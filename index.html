@@ -2726,7 +2726,6 @@ Border: #c4b5a8, #d4c4b0
         const DOUBLE_CLICK_DELAY = 300; // ms
         
         function handleSyllableClick(wordIndex, syllableIndex) {
-            console.log('[DEBUG] handleSyllableClick called:', wordIndex, syllableIndex);
             
             // If this is a second click on the same syllable within the delay, it's a double-click
             if (clickTimer && clickedWordIndex === wordIndex && clickedSyllableIndex === syllableIndex) {
@@ -2748,18 +2747,14 @@ Border: #c4b5a8, #d4c4b0
             // Set timer for single-click action
             clickTimer = setTimeout(() => {
                 clickTimer = null;
-                console.log('[DEBUG] toggleStress about to be called:', wordIndex, syllableIndex);
                 toggleStress(wordIndex, syllableIndex);
             }, DOUBLE_CLICK_DELAY);
         }
         
         // Toggle stress on a syllable (called after single-click confirmed)
         function toggleStress(wordIndex, syllableIndex) {
-            console.log('[DEBUG] toggleStress called:', wordIndex, syllableIndex);
             const wordData = processedWords[wordIndex];
-            console.log('[DEBUG] wordData:', wordData);
             const currentStress = wordData.processed.stressIndex;
-            console.log('[DEBUG] currentStress:', currentStress);
             
             // RULE: If word contains ё, stress CANNOT be moved away from ё syllable
             // ё is always stressed in Russian; allowing unstressed ё violates Grayson's schema
@@ -2771,13 +2766,10 @@ Border: #c4b5a8, #d4c4b0
 
             // Toggle: if clicking same syllable, remove stress; otherwise set new stress
             const newStress = currentStress === syllableIndex ? -1 : syllableIndex;
-            console.log('[DEBUG] newStress calculated as:', newStress);
 
             // Reprocess word with new stress (use correctedWord to preserve ё)
             const wordToUse = wordData.correctedWord || wordData.originalWord;
-            console.log('[DEBUG] wordToUse:', wordToUse);
             wordData.processed = processWord(wordToUse, newStress);
-            console.log('[DEBUG] after processWord, stressIndex is:', wordData.processed.stressIndex);
             
             // Track original dictionary stress for comparison
             if (wordData.stressSource === 'dictionary' && wordData.originalDictionaryStress === undefined) {
