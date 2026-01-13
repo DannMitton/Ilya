@@ -2767,10 +2767,13 @@ Border: #c4b5a8, #d4c4b0
 
             // Toggle: if clicking same syllable, remove stress; otherwise set new stress
             const newStress = currentStress === syllableIndex ? -1 : syllableIndex;
+            console.log('[DEBUG] newStress calculated as:', newStress);
 
             // Reprocess word with new stress (use correctedWord to preserve ё)
             const wordToUse = wordData.correctedWord || wordData.originalWord;
+            console.log('[DEBUG] wordToUse:', wordToUse);
             wordData.processed = processWord(wordToUse, newStress);
+            console.log('[DEBUG] after processWord, stressIndex is:', wordData.processed.stressIndex);
             
             // Track original dictionary stress for comparison
             if (wordData.stressSource === 'dictionary' && wordData.originalDictionaryStress === undefined) {
