@@ -1600,6 +1600,27 @@ Border: #c4b5a8, #d4c4b0
             opacity: 0.9;
         }
         
+        .footer-arrow {
+            display: inline-block;
+            opacity: 0;
+            animation: arrowFadeIn 0.8s ease-out 0.2s forwards;
+        }
+        
+        @keyframes arrowFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            60% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
         /* Mobile: collapsible footer */
         @media (max-width: 768px) {
             footer {
@@ -2619,7 +2640,7 @@ Border: #c4b5a8, #d4c4b0
 
         <footer id="mainFooter" class="collapsed" onclick="toggleFooter()">
             <div class="footer-collapsed-label">
-                My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap for credits & license ▲
+                My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap for credits & license <span class="footer-arrow">▲</span>
             </div>
             <div class="footer-main">
             <p>
@@ -2695,6 +2716,31 @@ Border: #c4b5a8, #d4c4b0
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-secondary" onclick="closeProfileModal()">Cancel</button>
                 <button class="modal-btn modal-btn-primary" onclick="saveUserProfile()">Save Profile</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- First-Launch Onboarding Modal -->
+    <div class="modal-overlay" id="onboardingModal">
+        <div class="modal-content" style="max-width: 420px;">
+            <div class="modal-header">
+                <h2>Welcome to My Sung Russian</h2>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px; color: #444; line-height: 1.5;">
+                    MSR helps singers transcribe Russian text into IPA for lyric diction study.
+                </p>
+                <div class="profile-field">
+                    <label for="onboardingName">What name should appear on your transcriptions?</label>
+                    <input type="text" id="onboardingName" placeholder="e.g., Dann Mitton" style="font-size: 16px; padding: 12px;">
+                    <div class="field-hint">
+                        This appears in PDF exports. You can change it anytime in Settings.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="skipOnboarding()">Skip</button>
+                <button class="modal-btn modal-btn-primary" onclick="completeOnboarding()">Continue</button>
             </div>
         </div>
     </div>
@@ -54913,6 +54959,76 @@ Border: #c4b5a8, #d4c4b0
             }
         }
         
+        // ============================================================================
+        // FIRST-LAUNCH ONBOARDING
+        // ============================================================================
+        
+        const ONBOARDING_KEY = 'msr_onboarding_complete';
+        
+        function checkFirstLaunch() {
+            try {
+                const completed = localStorage.getItem(ONBOARDING_KEY);
+                if (!completed) {
+                    showOnboardingModal();
+                }
+            } catch (e) {
+                // localStorage not available, skip onboarding
+            }
+        }
+        
+        function showOnboardingModal() {
+            const modal = document.getElementById('onboardingModal');
+            if (modal) {
+                modal.classList.add('show');
+                // Focus the name input
+                setTimeout(() => {
+                    document.getElementById('onboardingName')?.focus();
+                }, 100);
+            }
+        }
+        
+        function skipOnboarding() {
+            const modal = document.getElementById('onboardingModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+            // Mark as complete so we don't ask again
+            try {
+                localStorage.setItem(ONBOARDING_KEY, 'true');
+            } catch (e) {}
+        }
+        
+        function completeOnboarding() {
+            const nameInput = document.getElementById('onboardingName');
+            const name = nameInput?.value.trim() || '';
+            
+            // Save the name to user profile
+            if (name) {
+                userProfile.name = name;
+                documentMeta.userName = name;
+                try {
+                    localStorage.setItem('msr_user_profile', JSON.stringify(userProfile));
+                } catch (e) {}
+                
+                // Also update the profile form if it exists
+                const profileNameInput = document.getElementById('profileName');
+                if (profileNameInput) {
+                    profileNameInput.value = name;
+                }
+            }
+            
+            // Mark as complete
+            try {
+                localStorage.setItem(ONBOARDING_KEY, 'true');
+            } catch (e) {}
+            
+            // Close modal
+            const modal = document.getElementById('onboardingModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+        
         function updateCopyrightPreview() {
             const preview = document.getElementById('copyrightPreview');
             const countryCode = document.getElementById('profileCountry')?.value;
@@ -55508,13 +55624,15 @@ Border: #c4b5a8, #d4c4b0
                 // Line 1: Attribution
                 ctx.fillStyle = '#555555';
                 ctx.font = '8px "Noto Sans", sans-serif';
-                const dateStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
-                let attrLine = `Transcribed using My Sung Russian (MSR)  •  ${dateStr}`;
+                // Format: 24hr timestamp HH:MM:SS
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-CA'); // YYYY-MM-DD
+                const timeStr = now.toTimeString().slice(0, 8);  // HH:MM:SS
+                let attrLine = '';
                 if (documentMeta.userName) {
-                    attrLine += `  •  ${documentMeta.userName}`;
-                }
-                if (documentMeta.institution) {
-                    attrLine += `  •  ${documentMeta.institution}`;
+                    attrLine = `Transcribed by ${documentMeta.userName} using My Sung Russian | ${dateStr} ${timeStr}`;
+                } else {
+                    attrLine = `Transcribed using My Sung Russian | ${dateStr} ${timeStr}`;
                 }
                 ctx.fillText(attrLine, margin, footerY + 14);
                 
@@ -55737,9 +55855,9 @@ Border: #c4b5a8, #d4c4b0
                 const label = footer.querySelector('.footer-collapsed-label');
                 if (label) {
                     if (footer.classList.contains('collapsed')) {
-                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap for credits & license ▲';
+                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap for credits & license <span class="footer-arrow">▲</span>';
                     } else {
-                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap to collapse ▼';
+                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.16</span> — tap to collapse <span class="footer-arrow">▼</span>';
                     }
                     // Re-attach triple-click handler after innerHTML change
                     attachVersionClickHandlers();
@@ -56271,6 +56389,9 @@ Border: #c4b5a8, #d4c4b0
             
             // Attach hidden developer tool (triple-click version number)
             attachVersionClickHandlers();
+            
+            // Check for first launch and show onboarding if needed
+            checkFirstLaunch();
             
             // Set up placeholder visibility listeners
             const textarea = document.getElementById('russianInput');
