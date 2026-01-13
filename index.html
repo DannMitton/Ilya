@@ -2722,6 +2722,8 @@ Border: #c4b5a8, #d4c4b0
         const DOUBLE_CLICK_DELAY = 300; // ms
         
         function handleSyllableClick(wordIndex, syllableIndex) {
+            console.log('[DEBUG] handleSyllableClick called:', wordIndex, syllableIndex);
+            
             // If this is a second click on the same syllable within the delay, it's a double-click
             if (clickTimer && clickedWordIndex === wordIndex && clickedSyllableIndex === syllableIndex) {
                 clearTimeout(clickTimer);
@@ -2742,14 +2744,18 @@ Border: #c4b5a8, #d4c4b0
             // Set timer for single-click action
             clickTimer = setTimeout(() => {
                 clickTimer = null;
+                console.log('[DEBUG] toggleStress about to be called:', wordIndex, syllableIndex);
                 toggleStress(wordIndex, syllableIndex);
             }, DOUBLE_CLICK_DELAY);
         }
         
         // Toggle stress on a syllable (called after single-click confirmed)
         function toggleStress(wordIndex, syllableIndex) {
+            console.log('[DEBUG] toggleStress called:', wordIndex, syllableIndex);
             const wordData = processedWords[wordIndex];
+            console.log('[DEBUG] wordData:', wordData);
             const currentStress = wordData.processed.stressIndex;
+            console.log('[DEBUG] currentStress:', currentStress);
             
             // RULE: If word contains ё, stress CANNOT be moved away from ё syllable
             // ё is always stressed in Russian; allowing unstressed ё violates Grayson's schema
@@ -3717,13 +3723,10 @@ Border: #c4b5a8, #d4c4b0
                                                 } else if (hasЕ || hasЁ) {
                                                     tooltip = 'Click to stress • Then double-click for е↔ё';
                                                 }
-                                                const isLocked = lockedSyllables.has(`${wordIdx}-${sylIdx}`);
-                                                const lockClass = isLocked ? 'locked' : '';
-                                                const lockIcon = isLocked ? '🔓' : '🔒';
                                                 return `<span class="syllable ${stressClass} ${clickableClass}" 
                                                              onclick="handleSyllableClick(${wordIdx}, ${sylIdx})"
                                                              title="${tooltip}">
-                                                            ${displayText}<button class="lock-btn ${lockClass}" onclick="event.stopPropagation(); toggleLock(${wordIdx}, ${sylIdx}, event)">${lockIcon}</button>
+                                                            ${displayText}
                                                         </span>`;
                                             }).join('')}
                                         </div>
