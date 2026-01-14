@@ -1121,6 +1121,12 @@
         .syllable.before-clitic {
             margin-left: 0.8em;
         }
+        
+        /* Spacer for enclitics absorbed into final syllable (ль, ж, б, etc.) */
+        .enclitic-spacer {
+            display: inline-block;
+            width: 0.6em;
+        }
 
         .syllable:hover {
             background-color: #fef6e6;
