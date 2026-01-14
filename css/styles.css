@@ -750,17 +750,18 @@
         /* Back of card: syllable boundary editor */
         .word-card-back {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 50%;
+            transform: rotateY(180deg) translateX(50%);
             min-width: 100%;
             width: max-content;
-            max-width: none;
+            max-width: calc(100vw - 60px);
             min-height: 100%;
-            transform: rotateY(180deg);
             background: linear-gradient(145deg, #f5f0eb 0%, #ebe4dd 100%);
             border: 2px solid #c4a080;
             border-radius: 8px;
             padding: 15px;
-            padding-bottom: 40px;  /* Space for checkmark */
+            padding-bottom: 40px;  /* Space for close button */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -792,48 +793,43 @@
         /* Green checkmark - mirrors gear icon position (bottom-right) exactly */
         .card-back-close {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
+            bottom: 10px;
+            right: 10px;
             left: auto;
             background: none !important;
             background-color: transparent !important;
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
-            font-size: 18px;  /* Match cog size */
-            width: auto;
+            width: 18px;
+            height: 18px;
             padding: 0;
             margin: 0;
             cursor: pointer;
-            transition: color 0.2s;
             line-height: 1;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            color: #48bb78;
-            transform: none;
+            color: #999;
             z-index: 10;
-            display: inline-block;
-            text-align: right;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+        }
+        
+        .word-card-back:hover .card-back-close {
+            opacity: 0.6;
+            transition: opacity 0.5s ease-in;
         }
         
         .card-back-close:hover {
-            color: #38a169;
-            animation: nudge-left 0.4s ease;
+            opacity: 1 !important;
+            transition: opacity 0.2s ease-in;
             background: none !important;
             background-color: transparent !important;
             box-shadow: none !important;
         }
         
-        @keyframes nudge-left {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            50% { transform: translateX(0); }
-            75% { transform: translateX(-4px); }
-        }
-        
         .card-back-close:active {
-            transform: translateX(-2px);
             background: none !important;
             box-shadow: none !important;
         }
