@@ -751,11 +751,9 @@
         .word-card-back {
             position: absolute;
             top: 0;
-            left: 50%;
-            transform: rotateY(180deg) translateX(50%);
-            min-width: 100%;
-            width: max-content;
-            max-width: calc(100vw - 60px);
+            left: 0;
+            right: 0;
+            transform: rotateY(180deg);
             min-height: 100%;
             background: linear-gradient(145deg, #f5f0eb 0%, #ebe4dd 100%);
             border: 2px solid #c4a080;
@@ -1076,6 +1074,16 @@
             border-radius: 4px;
             transition: all 0.2s;
             position: relative;
+        }
+        
+        /* Extra spacing after proclitic (не, ни, в, etc.) */
+        .syllable.after-clitic {
+            margin-left: 0.8em;
+        }
+        
+        /* Extra spacing before enclitic (ли, же, бы, etc.) */
+        .syllable.before-clitic {
+            margin-left: 0.8em;
         }
 
         .syllable:hover {
