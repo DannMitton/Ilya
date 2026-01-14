@@ -72,6 +72,21 @@ Word-final я has no following consonant, so neither rule applies.
 
 ---
 
+## 4. Audit exception dictionary for incorrectly classified words
+
+**Issue:** день was found in the exception dictionary with incorrect IPA (/dʲɛɲ/ instead of /dʲeɲ/). день is not a true exception — it follows standard Grayson rules and should use the normal transcription path.
+
+**Concern:** How many other "exceptions" are actually regular words with incorrect IPA? True exceptions should be limited to:
+- Words with silent consonants (сердце, солнце)
+- Loanwords with unpalatalized consonants before е
+- Words deviating from standard Grayson rules
+
+**Action needed:** Review all entries in `/msr/data/exception-words.js` and remove any words that follow regular Grayson rules. For remaining true exceptions, verify IPA against Grayson.
+
+**Status:** Queued for review.
+
+---
+
 ## Template for Future Entries
 
 ### [Number]. [Brief description]
