@@ -2361,6 +2361,12 @@ Border: #c4b5a8, #d4c4b0
                                 } else if (isReflexiveEnding) {
                                     // Grayson p. 266-267: reflexive -ся/-сь → [ʌ]
                                     ipa += 'ʌ';
+                                } else if (position === 'posttonic-immediate' && wordCharIdxYa === wordCharsYa.length - 1) {
+                                    // MSR extension (pending Grayson clarification):
+                                    // Word-final posttonic я → /ɑ/ (parallels posttonic а pattern)
+                                    // Examples: няня, Ваня, Соня
+                                    // See TODO-grayson-questions.md #1
+                                    ipa += 'ɑ';
                                 } else {
                                     // Grayson p. 127: Ikanye - unstressed я after palatalized → [ɪ]
                                     // Remote after non-palatalized → [ʌ]

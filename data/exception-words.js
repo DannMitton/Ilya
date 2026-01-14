@@ -246,6 +246,7 @@ const EXCEPTION_WORDS = {
             
             // Consonants (Ch. 4)
             'день': { ipa: 'dʲeɲ', stressIndex: 0, rule: 'Interpalatal е → /e/, нь → ɲ (p.106, p.183)' },
+            'няня': { ipa: 'ɲa.ɲɑ', stressIndex: 0, rule: 'Interpalatal stressed я → /a/, word-final posttonic я → /ɑ/ (p.104, MSR extension pending Grayson)' },
             'был': { ipa: 'bɨɫ', stressIndex: 0, rule: 'hard л → ɫ (p. 150)' },
             'соль': { ipa: 'solʲ', stressIndex: 0, rule: 'soft л → lʲ (p. 150)' },
             'жить': { ipa: 'ʒɨtʲ', stressIndex: 0, rule: 'always-hard ж forces и → ɨ (p. 165)' },
