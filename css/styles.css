@@ -750,11 +750,10 @@
         /* Back of card: syllable boundary editor */
         .word-card-back {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             min-width: 100%;
             width: max-content;
-            max-width: calc(100vw - 40px);
+            max-width: none;
             min-height: 100%;
             transform: rotateY(180deg);
             background: linear-gradient(145deg, #f5f0eb 0%, #ebe4dd 100%);
@@ -1102,7 +1101,7 @@
         
         /* Placeholder stress - grey dashed, needs attention */
         .syllable.stressed.placeholder-stress {
-            border: 2px dashed rgba(100, 100, 100, 0.5);
+            border: 2px dashed rgba(140, 140, 140, 0.35);
             background: rgba(150, 150, 150, 0.1);
         }
 

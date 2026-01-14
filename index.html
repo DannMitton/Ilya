@@ -3560,51 +3560,12 @@ Border: #c4b5a8, #d4c4b0
                 </div>
             `;
             
-            // Position panel near the card
+            // Position panel near the card using scroll-aware coordinates
             if (card) {
-                const rect = card.getBoundingClientRect();
-                const panelWidth = Math.min(350, window.innerWidth - 40); // narrower, responsive
-                const gap = 8; // small gap between card and panel
-                
-                let left, top;
-                let preferRight = true;
-                
-                // Try right side first
-                if (rect.right + gap + panelWidth <= window.innerWidth - 20) {
-                    left = rect.right + gap;
-                    panel.style.transformOrigin = 'left top';
-                } 
-                // Try left side
-                else if (rect.left - gap - panelWidth >= 20) {
-                    left = rect.left - gap - panelWidth;
-                    panel.style.transformOrigin = 'right top';
-                    preferRight = false;
-                }
-                // Fall back to overlapping/centered on card
-                else {
-                    left = Math.max(20, Math.min(rect.left, window.innerWidth - panelWidth - 20));
-                    panel.style.transformOrigin = 'top center';
-                }
-                
-                // Vertical: align top of panel with top of card
-                top = rect.top;
-                
-                // If panel would go off bottom, shift up
-                const panelMaxHeight = window.innerHeight * 0.5;
-                if (top + panelMaxHeight > window.innerHeight - 20) {
-                    top = window.innerHeight - panelMaxHeight - 20;
-                }
-                
-                // Clamp to stay on screen
-                top = Math.max(20, top);
-                
-                panel.style.position = 'fixed';
-                panel.style.left = `${left}px`;
-                panel.style.top = `${top}px`;
-                panel.style.bottom = 'auto';
-                panel.style.maxWidth = `${panelWidth}px`;
+                placePanelNearCard(card, panel);
             } else {
                 // Fallback: center on screen
+                panel.style.position = 'fixed';
                 panel.style.left = '50%';
                 panel.style.top = '50%';
                 panel.style.transform = 'translate(-50%, -50%)';
@@ -3614,6 +3575,22 @@ Border: #c4b5a8, #d4c4b0
             panel.style.animation = 'emergeFromCard 0.45s ease-out forwards';
             
             document.body.appendChild(panel);
+            
+            // Re-position on scroll/resize (throttled)
+            let repositionTimeout;
+            const repositionHandler = () => {
+                clearTimeout(repositionTimeout);
+                repositionTimeout = setTimeout(() => {
+                    if (card && document.getElementById('explanation-panel')) {
+                        placePanelNearCard(card, panel);
+                    }
+                }, 50);
+            };
+            window.addEventListener('scroll', repositionHandler);
+            window.addEventListener('resize', repositionHandler);
+            
+            // Store handlers for cleanup
+            panel._repositionHandler = repositionHandler;
             
             // Prevent scroll on panel wheel events
             panel.addEventListener('wheel', (e) => {
@@ -3637,6 +3614,44 @@ Border: #c4b5a8, #d4c4b0
             document.addEventListener('keydown', handleExplanationEscape);
         }
         
+        /**
+         * Position panel adjacent to card, scroll-aware
+         * KIMI's fix: use absolute positioning with scrollX/scrollY offsets
+         */
+        function placePanelNearCard(card, panel, gap = 12) {
+            const r = card.getBoundingClientRect();
+            const scrollY = window.scrollY;
+            const scrollX = window.scrollX;
+            const vw = document.documentElement.clientWidth;
+            const vh = document.documentElement.clientHeight;
+            
+            const panelWidth = Math.min(350, vw - 40);
+            panel.style.maxWidth = `${panelWidth}px`;
+            
+            // Start with panel to the right of card
+            let left = r.right + scrollX + gap;
+            let top = r.top + scrollY;
+            
+            // If overflows right, try left side
+            if (left + panelWidth > scrollX + vw - 20) {
+                left = r.left + scrollX - panelWidth - gap;
+            }
+            
+            // Clamp to viewport
+            if (left < scrollX + 10) {
+                left = scrollX + 10;
+            }
+            
+            // Keep top within reasonable bounds
+            if (top < scrollY + 10) {
+                top = scrollY + 10;
+            }
+            
+            panel.style.position = 'absolute';
+            panel.style.left = `${left}px`;
+            panel.style.top = `${top}px`;
+        }
+        
         function handleExplanationClickOutside(e) {
             const panel = document.getElementById('explanation-panel');
             if (panel && !panel.contains(e.target) && !e.target.closest('.why-icon')) {
@@ -3647,6 +3662,11 @@ Border: #c4b5a8, #d4c4b0
         function closeExplanationPanel() {
             const panel = document.getElementById('explanation-panel');
             if (panel) {
+                // Clean up scroll/resize handlers
+                if (panel._repositionHandler) {
+                    window.removeEventListener('scroll', panel._repositionHandler);
+                    window.removeEventListener('resize', panel._repositionHandler);
+                }
                 // Animate out
                 panel.style.animation = 'recedeToCard 0.3s ease-in forwards';
                 // Remove after animation completes
@@ -3760,7 +3780,7 @@ Border: #c4b5a8, #d4c4b0
                     <p style="line-height: 1.8;">
                         <span style="display: inline-block; width: 12px; height: 12px; border: 2px solid #48bb78; border-radius: 50%; vertical-align: middle; margin-right: 4px;"></span>verified (${dictCount})
                         <span style="display: inline-block; width: 12px; height: 12px; border: 2px solid #3B82F6; border-radius: 50%; vertical-align: middle; margin-left: 12px; margin-right: 4px;"></span>${overrideLabel} (${overrideCount})
-                        <span style="display: inline-block; width: 12px; height: 12px; border: 2px dashed rgba(100,100,100,0.5); border-radius: 50%; vertical-align: middle; margin-left: 12px; margin-right: 4px;"></span>needs attention (${placeholderCount})
+                        <span style="display: inline-block; width: 12px; height: 12px; border: 2px dashed rgba(140,140,140,0.35); border-radius: 50%; vertical-align: middle; margin-left: 12px; margin-right: 4px;"></span>needs attention (${placeholderCount})
                     </p>
                 </div>
                 <div class="word-grid">

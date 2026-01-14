@@ -101,6 +101,19 @@
 **Priority**: Medium (cosmetic refresh)
 **Status**: Design approved, ready to implement
 
+### IMP-005: Why panel pop/transition design
+**Description**: Ask KIMI about modern popup/transition patterns for the "Why" explanation panel.
+**Current state**: Panel anchors to parent card edge, basic fade animation.
+**Question for KIMI**: What are current best practices for contextual popups? Options might include:
+- Popovers with arrow/tail pointing to source
+- Slide-out drawers
+- Modal overlays with backdrop blur
+- Micro-animations (spring physics, scale-in from source)
+- Mobile-friendly sheet patterns
+
+**Priority**: Low (polish)
+**Status**: Awaiting KIMI consultation
+
 ### IMP-004: UI/UX cosmetic refresh
 **Description**: Comprehensive design overhaul to reduce clutter and improve intuitiveness.
 - Audit every UI element for necessity
