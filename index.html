@@ -2650,7 +2650,11 @@ Border: #c4b5a8, #d4c4b0
 
             processedWords = allMergedWords.map(mergedWord => {
                 const word = mergedWord.combined;
-                const isClitic = mergedWord.parts.length > 1;  // Has proclitic or enclitic attached
+                const hasMergedParts = mergedWord.parts.length > 1;  // Has proclitic or enclitic attached
+                
+                // Check if this word itself is a standalone clitic (inherently unstressed)
+                const standaloneWord = mergedWord.parts.length === 1 ? mergedWord.parts[0].text.toLowerCase() : null;
+                const isStandaloneClitic = standaloneWord && clitics.has(normalizeUnicode(standaloneWord).toLowerCase());
                 
                 // For merged words, we need to process each part separately then combine
                 // But for now, process as a unit and let the main word carry stress
@@ -2738,9 +2742,16 @@ Border: #c4b5a8, #d4c4b0
                 // PLACEHOLDER STRESS: Unknown words get temporary stress on syllable 1
                 // This ensures every word is actionable immediately (no blank states)
                 // Grey dotted circle signals "needs attention"
-                if (stressSource === 'none' && adjustedStress === -1) {
+                // EXCEPTION: Standalone clitics are inherently unstressed — no placeholder
+                if (stressSource === 'none' && adjustedStress === -1 && !isStandaloneClitic) {
                     adjustedStress = 0;  // Syllable 1
                     stressSource = 'placeholder';
+                }
+                
+                // Standalone clitics: force unstressed (no stress index)
+                if (isStandaloneClitic) {
+                    adjustedStress = -1;
+                    stressSource = 'clitic';  // Special source to indicate inherently unstressed
                 }
                 
                 // Build the combined word for processing (remove spaces)
@@ -2753,7 +2764,8 @@ Border: #c4b5a8, #d4c4b0
                     correctedWord: ёException ? ёException.actualForm : mainWord,
                     // Process the full combined word with adjusted stress
                     processed: processWord(combinedWord, adjustedStress),
-                    isClitic: isClitic,
+                    isClitic: hasMergedParts,
+                    isStandaloneClitic: isStandaloneClitic,
                     mergedParts: mergedWord.parts,  // Track what was merged
                     trailingPunctuation: mergedWord.trailingPunctuation || '',  // Store punctuation separately
                     lineBreakAfter: mergedWord.lineBreakAfter,  // Preserve poetry line breaks
