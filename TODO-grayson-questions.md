@@ -30,12 +30,14 @@ Word-final я has no following consonant, so neither rule applies.
 - Avoids "curious realizations" that might distract listeners
 
 **Implementation:** няня → /ˈɲa ɲɑ/
-- First syllable: stressed interpalatal → /a/ (Grayson p. 104)
+- First syllable: stressed interpalatal я → /a/ (Grayson p. 104)
 - Second syllable: word-final posttonic я → /ɑ/ (MSR default)
+
+**Working choice:** Added няня to exception dictionary (`/msr/data/exception-words.js`) with IPA `ɲa.ɲɑ` rather than modifying core transcription logic. This prevents unintended side effects while we await clarification. The exception note references this pending question.
 
 **Question for Grayson:** What is the intended realization of word-final unstressed я outside of reflexive verb endings? Should it reduce to /ɪ/ (ikanye pattern), maintain as /ɑ/ (parallel to posttonic а), or follow another rule?
 
-**Status:** Implemented as /ɑ/. Pending clarification.
+**Status:** Implemented as exception. Pending clarification.
 
 ---
 
