@@ -3883,6 +3883,54 @@ Border: #c4b5a8, #d4c4b0
 
             outputDiv.innerHTML = html;
             showViewToggle();
+            
+            // Equalize card heights per row after render
+            requestAnimationFrame(() => {
+                equalizeCardHeights();
+            });
+        }
+        
+        /**
+         * Equalize card heights within each visual row
+         * Cards in the same row should have uniform height
+         */
+        function equalizeCardHeights() {
+            const cards = document.querySelectorAll('.word-card-container');
+            if (cards.length === 0) return;
+            
+            // Group cards by their top position (same row = same top)
+            const rows = new Map();
+            cards.forEach(card => {
+                const top = Math.round(card.getBoundingClientRect().top);
+                if (!rows.has(top)) rows.set(top, []);
+                rows.get(top).push(card);
+            });
+            
+            // For each row, find max height and apply to all
+            rows.forEach(rowCards => {
+                // Reset heights first to get natural height
+                rowCards.forEach(card => {
+                    const inner = card.querySelector('.word-card');
+                    if (inner) inner.style.height = 'auto';
+                });
+                
+                // Measure max natural height in this row
+                let maxHeight = 0;
+                rowCards.forEach(card => {
+                    const inner = card.querySelector('.word-card');
+                    if (inner) {
+                        maxHeight = Math.max(maxHeight, inner.offsetHeight);
+                    }
+                });
+                
+                // Apply max height to all cards in row
+                rowCards.forEach(card => {
+                    const inner = card.querySelector('.word-card');
+                    if (inner) {
+                        inner.style.height = maxHeight + 'px';
+                    }
+                });
+            });
         }
         
         // ============================================================================
