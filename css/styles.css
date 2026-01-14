@@ -293,18 +293,31 @@
             padding-top: 28px;
             padding-bottom: 30px;
             cursor: pointer;
-            min-width: 120px;
-            min-height: 110px;
-            width: max-content;
-            flex-shrink: 0;
-            max-width: 320px;
-            /* height set by JS equalizeCardHeights() */
             box-shadow: 0 2px 6px rgba(163, 61, 61, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
+        }
+        
+        /* When word-card is the front face, it fills the container */
+        .word-card-front.word-card {
+            position: absolute;
+            inset: 0;
+            min-width: unset;
+            min-height: unset;
+            width: auto;
+            max-width: none;
+        }
+        
+        /* Standalone word-card (not in flip container) keeps original sizing */
+        .word-card:not(.word-card-front) {
+            min-width: 120px;
+            min-height: 110px;
+            width: max-content;
+            flex-shrink: 0;
+            max-width: 320px;
         }
         
         /* Text lines - no wrapping, centered */
@@ -527,7 +540,7 @@
             position: relative;
             width: max-content;          /* as wide as the wider face */
             height: max-content;         /* as tall as the taller face */
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
             transform-style: preserve-3d;
         }
         
@@ -536,17 +549,17 @@
             transform: rotateY(180deg);
         }
         
-        /* Both faces fill the anchor container and share backface-visibility */
+        /* Both faces need backface hidden for clean flip */
         .word-card-front,
         .word-card-back {
-            position: absolute;
-            inset: 0;                    /* top:0 right:0 bottom:0 left:0 */
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
         }
         
-        .word-card-front {
-            /* Front is the "natural" position, back is rotated */
+        /* Back face is absolute positioned */
+        .word-card-back {
+            position: absolute;
+            inset: 0;
         }
         
         /* Note: .stress-indicator styles are defined earlier (lines ~491-680) */
@@ -754,17 +767,16 @@
         
         /* Back of card: syllable boundary editor */
         .word-card-back {
-            /* inset: 0 inherited from shared rule above */
             transform: rotateY(180deg);
             background: linear-gradient(145deg, #f5f0eb 0%, #ebe4dd 100%);
             border: 2px solid #c4a080;
             border-radius: 8px;
             padding: 15px;
-            padding-bottom: 40px;  /* Space for close button */
+            padding-top: 28px;  /* Match front card top padding */
+            padding-bottom: 30px;  /* Match front card bottom padding */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             overflow-x: auto;
         }
@@ -873,7 +885,7 @@
             font-size: 28px;
             justify-content: center;
             user-select: none;
-            padding-top: 20px;  /* Space for header */
+            /* No padding-top — let flex centering align with front Cyrillic */
         }
         
         /* Pipe boundary marker */

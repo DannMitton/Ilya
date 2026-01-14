@@ -3313,16 +3313,15 @@ Border: #c4b5a8, #d4c4b0
                 const mainPart = mergedParts.find(p => p.type === 'main');
                 
                 if (procliticPart && mainPart) {
-                    const particleName = ['не', 'ни'].includes(procliticPart.text.toLowerCase()) ? 'particle' : 'preposition';
                     explanations.push({
-                        html: `<strong>⟨${procliticPart.text}⟩</strong> is an unstressed ${particleName} — it attaches to <strong>⟨${mainPart.text}⟩</strong> and does not carry stress <span class="cite">(p. 263)</span>`,
+                        html: `<strong>⟨${procliticPart.text}⟩</strong> is unstressed by definition — it attaches to ⟨${mainPart.text}⟩ like a prefix, even though it is written as a separate word <span class="cite">(p. 263)</span>`,
                         priority: -1
                     });
                 }
                 
                 if (encliticPart && mainPart) {
                     explanations.push({
-                        html: `<strong>⟨${encliticPart.text}⟩</strong> is an enclitic particle — it attaches to <strong>⟨${mainPart.text}⟩</strong> and does not carry stress <span class="cite">(p. 263)</span>`,
+                        html: `<strong>⟨${encliticPart.text}⟩</strong> is unstressed by definition — it attaches to ⟨${mainPart.text}⟩ like a suffix, even though it is written as a separate word <span class="cite">(p. 263)</span>`,
                         priority: -1
                     });
                 }
