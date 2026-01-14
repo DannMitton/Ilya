@@ -535,6 +535,37 @@
             perspective: 1000px;
         }
         
+        /* ================================================================
+         * CLITIC CARD STYLING (KIMI design consultation 2026-01-14)
+         * Standalone clitics (во, ко, со, не, ни) are prosodically 
+         * subordinate — they need stress but defer to the following word.
+         * 
+         * Treatment #1: Size + baseline nudge (primary visual cue)
+         * Treatment #2: Optical-grey tint (colour cue)
+         * 
+         * The "upbeat to downbeat" metaphor: clitic floats toward host.
+         * ================================================================ */
+        .clitic-card {
+            /* Size reduction: –11% on Cyrillic, IPA stays full size */
+            font-size: 0.89em;
+            /* Baseline nudge: float upward toward the following word */
+            transform: translateY(-0.18em);
+            /* Optical-grey: tint toward paper colour (not opacity) */
+            /* Maintains contrast ratio ≥ 4.5:1 for accessibility */
+        }
+        
+        .clitic-card .word-card-front {
+            /* Reduced shadow makes card feel lighter, not disabled */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            /* Subtle tint toward paper colour (lower chroma, same hue) */
+            background-color: #F2EDE6;
+        }
+        
+        .clitic-card .ipa {
+            /* Keep IPA at full size — singers need the phoneme */
+            font-size: 1.12rem;
+        }
+        
         /* Inner wrapper - this is what actually rotates */
         .word-card-inner {
             position: relative;
