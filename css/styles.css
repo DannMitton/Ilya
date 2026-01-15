@@ -2603,4 +2603,82 @@ footer a:hover {
     font-size: 0.9rem;
     font-style: italic;
     color: var(--msr-paper-600, #9a8b7c);
+/* ============================================================================
+   NEW WORD CARD FACE STRUCTURE (2026-01-15)
+   IPA on top, Cyrillic in middle, divider, translation below
+   ============================================================================ */
+
+/* Card face uses flex column */
+.word-card-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+}
+
+/* IPA at top - discreet styling */
+.word-card-front .ipa-top {
+    font-size: 0.9rem;
+    font-family: 'Noto Serif', serif;
+    color: var(--msr-paper-600, #9a8b7c);
+    order: 1;
+    margin-bottom: 8px;
+}
+
+/* Cyrillic in middle - dominant */
+.word-card-front .cyrillic {
+    order: 2;
+    margin: 8px 0;
+}
+
+/* Divider - more breathing room */
+.word-card-front .card-divider {
+    width: 50%;
+    height: 1px;
+    background: var(--msr-paper-400, #d8cdc6);
+    margin: 12px auto 16px auto;
+    order: 3;
+}
+
+/* Translation at bottom - space above from divider */
+.word-card-front .translation {
+    font-size: 0.9rem;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    color: var(--msr-paper-600, #9a8b7c);
+    order: 4;
+    min-height: 1.2em;
+}
+
+/* Ensure buttons stay positioned correctly */
+.word-card-front .why-icon,
+.word-card-front .flip-button {
+    position: absolute;
+}
+
+/* Align card back content */
+.word-card-back {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Update sizer to match new structure */
+.word-card-sizer .sizer-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.word-card-sizer .ipa-top {
+    font-size: 0.9rem;
+    color: var(--msr-paper-600, #9a8b7c);
+}
+
+.word-card-sizer .translation {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--msr-paper-600, #9a8b7c);
 }
