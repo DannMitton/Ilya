@@ -1,7 +1,7 @@
 # MSR Session Handoff
 
-**Last Updated:** 2026-01-14
-**Current Version:** 4.25 (audit script added)
+**Last Updated:** 2026-01-15
+**Current Version:** 4.34 (cross-boundary voicing + proclitic fixes)
 **Stable Baseline:** v4.24-STABLE-BASELINE.zip (rollback point)
 
 ---
@@ -32,20 +32,25 @@
 ## CURRENT STATE
 
 ### Test Suite Status
-- **Golden tests:** 55/55 passing (100%) ✓
+- **Golden tests:** 66/66 passing (100%) ✓
 - **Test file:** `/msr/tests/golden.js`
 - Run with: `runGoldenTests()` in browser console
+- Includes cross-boundary voicing tests (11 phrase tests)
 
-### Exception Audit Ready
-- **Audit script:** `/msr/tests/audit-exceptions.js`
-- Run with: `auditExceptions()` in browser console
-- Will identify redundant vs valid exceptions
-- **Action:** Run audit, remove redundant entries, keep true exceptions
+### Cross-Boundary Voicing Assimilation (NEW in v4.34)
+- **Location:** `applyCrossBoundaryVoicing()` in index.html (~line 2807)
+- **Grayson reference:** Chapter 6.3, pp. 250-257
+- **Rules implemented:**
+  - Voicing: к→ɡ, с→з, т→д, ф→в, п→б before voiced obstruents
+  - Devoicing: г→к, з→с, д→т, в→ф, б→п before voiceless obstruents
+  - Special allophones: ч→dʒʲ, ц→dz, х→ɣ (p.256-257)
+  - Punctuation blocks assimilation (p.250, Rule #1)
+  - Sonorants and vowels don't trigger voicing changes
 
-### Clitic Styling Complete
-- Optical-grey tint on standalone clitics (во, ко, со, не, ни)
-- Reduced shadow
-- No size reduction (rejected — caused "broken picket fence" visual)
+### Proclitic Handling (FIXED in v4.34)
+- Vowelless proclitics (к, в, с, б) now display with visual spacing
+- Proclitics preserved when user reassigns stress
+- Key fix: `combinedWord` property stores merged form for reprocessing
 
 ---
 
@@ -53,22 +58,17 @@
 
 Phased implementation plan ready. Each phase is standalone and shippable:
 
-| Phase | Size | What |
-|-------|------|------|
-| 0 | S | Stub inlineCard.js container |
-| 1 | S | CSS underline affordance |
-| 2 | M | Wire underline → Inline-Card |
-| 3 | S | Settings toggle + analytics beacon |
-| 4 | M | Quick-mark lasso mode |
-| 5 | S | Keyboard shortcuts |
-| 6 | M | Undo ring-buffer |
-| 7 | S | Print-lock |
-| 8 | L | Measure & decide on workspace |
-
-**Next steps:** 
-1. Run exception audit
-2. Clean up redundant exceptions
-3. Begin Phase 0
+| Phase | Size | What | Status |
+|-------|------|------|--------|
+| 0 | S | Stub inlineCard.js container | **NEXT** |
+| 1 | S | CSS underline affordance | |
+| 2 | M | Wire underline → Inline-Card | |
+| 3 | S | Settings toggle + analytics beacon | |
+| 4 | M | Quick-mark lasso mode | |
+| 5 | S | Keyboard shortcuts | |
+| 6 | M | Undo ring-buffer | |
+| 7 | S | Print-lock | |
+| 8 | L | Measure & decide on workspace | |
 
 ---
 
@@ -86,21 +86,44 @@ Phased implementation plan ready. Each phase is standalone and shippable:
 | р palatalization | p. 209 fn. 277 | Only after stressed и/е/э AND before cluster |
 | Unstressed е after ж/ш/ц | p. 127 | → /ɨ/ |
 | сч cluster | p. 236, 287 | → /ʃʲʃʲ/ or /ʃʲː/ |
+| Cross-boundary voicing | p. 250-257 | Regressive across word boundaries |
+| Punctuation blocks assimilation | p. 250 | Rule #1 |
+| Special voiced allophones | p. 256-257 | ч→dʒʲ, ц→dz, х→ɣ |
 
 ---
 
-## SESSION 2026-01-14 ACCOMPLISHMENTS
+## SESSION 2026-01-15 ACCOMPLISHMENTS
 
-1. **Tests:** 40/55 → 55/55 (100%)
-2. **Bugs fixed:**
-   - Clitic о → /ɑ/ (not /ʌ/)
-   - р palatalization requires following cluster
-   - день exception had wrong IPA (was /ɛ/, fixed to /e/)
-   - няня added as exception
-   - Test expectations corrected for interpalatal, posttonic vowels
-3. **UI:** Clitic optical-grey styling
-4. **Planning:** Full PDF-first roadmap from KIMI
-5. **Infrastructure:** Audit script for exception dictionary
+1. **Cross-boundary voicing assimilation** — full implementation
+   - Test harness: `testPhrase()` function in golden.js
+   - Main app: `applyCrossBoundaryVoicing()` in index.html
+   - 11 new phrase tests added, all passing
+
+2. **Proclitic visual spacing** — vowelless proclitics show space
+   - CSS: `.proclitic-spacer` class
+   - Logic: Detects absorbed proclitics in first syllable
+
+3. **Proclitic preservation bug fixed**
+   - Root cause: `correctedWord` used `mainWord` instead of `combinedWord`
+   - Fix: Added `combinedWord` property, updated `applyStressChange()`
+
+4. **Tests:** 56/56 → 66/66 (added cross-boundary tests)
+
+5. **Branding discussion:** KLUCH (КЛЮЧ) name proposed by KIMI
+   - Means "key" in Russian
+   - Tagline: "The key to sung Russian phonetics — offline, print-ready, authoritative"
+   - Logo concepts explored (K + keyhole + ʲ) — not finalized
+
+---
+
+## KNOWN ISSUES / PARKING LOT
+
+1. **из Петербурга** — syllabification issue (test commented out)
+   - Output: `/is pʲi tʲɪ rbu rɡɑ/`
+   - Expected: `/is pʲi tʲɪr bur ɡɑ/`
+   - Not a voicing issue — syllabification algorithm edge case
+
+2. **Branding** — KLUCH name under consideration, logo not finalized
 
 ---
 
