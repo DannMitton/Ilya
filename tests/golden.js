@@ -285,12 +285,109 @@ function testPhrase(phrase, stresses) {
     });
     
     // Apply cross-boundary voicing assimilation
-    // For now, just concatenate - we'll implement the assimilation logic next
-    const ipaOutput = processedWords.map(pw => {
-        return pw.result.syllables.map(s => s.ipa).join(' ');
-    }).join(' ');
+    // Grayson 6.3: voicing assimilates regressively across word boundaries
+    // (except across punctuation or before sonorants/vowels)
     
-    return ipaOutput;
+    const voicingPairs = {
+        // Voiceless → Voiced
+        'p': 'b', 'b': 'b',
+        't': 'd', 'd': 'd',
+        'k': 'ɡ', 'ɡ': 'ɡ',
+        's': 'z', 'z': 'z',
+        'f': 'v', 'v': 'v',
+        'ʃ': 'ʒ', 'ʒ': 'ʒ',
+        'x': 'ɣ',  // Special: x → ɣ (p.257)
+        'ts': 'dz', // Special: ц → dz (p.256)
+        'tʃʲ': 'dʒʲ', // Special: ч → dʒʲ (p.256)
+    };
+    
+    const devoicingPairs = {
+        // Voiced → Voiceless
+        'b': 'p', 'p': 'p',
+        'd': 't', 't': 't',
+        'ɡ': 'k', 'k': 'k',
+        'z': 's', 's': 's',
+        'v': 'f', 'f': 'f',
+        'ʒ': 'ʃ', 'ʃ': 'ʃ',
+    };
+    
+    const voicedConsonants = new Set(['b', 'd', 'ɡ', 'z', 'v', 'ʒ', 'dz', 'dʒʲ', 'ɣ']);
+    const voicelessConsonants = new Set(['p', 't', 'k', 's', 'f', 'ʃ', 'x', 'ts', 'tʃʲ']);
+    const sonorants = new Set(['m', 'n', 'ɲ', 'l', 'lʲ', 'ɫ', 'r', 'rʲ', 'j']);
+    const vowels = new Set(['ɑ', 'a', 'o', 'ɔ', 'u', 'ʊ', 'i', 'ɪ', 'ɨ', 'e', 'ɛ', 'ʌ']);
+    
+    // Build IPA for each word, then apply cross-boundary changes
+    let ipaWords = processedWords.map(pw => {
+        return pw.result.syllables.map(s => s.ipa).join(' ');
+    });
+    
+    // For each word boundary, check if we need to assimilate
+    for (let i = 0; i < ipaWords.length - 1; i++) {
+        const currentIPA = ipaWords[i];
+        const nextIPA = ipaWords[i + 1];
+        
+        // Get last consonant sound of current word
+        const currentSegments = currentIPA.split(/\s+/);
+        const lastSegment = currentSegments[currentSegments.length - 1];
+        
+        // Get first consonant sound of next word
+        const nextSegments = nextIPA.split(/\s+/);
+        const firstSegment = nextSegments[0];
+        
+        // Extract the final consonant(s) from last segment
+        // Handle affricates and palatalized consonants
+        let finalC = '';
+        if (lastSegment.endsWith('tʃʲ')) finalC = 'tʃʲ';
+        else if (lastSegment.endsWith('ts')) finalC = 'ts';
+        else if (lastSegment.endsWith('x')) finalC = 'x';
+        else if (lastSegment.match(/[pbtdkɡszfvʃʒmnɲlrj]ʲ?$/)) {
+            finalC = lastSegment.match(/[pbtdkɡszfvʃʒmnɲlrj]ʲ?$/)[0];
+        }
+        
+        // Extract the initial consonant(s) from first segment  
+        let initialC = '';
+        if (firstSegment.startsWith('tʃʲ')) initialC = 'tʃʲ';
+        else if (firstSegment.startsWith('ts')) initialC = 'ts';
+        else if (firstSegment.match(/^[pbtdkɡszfvʃʒmnɲlrjx]ʲ?/)) {
+            initialC = firstSegment.match(/^[pbtdkɡszfvʃʒmnɲlrjx]ʲ?/)[0];
+        }
+        
+        // Skip if next word starts with sonorant or vowel (no assimilation)
+        const initialBase = initialC.replace('ʲ', '');
+        if (sonorants.has(initialBase) || vowels.has(firstSegment[0])) {
+            continue;
+        }
+        
+        // Determine if we need voicing or devoicing
+        const initialIsVoiced = voicedConsonants.has(initialC) || voicedConsonants.has(initialBase);
+        const initialIsVoiceless = voicelessConsonants.has(initialC) || voicelessConsonants.has(initialBase);
+        
+        if (initialIsVoiced && finalC) {
+            // Voice the final consonant
+            let newFinalC = voicingPairs[finalC] || voicingPairs[finalC.replace('ʲ', '')];
+            if (newFinalC && finalC.endsWith('ʲ') && !newFinalC.endsWith('ʲ')) {
+                newFinalC += 'ʲ';
+            }
+            if (newFinalC && newFinalC !== finalC) {
+                // Replace in the IPA
+                const escapedFinalC = finalC.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                ipaWords[i] = currentIPA.replace(new RegExp(escapedFinalC + '$'), newFinalC);
+            }
+        } else if (initialIsVoiceless && finalC) {
+            // Devoice the final consonant
+            const finalBase = finalC.replace('ʲ', '');
+            let newFinalC = devoicingPairs[finalBase];
+            if (newFinalC && finalC.endsWith('ʲ')) {
+                newFinalC += 'ʲ';
+            }
+            if (newFinalC && newFinalC !== finalC) {
+                const escapedFinalC = finalC.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                ipaWords[i] = currentIPA.replace(new RegExp(escapedFinalC + '$'), newFinalC);
+            }
+        }
+    }
+    
+    return ipaWords.join(' ');
 }
 
 /**
