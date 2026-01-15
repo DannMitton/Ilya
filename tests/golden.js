@@ -157,6 +157,31 @@ const GOLDEN_TESTS = {
         { word: 'шумных', stress: 0, expected: 'ʃum nɨx', note: 'Adjective genitive plural' },
     ],
     
+    // ================================================================
+    // CROSS-WORD-BOUNDARY VOICING ASSIMILATION (Chapter 6.3)
+    // Grayson pp. 250-257
+    // ================================================================
+    'Cross-Boundary Voicing': [
+        // Voicing: voiceless C → voiced before voiced C
+        { phrase: 'к берегу', stresses: [null, 0], expected: 'ɡ bʲe rʲɪ ɡu', note: 'к→г before б (p.252)' },
+        { phrase: 'к Дмитрию', stresses: [null, 0], expected: 'ɡ dʲmʲi tʲrʲi ju', note: 'к→г before д (p.252)' },
+        { phrase: 'с другом', stresses: [null, 0], expected: 'z dru ɡʌm', note: 'с→з before д (p.252)' },
+        { phrase: 'от брата', stresses: [null, 0], expected: 'ɑd brɑ tɑ', note: 'т→д before б (p.252)' },
+        
+        // Devoicing: voiced C → voiceless before voiceless C
+        { phrase: 'без Тани', stresses: [null, 0], expected: 'bʲɪs tɑ nʲi', note: 'з→с before т (p.252)' },
+        { phrase: 'из Петербурга', stresses: [null, 2], expected: 'is pʲɪ tʲɪr bur ɡɑ', note: 'з→с before п (p.252)' },
+        
+        // Sonorants don't trigger voicing (retain voicelessness)
+        { phrase: 'сад наш', stresses: [0, 0], expected: 'sɑt nɑʃ', note: 'No voicing before н (sonorant) (p.252)' },
+        { phrase: 'сад Анны', stresses: [0, 0], expected: 'sɑt ɑn nɨ', note: 'No voicing before vowel (p.252)' },
+        
+        // Special allophones (voiceless-only consonants becoming voiced)
+        { phrase: 'дочь была', stresses: [0, 1], expected: 'dodʒʲ bɨ ɫɑ', note: 'ч→дʒʲ before б (p.256)' },
+        { phrase: 'отец бы', stresses: [1, null], expected: 'ɑ tʲɛdz bɨ', note: 'ц→дз before б (p.256)' },
+        { phrase: 'мой слух был', stresses: [0, 0, 0], expected: 'moj sɫuɣ bɨɫ', note: 'х→ɣ before б (p.257)' },
+    ],
+    
 };
 
 /**
@@ -189,11 +214,21 @@ function runGoldenTests() {
         console.log(`\n▶ ${category}`);
         
         for (const test of tests) {
-            // processWord is defined in index.html
-            // Pass isClitic: true for words with stress = -1 (unstressed clitics)
-            const options = test.stress === -1 ? { isClitic: true } : {};
-            const result = processWord(test.word, test.stress, options);
-            const actual = result.syllables.map(s => s.ipa).join(' ');
+            let actual;
+            let displayWord;
+            
+            // Check if this is a phrase test (has 'phrase' property) or single word test
+            if (test.phrase) {
+                // Multi-word phrase test - uses processText flow
+                displayWord = test.phrase;
+                actual = testPhrase(test.phrase, test.stresses);
+            } else {
+                // Single word test
+                displayWord = test.word;
+                const options = test.stress === -1 ? { isClitic: true } : {};
+                const result = processWord(test.word, test.stress, options);
+                actual = result.syllables.map(s => s.ipa).join(' ');
+            }
             
             const normalizedActual = normalizeForComparison(actual);
             const normalizedExpected = normalizeForComparison(test.expected);
@@ -201,11 +236,11 @@ function runGoldenTests() {
             
             if (passed) {
                 totalPassed++;
-                console.log(`  ✅ ${test.word}: /${actual}/`);
+                console.log(`  ✅ ${displayWord}: /${actual}/`);
             } else {
                 totalFailed++;
-                failures.push({ ...test, actual });
-                console.log(`  ❌ ${test.word}: got /${actual}/, expected /${test.expected}/`);
+                failures.push({ word: displayWord, expected: test.expected, actual, note: test.note });
+                console.log(`  ❌ ${displayWord}: got /${actual}/, expected /${test.expected}/`);
                 console.log(`     ${test.note}`);
             }
         }
@@ -230,6 +265,35 @@ function runGoldenTests() {
 }
 
 /**
+ * Test a multi-word phrase with cross-boundary assimilation
+ * @param {string} phrase - Space-separated words
+ * @param {Array<number|null>} stresses - Stress index for each word (null = unstressed clitic)
+ * @returns {string} Combined IPA output
+ */
+function testPhrase(phrase, stresses) {
+    const words = phrase.split(/\s+/);
+    
+    // Process each word individually first
+    const processedWords = words.map((word, idx) => {
+        const stress = stresses[idx];
+        const options = stress === null ? { isClitic: true } : {};
+        return {
+            word,
+            stress: stress === null ? -1 : stress,
+            result: processWord(word, stress === null ? -1 : stress, options)
+        };
+    });
+    
+    // Apply cross-boundary voicing assimilation
+    // For now, just concatenate - we'll implement the assimilation logic next
+    const ipaOutput = processedWords.map(pw => {
+        return pw.result.syllables.map(s => s.ipa).join(' ');
+    }).join(' ');
+    
+    return ipaOutput;
+}
+
+/**
  * Run a single test (for debugging)
  */
 function testWord(word, stress = -1) {
@@ -243,10 +307,11 @@ function testWord(word, stress = -1) {
 if (typeof window !== 'undefined') {
     window.runGoldenTests = runGoldenTests;
     window.testWord = testWord;
+    window.testPhrase = testPhrase;
     window.GOLDEN_TESTS = GOLDEN_TESTS;
 }
 
 // Export for Node.js (future)
 if (typeof module !== 'undefined') {
-    module.exports = { GOLDEN_TESTS, runGoldenTests, testWord, normalizeForComparison };
+    module.exports = { GOLDEN_TESTS, runGoldenTests, testWord, testPhrase, normalizeForComparison };
 }
