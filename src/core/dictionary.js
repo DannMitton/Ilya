@@ -1,6 +1,9 @@
 /**
  * MSR Dictionary Module
- * Stress lookup and harvest management
+ * Stress lookup, gloss lookup, and harvest management
+ * 
+ * Dictionary source: OpenRussian.org (CC-BY-SA-4.0)
+ * https://github.com/Badestrand/russian-dictionary
  */
 
 // ============================================================================
@@ -14,10 +17,10 @@ const HARVEST_STORAGE_KEY = 'msr_wiktionary_harvest';
 // ============================================================================
 
 let wikiHarvest = {};
-let STRESS_DICTIONARY = {};
-let STRESS_CORRECTIONS = {};
+let STRESS_DICTIONARY = {};      // OpenRussian base dictionary
+let STRESS_CORRECTIONS = {};     // Manual overrides
 let Ё_EXCEPTION_DICTIONARY = {};
-let EXCEPTION_WORDS = {};
+let EXCEPTION_WORDS = {};        // Grayson Appendix F
 
 // ============================================================================
 // INITIALIZATION
@@ -34,31 +37,40 @@ export function setDictionaries(dictionaries) {
 // STRESS LOOKUP
 // ============================================================================
 
+/**
+ * Look up stress position for a word
+ * Priority: corrections > exceptions > openrussian > harvest
+ * 
+ * @param {string} word - The word to look up
+ * @returns {{ index: number, source: string|null }} Stress index and source
+ */
 export function lookupStress(word) {
     const normalized = word.toLowerCase().replace(/[.,!?;:"""''„‚«»—–\-()]/g, '');
     
-    // Check corrections first (highest priority)
+    // 1. Check corrections first (highest priority - manual overrides)
     if (STRESS_CORRECTIONS[normalized] !== undefined) {
-        return {
-            index: STRESS_CORRECTIONS[normalized],
-            source: 'corrections'
-        };
+        return { index: STRESS_CORRECTIONS[normalized], source: 'corrections' };
     }
     
-    // Check main dictionary
-    if (STRESS_DICTIONARY[normalized] !== undefined) {
-        return {
-            index: STRESS_DICTIONARY[normalized],
-            source: 'vuizur'
-        };
+    // 2. Check exception words (Grayson Appendix F)
+    if (EXCEPTION_WORDS[normalized]?.stress !== undefined) {
+        return { index: EXCEPTION_WORDS[normalized].stress, source: 'exceptions' };
     }
     
-    // Check harvest
+    // 3. Check main dictionary (OpenRussian)
+    // Supports both formats: { word: index } and { word: { stress, gloss } }
+    const dictEntry = STRESS_DICTIONARY[normalized];
+    if (dictEntry !== undefined) {
+        if (typeof dictEntry === 'number') {
+            return { index: dictEntry, source: 'openrussian' };
+        } else if (dictEntry.stress !== undefined) {
+            return { index: dictEntry.stress, source: 'openrussian' };
+        }
+    }
+    
+    // 4. Check user harvest (lowest priority)
     if (wikiHarvest[normalized]) {
-        return {
-            index: wikiHarvest[normalized].stress,
-            source: 'wiktionary'
-        };
+        return { index: wikiHarvest[normalized].stress, source: 'harvest' };
     }
     
     return { index: -1, source: null };
@@ -67,8 +79,47 @@ export function lookupStress(word) {
 export function hasStressEntry(word) {
     const normalized = word.toLowerCase().replace(/[.,!?;:"""''„‚«»—–\-()]/g, '');
     return STRESS_CORRECTIONS[normalized] !== undefined ||
+           EXCEPTION_WORDS[normalized]?.stress !== undefined ||
            STRESS_DICTIONARY[normalized] !== undefined ||
            wikiHarvest[normalized] !== undefined;
+}
+
+// ============================================================================
+// GLOSS LOOKUP
+// ============================================================================
+
+/**
+ * Look up English gloss/translation for a word
+ * 
+ * @param {string} word - The word to look up
+ * @returns {string|null} English gloss or null if not found
+ */
+export function lookupGloss(word) {
+    const normalized = word.toLowerCase().replace(/[.,!?;:"""''„‚«»—–\-()]/g, '');
+    
+    const dictEntry = STRESS_DICTIONARY[normalized];
+    if (dictEntry?.gloss) {
+        return dictEntry.gloss;
+    }
+    
+    return null;
+}
+
+/**
+ * Look up both stress and gloss in one call
+ * 
+ * @param {string} word - The word to look up
+ * @returns {{ stress: number, stressSource: string|null, gloss: string|null }}
+ */
+export function lookupWord(word) {
+    const stressResult = lookupStress(word);
+    const gloss = lookupGloss(word);
+    
+    return {
+        stress: stressResult.index,
+        stressSource: stressResult.source,
+        gloss: gloss
+    };
 }
 
 // ============================================================================
@@ -117,7 +168,7 @@ export function saveHarvest() {
 export function harvestWord(word, stressIndex) {
     const normalized = word.toLowerCase().replace(/[.,!?;:"""''„‚«»—–]/g, '');
     
-    // Skip if already in dictionaries
+    // Skip if already in any dictionary
     if (STRESS_DICTIONARY[normalized] !== undefined) return false;
     if (STRESS_CORRECTIONS[normalized] !== undefined) return false;
     
@@ -158,11 +209,11 @@ export function getHarvestStats() {
 }
 
 export function exportHarvest() {
-    const vuizurFormat = {};
+    const simpleFormat = {};
     for (const [word, data] of Object.entries(wikiHarvest)) {
-        vuizurFormat[word] = data.stress;
+        simpleFormat[word] = data.stress;
     }
-    return JSON.stringify(vuizurFormat, null, 2);
+    return JSON.stringify(simpleFormat, null, 2);
 }
 
 export function downloadHarvest(full = false) {
@@ -185,6 +236,23 @@ export function clearHarvest() {
 
 export function getHarvestData() {
     return wikiHarvest;
+}
+
+// ============================================================================
+// DICTIONARY STATS
+// ============================================================================
+
+/**
+ * Get statistics about loaded dictionaries
+ */
+export function getDictionaryStats() {
+    return {
+        openrussian: Object.keys(STRESS_DICTIONARY).length,
+        corrections: Object.keys(STRESS_CORRECTIONS).length,
+        exceptions: Object.keys(EXCEPTION_WORDS).length,
+        yoExceptions: Object.keys(Ё_EXCEPTION_DICTIONARY).length,
+        harvest: Object.keys(wikiHarvest).length
+    };
 }
 
 // ============================================================================
