@@ -2782,8 +2782,9 @@ Border: #c4b5a8, #d4c4b0
                 return {
                     originalWord: word,
                     displayWord: word,  // Keep spaces for display
+                    combinedWord: combinedWord,  // For reprocessing (no spaces)
                     // Store the corrected form (with ё) for reprocessing
-                    correctedWord: ёException ? ёException.actualForm : mainWord,
+                    correctedWord: ёException ? ёException.actualForm : combinedWord,
                     // Process the full combined word with adjusted stress
                     processed: processWord(combinedWord, adjustedStress, { isClitic: isStandaloneClitic }),
                     isClitic: hasMergedParts,
@@ -3068,8 +3069,9 @@ Border: #c4b5a8, #d4c4b0
             
             console.log('[applyStressChange]', { wordIndex, syllableIndex, source });
 
-            // Reprocess word with new stress (use correctedWord to preserve ё)
-            const wordToUse = wordData.correctedWord || wordData.originalWord;
+            // Reprocess word with new stress
+            // Priority: correctedWord (has ё fixes) > combinedWord (has proclitic) > originalWord
+            const wordToUse = wordData.correctedWord || wordData.combinedWord || wordData.originalWord;
             const oldIPA = wordData.processed.syllables.map(s => s.ipa).join('.');
             wordData.processed = processWord(wordToUse, syllableIndex);
             const newIPA = wordData.processed.syllables.map(s => s.ipa).join('.');
