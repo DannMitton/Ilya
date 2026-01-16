@@ -2531,7 +2531,7 @@ footer a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding-top: 12px;
     padding-bottom: 12px;
 }
@@ -2542,16 +2542,20 @@ footer a:hover {
     font-family: 'Noto Serif', serif;
     color: var(--msr-paper-600, #9a8b7c);
     order: 1;
-    margin-top: 0;
+margin-top: 0;
+    margin-bottom: 18px;
+    line-height: 1.4;
 }
 
 /* Cyrillic in middle - dominant, vertically centered */
 .word-card-front .cyrillic {
     order: 2;
-    flex-grow: 1;
+    flex-grow: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+   line-height: 36px;
+    margin-bottom: 18px;
 }
 
 /* Divider and translation grouped at bottom */
@@ -2559,14 +2563,15 @@ footer a:hover {
     width: 60%;
     height: 1px;
     background: var(--msr-paper-400, #d8cdc6);
-    margin: 0 auto 4px auto;
+    margin: 0 auto 9px auto;
     order: 3;
 }
 
 .word-card-front .translation {
     font-size: 0.9rem;
     font-family: 'Noto Serif', serif;
-    font-style: italic;
+    font-style: italic; 
+   line-height: 1.4;
     color: var(--msr-paper-600, #9a8b7c);
     order: 4;
     margin-bottom: 0;
