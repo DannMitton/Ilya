@@ -4,12 +4,30 @@
 ================================================================================
 MY SUNG RUSSIAN (MSR) - IPA Transcription Tool for Singers
 ================================================================================
-Version: 4.19
+Version: 4.28
 Last Updated: 2026-01-18
 Developer: Dann Mitton
 Assistant: Claude (Anthropic)
 
-CHANGES IN 4.19:
+CHANGES IN 4.28:
+- Optimization: removed dead lockedSyllables parameter and checks (~25 lines)
+- Optimization: extracted FLIP_ICON_SVG constant (deduplication)
+- Updated section overview comment with accurate line numbers
+- Cleaned up v4.16 changelog (lock feature was removed in v4.28)
+
+CHANGES IN 4.27:
+- Code pruning: removed dead word-card-sizer HTML and getIPAForSizer()
+- Code pruning: removed orphaned lock feature (toggleLock, retranscribeSyllablesWithLock)
+- Code pruning: removed dead .lock-btn handlers from modal code
+- Code pruning: removed debug console.logs (kept [MSR] and [Harvest] user-facing)
+- Updated TODO list (openrussian integration complete)
+
+CHANGES IN 4.26:
+- Fixed drag-and-drop modal update (preserve flipped state)
+- Added 3D flip CSS for modal context
+- Smoother drag animation transitions
+
+CHANGES IN 4.19-4.25:
 - Click-to-edit in Singer's View: click any word to open its card as a centered modal
 - DOM overlay approach replaces canvas hit-testing (simpler, more reliable)
 - Word card modal: fully functional, must dismiss to continue
@@ -26,12 +44,7 @@ CHANGES IN 4.17:
 - Coordinates now properly tethered to rendered word positions
 
 CHANGES IN 4.16:
-- Syllable Lock feature: click 🔒 to prevent vowel reduction on any syllable
-- Locked syllables retain full vowel quality even when unstressed
-- Visual feedback: 🔒 (faded) = unlocked, 🔓 (solid) = locked
-- Added lockedSyllables parameter to transcribeSyllable() function
-- Updated 5 vowel reduction branches (а, о, е, я, э) to respect locks
-- New functions: toggleLock(), retranscribeSyllablesWithLock()
+- (Syllable Lock feature removed in v4.28)
 
 CHANGES IN 4.15:
 - Wiktionary Harvest System: automatically collects verified stress data
@@ -194,8 +207,7 @@ KEY CONCEPTS:
 KNOWN ISSUES / TODO
 ================================================================================
 
-[ ] openrussian stress dictionary integration (currently placeholder)
-[ ] Gloss/translation input in Singer's View (shows "___" placeholder)
+[x] openrussian stress dictionary integration (51,643 words loaded)
 [ ] Mobile testing and refinement needed
 [ ] Extended repertoire testing (Rachmaninoff, Tchaikovsky)
 [ ] Print stylesheet refinement for Singer's View
@@ -560,11 +572,11 @@ Border: #c4b5a8, #d4c4b0
 
         <footer id="mainFooter" class="collapsed" onclick="toggleFooter()">
             <div class="footer-collapsed-label">
-                My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.26</span> — tap for credits & license <span class="footer-arrow">▲</span>
+                My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.28</span> — tap for credits & license <span class="footer-arrow">▲</span>
             </div>
             <div class="footer-main">
             <p>
-                <strong>My Sung Russian (MSR)</strong> <span id="versionNumberExpanded" onclick="event.stopPropagation()">v4.26</span>
+                <strong>My Sung Russian (MSR)</strong> <span id="versionNumberExpanded" onclick="event.stopPropagation()">v4.28</span>
             </p>
             <p style="margin-top: 8px; font-size: 0.85em; line-height: 1.6;">
                 MSR's transcription rules are drawn from Craig Grayson's doctoral dissertation <a href="https://digital.lib.washington.edu/server/api/core/bitstreams/96b596ce-3a65-41c8-a45f-77b2e94ae48a/content" target="_blank" onclick="event.stopPropagation()"><em>Russian Lyric Diction: A Practical Guide with Introduction and Annotations and a Bibliography with Annotations on Selected Sources</em></a> (University of Washington, 2012). Developed and maintained by Dann Mitton (2026). Stress dictionary via <a href="https://github.com/openrussian/add-stress-to-epub" target="_blank" onclick="event.stopPropagation()">openrussian</a> (AGPL-3.0).
@@ -691,53 +703,36 @@ Border: #c4b5a8, #d4c4b0
 
     <script>
         // ============================================================================
-        // MSR JAVASCRIPT - STRUCTURE OVERVIEW
+        // MSR JAVASCRIPT - STRUCTURE OVERVIEW (v4.28, ~7400 lines)
         // ============================================================================
         // 
-        // SECTION 0: GRAYSON RULES KNOWLEDGE BASE (NEW - lines ~1345-2200)
-        //            Pedagogical assertions for "Why?" explanations
+        // External data files (loaded via <script> tags):
+        //   - data/yo-exceptions.js (Ё_EXCEPTION_DICTIONARY)
+        //   - data/stress-corrections.js (STRESS_CORRECTIONS)
+        //   - data/exception-words.js (EXCEPTION_WORDS)
+        //   - data/openrussian-dict.json (51,643 stress entries, loaded async)
         //
-        // SECTION 1: STRESS DICTIONARY (~47,000 entries, lines ~2200-49200)
-        //            Large data block - scroll past to reach logic
-        //
-        // SECTION 2: GRAYSON IPA INVENTORY (lines ~49230-49340)
-        //            Authoritative symbol mappings from dissertation
-        //
-        // SECTION 3: UTILITY FUNCTIONS (lines ~49340-49450)
-        //            Character classification, normalization, notation prefs
-        //
-        // SECTION 4: SYLLABIFICATION (lines ~49450-49580)
-        //            Sonority-based syllable splitting
-        //
-        // SECTION 5: PHONOLOGICAL ANALYSIS (lines ~49580-49900)
-        //            Voicing assimilation, palatalization analysis
-        //
-        // SECTION 6: SPECIAL CLUSTERS & EXCEPTIONS (lines ~49900-50100)
-        //            Grayson Ch. 6 cluster rules, exception words
-        //
-        // SECTION 7: TRANSCRIPTION ENGINE (lines ~50100-50520)
-        //            Core syllable-to-IPA conversion
-        //
-        // SECTION 8: WORD PROCESSING (lines ~50520-50660)
-        //            Orchestrates transcription pipeline
-        //
-        // SECTION 9: UI RENDERING & INTERACTION (lines ~50660-51100)
-        //            DOM manipulation, event handlers, view switching
+        // SECTION 1: Harvest System & Stress Lookup (~700-1000)
+        // SECTION 2: IPA Inventory & Style Presets (~1000-1400)
+        // SECTION 3: Utilities & Syllabification (~1400-1600)
+        // SECTION 4: Phonological Analysis (~1600-1900)
+        // SECTION 5: Exception Handling (~1900-2100)
+        // SECTION 6: Transcription Engine (~2100-2620)
+        // SECTION 7: Word/Text Processing (~2620-3010)
+        // SECTION 8: Stress UI & Modals (~3010-3550)
+        // SECTION 9: Wiktionary & Why Panels (~3550-4350)
+        // SECTION 10: Workspace Rendering (~4350-4850)
+        // SECTION 11: Syllable Editor & Drag-Drop (~4850-5400)
+        // SECTION 12: View Switching & Metadata (~5400-5850)
+        // SECTION 13: User Profile & Autocomplete (~5850-6250)
+        // SECTION 14: Singer's View Canvas (~6250-6850)
+        // SECTION 15: Footer, Dev Mode, Export (~6850-7400)
         //
         // ============================================================================
 
-        // ============================================================================
-        // SECTION 1: openrussian STRESS DICTIONARY (47,283 entries)
-        // ============================================================================
-        // Extracted from Wiktionary via openrussian/add-stress-to-epub
-        // Obsolete orthography normalized per Grayson (ѳ→ф, і→и, ѣ→е, ѵ→и)
-        // Format: word -> stress position (0-based vowel/syllable index)
-        //
-        // NOTE: GRAYSON_RULES object and old rule-lookup functions (ruleMatchScore,
-        // findApplicableRules, getBestExplanation, getRule, explainHardConsonant)
-        // were removed in v4.14. The "Why" feature now uses generateCuratedExplanations().
-        // ============================================================================
-        
+        // Shared SVG icons (avoid duplication in templates)
+        const FLIP_ICON_SVG = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 12a8 8 0 0 1 8-8c2.8 0 5.2 1.4 6.7 3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-8 8c-2.8 0-5.2-1.4-6.7-3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
         // ============================================================================
         // CHAPTER 8 EXCEPTION DICTIONARY: Printed ⟨е⟩ = Actual ⟨ё⟩
         // ============================================================================
@@ -2081,7 +2076,7 @@ let wordClickRegions = []; // Store word positions for click handling
         }
         
         // Transcribe a single syllable
-        function transcribeSyllable(syllable, position, wordContext, lockedSyllables = new Set()) {
+        function transcribeSyllable(syllable, position, wordContext) {
             const chars = Array.from(syllable.toLowerCase());
             let ipa = '';
             
@@ -2377,7 +2372,7 @@ let wordClickRegions = []; // Store word positions for click handling
                                 // the same position."
                                 // Example: блюдa /ˈblʲu dɑ/ (platters) vs блюдо /ˈblʲu dʌ/ (a platter)
                                 ipa += 'ɑ';
-                            } else if (!lockedSyllables.has(position)) {
+                            } else {
                                 // Grayson p. 266: -ая ending exception → always /ɑ/ even in remote post-tonic
                                 // This overrides the normal remote reduction to [ʌ] or [ɪ]
                                 if (isAyaEndingA) {
@@ -2388,9 +2383,6 @@ let wordClickRegions = []; // Store word positions for click handling
                                     // agents, not just after one. Remote unstressed а → ʌ.
                                     ipa += 'ʌ';
                                 }
-                            } else {
-                                // Locked syllable: use full vowel quality
-                                ipa += inInterpalatalA ? 'a' : 'ɑ';
                             }
                             break;
 
@@ -2405,7 +2397,7 @@ let wordClickRegions = []; // Store word positions for click handling
                                 // Grayson p. 97: immediate posttonic о → [ʌ]
                                 // (Unlike а which stays ɑ, о reduces to ʌ)
                                 ipa += 'ʌ';
-                            } else if (!lockedSyllables.has(position)) {
+                            } else {
                                 // Grayson p. 127: remote positions → [ʌ]
                                 // EXCEPTION: Word-initial о → [ɑ] (same as immediate pretonic)
                                 // Grayson p. 97 treats word-initial as a special case
@@ -2419,9 +2411,6 @@ let wordClickRegions = []; // Store word positions for click handling
                                 } else {
                                     ipa += 'ʌ';
                                 }
-                            } else {
-                                // Locked syllable: use full vowel quality
-                                ipa += 'o';
                             }
                             break;
 
@@ -2467,7 +2456,7 @@ let wordClickRegions = []; // Store word positions for click handling
                                 } else {
                                     ipa += 'ɪ';
                                 }
-                            } else if (!lockedSyllables.has(position)) {
+                            } else {
                                 // Grayson p. 125: "The allophone is [ɪ]... and it fronts to 
                                 // the /i/-phoneme when interpalatal."
                                 if (inInterpalatal) {
@@ -2475,9 +2464,6 @@ let wordClickRegions = []; // Store word positions for click handling
                                 } else {
                                     ipa += 'ɪ';
                                 }
-                            } else {
-                                // Locked syllable: use full vowel quality
-                                ipa += inInterpalatal ? 'e' : 'ɛ';
                             }
                             break;
 
@@ -2540,7 +2526,7 @@ let wordClickRegions = []; // Store word positions for click handling
                             } else if (position === 'pretonic-immediate') {
                                 // Grayson p. 127: immediate pretonic after palatalized
                                 ipa += inInterpalatalYa ? 'a' : 'ɑ';
-                            } else if (!lockedSyllables.has(position)) {
+                            } else {
                                 // Grayson p. 266: -ая ending exception → always /ɑ/
                                 if (isAyaEnding) {
                                     ipa += 'ɑ';
@@ -2558,9 +2544,6 @@ let wordClickRegions = []; // Store word positions for click handling
                                     // Remote after non-palatalized → [ʌ]
                                     ipa += afterInterpalatal ? 'ɪ' : 'ʌ';
                                 }
-                            } else {
-                                // Locked syllable: use full vowel quality
-                                ipa += inInterpalatalYa ? 'a' : 'ɑ';
                             }
                             break;
 
@@ -2605,11 +2588,8 @@ let wordClickRegions = []; // Store word positions for click handling
                             // Grayson p. 127: unstressed э → [ɪ] (ikanye)
                             if (position === 'stressed') {
                                 ipa += 'ɛ';
-                            } else if (!lockedSyllables.has(position)) {
-                                ipa += 'ɪ';
                             } else {
-                                // Locked syllable: use full vowel quality
-                                ipa += 'ɛ';
+                                ipa += 'ɪ';
                             }
                             break;
                     }
@@ -2627,9 +2607,7 @@ let wordClickRegions = []; // Store word positions for click handling
             // Check for exception words with complete IPA override
             // BUT only use exception IPA if stress is NOT being overridden by user
             const exception = checkExceptionWord(normalized);
-            console.log('[processWord] word:', normalized, 'stressIndex:', stressIndex, 'exception:', exception ? exception.stressIndex : 'none');
             if (exception && (stressIndex === -1 || stressIndex === exception.stressIndex)) {
-                console.log('[processWord] Using exception IPA');
                 // Use exception's pre-computed IPA (stress matches dictionary or not specified)
                 const syllableIPAs = exception.ipa.split('.');
                 const syllables = syllabify(normalized);
@@ -2653,7 +2631,6 @@ let wordClickRegions = []; // Store word positions for click handling
                     exceptionRule: exception.rule || null
                 };
             }
-            console.log('[processWord] Using normal transcription (user override or no exception)');
             // If user overrides stress on exception word, fall through to normal processing
             // so vowel reduction recalculates based on new stress position
             
@@ -3251,17 +3228,6 @@ function showWordCardModal(wordIndex) {
     backCloseBtn.onclick = function() { flipModalCard(wordIndex); };
   }
   
-  // Lock buttons in syllable editor
-  cardClone.querySelectorAll('.lock-btn').forEach((lockBtn) => {
-    const sylIdx = parseInt(lockBtn.getAttribute('data-syllable-index') || lockBtn.closest('[data-syllable-index]')?.getAttribute('data-syllable-index'));
-    if (!isNaN(sylIdx)) {
-      lockBtn.onclick = function() { 
-        toggleLock(wordIndex, sylIdx);
-        setTimeout(() => updateModalCard(wordIndex), 50);
-      };
-    }
-  });
-  
   // Show modal with breathing in animation
   modal.style.display = 'flex';
   // Trigger reflow, then add visible class for animation
@@ -3316,17 +3282,6 @@ function updateModalCard(wordIndex) {
       
       const backCloseBtn = cardClone.querySelector('.card-back-close');
       if (backCloseBtn) backCloseBtn.onclick = function() { flipModalCard(wordIndex); };
-      
-      // Rewire lock buttons in syllable editor
-      cardClone.querySelectorAll('.lock-btn').forEach((lockBtn) => {
-        const sylIdx = parseInt(lockBtn.getAttribute('data-syllable-index') || lockBtn.closest('[data-syllable-index]')?.getAttribute('data-syllable-index'));
-        if (!isNaN(sylIdx)) {
-          lockBtn.onclick = function() { 
-            toggleLock(wordIndex, sylIdx);
-            setTimeout(() => updateModalCard(wordIndex), 50);
-          };
-        }
-      });
     }
   }, 50);
   
@@ -3366,14 +3321,6 @@ function handleModalEscape(e) {
         function toggleStress(wordIndex, syllableIndex) {
             const wordData = processedWords[wordIndex];
             const currentStress = wordData.processed.stressIndex;
-            
-            console.log('[toggleStress] START:', {
-                word: wordData.originalWord,
-                currentStress,
-                clickedSyllable: syllableIndex,
-                stressSource: wordData.stressSource,
-                originalDictionaryStress: wordData.originalDictionaryStress
-            });
             
             // RULE: If word contains ё, stress CANNOT be moved away from ё syllable
             // ё is always stressed in Russian; allowing unstressed ё violates Grayson's schema
@@ -3426,16 +3373,11 @@ function handleModalEscape(e) {
         function applyStressChange(wordIndex, syllableIndex, source) {
             const wordData = processedWords[wordIndex];
             const currentStress = wordData.processed.stressIndex;
-            
-            console.log('[applyStressChange]', { wordIndex, syllableIndex, source });
 
             // Reprocess word with new stress
             // Priority: correctedWord (has ё fixes) > combinedWord (has proclitic) > originalWord
             const wordToUse = wordData.correctedWord || wordData.combinedWord || wordData.originalWord;
-            const oldIPA = wordData.processed.syllables.map(s => s.ipa).join('.');
             wordData.processed = processWord(wordToUse, syllableIndex);
-            const newIPA = wordData.processed.syllables.map(s => s.ipa).join('.');
-            console.log('[applyStressChange] IPA changed:', oldIPA, '->', newIPA);
             
             // Track original dictionary stress for comparison
             if (wordData.originalDictionaryStress === undefined && 
@@ -3444,7 +3386,6 @@ function handleModalEscape(e) {
             }
             
             // Update stressSource
-            const oldSource = wordData.stressSource;
             if (wordData.originalDictionaryStress !== undefined && syllableIndex === wordData.originalDictionaryStress) {
                 // User returned to dictionary stress
                 wordData.stressSource = 'dictionary';
@@ -3452,7 +3393,6 @@ function handleModalEscape(e) {
                 // Apply the chosen source (user or composer)
                 wordData.stressSource = source;
             }
-            console.log('[applyStressChange] stressSource:', oldSource, '->', wordData.stressSource);
             
             // Clear cached IPA editor state so it regenerates with new stress
             delete wordData.ipaEditorState;
@@ -4644,23 +4584,15 @@ function handleModalEscape(e) {
                                             })()}
                                         </div>
                                         <div class="card-divider"></div>
-<div class="translation${gloss && gloss.length >= 60 ? ' truncated' : ''}">${gloss || ''}</div>                                                                                <button class="flip-button" onclick="flipCard(${wordIdx})" aria-label="Edit syllables"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 12a8 8 0 0 1 8-8c2.8 0 5.2 1.4 6.7 3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-8 8c-2.8 0-5.2-1.4-6.7-3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div class="translation${gloss && gloss.length >= 60 ? ' truncated' : ''}">${gloss || ''}</div>                                                                                <button class="flip-button" onclick="flipCard(${wordIdx})" aria-label="Edit syllables">${FLIP_ICON_SVG}</button>
                                     </div>
                                     <div class="word-card-back">
                                         <div class="card-back-header">
                                             <span class="card-back-title">${getCyrillicWithStress(processed)}</span>
                                         </div>
                                         ${renderSyllableEditor(wordIdx)}
-                                        <button class="card-back-close" onclick="flipCard(${wordIdx})" title="Done"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 12a8 8 0 0 1 8-8c2.8 0 5.2 1.4 6.7 3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-8 8c-2.8 0-5.2-1.4-6.7-3.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                                        <button class="card-back-close" onclick="flipCard(${wordIdx})" title="Done">${FLIP_ICON_SVG}</button>
                                     </div>
-                                    <div class="word-card-sizer">
-                                                                                <div class="sizer-front">
-                                                                                    <div class="ipa-top">/${fullIPA}/</div>
-                                                                                    <div class="cyrillic">${processed.syllables.map(s => s.cyrillic).join('')}</div>
-                                                                                    <div class="translation">${gloss || ''}</div>
-                                                                                </div>
-                                                                                <div class="sizer-back">${getIPAForSizer(wordIdx)}</div>
-                                                                            </div>
                                 </div>
                             </div>
                         `;
@@ -4871,21 +4803,6 @@ function handleModalEscape(e) {
         /**
          * Get IPA content for hidden sizer element (controls card width)
          */
-        function getIPAForSizer(wordIdx) {
-            const wordData = processedWords[wordIdx];
-            if (!wordData) return '';
-            const syllables = wordData.processed.syllables;
-            
-            // Always return IPA content for proper sizing
-            if (syllables.length <= 1) {
-                return syllables[0]?.ipa || '';
-            }
-            
-            // Build IPA string with pipes for boundaries
-            const parts = syllables.map(s => s.ipa);
-            return parts.join(' | ');
-        }
-        
         /**
          * Render the IPA syllable boundary editor
          * 
@@ -5448,67 +5365,12 @@ function handleModalEscape(e) {
             }
         }
         
-        // NOTE: moveCharLeft() and moveCharRight() removed in v4.14
-        // The syllable boundary editor now uses drag-and-drop with moveIPAUnitLeft/Right
-        
         /**
          * Re-run IPA transcription for a single syllable after boundary change
          * 
          * This keeps the IPA accurate after user moves consonants around.
          * Position-dependent rules (stressed/unstressed) are recalculated.
          */
-        
-        // Global storage for locked syllables (prevents vowel reduction)
-        // Key format: "wordIdx-sylIdx", Value: true
-        const lockedSyllables = new Set();
-        
-        /**
-         * Toggle lock state for a syllable (prevents/allows vowel reduction)
-         * @param {number} wordIdx - Word index
-         * @param {number} sylIdx - Syllable index within word
-         */
-        function toggleLock(wordIdx, sylIdx, event) {
-            const key = `${wordIdx}-${sylIdx}`;
-            if (lockedSyllables.has(key)) {
-                lockedSyllables.delete(key);
-            } else {
-                lockedSyllables.add(key);
-            }
-            // Update button appearance immediately
-            const btn = event.target;
-            btn.textContent = lockedSyllables.has(key) ? '🔓' : '🔒';
-            btn.style.opacity = lockedSyllables.has(key) ? '1' : '0.4';
-            // Retranscribe and refresh display
-            retranscribeSyllablesWithLock(wordIdx);
-            renderOutput();
-        }
-        
-        /**
-         * Retranscribe all syllables in a word, respecting locks
-         * @param {number} wordIdx - Word index
-         */
-        function retranscribeSyllablesWithLock(wordIdx) {
-            const wordData = processedWords[wordIdx];
-            if (!wordData) return;
-            
-            // Build set of locked positions for this word
-            const wordLockedPositions = new Set();
-            wordData.processed.syllables.forEach((syl, idx) => {
-                if (lockedSyllables.has(`${wordIdx}-${idx}`)) {
-                    const position = getSyllablePosition(idx, wordData.processed.stressIndex, wordData.processed.syllables.length);
-                    wordLockedPositions.add(position);
-                }
-            });
-            
-            // Retranscribe each syllable
-            wordData.processed.syllables.forEach((syllable, idx) => {
-                const position = getSyllablePosition(idx, wordData.processed.stressIndex, wordData.processed.syllables.length);
-                syllable.ipa = transcribeSyllable(syllable.cyrillic, position, { 
-                    word: wordData.originalWord, 
-                    syllables: wordData.processed.syllables 
-                }, wordLockedPositions);
-            });
-        }
         
         function retranscribeSyllables(wordIdx, sylIdx) {
             const wordData = processedWords[wordIdx];
@@ -6965,9 +6827,9 @@ function handleModalEscape(e) {
                 const label = footer.querySelector('.footer-collapsed-label');
                 if (label) {
                     if (footer.classList.contains('collapsed')) {
-                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.26</span> — tap for credits & license <span class="footer-arrow">▲</span>';
+                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.28</span> — tap for credits & license <span class="footer-arrow">▲</span>';
                     } else {
-                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.26</span> — tap to collapse <span class="footer-arrow">▼</span>';
+                        label.innerHTML = 'My Sung Russian (MSR) <span id="versionNumber" onclick="event.stopPropagation()">v4.28</span> — tap to collapse <span class="footer-arrow">▼</span>';
                     }
                     // Re-attach triple-click handler after innerHTML change
                     attachVersionClickHandlers();
@@ -6978,7 +6840,7 @@ function handleModalEscape(e) {
         // ============================================================================
         // DEVELOPER TOOLS - Hidden Harvest Export
         // ============================================================================
-        // Triple-click the version number (v4.26) in the footer to:
+        // Triple-click the version number (v4.28) in the footer to:
         //   - First time: Unlock "developer mode" (stored in localStorage)
         //   - After unlock: Shows harvest indicator (🌾 + count) next to version
         //   - Click the indicator: Downloads harvest immediately
@@ -7099,10 +6961,6 @@ function handleModalEscape(e) {
             updateHarvestIndicator();
             return result;
         };
-        
-        // NOTE: renderStressEditor(), toggleWordEditor(), and setStressFromSingersView()
-        // removed in v4.14 - these were part of an old Singer's View editing system
-        // that was never fully implemented. Stress editing now happens in Workspace view.
         
         // Show tooltip at cursor position (for Singer's View)
         function showTooltipAtCursor(message) {
