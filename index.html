@@ -10,9 +10,9 @@ Developer: Dann Mitton
 Assistant: Claude (Anthropic)
 
 CHANGES IN 4.30:
-- Fix: added backface-visibility CSS for proper 3D card flip in modal
-- Fix: card-back now properly positioned for flip animation
-- Stabilizing flip-back visual bug
+- Fix: reverted problematic absolute positioning CSS
+- Modal flip uses simpler transform approach
+- Investigating Workspace rendering issue
 
 CHANGES IN 4.29:
 - Refactor: extracted rewireModalCardHandlers() to consolidate duplicate code
@@ -312,22 +312,8 @@ Border: #c4b5a8, #d4c4b0
             perspective: 1000px;
         }
         .word-card-modal-content .word-card-inner {
-            position: relative;
             transform-style: preserve-3d;
             transition: transform 0.4s ease;
-        }
-        .word-card-modal-content .word-card-front,
-        .word-card-modal-content .word-card-back {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-        .word-card-modal-content .word-card-back {
-            transform: rotateY(180deg);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
         }
         .word-card-modal-content .word-card-container.flipped .word-card-inner {
             transform: rotateY(180deg);
