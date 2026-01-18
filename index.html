@@ -4,10 +4,15 @@
 ================================================================================
 MY SUNG RUSSIAN (MSR) - IPA Transcription Tool for Singers
 ================================================================================
-Version: 4.16
-Last Updated: 2026-01-13
+Version: 4.17
+Last Updated: 2026-01-18
 Developer: Dann Mitton
 Assistant: Claude (Anthropic)
+
+CHANGES IN 4.17:
+- Fixed wordClickRegions: now clears on each render (no duplicates)
+- Fixed word index tracking: uses global originalIndex instead of per-line index
+- Coordinates now properly tethered to rendered word positions
 
 CHANGES IN 4.16:
 - Syllable Lock feature: click 🔒 to prevent vowel reduction on any syllable
@@ -5957,6 +5962,8 @@ function openWordCard(wordIndex) {
             const canvas = document.getElementById('singersCanvas');
             if (!canvas) return;
             
+            wordClickRegions.length = 0; // Clear previous click regions
+            
             const ctx = canvas.getContext('2d');
             
             // ================================================================
@@ -5996,7 +6003,7 @@ function openWordCard(wordIndex) {
             let currentLine = [];
             let currentLineWidth = 0;
             
-            const wordData = processedWords.map((wd) => {
+            const wordData = processedWords.map((wd, originalIndex) => {
                 const { processed, originalWord } = wd;
                 
                 // Get IPA
@@ -6038,7 +6045,8 @@ function openWordCard(wordIndex) {
                     cyrillic,
                     gloss: lookupGloss(originalWord),
                     width,
-                    lineBreakAfter: wd.lineBreakAfter  // Preserve poetry line breaks
+                    lineBreakAfter: wd.lineBreakAfter,
+                    originalIndex
                 };
             });
             
@@ -6259,7 +6267,7 @@ function openWordCard(wordIndex) {
                           y: y + 6,
                           width: word.width,
                           height: lineHeight,
-                          wordIndex: wordIndex
+                          wordIndex: word.originalIndex
                         });
                         
                         x += word.width + wordSpacing;
