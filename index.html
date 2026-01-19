@@ -498,7 +498,7 @@ Border: #c4b5a8, #d4c4b0
                 <!-- Zoomable Canvas Viewport -->
                 <div class="canvas-viewport" id="canvasViewport">
                     <canvas id="singersCanvas"></canvas>
-                    <div id="wordOverlays" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+                    <div id="wordOverlays" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; "></div>
                 </div>
                 <!-- Zoom controls -->
                 <div class="viewport-controls">
@@ -6781,16 +6781,14 @@ function handleModalEscape(e) {
             const dpr = window.devicePixelRatio || 1;
             const scale = canvas.clientWidth / (canvas.width / dpr);
             
-            // Canvas offset within viewport
-            const canvasOffsetLeft = canvas.offsetLeft;
-            const canvasOffsetTop = canvas.offsetTop;
-            
             // Create an overlay for each word
+            // Note: wordOverlays container is absolutely positioned at (0,0) within canvasViewport
+            // so region coordinates map directly without needing canvas offset
             wordClickRegions.forEach(function(region) {
                 const overlay = document.createElement('div');
                 overlay.className = 'word-overlay';
-                overlay.style.left = (canvasOffsetLeft + region.x * scale) + 'px';
-                overlay.style.top = (canvasOffsetTop + region.y * scale) + 'px';
+                overlay.style.left = (region.x * scale) + 'px';
+                overlay.style.top = (region.y * scale) + 'px';
                 overlay.style.width = (region.width * scale) + 'px';
                 overlay.style.height = (region.height * scale) + 'px';
                 overlay.setAttribute('data-word-index', region.wordIndex);
