@@ -19,6 +19,7 @@ CHANGES IN 4.23:
 - Eliminated overlay positioning bugs permanently
 - Fixed drag ghost animation: consonants now show visual travel during drag
 - Fixed card flip animation: proper backface-visibility and CSS Grid stacking
+- Fixed card flip after operations: hidden .word-card-sizer prevents grid breakage
 
 CHANGES IN 4.22:
 - Fixed overlay positioning: added position:relative to canvasViewport
@@ -322,6 +323,9 @@ Border: #c4b5a8, #d4c4b0
         }
         .word-card-modal-content .word-card-back {
             transform: rotateY(180deg);
+        }
+        .word-card-modal-content .word-card-sizer {
+            display: none; /* Prevents grid layout breakage after operations */
         }
         .word-card-modal-content .word-card-container.flipped .word-card-inner {
             transform: rotateY(180deg);
