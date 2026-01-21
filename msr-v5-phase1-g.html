@@ -1203,7 +1203,160 @@ async function loadDictionary() {
 }
 
 // Start loading dictionary immediately
-loadDictionary();    
+loadDictionary();
+
+/* ==================================================
+   SINGER'S MONOSYLLABLE SUPPLEMENT
+   Common words missing from OpenRussian dictionary
+   ================================================== */
+const SINGER_SUPPLEMENT = {
+    // Pronouns
+    'я': { stress: 0, gloss: 'I', source: 'supplement' },
+    'ты': { stress: 0, gloss: 'you (informal)', source: 'supplement' },
+    'он': { stress: 0, gloss: 'he', source: 'supplement' },
+    'мы': { stress: 0, gloss: 'we', source: 'supplement' },
+    'вы': { stress: 0, gloss: 'you (formal/plural)', source: 'supplement' },
+    'мне': { stress: 0, gloss: 'to me', source: 'supplement' },
+    'мной': { stress: 0, gloss: 'with me', source: 'supplement' },
+    'нам': { stress: 0, gloss: 'to us', source: 'supplement' },
+    'вам': { stress: 0, gloss: 'to you', source: 'supplement' },
+    'вас': { stress: 0, gloss: 'you (acc.)', source: 'supplement' },
+    'нас': { stress: 0, gloss: 'us', source: 'supplement' },
+    'кто': { stress: 0, gloss: 'who', source: 'supplement' },
+    'что': { stress: 0, gloss: 'what', source: 'supplement' },
+    'всё': { stress: 0, gloss: 'everything', source: 'supplement' },
+    'все': { stress: 0, gloss: 'everyone', source: 'supplement' },
+    'сам': { stress: 0, gloss: 'oneself', source: 'supplement' },
+    'мой': { stress: 0, gloss: 'my', source: 'supplement' },
+    'твой': { stress: 0, gloss: 'your', source: 'supplement' },
+    'свой': { stress: 0, gloss: 'one\'s own', source: 'supplement' },
+    'наш': { stress: 0, gloss: 'our', source: 'supplement' },
+    'ваш': { stress: 0, gloss: 'your (formal)', source: 'supplement' },
+    'весь': { stress: 0, gloss: 'all/whole', source: 'supplement' },
+    'тот': { stress: 0, gloss: 'that', source: 'supplement' },
+    'там': { stress: 0, gloss: 'there', source: 'supplement' },
+    'тут': { stress: 0, gloss: 'here', source: 'supplement' },
+    'где': { stress: 0, gloss: 'where', source: 'supplement' },
+    
+    // Particles & Negation
+    'не': { stress: 0, gloss: 'not', source: 'supplement' },
+    'ни': { stress: 0, gloss: 'nor/not a', source: 'supplement' },
+    'да': { stress: 0, gloss: 'yes/and', source: 'supplement' },
+    'нет': { stress: 0, gloss: 'no', source: 'supplement' },
+    'вот': { stress: 0, gloss: 'here is', source: 'supplement' },
+    'уж': { stress: 0, gloss: 'already', source: 'supplement' },
+    'ещё': { stress: 0, gloss: 'still/yet', source: 'supplement' },
+    'уже': { stress: 0, gloss: 'already', source: 'supplement' },
+    'так': { stress: 0, gloss: 'so/thus', source: 'supplement' },
+    'как': { stress: 0, gloss: 'how/as', source: 'supplement' },
+    'чем': { stress: 0, gloss: 'than', source: 'supplement' },
+    
+    // Prepositions (stressed when standalone)
+    'при': { stress: 0, gloss: 'at/by/in presence of', source: 'supplement' },
+    'для': { stress: 0, gloss: 'for', source: 'supplement' },
+    'без': { stress: 0, gloss: 'without', source: 'supplement' },
+    'под': { stress: 0, gloss: 'under', source: 'supplement' },
+    'над': { stress: 0, gloss: 'above', source: 'supplement' },
+    'про': { stress: 0, gloss: 'about', source: 'supplement' },
+    
+    // Common verb forms (imperatives, short forms)
+    'пой': { stress: 0, gloss: 'sing!', source: 'supplement' },
+    'дай': { stress: 0, gloss: 'give!', source: 'supplement' },
+    'стой': { stress: 0, gloss: 'stop!/stand!', source: 'supplement' },
+    'спи': { stress: 0, gloss: 'sleep!', source: 'supplement' },
+    'жди': { stress: 0, gloss: 'wait!', source: 'supplement' },
+    'иди': { stress: 0, gloss: 'go!', source: 'supplement' },
+    'будь': { stress: 0, gloss: 'be!', source: 'supplement' },
+    'знай': { stress: 0, gloss: 'know!', source: 'supplement' },
+    'верь': { stress: 0, gloss: 'believe!', source: 'supplement' },
+    'жить': { stress: 0, gloss: 'to live', source: 'supplement' },
+    'быть': { stress: 0, gloss: 'to be', source: 'supplement' },
+    'петь': { stress: 0, gloss: 'to sing', source: 'supplement' },
+    'спать': { stress: 0, gloss: 'to sleep', source: 'supplement' },
+    'ждать': { stress: 0, gloss: 'to wait', source: 'supplement' },
+    'знать': { stress: 0, gloss: 'to know', source: 'supplement' },
+    'дать': { stress: 0, gloss: 'to give', source: 'supplement' },
+    'стать': { stress: 0, gloss: 'to become', source: 'supplement' },
+    'был': { stress: 0, gloss: 'was (m.)', source: 'supplement' },
+    'есть': { stress: 0, gloss: 'is/to eat', source: 'supplement' },
+    
+    // Nouns (common in vocal repertoire)
+    'ночь': { stress: 0, gloss: 'night', source: 'supplement' },
+    'день': { stress: 0, gloss: 'day', source: 'supplement' },
+    'путь': { stress: 0, gloss: 'path/way', source: 'supplement' },
+    'свет': { stress: 0, gloss: 'light', source: 'supplement' },
+    'мир': { stress: 0, gloss: 'world/peace', source: 'supplement' },
+    'сон': { stress: 0, gloss: 'dream/sleep', source: 'supplement' },
+    'дом': { stress: 0, gloss: 'home/house', source: 'supplement' },
+    'сад': { stress: 0, gloss: 'garden', source: 'supplement' },
+    'лес': { stress: 0, gloss: 'forest', source: 'supplement' },
+    'бог': { stress: 0, gloss: 'god', source: 'supplement' },
+    'царь': { stress: 0, gloss: 'tsar', source: 'supplement' },
+    'князь': { stress: 0, gloss: 'prince', source: 'supplement' },
+    'дух': { stress: 0, gloss: 'spirit', source: 'supplement' },
+    'друг': { stress: 0, gloss: 'friend', source: 'supplement' },
+    'враг': { stress: 0, gloss: 'enemy', source: 'supplement' },
+    'брат': { stress: 0, gloss: 'brother', source: 'supplement' },
+    'сын': { stress: 0, gloss: 'son', source: 'supplement' },
+    'муж': { stress: 0, gloss: 'husband', source: 'supplement' },
+    'жизнь': { stress: 0, gloss: 'life', source: 'supplement' },
+    'смерть': { stress: 0, gloss: 'death', source: 'supplement' },
+    'боль': { stress: 0, gloss: 'pain', source: 'supplement' },
+    'грусть': { stress: 0, gloss: 'sadness', source: 'supplement' },
+    'страсть': { stress: 0, gloss: 'passion', source: 'supplement' },
+    'честь': { stress: 0, gloss: 'honor', source: 'supplement' },
+    'власть': { stress: 0, gloss: 'power', source: 'supplement' },
+    'часть': { stress: 0, gloss: 'part', source: 'supplement' },
+    'речь': { stress: 0, gloss: 'speech', source: 'supplement' },
+    'мысль': { stress: 0, gloss: 'thought', source: 'supplement' },
+    'кровь': { stress: 0, gloss: 'blood', source: 'supplement' },
+    'грудь': { stress: 0, gloss: 'chest/breast', source: 'supplement' },
+    'взор': { stress: 0, gloss: 'gaze', source: 'supplement' },
+    'взгляд': { stress: 0, gloss: 'glance', source: 'supplement' },
+    'слух': { stress: 0, gloss: 'hearing/rumor', source: 'supplement' },
+    'шум': { stress: 0, gloss: 'noise', source: 'supplement' },
+    'гром': { stress: 0, gloss: 'thunder', source: 'supplement' },
+    'дождь': { stress: 0, gloss: 'rain', source: 'supplement' },
+    'снег': { stress: 0, gloss: 'snow', source: 'supplement' },
+    'лёд': { stress: 0, gloss: 'ice', source: 'supplement' },
+    'огонь': { stress: 0, gloss: 'fire', source: 'supplement' },
+    'вода': { stress: 0, gloss: 'water', source: 'supplement' },
+    'земля': { stress: 0, gloss: 'earth', source: 'supplement' },
+    'край': { stress: 0, gloss: 'edge/land', source: 'supplement' },
+    'рай': { stress: 0, gloss: 'paradise', source: 'supplement' },
+    'ад': { stress: 0, gloss: 'hell', source: 'supplement' },
+    
+    // Adjectives (short forms common in poetry)
+    'рад': { stress: 0, gloss: 'glad', source: 'supplement' },
+    'сыт': { stress: 0, gloss: 'full/sated', source: 'supplement' },
+    'злой': { stress: 0, gloss: 'evil/angry', source: 'supplement' },
+    'свят': { stress: 0, gloss: 'holy', source: 'supplement' },
+    'прав': { stress: 0, gloss: 'right/correct', source: 'supplement' },
+    'жив': { stress: 0, gloss: 'alive', source: 'supplement' },
+    'мёртв': { stress: 0, gloss: 'dead', source: 'supplement' },
+    'нов': { stress: 0, gloss: 'new', source: 'supplement' },
+    'стар': { stress: 0, gloss: 'old', source: 'supplement' },
+    'юн': { stress: 0, gloss: 'young', source: 'supplement' },
+    'мил': { stress: 0, gloss: 'dear/sweet', source: 'supplement' },
+    'люб': { stress: 0, gloss: 'beloved', source: 'supplement' },
+    
+    // Conjunctions & Adverbs
+    'но': { stress: 0, gloss: 'but', source: 'supplement' },
+    'а': { stress: 0, gloss: 'and/but', source: 'supplement' },
+    'и': { stress: 0, gloss: 'and', source: 'supplement' },
+    'то': { stress: 0, gloss: 'then/that', source: 'supplement' },
+    'же': { stress: 0, gloss: '(emphasis)', source: 'supplement' },
+    'ли': { stress: 0, gloss: '(question)', source: 'supplement' },
+    'бы': { stress: 0, gloss: 'would', source: 'supplement' },
+    'вновь': { stress: 0, gloss: 'again', source: 'supplement' },
+    'вдруг': { stress: 0, gloss: 'suddenly', source: 'supplement' },
+    'прочь': { stress: 0, gloss: 'away', source: 'supplement' },
+    'вниз': { stress: 0, gloss: 'down', source: 'supplement' },
+    'вверх': { stress: 0, gloss: 'up', source: 'supplement' },
+    'лишь': { stress: 0, gloss: 'only', source: 'supplement' },
+    'чуть': { stress: 0, gloss: 'barely', source: 'supplement' },
+    'сквозь': { stress: 0, gloss: 'through', source: 'supplement' }
+};
     /* ========================================
        DRAWER CONTROLLER
        ======================================== */
@@ -1847,7 +2000,7 @@ loadDictionary();
       // Look up stress from dictionary
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
-        const entry = STRESS_DICTIONARY[cleanWord];
+        const entry = STRESS_DICTIONARY[cleanWord] || SINGER_SUPPLEMENT[cleanWord];
         if (entry) {
           return {
             stress: entry.stress,
