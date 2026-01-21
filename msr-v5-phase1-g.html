@@ -2469,7 +2469,9 @@ const SINGER_SUPPLEMENT = {
           whyToggle: document.getElementById('whyToggle'),
           whyPanel: document.getElementById('whyPanel'),
           cliticBadge: document.getElementById('cliticBadge'),
-          cliticType: document.getElementById('cliticType')
+          cliticType: document.getElementById('cliticType'),
+          citationRule: document.querySelector('.citation-rule'),
+          citationRef: document.querySelector('.citation-ref')
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -2496,7 +2498,85 @@ const SINGER_SUPPLEMENT = {
           e.stopPropagation();
         });
       },
-      
+      generateCitation(wordData) {
+        const dominated_ipa = wordData.ipa || '';
+        const dominated_cyrillic = (wordData.cyrillic || '').toLowerCase();
+        const syllables = wordData.syllables || [];
+        const isProclitic = wordData.isProclitic === 'true';
+        const syllableCount = syllables.length;
+        
+        // Check for monosyllables first
+        if (syllableCount === 1) {
+            if (isProclitic) {
+                return {
+                    rule: 'Monosyllabic proclitic — unstressed, attaches to following word',
+                    ref: 'Grayson §7.1'
+                };
+            }
+            // Check if it has stress marked
+            const hasStress = syllables.some(s => s.isStressed);
+            if (hasStress) {
+                return {
+                    rule: 'Stressed monosyllable — vowel receives full value',
+                    ref: 'Grayson §3.1'
+                };
+            }
+            return {
+                rule: 'Monosyllable — stress context determines vowel quality',
+                ref: 'Grayson §7.1'
+            };
+        }
+        
+        // Multi-syllable words: analyze the IPA for reduction patterns
+        // Priority order: most specific/interesting rule first
+        
+        // Check for ɑ from о-reduction (akanye)
+        if (ipa.includes('ɑ') && cyrillic.includes('о')) {
+            return {
+                rule: 'Unstressed /о/ reduces to [ɑ] in immediate pretonic position',
+                ref: 'Grayson §3.2'
+            };
+        }
+        
+        // Check for ʌ (remote reduction)
+        if (ipa.includes('ʌ')) {
+            return {
+                rule: 'Unstressed vowel reduces to [ʌ] in remote positions',
+                ref: 'Grayson §3.3'
+            };
+        }
+        
+        // Check for ɪ from е/я reduction (ikanye)
+        if (ipa.includes('ɪ') && (cyrillic.includes('е') || cyrillic.includes('я'))) {
+            return {
+                rule: 'Unstressed /е/ or /я/ reduces to [ɪ]',
+                ref: 'Grayson §3.2'
+            };
+        }
+        
+        // Check for palatalization
+        if (ipa.includes('ʲ')) {
+            return {
+                rule: 'Consonant palatalized before soft sign or front vowel',
+                ref: 'Grayson §4.2'
+            };
+        }
+        
+        // Check for й (j-glide)
+        if (ipa.includes('j') && (cyrillic.includes('е') || cyrillic.includes('ё') || cyrillic.includes('ю') || cyrillic.includes('я'))) {
+            return {
+                rule: 'Iotated vowel produces [j] glide',
+                ref: 'Grayson §3.6'
+            };
+        }
+        
+        // Default: stressed vowel rule
+        return {
+            rule: 'Stressed vowel receives full phonetic value',
+            ref: 'Grayson §3.1'
+        };
+    },
+
       open(wordData) {
         this.currentWord = wordData;
         this.isOpen = true;
@@ -2524,7 +2604,10 @@ const SINGER_SUPPLEMENT = {
         } else {
           this.elements.cliticBadge.style.display = 'none';
         }
-        
+        // Generate dynamic Grayson citation
+        const citation = this.generateCitation(wordData);
+        this.elements.citationRule.textContent = citation.rule;
+        this.elements.citationRef.textContent = '— ' + citation.ref;
         this.positionPopup(wordData.element);
         this.elements.overlay.classList.add('active');
       },
