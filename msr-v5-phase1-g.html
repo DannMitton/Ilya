@@ -699,6 +699,16 @@
       text-align: center;
     }
 
+    .why-clitic-banner {
+        background: rgba(168, 90, 58, 0.08);
+        color: var(--accent);
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+
     .syllable-section {
       margin-bottom: 1rem;
     }
@@ -1158,6 +1168,7 @@
         <div class="why-panel" id="whyPanel">
           <div class="why-content">
             <div class="why-content-inner" id="whyContent">
+              <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
               <div class="stress-source-module" id="stressSourceModule">
                 <div class="stress-source-label">Mark this stress as…</div>
                 <div class="stress-source-buttons">
@@ -2474,6 +2485,7 @@ const SINGER_SUPPLEMENT = {
           whyPanel: document.getElementById('whyPanel'),
           cliticBadge: document.getElementById('cliticBadge'),
           cliticType: document.getElementById('cliticType'),
+          whyCliticBanner: document.getElementById('whyCliticBanner'),
           citationRule: document.querySelector('.citation-rule'),
           citationRef: document.querySelector('.citation-ref')
         };
@@ -2623,6 +2635,17 @@ const SINGER_SUPPLEMENT = {
         
         // Always hide top clitic badge (info now in Why section)
         this.elements.cliticBadge.style.display = 'none';
+        
+        // Show clitic banner in Why section if applicable
+            const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
+            const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+            if (isProclitic || isEnclitic) {
+                const cliticType = isProclitic ? 'Proclitic' : 'Enclitic';
+                this.elements.whyCliticBanner.textContent = cliticType + ' — attaches phonologically';
+                this.elements.whyCliticBanner.style.display = 'block';
+            } else {
+                this.elements.whyCliticBanner.style.display = 'none';
+            }
 
         // Generate dynamic Grayson citation
         const citation = this.generateCitation(wordData);
