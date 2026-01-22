@@ -1552,7 +1552,7 @@ const SINGER_SUPPLEMENT = {
             
             const isProclitic = GraysonEngine.proclitics.has(cleanWord.toLowerCase());
             const isEnclitic = GraysonEngine.enclitics.has(cleanWord.toLowerCase());
-            const result = GraysonEngine.transcribe(cleanWord, wordData.stress);
+            const result = GraysonEngine.transcribe(cleanWord, wordData.stress, isProclitic || isEnclitic);
             
             const wordStack = document.createElement('div');
             wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '');
@@ -2152,12 +2152,12 @@ const SINGER_SUPPLEMENT = {
         return base;
       },
       
-      transcribe(word, stressIndex = -1) {
+      transcribe(word, stressIndex = -1, isClitic = false) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         const syllables = this.syllabify(cleanWord);
         const vowelCount = this.countVowels(cleanWord);
         
-        const effectiveStress = vowelCount === 1 ? 0 : stressIndex;
+        const effectiveStress = (vowelCount === 1 && !isClitic) ? 0 : stressIndex;
         
         let ipa = '';
         let syllableData = [];
