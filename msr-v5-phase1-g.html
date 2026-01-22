@@ -2703,7 +2703,7 @@ const SINGER_SUPPLEMENT = {
           btn.classList.toggle('stressed', idx === newStressIdx);
         });
         
-        const result = GraysonEngine.transcribe(this.currentWord.cyrillic, newStressIdx);
+        const result = GraysonEngine.transcribe(this.currentWord.cyrillic, newStressIdx, this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true);
         this.currentWord.ipa = result.ipa;
         this.currentWord.syllables = result.syllables;
       }
