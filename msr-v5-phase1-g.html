@@ -2486,6 +2486,7 @@ const SINGER_SUPPLEMENT = {
           cliticBadge: document.getElementById('cliticBadge'),
           cliticType: document.getElementById('cliticType'),
           whyCliticBanner: document.getElementById('whyCliticBanner'),
+          stressSourceModule: document.getElementById('stressSourceModule'),
           citationRule: document.querySelector('.citation-rule'),
           citationRef: document.querySelector('.citation-ref')
         };
@@ -2616,6 +2617,13 @@ const SINGER_SUPPLEMENT = {
             this.elements.syllableLabel.textContent = 'Click to reassign stress';
         }
 
+        // Hide stress source module for monosyllables (no stress to reassign)
+            if (syllableCount === 1) {
+                this.elements.stressSourceModule.style.display = 'none';
+            } else {
+                this.elements.stressSourceModule.style.display = 'block';
+            }
+
         this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
           <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
                   data-syllable-index="${idx}">
@@ -2635,7 +2643,7 @@ const SINGER_SUPPLEMENT = {
         
         // Always hide top clitic badge (info now in Why section)
         this.elements.cliticBadge.style.display = 'none';
-        
+
         // Show clitic banner in Why section if applicable
             const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
             const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
