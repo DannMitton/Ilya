@@ -2503,17 +2503,24 @@ const SINGER_SUPPLEMENT = {
         });
       },
       generateCitation(wordData) {
-        const dominated_ipa = wordData.ipa || '';
-        const dominated_cyrillic = (wordData.cyrillic || '').toLowerCase();
+        const ipa = wordData.ipa || '';
+        const cyrillic = (wordData.cyrillic || '').toLowerCase();
         const syllables = wordData.syllables || [];
         const isProclitic = wordData.isProclitic === 'true';
+        const isEnclitic = wordData.isEnclitic === 'true';
         const syllableCount = syllables.length;
-        
+
         // Check for monosyllables first
         if (syllableCount === 1) {
             if (isProclitic) {
                 return {
-                    rule: 'Monosyllabic proclitic — unstressed, attaches to following word',
+                    rule: 'Proclitic (attaches to following word). Unstressed vowel reduces.',
+                    ref: 'Grayson §7.1'
+                };
+            }
+            if (isEnclitic) {
+                return {
+                    rule: 'Enclitic (attaches to preceding word). Unstressed vowel reduces.',
                     ref: 'Grayson §7.1'
                 };
             }
@@ -2521,12 +2528,12 @@ const SINGER_SUPPLEMENT = {
             const hasStress = syllables.some(s => s.isStressed);
             if (hasStress) {
                 return {
-                    rule: 'Stressed monosyllable — vowel receives full value',
+                    rule: 'Stressed monosyllable — vowel receives full phonetic value.',
                     ref: 'Grayson §3.1'
                 };
             }
             return {
-                rule: 'Monosyllable — stress context determines vowel quality',
+                rule: 'Monosyllable — stress context determines vowel quality.',
                 ref: 'Grayson §7.1'
             };
         }
@@ -2596,7 +2603,7 @@ const SINGER_SUPPLEMENT = {
         } else {
             this.elements.syllableLabel.textContent = 'Click to reassign stress';
         }
-        
+
         this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
           <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
                   data-syllable-index="${idx}">
@@ -2614,12 +2621,9 @@ const SINGER_SUPPLEMENT = {
         this.elements.cyrillic.textContent = wordData.cyrillic + wordData.punctuation;
         this.elements.glossInline.textContent = wordData.gloss || '';
         
-        if (wordData.isProclitic === 'true') {
-          this.elements.cliticBadge.style.display = 'block';
-          this.elements.cliticType.textContent = 'Proclitic';
-        } else {
-          this.elements.cliticBadge.style.display = 'none';
-        }
+        // Always hide top clitic badge (info now in Why section)
+        this.elements.cliticBadge.style.display = 'none';
+
         // Generate dynamic Grayson citation
         const citation = this.generateCitation(wordData);
         this.elements.citationRule.textContent = citation.rule;
