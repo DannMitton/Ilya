@@ -1130,7 +1130,7 @@
         </div>
         
         <div class="syllable-section">
-          <div class="syllable-label">Click to reassign stress</div>
+          <div class="syllable-label" id="syllableLabel">Click to reassign stress</div>
           <div class="syllable-sandwich">
             <div class="syllable-display" id="syllableDisplay"></div>
           </div>
@@ -2467,6 +2467,7 @@ const SINGER_SUPPLEMENT = {
           backdrop: document.getElementById('popupBackdrop'),
           card: document.getElementById('popupCard'),
           syllableDisplay: document.getElementById('syllableDisplay'),
+          syllableLabel: document.getElementById('syllableLabel'),
           cyrillic: document.getElementById('popupCyrillic'),
           glossInline: document.getElementById('glossInline'),
           whyToggle: document.getElementById('whyToggle'),
@@ -2583,6 +2584,18 @@ const SINGER_SUPPLEMENT = {
       open(wordData) {
         this.currentWord = wordData;
         this.isOpen = true;
+        // Update syllable label based on word type
+        const syllableCount = wordData.syllables.length;
+        const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
+        if (syllableCount === 1) {
+            if (isClitic) {
+                this.elements.syllableLabel.textContent = 'Unstressed monosyllable';
+            } else {
+                this.elements.syllableLabel.textContent = 'Stressed monosyllable';
+            }
+        } else {
+            this.elements.syllableLabel.textContent = 'Click to reassign stress';
+        }
         
         this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
           <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
