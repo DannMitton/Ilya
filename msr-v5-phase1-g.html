@@ -2584,7 +2584,7 @@ const SINGER_SUPPLEMENT = {
         this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
           <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
                   data-syllable-index="${idx}">
-            ${syl.cyrillic}
+            ${syl.ipa}
           </button>
         `).join('');
         
