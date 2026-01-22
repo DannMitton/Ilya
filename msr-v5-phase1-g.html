@@ -1552,7 +1552,8 @@ const SINGER_SUPPLEMENT = {
             
             const isProclitic = GraysonEngine.proclitics.has(cleanWord.toLowerCase());
             const isEnclitic = GraysonEngine.enclitics.has(cleanWord.toLowerCase());
-            const result = GraysonEngine.transcribe(cleanWord, wordData.stress, isProclitic || isEnclitic);
+            const cliticStress = (isProclitic || isEnclitic) ? -1 : wordData.stress;
+            const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic);
             
             const wordStack = document.createElement('div');
             wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '');
