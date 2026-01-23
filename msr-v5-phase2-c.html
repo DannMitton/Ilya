@@ -2762,7 +2762,13 @@ const SINGER_SUPPLEMENT = {
           return this.labials.has(triggerConsonant);
         }
         
-        // Dentals and others: can palatalize more freely
+        // Dentals (т, д, с, з): only before palatalized dental (Grayson p. 209)
+        // Dentals do NOT palatalize before labials (e.g., д before в in дверь stays hard)
+        if (this.dentals.has(consonant)) {
+          return this.dentals.has(triggerConsonant);
+        }
+        
+        // Others: can palatalize more freely
         return true;
       },
       
