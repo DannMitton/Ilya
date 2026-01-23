@@ -2747,7 +2747,8 @@ const SINGER_SUPPLEMENT = {
           });
         });
         
-        this.elements.cyrillic.textContent = wordData.cyrillic + wordData.punctuation;
+        const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
+        this.elements.cyrillic.textContent = syllabifiedCyrillic;
         this.elements.glossInline.textContent = wordData.gloss || '';
         
         // Always hide top clitic badge (info now in Why section)
