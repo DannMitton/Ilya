@@ -2628,6 +2628,21 @@ const SINGER_SUPPLEMENT = {
       proclitics: new Set(['в', 'во', 'к', 'ко', 'с', 'со', 'о', 'об', 'обо', 'у', 'на', 'за', 'по', 'до', 'из', 'изо', 'от', 'ото', 'без', 'не', 'ни', 'над', 'надо', 'под', 'подо', 'при', 'про', 'для', 'через', 'перед', 'передо']),
       enclitics: new Set(['ли', 'ль', 'же', 'бы', 'б', 'то', 'ка', 'таки']),
       
+      // Regressive palatalization categorical restrictions (Grayson p. 209; Derwing & Priestly pp. 76-87)
+      // These consonants BLOCK regressive palatalization — consonants before them do not soften
+      // NOTE: Grayson's example сестрёнка /sʲtʲrʲ/ appears to be an error; D&P pp. 85-87 confirms
+      // that р blocks regressive palatalization. MSR follows D&P: сестрёнка → /strʲ/
+      regressivePalatalizationBlockers: new Set(['р', 'л']), // р and л block regressive palatalization (except doubled)
+      
+      // Categorical restrictions for regressive palatalization (Grayson p. 209)
+      // Velars only palatalize before palatalized velars
+      velars: new Set(['к', 'г', 'х']),
+      // Labials only palatalize before palatalized labials
+      labials: new Set(['б', 'п', 'в', 'ф', 'м']),
+      // Dentals palatalize more freely
+      dentals: new Set(['т', 'д', 'с', 'з', 'н', 'ц']),
+      // н only palatalizes before palatalized н or dental
+      
       // Look up stress from dictionary
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
@@ -2660,6 +2675,104 @@ const SINGER_SUPPLEMENT = {
         if (['е', 'ё', 'и', 'ю', 'я'].includes(nextChar)) return true;
         
         return false;
+      },
+      
+      // Full regressive palatalization analysis for a word (Grayson p. 207-209; D&P pp. 76-87)
+      // Returns a Map of character indices that should be palatalized
+      analyzeRegressivePalatalization(word) {
+        const chars = [...word.toLowerCase()];
+        const softIndices = new Map(); // index -> true if should be palatalized
+        
+        // Step 1: Mark directly palatalized consonants (before indicator letters or ь)
+        for (let i = 0; i < chars.length; i++) {
+          if (this.isConsonant(chars[i])) {
+            if (this.isPalatalized(chars[i], chars[i + 1])) {
+              softIndices.set(i, true);
+            }
+          }
+        }
+        
+        // Step 2: Process regressive palatalization right-to-left through clusters
+        // Working backwards, check if palatalization can step through
+        for (let i = chars.length - 2; i >= 0; i--) {
+          const char = chars[i];
+          const nextChar = chars[i + 1];
+          
+          if (!this.isConsonant(char)) continue;
+          if (softIndices.has(i)) continue; // Already soft
+          
+          // Check if next consonant is soft
+          const nextIsSoft = softIndices.has(i + 1);
+          if (!nextIsSoft) continue;
+          
+          // Check for blockers (Grayson p. 209; D&P pp. 85-87)
+          // р and л block regressive palatalization (confirmed by D&P)
+          if (this.regressivePalatalizationBlockers.has(nextChar)) {
+            continue; // Blocked - don't palatalize through р or л
+          }
+          
+          // Check categorical restrictions (Grayson p. 209)
+          if (!this.canRegressivelyPalatalize(char, nextChar)) {
+            continue; // Categorical mismatch
+          }
+          
+          // Check for boundaries
+          if (this.alwaysHard.has(char)) continue; // ж, ш, ц never palatalize
+          if (chars[i + 1] === 'ъ') continue; // Hard sign blocks (except в, с, з - handled separately)
+          
+          // This consonant can be regressively palatalized
+          softIndices.set(i, true);
+        }
+        
+        return softIndices;
+      },
+      
+      // Check if consonant can regressively palatalize before another consonant (Grayson p. 209)
+      canRegressivelyPalatalize(consonant, triggerConsonant) {
+        consonant = consonant?.toLowerCase();
+        triggerConsonant = triggerConsonant?.toLowerCase();
+        
+        // Always-hard consonants never palatalize
+        if (this.alwaysHard.has(consonant)) return false;
+        
+        // л: only regressively palatalizes when doubled (лль)
+        // (Grayson p. 209 rule 1)
+        if (consonant === 'л') {
+          return triggerConsonant === 'л'; // Only before another л
+        }
+        
+        // р: never regressively palatalizes except when doubled (ррь)
+        // (Grayson p. 209 rule 2; D&P pp. 85-87)
+        if (consonant === 'р') {
+          return triggerConsonant === 'р'; // Only before another р
+        }
+        
+        // н: only before palatalized н or dental (Grayson p. 209 rule 3)
+        if (consonant === 'н') {
+          return triggerConsonant === 'н' || this.dentals.has(triggerConsonant);
+        }
+        
+        // Velars (к, г, х): only before palatalized velar (Grayson p. 209 rule 4)
+        if (this.velars.has(consonant)) {
+          return this.velars.has(triggerConsonant);
+        }
+        
+        // Labials (б, п, в, ф, м): only before palatalized labial (Grayson p. 209 rule 5)
+        if (this.labials.has(consonant)) {
+          return this.labials.has(triggerConsonant);
+        }
+        
+        // Dentals and others: can palatalize more freely
+        return true;
+      },
+      
+      // Check if a consonant at given index is palatalized (considering regressive)
+      isConsonantPalatalized(word, index, softIndices) {
+        if (softIndices && softIndices.has(index)) {
+          return true;
+        }
+        const chars = [...word.toLowerCase()];
+        return this.isPalatalized(chars[index], chars[index + 1]);
       },
       
       syllabify(word) {
@@ -2772,10 +2885,12 @@ const SINGER_SUPPLEMENT = {
         return vowel;
       },
       
-      transcribeConsonant(consonant, nextChar, prevChar, isStressedSyllable) {
+      transcribeConsonant(consonant, nextChar, prevChar, isStressedSyllable, isSoftFromRegressive = false) {
         consonant = consonant.toLowerCase();
         prevChar = prevChar?.toLowerCase();
-        const soft = this.isPalatalized(consonant, nextChar);
+        // Combine direct palatalization with regressive palatalization analysis
+        const softDirect = this.isPalatalized(consonant, nextChar);
+        const soft = softDirect || isSoftFromRegressive;
         const base = this.inventory.consonants[consonant] || consonant;
         
         // Progressive palatalization of р (Grayson p. 209, footnote 277)
@@ -2995,6 +3110,12 @@ const SINGER_SUPPLEMENT = {
         
         const effectiveStress = (vowelCount === 1 && !isClitic) ? 0 : stressIndex;
         
+        // Analyze regressive palatalization for the whole word (Grayson p. 207-209)
+        const softIndices = this.analyzeRegressivePalatalization(cleanWord);
+        
+        // Build a map of character position in full word to track palatalization
+        let charIndexInWord = 0;
+        
         let ipa = '';
         let syllableData = [];
         
@@ -3010,6 +3131,7 @@ const SINGER_SUPPLEMENT = {
           for (let i = 0; i < chars.length; i++) {
             const char = chars[i];
             const nextChar = chars[i + 1];
+            const globalIndex = charIndexInWord + i; // Position in full word
             
             if (char === 'ь' || char === 'ъ') continue;
             
@@ -3020,18 +3142,22 @@ const SINGER_SUPPLEMENT = {
               
               if (needsGlide) sylIpa += 'j';
               
-              // Check preceding consonant palatalization
+              // Check preceding consonant palatalization (using regressive analysis)
               const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
-              const isPrecededByPal = prevConsonant ? this.isPalatalized(prevConsonant, char) : false;
+              const prevGlobalIndex = globalIndex - 1;
+              const isPrecededByPal = prevConsonant ? 
+                (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false;
               
               // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
               // Find the next consonant after this vowel
               let followingConsonant = null;
+              let followingConsonantGlobalIndex = -1;
               let charAfterFollowingC = null;
               for (let j = i + 1; j < chars.length; j++) {
                 if (chars[j] === 'ь' || chars[j] === 'ъ') continue;
                 if (this.isConsonant(chars[j])) {
                   followingConsonant = chars[j];
+                  followingConsonantGlobalIndex = charIndexInWord + j;
                   charAfterFollowingC = chars[j + 1];
                   break;
                 }
@@ -3040,15 +3166,20 @@ const SINGER_SUPPLEMENT = {
               
               // й always counts as palatalized for interpalatal purposes
               const isFollowedByPal = followingConsonant === 'й' || 
-                                      (followingConsonant && this.isPalatalized(followingConsonant, charAfterFollowingC));
+                (followingConsonant && (softIndices.has(followingConsonantGlobalIndex) || 
+                 this.isPalatalized(followingConsonant, charAfterFollowingC)));
               
               sylIpa += this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonant);
             } else if (this.isConsonant(char)) {
               const prevChar = chars[i - 1];
               const isStressedSyl = (position === 'stressed');
-              sylIpa += this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl);
+              // Pass regressive palatalization info
+              const isSoftFromRegressive = softIndices.has(globalIndex);
+              sylIpa += this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
             }
           }
+          
+          charIndexInWord += syl.length;
           
           syllableData.push({
             cyrillic: syl,
