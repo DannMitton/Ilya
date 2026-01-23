@@ -2785,6 +2785,156 @@ const SINGER_SUPPLEMENT = {
         'ʒ': 'ʃ'     // ж → ш (p. 202) — ж never palatalizes, so жь also → ш
       }),
       
+      // Reverse mapping for voicing (voiceless → voiced)
+      voicelessToVoiced: Object.freeze({
+        'p': 'b',    // п → б
+        'pʲ': 'bʲ',  // пь → бь
+        'f': 'v',    // ф → в
+        'fʲ': 'vʲ',  // фь → вь
+        't': 'd',    // т → д
+        'tʲ': 'dʲ',  // ть → дь
+        'k': 'ɡ',    // к → г
+        's': 'z',    // с → з
+        'sʲ': 'zʲ',  // сь → зь
+        'ʃ': 'ʒ'     // ш → ж
+      }),
+      
+      // Sets for classification (Grayson Ch. 6 Sec. 1, pp. 213-214)
+      // Sonorants: "do not influence the voicing of preceding, unvoiced consonants 
+      // and are never devoiced themselves in lyric diction"
+      sonorantIPA: new Set(['ɫ', 'lʲ', 'm', 'mʲ', 'n', 'nʲ', 'ɲ', 'r', 'rʲ', 'j']),
+      
+      // Voiced obstruents (can trigger voicing of preceding consonants)
+      voicedObstruents: new Set(['b', 'bʲ', 'd', 'dʲ', 'ɡ', 'z', 'zʲ', 'ʒ']),
+      
+      // Voiceless obstruents (can trigger devoicing of preceding consonants)
+      voicelessObstruents: new Set(['p', 'pʲ', 't', 'tʲ', 'k', 's', 'sʲ', 'ʃ', 'x', 'ts', 'tʃ', 'ʃtʃ']),
+      
+      // /v/ phonemes: "has no assimilative voicing influence of its own, 
+      // but is influenced by most other consonants" (Grayson p. 214)
+      vPhonemes: new Set(['v', 'vʲ', 'f', 'fʲ']),
+      
+      // Regressive voicing assimilation within words (Grayson Ch. 6 Sec. 1, pp. 214-224)
+      // "The baseline approach to consonant clusters in Russian is to pronounce each 
+      // consonant member in the cluster and to determine the voicing of all the 
+      // consonants based upon the status of the last member of the cluster."
+      applyRegressiveVoicing(ipa) {
+        // Parse IPA into segments (consonants may be multi-char like tʃ, ʃtʃ, or have ʲ)
+        const segments = this.parseIPASegments(ipa);
+        if (segments.length < 2) return ipa;
+        
+        // Process clusters: find sequences of consonants
+        let result = [];
+        let i = 0;
+        
+        while (i < segments.length) {
+          const seg = segments[i];
+          
+          // If it's a vowel or stress mark, just add it
+          if (this.isIPAVowel(seg) || seg === 'ˈ') {
+            result.push(seg);
+            i++;
+            continue;
+          }
+          
+          // Found a consonant - collect the cluster
+          let cluster = [seg];
+          let j = i + 1;
+          while (j < segments.length && !this.isIPAVowel(segments[j]) && segments[j] !== 'ˈ') {
+            cluster.push(segments[j]);
+            j++;
+          }
+          
+          // Apply voicing assimilation to this cluster
+          if (cluster.length > 1) {
+            cluster = this.assimilateClusterVoicing(cluster);
+          }
+          
+          result.push(...cluster);
+          i = j;
+        }
+        
+        return result.join('');
+      },
+      
+      // Parse IPA string into segments (handling multi-char consonants)
+      parseIPASegments(ipa) {
+        const segments = [];
+        let i = 0;
+        
+        while (i < ipa.length) {
+          // Check for multi-char consonants first (longest match)
+          if (ipa.slice(i, i + 3) === 'ʃtʃ') {
+            segments.push('ʃtʃ');
+            i += 3;
+          } else if (ipa.slice(i, i + 2) === 'tʃ') {
+            segments.push('tʃ');
+            i += 2;
+          } else if (ipa.slice(i, i + 2) === 'ts') {
+            segments.push('ts');
+            i += 2;
+          } else if (ipa[i + 1] === 'ʲ') {
+            // Consonant + palatalization marker
+            segments.push(ipa.slice(i, i + 2));
+            i += 2;
+          } else {
+            segments.push(ipa[i]);
+            i++;
+          }
+        }
+        
+        return segments;
+      },
+      
+      // Check if IPA segment is a vowel
+      isIPAVowel(seg) {
+        const ipaVowels = new Set(['ɑ', 'a', 'o', 'ɛ', 'e', 'i', 'ɪ', 'ɨ', 'u', 'ʊ', 'ʌ']);
+        return ipaVowels.has(seg);
+      },
+      
+      // Assimilate voicing within a consonant cluster (Grayson p. 214-215)
+      // "the voicing of the entire cluster is that of the final member"
+      assimilateClusterVoicing(cluster) {
+        // Find the last non-sonorant, non-/v/ consonant - this is the "agent"
+        let agentIndex = -1;
+        for (let i = cluster.length - 1; i >= 0; i--) {
+          const seg = cluster[i];
+          if (this.sonorantIPA.has(seg)) continue;
+          if (this.vPhonemes.has(seg)) continue;
+          agentIndex = i;
+          break;
+        }
+        
+        // No agent found (all sonorants or /v/) - no assimilation
+        if (agentIndex === -1) return cluster;
+        
+        const agent = cluster[agentIndex];
+        const agentIsVoiced = this.voicedObstruents.has(agent);
+        
+        // Apply voicing/devoicing to all preceding consonants (and /v/ phonemes)
+        const result = [...cluster];
+        for (let i = 0; i < agentIndex; i++) {
+          const seg = result[i];
+          
+          // Sonorants never change
+          if (this.sonorantIPA.has(seg)) continue;
+          
+          if (agentIsVoiced) {
+            // Voice the consonant if it's voiceless
+            if (this.voicelessToVoiced[seg]) {
+              result[i] = this.voicelessToVoiced[seg];
+            }
+          } else {
+            // Devoice the consonant if it's voiced
+            if (this.voicedToVoiceless[seg]) {
+              result[i] = this.voicedToVoiceless[seg];
+            }
+          }
+        }
+        
+        return result;
+      },
+      
       // Apply final devoicing to IPA string
       applyFinalDevoicing(ipa) {
         // Find the final consonant segment (may include palatalization marker)
@@ -2852,6 +3002,16 @@ const SINGER_SUPPLEMENT = {
           
           ipa += sylIpa;
         });
+        
+        // Step 2 (Grayson p. 247): Apply regressive voicing assimilation
+        ipa = this.applyRegressiveVoicing(ipa);
+        
+        // Also update each syllable's IPA to reflect voicing assimilation
+        syllableData.forEach(syl => {
+          syl.ipa = this.applyRegressiveVoicing(syl.ipa);
+        });
+        
+        // Step 3-4 will be special clusters and palatalization (future phases)
         
         // Apply final consonant devoicing (Grayson Ch. 4 Sec. 4)
         ipa = this.applyFinalDevoicing(ipa);
