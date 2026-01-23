@@ -1451,6 +1451,9 @@ const SINGER_SUPPLEMENT = {
         
         // Transcribe button (placeholder for now)
         this.transcribeBtn.addEventListener('click', () => this.transcribe());
+        
+        // Start expanded so input is visible by default
+        this.expand();
       },
       
       isExpanded() {
