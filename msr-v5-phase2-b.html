@@ -2769,6 +2769,41 @@ const SINGER_SUPPLEMENT = {
         return base;
       },
       
+      // Final consonant devoicing (Grayson Ch. 4 Sec. 4, pp. 199-202)
+      // "In Russian, as in German, final consonants are generally unvoiced, 
+      // regardless of spelling. This does not apply to sonorants."
+      voicedToVoiceless: Object.freeze({
+        'b': 'p',    // б → п (p. 199-200)
+        'bʲ': 'pʲ',  // бь → пь
+        'v': 'f',    // в → ф (p. 200)
+        'vʲ': 'fʲ',  // вь → фь
+        'd': 't',    // д → т (p. 201)
+        'dʲ': 'tʲ',  // дь → ть
+        'ɡ': 'k',    // г → к (p. 201) — note: гь does not occur
+        'z': 's',    // з → с (p. 202)
+        'zʲ': 'sʲ',  // зь → сь
+        'ʒ': 'ʃ'     // ж → ш (p. 202) — ж never palatalizes, so жь also → ш
+      }),
+      
+      // Apply final devoicing to IPA string
+      applyFinalDevoicing(ipa) {
+        // Find the final consonant segment (may include palatalization marker)
+        // Sonorants (ɫ, lʲ, m, mʲ, n, ɲ, r, rʲ, j) are never devoiced
+        const sonorantPattern = /[ɫmnrj]ʲ?$/;
+        if (sonorantPattern.test(ipa)) {
+          return ipa; // Sonorants don't devoice
+        }
+        
+        // Check for voiced consonants at end and replace
+        for (const [voiced, voiceless] of Object.entries(this.voicedToVoiceless)) {
+          if (ipa.endsWith(voiced)) {
+            return ipa.slice(0, -voiced.length) + voiceless;
+          }
+        }
+        
+        return ipa;
+      },
+      
       transcribe(word, stressIndex = -1, isClitic = false) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         const syllables = this.syllabify(cleanWord);
@@ -2817,6 +2852,15 @@ const SINGER_SUPPLEMENT = {
           
           ipa += sylIpa;
         });
+        
+        // Apply final consonant devoicing (Grayson Ch. 4 Sec. 4)
+        ipa = this.applyFinalDevoicing(ipa);
+        
+        // Also update the last syllable's IPA to reflect devoicing
+        if (syllableData.length > 0) {
+          const lastSyl = syllableData[syllableData.length - 1];
+          lastSyl.ipa = this.applyFinalDevoicing(lastSyl.ipa);
+        }
         
         return { ipa, syllables: syllableData };
       }
