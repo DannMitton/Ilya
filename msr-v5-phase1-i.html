@@ -1,0 +1,2942 @@
+<!DOCTYPE html>
+<html lang="ru" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <title>My Sung Russian — v5.0 Bottom Panel</title>
+  
+  <!-- Noto Serif for all text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&family=Noto+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========================================
+       CALM AUTHORITY PALETTE — Warm Edition
+       ======================================== */
+    :root {
+      /* Base: Cream paper, like aged sheet music */
+      --paper: #faf6f0;
+      
+      /* Ink: Warm black, like India ink on parchment */
+      --ink-primary: #1a1612;
+      --ink-secondary: #4a4540; /* Bumped from #5a5349 for WCAG 7:1 contrast */
+      
+      /* Accent: Deep terracotta, like a well-worn notebook cover */
+      --accent: #a85a3a;
+      --accent-muted: rgba(168, 90, 58, 0.75);
+      --accent-hover: #8f4d32;
+      
+      /* Surface: Pure white for cards/popups */
+      --surface: #ffffff;
+      
+      /* Paper dimensions: Letter size at 96dpi */
+      --paper-width: 816px;
+      --paper-height: 1056px;
+      
+      /* Shadows: Warm, subtle */
+      --shadow-ambient: 0 1px 2px rgba(26, 22, 18, 0.08);
+      --shadow-card: 0 2px 8px rgba(26, 22, 18, 0.1);
+      --shadow-paper: 0 2px 12px rgba(26, 22, 18, 0.08);
+      --shadow-popup: 0 8px 24px rgba(26, 22, 18, 0.15);
+      
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      
+      /* Radii and easing */
+      --radius: 6px;
+      --ease: cubic-bezier(0.34, 0, 0.2, 1);
+      
+      /* Input drawer */
+      --drawer-handle-height: 36px;
+    }
+
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans', system-ui, sans-serif;
+      background-color: #e8e4de;
+      color: var(--ink-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ========================================
+       DISPLAY CONTAINER: Main app layout
+       ======================================== */
+    .display-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ========================================
+       PAPER APERTURE: Viewing area with inset depth
+       ======================================== */
+    .paper-aperture {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ========================================
+       PAPER: Letter-size document simulation
+       8.5in × 11in at 96dpi = 816px × 1056px
+       ======================================== */
+    .paper {
+      width: min(var(--paper-width), 100% - 3rem);
+      aspect-ratio: 8.5 / 11;
+      background: var(--surface);
+      box-shadow: var(--shadow-paper);
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      margin: 1.5rem auto;
+    }
+
+    @media print {
+      .paper {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        box-shadow: none;
+        overflow: visible;
+      }
+    }
+
+    /* Loading state */
+    .paper.rendering {
+      opacity: 0.7;
+      transition: opacity 100ms ease;
+    }
+
+    /* Content area fills available space */
+    .paper .doc-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .paper .verse-container {
+      flex: 1;
+    }
+
+    /* ========================================
+       DOCUMENT HEADER
+       ======================================== */
+    .doc-header {
+      padding: 72px 72px 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .doc-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 72px;
+      right: 72px;
+      height: 1px;
+      background: rgba(26, 22, 18, 0.1);
+    }
+
+    .doc-composer-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 1rem;
+    }
+
+    .doc-composer {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink-secondary);
+    }
+
+    .doc-composer .dates {
+      font-weight: 400;
+      color: var(--ink-secondary);
+      opacity: 0.8;
+    }
+
+    .doc-poet {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.9rem;
+      color: var(--ink-secondary);
+    }
+
+    .doc-poet .dates {
+      color: var(--ink-secondary);
+      opacity: 0.8;
+    }
+
+    .doc-title {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--ink-primary);
+      margin: 0 0 0.25rem 0;
+    }
+
+    .doc-opus {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.9rem;
+      color: var(--ink-secondary);
+    }
+
+    /* Placeholder text: greyed, italic, replaced by real content */
+    .placeholder-text {
+      font-style: italic;
+      opacity: 0.35;
+    }
+
+    /* Hide placeholder when real content exists */
+    .doc-composer:not(:empty) .placeholder-text,
+    .doc-poet:not(:empty) .placeholder-text,
+    .doc-title:not(:empty) .placeholder-text,
+    .doc-opus:not(:empty) .placeholder-text {
+      /* JS will remove placeholder spans when content is added */
+    }
+
+    /* ========================================
+       DOCUMENT BODY
+       ======================================== */
+    .doc-body {
+      flex: 1;
+      padding: 24px 72px;
+    }
+
+    /* ========================================
+       DOCUMENT FOOTER
+       ======================================== */
+    .doc-footer {
+      padding: 24px 72px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'Noto Serif', serif;
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+      position: relative;
+    }
+
+    .doc-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 72px;
+      right: 72px;
+      height: 1px;
+      background: rgba(26, 22, 18, 0.1);
+    }
+
+    .doc-footer .attribution {
+      font-style: italic;
+    }
+
+    /* ========================================
+       VERSE LINE
+       ======================================== */
+    .verse-line {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(40px, max-content));
+      gap: 0.5rem 1.25rem;
+      align-items: start;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(26, 22, 18, 0.06);
+    }
+
+    .verse-line:last-child {
+      border-bottom: none;
+    }
+
+    .verse-line.stanza-break {
+      margin-top: 1.5rem;
+    }
+
+    /* ========================================
+       WORD STACK
+       ======================================== */
+    .word-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.5rem 0.6rem;
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: background 150ms var(--ease);
+    }
+
+    .word-stack:hover {
+      background: rgba(168, 90, 58, 0.06);
+    }
+
+    .word-stack:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .word-stack[aria-selected="true"] {
+      background: rgba(168, 90, 58, 0.1);
+    }
+
+    .word-stack .ipa {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.95rem;
+      color: var(--ink-secondary);
+      letter-spacing: 0.01em;
+    }
+
+    .word-stack .cyrillic {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--ink-primary);
+    }
+
+    .word-stack .punct {
+      color: var(--ink-secondary);
+      opacity: 0.7;
+    }
+
+    .word-stack .gloss {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--accent-muted);
+      min-height: 1.2em;
+      min-width: 1em;
+    }
+
+    .word-stack.proclitic .cyrillic,
+    .word-stack.enclitic .cyrillic {
+      font-weight: 400;
+    }
+
+    /* ========================================
+       INPUT DRAWER: Bottom-anchored, collapsible
+       ======================================== */
+    .input-drawer {
+      flex-shrink: 0;
+      background: var(--surface);
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ========================================
+       DRAWER HANDLE: Full-width clickable bar
+       ======================================== */
+    .drawer-handle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: var(--drawer-handle-height);
+      background: #f0f0f0;
+      cursor: pointer;
+      user-select: none;
+      transition: background 150ms var(--ease);
+    }
+
+    .drawer-handle:hover {
+      background: #e8e8e8;
+    }
+
+    .drawer-handle:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    /* Preview text (left side, visible when collapsed) */
+    .handle-preview {
+      position: absolute;
+      left: var(--space-lg);
+      font-family: 'Noto Serif', serif;
+      font-size: 0.85rem;
+      color: var(--ink-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 40%;
+      opacity: 0;
+      transition: opacity 200ms var(--ease);
+    }
+
+    .input-drawer.collapsed .handle-preview {
+      opacity: 1;
+    }
+
+    /* Center toggle (chevron + label) */
+    .handle-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .handle-toggle .chevron {
+      width: 14px;
+      height: 14px;
+      stroke: var(--ink-secondary);
+      stroke-width: 2;
+      fill: none;
+      opacity: 0.6;
+      transition: transform 200ms var(--ease);
+    }
+
+    .handle-toggle .handle-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-secondary);
+      opacity: 0.6;
+    }
+
+    /* Show appropriate label based on state */
+    .handle-label-more,
+    .handle-label-less {
+      display: none;
+    }
+
+    .input-drawer.expanded .handle-label-less {
+      display: inline;
+    }
+
+    .input-drawer.expanded .handle-label-more {
+      display: none;
+    }
+
+    .input-drawer.collapsed .handle-label-more {
+      display: inline;
+    }
+
+    .input-drawer.collapsed .handle-label-less {
+      display: none;
+    }
+
+    /* Chevron flips when collapsed */
+    .input-drawer.collapsed .handle-toggle .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* ========================================
+       DRAWER: Expanded Content
+       ======================================== */
+    .drawer-content {
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-lg);
+      transition: opacity 200ms var(--ease);
+    }
+
+    /* Hide content when collapsed */
+    .input-drawer.collapsed .drawer-content {
+      display: none;
+    }
+
+    /* ========================================
+       DRAWER: Textarea
+       ======================================== */
+    .drawer-textarea {
+      width: 100%;
+      max-height: 240px;
+      min-height: 100px;
+      padding: 0.75rem;
+      font-family: monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+      background: #f5f5f5;
+      border: 1px solid rgba(26, 22, 18, 0.12);
+      border-radius: var(--radius);
+      resize: vertical;
+      transition: border-color 150ms var(--ease);
+    }
+
+    .drawer-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .drawer-textarea::placeholder {
+      color: var(--ink-secondary);
+      opacity: 0.5;
+    }
+
+    /* ========================================
+       DRAWER: Footer (status + buttons)
+       ======================================== */
+    .drawer-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-md);
+    }
+
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 0.75rem;
+      color: var(--ink-secondary);
+    }
+
+    .char-counter {
+      opacity: 0;
+      transition: opacity 200ms var(--ease);
+    }
+
+    .char-counter.visible {
+      opacity: 1;
+    }
+
+    .char-counter.warning {
+      color: #b45309;
+    }
+
+    .char-counter.error {
+      color: #dc2626;
+    }
+
+    .auto-saved {
+      opacity: 0;
+      transition: opacity 200ms var(--ease);
+    }
+
+    .auto-saved.visible {
+      opacity: 0.7;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    /* Button styles */
+    .btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink-secondary);
+      border: 1px solid rgba(26, 22, 18, 0.2);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--ink-secondary);
+      color: var(--ink-primary);
+    }
+
+    /* ========================================
+       GHOST TEXT: Empty state instruction
+       ======================================== */
+    .ghost-text {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Serif', serif;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+      opacity: 0.5;
+      max-width: 45em;
+    }
+
+    .ghost-text p {
+      margin: 0 0 0.5rem 0;
+    }
+
+    .ghost-text.hidden {
+      display: none;
+    }
+
+    /* ========================================
+       POPUP OVERLAY
+       ======================================== */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+    }
+
+    .popup-overlay.active {
+      display: block;
+    }
+
+    .popup-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 22, 18, 0.1);
+    }
+
+    /* ========================================
+       POPUP CARD
+       ======================================== */
+    .popup-card {
+      position: absolute;
+      width: 320px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-popup);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 250ms var(--ease), transform 250ms var(--ease);
+      z-index: 101;
+    }
+
+    .popup-overlay.active .popup-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .popup-arrow {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid var(--surface);
+      filter: drop-shadow(0 2px 2px rgba(26, 22, 18, 0.08));
+    }
+
+    .popup-card.arrow-top .popup-arrow {
+      top: -8px;
+      bottom: auto;
+      border-top: none;
+      border-bottom: 10px solid var(--surface);
+      filter: drop-shadow(0 -2px 2px rgba(26, 22, 18, 0.08));
+    }
+
+    /* Mobile popup */
+    @media (max-width: 600px) {
+      .popup-card {
+        position: fixed;
+        left: 0 !important;
+        right: 0;
+        bottom: 0 !important;
+        top: auto !important;
+        width: 100%;
+        max-height: 70vh;
+        border-radius: 16px 16px 0 0;
+        transform: translateY(100%);
+        overflow-y: auto;
+      }
+
+      .popup-overlay.active .popup-card {
+        transform: translateY(0);
+      }
+
+      .popup-arrow {
+        display: none;
+      }
+
+      .popup-body::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 4px;
+        background: rgba(26, 22, 18, 0.2);
+        border-radius: 2px;
+        margin: 0.75rem auto 0.5rem;
+      }
+    }
+
+    /* ========================================
+       POPUP BODY
+       ======================================== */
+    .popup-body {
+      padding: 1.25rem;
+    }
+
+    .clitic-badge {
+      background: rgba(168, 90, 58, 0.08);
+      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .why-clitic-banner {
+        background: rgba(168, 90, 58, 0.08);
+        color: var(--accent);
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+
+    .syllable-section {
+      margin-bottom: 1rem;
+    }
+
+    .syllable-label {
+      font-size: 0.7rem;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .syllable-sandwich {
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 0.6rem;
+    }
+
+    .syllable-display {
+      display: flex;
+      justify-content: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    .syllable-btn {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.15rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--surface);
+      border: 1px solid rgba(26, 22, 18, 0.15);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
+    }
+
+    .syllable-btn:hover {
+      border-color: var(--accent);
+      background: rgba(168, 90, 58, 0.05);
+    }
+
+    .syllable-btn.stressed {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      font-weight: 500;
+    }
+
+    .syllable-btn.stressed:hover {
+      background: var(--accent-hover);
+    }
+
+    .popup-cyrillic {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--ink-primary);
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .gloss-section {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .gloss-inline {
+      font-family: 'Noto Serif', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--accent-muted);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 100px;
+      transition: background 150ms var(--ease);
+    }
+
+    .gloss-inline:hover {
+      background: rgba(168, 90, 58, 0.05);
+    }
+
+    .gloss-inline:focus {
+      outline: none;
+      background: rgba(168, 90, 58, 0.08);
+    }
+
+    .gloss-inline:empty::before {
+      content: attr(data-placeholder);
+      color: var(--ink-secondary);
+      opacity: 0.5;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-toggle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid rgba(26, 22, 18, 0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 150ms var(--ease);
+    }
+
+    .info-toggle:hover {
+      border-color: var(--accent);
+      background: rgba(168, 90, 58, 0.05);
+    }
+
+    .info-icon {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--ink-secondary);
+    }
+
+    .why-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms var(--ease);
+    }
+
+    .why-panel.expanded {
+      max-height: 300px;
+    }
+
+    .why-content {
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(26, 22, 18, 0.08);
+    }
+
+    .why-content-inner {
+      font-size: 0.85rem;
+    }
+
+    .stress-source-module {
+      margin-bottom: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .stress-source-module.needs-attention .stress-source-buttons {
+      animation: gentle-pulse 2s ease-in-out 3;
+    }
+
+    @keyframes gentle-pulse {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(168, 90, 58, 0);
+      }
+      50% { 
+        box-shadow: 0 0 0 4px rgba(168, 90, 58, 0.15);
+      }
+    }
+
+    .stress-source-label {
+      font-size: 0.7rem;
+      color: var(--ink-secondary);
+      margin-bottom: 0.4rem;
+      text-align: left;
+    }
+
+    .stress-source-hint {
+      font-size: 0.65rem;
+      color: var(--ink-secondary);
+      opacity: 0.7;
+      font-style: italic;
+      margin-top: 0.3rem;
+      text-align: right;
+    }
+
+    .stress-source-buttons {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+      border-radius: 6px;
+    }
+
+    .stress-source-btn {
+      flex: 1;
+      padding: 0.4rem 0.5rem;
+      font-size: 0.75rem;
+      background: var(--surface);
+      border: 1px solid rgba(26, 22, 18, 0.15);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
+    }
+
+    .stress-source-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .stress-source-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .restore-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: none;
+      border: none;
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 0.7rem;
+      color: var(--accent);
+      cursor: pointer;
+      transition: opacity 150ms var(--ease);
+    }
+
+    .restore-link:hover {
+      opacity: 0.7;
+    }
+
+    .restore-link svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .restore-link-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .citation {
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .citation-rule {
+      color: var(--ink-primary);
+    }
+
+    .citation-ref {
+      color: var(--ink-secondary);
+      font-style: italic;
+    }
+
+    /* ========================================
+       PRINT STYLES
+       ======================================== */
+    @media print {
+      .input-drawer,
+      .popup-overlay {
+        display: none !important;
+      }
+
+      .paper-aperture {
+        padding: 0;
+        overflow: visible;
+        box-shadow: none;
+      }
+
+      body {
+        background: none;
+      }
+
+      .paper {
+        width: 100%;
+        max-width: none;
+        max-height: none;
+        box-shadow: none;
+      }
+
+      .word-stack {
+        cursor: default;
+        background: transparent !important;
+      }
+
+      .word-stack:hover {
+        background: none;
+      }
+
+      @page {
+        margin: 0.5in;
+        size: letter;
+      }
+
+      .verse-line {
+        page-break-inside: avoid;
+      }
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 880px) {
+      .paper {
+        min-height: auto;
+      }
+
+      .doc-header {
+        padding: 48px 36px 20px;
+      }
+
+      .doc-body {
+        padding: 20px 36px;
+      }
+
+      .doc-footer {
+        padding: 20px 36px 36px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .doc-header {
+        padding: 36px 24px 16px;
+      }
+
+      .doc-body {
+        padding: 16px 24px;
+      }
+
+      .doc-footer {
+        padding: 16px 24px 24px;
+      }
+
+      .doc-title {
+        font-size: 1.25rem;
+      }
+
+      .word-stack .cyrillic {
+        font-size: 1.1rem;
+      }
+
+      .word-stack .ipa {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body class="notranslate">
+
+  <div class="display-container">
+    
+    <!-- Paper Aperture: Viewing area with inset depth -->
+    <main class="paper-aperture" id="paperAperture">
+      
+      <!-- Paper: Single document (MVP) -->
+      <article class="paper" id="paper">
+        
+        <!-- Document Header -->
+        <header class="doc-header">
+          <h1 class="doc-title" id="docTitle">
+            <span class="placeholder-text">Song Title</span>
+          </h1>
+          <div class="doc-opus" id="docOpus">
+            <span class="placeholder-text">Op. 00, No. 0</span>
+          </div>
+          <div class="doc-composer-line">
+            <span class="doc-composer" id="docComposer">
+              <span class="placeholder-text">Composer Name (0000–0000)</span>
+            </span>
+            <span class="doc-poet" id="docPoet">
+              <span class="placeholder-text">Poet Name (0000–0000)</span>
+            </span>
+          </div>
+        </header>
+        
+        <!-- Document Body -->
+        <div class="doc-body" id="docBody">
+          <!-- Ghost text (empty state) -->
+          <div class="ghost-text" id="ghostText" aria-hidden="true">
+            <p>Paste or type your Cyrillic Russian text below, then press Transcribe.</p>
+            <p>This document will populate with your IPA transcription. Click any word stack to adjust stress and syllabification in the popup editor.</p>
+          </div>
+          
+          <!-- Verse content renders here -->
+          <div class="verse-container" id="verseContainer"></div>
+        </div>
+        
+        <!-- Document Footer -->
+        <footer class="doc-footer">
+          <span class="attribution">Transcription: Grayson (2012)</span>
+          <span class="page-number" id="pageNumber">Page 1 of 1</span>
+        </footer>
+        
+      </article>
+
+    </main>
+
+    <!-- Input Drawer: Bottom-anchored, collapsible -->
+    <aside class="input-drawer expanded" id="inputDrawer">
+      
+      <!-- Handle Bar (always visible, entire bar clickable) -->
+      <div class="drawer-handle" 
+           id="drawerHandle"
+           role="button" 
+           tabindex="0" 
+           aria-expanded="true"
+           aria-controls="drawerContent"
+           title="Toggle input drawer">
+        
+        <!-- Left: Preview (visible when collapsed) -->
+        <span class="handle-preview" id="handlePreview"></span>
+        
+        <!-- Center: Chevron + Label (changes based on state) -->
+        <span class="handle-toggle">
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          <span class="handle-label">
+            <span class="handle-label-more">show dashboard</span>
+            <span class="handle-label-less">hide dashboard</span>
+          </span>
+        </span>
+        
+      </div>
+      
+      <!-- Drawer Content (hidden when collapsed) -->
+      <div class="drawer-content" id="drawerContent">
+        <!-- Textarea -->
+        <textarea 
+          class="drawer-textarea" 
+          id="textInput" 
+          placeholder="Paste or type Russian Cyrillic text here..."
+          aria-label="Russian text input"
+        ></textarea>
+        
+        <!-- Footer row: status left, buttons right -->
+        <div class="drawer-footer">
+          <div class="footer-status">
+            <span class="char-counter" id="charCounter"></span>
+            <span class="auto-saved" id="autoSaved">Saved</span>
+          </div>
+          <div class="footer-actions">
+            <button class="btn btn-secondary" id="clearBtn">Clear</button>
+            <button class="btn btn-primary" id="transcribeBtn">Transcribe</button>
+          </div>
+        </div>
+        
+      </div>
+      
+    </aside>
+
+  </div>
+
+  <!-- Popup Overlay -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-backdrop" id="popupBackdrop"></div>
+    <div class="popup-card" id="popupCard">
+      <div class="popup-arrow"></div>
+      
+      <div class="popup-body">
+        <div class="clitic-badge" id="cliticBadge" style="display: none;">
+          <span id="cliticType">Proclitic</span> — attaches phonologically
+        </div>
+        
+        <div class="syllable-section">
+          <div class="syllable-label" id="syllableLabel">Click to reassign stress</div>
+          <div class="syllable-sandwich">
+            <div class="syllable-display" id="syllableDisplay"></div>
+          </div>
+        </div>
+        
+        <div class="popup-cyrillic" id="popupCyrillic">—</div>
+        
+        <div class="gloss-section">
+          <span 
+            class="gloss-inline" 
+            id="glossInline"
+            contenteditable="true"
+            role="textbox"
+            aria-label="Translation"
+            data-placeholder="tap to add translation"
+          ></span>
+        </div>
+        
+        <div class="info-row">
+          <button class="info-toggle" id="whyToggle" aria-label="Why this transcription?">
+            <span class="info-icon">i</span>
+          </button>
+        </div>
+        
+        <div class="why-panel" id="whyPanel">
+          <div class="why-content">
+            <div class="why-content-inner" id="whyContent">
+              <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
+              <div class="stress-source-module" id="stressSourceModule">
+                <div class="stress-source-label">Mark this stress as…</div>
+                <div class="stress-source-buttons" id="stressSourceButtons">
+                  <button class="stress-source-btn" data-source="composer">Composer's setting</button>
+                  <button class="stress-source-btn" data-source="user">My choice</button>
+                </div>
+                <div class="stress-source-hint" id="stressSourceHint">Optional: mark why you changed this</div>
+                <div class="restore-link-wrapper">
+                  <button class="restore-link" id="restoreLink" data-source="restore">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 14l-4-4 4-4"/>
+                      <path d="M5 10h11a4 4 0 0 1 0 8h-1"/>
+                    </svg>
+                    Undo
+                  </button>
+                </div>
+              </div>
+              
+              <div class="citation">
+                <span class="citation-rule">Unstressed /о/ reduces to [ɑ] in immediate pretonic position</span>
+                <span class="citation-ref">— Grayson §3.2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* ==================================================
+   STRESS DICTIONARY (loaded from external JSON)
+   ================================================== */
+let STRESS_DICTIONARY = {};
+
+// Load dictionary from external file
+async function loadDictionary() {
+    try {
+        const response = await fetch('openrussian-dict.json');
+        if (!response.ok) {
+            console.warn('Dictionary file not found, stress lookup disabled');
+            return;
+        }
+        STRESS_DICTIONARY = await response.json();
+        console.log(`Dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length} words`);
+    } catch (error) {
+        console.warn('Could not load dictionary:', error);
+    }
+}
+
+// Start loading dictionary immediately
+loadDictionary();
+
+/* ==================================================
+   SINGER'S MONOSYLLABLE SUPPLEMENT
+   Common words missing from OpenRussian dictionary
+   ================================================== */
+const SINGER_SUPPLEMENT = {
+    // Pronouns
+    'я': { stress: 0, gloss: 'I', source: 'supplement' },
+    'ты': { stress: 0, gloss: 'you (informal)', source: 'supplement' },
+    'он': { stress: 0, gloss: 'he', source: 'supplement' },
+    'мы': { stress: 0, gloss: 'we', source: 'supplement' },
+    'вы': { stress: 0, gloss: 'you (formal/plural)', source: 'supplement' },
+    'мне': { stress: 0, gloss: 'to me', source: 'supplement' },
+    'мной': { stress: 0, gloss: 'with me', source: 'supplement' },
+    'нам': { stress: 0, gloss: 'to us', source: 'supplement' },
+    'вам': { stress: 0, gloss: 'to you', source: 'supplement' },
+    'вас': { stress: 0, gloss: 'you (acc.)', source: 'supplement' },
+    'нас': { stress: 0, gloss: 'us', source: 'supplement' },
+    'кто': { stress: 0, gloss: 'who', source: 'supplement' },
+    'что': { stress: 0, gloss: 'what', source: 'supplement' },
+    'всё': { stress: 0, gloss: 'everything', source: 'supplement' },
+    'все': { stress: 0, gloss: 'everyone', source: 'supplement' },
+    'сам': { stress: 0, gloss: 'oneself', source: 'supplement' },
+    'мой': { stress: 0, gloss: 'my', source: 'supplement' },
+    'твой': { stress: 0, gloss: 'your', source: 'supplement' },
+    'свой': { stress: 0, gloss: 'one\'s own', source: 'supplement' },
+    'наш': { stress: 0, gloss: 'our', source: 'supplement' },
+    'ваш': { stress: 0, gloss: 'your (formal)', source: 'supplement' },
+    'весь': { stress: 0, gloss: 'all/whole', source: 'supplement' },
+    'тот': { stress: 0, gloss: 'that', source: 'supplement' },
+    'там': { stress: 0, gloss: 'there', source: 'supplement' },
+    'тут': { stress: 0, gloss: 'here', source: 'supplement' },
+    'где': { stress: 0, gloss: 'where', source: 'supplement' },
+    
+    // Particles & Negation
+    'не': { stress: 0, gloss: 'not', source: 'supplement' },
+    'ни': { stress: 0, gloss: 'nor/not a', source: 'supplement' },
+    'да': { stress: 0, gloss: 'yes/and', source: 'supplement' },
+    'нет': { stress: 0, gloss: 'no', source: 'supplement' },
+    'вот': { stress: 0, gloss: 'here is', source: 'supplement' },
+    'уж': { stress: 0, gloss: 'already', source: 'supplement' },
+    'ещё': { stress: 0, gloss: 'still/yet', source: 'supplement' },
+    'уже': { stress: 0, gloss: 'already', source: 'supplement' },
+    'так': { stress: 0, gloss: 'so/thus', source: 'supplement' },
+    'как': { stress: 0, gloss: 'how/as', source: 'supplement' },
+    'чем': { stress: 0, gloss: 'than', source: 'supplement' },
+    
+    // Prepositions (stressed when standalone)
+    'при': { stress: 0, gloss: 'at/by/in presence of', source: 'supplement' },
+    'для': { stress: 0, gloss: 'for', source: 'supplement' },
+    'без': { stress: 0, gloss: 'without', source: 'supplement' },
+    'под': { stress: 0, gloss: 'under', source: 'supplement' },
+    'над': { stress: 0, gloss: 'above', source: 'supplement' },
+    'про': { stress: 0, gloss: 'about', source: 'supplement' },
+    
+    // Common verb forms (imperatives, short forms)
+    'пой': { stress: 0, gloss: 'sing!', source: 'supplement' },
+    'дай': { stress: 0, gloss: 'give!', source: 'supplement' },
+    'стой': { stress: 0, gloss: 'stop!/stand!', source: 'supplement' },
+    'спи': { stress: 0, gloss: 'sleep!', source: 'supplement' },
+    'жди': { stress: 0, gloss: 'wait!', source: 'supplement' },
+    'иди': { stress: 0, gloss: 'go!', source: 'supplement' },
+    'будь': { stress: 0, gloss: 'be!', source: 'supplement' },
+    'знай': { stress: 0, gloss: 'know!', source: 'supplement' },
+    'верь': { stress: 0, gloss: 'believe!', source: 'supplement' },
+    'жить': { stress: 0, gloss: 'to live', source: 'supplement' },
+    'быть': { stress: 0, gloss: 'to be', source: 'supplement' },
+    'петь': { stress: 0, gloss: 'to sing', source: 'supplement' },
+    'спать': { stress: 0, gloss: 'to sleep', source: 'supplement' },
+    'ждать': { stress: 0, gloss: 'to wait', source: 'supplement' },
+    'знать': { stress: 0, gloss: 'to know', source: 'supplement' },
+    'дать': { stress: 0, gloss: 'to give', source: 'supplement' },
+    'стать': { stress: 0, gloss: 'to become', source: 'supplement' },
+    'был': { stress: 0, gloss: 'was (m.)', source: 'supplement' },
+    'есть': { stress: 0, gloss: 'is/to eat', source: 'supplement' },
+    
+    // Nouns (common in vocal repertoire)
+    'ночь': { stress: 0, gloss: 'night', source: 'supplement' },
+    'день': { stress: 0, gloss: 'day', source: 'supplement' },
+    'путь': { stress: 0, gloss: 'path/way', source: 'supplement' },
+    'свет': { stress: 0, gloss: 'light', source: 'supplement' },
+    'мир': { stress: 0, gloss: 'world/peace', source: 'supplement' },
+    'сон': { stress: 0, gloss: 'dream/sleep', source: 'supplement' },
+    'дом': { stress: 0, gloss: 'home/house', source: 'supplement' },
+    'сад': { stress: 0, gloss: 'garden', source: 'supplement' },
+    'лес': { stress: 0, gloss: 'forest', source: 'supplement' },
+    'бог': { stress: 0, gloss: 'god', source: 'supplement' },
+    'царь': { stress: 0, gloss: 'tsar', source: 'supplement' },
+    'князь': { stress: 0, gloss: 'prince', source: 'supplement' },
+    'дух': { stress: 0, gloss: 'spirit', source: 'supplement' },
+    'друг': { stress: 0, gloss: 'friend', source: 'supplement' },
+    'враг': { stress: 0, gloss: 'enemy', source: 'supplement' },
+    'брат': { stress: 0, gloss: 'brother', source: 'supplement' },
+    'сын': { stress: 0, gloss: 'son', source: 'supplement' },
+    'муж': { stress: 0, gloss: 'husband', source: 'supplement' },
+    'жизнь': { stress: 0, gloss: 'life', source: 'supplement' },
+    'смерть': { stress: 0, gloss: 'death', source: 'supplement' },
+    'боль': { stress: 0, gloss: 'pain', source: 'supplement' },
+    'грусть': { stress: 0, gloss: 'sadness', source: 'supplement' },
+    'страсть': { stress: 0, gloss: 'passion', source: 'supplement' },
+    'честь': { stress: 0, gloss: 'honor', source: 'supplement' },
+    'власть': { stress: 0, gloss: 'power', source: 'supplement' },
+    'часть': { stress: 0, gloss: 'part', source: 'supplement' },
+    'речь': { stress: 0, gloss: 'speech', source: 'supplement' },
+    'мысль': { stress: 0, gloss: 'thought', source: 'supplement' },
+    'кровь': { stress: 0, gloss: 'blood', source: 'supplement' },
+    'грудь': { stress: 0, gloss: 'chest/breast', source: 'supplement' },
+    'взор': { stress: 0, gloss: 'gaze', source: 'supplement' },
+    'взгляд': { stress: 0, gloss: 'glance', source: 'supplement' },
+    'слух': { stress: 0, gloss: 'hearing/rumor', source: 'supplement' },
+    'шум': { stress: 0, gloss: 'noise', source: 'supplement' },
+    'гром': { stress: 0, gloss: 'thunder', source: 'supplement' },
+    'дождь': { stress: 0, gloss: 'rain', source: 'supplement' },
+    'снег': { stress: 0, gloss: 'snow', source: 'supplement' },
+    'лёд': { stress: 0, gloss: 'ice', source: 'supplement' },
+    'огонь': { stress: 0, gloss: 'fire', source: 'supplement' },
+    'вода': { stress: 0, gloss: 'water', source: 'supplement' },
+    'земля': { stress: 0, gloss: 'earth', source: 'supplement' },
+    'край': { stress: 0, gloss: 'edge/land', source: 'supplement' },
+    'рай': { stress: 0, gloss: 'paradise', source: 'supplement' },
+    'ад': { stress: 0, gloss: 'hell', source: 'supplement' },
+    
+    // Adjectives (short forms common in poetry)
+    'рад': { stress: 0, gloss: 'glad', source: 'supplement' },
+    'сыт': { stress: 0, gloss: 'full/sated', source: 'supplement' },
+    'злой': { stress: 0, gloss: 'evil/angry', source: 'supplement' },
+    'свят': { stress: 0, gloss: 'holy', source: 'supplement' },
+    'прав': { stress: 0, gloss: 'right/correct', source: 'supplement' },
+    'жив': { stress: 0, gloss: 'alive', source: 'supplement' },
+    'мёртв': { stress: 0, gloss: 'dead', source: 'supplement' },
+    'нов': { stress: 0, gloss: 'new', source: 'supplement' },
+    'стар': { stress: 0, gloss: 'old', source: 'supplement' },
+    'юн': { stress: 0, gloss: 'young', source: 'supplement' },
+    'мил': { stress: 0, gloss: 'dear/sweet', source: 'supplement' },
+    'люб': { stress: 0, gloss: 'beloved', source: 'supplement' },
+    
+    // Conjunctions & Adverbs
+    'но': { stress: 0, gloss: 'but', source: 'supplement' },
+    'а': { stress: 0, gloss: 'and/but', source: 'supplement' },
+    'и': { stress: 0, gloss: 'and', source: 'supplement' },
+    'то': { stress: 0, gloss: 'then/that', source: 'supplement' },
+    'же': { stress: 0, gloss: '(emphasis)', source: 'supplement' },
+    'ли': { stress: 0, gloss: '(question)', source: 'supplement' },
+    'бы': { stress: 0, gloss: 'would', source: 'supplement' },
+    'вновь': { stress: 0, gloss: 'again', source: 'supplement' },
+    'вдруг': { stress: 0, gloss: 'suddenly', source: 'supplement' },
+    'прочь': { stress: 0, gloss: 'away', source: 'supplement' },
+    'вниз': { stress: 0, gloss: 'down', source: 'supplement' },
+    'вверх': { stress: 0, gloss: 'up', source: 'supplement' },
+    'лишь': { stress: 0, gloss: 'only', source: 'supplement' },
+    'чуть': { stress: 0, gloss: 'barely', source: 'supplement' },
+    'сквозь': { stress: 0, gloss: 'through', source: 'supplement' }
+};
+    /* ========================================
+       DRAWER CONTROLLER
+       ======================================== */
+    const DrawerController = {
+      drawer: null,
+      handle: null,
+      content: null,
+      preview: null,
+      textInput: null,
+      clearBtn: null,
+      transcribeBtn: null,
+      
+      init() {
+        this.drawer = document.getElementById('inputDrawer');
+        this.handle = document.getElementById('drawerHandle');
+        this.content = document.getElementById('drawerContent');
+        this.preview = document.getElementById('handlePreview');
+        this.textInput = document.getElementById('textInput');
+        this.clearBtn = document.getElementById('clearBtn');
+        this.transcribeBtn = document.getElementById('transcribeBtn');
+        
+        // Click handler for entire handle bar
+        this.handle.addEventListener('click', () => this.toggle());
+        
+        // Keyboard support (Enter/Space to toggle, Escape to collapse)
+        this.handle.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.toggle();
+          }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.isExpanded()) {
+            this.collapse();
+          }
+        });
+        
+        // Update preview when text changes
+        this.textInput.addEventListener('input', () => this.updatePreview());
+        
+        // Clear button
+        this.clearBtn.addEventListener('click', () => this.clear());
+        
+        // Transcribe button (placeholder for now)
+        this.transcribeBtn.addEventListener('click', () => this.transcribe());
+      },
+      
+      isExpanded() {
+        return this.drawer.classList.contains('expanded');
+      },
+      
+      toggle() {
+        if (this.isExpanded()) {
+          this.collapse();
+        } else {
+          this.expand();
+        }
+      },
+      
+      expand() {
+        this.drawer.classList.remove('collapsed');
+        this.drawer.classList.add('expanded');
+        this.handle.setAttribute('aria-expanded', 'true');
+        // Focus textarea when expanding
+        setTimeout(() => this.textInput.focus(), 100);
+      },
+      
+      collapse() {
+        this.drawer.classList.remove('expanded');
+        this.drawer.classList.add('collapsed');
+        this.handle.setAttribute('aria-expanded', 'false');
+        this.updatePreview();
+        // Return focus to handle
+        this.handle.focus();
+      },
+      
+      updatePreview() {
+        const text = this.textInput.value.trim();
+        if (!text) {
+          this.preview.textContent = '';
+          return;
+        }
+        
+        const lines = text.split('\n').filter(line => line.trim());
+        const lineCount = lines.length;
+        const firstLine = lines[0] || '[empty first line]';
+        
+        // Truncate at 30 chars
+        const truncated = firstLine.length > 30 
+          ? firstLine.substring(0, 30) + '...' 
+          : firstLine;
+        
+        this.preview.textContent = `${truncated} • ${lineCount} line${lineCount !== 1 ? 's' : ''}`;
+      },
+      
+      clear() {
+        this.textInput.value = '';
+        this.updatePreview();
+        
+        // Clear document state
+        DocumentState.lines = [];
+        
+        // Clear the paper and show ghost text
+        const verseContainer = document.getElementById('verseContainer');
+        const ghostText = document.getElementById('ghostText');
+        
+        if (verseContainer) {
+          verseContainer.innerHTML = '';
+        }
+        if (ghostText) {
+          ghostText.classList.remove('hidden');
+        }
+        
+        this.textInput.focus();
+      },
+      
+      transcribe() {
+        const text = this.textInput.value.trim();
+        if (!text) {
+          this.textInput.focus();
+          return;
+        }
+        
+        // Parse lines into words
+        const lines = text.split('\n').filter(line => line.trim());
+        
+        // Convert to DocumentState format with dictionary lookup
+        DocumentState.lines = lines.map(line => {
+          const words = line.trim().split(/\s+/);
+          return words.map(word => {
+            const lookup = GraysonEngine.lookupStress(word);
+            return {
+              cyrillic: word,
+              stress: lookup ? lookup.stress : -1,
+              gloss: lookup ? lookup.gloss : '',
+              originalStress: lookup ? lookup.stress : -1,
+              stressSource: lookup ? lookup.source : 'none'
+            };
+          });
+        });
+        
+        // Render to paper
+        this.renderToPaper();
+        
+        // Collapse drawer after transcription
+        this.collapse();
+      },
+      
+      renderToPaper() {
+        const verseContainer = document.getElementById('verseContainer');
+        const ghostText = document.getElementById('ghostText');
+        const paper = document.getElementById('paper');
+        
+        if (!verseContainer) return;
+        
+        // Add loading state
+        paper.classList.add('rendering');
+        
+        // Hide ghost text if we have content
+        if (DocumentState.lines.length > 0 && ghostText) {
+          ghostText.classList.add('hidden');
+        } else if (ghostText) {
+          ghostText.classList.remove('hidden');
+        }
+        
+        // Clear existing content
+        verseContainer.innerHTML = '';
+        
+        // Render each line
+        DocumentState.lines.forEach((line, lineIdx) => {
+          const verseLine = document.createElement('div');
+          verseLine.className = 'verse-line';
+          verseLine.setAttribute('role', 'row');
+          
+          line.forEach((wordData, wordIdx) => {
+            const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
+            const punct = wordData.cyrillic.replace(cleanWord, '');
+            
+            const isProclitic = GraysonEngine.proclitics.has(cleanWord.toLowerCase());
+            const isEnclitic = GraysonEngine.enclitics.has(cleanWord.toLowerCase());
+            const cliticStress = (isProclitic || isEnclitic) ? -1 : wordData.stress;
+            const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic);
+            
+            const wordStack = document.createElement('div');
+            wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '');
+            wordStack.setAttribute('tabindex', '0');
+            wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
+            wordStack.dataset.lineIndex = lineIdx;
+            wordStack.dataset.wordIndex = wordIdx;
+            wordStack.dataset.cyrillic = cleanWord;
+            wordStack.dataset.ipa = result.ipa;
+            wordStack.dataset.gloss = wordData.gloss || '';
+            wordStack.dataset.punctuation = punct;
+            wordStack.dataset.syllables = JSON.stringify(result.syllables);
+            wordStack.dataset.isProclitic = isProclitic;
+            wordStack.dataset.isEnclitic = isEnclitic;
+            
+            wordStack.innerHTML = `
+              <span class="ipa">${result.ipa}</span>
+              <span class="cyrillic">${cleanWord}<span class="punct">${punct}</span></span>
+              <span class="gloss">${wordData.gloss || ''}</span>
+            `;
+            
+            verseLine.appendChild(wordStack);
+          });
+          
+          verseContainer.appendChild(verseLine);
+        });
+        
+        // Remove loading state
+        setTimeout(() => paper.classList.remove('rendering'), 100);
+      }
+    };
+
+    /* ========================================
+       LOOKUP TABLES: Composers and Poets
+       ======================================== */
+    const COMPOSERS = [
+      { latin: 'Rachmaninoff, Sergei', cyrillic: 'Рахманинов, Сергей', dates: '1873–1943' },
+      { latin: 'Tchaikovsky, Pyotr', cyrillic: 'Чайковский, Пётр', dates: '1840–1893' },
+      { latin: 'Mussorgsky, Modest', cyrillic: 'Мусоргский, Модест', dates: '1839–1881' },
+      { latin: 'Rimsky-Korsakov, Nikolai', cyrillic: 'Римский-Корсаков, Николай', dates: '1844–1908' },
+      { latin: 'Glinka, Mikhail', cyrillic: 'Глинка, Михаил', dates: '1804–1857' },
+      { latin: 'Borodin, Alexander', cyrillic: 'Бородин, Александр', dates: '1833–1887' },
+      { latin: 'Cui, César', cyrillic: 'Кюи, Цезарь', dates: '1835–1918' },
+      { latin: 'Dargomyzhsky, Alexander', cyrillic: 'Даргомыжский, Александр', dates: '1813–1869' },
+      { latin: 'Arensky, Anton', cyrillic: 'Аренский, Антон', dates: '1861–1906' },
+      { latin: 'Medtner, Nikolai', cyrillic: 'Метнер, Николай', dates: '1880–1951' },
+      { latin: 'Taneyev, Sergei', cyrillic: 'Танеев, Сергей', dates: '1856–1915' },
+      { latin: 'Gretchaninov, Alexander', cyrillic: 'Гречанинов, Александр', dates: '1864–1956' },
+      { latin: 'Glazunov, Alexander', cyrillic: 'Глазунов, Александр', dates: '1865–1936' },
+      { latin: 'Rubinstein, Anton', cyrillic: 'Рубинштейн, Антон', dates: '1829–1894' },
+      { latin: 'Balakirev, Mily', cyrillic: 'Балакирев, Милий', dates: '1837–1910' },
+      { latin: 'Prokofiev, Sergei', cyrillic: 'Прокофьев, Сергей', dates: '1891–1953' },
+      { latin: 'Shostakovich, Dmitri', cyrillic: 'Шостакович, Дмитрий', dates: '1906–1975' },
+      { latin: 'Stravinsky, Igor', cyrillic: 'Стравинский, Игорь', dates: '1882–1971' },
+      { latin: 'Scriabin, Alexander', cyrillic: 'Скрябин, Александр', dates: '1872–1915' },
+      { latin: 'Kabalevsky, Dmitri', cyrillic: 'Кабалевский, Дмитрий', dates: '1904–1987' },
+      { latin: 'Sviridov, Georgy', cyrillic: 'Свиридов, Георгий', dates: '1915–1998' },
+      { latin: 'Varlamov, Alexander', cyrillic: 'Варламов, Александр', dates: '1801–1848' },
+      { latin: 'Gurilev, Alexander', cyrillic: 'Гурилёв, Александр', dates: '1803–1858' },
+      { latin: 'Bulakhov, Pyotr', cyrillic: 'Булахов, Пётр', dates: '1822–1885' },
+      { latin: 'Titov, Nikolai', cyrillic: 'Титов, Николай', dates: '1800–1875' }
+    ];
+
+    const POETS = [
+      { latin: 'Pushkin, Alexander', cyrillic: 'Пушкин, Александр', dates: '1799–1837' },
+      { latin: 'Lermontov, Mikhail', cyrillic: 'Лермонтов, Михаил', dates: '1814–1841' },
+      { latin: 'Tyutchev, Fyodor', cyrillic: 'Тютчев, Фёдор', dates: '1803–1873' },
+      { latin: 'Fet, Afanasy', cyrillic: 'Фет, Афанасий', dates: '1820–1892' },
+      { latin: 'Tolstoy, Alexei K.', cyrillic: 'Толстой, Алексей К.', dates: '1817–1875' },
+      { latin: 'Nekrasov, Nikolai', cyrillic: 'Некрасов, Николай', dates: '1821–1878' },
+      { latin: 'Koltsov, Alexei', cyrillic: 'Кольцов, Алексей', dates: '1809–1842' },
+      { latin: 'Maykov, Apollon', cyrillic: 'Майков, Аполлон', dates: '1821–1897' },
+      { latin: 'Pleshcheyev, Alexei', cyrillic: 'Плещеев, Алексей', dates: '1825–1893' },
+      { latin: 'Polonsky, Yakov', cyrillic: 'Полонский, Яков', dates: '1819–1898' },
+      { latin: 'Mey, Lev', cyrillic: 'Мей, Лев', dates: '1822–1862' },
+      { latin: 'Apukhtin, Alexei', cyrillic: 'Апухтин, Алексей', dates: '1840–1893' },
+      { latin: 'Rathaus, Daniil', cyrillic: 'Ратгауз, Даниил', dates: '1868–1937' },
+      { latin: 'Galina, Glafira', cyrillic: 'Галина, Глафира', dates: '1870–1942' },
+      { latin: 'Balmont, Konstantin', cyrillic: 'Бальмонт, Константин', dates: '1867–1942' },
+      { latin: 'Bryusov, Valery', cyrillic: 'Брюсов, Валерий', dates: '1873–1924' },
+      { latin: 'Blok, Alexander', cyrillic: 'Блок, Александр', dates: '1880–1921' },
+      { latin: 'Akhmatova, Anna', cyrillic: 'Ахматова, Анна', dates: '1889–1966' },
+      { latin: 'Tsvetaeva, Marina', cyrillic: 'Цветаева, Марина', dates: '1892–1941' },
+      { latin: 'Yesenin, Sergei', cyrillic: 'Есенин, Сергей', dates: '1895–1925' },
+      { latin: 'Mandelstam, Osip', cyrillic: 'Мандельштам, Осип', dates: '1891–1938' },
+      { latin: 'Pasternak, Boris', cyrillic: 'Пастернак, Борис', dates: '1890–1960' },
+      { latin: 'Zhukovsky, Vasily', cyrillic: 'Жуковский, Василий', dates: '1783–1852' },
+      { latin: 'Baratynsky, Yevgeny', cyrillic: 'Баратынский, Евгений', dates: '1800–1844' },
+      { latin: 'Delvig, Anton', cyrillic: 'Дельвиг, Антон', dates: '1798–1831' },
+      { latin: 'Khomyakov, Alexei', cyrillic: 'Хомяков, Алексей', dates: '1804–1860' },
+      { latin: 'Golenishchev-Kutuzov, Arseny', cyrillic: 'Голенищев-Кутузов, Арсений', dates: '1848–1913' },
+      { latin: 'Merezhkovsky, Dmitry', cyrillic: 'Мережковский, Дмитрий', dates: '1865–1941' },
+      { latin: 'Gippius, Zinaida', cyrillic: 'Гиппиус, Зинаида', dates: '1869–1945' },
+      { latin: 'Sologub, Fyodor', cyrillic: 'Сологуб, Фёдор', dates: '1863–1927' },
+      { latin: 'Bely, Andrei', cyrillic: 'Белый, Андрей', dates: '1880–1934' },
+      { latin: 'Bunin, Ivan', cyrillic: 'Бунин, Иван', dates: '1870–1953' },
+      { latin: 'Shevchenko, Taras', cyrillic: 'Шевченко, Тарас', dates: '1814–1861' },
+      { latin: 'Heine, Heinrich', cyrillic: 'Гейне, Генрих', dates: '1797–1856' },
+      { latin: 'Goethe, Johann Wolfgang', cyrillic: 'Гёте, Иоганн Вольфганг', dates: '1749–1832' }
+    ];
+
+    /* ========================================
+       COMBOBOX CONTROLLER
+       ======================================== */
+    const Combobox = {
+      create(inputId, dropdownId, dataSource, onSelect) {
+        const input = document.getElementById(inputId);
+        const dropdown = document.getElementById(dropdownId);
+        let highlightedIndex = -1;
+        let filteredData = [];
+        let isOpen = false;
+
+        const render = (data) => {
+          filteredData = data;
+          highlightedIndex = -1;
+          
+          if (data.length === 0) {
+            dropdown.innerHTML = '<div class="combobox-no-results">No matches — type to enter custom name</div>';
+          } else {
+            dropdown.innerHTML = data.map((item, idx) => `
+              <div class="combobox-option" data-index="${idx}">
+                <span class="name-latin">${item.latin}</span>
+                <span class="name-cyrillic">${item.cyrillic}</span>
+                <span class="dates">${item.dates}</span>
+              </div>
+            `).join('');
+          }
+        };
+
+        const filter = (query) => {
+          const q = query.toLowerCase().trim();
+          if (!q) return dataSource;
+          return dataSource.filter(item => 
+            item.latin.toLowerCase().includes(q) || 
+            item.cyrillic.toLowerCase().includes(q)
+          );
+        };
+
+        const open = () => {
+          render(filter(input.value));
+          dropdown.classList.add('open');
+          isOpen = true;
+        };
+
+        const close = () => {
+          dropdown.classList.remove('open');
+          isOpen = false;
+          highlightedIndex = -1;
+        };
+
+        const selectItem = (item) => {
+          input.value = item.latin;
+          input.dataset.dates = item.dates;
+          input.dataset.cyrillic = item.cyrillic;
+          close();
+          onSelect(item);
+        };
+
+        const selectHighlighted = () => {
+          if (highlightedIndex >= 0 && highlightedIndex < filteredData.length) {
+            selectItem(filteredData[highlightedIndex]);
+          }
+        };
+
+        const updateHighlight = () => {
+          dropdown.querySelectorAll('.combobox-option').forEach((el, idx) => {
+            el.classList.toggle('highlighted', idx === highlightedIndex);
+            if (idx === highlightedIndex) {
+              el.scrollIntoView({ block: 'nearest' });
+            }
+          });
+        };
+
+        // Event listeners
+        input.addEventListener('focus', () => {
+          // Always open dropdown on focus, regardless of current value
+          open();
+        });
+        
+        input.addEventListener('click', () => {
+          // Also open on click in case focus didn't trigger it
+          if (!isOpen) {
+            open();
+          }
+        });
+        
+        input.addEventListener('input', () => {
+          render(filter(input.value));
+          if (!isOpen) {
+            dropdown.classList.add('open');
+            isOpen = true;
+          }
+          // Clear stored data if user edits
+          delete input.dataset.dates;
+          delete input.dataset.cyrillic;
+          onSelect({ latin: input.value, dates: '', cyrillic: '' });
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (!isOpen) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              open();
+              return;
+            }
+            return;
+          }
+
+          switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault();
+              highlightedIndex = Math.min(highlightedIndex + 1, filteredData.length - 1);
+              updateHighlight();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              highlightedIndex = Math.max(highlightedIndex - 1, 0);
+              updateHighlight();
+              break;
+            case 'Enter':
+              e.preventDefault();
+              if (highlightedIndex >= 0) {
+                selectHighlighted();
+              } else {
+                close();
+              }
+              break;
+            case 'Escape':
+              close();
+              break;
+            case 'Tab':
+              close();
+              break;
+          }
+        });
+
+        dropdown.addEventListener('click', (e) => {
+          const option = e.target.closest('.combobox-option');
+          if (option) {
+            const idx = parseInt(option.dataset.index, 10);
+            selectItem(filteredData[idx]);
+          }
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+          if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            close();
+          }
+        });
+
+        return { input, dropdown, open, close };
+      }
+    };
+
+    /* ========================================
+       INPUT PANEL CONTROLLER
+       ======================================== */
+    const InputPanel = {
+      panel: null,
+      handle: null,
+      input: null,
+      viewport: null,
+      isExpanded: false,
+      metaFields: {},
+      composerData: { latin: '', dates: '', cyrillic: '' },
+      poetData: { latin: '', dates: '', cyrillic: '' },
+      
+      init() {
+        this.panel = document.getElementById('inputPanel');
+        this.handle = document.getElementById('panelHandle');
+        this.input = document.getElementById('textInput');
+        this.viewport = document.getElementById('pdfViewport');
+        
+        // Metadata field references
+        this.metaFields = {
+          title: document.getElementById('metaTitle'),
+          composer: document.getElementById('metaComposer'),
+          poet: document.getElementById('metaPoet'),
+          opus: document.getElementById('metaOpus')
+        };
+        
+        // Initialize comboboxes
+        Combobox.create('metaComposer', 'composerDropdown', COMPOSERS, (item) => {
+          this.composerData = item;
+          this.updateHeaderLive();
+        });
+        
+        Combobox.create('metaPoet', 'poetDropdown', POETS, (item) => {
+          this.poetData = item;
+          this.updateHeaderLive();
+        });
+        
+        // Toggle on handle click
+        this.handle.addEventListener('click', () => this.toggle());
+        
+        // Process button
+        document.getElementById('processBtn').addEventListener('click', () => {
+          this.processText();
+        });
+        
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', () => {
+          this.input.value = '';
+          this.metaFields.title.value = '';
+          this.metaFields.composer.value = '';
+          this.metaFields.poet.value = '';
+          this.metaFields.opus.value = '';
+          this.composerData = { latin: '', dates: '', cyrillic: '' };
+          this.poetData = { latin: '', dates: '', cyrillic: '' };
+          this.updateHeaderLive();
+        });
+        
+        // Live update for title and opus
+        this.metaFields.title.addEventListener('input', () => this.updateHeaderLive());
+        this.metaFields.opus.addEventListener('input', () => this.updateHeaderLive());
+        
+        // Keyboard shortcut: Cmd/Ctrl + Enter to process
+        this.input.addEventListener('keydown', (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            e.preventDefault();
+            this.processText();
+          }
+        });
+        
+        // Start expanded
+        this.expand();
+      },
+      
+      // Convert "Surname, Given" to "Given Surname" for display
+      formatNameForDisplay(name) {
+        if (!name) return '';
+        if (name.includes(', ')) {
+          const [surname, given] = name.split(', ');
+          return `${given} ${surname}`;
+        }
+        return name;
+      },
+      
+      updateHeaderLive() {
+        const container = document.getElementById('pagesContainer');
+        if (container) {
+          DocumentRenderer.updatePageMetadata(container);
+        }
+      },
+      
+      toggle() {
+        if (this.isExpanded) {
+          this.collapse();
+        } else {
+          this.expand();
+        }
+      },
+      
+      expand() {
+        this.isExpanded = true;
+        this.panel.classList.add('expanded');
+        this.viewport.classList.add('panel-open');
+        this.input.focus();
+      },
+      
+      collapse() {
+        this.isExpanded = false;
+        this.panel.classList.remove('expanded');
+        this.viewport.classList.remove('panel-open');
+      },
+      
+      processText() {
+        const text = this.input.value.trim();
+        if (!text) return;
+        
+        // Parse lines
+        const lines = text.split('\n').filter(line => line.trim());
+        
+        // Convert to document state format
+        DocumentState.lines = lines.map(line => {
+          const words = line.trim().split(/\s+/);
+          return words.map(word => ({
+            cyrillic: word,
+            stress: -1, // Will be looked up
+            gloss: '',
+            originalStress: -1
+          }));
+        });
+        
+        // Render
+        DocumentRenderer.render();
+        
+        // Collapse panel
+        this.collapse();
+      }
+    };
+
+    /* ========================================
+       STRESS DICTIONARY (OpenRussian, 51,644 words)
+       CC-BY-SA-4.0 License
+       ======================================== */
+;
+
+    /* ========================================
+       GRAYSON ENGINE
+       ======================================== */
+    const GraysonEngine = {
+      
+      inventory: Object.freeze({
+        vowels_stressed: {
+          'а': 'ɑ', 'а_interpalatal': 'a',
+          'о': 'o',
+          'е': 'ɛ', 'е_interpalatal': 'e',
+          'ё': 'o',
+          'и': 'i',
+          'ы': 'ɨ',
+          'у': 'u',
+          'ю': 'u',
+          'я': 'ɑ', 'я_interpalatal': 'a',
+          'э': 'ɛ'
+        },
+        vowels_unstressed: {
+          'а_pretonic': 'ɑ', 'а_remote': 'ʌ',
+          'о_pretonic': 'ɑ', 'о_remote': 'ʌ',
+          'е_unstressed': 'ɪ',
+          'и': 'i',
+          'ы_unstressed': 'ɨ',
+          'у_unstressed': 'u',
+          'ю_unstressed': 'u',
+          'я_unstressed': 'ɪ',
+          'э_unstressed': 'ɪ'
+        },
+        consonants: {
+          'б': 'b', 'п': 'p',
+          'в': 'v', 'ф': 'f',
+          'д': 'd', 'т': 't',
+          'г': 'ɡ', 'к': 'k',
+          'з': 'z', 'с': 's',
+          'ж': 'ʒ', 'ш': 'ʃ',
+          'х': 'x',
+          'ц': 'ts',
+          'ч': 'tʃ',
+          'щ': 'ʃtʃ',
+          'л': 'l', 'л_hard': 'ɫ', 'л_soft': 'lʲ',
+          'м': 'm',
+          'н': 'n', 'н_soft': 'ɲ',
+          'р': 'r',
+          'й': 'j'
+        },
+        markers: {
+          'palatalization': 'ʲ',
+          'stress': 'ˈ'
+        }
+      }),
+      
+      vowels: new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я']),
+      consonants: new Set(['б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ']),
+      alwaysSoft: new Set(['ч', 'щ', 'й']),
+      alwaysHard: new Set(['ж', 'ш', 'ц']),
+      proclitics: new Set(['в', 'во', 'к', 'ко', 'с', 'со', 'о', 'об', 'обо', 'у', 'на', 'за', 'по', 'до', 'из', 'изо', 'от', 'ото', 'без', 'не', 'ни', 'над', 'надо', 'под', 'подо', 'при', 'про', 'для', 'через', 'перед', 'передо']),
+      enclitics: new Set(['ли', 'ль', 'же', 'бы', 'б', 'то', 'ка', 'таки']),
+      
+      // Look up stress from dictionary
+      lookupStress(word) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const entry = STRESS_DICTIONARY[cleanWord] || SINGER_SUPPLEMENT[cleanWord];
+        if (entry) {
+          return {
+            stress: entry.stress,
+            gloss: entry.gloss || '',
+            source: entry.source || 'dictionary'
+          };
+        }
+        return null;
+      },
+      
+      isVowel(char) {
+        return this.vowels.has(char?.toLowerCase());
+      },
+      
+      isConsonant(char) {
+        return this.consonants.has(char?.toLowerCase());
+      },
+      
+      isPalatalized(char, nextChar) {
+        char = char?.toLowerCase();
+        nextChar = nextChar?.toLowerCase();
+        
+        if (this.alwaysSoft.has(char)) return true;
+        if (this.alwaysHard.has(char)) return false;
+        if (nextChar === 'ь') return true;
+        if (['е', 'ё', 'и', 'ю', 'я'].includes(nextChar)) return true;
+        
+        return false;
+      },
+      
+      syllabify(word) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const chars = [...cleanWord];
+        const syllables = [];
+        let current = '';
+        
+        for (let i = 0; i < chars.length; i++) {
+          const char = chars[i];
+          current += char;
+          
+          if (this.isVowel(char)) {
+            let j = i + 1;
+            while (j < chars.length && !this.isVowel(chars[j]) && chars[j] !== 'ь' && chars[j] !== 'ъ') {
+              j++;
+            }
+            
+            if (j >= chars.length) {
+              current += chars.slice(i + 1).join('');
+              syllables.push(current);
+              break;
+            }
+            
+            const cluster = chars.slice(i + 1, j);
+            if (cluster.length === 0) {
+              syllables.push(current);
+              current = '';
+            } else if (cluster.length === 1) {
+              syllables.push(current);
+              current = '';
+            } else {
+              const splitPoint = Math.max(1, cluster.length - 1);
+              current += cluster.slice(0, splitPoint).join('');
+              syllables.push(current);
+              current = '';
+              i = i + splitPoint;
+            }
+          }
+        }
+        
+        if (current && !syllables.includes(current)) {
+          syllables.push(current);
+        }
+        
+        return syllables.length > 0 ? syllables : [cleanWord];
+      },
+      
+      countVowels(word) {
+        return [...word.toLowerCase()].filter(c => this.isVowel(c)).length;
+      },
+      
+      getSyllablePosition(index, stressIndex, total) {
+        if (index === stressIndex) return 'stressed';
+        if (stressIndex === -1) return 'unstressed';
+        if (index === stressIndex - 1) return 'pretonic';
+        return 'remote';
+      },
+      
+      transcribeVowel(vowel, position, isPalatalized) {
+        vowel = vowel.toLowerCase();
+        
+        if (position === 'stressed') {
+          if (vowel === 'а') return isPalatalized ? 'a' : 'ɑ';
+          if (vowel === 'о') return 'o';
+          if (vowel === 'е') return isPalatalized ? 'e' : 'ɛ';
+          if (vowel === 'ё') return 'o';
+          if (vowel === 'и') return 'i';
+          if (vowel === 'ы') return 'ɨ';
+          if (vowel === 'у') return 'u';
+          if (vowel === 'ю') return 'u';
+          if (vowel === 'я') return isPalatalized ? 'a' : 'ɑ';
+          if (vowel === 'э') return 'ɛ';
+        } else if (position === 'pretonic') {
+          if (vowel === 'а' || vowel === 'о') return 'ɑ';
+          if (vowel === 'е' || vowel === 'я' || vowel === 'э') return 'ɪ';
+          if (vowel === 'и') return 'i';
+          if (vowel === 'ы') return 'ɨ';
+          if (vowel === 'у' || vowel === 'ю') return 'u';
+        } else {
+          if (vowel === 'а' || vowel === 'о') return 'ʌ';
+          if (vowel === 'е' || vowel === 'я' || vowel === 'э') return 'ɪ';
+          if (vowel === 'и') return 'i';
+          if (vowel === 'ы') return 'ɨ';
+          if (vowel === 'у' || vowel === 'ю') return 'u';
+        }
+        
+        return vowel;
+      },
+      
+      transcribeConsonant(consonant, nextChar) {
+        consonant = consonant.toLowerCase();
+        const soft = this.isPalatalized(consonant, nextChar);
+        const base = this.inventory.consonants[consonant] || consonant;
+        
+        if (consonant === 'л') {
+          return soft ? 'lʲ' : 'ɫ';
+        }
+        if (consonant === 'н' && soft) {
+          return 'ɲ';
+        }
+        
+        if (soft && !this.alwaysSoft.has(consonant)) {
+          return base + 'ʲ';
+        }
+        
+        return base;
+      },
+      
+      transcribe(word, stressIndex = -1, isClitic = false) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const syllables = this.syllabify(cleanWord);
+        const vowelCount = this.countVowels(cleanWord);
+        
+        const effectiveStress = (vowelCount === 1 && !isClitic) ? 0 : stressIndex;
+        
+        let ipa = '';
+        let syllableData = [];
+        
+        syllables.forEach((syl, sylIdx) => {
+          const position = this.getSyllablePosition(sylIdx, effectiveStress, syllables.length);
+          let sylIpa = '';
+          const chars = [...syl];
+          
+          if (position === 'stressed' && vowelCount > 1) {
+            sylIpa += 'ˈ';
+          }
+          
+          for (let i = 0; i < chars.length; i++) {
+            const char = chars[i];
+            const nextChar = chars[i + 1];
+            
+            if (char === 'ь' || char === 'ъ') continue;
+            
+            if (this.isVowel(char)) {
+              const prevChar = chars[i - 1];
+              const needsGlide = ['е', 'ё', 'ю', 'я'].includes(char) && 
+                                 (i === 0 || this.isVowel(prevChar) || prevChar === 'ь' || prevChar === 'ъ');
+              
+              if (needsGlide) sylIpa += 'j';
+              
+              const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
+              const isPal = prevConsonant ? this.isPalatalized(prevConsonant, char) : false;
+              sylIpa += this.transcribeVowel(char, position, isPal);
+            } else if (this.isConsonant(char)) {
+              sylIpa += this.transcribeConsonant(char, nextChar);
+            }
+          }
+          
+          syllableData.push({
+            cyrillic: syl,
+            ipa: sylIpa.replace(/^ˈ/, ''),
+            isStressed: position === 'stressed'
+          });
+          
+          ipa += sylIpa;
+        });
+        
+        return { ipa, syllables: syllableData };
+      }
+    };
+
+    /* ========================================
+       DOCUMENT STATE
+       ======================================== */
+    const DocumentState = {
+      lines: [],
+      metadata: {
+        composer: '',
+        composerDates: '',
+        title: '',
+        opus: '',
+        poet: '',
+        poetDates: ''
+      },
+      
+      updateStress(lineIndex, wordIndex, newStress) {
+        if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
+          this.lines[lineIndex][wordIndex].stress = newStress;
+          // Clear stressSource when stress changes (user must re-attribute)
+          this.lines[lineIndex][wordIndex].stressSource = null;
+        }
+      },
+      
+      updateStressSource(lineIndex, wordIndex, source) {
+        if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
+          this.lines[lineIndex][wordIndex].stressSource = source;
+        }
+      },
+      
+      updateGloss(lineIndex, wordIndex, newGloss) {
+        if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
+          this.lines[lineIndex][wordIndex].gloss = newGloss;
+        }
+      }
+    };
+
+    /* ========================================
+       DOCUMENT RENDERER WITH PAGINATION
+       ======================================== */
+    const DocumentRenderer = {
+      // Page dimensions (at 96 DPI)
+      PAGE_HEIGHT: 1056,
+      PAGE_WIDTH: 816,
+      MARGIN: 72,
+      HEADER_HEIGHT: 170,      // Full header on page 1
+      RUNNING_HEADER_HEIGHT: 60, // Running header on page 2+
+      FOOTER_HEIGHT: 96,
+      
+      get contentHeightPage1() {
+        return this.PAGE_HEIGHT - this.HEADER_HEIGHT - this.FOOTER_HEIGHT - 48;
+      },
+      
+      get contentHeightPageN() {
+        return this.PAGE_HEIGHT - this.RUNNING_HEADER_HEIGHT - this.FOOTER_HEIGHT - 48;
+      },
+      
+      createPage(pageNum, totalPages, isFirstPage) {
+        const page = document.createElement('article');
+        page.className = 'paper';
+        page.dataset.page = pageNum;
+        
+        if (isFirstPage) {
+          // Full header for page 1
+          page.innerHTML = `
+            <header class="doc-header">
+              <div class="doc-composer-line">
+                <span class="doc-composer"><span class="composer-name">Composer</span> <span class="dates composer-dates">(dates)</span></span>
+                <span class="doc-poet"><span class="poet-name">Poet</span> <span class="dates poet-dates">(dates)</span></span>
+              </div>
+              <h1 class="doc-title">Title</h1>
+              <div class="doc-opus">Opus / Larger Work</div>
+            </header>
+            <main class="doc-body">
+              <div class="verse-container"></div>
+            </main>
+            <footer class="doc-footer">
+              <div class="attribution">Transcription based on Grayson (2012)</div>
+              <div class="page-number">Page ${pageNum} of ${totalPages}</div>
+            </footer>
+          `;
+        } else {
+          // Running header for pages 2+
+          page.innerHTML = `
+            <header class="running-header">
+              <span class="running-title">Title</span>
+              <span class="running-page">Page ${pageNum}</span>
+            </header>
+            <main class="doc-body" style="padding-top: 16px;">
+              <div class="verse-container"></div>
+            </main>
+            <footer class="doc-footer">
+              <div class="attribution">Transcription based on Grayson (2012)</div>
+              <div class="page-number">Page ${pageNum} of ${totalPages}</div>
+            </footer>
+          `;
+        }
+        
+        return page;
+      },
+      
+      createVerseLine(line, lineIdx) {
+        const verseLine = document.createElement('div');
+        verseLine.className = 'verse-line';
+        verseLine.setAttribute('role', 'row');
+        
+        line.forEach((wordData, wordIdx) => {
+          const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
+          const punct = wordData.cyrillic.replace(cleanWord, '');
+          
+          const isProclitic = GraysonEngine.proclitics.has(cleanWord.toLowerCase());
+          const result = GraysonEngine.transcribe(cleanWord, wordData.stress);
+          
+          const wordStack = document.createElement('div');
+          wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '');
+          wordStack.setAttribute('role', 'gridcell');
+          wordStack.setAttribute('tabindex', '0');
+          wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
+          wordStack.dataset.lineIndex = lineIdx;
+          wordStack.dataset.wordIndex = wordIdx;
+          wordStack.dataset.cyrillic = cleanWord;
+          wordStack.dataset.ipa = result.ipa;
+          wordStack.dataset.gloss = wordData.gloss || '';
+          wordStack.dataset.punctuation = punct;
+          wordStack.dataset.syllables = JSON.stringify(result.syllables);
+          wordStack.dataset.isProclitic = isProclitic;
+          
+          wordStack.innerHTML = `
+            <span class="ipa">${result.ipa}</span>
+            <span class="cyrillic">${cleanWord}<span class="punct">${punct}</span></span>
+            <span class="gloss">${wordData.gloss || ''}</span>
+          `;
+          
+          verseLine.appendChild(wordStack);
+        });
+        
+        return verseLine;
+      },
+      
+      updatePageMetadata(container) {
+        const title = InputPanel.metaFields.title.value.trim() || 'Title';
+        const composer = InputPanel.formatNameForDisplay(InputPanel.composerData.latin || InputPanel.metaFields.composer.value.trim()) || 'Composer';
+        const composerDates = InputPanel.composerData.dates || '';
+        const poet = InputPanel.formatNameForDisplay(InputPanel.poetData.latin || InputPanel.metaFields.poet.value.trim()) || 'Poet';
+        const poetDates = InputPanel.poetData.dates || '';
+        const opus = InputPanel.metaFields.opus.value.trim() || 'Opus / Larger Work';
+        
+        // Update all pages
+        container.querySelectorAll('.doc-title').forEach(el => {
+          el.textContent = title;
+          el.style.color = title !== 'Title' ? 'var(--ink-primary)' : 'var(--ink-secondary)';
+        });
+        
+        container.querySelectorAll('.running-title').forEach(el => {
+          el.textContent = title;
+        });
+        
+        container.querySelectorAll('.composer-name').forEach(el => {
+          el.textContent = composer;
+          el.style.color = composer !== 'Composer' ? 'var(--ink-primary)' : 'var(--ink-secondary)';
+        });
+        
+        container.querySelectorAll('.composer-dates').forEach(el => {
+          el.textContent = composerDates ? `(${composerDates})` : '(dates)';
+          el.style.opacity = composerDates ? '1' : '0.8';
+        });
+        
+        container.querySelectorAll('.poet-name').forEach(el => {
+          el.textContent = poet;
+          el.style.color = poet !== 'Poet' ? 'var(--ink-primary)' : 'var(--ink-secondary)';
+        });
+        
+        container.querySelectorAll('.poet-dates').forEach(el => {
+          el.textContent = poetDates ? `(${poetDates})` : '(dates)';
+          el.style.opacity = poetDates ? '1' : '0.8';
+        });
+        
+        container.querySelectorAll('.doc-opus').forEach(el => {
+          el.textContent = opus;
+        });
+      },
+      
+      render() {
+        const container = document.getElementById('pagesContainer');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        // If no content, show empty page 1
+        if (DocumentState.lines.length === 0) {
+          const page = this.createPage(1, 1, true);
+          const body = page.querySelector('.doc-body');
+          body.innerHTML = `
+            <div class="empty-state">
+              <p class="empty-instruction">Your transcription will appear here. Enter the Cyrillic text of your song or poem in the input panel below and press Transcribe.</p>
+            </div>
+          `;
+          container.appendChild(page);
+          this.updatePageMetadata(container);
+          return;
+        }
+        
+        // Create verse lines first to measure them
+        const verseLines = DocumentState.lines.map((line, idx) => this.createVerseLine(line, idx));
+        
+        // Temporary container for measurement
+        const measureDiv = document.createElement('div');
+        measureDiv.style.cssText = 'position: absolute; visibility: hidden; width: 672px; padding: 0 72px;';
+        document.body.appendChild(measureDiv);
+        
+        // Measure each line
+        const lineHeights = verseLines.map(line => {
+          measureDiv.innerHTML = '';
+          measureDiv.appendChild(line.cloneNode(true));
+          return measureDiv.offsetHeight;
+        });
+        
+        document.body.removeChild(measureDiv);
+        
+        // Distribute lines across pages
+        const pages = [];
+        let currentPageLines = [];
+        let currentHeight = 0;
+        let isFirstPage = true;
+        
+        const getMaxHeight = () => isFirstPage ? this.contentHeightPage1 : this.contentHeightPageN;
+        
+        verseLines.forEach((line, idx) => {
+          const lineHeight = lineHeights[idx];
+          
+          if (currentHeight + lineHeight > getMaxHeight() && currentPageLines.length > 0) {
+            // Start new page
+            pages.push({ lines: currentPageLines, isFirst: isFirstPage });
+            currentPageLines = [];
+            currentHeight = 0;
+            isFirstPage = false;
+          }
+          
+          currentPageLines.push(line);
+          currentHeight += lineHeight;
+        });
+        
+        // Add remaining lines
+        if (currentPageLines.length > 0) {
+          pages.push({ lines: currentPageLines, isFirst: isFirstPage });
+        }
+        
+        // Create actual pages
+        const totalPages = pages.length;
+        pages.forEach((pageData, idx) => {
+          const page = this.createPage(idx + 1, totalPages, pageData.isFirst);
+          const verseContainer = page.querySelector('.verse-container');
+          
+          pageData.lines.forEach(line => {
+            verseContainer.appendChild(line);
+          });
+          
+          container.appendChild(page);
+        });
+        
+        // Update all page numbers
+        container.querySelectorAll('.page-number').forEach((el, idx) => {
+          el.textContent = `Page ${idx + 1} of ${totalPages}`;
+        });
+        
+        this.updatePageMetadata(container);
+      }
+    };
+
+    /* ========================================
+       POPUP CONTROLLER
+       ======================================== */
+    const Popup = {
+      isOpen: false,
+      currentWord: null,
+      stressWasChanged: false,
+      attributionSelected: false,
+      elements: {},
+      
+      init() {
+        this.elements = {
+          overlay: document.getElementById('popupOverlay'),
+          backdrop: document.getElementById('popupBackdrop'),
+          card: document.getElementById('popupCard'),
+          syllableDisplay: document.getElementById('syllableDisplay'),
+          syllableLabel: document.getElementById('syllableLabel'),
+          cyrillic: document.getElementById('popupCyrillic'),
+          glossInline: document.getElementById('glossInline'),
+          whyToggle: document.getElementById('whyToggle'),
+          whyPanel: document.getElementById('whyPanel'),
+          cliticBadge: document.getElementById('cliticBadge'),
+          cliticType: document.getElementById('cliticType'),
+          whyCliticBanner: document.getElementById('whyCliticBanner'),
+          stressSourceModule: document.getElementById('stressSourceModule'),
+          stressSourceButtons: document.getElementById('stressSourceButtons'),
+          stressSourceHint: document.getElementById('stressSourceHint'),
+          restoreLink: document.getElementById('restoreLink'),
+          citationRule: document.querySelector('.citation-rule'),
+          citationRef: document.querySelector('.citation-ref')
+        };
+        
+        this.elements.backdrop.addEventListener('click', () => this.close());
+        
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.isOpen) {
+            this.close();
+          }
+        });
+        
+        this.elements.whyToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.elements.whyPanel.classList.toggle('expanded');
+        });
+        
+        this.elements.glossInline.addEventListener('blur', () => {
+          if (this.currentWord) {
+            const newGloss = this.elements.glossInline.textContent.trim();
+            DocumentState.updateGloss(this.currentWord.lineIndex, this.currentWord.wordIndex, newGloss);
+            DrawerController.renderToPaper();
+          }
+        });
+        
+        this.elements.card.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+        
+        // Attribution button handlers
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const source = btn.dataset.source;
+            this.selectAttribution(source);
+          });
+        });
+        
+        // Undo/restore handler
+        this.elements.restoreLink.addEventListener('click', () => {
+          if (this.currentWord && this.currentWord.originalStress !== undefined) {
+            this.updateStress(this.currentWord.originalStress);
+            this.stressWasChanged = false;
+            this.attributionSelected = false;
+            this.elements.stressSourceModule.classList.remove('needs-attention');
+            this.clearAttributionSelection();
+          }
+        });
+      },
+      
+      selectAttribution(source) {
+        if (!this.currentWord) return;
+        
+        DocumentState.updateStressSource(
+          this.currentWord.lineIndex, 
+          this.currentWord.wordIndex, 
+          source
+        );
+        
+        this.attributionSelected = true;
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        
+        // Update button states
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.source === source);
+        });
+        
+        // Update hint text
+        this.elements.stressSourceHint.textContent = source === 'user' 
+          ? 'Marked as your choice' 
+          : 'Marked as composer\'s setting';
+      },
+      
+      clearAttributionSelection() {
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+      },
+      generateCitation(wordData) {
+        const ipa = wordData.ipa || '';
+        const cyrillic = (wordData.cyrillic || '').toLowerCase();
+        const syllables = wordData.syllables || [];
+        const isProclitic = wordData.isProclitic === 'true';
+        const isEnclitic = wordData.isEnclitic === 'true';
+        const syllableCount = syllables.length;
+
+        // Check for monosyllables first
+        if (syllableCount === 1) {
+            if (isProclitic) {
+                return {
+                    rule: 'Proclitic (attaches to following word). Unstressed vowel reduces.',
+                    ref: 'Grayson §7.1'
+                };
+            }
+            if (isEnclitic) {
+                return {
+                    rule: 'Enclitic (attaches to preceding word). Unstressed vowel reduces.',
+                    ref: 'Grayson §7.1'
+                };
+            }
+            // Check if it has stress marked
+            const hasStress = syllables.some(s => s.isStressed);
+            if (hasStress) {
+                return {
+                    rule: 'Stressed monosyllable — vowel receives full phonetic value.',
+                    ref: 'Grayson §3.1'
+                };
+            }
+            return {
+                rule: 'Monosyllable — stress context determines vowel quality.',
+                ref: 'Grayson §7.1'
+            };
+        }
+        
+        // Multi-syllable words: analyze the IPA for reduction patterns
+        // Priority order: most specific/interesting rule first
+        
+        // Check for ɑ from о-reduction (akanye)
+        if (ipa.includes('ɑ') && cyrillic.includes('о')) {
+            return {
+                rule: 'Unstressed /о/ reduces to [ɑ] in immediate pretonic position',
+                ref: 'Grayson §3.2'
+            };
+        }
+        
+        // Check for ʌ (remote reduction)
+        if (ipa.includes('ʌ')) {
+            return {
+                rule: 'Unstressed vowel reduces to [ʌ] in remote positions',
+                ref: 'Grayson §3.3'
+            };
+        }
+        
+        // Check for ɪ from е/я reduction (ikanye)
+        if (ipa.includes('ɪ') && (cyrillic.includes('е') || cyrillic.includes('я'))) {
+            return {
+                rule: 'Unstressed /е/ or /я/ reduces to [ɪ]',
+                ref: 'Grayson §3.2'
+            };
+        }
+        
+        // Check for palatalization
+        if (ipa.includes('ʲ')) {
+            return {
+                rule: 'Consonant palatalized before soft sign or front vowel',
+                ref: 'Grayson §4.2'
+            };
+        }
+        
+        // Check for й (j-glide)
+        if (ipa.includes('j') && (cyrillic.includes('е') || cyrillic.includes('ё') || cyrillic.includes('ю') || cyrillic.includes('я'))) {
+            return {
+                rule: 'Iotated vowel produces [j] glide',
+                ref: 'Grayson §3.6'
+            };
+        }
+        
+        // Default: stressed vowel rule
+        return {
+            rule: 'Stressed vowel receives full phonetic value',
+            ref: 'Grayson §3.1'
+        };
+    },
+
+      open(wordData) {
+        this.currentWord = wordData;
+        this.isOpen = true;
+        this.stressWasChanged = false;
+        this.attributionSelected = false;
+        
+        // Store original stress for undo functionality
+        const currentStressIdx = wordData.syllables.findIndex(s => s.isStressed);
+        this.currentWord.originalStress = currentStressIdx;
+        
+        // Reset attribution UI
+        this.clearAttributionSelection();
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        
+        // Update syllable label based on word type
+        const syllableCount = wordData.syllables.length;
+        const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
+        if (syllableCount === 1) {
+            if (isClitic) {
+                this.elements.syllableLabel.textContent = 'Unstressed monosyllable';
+            } else {
+                this.elements.syllableLabel.textContent = 'Stressed monosyllable';
+            }
+        } else {
+            this.elements.syllableLabel.textContent = 'Click to reassign stress';
+        }
+
+        // Hide stress source module for monosyllables (no stress to reassign)
+            if (syllableCount === 1) {
+                this.elements.stressSourceModule.style.display = 'none';
+            } else {
+                this.elements.stressSourceModule.style.display = 'block';
+            }
+
+        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
+          <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
+                  data-syllable-index="${idx}">
+            ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
+          </button>
+        `).join('');
+        
+        this.elements.syllableDisplay.querySelectorAll('.syllable-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
+            this.updateStress(newStressIdx);
+          });
+        });
+        
+        this.elements.cyrillic.textContent = wordData.cyrillic + wordData.punctuation;
+        this.elements.glossInline.textContent = wordData.gloss || '';
+        
+        // Always hide top clitic badge (info now in Why section)
+        this.elements.cliticBadge.style.display = 'none';
+
+        // Show clitic banner in Why section if applicable
+            const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
+            const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+            if (isProclitic || isEnclitic) {
+                const cliticType = isProclitic ? 'Proclitic' : 'Enclitic';
+                this.elements.whyCliticBanner.textContent = cliticType + ' — attaches phonologically';
+                this.elements.whyCliticBanner.style.display = 'block';
+            } else {
+                this.elements.whyCliticBanner.style.display = 'none';
+            }
+
+        // Generate dynamic Grayson citation
+        const citation = this.generateCitation(wordData);
+        this.elements.citationRule.textContent = citation.rule;
+        this.elements.citationRef.textContent = '— ' + citation.ref;
+        this.positionPopup(wordData.element);
+        this.elements.overlay.classList.add('active');
+      },
+      
+      close() {
+        // If stress was changed but no attribution selected, default to 'user'
+        if (this.stressWasChanged && !this.attributionSelected && this.currentWord) {
+          DocumentState.updateStressSource(
+            this.currentWord.lineIndex,
+            this.currentWord.wordIndex,
+            'user'
+          );
+        }
+        
+        // Reset state
+        this.isOpen = false;
+        this.stressWasChanged = false;
+        this.attributionSelected = false;
+        this.currentWord = null;
+        this.elements.overlay.classList.remove('active');
+        this.elements.whyPanel.classList.remove('expanded');
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        this.clearAttributionSelection();
+      },
+      
+      positionPopup(element) {
+        const rect = element.getBoundingClientRect();
+        const card = this.elements.card;
+        const cardWidth = 320;
+        
+        let top = rect.top - 10;
+        let left = rect.left + (rect.width / 2) - (cardWidth / 2);
+        
+        left = Math.max(10, Math.min(left, window.innerWidth - cardWidth - 10));
+        
+        const cardHeight = card.offsetHeight || 250;
+        if (top - cardHeight < 10) {
+          top = rect.bottom + 10;
+          card.classList.add('arrow-top');
+        } else {
+          top = top - cardHeight;
+          card.classList.remove('arrow-top');
+        }
+        
+        card.style.top = `${top}px`;
+        card.style.left = `${left}px`;
+      },
+      
+      updateStress(newStressIdx) {
+        if (!this.currentWord) return;
+        
+        DocumentState.updateStress(this.currentWord.lineIndex, this.currentWord.wordIndex, newStressIdx);
+        DrawerController.renderToPaper();
+        
+        const result = GraysonEngine.transcribe(this.currentWord.cyrillic, newStressIdx, this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true);
+        this.currentWord.ipa = result.ipa;
+        this.currentWord.syllables = result.syllables;
+        
+        // Re-render syllable buttons with updated stress marks
+        this.elements.syllableDisplay.querySelectorAll('.syllable-btn').forEach((btn, idx) => {
+          const syl = result.syllables[idx];
+          btn.classList.toggle('stressed', idx === newStressIdx);
+          btn.textContent = (idx === newStressIdx) ? 'ˈ' + syl.ipa : syl.ipa;
+        });
+        
+        // Track that stress was changed and trigger attribution prompt
+        this.stressWasChanged = true;
+        this.attributionSelected = false;
+        this.clearAttributionSelection();
+        
+        // Expand Why panel and trigger pulse animation
+        this.elements.whyPanel.classList.add('expanded');
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        // Force reflow to restart animation
+        void this.elements.stressSourceModule.offsetWidth;
+        this.elements.stressSourceModule.classList.add('needs-attention');
+        
+        // Update hint text
+        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+      }
+    };
+
+    /* ========================================
+       EVENT DELEGATION
+       ======================================== */
+    document.addEventListener('click', (e) => {
+      const wordStack = e.target.closest('.word-stack');
+      if (wordStack && !Popup.isOpen) {
+        const data = {
+          wordId: wordStack.dataset.wordId,
+          lineIndex: parseInt(wordStack.dataset.lineIndex, 10),
+          wordIndex: parseInt(wordStack.dataset.wordIndex, 10),
+          ipa: wordStack.dataset.ipa,
+          cyrillic: wordStack.dataset.cyrillic,
+          gloss: wordStack.dataset.gloss,
+          punctuation: wordStack.dataset.punctuation || '',
+          syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+          isProclitic: wordStack.dataset.isProclitic,
+          element: wordStack
+        };
+        Popup.open(data);
+      }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (Popup.isOpen) return;
+      
+      const wordStack = e.target.closest('.word-stack');
+      if (!wordStack) return;
+      
+      const verseLine = wordStack.closest('.verse-line');
+      const allWords = [...verseLine.querySelectorAll('.word-stack')];
+      const currentIndex = allWords.indexOf(wordStack);
+      
+      let nextElement = null;
+      
+      switch (e.key) {
+        case 'ArrowRight':
+          e.preventDefault();
+          if (currentIndex < allWords.length - 1) {
+            nextElement = allWords[currentIndex + 1];
+          }
+          break;
+          
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (currentIndex > 0) {
+            nextElement = allWords[currentIndex - 1];
+          }
+          break;
+          
+        case 'ArrowDown':
+          e.preventDefault();
+          const nextVerse = verseLine.nextElementSibling;
+          if (nextVerse && nextVerse.classList.contains('verse-line')) {
+            const nextWords = [...nextVerse.querySelectorAll('.word-stack')];
+            nextElement = nextWords[Math.min(currentIndex, nextWords.length - 1)];
+          }
+          break;
+          
+        case 'ArrowUp':
+          e.preventDefault();
+          const prevVerse = verseLine.previousElementSibling;
+          if (prevVerse && prevVerse.classList.contains('verse-line')) {
+            const prevWords = [...prevVerse.querySelectorAll('.word-stack')];
+            nextElement = prevWords[Math.min(currentIndex, prevWords.length - 1)];
+          }
+          break;
+          
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          wordStack.click();
+          return;
+      }
+      
+      if (nextElement) {
+        nextElement.focus();
+      }
+    });
+
+    /* ========================================
+       INITIALIZATION
+       ======================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      DrawerController.init();
+      Popup.init();
+    });
+  </script>
+
+</body>
+</html>
