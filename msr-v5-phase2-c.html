@@ -3168,19 +3168,20 @@ const SINGER_SUPPLEMENT = {
                 (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false;
               
               // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
-              // Find the next consonant after this vowel
+              // Find the next consonant after this vowel - must search in FULL WORD, not just current syllable
               let followingConsonant = null;
               let followingConsonantGlobalIndex = -1;
               let charAfterFollowingC = null;
-              for (let j = i + 1; j < chars.length; j++) {
-                if (chars[j] === 'ь' || chars[j] === 'ъ') continue;
-                if (this.isConsonant(chars[j])) {
-                  followingConsonant = chars[j];
-                  followingConsonantGlobalIndex = charIndexInWord + j;
-                  charAfterFollowingC = chars[j + 1];
+              const wordChars = [...cleanWord];
+              for (let j = globalIndex + 1; j < wordChars.length; j++) {
+                if (wordChars[j] === 'ь' || wordChars[j] === 'ъ') continue;
+                if (this.isConsonant(wordChars[j])) {
+                  followingConsonant = wordChars[j];
+                  followingConsonantGlobalIndex = j;
+                  charAfterFollowingC = wordChars[j + 1];
                   break;
                 }
-                if (this.isVowel(chars[j])) break; // Hit another vowel first
+                if (this.isVowel(wordChars[j])) break; // Hit another vowel first
               }
               
               // й always counts as palatalized for interpalatal purposes
