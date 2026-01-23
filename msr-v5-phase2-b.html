@@ -2719,30 +2719,52 @@ const SINGER_SUPPLEMENT = {
         return 'remote';
       },
       
-      transcribeVowel(vowel, position, isPalatalized) {
+      // Transcribe vowel based on position and palatal context
+      // Grayson Ch. 3: Fronting to [a] or [e] requires INTERPALATAL position
+      // (sandwiched between two palatalized consonants or followed by й)
+      transcribeVowel(vowel, position, isPrecededByPalatalized, isFollowedByPalatalized, precedingConsonant) {
         vowel = vowel.toLowerCase();
         
+        // Interpalatal = preceded by soft C AND followed by soft C or й (Grayson p. 104, 106, 125)
+        const isInterpalatal = isPrecededByPalatalized && isFollowedByPalatalized;
+        
+        // Always-hard consonants ж, ш, ц (Grayson p. 102-103)
+        const isAfterAlwaysHard = ['ж', 'ш', 'ц'].includes(precedingConsonant);
+        
         if (position === 'stressed') {
-          if (vowel === 'а') return isPalatalized ? 'a' : 'ɑ';
+          // а → [a] only when interpalatal (Grayson p. 104)
+          if (vowel === 'а') return isInterpalatal ? 'a' : 'ɑ';
           if (vowel === 'о') return 'o';
-          if (vowel === 'е') return isPalatalized ? 'e' : 'ɛ';
+          // е → [e] when followed by palatalized C; otherwise /ɛ/ (Grayson p. 106-107)
+          if (vowel === 'е') return isFollowedByPalatalized ? 'e' : 'ɛ';
           if (vowel === 'ё') return 'o';
-          if (vowel === 'и') return 'i';
+          // и after ж/ш/ц → ɨ (Grayson p. 93-95)
+          if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
           if (vowel === 'у') return 'u';
           if (vowel === 'ю') return 'u';
-          if (vowel === 'я') return isPalatalized ? 'a' : 'ɑ';
-          if (vowel === 'э') return 'ɛ';
+          // я → [a] only when interpalatal (Grayson p. 104)
+          if (vowel === 'я') return isInterpalatal ? 'a' : 'ɑ';
+          // э → [e] when followed by palatalized C (Grayson p. 106)
+          if (vowel === 'э') return isFollowedByPalatalized ? 'e' : 'ɛ';
         } else if (position === 'pretonic') {
           if (vowel === 'а' || vowel === 'о') return 'ɑ';
-          if (vowel === 'е' || vowel === 'я' || vowel === 'э') return 'ɪ';
-          if (vowel === 'и') return 'i';
+          // е after ж/ш/ц → ɨ (Grayson p. 102-103)
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
+          if (vowel === 'я' || vowel === 'э') return 'ɪ';
+          // и after ж/ш/ц → ɨ (Grayson p. 102)
+          if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
           if (vowel === 'у' || vowel === 'ю') return 'u';
         } else {
-          if (vowel === 'а' || vowel === 'о') return 'ʌ';
-          if (vowel === 'е' || vowel === 'я' || vowel === 'э') return 'ɪ';
-          if (vowel === 'и') return 'i';
+          // Remote unstressed positions (Grayson p. 109-112)
+          if (vowel === 'а') return 'ʌ';
+          if (vowel === 'о') return 'ʌ';
+          // е after ж/ш/ц → ɨ (Grayson p. 102-103)
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
+          if (vowel === 'я' || vowel === 'э') return 'ɪ';
+          // и after ж/ш/ц → ɨ (Grayson p. 102)
+          if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
           if (vowel === 'у' || vowel === 'ю') return 'u';
         }
@@ -2986,9 +3008,29 @@ const SINGER_SUPPLEMENT = {
               
               if (needsGlide) sylIpa += 'j';
               
+              // Check preceding consonant palatalization
               const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
-              const isPal = prevConsonant ? this.isPalatalized(prevConsonant, char) : false;
-              sylIpa += this.transcribeVowel(char, position, isPal);
+              const isPrecededByPal = prevConsonant ? this.isPalatalized(prevConsonant, char) : false;
+              
+              // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
+              // Find the next consonant after this vowel
+              let followingConsonant = null;
+              let charAfterFollowingC = null;
+              for (let j = i + 1; j < chars.length; j++) {
+                if (chars[j] === 'ь' || chars[j] === 'ъ') continue;
+                if (this.isConsonant(chars[j])) {
+                  followingConsonant = chars[j];
+                  charAfterFollowingC = chars[j + 1];
+                  break;
+                }
+                if (this.isVowel(chars[j])) break; // Hit another vowel first
+              }
+              
+              // й always counts as palatalized for interpalatal purposes
+              const isFollowedByPal = followingConsonant === 'й' || 
+                                      (followingConsonant && this.isPalatalized(followingConsonant, charAfterFollowingC));
+              
+              sylIpa += this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonant);
             } else if (this.isConsonant(char)) {
               sylIpa += this.transcribeConsonant(char, nextChar);
             }
