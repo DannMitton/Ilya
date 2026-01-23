@@ -853,10 +853,11 @@
     }
 
     .stress-source-module {
-    margin-bottom: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+      margin-bottom: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
     }
 
     .stress-source-module.needs-attention .stress-source-buttons {
@@ -876,6 +877,7 @@
       font-size: 0.7rem;
       color: var(--ink-secondary);
       margin-bottom: 0.4rem;
+      text-align: left;
     }
 
     .stress-source-hint {
@@ -918,7 +920,7 @@
     .restore-link {
       display: inline-flex;
       align-items: center;
-      margin-left: auto;
+      align-self: flex-end;
       gap: 0.25rem;
       padding: 0.25rem;
       background: none;
