@@ -1501,17 +1501,17 @@
         
         <!-- Document Header -->
         <header class="doc-header">
-          <h1 class="doc-title" id="docTitle">
+          <h1 class="doc-title" id="docTitle" title="Change in Dashboard below">
             <span class="placeholder-text">Song Title</span>
           </h1>
-          <div class="doc-opus" id="docOpus">
+          <div class="doc-opus" id="docOpus" title="Change in Dashboard below">
             <span class="placeholder-text">Op. 00, No. 0</span>
           </div>
           <div class="doc-composer-line">
-            <span class="doc-composer" id="docComposer">
+            <span class="doc-composer" id="docComposer" title="Change in Dashboard below">
               <span class="placeholder-text">Composer Name (0000–0000)</span>
             </span>
-            <span class="doc-poet" id="docPoet">
+            <span class="doc-poet" id="docPoet" title="Change in Dashboard below">
               <span class="placeholder-text">Poet Name (0000–0000)</span>
             </span>
           </div>
@@ -1609,6 +1609,11 @@
               <input type="text" class="form-input" id="metaTitle" placeholder="Title">
             </div>
             
+            <!-- Opus -->
+            <div class="form-group">
+              <input type="text" class="form-input" id="metaOpus" placeholder="Opus / Catalogue">
+            </div>
+            
             <!-- Composer (searchable select) -->
             <div class="form-group">
               <div class="searchable-select" id="composerSelect">
@@ -1639,11 +1644,6 @@
                   <div class="select-options" id="poetOptions"></div>
                 </div>
               </div>
-            </div>
-            
-            <!-- Opus -->
-            <div class="form-group">
-              <input type="text" class="form-input" id="metaOpus" placeholder="Opus / Catalogue">
             </div>
             
             <!-- Transcription Profile -->
@@ -2239,6 +2239,13 @@ const SINGER_SUPPLEMENT = {
         const composerEl = document.getElementById('docComposer');
         const poetEl = document.getElementById('docPoet');
         
+        // Helper: convert "Surname, Given" to "Given Surname"
+        const toGivenSurname = (name) => {
+          if (!name || !name.includes(',')) return name;
+          const [surname, given] = name.split(',').map(s => s.trim());
+          return `${given} ${surname}`;
+        };
+        
         if (titleEl && this.titleInput?.value) {
           titleEl.innerHTML = this.titleInput.value;
         }
@@ -2249,12 +2256,12 @@ const SINGER_SUPPLEMENT = {
         
         const composer = this.composerSelect?.selectedValue;
         if (composerEl && composer) {
-          composerEl.innerHTML = `${composer.latin} <span class="dates">(${composer.dates})</span>`;
+          composerEl.innerHTML = `${toGivenSurname(composer.latin)} <span class="dates">(${composer.dates})</span>`;
         }
         
         const poet = this.poetSelect?.selectedValue;
         if (poetEl && poet) {
-          poetEl.innerHTML = `${poet.latin} <span class="dates">(${poet.dates})</span>`;
+          poetEl.innerHTML = `${toGivenSurname(poet.latin)} <span class="dates">(${poet.dates})</span>`;
         }
       },
       
