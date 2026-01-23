@@ -859,16 +859,39 @@
     align-items: flex-end;
     }
 
+    .stress-source-module.needs-attention .stress-source-buttons {
+      animation: gentle-pulse 2s ease-in-out 3;
+    }
+
+    @keyframes gentle-pulse {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(168, 90, 58, 0);
+      }
+      50% { 
+        box-shadow: 0 0 0 4px rgba(168, 90, 58, 0.15);
+      }
+    }
+
     .stress-source-label {
       font-size: 0.7rem;
       color: var(--ink-secondary);
       margin-bottom: 0.4rem;
     }
 
+    .stress-source-hint {
+      font-size: 0.65rem;
+      color: var(--ink-secondary);
+      opacity: 0.7;
+      font-style: italic;
+      margin-top: 0.3rem;
+      text-align: right;
+    }
+
     .stress-source-buttons {
       display: flex;
       gap: 0.4rem;
       margin-bottom: 0.4rem;
+      border-radius: 6px;
     }
 
     .stress-source-btn {
@@ -1171,11 +1194,12 @@
               <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
               <div class="stress-source-module" id="stressSourceModule">
                 <div class="stress-source-label">Mark this stress as…</div>
-                <div class="stress-source-buttons">
+                <div class="stress-source-buttons" id="stressSourceButtons">
                   <button class="stress-source-btn" data-source="user">My choice</button>
                   <button class="stress-source-btn" data-source="composer">Composer's setting</button>
                 </div>
-                <button class="restore-link" data-source="restore">
+                <div class="stress-source-hint" id="stressSourceHint">Optional: mark why you changed this</div>
+                <button class="restore-link" id="restoreLink" data-source="restore">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 14l-4-4 4-4"/>
                     <path d="M5 10h11a4 4 0 0 1 0 8h-1"/>
@@ -2223,6 +2247,14 @@ const SINGER_SUPPLEMENT = {
       updateStress(lineIndex, wordIndex, newStress) {
         if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
           this.lines[lineIndex][wordIndex].stress = newStress;
+          // Clear stressSource when stress changes (user must re-attribute)
+          this.lines[lineIndex][wordIndex].stressSource = null;
+        }
+      },
+      
+      updateStressSource(lineIndex, wordIndex, source) {
+        if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
+          this.lines[lineIndex][wordIndex].stressSource = source;
         }
       },
       
@@ -2471,6 +2503,8 @@ const SINGER_SUPPLEMENT = {
     const Popup = {
       isOpen: false,
       currentWord: null,
+      stressWasChanged: false,
+      attributionSelected: false,
       elements: {},
       
       init() {
@@ -2488,6 +2522,9 @@ const SINGER_SUPPLEMENT = {
           cliticType: document.getElementById('cliticType'),
           whyCliticBanner: document.getElementById('whyCliticBanner'),
           stressSourceModule: document.getElementById('stressSourceModule'),
+          stressSourceButtons: document.getElementById('stressSourceButtons'),
+          stressSourceHint: document.getElementById('stressSourceHint'),
+          restoreLink: document.getElementById('restoreLink'),
           citationRule: document.querySelector('.citation-rule'),
           citationRef: document.querySelector('.citation-ref')
         };
@@ -2515,6 +2552,55 @@ const SINGER_SUPPLEMENT = {
         this.elements.card.addEventListener('click', (e) => {
           e.stopPropagation();
         });
+        
+        // Attribution button handlers
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const source = btn.dataset.source;
+            this.selectAttribution(source);
+          });
+        });
+        
+        // Undo/restore handler
+        this.elements.restoreLink.addEventListener('click', () => {
+          if (this.currentWord && this.currentWord.originalStress !== undefined) {
+            this.updateStress(this.currentWord.originalStress);
+            this.stressWasChanged = false;
+            this.attributionSelected = false;
+            this.elements.stressSourceModule.classList.remove('needs-attention');
+            this.clearAttributionSelection();
+          }
+        });
+      },
+      
+      selectAttribution(source) {
+        if (!this.currentWord) return;
+        
+        DocumentState.updateStressSource(
+          this.currentWord.lineIndex, 
+          this.currentWord.wordIndex, 
+          source
+        );
+        
+        this.attributionSelected = true;
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        
+        // Update button states
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.source === source);
+        });
+        
+        // Update hint text
+        this.elements.stressSourceHint.textContent = source === 'user' 
+          ? 'Marked as your choice' 
+          : 'Marked as composer\'s setting';
+      },
+      
+      clearAttributionSelection() {
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
       },
       generateCitation(wordData) {
         const ipa = wordData.ipa || '';
@@ -2605,6 +2691,17 @@ const SINGER_SUPPLEMENT = {
       open(wordData) {
         this.currentWord = wordData;
         this.isOpen = true;
+        this.stressWasChanged = false;
+        this.attributionSelected = false;
+        
+        // Store original stress for undo functionality
+        const currentStressIdx = wordData.syllables.findIndex(s => s.isStressed);
+        this.currentWord.originalStress = currentStressIdx;
+        
+        // Reset attribution UI
+        this.clearAttributionSelection();
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        
         // Update syllable label based on word type
         const syllableCount = wordData.syllables.length;
         const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
@@ -2665,10 +2762,24 @@ const SINGER_SUPPLEMENT = {
       },
       
       close() {
+        // If stress was changed but no attribution selected, default to 'user'
+        if (this.stressWasChanged && !this.attributionSelected && this.currentWord) {
+          DocumentState.updateStressSource(
+            this.currentWord.lineIndex,
+            this.currentWord.wordIndex,
+            'user'
+          );
+        }
+        
+        // Reset state
         this.isOpen = false;
+        this.stressWasChanged = false;
+        this.attributionSelected = false;
         this.currentWord = null;
         this.elements.overlay.classList.remove('active');
         this.elements.whyPanel.classList.remove('expanded');
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        this.clearAttributionSelection();
       },
       
       positionPopup(element) {
@@ -2710,6 +2821,21 @@ const SINGER_SUPPLEMENT = {
           btn.classList.toggle('stressed', idx === newStressIdx);
           btn.textContent = (idx === newStressIdx) ? 'ˈ' + syl.ipa : syl.ipa;
         });
+        
+        // Track that stress was changed and trigger attribution prompt
+        this.stressWasChanged = true;
+        this.attributionSelected = false;
+        this.clearAttributionSelection();
+        
+        // Expand Why panel and trigger pulse animation
+        this.elements.whyPanel.classList.add('expanded');
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        // Force reflow to restart animation
+        void this.elements.stressSourceModule.offsetWidth;
+        this.elements.stressSourceModule.classList.add('needs-attention');
+        
+        // Update hint text
+        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
       }
     };
 
