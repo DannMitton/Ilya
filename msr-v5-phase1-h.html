@@ -840,7 +840,7 @@
     }
 
     .why-panel.expanded {
-      max-height: 200px;
+      max-height: 300px;
     }
 
     .why-content {
@@ -1195,8 +1195,8 @@
               <div class="stress-source-module" id="stressSourceModule">
                 <div class="stress-source-label">Mark this stress as…</div>
                 <div class="stress-source-buttons" id="stressSourceButtons">
-                  <button class="stress-source-btn" data-source="user">My choice</button>
                   <button class="stress-source-btn" data-source="composer">Composer's setting</button>
+                  <button class="stress-source-btn" data-source="user">My choice</button>
                 </div>
                 <div class="stress-source-hint" id="stressSourceHint">Optional: mark why you changed this</div>
                 <button class="restore-link" id="restoreLink" data-source="restore">
@@ -2537,7 +2537,8 @@ const SINGER_SUPPLEMENT = {
           }
         });
         
-        this.elements.whyToggle.addEventListener('click', () => {
+        this.elements.whyToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
           this.elements.whyPanel.classList.toggle('expanded');
         });
         
