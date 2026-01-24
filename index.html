@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.4 Dashboard</title>
+  <title>My Sung Russian — v5.2.5 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2887,6 +2887,34 @@ const SINGER_SUPPLEMENT = {
         return false;
       },
       
+      // Check for Old Muscovite adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
+      // When profile is 'stage': velars stay hard, и → [ɨ], й → [j]
+      // Returns: { isVelarAdjectival: bool, charRole: 'velar'|'i'|'j'|null }
+      checkVelarAdjectival(word, charIndex) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const len = cleanWord.length;
+        
+        // Check if word ends in -кий, -гий, or -хий
+        if (len >= 3) {
+          const ending = cleanWord.slice(-3);
+          const velars = ['кий', 'гий', 'хий'];
+          
+          if (velars.includes(ending)) {
+            const suffixStart = len - 3;
+            
+            // Check which part of the suffix this charIndex is
+            if (charIndex === suffixStart) {
+              return { isVelarAdjectival: true, charRole: 'velar' };
+            } else if (charIndex === suffixStart + 1) {
+              return { isVelarAdjectival: true, charRole: 'i' };
+            } else if (charIndex === suffixStart + 2) {
+              return { isVelarAdjectival: true, charRole: 'j' };
+            }
+          }
+        }
+        return { isVelarAdjectival: false, charRole: null };
+      },
+      
       // Look up stress from dictionary
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
@@ -3541,6 +3569,15 @@ const SINGER_SUPPLEMENT = {
                 continue;
               }
               
+              // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
+              // When profile adjectival='stage': и → [ɨ] after hard velar
+              const profileParams = ProfileController.getParams();
+              const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
+              if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'i' && profileParams.adjectival === 'stage') {
+                sylIpa += 'ɨ';
+                continue;
+              }
+              
               // Check preceding consonant palatalization (using regressive analysis)
               const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
               const prevGlobalIndex = globalIndex - 1;
@@ -3599,8 +3636,19 @@ const SINGER_SUPPLEMENT = {
               const prevChar = chars[i - 1];
               const isStressedSyl = (position === 'stressed');
               // Pass regressive palatalization info
-              const isSoftFromRegressive = softIndices.has(globalIndex);
-              sylIpa += this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
+              let isSoftFromRegressive = softIndices.has(globalIndex);
+              
+              // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
+              // When profile adjectival='stage': velar stays HARD (not palatalized)
+              const profileParams = ProfileController.getParams();
+              const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
+              if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && profileParams.adjectival === 'stage') {
+                // Force hard velar: output base consonant without palatalization
+                const base = this.inventory.consonants[char] || char;
+                sylIpa += base;
+              } else {
+                sylIpa += this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
+              }
             }
           }
           
