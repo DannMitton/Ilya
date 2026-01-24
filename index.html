@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.3 Dashboard</title>
+  <title>My Sung Russian — v5.2.4 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3025,9 +3025,55 @@ const SINGER_SUPPLEMENT = {
         return this.isPalatalized(chars[index], chars[index + 1]);
       },
       
+      // Protected suffixes that must stay together as syllable units (Grayson p. 237-238)
+      // Format: { cyrillic: 'suffix', placeholder: '◊' }
+      // The placeholder replaces consonants, keeping the vowel visible for syllable counting
+      protectedSuffixes: [
+        { suffix: 'ться', consonants: 'ться', placeholder: '◊', vowelKept: 'я' }, // купаться
+        { suffix: 'тся', consonants: 'тс', placeholder: '◊', vowelKept: 'я' },   // боится
+      ],
+      
+      // Main syllabification entry point
+      // Wraps the open-syllable logic with morphological exception handling
       syllabify(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
-        const chars = [...cleanWord];
+        
+        // STEP 1: Check for protected suffixes and replace with placeholders
+        let processedWord = cleanWord;
+        let activeProtection = null;
+        
+        for (const protection of this.protectedSuffixes) {
+          if (cleanWord.endsWith(protection.suffix)) {
+            // Replace the consonant portion with placeholder, keep vowel
+            // e.g., "боится" → "бои◊я" (тс replaced with ◊, я kept)
+            const suffixStart = cleanWord.length - protection.suffix.length;
+            const beforeSuffix = cleanWord.slice(0, suffixStart);
+            processedWord = beforeSuffix + protection.placeholder + protection.vowelKept;
+            activeProtection = { ...protection, startIndex: suffixStart };
+            break; // Only one suffix per word
+          }
+        }
+        
+        // STEP 2: Apply open-syllable rules to processed word
+        const rawSyllables = this.syllabifyOpenSyllable(processedWord);
+        
+        // STEP 3: Restore protected suffix in final syllable
+        if (activeProtection) {
+          const lastIdx = rawSyllables.length - 1;
+          // Replace placeholder+vowel back to original suffix
+          rawSyllables[lastIdx] = rawSyllables[lastIdx].replace(
+            activeProtection.placeholder + activeProtection.vowelKept,
+            activeProtection.suffix
+          );
+        }
+        
+        return rawSyllables;
+      },
+      
+      // Core open-syllable logic (Maximum Onset Principle)
+      // This is the original syllabify, now renamed and called by the wrapper
+      syllabifyOpenSyllable(word) {
+        const chars = [...word];
         const syllables = [];
         let current = '';
         
@@ -3083,7 +3129,7 @@ const SINGER_SUPPLEMENT = {
           syllables.push(current);
         }
         
-        return syllables.length > 0 ? syllables : [cleanWord];
+        return syllables.length > 0 ? syllables : [word];
       },
       
       countVowels(word) {
