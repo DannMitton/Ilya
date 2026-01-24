@@ -2840,25 +2840,40 @@ const SINGER_SUPPLEMENT = {
           
           if (this.isVowel(char)) {
             let j = i + 1;
-            while (j < chars.length && !this.isVowel(chars[j]) && chars[j] !== 'ь' && chars[j] !== 'ъ') {
+            // Advance through consonants AND soft/hard signs (they attach to consonants)
+            while (j < chars.length && !this.isVowel(chars[j])) {
               j++;
             }
             
+            // If we've reached the end of the word, attach all remaining chars to this syllable
             if (j >= chars.length) {
               current += chars.slice(i + 1).join('');
               syllables.push(current);
               break;
             }
             
+            // We have consonants between this vowel and the next
             const cluster = chars.slice(i + 1, j);
             if (cluster.length === 0) {
+              // No consonants between vowels (e.g., two vowels in a row)
               syllables.push(current);
               current = '';
             } else if (cluster.length === 1) {
+              // Single consonant goes with next syllable (CV.CV pattern)
               syllables.push(current);
               current = '';
             } else {
-              const splitPoint = Math.max(1, cluster.length - 1);
+              // Multiple consonants: keep last one for next syllable, rest stay with current
+              // But soft/hard signs always stay with preceding consonant
+              let splitPoint = cluster.length - 1;
+              // If the last char is a soft/hard sign, move split point back
+              while (splitPoint > 0 && (cluster[splitPoint] === 'ь' || cluster[splitPoint] === 'ъ')) {
+                splitPoint--;
+              }
+              // Keep at least one consonant for the next syllable (unless it's all signs)
+              if (splitPoint === cluster.length - 1) {
+                splitPoint = Math.max(1, cluster.length - 1);
+              }
               current += cluster.slice(0, splitPoint).join('');
               syllables.push(current);
               current = '';
