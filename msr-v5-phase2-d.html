@@ -400,6 +400,17 @@
     .word-stack.enclitic .cyrillic {
       font-weight: 500;
     }
+    
+    /* Unverified stress: subtle visual cue without obscuring IPA */
+    .word-stack.stress-unverified {
+      border-left: 2px solid rgba(168, 90, 58, 0.3);
+      padding-left: calc(0.5rem - 2px);
+    }
+    
+    .word-stack.stress-unverified .ipa {
+      color: var(--ink-secondary);
+      opacity: 0.85;
+    }
 
     /* ========================================
        INPUT DRAWER: Bottom-anchored, collapsible
@@ -2450,8 +2461,9 @@ const SINGER_SUPPLEMENT = {
               stress = lookup.stress;
               stressSource = lookup.source;
             } else {
-              stress = -1;
-              stressSource = 'none';
+              // Unknown word: default to first syllable, marked for user verification
+              stress = 0;
+              stressSource = 'default';
             }
             
             return {
@@ -2509,7 +2521,7 @@ const SINGER_SUPPLEMENT = {
             const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic);
             
             const wordStack = document.createElement('div');
-            wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '');
+            wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '') + (wordData.stressSource === 'default' ? ' stress-unverified' : '');
             wordStack.setAttribute('tabindex', '0');
             wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
             wordStack.dataset.lineIndex = lineIdx;
@@ -2522,6 +2534,7 @@ const SINGER_SUPPLEMENT = {
             wordStack.dataset.isProclitic = isProclitic;
             wordStack.dataset.isEnclitic = isEnclitic;
             wordStack.dataset.hasYo = hasYo;
+            wordStack.dataset.stressSource = wordData.stressSource || '';
             
             wordStack.innerHTML = `
               <span class="ipa">${result.ipa}</span>
@@ -3594,6 +3607,7 @@ const SINGER_SUPPLEMENT = {
         const syllableCount = wordData.syllables.length;
         const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
         const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
+        const isUnverified = wordData.stressSource === 'default';
         
         // Determine if stress is locked (monosyllable, clitic, or ё)
         const stressLocked = syllableCount === 1 || hasYo;
@@ -3606,6 +3620,8 @@ const SINGER_SUPPLEMENT = {
             }
         } else if (hasYo) {
             this.elements.syllableLabel.textContent = 'Stress locked to ё';
+        } else if (isUnverified) {
+            this.elements.syllableLabel.textContent = 'Stress unverified — please confirm';
         } else {
             this.elements.syllableLabel.textContent = 'Click to reassign stress';
         }
@@ -3764,6 +3780,7 @@ const SINGER_SUPPLEMENT = {
           isProclitic: wordStack.dataset.isProclitic,
           isEnclitic: wordStack.dataset.isEnclitic,
           hasYo: wordStack.dataset.hasYo,
+          stressSource: wordStack.dataset.stressSource,
           element: wordStack
         };
         Popup.open(data);
