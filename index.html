@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.5 Dashboard</title>
+  <title>My Sung Russian — v5.2.6 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2788,6 +2788,20 @@ const SINGER_SUPPLEMENT = {
         'чтоб': { 'чт': 'ʃt' },
         'чтобы': { 'чт': 'ʃt' },
         'ничто': { 'чт': 'ʃt' },
+        // русский exception (Grayson p. 233): single /s/, not geminate
+        // Also overrides Old Muscovite -кий rule — uses modern soft кʲ
+        'русский': { 'сс': 's' },
+        'русская': { 'сс': 's' },
+        'русское': { 'сс': 's' },
+        'русские': { 'сс': 's' },
+        'русского': { 'сс': 's' },
+        'русскому': { 'сс': 's' },
+        'русским': { 'сс': 's' },
+        'русскими': { 'сс': 's' },
+        'русской': { 'сс': 's' },
+        'русских': { 'сс': 's' },
+        'русскую': { 'сс': 's' },
+        'русском': { 'сс': 's' },
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -2796,6 +2810,19 @@ const SINGER_SUPPLEMENT = {
         'счастья': { vowelOverrides: { 2: 'ɑ' } },
         'счастлив': { vowelOverrides: { 2: 'ɑ' } },
         'счастливый': { vowelOverrides: { 2: 'ɑ' } },
+        // русский exception (Grayson p. 233): uses modern -кий (soft), not Old Muscovite
+        'русский': { skipVelarAdjectival: true },
+        'русская': { skipVelarAdjectival: true },
+        'русское': { skipVelarAdjectival: true },
+        'русские': { skipVelarAdjectival: true },
+        'русского': { skipVelarAdjectival: true },
+        'русскому': { skipVelarAdjectival: true },
+        'русским': { skipVelarAdjectival: true },
+        'русскими': { skipVelarAdjectival: true },
+        'русской': { skipVelarAdjectival: true },
+        'русских': { skipVelarAdjectival: true },
+        'русскую': { skipVelarAdjectival: true },
+        'русском': { skipVelarAdjectival: true },
       },
       
       // Find special clusters in a word
@@ -2893,6 +2920,12 @@ const SINGER_SUPPLEMENT = {
       checkVelarAdjectival(word, charIndex) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         const len = cleanWord.length;
+        
+        // Check if this word is an exception (e.g., русский uses modern -кий)
+        const exception = this.exceptionWords[cleanWord];
+        if (exception?.skipVelarAdjectival) {
+          return { isVelarAdjectival: false, charRole: null };
+        }
         
         // Check if word ends in -кий, -гий, or -хий
         if (len >= 3) {
