@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.1 Dashboard</title>
+  <title>My Sung Russian — v5.2.2 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2765,9 +2765,81 @@ const SINGER_SUPPLEMENT = {
       // Special consonant clusters (Grayson p. 225-247)
       // These clusters have non-compositional readings and must be detected BEFORE letter-by-letter transcription
       specialClusters: {
-        'сч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
-        'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
-        // Future: add чн, чт, стн, здн, лнц, рдц, тся, ться
+        // Two-letter clusters → щ-like sound (p. 230-231, 282)
+        'сч': 'ʃʲʃʲ',
+        'зч': 'ʃʲʃʲ',
+        'жч': 'ʃʲʃʲ',
+        
+        // Doubled fricatives (p. 280-281)
+        'сш': 'ʃː',
+        'зш': 'ʃː',
+        'сж': 'ʒː',
+        'зж': 'ʒː',
+        
+        // тч/дч clusters (p. 285)
+        'тч': 'tʲːʃʲː',
+        'дч': 'tʲːʃʲː',
+        
+        // Deletion clusters - silent consonant (p. 296-306)
+        'стн': 'sn',    // страстный
+        'здн': 'zn',    // поздно
+        'стл': 'sʲlʲ',  // счастливо
+        'рдц': 'rts',   // сердце
+        'лнц': 'nts',   // солнце
+        'вств': 'stv',  // чувство
+        
+        // Velar softening (p. 240-241)
+        'гк': 'xk',     // мягко (note: before soft vowel becomes xʲkʲ)
+        'гч': 'xtʃʲ',   // легче
+      },
+      
+      // Word-specific cluster overrides (p. 239-240)
+      // These clusters only apply in certain words, not universally
+      wordSpecificClusters: {
+        // -чн- → /ʃn/ only in these words (p. 239-240)
+        'скучно': { 'чн': 'ʃn' },
+        'скучный': { 'чн': 'ʃn' },
+        'скучная': { 'чн': 'ʃn' },
+        'скучное': { 'чн': 'ʃn' },
+        'скучные': { 'чн': 'ʃn' },
+        'конечно': { 'чн': 'ʃn' },
+        'нарочно': { 'чн': 'ʃn' },
+        'яичница': { 'чн': 'ʃn' },
+        'прачечная': { 'чн': 'ʃn' },
+        'пустячный': { 'чн': 'ʃn' },
+        'девичник': { 'чн': 'ʃn' },
+        
+        // -чт- → /ʃt/ only in these words (p. 240)
+        'что': { 'чт': 'ʃt' },
+        'чтоб': { 'чт': 'ʃt' },
+        'чтобы': { 'чт': 'ʃt' },
+        'ничто': { 'чт': 'ʃt' },
+        'кое-что': { 'чт': 'ʃt' },
+        // NOTE: нечто = /tʃʲt/ (regular), NOT /ʃt/
+      },
+      
+      // Reflexive verb suffixes (p. 307-308)
+      // These are checked as suffixes, not mid-word clusters
+      reflexiveSuffixes: {
+        'ться': 'tːsʌ',  // купаться → /kuˈpɑtːsʌ/
+        'тся': 'tːsʌ',   // боится → /bɑˈitːsʌ/
+      },
+      
+      // Check if word ends with a reflexive suffix
+      findReflexiveSuffix(word) {
+        const cleanWord = word.toLowerCase();
+        for (const [suffix, ipa] of Object.entries(this.reflexiveSuffixes)) {
+          if (cleanWord.endsWith(suffix)) {
+            const startIndex = cleanWord.length - suffix.length;
+            return {
+              startIndex: startIndex,
+              endIndex: cleanWord.length - 1,
+              suffix: suffix,
+              ipa: ipa
+            };
+          }
+        }
+        return null;
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -2802,18 +2874,66 @@ const SINGER_SUPPLEMENT = {
         const cleanWord = word.toLowerCase();
         const clusters = [];
         
+        // First check for reflexive suffix (highest priority for end of word)
+        const reflexive = this.findReflexiveSuffix(cleanWord);
+        if (reflexive) {
+          clusters.push({
+            startIndex: reflexive.startIndex,
+            endIndex: reflexive.endIndex,
+            cluster: reflexive.suffix,
+            ipa: reflexive.ipa
+          });
+        }
+        
+        // Then check word-specific clusters (higher priority than universal)
+        const wordOverrides = this.wordSpecificClusters[cleanWord];
+        if (wordOverrides) {
+          for (const [cluster, ipa] of Object.entries(wordOverrides)) {
+            let idx = cleanWord.indexOf(cluster);
+            while (idx !== -1) {
+              // Check if this position is already covered
+              const alreadyCovered = clusters.some(c => 
+                (idx >= c.startIndex && idx <= c.endIndex) ||
+                (idx + cluster.length - 1 >= c.startIndex && idx + cluster.length - 1 <= c.endIndex)
+              );
+              
+              if (!alreadyCovered) {
+                clusters.push({ 
+                  startIndex: idx, 
+                  endIndex: idx + cluster.length - 1,
+                  cluster: cluster, 
+                  ipa: ipa 
+                });
+              }
+              idx = cleanWord.indexOf(cluster, idx + 1);
+            }
+          }
+        }
+        
+        // Then check universal clusters (skip if position already covered)
         for (const [cluster, ipa] of Object.entries(this.specialClusters)) {
           let idx = cleanWord.indexOf(cluster);
           while (idx !== -1) {
-            clusters.push({ 
-              startIndex: idx, 
-              endIndex: idx + cluster.length - 1,
-              cluster: cluster, 
-              ipa: ipa 
-            });
+            // Check if this position is already covered by a word-specific cluster
+            const alreadyCovered = clusters.some(c => 
+              (idx >= c.startIndex && idx <= c.endIndex) ||
+              (idx + cluster.length - 1 >= c.startIndex && idx + cluster.length - 1 <= c.endIndex)
+            );
+            
+            if (!alreadyCovered) {
+              clusters.push({ 
+                startIndex: idx, 
+                endIndex: idx + cluster.length - 1,
+                cluster: cluster, 
+                ipa: ipa 
+              });
+            }
             idx = cleanWord.indexOf(cluster, idx + 1);
           }
         }
+        
+        // Sort by start index (important for processing order)
+        clusters.sort((a, b) => a.startIndex - b.startIndex);
         
         return clusters;
       },
