@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.2 Dashboard</title>
+  <title>My Sung Russian — v5.2.3 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2769,6 +2769,14 @@ const SINGER_SUPPLEMENT = {
         'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
       },
       
+      // Reflexive verb suffix clusters (Grayson p. 237-238)
+      // "The clusters -тс-/-дс- and -тьс-/-дьс- resemble /ts/ but have an elongated stop"
+      // These are ONLY checked at word end (suffix position)
+      reflexiveSuffixes: {
+        'ться': 'tːsʌ',  // купаться → /kuˈpɑtːsʌ/
+        'тся': 'tːsʌ',   // боится → /bɑˈitːsʌ/
+      },
+      
       // Word-specific cluster overrides (p. 239-240)
       wordSpecificClusters: {
         'конечно': { 'чн': 'ʃn' },
@@ -2809,6 +2817,20 @@ const SINGER_SUPPLEMENT = {
               });
               idx = cleanWord.indexOf(cluster, idx + 1);
             }
+          }
+        }
+        
+        // Check reflexive suffixes (only at word end)
+        for (const [suffix, ipa] of Object.entries(this.reflexiveSuffixes)) {
+          if (cleanWord.endsWith(suffix)) {
+            const startIdx = cleanWord.length - suffix.length;
+            clusters.push({
+              startIndex: startIdx,
+              endIndex: cleanWord.length - 1,
+              cluster: suffix,
+              ipa: ipa
+            });
+            break; // Only one reflexive suffix per word
           }
         }
         
