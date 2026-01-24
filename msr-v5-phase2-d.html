@@ -402,14 +402,17 @@
     }
     
     /* Unverified stress: subtle visual cue without obscuring IPA */
-    .word-stack.stress-unverified {
-      border-left: 2px solid rgba(168, 90, 58, 0.3);
-      padding-left: calc(0.5rem - 2px);
+    .word-stack.stress-unverified::before {
+      content: '•';
+      position: absolute;
+      top: 0.35rem;
+      left: -0.6rem;
+      font-size: 0.5rem;
+      color: rgba(168, 90, 58, 0.5);
     }
     
-    .word-stack.stress-unverified .ipa {
-      color: var(--ink-secondary);
-      opacity: 0.85;
+    .word-stack.stress-unverified {
+      position: relative;
     }
 
     /* ========================================
