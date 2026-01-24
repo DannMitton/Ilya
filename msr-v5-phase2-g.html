@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2 Dashboard</title>
+  <title>My Sung Russian — v5.2.1 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3081,7 +3081,8 @@ const SINGER_SUPPLEMENT = {
       transcribeVowel(vowel, position, isPrecededByPalatalized, isFollowedByPalatalized, precedingConsonant) {
         vowel = vowel.toLowerCase();
         
-        // Interpalatal = preceded by soft C AND followed by soft C or й (Grayson p. 104, 106, 125)
+        // Interpalatal = preceded by soft C AND followed by soft C (Grayson p. 207)
+        // Note: For word-initial position, the /j/ glide counts as "preceded by soft"
         const isInterpalatal = isPrecededByPalatalized && isFollowedByPalatalized;
         
         // Always-hard consonants ж, ш, ц (Grayson p. 102-103)
@@ -3091,8 +3092,12 @@ const SINGER_SUPPLEMENT = {
           // а → [a] only when interpalatal (Grayson p. 104)
           if (vowel === 'а') return isInterpalatal ? 'a' : 'ɑ';
           if (vowel === 'о') return 'o';
-          // е → [e] when followed by palatalized C; otherwise /ɛ/ (Grayson p. 106-107)
-          if (vowel === 'е') return isFollowedByPalatalized ? 'e' : 'ɛ';
+          
+          // RULE B: -е- requires INTERPALATAL for [e] (Grayson p. 207)
+          // "е and its cluster /jɛ/ shift to [e]/[je] when interpalatal 
+          // (between two palatalized consonants or palatalizing agents)"
+          if (vowel === 'е') return isInterpalatal ? 'e' : 'ɛ';
+          
           if (vowel === 'ё') return 'o';
           // и after ж/ш/ц → ɨ (Grayson p. 93-95)
           if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
@@ -3101,7 +3106,10 @@ const SINGER_SUPPLEMENT = {
           if (vowel === 'ю') return 'u';
           // я → [a] only when interpalatal (Grayson p. 104)
           if (vowel === 'я') return isInterpalatal ? 'a' : 'ɑ';
-          // э → [e] when followed by palatalized C (Grayson p. 106)
+          
+          // RULE A: -э- only checks FOLLOWING consonant for [e] (Grayson p. 207)
+          // "-э- shifts from /ɛ/ to [e] when followed by a palatalized consonant"
+          // (Note: -э- cannot follow soft consonants orthographically)
           if (vowel === 'э') return isFollowedByPalatalized ? 'e' : 'ɛ';
         } else if (position === 'pretonic') {
           if (vowel === 'а' || vowel === 'о') return 'ɑ';
@@ -3467,10 +3475,30 @@ const SINGER_SUPPLEMENT = {
                 if (this.isVowel(wordChars[j])) break; // Hit another vowel first
               }
               
-              // й always counts as palatalized for interpalatal purposes
-              const isFollowedByPal = followingConsonant === 'й' || 
-                (followingConsonant && (softIndices.has(followingConsonantGlobalIndex) || 
-                 this.isPalatalized(followingConsonant, charAfterFollowingC)));
+              // Check if the following consonant is part of a special cluster
+              // If so, check the cluster's IPA for palatalization, not the Cyrillic letter
+              const followingCluster = followingConsonant ? 
+                specialClusters.find(c => 
+                  followingConsonantGlobalIndex >= c.startIndex && 
+                  followingConsonantGlobalIndex <= c.endIndex
+                ) : null;
+              
+              let isFollowedByPal = false;
+              if (followingConsonant === 'й') {
+                // й always counts as palatalized
+                isFollowedByPal = true;
+              } else if (followingCluster) {
+                // Check the cluster's IPA output for palatalization
+                // e.g., чн→/ʃn/ starts with /ʃ/ which is hard (no ʲ at start)
+                // But сч→/ʃʲʃʲ/ starts with /ʃʲ/ which is soft
+                const clusterIPA = followingCluster.ipa;
+                // The first sound in the cluster is what follows the vowel
+                isFollowedByPal = clusterIPA.length > 1 && clusterIPA[1] === 'ʲ';
+              } else if (followingConsonant) {
+                // Normal case: check the Cyrillic consonant
+                isFollowedByPal = softIndices.has(followingConsonantGlobalIndex) || 
+                  this.isPalatalized(followingConsonant, charAfterFollowingC);
+              }
               
               sylIpa += this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonant);
             } else if (this.isConsonant(char)) {
