@@ -3734,6 +3734,8 @@ const SINGER_SUPPLEMENT = {
           punctuation: wordStack.dataset.punctuation || '',
           syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
           isProclitic: wordStack.dataset.isProclitic,
+          isEnclitic: wordStack.dataset.isEnclitic,
+          hasYo: wordStack.dataset.hasYo,
           element: wordStack
         };
         Popup.open(data);
