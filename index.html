@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.3.0 Cross-Word Assimilation</title>
+  <title>My Sung Russian — v5.3.1 Cross-Word Assimilation</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -472,12 +472,15 @@
       transition: opacity 150ms ease;
     }
     
-    /* Hard boundary: gap (no visual connector) */
+    /* Hard boundary: subtle dotted line to show clickable area */
     .boundary-marker.hard .boundary-gap {
       display: block;
-      width: 8px;
-      height: 100%;
-      background: transparent;
+      width: 2px;
+      height: 16px;
+      background: var(--msr-border-light);
+      border-radius: 1px;
+      opacity: 0.5;
+      transition: opacity 150ms ease;
     }
     
     /* Hover states */
@@ -3882,7 +3885,9 @@ const SINGER_SUPPLEMENT = {
             word.rightBoundary = 'clitic';
             word.boundarySource = 'auto';
           } else {
-            word.rightBoundary = 'hard';
+            // Default: SOFT — assimilation happens automatically
+            // User can insert barriers when music has rests
+            word.rightBoundary = 'soft';
             word.boundarySource = 'auto';
           }
         });
