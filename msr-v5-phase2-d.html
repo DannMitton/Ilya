@@ -1787,7 +1787,7 @@ let STRESS_DICTIONARY = {};
 // Load dictionary from external file
 async function loadDictionary() {
     try {
-        const response = await fetch('openrussian-dict.json');
+        const response = await fetch('data/openrussian-dict.json');
         if (!response.ok) {
             console.warn('Dictionary file not found, stress lookup disabled');
             return;
