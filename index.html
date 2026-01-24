@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.3.1 Cross-Word Assimilation</title>
+  <title>My Sung Russian — v5.3.2 Cross-Word Assimilation</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -431,80 +431,6 @@
     }
     
     /* Unverified stress: no visual indicator on paper — popup message is sufficient */
-
-    /* ========================================
-       BOUNDARY MARKERS: Between word stacks
-       ======================================== */
-    .boundary-marker {
-      /* Reset button styles */
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      
-      /* Positioning */
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 100%;
-      margin: 0 -4px;
-      vertical-align: top;
-      
-      /* Accessibility */
-      position: relative;
-    }
-    
-    .boundary-marker:focus-visible {
-      outline: 2px solid var(--msr-accent);
-      outline-offset: 2px;
-    }
-    
-    /* Soft/Clitic boundary: subtle tie connector */
-    .boundary-marker.soft .boundary-tie,
-    .boundary-marker.clitic .boundary-tie {
-      display: block;
-      width: 10px;
-      height: 2px;
-      background: var(--msr-text-muted);
-      border-radius: 1px;
-      opacity: 0.5;
-      transition: opacity 150ms ease;
-    }
-    
-    /* Hard boundary: subtle dotted line to show clickable area */
-    .boundary-marker.hard .boundary-gap {
-      display: block;
-      width: 2px;
-      height: 16px;
-      background: var(--msr-border-light);
-      border-radius: 1px;
-      opacity: 0.5;
-      transition: opacity 150ms ease;
-    }
-    
-    /* Hover states */
-    .boundary-marker:hover .boundary-tie {
-      opacity: 1;
-      background: var(--msr-salmon);
-    }
-    
-    .boundary-marker.hard:hover::after {
-      content: '⌇';
-      font-size: 12px;
-      color: var(--msr-accent);
-      position: absolute;
-      opacity: 0.7;
-    }
-    
-    .boundary-marker.soft:hover::after,
-    .boundary-marker.clitic:hover::after {
-      content: '×';
-      font-size: 10px;
-      color: var(--msr-salmon);
-      position: absolute;
-      font-weight: bold;
-    }
 
     /* ========================================
        INPUT DRAWER: Bottom-anchored, collapsible
@@ -1164,6 +1090,61 @@
       display: flex;
       justify-content: flex-end;
       width: 100%;
+    }
+
+    /* Phrase Boundary Module */
+    .phrase-boundary-module {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--msr-border-light);
+    }
+
+    .phrase-boundary-label {
+      font-size: 0.7rem;
+      color: var(--ink-secondary);
+      margin-bottom: 0.4rem;
+      text-align: left;
+    }
+
+    .phrase-boundary-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .boundary-toggle-option {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      padding: 0.25rem 0;
+    }
+
+    .boundary-toggle-option input[type="radio"] {
+      accent-color: var(--msr-accent);
+      margin: 0;
+    }
+
+    .boundary-option-text {
+      font-size: 0.75rem;
+      color: var(--ink-primary);
+    }
+
+    .boundary-toggle-option:has(input:checked) .boundary-option-text {
+      font-weight: 500;
+    }
+
+    .phrase-boundary-hint {
+      font-size: 0.65rem;
+      color: var(--ink-secondary);
+      opacity: 0.7;
+      font-style: italic;
+      margin-top: 0.3rem;
+    }
+
+    .phrase-boundary-module.disabled {
+      opacity: 0.5;
+      pointer-events: none;
     }
 
     .citation {
@@ -1909,6 +1890,21 @@
                     Undo
                   </button>
                 </div>
+              </div>
+              
+              <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
+                <div class="phrase-boundary-label">Phrase boundary</div>
+                <div class="phrase-boundary-toggle">
+                  <label class="boundary-toggle-option">
+                    <input type="radio" name="boundaryType" value="soft" id="boundaryLinked">
+                    <span class="boundary-option-text">Linked to next word</span>
+                  </label>
+                  <label class="boundary-toggle-option">
+                    <input type="radio" name="boundaryType" value="hard" id="boundarySeparated">
+                    <span class="boundary-option-text">Phrase break after</span>
+                  </label>
+                </div>
+                <div class="phrase-boundary-hint" id="phraseBoundaryHint"></div>
               </div>
               
               <div class="citation">
@@ -2712,23 +2708,6 @@ const SINGER_SUPPLEMENT = {
             `;
             
             verseLine.appendChild(wordStack);
-            
-            // Add boundary marker after word (except last word)
-            if (wordIdx < transcribedWords.length - 1) {
-              const boundaryMarker = document.createElement('button');
-              boundaryMarker.className = `boundary-marker ${tw.rightBoundary}`;
-              boundaryMarker.dataset.lineIndex = lineIdx;
-              boundaryMarker.dataset.afterWord = wordIdx;
-              boundaryMarker.setAttribute('aria-label', 
-                tw.rightBoundary === 'hard' 
-                  ? 'Phrase break, click to link' 
-                  : 'Linked boundary, click to break'
-              );
-              boundaryMarker.innerHTML = tw.rightBoundary === 'hard' 
-                ? '<span class="boundary-gap"></span>' 
-                : '<span class="boundary-tie"></span>';
-              verseLine.appendChild(boundaryMarker);
-            }
           });
           
           verseContainer.appendChild(verseLine);
@@ -4141,7 +4120,11 @@ const SINGER_SUPPLEMENT = {
           stressSourceHint: document.getElementById('stressSourceHint'),
           restoreLink: document.getElementById('restoreLink'),
           citationRule: document.querySelector('.citation-rule'),
-          citationRef: document.querySelector('.citation-ref')
+          citationRef: document.querySelector('.citation-ref'),
+          phraseBoundaryModule: document.getElementById('phraseBoundaryModule'),
+          boundaryLinked: document.getElementById('boundaryLinked'),
+          boundarySeparated: document.getElementById('boundarySeparated'),
+          phraseBoundaryHint: document.getElementById('phraseBoundaryHint')
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -4187,6 +4170,44 @@ const SINGER_SUPPLEMENT = {
             this.clearAttributionSelection();
           }
         });
+        
+        // Phrase boundary handlers
+        this.elements.boundaryLinked.addEventListener('change', () => {
+          if (this.currentWord && this.elements.boundaryLinked.checked) {
+            this.updateBoundary('soft');
+          }
+        });
+        
+        this.elements.boundarySeparated.addEventListener('change', () => {
+          if (this.currentWord && this.elements.boundarySeparated.checked) {
+            this.updateBoundary('hard');
+          }
+        });
+      },
+      
+      updateBoundary(type) {
+        if (!this.currentWord) return;
+        
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        if (!word) return;
+        
+        // Don't allow changing punctuation-forced boundaries
+        if (word.boundarySource === 'punctuation') return;
+        
+        word.rightBoundary = type;
+        word.boundarySource = 'user';
+        
+        // Update hint
+        this.elements.phraseBoundaryHint.textContent = type === 'hard' 
+          ? 'Assimilation blocked after this word'
+          : 'Voicing may cross to next word';
+        
+        // Re-render to apply changes
+        DrawerController.renderToPaper();
+        
+        // Update the popup's current word data
+        this.currentWord.rightBoundary = type;
+        this.currentWord.boundarySource = 'user';
       },
       
       selectAttribution(source) {
@@ -4404,6 +4425,40 @@ const SINGER_SUPPLEMENT = {
         const citation = this.generateCitation(wordData);
         this.elements.citationRule.textContent = citation.rule;
         this.elements.citationRef.textContent = '— ' + citation.ref;
+        
+        // Phrase boundary control
+        const line = DocumentState.lines[wordData.lineIndex];
+        const isLastWordInLine = wordData.wordIndex >= line.length - 1;
+        const boundarySource = wordData.boundarySource;
+        const rightBoundary = wordData.rightBoundary;
+        
+        if (isLastWordInLine) {
+          // Hide for last word — no boundary to control
+          this.elements.phraseBoundaryModule.style.display = 'none';
+        } else {
+          this.elements.phraseBoundaryModule.style.display = 'block';
+          
+          // Set radio button state
+          if (rightBoundary === 'hard') {
+            this.elements.boundarySeparated.checked = true;
+            this.elements.boundaryLinked.checked = false;
+          } else {
+            this.elements.boundaryLinked.checked = true;
+            this.elements.boundarySeparated.checked = false;
+          }
+          
+          // Disable if punctuation-forced
+          if (boundarySource === 'punctuation') {
+            this.elements.phraseBoundaryModule.classList.add('disabled');
+            this.elements.phraseBoundaryHint.textContent = 'Punctuation creates phrase break';
+          } else {
+            this.elements.phraseBoundaryModule.classList.remove('disabled');
+            this.elements.phraseBoundaryHint.textContent = rightBoundary === 'hard'
+              ? 'Assimilation blocked after this word'
+              : 'Voicing may cross to next word';
+          }
+        }
+        
         this.positionPopup(wordData.element);
         this.elements.overlay.classList.add('active');
       },
@@ -4497,33 +4552,6 @@ const SINGER_SUPPLEMENT = {
        EVENT DELEGATION
        ======================================== */
     document.addEventListener('click', (e) => {
-      // Handle boundary marker clicks
-      const boundaryMarker = e.target.closest('.boundary-marker');
-      if (boundaryMarker) {
-        const lineIdx = parseInt(boundaryMarker.dataset.lineIndex, 10);
-        const wordIdx = parseInt(boundaryMarker.dataset.afterWord, 10);
-        const word = DocumentState.lines[lineIdx]?.[wordIdx];
-        
-        if (word) {
-          // Don't allow toggling punctuation-forced boundaries
-          if (word.boundarySource === 'punctuation') {
-            return;
-          }
-          
-          // Toggle boundary type
-          if (word.rightBoundary === 'hard') {
-            word.rightBoundary = 'soft';
-          } else {
-            word.rightBoundary = 'hard';
-          }
-          word.boundarySource = 'user';  // Mark as user-set
-          
-          // Re-render to apply new boundary
-          DrawerController.renderToPaper();
-        }
-        return;
-      }
-      
       // Handle word-stack clicks
       const wordStack = e.target.closest('.word-stack');
       if (wordStack && !Popup.isOpen) {
@@ -4540,6 +4568,8 @@ const SINGER_SUPPLEMENT = {
           isEnclitic: wordStack.dataset.isEnclitic,
           hasYo: wordStack.dataset.hasYo,
           stressSource: wordStack.dataset.stressSource,
+          rightBoundary: wordStack.dataset.rightBoundary,
+          boundarySource: wordStack.dataset.boundarySource,
           element: wordStack
         };
         Popup.open(data);
