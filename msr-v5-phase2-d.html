@@ -278,6 +278,12 @@
     .doc-body {
       flex: 1;
       padding: 24px 72px;
+      overflow: hidden;
+    }
+    
+    .verse-container {
+      max-width: 100%;
+      overflow: hidden;
     }
 
     /* ========================================
@@ -312,12 +318,14 @@
        VERSE LINE
        ======================================== */
     .verse-line {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(40px, max-content));
-      gap: 0.5rem 1.25rem;
-      align-items: start;
-      padding: 1rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      align-items: flex-start;
+      padding: 0.75rem 0;
       border-bottom: 1px solid rgba(26, 22, 18, 0.06);
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .verse-line:last-child {
@@ -335,11 +343,16 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.15rem;
-      padding: 0.5rem 0.6rem;
+      gap: 0.1rem;
+      padding: 0.35rem 0.5rem;
       cursor: pointer;
       border-radius: var(--radius);
       transition: background 150ms var(--ease);
+    }
+    
+    /* First word in line: flush left with margin */
+    .verse-line .word-stack:first-child {
+      padding-left: 0;
     }
 
     .word-stack:hover {
@@ -357,15 +370,15 @@
 
     .word-stack .ipa {
       font-family: 'Noto Serif', serif;
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--ink-secondary);
       letter-spacing: 0.01em;
     }
 
     .word-stack .cyrillic {
       font-family: 'Noto Serif', serif;
-      font-size: 1.3rem;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: 600;
       color: var(--ink-primary);
     }
 
@@ -376,16 +389,16 @@
 
     .word-stack .gloss {
       font-family: 'Noto Serif', serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-style: italic;
       color: var(--accent-muted);
-      min-height: 1.2em;
+      min-height: 1.1em;
       min-width: 1em;
     }
 
     .word-stack.proclitic .cyrillic,
     .word-stack.enclitic .cyrillic {
-      font-weight: 400;
+      font-weight: 500;
     }
 
     /* ========================================
@@ -819,7 +832,7 @@
     
     .syllable-btn.disabled,
     .syllable-btn:disabled {
-      opacity: 0.4;
+      opacity: 0.65;
       cursor: not-allowed;
       background: var(--msr-parchment);
       border-color: rgba(26, 22, 18, 0.1);
