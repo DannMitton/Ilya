@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.1 Dashboard</title>
+  <title>My Sung Russian — v5.2 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
   
   <style>
     /* ========================================
-       CALM AUTHORITY PALETTE v5.1
+       CALM AUTHORITY PALETTE v5.2
        Kimi Design System — Muted Sage Edition
        ======================================== */
     :root {
@@ -1459,7 +1459,6 @@
       padding: var(--space-md);
       background: var(--msr-paper);
       border-radius: 6px;
-      border-left: 3px solid var(--msr-accent);
     }
     
     .info-icon-circle {
@@ -1480,6 +1479,7 @@
     }
     
     .profile-future {
+      display: none; /* Hidden until multiple profiles implemented */
       font-size: var(--text-xs);
       color: var(--msr-text-muted);
       margin-top: var(--space-md);
@@ -2727,7 +2727,7 @@ const SINGER_SUPPLEMENT = {
           'х': 'x',
           'ц': 'ts',
           'ч': 'tʃʲ',
-          'щ': 'ʃʲtʃʲ',
+          'щ': 'ʃʲʃʲ',
           'л': 'l', 'л_hard': 'ɫ', 'л_soft': 'lʲ',
           'м': 'm',
           'н': 'n', 'н_soft': 'ɲ',
@@ -2761,6 +2761,90 @@ const SINGER_SUPPLEMENT = {
       // Dentals palatalize more freely
       dentals: new Set(['т', 'д', 'с', 'з', 'н', 'ц']),
       // н only palatalizes before palatalized н or dental
+      
+      // Special consonant clusters (Grayson p. 225-247)
+      // These are detected and transcribed as units before letter-by-letter processing
+      specialClusters: {
+        'сч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
+        'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
+      },
+      
+      // Word-specific cluster overrides (p. 239-240)
+      wordSpecificClusters: {
+        'конечно': { 'чн': 'ʃn' },
+        'скучно': { 'чн': 'ʃn' },
+        'скучный': { 'чн': 'ʃn' },
+        'нарочно': { 'чн': 'ʃn' },
+        'яичница': { 'чн': 'ʃn' },
+        'что': { 'чт': 'ʃt' },
+        'чтоб': { 'чт': 'ʃt' },
+        'чтобы': { 'чт': 'ʃt' },
+        'ничто': { 'чт': 'ʃt' },
+      },
+      
+      // Exception words where normal phonological rules don't apply (Grayson Appendix F)
+      exceptionWords: {
+        'счастье': { vowelOverrides: { 2: 'ɑ' } },
+        'счастья': { vowelOverrides: { 2: 'ɑ' } },
+        'счастлив': { vowelOverrides: { 2: 'ɑ' } },
+        'счастливый': { vowelOverrides: { 2: 'ɑ' } },
+      },
+      
+      // Find special clusters in a word
+      findSpecialClusters(word) {
+        const cleanWord = word.toLowerCase();
+        const clusters = [];
+        
+        // Check word-specific clusters first (higher priority)
+        const wordOverrides = this.wordSpecificClusters[cleanWord];
+        if (wordOverrides) {
+          for (const [cluster, ipa] of Object.entries(wordOverrides)) {
+            let idx = cleanWord.indexOf(cluster);
+            while (idx !== -1) {
+              clusters.push({ 
+                startIndex: idx, 
+                endIndex: idx + cluster.length - 1,
+                cluster: cluster, 
+                ipa: ipa 
+              });
+              idx = cleanWord.indexOf(cluster, idx + 1);
+            }
+          }
+        }
+        
+        // Check universal clusters
+        for (const [cluster, ipa] of Object.entries(this.specialClusters)) {
+          let idx = cleanWord.indexOf(cluster);
+          while (idx !== -1) {
+            // Skip if already covered
+            const alreadyCovered = clusters.some(c => 
+              (idx >= c.startIndex && idx <= c.endIndex) ||
+              (idx + cluster.length - 1 >= c.startIndex && idx + cluster.length - 1 <= c.endIndex)
+            );
+            if (!alreadyCovered) {
+              clusters.push({ 
+                startIndex: idx, 
+                endIndex: idx + cluster.length - 1,
+                cluster: cluster, 
+                ipa: ipa 
+              });
+            }
+            idx = cleanWord.indexOf(cluster, idx + 1);
+          }
+        }
+        
+        return clusters.sort((a, b) => a.startIndex - b.startIndex);
+      },
+      
+      // Check for vowel override in exception words
+      getVowelOverride(word, charIndex) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const exception = this.exceptionWords[cleanWord];
+        if (exception?.vowelOverrides?.[charIndex] !== undefined) {
+          return exception.vowelOverrides[charIndex];
+        }
+        return null;
+      },
       
       // Look up stress from dictionary
       lookupStress(word) {
@@ -3286,6 +3370,9 @@ const SINGER_SUPPLEMENT = {
         const syllables = this.syllabify(cleanWord);
         const vowelCount = this.countVowels(cleanWord);
         
+        // Find special clusters (e.g., сч → /ʃʲʃʲ/)
+        const specialClusters = this.findSpecialClusters(cleanWord);
+        
         // ё always carries stress — override any other stress assignment
         const yoSyllable = this.findYoSyllable(cleanWord);
         let effectiveStress;
@@ -3325,6 +3412,19 @@ const SINGER_SUPPLEMENT = {
             
             if (char === 'ь' || char === 'ъ') continue;
             
+            // Check if this character is part of a special cluster
+            const clusterInfo = specialClusters.find(c => 
+              globalIndex >= c.startIndex && globalIndex <= c.endIndex
+            );
+            
+            if (clusterInfo) {
+              // First char of cluster outputs the IPA, rest are skipped
+              if (globalIndex === clusterInfo.startIndex) {
+                sylIpa += clusterInfo.ipa;
+              }
+              continue;
+            }
+            
             if (this.isVowel(char)) {
               const prevChar = chars[i - 1];
               const needsGlide = ['е', 'ё', 'ю', 'я'].includes(char) && 
@@ -3332,11 +3432,23 @@ const SINGER_SUPPLEMENT = {
               
               if (needsGlide) sylIpa += 'j';
               
+              // Check for exception word vowel override
+              const vowelOverride = this.getVowelOverride(cleanWord, globalIndex);
+              if (vowelOverride !== null) {
+                sylIpa += vowelOverride;
+                continue;
+              }
+              
               // Check preceding consonant palatalization (using regressive analysis)
               const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
               const prevGlobalIndex = globalIndex - 1;
-              const isPrecededByPal = prevConsonant ? 
-                (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false;
+              
+              // Check if preceded by a special cluster (for interpalatal)
+              const prevCluster = specialClusters.find(c => c.endIndex === prevGlobalIndex);
+              const isPrecededByPal = prevCluster ?
+                prevCluster.ipa.includes('ʲ') :
+                (prevConsonant ? 
+                  (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false);
               
               // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
               // Find the next consonant after this vowel - must search in FULL WORD, not just current syllable
