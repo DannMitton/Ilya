@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.1 Dashboard</title>
+  <title>My Sung Russian — v5.2.2 Dashboard</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2846,6 +2846,25 @@ const SINGER_SUPPLEMENT = {
         return null;
       },
       
+      // Check for -ая/-яя suffix exception (Grayson p. 124)
+      // Feminine adjective endings are ALWAYS sung as /ɑjɑ/, never reduced
+      isAyaSuffixVowel(word, charIndex) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const len = cleanWord.length;
+        
+        // Check if word ends in -ая or -яя
+        if (len >= 2) {
+          const ending = cleanWord.slice(-2);
+          if (ending === 'ая' || ending === 'яя') {
+            // Check if this charIndex is one of the two final vowels
+            if (charIndex === len - 2 || charIndex === len - 1) {
+              return true;
+            }
+          }
+        }
+        return false;
+      },
+      
       // Look up stress from dictionary
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
@@ -3444,6 +3463,13 @@ const SINGER_SUPPLEMENT = {
               const vowelOverride = this.getVowelOverride(cleanWord, globalIndex);
               if (vowelOverride !== null) {
                 sylIpa += vowelOverride;
+                continue;
+              }
+              
+              // Check for -ая/-яя suffix exception (Grayson p. 124)
+              // These endings are ALWAYS /ɑjɑ/, never reduced
+              if (this.isAyaSuffixVowel(cleanWord, globalIndex)) {
+                sylIpa += 'ɑ';
                 continue;
               }
               
