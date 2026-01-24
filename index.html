@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.2.6 Dashboard</title>
+  <title>My Sung Russian — v5.3.0 Cross-Word Assimilation</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -431,6 +431,77 @@
     }
     
     /* Unverified stress: no visual indicator on paper — popup message is sufficient */
+
+    /* ========================================
+       BOUNDARY MARKERS: Between word stacks
+       ======================================== */
+    .boundary-marker {
+      /* Reset button styles */
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      
+      /* Positioning */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 100%;
+      margin: 0 -4px;
+      vertical-align: top;
+      
+      /* Accessibility */
+      position: relative;
+    }
+    
+    .boundary-marker:focus-visible {
+      outline: 2px solid var(--msr-accent);
+      outline-offset: 2px;
+    }
+    
+    /* Soft/Clitic boundary: subtle tie connector */
+    .boundary-marker.soft .boundary-tie,
+    .boundary-marker.clitic .boundary-tie {
+      display: block;
+      width: 10px;
+      height: 2px;
+      background: var(--msr-text-muted);
+      border-radius: 1px;
+      opacity: 0.5;
+      transition: opacity 150ms ease;
+    }
+    
+    /* Hard boundary: gap (no visual connector) */
+    .boundary-marker.hard .boundary-gap {
+      display: block;
+      width: 8px;
+      height: 100%;
+      background: transparent;
+    }
+    
+    /* Hover states */
+    .boundary-marker:hover .boundary-tie {
+      opacity: 1;
+      background: var(--msr-salmon);
+    }
+    
+    .boundary-marker.hard:hover::after {
+      content: '⌇';
+      font-size: 12px;
+      color: var(--msr-accent);
+      position: absolute;
+      opacity: 0.7;
+    }
+    
+    .boundary-marker.soft:hover::after,
+    .boundary-marker.clitic:hover::after {
+      content: '×';
+      font-size: 10px;
+      color: var(--msr-salmon);
+      position: absolute;
+      font-weight: bold;
+    }
 
     /* ========================================
        INPUT DRAWER: Bottom-anchored, collapsible
@@ -2531,9 +2602,16 @@ const SINGER_SUPPLEMENT = {
               gloss: lookup ? lookup.gloss : '',
               originalStress: stress,
               stressSource: stressSource,
-              hasYo: yoSyllable !== -1 // Track for UI
+              hasYo: yoSyllable !== -1, // Track for UI
+              rightBoundary: null,      // Set by autoDetectBoundaries()
+              boundarySource: null      // 'auto' | 'user' | 'punctuation'
             };
           });
+        });
+        
+        // Auto-detect boundary types for each line
+        DocumentState.lines.forEach(line => {
+          GraysonEngine.autoDetectBoundaries(line);
         });
         
         // Render to paper
@@ -2563,13 +2641,14 @@ const SINGER_SUPPLEMENT = {
         // Clear existing content
         verseContainer.innerHTML = '';
         
-        // Render each line
+        // Render each line with cross-word assimilation
         DocumentState.lines.forEach((line, lineIdx) => {
           const verseLine = document.createElement('div');
           verseLine.className = 'verse-line';
           verseLine.setAttribute('role', 'row');
           
-          line.forEach((wordData, wordIdx) => {
+          // PHASE 1: Transcribe all words, store ipaUnderlying
+          const transcribedWords = line.map((wordData, wordIdx) => {
             const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
             const punct = wordData.cyrillic.replace(cleanWord, '');
             
@@ -2579,29 +2658,74 @@ const SINGER_SUPPLEMENT = {
             const cliticStress = (isProclitic || isEnclitic) ? -1 : wordData.stress;
             const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic);
             
+            return {
+              wordData,
+              wordIdx,
+              cleanWord,
+              punct,
+              isProclitic,
+              isEnclitic,
+              hasYo,
+              syllables: result.syllables,
+              ipaUnderlying: result.ipaUnderlying,
+              ipaSurface: null,  // Set in phase 2
+              skipFinalDevoicing: false,
+              rightBoundary: wordData.rightBoundary,
+              boundarySource: wordData.boundarySource
+            };
+          });
+          
+          // PHASE 2: Apply cross-word assimilation
+          GraysonEngine.applyCrossWordAssimilation(transcribedWords);
+          
+          // PHASE 3: Render with ipaSurface
+          transcribedWords.forEach((tw, wordIdx) => {
             const wordStack = document.createElement('div');
-            wordStack.className = 'word-stack' + (isProclitic ? ' proclitic' : '') + (isEnclitic ? ' enclitic' : '') + (wordData.stressSource === 'default' ? ' stress-unverified' : '');
+            wordStack.className = 'word-stack' + 
+              (tw.isProclitic ? ' proclitic' : '') + 
+              (tw.isEnclitic ? ' enclitic' : '') + 
+              (tw.wordData.stressSource === 'default' ? ' stress-unverified' : '');
             wordStack.setAttribute('tabindex', '0');
             wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
             wordStack.dataset.lineIndex = lineIdx;
             wordStack.dataset.wordIndex = wordIdx;
-            wordStack.dataset.cyrillic = cleanWord;
-            wordStack.dataset.ipa = result.ipa;
-            wordStack.dataset.gloss = wordData.gloss || '';
-            wordStack.dataset.punctuation = punct;
-            wordStack.dataset.syllables = JSON.stringify(result.syllables);
-            wordStack.dataset.isProclitic = isProclitic;
-            wordStack.dataset.isEnclitic = isEnclitic;
-            wordStack.dataset.hasYo = hasYo;
-            wordStack.dataset.stressSource = wordData.stressSource || '';
+            wordStack.dataset.cyrillic = tw.cleanWord;
+            wordStack.dataset.ipa = tw.ipaSurface;  // Use surface form
+            wordStack.dataset.ipaUnderlying = tw.ipaUnderlying;  // Store underlying for debugging
+            wordStack.dataset.gloss = tw.wordData.gloss || '';
+            wordStack.dataset.punctuation = tw.punct;
+            wordStack.dataset.syllables = JSON.stringify(tw.syllables);
+            wordStack.dataset.isProclitic = tw.isProclitic;
+            wordStack.dataset.isEnclitic = tw.isEnclitic;
+            wordStack.dataset.hasYo = tw.hasYo;
+            wordStack.dataset.stressSource = tw.wordData.stressSource || '';
+            wordStack.dataset.rightBoundary = tw.rightBoundary;
+            wordStack.dataset.boundarySource = tw.boundarySource;
             
             wordStack.innerHTML = `
-              <span class="ipa">${result.ipa}</span>
-              <span class="cyrillic">${cleanWord}<span class="punct">${punct}</span></span>
-              <span class="gloss">${wordData.gloss || ''}</span>
+              <span class="ipa">${tw.ipaSurface}</span>
+              <span class="cyrillic">${tw.cleanWord}<span class="punct">${tw.punct}</span></span>
+              <span class="gloss">${tw.wordData.gloss || ''}</span>
             `;
             
             verseLine.appendChild(wordStack);
+            
+            // Add boundary marker after word (except last word)
+            if (wordIdx < transcribedWords.length - 1) {
+              const boundaryMarker = document.createElement('button');
+              boundaryMarker.className = `boundary-marker ${tw.rightBoundary}`;
+              boundaryMarker.dataset.lineIndex = lineIdx;
+              boundaryMarker.dataset.afterWord = wordIdx;
+              boundaryMarker.setAttribute('aria-label', 
+                tw.rightBoundary === 'hard' 
+                  ? 'Phrase break, click to link' 
+                  : 'Linked boundary, click to break'
+              );
+              boundaryMarker.innerHTML = tw.rightBoundary === 'hard' 
+                ? '<span class="boundary-gap"></span>' 
+                : '<span class="boundary-tie"></span>';
+              verseLine.appendChild(boundaryMarker);
+            }
           });
           
           verseContainer.appendChild(verseLine);
@@ -3706,16 +3830,244 @@ const SINGER_SUPPLEMENT = {
         
         // Step 3-4 will be special clusters and palatalization (future phases)
         
-        // Apply final consonant devoicing (Grayson Ch. 4 Sec. 4)
-        ipa = this.applyFinalDevoicing(ipa);
+        // NOTE: Final consonant devoicing is now DEFERRED to cross-word assimilation stage.
+        // This allows voicing to cross word boundaries when appropriate (Grayson p. 248-257).
+        // The ipa returned here is the "underlying" form before boundary-sensitive devoicing.
         
-        // Also update the last syllable's IPA to reflect devoicing
-        if (syllableData.length > 0) {
-          const lastSyl = syllableData[syllableData.length - 1];
-          lastSyl.ipa = this.applyFinalDevoicing(lastSyl.ipa);
+        return { ipa, ipaUnderlying: ipa, syllables: syllableData };
+      },
+      
+      /**
+       * Auto-detect boundary types for a line of words.
+       * Called after initial transcription, before cross-word assimilation.
+       * 
+       * Rules (in priority order):
+       * 1. User-set boundaries are never overwritten
+       * 2. Final word → always 'hard'
+       * 3. Punctuation after word → 'hard'
+       * 4. Current word is proclitic → 'clitic'
+       * 5. Next word is enclitic → 'clitic'
+       * 6. Otherwise → 'hard' (conservative default)
+       */
+      autoDetectBoundaries(words) {
+        const punctuationRegex = /[.,!?;:"""''–—]$/;
+        
+        words.forEach((word, i) => {
+          // Rule 1: Preserve user-set boundaries
+          if (word.boundarySource === 'user') return;
+          
+          const isLastWord = (i === words.length - 1);
+          const cleanWord = word.cyrillic.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+          const hasPunctuation = punctuationRegex.test(word.cyrillic);
+          const isProclitic = this.proclitics.has(cleanWord);
+          
+          // Check if next word is enclitic
+          const nextWord = words[i + 1];
+          const nextCleanWord = nextWord 
+            ? nextWord.cyrillic.replace(/[.,!?;:"""''–—]/g, '').toLowerCase() 
+            : null;
+          const nextIsEnclitic = nextCleanWord && this.enclitics.has(nextCleanWord);
+          
+          // Apply rules in priority order
+          if (isLastWord) {
+            word.rightBoundary = 'hard';
+            word.boundarySource = 'auto';
+          } else if (hasPunctuation) {
+            word.rightBoundary = 'hard';
+            word.boundarySource = 'punctuation';
+          } else if (isProclitic) {
+            word.rightBoundary = 'clitic';
+            word.boundarySource = 'auto';
+          } else if (nextIsEnclitic) {
+            word.rightBoundary = 'clitic';
+            word.boundarySource = 'auto';
+          } else {
+            word.rightBoundary = 'hard';
+            word.boundarySource = 'auto';
+          }
+        });
+      },
+      
+      // ========================================
+      // CROSS-WORD BOUNDARY ASSIMILATION
+      // Grayson p. 248-257
+      // ========================================
+      
+      // Voiceless → Voiced (for cross-boundary voicing)
+      crossWordVoicingMap: {
+        'p': 'b', 'pʲ': 'bʲ',
+        'f': 'v', 'fʲ': 'vʲ',
+        't': 'd', 'tʲ': 'dʲ',
+        's': 'z', 'sʲ': 'zʲ',
+        'ʃ': 'ʒ',
+        'k': 'ɡ', 'kʲ': 'ɡʲ',
+        'x': 'ɣ', 'xʲ': 'ɣʲ',      // Cross-boundary allophone
+        'ts': 'dz',                 // Cross-boundary allophone
+        'tʃʲ': 'dʒʲ'                // Cross-boundary allophone
+      },
+      
+      // Voiced → Voiceless (for cross-boundary devoicing)
+      crossWordDevoicingMap: {
+        'b': 'p', 'bʲ': 'pʲ',
+        'v': 'f', 'vʲ': 'fʲ',
+        'd': 't', 'dʲ': 'tʲ',
+        'z': 's', 'zʲ': 'sʲ',
+        'ʒ': 'ʃ',
+        'ɡ': 'k', 'ɡʲ': 'kʲ',
+        'g': 'k', 'gʲ': 'kʲ'        // Handle both ɡ and g
+      },
+      
+      // Consonant sets for cross-word assimilation
+      crossWordVoicelessSet: new Set(['p', 'pʲ', 'f', 'fʲ', 't', 'tʲ', 's', 'sʲ', 'ʃ', 'ʃʲ', 'k', 'kʲ', 'x', 'xʲ', 'ts', 'tʃʲ', 'ʃʲʃʲ']),
+      crossWordVoicedObstruentSet: new Set(['b', 'bʲ', 'd', 'dʲ', 'g', 'gʲ', 'ɡ', 'ɡʲ', 'z', 'zʲ', 'ʒ', 'ʒʲ']),
+      crossWordSonorantSet: new Set(['m', 'mʲ', 'n', 'nʲ', 'ɲ', 'l', 'lʲ', 'ɫ', 'r', 'rʲ', 'j']),
+      crossWordVSet: new Set(['v', 'vʲ']),
+      
+      /**
+       * Extract final consonant(s) from IPA string.
+       * Returns null if word ends in vowel.
+       */
+      getFinalConsonant(ipa) {
+        // Remove stress marks first
+        const clean = ipa.replace(/[ˈˌ]/g, '');
+        // Match final consonant cluster (including affricates and palatalization)
+        // Order matters: try longer sequences first
+        const patterns = [
+          'ʃʲʃʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',  // Affricates
+          'bʲ', 'pʲ', 'vʲ', 'fʲ', 'dʲ', 'tʲ', 'gʲ', 'ɡʲ', 'kʲ', 'zʲ', 'sʲ', 'ʒʲ', 'ʃʲ', 'xʲ', 'mʲ', 'nʲ', 'lʲ', 'rʲ',  // Palatalized
+          'b', 'p', 'v', 'f', 'd', 't', 'g', 'ɡ', 'k', 'z', 's', 'ʒ', 'ʃ', 'x', 'm', 'n', 'ɲ', 'l', 'ɫ', 'r', 'j'  // Plain
+        ];
+        
+        for (const pat of patterns) {
+          if (clean.endsWith(pat)) {
+            return pat;
+          }
+        }
+        return null;
+      },
+      
+      /**
+       * Extract initial consonant(s) from IPA string.
+       * Returns null if word starts with vowel.
+       */
+      getInitialConsonant(ipa) {
+        // Remove stress marks first
+        const clean = ipa.replace(/[ˈˌ]/g, '');
+        // Match initial consonant cluster
+        const patterns = [
+          'ʃʲʃʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',
+          'bʲ', 'pʲ', 'vʲ', 'fʲ', 'dʲ', 'tʲ', 'gʲ', 'ɡʲ', 'kʲ', 'zʲ', 'sʲ', 'ʒʲ', 'ʃʲ', 'xʲ', 'mʲ', 'nʲ', 'lʲ', 'rʲ',
+          'b', 'p', 'v', 'f', 'd', 't', 'g', 'ɡ', 'k', 'z', 's', 'ʒ', 'ʃ', 'x', 'm', 'n', 'ɲ', 'l', 'ɫ', 'r', 'j'
+        ];
+        
+        for (const pat of patterns) {
+          if (clean.startsWith(pat)) {
+            return pat;
+          }
+        }
+        return null;
+      },
+      
+      /**
+       * Check if consonant is voiceless.
+       */
+      isVoicelessConsonant(c) {
+        return this.crossWordVoicelessSet.has(c);
+      },
+      
+      /**
+       * Check if consonant is voiced obstruent (can trigger voicing).
+       */
+      isVoicedObstruent(c) {
+        return this.crossWordVoicedObstruentSet.has(c);
+      },
+      
+      /**
+       * Check if consonant is sonorant (neutral for voicing).
+       */
+      isSonorantConsonant(c) {
+        return this.crossWordSonorantSet.has(c);
+      },
+      
+      /**
+       * Check if consonant is /v/ (special: no assimilative influence per Grayson).
+       */
+      isVPhoneme(c) {
+        return this.crossWordVSet.has(c);
+      },
+      
+      /**
+       * Apply voicing to final consonant of IPA string.
+       */
+      applyVoicingToFinal(ipa, finalC) {
+        const voiced = this.crossWordVoicingMap[finalC];
+        if (!voiced) return ipa;
+        return ipa.slice(0, -finalC.length) + voiced;
+      },
+      
+      /**
+       * Apply devoicing to final consonant of IPA string.
+       */
+      applyDevoicingToFinal(ipa, finalC) {
+        const devoiced = this.crossWordDevoicingMap[finalC];
+        if (!devoiced) return ipa;
+        return ipa.slice(0, -finalC.length) + devoiced;
+      },
+      
+      /**
+       * Apply cross-word voicing assimilation to a line of words.
+       * Modifies word objects in place, setting ipaSurface.
+       * 
+       * Grayson p. 248-257:
+       * - Voicing determined by RIGHTMOST consonant (regressive)
+       * - Only crosses 'soft' or 'clitic' boundaries
+       * - Sonorants and /v/ are neutral (don't trigger, but DO undergo)
+       */
+      applyCrossWordAssimilation(words) {
+        // Initialize: copy ipaUnderlying to ipaSurface, set skipFinalDevoicing
+        words.forEach(word => {
+          word.ipaSurface = word.ipaUnderlying;
+          word.skipFinalDevoicing = false;
+        });
+        
+        // Process each boundary
+        for (let i = 0; i < words.length - 1; i++) {
+          const leftWord = words[i];
+          const rightWord = words[i + 1];
+          
+          // Skip hard boundaries
+          if (leftWord.rightBoundary === 'hard') continue;
+          
+          const leftFinal = this.getFinalConsonant(leftWord.ipaSurface);
+          const rightInitial = this.getInitialConsonant(rightWord.ipaSurface);
+          
+          // Skip if either word lacks consonant at boundary
+          if (!leftFinal || !rightInitial) continue;
+          
+          // Skip if right initial is sonorant or /v/ (no assimilative influence)
+          if (this.isSonorantConsonant(rightInitial) || this.isVPhoneme(rightInitial)) continue;
+          
+          // Determine assimilation direction
+          if (this.isVoicedObstruent(rightInitial) && this.isVoicelessConsonant(leftFinal)) {
+            // Voice the left final: слух был → sɫuɣ bɨɫ
+            leftWord.ipaSurface = this.applyVoicingToFinal(leftWord.ipaSurface, leftFinal);
+            leftWord.skipFinalDevoicing = true;
+          } else if (this.isVoicelessConsonant(rightInitial) && this.isVoicedObstruent(leftFinal)) {
+            // Devoice the left final: друг там → druk tam
+            leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
+            leftWord.skipFinalDevoicing = true;  // Already handled
+          }
         }
         
-        return { ipa, syllables: syllableData };
+        // Apply final devoicing to words that didn't undergo cross-word assimilation
+        words.forEach((word, i) => {
+          const isLastWord = (i === words.length - 1);
+          const hasHardBoundary = (word.rightBoundary === 'hard');
+          
+          if ((isLastWord || hasHardBoundary) && !word.skipFinalDevoicing) {
+            word.ipaSurface = this.applyFinalDevoicing(word.ipaSurface);
+          }
+        });
       }
     };
 
@@ -4140,6 +4492,34 @@ const SINGER_SUPPLEMENT = {
        EVENT DELEGATION
        ======================================== */
     document.addEventListener('click', (e) => {
+      // Handle boundary marker clicks
+      const boundaryMarker = e.target.closest('.boundary-marker');
+      if (boundaryMarker) {
+        const lineIdx = parseInt(boundaryMarker.dataset.lineIndex, 10);
+        const wordIdx = parseInt(boundaryMarker.dataset.afterWord, 10);
+        const word = DocumentState.lines[lineIdx]?.[wordIdx];
+        
+        if (word) {
+          // Don't allow toggling punctuation-forced boundaries
+          if (word.boundarySource === 'punctuation') {
+            return;
+          }
+          
+          // Toggle boundary type
+          if (word.rightBoundary === 'hard') {
+            word.rightBoundary = 'soft';
+          } else {
+            word.rightBoundary = 'hard';
+          }
+          word.boundarySource = 'user';  // Mark as user-set
+          
+          // Re-render to apply new boundary
+          DrawerController.renderToPaper();
+        }
+        return;
+      }
+      
+      // Handle word-stack clicks
       const wordStack = e.target.closest('.word-stack');
       if (wordStack && !Popup.isOpen) {
         const data = {
