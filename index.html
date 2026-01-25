@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.4.2 Compact Modules</title>
+  <title>My Sung Russian — v5.4.4 Dictionary Expansion</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1976,6 +1976,7 @@ const SINGER_SUPPLEMENT = {
     'нас': { stress: 0, gloss: 'us', source: 'supplement' },
     'кто': { stress: 0, gloss: 'who', source: 'supplement' },
     'что': { stress: 0, gloss: 'what', source: 'supplement' },
+    'чём': { stress: 0, gloss: 'what (prep.)', source: 'supplement' },
     'всё': { stress: 0, gloss: 'everything', source: 'supplement' },
     'все': { stress: 0, gloss: 'everyone', source: 'supplement' },
     'сам': { stress: 0, gloss: 'oneself', source: 'supplement' },
@@ -2004,6 +2005,21 @@ const SINGER_SUPPLEMENT = {
     'чем': { stress: 0, gloss: 'than', source: 'supplement' },
     
     // Prepositions (stressed when standalone)
+    'о': { stress: 0, gloss: 'about', source: 'supplement' },
+    'об': { stress: 0, gloss: 'about', source: 'supplement' },
+    'в': { stress: 0, gloss: 'in/into', source: 'supplement' },
+    'во': { stress: 0, gloss: 'in/into', source: 'supplement' },
+    'к': { stress: 0, gloss: 'to/toward', source: 'supplement' },
+    'ко': { stress: 0, gloss: 'to/toward', source: 'supplement' },
+    'с': { stress: 0, gloss: 'with/from', source: 'supplement' },
+    'со': { stress: 0, gloss: 'with/from', source: 'supplement' },
+    'у': { stress: 0, gloss: 'at/by', source: 'supplement' },
+    'на': { stress: 0, gloss: 'on/onto', source: 'supplement' },
+    'за': { stress: 0, gloss: 'behind/for', source: 'supplement' },
+    'по': { stress: 0, gloss: 'along/by', source: 'supplement' },
+    'до': { stress: 0, gloss: 'until/to', source: 'supplement' },
+    'из': { stress: 0, gloss: 'from/out of', source: 'supplement' },
+    'от': { stress: 0, gloss: 'from', source: 'supplement' },
     'при': { stress: 0, gloss: 'at/by/in presence of', source: 'supplement' },
     'для': { stress: 0, gloss: 'for', source: 'supplement' },
     'без': { stress: 0, gloss: 'without', source: 'supplement' },
@@ -2030,6 +2046,13 @@ const SINGER_SUPPLEMENT = {
     'дать': { stress: 0, gloss: 'to give', source: 'supplement' },
     'стать': { stress: 0, gloss: 'to become', source: 'supplement' },
     'был': { stress: 0, gloss: 'was (m.)', source: 'supplement' },
+    'была': { stress: 1, gloss: 'was (f.)', source: 'supplement' },
+    'было': { stress: 0, gloss: 'was (n.)', source: 'supplement' },
+    'были': { stress: 0, gloss: 'were', source: 'supplement' },
+    'сказал': { stress: 1, gloss: 'said/told', source: 'supplement' },
+    'думать': { stress: 0, gloss: 'to think', source: 'supplement' },
+    'думаю': { stress: 0, gloss: 'I think', source: 'supplement' },
+    'думаешь': { stress: 0, gloss: 'you think', source: 'supplement' },
     'есть': { stress: 0, gloss: 'is/to eat', source: 'supplement' },
     
     // Nouns (common in vocal repertoire)
@@ -2052,6 +2075,10 @@ const SINGER_SUPPLEMENT = {
     'сын': { stress: 0, gloss: 'son', source: 'supplement' },
     'муж': { stress: 0, gloss: 'husband', source: 'supplement' },
     'жизнь': { stress: 0, gloss: 'life', source: 'supplement' },
+    'любовь': { stress: 1, gloss: 'love', source: 'supplement' },
+    'любви': { stress: 1, gloss: 'of love', source: 'supplement' },
+    'правда': { stress: 0, gloss: 'truth', source: 'supplement' },
+    'правду': { stress: 0, gloss: 'truth (acc.)', source: 'supplement' },
     'смерть': { stress: 0, gloss: 'death', source: 'supplement' },
     'боль': { stress: 0, gloss: 'pain', source: 'supplement' },
     'грусть': { stress: 0, gloss: 'sadness', source: 'supplement' },
@@ -2061,6 +2088,8 @@ const SINGER_SUPPLEMENT = {
     'часть': { stress: 0, gloss: 'part', source: 'supplement' },
     'речь': { stress: 0, gloss: 'speech', source: 'supplement' },
     'мысль': { stress: 0, gloss: 'thought', source: 'supplement' },
+    'мама': { stress: 0, gloss: 'mama', source: 'supplement' },
+    'маме': { stress: 0, gloss: 'to mama', source: 'supplement' },
     'кровь': { stress: 0, gloss: 'blood', source: 'supplement' },
     'грудь': { stress: 0, gloss: 'chest/breast', source: 'supplement' },
     'взор': { stress: 0, gloss: 'gaze', source: 'supplement' },
@@ -2666,11 +2695,39 @@ const SINGER_SUPPLEMENT = {
             const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
             const punct = wordData.cyrillic.replace(cleanWord, '');
             
-            const isProclitic = GraysonEngine.proclitics.has(cleanWord.toLowerCase());
+            // Detect if line ends with question mark (for о interrogative detection)
+            const lineText = line.map(w => w.cyrillic).join(' ');
+            const lineEndsWithQuestion = /\?$/.test(lineText.trim());
+            const isFirstWord = wordIdx === 0;
+            
+            // Special case: "о" as interjection vs preposition
+            // Interjection (stressed /o/): punctuation after, OR sentence-initial without question mark
+            // Preposition (reduces): between spaces with no punctuation, OR interrogative context
+            const isO_Word = cleanWord.toLowerCase() === 'о';
+            const hasFollowingPunct = /[,!]/.test(punct);
+            const isO_Interjection = isO_Word && (
+              hasFollowingPunct ||  // "О, любовь!" or "О!"
+              (isFirstWord && !lineEndsWithQuestion)  // "О любовь!" but not "О чём ты думаешь?"
+            );
+            
+            const isProclitic = !isO_Interjection && GraysonEngine.proclitics.has(cleanWord.toLowerCase());
             const isEnclitic = GraysonEngine.enclitics.has(cleanWord.toLowerCase());
             const hasYo = GraysonEngine.hasYo(cleanWord);
+            
+            // For proclitics, determine reduction based on host word's stress position
+            // Proclitic + host stress on syl 0 → proclitic is pretonic → /ɑ/
+            // Proclitic + host stress on syl 1+ → proclitic is remote → /ʌ/
+            let procliticPosition = null;  // Will be 'pretonic' or 'remote'
+            if (isProclitic && wordIdx < line.length - 1) {
+              const nextWord = line[wordIdx + 1];
+              const nextStress = nextWord.stress;
+              // nextStress === 0 means first syllable of host is stressed → proclitic is immediate pretonic
+              // nextStress > 0 or -1 means proclitic is remote (2+ syllables from stress)
+              procliticPosition = (nextStress === 0) ? 'pretonic' : 'remote';
+            }
+            
             const cliticStress = (isProclitic || isEnclitic) ? -1 : wordData.stress;
-            const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic);
+            const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic, procliticPosition);
             
             return {
               wordData,
@@ -2679,6 +2736,10 @@ const SINGER_SUPPLEMENT = {
               punct,
               isProclitic,
               isEnclitic,
+              isO_Interjection,  // Track for Why explanation
+              isFirstWord,       // Track for interrogative preposition detection
+              lineEndsWithQuestion,  // Track for interrogative preposition detection
+              procliticPosition, // Track for Why explanation
               hasYo,
               syllables: result.syllables,
               ipaUnderlying: result.ipaUnderlying,
@@ -2700,6 +2761,19 @@ const SINGER_SUPPLEMENT = {
               (tw.isEnclitic ? ' enclitic' : '') + 
               (tw.wordData.stressSource === 'default' ? ' stress-unverified' : '');
             wordStack.setAttribute('tabindex', '0');
+            
+            // Add hovertip for stress provenance (v5.4.3)
+            const stressSource = tw.wordData.stressSource;
+            if (stressSource === 'composer') {
+              wordStack.setAttribute('title', 'Stress marked as composer\'s setting');
+            } else if (stressSource === 'user') {
+              wordStack.setAttribute('title', 'Stress marked as your choice');
+            } else if (stressSource === 'dictionary') {
+              wordStack.setAttribute('title', 'Stress from dictionary');
+            } else if (stressSource === 'default') {
+              wordStack.setAttribute('title', 'Stress unverified — click to confirm');
+            }
+            
             wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
             wordStack.dataset.lineIndex = lineIdx;
             wordStack.dataset.wordIndex = wordIdx;
@@ -2711,6 +2785,10 @@ const SINGER_SUPPLEMENT = {
             wordStack.dataset.syllables = JSON.stringify(tw.syllables);
             wordStack.dataset.isProclitic = tw.isProclitic;
             wordStack.dataset.isEnclitic = tw.isEnclitic;
+            wordStack.dataset.isO_Interjection = tw.isO_Interjection || false;
+            wordStack.dataset.isFirstWord = tw.isFirstWord || false;
+            wordStack.dataset.lineEndsWithQuestion = tw.lineEndsWithQuestion || false;
+            wordStack.dataset.procliticPosition = tw.procliticPosition || '';
             wordStack.dataset.hasYo = tw.hasYo;
             wordStack.dataset.stressSource = tw.wordData.stressSource || '';
             wordStack.dataset.rightBoundary = tw.rightBoundary;
@@ -3642,7 +3720,7 @@ const SINGER_SUPPLEMENT = {
         return ipa;
       },
       
-      transcribe(word, stressIndex = -1, isClitic = false) {
+      transcribe(word, stressIndex = -1, isClitic = false, procliticPosition = null) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         const syllables = this.syllabify(cleanWord);
         const vowelCount = this.countVowels(cleanWord);
@@ -3674,7 +3752,14 @@ const SINGER_SUPPLEMENT = {
         let syllableData = [];
         
         syllables.forEach((syl, sylIdx) => {
-          const position = this.getSyllablePosition(sylIdx, effectiveStress, syllables.length);
+          // For proclitics with host-stress-aware reduction, use procliticPosition
+          // This overrides the default 'unstressed' position for accurate vowel reduction
+          let position;
+          if (isClitic && procliticPosition) {
+            position = procliticPosition;  // 'pretonic' or 'remote' based on host word stress
+          } else {
+            position = this.getSyllablePosition(sylIdx, effectiveStress, syllables.length);
+          }
           let sylIpa = '';
           const chars = [...syl];
           
@@ -4429,6 +4514,7 @@ const SINGER_SUPPLEMENT = {
         const syllables = wordData.syllables || [];
         const isProclitic = wordData.isProclitic === 'true';
         const isEnclitic = wordData.isEnclitic === 'true';
+        const isO_Interjection = wordData.isO_Interjection === 'true' || wordData.isO_Interjection === true;
         const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true || cyrillic.includes('ё');
         const syllableCount = syllables.length;
         
@@ -4439,18 +4525,68 @@ const SINGER_SUPPLEMENT = {
                 ref: 'Grayson §2.3'
             };
         }
+        
+        // Check for О interjection (punctuation signals exclamation, not preposition)
+        if (isO_Interjection) {
+            return {
+                rule: '"О" here is an interjection (Oh!), not a preposition. Unlike proclitics, interjections are standalone exclamations that keep their full stress → /o/.',
+                ref: 'Context'
+            };
+        }
 
         // Check for monosyllables
         if (syllableCount === 1) {
             if (isProclitic) {
+                const procliticPosition = wordData.procliticPosition;
+                // Check if this is sentence-initial О in a question (interrogative preposition)
+                const isFirstWord = wordData.isFirstWord === 'true' || wordData.isFirstWord === true;
+                const lineEndsWithQuestion = wordData.lineEndsWithQuestion === 'true' || wordData.lineEndsWithQuestion === true;
+                const isInterrogativeO = cyrillic === 'о' && isFirstWord && lineEndsWithQuestion;
+                
+                // Special explanation for о as preposition
+                if (cyrillic === 'о') {
+                    if (isInterrogativeO) {
+                        // Interrogative preposition: "О чём ты думаешь?"
+                        if (procliticPosition === 'pretonic') {
+                            return {
+                                rule: '"О" here is an interrogative preposition (about what?), not an interjection. As a proclitic, it loses its stress and attaches to the following word. Host stress on first syllable → /ɑ/.',
+                                ref: 'Grayson §7.1'
+                            };
+                        } else {
+                            return {
+                                rule: '"О" here is an interrogative preposition (about what?), not an interjection. As a proclitic, it loses its stress and attaches to the following word. Remote from host stress → /ʌ/.',
+                                ref: 'Grayson §7.1'
+                            };
+                        }
+                    }
+                    // Regular preposition: "думаю о маме"
+                    if (procliticPosition === 'pretonic') {
+                        return {
+                            rule: '"О" is a preposition (about). As a proclitic, it loses its stress and attaches phonologically to the following word. Host stress on first syllable → immediate pretonic /ɑ/.',
+                            ref: 'Grayson §7.1'
+                        };
+                    } else {
+                        return {
+                            rule: '"О" is a preposition (about). As a proclitic, it loses its stress and attaches phonologically to the following word. Remote from host stress → maximum reduction /ʌ/.',
+                            ref: 'Grayson §7.1'
+                        };
+                    }
+                }
+                // General proclitic explanation
+                if (procliticPosition === 'pretonic') {
+                    return {
+                        rule: 'Proclitic: a function word that loses its stress and attaches phonologically to the following word. Host stress on first syllable → immediate pretonic reduction.',
+                        ref: 'Grayson §7.1'
+                    };
+                }
                 return {
-                    rule: 'Proclitic (attaches to following word). Unstressed vowel reduces.',
+                    rule: 'Proclitic: a function word that loses its stress and attaches phonologically to the following word. Remote from host stress → maximum reduction.',
                     ref: 'Grayson §7.1'
                 };
             }
             if (isEnclitic) {
                 return {
-                    rule: 'Enclitic (attaches to preceding word). Unstressed vowel reduces.',
+                    rule: 'Enclitic: a function word that loses its stress and attaches phonologically to the preceding word. Unstressed vowel reduces.',
                     ref: 'Grayson §7.1'
                 };
             }
