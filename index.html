@@ -1043,6 +1043,15 @@
       cursor: pointer;
       transition: all 150ms var(--ease);
     }
+    
+    /* First and last button need outer margin for border visibility */
+    .stress-source-btn:first-child {
+      margin-left: 2px;
+    }
+    
+    .stress-source-btn:last-child {
+      margin-right: 2px;
+    }
 
     .stress-source-btn:hover {
       border-color: var(--msr-accent);
