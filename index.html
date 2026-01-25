@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.4.1 Staging Pattern</title>
+  <title>My Sung Russian — v5.4.2 Compact Modules</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -989,174 +989,150 @@
       font-size: 0.85rem;
     }
 
-    .stress-source-module {
-      margin-bottom: 0.75rem;
+    /* ========================================
+       COMPACT MODULES (v5.4.2)
+       Shared pattern for Stress Source & Phrase Boundary
+       ======================================== */
+    
+    .stress-source-module,
+    .phrase-boundary-module {
+      margin-bottom: 0.5rem;
+      padding: 0 8px;
+      box-sizing: border-box;
+    }
+    
+    .module-header {
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
     }
-
-    .stress-source-module.needs-attention .stress-source-buttons {
-      animation: gentle-pulse 2s ease-in-out 3;
-    }
-
-    @keyframes gentle-pulse {
-      0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(168, 90, 58, 0);
-      }
-      50% { 
-        box-shadow: 0 0 0 4px rgba(168, 90, 58, 0.15);
-      }
-    }
-
-    .stress-source-label {
+    
+    .module-label {
       font-size: 0.7rem;
       color: var(--ink-secondary);
-      margin-bottom: 0.4rem;
-      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
-
-    .stress-source-hint {
-      font-size: 0.65rem;
-      color: var(--ink-secondary);
-      opacity: 0.7;
-      font-style: italic;
-      margin-top: 0.3rem;
-      text-align: right;
-    }
-
-    .stress-source-buttons {
-      display: flex;
-      gap: 0.4rem;
-      margin-bottom: 0.4rem;
-      border-radius: 6px;
-    }
-
-    .stress-source-btn {
-      flex: 1;
-      padding: 0.4rem 0.5rem;
+    
+    .staged-indicator {
       font-size: 0.75rem;
-      background: var(--surface);
-      border: 1px solid rgba(26, 22, 18, 0.15);
+      color: #9CA3AF;
+      opacity: 0;
+      transition: opacity 150ms var(--ease);
+    }
+    
+    .staged-indicator.visible {
+      opacity: 1;
+    }
+    
+    /* Segmented Control */
+    .segmented-control {
+      display: flex;
+      background: #F3F4F6;
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+    
+    .segment {
+      flex: 1;
+      padding: 0.35rem 0.4rem;
+      font-size: 0.7rem;
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--ink-secondary);
+      transition: all 150ms var(--ease);
+      box-sizing: border-box;
+    }
+    
+    .segment:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Active/committed segment */
+    .segment.active {
+      background: white;
+      color: var(--msr-text-primary);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Staged segment (pending, not yet committed) */
+    .segment.staged {
+      background: white;
+      color: var(--ink-secondary);
+      outline: 1px dashed #9CA3AF;
+      outline-offset: -2px;
+    }
+    
+    /* Committed segment (saved) */
+    .segment.committed {
+      background: white;
+      color: var(--msr-text-primary);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      outline: 1px solid var(--msr-accent);
+      outline-offset: -2px;
+    }
+    
+    /* ========================================
+       SHARED COMMIT FOOTER (v5.4.2)
+       Fixed height, always present
+       ======================================== */
+    
+    .shared-commit-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.75rem;
+      height: 36px;
+      padding: 0 8px;
+      margin-top: 0.5rem;
+      opacity: 0.4;
+      transition: opacity 150ms var(--ease);
+    }
+    
+    .shared-commit-footer.has-changes {
+      opacity: 1;
+    }
+    
+    .shared-commit-footer .apply-btn,
+    .shared-commit-footer .revert-btn {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem;
       border-radius: 4px;
       cursor: pointer;
       transition: all 150ms var(--ease);
     }
-
-    .stress-source-btn:hover {
-      border-color: var(--msr-accent);
-    }
     
-    .stress-source-btn:focus {
-      outline: 2px solid var(--msr-accent);
-      outline-offset: 2px;
-    }
-
-    .stress-source-btn.active {
+    .shared-commit-footer .apply-btn {
       background: var(--msr-accent);
       color: white;
-      border-color: var(--msr-accent);
-    }
-
-    /* ========================================
-       STAGING PATTERN (v5.4.0)
-       Pencil → Ink confirmation flow
-       ======================================== */
-    
-    /* Staged state: pending change, not yet committed */
-    /* Uses outline (escapes overflow clipping better than border) */
-    .stress-source-btn.staged {
-      background: #F3F4F6;
-      color: #4B5563;
-      border-color: transparent;
-      outline: 1px dashed #9CA3AF;
-      outline-offset: -3px;
-      position: relative;
-    }
-    
-    .stress-source-btn.staged::after {
-      content: '✎';
-      margin-left: 6px;
-      font-size: 0.7em;
-      color: #9CA3AF;
-    }
-    
-    /* Committed state: saved, confirmed */
-    /* Uses outline for consistency */
-    .stress-source-btn.committed {
-      background: var(--msr-accent-light);
-      color: var(--msr-text-primary);
-      border-color: transparent;
-      outline: 1px solid var(--msr-accent);
-      outline-offset: -3px;
-      position: relative;
-    }
-    
-    .stress-source-btn.committed::after {
-      content: '✓';
-      margin-left: 6px;
-      font-size: 0.8em;
-      color: var(--msr-accent);
-      font-weight: bold;
-    }
-    
-    /* Staging actions: Apply / Revert buttons */
-    .staging-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-      min-height: 1.5rem; /* Reserve space to prevent layout shift */
-    }
-    
-    .apply-btn,
-    .revert-btn {
-      background: none;
       border: none;
-      font-family: 'Noto Sans', sans-serif;
-      font-size: 0.75rem;
-      cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      transition: opacity 0.2s ease, background 0.15s ease;
-      opacity: 0;
-      visibility: hidden;
     }
     
-    .apply-btn.visible,
-    .revert-btn.visible {
-      opacity: 1;
-      visibility: visible;
+    .shared-commit-footer .apply-btn:hover {
+      background: var(--msr-accent-dark, #5a8a5e);
     }
     
-    .apply-btn {
-      color: var(--msr-accent);
-      font-weight: 500;
+    .shared-commit-footer .revert-btn {
+      background: transparent;
+      color: var(--ink-secondary);
+      border: 1px solid rgba(26, 22, 18, 0.15);
     }
     
-    .apply-btn:hover {
-      background: var(--msr-accent-light);
+    .shared-commit-footer .revert-btn:hover {
+      border-color: var(--ink-secondary);
     }
     
-    .apply-btn:focus {
-      outline: 2px solid var(--msr-accent);
-      outline-offset: 2px;
-    }
-    
-    .revert-btn {
-      color: var(--msr-text-secondary);
-    }
-    
-    .revert-btn:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-    
-    .revert-btn:focus {
-      outline: 2px solid var(--msr-accent);
-      outline-offset: 2px;
+    /* Hairline separator between modules */
+    .phrase-boundary-module {
+      padding-top: 0.5rem;
+      border-top: 1px solid #E5E7EB;
     }
 
+    /* Old restore-link kept for compatibility */
     .restore-link {
       display: inline-flex;
       align-items: center;
@@ -1189,61 +1165,6 @@
       display: flex;
       justify-content: flex-end;
       width: 100%;
-    }
-
-    /* Phrase Boundary Module */
-    .phrase-boundary-module {
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid var(--msr-border-light);
-    }
-
-    .phrase-boundary-label {
-      font-size: 0.7rem;
-      color: var(--ink-secondary);
-      margin-bottom: 0.4rem;
-      text-align: left;
-    }
-
-    .phrase-boundary-toggle {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .boundary-toggle-option {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      padding: 0.25rem 0;
-    }
-
-    .boundary-toggle-option input[type="radio"] {
-      accent-color: var(--msr-accent);
-      margin: 0;
-    }
-
-    .boundary-option-text {
-      font-size: 0.75rem;
-      color: var(--ink-primary);
-    }
-
-    .boundary-toggle-option:has(input:checked) .boundary-option-text {
-      font-weight: 500;
-    }
-
-    .phrase-boundary-hint {
-      font-size: 0.65rem;
-      color: var(--ink-secondary);
-      opacity: 0.7;
-      font-style: italic;
-      margin-top: 0.3rem;
-    }
-
-    .phrase-boundary-module.disabled {
-      opacity: 0.5;
-      pointer-events: none;
     }
 
     .citation {
@@ -1974,40 +1895,31 @@
             <div class="why-content-inner" id="whyContent">
               <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
               <div class="stress-source-module" id="stressSourceModule">
-                <div class="stress-source-label">Mark this stress as…</div>
-                <div class="stress-source-buttons" id="stressSourceButtons">
-                  <button class="stress-source-btn" id="stressSourceComposer" data-source="composer">Composer's setting</button>
-                  <button class="stress-source-btn" id="stressSourceUser" data-source="user">My choice</button>
+                <div class="module-header">
+                  <span class="module-label">Stress source</span>
+                  <span class="staged-indicator" id="stressStagedIndicator">✎</span>
                 </div>
-                <div class="staging-actions" id="stressStagingActions">
-                  <button class="revert-btn" id="stressRevertBtn">Revert</button>
-                  <button class="apply-btn" id="stressApplyBtn">Apply</button>
-                </div>
-                <div class="stress-source-hint" id="stressSourceHint">Optional: mark why you changed this</div>
-                <div class="restore-link-wrapper">
-                  <button class="restore-link" id="restoreLink" data-source="restore">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 14l-4-4 4-4"/>
-                      <path d="M5 10h11a4 4 0 0 1 0 8h-1"/>
-                    </svg>
-                    Undo
-                  </button>
+                <div class="segmented-control" id="stressSourceButtons">
+                  <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="MSR defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
+                  <button class="segment" id="stressSourceComposer" data-source="composer">Composer</button>
+                  <button class="segment" id="stressSourceUser" data-source="user">My choice</button>
                 </div>
               </div>
               
               <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
-                <div class="phrase-boundary-label">Phrase boundary</div>
-                <div class="phrase-boundary-toggle">
-                  <label class="boundary-toggle-option">
-                    <input type="radio" name="boundaryType" value="soft" id="boundaryLinked">
-                    <span class="boundary-option-text">Linked to next word</span>
-                  </label>
-                  <label class="boundary-toggle-option">
-                    <input type="radio" name="boundaryType" value="hard" id="boundarySeparated">
-                    <span class="boundary-option-text">Phrase break after</span>
-                  </label>
+                <div class="module-header">
+                  <span class="module-label">Phrase boundary</span>
+                  <span class="staged-indicator" id="boundaryStagedIndicator">✎</span>
                 </div>
-                <div class="phrase-boundary-hint" id="phraseBoundaryHint"></div>
+                <div class="segmented-control" id="boundaryButtons">
+                  <button class="segment" id="boundaryLinked" data-boundary="soft">Linked</button>
+                  <button class="segment" id="boundarySeparated" data-boundary="hard">Break after</button>
+                </div>
+              </div>
+              
+              <div class="shared-commit-footer" id="sharedCommitFooter">
+                <button class="revert-btn" id="sharedRevertBtn">Revert</button>
+                <button class="apply-btn" id="sharedApplyBtn">Apply Changes</button>
               </div>
               
               <div class="citation">
@@ -4246,22 +4158,22 @@ const SINGER_SUPPLEMENT = {
           cliticBadge: document.getElementById('cliticBadge'),
           cliticType: document.getElementById('cliticType'),
           whyCliticBanner: document.getElementById('whyCliticBanner'),
-          stressSourceModule: document.getElementById('stressSourceModule'),
-          stressSourceButtons: document.getElementById('stressSourceButtons'),
-          stressSourceHint: document.getElementById('stressSourceHint'),
-          restoreLink: document.getElementById('restoreLink'),
           citationRule: document.querySelector('.citation-rule'),
           citationRef: document.querySelector('.citation-ref'),
-          phraseBoundaryModule: document.getElementById('phraseBoundaryModule'),
-          boundaryLinked: document.getElementById('boundaryLinked'),
-          boundarySeparated: document.getElementById('boundarySeparated'),
-          phraseBoundaryHint: document.getElementById('phraseBoundaryHint'),
-          // Staging pattern elements (v5.4.0)
+          // Compact modules (v5.4.2)
+          stressSourceModule: document.getElementById('stressSourceModule'),
+          stressStagedIndicator: document.getElementById('stressStagedIndicator'),
+          stressSourceDictionary: document.getElementById('stressSourceDictionary'),
           stressSourceComposer: document.getElementById('stressSourceComposer'),
           stressSourceUser: document.getElementById('stressSourceUser'),
-          stressStagingActions: document.getElementById('stressStagingActions'),
-          stressApplyBtn: document.getElementById('stressApplyBtn'),
-          stressRevertBtn: document.getElementById('stressRevertBtn')
+          phraseBoundaryModule: document.getElementById('phraseBoundaryModule'),
+          boundaryStagedIndicator: document.getElementById('boundaryStagedIndicator'),
+          boundaryLinked: document.getElementById('boundaryLinked'),
+          boundarySeparated: document.getElementById('boundarySeparated'),
+          // Shared commit footer (v5.4.2)
+          sharedCommitFooter: document.getElementById('sharedCommitFooter'),
+          sharedApplyBtn: document.getElementById('sharedApplyBtn'),
+          sharedRevertBtn: document.getElementById('sharedRevertBtn')
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -4289,107 +4201,37 @@ const SINGER_SUPPLEMENT = {
           e.stopPropagation();
         });
         
-        // Attribution button handlers — now stages instead of committing (v5.4.0)
-        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const source = btn.dataset.source;
-            this.stageStressSource(source);
-          });
-        });
-        
-        // Apply staged stress source (v5.4.0)
-        this.elements.stressApplyBtn.addEventListener('click', () => {
-          this.commitStagedStressSource();
-        });
-        
-        // Revert staged stress source (v5.4.0)
-        this.elements.stressRevertBtn.addEventListener('click', () => {
-          this.revertStagedStressSource();
-        });
-        
-        // Undo/restore handler
-        this.elements.restoreLink.addEventListener('click', () => {
-          if (this.currentWord && this.currentWord.originalStress !== undefined) {
-            this.updateStress(this.currentWord.originalStress);
-            this.stressWasChanged = false;
-            this.attributionSelected = false;
-            this.elements.stressSourceModule.classList.remove('needs-attention');
-            this.clearAttributionSelection();
+        // Stress source segment handlers (v5.4.2)
+        [this.elements.stressSourceDictionary, this.elements.stressSourceComposer, this.elements.stressSourceUser].forEach(btn => {
+          if (btn) {
+            btn.addEventListener('click', () => {
+              this.stageStressSource(btn.dataset.source);
+            });
           }
         });
         
-        // Phrase boundary handlers
-        this.elements.boundaryLinked.addEventListener('change', () => {
-          if (this.currentWord && this.elements.boundaryLinked.checked) {
-            this.updateBoundary('soft');
+        // Phrase boundary segment handlers (v5.4.2)
+        [this.elements.boundaryLinked, this.elements.boundarySeparated].forEach(btn => {
+          if (btn) {
+            btn.addEventListener('click', () => {
+              this.stageBoundary(btn.dataset.boundary);
+            });
           }
         });
         
-        this.elements.boundarySeparated.addEventListener('change', () => {
-          if (this.currentWord && this.elements.boundarySeparated.checked) {
-            this.updateBoundary('hard');
-          }
-        });
-      },
-      
-      updateBoundary(type) {
-        if (!this.currentWord) return;
-        
-        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
-        if (!word) return;
-        
-        // Don't allow changing punctuation-forced boundaries
-        if (word.boundarySource === 'punctuation') return;
-        
-        word.rightBoundary = type;
-        word.boundarySource = 'user';
-        
-        // Update hint
-        this.elements.phraseBoundaryHint.textContent = type === 'hard' 
-          ? 'Assimilation blocked after this word'
-          : 'Voicing may cross to next word';
-        
-        // Re-render to apply changes
-        DrawerController.renderToPaper();
-        
-        // Update the popup's current word data
-        this.currentWord.rightBoundary = type;
-        this.currentWord.boundarySource = 'user';
-      },
-      
-      selectAttribution(source) {
-        if (!this.currentWord) return;
-        
-        DocumentState.updateStressSource(
-          this.currentWord.lineIndex, 
-          this.currentWord.wordIndex, 
-          source
-        );
-        
-        this.attributionSelected = true;
-        this.elements.stressSourceModule.classList.remove('needs-attention');
-        
-        // Update button states
-        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.source === source);
+        // Shared commit footer handlers (v5.4.2)
+        this.elements.sharedApplyBtn.addEventListener('click', () => {
+          this.commitAllStaged();
         });
         
-        // Update hint text
-        this.elements.stressSourceHint.textContent = source === 'user' 
-          ? 'Marked as your choice' 
-          : 'Marked as composer\'s setting';
-      },
-      
-      clearAttributionSelection() {
-        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
-          btn.classList.remove('active');
+        this.elements.sharedRevertBtn.addEventListener('click', () => {
+          this.revertAllStaged();
         });
-        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
       },
       
       // ========================================
-      // STAGING PATTERN METHODS (v5.4.0)
-      // Pencil → Ink confirmation flow
+      // STAGING PATTERN METHODS (v5.4.2)
+      // Compact Modules with Shared Commit Bar
       // ========================================
       
       // Stage a stress source selection (visual only, no commit)
@@ -4398,7 +4240,7 @@ const SINGER_SUPPLEMENT = {
         
         // Get current committed value for comparison
         const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
-        const currentCommitted = word?.stressSource || 'default';
+        const currentCommitted = word?.stressSource || 'dictionary';
         
         // If clicking the already-committed value, do nothing
         if (source === currentCommitted && !this.staged.stressSource) {
@@ -4407,7 +4249,8 @@ const SINGER_SUPPLEMENT = {
         
         // If clicking the same staged value, treat as toggle off
         if (source === this.staged.stressSource) {
-          this.revertStagedStressSource();
+          this.staged.stressSource = null;
+          this.updateAllUI();
           return;
         }
         
@@ -4416,64 +4259,100 @@ const SINGER_SUPPLEMENT = {
         this.stagedAt = Date.now();
         
         // Update visual state
-        this.updateStressSourceUI();
-        
-        // Update hint text
-        this.elements.stressSourceHint.textContent = source === 'user'
-          ? 'Will mark as your choice'
-          : 'Will mark as composer\'s setting';
+        this.updateAllUI();
       },
       
-      // Commit the staged stress source to DocumentState
-      commitStagedStressSource() {
-        if (!this.currentWord || !this.staged.stressSource) return;
+      // Stage a boundary selection (visual only, no commit)
+      stageBoundary(boundary) {
+        if (!this.currentWord) return;
         
-        const source = this.staged.stressSource;
+        // Get current committed value for comparison
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        const currentCommitted = word?.rightBoundary || 'soft';
         
-        // Actually commit to DocumentState (uses existing method)
-        DocumentState.updateStressSource(
-          this.currentWord.lineIndex,
-          this.currentWord.wordIndex,
-          source
-        );
+        // If clicking the already-committed value, do nothing
+        if (boundary === currentCommitted && !this.staged.boundary) {
+          return;
+        }
         
-        this.attributionSelected = true;
-        this.elements.stressSourceModule.classList.remove('needs-attention');
+        // If clicking the same staged value, treat as toggle off
+        if (boundary === this.staged.boundary) {
+          this.staged.boundary = null;
+          this.updateAllUI();
+          return;
+        }
         
-        // Clear staged state
-        this.staged.stressSource = null;
-        
-        // Update visual state to show committed
-        this.updateStressSourceUI();
-        
-        // Update hint text with confirmation
-        this.elements.stressSourceHint.textContent = source === 'user'
-          ? 'Marked as your choice ✓'
-          : 'Marked as composer\'s setting ✓';
-      },
-      
-      // Revert staged stress source (abandon pending change)
-      revertStagedStressSource() {
-        if (!this.staged.stressSource) return;
-        
-        // Clear staged state
-        this.staged.stressSource = null;
+        // Stage the new selection
+        this.staged.boundary = boundary;
+        this.stagedAt = Date.now();
         
         // Update visual state
-        this.updateStressSourceUI();
-        
-        // Reset hint text
-        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+        this.updateAllUI();
       },
       
-      // Update stress source button visual states
+      // Commit ALL staged changes (shared footer)
+      commitAllStaged() {
+        if (!this.currentWord) return;
+        
+        // Commit stress source if staged
+        if (this.staged.stressSource) {
+          DocumentState.updateStressSource(
+            this.currentWord.lineIndex,
+            this.currentWord.wordIndex,
+            this.staged.stressSource
+          );
+          this.attributionSelected = true;
+        }
+        
+        // Commit boundary if staged
+        if (this.staged.boundary) {
+          const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+          if (word && word.boundarySource !== 'punctuation') {
+            word.rightBoundary = this.staged.boundary;
+            word.boundarySource = 'user';
+            this.currentWord.rightBoundary = this.staged.boundary;
+            this.currentWord.boundarySource = 'user';
+          }
+        }
+        
+        // Clear staged state
+        this.clearStaged();
+        
+        // Re-render to apply changes
+        DrawerController.renderToPaper();
+        
+        // Update visual state
+        this.updateAllUI();
+      },
+      
+      // Revert ALL staged changes (shared footer)
+      revertAllStaged() {
+        this.clearStaged();
+        this.updateAllUI();
+      },
+      
+      // Update all UI elements based on current state
+      updateAllUI() {
+        this.updateStressSourceUI();
+        this.updateBoundaryUI();
+        this.updateSharedFooterUI();
+      },
+      
+      // Update stress source segment visual states
       updateStressSourceUI() {
         const word = DocumentState.lines[this.currentWord?.lineIndex]?.[this.currentWord?.wordIndex];
-        const committedSource = word?.stressSource || 'default';
+        const committedSource = word?.stressSource || 'dictionary';
         const stagedSource = this.staged.stressSource;
         
-        // Update button classes
-        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+        // Update segment classes
+        const segments = [
+          this.elements.stressSourceDictionary,
+          this.elements.stressSourceComposer,
+          this.elements.stressSourceUser
+        ];
+        
+        segments.forEach(btn => {
+          if (!btn) return;
           const btnSource = btn.dataset.source;
           
           // Remove all state classes
@@ -4482,16 +4361,66 @@ const SINGER_SUPPLEMENT = {
           if (btnSource === stagedSource) {
             // This option is staged (pending)
             btn.classList.add('staged');
-          } else if (btnSource === committedSource && committedSource !== 'default') {
+          } else if (btnSource === committedSource) {
             // This option is committed (saved)
-            btn.classList.add('committed');
+            btn.classList.add(committedSource === 'dictionary' ? 'active' : 'committed');
           }
         });
         
-        // Show/hide Apply and Revert buttons
-        const hasStaged = stagedSource !== null;
-        this.elements.stressApplyBtn.classList.toggle('visible', hasStaged);
-        this.elements.stressRevertBtn.classList.toggle('visible', hasStaged);
+        // Show/hide pencil indicator
+        if (this.elements.stressStagedIndicator) {
+          this.elements.stressStagedIndicator.classList.toggle('visible', stagedSource !== null);
+        }
+      },
+      
+      // Update boundary segment visual states
+      updateBoundaryUI() {
+        const word = DocumentState.lines[this.currentWord?.lineIndex]?.[this.currentWord?.wordIndex];
+        const committedBoundary = word?.rightBoundary || 'soft';
+        const stagedBoundary = this.staged.boundary;
+        
+        const segments = [
+          this.elements.boundaryLinked,
+          this.elements.boundarySeparated
+        ];
+        
+        segments.forEach(btn => {
+          if (!btn) return;
+          const btnBoundary = btn.dataset.boundary;
+          
+          // Remove all state classes
+          btn.classList.remove('active', 'staged', 'committed');
+          
+          if (btnBoundary === stagedBoundary) {
+            btn.classList.add('staged');
+          } else if (btnBoundary === committedBoundary) {
+            btn.classList.add('active');
+          }
+        });
+        
+        // Show/hide pencil indicator
+        if (this.elements.boundaryStagedIndicator) {
+          this.elements.boundaryStagedIndicator.classList.toggle('visible', stagedBoundary !== null);
+        }
+      },
+      
+      // Update shared commit footer visibility
+      updateSharedFooterUI() {
+        const hasChanges = this.hasStaged();
+        if (this.elements.sharedCommitFooter) {
+          this.elements.sharedCommitFooter.classList.toggle('has-changes', hasChanges);
+        }
+      },
+      
+      selectAttribution(source) {
+        // Legacy method - redirect to new staging approach
+        this.stageStressSource(source);
+      },
+      
+      clearAttributionSelection() {
+        // Legacy method - clear staged
+        this.staged.stressSource = null;
+        this.updateAllUI();
       },
       
       generateCitation(wordData) {
@@ -4616,9 +4545,8 @@ const SINGER_SUPPLEMENT = {
           this.clearStaged();
         }
         
-        // Initialize stress source UI with current staged/committed state
-        this.updateStressSourceUI();
-        this.elements.stressSourceModule.classList.remove('needs-attention');
+        // Initialize all UI with current staged/committed state (v5.4.2)
+        this.updateAllUI();
         
         // Update syllable label based on word type
         const syllableCount = wordData.syllables.length;
@@ -4691,11 +4619,10 @@ const SINGER_SUPPLEMENT = {
         this.elements.citationRule.textContent = citation.rule;
         this.elements.citationRef.textContent = '— ' + citation.ref;
         
-        // Phrase boundary control
+        // Phrase boundary control (v5.4.2 - segments instead of radio)
         const line = DocumentState.lines[wordData.lineIndex];
         const isLastWordInLine = wordData.wordIndex >= line.length - 1;
         const boundarySource = wordData.boundarySource;
-        const rightBoundary = wordData.rightBoundary;
         
         if (isLastWordInLine) {
           // Hide for last word — no boundary to control
@@ -4703,25 +4630,15 @@ const SINGER_SUPPLEMENT = {
         } else {
           this.elements.phraseBoundaryModule.style.display = 'block';
           
-          // Set radio button state
-          if (rightBoundary === 'hard') {
-            this.elements.boundarySeparated.checked = true;
-            this.elements.boundaryLinked.checked = false;
-          } else {
-            this.elements.boundaryLinked.checked = true;
-            this.elements.boundarySeparated.checked = false;
-          }
-          
           // Disable if punctuation-forced
           if (boundarySource === 'punctuation') {
             this.elements.phraseBoundaryModule.classList.add('disabled');
-            this.elements.phraseBoundaryHint.textContent = 'Punctuation creates phrase break';
           } else {
             this.elements.phraseBoundaryModule.classList.remove('disabled');
-            this.elements.phraseBoundaryHint.textContent = rightBoundary === 'hard'
-              ? 'Assimilation blocked after this word'
-              : 'Voicing may cross to next word';
           }
+          
+          // Update boundary UI (handles segment states)
+          this.updateBoundaryUI();
         }
         
         this.positionPopup(wordData.element);
