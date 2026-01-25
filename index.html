@@ -1043,15 +1043,6 @@
       cursor: pointer;
       transition: all 150ms var(--ease);
     }
-    
-    /* First and last button need outer margin for border visibility */
-    .stress-source-btn:first-child {
-      margin-left: 2px;
-    }
-    
-    .stress-source-btn:last-child {
-      margin-right: 2px;
-    }
 
     .stress-source-btn:hover {
       border-color: var(--msr-accent);
@@ -1074,21 +1065,14 @@
        ======================================== */
     
     /* Staged state: pending change, not yet committed */
+    /* Uses outline (escapes overflow clipping better than border) */
     .stress-source-btn.staged {
       background: #F3F4F6;
       color: #4B5563;
+      border-color: transparent;
+      outline: 1px dashed #9CA3AF;
+      outline-offset: -3px;
       position: relative;
-      border-color: transparent; /* Hide base border, keep spacing */
-    }
-    
-    /* Inset dashed border via ::before (Kimi's solution for overflow clipping) */
-    .stress-source-btn.staged::before {
-      content: '';
-      position: absolute;
-      inset: 2px;
-      border: 1px dashed #9CA3AF;
-      border-radius: 2px;
-      pointer-events: none;
     }
     
     .stress-source-btn.staged::after {
@@ -1099,21 +1083,14 @@
     }
     
     /* Committed state: saved, confirmed */
+    /* Uses outline for consistency */
     .stress-source-btn.committed {
       background: var(--msr-accent-light);
       color: var(--msr-text-primary);
+      border-color: transparent;
+      outline: 1px solid var(--msr-accent);
+      outline-offset: -3px;
       position: relative;
-      border-color: transparent; /* Hide base border, keep spacing */
-    }
-    
-    /* Inset solid border via ::before (consistent with staged) */
-    .stress-source-btn.committed::before {
-      content: '';
-      position: absolute;
-      inset: 2px;
-      border: 1px solid var(--msr-accent);
-      border-radius: 2px;
-      pointer-events: none;
     }
     
     .stress-source-btn.committed::after {
