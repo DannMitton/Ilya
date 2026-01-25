@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.3.2 Cross-Word Assimilation</title>
+  <title>My Sung Russian — v5.4.0 Staging Pattern</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1058,6 +1058,98 @@
       border-color: var(--msr-accent);
     }
 
+    /* ========================================
+       STAGING PATTERN (v5.4.0)
+       Pencil → Ink confirmation flow
+       ======================================== */
+    
+    /* Staged state: pending change, not yet committed */
+    .stress-source-btn.staged {
+      border: 1px dashed #9CA3AF;
+      background: #F3F4F6;
+      color: #4B5563;
+      position: relative;
+    }
+    
+    .stress-source-btn.staged::after {
+      content: '✎';
+      margin-left: 6px;
+      font-size: 0.7em;
+      color: #9CA3AF;
+    }
+    
+    /* Committed state: saved, confirmed */
+    .stress-source-btn.committed {
+      border: 1px solid var(--msr-accent);
+      background: var(--msr-accent-light);
+      color: var(--msr-text-primary);
+      position: relative;
+    }
+    
+    .stress-source-btn.committed::after {
+      content: '✓';
+      margin-left: 6px;
+      font-size: 0.8em;
+      color: var(--msr-accent);
+      font-weight: bold;
+    }
+    
+    /* Staging actions: Apply / Revert buttons */
+    .staging-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      min-height: 1.5rem; /* Reserve space to prevent layout shift */
+    }
+    
+    .apply-btn,
+    .revert-btn {
+      background: none;
+      border: none;
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: opacity 0.2s ease, background 0.15s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .apply-btn.visible,
+    .revert-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .apply-btn {
+      color: var(--msr-accent);
+      font-weight: 500;
+    }
+    
+    .apply-btn:hover {
+      background: var(--msr-accent-light);
+    }
+    
+    .apply-btn:focus {
+      outline: 2px solid var(--msr-accent);
+      outline-offset: 2px;
+    }
+    
+    .revert-btn {
+      color: var(--msr-text-secondary);
+    }
+    
+    .revert-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    .revert-btn:focus {
+      outline: 2px solid var(--msr-accent);
+      outline-offset: 2px;
+    }
+
     .restore-link {
       display: inline-flex;
       align-items: center;
@@ -1877,8 +1969,12 @@
               <div class="stress-source-module" id="stressSourceModule">
                 <div class="stress-source-label">Mark this stress as…</div>
                 <div class="stress-source-buttons" id="stressSourceButtons">
-                  <button class="stress-source-btn" data-source="composer">Composer's setting</button>
-                  <button class="stress-source-btn" data-source="user">My choice</button>
+                  <button class="stress-source-btn" id="stressSourceComposer" data-source="composer">Composer's setting</button>
+                  <button class="stress-source-btn" id="stressSourceUser" data-source="user">My choice</button>
+                </div>
+                <div class="staging-actions" id="stressStagingActions">
+                  <button class="revert-btn" id="stressRevertBtn">Revert</button>
+                  <button class="apply-btn" id="stressApplyBtn">Apply</button>
                 </div>
                 <div class="stress-source-hint" id="stressSourceHint">Optional: mark why you changed this</div>
                 <div class="restore-link-wrapper">
@@ -4100,6 +4196,34 @@ const SINGER_SUPPLEMENT = {
       stressWasChanged: false,
       attributionSelected: false,
       elements: {},
+      lastWordId: null,          // Track which word was last opened (v5.4.0)
+      
+      // Staging state for confirmation flow (v5.4.0)
+      // Tracks pending changes that require explicit "Apply" to commit
+      staged: {
+        stressSource: null,  // 'composer' | 'user' | null
+        boundary: null       // 'soft' | 'hard' | null
+      },
+      stagedAt: null,        // Timestamp for 5-minute auto-discard
+      
+      // Helper: check if any staged changes exist
+      hasStaged() {
+        return this.staged.stressSource !== null || this.staged.boundary !== null;
+      },
+      
+      // Helper: clear all staged changes
+      clearStaged() {
+        this.staged.stressSource = null;
+        this.staged.boundary = null;
+        this.stagedAt = null;
+      },
+      
+      // Helper: check if staged changes have expired (5 minutes)
+      isStagedExpired() {
+        if (!this.stagedAt) return false;
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        return (Date.now() - this.stagedAt) > FIVE_MINUTES;
+      },
       
       init() {
         this.elements = {
@@ -4124,7 +4248,13 @@ const SINGER_SUPPLEMENT = {
           phraseBoundaryModule: document.getElementById('phraseBoundaryModule'),
           boundaryLinked: document.getElementById('boundaryLinked'),
           boundarySeparated: document.getElementById('boundarySeparated'),
-          phraseBoundaryHint: document.getElementById('phraseBoundaryHint')
+          phraseBoundaryHint: document.getElementById('phraseBoundaryHint'),
+          // Staging pattern elements (v5.4.0)
+          stressSourceComposer: document.getElementById('stressSourceComposer'),
+          stressSourceUser: document.getElementById('stressSourceUser'),
+          stressStagingActions: document.getElementById('stressStagingActions'),
+          stressApplyBtn: document.getElementById('stressApplyBtn'),
+          stressRevertBtn: document.getElementById('stressRevertBtn')
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -4152,12 +4282,22 @@ const SINGER_SUPPLEMENT = {
           e.stopPropagation();
         });
         
-        // Attribution button handlers
+        // Attribution button handlers — now stages instead of committing (v5.4.0)
         this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const source = btn.dataset.source;
-            this.selectAttribution(source);
+            this.stageStressSource(source);
           });
+        });
+        
+        // Apply staged stress source (v5.4.0)
+        this.elements.stressApplyBtn.addEventListener('click', () => {
+          this.commitStagedStressSource();
+        });
+        
+        // Revert staged stress source (v5.4.0)
+        this.elements.stressRevertBtn.addEventListener('click', () => {
+          this.revertStagedStressSource();
         });
         
         // Undo/restore handler
@@ -4239,6 +4379,114 @@ const SINGER_SUPPLEMENT = {
         });
         this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
       },
+      
+      // ========================================
+      // STAGING PATTERN METHODS (v5.4.0)
+      // Pencil → Ink confirmation flow
+      // ========================================
+      
+      // Stage a stress source selection (visual only, no commit)
+      stageStressSource(source) {
+        if (!this.currentWord) return;
+        
+        // Get current committed value for comparison
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        const currentCommitted = word?.stressSource || 'default';
+        
+        // If clicking the already-committed value, do nothing
+        if (source === currentCommitted && !this.staged.stressSource) {
+          return;
+        }
+        
+        // If clicking the same staged value, treat as toggle off
+        if (source === this.staged.stressSource) {
+          this.revertStagedStressSource();
+          return;
+        }
+        
+        // Stage the new selection
+        this.staged.stressSource = source;
+        this.stagedAt = Date.now();
+        
+        // Update visual state
+        this.updateStressSourceUI();
+        
+        // Update hint text
+        this.elements.stressSourceHint.textContent = source === 'user'
+          ? 'Will mark as your choice'
+          : 'Will mark as composer\'s setting';
+      },
+      
+      // Commit the staged stress source to DocumentState
+      commitStagedStressSource() {
+        if (!this.currentWord || !this.staged.stressSource) return;
+        
+        const source = this.staged.stressSource;
+        
+        // Actually commit to DocumentState (uses existing method)
+        DocumentState.updateStressSource(
+          this.currentWord.lineIndex,
+          this.currentWord.wordIndex,
+          source
+        );
+        
+        this.attributionSelected = true;
+        this.elements.stressSourceModule.classList.remove('needs-attention');
+        
+        // Clear staged state
+        this.staged.stressSource = null;
+        
+        // Update visual state to show committed
+        this.updateStressSourceUI();
+        
+        // Update hint text with confirmation
+        this.elements.stressSourceHint.textContent = source === 'user'
+          ? 'Marked as your choice ✓'
+          : 'Marked as composer\'s setting ✓';
+      },
+      
+      // Revert staged stress source (abandon pending change)
+      revertStagedStressSource() {
+        if (!this.staged.stressSource) return;
+        
+        // Clear staged state
+        this.staged.stressSource = null;
+        
+        // Update visual state
+        this.updateStressSourceUI();
+        
+        // Reset hint text
+        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+      },
+      
+      // Update stress source button visual states
+      updateStressSourceUI() {
+        const word = DocumentState.lines[this.currentWord?.lineIndex]?.[this.currentWord?.wordIndex];
+        const committedSource = word?.stressSource || 'default';
+        const stagedSource = this.staged.stressSource;
+        
+        // Update button classes
+        this.elements.stressSourceModule.querySelectorAll('.stress-source-btn').forEach(btn => {
+          const btnSource = btn.dataset.source;
+          
+          // Remove all state classes
+          btn.classList.remove('active', 'staged', 'committed');
+          
+          if (btnSource === stagedSource) {
+            // This option is staged (pending)
+            btn.classList.add('staged');
+          } else if (btnSource === committedSource && committedSource !== 'default') {
+            // This option is committed (saved)
+            btn.classList.add('committed');
+          }
+        });
+        
+        // Show/hide Apply and Revert buttons
+        const hasStaged = stagedSource !== null;
+        this.elements.stressApplyBtn.classList.toggle('visible', hasStaged);
+        this.elements.stressRevertBtn.classList.toggle('visible', hasStaged);
+      },
+      
       generateCitation(wordData) {
         const ipa = wordData.ipa || '';
         const cyrillic = (wordData.cyrillic || '').toLowerCase();
@@ -4351,8 +4599,18 @@ const SINGER_SUPPLEMENT = {
         const currentStressIdx = wordData.syllables.findIndex(s => s.isStressed);
         this.currentWord.originalStress = currentStressIdx;
         
-        // Reset attribution UI
-        this.clearAttributionSelection();
+        // Staging pattern: handle word change and expiry (v5.4.0)
+        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
+        const isNewWord = this.lastWordId !== wordId;
+        this.lastWordId = wordId;
+        
+        // Clear staged changes if: opening a different word OR staged changes expired
+        if (isNewWord || this.isStagedExpired()) {
+          this.clearStaged();
+        }
+        
+        // Initialize stress source UI with current staged/committed state
+        this.updateStressSourceUI();
         this.elements.stressSourceModule.classList.remove('needs-attention');
         
         // Update syllable label based on word type
