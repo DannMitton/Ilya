@@ -3750,6 +3750,7 @@ const SINGER_SUPPLEMENT = {
         
         let ipa = '';
         let syllableData = [];
+        let transcriptionLog = [];  // Phase 1: Phoneme Ribbon data
         
         syllables.forEach((syl, sylIdx) => {
           // For proclitics with host-stress-aware reduction, use procliticPosition
@@ -3916,7 +3917,7 @@ const SINGER_SUPPLEMENT = {
         // This allows voicing to cross word boundaries when appropriate (Grayson p. 248-257).
         // The ipa returned here is the "underlying" form before boundary-sensitive devoicing.
         
-        return { ipa, ipaUnderlying: ipa, syllables: syllableData };
+        return { ipa, ipaUnderlying: ipa, syllables: syllableData, transcriptionLog };
       },
       
       /**
