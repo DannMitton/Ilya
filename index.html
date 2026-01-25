@@ -3882,13 +3882,40 @@ const SINGER_SUPPLEMENT = {
               // When profile adjectival='stage': velar stays HARD (not palatalized)
               const profileParams = ProfileController.getParams();
               const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
+              
+              let consonantIpa;
               if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && profileParams.adjectival === 'stage') {
                 // Force hard velar: output base consonant without palatalization
-                const base = this.inventory.consonants[char] || char;
-                sylIpa += base;
+                consonantIpa = this.inventory.consonants[char] || char;
               } else {
-                sylIpa += this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
+                consonantIpa = this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
               }
+              sylIpa += consonantIpa;
+              
+              // Populate transcriptionLog for consonant
+              const isSoft = consonantIpa.includes('ʲ') || consonantIpa === 'ɲ';
+              let softTrigger = null;
+              if (isSoft) {
+                if (isSoftFromRegressive) {
+                  softTrigger = 'regressive';
+                } else if (nextChar === 'ь') {
+                  softTrigger = 'ь';
+                } else if (['е', 'ё', 'ю', 'я', 'и'].includes(nextChar)) {
+                  softTrigger = nextChar;
+                }
+              }
+              
+              transcriptionLog.push({
+                char: char,
+                ipa: consonantIpa,
+                features: {
+                  type: 'consonant',
+                  soft: isSoft,
+                  softTrigger: softTrigger
+                },
+                syllableIndex: sylIdx,
+                position: globalIndex
+              });
             }
           }
           
