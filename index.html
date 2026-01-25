@@ -3795,83 +3795,112 @@ const SINGER_SUPPLEMENT = {
               
               if (needsGlide) sylIpa += 'j';
               
+              // Initialize vowel tracking
+              let vowelIpa = null;
+              let vowelFeatures = {
+                type: 'vowel',
+                position: position,
+                interpalatal: false,
+                afterHard: false,
+                exception: null
+              };
+              
               // Check for exception word vowel override
               const vowelOverride = this.getVowelOverride(cleanWord, globalIndex);
               if (vowelOverride !== null) {
-                sylIpa += vowelOverride;
-                continue;
+                vowelIpa = vowelOverride;
+                vowelFeatures.exception = 'word-override';
               }
               
               // Check for -ая/-яя suffix exception (Grayson p. 124)
               // These endings are ALWAYS /ɑjɑ/, never reduced
-              if (this.isAyaSuffixVowel(cleanWord, globalIndex)) {
-                sylIpa += 'ɑ';
-                continue;
+              if (vowelIpa === null && this.isAyaSuffixVowel(cleanWord, globalIndex)) {
+                vowelIpa = 'ɑ';
+                vowelFeatures.exception = 'aya-suffix';
               }
               
               // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
               // When profile adjectival='stage': и → [ɨ] after hard velar
               const profileParams = ProfileController.getParams();
               const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
-              if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'i' && profileParams.adjectival === 'stage') {
-                sylIpa += 'ɨ';
-                continue;
+              if (vowelIpa === null && velarAdj.isVelarAdjectival && velarAdj.charRole === 'i' && profileParams.adjectival === 'stage') {
+                vowelIpa = 'ɨ';
+                vowelFeatures.exception = 'velar-adjectival';
               }
               
-              // Check preceding consonant palatalization (using regressive analysis)
-              const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
-              const prevGlobalIndex = globalIndex - 1;
-              
-              // Check if preceded by a special cluster (for interpalatal)
-              const prevCluster = specialClusters.find(c => c.endIndex === prevGlobalIndex);
-              const isPrecededByPal = prevCluster ?
-                prevCluster.ipa.includes('ʲ') :
-                (prevConsonant ? 
-                  (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false);
-              
-              // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
-              // Find the next consonant after this vowel - must search in FULL WORD, not just current syllable
-              let followingConsonant = null;
-              let followingConsonantGlobalIndex = -1;
-              let charAfterFollowingC = null;
-              const wordChars = [...cleanWord];
-              for (let j = globalIndex + 1; j < wordChars.length; j++) {
-                if (wordChars[j] === 'ь' || wordChars[j] === 'ъ') continue;
-                if (this.isConsonant(wordChars[j])) {
-                  followingConsonant = wordChars[j];
-                  followingConsonantGlobalIndex = j;
-                  charAfterFollowingC = wordChars[j + 1];
-                  break;
+              // Normal vowel transcription (if no exception applied)
+              if (vowelIpa === null) {
+                // Check preceding consonant palatalization (using regressive analysis)
+                const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
+                const prevGlobalIndex = globalIndex - 1;
+                
+                // Check if preceded by a special cluster (for interpalatal)
+                const prevCluster = specialClusters.find(c => c.endIndex === prevGlobalIndex);
+                const isPrecededByPal = prevCluster ?
+                  prevCluster.ipa.includes('ʲ') :
+                  (prevConsonant ? 
+                    (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false);
+                
+                // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
+                // Find the next consonant after this vowel - must search in FULL WORD, not just current syllable
+                let followingConsonant = null;
+                let followingConsonantGlobalIndex = -1;
+                let charAfterFollowingC = null;
+                const wordChars = [...cleanWord];
+                for (let j = globalIndex + 1; j < wordChars.length; j++) {
+                  if (wordChars[j] === 'ь' || wordChars[j] === 'ъ') continue;
+                  if (this.isConsonant(wordChars[j])) {
+                    followingConsonant = wordChars[j];
+                    followingConsonantGlobalIndex = j;
+                    charAfterFollowingC = wordChars[j + 1];
+                    break;
+                  }
+                  if (this.isVowel(wordChars[j])) break; // Hit another vowel first
                 }
-                if (this.isVowel(wordChars[j])) break; // Hit another vowel first
+                
+                // Check if the following consonant is part of a special cluster
+                // If so, check the cluster's IPA for palatalization, not the Cyrillic letter
+                const followingCluster = followingConsonant ? 
+                  specialClusters.find(c => 
+                    followingConsonantGlobalIndex >= c.startIndex && 
+                    followingConsonantGlobalIndex <= c.endIndex
+                  ) : null;
+                
+                let isFollowedByPal = false;
+                if (followingConsonant === 'й') {
+                  // й always counts as palatalized
+                  isFollowedByPal = true;
+                } else if (followingCluster) {
+                  // Check the cluster's IPA output for palatalization
+                  // e.g., чн→/ʃn/ starts with /ʃ/ which is hard (no ʲ at start)
+                  // But сч→/ʃʲʃʲ/ starts with /ʃʲ/ which is soft
+                  const clusterIPA = followingCluster.ipa;
+                  // The first sound in the cluster is what follows the vowel
+                  isFollowedByPal = clusterIPA.length > 1 && clusterIPA[1] === 'ʲ';
+                } else if (followingConsonant) {
+                  // Normal case: check the Cyrillic consonant
+                  isFollowedByPal = softIndices.has(followingConsonantGlobalIndex) || 
+                    this.isPalatalized(followingConsonant, charAfterFollowingC);
+                }
+                
+                // Capture interpalatal and afterHard features
+                const prevConsonantForFeatures = this.isConsonant(prevChar) ? prevChar : null;
+                vowelFeatures.interpalatal = isPrecededByPal && isFollowedByPal;
+                vowelFeatures.afterHard = ['ж', 'ш', 'ц'].includes(prevConsonantForFeatures);
+                
+                vowelIpa = this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonantForFeatures);
               }
               
-              // Check if the following consonant is part of a special cluster
-              // If so, check the cluster's IPA for palatalization, not the Cyrillic letter
-              const followingCluster = followingConsonant ? 
-                specialClusters.find(c => 
-                  followingConsonantGlobalIndex >= c.startIndex && 
-                  followingConsonantGlobalIndex <= c.endIndex
-                ) : null;
+              sylIpa += vowelIpa;
               
-              let isFollowedByPal = false;
-              if (followingConsonant === 'й') {
-                // й always counts as palatalized
-                isFollowedByPal = true;
-              } else if (followingCluster) {
-                // Check the cluster's IPA output for palatalization
-                // e.g., чн→/ʃn/ starts with /ʃ/ which is hard (no ʲ at start)
-                // But сч→/ʃʲʃʲ/ starts with /ʃʲ/ which is soft
-                const clusterIPA = followingCluster.ipa;
-                // The first sound in the cluster is what follows the vowel
-                isFollowedByPal = clusterIPA.length > 1 && clusterIPA[1] === 'ʲ';
-              } else if (followingConsonant) {
-                // Normal case: check the Cyrillic consonant
-                isFollowedByPal = softIndices.has(followingConsonantGlobalIndex) || 
-                  this.isPalatalized(followingConsonant, charAfterFollowingC);
-              }
-              
-              sylIpa += this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonant);
+              // Populate transcriptionLog for vowel
+              transcriptionLog.push({
+                char: char,
+                ipa: vowelIpa,
+                features: vowelFeatures,
+                syllableIndex: sylIdx,
+                position: globalIndex
+              });
             } else if (this.isConsonant(char)) {
               const prevChar = chars[i - 1];
               const isStressedSyl = (position === 'stressed');
