@@ -1273,11 +1273,10 @@
       pointer-events: auto;
     }
     
-    /* Fade other rows when a blurb is active */
+    /* Fade other rows when a blurb is active - keep them readable */
     .ribbon-vertical.has-active-blurb .phoneme-row:not(.expanded) {
-      opacity: 0.4;
-      filter: blur(0.5px);
-      transition: opacity 200ms var(--ease), filter 200ms var(--ease);
+      opacity: 0.6;
+      transition: opacity 200ms var(--ease);
     }
     
     /* Expanded row stays prominent */
@@ -4770,31 +4769,31 @@ const SINGER_SUPPLEMENT = {
         // ========================================
         
         // 4.1 Standard Palatalization (Before Indicators)
-        'sʲ:soft-before-vowel:с': { blurb: 'Soft ⟨с⟩ palatalizes before front vowel. The one-letter preposition ⟨с⟩ ("with") transmits palatalization across word boundaries.', citation: '§4.2, p. 177-178', notable: false },
-        'sʲ:soft-before-softsign:с': { blurb: 'Soft ⟨с⟩ palatalizes before ⟨ь⟩.', citation: '§4.2, p. 177-178', notable: false },
-        'sʲ:soft-regressive:с': { blurb: 'Soft ⟨с⟩ palatalizes regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
-        'tʲ:soft-before-vowel:т': { blurb: '⟨т⟩ softens before front vowel.', citation: '§4.2, p. 179-180', notable: false },
+        'sʲ:soft-before-vowel:с': { blurb: '⟨с⟩ softens before a front vowel. As a preposition ("with"), it transmits palatalization across word boundaries.', citation: '§4.2, p. 177-178', notable: false },
+        'sʲ:soft-before-softsign:с': { blurb: '⟨с⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 177-178', notable: false },
+        'sʲ:soft-regressive:с': { blurb: '⟨с⟩ becomes soft when followed by a soft consonant or front vowel.', citation: '§4.2, p. 177-178; §5.2, p. 207-209', notable: true },
+        'tʲ:soft-before-vowel:т': { blurb: '⟨т⟩ softens before a front vowel.', citation: '§4.2, p. 179-180', notable: false },
         'tʲ:soft-before-softsign:т': { blurb: '⟨т⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
-        'tʲ:soft-regressive:т': { blurb: '⟨т⟩ softens regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
-        'dʲ:soft-before-vowel:д': { blurb: '⟨д⟩ softens before front vowel.', citation: '§4.2, p. 179-180', notable: false },
+        'tʲ:soft-regressive:т': { blurb: '⟨т⟩ becomes soft when followed by a soft consonant or front vowel.', citation: '§4.2, p. 179-180; §5.2, p. 207-209', notable: true },
+        'dʲ:soft-before-vowel:д': { blurb: '⟨д⟩ softens before a front vowel.', citation: '§4.2, p. 179-180', notable: false },
         'dʲ:soft-before-softsign:д': { blurb: '⟨д⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
-        'dʲ:soft-regressive:д': { blurb: '⟨д⟩ softens regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
-        'ɲ:soft-before-vowel:н': { blurb: 'Soft ⟨н⟩ is the palatal nasal /ɲ/, not /nʲ/. Grayson uses /ɲ/ to avoid unwanted /j/ glides.', citation: '§4.2, p. 186', notable: false },
-        'ɲ:soft-before-softsign:н': { blurb: 'Soft ⟨н⟩ before ⟨ь⟩ is the palatal nasal /ɲ/.', citation: '§4.2, p. 186', notable: false },
-        'ɲ:soft-regressive:н': { blurb: 'Soft ⟨н⟩ palatalizes regressively to /ɲ/.', citation: '§5.2, p. 207-209', notable: true },
-        'lʲ:soft-before-vowel:л': { blurb: '⟨л⟩ softens to /lʲ/ before front vowel.', citation: '§4.2, p. 184', notable: false },
+        'dʲ:soft-regressive:д': { blurb: '⟨д⟩ becomes soft when followed by a soft consonant or front vowel.', citation: '§4.2, p. 179-180; §5.2, p. 207-209', notable: true },
+        'ɲ:soft-before-vowel:н': { blurb: '⟨н⟩ before a front vowel becomes the palatal nasal /ɲ/, not /nʲ/. Grayson uses /ɲ/ to avoid unwanted glides.', citation: '§4.2, p. 186', notable: false },
+        'ɲ:soft-before-softsign:н': { blurb: '⟨н⟩ before ⟨ь⟩ becomes the palatal nasal /ɲ/.', citation: '§4.2, p. 186', notable: false },
+        'ɲ:soft-regressive:н': { blurb: '⟨н⟩ becomes soft /ɲ/ when followed by a soft consonant or front vowel.', citation: '§4.2, p. 186; §5.2, p. 207-209', notable: true },
+        'lʲ:soft-before-vowel:л': { blurb: '⟨л⟩ softens to /lʲ/ before a front vowel.', citation: '§4.2, p. 184', notable: false },
         'lʲ:soft-before-softsign:л': { blurb: '⟨л⟩ softens to /lʲ/ before ⟨ь⟩.', citation: '§4.2, p. 184', notable: false },
-        'rʲ:soft-before-vowel:р': { blurb: '⟨р⟩ softens before front vowel.', citation: '§4.2, p. 190', notable: false },
+        'rʲ:soft-before-vowel:р': { blurb: '⟨р⟩ softens before a front vowel.', citation: '§4.2, p. 190', notable: false },
         'rʲ:soft-before-softsign:р': { blurb: '⟨р⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 190', notable: false },
-        'bʲ:soft-before-vowel:б': { blurb: '⟨б⟩ softens before front vowel. Like hard /b/, soft /bʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
-        'pʲ:soft-before-vowel:п': { blurb: '⟨п⟩ softens before front vowel. Like hard /p/, soft /pʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
-        'vʲ:soft-before-vowel:в': { blurb: '⟨в⟩ softens before front vowel. As a preposition or prefix, ⟨в⟩ transmits palatalization across boundaries.', citation: '§4.2, p. 181-182', notable: false },
-        'fʲ:soft-before-vowel:ф': { blurb: '⟨ф⟩ softens before front vowel.', citation: '§4.2, p. 181-182', notable: false },
-        'mʲ:soft-before-vowel:м': { blurb: '⟨м⟩ softens before front vowel. As a sonorant, it is never devoiced.', citation: '§4.2, p. 185', notable: false },
-        'kʲ:soft-before-vowel:к': { blurb: '⟨к⟩ softens before front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
-        'ɡʲ:soft-before-vowel:г': { blurb: '⟨г⟩ softens before front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
-        'xʲ:soft-before-vowel:х': { blurb: '⟨х⟩ softens before front vowel. Russian /xʲ/ is between German ich-laut and ach-laut.', citation: '§4.2, p. 189', notable: false },
-        'zʲ:soft-before-vowel:з': { blurb: '⟨з⟩ softens before front vowel. Prepositions ending in ⟨з⟩ transmit palatalization across boundaries.', citation: '§4.2, p. 177-178', notable: false },
+        'bʲ:soft-before-vowel:б': { blurb: '⟨б⟩ softens before a front vowel. Like hard /b/, soft /bʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
+        'pʲ:soft-before-vowel:п': { blurb: '⟨п⟩ softens before a front vowel. Like hard /p/, soft /pʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
+        'vʲ:soft-before-vowel:в': { blurb: '⟨в⟩ softens before a front vowel. As a preposition or prefix, it transmits palatalization across boundaries.', citation: '§4.2, p. 181-182', notable: false },
+        'fʲ:soft-before-vowel:ф': { blurb: '⟨ф⟩ softens before a front vowel.', citation: '§4.2, p. 181-182', notable: false },
+        'mʲ:soft-before-vowel:м': { blurb: '⟨м⟩ softens before a front vowel. As a sonorant, it is never devoiced.', citation: '§4.2, p. 185', notable: false },
+        'kʲ:soft-before-vowel:к': { blurb: '⟨к⟩ softens before a front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
+        'ɡʲ:soft-before-vowel:г': { blurb: '⟨г⟩ softens before a front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
+        'xʲ:soft-before-vowel:х': { blurb: '⟨х⟩ softens before a front vowel. Russian /xʲ/ is between German ich-laut and ach-laut.', citation: '§4.2, p. 189', notable: false },
+        'zʲ:soft-before-vowel:з': { blurb: '⟨з⟩ softens before a front vowel. Prepositions ending in ⟨з⟩ transmit palatalization across boundaries.', citation: '§4.2, p. 177-178', notable: false },
         
         // 4.2 Intrinsically Soft Consonants
         'tʃ:hard-default:ч': { blurb: '⟨ч⟩ is intrinsically palatalized — always soft, regardless of what follows.', citation: '§4.2, p. 175-176', notable: false },
