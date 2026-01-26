@@ -1028,26 +1028,17 @@
       background: rgba(122, 158, 126, 0.02);
     }
     
-    /* Full-word label with current syllable highlighted */
+    /* Full-word label with current syllable highlighted via opacity */
     .syllable-label-word {
       font-size: 0.8rem;
-      color: var(--ink-tertiary);
+      color: rgba(26, 22, 18, 0.35);  /* Desaturated context */
       font-family: var(--font-serif);
       margin-bottom: 0.5rem;
       line-height: 1.4;
     }
     
     .syllable-label-current {
-      font-weight: 500;
-      color: var(--ink-primary);
-      background: rgba(122, 158, 126, 0.12);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    
-    /* Remove tint when current IS stressed (border is sufficient) */
-    .syllable-group.stressed .syllable-label-current {
-      background: transparent;
+      color: var(--ink-primary);  /* Full opacity spotlight */
     }
     
     .phoneme-block {
