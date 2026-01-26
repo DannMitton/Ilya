@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.4.4 Dictionary Expansion</title>
+  <title>My Sung Russian — v5.5.0 Content First Redesign</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -969,6 +969,7 @@
       color: var(--ink-secondary);
     }
 
+    /* LEGACY - why-panel (kept for reference, replaced by refine-panel in v5.5) */
     .why-panel {
       max-height: 0;
       overflow: hidden;
@@ -990,7 +991,63 @@
     }
 
     /* ========================================
-       PHONEME RIBBON (Phase C)
+       REFINE ANALYSIS PANEL (v5.5)
+       Content First, Control Second redesign
+       ======================================== */
+    
+    .refine-analysis-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 16px;
+      background: transparent;
+      border: 1px solid var(--msr-accent);
+      border-radius: 6px;
+      color: var(--msr-accent);
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
+    }
+
+    .refine-analysis-toggle:hover {
+      background: var(--msr-accent-light);
+    }
+
+    .disclosure-chevron {
+      font-size: 0.75rem;
+      transition: transform 200ms var(--ease);
+    }
+
+    .refine-analysis-toggle.expanded .disclosure-chevron {
+      transform: rotate(180deg);
+    }
+
+    .refine-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms var(--ease);
+    }
+
+    .refine-panel.expanded {
+      grid-template-rows: 1fr;
+    }
+
+    .refine-panel-inner {
+      overflow: hidden;
+      min-height: 0;
+      padding-top: 0;
+    }
+
+    .refine-panel.expanded .refine-panel-inner {
+      padding-top: 1rem;
+    }
+
+    /* ========================================
+       PHONEME RIBBON (v5.5 - Vertical Layout)
        Educational "Why This Transcription?" feature
        ======================================== */
     
@@ -998,6 +1055,146 @@
       margin-top: 0.75rem;
       padding: 0 8px;
     }
+    
+    /* ========================================
+       VERTICAL RIBBON (v5.5)
+       Replaces horizontal ribbon-grid
+       ======================================== */
+    
+    .ribbon-vertical {
+      --ribbon-inline-padding: 12px;
+      --syllable-gap: 16px;
+      --stressed-tint-opacity: 0.08;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 0;
+    }
+    
+    /* Phoneme row - minimum 44px for tap targets */
+    .phoneme-row {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 var(--ribbon-inline-padding);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 150ms var(--ease);
+    }
+    
+    .phoneme-row:hover {
+      background: rgba(122, 158, 126, 0.06);
+    }
+    
+    .phoneme-row:focus {
+      outline: 2px solid var(--msr-accent);
+      outline-offset: 1px;
+    }
+    
+    /* Metrical spacing between syllables */
+    .phoneme-row[data-syllable-start="true"] {
+      margin-top: var(--syllable-gap);
+    }
+    
+    .phoneme-row[data-syllable-start="true"]:first-child,
+    .stressed-syllable-region:first-child {
+      margin-top: 0;
+    }
+    
+    /* Stressed syllable region - subtle tint with soft radius */
+    .stressed-syllable-region {
+      background: rgba(122, 158, 126, var(--stressed-tint-opacity));
+      border-radius: 6px;
+      padding: 6px 0;
+      margin: var(--syllable-gap) calc(var(--ribbon-inline-padding) * -0.5) 0;
+    }
+    
+    .stressed-syllable-region:first-child {
+      margin-top: 0;
+    }
+    
+    .stressed-syllable-region .phoneme-row {
+      padding: 0 calc(var(--ribbon-inline-padding) + 6px);
+    }
+    
+    .stressed-syllable-region .phoneme-row[data-syllable-start="true"] {
+      margin-top: 0;
+    }
+    
+    /* Phoneme row content wrapper for grid animation */
+    .phoneme-row-content {
+      display: grid;
+      grid-template-rows: auto 0fr;
+      width: 100%;
+      transition: grid-template-rows 200ms var(--ease);
+    }
+    
+    .phoneme-row.expanded .phoneme-row-content {
+      grid-template-rows: auto 1fr;
+    }
+    
+    /* Typography hierarchy */
+    .phoneme-mapping {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .phoneme-cyr {
+      font-family: 'Noto Serif', serif;
+      color: var(--msr-text-muted);
+      width: 20px;
+      font-size: 0.95rem;
+    }
+    
+    .phoneme-arrow {
+      color: var(--msr-text-caption);
+      font-size: 0.75rem;
+      opacity: 0.5;
+    }
+    
+    .phoneme-ipa {
+      font-family: var(--font-ipa);
+      color: var(--msr-text-primary);
+      font-size: 0.95rem;
+    }
+    
+    /* Blurb content (accordion) */
+    .phoneme-blurb {
+      overflow: hidden;
+      min-height: 0;
+    }
+    
+    .phoneme-blurb-inner {
+      padding: 8px 0 4px 28px;
+      border-top: 1px solid rgba(122, 158, 126, 0.15);
+      margin-top: 6px;
+    }
+    
+    .blurb-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--msr-text-secondary);
+      margin-bottom: 4px;
+    }
+    
+    .blurb-citation {
+      font-size: 0.75rem;
+      font-style: italic;
+      color: var(--msr-text-caption);
+    }
+    
+    /* Mobile: scrollable ribbon if too tall */
+    @media (max-width: 768px) {
+      .ribbon-vertical {
+        max-height: 50vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+    
+    /* ========================================
+       LEGACY HORIZONTAL RIBBON (kept for reference)
+       ======================================== */
     
     .ribbon-header {
       font-size: 0.7rem;
@@ -1983,17 +2180,12 @@
       <div class="popup-arrow"></div>
       
       <div class="popup-body">
+        <!-- Clitic badge (conditionally shown) -->
         <div class="clitic-badge" id="cliticBadge" style="display: none;">
           <span id="cliticType">Proclitic</span> — attaches phonologically
         </div>
         
-        <div class="syllable-section">
-          <div class="syllable-label" id="syllableLabel">Click to reassign stress</div>
-          <div class="syllable-sandwich">
-            <div class="syllable-display" id="syllableDisplay"></div>
-          </div>
-        </div>
-        
+        <!-- TIER 1: THE ANSWER (always visible) -->
         <div class="popup-cyrillic" id="popupCyrillic">—</div>
         
         <div class="gloss-section">
@@ -2007,55 +2199,60 @@
           ></span>
         </div>
         
-        <div class="info-row">
-          <button class="info-toggle" id="whyToggle" aria-label="Why this transcription?">
-            <span class="info-icon">i</span>
-          </button>
+        <!-- Phoneme Ribbon (elevated, vertical layout) -->
+        <div class="phoneme-ribbon" id="phonemeRibbon">
+          <div class="ribbon-vertical" id="ribbonVertical">
+            <!-- Populated by JavaScript -->
+          </div>
         </div>
         
-        <div class="why-panel" id="whyPanel">
-          <div class="why-content">
-            <div class="why-content-inner" id="whyContent">
-              <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
-              <div class="stress-source-module" id="stressSourceModule">
-                <div class="module-header">
-                  <span class="module-label">Stress source</span>
-                  <span class="staged-indicator" id="stressStagedIndicator">✎</span>
-                </div>
-                <div class="segmented-control" id="stressSourceButtons">
-                  <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="MSR defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
-                  <button class="segment" id="stressSourceComposer" data-source="composer">Composer</button>
-                  <button class="segment" id="stressSourceUser" data-source="user">My choice</button>
-                </div>
+        <!-- TIER 2: THE CONTROLS (collapsed by default) -->
+        <button class="refine-analysis-toggle" id="refineAnalysisToggle">
+          Refine Analysis <span class="disclosure-chevron">▼</span>
+        </button>
+        
+        <div class="refine-panel" id="refinePanel">
+          <div class="refine-panel-inner">
+            <!-- Clitic banner (if applicable) -->
+            <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
+            
+            <!-- Stress reassignment -->
+            <div class="syllable-section">
+              <div class="syllable-label" id="syllableLabel">Click to reassign stress</div>
+              <div class="syllable-sandwich">
+                <div class="syllable-display" id="syllableDisplay"></div>
               </div>
-              
-              <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
-                <div class="module-header">
-                  <span class="module-label">Phrase boundary</span>
-                  <span class="staged-indicator" id="boundaryStagedIndicator">✎</span>
-                </div>
-                <div class="segmented-control" id="boundaryButtons">
-                  <button class="segment" id="boundaryLinked" data-boundary="soft">Linked</button>
-                  <button class="segment" id="boundarySeparated" data-boundary="hard">Break after</button>
-                </div>
+            </div>
+            
+            <!-- Stress source module -->
+            <div class="stress-source-module" id="stressSourceModule">
+              <div class="module-header">
+                <span class="module-label">Stress source</span>
+                <span class="staged-indicator" id="stressStagedIndicator">✎</span>
               </div>
-              
-              <div class="shared-commit-footer" id="sharedCommitFooter">
-                <button class="revert-btn" id="sharedRevertBtn">Revert</button>
-                <button class="apply-btn" id="sharedApplyBtn">Apply Changes</button>
+              <div class="segmented-control" id="stressSourceButtons">
+                <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="MSR defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
+                <button class="segment" id="stressSourceComposer" data-source="composer">Composer</button>
+                <button class="segment" id="stressSourceUser" data-source="user">My choice</button>
               </div>
-              
-              <div class="citation">
-                <span class="citation-rule">Unstressed /о/ reduces to [ɑ] in immediate pretonic position</span>
-                <span class="citation-ref">— Grayson §3.2</span>
+            </div>
+            
+            <!-- Phrase boundary module -->
+            <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
+              <div class="module-header">
+                <span class="module-label">Phrase boundary</span>
+                <span class="staged-indicator" id="boundaryStagedIndicator">✎</span>
               </div>
-              
-              <div class="phoneme-ribbon" id="phonemeRibbon">
-                <div class="ribbon-header">How each letter becomes IPA</div>
-                <div class="ribbon-grid" id="ribbonGrid">
-                  <!-- Populated by JavaScript -->
-                </div>
+              <div class="segmented-control" id="boundaryButtons">
+                <button class="segment" id="boundaryLinked" data-boundary="soft">Linked</button>
+                <button class="segment" id="boundarySeparated" data-boundary="hard">Break after</button>
               </div>
+            </div>
+            
+            <!-- Commit footer -->
+            <div class="shared-commit-footer" id="sharedCommitFooter">
+              <button class="revert-btn" id="sharedRevertBtn">Revert</button>
+              <button class="apply-btn" id="sharedApplyBtn">Apply Changes</button>
             </div>
           </div>
         </div>
@@ -4666,13 +4863,13 @@ const SINGER_SUPPLEMENT = {
           syllableLabel: document.getElementById('syllableLabel'),
           cyrillic: document.getElementById('popupCyrillic'),
           glossInline: document.getElementById('glossInline'),
-          whyToggle: document.getElementById('whyToggle'),
-          whyPanel: document.getElementById('whyPanel'),
+          // REMOVED IN v5.5 REDESIGN: whyToggle, whyPanel, citationRule, citationRef
+          // Refine Analysis disclosure (v5.5)
+          refineToggle: document.getElementById('refineAnalysisToggle'),
+          refinePanel: document.getElementById('refinePanel'),
           cliticBadge: document.getElementById('cliticBadge'),
           cliticType: document.getElementById('cliticType'),
           whyCliticBanner: document.getElementById('whyCliticBanner'),
-          citationRule: document.querySelector('.citation-rule'),
-          citationRef: document.querySelector('.citation-ref'),
           // Compact modules (v5.4.2)
           stressSourceModule: document.getElementById('stressSourceModule'),
           stressStagedIndicator: document.getElementById('stressStagedIndicator'),
@@ -4687,8 +4884,9 @@ const SINGER_SUPPLEMENT = {
           sharedCommitFooter: document.getElementById('sharedCommitFooter'),
           sharedApplyBtn: document.getElementById('sharedApplyBtn'),
           sharedRevertBtn: document.getElementById('sharedRevertBtn'),
-          // Phoneme Ribbon (Phase C)
-          ribbonGrid: document.getElementById('ribbonGrid')
+          // Phoneme Ribbon (v5.5 vertical layout)
+          ribbonVertical: document.getElementById('ribbonVertical'),
+          ribbonGrid: document.getElementById('ribbonVertical') // Alias for backward compatibility
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -4699,9 +4897,12 @@ const SINGER_SUPPLEMENT = {
           }
         });
         
-        this.elements.whyToggle.addEventListener('click', (e) => {
+        // REMOVED IN v5.5 REDESIGN: whyToggle click handler
+        // Refine Analysis disclosure toggle (v5.5)
+        this.elements.refineToggle.addEventListener('click', (e) => {
           e.stopPropagation();
-          this.elements.whyPanel.classList.toggle('expanded');
+          this.elements.refineToggle.classList.toggle('expanded');
+          this.elements.refinePanel.classList.toggle('expanded');
         });
         
         this.elements.glossInline.addEventListener('blur', () => {
@@ -5195,6 +5396,10 @@ const SINGER_SUPPLEMENT = {
         this.stressWasChanged = false;
         this.attributionSelected = false;
         
+        // Collapse refine panel on every open (v5.5 - must be early to avoid flash)
+        this.elements.refineToggle?.classList.remove('expanded');
+        this.elements.refinePanel?.classList.remove('expanded');
+        
         // Store original stress for undo functionality
         const currentStressIdx = wordData.syllables.findIndex(s => s.isStressed);
         this.currentWord.originalStress = currentStressIdx;
@@ -5278,12 +5483,9 @@ const SINGER_SUPPLEMENT = {
                 this.elements.whyCliticBanner.style.display = 'none';
             }
 
-        // Generate dynamic Grayson citation
-        const citation = this.generateCitation(wordData);
-        this.elements.citationRule.textContent = citation.rule;
-        this.elements.citationRef.textContent = '— ' + citation.ref;
+        // REMOVED IN v5.5 REDESIGN: word-level citation (now using per-phoneme blurbs)
         
-        // Render Phoneme Ribbon (Phase C)
+        // Render Phoneme Ribbon (v5.5 vertical layout)
         this.renderRibbon(wordData);
         
         // Phrase boundary control (v5.4.2 - segments instead of radio)
@@ -5328,7 +5530,9 @@ const SINGER_SUPPLEMENT = {
         this.attributionSelected = false;
         this.currentWord = null;
         this.elements.overlay.classList.remove('active');
-        this.elements.whyPanel.classList.remove('expanded');
+        // UPDATED IN v5.5: refinePanel instead of whyPanel
+        this.elements.refineToggle?.classList.remove('expanded');
+        this.elements.refinePanel?.classList.remove('expanded');
         this.elements.stressSourceModule.classList.remove('needs-attention');
         this.clearAttributionSelection();
       },
