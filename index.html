@@ -923,7 +923,7 @@
       font-family: 'Noto Serif', serif;
       font-size: 1rem;
       font-style: italic;
-      color: var(--msr-text-secondary);
+      color: var(--msr-accent);
       padding: 0.5rem 1rem;
       border-radius: 6px;
       display: inline-block;
@@ -946,10 +946,11 @@
       box-shadow: 0 0 0 2px var(--msr-accent-light);
     }
 
-    /* When gloss has content, make it look settled */
+    /* When gloss has content, make it look settled but keep sage */
     .gloss-inline:not(:empty) {
       background: transparent;
       border-color: transparent;
+      color: var(--msr-accent);
     }
 
     .gloss-inline:not(:empty):hover {
@@ -964,6 +965,11 @@
       font-style: italic;
     }
 
+    /* ========================================
+       LEGACY: Info Button (removed in v5.5)
+       Replaced by "Refine Analysis" disclosure
+       ======================================== */
+    /*
     .info-row {
       display: flex;
       justify-content: flex-end;
@@ -994,8 +1000,13 @@
       font-style: italic;
       color: var(--ink-secondary);
     }
+    */
 
-    /* LEGACY - why-panel (kept for reference, replaced by refine-panel in v5.5) */
+    /* ========================================
+       LEGACY: Why Panel (removed in v5.5)
+       Replaced by refine-panel
+       ======================================== */
+    /*
     .why-panel {
       max-height: 0;
       overflow: hidden;
@@ -1015,6 +1026,7 @@
     .why-content-inner {
       font-size: 0.85rem;
     }
+    */
 
     /* ========================================
        REFINE ANALYSIS PANEL (v5.5)
@@ -1070,6 +1082,9 @@
 
     .refine-panel.expanded .refine-panel-inner {
       padding-top: 1rem;
+      max-height: 40vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* ========================================
@@ -1091,6 +1106,7 @@
       --ribbon-inline-padding: 12px;
       --syllable-gap: 16px;
       --stressed-tint-opacity: 0.08;
+      position: relative;
       display: flex;
       flex-direction: column;
       padding: 8px 0;
@@ -1098,6 +1114,7 @@
     
     /* Phoneme row - minimum 44px for tap targets */
     .phoneme-row {
+      position: relative;
       display: flex;
       align-items: center;
       min-height: 44px;
@@ -1163,6 +1180,15 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex: 1;
+      min-height: 32px;
+    }
+    
+    /* Ensure clicks pass through to parent row */
+    .phoneme-cyr,
+    .phoneme-arrow,
+    .phoneme-ipa {
+      pointer-events: none;
     }
     
     .phoneme-cyr {
@@ -1219,9 +1245,100 @@
     }
     
     /* ========================================
-       LEGACY HORIZONTAL RIBBON (kept for reference)
+       FLOATING BLURB OVERLAY (v5.5)
+       "Inline Overlay" pattern per Kimi's design
+       Scholarly annotation without layout shift
        ======================================== */
     
+    /* Backdrop: white fade behind active blurb */
+    .ribbon-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms var(--ease);
+      z-index: 5;
+      border-radius: 6px;
+    }
+    
+    .ribbon-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    /* Fade other rows when a blurb is active */
+    .ribbon-vertical.has-active-blurb .phoneme-row:not(.expanded) {
+      opacity: 0.4;
+      filter: blur(0.5px);
+      transition: opacity 200ms var(--ease), filter 200ms var(--ease);
+    }
+    
+    /* Expanded row stays prominent */
+    .ribbon-vertical.has-active-blurb .phoneme-row.expanded {
+      z-index: 6;
+      opacity: 1;
+      filter: none;
+    }
+    
+    /* The floating blurb overlay */
+    .phoneme-blurb-overlay {
+      position: absolute;
+      top: 100%;
+      left: -6px;
+      right: -6px;
+      background: #FAFAF8;
+      border: 1px solid rgba(122, 158, 126, 0.25);
+      border-left: 3px solid var(--msr-accent);
+      border-radius: 0 8px 8px 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06),
+                  0 2px 8px rgba(122, 158, 126, 0.1);
+      padding: 16px;
+      z-index: 10;
+      max-height: 200px;
+      overflow-y: auto;
+      
+      /* Animation: scale + translate entrance */
+      opacity: 0;
+      transform: scale(0.98) translateY(4px);
+      transition: opacity 200ms var(--ease),
+                  transform 200ms var(--ease);
+    }
+    
+    /* When row is expanded, show overlay */
+    .phoneme-row.expanded .phoneme-blurb-overlay {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    
+    /* Expand upward variant (for rows in bottom half) */
+    .phoneme-blurb-overlay.expand-upward {
+      top: auto;
+      bottom: 100%;
+      border-radius: 8px 8px 8px 0;
+    }
+    
+    /* Blurb content styling within overlay */
+    .phoneme-blurb-overlay .blurb-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--msr-text-primary);
+      margin-bottom: 8px;
+    }
+    
+    .phoneme-blurb-overlay .blurb-citation {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--msr-accent);
+    }
+    
+       LEGACY HORIZONTAL RIBBON (removed in v5.5)
+       Replaced by vertical ribbon layout
+       ======================================== */
+    /*
     .ribbon-header {
       font-size: 0.7rem;
       color: var(--ink-secondary);
@@ -1251,17 +1368,16 @@
       background: rgba(122, 158, 126, 0.02);
     }
     
-    /* Full-word label with current syllable highlighted via opacity */
     .syllable-label-word {
       font-size: 0.8rem;
-      color: rgba(26, 22, 18, 0.35);  /* Desaturated context */
+      color: rgba(26, 22, 18, 0.35);
       font-family: var(--font-serif);
       margin-bottom: 0.5rem;
       line-height: 1.4;
     }
     
     .syllable-label-current {
-      color: var(--ink-primary);  /* Full opacity spotlight */
+      color: var(--ink-primary);
     }
     
     .phoneme-block {
@@ -1291,27 +1407,8 @@
       grid-template-rows: auto 1fr;
     }
     
-    .phoneme-mapping {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.9rem;
-    }
-    
-    .phoneme-char {
-      font-family: var(--font-serif);
-      color: var(--ink-primary);
-    }
-    
-    .phoneme-arrow {
-      color: var(--ink-tertiary);
-      font-size: 0.75rem;
-    }
-    
-    .phoneme-ipa {
-      font-family: var(--font-ipa);
-      color: var(--ink-secondary);
-    }
+    -- Legacy .phoneme-mapping, .phoneme-char, .phoneme-arrow, .phoneme-ipa --
+    -- Now defined in vertical ribbon section above --
     
     .blurb-content {
       overflow: hidden;
@@ -1325,15 +1422,9 @@
       color: var(--ink-secondary);
     }
     
-    .blurb-text {
-      margin-bottom: 0.25rem;
-    }
-    
-    .blurb-citation {
-      font-size: 0.7rem;
-      color: var(--ink-tertiary);
-      font-style: italic;
-    }
+    -- Legacy .blurb-text, .blurb-citation --
+    -- Now defined in vertical ribbon section above --
+    */
 
     /* ========================================
        COMPACT MODULES (v5.4.2)
@@ -4645,6 +4736,8 @@ const SINGER_SUPPLEMENT = {
         'ɪ:unstressed:э': { blurb: 'Unstressed ⟨э⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
         'ɪ:pretonic:е': { blurb: 'Pretonic ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
         'ɪ:pretonic:я': { blurb: 'Pretonic ⟨я⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:remote:е': { blurb: 'Remote unstressed ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:remote:я': { blurb: 'Remote unstressed ⟨я⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
         'i:unstressed:и': { blurb: 'Unstressed ⟨и⟩ stays /i/ — never reduces in sung Russian.', citation: '§3.2, p. 96, 101', notable: true },
         
         // 2.4 After Always-Hard Consonants (ж/ш/ц)
@@ -5366,24 +5459,24 @@ const SINGER_SUPPLEMENT = {
             const isFirstInSyllable = idx === 0;
             const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
             
+            // PHASE 1 MOCKUP: First row in first syllable shows expanded overlay
+            const isFirstRow = isFirstSyllable && idx === 0;
+            const mockupExpanded = isFirstRow ? ' expanded' : '';
+            
             html += `
-              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}" 
+              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}${mockupExpanded}" 
                    tabindex="0"
                    role="button"
-                   aria-expanded="false"
+                   aria-expanded="${isFirstRow ? 'true' : 'false'}"
                    aria-label="${entry.char} becomes ${entry.ipa || 'nothing'}">
-                <div class="phoneme-row-content">
-                  <div class="phoneme-mapping">
-                    <span class="phoneme-cyr">${entry.char}</span>
-                    <span class="phoneme-arrow">›</span>
-                    <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
-                  </div>
-                  <div class="phoneme-blurb">
-                    <div class="phoneme-blurb-inner">
-                      <div class="blurb-text">${blurb.blurb}</div>
-                      ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
-                    </div>
-                  </div>
+                <div class="phoneme-mapping">
+                  <span class="phoneme-cyr">${entry.char}</span>
+                  <span class="phoneme-arrow">›</span>
+                  <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
+                </div>
+                <div class="phoneme-blurb-overlay">
+                  <div class="blurb-text">${blurb.blurb}</div>
+                  ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
                 </div>
               </div>
             `;
@@ -5396,11 +5489,30 @@ const SINGER_SUPPLEMENT = {
           isFirstSyllable = false;
         });
         
+        // Add backdrop at end (positioned via CSS)
+        html += `<div class="ribbon-backdrop${' active'}"></div>`;
+        
+        // PHASE 1: Add class for mockup state
+        container.classList.add('has-active-blurb');
+        
         container.innerHTML = html;
         
-        // Event delegation for single-accordion behaviour (v5.5)
+        // Event delegation for floating overlay (v5.5)
         container.addEventListener('click', (e) => {
           const row = e.target.closest('.phoneme-row');
+          const backdrop = container.querySelector('.ribbon-backdrop');
+          
+          // If clicking backdrop, close all
+          if (e.target.classList.contains('ribbon-backdrop')) {
+            container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+              r.classList.remove('expanded');
+              r.setAttribute('aria-expanded', 'false');
+            });
+            container.classList.remove('has-active-blurb');
+            backdrop?.classList.remove('active');
+            return;
+          }
+          
           if (!row) return;
           
           e.stopPropagation();
@@ -5418,9 +5530,13 @@ const SINGER_SUPPLEMENT = {
           if (wasExpanded) {
             row.classList.remove('expanded');
             row.setAttribute('aria-expanded', 'false');
+            container.classList.remove('has-active-blurb');
+            backdrop?.classList.remove('active');
           } else {
             row.classList.add('expanded');
             row.setAttribute('aria-expanded', 'true');
+            container.classList.add('has-active-blurb');
+            backdrop?.classList.add('active');
           }
         });
         
