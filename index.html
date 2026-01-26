@@ -896,6 +896,15 @@
       outline: none;
     }
 
+    /* IPA display at top of popup (v5.5) */
+    .popup-ipa {
+      font-family: var(--font-ipa);
+      font-size: 1.1rem;
+      color: var(--msr-text-secondary);
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
     .popup-cyrillic {
       font-family: 'Noto Serif', serif;
       font-size: 1.35rem;
@@ -915,27 +924,44 @@
       font-size: 1rem;
       font-style: italic;
       color: var(--msr-text-secondary);
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       display: inline-block;
-      min-width: 100px;
-      transition: background 150ms var(--ease);
+      min-width: 140px;
+      background: var(--msr-accent-light);
+      border: 1px dashed rgba(122, 158, 126, 0.3);
+      transition: all 150ms var(--ease);
     }
 
     .gloss-inline:hover {
-      background: var(--msr-accent-light);
+      background: rgba(122, 158, 126, 0.15);
+      border-color: var(--msr-accent);
     }
 
     .gloss-inline:focus {
       outline: none;
+      background: rgba(122, 158, 126, 0.15);
+      border-style: solid;
+      border-color: var(--msr-accent);
+      box-shadow: 0 0 0 2px var(--msr-accent-light);
+    }
+
+    /* When gloss has content, make it look settled */
+    .gloss-inline:not(:empty) {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .gloss-inline:not(:empty):hover {
       background: var(--msr-accent-light);
-      box-shadow: 0 0 0 2px var(--msr-accent);
+      border-color: transparent;
     }
 
     .gloss-inline:empty::before {
       content: attr(data-placeholder);
-      color: var(--ink-secondary);
-      opacity: 0.5;
+      color: var(--msr-accent);
+      opacity: 0.7;
+      font-style: italic;
     }
 
     .info-row {
@@ -2186,6 +2212,7 @@
         </div>
         
         <!-- TIER 1: THE ANSWER (always visible) -->
+        <div class="popup-ipa" id="popupIPA">/—/</div>
         <div class="popup-cyrillic" id="popupCyrillic">—</div>
         
         <div class="gloss-section">
@@ -2195,7 +2222,7 @@
             contenteditable="true"
             role="textbox"
             aria-label="Translation"
-            data-placeholder="tap to add translation"
+            data-placeholder="add translation"
           ></span>
         </div>
         
@@ -4862,6 +4889,7 @@ const SINGER_SUPPLEMENT = {
           syllableDisplay: document.getElementById('syllableDisplay'),
           syllableLabel: document.getElementById('syllableLabel'),
           cyrillic: document.getElementById('popupCyrillic'),
+          ipa: document.getElementById('popupIPA'),
           glossInline: document.getElementById('glossInline'),
           // REMOVED IN v5.5 REDESIGN: whyToggle, whyPanel, citationRule, citationRef
           // Refine Analysis disclosure (v5.5)
@@ -5465,7 +5493,14 @@ const SINGER_SUPPLEMENT = {
           });
         });
         
+        // Populate IPA and Cyrillic displays (v5.5)
         const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
+        const syllabifiedIPA = wordData.syllables.map((s, idx) => {
+          const stressedIdx = wordData.syllables.findIndex(syl => syl.isStressed);
+          return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
+        }).join(' ');
+        
+        this.elements.ipa.textContent = '/' + syllabifiedIPA + '/';
         this.elements.cyrillic.textContent = syllabifiedCyrillic;
         this.elements.glossInline.textContent = wordData.gloss || '';
         
