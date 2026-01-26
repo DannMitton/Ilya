@@ -1110,6 +1110,8 @@
       display: flex;
       flex-direction: column;
       padding: 8px 0;
+      /* Allow overlays to extend beyond container */
+      overflow: visible;
     }
     
     /* Phoneme row - minimum 44px for tap targets */
@@ -1235,7 +1237,7 @@
       color: var(--msr-text-caption);
     }
     
-    /* Mobile: scrollable ribbon if too tall */
+    /* Mobile: ribbon scroll temporarily disabled for overlay support
     @media (max-width: 768px) {
       .ribbon-vertical {
         max-height: 50vh;
@@ -1243,6 +1245,7 @@
         -webkit-overflow-scrolling: touch;
       }
     }
+    */
     
     /* ========================================
        FLOATING BLURB OVERLAY (v5.5)
@@ -1284,25 +1287,32 @@
       filter: none;
     }
     
+    /* Expanded row gets subtle highlight */
+    .phoneme-row.expanded {
+      background: rgba(122, 158, 126, 0.1);
+      border-radius: 4px;
+    }
+    
     /* The floating blurb overlay */
     .phoneme-blurb-overlay {
       position: absolute;
-      top: 100%;
+      top: calc(100% + 4px);
       left: -6px;
       right: -6px;
       background: #FAFAF8;
-      border: 1px solid rgba(122, 158, 126, 0.25);
-      border-left: 3px solid var(--msr-accent);
-      border-radius: 0 8px 8px 8px;
+      border: 2px solid var(--msr-accent);
+      border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06),
                   0 2px 8px rgba(122, 158, 126, 0.1);
       padding: 16px;
       z-index: 10;
+      min-height: 60px;
       max-height: 200px;
       overflow-y: auto;
       
-      /* Animation: scale + translate entrance */
+      /* Hidden by default */
       opacity: 0;
+      pointer-events: none;
       transform: scale(0.98) translateY(4px);
       transition: opacity 200ms var(--ease),
                   transform 200ms var(--ease);
@@ -1311,6 +1321,7 @@
     /* When row is expanded, show overlay */
     .phoneme-row.expanded .phoneme-blurb-overlay {
       opacity: 1;
+      pointer-events: auto;
       transform: scale(1) translateY(0);
     }
     
@@ -1318,7 +1329,6 @@
     .phoneme-blurb-overlay.expand-upward {
       top: auto;
       bottom: 100%;
-      border-radius: 8px 8px 8px 0;
     }
     
     /* Blurb content styling within overlay */
@@ -1335,6 +1345,7 @@
       color: var(--msr-accent);
     }
     
+    /* ========================================
        LEGACY HORIZONTAL RIBBON (removed in v5.5)
        Replaced by vertical ribbon layout
        ======================================== */
@@ -5459,15 +5470,11 @@ const SINGER_SUPPLEMENT = {
             const isFirstInSyllable = idx === 0;
             const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
             
-            // PHASE 1 MOCKUP: First row in first syllable shows expanded overlay
-            const isFirstRow = isFirstSyllable && idx === 0;
-            const mockupExpanded = isFirstRow ? ' expanded' : '';
-            
             html += `
-              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}${mockupExpanded}" 
+              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}" 
                    tabindex="0"
                    role="button"
-                   aria-expanded="${isFirstRow ? 'true' : 'false'}"
+                   aria-expanded="false"
                    aria-label="${entry.char} becomes ${entry.ipa || 'nothing'}">
                 <div class="phoneme-mapping">
                   <span class="phoneme-cyr">${entry.char}</span>
@@ -5490,66 +5497,83 @@ const SINGER_SUPPLEMENT = {
         });
         
         // Add backdrop at end (positioned via CSS)
-        html += `<div class="ribbon-backdrop${' active'}"></div>`;
-        
-        // PHASE 1: Add class for mockup state
-        container.classList.add('has-active-blurb');
+        html += `<div class="ribbon-backdrop"></div>`;
         
         container.innerHTML = html;
         
         // Event delegation for floating overlay (v5.5)
-        container.addEventListener('click', (e) => {
-          const row = e.target.closest('.phoneme-row');
-          const backdrop = container.querySelector('.ribbon-backdrop');
+        // Only attach once per container to avoid stacking handlers
+        if (!container._ribbonListenerAttached) {
+          container._ribbonListenerAttached = true;
           
-          // If clicking backdrop, close all
-          if (e.target.classList.contains('ribbon-backdrop')) {
+          container.addEventListener('click', (e) => {
+            const row = e.target.closest('.phoneme-row');
+            const backdrop = container.querySelector('.ribbon-backdrop');
+            
+            // If clicking backdrop, close all
+            if (e.target.classList.contains('ribbon-backdrop')) {
+              container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+                r.classList.remove('expanded');
+                r.setAttribute('aria-expanded', 'false');
+              });
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+              return;
+            }
+            
+            // If clicking inside an open overlay, don't toggle
+            if (e.target.closest('.phoneme-blurb-overlay')) {
+              return;
+            }
+            
+            if (!row) return;
+            
+            e.stopPropagation();
+            const wasExpanded = row.classList.contains('expanded');
+            
+            // Collapse all others (single accordion)
             container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
-              r.classList.remove('expanded');
-              r.setAttribute('aria-expanded', 'false');
+              if (r !== row) {
+                r.classList.remove('expanded');
+                r.setAttribute('aria-expanded', 'false');
+              }
             });
-            container.classList.remove('has-active-blurb');
-            backdrop?.classList.remove('active');
-            return;
-          }
-          
-          if (!row) return;
-          
-          e.stopPropagation();
-          const wasExpanded = row.classList.contains('expanded');
-          
-          // Collapse all others (single accordion)
-          container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
-            if (r !== row) {
-              r.classList.remove('expanded');
-              r.setAttribute('aria-expanded', 'false');
+            
+            // Toggle clicked row
+            if (wasExpanded) {
+              row.classList.remove('expanded');
+              row.setAttribute('aria-expanded', 'false');
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+            } else {
+              row.classList.add('expanded');
+              row.setAttribute('aria-expanded', 'true');
+              container.classList.add('has-active-blurb');
+              backdrop?.classList.add('active');
             }
           });
           
-          // Toggle clicked row
-          if (wasExpanded) {
-            row.classList.remove('expanded');
-            row.setAttribute('aria-expanded', 'false');
-            container.classList.remove('has-active-blurb');
-            backdrop?.classList.remove('active');
-          } else {
-            row.classList.add('expanded');
-            row.setAttribute('aria-expanded', 'true');
-            container.classList.add('has-active-blurb');
-            backdrop?.classList.add('active');
-          }
-        });
-        
-        // Keyboard accessibility
-        container.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            const row = e.target.closest('.phoneme-row');
-            if (row) {
-              e.preventDefault();
-              row.click();
+          // Keyboard accessibility
+          container.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              const row = e.target.closest('.phoneme-row');
+              if (row) {
+                e.preventDefault();
+                row.click();
+              }
             }
-          }
-        });
+            // Escape to close
+            if (e.key === 'Escape') {
+              const backdrop = container.querySelector('.ribbon-backdrop');
+              container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+                r.classList.remove('expanded');
+                r.setAttribute('aria-expanded', 'false');
+              });
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+            }
+          });
+        }
       },
 
       open(wordData) {
