@@ -3773,7 +3773,20 @@ const SINGER_SUPPLEMENT = {
             const nextChar = chars[i + 1];
             const globalIndex = charIndexInWord + i; // Position in full word
             
-            if (char === 'ь' || char === 'ъ') continue;
+            // Log soft/hard signs before skipping
+            if (char === 'ь' || char === 'ъ') {
+              transcriptionLog.push({
+                char: char,
+                ipa: char === 'ь' ? 'ʲ' : '',
+                features: {
+                  type: 'sign',
+                  signType: char === 'ь' ? 'soft' : 'hard'
+                },
+                syllableIndex: sylIdx,
+                position: globalIndex
+              });
+              continue;
+            }
             
             // Check if this character is part of a special cluster
             const clusterInfo = specialClusters.find(c => 
@@ -3781,9 +3794,20 @@ const SINGER_SUPPLEMENT = {
             );
             
             if (clusterInfo) {
-              // First char of cluster outputs the IPA, rest are skipped
+              // First char of cluster outputs the IPA and logs the cluster
               if (globalIndex === clusterInfo.startIndex) {
                 sylIpa += clusterInfo.ipa;
+                
+                transcriptionLog.push({
+                  char: clusterInfo.cluster,
+                  ipa: clusterInfo.ipa,
+                  features: {
+                    type: 'cluster',
+                    clusterChars: clusterInfo.cluster.length
+                  },
+                  syllableIndex: sylIdx,
+                  position: globalIndex
+                });
               }
               continue;
             }
