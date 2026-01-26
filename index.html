@@ -4237,6 +4237,125 @@ const SINGER_SUPPLEMENT = {
     };
 
     /* ========================================
+       RULE REGISTRY - Phoneme Ribbon Blurbs
+       Maps transcription features → educational blurbs
+       ======================================== */
+    const RuleRegistry = {
+      // Blurb data - keyed by "IPA:rule:char"
+      // Phase B, Change 5: Representative subset to validate pattern
+      // Phase B, Change 6: Full 85 entries
+      blurbs: {
+        // VOWELS - STRESSED (subset)
+        'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ receives full open back value /ɑ/.', citation: '§3.1, p. 81', notable: false },
+        'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ after soft consonant → /ɑ/ (the consonant carries the softness).', citation: '§3.1, p. 81', notable: false },
+        'o:stressed:о': { blurb: 'Stressed ⟨о⟩ receives full value /o/.', citation: '§3.1, p. 86', notable: false },
+        'o:stressed:ё': { blurb: '⟨ё⟩ always indicates stress → /o/.', citation: '§3.1, p. 85-86', notable: false },
+        'ɛ:stressed:е': { blurb: 'Stressed ⟨е⟩ → open /ɛ/.', citation: '§3.1, p. 81', notable: false },
+        'i:stressed:и': { blurb: 'Stressed ⟨и⟩ → /i/ (never reduces in sung Russian).', citation: '§3.2, p. 96', notable: false },
+        'u:stressed:у': { blurb: 'Stressed ⟨у⟩ → /u/.', citation: '§3.1, p. 81', notable: false },
+        'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ → velarized [ɨ].', citation: '§3.1, p. 93-96', notable: false },
+        
+        // VOWELS - INTERPALATAL (subset)
+        'a:interpalatal:а': { blurb: '⟨а⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
+        'e:interpalatal:е': { blurb: '⟨е⟩ closes to [e] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
+        
+        // VOWELS - UNSTRESSED (subset)
+        'ɑ:pretonic:о': { blurb: 'Unstressed ⟨о⟩ → /ɑ/ immediately before stress (akanye).', citation: '§3.3, p. 97-98', notable: true },
+        'ɑ:pretonic:а': { blurb: 'Unstressed ⟨а⟩ → /ɑ/ in pretonic position.', citation: '§3.3, p. 97', notable: false },
+        'ʌ:remote:о': { blurb: 'Unstressed ⟨о⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
+        'ʌ:remote:а': { blurb: 'Unstressed ⟨а⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'i:unstressed:и': { blurb: 'Unstressed ⟨и⟩ stays /i/ — never reduces in sung Russian.', citation: '§3.2, p. 96, 101', notable: true },
+        
+        // CONSONANTS - SOFT (subset)
+        'sʲ:soft-before-vowel:с': { blurb: 'Soft ⟨с⟩ palatalizes before front vowel.', citation: '§4.2, p. 177-178', notable: false },
+        'tʲ:soft-before-vowel:т': { blurb: '⟨т⟩ softens before front vowel or ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
+        'ɲ:soft-before-vowel:н': { blurb: 'Soft ⟨н⟩ is the palatal nasal /ɲ/, not /nʲ/.', citation: '§4.2, p. 186', notable: false },
+        'lʲ:soft-before-vowel:л': { blurb: '⟨л⟩ softens to /lʲ/ before front vowel or ⟨ь⟩.', citation: '§4.2, p. 184', notable: false },
+        
+        // CONSONANTS - HARD (subset)
+        's:hard-default:с': { blurb: 'Hard ⟨с⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 155', notable: false },
+        't:hard-default:т': { blurb: 'Hard ⟨т⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 140', notable: false },
+        'n:hard-default:н': { blurb: 'Hard ⟨н⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 154', notable: false },
+        'ɫ:hard-default:л': { blurb: 'Hard ⟨л⟩ is velarized (the "dark-l"). This is the default when no palatalizing agent follows.', citation: '§4.1, p. 150-151', notable: false },
+        'tʃ:hard-default:ч': { blurb: '⟨ч⟩ is intrinsically palatalized — always soft, regardless of what follows.', citation: '§4.2, p. 175-176', notable: false },
+        'ʃ:hard-default:ш': { blurb: '⟨ш⟩ is intrinsically hard — it cannot soften, regardless of what follows.', citation: '§4.1, p. 161-163', notable: false },
+        
+        // SIGNS
+        'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but palatalizes the preceding consonant.', citation: '§4.3, p. 195-198', notable: false },
+        ':hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a boundary marker.', citation: '§4.3, p. 192-194', notable: false },
+        
+        // CLUSTERS (subset)
+        'tːsʌ:cluster:тся': { blurb: 'The reflexive verb ending ⟨-тся⟩ is pronounced /tːsʌ/.', citation: '§6.2, p. 237-238', notable: true },
+        'tːsʌ:cluster:ться': { blurb: 'The reflexive verb ending ⟨-ться⟩ is pronounced /tːsʌ/. The soft sign has no effect.', citation: '§6.2, p. 237-238', notable: true }
+      },
+      
+      // Derive rule name from transcriptionLog features
+      // Expected softTrigger values:
+      // - Soft vowels: 'е', 'ё', 'ю', 'я', 'и'
+      // - Soft sign: 'ь'
+      // - Regressive palatalization: 'regressive'
+      deriveRule(features) {
+        if (features.type === 'vowel') {
+          // Check for exception rules first
+          if (features.exception) return features.exception;
+          
+          // Stressed vowels
+          if (features.position === 'stressed') {
+            return features.interpalatal ? 'interpalatal' : 'stressed';
+          }
+          
+          // Unstressed vowels
+          if (features.afterHard) return 'after-hard';
+          if (features.position === 'pretonic') return 'pretonic';
+          if (features.position === 'initial') return 'initial';
+          if (features.position === 'remote') return 'remote';
+          return 'unstressed';
+        }
+        
+        if (features.type === 'consonant') {
+          if (features.soft) {
+            if (features.softTrigger === 'regressive') return 'soft-regressive';
+            if (features.softTrigger === 'ь') return 'soft-before-softsign';
+            if (['е', 'ё', 'ю', 'я', 'и'].includes(features.softTrigger)) return 'soft-before-vowel';
+            return 'soft-before-vowel'; // Default soft rule
+          }
+          return 'hard-default';
+        }
+        
+        if (features.type === 'sign') {
+          return features.signType === 'soft' ? 'soft-sign' : 'hard-sign';
+        }
+        
+        if (features.type === 'cluster') {
+          return 'cluster';
+        }
+        
+        return 'unknown';
+      },
+      
+      // Look up blurb data for a transcriptionLog entry
+      lookupBlurb(entry) {
+        const rule = this.deriveRule(entry.features);
+        const key = `${entry.ipa}:${rule}:${entry.char}`;
+        
+        return this.blurbs[key] || {
+          blurb: `${entry.char} → ${entry.ipa}`,
+          citation: null,
+          notable: false
+        };
+      },
+      
+      // Build display log with blurb data (memoizable)
+      buildDisplayLog(transcriptionLog) {
+        return transcriptionLog.map(entry => ({
+          ...entry,
+          blurbData: this.lookupBlurb(entry)
+        }));
+      }
+    };
+
+    /* ========================================
        DOCUMENT STATE
        ======================================== */
     const DocumentState = {
