@@ -1045,7 +1045,6 @@
       display: grid;
       grid-template-rows: auto 0fr;
       transition: grid-template-rows 200ms var(--ease);
-      border-left: 1px solid transparent;
       padding: 0.35rem 0.5rem;
       border-radius: 4px;
       cursor: pointer;
@@ -1069,11 +1068,6 @@
       grid-template-rows: auto 1fr;
     }
     
-    .phoneme-block.notable {
-      border-left: 3px solid var(--msr-accent);
-      padding-left: calc(0.5rem - 2px);
-    }
-    
     .phoneme-mapping {
       display: flex;
       align-items: center;
@@ -1094,11 +1088,6 @@
     .phoneme-ipa {
       font-family: var(--font-ipa);
       color: var(--ink-secondary);
-    }
-    
-    .phoneme-block.notable .phoneme-ipa {
-      color: var(--msr-accent);
-      font-weight: 600;
     }
     
     .blurb-content {
@@ -5153,11 +5142,10 @@ const SINGER_SUPPLEMENT = {
           
           entries.forEach((entry, idx) => {
             const blurb = entry.blurbData;
-            const notableClass = blurb.notable ? 'notable' : '';
             const blockId = `phoneme-${sylIdx}-${idx}`;
             
             html += `
-              <button class="phoneme-block ${notableClass}" 
+              <button class="phoneme-block" 
                       data-block-id="${blockId}"
                       aria-expanded="false">
                 <div class="phoneme-mapping">
@@ -5384,6 +5372,7 @@ const SINGER_SUPPLEMENT = {
         const result = GraysonEngine.transcribe(this.currentWord.cyrillic, newStressIdx, this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true);
         this.currentWord.ipa = result.ipa;
         this.currentWord.syllables = result.syllables;
+        this.currentWord.transcriptionLog = result.transcriptionLog;
         
         // Re-render syllable buttons with updated stress marks
         this.elements.syllableDisplay.querySelectorAll('.syllable-btn').forEach((btn, idx) => {
@@ -5391,6 +5380,9 @@ const SINGER_SUPPLEMENT = {
           btn.classList.toggle('stressed', idx === newStressIdx);
           btn.textContent = (idx === newStressIdx) ? 'ˈ' + syl.ipa : syl.ipa;
         });
+        
+        // Re-render Phoneme Ribbon with new stress position
+        this.renderRibbon(this.currentWord);
         
         // Track that stress was changed and trigger attribution prompt
         this.stressWasChanged = true;
