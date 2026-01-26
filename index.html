@@ -2871,6 +2871,7 @@ const SINGER_SUPPLEMENT = {
               hasYo,
               syllables: result.syllables,
               ipaUnderlying: result.ipaUnderlying,
+              transcriptionLog: result.transcriptionLog,  // Phoneme Ribbon data
               ipaSurface: null,  // Set in phase 2
               skipFinalDevoicing: false,
               rightBoundary: wordData.rightBoundary,
@@ -2921,6 +2922,7 @@ const SINGER_SUPPLEMENT = {
             wordStack.dataset.stressSource = tw.wordData.stressSource || '';
             wordStack.dataset.rightBoundary = tw.rightBoundary;
             wordStack.dataset.boundarySource = tw.boundarySource;
+            wordStack.dataset.transcriptionLog = JSON.stringify(tw.transcriptionLog || []);
             
             wordStack.innerHTML = `
               <span class="ipa">${tw.ipaSurface}</span>
@@ -4682,7 +4684,9 @@ const SINGER_SUPPLEMENT = {
           // Shared commit footer (v5.4.2)
           sharedCommitFooter: document.getElementById('sharedCommitFooter'),
           sharedApplyBtn: document.getElementById('sharedApplyBtn'),
-          sharedRevertBtn: document.getElementById('sharedRevertBtn')
+          sharedRevertBtn: document.getElementById('sharedRevertBtn'),
+          // Phoneme Ribbon (Phase C)
+          ribbonGrid: document.getElementById('ribbonGrid')
         };
         
         this.elements.backdrop.addEventListener('click', () => this.close());
@@ -5084,6 +5088,90 @@ const SINGER_SUPPLEMENT = {
             ref: 'Grayson §3.1'
         };
     },
+    
+      // Render Phoneme Ribbon from transcriptionLog (Phase C)
+      renderRibbon(wordData) {
+        const grid = this.elements.ribbonGrid;
+        if (!grid) return;
+        
+        const log = wordData.transcriptionLog || [];
+        if (log.length === 0) {
+          grid.innerHTML = '<div style="color: var(--ink-tertiary); font-size: 0.8rem;">No transcription data available</div>';
+          return;
+        }
+        
+        // Build displayLog with blurb data (memoized per Kimi's optimization)
+        const displayLog = RuleRegistry.buildDisplayLog(log);
+        
+        // Group by syllable
+        const syllableGroups = new Map();
+        displayLog.forEach(entry => {
+          const sylIdx = entry.syllableIndex ?? 0;
+          if (!syllableGroups.has(sylIdx)) {
+            syllableGroups.set(sylIdx, []);
+          }
+          syllableGroups.get(sylIdx).push(entry);
+        });
+        
+        // Get syllable labels from wordData
+        const syllableLabels = wordData.syllables.map(s => s.cyrillic);
+        
+        // Render each syllable group
+        let html = '';
+        syllableGroups.forEach((entries, sylIdx) => {
+          const label = syllableLabels[sylIdx] || `Syl ${sylIdx + 1}`;
+          html += `<div class="syllable-group">`;
+          html += `<div class="syllable-label">${label}</div>`;
+          
+          entries.forEach((entry, idx) => {
+            const blurb = entry.blurbData;
+            const notableClass = blurb.notable ? 'notable' : '';
+            const blockId = `phoneme-${sylIdx}-${idx}`;
+            
+            html += `
+              <button class="phoneme-block ${notableClass}" 
+                      data-block-id="${blockId}"
+                      aria-expanded="false">
+                <div class="phoneme-mapping">
+                  <span class="phoneme-char">${entry.char}</span>
+                  <span class="phoneme-arrow">→</span>
+                  <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
+                </div>
+                <div class="blurb-content">
+                  <div class="blurb-inner">
+                    <div class="blurb-text">${blurb.blurb}</div>
+                    ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
+                  </div>
+                </div>
+              </button>
+            `;
+          });
+          
+          html += `</div>`;
+        });
+        
+        grid.innerHTML = html;
+        
+        // Add click handlers for expansion
+        grid.querySelectorAll('.phoneme-block').forEach(block => {
+          block.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasExpanded = block.classList.contains('expanded');
+            
+            // Collapse all others in this grid
+            grid.querySelectorAll('.phoneme-block.expanded').forEach(b => {
+              b.classList.remove('expanded');
+              b.setAttribute('aria-expanded', 'false');
+            });
+            
+            // Toggle clicked block
+            if (!wasExpanded) {
+              block.classList.add('expanded');
+              block.setAttribute('aria-expanded', 'true');
+            }
+          });
+        });
+      },
 
       open(wordData) {
         this.currentWord = wordData;
@@ -5178,6 +5266,9 @@ const SINGER_SUPPLEMENT = {
         const citation = this.generateCitation(wordData);
         this.elements.citationRule.textContent = citation.rule;
         this.elements.citationRef.textContent = '— ' + citation.ref;
+        
+        // Render Phoneme Ribbon (Phase C)
+        this.renderRibbon(wordData);
         
         // Phrase boundary control (v5.4.2 - segments instead of radio)
         const line = DocumentState.lines[wordData.lineIndex];
@@ -5306,6 +5397,7 @@ const SINGER_SUPPLEMENT = {
           gloss: wordStack.dataset.gloss,
           punctuation: wordStack.dataset.punctuation || '',
           syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+          transcriptionLog: JSON.parse(wordStack.dataset.transcriptionLog || '[]'),
           isProclitic: wordStack.dataset.isProclitic,
           isEnclitic: wordStack.dataset.isEnclitic,
           hasYo: wordStack.dataset.hasYo,
