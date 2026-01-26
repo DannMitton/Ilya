@@ -1017,15 +1017,37 @@
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 10px;
+      transition: border-color 200ms var(--ease), background 200ms var(--ease);
     }
     
-    .syllable-label {
-      font-size: 0.75rem;
-      font-weight: 600;
+    .syllable-group.stressed {
+      border-color: var(--msr-accent);
+      background: rgba(122, 158, 126, 0.02);
+    }
+    
+    /* Full-word label with current syllable highlighted */
+    .syllable-label-word {
+      font-size: 0.8rem;
+      color: var(--ink-tertiary);
+      font-family: var(--font-serif);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    
+    .syllable-label-current {
+      font-weight: 500;
       color: var(--ink-primary);
-      padding-bottom: 0.25rem;
-      border-bottom: 1px solid rgba(26, 22, 18, 0.1);
-      margin-bottom: 0.25rem;
+      background: rgba(122, 158, 126, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    /* Remove tint when current IS stressed (border is sufficient) */
+    .syllable-group.stressed .syllable-label-current {
+      background: transparent;
     }
     
     .phoneme-block {
@@ -5113,15 +5135,30 @@ const SINGER_SUPPLEMENT = {
           syllableGroups.get(sylIdx).push(entry);
         });
         
-        // Get syllable labels from wordData
-        const syllableLabels = wordData.syllables.map(s => s.cyrillic);
+        // Get syllable data from wordData
+        const syllables = wordData.syllables;
+        const syllableLabels = syllables.map(s => s.cyrillic);
+        const stressedIdx = syllables.findIndex(s => s.isStressed);
+        
+        // Helper: build full-word label with current syllable highlighted
+        const buildWordLabel = (currentIdx) => {
+          return syllableLabels.map((syl, idx) => {
+            if (idx === currentIdx) {
+              return `<span class="syllable-label-current">${syl}</span>`;
+            }
+            return syl;
+          }).join('');
+        };
         
         // Render each syllable group
         let html = '';
         syllableGroups.forEach((entries, sylIdx) => {
-          const label = syllableLabels[sylIdx] || `Syl ${sylIdx + 1}`;
-          html += `<div class="syllable-group">`;
-          html += `<div class="syllable-label">${label}</div>`;
+          const isStressed = sylIdx === stressedIdx;
+          const stressedClass = isStressed ? 'stressed' : '';
+          const wordLabel = buildWordLabel(sylIdx);
+          
+          html += `<div class="syllable-group ${stressedClass}">`;
+          html += `<div class="syllable-label-word">${wordLabel}</div>`;
           
           entries.forEach((entry, idx) => {
             const blurb = entry.blurbData;
