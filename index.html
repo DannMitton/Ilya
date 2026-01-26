@@ -5320,14 +5320,15 @@ const SINGER_SUPPLEMENT = {
         };
     },
     
-      // Render Phoneme Ribbon from transcriptionLog (Phase C)
+      // Render Phoneme Ribbon - Vertical Layout (v5.5)
+      // Content First redesign: educational ribbon always visible
       renderRibbon(wordData) {
-        const grid = this.elements.ribbonGrid;
-        if (!grid) return;
+        const container = this.elements.ribbonVertical;
+        if (!container) return;
         
         const log = wordData.transcriptionLog || [];
         if (log.length === 0) {
-          grid.innerHTML = '<div style="color: var(--ink-tertiary); font-size: 0.8rem;">No transcription data available</div>';
+          container.innerHTML = '<div style="color: var(--ink-tertiary); font-size: 0.85rem; padding: 1rem; text-align: center;">No transcription data available</div>';
           return;
         }
         
@@ -5344,77 +5345,94 @@ const SINGER_SUPPLEMENT = {
           syllableGroups.get(sylIdx).push(entry);
         });
         
-        // Get syllable data from wordData
+        // Get stressed syllable index
         const syllables = wordData.syllables;
-        const syllableLabels = syllables.map(s => s.cyrillic);
         const stressedIdx = syllables.findIndex(s => s.isStressed);
         
-        // Helper: build full-word label with current syllable highlighted
-        const buildWordLabel = (currentIdx) => {
-          return syllableLabels.map((syl, idx) => {
-            if (idx === currentIdx) {
-              return `<span class="syllable-label-current">${syl}</span>`;
-            }
-            return syl;
-          }).join('');
-        };
-        
-        // Render each syllable group
+        // Build vertical ribbon HTML
         let html = '';
+        let isFirstSyllable = true;
+        
         syllableGroups.forEach((entries, sylIdx) => {
           const isStressed = sylIdx === stressedIdx;
-          const stressedClass = isStressed ? 'stressed' : '';
-          const wordLabel = buildWordLabel(sylIdx);
           
-          html += `<div class="syllable-group ${stressedClass}">`;
-          html += `<div class="syllable-label-word">${wordLabel}</div>`;
+          // Wrap stressed syllable in tinted region
+          if (isStressed) {
+            html += `<div class="stressed-syllable-region">`;
+          }
           
           entries.forEach((entry, idx) => {
             const blurb = entry.blurbData;
-            const blockId = `phoneme-${sylIdx}-${idx}`;
+            const isFirstInSyllable = idx === 0;
+            const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
             
             html += `
-              <button class="phoneme-block" 
-                      data-block-id="${blockId}"
-                      aria-expanded="false">
-                <div class="phoneme-mapping">
-                  <span class="phoneme-char">${entry.char}</span>
-                  <span class="phoneme-arrow">→</span>
-                  <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
-                </div>
-                <div class="blurb-content">
-                  <div class="blurb-inner">
-                    <div class="blurb-text">${blurb.blurb}</div>
-                    ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
+              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}" 
+                   tabindex="0"
+                   role="button"
+                   aria-expanded="false"
+                   aria-label="${entry.char} becomes ${entry.ipa || 'nothing'}">
+                <div class="phoneme-row-content">
+                  <div class="phoneme-mapping">
+                    <span class="phoneme-cyr">${entry.char}</span>
+                    <span class="phoneme-arrow">›</span>
+                    <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
+                  </div>
+                  <div class="phoneme-blurb">
+                    <div class="phoneme-blurb-inner">
+                      <div class="blurb-text">${blurb.blurb}</div>
+                      ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
+                    </div>
                   </div>
                 </div>
-              </button>
+              </div>
             `;
           });
           
-          html += `</div>`;
+          if (isStressed) {
+            html += `</div>`;
+          }
+          
+          isFirstSyllable = false;
         });
         
-        grid.innerHTML = html;
+        container.innerHTML = html;
         
-        // Add click handlers for expansion
-        grid.querySelectorAll('.phoneme-block').forEach(block => {
-          block.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const wasExpanded = block.classList.contains('expanded');
-            
-            // Collapse all others in this grid
-            grid.querySelectorAll('.phoneme-block.expanded').forEach(b => {
-              b.classList.remove('expanded');
-              b.setAttribute('aria-expanded', 'false');
-            });
-            
-            // Toggle clicked block
-            if (!wasExpanded) {
-              block.classList.add('expanded');
-              block.setAttribute('aria-expanded', 'true');
+        // Event delegation for single-accordion behaviour (v5.5)
+        container.addEventListener('click', (e) => {
+          const row = e.target.closest('.phoneme-row');
+          if (!row) return;
+          
+          e.stopPropagation();
+          const wasExpanded = row.classList.contains('expanded');
+          
+          // Collapse all others (single accordion)
+          container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+            if (r !== row) {
+              r.classList.remove('expanded');
+              r.setAttribute('aria-expanded', 'false');
             }
           });
+          
+          // Toggle clicked row
+          if (wasExpanded) {
+            row.classList.remove('expanded');
+            row.setAttribute('aria-expanded', 'false');
+          } else {
+            row.classList.add('expanded');
+            row.setAttribute('aria-expanded', 'true');
+          }
+        });
+        
+        // Keyboard accessibility
+        container.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            const row = e.target.closest('.phoneme-row');
+            if (row) {
+              e.preventDefault();
+              row.click();
+            }
+          }
         });
       },
 
