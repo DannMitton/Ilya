@@ -4242,52 +4242,148 @@ const SINGER_SUPPLEMENT = {
        ======================================== */
     const RuleRegistry = {
       // Blurb data - keyed by "IPA:rule:char"
-      // Phase B, Change 5: Representative subset to validate pattern
-      // Phase B, Change 6: Full 85 entries
+      // Full 85 entries from PHONEME_BLURBS_DRAFT.md
       blurbs: {
-        // VOWELS - STRESSED (subset)
+        // ========================================
+        // PART 1: VOWELS — STRESSED
+        // ========================================
+        
+        // 1.1 Cardinal Vowels (Full Value)
         'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ receives full open back value /ɑ/.', citation: '§3.1, p. 81', notable: false },
         'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ after soft consonant → /ɑ/ (the consonant carries the softness).', citation: '§3.1, p. 81', notable: false },
         'o:stressed:о': { blurb: 'Stressed ⟨о⟩ receives full value /o/.', citation: '§3.1, p. 86', notable: false },
         'o:stressed:ё': { blurb: '⟨ё⟩ always indicates stress → /o/.', citation: '§3.1, p. 85-86', notable: false },
+        'ɛ:stressed:э': { blurb: 'Stressed ⟨э⟩ → open /ɛ/.', citation: '§3.1, p. 81', notable: false },
         'ɛ:stressed:е': { blurb: 'Stressed ⟨е⟩ → open /ɛ/.', citation: '§3.1, p. 81', notable: false },
         'i:stressed:и': { blurb: 'Stressed ⟨и⟩ → /i/ (never reduces in sung Russian).', citation: '§3.2, p. 96', notable: false },
         'u:stressed:у': { blurb: 'Stressed ⟨у⟩ → /u/.', citation: '§3.1, p. 81', notable: false },
+        'u:stressed:ю': { blurb: 'Stressed ⟨ю⟩ after soft consonant → /u/.', citation: '§3.1, p. 81', notable: false },
         'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ → velarized [ɨ].', citation: '§3.1, p. 93-96', notable: false },
         
-        // VOWELS - INTERPALATAL (subset)
+        // 1.2 Interpalatal Fronting (Stressed)
         'a:interpalatal:а': { blurb: '⟨а⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
+        'a:interpalatal:я': { blurb: '⟨я⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
         'e:interpalatal:е': { blurb: '⟨е⟩ closes to [e] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
+        'e:interpalatal:э': { blurb: 'When stressed ⟨э⟩ is word-initial before a palatalized consonant, it fronts from /ɛ/ to [e].', citation: '§3.4, p. 106', notable: false },
         
-        // VOWELS - UNSTRESSED (subset)
+        // ========================================
+        // PART 2: VOWELS — UNSTRESSED
+        // ========================================
+        
+        // 2.1 Akanye (о/а Reduction)
         'ɑ:pretonic:о': { blurb: 'Unstressed ⟨о⟩ → /ɑ/ immediately before stress (akanye).', citation: '§3.3, p. 97-98', notable: true },
+        'ɑ:initial:о': { blurb: 'Word-initial unstressed ⟨о⟩ → /ɑ/.', citation: '§3.3, p. 97', notable: true },
         'ɑ:pretonic:а': { blurb: 'Unstressed ⟨а⟩ → /ɑ/ in pretonic position.', citation: '§3.3, p. 97', notable: false },
+        'ɑ:initial:а': { blurb: 'Word-initial ⟨а⟩ → /ɑ/.', citation: '§3.3, p. 97', notable: false },
+        'ɑ:unstressed:а': { blurb: 'Unstressed ⟨а⟩ immediately after stress → /ɑ/.', citation: '§7, p. 266, fn. 306', notable: false },
+        
+        // 2.2 Remote Reduction (→ ʌ)
         'ʌ:remote:о': { blurb: 'Unstressed ⟨о⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
         'ʌ:remote:а': { blurb: 'Unstressed ⟨а⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
+        'ʌ:unstressed:о': { blurb: 'Post-stress ⟨о⟩ reduces to [ʌ].', citation: '§3.5, p. 108-113', notable: true },
+        'ʌ:unstressed:а': { blurb: 'Post-stress ⟨а⟩ reduces to [ʌ].', citation: '§3.5, p. 108-113', notable: false },
+        
+        // 2.3 Ikanye (е/я Reduction)
         'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:unstressed:я': { blurb: 'Unstressed ⟨я⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:unstressed:э': { blurb: 'Unstressed ⟨э⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:pretonic:е': { blurb: 'Pretonic ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
+        'ɪ:pretonic:я': { blurb: 'Pretonic ⟨я⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
         'i:unstressed:и': { blurb: 'Unstressed ⟨и⟩ stays /i/ — never reduces in sung Russian.', citation: '§3.2, p. 96, 101', notable: true },
         
-        // CONSONANTS - SOFT (subset)
-        'sʲ:soft-before-vowel:с': { blurb: 'Soft ⟨с⟩ palatalizes before front vowel.', citation: '§4.2, p. 177-178', notable: false },
-        'tʲ:soft-before-vowel:т': { blurb: '⟨т⟩ softens before front vowel or ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
-        'ɲ:soft-before-vowel:н': { blurb: 'Soft ⟨н⟩ is the palatal nasal /ɲ/, not /nʲ/.', citation: '§4.2, p. 186', notable: false },
-        'lʲ:soft-before-vowel:л': { blurb: '⟨л⟩ softens to /lʲ/ before front vowel or ⟨ь⟩.', citation: '§4.2, p. 184', notable: false },
+        // 2.4 After Always-Hard Consonants (ж/ш/ц)
+        'ɨ:after-hard:и': { blurb: '⟨и⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ] (hard consonants retract the vowel).', citation: '§3.1, p. 93-96', notable: true },
+        'ɨ:after-hard:е': { blurb: 'Unstressed ⟨е⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ].', citation: '§3.3, p. 102-103', notable: true },
         
-        // CONSONANTS - HARD (subset)
-        's:hard-default:с': { blurb: 'Hard ⟨с⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 155', notable: false },
-        't:hard-default:т': { blurb: 'Hard ⟨т⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 140', notable: false },
-        'n:hard-default:н': { blurb: 'Hard ⟨н⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 154', notable: false },
-        'ɫ:hard-default:л': { blurb: 'Hard ⟨л⟩ is velarized (the "dark-l"). This is the default when no palatalizing agent follows.', citation: '§4.1, p. 150-151', notable: false },
+        // ========================================
+        // PART 3: VOWELS — J-GLIDE (IOTATED)
+        // ========================================
+        'jɑ:initial:я': { blurb: 'Word-initial ⟨я⟩ → /jɑ/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
+        'jɛ:initial:е': { blurb: 'Word-initial ⟨е⟩ → /jɛ/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
+        'jo:initial:ё': { blurb: 'Word-initial ⟨ё⟩ → /jo/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
+        'ju:initial:ю': { blurb: 'Word-initial ⟨ю⟩ → /ju/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
+        'jɪ:initial:е': { blurb: 'Word-initial unstressed ⟨е⟩ → /jɪ/.', citation: '§3.6, p. 114-124', notable: true },
+        'jɪ:initial:я': { blurb: 'Word-initial unstressed ⟨я⟩ → /jɪ/.', citation: '§3.6, p. 114-124', notable: true },
+        
+        // ========================================
+        // PART 4: CONSONANTS — SOFT (PALATALIZED)
+        // ========================================
+        
+        // 4.1 Standard Palatalization (Before Indicators)
+        'sʲ:soft-before-vowel:с': { blurb: 'Soft ⟨с⟩ palatalizes before front vowel. The one-letter preposition ⟨с⟩ ("with") transmits palatalization across word boundaries.', citation: '§4.2, p. 177-178', notable: false },
+        'sʲ:soft-before-softsign:с': { blurb: 'Soft ⟨с⟩ palatalizes before ⟨ь⟩.', citation: '§4.2, p. 177-178', notable: false },
+        'sʲ:soft-regressive:с': { blurb: 'Soft ⟨с⟩ palatalizes regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
+        'tʲ:soft-before-vowel:т': { blurb: '⟨т⟩ softens before front vowel.', citation: '§4.2, p. 179-180', notable: false },
+        'tʲ:soft-before-softsign:т': { blurb: '⟨т⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
+        'tʲ:soft-regressive:т': { blurb: '⟨т⟩ softens regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
+        'dʲ:soft-before-vowel:д': { blurb: '⟨д⟩ softens before front vowel.', citation: '§4.2, p. 179-180', notable: false },
+        'dʲ:soft-before-softsign:д': { blurb: '⟨д⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
+        'dʲ:soft-regressive:д': { blurb: '⟨д⟩ softens regressively before another palatalized consonant.', citation: '§5.2, p. 207-209', notable: true },
+        'ɲ:soft-before-vowel:н': { blurb: 'Soft ⟨н⟩ is the palatal nasal /ɲ/, not /nʲ/. Grayson uses /ɲ/ to avoid unwanted /j/ glides.', citation: '§4.2, p. 186', notable: false },
+        'ɲ:soft-before-softsign:н': { blurb: 'Soft ⟨н⟩ before ⟨ь⟩ is the palatal nasal /ɲ/.', citation: '§4.2, p. 186', notable: false },
+        'ɲ:soft-regressive:н': { blurb: 'Soft ⟨н⟩ palatalizes regressively to /ɲ/.', citation: '§5.2, p. 207-209', notable: true },
+        'lʲ:soft-before-vowel:л': { blurb: '⟨л⟩ softens to /lʲ/ before front vowel.', citation: '§4.2, p. 184', notable: false },
+        'lʲ:soft-before-softsign:л': { blurb: '⟨л⟩ softens to /lʲ/ before ⟨ь⟩.', citation: '§4.2, p. 184', notable: false },
+        'rʲ:soft-before-vowel:р': { blurb: '⟨р⟩ softens before front vowel.', citation: '§4.2, p. 190', notable: false },
+        'rʲ:soft-before-softsign:р': { blurb: '⟨р⟩ softens before ⟨ь⟩.', citation: '§4.2, p. 190', notable: false },
+        'bʲ:soft-before-vowel:б': { blurb: '⟨б⟩ softens before front vowel. Like hard /b/, soft /bʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
+        'pʲ:soft-before-vowel:п': { blurb: '⟨п⟩ softens before front vowel. Like hard /p/, soft /pʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
+        'vʲ:soft-before-vowel:в': { blurb: '⟨в⟩ softens before front vowel. As a preposition or prefix, ⟨в⟩ transmits palatalization across boundaries.', citation: '§4.2, p. 181-182', notable: false },
+        'fʲ:soft-before-vowel:ф': { blurb: '⟨ф⟩ softens before front vowel.', citation: '§4.2, p. 181-182', notable: false },
+        'mʲ:soft-before-vowel:м': { blurb: '⟨м⟩ softens before front vowel. As a sonorant, it is never devoiced.', citation: '§4.2, p. 185', notable: false },
+        'kʲ:soft-before-vowel:к': { blurb: '⟨к⟩ softens before front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
+        'ɡʲ:soft-before-vowel:г': { blurb: '⟨г⟩ softens before front vowel. Only another velar can regressively palatalize it.', citation: '§4.2, p. 187-188', notable: false },
+        'xʲ:soft-before-vowel:х': { blurb: '⟨х⟩ softens before front vowel. Russian /xʲ/ is between German ich-laut and ach-laut.', citation: '§4.2, p. 189', notable: false },
+        'zʲ:soft-before-vowel:з': { blurb: '⟨з⟩ softens before front vowel. Prepositions ending in ⟨з⟩ transmit palatalization across boundaries.', citation: '§4.2, p. 177-178', notable: false },
+        
+        // 4.2 Intrinsically Soft Consonants
         'tʃ:hard-default:ч': { blurb: '⟨ч⟩ is intrinsically palatalized — always soft, regardless of what follows.', citation: '§4.2, p. 175-176', notable: false },
-        'ʃ:hard-default:ш': { blurb: '⟨ш⟩ is intrinsically hard — it cannot soften, regardless of what follows.', citation: '§4.1, p. 161-163', notable: false },
+        'ʃʲʃʲ:hard-default:щ': { blurb: '⟨щ⟩ is intrinsically palatalized and doubled. Grayson prefers /ʃʲʃʲ/ to emphasize rearticulation.', citation: '§4.2, p. 171-173', notable: false },
         
-        // SIGNS
-        'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but palatalizes the preceding consonant.', citation: '§4.3, p. 195-198', notable: false },
-        ':hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a boundary marker.', citation: '§4.3, p. 192-194', notable: false },
+        // 4.3 Intrinsically Hard Consonants
+        'ʒ:hard-default:ж': { blurb: '⟨ж⟩ is intrinsically hard — it cannot soften. Even before ⟨и⟩ or ⟨е⟩, the vowel retracts to [ɨ].', citation: '§4.1, p. 161-166', notable: false },
+        'ʃ:hard-default:ш': { blurb: '⟨ш⟩ is intrinsically hard — it cannot soften. Even before ⟨и⟩ or ⟨е⟩, the vowel retracts to [ɨ].', citation: '§4.1, p. 161-163', notable: false },
+        'ts:hard-default:ц': { blurb: '⟨ц⟩ is intrinsically hard — it cannot soften. This affricate is a single phoneme, not /t/ + /s/.', citation: '§4.1, p. 166-168', notable: false },
         
-        // CLUSTERS (subset)
-        'tːsʌ:cluster:тся': { blurb: 'The reflexive verb ending ⟨-тся⟩ is pronounced /tːsʌ/.', citation: '§6.2, p. 237-238', notable: true },
-        'tːsʌ:cluster:ться': { blurb: 'The reflexive verb ending ⟨-ться⟩ is pronounced /tːsʌ/. The soft sign has no effect.', citation: '§6.2, p. 237-238', notable: true }
+        // ========================================
+        // PART 5: CONSONANTS — HARD
+        // ========================================
+        'ɫ:hard-default:л': { blurb: 'Hard ⟨л⟩ is velarized (the "dark-l"). Russian never has unqualified [l].', citation: '§4.1, p. 150-151', notable: false },
+        'j:hard-default:й': { blurb: '⟨й⟩ is the palatal glide. It only appears after vowels or as closing element in diphthongs.', citation: '§3.2, p. 96', notable: false },
+        's:hard-default:с': { blurb: 'Hard ⟨с⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 155', notable: false },
+        'z:hard-default:з': { blurb: 'Hard ⟨з⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 140', notable: false },
+        't:hard-default:т': { blurb: 'Hard ⟨т⟩ is the default. Russian /t/ is dental, but MSR notates it as plain /t/.', citation: '§4.1, p. 140', notable: false },
+        'd:hard-default:д': { blurb: 'Hard ⟨д⟩ is the default. Like /t/, Russian /d/ is dental.', citation: '§4.1, p. 146', notable: false },
+        'p:hard-default:п': { blurb: 'Hard ⟨п⟩ is the default. Russian /p/ is unaspirated (like Italian).', citation: '§4.1, p. 147', notable: false },
+        'b:hard-default:б': { blurb: 'Hard ⟨б⟩ is the default. Like /p/, Russian /b/ is unaspirated.', citation: '§4.1, p. 140', notable: false },
+        'k:hard-default:к': { blurb: 'Hard ⟨к⟩ is the default. Russian /k/ is unaspirated (like Italian).', citation: '§4.1, p. 140', notable: false },
+        'ɡ:hard-default:г': { blurb: 'Hard ⟨г⟩ is the default. Note: IPA uses opentail /ɡ/.', citation: '§4.1, p. 145', notable: false },
+        'x:hard-default:х': { blurb: 'Hard ⟨х⟩ is the default. This voiceless velar fricative resembles German ach-laut.', citation: '§4.1, p. 149', notable: false },
+        'f:hard-default:ф': { blurb: 'Hard ⟨ф⟩ is the default. All words with ⟨ф⟩ are loanwords.', citation: '§4.1, p. 148', notable: false },
+        'v:hard-default:в': { blurb: 'Hard ⟨в⟩ is the default. ⟨в⟩ is phonemically weak: it undergoes but does not trigger voicing assimilation.', citation: '§4.1, p. 152-153', notable: false },
+        'm:hard-default:м': { blurb: 'Hard ⟨м⟩ is the default. As a sonorant, it is never devoiced.', citation: '§4.1, p. 140', notable: false },
+        'n:hard-default:н': { blurb: 'Hard ⟨н⟩ is the default. Like /t/ and /d/, Russian /n/ is dental.', citation: '§4.1, p. 154', notable: false },
+        'r:hard-default:р': { blurb: 'Hard ⟨р⟩ is the default. Russian /r/ is a trilled alveolar, like Italian or Spanish.', citation: '§4.1, p. 155', notable: false },
+        
+        // ========================================
+        // PART 6: SIGNS
+        // ========================================
+        ':hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound. It marks a boundary: the consonant stays hard, and /j/ precedes the following vowel.', citation: '§4.3, p. 192-194', notable: false },
+        'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but palatalizes the preceding consonant. When followed by a soft vowel, /j/ appears between.', citation: '§4.3, p. 195-198', notable: false },
+        
+        // ========================================
+        // PART 7: ALLOPHONES & PROCESSES
+        // ========================================
+        'ɣ:hard-default:х': { blurb: 'The voiced velar fricative [ɣ] is an allophone of /x/, occurring through voicing assimilation across word boundaries.', citation: '§4.1, p. 149; §6.3, p. 252-254', notable: false },
+        
+        // ========================================
+        // PART 8: SPECIAL CLUSTERS
+        // ========================================
+        'tːsʌ:cluster:тся': { blurb: 'The reflexive ending ⟨-тся⟩ is pronounced /tːsʌ/, resembling ⟨ц⟩ but with elongated /t/.', citation: '§6.2, p. 237-238', notable: true },
+        'tːsʌ:cluster:ться': { blurb: 'The reflexive ending ⟨-ться⟩ is pronounced /tːsʌ/. The soft sign has no effect here.', citation: '§6.2, p. 237-238', notable: true },
+        'ʃt:cluster:чт': { blurb: 'In ⟨что⟩, ⟨чтобы⟩, ⟨ничто⟩, etc., ⟨чт⟩ is pronounced /ʃt/, not /tʃʲt/.', citation: '§6.2, p. 240-241', notable: true },
+        'ʃn:cluster:чн': { blurb: 'In certain words (⟨конечно⟩, ⟨скучно⟩, ⟨нарочно⟩), ⟨-чн-⟩ is pronounced /ʃn/.', citation: '§6.2, p. 241-243', notable: true },
+        'ʃʲʃʲ:cluster:сч': { blurb: 'The clusters ⟨сч⟩, ⟨зч⟩, ⟨жч⟩ all assimilate to /ʃʲʃʲ/ — the same sound as ⟨щ⟩.', citation: '§6.2, p. 235-236', notable: false }
       },
       
       // Derive rule name from transcriptionLog features
