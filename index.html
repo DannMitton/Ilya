@@ -3040,6 +3040,42 @@ const SINGER_SUPPLEMENT = {
           // PHASE 2: Apply cross-word assimilation
           GraysonEngine.applyCrossWordAssimilation(transcribedWords);
           
+          // PHASE 2.5: Sync syllable IPA and transcriptionLog with surface form after final devoicing
+          // When final devoicing changes ipaSurface, update the last syllable's IPA to match
+          transcribedWords.forEach(tw => {
+            if (tw.ipaSurface !== tw.ipaUnderlying && tw.syllables.length > 0) {
+              const lastSyl = tw.syllables[tw.syllables.length - 1];
+              const underlyingConcat = tw.syllables.map(s => s.ipa).join('');
+              const surfaceClean = tw.ipaSurface.replace(/\s+/g, '');
+              
+              // Calculate prefix length (everything before last syllable)
+              const prefixLen = underlyingConcat.length - lastSyl.ipa.length;
+              
+              // Extract what the last syllable should be in surface form
+              if (surfaceClean.length >= prefixLen) {
+                const newLastSylIpa = surfaceClean.slice(prefixLen);
+                lastSyl.ipa = newLastSylIpa;
+                
+                // Also update transcriptionLog: find the last consonant entry and update its IPA
+                if (tw.transcriptionLog && tw.transcriptionLog.length > 0) {
+                  // Find the last entry that's a consonant
+                  for (let i = tw.transcriptionLog.length - 1; i >= 0; i--) {
+                    const entry = tw.transcriptionLog[i];
+                    if (entry.features && entry.features.type === 'consonant') {
+                      // Check if this consonant was devoiced
+                      const devoicingMap = GraysonEngine.voicedToVoiceless;
+                      if (devoicingMap[entry.ipa]) {
+                        entry.ipa = devoicingMap[entry.ipa];
+                        entry.features.finalDevoicing = true;
+                      }
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          });
+          
           // PHASE 3: Render with ipaSurface
           transcribedWords.forEach((tw, wordIdx) => {
             const wordStack = document.createElement('div');
@@ -4840,6 +4876,17 @@ const SINGER_SUPPLEMENT = {
         'ɨ:after-hard:и': { blurb: 'When ⟨и⟩ follows an intrinsically hard consonant (⟨ж⟩, ⟨ш⟩, or ⟨ц⟩), it is pronounced /ɨ/. The hard consonant retracts the cardinal-i to velar-i.', citation: 'pp. 93–96', notable: true },
         'ɨ:after-hard:е': { blurb: 'When unstressed ⟨е⟩ follows an intrinsically hard consonant (⟨ж⟩, ⟨ш⟩, or ⟨ц⟩), it is pronounced /ɨ/.', citation: 'pp. 97–107', notable: true },
         'devoicing:process': { blurb: 'In Russian, as in German, final consonants are generally devoiced regardless of spelling (e.g., ⟨год⟩ → /ɡot/, ⟨кровь⟩ → /krofʲ/). Exception: sonorants (/m/, /mʲ/, /n/, /ɲ/, /ɫ/, /lʲ/, /r/, /rʲ/) are never devoiced.', citation: 'p. 199', notable: false },
+        
+        // Final devoicing blurbs (v5.5.1)
+        'k:final-devoicing:г': { blurb: 'Word-final ⟨г⟩ is devoiced to /k/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'p:final-devoicing:б': { blurb: 'Word-final ⟨б⟩ is devoiced to /p/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'f:final-devoicing:в': { blurb: 'Word-final ⟨в⟩ is devoiced to /f/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'fʲ:final-devoicing:в': { blurb: 'Word-final soft ⟨в⟩ is devoiced to /fʲ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        't:final-devoicing:д': { blurb: 'Word-final ⟨д⟩ is devoiced to /t/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'tʲ:final-devoicing:д': { blurb: 'Word-final soft ⟨д⟩ is devoiced to /tʲ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        's:final-devoicing:з': { blurb: 'Word-final ⟨з⟩ is devoiced to /s/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'sʲ:final-devoicing:з': { blurb: 'Word-final soft ⟨з⟩ is devoiced to /sʲ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        'ʃ:final-devoicing:ж': { blurb: 'Word-final ⟨ж⟩ is devoiced to /ʃ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
         'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
         'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In Ilya, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
         'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; Ilya uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
@@ -4874,6 +4921,12 @@ const SINGER_SUPPLEMENT = {
         
         if (features.type === 'consonant') {
           const lowerChar = char?.toLowerCase();
+          
+          // Final devoicing takes precedence (v5.5.1)
+          if (features.finalDevoicing) {
+            return 'final-devoicing';
+          }
+          
           // Always-soft consonants (ч, щ)
           if (['ч', 'щ'].includes(lowerChar)) {
             return 'always-soft';
