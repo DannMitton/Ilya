@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.7.5 Silent Consonant Clusters</title>
+  <title>Ilya — v5.8.0 ё-Restoration</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2984,14 +2984,24 @@ const SINGER_SUPPLEMENT = {
           return words.map(word => {
             const lookup = GraysonEngine.lookupStress(word);
             
-            // ё always carries stress — override dictionary if needed
-            const yoSyllable = GraysonEngine.findYoSyllable(word);
+            // Determine the display form (may be ё-restored)
+            let displayWord = word;
+            let wasYoRestored = false;
+            
+            if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
+              // Restore ё while preserving original case pattern
+              displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
+              wasYoRestored = true;
+            }
+            
+            // ё always carries stress — check the display form (which may now have ё)
+            const yoSyllable = GraysonEngine.findYoSyllable(displayWord);
             let stress, stressSource;
             
             if (yoSyllable !== -1) {
               // ё found: stress is locked to that syllable
               stress = yoSyllable;
-              stressSource = 'yo-rule'; // Special source indicating ё rule
+              stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
             } else if (lookup) {
               stress = lookup.stress;
               stressSource = lookup.source;
@@ -3002,12 +3012,13 @@ const SINGER_SUPPLEMENT = {
             }
             
             return {
-              cyrillic: word,
+              cyrillic: displayWord,
               stress: stress,
               gloss: lookup ? lookup.gloss : '',
               originalStress: stress,
               stressSource: stressSource,
               hasYo: yoSyllable !== -1, // Track for UI
+              originalInput: wasYoRestored ? word : null,  // Track what user typed
               rightBoundary: null,      // Set by autoDetectBoundaries()
               boundarySource: null      // 'auto' | 'user' | 'punctuation'
             };
@@ -3169,6 +3180,10 @@ const SINGER_SUPPLEMENT = {
               wordStack.setAttribute('title', 'Stress marked as your choice');
             } else if (stressSource === 'dictionary') {
               wordStack.setAttribute('title', 'Stress from dictionary');
+            } else if (stressSource === 'yo-restored') {
+              wordStack.setAttribute('title', 'ё restored from dictionary');
+            } else if (stressSource === 'yo-rule') {
+              wordStack.setAttribute('title', 'Stress locked to ё');
             } else if (stressSource === 'default') {
               wordStack.setAttribute('title', 'Stress unverified — click to confirm');
             }
@@ -3739,15 +3754,75 @@ const SINGER_SUPPLEMENT = {
       // Look up stress from dictionary
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
-        const entry = STRESS_DICTIONARY[cleanWord] || SINGER_SUPPLEMENT[cleanWord];
-        if (entry) {
+        
+        // Phase 1: Try exact match first (handles все/всё disambiguation)
+        const exactEntry = STRESS_DICTIONARY[cleanWord] || SINGER_SUPPLEMENT[cleanWord];
+        if (exactEntry) {
           return {
-            stress: entry.stress,
-            gloss: entry.gloss || '',
-            source: entry.source || 'dictionary'
+            stress: exactEntry.stress,
+            gloss: exactEntry.gloss || '',
+            source: exactEntry.source || 'dictionary',
+            canonicalForm: cleanWord  // No change needed
           };
         }
+        
+        // Phase 2: Word not found — try ё-restoration
+        // Russian publishers often omit the dieresis, printing ⟨е⟩ where ⟨ё⟩ should appear
+        const chars = [...cleanWord];
+        for (let i = 0; i < chars.length; i++) {
+          if (chars[i] === 'е') {
+            // Try substituting this е with ё
+            const candidate = [...chars];
+            candidate[i] = 'ё';
+            const candidateWord = candidate.join('');
+            
+            const restoredEntry = STRESS_DICTIONARY[candidateWord] || SINGER_SUPPLEMENT[candidateWord];
+            if (restoredEntry) {
+              return {
+                stress: restoredEntry.stress,
+                gloss: restoredEntry.gloss || '',
+                source: 'yo-restored',
+                canonicalForm: candidateWord,  // The corrected spelling
+                originalInput: cleanWord       // What user typed
+              };
+            }
+          }
+        }
+        
+        // Phase 3: No match found
         return null;
+      },
+      
+      // Apply the case pattern from original word to canonical form
+      // Preserves uppercase/lowercase pattern when restoring ё
+      applyCasePattern(original, canonical) {
+        // Strip punctuation from original to get just letters
+        const origLetters = original.replace(/[.,!?;:"""''–—]/g, '');
+        const canonLetters = canonical;
+        
+        // If lengths don't match, just return canonical (shouldn't happen with е→ё)
+        if (origLetters.length !== canonLetters.length) {
+          return canonical;
+        }
+        
+        // Apply case from original to canonical, character by character
+        const result = [];
+        for (let i = 0; i < canonLetters.length; i++) {
+          const origChar = origLetters[i];
+          const canonChar = canonLetters[i];
+          
+          // Check if original was uppercase
+          if (origChar === origChar.toUpperCase() && origChar !== origChar.toLowerCase()) {
+            // Original was uppercase — apply to canonical
+            result.push(canonChar.toUpperCase());
+          } else {
+            result.push(canonChar.toLowerCase());
+          }
+        }
+        
+        // Re-append any trailing punctuation from original
+        const trailingPunct = original.match(/[.,!?;:"""''–—]+$/);
+        return result.join('') + (trailingPunct ? trailingPunct[0] : '');
       },
       
       isVowel(char) {
