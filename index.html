@@ -4779,21 +4779,17 @@ const SINGER_SUPPLEMENT = {
        ======================================== */
     const OCRModule = {
       // Configuration
-      TESSERACT_VERSION: '4.1.1',
-      CDN_PRIMARY: 'https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js',
-      CDN_FALLBACK: 'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js',
-      // Worker and language paths use Tesseract.js defaults (handles CDN internally)
-      INIT_TIMEOUT: 15000,
-      IDLE_TIMEOUT: 300000, // 5 minutes
+      TESSERACT_VERSION: '5',
+      CDN_PRIMARY: 'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js',
+      CDN_FALLBACK: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+      INIT_TIMEOUT: 60000, // OCR can be slow
       MAX_IMAGE_WIDTH: 1200,
       CONFIDENCE_SKIP: 40,
       CONFIDENCE_DUBIOUS: 80,
       
       // State
-      worker: null,
       isLoaded: false,
       isProcessing: false,
-      idleTimer: null,
       
       // Callbacks
       _onProgress: null,
@@ -4827,7 +4823,7 @@ const SINGER_SUPPLEMENT = {
       },
       
       /**
-       * Initialize Tesseract worker (lazy-load)
+       * Initialize - just load the Tesseract.js library
        */
       async init() {
         if (this.isLoaded) return true;
@@ -4836,82 +4832,29 @@ const SINGER_SUPPLEMENT = {
           return false;
         }
         
-        // Suppress AudioContext warnings from Tesseract
-        const originalWarn = console.warn;
-        console.warn = (...args) => {
-          if (typeof args[0] === 'string' && args[0].includes('AudioContext')) return;
-          originalWarn.apply(console, args);
-        };
-        
-        const timeout = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('OCR initialization timeout')), this.INIT_TIMEOUT)
-        );
-        
         try {
           // Load Tesseract.js library with fallback
           if (!window.Tesseract) {
+            console.log('Loading Tesseract.js...');
             try {
               await this.loadScript(this.CDN_PRIMARY);
+              console.log('Tesseract.js loaded from primary CDN');
             } catch (e) {
               console.warn('Primary CDN failed, trying fallback...');
               await this.loadScript(this.CDN_FALLBACK);
+              console.log('Tesseract.js loaded from fallback CDN');
             }
           }
           
-          // Create worker with Russian language
-          // Use Tesseract's default paths - they handle CDN routing internally
-          const workerPromise = (async () => {
-            this.worker = await Tesseract.createWorker('rus', 1, {
-              logger: (m) => {
-                if (m.status && this._onProgress) {
-                  this._onProgress(m.status, m.progress);
-                }
-              }
-            });
-          })();
-          
-          await Promise.race([workerPromise, timeout]);
-          
-          // Verify worker is actually initialized
-          if (!this.worker) {
-            throw new Error('Worker creation returned null');
-          }
-          
           this.isLoaded = true;
-          this.touch(); // Start idle timer
-          
-          // Restore console.warn
-          console.warn = originalWarn;
-          
-          console.log('OCR module initialized successfully');
+          console.log('OCR module ready');
           return true;
         } catch (err) {
-          console.warn = originalWarn;
           this.isLoaded = false;
           this._onError?.('OCR unavailable. Please type or paste text.');
           console.error('OCR init failed:', err);
           return false;
         }
-      },
-      
-      /**
-       * Reset idle timer (call on each use)
-       */
-      touch() {
-        clearTimeout(this.idleTimer);
-        this.idleTimer = setTimeout(() => this.destroy(), this.IDLE_TIMEOUT);
-      },
-      
-      /**
-       * Clean up worker to free memory
-       */
-      async destroy() {
-        clearTimeout(this.idleTimer);
-        if (this.worker) {
-          await this.worker.terminate();
-          this.worker = null;
-        }
-        this.isLoaded = false;
       },
       
       /**
@@ -5020,6 +4963,7 @@ const SINGER_SUPPLEMENT = {
       
       /**
        * Main entry point: process image file → Russian text
+       * Uses Tesseract.recognize() which handles worker lifecycle internally
        */
       async processImage(file, onProgress) {
         if (this.isProcessing) {
@@ -5035,33 +4979,44 @@ const SINGER_SUPPLEMENT = {
         }
         
         this.isProcessing = true;
-        this._onProgress = onProgress;
-        this.touch();
         
         try {
           // Step 1: Resize image
           onProgress?.('processing', 0);
+          console.log('Resizing image...');
           const canvas = await this.resizeImage(file);
           
           // Step 2: Preprocess for better recognition
           onProgress?.('processing', 0.1);
+          console.log('Preprocessing image...');
           this.preprocessCanvas(canvas);
           
-          // Step 3: Run Tesseract
+          // Step 3: Run Tesseract using simple recognize() API
+          // This handles worker creation/destruction internally
           onProgress?.('recognizing text', 0.2);
-          const { data } = await this.worker.recognize(canvas);
+          console.log('Running OCR recognition...');
+          
+          const result = await Tesseract.recognize(canvas, 'rus', {
+            logger: m => {
+              console.log('Tesseract:', m.status, m.progress);
+              if (m.status) {
+                onProgress?.(m.status, m.progress);
+              }
+            }
+          });
           
           // Step 4: Filter by confidence and extract text
           onProgress?.('cleaning', 0.9);
+          console.log('Processing results...');
           let text = '';
           
-          if (data.words && data.words.length > 0) {
-            text = data.words
+          if (result.data.words && result.data.words.length > 0) {
+            text = result.data.words
               .filter(w => w.confidence >= this.CONFIDENCE_SKIP)
               .map(w => w.text)
               .join(' ');
           } else {
-            text = data.text || '';
+            text = result.data.text || '';
           }
           
           // Step 5: Clean up the text
@@ -5072,12 +5027,11 @@ const SINGER_SUPPLEMENT = {
             throw new Error('No Cyrillic text found in image');
           }
           
-          this.touch();
+          console.log('OCR complete, extracted', text.length, 'characters');
           return text;
           
         } finally {
           this.isProcessing = false;
-          this._onProgress = null;
         }
       },
       
