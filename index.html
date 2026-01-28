@@ -5065,15 +5065,17 @@ const SINGER_SUPPLEMENT = {
         });
         
         // Syllable button event delegation (prevents listener leak - v5.5.1)
-        this.elements.syllableDisplay.addEventListener('click', (e) => {
-          const btn = e.target.closest('.syllable-btn');
-          
-          // Guard: only respond if popup is open and button isn't disabled
-          if (btn && this.isOpen && !btn.disabled) {
-            const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
-            this.updateStress(newStressIdx);
-          }
-        });
+        if (this.elements.syllableDisplay) {
+          this.elements.syllableDisplay.addEventListener('click', (e) => {
+            const btn = e.target.closest('.syllable-btn');
+            
+            // Guard: only respond if popup is open and button isn't disabled
+            if (btn && this.isOpen && !btn.disabled) {
+              const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
+              this.updateStress(newStressIdx);
+            }
+          });
+        }
         
         // Stress source segment handlers (v5.4.2)
         [this.elements.stressSourceDictionary, this.elements.stressSourceComposer, this.elements.stressSourceUser].forEach(btn => {
