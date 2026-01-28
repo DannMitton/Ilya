@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.8.1 ё Toggle UI</title>
+  <title>Ilya — v5.8.2 ё Toggle Crossfade</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1484,6 +1484,11 @@
       color: var(--ilya-accent);
     }
     
+    .yo-toggle-btn:active {
+      transform: scale(0.97);
+      transition: transform 50ms ease-out;
+    }
+    
     .yo-toggle-btn:focus {
       outline: 2px solid var(--ilya-accent-light);
       outline-offset: 1px;
@@ -1494,6 +1499,16 @@
       font-size: 0.7rem;
       color: var(--ilya-warning);
       font-style: italic;
+    }
+    
+    /* Popup content crossfade for ё toggle (v5.8.1) */
+    .popup-body {
+      transition: opacity 120ms ease-out;
+    }
+    
+    .popup-body.fading {
+      opacity: 0.3;
+      transition: opacity 80ms ease-out;
     }
 
     /* Old restore-link kept for compatibility */
@@ -6059,8 +6074,8 @@ const SINGER_SUPPLEMENT = {
         this.updateAllUI();
       },
       
-      // Handle ё toggle (v5.8)
-      // Switches between е and ё forms, re-transcribes, and updates display
+      // Handle ё toggle (v5.8.1)
+      // Switches between е and ё forms with crossfade animation
       handleYoToggle() {
         if (!this.currentWord) return;
         
@@ -6080,10 +6095,8 @@ const SINGER_SUPPLEMENT = {
         if (hasYo) {
           // Currently has ё — remove it (revert to original or convert ё→е)
           if (originalInput) {
-            // Revert to what user originally typed
             newCyrillic = originalInput;
           } else {
-            // Convert first ё to е (native ё case)
             newCyrillic = currentCyrillic.replace(/ё/, 'е').replace(/Ё/, 'Е');
           }
           newYoSource = 'user-yo-edit';
@@ -6107,37 +6120,121 @@ const SINGER_SUPPLEMENT = {
         
         // Re-run stress assignment
         if (newHasYo) {
-          // ё present: lock stress to ё syllable
           const yoSyllable = GraysonEngine.findYoSyllable(newCyrillic);
           if (yoSyllable !== -1) {
             word.stress = yoSyllable;
             word.stressSource = newYoSource;
           }
         } else {
-          // ё removed: unlock stress, try dictionary lookup
           const lookup = GraysonEngine.lookupStress(newCyrillic);
           if (lookup) {
             word.stress = lookup.stress;
             word.stressSource = lookup.source;
           } else {
-            // Default to first syllable
             word.stress = 0;
             word.stressSource = 'default';
           }
         }
         
-        // Re-render the paper (full re-transcription)
-        DrawerController.renderToPaper();
+        // Crossfade: fade out popup content
+        const popupBody = this.elements.card.querySelector('.popup-body');
+        popupBody?.classList.add('fading');
         
-        // Re-open popup for this word to refresh state
-        const wordStacks = document.querySelectorAll('.word-stack');
-        wordStacks.forEach(stack => {
-          if (stack.dataset.lineIndex === String(lineIdx) && 
-              stack.dataset.wordIndex === String(wordIdx)) {
-            // Trigger click to re-open popup with fresh data
-            stack.click();
+        // After brief fade, re-render and refresh popup in place
+        setTimeout(() => {
+          // Re-render the paper
+          DrawerController.renderToPaper();
+          
+          // Find the new word stack element and update currentWord reference
+          const wordStacks = document.querySelectorAll('.word-stack');
+          let newElement = null;
+          wordStacks.forEach(stack => {
+            if (stack.dataset.lineIndex === String(lineIdx) && 
+                stack.dataset.wordIndex === String(wordIdx)) {
+              newElement = stack;
+            }
+          });
+          
+          if (newElement) {
+            // Build fresh wordData from the new element
+            const freshWordData = {
+              element: newElement,
+              lineIndex: lineIdx,
+              wordIndex: wordIdx,
+              cyrillic: newElement.dataset.cyrillic,
+              ipa: newElement.dataset.ipa,
+              gloss: newElement.dataset.gloss,
+              syllables: JSON.parse(newElement.dataset.syllables || '[]'),
+              isProclitic: newElement.dataset.isProclitic,
+              isEnclitic: newElement.dataset.isEnclitic,
+              hasYo: newElement.dataset.hasYo,
+              stressSource: newElement.dataset.stressSource,
+              rightBoundary: newElement.dataset.rightBoundary,
+              boundarySource: newElement.dataset.boundarySource,
+              originalInput: newElement.dataset.originalInput,
+              dictionaryForm: newElement.dataset.dictionaryForm,
+              yoSource: newElement.dataset.yoSource
+            };
+            
+            // Update currentWord reference
+            this.currentWord = freshWordData;
+            
+            // Refresh popup content in place
+            this.refreshPopupContent(freshWordData);
           }
-        });
+          
+          // Fade back in
+          popupBody?.classList.remove('fading');
+          
+          // Return focus to toggle button
+          this.elements.yoToggleBtn?.focus();
+        }, 80); // Match fade-out duration
+      },
+      
+      // Refresh popup content without closing (v5.8.1)
+      refreshPopupContent(wordData) {
+        // Update IPA and Cyrillic displays
+        const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
+        const syllabifiedIPA = wordData.syllables.map((s, idx) => {
+          const stressedIdx = wordData.syllables.findIndex(syl => syl.isStressed);
+          return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
+        }).join(' ');
+        
+        this.elements.ipa.textContent = '/' + syllabifiedIPA + '/';
+        this.elements.cyrillic.textContent = syllabifiedCyrillic;
+        
+        // Update syllable buttons
+        const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
+        const syllableCount = wordData.syllables.length;
+        const buttonsDisabled = hasYo && syllableCount > 1;
+        
+        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
+          <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
+                  data-syllable-index="${idx}"
+                  ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
+            ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
+          </button>
+        `).join('');
+        
+        // Update syllable label
+        if (syllableCount === 1) {
+          const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
+          this.elements.syllableLabel.textContent = isClitic ? 'Unstressed monosyllable' : 'Stressed monosyllable';
+        } else if (hasYo) {
+          this.elements.syllableLabel.textContent = 'Stress locked to ё';
+        } else {
+          this.elements.syllableLabel.textContent = 'Click to reassign stress';
+        }
+        
+        // Update stress source module visibility (locked when monosyllable or ё)
+        const stressLocked = syllableCount === 1 || hasYo;
+        this.elements.stressSourceModule.style.display = stressLocked ? 'none' : 'block';
+        
+        // Refresh ё toggle module
+        this.populateYoToggle(wordData);
+        
+        // Refresh Phoneme Ribbon
+        this.renderRibbon(wordData);
       },
       
       // Commit ALL staged changes (shared footer)
