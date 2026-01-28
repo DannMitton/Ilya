@@ -4782,8 +4782,7 @@ const SINGER_SUPPLEMENT = {
       TESSERACT_VERSION: '4.1.1',
       CDN_PRIMARY: 'https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js',
       CDN_FALLBACK: 'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js',
-      WORKER_CDN: 'https://unpkg.com/tesseract.js@4.1.1/dist/worker.min.js',
-      LANG_CDN: 'https://tessdata.projectnaptha.com/4.0.0',
+      // Worker and language paths use Tesseract.js defaults (handles CDN internally)
       INIT_TIMEOUT: 15000,
       IDLE_TIMEOUT: 300000, // 5 minutes
       MAX_IMAGE_WIDTH: 1200,
@@ -4860,10 +4859,9 @@ const SINGER_SUPPLEMENT = {
           }
           
           // Create worker with Russian language
+          // Use Tesseract's default paths - they handle CDN routing internally
           const workerPromise = (async () => {
             this.worker = await Tesseract.createWorker('rus', 1, {
-              workerPath: this.WORKER_CDN,
-              langPath: this.LANG_CDN,
               logger: (m) => {
                 if (m.status && this._onProgress) {
                   this._onProgress(m.status, m.progress);
@@ -4874,12 +4872,18 @@ const SINGER_SUPPLEMENT = {
           
           await Promise.race([workerPromise, timeout]);
           
+          // Verify worker is actually initialized
+          if (!this.worker) {
+            throw new Error('Worker creation returned null');
+          }
+          
           this.isLoaded = true;
           this.touch(); // Start idle timer
           
           // Restore console.warn
           console.warn = originalWarn;
           
+          console.log('OCR module initialized successfully');
           return true;
         } catch (err) {
           console.warn = originalWarn;
