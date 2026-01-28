@@ -6,7 +6,7 @@
 
 ## Overview
 
-MSR implements the phonetic transcription rules from Craig Grayson's *Russian Lyric Diction* (2012), providing singers and voice teachers with accurate IPA transcriptions tailored for classical singing contexts.
+Ilya implements the phonetic transcription rules from Craig Grayson's *Russian Lyric Diction* (2012), providing singers and voice teachers with accurate IPA transcriptions tailored for classical singing contexts.
 
 ## Features
 
@@ -19,7 +19,7 @@ MSR implements the phonetic transcription rules from Craig Grayson's *Russian Ly
 ## Directory Structure
 
 ```
-msr/
+ilya/
 ├── public/
 │   └── index.html          # Main app entry
 ├── src/
