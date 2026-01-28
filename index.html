@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.5.0 Content First Redesign</title>
+  <title>Ilya — v5.5.1 Event Delegation Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4581,7 +4581,7 @@ const SINGER_SUPPLEMENT = {
         // Entry 13 | Pre-tonic а → /ɑ/
         'ɑ:pretonic:а': { blurb: 'When ⟨а⟩ appears in pretonic position (the syllable immediately before the stress), it is pronounced /ɑ/.', citation: 'pp. 97–102', notable: false },
         
-        // Entry 11 | Pretonic interpalatal а → /a/
+        // Entry 11b | Pretonic interpalatal а → /a/
         'a:pretonic-interpalatal:а': { blurb: 'When ⟨а⟩ appears in pretonic position between two palatalized consonants (interpalatal context), it is pronounced /a/. This fronting is a natural coarticulatory effect.', citation: 'pp. 108, 127', notable: false },
         
         // Entry 14 | Word-initial а → /ɑ/
@@ -5062,6 +5062,17 @@ const SINGER_SUPPLEMENT = {
         
         this.elements.card.addEventListener('click', (e) => {
           e.stopPropagation();
+        });
+        
+        // Syllable button event delegation (prevents listener leak - v5.5.1)
+        this.elements.syllableDisplay.addEventListener('click', (e) => {
+          const btn = e.target.closest('.syllable-btn');
+          
+          // Guard: only respond if popup is open and button isn't disabled
+          if (btn && this.isOpen && !btn.disabled) {
+            const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
+            this.updateStress(newStressIdx);
+          }
         });
         
         // Stress source segment handlers (v5.4.2)
@@ -5658,13 +5669,6 @@ const SINGER_SUPPLEMENT = {
             ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
           </button>
         `).join('');
-        
-        this.elements.syllableDisplay.querySelectorAll('.syllable-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
-            this.updateStress(newStressIdx);
-          });
-        });
         
         // Populate IPA and Cyrillic displays (v5.5)
         const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
