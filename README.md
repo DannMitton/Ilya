@@ -1,4 +1,4 @@
-# MSR (My Sung Russian)
+# ILYA (formerly My Sung Russian)
 
 **IPA transcription tool for singers learning Russian vocal repertoire**
 
