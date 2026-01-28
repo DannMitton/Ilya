@@ -4547,6 +4547,11 @@ const SINGER_SUPPLEMENT = {
             // Devoice the left final: друг там → druk tam
             leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
             leftWord.skipFinalDevoicing = true;  // Already handled
+          } else if (this.isVoicelessConsonant(rightInitial) && this.isVPhoneme(leftFinal)) {
+            // Special case: /v/ devoices before voiceless consonants (в шутку → f ʃutku)
+            // Grayson: /v/ doesn't TRIGGER voicing, but DOES UNDERGO devoicing
+            leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
+            leftWord.skipFinalDevoicing = true;
           }
         }
         
