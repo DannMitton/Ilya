@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.6.1 Test Harness Fix</title>
+  <title>Ilya — v5.6.2 Final Devoicing Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4542,11 +4542,15 @@ const SINGER_SUPPLEMENT = {
         
         // Step 3-4 will be special clusters and palatalization (future phases)
         
-        // NOTE: Final consonant devoicing is now DEFERRED to cross-word assimilation stage.
-        // This allows voicing to cross word boundaries when appropriate (Grayson p. 248-257).
-        // The ipa returned here is the "underlying" form before boundary-sensitive devoicing.
+        // Final consonant devoicing (Grayson Ch. 4 Sec. 4, pp. 199-202)
+        // For clitics, devoicing is deferred to cross-word stage (boundary-dependent)
+        // For standalone words, apply devoicing now
+        let ipaSurface = ipa;
+        if (!isClitic) {
+          ipaSurface = this.applyFinalDevoicing(ipa);
+        }
         
-        return { ipa, ipaUnderlying: ipa, syllables: syllableData, transcriptionLog };
+        return { ipa: ipaSurface, ipaUnderlying: ipa, syllables: syllableData, transcriptionLog };
       },
       
       /**
