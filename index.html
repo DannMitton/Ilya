@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.6.0 Post-tonic Fix</title>
+  <title>Ilya — v5.6.1 Test Harness Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6635,7 +6635,9 @@ const SINGER_SUPPLEMENT = {
         console.log(`\n▶ ${category}`);
         for (const test of tests) {
           const result = processWord(test.word, test.stress);
-          const actual = result.syllables.map(s => s.ipa).join(' ');
+          // Use full-word IPA (includes cross-syllable assimilation) not syllable concatenation
+          const actual = result.ipa.replace(/ˈ/g, ' ˈ').replace(/^\s+/, '').trim();
+          const syllableIpa = result.syllables.map(s => s.ipa).join(' ');
 
           const normalizedActual = normalizeForComparison(actual);
           const normalizedExpected = normalizeForComparison(test.expected);
@@ -6648,6 +6650,9 @@ const SINGER_SUPPLEMENT = {
             totalFailed++;
             failures.push({ word: test.word, expected: test.expected, actual, note: test.note });
             console.log(`  ❌ ${test.word}: got /${actual}/, expected /${test.expected}/`);
+            if (actual !== syllableIpa) {
+              console.log(`     (syllables: /${syllableIpa}/)`);
+            }
             console.log(`     ${test.note}`);
           }
         }
