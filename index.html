@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.8.0 ё-Restoration</title>
+  <title>Ilya — v5.8.1 ё Toggle UI</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1446,6 +1446,55 @@
       padding-top: 0.5rem;
       border-top: 1px solid #E5E7EB;
     }
+    
+    /* ё toggle module */
+    .yo-toggle-module {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 8px 0;
+      border-top: 1px solid #E5E7EB;
+      box-sizing: border-box;
+    }
+    
+    .yo-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    
+    .yo-current-form {
+      font-family: 'Noto Serif', Georgia, serif;
+      font-size: 1rem;
+      color: var(--ink-primary);
+    }
+    
+    .yo-toggle-btn {
+      padding: 0.35rem 0.6rem;
+      font-size: 0.75rem;
+      background: transparent;
+      border: 1px solid var(--ilya-border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--ink-secondary);
+      transition: all 150ms var(--ease);
+    }
+    
+    .yo-toggle-btn:hover {
+      border-color: var(--ilya-accent);
+      color: var(--ilya-accent);
+    }
+    
+    .yo-toggle-btn:focus {
+      outline: 2px solid var(--ilya-accent-light);
+      outline-offset: 1px;
+    }
+    
+    .yo-warning {
+      margin-top: 0.35rem;
+      font-size: 0.7rem;
+      color: var(--ilya-warning);
+      font-style: italic;
+    }
 
     /* Old restore-link kept for compatibility */
     .restore-link {
@@ -2258,6 +2307,22 @@
               </div>
             </div>
             
+            <!-- ё toggle module (only shown if word contains е or ё) -->
+            <div class="yo-toggle-module" id="yoToggleModule" style="display: none;">
+              <div class="module-header">
+                <span class="module-label">Spelling</span>
+              </div>
+              <div class="yo-toggle-row">
+                <span class="yo-current-form" id="yoCurrentForm">—</span>
+                <button class="yo-toggle-btn" id="yoToggleBtn" title="Toggle ё/е spelling">
+                  <span id="yoToggleLabel">—</span>
+                </button>
+              </div>
+              <div class="yo-warning" id="yoWarning" style="display: none;">
+                Removing ё may change stress position
+              </div>
+            </div>
+            
             <!-- Phrase boundary module -->
             <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
               <div class="module-header">
@@ -2987,28 +3052,33 @@ const SINGER_SUPPLEMENT = {
             // Determine the display form (may be ё-restored)
             let displayWord = word;
             let wasYoRestored = false;
+            let dictionaryForm = null;
             
             if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
               // Restore ё while preserving original case pattern
               displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
+              dictionaryForm = displayWord;  // Store what Ilya found
               wasYoRestored = true;
             }
             
             // ё always carries stress — check the display form (which may now have ё)
             const yoSyllable = GraysonEngine.findYoSyllable(displayWord);
-            let stress, stressSource;
+            let stress, stressSource, yoSource;
             
             if (yoSyllable !== -1) {
               // ё found: stress is locked to that syllable
               stress = yoSyllable;
               stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
+              yoSource = wasYoRestored ? 'yo-restored' : null;  // null = native ё, no intervention
             } else if (lookup) {
               stress = lookup.stress;
               stressSource = lookup.source;
+              yoSource = null;
             } else {
               // Unknown word: default to first syllable, marked for user verification
               stress = 0;
               stressSource = 'default';
+              yoSource = null;
             }
             
             return {
@@ -3017,10 +3087,12 @@ const SINGER_SUPPLEMENT = {
               gloss: lookup ? lookup.gloss : '',
               originalStress: stress,
               stressSource: stressSource,
-              hasYo: yoSyllable !== -1, // Track for UI
-              originalInput: wasYoRestored ? word : null,  // Track what user typed
-              rightBoundary: null,      // Set by autoDetectBoundaries()
-              boundarySource: null      // 'auto' | 'user' | 'punctuation'
+              hasYo: yoSyllable !== -1,
+              originalInput: wasYoRestored ? word : null,  // What user typed (if different)
+              dictionaryForm: dictionaryForm,              // What Ilya found (if restored)
+              yoSource: yoSource,                          // yo-restored | user-yo-edit | null
+              rightBoundary: null,
+              boundarySource: null
             };
           });
         });
@@ -3208,6 +3280,10 @@ const SINGER_SUPPLEMENT = {
             wordStack.dataset.rightBoundary = tw.rightBoundary;
             wordStack.dataset.boundarySource = tw.boundarySource;
             wordStack.dataset.transcriptionLog = JSON.stringify(tw.transcriptionLog || []);
+            // ё toggle data (Phase 1)
+            wordStack.dataset.originalInput = tw.wordData.originalInput || '';
+            wordStack.dataset.dictionaryForm = tw.wordData.dictionaryForm || '';
+            wordStack.dataset.yoSource = tw.wordData.yoSource || '';
             
             wordStack.innerHTML = `
               <span class="ipa">${tw.ipaSurface}</span>
@@ -5831,6 +5907,12 @@ const SINGER_SUPPLEMENT = {
           boundaryStagedIndicator: document.getElementById('boundaryStagedIndicator'),
           boundaryLinked: document.getElementById('boundaryLinked'),
           boundarySeparated: document.getElementById('boundarySeparated'),
+          // ё toggle module (v5.8)
+          yoToggleModule: document.getElementById('yoToggleModule'),
+          yoCurrentForm: document.getElementById('yoCurrentForm'),
+          yoToggleBtn: document.getElementById('yoToggleBtn'),
+          yoToggleLabel: document.getElementById('yoToggleLabel'),
+          yoWarning: document.getElementById('yoWarning'),
           // Shared commit footer (v5.4.2)
           sharedCommitFooter: document.getElementById('sharedCommitFooter'),
           sharedApplyBtn: document.getElementById('sharedApplyBtn'),
@@ -5898,6 +5980,13 @@ const SINGER_SUPPLEMENT = {
             });
           }
         });
+        
+        // ё toggle button handler (v5.8)
+        if (this.elements.yoToggleBtn) {
+          this.elements.yoToggleBtn.addEventListener('click', () => {
+            this.handleYoToggle();
+          });
+        }
         
         // Shared commit footer handlers (v5.4.2)
         this.elements.sharedApplyBtn.addEventListener('click', () => {
@@ -5968,6 +6057,87 @@ const SINGER_SUPPLEMENT = {
         
         // Update visual state
         this.updateAllUI();
+      },
+      
+      // Handle ё toggle (v5.8)
+      // Switches between е and ё forms, re-transcribes, and updates display
+      handleYoToggle() {
+        if (!this.currentWord) return;
+        
+        const lineIdx = this.currentWord.lineIndex;
+        const wordIdx = this.currentWord.wordIndex;
+        const word = DocumentState.lines[lineIdx]?.[wordIdx];
+        if (!word) return;
+        
+        const currentCyrillic = word.cyrillic;
+        const hasYo = currentCyrillic.includes('ё') || currentCyrillic.includes('Ё');
+        const originalInput = word.originalInput;
+        const dictionaryForm = word.dictionaryForm;
+        
+        let newCyrillic;
+        let newYoSource;
+        
+        if (hasYo) {
+          // Currently has ё — remove it (revert to original or convert ё→е)
+          if (originalInput) {
+            // Revert to what user originally typed
+            newCyrillic = originalInput;
+          } else {
+            // Convert first ё to е (native ё case)
+            newCyrillic = currentCyrillic.replace(/ё/, 'е').replace(/Ё/, 'Е');
+          }
+          newYoSource = 'user-yo-edit';
+        } else if (dictionaryForm) {
+          // Has е, dictionary form available — restore ё
+          newCyrillic = dictionaryForm;
+          newYoSource = 'yo-restored';
+        } else {
+          // Has е, no dictionary — add ё to first е
+          newCyrillic = currentCyrillic.replace(/е/, 'ё').replace(/Е/, 'Ё');
+          newYoSource = 'user-yo-edit';
+        }
+        
+        // Update DocumentState
+        word.cyrillic = newCyrillic;
+        word.yoSource = newYoSource;
+        
+        // Check if new form has ё (for stress locking)
+        const newHasYo = newCyrillic.includes('ё') || newCyrillic.includes('Ё');
+        word.hasYo = newHasYo;
+        
+        // Re-run stress assignment
+        if (newHasYo) {
+          // ё present: lock stress to ё syllable
+          const yoSyllable = GraysonEngine.findYoSyllable(newCyrillic);
+          if (yoSyllable !== -1) {
+            word.stress = yoSyllable;
+            word.stressSource = newYoSource;
+          }
+        } else {
+          // ё removed: unlock stress, try dictionary lookup
+          const lookup = GraysonEngine.lookupStress(newCyrillic);
+          if (lookup) {
+            word.stress = lookup.stress;
+            word.stressSource = lookup.source;
+          } else {
+            // Default to first syllable
+            word.stress = 0;
+            word.stressSource = 'default';
+          }
+        }
+        
+        // Re-render the paper (full re-transcription)
+        InputDrawer.renderToPaper();
+        
+        // Re-open popup for this word to refresh state
+        const wordStacks = document.querySelectorAll('.word-stack');
+        wordStacks.forEach(stack => {
+          if (stack.dataset.lineIndex === String(lineIdx) && 
+              stack.dataset.wordIndex === String(wordIdx)) {
+            // Trigger click to re-open popup with fresh data
+            stack.click();
+          }
+        });
       },
       
       // Commit ALL staged changes (shared footer)
@@ -6407,6 +6577,50 @@ const SINGER_SUPPLEMENT = {
           });
         }
       },
+      
+      // ё toggle module population (v5.8)
+      populateYoToggle(wordData) {
+        const cyrillic = wordData.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const hasYe = cyrillic.includes('е') || cyrillic.includes('Е');
+        
+        // Only show if word contains е or ё
+        if (!hasYo && !hasYe) {
+          this.elements.yoToggleModule.style.display = 'none';
+          return;
+        }
+        
+        this.elements.yoToggleModule.style.display = 'block';
+        
+        // Get stored data
+        const originalInput = wordData.originalInput || '';
+        const dictionaryForm = wordData.dictionaryForm || '';
+        const yoSource = wordData.yoSource || '';
+        
+        // Display current form
+        this.elements.yoCurrentForm.textContent = cyrillic;
+        
+        // Determine button label based on state
+        let buttonLabel;
+        let showWarning = false;
+        
+        if (hasYo) {
+          // Currently has ё — offer to remove
+          buttonLabel = 'Remove ё';
+          // Show warning if removing ё will change stress (polysyllabic words)
+          const syllableCount = wordData.syllables?.length || 1;
+          showWarning = syllableCount > 1;
+        } else if (dictionaryForm && dictionaryForm !== cyrillic) {
+          // Has е, dictionary has ё form available — offer to restore
+          buttonLabel = 'Restore ё';
+        } else {
+          // Has е, no dictionary ё — offer to add
+          buttonLabel = 'Add ё';
+        }
+        
+        this.elements.yoToggleLabel.textContent = buttonLabel;
+        this.elements.yoWarning.style.display = showWarning ? 'block' : 'none';
+      },
 
       open(wordData) {
         this.currentWord = wordData;
@@ -6505,6 +6719,9 @@ const SINGER_SUPPLEMENT = {
         
         // Render Phoneme Ribbon (v5.5 vertical layout)
         this.renderRibbon(wordData);
+        
+        // ё toggle module (v5.8)
+        this.populateYoToggle(wordData);
         
         // Phrase boundary control (v5.4.2 - segments instead of radio)
         const line = DocumentState.lines[wordData.lineIndex];
