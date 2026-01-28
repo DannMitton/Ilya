@@ -4952,6 +4952,22 @@ const SINGER_SUPPLEMENT = {
           result = result.replace(pattern, replacement);
         }
         
+        // Filter out garbage: isolated numbers (page numbers), single non-Cyrillic chars
+        // Process line by line to preserve structure
+        result = result.split('\n').map(line => {
+          return line.split(/\s+/).filter(word => {
+            // Keep if word contains at least one Cyrillic letter
+            if (/[а-яА-ЯёЁ]/.test(word)) return true;
+            // Keep punctuation attached to Cyrillic (handled above)
+            // Filter out pure numbers (page numbers like "219")
+            if (/^\d+$/.test(word)) return false;
+            // Filter out single non-Cyrillic characters
+            if (word.length === 1 && !/[а-яА-ЯёЁ]/.test(word)) return false;
+            // Keep other content (punctuation, etc.)
+            return true;
+          }).join(' ');
+        }).filter(line => line.trim()).join('\n');
+        
         // Structural cleanup
         result = result
           .replace(/[ \t]+/g, ' ')           // Collapse spaces
@@ -5005,19 +5021,12 @@ const SINGER_SUPPLEMENT = {
             }
           });
           
-          // Step 4: Filter by confidence and extract text
+          // Step 4: Use full text (preserves line structure) instead of rebuilding from words
           onProgress?.('cleaning', 0.9);
           console.log('Processing results...');
-          let text = '';
           
-          if (result.data.words && result.data.words.length > 0) {
-            text = result.data.words
-              .filter(w => w.confidence >= this.CONFIDENCE_SKIP)
-              .map(w => w.text)
-              .join(' ');
-          } else {
-            text = result.data.text || '';
-          }
+          // Use data.text which preserves line breaks and layout
+          let text = result.data.text || '';
           
           // Step 5: Clean up the text
           text = this.cleanRussianText(text);
