@@ -4920,17 +4920,56 @@ const SINGER_SUPPLEMENT = {
       },
       
       /**
-       * Fix common OCR errors (Latin chars inside Cyrillic context)
+       * Fix common OCR errors and filter non-Russian content
        */
       cleanRussianText(text) {
         if (!text) return '';
         
-        // Only process if we have Cyrillic content
-        if (!/[а-яА-ЯёЁ]{3,}/.test(text)) {
-          return text;
-        }
+        // Helper: calculate Cyrillic density of a string (0-1)
+        const cyrillicDensity = (str) => {
+          const letters = str.match(/[a-zA-Zа-яА-ЯёЁ]/g) || [];
+          if (letters.length === 0) return 0;
+          const cyrillic = str.match(/[а-яА-ЯёЁ]/g) || [];
+          return cyrillic.length / letters.length;
+        };
+        
+        // Helper: detect garbage patterns (garbled English→Cyrillic)
+        const isGarbage = (str) => {
+          // Contains $ or multiple punctuation mixed with letters
+          if (/\$/.test(str)) return true;
+          if (/[!?]{2,}/.test(str)) return true;
+          // Parentheses with mostly non-Cyrillic inside
+          if (/\([^)]*\)/.test(str)) {
+            const parenContent = str.match(/\(([^)]*)\)/)?.[1] || '';
+            if (cyrillicDensity(parenContent) < 0.3) return true;
+          }
+          // Backslash (common OCR error)
+          if (/\\/.test(str)) return true;
+          return false;
+        };
         
         let result = text;
+        
+        // Filter lines: keep only those with >50% Cyrillic letters
+        result = result.split('\n').filter(line => {
+          const trimmed = line.trim();
+          if (!trimmed) return false;
+          
+          // Skip garbage patterns
+          if (isGarbage(trimmed)) {
+            console.log('OCR filter: removing garbage line:', trimmed);
+            return false;
+          }
+          
+          // Check Cyrillic density
+          const density = cyrillicDensity(trimmed);
+          if (density < 0.5) {
+            console.log('OCR filter: removing low-density line:', trimmed, `(${(density*100).toFixed(0)}%)`);
+            return false;
+          }
+          
+          return true;
+        }).join('\n');
         
         // Latin→Cyrillic fixes (only between Cyrillic chars)
         const latinToCyrillic = [
@@ -4952,19 +4991,18 @@ const SINGER_SUPPLEMENT = {
           result = result.replace(pattern, replacement);
         }
         
-        // Filter out garbage: isolated numbers (page numbers), single non-Cyrillic chars
-        // Process line by line to preserve structure
+        // Filter out garbage words within lines
         result = result.split('\n').map(line => {
           return line.split(/\s+/).filter(word => {
             // Keep if word contains at least one Cyrillic letter
             if (/[а-яА-ЯёЁ]/.test(word)) return true;
-            // Keep punctuation attached to Cyrillic (handled above)
             // Filter out pure numbers (page numbers like "219")
             if (/^\d+$/.test(word)) return false;
             // Filter out single non-Cyrillic characters
             if (word.length === 1 && !/[а-яА-ЯёЁ]/.test(word)) return false;
-            // Keep other content (punctuation, etc.)
-            return true;
+            // Keep punctuation
+            if (/^[.,!?;:\-—–]+$/.test(word)) return true;
+            return false;
           }).join(' ');
         }).filter(line => line.trim()).join('\n');
         
@@ -5008,11 +5046,12 @@ const SINGER_SUPPLEMENT = {
           this.preprocessCanvas(canvas);
           
           // Step 3: Run Tesseract using simple recognize() API
-          // This handles worker creation/destruction internally
+          // Use rus+eng to handle mixed content (headers, metadata)
+          // Then filter to keep only Cyrillic-dominant lines
           onProgress?.('recognizing text', 0.2);
-          console.log('Running OCR recognition...');
+          console.log('Running OCR recognition (rus+eng)...');
           
-          const result = await Tesseract.recognize(canvas, 'rus', {
+          const result = await Tesseract.recognize(canvas, 'rus+eng', {
             logger: m => {
               console.log('Tesseract:', m.status, m.progress);
               if (m.status) {
