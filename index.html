@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.7.2 Interpalatal Fronting Fix</title>
+  <title>Ilya — v5.7.3 Iotated Vowel Interpalatal</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4485,10 +4485,20 @@ const SINGER_SUPPLEMENT = {
                 
                 // Check if preceded by a special cluster (for interpalatal)
                 const prevCluster = specialClusters.find(c => c.endIndex === prevGlobalIndex);
+                
+                // Iotated vowels at word-initial or after vowel/ъ/ь produce /j/ glide
+                // The /j/ glide counts as a palatalizing agent (Grayson p. 125)
+                const iotatedVowels = ['е', 'ё', 'ю', 'я'];
+                const isIotated = iotatedVowels.includes(char);
+                const isWordInitialOrAfterVowel = globalIndex === 0 || 
+                  this.isVowel(prevChar) || prevChar === 'ъ' || prevChar === 'ь';
+                const precededByJGlide = isIotated && isWordInitialOrAfterVowel;
+                
                 const isPrecededByPal = prevCluster ?
                   prevCluster.ipa.includes('ʲ') :
                   (prevConsonant ? 
-                    (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : false);
+                    (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) : 
+                    precededByJGlide);  // Word-initial iotated → preceded by /j/
                 
                 // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
                 // Find the next consonant after this vowel - must search in FULL WORD, not just current syllable
@@ -4530,6 +4540,19 @@ const SINGER_SUPPLEMENT = {
                   // Normal case: check the Cyrillic consonant
                   isFollowedByPal = softIndices.has(followingConsonantGlobalIndex) || 
                     this.isPalatalized(followingConsonant, charAfterFollowingC);
+                } else {
+                  // No following consonant found - check if next vowel is iotated
+                  // Iotated vowels (е, ё, ю, я) produce /j/ glide which is a palatalizing agent
+                  // This handles cases like её where /j/-[vowel]-/j/ is interpalatal
+                  const iotatedVowels = ['е', 'ё', 'ю', 'я'];
+                  for (let j = globalIndex + 1; j < wordChars.length; j++) {
+                    if (wordChars[j] === 'ь' || wordChars[j] === 'ъ') continue;
+                    if (this.isVowel(wordChars[j])) {
+                      isFollowedByPal = iotatedVowels.includes(wordChars[j]);
+                      break;
+                    }
+                    if (this.isConsonant(wordChars[j])) break;
+                  }
                 }
                 
                 // Capture interpalatal and afterHard features
@@ -6672,7 +6695,7 @@ const SINGER_SUPPLEMENT = {
         { word: 'водка', stress: 0, expected: 'vot kɑ', note: 'д→т before к' },
         { word: 'подход', stress: 1, expected: 'pɑt xot', note: 'д→т before х' },
         { word: 'ложка', stress: 0, expected: 'ɫoʃ kɑ', note: 'ж→ш before к' },
-        { word: 'лезть', stress: 0, expected: 'lʲɛsʲtʲ', note: 'з→с before т' },
+        { word: 'лезть', stress: 0, expected: 'lʲesʲtʲ', note: 'Interpalatal е → /e/, з→с before т' },
       ],
       'Voicing Assimilation - Voicing': [
         { word: 'вокзал', stress: 1, expected: 'vɑɡ zɑɫ', note: 'к→г before з' },
