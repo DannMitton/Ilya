@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.7.0 Clitic Canonical Forms</title>
+  <title>Ilya — v5.7.1 Progressive Palatalization Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4090,10 +4090,13 @@ const SINGER_SUPPLEMENT = {
         // "Do not regressively palatalize /r/ within a cluster except... 
         // directly following -и-, -е-, or -э- (in the stressed syllable only)"
         // Examples: смерть /sʲmʲerʲtʲ/, терпеть /tʲirʲˈpʲetʲ/, кирпич /kʲirʲˈpʲitʃʲ/
+        // NOTE: This applies only when р is IN A CLUSTER (followed by consonant)
+        // Word-final р after front vowel does NOT palatalize: мир /mʲir/ not /mʲirʲ/
         if (consonant === 'р' && isStressedSyllable) {
           const frontVowels = ['и', 'е', 'э'];
-          if (frontVowels.includes(prevChar)) {
-            return 'rʲ'; // Progressive palatalization
+          const nextIsConsonant = nextChar && this.consonants.has(nextChar);
+          if (frontVowels.includes(prevChar) && nextIsConsonant) {
+            return 'rʲ'; // Progressive palatalization in cluster only
           }
         }
         
