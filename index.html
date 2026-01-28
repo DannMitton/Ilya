@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>My Sung Russian — v5.5.0 Content First Redesign</title>
+  <title>Ilya — v5.5.0 Content First Redesign</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,36 +18,36 @@
        ======================================== */
     :root {
       /* Core Palette */
-      --msr-paper: #ffffff;
-      --msr-parchment: #fafafa;
-      --msr-binding: #f5f5f0;
-      --msr-binding-dark: #ebebe5;
+      --ilya-paper: #ffffff;
+      --ilya-parchment: #fafafa;
+      --ilya-binding: #f5f5f0;
+      --ilya-binding-dark: #ebebe5;
       
       /* Legacy aliases (for backward compatibility) */
       --paper: #faf6f0;
       --surface: #ffffff;
       
       /* Typography Colors */
-      --msr-text-primary: #2c3e50;
-      --msr-text-secondary: #5a6c7d;
-      --msr-text-muted: #7f8c8d;
-      --msr-text-caption: #95a5a6;
+      --ilya-text-primary: #2c3e50;
+      --ilya-text-secondary: #5a6c7d;
+      --ilya-text-muted: #7f8c8d;
+      --ilya-text-caption: #95a5a6;
       
       /* Legacy ink aliases */
       --ink-primary: #1a1612;
       --ink-secondary: #4a4540;
       
       /* Borders & Focus */
-      --msr-border-light: #e8e8e8;
-      --msr-border: #e0e0e0;
-      --msr-border-focus: #7a9e7e;
+      --ilya-border-light: #e8e8e8;
+      --ilya-border: #e0e0e0;
+      --ilya-border-focus: #7a9e7e;
       
       /* Functional Colors — Muted Sage Accent */
-      --msr-accent: #7a9e7e;
-      --msr-accent-light: rgba(122, 158, 126, 0.1);
-      --msr-accent-hover: #6b8e6f;
-      --msr-salmon: #fa8072;
-      --msr-salmon-light: rgba(250, 128, 114, 0.1);
+      --ilya-accent: #7a9e7e;
+      --ilya-accent-light: rgba(122, 158, 126, 0.1);
+      --ilya-accent-hover: #6b8e6f;
+      --ilya-salmon: #fa8072;
+      --ilya-salmon-light: rgba(250, 128, 114, 0.1);
       
       /* Legacy accent aliases (terracotta for existing components) */
       --accent: #a85a3a;
@@ -55,8 +55,8 @@
       --accent-hover: #8f4d32;
       
       /* Status Colors */
-      --msr-success: #7a9e7e;
-      --msr-warning: #d4a373;
+      --ilya-success: #7a9e7e;
+      --ilya-warning: #d4a373;
       
       /* Fonts */
       --font-mono: 'Courier New', 'Consolas', monospace;
@@ -68,9 +68,9 @@
       --paper-height: 1056px;
       
       /* Shadows */
-      --msr-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --msr-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --msr-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+      --ilya-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --ilya-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --ilya-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
       
       /* Legacy shadow aliases */
       --shadow-ambient: 0 1px 2px rgba(26, 22, 18, 0.08);
@@ -79,9 +79,9 @@
       --shadow-popup: 0 8px 24px rgba(26, 22, 18, 0.15);
       
       /* Document Container */
-      --msr-doc-radius: 16px;
-      --msr-doc-border: 2px solid var(--msr-border);
-      --msr-doc-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      --ilya-doc-radius: 16px;
+      --ilya-doc-border: 2px solid var(--ilya-border);
+      --ilya-doc-shadow: 0 4px 20px rgba(0,0,0,0.05);
       
       /* Spacing Scale (8px base) */
       --space-xs: 4px;
@@ -134,7 +134,7 @@
        All interactive elements use 2px sage outline
        ======================================== */
     :focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
     
@@ -143,7 +143,7 @@
     }
     
     :focus-visible {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
     
@@ -153,8 +153,8 @@
     select:focus,
     [contenteditable]:focus {
       outline: none;
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
     
     input:focus:not(:focus-visible),
@@ -162,7 +162,7 @@
     select:focus:not(:focus-visible),
     [contenteditable]:focus:not(:focus-visible) {
       box-shadow: none;
-      border-color: var(--msr-border);
+      border-color: var(--ilya-border);
     }
 
     /* ========================================
@@ -389,12 +389,12 @@
     }
 
     .word-stack:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
 
     .word-stack[aria-selected="true"] {
-      background: var(--msr-accent-light);
+      background: var(--ilya-accent-light);
     }
 
     .word-stack .ipa {
@@ -463,7 +463,7 @@
     }
 
     .drawer-handle:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: -2px;
     }
 
@@ -576,8 +576,8 @@
 
     .drawer-textarea:focus {
       outline: none;
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
 
     .drawer-textarea::placeholder {
@@ -645,33 +645,33 @@
     }
 
     .btn-primary {
-      background: var(--msr-accent);
+      background: var(--ilya-accent);
       color: white;
       border: none;
     }
 
     .btn-primary:hover {
-      background: var(--msr-accent-hover);
+      background: var(--ilya-accent-hover);
     }
     
     .btn-primary:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
 
     .btn-secondary {
       background: transparent;
-      color: var(--msr-text-secondary);
-      border: 1px solid var(--msr-border);
+      color: var(--ilya-text-secondary);
+      border: 1px solid var(--ilya-border);
     }
 
     .btn-secondary:hover {
-      border-color: var(--msr-text-secondary);
-      color: var(--msr-text-primary);
+      border-color: var(--ilya-text-secondary);
+      color: var(--ilya-text-primary);
     }
     
     .btn-secondary:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
 
@@ -801,8 +801,8 @@
     }
 
     .clitic-badge {
-      background: var(--msr-accent-light);
-      color: var(--msr-accent);
+      background: var(--ilya-accent-light);
+      color: var(--ilya-accent);
       font-size: 0.75rem;
       padding: 0.4rem 0.75rem;
       border-radius: 4px;
@@ -811,8 +811,8 @@
     }
 
     .why-clitic-banner {
-        background: var(--msr-accent-light);
-        color: var(--msr-accent);
+        background: var(--ilya-accent-light);
+        color: var(--ilya-accent);
         font-size: 0.75rem;
         padding: 0.4rem 0.75rem;
         border-radius: 4px;
@@ -857,38 +857,38 @@
     }
 
     .syllable-btn:hover {
-      border-color: var(--msr-accent);
-      background: var(--msr-accent-light);
+      border-color: var(--ilya-accent);
+      background: var(--ilya-accent-light);
     }
     
     .syllable-btn:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
 
     .syllable-btn.stressed {
-      background: var(--msr-accent);
+      background: var(--ilya-accent);
       color: white;
-      border-color: var(--msr-accent);
+      border-color: var(--ilya-accent);
       font-weight: 500;
     }
 
     .syllable-btn.stressed:hover {
-      background: var(--msr-accent-hover);
+      background: var(--ilya-accent-hover);
     }
     
     .syllable-btn.disabled,
     .syllable-btn:disabled {
       opacity: 0.65;
       cursor: not-allowed;
-      background: var(--msr-parchment);
+      background: var(--ilya-parchment);
       border-color: rgba(26, 22, 18, 0.1);
     }
     
     .syllable-btn.disabled:hover,
     .syllable-btn:disabled:hover {
       border-color: rgba(26, 22, 18, 0.1);
-      background: var(--msr-parchment);
+      background: var(--ilya-parchment);
     }
     
     .syllable-btn.disabled:focus,
@@ -900,7 +900,7 @@
     .popup-ipa {
       font-family: var(--font-ipa);
       font-size: 1.1rem;
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
       text-align: center;
       margin-bottom: 0.25rem;
     }
@@ -923,44 +923,44 @@
       font-family: 'Noto Serif', serif;
       font-size: 1rem;
       font-style: italic;
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
       padding: 0.5rem 1rem;
       border-radius: 6px;
       display: inline-block;
       min-width: 140px;
-      background: var(--msr-accent-light);
+      background: var(--ilya-accent-light);
       border: 1px dashed rgba(122, 158, 126, 0.3);
       transition: all 150ms var(--ease);
     }
 
     .gloss-inline:hover {
       background: rgba(122, 158, 126, 0.15);
-      border-color: var(--msr-accent);
+      border-color: var(--ilya-accent);
     }
 
     .gloss-inline:focus {
       outline: none;
       background: rgba(122, 158, 126, 0.15);
       border-style: solid;
-      border-color: var(--msr-accent);
-      box-shadow: 0 0 0 2px var(--msr-accent-light);
+      border-color: var(--ilya-accent);
+      box-shadow: 0 0 0 2px var(--ilya-accent-light);
     }
 
     /* When gloss has content, make it look settled but keep sage */
     .gloss-inline:not(:empty) {
       background: transparent;
       border-color: transparent;
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
     }
 
     .gloss-inline:not(:empty):hover {
-      background: var(--msr-accent-light);
+      background: var(--ilya-accent-light);
       border-color: transparent;
     }
 
     .gloss-inline:empty::before {
       content: attr(data-placeholder);
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
       opacity: 0.7;
       font-style: italic;
     }
@@ -1042,9 +1042,9 @@
       padding: 12px 16px;
       margin-top: 16px;
       background: transparent;
-      border: 1px solid var(--msr-accent);
+      border: 1px solid var(--ilya-accent);
       border-radius: 6px;
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
       font-size: 0.875rem;
       font-family: inherit;
       cursor: pointer;
@@ -1052,7 +1052,7 @@
     }
 
     .refine-analysis-toggle:hover {
-      background: var(--msr-accent-light);
+      background: var(--ilya-accent-light);
     }
 
     .disclosure-chevron {
@@ -1131,7 +1131,7 @@
     }
     
     .phoneme-row:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 1px;
     }
     
@@ -1195,20 +1195,20 @@
     
     .phoneme-cyr {
       font-family: 'Noto Serif', serif;
-      color: var(--msr-text-muted);
+      color: var(--ilya-text-muted);
       width: 20px;
       font-size: 0.95rem;
     }
     
     .phoneme-arrow {
-      color: var(--msr-text-caption);
+      color: var(--ilya-text-caption);
       font-size: 0.75rem;
       opacity: 0.5;
     }
     
     .phoneme-ipa {
       font-family: var(--font-ipa);
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
       font-size: 0.95rem;
     }
     
@@ -1227,14 +1227,14 @@
     .blurb-text {
       font-size: 0.85rem;
       line-height: 1.5;
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
       margin-bottom: 4px;
     }
     
     .blurb-citation {
       font-size: 0.75rem;
       font-style: italic;
-      color: var(--msr-text-caption);
+      color: var(--ilya-text-caption);
     }
     
     /* Mobile: ribbon scroll temporarily disabled for overlay support
@@ -1299,7 +1299,7 @@
       left: -6px;
       right: -6px;
       background: #FAFAF8;
-      border: 2px solid var(--msr-accent);
+      border: 2px solid var(--ilya-accent);
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06),
                   0 2px 8px rgba(122, 158, 126, 0.1);
@@ -1334,14 +1334,14 @@
     .phoneme-blurb-overlay .blurb-text {
       font-size: 0.9rem;
       line-height: 1.6;
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
       margin-bottom: 8px;
     }
     
     .phoneme-blurb-overlay .blurb-citation {
       font-size: 0.8rem;
       font-style: italic;
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
     }
     
     /* ========================================
@@ -1374,7 +1374,7 @@
     }
     
     .syllable-group.stressed {
-      border-color: var(--msr-accent);
+      border-color: var(--ilya-accent);
       background: rgba(122, 158, 126, 0.02);
     }
     
@@ -1409,7 +1409,7 @@
     }
     
     .phoneme-block:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 1px;
     }
     
@@ -1502,7 +1502,7 @@
     /* Active/committed segment */
     .segment.active {
       background: white;
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
     }
     
@@ -1517,9 +1517,9 @@
     /* Committed segment (saved) */
     .segment.committed {
       background: white;
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-      outline: 1px solid var(--msr-accent);
+      outline: 1px solid var(--ilya-accent);
       outline-offset: -2px;
     }
     
@@ -1554,13 +1554,13 @@
     }
     
     .shared-commit-footer .apply-btn {
-      background: var(--msr-accent);
+      background: var(--ilya-accent);
       color: white;
       border: none;
     }
     
     .shared-commit-footer .apply-btn:hover {
-      background: var(--msr-accent-dark, #5a8a5e);
+      background: var(--ilya-accent-dark, #5a8a5e);
     }
     
     .shared-commit-footer .revert-btn {
@@ -1589,7 +1589,7 @@
       border: none;
       font-family: 'Noto Sans', sans-serif;
       font-size: 0.7rem;
-      color: var(--msr-accent);
+      color: var(--ilya-accent);
       cursor: pointer;
       transition: opacity 150ms var(--ease);
     }
@@ -1599,7 +1599,7 @@
     }
     
     .restore-link:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
     }
 
@@ -1635,8 +1635,8 @@
     /* Mobile tabs navigation */
     .drawer-tabs {
       display: none;
-      border-bottom: 1px solid var(--msr-border);
-      background: var(--msr-binding);
+      border-bottom: 1px solid var(--ilya-border);
+      background: var(--ilya-binding);
     }
     
     .drawer-tab {
@@ -1644,7 +1644,7 @@
       padding: var(--space-md);
       font-size: var(--text-sm);
       font-weight: 500;
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
       background: transparent;
       border: none;
       border-bottom: 3px solid transparent;
@@ -1653,9 +1653,9 @@
     }
     
     .drawer-tab.active {
-      color: var(--msr-text-primary);
-      background: var(--msr-paper);
-      border-bottom-color: var(--msr-accent);
+      color: var(--ilya-text-primary);
+      background: var(--ilya-paper);
+      border-bottom-color: var(--ilya-accent);
     }
     
     .drawer-tab:hover:not(.active) {
@@ -1663,7 +1663,7 @@
     }
     
     .drawer-tab:focus {
-      outline: 2px solid var(--msr-accent);
+      outline: 2px solid var(--ilya-accent);
       outline-offset: -2px;
     }
     
@@ -1681,8 +1681,8 @@
       display: flex;
       flex-direction: column;
       padding: var(--space-lg);
-      background: var(--msr-paper);
-      border-right: 1px solid var(--msr-border-light);
+      background: var(--ilya-paper);
+      border-right: 1px solid var(--ilya-border-light);
       overflow-y: auto;
     }
     
@@ -1692,7 +1692,7 @@
       display: flex;
       flex-direction: column;
       padding: var(--space-lg);
-      background: var(--msr-binding);
+      background: var(--ilya-binding);
       overflow-y: auto;
       gap: var(--space-md);
     }
@@ -1735,7 +1735,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
       margin-bottom: var(--space-sm);
     }
     
@@ -1744,21 +1744,21 @@
       padding: var(--space-md);
       font-size: var(--text-base);
       font-family: var(--font-sans);
-      color: var(--msr-text-primary);
-      background: var(--msr-paper);
-      border: 1px solid var(--msr-border);
+      color: var(--ilya-text-primary);
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
       border-radius: 6px;
       transition: all var(--duration-fast) var(--ease-out);
     }
     
     .form-input:focus {
       outline: none;
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
     
     .form-input::placeholder {
-      color: var(--msr-text-muted);
+      color: var(--ilya-text-muted);
     }
     
     /* ========================================
@@ -1772,12 +1772,12 @@
     .select-trigger {
       width: 100%;
       padding: var(--space-md);
-      background: var(--msr-paper);
-      border: 1px solid var(--msr-border);
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
       border-radius: 6px;
       font-size: var(--text-base);
       font-family: var(--font-sans);
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
       cursor: pointer;
       display: flex;
       justify-content: space-between;
@@ -1787,18 +1787,18 @@
     }
     
     .select-trigger:hover {
-      border-color: var(--msr-border-focus);
+      border-color: var(--ilya-border-focus);
     }
     
     .select-trigger.active {
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
     
     .select-trigger .chevron-down {
       width: 16px;
       height: 16px;
-      stroke: var(--msr-text-muted);
+      stroke: var(--ilya-text-muted);
       transition: transform var(--duration-base) var(--ease-out);
     }
     
@@ -1807,7 +1807,7 @@
     }
     
     .select-trigger .placeholder {
-      color: var(--msr-text-muted);
+      color: var(--ilya-text-muted);
     }
     
     .select-dropdown {
@@ -1817,10 +1817,10 @@
       right: 0;
       max-height: 200px;
       overflow-y: auto;
-      background: var(--msr-paper);
-      border: 1px solid var(--msr-border);
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
       border-radius: 6px;
-      box-shadow: var(--msr-shadow-md);
+      box-shadow: var(--ilya-shadow-md);
       z-index: 100;
       opacity: 0;
       transform: translateY(-10px);
@@ -1838,21 +1838,21 @@
       width: 100%;
       padding: var(--space-md);
       border: none;
-      border-bottom: 1px solid var(--msr-border-light);
+      border-bottom: 1px solid var(--ilya-border-light);
       font-size: var(--text-sm);
       font-family: var(--font-sans);
     }
     
     .select-search:focus {
       outline: none;
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
     
     .select-option {
       padding: var(--space-md);
       cursor: pointer;
-      border-bottom: 1px solid var(--msr-border-light);
+      border-bottom: 1px solid var(--ilya-border-light);
       transition: background var(--duration-fast) var(--ease-out);
     }
     
@@ -1862,26 +1862,26 @@
     
     .select-option:hover,
     .select-option.highlighted {
-      background: var(--msr-accent-light);
+      background: var(--ilya-accent-light);
     }
     
     .select-option .primary {
       display: block;
       font-weight: 500;
-      color: var(--msr-text-primary);
+      color: var(--ilya-text-primary);
     }
     
     .select-option .secondary {
       display: block;
       font-size: var(--text-xs);
-      color: var(--msr-text-caption);
+      color: var(--ilya-text-caption);
       margin-top: 2px;
     }
     
     .select-option.custom {
       font-style: italic;
-      color: var(--msr-text-secondary);
-      border-top: 2px solid var(--msr-border);
+      color: var(--ilya-text-secondary);
+      border-top: 2px solid var(--ilya-border);
     }
     
     .custom-warning {
@@ -1889,7 +1889,7 @@
       align-items: center;
       gap: var(--space-sm);
       font-size: var(--text-xs);
-      color: var(--msr-warning);
+      color: var(--ilya-warning);
       margin-top: var(--space-sm);
       padding: var(--space-sm);
       background: rgba(212, 163, 115, 0.1);
@@ -1901,7 +1901,7 @@
        ======================================== */
     .profile-section {
       margin-top: auto;
-      border-top: 1px solid var(--msr-border);
+      border-top: 1px solid var(--ilya-border);
       padding-top: var(--space-lg);
     }
     
@@ -1920,18 +1920,18 @@
     .profile-title {
       font-size: var(--text-sm);
       font-weight: 600;
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
     }
     
     .profile-active {
       font-size: var(--text-xs);
-      color: var(--msr-text-muted);
+      color: var(--ilya-text-muted);
     }
     
     .profile-chevron {
       width: 16px;
       height: 16px;
-      stroke: var(--msr-text-muted);
+      stroke: var(--ilya-text-muted);
       transition: transform var(--duration-base) var(--ease-out);
     }
     
@@ -1958,17 +1958,17 @@
       margin: var(--space-md) 0;
       font-size: var(--text-base);
       font-family: var(--font-sans);
-      color: var(--msr-text-primary);
-      background: var(--msr-paper);
-      border: 1px solid var(--msr-border);
+      color: var(--ilya-text-primary);
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
       border-radius: 6px;
       cursor: pointer;
     }
     
     .profile-select:focus {
       outline: none;
-      border-color: var(--msr-border-focus);
-      box-shadow: 0 0 0 3px var(--msr-accent-light);
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
     }
     
     .profile-description {
@@ -1976,10 +1976,10 @@
       gap: var(--space-sm);
       font-size: var(--text-sm);
       font-family: var(--font-ipa);
-      color: var(--msr-text-secondary);
+      color: var(--ilya-text-secondary);
       line-height: 1.5;
       padding: var(--space-md);
-      background: var(--msr-paper);
+      background: var(--ilya-paper);
       border-radius: 6px;
     }
     
@@ -1994,8 +1994,8 @@
       font-weight: 600;
       font-style: italic;
       font-family: var(--font-sans);
-      color: var(--msr-accent);
-      border: 1.5px solid var(--msr-accent);
+      color: var(--ilya-accent);
+      border: 1.5px solid var(--ilya-accent);
       border-radius: 50%;
       opacity: 0.7;
     }
@@ -2003,7 +2003,7 @@
     .profile-future {
       display: none; /* Hidden until multiple profiles implemented */
       font-size: var(--text-xs);
-      color: var(--msr-text-muted);
+      color: var(--ilya-text-muted);
       margin-top: var(--space-md);
       cursor: not-allowed;
       opacity: 0.5;
@@ -2359,7 +2359,7 @@
                 <span class="staged-indicator" id="stressStagedIndicator">✎</span>
               </div>
               <div class="segmented-control" id="stressSourceButtons">
-                <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="MSR defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
+                <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="Ilya defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
                 <button class="segment" id="stressSourceComposer" data-source="composer">Composer</button>
                 <button class="segment" id="stressSourceUser" data-source="user">My choice</button>
               </div>
@@ -3406,7 +3406,7 @@ const SINGER_SUPPLEMENT = {
       // Regressive palatalization categorical restrictions (Grayson p. 209; Derwing & Priestly pp. 76-87)
       // These consonants BLOCK regressive palatalization — consonants before them do not soften
       // NOTE: Grayson's example сестрёнка /sʲtʲrʲ/ appears to be an error; D&P pp. 85-87 confirms
-      // that р blocks regressive palatalization. MSR follows D&P: сестрёнка → /strʲ/
+      // that р blocks regressive palatalization. Ilya follows D&P: сестрёнка → /strʲ/
       regressivePalatalizationBlockers: new Set(['р', 'л']), // р and л block regressive palatalization (except doubled)
       
       // Categorical restrictions for regressive palatalization (Grayson p. 209)
@@ -4704,139 +4704,315 @@ const SINGER_SUPPLEMENT = {
       // Full 85 entries from PHONEME_BLURBS_DRAFT.md
       blurbs: {
         // ========================================
-        // PART 1: VOWELS — STRESSED
+        // SECTION 1: VOWELS — STRESSED (Entries 1–10)
         // ========================================
         
-        // 1.1 Cardinal Vowels (Full Value)
-        'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ receives full open back value /ɑ/.', citation: '§3.1, p. 81', notable: false },
-        'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ after soft consonant → /ɑ/ (the consonant carries the softness).', citation: '§3.1, p. 81', notable: false },
-        'o:stressed:о': { blurb: 'Stressed ⟨о⟩ receives full value /o/.', citation: '§3.1, p. 86', notable: false },
-        'o:stressed:ё': { blurb: '⟨ё⟩ always indicates stress → /o/.', citation: '§3.1, p. 85-86', notable: false },
-        'ɛ:stressed:э': { blurb: 'Stressed ⟨э⟩ → open /ɛ/.', citation: '§3.1, p. 81', notable: false },
-        'ɛ:stressed:е': { blurb: 'Stressed ⟨е⟩ → open /ɛ/.', citation: '§3.1, p. 81', notable: false },
-        'i:stressed:и': { blurb: 'Stressed ⟨и⟩ → /i/ (never reduces in sung Russian).', citation: '§3.2, p. 96', notable: false },
-        'u:stressed:у': { blurb: 'Stressed ⟨у⟩ → /u/.', citation: '§3.1, p. 81', notable: false },
-        'u:stressed:ю': { blurb: 'Stressed ⟨ю⟩ after soft consonant → /u/.', citation: '§3.1, p. 81', notable: false },
-        'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ → velarized [ɨ].', citation: '§3.1, p. 93-96', notable: false },
+        // Entry 1 | Dark-a
+        'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ is pronounced /ɑ/, the \'dark\' or backed variant, similar to the vowel in "father." This is the default for stressed ⟨а⟩ unless it occurs in an interpalatal context.', citation: 'pp. 81–85', notable: false },
         
-        // 1.2 Interpalatal Fronting (Stressed)
-        'a:interpalatal:а': { blurb: '⟨а⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
-        'a:interpalatal:я': { blurb: '⟨я⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
-        'e:interpalatal:е': { blurb: '⟨е⟩ closes to [e] when sandwiched between two palatalizing agents.', citation: '§3.4, p. 104-107', notable: true },
-        'e:interpalatal:э': { blurb: 'When stressed ⟨э⟩ is word-initial before a palatalized consonant, it fronts from /ɛ/ to [e] (e.g., ⟨эти⟩ → /ˈetʲi/, in contrast to ⟨это⟩ → /ˈɛtʌ/).', citation: '§3.4, p. 106', notable: false },
+        // Entry 2 | Bright-a
+        'a:stressed-interpalatal:а': { blurb: 'When stressed ⟨а⟩ occurs between two palatalized consonants (interpalatal context), it is pronounced /a/, the \'bright\' or fronted variant. This fronting is a natural coarticulatory effect.', citation: 'pp. 81–85, 125', notable: true },
         
-        // ========================================
-        // PART 2: VOWELS — UNSTRESSED
-        // ========================================
+        // Entry 3 | Stressed-o
+        'o:stressed:о': { blurb: 'Stressed ⟨о⟩ is pronounced /o/. Grayson (p. 86) explicitly states that stressed /o/ is "transcribed simply as /o/," not as open-mid /ɔ/.', citation: 'p. 86', notable: false },
         
-        // 2.1 Akanye (о/а Reduction)
-        'ɑ:pretonic:о': { blurb: 'Unstressed ⟨о⟩ → /ɑ/ immediately before stress (akanye).', citation: '§3.3, p. 97-98', notable: true },
-        'ɑ:initial:о': { blurb: 'Word-initial unstressed ⟨о⟩ → /ɑ/.', citation: '§3.3, p. 97', notable: true },
-        'ɑ:pretonic:а': { blurb: 'Unstressed ⟨а⟩ → /ɑ/ in pretonic position.', citation: '§3.3, p. 97', notable: false },
-        'ɑ:initial:а': { blurb: 'Word-initial ⟨а⟩ → /ɑ/.', citation: '§3.3, p. 97', notable: false },
-        'ɑ:post-stress-immediate:а': { blurb: 'Unstressed ⟨а⟩ immediately after stress → /ɑ/.', citation: '§7, p. 266, fn. 306', notable: false },
+        // Entry 4 | Stressed-o (ё spelling)
+        'o:stressed:ё': { blurb: 'The letter ⟨ё⟩ is always stressed and pronounced /o/, identical to stressed ⟨о⟩. The diaeresis signals that this vowel follows a palatalized consonant (or word-initially, that a /j/-glide precedes it).', citation: 'pp. 85–86', notable: false },
         
-        // 2.2 Remote Reduction (→ ʌ)
-        'ʌ:remote:о': { blurb: 'Unstressed ⟨о⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
-        'ʌ:remote:а': { blurb: 'Unstressed ⟨а⟩ reduces to [ʌ] in remote position.', citation: '§3.5, p. 108-113', notable: true },
-        'ʌ:post-stress:о': { blurb: 'Post-stress ⟨о⟩ reduces to [ʌ].', citation: '§3.5, p. 108-113', notable: true },
-        'ʌ:reflexive:я': { blurb: '⟨я⟩ in reflexive ⟨-ться⟩/⟨-тся⟩ → [ʌ].', citation: '§3.5, p. 108-113', notable: true },
+        // Entry 5 | Open-e
+        'ɛ:stressed:е': { blurb: 'Stressed ⟨е⟩ is pronounced /ɛ/, the open-mid front vowel, as the default. This applies when ⟨е⟩ is not in an interpalatal context.', citation: 'pp. 87–90', notable: false },
         
-        // 2.3 Ikanye (е/я Reduction)
-        'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
-        'ɪ:unstressed:я': { blurb: 'Unstressed ⟨я⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
-        'ɪ:unstressed:э': { blurb: 'Unstressed ⟨э⟩ reduces to [ɪ].', citation: '§3.5, p. 108-113', notable: true },
-        'i:unstressed:и': { blurb: 'Unstressed ⟨и⟩ stays /i/ — never reduces in sung Russian.', citation: '§3.2, p. 96, 101', notable: true },
+        // Entry 6 | Close-e
+        'e:stressed-interpalatal:е': { blurb: 'When stressed ⟨е⟩ occurs between two palatalized consonants (interpalatal context), it is pronounced /e/, the close-mid front vowel. This is a raised variant compared to the default /ɛ/.', citation: 'pp. 87–90, 125', notable: true },
         
-        // 2.4 After Always-Hard Consonants (ж/ш/ц)
-        'ɨ:after-hard:и': { blurb: '⟨и⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ] (hard consonants retract the vowel).', citation: '§3.1, p. 93-96', notable: true },
-        'ɨ:after-hard:е': { blurb: 'Unstressed ⟨е⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ].', citation: '§3.3, p. 102-103', notable: true },
+        // Entry 7 | Stressed-i
+        'i:stressed:и': { blurb: 'Stressed ⟨и⟩ is pronounced /i/. Crucially, ⟨и⟩ never reduces in sung Russian: it remains /i/ regardless of stress position (Grayson p. 96).', citation: 'p. 96', notable: false },
+        
+        // Entry 8 | Barred-i
+        'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ is pronounced /ɨ/, the close central unrounded vowel. This sound does not exist in English; it is produced with the tongue position of /i/ but retracted toward the centre of the mouth.', citation: 'pp. 93–95', notable: false },
+        
+        // Entry 9 | Stressed-u
+        'u:stressed:у': { blurb: 'Stressed ⟨у⟩ is pronounced /u/.', citation: 'pp. 91–92', notable: false },
+        
+        // Entry 10 | Stressed-u (ю spelling)
+        'u:stressed:ю': { blurb: 'Stressed ⟨ю⟩ is pronounced /u/, identical to stressed ⟨у⟩. The spelling signals that this vowel follows a palatalized consonant (or word-initially, that a /j/-glide precedes it).', citation: 'pp. 91–92', notable: false },
         
         // ========================================
-        // PART 3: VOWELS — J-GLIDE (IOTATED)
-        // ========================================
-        'jɑ:initial:я': { blurb: 'Word-initial ⟨я⟩ → /jɑ/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
-        'jɛ:initial:е': { blurb: 'Word-initial ⟨е⟩ → /jɛ/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
-        'jo:initial:ё': { blurb: 'Word-initial ⟨ё⟩ → /jo/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
-        'ju:initial:ю': { blurb: 'Word-initial ⟨ю⟩ → /ju/ (glide + vowel).', citation: '§3.6, p. 114-124', notable: false },
-        'jɪ:unstressed-initial:е': { blurb: 'Word-initial unstressed ⟨е⟩ → /jɪ/.', citation: '§3.6, p. 114-124', notable: true },
-        'jɪ:unstressed-initial:я': { blurb: 'Word-initial unstressed ⟨я⟩ → /jɪ/.', citation: '§3.6, p. 114-124', notable: true },
-        'j:after-vowel:е': { blurb: '⟨е⟩ after vowel inserts glide /j/.', citation: '§3.6, p. 114-124', notable: false },
-        'j:after-sign:е': { blurb: '⟨е⟩ after ⟨ъ⟩/⟨ь⟩ inserts glide /j/.', citation: '§3.6, p. 114-124', notable: false },
-        
-        // ========================================
-        // PART 4: CONSONANTS — SOFT (PALATALIZED)
+        // SECTION 2: VOWELS — UNSTRESSED (Entries 11–25)
         // ========================================
         
-        // 4.1 Standard Palatalization (Before Indicators)
-        'sʲ:soft:с': { blurb: 'Predictably, ⟨с⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). Like ⟨в⟩, the one-letter preposition ⟨с⟩ ("with") transmits palatalization across the word boundary (e.g., ⟨с ним⟩ /sʲ ɲim/). This exception applies only to prepositions and prefixes that end in ⟨с⟩, never to content words that end in ⟨с⟩.', citation: '§4.2, p. 177-178', notable: false },
-        'tʲ:soft:т': { blurb: '⟨т⟩ softens before front vowel or ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
-        'dʲ:soft:д': { blurb: '⟨д⟩ softens before front vowel or ⟨ь⟩.', citation: '§4.2, p. 179-180', notable: false },
-        'ɲ:soft:н': { blurb: 'Soft ⟨н⟩ is the palatal nasal, notated here as the single symbol /ɲ/, not /nʲ/. Linguists do notate Russian soft-n as /nʲ/, but Grayson opts for the single familiar symbol /ɲ/ to avoid unwanted /j/ glides (e.g., ⟨нет⟩ expresses three phonemes /ɲɛt/, not four /njɛt/, for which /nʲɛt/ can easily be mistaken by newcomers to sung Russian).', citation: '§4.2, p. 186', notable: false },
-        'lʲ:soft:л': { blurb: '⟨л⟩ softens to /lʲ/ before front vowel or ⟨ь⟩.', citation: '§4.2, p. 184', notable: false },
-        'rʲ:soft:р': { blurb: '⟨р⟩ softens before front vowel or ⟨ь⟩.', citation: '§4.2, p. 190', notable: false },
-        'bʲ:soft:б': { blurb: 'Predictably, ⟨б⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). Like hard /b/, soft /bʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
-        'pʲ:soft:п': { blurb: 'Predictably, ⟨п⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). Like hard /p/, soft /pʲ/ is unaspirated.', citation: '§4.2, p. 181-182', notable: false },
-        'vʲ:soft:в': { blurb: '⟨в⟩ is phonemically weak: processes happen to it, but it doesn\'t usually transmit them. Predictably, ⟨в⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). But unlike other voiced consonants, ⟨в⟩ blocks the regressive assimilation of voicing. Time for some important nuance: ⟨в⟩ as a standalone preposition, or as the final letter of a prefix, does transmit palatalization across the boundary (e.g., ⟨в небе⟩ /vʲ ˈɲebʲe/). This exception applies only to prepositions and prefixes that end in ⟨в⟩, never to content words that end in ⟨в⟩.', citation: '§4.2, p. 181-182', notable: false },
-        'fʲ:soft:ф': { blurb: 'Predictably, ⟨ф⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). Like hard /f/, soft /fʲ/ is essentially the same as in other European languages.', citation: '§4.2, p. 181-182', notable: false },
-        'mʲ:soft:м': { blurb: 'Predictably, ⟨м⟩ softens before any palatalizing agent (i.e., a soft vowel, the soft sign ⟨ь⟩, or a palatalized consonant). In isolation, /mʲ/ is practically indistinguishable from unpalatalized /m/ to the ear. As a sonorant, it is never devoiced, and cannot affect the voicing of adjacent consonants.', citation: '§4.2, p. 185', notable: false },
-        'kʲ:soft:к': { blurb: '⟨к⟩ is one of the three sung Russian velar consonants alongside ⟨г⟩ and ⟨х⟩. While ⟨к⟩ softens before some palatalizing agents (i.e., a soft vowel or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Like hard /k/, soft /kʲ/ is unaspirated.', citation: '§4.2, p. 187-188; §5.2, p. 209', notable: false },
-        'ɡʲ:soft:г': { blurb: '⟨г⟩ is one of the three sung Russian velar consonants alongside ⟨к⟩ and ⟨х⟩. While ⟨г⟩ softens before some palatalizing agents (i.e., a soft vowel or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Note the IPA symbol: opentail /ɡʲ/, although Latin ⟨g⟩ + palatalization marker is equally valid in IPA.', citation: '§4.2, p. 187-188; §5.2, p. 209', notable: false },
-        'xʲ:soft:х': { blurb: '⟨х⟩ is one of the three sung Russian velar consonants alongside ⟨к⟩ and ⟨г⟩. While ⟨х⟩ softens before some palatalizing agents (i.e., a soft vowel or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Russian /xʲ/ is articulated midway between German ich-laut /ç/ and ach-laut /χ/.', citation: '§4.2, p. 189; §5.2, p. 209', notable: false },
-        'zʲ:soft:з': { blurb: '⟨з⟩ softens before front vowel or ⟨ь⟩. Like ⟨в⟩ and ⟨с⟩, prepositions and prefixes ending in ⟨з⟩ (such as ⟨из⟩, ⟨без⟩, ⟨раз-⟩) transmit palatalization across the word boundary. This exception applies only to prepositions and prefixes, never to content words that end in ⟨з⟩.', citation: '§4.2, p. 177-178', notable: false },
+        // Entry 11 | Pre-tonic о → /ɑ/
+        'ɑ:pretonic:о': { blurb: 'When unstressed ⟨о⟩ is in the immediate pre-tonic position (the syllable directly before the stress), it is pronounced /ɑ/. This is akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
         
-        // 4.2 Intrinsically Soft Consonants
-        'tʃʲ:always-soft:ч': { blurb: '⟨ч⟩ is intrinsically palatalized — it is always soft, regardless of what follows. Unlike ⟨ш⟩ and ⟨ж⟩ which are always hard, ⟨ч⟩ patterns with ⟨щ⟩ as an always-soft husher.', citation: '§4.2, p. 175-176', notable: false },
-        'ʃʲʃʲ:always-soft:щ': { blurb: '⟨щ⟩ is intrinsically palatalized and doubled. Grayson prefers /ʃʲʃʲ/ over /ʃʲː/ to emphasize that Russians rearticulate the sound. An alternative Peterburgian or Church Slavonic pronunciation /ʃʲtʃʲ/ exists but is not MSR\'s default.', citation: '§4.2, p. 171-173', notable: false },
+        // Entry 12 | Word-initial о → /ɑ/
+        'ɑ:initial:о': { blurb: 'When unstressed ⟨о⟩ begins a word, it is pronounced /ɑ/. Word-initial position receives the same treatment as immediate pre-tonic position. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
         
-        // 4.3 Intrinsically Hard Consonants
-        'ʒ:always-hard:ж': { blurb: '⟨ж⟩ is intrinsically hard — it cannot soften, regardless of what follows. Even when followed by a front vowel like ⟨и⟩ or ⟨е⟩, the consonant remains /ʒ/ and the vowel retracts to [ɨ].', citation: '§4.1, p. 161-166', notable: false },
-        'ʃ:always-hard:ш': { blurb: '⟨ш⟩ is intrinsically hard — it cannot soften, regardless of what follows. Even when followed by a front vowel like ⟨и⟩ or ⟨е⟩, the consonant remains /ʃ/ and the vowel retracts to [ɨ].', citation: '§4.1, p. 161-163', notable: false },
-        'ts:always-hard:ц': { blurb: '⟨ц⟩ is intrinsically hard — it cannot soften, regardless of what follows. This voiceless alveolar affricate is a single phoneme, not a /t/ + /s/ cluster. Even when followed by a front vowel like ⟨и⟩ or ⟨е⟩, the consonant remains /ts/ and the vowel retracts to [ɨ]. Compare with the reflexive ending clusters ⟨-тс-⟩/⟨-тьс-⟩ which produce /tːs/ (an elongated /t/ followed by /s/), not the affricate /ts/.', citation: '§4.1, p. 166-168', notable: false },
+        // Entry 13 | Pre-tonic а → /ɑ/
+        'ɑ:pretonic:а': { blurb: 'When unstressed ⟨а⟩ is in the immediate pre-tonic position (the syllable directly before the stress), it is pronounced /ɑ/. This maintains the vowel\'s quality in the position closest to stress.', citation: 'pp. 108, 127', notable: false },
         
-        // ========================================
-        // PART 5: CONSONANTS — HARD
-        // ========================================
-        'ɫ:hard:л': { blurb: 'Hard ⟨л⟩ is velarized (the "dark-l"). This is the default when no palatalizing agent follows. Note: The phoneme [l] never exists unqualified in sung Russian: it is always notated as either soft (palatalized) /lʲ/ or hard (velarized) [ɫ], never as a standalone [l].', citation: '§4.1, p. 150-151', notable: false },
-        'j:glide:й': { blurb: '⟨й⟩ is the familiar palatal glide. Although English speakers often call this phoneme a semi-vowel, Russians consider the /j/-phoneme a palatalized consonant, especially when it is spelled as ⟨-й-⟩. It only appears after vowels, or as the closing element in sung Russian diphthongs.', citation: '§3.2, p. 96', notable: false },
-        's:hard:с': { blurb: 'Hard ⟨с⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 155', notable: false },
-        'z:hard:з': { blurb: 'Hard ⟨з⟩ is the default when no palatalizing agent follows.', citation: '§4.1, p. 140', notable: false },
-        't:hard:т': { blurb: 'Hard ⟨т⟩ is the default when no palatalizing agent follows. While Russian /t/ is dental ([t̪], tongue on teeth, not alveolar as in English), MSR notates it as plain /t/.', citation: '§4.1, p. 140', notable: false },
-        'd:hard:д': { blurb: 'Hard ⟨д⟩ is the default when no palatalizing agent follows. Like /t/, Russian /d̪/ is dental (tongue on teeth), but MSR notates it as plain /d/.', citation: '§4.1, p. 146', notable: false },
-        'p:hard:п': { blurb: 'Hard ⟨п⟩ is the default when no palatalizing agent follows. Russian /p/ is unaspirated (like Italian), unlike English /pʰ/. It is notated as plain /p/.', citation: '§4.1, p. 147', notable: false },
-        'b:hard:б': { blurb: 'Hard ⟨б⟩ is the default when no palatalizing agent follows. Like /p/, Russian /b/ is unaspirated.', citation: '§4.1, p. 140', notable: false },
-        'k:hard:к': { blurb: 'Hard ⟨к⟩ is the default when no palatalizing agent follows. Russian /k/ is unaspirated (like Italian), unlike English /kʰ/. It is notated as plain /k/.', citation: '§4.1, p. 140', notable: false },
-        'ɡ:hard:г': { blurb: 'Hard ⟨г⟩ is the default when no palatalizing agent follows. Note the IPA symbol used here: opentail /ɡ/, although Latin ⟨g⟩ is equally valid in IPA. Russian /ɡ/ is unaspirated (like Italian).', citation: '§4.1, p. 145', notable: false },
-        'x:hard:х': { blurb: 'Hard ⟨х⟩ is the default when no palatalizing agent follows. This voiceless velar fricative resembles the German ⟨ch⟩ [χ] in "Bach" (i.e. an ach-laut), but the Russian velar /x/ is articulated more forward, on the front of the velum in the same place as the other velars /k/, /ɡ/, and /ɣ/.', citation: '§4.1, p. 149', notable: false },
-        'f:hard:ф': { blurb: 'Hard ⟨ф⟩ is the default when no palatalizing agent follows. Russian /f/ is essentially the same as Italian, French, German, and English /f/. All words spelled with ⟨ф⟩ are loanwords.', citation: '§4.1, p. 148', notable: false },
-        'v:hard:в': { blurb: 'Hard ⟨в⟩ is the default when no palatalizing agent follows. Russian /v/ is phonemically weak: while it undergoes devoicing like any voiced consonant (e.g., ⟨кров⟩ → /krof/), it does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: '§4.1, p. 152-153', notable: false },
-        'm:hard:м': { blurb: 'Hard ⟨м⟩ is the default when no palatalizing agent follows. Russian /m/ is essentially the same as Italian, French, German, and English /m/. As a sonorant, it is never devoiced, and cannot affect the voicing of adjacent consonants.', citation: '§4.1, p. 140', notable: false },
-        'n:hard:н': { blurb: 'Hard ⟨н⟩ is the default when no palatalizing agent follows. Like /t/ and /d/, Russian /n̪/ is dental (tongue on teeth), but MSR notates it as plain /n/. As a sonorant, it is never devoiced, and cannot affect the voicing of adjacent consonants.', citation: '§4.1, p. 154', notable: false },
-        'r:hard:р': { blurb: 'Hard ⟨р⟩ (from the Greek letter "rho") is the default when no palatalizing agent follows. Russian /r/ is a trilled alveolar, like Italian or Spanish /r/. As a sonorant, it is never devoiced, and cannot affect the voicing of adjacent consonants.', citation: '§4.1, p. 155', notable: false },
+        // Entry 14 | Word-initial а → /ɑ/
+        'ɑ:initial:а': { blurb: 'When unstressed ⟨а⟩ begins a word, it is pronounced /ɑ/. Word-initial position receives the same treatment as immediate pre-tonic position.', citation: 'pp. 108, 127', notable: false },
         
-        // ========================================
-        // PART 6: SIGNS
-        // ========================================
-        'none:hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a visual boundary marker: the consonant before it stays hard, and a /j/ glide is articulated before the following vowel (e.g., ⟨съел⟩ → /sjɛɫ/). ⟨Ъ⟩ once appeared at the end of every Russian Cyrillic word ending in a hard consonant; these final hard signs were eliminated by post-1917 spelling reforms (MSR silently removes them), but hard signs within words still work as described.', citation: '§4.3, p. 192-194', notable: false },
-        'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but it causes an obvious sound shift by palatalizing the preceding consonant. When followed by a vowel from the soft series (е, ё, ю, я), a /j/ glide is articulated between the palatalized consonant and the vowel (e.g., ⟨вьюга⟩ → /vʲˈjuɡʌ/). Note: the superscript [ʲ] (palatalization marker) and the baseline /j/ (palatal glide) are distinct symbols and not interchangeable.', citation: '§4.3, p. 195-198', notable: false },
+        // Entry 15 | Post-stress immediate а → /ɑ/
+        'ɑ:post-stress-immediate:а': { blurb: 'When unstressed ⟨а⟩ immediately follows the stressed syllable, it is pronounced /ɑ/. The immediate post-tonic position preserves vowel quality.', citation: 'pp. 108, 127', notable: false },
+        
+        // Entry 16 | Turned-v (remote о)
+        'ʌ:remote:о': { blurb: 'When unstressed ⟨о⟩ is remote from the stress (more than one syllable away, but not word-initial), it reduces to [ʌ]. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Note: We use Turned-v [ʌ] instead of traditional schwa [ə] in Russian lyric diction to avoid confusion with the familiar (but un-Russian!) lip-rounded French schwa.', citation: 'pp. 108, 127', notable: true },
+        
+        // Entry 17 | Turned-v (remote а)
+        'ʌ:remote:а': { blurb: 'When unstressed ⟨а⟩ is remote from the stress (more than one syllable away, but not word-initial), it reduces to [ʌ]. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Note: We use Turned-v [ʌ] instead of traditional schwa [ə] in Russian lyric diction to avoid confusion with the familiar (but un-Russian!) lip-rounded French schwa.', citation: 'pp. 108, 127', notable: true },
+        
+        // Entry 18 | Unstressed е → /ɪ/
+        'ɪ:ikanye:е': { blurb: 'When ⟨е⟩ is unstressed, it reduces to /ɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 97–107', notable: true },
+        
+        // Entry 19 | Reflexive я → [ʌ]
+        'ʌ:reflexive:я': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ always feature /ʌ/ as their vowel sound. This [ʌ] derives from ⟨я⟩, which exceptionally reduces to [ʌ] (not [ɪ]) in this context. See Entry 73 for a complete explanation of these endings.', citation: 'pp. 237–238, 281–282', notable: true },
+        
+        // Entry 20 | Unstressed я → /ɪ/
+        'ɪ:ikanye:я': { blurb: 'When ⟨я⟩ is unstressed (except in reflexive endings), it reduces to /ɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 97–107', notable: true },
+        
+        // Entry 21 | Unstressed и → /i/
+        'i:unstressed:и': { blurb: 'Unstressed ⟨и⟩ remains /i/. Unlike other vowels, ⟨и⟩ never reduces in sung Russian (Grayson p. 96): "neither syllabic stress nor position affects the reading as /i/, in sung Russian."', citation: 'p. 96', notable: true },
+        
+        // Entry 22 | Unstressed ы → /ɨ/
+        'ɨ:unstressed:ы': { blurb: 'Unstressed ⟨ы⟩ is pronounced /ɨ/, the same as stressed ⟨ы⟩. This vowel does not reduce.', citation: 'pp. 93–95', notable: false },
+        
+        // Entry 23 | Unstressed у → /u/
+        'u:unstressed:у': { blurb: 'Unstressed ⟨у⟩ is pronounced /u/. This vowel does not reduce significantly in sung Russian.', citation: 'pp. 91–92', notable: false },
+        
+        // Entry 24 | Unstressed ю → /u/
+        'u:unstressed:ю': { blurb: 'Unstressed ⟨ю⟩ is pronounced /u/, identical to unstressed ⟨у⟩. This vowel does not reduce significantly in sung Russian.', citation: 'pp. 91–92', notable: false },
+        
+        // Entry 25 | Unstressed э → /ɪ/
+        'ɪ:unstressed:э': { blurb: 'When ⟨э⟩ is unstressed, it reduces to /ɪ/. This relatively rare letter (found mainly in loanwords) follows the same reduction pattern as ⟨е⟩.', citation: 'pp. 97–107', notable: false },
         
         // ========================================
-        // PART 7: ALLOPHONES & PHONOLOGICAL PROCESSES
+        // SECTION 3: VOWELS — J-GLIDE (Entries 26–33)
         // ========================================
-        'ɣ:allophone:х': { blurb: 'The voiced velar fricative [ɣ] is an allophone of /x/, occurring through regressive voicing assimilation across word boundaries (e.g., ⟨их дом⟩ → [iɣ dom]). It has no Cyrillic letter of its own and is articulated in the same place as the other velars /k/, /ɡ/, and /x/.', citation: '§4.1, p. 149; §6.3, p. 252-254', notable: false },
-        'devoicing:process': { blurb: 'In Russian, as in German, final consonants are generally devoiced regardless of spelling (e.g., ⟨год⟩ → /ɡot/, ⟨кровь⟩ → /krofʲ/). Exception: sonorants (/m/, /mʲ/, /n/, /ɲ/, /ɫ/, /lʲ/, /r/, /rʲ/) are never devoiced.', citation: '§4.4, p. 199', notable: false },
-        'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: '§6.1, p. 215-221', notable: false },
-        'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In MSR, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: '§6.3, p. 248-254', notable: false },
-        'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; MSR uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: '§6.2, p. 225-226, 233; §4.2, p. 188', notable: true },
+        
+        // Entry 26 | Word-initial stressed я → /jɑ/
+        'jɑ:initial:я': { blurb: 'When stressed ⟨я⟩ begins a word, it is pronounced /jɑ/.', citation: 'pp. 114–124', notable: false },
+        
+        // Entry 27 | Word-initial stressed е → /jɛ/
+        'jɛ:initial:е': { blurb: 'When stressed ⟨е⟩ begins a word, it is pronounced /jɛ/.', citation: 'pp. 114–124', notable: false },
+        
+        // Entry 28 | Word-initial stressed ё → /jo/
+        'jo:initial:ё': { blurb: 'When stressed ⟨ё⟩ begins a word, it is pronounced /jo/.', citation: 'pp. 114–124', notable: false },
+        
+        // Entry 29 | Word-initial stressed ю → /ju/
+        'ju:initial:ю': { blurb: 'Whenever ⟨ю⟩ begins a word, it is pronounced /ju/.', citation: 'pp. 114–124', notable: false },
+        
+        // Entry 30 | Word-initial unstressed е → /jɪ/
+        'jɪ:unstressed-initial:е': { blurb: 'Whenever unstressed ⟨е⟩ begins a word, it is pronounced /jɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 114–124', notable: true },
+        
+        // Entry 31 | Word-initial unstressed я → /jɪ/
+        'jɪ:unstressed-initial:я': { blurb: 'Whenever unstressed ⟨я⟩ begins a word, it is pronounced /jɪ/. The reduction of this unstressed vowel is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 114–124', notable: true },
+        
+        // Entry 32 | /j/-glide after vowel
+        'j:after-vowel:е': { blurb: 'Whenever ⟨е⟩ immediately follows another vowel, a /j/ glide is inserted before the vowel sound (e.g., ⟨моего⟩ /mʌjɪˈvo/ "my/mine" and ⟨оперное⟩ /ˈopɛrnʌjɪ/ "operatic").', citation: 'pp. 114–124', notable: false },
+        
+        // Entry 33 | /j/-glide insertion after ъ/ь
+        'j:after-sign:е': { blurb: 'Whenever ⟨е⟩ immediately follows a hard sign ⟨ъ⟩ or soft sign ⟨ь⟩, a /j/ glide is inserted before the vowel sound (e.g., ⟨въезд⟩ /vjɛst/ "entrance," ⟨пьеса⟩ /pʲˈjɛsʌ/ "play").', citation: 'pp. 114–124', notable: false },
         
         // ========================================
-        // PART 8: SPECIAL CLUSTERS & EXCEPTIONS
+        // SECTION 4: CONSONANTS — SOFT/PALATALIZED (Entries 34–50)
         // ========================================
-        'tːsʌ:reflexive:тся': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ are both pronounced /tːsʌ/. These clusters resemble the affricate ⟨ц⟩ (/ts/), but have an elongated stop on the /t/ portion (e.g., ⟨боится⟩ → /bɑˈitːsʌ/, ⟨купаться⟩ → /kuˈpɑtːsʌ/). The soft sign in ⟨-ться⟩ has no effect in this construct. Ignore it.', citation: '§6.2, p. 237-238', notable: true },
-        'ʃt:cluster:чт': { blurb: 'In the words ⟨что⟩, ⟨чтобы⟩, ⟨чтоб⟩, ⟨ничто⟩, and ⟨кое-что⟩, the cluster ⟨чт⟩ is pronounced /ʃt/, not /tʃʲt/. This is a closed class of common words.', citation: '§6.2, p. 240-241', notable: true },
-        'ʃn:cluster:чн': { blurb: 'In a small closed class of words, ⟨-чн-⟩ is pronounced /ʃn/ rather than /tʃʲn/. Common examples include ⟨конечно⟩ → /kɑˈɲeʃnʌ/, ⟨скучно⟩ → /ˈskuʃnʌ/, ⟨нарочно⟩ → /nɑˈroʃnʌ/, ⟨яичница⟩ → /jɪˈiʃɲitsʌ/, and ⟨скворечник⟩ → /skvɑˈrʲeʃɲik/. Most other ⟨-чн-⟩ words retain /tʃʲn/ (e.g., ⟨точно⟩ → /ˈtotʃʲnʌ/, ⟨вечно⟩ → /ˈvʲetʃʲnʌ/).', citation: '§6.2, p. 241-243', notable: true },
-        'ʃʲʃʲ:cluster:сч': { blurb: 'The clusters ⟨сч⟩, ⟨зч⟩, and ⟨жч⟩ all assimilate to /ʃʲʃʲ/. This is the very same sound as ⟨щ⟩ (e.g., ⟨счастье⟩ → /ˈʃʲʃʲasʲtʲje/, ⟨мужчина⟩ → /muˈʃʲʃʲinʌ/).', citation: '§6.2, p. 235-236', notable: false },
-        'deletion:cluster': { blurb: 'Certain consonant clusters contain "silent" letters that are not pronounced. Common examples: ⟨солнце⟩ → /ˈsontsɨ/ (⟨л⟩ silent), ⟨сердце⟩ → /ˈsʲertsɨ/ (⟨д⟩ silent), ⟨праздник⟩ → /ˈprazʲɲik/ (⟨д⟩ silent), ⟨чувство⟩ → /ˈtʃʲustvʌ/ (first ⟨в⟩ silent), ⟨здравствуйте⟩ → /ˈzdrastvujtʲe/ (first ⟨в⟩ silent).', citation: '§6.2, p. 243-247', notable: true }
+        
+        // Entry 34 | Palatal nasal
+        'ɲ:soft:н': { blurb: 'Soft ⟨н⟩ is a true palatal nasal /ɲ/, not simply /n/ with a palatalization marker. Grayson\'s transcription distinguishes palatalized /nʲ/ (dental, rare) from palatal /ɲ/ (default soft н).', citation: 'pp. 183–184', notable: false },
+        
+        // Entry 35 | Palatalized (\'soft\')-l
+        'lʲ:soft:л': { blurb: 'Soft ⟨л⟩ is pronounced /lʲ/. Unlike hard ⟨л⟩ [ɫ], which is velarized, soft /lʲ/ has a clear, bright quality similar to the "l" in "million."', citation: 'pp. 150–151', notable: false },
+        
+        // Entry 36 | Palatalized (\'soft\')-r
+        'rʲ:soft:р': { blurb: 'Soft ⟨р⟩ is pronounced /rʲ/, a palatalized trill. The tongue maintains the trilled articulation while the body of the tongue rises toward the palate.', citation: 'pp. 156–158', notable: false },
+        
+        // Entry 37 | Palatalized (\'soft\')-s
+        'sʲ:soft:с': { blurb: 'Predictably, ⟨с⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant).', citation: 'pp. 155–156', notable: false },
+        
+        // Entry 38 | Palatalized (\'soft\')-t
+        'tʲ:soft:т': { blurb: 'Predictably, ⟨т⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Like \'hard\' /t/, \'soft\' /tʲ/ is dental (tongue on teeth).', citation: 'pp. 140–145', notable: false },
+        
+        // Entry 39 | Palatalized (\'soft\')-d
+        'dʲ:soft:д': { blurb: 'Predictably, ⟨д⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Like \'hard\' /d/, \'soft\' /dʲ/ is dental (tongue on teeth).', citation: 'pp. 146–147', notable: false },
+        
+        // Entry 40 | Palatalized (\'soft\')-p
+        'pʲ:soft:п': { blurb: 'Predictably, ⟨п⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Like hard /p/, soft /pʲ/ is unaspirated.', citation: 'pp. 147–148', notable: false },
+        
+        // Entry 41 | Palatalized (\'soft\')-b
+        'bʲ:soft:б': { blurb: 'Predictably, ⟨б⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant).', citation: 'pp. 140–141', notable: false },
+        
+        // Entry 42 | Palatalized (\'soft\')-v
+        'vʲ:soft:в': { blurb: 'The letter ⟨в⟩ is phonemically weak: processes happen to it, but it doesn\'t usually transmit them. Accordingly, ⟨в⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Note: the single-letter preposition ⟨в⟩ "in/into" does accept palatalization across the word boundary (e.g., ⟨в небе⟩ /vʲ ˈɲebʲe/ "in the sky"). This behaviour applies equally to the preposition ⟨в⟩ and the prefix ⟨в-⟩ (e.g., ⟨вниз⟩ /vɲiz/ "down," ⟨внести⟩ /vɲɪˈsʲtʲi/ "to bring in"), but never to content words that end in ⟨в⟩ (e.g., ⟨гнев⟩ /ɡɲef/ "wrath," ⟨залив⟩ /zʌˈlʲif/ "bay," and ⟨рукав⟩ /ruˈkɑf/ "sleeve").', citation: 'pp. 181–182', notable: false },
+        
+        // Entry 43 | Palatalized (\'soft\')-f
+        'fʲ:soft:ф': { blurb: 'Predictably, ⟨ф⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant).', citation: 'pp. 181–182', notable: false },
+        
+        // Entry 44 | Palatalized (\'soft\')-m
+        'mʲ:soft:м': { blurb: 'Predictably, ⟨м⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). In isolation, /mʲ/ is practically indistinguishable from unpalatalized /m/ to the ear.', citation: 'p. 185', notable: false },
+        
+        // Entry 45 | Palatalized (\'soft\')-k
+        'kʲ:soft:к': { blurb: '⟨К⟩ /k/ is one of the three sung Russian velar consonants alongside ⟨г⟩ /ɡ/ and ⟨х⟩ /x/ (or its voiced allophone [ɣ]). While ⟨к⟩ softens before some palatalizing agents (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩) or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Like hard /k/, soft /kʲ/ is unaspirated.', citation: 'pp. 187–188, 209', notable: false },
+        
+        // Entry 46 | Palatalized (\'soft\')-g
+        'ɡʲ:soft:г': { blurb: '⟨Г⟩ /ɡ/ is one of the three sung Russian velar consonants alongside ⟨к⟩ /k/ and ⟨х⟩ /x/ (or its voiced allophone [ɣ]). While ⟨г⟩ softens before some palatalizing agents (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩) or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Note: Grayson\'s preferred IPA symbol is opentail [ɡ], although the International Phonetic Association accepts Latin [g] as equally valid.', citation: 'pp. 187–188, 209', notable: false },
+        
+        // Entry 47 | Palatalized (\'soft\')-x
+        'xʲ:soft:х': { blurb: '⟨Х⟩ /x/ (or its voiced allophone [ɣ]) is one of the three sung Russian velar consonants alongside ⟨к⟩ /k/ and ⟨г⟩ /ɡ/. While ⟨х⟩ softens before some palatalizing agents (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩) or the soft sign ⟨ь⟩), only another velar consonant can regressively palatalize it. Russian /xʲ/ is velar, articulated midway between German ich-laut /ç/ (palatal) and ach-laut /χ/ (uvular); avoid substituting either.', citation: 'pp. 189, 209', notable: false },
+        
+        // Entry 48 | Palatalized (\'soft\')-z
+        'zʲ:soft:з': { blurb: 'Predictably, ⟨з⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Note: the prepositions ⟨из⟩ "from" and ⟨без⟩ "without" do accept palatalization across the word boundary (e.g., ⟨из них⟩ /izʲ ɲix/ "from them"). This behaviour never applies to content words that end in ⟨з⟩.', citation: 'pp. 177–178', notable: false },
+        
+        // Entry 49 | Intrinsically soft ч
+        'tʃʲ:always-soft:ч': { blurb: 'The letter ⟨ч⟩ /tʃʲ/ is intrinsically palatalized. We usually notate it with the indivisible trigraph /tʃʲ/.', citation: 'pp. 175–176', notable: false },
+        
+        // Entry 50 | Intrinsically soft щ
+        'ʃʲʃʲ:always-soft:щ': { blurb: 'The letter ⟨щ⟩ /ʃʲʃʲ/ is intrinsically palatalized and intrinsically geminate. Grayson prefers to notate this soft consonant as /ʃʲʃʲ/ to emphasize that Russians rearticulate the sound, but it is equally valid to notate it as /ʃʲː/ to reduce visual clutter. You may choose your own preference in the Ilya dashboard. Note: a dated Peterburgian or Church Slavonic pronunciation /ʃʲtʃʲ/ exists, but this is not Ilya\'s default for sung Russian.', citation: 'pp. 171–173', notable: false },
+        
+        // ========================================
+        // SECTION 5: CONSONANTS — HARD/UNPALATALIZED (Entries 51–69)
+        // ========================================
+        
+        // Entry 51 | Intrinsically hard ж
+        'ʒ:always-hard:ж': { blurb: 'The letter ⟨ж⟩ /ʒ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ж⟩ remains unpalatalized /ʒ/ while these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨жить⟩ /ʒɨtʲ/ "to live," ⟨жена⟩ /ʒɨˈnɑ/ "wife").', citation: 'pp. 161–166', notable: false },
+        
+        // Entry 52 | Intrinsically hard ш
+        'ʃ:always-hard:ш': { blurb: 'The letter ⟨ш⟩ /ʃ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ш⟩ remains unpalatalized /ʃ/ while these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨шить⟩ /ʃɨtʲ/ "to sew," ⟨шептать⟩ /ʃɨpˈtɑtʲ/ "to whisper").', citation: 'pp. 161–163', notable: false },
+        
+        // Entry 53 | Intrinsically hard ц
+        'ts:always-hard:ц': { blurb: 'The letter ⟨ц⟩ /ts/ is intrinsically hard: it cannot soften, regardless of what follows. This digraph notates a single phoneme, /ts/, which can be confusing to Anglophones who routinely encounter mid-word /ts/ (i.e. /t/ + /s/) at a morpheme boundary (e.g., ⟨отсюда⟩ /ɑtʲˈsʲudʌ/ "from here"). Structurally, these very common cases are the result of the meeting of two separate phonemes, not the affricate ⟨ц⟩ /ts/, even though they are visually indistinguishable. When ⟨ц⟩ is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), it remains unpalatalized /ts/ and these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨цирк⟩ /tsɨrk/ "circus," ⟨цена⟩ /tsɨˈnɑ/ "price").', citation: 'pp. 166–168', notable: false },
+        
+        // Entry 54 | Unpalatalized (\'hard\')-l, a.k.a. velar-l
+        'ɫ:hard:л': { blurb: 'Velarized hard-l [ɫ] is the default for ⟨л⟩ when no palatalizing agent follows. Note: the phoneme [l] never exists unqualified in sung Russian: it is always either \'soft\' (palatalized) /lʲ/ or \'hard\' (velarized) [ɫ], never a standalone [l].', citation: 'pp. 150–151', notable: false },
+        
+        // Entry 55 | /j/-glide
+        'j:glide:й': { blurb: 'The letter ⟨й⟩ represents the familiar palatal glide /j/. Although English speakers often call this phoneme a semi-vowel, Russians consider /j/ a consonant. In native Russian words, ⟨й⟩ only appears after vowels, typically as the closing element in diphthongs (e.g., ⟨мой⟩ /moj/ "my/mine," ⟨чайка⟩ /ˈtʃʲajkʌ/ "seagull").', citation: 'p. 96', notable: false },
+        
+        // Entry 56 | Unpalatalized (\'hard\')-s
+        's:hard:с': { blurb: 'Unpalatalized ⟨с⟩ /s/ is the default when no palatalizing agent follows.', citation: 'p. 155', notable: false },
+        
+        // Entry 57 | Unpalatalized (\'hard\')-z
+        'z:hard:з': { blurb: 'Unpalatalized ⟨з⟩ /z/ is the default when no palatalizing agent follows.', citation: 'p. 140', notable: false },
+        
+        // Entry 58 | Unpalatalized (\'hard\')-t
+        't:hard:т': { blurb: 'Unpalatalized ⟨т⟩ /t/ is the default when no palatalizing agent follows. Russian [t̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /t/.', citation: 'p. 140', notable: false },
+        
+        // Entry 59 | Unpalatalized (\'hard\')-d
+        'd:hard:д': { blurb: 'Unpalatalized ⟨д⟩ /d/ is the default when no palatalizing agent follows. Russian [d̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /d/.', citation: 'p. 146', notable: false },
+        
+        // Entry 60 | Unpalatalized (\'hard\')-p
+        'p:hard:п': { blurb: 'Unpalatalized ⟨п⟩ /p/ is the default when no palatalizing agent follows. Russian /p/ is unaspirated (like Italian), unlike English /pʰ/.', citation: 'p. 147', notable: false },
+        
+        // Entry 61 | Unpalatalized (\'hard\')-b
+        'b:hard:б': { blurb: 'Unpalatalized ⟨б⟩ /b/ is the default when no palatalizing agent follows.', citation: 'p. 140', notable: false },
+        
+        // Entry 62 | Unpalatalized (\'hard\')-k
+        'k:hard:к': { blurb: 'Unpalatalized ⟨к⟩ /k/ is the default when no palatalizing agent follows. Russian /k/ is unaspirated (like Italian), unlike English /kʰ/.', citation: 'p. 140', notable: false },
+        
+        // Entry 63 | Unpalatalized (\'hard\')-g
+        'ɡ:hard:г': { blurb: 'Unpalatalized ⟨г⟩ /ɡ/ is the default when no palatalizing agent follows. Note: Grayson\'s preferred IPA symbol is opentail [ɡ], although the International Phonetic Association accepts Latin [g] as equally valid.', citation: 'p. 145', notable: false },
+        
+        // Entry 64 | Unpalatalized (\'hard\')-x
+        'x:hard:х': { blurb: 'The letter ⟨х⟩ /x/ (or its voiced allophone [ɣ]) is one of the three sung Russian velar consonants alongside ⟨к⟩ /k/ and ⟨г⟩ /ɡ/. Unpalatalized /x/ is the default when no palatalizing agent follows, although this phoneme may undergo regressive voicing assimilation to become [ɣ]. This voiceless velar fricative resembles German ach-laut /χ/, but Russian /x/ is articulated further forward on the velum.', citation: 'p. 149', notable: false },
+        
+        // Entry 65 | Unpalatalized (\'hard\')-f
+        'f:hard:ф': { blurb: 'Unpalatalized ⟨ф⟩ /f/ is the default when no palatalizing agent follows. All Russian words spelled with ⟨ф⟩ are loanwords.', citation: 'p. 148', notable: false },
+        
+        // Entry 66 | Unpalatalized (\'hard\')-v
+        'v:hard:в': { blurb: 'Unpalatalized ⟨в⟩ /v/ is the default when no palatalizing agent follows. Note: ⟨в⟩ is phonemically weak. While it undergoes devoicing like any voiced consonant does (e.g., ⟨кров⟩ /krof/ "shelter"), ⟨в⟩ does not transmit voicing to preceding consonants (e.g., ⟨свет⟩ /svʲɛt/ "light," not */zvʲɛt/; ⟨твой⟩ /tvoj/ "your," not */dvoj/).', citation: 'pp. 152–153', notable: false },
+        
+        // Entry 67 | Unpalatalized (\'hard\')-m
+        'm:hard:м': { blurb: 'Unpalatalized ⟨м⟩ /m/ is the default when no palatalizing agent follows.', citation: 'p. 140', notable: false },
+        
+        // Entry 68 | Unpalatalized (\'hard\')-n
+        'n:hard:н': { blurb: 'Unpalatalized ⟨н⟩ /n/ is the default when no palatalizing agent follows. Russian [n̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /n/.', citation: 'p. 154', notable: false },
+        
+        // Entry 69 | Unpalatalized (\'hard\')-r
+        'r:hard:р': { blurb: 'Unpalatalized ⟨р⟩ /r/ is the default when no palatalizing agent follows. Russian /r/ is a trilled alveolar, like Italian or Spanish /r/.', citation: 'p. 155', notable: false },
+        
+        // ========================================
+        // SECTION 6: SIGNS (Entries 70–71)
+        // ========================================
+        
+        // Entry 70 | Hard sign
+        'hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a silent boundary marker, preserving the unpalatalized state of its preceding consonant while signalling the insertion of a /j/-glide before the following vowel (e.g., ⟨съел⟩ /sjɛɫ/ "ate").', citation: 'pp. 192–194', notable: false },
+        
+        // Entry 71 | Soft sign
+        'soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ /ʲ/ is silent yet phonetically consequential. It palatalizes its preceding consonant. When followed by a vowel, it also signals the insertion of a /j/-glide between the now-palatalized consonant and the following vowel (e.g., ⟨пьеса⟩ /pʲˈjɛsʌ/ "play"; note the contiguous /ʲ/ and /j/, which are not interchangeable). Exception: after the intrinsically hard consonants ⟨ж⟩ and ⟨ш⟩, the soft sign is purely orthographic and does not indicate palatalization. Ignore it.', citation: 'pp. 195–198', notable: false },
+        
+        // ========================================
+        // SECTION 7: ALLOPHONES & PROCESSES (Entry 72)
+        // ========================================
+        
+        // Entry 72 | Gamma
+        'ɣ:allophone:х': { blurb: 'Just as /k/ becomes [ɡ] before a voiced consonant, ⟨х⟩ becomes [ɣ]. This voiced velar fricative [ɣ] is an allophone of /x/ without its own dedicated letterform.', citation: 'p. 215', notable: false },
+        
+        // ========================================
+        // SECTION 8: SPECIAL CLUSTERS & EXCEPTIONS (Entries 73–85)
+        // ========================================
+        
+        // Entry 73 | Reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩
+        'tːs:cluster:тс': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ are two orthographic representations of the same cluster, both pronounced /tːsʌ/. (The soft sign in ⟨-ться⟩ is ignored: no palatalization occurs.) Either spelling features an elongated /tː/ followed by /s/; by contrast, the similar affricate /ts/ is quicker to pronounce.', citation: 'pp. 237–238', notable: true },
+        
+        // Entry 74 | ⟨чн⟩ → /ʃn/ exceptions
+        'ʃn:cluster:чн': { blurb: 'In a subset of common words, the cluster ⟨чн⟩ is pronounced /ʃn/ rather than the expected /tʃʲn/. This subset includes ⟨конечно⟩ /kɑˈɲeʃnʌ/ "of course," ⟨скучно⟩ /ˈskuʃnʌ/ "boring," ⟨яичница⟩ /jɪˈiʃɲitsʌ/ "fried eggs," and a handful of others.', citation: 'pp. 240–241', notable: true },
+        
+        // Entry 75 | ⟨чт⟩ → /ʃt/ exceptions
+        'ʃt:cluster:чт': { blurb: 'In a subset of common words, the cluster ⟨чт⟩ is pronounced /ʃt/ rather than the expected /tʃʲt/. This subset includes ⟨что⟩ /ʃto/ "what," ⟨чтобы⟩ /ˈʃtobɨ/ "in order to," ⟨ничто⟩ /ɲiˈʃto/ "nothing," and a handful of others.', citation: 'p. 241', notable: true },
+        
+        // Entry 76 | ⟨бог⟩ → /box/
+        'x:exception:бог': { blurb: 'In the word ⟨бог⟩ /box/ "God," the final ⟨г⟩ is pronounced /x/ rather than the expected devoiced /k/. This pronunciation is preserved from Church Slavonic tradition.', citation: 'p. 242', notable: true },
+        
+        // Entry 77 | Genitive endings where ⟨г⟩ is /v/
+        'v:genitive:г': { blurb: 'In the very common genitive singular endings ⟨-его⟩ and ⟨-ого⟩, the letter ⟨г⟩ is pronounced /v/, not /ɡ/. This applies to adjectives, pronouns, and ordinal numbers (e.g., ⟨его⟩ /jɪˈvo/ "his/him," ⟨сегодня⟩ /sʲɪˈvodɲʌ/ "today," ⟨красного⟩ /ˈkrɑsnʌvʌ/ "of the red"). Beware the common word ⟨много⟩ /ˈmnoɡʌ/ "much/many," where the identical-looking cluster is not a genitive ending, so it retains the voiced velar plosive /ɡ/ we would otherwise expect.', citation: 'p. 243', notable: true },
+        
+        // Entry 78 | ⟨сш⟩ → /ʃː/ assimilation
+        'sːʃ:cluster:сш': { blurb: 'When ⟨с⟩ precedes ⟨ш⟩, the /s/ transforms to match the /ʃ/ that follows, lengthening it (e.g., ⟨сшить⟩ /ʃːɨtʲ/ "to sew together").', citation: 'p. 230', notable: false },
+        
+        // Entry 79 | ⟨зж⟩ → /ʒː/ assimilation
+        'zːʒ:cluster:зж': { blurb: 'When ⟨з⟩ precedes ⟨ж⟩, the /z/ transforms to match the /ʒ/ that follows, lengthening it (e.g., ⟨изжога⟩ /ɪˈʒːoɡʌ/ "heartburn").', citation: 'p. 230', notable: false },
+        
+        // Entry 80 | ⟨сч⟩ → /ʃʲʃʲ/ assimilation
+        'ʃʲʃʲ:cluster:сч': { blurb: 'When ⟨с⟩ precedes ⟨ч⟩, the cluster assimilates to /ʃʲʃʲ/ (or /ʃʲː/ if you prefer), identical to ⟨щ⟩ (e.g., ⟨счастье⟩ /ˈʃʲːɑsʲtʲjɪ/ "happiness" (note the exceptional /ɑ/ in this common word), ⟨считать⟩ /ʃʲːɪˈtɑtʲ/ "to count," and ⟨расчёт⟩ /rʌˈʃʲːot/ "calculation").', citation: 'p. 231', notable: false },
+        
+        // Entry 81 | Silent ⟨л⟩ in the ⟨лнц⟩ cluster
+        'silent:cluster:лнц': { blurb: 'In the cluster ⟨лнц⟩, most commonly encountered in ⟨солнце⟩ /ˈsontsɛ/ "sun," the ⟨л⟩ is silent.', citation: 'p. 235', notable: true },
+        
+        // Entry 82 | Silent ⟨д⟩ in the ⟨рдц⟩ cluster
+        'silent:cluster:рдц': { blurb: 'In the cluster ⟨рдц⟩, most commonly encountered in ⟨сердце⟩ /ˈsʲertsɛ/ "heart" and its derivatives, the ⟨д⟩ is silent.', citation: 'p. 235', notable: true },
+        
+        // Entry 83 | Silent ⟨т⟩ in the ⟨стн⟩ cluster
+        'silent:cluster:стн': { blurb: 'In the cluster ⟨стн⟩, the ⟨т⟩ is silent (e.g., ⟨честный⟩ /ˈtʃʲesnɨj/ "honest," ⟨известный⟩ /ɪzˈvʲesnɨj/ "famous," and ⟨грустный⟩ /ˈɡrusnɨj/ "sad").', citation: 'p. 235', notable: true },
+        
+        // Entry 84 | Silent ⟨д⟩ in the ⟨здн⟩ cluster
+        'silent:cluster:здн': { blurb: 'In the cluster ⟨здн⟩, the ⟨д⟩ is silent (e.g., ⟨поздно⟩ /ˈpoznʌ/ "late," ⟨праздник⟩ /ˈprazɲɪk/ "holiday").', citation: 'p. 235', notable: true },
+        
+        // Entry 85 | Silent ⟨в⟩ in the ⟨вств⟩ cluster
+        'silent:cluster:вств': { blurb: 'In the cluster ⟨вств⟩, the first ⟨в⟩ is silent (e.g., ⟨чувство⟩ /ˈtʃʲustvʌ/ "feeling," ⟨здравствуй⟩ /ˈzdrastvuj/ "hello").', citation: 'p. 236', notable: true },
+        
+        // ========================================
+        // LEGACY ENTRIES (Phonological Processes)
+        // Retained for backward compatibility with deriveRule()
+        // ========================================
+        'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ after soft consonant → /ɑ/ (the consonant carries the softness).', citation: 'pp. 81–85', notable: false },
+        'ɛ:stressed:э': { blurb: 'Stressed ⟨э⟩ → open /ɛ/.', citation: 'pp. 87–90', notable: false },
+        'a:interpalatal:а': { blurb: '⟨а⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
+        'a:interpalatal:я': { blurb: '⟨я⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
+        'e:interpalatal:е': { blurb: '⟨е⟩ closes to [e] when sandwiched between two palatalizing agents.', citation: 'pp. 87–90, 125', notable: true },
+        'e:interpalatal:э': { blurb: 'When stressed ⟨э⟩ is word-initial before a palatalized consonant, it fronts from /ɛ/ to [e] (e.g., ⟨эти⟩ → /ˈetʲi/, in contrast to ⟨это⟩ → /ˈɛtʌ/).', citation: 'pp. 87–90, 125', notable: false },
+        'ʌ:post-stress:о': { blurb: 'Post-stress ⟨о⟩ reduces to [ʌ].', citation: 'pp. 108, 127', notable: true },
+        'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to [ɪ].', citation: 'pp. 97–107', notable: true },
+        'ɪ:unstressed:я': { blurb: 'Unstressed ⟨я⟩ reduces to [ɪ].', citation: 'pp. 97–107', notable: true },
+        'ɨ:after-hard:и': { blurb: '⟨и⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ] (hard consonants retract the vowel).', citation: 'pp. 93–96', notable: true },
+        'ɨ:after-hard:е': { blurb: 'Unstressed ⟨е⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ].', citation: 'pp. 97–107', notable: true },
+        'devoicing:process': { blurb: 'In Russian, as in German, final consonants are generally devoiced regardless of spelling (e.g., ⟨год⟩ → /ɡot/, ⟨кровь⟩ → /krofʲ/). Exception: sonorants (/m/, /mʲ/, /n/, /ɲ/, /ɫ/, /lʲ/, /r/, /rʲ/) are never devoiced.', citation: 'p. 199', notable: false },
+        'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
+        'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In Ilya, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
+        'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; Ilya uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
+        'tːsʌ:reflexive:тся': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ are both pronounced /tːsʌ/. These clusters resemble the affricate ⟨ц⟩ (/ts/), but have an elongated stop on the /t/ portion (e.g., ⟨боится⟩ → /bɑˈitːsʌ/, ⟨купаться⟩ → /kuˈpɑtːsʌ/). The soft sign in ⟨-ться⟩ has no effect in this construct. Ignore it.', citation: 'pp. 237–238', notable: true },
+        'deletion:cluster': { blurb: 'Certain consonant clusters contain "silent" letters that are not pronounced. Common examples: ⟨солнце⟩ → /ˈsontsɨ/ (⟨л⟩ silent), ⟨сердце⟩ → /ˈsʲertsɨ/ (⟨д⟩ silent), ⟨праздник⟩ → /ˈprazʲɲik/ (⟨д⟩ silent), ⟨чувство⟩ → /ˈtʃʲustvʌ/ (first ⟨в⟩ silent), ⟨здравствуйте⟩ → /ˈzdrastvujtʲe/ (first ⟨в⟩ silent).', citation: 'pp. 235–247', notable: true },
+        'none:hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a visual boundary marker: the consonant before it stays hard, and a /j/ glide is articulated before the following vowel (e.g., ⟨съел⟩ → /sjɛɫ/). ⟨Ъ⟩ once appeared at the end of every Russian Cyrillic word ending in a hard consonant; these final hard signs were eliminated by post-1917 spelling reforms (Ilya silently removes them), but hard signs within words still work as described.', citation: 'pp. 192–194', notable: false },
+        'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but it causes an obvious sound shift by palatalizing the preceding consonant. When followed by a vowel from the soft series (е, ё, ю, я), a /j/ glide is articulated between the palatalized consonant and the vowel (e.g., ⟨вьюга⟩ → /vʲˈjuɡʌ/). Note: the superscript [ʲ] (palatalization marker) and the baseline /j/ (palatal glide) are distinct symbols and not interchangeable.', citation: 'pp. 195–198', notable: false }
       },
       
       // Derive rule name from transcriptionLog features
@@ -6013,7 +6189,7 @@ const SINGER_SUPPLEMENT = {
       const failures = [];
 
       console.log('═══════════════════════════════════════════════════════════');
-      console.log('MSR Golden-Master Tests');
+      console.log('Ilya Golden-Master Tests');
       console.log('═══════════════════════════════════════════════════════════');
 
       for (const [category, tests] of Object.entries(GOLDEN_TESTS)) {
