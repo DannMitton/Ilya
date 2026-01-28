@@ -46,16 +46,12 @@
       --ilya-accent: #7a9e7e;
       --ilya-accent-light: rgba(122, 158, 126, 0.1);
       --ilya-accent-hover: #6b8e6f;
-      --ilya-salmon: #fa8072;
-      --ilya-salmon-light: rgba(250, 128, 114, 0.1);
       
       /* Legacy accent aliases (terracotta for existing components) */
       --accent: #a85a3a;
       --accent-muted: rgba(168, 90, 58, 0.75);
-      --accent-hover: #8f4d32;
       
       /* Status Colors */
-      --ilya-success: #7a9e7e;
       --ilya-warning: #d4a373;
       
       /* Fonts */
@@ -65,12 +61,9 @@
       
       /* Paper dimensions: Letter size at 96dpi */
       --paper-width: 816px;
-      --paper-height: 1056px;
       
       /* Shadows */
-      --ilya-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
       --ilya-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --ilya-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
       
       /* Legacy shadow aliases */
       --shadow-ambient: 0 1px 2px rgba(26, 22, 18, 0.08);
@@ -84,26 +77,19 @@
       --ilya-doc-shadow: 0 4px 20px rgba(0,0,0,0.05);
       
       /* Spacing Scale (8px base) */
-      --space-xs: 4px;
       --space-sm: 8px;
       --space-md: 16px;
       --space-lg: 24px;
-      --space-xl: 32px;
-      --space-xxl: 48px;
       
       /* Typography Scale */
       --text-xs: 12px;
       --text-sm: 14px;
       --text-base: 16px;
-      --text-lg: 18px;
-      --text-xl: 24px;
       
       /* Animation Timing */
       --duration-fast: 150ms;
       --duration-base: 300ms;
-      --duration-slow: 800ms;
       --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
       
       /* Legacy */
       --radius: 6px;
@@ -966,69 +952,6 @@
     }
 
     /* ========================================
-       LEGACY: Info Button (removed in v5.5)
-       Replaced by "Refine Analysis" disclosure
-       ======================================== */
-    /*
-    .info-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 0.5rem;
-    }
-
-    .info-toggle {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--paper);
-      border: 1px solid rgba(26, 22, 18, 0.15);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 150ms var(--ease);
-    }
-
-    .info-toggle:hover {
-      border-color: var(--accent);
-      background: rgba(168, 90, 58, 0.05);
-    }
-
-    .info-icon {
-      font-family: 'Noto Serif', serif;
-      font-size: 0.8rem;
-      font-style: italic;
-      color: var(--ink-secondary);
-    }
-    */
-
-    /* ========================================
-       LEGACY: Why Panel (removed in v5.5)
-       Replaced by refine-panel
-       ======================================== */
-    /*
-    .why-panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 300ms var(--ease);
-    }
-
-    .why-panel.expanded {
-      max-height: 500px;
-      overflow-y: auto;
-    }
-
-    .why-content {
-      padding-top: 0.75rem;
-      border-top: 1px solid rgba(26, 22, 18, 0.08);
-    }
-
-    .why-content-inner {
-      font-size: 0.85rem;
-    }
-    */
-
-    /* ========================================
        REFINE ANALYSIS PANEL (v5.5)
        Content First, Control Second redesign
        ======================================== */
@@ -1344,98 +1267,6 @@
       color: var(--ilya-accent);
     }
     
-    /* ========================================
-       LEGACY HORIZONTAL RIBBON (removed in v5.5)
-       Replaced by vertical ribbon layout
-       ======================================== */
-    /*
-    .ribbon-header {
-      font-size: 0.7rem;
-      color: var(--ink-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      margin-bottom: 0.5rem;
-    }
-    
-    .ribbon-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 1rem;
-    }
-    
-    .syllable-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      border: 2px solid transparent;
-      border-radius: 8px;
-      padding: 10px;
-      transition: border-color 200ms var(--ease), background 200ms var(--ease);
-    }
-    
-    .syllable-group.stressed {
-      border-color: var(--ilya-accent);
-      background: rgba(122, 158, 126, 0.02);
-    }
-    
-    .syllable-label-word {
-      font-size: 0.8rem;
-      color: rgba(26, 22, 18, 0.35);
-      font-family: var(--font-serif);
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
-    
-    .syllable-label-current {
-      color: var(--ink-primary);
-    }
-    
-    .phoneme-block {
-      display: grid;
-      grid-template-rows: auto 0fr;
-      transition: grid-template-rows 200ms var(--ease);
-      padding: 0.35rem 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      text-align: left;
-      width: 100%;
-      font-family: inherit;
-    }
-    
-    .phoneme-block:hover {
-      background: rgba(122, 158, 126, 0.08);
-    }
-    
-    .phoneme-block:focus {
-      outline: 2px solid var(--ilya-accent);
-      outline-offset: 1px;
-    }
-    
-    .phoneme-block.expanded {
-      grid-template-rows: auto 1fr;
-    }
-    
-    -- Legacy .phoneme-mapping, .phoneme-char, .phoneme-arrow, .phoneme-ipa --
-    -- Now defined in vertical ribbon section above --
-    
-    .blurb-content {
-      overflow: hidden;
-      min-height: 0;
-    }
-    
-    .blurb-inner {
-      padding-top: 0.5rem;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      color: var(--ink-secondary);
-    }
-    
-    -- Legacy .blurb-text, .blurb-citation --
-    -- Now defined in vertical ribbon section above --
-    */
-
     /* ========================================
        COMPACT MODULES (v5.4.2)
        Shared pattern for Stress Source & Phrase Boundary
