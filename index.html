@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.7.4 Silent Consonant Exceptions</title>
+  <title>Ilya — v5.7.5 Silent Consonant Clusters</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3579,6 +3579,17 @@ const SINGER_SUPPLEMENT = {
         'русских': { 'сс': 's' },
         'русскую': { 'сс': 's' },
         'русском': { 'сс': 's' },
+        // Silent consonant exceptions (Grayson p. 235-236)
+        // сердце family: рдц → рц (д silent)
+        'сердце': { 'рдц': 'rts' },
+        'сердца': { 'рдц': 'rts' },
+        'сердцу': { 'рдц': 'rts' },
+        'сердцем': { 'рдц': 'rts' },
+        // солнце family: лнц → нц (л silent)
+        'солнце': { 'лнц': 'nts' },
+        'солнца': { 'лнц': 'nts' },
+        'солнцу': { 'лнц': 'nts' },
+        'солнцем': { 'лнц': 'nts' },
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -3600,26 +3611,6 @@ const SINGER_SUPPLEMENT = {
         'русских': { skipVelarAdjectival: true },
         'русскую': { skipVelarAdjectival: true },
         'русском': { skipVelarAdjectival: true },
-        
-        // Silent consonant exceptions (Grayson p. 235-236)
-        // сердце family: рдц → рц (д silent)
-        'сердце': { fullIpa: 'sʲɛr tsɨ', stressIndex: 0, note: 'д silent in рдц cluster' },
-        'сердца': { fullIpa: 'sʲɛr tsɑ', stressIndex: 1, note: 'д silent in рдц cluster' },
-        'сердцу': { fullIpa: 'sʲɛr tsu', stressIndex: 0, note: 'д silent in рдц cluster' },
-        'сердцем': { fullIpa: 'sʲɛr tsɨm', stressIndex: 0, note: 'д silent in рдц cluster' },
-        'сердец': { fullIpa: 'sʲɪr dʲɛts', stressIndex: 1, note: 'д pronounced in genitive plural' },
-        'сердечный': { fullIpa: 'sʲɪr dʲɛtʃʲ nɨj', stressIndex: 1, note: 'д pronounced before е' },
-        'сердечная': { fullIpa: 'sʲɪr dʲɛtʃʲ nɑ jɑ', stressIndex: 1, note: 'д pronounced before е' },
-        'сердечко': { fullIpa: 'sʲɪr dʲɛtʃʲ kɑ', stressIndex: 1, note: 'д pronounced before е' },
-        
-        // солнце family: лнц → нц (л silent)
-        'солнце': { fullIpa: 'son tsɨ', stressIndex: 0, note: 'л silent in лнц cluster' },
-        'солнца': { fullIpa: 'son tsɑ', stressIndex: 0, note: 'л silent in лнц cluster' },
-        'солнцу': { fullIpa: 'son tsu', stressIndex: 0, note: 'л silent in лнц cluster' },
-        'солнцем': { fullIpa: 'son tsɨm', stressIndex: 0, note: 'л silent in лнц cluster' },
-        'солнечный': { fullIpa: 'soɫ ɲɪtʃʲ nɨj', stressIndex: 0, note: 'л pronounced before е' },
-        'солнечная': { fullIpa: 'soɫ ɲɪtʃʲ nɑ jɑ', stressIndex: 0, note: 'л pronounced before е' },
-        'солнышко': { fullIpa: 'soɫ nɨʃ kɑ', stressIndex: 0, note: 'л pronounced in diminutive' },
       },
       
       // Find special clusters in a word
@@ -4364,29 +4355,6 @@ const SINGER_SUPPLEMENT = {
               note: 'Canonical citation form — contextual pronunciation varies'
             }],
             source: 'isolated-clitic'
-          };
-        }
-        
-        // Check for full IPA override (silent consonant exceptions, etc.)
-        const exceptionEntry = this.exceptionWords[cleanWord];
-        if (exceptionEntry?.fullIpa) {
-          const syllables = this.syllabify(cleanWord);
-          const ipaSpaces = exceptionEntry.fullIpa.split(' ');
-          return {
-            ipa: exceptionEntry.fullIpa.replace(/ /g, ''),
-            ipaUnderlying: exceptionEntry.fullIpa.replace(/ /g, ''),
-            syllables: syllables.map((syl, idx) => ({
-              cyrillic: syl,
-              ipa: ipaSpaces[idx] || '',
-              isStressed: idx === exceptionEntry.stressIndex
-            })),
-            transcriptionLog: [{
-              cyrillic: cleanWord,
-              ipa: exceptionEntry.fullIpa,
-              source: 'exception-word',
-              note: exceptionEntry.note || 'Exception word with full IPA override'
-            }],
-            source: 'exception-word'
           };
         }
         
@@ -5552,10 +5520,12 @@ const SINGER_SUPPLEMENT = {
         'ʃʲʃʲ:cluster:сч': { blurb: 'When ⟨с⟩ precedes ⟨ч⟩, the cluster assimilates to /ʃʲʃʲ/ (or /ʃʲː/ if you prefer), identical to ⟨щ⟩ (e.g., ⟨счастье⟩ /ˈʃʲːɑsʲtʲjɪ/ "happiness" (note the exceptional /ɑ/ in this common word), ⟨считать⟩ /ʃʲːɪˈtɑtʲ/ "to count," and ⟨расчёт⟩ /rʌˈʃʲːot/ "calculation").', citation: 'p. 231', notable: false },
         
         // Entry 81 | Silent ⟨л⟩ in the ⟨лнц⟩ cluster
-        'silent:cluster:лнц': { blurb: 'In the cluster ⟨лнц⟩, most commonly encountered in ⟨солнце⟩ /ˈsontsɛ/ "sun," the ⟨л⟩ is silent.', citation: 'p. 235', notable: true },
+        'silent:cluster:лнц': { blurb: '⟨л⟩ is silent in the cluster ⟨лнц⟩; this is an exceptional rule of one.', citation: 'p. 235', notable: true },
+        'nts:cluster:лнц': { blurb: '⟨л⟩ is silent in the cluster ⟨лнц⟩; this is an exceptional rule of one.', citation: 'p. 235', notable: true },
         
         // Entry 82 | Silent ⟨д⟩ in the ⟨рдц⟩ cluster
-        'silent:cluster:рдц': { blurb: 'In the cluster ⟨рдц⟩, most commonly encountered in ⟨сердце⟩ /ˈsʲertsɛ/ "heart" and its derivatives, the ⟨д⟩ is silent.', citation: 'p. 235', notable: true },
+        'silent:cluster:рдц': { blurb: '⟨д⟩ is silent in the cluster ⟨рдц⟩; this is an exceptional rule of one.', citation: 'p. 235', notable: true },
+        'rts:cluster:рдц': { blurb: '⟨д⟩ is silent in the cluster ⟨рдц⟩; this is an exceptional rule of one.', citation: 'p. 235', notable: true },
         
         // Entry 83 | Silent ⟨т⟩ in the ⟨стн⟩ cluster
         'silent:cluster:стн': { blurb: 'In the cluster ⟨стн⟩, the ⟨т⟩ is silent (e.g., ⟨честный⟩ /ˈtʃʲesnɨj/ "honest," ⟨известный⟩ /ɪzˈvʲesnɨj/ "famous," and ⟨грустный⟩ /ˈɡrusnɨj/ "sad").', citation: 'p. 235', notable: true },
