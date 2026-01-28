@@ -615,6 +615,43 @@
       opacity: 0.7;
     }
 
+    /* OCR Status */
+    .ocr-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--ink-secondary);
+    }
+
+    .ocr-status.error {
+      color: #c75d5d;
+    }
+
+    .ocr-status.success {
+      color: var(--ilya-accent);
+    }
+
+    .ocr-status .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Scan button icon alignment */
+    #ocrScanBtn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    #ocrScanBtn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .footer-actions {
       display: flex;
       gap: var(--space-sm);
@@ -2040,12 +2077,37 @@
             
             <!-- Footer row: status left, buttons right -->
             <div class="drawer-footer">
-              <div class="footer-status">
+              <div class="footer-status" aria-live="polite">
                 <span class="char-counter" id="charCounter"></span>
                 <span class="auto-saved" id="autoSaved">Saved</span>
+                <span class="ocr-status" id="ocrStatus" style="display: none;">
+                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+                  </svg>
+                  <span class="ocr-status-text"></span>
+                </span>
               </div>
               <div class="footer-actions">
+                <!-- Hidden file input for OCR -->
+                <input type="file" 
+                       id="ocrFileInput" 
+                       accept="image/*" 
+                       capture="environment"
+                       aria-hidden="true"
+                       style="display: none;">
                 <button class="btn btn-secondary" id="clearBtn">Clear</button>
+                <button class="btn btn-secondary" id="ocrScanBtn" 
+                        aria-label="Import Russian text from image"
+                        disabled
+                        title="Loading Russian language pack...">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  Scan
+                </button>
                 <button class="btn btn-primary" id="transcribeBtn">Transcribe</button>
               </div>
             </div>
@@ -2783,6 +2845,11 @@ const SINGER_SUPPLEMENT = {
       textInput: null,
       clearBtn: null,
       transcribeBtn: null,
+      // OCR elements
+      ocrScanBtn: null,
+      ocrFileInput: null,
+      ocrStatus: null,
+      ocrStatusText: null,
       
       init() {
         this.drawer = document.getElementById('inputDrawer');
@@ -2792,6 +2859,15 @@ const SINGER_SUPPLEMENT = {
         this.textInput = document.getElementById('textInput');
         this.clearBtn = document.getElementById('clearBtn');
         this.transcribeBtn = document.getElementById('transcribeBtn');
+        
+        // OCR elements
+        this.ocrScanBtn = document.getElementById('ocrScanBtn');
+        this.ocrFileInput = document.getElementById('ocrFileInput');
+        this.ocrStatus = document.getElementById('ocrStatus');
+        this.ocrStatusText = this.ocrStatus?.querySelector('.ocr-status-text');
+        
+        // Initialize OCR (lazy-loads Tesseract in background)
+        this.initOCR();
         
         // Click handler for entire handle bar
         this.handle.addEventListener('click', () => this.toggle());
@@ -3132,6 +3208,136 @@ const SINGER_SUPPLEMENT = {
         
         // Remove loading state
         setTimeout(() => paper.classList.remove('rendering'), 100);
+      },
+      
+      // ========================================
+      // OCR Methods
+      // ========================================
+      
+      /**
+       * Initialize OCR module (lazy-loads Tesseract in background)
+       */
+      async initOCR() {
+        if (!OCRModule.isSupported()) {
+          console.log('OCR not supported in this browser');
+          this.ocrScanBtn.style.display = 'none';
+          return;
+        }
+        
+        // Set up error callback
+        OCRModule.onError((msg) => {
+          console.warn('OCR error:', msg);
+          this.showOCRStatus('error', msg);
+        });
+        
+        // Scan button triggers hidden file input
+        this.ocrScanBtn.addEventListener('click', () => {
+          if (!this.ocrScanBtn.disabled) {
+            this.ocrFileInput.click();
+          }
+        });
+        
+        // File selected → process
+        this.ocrFileInput.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          await this.processOCRFile(file);
+          // Reset input for re-use
+          this.ocrFileInput.value = '';
+        });
+        
+        // Start lazy-loading Tesseract
+        try {
+          const loaded = await OCRModule.init();
+          if (loaded) {
+            this.ocrScanBtn.disabled = false;
+            this.ocrScanBtn.title = 'Import Russian text from image';
+          }
+        } catch (err) {
+          console.error('OCR init failed:', err);
+          this.ocrScanBtn.title = 'OCR unavailable';
+        }
+      },
+      
+      /**
+       * Process uploaded image file through OCR
+       */
+      async processOCRFile(file) {
+        // Hide normal status, show OCR status
+        document.getElementById('charCounter')?.classList.remove('visible');
+        document.getElementById('autoSaved')?.classList.remove('visible');
+        
+        // Status message mapping (Kimi's "narrated steps")
+        const statusMessages = {
+          'loading tesseract': 'Loading recognition engine...',
+          'loading language': 'Loading Russian dictionary...',
+          'loading eng+rus traineddata': 'Loading Russian dictionary...',
+          'loaded eng+rus traineddata': 'Dictionary loaded.',
+          'processing': 'Analyzing image...',
+          'recognizing text': 'Reading Cyrillic text...',
+          'recognizing': 'Reading Cyrillic text...',
+          'cleaning': 'Cleaning up results...'
+        };
+        
+        try {
+          const text = await OCRModule.processImage(file, (status, progress) => {
+            const message = statusMessages[status] || status;
+            this.showOCRStatus('processing', message);
+          });
+          
+          if (text) {
+            // Append to existing text with newline separator if not empty
+            const existingText = this.textInput.value.trim();
+            if (existingText) {
+              this.textInput.value = existingText + '\n\n' + text;
+            } else {
+              this.textInput.value = text;
+            }
+            
+            this.updatePreview();
+            this.showOCRStatus('success', 'Import complete');
+            
+            // Clear success message after 3 seconds
+            setTimeout(() => this.hideOCRStatus(), 3000);
+          }
+        } catch (err) {
+          console.error('OCR processing failed:', err);
+          this.showOCRStatus('error', err.message || 'Failed to read image');
+          
+          // Clear error after 5 seconds
+          setTimeout(() => this.hideOCRStatus(), 5000);
+        }
+      },
+      
+      /**
+       * Show OCR status message
+       */
+      showOCRStatus(type, message) {
+        if (!this.ocrStatus) return;
+        
+        this.ocrStatus.style.display = 'flex';
+        this.ocrStatus.className = 'ocr-status ' + type;
+        
+        if (this.ocrStatusText) {
+          this.ocrStatusText.textContent = message;
+        }
+        
+        // Show/hide spinner based on type
+        const spinner = this.ocrStatus.querySelector('.spinner');
+        if (spinner) {
+          spinner.style.display = type === 'processing' ? 'block' : 'none';
+        }
+      },
+      
+      /**
+       * Hide OCR status and restore normal footer status
+       */
+      hideOCRStatus() {
+        if (this.ocrStatus) {
+          this.ocrStatus.style.display = 'none';
+        }
+        // Let updatePreview restore char counter if needed
+        this.updatePreview();
       }
     };
 
@@ -4564,6 +4770,318 @@ const SINGER_SUPPLEMENT = {
             word.ipaSurface = this.applyFinalDevoicing(word.ipaSurface);
           }
         });
+      }
+    };
+
+    /* ========================================
+       OCR MODULE - Russian Text Recognition
+       Lazy-loads Tesseract.js for image-to-text
+       ======================================== */
+    const OCRModule = {
+      // Configuration
+      TESSERACT_VERSION: '4.1.1',
+      CDN_PRIMARY: 'https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js',
+      CDN_FALLBACK: 'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js',
+      WORKER_CDN: 'https://unpkg.com/tesseract.js@4.1.1/dist/worker.min.js',
+      LANG_CDN: 'https://tessdata.projectnaptha.com/4.0.0',
+      INIT_TIMEOUT: 15000,
+      IDLE_TIMEOUT: 300000, // 5 minutes
+      MAX_IMAGE_WIDTH: 1200,
+      CONFIDENCE_SKIP: 40,
+      CONFIDENCE_DUBIOUS: 80,
+      
+      // State
+      worker: null,
+      isLoaded: false,
+      isProcessing: false,
+      idleTimer: null,
+      
+      // Callbacks
+      _onProgress: null,
+      _onError: null,
+      
+      /**
+       * Check if OCR is supported in this browser
+       */
+      isSupported() {
+        return !!(
+          window.Worker &&
+          window.Blob &&
+          window.URL &&
+          window.FileReader &&
+          HTMLCanvasElement.prototype.toBlob
+        );
+      },
+      
+      /**
+       * Load external script with promise
+       */
+      loadScript(url) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = url;
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error(`Failed to load: ${url}`));
+          document.head.appendChild(script);
+        });
+      },
+      
+      /**
+       * Initialize Tesseract worker (lazy-load)
+       */
+      async init() {
+        if (this.isLoaded) return true;
+        if (!this.isSupported()) {
+          this._onError?.('OCR not supported in this browser');
+          return false;
+        }
+        
+        // Suppress AudioContext warnings from Tesseract
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+          if (typeof args[0] === 'string' && args[0].includes('AudioContext')) return;
+          originalWarn.apply(console, args);
+        };
+        
+        const timeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('OCR initialization timeout')), this.INIT_TIMEOUT)
+        );
+        
+        try {
+          // Load Tesseract.js library with fallback
+          if (!window.Tesseract) {
+            try {
+              await this.loadScript(this.CDN_PRIMARY);
+            } catch (e) {
+              console.warn('Primary CDN failed, trying fallback...');
+              await this.loadScript(this.CDN_FALLBACK);
+            }
+          }
+          
+          // Create worker with Russian language
+          const workerPromise = (async () => {
+            this.worker = await Tesseract.createWorker('rus', 1, {
+              workerPath: this.WORKER_CDN,
+              langPath: this.LANG_CDN,
+              logger: (m) => {
+                if (m.status && this._onProgress) {
+                  this._onProgress(m.status, m.progress);
+                }
+              }
+            });
+          })();
+          
+          await Promise.race([workerPromise, timeout]);
+          
+          this.isLoaded = true;
+          this.touch(); // Start idle timer
+          
+          // Restore console.warn
+          console.warn = originalWarn;
+          
+          return true;
+        } catch (err) {
+          console.warn = originalWarn;
+          this.isLoaded = false;
+          this._onError?.('OCR unavailable. Please type or paste text.');
+          console.error('OCR init failed:', err);
+          return false;
+        }
+      },
+      
+      /**
+       * Reset idle timer (call on each use)
+       */
+      touch() {
+        clearTimeout(this.idleTimer);
+        this.idleTimer = setTimeout(() => this.destroy(), this.IDLE_TIMEOUT);
+      },
+      
+      /**
+       * Clean up worker to free memory
+       */
+      async destroy() {
+        clearTimeout(this.idleTimer);
+        if (this.worker) {
+          await this.worker.terminate();
+          this.worker = null;
+        }
+        this.isLoaded = false;
+      },
+      
+      /**
+       * Resize image to max width while preserving aspect ratio
+       */
+      async resizeImage(file) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          const url = URL.createObjectURL(file);
+          
+          img.onload = () => {
+            URL.revokeObjectURL(url); // Free memory immediately
+            
+            let { width, height } = img;
+            
+            // Only downscale, never upscale
+            if (width > this.MAX_IMAGE_WIDTH) {
+              const ratio = this.MAX_IMAGE_WIDTH / width;
+              width = this.MAX_IMAGE_WIDTH;
+              height = Math.round(height * ratio);
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            resolve(canvas);
+          };
+          
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Failed to load image'));
+          };
+          
+          img.src = url;
+        });
+      },
+      
+      /**
+       * Preprocess canvas for better OCR (grayscale + contrast)
+       */
+      preprocessCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // Convert to grayscale and boost contrast
+        for (let i = 0; i < data.length; i += 4) {
+          // Grayscale using luminance formula
+          const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+          
+          // Simple contrast boost (stretch to 0-255)
+          const contrast = Math.min(255, Math.max(0, (gray - 128) * 1.5 + 128));
+          
+          data[i] = data[i + 1] = data[i + 2] = contrast;
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+        return canvas;
+      },
+      
+      /**
+       * Fix common OCR errors (Latin chars inside Cyrillic context)
+       */
+      cleanRussianText(text) {
+        if (!text) return '';
+        
+        // Only process if we have Cyrillic content
+        if (!/[а-яА-ЯёЁ]{3,}/.test(text)) {
+          return text;
+        }
+        
+        let result = text;
+        
+        // Latin→Cyrillic fixes (only between Cyrillic chars)
+        const latinToCyrillic = [
+          [/(?<=[а-яА-ЯёЁ])3(?=[а-яА-ЯёЁ])/g, 'з'],
+          [/(?<=[а-яА-ЯёЁ])e(?=[а-яА-ЯёЁ])/gi, 'е'],
+          [/(?<=[а-яА-ЯёЁ])c(?=[а-яА-ЯёЁ])/gi, 'с'],
+          [/(?<=[а-яА-ЯёЁ])o(?=[а-яА-ЯёЁ])/gi, 'о'],
+          [/(?<=[а-яА-ЯёЁ])p(?=[а-яА-ЯёЁ])/gi, 'р'],
+          [/(?<=[а-яА-ЯёЁ])x(?=[а-яА-ЯёЁ])/gi, 'х'],
+          [/(?<=[а-яА-ЯёЁ])a(?=[а-яА-ЯёЁ])/gi, 'а'],
+          [/(?<=[а-яА-ЯёЁ])y(?=[а-яА-ЯёЁ])/gi, 'у'],
+          [/(?<=[а-яА-ЯёЁ])H(?=[а-яА-ЯёЁ])/g, 'Н'],
+          [/(?<=[а-яА-ЯёЁ])B(?=[а-яА-ЯёЁ])/g, 'В'],
+          [/(?<=[а-яА-ЯёЁ])K(?=[а-яА-ЯёЁ])/g, 'К'],
+          [/(?<=[а-яА-ЯёЁ])M(?=[а-яА-ЯёЁ])/g, 'М'],
+        ];
+        
+        for (const [pattern, replacement] of latinToCyrillic) {
+          result = result.replace(pattern, replacement);
+        }
+        
+        // Structural cleanup
+        result = result
+          .replace(/[ \t]+/g, ' ')           // Collapse spaces
+          .replace(/\n{3,}/g, '\n\n')        // Max 2 newlines
+          .replace(/^\s+|\s+$/gm, '');       // Trim lines
+        
+        return result;
+      },
+      
+      /**
+       * Main entry point: process image file → Russian text
+       */
+      async processImage(file, onProgress) {
+        if (this.isProcessing) {
+          console.warn('OCR already processing');
+          return null;
+        }
+        
+        if (!this.isLoaded) {
+          const loaded = await this.init();
+          if (!loaded) {
+            throw new Error('OCR initialization failed');
+          }
+        }
+        
+        this.isProcessing = true;
+        this._onProgress = onProgress;
+        this.touch();
+        
+        try {
+          // Step 1: Resize image
+          onProgress?.('processing', 0);
+          const canvas = await this.resizeImage(file);
+          
+          // Step 2: Preprocess for better recognition
+          onProgress?.('processing', 0.1);
+          this.preprocessCanvas(canvas);
+          
+          // Step 3: Run Tesseract
+          onProgress?.('recognizing text', 0.2);
+          const { data } = await this.worker.recognize(canvas);
+          
+          // Step 4: Filter by confidence and extract text
+          onProgress?.('cleaning', 0.9);
+          let text = '';
+          
+          if (data.words && data.words.length > 0) {
+            text = data.words
+              .filter(w => w.confidence >= this.CONFIDENCE_SKIP)
+              .map(w => w.text)
+              .join(' ');
+          } else {
+            text = data.text || '';
+          }
+          
+          // Step 5: Clean up the text
+          text = this.cleanRussianText(text);
+          
+          // Validate we got Cyrillic content
+          if (!/[а-яА-ЯёЁ]{3,}/.test(text)) {
+            throw new Error('No Cyrillic text found in image');
+          }
+          
+          this.touch();
+          return text;
+          
+        } finally {
+          this.isProcessing = false;
+          this._onProgress = null;
+        }
+      },
+      
+      /**
+       * Set error callback
+       */
+      onError(callback) {
+        this._onError = callback;
       }
     };
 
