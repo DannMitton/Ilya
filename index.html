@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.5.1 Event Delegation Fix</title>
+  <title>Ilya — v5.6.0 Post-tonic Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3949,6 +3949,8 @@ const SINGER_SUPPLEMENT = {
         if (index === stressIndex) return 'stressed';
         if (stressIndex === -1) return 'unstressed';
         if (index === stressIndex - 1) return 'pretonic';
+        // Grayson p. 266, fn. 306: immediate post-tonic а stays /ɑ/ to distinguish from о
+        if (index === stressIndex + 1) return 'posttonic-immediate';
         return 'remote';
       },
       
@@ -3994,6 +3996,21 @@ const SINGER_SUPPLEMENT = {
           if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
           if (vowel === 'я' || vowel === 'э') return 'ɪ';
           // и after ж/ш/ц → ɨ (Grayson p. 102)
+          if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
+          if (vowel === 'ы') return 'ɨ';
+          if (vowel === 'у' || vowel === 'ю') return 'u';
+        } else if (position === 'posttonic-immediate') {
+          // Grayson p. 266, footnote 306: "This guide suggests that -а- in 
+          // the immediate-post-stress position be read as /ɑ/ in order to 
+          // aurally differentiate from words that have the letter -о- in 
+          // the same position."
+          // Example: блюдa /ˈblʲu dɑ/ (platters) vs блюдо /ˈblʲu dʌ/ (a platter)
+          if (vowel === 'а') return 'ɑ';
+          if (vowel === 'я') return 'ɑ';  // я follows а pattern (underlying /ja/)
+          if (vowel === 'о') return 'ʌ';
+          // Other vowels follow remote patterns
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
+          if (vowel === 'э') return 'ɪ';
           if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
           if (vowel === 'у' || vowel === 'ю') return 'u';
