@@ -4539,31 +4539,31 @@ const SINGER_SUPPLEMENT = {
         // ========================================
         
         // Entry 1 | Dark-a
-        'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ is pronounced /ɑ/, the \'dark\' or backed variant, similar to the vowel in "father." This is the default for stressed ⟨а⟩ unless it occurs in an interpalatal context.', citation: 'pp. 81–85', notable: false },
+        'ɑ:stressed:а': { blurb: 'Stressed ⟨а⟩ is pronounced /ɑ/, the default sung Russian "a". This is the familiar backed variant in the word "father."', citation: 'pp. 81–85', notable: false },
         
         // Entry 2 | Bright-a
-        'a:stressed-interpalatal:а': { blurb: 'When stressed ⟨а⟩ occurs between two palatalized consonants (interpalatal context), it is pronounced /a/, the \'bright\' or fronted variant. This fronting is a natural coarticulatory effect.', citation: 'pp. 81–85, 125', notable: true },
+        'a:stressed-interpalatal:а': { blurb: 'The default dark-a /ɑ/ phoneme fronts to its brighter /a/ allophone whenever it sits between two palatalizing agents; these may be any combination of: a soft sign ⟨ь⟩, a palatalized consonant, or a /j/-glide. Bright-a /a/ is the more singable analog for the spoken Russian /æ/.', citation: 'pp. 81–85, 125', notable: true },
         
         // Entry 3 | Stressed-o
         'o:stressed:о': { blurb: 'Stressed ⟨о⟩ is pronounced /o/. Grayson (p. 86) explicitly states that stressed /o/ is "transcribed simply as /o/," not as open-mid /ɔ/.', citation: 'p. 86', notable: false },
         
         // Entry 4 | Stressed-o (ё spelling)
-        'o:stressed:ё': { blurb: 'The letter ⟨ё⟩ is always stressed and pronounced /o/, identical to stressed ⟨о⟩. The diaeresis signals that this vowel follows a palatalized consonant (or word-initially, that a /j/-glide precedes it).', citation: 'pp. 85–86', notable: false },
+        'o:stressed:ё': { blurb: 'The letter ⟨ё⟩ is always stressed. It is pronounced /o/, identical to stressed ⟨о⟩. The diaeresis signals that this vowel is a member of the \'soft\' series (⟨я е и ё ю⟩) and typically follows a palatalized consonant (exceptions: the always-hard ⟨ж⟩ and ⟨ш⟩). Word-initially, a /j/-glide precedes this vowel as /jo/.', citation: 'pp. 85–86', notable: false },
         
         // Entry 5 | Open-e
-        'ɛ:stressed:е': { blurb: 'Stressed ⟨е⟩ is pronounced /ɛ/, the open-mid front vowel, as the default. This applies when ⟨е⟩ is not in an interpalatal context.', citation: 'pp. 87–90', notable: false },
+        'ɛ:stressed:е': { blurb: 'The default pronunciation of stressed ⟨е⟩ is /ɛ/, as in ⟨bed⟩ /bɛd/ (English), ⟨mer⟩ /mɛʁ/ "sea" (French), ⟨Geld⟩ /gɛlt/ "money" (German), or ⟨è⟩ /ɛ/ "is" (Italian).', citation: 'pp. 87–90', notable: false },
         
         // Entry 6 | Close-e
-        'e:stressed-interpalatal:е': { blurb: 'When stressed ⟨е⟩ occurs between two palatalized consonants (interpalatal context), it is pronounced /e/, the close-mid front vowel. This is a raised variant compared to the default /ɛ/.', citation: 'pp. 87–90, 125', notable: true },
+        'e:stressed-interpalatal:е': { blurb: 'When stressed ⟨е⟩ occurs between two palatalized consonants (interpalatal context), it is pronounced /e/, the close-mid front vowel. This raising is a natural coarticulatory effect.', citation: 'pp. 87–90, 125', notable: true },
         
         // Entry 7 | Stressed-i
-        'i:stressed:и': { blurb: 'Stressed ⟨и⟩ is pronounced /i/. Crucially, ⟨и⟩ never reduces in sung Russian: it remains /i/ regardless of stress position (Grayson p. 96).', citation: 'p. 96', notable: false },
+        'i:stressed:и': { blurb: 'Stressed ⟨и⟩ is usually pronounced /i/.', citation: 'p. 96', notable: false },
         
         // Entry 8 | Barred-i
-        'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ is pronounced /ɨ/, the close central unrounded vowel. This sound does not exist in English; it is produced with the tongue position of /i/ but retracted toward the centre of the mouth.', citation: 'pp. 93–95', notable: false },
+        'ɨ:stressed:ы': { blurb: 'Stressed ⟨ы⟩ is pronounced /ɨ/, the close central unrounded vowel. North American English speakers may recognize this vowel in the words "milk" or "will" when spoken quickly. Velar-i is as ubiquitous in sung Russian as it is challenging to master. See Ilya's LEARN module for more.', citation: 'pp. 93–95', notable: false },
         
         // Entry 9 | Stressed-u
-        'u:stressed:у': { blurb: 'Stressed ⟨у⟩ is pronounced /u/.', citation: 'pp. 91–92', notable: false },
+        'u:stressed:у': { blurb: 'The letter ⟨у⟩ is always pronounced /u/, whether stressed or unstressed.', citation: 'pp. 91–93', notable: false },
         
         // Entry 10 | Stressed-u (ю spelling)
         'u:stressed:ю': { blurb: 'Stressed ⟨ю⟩ is pronounced /u/, identical to stressed ⟨у⟩. The spelling signals that this vowel follows a palatalized consonant (or word-initially, that a /j/-glide precedes it).', citation: 'pp. 91–92', notable: false },
@@ -4573,31 +4573,34 @@ const SINGER_SUPPLEMENT = {
         // ========================================
         
         // Entry 11 | Pre-tonic о → /ɑ/
-        'ɑ:pretonic:о': { blurb: 'When unstressed ⟨о⟩ is in the immediate pre-tonic position (the syllable directly before the stress), it is pronounced /ɑ/. This is akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
+        'ɑ:pretonic:о': { blurb: 'When ⟨о⟩ appears in pretonic position (the syllable immediately before the stress), it is pronounced /ɑ/. This is akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 12 | Word-initial о → /ɑ/
-        'ɑ:initial:о': { blurb: 'When unstressed ⟨о⟩ begins a word, it is pronounced /ɑ/. Word-initial position receives the same treatment as immediate pre-tonic position. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
+        'ɑ:initial:о': { blurb: 'Whenever unstressed ⟨о⟩ begins a word, it is pronounced /ɑ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 13 | Pre-tonic а → /ɑ/
-        'ɑ:pretonic:а': { blurb: 'When unstressed ⟨а⟩ is in the immediate pre-tonic position (the syllable directly before the stress), it is pronounced /ɑ/. This maintains the vowel\'s quality in the position closest to stress.', citation: 'pp. 108, 127', notable: false },
+        'ɑ:pretonic:а': { blurb: 'When ⟨а⟩ appears in pretonic position (the syllable immediately before the stress), it is pronounced /ɑ/.', citation: 'pp. 97–102', notable: false },
+        
+        // Entry 11 | Pretonic interpalatal а → /a/
+        'a:pretonic-interpalatal:а': { blurb: 'When ⟨а⟩ appears in pretonic position between two palatalized consonants (interpalatal context), it is pronounced /a/. This fronting is a natural coarticulatory effect.', citation: 'pp. 108, 127', notable: false },
         
         // Entry 14 | Word-initial а → /ɑ/
-        'ɑ:initial:а': { blurb: 'When unstressed ⟨а⟩ begins a word, it is pronounced /ɑ/. Word-initial position receives the same treatment as immediate pre-tonic position.', citation: 'pp. 108, 127', notable: false },
+        'ɑ:initial:а': { blurb: 'Whenever unstressed ⟨а⟩ begins a word, it is pronounced /ɑ/.', citation: 'pp. 108, 127', notable: false },
         
         // Entry 15 | Post-stress immediate а → /ɑ/
-        'ɑ:post-stress-immediate:а': { blurb: 'When unstressed ⟨а⟩ immediately follows the stressed syllable, it is pronounced /ɑ/. The immediate post-tonic position preserves vowel quality.', citation: 'pp. 108, 127', notable: false },
+        'ɑ:post-stress-immediate:а': { blurb: 'When ⟨а⟩ appears in the syllable immediately following the stress, it is pronounced /ɑ/.', citation: 'pp. 108, 127', notable: false },
         
         // Entry 16 | Turned-v (remote о)
-        'ʌ:remote:о': { blurb: 'When unstressed ⟨о⟩ is remote from the stress (more than one syllable away, but not word-initial), it reduces to [ʌ]. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Note: We use Turned-v [ʌ] instead of traditional schwa [ə] in Russian lyric diction to avoid confusion with the familiar (but un-Russian!) lip-rounded French schwa.', citation: 'pp. 108, 127', notable: true },
+        'ʌ:remote:о': { blurb: 'When unstressed ⟨о⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Ilya uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 17 | Turned-v (remote а)
-        'ʌ:remote:а': { blurb: 'When unstressed ⟨а⟩ is remote from the stress (more than one syllable away, but not word-initial), it reduces to [ʌ]. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Note: We use Turned-v [ʌ] instead of traditional schwa [ə] in Russian lyric diction to avoid confusion with the familiar (but un-Russian!) lip-rounded French schwa.', citation: 'pp. 108, 127', notable: true },
+        'ʌ:remote:а': { blurb: 'When unstressed ⟨а⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Ilya uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 18 | Unstressed е → /ɪ/
         'ɪ:ikanye:е': { blurb: 'When ⟨е⟩ is unstressed, it reduces to /ɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 97–107', notable: true },
         
         // Entry 19 | Reflexive я → [ʌ]
-        'ʌ:reflexive:я': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ always feature /ʌ/ as their vowel sound. This [ʌ] derives from ⟨я⟩, which exceptionally reduces to [ʌ] (not [ɪ]) in this context. See Entry 73 for a complete explanation of these endings.', citation: 'pp. 237–238, 281–282', notable: true },
+        'ʌ:reflexive:я': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ always feature /ʌ/ as their vowel sound. This /ʌ/ derives from ⟨я⟩, which exceptionally reduces to /ʌ/ (not /ɪ/) in this context. See Entry 73 for a complete explanation of these endings.', citation: 'pp. 237–238, 281–282', notable: true },
         
         // Entry 20 | Unstressed я → /ɪ/
         'ɪ:ikanye:я': { blurb: 'When ⟨я⟩ is unstressed (except in reflexive endings), it reduces to /ɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 97–107', notable: true },
@@ -4695,7 +4698,7 @@ const SINGER_SUPPLEMENT = {
         'zʲ:soft:з': { blurb: 'Predictably, ⟨з⟩ softens before any palatalizing agent (i.e., a vowel from the \'soft\' series (⟨я е и ё ю⟩), the soft sign ⟨ь⟩, or a palatalized consonant). Note: the prepositions ⟨из⟩ "from" and ⟨без⟩ "without" do accept palatalization across the word boundary (e.g., ⟨из них⟩ /izʲ ɲix/ "from them"). This behaviour never applies to content words that end in ⟨з⟩.', citation: 'pp. 177–178', notable: false },
         
         // Entry 49 | Intrinsically soft ч
-        'tʃʲ:always-soft:ч': { blurb: 'The letter ⟨ч⟩ /tʃʲ/ is intrinsically palatalized. We usually notate it with the indivisible trigraph /tʃʲ/.', citation: 'pp. 175–176', notable: false },
+        'tʃʲ:always-soft:ч': { blurb: 'The letter ⟨ч⟩ /tʃʲ/ is intrinsically palatalized. Grayson notates it with the indivisible trigraph /tʃʲ/.', citation: 'pp. 175–176', notable: false },
         
         // Entry 50 | Intrinsically soft щ
         'ʃʲʃʲ:always-soft:щ': { blurb: 'The letter ⟨щ⟩ /ʃʲʃʲ/ is intrinsically palatalized and intrinsically geminate. Grayson prefers to notate this soft consonant as /ʃʲʃʲ/ to emphasize that Russians rearticulate the sound, but it is equally valid to notate it as /ʃʲː/ to reduce visual clutter. You may choose your own preference in the Ilya dashboard. Note: a dated Peterburgian or Church Slavonic pronunciation /ʃʲtʃʲ/ exists, but this is not Ilya\'s default for sung Russian.', citation: 'pp. 171–173', notable: false },
@@ -4705,13 +4708,13 @@ const SINGER_SUPPLEMENT = {
         // ========================================
         
         // Entry 51 | Intrinsically hard ж
-        'ʒ:always-hard:ж': { blurb: 'The letter ⟨ж⟩ /ʒ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ж⟩ remains unpalatalized /ʒ/ while these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨жить⟩ /ʒɨtʲ/ "to live," ⟨жена⟩ /ʒɨˈnɑ/ "wife").', citation: 'pp. 161–166', notable: false },
+        'ʒ:always-hard:ж': { blurb: 'The letter ⟨ж⟩ /ʒ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ж⟩ remains unpalatalized /ʒ/ while these vowels are sung instead as the more compatible /ɨ/ (e.g., ⟨жить⟩ /ʒɨtʲ/ "to live," ⟨жена⟩ /ʒɨˈnɑ/ "wife").', citation: 'pp. 161–166', notable: false },
         
         // Entry 52 | Intrinsically hard ш
-        'ʃ:always-hard:ш': { blurb: 'The letter ⟨ш⟩ /ʃ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ш⟩ remains unpalatalized /ʃ/ while these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨шить⟩ /ʃɨtʲ/ "to sew," ⟨шептать⟩ /ʃɨpˈtɑtʲ/ "to whisper").', citation: 'pp. 161–163', notable: false },
+        'ʃ:always-hard:ш': { blurb: 'The letter ⟨ш⟩ /ʃ/ is intrinsically hard: it cannot soften, regardless of what follows. When it is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), ⟨ш⟩ remains unpalatalized /ʃ/ while these vowels are sung instead as the more compatible /ɨ/ (e.g., ⟨шить⟩ /ʃɨtʲ/ "to sew," ⟨шептать⟩ /ʃɨpˈtɑtʲ/ "to whisper").', citation: 'pp. 161–163', notable: false },
         
         // Entry 53 | Intrinsically hard ц
-        'ts:always-hard:ц': { blurb: 'The letter ⟨ц⟩ /ts/ is intrinsically hard: it cannot soften, regardless of what follows. This digraph notates a single phoneme, /ts/, which can be confusing to Anglophones who routinely encounter mid-word /ts/ (i.e. /t/ + /s/) at a morpheme boundary (e.g., ⟨отсюда⟩ /ɑtʲˈsʲudʌ/ "from here"). Structurally, these very common cases are the result of the meeting of two separate phonemes, not the affricate ⟨ц⟩ /ts/, even though they are visually indistinguishable. When ⟨ц⟩ is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), it remains unpalatalized /ts/ and these vowels are sung instead as the more compatible [ɨ] (e.g., ⟨цирк⟩ /tsɨrk/ "circus," ⟨цена⟩ /tsɨˈnɑ/ "price").', citation: 'pp. 166–168', notable: false },
+        'ts:always-hard:ц': { blurb: 'The letter ⟨ц⟩ /ts/ is intrinsically hard: it cannot soften, regardless of what follows. This digraph notates a single phoneme, /ts/, which can be confusing to Anglophones who routinely encounter mid-word /ts/ (i.e. /t/ + /s/) at a morpheme boundary (e.g., ⟨отсюда⟩ /ɑtʲˈsʲudʌ/ "from here"). Structurally, these very common cases are the result of the meeting of two separate phonemes, not the affricate ⟨ц⟩ /ts/, even though they are visually indistinguishable. When ⟨ц⟩ is followed by ⟨и⟩ or unstressed ⟨е⟩ (as is common due to traditional Russian spelling rules), it remains unpalatalized /ts/ and these vowels are sung instead as the more compatible /ɨ/ (e.g., ⟨цирк⟩ /tsɨrk/ "circus," ⟨цена⟩ /tsɨˈnɑ/ "price").', citation: 'pp. 166–168', notable: false },
         
         // Entry 54 | Unpalatalized (\'hard\')-l, a.k.a. velar-l
         'ɫ:hard:л': { blurb: 'Velarized hard-l [ɫ] is the default for ⟨л⟩ when no palatalizing agent follows. Note: the phoneme [l] never exists unqualified in sung Russian: it is always either \'soft\' (palatalized) /lʲ/ or \'hard\' (velarized) [ɫ], never a standalone [l].', citation: 'pp. 150–151', notable: false },
@@ -4825,17 +4828,17 @@ const SINGER_SUPPLEMENT = {
         // LEGACY ENTRIES (Phonological Processes)
         // Retained for backward compatibility with deriveRule()
         // ========================================
-        'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ after soft consonant → /ɑ/ (the consonant carries the softness).', citation: 'pp. 81–85', notable: false },
-        'ɛ:stressed:э': { blurb: 'Stressed ⟨э⟩ → open /ɛ/.', citation: 'pp. 87–90', notable: false },
-        'a:interpalatal:а': { blurb: '⟨а⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
-        'a:interpalatal:я': { blurb: '⟨я⟩ fronts to [a] when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
-        'e:interpalatal:е': { blurb: '⟨е⟩ closes to [e] when sandwiched between two palatalizing agents.', citation: 'pp. 87–90, 125', notable: true },
-        'e:interpalatal:э': { blurb: 'When stressed ⟨э⟩ is word-initial before a palatalized consonant, it fronts from /ɛ/ to [e] (e.g., ⟨эти⟩ → /ˈetʲi/, in contrast to ⟨это⟩ → /ˈɛtʌ/).', citation: 'pp. 87–90, 125', notable: false },
-        'ʌ:post-stress:о': { blurb: 'Post-stress ⟨о⟩ reduces to [ʌ].', citation: 'pp. 108, 127', notable: true },
-        'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to [ɪ].', citation: 'pp. 97–107', notable: true },
-        'ɪ:unstressed:я': { blurb: 'Unstressed ⟨я⟩ reduces to [ɪ].', citation: 'pp. 97–107', notable: true },
-        'ɨ:after-hard:и': { blurb: '⟨и⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ] (hard consonants retract the vowel).', citation: 'pp. 93–96', notable: true },
-        'ɨ:after-hard:е': { blurb: 'Unstressed ⟨е⟩ after ⟨ж⟩/⟨ш⟩/⟨ц⟩ → [ɨ].', citation: 'pp. 97–107', notable: true },
+        'ɑ:stressed:я': { blurb: 'Stressed ⟨я⟩ following a soft consonant is pronounced /ɑ/. The preceding consonant carries the palatalization.', citation: 'pp. 81–85', notable: false },
+        'ɛ:stressed:э': { blurb: 'Stressed ⟨э⟩ is pronounced /ɛ/, the open-mid front vowel.', citation: 'pp. 87–90', notable: false },
+        'a:interpalatal:а': { blurb: '⟨а⟩ fronts to /a/ when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
+        'a:interpalatal:я': { blurb: '⟨я⟩ fronts to /a/ when sandwiched between two palatalizing agents.', citation: 'pp. 81–85, 125', notable: true },
+        'e:interpalatal:е': { blurb: '⟨е⟩ closes to /e/ when sandwiched between two palatalizing agents.', citation: 'pp. 87–90, 125', notable: true },
+        'e:interpalatal:э': { blurb: 'When stressed ⟨э⟩ is word-initial before a palatalized consonant, it fronts from /ɛ/ to /e/ (e.g., ⟨эти⟩ → /ˈetʲi/, in contrast to ⟨это⟩ → /ˈɛtʌ/).', citation: 'pp. 87–90, 125', notable: false },
+        'ʌ:post-stress:о': { blurb: 'Post-stress ⟨о⟩ reduces to /ʌ/.', citation: 'pp. 108, 127', notable: true },
+        'ɪ:unstressed:е': { blurb: 'Unstressed ⟨е⟩ reduces to /ɪ/.', citation: 'pp. 97–107', notable: true },
+        'ɪ:unstressed:я': { blurb: 'Unstressed ⟨я⟩ reduces to /ɪ/.', citation: 'pp. 97–107', notable: true },
+        'ɨ:after-hard:и': { blurb: 'When ⟨и⟩ follows an intrinsically hard consonant (⟨ж⟩, ⟨ш⟩, or ⟨ц⟩), it is pronounced /ɨ/. The hard consonant retracts the cardinal-i to velar-i.', citation: 'pp. 93–96', notable: true },
+        'ɨ:after-hard:е': { blurb: 'When unstressed ⟨е⟩ follows an intrinsically hard consonant (⟨ж⟩, ⟨ш⟩, or ⟨ц⟩), it is pronounced /ɨ/.', citation: 'pp. 97–107', notable: true },
         'devoicing:process': { blurb: 'In Russian, as in German, final consonants are generally devoiced regardless of spelling (e.g., ⟨год⟩ → /ɡot/, ⟨кровь⟩ → /krofʲ/). Exception: sonorants (/m/, /mʲ/, /n/, /ɲ/, /ɫ/, /lʲ/, /r/, /rʲ/) are never devoiced.', citation: 'p. 199', notable: false },
         'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
         'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In Ilya, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
