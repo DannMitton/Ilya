@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.6.2 Final Devoicing Fix</title>
+  <title>Ilya — v5.7.0 Clitic Canonical Forms</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3473,8 +3473,56 @@ const SINGER_SUPPLEMENT = {
       consonants: new Set(['б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ']),
       alwaysSoft: new Set(['ч', 'щ', 'й']),
       alwaysHard: new Set(['ж', 'ш', 'ц']),
-      proclitics: new Set(['в', 'во', 'к', 'ко', 'с', 'со', 'о', 'об', 'обо', 'у', 'на', 'за', 'по', 'до', 'из', 'изо', 'от', 'ото', 'без', 'не', 'ни', 'над', 'надо', 'под', 'подо', 'при', 'про', 'для', 'через', 'перед', 'передо']),
-      enclitics: new Set(['ли', 'ль', 'же', 'бы', 'б', 'то', 'ка', 'таки']),
+      
+      // Clitic data with canonical IPA for isolated forms (Grayson p. 248-257)
+      // Canonical forms use pretonic reduction for proclitics, posttonic for enclitics
+      cliticData: new Map([
+        // Proclitics - canonical form assumes pretonic position
+        ['в', { type: 'proclitic', canonicalIpa: 'v' }],
+        ['во', { type: 'proclitic', canonicalIpa: 'vɑ' }],
+        ['к', { type: 'proclitic', canonicalIpa: 'k' }],
+        ['ко', { type: 'proclitic', canonicalIpa: 'kɑ' }],
+        ['с', { type: 'proclitic', canonicalIpa: 's' }],
+        ['со', { type: 'proclitic', canonicalIpa: 'sɑ' }],
+        ['о', { type: 'proclitic', canonicalIpa: 'ɑ' }],
+        ['об', { type: 'proclitic', canonicalIpa: 'ɑb' }],
+        ['обо', { type: 'proclitic', canonicalIpa: 'ɑbɑ' }],
+        ['у', { type: 'proclitic', canonicalIpa: 'u' }],
+        ['на', { type: 'proclitic', canonicalIpa: 'nɑ' }],
+        ['за', { type: 'proclitic', canonicalIpa: 'zɑ' }],
+        ['по', { type: 'proclitic', canonicalIpa: 'pɑ' }],
+        ['до', { type: 'proclitic', canonicalIpa: 'dɑ' }],
+        ['из', { type: 'proclitic', canonicalIpa: 'iz' }],
+        ['изо', { type: 'proclitic', canonicalIpa: 'izɑ' }],
+        ['от', { type: 'proclitic', canonicalIpa: 'ɑt' }],
+        ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ' }],
+        ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz' }],
+        ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ' }],
+        ['ни', { type: 'proclitic', canonicalIpa: 'ɲi' }],
+        ['над', { type: 'proclitic', canonicalIpa: 'nɑt' }],
+        ['надо', { type: 'proclitic', canonicalIpa: 'nɑdɑ' }],
+        ['под', { type: 'proclitic', canonicalIpa: 'pɑt' }],
+        ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ' }],
+        ['при', { type: 'proclitic', canonicalIpa: 'prʲi' }],
+        ['про', { type: 'proclitic', canonicalIpa: 'prɑ' }],
+        ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ' }],
+        ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz' }],
+        ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt' }],
+        ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ' }],
+        // Enclitics - canonical form assumes posttonic position
+        ['ли', { type: 'enclitic', canonicalIpa: 'lʲi' }],
+        ['ль', { type: 'enclitic', canonicalIpa: 'lʲ' }],
+        ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ' }],
+        ['бы', { type: 'enclitic', canonicalIpa: 'bɨ' }],
+        ['б', { type: 'enclitic', canonicalIpa: 'b' }],
+        ['то', { type: 'enclitic', canonicalIpa: 'tɑ' }],
+        ['ка', { type: 'enclitic', canonicalIpa: 'kɑ' }],
+        ['таки', { type: 'enclitic', canonicalIpa: 'tɑkʲi' }],
+      ]),
+      
+      // Derived Sets for backwards compatibility (computed once, not on every access)
+      proclitics: null, // Initialized below
+      enclitics: null,  // Initialized below
       
       // Regressive palatalization categorical restrictions (Grayson p. 209; Derwing & Priestly pp. 76-87)
       // These consonants BLOCK regressive palatalization — consonants before them do not soften
@@ -4269,6 +4317,30 @@ const SINGER_SUPPLEMENT = {
       
       transcribe(word, stressIndex = -1, isClitic = false, procliticPosition = null) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        
+        // Check for isolated clitic — use canonical form from registry
+        // (Phrase-context clitics have procliticPosition set by the caller)
+        const cliticInfo = this.cliticData.get(cleanWord);
+        if (cliticInfo && isClitic && !procliticPosition) {
+          // Return canonical citation form for isolated clitic
+          return {
+            ipa: cliticInfo.canonicalIpa,
+            ipaUnderlying: cliticInfo.canonicalIpa,
+            syllables: [{
+              cyrillic: cleanWord,
+              ipa: cliticInfo.canonicalIpa,
+              isStressed: false
+            }],
+            transcriptionLog: [{
+              cyrillic: cleanWord,
+              ipa: cliticInfo.canonicalIpa,
+              source: 'isolated-clitic',
+              note: 'Canonical citation form — contextual pronunciation varies'
+            }],
+            source: 'isolated-clitic'
+          };
+        }
+        
         const syllables = this.syllabify(cleanWord);
         const vowelCount = this.countVowels(cleanWord);
         
@@ -4793,6 +4865,18 @@ const SINGER_SUPPLEMENT = {
         });
       }
     };
+    
+    // Initialize derived clitic Sets from cliticData (DRY - single source of truth)
+    GraysonEngine.proclitics = new Set(
+      [...GraysonEngine.cliticData.entries()]
+        .filter(([_, d]) => d.type === 'proclitic')
+        .map(([k, _]) => k)
+    );
+    GraysonEngine.enclitics = new Set(
+      [...GraysonEngine.cliticData.entries()]
+        .filter(([_, d]) => d.type === 'enclitic')
+        .map(([k, _]) => k)
+    );
 
     /* ========================================
        OCR MODULE - Russian Text Recognition
