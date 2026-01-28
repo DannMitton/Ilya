@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.7.1 Progressive Palatalization Fix</title>
+  <title>Ilya — v5.7.2 Interpalatal Fronting Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4041,8 +4041,9 @@ const SINGER_SUPPLEMENT = {
         } else if (position === 'pretonic') {
           if (vowel === 'а' || vowel === 'о') return 'ɑ';
           // е after ж/ш/ц → ɨ (Grayson p. 102-103)
-          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
-          if (vowel === 'я' || vowel === 'э') return 'ɪ';
+          // Interpalatal: /ɪ/ fronts to /i/ (Grayson p. 125, Ch. 3.7)
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : (isInterpalatal ? 'i' : 'ɪ');
+          if (vowel === 'я' || vowel === 'э') return isInterpalatal ? 'i' : 'ɪ';
           // и after ж/ш/ц → ɨ (Grayson p. 102)
           if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
@@ -4057,8 +4058,9 @@ const SINGER_SUPPLEMENT = {
           if (vowel === 'я') return 'ɑ';  // я follows а pattern (underlying /ja/)
           if (vowel === 'о') return 'ʌ';
           // Other vowels follow remote patterns
-          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
-          if (vowel === 'э') return 'ɪ';
+          // Interpalatal: /ɪ/ fronts to /i/ (Grayson p. 125, Ch. 3.7)
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : (isInterpalatal ? 'i' : 'ɪ');
+          if (vowel === 'э') return isInterpalatal ? 'i' : 'ɪ';
           if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
           if (vowel === 'у' || vowel === 'ю') return 'u';
@@ -4067,8 +4069,9 @@ const SINGER_SUPPLEMENT = {
           if (vowel === 'а') return 'ʌ';
           if (vowel === 'о') return 'ʌ';
           // е after ж/ш/ц → ɨ (Grayson p. 102-103)
-          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : 'ɪ';
-          if (vowel === 'я' || vowel === 'э') return 'ɪ';
+          // Interpalatal: /ɪ/ fronts to /i/ (Grayson p. 125, Ch. 3.7)
+          if (vowel === 'е') return isAfterAlwaysHard ? 'ɨ' : (isInterpalatal ? 'i' : 'ɪ');
+          if (vowel === 'я' || vowel === 'э') return isInterpalatal ? 'i' : 'ɪ';
           // и after ж/ш/ц → ɨ (Grayson p. 102)
           if (vowel === 'и') return isAfterAlwaysHard ? 'ɨ' : 'i';
           if (vowel === 'ы') return 'ɨ';
