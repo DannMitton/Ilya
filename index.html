@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.14 Smarter Popup Positioning</title>
+  <title>Ilya — v5.9.15 Pagination Fixes</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -421,7 +421,7 @@
     .page-content {
       flex: 1;
       padding: 24px 72px;
-      padding-bottom: 100px; /* Clearance for absolute footer */
+      padding-bottom: 130px; /* Clearance for absolute footer */
       display: flex;
       flex-direction: column;
     }
@@ -3536,7 +3536,7 @@ const SINGER_SUPPLEMENT = {
       // Header heights
       TITLE_HEADER_HEIGHT: 150,    // Page 1: full title block
       RUNNING_HEADER_HEIGHT: 48,   // Pages 2+: "COMPOSER — TITLE"
-      FOOTER_HEIGHT: 80,           // Footer with attribution + pagination (measured)
+      FOOTER_HEIGHT: 120,           // Footer with attribution + pagination (measured)
       
       /**
        * Measure actual line height from rendered content
@@ -3584,7 +3584,7 @@ const SINGER_SUPPLEMENT = {
         // Page 1 has less room due to title block
         // Subsequent pages have more room with just running header
         const linesPage1 = 6;
-        const linesSubsequent = 8;
+        const linesSubsequent = 7;
         
         console.log('[Paginator] Lines per page:', {
           paperSize,
@@ -7184,13 +7184,9 @@ const SINGER_SUPPLEMENT = {
         const syllableCount = wordData.syllables.length;
         const buttonsDisabled = hasYo && syllableCount > 1;
         
-        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
-          <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
-                  data-syllable-index="${idx}"
-                  ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
-            ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
-          </button>
-        `).join('');
+        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => 
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+        ).join('');
         
         // Update syllable label
         if (syllableCount === 1) {
@@ -7755,13 +7751,9 @@ const SINGER_SUPPLEMENT = {
         // Mark syllable buttons as disabled if stress is locked (except for single syllable)
         const buttonsDisabled = hasYo && syllableCount > 1;
         
-        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => `
-          <button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
-                  data-syllable-index="${idx}"
-                  ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
-            ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
-          </button>
-        `).join('');
+        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => 
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+        ).join('');
         
         // Populate IPA and Cyrillic displays (v5.5)
         const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
