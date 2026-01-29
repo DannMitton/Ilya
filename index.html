@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.13 Interpalatal Fix + Popup Scroll</title>
+  <title>Ilya — v5.9.14 Smarter Popup Positioning</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7849,21 +7849,38 @@ const SINGER_SUPPLEMENT = {
         const rect = element.getBoundingClientRect();
         const card = this.elements.card;
         const cardWidth = 320;
+        const margin = 10;
+        const viewportHeight = window.innerHeight;
         
-        let top = rect.top - 10;
+        // Horizontal positioning
         let left = rect.left + (rect.width / 2) - (cardWidth / 2);
+        left = Math.max(margin, Math.min(left, window.innerWidth - cardWidth - margin));
         
-        left = Math.max(10, Math.min(left, window.innerWidth - cardWidth - 10));
+        // Calculate available space above and below the word
+        const spaceAbove = rect.top - margin * 2;
+        const spaceBelow = viewportHeight - rect.bottom - margin * 2;
         
-        const cardHeight = card.offsetHeight || 250;
-        if (top - cardHeight < 10) {
-          top = rect.bottom + 10;
-          card.classList.add('arrow-top');
-        } else {
-          top = top - cardHeight;
+        let top;
+        let maxHeight;
+        
+        // Prefer placing above if more room there and sufficient space
+        if (spaceAbove >= spaceBelow && spaceAbove >= 250) {
+          // Place above: position bottom of card at top of word
+          maxHeight = Math.min(spaceAbove, viewportHeight * 0.7);
+          top = rect.top - margin - maxHeight;
+          top = Math.max(margin, top);
           card.classList.remove('arrow-top');
+        } else {
+          // Place below: position top of card at bottom of word
+          maxHeight = Math.min(spaceBelow, viewportHeight * 0.7);
+          top = rect.bottom + margin;
+          card.classList.add('arrow-top');
         }
         
+        // Ensure minimum usable height
+        maxHeight = Math.max(250, maxHeight);
+        
+        card.style.maxHeight = `${maxHeight}px`;
         card.style.top = `${top}px`;
         card.style.left = `${left}px`;
       },
