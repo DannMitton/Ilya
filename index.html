@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.10 Fixed Pagination</title>
+  <title>Ilya — v5.9.13 Interpalatal Fix + Popup Scroll</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1069,6 +1069,8 @@
     .popup-card {
       position: absolute;
       width: 320px;
+      max-height: 70vh;
+      overflow-y: auto;
       background: var(--surface);
       border-radius: var(--radius);
       box-shadow: var(--shadow-popup);
@@ -2761,7 +2763,7 @@
               <div class="document-header" id="documentHeader">
                 <div>
                   <span class="document-title">Page</span>
-                  <span class="document-active" id="documentActive">Letter</span>
+                  <span class="document-active" id="documentActive">Letter (8.5×11)</span>
                   <span class="document-pages" id="pageNumber">1 page</span>
                 </div>
                 <svg class="document-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3439,8 +3441,8 @@ const SINGER_SUPPLEMENT = {
           btn.classList.toggle('active', btn.dataset.size === size);
         });
         
-        // Update label
-        this.activeLabel.textContent = size === 'letter' ? 'Letter' : 'A4';
+        // Update label with dimensions
+        this.activeLabel.textContent = size === 'letter' ? 'Letter (8.5×11)' : 'A4 (210×297)';
         
         // Add reflowing class for content fade
         this.paper?.classList.add('reflowing');
@@ -3487,26 +3489,16 @@ const SINGER_SUPPLEMENT = {
           return;
         }
         
-        // Use Paginator if line height is measured, else fall back to simple count
+        // Count pages based on DocumentState lines
         let totalPages = 1;
         
-        console.log('[DocumentController] updatePageCount called:', {
-          safeLineHeight: Paginator.safeLineHeight,
-          hasDocumentState: typeof DocumentState !== 'undefined',
-          lineCount: DocumentState?.lines?.length || 0
-        });
-        
-        if (Paginator.safeLineHeight && typeof DocumentState !== 'undefined' && DocumentState.lines && DocumentState.lines.length > 0) {
+        if (DocumentState?.lines?.length > 0) {
           const lineCount = DocumentState.lines.length;
           const pages = Paginator.distributeToPages(
             Array(lineCount).fill({}),  // Mock lines for counting
             this.currentSize
           );
           totalPages = pages.length;
-          console.log('[DocumentController] Using Paginator:', { lineCount, totalPages });
-        } else {
-          totalPages = this.calculatePageCount();
-          console.log('[DocumentController] Using fallback calculatePageCount:', totalPages);
         }
         
         // Format: "X pages" for dashboard indicator
@@ -4023,6 +4015,7 @@ const SINGER_SUPPLEMENT = {
         if (!DocumentState.lines || DocumentState.lines.length === 0) {
           const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
           paperStack.appendChild(emptyPage);
+          DocumentController.updatePageCount();
           DashboardController.updateExportButton();
           return;
         }
@@ -4181,7 +4174,7 @@ const SINGER_SUPPLEMENT = {
           
           return `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
-              <span class="ipa">${tw.ipaSurface}</span>
+              <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${tw.cleanWord}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${tw.wordData?.gloss || ''}</span>
             </div>
@@ -4284,6 +4277,11 @@ const SINGER_SUPPLEMENT = {
                 }
               }
             }
+            
+            // Create display version with spaces between syllables
+            tw.ipaDisplay = tw.syllables.map(s => {
+              return s.isStressed && tw.syllables.length > 1 ? 'ˈ' + s.ipa : s.ipa;
+            }).join(' ');
           });
           
           return transcribedWords;
@@ -5589,9 +5587,11 @@ const SINGER_SUPPLEMENT = {
             }
             
             if (this.isVowel(char)) {
-              const prevChar = chars[i - 1];
+              const prevCharInSyllable = chars[i - 1];
+              // Use word-level previous char for j-glide and interpalatal detection
+              const prevCharInWord = cleanWord[globalIndex - 1];
               const needsGlide = ['е', 'ё', 'ю', 'я'].includes(char) && 
-                                 (i === 0 || this.isVowel(prevChar) || prevChar === 'ь' || prevChar === 'ъ');
+                                 (globalIndex === 0 || this.isVowel(prevCharInWord) || prevCharInWord === 'ь' || prevCharInWord === 'ъ');
               
               if (needsGlide) sylIpa += 'j';
               
@@ -5631,7 +5631,8 @@ const SINGER_SUPPLEMENT = {
               // Normal vowel transcription (if no exception applied)
               if (vowelIpa === null) {
                 // Check preceding consonant palatalization (using regressive analysis)
-                const prevConsonant = this.isConsonant(prevChar) ? prevChar : null;
+                // Use word-level previous char, not within-syllable
+                const prevConsonant = this.isConsonant(prevCharInWord) ? prevCharInWord : null;
                 const prevGlobalIndex = globalIndex - 1;
                 
                 // Check if preceded by a special cluster (for interpalatal)
@@ -5642,7 +5643,7 @@ const SINGER_SUPPLEMENT = {
                 const iotatedVowels = ['е', 'ё', 'ю', 'я'];
                 const isIotated = iotatedVowels.includes(char);
                 const isWordInitialOrAfterVowel = globalIndex === 0 || 
-                  this.isVowel(prevChar) || prevChar === 'ъ' || prevChar === 'ь';
+                  this.isVowel(prevCharInWord) || prevCharInWord === 'ъ' || prevCharInWord === 'ь';
                 const precededByJGlide = isIotated && isWordInitialOrAfterVowel;
                 
                 const isPrecededByPal = prevCluster ?
@@ -5707,7 +5708,7 @@ const SINGER_SUPPLEMENT = {
                 }
                 
                 // Capture interpalatal and afterHard features
-                const prevConsonantForFeatures = this.isConsonant(prevChar) ? prevChar : null;
+                const prevConsonantForFeatures = this.isConsonant(prevCharInWord) ? prevCharInWord : null;
                 vowelFeatures.interpalatal = isPrecededByPal && isFollowedByPal;
                 vowelFeatures.afterHard = ['ж', 'ш', 'ц'].includes(prevConsonantForFeatures);
                 
@@ -8062,6 +8063,7 @@ const SINGER_SUPPLEMENT = {
         { word: 'конь', stress: 0, expected: 'koɲ', note: 'нь → ɲ' },
         { word: 'день', stress: 0, expected: 'dʲeɲ', note: 'Interpalatal е → e, нь → ɲ' },
         { word: 'очень', stress: 0, expected: 'otʃʲiɲ', note: 'Unstressed interpalatal е → i' },
+        { word: 'моей', stress: 1, expected: 'mɑ jej', note: 'Interpalatal stressed е → /e/ (j-glide + е + й)' },
       ],
       'Hard vs Soft Л': [
         { word: 'был', stress: 0, expected: 'bɨɫ', note: 'Hard л → ɫ' },
