@@ -3337,20 +3337,31 @@ const SINGER_SUPPLEMENT = {
       
       // Update the page count label using Paginator
       updatePageCount() {
-        if (!this.pageNumberEl) return;
+        if (!this.pageNumberEl) {
+          console.warn('[DocumentController] pageNumberEl not found');
+          return;
+        }
         
         // Use Paginator if line height is measured, else fall back to simple count
         let totalPages = 1;
         
-        if (Paginator.safeLineHeight && typeof DocumentState !== 'undefined' && DocumentState.lines) {
+        console.log('[DocumentController] updatePageCount called:', {
+          safeLineHeight: Paginator.safeLineHeight,
+          hasDocumentState: typeof DocumentState !== 'undefined',
+          lineCount: DocumentState?.lines?.length || 0
+        });
+        
+        if (Paginator.safeLineHeight && typeof DocumentState !== 'undefined' && DocumentState.lines && DocumentState.lines.length > 0) {
           const lineCount = DocumentState.lines.length;
           const pages = Paginator.distributeToPages(
             Array(lineCount).fill({}),  // Mock lines for counting
             this.currentSize
           );
           totalPages = pages.length;
+          console.log('[DocumentController] Using Paginator:', { lineCount, totalPages });
         } else {
           totalPages = this.calculatePageCount();
+          console.log('[DocumentController] Using fallback calculatePageCount:', totalPages);
         }
         
         // Format: "X pages" for dashboard indicator
