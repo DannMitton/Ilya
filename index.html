@@ -7851,8 +7851,8 @@ const SINGER_SUPPLEMENT = {
             const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
             if (isProclitic || isEnclitic) {
                 const cliticText = isProclitic 
-                    ? 'Proclitic — attaches to the following word like a prefix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic's proximity to the host word's stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>'
-                    : 'Enclitic — attaches to the preceding word like a suffix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic's proximity to the host word's stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>';
+                    ? 'Proclitic — attaches to the following word like a prefix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic\'s proximity to the host word\'s stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>'
+                    : 'Enclitic — attaches to the preceding word like a suffix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic\'s proximity to the host word\'s stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>';
                 this.elements.whyCliticBanner.innerHTML = cliticText;
                 this.elements.whyCliticBanner.style.display = 'block';
             } else {
