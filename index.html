@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.15 Pagination Fixes</title>
+  <title>Ilya — v5.9.17 Tie Bar Notation</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1161,10 +1161,23 @@
         background: var(--ilya-accent-light);
         color: var(--ilya-accent);
         font-size: 0.75rem;
-        padding: 0.4rem 0.75rem;
+        padding: 0.6rem 0.85rem;
         border-radius: 4px;
         margin-bottom: 0.75rem;
-        text-align: center;
+        text-align: left;
+        line-height: 1.45;
+    }
+    
+    .why-clitic-banner em {
+        display: block;
+        margin-top: 0.4rem;
+        font-style: italic;
+    }
+    
+    .why-clitic-banner .tie-bar-ref {
+        color: var(--ilya-accent-dark, #4a5c4d);
+        font-weight: 600;
+        font-style: normal;
     }
 
     .syllable-section {
@@ -1447,6 +1460,23 @@
     
     .stressed-syllable-region .phoneme-row[data-syllable-start="true"] {
       margin-top: 0;
+    }
+    
+    /* Featured ribbon entry (tie bar for clitics) */
+    .phoneme-row.featured-entry {
+      background: rgba(107, 124, 110, 0.08);
+      border-left: 3px solid var(--ilya-accent);
+      margin-left: -0.75rem;
+      padding-left: calc(0.75rem - 3px);
+      margin-bottom: 0.75rem;
+    }
+    
+    .phoneme-row.featured-entry .phoneme-blurb-overlay {
+      background: rgba(107, 124, 110, 0.06);
+    }
+    
+    .phoneme-row.featured-entry .blurb-text {
+      line-height: 1.5;
     }
     
     /* Phoneme row content wrapper for grid animation */
@@ -4279,9 +4309,20 @@ const SINGER_SUPPLEMENT = {
             }
             
             // Create display version with spaces between syllables
-            tw.ipaDisplay = tw.syllables.map(s => {
+            let ipaCore = tw.syllables.map(s => {
               return s.isStressed && tw.syllables.length > 1 ? 'ˈ' + s.ipa : s.ipa;
             }).join(' ');
+            
+            // Add tie bar (‿) for clitics to signal phonological binding
+            // Proclitics bind forward, enclitics bind backward
+            // See scholarly note in Phoneme Ribbon for full explanation
+            if (tw.isProclitic) {
+              ipaCore = ipaCore + '‿';
+            } else if (tw.isEnclitic) {
+              ipaCore = '‿' + ipaCore;
+            }
+            
+            tw.ipaDisplay = ipaCore;
           });
           
           return transcribedWords;
@@ -7528,6 +7569,42 @@ const SINGER_SUPPLEMENT = {
         let html = '';
         let isFirstSyllable = true;
         
+        // FEATURED ENTRY: Tie bar (‿) for clitics - pinned to top per Kimi's guidance
+        // Scholarly note explains phonological word boundaries
+        const isClitic = wordData.isProclitic === 'true' || wordData.isProclitic === true ||
+                         wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+        
+        if (isClitic) {
+          const tieBarBlurb = `<strong>Clitics and Phonological Word Boundaries</strong><br><br>` +
+            `Proclitics (e.g., "в," "на") and enclitics (e.g., "ли," "же") attach phonologically to their host words, ` +
+            `collapsing the orthographic word boundary for purposes of assimilation. The resulting unit functions as a ` +
+            `single phonological word: voicing assimilation and regressive palatalization proceed across the juncture ` +
+            `as they would within a word.<br><br>` +
+            `<strong>Exception:</strong> /л/ resists regressive palatalization unless the letters are orthographically ` +
+            `doubled (e.g., -лль-). Since clitic attachment preserves orthographic separation ("л л" not "лль"), ` +
+            `the sequence /ɫ‿lʲ/ remains unassimilated even when phonologically bound.<br><br>` +
+            `The tie bar (‿) signals this phonological unity while respecting orthographic independence.`;
+          const tieBarCitation = `Grayson (2012), pp. 209, 248–255; Avanesov (1972); Jones & Ward (1969); A. Kochetov, personal communication.`;
+          
+          html += `
+            <div class="phoneme-row featured-entry" 
+                 tabindex="0"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Tie bar indicates phonological binding">
+              <div class="phoneme-mapping">
+                <span class="phoneme-cyr">—</span>
+                <span class="phoneme-arrow">›</span>
+                <span class="phoneme-ipa">‿</span>
+              </div>
+              <div class="phoneme-blurb-overlay">
+                <div class="blurb-text">${tieBarBlurb}</div>
+                <div class="blurb-citation">${tieBarCitation}</div>
+              </div>
+            </div>
+          `;
+        }
+        
         syllableGroups.forEach((entries, sylIdx) => {
           const isStressed = sylIdx === stressedIdx;
           
@@ -7773,8 +7850,10 @@ const SINGER_SUPPLEMENT = {
             const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
             const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
             if (isProclitic || isEnclitic) {
-                const cliticType = isProclitic ? 'Proclitic' : 'Enclitic';
-                this.elements.whyCliticBanner.textContent = cliticType + ' — attaches phonologically';
+                const cliticText = isProclitic 
+                    ? 'Proclitic — attaches to the following word like a prefix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic's proximity to the host word's stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>'
+                    : 'Enclitic — attaches to the preceding word like a suffix. A clitic carries no independent stress; its vowel (if any) reduces based on the clitic's proximity to the host word's stressed syllable. <em>See <span class="tie-bar-ref">‿</span> below for phonological boundaries.</em>';
+                this.elements.whyCliticBanner.innerHTML = cliticText;
                 this.elements.whyCliticBanner.style.display = 'block';
             } else {
                 this.elements.whyCliticBanner.style.display = 'none';
