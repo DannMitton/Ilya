@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.4 Page Templates</title>
+  <title>Ilya — v5.9.5 Multi-Page Render</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -176,12 +176,14 @@
        ======================================== */
     .paper-aperture {
       flex: 1;
-      overflow: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem;
+      flex-direction: column;
+      align-items: center;
       box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+      /* Kimi: explicit height prevents infinite growth */
+      min-height: 0; /* Flex child needs this to scroll */
     }
 
     /* ========================================
@@ -2427,46 +2429,12 @@
     <!-- Paper Aperture: Viewing area with inset depth -->
     <main class="paper-aperture" id="paperAperture">
       
-      <!-- Paper: Single document (MVP) -->
-      <article class="paper" id="paper">
+      <!-- Paper Stack: Multi-page container (v5.9.4) -->
+      <div class="paper-stack" id="paperStack">
         
-        <!-- Document Header -->
-        <header class="doc-header">
-          <h1 class="doc-title" id="docTitle" title="Change in Dashboard below">
-            <span class="placeholder-text">Song Title</span>
-          </h1>
-          <div class="doc-opus" id="docOpus" title="Change in Dashboard below">
-            <span class="placeholder-text">Op. 00, No. 0</span>
-          </div>
-          <div class="doc-composer-line">
-            <span class="doc-composer" id="docComposer" title="Change in Dashboard below">
-              <span class="placeholder-text">Composer Name (0000–0000)</span>
-            </span>
-            <span class="doc-poet" id="docPoet" title="Change in Dashboard below">
-              <span class="placeholder-text">Poet Name (0000–0000)</span>
-            </span>
-          </div>
-        </header>
+        <!-- Pages render here dynamically -->
         
-        <!-- Document Body -->
-        <div class="doc-body" id="docBody">
-          <!-- Ghost text (empty state) -->
-          <div class="ghost-text" id="ghostText" aria-hidden="true">
-            <p>Paste or type your Cyrillic Russian text below, then press Transcribe.</p>
-            <p>This document will populate with your IPA transcription. Click any word stack to adjust stress and syllabification in the popup editor.</p>
-          </div>
-          
-          <!-- Verse content renders here -->
-          <div class="verse-container" id="verseContainer"></div>
-        </div>
-        
-        <!-- Document Footer -->
-        <footer class="doc-footer">
-          <span class="attribution">Transcription: Grayson (2012)</span>
-          <span class="page-number" id="pageNumber">1 page</span>
-        </footer>
-        
-      </article>
+      </div>
 
     </main>
 
@@ -3855,49 +3823,210 @@ const SINGER_SUPPLEMENT = {
       },
       
       renderToPaper() {
-        const verseContainer = document.getElementById('verseContainer');
-        const ghostText = document.getElementById('ghostText');
-        const paper = document.getElementById('paper');
+        const paperStack = document.getElementById('paperStack');
+        const paperSize = DocumentController.getSize();
         
-        if (!verseContainer) return;
+        if (!paperStack) return;
         
-        // Add loading state
-        paper.classList.add('rendering');
+        // Clear existing pages
+        paperStack.innerHTML = '';
         
-        // Hide ghost text if we have content
-        if (DocumentState.lines.length > 0 && ghostText) {
-          ghostText.classList.add('hidden');
-        } else if (ghostText) {
-          ghostText.classList.remove('hidden');
+        // If no content, show empty title page with ghost text
+        if (!DocumentState.lines || DocumentState.lines.length === 0) {
+          const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
+          paperStack.appendChild(emptyPage);
+          return;
         }
         
-        // Clear existing content
-        verseContainer.innerHTML = '';
+        // PHASE 1-2.5: Transcribe all lines (same as before)
+        const transcribedLines = this.transcribeAllLines();
         
-        // Render each line with cross-word assimilation
-        DocumentState.lines.forEach((line, lineIdx) => {
-          const verseLine = document.createElement('div');
-          verseLine.className = 'verse-line';
-          verseLine.setAttribute('role', 'row');
+        // Measure line height if not done yet
+        // We need at least one line rendered to measure
+        if (!Paginator.safeLineHeight) {
+          // Create a temporary measurement container
+          const tempPage = this.createPageElement(1, 'title', transcribedLines.slice(0, 1), 1, paperSize);
+          paperStack.appendChild(tempPage);
           
+          // Force layout and measure
+          setTimeout(() => {
+            Paginator.measureLineHeight();
+            // Now re-render with proper pagination
+            this.renderToPaper();
+          }, 50);
+          return;
+        }
+        
+        // Distribute lines to pages
+        const pages = Paginator.distributeToPages(transcribedLines, paperSize);
+        const totalPages = pages.length;
+        
+        console.log('[renderToPaper] Creating', totalPages, 'pages');
+        
+        // Render each page
+        pages.forEach((pageData, pageIdx) => {
+          const pageElement = this.createPageElement(
+            pageData.pageNumber,
+            pageData.template,
+            pageData.lines,
+            totalPages,
+            paperSize
+          );
+          paperStack.appendChild(pageElement);
+        });
+        
+        // Update page count display
+        DocumentController.updatePageCount();
+      },
+      
+      /**
+       * Create a single page element with header, content, and footer
+       */
+      createPageElement(pageNumber, template, lines, totalPages, paperSize) {
+        const page = document.createElement('article');
+        page.className = 'paper-page';
+        page.setAttribute('data-template', template);
+        page.setAttribute('data-page', pageNumber);
+        if (paperSize === 'a4') {
+          page.setAttribute('data-size', 'a4');
+        }
+        
+        // Get metadata from dashboard
+        const title = DashboardController.titleInput?.value || 'Song Title';
+        const opus = DashboardController.opusInput?.value || '';
+        const composer = DashboardController.composerSelect?.selectedItem?.display || '';
+        const poet = DashboardController.poetSelect?.selectedItem?.display || '';
+        
+        let headerHTML = '';
+        
+        if (template === 'title') {
+          // Page 1: Full title block
+          headerHTML = `
+            <header class="page-header-title">
+              <h1 class="page-title">${title}</h1>
+              <div class="page-metadata">
+                ${composer ? `<span>${composer}</span>` : ''}
+                ${composer && opus ? '<span class="divider">│</span>' : ''}
+                ${opus ? `<span>${opus}</span>` : ''}
+              </div>
+              ${poet ? `<div class="page-metadata"><span>${poet}</span></div>` : ''}
+              <hr class="page-metadata-rule">
+            </header>
+          `;
+        } else {
+          // Pages 2+: Running header
+          const runningHeader = Paginator.formatRunningHeader(composer, title);
+          headerHTML = `
+            <header class="page-header-running">
+              <span class="running-title">${runningHeader}</span>
+            </header>
+          `;
+        }
+        
+        // Content area
+        let contentHTML = '';
+        if (lines.length === 0 && template === 'title') {
+          // Empty state
+          contentHTML = `
+            <main class="page-content empty">
+              <span class="page-ghost-text">Paste or type your Cyrillic Russian text below, then press Transcribe.</span>
+            </main>
+          `;
+        } else {
+          // Render verse lines
+          const linesHTML = lines.map(line => this.renderVerseLine(line)).join('');
+          contentHTML = `
+            <main class="page-content">
+              <div class="verse-container">${linesHTML}</div>
+            </main>
+          `;
+        }
+        
+        // Footer
+        const footerHTML = `
+          <footer class="page-footer">
+            Page ${pageNumber} of ${totalPages}
+          </footer>
+        `;
+        
+        page.innerHTML = headerHTML + contentHTML + footerHTML;
+        
+        return page;
+      },
+      
+      /**
+       * Render a single verse line (array of transcribed words) to HTML
+       */
+      renderVerseLine(transcribedWords) {
+        if (!transcribedWords || !transcribedWords.length) return '';
+        
+        const wordStacksHTML = transcribedWords.map((tw, wordIdx) => {
+          const classes = ['word-stack'];
+          if (tw.isProclitic) classes.push('proclitic');
+          if (tw.isEnclitic) classes.push('enclitic');
+          if (tw.wordData?.stressSource === 'default') classes.push('stress-unverified');
+          
+          // Build data attributes
+          const dataAttrs = `
+            data-word-id="${tw.lineIdx}-${tw.wordIdx}"
+            data-line-index="${tw.lineIdx}"
+            data-word-index="${tw.wordIdx}"
+            data-cyrillic="${tw.cleanWord}"
+            data-ipa="${tw.ipaSurface}"
+            data-ipa-underlying="${tw.ipaUnderlying}"
+            data-gloss="${tw.wordData?.gloss || ''}"
+            data-punctuation="${tw.punct}"
+            data-syllables='${JSON.stringify(tw.syllables)}'
+            data-is-proclitic="${tw.isProclitic}"
+            data-is-enclitic="${tw.isEnclitic}"
+            data-is-o_-interjection="${tw.isO_Interjection || false}"
+            data-is-first-word="${tw.isFirstWord || false}"
+            data-line-ends-with-question="${tw.lineEndsWithQuestion || false}"
+            data-proclitic-position="${tw.procliticPosition || ''}"
+            data-has-yo="${tw.hasYo}"
+            data-stress-source="${tw.wordData?.stressSource || ''}"
+            data-right-boundary="${tw.rightBoundary || ''}"
+            data-boundary-source="${tw.boundarySource || ''}"
+            data-transcription-log='${JSON.stringify(tw.transcriptionLog || [])}'
+            data-original-input="${tw.wordData?.originalInput || ''}"
+            data-dictionary-form="${tw.wordData?.dictionaryForm || ''}"
+            data-yo-source="${tw.wordData?.yoSource || ''}"
+          `;
+          
+          return `
+            <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
+              <span class="ipa">${tw.ipaSurface}</span>
+              <span class="cyrillic">${tw.cleanWord}<span class="punct">${tw.punct}</span></span>
+              <span class="gloss">${tw.wordData?.gloss || ''}</span>
+            </div>
+          `;
+        }).join('');
+        
+        return `<div class="verse-line" role="row">${wordStacksHTML}</div>`;
+      },
+      
+      /**
+       * Transcribe all lines (Phase 1-2.5)
+       * Returns array of arrays of transcribed word objects
+       */
+      transcribeAllLines() {
+        return DocumentState.lines.map((line, lineIdx) => {
           // PHASE 1: Transcribe all words, store ipaUnderlying
           const transcribedWords = line.map((wordData, wordIdx) => {
             const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
             const punct = wordData.cyrillic.replace(cleanWord, '');
             
-            // Detect if line ends with question mark (for о interrogative detection)
+            // Detect if line ends with question mark
             const lineText = line.map(w => w.cyrillic).join(' ');
             const lineEndsWithQuestion = /\?$/.test(lineText.trim());
             const isFirstWord = wordIdx === 0;
             
             // Special case: "о" as interjection vs preposition
-            // Interjection (stressed /o/): punctuation after, OR sentence-initial without question mark
-            // Preposition (reduces): between spaces with no punctuation, OR interrogative context
             const isO_Word = cleanWord.toLowerCase() === 'о';
             const hasFollowingPunct = /[,!]/.test(punct);
             const isO_Interjection = isO_Word && (
-              hasFollowingPunct ||  // "О, любовь!" or "О!"
-              (isFirstWord && !lineEndsWithQuestion)  // "О любовь!" but not "О чём ты думаешь?"
+              hasFollowingPunct ||
+              (isFirstWord && !lineEndsWithQuestion)
             );
             
             const isProclitic = !isO_Interjection && GraysonEngine.proclitics.has(cleanWord.toLowerCase());
@@ -3905,14 +4034,10 @@ const SINGER_SUPPLEMENT = {
             const hasYo = GraysonEngine.hasYo(cleanWord);
             
             // For proclitics, determine reduction based on host word's stress position
-            // Proclitic + host stress on syl 0 → proclitic is pretonic → /ɑ/
-            // Proclitic + host stress on syl 1+ → proclitic is remote → /ʌ/
-            let procliticPosition = null;  // Will be 'pretonic' or 'remote'
+            let procliticPosition = null;
             if (isProclitic && wordIdx < line.length - 1) {
               const nextWord = line[wordIdx + 1];
               const nextStress = nextWord.stress;
-              // nextStress === 0 means first syllable of host is stressed → proclitic is immediate pretonic
-              // nextStress > 0 or -1 means proclitic is remote (2+ syllables from stress)
               procliticPosition = (nextStress === 0) ? 'pretonic' : 'remote';
             }
             
@@ -3922,19 +4047,20 @@ const SINGER_SUPPLEMENT = {
             return {
               wordData,
               wordIdx,
+              lineIdx,
               cleanWord,
               punct,
               isProclitic,
               isEnclitic,
-              isO_Interjection,  // Track for Why explanation
-              isFirstWord,       // Track for interrogative preposition detection
-              lineEndsWithQuestion,  // Track for interrogative preposition detection
-              procliticPosition, // Track for Why explanation
+              isO_Interjection,
+              isFirstWord,
+              lineEndsWithQuestion,
+              procliticPosition,
               hasYo,
               syllables: result.syllables,
               ipaUnderlying: result.ipaUnderlying,
-              transcriptionLog: result.transcriptionLog,  // Phoneme Ribbon data
-              ipaSurface: null,  // Set in phase 2
+              transcriptionLog: result.transcriptionLog,
+              ipaSurface: null,
               skipFinalDevoicing: false,
               rightBoundary: wordData.rightBoundary,
               boundarySource: wordData.boundarySource
@@ -3944,29 +4070,23 @@ const SINGER_SUPPLEMENT = {
           // PHASE 2: Apply cross-word assimilation
           GraysonEngine.applyCrossWordAssimilation(transcribedWords);
           
-          // PHASE 2.5: Sync syllable IPA and transcriptionLog with surface form after final devoicing
-          // When final devoicing changes ipaSurface, update the last syllable's IPA to match
+          // PHASE 2.5: Sync syllable IPA with surface form after final devoicing
           transcribedWords.forEach(tw => {
             if (tw.ipaSurface !== tw.ipaUnderlying && tw.syllables.length > 0) {
               const lastSyl = tw.syllables[tw.syllables.length - 1];
               const underlyingConcat = tw.syllables.map(s => s.ipa).join('');
               const surfaceClean = tw.ipaSurface.replace(/\s+/g, '');
               
-              // Calculate prefix length (everything before last syllable)
               const prefixLen = underlyingConcat.length - lastSyl.ipa.length;
               
-              // Extract what the last syllable should be in surface form
               if (surfaceClean.length >= prefixLen) {
                 const newLastSylIpa = surfaceClean.slice(prefixLen);
                 lastSyl.ipa = newLastSylIpa;
                 
-                // Also update transcriptionLog: find the last consonant entry and update its IPA
                 if (tw.transcriptionLog && tw.transcriptionLog.length > 0) {
-                  // Find the last entry that's a consonant
                   for (let i = tw.transcriptionLog.length - 1; i >= 0; i--) {
                     const entry = tw.transcriptionLog[i];
                     if (entry.features && entry.features.type === 'consonant') {
-                      // Check if this consonant was devoiced
                       const devoicingMap = GraysonEngine.voicedToVoiceless;
                       if (devoicingMap[entry.ipa]) {
                         entry.ipa = devoicingMap[entry.ipa];
@@ -3980,74 +4100,8 @@ const SINGER_SUPPLEMENT = {
             }
           });
           
-          // PHASE 3: Render with ipaSurface
-          transcribedWords.forEach((tw, wordIdx) => {
-            const wordStack = document.createElement('div');
-            wordStack.className = 'word-stack' + 
-              (tw.isProclitic ? ' proclitic' : '') + 
-              (tw.isEnclitic ? ' enclitic' : '') + 
-              (tw.wordData.stressSource === 'default' ? ' stress-unverified' : '');
-            wordStack.setAttribute('tabindex', '0');
-            
-            // Add hovertip for stress provenance (v5.4.3)
-            const stressSource = tw.wordData.stressSource;
-            if (stressSource === 'composer') {
-              wordStack.setAttribute('title', 'Stress marked as composer\'s setting');
-            } else if (stressSource === 'user') {
-              wordStack.setAttribute('title', 'Stress marked as your choice');
-            } else if (stressSource === 'dictionary') {
-              wordStack.setAttribute('title', 'Stress from dictionary');
-            } else if (stressSource === 'yo-restored') {
-              wordStack.setAttribute('title', 'ё restored from dictionary');
-            } else if (stressSource === 'yo-rule') {
-              wordStack.setAttribute('title', 'Stress locked to ё');
-            } else if (stressSource === 'default') {
-              wordStack.setAttribute('title', 'Stress unverified — click to confirm');
-            }
-            
-            wordStack.dataset.wordId = `${lineIdx}-${wordIdx}`;
-            wordStack.dataset.lineIndex = lineIdx;
-            wordStack.dataset.wordIndex = wordIdx;
-            wordStack.dataset.cyrillic = tw.cleanWord;
-            wordStack.dataset.ipa = tw.ipaSurface;  // Use surface form
-            wordStack.dataset.ipaUnderlying = tw.ipaUnderlying;  // Store underlying for debugging
-            wordStack.dataset.gloss = tw.wordData.gloss || '';
-            wordStack.dataset.punctuation = tw.punct;
-            wordStack.dataset.syllables = JSON.stringify(tw.syllables);
-            wordStack.dataset.isProclitic = tw.isProclitic;
-            wordStack.dataset.isEnclitic = tw.isEnclitic;
-            wordStack.dataset.isO_Interjection = tw.isO_Interjection || false;
-            wordStack.dataset.isFirstWord = tw.isFirstWord || false;
-            wordStack.dataset.lineEndsWithQuestion = tw.lineEndsWithQuestion || false;
-            wordStack.dataset.procliticPosition = tw.procliticPosition || '';
-            wordStack.dataset.hasYo = tw.hasYo;
-            wordStack.dataset.stressSource = tw.wordData.stressSource || '';
-            wordStack.dataset.rightBoundary = tw.rightBoundary;
-            wordStack.dataset.boundarySource = tw.boundarySource;
-            wordStack.dataset.transcriptionLog = JSON.stringify(tw.transcriptionLog || []);
-            // ё toggle data (Phase 1)
-            wordStack.dataset.originalInput = tw.wordData.originalInput || '';
-            wordStack.dataset.dictionaryForm = tw.wordData.dictionaryForm || '';
-            wordStack.dataset.yoSource = tw.wordData.yoSource || '';
-            
-            wordStack.innerHTML = `
-              <span class="ipa">${tw.ipaSurface}</span>
-              <span class="cyrillic">${tw.cleanWord}<span class="punct">${tw.punct}</span></span>
-              <span class="gloss">${tw.wordData.gloss || ''}</span>
-            `;
-            
-            verseLine.appendChild(wordStack);
-          });
-          
-          verseContainer.appendChild(verseLine);
+          return transcribedWords;
         });
-        
-        // Remove loading state and update measurements
-        setTimeout(() => {
-          paper.classList.remove('rendering');
-          Paginator.update();
-          DocumentController.updatePageCount();
-        }, 100);
       },
       
       // ========================================
