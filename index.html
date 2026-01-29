@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.7 Logo + Footer Voice</title>
+  <title>Ilya — v5.9.8 PDF Export</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2367,6 +2367,53 @@
       margin-top: 2px;
     }
     
+    /* Export section (v5.9.8) */
+    .export-section {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--ilya-border-light);
+    }
+    
+    .export-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--stationery-sage);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
+      min-height: 44px;
+    }
+    
+    .export-btn:hover {
+      background: #7a8a6d;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(139, 154, 125, 0.3);
+    }
+    
+    .export-btn:active {
+      transform: translateY(0);
+    }
+    
+    .export-btn:disabled {
+      background: var(--ilya-border);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .export-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
     /* IPA text styling */
     .ipa-text {
       font-family: var(--font-ipa);
@@ -2377,44 +2424,90 @@
        PRINT STYLES
        ======================================== */
     @media print {
+      /* Hide all UI elements */
       .input-drawer,
-      .popup-overlay {
+      .popup-overlay,
+      .dashboard-zone,
+      .drawer-handle,
+      .tab-bar,
+      .input-zone,
+      .drawer-tabs {
         display: none !important;
       }
 
+      /* Reset body and aperture */
+      body {
+        background: white !important;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .display-container {
+        display: block;
+        padding: 0;
+        margin: 0;
+      }
+      
       .paper-aperture {
         padding: 0;
         overflow: visible;
         box-shadow: none;
+        display: block;
+        background: white;
+        width: 100%;
       }
 
-      body {
-        background: none;
+      /* Paper stack: no gaps, visible overflow */
+      .paper-stack {
+        gap: 0;
+        padding: 0;
+        display: block;
       }
 
-      .paper {
+      /* Individual pages */
+      .paper-page {
+        break-after: page;
+        box-shadow: none !important;
+        margin: 0;
+        padding: 0;
+        min-height: auto;
+        height: auto;
         width: 100%;
         max-width: none;
-        max-height: none;
-        box-shadow: none;
+        aspect-ratio: unset;
+        background: white;
+      }
+      
+      /* Hide watermark in print */
+      .paper-page[data-template="subsequent"]::before {
+        display: none;
       }
 
+      /* Word stacks: no hover effects */
       .word-stack {
         cursor: default;
         background: transparent !important;
       }
 
       .word-stack:hover {
-        background: none;
+        background: none !important;
+        box-shadow: none !important;
       }
 
+      /* Verse lines: avoid breaking */
+      .verse-line {
+        page-break-inside: avoid;
+      }
+
+      /* Page setup */
       @page {
         margin: 0.5in;
         size: letter;
       }
-
-      .verse-line {
-        page-break-inside: avoid;
+      
+      /* A4 page size */
+      .paper-page[data-size="a4"] ~ @page {
+        size: A4;
       }
     }
 
@@ -2668,6 +2761,21 @@
                   </button>
                 </div>
               </div>
+            </div>
+            
+            <!-- Export (v5.9.8) -->
+            <div class="export-section">
+              <button type="button" class="export-btn" id="exportPdfBtn">
+                <svg class="export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="12" y2="12"></line>
+                  <line x1="15" y1="15" x2="12" y2="12"></line>
+                </svg>
+                <span>Export PDF</span>
+              </button>
+              <div class="form-hint">Opens print dialog. Select "Save as PDF".</div>
             </div>
             
           </div>
@@ -3589,11 +3697,13 @@ const SINGER_SUPPLEMENT = {
       transcriberInput: null,
       composerSelect: null,
       poetSelect: null,
+      exportBtn: null,
       
       init() {
         this.titleInput = document.getElementById('metaTitle');
         this.opusInput = document.getElementById('metaOpus');
         this.transcriberInput = document.getElementById('metaTranscriber');
+        this.exportBtn = document.getElementById('exportPdfBtn');
         
         // Initialize searchable selects
         this.composerSelect = SearchableSelect.create({
@@ -3620,6 +3730,39 @@ const SINGER_SUPPLEMENT = {
         this.titleInput?.addEventListener('input', () => this.updatePaperMetadata());
         this.opusInput?.addEventListener('input', () => this.updatePaperMetadata());
         this.transcriberInput?.addEventListener('input', () => this.updateTranscriber());
+        
+        // Export PDF button
+        this.exportBtn?.addEventListener('click', () => this.exportPDF());
+        
+        // Update export button state
+        this.updateExportButton();
+      },
+      
+      updateExportButton() {
+        if (!this.exportBtn) return;
+        const hasContent = DocumentState.lines.length > 0;
+        this.exportBtn.disabled = !hasContent;
+        this.exportBtn.title = hasContent ? 'Export transcription as PDF' : 'Transcribe text first';
+      },
+      
+      exportPDF() {
+        if (DocumentState.lines.length === 0) {
+          alert('Please transcribe some text first.');
+          return;
+        }
+        
+        // Set document title for PDF filename suggestion
+        const title = this.titleInput?.value || 'Ilya Transcription';
+        const originalTitle = document.title;
+        document.title = title;
+        
+        // Trigger print dialog
+        window.print();
+        
+        // Restore document title after print dialog closes
+        setTimeout(() => {
+          document.title = originalTitle;
+        }, 1000);
       },
       
       updateTranscriber() {
@@ -3913,8 +4056,9 @@ const SINGER_SUPPLEMENT = {
           paperStack.appendChild(pageElement);
         });
         
-        // Update page count display
+        // Update page count display and export button state
         DocumentController.updatePageCount();
+        DashboardController.updateExportButton();
       },
       
       /**
