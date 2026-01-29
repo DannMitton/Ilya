@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.5 Multi-Page Render</title>
+  <title>Ilya — v5.9.6 Footer Attribution</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,12 +37,12 @@
       --ink-primary: #1a1612;
       --ink-secondary: #4a4540;
       
-      /* Ilya Stationery Palette (v5.9.4) */
+      /* Ilya Stationery Palette (v5.9.6) */
       --stationery-cream: #F8F5F0;        /* Warm aged manuscript */
       --stationery-ink: #1A1612;          /* Rich black, not pure */
-      --stationery-terracotta: #C17F59;   /* Muted dusty orange */
-      --stationery-sage: #8B9A7D;         /* Desaturated green */
-      --stationery-watermark: rgba(193, 127, 89, 0.06); /* Faint terracotta */
+      --stationery-accent: #8B9A7D;       /* Sage green - primary accent */
+      --stationery-sage: #8B9A7D;         /* Alias for clarity */
+      --stationery-watermark: rgba(139, 154, 125, 0.06); /* Faint sage */
       
       /* Borders & Focus */
       --ilya-border-light: #e8e8e8;
@@ -316,7 +316,7 @@
       font-family: var(--font-mono);
       font-size: 18px;
       font-weight: 600;
-      color: var(--stationery-terracotta);
+      color: var(--stationery-sage);
       letter-spacing: 2px;
     }
     
@@ -349,7 +349,7 @@
     }
     
     .page-metadata .divider {
-      color: var(--stationery-terracotta);
+      color: var(--stationery-sage);
       font-weight: 300;
     }
     
@@ -389,7 +389,7 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      border-bottom: 1px solid var(--stationery-terracotta);
+      border-bottom: 1px solid var(--stationery-sage);
       margin: 0 72px;
       padding-left: 0;
       padding-right: 0;
@@ -429,15 +429,41 @@
     }
     
     /* ----------------------------------------
-       PAGE FOOTER
+       PAGE FOOTER (v5.9.6)
+       2/3 attribution left, 1/3 pagination right
        ---------------------------------------- */
     .page-footer {
-      padding: 16px 72px 48px;
+      padding: 24px 72px 48px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: end;
+    }
+    
+    .footer-attribution {
+      font-family: var(--font-sans);
+      font-size: 8px;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+      max-width: 100%;
+    }
+    
+    .footer-attribution p {
+      margin: 0 0 4px 0;
+    }
+    
+    .footer-attribution p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .footer-pagination {
       font-family: var(--font-sans);
       font-size: 10px;
       color: var(--ink-secondary);
       text-transform: uppercase;
       letter-spacing: 1px;
+      text-align: right;
+      white-space: nowrap;
     }
     
     /* ----------------------------------------
@@ -1971,6 +1997,13 @@
       color: var(--ilya-text-muted);
     }
     
+    .form-hint {
+      font-size: 10px;
+      color: var(--ilya-text-muted);
+      margin-top: 4px;
+      font-style: italic;
+    }
+    
     /* ========================================
        DASHBOARD: Searchable Select
        ======================================== */
@@ -2568,6 +2601,12 @@
                   <div class="select-options" id="poetOptions"></div>
                 </div>
               </div>
+            </div>
+            
+            <!-- Transcriber Name (for attribution) -->
+            <div class="form-group">
+              <input type="text" class="form-input" id="metaTranscriber" placeholder="Your name (for attribution)">
+              <div class="form-hint">Appears in document footer</div>
             </div>
             
             <!-- Transcription Profile -->
@@ -3536,12 +3575,14 @@ const SINGER_SUPPLEMENT = {
     const DashboardController = {
       titleInput: null,
       opusInput: null,
+      transcriberInput: null,
       composerSelect: null,
       poetSelect: null,
       
       init() {
         this.titleInput = document.getElementById('metaTitle');
         this.opusInput = document.getElementById('metaOpus');
+        this.transcriberInput = document.getElementById('metaTranscriber');
         
         // Initialize searchable selects
         this.composerSelect = SearchableSelect.create({
@@ -3567,38 +3608,23 @@ const SINGER_SUPPLEMENT = {
         // Listen for text input changes
         this.titleInput?.addEventListener('input', () => this.updatePaperMetadata());
         this.opusInput?.addEventListener('input', () => this.updatePaperMetadata());
+        this.transcriberInput?.addEventListener('input', () => this.updateTranscriber());
+      },
+      
+      updateTranscriber() {
+        const name = this.transcriberInput?.value.trim();
+        DocumentState.userName = name || 'anonymous';
+        // Re-render to update footers
+        if (DocumentState.lines.length > 0) {
+          DrawerController.renderToPaper();
+        }
       },
       
       updatePaperMetadata() {
-        // Update paper header with dashboard values
-        const titleEl = document.getElementById('docTitle');
-        const opusEl = document.getElementById('docOpus');
-        const composerEl = document.getElementById('docComposer');
-        const poetEl = document.getElementById('docPoet');
-        
-        // Helper: convert "Surname, Given" to "Given Surname"
-        const toGivenSurname = (name) => {
-          if (!name || !name.includes(',')) return name;
-          const [surname, given] = name.split(',').map(s => s.trim());
-          return `${given} ${surname}`;
-        };
-        
-        if (titleEl && this.titleInput?.value) {
-          titleEl.innerHTML = this.titleInput.value;
-        }
-        
-        if (opusEl && this.opusInput?.value) {
-          opusEl.innerHTML = this.opusInput.value;
-        }
-        
-        const composer = this.composerSelect?.selectedValue;
-        if (composerEl && composer) {
-          composerEl.innerHTML = `${toGivenSurname(composer.latin)} <span class="dates">(${composer.dates})</span>`;
-        }
-        
-        const poet = this.poetSelect?.selectedValue;
-        if (poetEl && poet) {
-          poetEl.innerHTML = `${toGivenSurname(poet.latin)} <span class="dates">(${poet.dates})</span>`;
+        // In multi-page mode, metadata is embedded in page templates
+        // Re-render to update headers with new metadata
+        if (DocumentState.lines.length > 0) {
+          DrawerController.renderToPaper();
         }
       },
       
@@ -3607,7 +3633,8 @@ const SINGER_SUPPLEMENT = {
           title: this.titleInput?.value || '',
           opus: this.opusInput?.value || '',
           composer: this.composerSelect?.selectedValue || null,
-          poet: this.poetSelect?.selectedValue || null
+          poet: this.poetSelect?.selectedValue || null,
+          transcriber: this.transcriberInput?.value || 'anonymous'
         };
       }
     };
@@ -3942,10 +3969,17 @@ const SINGER_SUPPLEMENT = {
           `;
         }
         
-        // Footer
+        // Footer with attribution (2/3) and pagination (1/3)
+        const userName = DocumentState.userName || 'anonymous';
         const footerHTML = `
           <footer class="page-footer">
-            Page ${pageNumber} of ${totalPages}
+            <div class="footer-attribution">
+              <p>This singer's IPA transcription was created by ${userName} using Ilya, a rules engine based on the work of Dr. Craig Grayson, <em>Russian Lyric Diction</em>, University of Washington, 2012.</p>
+              <p>Ilya is free software (AGPL-3.0). Transcriptions are licensed CC BY-NC-SA 4.0: share freely with attribution, but not for commercial use.</p>
+            </div>
+            <div class="footer-pagination">
+              Page ${pageNumber} of ${totalPages}
+            </div>
           </footer>
         `;
         
@@ -6614,6 +6648,7 @@ const SINGER_SUPPLEMENT = {
        ======================================== */
     const DocumentState = {
       lines: [],
+      userName: 'anonymous',  // Default until wizard/dashboard sets it
       metadata: {
         composer: '',
         composerDates: '',
