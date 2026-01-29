@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.1 Pagination Count</title>
+  <title>Ilya — v5.9.4 Page Templates</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,13 @@
       /* Legacy ink aliases */
       --ink-primary: #1a1612;
       --ink-secondary: #4a4540;
+      
+      /* Ilya Stationery Palette (v5.9.4) */
+      --stationery-cream: #F8F5F0;        /* Warm aged manuscript */
+      --stationery-ink: #1A1612;          /* Rich black, not pure */
+      --stationery-terracotta: #C17F59;   /* Muted dusty orange */
+      --stationery-sage: #8B9A7D;         /* Desaturated green */
+      --stationery-watermark: rgba(193, 127, 89, 0.06); /* Faint terracotta */
       
       /* Borders & Focus */
       --ilya-border-light: #e8e8e8;
@@ -178,13 +185,15 @@
     }
 
     /* ========================================
-       PAPER: Document simulation (v5.8.2)
+       PAPER: Document simulation (v5.9.1)
        Supports Letter (8.5×11) and A4 (210×297mm)
+       Height-constrained with aspect-ratio calculating width
        ======================================== */
     .paper {
-      width: min(var(--paper-width), 100% - 3rem);
+      /* Height is the constraining dimension; aspect-ratio calculates width */
       height: min(var(--paper-height), 80vh);
       aspect-ratio: var(--paper-aspect);
+      max-width: calc(100% - 3rem);
       background: var(--surface);
       box-shadow: var(--shadow-paper);
       display: flex;
@@ -193,7 +202,6 @@
       overflow-x: hidden;
       margin: 1.5rem auto;
       transition: aspect-ratio 300ms ease-out, 
-                  width 300ms ease-out, 
                   height 300ms ease-out;
       
       /* Ghosted scrollbar (Calm Authority) */
@@ -253,6 +261,229 @@
       transition: opacity 100ms ease;
     }
 
+    /* ========================================
+       PAGE TEMPLATES (v5.9.4)
+       Multi-page stationery design
+       ======================================== */
+    
+    /* Container for multiple pages */
+    .paper-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px;
+    }
+    
+    /* Individual page */
+    .paper-page {
+      width: min(var(--paper-width), 100% - 3rem);
+      min-height: var(--paper-height);
+      aspect-ratio: var(--paper-aspect);
+      background: var(--stationery-cream);
+      box-shadow: 0 2px 4px rgba(26, 22, 18, 0.08);
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      position: relative;
+      
+      /* GPU acceleration for shadow performance */
+      transform: translateY(0);
+      will-change: transform;
+    }
+    
+    /* A4 variant */
+    .paper-page[data-size="a4"] {
+      --paper-width: 794px;
+      --paper-height: 1123px;
+      --paper-aspect: 210 / 297;
+    }
+    
+    /* ----------------------------------------
+       PAGE 1: TITLE TEMPLATE
+       ---------------------------------------- */
+    .paper-page[data-template="title"] {
+      /* Structure defined by children */
+    }
+    
+    /* Bracket logo */
+    .paper-page[data-template="title"]::before {
+      content: "[ ]";
+      position: absolute;
+      top: 48px;
+      left: 72px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--stationery-terracotta);
+      letter-spacing: 2px;
+    }
+    
+    /* Title header block */
+    .page-header-title {
+      padding: 96px 72px 24px;
+      text-align: left;
+    }
+    
+    .page-title {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 28px;
+      font-weight: normal;
+      color: var(--stationery-ink);
+      margin: 0 0 16px 0;
+      letter-spacing: 0.5px;
+    }
+    
+    .page-metadata {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .page-metadata .divider {
+      color: var(--stationery-terracotta);
+      font-weight: 300;
+    }
+    
+    .page-metadata-rule {
+      width: 200px;
+      height: 1px;
+      background: var(--stationery-sage);
+      margin-top: 16px;
+      border: none;
+    }
+    
+    /* ----------------------------------------
+       PAGES 2+: SUBSEQUENT TEMPLATE
+       ---------------------------------------- */
+    .paper-page[data-template="subsequent"] {
+      /* Structure defined by children */
+    }
+    
+    /* Faint bracket watermark */
+    .paper-page[data-template="subsequent"]::before {
+      content: "[ ]";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono);
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--stationery-watermark);
+      letter-spacing: 8px;
+      pointer-events: none;
+    }
+    
+    /* Running header */
+    .page-header-running {
+      padding: 48px 72px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--stationery-terracotta);
+      margin: 0 72px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    .running-title {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    /* ----------------------------------------
+       PAGE CONTENT AREA
+       ---------------------------------------- */
+    .page-content {
+      flex: 1;
+      padding: 24px 72px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .page-content.empty {
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .page-ghost-text {
+      color: var(--ink-secondary);
+      opacity: 0.25;
+      font-style: italic;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      text-align: center;
+    }
+    
+    /* ----------------------------------------
+       PAGE FOOTER
+       ---------------------------------------- */
+    .page-footer {
+      padding: 16px 72px 48px;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* ----------------------------------------
+       PRINT STYLES FOR PAGES
+       ---------------------------------------- */
+    @media print {
+      .paper-stack {
+        gap: 0;
+        padding: 0;
+      }
+      
+      .paper-page {
+        break-after: page;
+        box-shadow: none;
+        margin: 0;
+        min-height: auto;
+        height: auto;
+      }
+      
+      .paper-page::before {
+        /* Keep bracket logo but not watermark */
+      }
+      
+      .paper-page[data-template="subsequent"]::before {
+        display: none; /* Hide watermark in print */
+      }
+    }
+    
+    /* ----------------------------------------
+       MOBILE: HORIZONTAL SWIPE
+       ---------------------------------------- */
+    @media (max-width: 768px) {
+      .paper-stack {
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        gap: 0;
+        padding: 16px;
+      }
+      
+      .paper-page {
+        flex: 0 0 calc(100vw - 32px);
+        scroll-snap-align: center;
+        margin: 0 8px;
+      }
+    }
+
     /* Content area fills available space */
     .paper .doc-body {
       flex: 1;
@@ -265,7 +496,7 @@
     }
 
     /* ========================================
-       DOCUMENT HEADER
+       DOCUMENT HEADER (Legacy - single page)
        ======================================== */
     .doc-header {
       padding: 72px 72px 24px;
@@ -398,10 +629,6 @@
 
     .verse-line:last-child {
       border-bottom: none;
-    }
-
-    .verse-line.stanza-break {
-      margin-top: 1.5rem;
     }
 
     /* ========================================
@@ -3108,22 +3335,219 @@ const SINGER_SUPPLEMENT = {
         return Math.max(1, pageCount);
       },
       
-      // Update the page count label
+      // Update the page count label using Paginator
       updatePageCount() {
         if (!this.pageNumberEl) return;
         
-        const count = this.calculatePageCount();
+        // Use Paginator if line height is measured, else fall back to simple count
+        let totalPages = 1;
         
-        // Per Kimi: "1 page", "2 pages", "3+ pages"
-        if (count === 1) {
-          this.pageNumberEl.textContent = '1 page';
-        } else if (count === 2) {
-          this.pageNumberEl.textContent = '2 pages';
-        } else if (count === 3) {
-          this.pageNumberEl.textContent = '3 pages';
+        if (Paginator.safeLineHeight && typeof DocumentState !== 'undefined' && DocumentState.lines) {
+          const lineCount = DocumentState.lines.length;
+          const pages = Paginator.distributeToPages(
+            Array(lineCount).fill({}),  // Mock lines for counting
+            this.currentSize
+          );
+          totalPages = pages.length;
         } else {
-          this.pageNumberEl.textContent = '3+ pages';
+          totalPages = this.calculatePageCount();
         }
+        
+        // Format: "X pages" for dashboard indicator
+        if (totalPages === 1) {
+          this.pageNumberEl.textContent = '1 page';
+        } else {
+          this.pageNumberEl.textContent = `${totalPages} pages`;
+        }
+      }
+    };
+    
+    /* ========================================
+       PAGINATOR (v5.9.4)
+       Multi-page distribution engine
+       ======================================== */
+    const Paginator = {
+      // Measured values (populated after first render)
+      lineHeight: null,
+      safeLineHeight: null,
+      
+      // Paper dimensions in pixels (96dpi)
+      PAPER_HEIGHTS: {
+        letter: 1056,  // 11in × 96dpi
+        a4: 1123       // 297mm × 96dpi / 25.4
+      },
+      
+      // Layout constants (in pixels)
+      MARGINS: {
+        top: 72,
+        bottom: 72,
+        left: 72,
+        right: 72
+      },
+      
+      // Header heights
+      TITLE_HEADER_HEIGHT: 150,    // Page 1: full title block
+      RUNNING_HEADER_HEIGHT: 48,   // Pages 2+: "COMPOSER — TITLE"
+      FOOTER_HEIGHT: 36,           // Page number
+      
+      /**
+       * Measure actual line height from rendered content
+       * Should be called after renderToPaper() completes
+       */
+      measureLineHeight() {
+        const lines = document.querySelectorAll('.verse-line');
+        
+        if (lines.length === 0) {
+          console.log('[Paginator] No lines to measure');
+          return null;
+        }
+        
+        // Find maximum height among all lines
+        const heights = Array.from(lines).map(el => {
+          const rect = el.getBoundingClientRect();
+          return rect.height;
+        });
+        
+        const maxHeight = Math.max(...heights);
+        const minHeight = Math.min(...heights);
+        const avgHeight = heights.reduce((a, b) => a + b, 0) / heights.length;
+        
+        // Store with 10% safety margin
+        this.lineHeight = maxHeight;
+        this.safeLineHeight = Math.ceil(maxHeight * 1.1);
+        
+        console.log('[Paginator] Line height measured:', {
+          min: minHeight.toFixed(1),
+          max: maxHeight.toFixed(1),
+          avg: avgHeight.toFixed(1),
+          safe: this.safeLineHeight,
+          sampleSize: lines.length
+        });
+        
+        return this.safeLineHeight;
+      },
+      
+      /**
+       * Calculate how many lines fit on each page type
+       */
+      calculateLinesPerPage(paperSize = 'letter') {
+        if (!this.safeLineHeight) {
+          console.warn('[Paginator] Line height not measured yet');
+          return { page1: 0, subsequent: 0 };
+        }
+        
+        const paperHeight = this.PAPER_HEIGHTS[paperSize];
+        const verticalMargins = this.MARGINS.top + this.MARGINS.bottom;
+        
+        // Page 1: Title header + footer + margins
+        const page1Content = paperHeight - this.TITLE_HEADER_HEIGHT - this.FOOTER_HEIGHT - verticalMargins;
+        const linesPage1 = Math.floor(page1Content / this.safeLineHeight);
+        
+        // Pages 2+: Running header + footer + margins
+        const subsequentContent = paperHeight - this.RUNNING_HEADER_HEIGHT - this.FOOTER_HEIGHT - verticalMargins;
+        const linesSubsequent = Math.floor(subsequentContent / this.safeLineHeight);
+        
+        console.log('[Paginator] Lines per page:', {
+          paperSize,
+          paperHeight,
+          page1ContentArea: page1Content,
+          subsequentContentArea: subsequentContent,
+          linesPage1,
+          linesSubsequent
+        });
+        
+        return {
+          page1: linesPage1,
+          subsequent: linesSubsequent
+        };
+      },
+      
+      /**
+       * Format running header: "COMPOSER — TITLE"
+       * Smart truncation per Kimi's spec
+       */
+      formatRunningHeader(composer, title) {
+        if (!composer && !title) return '';
+        
+        // Extract surname from full name
+        const surname = composer ? composer.split(' ').pop() : '';
+        
+        // Truncate title if needed (30 chars max)
+        let shortTitle = title || '';
+        if (shortTitle.length > 30) {
+          shortTitle = shortTitle.slice(0, 27) + '...';
+        }
+        
+        // If combined length > 40, use surname only
+        const combined = `${surname} — ${shortTitle}`;
+        if (combined.length > 45) {
+          return `${surname.toUpperCase()} — ${shortTitle.toUpperCase()}`;
+        }
+        
+        return combined.toUpperCase();
+      },
+      
+      /**
+       * Distribute lines across pages
+       * Pure function: returns array of page objects
+       */
+      distributeToPages(allLines, paperSize = 'letter') {
+        const { page1, subsequent } = this.calculateLinesPerPage(paperSize);
+        
+        if (page1 === 0 || subsequent === 0) {
+          console.warn('[Paginator] Cannot distribute: lines per page not calculated');
+          return [{ pageNumber: 1, template: 'title', lines: allLines }];
+        }
+        
+        const pages = [];
+        let cursor = 0;
+        
+        // Page 1: fewer lines (title block takes space)
+        if (allLines.length > 0 || pages.length === 0) {
+          const page1Lines = allLines.slice(0, page1);
+          pages.push({
+            pageNumber: 1,
+            template: 'title',
+            lines: page1Lines
+          });
+          cursor = page1;
+        }
+        
+        // Pages 2+: more lines (running header only)
+        while (cursor < allLines.length) {
+          const pageLines = allLines.slice(cursor, cursor + subsequent);
+          pages.push({
+            pageNumber: pages.length + 1,
+            template: 'subsequent',
+            lines: pageLines
+          });
+          cursor += subsequent;
+        }
+        
+        console.log('[Paginator] Distribution:', {
+          totalLines: allLines.length,
+          pageCount: pages.length,
+          linesPerPage: pages.map(p => p.lines.length)
+        });
+        
+        return pages;
+      },
+      
+      /**
+       * Get total page count for display
+       */
+      getPageCount(allLines, paperSize = 'letter') {
+        const pages = this.distributeToPages(allLines, paperSize);
+        return pages.length;
+      },
+      
+      /**
+       * Update measurements (call after render or resize)
+       */
+      update() {
+        this.measureLineHeight();
+        const paperSize = DocumentController.getSize();
+        this.calculateLinesPerPage(paperSize);
       }
     };
     
@@ -3607,9 +4031,10 @@ const SINGER_SUPPLEMENT = {
           verseContainer.appendChild(verseLine);
         });
         
-        // Remove loading state and update page count
+        // Remove loading state and update measurements
         setTimeout(() => {
           paper.classList.remove('rendering');
+          Paginator.update();
           DocumentController.updatePageCount();
         }, 100);
       },
