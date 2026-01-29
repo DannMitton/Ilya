@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.8.2 ё Toggle Crossfade</title>
+  <title>Ilya — v5.9.0 Paper Size Selection</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,8 +59,12 @@
       --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-ipa: 'Doulos SIL', 'Charis SIL', 'Gentium', 'Noto Serif', 'Times New Roman', serif;
       
-      /* Paper dimensions: Letter size at 96dpi */
+      /* Paper dimensions (v5.8.2) */
+      /* Letter: 8.5in × 11in at 96dpi = 816px × 1056px */
+      /* A4: 210mm × 297mm at 96dpi ≈ 794px × 1123px */
       --paper-width: 816px;
+      --paper-height: 1056px;
+      --paper-aspect: 8.5 / 11;
       
       /* Shadows */
       --ilya-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
@@ -174,18 +178,58 @@
     }
 
     /* ========================================
-       PAPER: Letter-size document simulation
-       8.5in × 11in at 96dpi = 816px × 1056px
+       PAPER: Document simulation (v5.8.2)
+       Supports Letter (8.5×11) and A4 (210×297mm)
        ======================================== */
     .paper {
       width: min(var(--paper-width), 100% - 3rem);
-      aspect-ratio: 8.5 / 11;
+      height: min(var(--paper-height), 80vh);
+      aspect-ratio: var(--paper-aspect);
       background: var(--surface);
       box-shadow: var(--shadow-paper);
       display: flex;
       flex-direction: column;
-      overflow: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
       margin: 1.5rem auto;
+      transition: aspect-ratio 300ms ease-out, 
+                  width 300ms ease-out, 
+                  height 300ms ease-out;
+      
+      /* Ghosted scrollbar (Calm Authority) */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(74, 69, 64, 0.2) transparent;
+    }
+    
+    /* WebKit ghosted scrollbar */
+    .paper::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .paper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .paper::-webkit-scrollbar-thumb {
+      background: rgba(74, 69, 64, 0.2);
+      border-radius: 3px;
+    }
+    
+    .paper::-webkit-scrollbar-thumb:hover {
+      background: rgba(74, 69, 64, 0.35);
+    }
+    
+    /* A4 paper size */
+    .paper[data-size="a4"] {
+      --paper-width: 794px;
+      --paper-height: 1123px;
+      --paper-aspect: 210 / 297;
+    }
+    
+    /* Post-animation content fade (for reflow) */
+    .paper.reflowing .doc-body {
+      opacity: 0.8;
+      transition: opacity 100ms ease-out;
     }
 
     @media print {
@@ -195,6 +239,11 @@
         margin: 0;
         box-shadow: none;
         overflow: visible;
+      }
+      
+      .paper[data-size="a4"] {
+        width: 210mm;
+        height: 297mm;
       }
     }
 
@@ -1941,6 +1990,110 @@
       opacity: 0.5;
     }
     
+    /* ========================================
+       DOCUMENT SECTION (v5.8.2)
+       Paper size selection in dashboard
+       ======================================== */
+    .document-section {
+      margin-top: var(--space-lg);
+      border-top: 1px solid var(--ilya-border);
+      padding-top: var(--space-lg);
+    }
+    
+    .document-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: var(--space-sm) 0;
+    }
+    
+    .document-header:hover {
+      opacity: 0.8;
+    }
+    
+    .document-title {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--ilya-text-secondary);
+    }
+    
+    .document-active {
+      font-size: var(--text-xs);
+      color: var(--ilya-text-muted);
+    }
+    
+    .document-chevron {
+      width: 16px;
+      height: 16px;
+      stroke: var(--ilya-text-muted);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+    
+    .document-section.expanded .document-chevron {
+      transform: rotate(180deg);
+    }
+    
+    .document-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--duration-base) var(--ease-out),
+                  opacity var(--duration-base) var(--ease-out);
+      opacity: 0;
+    }
+    
+    .document-section.expanded .document-content {
+      max-height: 150px;
+      opacity: 1;
+    }
+    
+    /* Paper size segmented control */
+    .paper-size-control {
+      display: flex;
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
+      border-radius: 6px;
+      padding: 3px;
+      gap: 3px;
+      margin: var(--space-md) 0;
+    }
+    
+    .paper-size-btn {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--ink-secondary);
+      transition: all 150ms var(--ease);
+      min-height: 44px;
+    }
+    
+    .paper-size-btn:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .paper-size-btn.active {
+      background: var(--ink-primary);
+      color: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+    
+    .paper-size-label {
+      display: block;
+      font-weight: 500;
+    }
+    
+    .paper-size-dims {
+      display: block;
+      font-size: var(--text-xs);
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+    
     /* IPA text styling */
     .ipa-text {
       font-family: var(--font-ipa);
@@ -2083,7 +2236,7 @@
         <!-- Document Footer -->
         <footer class="doc-footer">
           <span class="attribution">Transcription: Grayson (2012)</span>
-          <span class="page-number" id="pageNumber">Page 1 of 1</span>
+          <span class="page-number" id="pageNumber">1 page</span>
         </footer>
         
       </article>
@@ -2244,6 +2397,31 @@
                   <span>Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]</span>
                 </div>
                 <div class="profile-future">View all profiles →</div>
+              </div>
+            </div>
+            
+            <!-- Document Settings (v5.8.2) -->
+            <div class="document-section" id="documentSection">
+              <div class="document-header" id="documentHeader">
+                <div>
+                  <span class="document-title">Page</span>
+                  <span class="document-active" id="documentActive">Letter</span>
+                </div>
+                <svg class="document-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+              <div class="document-content">
+                <div class="paper-size-control" id="paperSizeControl">
+                  <button type="button" class="paper-size-btn active" data-size="letter" id="paperSizeLetter">
+                    <span class="paper-size-label">Letter</span>
+                    <span class="paper-size-dims">8.5 × 11 in</span>
+                  </button>
+                  <button type="button" class="paper-size-btn" data-size="a4" id="paperSizeA4">
+                    <span class="paper-size-label">A4</span>
+                    <span class="paper-size-dims">210 × 297 mm</span>
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -2829,6 +3007,73 @@ const SINGER_SUPPLEMENT = {
       
       getParams() {
         return TRANSCRIPTION_PROFILES[this.currentProfile]?.params || TRANSCRIPTION_PROFILES['old-muscovite'].params;
+      }
+    };
+    
+    /* ========================================
+       DOCUMENT CONTROLLER (v5.8.2)
+       Paper size selection
+       ======================================== */
+    const DocumentController = {
+      section: null,
+      header: null,
+      activeLabel: null,
+      paperSizeBtns: null,
+      currentSize: 'letter',
+      
+      init() {
+        this.section = document.getElementById('documentSection');
+        this.header = document.getElementById('documentHeader');
+        this.activeLabel = document.getElementById('documentActive');
+        this.paperSizeBtns = document.querySelectorAll('.paper-size-btn');
+        this.paper = document.querySelector('.paper');
+        
+        if (!this.section) return;
+        
+        // Toggle expand/collapse
+        this.header.addEventListener('click', () => {
+          this.section.classList.toggle('expanded');
+        });
+        
+        // Paper size selection
+        this.paperSizeBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.setSize(btn.dataset.size);
+          });
+        });
+      },
+      
+      setSize(size) {
+        if (size === this.currentSize) return;
+        
+        this.currentSize = size;
+        
+        // Update button states
+        this.paperSizeBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.size === size);
+        });
+        
+        // Update label
+        this.activeLabel.textContent = size === 'letter' ? 'Letter' : 'A4';
+        
+        // Add reflowing class for content fade
+        this.paper?.classList.add('reflowing');
+        
+        // Update paper data attribute (triggers CSS transition)
+        if (size === 'a4') {
+          this.paper?.setAttribute('data-size', 'a4');
+        } else {
+          this.paper?.removeAttribute('data-size');
+        }
+        
+        // Remove reflowing class after transition completes
+        setTimeout(() => {
+          this.paper?.classList.remove('reflowing');
+        }, 400); // 300ms transition + 100ms buffer
+      },
+      
+      getSize() {
+        return this.currentSize;
       }
     };
     
@@ -7031,6 +7276,7 @@ const SINGER_SUPPLEMENT = {
       TabController.init();
       DashboardController.init();
       ProfileController.init();
+      DocumentController.init();
       Popup.init();
     });
 
