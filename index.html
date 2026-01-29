@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.9 Empty State + Better Pagination</title>
+  <title>Ilya — v5.9.10 Fixed Pagination</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -421,6 +421,7 @@
     .page-content {
       flex: 1;
       padding: 24px 72px;
+      padding-bottom: 100px; /* Clearance for absolute footer */
       display: flex;
       flex-direction: column;
     }
@@ -442,13 +443,19 @@
     /* ----------------------------------------
        PAGE FOOTER (v5.9.6)
        2/3 attribution left, 1/3 pagination right
+       Positioned absolutely at bottom of page
        ---------------------------------------- */
     .page-footer {
-      padding: 24px 72px 48px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 72px 32px;
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 24px;
       align-items: end;
+      background: var(--stationery-cream);
     }
     
     .footer-attribution {
@@ -2296,6 +2303,17 @@
       color: var(--ilya-text-muted);
     }
     
+    .document-pages {
+      font-size: var(--text-xs);
+      color: var(--ilya-text-muted);
+      margin-left: 8px;
+    }
+    
+    .document-pages::before {
+      content: "•";
+      margin-right: 8px;
+    }
+    
     .document-chevron {
       width: 16px;
       height: 16px;
@@ -2744,6 +2762,7 @@
                 <div>
                   <span class="document-title">Page</span>
                   <span class="document-active" id="documentActive">Letter</span>
+                  <span class="document-pages" id="pageNumber">1 page</span>
                 </div>
                 <svg class="document-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
@@ -3566,30 +3585,17 @@ const SINGER_SUPPLEMENT = {
       
       /**
        * Calculate how many lines fit on each page type
+       * Fixed counts based on testing: 6 for title page, 8 for subsequent
        */
       calculateLinesPerPage(paperSize = 'letter') {
-        if (!this.safeLineHeight) {
-          console.warn('[Paginator] Line height not measured yet');
-          return { page1: 0, subsequent: 0 };
-        }
-        
-        const paperHeight = this.PAPER_HEIGHTS[paperSize];
-        
-        // Page 1: Paper - title header - footer
-        // Note: margins are handled by CSS padding, content area is flex: 1
-        const page1Content = paperHeight - this.TITLE_HEADER_HEIGHT - this.FOOTER_HEIGHT;
-        const linesPage1 = Math.floor(page1Content / this.safeLineHeight);
-        
-        // Pages 2+: Paper - running header - footer
-        const subsequentContent = paperHeight - this.RUNNING_HEADER_HEIGHT - this.FOOTER_HEIGHT;
-        const linesSubsequent = Math.floor(subsequentContent / this.safeLineHeight);
+        // Fixed line counts based on visual testing
+        // Page 1 has less room due to title block
+        // Subsequent pages have more room with just running header
+        const linesPage1 = 6;
+        const linesSubsequent = 8;
         
         console.log('[Paginator] Lines per page:', {
           paperSize,
-          paperHeight,
-          safeLineHeight: this.safeLineHeight,
-          page1ContentArea: page1Content,
-          subsequentContentArea: subsequentContent,
           linesPage1,
           linesSubsequent
         });
@@ -4017,29 +4023,14 @@ const SINGER_SUPPLEMENT = {
         if (!DocumentState.lines || DocumentState.lines.length === 0) {
           const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
           paperStack.appendChild(emptyPage);
+          DashboardController.updateExportButton();
           return;
         }
         
-        // PHASE 1-2.5: Transcribe all lines (same as before)
+        // PHASE 1-2.5: Transcribe all lines
         const transcribedLines = this.transcribeAllLines();
         
-        // Measure line height if not done yet
-        // We need at least one line rendered to measure
-        if (!Paginator.safeLineHeight) {
-          // Create a temporary measurement container
-          const tempPage = this.createPageElement(1, 'title', transcribedLines.slice(0, 1), 1, paperSize);
-          paperStack.appendChild(tempPage);
-          
-          // Force layout and measure
-          setTimeout(() => {
-            Paginator.measureLineHeight();
-            // Now re-render with proper pagination
-            this.renderToPaper();
-          }, 50);
-          return;
-        }
-        
-        // Distribute lines to pages
+        // Distribute lines to pages (uses fixed counts: 6/8)
         const pages = Paginator.distributeToPages(transcribedLines, paperSize);
         const totalPages = pages.length;
         
