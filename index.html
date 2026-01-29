@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.17 Tie Bar Notation</title>
+  <title>Ilya — v5.10.0 Kaikki Dictionary</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&family=Noto+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Pako library for gzip decompression -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
   
   <style>
     /* ========================================
@@ -2946,19 +2949,46 @@
   <script>
 /* ==================================================
    STRESS DICTIONARY (loaded from external JSON)
+   Kaikki.org Wiktionary extract — 416K+ words
    ================================================== */
 let STRESS_DICTIONARY = {};
+let DICTIONARY_LOADED = false;
 
-// Load dictionary from external file
+// Load dictionary from external gzipped file
 async function loadDictionary() {
     try {
-        const response = await fetch('data/openrussian-dict.json');
-        if (!response.ok) {
-            console.warn('Dictionary file not found, stress lookup disabled');
+        // First try the gzipped version
+        let response = await fetch('data/ilya_dictionary.json.gz');
+        
+        if (response.ok) {
+            // Decompress gzipped data using pako
+            const compressed = await response.arrayBuffer();
+            const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
+            STRESS_DICTIONARY = JSON.parse(decompressed);
+            DICTIONARY_LOADED = true;
+            console.log(`Dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
             return;
         }
-        STRESS_DICTIONARY = await response.json();
-        console.log(`Dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length} words`);
+        
+        // Fallback to uncompressed JSON
+        response = await fetch('data/ilya_dictionary.json');
+        if (response.ok) {
+            STRESS_DICTIONARY = await response.json();
+            DICTIONARY_LOADED = true;
+            console.log(`Dictionary loaded (uncompressed): ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
+            return;
+        }
+        
+        // Final fallback to old OpenRussian dictionary
+        response = await fetch('data/openrussian-dict.json');
+        if (response.ok) {
+            STRESS_DICTIONARY = await response.json();
+            DICTIONARY_LOADED = true;
+            console.log(`Legacy dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
+            return;
+        }
+        
+        console.warn('No dictionary file found, stress lookup disabled');
     } catch (error) {
         console.warn('Could not load dictionary:', error);
     }
@@ -2991,7 +3021,14 @@ const SINGER_SUPPLEMENT = {
     'все': { stress: 0, gloss: 'everyone', source: 'supplement' },
     'сам': { stress: 0, gloss: 'oneself', source: 'supplement' },
     'мой': { stress: 0, gloss: 'my', source: 'supplement' },
+    'моя': { stress: 1, gloss: 'my (fem.)', source: 'supplement' },
+    'моё': { stress: 1, gloss: 'my (neut.)', source: 'supplement' },
+    'моей': { stress: 1, gloss: 'my (gen./dat./prep. fem.)', source: 'supplement' },
     'твой': { stress: 0, gloss: 'your', source: 'supplement' },
+    'твоя': { stress: 1, gloss: 'your (fem.)', source: 'supplement' },
+    'твоё': { stress: 1, gloss: 'your (neut.)', source: 'supplement' },
+    'твоей': { stress: 1, gloss: 'your (gen./dat./prep. fem.)', source: 'supplement' },
+    'её': { stress: 1, gloss: 'her/hers', source: 'supplement' },
     'свой': { stress: 0, gloss: 'one\'s own', source: 'supplement' },
     'наш': { stress: 0, gloss: 'our', source: 'supplement' },
     'ваш': { stress: 0, gloss: 'your (formal)', source: 'supplement' },
@@ -4149,7 +4186,7 @@ const SINGER_SUPPLEMENT = {
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This singer's IPA transcription was created by ${userName} using <em>Ilya</em>, a rules engine based on the work of Dr. Craig Grayson, <em>Russian Lyric Diction</em>, University of Washington, 2012.</p>
+              <p>This singer's IPA transcription was created by ${userName} using <em>Ilya</em>, a rules engine based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
               <p><em>Ilya</em> is open source, built for singers and teachers. Use it freely, improve it if you can, share what you make. This is a scholarly tool: neither it nor its transcriptions may be sold.</p>
             </div>
             <div class="footer-pagination">
@@ -4856,18 +4893,51 @@ const SINGER_SUPPLEMENT = {
       },
       
       // Look up stress from dictionary
+      // Handles both old format and new kaikki format (including homographs)
       lookupStress(word) {
         const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         
-        // Phase 1: Try exact match first (handles все/всё disambiguation)
-        const exactEntry = STRESS_DICTIONARY[cleanWord] || SINGER_SUPPLEMENT[cleanWord];
-        if (exactEntry) {
+        // Helper to normalize entry format
+        const normalizeEntry = (entry, source = 'dictionary') => {
+          if (!entry) return null;
+          
+          // Handle homographs (arrays) - return first match for now, mark as homograph
+          if (Array.isArray(entry)) {
+            const firstEntry = entry[0];
+            return {
+              stress: firstEntry.stress ?? firstEntry.s,
+              gloss: firstEntry.gloss ?? firstEntry.g ?? '',
+              pos: firstEntry.pos ?? firstEntry.p ?? '',
+              lemma: firstEntry.lemma ?? firstEntry.l ?? '',
+              source: source,
+              isHomograph: true,
+              allEntries: entry,
+              canonicalForm: cleanWord
+            };
+          }
+          
+          // Single entry
           return {
-            stress: exactEntry.stress,
-            gloss: exactEntry.gloss || '',
-            source: exactEntry.source || 'dictionary',
-            canonicalForm: cleanWord  // No change needed
+            stress: entry.stress ?? entry.s,
+            gloss: entry.gloss ?? entry.g ?? '',
+            pos: entry.pos ?? entry.p ?? '',
+            lemma: entry.lemma ?? entry.l ?? '',
+            source: entry.source || source,
+            isHomograph: false,
+            canonicalForm: cleanWord
           };
+        };
+        
+        // Phase 1: Try exact match first (handles все/всё disambiguation)
+        const exactEntry = STRESS_DICTIONARY[cleanWord];
+        if (exactEntry) {
+          return normalizeEntry(exactEntry, 'dictionary');
+        }
+        
+        // Phase 1b: Check SINGER_SUPPLEMENT
+        const supplementEntry = SINGER_SUPPLEMENT[cleanWord];
+        if (supplementEntry) {
+          return normalizeEntry(supplementEntry, 'supplement');
         }
         
         // Phase 2: Word not found — try ё-restoration
@@ -4882,13 +4952,12 @@ const SINGER_SUPPLEMENT = {
             
             const restoredEntry = STRESS_DICTIONARY[candidateWord] || SINGER_SUPPLEMENT[candidateWord];
             if (restoredEntry) {
-              return {
-                stress: restoredEntry.stress,
-                gloss: restoredEntry.gloss || '',
-                source: 'yo-restored',
-                canonicalForm: candidateWord,  // The corrected spelling
-                originalInput: cleanWord       // What user typed
-              };
+              const result = normalizeEntry(restoredEntry, 'yo-restored');
+              if (result) {
+                result.canonicalForm = candidateWord;
+                result.originalInput = cleanWord;
+              }
+              return result;
             }
           }
         }
