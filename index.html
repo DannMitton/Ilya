@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.6 Footer Attribution</title>
+  <title>Ilya — v5.9.7 Logo + Footer Voice</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -307,17 +307,28 @@
       /* Structure defined by children */
     }
     
-    /* Bracket logo */
-    .paper-page[data-template="title"]::before {
-      content: "[ ]";
+    /* Bracket logo [ Ilya ] */
+    .page-logo {
       position: absolute;
       top: 48px;
       left: 72px;
-      font-family: var(--font-mono);
       font-size: 18px;
-      font-weight: 600;
       color: var(--stationery-sage);
-      letter-spacing: 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+    
+    .page-logo .bracket {
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    
+    .page-logo .logo-name {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-style: italic;
+      font-weight: normal;
+      letter-spacing: 0.5px;
     }
     
     /* Title header block */
@@ -3753,22 +3764,22 @@ const SINGER_SUPPLEMENT = {
       },
       
       clear() {
+        // If there's transcribed content, confirm before clearing
+        if (DocumentState.lines.length > 0) {
+          if (!confirm('Clear transcription? This cannot be undone.')) {
+            return;
+          }
+        }
+        
+        // Clear input field
         this.textInput.value = '';
         this.updatePreview();
         
         // Clear document state
         DocumentState.lines = [];
         
-        // Clear the paper and show ghost text
-        const verseContainer = document.getElementById('verseContainer');
-        const ghostText = document.getElementById('ghostText');
-        
-        if (verseContainer) {
-          verseContainer.innerHTML = '';
-        }
-        if (ghostText) {
-          ghostText.classList.remove('hidden');
-        }
+        // Re-render to show empty page with ghost text
+        this.renderToPaper();
         
         this.textInput.focus();
       },
@@ -3927,8 +3938,13 @@ const SINGER_SUPPLEMENT = {
         let headerHTML = '';
         
         if (template === 'title') {
-          // Page 1: Full title block
+          // Page 1: Full title block with logo
           headerHTML = `
+            <div class="page-logo">
+              <span class="bracket">[</span>
+              <span class="logo-name">Ilya</span>
+              <span class="bracket">]</span>
+            </div>
             <header class="page-header-title">
               <h1 class="page-title">${title}</h1>
               <div class="page-metadata">
@@ -3974,8 +3990,8 @@ const SINGER_SUPPLEMENT = {
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This singer's IPA transcription was created by ${userName} using Ilya, a rules engine based on the work of Dr. Craig Grayson, <em>Russian Lyric Diction</em>, University of Washington, 2012.</p>
-              <p>Ilya is free software (AGPL-3.0). Transcriptions are licensed CC BY-NC-SA 4.0: share freely with attribution, but not for commercial use.</p>
+              <p>This singer's IPA transcription was created by ${userName} using <em>Ilya</em>, a rules engine based on the work of Dr. Craig Grayson, <em>Russian Lyric Diction</em>, University of Washington, 2012.</p>
+              <p><em>Ilya</em> is open source, built for singers and teachers. Use it freely, improve it if you can, share what you make. This is a scholarly tool: neither it nor its transcriptions may be sold.</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
@@ -4455,7 +4471,7 @@ const SINGER_SUPPLEMENT = {
       // Regressive palatalization categorical restrictions (Grayson p. 209; Derwing & Priestly pp. 76-87)
       // These consonants BLOCK regressive palatalization — consonants before them do not soften
       // NOTE: Grayson's example сестрёнка /sʲtʲrʲ/ appears to be an error; D&P pp. 85-87 confirms
-      // that р blocks regressive palatalization. Ilya follows D&P: сестрёнка → /strʲ/
+      // that р blocks regressive palatalization. <em>Ilya</em> follows D&P: сестрёнка → /strʲ/
       regressivePalatalizationBlockers: new Set(['р', 'л']), // р and л block regressive palatalization (except doubled)
       
       // Categorical restrictions for regressive palatalization (Grayson p. 209)
@@ -6258,7 +6274,7 @@ const SINGER_SUPPLEMENT = {
         'i:stressed:и': { blurb: 'Stressed ⟨и⟩ is usually pronounced /i/.', citation: 'p. 96', notable: false },
         
         // Entry 8 | Barred-i
-        'ɨ:stressed:ы': { blurb: "Stressed ⟨ы⟩ is pronounced /ɨ/, the close central unrounded vowel. North American English speakers may recognize this vowel in the words 'milk' or 'will' when spoken quickly. Velar-i is as ubiquitous in sung Russian as it is challenging to master. See Ilya's LEARN module for more.", citation: 'pp. 93–95', notable: false },
+        'ɨ:stressed:ы': { blurb: "Stressed ⟨ы⟩ is pronounced /ɨ/, the close central unrounded vowel. North American English speakers may recognize this vowel in the words 'milk' or 'will' when spoken quickly. Velar-i is as ubiquitous in sung Russian as it is challenging to master. See <em>Ilya</em>'s LEARN module for more.", citation: 'pp. 93–95', notable: false },
         
         // Entry 9 | Stressed-u
         'u:stressed:у': { blurb: 'The letter ⟨у⟩ is always pronounced /u/, whether stressed or unstressed.', citation: 'pp. 91–93', notable: false },
@@ -6289,10 +6305,10 @@ const SINGER_SUPPLEMENT = {
         'ɑ:post-stress-immediate:а': { blurb: 'When ⟨а⟩ appears in the syllable immediately following the stress, it is pronounced /ɑ/.', citation: 'pp. 108, 127', notable: false },
         
         // Entry 16 | Turned-v (remote о)
-        'ʌ:remote:о': { blurb: 'When unstressed ⟨о⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Ilya uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
+        'ʌ:remote:о': { blurb: 'When unstressed ⟨о⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. <em>Ilya</em> uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 17 | Turned-v (remote а)
-        'ʌ:remote:а': { blurb: 'When unstressed ⟨а⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. Ilya uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
+        'ʌ:remote:а': { blurb: 'When unstressed ⟨а⟩ is remote from the stress, it reduces to /ʌ/. This is an aspect of akanye /ˈɑ kʌ ɲɪ/, one of the defining features of sung Russian pronunciation. <em>Ilya</em> uses turned-v /ʌ/ rather than schwa /ə/ to avoid confusion with the lip-rounded French vowel.', citation: 'pp. 108, 127', notable: true },
         
         // Entry 18 | Unstressed е → /ɪ/
         'ɪ:ikanye:е': { blurb: 'When ⟨е⟩ is unstressed, it reduces to /ɪ/. This is an aspect of ikanye /ˈi kʌ ɲɪ/, a defining feature of sung Russian pronunciation.', citation: 'pp. 97–107', notable: true },
@@ -6399,7 +6415,7 @@ const SINGER_SUPPLEMENT = {
         'tʃʲ:always-soft:ч': { blurb: 'The letter ⟨ч⟩ /tʃʲ/ is intrinsically palatalized. Grayson notates it with the indivisible trigraph /tʃʲ/.', citation: 'pp. 175–176', notable: false },
         
         // Entry 50 | Intrinsically soft щ
-        'ʃʲʃʲ:always-soft:щ': { blurb: 'The letter ⟨щ⟩ /ʃʲʃʲ/ is intrinsically palatalized and intrinsically geminate. Grayson prefers to notate this soft consonant as /ʃʲʃʲ/ to emphasize that Russians rearticulate the sound, but it is equally valid to notate it as /ʃʲː/ to reduce visual clutter. You may choose your own preference in the Ilya dashboard. Note: a dated Peterburgian or Church Slavonic pronunciation /ʃʲtʃʲ/ exists, but this is not Ilya\'s default for sung Russian.', citation: 'pp. 171–173', notable: false },
+        'ʃʲʃʲ:always-soft:щ': { blurb: 'The letter ⟨щ⟩ /ʃʲʃʲ/ is intrinsically palatalized and intrinsically geminate. Grayson prefers to notate this soft consonant as /ʃʲʃʲ/ to emphasize that Russians rearticulate the sound, but it is equally valid to notate it as /ʃʲː/ to reduce visual clutter. You may choose your own preference in the <em>Ilya</em> dashboard. Note: a dated Peterburgian or Church Slavonic pronunciation /ʃʲtʃʲ/ exists, but this is not <em>Ilya</em>\'s default for sung Russian.', citation: 'pp. 171–173', notable: false },
         
         // ========================================
         // SECTION 5: CONSONANTS — HARD/UNPALATALIZED (Entries 51–69)
@@ -6427,10 +6443,10 @@ const SINGER_SUPPLEMENT = {
         'z:hard:з': { blurb: 'Unpalatalized ⟨з⟩ /z/ is the default when no palatalizing agent follows.', citation: 'p. 140', notable: false },
         
         // Entry 58 | Unpalatalized (\'hard\')-t
-        't:hard:т': { blurb: 'Unpalatalized ⟨т⟩ /t/ is the default when no palatalizing agent follows. Russian [t̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /t/.', citation: 'p. 140', notable: false },
+        't:hard:т': { blurb: 'Unpalatalized ⟨т⟩ /t/ is the default when no palatalizing agent follows. Russian [t̪] is dental (tongue on teeth, not alveolar as in English), but <em>Ilya</em> notates it as plain /t/.', citation: 'p. 140', notable: false },
         
         // Entry 59 | Unpalatalized (\'hard\')-d
-        'd:hard:д': { blurb: 'Unpalatalized ⟨д⟩ /d/ is the default when no palatalizing agent follows. Russian [d̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /d/.', citation: 'p. 146', notable: false },
+        'd:hard:д': { blurb: 'Unpalatalized ⟨д⟩ /d/ is the default when no palatalizing agent follows. Russian [d̪] is dental (tongue on teeth, not alveolar as in English), but <em>Ilya</em> notates it as plain /d/.', citation: 'p. 146', notable: false },
         
         // Entry 60 | Unpalatalized (\'hard\')-p
         'p:hard:п': { blurb: 'Unpalatalized ⟨п⟩ /p/ is the default when no palatalizing agent follows. Russian /p/ is unaspirated (like Italian), unlike English /pʰ/.', citation: 'p. 147', notable: false },
@@ -6457,7 +6473,7 @@ const SINGER_SUPPLEMENT = {
         'm:hard:м': { blurb: 'Unpalatalized ⟨м⟩ /m/ is the default when no palatalizing agent follows.', citation: 'p. 140', notable: false },
         
         // Entry 68 | Unpalatalized (\'hard\')-n
-        'n:hard:н': { blurb: 'Unpalatalized ⟨н⟩ /n/ is the default when no palatalizing agent follows. Russian [n̪] is dental (tongue on teeth, not alveolar as in English), but Ilya notates it as plain /n/.', citation: 'p. 154', notable: false },
+        'n:hard:н': { blurb: 'Unpalatalized ⟨н⟩ /n/ is the default when no palatalizing agent follows. Russian [n̪] is dental (tongue on teeth, not alveolar as in English), but <em>Ilya</em> notates it as plain /n/.', citation: 'p. 154', notable: false },
         
         // Entry 69 | Unpalatalized (\'hard\')-r
         'r:hard:р': { blurb: 'Unpalatalized ⟨р⟩ /r/ is the default when no palatalizing agent follows. Russian /r/ is a trilled alveolar, like Italian or Spanish /r/.', citation: 'p. 155', notable: false },
@@ -6552,11 +6568,11 @@ const SINGER_SUPPLEMENT = {
         'sʲ:final-devoicing:з': { blurb: 'Word-final soft ⟨з⟩ is devoiced to /sʲ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
         'ʃ:final-devoicing:ж': { blurb: 'Word-final ⟨ж⟩ is devoiced to /ʃ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
         'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
-        'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In Ilya, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
-        'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; Ilya uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
+        'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In <em>Ilya</em>, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
+        'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; <em>Ilya</em> uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
         'tːsʌ:reflexive:тся': { blurb: 'The reflexive verb endings ⟨-тся⟩ and ⟨-ться⟩ are both pronounced /tːsʌ/. These clusters resemble the affricate ⟨ц⟩ (/ts/), but have an elongated stop on the /t/ portion (e.g., ⟨боится⟩ → /bɑˈitːsʌ/, ⟨купаться⟩ → /kuˈpɑtːsʌ/). The soft sign in ⟨-ться⟩ has no effect in this construct. Ignore it.', citation: 'pp. 237–238', notable: true },
         'deletion:cluster': { blurb: 'Certain consonant clusters contain "silent" letters that are not pronounced. Common examples: ⟨солнце⟩ → /ˈsontsɨ/ (⟨л⟩ silent), ⟨сердце⟩ → /ˈsʲertsɨ/ (⟨д⟩ silent), ⟨праздник⟩ → /ˈprazʲɲik/ (⟨д⟩ silent), ⟨чувство⟩ → /ˈtʃʲustvʌ/ (first ⟨в⟩ silent), ⟨здравствуйте⟩ → /ˈzdrastvujtʲe/ (first ⟨в⟩ silent).', citation: 'pp. 235–247', notable: true },
-        'none:hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a visual boundary marker: the consonant before it stays hard, and a /j/ glide is articulated before the following vowel (e.g., ⟨съел⟩ → /sjɛɫ/). ⟨Ъ⟩ once appeared at the end of every Russian Cyrillic word ending in a hard consonant; these final hard signs were eliminated by post-1917 spelling reforms (Ilya silently removes them), but hard signs within words still work as described.', citation: 'pp. 192–194', notable: false },
+        'none:hard-sign:ъ': { blurb: 'The hard sign ⟨ъ⟩ has no sound of its own. It serves as a visual boundary marker: the consonant before it stays hard, and a /j/ glide is articulated before the following vowel (e.g., ⟨съел⟩ → /sjɛɫ/). ⟨Ъ⟩ once appeared at the end of every Russian Cyrillic word ending in a hard consonant; these final hard signs were eliminated by post-1917 spelling reforms (<em>Ilya</em> silently removes them), but hard signs within words still work as described.', citation: 'pp. 192–194', notable: false },
         'ʲ:soft-sign:ь': { blurb: 'The soft sign ⟨ь⟩ has no sound of its own, but it causes an obvious sound shift by palatalizing the preceding consonant. When followed by a vowel from the soft series (е, ё, ю, я), a /j/ glide is articulated between the palatalized consonant and the vowel (e.g., ⟨вьюга⟩ → /vʲˈjuɡʌ/). Note: the superscript [ʲ] (palatalization marker) and the baseline /j/ (palatal glide) are distinct symbols and not interchangeable.', citation: 'pp. 195–198', notable: false }
       },
       
@@ -7971,7 +7987,7 @@ const SINGER_SUPPLEMENT = {
       const failures = [];
 
       console.log('═══════════════════════════════════════════════════════════');
-      console.log('Ilya Golden-Master Tests');
+      console.log('<em>Ilya</em> Golden-Master Tests');
       console.log('═══════════════════════════════════════════════════════════');
 
       for (const [category, tests] of Object.entries(GOLDEN_TESTS)) {
