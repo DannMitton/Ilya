@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.9.0 Paper Size Selection</title>
+  <title>Ilya — v5.9.1 Pagination Count</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3011,21 +3011,30 @@ const SINGER_SUPPLEMENT = {
     };
     
     /* ========================================
-       DOCUMENT CONTROLLER (v5.8.2)
-       Paper size selection
+       DOCUMENT CONTROLLER (v5.9.0)
+       Paper size selection + pagination
        ======================================== */
     const DocumentController = {
       section: null,
       header: null,
       activeLabel: null,
       paperSizeBtns: null,
+      pageNumberEl: null,
+      paper: null,
       currentSize: 'letter',
+      
+      // Paper dimensions in pixels (96dpi)
+      PAPER_HEIGHTS: {
+        letter: 1056,  // 11in × 96dpi
+        a4: 1123       // 297mm × 96dpi / 25.4
+      },
       
       init() {
         this.section = document.getElementById('documentSection');
         this.header = document.getElementById('documentHeader');
         this.activeLabel = document.getElementById('documentActive');
         this.paperSizeBtns = document.querySelectorAll('.paper-size-btn');
+        this.pageNumberEl = document.getElementById('pageNumber');
         this.paper = document.querySelector('.paper');
         
         if (!this.section) return;
@@ -3040,6 +3049,11 @@ const SINGER_SUPPLEMENT = {
           btn.addEventListener('click', () => {
             this.setSize(btn.dataset.size);
           });
+        });
+        
+        // Recalculate on window resize
+        window.addEventListener('resize', () => {
+          this.updatePageCount();
         });
       },
       
@@ -3066,14 +3080,50 @@ const SINGER_SUPPLEMENT = {
           this.paper?.removeAttribute('data-size');
         }
         
-        // Remove reflowing class after transition completes
+        // Remove reflowing class and update page count after transition
         setTimeout(() => {
           this.paper?.classList.remove('reflowing');
+          this.updatePageCount();
         }, 400); // 300ms transition + 100ms buffer
       },
       
       getSize() {
         return this.currentSize;
+      },
+      
+      // Calculate page count based on content vs paper height
+      calculatePageCount() {
+        if (!this.paper) return 1;
+        
+        const contentHeight = this.paper.scrollHeight;
+        const visibleHeight = this.paper.clientHeight;
+        
+        // If no overflow, it's 1 page
+        if (contentHeight <= visibleHeight) return 1;
+        
+        // Calculate based on full paper height (not viewport-constrained)
+        const fullPaperHeight = this.PAPER_HEIGHTS[this.currentSize];
+        const pageCount = Math.ceil(contentHeight / fullPaperHeight);
+        
+        return Math.max(1, pageCount);
+      },
+      
+      // Update the page count label
+      updatePageCount() {
+        if (!this.pageNumberEl) return;
+        
+        const count = this.calculatePageCount();
+        
+        // Per Kimi: "1 page", "2 pages", "3+ pages"
+        if (count === 1) {
+          this.pageNumberEl.textContent = '1 page';
+        } else if (count === 2) {
+          this.pageNumberEl.textContent = '2 pages';
+        } else if (count === 3) {
+          this.pageNumberEl.textContent = '3 pages';
+        } else {
+          this.pageNumberEl.textContent = '3+ pages';
+        }
       }
     };
     
@@ -3557,8 +3607,11 @@ const SINGER_SUPPLEMENT = {
           verseContainer.appendChild(verseLine);
         });
         
-        // Remove loading state
-        setTimeout(() => paper.classList.remove('rendering'), 100);
+        // Remove loading state and update page count
+        setTimeout(() => {
+          paper.classList.remove('rendering');
+          DocumentController.updatePageCount();
+        }, 100);
       },
       
       // ========================================
