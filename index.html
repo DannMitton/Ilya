@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.16 Ghost Animation</title>
+  <title>Ilya — v5.10.17 Silent в in вств Cluster</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5099,6 +5099,19 @@ function addAcuteToSyllable(syllable) {
         'солнца': { 'лнц': 'nts' },
         'солнцу': { 'лнц': 'nts' },
         'солнцем': { 'лнц': 'nts' },
+        // здравствуй family: вств → ств (first в silent)
+        'здравствуй': { 'вств': 'stv' },
+        'здравствуйте': { 'вств': 'stv' },
+        'здравствуют': { 'вств': 'stv' },
+        // чувство family: вств → ств (first в silent)
+        'чувство': { 'вств': 'stv' },
+        'чувства': { 'вств': 'stv' },
+        'чувствам': { 'вств': 'stv' },
+        'чувствами': { 'вств': 'stv' },
+        'чувствах': { 'вств': 'stv' },
+        'чувствую': { 'вств': 'stv' },
+        'чувствует': { 'вств': 'stv' },
+        'чувствовать': { 'вств': 'stv' },
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -7283,6 +7296,12 @@ function addAcuteToSyllable(syllable) {
             { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } },
             { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } }
           ],
+          'вств': [
+            { char: 'в', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
+            { char: 'т', ipa: 't', features: { type: 'consonant', soft: false } },
+            { char: 'в', ipa: 'v', features: { type: 'consonant', soft: false } }
+          ],
           // Geminate simplification (Grayson p. 233)
           'сс': [
             { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
@@ -9340,6 +9359,8 @@ function addAcuteToSyllable(syllable) {
         { word: 'счастье', stress: 0, expected: 'ʃʲʃʲɑ sʲtʲjɪ', note: 'сч→ʃʲʃʲ' },
         { word: 'сердце', stress: 0, expected: 'sʲɛr tsɨ', note: 'рдц→рц, д silent' },
         { word: 'солнце', stress: 0, expected: 'son tsɨ', note: 'лнц→нц, л silent' },
+        { word: 'здравствуй', stress: 0, expected: 'zdrɑ stvuj', note: 'вств→ств, first в silent' },
+        { word: 'чувство', stress: 0, expected: 'tʃʲu stvʌ', note: 'вств→ств, first в silent' },
       ],
       'Ё Stress Rule': [
         { word: 'ёлка', stress: 0, expected: 'joɫ kɑ', note: 'ё always stressed' },
