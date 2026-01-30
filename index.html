@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.21 Cross-syllable Voicing Fix</title>
+  <title>Ilya — v5.10.22 Real-time Drag Sync</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8843,10 +8843,39 @@ function addAcuteToSyllable(syllable) {
           );
         }
         
-        // Reset boundary customizations (session-only persistence - v5.10.15)
+        // Reset boundary customizations and restore word stack IPA (v5.10.22)
         if (this.currentWord) {
           const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+          const hadCustomBoundaries = BoundaryStack.hasCustomBoundaries(wordId);
           BoundaryStack.reset(wordId);
+          
+          // Restore word stack IPA to original if it was customized
+          if (hadCustomBoundaries) {
+            const wordStack = document.querySelector(
+              `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`
+            );
+            if (wordStack) {
+              const ipaSpan = wordStack.querySelector('.ipa');
+              if (ipaSpan) {
+                // Restore original IPA from currentWord data
+                const originalSyllables = this.currentWord.syllables;
+                let originalIPA = originalSyllables.map((syl, idx) => {
+                  return syl.isStressed && originalSyllables.length > 1 ? 'ˈ' + syl.ipa : syl.ipa;
+                }).join(' ');
+                
+                // Preserve clitic tie bars
+                const isProclitic = this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true;
+                const isEnclitic = this.currentWord.isEnclitic === 'true' || this.currentWord.isEnclitic === true;
+                if (isProclitic) {
+                  originalIPA = originalIPA + '‿';
+                } else if (isEnclitic) {
+                  originalIPA = '‿' + originalIPA;
+                }
+                
+                ipaSpan.textContent = originalIPA;
+              }
+            }
+          }
         }
         
         // Reset state
@@ -9170,6 +9199,31 @@ function addAcuteToSyllable(syllable) {
         this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
           `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
+        
+        // Sync word stack IPA in main document (v5.10.22)
+        const wordStack = document.querySelector(
+          `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`
+        );
+        if (wordStack) {
+          const ipaSpan = wordStack.querySelector('.ipa');
+          if (ipaSpan) {
+            // Build display IPA with stress marks and spaces
+            let displayIPA = displaySyllables.map((syl, idx) => {
+              return syl.isStressed && displaySyllables.length > 1 ? 'ˈ' + syl.ipa : syl.ipa;
+            }).join(' ');
+            
+            // Preserve clitic tie bars
+            const isProclitic = this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true;
+            const isEnclitic = this.currentWord.isEnclitic === 'true' || this.currentWord.isEnclitic === true;
+            if (isProclitic) {
+              displayIPA = displayIPA + '‿';
+            } else if (isEnclitic) {
+              displayIPA = '‿' + displayIPA;
+            }
+            
+            ipaSpan.textContent = displayIPA;
+          }
+        }
       },
       
       /**
