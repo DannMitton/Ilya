@@ -8787,7 +8787,6 @@ function addAcuteToSyllable(syllable) {
             }
 
         // Render syllable buttons with BoundaryStack offsets (v5.10.23)
-        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
         const displaySyllables = BoundaryStack.applyOffsets(wordId, wordData.syllables);
         const buttonsDisabled = hasYo && syllableCount > 1;
         
