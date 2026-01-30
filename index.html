@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.23 Persistent Boundary Drag</title>
+  <title>Ilya — v5.10.24 Fix Popup Display</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3449,6 +3449,11 @@ function formatGlossForPopup(gloss, pos, lemma) {
         const displayGloss = semanticGloss || '';
         const grammarPart = grammarHint ? `(${grammarHint})` : '';
         
+        // Avoid duplicating POS if gloss already starts with it
+        if (pos && displayGloss.toLowerCase().startsWith(pos.toLowerCase())) {
+          return `${displayGloss} ${grammarPart}`.trim();
+        }
+        
         return pos 
             ? `${pos} ${displayGloss} ${grammarPart}`.trim()
             : `${displayGloss} ${grammarPart}`.trim();
@@ -3456,6 +3461,12 @@ function formatGlossForPopup(gloss, pos, lemma) {
     
     // Clean semantic gloss — extract clean translation, add POS
     const cleanedGloss = extractCleanGloss(gloss);
+    
+    // Avoid duplicating POS if gloss already starts with it (v5.10.23)
+    if (pos && cleanedGloss.toLowerCase().startsWith(pos.toLowerCase())) {
+      return cleanedGloss;
+    }
+    
     return pos ? `${pos} ${cleanedGloss}` : cleanedGloss;
 }
 
@@ -8757,7 +8768,6 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Initialize all UI with current staged/committed state (v5.4.2)
-        // This now applies BoundaryStack offsets for syllable display (v5.10.23)
         this.updateAllUI();
         
         // Additional word-type specific UI setup
@@ -8776,7 +8786,24 @@ function addAcuteToSyllable(syllable) {
                 this.elements.stressSourceModule.style.display = 'block';
             }
 
-        // Populate gloss (Cyrillic and syllables handled in updateAllUI)
+        // Render syllable buttons with BoundaryStack offsets (v5.10.23)
+        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, wordData.syllables);
+        const buttonsDisabled = hasYo && syllableCount > 1;
+        
+        this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+        ).join('');
+        
+        // Show customized state and register reset handler
+        this._updateCustomizedState();
+        
+        // Populate Cyrillic display and gloss
+        const syllabifiedCyrillic = wordData.syllables.map(s => 
+          s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
+        ).join(' ');
+        
+        this.elements.cyrillic.textContent = syllabifiedCyrillic;
         this.elements.glossInline.textContent = formatGlossForPopup(wordData.gloss, wordData.pos, wordData.lemma);
         
         // Always hide top clitic badge (info now in Why section)
