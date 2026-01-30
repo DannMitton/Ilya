@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.10 Clitic arrows and IPA fusion</title>
+  <title>Ilya — v5.11.11 Phase 1 bug fixes (K, L partial)</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4797,8 +4797,12 @@ function addAcuteToSyllable(syllable) {
         return DocumentState.lines.map((line, lineIdx) => {
           // PHASE 1: Transcribe all words, store ipaUnderlying
           const transcribedWords = line.map((wordData, wordIdx) => {
-            const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—\-]/g, '');
-            const punct = wordData.cyrillic.replace(cleanWord, '');
+            // Capture trailing punctuation explicitly (v5.11.11 - fixes ghost text bug K)
+            const trailingPunctMatch = wordData.cyrillic.match(/[.,!?;:"""'']+$/);
+            const punct = trailingPunctMatch ? trailingPunctMatch[0] : '';
+            const cleanWord = wordData.cyrillic
+              .replace(/[.,!?;:"""'']+$/, '')  // Remove trailing punct
+              .replace(/[-–—]/g, '');           // Remove hyphens/dashes (keep word intact)
             
             // Detect if line ends with question mark
             const lineText = line.map(w => w.cyrillic).join(' ');
@@ -4884,8 +4888,9 @@ function addAcuteToSyllable(syllable) {
             }
             
             // Create IPA content (syllables with stress marks, spaces between)
+            // v5.11.11: Show stress marks on monosyllables too (Issue L)
             let ipaCore = tw.syllables.map(s => {
-              return s.isStressed && tw.syllables.length > 1 ? 'ˈ' + s.ipa : s.ipa;
+              return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
             }).join(' ');
             
             // Store the actual IPA for fusion (v5.11.10)
