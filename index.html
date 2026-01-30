@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.8 Acute Stress Marks on Cyrillic</title>
+  <title>Ilya — v5.10.9 Gloss Truncation + ё Lookup</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3245,7 +3245,7 @@ function formatGlossForDisplay(gloss, pos, lemma) {
             // Look up lemma's semantic gloss
             const semanticGloss = getLemmaGloss(effectiveLemma);
             if (semanticGloss) {
-                return semanticGloss;
+                return truncateGloss(semanticGloss, 5);
             }
             // Fallback: show lemma reference
             return `→ ${effectiveLemma}`;
@@ -3253,8 +3253,18 @@ function formatGlossForDisplay(gloss, pos, lemma) {
         return '';
     }
     
-    // Clean, semantic gloss — return as-is
-    return gloss;
+    // Clean, semantic gloss — truncate to 5 words max for PDF display
+    return truncateGloss(gloss, 5);
+}
+
+/**
+ * Truncate gloss to N words max, adding ellipsis if needed
+ */
+function truncateGloss(gloss, maxWords) {
+    if (!gloss) return '';
+    const words = gloss.split(/\s+/);
+    if (words.length <= maxWords) return gloss;
+    return words.slice(0, maxWords).join(' ') + '…';
 }
 
 /**
@@ -5190,6 +5200,22 @@ function addAcuteToSyllable(syllable) {
               }
               return result;
             }
+          }
+        }
+        
+        // Phase 2b: Try ё→е normalization
+        // Some dictionaries store the е-form even when ё is correct
+        // If user types ёлка but dictionary has елка, try that
+        if (cleanWord.includes('ё')) {
+          const normalizedWord = cleanWord.replace(/ё/g, 'е');
+          const normalizedEntry = STRESS_DICTIONARY[normalizedWord] || SINGER_SUPPLEMENT[normalizedWord];
+          if (normalizedEntry) {
+            const result = normalizeEntry(normalizedEntry, 'yo-normalized');
+            if (result) {
+              result.canonicalForm = cleanWord; // Keep the ё form as canonical
+              result.originalInput = cleanWord;
+            }
+            return result;
           }
         }
         
