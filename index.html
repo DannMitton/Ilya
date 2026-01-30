@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.19 Interactive IPA Header</title>
+  <title>Ilya — v5.10.20 Voicing Assimilation in Ribbon</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6306,6 +6306,41 @@ function addAcuteToSyllable(syllable) {
           syl.ipa = this.applyRegressiveVoicing(syl.ipa);
         });
         
+        // Sync transcriptionLog to match surface IPA after voicing assimilation (v5.10.20)
+        // The log was built before assimilation, so consonant entries may have stale IPA
+        transcriptionLog.forEach(entry => {
+          if (entry.features?.type === 'consonant') {
+            const originalIpa = entry.ipa;
+            // Check if this consonant was devoiced
+            if (this.voicedToVoiceless[originalIpa]) {
+              // Look at what's in the syllable data to see if it changed
+              const sylData = syllableData[entry.syllableIndex];
+              if (sylData && !sylData.ipa.includes(originalIpa)) {
+                // The original voiced consonant is not in the syllable anymore
+                // Check if the devoiced version is there
+                const devoiced = this.voicedToVoiceless[originalIpa];
+                if (sylData.ipa.includes(devoiced)) {
+                  entry.ipa = devoiced;
+                  entry.features.voicingAssimilation = true;
+                  entry.features.devoiced = true;
+                }
+              }
+            }
+            // Check if this consonant was voiced
+            if (this.voicelessToVoiced[originalIpa]) {
+              const sylData = syllableData[entry.syllableIndex];
+              if (sylData && !sylData.ipa.includes(originalIpa)) {
+                const voiced = this.voicelessToVoiced[originalIpa];
+                if (sylData.ipa.includes(voiced)) {
+                  entry.ipa = voiced;
+                  entry.features.voicingAssimilation = true;
+                  entry.features.voiced = true;
+                }
+              }
+            }
+          }
+        });
+        
         // Step 3-4 will be special clusters and palatalization (future phases)
         
         // Final consonant devoicing (Grayson Ch. 4 Sec. 4, pp. 199-202)
@@ -7217,6 +7252,15 @@ function addAcuteToSyllable(syllable) {
         's:final-devoicing:з': { blurb: 'Word-final ⟨з⟩ is devoiced to /s/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
         'sʲ:final-devoicing:з': { blurb: 'Word-final soft ⟨з⟩ is devoiced to /sʲ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
         'ʃ:final-devoicing:ж': { blurb: 'Word-final ⟨ж⟩ is devoiced to /ʃ/. In Russian, voiced obstruents at the end of a word or phrase become voiceless.', citation: 'p. 199', notable: false },
+        
+        // Regressive devoicing within words (v5.10.20)
+        'f:regressive-devoicing:в': { blurb: '⟨в⟩ is devoiced to /f/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant (e.g., ⟨завтра⟩ → /ˈzɑftrʌ/).', citation: 'pp. 215–221', notable: false },
+        'p:regressive-devoicing:б': { blurb: '⟨б⟩ is devoiced to /p/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'k:regressive-devoicing:г': { blurb: '⟨г⟩ is devoiced to /k/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        't:regressive-devoicing:д': { blurb: '⟨д⟩ is devoiced to /t/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        's:regressive-devoicing:з': { blurb: '⟨з⟩ is devoiced to /s/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'ʃ:regressive-devoicing:ж': { blurb: '⟨ж⟩ is devoiced to /ʃ/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        
         'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
         'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In <em>Ilya</em>, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
         'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; <em>Ilya</em> uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
@@ -7290,11 +7334,29 @@ function addAcuteToSyllable(syllable) {
       
       // Look up blurb data for a transcriptionLog entry
       lookupBlurb(entry) {
-        const rule = this.deriveRule(entry.features, entry.char);
-        const key = `${entry.ipa}:${rule}:${entry.char}`;
+        const { features, char, ipa } = entry;
+        
+        // Check for regressive voicing assimilation (v5.10.20)
+        if (features?.voicingAssimilation && features?.devoiced) {
+          const key = `${ipa}:regressive-devoicing:${char}`;
+          if (this.blurbs[key]) {
+            return this.blurbs[key];
+          }
+        }
+        
+        // Check for final devoicing
+        if (features?.finalDevoicing) {
+          const key = `${ipa}:final-devoicing:${char}`;
+          if (this.blurbs[key]) {
+            return this.blurbs[key];
+          }
+        }
+        
+        const rule = this.deriveRule(features, char);
+        const key = `${ipa}:${rule}:${char}`;
         
         return this.blurbs[key] || {
-          blurb: `${entry.char} → ${entry.ipa}`,
+          blurb: `${char} → ${ipa}`,
           citation: null,
           notable: false
         };
