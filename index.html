@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.15 Consonant Drag Phase 1</title>
+  <title>Ilya — v5.10.16 Ghost Animation</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8919,14 +8919,84 @@ function addAcuteToSyllable(syllable) {
           return;
         }
         
-        // Shift the boundary
-        const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
-        const shiftDir = direction === 'left' ? 'left' : 'right';
-        BoundaryStack.shiftBoundary(wordId, boundaryIdx, shiftDir, syllableCount);
+        // Get button positions for animation
+        const sourceBtn = this.elements.syllableDisplay.querySelector(`[data-syllable-index="${syllableIdx}"]`);
+        const targetIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx + 1;
+        const targetBtn = this.elements.syllableDisplay.querySelector(`[data-syllable-index="${targetIdx}"]`);
         
-        // Update display
-        this._updateSyllableDisplay();
-        this._updateCustomizedState();
+        if (sourceBtn && targetBtn) {
+          // Animate the ghost consonant
+          this._animateConsonantGhost(consonantToShed, sourceBtn, targetBtn, direction, () => {
+            // Shift the boundary after animation completes
+            const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
+            const shiftDir = direction === 'left' ? 'left' : 'right';
+            BoundaryStack.shiftBoundary(wordId, boundaryIdx, shiftDir, syllableCount);
+            
+            // Update display
+            this._updateSyllableDisplay();
+            this._updateCustomizedState();
+          });
+        } else {
+          // Fallback: no animation, just update
+          const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
+          const shiftDir = direction === 'left' ? 'left' : 'right';
+          BoundaryStack.shiftBoundary(wordId, boundaryIdx, shiftDir, syllableCount);
+          this._updateSyllableDisplay();
+          this._updateCustomizedState();
+        }
+      },
+      
+      /**
+       * Animate a ghost consonant from source to target button
+       */
+      _animateConsonantGhost(consonant, sourceBtn, targetBtn, direction, onComplete) {
+        // Get positions
+        const sourceRect = sourceBtn.getBoundingClientRect();
+        const targetRect = targetBtn.getBoundingClientRect();
+        
+        // Calculate start and end positions
+        // For left drag: consonant leaves from left edge of source, arrives at right edge of target
+        // For right drag: consonant leaves from right edge of source, arrives at left edge of target
+        const startX = direction === 'left' 
+          ? sourceRect.left 
+          : sourceRect.right - 20;
+        const startY = sourceRect.top + sourceRect.height / 2 - 15;
+        
+        const endX = direction === 'left'
+          ? targetRect.right - 20
+          : targetRect.left;
+        const endY = targetRect.top + targetRect.height / 2 - 15;
+        
+        // Create ghost element
+        const ghost = document.createElement('div');
+        ghost.className = 'consonant-ghost';
+        ghost.textContent = consonant;
+        ghost.style.left = `${startX}px`;
+        ghost.style.top = `${startY}px`;
+        document.body.appendChild(ghost);
+        this._ghostElement = ghost;
+        
+        // Dim the source button
+        sourceBtn.classList.add('dragging');
+        
+        // Highlight target button
+        targetBtn.classList.add('drag-target');
+        
+        // Trigger animation after a frame (to ensure initial position is set)
+        requestAnimationFrame(() => {
+          ghost.style.transition = 'left 0.25s ease-out, top 0.25s ease-out';
+          ghost.style.left = `${endX}px`;
+          ghost.style.top = `${endY}px`;
+          ghost.classList.add('valid');
+        });
+        
+        // Cleanup and callback after animation
+        setTimeout(() => {
+          sourceBtn.classList.remove('dragging');
+          targetBtn.classList.remove('drag-target');
+          this._cleanupGhost();
+          onComplete();
+        }, 260);
       },
       
       /**
