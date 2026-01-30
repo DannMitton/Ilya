@@ -1532,13 +1532,13 @@
     /* Silent letter styling (deletion clusters) */
     .phoneme-row.silent-letter .phoneme-cyr {
       color: var(--ilya-text-caption);
-      text-decoration: line-through;
-      text-decoration-color: var(--ilya-text-caption);
     }
     
     .phoneme-row.silent-letter .phoneme-ipa {
       color: var(--ilya-text-caption);
       font-style: italic;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
     }
     
     /* Blurb content (accordion) */
@@ -8130,6 +8130,9 @@ function addAcuteToSyllable(syllable) {
             // Build attributes
             const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
             
+            // Display text for IPA column
+            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
+            
             html += `
               <div class="${rowClasses}"${syllableAttr}
                    tabindex="0"
@@ -8139,7 +8142,7 @@ function addAcuteToSyllable(syllable) {
                 <div class="phoneme-mapping">
                   <span class="phoneme-cyr">${entry.char}</span>
                   <span class="phoneme-arrow">›</span>
-                  <span class="phoneme-ipa">${entry.ipa || '∅'}</span>
+                  <span class="phoneme-ipa">${ipaDisplay}</span>
                 </div>
                 <div class="phoneme-blurb-overlay">
                   <div class="blurb-text">${blurb.blurb}</div>
