@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.12 6/8 row layout</title>
+  <title>Ilya — v5.11.13 curated glosses + 6/8 layout</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3452,9 +3452,163 @@ function getLemmaGloss(lemma) {
 }
 
 /**
+ * Curated short glosses for common words (Issue P)
+ * These override verbose dictionary glosses to maintain column alignment.
+ * Key = lemma (base form), so inflected forms inherit the gloss.
+ */
+const CURATED_GLOSSES = new Map([
+    // Personal pronouns
+    ['я', 'I'],
+    ['ты', 'you'],
+    ['он', 'he'],
+    ['она', 'she'],
+    ['оно', 'it'],
+    ['мы', 'we'],
+    ['вы', 'you (pl.)'],
+    ['они', 'they'],
+    // Pronoun oblique forms (when lemma lookup fails)
+    ['меня', 'me'],
+    ['мне', 'to me'],
+    ['мной', 'by me'],
+    ['мною', 'by me'],
+    ['тебя', 'you'],
+    ['тебе', 'you'],
+    ['тобой', 'by you'],
+    ['тобою', 'by you'],
+    ['его', 'him/his'],
+    ['него', 'him'],
+    ['ему', 'to him'],
+    ['нему', 'to him'],
+    ['им', 'by him'],
+    ['ним', 'him'],
+    ['её', 'her'],
+    ['неё', 'her'],
+    ['ей', 'to her'],
+    ['ней', 'her'],
+    ['ею', 'by her'],
+    ['нею', 'by her'],
+    ['нас', 'us'],
+    ['нам', 'to us'],
+    ['нами', 'by us'],
+    ['вас', 'you (pl.)'],
+    ['вам', 'to you'],
+    ['вами', 'by you'],
+    ['их', 'them/their'],
+    ['них', 'them'],
+    ['ими', 'by them'],
+    ['ними', 'them'],
+    // Possessives (all genders/cases)
+    ['мой', 'my'],
+    ['моя', 'my'],
+    ['моё', 'my'],
+    ['мои', 'my'],
+    ['моего', 'my'],
+    ['моей', 'my'],
+    ['моему', 'my'],
+    ['моим', 'my'],
+    ['моими', 'my'],
+    ['моих', 'my'],
+    ['мою', 'my'],
+    ['твой', 'your'],
+    ['твоя', 'your'],
+    ['твоё', 'your'],
+    ['твои', 'your'],
+    ['твоего', 'your'],
+    ['твоей', 'your'],
+    ['твоему', 'your'],
+    ['твоим', 'your'],
+    ['твоими', 'your'],
+    ['твоих', 'your'],
+    ['твою', 'your'],
+    ['свой', 'one\'s own'],
+    ['наш', 'our'],
+    ['ваш', 'your (pl.)'],
+    // Demonstratives
+    ['этот', 'this'],
+    ['эта', 'this'],
+    ['это', 'this/it is'],
+    ['эти', 'these'],
+    ['тот', 'that'],
+    ['та', 'that'],
+    ['то', 'that'],
+    ['те', 'those'],
+    // Interrogatives
+    ['что', 'what/that'],
+    ['чего', 'what'],
+    ['чему', 'to what'],
+    ['чем', 'what (instr.)'],
+    ['кто', 'who'],
+    ['кого', 'whom'],
+    ['кому', 'to whom'],
+    ['кем', 'by whom'],
+    ['чей', 'whose'],
+    ['чья', 'whose'],
+    ['чьё', 'whose'],
+    ['чьи', 'whose'],
+    // Common adverbs
+    ['где', 'where'],
+    ['как', 'how'],
+    ['когда', 'when'],
+    ['здесь', 'here'],
+    ['там', 'there'],
+    ['сюда', 'hither'],
+    ['туда', 'thither'],
+    ['тут', 'here'],
+    ['уже', 'already'],
+    ['уж', 'already'],
+    ['ещё', 'still, yet'],
+    ['еще', 'still, yet'],
+    // Quantifiers
+    ['весь', 'all'],
+    ['вся', 'all'],
+    ['всё', 'everything'],
+    ['все', 'everyone'],
+    ['всех', 'all'],
+    ['всем', 'all'],
+    ['сам', 'oneself'],
+    ['сама', 'herself'],
+    ['само', 'itself'],
+    ['сами', 'themselves'],
+    ['один', 'one, alone'],
+    ['одна', 'one, alone'],
+    ['одно', 'one, alone'],
+    // Common verbs
+    ['быть', 'to be'],
+    ['есть', 'is/to eat'],
+    ['нет', 'no/there is no'],
+    // Preposition-like
+    ['между', 'between'],
+    ['меж', 'between'],
+    ['ради', 'for the sake of'],
+    // Numbers  
+    ['два', 'two'],
+    ['три', 'three'],
+    // Common short words in vocal lit
+    ['день', 'day'],
+    ['ночь', 'night'],
+    ['путь', 'path, way'],
+    ['жизнь', 'life'],
+    ['смерть', 'death'],
+    ['любовь', 'love'],
+    ['душа', 'soul'],
+    ['сердце', 'heart'],
+    ['час', 'hour'],
+    ['год', 'year'],
+    ['век', 'century, age'],
+]);
+
+/**
  * Format gloss for word-stack display (minimal, translation only)
  */
-function formatGlossForDisplay(gloss, pos, lemma) {
+function formatGlossForDisplay(gloss, pos, lemma, word) {
+    // Check curated glosses first (word form, then lemma)
+    if (word && CURATED_GLOSSES.has(word.toLowerCase())) {
+        return CURATED_GLOSSES.get(word.toLowerCase());
+    }
+    if (lemma && CURATED_GLOSSES.has(lemma.toLowerCase())) {
+        return CURATED_GLOSSES.get(lemma.toLowerCase());
+    }
+    
     if (!gloss) return '';
     
     // First, try to extract a clean translation from verbose patterns
@@ -4781,7 +4935,7 @@ function addAcuteToSyllable(syllable) {
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${tw.isProclitic || tw.isEnclitic 
                 ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
-                : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma)}</span>
+                : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
             </div>
           `;
         }).join('');
