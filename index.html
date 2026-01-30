@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.25 Dynamic Ribbon + Footer</title>
+  <title>Ilya — v5.11.0 Flat Footer Controls</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1418,58 +1418,130 @@
        Content First, Control Second redesign
        ======================================== */
     
-    .refine-analysis-toggle {
+    /* ========================================
+       POPUP FOOTER CONTROLS (v5.11 - Flat Structure)
+       Replaces accordion with contextual rows
+       ======================================== */
+    
+    .popup-footer-controls {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .footer-control-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      padding: 12px 16px;
-      margin-top: 16px;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--ilya-binding);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    
+    .footer-label {
+      color: var(--ilya-text-secondary);
+      font-weight: 500;
+    }
+    
+    .footer-label .next-word {
+      color: var(--ilya-text-primary);
+      font-style: italic;
+    }
+    
+    /* Variant row (ё toggle) */
+    .variant-row {
+      background: linear-gradient(135deg, var(--ilya-binding) 0%, rgba(122, 158, 126, 0.08) 100%);
+    }
+    
+    .variant-control {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .variant-control .segment {
+      min-width: 36px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .variant-control .segment[data-variant="yo"].active {
+      background: var(--ilya-accent);
+      color: white;
+    }
+    
+    .variant-control .segment[data-variant="ye"].active {
+      background: var(--ilya-text-muted);
+      color: white;
+    }
+    
+    /* Assimilation row */
+    .assimilation-row {
+      background: var(--ilya-binding);
+    }
+    
+    .assimilation-row.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    .assimilation-control {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .assimilation-control .segment {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+    
+    /* Toast notification for ё warning */
+    .yo-toast {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 16px;
+      background: var(--ilya-text-primary);
+      color: white;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transform: translateY(100%);
+      transition: transform 250ms var(--ease);
+      border-radius: 0 0 16px 16px;
+      z-index: 10;
+    }
+    
+    .yo-toast.visible {
+      transform: translateY(0);
+    }
+    
+    .yo-toast .undo-btn {
       background: transparent;
-      border: 1px solid var(--ilya-accent);
-      border-radius: 6px;
-      color: var(--ilya-accent);
-      font-size: 0.875rem;
-      font-family: inherit;
+      border: 1px solid white;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: all 150ms var(--ease);
+      transition: background 150ms;
+    }
+    
+    .yo-toast .undo-btn:hover {
+      background: rgba(255,255,255,0.15);
     }
 
-    .refine-analysis-toggle:hover {
-      background: var(--ilya-accent-light);
-    }
-
-    .disclosure-chevron {
-      font-size: 0.75rem;
-      transition: transform 200ms var(--ease);
-    }
-
-    .refine-analysis-toggle.expanded .disclosure-chevron {
-      transform: rotate(180deg);
+    /* Legacy accordion styles - keeping for gradual removal */
+    .refine-analysis-toggle {
+      display: none; /* Hidden in v5.11 */
     }
 
     .refine-panel {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 300ms var(--ease);
-    }
-
-    .refine-panel.expanded {
-      grid-template-rows: 1fr;
-    }
-
-    .refine-panel-inner {
-      overflow: hidden;
-      min-height: 0;
-      padding-top: 0;
-    }
-
-    .refine-panel.expanded .refine-panel-inner {
-      padding-top: 1rem;
-      max-height: 40vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      display: none; /* Hidden in v5.11 */
     }
 
     /* ========================================
@@ -1895,14 +1967,16 @@
       border-color: var(--ink-secondary);
     }
     
-    /* Hairline separator between modules */
+    /* Hairline separator between modules - HIDDEN IN v5.11 */
     .phrase-boundary-module {
+      display: none !important; /* Hidden in v5.11 (moved to assimilation row) */
       padding-top: 0.5rem;
       border-top: 1px solid #E5E7EB;
     }
     
-    /* ё toggle module */
+    /* ё toggle module - HIDDEN IN v5.11 (moved to variant row) */
     .yo-toggle-module {
+      display: none !important; /* Hidden in v5.11 */
       margin-bottom: 0.5rem;
       padding: 0.5rem 8px 0;
       border-top: 1px solid #E5E7EB;
@@ -2976,17 +3050,46 @@
           </div>
         </div>
         
-        <!-- TIER 2: THE CONTROLS (collapsed by default) -->
-        <button class="refine-analysis-toggle" id="refineAnalysisToggle">
+        <!-- FOOTER CONTROLS (v5.11 - Flat Structure) -->
+        <div class="popup-footer-controls">
+          
+          <!-- Clitic banner (if applicable) - moved out of accordion -->
+          <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
+          
+          <!-- Variant row (ё toggle) - only shown if word has е/ё -->
+          <div class="footer-control-row variant-row" id="variantRow" style="display: none;">
+            <span class="footer-label">Variant:</span>
+            <div class="segmented-control variant-control" id="variantButtons">
+              <button class="segment" id="variantYo" data-variant="yo">ё</button>
+              <button class="segment" id="variantYe" data-variant="ye">е</button>
+            </div>
+          </div>
+          
+          <!-- Assimilation row - only shown if not last word in line -->
+          <div class="footer-control-row assimilation-row" id="assimilationRow" style="display: none;">
+            <span class="footer-label">Link to "<span class="next-word" id="nextWordLabel">—</span>":</span>
+            <div class="segmented-control assimilation-control" id="assimilationButtons">
+              <button class="segment" id="assimilationLinked" data-boundary="soft">Linked</button>
+              <button class="segment" id="assimilationSeparated" data-boundary="hard">Separated</button>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Toast for ё warning -->
+        <div class="yo-toast" id="yoToast">
+          <span>ё → е changes pronunciation</span>
+          <button class="undo-btn" id="yoUndoBtn">Undo</button>
+        </div>
+        
+        <!-- OLD ACCORDION (hidden in v5.11, kept for reference) -->
+        <button class="refine-analysis-toggle" id="refineAnalysisToggle" style="display: none;">
           Refine Analysis <span class="disclosure-chevron">▼</span>
         </button>
         
-        <div class="refine-panel" id="refinePanel">
+        <div class="refine-panel" id="refinePanel" style="display: none;">
           <div class="refine-panel-inner">
-            <!-- Clitic banner (if applicable) -->
-            <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
-            
-            <!-- Stress source module -->
+            <!-- Stress source module (will move to provenance badges in v5.12) -->
             <div class="stress-source-module" id="stressSourceModule">
               <div class="module-header">
                 <span class="module-label">Stress source</span>
@@ -2999,7 +3102,7 @@
               </div>
             </div>
             
-            <!-- ё toggle module (only shown if word contains е or ё) -->
+            <!-- ё toggle module (MOVED to Variant row in v5.11) -->
             <div class="yo-toggle-module" id="yoToggleModule" style="display: none;">
               <div class="module-header">
                 <span class="module-label">Spelling</span>
@@ -3015,7 +3118,7 @@
               </div>
             </div>
             
-            <!-- Phrase boundary module -->
+            <!-- Phrase boundary module (MOVED to Assimilation row in v5.11) -->
             <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
               <div class="module-header">
                 <span class="module-label">Phrase boundary</span>
@@ -7884,13 +7987,13 @@ function addAcuteToSyllable(syllable) {
           cyrillic: document.getElementById('popupCyrillic'),
           glossInline: document.getElementById('glossInline'),
           // REMOVED IN v5.5 REDESIGN: whyToggle, whyPanel, citationRule, citationRef
-          // Refine Analysis disclosure (v5.5)
+          // Refine Analysis disclosure (v5.5) - HIDDEN IN v5.11
           refineToggle: document.getElementById('refineAnalysisToggle'),
           refinePanel: document.getElementById('refinePanel'),
           cliticBadge: document.getElementById('cliticBadge'),
           cliticType: document.getElementById('cliticType'),
           whyCliticBanner: document.getElementById('whyCliticBanner'),
-          // Compact modules (v5.4.2)
+          // Compact modules (v5.4.2) - MOVING TO FLAT FOOTER IN v5.11
           stressSourceModule: document.getElementById('stressSourceModule'),
           stressStagedIndicator: document.getElementById('stressStagedIndicator'),
           stressSourceDictionary: document.getElementById('stressSourceDictionary'),
@@ -7900,12 +8003,22 @@ function addAcuteToSyllable(syllable) {
           boundaryStagedIndicator: document.getElementById('boundaryStagedIndicator'),
           boundaryLinked: document.getElementById('boundaryLinked'),
           boundarySeparated: document.getElementById('boundarySeparated'),
-          // ё toggle module (v5.8)
+          // ё toggle module (v5.8) - OLD LOCATION
           yoToggleModule: document.getElementById('yoToggleModule'),
           yoCurrentForm: document.getElementById('yoCurrentForm'),
           yoToggleBtn: document.getElementById('yoToggleBtn'),
           yoToggleLabel: document.getElementById('yoToggleLabel'),
           yoWarning: document.getElementById('yoWarning'),
+          // NEW: Footer controls (v5.11)
+          variantRow: document.getElementById('variantRow'),
+          variantYo: document.getElementById('variantYo'),
+          variantYe: document.getElementById('variantYe'),
+          assimilationRow: document.getElementById('assimilationRow'),
+          nextWordLabel: document.getElementById('nextWordLabel'),
+          assimilationLinked: document.getElementById('assimilationLinked'),
+          assimilationSeparated: document.getElementById('assimilationSeparated'),
+          yoToast: document.getElementById('yoToast'),
+          yoUndoBtn: document.getElementById('yoUndoBtn'),
           // Shared commit footer (v5.4.2)
           sharedCommitFooter: document.getElementById('sharedCommitFooter'),
           sharedApplyBtn: document.getElementById('sharedApplyBtn'),
@@ -7979,10 +8092,41 @@ function addAcuteToSyllable(syllable) {
           }
         });
         
-        // ё toggle button handler (v5.8)
+        // ё toggle button handler (v5.8) - OLD LOCATION
         if (this.elements.yoToggleBtn) {
           this.elements.yoToggleBtn.addEventListener('click', () => {
             this.handleYoToggle();
+          });
+        }
+        
+        // NEW: Variant row handlers (v5.11)
+        if (this.elements.variantYo) {
+          this.elements.variantYo.addEventListener('click', () => {
+            this.handleVariantToggle('yo');
+          });
+        }
+        if (this.elements.variantYe) {
+          this.elements.variantYe.addEventListener('click', () => {
+            this.handleVariantToggle('ye');
+          });
+        }
+        
+        // NEW: Assimilation row handlers (v5.11)
+        if (this.elements.assimilationLinked) {
+          this.elements.assimilationLinked.addEventListener('click', () => {
+            this.handleAssimilationToggle('soft');
+          });
+        }
+        if (this.elements.assimilationSeparated) {
+          this.elements.assimilationSeparated.addEventListener('click', () => {
+            this.handleAssimilationToggle('hard');
+          });
+        }
+        
+        // NEW: Toast undo handler (v5.11)
+        if (this.elements.yoUndoBtn) {
+          this.elements.yoUndoBtn.addEventListener('click', () => {
+            this.undoYoToggle();
           });
         }
         
@@ -8814,6 +8958,175 @@ function addAcuteToSyllable(syllable) {
         this.elements.yoToggleLabel.textContent = buttonLabel;
         this.elements.yoWarning.style.display = showWarning ? 'block' : 'none';
       },
+      
+      // ========================================
+      // NEW FOOTER CONTROLS (v5.11)
+      // Flat structure replacing accordion
+      // ========================================
+      
+      /**
+       * Populate variant row (ё toggle) - v5.11
+       * Only shown if word contains е or ё
+       */
+      populateVariantRow(wordData) {
+        const cyrillic = wordData.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const hasYe = cyrillic.includes('е') || cyrillic.includes('Е');
+        
+        // Hide if word has neither е nor ё
+        if (!hasYo && !hasYe) {
+          this.elements.variantRow.style.display = 'none';
+          return;
+        }
+        
+        this.elements.variantRow.style.display = 'flex';
+        
+        // Set active state based on current form
+        this.elements.variantYo.classList.toggle('active', hasYo);
+        this.elements.variantYe.classList.toggle('active', !hasYo && hasYe);
+        
+        // Store state for undo
+        this._yoStateBeforeToggle = hasYo ? 'yo' : 'ye';
+      },
+      
+      /**
+       * Populate assimilation row - v5.11
+       * Only shown if not last word in line
+       */
+      populateAssimilationRow(wordData) {
+        const line = DocumentState.lines[wordData.lineIndex];
+        const isLastWordInLine = wordData.wordIndex >= line.length - 1;
+        
+        if (isLastWordInLine) {
+          this.elements.assimilationRow.style.display = 'none';
+          return;
+        }
+        
+        this.elements.assimilationRow.style.display = 'flex';
+        
+        // Get next word for label
+        const nextWord = line[wordData.wordIndex + 1];
+        const nextWordCyrillic = nextWord?.cyrillic || nextWord?.originalInput || '—';
+        this.elements.nextWordLabel.textContent = nextWordCyrillic;
+        
+        // Set active state based on current boundary
+        const currentBoundary = wordData.rightBoundary || 'soft';
+        this.elements.assimilationLinked.classList.toggle('active', currentBoundary === 'soft');
+        this.elements.assimilationSeparated.classList.toggle('active', currentBoundary === 'hard');
+        
+        // Disable if punctuation-forced
+        const boundarySource = wordData.boundarySource;
+        if (boundarySource === 'punctuation') {
+          this.elements.assimilationRow.classList.add('disabled');
+        } else {
+          this.elements.assimilationRow.classList.remove('disabled');
+        }
+      },
+      
+      /**
+       * Handle variant toggle (ё ↔ е) - v5.11
+       */
+      handleVariantToggle(variant) {
+        if (!this.currentWord) return;
+        
+        const cyrillic = this.currentWord.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const currentVariant = hasYo ? 'yo' : 'ye';
+        
+        // If clicking current state, do nothing
+        if (variant === currentVariant) return;
+        
+        // Store for undo
+        this._yoStateBeforeToggle = currentVariant;
+        
+        // Check if warning needed (polysyllabic + removing ё)
+        const syllableCount = this.currentWord.syllables?.length || 1;
+        const showWarning = variant === 'ye' && syllableCount > 1;
+        
+        // Execute toggle (reuse existing logic)
+        this.handleYoToggle();
+        
+        // Show toast warning if needed
+        if (showWarning) {
+          this.showYoToast();
+        }
+      },
+      
+      /**
+       * Handle assimilation toggle - v5.11
+       */
+      handleAssimilationToggle(boundary) {
+        if (!this.currentWord) return;
+        
+        const currentBoundary = this.currentWord.rightBoundary || 'soft';
+        
+        // If clicking current state, do nothing
+        if (boundary === currentBoundary) return;
+        
+        // Update the boundary directly (no staging pattern for this)
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        if (word) {
+          word.rightBoundary = boundary;
+          this.currentWord.rightBoundary = boundary;
+        }
+        
+        // Update UI
+        this.elements.assimilationLinked.classList.toggle('active', boundary === 'soft');
+        this.elements.assimilationSeparated.classList.toggle('active', boundary === 'hard');
+        
+        // Re-render document to apply assimilation changes
+        renderDocument();
+      },
+      
+      /**
+       * Show ё warning toast - v5.11
+       */
+      showYoToast() {
+        this.elements.yoToast.classList.add('visible');
+        
+        // Auto-dismiss after 3 seconds
+        this._yoToastTimer = setTimeout(() => {
+          this.hideYoToast();
+        }, 3000);
+        
+        // Pause on hover
+        this.elements.yoToast.addEventListener('mouseenter', () => {
+          if (this._yoToastTimer) {
+            clearTimeout(this._yoToastTimer);
+            this._yoToastTimer = null;
+          }
+        });
+        
+        this.elements.yoToast.addEventListener('mouseleave', () => {
+          this._yoToastTimer = setTimeout(() => {
+            this.hideYoToast();
+          }, 2000);
+        });
+      },
+      
+      /**
+       * Hide ё warning toast - v5.11
+       */
+      hideYoToast() {
+        this.elements.yoToast.classList.remove('visible');
+        if (this._yoToastTimer) {
+          clearTimeout(this._yoToastTimer);
+          this._yoToastTimer = null;
+        }
+      },
+      
+      /**
+       * Undo ё toggle - v5.11
+       */
+      undoYoToggle() {
+        if (!this.currentWord) return;
+        
+        // Toggle back
+        this.handleYoToggle();
+        
+        // Hide toast
+        this.hideYoToast();
+      },
 
       open(wordData) {
         this.currentWord = wordData;
@@ -8898,10 +9211,15 @@ function addAcuteToSyllable(syllable) {
         // Render Phoneme Ribbon (v5.5 vertical layout)
         this.renderRibbon(wordData);
         
-        // ё toggle module (v5.8)
+        // ё toggle module (v5.8) - OLD LOCATION (hidden in v5.11)
         this.populateYoToggle(wordData);
         
-        // Phrase boundary control (v5.4.2 - segments instead of radio)
+        // NEW: Footer controls (v5.11 - flat structure)
+        this.populateVariantRow(wordData);
+        this.populateAssimilationRow(wordData);
+        this.hideYoToast(); // Ensure toast is hidden when opening
+        
+        // Phrase boundary control (v5.4.2 - segments instead of radio) - HIDDEN IN v5.11
         const line = DocumentState.lines[wordData.lineIndex];
         const isLastWordInLine = wordData.wordIndex >= line.length - 1;
         const boundarySource = wordData.boundarySource;
@@ -8954,6 +9272,9 @@ function addAcuteToSyllable(syllable) {
         
         // Reset header customized state (v5.10.19)
         this.elements.syllableDisplayHeader.classList.remove('customized');
+        
+        // Hide toast (v5.11)
+        this.hideYoToast();
       },
       
       positionPopup(element) {
