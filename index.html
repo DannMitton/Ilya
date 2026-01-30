@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.5 Name Display Order</title>
+  <title>Ilya — v5.10.8 Acute Stress Marks on Cyrillic</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3300,6 +3300,84 @@ function formatGlossForPopup(gloss, pos, lemma) {
     return pos ? `${pos} ${gloss}` : gloss;
 }
 
+/**
+ * Add combining acute accent (U+0301) to the stressed vowel in Cyrillic text.
+ * Exception: ё/Ё already indicates stress via dieresis, so no acute added.
+ * 
+ * @param {string} word - The Cyrillic word
+ * @param {Array} syllables - Array of syllable objects with isStressed property
+ * @returns {string} - Word with acute on stressed vowel (or unchanged if ё is stressed)
+ */
+function addStressMarkToCyrillic(word, syllables) {
+    if (!syllables || syllables.length === 0) return word;
+    
+    // Find the stressed syllable
+    const stressedSyl = syllables.find(s => s.isStressed);
+    if (!stressedSyl) return word;
+    
+    // Find position of stressed syllable's Cyrillic in the word
+    const vowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
+                           'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
+    
+    // Count vowels to find stressed syllable position
+    let vowelCount = 0;
+    let stressedSylIndex = 0;
+    for (let i = 0; i < syllables.length; i++) {
+        if (syllables[i].isStressed) {
+            stressedSylIndex = i;
+            break;
+        }
+    }
+    
+    // Now find the (stressedSylIndex + 1)th vowel in the word
+    let currentVowelNum = 0;
+    const chars = Array.from(word);
+    let result = '';
+    
+    for (let i = 0; i < chars.length; i++) {
+        const char = chars[i];
+        result += char;
+        
+        if (vowels.has(char)) {
+            if (currentVowelNum === stressedSylIndex) {
+                // This is the stressed vowel — add acute unless it's ё/Ё
+                if (char !== 'ё' && char !== 'Ё') {
+                    result += '\u0301'; // Combining acute accent
+                }
+            }
+            currentVowelNum++;
+        }
+    }
+    
+    return result;
+}
+
+/**
+ * Add combining acute accent to the vowel in a syllable string (for popup display).
+ * Exception: ё/Ё already indicates stress via dieresis, so no acute added.
+ * 
+ * @param {string} syllable - A single Cyrillic syllable
+ * @returns {string} - Syllable with acute on its vowel (or unchanged if ё)
+ */
+function addAcuteToSyllable(syllable) {
+    const vowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
+                           'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
+    
+    const chars = Array.from(syllable);
+    let result = '';
+    let acuteAdded = false;
+    
+    for (const char of chars) {
+        result += char;
+        if (!acuteAdded && vowels.has(char) && char !== 'ё' && char !== 'Ё') {
+            result += '\u0301'; // Combining acute accent
+            acuteAdded = true;
+        }
+    }
+    
+    return result;
+}
+
     /* ========================================
        TRANSCRIPTION PROFILES
        ======================================== */
@@ -3410,8 +3488,10 @@ function formatGlossForPopup(gloss, pos, lemma) {
             trigger.classList.add('active');
             dropdown.classList.add('open');
             search.value = '';
+            this.filteredData = [...data]; // Reset filtered data
+            this.highlightIndex = -1;
             search.focus();
-            this.render(data);
+            this.render(this.filteredData);
           },
           
           close() {
@@ -3484,6 +3564,28 @@ function formatGlossForPopup(gloss, pos, lemma) {
         // Event listeners
         trigger.addEventListener('click', () => instance.toggle());
         search.addEventListener('input', (e) => instance.filter(e.target.value));
+        
+        // Make trigger focusable and respond to typing
+        trigger.setAttribute('tabindex', '0');
+        trigger.addEventListener('keydown', (e) => {
+          // If typing a printable character, open and start filtering
+          if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            if (!instance.isOpen) {
+              instance.open();
+            }
+            search.value = e.key;
+            instance.filter(e.key);
+          } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            instance.toggle();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (!instance.isOpen) instance.open();
+          } else if (e.key === 'Escape') {
+            instance.close();
+          }
+        });
         
         // Close on outside click
         document.addEventListener('click', (e) => {
@@ -4371,7 +4473,7 @@ function formatGlossForPopup(gloss, pos, lemma) {
           return `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
-              <span class="cyrillic">${tw.cleanWord}<span class="punct">${tw.punct}</span></span>
+              <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma)}</span>
             </div>
           `;
@@ -7409,7 +7511,9 @@ function formatGlossForPopup(gloss, pos, lemma) {
       // Refresh popup content without closing (v5.8.1)
       refreshPopupContent(wordData) {
         // Update IPA and Cyrillic displays
-        const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
+        const syllabifiedCyrillic = wordData.syllables.map(s => 
+          s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
+        ).join(' ');
         const syllabifiedIPA = wordData.syllables.map((s, idx) => {
           const stressedIdx = wordData.syllables.findIndex(syl => syl.isStressed);
           return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
@@ -8031,7 +8135,9 @@ function formatGlossForPopup(gloss, pos, lemma) {
         ).join('');
         
         // Populate IPA and Cyrillic displays (v5.5)
-        const syllabifiedCyrillic = wordData.syllables.map(s => s.cyrillic).join(' ');
+        const syllabifiedCyrillic = wordData.syllables.map(s => 
+          s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
+        ).join(' ');
         const syllabifiedIPA = wordData.syllables.map((s, idx) => {
           const stressedIdx = wordData.syllables.findIndex(syl => syl.isStressed);
           return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
