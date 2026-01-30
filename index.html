@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.2 Lemma Extraction</title>
+  <title>Ilya — v5.10.3 Footer Attribution</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4301,11 +4301,12 @@ function formatGlossForPopup(gloss, pos, lemma) {
         
         // Footer with attribution (2/3) and pagination (1/3)
         const userName = DocumentState.userName || 'anonymous';
+        const canadaFlag = `<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="0.75em" viewBox="0 0 9600 4800" style="vertical-align: middle; margin-left: 0.25em;"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>`;
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This singer's IPA transcription was created by ${userName} using <em>Ilya</em>, a rules engine based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
-              <p><em>Ilya</em> is open source, built for singers and teachers. Use it freely, improve it if you can, share what you make. This is a scholarly tool: neither it nor its transcriptions may be sold.</p>
+              <p>This transcription was created by ${userName} using <em>Ilya</em>, whose rules engine is based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
+              <p><em>Ilya</em> is open source, built for singers and teachers by Dann Mitton. Use it freely, improve it if you can, share what you make. This is a scholarly tool: neither it nor its transcriptions may be sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
