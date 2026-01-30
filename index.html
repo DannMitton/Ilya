@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.4 Composer/Poet Fix</title>
+  <title>Ilya — v5.10.5 Name Display Order</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3784,18 +3784,8 @@ function formatGlossForPopup(gloss, pos, lemma) {
        * Format running header: "COMPOSER — TITLE"
        * Smart truncation per Kimi's spec
        */
-      formatRunningHeader(composer, title) {
-        if (!composer && !title) return '';
-        
-        // Extract surname from "Lastname, Firstname (dates)" format
-        // or just "Lastname, Firstname"
-        let surname = '';
-        if (composer) {
-          // Remove dates in parentheses first
-          const withoutDates = composer.replace(/\s*\([^)]+\)\s*$/, '');
-          // Take everything before the comma (the surname)
-          surname = withoutDates.split(',')[0].trim();
-        }
+      formatRunningHeader(surname, title) {
+        if (!surname && !title) return '';
         
         // Truncate title if needed (30 chars max)
         let shortTitle = title || '';
@@ -3803,13 +3793,11 @@ function formatGlossForPopup(gloss, pos, lemma) {
           shortTitle = shortTitle.slice(0, 27) + '...';
         }
         
-        // If combined length > 40, use surname only
-        const combined = `${surname} — ${shortTitle}`;
-        if (combined.length > 45) {
+        // Format as "SURNAME — TITLE"
+        if (surname && shortTitle) {
           return `${surname.toUpperCase()} — ${shortTitle.toUpperCase()}`;
         }
-        
-        return combined.toUpperCase();
+        return (surname || shortTitle).toUpperCase();
       },
       
       /**
@@ -4253,8 +4241,21 @@ function formatGlossForPopup(gloss, pos, lemma) {
         // Get metadata from dashboard
         const title = DashboardController.titleInput?.value || 'Song Title';
         const opus = DashboardController.opusInput?.value || '';
-        const composer = DashboardController.composerSelect?.selectedDisplay || '';
-        const poet = DashboardController.poetSelect?.selectedDisplay || '';
+        // Format name from "Lastname, Firstname" to "Firstname Lastname"
+        const formatNameForDisplay = (item) => {
+          if (!item) return '';
+          const name = item.latin || '';
+          const dates = item.dates || '';
+          // Split "Lastname, Firstname" and reverse
+          const parts = name.split(',').map(p => p.trim());
+          const displayName = parts.length > 1 ? `${parts[1]} ${parts[0]}` : name;
+          return dates ? `${displayName} (${dates})` : displayName;
+        };
+        
+        const composerDisplay = formatNameForDisplay(DashboardController.composerSelect?.selectedValue);
+        const poetDisplay = formatNameForDisplay(DashboardController.poetSelect?.selectedValue);
+        // For running header, keep surname only
+        const composerSurname = DashboardController.composerSelect?.selectedValue?.latin?.split(',')[0]?.trim() || '';
         
         let headerHTML = '';
         
@@ -4269,17 +4270,17 @@ function formatGlossForPopup(gloss, pos, lemma) {
             <header class="page-header-title">
               <h1 class="page-title">${title}</h1>
               <div class="page-metadata">
-                ${composer ? `<span>${composer}</span>` : ''}
-                ${composer && opus ? '<span class="divider">│</span>' : ''}
+                ${composerDisplay ? `<span>${composerDisplay}</span>` : ''}
+                ${composerDisplay && opus ? '<span class="divider">│</span>' : ''}
                 ${opus ? `<span>${opus}</span>` : ''}
               </div>
-              ${poet ? `<div class="page-metadata"><span>${poet}</span></div>` : ''}
+              ${poetDisplay ? `<div class="page-metadata"><span>Text by ${poetDisplay}</span></div>` : ''}
               <hr class="page-metadata-rule">
             </header>
           `;
         } else {
           // Pages 2+: Running header
-          const runningHeader = Paginator.formatRunningHeader(composer, title);
+          const runningHeader = Paginator.formatRunningHeader(composerSurname, title);
           headerHTML = `
             <header class="page-header-running">
               <span class="running-title">${runningHeader}</span>
