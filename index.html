@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.22 Real-time Drag Sync</title>
+  <title>Ilya — v5.10.23 Persistent Boundary Drag</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8177,13 +8177,20 @@ function addAcuteToSyllable(syllable) {
         this.elements.cyrillic.textContent = syllabifiedCyrillic;
         
         // Update syllable buttons (now the primary IPA display)
+        // Apply any existing boundary customizations (v5.10.23)
+        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, wordData.syllables);
+        
         const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
-        const syllableCount = wordData.syllables.length;
+        const syllableCount = displaySyllables.length;
         const buttonsDisabled = hasYo && syllableCount > 1;
         
-        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => 
+        this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
           `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
+        
+        // Show customized state and register reset handler if boundaries were adjusted (v5.10.23)
+        this._updateCustomizedState();
         
         // Update stress source module visibility (locked when monosyllable or ё)
         const stressLocked = syllableCount === 1 || hasYo;
@@ -8750,9 +8757,10 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Initialize all UI with current staged/committed state (v5.4.2)
+        // This now applies BoundaryStack offsets for syllable display (v5.10.23)
         this.updateAllUI();
         
-        // Update syllable label based on word type
+        // Additional word-type specific UI setup
         const syllableCount = wordData.syllables.length;
         const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
         const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
@@ -8768,19 +8776,7 @@ function addAcuteToSyllable(syllable) {
                 this.elements.stressSourceModule.style.display = 'block';
             }
 
-        // Mark syllable buttons as disabled if stress is locked (except for single syllable)
-        const buttonsDisabled = hasYo && syllableCount > 1;
-        
-        this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => 
-          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
-        ).join('');
-        
-        // Populate Cyrillic display and gloss
-        const syllabifiedCyrillic = wordData.syllables.map(s => 
-          s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
-        ).join(' ');
-        
-        this.elements.cyrillic.textContent = syllabifiedCyrillic;
+        // Populate gloss (Cyrillic and syllables handled in updateAllUI)
         this.elements.glossInline.textContent = formatGlossForPopup(wordData.gloss, wordData.pos, wordData.lemma);
         
         // Always hide top clitic badge (info now in Why section)
@@ -8843,40 +8839,8 @@ function addAcuteToSyllable(syllable) {
           );
         }
         
-        // Reset boundary customizations and restore word stack IPA (v5.10.22)
-        if (this.currentWord) {
-          const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
-          const hadCustomBoundaries = BoundaryStack.hasCustomBoundaries(wordId);
-          BoundaryStack.reset(wordId);
-          
-          // Restore word stack IPA to original if it was customized
-          if (hadCustomBoundaries) {
-            const wordStack = document.querySelector(
-              `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`
-            );
-            if (wordStack) {
-              const ipaSpan = wordStack.querySelector('.ipa');
-              if (ipaSpan) {
-                // Restore original IPA from currentWord data
-                const originalSyllables = this.currentWord.syllables;
-                let originalIPA = originalSyllables.map((syl, idx) => {
-                  return syl.isStressed && originalSyllables.length > 1 ? 'ˈ' + syl.ipa : syl.ipa;
-                }).join(' ');
-                
-                // Preserve clitic tie bars
-                const isProclitic = this.currentWord.isProclitic === 'true' || this.currentWord.isProclitic === true;
-                const isEnclitic = this.currentWord.isEnclitic === 'true' || this.currentWord.isEnclitic === true;
-                if (isProclitic) {
-                  originalIPA = originalIPA + '‿';
-                } else if (isEnclitic) {
-                  originalIPA = '‿' + originalIPA;
-                }
-                
-                ipaSpan.textContent = originalIPA;
-              }
-            }
-          }
-        }
+        // Boundary customizations now persist until page reload (v5.10.23)
+        // Word stack IPA already synced in _updateSyllableDisplay()
         
         // Reset state
         this.isOpen = false;
@@ -9237,11 +9201,13 @@ function addAcuteToSyllable(syllable) {
         
         this.elements.syllableDisplayHeader.classList.toggle('customized', hasCustom);
         
-        // Add click handler for reset if customized
-        if (hasCustom && !this._headerResetHandler) {
+        // Set up click handler for reset (only once, uses currentWord dynamically)
+        if (!this._headerResetHandler) {
           this._headerResetHandler = () => {
-            if (BoundaryStack.hasCustomBoundaries(wordId)) {
-              BoundaryStack.reset(wordId);
+            if (!this.currentWord) return;
+            const currentWordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+            if (BoundaryStack.hasCustomBoundaries(currentWordId)) {
+              BoundaryStack.reset(currentWordId);
               this._updateSyllableDisplay();
               this._updateCustomizedState();
               this._pulseAllConsonants();
