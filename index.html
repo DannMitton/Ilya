@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.13 curated glosses + 6/8 layout</title>
+  <title>Ilya — v5.11.17 visual row pagination</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -425,7 +425,7 @@
     .page-content {
       flex: 1;
       padding: 16px 72px;
-      padding-bottom: 150px; /* Clearance for absolute footer */
+      padding-bottom: 120px; /* Clearance for absolute footer (reduced from 150px in v5.11.17) */
       display: flex;
       flex-direction: column;
     }
@@ -3053,6 +3053,7 @@
         
         <!-- TIER 1: THE ANSWER (always visible) -->
         <!-- Syllable buttons: interactive IPA display + stress control + consonant drag -->
+        <div class="syllable-label" id="syllableLabel"></div>
         <div class="syllable-display-header" id="syllableDisplayHeader">
           <div class="syllable-display" id="syllableDisplay"></div>
         </div>
@@ -3683,16 +3684,29 @@ function truncateGloss(gloss, maxWords, maxChars = 18) {
     cleaned = cleaned.replace(/\s*\([^)]*$/, ''); // Remove unclosed parentheticals
     cleaned = cleaned.trim();
     
-    // Word limit
+    // Word limit (no ellipsis)
     const words = cleaned.split(/\s+/);
     if (words.length > maxWords) {
-        cleaned = words.slice(0, maxWords).join(' ') + '…';
+        cleaned = words.slice(0, maxWords).join(' ');
     }
     
-    // Character limit
+    // Character limit - truncate at word boundary, no ellipsis
     if (cleaned.length > maxChars) {
-        cleaned = cleaned.slice(0, maxChars).replace(/[,\s]+$/, '') + '…';
+        const truncatedWords = [];
+        let charCount = 0;
+        for (const word of cleaned.split(/\s+/)) {
+            if (charCount + word.length + (truncatedWords.length > 0 ? 1 : 0) <= maxChars) {
+                truncatedWords.push(word);
+                charCount += word.length + (truncatedWords.length > 1 ? 1 : 0);
+            } else {
+                break;
+            }
+        }
+        cleaned = truncatedWords.join(' ') || cleaned.slice(0, maxChars);
     }
+    
+    // Remove trailing punctuation for cleaner appearance
+    cleaned = cleaned.replace(/[,;:]+$/, '');
     
     return cleaned;
 }
@@ -4233,6 +4247,7 @@ function addAcuteToSyllable(syllable) {
           const lineCount = DocumentState.lines.length;
           const pages = Paginator.distributeToPages(
             Array(lineCount).fill({}),  // Mock lines for counting
+            null,                        // No heights for simple count
             this.currentSize
           );
           totalPages = pages.length;
@@ -4255,6 +4270,10 @@ function addAcuteToSyllable(syllable) {
       // Measured values (populated after first render)
       lineHeight: null,
       safeLineHeight: null,
+      
+      // Line height cache for pre-flight measurement (v5.11.17)
+      lineHeightCache: null,
+      lineHeightCacheHash: null,
       
       // Paper dimensions in pixels (96dpi)
       PAPER_HEIGHTS: {
@@ -4313,6 +4332,109 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
+       * Pre-flight measurement: measure all line heights BEFORE pagination (v5.11.17)
+       * Uses off-screen container with actual CSS to get true visual heights
+       * @param {Array} allLines - Transcribed line data
+       * @param {Function} createLineElement - Function to create .verse-line element
+       * @returns {Array} Heights in pixels for each line
+       */
+      measureAllLineHeights(allLines, createLineElement) {
+        // Check cache first
+        const contentHash = this.hashLineContent(allLines);
+        if (this.lineHeightCache && this.lineHeightCacheHash === contentHash) {
+          console.log('[Paginator] Using cached line heights');
+          return this.lineHeightCache;
+        }
+        
+        // Get content width from existing page, or use fallback
+        const contentWidth = this.getContentWidth();
+        
+        // Create hidden container that inherits page-content CSS
+        const hiddenContainer = document.createElement('div');
+        hiddenContainer.className = 'page-content';
+        hiddenContainer.style.cssText = `
+          position: absolute;
+          visibility: hidden;
+          pointer-events: none;
+          width: ${contentWidth}px;
+          top: -9999px;
+          left: -9999px;
+        `;
+        document.body.appendChild(hiddenContainer);
+        
+        // Measure each line
+        const heights = allLines.map(line => {
+          const el = createLineElement(line);
+          hiddenContainer.appendChild(el);
+          const height = el.getBoundingClientRect().height;
+          hiddenContainer.removeChild(el);
+          return height;
+        });
+        
+        // Clean up
+        hiddenContainer.remove();
+        
+        // Cache results
+        this.lineHeightCache = heights;
+        this.lineHeightCacheHash = contentHash;
+        
+        // Calculate standard row height (minimum non-zero height)
+        const nonZeroHeights = heights.filter(h => h > 0);
+        this.standardRowHeight = nonZeroHeights.length > 0 
+          ? Math.min(...nonZeroHeights) 
+          : 105; // Fallback
+        
+        console.log('[Paginator] Pre-flight measurement:', {
+          lines: heights.length,
+          standardRowHeight: this.standardRowHeight.toFixed(1),
+          minHeight: Math.min(...heights).toFixed(1),
+          maxHeight: Math.max(...heights).toFixed(1),
+          wrappingLines: heights.filter(h => h > this.standardRowHeight * 1.5).length
+        });
+        
+        return heights;
+      },
+      
+      /**
+       * Get content width from rendered page or calculate from constants
+       */
+      getContentWidth() {
+        const referencePage = document.querySelector('.paper-page');
+        if (referencePage) {
+          const referenceContent = referencePage.querySelector('.page-content');
+          if (referenceContent) {
+            const computedStyle = window.getComputedStyle(referenceContent);
+            return referenceContent.clientWidth 
+              - parseFloat(computedStyle.paddingLeft || 0) 
+              - parseFloat(computedStyle.paddingRight || 0);
+          }
+        }
+        // Fallback: letter width (8.5in) minus margins (72px each side)
+        return 816 - 144; // 672px
+      },
+      
+      /**
+       * Hash line content for cache invalidation
+       * Uses cleanWord and stress index from transcribed word data
+       */
+      hashLineContent(allLines) {
+        return allLines.map(line => 
+          line.map(tw => 
+            (tw.cleanWord || '') + ':' + (tw.wordData?.stress ?? '')
+          ).join('|')
+        ).join('||');
+      },
+      
+      /**
+       * Invalidate line height cache (call when content changes)
+       */
+      invalidateCache() {
+        this.lineHeightCache = null;
+        this.lineHeightCacheHash = null;
+        console.log('[Paginator] Cache invalidated');
+      },
+      
+      /**
        * Calculate how many lines fit on each page type
        * Fixed counts based on testing: 5 for title page, 7 for subsequent
        * (v5.11.7 - reduced from 6/8 to prevent clipping)
@@ -4357,47 +4479,127 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Distribute lines across pages
-       * Pure function: returns array of page objects
+       * Distribute lines across pages with visual row counting (v5.11.17)
+       * Accounts for lines that wrap and consume multiple visual rows
+       * @param {Array} allLines - All transcribed lines
+       * @param {Array} lineHeights - Pre-measured heights for each line (optional)
+       * @param {string} paperSize - 'letter' or 'a4'
+       * @returns {Array} Array of page objects
        */
-      distributeToPages(allLines, paperSize = 'letter') {
-        const { page1, subsequent } = this.calculateLinesPerPage(paperSize);
+      distributeToPages(allLines, lineHeights = null, paperSize = 'letter') {
+        const targets = { page1: 6, subsequent: 8 };
+        const tolerance = 1; // Allow 1 spillover visual row per page
         
-        if (page1 === 0 || subsequent === 0) {
-          console.warn('[Paginator] Cannot distribute: lines per page not calculated');
-          return [{ pageNumber: 1, template: 'title', lines: allLines }];
+        // If no heights provided, fall back to simple slicing (legacy behavior)
+        if (!lineHeights || lineHeights.length !== allLines.length) {
+          console.log('[Paginator] No line heights, using simple distribution');
+          return this.distributeSimple(allLines, targets);
         }
         
-        const pages = [];
-        let cursor = 0;
+        // Calculate standard row height from measurements
+        const standardRowHeight = this.standardRowHeight || 
+          Math.min(...lineHeights.filter(h => h > 0)) || 105;
         
-        // Page 1: fewer lines (title block takes space)
-        if (allLines.length > 0 || pages.length === 0) {
-          const page1Lines = allLines.slice(0, page1);
+        const pages = [];
+        let currentPage = 1;
+        let logicalRows = 0;
+        let visualRows = 0;
+        let currentPageLines = [];
+        
+        for (let i = 0; i < allLines.length; i++) {
+          const line = allLines[i];
+          const lineVisualRows = Math.max(1, Math.ceil(lineHeights[i] / standardRowHeight));
+          const target = currentPage === 1 ? targets.page1 : targets.subsequent;
+          
+          // Check if we need a page break
+          // Break if: we've hit the logical target AND adding this line would exceed visual tolerance
+          const wouldExceedVisual = visualRows + lineVisualRows > target + tolerance;
+          const atLogicalLimit = logicalRows >= target;
+          
+          if (atLogicalLimit || (logicalRows > 0 && wouldExceedVisual)) {
+            // Save current page
+            pages.push({
+              pageNumber: currentPage,
+              template: currentPage === 1 ? 'title' : 'subsequent',
+              lines: currentPageLines,
+              logicalRows,
+              visualRows
+            });
+            
+            // Start new page
+            currentPage++;
+            currentPageLines = [line];
+            logicalRows = 1;
+            visualRows = lineVisualRows;
+          } else {
+            // Add to current page
+            currentPageLines.push(line);
+            logicalRows++;
+            visualRows += lineVisualRows;
+          }
+        }
+        
+        // Don't forget the last page
+        if (currentPageLines.length > 0) {
+          pages.push({
+            pageNumber: currentPage,
+            template: currentPage === 1 ? 'title' : 'subsequent',
+            lines: currentPageLines,
+            logicalRows,
+            visualRows
+          });
+        }
+        
+        // Ensure at least one page exists
+        if (pages.length === 0) {
           pages.push({
             pageNumber: 1,
             template: 'title',
-            lines: page1Lines
+            lines: [],
+            logicalRows: 0,
+            visualRows: 0
           });
-          cursor = page1;
         }
         
-        // Pages 2+: more lines (running header only)
+        console.log('[Paginator] Visual distribution:', {
+          totalLines: allLines.length,
+          pageCount: pages.length,
+          pages: pages.map(p => ({ 
+            logical: p.logicalRows, 
+            visual: p.visualRows,
+            lines: p.lines.length 
+          }))
+        });
+        
+        return pages;
+      },
+      
+      /**
+       * Simple distribution without visual row counting (fallback)
+       */
+      distributeSimple(allLines, targets) {
+        const pages = [];
+        let cursor = 0;
+        
+        // Page 1
+        if (allLines.length > 0 || pages.length === 0) {
+          pages.push({
+            pageNumber: 1,
+            template: 'title',
+            lines: allLines.slice(0, targets.page1)
+          });
+          cursor = targets.page1;
+        }
+        
+        // Subsequent pages
         while (cursor < allLines.length) {
-          const pageLines = allLines.slice(cursor, cursor + subsequent);
           pages.push({
             pageNumber: pages.length + 1,
             template: 'subsequent',
-            lines: pageLines
+            lines: allLines.slice(cursor, cursor + targets.subsequent)
           });
-          cursor += subsequent;
+          cursor += targets.subsequent;
         }
-        
-        console.log('[Paginator] Distribution:', {
-          totalLines: allLines.length,
-          pageCount: pages.length,
-          linesPerPage: pages.map(p => p.lines.length)
-        });
         
         return pages;
       },
@@ -4406,7 +4608,7 @@ function addAcuteToSyllable(syllable) {
        * Get total page count for display
        */
       getPageCount(allLines, paperSize = 'letter') {
-        const pages = this.distributeToPages(allLines, paperSize);
+        const pages = this.distributeToPages(allLines, null, paperSize);
         return pages.length;
       },
       
@@ -4669,6 +4871,9 @@ function addAcuteToSyllable(syllable) {
         // Parse lines into words
         const lines = text.split('\n').filter(line => line.trim());
         
+        // Invalidate pre-measurement cache when new content arrives (v5.11.17)
+        Paginator.invalidateCache();
+        
         // Convert to DocumentState format with dictionary lookup
         DocumentState.lines = lines.map(line => {
           const words = line.trim().split(/\s+/)
@@ -4764,8 +4969,21 @@ function addAcuteToSyllable(syllable) {
         // PHASE 1-2.5: Transcribe all lines
         const transcribedLines = this.transcribeAllLines();
         
-        // Distribute lines to pages (uses fixed counts: 6/8)
-        const pages = Paginator.distributeToPages(transcribedLines, paperSize);
+        // PHASE 3: Pre-flight measurement (v5.11.17)
+        // Measure actual heights before pagination to handle wrapping lines
+        const lineHeights = Paginator.measureAllLineHeights(
+          transcribedLines,
+          (line) => {
+            // Create a temporary DOM element from the line HTML
+            const html = this.renderVerseLine(line);
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            return temp.firstElementChild;
+          }
+        );
+        
+        // Distribute lines to pages with visual row counting
+        const pages = Paginator.distributeToPages(transcribedLines, lineHeights, paperSize);
         const totalPages = pages.length;
         
         console.log('[renderToPaper] Creating', totalPages, 'pages');
@@ -4782,9 +5000,44 @@ function addAcuteToSyllable(syllable) {
           paperStack.appendChild(pageElement);
         });
         
+        // POST-RENDER VERIFICATION (v5.11.17)
+        // Safety net assertion - should never trigger with proper pre-measurement
+        this.verifyNoOverflow();
+        
         // Update page count display and export button state
         DocumentController.updatePageCount();
         DashboardController.updateExportButton();
+      },
+      
+      /**
+       * Post-render verification: assert no overflow (v5.11.17)
+       * Logs warning if overflow detected - indicates bug in pre-measurement
+       */
+      verifyNoOverflow() {
+        const pages = document.querySelectorAll('.paper-page');
+        
+        pages.forEach((page, idx) => {
+          const pageContent = page.querySelector('.page-content');
+          const footer = page.querySelector('.page-footer');
+          
+          if (!pageContent || !footer) return;
+          
+          const lastVerseLine = pageContent.querySelector('.verse-line:last-child');
+          if (!lastVerseLine) return;
+          
+          const lineRect = lastVerseLine.getBoundingClientRect();
+          const footerRect = footer.getBoundingClientRect();
+          const lineBottom = lineRect.bottom;
+          const footerTop = footerRect.top;
+          
+          // 10px safety margin
+          if (lineBottom > footerTop - 10) {
+            console.error(`[OVERFLOW BUG] Page ${idx + 1}: last line (${lineBottom.toFixed(0)}px) overlaps footer (${footerTop.toFixed(0)}px)`, {
+              gap: (footerTop - lineBottom).toFixed(0),
+              lineText: lastVerseLine.textContent?.substring(0, 50)
+            });
+          }
+        });
       },
       
       /**
@@ -8197,6 +8450,7 @@ function addAcuteToSyllable(syllable) {
           overlay: document.getElementById('popupOverlay'),
           backdrop: document.getElementById('popupBackdrop'),
           card: document.getElementById('popupCard'),
+          syllableLabel: document.getElementById('syllableLabel'),
           syllableDisplay: document.getElementById('syllableDisplay'),
           syllableDisplayHeader: document.getElementById('syllableDisplayHeader'),
           cyrillic: document.getElementById('popupCyrillic'),
@@ -9396,6 +9650,21 @@ function addAcuteToSyllable(syllable) {
         this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
           `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
+        
+        // Monosyllable context label (v5.11.13)
+        if (syllableCount === 1) {
+          const hasStress = wordData.syllables.some(s => s.isStressed);
+          if (isClitic) {
+            this.elements.syllableLabel.textContent = 'Unstressed clitic';
+          } else if (hasStress) {
+            this.elements.syllableLabel.textContent = 'Stressed monosyllable';
+          } else {
+            this.elements.syllableLabel.textContent = 'Unstressed monosyllable';
+          }
+          this.elements.syllableLabel.style.display = 'block';
+        } else {
+          this.elements.syllableLabel.style.display = 'none';
+        }
         
         // Show customized state and register reset handler
         this._updateCustomizedState();
