@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.0 Flat Footer Controls</title>
+  <title>Ilya — v5.11.2 Fix soft sign silent</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6194,10 +6194,11 @@ function addAcuteToSyllable(syllable) {
             if (char === 'ь' || char === 'ъ') {
               transcriptionLog.push({
                 char: char,
-                ipa: char === 'ь' ? 'ʲ' : '',
+                ipa: '',  // Signs produce no sound of their own (v5.11.1)
                 features: {
                   type: 'sign',
-                  signType: char === 'ь' ? 'soft' : 'hard'
+                  signType: char === 'ь' ? 'soft' : 'hard',
+                  silent: true  // Mark as silent for ribbon display
                 },
                 syllableIndex: sylIdx,
                 position: globalIndex
@@ -9075,7 +9076,7 @@ function addAcuteToSyllable(syllable) {
         this.elements.assimilationSeparated.classList.toggle('active', boundary === 'hard');
         
         // Re-render document to apply assimilation changes
-        renderDocument();
+        DrawerController.renderToPaper();
       },
       
       /**
