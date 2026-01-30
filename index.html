@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.7 Fix clitic spacing and footer margins</title>
+  <title>Ilya — v5.11.10 Clitic arrows and IPA fusion</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -290,6 +290,7 @@
       flex-direction: column;
       margin: 0 auto;
       position: relative;
+      overflow: hidden;  /* Prevent content bleed between pages (v5.11.9) */
       
       /* GPU acceleration for shadow performance */
       transform: translateY(0);
@@ -736,14 +737,7 @@
       font-weight: 500;
     }
     
-    /* Clitics should be tighter to adjacent words (v5.11.6) */
-    .word-stack.proclitic {
-      margin-right: -1rem;  /* Pull closer to following word */
-    }
-    
-    .word-stack.enclitic {
-      margin-left: -1rem;   /* Pull closer to preceding word */
-    }
+    /* Clitics show directional arrows — normal spacing (v5.11.10) */
     
     /* Unverified stress: no visual indicator on paper — popup message is sufficient */
 
@@ -3525,13 +3519,13 @@ function extractCleanGloss(gloss) {
 
 /**
  * Truncate gloss to N words max AND M characters max, adding ellipsis if needed
+ * v5.11.8: Reduced maxChars to 18 for tighter word stack layout
  */
-function truncateGloss(gloss, maxWords, maxChars = 25) {
+function truncateGloss(gloss, maxWords, maxChars = 18) {
     if (!gloss) return '';
     
-    // First, strip or truncate parenthetical content for display
-    // Keep short clarifications like "(tree)" but remove long ones
-    let cleaned = gloss.replace(/\s*\([^)]{15,}\)/g, ''); // Remove long parentheticals
+    // First, strip ALL parenthetical content for word stack display
+    let cleaned = gloss.replace(/\s*\([^)]*\)/g, ''); // Remove all parentheticals
     cleaned = cleaned.replace(/\s*\([^)]*$/, ''); // Remove unclosed parentheticals
     cleaned = cleaned.trim();
     
@@ -4166,14 +4160,15 @@ function addAcuteToSyllable(syllable) {
       
       /**
        * Calculate how many lines fit on each page type
-       * Fixed counts based on testing: 6 for title page, 8 for subsequent
+       * Fixed counts based on testing: 5 for title page, 7 for subsequent
+       * (v5.11.7 - reduced from 6/8 to prevent clipping)
        */
       calculateLinesPerPage(paperSize = 'letter') {
         // Fixed line counts based on visual testing
         // Page 1 has less room due to title block
         // Subsequent pages have more room with just running header
-        const linesPage1 = 6;
-        const linesSubsequent = 8;
+        const linesPage1 = 5;
+        const linesSubsequent = 7;
         
         console.log('[Paginator] Lines per page:', {
           paperSize,
@@ -4522,7 +4517,12 @@ function addAcuteToSyllable(syllable) {
         
         // Convert to DocumentState format with dictionary lookup
         DocumentState.lines = lines.map(line => {
-          const words = line.trim().split(/\s+/);
+          const words = line.trim().split(/\s+/)
+            // Filter out punctuation-only tokens (v5.11.8)
+            .filter(word => {
+              const cleaned = word.replace(/[.,!?;:"""''–—\-]/g, '');
+              return cleaned.length > 0;
+            });
           return words.map(word => {
             const lookup = GraysonEngine.lookupStress(word);
             
@@ -4575,7 +4575,7 @@ function addAcuteToSyllable(syllable) {
               boundarySource: null
             };
           });
-        });
+        }).filter(line => line.length > 0);  // Remove empty lines (v5.11.8)
         
         // Auto-detect boundary types for each line
         DocumentState.lines.forEach(line => {
@@ -4779,7 +4779,9 @@ function addAcuteToSyllable(syllable) {
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
-              <span class="gloss">${formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma)}</span>
+              <span class="gloss">${tw.isProclitic || tw.isEnclitic 
+                ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
+                : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma)}</span>
             </div>
           `;
         }).join('');
@@ -4795,7 +4797,7 @@ function addAcuteToSyllable(syllable) {
         return DocumentState.lines.map((line, lineIdx) => {
           // PHASE 1: Transcribe all words, store ipaUnderlying
           const transcribedWords = line.map((wordData, wordIdx) => {
-            const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—]/g, '');
+            const cleanWord = wordData.cyrillic.replace(/[.,!?;:"""''–—\-]/g, '');
             const punct = wordData.cyrillic.replace(cleanWord, '');
             
             // Detect if line ends with question mark
@@ -4881,21 +4883,41 @@ function addAcuteToSyllable(syllable) {
               }
             }
             
-            // Create display version with spaces between syllables
+            // Create IPA content (syllables with stress marks, spaces between)
             let ipaCore = tw.syllables.map(s => {
               return s.isStressed && tw.syllables.length > 1 ? 'ˈ' + s.ipa : s.ipa;
             }).join(' ');
             
-            // Add tie bar (‿) for clitics to signal phonological binding
-            // Proclitics bind forward, enclitics bind backward
-            // See scholarly note in Phoneme Ribbon for full explanation
+            // Store the actual IPA for fusion (v5.11.10)
+            tw.ipaContent = ipaCore;
+            tw.ipaDisplay = ipaCore; // Will be overwritten for clitics
+          });
+          
+          // PHASE 2.6: Clitic IPA fusion (v5.11.10)
+          // Proclitics fuse forward, enclitics fuse backward
+          // Clitics show directional arrows in their stacks
+          transcribedWords.forEach((tw, idx) => {
             if (tw.isProclitic) {
-              ipaCore = ipaCore + '‿';
+              // Show arrow pointing right
+              tw.ipaDisplay = '→';
+              
+              // Fuse IPA to following word (if exists)
+              const nextWord = transcribedWords[idx + 1];
+              if (nextWord && !nextWord.isProclitic) {
+                // Prepend clitic IPA (no space, direct fusion)
+                nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaContent;
+              }
             } else if (tw.isEnclitic) {
-              ipaCore = '‿' + ipaCore;
+              // Show arrow pointing left
+              tw.ipaDisplay = '←';
+              
+              // Fuse IPA to preceding word (if exists)
+              const prevWord = transcribedWords[idx - 1];
+              if (prevWord && !prevWord.isEnclitic) {
+                // Append clitic IPA (no space, direct fusion)
+                prevWord.ipaDisplay = prevWord.ipaDisplay + ' ' + tw.ipaContent;
+              }
             }
-            
-            tw.ipaDisplay = ipaCore;
           });
           
           return transcribedWords;
@@ -5170,46 +5192,47 @@ function addAcuteToSyllable(syllable) {
       // Canonical forms use pretonic reduction for proclitics, posttonic for enclitics
       cliticData: new Map([
         // Proclitics - canonical form assumes pretonic position
-        ['в', { type: 'proclitic', canonicalIpa: 'v' }],
-        ['во', { type: 'proclitic', canonicalIpa: 'vɑ' }],
-        ['к', { type: 'proclitic', canonicalIpa: 'k' }],
-        ['ко', { type: 'proclitic', canonicalIpa: 'kɑ' }],
-        ['с', { type: 'proclitic', canonicalIpa: 's' }],
-        ['со', { type: 'proclitic', canonicalIpa: 'sɑ' }],
-        ['о', { type: 'proclitic', canonicalIpa: 'ɑ' }],
-        ['об', { type: 'proclitic', canonicalIpa: 'ɑb' }],
-        ['обо', { type: 'proclitic', canonicalIpa: 'ɑbɑ' }],
-        ['у', { type: 'proclitic', canonicalIpa: 'u' }],
-        ['на', { type: 'proclitic', canonicalIpa: 'nɑ' }],
-        ['за', { type: 'proclitic', canonicalIpa: 'zɑ' }],
-        ['по', { type: 'proclitic', canonicalIpa: 'pɑ' }],
-        ['до', { type: 'proclitic', canonicalIpa: 'dɑ' }],
-        ['из', { type: 'proclitic', canonicalIpa: 'iz' }],
-        ['изо', { type: 'proclitic', canonicalIpa: 'izɑ' }],
-        ['от', { type: 'proclitic', canonicalIpa: 'ɑt' }],
-        ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ' }],
-        ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz' }],
-        ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ' }],
-        ['ни', { type: 'proclitic', canonicalIpa: 'ɲi' }],
-        ['над', { type: 'proclitic', canonicalIpa: 'nɑt' }],
-        ['надо', { type: 'proclitic', canonicalIpa: 'nɑdɑ' }],
-        ['под', { type: 'proclitic', canonicalIpa: 'pɑt' }],
-        ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ' }],
-        ['при', { type: 'proclitic', canonicalIpa: 'prʲi' }],
-        ['про', { type: 'proclitic', canonicalIpa: 'prɑ' }],
-        ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ' }],
-        ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz' }],
-        ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt' }],
-        ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ' }],
+        // Short glosses curated for PDF display (v5.11.10)
+        ['в', { type: 'proclitic', canonicalIpa: 'v', gloss: 'in/into' }],
+        ['во', { type: 'proclitic', canonicalIpa: 'vɑ', gloss: 'in/into' }],
+        ['к', { type: 'proclitic', canonicalIpa: 'k', gloss: 'to/toward' }],
+        ['ко', { type: 'proclitic', canonicalIpa: 'kɑ', gloss: 'to/toward' }],
+        ['с', { type: 'proclitic', canonicalIpa: 's', gloss: 'with/from' }],
+        ['со', { type: 'proclitic', canonicalIpa: 'sɑ', gloss: 'with/from' }],
+        ['о', { type: 'proclitic', canonicalIpa: 'ɑ', gloss: 'about' }],
+        ['об', { type: 'proclitic', canonicalIpa: 'ɑb', gloss: 'about' }],
+        ['обо', { type: 'proclitic', canonicalIpa: 'ɑbɑ', gloss: 'about' }],
+        ['у', { type: 'proclitic', canonicalIpa: 'u', gloss: 'at/by' }],
+        ['на', { type: 'proclitic', canonicalIpa: 'nɑ', gloss: 'on/onto' }],
+        ['за', { type: 'proclitic', canonicalIpa: 'zɑ', gloss: 'behind/for' }],
+        ['по', { type: 'proclitic', canonicalIpa: 'pɑ', gloss: 'along/by' }],
+        ['до', { type: 'proclitic', canonicalIpa: 'dɑ', gloss: 'until/to' }],
+        ['из', { type: 'proclitic', canonicalIpa: 'iz', gloss: 'from/out of' }],
+        ['изо', { type: 'proclitic', canonicalIpa: 'izɑ', gloss: 'from/out of' }],
+        ['от', { type: 'proclitic', canonicalIpa: 'ɑt', gloss: 'from' }],
+        ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ', gloss: 'from' }],
+        ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz', gloss: 'without' }],
+        ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ', gloss: 'not' }],
+        ['ни', { type: 'proclitic', canonicalIpa: 'ɲi', gloss: 'nor/not' }],
+        ['над', { type: 'proclitic', canonicalIpa: 'nɑt', gloss: 'above' }],
+        ['надо', { type: 'proclitic', canonicalIpa: 'nɑdɑ', gloss: 'above' }],
+        ['под', { type: 'proclitic', canonicalIpa: 'pɑt', gloss: 'under' }],
+        ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ', gloss: 'under' }],
+        ['при', { type: 'proclitic', canonicalIpa: 'prʲi', gloss: 'at/near' }],
+        ['про', { type: 'proclitic', canonicalIpa: 'prɑ', gloss: 'about' }],
+        ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ', gloss: 'for' }],
+        ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz', gloss: 'through' }],
+        ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt', gloss: 'before' }],
+        ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ', gloss: 'before' }],
         // Enclitics - canonical form assumes posttonic position
-        ['ли', { type: 'enclitic', canonicalIpa: 'lʲi' }],
-        ['ль', { type: 'enclitic', canonicalIpa: 'lʲ' }],
-        ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ' }],
-        ['бы', { type: 'enclitic', canonicalIpa: 'bɨ' }],
-        ['б', { type: 'enclitic', canonicalIpa: 'b' }],
-        ['то', { type: 'enclitic', canonicalIpa: 'tɑ' }],
-        ['ка', { type: 'enclitic', canonicalIpa: 'kɑ' }],
-        ['таки', { type: 'enclitic', canonicalIpa: 'tɑkʲi' }],
+        ['ли', { type: 'enclitic', canonicalIpa: 'lʲi', gloss: '(question)' }],
+        ['ль', { type: 'enclitic', canonicalIpa: 'lʲ', gloss: '(question)' }],
+        ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ', gloss: '(emphasis)' }],
+        ['бы', { type: 'enclitic', canonicalIpa: 'bɨ', gloss: 'would' }],
+        ['б', { type: 'enclitic', canonicalIpa: 'b', gloss: 'would' }],
+        ['то', { type: 'enclitic', canonicalIpa: 'tɑ', gloss: '(then)' }],
+        ['ка', { type: 'enclitic', canonicalIpa: 'kɑ', gloss: '(urging)' }],
+        ['таки', { type: 'enclitic', canonicalIpa: 'tɑkʲi', gloss: 'after all' }],
       ]),
       
       // Derived Sets for backwards compatibility (computed once, not on every access)
