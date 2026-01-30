@@ -9181,6 +9181,10 @@ function addAcuteToSyllable(syllable) {
         const originalSyllables = this.currentWord.syllables;
         const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
         
+        console.log('[_updateSyllableDisplay] wordId:', wordId);
+        console.log('[_updateSyllableDisplay] lineIndex:', this.currentWord.lineIndex, 'wordIndex:', this.currentWord.wordIndex);
+        console.log('[_updateSyllableDisplay] displaySyllables:', displaySyllables.map(s => s.ipa));
+        
         // Re-render buttons with display syllables
         const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true;
         const syllableCount = displaySyllables.length;
@@ -9191,11 +9195,14 @@ function addAcuteToSyllable(syllable) {
         ).join('');
         
         // Sync word stack IPA in main document (v5.10.22)
-        const wordStack = document.querySelector(
-          `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`
-        );
+        const selector = `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`;
+        console.log('[_updateSyllableDisplay] selector:', selector);
+        const wordStack = document.querySelector(selector);
+        console.log('[_updateSyllableDisplay] wordStack found:', !!wordStack);
+        
         if (wordStack) {
           const ipaSpan = wordStack.querySelector('.ipa');
+          console.log('[_updateSyllableDisplay] ipaSpan found:', !!ipaSpan);
           if (ipaSpan) {
             // Build display IPA with stress marks and spaces
             let displayIPA = displaySyllables.map((syl, idx) => {
@@ -9211,6 +9218,7 @@ function addAcuteToSyllable(syllable) {
               displayIPA = '‿' + displayIPA;
             }
             
+            console.log('[_updateSyllableDisplay] setting displayIPA:', displayIPA);
             ipaSpan.textContent = displayIPA;
           }
         }
