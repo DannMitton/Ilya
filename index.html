@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.14 Fix Ribbon Cluster Display</title>
+  <title>Ilya — v5.10.15 Consonant Drag Phase 1</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1257,6 +1257,65 @@
     .syllable-btn.disabled:focus,
     .syllable-btn:disabled:focus {
       outline: none;
+    }
+    
+    /* Syllable drag states (v5.10.15) */
+    .syllable-btn.dragging {
+      opacity: 0.5;
+      transform: scale(0.98);
+    }
+    
+    .syllable-btn.drag-target {
+      border-color: var(--ilya-accent);
+      box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.3);
+    }
+    
+    .syllable-btn.drag-invalid {
+      animation: shake 0.3s ease-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    
+    /* Ghost consonant during drag */
+    .consonant-ghost {
+      position: fixed;
+      pointer-events: none;
+      font-family: var(--font-ipa);
+      font-size: 1.15rem;
+      padding: 0.3rem 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--ilya-accent);
+      border-radius: 4px;
+      opacity: 0.85;
+      z-index: 10000;
+      transition: opacity 0.15s, transform 0.15s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .consonant-ghost.valid {
+      background: var(--ilya-accent-light);
+      border-color: var(--ilya-accent);
+    }
+    
+    .consonant-ghost.invalid {
+      background: #fee;
+      border-color: #c44;
+      opacity: 0.6;
+    }
+    
+    /* Header IPA color shift when boundaries customized */
+    .popup-ipa.customized {
+      color: var(--ilya-accent);
+      cursor: pointer;
+    }
+    
+    .popup-ipa.customized:hover {
+      text-decoration: underline;
+      text-decoration-style: dotted;
     }
 
     /* IPA display at top of popup (v5.5) */
@@ -7343,7 +7402,249 @@ function addAcuteToSyllable(syllable) {
     };
 
     /* ========================================
-       DOCUMENT STATE
+       IPA TOKENIZER
+       Parses IPA strings into draggable atomic units
+       Affricates and palatalized consonants travel as single tokens
+       ======================================== */
+    const IpaTokenizer = {
+      // Affricates that must travel as single units (longest first for matching)
+      AFFRICATES: ['ʃtʃ', 'tʃ', 'ts', 'dʒ'],
+      
+      // IPA vowels (including variants)
+      VOWELS: new Set([
+        'a', 'ɑ', 'æ', 'e', 'ɛ', 'i', 'ɪ', 'o', 'ɔ', 'u', 'ʊ', 'ɨ', 'ə', 'ʌ'
+      ]),
+      
+      // Modifiers that attach to preceding consonant
+      MODIFIERS: new Set(['ʲ', 'ʷ', 'ˠ', 'ː']),
+      
+      // Check if character is a vowel
+      isVowel(char) {
+        return this.VOWELS.has(char);
+      },
+      
+      /**
+       * Tokenize an IPA string into atomic units
+       * Each token: { symbol: string, isVowel: boolean, isGeminate: boolean }
+       * 
+       * Example: 'krɐsá' → ['k', 'r', 'ɐ', 's', 'á']
+       * Example: 'vʲjotːsʌ' → ['vʲ', 'j', 'o', 'tː', 's', 'ʌ']
+       * Example: 'tʃajtʃ' → ['tʃ', 'a', 'j', 'tʃ']
+       */
+      tokenize(ipa) {
+        // Strip stress marks for tokenization (they stay with vowels)
+        const clean = ipa.replace(/[ˈˌ]/g, '');
+        const tokens = [];
+        let i = 0;
+        
+        while (i < clean.length) {
+          // Check for affricates first (longest match wins)
+          let foundAffricate = false;
+          for (const affricate of this.AFFRICATES) {
+            if (clean.slice(i, i + affricate.length) === affricate) {
+              let symbol = affricate;
+              i += affricate.length;
+              
+              // Check for following modifiers (palatalization, length)
+              while (i < clean.length && this.MODIFIERS.has(clean[i])) {
+                symbol += clean[i];
+                i++;
+              }
+              
+              tokens.push({
+                symbol,
+                isVowel: false,
+                isGeminate: symbol.includes('ː')
+              });
+              foundAffricate = true;
+              break;
+            }
+          }
+          if (foundAffricate) continue;
+          
+          // Check for vowels
+          if (this.isVowel(clean[i])) {
+            tokens.push({
+              symbol: clean[i],
+              isVowel: true,
+              isGeminate: false
+            });
+            i++;
+            continue;
+          }
+          
+          // Consonant - collect following modifiers
+          let symbol = clean[i];
+          i++;
+          
+          while (i < clean.length && this.MODIFIERS.has(clean[i])) {
+            symbol += clean[i];
+            i++;
+          }
+          
+          tokens.push({
+            symbol,
+            isVowel: false,
+            isGeminate: symbol.includes('ː')
+          });
+        }
+        
+        return tokens;
+      },
+      
+      /**
+       * Parse tokens into onset/nucleus/coda structure
+       * Returns: { onset: [...], nucleus: token, coda: [...] }
+       */
+      parseSegments(tokens) {
+        const vowelIdx = tokens.findIndex(t => t.isVowel);
+        
+        if (vowelIdx === -1) {
+          // No vowel (edge case - shouldn't happen in valid syllables)
+          return { onset: tokens, nucleus: null, coda: [] };
+        }
+        
+        return {
+          onset: tokens.slice(0, vowelIdx),
+          nucleus: tokens[vowelIdx],
+          coda: tokens.slice(vowelIdx + 1)
+        };
+      },
+      
+      /**
+       * Reconstruct IPA string from tokens
+       */
+      join(tokens) {
+        return tokens.map(t => t.symbol).join('');
+      }
+    };
+
+    /* ========================================
+       BOUNDARY STACK
+       Manages display-only syllable boundary offsets
+       Source data is NEVER mutated - only cut points change
+       ======================================== */
+    const BoundaryStack = {
+      // Storage: Map of wordId → array of boundary offsets
+      // Positive offset = stole consonant from right
+      // Negative offset = gave consonant to right
+      _offsets: new Map(),
+      
+      /**
+       * Get boundary offsets for a word (creates default if none)
+       */
+      getOffsets(wordId, syllableCount) {
+        if (!this._offsets.has(wordId)) {
+          // Default: all offsets are 0 (no adjustment)
+          this._offsets.set(wordId, new Array(syllableCount).fill(0));
+        }
+        return this._offsets.get(wordId);
+      },
+      
+      /**
+       * Shift a boundary (move consonant between syllables)
+       * direction: 'left' (steal from right) or 'right' (give to right)
+       * boundaryIdx: which boundary (0 = between syl0 and syl1)
+       */
+      shiftBoundary(wordId, boundaryIdx, direction, syllableCount) {
+        const offsets = this.getOffsets(wordId, syllableCount);
+        
+        if (direction === 'left') {
+          offsets[boundaryIdx]++;  // Steal one consonant from right syllable
+        } else {
+          offsets[boundaryIdx]--;  // Give one consonant to right syllable
+        }
+        
+        return offsets;
+      },
+      
+      /**
+       * Reset all boundaries for a word to default
+       */
+      reset(wordId) {
+        this._offsets.delete(wordId);
+      },
+      
+      /**
+       * Check if word has any custom boundaries
+       */
+      hasCustomBoundaries(wordId) {
+        const offsets = this._offsets.get(wordId);
+        return offsets && offsets.some(o => o !== 0);
+      },
+      
+      /**
+       * Clear all stored offsets (session reset)
+       */
+      clearAll() {
+        this._offsets.clear();
+      },
+      
+      /**
+       * Apply boundary offsets to render display syllables
+       * Takes the original syllable data and returns adjusted display syllables
+       * 
+       * CRITICAL: This NEVER mutates source data
+       * It only computes where to visually cut the token stream
+       */
+      applyOffsets(wordId, originalSyllables) {
+        const syllableCount = originalSyllables.length;
+        const offsets = this.getOffsets(wordId, syllableCount);
+        
+        // If no custom boundaries, return original
+        if (!offsets.some(o => o !== 0)) {
+          return originalSyllables;
+        }
+        
+        // Flatten all syllables into one token stream (preserving order)
+        const allTokens = [];
+        const originalBoundaries = [0]; // Indices where each syllable starts
+        
+        originalSyllables.forEach((syl, idx) => {
+          const tokens = IpaTokenizer.tokenize(syl.ipa);
+          if (idx > 0) {
+            originalBoundaries.push(allTokens.length);
+          }
+          allTokens.push(...tokens);
+        });
+        originalBoundaries.push(allTokens.length); // End marker
+        
+        // Calculate adjusted boundaries
+        const adjustedBoundaries = originalBoundaries.map((boundary, idx) => {
+          if (idx === 0 || idx === originalBoundaries.length - 1) {
+            return boundary; // First and last boundaries don't move
+          }
+          return boundary + offsets[idx - 1];
+        });
+        
+        // Clamp boundaries to valid range
+        for (let i = 1; i < adjustedBoundaries.length - 1; i++) {
+          adjustedBoundaries[i] = Math.max(
+            adjustedBoundaries[i - 1] + 1, // Must have at least 1 token
+            Math.min(adjustedBoundaries[i], adjustedBoundaries[i + 1] - 1)
+          );
+        }
+        
+        // Build display syllables from adjusted boundaries
+        const displaySyllables = [];
+        for (let i = 0; i < syllableCount; i++) {
+          const start = adjustedBoundaries[i];
+          const end = adjustedBoundaries[i + 1];
+          const tokens = allTokens.slice(start, end);
+          
+          displaySyllables.push({
+            ...originalSyllables[i],
+            ipa: IpaTokenizer.join(tokens),
+            displayTokens: tokens,
+            isModified: start !== originalBoundaries[i] || end !== originalBoundaries[i + 1]
+          });
+        }
+        
+        return displaySyllables;
+      }
+    };
+
+    /* ========================================
        ======================================== */
     const DocumentState = {
       lines: [],
@@ -7493,11 +7794,16 @@ function addAcuteToSyllable(syllable) {
             const btn = e.target.closest('.syllable-btn');
             
             // Guard: only respond if popup is open and button isn't disabled
-            if (btn && this.isOpen && !btn.disabled) {
+            // Also guard: don't trigger if we just finished a drag
+            if (btn && this.isOpen && !btn.disabled && !this._dragJustCompleted) {
               const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
               this.updateStress(newStressIdx);
             }
+            this._dragJustCompleted = false;
           });
+          
+          // Drag handling for consonant boundary editing (v5.10.15)
+          this._setupDragHandlers();
         }
         
         // Stress source segment handlers (v5.4.2)
@@ -8423,6 +8729,12 @@ function addAcuteToSyllable(syllable) {
           );
         }
         
+        // Reset boundary customizations (session-only persistence - v5.10.15)
+        if (this.currentWord) {
+          const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+          BoundaryStack.reset(wordId);
+        }
+        
         // Reset state
         this.isOpen = false;
         this.stressWasChanged = false;
@@ -8434,6 +8746,9 @@ function addAcuteToSyllable(syllable) {
         this.elements.refinePanel?.classList.remove('expanded');
         this.elements.stressSourceModule.classList.remove('needs-attention');
         this.clearAttributionSelection();
+        
+        // Reset IPA header customized state (v5.10.15)
+        this.elements.ipa.classList.remove('customized');
       },
       
       positionPopup(element) {
@@ -8474,6 +8789,241 @@ function addAcuteToSyllable(syllable) {
         card.style.maxHeight = `${maxHeight}px`;
         card.style.top = `${top}px`;
         card.style.left = `${left}px`;
+      },
+      
+      // Drag handling state (v5.10.15)
+      _dragState: null,
+      _dragJustCompleted: false,
+      _ghostElement: null,
+      _hasShownDragHint: false,
+      
+      /**
+       * Setup drag handlers for consonant boundary editing
+       * Tap = stress reassignment (unchanged)
+       * Horizontal drag > 40px = shed consonant to adjacent syllable
+       */
+      _setupDragHandlers() {
+        const container = this.elements.syllableDisplay;
+        
+        // Unified handler for mouse and touch
+        const handlePointerDown = (e) => {
+          const btn = e.target.closest('.syllable-btn');
+          if (!btn || !this.isOpen || btn.disabled) return;
+          
+          // Get pointer position (mouse or touch)
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          
+          this._dragState = {
+            startX: clientX,
+            startY: clientY,
+            syllableIdx: parseInt(btn.dataset.syllableIndex, 10),
+            button: btn,
+            hasDragged: false,
+            direction: null
+          };
+        };
+        
+        const handlePointerMove = (e) => {
+          if (!this._dragState) return;
+          
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          
+          const deltaX = clientX - this._dragState.startX;
+          const deltaY = clientY - this._dragState.startY;
+          
+          // Check threshold: horizontal > 40px, vertical < 20px
+          if (Math.abs(deltaX) > 40 && Math.abs(deltaY) < 20 && !this._dragState.hasDragged) {
+            this._dragState.hasDragged = true;
+            this._dragState.direction = deltaX > 0 ? 'right' : 'left';
+            
+            // Attempt to shed consonant
+            this._attemptConsonantShed(this._dragState.syllableIdx, this._dragState.direction);
+          }
+        };
+        
+        const handlePointerUp = () => {
+          if (this._dragState?.hasDragged) {
+            this._dragJustCompleted = true;
+            this._cleanupGhost();
+          }
+          this._dragState = null;
+        };
+        
+        // Mouse events
+        container.addEventListener('mousedown', handlePointerDown);
+        document.addEventListener('mousemove', handlePointerMove);
+        document.addEventListener('mouseup', handlePointerUp);
+        
+        // Touch events
+        container.addEventListener('touchstart', handlePointerDown, { passive: true });
+        document.addEventListener('touchmove', handlePointerMove, { passive: true });
+        document.addEventListener('touchend', handlePointerUp);
+      },
+      
+      /**
+       * Attempt to shed a consonant from syllable in given direction
+       */
+      _attemptConsonantShed(syllableIdx, direction) {
+        if (!this.currentWord) return;
+        
+        const syllables = this.currentWord.syllables;
+        const syllableCount = syllables.length;
+        const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+        
+        // Clamp check: can't shed left from first syllable or right from last
+        if (direction === 'left' && syllableIdx === 0) {
+          this._flashInvalid(syllableIdx);
+          return;
+        }
+        if (direction === 'right' && syllableIdx === syllableCount - 1) {
+          this._flashInvalid(syllableIdx);
+          return;
+        }
+        
+        // Get current syllable's tokens
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, syllables);
+        const currentSyl = displaySyllables[syllableIdx];
+        const tokens = IpaTokenizer.tokenize(currentSyl.ipa);
+        const segments = IpaTokenizer.parseSegments(tokens);
+        
+        // Check if we can shed in this direction
+        let canShed = false;
+        let consonantToShed = null;
+        
+        if (direction === 'left') {
+          // Shed leftmost onset consonant to previous syllable's coda
+          if (segments.onset.length > 0) {
+            canShed = true;
+            consonantToShed = segments.onset[0].symbol;
+          }
+        } else {
+          // Shed rightmost coda consonant to next syllable's onset
+          if (segments.coda.length > 0) {
+            canShed = true;
+            consonantToShed = segments.coda[segments.coda.length - 1].symbol;
+          }
+        }
+        
+        if (!canShed) {
+          this._flashInvalid(syllableIdx);
+          return;
+        }
+        
+        // Check for reset gesture: if dragging back to origin, reset all boundaries
+        if (this._isResetGesture(wordId, syllableIdx, direction, syllableCount)) {
+          BoundaryStack.reset(wordId);
+          this._updateSyllableDisplay();
+          this._pulseAllConsonants();
+          return;
+        }
+        
+        // Shift the boundary
+        const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
+        const shiftDir = direction === 'left' ? 'left' : 'right';
+        BoundaryStack.shiftBoundary(wordId, boundaryIdx, shiftDir, syllableCount);
+        
+        // Update display
+        this._updateSyllableDisplay();
+        this._updateCustomizedState();
+      },
+      
+      /**
+       * Check if this is a reset gesture (dragging consonant back to origin)
+       */
+      _isResetGesture(wordId, syllableIdx, direction, syllableCount) {
+        const offsets = BoundaryStack.getOffsets(wordId, syllableCount);
+        
+        // If dragging left and this syllable previously took from left, it's a reset
+        if (direction === 'left' && syllableIdx > 0 && offsets[syllableIdx - 1] > 0) {
+          return true;
+        }
+        // If dragging right and this syllable previously gave to right, it's a reset
+        if (direction === 'right' && syllableIdx < syllableCount - 1 && offsets[syllableIdx] < 0) {
+          return true;
+        }
+        return false;
+      },
+      
+      /**
+       * Flash invalid feedback on syllable button
+       */
+      _flashInvalid(syllableIdx) {
+        const btn = this.elements.syllableDisplay.querySelector(`[data-syllable-index="${syllableIdx}"]`);
+        if (btn) {
+          btn.classList.add('drag-invalid');
+          setTimeout(() => btn.classList.remove('drag-invalid'), 300);
+        }
+      },
+      
+      /**
+       * Update syllable button display with boundary offsets applied
+       */
+      _updateSyllableDisplay() {
+        if (!this.currentWord) return;
+        
+        const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+        const originalSyllables = this.currentWord.syllables;
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
+        
+        // Re-render buttons with display syllables
+        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true;
+        const syllableCount = displaySyllables.length;
+        const buttonsDisabled = hasYo && syllableCount > 1;
+        
+        this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+        ).join('');
+      },
+      
+      /**
+       * Update header IPA to show customized state
+       */
+      _updateCustomizedState() {
+        if (!this.currentWord) return;
+        
+        const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
+        const hasCustom = BoundaryStack.hasCustomBoundaries(wordId);
+        
+        this.elements.ipa.classList.toggle('customized', hasCustom);
+        
+        // Add click handler for reset if customized
+        if (hasCustom && !this._ipaResetHandler) {
+          this._ipaResetHandler = () => {
+            if (BoundaryStack.hasCustomBoundaries(wordId)) {
+              BoundaryStack.reset(wordId);
+              this._updateSyllableDisplay();
+              this._updateCustomizedState();
+              this._pulseAllConsonants();
+            }
+          };
+          this.elements.ipa.addEventListener('click', this._ipaResetHandler);
+        }
+      },
+      
+      /**
+       * Pulse animation when resetting to default
+       */
+      _pulseAllConsonants() {
+        const buttons = this.elements.syllableDisplay.querySelectorAll('.syllable-btn');
+        buttons.forEach(btn => {
+          btn.style.transition = 'transform 0.2s ease-out';
+          btn.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+          }, 200);
+        });
+      },
+      
+      /**
+       * Clean up ghost element
+       */
+      _cleanupGhost() {
+        if (this._ghostElement) {
+          this._ghostElement.remove();
+          this._ghostElement = null;
+        }
       },
       
       updateStress(newStressIdx) {
