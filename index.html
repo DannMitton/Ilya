@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.17 Silent в in вств Cluster</title>
+  <title>Ilya — v5.10.19 Interactive IPA Header</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1306,25 +1306,51 @@
       border-color: #c44;
       opacity: 0.6;
     }
-    
-    /* Header IPA color shift when boundaries customized */
-    .popup-ipa.customized {
-      color: var(--ilya-accent);
-      cursor: pointer;
-    }
-    
-    .popup-ipa.customized:hover {
-      text-decoration: underline;
-      text-decoration-style: dotted;
-    }
 
-    /* IPA display at top of popup (v5.5) */
-    .popup-ipa {
-      font-family: var(--font-ipa);
-      font-size: 1.1rem;
-      color: var(--ilya-text-secondary);
+    /* Syllable display header (v5.10.19) - interactive IPA at top of popup */
+    .syllable-display-header {
       text-align: center;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .syllable-display-header .syllable-display {
+      justify-content: center;
+    }
+    
+    .syllable-display-header .syllable-btn {
+      font-family: var(--font-ipa);
+      font-size: 1.2rem;
+      padding: 0.4rem 0.6rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: var(--ilya-text-secondary);
+    }
+    
+    .syllable-display-header .syllable-btn:hover {
+      background: var(--ilya-accent-light);
+      border-color: var(--ilya-accent);
+      color: var(--ink-primary);
+    }
+    
+    .syllable-display-header .syllable-btn.stressed {
+      background: var(--ilya-accent);
+      color: white;
+      border-color: var(--ilya-accent);
+      font-weight: 500;
+    }
+    
+    .syllable-display-header .syllable-btn.stressed:hover {
+      background: var(--ilya-accent-hover);
+    }
+    
+    /* Customized state indicator (boundaries adjusted) */
+    .syllable-display-header.customized .syllable-btn {
+      color: var(--ilya-accent);
+    }
+    
+    .syllable-display-header.customized .syllable-btn.stressed {
+      color: white;
     }
 
     .popup-cyrillic {
@@ -2926,7 +2952,10 @@
         </div>
         
         <!-- TIER 1: THE ANSWER (always visible) -->
-        <div class="popup-ipa" id="popupIPA">/—/</div>
+        <!-- Syllable buttons: interactive IPA display + stress control + consonant drag -->
+        <div class="syllable-display-header" id="syllableDisplayHeader">
+          <div class="syllable-display" id="syllableDisplay"></div>
+        </div>
         <div class="popup-cyrillic" id="popupCyrillic">—</div>
         
         <div class="gloss-section">
@@ -2956,14 +2985,6 @@
           <div class="refine-panel-inner">
             <!-- Clitic banner (if applicable) -->
             <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
-            
-            <!-- Stress reassignment -->
-            <div class="syllable-section">
-              <div class="syllable-label" id="syllableLabel">Click to reassign stress</div>
-              <div class="syllable-sandwich">
-                <div class="syllable-display" id="syllableDisplay"></div>
-              </div>
-            </div>
             
             <!-- Stress source module -->
             <div class="stress-source-module" id="stressSourceModule">
@@ -7743,9 +7764,8 @@ function addAcuteToSyllable(syllable) {
           backdrop: document.getElementById('popupBackdrop'),
           card: document.getElementById('popupCard'),
           syllableDisplay: document.getElementById('syllableDisplay'),
-          syllableLabel: document.getElementById('syllableLabel'),
+          syllableDisplayHeader: document.getElementById('syllableDisplayHeader'),
           cyrillic: document.getElementById('popupCyrillic'),
-          ipa: document.getElementById('popupIPA'),
           glossInline: document.getElementById('glossInline'),
           // REMOVED IN v5.5 REDESIGN: whyToggle, whyPanel, citationRule, citationRef
           // Refine Analysis disclosure (v5.5)
@@ -8049,10 +8069,9 @@ function addAcuteToSyllable(syllable) {
           return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
         }).join(' ');
         
-        this.elements.ipa.textContent = '/' + syllabifiedIPA + '/';
         this.elements.cyrillic.textContent = syllabifiedCyrillic;
         
-        // Update syllable buttons
+        // Update syllable buttons (now the primary IPA display)
         const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
         const syllableCount = wordData.syllables.length;
         const buttonsDisabled = hasYo && syllableCount > 1;
@@ -8060,16 +8079,6 @@ function addAcuteToSyllable(syllable) {
         this.elements.syllableDisplay.innerHTML = wordData.syllables.map((syl, idx) => 
           `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
-        
-        // Update syllable label
-        if (syllableCount === 1) {
-          const isClitic = wordData.isProclitic === 'true' || wordData.isEnclitic === 'true';
-          this.elements.syllableLabel.textContent = isClitic ? 'Unstressed monosyllable' : 'Stressed monosyllable';
-        } else if (hasYo) {
-          this.elements.syllableLabel.textContent = 'Stress locked to ё';
-        } else {
-          this.elements.syllableLabel.textContent = 'Click to reassign stress';
-        }
         
         // Update stress source module visibility (locked when monosyllable or ё)
         const stressLocked = syllableCount === 1 || hasYo;
@@ -8646,20 +8655,6 @@ function addAcuteToSyllable(syllable) {
         
         // Determine if stress is locked (monosyllable, clitic, or ё)
         const stressLocked = syllableCount === 1 || hasYo;
-        
-        if (syllableCount === 1) {
-            if (isClitic) {
-                this.elements.syllableLabel.textContent = 'Unstressed monosyllable';
-            } else {
-                this.elements.syllableLabel.textContent = 'Stressed monosyllable';
-            }
-        } else if (hasYo) {
-            this.elements.syllableLabel.textContent = 'Stress locked to ё';
-        } else if (isUnverified) {
-            this.elements.syllableLabel.textContent = 'Stress unverified — please confirm';
-        } else {
-            this.elements.syllableLabel.textContent = 'Click to reassign stress';
-        }
 
         // Hide stress source module when stress is locked (monosyllables or ё)
             if (stressLocked) {
@@ -8675,16 +8670,11 @@ function addAcuteToSyllable(syllable) {
           `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
         
-        // Populate IPA and Cyrillic displays (v5.5)
+        // Populate Cyrillic display and gloss
         const syllabifiedCyrillic = wordData.syllables.map(s => 
           s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
         ).join(' ');
-        const syllabifiedIPA = wordData.syllables.map((s, idx) => {
-          const stressedIdx = wordData.syllables.findIndex(syl => syl.isStressed);
-          return idx === stressedIdx ? 'ˈ' + s.ipa : s.ipa;
-        }).join(' ');
         
-        this.elements.ipa.textContent = '/' + syllabifiedIPA + '/';
         this.elements.cyrillic.textContent = syllabifiedCyrillic;
         this.elements.glossInline.textContent = formatGlossForPopup(wordData.gloss, wordData.pos, wordData.lemma);
         
@@ -8766,8 +8756,8 @@ function addAcuteToSyllable(syllable) {
         this.elements.stressSourceModule.classList.remove('needs-attention');
         this.clearAttributionSelection();
         
-        // Reset IPA header customized state (v5.10.15)
-        this.elements.ipa.classList.remove('customized');
+        // Reset header customized state (v5.10.19)
+        this.elements.syllableDisplayHeader.classList.remove('customized');
       },
       
       positionPopup(element) {
@@ -9078,7 +9068,7 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Update header IPA to show customized state
+       * Update header to show customized state (boundaries adjusted)
        */
       _updateCustomizedState() {
         if (!this.currentWord) return;
@@ -9086,11 +9076,11 @@ function addAcuteToSyllable(syllable) {
         const wordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
         const hasCustom = BoundaryStack.hasCustomBoundaries(wordId);
         
-        this.elements.ipa.classList.toggle('customized', hasCustom);
+        this.elements.syllableDisplayHeader.classList.toggle('customized', hasCustom);
         
         // Add click handler for reset if customized
-        if (hasCustom && !this._ipaResetHandler) {
-          this._ipaResetHandler = () => {
+        if (hasCustom && !this._headerResetHandler) {
+          this._headerResetHandler = () => {
             if (BoundaryStack.hasCustomBoundaries(wordId)) {
               BoundaryStack.reset(wordId);
               this._updateSyllableDisplay();
@@ -9098,7 +9088,7 @@ function addAcuteToSyllable(syllable) {
               this._pulseAllConsonants();
             }
           };
-          this.elements.ipa.addEventListener('click', this._ipaResetHandler);
+          this.elements.syllableDisplayHeader.addEventListener('click', this._headerResetHandler);
         }
       },
       
