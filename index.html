@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.20 Voicing Assimilation in Ribbon</title>
+  <title>Ilya — v5.10.21 Cross-syllable Voicing Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3389,13 +3389,29 @@ function extractCleanGloss(gloss) {
 }
 
 /**
- * Truncate gloss to N words max, adding ellipsis if needed
+ * Truncate gloss to N words max AND M characters max, adding ellipsis if needed
  */
-function truncateGloss(gloss, maxWords) {
+function truncateGloss(gloss, maxWords, maxChars = 25) {
     if (!gloss) return '';
-    const words = gloss.split(/\s+/);
-    if (words.length <= maxWords) return gloss;
-    return words.slice(0, maxWords).join(' ') + '…';
+    
+    // First, strip or truncate parenthetical content for display
+    // Keep short clarifications like "(tree)" but remove long ones
+    let cleaned = gloss.replace(/\s*\([^)]{15,}\)/g, ''); // Remove long parentheticals
+    cleaned = cleaned.replace(/\s*\([^)]*$/, ''); // Remove unclosed parentheticals
+    cleaned = cleaned.trim();
+    
+    // Word limit
+    const words = cleaned.split(/\s+/);
+    if (words.length > maxWords) {
+        cleaned = words.slice(0, maxWords).join(' ') + '…';
+    }
+    
+    // Character limit
+    if (cleaned.length > maxChars) {
+        cleaned = cleaned.slice(0, maxChars).replace(/[,\s]+$/, '') + '…';
+    }
+    
+    return cleaned;
 }
 
 /**
@@ -6301,9 +6317,20 @@ function addAcuteToSyllable(syllable) {
         // Step 2 (Grayson p. 247): Apply regressive voicing assimilation
         ipa = this.applyRegressiveVoicing(ipa);
         
-        // Also update each syllable's IPA to reflect voicing assimilation
+        // Sync syllable IPAs with word-level assimilation (v5.10.20)
+        // Cross-syllable clusters (e.g., кз in вок-зал) are only caught at word level
+        // Re-split the assimilated word IPA back into syllables
+        const assimilatedSegments = this.parseIPASegments(ipa.replace(/ˈ/g, ''));
+        let segmentIdx = 0;
         syllableData.forEach(syl => {
-          syl.ipa = this.applyRegressiveVoicing(syl.ipa);
+          // Count how many segments this syllable originally had
+          const originalSegments = this.parseIPASegments(syl.ipa);
+          const segmentCount = originalSegments.length;
+          
+          // Extract that many segments from the assimilated word
+          const newSegments = assimilatedSegments.slice(segmentIdx, segmentIdx + segmentCount);
+          syl.ipa = newSegments.join('');
+          segmentIdx += segmentCount;
         });
         
         // Sync transcriptionLog to match surface IPA after voicing assimilation (v5.10.20)
@@ -7261,6 +7288,14 @@ function addAcuteToSyllable(syllable) {
         's:regressive-devoicing:з': { blurb: '⟨з⟩ is devoiced to /s/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
         'ʃ:regressive-devoicing:ж': { blurb: '⟨ж⟩ is devoiced to /ʃ/ before a voiceless consonant. Within Russian words, voiced obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
         
+        // Regressive voicing within words (v5.10.21) - voiceless becomes voiced
+        'ɡ:regressive-voicing:к': { blurb: '⟨к⟩ is voiced to /ɡ/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/).', citation: 'pp. 215–221', notable: false },
+        'b:regressive-voicing:п': { blurb: '⟨п⟩ is voiced to /b/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'd:regressive-voicing:т': { blurb: '⟨т⟩ is voiced to /d/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'v:regressive-voicing:ф': { blurb: '⟨ф⟩ is voiced to /v/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'z:regressive-voicing:с': { blurb: '⟨с⟩ is voiced to /z/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        'ʒ:regressive-voicing:ш': { blurb: '⟨ш⟩ is voiced to /ʒ/ before a voiced consonant. Within Russian words, voiceless obstruents assimilate regressively to match the voicing of the following consonant.', citation: 'pp. 215–221', notable: false },
+        
         'voicing:within-word': { blurb: 'Within words, voiced and voiceless consonants assimilate regressively: a voiceless consonant becomes voiced before a voiced consonant (e.g., ⟨вокзал⟩ → /vɑɡˈzɑɫ/), and a voiced consonant becomes voiceless before a voiceless consonant (e.g., ⟨водка⟩ → /ˈvotkʌ/). Exception: ⟨в⟩ does not trigger voicing in preceding consonants (e.g., ⟨свет⟩ → /svʲɛt/, not */zvʲɛt/).', citation: 'pp. 215–221', notable: false },
         'voicing:cross-word': { blurb: 'Voicing assimilation also operates across word boundaries within a single thought or phrase: a final consonant voices before an initial voiced consonant (e.g., ⟨ваш дом⟩ → /vaʒ dom/) or devoices before an initial voiceless consonant (e.g., ⟨год прошёл⟩ → /ɡot prɑˈʃoɫ/). As within words, ⟨в⟩ does not trigger voicing in preceding consonants. In <em>Ilya</em>, you can insert breaks in cross-word assimilation through the popups to mirror the composer\'s phrasing.', citation: 'pp. 248–254', notable: false },
         'ː:geminate': { blurb: 'Geminate (doubled) consonants are pronounced with extended duration. Grayson describes this as "speaking the single consonant twice without any break in between" — a rearticulation rather than simply holding the sound longer. Notation using either doubled symbols (/nn/) or the length mark (/nː/) is acceptable; <em>Ilya</em> uses the length mark (e.g., ⟨ванна⟩ → /ˈvɑnːʌ/) to lessen visual clutter. Notable exception: the very common word ⟨русский⟩ and all of its declensions are pronounced with a single /s/, not a geminate: /ˈruskɨj/.', citation: 'pp. 225–226, 233', notable: true },
@@ -7336,9 +7371,17 @@ function addAcuteToSyllable(syllable) {
       lookupBlurb(entry) {
         const { features, char, ipa } = entry;
         
-        // Check for regressive voicing assimilation (v5.10.20)
+        // Check for regressive devoicing assimilation (v5.10.20)
         if (features?.voicingAssimilation && features?.devoiced) {
           const key = `${ipa}:regressive-devoicing:${char}`;
+          if (this.blurbs[key]) {
+            return this.blurbs[key];
+          }
+        }
+        
+        // Check for regressive voicing assimilation (v5.10.21)
+        if (features?.voicingAssimilation && features?.voiced) {
+          const key = `${ipa}:regressive-voicing:${char}`;
           if (this.blurbs[key]) {
             return this.blurbs[key];
           }
