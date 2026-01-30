@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.1 Gloss Formatting</title>
+  <title>Ilya — v5.10.2 Lemma Extraction</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3192,39 +3192,65 @@ const SINGER_SUPPLEMENT = {
    ================================================== */
 
 /**
- * Format gloss for PDF/word-stack display (minimal, translation only)
+ * Extract lemma from grammatical gloss text
+ * e.g., "short feminine singular past indicative perfective of уга́снуть (ugásnutʹ)" → "угаснуть"
+ */
+function extractLemmaFromGloss(gloss) {
+    if (!gloss) return null;
+    
+    // Pattern: "... of CYRILLIC_WORD (transliteration)" or just "... of CYRILLIC_WORD"
+    const match = gloss.match(/of\s+([а-яёА-ЯЁ́]+)(?:\s*\(|$|\s|,)/i);
+    if (match) {
+        // Remove any combining accents from the extracted lemma
+        return match[1].normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC').toLowerCase();
+    }
+    return null;
+}
+
+/**
+ * Look up semantic gloss for a lemma
+ */
+function getLemmaGloss(lemma) {
+    if (!lemma) return null;
+    
+    const lemmaEntry = STRESS_DICTIONARY[lemma];
+    if (!lemmaEntry) return null;
+    
+    const entryGloss = Array.isArray(lemmaEntry) 
+        ? (lemmaEntry[0].gloss || lemmaEntry[0].g || '')
+        : (lemmaEntry.gloss || lemmaEntry.g || '');
+    
+    // Don't return if it's also a grammatical description
+    if (entryGloss && !/^(short |inflection |nominative |genitive |dative |accusative |instrumental |prepositional )/i.test(entryGloss)) {
+        return entryGloss;
+    }
+    return null;
+}
+
+/**
+ * Format gloss for word-stack display (minimal, translation only)
  */
 function formatGlossForDisplay(gloss, pos, lemma) {
     if (!gloss) return '';
     
     // Detect verbose grammatical patterns from kaikki.org
-    const grammaticalPatterns = [
-        /^(short )?(masculine |feminine |neuter )?(singular |plural )?(past |present |future )?(indicative |imperative |subjunctive )?(perfective |imperfective )?(participle |gerund )?of\s+/i,
-        /^inflection of\s+/i,
-        /^(nominative |genitive |dative |accusative |instrumental |prepositional )(singular |plural )?of\s+/i,
-        /^(comparative |superlative )of\s+/i,
-    ];
+    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(gloss) 
+                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(gloss);
     
-    for (const pattern of grammaticalPatterns) {
-        if (pattern.test(gloss)) {
-            // This is a grammatical description, not a semantic gloss
-            // Try to extract the lemma meaning or return lemma reference
-            if (lemma) {
-                // Look up lemma in dictionary for its meaning
-                const lemmaEntry = STRESS_DICTIONARY[lemma];
-                if (lemmaEntry) {
-                    const lemmaGloss = Array.isArray(lemmaEntry) 
-                        ? (lemmaEntry[0].gloss || lemmaEntry[0].g || '')
-                        : (lemmaEntry.gloss || lemmaEntry.g || '');
-                    if (lemmaGloss && !grammaticalPatterns.some(p => p.test(lemmaGloss))) {
-                        return lemmaGloss;
-                    }
-                }
-                // Fallback: show lemma reference
-                return `→ ${lemma}`;
+    if (isGrammatical) {
+        // Try lemma field first, then extract from gloss text
+        const effectiveLemma = lemma || extractLemmaFromGloss(gloss);
+        
+        if (effectiveLemma) {
+            // Look up lemma's semantic gloss
+            const semanticGloss = getLemmaGloss(effectiveLemma);
+            if (semanticGloss) {
+                return semanticGloss;
             }
-            return '';
+            // Fallback: show lemma reference
+            return `→ ${effectiveLemma}`;
         }
+        return '';
     }
     
     // Clean, semantic gloss — return as-is
@@ -3238,49 +3264,36 @@ function formatGlossForPopup(gloss, pos, lemma) {
     if (!gloss) return pos ? `${pos}` : '';
     
     // Detect verbose grammatical patterns
-    const grammaticalPatterns = [
-        { pattern: /^short (masculine |feminine |neuter )?(singular |plural )?(past ).*(perfective |imperfective )?of\s+/i, 
-          extract: (m) => { 
-            const gender = m[1]?.trim() || '';
-            const number = m[2]?.trim() || '';
-            const tense = m[3]?.trim() || '';
-            return `(${tense}${gender ? ' ' + gender.charAt(0) + '.' : ''})`.replace(/\s+/g, ' ').trim();
-          }
-        },
-        { pattern: /^(masculine |feminine |neuter )?(singular |plural )?(nominative |genitive |dative |accusative |instrumental |prepositional ).*(of\s+)?/i,
-          extract: (m) => {
-            const gender = m[1]?.trim() || '';
-            const number = m[2]?.trim() || '';
-            const case_ = m[3]?.trim() || '';
-            const abbrevCase = case_.substring(0, 3) + '.';
-            return `(${abbrevCase}${gender ? ' ' + gender.charAt(0) + '.' : ''})`.replace(/\s+/g, ' ').trim();
-          }
-        }
-    ];
+    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(gloss) 
+                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(gloss);
     
-    // Check for grammatical gloss
-    for (const {pattern, extract} of grammaticalPatterns) {
-        const match = gloss.match(pattern);
-        if (match) {
-            const grammarHint = extract(match);
-            // Get the semantic meaning from lemma
-            let semanticGloss = '';
-            if (lemma) {
-                const lemmaEntry = STRESS_DICTIONARY[lemma];
-                if (lemmaEntry) {
-                    semanticGloss = Array.isArray(lemmaEntry) 
-                        ? (lemmaEntry[0].gloss || lemmaEntry[0].g || '')
-                        : (lemmaEntry.gloss || lemmaEntry.g || '');
-                    // Recursively clean if lemma gloss is also grammatical
-                    if (grammaticalPatterns.some(({pattern: p}) => p.test(semanticGloss))) {
-                        semanticGloss = `→ ${lemma}`;
-                    }
-                }
-            }
-            
-            const displayGloss = semanticGloss || `→ ${lemma || '?'}`;
-            return pos ? `${pos} ${displayGloss} ${grammarHint}` : `${displayGloss} ${grammarHint}`;
+    if (isGrammatical) {
+        // Extract grammar hints
+        let grammarHint = '';
+        if (/past/i.test(gloss)) grammarHint += 'past ';
+        if (/present/i.test(gloss)) grammarHint += 'pres. ';
+        if (/future/i.test(gloss)) grammarHint += 'fut. ';
+        if (/feminine/i.test(gloss)) grammarHint += 'f.';
+        else if (/masculine/i.test(gloss)) grammarHint += 'm.';
+        else if (/neuter/i.test(gloss)) grammarHint += 'n.';
+        if (/plural/i.test(gloss)) grammarHint += 'pl.';
+        grammarHint = grammarHint.trim();
+        
+        // Try lemma field first, then extract from gloss text
+        const effectiveLemma = lemma || extractLemmaFromGloss(gloss);
+        
+        // Get semantic gloss
+        let semanticGloss = '';
+        if (effectiveLemma) {
+            semanticGloss = getLemmaGloss(effectiveLemma) || `→ ${effectiveLemma}`;
         }
+        
+        const displayGloss = semanticGloss || '';
+        const grammarPart = grammarHint ? `(${grammarHint})` : '';
+        
+        return pos 
+            ? `${pos} ${displayGloss} ${grammarPart}`.trim()
+            : `${displayGloss} ${grammarPart}`.trim();
     }
     
     // Clean semantic gloss — just add POS
