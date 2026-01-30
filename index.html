@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.3 Fix toast persistence</title>
+  <title>Ilya — v5.11.5 Fix print pagination WYSIWYG</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -496,13 +496,8 @@
         padding: 0;
       }
       
-      .paper-page {
-        break-after: page;
-        box-shadow: none;
-        margin: 0;
-        min-height: auto;
-        height: auto;
-      }
+      /* Note: Main print styles for .paper-page are in the comprehensive 
+         @media print block below (around line 2650+) */
       
       .paper-page::before {
         /* Keep bracket logo but not watermark */
@@ -2688,18 +2683,40 @@
         display: block;
       }
 
-      /* Individual pages */
+      /* Individual pages - WYSIWYG fix (v5.11.4)
+         Each paper-page IS one physical page - don't let browser reflow */
       .paper-page {
+        page-break-after: always;
+        page-break-inside: avoid;
         break-after: page;
+        break-inside: avoid;
         box-shadow: none !important;
         margin: 0;
-        padding: 0;
-        min-height: auto;
-        height: auto;
-        width: 100%;
+        padding: 0.5in 0.75in;
+        width: 8.5in;
+        min-height: 11in;
+        height: 11in;
+        max-height: 11in;
         max-width: none;
-        aspect-ratio: unset;
+        overflow: hidden;
         background: white;
+        box-sizing: border-box;
+        position: relative;
+      }
+      
+      /* Last page shouldn't force a trailing blank */
+      .paper-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      
+      /* A4: 210mm × 297mm */
+      .paper-page[data-size="a4"] {
+        width: 210mm;
+        min-height: 297mm;
+        height: 297mm;
+        max-height: 297mm;
+        padding: 12.7mm 15mm;
       }
       
       /* Hide watermark in print */
@@ -2720,18 +2737,18 @@
 
       /* Verse lines: avoid breaking */
       .verse-line {
+        break-inside: avoid;
         page-break-inside: avoid;
       }
 
-      /* Page setup */
+      /* Page setup - no margins, we handle them in paper-page */
       @page {
-        margin: 0.5in;
+        margin: 0;
         size: letter;
       }
       
-      /* A4 page size */
-      .paper-page[data-size="a4"] ~ @page {
-        size: A4;
+      @page :first {
+        margin: 0;
       }
     }
 
