@@ -8931,18 +8931,29 @@ function addAcuteToSyllable(syllable) {
       
       /**
        * Check if this is a reset gesture (dragging consonant back to origin)
+       * Only triggers when the drag would return the boundary toward zero
        */
       _isResetGesture(wordId, syllableIdx, direction, syllableCount) {
         const offsets = BoundaryStack.getOffsets(wordId, syllableCount);
+        const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
         
-        // If dragging left and this syllable previously took from left, it's a reset
-        if (direction === 'left' && syllableIdx > 0 && offsets[syllableIdx - 1] > 0) {
-          return true;
+        if (boundaryIdx < 0 || boundaryIdx >= offsets.length) return false;
+        
+        const currentOffset = offsets[boundaryIdx];
+        
+        // Reset only if this drag would move offset TOWARD zero
+        // direction='left' increases offset (++)
+        // direction='right' decreases offset (--)
+        
+        if (direction === 'left' && currentOffset < 0) {
+          // Offset is negative (gave to right), dragging left brings it toward 0
+          return currentOffset === -1; // Only reset if this is the last step back
         }
-        // If dragging right and this syllable previously gave to right, it's a reset
-        if (direction === 'right' && syllableIdx < syllableCount - 1 && offsets[syllableIdx] < 0) {
-          return true;
+        if (direction === 'right' && currentOffset > 0) {
+          // Offset is positive (stole from right), dragging right brings it toward 0
+          return currentOffset === 1; // Only reset if this is the last step back
         }
+        
         return false;
       },
       
