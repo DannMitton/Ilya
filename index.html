@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.2 Fix soft sign silent</title>
+  <title>Ilya — v5.11.3 Fix toast persistence</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -9135,6 +9135,9 @@ function addAcuteToSyllable(syllable) {
         this.stressWasChanged = false;
         this.attributionSelected = false;
         
+        // Hide any lingering toast immediately (v5.11.3)
+        this.hideYoToast();
+        
         // Collapse refine panel on every open (v5.5 - must be early to avoid flash)
         this.elements.refineToggle?.classList.remove('expanded');
         this.elements.refinePanel?.classList.remove('expanded');
@@ -9218,7 +9221,6 @@ function addAcuteToSyllable(syllable) {
         // NEW: Footer controls (v5.11 - flat structure)
         this.populateVariantRow(wordData);
         this.populateAssimilationRow(wordData);
-        this.hideYoToast(); // Ensure toast is hidden when opening
         
         // Phrase boundary control (v5.4.2 - segments instead of radio) - HIDDEN IN v5.11
         const line = DocumentState.lines[wordData.lineIndex];
