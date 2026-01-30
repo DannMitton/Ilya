@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.9 Gloss Truncation + ё Lookup</title>
+  <title>Ilya — v5.10.10 Smart Gloss Extraction</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3233,9 +3233,12 @@ function getLemmaGloss(lemma) {
 function formatGlossForDisplay(gloss, pos, lemma) {
     if (!gloss) return '';
     
+    // First, try to extract a clean translation from verbose patterns
+    const cleanedGloss = extractCleanGloss(gloss);
+    
     // Detect verbose grammatical patterns from kaikki.org
-    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(gloss) 
-                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(gloss);
+    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(cleanedGloss) 
+                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(cleanedGloss);
     
     if (isGrammatical) {
         // Try lemma field first, then extract from gloss text
@@ -3245,7 +3248,7 @@ function formatGlossForDisplay(gloss, pos, lemma) {
             // Look up lemma's semantic gloss
             const semanticGloss = getLemmaGloss(effectiveLemma);
             if (semanticGloss) {
-                return truncateGloss(semanticGloss, 5);
+                return truncateGloss(extractCleanGloss(semanticGloss), 5);
             }
             // Fallback: show lemma reference
             return `→ ${effectiveLemma}`;
@@ -3254,7 +3257,33 @@ function formatGlossForDisplay(gloss, pos, lemma) {
     }
     
     // Clean, semantic gloss — truncate to 5 words max for PDF display
-    return truncateGloss(gloss, 5);
+    return truncateGloss(cleanedGloss, 5);
+}
+
+/**
+ * Extract clean translation from verbose dictionary glosses
+ * Handles patterns like "Usually translated as 'this'" → "this"
+ */
+function extractCleanGloss(gloss) {
+    if (!gloss) return '';
+    
+    // Pattern: "translated as X" or "Translated as X" — extract X
+    let match = gloss.match(/translated as ["']?([^"'.,;\/]+)/i);
+    if (match) return match[1].replace(/["']/g, '').trim();
+    
+    // Pattern: "diminutive of X: Y" or "augmentative of X: Y" → extract Y
+    match = gloss.match(/^(?:diminutive|augmentative|pejorative|endearing form) of [^:]+:\s*(.+)$/i);
+    if (match) return match[1].trim();
+    
+    // Pattern: starts with linguistic jargon followed by simple gloss in parens
+    // e.g., "proximal demonstrative (this)" but NOT "birch (tree or wood)"
+    if (/^(mostly |generic |proximal |distal |demonstrative )/i.test(gloss)) {
+        match = gloss.match(/\(([a-z][^)]{0,20})\)\s*$/i);
+        if (match && !/\d/.test(match[1])) return match[1].trim();
+    }
+    
+    // No extraction pattern matched — return original
+    return gloss;
 }
 
 /**
@@ -3295,7 +3324,8 @@ function formatGlossForPopup(gloss, pos, lemma) {
         // Get semantic gloss
         let semanticGloss = '';
         if (effectiveLemma) {
-            semanticGloss = getLemmaGloss(effectiveLemma) || `→ ${effectiveLemma}`;
+            const rawGloss = getLemmaGloss(effectiveLemma);
+            semanticGloss = rawGloss ? extractCleanGloss(rawGloss) : `→ ${effectiveLemma}`;
         }
         
         const displayGloss = semanticGloss || '';
@@ -3306,8 +3336,9 @@ function formatGlossForPopup(gloss, pos, lemma) {
             : `${displayGloss} ${grammarPart}`.trim();
     }
     
-    // Clean semantic gloss — just add POS
-    return pos ? `${pos} ${gloss}` : gloss;
+    // Clean semantic gloss — extract clean translation, add POS
+    const cleanedGloss = extractCleanGloss(gloss);
+    return pos ? `${pos} ${cleanedGloss}` : cleanedGloss;
 }
 
 /**
