@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.5 Fix print pagination WYSIWYG</title>
+  <title>Ilya — v5.11.7 Fix clitic spacing and footer margins</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -734,6 +734,15 @@
     .word-stack.proclitic .cyrillic,
     .word-stack.enclitic .cyrillic {
       font-weight: 500;
+    }
+    
+    /* Clitics should be tighter to adjacent words (v5.11.6) */
+    .word-stack.proclitic {
+      margin-right: -1rem;  /* Pull closer to following word */
+    }
+    
+    .word-stack.enclitic {
+      margin-left: -1rem;   /* Pull closer to preceding word */
     }
     
     /* Unverified stress: no visual indicator on paper — popup message is sufficient */
@@ -2683,8 +2692,8 @@
         display: block;
       }
 
-      /* Individual pages - WYSIWYG fix (v5.11.4)
-         Each paper-page IS one physical page - don't let browser reflow */
+      /* Individual pages - WYSIWYG fix (v5.11.6)
+         Force each paper-page to be one physical page */
       .paper-page {
         page-break-after: always;
         page-break-inside: avoid;
@@ -2695,10 +2704,8 @@
         padding: 0.5in 0.75in;
         width: 8.5in;
         min-height: 11in;
-        height: 11in;
-        max-height: 11in;
-        max-width: none;
-        overflow: hidden;
+        height: 11in;  /* Force full page height */
+        overflow: visible;  /* But don't clip if slightly over */
         background: white;
         box-sizing: border-box;
         position: relative;
@@ -2715,7 +2722,6 @@
         width: 210mm;
         min-height: 297mm;
         height: 297mm;
-        max-height: 297mm;
         padding: 12.7mm 15mm;
       }
       
@@ -2735,13 +2741,22 @@
         box-shadow: none !important;
       }
 
-      /* Verse lines: avoid breaking */
+      /* Verse lines: avoid breaking mid-line */
       .verse-line {
         break-inside: avoid;
         page-break-inside: avoid;
       }
+      
+      /* Footer: align with page content area (v5.11.6) */
+      .page-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0.75in;
+        right: 0.75in;
+        padding: 12px 0 24px 0;  /* Keep vertical padding only */
+      }
 
-      /* Page setup - no margins, we handle them in paper-page */
+      /* Page setup - minimal margins, content has its own padding */
       @page {
         margin: 0;
         size: letter;
