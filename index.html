@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.24 Fix Popup Display</title>
+  <title>Ilya — v5.10.25 Dynamic Ribbon + Footer</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4585,8 +4585,8 @@ function addAcuteToSyllable(syllable) {
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This transcription was created by ${userName} using <em>Ilya</em>, whose rules engine is based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
-              <p><em>Ilya</em> is open source, built for singers and teachers by Dann Mitton. Use it freely, improve it if you can, share what you make. This is a scholarly tool: neither it nor its transcriptions may be sold. Made with love in Canada.${canadaFlag}</p>
+              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, whose rules engine is based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
+              <p><em>Ilya</em> is open source, built for singers and teachers by Dann Mitton. Use it freely, improve it if you can, share what you make. Don't be evil. <em>Ilya</em> is a scholarly tool: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
@@ -8515,10 +8515,22 @@ function addAcuteToSyllable(syllable) {
         // Build displayLog with blurb data (memoized per Kimi's optimization)
         const displayLog = RuleRegistry.buildDisplayLog(log);
         
-        // Group by syllable
+        // Get boundary-adjusted syllables (v5.10.25)
+        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
+        const originalSyllables = wordData.syllables;
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
+        const hasCustomBoundaries = BoundaryStack.hasCustomBoundaries(wordId);
+        
+        // Recalculate syllable assignments if boundaries were adjusted
+        let adjustedDisplayLog = displayLog;
+        if (hasCustomBoundaries) {
+          adjustedDisplayLog = this._recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables);
+        }
+        
+        // Group by (adjusted) syllable
         const syllableGroups = new Map();
-        displayLog.forEach(entry => {
-          const sylIdx = entry.syllableIndex ?? 0;
+        adjustedDisplayLog.forEach(entry => {
+          const sylIdx = entry.adjustedSyllableIndex ?? entry.syllableIndex ?? 0;
           if (!syllableGroups.has(sylIdx)) {
             syllableGroups.set(sylIdx, []);
           }
@@ -8697,6 +8709,66 @@ function addAcuteToSyllable(syllable) {
             }
           });
         }
+      },
+      
+      /**
+       * Recalculate syllable indices for ribbon entries based on boundary adjustments (v5.10.25)
+       * Maps each log entry to its new display syllable based on IPA token positions
+       */
+      _recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables) {
+        // Build mapping: cumulative IPA token position → new syllable index
+        // First, calculate original token ranges for each syllable
+        const originalRanges = [];
+        let tokenOffset = 0;
+        originalSyllables.forEach((syl, sylIdx) => {
+          const tokens = IpaTokenizer.tokenize(syl.ipa);
+          originalRanges.push({
+            start: tokenOffset,
+            end: tokenOffset + tokens.length,
+            sylIdx
+          });
+          tokenOffset += tokens.length;
+        });
+        
+        // Calculate display token ranges
+        const displayRanges = [];
+        let displayOffset = 0;
+        displaySyllables.forEach((syl, sylIdx) => {
+          const tokens = IpaTokenizer.tokenize(syl.ipa);
+          displayRanges.push({
+            start: displayOffset,
+            end: displayOffset + tokens.length,
+            sylIdx
+          });
+          displayOffset += tokens.length;
+        });
+        
+        // For each log entry, find which display syllable its IPA token(s) now fall into
+        // Track cumulative token position as we iterate through entries
+        let cumulativeTokenPos = 0;
+        const adjustedLog = displayLog.map(entry => {
+          const entryTokens = IpaTokenizer.tokenize(entry.ipa || '');
+          const entryTokenCount = Math.max(1, entryTokens.length); // At least 1 for positioning
+          
+          // Find which display syllable contains this token position
+          let newSylIdx = entry.syllableIndex ?? 0;
+          for (const range of displayRanges) {
+            if (cumulativeTokenPos >= range.start && cumulativeTokenPos < range.end) {
+              newSylIdx = range.sylIdx;
+              break;
+            }
+          }
+          
+          // Advance cumulative position
+          cumulativeTokenPos += entryTokenCount;
+          
+          return {
+            ...entry,
+            adjustedSyllableIndex: newSylIdx
+          };
+        });
+        
+        return adjustedLog;
       },
       
       // ё toggle module population (v5.8)
@@ -9181,10 +9253,6 @@ function addAcuteToSyllable(syllable) {
         const originalSyllables = this.currentWord.syllables;
         const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
         
-        console.log('[_updateSyllableDisplay] wordId:', wordId);
-        console.log('[_updateSyllableDisplay] lineIndex:', this.currentWord.lineIndex, 'wordIndex:', this.currentWord.wordIndex);
-        console.log('[_updateSyllableDisplay] displaySyllables:', displaySyllables.map(s => s.ipa));
-        
         // Re-render buttons with display syllables
         const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true;
         const syllableCount = displaySyllables.length;
@@ -9195,14 +9263,11 @@ function addAcuteToSyllable(syllable) {
         ).join('');
         
         // Sync word stack IPA in main document (v5.10.22)
-        const selector = `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`;
-        console.log('[_updateSyllableDisplay] selector:', selector);
-        const wordStack = document.querySelector(selector);
-        console.log('[_updateSyllableDisplay] wordStack found:', !!wordStack);
-        
+        const wordStack = document.querySelector(
+          `.word-stack[data-line-index="${this.currentWord.lineIndex}"][data-word-index="${this.currentWord.wordIndex}"]`
+        );
         if (wordStack) {
           const ipaSpan = wordStack.querySelector('.ipa');
-          console.log('[_updateSyllableDisplay] ipaSpan found:', !!ipaSpan);
           if (ipaSpan) {
             // Build display IPA with stress marks and spaces
             let displayIPA = displaySyllables.map((syl, idx) => {
@@ -9218,9 +9283,13 @@ function addAcuteToSyllable(syllable) {
               displayIPA = '‿' + displayIPA;
             }
             
-            console.log('[_updateSyllableDisplay] setting displayIPA:', displayIPA);
             ipaSpan.textContent = displayIPA;
           }
+        }
+        
+        // Re-render ribbon with updated syllable groupings (v5.10.25)
+        if (this.currentWord) {
+          this.renderRibbon(this.currentWord);
         }
       },
       
