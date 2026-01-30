@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.17 visual row pagination</title>
+  <title>Ilya — v5.11.18 reliable 6/7 pagination</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -665,7 +665,7 @@
     .verse-line {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.25rem 1.5rem;
+      gap: 0.25rem 0.625rem; /* Column gap reduced from 1.5rem for density (v5.11.18) */
       align-items: flex-start;
       padding: 0.45rem 0;
       border-bottom: 1px solid rgba(26, 22, 18, 0.06);
@@ -3596,6 +3596,25 @@ const CURATED_GLOSSES = new Map([
     ['час', 'hour'],
     ['год', 'year'],
     ['век', 'century, age'],
+    
+    // Additional common vocab (v5.11.18)
+    ['странствие', 'wandering'],
+    ['странствии', 'wandering'],
+    ['странствия', 'wandering'],
+    ['мгновение', 'moment'],
+    ['мгновенье', 'moment'],
+    ['воспоминание', 'memory'],
+    ['воспоминанье', 'memory'],
+    ['судьбина', 'fate, destiny'],
+    ['провожать', 'to see off'],
+    ['провождать', 'to see off'],
+    ['угадать', 'to guess'],
+    ['годовщина', 'anniversary'],
+    ['годовщину', 'anniversary'],
+    ['бой', 'battle, fight'],
+    ['бою', 'battle'],
+    ['волна', 'wave'],
+    ['волнах', 'waves'],
 ]);
 
 /**
@@ -4350,6 +4369,7 @@ function addAcuteToSyllable(syllable) {
         const contentWidth = this.getContentWidth();
         
         // Create hidden container that inherits page-content CSS
+        // Must match real container exactly: box-sizing, overflow, width
         const hiddenContainer = document.createElement('div');
         hiddenContainer.className = 'page-content';
         hiddenContainer.style.cssText = `
@@ -4357,10 +4377,20 @@ function addAcuteToSyllable(syllable) {
           visibility: hidden;
           pointer-events: none;
           width: ${contentWidth}px;
+          box-sizing: border-box;
+          overflow: hidden;
           top: -9999px;
           left: -9999px;
         `;
         document.body.appendChild(hiddenContainer);
+        
+        // Diagnostic logging (v5.11.18)
+        const realPage = document.querySelector('.paper-page .page-content');
+        if (realPage) {
+          const realWidth = realPage.getBoundingClientRect().width;
+          const hiddenWidth = hiddenContainer.getBoundingClientRect().width;
+          console.log(`[Paginator] Width check - Hidden: ${hiddenWidth.toFixed(1)}px, Real: ${realWidth.toFixed(1)}px, Diff: ${(hiddenWidth - realWidth).toFixed(1)}px`);
+        }
         
         // Measure each line
         const heights = allLines.map(line => {
@@ -4378,11 +4408,16 @@ function addAcuteToSyllable(syllable) {
         this.lineHeightCache = heights;
         this.lineHeightCacheHash = contentHash;
         
-        // Calculate standard row height (minimum non-zero height)
+        // Calculate standard row height using 10th percentile for robustness (v5.11.18)
+        // Math.min() is fragile if some lines are unusually short
         const nonZeroHeights = heights.filter(h => h > 0);
-        this.standardRowHeight = nonZeroHeights.length > 0 
-          ? Math.min(...nonZeroHeights) 
-          : 105; // Fallback
+        if (nonZeroHeights.length > 0) {
+          const sorted = [...nonZeroHeights].sort((a, b) => a - b);
+          const idx = Math.floor(sorted.length * 0.1); // 10th percentile
+          this.standardRowHeight = sorted[idx] || sorted[0];
+        } else {
+          this.standardRowHeight = 105; // Fallback
+        }
         
         console.log('[Paginator] Pre-flight measurement:', {
           lines: heights.length,
@@ -4443,8 +4478,9 @@ function addAcuteToSyllable(syllable) {
         // Fixed line counts based on visual testing
         // Page 1 has less room due to title block
         // Subsequent pages have more room with just running header
+        // (v5.11.18 - reduced subsequent from 8 to 7 for reliability)
         const linesPage1 = 6;
-        const linesSubsequent = 8;
+        const linesSubsequent = 7;
         
         console.log('[Paginator] Lines per page:', {
           paperSize,
@@ -4487,7 +4523,7 @@ function addAcuteToSyllable(syllable) {
        * @returns {Array} Array of page objects
        */
       distributeToPages(allLines, lineHeights = null, paperSize = 'letter') {
-        const targets = { page1: 6, subsequent: 8 };
+        const targets = { page1: 6, subsequent: 7 }; // Reduced from 8 for reliability
         const tolerance = 1; // Allow 1 spillover visual row per page
         
         // If no heights provided, fall back to simple slicing (legacy behavior)
