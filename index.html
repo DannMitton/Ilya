@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.13 Remove Stopgap Adjectives</title>
+  <title>Ilya — v5.10.14 Fix Ribbon Cluster Display</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1527,6 +1527,18 @@
       font-family: var(--font-ipa);
       color: var(--ilya-text-primary);
       font-size: 0.95rem;
+    }
+    
+    /* Silent letter styling (deletion clusters) */
+    .phoneme-row.silent-letter .phoneme-cyr {
+      color: var(--ilya-text-caption);
+      text-decoration: line-through;
+      text-decoration-color: var(--ilya-text-caption);
+    }
+    
+    .phoneme-row.silent-letter .phoneme-ipa {
+      color: var(--ilya-text-caption);
+      font-style: italic;
     }
     
     /* Blurb content (accordion) */
@@ -7193,11 +7205,138 @@ function addAcuteToSyllable(syllable) {
       },
       
       // Build display log with blurb data (memoizable)
+      // Expands cluster entries into per-character rows for educational clarity
       buildDisplayLog(transcriptionLog) {
-        return transcriptionLog.map(entry => ({
-          ...entry,
-          blurbData: this.lookupBlurb(entry)
-        }));
+        // Cluster breakdowns for educational display
+        // Maps cluster string to array of per-character entries
+        const CLUSTER_BREAKDOWNS = {
+          // Silent consonant clusters (Grayson pp. 235-236)
+          'рдц': [
+            { char: 'р', ipa: 'r', features: { type: 'consonant', soft: false } },
+            { char: 'д', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } }
+          ],
+          'лнц': [
+            { char: 'л', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } },
+            { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } }
+          ],
+          // Geminate simplification (Grayson p. 233)
+          'сс': [
+            { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
+            { char: 'с', ipa: '', features: { type: 'consonant', silent: true, geminateSimplified: true } }
+          ],
+          // Assimilated clusters (Grayson pp. 230-231)
+          'сч': [
+            { char: 'с', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
+            { char: 'ч', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, alwaysSoft: true } }
+          ],
+          'зч': [
+            { char: 'з', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
+            { char: 'ч', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, alwaysSoft: true } }
+          ],
+          // Word-specific чн → шн (Grayson p. 239)
+          'чн': [
+            { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', soft: false, clusterAssimilation: true } },
+            { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } }
+          ],
+          // Word-specific чт → шт (Grayson p. 240)
+          'чт': [
+            { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', soft: false, clusterAssimilation: true } },
+            { char: 'т', ipa: 't', features: { type: 'consonant', soft: false } }
+          ]
+        };
+        
+        const expandedLog = [];
+        
+        transcriptionLog.forEach(entry => {
+          // Check if this is a cluster that should be expanded
+          if (entry.features?.type === 'cluster' && CLUSTER_BREAKDOWNS[entry.char]) {
+            const breakdown = CLUSTER_BREAKDOWNS[entry.char];
+            breakdown.forEach((charEntry, idx) => {
+              expandedLog.push({
+                char: charEntry.char,
+                ipa: charEntry.ipa,
+                features: charEntry.features,
+                syllableIndex: entry.syllableIndex,
+                position: entry.position + idx,
+                // Mark as part of cluster for potential styling
+                clusterSource: entry.char,
+                blurbData: this.lookupClusterCharBlurb(charEntry, entry.char)
+              });
+            });
+          } else {
+            // Regular entry, add blurb data
+            expandedLog.push({
+              ...entry,
+              blurbData: this.lookupBlurb(entry)
+            });
+          }
+        });
+        
+        return expandedLog;
+      },
+      
+      // Look up blurb for a character within an expanded cluster
+      lookupClusterCharBlurb(charEntry, clusterSource) {
+        const { char, ipa, features } = charEntry;
+        
+        // Silent letters get the deletion:cluster blurb
+        if (features.silent && features.deletionCluster) {
+          return {
+            blurb: `In the cluster ⟨${clusterSource}⟩, the letter ⟨${char}⟩ is silent and not pronounced. This is one of several consonant clusters in Russian where a letter is written but has no phonetic realization.`,
+            citation: 'pp. 235–236',
+            notable: true
+          };
+        }
+        
+        // Geminate simplified
+        if (features.silent && features.geminateSimplified) {
+          return {
+            blurb: `In ⟨русский⟩ and its declensions, the doubled ⟨сс⟩ is pronounced as a single /s/, not as a geminate. This is an exception to the normal geminate rule.`,
+            citation: 'p. 233',
+            notable: true
+          };
+        }
+        
+        // Cluster assimilation (сч, зч → щ sound)
+        if (features.clusterAssimilation && clusterSource === 'сч') {
+          return {
+            blurb: `The cluster ⟨сч⟩ is pronounced like ⟨щ⟩: a long soft hushing sound /ʃʲʃʲ/. The ⟨с⟩ fully assimilates to match the following ⟨ч⟩.`,
+            citation: 'pp. 230–231',
+            notable: true
+          };
+        }
+        
+        if (features.clusterAssimilation && clusterSource === 'зч') {
+          return {
+            blurb: `The cluster ⟨зч⟩ is pronounced like ⟨щ⟩: a long soft hushing sound /ʃʲʃʲ/. The ⟨з⟩ fully assimilates to match the following ⟨ч⟩.`,
+            citation: 'pp. 230–231',
+            notable: true
+          };
+        }
+        
+        // чн → шн assimilation
+        if (features.clusterAssimilation && clusterSource === 'чн') {
+          return {
+            blurb: `In certain common words (⟨конечно⟩, ⟨скучно⟩, ⟨нарочно⟩, ⟨яичница⟩), the cluster ⟨чн⟩ is pronounced /ʃn/ rather than /tʃn/. This is a historical pronunciation retained in everyday speech.`,
+            citation: 'p. 239',
+            notable: true
+          };
+        }
+        
+        // чт → шт assimilation
+        if (features.clusterAssimilation && clusterSource === 'чт') {
+          return {
+            blurb: `In ⟨что⟩, ⟨чтобы⟩, and ⟨ничто⟩, the cluster ⟨чт⟩ is pronounced /ʃt/ rather than /tʃt/. This is one of the most common pronunciation exceptions in Russian.`,
+            citation: 'p. 240',
+            notable: true
+          };
+        }
+        
+        // Default: look up regular blurb
+        return this.lookupBlurb({ char, ipa, features });
+      },
       }
     };
 
@@ -7983,9 +8122,17 @@ function addAcuteToSyllable(syllable) {
             const blurb = entry.blurbData;
             const isFirstInSyllable = idx === 0;
             const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
+            const isSilent = entry.features?.silent || entry.ipa === '';
+            
+            // Build class list
+            let rowClasses = 'phoneme-row';
+            if (isSilent) rowClasses += ' silent-letter';
+            
+            // Build attributes
+            const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
             
             html += `
-              <div class="phoneme-row${syllableStart ? '" data-syllable-start="true' : ''}" 
+              <div class="${rowClasses}"${syllableAttr}
                    tabindex="0"
                    role="button"
                    aria-expanded="false"
