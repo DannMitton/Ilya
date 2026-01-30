@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.3 Footer Attribution</title>
+  <title>Ilya — v5.10.4 Composer/Poet Fix</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3787,8 +3787,15 @@ function formatGlossForPopup(gloss, pos, lemma) {
       formatRunningHeader(composer, title) {
         if (!composer && !title) return '';
         
-        // Extract surname from full name
-        const surname = composer ? composer.split(' ').pop() : '';
+        // Extract surname from "Lastname, Firstname (dates)" format
+        // or just "Lastname, Firstname"
+        let surname = '';
+        if (composer) {
+          // Remove dates in parentheses first
+          const withoutDates = composer.replace(/\s*\([^)]+\)\s*$/, '');
+          // Take everything before the comma (the surname)
+          surname = withoutDates.split(',')[0].trim();
+        }
         
         // Truncate title if needed (30 chars max)
         let shortTitle = title || '';
@@ -4246,8 +4253,8 @@ function formatGlossForPopup(gloss, pos, lemma) {
         // Get metadata from dashboard
         const title = DashboardController.titleInput?.value || 'Song Title';
         const opus = DashboardController.opusInput?.value || '';
-        const composer = DashboardController.composerSelect?.selectedItem?.display || '';
-        const poet = DashboardController.poetSelect?.selectedItem?.display || '';
+        const composer = DashboardController.composerSelect?.selectedDisplay || '';
+        const poet = DashboardController.poetSelect?.selectedDisplay || '';
         
         let headerHTML = '';
         
