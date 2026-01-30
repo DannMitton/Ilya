@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.10.10 Smart Gloss Extraction</title>
+  <title>Ilya — v5.10.11 Cleaner Glosses</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3273,6 +3273,13 @@ function extractCleanGloss(gloss) {
     
     // Pattern: "diminutive of X: Y" or "augmentative of X: Y" → extract Y
     match = gloss.match(/^(?:diminutive|augmentative|pejorative|endearing form) of [^:]+:\s*(.+)$/i);
+    if (match) return match[1].trim();
+    
+    // Pattern: simple gloss followed by verbose parenthetical explanation
+    // e.g., "I (first-person singular subject pronoun)" → "I"
+    // e.g., "house, building (a residential building)" → "house, building"
+    // But keep useful clarifications like "birch (tree or wood)"
+    match = gloss.match(/^([^(]+)\s*\((?:a |the |first|second|third|singular|plural|subject|object|nominative|genitive|dative|accusative|masculine|feminine|neuter)[^)]*\)$/i);
     if (match) return match[1].trim();
     
     // Pattern: starts with linguistic jargon followed by simple gloss in parens
