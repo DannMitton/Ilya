@@ -8369,6 +8369,23 @@ function addAcuteToSyllable(syllable) {
             { char: 'з', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
             { char: 'ч', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, alwaysSoft: true } }
           ],
+          // Sibilant mergers (Grayson pp. 235-236)
+          'сш': [
+            { char: 'с', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ш' } },
+            { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } }
+          ],
+          'зш': [
+            { char: 'з', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ш', devoices: true } },
+            { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } }
+          ],
+          'сж': [
+            { char: 'с', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ж', voices: true } },
+            { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } }
+          ],
+          'зж': [
+            { char: 'з', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ж' } },
+            { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } }
+          ],
           // Word-specific чн → шн (Grayson p. 239)
           'чн': [
             { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', soft: false, clusterAssimilation: true } },
@@ -8446,6 +8463,25 @@ function addAcuteToSyllable(syllable) {
           return {
             blurb: `The cluster ⟨зч⟩ is pronounced like ⟨щ⟩: a long soft hushing sound /ʃʲʃʲ/. The ⟨з⟩ fully assimilates to match the following ⟨ч⟩.`,
             citation: 'pp. 230–231',
+            notable: true
+          };
+        }
+        
+        // Sibilant mergers (Grayson pp. 235-236)
+        if (features.sibilantMerger) {
+          const mergeTarget = features.mergesInto;
+          const voiceChange = features.voices ? ' (voicing)' : features.devoices ? ' (devoicing)' : '';
+          return {
+            blurb: `The ⟨${char}⟩ merges completely into the following ⟨${mergeTarget}⟩${voiceChange}, lengthening it to /ʒː/ or /ʃː/.`,
+            citation: 'pp. 235–236',
+            notable: true
+          };
+        }
+        
+        if (features.receivesLength) {
+          return {
+            blurb: `This ⟨${char}⟩ receives length from the preceding sibilant, producing a geminate /ʒː/ or /ʃː/.`,
+            citation: 'pp. 235–236',
             notable: true
           };
         }
