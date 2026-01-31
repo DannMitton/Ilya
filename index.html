@@ -1721,13 +1721,19 @@
       /* No backdrop dimming for clusters - perimeter stays anchored */
     }
     
-    /* Cluster member rows - chevron/IPA hidden, but row structure intact */
-    .cluster-group .phoneme-row {
-      min-height: 44px; /* Preserve row height for positioning */
+    /* Cluster member rows - completely neutral, no competing styles */
+    .cluster-group .phoneme-row.cluster-member {
+      min-height: 44px;
+      background: transparent !important;
+      pointer-events: none; /* Clicks go through to cluster-group */
     }
     
-    .cluster-group .phoneme-row .phoneme-arrow,
-    .cluster-group .phoneme-row .phoneme-ipa {
+    .cluster-group .phoneme-row.cluster-member:hover {
+      background: transparent !important;
+    }
+    
+    .cluster-group .phoneme-row.cluster-member .phoneme-arrow,
+    .cluster-group .phoneme-row.cluster-member .phoneme-ipa {
       visibility: hidden;
     }
     
@@ -1746,19 +1752,25 @@
       border: 2px solid var(--ilya-accent);
       border-radius: 4px;
       background: transparent;
-      pointer-events: none;
+      pointer-events: auto; /* Clickable */
+      cursor: pointer;
       z-index: 2;
+    }
+    
+    .cluster-perimeter:focus {
+      outline: 2px solid var(--ilya-accent);
+      outline-offset: 2px;
     }
     
     .cluster-group.active .cluster-perimeter {
       border-width: 3px;
     }
     
-    /* Overlay container - holds connector + bubble, accordion unfolds */
+    /* Overlay container - NO GAP, starts at perimeter edge */
     .cluster-overlay-container {
       position: absolute;
       top: 50%;
-      left: 46px; /* Right edge of perimeter */
+      left: 44px; /* Flush with perimeter right edge (8 + 36 = 44) */
       transform: translateY(-50%);
       transform-origin: left center;
       display: flex;
@@ -1779,10 +1791,10 @@
       pointer-events: auto;
     }
     
-    /* Connector beam */
+    /* Connector beam - no gap, flush with perimeter */
     .cluster-connector {
-      width: 20px;
-      min-width: 20px;
+      width: 16px;
+      min-width: 16px;
       height: 2px;
       background: var(--ilya-accent);
       flex-shrink: 0;
@@ -9829,12 +9841,12 @@ function addAcuteToSyllable(syllable) {
                      aria-label="Consonant cluster: ${clusterOrthography}"
                      data-cluster-ipa="${entry.ipa}"
                      data-cluster-source="${entry.clusterSource}">
-                  <div class="cluster-perimeter"></div>
+                  <div class="cluster-perimeter" 
+                       tabindex="0" 
+                       role="button"
+                       aria-label="Show explanation for ${clusterOrthography} cluster"></div>
                   ${clusterMembers.map(m => `
                     <div class="phoneme-row cluster-member"
-                         tabindex="0"
-                         role="button"
-                         aria-expanded="false"
                          data-cluster-id="${clusterId}">
                       <div class="phoneme-mapping">
                         <span class="phoneme-cyr">${m.char}</span>
@@ -9904,14 +9916,16 @@ function addAcuteToSyllable(syllable) {
         container.innerHTML = html;
         
         // Event delegation for floating overlay (v5.5)
-        // Updated v5.11.30: Two-layer cluster architecture with cluster-group
+        // Updated v5.11.30: Two-layer cluster architecture - click perimeter to activate
         // Only attach once per container to avoid stacking handlers
         if (!container._ribbonListenerAttached) {
           container._ribbonListenerAttached = true;
           
           container.addEventListener('click', (e) => {
-            const row = e.target.closest('.phoneme-row');
+            const row = e.target.closest('.phoneme-row:not(.cluster-member)'); // Exclude cluster members
+            const clusterPerimeter = e.target.closest('.cluster-perimeter');
             const clusterGroup = e.target.closest('.cluster-group');
+            const clusterBubble = e.target.closest('.cluster-bubble');
             const backdrop = container.querySelector('.ribbon-backdrop');
             
             // If clicking backdrop, close all
@@ -9932,22 +9946,25 @@ function addAcuteToSyllable(syllable) {
             }
             
             // If clicking inside a cluster bubble, don't toggle
-            if (e.target.closest('.cluster-bubble')) {
+            if (clusterBubble) {
               return;
             }
             
-            // Clicking anywhere in ribbon outside cluster-bubble dismisses active clusters
+            // Close any active cluster if clicking outside it
             const activeCluster = container.querySelector('.cluster-group.active');
-            if (activeCluster && !e.target.closest('.cluster-group')) {
+            if (activeCluster && !clusterPerimeter && !clusterBubble) {
               activeCluster.classList.remove('active');
               activeCluster.querySelectorAll('.cluster-member').forEach(m => {
                 m.setAttribute('aria-expanded', 'false');
               });
-              // Don't return - allow other handlers to process
+              // If just clicking empty space, return after closing
+              if (!row) {
+                return;
+              }
             }
             
-            // Handle cluster member clicks - activate parent cluster-group
-            if (clusterGroup) {
+            // Handle cluster perimeter clicks - activate/deactivate cluster
+            if (clusterPerimeter && clusterGroup) {
               e.stopPropagation();
               const wasActive = clusterGroup.classList.contains('active');
               
@@ -9962,7 +9979,7 @@ function addAcuteToSyllable(syllable) {
               container.classList.remove('has-active-blurb');
               backdrop?.classList.remove('active');
               
-              // Toggle clicked cluster group (NO backdrop for clusters)
+              // Toggle clicked cluster group
               if (wasActive) {
                 clusterGroup.classList.remove('active');
                 clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
@@ -9973,7 +9990,6 @@ function addAcuteToSyllable(syllable) {
                 clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
                   m.setAttribute('aria-expanded', 'true');
                 });
-                // Note: NO has-active-blurb or backdrop for clusters
               }
               return;
             }
@@ -10006,14 +10022,18 @@ function addAcuteToSyllable(syllable) {
             }
           });
           
-          // Keyboard accessibility (updated for cluster-group)
+          // Keyboard accessibility (cluster perimeter + regular rows)
           container.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              const row = e.target.closest('.phoneme-row');
-              const clusterGroup = e.target.closest('.cluster-group');
-              if (row || clusterGroup) {
+              const row = e.target.closest('.phoneme-row:not(.cluster-member)');
+              const perimeter = e.target.closest('.cluster-perimeter');
+              
+              if (perimeter) {
                 e.preventDefault();
-                (clusterGroup || row).click();
+                perimeter.click();
+              } else if (row) {
+                e.preventDefault();
+                row.click();
               }
             }
             // Escape to close
@@ -10610,6 +10630,17 @@ function addAcuteToSyllable(syllable) {
        */
       _attemptConsonantShed(syllableIdx, direction) {
         if (!this.currentWord) return;
+        
+        // CLUSTER IMMUTABILITY: Check if this syllable contains a merged cluster
+        // Clusters are phonologically bound units that cannot be split
+        if (this.displayLog) {
+          const syllableEntries = this.displayLog.filter(e => e.syllableIndex === syllableIdx);
+          const hasCluster = syllableEntries.some(e => e.clusterMerged);
+          if (hasCluster) {
+            this._flashInvalid(syllableIdx);
+            return; // Clusters are immutable - cannot shed
+          }
+        }
         
         const syllables = this.currentWord.syllables;
         const syllableCount = syllables.length;
