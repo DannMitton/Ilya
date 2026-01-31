@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.25 сш/зж sibilant mergers (word + cross-word)</title>
+  <title>Ilya — v5.11.26 fix parseIPASegments length mark handling</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -6770,8 +6770,16 @@ function addAcuteToSyllable(syllable) {
           } else if (ipa.slice(i, i + 2) === 'ts') {
             segments.push('ts');
             i += 2;
+          } else if (ipa[i + 1] === 'ʲ' && ipa[i + 2] === 'ː') {
+            // Consonant + palatalization + length (e.g., ʃʲː)
+            segments.push(ipa.slice(i, i + 3));
+            i += 3;
           } else if (ipa[i + 1] === 'ʲ') {
             // Consonant + palatalization marker
+            segments.push(ipa.slice(i, i + 2));
+            i += 2;
+          } else if (ipa[i + 1] === 'ː') {
+            // Consonant + length marker (e.g., ʃː, ʒː)
             segments.push(ipa.slice(i, i + 2));
             i += 2;
           } else {
