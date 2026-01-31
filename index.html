@@ -5340,9 +5340,16 @@ function addAcuteToSyllable(syllable) {
             if (tw.isProclitic || tw.isEnclitic) {
               const isVowelless = !hasVowel(tw.cleanWord);
               if (isVowelless) {
-                // Vowelless clitic: use canonical IPA (can't be calculated)
-                const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
-                tw.ipaContent = cliticInfo?.canonicalIpa || tw.ipaContent || '';
+                // Vowelless clitic: check if cross-word assimilation modified ipaSurface
+                // If ipaSurface differs from ipaUnderlying, use the modified version
+                // (e.g., sibilant merger: с + шумом → ipaSurface is empty, /s/ merged into host)
+                if (tw.ipaSurface !== tw.ipaUnderlying) {
+                  tw.ipaContent = tw.ipaSurface; // Use modified (possibly empty) IPA
+                } else {
+                  // No cross-word modification: use canonical IPA
+                  const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
+                  tw.ipaContent = cliticInfo?.canonicalIpa || tw.ipaContent || '';
+                }
               }
               // Vowelled clitics: keep dynamically calculated ipaContent (position-aware)
             }
