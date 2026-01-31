@@ -1707,33 +1707,78 @@
       font-size: 0.8rem;
     }
     
-    /* Cluster member grouping - Funnel Ribbon (v5.11.29) */
-    /* Blue left border visually groups letters that merge into one sound */
-    .phoneme-row.cluster-member {
-      border-left: 3px solid var(--ilya-accent);
-      margin-left: -3px;
-      padding-left: calc(var(--ribbon-inline-padding) + 3px);
+    /* Cluster box - full perimeter groups merged letters (v5.11.29) */
+    .cluster-box {
+      border: 2px solid var(--ilya-accent);
+      border-radius: 6px;
+      margin: 4px 0;
+      padding: 4px 0;
+      background: rgba(122, 158, 126, 0.04);
     }
     
-    /* First member of cluster - shows the merged IPA */
-    .phoneme-row.cluster-start {
-      border-top-left-radius: 4px;
+    .cluster-box .phoneme-row {
+      min-height: 36px;
     }
     
-    /* Last member of cluster - shows only orthography */
-    .phoneme-row.cluster-end {
-      border-bottom-left-radius: 4px;
+    /* Merged IPA display - centered, spans the cluster */
+    .cluster-box .cluster-ipa {
+      font-family: var(--font-ipa);
+      color: var(--ilya-text-primary);
+      font-size: 1.05rem;
+      padding: 2px 12px 6px;
+      text-align: center;
+      border-bottom: 1px solid rgba(122, 158, 126, 0.15);
+      margin-bottom: 4px;
     }
     
-    /* Continuation rows hide IPA/arrow - orthography only */
-    .phoneme-row.cluster-continuation .phoneme-arrow,
-    .phoneme-row.cluster-continuation .phoneme-ipa {
-      visibility: hidden;
+    /* Cluster member rows - orthography only */
+    .cluster-box .cluster-char-row {
+      display: flex;
+      align-items: center;
+      padding: 2px 12px;
+      min-height: 28px;
     }
     
-    /* Hover highlights entire cluster group */
-    .phoneme-row.cluster-member:hover {
-      background: rgba(122, 158, 126, 0.1);
+    .cluster-box .cluster-char {
+      font-family: 'Noto Serif', serif;
+      color: var(--ilya-text-muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Shared blurb area at bottom of cluster box */
+    .cluster-box .cluster-blurb {
+      padding: 8px 12px 4px;
+      border-top: 1px solid rgba(122, 158, 126, 0.15);
+      margin-top: 4px;
+      display: none;
+    }
+    
+    .cluster-box.expanded .cluster-blurb {
+      display: block;
+    }
+    
+    .cluster-box .blurb-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--ilya-text-secondary);
+    }
+    
+    .cluster-box .blurb-citation {
+      font-size: 0.75rem;
+      color: var(--ilya-text-caption);
+      margin-top: 6px;
+      font-style: italic;
+    }
+    
+    /* Hover and focus states */
+    .cluster-box:hover {
+      background: rgba(122, 158, 126, 0.08);
+      cursor: pointer;
+    }
+    
+    .cluster-box:focus {
+      outline: 2px solid var(--ilya-accent);
+      outline-offset: 2px;
     }
     
     /* Blurb content (accordion) */
@@ -9655,31 +9700,57 @@ function addAcuteToSyllable(syllable) {
             html += `<div class="stressed-syllable-region">`;
           }
           
-          entries.forEach((entry, idx) => {
+          // Process entries, grouping merged clusters into boxes
+          let i = 0;
+          while (i < entries.length) {
+            const entry = entries[i];
             const blurb = entry.blurbData;
-            const isFirstInSyllable = idx === 0;
+            const isFirstInSyllable = i === 0;
             const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
             const isSilent = entry.features?.silent || entry.ipa === '';
             
-            // Build class list
+            // Check if this starts a merged cluster
+            if (entry.clusterMerged && entry.clusterStart) {
+              // Collect all cluster members
+              const clusterMembers = [entry];
+              let j = i + 1;
+              while (j < entries.length && entries[j].clusterSource === entry.clusterSource) {
+                clusterMembers.push(entries[j]);
+                j++;
+              }
+              
+              // Render cluster box
+              const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
+              html += `
+                <div class="cluster-box"${syllableAttr}
+                     tabindex="0"
+                     role="button"
+                     aria-expanded="false"
+                     aria-label="Cluster ${entry.clusterSource} becomes ${entry.ipa}">
+                  <div class="cluster-ipa">/${entry.ipa}/</div>
+                  ${clusterMembers.map(m => `
+                    <div class="cluster-char-row">
+                      <span class="cluster-char">${m.char}</span>
+                    </div>
+                  `).join('')}
+                  <div class="cluster-blurb">
+                    <div class="blurb-text">${blurb.blurb}</div>
+                    ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
+                  </div>
+                </div>
+              `;
+              
+              // Skip past all cluster members
+              i = j;
+              continue;
+            }
+            
+            // Regular entry (non-cluster)
             let rowClasses = 'phoneme-row';
             if (isSilent) rowClasses += ' silent-letter';
             
-            // Add cluster member classes for Funnel Ribbon display (v5.11.29)
-            if (entry.clusterMerged) {
-              rowClasses += ' cluster-member';
-              if (entry.clusterStart) rowClasses += ' cluster-start';
-              if (entry.clusterEnd) rowClasses += ' cluster-end';
-              if (entry.clusterContinuation) rowClasses += ' cluster-continuation';
-            }
-            
-            // Build attributes
             const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
-            
-            // Display text for IPA column
-            // For merged clusters, continuation rows show empty (hidden via CSS)
-            const ipaDisplay = entry.clusterContinuation ? '' : 
-                               (isSilent ? '[silent]' : (entry.ipa || '∅'));
+            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
             
             html += `
               <div class="${rowClasses}"${syllableAttr}
@@ -9698,7 +9769,9 @@ function addAcuteToSyllable(syllable) {
                 </div>
               </div>
             `;
-          });
+            
+            i++;
+          }
           
           if (isStressed) {
             html += `</div>`;
@@ -9713,17 +9786,19 @@ function addAcuteToSyllable(syllable) {
         container.innerHTML = html;
         
         // Event delegation for floating overlay (v5.5)
+        // Updated v5.11.29: Handle both phoneme-row and cluster-box
         // Only attach once per container to avoid stacking handlers
         if (!container._ribbonListenerAttached) {
           container._ribbonListenerAttached = true;
           
           container.addEventListener('click', (e) => {
             const row = e.target.closest('.phoneme-row');
+            const clusterBox = e.target.closest('.cluster-box');
             const backdrop = container.querySelector('.ribbon-backdrop');
             
             // If clicking backdrop, close all
             if (e.target.classList.contains('ribbon-backdrop')) {
-              container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+              container.querySelectorAll('.phoneme-row.expanded, .cluster-box.expanded').forEach(r => {
                 r.classList.remove('expanded');
                 r.setAttribute('aria-expanded', 'false');
               });
@@ -9732,8 +9807,36 @@ function addAcuteToSyllable(syllable) {
               return;
             }
             
-            // If clicking inside an open overlay, don't toggle
-            if (e.target.closest('.phoneme-blurb-overlay')) {
+            // If clicking inside an open overlay or blurb, don't toggle
+            if (e.target.closest('.phoneme-blurb-overlay') || e.target.closest('.cluster-blurb')) {
+              return;
+            }
+            
+            // Handle cluster-box clicks
+            if (clusterBox) {
+              e.stopPropagation();
+              const wasExpanded = clusterBox.classList.contains('expanded');
+              
+              // Collapse all others
+              container.querySelectorAll('.phoneme-row.expanded, .cluster-box.expanded').forEach(r => {
+                if (r !== clusterBox) {
+                  r.classList.remove('expanded');
+                  r.setAttribute('aria-expanded', 'false');
+                }
+              });
+              
+              // Toggle clicked box
+              if (wasExpanded) {
+                clusterBox.classList.remove('expanded');
+                clusterBox.setAttribute('aria-expanded', 'false');
+                container.classList.remove('has-active-blurb');
+                backdrop?.classList.remove('active');
+              } else {
+                clusterBox.classList.add('expanded');
+                clusterBox.setAttribute('aria-expanded', 'true');
+                container.classList.add('has-active-blurb');
+                backdrop?.classList.add('active');
+              }
               return;
             }
             
@@ -9743,7 +9846,7 @@ function addAcuteToSyllable(syllable) {
             const wasExpanded = row.classList.contains('expanded');
             
             // Collapse all others (single accordion)
-            container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+            container.querySelectorAll('.phoneme-row.expanded, .cluster-box.expanded').forEach(r => {
               if (r !== row) {
                 r.classList.remove('expanded');
                 r.setAttribute('aria-expanded', 'false');
@@ -9764,13 +9867,14 @@ function addAcuteToSyllable(syllable) {
             }
           });
           
-          // Keyboard accessibility
+          // Keyboard accessibility (updated for cluster-box)
           container.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               const row = e.target.closest('.phoneme-row');
-              if (row) {
+              const clusterBox = e.target.closest('.cluster-box');
+              if (row || clusterBox) {
                 e.preventDefault();
-                row.click();
+                (row || clusterBox).click();
               }
             }
             // Escape to close
