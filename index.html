@@ -1800,14 +1800,31 @@
       white-space: normal;
     }
     
-    .cluster-bubble .cluster-merged-ipa {
-      font-family: var(--font-ipa);
-      font-size: 1.2rem;
-      color: var(--ilya-text-primary);
-      text-align: center;
+    .cluster-bubble .cluster-formula {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       padding-bottom: 8px;
       margin-bottom: 8px;
       border-bottom: 1px solid rgba(122, 158, 126, 0.2);
+    }
+    
+    .cluster-bubble .cluster-formula-ortho {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.1rem;
+      color: var(--ilya-text-muted);
+    }
+    
+    .cluster-bubble .cluster-formula-arrow {
+      font-size: 1rem;
+      color: var(--ilya-text-caption);
+    }
+    
+    .cluster-bubble .cluster-formula-ipa {
+      font-family: var(--font-ipa);
+      font-size: 1.2rem;
+      color: var(--ilya-text-primary);
     }
     
     .cluster-bubble .cluster-blurb-text {
@@ -9829,7 +9846,11 @@ function addAcuteToSyllable(syllable) {
                   <div class="cluster-overlay-container">
                     <div class="cluster-connector"></div>
                     <div class="cluster-bubble">
-                      <div class="cluster-merged-ipa">/${entry.ipa}/</div>
+                      <div class="cluster-formula">
+                        <span class="cluster-formula-ortho">${clusterOrthography}</span>
+                        <span class="cluster-formula-arrow">→</span>
+                        <span class="cluster-formula-ipa">/${entry.ipa}/</span>
+                      </div>
                       <div class="cluster-blurb-text">${blurb.blurb}</div>
                       ${blurb.citation ? `<div class="cluster-blurb-citation">${blurb.citation}</div>` : ''}
                     </div>
