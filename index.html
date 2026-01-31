@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.23 genitive г→v + вств deletion</title>
+  <title>Ilya — v5.11.25 сш/зж sibilant mergers (word + cross-word)</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -5738,6 +5738,11 @@ function addAcuteToSyllable(syllable) {
       specialClusters: {
         'сч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
         'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
+        // Sibilant mergers (Grayson pp. 235-236)
+        'сш': 'ʃː',     // с + ш → long unvoiced postalveolar (p. 235)
+        'зш': 'ʃː',     // з + ш → long unvoiced postalveolar (devoices, p. 235)
+        'сж': 'ʒː',     // с + ж → long voiced postalveolar (voices, p. 236)
+        'зж': 'ʒː',     // з + ж → long voiced postalveolar (p. 236)
       },
       
       // Reflexive verb suffix clusters (Grayson p. 237-238)
@@ -5810,6 +5815,140 @@ function addAcuteToSyllable(syllable) {
         'бесчувственных': { 'вств': 'stv' },
         'бесчувственную': { 'вств': 'stv' },
         'бесчувственном': { 'вств': 'stv' },
+        // Silent т in стн cluster (Grayson p. 235)
+        // честный family (honest)
+        'честный': { 'стн': 'sn' },
+        'честная': { 'стн': 'sn' },
+        'честное': { 'стн': 'sn' },
+        'честные': { 'стн': 'sn' },
+        'честного': { 'стн': 'sn' },
+        'честной': { 'стн': 'sn' },
+        'честному': { 'стн': 'sn' },
+        'честным': { 'стн': 'sn' },
+        'честными': { 'стн': 'sn' },
+        'честных': { 'стн': 'sn' },
+        'честную': { 'стн': 'sn' },
+        'честном': { 'стн': 'sn' },
+        'честно': { 'стн': 'sn' },
+        // известный family (famous)
+        'известный': { 'стн': 'sn' },
+        'известная': { 'стн': 'sn' },
+        'известное': { 'стн': 'sn' },
+        'известные': { 'стн': 'sn' },
+        'известного': { 'стн': 'sn' },
+        'известной': { 'стн': 'sn' },
+        'известному': { 'стн': 'sn' },
+        'известным': { 'стн': 'sn' },
+        'известными': { 'стн': 'sn' },
+        'известных': { 'стн': 'sn' },
+        'известную': { 'стн': 'sn' },
+        'известном': { 'стн': 'sn' },
+        'известно': { 'стн': 'sn' },
+        // грустный family (sad)
+        'грустный': { 'стн': 'sn' },
+        'грустная': { 'стн': 'sn' },
+        'грустное': { 'стн': 'sn' },
+        'грустные': { 'стн': 'sn' },
+        'грустного': { 'стн': 'sn' },
+        'грустной': { 'стн': 'sn' },
+        'грустному': { 'стн': 'sn' },
+        'грустным': { 'стн': 'sn' },
+        'грустными': { 'стн': 'sn' },
+        'грустных': { 'стн': 'sn' },
+        'грустную': { 'стн': 'sn' },
+        'грустном': { 'стн': 'sn' },
+        'грустно': { 'стн': 'sn' },
+        // местный family (local)
+        'местный': { 'стн': 'sn' },
+        'местная': { 'стн': 'sn' },
+        'местное': { 'стн': 'sn' },
+        'местные': { 'стн': 'sn' },
+        'местного': { 'стн': 'sn' },
+        'местной': { 'стн': 'sn' },
+        'местному': { 'стн': 'sn' },
+        'местным': { 'стн': 'sn' },
+        'местными': { 'стн': 'sn' },
+        'местных': { 'стн': 'sn' },
+        'местную': { 'стн': 'sn' },
+        'местном': { 'стн': 'sn' },
+        // частный family (private)
+        'частный': { 'стн': 'sn' },
+        'частная': { 'стн': 'sn' },
+        'частное': { 'стн': 'sn' },
+        'частные': { 'стн': 'sn' },
+        'частного': { 'стн': 'sn' },
+        'частной': { 'стн': 'sn' },
+        'частному': { 'стн': 'sn' },
+        'частным': { 'стн': 'sn' },
+        'частными': { 'стн': 'sn' },
+        'частных': { 'стн': 'sn' },
+        'частную': { 'стн': 'sn' },
+        'частном': { 'стн': 'sn' },
+        'частно': { 'стн': 'sn' },
+        // прелестный family (lovely)
+        'прелестный': { 'стн': 'sn' },
+        'прелестная': { 'стн': 'sn' },
+        'прелестное': { 'стн': 'sn' },
+        'прелестные': { 'стн': 'sn' },
+        'прелестного': { 'стн': 'sn' },
+        'прелестной': { 'стн': 'sn' },
+        'прелестному': { 'стн': 'sn' },
+        'прелестным': { 'стн': 'sn' },
+        'прелестными': { 'стн': 'sn' },
+        'прелестных': { 'стн': 'sn' },
+        'прелестную': { 'стн': 'sn' },
+        'прелестном': { 'стн': 'sn' },
+        // Silent д in здн cluster (Grayson p. 235)
+        // поздно family (late)
+        'поздно': { 'здн': 'zn' },
+        'поздний': { 'здн': 'zn' },
+        'поздняя': { 'здн': 'zn' },
+        'позднее': { 'здн': 'zn' },
+        'поздние': { 'здн': 'zn' },
+        'позднего': { 'здн': 'zn' },
+        'поздней': { 'здн': 'zn' },
+        'позднему': { 'здн': 'zn' },
+        'поздним': { 'здн': 'zn' },
+        'поздними': { 'здн': 'zn' },
+        'поздних': { 'здн': 'zn' },
+        'позднюю': { 'здн': 'zn' },
+        'позднем': { 'здн': 'zn' },
+        // праздник family (holiday)
+        'праздник': { 'здн': 'zn' },
+        'праздника': { 'здн': 'zn' },
+        'праздникам': { 'здн': 'zn' },
+        'праздниками': { 'здн': 'zn' },
+        'праздниках': { 'здн': 'zn' },
+        'праздники': { 'здн': 'zn' },
+        'праздников': { 'здн': 'zn' },
+        'праздником': { 'здн': 'zn' },
+        'праздникам': { 'здн': 'zn' },
+        'праздниках': { 'здн': 'zn' },
+        'праздничный': { 'здн': 'zn' },
+        'праздничная': { 'здн': 'zn' },
+        'праздничное': { 'здн': 'zn' },
+        'праздничные': { 'здн': 'zn' },
+        'праздничного': { 'здн': 'zn' },
+        'праздничной': { 'здн': 'zn' },
+        'праздничному': { 'здн': 'zn' },
+        'праздничным': { 'здн': 'zn' },
+        'праздничными': { 'здн': 'zn' },
+        'праздничных': { 'здн': 'zn' },
+        'праздничную': { 'здн': 'zn' },
+        'праздничном': { 'здн': 'zn' },
+        // звёздный family (starry) - also has здн
+        'звёздный': { 'здн': 'zn' },
+        'звёздная': { 'здн': 'zn' },
+        'звёздное': { 'здн': 'zn' },
+        'звёздные': { 'здн': 'zn' },
+        'звёздного': { 'здн': 'zn' },
+        'звёздной': { 'здн': 'zn' },
+        'звёздному': { 'здн': 'zn' },
+        'звёздным': { 'здн': 'zn' },
+        'звёздными': { 'здн': 'zn' },
+        'звёздных': { 'здн': 'zn' },
+        'звёздную': { 'здн': 'zn' },
+        'звёздном': { 'здн': 'zn' },
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -7084,7 +7223,25 @@ function addAcuteToSyllable(syllable) {
         // For standalone words, apply devoicing now
         let ipaSurface = ipa;
         if (!isClitic) {
-          ipaSurface = this.applyFinalDevoicing(ipa);
+          // Exception: бог → /box/ (Grayson p. 242) — г becomes /x/ not /k/
+          // This is a Church Slavonic preservation
+          if (cleanWord === 'бог' && ipa.endsWith('ɡ')) {
+            ipaSurface = ipa.slice(0, -1) + 'x';
+            // Update syllable data to show /x/ not /ɡ/
+            const lastSyl = syllableData[syllableData.length - 1];
+            if (lastSyl && lastSyl.ipa.endsWith('ɡ')) {
+              lastSyl.ipa = lastSyl.ipa.slice(0, -1) + 'x';
+            }
+            // Update transcriptionLog for the final г
+            const lastConsonantEntry = transcriptionLog.findLast(e => e.char === 'г');
+            if (lastConsonantEntry) {
+              lastConsonantEntry.ipa = 'x';
+              lastConsonantEntry.features.bogException = true;
+              lastConsonantEntry.features.finalDevoicing = false; // Not standard devoicing
+            }
+          } else {
+            ipaSurface = this.applyFinalDevoicing(ipa);
+          }
         }
         
         return { ipa: ipaSurface, ipaUnderlying: ipa, syllables: syllableData, transcriptionLog };
@@ -7301,6 +7458,26 @@ function addAcuteToSyllable(syllable) {
           
           // Skip if right initial is sonorant or /v/ (no assimilative influence)
           if (this.isSonorantConsonant(rightInitial) || this.isVPhoneme(rightInitial)) continue;
+          
+          // SIBILANT MERGERS (Grayson pp. 235-236)
+          // с/з + ш → /ʃː/, с/з + ж → /ʒː/
+          // These take priority over voicing assimilation (complete merger, not just voicing change)
+          const sibilantMergers = {
+            's':  { 'ʃ': 'ʃː', 'ʒ': 'ʒː' },
+            'z':  { 'ʃ': 'ʃː', 'ʒ': 'ʒː' },
+            'sʲ': { 'ʃ': 'ʃː', 'ʒ': 'ʒː' },
+            'zʲ': { 'ʃ': 'ʃː', 'ʒ': 'ʒː' }
+          };
+          
+          if (sibilantMergers[leftFinal]?.[rightInitial]) {
+            // Complete merger: delete left final, geminate right initial
+            // Example: с шумом → /ʃːumʌm/ (not /s ʃumʌm/)
+            const geminate = sibilantMergers[leftFinal][rightInitial];
+            leftWord.ipaSurface = leftWord.ipaSurface.slice(0, -leftFinal.length);
+            rightWord.ipaSurface = geminate + rightWord.ipaSurface.slice(rightInitial.length);
+            leftWord.skipFinalDevoicing = true;
+            continue; // Skip voicing assimilation - merger already handled
+          }
           
           // Determine assimilation direction
           if (this.isVoicedObstruent(rightInitial) && this.isVoicelessConsonant(leftFinal)) {
@@ -8107,6 +8284,14 @@ function addAcuteToSyllable(syllable) {
         // Check for genitive ending г → /v/ (Grayson p. 243)
         if (features?.genitiveEnding) {
           const key = `${ipa}:genitive:${char}`;
+          if (this.blurbs[key]) {
+            return this.blurbs[key];
+          }
+        }
+        
+        // Check for бог exception г → /x/ (Grayson p. 242)
+        if (features?.bogException) {
+          const key = `x:exception:бог`;
           if (this.blurbs[key]) {
             return this.blurbs[key];
           }
