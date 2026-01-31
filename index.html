@@ -1710,16 +1710,18 @@
     /* Cluster box - full perimeter groups merged letters (v5.11.29) */
     /* ==========================================================================
        CLUSTER TWO-LAYER ARCHITECTURE (v5.11.30)
-       Base layer: rows with hidden chevron/IPA
-       Overlay layer: tight perimeter + connector + blurb bubble
+       Base layer: standard rows, visually unmarked
+       Floating layer: tight perimeter + connector + blurb bubble
+       Accordion animation: unfolds rightward from perimeter
        ========================================================================== */
     
-    /* Cluster group wrapper - structural only, no visual border */
+    /* Cluster group wrapper - invisible, just for JS targeting */
     .cluster-group {
       position: relative;
+      /* No backdrop dimming for clusters - perimeter stays anchored */
     }
     
-    /* Cluster member rows - chevron/IPA hidden */
+    /* Cluster member rows - chevron/IPA hidden, but row structure intact */
     .cluster-group .phoneme-row {
       min-height: 44px; /* Preserve row height for positioning */
     }
@@ -1729,53 +1731,58 @@
       visibility: hidden;
     }
     
-    /* Cluster perimeter - positioned over orthography column only */
+    /* Prevent cluster rows from fading when blurb is active */
+    .ribbon-vertical.has-active-blurb .cluster-group .phoneme-row {
+      opacity: 1 !important;
+    }
+    
+    /* Tight perimeter - always visible, hugs orthography column */
     .cluster-perimeter {
       position: absolute;
-      left: 4px;
       top: 0;
       bottom: 0;
+      left: 8px;
       width: 36px; /* Tight around orthography */
       border: 2px solid var(--ilya-accent);
       border-radius: 4px;
+      background: transparent;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 150ms ease;
+      z-index: 2;
     }
     
     .cluster-group.active .cluster-perimeter {
-      opacity: 1;
       border-width: 3px;
     }
     
-    /* Always show subtle perimeter at rest */
-    .cluster-group .cluster-perimeter {
-      opacity: 1;
-      border-color: var(--ilya-accent);
-    }
-    
-    /* Cluster overlay container - holds connector + bubble */
+    /* Overlay container - holds connector + bubble, accordion unfolds */
     .cluster-overlay-container {
       position: absolute;
-      left: 48px; /* Right of perimeter (4px + 36px + 8px gap) */
       top: 50%;
+      left: 46px; /* Right edge of perimeter */
       transform: translateY(-50%);
+      transform-origin: left center;
       display: flex;
       align-items: center;
-      z-index: 10;
+      z-index: 15;
+      
+      /* Accordion animation - starts collapsed, unfolds right */
       opacity: 0;
+      max-width: 0;
+      overflow: hidden;
       pointer-events: none;
-      transition: opacity 150ms ease;
+      transition: opacity 150ms ease, max-width 250ms ease;
     }
     
     .cluster-group.active .cluster-overlay-container {
       opacity: 1;
+      max-width: 400px; /* Enough for bubble */
       pointer-events: auto;
     }
     
     /* Connector beam */
     .cluster-connector {
       width: 20px;
+      min-width: 20px;
       height: 2px;
       background: var(--ilya-accent);
       flex-shrink: 0;
@@ -1790,6 +1797,7 @@
       min-width: 200px;
       max-width: 280px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      white-space: normal;
     }
     
     .cluster-bubble .cluster-merged-ipa {
@@ -1818,16 +1826,27 @@
     /* Mobile: stack vertically */
     @media (max-width: 768px) {
       .cluster-overlay-container {
-        left: 50%;
         top: 100%;
+        left: 50%;
         transform: translateX(-50%);
+        transform-origin: center top;
         flex-direction: column;
         margin-top: 8px;
+        max-width: none;
+        max-height: 0;
+        transition: opacity 150ms ease, max-height 250ms ease;
+      }
+      
+      .cluster-group.active .cluster-overlay-container {
+        max-width: none;
+        max-height: 400px;
       }
       
       .cluster-connector {
         width: 2px;
+        min-width: 2px;
         height: 12px;
+        min-height: 12px;
       }
       
       .cluster-bubble {
@@ -9886,9 +9905,24 @@ function addAcuteToSyllable(syllable) {
               return;
             }
             
-            // If clicking inside an open overlay or blurb, don't toggle
-            if (e.target.closest('.phoneme-blurb-overlay') || e.target.closest('.cluster-overlay')) {
+            // If clicking inside an open phoneme blurb overlay, don't toggle
+            if (e.target.closest('.phoneme-blurb-overlay')) {
               return;
+            }
+            
+            // If clicking inside a cluster bubble, don't toggle
+            if (e.target.closest('.cluster-bubble')) {
+              return;
+            }
+            
+            // Clicking anywhere in ribbon outside cluster-bubble dismisses active clusters
+            const activeCluster = container.querySelector('.cluster-group.active');
+            if (activeCluster && !e.target.closest('.cluster-group')) {
+              activeCluster.classList.remove('active');
+              activeCluster.querySelectorAll('.cluster-member').forEach(m => {
+                m.setAttribute('aria-expanded', 'false');
+              });
+              // Don't return - allow other handlers to process
             }
             
             // Handle cluster member clicks - activate parent cluster-group
@@ -9896,7 +9930,7 @@ function addAcuteToSyllable(syllable) {
               e.stopPropagation();
               const wasActive = clusterGroup.classList.contains('active');
               
-              // Collapse all others
+              // Collapse all other clusters and expanded rows
               container.querySelectorAll('.phoneme-row.expanded, .cluster-group.active').forEach(r => {
                 if (r !== clusterGroup) {
                   r.classList.remove('expanded');
@@ -9904,22 +9938,21 @@ function addAcuteToSyllable(syllable) {
                   r.setAttribute('aria-expanded', 'false');
                 }
               });
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
               
-              // Toggle clicked cluster group
+              // Toggle clicked cluster group (NO backdrop for clusters)
               if (wasActive) {
                 clusterGroup.classList.remove('active');
                 clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
                   m.setAttribute('aria-expanded', 'false');
                 });
-                container.classList.remove('has-active-blurb');
-                backdrop?.classList.remove('active');
               } else {
                 clusterGroup.classList.add('active');
                 clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
                   m.setAttribute('aria-expanded', 'true');
                 });
-                container.classList.add('has-active-blurb');
-                backdrop?.classList.add('active');
+                // Note: NO has-active-blurb or backdrop for clusters
               }
               return;
             }
@@ -9965,8 +9998,9 @@ function addAcuteToSyllable(syllable) {
             // Escape to close
             if (e.key === 'Escape') {
               const backdrop = container.querySelector('.ribbon-backdrop');
-              container.querySelectorAll('.phoneme-row.expanded').forEach(r => {
+              container.querySelectorAll('.phoneme-row.expanded, .cluster-group.active').forEach(r => {
                 r.classList.remove('expanded');
+                r.classList.remove('active');
                 r.setAttribute('aria-expanded', 'false');
               });
               container.classList.remove('has-active-blurb');
