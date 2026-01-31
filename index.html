@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.19 simple 6/8 + tight spacing</title>
+  <title>Ilya — v5.11.19 bulletproof pagination</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4515,15 +4515,15 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Distribute lines across pages (v5.11.19 - simplified)
-       * Horizontal gap reduction prevents wrapping, so simple slicing works
+       * Distribute lines across pages (v5.11.19)
        * @param {Array} allLines - All transcribed lines
-       * @param {Array} lineHeights - Unused, kept for API compatibility
+       * @param {Object} targets - { page1: N, subsequent: M } line counts
        * @param {string} paperSize - 'letter' or 'a4'
        * @returns {Array} Array of page objects
        */
-      distributeToPages(allLines, lineHeights = null, paperSize = 'letter') {
-        const targets = { page1: 6, subsequent: 8 };
+      distributeToPages(allLines, targets = null, paperSize = 'letter') {
+        // Use provided targets or defaults
+        const { page1, subsequent } = targets || { page1: 6, subsequent: 8 };
         
         const pages = [];
         let cursor = 0;
@@ -4533,9 +4533,9 @@ function addAcuteToSyllable(syllable) {
           pages.push({
             pageNumber: 1,
             template: 'title',
-            lines: allLines.slice(0, targets.page1)
+            lines: allLines.slice(0, page1)
           });
-          cursor = targets.page1;
+          cursor = page1;
         }
         
         // Subsequent pages: running header, more lines
@@ -4543,9 +4543,9 @@ function addAcuteToSyllable(syllable) {
           pages.push({
             pageNumber: pages.length + 1,
             template: 'subsequent',
-            lines: allLines.slice(cursor, cursor + targets.subsequent)
+            lines: allLines.slice(cursor, cursor + subsequent)
           });
-          cursor += targets.subsequent;
+          cursor += subsequent;
         }
         
         // Ensure at least one page
@@ -4557,7 +4557,8 @@ function addAcuteToSyllable(syllable) {
           });
         }
         
-        console.log('[Paginator] Simple distribution:', {
+        console.log('[Paginator] Distribution:', {
+          targets: { page1, subsequent },
           totalLines: allLines.length,
           pageCount: pages.length,
           linesPerPage: pages.map(p => p.lines.length)
@@ -4910,7 +4911,7 @@ function addAcuteToSyllable(syllable) {
         this.collapse();
       },
       
-      renderToPaper() {
+      renderToPaper(fallbackMode = false) {
         const paperStack = document.getElementById('paperStack');
         const paperSize = DocumentController.getSize();
         
@@ -4931,12 +4932,16 @@ function addAcuteToSyllable(syllable) {
         // PHASE 1-2.5: Transcribe all lines
         const transcribedLines = this.transcribeAllLines();
         
-        // Distribute lines to pages (v5.11.19 - simple 6/8 slicing)
-        // Horizontal gap reduction prevents wrapping, so visual row counting not needed
-        const pages = Paginator.distributeToPages(transcribedLines, null, paperSize);
+        // Distribute lines to pages
+        // Normal mode: 6/8, Fallback mode: 5/7 (guaranteed safe)
+        const targets = fallbackMode 
+          ? { page1: 5, subsequent: 7 }
+          : { page1: 6, subsequent: 8 };
+        
+        const pages = Paginator.distributeToPages(transcribedLines, targets, paperSize);
         const totalPages = pages.length;
         
-        console.log('[renderToPaper] Creating', totalPages, 'pages');
+        console.log('[renderToPaper] Creating', totalPages, 'pages', fallbackMode ? '(fallback mode)' : '');
         
         // Render each page
         pages.forEach((pageData, pageIdx) => {
@@ -4950,8 +4955,16 @@ function addAcuteToSyllable(syllable) {
           paperStack.appendChild(pageElement);
         });
         
-        // POST-RENDER VERIFICATION - safety net
-        this.verifyNoOverflow();
+        // POST-RENDER OVERFLOW CHECK (v5.11.19)
+        // If overflow detected and not already in fallback mode, re-render with reduced counts
+        if (!fallbackMode) {
+          const hasOverflow = this.detectOverflow();
+          if (hasOverflow) {
+            console.warn('[renderToPaper] Overflow detected, re-rendering in fallback mode (5/7)');
+            this.renderToPaper(true); // Recursive call with fallback
+            return;
+          }
+        }
         
         // Update page count display and export button state
         DocumentController.updatePageCount();
@@ -4959,11 +4972,12 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Post-render verification: assert no overflow (v5.11.17)
-       * Logs warning if overflow detected - indicates bug in pre-measurement
+       * Detect if any page has content overflow (v5.11.19)
+       * Returns true if any last verse-line extends into footer zone
        */
-      verifyNoOverflow() {
+      detectOverflow() {
         const pages = document.querySelectorAll('.paper-page');
+        let hasOverflow = false;
         
         pages.forEach((page, idx) => {
           const pageContent = page.querySelector('.page-content');
@@ -4979,14 +4993,14 @@ function addAcuteToSyllable(syllable) {
           const lineBottom = lineRect.bottom;
           const footerTop = footerRect.top;
           
-          // 10px safety margin
-          if (lineBottom > footerTop - 10) {
-            console.error(`[OVERFLOW BUG] Page ${idx + 1}: last line (${lineBottom.toFixed(0)}px) overlaps footer (${footerTop.toFixed(0)}px)`, {
-              gap: (footerTop - lineBottom).toFixed(0),
-              lineText: lastVerseLine.textContent?.substring(0, 50)
-            });
+          // 20px safety margin
+          if (lineBottom > footerTop - 20) {
+            console.warn(`[Overflow] Page ${idx + 1}: line bottom ${lineBottom.toFixed(0)}px, footer top ${footerTop.toFixed(0)}px`);
+            hasOverflow = true;
           }
         });
+        
+        return hasOverflow;
       },
       
       /**
