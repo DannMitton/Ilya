@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.20 clitic spacing + gloss fixes</title>
+  <title>Ilya — v5.11.21 progressive pal + footer + glosses</title>
+  
+  <!-- Favicon: simple И in terracotta circle -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -713,7 +716,7 @@
     }
 
     .word-stack .ipa {
-      font-family: 'Noto Serif', serif;
+      font-family: 'Charis SIL', 'Doulos SIL', 'Noto Serif', 'DejaVu Sans', serif;
       font-size: 1rem;
       color: var(--ink-secondary);
       letter-spacing: 0.01em;
@@ -3623,6 +3626,41 @@ const CURATED_GLOSSES = new Map([
     ['бою', 'battle'],
     ['волна', 'wave'],
     ['волнах', 'waves'],
+    
+    // v5.11.21: Additional Станцы vocab
+    ['уединённый', 'solitary'],
+    ['уединенный', 'solitary'],
+    ['патриарх', 'patriarch'],
+    ['забвенный', 'forgotten'],
+    ['младенец', 'infant'],
+    ['младенца', 'infant'],
+    ['уступаю', 'I yield'],
+    ['уступать', 'to yield'],
+    ['тлеть', 'to decay'],
+    ['цвести', 'to bloom'],
+    ['годину', 'hour, time'],
+    ['грядущей', 'coming, future'],
+    ['грядущий', 'coming, future'],
+    ['соседняя', 'neighboring'],
+    ['долина', 'valley'],
+    ['охладелый', 'cold, dead'],
+    ['прах', 'dust, ashes'],
+    ['бесчувственному', 'insensible'],
+    ['бесчувственный', 'insensible'],
+    ['истлевать', 'to decay'],
+    ['предел', 'limit, end'],
+    ['пределу', 'limit, end'],
+    ['почивать', 'to rest, sleep'],
+    ['гробовой', 'grave, deathly'],
+    ['гробового', 'grave'],
+    ['младая', 'young'],
+    ['равнодушная', 'indifferent'],
+    ['равнодушный', 'indifferent'],
+    ['природа', 'nature'],
+    ['краса', 'beauty'],
+    ['красою', 'beauty'],
+    ['вечною', 'eternal'],
+    ['сиять', 'to shine'],
 ]);
 
 /**
@@ -3637,8 +3675,8 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
         return CURATED_GLOSSES.get(lemma.toLowerCase());
     }
     
-    // En-dash for missing glosses: holds vertical space, maintains rhythm (v5.11.19)
-    if (!gloss) return '—';
+    // Blank for missing glosses: leave space for pencil users (v5.11.20)
+    if (!gloss) return '';
     
     // First, try to extract a clean translation from verbose patterns
     const cleanedGloss = extractCleanGloss(gloss);
@@ -3660,8 +3698,8 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
             // Fallback: show lemma reference
             return `→ ${effectiveLemma}`;
         }
-        // No lemma found: show en-dash
-        return '—';
+        // No lemma found: leave blank
+        return '';
     }
     
     // Clean, semantic gloss — truncate to 5 words max for PDF display
@@ -5105,7 +5143,7 @@ function addAcuteToSyllable(syllable) {
           <footer class="page-footer">
             <div class="footer-attribution">
               <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, whose rules engine is based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
-              <p><em>Ilya</em> is open source, built for singers and teachers by Dann Mitton. Use it freely, improve it if you can, share what you make. Don't be evil. <em>Ilya</em> is a scholarly tool: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
+              <p>Dann Mitton built <em>Ilya</em> to be open source: use and distribute it freely, improve it if you can, share what you make. Don't be evil. <em>Ilya</em> is a scholarly tool: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
@@ -5248,7 +5286,8 @@ function addAcuteToSyllable(syllable) {
             if (tw.ipaSurface !== tw.ipaUnderlying && tw.syllables.length > 0) {
               const lastSyl = tw.syllables[tw.syllables.length - 1];
               const underlyingConcat = tw.syllables.map(s => s.ipa).join('');
-              const surfaceClean = tw.ipaSurface.replace(/\s+/g, '');
+              // Remove stress marks AND spaces from surface for comparison
+              const surfaceClean = tw.ipaSurface.replace(/[ˈ\s]+/g, '');
               
               const prefixLen = underlyingConcat.length - lastSyl.ipa.length;
               
@@ -5283,9 +5322,10 @@ function addAcuteToSyllable(syllable) {
             tw.ipaDisplay = ipaCore; // Will be overwritten for clitics
           });
           
-          // PHASE 2.6: Clitic IPA fusion (v5.11.19)
+          // PHASE 2.6: Clitic IPA fusion (v5.11.20)
           // Vowelless clitics fuse directly (no space, no arrow) - they're not syllables
           // Vowelled clitics keep space (they ARE syllables) and show directional arrows
+          // Use canonicalIpa from cliticData since syllabification fails for vowelless words
           const cyrillicVowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
                                           'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
           const hasVowel = (word) => {
@@ -5293,6 +5333,13 @@ function addAcuteToSyllable(syllable) {
           };
           
           transcribedWords.forEach((tw, idx) => {
+            if (tw.isProclitic || tw.isEnclitic) {
+              // Get canonical IPA from cliticData (reliable for vowelless clitics)
+              const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
+              const cliticIpa = cliticInfo?.canonicalIpa || tw.ipaContent || '';
+              tw.ipaContent = cliticIpa; // Use canonical IPA
+            }
+            
             if (tw.isProclitic) {
               const nextWord = transcribedWords[idx + 1];
               const isVowelless = !hasVowel(tw.cleanWord);
@@ -5303,7 +5350,7 @@ function addAcuteToSyllable(syllable) {
                 tw.isVowellessClitic = true;
                 if (nextWord && !nextWord.isProclitic) {
                   // Fuse directly (no space)
-                  nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaContent;
+                  nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaDisplay;
                 }
               } else {
                 // Vowelled proclitic: show arrow, keep as separate syllable
@@ -5311,7 +5358,7 @@ function addAcuteToSyllable(syllable) {
                 tw.isVowellessClitic = false;
                 if (nextWord && !nextWord.isProclitic) {
                   // Prepend with space (clitic is a syllable)
-                  nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaContent;
+                  nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaDisplay;
                 }
               }
             } else if (tw.isEnclitic) {
@@ -6090,6 +6137,7 @@ function addAcuteToSyllable(syllable) {
         
         // р: never regressively palatalizes except when doubled (ррь)
         // (Grayson p. 209 rule 2; D&P pp. 85-87)
+        // NOTE: Progressive palatalization (after front vowel in cluster) is handled separately
         if (consonant === 'р') {
           return triggerConsonant === 'р'; // Only before another р
         }
@@ -6346,7 +6394,7 @@ function addAcuteToSyllable(syllable) {
         return vowel;
       },
       
-      transcribeConsonant(consonant, nextChar, prevChar, isStressedSyllable, isSoftFromRegressive = false) {
+      transcribeConsonant(consonant, nextChar, prevChar, isStressedSyllable, isSoftFromRegressive = false, nextCharInWord = null) {
         consonant = consonant.toLowerCase();
         prevChar = prevChar?.toLowerCase();
         // Combine direct palatalization with regressive palatalization analysis
@@ -6360,9 +6408,12 @@ function addAcuteToSyllable(syllable) {
         // Examples: смерть /sʲmʲerʲtʲ/, терпеть /tʲirʲˈpʲetʲ/, кирпич /kʲirʲˈpʲitʃʲ/
         // NOTE: This applies only when р is IN A CLUSTER (followed by consonant)
         // Word-final р after front vowel does NOT palatalize: мир /mʲir/ not /mʲirʲ/
+        // v5.11.21: Use nextCharInWord to check across syllable boundaries
         if (consonant === 'р' && isStressedSyllable) {
           const frontVowels = ['и', 'е', 'э'];
-          const nextIsConsonant = nextChar && this.consonants.has(nextChar);
+          // Check both syllable-local nextChar AND word-level nextCharInWord
+          const effectiveNextChar = nextChar || nextCharInWord;
+          const nextIsConsonant = effectiveNextChar && this.consonants.has(effectiveNextChar.toLowerCase());
           if (frontVowels.includes(prevChar) && nextIsConsonant) {
             return 'rʲ'; // Progressive palatalization in cluster only
           }
@@ -6576,10 +6627,13 @@ function addAcuteToSyllable(syllable) {
           return ipa; // Sonorants don't devoice
         }
         
+        // Remove any trailing spaces for matching
+        const trimmedIpa = ipa.trimEnd();
+        
         // Check for voiced consonants at end and replace
         for (const [voiced, voiceless] of Object.entries(this.voicedToVoiceless)) {
-          if (ipa.endsWith(voiced)) {
-            return ipa.slice(0, -voiced.length) + voiceless;
+          if (trimmedIpa.endsWith(voiced)) {
+            return trimmedIpa.slice(0, -voiced.length) + voiceless;
           }
         }
         
@@ -6844,6 +6898,7 @@ function addAcuteToSyllable(syllable) {
               });
             } else if (this.isConsonant(char)) {
               const prevChar = chars[i - 1];
+              const nextCharInWord = cleanWord[globalIndex + 1]; // For cross-syllable checks
               const isStressedSyl = (position === 'stressed');
               // Pass regressive palatalization info
               let isSoftFromRegressive = softIndices.has(globalIndex);
@@ -6858,7 +6913,7 @@ function addAcuteToSyllable(syllable) {
                 // Force hard velar: output base consonant without palatalization
                 consonantIpa = this.inventory.consonants[char] || char;
               } else {
-                consonantIpa = this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive);
+                consonantIpa = this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive, nextCharInWord);
               }
               sylIpa += consonantIpa;
               
