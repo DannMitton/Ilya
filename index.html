@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.26 fix parseIPASegments length mark handling</title>
+  <title>Ilya — v5.11.27 distance-on-release click/drag disambiguation</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8914,21 +8914,11 @@ function addAcuteToSyllable(syllable) {
           e.stopPropagation();
         });
         
-        // Syllable button event delegation (prevents listener leak - v5.5.1)
+        // Syllable button interaction: unified pointer handling (v5.11.27)
+        // Distance-on-release: <10px = stress, 10-40px = cancel, >40px = drag
+        // No separate click handler - all logic in pointerup
         if (this.elements.syllableDisplay) {
-          this.elements.syllableDisplay.addEventListener('click', (e) => {
-            const btn = e.target.closest('.syllable-btn');
-            
-            // Guard: only respond if popup is open and button isn't disabled
-            // Also guard: don't trigger if we just finished a drag
-            if (btn && this.isOpen && !btn.disabled && !this._dragJustCompleted) {
-              const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
-              this.updateStress(newStressIdx);
-            }
-            this._dragJustCompleted = false;
-          });
-          
-          // Drag handling for consonant boundary editing (v5.10.15)
+          // Drag handling for consonant boundary editing (v5.10.15, refactored v5.11.27)
           this._setupDragHandlers();
         }
         
@@ -10192,24 +10182,33 @@ function addAcuteToSyllable(syllable) {
         card.style.left = `${left}px`;
       },
       
-      // Drag handling state (v5.10.15)
+      // Drag handling state (v5.10.15, refactored v5.11.27)
       _dragState: null,
-      _dragJustCompleted: false,
       _ghostElement: null,
       _hasShownDragHint: false,
       
       /**
-       * Setup drag handlers for consonant boundary editing
-       * Tap = stress reassignment (unchanged)
-       * Horizontal drag > 40px = shed consonant to adjacent syllable
+       * Setup unified pointer handlers for syllable buttons (v5.11.27)
+       * Distance-on-release disambiguation:
+       * - <10px movement = tap = reassign stress
+       * - 10-40px = hesitation/jitter = silent cancellation
+       * - >40px horizontal = drag = shed consonant
+       * 
+       * No separate click handler, no flags, no timeouts.
+       * Pure geometric decision at moment of release.
        */
       _setupDragHandlers() {
         const container = this.elements.syllableDisplay;
+        const CLICK_THRESHOLD = 10;   // px - absorbs normal jitter
+        const DRAG_THRESHOLD = 40;    // px - existing shed threshold
         
         // Unified handler for mouse and touch
         const handlePointerDown = (e) => {
           const btn = e.target.closest('.syllable-btn');
           if (!btn || !this.isOpen || btn.disabled) return;
+          
+          // Only handle primary button (left click / single touch)
+          if (e.button !== undefined && e.button !== 0) return;
           
           // Get pointer position (mouse or touch)
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -10219,36 +10218,51 @@ function addAcuteToSyllable(syllable) {
             startX: clientX,
             startY: clientY,
             syllableIdx: parseInt(btn.dataset.syllableIndex, 10),
-            button: btn,
-            hasDragged: false,
-            direction: null
+            button: btn
           };
+          
+          // Prevent text selection during potential drag
+          e.preventDefault();
         };
         
         const handlePointerMove = (e) => {
           if (!this._dragState) return;
           
+          // Optional: cursor feedback when exiting click zone
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          const dx = Math.abs(clientX - this._dragState.startX);
           
-          const deltaX = clientX - this._dragState.startX;
-          const deltaY = clientY - this._dragState.startY;
-          
-          // Check threshold: horizontal > 40px, vertical < 20px
-          if (Math.abs(deltaX) > 40 && Math.abs(deltaY) < 20 && !this._dragState.hasDragged) {
-            this._dragState.hasDragged = true;
-            this._dragState.direction = deltaX > 0 ? 'right' : 'left';
-            
-            // Attempt to shed consonant
-            this._attemptConsonantShed(this._dragState.syllableIdx, this._dragState.direction);
+          if (dx > CLICK_THRESHOLD) {
+            this._dragState.button.style.cursor = 'grabbing';
           }
         };
         
-        const handlePointerUp = () => {
-          if (this._dragState?.hasDragged) {
-            this._dragJustCompleted = true;
+        const handlePointerUp = (e) => {
+          if (!this._dragState) return;
+          
+          const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+          const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+          
+          const dx = clientX - this._dragState.startX;
+          const dy = clientY - this._dragState.startY;
+          const distance = Math.abs(dx); // Horizontal distance for drag detection
+          
+          // Reset cursor
+          this._dragState.button.style.cursor = '';
+          
+          if (distance < CLICK_THRESHOLD) {
+            // CASE 1: Clean tap/click → reassign stress
+            this.updateStress(this._dragState.syllableIdx);
+          } 
+          else if (distance >= DRAG_THRESHOLD && Math.abs(dy) < 20) {
+            // CASE 2: Committed horizontal drag → shed consonant
+            const direction = dx > 0 ? 'right' : 'left';
+            this._attemptConsonantShed(this._dragState.syllableIdx, direction);
             this._cleanupGhost();
           }
+          // CASE 3: Dead zone (10-40px) or vertical movement → silent cancellation
+          // Do nothing - this is the "Calm" moment
+          
           this._dragState = null;
         };
         
@@ -10257,8 +10271,8 @@ function addAcuteToSyllable(syllable) {
         document.addEventListener('mousemove', handlePointerMove);
         document.addEventListener('mouseup', handlePointerUp);
         
-        // Touch events
-        container.addEventListener('touchstart', handlePointerDown, { passive: true });
+        // Touch events (not passive because we preventDefault in pointerdown)
+        container.addEventListener('touchstart', handlePointerDown, { passive: false });
         document.addEventListener('touchmove', handlePointerMove, { passive: true });
         document.addEventListener('touchend', handlePointerUp);
       },
