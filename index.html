@@ -1711,14 +1711,12 @@
     /* ==========================================================================
        CLUSTER TWO-LAYER ARCHITECTURE (v5.11.30)
        Base layer: standard rows, visually unmarked
-       Floating layer: tight perimeter + connector + blurb bubble
-       Accordion animation: unfolds rightward from perimeter
+       Floating layer: tight perimeter + connector + blurb bubble + dismiss backdrop
        ========================================================================== */
     
     /* Cluster group wrapper - invisible, just for JS targeting */
     .cluster-group {
       position: relative;
-      /* No backdrop dimming for clusters - perimeter stays anchored */
     }
     
     /* Cluster member rows - completely neutral, no competing styles */
@@ -1742,17 +1740,17 @@
       opacity: 1 !important;
     }
     
-    /* Tight perimeter - always visible, hugs orthography column */
+    /* Tight perimeter - 2px always, matches blurb border */
     .cluster-perimeter {
       position: absolute;
       top: 0;
       bottom: 0;
       left: 8px;
-      width: 36px; /* Tight around orthography */
+      width: 36px;
       border: 2px solid var(--ilya-accent);
       border-radius: 4px;
       background: transparent;
-      pointer-events: auto; /* Clickable */
+      pointer-events: auto;
       cursor: pointer;
       z-index: 2;
     }
@@ -1762,22 +1760,37 @@
       outline-offset: 2px;
     }
     
-    .cluster-group.active .cluster-perimeter {
-      border-width: 3px;
+    /* NO thicker border on active - Calm Authority, not Growing Irritation */
+    
+    /* Dismiss backdrop - covers ribbon, catches clicks outside bubble */
+    .cluster-dismiss-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 14; /* Below bubble (15), above everything else */
+      background: transparent;
+      cursor: default;
+    }
+    
+    .cluster-group.active .cluster-dismiss-backdrop {
+      display: block;
     }
     
     /* Overlay container - NO GAP, starts at perimeter edge */
     .cluster-overlay-container {
       position: absolute;
       top: 50%;
-      left: 44px; /* Flush with perimeter right edge (8 + 36 = 44) */
+      left: 44px; /* Flush with perimeter right edge */
       transform: translateY(-50%);
       transform-origin: left center;
       display: flex;
       align-items: center;
       z-index: 15;
       
-      /* Accordion animation - starts collapsed, unfolds right */
+      /* Accordion animation */
       opacity: 0;
       max-width: 0;
       overflow: hidden;
@@ -1787,11 +1800,11 @@
     
     .cluster-group.active .cluster-overlay-container {
       opacity: 1;
-      max-width: 400px; /* Enough for bubble */
+      max-width: 400px;
       pointer-events: auto;
     }
     
-    /* Connector beam - no gap, flush with perimeter */
+    /* Connector beam - flush with perimeter */
     .cluster-connector {
       width: 16px;
       min-width: 16px;
@@ -1800,7 +1813,7 @@
       flex-shrink: 0;
     }
     
-    /* Blurb bubble */
+    /* Blurb bubble - 2px border to match perimeter */
     .cluster-bubble {
       background: white;
       border: 2px solid var(--ilya-accent);
@@ -5320,13 +5333,13 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Footer with attribution (2/3) and pagination (1/3)
-        const userName = DocumentState.userName || 'anonymous';
+        const userName = DocumentState.userName || '[User Name]';
         const canadaFlag = `<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="0.75em" viewBox="0 0 9600 4800" style="vertical-align: middle; margin-left: 0.25em;"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>`;
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, whose rules engine is based on Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
-              <p>Dann Mitton built <em>Ilya</em> to be open source: use and distribute it freely, improve it if you can, share what you make. Don't be evil. <em>Ilya</em> is a scholarly tool: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
+              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's dissertation, <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
+              <p><em>Ilya</em> is an open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
@@ -9841,6 +9854,7 @@ function addAcuteToSyllable(syllable) {
                      aria-label="Consonant cluster: ${clusterOrthography}"
                      data-cluster-ipa="${entry.ipa}"
                      data-cluster-source="${entry.clusterSource}">
+                  <div class="cluster-dismiss-backdrop"></div>
                   <div class="cluster-perimeter" 
                        tabindex="0" 
                        role="button"
@@ -9924,11 +9938,20 @@ function addAcuteToSyllable(syllable) {
           container.addEventListener('click', (e) => {
             const row = e.target.closest('.phoneme-row:not(.cluster-member)'); // Exclude cluster members
             const clusterPerimeter = e.target.closest('.cluster-perimeter');
-            const clusterGroup = e.target.closest('.cluster-group');
             const clusterBubble = e.target.closest('.cluster-bubble');
+            const clusterDismissBackdrop = e.target.closest('.cluster-dismiss-backdrop');
             const backdrop = container.querySelector('.ribbon-backdrop');
             
-            // If clicking backdrop, close all
+            // If clicking dismiss backdrop (floating layer), close cluster
+            if (clusterDismissBackdrop) {
+              const clusterGroup = clusterDismissBackdrop.closest('.cluster-group');
+              if (clusterGroup) {
+                clusterGroup.classList.remove('active');
+              }
+              return;
+            }
+            
+            // If clicking ribbon backdrop, close all
             if (e.target.classList.contains('ribbon-backdrop')) {
               container.querySelectorAll('.phoneme-row.expanded, .cluster-group.active').forEach(r => {
                 r.classList.remove('expanded');
@@ -9950,22 +9973,12 @@ function addAcuteToSyllable(syllable) {
               return;
             }
             
-            // Close any active cluster if clicking outside it
-            const activeCluster = container.querySelector('.cluster-group.active');
-            if (activeCluster && !clusterPerimeter && !clusterBubble) {
-              activeCluster.classList.remove('active');
-              activeCluster.querySelectorAll('.cluster-member').forEach(m => {
-                m.setAttribute('aria-expanded', 'false');
-              });
-              // If just clicking empty space, return after closing
-              if (!row) {
-                return;
-              }
-            }
-            
             // Handle cluster perimeter clicks - activate/deactivate cluster
-            if (clusterPerimeter && clusterGroup) {
+            if (clusterPerimeter) {
               e.stopPropagation();
+              const clusterGroup = clusterPerimeter.closest('.cluster-group');
+              if (!clusterGroup) return;
+              
               const wasActive = clusterGroup.classList.contains('active');
               
               // Collapse all other clusters and expanded rows
@@ -9982,14 +9995,8 @@ function addAcuteToSyllable(syllable) {
               // Toggle clicked cluster group
               if (wasActive) {
                 clusterGroup.classList.remove('active');
-                clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
-                  m.setAttribute('aria-expanded', 'false');
-                });
               } else {
                 clusterGroup.classList.add('active');
-                clusterGroup.querySelectorAll('.cluster-member').forEach(m => {
-                  m.setAttribute('aria-expanded', 'true');
-                });
               }
               return;
             }
