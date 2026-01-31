@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.18 reliable 6/7 pagination</title>
+  <title>Ilya — v5.11.19 simple 6/8 + tight spacing</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4478,9 +4478,9 @@ function addAcuteToSyllable(syllable) {
         // Fixed line counts based on visual testing
         // Page 1 has less room due to title block
         // Subsequent pages have more room with just running header
-        // (v5.11.18 - reduced subsequent from 8 to 7 for reliability)
+        // (v5.11.19 - restored to 6/8, horizontal gap reduction prevents wrapping)
         const linesPage1 = 6;
-        const linesSubsequent = 7;
+        const linesSubsequent = 8;
         
         console.log('[Paginator] Lines per page:', {
           paperSize,
@@ -4515,110 +4515,21 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Distribute lines across pages with visual row counting (v5.11.17)
-       * Accounts for lines that wrap and consume multiple visual rows
+       * Distribute lines across pages (v5.11.19 - simplified)
+       * Horizontal gap reduction prevents wrapping, so simple slicing works
        * @param {Array} allLines - All transcribed lines
-       * @param {Array} lineHeights - Pre-measured heights for each line (optional)
+       * @param {Array} lineHeights - Unused, kept for API compatibility
        * @param {string} paperSize - 'letter' or 'a4'
        * @returns {Array} Array of page objects
        */
       distributeToPages(allLines, lineHeights = null, paperSize = 'letter') {
-        const targets = { page1: 6, subsequent: 7 }; // Reduced from 8 for reliability
-        const tolerance = 1; // Allow 1 spillover visual row per page
+        const targets = { page1: 6, subsequent: 8 };
         
-        // If no heights provided, fall back to simple slicing (legacy behavior)
-        if (!lineHeights || lineHeights.length !== allLines.length) {
-          console.log('[Paginator] No line heights, using simple distribution');
-          return this.distributeSimple(allLines, targets);
-        }
-        
-        // Calculate standard row height from measurements
-        const standardRowHeight = this.standardRowHeight || 
-          Math.min(...lineHeights.filter(h => h > 0)) || 105;
-        
-        const pages = [];
-        let currentPage = 1;
-        let logicalRows = 0;
-        let visualRows = 0;
-        let currentPageLines = [];
-        
-        for (let i = 0; i < allLines.length; i++) {
-          const line = allLines[i];
-          const lineVisualRows = Math.max(1, Math.ceil(lineHeights[i] / standardRowHeight));
-          const target = currentPage === 1 ? targets.page1 : targets.subsequent;
-          
-          // Check if we need a page break
-          // Break if: we've hit the logical target AND adding this line would exceed visual tolerance
-          const wouldExceedVisual = visualRows + lineVisualRows > target + tolerance;
-          const atLogicalLimit = logicalRows >= target;
-          
-          if (atLogicalLimit || (logicalRows > 0 && wouldExceedVisual)) {
-            // Save current page
-            pages.push({
-              pageNumber: currentPage,
-              template: currentPage === 1 ? 'title' : 'subsequent',
-              lines: currentPageLines,
-              logicalRows,
-              visualRows
-            });
-            
-            // Start new page
-            currentPage++;
-            currentPageLines = [line];
-            logicalRows = 1;
-            visualRows = lineVisualRows;
-          } else {
-            // Add to current page
-            currentPageLines.push(line);
-            logicalRows++;
-            visualRows += lineVisualRows;
-          }
-        }
-        
-        // Don't forget the last page
-        if (currentPageLines.length > 0) {
-          pages.push({
-            pageNumber: currentPage,
-            template: currentPage === 1 ? 'title' : 'subsequent',
-            lines: currentPageLines,
-            logicalRows,
-            visualRows
-          });
-        }
-        
-        // Ensure at least one page exists
-        if (pages.length === 0) {
-          pages.push({
-            pageNumber: 1,
-            template: 'title',
-            lines: [],
-            logicalRows: 0,
-            visualRows: 0
-          });
-        }
-        
-        console.log('[Paginator] Visual distribution:', {
-          totalLines: allLines.length,
-          pageCount: pages.length,
-          pages: pages.map(p => ({ 
-            logical: p.logicalRows, 
-            visual: p.visualRows,
-            lines: p.lines.length 
-          }))
-        });
-        
-        return pages;
-      },
-      
-      /**
-       * Simple distribution without visual row counting (fallback)
-       */
-      distributeSimple(allLines, targets) {
         const pages = [];
         let cursor = 0;
         
-        // Page 1
-        if (allLines.length > 0 || pages.length === 0) {
+        // Page 1: title template, fewer lines
+        if (allLines.length > 0) {
           pages.push({
             pageNumber: 1,
             template: 'title',
@@ -4627,7 +4538,7 @@ function addAcuteToSyllable(syllable) {
           cursor = targets.page1;
         }
         
-        // Subsequent pages
+        // Subsequent pages: running header, more lines
         while (cursor < allLines.length) {
           pages.push({
             pageNumber: pages.length + 1,
@@ -4636,6 +4547,21 @@ function addAcuteToSyllable(syllable) {
           });
           cursor += targets.subsequent;
         }
+        
+        // Ensure at least one page
+        if (pages.length === 0) {
+          pages.push({
+            pageNumber: 1,
+            template: 'title',
+            lines: []
+          });
+        }
+        
+        console.log('[Paginator] Simple distribution:', {
+          totalLines: allLines.length,
+          pageCount: pages.length,
+          linesPerPage: pages.map(p => p.lines.length)
+        });
         
         return pages;
       },
@@ -5005,21 +4931,9 @@ function addAcuteToSyllable(syllable) {
         // PHASE 1-2.5: Transcribe all lines
         const transcribedLines = this.transcribeAllLines();
         
-        // PHASE 3: Pre-flight measurement (v5.11.17)
-        // Measure actual heights before pagination to handle wrapping lines
-        const lineHeights = Paginator.measureAllLineHeights(
-          transcribedLines,
-          (line) => {
-            // Create a temporary DOM element from the line HTML
-            const html = this.renderVerseLine(line);
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            return temp.firstElementChild;
-          }
-        );
-        
-        // Distribute lines to pages with visual row counting
-        const pages = Paginator.distributeToPages(transcribedLines, lineHeights, paperSize);
+        // Distribute lines to pages (v5.11.19 - simple 6/8 slicing)
+        // Horizontal gap reduction prevents wrapping, so visual row counting not needed
+        const pages = Paginator.distributeToPages(transcribedLines, null, paperSize);
         const totalPages = pages.length;
         
         console.log('[renderToPaper] Creating', totalPages, 'pages');
@@ -5036,8 +4950,7 @@ function addAcuteToSyllable(syllable) {
           paperStack.appendChild(pageElement);
         });
         
-        // POST-RENDER VERIFICATION (v5.11.17)
-        // Safety net assertion - should never trigger with proper pre-measurement
+        // POST-RENDER VERIFICATION - safety net
         this.verifyNoOverflow();
         
         // Update page count display and export button state
