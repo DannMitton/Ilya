@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.21 progressive pal + footer + glosses</title>
+  <title>Ilya — v5.11.23 genitive г→v + вств deletion</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -3588,6 +3588,9 @@ const CURATED_GLOSSES = new Map([
     ['быть', 'to be'],
     ['есть', 'is/to eat'],
     ['нет', 'no/there is no'],
+    ['сойти', 'to descend'],
+    ['сойдём', 'we will descend'],
+    ['сойду', 'I will descend'],
     // Preposition-like
     ['между', 'between'],
     ['меж', 'between'],
@@ -3695,8 +3698,8 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
             if (semanticGloss) {
                 return truncateGloss(extractCleanGloss(semanticGloss), 5);
             }
-            // Fallback: show lemma reference
-            return `→ ${effectiveLemma}`;
+            // Fallback: leave blank for pencil users (no arrow - v5.11.22)
+            return '';
         }
         // No lemma found: leave blank
         return '';
@@ -5325,7 +5328,8 @@ function addAcuteToSyllable(syllable) {
           // PHASE 2.6: Clitic IPA fusion (v5.11.20)
           // Vowelless clitics fuse directly (no space, no arrow) - they're not syllables
           // Vowelled clitics keep space (they ARE syllables) and show directional arrows
-          // Use canonicalIpa from cliticData since syllabification fails for vowelless words
+          // Use canonicalIpa from cliticData ONLY for vowelless clitics (syllabification fails)
+          // For vowelled clitics, use the dynamically calculated IPA (position-aware reduction)
           const cyrillicVowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
                                           'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
           const hasVowel = (word) => {
@@ -5334,10 +5338,13 @@ function addAcuteToSyllable(syllable) {
           
           transcribedWords.forEach((tw, idx) => {
             if (tw.isProclitic || tw.isEnclitic) {
-              // Get canonical IPA from cliticData (reliable for vowelless clitics)
-              const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
-              const cliticIpa = cliticInfo?.canonicalIpa || tw.ipaContent || '';
-              tw.ipaContent = cliticIpa; // Use canonical IPA
+              const isVowelless = !hasVowel(tw.cleanWord);
+              if (isVowelless) {
+                // Vowelless clitic: use canonical IPA (can't be calculated)
+                const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
+                tw.ipaContent = cliticInfo?.canonicalIpa || tw.ipaContent || '';
+              }
+              // Vowelled clitics: keep dynamically calculated ipaContent (position-aware)
             }
             
             if (tw.isProclitic) {
@@ -5350,7 +5357,14 @@ function addAcuteToSyllable(syllable) {
                 tw.isVowellessClitic = true;
                 if (nextWord && !nextWord.isProclitic) {
                   // Fuse directly (no space)
-                  nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaDisplay;
+                  // If host starts with stress mark, move it before the proclitic consonant
+                  // Wrong: vˈstranst (stress mark after onset consonant)
+                  // Right: ˈvstranst (stress mark before entire syllable onset)
+                  if (nextWord.ipaDisplay.startsWith('ˈ')) {
+                    nextWord.ipaDisplay = 'ˈ' + tw.ipaContent + nextWord.ipaDisplay.slice(1);
+                  } else {
+                    nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaDisplay;
+                  }
                 }
               } else {
                 // Vowelled proclitic: show arrow, keep as separate syllable
@@ -5783,6 +5797,19 @@ function addAcuteToSyllable(syllable) {
         'чувствую': { 'вств': 'stv' },
         'чувствует': { 'вств': 'stv' },
         'чувствовать': { 'вств': 'stv' },
+        // бесчувственный family: вств → ств (first в silent)
+        'бесчувственный': { 'вств': 'stv' },
+        'бесчувственная': { 'вств': 'stv' },
+        'бесчувственное': { 'вств': 'stv' },
+        'бесчувственные': { 'вств': 'stv' },
+        'бесчувственного': { 'вств': 'stv' },
+        'бесчувственной': { 'вств': 'stv' },
+        'бесчувственному': { 'вств': 'stv' },
+        'бесчувственным': { 'вств': 'stv' },
+        'бесчувственными': { 'вств': 'stv' },
+        'бесчувственных': { 'вств': 'stv' },
+        'бесчувственную': { 'вств': 'stv' },
+        'бесчувственном': { 'вств': 'stv' },
       },
       
       // Exception words where normal phonological rules don't apply (Grayson Appendix F)
@@ -5927,6 +5954,38 @@ function addAcuteToSyllable(syllable) {
           }
         }
         return { isVelarAdjectival: false, charRole: null };
+      },
+      
+      // Check for genitive ending -ого/-его where г → /v/ (Grayson p. 243)
+      // Exception: много, строго, etc. where -ого is NOT a genitive ending
+      checkGenitiveEnding(word, charIndex) {
+        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const len = cleanWord.length;
+        
+        // Exceptions: words where -ого/-его is NOT a genitive ending
+        const exceptions = new Set([
+          'много', 'немного', 'строго', 'нестрого', 'убого', 
+          'отлого', 'полого', 'дорого', 'недорого', 'другого' // 'другого' IS genitive, but listed in some sources
+        ]);
+        
+        // Remove другого from exceptions - it IS a genitive form
+        exceptions.delete('другого');
+        
+        if (exceptions.has(cleanWord)) {
+          return false;
+        }
+        
+        // Check if word ends in -ого or -его
+        if (len >= 3) {
+          const ending3 = cleanWord.slice(-3);
+          if (ending3 === 'ого' || ending3 === 'его') {
+            // The г is at position len - 2 (second to last character)
+            const gPosition = len - 2;
+            return charIndex === gPosition;
+          }
+        }
+        
+        return false;
       },
       
       // Look up stress from dictionary
@@ -6908,8 +6967,14 @@ function addAcuteToSyllable(syllable) {
               const profileParams = ProfileController.getParams();
               const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
               
+              // Check for genitive ending -ого/-его: г → /v/ (Grayson p. 243)
+              const isGenitiveG = (char === 'г') && this.checkGenitiveEnding(cleanWord, globalIndex);
+              
               let consonantIpa;
-              if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && profileParams.adjectival === 'stage') {
+              if (isGenitiveG) {
+                // Genitive г → /v/
+                consonantIpa = 'v';
+              } else if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && profileParams.adjectival === 'stage') {
                 // Force hard velar: output base consonant without palatalization
                 consonantIpa = this.inventory.consonants[char] || char;
               } else {
@@ -6938,7 +7003,8 @@ function addAcuteToSyllable(syllable) {
                 features: {
                   type: 'consonant',
                   soft: isSoft,
-                  softTrigger: softTrigger
+                  softTrigger: softTrigger,
+                  genitiveEnding: isGenitiveG
                 },
                 syllableIndex: sylIdx,
                 position: globalIndex
@@ -8033,6 +8099,14 @@ function addAcuteToSyllable(syllable) {
         // Check for final devoicing
         if (features?.finalDevoicing) {
           const key = `${ipa}:final-devoicing:${char}`;
+          if (this.blurbs[key]) {
+            return this.blurbs[key];
+          }
+        }
+        
+        // Check for genitive ending г → /v/ (Grayson p. 243)
+        if (features?.genitiveEnding) {
+          const key = `${ipa}:genitive:${char}`;
           if (this.blurbs[key]) {
             return this.blurbs[key];
           }
