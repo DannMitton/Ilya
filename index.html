@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.27 distance-on-release click/drag disambiguation</title>
+  <title>Ilya — v5.11.28 add зч cluster blurb (DRIFT-1/4)</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8153,6 +8153,9 @@ function addAcuteToSyllable(syllable) {
         
         // Entry 80 | ⟨сч⟩ → /ʃʲʃʲ/ assimilation
         'ʃʲʃʲ:cluster:сч': { blurb: 'When ⟨с⟩ precedes ⟨ч⟩, the cluster assimilates to /ʃʲʃʲ/ (or /ʃʲː/ if you prefer), identical to ⟨щ⟩ (e.g., ⟨счастье⟩ /ˈʃʲːɑsʲtʲjɪ/ "happiness" (note the exceptional /ɑ/ in this common word), ⟨считать⟩ /ʃʲːɪˈtɑtʲ/ "to count," and ⟨расчёт⟩ /rʌˈʃʲːot/ "calculation").', citation: 'p. 231', notable: false },
+        
+        // Entry 80b | ⟨зч⟩ → /ʃʲʃʲ/ assimilation
+        'ʃʲʃʲ:cluster:зч': { blurb: 'When ⟨з⟩ precedes ⟨ч⟩, the cluster assimilates to /ʃʲʃʲ/, identical to ⟨щ⟩ (e.g., ⟨резчик⟩ /ˈrʲeʃʲʃʲɪk/ "carver," ⟨образчик⟩ /ɐˈbraʃʲʃʲɪk/ "sample"). The voiced ⟨з⟩ fully assimilates to match the following ⟨ч⟩.', citation: 'pp. 230–231', notable: false },
         
         // Entry 81 | Silent ⟨л⟩ in the ⟨лнц⟩ cluster
         'silent:cluster:лнц': { blurb: '⟨л⟩ is silent in the cluster ⟨лнц⟩; this is an exceptional rule of one.', citation: 'p. 235', notable: true },
