@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.28 add зч cluster blurb (DRIFT-1/4)</title>
+  <title>Ilya — v5.11.29 Funnel Ribbon cluster display</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1705,6 +1705,35 @@
       font-style: italic;
       font-family: var(--font-sans);
       font-size: 0.8rem;
+    }
+    
+    /* Cluster member grouping - Funnel Ribbon (v5.11.29) */
+    /* Blue left border visually groups letters that merge into one sound */
+    .phoneme-row.cluster-member {
+      border-left: 3px solid var(--ilya-accent);
+      margin-left: -3px;
+      padding-left: calc(var(--ribbon-inline-padding) + 3px);
+    }
+    
+    /* First member of cluster - shows the merged IPA */
+    .phoneme-row.cluster-start {
+      border-top-left-radius: 4px;
+    }
+    
+    /* Last member of cluster - shows only orthography */
+    .phoneme-row.cluster-end {
+      border-bottom-left-radius: 4px;
+    }
+    
+    /* Continuation rows hide IPA/arrow - orthography only */
+    .phoneme-row.cluster-continuation .phoneme-arrow,
+    .phoneme-row.cluster-continuation .phoneme-ipa {
+      visibility: hidden;
+    }
+    
+    /* Hover highlights entire cluster group */
+    .phoneme-row.cluster-member:hover {
+      background: rgba(122, 158, 126, 0.1);
     }
     
     /* Blurb content (accordion) */
@@ -8371,15 +8400,24 @@ function addAcuteToSyllable(syllable) {
             { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
             { char: 'с', ipa: '', features: { type: 'consonant', silent: true, geminateSimplified: true } }
           ],
-          // Assimilated clusters (Grayson pp. 230-231)
-          'сч': [
-            { char: 'с', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
-            { char: 'ч', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, alwaysSoft: true } }
-          ],
-          'зч': [
-            { char: 'з', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
-            { char: 'ч', ipa: 'ʃʲ', features: { type: 'consonant', soft: true, alwaysSoft: true } }
-          ],
+          // Assimilated clusters - TRUE MERGERS (Grayson pp. 230-231)
+          // Both letters merge into ONE sound - use merged display
+          'сч': {
+            type: 'merged',
+            mergedIpa: 'ʃʲʃʲ',
+            members: [
+              { char: 'с', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
+              { char: 'ч', features: { type: 'consonant', soft: true, alwaysSoft: true } }
+            ]
+          },
+          'зч': {
+            type: 'merged',
+            mergedIpa: 'ʃʲʃʲ',
+            members: [
+              { char: 'з', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
+              { char: 'ч', features: { type: 'consonant', soft: true, alwaysSoft: true } }
+            ]
+          },
           // Sibilant mergers (Grayson pp. 235-236)
           'сш': [
             { char: 'с', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ш' } },
@@ -8415,18 +8453,51 @@ function addAcuteToSyllable(syllable) {
           // Check if this is a cluster that should be expanded
           if (entry.features?.type === 'cluster' && CLUSTER_BREAKDOWNS[entry.char]) {
             const breakdown = CLUSTER_BREAKDOWNS[entry.char];
-            breakdown.forEach((charEntry, idx) => {
-              expandedLog.push({
-                char: charEntry.char,
-                ipa: charEntry.ipa,
-                features: charEntry.features,
-                syllableIndex: entry.syllableIndex,
-                position: entry.position + idx,
-                // Mark as part of cluster for potential styling
-                clusterSource: entry.char,
-                blurbData: this.lookupClusterCharBlurb(charEntry, entry.char)
+            
+            // Check if this is a "merged" cluster (both letters → one sound)
+            if (breakdown.type === 'merged') {
+              // Get the shared blurb for this merged cluster
+              const clusterBlurb = this.lookupBlurb({
+                char: entry.char,
+                ipa: breakdown.mergedIpa,
+                features: { type: 'cluster' }
               });
-            });
+              
+              breakdown.members.forEach((charEntry, idx) => {
+                const isFirst = idx === 0;
+                const isLast = idx === breakdown.members.length - 1;
+                
+                expandedLog.push({
+                  char: charEntry.char,
+                  ipa: isFirst ? breakdown.mergedIpa : '', // Only first row shows IPA
+                  features: charEntry.features,
+                  syllableIndex: entry.syllableIndex,
+                  position: entry.position + idx,
+                  // Cluster grouping metadata
+                  clusterSource: entry.char,
+                  clusterMerged: true,
+                  clusterStart: isFirst,
+                  clusterEnd: isLast,
+                  clusterContinuation: !isFirst,
+                  // Blurb only on first row (will be shared visually)
+                  blurbData: isFirst ? clusterBlurb : { blurb: '', citation: null, notable: false }
+                });
+              });
+            } else {
+              // Standard array format (silent letter clusters, etc.)
+              breakdown.forEach((charEntry, idx) => {
+                expandedLog.push({
+                  char: charEntry.char,
+                  ipa: charEntry.ipa,
+                  features: charEntry.features,
+                  syllableIndex: entry.syllableIndex,
+                  position: entry.position + idx,
+                  // Mark as part of cluster for potential styling
+                  clusterSource: entry.char,
+                  blurbData: this.lookupClusterCharBlurb(charEntry, entry.char)
+                });
+              });
+            }
           } else {
             // Regular entry, add blurb data
             expandedLog.push({
@@ -9594,11 +9665,21 @@ function addAcuteToSyllable(syllable) {
             let rowClasses = 'phoneme-row';
             if (isSilent) rowClasses += ' silent-letter';
             
+            // Add cluster member classes for Funnel Ribbon display (v5.11.29)
+            if (entry.clusterMerged) {
+              rowClasses += ' cluster-member';
+              if (entry.clusterStart) rowClasses += ' cluster-start';
+              if (entry.clusterEnd) rowClasses += ' cluster-end';
+              if (entry.clusterContinuation) rowClasses += ' cluster-continuation';
+            }
+            
             // Build attributes
             const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
             
             // Display text for IPA column
-            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
+            // For merged clusters, continuation rows show empty (hidden via CSS)
+            const ipaDisplay = entry.clusterContinuation ? '' : 
+                               (isSilent ? '[silent]' : (entry.ipa || '∅'));
             
             html += `
               <div class="${rowClasses}"${syllableAttr}
