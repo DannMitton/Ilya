@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.19 bulletproof pagination</title>
+  <title>Ilya — v5.11.20 clitic spacing + gloss fixes</title>
   
   <!-- Noto Serif for all text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -698,6 +698,14 @@
     .word-stack:focus {
       outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
+    }
+
+    /* Vowelless clitics: reduced gap (4px) to visually connect with host (v5.11.19) */
+    .word-stack.vowelless-clitic.proclitic {
+      margin-right: -0.375rem; /* Reduces 10px gap to 4px before host */
+    }
+    .word-stack.vowelless-clitic.enclitic {
+      margin-left: -0.375rem; /* Reduces 10px gap to 4px after host */
     }
 
     .word-stack[aria-selected="true"] {
@@ -3629,7 +3637,8 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
         return CURATED_GLOSSES.get(lemma.toLowerCase());
     }
     
-    if (!gloss) return '';
+    // En-dash for missing glosses: holds vertical space, maintains rhythm (v5.11.19)
+    if (!gloss) return '—';
     
     // First, try to extract a clean translation from verbose patterns
     const cleanedGloss = extractCleanGloss(gloss);
@@ -3651,7 +3660,8 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
             // Fallback: show lemma reference
             return `→ ${effectiveLemma}`;
         }
-        return '';
+        // No lemma found: show en-dash
+        return '—';
     }
     
     // Clean, semantic gloss — truncate to 5 words max for PDF display
@@ -3723,6 +3733,10 @@ function truncateGloss(gloss, maxWords, maxChars = 18) {
         }
         cleaned = truncatedWords.join(' ') || cleaned.slice(0, maxChars);
     }
+    
+    // Remove dangling particles after comma/semicolon (v5.11.19)
+    // "to wander, to" → "to wander" (the trailing "to" is semantically incomplete)
+    cleaned = cleaned.replace(/[,;]\s+(to|a|the|of|in|on|for|and|or)$/i, '');
     
     // Remove trailing punctuation for cleaner appearance
     cleaned = cleaned.replace(/[,;:]+$/, '');
@@ -5114,6 +5128,7 @@ function addAcuteToSyllable(syllable) {
           const classes = ['word-stack'];
           if (tw.isProclitic) classes.push('proclitic');
           if (tw.isEnclitic) classes.push('enclitic');
+          if (tw.isVowellessClitic) classes.push('vowelless-clitic');
           if (tw.wordData?.stressSource === 'default') classes.push('stress-unverified');
           
           // Build data attributes
@@ -5268,29 +5283,57 @@ function addAcuteToSyllable(syllable) {
             tw.ipaDisplay = ipaCore; // Will be overwritten for clitics
           });
           
-          // PHASE 2.6: Clitic IPA fusion (v5.11.10)
-          // Proclitics fuse forward, enclitics fuse backward
-          // Clitics show directional arrows in their stacks
+          // PHASE 2.6: Clitic IPA fusion (v5.11.19)
+          // Vowelless clitics fuse directly (no space, no arrow) - they're not syllables
+          // Vowelled clitics keep space (they ARE syllables) and show directional arrows
+          const cyrillicVowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
+                                          'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
+          const hasVowel = (word) => {
+            return Array.from(word).some(char => cyrillicVowels.has(char));
+          };
+          
           transcribedWords.forEach((tw, idx) => {
             if (tw.isProclitic) {
-              // Show arrow pointing right
-              tw.ipaDisplay = '→';
-              
-              // Fuse IPA to following word (if exists)
               const nextWord = transcribedWords[idx + 1];
-              if (nextWord && !nextWord.isProclitic) {
-                // Prepend clitic IPA (no space, direct fusion)
-                nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaContent;
+              const isVowelless = !hasVowel(tw.cleanWord);
+              
+              if (isVowelless) {
+                // Vowelless proclitic: fuse directly, no arrow
+                tw.ipaDisplay = ''; // Empty - IPA fuses to host
+                tw.isVowellessClitic = true;
+                if (nextWord && !nextWord.isProclitic) {
+                  // Fuse directly (no space)
+                  nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaContent;
+                }
+              } else {
+                // Vowelled proclitic: show arrow, keep as separate syllable
+                tw.ipaDisplay = '→';
+                tw.isVowellessClitic = false;
+                if (nextWord && !nextWord.isProclitic) {
+                  // Prepend with space (clitic is a syllable)
+                  nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaContent;
+                }
               }
             } else if (tw.isEnclitic) {
-              // Show arrow pointing left
-              tw.ipaDisplay = '←';
-              
-              // Fuse IPA to preceding word (if exists)
               const prevWord = transcribedWords[idx - 1];
-              if (prevWord && !prevWord.isEnclitic) {
-                // Append clitic IPA (no space, direct fusion)
-                prevWord.ipaDisplay = prevWord.ipaDisplay + ' ' + tw.ipaContent;
+              const isVowelless = !hasVowel(tw.cleanWord);
+              
+              if (isVowelless) {
+                // Vowelless enclitic: fuse directly, no arrow
+                tw.ipaDisplay = ''; // Empty - IPA fuses to host
+                tw.isVowellessClitic = true;
+                if (prevWord && !prevWord.isEnclitic) {
+                  // Fuse directly (no space)
+                  prevWord.ipaDisplay = prevWord.ipaDisplay + tw.ipaContent;
+                }
+              } else {
+                // Vowelled enclitic: show arrow, keep as separate syllable
+                tw.ipaDisplay = '←';
+                tw.isVowellessClitic = false;
+                if (prevWord && !prevWord.isEnclitic) {
+                  // Append with space (clitic is a syllable)
+                  prevWord.ipaDisplay = prevWord.ipaDisplay + ' ' + tw.ipaContent;
+                }
               }
             }
           });
@@ -10436,6 +10479,109 @@ function addAcuteToSyllable(syllable) {
     window.runGoldenTests = runGoldenTests;
     window.testWord = testWord;
     window.GOLDEN_TESTS = GOLDEN_TESTS;
+    
+    /**
+     * DICTIONARY AUDIT DIAGNOSTIC (v5.11.20)
+     * Usage: auditDictionary() to audit current document
+     *        auditDictionary("Брожу ли я вдоль улиц шумных") to audit custom text
+     * 
+     * Returns coverage statistics and categorized misses
+     */
+    window.auditDictionary = function(text) {
+      // Use provided text or current document
+      const corpus = text || (DocumentState.lines || []).map(l => l.text).join('\n');
+      
+      if (!corpus) {
+        console.log('No text to audit. Paste Russian text into the input area first, or pass text as argument.');
+        return;
+      }
+      
+      // Extract words (Cyrillic only, normalized)
+      const wordPattern = /[а-яёА-ЯЁ]+/g;
+      const rawWords = corpus.match(wordPattern) || [];
+      
+      // Count word frequencies
+      const wordFreq = new Map();
+      rawWords.forEach(w => {
+        const lower = w.toLowerCase();
+        wordFreq.set(lower, (wordFreq.get(lower) || 0) + 1);
+      });
+      
+      // Categorize each unique word
+      const results = {
+        found: [],
+        notInDictionary: [],
+        isClitic: [],
+        total: wordFreq.size,
+        totalTokens: rawWords.length
+      };
+      
+      wordFreq.forEach((freq, word) => {
+        // Check if it's a clitic (handled separately)
+        if (GraysonEngine.proclitics.has(word) || GraysonEngine.enclitics.has(word)) {
+          results.isClitic.push({ word, freq });
+          return;
+        }
+        
+        // Check curated glosses
+        if (CURATED_GLOSSES.has(word)) {
+          results.found.push({ word, freq, source: 'curated' });
+          return;
+        }
+        
+        // Check main dictionary
+        if (typeof window.russianDictionary !== 'undefined' && window.russianDictionary.has(word)) {
+          results.found.push({ word, freq, source: 'dictionary' });
+          return;
+        }
+        
+        // Not found
+        results.notInDictionary.push({ word, freq });
+      });
+      
+      // Sort misses by frequency (highest first)
+      results.notInDictionary.sort((a, b) => b.freq - a.freq);
+      
+      // Calculate coverage
+      const foundCount = results.found.length + results.isClitic.length;
+      const coverage = ((foundCount / results.total) * 100).toFixed(1);
+      const tokenCoverage = ((results.found.reduce((sum, w) => sum + w.freq, 0) + 
+                              results.isClitic.reduce((sum, w) => sum + w.freq, 0)) / 
+                             results.totalTokens * 100).toFixed(1);
+      
+      // Format report
+      console.log('%c═══════════════════════════════════════', 'color: #667eea');
+      console.log('%c ILYA DICTIONARY AUDIT', 'font-weight: bold; font-size: 14px; color: #667eea');
+      console.log('%c═══════════════════════════════════════', 'color: #667eea');
+      console.log(`\nUnique words: ${results.total}`);
+      console.log(`Total tokens: ${results.totalTokens}`);
+      console.log(`\n%cCoverage: ${foundCount}/${results.total} unique words (${coverage}%)`, 'font-weight: bold');
+      console.log(`%cToken coverage: ${tokenCoverage}% of running text`, 'font-weight: bold');
+      
+      console.log(`\n%cMisses by type:`, 'font-weight: bold; color: #e53e3e');
+      console.log(`  • Not in dictionary: ${results.notInDictionary.length}`);
+      console.log(`  • Clitics (handled separately): ${results.isClitic.length}`);
+      
+      if (results.notInDictionary.length > 0) {
+        console.log(`\n%cTop ${Math.min(15, results.notInDictionary.length)} missing words:`, 'font-weight: bold; color: #e53e3e');
+        results.notInDictionary.slice(0, 15).forEach((w, i) => {
+          console.log(`  ${i + 1}. "${w.word}" (×${w.freq})`);
+        });
+      }
+      
+      console.log('%c═══════════════════════════════════════', 'color: #667eea');
+      
+      // Return raw data for programmatic use
+      return {
+        coverage: parseFloat(coverage),
+        tokenCoverage: parseFloat(tokenCoverage),
+        uniqueWords: results.total,
+        totalTokens: results.totalTokens,
+        found: results.found.length,
+        missing: results.notInDictionary,
+        clitics: results.isClitic
+      };
+    };
   </script>
 
 </body>
