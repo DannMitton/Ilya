@@ -7474,7 +7474,16 @@ function addAcuteToSyllable(syllable) {
             // Example: с шумом → /ʃːumʌm/ (not /s ʃumʌm/)
             const geminate = sibilantMergers[leftFinal][rightInitial];
             leftWord.ipaSurface = leftWord.ipaSurface.slice(0, -leftFinal.length);
-            rightWord.ipaSurface = geminate + rightWord.ipaSurface.slice(rightInitial.length);
+            
+            // Handle stress marks: getInitialConsonant strips stress marks before matching,
+            // but ipaSurface may start with ˈ or ˌ. Preserve stress position.
+            const rightSurface = rightWord.ipaSurface;
+            const stressMatch = rightSurface.match(/^[ˈˌ]+/);
+            const stressPrefix = stressMatch ? stressMatch[0] : '';
+            const afterStress = rightSurface.slice(stressPrefix.length);
+            const afterConsonant = afterStress.slice(rightInitial.length);
+            rightWord.ipaSurface = stressPrefix + geminate + afterConsonant;
+            
             leftWord.skipFinalDevoicing = true;
             continue; // Skip voicing assimilation - merger already handled
           }
