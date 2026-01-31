@@ -5316,9 +5316,18 @@ function addAcuteToSyllable(syllable) {
             
             // Create IPA content (syllables with stress marks, spaces between)
             // v5.11.11: Show stress marks on monosyllables too (Issue L)
-            let ipaCore = tw.syllables.map(s => {
-              return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
-            }).join(' ');
+            let ipaCore;
+            
+            // If cross-word assimilation modified ipaSurface, use that directly
+            // (e.g., sibilant merger: шумом after с → ˈʃːumʌm)
+            if (tw.ipaSurface !== tw.ipaUnderlying) {
+              ipaCore = tw.ipaSurface;
+            } else {
+              // Normal case: build from syllables
+              ipaCore = tw.syllables.map(s => {
+                return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
+              }).join(' ');
+            }
             
             // Store the actual IPA for fusion (v5.11.10)
             tw.ipaContent = ipaCore;
@@ -5359,8 +5368,8 @@ function addAcuteToSyllable(syllable) {
               const isVowelless = !hasVowel(tw.cleanWord);
               
               if (isVowelless) {
-                // Vowelless proclitic: fuse directly, no arrow
-                tw.ipaDisplay = ''; // Empty - IPA fuses to host
+                // Vowelless proclitic: show arrow, fuse IPA to host
+                tw.ipaDisplay = '→'; // Arrow shows attachment direction
                 tw.isVowellessClitic = true;
                 if (nextWord && !nextWord.isProclitic) {
                   // Fuse directly (no space)
@@ -5387,8 +5396,8 @@ function addAcuteToSyllable(syllable) {
               const isVowelless = !hasVowel(tw.cleanWord);
               
               if (isVowelless) {
-                // Vowelless enclitic: fuse directly, no arrow
-                tw.ipaDisplay = ''; // Empty - IPA fuses to host
+                // Vowelless enclitic: show arrow, fuse IPA to host
+                tw.ipaDisplay = '←'; // Arrow shows attachment direction
                 tw.isVowellessClitic = true;
                 if (prevWord && !prevWord.isEnclitic) {
                   // Fuse directly (no space)
