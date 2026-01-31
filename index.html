@@ -1710,26 +1710,18 @@
     /* Cluster box - full perimeter groups merged letters (v5.11.29) */
     /* ==========================================================================
        CLUSTER TWO-LAYER ARCHITECTURE (v5.11.30)
-       Base layer: rows with perimeter, hidden chevron/IPA
-       Overlay layer: floating bubble with connector beam
+       Base layer: rows with hidden chevron/IPA
+       Overlay layer: tight perimeter + connector + blurb bubble
        ========================================================================== */
     
-    /* Cluster perimeter wrapper - groups cluster member rows */
+    /* Cluster group wrapper - structural only, no visual border */
     .cluster-group {
       position: relative;
-      border: 2px solid var(--ilya-accent);
-      border-radius: 4px;
-      margin: 4px 0;
-      background: transparent; /* Stressed syllable tint shows through */
     }
     
-    .cluster-group.active {
-      border-width: 3px;
-    }
-    
-    /* Cluster member rows - orthography visible, chevron/IPA hidden */
+    /* Cluster member rows - chevron/IPA hidden */
     .cluster-group .phoneme-row {
-      min-height: 44px; /* Preserve row height for midpoint calculation */
+      min-height: 44px; /* Preserve row height for positioning */
     }
     
     .cluster-group .phoneme-row .phoneme-arrow,
@@ -1737,47 +1729,70 @@
       visibility: hidden;
     }
     
-    /* Cluster overlay bubble - floating explanation */
-    .cluster-overlay {
+    /* Cluster perimeter - positioned over orthography column only */
+    .cluster-perimeter {
       position: absolute;
-      left: calc(100% + 20px); /* 20px fixed gap from perimeter */
-      top: 50%; /* Will be adjusted by JS to true midpoint */
-      transform: translateY(-50%);
-      z-index: 10;
-      
-      background: white;
+      left: 4px;
+      top: 0;
+      bottom: 0;
+      width: 36px; /* Tight around orthography */
       border: 2px solid var(--ilya-accent);
       border-radius: 4px;
-      padding: 12px 16px;
-      min-width: 240px;
-      max-width: 320px;
-      
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 150ms ease;
+    }
+    
+    .cluster-group.active .cluster-perimeter {
+      opacity: 1;
+      border-width: 3px;
+    }
+    
+    /* Always show subtle perimeter at rest */
+    .cluster-group .cluster-perimeter {
+      opacity: 1;
+      border-color: var(--ilya-accent);
+    }
+    
+    /* Cluster overlay container - holds connector + bubble */
+    .cluster-overlay-container {
+      position: absolute;
+      left: 48px; /* Right of perimeter (4px + 36px + 8px gap) */
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      z-index: 10;
       opacity: 0;
       pointer-events: none;
       transition: opacity 150ms ease;
     }
     
-    .cluster-group.active .cluster-overlay {
+    .cluster-group.active .cluster-overlay-container {
       opacity: 1;
       pointer-events: auto;
     }
     
-    /* Connector beam - horizontal line from perimeter to bubble */
-    .cluster-overlay::before {
-      content: '';
-      position: absolute;
-      right: 100%;
-      top: 50%;
-      transform: translateY(-50%);
+    /* Connector beam */
+    .cluster-connector {
       width: 20px;
       height: 2px;
       background: var(--ilya-accent);
+      flex-shrink: 0;
     }
     
-    /* Overlay content structure */
-    .cluster-overlay .cluster-merged-ipa {
+    /* Blurb bubble */
+    .cluster-bubble {
+      background: white;
+      border: 2px solid var(--ilya-accent);
+      border-radius: 4px;
+      padding: 12px 16px;
+      min-width: 200px;
+      max-width: 280px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cluster-bubble .cluster-merged-ipa {
       font-family: var(--font-ipa);
       font-size: 1.2rem;
       color: var(--ilya-text-primary);
@@ -1787,38 +1802,36 @@
       border-bottom: 1px solid rgba(122, 158, 126, 0.2);
     }
     
-    .cluster-overlay .cluster-blurb-text {
+    .cluster-bubble .cluster-blurb-text {
       font-size: 0.85rem;
       line-height: 1.5;
       color: var(--ilya-text-secondary);
     }
     
-    .cluster-overlay .cluster-blurb-citation {
+    .cluster-bubble .cluster-blurb-citation {
       font-size: 0.75rem;
       color: var(--ilya-text-caption);
       margin-top: 8px;
       font-style: italic;
     }
     
-    /* Mobile: bubble flips below cluster */
+    /* Mobile: stack vertically */
     @media (max-width: 768px) {
-      .cluster-overlay {
+      .cluster-overlay-container {
         left: 50%;
-        top: calc(100% + 20px);
+        top: 100%;
         transform: translateX(-50%);
-        min-width: 280px;
-        max-width: calc(100vw - 48px);
+        flex-direction: column;
+        margin-top: 8px;
       }
       
-      /* Vertical connector - from perimeter bottom to bubble top */
-      .cluster-overlay::before {
-        right: auto;
-        left: 50%;
-        top: auto;
-        bottom: 100%;
-        transform: translateX(-50%);
+      .cluster-connector {
         width: 2px;
-        height: 20px;
+        height: 12px;
+      }
+      
+      .cluster-bubble {
+        max-width: calc(100vw - 48px);
       }
     }
     
@@ -9771,6 +9784,8 @@ function addAcuteToSyllable(syllable) {
               const clusterOrthography = clusterMembers.map(m => m.char).join('');
               
               // Render cluster group with two-layer architecture
+              // Perimeter is on floating layer (tight around orthography)
+              // Overlay contains connector + bubble
               const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
               html += `
                 <div class="cluster-group" id="${clusterId}"${syllableAttr}
@@ -9778,6 +9793,7 @@ function addAcuteToSyllable(syllable) {
                      aria-label="Consonant cluster: ${clusterOrthography}"
                      data-cluster-ipa="${entry.ipa}"
                      data-cluster-source="${entry.clusterSource}">
+                  <div class="cluster-perimeter"></div>
                   ${clusterMembers.map(m => `
                     <div class="phoneme-row cluster-member"
                          tabindex="0"
@@ -9791,10 +9807,13 @@ function addAcuteToSyllable(syllable) {
                       </div>
                     </div>
                   `).join('')}
-                  <div class="cluster-overlay">
-                    <div class="cluster-merged-ipa">/${entry.ipa}/</div>
-                    <div class="cluster-blurb-text">${blurb.blurb}</div>
-                    ${blurb.citation ? `<div class="cluster-blurb-citation">${blurb.citation}</div>` : ''}
+                  <div class="cluster-overlay-container">
+                    <div class="cluster-connector"></div>
+                    <div class="cluster-bubble">
+                      <div class="cluster-merged-ipa">/${entry.ipa}/</div>
+                      <div class="cluster-blurb-text">${blurb.blurb}</div>
+                      ${blurb.citation ? `<div class="cluster-blurb-citation">${blurb.citation}</div>` : ''}
+                    </div>
                   </div>
                 </div>
               `;
