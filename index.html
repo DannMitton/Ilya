@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.47 toast lifecycle fix</title>
+  <title>Ilya — v5.11.48 Height Budget calculator</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -10849,6 +10849,121 @@ function addAcuteToSyllable(syllable) {
         this.hideYoToast();
       },
 
+      /**
+       * Height Budget Calculator — v5.11.48 (Phase 2A)
+       * Determines layout mode based on content height vs available tethered space.
+       * Per Kimi's spec: don't grow the popup — route the content smarter.
+       * 
+       * Returns: { mode: 'INLINE'|'LATERAL'|'STACKED', position?: 'ABOVE'|'BELOW', maxHeight?: number }
+       */
+      calculateLayout(wordData) {
+        // Constants (verified from CSS audit)
+        const ROW_HEIGHT = 44;        // .phoneme-row min-height
+        const CLUSTER_RUBRIC = 36;    // .cluster-rubric-row approximate height
+        const SYLLABLE_GAP = 16;      // .phoneme-row[data-syllable-start] margin-top
+        const HEADER_HEIGHT = 250;    // Label + syllables + cyrillic + gloss + padding
+        const BLURB_HEIGHT = 120;     // Estimated expanded blurb (stress case)
+        const BUFFER = 40;            // Safety padding
+        const MARGIN = 20;            // Popup margin from viewport edges
+        
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        const maxInlineHeight = Math.min(viewportHeight * 0.7, 630);
+        
+        // Count visual rows from transcription log
+        const log = wordData.transcriptionLog || [];
+        let visualRowCount = 0;
+        let clusterRubricCount = 0;
+        let syllableGapCount = 0;
+        
+        // Track syllable transitions for gap counting
+        let lastSyllableIndex = -1;
+        let i = 0;
+        
+        while (i < log.length) {
+          const entry = log[i];
+          const sylIdx = entry.syllableIndex ?? 0;
+          
+          // Count syllable gaps (not for first syllable)
+          if (sylIdx !== lastSyllableIndex && lastSyllableIndex !== -1) {
+            syllableGapCount++;
+          }
+          lastSyllableIndex = sylIdx;
+          
+          // Check if this starts a merged cluster
+          if (entry.clusterMerged && entry.clusterStart) {
+            // Count cluster member rows
+            let j = i + 1;
+            let memberCount = 1;
+            while (j < log.length && log[j].clusterSource === entry.clusterSource) {
+              memberCount++;
+              j++;
+            }
+            visualRowCount += memberCount;
+            clusterRubricCount++;
+            i = j;
+            continue;
+          }
+          
+          // Regular row
+          visualRowCount++;
+          i++;
+        }
+        
+        // Add tie-bar row for clitics
+        const isClitic = wordData.isProclitic === 'true' || wordData.isProclitic === true ||
+                         wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+        if (isClitic) visualRowCount++;
+        
+        // Calculate content heights
+        const ribbonHeight = (visualRowCount * ROW_HEIGHT) + 
+                             (clusterRubricCount * CLUSTER_RUBRIC) + 
+                             (syllableGapCount * SYLLABLE_GAP);
+        const contentMin = HEADER_HEIGHT + ribbonHeight + BUFFER;
+        const contentStress = contentMin + BLURB_HEIGHT; // One blurb open
+        
+        // Calculate available tethered space
+        const clickRect = wordData.element.getBoundingClientRect();
+        const spaceAbove = clickRect.top - MARGIN;
+        const spaceBelow = viewportHeight - clickRect.bottom - MARGIN;
+        const bestTetheredSpace = Math.max(spaceAbove, spaceBelow);
+        const preferAbove = spaceAbove > spaceBelow;
+        
+        // Log diagnostic info
+        console.log(`[HeightBudget] Word: "${wordData.cyrillic}" | Rows: ${visualRowCount} | Clusters: ${clusterRubricCount} | Gaps: ${syllableGapCount}`);
+        console.log(`[HeightBudget] Content: ${contentMin}px (min) / ${contentStress}px (stress) | Ribbon: ${ribbonHeight}px`);
+        console.log(`[HeightBudget] Tethered space: above=${Math.round(spaceAbove)}px, below=${Math.round(spaceBelow)}px, best=${Math.round(bestTetheredSpace)}px`);
+        console.log(`[HeightBudget] Max inline: ${Math.round(maxInlineHeight)}px | Viewport: ${viewportWidth}×${viewportHeight}`);
+        
+        // Decision tree (per Kimi's spec)
+        let result;
+        
+        // Can we fit comfortably inline (with room for one blurb)?
+        if (contentStress <= bestTetheredSpace && contentStress <= maxInlineHeight) {
+          result = {
+            mode: 'INLINE',
+            position: preferAbove ? 'ABOVE' : 'BELOW',
+            maxHeight: Math.min(bestTetheredSpace, maxInlineHeight)
+          };
+        }
+        // Content fits 70vh but not local tethered space → Lateral if desktop
+        else if (viewportWidth >= 900 && contentStress <= viewportHeight * 0.85) {
+          result = { mode: 'LATERAL' };
+        }
+        // Desktop but extremely long word exceeding 85vh
+        else if (viewportWidth >= 900) {
+          result = { mode: 'LATERAL' };
+        }
+        // Mobile/narrow → Stacked
+        else {
+          result = { mode: 'STACKED' };
+        }
+        
+        console.log(`[HeightBudget] → Decision: ${result.mode}${result.position ? ' (' + result.position + ')' : ''}`);
+        
+        return result;
+      },
+
       open(wordData) {
         this.currentWord = wordData;
         this.isOpen = true;
@@ -10956,6 +11071,10 @@ function addAcuteToSyllable(syllable) {
         // NEW: Footer controls (v5.11 - flat structure)
         this.populateVariantRow(wordData);
         this.populateAssimilationRow(wordData);
+        
+        // Height Budget: calculate layout mode (v5.11.48 Phase 2A)
+        // Currently diagnostic only — visual layout switching in Phase 2B
+        this._currentLayout = this.calculateLayout(wordData);
         
         // Phrase boundary control (v5.4.2 - segments instead of radio) - HIDDEN IN v5.11
         const line = DocumentState.lines[wordData.lineIndex];
