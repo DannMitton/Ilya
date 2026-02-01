@@ -11320,10 +11320,14 @@ function addAcuteToSyllable(syllable) {
         this.currentWord.transcriptionLog = result.transcriptionLog;
         
         // Re-render syllable buttons with updated stress marks
-        this.elements.syllableDisplay.querySelectorAll('.syllable-btn').forEach((btn, idx) => {
-          const syl = result.syllables[idx];
-          btn.classList.toggle('stressed', idx === newStressIdx);
-          btn.textContent = (idx === newStressIdx) ? 'ˈ' + syl.ipa : syl.ipa;
+        // Guard: ensure syllable count matches button count
+        const buttons = this.elements.syllableDisplay.querySelectorAll('.syllable-btn');
+        buttons.forEach((btn, idx) => {
+          if (idx < result.syllables.length) {
+            const syl = result.syllables[idx];
+            btn.classList.toggle('stressed', idx === newStressIdx);
+            btn.textContent = (idx === newStressIdx) ? 'ˈ' + syl.ipa : syl.ipa;
+          }
         });
         
         // Re-render Phoneme Ribbon with new stress position
@@ -11334,15 +11338,21 @@ function addAcuteToSyllable(syllable) {
         this.attributionSelected = false;
         this.clearAttributionSelection();
         
-        // Expand Why panel and trigger pulse animation
-        this.elements.whyPanel.classList.add('expanded');
-        this.elements.stressSourceModule.classList.remove('needs-attention');
-        // Force reflow to restart animation
-        void this.elements.stressSourceModule.offsetWidth;
-        this.elements.stressSourceModule.classList.add('needs-attention');
+        // Expand Why panel and trigger pulse animation (with null guards)
+        if (this.elements.whyPanel) {
+          this.elements.whyPanel.classList.add('expanded');
+        }
+        if (this.elements.stressSourceModule) {
+          this.elements.stressSourceModule.classList.remove('needs-attention');
+          // Force reflow to restart animation
+          void this.elements.stressSourceModule.offsetWidth;
+          this.elements.stressSourceModule.classList.add('needs-attention');
+        }
         
         // Update hint text
-        this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+        if (this.elements.stressSourceHint) {
+          this.elements.stressSourceHint.textContent = 'Optional: mark why you changed this';
+        }
       }
     };
 
