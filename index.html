@@ -2980,6 +2980,30 @@
         right: 0.75in;
         padding: 12px 0 24px 0;  /* Keep vertical padding only */
       }
+      
+      /* Page content: remove horizontal padding (paper-page provides it) */
+      .page-content {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      
+      /* Page header title: align with content (v5.11.31) */
+      .page-header-title {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      
+      /* Running header: align with content (v5.11.31) */
+      .page-header-running {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      /* Logo: align with content edge (v5.11.31) */
+      .page-logo {
+        left: 0.75in;
+        top: 0.25in;
+      }
 
       /* Page setup - minimal margins, content has its own padding */
       @page {
