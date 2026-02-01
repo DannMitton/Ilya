@@ -1424,6 +1424,9 @@
       border: 1px solid transparent;
       border-radius: 4px;
       color: var(--ilya-text-secondary);
+      /* Stable width: reserve space for stress marker even when absent */
+      min-width: 3.5em;
+      text-align: center;
     }
     
     .syllable-display-header .syllable-btn:hover {
@@ -1436,7 +1439,7 @@
       background: var(--ilya-accent);
       color: white;
       border-color: var(--ilya-accent);
-      font-weight: 500;
+      /* Removed font-weight: 500 to prevent layout shift */
     }
     
     .syllable-display-header .syllable-btn.stressed:hover {
@@ -1706,7 +1709,8 @@
       background: rgba(122, 158, 126, var(--stressed-tint-opacity));
       border-radius: 6px;
       padding: 6px 0;
-      margin: var(--syllable-gap) calc(var(--ribbon-inline-padding) * -0.5) 0;
+      margin: var(--syllable-gap) 0 0 0;
+      /* Removed negative horizontal margins - let rows keep consistent padding */
     }
     
     .stressed-syllable-region:first-child {
@@ -1714,7 +1718,8 @@
     }
     
     .stressed-syllable-region .phoneme-row {
-      padding: 0 calc(var(--ribbon-inline-padding) + 6px);
+      /* Keep same padding as unstressed rows to prevent layout shift */
+      padding: 0 var(--ribbon-inline-padding);
     }
     
     .stressed-syllable-region .phoneme-row[data-syllable-start="true"] {
