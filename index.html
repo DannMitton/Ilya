@@ -762,17 +762,51 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      border: 2px dashed var(--color-muted-border);
       border-radius: 3px;
       padding: 3px 8px 12px 6px; /* Extra bottom padding for label */
       background-color: rgba(245, 244, 240, 0.3);
       cursor: pointer;
       transition: background-color 0.15s ease;
+      
+      /* Custom dashed border: 16px dash, 6px gap */
+      /* Four gradient layers: top, bottom, left, right edges */
+      background-image: 
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px);
+      background-size: 
+        100% 2px,
+        100% 2px,
+        2px 100%,
+        2px 100%;
+      background-position: 
+        0 0,
+        0 100%,
+        0 0,
+        100% 0;
+      background-repeat: no-repeat;
     }
     
     .stress-unverified-container:hover {
       background-color: rgba(245, 244, 240, 0.6);
-      border-color: var(--color-muted-text);
+      /* Darken dashes on hover */
+      background-image: 
+        repeating-linear-gradient(to right, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to right, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px);
+      background-size: 
+        100% 2px,
+        100% 2px,
+        2px 100%,
+        2px 100%;
+      background-position: 
+        0 0,
+        0 100%,
+        0 0,
+        100% 0;
+      background-repeat: no-repeat;
     }
     
     .stress-unverified-container .word-stack {
@@ -799,9 +833,9 @@
     /* Print/PDF: hide Verify boxes, show clean content */
     @media print {
       .stress-unverified-container {
-        border: none;
         padding: 0;
         background: transparent;
+        background-image: none;
       }
       .stress-unverified-label {
         display: none;
@@ -5545,8 +5579,8 @@ function addAcuteToSyllable(syllable) {
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's dissertation, <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
-              <p><em>Ilya</em> is an open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
+              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
+              <p><em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
               Page ${pageNumber} of ${totalPages}
