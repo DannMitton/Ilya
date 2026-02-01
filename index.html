@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.45 stress marks on monosyllables</title>
+  <title>Ilya — v5.11.46 sticky toast positioning</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1633,7 +1633,7 @@
     
     /* Toast notification for ё warning */
     .yo-toast {
-      position: absolute;
+      position: sticky;
       bottom: 0;
       left: 0;
       right: 0;
@@ -1648,6 +1648,7 @@
       transition: transform 250ms var(--ease);
       border-radius: 0 0 16px 16px;
       z-index: 10;
+      margin-top: auto; /* Push to bottom of flex container if needed */
     }
     
     .yo-toast.visible {
