@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.42 fix boundary reset on drag</title>
+  <title>Ilya — v5.11.43 explicit boundary reset button</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1408,7 +1408,10 @@
 
     /* Syllable display header (v5.10.19) - interactive IPA at top of popup */
     .syllable-display-header {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
       margin-bottom: 0.5rem;
     }
     
@@ -1452,6 +1455,35 @@
     }
     
     .syllable-display-header.customized .syllable-btn.stressed {
+      color: white;
+    }
+    
+    /* Boundary reset button (v5.11.43) - explicit reset for adjusted boundaries */
+    .boundary-reset-btn {
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
+      margin-left: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--ilya-accent-light);
+      border-radius: 4px;
+      color: var(--ilya-accent);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, background 0.15s ease;
+      vertical-align: middle;
+    }
+    
+    .boundary-reset-btn.visible {
+      opacity: 1;
+    }
+    
+    .boundary-reset-btn:hover {
+      background: var(--ilya-accent-light);
+      border-color: var(--ilya-accent);
+    }
+    
+    .boundary-reset-btn:active {
+      background: var(--ilya-accent);
       color: white;
     }
 
@@ -3406,6 +3438,7 @@
         <div class="syllable-label" id="syllableLabel"></div>
         <div class="syllable-display-header" id="syllableDisplayHeader">
           <div class="syllable-display" id="syllableDisplay"></div>
+          <button class="boundary-reset-btn" id="boundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
         </div>
         <div class="popup-cyrillic" id="popupCyrillic">—</div>
         
@@ -9477,6 +9510,7 @@ function addAcuteToSyllable(syllable) {
           syllableLabel: document.getElementById('syllableLabel'),
           syllableDisplay: document.getElementById('syllableDisplay'),
           syllableDisplayHeader: document.getElementById('syllableDisplayHeader'),
+          boundaryResetBtn: document.getElementById('boundaryResetBtn'),
           cyrillic: document.getElementById('popupCyrillic'),
           glossInline: document.getElementById('glossInline'),
           // REMOVED IN v5.5 REDESIGN: whyToggle, whyPanel, citationRule, citationRef
@@ -11003,7 +11037,6 @@ function addAcuteToSyllable(syllable) {
             // CASE 2: Committed horizontal drag → shed consonant
             const direction = dx > 0 ? 'right' : 'left';
             this._attemptConsonantShed(this._dragState.syllableIdx, direction);
-            // NOTE: Don't call _cleanupGhost() here - the animation handles its own cleanup
           }
           // CASE 3: Dead zone (10-40px) or vertical movement → silent cancellation
           // Do nothing - this is the "Calm" moment
@@ -11265,6 +11298,7 @@ function addAcuteToSyllable(syllable) {
       
       /**
        * Update header to show customized state (boundaries adjusted)
+       * v5.11.43: Uses explicit reset button instead of header click handler
        */
       _updateCustomizedState() {
         if (!this.currentWord) return;
@@ -11274,14 +11308,15 @@ function addAcuteToSyllable(syllable) {
         
         this.elements.syllableDisplayHeader.classList.toggle('customized', hasCustom);
         
-        // Set up click handler for reset (only once, uses currentWord dynamically)
-        // NOTE: Must check that click wasn't on a syllable button to avoid
-        // resetting boundaries during drag interactions
-        if (!this._headerResetHandler) {
-          this._headerResetHandler = (e) => {
-            // Don't reset if click was on a syllable button (drag gesture)
-            if (e.target.closest('.syllable-btn')) return;
-            
+        // Show/hide the explicit reset button
+        if (this.elements.boundaryResetBtn) {
+          this.elements.boundaryResetBtn.classList.toggle('visible', hasCustom);
+          this.elements.boundaryResetBtn.style.display = hasCustom ? 'inline-block' : 'none';
+        }
+        
+        // Set up reset button click handler (only once)
+        if (!this._resetBtnHandler && this.elements.boundaryResetBtn) {
+          this._resetBtnHandler = () => {
             if (!this.currentWord) return;
             const currentWordId = `${this.currentWord.lineIndex}-${this.currentWord.wordIndex}`;
             if (BoundaryStack.hasCustomBoundaries(currentWordId)) {
@@ -11291,7 +11326,7 @@ function addAcuteToSyllable(syllable) {
               this._pulseAllConsonants();
             }
           };
-          this.elements.syllableDisplayHeader.addEventListener('click', this._headerResetHandler);
+          this.elements.boundaryResetBtn.addEventListener('click', this._resetBtnHandler);
         }
       },
       
