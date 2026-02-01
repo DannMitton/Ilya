@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.30 two-layer cluster architecture</title>
+  <title>Ilya — v5.11.38 complete palatalization map</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -6804,13 +6804,41 @@ function addAcuteToSyllable(syllable) {
         return false;
       },
       
-      // Full regressive palatalization analysis for a word (Grayson p. 207-209; D&P pp. 76-87)
-      // Returns a Map of character indices that should be palatalized
-      analyzeRegressivePalatalization(word) {
+      // COMPLETE PALATALIZATION MAP (Grayson p. 207-209; D&P pp. 76-87)
+      // Computes ALL palatalization sources upfront, before any transcription.
+      // This ensures vowel interpalatal detection knows about progressive palatalization.
+      // Architecture per Kimi's spec: single source of truth for vowels AND consonants.
+      //
+      // Pass 1: Direct palatalization (consonants before front vowels/ь)
+      // Pass 2: Regressive chain through consonant clusters
+      // Pass 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
+      //
+      // Returns a Map of character indices that should be palatalized.
+      computeCompletePalatalizationMap(word, syllables, stressIndex) {
         const chars = [...word.toLowerCase()];
         const softIndices = new Map(); // index -> true if should be palatalized
         
-        // Step 1: Mark directly palatalized consonants (before indicator letters or ь)
+        // Compute syllable boundaries: which char indices are in each syllable
+        const syllableBoundaries = []; // Array of { start, end, isStressed }
+        let charPos = 0;
+        syllables.forEach((syl, sylIdx) => {
+          const start = charPos;
+          const end = charPos + syl.length - 1;
+          syllableBoundaries.push({
+            start,
+            end,
+            isStressed: sylIdx === stressIndex
+          });
+          charPos += syl.length;
+        });
+        
+        // Helper: check if character index is in the stressed syllable
+        const isInStressedSyllable = (index) => {
+          const boundary = syllableBoundaries.find(b => index >= b.start && index <= b.end);
+          return boundary ? boundary.isStressed : false;
+        };
+        
+        // PASS 1: Mark directly palatalized consonants (before indicator letters or ь)
         for (let i = 0; i < chars.length; i++) {
           if (this.isConsonant(chars[i])) {
             if (this.isPalatalized(chars[i], chars[i + 1])) {
@@ -6819,7 +6847,7 @@ function addAcuteToSyllable(syllable) {
           }
         }
         
-        // Step 2: Process regressive palatalization right-to-left through clusters
+        // PASS 2: Process regressive palatalization right-to-left through clusters
         // Working backwards, check if palatalization can step through
         for (let i = chars.length - 2; i >= 0; i--) {
           const char = chars[i];
@@ -6851,7 +6879,43 @@ function addAcuteToSyllable(syllable) {
           softIndices.set(i, true);
         }
         
+        // PASS 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
+        // "Do not regressively palatalize /r/ within a cluster except...
+        // directly following -и-, -е-, or -э- (in the stressed syllable only)"
+        // Examples: смерть /sʲmʲerʲtʲ/, терпеть /tʲirʲˈpʲetʲ/, кирпич /kʲirʲˈpʲitʃʲ/
+        // NOTE: Applies only when р is in a CLUSTER (followed by consonant).
+        // Word-final р after front vowel does NOT palatalize: мир /mʲir/ not /mʲirʲ/
+        const progressiveFrontVowels = new Set(['и', 'е', 'э']);
+        
+        for (let i = 0; i < chars.length; i++) {
+          if (chars[i] !== 'р') continue;
+          if (softIndices.has(i)) continue; // Already soft from Pass 1 or 2
+          if (!isInStressedSyllable(i)) continue; // Must be in stressed syllable
+          
+          const prevChar = chars[i - 1];
+          if (!prevChar || !progressiveFrontVowels.has(prevChar)) continue; // Must follow front vowel
+          
+          // Find what follows р (skip ь/ъ)
+          let charAfterR = null;
+          for (let j = i + 1; j < chars.length; j++) {
+            if (chars[j] === 'ь' || chars[j] === 'ъ') continue;
+            charAfterR = chars[j];
+            break;
+          }
+          
+          // Cluster requirement: р must be followed by a consonant
+          if (charAfterR && this.isConsonant(charAfterR)) {
+            softIndices.set(i, true); // Progressive palatalization
+          }
+        }
+        
         return softIndices;
+      },
+      
+      // Legacy wrapper for any code still calling the old function name
+      analyzeRegressivePalatalization(word) {
+        // Fallback: treat as single stressed syllable (conservative)
+        return this.computeCompletePalatalizationMap(word, [word], 0);
       },
       
       // Check if consonant can regressively palatalize before another consonant (Grayson p. 209)
@@ -7427,8 +7491,10 @@ function addAcuteToSyllable(syllable) {
           effectiveStress = stressIndex;
         }
         
-        // Analyze regressive palatalization for the whole word (Grayson p. 207-209)
-        const softIndices = this.analyzeRegressivePalatalization(cleanWord);
+        // Compute COMPLETE palatalization map for the whole word (Grayson p. 207-209)
+        // This includes regressive AND progressive palatalization (for р after front vowels)
+        // Architecture: single source of truth computed BEFORE any transcription
+        const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress);
         
         // Build a map of character position in full word to track palatalization
         let charIndexInWord = 0;
