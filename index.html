@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.38 complete palatalization map</title>
+  <title>Ilya — v5.11.39 unlimited consonant migration</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -11018,20 +11018,14 @@ function addAcuteToSyllable(syllable) {
       
       /**
        * Attempt to shed a consonant from syllable in given direction
+       * 
+       * NOTE (v5.11.39): Cluster immutability check REMOVED per Kimi's guidance.
+       * The Phoneme Ribbon is pedagogical visualization, not phonological commitment.
+       * Users should be able to visualize any syllable break for educational purposes,
+       * even if Grayson's engine treats certain clusters as fused units.
        */
       _attemptConsonantShed(syllableIdx, direction) {
         if (!this.currentWord) return;
-        
-        // CLUSTER IMMUTABILITY: Check if this syllable contains a merged cluster
-        // Clusters are phonologically bound units that cannot be split
-        if (this.displayLog) {
-          const syllableEntries = this.displayLog.filter(e => e.syllableIndex === syllableIdx);
-          const hasCluster = syllableEntries.some(e => e.clusterMerged);
-          if (hasCluster) {
-            this._flashInvalid(syllableIdx);
-            return; // Clusters are immutable - cannot shed
-          }
-        }
         
         const syllables = this.currentWord.syllables;
         const syllableCount = syllables.length;
@@ -11076,13 +11070,9 @@ function addAcuteToSyllable(syllable) {
           return;
         }
         
-        // Check for reset gesture: if dragging back to origin, reset all boundaries
-        if (this._isResetGesture(wordId, syllableIdx, direction, syllableCount)) {
-          BoundaryStack.reset(wordId);
-          this._updateSyllableDisplay();
-          this._pulseAllConsonants();
-          return;
-        }
+        // NOTE (v5.11.39): Gesture-based reset REMOVED per Kimi's diagnosis.
+        // This was causing the "3rd consonant resets to original" bug.
+        // Reset is now explicit via per-word button only (Cycle B).
         
         // Get button positions for animation
         const sourceBtn = this.elements.syllableDisplay.querySelector(`[data-syllable-index="${syllableIdx}"]`);
@@ -11165,9 +11155,15 @@ function addAcuteToSyllable(syllable) {
       },
       
       /**
-       * Check if this is a reset gesture (dragging consonant back to origin)
-       * Only triggers when the drag would return the boundary toward zero
+       * DEPRECATED (v5.11.39): Gesture-based reset removed.
+       * This was causing the "3rd consonant resets" bug by triggering
+       * when the drag path crossed the original boundary position.
+       * Reset is now explicit via per-word button only.
+       * 
+       * Keeping commented for reference in case we want to restore
+       * as an optional behavior later.
        */
+      /*
       _isResetGesture(wordId, syllableIdx, direction, syllableCount) {
         const offsets = BoundaryStack.getOffsets(wordId, syllableCount);
         const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
@@ -11191,6 +11187,7 @@ function addAcuteToSyllable(syllable) {
         
         return false;
       },
+      */
       
       /**
        * Flash invalid feedback on syllable button
