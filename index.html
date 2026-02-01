@@ -3727,6 +3727,7 @@ const SINGER_SUPPLEMENT = {
     'думаю': { stress: 0, gloss: 'I think', source: 'supplement' },
     'думаешь': { stress: 0, gloss: 'you think', source: 'supplement' },
     'есть': { stress: 0, gloss: 'is/to eat', source: 'supplement' },
+    'играть': { stress: 1, gloss: 'to play', source: 'supplement' },
     
     // Gloss overrides (dictionary glosses too verbose)
     'русский': { stress: 0, pos: 'adj.', gloss: 'Russian', source: 'supplement' },
@@ -3797,6 +3798,10 @@ const SINGER_SUPPLEMENT = {
     'мил': { stress: 0, gloss: 'dear/sweet', source: 'supplement' },
     'люб': { stress: 0, gloss: 'beloved', source: 'supplement' },
     
+    // Poetic/archaic adjectives
+    'забвенный': { stress: 0, gloss: 'forgotten', source: 'supplement' },
+    'охладелый': { stress: 2, gloss: 'cold, dead', source: 'supplement' },
+    
     // Conjunctions & Adverbs
     'но': { stress: 0, gloss: 'but', source: 'supplement' },
     'а': { stress: 0, gloss: 'and/but', source: 'supplement' },
@@ -3804,7 +3809,12 @@ const SINGER_SUPPLEMENT = {
     'то': { stress: 0, gloss: 'then/that', source: 'supplement' },
     'же': { stress: 0, gloss: '(emphasis)', source: 'supplement' },
     'ли': { stress: 0, gloss: '(question)', source: 'supplement' },
+    'ль': { stress: 0, gloss: '(question)', source: 'supplement' },  // contracted form
     'бы': { stress: 0, gloss: 'would', source: 'supplement' },
+    'б': { stress: 0, gloss: 'would', source: 'supplement' },        // contracted form
+    'хоть': { stress: 0, gloss: 'although', source: 'supplement' },
+    'пусть': { stress: 0, gloss: 'let', source: 'supplement' },
+    'здесь': { stress: 0, gloss: 'here', source: 'supplement' },
     'вновь': { stress: 0, gloss: 'again', source: 'supplement' },
     'вдруг': { stress: 0, gloss: 'suddenly', source: 'supplement' },
     'прочь': { stress: 0, gloss: 'away', source: 'supplement' },
@@ -5638,7 +5648,7 @@ function addAcuteToSyllable(syllable) {
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
-              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
+              <p>This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).</p>
               <p><em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}</p>
             </div>
             <div class="footer-pagination">
@@ -6687,16 +6697,17 @@ function addAcuteToSyllable(syllable) {
           };
         };
         
-        // Phase 1: Try exact match first (handles все/всё disambiguation)
-        const exactEntry = STRESS_DICTIONARY[cleanWord];
-        if (exactEntry) {
-          return normalizeEntry(exactEntry, 'dictionary');
-        }
-        
-        // Phase 1b: Check SINGER_SUPPLEMENT
+        // Phase 1: Check SINGER_SUPPLEMENT first (authoritative overrides)
+        // This catches critical corrections like и→"and" (not "the tenth letter")
         const supplementEntry = SINGER_SUPPLEMENT[cleanWord];
         if (supplementEntry) {
           return normalizeEntry(supplementEntry, 'supplement');
+        }
+        
+        // Phase 1b: Try dictionary lookup
+        const exactEntry = STRESS_DICTIONARY[cleanWord];
+        if (exactEntry) {
+          return normalizeEntry(exactEntry, 'dictionary');
         }
         
         // Phase 2: Word not found — try ё-restoration
