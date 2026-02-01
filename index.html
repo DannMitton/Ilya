@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.39 unlimited consonant migration</title>
+  <title>Ilya — v5.11.40 fix repeated consonant drag</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -10997,7 +10997,7 @@ function addAcuteToSyllable(syllable) {
             // CASE 2: Committed horizontal drag → shed consonant
             const direction = dx > 0 ? 'right' : 'left';
             this._attemptConsonantShed(this._dragState.syllableIdx, direction);
-            this._cleanupGhost();
+            // NOTE: Don't call _cleanupGhost() here - the animation handles its own cleanup
           }
           // CASE 3: Dead zone (10-40px) or vertical movement → silent cancellation
           // Do nothing - this is the "Calm" moment
