@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.40 fix repeated consonant drag</title>
+  <title>Ilya — v5.11.41-diag trace drag flow</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -3920,7 +3920,12 @@ const SINGER_SUPPLEMENT = {
     'сердец': { stress: 1, gloss: 'hearts (gen. pl.)', source: 'supplement' },
     'очей': { stress: 1, gloss: 'eyes (gen. pl., archaic)', source: 'supplement' },
     'людей': { stress: 1, gloss: 'people (gen. pl.)', source: 'supplement' },
-    'детей': { stress: 1, gloss: 'children (gen. pl.)', source: 'supplement' }
+    'детей': { stress: 1, gloss: 'children (gen. pl.)', source: 'supplement' },
+    
+    // Common nouns for vocal literature (v5.11.41)
+    'странствие': { stress: 0, gloss: 'wandering', source: 'supplement' },
+    'странствии': { stress: 0, gloss: 'wandering (prep. sg.)', source: 'supplement' },
+    'странствия': { stress: 0, gloss: 'wandering (gen. sg.)', source: 'supplement' }
 };
 
 /* ==================================================
@@ -10924,6 +10929,7 @@ function addAcuteToSyllable(syllable) {
       // Drag handling state (v5.10.15, refactored v5.11.27)
       _dragState: null,
       _ghostElement: null,
+      _animationInProgress: false,  // Guard against overlapping drag animations
       _hasShownDragHint: false,
       
       /**
@@ -11025,7 +11031,17 @@ function addAcuteToSyllable(syllable) {
        * even if Grayson's engine treats certain clusters as fused units.
        */
       _attemptConsonantShed(syllableIdx, direction) {
-        if (!this.currentWord) return;
+        console.log('[Shed] Start - syllableIdx:', syllableIdx, 'direction:', direction);
+        if (!this.currentWord) {
+          console.log('[Shed] ABORT: no currentWord');
+          return;
+        }
+        
+        // Guard: prevent overlapping animations
+        if (this._animationInProgress) {
+          console.log('[Shed] ABORT: animation in progress');
+          return;
+        }
         
         const syllables = this.currentWord.syllables;
         const syllableCount = syllables.length;
@@ -11044,8 +11060,10 @@ function addAcuteToSyllable(syllable) {
         // Get current syllable's tokens
         const displaySyllables = BoundaryStack.applyOffsets(wordId, syllables);
         const currentSyl = displaySyllables[syllableIdx];
+        console.log('[Shed] currentSyl:', currentSyl.ipa);
         const tokens = IpaTokenizer.tokenize(currentSyl.ipa);
         const segments = IpaTokenizer.parseSegments(tokens);
+        console.log('[Shed] segments - onset:', segments.onset.map(t=>t.symbol), 'coda:', segments.coda.map(t=>t.symbol));
         
         // Check if we can shed in this direction
         let canShed = false;
@@ -11064,6 +11082,7 @@ function addAcuteToSyllable(syllable) {
             consonantToShed = segments.coda[segments.coda.length - 1].symbol;
           }
         }
+        console.log('[Shed] canShed:', canShed, 'consonantToShed:', consonantToShed);
         
         if (!canShed) {
           this._flashInvalid(syllableIdx);
@@ -11080,16 +11099,20 @@ function addAcuteToSyllable(syllable) {
         const targetBtn = this.elements.syllableDisplay.querySelector(`[data-syllable-index="${targetIdx}"]`);
         
         if (sourceBtn && targetBtn) {
+          console.log('[Shed] Starting animation with buttons');
           // Animate the ghost consonant
           this._animateConsonantGhost(consonantToShed, sourceBtn, targetBtn, direction, () => {
             // Shift the boundary after animation completes
             const boundaryIdx = direction === 'left' ? syllableIdx - 1 : syllableIdx;
             const shiftDir = direction === 'left' ? 'left' : 'right';
+            console.log('[Shed] Callback: shifting boundary', boundaryIdx, shiftDir);
             BoundaryStack.shiftBoundary(wordId, boundaryIdx, shiftDir, syllableCount);
             
             // Update display
+            console.log('[Shed] Updating display...');
             this._updateSyllableDisplay();
             this._updateCustomizedState();
+            console.log('[Shed] Display updated');
           });
         } else {
           // Fallback: no animation, just update
@@ -11105,6 +11128,10 @@ function addAcuteToSyllable(syllable) {
        * Animate a ghost consonant from source to target button
        */
       _animateConsonantGhost(consonant, sourceBtn, targetBtn, direction, onComplete) {
+        console.log('[Ghost] Starting animation for:', consonant);
+        // Set animation lock
+        this._animationInProgress = true;
+        
         // Get positions
         const sourceRect = sourceBtn.getBoundingClientRect();
         const targetRect = targetBtn.getBoundingClientRect();
@@ -11122,6 +11149,8 @@ function addAcuteToSyllable(syllable) {
           : targetRect.left;
         const endY = targetRect.top + targetRect.height / 2 - 15;
         
+        console.log('[Ghost] Positions - start:', startX, startY, 'end:', endX, endY);
+        
         // Create ghost element
         const ghost = document.createElement('div');
         ghost.className = 'consonant-ghost';
@@ -11130,6 +11159,7 @@ function addAcuteToSyllable(syllable) {
         ghost.style.top = `${startY}px`;
         document.body.appendChild(ghost);
         this._ghostElement = ghost;
+        console.log('[Ghost] Created ghost element');
         
         // Dim the source button
         sourceBtn.classList.add('dragging');
@@ -11139,6 +11169,7 @@ function addAcuteToSyllable(syllable) {
         
         // Trigger animation after a frame (to ensure initial position is set)
         requestAnimationFrame(() => {
+          console.log('[Ghost] Starting CSS transition');
           ghost.style.transition = 'left 0.25s ease-out, top 0.25s ease-out';
           ghost.style.left = `${endX}px`;
           ghost.style.top = `${endY}px`;
@@ -11147,10 +11178,13 @@ function addAcuteToSyllable(syllable) {
         
         // Cleanup and callback after animation
         setTimeout(() => {
+          console.log('[Ghost] Animation timeout fired - calling onComplete');
           sourceBtn.classList.remove('dragging');
           targetBtn.classList.remove('drag-target');
           this._cleanupGhost();
+          this._animationInProgress = false;  // Release animation lock
           onComplete();
+          console.log('[Ghost] onComplete finished');
         }, 260);
       },
       
