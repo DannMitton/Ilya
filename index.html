@@ -3520,54 +3520,108 @@
 
   <script>
 /* ==================================================
-   STRESS DICTIONARY (loaded from external JSON)
-   Kaikki.org Wiktionary extract — 416K+ words
+   STRESS DICTIONARY (Tiered Loading Architecture)
+   Kaikki.org Wiktionary extract — 1.29M words
+   
+   Tier 1: 405K lemmas (loaded immediately)
+   Tier 2: 887K inflections (lazy loaded on interaction)
    ================================================== */
 let STRESS_DICTIONARY = {};
 let DICTIONARY_LOADED = false;
+let TIER2_LOADED = false;
+let TIER2_LOADING = false;
 
-// Load dictionary from external gzipped file
-async function loadDictionary() {
+// Tier 1: Load immediately, blocks until ready
+async function loadTier1() {
     try {
-        // First try the gzipped version
-        let response = await fetch('data/ilya_dictionary.json.gz');
-        
+        const response = await fetch('data/ilya_tier1.json.gz');
         if (response.ok) {
-            // Decompress gzipped data using pako
             const compressed = await response.arrayBuffer();
             const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
             STRESS_DICTIONARY = JSON.parse(decompressed);
             DICTIONARY_LOADED = true;
-            console.log(`Dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
+            console.log(`Tier 1: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} lemmas`);
             return;
         }
         
-        // Fallback to uncompressed JSON
-        response = await fetch('data/ilya_dictionary.json');
-        if (response.ok) {
-            STRESS_DICTIONARY = await response.json();
+        // Fallback to legacy dictionary if tier1 not found
+        const legacyResponse = await fetch('data/ilya_dictionary.json.gz');
+        if (legacyResponse.ok) {
+            const compressed = await legacyResponse.arrayBuffer();
+            const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
+            STRESS_DICTIONARY = JSON.parse(decompressed);
             DICTIONARY_LOADED = true;
-            console.log(`Dictionary loaded (uncompressed): ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
-            return;
-        }
-        
-        // Final fallback to old OpenRussian dictionary
-        response = await fetch('data/openrussian-dict.json');
-        if (response.ok) {
-            STRESS_DICTIONARY = await response.json();
-            DICTIONARY_LOADED = true;
-            console.log(`Legacy dictionary loaded: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
+            console.log(`Legacy dictionary: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
             return;
         }
         
         console.warn('No dictionary file found, stress lookup disabled');
     } catch (error) {
-        console.warn('Could not load dictionary:', error);
+        console.warn('Could not load Tier 1 dictionary:', error);
     }
 }
 
-// Start loading dictionary immediately
-loadDictionary();
+// Tier 2: Lazy load with chunked merge to avoid UI freeze
+async function loadTier2() {
+    if (TIER2_LOADING || TIER2_LOADED) return;
+    TIER2_LOADING = true;
+    
+    try {
+        const response = await fetch('data/ilya_tier2.json.gz');
+        if (!response.ok) {
+            console.warn('Tier 2 not available');
+            return;
+        }
+        
+        const compressed = await response.arrayBuffer();
+        const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
+        const inflections = JSON.parse(decompressed);
+        
+        // Chunked merge: 10K entries per frame to prevent UI jank
+        const entries = Object.entries(inflections);
+        const chunkSize = 10000;
+        
+        for (let i = 0; i < entries.length; i += chunkSize) {
+            const chunk = entries.slice(i, i + chunkSize);
+            chunk.forEach(([k, v]) => STRESS_DICTIONARY[k] = v);
+            
+            // Yield to main thread between chunks
+            if (i + chunkSize < entries.length) {
+                await new Promise(resolve => requestAnimationFrame(resolve));
+            }
+        }
+        
+        TIER2_LOADED = true;
+        console.log(`Tier 2: ${entries.length.toLocaleString()} inflections merged`);
+        console.log(`Total: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
+        
+    } catch (error) {
+        console.warn('Tier 2 load failed:', error);
+    } finally {
+        TIER2_LOADING = false;
+    }
+}
+
+// Trigger Tier 2 on first user interaction or after 5 seconds
+let tier2Triggered = false;
+function triggerTier2Load() {
+    if (!tier2Triggered) {
+        tier2Triggered = true;
+        // Small delay to ensure UI is fully responsive first
+        setTimeout(loadTier2, 100);
+    }
+}
+
+// Attach interaction listeners (fire once)
+document.addEventListener('click', triggerTier2Load, { once: true });
+document.addEventListener('keydown', triggerTier2Load, { once: true });
+document.addEventListener('paste', triggerTier2Load, { once: true });
+
+// Safety: Load Tier 2 after 5 seconds regardless
+setTimeout(triggerTier2Load, 5000);
+
+// Start Tier 1 immediately
+loadTier1();
 
 /* ==================================================
    SINGER'S MONOSYLLABLE SUPPLEMENT
