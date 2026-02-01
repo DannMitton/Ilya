@@ -756,15 +756,15 @@
     
     /* ----------------------------------------
        UNVERIFIED STRESS: "Verify" Treatment (v5.11.32)
-       Dotted box with smallcaps label for inferred stress
+       Dashed box with smallcaps label for inferred stress
        ---------------------------------------- */
     .stress-unverified-container {
       position: relative;
       display: inline-flex;
       align-items: center;
-      border: 1px dotted var(--color-muted-border);
+      border: 2px dashed var(--color-muted-border);
       border-radius: 3px;
-      padding: 3px 8px 3px 6px;
+      padding: 3px 8px 12px 6px; /* Extra bottom padding for label */
       background-color: rgba(245, 244, 240, 0.3);
       cursor: pointer;
       transition: background-color 0.15s ease;
@@ -782,16 +782,16 @@
     
     .stress-unverified-label {
       position: absolute;
-      top: 0;
-      right: 4px;
-      transform: translateY(-50%);
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
       font-family: var(--font-sans);
       font-variant: small-caps;
       font-size: 0.6rem;
       letter-spacing: 0.08em;
       color: var(--color-muted-text);
       background-color: var(--stationery-cream);
-      padding: 0 3px;
+      padding: 0 4px;
       line-height: 1;
       pointer-events: none;
     }
