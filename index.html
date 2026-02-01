@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.41-diag trace drag flow</title>
+  <title>Ilya — v5.11.41-diag2 trace BoundaryStack</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -9299,6 +9299,7 @@ function addAcuteToSyllable(syllable) {
        */
       shiftBoundary(wordId, boundaryIdx, direction, syllableCount) {
         const offsets = this.getOffsets(wordId, syllableCount);
+        console.log('[BoundaryStack] shiftBoundary BEFORE:', wordId, 'boundaryIdx:', boundaryIdx, 'direction:', direction, 'offsets:', [...offsets]);
         
         if (direction === 'left') {
           offsets[boundaryIdx]++;  // Steal one consonant from right syllable
@@ -9306,6 +9307,7 @@ function addAcuteToSyllable(syllable) {
           offsets[boundaryIdx]--;  // Give one consonant to right syllable
         }
         
+        console.log('[BoundaryStack] shiftBoundary AFTER:', 'offsets:', [...offsets]);
         return offsets;
       },
       
@@ -9341,9 +9343,11 @@ function addAcuteToSyllable(syllable) {
       applyOffsets(wordId, originalSyllables) {
         const syllableCount = originalSyllables.length;
         const offsets = this.getOffsets(wordId, syllableCount);
+        console.log('[BoundaryStack] applyOffsets:', wordId, 'offsets:', [...offsets], 'originalIPAs:', originalSyllables.map(s=>s.ipa));
         
         // If no custom boundaries, return original
         if (!offsets.some(o => o !== 0)) {
+          console.log('[BoundaryStack] No custom boundaries, returning original');
           return originalSyllables;
         }
         
@@ -9359,6 +9363,7 @@ function addAcuteToSyllable(syllable) {
           allTokens.push(...tokens);
         });
         originalBoundaries.push(allTokens.length); // End marker
+        console.log('[BoundaryStack] allTokens:', allTokens.map(t=>t.symbol), 'originalBoundaries:', originalBoundaries);
         
         // Calculate adjusted boundaries
         const adjustedBoundaries = originalBoundaries.map((boundary, idx) => {
@@ -9367,6 +9372,7 @@ function addAcuteToSyllable(syllable) {
           }
           return boundary + offsets[idx - 1];
         });
+        console.log('[BoundaryStack] adjustedBoundaries:', adjustedBoundaries);
         
         // Clamp boundaries to valid range
         for (let i = 1; i < adjustedBoundaries.length - 1; i++) {
@@ -9375,6 +9381,7 @@ function addAcuteToSyllable(syllable) {
             Math.min(adjustedBoundaries[i], adjustedBoundaries[i + 1] - 1)
           );
         }
+        console.log('[BoundaryStack] clamped boundaries:', adjustedBoundaries);
         
         // Build display syllables from adjusted boundaries
         const displaySyllables = [];
@@ -9390,6 +9397,7 @@ function addAcuteToSyllable(syllable) {
             isModified: start !== originalBoundaries[i] || end !== originalBoundaries[i + 1]
           });
         }
+        console.log('[BoundaryStack] displaySyllables IPAs:', displaySyllables.map(s=>s.ipa));
         
         return displaySyllables;
       }
