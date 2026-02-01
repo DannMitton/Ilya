@@ -55,6 +55,10 @@
       --ilya-border: #e0e0e0;
       --ilya-border-focus: #7a9e7e;
       
+      /* Unverified/Inferred State (v5.11.32) */
+      --color-muted-border: #c4c4bc;
+      --color-muted-text: #6b6b6b;
+      
       /* Functional Colors — Muted Sage Accent */
       --ilya-accent: #7a9e7e;
       --ilya-accent-light: rgba(122, 158, 126, 0.1);
@@ -750,7 +754,59 @@
     
     /* Clitics show directional arrows — normal spacing (v5.11.10) */
     
-    /* Unverified stress: no visual indicator on paper — popup message is sufficient */
+    /* ----------------------------------------
+       UNVERIFIED STRESS: "Verify" Treatment (v5.11.32)
+       Dotted box with smallcaps label for inferred stress
+       ---------------------------------------- */
+    .stress-unverified-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      border: 1px dotted var(--color-muted-border);
+      border-radius: 3px;
+      padding: 3px 8px 3px 6px;
+      background-color: rgba(245, 244, 240, 0.3);
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+    
+    .stress-unverified-container:hover {
+      background-color: rgba(245, 244, 240, 0.6);
+      border-color: var(--color-muted-text);
+    }
+    
+    .stress-unverified-container .word-stack {
+      /* Reset word-stack padding when inside container */
+      padding: 0;
+    }
+    
+    .stress-unverified-label {
+      position: absolute;
+      top: 0;
+      right: 4px;
+      transform: translateY(-50%);
+      font-family: var(--font-sans);
+      font-variant: small-caps;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted-text);
+      background-color: var(--stationery-cream);
+      padding: 0 3px;
+      line-height: 1;
+      pointer-events: none;
+    }
+    
+    /* Print/PDF: hide Verify boxes, show clean content */
+    @media print {
+      .stress-unverified-container {
+        border: none;
+        padding: 0;
+        background: transparent;
+      }
+      .stress-unverified-label {
+        display: none;
+      }
+    }
 
     /* ========================================
        INPUT DRAWER: Bottom-anchored, collapsible
@@ -5275,7 +5331,7 @@ function addAcuteToSyllable(syllable) {
             } else {
               // Unknown word: default to first syllable, marked for user verification
               stress = 0;
-              stressSource = 'default';
+              stressSource = 'inferred';
               yoSource = null;
             }
             
@@ -5514,7 +5570,9 @@ function addAcuteToSyllable(syllable) {
           if (tw.isProclitic) classes.push('proclitic');
           if (tw.isEnclitic) classes.push('enclitic');
           if (tw.isVowellessClitic) classes.push('vowelless-clitic');
-          if (tw.wordData?.stressSource === 'default') classes.push('stress-unverified');
+          
+          // Check if stress is inferred (unknown word, needs verification)
+          const isInferred = tw.wordData?.stressSource === 'inferred';
           
           // Build data attributes
           const dataAttrs = `
@@ -5545,7 +5603,8 @@ function addAcuteToSyllable(syllable) {
             data-yo-source="${tw.wordData?.yoSource || ''}"
           `;
           
-          return `
+          // Build word stack HTML
+          const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
@@ -5554,6 +5613,18 @@ function addAcuteToSyllable(syllable) {
                 : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
             </div>
           `;
+          
+          // Wrap in Verify container if stress is inferred (v5.11.32)
+          if (isInferred) {
+            return `
+              <div class="stress-unverified-container" data-word="${tw.cleanWord}">
+                <span class="stress-unverified-label">verify</span>
+                ${wordStackHTML}
+              </div>
+            `;
+          }
+          
+          return wordStackHTML;
         }).join('');
         
         return `<div class="verse-line" role="row">${wordStacksHTML}</div>`;
@@ -9166,8 +9237,8 @@ function addAcuteToSyllable(syllable) {
       updateStress(lineIndex, wordIndex, newStress) {
         if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
           this.lines[lineIndex][wordIndex].stress = newStress;
-          // Clear stressSource when stress changes (user must re-attribute)
-          this.lines[lineIndex][wordIndex].stressSource = null;
+          // Mark as user-verified when stress changes (v5.11.32)
+          this.lines[lineIndex][wordIndex].stressSource = 'user';
         }
       },
       
