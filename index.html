@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.43 explicit boundary reset button</title>
+  <title>Ilya — v5.11.45 stress marks on monosyllables</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -7553,7 +7553,10 @@ function addAcuteToSyllable(syllable) {
           let sylIpa = '';
           const chars = [...syl];
           
-          if (position === 'stressed' && vowelCount > 1) {
+          // v5.11.45: Always add stress mark for stressed syllables
+          // Previously only polysyllables got marks in underlying IPA, causing
+          // monosyllables to lose their mark after cross-word assimilation
+          if (position === 'stressed') {
             sylIpa += 'ˈ';
           }
           
@@ -7606,10 +7609,51 @@ function addAcuteToSyllable(syllable) {
               const prevCharInSyllable = chars[i - 1];
               // Use word-level previous char for j-glide and interpalatal detection
               const prevCharInWord = cleanWord[globalIndex - 1];
-              const needsGlide = ['е', 'ё', 'ю', 'я'].includes(char) && 
-                                 (globalIndex === 0 || this.isVowel(prevCharInWord) || prevCharInWord === 'ь' || prevCharInWord === 'ъ');
               
-              if (needsGlide) sylIpa += 'j';
+              // Standard j-glide: iotated vowels at word-initial or after vowel/ъ/ь
+              let needsGlide = ['е', 'ё', 'ю', 'я'].includes(char) && 
+                               (globalIndex === 0 || this.isVowel(prevCharInWord) || prevCharInWord === 'ь' || prevCharInWord === 'ъ');
+              
+              // EXCEPTION: -ии suffix (Grayson p. 89, 120)
+              // The suffix -ии is pronounced /i ji/ for singing clarity.
+              // This is an exception to the rule that и after vowels doesn't get a j-glide.
+              // Example: странствии → /ˈstrɑnst vʲi ji/, в здании → /v ˈzdɑ ɲi ji/
+              const isIiSuffix = char === 'и' && prevCharInWord === 'и' && globalIndex === cleanWord.length - 1;
+              if (isIiSuffix) {
+                needsGlide = true;
+              }
+              
+              // Add j-glide to IPA and log it
+              if (needsGlide) {
+                sylIpa += 'j';
+                
+                // Determine j-glide source for ribbon display
+                let jGlideSource = 'iotated';  // default: iotated vowel
+                if (isIiSuffix) {
+                  jGlideSource = 'ii-suffix';
+                } else if (prevCharInWord === 'ь') {
+                  jGlideSource = 'after-sign';
+                } else if (prevCharInWord === 'ъ') {
+                  jGlideSource = 'after-sign';
+                } else if (this.isVowel(prevCharInWord)) {
+                  jGlideSource = 'after-vowel';
+                } else if (globalIndex === 0) {
+                  jGlideSource = 'word-initial';
+                }
+                
+                // Log j-glide for Phoneme Ribbon
+                transcriptionLog.push({
+                  char: '',  // No Cyrillic character - it's implicit
+                  ipa: 'j',
+                  features: {
+                    type: 'glide',
+                    source: jGlideSource,
+                    triggeredBy: char  // The vowel that triggered the glide
+                  },
+                  syllableIndex: sylIdx,
+                  position: globalIndex - 0.5  // Position between prev and current char
+                });
+              }
               
               // Initialize vowel tracking
               let vowelIpa = null;
@@ -8616,6 +8660,9 @@ function addAcuteToSyllable(syllable) {
         // Entry 33 | /j/-glide insertion after ъ/ь
         'j:after-sign:е': { blurb: 'Whenever ⟨е⟩ immediately follows a hard sign ⟨ъ⟩ or soft sign ⟨ь⟩, a /j/ glide is inserted before the vowel sound (e.g., ⟨въезд⟩ /vjɛst/ "entrance," ⟨пьеса⟩ /pʲˈjɛsʌ/ "play").', citation: 'pp. 114–124', notable: false },
         
+        // Entry 33b | /j/-glide insertion in -ии suffix (v5.11.44)
+        'j:ii-suffix:и': { blurb: 'Whenever the suffix ⟨-ии⟩ ends a word (typically in prepositional singular of neuter nouns or genitive/dative/prepositional of feminine nouns), the second ⟨и⟩ receives a /j/ glide: /i ji/. This singing convention provides clarity and prevents the two identical vowels from blurring together (e.g., ⟨странствии⟩ /ˈstrɑnst vʲi ji/ "wandering," ⟨здании⟩ /ˈzdɑ ɲi ji/ "building").', citation: 'pp. 89, 120', notable: true },
+        
         // ========================================
         // SECTION 4: CONSONANTS — SOFT/PALATALIZED (Entries 34–50)
         // ========================================
@@ -8954,6 +9001,37 @@ function addAcuteToSyllable(syllable) {
           if (this.blurbs[key]) {
             return this.blurbs[key];
           }
+        }
+        
+        // Check for j-glide entries (v5.11.44)
+        if (features?.type === 'glide' && ipa === 'j') {
+          const source = features.source;
+          const triggeredBy = features.triggeredBy || 'е';
+          
+          // Map source to blurb key
+          if (source === 'ii-suffix') {
+            const key = 'j:ii-suffix:и';
+            if (this.blurbs[key]) {
+              return this.blurbs[key];
+            }
+          } else if (source === 'after-vowel') {
+            const key = `j:after-vowel:${triggeredBy}`;
+            if (this.blurbs[key]) {
+              return this.blurbs[key];
+            }
+          } else if (source === 'after-sign') {
+            const key = `j:after-sign:${triggeredBy}`;
+            if (this.blurbs[key]) {
+              return this.blurbs[key];
+            }
+          }
+          
+          // Default j-glide blurb
+          return {
+            blurb: 'The palatal glide /j/ precedes this vowel.',
+            citation: 'pp. 114–124',
+            notable: false
+          };
         }
         
         const rule = this.deriveRule(features, char);
