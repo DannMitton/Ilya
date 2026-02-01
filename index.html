@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.48 Height Budget calculator</title>
+  <title>Ilya — v5.11.48 Companion Panel lateral layout</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1681,6 +1681,28 @@
 
     .refine-panel {
       display: none; /* Hidden in v5.11 */
+    }
+
+    /* ========================================
+       LATERAL COMPANION PANEL (v5.11.48 Phase 2B)
+       Per Kimi's spec: ribbon graduates from popup content
+       to companion interface on desktop ≥900px.
+       "Don't grow the popup — route the content smarter."
+       ======================================== */
+    
+    .ribbon-panel {
+      position: absolute;
+      overflow-y: auto;
+      background: var(--surface);
+      opacity: 0.97;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-popup);
+      z-index: 101;
+      padding: 12px 0;
+    }
+    
+    .ribbon-panel .phoneme-ribbon {
+      margin-top: 0;
     }
 
     /* ========================================
@@ -10964,6 +10986,157 @@ function addAcuteToSyllable(syllable) {
         return result;
       },
 
+      /**
+       * Enter lateral layout mode — v5.11.48 Phase 2B
+       * Extracts phoneme ribbon from popup-body into a separate companion panel.
+       * Card stays positioned as normal; ribbon panel positions beside it.
+       */
+      _isLateral: false,
+      _ribbonPanel: null,
+      _drawerWasExpanded: false,
+
+      enterLateralMode() {
+        if (this._isLateral) return;
+        
+        // Create ribbon panel
+        const ribbonPanel = document.createElement('div');
+        ribbonPanel.className = 'ribbon-panel';
+        ribbonPanel.id = 'ribbonPanel';
+        
+        // Move phoneme-ribbon from popup-body to ribbon-panel
+        const phonemeRibbon = document.getElementById('phonemeRibbon');
+        if (phonemeRibbon) {
+          ribbonPanel.appendChild(phonemeRibbon);
+        }
+        
+        // Add to overlay (as sibling of popup-card)
+        this.elements.overlay.appendChild(ribbonPanel);
+        
+        // Hide popup arrow in lateral mode (no tether)
+        const arrow = this.elements.card.querySelector('.popup-arrow');
+        if (arrow) arrow.style.display = 'none';
+        
+        // Store reference and state
+        this._ribbonPanel = ribbonPanel;
+        this._isLateral = true;
+        
+        // Auto-collapse dashboard drawer (per Kimi's spec)
+        if (typeof DrawerController !== 'undefined' && DrawerController.isExpanded()) {
+          this._drawerWasExpanded = true;
+          DrawerController.collapse();
+        }
+        
+        console.log('[CompanionPanel] Entered LATERAL mode');
+      },
+
+      /**
+       * Exit lateral layout mode — v5.11.48 Phase 2B
+       * Restores phoneme ribbon to popup-body, removes companion panel.
+       */
+      exitLateralMode() {
+        if (!this._isLateral) return;
+        
+        // Move phoneme-ribbon back to popup-body (before footer controls)
+        const phonemeRibbon = document.getElementById('phonemeRibbon');
+        const popupBody = this.elements.card.querySelector('.popup-body');
+        const footerControls = popupBody?.querySelector('.popup-footer-controls');
+        
+        if (phonemeRibbon && popupBody && footerControls) {
+          popupBody.insertBefore(phonemeRibbon, footerControls);
+        } else if (phonemeRibbon && popupBody) {
+          popupBody.appendChild(phonemeRibbon);
+        }
+        
+        // Remove ribbon panel
+        if (this._ribbonPanel) {
+          this._ribbonPanel.remove();
+          this._ribbonPanel = null;
+        }
+        
+        // Restore popup arrow
+        const arrow = this.elements.card.querySelector('.popup-arrow');
+        if (arrow) arrow.style.display = '';
+        
+        // Restore dashboard drawer if we collapsed it
+        if (this._drawerWasExpanded) {
+          if (typeof DrawerController !== 'undefined') {
+            DrawerController.expand();
+          }
+          this._drawerWasExpanded = false;
+        }
+        
+        this._isLateral = false;
+        console.log('[CompanionPanel] Exited LATERAL mode');
+      },
+
+      /**
+       * Position ribbon panel next to popup card — v5.11.48 Phase 2B
+       * Determines left/right side based on available viewport space.
+       */
+      positionRibbonPanel() {
+        if (!this._ribbonPanel || !this._isLateral) return;
+        
+        const card = this.elements.card;
+        const cardRect = card.getBoundingClientRect();
+        const ribbonWidth = Math.min(Math.max(280, window.innerWidth * 0.2), 320);
+        const gap = 16;
+        const viewportMargin = 24;
+        const viewportHeight = window.innerHeight;
+        
+        // Determine side: prefer right, fall back to left
+        const spaceRight = window.innerWidth - cardRect.right - viewportMargin;
+        const spaceLeft = cardRect.left - viewportMargin;
+        
+        let ribbonLeft;
+        let side;
+        
+        if (spaceRight >= ribbonWidth + gap) {
+          // Ribbon on right (default)
+          ribbonLeft = cardRect.right + gap;
+          side = 'right';
+          this._ribbonPanel.classList.add('ribbon-right');
+          this._ribbonPanel.classList.remove('ribbon-left');
+        } else if (spaceLeft >= ribbonWidth + gap) {
+          // Ribbon on left (fallback)
+          ribbonLeft = cardRect.left - ribbonWidth - gap;
+          side = 'left';
+          this._ribbonPanel.classList.add('ribbon-left');
+          this._ribbonPanel.classList.remove('ribbon-right');
+        } else {
+          // Not enough space on either side — squeeze on side with more room
+          if (spaceRight >= spaceLeft) {
+            ribbonLeft = window.innerWidth - ribbonWidth - viewportMargin;
+            side = 'right (squeezed)';
+            this._ribbonPanel.classList.add('ribbon-right');
+            this._ribbonPanel.classList.remove('ribbon-left');
+          } else {
+            ribbonLeft = viewportMargin;
+            side = 'left (squeezed)';
+            this._ribbonPanel.classList.add('ribbon-left');
+            this._ribbonPanel.classList.remove('ribbon-right');
+          }
+        }
+        
+        // Vertical: align top with card, cap at 85vh per spec
+        let ribbonTop = cardRect.top;
+        const maxHeight = viewportHeight * 0.85;
+        
+        // Keep within viewport
+        ribbonLeft = Math.max(viewportMargin, ribbonLeft);
+        ribbonTop = Math.max(viewportMargin, Math.min(ribbonTop, viewportHeight - 200));
+        
+        // Apply positioning
+        this._ribbonPanel.style.left = `${ribbonLeft}px`;
+        this._ribbonPanel.style.top = `${ribbonTop}px`;
+        this._ribbonPanel.style.width = `${ribbonWidth}px`;
+        this._ribbonPanel.style.maxHeight = `${maxHeight}px`;
+        
+        // Reset scroll position (per spec: always reset to top on open)
+        this._ribbonPanel.scrollTop = 0;
+        
+        console.log(`[CompanionPanel] Ribbon positioned: ${side}, left=${Math.round(ribbonLeft)}px, top=${Math.round(ribbonTop)}px, width=${ribbonWidth}px`);
+      },
+
       open(wordData) {
         this.currentWord = wordData;
         this.isOpen = true;
@@ -11073,8 +11246,14 @@ function addAcuteToSyllable(syllable) {
         this.populateAssimilationRow(wordData);
         
         // Height Budget: calculate layout mode (v5.11.48 Phase 2A)
-        // Currently diagnostic only — visual layout switching in Phase 2B
         this._currentLayout = this.calculateLayout(wordData);
+        
+        // Enter lateral mode if Height Budget says so (v5.11.48 Phase 2B)
+        // Must happen BEFORE positionPopup so card is shorter (ribbon extracted)
+        this.exitLateralMode(); // Clean up any previous lateral state
+        if (this._currentLayout.mode === 'LATERAL') {
+          this.enterLateralMode();
+        }
         
         // Phrase boundary control (v5.4.2 - segments instead of radio) - HIDDEN IN v5.11
         const line = DocumentState.lines[wordData.lineIndex];
@@ -11099,6 +11278,12 @@ function addAcuteToSyllable(syllable) {
         }
         
         this.positionPopup(wordData.element);
+        
+        // Position companion panel if in lateral mode (v5.11.48 Phase 2B)
+        if (this._isLateral) {
+          this.positionRibbonPanel();
+        }
+        
         this.elements.overlay.classList.add('active');
       },
       
@@ -11111,6 +11296,9 @@ function addAcuteToSyllable(syllable) {
             'user'
           );
         }
+        
+        // Exit lateral companion panel mode (v5.11.48 Phase 2B)
+        this.exitLateralMode();
         
         // Boundary customizations now persist until page reload (v5.10.23)
         // Word stack IPA already synced in _updateSyllableDisplay()
