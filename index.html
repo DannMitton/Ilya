@@ -11759,9 +11759,9 @@ function addAcuteToSyllable(syllable) {
         return;
       }
 
-      // Paper chrome = click inside paper content area but NOT on a word
+      // Paper chrome = click inside paper page area but NOT on a word
       // This means clicking white margins, headers, inter-line space on the page
-      const page = e.target.closest('.page');
+      const page = e.target.closest('.paper-page');
       if (page) {
         DrawerState.open('root');
         return;
