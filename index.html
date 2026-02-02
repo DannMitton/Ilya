@@ -11762,6 +11762,7 @@ function addAcuteToSyllable(syllable) {
       // Paper chrome = click inside paper page area but NOT on a word
       // This means clicking white margins, headers, inter-line space on the page
       const page = e.target.closest('.paper-page');
+      console.log('[DrawerState] click target:', e.target.tagName, e.target.className, '| .paper-page found:', !!page, '| Popup.isOpen:', Popup.isOpen);
       if (page) {
         DrawerState.open('root');
         return;
