@@ -3341,10 +3341,23 @@
 
       <!-- Root State: Dashboard/Input (content migrated in Phase 2) -->
       <div class="drawer-root" id="drawerRoot">
+        <div style="padding: 24px;">
+          <div style="font-family: var(--font-mono); font-size: 14px; color: var(--stationery-sage); margin-bottom: 12px;">[ Ilya ]</div>
+          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+            <strong>Root State</strong><br>
+            Dashboard and input controls will live here in Phase 2.
+          </div>
+        </div>
       </div>
 
       <!-- Drill State: Word Inspector (content migrated in Phase 3) -->
       <div class="drawer-inspector" id="drawerInspector">
+        <div style="padding: 24px;">
+          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+            <strong>Drill State</strong><br>
+            Word inspector and phoneme ribbon will live here in Phase 3.
+          </div>
+        </div>
       </div>
 
     </aside>
@@ -11762,7 +11775,6 @@ function addAcuteToSyllable(syllable) {
       // Paper chrome = click inside paper page area but NOT on a word
       // This means clicking white margins, headers, inter-line space on the page
       const page = e.target.closest('.paper-page');
-      console.log('[DrawerState] click target:', e.target.tagName, e.target.className, '| .paper-page found:', !!page, '| Popup.isOpen:', Popup.isOpen);
       if (page) {
         DrawerState.open('root');
         return;
