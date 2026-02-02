@@ -1143,15 +1143,16 @@
        ======================================== */
     .drawer-textarea {
       width: 100%;
-      max-height: 240px;
-      min-height: 100px;
+      height: 360px;
+      min-height: 120px;
       padding: 0.75rem;
+      padding-right: 2.75rem; /* space for OCR icon */
       font-family: monospace;
       font-size: 0.95rem;
       line-height: 1.6;
-      color: var(--ink-secondary);
-      background: #f5f5f5;
-      border: 1px solid rgba(26, 22, 18, 0.12);
+      color: var(--ilya-text-primary);
+      background: var(--ilya-paper);
+      border: 1px solid var(--ilya-border);
       border-radius: var(--radius);
       resize: vertical;
       transition: border-color 150ms var(--ease);
@@ -1164,8 +1165,53 @@
     }
 
     .drawer-textarea::placeholder {
-      color: var(--ink-secondary);
-      opacity: 0.5;
+      color: var(--ilya-text-muted);
+      opacity: 0.7;
+    }
+
+    /* Textarea wrapper (positions OCR overlay) */
+    .textarea-wrapper {
+      position: relative;
+    }
+
+    /* OCR icon: top-right corner inside textarea */
+    .ocr-overlay-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0.6;
+      color: var(--ilya-text-secondary);
+      transition: opacity 200ms var(--ease), color 200ms var(--ease), transform 200ms var(--ease);
+      z-index: 2;
+    }
+
+    .textarea-wrapper:hover .ocr-overlay-btn,
+    .drawer-textarea:focus ~ .ocr-overlay-btn {
+      opacity: 1;
+    }
+
+    .ocr-overlay-btn:hover {
+      color: var(--ilya-accent);
+      transform: scale(1.05);
+    }
+
+    .ocr-overlay-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .ocr-overlay-btn:disabled:hover {
+      color: var(--ilya-text-secondary);
     }
 
     /* ========================================
@@ -1250,6 +1296,61 @@
     }
 
     .footer-actions {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    /* Drawer-specific input section layout */
+    .drawer-input-section {
+      margin-top: var(--space-lg);
+    }
+
+    .drawer-input-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--space-sm);
+    }
+
+    .drawer-input-footer .footer-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--ilya-text-muted);
+    }
+
+    .drawer-input-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .btn-transcribe {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--ilya-accent);
+      color: white;
+      border: none;
+      transition: all 150ms var(--ease);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-transcribe:hover {
+      background: var(--ilya-accent-hover);
+    }
+
+    .btn-transcribe:focus {
+      outline: 2px solid var(--ilya-accent);
+      outline-offset: 2px;
+    }
+
+    .drawer-secondary-actions {
       display: flex;
       gap: var(--space-sm);
     }
@@ -3500,6 +3601,63 @@
               <span>Export PDF</span>
             </button>
             <div class="form-hint">Opens print dialog. Select "Save as PDF".</div>
+          </div>
+
+          <!-- Text Input (Phase 2B) -->
+          <div class="drawer-section-label">Text</div>
+
+          <div class="drawer-input-section">
+            <!-- Textarea with OCR overlay -->
+            <div class="textarea-wrapper">
+              <textarea
+                class="drawer-textarea"
+                id="drawerTextInput"
+                placeholder="Paste Russian lyrics here...&#10;Вставьте русский текст здесь..."
+                aria-label="Russian text input"
+              ></textarea>
+
+              <!-- OCR: icon inside textarea top-right corner -->
+              <button class="ocr-overlay-btn" id="drawerOcrBtn"
+                      aria-label="Import Russian text from image"
+                      disabled
+                      title="Loading Russian language pack...">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </button>
+
+              <!-- Hidden file input for OCR -->
+              <input type="file"
+                     id="drawerOcrFileInput"
+                     accept="image/*"
+                     capture="environment"
+                     aria-hidden="true"
+                     style="display: none;">
+            </div>
+
+            <!-- Footer: character counter + OCR status -->
+            <div class="drawer-input-footer">
+              <div class="footer-status">
+                <span class="char-counter" id="drawerCharCounter"></span>
+                <span class="ocr-status" id="drawerOcrStatus" style="display: none;">
+                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+                  </svg>
+                  <span class="ocr-status-text"></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="drawer-input-actions">
+              <button class="btn-transcribe" id="drawerTranscribeBtn">Transcribe to IPA</button>
+              <div class="drawer-secondary-actions">
+                <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -11901,6 +12059,108 @@ function addAcuteToSyllable(syllable) {
       ProfileController.init();
       DocumentController.init();
       Popup.init();
+
+      // ========================================
+      // DRAWER BRIDGE (Phase 2B)
+      // Forwards new drawer-root inputs to existing DrawerController.
+      // Removed in Phase 2C when old input-drawer is deleted.
+      // ========================================
+      const DrawerBridge = {
+        init() {
+          const newTextarea = document.getElementById('drawerTextInput');
+          const oldTextarea = document.getElementById('textInput');
+          const newTranscribe = document.getElementById('drawerTranscribeBtn');
+          const newClear = document.getElementById('drawerClearBtn');
+          const newOcrBtn = document.getElementById('drawerOcrBtn');
+          const newOcrFile = document.getElementById('drawerOcrFileInput');
+          const newCharCounter = document.getElementById('drawerCharCounter');
+
+          if (!newTextarea || !oldTextarea) return;
+
+          // Sync new textarea → old textarea
+          newTextarea.addEventListener('input', () => {
+            oldTextarea.value = newTextarea.value;
+            DrawerController.updatePreview();
+            this.updateCharCounter(newTextarea, newCharCounter);
+          });
+
+          // Sync old textarea → new textarea (for OCR, etc.)
+          const origOldSetter = Object.getOwnPropertyDescriptor(
+            HTMLTextAreaElement.prototype, 'value'
+          );
+          // Use MutationObserver fallback: poll on focus
+          oldTextarea.addEventListener('input', () => {
+            newTextarea.value = oldTextarea.value;
+            this.updateCharCounter(newTextarea, newCharCounter);
+          });
+
+          // Transcribe button
+          newTranscribe.addEventListener('click', () => {
+            // Sync text first
+            oldTextarea.value = newTextarea.value;
+            DrawerController.transcribe();
+            // Close the left drawer after transcription
+            DrawerState.close();
+          });
+
+          // Clear button
+          newClear.addEventListener('click', () => {
+            newTextarea.value = '';
+            oldTextarea.value = '';
+            DrawerController.updatePreview();
+            this.updateCharCounter(newTextarea, newCharCounter);
+            newTextarea.focus();
+          });
+
+          // OCR button → triggers hidden file input
+          if (newOcrBtn && newOcrFile) {
+            newOcrBtn.addEventListener('click', () => {
+              if (!newOcrBtn.disabled) {
+                newOcrFile.click();
+              }
+            });
+
+            newOcrFile.addEventListener('change', async (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              await DrawerController.processOCRFile(file);
+              newOcrFile.value = '';
+              // Sync result back to new textarea
+              newTextarea.value = oldTextarea.value;
+              this.updateCharCounter(newTextarea, newCharCounter);
+            });
+
+            // Mirror OCR ready state from old button
+            const oldOcrBtn = document.getElementById('ocrScanBtn');
+            if (oldOcrBtn) {
+              const checkOcr = () => {
+                if (!oldOcrBtn.disabled) {
+                  newOcrBtn.disabled = false;
+                  newOcrBtn.title = 'Import Russian text from image';
+                } else {
+                  requestAnimationFrame(checkOcr);
+                }
+              };
+              checkOcr();
+            }
+          }
+        },
+
+        updateCharCounter(textarea, counter) {
+          if (!counter) return;
+          const len = textarea.value.length;
+          if (len > 0) {
+            counter.textContent = `${len} chars`;
+            counter.classList.add('visible');
+            counter.classList.toggle('warning', len > 5000);
+            counter.classList.toggle('error', len > 10000);
+          } else {
+            counter.classList.remove('visible');
+          }
+        }
+      };
+
+      DrawerBridge.init();
       
       // Render empty title page on load
       DrawerController.renderToPaper();
