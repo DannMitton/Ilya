@@ -11035,7 +11035,9 @@ function addAcuteToSyllable(syllable) {
         console.log(`[HeightBudget] Tethered space: above=${Math.round(spaceAbove)}px, below=${Math.round(spaceBelow)}px, best=${Math.round(bestTetheredSpace)}px`);
         console.log(`[HeightBudget] Max inline: ${Math.round(maxInlineHeight)}px | Viewport: ${viewportWidth}×${viewportHeight}`);
         
-        // Decision tree (per Kimi's spec)
+        // Decision tree (per Kimi's spec, threshold adjusted v5.11.49)
+        // Suite needs ~649px (320 card + 280 ribbon + 1 seam + 48 margins)
+        // 680px threshold reflects actual physical requirement, not abstract "desktop"
         let result;
         
         // Can we fit comfortably inline (with room for one blurb)?
@@ -11046,15 +11048,15 @@ function addAcuteToSyllable(syllable) {
             maxHeight: Math.min(bestTetheredSpace, maxInlineHeight)
           };
         }
-        // Content fits 70vh but not local tethered space → Lateral if desktop
-        else if (viewportWidth >= 900 && contentStress <= viewportHeight * 0.85) {
+        // Content overflows inline → Lateral if suite fits (≥680px)
+        else if (viewportWidth >= 680 && contentStress <= viewportHeight * 0.85) {
           result = { mode: 'LATERAL' };
         }
-        // Desktop but extremely long word exceeding 85vh
-        else if (viewportWidth >= 900) {
+        // Wide enough but extremely long word exceeding 85vh
+        else if (viewportWidth >= 680) {
           result = { mode: 'LATERAL' };
         }
-        // Mobile/narrow → Stacked
+        // Too narrow for suite → Stacked
         else {
           result = { mode: 'STACKED' };
         }
