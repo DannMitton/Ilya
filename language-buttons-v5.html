@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ilya — Language Selection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #e5e4e0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      gap: 20px;
+    }
+
+    .context-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #999;
+      font-weight: 500;
+    }
+
+    .button-pair {
+      display: flex;
+      gap: 28px;
+    }
+
+    .lang-btn {
+      width: 300px;
+      height: 200px;
+      cursor: pointer;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.12))
+              drop-shadow(0 1px 3px rgba(0,0,0,0.08));
+      transition: filter 0.25s ease, transform 0.25s ease;
+    }
+
+    .lang-btn:hover {
+      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.20))
+              drop-shadow(0 2px 6px rgba(0,0,0,0.10));
+      transform: translateY(-2px);
+    }
+
+    .lang-btn:active {
+      transform: translateY(0px);
+      filter: drop-shadow(0 3px 12px rgba(0,0,0,0.14))
+              drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+    }
+  </style>
+</head>
+<body>
+
+  <span class="context-label">Select language · Sélectionner la langue</span>
+
+  <div class="button-pair">
+
+    <!-- ===== SHARED SYMBOLS (defined once, used in both buttons) ===== -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Official Canadian flag from Ilya footer (9600×4800 coordinate system) -->
+        <symbol id="canada-flag" viewBox="0 0 9600 4800">
+          <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/>
+          <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/>
+        </symbol>
+
+        <!-- Official Quebec Fleurdelisé from Wikimedia Commons (CC BY-SA 4.0).
+             Source: Flag_of_Quebec_(modified_for_visibility).svg
+             ViewBox 600×400 (3:2 ratio). White background with four blue quadrant
+             paths; the white cross and fleurs-de-lys are formed by negative space. -->
+        <symbol id="quebec-flag" viewBox="0 0 600 400">
+          <!-- White background (cross + fleurs show through) -->
+          <rect width="600" height="400" fill="#FFFFFF"/>
+          <!-- Top-left quadrant (blue + fleur cutout) -->
+          <path fill="#002495" d="M0,161.6h261.8V0H0L0,161.6L0,161.6z M194.8,92.9c-3.2,10-8.7,13.4-10.3,13.4  c0,0,2.6-11-5.3-16.7c-7.5-5.3-16.7-2.1-20.9,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.6v10.2h-27.4c0,0,0.7,14.3,15.7,12.9  c0,0-1.8,11.3-15.7,5.4c0,0,0.7,11.9-8.8,17.8c-9.5-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.8-5.4-15.8-5.4c15,1.4,15.8-12.9,15.8-12.9  H94.7v-10.2h13.6c0,0-0.6-8.2-4.7-14.3c-4.3-6.3-13.5-9.5-20.9-4.2c-7.9,5.7-5.3,16.7-5.3,16.7c-1.5,0-7.1-3.4-10.3-13.4  c-5.9-19.1,12.8-37.4,31.8-26.8c13.4,7.4,18.9,24.3,18.9,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.5-4.7-15.4-9.2-25  c-4-8.3-5.4-22.3,3-32.8c7.2-9.1,11.4-14.1,13.3-17.7c1.9,3.6,6.2,8.7,13.4,17.7c8.3,10.5,6.9,24.5,2.9,32.8  c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.6-1.2,24.2h7.2c0-17.8,5.6-34.6,18.9-42C181.9,55.5,200.7,73.9,194.8,92.9"/>
+          <!-- Top-right quadrant -->
+          <path fill="#002495" d="M338.1,161.6H600V0H338.1V161.6z M532.8,92.9c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.5-11-5.3-16.7  c-7.5-5.3-16.7-2.1-21,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.7v10.2h-27.5c0,0,0.7,14.3,15.8,12.9c0,0-1.8,11.3-15.8,5.4  c0,0,0.7,11.9-8.8,17.8c-9.6-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.7-5.4-15.7-5.4c15,1.4,15.7-12.9,15.7-12.9h-27.4v-10.2h13.6  c0,0-0.6-8.2-4.7-14.3c-4.3-6.3-13.5-9.5-20.8-4.2c-8,5.7-5.3,16.7-5.3,16.7c-1.6,0-7.2-3.4-10.3-13.4c-6-19.1,12.7-37.4,31.7-26.8  c13.4,7.4,18.8,24.3,18.8,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.5-4.7-15.4-9.2-25c-4-8.3-5.4-22.3,3-32.8  c7.2-9.1,11.4-14.1,13.4-17.7c1.9,3.6,6.3,8.7,13.4,17.7c8.3,10.5,6.9,24.5,2.9,32.8c-4.5,9.5-7.2,17.5-9.2,25  c-2.9,10.9-1,25.6-1.1,24.2h7.2c0-17.8,5.5-34.6,18.8-42C520,55.5,538.7,73.9,532.8,92.9"/>
+          <!-- Bottom-left quadrant -->
+          <path fill="#002495" d="M0,400h261.8V238.5H0L0,400L0,400z M194.8,331.4c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.6-11-5.3-16.6  c-7.5-5.3-16.7-2.1-20.9,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.6v10.2h-27.4c0,0,0.7,14.3,15.7,13c0,0-1.8,11.3-15.7,5.3  c0,0,0.7,11.8-8.8,17.8c-9.5-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.8-5.3-15.8-5.3c15,1.4,15.8-13,15.8-13H94.7v-10.2h13.6  c0,0-0.6-8.2-4.7-14.3c-4.3-6.2-13.5-9.4-20.9-4.2c-7.9,5.6-5.3,16.6-5.3,16.6c-1.5,0-7.1-3.3-10.3-13.4  c-5.9-19.1,12.8-37.4,31.8-26.8c13.4,7.5,18.9,24.3,18.9,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.6-4.7-15.5-9.2-25  c-4-8.3-5.4-22.3,3-32.7c7.2-9.1,11.4-14.2,13.3-17.7c1.9,3.5,6.2,8.6,13.4,17.7c8.3,10.4,6.9,24.4,2.9,32.7  c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.5-1.2,24.2h7.2c0-17.8,5.6-34.6,18.9-42C181.9,294,200.7,312.4,194.8,331.4"/>
+          <!-- Bottom-right quadrant -->
+          <path fill="#002495" d="M338.1,400H600V238.5H338.1V400z M532.8,331.4c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.5-11-5.3-16.6  c-7.5-5.3-16.7-2.1-21,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.7v10.2h-27.5c0,0,0.7,14.3,15.8,13c0,0-1.8,11.3-15.8,5.3  c0,0,0.7,11.8-8.8,17.8c-9.6-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.7-5.3-15.7-5.3c15,1.4,15.7-13,15.7-13h-27.4v-10.2h13.6  c0,0-0.6-8.2-4.7-14.3c-4.3-6.2-13.5-9.4-20.8-4.2c-8,5.6-5.3,16.6-5.3,16.6c-1.6,0-7.2-3.3-10.3-13.4c-6-19.1,12.7-37.4,31.7-26.8  c13.4,7.5,18.8,24.3,18.8,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.6-4.7-15.5-9.2-25c-4-8.3-5.4-22.3,3-32.7  c7.2-9.1,11.4-14.2,13.4-17.7c1.9,3.5,6.3,8.6,13.4,17.7c8.3,10.4,6.9,24.4,2.9,32.7c-4.5,9.5-7.2,17.5-9.2,25  c-2.9,10.9-1,25.5-1.1,24.2h7.2c0-17.8,5.5-34.6,18.8-42C520,294,538.7,312.4,532.8,331.4"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- ===== ENGLISH BUTTON ===== -->
+    <svg class="lang-btn" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="btn-en">
+          <rect width="300" height="200" rx="8"/>
+        </clipPath>
+        <clipPath id="left-en">
+          <rect width="150" height="200"/>
+        </clipPath>
+        <clipPath id="right-en">
+          <rect x="150" width="150" height="200"/>
+        </clipPath>
+        <linearGradient id="gloss-en" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.18"/>
+          <stop offset="40%" stop-color="#fff" stop-opacity="0.03"/>
+          <stop offset="60%" stop-color="#000" stop-opacity="0.02"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0.06"/>
+        </linearGradient>
+      </defs>
+
+      <g clip-path="url(#btn-en)">
+        <!-- Canadian flag (2:1 ratio, 400×200 to fill height, centred at 150) -->
+        <g clip-path="url(#left-en)">
+          <use href="#canada-flag" x="-50" y="0" width="400" height="200"/>
+        </g>
+
+        <!-- Union Jack (2:1 ratio, 400×200, centred at 150) -->
+        <g clip-path="url(#right-en)">
+          <rect x="-50" width="400" height="200" fill="#012169"/>
+          <line x1="-50" y1="0" x2="350" y2="200" stroke="#FFF" stroke-width="34"/>
+          <line x1="350" y1="0" x2="-50" y2="200" stroke="#FFF" stroke-width="34"/>
+          <line x1="-50" y1="0" x2="140" y2="95" stroke="#C8102E" stroke-width="11"/>
+          <line x1="160" y1="105" x2="350" y2="200" stroke="#C8102E" stroke-width="11"/>
+          <line x1="350" y1="0" x2="160" y2="95" stroke="#C8102E" stroke-width="11"/>
+          <line x1="140" y1="105" x2="-50" y2="200" stroke="#C8102E" stroke-width="11"/>
+          <rect x="125" y="0" width="50" height="200" fill="#FFF"/>
+          <rect x="-50" y="75" width="400" height="50" fill="#FFF"/>
+          <rect x="133" y="0" width="34" height="200" fill="#C8102E"/>
+          <rect x="-50" y="83" width="400" height="34" fill="#C8102E"/>
+        </g>
+
+        <rect width="300" height="200" fill="url(#gloss-en)"/>
+        <line x1="150" y1="0" x2="150" y2="200" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+
+        <text x="150" y="110" text-anchor="middle"
+              font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif"
+              font-size="28" font-weight="600" letter-spacing="0.5"
+              fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="5" stroke-linejoin="round"
+              >English</text>
+        <text x="150" y="110" text-anchor="middle"
+              font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif"
+              font-size="28" font-weight="600" letter-spacing="0.5"
+              fill="#FFFFFF">English</text>
+      </g>
+    </svg>
+
+    <!-- ===== FRENCH BUTTON ===== -->
+    <svg class="lang-btn" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="btn-fr">
+          <rect width="300" height="200" rx="8"/>
+        </clipPath>
+        <clipPath id="left-fr">
+          <rect width="150" height="200"/>
+        </clipPath>
+        <clipPath id="right-fr">
+          <rect x="150" width="150" height="200"/>
+        </clipPath>
+        <linearGradient id="gloss-fr" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.18"/>
+          <stop offset="40%" stop-color="#fff" stop-opacity="0.03"/>
+          <stop offset="60%" stop-color="#000" stop-opacity="0.02"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0.06"/>
+        </linearGradient>
+      </defs>
+
+      <g clip-path="url(#btn-fr)">
+        <!-- Canadian flag (identical left half) -->
+        <g clip-path="url(#left-fr)">
+          <use href="#canada-flag" x="-50" y="0" width="400" height="200"/>
+        </g>
+
+        <!-- Quebec Fleurdelisé (3:2 ratio, 300×200 fills exactly, centred at 150) -->
+        <g clip-path="url(#right-fr)">
+          <use href="#quebec-flag" x="0" y="0" width="300" height="200"/>
+        </g>
+
+        <rect width="300" height="200" fill="url(#gloss-fr)"/>
+        <line x1="150" y1="0" x2="150" y2="200" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+
+        <text x="150" y="110" text-anchor="middle"
+              font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif"
+              font-size="28" font-weight="600" letter-spacing="0.5"
+              fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="5" stroke-linejoin="round"
+              >Français</text>
+        <text x="150" y="110" text-anchor="middle"
+              font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif"
+              font-size="28" font-weight="600" letter-spacing="0.5"
+              fill="#FFFFFF">Français</text>
+      </g>
+    </svg>
+
+  </div>
+
+</body>
+</html>
