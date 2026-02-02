@@ -3484,6 +3484,62 @@
         </div>
         <div class="drawer-body">
 
+          <!-- Text Input (Phase 2B) -->
+          <div class="drawer-input-section">
+            <!-- Textarea with OCR overlay -->
+            <div class="textarea-wrapper">
+              <textarea
+                class="drawer-textarea"
+                id="drawerTextInput"
+                placeholder="Paste Russian lyrics here...&#10;Collez les paroles russes ici..."
+                aria-label="Russian text input"
+              ></textarea>
+
+              <!-- OCR: icon inside textarea top-right corner -->
+              <button class="ocr-overlay-btn" id="drawerOcrBtn"
+                      aria-label="Import Russian text from image"
+                      disabled
+                      title="Loading Russian language pack...">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+                  <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+                  <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+                </svg>
+              </button>
+
+              <!-- Hidden file input for OCR -->
+              <input type="file"
+                     id="drawerOcrFileInput"
+                     accept="image/*"
+                     capture="environment"
+                     aria-hidden="true"
+                     style="display: none;">
+            </div>
+
+            <!-- Footer: character counter + OCR status -->
+            <div class="drawer-input-footer">
+              <div class="footer-status">
+                <span class="char-counter" id="drawerCharCounter"></span>
+                <span class="ocr-status" id="drawerOcrStatus" style="display: none;">
+                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+                  </svg>
+                  <span class="ocr-status-text"></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="drawer-input-actions">
+              <button class="btn-transcribe" id="drawerTranscribeBtn">Transcribe to IPA</button>
+              <div class="drawer-secondary-actions">
+                <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Song Setup -->
           <div class="drawer-section-label">Song Setup</div>
 
@@ -3601,63 +3657,6 @@
               <span>Export PDF</span>
             </button>
             <div class="form-hint">Opens print dialog. Select "Save as PDF".</div>
-          </div>
-
-          <!-- Text Input (Phase 2B) -->
-          <div class="drawer-section-label">Text</div>
-
-          <div class="drawer-input-section">
-            <!-- Textarea with OCR overlay -->
-            <div class="textarea-wrapper">
-              <textarea
-                class="drawer-textarea"
-                id="drawerTextInput"
-                placeholder="Paste Russian lyrics here...&#10;Collez les paroles russes ici..."
-                aria-label="Russian text input"
-              ></textarea>
-
-              <!-- OCR: icon inside textarea top-right corner -->
-              <button class="ocr-overlay-btn" id="drawerOcrBtn"
-                      aria-label="Import Russian text from image"
-                      disabled
-                      title="Loading Russian language pack...">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="17 8 12 3 7 8"/>
-                  <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-              </button>
-
-              <!-- Hidden file input for OCR -->
-              <input type="file"
-                     id="drawerOcrFileInput"
-                     accept="image/*"
-                     capture="environment"
-                     aria-hidden="true"
-                     style="display: none;">
-            </div>
-
-            <!-- Footer: character counter + OCR status -->
-            <div class="drawer-input-footer">
-              <div class="footer-status">
-                <span class="char-counter" id="drawerCharCounter"></span>
-                <span class="ocr-status" id="drawerOcrStatus" style="display: none;">
-                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
-                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
-                  </svg>
-                  <span class="ocr-status-text"></span>
-                </span>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="drawer-input-actions">
-              <button class="btn-transcribe" id="drawerTranscribeBtn">Transcribe to IPA</button>
-              <div class="drawer-secondary-actions">
-                <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
-              </div>
-            </div>
           </div>
 
         </div>
@@ -12103,11 +12102,16 @@ function addAcuteToSyllable(syllable) {
             DrawerState.close();
           });
 
-          // Clear button
+          // Clear button — confirmation + full reset
           newClear.addEventListener('click', () => {
+            if (!confirm('Clear all content? This cannot be undone.')) return;
+            // Clear both textareas
             newTextarea.value = '';
             oldTextarea.value = '';
             DrawerController.updatePreview();
+            // Clear document state and re-render empty paper
+            DocumentState.lines = [];
+            DrawerController.renderToPaper();
             this.updateCharCounter(newTextarea, newCharCounter);
             newTextarea.focus();
           });
