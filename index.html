@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.11.48 Companion Panel lateral layout</title>
+  <title>Ilya — v5.11.49 Companion Suite unified wrapper</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1684,25 +1684,103 @@
     }
 
     /* ========================================
-       LATERAL COMPANION PANEL (v5.11.48 Phase 2B)
-       Per Kimi's spec: ribbon graduates from popup content
-       to companion interface on desktop ≥900px.
-       "Don't grow the popup — route the content smarter."
+       COMPANION SUITE (v5.11.49 — Kimi's "Folded Object")
+       Single unified wrapper for word card + ribbon panel.
+       One shadow, one radius, one object.
+       "Singularity creates trust."
        ======================================== */
     
-    .ribbon-panel {
+    .companion-suite {
       position: absolute;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: row; /* Ribbon right (default) */
       background: var(--surface);
-      opacity: 0.97;
       border-radius: var(--radius);
-      box-shadow: var(--shadow-popup);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
       z-index: 101;
-      padding: 12px 0;
+      animation: suiteEnter 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     
-    .ribbon-panel .phoneme-ribbon {
+    .companion-suite[data-side="left"] {
+      flex-direction: row-reverse;
+    }
+    
+    /* Card surrenders independence inside suite */
+    .companion-suite .popup-card {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      flex: 0 0 320px;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none;
+      z-index: auto;
+    }
+    
+    /* Ribbon panel inside suite */
+    .companion-suite .ribbon-panel {
+      position: relative;
+      flex: 0 0 min(max(280px, 20vw), 320px);
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      border-left: 1px solid rgba(26, 22, 18, 0.08);
+      overflow-y: auto;
+      padding: 12px 0;
+      animation: ribbonUnfold 300ms cubic-bezier(0.16, 1, 0.3, 1) 50ms backwards;
+    }
+    
+    .companion-suite[data-side="left"] .ribbon-panel {
+      border-left: none;
+      border-right: 1px solid rgba(26, 22, 18, 0.08);
+    }
+    
+    /* Fold shadow: subtle gradient at the seam */
+    .companion-suite .ribbon-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background: linear-gradient(to right, rgba(0,0,0,0.02), transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .companion-suite[data-side="left"] .ribbon-panel::before {
+      left: auto;
+      right: 0;
+      background: linear-gradient(to left, rgba(0,0,0,0.02), transparent);
+    }
+    
+    .companion-suite .ribbon-panel .phoneme-ribbon {
       margin-top: 0;
+    }
+    
+    @keyframes suiteEnter {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes ribbonUnfold {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .companion-suite[data-side="left"] .ribbon-panel {
+      animation-name: ribbonUnfoldLeft;
+    }
+    
+    @keyframes ribbonUnfoldLeft {
+      from { opacity: 0; transform: translateX(8px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     /* ========================================
@@ -10993,12 +11071,22 @@ function addAcuteToSyllable(syllable) {
        */
       _isLateral: false,
       _ribbonPanel: null,
+      _companionSuite: null,
       _drawerWasExpanded: false,
 
       enterLateralMode() {
         if (this._isLateral) return;
         
-        // Create ribbon panel
+        // Create the unified suite wrapper (Kimi's "folded object")
+        const suite = document.createElement('div');
+        suite.className = 'companion-suite';
+        suite.id = 'companionSuite';
+        
+        // Insert suite into overlay, then move card inside it
+        this.elements.overlay.insertBefore(suite, this.elements.card);
+        suite.appendChild(this.elements.card);
+        
+        // Create ribbon panel as sibling of card inside suite
         const ribbonPanel = document.createElement('div');
         ribbonPanel.className = 'ribbon-panel';
         ribbonPanel.id = 'ribbonPanel';
@@ -11009,14 +11097,14 @@ function addAcuteToSyllable(syllable) {
           ribbonPanel.appendChild(phonemeRibbon);
         }
         
-        // Add to overlay (as sibling of popup-card)
-        this.elements.overlay.appendChild(ribbonPanel);
+        suite.appendChild(ribbonPanel);
         
         // Hide popup arrow in lateral mode (no tether)
         const arrow = this.elements.card.querySelector('.popup-arrow');
         if (arrow) arrow.style.display = 'none';
         
-        // Store reference and state
+        // Store references and state
+        this._companionSuite = suite;
         this._ribbonPanel = ribbonPanel;
         this._isLateral = true;
         
@@ -11026,7 +11114,7 @@ function addAcuteToSyllable(syllable) {
           DrawerController.collapse();
         }
         
-        console.log('[CompanionPanel] Entered LATERAL mode');
+        console.log('[CompanionPanel] Entered LATERAL mode (unified suite)');
       },
 
       /**
@@ -11047,9 +11135,19 @@ function addAcuteToSyllable(syllable) {
           popupBody.appendChild(phonemeRibbon);
         }
         
-        // Remove ribbon panel
+        // Move card back out of suite to overlay
+        if (this._companionSuite) {
+          this.elements.overlay.insertBefore(this.elements.card, this._companionSuite);
+          this._companionSuite.remove();
+          this._companionSuite = null;
+        }
+        
+        // Clear inline styles that suite positioning may have set on card
+        this.elements.card.style.top = '';
+        this.elements.card.style.left = '';
+        
+        // Remove ribbon panel reference
         if (this._ribbonPanel) {
-          this._ribbonPanel.remove();
           this._ribbonPanel = null;
         }
         
@@ -11073,68 +11171,85 @@ function addAcuteToSyllable(syllable) {
        * Position ribbon panel next to popup card — v5.11.48 Phase 2B
        * Determines left/right side based on available viewport space.
        */
-      positionRibbonPanel() {
-        if (!this._ribbonPanel || !this._isLateral) return;
+      positionSuite(element) {
+        if (!this._companionSuite || !this._isLateral) return;
         
-        const card = this.elements.card;
-        const cardRect = card.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
+        const cardWidth = 320;
         const ribbonWidth = Math.min(Math.max(280, window.innerWidth * 0.2), 320);
-        const gap = 16;
+        const suiteWidth = cardWidth + ribbonWidth + 1; // +1 for border seam
+        const margin = 10;
         const viewportMargin = 24;
+        const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         
-        // Determine side: prefer right, fall back to left
-        const spaceRight = window.innerWidth - cardRect.right - viewportMargin;
-        const spaceLeft = cardRect.left - viewportMargin;
-        
-        let ribbonLeft;
+        // Determine side: position card half over the word, ribbon extends outward
+        // Try ribbon-right first (card on left side of suite)
+        const cardCenterX = rect.left + rect.width / 2;
+        let suiteLeft;
         let side;
         
-        if (spaceRight >= ribbonWidth + gap) {
-          // Ribbon on right (default)
-          ribbonLeft = cardRect.right + gap;
+        // If ribbon-right: card starts at suite left edge
+        const rightAttempt = cardCenterX - cardWidth / 2;
+        const rightEnd = rightAttempt + suiteWidth;
+        
+        // If ribbon-left: card starts at suite left + ribbon width
+        const leftAttempt = cardCenterX - cardWidth / 2 - ribbonWidth - 1;
+        
+        if (rightEnd <= viewportWidth - viewportMargin && rightAttempt >= viewportMargin) {
+          // Ribbon fits on right
+          suiteLeft = rightAttempt;
           side = 'right';
-          this._ribbonPanel.classList.add('ribbon-right');
-          this._ribbonPanel.classList.remove('ribbon-left');
-        } else if (spaceLeft >= ribbonWidth + gap) {
-          // Ribbon on left (fallback)
-          ribbonLeft = cardRect.left - ribbonWidth - gap;
+        } else if (leftAttempt >= viewportMargin) {
+          // Ribbon fits on left
+          suiteLeft = leftAttempt;
           side = 'left';
-          this._ribbonPanel.classList.add('ribbon-left');
-          this._ribbonPanel.classList.remove('ribbon-right');
         } else {
-          // Not enough space on either side — squeeze on side with more room
+          // Tight: clamp to viewport, prefer side with more room
+          const spaceRight = viewportWidth - (cardCenterX + cardWidth / 2);
+          const spaceLeft = cardCenterX - cardWidth / 2;
+          
           if (spaceRight >= spaceLeft) {
-            ribbonLeft = window.innerWidth - ribbonWidth - viewportMargin;
-            side = 'right (squeezed)';
-            this._ribbonPanel.classList.add('ribbon-right');
-            this._ribbonPanel.classList.remove('ribbon-left');
+            suiteLeft = Math.max(viewportMargin, Math.min(rightAttempt, viewportWidth - suiteWidth - viewportMargin));
+            side = 'right';
           } else {
-            ribbonLeft = viewportMargin;
-            side = 'left (squeezed)';
-            this._ribbonPanel.classList.add('ribbon-left');
-            this._ribbonPanel.classList.remove('ribbon-right');
+            suiteLeft = Math.max(viewportMargin, Math.min(leftAttempt, viewportWidth - suiteWidth - viewportMargin));
+            side = 'left';
           }
         }
         
-        // Vertical: align top with card, cap at 85vh per spec
-        let ribbonTop = cardRect.top;
-        const maxHeight = viewportHeight * 0.85;
+        this._companionSuite.setAttribute('data-side', side);
         
-        // Keep within viewport
-        ribbonLeft = Math.max(viewportMargin, ribbonLeft);
-        ribbonTop = Math.max(viewportMargin, Math.min(ribbonTop, viewportHeight - 200));
+        // Vertical: same logic as positionPopup
+        const spaceAbove = rect.top - margin * 2;
+        const spaceBelow = viewportHeight - rect.bottom - margin * 2;
         
-        // Apply positioning
-        this._ribbonPanel.style.left = `${ribbonLeft}px`;
-        this._ribbonPanel.style.top = `${ribbonTop}px`;
-        this._ribbonPanel.style.width = `${ribbonWidth}px`;
+        let top;
+        let maxHeight;
+        
+        if (spaceAbove >= spaceBelow && spaceAbove >= 250) {
+          maxHeight = Math.min(spaceAbove, viewportHeight * 0.7);
+          top = rect.top - margin - maxHeight;
+          top = Math.max(margin, top);
+          this.elements.card.classList.remove('arrow-top');
+        } else {
+          maxHeight = Math.min(spaceBelow, viewportHeight * 0.7);
+          top = rect.bottom + margin;
+          this.elements.card.classList.add('arrow-top');
+        }
+        
+        maxHeight = Math.max(250, maxHeight);
+        
+        // Apply to suite
+        this._companionSuite.style.top = `${top}px`;
+        this._companionSuite.style.left = `${suiteLeft}px`;
+        
+        // Card and ribbon share the height constraint
+        this.elements.card.style.maxHeight = `${maxHeight}px`;
         this._ribbonPanel.style.maxHeight = `${maxHeight}px`;
-        
-        // Reset scroll position (per spec: always reset to top on open)
         this._ribbonPanel.scrollTop = 0;
         
-        console.log(`[CompanionPanel] Ribbon positioned: ${side}, left=${Math.round(ribbonLeft)}px, top=${Math.round(ribbonTop)}px, width=${ribbonWidth}px`);
+        console.log(`[CompanionPanel] Suite positioned: side=${side}, left=${Math.round(suiteLeft)}px, top=${Math.round(top)}px, suiteWidth=${suiteWidth}px`);
       },
 
       open(wordData) {
@@ -11279,9 +11394,10 @@ function addAcuteToSyllable(syllable) {
         
         this.positionPopup(wordData.element);
         
-        // Position companion panel if in lateral mode (v5.11.48 Phase 2B)
+        // Position companion suite if in lateral mode (v5.11.49)
+        // Suite handles both card and ribbon as one unit
         if (this._isLateral) {
-          this.positionRibbonPanel();
+          this.positionSuite(wordData.element);
         }
         
         this.elements.overlay.classList.add('active');
