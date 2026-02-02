@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.1 Drawer shell DOM and CSS</title>
+  <title>Ilya — v6.0.2 Drawer click zones and state machine</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -11662,10 +11662,54 @@ function addAcuteToSyllable(syllable) {
     };
 
     /* ========================================
+       DRAWER STATE MACHINE (v6.0)
+       Manages left-side drawer open/close and
+       Root/Drill internal state transitions.
+       ======================================== */
+    const DrawerState = {
+      drawer: null,
+      scrim: null,
+      previousFocus: null,
+
+      init() {
+        this.drawer = document.getElementById('ilyaDrawer');
+        this.scrim = document.getElementById('drawerScrim');
+      },
+
+      get isOpen() {
+        return this.drawer?.dataset.state === 'open';
+      },
+
+      get mode() {
+        return this.drawer?.dataset.mode || 'root';
+      },
+
+      open(mode = 'root') {
+        if (!this.drawer) return;
+        this.previousFocus = document.activeElement;
+        this.drawer.dataset.state = 'open';
+        this.drawer.dataset.mode = mode;
+      },
+
+      close() {
+        if (!this.drawer) return;
+        this.drawer.dataset.state = 'closed';
+        // Return focus to triggering element
+        this.previousFocus?.focus();
+        this.previousFocus = null;
+      },
+
+      switchMode(mode) {
+        if (!this.drawer) return;
+        this.drawer.dataset.mode = mode;
+      }
+    };
+
+    /* ========================================
        EVENT DELEGATION
        ======================================== */
     document.addEventListener('click', (e) => {
-      // Handle word-stack clicks
+      // Handle word-stack clicks → open popup AND drawer in Drill
       const wordStack = e.target.closest('.word-stack');
       if (wordStack && !Popup.isOpen) {
         const data = {
@@ -11689,6 +11733,46 @@ function addAcuteToSyllable(syllable) {
           element: wordStack
         };
         Popup.open(data);
+        DrawerState.open('inspect');
+        return;
+      }
+
+      // Don't process drawer zones if popup is open or click is inside drawer/popup
+      if (Popup.isOpen) return;
+      if (e.target.closest('.ilya-drawer')) return;
+      if (e.target.closest('.popup-overlay')) return;
+      if (e.target.closest('.input-drawer')) return;
+
+      // Scrim click → close drawer
+      if (e.target.closest('.drawer-scrim')) {
+        DrawerState.close();
+        return;
+      }
+
+      // Paper chrome click (paper-aperture but NOT a word-stack) → Root
+      const paperAperture = e.target.closest('.paper-aperture');
+      if (paperAperture) {
+        // Only open Root if paper has content and click is on chrome
+        const paperStack = e.target.closest('.paper-stack');
+        if (paperStack) {
+          // Click inside paper-stack but not on a word = paper chrome
+          DrawerState.open('root');
+        } else {
+          // Click on aperture margins = paper chrome
+          DrawerState.open('root');
+        }
+        return;
+      }
+
+      // Desk click (background, outside paper and drawer) → close
+      DrawerState.close();
+    });
+
+    // Escape key → close drawer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && DrawerState.isOpen && !Popup.isOpen) {
+        DrawerState.close();
+        return;
       }
     });
     
@@ -11753,6 +11837,7 @@ function addAcuteToSyllable(syllable) {
        INITIALIZATION
        ======================================== */
     document.addEventListener('DOMContentLoaded', () => {
+      DrawerState.init();
       DrawerController.init();
       TabController.init();
       DashboardController.init();
