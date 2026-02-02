@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.12.0 Drawer architecture baseline</title>
+  <title>Ilya — v5.12.1 Blurb lookup repair</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8921,6 +8921,7 @@ function addAcuteToSyllable(syllable) {
           if (features.afterHard) return 'after-hard';
           if (features.position === 'pretonic') return 'pretonic';
           if (features.position === 'initial') return 'initial';
+          if (features.position === 'posttonic-immediate') return 'post-stress-immediate';
           if (features.position === 'remote') return 'remote';
           return 'unstressed';
         }
@@ -9040,9 +9041,20 @@ function addAcuteToSyllable(syllable) {
         }
         
         const rule = this.deriveRule(features, char);
-        const key = `${ipa}:${rule}:${char}`;
         
-        return this.blurbs[key] || {
+        // Signs have empty IPA - key format is just 'rule:char' (e.g., 'soft-sign:ь')
+        const key = ipa ? `${ipa}:${rule}:${char}` : `${rule}:${char}`;
+        
+        if (this.blurbs[key]) return this.blurbs[key];
+        
+        // Fallback for non-reducing vowels (у, ю, и, ы): try generic 'unstressed' or 'stressed'
+        if (features?.type === 'vowel' && !this.blurbs[key]) {
+          const fallbackRule = features.position === 'stressed' ? 'stressed' : 'unstressed';
+          const fallbackKey = `${ipa}:${fallbackRule}:${char}`;
+          if (this.blurbs[fallbackKey]) return this.blurbs[fallbackKey];
+        }
+        
+        return {
           blurb: `${char} → ${ipa}`,
           citation: null,
           notable: false
