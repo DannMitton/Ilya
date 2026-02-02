@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v5.12.1 Blurb lookup repair</title>
+  <title>Ilya — v6.0.1 Drawer shell DOM and CSS</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -175,10 +175,139 @@
     /* ========================================
        DISPLAY CONTAINER: Main app layout
        ======================================== */
-    .display-container {
+    .ilya-layout {
       display: flex;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ========================================
+       DRAWER: Left-side workbench (v6.0)
+       During transition: position fixed to avoid breaking
+       existing column layout. Converts to flex sibling
+       when old input-drawer is removed in Phase 2.
+       ======================================== */
+    .ilya-drawer {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 360px;
+      min-width: 320px;
+      max-width: 400px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid rgba(26, 22, 18, 0.08);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transform: translateX(-100%);
+      transition: transform 300ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ilya-drawer[data-state="open"] {
+      transform: translateX(0);
+    }
+
+    /* Internal state containers */
+    .drawer-root,
+    .drawer-inspector {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 200ms ease, opacity 200ms ease, visibility 200ms;
+      pointer-events: none;
+    }
+
+    /* Root state visible */
+    .ilya-drawer[data-mode="root"] .drawer-root {
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .ilya-drawer[data-mode="root"] .drawer-inspector {
+      transform: translateX(20px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Drill/inspect state visible */
+    .ilya-drawer[data-mode="inspect"] .drawer-root {
+      transform: translateX(-20px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .ilya-drawer[data-mode="inspect"] .drawer-inspector {
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Scrim: tablet overlay mode only */
+    .drawer-scrim {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 22, 18, 0.1);
+      z-index: 9;
+    }
+
+    /* Tablet: drawer overlays paper (same as desktop during transition) */
+    @media (min-width: 601px) and (max-width: 899px) {
+      .ilya-drawer {
+        z-index: 100;
+      }
+
+      .ilya-drawer[data-state="open"] ~ .drawer-scrim {
+        display: block;
+      }
+    }
+
+    /* Mobile: bottom sheet (Phase 5 - placeholder) */
+    @media (max-width: 600px) {
+      .ilya-drawer {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        height: auto;
+        max-height: 70vh;
+        border-right: none;
+        border-top: 1px solid rgba(26, 22, 18, 0.08);
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.05);
+        transform: translateY(100%);
+        z-index: 100;
+      }
+
+      .ilya-drawer[data-state="open"] {
+        transform: translateY(0);
+      }
+
+      .ilya-drawer[data-state="open"] ~ .drawer-scrim {
+        display: block;
+      }
+    }
+
+    /* Print: hide drawer entirely */
+    @media print {
+      .ilya-drawer,
+      .drawer-scrim {
+        display: none !important;
+      }
     }
 
     /* ========================================
@@ -192,7 +321,6 @@
       flex-direction: column;
       align-items: center;
       box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
-      /* Kimi: explicit height prevents infinite growth */
       min-height: 0; /* Flex child needs this to scroll */
     }
 
@@ -3027,7 +3155,7 @@
         margin: 0;
       }
       
-      .display-container {
+      .ilya-layout {
         display: block;
         padding: 0;
         margin: 0;
@@ -3198,7 +3326,23 @@
 </head>
 <body class="notranslate">
 
-  <div class="display-container">
+  <div class="ilya-layout">
+
+    <!-- Drawer: The workbench (v6.0) -->
+    <aside class="ilya-drawer" id="ilyaDrawer" data-state="closed" data-mode="root">
+
+      <!-- Root State: Dashboard/Input (content migrated in Phase 2) -->
+      <div class="drawer-root" id="drawerRoot">
+      </div>
+
+      <!-- Drill State: Word Inspector (content migrated in Phase 3) -->
+      <div class="drawer-inspector" id="drawerInspector">
+      </div>
+
+    </aside>
+
+    <!-- Scrim: tablet/mobile overlay backdrop -->
+    <div class="drawer-scrim" id="drawerScrim"></div>
     
     <!-- Paper Aperture: Viewing area with inset depth -->
     <main class="paper-aperture" id="paperAperture">
