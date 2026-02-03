@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.5 Bilingual glosses (authentic flags)</title>
+  <title>Ilya — v6.0.11 Gap analysis function</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1381,23 +1381,28 @@
     }
 
     /* ========================================
-       LANGUAGE SELECTION (v6.0.6)
-       Compact flag buttons with Calm Authority palette
+       LANGUAGE SELECTION (v6.0.9)
+       Simple text buttons — Calm Authority aesthetic
        ======================================== */
     .lang-btn {
-      width: 72px;
-      height: 36px;
+      min-width: 72px;
+      height: 32px;
+      padding: 0 12px;
       cursor: pointer;
+      border: 1px solid var(--ilya-border);
       border-radius: var(--radius);
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10));
-      transition: filter 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
-      opacity: 0.7;
+      background: var(--surface);
+      color: var(--ilya-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     .lang-btn:hover {
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-      transform: translateY(-1px);
-      opacity: 0.9;
+      background: var(--ilya-binding);
+      color: var(--ilya-text-primary);
+      border-color: var(--ilya-border-focus);
     }
 
     .lang-btn:active {
@@ -1405,13 +1410,13 @@
     }
 
     .lang-btn.lang-btn-active {
-      opacity: 1;
-      outline: 2px solid var(--ilya-accent);
-      outline-offset: 1px;
+      background: var(--ilya-accent-light);
+      border-color: var(--ilya-accent);
+      color: var(--ilya-text-primary);
     }
 
     .lang-btn.lang-btn-active:hover {
-      transform: none;
+      background: var(--ilya-accent-light);
     }
 
     /* ========================================
@@ -3554,80 +3559,10 @@
               <div class="drawer-secondary-actions">
                 <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
                 
-                <!-- Language toggle buttons (v6.0.6) -->
+                <!-- Language toggle buttons (v6.0.9) -->
                 <div class="drawer-lang-buttons">
-                  <!-- Shared SVG symbols -->
-                  <svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <!-- Canadian flag with Calm Authority Madder #a5292a -->
-                      <symbol id="canada-flag" viewBox="0 0 9600 4800">
-                        <path fill="#a5292a" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/>
-                        <path fill="#faf6f0" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/>
-                      </symbol>
-                      <!-- Quebec Fleurdelisé with Calm Authority Slate #3d5a80 -->
-                      <symbol id="quebec-flag" viewBox="0 0 600 400">
-                        <rect width="600" height="400" fill="#faf6f0"/>
-                        <path fill="#3d5a80" d="M0,161.6h261.8V0H0L0,161.6L0,161.6z M194.8,92.9c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.6-11-5.3-16.7c-7.5-5.3-16.7-2.1-20.9,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.6v10.2h-27.4c0,0,0.7,14.3,15.7,12.9c0,0-1.8,11.3-15.7,5.4c0,0,0.7,11.9-8.8,17.8c-9.5-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.8-5.4-15.8-5.4c15,1.4,15.8-12.9,15.8-12.9H94.7v-10.2h13.6c0,0-0.6-8.2-4.7-14.3c-4.3-6.3-13.5-9.5-20.9-4.2c-7.9,5.7-5.3,16.7-5.3,16.7c-1.5,0-7.1-3.4-10.3-13.4c-5.9-19.1,12.8-37.4,31.8-26.8c13.4,7.4,18.9,24.3,18.9,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.5-4.7-15.4-9.2-25c-4-8.3-5.4-22.3,3-32.8c7.2-9.1,11.4-14.1,13.3-17.7c1.9,3.6,6.2,8.7,13.4,17.7c8.3,10.5,6.9,24.5,2.9,32.8c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.6-1.2,24.2h7.2c0-17.8,5.6-34.6,18.9-42C181.9,55.5,200.7,73.9,194.8,92.9"/>
-                        <path fill="#3d5a80" d="M338.1,161.6H600V0H338.1V161.6z M532.8,92.9c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.5-11-5.3-16.7c-7.5-5.3-16.7-2.1-21,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.7v10.2h-27.5c0,0,0.7,14.3,15.8,12.9c0,0-1.8,11.3-15.8,5.4c0,0,0.7,11.9-8.8,17.8c-9.6-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.7-5.4-15.7-5.4c15,1.4,15.7-12.9,15.7-12.9h-27.4v-10.2h13.6c0,0-0.6-8.2-4.7-14.3c-4.3-6.3-13.5-9.5-20.8-4.2c-8,5.7-5.3,16.7-5.3,16.7c-1.6,0-7.2-3.4-10.3-13.4c-6-19.1,12.7-37.4,31.7-26.8c13.4,7.4,18.8,24.3,18.8,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.5-4.7-15.4-9.2-25c-4-8.3-5.4-22.3,3-32.8c7.2-9.1,11.4-14.1,13.4-17.7c1.9,3.6,6.3,8.7,13.4,17.7c8.3,10.5,6.9,24.5,2.9,32.8c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.6-1.1,24.2h7.2c0-17.8,5.5-34.6,18.8-42C520,55.5,538.7,73.9,532.8,92.9"/>
-                        <path fill="#3d5a80" d="M0,400h261.8V238.5H0L0,400L0,400z M194.8,331.4c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.6-11-5.3-16.6c-7.5-5.3-16.7-2.1-20.9,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.6v10.2h-27.4c0,0,0.7,14.3,15.7,13c0,0-1.8,11.3-15.7,5.3c0,0,0.7,11.8-8.8,17.8c-9.5-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.8-5.3-15.8-5.3c15,1.4,15.8-13,15.8-13H94.7v-10.2h13.6c0,0-0.6-8.2-4.7-14.3c-4.3-6.2-13.5-9.4-20.9-4.2c-7.9,5.6-5.3,16.6-5.3,16.6c-1.5,0-7.1-3.3-10.3-13.4c-5.9-19.1,12.8-37.4,31.8-26.8c13.4,7.5,18.9,24.3,18.9,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.6-4.7-15.5-9.2-25c-4-8.3-5.4-22.3,3-32.7c7.2-9.1,11.4-14.2,13.3-17.7c1.9,3.5,6.2,8.6,13.4,17.7c8.3,10.4,6.9,24.4,2.9,32.7c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.5-1.2,24.2h7.2c0-17.8,5.6-34.6,18.9-42C181.9,294,200.7,312.4,194.8,331.4"/>
-                        <path fill="#3d5a80" d="M338.1,400H600V238.5H338.1V400z M532.8,331.4c-3.2,10-8.7,13.4-10.3,13.4c0,0,2.5-11-5.3-16.6c-7.5-5.3-16.7-2.1-21,4.2c-4,6.1-4.6,14.3-4.6,14.3h13.7v10.2h-27.5c0,0,0.7,14.3,15.8,13c0,0-1.8,11.3-15.8,5.3c0,0,0.7,11.8-8.8,17.8c-9.6-5.9-8.8-17.8-8.8-17.8c-13.9,5.9-15.7-5.3-15.7-5.3c15,1.4,15.7-13,15.7-13h-27.4v-10.2h13.6c0,0-0.6-8.2-4.7-14.3c-4.3-6.2-13.5-9.4-20.8-4.2c-8,5.6-5.3,16.6-5.3,16.6c-1.6,0-7.2-3.3-10.3-13.4c-6-19.1,12.7-37.4,31.7-26.8c13.4,7.5,18.8,24.3,18.8,42h7.3c-0.2,1.4,1.7-13.3-1.2-24.2c-2.1-7.6-4.7-15.5-9.2-25c-4-8.3-5.4-22.3,3-32.7c7.2-9.1,11.4-14.2,13.4-17.7c1.9,3.5,6.3,8.6,13.4,17.7c8.3,10.4,6.9,24.4,2.9,32.7c-4.5,9.5-7.2,17.5-9.2,25c-2.9,10.9-1,25.5-1.1,24.2h7.2c0-17.8,5.5-34.6,18.8-42C520,294,538.7,312.4,532.8,331.4"/>
-                      </symbol>
-                    </defs>
-                  </svg>
-
-                  <!-- English Button (Canada + UK) - 72×36px -->
-                  <svg class="lang-btn lang-btn-active" id="langBtnEn" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
-                    <title>Transcribe with English glosses</title>
-                    <defs>
-                      <clipPath id="btn-clip-en"><rect width="72" height="36" rx="4"/></clipPath>
-                      <clipPath id="left-clip-en"><rect width="36" height="36"/></clipPath>
-                      <clipPath id="right-clip-en"><rect x="36" width="36" height="36"/></clipPath>
-                    </defs>
-                    <g clip-path="url(#btn-clip-en)">
-                      <!-- Canada left half (maple centered at x=18) -->
-                      <g clip-path="url(#left-clip-en)">
-                        <use href="#canada-flag" x="-18" y="0" width="72" height="36"/>
-                        <rect x="0" y="0" width="6" height="36" fill="#a5292a"/>
-                      </g>
-                      <!-- Union Jack right half (cross centered at x=54) -->
-                      <g clip-path="url(#right-clip-en)">
-                        <rect x="36" y="0" width="36" height="36" fill="#3d5a80"/>
-                        <line x1="36" y1="0" x2="72" y2="36" stroke="#faf6f0" stroke-width="5"/>
-                        <line x1="72" y1="0" x2="36" y2="36" stroke="#faf6f0" stroke-width="5"/>
-                        <line x1="36" y1="0" x2="52" y2="16" stroke="#a5292a" stroke-width="1.5"/>
-                        <line x1="56" y1="20" x2="72" y2="36" stroke="#a5292a" stroke-width="1.5"/>
-                        <line x1="72" y1="0" x2="56" y2="16" stroke="#a5292a" stroke-width="1.5"/>
-                        <line x1="52" y1="20" x2="36" y2="36" stroke="#a5292a" stroke-width="1.5"/>
-                        <rect x="50" y="0" width="8" height="36" fill="#faf6f0"/>
-                        <rect x="36" y="14" width="36" height="8" fill="#faf6f0"/>
-                        <rect x="51" y="0" width="6" height="36" fill="#a5292a"/>
-                        <rect x="36" y="15" width="36" height="6" fill="#a5292a"/>
-                      </g>
-                      <line x1="36" y1="0" x2="36" y2="36" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
-                    </g>
-                  </svg>
-
-                  <!-- French Button (Canada + Quebec) - 72×36px -->
-                  <svg class="lang-btn" id="langBtnFr" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
-                    <title>Transcrire avec gloses en français</title>
-                    <defs>
-                      <clipPath id="btn-clip-fr"><rect width="72" height="36" rx="4"/></clipPath>
-                      <clipPath id="left-clip-fr"><rect width="36" height="36"/></clipPath>
-                      <clipPath id="right-clip-fr"><rect x="36" width="36" height="36"/></clipPath>
-                    </defs>
-                    <g clip-path="url(#btn-clip-fr)">
-                      <!-- Canada left half (maple centered at x=18) -->
-                      <g clip-path="url(#left-clip-fr)">
-                        <use href="#canada-flag" x="-18" y="0" width="72" height="36"/>
-                        <rect x="0" y="0" width="6" height="36" fill="#a5292a"/>
-                      </g>
-                      <!-- Quebec right half (cross centered at x=54) -->
-                      <g clip-path="url(#right-clip-fr)">
-                        <use href="#quebec-flag" x="27" y="0" width="54" height="36"/>
-                      </g>
-                      <line x1="36" y1="0" x2="36" y2="36" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
-                    </g>
-                  </svg>
+                  <button class="lang-btn lang-btn-active" id="langBtnEn" title="Transcribe with English glosses">English</button>
+                  <button class="lang-btn" id="langBtnFr" title="Transcrire avec gloses en français">Français</button>
                 </div>
               </div>
             </div>
@@ -4034,13 +3969,98 @@ let currentGlossLanguage = 'en';
  * Handles both old format (string) and new format ({en, fr})
  */
 function extractGloss(g) {
-  if (!g) return '';
-  if (typeof g === 'string') return g;
-  if (typeof g === 'object') {
-    // Try current language first, fall back to English
-    return g[currentGlossLanguage] || g.en || g.fr || '';
+  if (!g) return currentGlossLanguage === 'fr' ? 'À VÉRIFIER' : '';
+  
+  // String format = English-only (legacy)
+  if (typeof g === 'string') {
+    return currentGlossLanguage === 'fr' ? 'À VÉRIFIER' : g;
   }
+  
+  // Object format = bilingual
+  if (typeof g === 'object') {
+    if (currentGlossLanguage === 'fr') {
+      return g.fr || 'À VÉRIFIER';
+    }
+    return g.en || g.fr || '';
+  }
+  
   return '';
+}
+
+// ==========================================
+// GAP ANALYSIS: French gloss coverage (v6.0.11)
+// Run from console: analyzeGlossGaps()
+// ==========================================
+function analyzeGlossGaps() {
+  const results = {
+    supplement: { total: 0, bilingual: 0, englishOnly: 0, noGloss: 0, gaps: [] },
+    dictionary: { total: 0, bilingual: 0, englishOnly: 0, noGloss: 0, gaps: [] }
+  };
+  
+  // Analyze SINGER_SUPPLEMENT
+  for (const [word, entry] of Object.entries(SINGER_SUPPLEMENT)) {
+    results.supplement.total++;
+    const g = entry.gloss;
+    if (!g) {
+      results.supplement.noGloss++;
+    } else if (typeof g === 'object' && g.fr) {
+      results.supplement.bilingual++;
+    } else {
+      results.supplement.englishOnly++;
+      results.supplement.gaps.push(word);
+    }
+  }
+  
+  // Analyze STRESS_DICTIONARY (Tier 1 + Tier 2)
+  for (const [word, entry] of Object.entries(STRESS_DICTIONARY)) {
+    results.dictionary.total++;
+    // Entry can be object or array
+    const e = Array.isArray(entry) ? entry[0] : entry;
+    const g = e.gloss || e.g;
+    if (!g) {
+      results.dictionary.noGloss++;
+    } else if (typeof g === 'object' && g.fr) {
+      results.dictionary.bilingual++;
+    } else {
+      results.dictionary.englishOnly++;
+      // Only collect first 100 gaps as sample
+      if (results.dictionary.gaps.length < 100) {
+        results.dictionary.gaps.push(word);
+      }
+    }
+  }
+  
+  // Calculate percentages
+  const suppCoverage = results.supplement.total > 0 
+    ? ((results.supplement.bilingual / results.supplement.total) * 100).toFixed(1)
+    : 0;
+  const dictCoverage = results.dictionary.total > 0
+    ? ((results.dictionary.bilingual / results.dictionary.total) * 100).toFixed(1)
+    : 0;
+  
+  console.log('\n========== FRENCH GLOSS GAP ANALYSIS ==========\n');
+  
+  console.log('SINGER_SUPPLEMENT:');
+  console.log(`  Total entries:    ${results.supplement.total}`);
+  console.log(`  Bilingual:        ${results.supplement.bilingual} (${suppCoverage}%)`);
+  console.log(`  English-only:     ${results.supplement.englishOnly}`);
+  console.log(`  No gloss:         ${results.supplement.noGloss}`);
+  if (results.supplement.gaps.length > 0) {
+    console.log(`  Gaps preview:     ${results.supplement.gaps.slice(0, 20).join(', ')}${results.supplement.gaps.length > 20 ? '...' : ''}`);
+  }
+  
+  console.log('\nSTRESS_DICTIONARY:');
+  console.log(`  Total entries:    ${results.dictionary.total.toLocaleString()}`);
+  console.log(`  Bilingual:        ${results.dictionary.bilingual.toLocaleString()} (${dictCoverage}%)`);
+  console.log(`  English-only:     ${results.dictionary.englishOnly.toLocaleString()}`);
+  console.log(`  No gloss:         ${results.dictionary.noGloss.toLocaleString()}`);
+  if (results.dictionary.gaps.length > 0) {
+    console.log(`  Gaps sample:      ${results.dictionary.gaps.slice(0, 20).join(', ')}...`);
+  }
+  
+  console.log('\n================================================\n');
+  
+  return results;
 }
 
 // Tier 1: Load immediately, blocks until ready
@@ -4140,227 +4160,240 @@ loadTier1();
    Common words missing from OpenRussian dictionary
    ================================================== */
 const SINGER_SUPPLEMENT = {
-    // Pronouns
-    'я': { stress: 0, gloss: 'I', source: 'supplement' },
-    'ты': { stress: 0, gloss: 'you (informal)', source: 'supplement' },
-    'он': { stress: 0, gloss: 'he', source: 'supplement' },
-    'мы': { stress: 0, gloss: 'we', source: 'supplement' },
-    'вы': { stress: 0, gloss: 'you (formal/plural)', source: 'supplement' },
-    'мне': { stress: 0, gloss: 'to me', source: 'supplement' },
-    'мной': { stress: 0, gloss: 'with me', source: 'supplement' },
-    'нам': { stress: 0, gloss: 'to us', source: 'supplement' },
-    'вам': { stress: 0, gloss: 'to you', source: 'supplement' },
-    'вас': { stress: 0, gloss: 'you (acc.)', source: 'supplement' },
-    'нас': { stress: 0, gloss: 'us', source: 'supplement' },
-    'кто': { stress: 0, gloss: 'who', source: 'supplement' },
-    'что': { stress: 0, gloss: 'what', source: 'supplement' },
-    'чём': { stress: 0, gloss: 'what (prep.)', source: 'supplement' },
-    'всё': { stress: 0, gloss: 'everything', source: 'supplement' },
-    'все': { stress: 0, gloss: 'everyone', source: 'supplement' },
-    'сам': { stress: 0, gloss: 'oneself', source: 'supplement' },
-    'мой': { stress: 0, gloss: 'my', source: 'supplement' },
-    'моя': { stress: 1, gloss: 'my (fem.)', source: 'supplement' },
-    'моё': { stress: 1, gloss: 'my (neut.)', source: 'supplement' },
-    'моей': { stress: 1, gloss: 'my (gen./dat./prep. fem.)', source: 'supplement' },
-    'твой': { stress: 0, gloss: 'your', source: 'supplement' },
-    'твоя': { stress: 1, gloss: 'your (fem.)', source: 'supplement' },
-    'твоё': { stress: 1, gloss: 'your (neut.)', source: 'supplement' },
-    'твоей': { stress: 1, gloss: 'your (gen./dat./prep. fem.)', source: 'supplement' },
-    'её': { stress: 1, gloss: 'her/hers', source: 'supplement' },
-    'свой': { stress: 0, gloss: 'one\'s own', source: 'supplement' },
-    'наш': { stress: 0, gloss: 'our', source: 'supplement' },
-    'ваш': { stress: 0, gloss: 'your (formal)', source: 'supplement' },
-    'весь': { stress: 0, gloss: 'all/whole', source: 'supplement' },
-    'тот': { stress: 0, gloss: 'that', source: 'supplement' },
-    'там': { stress: 0, gloss: 'there', source: 'supplement' },
-    'тут': { stress: 0, gloss: 'here', source: 'supplement' },
-    'где': { stress: 0, gloss: 'where', source: 'supplement' },
+    // ========================================
+    // BILINGUAL GLOSSES (v6.0.8)
+    // French translations approved Feb 3, 2026
+    // ========================================
     
-    // Particles & Negation
-    'не': { stress: 0, gloss: 'not', source: 'supplement' },
-    'ни': { stress: 0, gloss: 'nor/not a', source: 'supplement' },
-    'да': { stress: 0, gloss: 'yes/and', source: 'supplement' },
-    'нет': { stress: 0, gloss: 'no', source: 'supplement' },
-    'вот': { stress: 0, gloss: 'here is', source: 'supplement' },
-    'уж': { stress: 0, gloss: 'already', source: 'supplement' },
-    'ещё': { stress: 0, gloss: 'still/yet', source: 'supplement' },
-    'уже': { stress: 0, gloss: 'already', source: 'supplement' },
-    'так': { stress: 0, gloss: 'so/thus', source: 'supplement' },
-    'как': { stress: 0, gloss: 'how/as', source: 'supplement' },
-    'чем': { stress: 0, gloss: 'than', source: 'supplement' },
+    // Batch 1: Pronouns
+    'я': { stress: 0, gloss: { en: 'I', fr: 'je' }, source: 'supplement' },
+    'ты': { stress: 0, gloss: { en: 'you (informal)', fr: 'tu' }, source: 'supplement' },
+    'он': { stress: 0, gloss: { en: 'he', fr: 'il' }, source: 'supplement' },
+    'мы': { stress: 0, gloss: { en: 'we', fr: 'nous' }, source: 'supplement' },
+    'вы': { stress: 0, gloss: { en: 'you (formal/plural)', fr: 'vous' }, source: 'supplement' },
+    'мне': { stress: 0, gloss: { en: 'to me', fr: 'à moi' }, source: 'supplement' },
+    'мной': { stress: 0, gloss: { en: 'with me', fr: 'avec moi' }, source: 'supplement' },
+    'нам': { stress: 0, gloss: { en: 'to us', fr: 'à nous' }, source: 'supplement' },
+    'вам': { stress: 0, gloss: { en: 'to you', fr: 'à vous' }, source: 'supplement' },
+    'вас': { stress: 0, gloss: { en: 'you (acc.)', fr: 'vous' }, source: 'supplement' },
+    'нас': { stress: 0, gloss: { en: 'us', fr: 'nous' }, source: 'supplement' },
+    'кто': { stress: 0, gloss: { en: 'who', fr: 'qui' }, source: 'supplement' },
+    'что': { stress: 0, gloss: { en: 'what', fr: 'quoi' }, source: 'supplement' },
+    'чём': { stress: 0, gloss: { en: 'what (prep.)', fr: 'quoi (prép.)' }, source: 'supplement' },
+    'всё': { stress: 0, gloss: { en: 'everything', fr: 'tout' }, source: 'supplement' },
+    'все': { stress: 0, gloss: { en: 'everyone', fr: 'tous' }, source: 'supplement' },
+    'сам': { stress: 0, gloss: { en: 'oneself', fr: 'soi-même' }, source: 'supplement' },
     
-    // Prepositions (stressed when standalone)
-    'о': { stress: 0, gloss: 'about', source: 'supplement' },
-    'об': { stress: 0, gloss: 'about', source: 'supplement' },
-    'в': { stress: 0, gloss: 'in/into', source: 'supplement' },
-    'во': { stress: 0, gloss: 'in/into', source: 'supplement' },
-    'к': { stress: 0, gloss: 'to/toward', source: 'supplement' },
-    'ко': { stress: 0, gloss: 'to/toward', source: 'supplement' },
-    'с': { stress: 0, gloss: 'with/from', source: 'supplement' },
-    'со': { stress: 0, gloss: 'with/from', source: 'supplement' },
-    'у': { stress: 0, gloss: 'at/by', source: 'supplement' },
-    'на': { stress: 0, gloss: 'on/onto', source: 'supplement' },
-    'за': { stress: 0, gloss: 'behind/for', source: 'supplement' },
-    'по': { stress: 0, gloss: 'along/by', source: 'supplement' },
-    'до': { stress: 0, gloss: 'until/to', source: 'supplement' },
-    'из': { stress: 0, gloss: 'from/out of', source: 'supplement' },
-    'от': { stress: 0, gloss: 'from', source: 'supplement' },
-    'при': { stress: 0, gloss: 'at/by/in presence of', source: 'supplement' },
-    'для': { stress: 0, gloss: 'for', source: 'supplement' },
-    'без': { stress: 0, gloss: 'without', source: 'supplement' },
-    'под': { stress: 0, gloss: 'under', source: 'supplement' },
-    'над': { stress: 0, gloss: 'above', source: 'supplement' },
-    'про': { stress: 0, gloss: 'about', source: 'supplement' },
+    // Batch 2: Possessives
+    'мой': { stress: 0, gloss: { en: 'my', fr: 'mon' }, source: 'supplement' },
+    'моя': { stress: 1, gloss: { en: 'my (fem.)', fr: 'ma' }, source: 'supplement' },
+    'моё': { stress: 1, gloss: { en: 'my (neut.)', fr: 'mon (n.)' }, source: 'supplement' },
+    'моей': { stress: 1, gloss: { en: 'my (gen./dat./prep. fem.)', fr: 'de ma (gén./dat./prép.)' }, source: 'supplement' },
+    'твой': { stress: 0, gloss: { en: 'your', fr: 'ton' }, source: 'supplement' },
+    'твоя': { stress: 1, gloss: { en: 'your (fem.)', fr: 'ta' }, source: 'supplement' },
+    'твоё': { stress: 1, gloss: { en: 'your (neut.)', fr: 'ton (n.)' }, source: 'supplement' },
+    'твоей': { stress: 1, gloss: { en: 'your (gen./dat./prep. fem.)', fr: 'de ta (gén./dat./prép.)' }, source: 'supplement' },
+    'её': { stress: 1, gloss: { en: 'her/hers', fr: 'son/sa' }, source: 'supplement' },
+    'свой': { stress: 0, gloss: { en: "one's own", fr: 'son propre' }, source: 'supplement' },
+    'наш': { stress: 0, gloss: { en: 'our', fr: 'notre' }, source: 'supplement' },
+    'ваш': { stress: 0, gloss: { en: 'your (formal)', fr: 'votre' }, source: 'supplement' },
     
-    // Common verb forms (imperatives, short forms)
-    'пой': { stress: 0, gloss: 'sing!', source: 'supplement' },
-    'дай': { stress: 0, gloss: 'give!', source: 'supplement' },
-    'стой': { stress: 0, gloss: 'stop!/stand!', source: 'supplement' },
-    'спи': { stress: 0, gloss: 'sleep!', source: 'supplement' },
-    'жди': { stress: 0, gloss: 'wait!', source: 'supplement' },
-    'иди': { stress: 0, gloss: 'go!', source: 'supplement' },
-    'будь': { stress: 0, gloss: 'be!', source: 'supplement' },
-    'знай': { stress: 0, gloss: 'know!', source: 'supplement' },
-    'верь': { stress: 0, gloss: 'believe!', source: 'supplement' },
-    'жить': { stress: 0, gloss: 'to live', source: 'supplement' },
-    'быть': { stress: 0, gloss: 'to be', source: 'supplement' },
-    'петь': { stress: 0, gloss: 'to sing', source: 'supplement' },
-    'спать': { stress: 0, gloss: 'to sleep', source: 'supplement' },
-    'ждать': { stress: 0, gloss: 'to wait', source: 'supplement' },
-    'знать': { stress: 0, gloss: 'to know', source: 'supplement' },
-    'дать': { stress: 0, gloss: 'to give', source: 'supplement' },
-    'стать': { stress: 0, gloss: 'to become', source: 'supplement' },
-    'был': { stress: 0, gloss: 'was (m.)', source: 'supplement' },
-    'была': { stress: 1, gloss: 'was (f.)', source: 'supplement' },
-    'было': { stress: 0, gloss: 'was (n.)', source: 'supplement' },
-    'были': { stress: 0, gloss: 'were', source: 'supplement' },
-    'сказал': { stress: 1, gloss: 'said/told', source: 'supplement' },
-    'думать': { stress: 0, gloss: 'to think', source: 'supplement' },
-    'думаю': { stress: 0, gloss: 'I think', source: 'supplement' },
-    'думаешь': { stress: 0, gloss: 'you think', source: 'supplement' },
-    'есть': { stress: 0, gloss: 'is/to eat', source: 'supplement' },
-    'играть': { stress: 1, gloss: 'to play', source: 'supplement' },
+    // Batch 3: Demonstratives, Locatives & Particles
+    'весь': { stress: 0, gloss: { en: 'all/whole', fr: 'tout/entier' }, source: 'supplement' },
+    'тот': { stress: 0, gloss: { en: 'that', fr: 'celui-là' }, source: 'supplement' },
+    'там': { stress: 0, gloss: { en: 'there', fr: 'là-bas' }, source: 'supplement' },
+    'тут': { stress: 0, gloss: { en: 'here', fr: 'ici' }, source: 'supplement' },
+    'где': { stress: 0, gloss: { en: 'where', fr: 'où' }, source: 'supplement' },
+    'здесь': { stress: 0, gloss: { en: 'here', fr: 'ici' }, source: 'supplement' },
+    'не': { stress: 0, gloss: { en: 'not', fr: 'ne' }, source: 'supplement' },
+    'ни': { stress: 0, gloss: { en: 'nor/not a', fr: 'ni' }, source: 'supplement' },
+    'да': { stress: 0, gloss: { en: 'yes/and', fr: 'oui/et' }, source: 'supplement' },
+    'нет': { stress: 0, gloss: { en: 'no', fr: 'non' }, source: 'supplement' },
+    'вот': { stress: 0, gloss: { en: 'here is', fr: 'voici' }, source: 'supplement' },
+    'уж': { stress: 0, gloss: { en: 'already', fr: 'déjà' }, source: 'supplement' },
+    'ещё': { stress: 0, gloss: { en: 'still/yet', fr: 'encore' }, source: 'supplement' },
+    'уже': { stress: 0, gloss: { en: 'already', fr: 'déjà' }, source: 'supplement' },
+    'так': { stress: 0, gloss: { en: 'so/thus', fr: 'ainsi' }, source: 'supplement' },
+    'как': { stress: 0, gloss: { en: 'how/as', fr: 'comme' }, source: 'supplement' },
+    'чем': { stress: 0, gloss: { en: 'than', fr: 'que' }, source: 'supplement' },
+    'но': { stress: 0, gloss: { en: 'but', fr: 'mais' }, source: 'supplement' },
+    'а': { stress: 0, gloss: { en: 'and/but', fr: 'et/mais' }, source: 'supplement' },
+    'и': { stress: 0, gloss: { en: 'and', fr: 'et' }, source: 'supplement' },
+    'то': { stress: 0, gloss: { en: 'then/that', fr: 'alors/cela' }, source: 'supplement' },
+    'же': { stress: 0, gloss: { en: '(emphasis)', fr: '(emphase)' }, source: 'supplement' },
+    'ли': { stress: 0, gloss: { en: '(question)', fr: '(interr.)' }, source: 'supplement' },
+    'ль': { stress: 0, gloss: { en: '(question)', fr: '(interr.)' }, source: 'supplement' },
     
-    // Gloss overrides (dictionary glosses too verbose)
-    'русский': { stress: 0, pos: 'adj.', gloss: 'Russian', source: 'supplement' },
+    // Batch 4: Prepositions
+    'о': { stress: 0, gloss: { en: 'about', fr: 'de/sur' }, source: 'supplement' },
+    'об': { stress: 0, gloss: { en: 'about', fr: 'de/sur' }, source: 'supplement' },
+    'в': { stress: 0, gloss: { en: 'in/into', fr: 'dans' }, source: 'supplement' },
+    'во': { stress: 0, gloss: { en: 'in/into', fr: 'dans' }, source: 'supplement' },
+    'к': { stress: 0, gloss: { en: 'to/toward', fr: 'vers' }, source: 'supplement' },
+    'ко': { stress: 0, gloss: { en: 'to/toward', fr: 'vers' }, source: 'supplement' },
+    'с': { stress: 0, gloss: { en: 'with/from', fr: 'avec/de' }, source: 'supplement' },
+    'со': { stress: 0, gloss: { en: 'with/from', fr: 'avec/de' }, source: 'supplement' },
+    'у': { stress: 0, gloss: { en: 'at/by', fr: 'chez/près de' }, source: 'supplement' },
+    'на': { stress: 0, gloss: { en: 'on/onto', fr: 'sur' }, source: 'supplement' },
+    'за': { stress: 0, gloss: { en: 'behind/for', fr: 'derrière/pour' }, source: 'supplement' },
+    'по': { stress: 0, gloss: { en: 'along/by', fr: 'le long de' }, source: 'supplement' },
+    'до': { stress: 0, gloss: { en: 'until/to', fr: "jusqu'à" }, source: 'supplement' },
+    'из': { stress: 0, gloss: { en: 'from/out of', fr: 'de/hors de' }, source: 'supplement' },
+    'от': { stress: 0, gloss: { en: 'from', fr: 'de' }, source: 'supplement' },
+    'при': { stress: 0, gloss: { en: 'at/by/in presence of', fr: 'en présence de' }, source: 'supplement' },
+    'для': { stress: 0, gloss: { en: 'for', fr: 'pour' }, source: 'supplement' },
+    'без': { stress: 0, gloss: { en: 'without', fr: 'sans' }, source: 'supplement' },
+    'под': { stress: 0, gloss: { en: 'under', fr: 'sous' }, source: 'supplement' },
+    'над': { stress: 0, gloss: { en: 'above', fr: 'au-dessus de' }, source: 'supplement' },
+    'про': { stress: 0, gloss: { en: 'about', fr: 'au sujet de' }, source: 'supplement' },
+    'сквозь': { stress: 0, gloss: { en: 'through', fr: 'à travers' }, source: 'supplement' },
+    'вдоль': { stress: 0, gloss: { en: 'along', fr: 'le long de' }, source: 'supplement' },
     
-    // Nouns (common in vocal repertoire)
-    'ночь': { stress: 0, gloss: 'night', source: 'supplement' },
-    'день': { stress: 0, gloss: 'day', source: 'supplement' },
-    'путь': { stress: 0, gloss: 'path/way', source: 'supplement' },
-    'свет': { stress: 0, gloss: 'light', source: 'supplement' },
-    'мир': { stress: 0, gloss: 'world/peace', source: 'supplement' },
-    'сон': { stress: 0, gloss: 'dream/sleep', source: 'supplement' },
-    'дом': { stress: 0, gloss: 'home/house', source: 'supplement' },
-    'сад': { stress: 0, gloss: 'garden', source: 'supplement' },
-    'лес': { stress: 0, gloss: 'forest', source: 'supplement' },
-    'бог': { stress: 0, gloss: 'god', source: 'supplement' },
-    'царь': { stress: 0, gloss: 'tsar', source: 'supplement' },
-    'князь': { stress: 0, gloss: 'prince', source: 'supplement' },
-    'дух': { stress: 0, gloss: 'spirit', source: 'supplement' },
-    'друг': { stress: 0, gloss: 'friend', source: 'supplement' },
-    'враг': { stress: 0, gloss: 'enemy', source: 'supplement' },
-    'брат': { stress: 0, gloss: 'brother', source: 'supplement' },
-    'сын': { stress: 0, gloss: 'son', source: 'supplement' },
-    'муж': { stress: 0, gloss: 'husband', source: 'supplement' },
-    'жизнь': { stress: 0, gloss: 'life', source: 'supplement' },
-    'любовь': { stress: 1, gloss: 'love', source: 'supplement' },
-    'любви': { stress: 1, gloss: 'of love', source: 'supplement' },
-    'правда': { stress: 0, gloss: 'truth', source: 'supplement' },
-    'правду': { stress: 0, gloss: 'truth (acc.)', source: 'supplement' },
-    'смерть': { stress: 0, gloss: 'death', source: 'supplement' },
-    'боль': { stress: 0, gloss: 'pain', source: 'supplement' },
-    'грусть': { stress: 0, gloss: 'sadness', source: 'supplement' },
-    'страсть': { stress: 0, gloss: 'passion', source: 'supplement' },
-    'честь': { stress: 0, gloss: 'honor', source: 'supplement' },
-    'власть': { stress: 0, gloss: 'power', source: 'supplement' },
-    'часть': { stress: 0, gloss: 'part', source: 'supplement' },
-    'речь': { stress: 0, gloss: 'speech', source: 'supplement' },
-    'мысль': { stress: 0, gloss: 'thought', source: 'supplement' },
-    'мама': { stress: 0, gloss: 'mama', source: 'supplement' },
-    'маме': { stress: 0, gloss: 'to mama', source: 'supplement' },
-    'кровь': { stress: 0, gloss: 'blood', source: 'supplement' },
-    'грудь': { stress: 0, gloss: 'chest/breast', source: 'supplement' },
-    'взор': { stress: 0, gloss: 'gaze', source: 'supplement' },
-    'взгляд': { stress: 0, gloss: 'glance', source: 'supplement' },
-    'слух': { stress: 0, gloss: 'hearing/rumor', source: 'supplement' },
-    'шум': { stress: 0, gloss: 'noise', source: 'supplement' },
-    'гром': { stress: 0, gloss: 'thunder', source: 'supplement' },
-    'дождь': { stress: 0, gloss: 'rain', source: 'supplement' },
-    'снег': { stress: 0, gloss: 'snow', source: 'supplement' },
-    'лёд': { stress: 0, gloss: 'ice', source: 'supplement' },
-    'огонь': { stress: 0, gloss: 'fire', source: 'supplement' },
-    'вода': { stress: 0, gloss: 'water', source: 'supplement' },
-    'земля': { stress: 0, gloss: 'earth', source: 'supplement' },
-    'край': { stress: 0, gloss: 'edge/land', source: 'supplement' },
-    'рай': { stress: 0, gloss: 'paradise', source: 'supplement' },
-    'ад': { stress: 0, gloss: 'hell', source: 'supplement' },
+    // Batch 5: Imperatives & Infinitives
+    'пой': { stress: 0, gloss: { en: 'sing!', fr: 'chante !' }, source: 'supplement' },
+    'дай': { stress: 0, gloss: { en: 'give!', fr: 'donne !' }, source: 'supplement' },
+    'стой': { stress: 0, gloss: { en: 'stop!/stand!', fr: 'arrête !/reste !' }, source: 'supplement' },
+    'спи': { stress: 0, gloss: { en: 'sleep!', fr: 'dors !' }, source: 'supplement' },
+    'жди': { stress: 0, gloss: { en: 'wait!', fr: 'attends !' }, source: 'supplement' },
+    'иди': { stress: 0, gloss: { en: 'go!', fr: 'va !' }, source: 'supplement' },
+    'будь': { stress: 0, gloss: { en: 'be!', fr: 'sois !' }, source: 'supplement' },
+    'знай': { stress: 0, gloss: { en: 'know!', fr: 'sache !' }, source: 'supplement' },
+    'верь': { stress: 0, gloss: { en: 'believe!', fr: 'crois !' }, source: 'supplement' },
+    'жить': { stress: 0, gloss: { en: 'to live', fr: 'vivre' }, source: 'supplement' },
+    'быть': { stress: 0, gloss: { en: 'to be', fr: 'être' }, source: 'supplement' },
+    'петь': { stress: 0, gloss: { en: 'to sing', fr: 'chanter' }, source: 'supplement' },
+    'спать': { stress: 0, gloss: { en: 'to sleep', fr: 'dormir' }, source: 'supplement' },
+    'ждать': { stress: 0, gloss: { en: 'to wait', fr: 'attendre' }, source: 'supplement' },
+    'знать': { stress: 0, gloss: { en: 'to know', fr: 'savoir' }, source: 'supplement' },
+    'дать': { stress: 0, gloss: { en: 'to give', fr: 'donner' }, source: 'supplement' },
+    'стать': { stress: 0, gloss: { en: 'to become', fr: 'devenir' }, source: 'supplement' },
+    'думать': { stress: 0, gloss: { en: 'to think', fr: 'penser' }, source: 'supplement' },
+    'играть': { stress: 1, gloss: { en: 'to play', fr: 'jouer' }, source: 'supplement' },
     
-    // Adjectives (short forms common in poetry)
-    'рад': { stress: 0, gloss: 'glad', source: 'supplement' },
-    'сыт': { stress: 0, gloss: 'full/sated', source: 'supplement' },
-    'злой': { stress: 0, gloss: 'evil/angry', source: 'supplement' },
-    'свят': { stress: 0, gloss: 'holy', source: 'supplement' },
-    'прав': { stress: 0, gloss: 'right/correct', source: 'supplement' },
-    'жив': { stress: 0, gloss: 'alive', source: 'supplement' },
-    'мёртв': { stress: 0, gloss: 'dead', source: 'supplement' },
-    'нов': { stress: 0, gloss: 'new', source: 'supplement' },
-    'стар': { stress: 0, gloss: 'old', source: 'supplement' },
-    'юн': { stress: 0, gloss: 'young', source: 'supplement' },
-    'мил': { stress: 0, gloss: 'dear/sweet', source: 'supplement' },
-    'люб': { stress: 0, gloss: 'beloved', source: 'supplement' },
+    // Batch 6: Past & Present Tense Forms
+    'был': { stress: 0, gloss: { en: 'was (m.)', fr: 'était (m.)' }, source: 'supplement' },
+    'была': { stress: 1, gloss: { en: 'was (f.)', fr: 'était (f.)' }, source: 'supplement' },
+    'было': { stress: 0, gloss: { en: 'was (n.)', fr: 'était (n.)' }, source: 'supplement' },
+    'были': { stress: 0, gloss: { en: 'were', fr: 'étaient' }, source: 'supplement' },
+    'сказал': { stress: 1, gloss: { en: 'said/told', fr: 'dit' }, source: 'supplement' },
+    'думаю': { stress: 0, gloss: { en: 'I think', fr: 'je pense' }, source: 'supplement' },
+    'думаешь': { stress: 0, gloss: { en: 'you think', fr: 'tu penses' }, source: 'supplement' },
+    'есть': { stress: 0, gloss: { en: 'is/to eat', fr: 'est/il y a/manger' }, source: 'supplement' },
     
-    // Poetic/archaic adjectives
-    'забвенный': { stress: 0, gloss: 'forgotten', source: 'supplement' },
-    'охладелый': { stress: 2, gloss: 'cold, dead', source: 'supplement' },
+    // Batch 7: Nouns — Time & Nature
+    'ночь': { stress: 0, gloss: { en: 'night', fr: 'nuit' }, source: 'supplement' },
+    'день': { stress: 0, gloss: { en: 'day', fr: 'jour' }, source: 'supplement' },
+    'путь': { stress: 0, gloss: { en: 'path/way', fr: 'chemin' }, source: 'supplement' },
+    'свет': { stress: 0, gloss: { en: 'light', fr: 'lumière' }, source: 'supplement' },
+    'мир': { stress: 0, gloss: { en: 'world/peace', fr: 'monde/paix' }, source: 'supplement' },
+    'сон': { stress: 0, gloss: { en: 'dream/sleep', fr: 'rêve/sommeil' }, source: 'supplement' },
+    'дом': { stress: 0, gloss: { en: 'home/house', fr: 'maison' }, source: 'supplement' },
+    'сад': { stress: 0, gloss: { en: 'garden', fr: 'jardin' }, source: 'supplement' },
+    'лес': { stress: 0, gloss: { en: 'forest', fr: 'forêt' }, source: 'supplement' },
+    'дождь': { stress: 0, gloss: { en: 'rain', fr: 'pluie' }, source: 'supplement' },
+    'снег': { stress: 0, gloss: { en: 'snow', fr: 'neige' }, source: 'supplement' },
+    'лёд': { stress: 0, gloss: { en: 'ice', fr: 'glace' }, source: 'supplement' },
+    'огонь': { stress: 0, gloss: { en: 'fire', fr: 'feu' }, source: 'supplement' },
+    'вода': { stress: 0, gloss: { en: 'water', fr: 'eau' }, source: 'supplement' },
+    'земля': { stress: 0, gloss: { en: 'earth', fr: 'terre' }, source: 'supplement' },
+    'край': { stress: 0, gloss: { en: 'edge/land', fr: 'bord/pays' }, source: 'supplement' },
+    'гром': { stress: 0, gloss: { en: 'thunder', fr: 'tonnerre' }, source: 'supplement' },
+    'шум': { stress: 0, gloss: { en: 'noise', fr: 'bruit' }, source: 'supplement' },
     
-    // Conjunctions & Adverbs
-    'но': { stress: 0, gloss: 'but', source: 'supplement' },
-    'а': { stress: 0, gloss: 'and/but', source: 'supplement' },
-    'и': { stress: 0, gloss: 'and', source: 'supplement' },
-    'то': { stress: 0, gloss: 'then/that', source: 'supplement' },
-    'же': { stress: 0, gloss: '(emphasis)', source: 'supplement' },
-    'ли': { stress: 0, gloss: '(question)', source: 'supplement' },
-    'ль': { stress: 0, gloss: '(question)', source: 'supplement' },  // contracted form
-    'бы': { stress: 0, gloss: 'would', source: 'supplement' },
-    'б': { stress: 0, gloss: 'would', source: 'supplement' },        // contracted form
-    'хоть': { stress: 0, gloss: 'although', source: 'supplement' },
-    'пусть': { stress: 0, gloss: 'let', source: 'supplement' },
-    'здесь': { stress: 0, gloss: 'here', source: 'supplement' },
-    'вновь': { stress: 0, gloss: 'again', source: 'supplement' },
-    'вдруг': { stress: 0, gloss: 'suddenly', source: 'supplement' },
-    'прочь': { stress: 0, gloss: 'away', source: 'supplement' },
-    'вниз': { stress: 0, gloss: 'down', source: 'supplement' },
-    'вверх': { stress: 0, gloss: 'up', source: 'supplement' },
-    'лишь': { stress: 0, gloss: 'only', source: 'supplement' },
-    'чуть': { stress: 0, gloss: 'barely', source: 'supplement' },
-    'сквозь': { stress: 0, gloss: 'through', source: 'supplement' },
+    // Batch 8: Nouns — People & Relationships
+    'бог': { stress: 0, gloss: { en: 'god', fr: 'dieu' }, source: 'supplement' },
+    'царь': { stress: 0, gloss: { en: 'tsar', fr: 'tsar' }, source: 'supplement' },
+    'князь': { stress: 0, gloss: { en: 'prince', fr: 'prince' }, source: 'supplement' },
+    'дух': { stress: 0, gloss: { en: 'spirit', fr: 'esprit' }, source: 'supplement' },
+    'друг': { stress: 0, gloss: { en: 'friend', fr: 'ami' }, source: 'supplement' },
+    'враг': { stress: 0, gloss: { en: 'enemy', fr: 'ennemi' }, source: 'supplement' },
+    'брат': { stress: 0, gloss: { en: 'brother', fr: 'frère' }, source: 'supplement' },
+    'сын': { stress: 0, gloss: { en: 'son', fr: 'fils' }, source: 'supplement' },
+    'муж': { stress: 0, gloss: { en: 'husband', fr: 'mari' }, source: 'supplement' },
+    'мама': { stress: 0, gloss: { en: 'mama', fr: 'maman' }, source: 'supplement' },
+    'маме': { stress: 0, gloss: { en: 'to mama', fr: 'à maman' }, source: 'supplement' },
     
-    // Adverbs (common in vocal literature)
-    'вдоль': { stress: 0, gloss: 'along', source: 'supplement' },
-    'близко': { stress: 0, gloss: 'near', source: 'supplement' },
-    'далеко': { stress: 2, gloss: 'far', source: 'supplement' },
-    'высоко': { stress: 2, gloss: 'high', source: 'supplement' },
-    'глубоко': { stress: 2, gloss: 'deep', source: 'supplement' },
-    'тихо': { stress: 0, gloss: 'quietly', source: 'supplement' },
-    'громко': { stress: 0, gloss: 'loudly', source: 'supplement' },
-    'быстро': { stress: 0, gloss: 'quickly', source: 'supplement' },
-    'медленно': { stress: 0, gloss: 'slowly', source: 'supplement' },
-    'тепло': { stress: 1, gloss: 'warmly', source: 'supplement' },
-    'холодно': { stress: 0, gloss: 'coldly', source: 'supplement' },
-    'светло': { stress: 1, gloss: 'brightly', source: 'supplement' },
-    'темно': { stress: 1, gloss: 'darkly', source: 'supplement' },
-    'ясно': { stress: 0, gloss: 'clearly', source: 'supplement' },
-    'страшно': { stress: 0, gloss: 'terribly', source: 'supplement' },
-    'больно': { stress: 0, gloss: 'painfully', source: 'supplement' },
-    'грустно': { stress: 0, gloss: 'sadly', source: 'supplement' },
-    'радостно': { stress: 0, gloss: 'joyfully', source: 'supplement' },
-    'нежно': { stress: 0, gloss: 'tenderly', source: 'supplement' },
+    // Batch 9: Nouns — Abstract
+    'жизнь': { stress: 0, gloss: { en: 'life', fr: 'vie' }, source: 'supplement' },
+    'любовь': { stress: 1, gloss: { en: 'love', fr: 'amour' }, source: 'supplement' },
+    'любви': { stress: 1, gloss: { en: 'of love', fr: "d'amour" }, source: 'supplement' },
+    'правда': { stress: 0, gloss: { en: 'truth', fr: 'vérité' }, source: 'supplement' },
+    'правду': { stress: 0, gloss: { en: 'truth (acc.)', fr: 'vérité (acc.)' }, source: 'supplement' },
+    'смерть': { stress: 0, gloss: { en: 'death', fr: 'mort' }, source: 'supplement' },
+    'боль': { stress: 0, gloss: { en: 'pain', fr: 'douleur' }, source: 'supplement' },
+    'грусть': { stress: 0, gloss: { en: 'sadness', fr: 'tristesse' }, source: 'supplement' },
+    'страсть': { stress: 0, gloss: { en: 'passion', fr: 'passion' }, source: 'supplement' },
+    'честь': { stress: 0, gloss: { en: 'honor', fr: 'honneur' }, source: 'supplement' },
+    'власть': { stress: 0, gloss: { en: 'power', fr: 'pouvoir' }, source: 'supplement' },
+    'часть': { stress: 0, gloss: { en: 'part', fr: 'partie' }, source: 'supplement' },
+    'речь': { stress: 0, gloss: { en: 'speech', fr: 'parole' }, source: 'supplement' },
+    'мысль': { stress: 0, gloss: { en: 'thought', fr: 'pensée' }, source: 'supplement' },
+    'кровь': { stress: 0, gloss: { en: 'blood', fr: 'sang' }, source: 'supplement' },
+    'грудь': { stress: 0, gloss: { en: 'chest/breast', fr: 'poitrine' }, source: 'supplement' },
+    'взор': { stress: 0, gloss: { en: 'gaze', fr: 'regard' }, source: 'supplement' },
+    'взгляд': { stress: 0, gloss: { en: 'glance', fr: "coup d'œil" }, source: 'supplement' },
+    'слух': { stress: 0, gloss: { en: 'hearing/rumor', fr: 'ouïe/rumeur' }, source: 'supplement' },
+    'рай': { stress: 0, gloss: { en: 'paradise', fr: 'paradis' }, source: 'supplement' },
+    'ад': { stress: 0, gloss: { en: 'hell', fr: 'enfer' }, source: 'supplement' },
     
-    // Comparatives (common in poetry)
-    'ближе': { stress: 0, gloss: 'closer', source: 'supplement' },
-    'дальше': { stress: 0, gloss: 'farther', source: 'supplement' },
-    'выше': { stress: 0, gloss: 'higher', source: 'supplement' },
+    // Batch 10: Adjectives — Short Forms
+    'русский': { stress: 0, pos: 'adj.', gloss: { en: 'Russian', fr: 'russe' }, source: 'supplement' },
+    'рад': { stress: 0, gloss: { en: 'glad', fr: 'content' }, source: 'supplement' },
+    'сыт': { stress: 0, gloss: { en: 'full/sated', fr: 'rassasié' }, source: 'supplement' },
+    'злой': { stress: 0, gloss: { en: 'evil/angry', fr: 'méchant/fâché' }, source: 'supplement' },
+    'свят': { stress: 0, gloss: { en: 'holy', fr: 'saint' }, source: 'supplement' },
+    'прав': { stress: 0, gloss: { en: 'right/correct', fr: 'juste' }, source: 'supplement' },
+    'жив': { stress: 0, gloss: { en: 'alive', fr: 'vivant' }, source: 'supplement' },
+    'мёртв': { stress: 0, gloss: { en: 'dead', fr: 'mort' }, source: 'supplement' },
+    'нов': { stress: 0, gloss: { en: 'new', fr: 'nouveau' }, source: 'supplement' },
+    'стар': { stress: 0, gloss: { en: 'old', fr: 'vieux' }, source: 'supplement' },
+    'юн': { stress: 0, gloss: { en: 'young', fr: 'jeune' }, source: 'supplement' },
+    'мил': { stress: 0, gloss: { en: 'dear/sweet', fr: 'cher/doux' }, source: 'supplement' },
+    'люб': { stress: 0, gloss: { en: 'beloved', fr: 'bien-aimé' }, source: 'supplement' },
+    'забвенный': { stress: 0, gloss: { en: 'forgotten', fr: 'oublié' }, source: 'supplement' },
+    'охладелый': { stress: 2, gloss: { en: 'cold, dead', fr: 'refroidi' }, source: 'supplement' },
+    
+    // Batch 11: Adverbs & More Particles
+    'бы': { stress: 0, gloss: { en: 'would', fr: '(cond.)' }, source: 'supplement' },
+    'б': { stress: 0, gloss: { en: 'would', fr: '(cond.)' }, source: 'supplement' },
+    'хоть': { stress: 0, gloss: { en: 'although', fr: 'bien que' }, source: 'supplement' },
+    'пусть': { stress: 0, gloss: { en: 'let', fr: 'que' }, source: 'supplement' },
+    'лишь': { stress: 0, gloss: { en: 'only', fr: 'seulement' }, source: 'supplement' },
+    'вновь': { stress: 0, gloss: { en: 'again', fr: 'de nouveau' }, source: 'supplement' },
+    'вдруг': { stress: 0, gloss: { en: 'suddenly', fr: 'soudain' }, source: 'supplement' },
+    'прочь': { stress: 0, gloss: { en: 'away', fr: 'loin' }, source: 'supplement' },
+    'вниз': { stress: 0, gloss: { en: 'down', fr: 'en bas' }, source: 'supplement' },
+    'вверх': { stress: 0, gloss: { en: 'up', fr: 'en haut' }, source: 'supplement' },
+    'чуть': { stress: 0, gloss: { en: 'barely', fr: 'à peine' }, source: 'supplement' },
+    'близко': { stress: 0, gloss: { en: 'near', fr: 'près' }, source: 'supplement' },
+    'далеко': { stress: 2, gloss: { en: 'far', fr: 'loin' }, source: 'supplement' },
+    'высоко': { stress: 2, gloss: { en: 'high', fr: 'haut' }, source: 'supplement' },
+    'глубоко': { stress: 2, gloss: { en: 'deep', fr: 'profond' }, source: 'supplement' },
+    
+    // Batch 12: Adverbs — Manner & Comparatives
+    'тихо': { stress: 0, gloss: { en: 'quietly', fr: 'doucement' }, source: 'supplement' },
+    'громко': { stress: 0, gloss: { en: 'loudly', fr: 'fort' }, source: 'supplement' },
+    'быстро': { stress: 0, gloss: { en: 'quickly', fr: 'vite' }, source: 'supplement' },
+    'медленно': { stress: 0, gloss: { en: 'slowly', fr: 'lentement' }, source: 'supplement' },
+    'тепло': { stress: 1, gloss: { en: 'warmly', fr: 'chaudement' }, source: 'supplement' },
+    'холодно': { stress: 0, gloss: { en: 'coldly', fr: 'froidement' }, source: 'supplement' },
+    'светло': { stress: 1, gloss: { en: 'brightly', fr: 'clairement' }, source: 'supplement' },
+    'темно': { stress: 1, gloss: { en: 'darkly', fr: 'sombrement' }, source: 'supplement' },
+    'ясно': { stress: 0, gloss: { en: 'clearly', fr: 'clairement' }, source: 'supplement' },
+    'страшно': { stress: 0, gloss: { en: 'terribly', fr: 'terriblement' }, source: 'supplement' },
+    'больно': { stress: 0, gloss: { en: 'painfully', fr: 'douloureusement' }, source: 'supplement' },
+    'грустно': { stress: 0, gloss: { en: 'sadly', fr: 'tristement' }, source: 'supplement' },
+    'радостно': { stress: 0, gloss: { en: 'joyfully', fr: 'joyeusement' }, source: 'supplement' },
+    'нежно': { stress: 0, gloss: { en: 'tenderly', fr: 'tendrement' }, source: 'supplement' },
+    'ближе': { stress: 0, gloss: { en: 'closer', fr: 'plus près' }, source: 'supplement' },
+    'дальше': { stress: 0, gloss: { en: 'farther', fr: 'plus loin' }, source: 'supplement' },
+    'выше': { stress: 0, gloss: { en: 'higher', fr: 'plus haut' }, source: 'supplement' },
+    
+    // ========================================
+    // ENGLISH-ONLY ENTRIES (not yet translated)
+    // ========================================
+    
+    // Comparatives (additional)
     'ниже': { stress: 0, gloss: 'lower', source: 'supplement' },
     'громче': { stress: 0, gloss: 'louder', source: 'supplement' },
     'тише': { stress: 0, gloss: 'quieter', source: 'supplement' },
@@ -6166,7 +6199,7 @@ function addAcuteToSyllable(syllable) {
         // Bilingual footer text (v6.0.7)
         const footerText = currentGlossLanguage === 'fr' ? {
           para1: `Cette transcription a été réalisée par ${userName} à l'aide d'<em>Ilya</em> v1.0, qui met en œuvre la <em>Russian Lyric Diction</em> du Dr Craig Grayson (Université de Washington, 2012). Données d'accentuation (1,3 million de mots) et gloses de traduction issues des Wiktionnaires anglais et français via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
-          para2: `<em>Ilya</em> est un outil pédagogique libre et gratuit destiné aux enseignants et aux artistes interprètes : ni <em>Ilya</em> ni ses transcriptions ne peuvent être redistribués ou vendus. Conçu avec amour au Canada.${canadaFlag}`,
+          para2: `<em>Ilya</em> est un outil pédagogique libre et gratuit destiné au personnel enseignant et aux artistes interprètes : ni <em>Ilya</em> ni ses transcriptions ne peuvent être redistribués ou vendus. Conçu avec amour au Canada.${canadaFlag}`,
           pagination: `Page ${pageNumber} sur ${totalPages}`
         } : {
           para1: `This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
