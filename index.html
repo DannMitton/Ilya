@@ -4062,7 +4062,7 @@ function extractGloss(g) {
 // Tier 1: Load immediately, blocks until ready
 async function loadTier1() {
     try {
-        const response = await fetch('data/ilya_tier1.json.gz');
+        const response = await fetch('data/ilya_tier1_final.json.gz');
         if (response.ok) {
             const compressed = await response.arrayBuffer();
             const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
