@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.3 Paper shift animation</title>
+  <title>Ilya — v6.0.4 Bilingual glosses</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1394,6 +1394,66 @@
     .btn-secondary:focus {
       outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
+    }
+
+    /* ========================================
+       LANGUAGE SELECTION (v6.0.4)
+       Bilingual gloss toggle
+       ======================================== */
+    .drawer-lang-section {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--ilya-border-light);
+    }
+
+    .drawer-lang-label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ilya-text-muted);
+      margin-bottom: var(--space-sm);
+    }
+
+    .drawer-lang-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: transparent;
+      border: 1px solid var(--ilya-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--ilya-text-secondary);
+      transition: all 150ms var(--ease);
+    }
+
+    .lang-btn:hover {
+      border-color: var(--ilya-text-secondary);
+      color: var(--ilya-text-primary);
+    }
+
+    .lang-btn-active {
+      border-color: var(--ilya-accent);
+      background: var(--ilya-accent-light);
+      color: var(--ilya-text-primary);
+    }
+
+    .lang-btn-active:hover {
+      border-color: var(--ilya-accent);
+    }
+
+    .lang-flag {
+      width: 24px;
+      height: 16px;
+      border-radius: 2px;
+      overflow: hidden;
     }
 
     /* ========================================
@@ -3538,6 +3598,55 @@
                 <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
               </div>
             </div>
+
+            <!-- Language Selection (v6.0.4) -->
+            <div class="drawer-lang-section">
+              <span class="drawer-lang-label">Gloss language</span>
+              <div class="drawer-lang-buttons">
+                <button class="lang-btn lang-btn-active" id="langBtnEn" title="English translations">
+                  <svg viewBox="0 0 60 40" class="lang-flag">
+                    <clipPath id="flagClipEn"><rect width="60" height="40" rx="3"/></clipPath>
+                    <g clip-path="url(#flagClipEn)">
+                      <!-- Canada left half -->
+                      <rect width="30" height="40" fill="#f00"/>
+                      <rect x="10" width="10" height="40" fill="#fff"/>
+                      <path d="M15,8 L16,12 L14,11 L15,14 L13,13 L15,20 L12,18 L13,22 L10,20 L11,25 L15,23 L14,28 L16,28 L15,23 L19,25 L20,20 L17,22 L18,18 L15,20 L17,13 L15,14 L16,11 L14,12 Z" fill="#f00"/>
+                      <!-- UK right half -->
+                      <rect x="30" width="30" height="40" fill="#012169"/>
+                      <path d="M30,0 L60,20 M30,40 L60,20 M30,20 L60,0 M30,20 L60,40" stroke="#fff" stroke-width="4"/>
+                      <path d="M30,0 L60,20 M30,40 L60,20" stroke="#C8102E" stroke-width="2"/>
+                      <path d="M30,20 L60,0 M30,20 L60,40" stroke="#C8102E" stroke-width="2"/>
+                      <rect x="43" y="0" width="4" height="40" fill="#fff"/>
+                      <rect x="30" y="16" width="30" height="8" fill="#fff"/>
+                      <rect x="44" y="0" width="2" height="40" fill="#C8102E"/>
+                      <rect x="30" y="17" width="30" height="6" fill="#C8102E"/>
+                    </g>
+                  </svg>
+                  <span>English</span>
+                </button>
+                <button class="lang-btn" id="langBtnFr" title="Traductions en français">
+                  <svg viewBox="0 0 60 40" class="lang-flag">
+                    <clipPath id="flagClipFr"><rect width="60" height="40" rx="3"/></clipPath>
+                    <g clip-path="url(#flagClipFr)">
+                      <!-- Canada left half -->
+                      <rect width="30" height="40" fill="#f00"/>
+                      <rect x="10" width="10" height="40" fill="#fff"/>
+                      <path d="M15,8 L16,12 L14,11 L15,14 L13,13 L15,20 L12,18 L13,22 L10,20 L11,25 L15,23 L14,28 L16,28 L15,23 L19,25 L20,20 L17,22 L18,18 L15,20 L17,13 L15,14 L16,11 L14,12 Z" fill="#f00"/>
+                      <!-- Quebec right half -->
+                      <rect x="30" width="30" height="40" fill="#002495"/>
+                      <rect x="43" y="0" width="4" height="40" fill="#fff"/>
+                      <rect x="30" y="16" width="30" height="8" fill="#fff"/>
+                      <!-- Fleurs-de-lys simplified -->
+                      <path d="M38,10 L38,6 L36,8 L38,10 L40,8 L38,6" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+                      <path d="M52,10 L52,6 L50,8 L52,10 L54,8 L52,6" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+                      <path d="M38,34 L38,30 L36,32 L38,34 L40,32 L38,30" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+                      <path d="M52,34 L52,30 L50,32 L52,34 L54,32 L52,30" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+                    </g>
+                  </svg>
+                  <span>Français</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Song Setup -->
@@ -3931,6 +4040,24 @@ let STRESS_DICTIONARY = {};
 let DICTIONARY_LOADED = false;
 let TIER2_LOADED = false;
 let TIER2_LOADING = false;
+
+// Gloss language state (v6.0.4)
+// Supports bilingual glosses: {en: '...', fr: '...'}
+let currentGlossLanguage = 'en';
+
+/**
+ * Extract gloss in current language from new bilingual format
+ * Handles both old format (string) and new format ({en, fr})
+ */
+function extractGloss(g) {
+  if (!g) return '';
+  if (typeof g === 'string') return g;
+  if (typeof g === 'object') {
+    // Try current language first, fall back to English
+    return g[currentGlossLanguage] || g.en || g.fr || '';
+  }
+  return '';
+}
 
 // Tier 1: Load immediately, blocks until ready
 async function loadTier1() {
@@ -7081,7 +7208,7 @@ function addAcuteToSyllable(syllable) {
             const firstEntry = entry[0];
             return {
               stress: firstEntry.stress ?? firstEntry.s,
-              gloss: firstEntry.gloss ?? firstEntry.g ?? '',
+              gloss: extractGloss(firstEntry.gloss ?? firstEntry.g),
               pos: firstEntry.pos ?? firstEntry.p ?? '',
               lemma: firstEntry.lemma ?? firstEntry.l ?? '',
               source: source,
@@ -7094,7 +7221,7 @@ function addAcuteToSyllable(syllable) {
           // Single entry
           return {
             stress: entry.stress ?? entry.s,
-            gloss: entry.gloss ?? entry.g ?? '',
+            gloss: extractGloss(entry.gloss ?? entry.g),
             pos: entry.pos ?? entry.p ?? '',
             lemma: entry.lemma ?? entry.l ?? '',
             source: entry.source || source,
@@ -12165,6 +12292,35 @@ function addAcuteToSyllable(syllable) {
       };
 
       DrawerBridge.init();
+
+      // ========================================
+      // LANGUAGE TOGGLE (v6.0.4)
+      // Switches gloss language between English and French
+      // ========================================
+      const langBtnEn = document.getElementById('langBtnEn');
+      const langBtnFr = document.getElementById('langBtnFr');
+
+      if (langBtnEn && langBtnFr) {
+        langBtnEn.addEventListener('click', () => {
+          if (currentGlossLanguage === 'en') return;
+          currentGlossLanguage = 'en';
+          langBtnEn.classList.add('lang-btn-active');
+          langBtnFr.classList.remove('lang-btn-active');
+          // Re-render paper to update glosses
+          DrawerController.renderToPaper();
+          console.log('Gloss language: English');
+        });
+
+        langBtnFr.addEventListener('click', () => {
+          if (currentGlossLanguage === 'fr') return;
+          currentGlossLanguage = 'fr';
+          langBtnFr.classList.add('lang-btn-active');
+          langBtnEn.classList.remove('lang-btn-active');
+          // Re-render paper to update glosses
+          DrawerController.renderToPaper();
+          console.log('Gloss language: Français');
+        });
+      }
       
       // Render empty title page on load
       DrawerController.renderToPaper();
