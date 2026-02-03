@@ -1321,33 +1321,7 @@
     }
 
     .drawer-input-actions {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
       margin-top: var(--space-md);
-    }
-
-    .btn-transcribe {
-      width: 100%;
-      padding: 0.75rem 1.25rem;
-      border-radius: var(--radius);
-      font-size: 0.9375rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--ilya-accent);
-      color: white;
-      border: none;
-      transition: all 150ms var(--ease);
-      letter-spacing: 0.01em;
-    }
-
-    .btn-transcribe:hover {
-      background: var(--ilya-accent-hover);
-    }
-
-    .btn-transcribe:focus {
-      outline: 2px solid var(--ilya-accent);
-      outline-offset: 2px;
     }
 
     .drawer-secondary-actions {
@@ -1359,7 +1333,7 @@
 
     .drawer-lang-buttons {
       display: flex;
-      gap: 6px;
+      gap: 10px;
     }
 
     /* Button styles */
@@ -1391,6 +1365,9 @@
       background: transparent;
       color: var(--ilya-text-secondary);
       border: 1px solid var(--ilya-border);
+      min-width: 72px;
+      height: 36px;
+      padding: 0 1rem;
     }
 
     .btn-secondary:hover {
@@ -1408,10 +1385,10 @@
        Compact flag buttons with Calm Authority palette
        ======================================== */
     .lang-btn {
-      width: 32px;
-      height: 24px;
+      width: 72px;
+      height: 36px;
       cursor: pointer;
-      border-radius: 3px;
+      border-radius: var(--radius);
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10));
       transition: filter 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
       opacity: 0.7;
@@ -3574,7 +3551,6 @@
 
             <!-- Action buttons -->
             <div class="drawer-input-actions">
-              <button class="btn-transcribe" id="drawerTranscribeBtn">Transcribe to IPA</button>
               <div class="drawer-secondary-actions">
                 <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
                 
@@ -3599,57 +3575,57 @@
                     </defs>
                   </svg>
 
-                  <!-- English Button (Canada + UK) - 32×24px -->
-                  <svg class="lang-btn lang-btn-active" id="langBtnEn" viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg">
-                    <title>English glosses</title>
+                  <!-- English Button (Canada + UK) - 72×36px -->
+                  <svg class="lang-btn lang-btn-active" id="langBtnEn" viewBox="0 0 48 36" xmlns="http://www.w3.org/2000/svg">
+                    <title>Transcribe with English glosses</title>
                     <defs>
-                      <clipPath id="btn-clip-en"><rect width="32" height="24" rx="2"/></clipPath>
-                      <clipPath id="left-clip-en"><rect width="16" height="24"/></clipPath>
-                      <clipPath id="right-clip-en"><rect x="16" width="16" height="24"/></clipPath>
+                      <clipPath id="btn-clip-en"><rect width="48" height="36" rx="3"/></clipPath>
+                      <clipPath id="left-clip-en"><rect width="24" height="36"/></clipPath>
+                      <clipPath id="right-clip-en"><rect x="24" width="24" height="36"/></clipPath>
                     </defs>
                     <g clip-path="url(#btn-clip-en)">
                       <!-- Canada left half -->
                       <g clip-path="url(#left-clip-en)">
-                        <use href="#canada-flag" x="-8" y="0" width="48" height="24"/>
+                        <use href="#canada-flag" x="-12" y="0" width="72" height="36"/>
                       </g>
                       <!-- Union Jack right half (Calm Authority colors) -->
                       <g clip-path="url(#right-clip-en)">
-                        <g transform="translate(-8, 0)">
-                          <rect x="0" width="48" height="24" fill="#3d5a80"/>
-                          <line x1="0" y1="0" x2="48" y2="24" stroke="#faf6f0" stroke-width="4"/>
-                          <line x1="48" y1="0" x2="0" y2="24" stroke="#faf6f0" stroke-width="4"/>
-                          <line x1="0" y1="0" x2="22" y2="11" stroke="#a5292a" stroke-width="1.5"/>
-                          <line x1="26" y1="13" x2="48" y2="24" stroke="#a5292a" stroke-width="1.5"/>
-                          <line x1="48" y1="0" x2="26" y2="11" stroke="#a5292a" stroke-width="1.5"/>
-                          <line x1="22" y1="13" x2="0" y2="24" stroke="#a5292a" stroke-width="1.5"/>
-                          <rect x="20" y="0" width="8" height="24" fill="#faf6f0"/>
-                          <rect x="0" y="9" width="48" height="6" fill="#faf6f0"/>
-                          <rect x="21.5" y="0" width="5" height="24" fill="#a5292a"/>
-                          <rect x="0" y="10" width="48" height="4" fill="#a5292a"/>
+                        <g transform="translate(-12, 0)">
+                          <rect x="0" width="72" height="36" fill="#3d5a80"/>
+                          <line x1="0" y1="0" x2="72" y2="36" stroke="#faf6f0" stroke-width="6"/>
+                          <line x1="72" y1="0" x2="0" y2="36" stroke="#faf6f0" stroke-width="6"/>
+                          <line x1="0" y1="0" x2="33" y2="16" stroke="#a5292a" stroke-width="2"/>
+                          <line x1="39" y1="20" x2="72" y2="36" stroke="#a5292a" stroke-width="2"/>
+                          <line x1="72" y1="0" x2="39" y2="16" stroke="#a5292a" stroke-width="2"/>
+                          <line x1="33" y1="20" x2="0" y2="36" stroke="#a5292a" stroke-width="2"/>
+                          <rect x="30" y="0" width="12" height="36" fill="#faf6f0"/>
+                          <rect x="0" y="13" width="72" height="10" fill="#faf6f0"/>
+                          <rect x="32" y="0" width="8" height="36" fill="#a5292a"/>
+                          <rect x="0" y="15" width="72" height="6" fill="#a5292a"/>
                         </g>
                       </g>
-                      <line x1="16" y1="0" x2="16" y2="24" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+                      <line x1="24" y1="0" x2="24" y2="36" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
                     </g>
                   </svg>
 
-                  <!-- French Button (Canada + Quebec) - 32×24px -->
-                  <svg class="lang-btn" id="langBtnFr" viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg">
-                    <title>Gloses en français</title>
+                  <!-- French Button (Canada + Quebec) - 72×36px -->
+                  <svg class="lang-btn" id="langBtnFr" viewBox="0 0 48 36" xmlns="http://www.w3.org/2000/svg">
+                    <title>Transcrire avec gloses en français</title>
                     <defs>
-                      <clipPath id="btn-clip-fr"><rect width="32" height="24" rx="2"/></clipPath>
-                      <clipPath id="left-clip-fr"><rect width="16" height="24"/></clipPath>
-                      <clipPath id="right-clip-fr"><rect x="16" width="16" height="24"/></clipPath>
+                      <clipPath id="btn-clip-fr"><rect width="48" height="36" rx="3"/></clipPath>
+                      <clipPath id="left-clip-fr"><rect width="24" height="36"/></clipPath>
+                      <clipPath id="right-clip-fr"><rect x="24" width="24" height="36"/></clipPath>
                     </defs>
                     <g clip-path="url(#btn-clip-fr)">
                       <!-- Canada left half -->
                       <g clip-path="url(#left-clip-fr)">
-                        <use href="#canada-flag" x="-8" y="0" width="48" height="24"/>
+                        <use href="#canada-flag" x="-12" y="0" width="72" height="36"/>
                       </g>
                       <!-- Quebec right half -->
                       <g clip-path="url(#right-clip-fr)">
-                        <use href="#quebec-flag" x="-4" y="0" width="36" height="24"/>
+                        <use href="#quebec-flag" x="-6" y="0" width="54" height="36"/>
                       </g>
-                      <line x1="16" y1="0" x2="16" y2="24" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+                      <line x1="24" y1="0" x2="24" y2="36" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
                     </g>
                   </svg>
                 </div>
@@ -12203,7 +12179,6 @@ function addAcuteToSyllable(syllable) {
         init() {
           const newTextarea = document.getElementById('drawerTextInput');
           const oldTextarea = document.getElementById('textInput');
-          const newTranscribe = document.getElementById('drawerTranscribeBtn');
           const newClear = document.getElementById('drawerClearBtn');
           const newOcrBtn = document.getElementById('drawerOcrBtn');
           const newOcrFile = document.getElementById('drawerOcrFileInput');
@@ -12226,15 +12201,6 @@ function addAcuteToSyllable(syllable) {
           oldTextarea.addEventListener('input', () => {
             newTextarea.value = oldTextarea.value;
             this.updateCharCounter(newTextarea, newCharCounter);
-          });
-
-          // Transcribe button
-          newTranscribe.addEventListener('click', () => {
-            // Sync text first
-            oldTextarea.value = newTextarea.value;
-            DrawerController.transcribe();
-            // Close the left drawer after transcription
-            DrawerState.close();
           });
 
           // Clear button — confirmation + full reset
@@ -12302,32 +12268,52 @@ function addAcuteToSyllable(syllable) {
       DrawerBridge.init();
 
       // ========================================
-      // LANGUAGE TOGGLE (v6.0.4)
-      // Switches gloss language between English and French
+      // LANGUAGE TOGGLE (v6.0.6)
+      // Transcribe + set gloss language in one click
       // ========================================
       const langBtnEn = document.getElementById('langBtnEn');
       const langBtnFr = document.getElementById('langBtnFr');
 
       if (langBtnEn && langBtnFr) {
         langBtnEn.addEventListener('click', () => {
-          if (currentGlossLanguage === 'en') return;
           currentGlossLanguage = 'en';
           langBtnEn.classList.add('lang-btn-active');
           langBtnFr.classList.remove('lang-btn-active');
-          // Re-transcribe to get glosses in new language
-          if (DocumentState.lines && DocumentState.lines.length > 0) {
+          
+          // Get textarea content
+          const newTextarea = document.getElementById('drawerTextInput');
+          const oldTextarea = document.getElementById('textInput');
+          const hasText = newTextarea && newTextarea.value.trim().length > 0;
+          
+          if (hasText) {
+            // Sync and transcribe
+            if (oldTextarea) oldTextarea.value = newTextarea.value;
+            DrawerController.transcribe();
+            DrawerState.close();
+          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
+            // Already transcribed, just refresh glosses
             DrawerController.transcribe();
           }
           console.log('Gloss language: English');
         });
 
         langBtnFr.addEventListener('click', () => {
-          if (currentGlossLanguage === 'fr') return;
           currentGlossLanguage = 'fr';
           langBtnFr.classList.add('lang-btn-active');
           langBtnEn.classList.remove('lang-btn-active');
-          // Re-transcribe to get glosses in new language
-          if (DocumentState.lines && DocumentState.lines.length > 0) {
+          
+          // Get textarea content
+          const newTextarea = document.getElementById('drawerTextInput');
+          const oldTextarea = document.getElementById('textInput');
+          const hasText = newTextarea && newTextarea.value.trim().length > 0;
+          
+          if (hasText) {
+            // Sync and transcribe
+            if (oldTextarea) oldTextarea.value = newTextarea.value;
+            DrawerController.transcribe();
+            DrawerState.close();
+          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
+            // Already transcribed, just refresh glosses
             DrawerController.transcribe();
           }
           console.log('Gloss language: Français');
