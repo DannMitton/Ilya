@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.11 Gap analysis function</title>
+  <title>Ilya — v6.0.12 SINGER_SUPPLEMENT 100% bilingual</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -4161,8 +4161,9 @@ loadTier1();
    ================================================== */
 const SINGER_SUPPLEMENT = {
     // ========================================
-    // BILINGUAL GLOSSES (v6.0.8)
-    // French translations approved Feb 3, 2026
+    // BILINGUAL GLOSSES (v6.0.12)
+    // French translations: Batches 1–16 complete
+    // 100% bilingual coverage — Feb 3, 2026
     // ========================================
     
     // Batch 1: Pronouns
@@ -4390,87 +4391,89 @@ const SINGER_SUPPLEMENT = {
     'выше': { stress: 0, gloss: { en: 'higher', fr: 'plus haut' }, source: 'supplement' },
     
     // ========================================
-    // ENGLISH-ONLY ENTRIES (not yet translated)
+    // BATCHES 13-16: Approved Feb 3, 2026
     // ========================================
     
-    // Comparatives (additional)
-    'ниже': { stress: 0, gloss: 'lower', source: 'supplement' },
-    'громче': { stress: 0, gloss: 'louder', source: 'supplement' },
-    'тише': { stress: 0, gloss: 'quieter', source: 'supplement' },
-    'быстрее': { stress: 1, gloss: 'faster', source: 'supplement' },
-    'сильнее': { stress: 1, gloss: 'stronger', source: 'supplement' },
-    'слаще': { stress: 0, gloss: 'sweeter', source: 'supplement' },
-    'горче': { stress: 0, gloss: 'more bitter', source: 'supplement' },
-    'ярче': { stress: 0, gloss: 'brighter', source: 'supplement' },
-    'темнее': { stress: 1, gloss: 'darker', source: 'supplement' },
-    'теплее': { stress: 1, gloss: 'warmer', source: 'supplement' },
-    'холоднее': { stress: 2, gloss: 'colder', source: 'supplement' },
-    'нежнее': { stress: 1, gloss: 'more tender', source: 'supplement' },
-    'краше': { stress: 0, gloss: 'fairer', source: 'supplement' },
-    'глубже': { stress: 0, gloss: 'deeper', source: 'supplement' },
-    'дороже': { stress: 1, gloss: 'dearer', source: 'supplement' },
+    // Batch 13: Comparatives
+    'ниже': { stress: 0, gloss: { en: 'lower', fr: 'plus bas' }, source: 'supplement' },
+    'громче': { stress: 0, gloss: { en: 'louder', fr: 'plus fort' }, source: 'supplement' },
+    'тише': { stress: 0, gloss: { en: 'quieter', fr: 'plus doucement' }, source: 'supplement' },
+    'быстрее': { stress: 1, gloss: { en: 'faster', fr: 'plus vite' }, source: 'supplement' },
+    'сильнее': { stress: 1, gloss: { en: 'stronger', fr: 'plus fort' }, source: 'supplement' },
+    'слаще': { stress: 0, gloss: { en: 'sweeter', fr: 'plus doux' }, source: 'supplement' },
+    'горче': { stress: 0, gloss: { en: 'more bitter', fr: 'plus amer' }, source: 'supplement' },
+    'ярче': { stress: 0, gloss: { en: 'brighter', fr: 'plus brillant' }, source: 'supplement' },
+    'темнее': { stress: 1, gloss: { en: 'darker', fr: 'plus sombre' }, source: 'supplement' },
+    'теплее': { stress: 1, gloss: { en: 'warmer', fr: 'plus chaud' }, source: 'supplement' },
+    'холоднее': { stress: 2, gloss: { en: 'colder', fr: 'plus froid' }, source: 'supplement' },
+    'нежнее': { stress: 1, gloss: { en: 'more tender', fr: 'plus tendre' }, source: 'supplement' },
+    'краше': { stress: 0, gloss: { en: 'fairer', fr: 'plus beau' }, source: 'supplement' },
+    'глубже': { stress: 0, gloss: { en: 'deeper', fr: 'plus profond' }, source: 'supplement' },
+    'дороже': { stress: 1, gloss: { en: 'dearer', fr: 'plus cher' }, source: 'supplement' },
     
-    // Common adjective inflections (gen/prep plural -ых/-их)
-    'шумных': { stress: 0, gloss: 'noisy (gen./prep. pl.)', source: 'supplement' },
-    'тихих': { stress: 0, gloss: 'quiet (gen./prep. pl.)', source: 'supplement' },
-    'темных': { stress: 0, gloss: 'dark (gen./prep. pl.)', source: 'supplement' },
-    'светлых': { stress: 0, gloss: 'bright (gen./prep. pl.)', source: 'supplement' },
-    'белых': { stress: 0, gloss: 'white (gen./prep. pl.)', source: 'supplement' },
-    'чёрных': { stress: 0, gloss: 'black (gen./prep. pl.)', source: 'supplement' },
-    'красных': { stress: 0, gloss: 'red (gen./prep. pl.)', source: 'supplement' },
-    'синих': { stress: 0, gloss: 'blue (gen./prep. pl.)', source: 'supplement' },
-    'ясных': { stress: 0, gloss: 'clear (gen./prep. pl.)', source: 'supplement' },
-    'нежных': { stress: 0, gloss: 'tender (gen./prep. pl.)', source: 'supplement' },
-    'добрых': { stress: 0, gloss: 'kind (gen./prep. pl.)', source: 'supplement' },
-    'злых': { stress: 0, gloss: 'evil (gen./prep. pl.)', source: 'supplement' },
-    'юных': { stress: 0, gloss: 'young (gen./prep. pl.)', source: 'supplement' },
-    'старых': { stress: 0, gloss: 'old (gen./prep. pl.)', source: 'supplement' },
-    'новых': { stress: 0, gloss: 'new (gen./prep. pl.)', source: 'supplement' },
-    'милых': { stress: 0, gloss: 'dear (gen./prep. pl.)', source: 'supplement' },
-    'дальних': { stress: 0, gloss: 'distant (gen./prep. pl.)', source: 'supplement' },
-    'близких': { stress: 0, gloss: 'close (gen./prep. pl.)', source: 'supplement' },
-    'вечных': { stress: 0, gloss: 'eternal (gen./prep. pl.)', source: 'supplement' },
-    'грустных': { stress: 0, gloss: 'sad (gen./prep. pl.)', source: 'supplement' },
-    'святых': { stress: 1, gloss: 'holy (gen./prep. pl.)', source: 'supplement' },
-    'живых': { stress: 1, gloss: 'living (gen./prep. pl.)', source: 'supplement' },
-    'мёртвых': { stress: 0, gloss: 'dead (gen./prep. pl.)', source: 'supplement' },
-    'родных': { stress: 1, gloss: 'native (gen./prep. pl.)', source: 'supplement' },
-    'чужих': { stress: 1, gloss: 'foreign (gen./prep. pl.)', source: 'supplement' },
-    'пустых': { stress: 1, gloss: 'empty (gen./prep. pl.)', source: 'supplement' },
-    'густых': { stress: 1, gloss: 'dense (gen./prep. pl.)', source: 'supplement' },
-    'безумных': { stress: 0, gloss: 'mad (gen./prep. pl.)', source: 'supplement' },
-    'безмолвных': { stress: 1, gloss: 'silent (gen./prep. pl.)', source: 'supplement' },
-    'бездонных': { stress: 1, gloss: 'bottomless (gen./prep. pl.)', source: 'supplement' },
-    'бескрайних': { stress: 1, gloss: 'boundless (gen./prep. pl.)', source: 'supplement' },
-    'небесных': { stress: 1, gloss: 'heavenly (gen./prep. pl.)', source: 'supplement' },
-    'земных': { stress: 1, gloss: 'earthly (gen./prep. pl.)', source: 'supplement' },
+    // Batch 14: Adjective inflections -ых/-их (first 20)
+    'шумных': { stress: 0, gloss: { en: 'noisy (gen./prep. pl.)', fr: 'bruyants (gén./prép. pl.)' }, source: 'supplement' },
+    'тихих': { stress: 0, gloss: { en: 'quiet (gen./prep. pl.)', fr: 'calmes (gén./prép. pl.)' }, source: 'supplement' },
+    'темных': { stress: 0, gloss: { en: 'dark (gen./prep. pl.)', fr: 'sombres (gén./prép. pl.)' }, source: 'supplement' },
+    'светлых': { stress: 0, gloss: { en: 'bright (gen./prep. pl.)', fr: 'clairs (gén./prép. pl.)' }, source: 'supplement' },
+    'белых': { stress: 0, gloss: { en: 'white (gen./prep. pl.)', fr: 'blancs (gén./prép. pl.)' }, source: 'supplement' },
+    'чёрных': { stress: 0, gloss: { en: 'black (gen./prep. pl.)', fr: 'noirs (gén./prép. pl.)' }, source: 'supplement' },
+    'красных': { stress: 0, gloss: { en: 'red (gen./prep. pl.)', fr: 'rouges (gén./prép. pl.)' }, source: 'supplement' },
+    'синих': { stress: 0, gloss: { en: 'blue (gen./prep. pl.)', fr: 'bleus (gén./prép. pl.)' }, source: 'supplement' },
+    'ясных': { stress: 0, gloss: { en: 'clear (gen./prep. pl.)', fr: 'clairs (gén./prép. pl.)' }, source: 'supplement' },
+    'нежных': { stress: 0, gloss: { en: 'tender (gen./prep. pl.)', fr: 'tendres (gén./prép. pl.)' }, source: 'supplement' },
+    'добрых': { stress: 0, gloss: { en: 'kind (gen./prep. pl.)', fr: 'bons (gén./prép. pl.)' }, source: 'supplement' },
+    'злых': { stress: 0, gloss: { en: 'evil (gen./prep. pl.)', fr: 'méchants (gén./prép. pl.)' }, source: 'supplement' },
+    'юных': { stress: 0, gloss: { en: 'young (gen./prep. pl.)', fr: 'jeunes (gén./prép. pl.)' }, source: 'supplement' },
+    'старых': { stress: 0, gloss: { en: 'old (gen./prep. pl.)', fr: 'vieux (gén./prép. pl.)' }, source: 'supplement' },
+    'новых': { stress: 0, gloss: { en: 'new (gen./prep. pl.)', fr: 'nouveaux (gén./prép. pl.)' }, source: 'supplement' },
+    'милых': { stress: 0, gloss: { en: 'dear (gen./prep. pl.)', fr: 'chers (gén./prép. pl.)' }, source: 'supplement' },
+    'дальних': { stress: 0, gloss: { en: 'distant (gen./prep. pl.)', fr: 'lointains (gén./prép. pl.)' }, source: 'supplement' },
+    'близких': { stress: 0, gloss: { en: 'close (gen./prep. pl.)', fr: 'proches (gén./prép. pl.)' }, source: 'supplement' },
+    'вечных': { stress: 0, gloss: { en: 'eternal (gen./prep. pl.)', fr: 'éternels (gén./prép. pl.)' }, source: 'supplement' },
+    'грустных': { stress: 0, gloss: { en: 'sad (gen./prep. pl.)', fr: 'tristes (gén./prép. pl.)' }, source: 'supplement' },
     
-    // Common noun inflections (genitive plural)
-    'дней': { stress: 0, gloss: 'days (gen. pl.)', source: 'supplement' },
-    'ночей': { stress: 1, gloss: 'nights (gen. pl.)', source: 'supplement' },
-    'лет': { stress: 0, gloss: 'years (gen. pl.)', source: 'supplement' },
-    'слёз': { stress: 0, gloss: 'tears (gen. pl.)', source: 'supplement' },
-    'глаз': { stress: 0, gloss: 'eyes (gen. pl.)', source: 'supplement' },
-    'рук': { stress: 0, gloss: 'hands (gen. pl.)', source: 'supplement' },
-    'ног': { stress: 0, gloss: 'feet (gen. pl.)', source: 'supplement' },
-    'губ': { stress: 0, gloss: 'lips (gen. pl.)', source: 'supplement' },
-    'слов': { stress: 0, gloss: 'words (gen. pl.)', source: 'supplement' },
-    'снов': { stress: 0, gloss: 'dreams (gen. pl.)', source: 'supplement' },
-    'цветов': { stress: 1, gloss: 'flowers (gen. pl.)', source: 'supplement' },
-    'садов': { stress: 1, gloss: 'gardens (gen. pl.)', source: 'supplement' },
-    'лесов': { stress: 1, gloss: 'forests (gen. pl.)', source: 'supplement' },
-    'полей': { stress: 1, gloss: 'fields (gen. pl.)', source: 'supplement' },
-    'морей': { stress: 1, gloss: 'seas (gen. pl.)', source: 'supplement' },
-    'небес': { stress: 1, gloss: 'heavens (gen. pl.)', source: 'supplement' },
-    'сердец': { stress: 1, gloss: 'hearts (gen. pl.)', source: 'supplement' },
-    'очей': { stress: 1, gloss: 'eyes (gen. pl., archaic)', source: 'supplement' },
-    'людей': { stress: 1, gloss: 'people (gen. pl.)', source: 'supplement' },
-    'детей': { stress: 1, gloss: 'children (gen. pl.)', source: 'supplement' },
+    // Batch 15: Remaining adjective inflections
+    'святых': { stress: 1, gloss: { en: 'holy (gen./prep. pl.)', fr: 'saints (gén./prép. pl.)' }, source: 'supplement' },
+    'живых': { stress: 1, gloss: { en: 'living (gen./prep. pl.)', fr: 'vivants (gén./prép. pl.)' }, source: 'supplement' },
+    'мёртвых': { stress: 0, gloss: { en: 'dead (gen./prep. pl.)', fr: 'morts (gén./prép. pl.)' }, source: 'supplement' },
+    'родных': { stress: 1, gloss: { en: 'native (gen./prep. pl.)', fr: 'natals (gén./prép. pl.)' }, source: 'supplement' },
+    'чужих': { stress: 1, gloss: { en: 'foreign (gen./prep. pl.)', fr: 'étrangers (gén./prép. pl.)' }, source: 'supplement' },
+    'пустых': { stress: 1, gloss: { en: 'empty (gen./prep. pl.)', fr: 'vides (gén./prép. pl.)' }, source: 'supplement' },
+    'густых': { stress: 1, gloss: { en: 'dense (gen./prep. pl.)', fr: 'denses (gén./prép. pl.)' }, source: 'supplement' },
+    'безумных': { stress: 0, gloss: { en: 'mad (gen./prep. pl.)', fr: 'fous (gén./prép. pl.)' }, source: 'supplement' },
+    'безмолвных': { stress: 1, gloss: { en: 'silent (gen./prep. pl.)', fr: 'silencieux (gén./prép. pl.)' }, source: 'supplement' },
+    'бездонных': { stress: 1, gloss: { en: 'bottomless (gen./prep. pl.)', fr: 'sans fond (gén./prép. pl.)' }, source: 'supplement' },
+    'бескрайних': { stress: 1, gloss: { en: 'boundless (gen./prep. pl.)', fr: 'sans bornes (gén./prép. pl.)' }, source: 'supplement' },
+    'небесных': { stress: 1, gloss: { en: 'heavenly (gen./prep. pl.)', fr: 'célestes (gén./prép. pl.)' }, source: 'supplement' },
+    'земных': { stress: 1, gloss: { en: 'earthly (gen./prep. pl.)', fr: 'terrestres (gén./prép. pl.)' }, source: 'supplement' },
+    
+    // Batch 16: Noun inflections — genitive plurals
+    'дней': { stress: 0, gloss: { en: 'days (gen. pl.)', fr: 'de jours' }, source: 'supplement' },
+    'ночей': { stress: 1, gloss: { en: 'nights (gen. pl.)', fr: 'de nuits' }, source: 'supplement' },
+    'лет': { stress: 0, gloss: { en: 'years (gen. pl.)', fr: "d'années" }, source: 'supplement' },
+    'слёз': { stress: 0, gloss: { en: 'tears (gen. pl.)', fr: 'de larmes' }, source: 'supplement' },
+    'глаз': { stress: 0, gloss: { en: 'eyes (gen. pl.)', fr: "d'yeux" }, source: 'supplement' },
+    'рук': { stress: 0, gloss: { en: 'hands (gen. pl.)', fr: 'de mains' }, source: 'supplement' },
+    'ног': { stress: 0, gloss: { en: 'feet (gen. pl.)', fr: 'de pieds' }, source: 'supplement' },
+    'губ': { stress: 0, gloss: { en: 'lips (gen. pl.)', fr: 'de lèvres' }, source: 'supplement' },
+    'слов': { stress: 0, gloss: { en: 'words (gen. pl.)', fr: 'de mots' }, source: 'supplement' },
+    'снов': { stress: 0, gloss: { en: 'dreams (gen. pl.)', fr: 'de rêves' }, source: 'supplement' },
+    'цветов': { stress: 1, gloss: { en: 'flowers (gen. pl.)', fr: 'de fleurs' }, source: 'supplement' },
+    'садов': { stress: 1, gloss: { en: 'gardens (gen. pl.)', fr: 'de jardins' }, source: 'supplement' },
+    'лесов': { stress: 1, gloss: { en: 'forests (gen. pl.)', fr: 'de forêts' }, source: 'supplement' },
+    'полей': { stress: 1, gloss: { en: 'fields (gen. pl.)', fr: 'de champs' }, source: 'supplement' },
+    'морей': { stress: 1, gloss: { en: 'seas (gen. pl.)', fr: 'de mers' }, source: 'supplement' },
+    'небес': { stress: 1, gloss: { en: 'heavens (gen. pl.)', fr: 'de cieux' }, source: 'supplement' },
+    'сердец': { stress: 1, gloss: { en: 'hearts (gen. pl.)', fr: 'de cœurs' }, source: 'supplement' },
+    'очей': { stress: 1, gloss: { en: 'eyes (gen. pl., archaic)', fr: "d'yeux (arch.)" }, source: 'supplement' },
+    'людей': { stress: 1, gloss: { en: 'people (gen. pl.)', fr: 'de gens' }, source: 'supplement' },
+    'детей': { stress: 1, gloss: { en: 'children (gen. pl.)', fr: "d'enfants" }, source: 'supplement' },
     
     // Common nouns for vocal literature (v5.11.41)
-    'странствие': { stress: 0, gloss: 'wandering', source: 'supplement' },
-    'странствии': { stress: 0, gloss: 'wandering (prep. sg.)', source: 'supplement' },
-    'странствия': { stress: 0, gloss: 'wandering (gen. sg.)', source: 'supplement' }
+    'странствие': { stress: 0, gloss: { en: 'wandering', fr: 'errance' }, source: 'supplement' },
+    'странствии': { stress: 0, gloss: { en: 'wandering (prep. sg.)', fr: 'errance (prép. sg.)' }, source: 'supplement' },
+    'странствия': { stress: 0, gloss: { en: 'wandering (gen. sg.)', fr: "d'errance" }, source: 'supplement' }
 };
 
 /* ==================================================
