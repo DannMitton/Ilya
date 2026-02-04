@@ -981,6 +981,30 @@
         100% 0;
       background-repeat: no-repeat;
     }
+
+    /* Dashed box for unverified French glosses (v6.0.8) */
+    .gloss-unverified {
+      padding: 2px 6px;
+      border-radius: 3px;
+      background-color: rgba(245, 244, 240, 0.3);
+      /* Custom dashed border: 16px dash, 6px gap */
+      background-image:
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px);
+      background-size:
+        100% 2px,
+        100% 2px,
+        2px 100%,
+        2px 100%;
+      background-position:
+        0 0,
+        0 100%,
+        0 0,
+        100% 0;
+      background-repeat: no-repeat;
+    }
     
     .stress-unverified-container .word-stack {
       /* Reset word-stack padding when inside container */
@@ -6272,14 +6296,17 @@ function addAcuteToSyllable(syllable) {
           `;
           
           // Build word stack HTML
+
+          // Calculate gloss for display and check if unverified (v6.0.8)
+          const displayGloss = tw.isProclitic || tw.isEnclitic 
+            ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
+            : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord);
+          const isGlossUnverified = displayGloss === 'À VÉRIFIER';
           const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
-              <span class="gloss">${tw.isProclitic || tw.isEnclitic 
-                ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
-                : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
-            </div>
+              <span class="gloss${isGlossUnverified ? ' gloss-unverified' : ''}">${displayGloss}</span>            </div>
           `;
           
           // Wrap in Verify container if stress is inferred (v5.11.32)
