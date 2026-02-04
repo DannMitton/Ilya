@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.28 Phase 3D: Fix blurb lookup for remote vowels</title>
+  <title>Ilya — v6.0.29 Phase 3E: Remove popup UI</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -2047,8 +2047,10 @@
     }
 
     /* ========================================
-       POPUP OVERLAY
+       POPUP OVERLAY - REMOVED Phase 3E
+       Functionality moved to drawer inspector
        ======================================== */
+    /* 
     .popup-overlay {
       position: fixed;
       inset: 0;
@@ -2065,10 +2067,12 @@
       inset: 0;
       background: rgba(26, 22, 18, 0.1);
     }
+    */
 
     /* ========================================
-       POPUP CARD
+       POPUP CARD - REMOVED Phase 3E
        ======================================== */
+    /*
     .popup-card {
       position: absolute;
       width: 320px;
@@ -2108,8 +2112,10 @@
       border-bottom: 10px solid var(--surface);
       filter: drop-shadow(0 -2px 2px rgba(26, 22, 18, 0.08));
     }
+    */
 
-    /* Mobile popup */
+    /* Mobile popup - REMOVED Phase 3E */
+    /*
     @media (max-width: 600px) {
       .popup-card {
         position: fixed;
@@ -2142,6 +2148,7 @@
         margin: 0.75rem auto 0.5rem;
       }
     }
+    */
 
     /* ========================================
        POPUP BODY
@@ -4511,135 +4518,7 @@
 
   </div>
 
-  <!-- Popup Overlay -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-backdrop" id="popupBackdrop"></div>
-    <div class="popup-card" id="popupCard">
-      <div class="popup-arrow"></div>
-      
-      <div class="popup-body">
-        <!-- Clitic badge (conditionally shown) -->
-        <div class="clitic-badge" id="cliticBadge" style="display: none;">
-          <span id="cliticType">Proclitic</span> — attaches phonologically
-        </div>
-        
-        <!-- TIER 1: THE ANSWER (always visible) -->
-        <!-- Syllable buttons: interactive IPA display + stress control + consonant drag -->
-        <div class="syllable-label" id="syllableLabel"></div>
-        <div class="syllable-display-header" id="syllableDisplayHeader">
-          <div class="syllable-display" id="syllableDisplay"></div>
-          <button class="boundary-reset-btn" id="boundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
-        </div>
-        <div class="popup-cyrillic" id="popupCyrillic">—</div>
-        
-        <div class="gloss-section">
-          <span 
-            class="gloss-inline" 
-            id="glossInline"
-            contenteditable="true"
-            role="textbox"
-            aria-label="Translation"
-            data-placeholder="add translation"
-          ></span>
-        </div>
-        
-        <!-- Phoneme Ribbon (elevated, vertical layout) -->
-        <div class="phoneme-ribbon" id="phonemeRibbon">
-          <div class="ribbon-vertical" id="ribbonVertical">
-            <!-- Populated by JavaScript -->
-          </div>
-        </div>
-        
-        <!-- FOOTER CONTROLS (v5.11 - Flat Structure) -->
-        <div class="popup-footer-controls">
-          
-          <!-- Clitic banner (if applicable) - moved out of accordion -->
-          <div class="why-clitic-banner" id="whyCliticBanner" style="display: none;"></div>
-          
-          <!-- Variant row (ё toggle) - only shown if word has е/ё -->
-          <div class="footer-control-row variant-row" id="variantRow" style="display: none;">
-            <span class="footer-label">Variant:</span>
-            <div class="segmented-control variant-control" id="variantButtons">
-              <button class="segment" id="variantYo" data-variant="yo">ё</button>
-              <button class="segment" id="variantYe" data-variant="ye">е</button>
-            </div>
-          </div>
-          
-          <!-- Assimilation row - only shown if not last word in line -->
-          <div class="footer-control-row assimilation-row" id="assimilationRow" style="display: none;">
-            <span class="footer-label">Link to "<span class="next-word" id="nextWordLabel">—</span>":</span>
-            <div class="segmented-control assimilation-control" id="assimilationButtons">
-              <button class="segment" id="assimilationLinked" data-boundary="soft">Linked</button>
-              <button class="segment" id="assimilationSeparated" data-boundary="hard">Separated</button>
-            </div>
-          </div>
-          
-        </div>
-        
-        <!-- Toast for ё warning -->
-        <div class="yo-toast" id="yoToast">
-          <span>ё → е changes pronunciation</span>
-          <button class="undo-btn" id="yoUndoBtn">Undo</button>
-        </div>
-        
-        <!-- OLD ACCORDION (hidden in v5.11, kept for reference) -->
-        <button class="refine-analysis-toggle" id="refineAnalysisToggle" style="display: none;">
-          Refine Analysis <span class="disclosure-chevron">▼</span>
-        </button>
-        
-        <div class="refine-panel" id="refinePanel" style="display: none;">
-          <div class="refine-panel-inner">
-            <!-- Stress source module (will move to provenance badges in v5.12) -->
-            <div class="stress-source-module" id="stressSourceModule">
-              <div class="module-header">
-                <span class="module-label">Stress source</span>
-                <span class="staged-indicator" id="stressStagedIndicator">✎</span>
-              </div>
-              <div class="segmented-control" id="stressSourceButtons">
-                <button class="segment" id="stressSourceDictionary" data-source="dictionary" title="Ilya defaults to first-syllable stress for words not in our dictionary. This stress has not been independently verified.">Dictionary</button>
-                <button class="segment" id="stressSourceComposer" data-source="composer">Composer</button>
-                <button class="segment" id="stressSourceUser" data-source="user">My choice</button>
-              </div>
-            </div>
-            
-            <!-- ё toggle module (MOVED to Variant row in v5.11) -->
-            <div class="yo-toggle-module" id="yoToggleModule" style="display: none;">
-              <div class="module-header">
-                <span class="module-label">Spelling</span>
-              </div>
-              <div class="yo-toggle-row">
-                <span class="yo-current-form" id="yoCurrentForm">—</span>
-                <button class="yo-toggle-btn" id="yoToggleBtn" title="Toggle ё/е spelling">
-                  <span id="yoToggleLabel">—</span>
-                </button>
-              </div>
-              <div class="yo-warning" id="yoWarning" style="display: none;">
-                Removing ё may change stress position
-              </div>
-            </div>
-            
-            <!-- Phrase boundary module (MOVED to Assimilation row in v5.11) -->
-            <div class="phrase-boundary-module" id="phraseBoundaryModule" style="display: none;">
-              <div class="module-header">
-                <span class="module-label">Phrase boundary</span>
-                <span class="staged-indicator" id="boundaryStagedIndicator">✎</span>
-              </div>
-              <div class="segmented-control" id="boundaryButtons">
-                <button class="segment" id="boundaryLinked" data-boundary="soft">Linked</button>
-                <button class="segment" id="boundarySeparated" data-boundary="hard">Break after</button>
-              </div>
-            </div>
-            
-            <!-- Commit footer -->
-            <div class="shared-commit-footer" id="sharedCommitFooter">
-              <button class="revert-btn" id="sharedRevertBtn">Revert</button>
-              <button class="apply-btn" id="sharedApplyBtn">Apply Changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Popup removed in Phase 3E - all functionality now in drawer inspector -->
 
   <script>
 /* ==================================================
@@ -10780,10 +10659,14 @@ function addAcuteToSyllable(syllable) {
 
 
     /* ========================================
-       POPUP CONTROLLER
+       POPUP CONTROLLER (PROCESSING HELPER)
+       Phase 3E: UI removed, kept for processing methods:
+       - renderRibbon() - builds phoneme ribbon HTML
+       - handleYoToggle() - ё/е reprocessing logic
+       DrawerInspector delegates to these methods.
        ======================================== */
     const Popup = {
-      isOpen: false,
+      isOpen: false,  // Always false now - UI removed
       currentWord: null,
       stressWasChanged: false,
       attributionSelected: false,
@@ -13351,7 +13234,7 @@ function addAcuteToSyllable(syllable) {
         };
         
         // PHASE 3A: Popup dormant — route to drawer instead
-        // Popup.open(data);  // ← DORMANT (Phase 3A)
+        // Word inspection now handled entirely by drawer
         
         if (!DrawerState.isOpen) {
           // Drawer closed → open in inspect mode
@@ -13363,8 +13246,7 @@ function addAcuteToSyllable(syllable) {
         return;
       }
 
-      // Don't process drawer zones if popup is open or click is inside drawer/input
-      if (Popup.isOpen) return;  // Keep for safety until popup fully removed
+      // Don't process drawer zones if click is inside drawer/input
       if (e.target.closest('.ilya-drawer')) return;
       if (e.target.closest('.input-drawer')) return;
 
@@ -13388,14 +13270,13 @@ function addAcuteToSyllable(syllable) {
 
     // Escape key → close drawer
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && DrawerState.isOpen && !Popup.isOpen) {
+      if (e.key === 'Escape' && DrawerState.isOpen) {
         DrawerState.close();
         return;
       }
     });
     
     document.addEventListener('keydown', (e) => {
-      if (Popup.isOpen) return;
       
       const wordStack = e.target.closest('.word-stack');
       if (!wordStack) return;
@@ -13461,7 +13342,7 @@ function addAcuteToSyllable(syllable) {
       DashboardController.init();
       ProfileController.init();
       DocumentController.init();
-      Popup.init();
+      // Popup.init();  // REMOVED Phase 3E - popup UI fully replaced by drawer
 
       // ========================================
       // DRAWER BRIDGE (Phase 2B)
