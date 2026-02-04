@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.30 Phase 3E: Fix blurbs and nested perimeters</title>
+  <title>Ilya — v6.0.31 Phase 2C: Remove old bottom drawer</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1626,8 +1626,10 @@
     }
 
     /* ========================================
-       INPUT DRAWER: Bottom-anchored, collapsible
+       INPUT DRAWER: REMOVED Phase 2C
+       All input now in left drawer
        ======================================== */
+    /*
     .input-drawer {
       flex-shrink: 0;
       background: var(--surface);
@@ -1635,10 +1637,12 @@
       display: flex;
       flex-direction: column;
     }
+    */
 
     /* ========================================
-       DRAWER HANDLE: Full-width clickable bar
+       DRAWER HANDLE: REMOVED Phase 2C
        ======================================== */
+    /*
     .drawer-handle {
       display: flex;
       align-items: center;
@@ -1660,7 +1664,6 @@
       outline-offset: -2px;
     }
 
-    /* Preview text (left side, visible when collapsed) */
     .handle-preview {
       position: absolute;
       left: var(--space-lg);
@@ -1679,7 +1682,6 @@
       opacity: 1;
     }
 
-    /* Center toggle (chevron + label) */
     .handle-toggle {
       display: flex;
       align-items: center;
@@ -1705,7 +1707,6 @@
       opacity: 0.6;
     }
 
-    /* Show appropriate label based on state */
     .handle-label-more,
     .handle-label-less {
       display: none;
@@ -1727,14 +1728,15 @@
       display: none;
     }
 
-    /* Chevron flips when collapsed */
     .input-drawer.collapsed .handle-toggle .chevron {
       transform: rotate(180deg);
     }
+    */
 
     /* ========================================
-       DRAWER: Expanded Content
+       OLD DRAWER CONTENT: REMOVED Phase 2C
        ======================================== */
+    /*
     .drawer-content {
       display: flex;
       flex-direction: column;
@@ -1743,10 +1745,10 @@
       transition: opacity 200ms var(--ease);
     }
 
-    /* Hide content when collapsed */
     .input-drawer.collapsed .drawer-content {
       display: none;
     }
+    */
 
     /* ========================================
        DRAWER: Textarea
@@ -3405,7 +3407,8 @@
       outline-offset: -2px;
     }
     
-    /* Drawer zones container */
+    /* OLD DRAWER ZONES: REMOVED Phase 2C */
+    /*
     .drawer-zones {
       display: flex;
       flex-direction: row;
@@ -3413,7 +3416,6 @@
       min-height: 0;
     }
     
-    /* Input zone (text area side) */
     .input-zone {
       flex: 2;
       display: flex;
@@ -3424,7 +3426,6 @@
       overflow-y: auto;
     }
     
-    /* Dashboard zone (metadata side) */
     .dashboard-zone {
       flex: 1;
       display: flex;
@@ -3434,8 +3435,10 @@
       overflow-y: auto;
       gap: var(--space-md);
     }
+    */
     
-    /* Mobile: stacked with tabs */
+    /* Mobile zones: REMOVED Phase 2C */
+    /*
     @media (max-width: 767px) {
       .drawer-tabs {
         display: flex;
@@ -3459,6 +3462,7 @@
         display: none;
       }
     }
+    */
     
     /* ========================================
        DASHBOARD: Form Components
@@ -3927,13 +3931,10 @@
        ======================================== */
     @media print {
       /* Hide all UI elements */
-      .input-drawer,
+      .ilya-drawer,
+      .drawer-scrim,
       .popup-overlay,
-      .dashboard-zone,
-      .drawer-handle,
-      .tab-bar,
-      .input-zone,
-      .drawer-tabs {
+      .tab-bar {
         display: none !important;
       }
 
@@ -4425,102 +4426,7 @@
     </main>
 
     <!-- Input Drawer: Bottom-anchored, collapsible -->
-    <aside class="input-drawer expanded" id="inputDrawer">
-      
-      <!-- Handle Bar (always visible, entire bar clickable) -->
-      <div class="drawer-handle" 
-           id="drawerHandle"
-           role="button" 
-           tabindex="0" 
-           aria-expanded="true"
-           aria-controls="drawerContent"
-           title="Toggle input drawer">
-        
-        <!-- Left: Preview (visible when collapsed) -->
-        <span class="handle-preview" id="handlePreview"></span>
-        
-        <!-- Center: Chevron + Label (changes based on state) -->
-        <span class="handle-toggle">
-          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-          <span class="handle-label">
-            <span class="handle-label-more">show dashboard</span>
-            <span class="handle-label-less">hide dashboard</span>
-          </span>
-        </span>
-        
-      </div>
-      
-      <!-- Mobile Tabs (visible <768px) -->
-      <div class="drawer-tabs" id="drawerTabs">
-        <button class="drawer-tab active" data-tab="text">Text</button>
-        <button class="drawer-tab" data-tab="details">Details</button>
-      </div>
-      
-      <!-- Drawer Content (hidden when collapsed) -->
-      <div class="drawer-content" id="drawerContent">
-        
-        <div class="drawer-zones">
-          
-          <!-- Input Zone (2/3 on desktop, tab on mobile) -->
-          <div class="input-zone" id="inputZone">
-            <!-- Textarea -->
-            <textarea 
-              class="drawer-textarea" 
-              id="textInput" 
-              placeholder="Paste or type Russian Cyrillic text here..."
-              aria-label="Russian text input"
-            ></textarea>
-            
-            <!-- Footer row: status left, buttons right -->
-            <div class="drawer-footer">
-              <div class="footer-status" aria-live="polite">
-                <span class="char-counter" id="charCounter"></span>
-                <span class="auto-saved" id="autoSaved">Saved</span>
-                <span class="ocr-status" id="ocrStatus" style="display: none;">
-                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
-                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
-                  </svg>
-                  <span class="ocr-status-text"></span>
-                </span>
-              </div>
-              <div class="footer-actions">
-                <!-- Hidden file input for OCR -->
-                <input type="file" 
-                       id="ocrFileInput" 
-                       accept="image/*" 
-                       capture="environment"
-                       aria-hidden="true"
-                       style="display: none;">
-                <button class="btn btn-secondary" id="clearBtn">Clear</button>
-                <button class="btn btn-secondary" id="ocrScanBtn" 
-                        aria-label="Import Russian text from image"
-                        disabled
-                        title="Loading Russian language pack...">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                  </svg>
-                  Scan
-                </button>
-                <button class="btn btn-primary" id="transcribeBtn">Transcribe</button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Dashboard Zone: migrated to drawer-root in v6.0.3 -->
-          <div class="dashboard-zone hidden" id="dashboardZone">
-            <!-- All metadata, profile, document, and export fields now live in .drawer-root -->
-          </div>
-          
-        </div>
-        
-      </div>
-      
-    </aside>
+    <!-- Old input-drawer removed in Phase 2C - all input now in left drawer -->
 
   </div>
 
@@ -6385,13 +6291,10 @@ function addAcuteToSyllable(syllable) {
        DRAWER CONTROLLER
        ======================================== */
     const DrawerController = {
-      drawer: null,
-      handle: null,
-      content: null,
-      preview: null,
+      // Phase 2C: Now uses left drawer elements directly
       textInput: null,
       clearBtn: null,
-      transcribeBtn: null,
+      charCounter: null,
       // OCR elements
       ocrScanBtn: null,
       ocrFileInput: null,
@@ -6399,99 +6302,38 @@ function addAcuteToSyllable(syllable) {
       ocrStatusText: null,
       
       init() {
-        this.drawer = document.getElementById('inputDrawer');
-        this.handle = document.getElementById('drawerHandle');
-        this.content = document.getElementById('drawerContent');
-        this.preview = document.getElementById('handlePreview');
-        this.textInput = document.getElementById('textInput');
-        this.clearBtn = document.getElementById('clearBtn');
-        this.transcribeBtn = document.getElementById('transcribeBtn');
+        // Phase 2C: Use left drawer elements
+        this.textInput = document.getElementById('drawerTextInput');
+        this.clearBtn = document.getElementById('drawerClearBtn');
+        this.charCounter = document.getElementById('drawerCharCounter');
         
-        // OCR elements
-        this.ocrScanBtn = document.getElementById('ocrScanBtn');
-        this.ocrFileInput = document.getElementById('ocrFileInput');
-        this.ocrStatus = document.getElementById('ocrStatus');
+        // OCR elements (in left drawer)
+        this.ocrScanBtn = document.getElementById('drawerOcrBtn');
+        this.ocrFileInput = document.getElementById('drawerOcrFileInput');
+        this.ocrStatus = document.getElementById('drawerOcrStatus');
         this.ocrStatusText = this.ocrStatus?.querySelector('.ocr-status-text');
         
         // Initialize OCR (lazy-loads Tesseract in background)
         this.initOCR();
         
-        // Click handler for entire handle bar
-        this.handle.addEventListener('click', () => this.toggle());
-        
-        // Keyboard support (Enter/Space to toggle, Escape to collapse)
-        this.handle.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.toggle();
-          }
-        });
-        
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && this.isExpanded()) {
-            this.collapse();
-          }
-        });
-        
-        // Update preview when text changes
-        this.textInput.addEventListener('input', () => this.updatePreview());
+        // Update character counter when text changes
+        this.textInput?.addEventListener('input', () => this.updateCharCounter());
         
         // Clear button
-        this.clearBtn.addEventListener('click', () => this.clear());
-        
-        // Transcribe button (placeholder for now)
-        this.transcribeBtn.addEventListener('click', () => this.transcribe());
-        
-        // Start expanded so input is visible by default
-        this.expand();
+        this.clearBtn?.addEventListener('click', () => this.clear());
       },
       
-      isExpanded() {
-        return this.drawer.classList.contains('expanded');
-      },
-      
-      toggle() {
-        if (this.isExpanded()) {
-          this.collapse();
+      updateCharCounter() {
+        if (!this.charCounter || !this.textInput) return;
+        const len = this.textInput.value.length;
+        if (len > 0) {
+          this.charCounter.textContent = `${len} chars`;
+          this.charCounter.classList.add('visible');
+          this.charCounter.classList.toggle('warning', len > 5000);
+          this.charCounter.classList.toggle('error', len > 10000);
         } else {
-          this.expand();
+          this.charCounter.classList.remove('visible');
         }
-      },
-      
-      expand() {
-        this.drawer.classList.remove('collapsed');
-        this.drawer.classList.add('expanded');
-        this.handle.setAttribute('aria-expanded', 'true');
-        // Focus textarea when expanding
-        setTimeout(() => this.textInput.focus(), 100);
-      },
-      
-      collapse() {
-        this.drawer.classList.remove('expanded');
-        this.drawer.classList.add('collapsed');
-        this.handle.setAttribute('aria-expanded', 'false');
-        this.updatePreview();
-        // Return focus to handle
-        this.handle.focus();
-      },
-      
-      updatePreview() {
-        const text = this.textInput.value.trim();
-        if (!text) {
-          this.preview.textContent = '';
-          return;
-        }
-        
-        const lines = text.split('\n').filter(line => line.trim());
-        const lineCount = lines.length;
-        const firstLine = lines[0] || '[empty first line]';
-        
-        // Truncate at 30 chars
-        const truncated = firstLine.length > 30 
-          ? firstLine.substring(0, 30) + '...' 
-          : firstLine;
-        
-        this.preview.textContent = `${truncated} • ${lineCount} line${lineCount !== 1 ? 's' : ''}`;
       },
       
       clear() {
@@ -6503,8 +6345,8 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Clear input field
-        this.textInput.value = '';
-        this.updatePreview();
+        if (this.textInput) this.textInput.value = '';
+        this.updateCharCounter();
         
         // Clear document state
         DocumentState.lines = [];
@@ -6512,13 +6354,13 @@ function addAcuteToSyllable(syllable) {
         // Re-render to show empty page with ghost text
         this.renderToPaper();
         
-        this.textInput.focus();
+        this.textInput?.focus();
       },
       
       transcribe() {
-        const text = this.textInput.value.trim();
+        const text = this.textInput?.value?.trim() || '';
         if (!text) {
-          this.textInput.focus();
+          this.textInput?.focus();
           return;
         }
         
@@ -7092,7 +6934,7 @@ function addAcuteToSyllable(syllable) {
       async initOCR() {
         if (!OCRModule.isSupported()) {
           console.log('OCR not supported in this browser');
-          this.ocrScanBtn.style.display = 'none';
+          if (this.ocrScanBtn) this.ocrScanBtn.style.display = 'none';
           return;
         }
         
@@ -7103,31 +6945,31 @@ function addAcuteToSyllable(syllable) {
         });
         
         // Scan button triggers hidden file input
-        this.ocrScanBtn.addEventListener('click', () => {
-          if (!this.ocrScanBtn.disabled) {
-            this.ocrFileInput.click();
+        this.ocrScanBtn?.addEventListener('click', () => {
+          if (this.ocrScanBtn && !this.ocrScanBtn.disabled) {
+            this.ocrFileInput?.click();
           }
         });
         
         // File selected → process
-        this.ocrFileInput.addEventListener('change', async (e) => {
+        this.ocrFileInput?.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
           await this.processOCRFile(file);
           // Reset input for re-use
-          this.ocrFileInput.value = '';
+          if (this.ocrFileInput) this.ocrFileInput.value = '';
         });
         
         // Start lazy-loading Tesseract
         try {
           const loaded = await OCRModule.init();
-          if (loaded) {
+          if (loaded && this.ocrScanBtn) {
             this.ocrScanBtn.disabled = false;
             this.ocrScanBtn.title = 'Import Russian text from image';
           }
         } catch (err) {
           console.error('OCR init failed:', err);
-          this.ocrScanBtn.title = 'OCR unavailable';
+          if (this.ocrScanBtn) this.ocrScanBtn.title = 'OCR unavailable';
         }
       },
       
@@ -7136,8 +6978,7 @@ function addAcuteToSyllable(syllable) {
        */
       async processOCRFile(file) {
         // Hide normal status, show OCR status
-        document.getElementById('charCounter')?.classList.remove('visible');
-        document.getElementById('autoSaved')?.classList.remove('visible');
+        this.charCounter?.classList.remove('visible');
         
         // Status message mapping (Kimi's "narrated steps")
         const statusMessages = {
@@ -7157,7 +6998,7 @@ function addAcuteToSyllable(syllable) {
             this.showOCRStatus('processing', message);
           });
           
-          if (text) {
+          if (text && this.textInput) {
             // Append to existing text with newline separator if not empty
             const existingText = this.textInput.value.trim();
             if (existingText) {
@@ -7166,7 +7007,7 @@ function addAcuteToSyllable(syllable) {
               this.textInput.value = text;
             }
             
-            this.updatePreview();
+            this.updateCharCounter();
             this.showOCRStatus('success', 'Import complete');
             
             // Clear success message after 3 seconds
@@ -13353,106 +13194,12 @@ function addAcuteToSyllable(syllable) {
       DocumentController.init();
       // Popup.init();  // REMOVED Phase 3E - popup UI fully replaced by drawer
 
-      // ========================================
-      // DRAWER BRIDGE (Phase 2B)
-      // Forwards new drawer-root inputs to existing DrawerController.
-      // Removed in Phase 2C when old input-drawer is deleted.
-      // ========================================
-      const DrawerBridge = {
-        init() {
-          const newTextarea = document.getElementById('drawerTextInput');
-          const oldTextarea = document.getElementById('textInput');
-          const newClear = document.getElementById('drawerClearBtn');
-          const newOcrBtn = document.getElementById('drawerOcrBtn');
-          const newOcrFile = document.getElementById('drawerOcrFileInput');
-          const newCharCounter = document.getElementById('drawerCharCounter');
-
-          if (!newTextarea || !oldTextarea) return;
-
-          // Sync new textarea → old textarea
-          newTextarea.addEventListener('input', () => {
-            oldTextarea.value = newTextarea.value;
-            DrawerController.updatePreview();
-            this.updateCharCounter(newTextarea, newCharCounter);
-          });
-
-          // Sync old textarea → new textarea (for OCR, etc.)
-          const origOldSetter = Object.getOwnPropertyDescriptor(
-            HTMLTextAreaElement.prototype, 'value'
-          );
-          // Use MutationObserver fallback: poll on focus
-          oldTextarea.addEventListener('input', () => {
-            newTextarea.value = oldTextarea.value;
-            this.updateCharCounter(newTextarea, newCharCounter);
-          });
-
-          // Clear button — confirmation + full reset
-          newClear.addEventListener('click', () => {
-            if (!confirm('Clear all content? This cannot be undone.')) return;
-            // Clear both textareas
-            newTextarea.value = '';
-            oldTextarea.value = '';
-            DrawerController.updatePreview();
-            // Clear document state and re-render empty paper
-            DocumentState.lines = [];
-            DrawerController.renderToPaper();
-            this.updateCharCounter(newTextarea, newCharCounter);
-            newTextarea.focus();
-          });
-
-          // OCR button → triggers hidden file input
-          if (newOcrBtn && newOcrFile) {
-            newOcrBtn.addEventListener('click', () => {
-              if (!newOcrBtn.disabled) {
-                newOcrFile.click();
-              }
-            });
-
-            newOcrFile.addEventListener('change', async (e) => {
-              const file = e.target.files[0];
-              if (!file) return;
-              await DrawerController.processOCRFile(file);
-              newOcrFile.value = '';
-              // Sync result back to new textarea
-              newTextarea.value = oldTextarea.value;
-              this.updateCharCounter(newTextarea, newCharCounter);
-            });
-
-            // Mirror OCR ready state from old button
-            const oldOcrBtn = document.getElementById('ocrScanBtn');
-            if (oldOcrBtn) {
-              const checkOcr = () => {
-                if (!oldOcrBtn.disabled) {
-                  newOcrBtn.disabled = false;
-                  newOcrBtn.title = 'Import Russian text from image';
-                } else {
-                  requestAnimationFrame(checkOcr);
-                }
-              };
-              checkOcr();
-            }
-          }
-        },
-
-        updateCharCounter(textarea, counter) {
-          if (!counter) return;
-          const len = textarea.value.length;
-          if (len > 0) {
-            counter.textContent = `${len} chars`;
-            counter.classList.add('visible');
-            counter.classList.toggle('warning', len > 5000);
-            counter.classList.toggle('error', len > 10000);
-          } else {
-            counter.classList.remove('visible');
-          }
-        }
-      };
-
-      DrawerBridge.init();
+      // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
       // ========================================
       // LANGUAGE TOGGLE (v6.0.6)
       // Transcribe + set gloss language in one click
+      // Phase 2C: No more syncing needed - DrawerController uses left drawer directly
       // ========================================
       const langBtnEn = document.getElementById('langBtnEn');
       const langBtnFr = document.getElementById('langBtnFr');
@@ -13463,14 +13210,9 @@ function addAcuteToSyllable(syllable) {
           langBtnEn.classList.add('lang-btn-active');
           langBtnFr.classList.remove('lang-btn-active');
           
-          // Get textarea content
-          const newTextarea = document.getElementById('drawerTextInput');
-          const oldTextarea = document.getElementById('textInput');
-          const hasText = newTextarea && newTextarea.value.trim().length > 0;
+          const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
-            // Sync and transcribe
-            if (oldTextarea) oldTextarea.value = newTextarea.value;
             DrawerController.transcribe();
             DrawerState.close();
           } else if (DocumentState.lines && DocumentState.lines.length > 0) {
@@ -13485,14 +13227,9 @@ function addAcuteToSyllable(syllable) {
           langBtnFr.classList.add('lang-btn-active');
           langBtnEn.classList.remove('lang-btn-active');
           
-          // Get textarea content
-          const newTextarea = document.getElementById('drawerTextInput');
-          const oldTextarea = document.getElementById('textInput');
-          const hasText = newTextarea && newTextarea.value.trim().length > 0;
+          const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
-            // Sync and transcribe
-            if (oldTextarea) oldTextarea.value = newTextarea.value;
             DrawerController.transcribe();
             DrawerState.close();
           } else if (DocumentState.lines && DocumentState.lines.length > 0) {
