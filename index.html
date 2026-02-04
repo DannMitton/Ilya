@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.14 Phase 3B: Syllable buttons in drawer</title>
+  <title>Ilya — v6.0.15 Phase 3B: Bugfix stopPropagation</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -12309,8 +12309,9 @@ function addAcuteToSyllable(syllable) {
           controls: document.getElementById('inspectorControls')
         };
         
-        // Back button returns to Root
-        this.inspectorElements.backBtn?.addEventListener('click', () => {
+        // Back button returns to Root (with stopPropagation)
+        this.inspectorElements.backBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
           this.switchMode('root');
         });
         
@@ -12321,6 +12322,11 @@ function addAcuteToSyllable(syllable) {
             DocumentState.updateGloss(this.currentWord.lineIndex, this.currentWord.wordIndex, newGloss);
             DrawerController.renderToPaper();
           }
+        });
+        
+        // Prevent gloss click from propagating (keeps focus for editing)
+        this.inspectorElements.glossInline?.addEventListener('click', (e) => {
+          e.stopPropagation();
         });
       },
 
@@ -12424,6 +12430,7 @@ function addAcuteToSyllable(syllable) {
           // Wire up syllable button clicks for stress reassignment
           this.inspectorElements.syllableDisplay.querySelectorAll('.syllable-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+              e.stopPropagation();  // Prevent drawer from closing
               if (btn.disabled) return;
               const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
               this.handleStressChange(newStressIdx);
