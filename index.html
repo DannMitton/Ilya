@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.29 Phase 3E: Remove popup UI</title>
+  <title>Ilya — v6.0.30 Phase 3E: Fix blurbs and nested perimeters</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -512,6 +512,12 @@
       outline: none !important;
       box-shadow: none !important;
     }
+    
+    /* Remove focus outline from rows inside drawer - prevents nested perimeters */
+    .inspector-ribbon .phoneme-row:focus,
+    .inspector-ribbon .phoneme-row.expanded:focus {
+      outline: none !important;
+    }
 
     /* Refinement 2: Blurb simplification - HIDDEN by default, NO PERIMETER */
     /* RULE: Perimeters identify STRESSED SYLLABLES only. Blurbs have NO border. */
@@ -549,7 +555,7 @@
     }
 
     /* Expanded blurb - soft, welcoming fade-in after row fully expands */
-    /* Animation: height 280ms, then SLOW gentle fade 400ms */
+    /* Phase 3C timing: 350ms expand, 400ms fade starting at 300ms */
     #ilyaDrawer .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay,
     .ilya-drawer .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay,
     .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
@@ -566,11 +572,11 @@
       visibility: visible !important;
       pointer-events: auto !important;
       overflow-y: auto !important;
-      /* Soft, welcoming fade: 400ms ease-in-out, starts when row is fully expanded (280ms) */
-      transition: max-height 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                  opacity 400ms ease-in-out 280ms,
+      /* Phase 3C approved: 350ms stately expand, 400ms fade starting at 300ms */
+      transition: max-height 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 400ms ease-in-out 300ms,
                   visibility 0ms linear 0ms,
-                  margin 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+                  margin 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
     }
 
     .inspector-ribbon .phoneme-blurb-overlay .blurb-text {
@@ -11962,7 +11968,10 @@ function addAcuteToSyllable(syllable) {
        * Hide ё warning toast - v5.11
        */
       hideYoToast() {
-        this.elements.yoToast.classList.remove('visible');
+        // Guard against missing elements (Phase 3E - popup DOM removed)
+        if (this.elements?.yoToast) {
+          this.elements.yoToast.classList.remove('visible');
+        }
         if (this._yoToastTimer) {
           clearTimeout(this._yoToastTimer);
           this._yoToastTimer = null;
