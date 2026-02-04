@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.17 Phase 3C: Ribbon refinements (Kimi collab)</title>
+  <title>Ilya — v6.0.18 Phase 3C: Ribbon refinement fixes</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -469,7 +469,7 @@
     }
 
     /* Ribbon Section (Phase 3C) */
-    /* REFINEMENTS v6.0.17: Row spacing, blurb simplification, stressed syllable border */
+    /* REFINEMENTS v6.0.18: Fixes from testing */
     .inspector-ribbon-section {
       margin-bottom: 16px;
     }
@@ -493,35 +493,47 @@
     }
 
     /* Refinement 3: Remove fading - trust user attention */
-    .inspector-ribbon.has-active-blurb .phoneme-row:not(.expanded) {
-      opacity: 1;
+    /* Use !important to override base ribbon styles */
+    .inspector-ribbon.has-active-blurb .phoneme-row:not(.expanded),
+    .inspector-ribbon .phoneme-row:not(.expanded) {
+      opacity: 1 !important;
     }
 
-    /* Refinement 2: Blurb simplification - no border/background, left indent, terracotta citation */
+    /* Refinement 2: Blurb simplification - HIDDEN by default, no border/background */
+    /* Override all base overlay styles for drawer context */
     .inspector-ribbon .phoneme-blurb-overlay {
-      position: relative;
-      top: 0;
-      left: 0;
-      right: 0;
-      max-height: 0;
-      overflow: hidden;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      padding: 0;
-      margin: 0;
-      opacity: 1;
-      transform: none;
-      transition: max-height 300ms ease, padding 300ms ease, margin 300ms ease;
+      position: relative !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      max-height: 0 !important;
+      overflow: hidden !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: none !important;
+      pointer-events: none !important;
+      min-height: 0 !important;
+      z-index: auto !important;
+      transition: max-height 300ms ease, padding 300ms ease, margin 300ms ease, opacity 200ms ease, visibility 200ms ease;
     }
 
+    /* Only show blurb when row is expanded */
     .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
-      max-height: 500px;
-      padding: 8px 0 8px 1.5em;
-      margin-top: 8px;
-      background: transparent;
-      border: none;
-      border-radius: 0;
+      max-height: 500px !important;
+      padding: 12px 0 8px 48px !important; /* More left padding for separation from phoneme */
+      margin-top: 4px !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      overflow: visible !important;
     }
 
     .inspector-ribbon .phoneme-blurb-overlay .blurb-text {
@@ -541,9 +553,9 @@
       content: '— ';
     }
 
-    /* Refinement 4: Stressed syllable - 2px sage perimeter, no fill */
+    /* Refinement 4: Stressed syllable - 2px sage perimeter, NO fill */
     .inspector-ribbon .stressed-syllable-region {
-      background: transparent;
+      background: transparent !important;
       border: 2px solid var(--ilya-accent);
       border-radius: 6px;
       padding: 4px;
@@ -11323,10 +11335,10 @@ function addAcuteToSyllable(syllable) {
                  tabindex="0"
                  role="button"
                  aria-expanded="false"
-                 aria-label="Forward binding arrow - this word attaches to the next">
+                 aria-label="Proclitic - this word attaches to the next">
               <div class="phoneme-mapping">
                 <span class="arrow-symbol">→</span>
-                <span class="arrow-label">binds forward</span>
+                <span class="arrow-label">proclitic</span>
               </div>
               <div class="phoneme-blurb-overlay">
                 <div class="blurb-text">${procliticBlurb}</div>
@@ -11342,10 +11354,10 @@ function addAcuteToSyllable(syllable) {
                  tabindex="0"
                  role="button"
                  aria-expanded="false"
-                 aria-label="Backward binding arrow - this word attaches to the previous">
+                 aria-label="Enclitic - this word attaches to the previous">
               <div class="phoneme-mapping">
                 <span class="arrow-symbol">←</span>
-                <span class="arrow-label">binds backward</span>
+                <span class="arrow-label">enclitic</span>
               </div>
               <div class="phoneme-blurb-overlay">
                 <div class="blurb-text">${encliticBlurb}</div>
