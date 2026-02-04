@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.38 Phase 4B complete: Syllable boundary dragging</title>
+  <title>Ilya — v6.0.39 Phase 4C: Focus management</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -12872,6 +12872,11 @@ function addAcuteToSyllable(syllable) {
           this.currentWord = wordData;
           this.updateInspector();
         }
+        
+        // Phase 4C: Focus first interactive element after transition
+        setTimeout(() => {
+          this._focusFirstElement(mode);
+        }, 310); // After 300ms drawer animation
       },
 
       close() {
@@ -12904,6 +12909,11 @@ function addAcuteToSyllable(syllable) {
             this._previousPhonemes = null; // No comparison for fresh inspection
             this.updateInspector();
           }
+          
+          // Phase 4C: Focus appropriate element after mode transition
+          setTimeout(() => {
+            this._focusFirstElement(mode);
+          }, 210); // After 200ms internal transition
         }
       },
       
@@ -13732,6 +13742,26 @@ function addAcuteToSyllable(syllable) {
             btn.style.transform = 'scale(1)';
           }, 200);
         });
+      },
+      
+      /**
+       * Phase 4C: Focus first interactive element based on mode
+       * Root: textarea or first input
+       * Inspect: back button
+       */
+      _focusFirstElement(mode) {
+        if (!this.drawer) return;
+        
+        let target;
+        if (mode === 'root') {
+          // Focus textarea first, then fall back to any input
+          target = this.drawer.querySelector('.drawer-root textarea, .drawer-root input');
+        } else {
+          // Focus back button in inspect mode
+          target = this.inspectorElements.backBtn;
+        }
+        
+        target?.focus();
       }
     };
 
