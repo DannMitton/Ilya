@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.13 Phase 3A: Popup dormant</title>
+  <title>Ilya — v6.0.14 Phase 3B: Syllable buttons in drawer</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -339,33 +339,147 @@
       flex-shrink: 0;
     }
 
-    /* Inspector Body (Phase 3A placeholder) */
+    /* Inspector Body (Phase 3B) */
     .inspector-body {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 16px 20px;
     }
 
-    .inspector-ipa {
-      font-family: var(--font-ipa);
-      font-size: 1.1rem;
-      color: var(--ilya-text-primary);
+    /* Syllable Label (monosyllable/clitic context) */
+    .inspector-syllable-label {
+      font-size: 12px;
+      color: var(--ilya-text-muted);
+      text-align: center;
       margin-bottom: 8px;
     }
 
-    .inspector-gloss {
+    .inspector-syllable-label:empty {
+      display: none;
+    }
+
+    /* Syllable Buttons Container */
+    .inspector-syllable-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .inspector-syllable-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    /* Syllable buttons in drawer - reuse existing .syllable-btn styles */
+    .inspector-syllable-display .syllable-btn {
+      font-family: var(--font-ipa);
+      font-size: 1.1rem;
+      padding: 8px 12px;
+    }
+
+    /* Boundary reset button in drawer */
+    .inspector-syllable-header .boundary-reset-btn {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 14px;
-      color: var(--ilya-text-secondary);
-      font-style: italic;
+      border: 1px solid var(--ilya-border);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--ilya-text-muted);
+      cursor: pointer;
+      transition: all 150ms ease;
+      margin-left: 8px;
+    }
+
+    .inspector-syllable-header .boundary-reset-btn:hover {
+      background: var(--ilya-binding);
+      border-color: var(--ilya-accent);
+      color: var(--ilya-text-primary);
+    }
+
+    /* Cyrillic Display */
+    .inspector-cyrillic {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--ink-primary);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    /* Gloss Section */
+    .inspector-gloss-section {
+      text-align: center;
       margin-bottom: 16px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--ilya-border-light);
     }
 
-    .inspector-placeholder {
-      padding: 16px;
-      background: var(--ilya-binding);
-      border-radius: 8px;
+    .inspector-gloss-inline {
+      font-family: 'Noto Serif', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--ilya-accent);
+      padding: 8px 16px;
+      border-radius: 6px;
+      display: inline-block;
+      min-width: 120px;
+      background: var(--ilya-accent-light);
+      border: 1px dashed rgba(122, 158, 126, 0.3);
+      transition: all 150ms var(--ease);
+    }
+
+    .inspector-gloss-inline:hover {
+      background: rgba(122, 158, 126, 0.15);
+      border-color: var(--ilya-accent);
+    }
+
+    .inspector-gloss-inline:focus {
+      outline: none;
+      background: rgba(122, 158, 126, 0.15);
+      border-style: solid;
+      border-color: var(--ilya-accent);
+      box-shadow: 0 0 0 2px var(--ilya-accent-light);
+    }
+
+    .inspector-gloss-inline:not(:empty) {
+      background: transparent;
+      border-color: transparent;
+      color: var(--ilya-accent);
+    }
+
+    .inspector-gloss-inline:not(:empty):hover {
+      background: var(--ilya-accent-light);
+      border-color: transparent;
+    }
+
+    .inspector-gloss-inline:empty::before {
+      content: attr(data-placeholder);
+      color: var(--ilya-accent);
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    /* Ribbon Section (Phase 3C placeholder) */
+    .inspector-ribbon-section {
+      margin-bottom: 16px;
+    }
+
+    .inspector-ribbon {
+      /* Will be populated in Phase 3C */
+    }
+
+    /* Controls Section (Phase 3D placeholder) */
+    .inspector-controls {
+      /* Will be populated in Phase 3D */
     }
 
     /* Scrim: tablet overlay mode only */
@@ -3777,22 +3891,47 @@
           <span class="inspector-count" id="inspectorSyllableCount">[0]</span>
         </div>
         
-        <!-- Inspector Body (Phase 3B-3D will add full content) -->
+        <!-- Inspector Body -->
         <div class="inspector-body">
-          <div class="inspector-ipa" id="inspectorIpaDisplay">/—/</div>
-          <div class="inspector-gloss" id="inspectorGlossDisplay">—</div>
           
-          <div class="inspector-placeholder">
-            <p style="font-size: 13px; color: var(--ilya-text-secondary); margin-top: 24px; line-height: 1.6;">
-              <strong>Phase 3A Complete</strong><br>
-              Popup is now dormant. Word clicks route here.<br><br>
-              Coming in Phase 3B–3D:<br>
-              • Syllable buttons<br>
-              • Phoneme ribbon<br>
-              • Blurb expansion<br>
-              • Variant/linking controls
+          <!-- Syllable Label (monosyllable/clitic context) -->
+          <div class="inspector-syllable-label" id="inspectorSyllableLabel"></div>
+          
+          <!-- Syllable Buttons (interactive IPA) -->
+          <div class="inspector-syllable-header" id="inspectorSyllableHeader">
+            <div class="inspector-syllable-display" id="inspectorSyllableDisplay"></div>
+            <button class="boundary-reset-btn" id="inspectorBoundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
+          </div>
+          
+          <!-- Cyrillic Display -->
+          <div class="inspector-cyrillic" id="inspectorCyrillic">—</div>
+          
+          <!-- Editable Gloss -->
+          <div class="inspector-gloss-section">
+            <span 
+              class="inspector-gloss-inline" 
+              id="inspectorGlossInline"
+              contenteditable="true"
+              role="textbox"
+              aria-label="Translation"
+              data-placeholder="add translation"
+            ></span>
+          </div>
+          
+          <!-- Phoneme Ribbon (Phase 3C) -->
+          <div class="inspector-ribbon-section" id="inspectorRibbonSection">
+            <div class="inspector-ribbon" id="inspectorRibbon">
+              <!-- Populated by JavaScript in Phase 3C -->
+            </div>
+          </div>
+          
+          <!-- Footer Controls (Phase 3D) -->
+          <div class="inspector-controls" id="inspectorControls">
+            <p style="font-size: 12px; color: var(--ilya-text-muted); padding: 12px; background: var(--ilya-binding); border-radius: 6px; margin-top: 16px;">
+              Ribbon and controls coming in Phase 3C–3D
             </p>
           </div>
+          
         </div>
       </div>
 
@@ -12154,18 +12293,34 @@ function addAcuteToSyllable(syllable) {
         this.scrim = document.getElementById('drawerScrim');
         this.layout = document.querySelector('.ilya-layout');
         
-        // Cache inspector elements
+        // Cache inspector elements (Phase 3B)
         this.inspectorElements = {
           backBtn: document.getElementById('drawerBackBtn'),
           wordDisplay: document.getElementById('inspectorWordDisplay'),
-          ipaDisplay: document.getElementById('inspectorIpaDisplay'),
-          glossDisplay: document.getElementById('inspectorGlossDisplay'),
-          syllableCount: document.getElementById('inspectorSyllableCount')
+          syllableCount: document.getElementById('inspectorSyllableCount'),
+          syllableLabel: document.getElementById('inspectorSyllableLabel'),
+          syllableHeader: document.getElementById('inspectorSyllableHeader'),
+          syllableDisplay: document.getElementById('inspectorSyllableDisplay'),
+          boundaryResetBtn: document.getElementById('inspectorBoundaryResetBtn'),
+          cyrillic: document.getElementById('inspectorCyrillic'),
+          glossInline: document.getElementById('inspectorGlossInline'),
+          ribbonSection: document.getElementById('inspectorRibbonSection'),
+          ribbon: document.getElementById('inspectorRibbon'),
+          controls: document.getElementById('inspectorControls')
         };
         
         // Back button returns to Root
         this.inspectorElements.backBtn?.addEventListener('click', () => {
           this.switchMode('root');
+        });
+        
+        // Gloss editing (save on blur)
+        this.inspectorElements.glossInline?.addEventListener('blur', () => {
+          if (this.currentWord) {
+            const newGloss = this.inspectorElements.glossInline.textContent.trim();
+            DocumentState.updateGloss(this.currentWord.lineIndex, this.currentWord.wordIndex, newGloss);
+            DrawerController.renderToPaper();
+          }
         });
       },
 
@@ -12211,13 +12366,16 @@ function addAcuteToSyllable(syllable) {
         }
       },
       
-      // Update inspector display with current word (Phase 3A placeholder)
+      // Update inspector display with current word (Phase 3B)
       updateInspector() {
         if (!this.currentWord) return;
         
-        const { cyrillic, ipa, gloss, syllables } = this.currentWord;
+        const { cyrillic, ipa, gloss, syllables, isProclitic, isEnclitic, hasYo, wordId } = this.currentWord;
+        const syllableCount = syllables?.length || 0;
+        const isClitic = isProclitic === 'true' || isEnclitic === 'true';
+        const hasYoFlag = hasYo === 'true' || hasYo === true;
         
-        // Add stress mark to Cyrillic display
+        // Header: Word display with stress
         const syllabifiedCyrillic = syllables?.map(s => 
           s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
         ).join(' ') || cyrillic;
@@ -12225,15 +12383,90 @@ function addAcuteToSyllable(syllable) {
         if (this.inspectorElements.wordDisplay) {
           this.inspectorElements.wordDisplay.textContent = syllabifiedCyrillic;
         }
-        if (this.inspectorElements.ipaDisplay) {
-          this.inspectorElements.ipaDisplay.textContent = `/${ipa}/`;
-        }
-        if (this.inspectorElements.glossDisplay) {
-          this.inspectorElements.glossDisplay.textContent = gloss || '—';
-        }
         if (this.inspectorElements.syllableCount) {
-          const count = syllables?.length || 0;
-          this.inspectorElements.syllableCount.textContent = `[${count}]`;
+          this.inspectorElements.syllableCount.textContent = `[${syllableCount}]`;
+        }
+        
+        // Syllable Label (monosyllable/clitic context)
+        if (this.inspectorElements.syllableLabel) {
+          if (syllableCount === 1) {
+            const hasStress = syllables?.some(s => s.isStressed);
+            if (isClitic) {
+              this.inspectorElements.syllableLabel.textContent = 'Unstressed clitic';
+            } else if (hasStress) {
+              this.inspectorElements.syllableLabel.textContent = 'Stressed monosyllable';
+            } else {
+              this.inspectorElements.syllableLabel.textContent = 'Unstressed monosyllable';
+            }
+          } else {
+            this.inspectorElements.syllableLabel.textContent = '';
+          }
+        }
+        
+        // Syllable Buttons (interactive IPA)
+        if (this.inspectorElements.syllableDisplay) {
+          // Apply boundary offsets if customized
+          const displaySyllables = typeof BoundaryStack !== 'undefined' && wordId
+            ? BoundaryStack.applyOffsets(wordId, syllables)
+            : syllables;
+          
+          // ё locks stress — disable non-stressed buttons
+          const buttonsDisabled = hasYoFlag && syllableCount > 1;
+          
+          this.inspectorElements.syllableDisplay.innerHTML = displaySyllables?.map((syl, idx) => 
+            `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
+                     data-syllable-index="${idx}" 
+                     ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
+              ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
+            </button>`
+          ).join('') || '';
+          
+          // Wire up syllable button clicks for stress reassignment
+          this.inspectorElements.syllableDisplay.querySelectorAll('.syllable-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              if (btn.disabled) return;
+              const newStressIdx = parseInt(btn.dataset.syllableIndex, 10);
+              this.handleStressChange(newStressIdx);
+            });
+          });
+        }
+        
+        // Cyrillic Display
+        if (this.inspectorElements.cyrillic) {
+          this.inspectorElements.cyrillic.textContent = syllabifiedCyrillic;
+        }
+        
+        // Gloss (editable)
+        if (this.inspectorElements.glossInline) {
+          this.inspectorElements.glossInline.textContent = gloss || '';
+        }
+      },
+      
+      // Handle stress change from syllable button click (Phase 3B)
+      handleStressChange(newStressIdx) {
+        if (!this.currentWord) return;
+        
+        const { lineIndex, wordIndex, syllables } = this.currentWord;
+        const currentStressIdx = syllables?.findIndex(s => s.isStressed) ?? -1;
+        
+        // No change needed
+        if (newStressIdx === currentStressIdx) return;
+        
+        // Update DocumentState
+        DocumentState.updateStress(lineIndex, wordIndex, newStressIdx);
+        
+        // Re-render paper
+        DrawerController.renderToPaper();
+        
+        // Find the updated word element and refresh inspector data
+        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
+        if (wordStack) {
+          this.currentWord = {
+            ...this.currentWord,
+            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+            ipa: wordStack.dataset.ipa
+          };
+          this.updateInspector();
         }
       }
     };
