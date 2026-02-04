@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.22 Phase 3C: Remove blurb borders, softer animation</title>
+  <title>Ilya — v6.0.24 Phase 3D: Control modules in drawer inspector</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -652,9 +652,141 @@
       background: rgba(122, 158, 126, 0.1);
     }
 
-    /* Controls Section (Phase 3D placeholder) */
+    /* Controls Section (Phase 3D) */
     .inspector-controls {
-      /* Will be populated in Phase 3D */
+      padding: 16px 0;
+      margin-top: 8px;
+      border-top: 1px solid rgba(26, 22, 18, 0.06);
+    }
+    
+    .inspector-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      background: var(--ilya-binding);
+      border-radius: 8px;
+    }
+    
+    .inspector-control-row:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    .inspector-control-label {
+      font-size: 0.85rem;
+      color: var(--ilya-text-secondary);
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+    
+    /* Variant row (ё toggle) - sage accent when ё active */
+    .inspector-variant-row {
+      background: linear-gradient(135deg, var(--ilya-binding) 0%, rgba(122, 158, 126, 0.08) 100%);
+    }
+    
+    .inspector-variant-control {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .inspector-variant-control .segment {
+      min-width: 40px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .inspector-variant-control .segment[data-variant="yo"].active {
+      background: var(--ilya-accent);
+      color: white;
+    }
+    
+    .inspector-variant-control .segment[data-variant="ye"].active {
+      background: var(--ilya-text-muted);
+      color: white;
+    }
+    
+    /* Assimilation row */
+    .inspector-assimilation-row.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    .inspector-assimilation-control {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .inspector-assimilation-control .segment {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    
+    /* Stress source row - hidden when locked */
+    .inspector-stress-source-row.hidden {
+      display: none;
+    }
+    
+    .inspector-stress-source-control {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .inspector-stress-source-control .segment {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+    }
+    
+    /* Committed state for user selections */
+    .inspector-controls .segment.committed {
+      background: white;
+      color: var(--ilya-text-primary);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      outline: 1px solid var(--ilya-accent);
+      outline-offset: -2px;
+    }
+    
+    /* Toast notification for ё warning */
+    .inspector-yo-toast {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 16px;
+      background: var(--ilya-text-primary);
+      color: white;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 200ms var(--ease), opacity 200ms var(--ease), padding 200ms var(--ease);
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    
+    .inspector-yo-toast.visible {
+      max-height: 60px;
+      opacity: 1;
+      padding: 10px 16px;
+    }
+    
+    .inspector-yo-toast .undo-btn {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 150ms;
+    }
+    
+    .inspector-yo-toast .undo-btn:hover {
+      background: rgba(255,255,255,0.15);
     }
 
     /* Scrim: tablet overlay mode only */
@@ -4104,9 +4236,41 @@
           
           <!-- Footer Controls (Phase 3D) -->
           <div class="inspector-controls" id="inspectorControls">
-            <p style="font-size: 12px; color: var(--ilya-text-muted); padding: 12px; background: var(--ilya-binding); border-radius: 6px; margin-top: 16px;">
-              Controls coming in Phase 3D
-            </p>
+            
+            <!-- Variant row (ё/е toggle) - only shown if word has е or ё -->
+            <div class="inspector-control-row inspector-variant-row" id="inspectorVariantRow" style="display: none;">
+              <span class="inspector-control-label">Variant:</span>
+              <div class="segmented-control inspector-variant-control">
+                <button class="segment" id="inspectorVariantYo" data-variant="yo">ё</button>
+                <button class="segment" id="inspectorVariantYe" data-variant="ye">е</button>
+              </div>
+            </div>
+            
+            <!-- Assimilation row (Linked/Separated) - only shown if not last word -->
+            <div class="inspector-control-row inspector-assimilation-row" id="inspectorAssimilationRow" style="display: none;">
+              <span class="inspector-control-label">Link to "<span id="inspectorNextWordLabel">—</span>":</span>
+              <div class="segmented-control inspector-assimilation-control">
+                <button class="segment" id="inspectorAssimilationLinked" data-boundary="soft">Linked</button>
+                <button class="segment" id="inspectorAssimilationSeparated" data-boundary="hard">Separated</button>
+              </div>
+            </div>
+            
+            <!-- Stress source module -->
+            <div class="inspector-control-row inspector-stress-source-row" id="inspectorStressSourceRow">
+              <span class="inspector-control-label">Stress source:</span>
+              <div class="segmented-control inspector-stress-source-control">
+                <button class="segment" id="inspectorStressDictionary" data-source="dictionary">Dictionary</button>
+                <button class="segment" id="inspectorStressComposer" data-source="composer">Composer</button>
+                <button class="segment" id="inspectorStressUser" data-source="user">My choice</button>
+              </div>
+            </div>
+            
+            <!-- Toast for ё warning -->
+            <div class="inspector-yo-toast" id="inspectorYoToast">
+              <span>ё → е changes pronunciation</span>
+              <button class="undo-btn" id="inspectorYoUndoBtn">Undo</button>
+            </div>
+            
           </div>
           
         </div>
@@ -12502,7 +12666,21 @@ function addAcuteToSyllable(syllable) {
           glossInline: document.getElementById('inspectorGlossInline'),
           ribbonSection: document.getElementById('inspectorRibbonSection'),
           ribbon: document.getElementById('inspectorRibbon'),
-          controls: document.getElementById('inspectorControls')
+          controls: document.getElementById('inspectorControls'),
+          // Phase 3D: Control modules
+          variantRow: document.getElementById('inspectorVariantRow'),
+          variantYo: document.getElementById('inspectorVariantYo'),
+          variantYe: document.getElementById('inspectorVariantYe'),
+          assimilationRow: document.getElementById('inspectorAssimilationRow'),
+          nextWordLabel: document.getElementById('inspectorNextWordLabel'),
+          assimilationLinked: document.getElementById('inspectorAssimilationLinked'),
+          assimilationSeparated: document.getElementById('inspectorAssimilationSeparated'),
+          stressSourceRow: document.getElementById('inspectorStressSourceRow'),
+          stressDictionary: document.getElementById('inspectorStressDictionary'),
+          stressComposer: document.getElementById('inspectorStressComposer'),
+          stressUser: document.getElementById('inspectorStressUser'),
+          yoToast: document.getElementById('inspectorYoToast'),
+          yoUndoBtn: document.getElementById('inspectorYoUndoBtn')
         };
         
         // Back button returns to Root (with stopPropagation)
@@ -12523,6 +12701,47 @@ function addAcuteToSyllable(syllable) {
         // Prevent gloss click from propagating (keeps focus for editing)
         this.inspectorElements.glossInline?.addEventListener('click', (e) => {
           e.stopPropagation();
+        });
+        
+        // Phase 3D: Control event handlers
+        // Variant toggle (ё/е)
+        this.inspectorElements.variantYo?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleVariantToggle('yo');
+        });
+        this.inspectorElements.variantYe?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleVariantToggle('ye');
+        });
+        
+        // Assimilation toggle (Linked/Separated)
+        this.inspectorElements.assimilationLinked?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleAssimilationToggle('soft');
+        });
+        this.inspectorElements.assimilationSeparated?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleAssimilationToggle('hard');
+        });
+        
+        // Stress source selection
+        this.inspectorElements.stressDictionary?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleStressSourceSelect('dictionary');
+        });
+        this.inspectorElements.stressComposer?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleStressSourceSelect('composer');
+        });
+        this.inspectorElements.stressUser?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleStressSourceSelect('user');
+        });
+        
+        // Toast undo button
+        this.inspectorElements.yoUndoBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.undoYoToggle();
         });
       },
 
@@ -12647,6 +12866,221 @@ function addAcuteToSyllable(syllable) {
         // Phoneme Ribbon (Phase 3C) - reuse Popup's renderRibbon with drawer container
         if (this.inspectorElements.ribbon && typeof Popup !== 'undefined') {
           Popup.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
+        }
+        
+        // Phase 3D: Populate controls
+        this.populateControls();
+      },
+      
+      // Phase 3D: Populate control modules based on current word
+      populateControls() {
+        if (!this.currentWord) return;
+        
+        const { cyrillic, syllables, lineIndex, wordIndex, rightBoundary, boundarySource, stressSource } = this.currentWord;
+        const syllableCount = syllables?.length || 1;
+        const hasYo = cyrillic?.includes('ё') || cyrillic?.includes('Ё');
+        const hasYe = cyrillic?.includes('е') || cyrillic?.includes('Е');
+        
+        // 1. Variant row (ё/е toggle)
+        if (!hasYo && !hasYe) {
+          this.inspectorElements.variantRow.style.display = 'none';
+        } else {
+          this.inspectorElements.variantRow.style.display = 'flex';
+          this.inspectorElements.variantYo?.classList.toggle('active', hasYo);
+          this.inspectorElements.variantYe?.classList.toggle('active', !hasYo && hasYe);
+          // Store state for undo
+          this._yoStateBeforeToggle = hasYo ? 'yo' : 'ye';
+        }
+        
+        // 2. Assimilation row (Linked/Separated)
+        const line = DocumentState.lines[lineIndex];
+        const isLastWordInLine = wordIndex >= (line?.length || 1) - 1;
+        
+        if (isLastWordInLine) {
+          this.inspectorElements.assimilationRow.style.display = 'none';
+        } else {
+          this.inspectorElements.assimilationRow.style.display = 'flex';
+          
+          // Get next word for label
+          const nextWord = line[wordIndex + 1];
+          const nextWordCyrillic = nextWord?.cyrillic || nextWord?.originalInput || '—';
+          if (this.inspectorElements.nextWordLabel) {
+            this.inspectorElements.nextWordLabel.textContent = nextWordCyrillic;
+          }
+          
+          // Set active state based on current boundary
+          const currentBoundary = rightBoundary || 'soft';
+          this.inspectorElements.assimilationLinked?.classList.toggle('active', currentBoundary === 'soft');
+          this.inspectorElements.assimilationSeparated?.classList.toggle('active', currentBoundary === 'hard');
+          
+          // Disable if punctuation-forced
+          if (boundarySource === 'punctuation') {
+            this.inspectorElements.assimilationRow.classList.add('disabled');
+          } else {
+            this.inspectorElements.assimilationRow.classList.remove('disabled');
+          }
+        }
+        
+        // 3. Stress source module
+        // Hide when stress is locked (monosyllable or ё)
+        const stressLocked = syllableCount === 1 || hasYo;
+        this.inspectorElements.stressSourceRow?.classList.toggle('hidden', stressLocked);
+        
+        if (!stressLocked) {
+          const currentSource = stressSource || 'dictionary';
+          this.inspectorElements.stressDictionary?.classList.toggle('active', currentSource === 'dictionary');
+          this.inspectorElements.stressComposer?.classList.toggle('active', currentSource === 'composer');
+          this.inspectorElements.stressComposer?.classList.toggle('committed', currentSource === 'composer');
+          this.inspectorElements.stressUser?.classList.toggle('active', currentSource === 'user');
+          this.inspectorElements.stressUser?.classList.toggle('committed', currentSource === 'user');
+        }
+        
+        // Hide toast initially
+        this.inspectorElements.yoToast?.classList.remove('visible');
+      },
+      
+      // Phase 3D: Handle variant toggle (ё ↔ е)
+      handleVariantToggle(variant) {
+        if (!this.currentWord) return;
+        
+        const cyrillic = this.currentWord.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const currentVariant = hasYo ? 'yo' : 'ye';
+        
+        // If clicking current state, do nothing
+        if (variant === currentVariant) return;
+        
+        // Store for undo
+        this._yoStateBeforeToggle = currentVariant;
+        
+        // Check if warning needed (polysyllabic + removing ё)
+        const syllableCount = this.currentWord.syllables?.length || 1;
+        const showWarning = variant === 'ye' && syllableCount > 1;
+        
+        // Delegate to Popup's handleYoToggle (it has the reprocessing logic)
+        if (typeof Popup !== 'undefined' && Popup.currentWord) {
+          // Temporarily set Popup's currentWord to match ours
+          const originalPopupWord = Popup.currentWord;
+          Popup.currentWord = this.currentWord;
+          Popup.handleYoToggle();
+          Popup.currentWord = originalPopupWord;
+        }
+        
+        // Refresh inspector after change
+        this.refreshAfterChange();
+        
+        // Show toast warning if needed
+        if (showWarning) {
+          this.showYoToast();
+        }
+      },
+      
+      // Phase 3D: Handle assimilation toggle (Linked/Separated)
+      handleAssimilationToggle(boundary) {
+        if (!this.currentWord) return;
+        
+        const currentBoundary = this.currentWord.rightBoundary || 'soft';
+        
+        // If clicking current state, do nothing
+        if (boundary === currentBoundary) return;
+        
+        // Update the boundary directly
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        if (word) {
+          word.rightBoundary = boundary;
+          word.boundarySource = 'user';
+          this.currentWord.rightBoundary = boundary;
+          this.currentWord.boundarySource = 'user';
+        }
+        
+        // Update UI
+        this.inspectorElements.assimilationLinked?.classList.toggle('active', boundary === 'soft');
+        this.inspectorElements.assimilationSeparated?.classList.toggle('active', boundary === 'hard');
+        
+        // Re-render paper
+        DrawerController.renderToPaper();
+      },
+      
+      // Phase 3D: Handle stress source selection
+      handleStressSourceSelect(source) {
+        if (!this.currentWord) return;
+        
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        if (!word) return;
+        
+        const currentSource = word.stressSource || 'dictionary';
+        
+        // If clicking current state, do nothing
+        if (source === currentSource) return;
+        
+        // Update stress source
+        word.stressSource = source;
+        this.currentWord.stressSource = source;
+        
+        // Update UI
+        this.inspectorElements.stressDictionary?.classList.remove('active', 'committed');
+        this.inspectorElements.stressComposer?.classList.remove('active', 'committed');
+        this.inspectorElements.stressUser?.classList.remove('active', 'committed');
+        
+        const targetBtn = source === 'dictionary' ? this.inspectorElements.stressDictionary
+                        : source === 'composer' ? this.inspectorElements.stressComposer
+                        : this.inspectorElements.stressUser;
+        
+        if (targetBtn) {
+          targetBtn.classList.add('active');
+          if (source !== 'dictionary') {
+            targetBtn.classList.add('committed');
+          }
+        }
+        
+        // Re-render paper
+        DrawerController.renderToPaper();
+      },
+      
+      // Phase 3D: Show ё warning toast
+      showYoToast() {
+        this.inspectorElements.yoToast?.classList.add('visible');
+        
+        // Auto-hide after 5 seconds
+        clearTimeout(this._yoToastTimeout);
+        this._yoToastTimeout = setTimeout(() => {
+          this.inspectorElements.yoToast?.classList.remove('visible');
+        }, 5000);
+      },
+      
+      // Phase 3D: Undo ё toggle
+      undoYoToggle() {
+        if (!this._yoStateBeforeToggle) return;
+        
+        // Toggle back
+        this.handleVariantToggle(this._yoStateBeforeToggle);
+        
+        // Hide toast
+        this.inspectorElements.yoToast?.classList.remove('visible');
+        clearTimeout(this._yoToastTimeout);
+      },
+      
+      // Phase 3D: Refresh inspector after word change
+      refreshAfterChange() {
+        const { lineIndex, wordIndex } = this.currentWord;
+        
+        // Re-render paper
+        DrawerController.renderToPaper();
+        
+        // Find the updated word element and refresh inspector data
+        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
+        if (wordStack) {
+          this.currentWord = {
+            ...this.currentWord,
+            cyrillic: wordStack.dataset.cyrillic,
+            ipa: wordStack.dataset.ipa,
+            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+            hasYo: wordStack.dataset.hasYo,
+            stressSource: wordStack.dataset.stressSource,
+            rightBoundary: wordStack.dataset.rightBoundary,
+            boundarySource: wordStack.dataset.boundarySource
+          };
+          this.updateInspector();
         }
       },
       
