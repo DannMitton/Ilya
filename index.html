@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.12 SINGER_SUPPLEMENT 100% bilingual</title>
+  <title>Ilya — v6.0.13 Phase 3A: Popup dormant</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -288,6 +288,84 @@
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
+    }
+
+    /* Inspector Header (Phase 3A) */
+    .inspector-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--ilya-border-light);
+      background: var(--surface);
+    }
+
+    .inspector-header .back-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--ilya-border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ilya-text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 150ms ease;
+      flex-shrink: 0;
+    }
+
+    .inspector-header .back-btn:hover {
+      background: var(--ilya-binding);
+      border-color: var(--ilya-border-focus);
+      color: var(--ilya-text-primary);
+    }
+
+    .inspector-header .inspector-word {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--ilya-text-primary);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .inspector-header .inspector-count {
+      font-size: 13px;
+      color: var(--ilya-text-muted);
+      flex-shrink: 0;
+    }
+
+    /* Inspector Body (Phase 3A placeholder) */
+    .inspector-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .inspector-ipa {
+      font-family: var(--font-ipa);
+      font-size: 1.1rem;
+      color: var(--ilya-text-primary);
+      margin-bottom: 8px;
+    }
+
+    .inspector-gloss {
+      font-size: 14px;
+      color: var(--ilya-text-secondary);
+      font-style: italic;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--ilya-border-light);
+    }
+
+    .inspector-placeholder {
+      padding: 16px;
+      background: var(--ilya-binding);
+      border-radius: 8px;
     }
 
     /* Scrim: tablet overlay mode only */
@@ -975,30 +1053,6 @@
         2px 100%,
         2px 100%;
       background-position: 
-        0 0,
-        0 100%,
-        0 0,
-        100% 0;
-      background-repeat: no-repeat;
-    }
-
-    /* Dashed box for unverified French glosses (v6.0.8) */
-    .gloss-unverified {
-      padding: 2px 6px;
-      border-radius: 3px;
-      background-color: rgba(245, 244, 240, 0.3);
-      /* Custom dashed border: 16px dash, 6px gap */
-      background-image:
-        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
-        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
-        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
-        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px);
-      background-size:
-        100% 2px,
-        100% 2px,
-        2px 100%,
-        2px 100%;
-      background-position:
         0 0,
         0 100%,
         0 0,
@@ -3716,10 +3770,28 @@
 
       <!-- Drill State: Word Inspector (content migrated in Phase 3) -->
       <div class="drawer-inspector" id="drawerInspector">
-        <div style="padding: 24px;">
-          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-            <strong>Drill State</strong><br>
-            Word inspector and phoneme ribbon will live here in Phase 3.
+        <!-- Inspector Header -->
+        <div class="inspector-header">
+          <button class="back-btn" id="drawerBackBtn" aria-label="Back to dashboard">←</button>
+          <span class="inspector-word" id="inspectorWordDisplay">—</span>
+          <span class="inspector-count" id="inspectorSyllableCount">[0]</span>
+        </div>
+        
+        <!-- Inspector Body (Phase 3B-3D will add full content) -->
+        <div class="inspector-body">
+          <div class="inspector-ipa" id="inspectorIpaDisplay">/—/</div>
+          <div class="inspector-gloss" id="inspectorGlossDisplay">—</div>
+          
+          <div class="inspector-placeholder">
+            <p style="font-size: 13px; color: var(--ilya-text-secondary); margin-top: 24px; line-height: 1.6;">
+              <strong>Phase 3A Complete</strong><br>
+              Popup is now dormant. Word clicks route here.<br><br>
+              Coming in Phase 3B–3D:<br>
+              • Syllable buttons<br>
+              • Phoneme ribbon<br>
+              • Blurb expansion<br>
+              • Variant/linking controls
+            </p>
           </div>
         </div>
       </div>
@@ -6296,17 +6368,14 @@ function addAcuteToSyllable(syllable) {
           `;
           
           // Build word stack HTML
-
-          // Calculate gloss for display and check if unverified (v6.0.8)
-          const displayGloss = tw.isProclitic || tw.isEnclitic 
-            ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
-            : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord);
-          const isGlossUnverified = displayGloss === 'À VÉRIFIER';
           const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
-              <span class="gloss${isGlossUnverified ? ' gloss-unverified' : ''}">${displayGloss}</span>            </div>
+              <span class="gloss">${tw.isProclitic || tw.isEnclitic 
+                ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
+                : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
+            </div>
           `;
           
           // Wrap in Verify container if stress is inferred (v5.11.32)
@@ -12075,11 +12144,29 @@ function addAcuteToSyllable(syllable) {
       drawer: null,
       scrim: null,
       previousFocus: null,
+      currentWord: null,  // Stores selected word data for Drill state (Phase 3)
+      
+      // Element references for inspector
+      inspectorElements: {},
 
       init() {
         this.drawer = document.getElementById('ilyaDrawer');
         this.scrim = document.getElementById('drawerScrim');
         this.layout = document.querySelector('.ilya-layout');
+        
+        // Cache inspector elements
+        this.inspectorElements = {
+          backBtn: document.getElementById('drawerBackBtn'),
+          wordDisplay: document.getElementById('inspectorWordDisplay'),
+          ipaDisplay: document.getElementById('inspectorIpaDisplay'),
+          glossDisplay: document.getElementById('inspectorGlossDisplay'),
+          syllableCount: document.getElementById('inspectorSyllableCount')
+        };
+        
+        // Back button returns to Root
+        this.inspectorElements.backBtn?.addEventListener('click', () => {
+          this.switchMode('root');
+        });
       },
 
       get isOpen() {
@@ -12090,12 +12177,18 @@ function addAcuteToSyllable(syllable) {
         return this.drawer?.dataset.mode || 'root';
       },
 
-      open(mode = 'root') {
+      open(mode = 'root', wordData = null) {
         if (!this.drawer) return;
         this.previousFocus = document.activeElement;
         this.drawer.dataset.state = 'open';
         this.drawer.dataset.mode = mode;
         this.layout?.classList.add('drawer-open');
+        
+        // If opening in inspect mode with word data, update the inspector
+        if (mode === 'inspect' && wordData) {
+          this.currentWord = wordData;
+          this.updateInspector();
+        }
       },
 
       close() {
@@ -12107,9 +12200,41 @@ function addAcuteToSyllable(syllable) {
         this.previousFocus = null;
       },
 
-      switchMode(mode) {
+      switchMode(mode, wordData = null) {
         if (!this.drawer) return;
         this.drawer.dataset.mode = mode;
+        
+        // If switching to inspect with new word data, update the inspector
+        if (mode === 'inspect' && wordData) {
+          this.currentWord = wordData;
+          this.updateInspector();
+        }
+      },
+      
+      // Update inspector display with current word (Phase 3A placeholder)
+      updateInspector() {
+        if (!this.currentWord) return;
+        
+        const { cyrillic, ipa, gloss, syllables } = this.currentWord;
+        
+        // Add stress mark to Cyrillic display
+        const syllabifiedCyrillic = syllables?.map(s => 
+          s.isStressed ? addAcuteToSyllable(s.cyrillic) : s.cyrillic
+        ).join(' ') || cyrillic;
+        
+        if (this.inspectorElements.wordDisplay) {
+          this.inspectorElements.wordDisplay.textContent = syllabifiedCyrillic;
+        }
+        if (this.inspectorElements.ipaDisplay) {
+          this.inspectorElements.ipaDisplay.textContent = `/${ipa}/`;
+        }
+        if (this.inspectorElements.glossDisplay) {
+          this.inspectorElements.glossDisplay.textContent = gloss || '—';
+        }
+        if (this.inspectorElements.syllableCount) {
+          const count = syllables?.length || 0;
+          this.inspectorElements.syllableCount.textContent = `[${count}]`;
+        }
       }
     };
 
@@ -12117,9 +12242,10 @@ function addAcuteToSyllable(syllable) {
        EVENT DELEGATION
        ======================================== */
     document.addEventListener('click', (e) => {
-      // Handle word-stack clicks → open popup AND drawer in Drill
+      // Handle word-stack clicks → open drawer in Drill mode (Phase 3A)
+      // Popup is now dormant — word inspection happens in drawer
       const wordStack = e.target.closest('.word-stack');
-      if (wordStack && !Popup.isOpen) {
+      if (wordStack) {
         const data = {
           wordId: wordStack.dataset.wordId,
           lineIndex: parseInt(wordStack.dataset.lineIndex, 10),
@@ -12140,13 +12266,22 @@ function addAcuteToSyllable(syllable) {
           boundarySource: wordStack.dataset.boundarySource,
           element: wordStack
         };
-        Popup.open(data);
-        DrawerState.open('inspect');
+        
+        // PHASE 3A: Popup dormant — route to drawer instead
+        // Popup.open(data);  // ← DORMANT (Phase 3A)
+        
+        if (!DrawerState.isOpen) {
+          // Drawer closed → open in inspect mode
+          DrawerState.open('inspect', data);
+        } else {
+          // Drawer already open → switch to inspect mode with new word
+          DrawerState.switchMode('inspect', data);
+        }
         return;
       }
 
       // Don't process drawer zones if popup is open or click is inside drawer/input
-      if (Popup.isOpen) return;
+      if (Popup.isOpen) return;  // Keep for safety until popup fully removed
       if (e.target.closest('.ilya-drawer')) return;
       if (e.target.closest('.input-drawer')) return;
 
