@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.40 Phase 4D: Keyboard navigation</title>
+  <title>Ilya — v6.0.43 Phase 5 complete: Mobile adaptation</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1038,7 +1038,7 @@
       }
     }
 
-    /* Mobile: bottom sheet (Phase 5 - placeholder) */
+    /* Mobile: bottom sheet (Phase 5A) */
     @media (max-width: 600px) {
       .ilya-drawer {
         top: auto;
@@ -1064,6 +1064,121 @@
 
       .ilya-drawer[data-state="open"] ~ .drawer-scrim {
         display: block;
+      }
+      
+      /* Drag handle: visible only on mobile */
+      .drawer-drag-handle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 0 8px;
+        cursor: grab;
+        touch-action: none;
+      }
+      
+      .drawer-drag-handle:active {
+        cursor: grabbing;
+      }
+      
+      .drag-handle-bar {
+        width: 36px;
+        height: 4px;
+        background: rgba(26, 22, 18, 0.2);
+        border-radius: 2px;
+      }
+      
+      /* Adjust drawer header for mobile */
+      .drawer-header {
+        padding-top: 0;
+      }
+      
+      /* Drawer body needs overflow for scrolling */
+      .drawer-root .drawer-body,
+      .drawer-inspector .inspector-body {
+        max-height: calc(70vh - 100px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Textarea sizing for mobile */
+      .drawer-textarea {
+        min-height: 120px;
+        max-height: 150px;
+      }
+      
+      /* Compact language buttons on mobile */
+      .lang-buttons {
+        gap: 8px;
+      }
+      
+      .lang-btn {
+        min-width: 64px;
+        padding: 8px 12px;
+      }
+      
+      /* Phase 5B: Mobile Drill state (Inspector) */
+      
+      /* Compact inspector header */
+      .drawer-inspector .drawer-header {
+        padding: 8px 16px;
+        gap: 8px;
+      }
+      
+      .drawer-inspector .inspector-word-display {
+        font-size: 1.1rem;
+      }
+      
+      /* Syllable buttons: horizontal scroll on mobile */
+      .inspector-syllable-display {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 6px;
+        padding-bottom: 4px;
+      }
+      
+      .inspector-syllable-display .syllable-btn {
+        flex-shrink: 0;
+        min-width: 44px;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+      
+      /* Compact ribbon for mobile */
+      .inspector-ribbon .phoneme-row {
+        padding: 8px 12px;
+      }
+      
+      .inspector-ribbon .phoneme-row .ipa-cell {
+        font-size: 1.1rem;
+      }
+      
+      .inspector-ribbon .phoneme-row .cyrillic-cell {
+        font-size: 0.85rem;
+      }
+      
+      /* Control modules: stack vertically on mobile */
+      .inspector-controls {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .inspector-controls .control-row {
+        flex-wrap: wrap;
+      }
+      
+      /* Blurb text sizing for mobile */
+      .inspector-ribbon .phoneme-blurb-overlay .blurb-text {
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+    }
+    
+    /* Drag handle: hidden on desktop/tablet */
+    @media (min-width: 601px) {
+      .drawer-drag-handle {
+        display: none;
       }
     }
 
@@ -4238,6 +4353,11 @@
 
     <!-- Drawer: The workbench (v6.0) -->
     <aside class="ilya-drawer" id="ilyaDrawer" data-state="closed" data-mode="root">
+      
+      <!-- Phase 5A: Mobile drag handle (visible only on ≤600px) -->
+      <div class="drawer-drag-handle" aria-hidden="true">
+        <div class="drag-handle-bar"></div>
+      </div>
 
       <!-- Root State: Dashboard/Input (content migrated in Phase 2) -->
       <div class="drawer-root" id="drawerRoot">
@@ -12875,6 +12995,12 @@ function addAcuteToSyllable(syllable) {
         
         // Phase 4B: Set up syllable boundary drag handlers
         this._setupDragHandlers();
+        
+        // Phase 5C: Set up swipe-to-dismiss for mobile bottom sheet
+        this._setupSwipeToDismiss();
+        
+        // Phase 5C: Viewport resize state synchronization
+        this._setupViewportListener();
       },
 
       get isOpen() {
@@ -13813,6 +13939,86 @@ function addAcuteToSyllable(syllable) {
         }
         
         target?.focus();
+      },
+      
+      /**
+       * Phase 5C: Set up swipe-to-dismiss for mobile bottom sheet
+       * Only active when viewport ≤600px
+       */
+      _setupSwipeToDismiss() {
+        const dragHandle = document.querySelector('.drawer-drag-handle');
+        if (!dragHandle) return;
+        
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+        
+        const handleTouchStart = (e) => {
+          // Only on mobile
+          if (window.innerWidth > 600) return;
+          if (!this.isOpen) return;
+          
+          startY = e.touches[0].clientY;
+          currentY = startY;
+          isDragging = true;
+          this.drawer.style.transition = 'none';
+        };
+        
+        const handleTouchMove = (e) => {
+          if (!isDragging) return;
+          
+          currentY = e.touches[0].clientY;
+          const deltaY = currentY - startY;
+          
+          // Only allow dragging down (positive deltaY)
+          if (deltaY > 0) {
+            this.drawer.style.transform = `translateY(${deltaY}px)`;
+          }
+        };
+        
+        const handleTouchEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          
+          const deltaY = currentY - startY;
+          this.drawer.style.transition = '';
+          
+          // If dragged more than 100px down, close the drawer
+          if (deltaY > 100) {
+            this.close();
+          } else {
+            // Snap back
+            this.drawer.style.transform = '';
+          }
+        };
+        
+        dragHandle.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.addEventListener('touchmove', handleTouchMove, { passive: true });
+        document.addEventListener('touchend', handleTouchEnd);
+      },
+      
+      /**
+       * Phase 5C: Viewport resize state synchronization
+       * Maintains drawer state when crossing breakpoints
+       */
+      _setupViewportListener() {
+        const mobileQuery = window.matchMedia('(max-width: 600px)');
+        const tabletQuery = window.matchMedia('(min-width: 601px) and (max-width: 899px)');
+        
+        const handleResize = () => {
+          if (!this.drawer) return;
+          
+          // Reset any inline transform from swipe gesture
+          if (this.isOpen) {
+            this.drawer.style.transform = '';
+          }
+          
+          // The CSS handles layout changes automatically
+          // This just ensures clean state after resize
+        };
+        
+        mobileQuery.addEventListener('change', handleResize);
+        tabletQuery.addEventListener('change', handleResize);
       }
     };
 
