@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.15 Phase 3B: Bugfix stopPropagation</title>
+  <title>Ilya — v6.0.16 Phase 3C: Phoneme ribbon in drawer</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -468,13 +468,49 @@
       font-style: italic;
     }
 
-    /* Ribbon Section (Phase 3C placeholder) */
+    /* Ribbon Section (Phase 3C) */
     .inspector-ribbon-section {
       margin-bottom: 16px;
     }
 
-    .inspector-ribbon {
-      /* Will be populated in Phase 3C */
+    /* Drawer ribbon inherits .ribbon-vertical styles but needs drawer-specific adjustments */
+    .inspector-ribbon.ribbon-vertical {
+      padding: 0;
+      border-radius: 8px;
+      background: var(--ilya-binding);
+    }
+
+    /* Ensure phoneme rows have proper spacing in drawer */
+    .inspector-ribbon .phoneme-row {
+      padding: 10px 12px;
+    }
+
+    /* Blurb overlay positioning for drawer context */
+    .inspector-ribbon .phoneme-blurb-overlay {
+      position: relative;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease, padding 300ms ease;
+    }
+
+    .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
+      max-height: 500px;
+      padding: 12px;
+      background: var(--surface);
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    /* Stressed syllable region in drawer */
+    .inspector-ribbon .stressed-syllable-region {
+      background: var(--ilya-accent-light);
+      border-radius: 6px;
+      margin: 4px 0;
+    }
+
+    /* Cluster groups in drawer */
+    .inspector-ribbon .cluster-group {
+      margin: 4px 0;
     }
 
     /* Controls Section (Phase 3D placeholder) */
@@ -3920,15 +3956,15 @@
           
           <!-- Phoneme Ribbon (Phase 3C) -->
           <div class="inspector-ribbon-section" id="inspectorRibbonSection">
-            <div class="inspector-ribbon" id="inspectorRibbon">
-              <!-- Populated by JavaScript in Phase 3C -->
+            <div class="inspector-ribbon ribbon-vertical" id="inspectorRibbon">
+              <!-- Populated by JavaScript -->
             </div>
           </div>
           
           <!-- Footer Controls (Phase 3D) -->
           <div class="inspector-controls" id="inspectorControls">
             <p style="font-size: 12px; color: var(--ilya-text-muted); padding: 12px; background: var(--ilya-binding); border-radius: 6px; margin-top: 16px;">
-              Ribbon and controls coming in Phase 3C–3D
+              Controls coming in Phase 3D
             </p>
           </div>
           
@@ -11015,8 +11051,9 @@ function addAcuteToSyllable(syllable) {
     
       // Render Phoneme Ribbon - Vertical Layout (v5.5)
       // Content First redesign: educational ribbon always visible
-      renderRibbon(wordData) {
-        const container = this.elements.ribbonVertical;
+      // Phase 3C: Added optional targetContainer param for drawer reuse
+      renderRibbon(wordData, targetContainer = null) {
+        const container = targetContainer || this.elements.ribbonVertical;
         if (!container) return;
         
         const log = wordData.transcriptionLog || [];
@@ -12446,6 +12483,11 @@ function addAcuteToSyllable(syllable) {
         // Gloss (editable)
         if (this.inspectorElements.glossInline) {
           this.inspectorElements.glossInline.textContent = gloss || '';
+        }
+        
+        // Phoneme Ribbon (Phase 3C) - reuse Popup's renderRibbon with drawer container
+        if (this.inspectorElements.ribbon && typeof Popup !== 'undefined') {
+          Popup.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
         }
       },
       
