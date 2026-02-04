@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.21 Phase 3C: Fix animation, perimeter, overflow</title>
+  <title>Ilya — v6.0.22 Phase 3C: Remove blurb borders, softer animation</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -501,28 +501,38 @@
     }
     
     /* Remove sage background from expanded rows in drawer */
-    /* Also remove any border that creates nested perimeter effect */
+    /* NO PERIMETER on expanded rows - perimeters are ONLY for stressed syllables */
+    #ilyaDrawer .inspector-ribbon .phoneme-row.expanded,
+    .ilya-drawer .inspector-ribbon .phoneme-row.expanded,
     .inspector-ribbon .phoneme-row.expanded,
     .inspector-ribbon.ribbon-vertical .phoneme-row.expanded {
       background: transparent !important;
       border: none !important;
+      border-width: 0 !important;
+      outline: none !important;
       box-shadow: none !important;
     }
 
-    /* Refinement 2: Blurb simplification - HIDDEN by default, no border/background */
+    /* Refinement 2: Blurb simplification - HIDDEN by default, NO PERIMETER */
+    /* RULE: Perimeters identify STRESSED SYLLABLES only. Blurbs have NO border. */
     /* Override all base overlay styles for drawer context */
-    /* Animation: Row expands (280ms), THEN text fades in (250ms after 280ms delay) */
+    /* Using maximum specificity to ensure override */
+    #ilyaDrawer .inspector-ribbon .phoneme-blurb-overlay,
+    .ilya-drawer .inspector-ribbon .phoneme-blurb-overlay,
     .inspector-ribbon .phoneme-blurb-overlay {
       position: relative !important;
       top: 0 !important;
       left: 0 !important;
       right: 0 !important;
       max-height: 0 !important;
-      overflow: hidden !important; /* Critical: prevents text peeking during expansion */
+      overflow: hidden !important;
       background: transparent !important;
       border: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      outline: none !important;
       box-shadow: none !important;
-      padding: 12px 0 8px 48px !important; /* Set padding immediately - no transition */
+      padding: 12px 0 8px 48px !important; /* Set immediately - no transition */
       margin: 0 !important;
       opacity: 0 !important;
       visibility: hidden !important;
@@ -530,28 +540,35 @@
       pointer-events: none !important;
       min-height: 0 !important;
       z-index: auto !important;
-      /* Collapse transition: fast, no padding animation */
+      border-radius: 0 !important;
+      /* Collapse: fast */
       transition: max-height 200ms ease-in,
                   opacity 150ms ease,
                   visibility 0ms linear 200ms,
                   margin 200ms ease-in !important;
     }
 
-    /* Only show blurb when row is expanded */
-    /* Two-phase: height expands FULLY (280ms), THEN text fades in (250ms, slower) */
+    /* Expanded blurb - soft, welcoming fade-in after row fully expands */
+    /* Animation: height 280ms, then SLOW gentle fade 400ms */
+    #ilyaDrawer .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay,
+    .ilya-drawer .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay,
     .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
-      max-height: 800px !important; /* Increased for long blurbs like в */
+      max-height: 800px !important;
       margin-top: 4px !important;
       background: transparent !important;
       border: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      outline: none !important;
+      box-shadow: none !important;
       border-radius: 0 !important;
       opacity: 1 !important;
       visibility: visible !important;
       pointer-events: auto !important;
-      overflow-y: auto !important; /* Allow scroll for very long blurbs */
-      /* Expand transition: height first (280ms), then SLOWER fade (250ms) after FULL expansion (280ms delay) */
+      overflow-y: auto !important;
+      /* Soft, welcoming fade: 400ms ease-in-out, starts when row is fully expanded (280ms) */
       transition: max-height 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                  opacity 250ms ease-out 280ms,
+                  opacity 400ms ease-in-out 280ms,
                   visibility 0ms linear 0ms,
                   margin 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
     }
@@ -2787,13 +2804,15 @@
     }
     
     /* The floating blurb overlay */
+    /* NOTE: Border removed from base - drawer inspector uses no borders */
+    /* Original popup would add border via different selector if needed */
     .phoneme-blurb-overlay {
       position: absolute;
       top: calc(100% + 4px);
       left: -6px;
       right: -6px;
       background: #FAFAF8;
-      border: 2px solid var(--ilya-accent);
+      /* border: 2px solid var(--ilya-accent); -- REMOVED: no borders on blurbs */
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06),
                   0 2px 8px rgba(122, 158, 126, 0.1);
