@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.16 Phase 3C: Phoneme ribbon in drawer</title>
+  <title>Ilya — v6.0.17 Phase 3C: Ribbon refinements (Kimi collab)</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -469,6 +469,7 @@
     }
 
     /* Ribbon Section (Phase 3C) */
+    /* REFINEMENTS v6.0.17: Row spacing, blurb simplification, stressed syllable border */
     .inspector-ribbon-section {
       margin-bottom: 16px;
     }
@@ -480,37 +481,126 @@
       background: var(--ilya-binding);
     }
 
-    /* Ensure phoneme rows have proper spacing in drawer */
+    /* Refinement 1: Condensed row spacing - 48px height, hairline separators */
     .inspector-ribbon .phoneme-row {
-      padding: 10px 12px;
+      min-height: 48px;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(26, 22, 18, 0.06);
     }
 
-    /* Blurb overlay positioning for drawer context */
+    .inspector-ribbon .phoneme-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Refinement 3: Remove fading - trust user attention */
+    .inspector-ribbon.has-active-blurb .phoneme-row:not(.expanded) {
+      opacity: 1;
+    }
+
+    /* Refinement 2: Blurb simplification - no border/background, left indent, terracotta citation */
     .inspector-ribbon .phoneme-blurb-overlay {
       position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 300ms ease, padding 300ms ease;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin: 0;
+      opacity: 1;
+      transform: none;
+      transition: max-height 300ms ease, padding 300ms ease, margin 300ms ease;
     }
 
     .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
       max-height: 500px;
-      padding: 12px;
-      background: var(--surface);
-      border-radius: 6px;
+      padding: 8px 0 8px 1.5em;
       margin-top: 8px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
     }
 
-    /* Stressed syllable region in drawer */
+    .inspector-ribbon .phoneme-blurb-overlay .blurb-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--ilya-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .inspector-ribbon .phoneme-blurb-overlay .blurb-citation {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--accent-muted, rgba(168, 90, 58, 0.75));
+    }
+
+    .inspector-ribbon .phoneme-blurb-overlay .blurb-citation::before {
+      content: '— ';
+    }
+
+    /* Refinement 4: Stressed syllable - 2px sage perimeter, no fill */
     .inspector-ribbon .stressed-syllable-region {
-      background: var(--ilya-accent-light);
+      background: transparent;
+      border: 2px solid var(--ilya-accent);
       border-radius: 6px;
-      margin: 4px 0;
+      padding: 4px;
+      margin: 8px 0;
+    }
+
+    .inspector-ribbon .stressed-syllable-region:first-child {
+      margin-top: 0;
+    }
+
+    /* Rows inside stressed region don't need extra bottom border at region edge */
+    .inspector-ribbon .stressed-syllable-region .phoneme-row:last-child {
+      border-bottom: none;
     }
 
     /* Cluster groups in drawer */
     .inspector-ribbon .cluster-group {
       margin: 4px 0;
+    }
+
+    /* Refinement 5: Clitic arrow styling */
+    .inspector-ribbon .clitic-arrow-row {
+      min-height: 48px;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(26, 22, 18, 0.06);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 150ms ease;
+    }
+
+    .inspector-ribbon .clitic-arrow-row:hover {
+      background: rgba(122, 158, 126, 0.06);
+    }
+
+    .inspector-ribbon .clitic-arrow-row:focus {
+      outline: 2px solid var(--ilya-accent);
+      outline-offset: 1px;
+    }
+
+    .inspector-ribbon .clitic-arrow-row .arrow-symbol {
+      font-size: 1.25em;
+      color: var(--ilya-accent);
+      opacity: 0.7;
+      width: 28px;
+      text-align: center;
+    }
+
+    .inspector-ribbon .clitic-arrow-row .arrow-label {
+      font-size: 0.85rem;
+      color: var(--ilya-text-muted);
+      margin-left: 8px;
+    }
+
+    .inspector-ribbon .clitic-arrow-row.expanded {
+      background: rgba(122, 158, 126, 0.1);
     }
 
     /* Controls Section (Phase 3D placeholder) */
@@ -4584,6 +4674,7 @@ const SINGER_SUPPLEMENT = {
     'муж': { stress: 0, gloss: { en: 'husband', fr: 'mari' }, source: 'supplement' },
     'мама': { stress: 0, gloss: { en: 'mama', fr: 'maman' }, source: 'supplement' },
     'маме': { stress: 0, gloss: { en: 'to mama', fr: 'à maman' }, source: 'supplement' },
+    'красавица': { stress: 1, gloss: { en: 'beauty', fr: 'beauté' }, source: 'supplement' },
     
     // Batch 9: Nouns — Abstract
     'жизнь': { stress: 0, gloss: { en: 'life', fr: 'vie' }, source: 'supplement' },
@@ -11095,41 +11186,17 @@ function addAcuteToSyllable(syllable) {
         let html = '';
         let isFirstSyllable = true;
         
-        // FEATURED ENTRY: Tie bar (‿) for clitics - pinned to top per Kimi's guidance
-        // Scholarly note explains phonological word boundaries
-        const isClitic = wordData.isProclitic === 'true' || wordData.isProclitic === true ||
-                         wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+        // Clitic detection (v6.0.17 - arrows replace tie bar)
+        const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
+        const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
         
-        if (isClitic) {
-          const tieBarBlurb = `<strong>Clitics and Phonological Word Boundaries</strong><br><br>` +
-            `Proclitics (e.g., "в," "на") and enclitics (e.g., "ли," "же") attach phonologically to their host words, ` +
-            `collapsing the orthographic word boundary for purposes of assimilation. The resulting unit functions as a ` +
-            `single phonological word: voicing assimilation and regressive palatalization proceed across the juncture ` +
-            `as they would within a word.<br><br>` +
-            `<strong>Exception:</strong> /л/ resists regressive palatalization unless the letters are orthographically ` +
-            `doubled (e.g., -лль-). Since clitic attachment preserves orthographic separation ("л л" not "лль"), ` +
-            `the sequence /ɫ‿lʲ/ remains unassimilated even when phonologically bound.<br><br>` +
-            `The tie bar (‿) signals this phonological unity while respecting orthographic independence.`;
-          const tieBarCitation = `Grayson (2012), pp. 209, 248–255; Avanesov (1972); Jones & Ward (1969); A. Kochetov, personal communication.`;
-          
-          html += `
-            <div class="phoneme-row featured-entry" 
-                 tabindex="0"
-                 role="button"
-                 aria-expanded="false"
-                 aria-label="Tie bar indicates phonological binding">
-              <div class="phoneme-mapping">
-                <span class="phoneme-cyr">—</span>
-                <span class="phoneme-arrow">›</span>
-                <span class="phoneme-ipa">‿</span>
-              </div>
-              <div class="phoneme-blurb-overlay">
-                <div class="blurb-text">${tieBarBlurb}</div>
-                <div class="blurb-citation">${tieBarCitation}</div>
-              </div>
-            </div>
-          `;
-        }
+        // Proclitic blurb (approved by Dann, Feb 3 2026)
+        const procliticBlurb = `Some short words — prepositions like "в" and "на," the negation "не" — don't carry their own stress. Instead, they lean forward and attach to the word that follows, forming a single unit of pronunciation. Voicing and palatalization flow right through the boundary as if it were one word. The arrow marks this forward binding.`;
+        const procliticCitation = `Grayson (2012), pp. 248–255`;
+        
+        // Enclitic blurb (approved by Dann, Feb 3 2026)
+        const encliticBlurb = `Certain particles — "ли" (question), "же" (emphasis), "бы" (conditional) — attach backward to the word before them. They're unstressed and form a single phonological unit with their host. The same assimilation rules apply across this bond as within any word. The arrow marks this backward binding.`;
+        const encliticCitation = `Grayson (2012), pp. 248–255`;
         
         syllableGroups.forEach((entries, sylIdx) => {
           const isStressed = sylIdx === stressedIdx;
@@ -11246,6 +11313,47 @@ function addAcuteToSyllable(syllable) {
           
           isFirstSyllable = false;
         });
+        
+        // Clitic arrow at END of ribbon (v6.0.17 - replaces tie bar)
+        // Proclitic: → points forward to host
+        // Enclitic: ← points backward to host
+        if (isProclitic) {
+          html += `
+            <div class="phoneme-row clitic-arrow-row" 
+                 tabindex="0"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Forward binding arrow - this word attaches to the next">
+              <div class="phoneme-mapping">
+                <span class="arrow-symbol">→</span>
+                <span class="arrow-label">binds forward</span>
+              </div>
+              <div class="phoneme-blurb-overlay">
+                <div class="blurb-text">${procliticBlurb}</div>
+                <div class="blurb-citation">${procliticCitation}</div>
+              </div>
+            </div>
+          `;
+        }
+        
+        if (isEnclitic) {
+          html += `
+            <div class="phoneme-row clitic-arrow-row" 
+                 tabindex="0"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Backward binding arrow - this word attaches to the previous">
+              <div class="phoneme-mapping">
+                <span class="arrow-symbol">←</span>
+                <span class="arrow-label">binds backward</span>
+              </div>
+              <div class="phoneme-blurb-overlay">
+                <div class="blurb-text">${encliticBlurb}</div>
+                <div class="blurb-citation">${encliticCitation}</div>
+              </div>
+            </div>
+          `;
+        }
         
         // Add backdrop at end (positioned via CSS)
         html += `<div class="ribbon-backdrop"></div>`;
