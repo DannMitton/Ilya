@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.39 Phase 4C: Focus management</title>
+  <title>Ilya — v6.0.40 Phase 4D: Keyboard navigation</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -11774,6 +11774,31 @@ function addAcuteToSyllable(syllable) {
               container.classList.remove('has-active-blurb');
               backdrop?.classList.remove('active');
             }
+            
+            // Phase 4D: Arrow key navigation through ribbon rows
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+              const focusableRows = [...container.querySelectorAll('.phoneme-row:not(.cluster-member), .cluster-group, .clitic-arrow-row')];
+              const currentIdx = focusableRows.findIndex(row => row.contains(e.target) || row === e.target);
+              
+              if (currentIdx === -1) return;
+              
+              e.preventDefault();
+              let nextIdx;
+              if (e.key === 'ArrowDown') {
+                nextIdx = Math.min(currentIdx + 1, focusableRows.length - 1);
+              } else {
+                nextIdx = Math.max(currentIdx - 1, 0);
+              }
+              
+              const nextRow = focusableRows[nextIdx];
+              if (nextRow) {
+                // For cluster groups, focus the perimeter or rubric
+                const focusTarget = nextRow.querySelector('.cluster-perimeter, .cluster-rubric') || nextRow;
+                focusTarget.focus();
+                // Scroll into view if needed
+                focusTarget.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }
+            }
           });
         }
       },
@@ -13483,6 +13508,32 @@ function addAcuteToSyllable(syllable) {
         container.addEventListener('touchstart', handlePointerDown, { passive: false });
         document.addEventListener('touchmove', handlePointerMove, { passive: true });
         document.addEventListener('touchend', handlePointerUp);
+        
+        // Phase 4D: Keyboard navigation for syllable buttons
+        container.addEventListener('keydown', (e) => {
+          const btn = e.target.closest('.syllable-btn');
+          if (!btn) return;
+          
+          const buttons = [...container.querySelectorAll('.syllable-btn:not([disabled])')];
+          const currentIdx = buttons.indexOf(btn);
+          
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const nextIdx = Math.min(currentIdx + 1, buttons.length - 1);
+            buttons[nextIdx]?.focus();
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prevIdx = Math.max(currentIdx - 1, 0);
+            buttons[prevIdx]?.focus();
+          } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            // Activate stress change (same as click)
+            if (!btn.disabled) {
+              const syllableIdx = parseInt(btn.dataset.syllableIndex, 10);
+              this.handleStressChange(syllableIdx);
+            }
+          }
+        });
       },
       
       /**
