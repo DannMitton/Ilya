@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.20 Phase 3C: Two-phase blurb animation (Kimi timing)</title>
+  <title>Ilya — v6.0.21 Phase 3C: Fix animation, perimeter, overflow</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -501,14 +501,17 @@
     }
     
     /* Remove sage background from expanded rows in drawer */
+    /* Also remove any border that creates nested perimeter effect */
     .inspector-ribbon .phoneme-row.expanded,
     .inspector-ribbon.ribbon-vertical .phoneme-row.expanded {
       background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
     }
 
     /* Refinement 2: Blurb simplification - HIDDEN by default, no border/background */
     /* Override all base overlay styles for drawer context */
-    /* Animation timing per Kimi (Feb 4, 2026): 280ms expand, 160ms delay, 180ms fade */
+    /* Animation: Row expands (280ms), THEN text fades in (250ms after 280ms delay) */
     .inspector-ribbon .phoneme-blurb-overlay {
       position: relative !important;
       top: 0 !important;
@@ -519,7 +522,7 @@
       background: transparent !important;
       border: none !important;
       box-shadow: none !important;
-      padding: 0 !important;
+      padding: 12px 0 8px 48px !important; /* Set padding immediately - no transition */
       margin: 0 !important;
       opacity: 0 !important;
       visibility: hidden !important;
@@ -527,19 +530,17 @@
       pointer-events: none !important;
       min-height: 0 !important;
       z-index: auto !important;
-      /* Collapse transition: both happen immediately, faster */
+      /* Collapse transition: fast, no padding animation */
       transition: max-height 200ms ease-in,
                   opacity 150ms ease,
                   visibility 0ms linear 200ms,
-                  padding 200ms ease-in,
                   margin 200ms ease-in !important;
     }
 
     /* Only show blurb when row is expanded */
-    /* Two-phase: height first (280ms), then text fades in (180ms after 160ms delay) */
+    /* Two-phase: height expands FULLY (280ms), THEN text fades in (250ms, slower) */
     .inspector-ribbon .phoneme-row.expanded .phoneme-blurb-overlay {
-      max-height: 500px !important;
-      padding: 12px 0 8px 48px !important;
+      max-height: 800px !important; /* Increased for long blurbs like в */
       margin-top: 4px !important;
       background: transparent !important;
       border: none !important;
@@ -547,12 +548,11 @@
       opacity: 1 !important;
       visibility: visible !important;
       pointer-events: auto !important;
-      overflow: visible !important;
-      /* Expand transition: height first, then text emerges */
+      overflow-y: auto !important; /* Allow scroll for very long blurbs */
+      /* Expand transition: height first (280ms), then SLOWER fade (250ms) after FULL expansion (280ms delay) */
       transition: max-height 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                  opacity 180ms ease-out 160ms,
+                  opacity 250ms ease-out 280ms,
                   visibility 0ms linear 0ms,
-                  padding 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
                   margin 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
     }
 
