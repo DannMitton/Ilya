@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.24 Phase 3D: Control modules in drawer inspector</title>
+  <title>Ilya — v6.0.28 Phase 3D: Fix blurb lookup for remote vowels</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -654,9 +654,12 @@
 
     /* Controls Section (Phase 3D) */
     .inspector-controls {
+      display: flex;
+      flex-direction: column;
       padding: 16px 0;
       margin-top: 8px;
       border-top: 1px solid rgba(26, 22, 18, 0.06);
+      min-height: 120px; /* Ensures spacer has room to work */
     }
     
     .inspector-control-row {
@@ -680,9 +683,40 @@
       margin-right: 12px;
     }
     
+    /* Spacer pushes assimilation row to bottom */
+    .inspector-controls-spacer {
+      flex-grow: 1;
+      min-height: 8px;
+    }
+    
+    /* Stress source row - hidden when locked */
+    .inspector-stress-source-row.hidden {
+      display: none;
+    }
+    
+    .inspector-stress-source-control {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .inspector-stress-source-control .segment {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+    }
+    
     /* Variant row (ё toggle) - sage accent when ё active */
     .inspector-variant-row {
-      background: linear-gradient(135deg, var(--ilya-binding) 0%, rgba(122, 158, 126, 0.08) 100%);
+      flex-direction: column;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .variant-row-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 16px;
     }
     
     .inspector-variant-control {
@@ -707,7 +741,91 @@
       color: white;
     }
     
-    /* Assimilation row */
+    /* Staged state - dashed outline indicates pending */
+    .inspector-variant-control .segment.staged {
+      background: white;
+      outline: 2px dashed var(--ilya-accent);
+      outline-offset: -2px;
+    }
+    
+    /* Confirmation row - slides in below */
+    .variant-confirm-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      padding: 0 16px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 200ms ease-out, opacity 150ms ease, padding 200ms ease-out;
+    }
+    
+    .variant-confirm-row.visible {
+      max-height: 80px;
+      opacity: 1;
+      padding: 0 16px 12px 16px;
+    }
+    
+    .variant-confirm-text {
+      font-size: 0.8rem;
+      color: var(--ilya-text-secondary);
+      line-height: 1.4;
+    }
+    
+    .variant-confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    
+    .variant-cancel-btn,
+    .variant-apply-btn {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    
+    .variant-cancel-btn {
+      background: transparent;
+      border: 1px solid var(--ilya-border);
+      color: var(--ilya-text-secondary);
+    }
+    
+    .variant-cancel-btn:hover {
+      border-color: var(--ilya-text-secondary);
+    }
+    
+    .variant-apply-btn {
+      background: var(--ilya-accent);
+      border: none;
+      color: white;
+    }
+    
+    .variant-apply-btn:hover {
+      background: var(--ilya-accent-hover);
+    }
+    
+    /* Assimilation row - footer-docked, de-emphasized */
+    .inspector-assimilation-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      background: rgba(245, 245, 240, 0.6); /* Lighter than other controls */
+      border-top: 1px solid rgba(26, 22, 18, 0.06);
+      margin-top: auto; /* Ensures docking to bottom */
+      margin-bottom: 0;
+      padding: 10px 16px;
+    }
+    
+    .inspector-assimilation-row .inspector-control-label {
+      font-size: 0.85rem;
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+    
     .inspector-assimilation-row.disabled {
       opacity: 0.5;
       pointer-events: none;
@@ -716,26 +834,13 @@
     .inspector-assimilation-control {
       display: flex;
       gap: 4px;
+      align-self: flex-end;
     }
     
     .inspector-assimilation-control .segment {
-      padding: 6px 12px;
+      padding: 6px 16px;
       font-size: 0.8rem;
-    }
-    
-    /* Stress source row - hidden when locked */
-    .inspector-stress-source-row.hidden {
-      display: none;
-    }
-    
-    .inspector-stress-source-control {
-      display: flex;
-      gap: 2px;
-    }
-    
-    .inspector-stress-source-control .segment {
-      padding: 6px 10px;
-      font-size: 0.75rem;
+      min-width: 48px;
     }
     
     /* Committed state for user selections */
@@ -2916,11 +3021,12 @@
       pointer-events: auto;
     }
     
-    /* Fade other rows when a blurb is active - keep them readable */
-    .ribbon-vertical.has-active-blurb .phoneme-row:not(.expanded) {
+    /* Fade other rows when a blurb is active - DISABLED per Phase 3C */
+    /* Kimi's recommendation: trust user attention, no fading */
+    /* .ribbon-vertical.has-active-blurb .phoneme-row:not(.expanded) {
       opacity: 0.6;
       transition: opacity 200ms var(--ease);
-    }
+    } */
     
     /* Expanded row stays prominent */
     .ribbon-vertical.has-active-blurb .phoneme-row.expanded {
@@ -4237,31 +4343,43 @@
           <!-- Footer Controls (Phase 3D) -->
           <div class="inspector-controls" id="inspectorControls">
             
-            <!-- Variant row (ё/е toggle) - only shown if word has е or ё -->
-            <div class="inspector-control-row inspector-variant-row" id="inspectorVariantRow" style="display: none;">
-              <span class="inspector-control-label">Variant:</span>
-              <div class="segmented-control inspector-variant-control">
-                <button class="segment" id="inspectorVariantYo" data-variant="yo">ё</button>
-                <button class="segment" id="inspectorVariantYe" data-variant="ye">е</button>
-              </div>
-            </div>
-            
-            <!-- Assimilation row (Linked/Separated) - only shown if not last word -->
-            <div class="inspector-control-row inspector-assimilation-row" id="inspectorAssimilationRow" style="display: none;">
-              <span class="inspector-control-label">Link to "<span id="inspectorNextWordLabel">—</span>":</span>
-              <div class="segmented-control inspector-assimilation-control">
-                <button class="segment" id="inspectorAssimilationLinked" data-boundary="soft">Linked</button>
-                <button class="segment" id="inspectorAssimilationSeparated" data-boundary="hard">Separated</button>
-              </div>
-            </div>
-            
-            <!-- Stress source module -->
+            <!-- Stress source module (most common user action) -->
             <div class="inspector-control-row inspector-stress-source-row" id="inspectorStressSourceRow">
               <span class="inspector-control-label">Stress source:</span>
               <div class="segmented-control inspector-stress-source-control">
                 <button class="segment" id="inspectorStressDictionary" data-source="dictionary">Dictionary</button>
                 <button class="segment" id="inspectorStressComposer" data-source="composer">Composer</button>
                 <button class="segment" id="inspectorStressUser" data-source="user">My choice</button>
+              </div>
+            </div>
+            
+            <!-- Variant row (ё/е toggle) - rare but more common than assimilation -->
+            <div class="inspector-control-row inspector-variant-row" id="inspectorVariantRow" style="display: none;">
+              <div class="variant-row-main">
+                <span class="inspector-control-label" id="inspectorVariantLabel">Restore ё:</span>
+                <div class="segmented-control inspector-variant-control">
+                  <button class="segment" id="inspectorVariantYo" data-variant="yo">ё</button>
+                  <button class="segment" id="inspectorVariantYe" data-variant="ye">е</button>
+                </div>
+              </div>
+              <div class="variant-confirm-row" id="inspectorVariantConfirm">
+                <span class="variant-confirm-text">This changes the vowel sound and stress position.</span>
+                <div class="variant-confirm-actions">
+                  <button class="variant-cancel-btn" id="inspectorVariantCancel">Cancel</button>
+                  <button class="variant-apply-btn" id="inspectorVariantApply">Apply</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Spacer pushes assimilation to bottom -->
+            <div class="inspector-controls-spacer"></div>
+            
+            <!-- Assimilation row (word boundary control) - footer-docked, occasional use -->
+            <div class="inspector-control-row inspector-assimilation-row" id="inspectorAssimilationRow" style="display: none;">
+              <span class="inspector-control-label" id="inspectorBoundaryLabel">Break between [—] and [—]?</span>
+              <div class="segmented-control inspector-assimilation-control">
+                <button class="segment" id="inspectorAssimilationLinked" data-boundary="soft">No</button>
+                <button class="segment" id="inspectorAssimilationSeparated" data-boundary="hard">Yes</button>
               </div>
             </div>
             
@@ -10017,7 +10135,10 @@ function addAcuteToSyllable(syllable) {
           }
           
           // Unstressed vowels
-          if (features.afterHard) return 'after-hard';
+          // afterHard only applies to и and е (which become ɨ after ж/ш/ц)
+          // а is unaffected by preceding hard consonants - it still follows position rules
+          const lowerChar = char?.toLowerCase();
+          if (features.afterHard && (lowerChar === 'и' || lowerChar === 'е')) return 'after-hard';
           if (features.position === 'pretonic') return 'pretonic';
           if (features.position === 'initial') return 'initial';
           if (features.position === 'posttonic-immediate') return 'post-stress-immediate';
@@ -12669,10 +12790,14 @@ function addAcuteToSyllable(syllable) {
           controls: document.getElementById('inspectorControls'),
           // Phase 3D: Control modules
           variantRow: document.getElementById('inspectorVariantRow'),
+          variantLabel: document.getElementById('inspectorVariantLabel'),
           variantYo: document.getElementById('inspectorVariantYo'),
           variantYe: document.getElementById('inspectorVariantYe'),
+          variantConfirm: document.getElementById('inspectorVariantConfirm'),
+          variantCancel: document.getElementById('inspectorVariantCancel'),
+          variantApply: document.getElementById('inspectorVariantApply'),
           assimilationRow: document.getElementById('inspectorAssimilationRow'),
-          nextWordLabel: document.getElementById('inspectorNextWordLabel'),
+          boundaryLabel: document.getElementById('inspectorBoundaryLabel'),
           assimilationLinked: document.getElementById('inspectorAssimilationLinked'),
           assimilationSeparated: document.getElementById('inspectorAssimilationSeparated'),
           stressSourceRow: document.getElementById('inspectorStressSourceRow'),
@@ -12704,14 +12829,24 @@ function addAcuteToSyllable(syllable) {
         });
         
         // Phase 3D: Control event handlers
-        // Variant toggle (ё/е)
+        // Variant toggle (ё/е) - stages change, shows confirmation
         this.inspectorElements.variantYo?.addEventListener('click', (e) => {
           e.stopPropagation();
-          this.handleVariantToggle('yo');
+          this.stageVariantToggle('yo');
         });
         this.inspectorElements.variantYe?.addEventListener('click', (e) => {
           e.stopPropagation();
-          this.handleVariantToggle('ye');
+          this.stageVariantToggle('ye');
+        });
+        
+        // Variant confirmation actions
+        this.inspectorElements.variantCancel?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.cancelVariantToggle();
+        });
+        this.inspectorElements.variantApply?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.applyVariantToggle();
         });
         
         // Assimilation toggle (Linked/Separated)
@@ -12886,13 +13021,26 @@ function addAcuteToSyllable(syllable) {
           this.inspectorElements.variantRow.style.display = 'none';
         } else {
           this.inspectorElements.variantRow.style.display = 'flex';
+          
+          // Contextual label: "Restore ё:" when showing е, "Restore е:" when showing ё
+          if (this.inspectorElements.variantLabel) {
+            this.inspectorElements.variantLabel.textContent = hasYo ? 'Restore е:' : 'Restore ё:';
+          }
+          
           this.inspectorElements.variantYo?.classList.toggle('active', hasYo);
+          this.inspectorElements.variantYo?.classList.remove('staged');
           this.inspectorElements.variantYe?.classList.toggle('active', !hasYo && hasYe);
+          this.inspectorElements.variantYe?.classList.remove('staged');
+          
+          // Hide confirmation row
+          this.inspectorElements.variantConfirm?.classList.remove('visible');
+          this._stagedVariant = null;
+          
           // Store state for undo
           this._yoStateBeforeToggle = hasYo ? 'yo' : 'ye';
         }
         
-        // 2. Assimilation row (Linked/Separated)
+        // 2. Assimilation row (word boundary control)
         const line = DocumentState.lines[lineIndex];
         const isLastWordInLine = wordIndex >= (line?.length || 1) - 1;
         
@@ -12901,14 +13049,15 @@ function addAcuteToSyllable(syllable) {
         } else {
           this.inspectorElements.assimilationRow.style.display = 'flex';
           
-          // Get next word for label
+          // Build bespoke label: "Break between [x] and [y]?"
+          const currentWordCyrillic = cyrillic || '—';
           const nextWord = line[wordIndex + 1];
           const nextWordCyrillic = nextWord?.cyrillic || nextWord?.originalInput || '—';
-          if (this.inspectorElements.nextWordLabel) {
-            this.inspectorElements.nextWordLabel.textContent = nextWordCyrillic;
+          if (this.inspectorElements.boundaryLabel) {
+            this.inspectorElements.boundaryLabel.textContent = `Break between [${currentWordCyrillic}] and [${nextWordCyrillic}]?`;
           }
           
-          // Set active state based on current boundary
+          // Set active state based on current boundary (No = soft, Yes = hard)
           const currentBoundary = rightBoundary || 'soft';
           this.inspectorElements.assimilationLinked?.classList.toggle('active', currentBoundary === 'soft');
           this.inspectorElements.assimilationSeparated?.classList.toggle('active', currentBoundary === 'hard');
@@ -12939,7 +13088,66 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements.yoToast?.classList.remove('visible');
       },
       
-      // Phase 3D: Handle variant toggle (ё ↔ е)
+      // Phase 3D: Stage variant toggle (shows confirmation)
+      stageVariantToggle(variant) {
+        if (!this.currentWord) return;
+        
+        const cyrillic = this.currentWord.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const currentVariant = hasYo ? 'yo' : 'ye';
+        
+        // If clicking current state, do nothing
+        if (variant === currentVariant) return;
+        
+        // Stage the change
+        this._stagedVariant = variant;
+        
+        // Update button states: remove active, add staged to target
+        this.inspectorElements.variantYo?.classList.remove('active', 'staged');
+        this.inspectorElements.variantYe?.classList.remove('active', 'staged');
+        
+        if (variant === 'yo') {
+          this.inspectorElements.variantYo?.classList.add('staged');
+        } else {
+          this.inspectorElements.variantYe?.classList.add('staged');
+        }
+        
+        // Show confirmation row
+        this.inspectorElements.variantConfirm?.classList.add('visible');
+      },
+      
+      // Phase 3D: Cancel variant toggle
+      cancelVariantToggle() {
+        // Restore button states
+        const cyrillic = this.currentWord?.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        
+        this.inspectorElements.variantYo?.classList.remove('staged');
+        this.inspectorElements.variantYe?.classList.remove('staged');
+        this.inspectorElements.variantYo?.classList.toggle('active', hasYo);
+        this.inspectorElements.variantYe?.classList.toggle('active', !hasYo);
+        
+        // Hide confirmation row
+        this.inspectorElements.variantConfirm?.classList.remove('visible');
+        this._stagedVariant = null;
+      },
+      
+      // Phase 3D: Apply variant toggle
+      applyVariantToggle() {
+        if (!this._stagedVariant || !this.currentWord) return;
+        
+        const variant = this._stagedVariant;
+        
+        // Hide confirmation row first
+        this.inspectorElements.variantConfirm?.classList.remove('visible');
+        
+        // Execute the toggle
+        this.handleVariantToggle(variant);
+        
+        this._stagedVariant = null;
+      },
+      
+      // Phase 3D: Handle variant toggle (ё ↔ е) - executes the change
       handleVariantToggle(variant) {
         if (!this.currentWord) return;
         
