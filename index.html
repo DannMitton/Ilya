@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.33 Phase 4A word-to-word morph</title>
+  <title>Ilya — v6.0.34 First-run name collection</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -244,6 +244,86 @@
       overflow-y: auto;
       padding: var(--space-lg);
       background: var(--ilya-binding);
+    }
+
+    /* ========================================
+       WELCOME PREFACE (First-run name collection)
+       Shows once on first drawer open, then never returns
+       ======================================== */
+    .welcome-preface {
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--ilya-border-light);
+    }
+    
+    .welcome-preface.hidden {
+      display: none;
+    }
+    
+    .preface-text {
+      font-size: 0.95em;
+      letter-spacing: 0.01em;
+      color: var(--ilya-text-secondary);
+      line-height: 1.5;
+      margin: 0 0 var(--space-md) 0;
+    }
+    
+    .preface-field {
+      margin-bottom: var(--space-md);
+    }
+    
+    .preface-field input {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border: 1px solid var(--ilya-border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink-primary);
+    }
+    
+    .preface-field input:focus {
+      outline: none;
+      border-color: var(--ilya-border-focus);
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
+    }
+    
+    .preface-field input::placeholder {
+      color: var(--ilya-text-muted);
+    }
+    
+    .preface-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .preface-actions .btn-primary {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: white;
+      background: var(--ilya-accent);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+    
+    .preface-actions .btn-primary:hover {
+      background: var(--ilya-accent-hover);
+    }
+    
+    .preface-actions .link-secondary {
+      font-size: 0.9rem;
+      color: var(--ilya-text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 150ms ease;
+    }
+    
+    .preface-actions .link-secondary:hover {
+      color: var(--ilya-text-secondary);
     }
 
     /* Internal state containers */
@@ -4166,6 +4246,21 @@
         </div>
         <div class="drawer-body">
 
+          <!-- Welcome Preface (First-run name collection) -->
+          <div class="welcome-preface hidden" id="welcomePreface">
+            <p class="preface-text">Welcome to Ilya. Your name will appear in the footer of every transcription you make.</p>
+            <div class="preface-field">
+              <input type="text" id="welcomeNameInput" 
+                     placeholder="e.g. Dr. Jane Smith or J. Smith"
+                     maxlength="50"
+                     aria-label="Your name for attribution">
+            </div>
+            <div class="preface-actions">
+              <button class="btn-primary" id="welcomeSaveBtn">Save</button>
+              <a class="link-secondary" id="welcomeSkipBtn">Skip for now</a>
+            </div>
+          </div>
+
           <!-- Text Input (Phase 2B) -->
           <div class="drawer-input-section">
             <!-- Textarea with OCR overlay -->
@@ -6230,12 +6325,30 @@ function addAcuteToSyllable(syllable) {
       composerSelect: null,
       poetSelect: null,
       exportBtn: null,
+      // Welcome banner elements
+      welcomePreface: null,
+      welcomeNameInput: null,
+      welcomeSaveBtn: null,
+      welcomeSkipBtn: null,
       
       init() {
         this.titleInput = document.getElementById('metaTitle');
         this.opusInput = document.getElementById('metaOpus');
         this.transcriberInput = document.getElementById('metaTranscriber');
         this.exportBtn = document.getElementById('exportPdfBtn');
+        
+        // Welcome banner elements
+        this.welcomePreface = document.getElementById('welcomePreface');
+        this.welcomeNameInput = document.getElementById('welcomeNameInput');
+        this.welcomeSaveBtn = document.getElementById('welcomeSaveBtn');
+        this.welcomeSkipBtn = document.getElementById('welcomeSkipBtn');
+        
+        // Load saved name from localStorage and populate fields
+        this.loadSavedName();
+        
+        // Wire up welcome banner actions
+        this.welcomeSaveBtn?.addEventListener('click', () => this.handleWelcomeSave());
+        this.welcomeSkipBtn?.addEventListener('click', () => this.handleWelcomeSkip());
         
         // Initialize searchable selects
         this.composerSelect = SearchableSelect.create({
@@ -6262,12 +6375,82 @@ function addAcuteToSyllable(syllable) {
         this.titleInput?.addEventListener('input', () => this.updatePaperMetadata());
         this.opusInput?.addEventListener('input', () => this.updatePaperMetadata());
         this.transcriberInput?.addEventListener('input', () => this.updateTranscriber());
+        // Also update localStorage on blur (for persistent changes)
+        this.transcriberInput?.addEventListener('blur', () => this.syncTranscriberToStorage());
         
         // Export PDF button
         this.exportBtn?.addEventListener('click', () => this.exportPDF());
         
         // Update export button state
         this.updateExportButton();
+      },
+      
+      // Load saved name from localStorage on init
+      loadSavedName() {
+        const savedName = localStorage.getItem('ilya_transcriber_name');
+        const welcomeCompleted = localStorage.getItem('ilya_welcome_completed');
+        
+        // Pre-populate fields if name exists
+        if (savedName) {
+          DocumentState.userName = savedName;
+          if (this.transcriberInput) {
+            this.transcriberInput.value = savedName;
+          }
+        } else {
+          DocumentState.userName = ''; // Empty = [unattributed]
+        }
+        
+        // Show welcome banner only if not yet completed
+        if (!welcomeCompleted && this.welcomePreface) {
+          this.welcomePreface.classList.remove('hidden');
+        }
+      },
+      
+      // Handle Save button in welcome banner
+      handleWelcomeSave() {
+        const name = this.welcomeNameInput?.value.trim();
+        if (name) {
+          // Save to localStorage
+          localStorage.setItem('ilya_transcriber_name', name);
+          localStorage.setItem('ilya_welcome_completed', 'true');
+          
+          // Update DocumentState and drawer field
+          DocumentState.userName = name;
+          if (this.transcriberInput) {
+            this.transcriberInput.value = name;
+          }
+          
+          // Hide banner
+          this.welcomePreface?.classList.add('hidden');
+          
+          // Re-render if content exists
+          if (DocumentState.lines.length > 0) {
+            DrawerController.renderToPaper();
+          }
+        }
+      },
+      
+      // Handle Skip button in welcome banner
+      handleWelcomeSkip() {
+        // Mark as completed but don't save a name
+        localStorage.setItem('ilya_welcome_completed', 'true');
+        // Don't set ilya_transcriber_name — leaves it null/undefined
+        
+        // DocumentState.userName stays empty = [unattributed]
+        DocumentState.userName = '';
+        
+        // Hide banner
+        this.welcomePreface?.classList.add('hidden');
+      },
+      
+      // Sync transcriber field changes to localStorage
+      syncTranscriberToStorage() {
+        const name = this.transcriberInput?.value.trim();
+        if (name) {
+          localStorage.setItem('ilya_transcriber_name', name);
+        } else {
+          localStorage.removeItem('ilya_transcriber_name');
+        }
       },
       
       updateExportButton() {
@@ -6299,7 +6482,7 @@ function addAcuteToSyllable(syllable) {
       
       updateTranscriber() {
         const name = this.transcriberInput?.value.trim();
-        DocumentState.userName = name || 'anonymous';
+        DocumentState.userName = name || '';
         // Re-render to update footers
         if (DocumentState.lines.length > 0) {
           DrawerController.renderToPaper();
@@ -6320,7 +6503,7 @@ function addAcuteToSyllable(syllable) {
           opus: this.opusInput?.value || '',
           composer: this.composerSelect?.selectedValue || null,
           poet: this.poetSelect?.selectedValue || null,
-          transcriber: this.transcriberInput?.value || 'anonymous'
+          transcriber: this.transcriberInput?.value || ''
         };
       }
     };
@@ -6656,16 +6839,23 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Footer with attribution (2/3) and pagination (1/3)
-        const userName = DocumentState.userName || '[User Name]';
+        const storedName = DocumentState.userName;
+        const hasName = storedName && storedName.trim() !== '';
         const canadaFlag = `<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="0.75em" viewBox="0 0 9600 4800" style="vertical-align: middle; margin-left: 0.25em;"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>`;
         
-        // Bilingual footer text (v6.0.7)
+        // Bilingual footer text (v6.0.7, updated v6.0.34 for [unattributed])
+        // Named: "Transcribed by [Name] using Ilya..."
+        // Unattributed: "Transcription by [unattributed] using Ilya..."
         const footerText = currentGlossLanguage === 'fr' ? {
-          para1: `Cette transcription a été réalisée par ${userName} à l'aide d'<em>Ilya</em> v1.0, qui met en œuvre la <em>Russian Lyric Diction</em> du Dr Craig Grayson (Université de Washington, 2012). Données d'accentuation (1,3 million de mots) et gloses de traduction issues des Wiktionnaires anglais et français via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
+          para1: hasName 
+            ? `Cette transcription a été réalisée par ${storedName} à l'aide d'<em>Ilya</em> v1.0, qui met en œuvre la <em>Russian Lyric Diction</em> du Dr Craig Grayson (Université de Washington, 2012). Données d'accentuation (1,3 million de mots) et gloses de traduction issues des Wiktionnaires anglais et français via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`
+            : `Transcription par [non attribué] réalisée à l'aide d'<em>Ilya</em> v1.0, qui met en œuvre la <em>Russian Lyric Diction</em> du Dr Craig Grayson (Université de Washington, 2012). Données d'accentuation (1,3 million de mots) et gloses de traduction issues des Wiktionnaires anglais et français via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
           para2: `<em>Ilya</em> est un outil pédagogique libre et gratuit destiné au personnel enseignant et aux artistes interprètes : ni <em>Ilya</em> ni ses transcriptions ne peuvent être redistribués ou vendus. Conçu avec amour au Canada.${canadaFlag}`,
           pagination: `Page ${pageNumber} sur ${totalPages}`
         } : {
-          para1: `This transcription was created by ${userName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
+          para1: hasName
+            ? `This transcription was created by ${storedName} using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`
+            : `Transcription by [unattributed] using <em>Ilya</em> v1.0, which operationalizes Dr. Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`,
           para2: `<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}`,
           pagination: `Page ${pageNumber} of ${totalPages}`
         };
@@ -10511,7 +10701,7 @@ function addAcuteToSyllable(syllable) {
        ======================================== */
     const DocumentState = {
       lines: [],
-      userName: 'anonymous',  // Default until wizard/dashboard sets it
+      userName: '',  // Empty = [unattributed] in footer; populated from localStorage on init
       metadata: {
         composer: '',
         composerDates: '',
