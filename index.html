@@ -15257,6 +15257,38 @@ function addAcuteToSyllable(syllable) {
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
       // ========================================
+      // PAPER GLOSS REFRESH (v6.0.54)
+      // Re-renders all paper-surface glosses in currentGlossLanguage
+      // without re-transcription. Called by pill handler on toggle.
+      // ========================================
+      function refreshPaperGlosses() {
+        const wordStacks = document.querySelectorAll('.word-stack');
+        wordStacks.forEach(stack => {
+          const glossSpan = stack.querySelector('.gloss');
+          if (!glossSpan) return;
+
+          const isClitic = stack.dataset.isProclitic === 'true' || stack.dataset.isEnclitic === 'true';
+          const cyrillic = stack.dataset.cyrillic || '';
+          let newGloss = '';
+
+          if (isClitic) {
+            const cliticEntry = GraysonEngine.cliticData.get(cyrillic.toLowerCase());
+            newGloss = extractGloss(cliticEntry?.gloss);
+          } else {
+            const lineIdx = parseInt(stack.dataset.lineIndex, 10);
+            const wordIdx = parseInt(stack.dataset.wordIndex, 10);
+            const wordData = DocumentState.lines[lineIdx]?.[wordIdx];
+            if (wordData) {
+              newGloss = formatGlossForDisplay(wordData.gloss, wordData.pos, wordData.lemma, cyrillic);
+            }
+          }
+
+          glossSpan.textContent = newGloss;
+          stack.dataset.gloss = newGloss;
+        });
+      }
+
+      // ========================================
       // LANGUAGE PILL (v6.0.51, relocated v6.0.52)
       // Unified segmented pill — Root pill sets language only,
       // Drill pill swaps display language in-place
@@ -15289,6 +15321,9 @@ function addAcuteToSyllable(syllable) {
             if (transcribeBtn) {
               transcribeBtn.textContent = newLang === 'fr' ? 'Transcrire' : 'Transcribe';
             }
+            
+            // Re-render paper glosses in new language (v6.0.54)
+            refreshPaperGlosses();
             
             if (mode === 'drill') {
               // Drill pill: swap display text in-place, no re-transcription
