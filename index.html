@@ -4526,7 +4526,7 @@
             <div class="profile-header" id="profileHeader">
               <div>
                 <span class="profile-title" data-i18n="profile.label">Transcription Profile</span>
-                <span class="profile-active" id="profileActive">Old Muscovite</span>
+                <span class="profile-active" id="profileActive" data-i18n="profile.oldMuscovite">Old Muscovite</span>
               </div>
               <svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -4534,15 +4534,15 @@
             </div>
             <div class="profile-content">
               <select class="profile-select" id="profileSelect">
-                <option value="old-muscovite" selected>Old Muscovite</option>
-                <option value="peterburgian">Peterburgian</option>
-                <option value="choral">Choral</option>
+                <option value="old-muscovite" data-i18n="profile.oldMuscovite" selected>Old Muscovite</option>
+                <option value="peterburgian" data-i18n="profile.peterburgian">Peterburgian</option>
+                <option value="choral" data-i18n="profile.choral">Choral</option>
               </select>
               <div class="profile-description" id="profileDescription">
                 <span class="info-icon-circle">i</span>
-                <span>Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]</span>
+                <span data-i18n="profile.descOldMuscovite" data-i18n-target="html">Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]</span>
               </div>
-              <div class="profile-future">View all profiles →</div>
+              <div class="profile-future" data-i18n="page.viewProfiles">View all profiles →</div>
             </div>
           </div>
 
@@ -4552,7 +4552,7 @@
           <div class="document-section" id="documentSection">
             <div class="document-header" id="documentHeader">
               <div>
-                <span class="document-title">Paper Size</span>
+                <span class="document-title" data-i18n="page.paperSize">Paper Size</span>
                 <span class="document-active" id="documentActive">Letter (8.5×11)</span>
                 <span class="document-pages" id="pageNumber">1 page</span>
               </div>
@@ -4871,16 +4871,58 @@ const UI_LABELS = {
   'counter.chars': {
     en: 'chars',
     fr: 'car.'
+  },
+  'profile.oldMuscovite': {
+    en: 'Old Muscovite',
+    fr: 'Vieux muscovite'
+  },
+  'profile.peterburgian': {
+    en: 'Peterburgian',
+    fr: 'Petersbourgeois'
+  },
+  'profile.choral': {
+    en: 'Choral',
+    fr: 'Choral'
+  },
+  'profile.descOldMuscovite': {
+    en: 'Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]',
+    fr: 'Réduction vocalique <em>ikanié</em>, [ʃʲː] pour щ, adjectivaux scéniques [ɨj]'
+  },
+  'profile.descPeterburgian': {
+    en: 'Ekanye vowel reduction, [ʃtʃ] for щ, modern adjectivals [ij]',
+    fr: 'Réduction vocalique <em>ékanié</em>, [ʃtʃ] pour щ, adjectivaux modernes [ij]'
+  },
+  'profile.descChoral': {
+    en: 'Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj], reduced intensity for vowel matching',
+    fr: 'Réduction vocalique <em>ikanié</em>, [ʃʲː] pour щ, adjectivaux scéniques [ɨj], intensité réduite pour l\u2019harmonisation vocalique'
+  },
+  'page.paperSize': {
+    en: 'Paper Size',
+    fr: 'Format du papier'
+  },
+  'page.viewProfiles': {
+    en: 'View all profiles \u2192',
+    fr: 'Voir tous les profils \u2192'
+  },
+  'page.countOne': {
+    en: '1 page',
+    fr: '1 page'
+  },
+  'page.countMany': {
+    en: '{n} pages',
+    fr: '{n} pages'
   }
 };
 
 /**
  * setUILanguage(lang)
  * Walks all elements with [data-i18n] and swaps their visible text.
- * Handles three target types:
+ * Handles four target types:
  *   - placeholder: elements with data-i18n-target="placeholder"
  *   - aria-label: elements with data-i18n-target="aria"
+ *   - html: elements with data-i18n-target="html" (allows <em> etc.)
  *   - textContent: default
+ * Also refreshes profile section for current selection.
  * Falls back to English for any missing key.
  */
 function setUILanguage(lang) {
@@ -4900,10 +4942,17 @@ function setUILanguage(lang) {
       }
     } else if (mode === 'aria') {
       el.setAttribute('aria-label', text);
+    } else if (mode === 'html') {
+      el.innerHTML = text;
     } else {
       el.textContent = text;
     }
   });
+  
+  // Refresh profile section for current selection (v6.0.54)
+  if (typeof ProfileController !== 'undefined' && ProfileController.currentProfile) {
+    ProfileController.setProfile(ProfileController.currentProfile);
+  }
 }
 
 /**
@@ -5961,6 +6010,8 @@ function addAcuteToSyllable(syllable) {
     const TRANSCRIPTION_PROFILES = {
       'old-muscovite': {
         name: 'Old Muscovite',
+        i18nName: 'profile.oldMuscovite',
+        i18nDesc: 'profile.descOldMuscovite',
         default: true,
         params: {
           reduction: 'ikanye',
@@ -5972,6 +6023,8 @@ function addAcuteToSyllable(syllable) {
       },
       'peterburgian': {
         name: 'Peterburgian',
+        i18nName: 'profile.peterburgian',
+        i18nDesc: 'profile.descPeterburgian',
         params: {
           reduction: 'ekanye',
           shcha: 'shchokanye',    // [ʃtʃ]
@@ -5982,6 +6035,8 @@ function addAcuteToSyllable(syllable) {
       },
       'choral': {
         name: 'Choral',
+        i18nName: 'profile.choral',
+        i18nDesc: 'profile.descChoral',
         params: {
           reduction: 'ikanye',
           shcha: 'shshokanye',    // [ʃʲː]
@@ -6230,11 +6285,22 @@ function addAcuteToSyllable(syllable) {
         if (!profile) return;
         
         this.currentProfile = profileKey;
-        this.activeLabel.textContent = profile.name;
+        const lang = currentGlossLanguage || 'en';
+        const name = UI_LABELS[profile.i18nName]?.[lang] || profile.name;
+        const desc = UI_LABELS[profile.i18nDesc]?.[lang] || profile.description;
+        this.activeLabel.textContent = name;
         this.description.innerHTML = `
           <span class="info-icon-circle">i</span>
-          <span>${profile.description}</span>
+          <span>${desc}</span>
         `;
+        
+        // Update select option labels
+        if (this.select) {
+          Array.from(this.select.options).forEach(opt => {
+            const p = TRANSCRIPTION_PROFILES[opt.value];
+            if (p) opt.textContent = UI_LABELS[p.i18nName]?.[lang] || p.name;
+          });
+        }
         
         // TODO: Trigger re-transcription if content exists
         console.log('Profile changed to:', profile.name, profile.params);
@@ -6364,10 +6430,11 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Format: "X pages" for dashboard indicator
+        const lang = currentGlossLanguage || 'en';
         if (totalPages === 1) {
-          this.pageNumberEl.textContent = '1 page';
+          this.pageNumberEl.textContent = UI_LABELS['page.countOne'][lang];
         } else {
-          this.pageNumberEl.textContent = `${totalPages} pages`;
+          this.pageNumberEl.textContent = UI_LABELS['page.countMany'][lang].replace('{n}', totalPages);
         }
       }
     };
