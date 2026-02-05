@@ -420,11 +420,6 @@
       white-space: nowrap;
     }
 
-    .inspector-header .inspector-count {
-      font-size: 13px;
-      color: var(--ilya-text-muted);
-      flex-shrink: 0;
-    }
 
     /* Inspector Body (Phase 3B) */
     .inspector-body {
@@ -4598,7 +4593,6 @@
         <div class="inspector-header">
           <button class="back-btn" id="drawerBackBtn" aria-label="Back to dashboard">←</button>
           <span class="inspector-word" id="inspectorWordDisplay">—</span>
-          <span class="inspector-count" id="inspectorSyllableCount">[0]</span>
           <!-- Language pill — Drill placement: inspector header, right-aligned (v6.0.53) -->
           <div class="lang-toggle-pill" id="drillLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
             <div class="lang-pill-indicator"></div>
@@ -14214,7 +14208,6 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements = {
           backBtn: document.getElementById('drawerBackBtn'),
           wordDisplay: document.getElementById('inspectorWordDisplay'),
-          syllableCount: document.getElementById('inspectorSyllableCount'),
           syllableLabel: document.getElementById('inspectorSyllableLabel'),
           syllableHeader: document.getElementById('inspectorSyllableHeader'),
           syllableDisplay: document.getElementById('inspectorSyllableDisplay'),
@@ -14491,9 +14484,6 @@ function addAcuteToSyllable(syllable) {
         
         if (this.inspectorElements.wordDisplay) {
           this.inspectorElements.wordDisplay.textContent = syllabifiedCyrillic;
-        }
-        if (this.inspectorElements.syllableCount) {
-          this.inspectorElements.syllableCount.textContent = `[${syllableCount}]`;
         }
         
         // Syllable Label (monosyllable/clitic context)
