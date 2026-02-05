@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.51 Unified language pill</title>
+  <title>Ilya — v6.0.52 Header pill + Transcribe button</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -216,6 +216,9 @@
       flex-shrink: 0;
       padding: var(--space-lg) var(--space-lg) var(--space-md);
       border-bottom: 1px solid rgba(26, 22, 18, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .drawer-title {
@@ -2279,31 +2282,6 @@
     /* FR active */
     .lang-toggle-pill[data-lang="fr"] .lang-pill-indicator {
       transform: translateX(100%);
-    }
-
-    /* Root placement: left-aligned, above textarea */
-    .root-lang-pill-row {
-      margin-bottom: 8px;
-      position: relative;
-    }
-
-    /* Root hover micro-hint (v6.0.51 — Kimi spec) */
-    .root-lang-hint {
-      position: absolute;
-      left: 0;
-      top: 100%;
-      margin-top: 4px;
-      font-family: var(--font-sans);
-      font-size: 10px;
-      color: #8B9A7D;
-      opacity: 0;
-      transition: opacity 200ms ease;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    .root-lang-pill-row:hover .root-lang-hint {
-      opacity: 1;
     }
 
     /* Drill placement: right-flush, above phoneme ribbon */
@@ -4412,6 +4390,12 @@
       <div class="drawer-root" id="drawerRoot">
         <div class="drawer-header">
           <span class="drawer-title"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="120" height="42" viewBox="0 0 526 184" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Ilya"><g transform="translate(0,184) scale(0.1,-0.1)" fill="#8B9A7D" stroke="none"><path d="M1925 1783 c-85 -4 -102 -10 -108 -35 -7 -26 7 -38 45 -38 81 0 103 -46 78 -160 -10 -41 -63 -273 -119 -516 -57 -249 -101 -463 -101 -492 0 -121 118 -162 290 -100 58 21 80 40 80 70 0 14 -6 17 -22 13 -55 -11 -91 -13 -123 -4 -27 8 -36 17 -43 43 -6 18 -7 46 -5 62 5 29 191 840 237 1036 15 59 26 112 26 118 0 10 -90 11 -235 3z M1127 1673 c-14 -13 -7 -52 11 -56 9 -3 39 -11 65 -17 87 -23 87 -22 22 -307 -32 -136 -63 -273 -70 -303 -84 -373 -98 -427 -117 -447 -26 -28 -59 -40 -130 -48 -39 -4 -58 -11 -58 -20 0 -7 -3 -20 -6 -29 -6 -14 23 -16 279 -16 l285 0 4 30 c4 28 3 30 -51 41 -31 6 -64 15 -73 20 -43 23 -42 33 48 421 47 205 97 419 109 475 26 111 45 157 74 172 10 6 49 15 87 21 69 11 84 20 84 53 0 16 -20 17 -278 17 -153 0 -282 -3 -285 -7z M50 859 l0 -710 181 3 181 3 24 28 c33 39 31 81 -5 118 -28 28 -34 29 -115 29 l-86 0 0 530 0 530 84 0 c75 0 88 3 113 24 22 19 28 32 28 66 0 35 -6 46 -30 66 -29 23 -36 24 -202 24 l-173 0 0 -711z M4803 1560 c-28 -12 -56 -66 -49 -95 3 -12 14 -33 25 -46 17 -21 30 -24 112 -29 52 -3 93 -8 92 -12 -2 -5 -3 -242 -3 -528 l0 -520 -77 0 c-88 0 -122 -13 -141 -53 -11 -22 -11 -35 -2 -63 19 -56 50 -64 245 -64 l165 0 0 710 0 710 -172 -1 c-95 0 -183 -4 -195 -9z M3690 1297 c-165 -56 -296 -197 -353 -382 -35 -112 -29 -274 14 -362 82 -169 293 -192 455 -50 44 38 64 41 64 9 0 -10 13 -33 29 -52 29 -35 29 -35 112 -35 75 0 136 15 206 49 1 1 5 14 8 29 l7 28 -66 -7 c-94 -10 -116 6 -116 83 0 30 5 72 10 92 37 133 139 596 133 602 -4 4 -43 -2 -85 -13 -73 -20 -79 -20 -112 -4 -86 41 -210 46 -306 13z m241 -70 c23 -15 38 -37 47 -65 13 -39 11 -53 -21 -190 -20 -81 -46 -190 -58 -242 -25 -111 -50 -144 -143 -190 -101 -51 -192 -34 -233 42 -25 48 -30 221 -9 313 35 146 125 282 222 333 56 30 150 30 195 -1z M2370 1291 c-85 -28 -110 -43 -116 -68 -4 -13 -5 -26 -3 -28 2 -2 27 1 55 7 40 8 58 7 80 -4 28 -13 29 -15 28 -88 -1 -53 -15 -131 -48 -262 -67 -270 -61 -348 27 -406 35 -24 50 -27 118 -26 88 2 166 32 252 98 27 21 51 35 54 32 3 -3 -8 -49 -25 -103 -65 -205 -175 -327 -303 -335 -41 -3 -43 -2 -69 45 -53 95 -101 125 -165 101 -21 -8 -45 -56 -45 -89 0 -75 65 -115 198 -123 226 -13 394 85 496 287 25 51 54 122 65 159 39 131 183 804 174 813 -5 5 -42 6 -83 1 l-75 -7 -67 -300 c-88 -397 -77 -366 -148 -414 -106 -70 -209 -78 -254 -18 -33 45 -26 122 33 356 56 219 63 278 42 328 -25 61 -114 79 -221 44z"/></g></svg></span>
+          <!-- Language pill — header placement: flush right, level with sigil (v6.0.52) -->
+          <div class="lang-toggle-pill" id="rootLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
+            <div class="lang-pill-indicator"></div>
+            <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
+            <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
+          </div>
         </div>
         <div class="drawer-body">
 
@@ -4432,16 +4416,6 @@
 
           <!-- Text Input (Phase 2B) -->
           <div class="drawer-input-section">
-            <!-- Language pill — Root placement: left-aligned, pre-flight (v6.0.51) -->
-            <div class="root-lang-pill-row">
-              <div class="lang-toggle-pill" id="rootLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
-                <div class="lang-pill-indicator"></div>
-                <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
-                <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
-              </div>
-              <span class="root-lang-hint">Affects new transcriptions</span>
-            </div>
-
             <!-- Textarea with OCR overlay -->
             <div class="textarea-wrapper">
               <textarea
@@ -4491,6 +4465,7 @@
             <div class="drawer-input-actions">
               <div class="drawer-secondary-actions">
                 <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
+                <button class="btn btn-primary" id="drawerTranscribeBtn">Transcribe</button>
               </div>
             </div>
           </div>
@@ -15280,9 +15255,9 @@ function addAcuteToSyllable(syllable) {
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
       // ========================================
-      // LANGUAGE PILL (v6.0.51)
-      // Unified segmented pill — Root triggers transcription,
-      // Drill swaps display language in-place
+      // LANGUAGE PILL (v6.0.51, relocated v6.0.52)
+      // Unified segmented pill — Root pill sets language only,
+      // Drill pill swaps display language in-place
       // ========================================
       function initLangPill(pillElement, mode) {
         if (!pillElement) return;
@@ -15297,7 +15272,7 @@ function addAcuteToSyllable(syllable) {
             // Update global state
             currentGlossLanguage = newLang;
             
-            // Update BOTH pills to stay in sync
+            // Update ALL pills to stay in sync
             document.querySelectorAll('.lang-toggle-pill').forEach(pill => {
               pill.dataset.lang = newLang;
               pill.querySelectorAll('.lang-option').forEach(opt => {
@@ -15307,15 +15282,13 @@ function addAcuteToSyllable(syllable) {
               });
             });
             
-            if (mode === 'root') {
-              // Root pill: set language + transcribe (pre-flight behaviour)
-              const hasText = DrawerController.textInput?.value?.trim().length > 0;
-              if (hasText) {
-                DrawerController.transcribe();
-              } else {
-                DrawerController.renderToPaper();
-              }
-            } else if (mode === 'drill') {
+            // Update Transcribe button label
+            const transcribeBtn = document.getElementById('drawerTranscribeBtn');
+            if (transcribeBtn) {
+              transcribeBtn.textContent = newLang === 'fr' ? 'Transcrire' : 'Transcribe';
+            }
+            
+            if (mode === 'drill') {
               // Drill pill: swap display text in-place, no re-transcription
               const word = DrawerState.currentWord;
               if (word) {
@@ -15323,17 +15296,14 @@ function addAcuteToSyllable(syllable) {
                 const docWord = DocumentState.lines[word.lineIndex]?.[word.wordIndex];
                 if (docWord && docWord.gloss) {
                   const rawGloss = docWord.gloss;
-                  // Extract language-appropriate gloss
                   let displayGloss;
                   if (typeof rawGloss === 'object' && (rawGloss.en || rawGloss.fr)) {
                     displayGloss = rawGloss[currentGlossLanguage] || rawGloss.en || '';
                   } else {
                     displayGloss = rawGloss || '';
                   }
-                  // Update currentWord so updateInspector uses new text
                   word.gloss = displayGloss;
                 }
-                // Re-render inspector (ribbon picks up new language via extractBlurbText)
                 DrawerState.updateInspector();
               }
             }
@@ -15346,6 +15316,22 @@ function addAcuteToSyllable(syllable) {
       // Initialize both pills
       initLangPill(document.getElementById('rootLangPill'), 'root');
       initLangPill(document.getElementById('drillLangPill'), 'drill');
+      
+      // ========================================
+      // TRANSCRIBE BUTTON (v6.0.52)
+      // Dedicated action button — label swaps with language pill
+      // ========================================
+      const transcribeBtn = document.getElementById('drawerTranscribeBtn');
+      if (transcribeBtn) {
+        transcribeBtn.addEventListener('click', () => {
+          const hasText = DrawerController.textInput?.value?.trim().length > 0;
+          if (hasText) {
+            DrawerController.transcribe();
+          } else {
+            DrawerController.renderToPaper();
+          }
+        });
+      }
       
       // Render empty title page on load
       DrawerController.renderToPaper();
