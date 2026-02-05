@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.50 Bilingual j-glide fallback</title>
+  <title>Ilya — v6.0.51 Unified language pill</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -502,7 +502,7 @@
     /* Gloss Section */
     .inspector-gloss-section {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 8px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--ilya-border-light);
     }
@@ -1110,15 +1110,7 @@
         max-height: 150px;
       }
       
-      /* Compact language buttons on mobile */
-      .lang-buttons {
-        gap: 8px;
-      }
-      
-      .lang-btn {
-        min-width: 64px;
-        padding: 8px 12px;
-      }
+      /* Language pill needs no mobile override — 52×24px is touch-accessible */
       
       /* Phase 5B: Mobile Drill state (Inspector) */
       
@@ -2180,11 +2172,6 @@
       gap: var(--space-sm);
     }
 
-    .drawer-lang-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
     /* Button styles */
     .btn {
       padding: 0.5rem 1.25rem;
@@ -2230,42 +2217,100 @@
     }
 
     /* ========================================
-       LANGUAGE SELECTION (v6.0.9)
-       Simple text buttons — Calm Authority aesthetic
+       LANGUAGE PILL (v6.0.51)
+       Unified segmented pill — Kimi spec
+       Used in Root (left-aligned, pre-flight) and
+       Drill (right-flush, display swap)
        ======================================== */
-    .lang-btn {
-      min-width: 72px;
-      height: 32px;
-      padding: 0 12px;
+    .lang-toggle-pill {
+      display: inline-flex;
+      width: 52px;
+      height: 24px;
+      background: rgba(139, 154, 125, 0.12);
+      border-radius: 12px;
+      position: relative;
       cursor: pointer;
-      border: 1px solid var(--ilya-border);
-      border-radius: var(--radius);
-      background: var(--surface);
-      color: var(--ilya-text-secondary);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .lang-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: var(--font-sans);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 500;
-      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B6B6B;
+      transition: color 300ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+      z-index: 2;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
     }
 
-    .lang-btn:hover {
-      background: var(--ilya-binding);
-      color: var(--ilya-text-primary);
-      border-color: var(--ilya-border-focus);
+    .lang-option.active {
+      color: #fff;
     }
 
-    .lang-btn:active {
-      transform: translateY(0);
+    .lang-option:hover:not(.active) {
+      color: #4A4A4A;
     }
 
-    .lang-btn.lang-btn-active {
-      background: var(--ilya-accent-light);
-      border-color: var(--ilya-accent);
-      color: var(--ilya-text-primary);
+    .lang-pill-indicator {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      background: #8B9A7D;
+      border-radius: 12px;
+      transition: transform 300ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+      z-index: 1;
     }
 
-    .lang-btn.lang-btn-active:hover {
-      background: var(--ilya-accent-light);
+    /* EN active */
+    .lang-toggle-pill[data-lang="en"] .lang-pill-indicator {
+      transform: translateX(0);
+    }
+
+    /* FR active */
+    .lang-toggle-pill[data-lang="fr"] .lang-pill-indicator {
+      transform: translateX(100%);
+    }
+
+    /* Root placement: left-aligned, above textarea */
+    .root-lang-pill-row {
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    /* Root hover micro-hint (v6.0.51 — Kimi spec) */
+    .root-lang-hint {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      margin-top: 4px;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      color: #8B9A7D;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .root-lang-pill-row:hover .root-lang-hint {
+      opacity: 1;
+    }
+
+    /* Drill placement: right-flush, above phoneme ribbon */
+    .drill-lang-pill-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
     }
 
     /* ========================================
@@ -4387,6 +4432,16 @@
 
           <!-- Text Input (Phase 2B) -->
           <div class="drawer-input-section">
+            <!-- Language pill — Root placement: left-aligned, pre-flight (v6.0.51) -->
+            <div class="root-lang-pill-row">
+              <div class="lang-toggle-pill" id="rootLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
+                <div class="lang-pill-indicator"></div>
+                <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
+                <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
+              </div>
+              <span class="root-lang-hint">Affects new transcriptions</span>
+            </div>
+
             <!-- Textarea with OCR overlay -->
             <div class="textarea-wrapper">
               <textarea
@@ -4436,12 +4491,6 @@
             <div class="drawer-input-actions">
               <div class="drawer-secondary-actions">
                 <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
-                
-                <!-- Language toggle buttons (v6.0.9) -->
-                <div class="drawer-lang-buttons">
-                  <button class="lang-btn lang-btn-active" id="langBtnEn" title="Transcribe with English glosses">English</button>
-                  <button class="lang-btn" id="langBtnFr" title="Transcrire avec gloses en français">Français</button>
-                </div>
               </div>
             </div>
           </div>
@@ -4602,6 +4651,15 @@
               aria-label="Translation"
               data-placeholder="add translation"
             ></span>
+          </div>
+          
+          <!-- Language pill — Drill placement: right-flush, display swap (v6.0.51) -->
+          <div class="drill-lang-pill-row">
+            <div class="lang-toggle-pill" id="drillLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
+              <div class="lang-pill-indicator"></div>
+              <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
+              <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
+            </div>
           </div>
           
           <!-- Phoneme Ribbon (Phase 3C) -->
@@ -14192,6 +14250,17 @@ function addAcuteToSyllable(syllable) {
       updateInspector() {
         if (!this.currentWord) return;
         
+        // Sync Drill language pill to currentGlossLanguage (v6.0.51)
+        const drillPill = document.getElementById('drillLangPill');
+        if (drillPill) {
+          drillPill.dataset.lang = currentGlossLanguage;
+          drillPill.querySelectorAll('.lang-option').forEach(opt => {
+            const isActive = opt.dataset.lang === currentGlossLanguage;
+            opt.classList.toggle('active', isActive);
+            opt.setAttribute('aria-checked', isActive);
+          });
+        }
+        
         const { cyrillic, ipa, gloss, syllables, isProclitic, isEnclitic, hasYo, wordId } = this.currentWord;
         const syllableCount = syllables?.length || 0;
         const isClitic = isProclitic === 'true' || isEnclitic === 'true';
@@ -15211,44 +15280,72 @@ function addAcuteToSyllable(syllable) {
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
       // ========================================
-      // LANGUAGE TOGGLE (v6.0.6)
-      // Transcribe + set gloss language in one click
-      // Phase 2C: No more syncing needed - DrawerController uses left drawer directly
+      // LANGUAGE PILL (v6.0.51)
+      // Unified segmented pill — Root triggers transcription,
+      // Drill swaps display language in-place
       // ========================================
-      const langBtnEn = document.getElementById('langBtnEn');
-      const langBtnFr = document.getElementById('langBtnFr');
-
-      if (langBtnEn && langBtnFr) {
-        langBtnEn.addEventListener('click', () => {
-          currentGlossLanguage = 'en';
-          langBtnEn.classList.add('lang-btn-active');
-          langBtnFr.classList.remove('lang-btn-active');
-          
-          const hasText = DrawerController.textInput?.value?.trim().length > 0;
-          
-          if (hasText) {
-            DrawerController.transcribe();
-          } else {
-            DrawerController.renderToPaper();
-          }
-          console.log('Gloss language: English');
-        });
-
-        langBtnFr.addEventListener('click', () => {
-          currentGlossLanguage = 'fr';
-          langBtnFr.classList.add('lang-btn-active');
-          langBtnEn.classList.remove('lang-btn-active');
-          
-          const hasText = DrawerController.textInput?.value?.trim().length > 0;
-          
-          if (hasText) {
-            DrawerController.transcribe();
-          } else {
-            DrawerController.renderToPaper();
-          }
-          console.log('Gloss language: Français');
+      function initLangPill(pillElement, mode) {
+        if (!pillElement) return;
+        
+        const options = pillElement.querySelectorAll('.lang-option');
+        
+        options.forEach(option => {
+          option.addEventListener('click', () => {
+            const newLang = option.dataset.lang;
+            if (newLang === currentGlossLanguage) return;
+            
+            // Update global state
+            currentGlossLanguage = newLang;
+            
+            // Update BOTH pills to stay in sync
+            document.querySelectorAll('.lang-toggle-pill').forEach(pill => {
+              pill.dataset.lang = newLang;
+              pill.querySelectorAll('.lang-option').forEach(opt => {
+                const isActive = opt.dataset.lang === newLang;
+                opt.classList.toggle('active', isActive);
+                opt.setAttribute('aria-checked', isActive);
+              });
+            });
+            
+            if (mode === 'root') {
+              // Root pill: set language + transcribe (pre-flight behaviour)
+              const hasText = DrawerController.textInput?.value?.trim().length > 0;
+              if (hasText) {
+                DrawerController.transcribe();
+              } else {
+                DrawerController.renderToPaper();
+              }
+            } else if (mode === 'drill') {
+              // Drill pill: swap display text in-place, no re-transcription
+              const word = DrawerState.currentWord;
+              if (word) {
+                // Re-extract gloss from DocumentState (bilingual source)
+                const docWord = DocumentState.lines[word.lineIndex]?.[word.wordIndex];
+                if (docWord && docWord.gloss) {
+                  const rawGloss = docWord.gloss;
+                  // Extract language-appropriate gloss
+                  let displayGloss;
+                  if (typeof rawGloss === 'object' && (rawGloss.en || rawGloss.fr)) {
+                    displayGloss = rawGloss[currentGlossLanguage] || rawGloss.en || '';
+                  } else {
+                    displayGloss = rawGloss || '';
+                  }
+                  // Update currentWord so updateInspector uses new text
+                  word.gloss = displayGloss;
+                }
+                // Re-render inspector (ribbon picks up new language via extractBlurbText)
+                DrawerState.updateInspector();
+              }
+            }
+            
+            console.log(`Gloss language: ${newLang === 'fr' ? 'Français' : 'English'}`);
+          });
         });
       }
+      
+      // Initialize both pills
+      initLangPill(document.getElementById('rootLangPill'), 'root');
+      initLangPill(document.getElementById('drillLangPill'), 'drill');
       
       // Render empty title page on load
       DrawerController.renderToPaper();
