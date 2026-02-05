@@ -4368,16 +4368,17 @@
 
           <!-- Welcome Preface (First-run name collection) -->
           <div class="welcome-preface hidden" id="welcomePreface">
-            <p class="preface-text">Welcome to Ilya. Your name will appear in the footer of every transcription you make.</p>
+            <p class="preface-text" data-i18n="welcome.text">Welcome to Ilya. Your name will appear in the footer of every transcription you make.</p>
             <div class="preface-field">
               <input type="text" id="welcomeNameInput" 
                      placeholder="e.g. Dr. Jane Smith or J. Smith"
+                     data-i18n-placeholder="welcome.placeholder"
                      maxlength="50"
                      aria-label="Your name for attribution">
             </div>
             <div class="preface-actions">
-              <button class="btn-primary" id="welcomeSaveBtn">Save</button>
-              <a class="link-secondary" id="welcomeSkipBtn">Skip for now</a>
+              <button class="btn-primary" id="welcomeSaveBtn" data-i18n="welcome.save">Save</button>
+              <a class="link-secondary" id="welcomeSkipBtn" data-i18n="welcome.skip">Skip for now</a>
             </div>
           </div>
 
@@ -4431,7 +4432,7 @@
             <!-- Action buttons -->
             <div class="drawer-input-actions">
               <div class="drawer-secondary-actions">
-                <button class="btn btn-secondary" id="drawerClearBtn">Clear</button>
+                <button class="btn btn-secondary" id="drawerClearBtn" data-i18n="input.clear">Clear</button>
                 
                 <!-- Language toggle buttons (v6.0.9) -->
                 <div class="drawer-lang-buttons">
@@ -4443,29 +4444,29 @@
           </div>
 
           <!-- Song Setup -->
-          <div class="drawer-section-label">Song Setup</div>
+          <div class="drawer-section-label" data-i18n="setup.label">Song Setup</div>
 
           <!-- Title -->
           <div class="form-group">
-            <input type="text" class="form-input" id="metaTitle" placeholder="Title">
+            <input type="text" class="form-input" id="metaTitle" placeholder="Title" data-i18n-placeholder="setup.title">
           </div>
 
           <!-- Opus -->
           <div class="form-group">
-            <input type="text" class="form-input" id="metaOpus" placeholder="Opus / Catalogue">
+            <input type="text" class="form-input" id="metaOpus" placeholder="Opus / Catalogue" data-i18n-placeholder="setup.opus">
           </div>
 
           <!-- Composer (searchable select) -->
           <div class="form-group">
             <div class="searchable-select" id="composerSelect">
               <button type="button" class="select-trigger" id="composerTrigger">
-                <span class="placeholder">Composer</span>
+                <span class="placeholder" data-i18n="setup.composer">Composer</span>
                 <svg class="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
               <div class="select-dropdown" id="composerDropdown">
-                <input type="text" class="select-search" placeholder="Type to filter..." id="composerSearch">
+                <input type="text" class="select-search" placeholder="Type to filter..." id="composerSearch" data-i18n-placeholder="setup.filter">
                 <div class="select-options" id="composerOptions"></div>
               </div>
             </div>
@@ -4475,13 +4476,13 @@
           <div class="form-group">
             <div class="searchable-select" id="poetSelect">
               <button type="button" class="select-trigger" id="poetTrigger">
-                <span class="placeholder">Poet / Librettist</span>
+                <span class="placeholder" data-i18n="setup.poet">Poet / Librettist</span>
                 <svg class="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
               <div class="select-dropdown" id="poetDropdown">
-                <input type="text" class="select-search" placeholder="Type to filter..." id="poetSearch">
+                <input type="text" class="select-search" placeholder="Type to filter..." id="poetSearch" data-i18n-placeholder="setup.filter">
                 <div class="select-options" id="poetOptions"></div>
               </div>
             </div>
@@ -4489,16 +4490,16 @@
 
           <!-- Transcriber Name -->
           <div class="form-group">
-            <input type="text" class="form-input" id="metaTranscriber" placeholder="Your name (for attribution)">
-            <div class="form-hint">Appears in document footer</div>
+            <input type="text" class="form-input" id="metaTranscriber" placeholder="Your name (for attribution)" data-i18n-placeholder="setup.transcriber">
+            <div class="form-hint" data-i18n="setup.transcriberHint">Appears in document footer</div>
           </div>
 
           <!-- Transcription Profile -->
           <div class="profile-section" id="profileSection">
             <div class="profile-header" id="profileHeader">
               <div>
-                <span class="profile-title">Transcription Profile</span>
-                <span class="profile-active" id="profileActive">Old Muscovite</span>
+                <span class="profile-title" data-i18n="profile.label">Transcription Profile</span>
+                <span class="profile-active" id="profileActive" data-i18n="profile.oldMuscovite">Old Muscovite</span>
               </div>
               <svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -4506,25 +4507,25 @@
             </div>
             <div class="profile-content">
               <select class="profile-select" id="profileSelect">
-                <option value="old-muscovite" selected>Old Muscovite</option>
-                <option value="peterburgian">Peterburgian</option>
-                <option value="choral">Choral</option>
+                <option value="old-muscovite" selected data-i18n="profile.oldMuscovite">Old Muscovite</option>
+                <option value="peterburgian" data-i18n="profile.peterburgian">Peterburgian</option>
+                <option value="choral" data-i18n="profile.choral">Choral</option>
               </select>
               <div class="profile-description" id="profileDescription">
                 <span class="info-icon-circle">i</span>
-                <span>Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]</span>
+                <span data-i18n="profile.oldMuscoviteDesc">Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]</span>
               </div>
-              <div class="profile-future">View all profiles →</div>
+              <div class="profile-future" data-i18n="profile.viewAll">View all profiles →</div>
             </div>
           </div>
 
           <!-- Document Settings -->
-          <div class="drawer-section-label">Page</div>
+          <div class="drawer-section-label" data-i18n="page.label">Page</div>
 
           <div class="document-section" id="documentSection">
             <div class="document-header" id="documentHeader">
               <div>
-                <span class="document-title">Paper Size</span>
+                <span class="document-title" data-i18n="page.paperSize">Paper Size</span>
                 <span class="document-active" id="documentActive">Letter (8.5×11)</span>
                 <span class="document-pages" id="pageNumber">1 page</span>
               </div>
@@ -4535,12 +4536,12 @@
             <div class="document-content">
               <div class="paper-size-control" id="paperSizeControl">
                 <button type="button" class="paper-size-btn active" data-size="letter" id="paperSizeLetter">
-                  <span class="paper-size-label">Letter</span>
-                  <span class="paper-size-dims">8.5 × 11 in</span>
+                  <span class="paper-size-label" data-i18n="page.letter">Letter</span>
+                  <span class="paper-size-dims" data-i18n="page.letterDims">8.5 × 11 in</span>
                 </button>
                 <button type="button" class="paper-size-btn" data-size="a4" id="paperSizeA4">
-                  <span class="paper-size-label">A4</span>
-                  <span class="paper-size-dims">210 × 297 mm</span>
+                  <span class="paper-size-label" data-i18n="page.a4">A4</span>
+                  <span class="paper-size-dims" data-i18n="page.a4Dims">210 × 297 mm</span>
                 </button>
               </div>
             </div>
@@ -4556,9 +4557,9 @@
                 <line x1="9" y1="15" x2="12" y2="12"></line>
                 <line x1="15" y1="15" x2="12" y2="12"></line>
               </svg>
-              <span>Export PDF</span>
+              <span data-i18n="export.button">Export PDF</span>
             </button>
-            <div class="form-hint">Opens print dialog. Select "Save as PDF".</div>
+            <div class="form-hint" data-i18n="export.hint">Opens print dialog. Select "Save as PDF".</div>
           </div>
 
         </div>
@@ -4582,7 +4583,7 @@
           <!-- Syllable Buttons (interactive IPA) -->
           <div class="inspector-syllable-header" id="inspectorSyllableHeader">
             <div class="inspector-syllable-display" id="inspectorSyllableDisplay"></div>
-            <button class="boundary-reset-btn" id="inspectorBoundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
+            <button class="boundary-reset-btn" id="inspectorBoundaryResetBtn" title="Reset syllable boundaries" data-i18n-title="inspector.resetBoundaries" aria-label="Reset syllable boundaries" data-i18n-aria="inspector.resetBoundaries" style="display: none;">↺</button>
           </div>
           
           <!-- Cyrillic Display -->
@@ -4597,6 +4598,7 @@
               role="textbox"
               aria-label="Translation"
               data-placeholder="add translation"
+              data-i18n-data-placeholder="inspector.addTranslation"
             ></span>
           </div>
           
@@ -4612,28 +4614,28 @@
             
             <!-- Stress source module (most common user action) -->
             <div class="inspector-control-row inspector-stress-source-row" id="inspectorStressSourceRow">
-              <span class="inspector-control-label">Stress source:</span>
+              <span class="inspector-control-label" data-i18n="inspector.stressSource">Stress source:</span>
               <div class="segmented-control inspector-stress-source-control">
-                <button class="segment" id="inspectorStressDictionary" data-source="dictionary">Dictionary</button>
-                <button class="segment" id="inspectorStressComposer" data-source="composer">Composer</button>
-                <button class="segment" id="inspectorStressUser" data-source="user">My choice</button>
+                <button class="segment" id="inspectorStressDictionary" data-source="dictionary" data-i18n="inspector.dictionary">Dictionary</button>
+                <button class="segment" id="inspectorStressComposer" data-source="composer" data-i18n="inspector.composer">Composer</button>
+                <button class="segment" id="inspectorStressUser" data-source="user" data-i18n="inspector.myChoice">My choice</button>
               </div>
             </div>
             
             <!-- Variant row (ё/е toggle) - rare but more common than assimilation -->
             <div class="inspector-control-row inspector-variant-row" id="inspectorVariantRow" style="display: none;">
               <div class="variant-row-main">
-                <span class="inspector-control-label" id="inspectorVariantLabel">Restore ё:</span>
+                <span class="inspector-control-label" id="inspectorVariantLabel" data-i18n="inspector.restoreYo">Restore ё:</span>
                 <div class="segmented-control inspector-variant-control">
                   <button class="segment" id="inspectorVariantYo" data-variant="yo">ё</button>
                   <button class="segment" id="inspectorVariantYe" data-variant="ye">е</button>
                 </div>
               </div>
               <div class="variant-confirm-row" id="inspectorVariantConfirm">
-                <span class="variant-confirm-text">This changes the vowel sound and stress position.</span>
+                <span class="variant-confirm-text" data-i18n="inspector.yoWarning">This changes the vowel sound and stress position.</span>
                 <div class="variant-confirm-actions">
-                  <button class="variant-cancel-btn" id="inspectorVariantCancel">Cancel</button>
-                  <button class="variant-apply-btn" id="inspectorVariantApply">Apply</button>
+                  <button class="variant-cancel-btn" id="inspectorVariantCancel" data-i18n="inspector.cancel">Cancel</button>
+                  <button class="variant-apply-btn" id="inspectorVariantApply" data-i18n="inspector.apply">Apply</button>
                 </div>
               </div>
             </div>
@@ -4643,17 +4645,17 @@
             
             <!-- Assimilation row (word boundary control) - footer-docked, occasional use -->
             <div class="inspector-control-row inspector-assimilation-row" id="inspectorAssimilationRow" style="display: none;">
-              <span class="inspector-control-label" id="inspectorBoundaryLabel">Break between [—] and [—]?</span>
+              <span class="inspector-control-label" id="inspectorBoundaryLabel" data-i18n="inspector.breakBetween">Break between words?</span>
               <div class="segmented-control inspector-assimilation-control">
-                <button class="segment" id="inspectorAssimilationLinked" data-boundary="soft">No</button>
-                <button class="segment" id="inspectorAssimilationSeparated" data-boundary="hard">Yes</button>
+                <button class="segment" id="inspectorAssimilationLinked" data-boundary="soft" data-i18n="inspector.no">No</button>
+                <button class="segment" id="inspectorAssimilationSeparated" data-boundary="hard" data-i18n="inspector.yes">Yes</button>
               </div>
             </div>
             
             <!-- Toast for ё warning -->
             <div class="inspector-yo-toast" id="inspectorYoToast">
-              <span>ё → е changes pronunciation</span>
-              <button class="undo-btn" id="inspectorYoUndoBtn">Undo</button>
+              <span data-i18n="inspector.yoToast">ё → е changes pronunciation</span>
+              <button class="undo-btn" id="inspectorYoUndoBtn" data-i18n="inspector.undo">Undo</button>
             </div>
             
           </div>
@@ -4701,6 +4703,199 @@ let TIER2_LOADING = false;
 // Gloss language state (v6.0.4)
 // Supports bilingual glosses: {en: '...', fr: '...'}
 let currentGlossLanguage = 'en';
+
+// ==========================================
+// UI LANGUAGE SYSTEM (Phase 6A)
+// Decoupled from gloss language
+// ==========================================
+let currentUILanguage = 'en';
+
+const I18N = {
+  en: {
+    // Welcome Banner
+    'welcome.text': 'Welcome to Ilya. Your name will appear in the footer of every transcription you make.',
+    'welcome.placeholder': 'e.g. Dr. Jane Smith or J. Smith',
+    'welcome.save': 'Save',
+    'welcome.skip': 'Skip for now',
+    
+    // Input Section
+    'input.clear': 'Clear',
+    
+    // Song Setup Section
+    'setup.label': 'Song Setup',
+    'setup.title': 'Title',
+    'setup.opus': 'Opus / Catalogue',
+    'setup.composer': 'Composer',
+    'setup.poet': 'Poet / Librettist',
+    'setup.filter': 'Type to filter...',
+    'setup.transcriber': 'Your name (for attribution)',
+    'setup.transcriberHint': 'Appears in document footer',
+    
+    // Transcription Profile
+    'profile.label': 'Transcription Profile',
+    'profile.oldMuscovite': 'Old Muscovite',
+    'profile.peterburgian': 'Peterburgian',
+    'profile.choral': 'Choral',
+    'profile.oldMuscoviteDesc': 'Ikanye vowel reduction, [ʃʲː] for щ, stage adjectivals [ɨj]',
+    'profile.viewAll': 'View all profiles →',
+    
+    // Page Section
+    'page.label': 'Page',
+    'page.paperSize': 'Paper Size',
+    'page.letter': 'Letter',
+    'page.letterDims': '8.5 × 11 in',
+    'page.a4': 'A4',
+    'page.a4Dims': '210 × 297 mm',
+    
+    // Export
+    'export.button': 'Export PDF',
+    'export.hint': 'Opens print dialog. Select "Save as PDF".',
+    
+    // Inspector (Drill Mode)
+    'inspector.addTranslation': 'add translation',
+    'inspector.resetBoundaries': 'Reset syllable boundaries',
+    'inspector.stressSource': 'Stress source:',
+    'inspector.dictionary': 'Dictionary',
+    'inspector.composer': 'Composer',
+    'inspector.myChoice': 'My choice',
+    'inspector.restoreYo': 'Restore ё:',
+    'inspector.yoWarning': 'This changes the vowel sound and stress position.',
+    'inspector.cancel': 'Cancel',
+    'inspector.apply': 'Apply',
+    'inspector.breakBetween': 'Break between words?',
+    'inspector.no': 'No',
+    'inspector.yes': 'Yes',
+    'inspector.yoToast': 'ё → е changes pronunciation',
+    'inspector.undo': 'Undo',
+    
+    // UI Language Selector
+    'ui.label': 'Interface'
+  },
+  fr: {
+    // Welcome Banner
+    'welcome.text': 'Bienvenue sur Ilya. Votre nom apparaîtra en bas de page sur chaque transcription.',
+    'welcome.placeholder': 'p. ex. Dre Jeanne Roy ou J. Roy',
+    'welcome.save': 'Enregistrer',
+    'welcome.skip': 'Passer pour l\'instant',
+    
+    // Input Section
+    'input.clear': 'Effacer',
+    
+    // Song Setup Section
+    'setup.label': 'Configuration',
+    'setup.title': 'Titre',
+    'setup.opus': 'Opus / Catalogue',
+    'setup.composer': 'Compositeur',
+    'setup.poet': 'Poète / Librettiste',
+    'setup.filter': 'Filtrer...',
+    'setup.transcriber': 'Votre nom (pour attribution)',
+    'setup.transcriberHint': 'Apparaît dans le pied de page',
+    
+    // Transcription Profile
+    'profile.label': 'Profil de transcription',
+    'profile.oldMuscovite': 'Vieux-moscovite',
+    'profile.peterburgian': 'Pétersbourgeois',
+    'profile.choral': 'Choral',
+    'profile.oldMuscoviteDesc': 'Réduction vocalique ikanye, [ʃʲː] pour щ, adjectifs scéniques [ɨj]',
+    'profile.viewAll': 'Voir tous les profils →',
+    
+    // Page Section
+    'page.label': 'Page',
+    'page.paperSize': 'Format du papier',
+    'page.letter': 'Letter',
+    'page.letterDims': '8,5 × 11 po',
+    'page.a4': 'A4',
+    'page.a4Dims': '210 × 297 mm',
+    
+    // Export
+    'export.button': 'Exporter en PDF',
+    'export.hint': 'Ouvre la boîte de dialogue d\'impression. Sélectionnez « Enregistrer au format PDF ».',
+    
+    // Inspector (Drill Mode)
+    'inspector.addTranslation': 'ajouter une traduction',
+    'inspector.resetBoundaries': 'Réinitialiser les frontières syllabiques',
+    'inspector.stressSource': 'Source de l\'accent :',
+    'inspector.dictionary': 'Dictionnaire',
+    'inspector.composer': 'Compositeur',
+    'inspector.myChoice': 'Mon choix',
+    'inspector.restoreYo': 'Rétablir ё :',
+    'inspector.yoWarning': 'Cela modifie le son de la voyelle et la position de l\'accent.',
+    'inspector.cancel': 'Annuler',
+    'inspector.apply': 'Appliquer',
+    'inspector.breakBetween': 'Séparation entre les mots?',
+    'inspector.no': 'Non',
+    'inspector.yes': 'Oui',
+    'inspector.yoToast': 'ё → е modifie la prononciation',
+    'inspector.undo': 'Annuler',
+    
+    // UI Language Selector
+    'ui.label': 'Interface'
+  }
+};
+
+/**
+ * Get translated string for current UI language
+ * @param {string} key - Dot-notation key (e.g., 'welcome.save')
+ * @returns {string} Translated string, or key if not found
+ */
+function t(key) {
+  return I18N[currentUILanguage]?.[key] || I18N.en[key] || key;
+}
+
+/**
+ * Refresh all data-i18n elements with current UI language
+ * Called on language switch and initial load
+ */
+function refreshI18n() {
+  // Update text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+  
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    el.placeholder = t(key);
+  });
+  
+  // Update titles/tooltips
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.dataset.i18nTitle;
+    el.title = t(key);
+  });
+  
+  // Update aria-labels
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const key = el.dataset.i18nAria;
+    el.setAttribute('aria-label', t(key));
+  });
+  
+  // Update data-placeholder (for contenteditable)
+  document.querySelectorAll('[data-i18n-data-placeholder]').forEach(el => {
+    const key = el.dataset.i18nDataPlaceholder;
+    el.dataset.placeholder = t(key);
+  });
+  
+  console.log(`UI language refreshed: ${currentUILanguage}`);
+}
+
+/**
+ * Initialize UI language from localStorage or browser detection
+ * First visit: detect from navigator.language
+ * Return visit: use stored preference
+ */
+function initializeUILanguage() {
+  const stored = localStorage.getItem('ilya_ui_language');
+  if (stored) {
+    currentUILanguage = stored;
+  } else {
+    // First visit: detect from browser
+    currentUILanguage = navigator.language.startsWith('fr') ? 'fr' : 'en';
+    localStorage.setItem('ilya_ui_language', currentUILanguage);
+  }
+  console.log(`UI language initialized: ${currentUILanguage}`);
+}
 
 /**
  * Extract gloss in current language from new bilingual format
@@ -15186,6 +15381,25 @@ function addAcuteToSyllable(syllable) {
        INITIALIZATION
        ======================================== */
     document.addEventListener('DOMContentLoaded', () => {
+      // ========================================
+      // PHASE 6A: UI LANGUAGE INITIALIZATION
+      // Must run before controllers that might use t()
+      // ========================================
+      initializeUILanguage();
+      
+      // Also initialize gloss language from storage
+      const storedGloss = localStorage.getItem('ilya_gloss_language');
+      if (storedGloss) {
+        currentGlossLanguage = storedGloss;
+      } else {
+        // Match gloss language to UI language on first visit
+        currentGlossLanguage = currentUILanguage;
+        localStorage.setItem('ilya_gloss_language', currentGlossLanguage);
+      }
+      
+      // Apply UI language to all data-i18n elements
+      refreshI18n();
+      
       DrawerState.init();
       DrawerController.init();
       TabController.init();
@@ -15197,19 +15411,29 @@ function addAcuteToSyllable(syllable) {
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
       // ========================================
-      // LANGUAGE TOGGLE (v6.0.6)
-      // Transcribe + set gloss language in one click
-      // Phase 2C: No more syncing needed - DrawerController uses left drawer directly
+      // LANGUAGE TOGGLE (v6.0.6, updated Phase 6A)
+      // Now controls both gloss language and UI language
+      // Phase 6A: Instant swap, no animation (animation added in Phase 6B)
       // ========================================
       const langBtnEn = document.getElementById('langBtnEn');
       const langBtnFr = document.getElementById('langBtnFr');
 
       if (langBtnEn && langBtnFr) {
         langBtnEn.addEventListener('click', () => {
+          // Set both gloss and UI language
           currentGlossLanguage = 'en';
+          currentUILanguage = 'en';
+          localStorage.setItem('ilya_gloss_language', 'en');
+          localStorage.setItem('ilya_ui_language', 'en');
+          
+          // Update button states
           langBtnEn.classList.add('lang-btn-active');
           langBtnFr.classList.remove('lang-btn-active');
           
+          // Refresh UI labels
+          refreshI18n();
+          
+          // Handle transcription if needed
           const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
@@ -15219,14 +15443,24 @@ function addAcuteToSyllable(syllable) {
             // Already transcribed, just refresh glosses
             DrawerController.transcribe();
           }
-          console.log('Gloss language: English');
+          console.log('Language: English');
         });
 
         langBtnFr.addEventListener('click', () => {
+          // Set both gloss and UI language
           currentGlossLanguage = 'fr';
+          currentUILanguage = 'fr';
+          localStorage.setItem('ilya_gloss_language', 'fr');
+          localStorage.setItem('ilya_ui_language', 'fr');
+          
+          // Update button states
           langBtnFr.classList.add('lang-btn-active');
           langBtnEn.classList.remove('lang-btn-active');
           
+          // Refresh UI labels
+          refreshI18n();
+          
+          // Handle transcription if needed
           const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
@@ -15236,8 +15470,17 @@ function addAcuteToSyllable(syllable) {
             // Already transcribed, just refresh glosses
             DrawerController.transcribe();
           }
-          console.log('Gloss language: Français');
+          console.log('Language: Français');
         });
+        
+        // Initialize button states from stored preference
+        if (currentUILanguage === 'fr') {
+          langBtnFr.classList.add('lang-btn-active');
+          langBtnEn.classList.remove('lang-btn-active');
+        } else {
+          langBtnEn.classList.add('lang-btn-active');
+          langBtnFr.classList.remove('lang-btn-active');
+        }
       }
       
       // Render empty title page on load
