@@ -15491,11 +15491,8 @@ function addAcuteToSyllable(syllable) {
               });
             });
             
-            // Update Transcribe button label
-            const transcribeBtn = document.getElementById('drawerTranscribeBtn');
-            if (transcribeBtn) {
-              transcribeBtn.textContent = newLang === 'fr' ? 'Transcrire' : 'Transcribe';
-            }
+            // Swap all static UI labels (v6.0.54 — Phase A, item 5)
+            setUILanguage(newLang);
             
             // Re-render paper glosses in new language (v6.0.54)
             refreshPaperGlosses();
