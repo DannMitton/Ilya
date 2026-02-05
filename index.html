@@ -15582,7 +15582,11 @@ function addAcuteToSyllable(syllable) {
             // Phase 2: At midpoint, swap content
             setTimeout(() => {
               setUILanguage(newLang);
-              refreshPaperGlosses();
+              
+              // Full re-render: glosses, verify badges, and footer attribution (v6.0.54)
+              if (DocumentState?.lines?.length > 0) {
+                DrawerController.renderToPaper();
+              }
               
               if (mode === 'drill') {
                 const word = DrawerState.currentWord;
