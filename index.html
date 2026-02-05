@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.52 Header pill + Transcribe button</title>
+  <title>Ilya — v6.0.53 Drill pill relocated to inspector header</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -2285,10 +2285,9 @@
     }
 
     /* Drill placement: right-flush, above phoneme ribbon */
-    .drill-lang-pill-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 12px;
+    .inspector-header .lang-toggle-pill {
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     /* ========================================
@@ -4599,6 +4598,12 @@
           <button class="back-btn" id="drawerBackBtn" aria-label="Back to dashboard">←</button>
           <span class="inspector-word" id="inspectorWordDisplay">—</span>
           <span class="inspector-count" id="inspectorSyllableCount">[0]</span>
+          <!-- Language pill — Drill placement: inspector header, right-aligned (v6.0.53) -->
+          <div class="lang-toggle-pill" id="drillLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
+            <div class="lang-pill-indicator"></div>
+            <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
+            <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
+          </div>
         </div>
         
         <!-- Inspector Body -->
@@ -4626,15 +4631,6 @@
               aria-label="Translation"
               data-placeholder="add translation"
             ></span>
-          </div>
-          
-          <!-- Language pill — Drill placement: right-flush, display swap (v6.0.51) -->
-          <div class="drill-lang-pill-row">
-            <div class="lang-toggle-pill" id="drillLangPill" data-lang="en" role="radiogroup" aria-label="Gloss language">
-              <div class="lang-pill-indicator"></div>
-              <button class="lang-option active" data-lang="en" role="radio" aria-checked="true">EN</button>
-              <button class="lang-option" data-lang="fr" role="radio" aria-checked="false">FR</button>
-            </div>
           </div>
           
           <!-- Phoneme Ribbon (Phase 3C) -->
