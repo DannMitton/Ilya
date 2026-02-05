@@ -220,8 +220,8 @@
 
     .drawer-title {
       display: inline-block;
-      width: 120px;
-      height: 42px;
+      width: 80px;
+      height: 28px;
     }
     .drawer-title svg {
       display: block;
@@ -6809,8 +6809,8 @@ function addAcuteToSyllable(syllable) {
         // Render to paper
         this.renderToPaper();
         
-        // Collapse drawer after transcription
-        this.collapse();
+        // Close drawer after transcription
+        DrawerState.close();
       },
       
       renderToPaper(fallbackMode = false) {
@@ -15218,10 +15218,8 @@ function addAcuteToSyllable(syllable) {
           
           if (hasText) {
             DrawerController.transcribe();
-            DrawerState.close();
-          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, just refresh glosses
-            DrawerController.transcribe();
+          } else {
+            DrawerController.renderToPaper();
           }
           console.log('Gloss language: English');
         });
@@ -15235,10 +15233,8 @@ function addAcuteToSyllable(syllable) {
           
           if (hasText) {
             DrawerController.transcribe();
-            DrawerState.close();
-          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, just refresh glosses
-            DrawerController.transcribe();
+          } else {
+            DrawerController.renderToPaper();
           }
           console.log('Gloss language: Français');
         });
