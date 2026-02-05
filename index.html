@@ -218,11 +218,9 @@
       border-bottom: 1px solid rgba(26, 22, 18, 0.06);
     }
 
-    .drawer-title {
-      font-family: var(--font-mono);
-      font-size: 14px;
+    .drawer-logo {
       color: var(--stationery-sage);
-      letter-spacing: 0.02em;
+      display: block;
     }
 
     .drawer-section-label {
@@ -4364,7 +4362,20 @@
       <!-- Root State: Dashboard/Input (content migrated in Phase 2) -->
       <div class="drawer-root" id="drawerRoot">
         <div class="drawer-header">
-          <span class="drawer-title">[ Ilya ]</span>
+          <svg class="drawer-logo" width="56" height="16" viewBox="0 0 56 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ilya">
+            <!-- Left bracket [ -->
+            <path d="M1 2h5v1.8H3v8.4h3V14H1V2z" fill="currentColor"/>
+            <!-- I (italic serif) -->
+            <path d="M12.4 4h2l-2.2 8h-2l2.2-8z" fill="currentColor"/>
+            <!-- l (italic serif) -->
+            <path d="M17.2 2h1.9l-2.8 10h-1.9l2.8-10z" fill="currentColor"/>
+            <!-- y (italic serif with descender) -->
+            <path d="M20.5 4h1.9l.8 5.2h.05L26 4h1.9l-4.5 10.5c-.3.7-.8 1.2-1.6 1.2h-1.2l.4-1.4h.7c.3 0 .5-.15.6-.4l.5-1L20.5 4z" fill="currentColor"/>
+            <!-- a (italic serif) -->
+            <path d="M29 7.8c.5-.5 1.2-.9 2-.9 1.3 0 2.1.8 1.7 2.3l-.7 2.8h-1.8l.6-2.4c.2-.7-.1-1.1-.7-1.1-.6 0-1.1.4-1.3 1.1l-.6 2.4h-1.8l1.3-5h1.7l-.4.8zm1.2-3.8h2l-.4 1.7h-2l.4-1.7z" fill="currentColor"/>
+            <!-- Right bracket ] -->
+            <path d="M50 2h5v12h-5v-1.8h3V5.8h-3V2z" fill="currentColor"/>
+          </svg>
         </div>
         <div class="drawer-body">
 
@@ -15441,11 +15452,8 @@ function addAcuteToSyllable(syllable) {
           if (hasText) {
             DrawerController.transcribe();
             DrawerState.close();
-          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, refresh with new language
-            DrawerController.transcribe();
           } else {
-            // Empty document - re-render to update footer language
+            // Re-render paper to update footer language
             DrawerController.renderToPaper();
           }
           console.log('Language: English');
@@ -15471,11 +15479,8 @@ function addAcuteToSyllable(syllable) {
           if (hasText) {
             DrawerController.transcribe();
             DrawerState.close();
-          } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, refresh with new language
-            DrawerController.transcribe();
           } else {
-            // Empty document - re-render to update footer language
+            // Re-render paper to update footer language
             DrawerController.renderToPaper();
           }
           console.log('Language: Français');
