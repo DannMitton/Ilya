@@ -4774,16 +4774,22 @@ function extractBlurbText(blurbData) {
   const blurbContent = blurbData.blurb;
   
   // String format = English-only (legacy)
+  let text;
   if (typeof blurbContent === 'string') {
-    return blurbContent;
+    text = blurbContent;
+  } else if (typeof blurbContent === 'object') {
+    text = blurbContent[currentGlossLanguage] || blurbContent.en || '';
+  } else {
+    return '';
   }
   
-  // Object format = bilingual {en, fr}
-  if (typeof blurbContent === 'object') {
-    return blurbContent[currentGlossLanguage] || blurbContent.en || '';
-  }
+  // Prevent IPA notation from breaking across lines (v6.0.52)
+  // Wraps /…/, […], and ⟨…⟩ in nowrap spans
+  text = text.replace(/\/[^/]+\//g, m => `<span style="white-space:nowrap">${m}</span>`);
+  text = text.replace(/\[[^\]]+\]/g, m => `<span style="white-space:nowrap">${m}</span>`);
+  text = text.replace(/⟨[^⟩]+⟩/g, m => `<span style="white-space:nowrap">${m}</span>`);
   
-  return '';
+  return text;
 }
 
 // ==========================================
@@ -15292,19 +15298,38 @@ function addAcuteToSyllable(syllable) {
               // Drill pill: swap display text in-place, no re-transcription
               const word = DrawerState.currentWord;
               if (word) {
-                // Re-extract gloss from DocumentState (bilingual source)
+                // Fix: use extractGloss for proper bilingual handling (v6.0.52)
                 const docWord = DocumentState.lines[word.lineIndex]?.[word.wordIndex];
-                if (docWord && docWord.gloss) {
-                  const rawGloss = docWord.gloss;
-                  let displayGloss;
-                  if (typeof rawGloss === 'object' && (rawGloss.en || rawGloss.fr)) {
-                    displayGloss = rawGloss[currentGlossLanguage] || rawGloss.en || '';
-                  } else {
-                    displayGloss = rawGloss || '';
-                  }
-                  word.gloss = displayGloss;
+                if (docWord) {
+                  word.gloss = extractGloss(docWord.gloss);
                 }
+                
+                // Save expanded ribbon state before re-render
+                const ribbon = document.getElementById('inspectorRibbon');
+                const expandedRows = [];
+                const expandedClusters = [];
+                if (ribbon) {
+                  ribbon.querySelectorAll('.phoneme-row').forEach((row, idx) => {
+                    if (row.classList.contains('expanded')) expandedRows.push(idx);
+                  });
+                  ribbon.querySelectorAll('.cluster-group').forEach((grp, idx) => {
+                    if (grp.classList.contains('expanded')) expandedClusters.push(idx);
+                  });
+                }
+                
                 DrawerState.updateInspector();
+                
+                // Restore expanded rows after re-render
+                if (ribbon && (expandedRows.length || expandedClusters.length)) {
+                  const rows = ribbon.querySelectorAll('.phoneme-row');
+                  expandedRows.forEach(idx => {
+                    if (rows[idx]) rows[idx].classList.add('expanded');
+                  });
+                  const clusters = ribbon.querySelectorAll('.cluster-group');
+                  expandedClusters.forEach(idx => {
+                    if (clusters[idx]) clusters[idx].classList.add('expanded');
+                  });
+                }
               }
             }
             
