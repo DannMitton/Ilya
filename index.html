@@ -253,6 +253,24 @@
       background: var(--ilya-binding);
     }
 
+    /* Breath animation: language swap (v6.0.54, Kimi spec)
+       150ms fade-out + lift, 250ms fade-in + settle. Total 400ms.
+       Header stays still. Applied to drawer-body, inspector-body, paper-stack. */
+    .breath-out {
+      animation: breathOut 150ms cubic-bezier(0.25, 0.1, 0.25, 1.0) forwards;
+    }
+    .breath-in {
+      animation: breathIn 250ms cubic-bezier(0.25, 0.1, 0.25, 1.0) forwards;
+    }
+    @keyframes breathOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-2px); }
+    }
+    @keyframes breathIn {
+      from { opacity: 0; transform: translateY(-2px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     /* ========================================
        WELCOME PREFACE (First-run name collection)
        Shows once on first drawer open, then never returns
@@ -15538,7 +15556,7 @@ function addAcuteToSyllable(syllable) {
             // Update global state
             currentGlossLanguage = newLang;
             
-            // Update ALL pills to stay in sync
+            // Update ALL pills to stay in sync (immediate — header stays still)
             document.querySelectorAll('.lang-toggle-pill').forEach(pill => {
               pill.dataset.lang = newLang;
               pill.querySelectorAll('.lang-option').forEach(opt => {
@@ -15548,50 +15566,73 @@ function addAcuteToSyllable(syllable) {
               });
             });
             
-            // Swap all static UI labels (v6.0.54 — Phase A, item 5)
-            setUILanguage(newLang);
+            // Breath animation (v6.0.54 — Kimi spec: 150ms out, 250ms in)
+            // Targets: drawer-body (Root), inspector-body (Drill), paper-stack (Paper)
+            const drawerBody = document.querySelector('.drawer-body');
+            const inspectorBody = document.querySelector('.inspector-body');
+            const paperStack = document.getElementById('paperStack');
+            const breathTargets = [drawerBody, inspectorBody, paperStack].filter(Boolean);
             
-            // Re-render paper glosses in new language (v6.0.54)
-            refreshPaperGlosses();
+            // Phase 1: Breathe out (150ms)
+            breathTargets.forEach(el => {
+              el.classList.remove('breath-in');
+              el.classList.add('breath-out');
+            });
             
-            if (mode === 'drill') {
-              // Drill pill: swap display text in-place, no re-transcription
-              const word = DrawerState.currentWord;
-              if (word) {
-                // Fix: use extractGloss for proper bilingual handling (v6.0.52)
-                const docWord = DocumentState.lines[word.lineIndex]?.[word.wordIndex];
-                if (docWord) {
-                  word.gloss = extractGloss(docWord.gloss);
-                }
-                
-                // Save expanded ribbon state before re-render
-                const ribbon = document.getElementById('inspectorRibbon');
-                const expandedRows = [];
-                const expandedClusters = [];
-                if (ribbon) {
-                  ribbon.querySelectorAll('.phoneme-row').forEach((row, idx) => {
-                    if (row.classList.contains('expanded')) expandedRows.push(idx);
-                  });
-                  ribbon.querySelectorAll('.cluster-group').forEach((grp, idx) => {
-                    if (grp.classList.contains('expanded')) expandedClusters.push(idx);
-                  });
-                }
-                
-                DrawerState.updateInspector();
-                
-                // Restore expanded rows after re-render
-                if (ribbon && (expandedRows.length || expandedClusters.length)) {
-                  const rows = ribbon.querySelectorAll('.phoneme-row');
-                  expandedRows.forEach(idx => {
-                    if (rows[idx]) rows[idx].classList.add('expanded');
-                  });
-                  const clusters = ribbon.querySelectorAll('.cluster-group');
-                  expandedClusters.forEach(idx => {
-                    if (clusters[idx]) clusters[idx].classList.add('expanded');
-                  });
+            // Phase 2: At midpoint, swap content
+            setTimeout(() => {
+              setUILanguage(newLang);
+              refreshPaperGlosses();
+              
+              if (mode === 'drill') {
+                const word = DrawerState.currentWord;
+                if (word) {
+                  const docWord = DocumentState.lines[word.lineIndex]?.[word.wordIndex];
+                  if (docWord) {
+                    word.gloss = extractGloss(docWord.gloss);
+                  }
+                  
+                  // Save expanded ribbon state before re-render
+                  const ribbon = document.getElementById('inspectorRibbon');
+                  const expandedRows = [];
+                  const expandedClusters = [];
+                  if (ribbon) {
+                    ribbon.querySelectorAll('.phoneme-row').forEach((row, idx) => {
+                      if (row.classList.contains('expanded')) expandedRows.push(idx);
+                    });
+                    ribbon.querySelectorAll('.cluster-group').forEach((grp, idx) => {
+                      if (grp.classList.contains('expanded')) expandedClusters.push(idx);
+                    });
+                  }
+                  
+                  DrawerState.updateInspector();
+                  
+                  // Restore expanded rows after re-render
+                  if (ribbon && (expandedRows.length || expandedClusters.length)) {
+                    const rows = ribbon.querySelectorAll('.phoneme-row');
+                    expandedRows.forEach(idx => {
+                      if (rows[idx]) rows[idx].classList.add('expanded');
+                    });
+                    const clusters = ribbon.querySelectorAll('.cluster-group');
+                    expandedClusters.forEach(idx => {
+                      if (clusters[idx]) clusters[idx].classList.add('expanded');
+                    });
+                  }
                 }
               }
-            }
+              
+              // Phase 3: Breathe in (250ms)
+              breathTargets.forEach(el => {
+                el.classList.remove('breath-out');
+                el.classList.add('breath-in');
+              });
+              
+              // Clean up animation classes
+              setTimeout(() => {
+                breathTargets.forEach(el => el.classList.remove('breath-in'));
+              }, 250);
+              
+            }, 150);
             
             console.log(`Gloss language: ${newLang === 'fr' ? 'Français' : 'English'}`);
           });
