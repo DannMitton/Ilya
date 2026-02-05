@@ -5493,6 +5493,11 @@ const CURATED_GLOSSES = new Map([
  * Format gloss for word-stack display (minimal, translation only)
  */
 function formatGlossForDisplay(gloss, pos, lemma, word) {
+    // Bilingual gloss data takes priority (v6.0.48)
+    if (gloss && typeof gloss === 'object' && (gloss.en || gloss.fr)) {
+        return extractGloss(gloss);
+    }
+    
     // Check curated glosses first (word form, then lemma)
     if (word && CURATED_GLOSSES.has(word.toLowerCase())) {
         return CURATED_GLOSSES.get(word.toLowerCase());
@@ -7078,7 +7083,7 @@ function addAcuteToSyllable(syllable) {
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${tw.isProclitic || tw.isEnclitic 
-                ? (GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss || '')
+                ? extractGloss(GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss)
                 : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
             </div>
           `;
@@ -7571,46 +7576,46 @@ function addAcuteToSyllable(syllable) {
       cliticData: new Map([
         // Proclitics - canonical form assumes pretonic position
         // Short glosses curated for PDF display (v5.11.10)
-        ['в', { type: 'proclitic', canonicalIpa: 'v', gloss: 'in/into' }],
-        ['во', { type: 'proclitic', canonicalIpa: 'vɑ', gloss: 'in/into' }],
-        ['к', { type: 'proclitic', canonicalIpa: 'k', gloss: 'to/toward' }],
-        ['ко', { type: 'proclitic', canonicalIpa: 'kɑ', gloss: 'to/toward' }],
-        ['с', { type: 'proclitic', canonicalIpa: 's', gloss: 'with/from' }],
-        ['со', { type: 'proclitic', canonicalIpa: 'sɑ', gloss: 'with/from' }],
-        ['о', { type: 'proclitic', canonicalIpa: 'ɑ', gloss: 'about' }],
-        ['об', { type: 'proclitic', canonicalIpa: 'ɑb', gloss: 'about' }],
-        ['обо', { type: 'proclitic', canonicalIpa: 'ɑbɑ', gloss: 'about' }],
-        ['у', { type: 'proclitic', canonicalIpa: 'u', gloss: 'at/by' }],
-        ['на', { type: 'proclitic', canonicalIpa: 'nɑ', gloss: 'on/onto' }],
-        ['за', { type: 'proclitic', canonicalIpa: 'zɑ', gloss: 'behind/for' }],
-        ['по', { type: 'proclitic', canonicalIpa: 'pɑ', gloss: 'along/by' }],
-        ['до', { type: 'proclitic', canonicalIpa: 'dɑ', gloss: 'until/to' }],
-        ['из', { type: 'proclitic', canonicalIpa: 'iz', gloss: 'from/out of' }],
-        ['изо', { type: 'proclitic', canonicalIpa: 'izɑ', gloss: 'from/out of' }],
-        ['от', { type: 'proclitic', canonicalIpa: 'ɑt', gloss: 'from' }],
-        ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ', gloss: 'from' }],
-        ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz', gloss: 'without' }],
-        ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ', gloss: 'not' }],
-        ['ни', { type: 'proclitic', canonicalIpa: 'ɲi', gloss: 'nor/not' }],
-        ['над', { type: 'proclitic', canonicalIpa: 'nɑt', gloss: 'above' }],
-        ['надо', { type: 'proclitic', canonicalIpa: 'nɑdɑ', gloss: 'above' }],
-        ['под', { type: 'proclitic', canonicalIpa: 'pɑt', gloss: 'under' }],
-        ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ', gloss: 'under' }],
-        ['при', { type: 'proclitic', canonicalIpa: 'prʲi', gloss: 'at/near' }],
-        ['про', { type: 'proclitic', canonicalIpa: 'prɑ', gloss: 'about' }],
-        ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ', gloss: 'for' }],
-        ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz', gloss: 'through' }],
-        ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt', gloss: 'before' }],
-        ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ', gloss: 'before' }],
+        ['в', { type: 'proclitic', canonicalIpa: 'v', gloss: { en: 'in/into', fr: 'dans/en' } }],
+        ['во', { type: 'proclitic', canonicalIpa: 'vɑ', gloss: { en: 'in/into', fr: 'dans/en' } }],
+        ['к', { type: 'proclitic', canonicalIpa: 'k', gloss: { en: 'to/toward', fr: 'vers/à' } }],
+        ['ко', { type: 'proclitic', canonicalIpa: 'kɑ', gloss: { en: 'to/toward', fr: 'vers/à' } }],
+        ['с', { type: 'proclitic', canonicalIpa: 's', gloss: { en: 'with/from', fr: 'avec/de' } }],
+        ['со', { type: 'proclitic', canonicalIpa: 'sɑ', gloss: { en: 'with/from', fr: 'avec/de' } }],
+        ['о', { type: 'proclitic', canonicalIpa: 'ɑ', gloss: { en: 'about', fr: 'de/sur' } }],
+        ['об', { type: 'proclitic', canonicalIpa: 'ɑb', gloss: { en: 'about', fr: 'de/sur' } }],
+        ['обо', { type: 'proclitic', canonicalIpa: 'ɑbɑ', gloss: { en: 'about', fr: 'de/sur' } }],
+        ['у', { type: 'proclitic', canonicalIpa: 'u', gloss: { en: 'at/by', fr: 'chez/près de' } }],
+        ['на', { type: 'proclitic', canonicalIpa: 'nɑ', gloss: { en: 'on/onto', fr: 'sur' } }],
+        ['за', { type: 'proclitic', canonicalIpa: 'zɑ', gloss: { en: 'behind/for', fr: 'derrière/pour' } }],
+        ['по', { type: 'proclitic', canonicalIpa: 'pɑ', gloss: { en: 'along/by', fr: 'le long de/par' } }],
+        ['до', { type: 'proclitic', canonicalIpa: 'dɑ', gloss: { en: 'until/to', fr: "jusqu'à" } }],
+        ['из', { type: 'proclitic', canonicalIpa: 'iz', gloss: { en: 'from/out of', fr: 'de/hors de' } }],
+        ['изо', { type: 'proclitic', canonicalIpa: 'izɑ', gloss: { en: 'from/out of', fr: 'de/hors de' } }],
+        ['от', { type: 'proclitic', canonicalIpa: 'ɑt', gloss: { en: 'from', fr: 'de' } }],
+        ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ', gloss: { en: 'from', fr: 'de' } }],
+        ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz', gloss: { en: 'without', fr: 'sans' } }],
+        ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ', gloss: { en: 'not', fr: 'ne… pas' } }],
+        ['ни', { type: 'proclitic', canonicalIpa: 'ɲi', gloss: { en: 'nor/not', fr: 'ni' } }],
+        ['над', { type: 'proclitic', canonicalIpa: 'nɑt', gloss: { en: 'above', fr: 'au-dessus de' } }],
+        ['надо', { type: 'proclitic', canonicalIpa: 'nɑdɑ', gloss: { en: 'above', fr: 'au-dessus de' } }],
+        ['под', { type: 'proclitic', canonicalIpa: 'pɑt', gloss: { en: 'under', fr: 'sous' } }],
+        ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ', gloss: { en: 'under', fr: 'sous' } }],
+        ['при', { type: 'proclitic', canonicalIpa: 'prʲi', gloss: { en: 'at/near', fr: 'près de/en présence de' } }],
+        ['про', { type: 'proclitic', canonicalIpa: 'prɑ', gloss: { en: 'about', fr: 'au sujet de' } }],
+        ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ', gloss: { en: 'for', fr: 'pour' } }],
+        ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz', gloss: { en: 'through', fr: 'à travers' } }],
+        ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt', gloss: { en: 'before', fr: 'devant' } }],
+        ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ', gloss: { en: 'before', fr: 'devant' } }],
         // Enclitics - canonical form assumes posttonic position
-        ['ли', { type: 'enclitic', canonicalIpa: 'lʲi', gloss: '(question)' }],
-        ['ль', { type: 'enclitic', canonicalIpa: 'lʲ', gloss: '(question)' }],
-        ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ', gloss: '(emphasis)' }],
-        ['бы', { type: 'enclitic', canonicalIpa: 'bɨ', gloss: 'would' }],
-        ['б', { type: 'enclitic', canonicalIpa: 'b', gloss: 'would' }],
-        ['то', { type: 'enclitic', canonicalIpa: 'tɑ', gloss: '(then)' }],
-        ['ка', { type: 'enclitic', canonicalIpa: 'kɑ', gloss: '(urging)' }],
-        ['таки', { type: 'enclitic', canonicalIpa: 'tɑkʲi', gloss: 'after all' }],
+        ['ли', { type: 'enclitic', canonicalIpa: 'lʲi', gloss: { en: '(question)', fr: '(question)' } }],
+        ['ль', { type: 'enclitic', canonicalIpa: 'lʲ', gloss: { en: '(question)', fr: '(question)' } }],
+        ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ', gloss: { en: '(emphasis)', fr: '(emphase)' } }],
+        ['бы', { type: 'enclitic', canonicalIpa: 'bɨ', gloss: { en: 'would', fr: '(conditionnel)' } }],
+        ['б', { type: 'enclitic', canonicalIpa: 'b', gloss: { en: 'would', fr: '(conditionnel)' } }],
+        ['то', { type: 'enclitic', canonicalIpa: 'tɑ', gloss: { en: '(then)', fr: '(alors)' } }],
+        ['ка', { type: 'enclitic', canonicalIpa: 'kɑ', gloss: { en: '(urging)', fr: '(exhortation)' } }],
+        ['таки', { type: 'enclitic', canonicalIpa: 'tɑkʲi', gloss: { en: 'after all', fr: 'tout de même' } }],
       ]),
       
       // Derived Sets for backwards compatibility (computed once, not on every access)
