@@ -15433,15 +15433,18 @@ function addAcuteToSyllable(syllable) {
           // Refresh UI labels
           refreshI18n();
           
-          // Handle transcription if needed
+          // Handle transcription/re-render
           const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
             DrawerController.transcribe();
             DrawerState.close();
           } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, just refresh glosses
+            // Already transcribed, refresh with new language
             DrawerController.transcribe();
+          } else {
+            // Empty document - re-render to update footer language
+            DrawerController.renderToPaper();
           }
           console.log('Language: English');
         });
@@ -15460,15 +15463,18 @@ function addAcuteToSyllable(syllable) {
           // Refresh UI labels
           refreshI18n();
           
-          // Handle transcription if needed
+          // Handle transcription/re-render
           const hasText = DrawerController.textInput?.value?.trim().length > 0;
           
           if (hasText) {
             DrawerController.transcribe();
             DrawerState.close();
           } else if (DocumentState.lines && DocumentState.lines.length > 0) {
-            // Already transcribed, just refresh glosses
+            // Already transcribed, refresh with new language
             DrawerController.transcribe();
+          } else {
+            // Empty document - re-render to update footer language
+            DrawerController.renderToPaper();
           }
           console.log('Language: Français');
         });
