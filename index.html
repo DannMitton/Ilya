@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.44 Shortened ghost text</title>
+  <title>Ilya — v6.0.49 Bilingual PHONEME_BLURBS</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -7056,7 +7056,7 @@ function addAcuteToSyllable(syllable) {
             data-cyrillic="${tw.cleanWord}"
             data-ipa="${tw.ipaSurface}"
             data-ipa-underlying="${tw.ipaUnderlying}"
-            data-gloss="${tw.wordData?.gloss || ''}"
+            data-gloss="${typeof tw.wordData?.gloss === 'object' ? extractGloss(tw.wordData.gloss) : (tw.wordData?.gloss || '')}"
             data-pos="${tw.wordData?.pos || ''}"
             data-lemma="${tw.wordData?.lemma || ''}"
             data-punctuation="${tw.punct}"
@@ -8043,9 +8043,10 @@ function addAcuteToSyllable(syllable) {
           // Handle homographs (arrays) - return first match for now, mark as homograph
           if (Array.isArray(entry)) {
             const firstEntry = entry[0];
+            const rawGloss = firstEntry.gloss ?? firstEntry.g;
             return {
               stress: firstEntry.stress ?? firstEntry.s,
-              gloss: extractGloss(firstEntry.gloss ?? firstEntry.g),
+              gloss: rawGloss,
               pos: firstEntry.pos ?? firstEntry.p ?? '',
               lemma: firstEntry.lemma ?? firstEntry.l ?? '',
               source: source,
@@ -8056,9 +8057,10 @@ function addAcuteToSyllable(syllable) {
           }
           
           // Single entry
+          const rawGloss = entry.gloss ?? entry.g;
           return {
             stress: entry.stress ?? entry.s,
-            gloss: extractGloss(entry.gloss ?? entry.g),
+            gloss: rawGloss,
             pos: entry.pos ?? entry.p ?? '',
             lemma: entry.lemma ?? entry.l ?? '',
             source: entry.source || source,
