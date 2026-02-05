@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.49 Bilingual PHONEME_BLURBS</title>
+  <title>Ilya — v6.0.50 Bilingual j-glide fallback</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -11374,7 +11374,10 @@ function addAcuteToSyllable(syllable) {
           
           // Default j-glide blurb
           return {
-            blurb: 'The palatal glide /j/ precedes this vowel.',
+            blurb: {
+              en: 'The palatal glide /j/ precedes this vowel.',
+              fr: 'La glissante palatale /j/ précède cette voyelle.'
+            },
             citation: 'pp. 114–124',
             notable: false
           };
