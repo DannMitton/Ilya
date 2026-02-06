@@ -14464,6 +14464,7 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements.yoOkBtn?.addEventListener('click', (e) => {
           e.stopPropagation();
           this.inspectorElements.yoToast?.classList.remove('visible');
+          this._yoStateBeforeToggle = null;
         });
         
         // Phase 4B: Set up syllable boundary drag handlers
@@ -14751,8 +14752,11 @@ function addAcuteToSyllable(syllable) {
           this.inspectorElements.variantConfirm?.classList.remove('visible');
           this._stagedVariant = null;
           
-          // Store state for undo
-          this._yoStateBeforeToggle = hasYo ? 'yo' : 'ye';
+          // Store state for undo (only if toast is not showing -- preserve undo target)
+          const toastVisible = this.inspectorElements.yoToast?.classList.contains('visible');
+          if (!toastVisible) {
+            this._yoStateBeforeToggle = hasYo ? 'yo' : 'ye';
+          }
         }
         
         // 2. Assimilation row (word boundary control)
