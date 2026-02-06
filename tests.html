@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ilya — Golden-Master Tests</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f8f7f4;
+      color: #2c2c2c;
+      padding: 2rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: normal;
+      color: #4a6741;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: #888;
+      margin-bottom: 1.5rem;
+    }
+
+    #status {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    #status.loading { background: #fef9e7; color: #856404; }
+    #status.pass { background: #e8f5e9; color: #2e7d32; }
+    #status.fail { background: #fdecea; color: #c62828; }
+
+    .category {
+      margin-bottom: 1.25rem;
+    }
+
+    .category-header {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #555;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 0.5rem;
+    }
+
+    .test-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.2rem 0;
+      font-size: 0.85rem;
+      font-family: 'Menlo', 'Consolas', monospace;
+    }
+
+    .test-row.pass .icon { color: #2e7d32; }
+    .test-row.fail .icon { color: #c62828; }
+
+    .icon { width: 1.25rem; flex-shrink: 0; text-align: center; }
+
+    .word {
+      font-weight: 600;
+      min-width: 7rem;
+    }
+
+    .ipa { color: #555; }
+
+    .fail-detail {
+      font-size: 0.8rem;
+      color: #c62828;
+      padding-left: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .note {
+      font-size: 0.78rem;
+      color: #999;
+      padding-left: 1.75rem;
+      font-family: 'Georgia', serif;
+    }
+
+    .summary-bar {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .summary-bar span { font-weight: 600; }
+    .summary-bar .passed { color: #2e7d32; }
+    .summary-bar .failed { color: #c62828; }
+
+    button {
+      background: #4a6741;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+
+    button:hover { background: #3d5636; }
+    button:disabled { background: #aaa; cursor: default; }
+  </style>
+</head>
+<body>
+  <h1><em>Ilya</em> Golden-Master Tests</h1>
+  <p class="subtitle">GraysonEngine phonological accuracy suite</p>
+
+  <div id="status" class="loading">Loading GraysonEngine from index.html…</div>
+  <button id="runBtn" disabled onclick="runTests()">Run Tests</button>
+
+  <div id="results"></div>
+
+  <!-- Hidden iframe loads the app to access GraysonEngine -->
+  <iframe id="engineFrame" src="index.html" style="display:none;"></iframe>
+
+  <script>
+    // ========================================
+    // TEST DATA
+    // ========================================
+
+    const GOLDEN_TESTS = {
+      'Clitics and Prepositions': [
+        { word: 'во', stress: -1, expected: 'vɑ', note: 'Voweled preposition, unstressed' },
+        { word: 'ко', stress: -1, expected: 'kɑ', note: 'Voweled preposition, unstressed' },
+        { word: 'со', stress: -1, expected: 'sɑ', note: 'Voweled preposition, unstressed' },
+        { word: 'не', stress: -1, expected: 'ɲɪ', note: 'Particle, unstressed' },
+        { word: 'ни', stress: -1, expected: 'ɲi', note: 'Particle, unstressed' },
+      ],
+      'Stressed Vowels': [
+        { word: 'мама', stress: 0, expected: 'mɑ mɑ', note: 'Stressed а → ɑ' },
+        { word: 'папа', stress: 0, expected: 'pɑ pɑ', note: 'Stressed а → ɑ' },
+        { word: 'дом', stress: 0, expected: 'dom', note: 'Stressed о → o' },
+        { word: 'ночь', stress: 0, expected: 'notʃʲ', note: 'Stressed о → o, ч palatalized' },
+        { word: 'сон', stress: 0, expected: 'son', note: 'Stressed о → o' },
+        { word: 'лес', stress: 0, expected: 'lʲɛs', note: 'Stressed е → ɛ' },
+        { word: 'мир', stress: 0, expected: 'mʲir', note: 'Stressed и → i' },
+        { word: 'сын', stress: 0, expected: 'sɨn', note: 'Stressed ы → ɨ' },
+        { word: 'дух', stress: 0, expected: 'dux', note: 'Stressed у → u' },
+      ],
+      'Vowel Reduction - Akanye': [
+        { word: 'вода', stress: 1, expected: 'vɑ dɑ', note: 'Immediate pretonic о → ɑ' },
+        { word: 'молоко', stress: 2, expected: 'mʌ ɫɑ ko', note: 'Remote о → ʌ, immediate → ɑ' },
+        { word: 'хорошо', stress: 2, expected: 'xʌ rɑ ʃo', note: 'Remote о → ʌ, immediate → ɑ' },
+        { word: 'голова', stress: 2, expected: 'ɡʌ ɫɑ vɑ', note: 'Remote о → ʌ, immediate → ɑ' },
+      ],
+      'Vowel Reduction - Ikanye': [
+        { word: 'весна', stress: 1, expected: 'vʲɪ snɑ', note: 'Unstressed е → ɪ' },
+        { word: 'земля', stress: 1, expected: 'zʲɪ mlʲɑ', note: 'Unstressed е → ɪ' },
+      ],
+      'И Never Reduces': [
+        { word: 'игра', stress: 1, expected: 'i ɡrɑ', note: 'Unstressed и stays i' },
+        { word: 'книга', stress: 0, expected: 'kɲi ɡɑ', note: 'Unstressed и stays i' },
+      ],
+      'Palatal Nasal': [
+        { word: 'няня', stress: 0, expected: 'ɲa ɲɑ', note: 'н before я → ɲ' },
+        { word: 'конь', stress: 0, expected: 'koɲ', note: 'нь → ɲ' },
+        { word: 'день', stress: 0, expected: 'dʲeɲ', note: 'Interpalatal е → e, нь → ɲ' },
+        { word: 'очень', stress: 0, expected: 'otʃʲiɲ', note: 'Unstressed interpalatal е → i' },
+        { word: 'моей', stress: 1, expected: 'mɑ jej', note: 'Interpalatal stressed е → /e/ (j-glide + е + й)' },
+      ],
+      'Hard vs Soft Л': [
+        { word: 'был', stress: 0, expected: 'bɨɫ', note: 'Hard л → ɫ' },
+        { word: 'была', stress: 1, expected: 'bɨ ɫɑ', note: 'Hard л → ɫ' },
+        { word: 'люди', stress: 0, expected: 'lʲu dʲi', note: 'Soft л → lʲ' },
+        { word: 'любовь', stress: 1, expected: 'lʲu bofʲ', note: 'Soft л → lʲ' },
+      ],
+      'Voicing Assimilation - Devoicing': [
+        { word: 'трубка', stress: 0, expected: 'trup kɑ', note: 'б→п before к' },
+        { word: 'обход', stress: 1, expected: 'ɑp xot', note: 'б→п before х' },
+        { word: 'ногти', stress: 0, expected: 'nok tʲi', note: 'г→к before т' },
+        { word: 'водка', stress: 0, expected: 'vot kɑ', note: 'д→т before к' },
+        { word: 'подход', stress: 1, expected: 'pɑt xot', note: 'д→т before х' },
+        { word: 'ложка', stress: 0, expected: 'ɫoʃ kɑ', note: 'ж→ш before к' },
+        { word: 'лезть', stress: 0, expected: 'lʲesʲtʲ', note: 'Interpalatal е → /e/, з→с before т' },
+      ],
+      'Voicing Assimilation - Voicing': [
+        { word: 'вокзал', stress: 1, expected: 'vɑɡ zɑɫ', note: 'к→г before з' },
+        { word: 'сбор', stress: 0, expected: 'zbor', note: 'с→з before б' },
+        { word: 'просьба', stress: 0, expected: 'prozʲ bɑ', note: 'с→з before б' },
+        { word: 'отбой', stress: 1, expected: 'ɑd boj', note: 'т→д before б' },
+      ],
+      'Special Clusters': [
+        { word: 'что', stress: 0, expected: 'ʃto', note: 'чт→ʃt' },
+        { word: 'конечно', stress: 1, expected: 'kɑ ɲɛ ʃnʌ', note: 'чн→ʃn' },
+        { word: 'скучно', stress: 0, expected: 'sku ʃnʌ', note: 'чн→ʃn' },
+      ],
+      'Reflexive Verbs': [
+        { word: 'боится', stress: 1, expected: 'bɑ i tːsʌ', note: '-тся→tːsʌ' },
+        { word: 'купаться', stress: 1, expected: 'ku pɑ tːsʌ', note: '-ться→tːsʌ' },
+      ],
+      'Exception Words': [
+        { word: 'счастье', stress: 0, expected: 'ʃʲʃʲɑ sʲtʲjɪ', note: 'сч→ʃʲʃʲ' },
+        { word: 'сердце', stress: 0, expected: 'sʲɛr tsɨ', note: 'рдц→рц, д silent' },
+        { word: 'солнце', stress: 0, expected: 'son tsɨ', note: 'лнц→нц, л silent' },
+        { word: 'здравствуй', stress: 0, expected: 'zdrɑ stvuj', note: 'вств→ств, first в silent' },
+        { word: 'чувство', stress: 0, expected: 'tʃʲu stvʌ', note: 'вств→ств, first в silent' },
+      ],
+      'Ё Stress Rule': [
+        { word: 'ёлка', stress: 0, expected: 'joɫ kɑ', note: 'ё always stressed' },
+        { word: 'моё', stress: 1, expected: 'mɑ jo', note: 'ё always stressed' },
+        { word: 'её', stress: 1, expected: 'ji jo', note: 'ё always stressed' },
+      ],
+      'Pushkin/Tchaikovsky Vocabulary': [
+        { word: 'храм', stress: 0, expected: 'xrɑm', note: 'Monosyllable' },
+        { word: 'брожу', stress: 1, expected: 'brɑ ʒu', note: 'Common verb' },
+        { word: 'улиц', stress: 0, expected: 'u lʲits', note: 'Genitive plural' },
+        { word: 'шумных', stress: 0, expected: 'ʃum nɨx', note: 'Adjective genitive plural' },
+      ],
+    };
+
+    // ========================================
+    // TEST RUNNER
+    // ========================================
+
+    let engine = null;
+
+    function normalizeForComparison(ipa) {
+      return ipa
+        .replace(/\s+/g, '')
+        .replace(/ˈ/g, '')
+        .replace(/ˌ/g, '')
+        .replace(/[\/\[\]]/g, '')
+        .replace(/\./g, '');
+    }
+
+    function processWord(word, stress, options = {}) {
+      const isClitic = options.isClitic || stress === -1;
+      return engine.transcribe(word, stress, isClitic);
+    }
+
+    function runTests() {
+      if (!engine) return;
+
+      const statusEl = document.getElementById('status');
+      const resultsEl = document.getElementById('results');
+      resultsEl.innerHTML = '';
+
+      let totalPassed = 0;
+      let totalFailed = 0;
+      const failures = [];
+      let html = '';
+
+      for (const [category, tests] of Object.entries(GOLDEN_TESTS)) {
+        let categoryHtml = `<div class="category"><div class="category-header">${category}</div>`;
+
+        for (const test of tests) {
+          const result = processWord(test.word, test.stress);
+          const actual = result.ipa.replace(/ˈ/g, ' ˈ').replace(/^\s+/, '').trim();
+          const syllableIpa = result.syllables.map(s => s.ipa).join(' ');
+
+          const normalizedActual = normalizeForComparison(actual);
+          const normalizedExpected = normalizeForComparison(test.expected);
+          const passed = normalizedActual === normalizedExpected;
+
+          if (passed) {
+            totalPassed++;
+            categoryHtml += `<div class="test-row pass"><span class="icon">✅</span><span class="word">${test.word}</span><span class="ipa">/${actual}/</span></div>`;
+          } else {
+            totalFailed++;
+            failures.push({ word: test.word, expected: test.expected, actual, note: test.note });
+            categoryHtml += `<div class="test-row fail"><span class="icon">❌</span><span class="word">${test.word}</span><span class="ipa">got /${actual}/</span></div>`;
+            categoryHtml += `<div class="fail-detail">expected /${test.expected}/</div>`;
+            if (actual !== syllableIpa) {
+              categoryHtml += `<div class="fail-detail">syllables: /${syllableIpa}/</div>`;
+            }
+            categoryHtml += `<div class="note">${test.note}</div>`;
+          }
+        }
+
+        categoryHtml += '</div>';
+        html += categoryHtml;
+      }
+
+      const total = totalPassed + totalFailed;
+      const passRate = ((totalPassed / total) * 100).toFixed(1);
+
+      // Summary bar
+      const summaryHtml = `<div class="summary-bar">
+        <div>Total: <span>${total}</span></div>
+        <div class="passed">Passed: <span>${totalPassed}</span></div>
+        <div class="failed">Failed: <span>${totalFailed}</span></div>
+        <div>Rate: <span>${passRate}%</span></div>
+      </div>`;
+
+      resultsEl.innerHTML = summaryHtml + html;
+
+      if (totalFailed === 0) {
+        statusEl.className = 'pass';
+        statusEl.textContent = `All ${total} tests passed (${passRate}%)`;
+      } else {
+        statusEl.className = 'fail';
+        statusEl.textContent = `${totalPassed}/${total} passed (${passRate}%) — ${totalFailed} failed`;
+      }
+
+      // Also log to console for CI/scripting use
+      console.log('═══════════════════════════════════════════════════════════');
+      console.log('Ilya Golden-Master Tests');
+      console.log('═══════════════════════════════════════════════════════════');
+      console.log(`${totalPassed}/${total} passed (${passRate}%)`);
+      if (failures.length > 0) {
+        console.log('Failures:');
+        failures.forEach(f => {
+          console.log(`  ${f.word}: expected /${f.expected}/, got /${f.actual}/`);
+        });
+      }
+      console.log('═══════════════════════════════════════════════════════════');
+
+      return { passed: totalPassed, failed: totalFailed, total, failures };
+    }
+
+    // ========================================
+    // ENGINE LOADING
+    // ========================================
+
+    const frame = document.getElementById('engineFrame');
+    const statusEl = document.getElementById('status');
+    const runBtn = document.getElementById('runBtn');
+
+    frame.addEventListener('load', () => {
+      // Poll for GraysonEngine availability (it initializes after DOMContentLoaded)
+      let attempts = 0;
+      const poll = setInterval(() => {
+        attempts++;
+        if (frame.contentWindow && frame.contentWindow.GraysonEngine) {
+          clearInterval(poll);
+          engine = frame.contentWindow.GraysonEngine;
+          statusEl.textContent = 'GraysonEngine loaded. Ready to run tests.';
+          runBtn.disabled = false;
+          // Auto-run on load
+          runTests();
+        } else if (attempts > 100) {
+          clearInterval(poll);
+          statusEl.textContent = 'Failed to load GraysonEngine after 10 seconds.';
+          statusEl.className = 'fail';
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
