@@ -1135,8 +1135,8 @@
     }
     
     .inspector-yo-toast .ok-btn {
-      background: var(--ilya-accent);
-      border: 1px solid var(--ilya-accent);
+      background: transparent;
+      border: 1px solid white;
       color: white;
       padding: 4px 10px;
       border-radius: 4px;
@@ -1147,7 +1147,7 @@
     }
     
     .inspector-yo-toast .ok-btn:hover {
-      background: var(--ilya-accent-hover);
+      background: rgba(255,255,255,0.15);
     }
 
     /* Scrim: tablet overlay mode only */
@@ -4825,7 +4825,7 @@
             <!-- Toast for ё warning -->
             <div class="inspector-yo-toast" id="inspectorYoToast">
               <span id="inspectorYoToastText">ё → е changes pronunciation</span>
-              <div>
+              <div style="display: flex; gap: 6px;">
                 <button class="undo-btn" id="inspectorYoUndoBtn">Undo</button>
                 <button class="ok-btn" id="inspectorYoOkBtn">OK</button>
               </div>
