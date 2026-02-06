@@ -14925,9 +14925,9 @@ function addAcuteToSyllable(syllable) {
         const drawer = document.getElementById('ilyaDrawer');
         const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
         
-        // Position: straddle the drawer edge, vertically centred on the row
+        // Position: straddle the drawer edge, tip aligned with button row midpoint
         arrow.style.left = (drawerRight - 20) + 'px';
-        arrow.style.top = (rowRect.top + rowRect.height / 2 - 18) + 'px';
+        arrow.style.top = (rowRect.top + rowRect.height / 2 - 30) + 'px';
         
         // Restart animation
         arrow.classList.remove('visible');
