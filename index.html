@@ -903,21 +903,24 @@
       font-size: 0.75rem;
     }
 
-    /* Pulsating attribution arrow */
+    /* Pulsating attribution arrow — fixed overlay straddling drawer edge */
     .stress-attribution-arrow {
       display: none;
-      color: var(--ilya-accent);
-      font-size: 1.1rem;
-      margin-left: 4px;
+      position: fixed;
+      z-index: 15;
+      transform: rotate(-20deg);
+      transform-origin: center center;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
     }
 
-    .inspector-stress-source-row.pending-attribution .stress-attribution-arrow {
-      display: inline-block;
+    .stress-attribution-arrow.visible {
+      display: block;
       animation: pulse-arrow 1.5s ease-in-out infinite;
     }
 
     @keyframes pulse-arrow {
-      0%, 100% { opacity: 0.3; }
+      0%, 100% { opacity: 0.4; }
       50% { opacity: 1; }
     }
     
@@ -4721,7 +4724,6 @@
               <button class="segment" id="inspectorStressComposer" data-source="composer" data-i18n="inspector.stressComposer">Composer</button>
               <button class="segment" id="inspectorStressUser" data-source="user" data-i18n="inspector.stressUser">My choice</button>
             </div>
-            <span class="stress-attribution-arrow" id="stressAttributionArrow" title="Please select the source for your stress decision">→</span>
           </div>
           
           <!-- Cyrillic Display -->
@@ -4795,6 +4797,13 @@
 
     <!-- Scrim: tablet/mobile overlay backdrop -->
     <div class="drawer-scrim" id="drawerScrim"></div>
+    
+    <!-- Attribution arrow: fixed overlay straddling drawer edge -->
+    <div class="stress-attribution-arrow" id="stressAttributionArrow" title="Please select the source for your stress decision" aria-hidden="true">
+      <svg viewBox="0 0 32 24" width="48" height="36" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3,7 H18 V2 L30,12 L18,22 V17 H3 Q0,17 0,14 V10 Q0,7 3,7 Z" fill="var(--ilya-accent)"/>
+      </svg>
+    </div>
     
     <!-- Paper Aperture: Viewing area with inset depth -->
     <main class="paper-aperture" id="paperAperture">
@@ -14564,7 +14573,7 @@ function addAcuteToSyllable(syllable) {
         if (!this.currentWord) return;
         
         // Clear pending attribution from previous word
-        this.inspectorElements.stressSourceRow?.classList.remove('pending-attribution');
+        this.hideAttributionArrow();
         
         // Sync Drill language pill to currentGlossLanguage (v6.0.51)
         const drillPill = document.getElementById('drillLangPill');
@@ -14903,7 +14912,32 @@ function addAcuteToSyllable(syllable) {
         DrawerController.renderToPaper();
         
         // Attribution fulfilled
-        this.inspectorElements.stressSourceRow?.classList.remove('pending-attribution');
+        this.hideAttributionArrow();
+      },
+      
+      // Attribution arrow: position and show the fixed overlay
+      showAttributionArrow() {
+        const arrow = this.inspectorElements.stressAttributionArrow;
+        const row = this.inspectorElements.stressSourceRow;
+        if (!arrow || !row) return;
+        
+        const rowRect = row.getBoundingClientRect();
+        const drawer = document.getElementById('ilyaDrawer');
+        const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
+        
+        // Position: straddle the drawer edge, vertically centred on the row
+        arrow.style.left = (drawerRight - 20) + 'px';
+        arrow.style.top = (rowRect.top + rowRect.height / 2 - 18) + 'px';
+        
+        // Restart animation
+        arrow.classList.remove('visible');
+        void arrow.offsetWidth;
+        arrow.classList.add('visible');
+      },
+      
+      hideAttributionArrow() {
+        const arrow = this.inspectorElements.stressAttributionArrow;
+        if (arrow) arrow.classList.remove('visible');
       },
       
       // Phase 3D: Show ё warning toast
@@ -14981,11 +15015,7 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Prompt for attribution (scholarly act)
-        if (this.inspectorElements.stressSourceRow) {
-          this.inspectorElements.stressSourceRow.classList.remove('pending-attribution');
-          void this.inspectorElements.stressSourceRow.offsetWidth;
-          this.inspectorElements.stressSourceRow.classList.add('pending-attribution');
-        }
+        this.showAttributionArrow();
       },
       
       // ========================================
