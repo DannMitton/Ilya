@@ -876,8 +876,8 @@
     /* Stress source row - collapsed by default, slides in on stress change */
     .inspector-stress-source-row {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: var(--space-sm);
       padding: 0 16px;
       margin-bottom: 0;
@@ -888,7 +888,7 @@
     }
 
     .inspector-stress-source-row.expanded {
-      max-height: 50px;
+      max-height: 80px;
       padding: 8px 16px;
       margin-bottom: 8px;
       opacity: 1;
@@ -898,20 +898,24 @@
       display: none;
     }
     
-    .inspector-stress-source-row .inspector-control-label {
-      font-size: 0.75rem;
-      color: var(--ilya-text-muted);
-      white-space: nowrap;
+    .inspector-stress-source-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ilya-text-secondary);
     }
 
     .inspector-stress-source-control {
       display: flex;
       gap: 2px;
+      width: 100%;
     }
     
     .inspector-stress-source-control .segment {
       padding: 6px 10px;
       font-size: 0.75rem;
+      flex: 1;
     }
 
     /* Pulsating attribution arrow — fixed overlay straddling drawer edge */
@@ -4729,8 +4733,8 @@
           
           <!-- Stress source (proximity-grouped with syllable buttons) -->
           <div class="inspector-stress-source-row" id="inspectorStressSourceRow" aria-live="polite">
-            <span class="inspector-control-label" data-i18n="inspector.stressLabel">Stress source:</span>
-            <div class="segmented-control inspector-stress-source-control">
+            <div class="inspector-stress-source-label" data-i18n="inspector.stressLabel">Identify stress source</div>
+            <div class="segmented-control inspector-stress-source-control" id="inspectorStressSourceButtons">
               <button class="segment" id="inspectorStressDictionary" data-source="dictionary" data-i18n="inspector.stressDictionary">Dictionary</button>
               <button class="segment" id="inspectorStressComposer" data-source="composer" data-i18n="inspector.stressComposer">Composer</button>
               <button class="segment" id="inspectorStressUser" data-source="user" data-i18n="inspector.stressUser">My choice</button>
@@ -4936,8 +4940,8 @@ const UI_LABELS = {
     fr: 'Ouvre la boîte d\u2019impression. Sélectionnez \u00ab\u202FEnregistrer en PDF\u202F\u00bb.'
   },
   'inspector.stressLabel': {
-    en: 'Stress source:',
-    fr: 'Source de l\u2019accent\u202F:'
+    en: 'Identify stress source',
+    fr: 'Identifier la source de l\u2019accent'
   },
   'inspector.stressDictionary': {
     en: 'Dictionary',
@@ -14351,6 +14355,7 @@ function addAcuteToSyllable(syllable) {
           assimilationLinked: document.getElementById('inspectorAssimilationLinked'),
           assimilationSeparated: document.getElementById('inspectorAssimilationSeparated'),
           stressSourceRow: document.getElementById('inspectorStressSourceRow'),
+          stressSourceButtons: document.getElementById('inspectorStressSourceButtons'),
           stressDictionary: document.getElementById('inspectorStressDictionary'),
           stressComposer: document.getElementById('inspectorStressComposer'),
           stressUser: document.getElementById('inspectorStressUser'),
@@ -14930,6 +14935,7 @@ function addAcuteToSyllable(syllable) {
       showAttributionArrow() {
         const arrow = this.inspectorElements.stressAttributionArrow;
         const row = this.inspectorElements.stressSourceRow;
+        const buttons = this.inspectorElements.stressSourceButtons;
         if (!arrow || !row) return;
         
         // Expand the row first
@@ -14937,13 +14943,14 @@ function addAcuteToSyllable(syllable) {
         
         // Position arrow after layout settles
         requestAnimationFrame(() => {
-          const rowRect = row.getBoundingClientRect();
+          const target = buttons || row;
+          const targetRect = target.getBoundingClientRect();
           const drawer = document.getElementById('ilyaDrawer');
           const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
           
           // Position: straddle the drawer edge, tip aligned with button row midpoint
           arrow.style.left = (drawerRight - 20) + 'px';
-          arrow.style.top = (rowRect.top + rowRect.height / 2 - 30) + 'px';
+          arrow.style.top = (targetRect.top + targetRect.height / 2 - 18) + 'px';
           
           // Restart animation
           arrow.classList.remove('visible');
