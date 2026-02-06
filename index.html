@@ -904,6 +904,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--ilya-text-secondary);
+      align-self: flex-start;
     }
 
     .inspector-stress-source-control {
@@ -14476,6 +14477,7 @@ function addAcuteToSyllable(syllable) {
         if (!this.drawer) return;
         this.drawer.dataset.state = 'closed';
         this.layout?.classList.remove('drawer-open');
+        this.hideAttributionArrow();
         // Return focus to triggering element
         this.previousFocus?.focus();
         this.previousFocus = null;
@@ -14496,6 +14498,11 @@ function addAcuteToSyllable(syllable) {
         } else {
           // Standard mode switch (no morph needed)
           this.drawer.dataset.mode = mode;
+          
+          // Hide attribution arrow when leaving Drill
+          if (mode === 'root') {
+            this.hideAttributionArrow();
+          }
           
           if (mode === 'inspect' && wordData) {
             this.currentWord = wordData;
