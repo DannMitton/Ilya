@@ -873,7 +873,7 @@
       min-height: 8px;
     }
     
-    /* Stress source row - collapsed by default, slides in on stress change */
+    /* Stress source row - collapsed by default, slides in from left with overshoot */
     .inspector-stress-source-row {
       display: flex;
       flex-direction: column;
@@ -884,10 +884,12 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
+      transform: translateX(-100%);
       transition: max-height 900ms cubic-bezier(0.0, 0.7, 0.1, 1.0),
                   padding 900ms cubic-bezier(0.0, 0.7, 0.1, 1.0),
                   margin-bottom 900ms cubic-bezier(0.0, 0.7, 0.1, 1.0),
-                  opacity 400ms ease 500ms;
+                  transform 900ms cubic-bezier(0.22, 1.2, 0.36, 1.0),
+                  opacity 400ms ease 300ms;
     }
 
     .inspector-stress-source-row.expanded {
@@ -896,6 +898,7 @@
       margin-bottom: 8px;
       opacity: 1;
       overflow: visible;
+      transform: translateX(0);
     }
 
     .inspector-stress-source-row.hidden {
