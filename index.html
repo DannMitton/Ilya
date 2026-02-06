@@ -15878,9 +15878,7 @@ function addAcuteToSyllable(syllable) {
               setUILanguage(newLang);
               
               // Full re-render: glosses, verify badges, and footer attribution (v6.0.54)
-              if (DocumentState?.lines?.length > 0) {
-                DrawerController.renderToPaper();
-              }
+              DrawerController.renderToPaper();
               
               if (mode === 'drill') {
                 const word = DrawerState.currentWord;
