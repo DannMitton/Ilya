@@ -4786,8 +4786,8 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* DOCUMENT CONTROLLER (v5.9.0) — Paper size selection + pagination */
-    const DocumentController = {
+    /* PAPER MANAGER — Paper size, page count, and multi-page distribution */
+    const PaperManager = {
       section: null,
       header: null,
       activeLabel: null,
@@ -4795,13 +4795,12 @@ function addAcuteToSyllable(syllable) {
       pageNumberEl: null,
       paper: null,
       currentSize: 'letter',
-      
-      // Paper dimensions in pixels (96dpi)
+      lineHeightCache: null,
+      lineHeightCacheHash: null,
       PAPER_HEIGHTS: {
         letter: 1056,  // 11in × 96dpi
         a4: 1123       // 297mm × 96dpi / 25.4
       },
-      
       init() {
         this.section = document.getElementById('documentSection');
         this.header = document.getElementById('documentHeader');
@@ -4809,326 +4808,78 @@ function addAcuteToSyllable(syllable) {
         this.paperSizeBtns = document.querySelectorAll('.paper-size-btn');
         this.pageNumberEl = document.getElementById('pageNumber');
         this.paper = document.querySelector('.paper');
-        
         if (!this.section) return;
-        
-        // Toggle expand/collapse
         this.header.addEventListener('click', () => {
           this.section.classList.toggle('expanded');
         });
-        
-        // Paper size selection
         this.paperSizeBtns.forEach(btn => {
           btn.addEventListener('click', () => {
             this.setSize(btn.dataset.size);
           });
         });
-        
-        // Recalculate on window resize
         window.addEventListener('resize', () => {
           this.updatePageCount();
         });
       },
-      
       setSize(size) {
         if (size === this.currentSize) return;
-        
         this.currentSize = size;
-        
-        // Update button states
         this.paperSizeBtns.forEach(btn => {
           btn.classList.toggle('active', btn.dataset.size === size);
         });
-        
-        // Update label with dimensions
         this.activeLabel.textContent = size === 'letter' ? 'Letter (8.5×11)' : 'A4 (210×297)';
-        
-        // Add reflowing class for content fade
         this.paper?.classList.add('reflowing');
-        
-        // Update paper data attribute (triggers CSS transition)
         if (size === 'a4') {
           this.paper?.setAttribute('data-size', 'a4');
         } else {
           this.paper?.removeAttribute('data-size');
         }
-        
-        // Remove reflowing class and update page count after transition
         setTimeout(() => {
           this.paper?.classList.remove('reflowing');
           this.updatePageCount();
-        }, 400); // 300ms transition + 100ms buffer
+        }, 400);
       },
-      
       getSize() {
         return this.currentSize;
       },
-      
-      // Calculate page count based on content vs paper height
-      calculatePageCount() {
-        if (!this.paper) return 1;
-        
-        const contentHeight = this.paper.scrollHeight;
-        const visibleHeight = this.paper.clientHeight;
-        
-        // If no overflow, it's 1 page
-        if (contentHeight <= visibleHeight) return 1;
-        
-        // Calculate based on full paper height (not viewport-constrained)
-        const fullPaperHeight = this.PAPER_HEIGHTS[this.currentSize];
-        const pageCount = Math.ceil(contentHeight / fullPaperHeight);
-        
-        return Math.max(1, pageCount);
-      },
-      
-      // Update the page count label using Paginator
       updatePageCount() {
-        if (!this.pageNumberEl) {
-          return;
-        }
-        
-        // Count pages based on DocumentState lines
+        if (!this.pageNumberEl) return;
         let totalPages = 1;
-        
         if (DocumentState?.lines?.length > 0) {
           const lineCount = DocumentState.lines.length;
-          const pages = Paginator.distributeToPages(
-            Array(lineCount).fill({}),  // Mock lines for counting
-            null,                        // No heights for simple count
+          const pages = this.distributeToPages(
+            Array(lineCount).fill({}),
+            null,
             this.currentSize
           );
           totalPages = pages.length;
         }
-        
-        // Format: "X pages" for dashboard indicator
         const lang = currentGlossLanguage || 'en';
         if (totalPages === 1) {
           this.pageNumberEl.textContent = UI_LABELS['page.countOne'][lang];
         } else {
           this.pageNumberEl.textContent = UI_LABELS['page.countMany'][lang].replace('{n}', totalPages);
         }
-      }
-    };
-    
-    /* PAGINATOR (v5.9.4) — Multi-page distribution engine */
-    const Paginator = {
-      // Measured values (populated after first render)
-      lineHeight: null,
-      safeLineHeight: null,
-      
-      // Line height cache for pre-flight measurement (v5.11.17)
-      lineHeightCache: null,
-      lineHeightCacheHash: null,
-      
-      // Paper dimensions in pixels (96dpi)
-      PAPER_HEIGHTS: {
-        letter: 1056,  // 11in × 96dpi
-        a4: 1123       // 297mm × 96dpi / 25.4
       },
-      
-      // Layout constants (in pixels)
-      MARGINS: {
-        top: 48,       // Reduced from 72 - header provides visual padding
-        bottom: 24,    // Reduced from 72 - footer provides visual padding
-        left: 72,
-        right: 72
-      },
-      
-      // Header heights
-      TITLE_HEADER_HEIGHT: 150,    // Page 1: full title block
-      RUNNING_HEADER_HEIGHT: 48,   // Pages 2+: "COMPOSER — TITLE"
-      FOOTER_HEIGHT: 120,           // Footer with attribution + pagination (measured)
-      
-      /**
-       * Measure actual line height from rendered content
-       * Should be called after renderToPaper() completes
-       */
-      measureLineHeight() {
-        const lines = document.querySelectorAll('.verse-line');
-        
-        if (lines.length === 0) {
-          return null;
-        }
-        
-        // Find maximum height among all lines
-        const heights = Array.from(lines).map(el => {
-          const rect = el.getBoundingClientRect();
-          return rect.height;
-        });
-        
-        const maxHeight = Math.max(...heights);
-        const minHeight = Math.min(...heights);
-        const avgHeight = heights.reduce((a, b) => a + b, 0) / heights.length;
-        
-        // Store with 5% safety margin (reduced from 10%)
-        this.lineHeight = maxHeight;
-        this.safeLineHeight = Math.ceil(maxHeight * 1.05);
-        
-        return this.safeLineHeight;
-      },
-      
-      /**
-       * Pre-flight measurement: measure all line heights BEFORE pagination (v5.11.17)
-       * Uses off-screen container with actual CSS to get true visual heights
-       * @param {Array} allLines - Transcribed line data
-       * @param {Function} createLineElement - Function to create .verse-line element
-       * @returns {Array} Heights in pixels for each line
-       */
-      measureAllLineHeights(allLines, createLineElement) {
-        // Check cache first
-        const contentHash = this.hashLineContent(allLines);
-        if (this.lineHeightCache && this.lineHeightCacheHash === contentHash) {
-          return this.lineHeightCache;
-        }
-        
-        // Get content width from existing page, or use fallback
-        const contentWidth = this.getContentWidth();
-        
-        // Create hidden container that inherits page-content CSS
-        // Must match real container exactly: box-sizing, overflow, width
-        const hiddenContainer = document.createElement('div');
-        hiddenContainer.className = 'page-content';
-        hiddenContainer.style.cssText = `
-          position: absolute;
-          visibility: hidden;
-          pointer-events: none;
-          width: ${contentWidth}px;
-          box-sizing: border-box;
-          overflow: hidden;
-          top: -9999px;
-          left: -9999px;
-        `;
-        document.body.appendChild(hiddenContainer);
-        
-        // Diagnostic logging (v5.11.18)
-        const realPage = document.querySelector('.paper-page .page-content');
-        if (realPage) {
-          const realWidth = realPage.getBoundingClientRect().width;
-          const hiddenWidth = hiddenContainer.getBoundingClientRect().width;
-        }
-        
-        // Measure each line
-        const heights = allLines.map(line => {
-          const el = createLineElement(line);
-          hiddenContainer.appendChild(el);
-          const height = el.getBoundingClientRect().height;
-          hiddenContainer.removeChild(el);
-          return height;
-        });
-        
-        // Clean up
-        hiddenContainer.remove();
-        
-        // Cache results
-        this.lineHeightCache = heights;
-        this.lineHeightCacheHash = contentHash;
-        
-        // Calculate standard row height using 10th percentile for robustness (v5.11.18)
-        // Math.min() is fragile if some lines are unusually short
-        const nonZeroHeights = heights.filter(h => h > 0);
-        if (nonZeroHeights.length > 0) {
-          const sorted = [...nonZeroHeights].sort((a, b) => a - b);
-          const idx = Math.floor(sorted.length * 0.1); // 10th percentile
-          this.standardRowHeight = sorted[idx] || sorted[0];
-        } else {
-          this.standardRowHeight = 105; // Fallback
-        }
-        
-        return heights;
-      },
-      
-      /**
-       * Get content width from rendered page or calculate from constants
-       */
-      getContentWidth() {
-        const referencePage = document.querySelector('.paper-page');
-        if (referencePage) {
-          const referenceContent = referencePage.querySelector('.page-content');
-          if (referenceContent) {
-            const computedStyle = window.getComputedStyle(referenceContent);
-            return referenceContent.clientWidth 
-              - parseFloat(computedStyle.paddingLeft || 0) 
-              - parseFloat(computedStyle.paddingRight || 0);
-          }
-        }
-        // Fallback: letter width (8.5in) minus margins (72px each side)
-        return 816 - 144; // 672px
-      },
-      
-      /**
-       * Hash line content for cache invalidation
-       * Uses cleanWord and stress index from transcribed word data
-       */
-      hashLineContent(allLines) {
-        return allLines.map(line => 
-          line.map(tw => 
-            (tw.cleanWord || '') + ':' + (tw.wordData?.stress ?? '')
-          ).join('|')
-        ).join('||');
-      },
-      
-      /**
-       * Invalidate line height cache (call when content changes)
-       */
       invalidateCache() {
         this.lineHeightCache = null;
         this.lineHeightCacheHash = null;
       },
-      
-      /**
-       * Calculate how many lines fit on each page type
-       * Fixed counts based on testing: 5 for title page, 7 for subsequent
-       * (v5.11.7 - reduced from 6/8 to prevent clipping)
-       */
-      calculateLinesPerPage(paperSize = 'letter') {
-        // Fixed line counts based on visual testing
-        // Page 1 has less room due to title block
-        // Subsequent pages have more room with just running header
-        // (v5.11.19 - restored to 6/8, horizontal gap reduction prevents wrapping)
-        const linesPage1 = 6;
-        const linesSubsequent = 8;
-        
-        return {
-          page1: linesPage1,
-          subsequent: linesSubsequent
-        };
-      },
-      
-      /**
-       * Format running header: "COMPOSER — TITLE"
-       * Smart truncation per Kimi's spec
-       */
       formatRunningHeader(surname, title) {
         if (!surname && !title) return '';
-        
-        // Truncate title if needed (30 chars max)
         let shortTitle = title || '';
         if (shortTitle.length > 30) {
           shortTitle = shortTitle.slice(0, 27) + '...';
         }
-        
-        // Format as "SURNAME — TITLE"
         if (surname && shortTitle) {
           return `${surname.toUpperCase()} — ${shortTitle.toUpperCase()}`;
         }
         return (surname || shortTitle).toUpperCase();
       },
-      
-      /**
-       * Distribute lines across pages (v5.11.19)
-       * @param {Array} allLines - All transcribed lines
-       * @param {Object} targets - { page1: N, subsequent: M } line counts
-       * @param {string} paperSize - 'letter' or 'a4'
-       * @returns {Array} Array of page objects
-       */
       distributeToPages(allLines, targets = null, paperSize = 'letter') {
-        // Use provided targets or defaults
         const { page1, subsequent } = targets || { page1: 6, subsequent: 8 };
-        
         const pages = [];
         let cursor = 0;
-        
-        // Page 1: title template, fewer lines
         if (allLines.length > 0) {
           pages.push({
             pageNumber: 1,
@@ -5137,8 +4888,6 @@ function addAcuteToSyllable(syllable) {
           });
           cursor = page1;
         }
-        
-        // Subsequent pages: running header, more lines
         while (cursor < allLines.length) {
           pages.push({
             pageNumber: pages.length + 1,
@@ -5147,8 +4896,6 @@ function addAcuteToSyllable(syllable) {
           });
           cursor += subsequent;
         }
-        
-        // Ensure at least one page
         if (pages.length === 0) {
           pages.push({
             pageNumber: 1,
@@ -5156,25 +4903,7 @@ function addAcuteToSyllable(syllable) {
             lines: []
           });
         }
-        
         return pages;
-      },
-      
-      /**
-       * Get total page count for display
-       */
-      getPageCount(allLines, paperSize = 'letter') {
-        const pages = this.distributeToPages(allLines, null, paperSize);
-        return pages.length;
-      },
-      
-      /**
-       * Update measurements (call after render or resize)
-       */
-      update() {
-        this.measureLineHeight();
-        const paperSize = DocumentController.getSize();
-        this.calculateLinesPerPage(paperSize);
       }
     };
     
@@ -5456,7 +5185,7 @@ function addAcuteToSyllable(syllable) {
         const lines = text.split('\n').filter(line => line.trim());
         
         // Invalidate pre-measurement cache when new content arrives (v5.11.17)
-        Paginator.invalidateCache();
+        PaperManager.invalidateCache();
         
         // Convert to DocumentState format with dictionary lookup
         DocumentState.lines = lines.map(line => {
@@ -5534,7 +5263,7 @@ function addAcuteToSyllable(syllable) {
       
       renderToPaper(fallbackMode = false) {
         const paperStack = document.getElementById('paperStack');
-        const paperSize = DocumentController.getSize();
+        const paperSize = PaperManager.getSize();
         
         if (!paperStack) return;
         
@@ -5545,7 +5274,7 @@ function addAcuteToSyllable(syllable) {
         if (!DocumentState.lines || DocumentState.lines.length === 0) {
           const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
           paperStack.appendChild(emptyPage);
-          DocumentController.updatePageCount();
+          PaperManager.updatePageCount();
           DashboardController.updateExportButton();
           return;
         }
@@ -5559,7 +5288,7 @@ function addAcuteToSyllable(syllable) {
           ? { page1: 5, subsequent: 7 }
           : { page1: 6, subsequent: 8 };
         
-        const pages = Paginator.distributeToPages(transcribedLines, targets, paperSize);
+        const pages = PaperManager.distributeToPages(transcribedLines, targets, paperSize);
         const totalPages = pages.length;
         
         // Render each page
@@ -5585,7 +5314,7 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Update page count display and export button state
-        DocumentController.updatePageCount();
+        PaperManager.updatePageCount();
         DashboardController.updateExportButton();
       },
       
@@ -5674,7 +5403,7 @@ function addAcuteToSyllable(syllable) {
           `;
         } else {
           // Pages 2+: Running header
-          const runningHeader = Paginator.formatRunningHeader(composerSurname, title);
+          const runningHeader = PaperManager.formatRunningHeader(composerSurname, title);
           headerHTML = `
             <header class="page-header-running">
               <span class="running-title">${runningHeader}</span>
@@ -11048,7 +10777,7 @@ function addAcuteToSyllable(syllable) {
       TabController.init();
       DashboardController.init();
       ProfileController.init();
-      DocumentController.init();
+      PaperManager.init();
 
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
