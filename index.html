@@ -873,11 +873,26 @@
       min-height: 8px;
     }
     
-    /* Stress source row - hidden when locked */
+    /* Stress source row - proximity-grouped below syllable buttons */
+    .inspector-stress-source-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: 8px 16px;
+      margin-bottom: 8px;
+    }
+
     .inspector-stress-source-row.hidden {
       display: none;
     }
     
+    .inspector-stress-source-row .inspector-control-label {
+      font-size: 0.75rem;
+      color: var(--ilya-text-muted);
+      white-space: nowrap;
+    }
+
     .inspector-stress-source-control {
       display: flex;
       gap: 2px;
@@ -886,6 +901,24 @@
     .inspector-stress-source-control .segment {
       padding: 6px 10px;
       font-size: 0.75rem;
+    }
+
+    /* Pulsating attribution arrow */
+    .stress-attribution-arrow {
+      display: none;
+      color: var(--ilya-accent);
+      font-size: 1.1rem;
+      margin-left: 4px;
+    }
+
+    .inspector-stress-source-row.pending-attribution .stress-attribution-arrow {
+      display: inline-block;
+      animation: pulse-arrow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-arrow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
     }
     
     /* Variant row (ё toggle) - sage accent when ё active */
@@ -4680,6 +4713,17 @@
             <button class="boundary-reset-btn" id="inspectorBoundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
           </div>
           
+          <!-- Stress source (proximity-grouped with syllable buttons) -->
+          <div class="inspector-stress-source-row" id="inspectorStressSourceRow" aria-live="polite">
+            <span class="inspector-control-label" data-i18n="inspector.stressLabel">Stress source:</span>
+            <div class="segmented-control inspector-stress-source-control">
+              <button class="segment" id="inspectorStressDictionary" data-source="dictionary" data-i18n="inspector.stressDictionary">Dictionary</button>
+              <button class="segment" id="inspectorStressComposer" data-source="composer" data-i18n="inspector.stressComposer">Composer</button>
+              <button class="segment" id="inspectorStressUser" data-source="user" data-i18n="inspector.stressUser">My choice</button>
+            </div>
+            <span class="stress-attribution-arrow" id="stressAttributionArrow" title="Please select the source for your stress decision">→</span>
+          </div>
+          
           <!-- Cyrillic Display -->
           <div class="inspector-cyrillic" id="inspectorCyrillic">—</div>
           
@@ -4705,16 +4749,6 @@
           
           <!-- Footer Controls (Phase 3D) -->
           <div class="inspector-controls" id="inspectorControls">
-            
-            <!-- Stress source module (most common user action) -->
-            <div class="inspector-control-row inspector-stress-source-row" id="inspectorStressSourceRow">
-              <span class="inspector-control-label" data-i18n="inspector.stressLabel">Stress source:</span>
-              <div class="segmented-control inspector-stress-source-control">
-                <button class="segment" id="inspectorStressDictionary" data-source="dictionary" data-i18n="inspector.stressDictionary">Dictionary</button>
-                <button class="segment" id="inspectorStressComposer" data-source="composer" data-i18n="inspector.stressComposer">Composer</button>
-                <button class="segment" id="inspectorStressUser" data-source="user" data-i18n="inspector.stressUser">My choice</button>
-              </div>
-            </div>
             
             <!-- Variant row (ё/е toggle) - rare but more common than assimilation -->
             <div class="inspector-control-row inspector-variant-row" id="inspectorVariantRow" style="display: none;">
@@ -14300,6 +14334,7 @@ function addAcuteToSyllable(syllable) {
           stressDictionary: document.getElementById('inspectorStressDictionary'),
           stressComposer: document.getElementById('inspectorStressComposer'),
           stressUser: document.getElementById('inspectorStressUser'),
+          stressAttributionArrow: document.getElementById('stressAttributionArrow'),
           yoToast: document.getElementById('inspectorYoToast'),
           yoUndoBtn: document.getElementById('inspectorYoUndoBtn')
         };
@@ -14527,6 +14562,9 @@ function addAcuteToSyllable(syllable) {
       // Update inspector display with current word (Phase 3B)
       updateInspector() {
         if (!this.currentWord) return;
+        
+        // Clear pending attribution from previous word
+        this.inspectorElements.stressSourceRow?.classList.remove('pending-attribution');
         
         // Sync Drill language pill to currentGlossLanguage (v6.0.51)
         const drillPill = document.getElementById('drillLangPill');
@@ -14863,6 +14901,9 @@ function addAcuteToSyllable(syllable) {
         
         // Re-render paper
         DrawerController.renderToPaper();
+        
+        // Attribution fulfilled
+        this.inspectorElements.stressSourceRow?.classList.remove('pending-attribution');
       },
       
       // Phase 3D: Show ё warning toast
@@ -14937,6 +14978,13 @@ function addAcuteToSyllable(syllable) {
             ipa: wordStack.dataset.ipa
           };
           this.updateInspector();
+        }
+        
+        // Prompt for attribution (scholarly act)
+        if (this.inspectorElements.stressSourceRow) {
+          this.inspectorElements.stressSourceRow.classList.remove('pending-attribution');
+          void this.inspectorElements.stressSourceRow.offsetWidth;
+          this.inspectorElements.stressSourceRow.classList.add('pending-attribution');
         }
       },
       
