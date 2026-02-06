@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.68 Fix multi-page print clipping</title>
+  <title>Ilya — v6.0.69 Fix sonorant-blocking devoicing</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -9174,13 +9174,13 @@ function addAcuteToSyllable(syllable) {
         const agent = cluster[agentIndex];
         const agentIsVoiced = this.voicedObstruents.has(agent);
         
-        // Apply voicing/devoicing to all preceding consonants (and /v/ phonemes)
+        // Apply voicing/devoicing backwards from agent — sonorants block the chain
         const result = [...cluster];
-        for (let i = 0; i < agentIndex; i++) {
+        for (let i = agentIndex - 1; i >= 0; i--) {
           const seg = result[i];
           
-          // Sonorants never change
-          if (this.sonorantIPA.has(seg)) continue;
+          // Sonorants block assimilation — stop here (Grayson p. 213-214)
+          if (this.sonorantIPA.has(seg)) break;
           
           if (agentIsVoiced) {
             // Voice the consonant if it's voiceless
