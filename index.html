@@ -15863,7 +15863,9 @@ function addAcuteToSyllable(syllable) {
       DrawerController.renderToPaper();
     });
 
-    
+    // Expose for tests.html
+    window.GraysonEngine = GraysonEngine;
+
     /**
      * DICTIONARY AUDIT DIAGNOSTIC (v5.11.20)
      * Usage: auditDictionary() to audit current document
