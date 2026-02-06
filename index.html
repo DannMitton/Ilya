@@ -873,14 +873,25 @@
       min-height: 8px;
     }
     
-    /* Stress source row - proximity-grouped below syllable buttons */
+    /* Stress source row - collapsed by default, slides in on stress change */
     .inspector-stress-source-row {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: var(--space-sm);
+      padding: 0 16px;
+      margin-bottom: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 250ms var(--ease), padding 250ms var(--ease), margin-bottom 250ms var(--ease), opacity 250ms var(--ease);
+    }
+
+    .inspector-stress-source-row.expanded {
+      max-height: 50px;
       padding: 8px 16px;
       margin-bottom: 8px;
+      opacity: 1;
     }
 
     .inspector-stress-source-row.hidden {
@@ -14915,29 +14926,37 @@ function addAcuteToSyllable(syllable) {
         this.hideAttributionArrow();
       },
       
-      // Attribution arrow: position and show the fixed overlay
+      // Attribution arrow: expand row and show the fixed overlay
       showAttributionArrow() {
         const arrow = this.inspectorElements.stressAttributionArrow;
         const row = this.inspectorElements.stressSourceRow;
         if (!arrow || !row) return;
         
-        const rowRect = row.getBoundingClientRect();
-        const drawer = document.getElementById('ilyaDrawer');
-        const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
+        // Expand the row first
+        row.classList.add('expanded');
         
-        // Position: straddle the drawer edge, tip aligned with button row midpoint
-        arrow.style.left = (drawerRight - 20) + 'px';
-        arrow.style.top = (rowRect.top + rowRect.height / 2 - 30) + 'px';
-        
-        // Restart animation
-        arrow.classList.remove('visible');
-        void arrow.offsetWidth;
-        arrow.classList.add('visible');
+        // Position arrow after layout settles
+        requestAnimationFrame(() => {
+          const rowRect = row.getBoundingClientRect();
+          const drawer = document.getElementById('ilyaDrawer');
+          const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
+          
+          // Position: straddle the drawer edge, tip aligned with button row midpoint
+          arrow.style.left = (drawerRight - 20) + 'px';
+          arrow.style.top = (rowRect.top + rowRect.height / 2 - 30) + 'px';
+          
+          // Restart animation
+          arrow.classList.remove('visible');
+          void arrow.offsetWidth;
+          arrow.classList.add('visible');
+        });
       },
       
       hideAttributionArrow() {
         const arrow = this.inspectorElements.stressAttributionArrow;
         if (arrow) arrow.classList.remove('visible');
+        // Collapse the row
+        this.inspectorElements.stressSourceRow?.classList.remove('expanded');
       },
       
       // Phase 3D: Show ё warning toast
