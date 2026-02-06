@@ -532,34 +532,73 @@
       border-radius: 6px;
       display: inline-block;
       min-width: 120px;
-      background: var(--ilya-accent-light);
-      border: 1px dashed rgba(122, 158, 126, 0.3);
+      background-color: var(--ilya-accent-light);
+      border: none;
       transition: all 150ms var(--ease);
+      background-image:
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px);
+      background-size:
+        100% 2px,
+        100% 2px,
+        2px 100%,
+        2px 100%;
+      background-position:
+        0 0,
+        0 100%,
+        0 0,
+        100% 0;
+      background-repeat: no-repeat;
     }
 
     .inspector-gloss-inline:hover {
-      background: rgba(122, 158, 126, 0.15);
-      border-color: var(--ilya-accent);
+      background-color: rgba(122, 158, 126, 0.15);
+      background-image:
+        repeating-linear-gradient(to right, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to right, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px),
+        repeating-linear-gradient(to bottom, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px);
+      background-size:
+        100% 2px,
+        100% 2px,
+        2px 100%,
+        2px 100%;
+      background-position:
+        0 0,
+        0 100%,
+        0 0,
+        100% 0;
+      background-repeat: no-repeat;
     }
 
     .inspector-gloss-inline:focus {
       outline: none;
-      background: rgba(122, 158, 126, 0.15);
-      border-style: solid;
-      border-color: var(--ilya-accent);
+      background-color: rgba(122, 158, 126, 0.15);
+      border: 2px solid var(--ilya-accent);
+      background-image: none;
       box-shadow: 0 0 0 2px var(--ilya-accent-light);
     }
 
     .inspector-gloss-inline:not(:empty) {
       background: transparent;
       border-color: transparent;
-      border-bottom: 1px dashed rgba(122, 158, 126, 0.4);
       color: var(--ilya-accent);
+      background-image:
+        repeating-linear-gradient(to right, var(--color-muted-border) 0, var(--color-muted-border) 16px, transparent 16px, transparent 22px);
+      background-size: 100% 2px;
+      background-position: 0 100%;
+      background-repeat: no-repeat;
     }
 
     .inspector-gloss-inline:not(:empty):hover {
-      background: var(--ilya-accent-light);
-      border-bottom: 1px solid var(--ilya-accent);
+      background-color: var(--ilya-accent-light);
+      background-image:
+        repeating-linear-gradient(to right, var(--color-muted-text) 0, var(--color-muted-text) 16px, transparent 16px, transparent 22px);
+      background-size: 100% 2px;
+      background-position: 0 100%;
+      background-repeat: no-repeat;
     }
 
     .inspector-gloss-inline:empty::before {
