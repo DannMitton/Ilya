@@ -5163,12 +5163,9 @@ document.addEventListener('paste', triggerTier2Load, { once: true });
 // Safety: Load Tier 2 after 5 seconds regardless
 setTimeout(triggerTier2Load, 5000);
 
-// Start Tier 1 and Singer's Supplement immediately
-loadTier1();
-loadSingerSupplement();
-
 let SINGER_SUPPLEMENT = {};
 let SUPPLEMENT_LOADED = false;
+let _supplementLoadPromise = null;
 
 async function loadSingerSupplement() {
     try {
@@ -5180,6 +5177,9 @@ async function loadSingerSupplement() {
     } catch (error) {
     }
 }
+
+// Start Tier 1 and Singer's Supplement immediately
+_supplementLoadPromise = Promise.all([loadTier1(), loadSingerSupplement()]);
 
 
 /* GLOSS FORMATTING HELPERS — Handles verbose grammatical descriptions from kaikki.org */
@@ -6636,11 +6636,16 @@ function addAcuteToSyllable(syllable) {
         this.textInput?.focus();
       },
       
-      transcribe() {
+      async transcribe() {
         const text = this.textInput?.value?.trim() || '';
         if (!text) {
           this.textInput?.focus();
           return;
+        }
+
+        // Ensure dictionary and supplement are loaded before any lookup
+        if (_supplementLoadPromise) {
+          await _supplementLoadPromise;
         }
         
         // Parse lines into words
