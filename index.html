@@ -2362,6 +2362,7 @@
       min-width: 72px;
       height: 36px;
       padding: 0 1rem;
+      white-space: nowrap;
     }
 
     .btn-secondary:hover {
@@ -4287,51 +4288,46 @@
       margin-top: 2px;
     }
     
-    /* Export section (v5.9.8) */
-    .export-section {
-      margin-top: var(--space-lg);
-      padding-top: var(--space-lg);
-      border-top: 1px solid var(--ilya-border-light);
-    }
-    
-    .export-btn {
-      width: 100%;
-      display: flex;
+    /* Export button (inline, v6.0.76) */
+    .btn-export {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 12px 16px;
+      gap: 4px;
       background: var(--stationery-sage);
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: var(--text-sm);
-      font-weight: 600;
+      border-radius: var(--radius);
+      height: 36px;
+      padding: 0 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 150ms var(--ease);
-      min-height: 44px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     
-    .export-btn:hover {
+    .btn-export:hover {
       background: #7a8a6d;
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(139, 154, 125, 0.3);
     }
     
-    .export-btn:active {
+    .btn-export:active {
       transform: translateY(0);
     }
     
-    .export-btn:disabled {
+    .btn-export:disabled {
       background: var(--ilya-border);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
     
-    .export-icon {
-      width: 18px;
-      height: 18px;
+    .btn-export .export-icon {
+      width: 14px;
+      height: 14px;
     }
     
     /* IPA text styling */
@@ -4624,6 +4620,16 @@
             <div class="drawer-input-actions">
               <div class="drawer-secondary-actions">
                 <button class="btn btn-secondary" id="drawerClearBtn" data-i18n="btn.newText">New Text</button>
+                <button type="button" class="btn btn-export" id="exportPdfBtn">
+                  <svg class="export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="12" y2="12"></line>
+                    <line x1="15" y1="15" x2="12" y2="12"></line>
+                  </svg>
+                  <span data-i18n="page.exportPdf">Export PDF</span>
+                </button>
                 <button class="btn btn-primary" id="drawerTranscribeBtn" data-i18n="btn.transcribe">Transcribe</button>
               </div>
             </div>
@@ -4731,21 +4737,6 @@
                 </button>
               </div>
             </div>
-          </div>
-
-          <!-- Export -->
-          <div class="export-section">
-            <button type="button" class="export-btn" id="exportPdfBtn">
-              <svg class="export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="12" y1="18" x2="12" y2="12"></line>
-                <line x1="9" y1="15" x2="12" y2="12"></line>
-                <line x1="15" y1="15" x2="12" y2="12"></line>
-              </svg>
-              <span data-i18n="page.exportPdf">Export PDF</span>
-            </button>
-            <div class="form-hint" data-i18n="page.exportHint">Opens print dialog. Select "Save as PDF".</div>
           </div>
 
         </div>
@@ -7171,7 +7162,10 @@ function addAcuteToSyllable(syllable) {
       clear() {
         // If there's transcribed content, confirm before clearing
         if (DocumentState.lines.length > 0) {
-          if (!confirm('Clear transcription? This cannot be undone.')) {
+          const msg = currentGlossLanguage === 'fr'
+            ? 'Effacer la transcription ? Cette action est irréversible.'
+            : 'Clear transcription? This cannot be undone.';
+          if (!confirm(msg)) {
             return;
           }
         }
