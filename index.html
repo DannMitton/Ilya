@@ -14310,6 +14310,7 @@ function addAcuteToSyllable(syllable) {
         const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true || 
                       GraysonEngine.hasYo(this.currentWord.cyrillic);
         if (hasYo) {
+          DrawerController.showYoLockMessage();
           return; // Stress is locked to ё syllable
         }
         
