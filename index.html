@@ -14938,7 +14938,10 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Refresh inspector and paper
+        // Save undo target -- updateInspector() would overwrite it
+        const undoTarget = currentVariant;
         this.refreshAfterChange();
+        this._yoStateBeforeToggle = undoTarget;
         
         // Show toast with direction (unless suppressed by undo)
         if (!skipToast) {
