@@ -1,0 +1,2179 @@
+{
+  "я": {
+    "stress": 0,
+    "gloss": {
+      "en": "I",
+      "fr": "je"
+    },
+    "source": "supplement"
+  },
+  "ты": {
+    "stress": 0,
+    "gloss": {
+      "en": "you (informal)",
+      "fr": "tu"
+    },
+    "source": "supplement"
+  },
+  "он": {
+    "stress": 0,
+    "gloss": {
+      "en": "he",
+      "fr": "il"
+    },
+    "source": "supplement"
+  },
+  "мы": {
+    "stress": 0,
+    "gloss": {
+      "en": "we",
+      "fr": "nous"
+    },
+    "source": "supplement"
+  },
+  "вы": {
+    "stress": 0,
+    "gloss": {
+      "en": "you (formal/plural)",
+      "fr": "vous"
+    },
+    "source": "supplement"
+  },
+  "мне": {
+    "stress": 0,
+    "gloss": {
+      "en": "to me",
+      "fr": "à moi"
+    },
+    "source": "supplement"
+  },
+  "мной": {
+    "stress": 0,
+    "gloss": {
+      "en": "with me",
+      "fr": "avec moi"
+    },
+    "source": "supplement"
+  },
+  "нам": {
+    "stress": 0,
+    "gloss": {
+      "en": "to us",
+      "fr": "à nous"
+    },
+    "source": "supplement"
+  },
+  "вам": {
+    "stress": 0,
+    "gloss": {
+      "en": "to you",
+      "fr": "à vous"
+    },
+    "source": "supplement"
+  },
+  "вас": {
+    "stress": 0,
+    "gloss": {
+      "en": "you (acc.)",
+      "fr": "vous"
+    },
+    "source": "supplement"
+  },
+  "нас": {
+    "stress": 0,
+    "gloss": {
+      "en": "us",
+      "fr": "nous"
+    },
+    "source": "supplement"
+  },
+  "кто": {
+    "stress": 0,
+    "gloss": {
+      "en": "who",
+      "fr": "qui"
+    },
+    "source": "supplement"
+  },
+  "что": {
+    "stress": 0,
+    "gloss": {
+      "en": "what",
+      "fr": "quoi"
+    },
+    "source": "supplement"
+  },
+  "чём": {
+    "stress": 0,
+    "gloss": {
+      "en": "what (prep.)",
+      "fr": "quoi (prép.)"
+    },
+    "source": "supplement"
+  },
+  "всё": {
+    "stress": 0,
+    "gloss": {
+      "en": "everything",
+      "fr": "tout"
+    },
+    "source": "supplement"
+  },
+  "все": {
+    "stress": 0,
+    "gloss": {
+      "en": "everyone",
+      "fr": "tous"
+    },
+    "source": "supplement"
+  },
+  "сам": {
+    "stress": 0,
+    "gloss": {
+      "en": "oneself",
+      "fr": "soi-même"
+    },
+    "source": "supplement"
+  },
+  "мой": {
+    "stress": 0,
+    "gloss": {
+      "en": "my",
+      "fr": "mon"
+    },
+    "source": "supplement"
+  },
+  "моя": {
+    "stress": 1,
+    "gloss": {
+      "en": "my (fem.)",
+      "fr": "ma"
+    },
+    "source": "supplement"
+  },
+  "моё": {
+    "stress": 1,
+    "gloss": {
+      "en": "my (neut.)",
+      "fr": "mon (n.)"
+    },
+    "source": "supplement"
+  },
+  "моей": {
+    "stress": 1,
+    "gloss": {
+      "en": "my (gen./dat./prep. fem.)",
+      "fr": "de ma (gén./dat./prép.)"
+    },
+    "source": "supplement"
+  },
+  "твой": {
+    "stress": 0,
+    "gloss": {
+      "en": "your",
+      "fr": "ton"
+    },
+    "source": "supplement"
+  },
+  "твоя": {
+    "stress": 1,
+    "gloss": {
+      "en": "your (fem.)",
+      "fr": "ta"
+    },
+    "source": "supplement"
+  },
+  "твоё": {
+    "stress": 1,
+    "gloss": {
+      "en": "your (neut.)",
+      "fr": "ton (n.)"
+    },
+    "source": "supplement"
+  },
+  "твоей": {
+    "stress": 1,
+    "gloss": {
+      "en": "your (gen./dat./prep. fem.)",
+      "fr": "de ta (gén./dat./prép.)"
+    },
+    "source": "supplement"
+  },
+  "её": {
+    "stress": 1,
+    "gloss": {
+      "en": "her/hers",
+      "fr": "son/sa"
+    },
+    "source": "supplement"
+  },
+  "свой": {
+    "stress": 0,
+    "gloss": {
+      "en": "one's own",
+      "fr": "son propre"
+    },
+    "source": "supplement"
+  },
+  "наш": {
+    "stress": 0,
+    "gloss": {
+      "en": "our",
+      "fr": "notre"
+    },
+    "source": "supplement"
+  },
+  "ваш": {
+    "stress": 0,
+    "gloss": {
+      "en": "your (formal)",
+      "fr": "votre"
+    },
+    "source": "supplement"
+  },
+  "весь": {
+    "stress": 0,
+    "gloss": {
+      "en": "all/whole",
+      "fr": "tout/entier"
+    },
+    "source": "supplement"
+  },
+  "тот": {
+    "stress": 0,
+    "gloss": {
+      "en": "that",
+      "fr": "celui-là"
+    },
+    "source": "supplement"
+  },
+  "там": {
+    "stress": 0,
+    "gloss": {
+      "en": "there",
+      "fr": "là-bas"
+    },
+    "source": "supplement"
+  },
+  "тут": {
+    "stress": 0,
+    "gloss": {
+      "en": "here",
+      "fr": "ici"
+    },
+    "source": "supplement"
+  },
+  "где": {
+    "stress": 0,
+    "gloss": {
+      "en": "where",
+      "fr": "où"
+    },
+    "source": "supplement"
+  },
+  "здесь": {
+    "stress": 0,
+    "gloss": {
+      "en": "here",
+      "fr": "ici"
+    },
+    "source": "supplement"
+  },
+  "не": {
+    "stress": 0,
+    "gloss": {
+      "en": "not",
+      "fr": "ne"
+    },
+    "source": "supplement"
+  },
+  "ни": {
+    "stress": 0,
+    "gloss": {
+      "en": "nor/not a",
+      "fr": "ni"
+    },
+    "source": "supplement"
+  },
+  "да": {
+    "stress": 0,
+    "gloss": {
+      "en": "yes/and",
+      "fr": "oui/et"
+    },
+    "source": "supplement"
+  },
+  "нет": {
+    "stress": 0,
+    "gloss": {
+      "en": "no",
+      "fr": "non"
+    },
+    "source": "supplement"
+  },
+  "вот": {
+    "stress": 0,
+    "gloss": {
+      "en": "here is",
+      "fr": "voici"
+    },
+    "source": "supplement"
+  },
+  "уж": {
+    "stress": 0,
+    "gloss": {
+      "en": "already",
+      "fr": "déjà"
+    },
+    "source": "supplement"
+  },
+  "ещё": {
+    "stress": 0,
+    "gloss": {
+      "en": "still/yet",
+      "fr": "encore"
+    },
+    "source": "supplement"
+  },
+  "уже": {
+    "stress": 0,
+    "gloss": {
+      "en": "already",
+      "fr": "déjà"
+    },
+    "source": "supplement"
+  },
+  "так": {
+    "stress": 0,
+    "gloss": {
+      "en": "so/thus",
+      "fr": "ainsi"
+    },
+    "source": "supplement"
+  },
+  "как": {
+    "stress": 0,
+    "gloss": {
+      "en": "how/as",
+      "fr": "comme"
+    },
+    "source": "supplement"
+  },
+  "чем": {
+    "stress": 0,
+    "gloss": {
+      "en": "than",
+      "fr": "que"
+    },
+    "source": "supplement"
+  },
+  "но": {
+    "stress": 0,
+    "gloss": {
+      "en": "but",
+      "fr": "mais"
+    },
+    "source": "supplement"
+  },
+  "а": {
+    "stress": 0,
+    "gloss": {
+      "en": "and/but",
+      "fr": "et/mais"
+    },
+    "source": "supplement"
+  },
+  "и": {
+    "stress": 0,
+    "gloss": {
+      "en": "and",
+      "fr": "et"
+    },
+    "source": "supplement"
+  },
+  "то": {
+    "stress": 0,
+    "gloss": {
+      "en": "then/that",
+      "fr": "alors/cela"
+    },
+    "source": "supplement"
+  },
+  "же": {
+    "stress": 0,
+    "gloss": {
+      "en": "(emphasis)",
+      "fr": "(emphase)"
+    },
+    "source": "supplement"
+  },
+  "ли": {
+    "stress": 0,
+    "gloss": {
+      "en": "(question)",
+      "fr": "(interr.)"
+    },
+    "source": "supplement"
+  },
+  "ль": {
+    "stress": 0,
+    "gloss": {
+      "en": "(question)",
+      "fr": "(interr.)"
+    },
+    "source": "supplement"
+  },
+  "о": {
+    "stress": 0,
+    "gloss": {
+      "en": "about",
+      "fr": "de/sur"
+    },
+    "source": "supplement"
+  },
+  "об": {
+    "stress": 0,
+    "gloss": {
+      "en": "about",
+      "fr": "de/sur"
+    },
+    "source": "supplement"
+  },
+  "в": {
+    "stress": 0,
+    "gloss": {
+      "en": "in/into",
+      "fr": "dans"
+    },
+    "source": "supplement"
+  },
+  "во": {
+    "stress": 0,
+    "gloss": {
+      "en": "in/into",
+      "fr": "dans"
+    },
+    "source": "supplement"
+  },
+  "к": {
+    "stress": 0,
+    "gloss": {
+      "en": "to/toward",
+      "fr": "vers"
+    },
+    "source": "supplement"
+  },
+  "ко": {
+    "stress": 0,
+    "gloss": {
+      "en": "to/toward",
+      "fr": "vers"
+    },
+    "source": "supplement"
+  },
+  "с": {
+    "stress": 0,
+    "gloss": {
+      "en": "with/from",
+      "fr": "avec/de"
+    },
+    "source": "supplement"
+  },
+  "со": {
+    "stress": 0,
+    "gloss": {
+      "en": "with/from",
+      "fr": "avec/de"
+    },
+    "source": "supplement"
+  },
+  "у": {
+    "stress": 0,
+    "gloss": {
+      "en": "at/by",
+      "fr": "chez/près de"
+    },
+    "source": "supplement"
+  },
+  "на": {
+    "stress": 0,
+    "gloss": {
+      "en": "on/onto",
+      "fr": "sur"
+    },
+    "source": "supplement"
+  },
+  "за": {
+    "stress": 0,
+    "gloss": {
+      "en": "behind/for",
+      "fr": "derrière/pour"
+    },
+    "source": "supplement"
+  },
+  "по": {
+    "stress": 0,
+    "gloss": {
+      "en": "along/by",
+      "fr": "le long de"
+    },
+    "source": "supplement"
+  },
+  "до": {
+    "stress": 0,
+    "gloss": {
+      "en": "until/to",
+      "fr": "jusqu'à"
+    },
+    "source": "supplement"
+  },
+  "из": {
+    "stress": 0,
+    "gloss": {
+      "en": "from/out of",
+      "fr": "de/hors de"
+    },
+    "source": "supplement"
+  },
+  "от": {
+    "stress": 0,
+    "gloss": {
+      "en": "from",
+      "fr": "de"
+    },
+    "source": "supplement"
+  },
+  "при": {
+    "stress": 0,
+    "gloss": {
+      "en": "at/by/in presence of",
+      "fr": "en présence de"
+    },
+    "source": "supplement"
+  },
+  "для": {
+    "stress": 0,
+    "gloss": {
+      "en": "for",
+      "fr": "pour"
+    },
+    "source": "supplement"
+  },
+  "без": {
+    "stress": 0,
+    "gloss": {
+      "en": "without",
+      "fr": "sans"
+    },
+    "source": "supplement"
+  },
+  "под": {
+    "stress": 0,
+    "gloss": {
+      "en": "under",
+      "fr": "sous"
+    },
+    "source": "supplement"
+  },
+  "над": {
+    "stress": 0,
+    "gloss": {
+      "en": "above",
+      "fr": "au-dessus de"
+    },
+    "source": "supplement"
+  },
+  "про": {
+    "stress": 0,
+    "gloss": {
+      "en": "about",
+      "fr": "au sujet de"
+    },
+    "source": "supplement"
+  },
+  "сквозь": {
+    "stress": 0,
+    "gloss": {
+      "en": "through",
+      "fr": "à travers"
+    },
+    "source": "supplement"
+  },
+  "вдоль": {
+    "stress": 0,
+    "gloss": {
+      "en": "along",
+      "fr": "le long de"
+    },
+    "source": "supplement"
+  },
+  "пой": {
+    "stress": 0,
+    "gloss": {
+      "en": "sing!",
+      "fr": "chante !"
+    },
+    "source": "supplement"
+  },
+  "дай": {
+    "stress": 0,
+    "gloss": {
+      "en": "give!",
+      "fr": "donne !"
+    },
+    "source": "supplement"
+  },
+  "стой": {
+    "stress": 0,
+    "gloss": {
+      "en": "stop!/stand!",
+      "fr": "arrête !/reste !"
+    },
+    "source": "supplement"
+  },
+  "спи": {
+    "stress": 0,
+    "gloss": {
+      "en": "sleep!",
+      "fr": "dors !"
+    },
+    "source": "supplement"
+  },
+  "жди": {
+    "stress": 0,
+    "gloss": {
+      "en": "wait!",
+      "fr": "attends !"
+    },
+    "source": "supplement"
+  },
+  "иди": {
+    "stress": 0,
+    "gloss": {
+      "en": "go!",
+      "fr": "va !"
+    },
+    "source": "supplement"
+  },
+  "будь": {
+    "stress": 0,
+    "gloss": {
+      "en": "be!",
+      "fr": "sois !"
+    },
+    "source": "supplement"
+  },
+  "знай": {
+    "stress": 0,
+    "gloss": {
+      "en": "know!",
+      "fr": "sache !"
+    },
+    "source": "supplement"
+  },
+  "верь": {
+    "stress": 0,
+    "gloss": {
+      "en": "believe!",
+      "fr": "crois !"
+    },
+    "source": "supplement"
+  },
+  "жить": {
+    "stress": 0,
+    "gloss": {
+      "en": "to live",
+      "fr": "vivre"
+    },
+    "source": "supplement"
+  },
+  "быть": {
+    "stress": 0,
+    "gloss": {
+      "en": "to be",
+      "fr": "être"
+    },
+    "source": "supplement"
+  },
+  "петь": {
+    "stress": 0,
+    "gloss": {
+      "en": "to sing",
+      "fr": "chanter"
+    },
+    "source": "supplement"
+  },
+  "спать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to sleep",
+      "fr": "dormir"
+    },
+    "source": "supplement"
+  },
+  "ждать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to wait",
+      "fr": "attendre"
+    },
+    "source": "supplement"
+  },
+  "знать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to know",
+      "fr": "savoir"
+    },
+    "source": "supplement"
+  },
+  "дать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to give",
+      "fr": "donner"
+    },
+    "source": "supplement"
+  },
+  "стать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to become",
+      "fr": "devenir"
+    },
+    "source": "supplement"
+  },
+  "думать": {
+    "stress": 0,
+    "gloss": {
+      "en": "to think",
+      "fr": "penser"
+    },
+    "source": "supplement"
+  },
+  "играть": {
+    "stress": 1,
+    "gloss": {
+      "en": "to play",
+      "fr": "jouer"
+    },
+    "source": "supplement"
+  },
+  "был": {
+    "stress": 0,
+    "gloss": {
+      "en": "was (m.)",
+      "fr": "était (m.)"
+    },
+    "source": "supplement"
+  },
+  "была": {
+    "stress": 1,
+    "gloss": {
+      "en": "was (f.)",
+      "fr": "était (f.)"
+    },
+    "source": "supplement"
+  },
+  "было": {
+    "stress": 0,
+    "gloss": {
+      "en": "was (n.)",
+      "fr": "était (n.)"
+    },
+    "source": "supplement"
+  },
+  "были": {
+    "stress": 0,
+    "gloss": {
+      "en": "were",
+      "fr": "étaient"
+    },
+    "source": "supplement"
+  },
+  "сказал": {
+    "stress": 1,
+    "gloss": {
+      "en": "said/told",
+      "fr": "dit"
+    },
+    "source": "supplement"
+  },
+  "думаю": {
+    "stress": 0,
+    "gloss": {
+      "en": "I think",
+      "fr": "je pense"
+    },
+    "source": "supplement"
+  },
+  "думаешь": {
+    "stress": 0,
+    "gloss": {
+      "en": "you think",
+      "fr": "tu penses"
+    },
+    "source": "supplement"
+  },
+  "есть": {
+    "stress": 0,
+    "gloss": {
+      "en": "is/to eat",
+      "fr": "est/il y a/manger"
+    },
+    "source": "supplement"
+  },
+  "ночь": {
+    "stress": 0,
+    "gloss": {
+      "en": "night",
+      "fr": "nuit"
+    },
+    "source": "supplement"
+  },
+  "день": {
+    "stress": 0,
+    "gloss": {
+      "en": "day",
+      "fr": "jour"
+    },
+    "source": "supplement"
+  },
+  "путь": {
+    "stress": 0,
+    "gloss": {
+      "en": "path/way",
+      "fr": "chemin"
+    },
+    "source": "supplement"
+  },
+  "свет": {
+    "stress": 0,
+    "gloss": {
+      "en": "light",
+      "fr": "lumière"
+    },
+    "source": "supplement"
+  },
+  "мир": {
+    "stress": 0,
+    "gloss": {
+      "en": "world/peace",
+      "fr": "monde/paix"
+    },
+    "source": "supplement"
+  },
+  "сон": {
+    "stress": 0,
+    "gloss": {
+      "en": "dream/sleep",
+      "fr": "rêve/sommeil"
+    },
+    "source": "supplement"
+  },
+  "дом": {
+    "stress": 0,
+    "gloss": {
+      "en": "home/house",
+      "fr": "maison"
+    },
+    "source": "supplement"
+  },
+  "сад": {
+    "stress": 0,
+    "gloss": {
+      "en": "garden",
+      "fr": "jardin"
+    },
+    "source": "supplement"
+  },
+  "лес": {
+    "stress": 0,
+    "gloss": {
+      "en": "forest",
+      "fr": "forêt"
+    },
+    "source": "supplement"
+  },
+  "дождь": {
+    "stress": 0,
+    "gloss": {
+      "en": "rain",
+      "fr": "pluie"
+    },
+    "source": "supplement"
+  },
+  "снег": {
+    "stress": 0,
+    "gloss": {
+      "en": "snow",
+      "fr": "neige"
+    },
+    "source": "supplement"
+  },
+  "лёд": {
+    "stress": 0,
+    "gloss": {
+      "en": "ice",
+      "fr": "glace"
+    },
+    "source": "supplement"
+  },
+  "огонь": {
+    "stress": 0,
+    "gloss": {
+      "en": "fire",
+      "fr": "feu"
+    },
+    "source": "supplement"
+  },
+  "вода": {
+    "stress": 0,
+    "gloss": {
+      "en": "water",
+      "fr": "eau"
+    },
+    "source": "supplement"
+  },
+  "земля": {
+    "stress": 0,
+    "gloss": {
+      "en": "earth",
+      "fr": "terre"
+    },
+    "source": "supplement"
+  },
+  "край": {
+    "stress": 0,
+    "gloss": {
+      "en": "edge/land",
+      "fr": "bord/pays"
+    },
+    "source": "supplement"
+  },
+  "гром": {
+    "stress": 0,
+    "gloss": {
+      "en": "thunder",
+      "fr": "tonnerre"
+    },
+    "source": "supplement"
+  },
+  "шум": {
+    "stress": 0,
+    "gloss": {
+      "en": "noise",
+      "fr": "bruit"
+    },
+    "source": "supplement"
+  },
+  "бог": {
+    "stress": 0,
+    "gloss": {
+      "en": "god",
+      "fr": "dieu"
+    },
+    "source": "supplement"
+  },
+  "царь": {
+    "stress": 0,
+    "gloss": {
+      "en": "tsar",
+      "fr": "tsar"
+    },
+    "source": "supplement"
+  },
+  "князь": {
+    "stress": 0,
+    "gloss": {
+      "en": "prince",
+      "fr": "prince"
+    },
+    "source": "supplement"
+  },
+  "дух": {
+    "stress": 0,
+    "gloss": {
+      "en": "spirit",
+      "fr": "esprit"
+    },
+    "source": "supplement"
+  },
+  "друг": {
+    "stress": 0,
+    "gloss": {
+      "en": "friend",
+      "fr": "ami"
+    },
+    "source": "supplement"
+  },
+  "враг": {
+    "stress": 0,
+    "gloss": {
+      "en": "enemy",
+      "fr": "ennemi"
+    },
+    "source": "supplement"
+  },
+  "брат": {
+    "stress": 0,
+    "gloss": {
+      "en": "brother",
+      "fr": "frère"
+    },
+    "source": "supplement"
+  },
+  "сын": {
+    "stress": 0,
+    "gloss": {
+      "en": "son",
+      "fr": "fils"
+    },
+    "source": "supplement"
+  },
+  "муж": {
+    "stress": 0,
+    "gloss": {
+      "en": "husband",
+      "fr": "mari"
+    },
+    "source": "supplement"
+  },
+  "мама": {
+    "stress": 0,
+    "gloss": {
+      "en": "mama",
+      "fr": "maman"
+    },
+    "source": "supplement"
+  },
+  "маме": {
+    "stress": 0,
+    "gloss": {
+      "en": "to mama",
+      "fr": "à maman"
+    },
+    "source": "supplement"
+  },
+  "красавица": {
+    "stress": 1,
+    "gloss": {
+      "en": "beauty",
+      "fr": "beauté"
+    },
+    "source": "supplement"
+  },
+  "жизнь": {
+    "stress": 0,
+    "gloss": {
+      "en": "life",
+      "fr": "vie"
+    },
+    "source": "supplement"
+  },
+  "любовь": {
+    "stress": 1,
+    "gloss": {
+      "en": "love",
+      "fr": "amour"
+    },
+    "source": "supplement"
+  },
+  "любви": {
+    "stress": 1,
+    "gloss": {
+      "en": "of love",
+      "fr": "d'amour"
+    },
+    "source": "supplement"
+  },
+  "правда": {
+    "stress": 0,
+    "gloss": {
+      "en": "truth",
+      "fr": "vérité"
+    },
+    "source": "supplement"
+  },
+  "правду": {
+    "stress": 0,
+    "gloss": {
+      "en": "truth (acc.)",
+      "fr": "vérité (acc.)"
+    },
+    "source": "supplement"
+  },
+  "смерть": {
+    "stress": 0,
+    "gloss": {
+      "en": "death",
+      "fr": "mort"
+    },
+    "source": "supplement"
+  },
+  "боль": {
+    "stress": 0,
+    "gloss": {
+      "en": "pain",
+      "fr": "douleur"
+    },
+    "source": "supplement"
+  },
+  "грусть": {
+    "stress": 0,
+    "gloss": {
+      "en": "sadness",
+      "fr": "tristesse"
+    },
+    "source": "supplement"
+  },
+  "страсть": {
+    "stress": 0,
+    "gloss": {
+      "en": "passion",
+      "fr": "passion"
+    },
+    "source": "supplement"
+  },
+  "честь": {
+    "stress": 0,
+    "gloss": {
+      "en": "honor",
+      "fr": "honneur"
+    },
+    "source": "supplement"
+  },
+  "власть": {
+    "stress": 0,
+    "gloss": {
+      "en": "power",
+      "fr": "pouvoir"
+    },
+    "source": "supplement"
+  },
+  "часть": {
+    "stress": 0,
+    "gloss": {
+      "en": "part",
+      "fr": "partie"
+    },
+    "source": "supplement"
+  },
+  "речь": {
+    "stress": 0,
+    "gloss": {
+      "en": "speech",
+      "fr": "parole"
+    },
+    "source": "supplement"
+  },
+  "мысль": {
+    "stress": 0,
+    "gloss": {
+      "en": "thought",
+      "fr": "pensée"
+    },
+    "source": "supplement"
+  },
+  "кровь": {
+    "stress": 0,
+    "gloss": {
+      "en": "blood",
+      "fr": "sang"
+    },
+    "source": "supplement"
+  },
+  "грудь": {
+    "stress": 0,
+    "gloss": {
+      "en": "chest/breast",
+      "fr": "poitrine"
+    },
+    "source": "supplement"
+  },
+  "взор": {
+    "stress": 0,
+    "gloss": {
+      "en": "gaze",
+      "fr": "regard"
+    },
+    "source": "supplement"
+  },
+  "взгляд": {
+    "stress": 0,
+    "gloss": {
+      "en": "glance",
+      "fr": "coup d'œil"
+    },
+    "source": "supplement"
+  },
+  "слух": {
+    "stress": 0,
+    "gloss": {
+      "en": "hearing/rumor",
+      "fr": "ouïe/rumeur"
+    },
+    "source": "supplement"
+  },
+  "рай": {
+    "stress": 0,
+    "gloss": {
+      "en": "paradise",
+      "fr": "paradis"
+    },
+    "source": "supplement"
+  },
+  "ад": {
+    "stress": 0,
+    "gloss": {
+      "en": "hell",
+      "fr": "enfer"
+    },
+    "source": "supplement"
+  },
+  "русский": {
+    "stress": 0,
+    "pos": "adj.",
+    "gloss": {
+      "en": "Russian",
+      "fr": "russe"
+    },
+    "source": "supplement"
+  },
+  "рад": {
+    "stress": 0,
+    "gloss": {
+      "en": "glad",
+      "fr": "content"
+    },
+    "source": "supplement"
+  },
+  "сыт": {
+    "stress": 0,
+    "gloss": {
+      "en": "full/sated",
+      "fr": "rassasié"
+    },
+    "source": "supplement"
+  },
+  "злой": {
+    "stress": 0,
+    "gloss": {
+      "en": "evil/angry",
+      "fr": "méchant/fâché"
+    },
+    "source": "supplement"
+  },
+  "свят": {
+    "stress": 0,
+    "gloss": {
+      "en": "holy",
+      "fr": "saint"
+    },
+    "source": "supplement"
+  },
+  "прав": {
+    "stress": 0,
+    "gloss": {
+      "en": "right/correct",
+      "fr": "juste"
+    },
+    "source": "supplement"
+  },
+  "жив": {
+    "stress": 0,
+    "gloss": {
+      "en": "alive",
+      "fr": "vivant"
+    },
+    "source": "supplement"
+  },
+  "мёртв": {
+    "stress": 0,
+    "gloss": {
+      "en": "dead",
+      "fr": "mort"
+    },
+    "source": "supplement"
+  },
+  "нов": {
+    "stress": 0,
+    "gloss": {
+      "en": "new",
+      "fr": "nouveau"
+    },
+    "source": "supplement"
+  },
+  "стар": {
+    "stress": 0,
+    "gloss": {
+      "en": "old",
+      "fr": "vieux"
+    },
+    "source": "supplement"
+  },
+  "юн": {
+    "stress": 0,
+    "gloss": {
+      "en": "young",
+      "fr": "jeune"
+    },
+    "source": "supplement"
+  },
+  "мил": {
+    "stress": 0,
+    "gloss": {
+      "en": "dear/sweet",
+      "fr": "cher/doux"
+    },
+    "source": "supplement"
+  },
+  "люб": {
+    "stress": 0,
+    "gloss": {
+      "en": "beloved",
+      "fr": "bien-aimé"
+    },
+    "source": "supplement"
+  },
+  "забвенный": {
+    "stress": 0,
+    "gloss": {
+      "en": "forgotten",
+      "fr": "oublié"
+    },
+    "source": "supplement"
+  },
+  "охладелый": {
+    "stress": 2,
+    "gloss": {
+      "en": "cold, dead",
+      "fr": "refroidi"
+    },
+    "source": "supplement"
+  },
+  "бы": {
+    "stress": 0,
+    "gloss": {
+      "en": "would",
+      "fr": "(cond.)"
+    },
+    "source": "supplement"
+  },
+  "б": {
+    "stress": 0,
+    "gloss": {
+      "en": "would",
+      "fr": "(cond.)"
+    },
+    "source": "supplement"
+  },
+  "хоть": {
+    "stress": 0,
+    "gloss": {
+      "en": "although",
+      "fr": "bien que"
+    },
+    "source": "supplement"
+  },
+  "пусть": {
+    "stress": 0,
+    "gloss": {
+      "en": "let",
+      "fr": "que"
+    },
+    "source": "supplement"
+  },
+  "лишь": {
+    "stress": 0,
+    "gloss": {
+      "en": "only",
+      "fr": "seulement"
+    },
+    "source": "supplement"
+  },
+  "вновь": {
+    "stress": 0,
+    "gloss": {
+      "en": "again",
+      "fr": "de nouveau"
+    },
+    "source": "supplement"
+  },
+  "вдруг": {
+    "stress": 0,
+    "gloss": {
+      "en": "suddenly",
+      "fr": "soudain"
+    },
+    "source": "supplement"
+  },
+  "прочь": {
+    "stress": 0,
+    "gloss": {
+      "en": "away",
+      "fr": "loin"
+    },
+    "source": "supplement"
+  },
+  "вниз": {
+    "stress": 0,
+    "gloss": {
+      "en": "down",
+      "fr": "en bas"
+    },
+    "source": "supplement"
+  },
+  "вверх": {
+    "stress": 0,
+    "gloss": {
+      "en": "up",
+      "fr": "en haut"
+    },
+    "source": "supplement"
+  },
+  "чуть": {
+    "stress": 0,
+    "gloss": {
+      "en": "barely",
+      "fr": "à peine"
+    },
+    "source": "supplement"
+  },
+  "близко": {
+    "stress": 0,
+    "gloss": {
+      "en": "near",
+      "fr": "près"
+    },
+    "source": "supplement"
+  },
+  "далеко": {
+    "stress": 2,
+    "gloss": {
+      "en": "far",
+      "fr": "loin"
+    },
+    "source": "supplement"
+  },
+  "высоко": {
+    "stress": 2,
+    "gloss": {
+      "en": "high",
+      "fr": "haut"
+    },
+    "source": "supplement"
+  },
+  "глубоко": {
+    "stress": 2,
+    "gloss": {
+      "en": "deep",
+      "fr": "profond"
+    },
+    "source": "supplement"
+  },
+  "тихо": {
+    "stress": 0,
+    "gloss": {
+      "en": "quietly",
+      "fr": "doucement"
+    },
+    "source": "supplement"
+  },
+  "громко": {
+    "stress": 0,
+    "gloss": {
+      "en": "loudly",
+      "fr": "fort"
+    },
+    "source": "supplement"
+  },
+  "быстро": {
+    "stress": 0,
+    "gloss": {
+      "en": "quickly",
+      "fr": "vite"
+    },
+    "source": "supplement"
+  },
+  "медленно": {
+    "stress": 0,
+    "gloss": {
+      "en": "slowly",
+      "fr": "lentement"
+    },
+    "source": "supplement"
+  },
+  "тепло": {
+    "stress": 1,
+    "gloss": {
+      "en": "warmly",
+      "fr": "chaudement"
+    },
+    "source": "supplement"
+  },
+  "холодно": {
+    "stress": 0,
+    "gloss": {
+      "en": "coldly",
+      "fr": "froidement"
+    },
+    "source": "supplement"
+  },
+  "светло": {
+    "stress": 1,
+    "gloss": {
+      "en": "brightly",
+      "fr": "clairement"
+    },
+    "source": "supplement"
+  },
+  "темно": {
+    "stress": 1,
+    "gloss": {
+      "en": "darkly",
+      "fr": "sombrement"
+    },
+    "source": "supplement"
+  },
+  "ясно": {
+    "stress": 0,
+    "gloss": {
+      "en": "clearly",
+      "fr": "clairement"
+    },
+    "source": "supplement"
+  },
+  "страшно": {
+    "stress": 0,
+    "gloss": {
+      "en": "terribly",
+      "fr": "terriblement"
+    },
+    "source": "supplement"
+  },
+  "больно": {
+    "stress": 0,
+    "gloss": {
+      "en": "painfully",
+      "fr": "douloureusement"
+    },
+    "source": "supplement"
+  },
+  "грустно": {
+    "stress": 0,
+    "gloss": {
+      "en": "sadly",
+      "fr": "tristement"
+    },
+    "source": "supplement"
+  },
+  "радостно": {
+    "stress": 0,
+    "gloss": {
+      "en": "joyfully",
+      "fr": "joyeusement"
+    },
+    "source": "supplement"
+  },
+  "нежно": {
+    "stress": 0,
+    "gloss": {
+      "en": "tenderly",
+      "fr": "tendrement"
+    },
+    "source": "supplement"
+  },
+  "ближе": {
+    "stress": 0,
+    "gloss": {
+      "en": "closer",
+      "fr": "plus près"
+    },
+    "source": "supplement"
+  },
+  "дальше": {
+    "stress": 0,
+    "gloss": {
+      "en": "farther",
+      "fr": "plus loin"
+    },
+    "source": "supplement"
+  },
+  "выше": {
+    "stress": 0,
+    "gloss": {
+      "en": "higher",
+      "fr": "plus haut"
+    },
+    "source": "supplement"
+  },
+  "ниже": {
+    "stress": 0,
+    "gloss": {
+      "en": "lower",
+      "fr": "plus bas"
+    },
+    "source": "supplement"
+  },
+  "громче": {
+    "stress": 0,
+    "gloss": {
+      "en": "louder",
+      "fr": "plus fort"
+    },
+    "source": "supplement"
+  },
+  "тише": {
+    "stress": 0,
+    "gloss": {
+      "en": "quieter",
+      "fr": "plus doucement"
+    },
+    "source": "supplement"
+  },
+  "быстрее": {
+    "stress": 1,
+    "gloss": {
+      "en": "faster",
+      "fr": "plus vite"
+    },
+    "source": "supplement"
+  },
+  "сильнее": {
+    "stress": 1,
+    "gloss": {
+      "en": "stronger",
+      "fr": "plus fort"
+    },
+    "source": "supplement"
+  },
+  "слаще": {
+    "stress": 0,
+    "gloss": {
+      "en": "sweeter",
+      "fr": "plus doux"
+    },
+    "source": "supplement"
+  },
+  "горче": {
+    "stress": 0,
+    "gloss": {
+      "en": "more bitter",
+      "fr": "plus amer"
+    },
+    "source": "supplement"
+  },
+  "ярче": {
+    "stress": 0,
+    "gloss": {
+      "en": "brighter",
+      "fr": "plus brillant"
+    },
+    "source": "supplement"
+  },
+  "темнее": {
+    "stress": 1,
+    "gloss": {
+      "en": "darker",
+      "fr": "plus sombre"
+    },
+    "source": "supplement"
+  },
+  "теплее": {
+    "stress": 1,
+    "gloss": {
+      "en": "warmer",
+      "fr": "plus chaud"
+    },
+    "source": "supplement"
+  },
+  "холоднее": {
+    "stress": 2,
+    "gloss": {
+      "en": "colder",
+      "fr": "plus froid"
+    },
+    "source": "supplement"
+  },
+  "нежнее": {
+    "stress": 1,
+    "gloss": {
+      "en": "more tender",
+      "fr": "plus tendre"
+    },
+    "source": "supplement"
+  },
+  "краше": {
+    "stress": 0,
+    "gloss": {
+      "en": "fairer",
+      "fr": "plus beau"
+    },
+    "source": "supplement"
+  },
+  "глубже": {
+    "stress": 0,
+    "gloss": {
+      "en": "deeper",
+      "fr": "plus profond"
+    },
+    "source": "supplement"
+  },
+  "дороже": {
+    "stress": 1,
+    "gloss": {
+      "en": "dearer",
+      "fr": "plus cher"
+    },
+    "source": "supplement"
+  },
+  "шумных": {
+    "stress": 0,
+    "gloss": {
+      "en": "noisy (gen./prep. pl.)",
+      "fr": "bruyants (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "тихих": {
+    "stress": 0,
+    "gloss": {
+      "en": "quiet (gen./prep. pl.)",
+      "fr": "calmes (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "темных": {
+    "stress": 0,
+    "gloss": {
+      "en": "dark (gen./prep. pl.)",
+      "fr": "sombres (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "светлых": {
+    "stress": 0,
+    "gloss": {
+      "en": "bright (gen./prep. pl.)",
+      "fr": "clairs (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "белых": {
+    "stress": 0,
+    "gloss": {
+      "en": "white (gen./prep. pl.)",
+      "fr": "blancs (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "чёрных": {
+    "stress": 0,
+    "gloss": {
+      "en": "black (gen./prep. pl.)",
+      "fr": "noirs (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "красных": {
+    "stress": 0,
+    "gloss": {
+      "en": "red (gen./prep. pl.)",
+      "fr": "rouges (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "синих": {
+    "stress": 0,
+    "gloss": {
+      "en": "blue (gen./prep. pl.)",
+      "fr": "bleus (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "ясных": {
+    "stress": 0,
+    "gloss": {
+      "en": "clear (gen./prep. pl.)",
+      "fr": "clairs (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "нежных": {
+    "stress": 0,
+    "gloss": {
+      "en": "tender (gen./prep. pl.)",
+      "fr": "tendres (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "добрых": {
+    "stress": 0,
+    "gloss": {
+      "en": "kind (gen./prep. pl.)",
+      "fr": "bons (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "злых": {
+    "stress": 0,
+    "gloss": {
+      "en": "evil (gen./prep. pl.)",
+      "fr": "méchants (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "юных": {
+    "stress": 0,
+    "gloss": {
+      "en": "young (gen./prep. pl.)",
+      "fr": "jeunes (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "старых": {
+    "stress": 0,
+    "gloss": {
+      "en": "old (gen./prep. pl.)",
+      "fr": "vieux (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "новых": {
+    "stress": 0,
+    "gloss": {
+      "en": "new (gen./prep. pl.)",
+      "fr": "nouveaux (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "милых": {
+    "stress": 0,
+    "gloss": {
+      "en": "dear (gen./prep. pl.)",
+      "fr": "chers (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "дальних": {
+    "stress": 0,
+    "gloss": {
+      "en": "distant (gen./prep. pl.)",
+      "fr": "lointains (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "близких": {
+    "stress": 0,
+    "gloss": {
+      "en": "close (gen./prep. pl.)",
+      "fr": "proches (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "вечных": {
+    "stress": 0,
+    "gloss": {
+      "en": "eternal (gen./prep. pl.)",
+      "fr": "éternels (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "грустных": {
+    "stress": 0,
+    "gloss": {
+      "en": "sad (gen./prep. pl.)",
+      "fr": "tristes (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "святых": {
+    "stress": 1,
+    "gloss": {
+      "en": "holy (gen./prep. pl.)",
+      "fr": "saints (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "живых": {
+    "stress": 1,
+    "gloss": {
+      "en": "living (gen./prep. pl.)",
+      "fr": "vivants (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "мёртвых": {
+    "stress": 0,
+    "gloss": {
+      "en": "dead (gen./prep. pl.)",
+      "fr": "morts (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "родных": {
+    "stress": 1,
+    "gloss": {
+      "en": "native (gen./prep. pl.)",
+      "fr": "natals (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "чужих": {
+    "stress": 1,
+    "gloss": {
+      "en": "foreign (gen./prep. pl.)",
+      "fr": "étrangers (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "пустых": {
+    "stress": 1,
+    "gloss": {
+      "en": "empty (gen./prep. pl.)",
+      "fr": "vides (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "густых": {
+    "stress": 1,
+    "gloss": {
+      "en": "dense (gen./prep. pl.)",
+      "fr": "denses (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "безумных": {
+    "stress": 0,
+    "gloss": {
+      "en": "mad (gen./prep. pl.)",
+      "fr": "fous (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "безмолвных": {
+    "stress": 1,
+    "gloss": {
+      "en": "silent (gen./prep. pl.)",
+      "fr": "silencieux (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "бездонных": {
+    "stress": 1,
+    "gloss": {
+      "en": "bottomless (gen./prep. pl.)",
+      "fr": "sans fond (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "бескрайних": {
+    "stress": 1,
+    "gloss": {
+      "en": "boundless (gen./prep. pl.)",
+      "fr": "sans bornes (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "небесных": {
+    "stress": 1,
+    "gloss": {
+      "en": "heavenly (gen./prep. pl.)",
+      "fr": "célestes (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "земных": {
+    "stress": 1,
+    "gloss": {
+      "en": "earthly (gen./prep. pl.)",
+      "fr": "terrestres (gén./prép. pl.)"
+    },
+    "source": "supplement"
+  },
+  "дней": {
+    "stress": 0,
+    "gloss": {
+      "en": "days (gen. pl.)",
+      "fr": "de jours"
+    },
+    "source": "supplement"
+  },
+  "ночей": {
+    "stress": 1,
+    "gloss": {
+      "en": "nights (gen. pl.)",
+      "fr": "de nuits"
+    },
+    "source": "supplement"
+  },
+  "лет": {
+    "stress": 0,
+    "gloss": {
+      "en": "years (gen. pl.)",
+      "fr": "d'années"
+    },
+    "source": "supplement"
+  },
+  "слёз": {
+    "stress": 0,
+    "gloss": {
+      "en": "tears (gen. pl.)",
+      "fr": "de larmes"
+    },
+    "source": "supplement"
+  },
+  "глаз": {
+    "stress": 0,
+    "gloss": {
+      "en": "eyes (gen. pl.)",
+      "fr": "d'yeux"
+    },
+    "source": "supplement"
+  },
+  "рук": {
+    "stress": 0,
+    "gloss": {
+      "en": "hands (gen. pl.)",
+      "fr": "de mains"
+    },
+    "source": "supplement"
+  },
+  "ног": {
+    "stress": 0,
+    "gloss": {
+      "en": "feet (gen. pl.)",
+      "fr": "de pieds"
+    },
+    "source": "supplement"
+  },
+  "губ": {
+    "stress": 0,
+    "gloss": {
+      "en": "lips (gen. pl.)",
+      "fr": "de lèvres"
+    },
+    "source": "supplement"
+  },
+  "слов": {
+    "stress": 0,
+    "gloss": {
+      "en": "words (gen. pl.)",
+      "fr": "de mots"
+    },
+    "source": "supplement"
+  },
+  "снов": {
+    "stress": 0,
+    "gloss": {
+      "en": "dreams (gen. pl.)",
+      "fr": "de rêves"
+    },
+    "source": "supplement"
+  },
+  "цветов": {
+    "stress": 1,
+    "gloss": {
+      "en": "flowers (gen. pl.)",
+      "fr": "de fleurs"
+    },
+    "source": "supplement"
+  },
+  "садов": {
+    "stress": 1,
+    "gloss": {
+      "en": "gardens (gen. pl.)",
+      "fr": "de jardins"
+    },
+    "source": "supplement"
+  },
+  "лесов": {
+    "stress": 1,
+    "gloss": {
+      "en": "forests (gen. pl.)",
+      "fr": "de forêts"
+    },
+    "source": "supplement"
+  },
+  "полей": {
+    "stress": 1,
+    "gloss": {
+      "en": "fields (gen. pl.)",
+      "fr": "de champs"
+    },
+    "source": "supplement"
+  },
+  "морей": {
+    "stress": 1,
+    "gloss": {
+      "en": "seas (gen. pl.)",
+      "fr": "de mers"
+    },
+    "source": "supplement"
+  },
+  "небес": {
+    "stress": 1,
+    "gloss": {
+      "en": "heavens (gen. pl.)",
+      "fr": "de cieux"
+    },
+    "source": "supplement"
+  },
+  "сердец": {
+    "stress": 1,
+    "gloss": {
+      "en": "hearts (gen. pl.)",
+      "fr": "de cœurs"
+    },
+    "source": "supplement"
+  },
+  "очей": {
+    "stress": 1,
+    "gloss": {
+      "en": "eyes (gen. pl., archaic)",
+      "fr": "d'yeux (arch.)"
+    },
+    "source": "supplement"
+  },
+  "людей": {
+    "stress": 1,
+    "gloss": {
+      "en": "people (gen. pl.)",
+      "fr": "de gens"
+    },
+    "source": "supplement"
+  },
+  "детей": {
+    "stress": 1,
+    "gloss": {
+      "en": "children (gen. pl.)",
+      "fr": "d'enfants"
+    },
+    "source": "supplement"
+  },
+  "странствие": {
+    "stress": 0,
+    "gloss": {
+      "en": "wandering",
+      "fr": "errance"
+    },
+    "source": "supplement"
+  },
+  "странствии": {
+    "stress": 0,
+    "gloss": {
+      "en": "wandering (prep. sg.)",
+      "fr": "errance (prép. sg.)"
+    },
+    "source": "supplement"
+  },
+  "странствия": {
+    "stress": 0,
+    "gloss": {
+      "en": "wandering (gen. sg.)",
+      "fr": "d'errance"
+    },
+    "source": "supplement"
+  }
+}
