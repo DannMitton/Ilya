@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.69 Fix sonorant-blocking devoicing</title>
+  <title>Ilya — v6.0.70 Fix ё blocking consonant migration (3.H)</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -12697,12 +12697,10 @@ function addAcuteToSyllable(syllable) {
         const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
         const displaySyllables = BoundaryStack.applyOffsets(wordId, wordData.syllables);
         
-        const hasYo = wordData.hasYo === 'true' || wordData.hasYo === true;
         const syllableCount = displaySyllables.length;
-        const buttonsDisabled = hasYo && syllableCount > 1;
         
         this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
-          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" data-syllable-index="${idx}">${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
         
         // Show customized state and register reset handler if boundaries were adjusted (v5.10.23)
@@ -13704,10 +13702,9 @@ function addAcuteToSyllable(syllable) {
 
         // Render syllable buttons with BoundaryStack offsets (v5.10.23)
         const displaySyllables = BoundaryStack.applyOffsets(wordId, wordData.syllables);
-        const buttonsDisabled = hasYo && syllableCount > 1;
         
         this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
-          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" data-syllable-index="${idx}">${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
         
         // Monosyllable context label (v5.11.13)
@@ -14161,12 +14158,10 @@ function addAcuteToSyllable(syllable) {
         const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
         
         // Re-render buttons with display syllables
-        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true;
         const syllableCount = displaySyllables.length;
-        const buttonsDisabled = hasYo && syllableCount > 1;
         
         this.elements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
-          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" data-syllable-index="${idx}" ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" data-syllable-index="${idx}">${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}</button>`
         ).join('');
         
         // Sync word stack IPA in main document (v5.10.22)
@@ -14648,13 +14643,11 @@ function addAcuteToSyllable(syllable) {
             ? BoundaryStack.applyOffsets(wordId, syllables)
             : syllables;
           
-          // ё locks stress — disable non-stressed buttons
-          const buttonsDisabled = hasYoFlag && syllableCount > 1;
+          // ё locks stress — handled in updateStress/handleStressChange guards
           
           this.inspectorElements.syllableDisplay.innerHTML = displaySyllables?.map((syl, idx) => 
-            `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
-                     data-syllable-index="${idx}" 
-                     ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
+            `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
+                     data-syllable-index="${idx}">
               ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
             </button>`
           ).join('') || '';
@@ -15026,6 +15019,11 @@ function addAcuteToSyllable(syllable) {
       handleStressChange(newStressIdx) {
         if (!this.currentWord) return;
         
+        // Block stress changes for ё words (ё always carries stress)
+        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true ||
+                      GraysonEngine.hasYo(this.currentWord.cyrillic);
+        if (hasYo) return;
+        
         const { lineIndex, wordIndex, syllables } = this.currentWord;
         const currentStressIdx = syllables?.findIndex(s => s.isStressed) ?? -1;
         
@@ -15334,14 +15332,11 @@ function addAcuteToSyllable(syllable) {
         const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
         
         // Re-render buttons with display syllables
-        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true;
         const syllableCount = displaySyllables.length;
-        const buttonsDisabled = hasYo && syllableCount > 1;
         
         this.inspectorElements.syllableDisplay.innerHTML = displaySyllables.map((syl, idx) => 
-          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''} ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}" 
-                   data-syllable-index="${idx}" 
-                   ${buttonsDisabled && !syl.isStressed ? 'disabled' : ''}>
+          `<button class="syllable-btn ${syl.isStressed ? 'stressed' : ''}" 
+                   data-syllable-index="${idx}">
             ${syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa}
           </button>`
         ).join('');
