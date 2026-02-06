@@ -553,12 +553,13 @@
     .inspector-gloss-inline:not(:empty) {
       background: transparent;
       border-color: transparent;
+      border-bottom: 1px dashed rgba(122, 158, 126, 0.4);
       color: var(--ilya-accent);
     }
 
     .inspector-gloss-inline:not(:empty):hover {
       background: var(--ilya-accent-light);
-      border-color: transparent;
+      border-bottom: 1px solid var(--ilya-accent);
     }
 
     .inspector-gloss-inline:empty::before {
