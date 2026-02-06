@@ -1905,6 +1905,10 @@
       color: var(--accent-muted);
       min-height: 1.1em;
       min-width: 1em;
+      max-width: 10em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .word-stack.proclitic .cyrillic,
@@ -5044,7 +5048,7 @@ const UI_LABELS = {
   },
   'paper.verify': {
     en: 'verify',
-    fr: 'vérifier'
+    fr: 'à vérifier'
   },
   'paper.songTitle': {
     en: 'Song Title',
@@ -14801,7 +14805,10 @@ function addAcuteToSyllable(syllable) {
           const nextWord = line[wordIndex + 1];
           const nextWordCyrillic = nextWord?.cyrillic || nextWord?.originalInput || '—';
           if (this.inspectorElements.boundaryLabel) {
-            this.inspectorElements.boundaryLabel.textContent = `Break between [${currentWordCyrillic}] and [${nextWordCyrillic}]?`;
+            const lang = currentGlossLanguage || 'en';
+            const template = UI_LABELS['inspector.boundaryLabel'][lang];
+            const parts = template.split('[—]');
+            this.inspectorElements.boundaryLabel.textContent = parts[0] + '[' + currentWordCyrillic + ']' + parts[1] + '[' + nextWordCyrillic + ']' + parts[2];
           }
           
           // Set active state based on current boundary (No = soft, Yes = hard)
