@@ -1133,6 +1133,22 @@
     .inspector-yo-toast .undo-btn:hover {
       background: rgba(255,255,255,0.15);
     }
+    
+    .inspector-yo-toast .ok-btn {
+      background: var(--ilya-accent);
+      border: 1px solid var(--ilya-accent);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 150ms;
+      margin-left: 6px;
+    }
+    
+    .inspector-yo-toast .ok-btn:hover {
+      background: var(--ilya-accent-hover);
+    }
 
     /* Scrim: tablet overlay mode only */
     .drawer-scrim {
@@ -4808,8 +4824,11 @@
             
             <!-- Toast for ё warning -->
             <div class="inspector-yo-toast" id="inspectorYoToast">
-              <span>ё → е changes pronunciation</span>
-              <button class="undo-btn" id="inspectorYoUndoBtn">Undo</button>
+              <span id="inspectorYoToastText">ё → е changes pronunciation</span>
+              <div>
+                <button class="undo-btn" id="inspectorYoUndoBtn">Undo</button>
+                <button class="ok-btn" id="inspectorYoOkBtn">OK</button>
+              </div>
             </div>
             
           </div>
@@ -4987,6 +5006,14 @@ const UI_LABELS = {
   'inspector.unstressedMono': {
     en: 'Unstressed monosyllable',
     fr: 'Monosyllabe sans accent'
+  },
+  'inspector.yoToastYoToYe': {
+    en: 'ё → е changes pronunciation',
+    fr: 'ё → е modifie la prononciation'
+  },
+  'inspector.yoToastYeToYo': {
+    en: 'е → ё changes pronunciation',
+    fr: 'е → ё modifie la prononciation'
   },
   'paper.verify': {
     en: 'verify',
@@ -14364,7 +14391,9 @@ function addAcuteToSyllable(syllable) {
           stressUser: document.getElementById('inspectorStressUser'),
           stressAttributionArrow: document.getElementById('stressAttributionArrow'),
           yoToast: document.getElementById('inspectorYoToast'),
-          yoUndoBtn: document.getElementById('inspectorYoUndoBtn')
+          yoToastText: document.getElementById('inspectorYoToastText'),
+          yoUndoBtn: document.getElementById('inspectorYoUndoBtn'),
+          yoOkBtn: document.getElementById('inspectorYoOkBtn')
         };
         
         // Back button returns to Root (with stopPropagation)
@@ -14430,6 +14459,11 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements.yoUndoBtn?.addEventListener('click', (e) => {
           e.stopPropagation();
           this.undoYoToggle();
+        });
+        
+        this.inspectorElements.yoOkBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.inspectorElements.yoToast?.classList.remove('visible');
         });
         
         // Phase 4B: Set up syllable boundary drag handlers
@@ -14832,10 +14866,13 @@ function addAcuteToSyllable(syllable) {
       },
       
       // Phase 3D: Handle variant toggle (ё ↔ е) - executes the change
-      handleVariantToggle(variant) {
+      handleVariantToggle(variant, skipToast) {
         if (!this.currentWord) return;
         
-        const cyrillic = this.currentWord.cyrillic || '';
+        const { lineIndex, wordIndex, cyrillic } = this.currentWord;
+        const word = DocumentState.lines[lineIndex]?.[wordIndex];
+        if (!word) return;
+        
         const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
         const currentVariant = hasYo ? 'yo' : 'ye';
         
@@ -14845,25 +14882,63 @@ function addAcuteToSyllable(syllable) {
         // Store for undo
         this._yoStateBeforeToggle = currentVariant;
         
-        // Check if warning needed (polysyllabic + removing ё)
-        const syllableCount = this.currentWord.syllables?.length || 1;
-        const showWarning = variant === 'ye' && syllableCount > 1;
+        // Determine direction for toast text
+        const direction = hasYo ? 'yo-to-ye' : 'ye-to-yo';
         
-        // Delegate to Popup's handleYoToggle (it has the reprocessing logic)
-        if (typeof Popup !== 'undefined' && Popup.currentWord) {
-          // Temporarily set Popup's currentWord to match ours
-          const originalPopupWord = Popup.currentWord;
-          Popup.currentWord = this.currentWord;
-          Popup.handleYoToggle();
-          Popup.currentWord = originalPopupWord;
+        // Respell the word
+        let newCyrillic;
+        let newYoSource;
+        
+        if (hasYo) {
+          // Currently has ё — remove it (revert to original or convert ё→е)
+          if (word.originalInput) {
+            newCyrillic = word.originalInput;
+          } else {
+            newCyrillic = cyrillic.replace(/ё/, 'е').replace(/Ё/, 'Е');
+          }
+          newYoSource = 'user-yo-edit';
+        } else if (word.dictionaryForm) {
+          // Has е, dictionary form available — restore ё
+          newCyrillic = word.dictionaryForm;
+          newYoSource = 'yo-restored';
+        } else {
+          // Has е, no dictionary — add ё to first е
+          newCyrillic = cyrillic.replace(/е/, 'ё').replace(/Е/, 'Ё');
+          newYoSource = 'user-yo-edit';
         }
         
-        // Refresh inspector after change
+        // Update DocumentState
+        word.cyrillic = newCyrillic;
+        word.yoSource = newYoSource;
+        
+        // Check if new form has ё (for stress locking)
+        const newHasYo = newCyrillic.includes('ё') || newCyrillic.includes('Ё');
+        word.hasYo = newHasYo;
+        
+        // Re-run stress assignment
+        if (newHasYo) {
+          const yoSyllable = GraysonEngine.findYoSyllable(newCyrillic);
+          if (yoSyllable !== -1) {
+            word.stress = yoSyllable;
+            word.stressSource = newYoSource;
+          }
+        } else {
+          const lookup = GraysonEngine.lookupStress(newCyrillic);
+          if (lookup) {
+            word.stress = lookup.stress;
+            word.stressSource = lookup.source;
+          } else {
+            word.stress = 0;
+            word.stressSource = 'default';
+          }
+        }
+        
+        // Refresh inspector and paper
         this.refreshAfterChange();
         
-        // Show toast warning if needed
-        if (showWarning) {
-          this.showYoToast();
+        // Show toast with direction (unless suppressed by undo)
+        if (!skipToast) {
+          this.showYoToast(direction);
         }
       },
       
@@ -14969,26 +15044,27 @@ function addAcuteToSyllable(syllable) {
       },
       
       // Phase 3D: Show ё warning toast
-      showYoToast() {
-        this.inspectorElements.yoToast?.classList.add('visible');
+      showYoToast(direction) {
+        // Update toast text based on direction
+        if (this.inspectorElements.yoToastText) {
+          const lang = currentGlossLanguage || 'en';
+          const key = direction === 'yo-to-ye' ? 'inspector.yoToastYoToYe' : 'inspector.yoToastYeToYo';
+          this.inspectorElements.yoToastText.textContent = UI_LABELS[key]?.[lang] ||
+            (direction === 'yo-to-ye' ? 'ё → е changes pronunciation' : 'е → ё changes pronunciation');
+        }
         
-        // Auto-hide after 5 seconds
-        clearTimeout(this._yoToastTimeout);
-        this._yoToastTimeout = setTimeout(() => {
-          this.inspectorElements.yoToast?.classList.remove('visible');
-        }, 5000);
+        this.inspectorElements.yoToast?.classList.add('visible');
       },
       
       // Phase 3D: Undo ё toggle
       undoYoToggle() {
         if (!this._yoStateBeforeToggle) return;
         
-        // Toggle back
-        this.handleVariantToggle(this._yoStateBeforeToggle);
+        // Toggle back (suppress toast on undo)
+        this.handleVariantToggle(this._yoStateBeforeToggle, true);
         
         // Hide toast
         this.inspectorElements.yoToast?.classList.remove('visible');
-        clearTimeout(this._yoToastTimeout);
       },
       
       // Phase 3D: Refresh inspector after word change
