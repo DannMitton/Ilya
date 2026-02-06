@@ -2325,9 +2325,26 @@
 
     .drawer-secondary-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       gap: var(--space-sm);
+    }
+
+    /* Button styles — square tile variant for action row (v6.0.77) */
+    .drawer-secondary-actions .btn,
+    .drawer-secondary-actions .btn-export {
+      flex: 1;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-sm);
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1.3;
+      cursor: pointer;
+      transition: all 150ms var(--ease);
     }
 
     /* Button styles */
@@ -2359,10 +2376,6 @@
       background: transparent;
       color: var(--ilya-text-secondary);
       border: 1px solid var(--ilya-border);
-      min-width: 72px;
-      height: 36px;
-      padding: 0 1rem;
-      white-space: nowrap;
     }
 
     .btn-secondary:hover {
@@ -4288,24 +4301,12 @@
       margin-top: 2px;
     }
     
-    /* Export button (inline, v6.0.76) */
+    /* Export button (inline tile, v6.0.77) */
     .btn-export {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
       background: var(--stationery-sage);
       color: white;
       border: none;
-      border-radius: var(--radius);
-      height: 36px;
-      padding: 0 0.75rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 150ms var(--ease);
-      white-space: nowrap;
-      flex-shrink: 0;
+      gap: 6px;
     }
     
     .btn-export:hover {
@@ -4326,8 +4327,8 @@
     }
     
     .btn-export .export-icon {
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
     }
     
     /* IPA text styling */
