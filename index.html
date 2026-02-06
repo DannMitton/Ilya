@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.83 Externalize RuleRegistry blurbs to JSON (C.5)</title>
+  <title>Ilya — v6.0.84 CSS audit: dead selectors, commented blocks, media consolidation (C.6)</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -87,7 +87,6 @@
       --shadow-ambient: 0 1px 2px rgba(26, 22, 18, 0.08);
       --shadow-card: 0 2px 8px rgba(26, 22, 18, 0.1);
       --shadow-paper: 0 2px 12px rgba(26, 22, 18, 0.08);
-      --shadow-popup: 0 8px 24px rgba(26, 22, 18, 0.15);
       
       /* Document Container */
       --ilya-doc-radius: 16px;
@@ -1303,13 +1302,7 @@
     }
 
     /* Print: hide drawer entirely */
-    @media print {
-      .ilya-drawer,
-      .drawer-scrim {
-        display: none !important;
-      }
-    }
-
+    
     /* PAPER APERTURE: Viewing area with inset depth */
     .paper-aperture {
       flex: 1;
@@ -1382,21 +1375,7 @@
       transition: opacity 100ms ease-out;
     }
 
-    @media print {
-      .paper {
-        width: 8.5in;
-        height: 11in;
-        margin: 0;
-        box-shadow: none;
-        overflow: visible;
-      }
-      
-      .paper[data-size="a4"] {
-        width: 210mm;
-        height: 297mm;
-      }
-    }
-
+    
     /* Loading state */
     .paper.rendering {
       opacity: 0.7;
@@ -1612,24 +1591,7 @@
     }
     
     /* PRINT STYLES FOR PAGES */
-    @media print {
-      .paper-stack {
-        gap: 0;
-        padding: 0;
-      }
-      
-      /* Note: Main print styles for .paper-page are in the comprehensive 
-         @media print block below (around line 2650+) */
-      
-      .paper-page::before {
-        /* Keep bracket logo but not watermark */
-      }
-      
-      .paper-page[data-template="subsequent"]::before {
-        display: none; /* Hide watermark in print */
-      }
-    }
-    
+        
     /* MOBILE: HORIZONTAL SWIPE */
     @media (max-width: 768px) {
       .paper-stack {
@@ -1645,6 +1607,20 @@
         flex: 0 0 calc(100vw - 32px);
         scroll-snap-align: center;
         margin: 0 8px;
+      }
+    
+      .cluster-overlay-container {
+        right: 4px;
+      }
+      
+      .cluster-rubric {
+        max-width: none;
+        flex: 1;
+      }
+      
+      .cluster-details {
+        margin-left: 0;
+        width: 100%;
       }
     }
 
@@ -1931,135 +1907,7 @@
     }
     
     /* Print/PDF: hide Verify boxes, show clean content */
-    @media print {
-      .stress-unverified-container {
-        padding: 0;
-        background: transparent;
-        background-image: none;
-      }
-      .stress-unverified-label {
-        display: none;
-      }
-    }
-
-    /* INPUT DRAWER: REMOVED Phase 2C — All input now in left drawer */
-    /*
-    .input-drawer {
-      flex-shrink: 0;
-      background: var(--surface);
-      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
-      display: flex;
-      flex-direction: column;
-    }
-    */
-
-    /* DRAWER HANDLE: REMOVED Phase 2C */
-    /*
-    .drawer-handle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      height: var(--drawer-handle-height);
-      background: #f0f0f0;
-      cursor: pointer;
-      user-select: none;
-      transition: background 150ms var(--ease);
-    }
-
-    .drawer-handle:hover {
-      background: #e8e8e8;
-    }
-
-    .drawer-handle:focus {
-      outline: 2px solid var(--ilya-accent);
-      outline-offset: -2px;
-    }
-
-    .handle-preview {
-      position: absolute;
-      left: var(--space-lg);
-      font-family: 'Noto Serif', serif;
-      font-size: 0.85rem;
-      color: var(--ink-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 40%;
-      opacity: 0;
-      transition: opacity 200ms var(--ease);
-    }
-
-    .input-drawer.collapsed .handle-preview {
-      opacity: 1;
-    }
-
-    .handle-toggle {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .handle-toggle .chevron {
-      width: 14px;
-      height: 14px;
-      stroke: var(--ink-secondary);
-      stroke-width: 2;
-      fill: none;
-      opacity: 0.6;
-      transition: transform 200ms var(--ease);
-    }
-
-    .handle-toggle .handle-label {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-secondary);
-      opacity: 0.6;
-    }
-
-    .handle-label-more,
-    .handle-label-less {
-      display: none;
-    }
-
-    .input-drawer.expanded .handle-label-less {
-      display: inline;
-    }
-
-    .input-drawer.expanded .handle-label-more {
-      display: none;
-    }
-
-    .input-drawer.collapsed .handle-label-more {
-      display: inline;
-    }
-
-    .input-drawer.collapsed .handle-label-less {
-      display: none;
-    }
-
-    .input-drawer.collapsed .handle-toggle .chevron {
-      transform: rotate(180deg);
-    }
-    */
-
-    /* OLD DRAWER CONTENT: REMOVED Phase 2C */
-    /*
-    .drawer-content {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-height: 0;
-      transition: opacity 200ms var(--ease);
-    }
-
-    .input-drawer.collapsed .drawer-content {
-      display: none;
-    }
-    */
-
+    
     /* DRAWER: Textarea */
     .drawer-textarea {
       width: 100%;
@@ -2403,167 +2251,6 @@
       display: none;
     }
 
-    /* POPUP OVERLAY - REMOVED Phase 3E — Functionality moved to drawer inspector */
-    /* 
-    .popup-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-    }
-
-    .popup-overlay.active {
-      display: block;
-    }
-
-    .popup-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(26, 22, 18, 0.1);
-    }
-    */
-
-    /* POPUP CARD - REMOVED Phase 3E */
-    /*
-    .popup-card {
-      position: absolute;
-      width: 320px;
-      max-height: 70vh;
-      overflow-y: auto;
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-popup);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 250ms var(--ease), transform 250ms var(--ease);
-      z-index: 101;
-    }
-
-    .popup-overlay.active .popup-card {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .popup-arrow {
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid var(--surface);
-      filter: drop-shadow(0 2px 2px rgba(26, 22, 18, 0.08));
-    }
-
-    .popup-card.arrow-top .popup-arrow {
-      top: -8px;
-      bottom: auto;
-      border-top: none;
-      border-bottom: 10px solid var(--surface);
-      filter: drop-shadow(0 -2px 2px rgba(26, 22, 18, 0.08));
-    }
-    */
-
-    /* Mobile popup - REMOVED Phase 3E */
-    /*
-    @media (max-width: 600px) {
-      .popup-card {
-        position: fixed;
-        left: 0 !important;
-        right: 0;
-        bottom: 0 !important;
-        top: auto !important;
-        width: 100%;
-        max-height: 70vh;
-        border-radius: 16px 16px 0 0;
-        transform: translateY(100%);
-        overflow-y: auto;
-      }
-
-      .popup-overlay.active .popup-card {
-        transform: translateY(0);
-      }
-
-      .popup-arrow {
-        display: none;
-      }
-
-      .popup-body::before {
-        content: '';
-        display: block;
-        width: 36px;
-        height: 4px;
-        background: rgba(26, 22, 18, 0.2);
-        border-radius: 2px;
-        margin: 0.75rem auto 0.5rem;
-      }
-    }
-    */
-
-    /* POPUP BODY */
-    .popup-body {
-      padding: 1.25rem;
-    }
-
-    .clitic-badge {
-      background: var(--ilya-accent-light);
-      color: var(--ilya-accent);
-      font-size: 0.75rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .why-clitic-banner {
-        background: var(--ilya-accent-light);
-        color: var(--ilya-accent);
-        font-size: 0.75rem;
-        padding: 0.6rem 0.85rem;
-        border-radius: 4px;
-        margin-bottom: 0.75rem;
-        text-align: left;
-        line-height: 1.45;
-    }
-    
-    .why-clitic-banner em {
-        display: block;
-        margin-top: 0.4rem;
-        font-style: italic;
-    }
-    
-    .why-clitic-banner .tie-bar-ref {
-        color: var(--ilya-accent-dark, #4a5c4d);
-        font-weight: 600;
-        font-style: normal;
-    }
-
-    .syllable-section {
-      margin-bottom: 1rem;
-    }
-
-    .syllable-label {
-      font-size: 0.7rem;
-      color: var(--ink-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-
-    .syllable-sandwich {
-      background: var(--paper);
-      border-radius: var(--radius);
-      padding: 0.6rem;
-    }
-
-    .syllable-display {
-      display: flex;
-      justify-content: center;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-    }
 
     .syllable-btn {
       font-family: 'Noto Serif', serif;
@@ -2663,58 +2350,6 @@
       border-color: #c44;
       opacity: 0.6;
     }
-
-    /* Syllable display header (v5.10.19) - interactive IPA at top of popup */
-    .syllable-display-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.25rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .syllable-display-header .syllable-display {
-      justify-content: center;
-    }
-    
-    .syllable-display-header .syllable-btn {
-      font-family: var(--font-ipa);
-      font-size: 1.2rem;
-      padding: 0.4rem 0.6rem;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      color: var(--ilya-text-secondary);
-      /* Stable width: reserve space for stress marker even when absent */
-      min-width: 3.5em;
-      text-align: center;
-    }
-    
-    .syllable-display-header .syllable-btn:hover {
-      background: var(--ilya-accent-light);
-      border-color: var(--ilya-accent);
-      color: var(--ink-primary);
-    }
-    
-    .syllable-display-header .syllable-btn.stressed {
-      background: var(--ilya-accent);
-      color: white;
-      border-color: var(--ilya-accent);
-      /* Removed font-weight: 500 to prevent layout shift */
-    }
-    
-    .syllable-display-header .syllable-btn.stressed:hover {
-      background: var(--ilya-accent-hover);
-    }
-    
-    /* Customized state indicator (boundaries adjusted) */
-    .syllable-display-header.customized .syllable-btn {
-      color: var(--ilya-accent);
-    }
-    
-    .syllable-display-header.customized .syllable-btn.stressed {
-      color: white;
-    }
     
     /* Boundary reset button (v5.11.43) - explicit reset for adjusted boundaries */
     .boundary-reset-btn {
@@ -2743,142 +2378,6 @@
     .boundary-reset-btn:active {
       background: var(--ilya-accent);
       color: white;
-    }
-
-    .popup-cyrillic {
-      font-family: 'Noto Serif', serif;
-      font-size: 1.35rem;
-      font-weight: 500;
-      color: var(--ink-primary);
-      text-align: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .gloss-section {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .gloss-inline {
-      font-family: 'Noto Serif', serif;
-      font-size: 1rem;
-      font-style: italic;
-      color: var(--ilya-accent);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      display: inline-block;
-      min-width: 140px;
-      background: var(--ilya-accent-light);
-      border: 1px dashed rgba(122, 158, 126, 0.3);
-      transition: all 150ms var(--ease);
-    }
-
-    .gloss-inline:hover {
-      background: rgba(122, 158, 126, 0.15);
-      border-color: var(--ilya-accent);
-    }
-
-    .gloss-inline:focus {
-      outline: none;
-      background: rgba(122, 158, 126, 0.15);
-      border-style: solid;
-      border-color: var(--ilya-accent);
-      box-shadow: 0 0 0 2px var(--ilya-accent-light);
-    }
-
-    /* When gloss has content, make it look settled but keep sage */
-    .gloss-inline:not(:empty) {
-      background: transparent;
-      border-color: transparent;
-      color: var(--ilya-accent);
-    }
-
-    .gloss-inline:not(:empty):hover {
-      background: var(--ilya-accent-light);
-      border-color: transparent;
-    }
-
-    .gloss-inline:empty::before {
-      content: attr(data-placeholder);
-      color: var(--ilya-accent);
-      opacity: 0.7;
-      font-style: italic;
-    }
-
-    /* REFINE ANALYSIS PANEL (v5.5) — Content First, Control Second redesign */
-    /* POPUP FOOTER CONTROLS (v5.11 - Flat Structure) — Replaces accordion with contextual rows */
-    .popup-footer-controls {
-      margin-top: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .footer-control-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      background: var(--ilya-binding);
-      border-radius: 8px;
-      font-size: 0.85rem;
-    }
-    
-    .footer-label {
-      color: var(--ilya-text-secondary);
-      font-weight: 500;
-    }
-    
-    .footer-label .next-word {
-      color: var(--ilya-text-primary);
-      font-style: italic;
-    }
-    
-    /* Variant row (ё toggle) */
-    .variant-row {
-      background: linear-gradient(135deg, var(--ilya-binding) 0%, rgba(122, 158, 126, 0.08) 100%);
-    }
-    
-    .variant-control {
-      display: flex;
-      gap: 4px;
-    }
-    
-    .variant-control .segment {
-      min-width: 36px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    
-    .variant-control .segment[data-variant="yo"].active {
-      background: var(--ilya-accent);
-      color: white;
-    }
-    
-    .variant-control .segment[data-variant="ye"].active {
-      background: var(--ilya-text-muted);
-      color: white;
-    }
-    
-    /* Assimilation row */
-    .assimilation-row {
-      background: var(--ilya-binding);
-    }
-    
-    .assimilation-row.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    
-    .assimilation-control {
-      display: flex;
-      gap: 4px;
-    }
-    
-    .assimilation-control .segment {
-      padding: 6px 10px;
-      font-size: 0.8rem;
     }
     
     /* Toast notification for ё warning — v5.11.47 lifecycle-scoped */
@@ -3274,22 +2773,7 @@
     }
     
     /* Mobile: stack vertically */
-    @media (max-width: 768px) {
-      .cluster-overlay-container {
-        right: 4px;
-      }
-      
-      .cluster-rubric {
-        max-width: none;
-        flex: 1;
-      }
-      
-      .cluster-details {
-        margin-left: 0;
-        width: 100%;
-      }
-    }
-    
+        
     /* END CLUSTER TWO-LAYER ARCHITECTURE */
     /* Blurb content (accordion) */
     .phoneme-blurb {
@@ -3316,16 +2800,6 @@
       color: var(--ilya-text-caption);
     }
     
-    /* Mobile: ribbon scroll temporarily disabled for overlay support
-    @media (max-width: 768px) {
-      .ribbon-vertical {
-        max-height: 50vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-    }
-    */
-    
     /* FLOATING BLURB OVERLAY (v5.5) — "Inline Overlay" pattern per Kimi's design — Scholarly annotation without layout shift */
     /* Backdrop: white fade behind active blurb */
     .ribbon-backdrop {
@@ -3347,12 +2821,6 @@
       pointer-events: auto;
     }
     
-    /* Fade other rows when a blurb is active - DISABLED per Phase 3C */
-    /* Kimi's recommendation: trust user attention, no fading */
-    /* .ribbon-vertical.has-active-blurb .phoneme-row:not(.expanded) {
-      opacity: 0.6;
-      transition: opacity 200ms var(--ease);
-    } */
     
     /* Expanded row stays prominent */
     .ribbon-vertical.has-active-blurb .phoneme-row.expanded {
@@ -3611,64 +3079,10 @@
       color: var(--ilya-warning);
       font-style: italic;
     }
-    
-    /* Popup content crossfade for ё toggle (v5.8.1) */
-    .popup-body {
-      transition: opacity 120ms ease-out;
-    }
-    
-    .popup-body.fading {
-      opacity: 0.3;
-      transition: opacity 80ms ease-out;
-    }
-
-    /* Old restore-link kept for compatibility */
-    .restore-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.25rem;
-      background: none;
-      border: none;
-      font-family: 'Noto Sans', sans-serif;
-      font-size: 0.7rem;
-      color: var(--ilya-accent);
-      cursor: pointer;
-      transition: opacity 150ms var(--ease);
-    }
-
-    .restore-link:hover {
-      opacity: 0.7;
-    }
-    
-    .restore-link:focus {
-      outline: 2px solid var(--ilya-accent);
-      outline-offset: 2px;
-    }
-
-    .restore-link svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    .restore-link-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      width: 100%;
-    }
 
     .citation {
       font-size: 0.8rem;
       line-height: 1.5;
-    }
-
-    .citation-rule {
-      color: var(--ink-primary);
-    }
-
-    .citation-ref {
-      color: var(--ink-secondary);
-      font-style: italic;
     }
 
     /* DASHBOARD: Split Layout (Desktop ≥768px) */
@@ -3706,63 +3120,6 @@
       outline: 2px solid var(--ilya-accent);
       outline-offset: -2px;
     }
-    
-    /* OLD DRAWER ZONES: REMOVED Phase 2C */
-    /*
-    .drawer-zones {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      min-height: 0;
-    }
-    
-    .input-zone {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-      padding: var(--space-lg);
-      background: var(--ilya-paper);
-      border-right: 1px solid var(--ilya-border-light);
-      overflow-y: auto;
-    }
-    
-    .dashboard-zone {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: var(--space-lg);
-      background: var(--ilya-binding);
-      overflow-y: auto;
-      gap: var(--space-md);
-    }
-    */
-    
-    /* Mobile zones: REMOVED Phase 2C */
-    /*
-    @media (max-width: 767px) {
-      .drawer-tabs {
-        display: flex;
-      }
-      
-      .drawer-zones {
-        flex-direction: column;
-      }
-      
-      .input-zone {
-        border-right: none;
-        flex: 1;
-      }
-      
-      .dashboard-zone {
-        flex: 1;
-      }
-      
-      .input-zone.hidden,
-      .dashboard-zone.hidden {
-        display: none;
-      }
-    }
-    */
     
     /* DASHBOARD: Form Components */
     .form-group {
@@ -4205,7 +3562,6 @@
       /* Hide all UI elements */
       .ilya-drawer,
       .drawer-scrim,
-      .popup-overlay,
       .tab-bar {
         display: none !important;
       }
@@ -4339,6 +3695,30 @@
       
       @page :first {
         margin: 0;
+      }
+    
+      /* Consolidated from earlier @media print block */
+      .paper {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        box-shadow: none;
+        overflow: visible;
+      }
+      
+      .paper[data-size="a4"] {
+        width: 210mm;
+        height: 297mm;
+      }
+
+      /* Consolidated from earlier @media print block */
+      .stress-unverified-container {
+        padding: 0;
+        background: transparent;
+        background-image: none;
+      }
+      .stress-unverified-label {
+        display: none;
       }
     }
 
@@ -4740,7 +4120,6 @@
 
   </div>
 
-  <!-- Popup removed in Phase 3E - all functionality now in drawer inspector -->
 
   <script>
 /* STRESS DICTIONARY (Tiered Loading Architecture) — Kaikki.org Wiktionary extract — 1.29M words — Tier 1: 405K lemmas (loaded immediately) — Tier 2: 887K inflections (lazy loaded on interaction) */
