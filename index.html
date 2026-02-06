@@ -1987,6 +1987,7 @@
       background-color: var(--stationery-cream);
       padding: 0 4px;
       line-height: 1;
+      white-space: nowrap;
       pointer-events: none;
     }
     
@@ -12352,7 +12353,7 @@ function addAcuteToSyllable(syllable) {
       
       updateGloss(lineIndex, wordIndex, newGloss) {
         if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
-          this.lines[lineIndex][wordIndex].gloss = newGloss;
+          this.lines[lineIndex][wordIndex].gloss = { en: newGloss, fr: newGloss };
         }
       }
     };
