@@ -18,10 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
   
   <style>
-    /* ========================================
-       CALM AUTHORITY PALETTE v5.2
-       Kimi Design System — Muted Sage Edition
-       ======================================== */
+    /* CALM AUTHORITY PALETTE v5.2 — Kimi Design System — Muted Sage Edition */
     :root {
       /* Core Palette */
       --ilya-paper: #ffffff;
@@ -118,9 +115,7 @@
       --drawer-handle-height: 36px;
     }
 
-    /* ========================================
-       RESET & BASE
-       ======================================== */
+    /* RESET & BASE */
     *, *::before, *::after {
       box-sizing: border-box;
     }
@@ -136,10 +131,7 @@
       overflow: hidden;
     }
 
-    /* ========================================
-       UNIFIED FOCUS SYSTEM
-       All interactive elements use 2px sage outline
-       ======================================== */
+    /* UNIFIED FOCUS SYSTEM — All interactive elements use 2px sage outline */
     :focus {
       outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
@@ -172,9 +164,7 @@
       border-color: var(--ilya-border);
     }
 
-    /* ========================================
-       DISPLAY CONTAINER: Main app layout
-       ======================================== */
+    /* DISPLAY CONTAINER: Main app layout */
     .ilya-layout {
       display: flex;
       flex-direction: column;
@@ -182,12 +172,7 @@
       overflow: hidden;
     }
 
-    /* ========================================
-       DRAWER: Left-side workbench (v6.0)
-       During transition: position fixed to avoid breaking
-       existing column layout. Converts to flex sibling
-       when old input-drawer is removed in Phase 2.
-       ======================================== */
+    /* DRAWER: Left-side workbench (v6.0) — During transition: position fixed to avoid breaking — existing column layout. Converts to flex sibling — when old input-drawer is removed in Phase 2. */
     .ilya-drawer {
       position: fixed;
       left: 0;
@@ -271,10 +256,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ========================================
-       WELCOME PREFACE (First-run name collection)
-       Shows once on first drawer open, then never returns
-       ======================================== */
+    /* WELCOME PREFACE (First-run name collection) — Shows once on first drawer open, then never returns */
     .welcome-preface {
       margin-bottom: var(--space-lg);
       padding-bottom: var(--space-lg);
@@ -817,12 +799,7 @@
       background: rgba(122, 158, 126, 0.1);
     }
 
-    /* ========================================
-       PHASE 4A: Word-to-Word Content Morph
-       250ms cross-fade with sage highlight
-       on changed phonemes
-       ======================================== */
-    
+    /* PHASE 4A: Word-to-Word Content Morph — 250ms cross-fade with sage highlight — on changed phonemes */
     /* Inspector body morph animation */
     .inspector-body.morphing {
       opacity: 0;
@@ -1333,9 +1310,7 @@
       }
     }
 
-    /* ========================================
-       PAPER APERTURE: Viewing area with inset depth
-       ======================================== */
+    /* PAPER APERTURE: Viewing area with inset depth */
     .paper-aperture {
       flex: 1;
       overflow-y: auto;
@@ -1355,11 +1330,7 @@
       }
     }
 
-    /* ========================================
-       PAPER: Document simulation (v5.9.1)
-       Supports Letter (8.5×11) and A4 (210×297mm)
-       Height-constrained with aspect-ratio calculating width
-       ======================================== */
+    /* PAPER: Document simulation (v5.9.1) — Supports Letter (8.5×11) and A4 (210×297mm) — Height-constrained with aspect-ratio calculating width */
     .paper {
       /* Height is the constraining dimension; aspect-ratio calculates width */
       height: min(var(--paper-height), 80vh);
@@ -1432,11 +1403,7 @@
       transition: opacity 100ms ease;
     }
 
-    /* ========================================
-       PAGE TEMPLATES (v5.9.4)
-       Multi-page stationery design
-       ======================================== */
-    
+    /* PAGE TEMPLATES (v5.9.4) — Multi-page stationery design */
     /* Container for multiple pages */
     .paper-stack {
       display: flex;
@@ -1470,9 +1437,7 @@
       --paper-aspect: 210 / 297;
     }
     
-    /* ----------------------------------------
-       PAGE 1: TITLE TEMPLATE
-       ---------------------------------------- */
+    /* PAGE 1: TITLE TEMPLATE */
     .paper-page[data-template="title"] {
       /* Structure defined by children */
     }
@@ -1542,9 +1507,7 @@
       border: none;
     }
     
-    /* ----------------------------------------
-       PAGES 2+: SUBSEQUENT TEMPLATE
-       ---------------------------------------- */
+    /* PAGES 2+: SUBSEQUENT TEMPLATE */
     .paper-page[data-template="subsequent"] {
       /* Structure defined by children */
     }
@@ -1585,9 +1548,7 @@
       letter-spacing: 2px;
     }
     
-    /* ----------------------------------------
-       PAGE CONTENT AREA
-       ---------------------------------------- */
+    /* PAGE CONTENT AREA */
     .page-content {
       flex: 1;
       padding: 16px 72px;
@@ -1610,11 +1571,7 @@
       text-align: center;
     }
     
-    /* ----------------------------------------
-       PAGE FOOTER (v5.9.6)
-       2/3 attribution left, 1/3 pagination right
-       Positioned absolutely at bottom of page
-       ---------------------------------------- */
+    /* PAGE FOOTER (v5.9.6) — 2/3 attribution left, 1/3 pagination right — Positioned absolutely at bottom of page */
     .page-footer {
       position: absolute;
       bottom: 0;
@@ -1654,9 +1611,7 @@
       white-space: nowrap;
     }
     
-    /* ----------------------------------------
-       PRINT STYLES FOR PAGES
-       ---------------------------------------- */
+    /* PRINT STYLES FOR PAGES */
     @media print {
       .paper-stack {
         gap: 0;
@@ -1675,9 +1630,7 @@
       }
     }
     
-    /* ----------------------------------------
-       MOBILE: HORIZONTAL SWIPE
-       ---------------------------------------- */
+    /* MOBILE: HORIZONTAL SWIPE */
     @media (max-width: 768px) {
       .paper-stack {
         flex-direction: row;
@@ -1706,9 +1659,7 @@
       flex: 1;
     }
 
-    /* ========================================
-       DOCUMENT HEADER (Legacy - single page)
-       ======================================== */
+    /* DOCUMENT HEADER (Legacy - single page) */
     .doc-header {
       padding: 72px 72px 24px;
       text-align: center;
@@ -1785,9 +1736,7 @@
       /* JS will remove placeholder spans when content is added */
     }
 
-    /* ========================================
-       DOCUMENT BODY
-       ======================================== */
+    /* DOCUMENT BODY */
     .doc-body {
       flex: 1;
       padding: 24px 72px;
@@ -1797,9 +1746,7 @@
       max-width: 100%;
     }
 
-    /* ========================================
-       DOCUMENT FOOTER
-       ======================================== */
+    /* DOCUMENT FOOTER */
     .doc-footer {
       padding: 24px 72px 48px;
       display: flex;
@@ -1825,9 +1772,7 @@
       font-style: italic;
     }
 
-    /* ========================================
-       VERSE LINE
-       ======================================== */
+    /* VERSE LINE */
     .verse-line {
       display: flex;
       flex-wrap: wrap;
@@ -1842,9 +1787,7 @@
       border-bottom: none;
     }
 
-    /* ========================================
-       WORD STACK
-       ======================================== */
+    /* WORD STACK */
     .word-stack {
       display: flex;
       flex-direction: column;
@@ -1913,10 +1856,7 @@
     
     /* Clitics show directional arrows — normal spacing (v5.11.10) */
     
-    /* ----------------------------------------
-       UNVERIFIED STRESS: "Verify" Treatment (v5.11.32)
-       Dashed box with smallcaps label for inferred stress
-       ---------------------------------------- */
+    /* UNVERIFIED STRESS: "Verify" Treatment (v5.11.32) — Dashed box with smallcaps label for inferred stress */
     .stress-unverified-container {
       position: relative;
       display: inline-flex;
@@ -2002,10 +1942,7 @@
       }
     }
 
-    /* ========================================
-       INPUT DRAWER: REMOVED Phase 2C
-       All input now in left drawer
-       ======================================== */
+    /* INPUT DRAWER: REMOVED Phase 2C — All input now in left drawer */
     /*
     .input-drawer {
       flex-shrink: 0;
@@ -2016,9 +1953,7 @@
     }
     */
 
-    /* ========================================
-       DRAWER HANDLE: REMOVED Phase 2C
-       ======================================== */
+    /* DRAWER HANDLE: REMOVED Phase 2C */
     /*
     .drawer-handle {
       display: flex;
@@ -2110,9 +2045,7 @@
     }
     */
 
-    /* ========================================
-       OLD DRAWER CONTENT: REMOVED Phase 2C
-       ======================================== */
+    /* OLD DRAWER CONTENT: REMOVED Phase 2C */
     /*
     .drawer-content {
       display: flex;
@@ -2127,9 +2060,7 @@
     }
     */
 
-    /* ========================================
-       DRAWER: Textarea
-       ======================================== */
+    /* DRAWER: Textarea */
     .drawer-textarea {
       width: 100%;
       height: 360px;
@@ -2203,9 +2134,7 @@
       color: var(--ilya-text-secondary);
     }
 
-    /* ========================================
-       DRAWER: Footer (status + buttons)
-       ======================================== */
+    /* DRAWER: Footer (status + buttons) */
     .drawer-footer {
       display: flex;
       justify-content: space-between;
@@ -2387,12 +2316,7 @@
       outline-offset: 2px;
     }
 
-    /* ========================================
-       LANGUAGE PILL (v6.0.51)
-       Unified segmented pill — Kimi spec
-       Used in Root (left-aligned, pre-flight) and
-       Drill (right-flush, display swap)
-       ======================================== */
+    /* LANGUAGE PILL (v6.0.51) — Unified segmented pill — Kimi spec — Used in Root (left-aligned, pre-flight) and — Drill (right-flush, display swap) */
     .lang-toggle-pill {
       display: inline-flex;
       width: 52px;
@@ -2458,9 +2382,7 @@
       margin-left: auto;
     }
 
-    /* ========================================
-       GHOST TEXT: Empty state instruction
-       ======================================== */
+    /* GHOST TEXT: Empty state instruction */
     .ghost-text {
       margin: 0;
       padding: 0;
@@ -2481,10 +2403,7 @@
       display: none;
     }
 
-    /* ========================================
-       POPUP OVERLAY - REMOVED Phase 3E
-       Functionality moved to drawer inspector
-       ======================================== */
+    /* POPUP OVERLAY - REMOVED Phase 3E — Functionality moved to drawer inspector */
     /* 
     .popup-overlay {
       position: fixed;
@@ -2504,9 +2423,7 @@
     }
     */
 
-    /* ========================================
-       POPUP CARD - REMOVED Phase 3E
-       ======================================== */
+    /* POPUP CARD - REMOVED Phase 3E */
     /*
     .popup-card {
       position: absolute;
@@ -2585,9 +2502,7 @@
     }
     */
 
-    /* ========================================
-       POPUP BODY
-       ======================================== */
+    /* POPUP BODY */
     .popup-body {
       padding: 1.25rem;
     }
@@ -2890,16 +2805,8 @@
       font-style: italic;
     }
 
-    /* ========================================
-       REFINE ANALYSIS PANEL (v5.5)
-       Content First, Control Second redesign
-       ======================================== */
-    
-    /* ========================================
-       POPUP FOOTER CONTROLS (v5.11 - Flat Structure)
-       Replaces accordion with contextual rows
-       ======================================== */
-    
+    /* REFINE ANALYSIS PANEL (v5.5) — Content First, Control Second redesign */
+    /* POPUP FOOTER CONTROLS (v5.11 - Flat Structure) — Replaces accordion with contextual rows */
     .popup-footer-controls {
       margin-top: 16px;
       display: flex;
@@ -3026,21 +2933,13 @@
       display: none; /* Hidden in v5.11 */
     }
 
-    /* ========================================
-       PHONEME RIBBON (v5.5 - Vertical Layout)
-       Educational "Why This Transcription?" feature
-       ======================================== */
-    
+    /* PHONEME RIBBON (v5.5 - Vertical Layout) — Educational "Why This Transcription?" feature */
     .phoneme-ribbon {
       margin-top: 0.75rem;
       padding: 0 8px;
     }
     
-    /* ========================================
-       VERTICAL RIBBON (v5.5)
-       Replaces horizontal ribbon-grid
-       ======================================== */
-    
+    /* VERTICAL RIBBON (v5.5) — Replaces horizontal ribbon-grid */
     .ribbon-vertical {
       --ribbon-inline-padding: 12px;
       --syllable-gap: 16px;
@@ -3183,14 +3082,7 @@
     }
     
     /* Cluster box - full perimeter groups merged letters (v5.11.29) */
-    /* ==========================================================================
-       CLUSTER TWO-LAYER ARCHITECTURE (v5.11.31)
-       Per Kimi's spec: always-visible rubric, vertical accordion for details
-       - Perimeter: demoted to 1px, subtle grouping indicator
-       - Rubric: always visible, content-sized
-       - Details: accordion below rubric on click
-       ========================================================================== */
-    
+    /* CLUSTER TWO-LAYER ARCHITECTURE (v5.11.31) — Per Kimi's spec: always-visible rubric, vertical accordion for details — - Perimeter: demoted to 1px, subtle grouping indicator — - Rubric: always visible, content-sized — - Details: accordion below rubric on click */
     /* Cluster group wrapper */
     .cluster-group {
       position: relative;
@@ -3398,10 +3290,7 @@
       }
     }
     
-    /* ==========================================================================
-       END CLUSTER TWO-LAYER ARCHITECTURE
-       ========================================================================== */
-
+    /* END CLUSTER TWO-LAYER ARCHITECTURE */
     /* Blurb content (accordion) */
     .phoneme-blurb {
       overflow: hidden;
@@ -3437,12 +3326,7 @@
     }
     */
     
-    /* ========================================
-       FLOATING BLURB OVERLAY (v5.5)
-       "Inline Overlay" pattern per Kimi's design
-       Scholarly annotation without layout shift
-       ======================================== */
-    
+    /* FLOATING BLURB OVERLAY (v5.5) — "Inline Overlay" pattern per Kimi's design — Scholarly annotation without layout shift */
     /* Backdrop: white fade behind active blurb */
     .ribbon-backdrop {
       position: absolute;
@@ -3537,11 +3421,7 @@
       color: var(--ilya-accent);
     }
     
-    /* ========================================
-       COMPACT MODULES (v5.4.2)
-       Shared pattern for Stress Source & Phrase Boundary
-       ======================================== */
-    
+    /* COMPACT MODULES (v5.4.2) — Shared pattern for Stress Source & Phrase Boundary */
     .stress-source-module,
     .phrase-boundary-module {
       margin-bottom: 0.5rem;
@@ -3624,11 +3504,7 @@
       outline-offset: -2px;
     }
     
-    /* ========================================
-       SHARED COMMIT FOOTER (v5.4.2)
-       Fixed height, always present
-       ======================================== */
-    
+    /* SHARED COMMIT FOOTER (v5.4.2) — Fixed height, always present */
     .shared-commit-footer {
       display: flex;
       justify-content: flex-end;
@@ -3795,10 +3671,7 @@
       font-style: italic;
     }
 
-    /* ========================================
-       DASHBOARD: Split Layout (Desktop ≥768px)
-       ======================================== */
-    
+    /* DASHBOARD: Split Layout (Desktop ≥768px) */
     /* Mobile tabs navigation */
     .drawer-tabs {
       display: none;
@@ -3891,9 +3764,7 @@
     }
     */
     
-    /* ========================================
-       DASHBOARD: Form Components
-       ======================================== */
+    /* DASHBOARD: Form Components */
     .form-group {
       margin-bottom: var(--space-md);
     }
@@ -3937,9 +3808,7 @@
       font-style: italic;
     }
     
-    /* ========================================
-       DASHBOARD: Searchable Select
-       ======================================== */
+    /* DASHBOARD: Searchable Select */
     .searchable-select {
       position: relative;
       width: 100%;
@@ -4072,9 +3941,7 @@
       border-radius: 4px;
     }
     
-    /* ========================================
-       DASHBOARD: Profile Section
-       ======================================== */
+    /* DASHBOARD: Profile Section */
     .profile-section {
       margin-top: auto;
       border-top: 1px solid var(--ilya-border);
@@ -4185,10 +4052,7 @@
       opacity: 0.5;
     }
     
-    /* ========================================
-       DOCUMENT SECTION (v5.8.2)
-       Paper size selection in dashboard
-       ======================================== */
+    /* DOCUMENT SECTION (v5.8.2) — Paper size selection in dashboard */
     .document-section {
       margin-top: var(--space-lg);
       border-top: 1px solid var(--ilya-border);
@@ -4336,9 +4200,7 @@
       font-size: 1.05em;
     }
 
-    /* ========================================
-       PRINT STYLES
-       ======================================== */
+    /* PRINT STYLES */
     @media print {
       /* Hide all UI elements */
       .ilya-drawer,
@@ -4480,9 +4342,7 @@
       }
     }
 
-    /* ========================================
-       RESPONSIVE
-       ======================================== */
+    /* RESPONSIVE */
     @media (max-width: 880px) {
       .paper {
         min-height: auto;
@@ -4883,13 +4743,7 @@
   <!-- Popup removed in Phase 3E - all functionality now in drawer inspector -->
 
   <script>
-/* ==================================================
-   STRESS DICTIONARY (Tiered Loading Architecture)
-   Kaikki.org Wiktionary extract — 1.29M words
-   
-   Tier 1: 405K lemmas (loaded immediately)
-   Tier 2: 887K inflections (lazy loaded on interaction)
-   ================================================== */
+/* STRESS DICTIONARY (Tiered Loading Architecture) — Kaikki.org Wiktionary extract — 1.29M words — Tier 1: 405K lemmas (loaded immediately) — Tier 2: 887K inflections (lazy loaded on interaction) */
 let STRESS_DICTIONARY = {};
 let DICTIONARY_LOADED = false;
 let TIER2_LOADED = false;
@@ -4899,12 +4753,7 @@ let TIER2_LOADING = false;
 // Supports bilingual glosses: {en: '...', fr: '...'}
 let currentGlossLanguage = 'en';
 
-// ========================================
-// UI_LABELS + setUILanguage() (v6.0.54)
-// i18n skin system for static UI text.
-// Keys match data-i18n attributes (Phase A, item 4).
-// Must be top-level scope so DocumentState/DrawerState can access.
-// ========================================
+// --- UI_LABELS + setUILanguage() (v6.0.54) — i18n skin system for static UI text. — Keys match data-i18n attributes (Phase A, item 4). — Must be top-level scope so DocumentState/DrawerState can access. ---
 const UI_LABELS = {
   'welcome.text': {
     en: 'Welcome to Ilya. Your name will appear in the footer of every transcription you make.',
@@ -5182,10 +5031,7 @@ function extractBlurbText(blurbData) {
   return text;
 }
 
-// ==========================================
-// GAP ANALYSIS: French gloss coverage (v6.0.11)
-// Run from console: analyzeGlossGaps()
-// ==========================================
+// --- GAP ANALYSIS: French gloss coverage (v6.0.11) — Run from console: analyzeGlossGaps() ---
 function analyzeGlossGaps() {
   const results = {
     supplement: { total: 0, bilingual: 0, englishOnly: 0, noGloss: 0, gaps: [] },
@@ -5320,17 +5166,9 @@ setTimeout(triggerTier2Load, 5000);
 // Start Tier 1 immediately
 loadTier1();
 
-/* ==================================================
-   SINGER'S MONOSYLLABLE SUPPLEMENT
-   Common words missing from OpenRussian dictionary
-   ================================================== */
+/* SINGER'S MONOSYLLABLE SUPPLEMENT — Common words missing from OpenRussian dictionary */
 const SINGER_SUPPLEMENT = {
-    // ========================================
-    // BILINGUAL GLOSSES (v6.0.12)
-    // French translations: Batches 1–16 complete
-    // 100% bilingual coverage — Feb 3, 2026
-    // ========================================
-    
+    // --- BILINGUAL GLOSSES (v6.0.12) — French translations: Batches 1–16 complete — 100% bilingual coverage — Feb 3, 2026 ---
     // Batch 1: Pronouns
     'я': { stress: 0, gloss: { en: 'I', fr: 'je' }, source: 'supplement' },
     'ты': { stress: 0, gloss: { en: 'you (informal)', fr: 'tu' }, source: 'supplement' },
@@ -5556,10 +5394,7 @@ const SINGER_SUPPLEMENT = {
     'дальше': { stress: 0, gloss: { en: 'farther', fr: 'plus loin' }, source: 'supplement' },
     'выше': { stress: 0, gloss: { en: 'higher', fr: 'plus haut' }, source: 'supplement' },
     
-    // ========================================
-    // BATCHES 13-16: Approved Feb 3, 2026
-    // ========================================
-    
+    // --- BATCHES 13-16: Approved Feb 3, 2026 ---
     // Batch 13: Comparatives
     'ниже': { stress: 0, gloss: { en: 'lower', fr: 'plus bas' }, source: 'supplement' },
     'громче': { stress: 0, gloss: { en: 'louder', fr: 'plus fort' }, source: 'supplement' },
@@ -5642,11 +5477,7 @@ const SINGER_SUPPLEMENT = {
     'странствия': { stress: 0, gloss: { en: 'wandering (gen. sg.)', fr: "d'errance" }, source: 'supplement' }
 };
 
-/* ==================================================
-   GLOSS FORMATTING HELPERS
-   Handles verbose grammatical descriptions from kaikki.org
-   ================================================== */
-
+/* GLOSS FORMATTING HELPERS — Handles verbose grammatical descriptions from kaikki.org */
 /**
  * Extract lemma from grammatical gloss text
  * e.g., "short feminine singular past indicative perfective of уга́снуть (ugásnutʹ)" → "угаснуть"
@@ -6148,9 +5979,7 @@ function addAcuteToSyllable(syllable) {
     return result;
 }
 
-    /* ========================================
-       TRANSCRIPTION PROFILES
-       ======================================== */
+    /* TRANSCRIPTION PROFILES */
     const TRANSCRIPTION_PROFILES = {
       'old-muscovite': {
         name: 'Old Muscovite',
@@ -6191,9 +6020,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       TAB CONTROLLER (Mobile)
-       ======================================== */
+    /* TAB CONTROLLER (Mobile) */
     const TabController = {
       tabs: null,
       inputZone: null,
@@ -6243,9 +6070,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       SEARCHABLE SELECT CONTROLLER
-       ======================================== */
+    /* SEARCHABLE SELECT CONTROLLER */
     const SearchableSelect = {
       instances: {},
       
@@ -6393,9 +6218,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       PROFILE CONTROLLER
-       ======================================== */
+    /* PROFILE CONTROLLER */
     const ProfileController = {
       section: null,
       header: null,
@@ -6454,10 +6277,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       DOCUMENT CONTROLLER (v5.9.0)
-       Paper size selection + pagination
-       ======================================== */
+    /* DOCUMENT CONTROLLER (v5.9.0) — Paper size selection + pagination */
     const DocumentController = {
       section: null,
       header: null,
@@ -6581,10 +6401,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       PAGINATOR (v5.9.4)
-       Multi-page distribution engine
-       ======================================== */
+    /* PAGINATOR (v5.9.4) — Multi-page distribution engine */
     const Paginator = {
       // Measured values (populated after first render)
       lineHeight: null,
@@ -6852,9 +6669,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* ========================================
-       DASHBOARD CONTROLLER
-       ======================================== */
+    /* DASHBOARD CONTROLLER */
     const DashboardController = {
       titleInput: null,
       opusInput: null,
@@ -7045,9 +6860,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       DRAWER CONTROLLER
-       ======================================== */
+    /* DRAWER CONTROLLER */
     const DrawerController = {
       // Phase 2C: Now uses left drawer elements directly
       textInput: null,
@@ -7691,10 +7504,7 @@ function addAcuteToSyllable(syllable) {
         });
       },
       
-      // ========================================
-      // OCR Methods
-      // ========================================
-      
+      // --- OCR Methods ---
       /**
        * Initialize OCR module (lazy-loads Tesseract in background)
        */
@@ -7817,9 +7627,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       LOOKUP TABLES: Composers and Poets
-       ======================================== */
+    /* LOOKUP TABLES: Composers and Poets */
     const COMPOSERS = [
       { latin: 'Rachmaninoff, Sergei', cyrillic: 'Рахманинов, Сергей', dates: '1873–1943' },
       { latin: 'Tchaikovsky, Pyotr', cyrillic: 'Чайковский, Пётр', dates: '1840–1893' },
@@ -7886,15 +7694,10 @@ function addAcuteToSyllable(syllable) {
       { latin: 'Goethe, Johann Wolfgang', cyrillic: 'Гёте, Иоганн Вольфганг', dates: '1749–1832' }
     ];
 
-    /* ========================================
-       STRESS DICTIONARY (OpenRussian, 51,644 words)
-       CC-BY-SA-4.0 License
-       ======================================== */
+    /* STRESS DICTIONARY (OpenRussian, 51,644 words) — CC-BY-SA-4.0 License */
 ;
 
-    /* ========================================
-       GRAYSON ENGINE
-       ======================================== */
+    /* GRAYSON ENGINE */
     const GraysonEngine = {
       
       inventory: Object.freeze({
@@ -9703,11 +9506,7 @@ function addAcuteToSyllable(syllable) {
         });
       },
       
-      // ========================================
-      // CROSS-WORD BOUNDARY ASSIMILATION
-      // Grayson p. 248-257
-      // ========================================
-      
+      // --- CROSS-WORD BOUNDARY ASSIMILATION — Grayson p. 248-257 ---
       // Voiceless → Voiced (for cross-boundary voicing)
       crossWordVoicingMap: {
         'p': 'b', 'pʲ': 'bʲ',
@@ -9932,10 +9731,7 @@ function addAcuteToSyllable(syllable) {
         .map(([k, _]) => k)
     );
 
-    /* ========================================
-       OCR MODULE - Russian Text Recognition
-       Lazy-loads Tesseract.js for image-to-text
-       ======================================== */
+    /* OCR MODULE - Russian Text Recognition — Lazy-loads Tesseract.js for image-to-text */
     const OCRModule = {
       // Configuration
       TESSERACT_VERSION: '5',
@@ -10235,18 +10031,12 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       RULE REGISTRY - Phoneme Ribbon Blurbs
-       Maps transcription features → educational blurbs
-       ======================================== */
+    /* RULE REGISTRY - Phoneme Ribbon Blurbs — Maps transcription features → educational blurbs */
     const RuleRegistry = {
       // Blurb data - keyed by "IPA:rule:char"
       // Full 85 entries from PHONEME_BLURBS_DRAFT.md
       blurbs: {
-        // ========================================
-        // SECTION 1: VOWELS — STRESSED (Entries 1–10)
-        // ========================================
-        
+        // --- SECTION 1: VOWELS — STRESSED (Entries 1–10) ---
         // Entry 1 | Dark-a
         'ɑ:stressed:а': { 
           blurb: { 
@@ -10347,10 +10137,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 2: VOWELS — UNSTRESSED (Entries 11–25)
-        // ========================================
-        
+        // --- SECTION 2: VOWELS — UNSTRESSED (Entries 11–25) ---
         // Entry 11 | Pretonic-o / Akanye
         'ɑ:pretonic:о': { 
           blurb: { 
@@ -10551,10 +10338,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 3: J-GLIDES (Entries 26–33b)
-        // ========================================
-        
+        // --- SECTION 3: J-GLIDES (Entries 26–33b) ---
         // Entry 26 | Word-initial е
         'jɑ:initial:я': { 
           blurb: { 
@@ -10665,10 +10449,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 4: SOFT CONSONANTS (Entries 34–50)
-        // ========================================
-        
+        // --- SECTION 4: SOFT CONSONANTS (Entries 34–50) ---
         // Entry 34 | Palatal nasal
         'ɲ:soft:н': { 
           blurb: { 
@@ -10839,10 +10620,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 5: HARD CONSONANTS (Entries 51–69)
-        // ========================================
-        
+        // --- SECTION 5: HARD CONSONANTS (Entries 51–69) ---
         // Entry 51 | Intrinsically hard ж
         'ʒ:always-hard:ж': { 
           blurb: { 
@@ -11033,10 +10811,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 6: SIGNS (Entries 70–71)
-        // ========================================
-        
+        // --- SECTION 6: SIGNS (Entries 70–71) ---
         // Entry 70 | Hard sign
         'hard-sign:ъ': { 
           blurb: { 
@@ -11057,10 +10832,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 7: ALLOPHONES & PROCESSES (Entry 72)
-        // ========================================
-        
+        // --- SECTION 7: ALLOPHONES & PROCESSES (Entry 72) ---
         // Entry 72 | Gamma
         'ɣ:allophone:х': { 
           blurb: { 
@@ -11071,10 +10843,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 8: SPECIAL CLUSTERS & EXCEPTIONS (Entries 73–85)
-        // ========================================
-        
+        // --- SECTION 8: SPECIAL CLUSTERS & EXCEPTIONS (Entries 73–85) ---
         // Entry 73 | Reflexive endings
         'tːs:cluster:тс': { 
           blurb: { 
@@ -11215,10 +10984,7 @@ function addAcuteToSyllable(syllable) {
           notable: false 
         },
         
-        // ========================================
-        // SECTION 9: LEGACY ENTRIES (Backward Compatibility)
-        // ========================================
-        
+        // --- SECTION 9: LEGACY ENTRIES (Backward Compatibility) ---
         // Legacy stressed я
         'ɑ:stressed:я': { 
           blurb: { 
@@ -11986,11 +11752,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       IPA TOKENIZER
-       Parses IPA strings into draggable atomic units
-       Affricates and palatalized consonants travel as single tokens
-       ======================================== */
+    /* IPA TOKENIZER — Parses IPA strings into draggable atomic units — Affricates and palatalized consonants travel as single tokens */
     const IpaTokenizer = {
       // Affricates that must travel as single units (longest first for matching)
       AFFRICATES: ['ʃtʃ', 'tʃ', 'ts', 'dʒ'],
@@ -12104,11 +11866,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       BOUNDARY STACK
-       Manages display-only syllable boundary offsets
-       Source data is NEVER mutated - only cut points change
-       ======================================== */
+    /* BOUNDARY STACK — Manages display-only syllable boundary offsets — Source data is NEVER mutated - only cut points change */
     const BoundaryStack = {
       // Storage: Map of wordId → array of boundary offsets
       // Positive offset = stole consonant from right
@@ -12229,8 +11987,6 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       ======================================== */
     const DocumentState = {
       lines: [],
       userName: '',  // Empty = [unattributed] in footer; populated from localStorage on init
@@ -12263,13 +12019,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       POPUP CONTROLLER (PROCESSING HELPER)
-       Phase 3E: UI removed, kept for processing methods:
-       - renderRibbon() - builds phoneme ribbon HTML
-       - handleYoToggle() - ё/е reprocessing logic
-       DrawerInspector delegates to these methods.
-       ======================================== */
+    /* POPUP CONTROLLER (PROCESSING HELPER) — Phase 3E: UI removed, kept for processing methods: — - renderRibbon() - builds phoneme ribbon HTML — - handleYoToggle() - ё/е reprocessing logic — DrawerInspector delegates to these methods. */
     const Popup = {
       isOpen: false,  // Always false now - UI removed
       currentWord: null,
@@ -12460,11 +12210,7 @@ function addAcuteToSyllable(syllable) {
         });
       },
       
-      // ========================================
-      // STAGING PATTERN METHODS (v5.4.2)
-      // Compact Modules with Shared Commit Bar
-      // ========================================
-      
+      // --- STAGING PATTERN METHODS (v5.4.2) — Compact Modules with Shared Commit Bar ---
       // Stage a stress source selection (visual only, no commit)
       stageStressSource(source) {
         if (!this.currentWord) return;
@@ -13432,11 +13178,7 @@ function addAcuteToSyllable(syllable) {
         this.elements.yoWarning.style.display = showWarning ? 'block' : 'none';
       },
       
-      // ========================================
-      // NEW FOOTER CONTROLS (v5.11)
-      // Flat structure replacing accordion
-      // ========================================
-      
+      // --- NEW FOOTER CONTROLS (v5.11) — Flat structure replacing accordion ---
       /**
        * Populate variant row (ё toggle) - v5.11
        * Only shown if word contains е or ё
@@ -14268,11 +14010,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       DRAWER STATE MACHINE (v6.0)
-       Manages left-side drawer open/close and
-       Root/Drill internal state transitions.
-       ======================================== */
+    /* DRAWER STATE MACHINE (v6.0) — Manages left-side drawer open/close and — Root/Drill internal state transitions. */
     const DrawerState = {
       drawer: null,
       scrim: null,
@@ -15093,14 +14831,7 @@ function addAcuteToSyllable(syllable) {
         this.showAttributionArrow();
       },
       
-      // ========================================
-      // PHASE 4B: SYLLABLE BOUNDARY DRAGGING
-      // Distance-on-release disambiguation:
-      // - <10px = tap = reassign stress
-      // - 10-40px = hesitation = silent cancel
-      // - >40px horizontal = drag = shed consonant
-      // ========================================
-      
+      // --- PHASE 4B: SYLLABLE BOUNDARY DRAGGING — Distance-on-release disambiguation: — - <10px = tap = reassign stress — - 10-40px = hesitation = silent cancel — - >40px horizontal = drag = shed consonant ---
       _setupDragHandlers() {
         const container = this.inspectorElements.syllableDisplay;
         if (!container) return;
@@ -15563,9 +15294,7 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* ========================================
-       EVENT DELEGATION
-       ======================================== */
+    /* EVENT DELEGATION */
     document.addEventListener('click', (e) => {
       // Handle word-stack clicks → open drawer in Drill mode (Phase 3A)
       // Popup is now dormant — word inspection happens in drawer
@@ -15691,9 +15420,7 @@ function addAcuteToSyllable(syllable) {
       }
     });
 
-    /* ========================================
-       INITIALIZATION
-       ======================================== */
+    /* INITIALIZATION */
     document.addEventListener('DOMContentLoaded', () => {
       DrawerState.init();
       DrawerController.init();
@@ -15705,11 +15432,7 @@ function addAcuteToSyllable(syllable) {
 
       // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
 
-      // ========================================
-      // PAPER GLOSS REFRESH (v6.0.54)
-      // Re-renders all paper-surface glosses in currentGlossLanguage
-      // without re-transcription. Called by pill handler on toggle.
-      // ========================================
+      // --- PAPER GLOSS REFRESH (v6.0.54) — Re-renders all paper-surface glosses in currentGlossLanguage — without re-transcription. Called by pill handler on toggle. ---
       function refreshPaperGlosses() {
         const wordStacks = document.querySelectorAll('.word-stack');
         wordStacks.forEach(stack => {
@@ -15737,11 +15460,7 @@ function addAcuteToSyllable(syllable) {
         });
       }
 
-      // ========================================
-      // LANGUAGE PILL (v6.0.51, relocated v6.0.52)
-      // Unified segmented pill — Root pill sets language only,
-      // Drill pill swaps display language in-place
-      // ========================================
+      // --- LANGUAGE PILL (v6.0.51, relocated v6.0.52) — Unified segmented pill — Root pill sets language only, — Drill pill swaps display language in-place ---
       function initLangPill(pillElement, mode) {
         if (!pillElement) return;
         
@@ -15843,10 +15562,7 @@ function addAcuteToSyllable(syllable) {
       initLangPill(document.getElementById('rootLangPill'), 'root');
       initLangPill(document.getElementById('drillLangPill'), 'drill');
       
-      // ========================================
-      // TRANSCRIBE BUTTON (v6.0.52)
-      // Dedicated action button — label swaps with language pill
-      // ========================================
+      // --- TRANSCRIBE BUTTON (v6.0.52) — Dedicated action button — label swaps with language pill ---
       const transcribeBtn = document.getElementById('drawerTranscribeBtn');
       if (transcribeBtn) {
         transcribeBtn.addEventListener('click', () => {
