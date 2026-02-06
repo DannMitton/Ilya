@@ -2097,6 +2097,10 @@
       transition: opacity 200ms var(--ease), visibility 200ms var(--ease);
     }
 
+    .char-counter::after {
+      content: '\200b';
+    }
+
     .char-counter.visible {
       opacity: 1;
       visibility: visible;
@@ -2171,6 +2175,7 @@
       align-items: center;
       justify-content: space-between;
       margin-top: var(--space-sm);
+      min-height: 1.5rem;
     }
 
     .drawer-input-footer .footer-status {
