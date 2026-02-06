@@ -438,7 +438,6 @@
       white-space: nowrap;
     }
 
-
     /* Inspector Body (Phase 3B) */
     .inspector-body {
       flex: 1;
@@ -5234,28 +5233,6 @@ function analyzeGlossGaps() {
     ? ((results.dictionary.bilingual / results.dictionary.total) * 100).toFixed(1)
     : 0;
   
-  console.log('\n========== FRENCH GLOSS GAP ANALYSIS ==========\n');
-  
-  console.log('SINGER_SUPPLEMENT:');
-  console.log(`  Total entries:    ${results.supplement.total}`);
-  console.log(`  Bilingual:        ${results.supplement.bilingual} (${suppCoverage}%)`);
-  console.log(`  English-only:     ${results.supplement.englishOnly}`);
-  console.log(`  No gloss:         ${results.supplement.noGloss}`);
-  if (results.supplement.gaps.length > 0) {
-    console.log(`  Gaps preview:     ${results.supplement.gaps.slice(0, 20).join(', ')}${results.supplement.gaps.length > 20 ? '...' : ''}`);
-  }
-  
-  console.log('\nSTRESS_DICTIONARY:');
-  console.log(`  Total entries:    ${results.dictionary.total.toLocaleString()}`);
-  console.log(`  Bilingual:        ${results.dictionary.bilingual.toLocaleString()} (${dictCoverage}%)`);
-  console.log(`  English-only:     ${results.dictionary.englishOnly.toLocaleString()}`);
-  console.log(`  No gloss:         ${results.dictionary.noGloss.toLocaleString()}`);
-  if (results.dictionary.gaps.length > 0) {
-    console.log(`  Gaps sample:      ${results.dictionary.gaps.slice(0, 20).join(', ')}...`);
-  }
-  
-  console.log('\n================================================\n');
-  
   return results;
 }
 
@@ -5268,7 +5245,6 @@ async function loadTier1() {
             const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
             STRESS_DICTIONARY = JSON.parse(decompressed);
             DICTIONARY_LOADED = true;
-            console.log(`Tier 1: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} lemmas`);
             return;
         }
         
@@ -5279,13 +5255,10 @@ async function loadTier1() {
             const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' });
             STRESS_DICTIONARY = JSON.parse(decompressed);
             DICTIONARY_LOADED = true;
-            console.log(`Legacy dictionary: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
             return;
         }
         
-        console.warn('No dictionary file found, stress lookup disabled');
     } catch (error) {
-        console.warn('Could not load Tier 1 dictionary:', error);
     }
 }
 
@@ -5297,7 +5270,6 @@ async function loadTier2() {
     try {
         const response = await fetch('data/ilya_tier2.json.gz');
         if (!response.ok) {
-            console.warn('Tier 2 not available');
             return;
         }
         
@@ -5320,11 +5292,8 @@ async function loadTier2() {
         }
         
         TIER2_LOADED = true;
-        console.log(`Tier 2: ${entries.length.toLocaleString()} inflections merged`);
-        console.log(`Total: ${Object.keys(STRESS_DICTIONARY).length.toLocaleString()} words`);
         
     } catch (error) {
-        console.warn('Tier 2 load failed:', error);
     } finally {
         TIER2_LOADING = false;
     }
@@ -6478,7 +6447,6 @@ function addAcuteToSyllable(syllable) {
         }
         
         // TODO: Trigger re-transcription if content exists
-        console.log('Profile changed to:', profile.name, profile.params);
       },
       
       getParams() {
@@ -6587,7 +6555,6 @@ function addAcuteToSyllable(syllable) {
       // Update the page count label using Paginator
       updatePageCount() {
         if (!this.pageNumberEl) {
-          console.warn('[DocumentController] pageNumberEl not found');
           return;
         }
         
@@ -6654,7 +6621,6 @@ function addAcuteToSyllable(syllable) {
         const lines = document.querySelectorAll('.verse-line');
         
         if (lines.length === 0) {
-          console.log('[Paginator] No lines to measure');
           return null;
         }
         
@@ -6672,14 +6638,6 @@ function addAcuteToSyllable(syllable) {
         this.lineHeight = maxHeight;
         this.safeLineHeight = Math.ceil(maxHeight * 1.05);
         
-        console.log('[Paginator] Line height measured:', {
-          min: minHeight.toFixed(1),
-          max: maxHeight.toFixed(1),
-          avg: avgHeight.toFixed(1),
-          safe: this.safeLineHeight,
-          sampleSize: lines.length
-        });
-        
         return this.safeLineHeight;
       },
       
@@ -6694,7 +6652,6 @@ function addAcuteToSyllable(syllable) {
         // Check cache first
         const contentHash = this.hashLineContent(allLines);
         if (this.lineHeightCache && this.lineHeightCacheHash === contentHash) {
-          console.log('[Paginator] Using cached line heights');
           return this.lineHeightCache;
         }
         
@@ -6722,7 +6679,6 @@ function addAcuteToSyllable(syllable) {
         if (realPage) {
           const realWidth = realPage.getBoundingClientRect().width;
           const hiddenWidth = hiddenContainer.getBoundingClientRect().width;
-          console.log(`[Paginator] Width check - Hidden: ${hiddenWidth.toFixed(1)}px, Real: ${realWidth.toFixed(1)}px, Diff: ${(hiddenWidth - realWidth).toFixed(1)}px`);
         }
         
         // Measure each line
@@ -6751,14 +6707,6 @@ function addAcuteToSyllable(syllable) {
         } else {
           this.standardRowHeight = 105; // Fallback
         }
-        
-        console.log('[Paginator] Pre-flight measurement:', {
-          lines: heights.length,
-          standardRowHeight: this.standardRowHeight.toFixed(1),
-          minHeight: Math.min(...heights).toFixed(1),
-          maxHeight: Math.max(...heights).toFixed(1),
-          wrappingLines: heights.filter(h => h > this.standardRowHeight * 1.5).length
-        });
         
         return heights;
       },
@@ -6799,7 +6747,6 @@ function addAcuteToSyllable(syllable) {
       invalidateCache() {
         this.lineHeightCache = null;
         this.lineHeightCacheHash = null;
-        console.log('[Paginator] Cache invalidated');
       },
       
       /**
@@ -6814,12 +6761,6 @@ function addAcuteToSyllable(syllable) {
         // (v5.11.19 - restored to 6/8, horizontal gap reduction prevents wrapping)
         const linesPage1 = 6;
         const linesSubsequent = 8;
-        
-        console.log('[Paginator] Lines per page:', {
-          paperSize,
-          linesPage1,
-          linesSubsequent
-        });
         
         return {
           page1: linesPage1,
@@ -6889,13 +6830,6 @@ function addAcuteToSyllable(syllable) {
             lines: []
           });
         }
-        
-        console.log('[Paginator] Distribution:', {
-          targets: { page1, subsequent },
-          totalLines: allLines.length,
-          pageCount: pages.length,
-          linesPerPage: pages.map(p => p.lines.length)
-        });
         
         return pages;
       },
@@ -7301,8 +7235,6 @@ function addAcuteToSyllable(syllable) {
         const pages = Paginator.distributeToPages(transcribedLines, targets, paperSize);
         const totalPages = pages.length;
         
-        console.log('[renderToPaper] Creating', totalPages, 'pages', fallbackMode ? '(fallback mode)' : '');
-        
         // Render each page
         pages.forEach((pageData, pageIdx) => {
           const pageElement = this.createPageElement(
@@ -7320,7 +7252,6 @@ function addAcuteToSyllable(syllable) {
         if (!fallbackMode) {
           const hasOverflow = this.detectOverflow();
           if (hasOverflow) {
-            console.warn('[renderToPaper] Overflow detected, re-rendering in fallback mode (5/7)');
             this.renderToPaper(true); // Recursive call with fallback
             return;
           }
@@ -7355,7 +7286,6 @@ function addAcuteToSyllable(syllable) {
           
           // 20px safety margin
           if (lineBottom > footerTop - 20) {
-            console.warn(`[Overflow] Page ${idx + 1}: line bottom ${lineBottom.toFixed(0)}px, footer top ${footerTop.toFixed(0)}px`);
             hasOverflow = true;
           }
         });
@@ -7770,14 +7700,12 @@ function addAcuteToSyllable(syllable) {
        */
       async initOCR() {
         if (!OCRModule.isSupported()) {
-          console.log('OCR not supported in this browser');
           if (this.ocrScanBtn) this.ocrScanBtn.style.display = 'none';
           return;
         }
         
         // Set up error callback
         OCRModule.onError((msg) => {
-          console.warn('OCR error:', msg);
           this.showOCRStatus('error', msg);
         });
         
@@ -7805,7 +7733,6 @@ function addAcuteToSyllable(syllable) {
             this.ocrScanBtn.title = 'Import Russian text from image';
           }
         } catch (err) {
-          console.error('OCR init failed:', err);
           if (this.ocrScanBtn) this.ocrScanBtn.title = 'OCR unavailable';
         }
       },
@@ -7851,7 +7778,6 @@ function addAcuteToSyllable(syllable) {
             setTimeout(() => this.hideOCRStatus(), 3000);
           }
         } catch (err) {
-          console.error('OCR processing failed:', err);
           this.showOCRStatus('error', err.message || 'Failed to read image');
           
           // Clear error after 5 seconds
@@ -7959,7 +7885,6 @@ function addAcuteToSyllable(syllable) {
       { latin: 'Heine, Heinrich', cyrillic: 'Гейне, Генрих', dates: '1797–1856' },
       { latin: 'Goethe, Johann Wolfgang', cyrillic: 'Гёте, Иоганн Вольфганг', dates: '1749–1832' }
     ];
-
 
     /* ========================================
        STRESS DICTIONARY (OpenRussian, 51,644 words)
@@ -10069,24 +9994,18 @@ function addAcuteToSyllable(syllable) {
         try {
           // Load Tesseract.js library with fallback
           if (!window.Tesseract) {
-            console.log('Loading Tesseract.js...');
             try {
               await this.loadScript(this.CDN_PRIMARY);
-              console.log('Tesseract.js loaded from primary CDN');
             } catch (e) {
-              console.warn('Primary CDN failed, trying fallback...');
               await this.loadScript(this.CDN_FALLBACK);
-              console.log('Tesseract.js loaded from fallback CDN');
             }
           }
           
           this.isLoaded = true;
-          console.log('OCR module ready');
           return true;
         } catch (err) {
           this.isLoaded = false;
           this._onError?.('OCR unavailable. Please type or paste text.');
-          console.error('OCR init failed:', err);
           return false;
         }
       },
@@ -10191,14 +10110,12 @@ function addAcuteToSyllable(syllable) {
           
           // Skip garbage patterns
           if (isGarbage(trimmed)) {
-            console.log('OCR filter: removing garbage line:', trimmed);
             return false;
           }
           
           // Check Cyrillic density
           const density = cyrillicDensity(trimmed);
           if (density < 0.5) {
-            console.log('OCR filter: removing low-density line:', trimmed, `(${(density*100).toFixed(0)}%)`);
             return false;
           }
           
@@ -10255,7 +10172,6 @@ function addAcuteToSyllable(syllable) {
        */
       async processImage(file, onProgress) {
         if (this.isProcessing) {
-          console.warn('OCR already processing');
           return null;
         }
         
@@ -10271,23 +10187,19 @@ function addAcuteToSyllable(syllable) {
         try {
           // Step 1: Resize image
           onProgress?.('processing', 0);
-          console.log('Resizing image...');
           const canvas = await this.resizeImage(file);
           
           // Step 2: Preprocess for better recognition
           onProgress?.('processing', 0.1);
-          console.log('Preprocessing image...');
           this.preprocessCanvas(canvas);
           
           // Step 3: Run Tesseract using simple recognize() API
           // Use rus+eng to handle mixed content (headers, metadata)
           // Then filter to keep only Cyrillic-dominant lines
           onProgress?.('recognizing text', 0.2);
-          console.log('Running OCR recognition (rus+eng)...');
           
           const result = await Tesseract.recognize(canvas, 'rus+eng', {
             logger: m => {
-              console.log('Tesseract:', m.status, m.progress);
               if (m.status) {
                 onProgress?.(m.status, m.progress);
               }
@@ -10296,7 +10208,6 @@ function addAcuteToSyllable(syllable) {
           
           // Step 4: Use full text (preserves line structure) instead of rebuilding from words
           onProgress?.('cleaning', 0.9);
-          console.log('Processing results...');
           
           // Use data.text which preserves line breaks and layout
           let text = result.data.text || '';
@@ -10309,7 +10220,6 @@ function addAcuteToSyllable(syllable) {
             throw new Error('No Cyrillic text found in image');
           }
           
-          console.log('OCR complete, extracted', text.length, 'characters');
           return text;
           
         } finally {
@@ -12352,7 +12262,6 @@ function addAcuteToSyllable(syllable) {
         }
       }
     };
-
 
     /* ========================================
        POPUP CONTROLLER (PROCESSING HELPER)
@@ -15926,7 +15835,6 @@ function addAcuteToSyllable(syllable) {
               
             }, 150);
             
-            console.log(`Gloss language: ${newLang === 'fr' ? 'Français' : 'English'}`);
           });
         });
       }
@@ -16070,12 +15978,7 @@ function addAcuteToSyllable(syllable) {
       let totalFailed = 0;
       const failures = [];
 
-      console.log('═══════════════════════════════════════════════════════════');
-      console.log('<em>Ilya</em> Golden-Master Tests');
-      console.log('═══════════════════════════════════════════════════════════');
-
       for (const [category, tests] of Object.entries(GOLDEN_TESTS)) {
-        console.log(`\n▶ ${category}`);
         for (const test of tests) {
           const result = processWord(test.word, test.stress);
           // Use full-word IPA (includes cross-syllable assimilation) not syllable concatenation
@@ -16088,40 +15991,21 @@ function addAcuteToSyllable(syllable) {
 
           if (passed) {
             totalPassed++;
-            console.log(`  ✅ ${test.word}: /${actual}/`);
           } else {
             totalFailed++;
             failures.push({ word: test.word, expected: test.expected, actual, note: test.note });
-            console.log(`  ❌ ${test.word}: got /${actual}/, expected /${test.expected}/`);
-            if (actual !== syllableIpa) {
-              console.log(`     (syllables: /${syllableIpa}/)`);
-            }
-            console.log(`     ${test.note}`);
           }
         }
       }
 
-      console.log('\n═══════════════════════════════════════════════════════════');
       const total = totalPassed + totalFailed;
       const passRate = ((totalPassed / total) * 100).toFixed(1);
-      if (totalFailed === 0) {
-        console.log(`🎉 ALL TESTS PASSED: ${totalPassed}/${total} (${passRate}%)`);
-      } else {
-        console.log(`⚠️  ${totalPassed}/${total} passed (${passRate}%)`);
-        console.log(`\nFailed tests:`);
-        failures.forEach(f => {
-          console.log(`  - ${f.word}: expected /${f.expected}/, got /${f.actual}/`);
-        });
-      }
-      console.log('═══════════════════════════════════════════════════════════');
-
       return { passed: totalPassed, failed: totalFailed, total, failures };
     }
 
     function testWord(word, stress = 0) {
       const result = processWord(word, stress);
       const ipa = result.syllables.map(s => s.ipa).join(' ');
-      console.log(`${word} (stress: ${stress}) → /${ipa}/`);
       return result;
     }
 
@@ -16142,7 +16026,6 @@ function addAcuteToSyllable(syllable) {
       const corpus = text || (DocumentState.lines || []).map(l => l.text).join('\n');
       
       if (!corpus) {
-        console.log('No text to audit. Paste Russian text into the input area first, or pass text as argument.');
         return;
       }
       
@@ -16198,28 +16081,6 @@ function addAcuteToSyllable(syllable) {
       const tokenCoverage = ((results.found.reduce((sum, w) => sum + w.freq, 0) + 
                               results.isClitic.reduce((sum, w) => sum + w.freq, 0)) / 
                              results.totalTokens * 100).toFixed(1);
-      
-      // Format report
-      console.log('%c═══════════════════════════════════════', 'color: #667eea');
-      console.log('%c ILYA DICTIONARY AUDIT', 'font-weight: bold; font-size: 14px; color: #667eea');
-      console.log('%c═══════════════════════════════════════', 'color: #667eea');
-      console.log(`\nUnique words: ${results.total}`);
-      console.log(`Total tokens: ${results.totalTokens}`);
-      console.log(`\n%cCoverage: ${foundCount}/${results.total} unique words (${coverage}%)`, 'font-weight: bold');
-      console.log(`%cToken coverage: ${tokenCoverage}% of running text`, 'font-weight: bold');
-      
-      console.log(`\n%cMisses by type:`, 'font-weight: bold; color: #e53e3e');
-      console.log(`  • Not in dictionary: ${results.notInDictionary.length}`);
-      console.log(`  • Clitics (handled separately): ${results.isClitic.length}`);
-      
-      if (results.notInDictionary.length > 0) {
-        console.log(`\n%cTop ${Math.min(15, results.notInDictionary.length)} missing words:`, 'font-weight: bold; color: #e53e3e');
-        results.notInDictionary.slice(0, 15).forEach((w, i) => {
-          console.log(`  ${i + 1}. "${w.word}" (×${w.freq})`);
-        });
-      }
-      
-      console.log('%c═══════════════════════════════════════', 'color: #667eea');
       
       // Return raw data for programmatic use
       return {
