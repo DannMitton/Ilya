@@ -40,6 +40,16 @@
     #status.pass { background: #e8f5e9; color: #2e7d32; }
     #status.fail { background: #fdecea; color: #c62828; }
 
+    #status code {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 0.85rem;
+    }
+
+    #status a {
+      color: #4a6741;
+      font-weight: 600;
+    }
+
     .category {
       margin-bottom: 1.25rem;
     }
@@ -133,9 +143,9 @@
 
     const GOLDEN_TESTS = {
       'Clitics and Prepositions': [
-        { word: 'во', stress: -1, expected: 'vɑ', note: 'Voweled preposition, unstressed' },
-        { word: 'ко', stress: -1, expected: 'kɑ', note: 'Voweled preposition, unstressed' },
-        { word: 'со', stress: -1, expected: 'sɑ', note: 'Voweled preposition, unstressed' },
+        { word: 'во', stress: -1, expected: 'vʌ', note: 'Voweled preposition, unstressed. Remote о → ʌ in isolation; /vɑ/ when immediate pretonic' },
+        { word: 'ко', stress: -1, expected: 'kʌ', note: 'Voweled preposition, unstressed. Remote о → ʌ in isolation; /kɑ/ when immediate pretonic' },
+        { word: 'со', stress: -1, expected: 'sʌ', note: 'Voweled preposition, unstressed. Remote о → ʌ in isolation; /sɑ/ when immediate pretonic' },
         { word: 'не', stress: -1, expected: 'ɲɪ', note: 'Particle, unstressed' },
         { word: 'ни', stress: -1, expected: 'ɲi', note: 'Particle, unstressed' },
       ],
@@ -334,17 +344,28 @@
       let attempts = 0;
       const poll = setInterval(() => {
         attempts++;
-        if (frame.contentWindow && frame.contentWindow.GraysonEngine) {
+        try {
+          // This will throw on file:// due to cross-origin restrictions
+          if (frame.contentWindow && frame.contentWindow.GraysonEngine) {
+            clearInterval(poll);
+            engine = frame.contentWindow.GraysonEngine;
+            statusEl.textContent = 'GraysonEngine loaded. Ready to run tests.';
+            runBtn.disabled = false;
+            // Auto-run on load
+            runTests();
+          } else if (attempts > 100) {
+            clearInterval(poll);
+            statusEl.textContent = 'Failed to load GraysonEngine after 10 seconds.';
+            statusEl.className = 'fail';
+          }
+        } catch (e) {
+          // Cross-origin error (file:// protocol)
           clearInterval(poll);
-          engine = frame.contentWindow.GraysonEngine;
-          statusEl.textContent = 'GraysonEngine loaded. Ready to run tests.';
-          runBtn.disabled = false;
-          // Auto-run on load
-          runTests();
-        } else if (attempts > 100) {
-          clearInterval(poll);
-          statusEl.textContent = 'Failed to load GraysonEngine after 10 seconds.';
           statusEl.className = 'fail';
+          statusEl.innerHTML = '<strong>Cross-origin restriction</strong> (file:// protocol).<br>' +
+            'Run a local server from the repo folder:<br><br>' +
+            '<code style="background:#eee;padding:0.3rem 0.6rem;border-radius:4px;">python3 -m http.server 8000</code><br><br>' +
+            'Then open <a href="http://localhost:8000/tests.html">http://localhost:8000/tests.html</a>';
         }
       }, 100);
     });
