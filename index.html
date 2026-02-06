@@ -891,10 +891,11 @@
     }
 
     .inspector-stress-source-row.expanded {
-      max-height: 80px;
+      max-height: 120px;
       padding: 8px 0;
       margin-bottom: 8px;
       opacity: 1;
+      overflow: visible;
     }
 
     .inspector-stress-source-row.hidden {
@@ -4818,7 +4819,7 @@
     <div class="drawer-scrim" id="drawerScrim"></div>
     
     <!-- Attribution arrow: fixed overlay straddling drawer edge -->
-    <div class="stress-attribution-arrow" id="stressAttributionArrow" title="Please select the source for your stress decision" aria-hidden="true">
+    <div class="stress-attribution-arrow" id="stressAttributionArrow" aria-hidden="true">
       <svg viewBox="0 0 32 24" width="48" height="36" xmlns="http://www.w3.org/2000/svg">
         <path d="M3,7 H18 V2 L30,12 L18,22 V17 H3 Q0,17 0,14 V10 Q0,7 3,7 Z" fill="var(--ilya-accent)"/>
       </svg>
@@ -12281,8 +12282,7 @@ function addAcuteToSyllable(syllable) {
       updateStress(lineIndex, wordIndex, newStress) {
         if (this.lines[lineIndex] && this.lines[lineIndex][wordIndex]) {
           this.lines[lineIndex][wordIndex].stress = newStress;
-          // Mark as user-verified when stress changes (v5.11.32)
-          this.lines[lineIndex][wordIndex].stressSource = 'user';
+          // Attribution is a deliberate scholarly act — don't auto-set source
         }
       },
       
@@ -14419,18 +14419,12 @@ function addAcuteToSyllable(syllable) {
           this.handleAssimilationToggle('hard');
         });
         
-        // Stress source selection
-        this.inspectorElements.stressDictionary?.addEventListener('click', (e) => {
+        // Stress source selection (event delegation on parent)
+        this.inspectorElements.stressSourceButtons?.addEventListener('click', (e) => {
+          const segment = e.target.closest('.segment[data-source]');
+          if (!segment) return;
           e.stopPropagation();
-          this.handleStressSourceSelect('dictionary');
-        });
-        this.inspectorElements.stressComposer?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.handleStressSourceSelect('composer');
-        });
-        this.inspectorElements.stressUser?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.handleStressSourceSelect('user');
+          this.handleStressSourceSelect(segment.dataset.source);
         });
         
         // Toast undo button
@@ -14910,9 +14904,10 @@ function addAcuteToSyllable(syllable) {
         if (!word) return;
         
         const currentSource = word.stressSource || 'dictionary';
+        const arrowVisible = this.inspectorElements.stressAttributionArrow?.classList.contains('visible');
         
-        // If clicking current state, do nothing
-        if (source === currentSource) return;
+        // If clicking current state and no attribution pending, do nothing
+        if (source === currentSource && !arrowVisible) return;
         
         // Update stress source
         word.stressSource = source;
