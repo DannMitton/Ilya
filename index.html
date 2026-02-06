@@ -481,6 +481,22 @@
       padding: 8px 12px;
     }
 
+    .yo-lock-message {
+      font-size: 0.78rem;
+      color: var(--ilya-accent);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 200ms var(--ease), max-height 200ms var(--ease);
+      padding: 0;
+    }
+    
+    .yo-lock-message.visible {
+      opacity: 1;
+      max-height: 2em;
+      padding: 2px 0 4px;
+    }
+
     /* Boundary reset button in drawer */
     .inspector-syllable-header .boundary-reset-btn {
       width: 28px;
@@ -4756,6 +4772,9 @@
             <button class="boundary-reset-btn" id="inspectorBoundaryResetBtn" title="Reset syllable boundaries" aria-label="Reset syllable boundaries" style="display: none;">↺</button>
           </div>
           
+          <!-- ё lock feedback message -->
+          <div class="yo-lock-message" id="inspectorYoLockMessage" data-i18n="inspector.yoLockMessage">⟨ё⟩ is always stressed</div>
+          
           <!-- Stress source (proximity-grouped with syllable buttons) -->
           <div class="inspector-stress-source-row" id="inspectorStressSourceRow" aria-live="polite">
             <div class="inspector-stress-source-label" data-i18n="inspector.stressLabel">Identify stress source</div>
@@ -5014,6 +5033,10 @@ const UI_LABELS = {
   'inspector.yoToastYeToYo': {
     en: 'е → ё changes pronunciation',
     fr: 'е → ё modifie la prononciation'
+  },
+  'inspector.yoLockMessage': {
+    en: '⟨ё⟩ is always stressed',
+    fr: '⟨ё⟩ est toujours accentué'
   },
   'paper.verify': {
     en: 'verify',
@@ -14393,7 +14416,8 @@ function addAcuteToSyllable(syllable) {
           yoToast: document.getElementById('inspectorYoToast'),
           yoToastText: document.getElementById('inspectorYoToastText'),
           yoUndoBtn: document.getElementById('inspectorYoUndoBtn'),
-          yoOkBtn: document.getElementById('inspectorYoOkBtn')
+          yoOkBtn: document.getElementById('inspectorYoOkBtn'),
+          yoLockMessage: document.getElementById('inspectorYoLockMessage')
         };
         
         // Back button returns to Root (with stopPropagation)
@@ -14803,8 +14827,9 @@ function addAcuteToSyllable(syllable) {
           this.inspectorElements.stressUser?.classList.toggle('committed', currentSource === 'user');
         }
         
-        // Hide toast initially
+        // Hide toast and lock message initially
         this.inspectorElements.yoToast?.classList.remove('visible');
+        this.hideYoLockMessage();
         
         // Phase 4B: Initialize reset button visibility
         this._updateCustomizedState();
@@ -15050,6 +15075,24 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements.stressSourceRow?.classList.remove('expanded');
       },
       
+      // Show ё lock feedback message (auto-dismiss after 2s)
+      showYoLockMessage() {
+        const el = this.inspectorElements.yoLockMessage;
+        if (!el) return;
+        
+        el.classList.add('visible');
+        
+        clearTimeout(this._yoLockTimer);
+        this._yoLockTimer = setTimeout(() => {
+          el.classList.remove('visible');
+        }, 2000);
+      },
+      
+      hideYoLockMessage() {
+        this.inspectorElements.yoLockMessage?.classList.remove('visible');
+        clearTimeout(this._yoLockTimer);
+      },
+      
       // Phase 3D: Show ё warning toast
       showYoToast(direction) {
         // Update toast text based on direction
@@ -15105,7 +15148,10 @@ function addAcuteToSyllable(syllable) {
         // Block stress changes for ё words (ё always carries stress)
         const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true ||
                       GraysonEngine.hasYo(this.currentWord.cyrillic);
-        if (hasYo) return;
+        if (hasYo) {
+          this.showYoLockMessage();
+          return;
+        }
         
         const { lineIndex, wordIndex, syllables } = this.currentWord;
         const currentStressIdx = syllables?.findIndex(s => s.isStressed) ?? -1;
