@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.86 CSS dead class removal (C.8)</title>
+  <title>Ilya — v6.0.98 Composable blurb scaffold</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -4200,8 +4200,19 @@ async function loadRuleRegistry() {
     }
 }
 
-// Start Tier 1, Singer's Supplement, and Rule Registry immediately
-_supplementLoadPromise = Promise.all([loadTier1(), loadSingerSupplement(), loadRuleRegistry()]);
+async function loadBlurbComposer() {
+    try {
+        const response = await fetch('data/blurb-composer.json');
+        if (response.ok) {
+            BlurbComposer.data = await response.json();
+        }
+    } catch (error) {
+        console.warn('[BlurbComposer] Failed to load blurb-composer.json; using legacy blurbs only');
+    }
+}
+
+// Start Tier 1, Singer's Supplement, Rule Registry, and Blurb Composer immediately
+_supplementLoadPromise = Promise.all([loadTier1(), loadSingerSupplement(), loadRuleRegistry(), loadBlurbComposer()]);
 
 /* GLOSS FORMATTING HELPERS — Handles verbose grammatical descriptions from kaikki.org */
 /**
@@ -8191,6 +8202,156 @@ function buildProvenanceLegend(lines) {
       }
     };
 
+    /* BLURB COMPOSER — IPI (Identity-Process-Implication) assembly engine (v6.0.98) */
+    /* Composes context-aware educational blurbs from modular layers.              */
+    /* Falls back to legacy rule-registry.json when composer data is incomplete.   */
+    const BlurbComposer = {
+      // Data loaded from data/blurb-composer.json
+      data: {},
+      
+      // Derive the composer rule key from a transcription log entry.
+      // Covers all special cases that RuleRegistry.lookupBlurb handles.
+      deriveRule(entry) {
+        const { features, char, ipa } = entry;
+        
+        // Assimilation processes (checked before generic derivation)
+        if (features?.voicingAssimilation && features?.devoiced) return 'regressive-devoicing';
+        if (features?.voicingAssimilation && features?.voiced) return 'regressive-voicing';
+        if (features?.finalDevoicing) return 'final-devoicing';
+        if (features?.genitiveEnding) return 'genitive';
+        if (features?.bogException) return 'bog-exception';
+        
+        // J-glide variants
+        if (features?.type === 'glide' && ipa === 'j') {
+          if (features.source === 'ii-suffix') return 'j-ii-suffix';
+          if (features.source === 'after-vowel') return 'j-after-vowel';
+          if (features.source === 'after-sign') return 'j-after-sign';
+          return 'j-glide';
+        }
+        
+        // Delegate to RuleRegistry for standard vowel/consonant/sign rules
+        return RuleRegistry.deriveRule(features, char);
+      },
+      
+      // Attempt to compose a blurb from IPI layers.
+      // Returns { blurb: {en, fr}, citation, notable } or null if any required layer is missing.
+      composeBlurb(entry) {
+        if (!this.data.identities || !this.data.processes) return null;
+        
+        const { char, ipa, features } = entry;
+        const lowerChar = char?.toLowerCase();
+        if (!lowerChar) return null;
+        
+        const rule = this.deriveRule(entry);
+        const processKey = `${rule}:${lowerChar}`;
+        
+        // Identity lookup (required)
+        const identity = this.data.identities[lowerChar];
+        if (!identity) {
+          console.warn(`[BlurbComposer] Missing identity: "${lowerChar}"`);
+          return null;
+        }
+        
+        // Process lookup (required for meaningful blurb)
+        const process = this.data.processes[processKey];
+        if (!process) {
+          console.warn(`[BlurbComposer] Missing process: "${processKey}"`);
+          return null;
+        }
+        
+        // Implication lookup (optional; absence is valid for some processes)
+        const implication = this.data.implications?.[processKey] || null;
+        
+        // Template variables available for substitution
+        const vars = {
+          char: lowerChar,
+          ipa: ipa || '',
+          base_ipa: '',
+          trigger: features?.trigger || '',
+          profile: ''
+        };
+        
+        // Assemble for each language
+        const blurb = {};
+        const allCitations = [];
+        
+        for (const lang of ['en', 'fr']) {
+          const idEntry = identity[lang] || identity.en;
+          const procEntry = process[lang] || process.en;
+          const implEntry = implication ? (implication[lang] || implication.en) : null;
+          
+          if (!idEntry || !procEntry) {
+            if (lang === 'en') return null;
+            if (lang === 'fr') {
+              console.warn(`[BlurbComposer] French missing for "${processKey}"; falling back to English`);
+            }
+            continue;
+          }
+          
+          // Assemble: Identity + Process + Implication (if present)
+          let text = this.substituteVars(idEntry.template, vars);
+          text += ' ' + this.substituteVars(procEntry.template, vars);
+          if (implEntry?.template) {
+            text += ' ' + this.substituteVars(implEntry.template, vars);
+          }
+          
+          blurb[lang] = text;
+          
+          // Collect citations once (from English pass)
+          if (lang === 'en') {
+            if (idEntry.citation) allCitations.push(idEntry.citation);
+            if (procEntry.citation) allCitations.push(procEntry.citation);
+            if (implEntry?.citation) allCitations.push(implEntry.citation);
+          }
+        }
+        
+        // French fallback to English
+        if (!blurb.fr) blurb.fr = blurb.en;
+        
+        return {
+          blurb,
+          citation: this.formatCitations(allCitations),
+          notable: false
+        };
+      },
+      
+      // Replace {var} placeholders in template strings
+      substituteVars(template, vars) {
+        if (!template) return '';
+        return template.replace(/\{(\w+)\}/g, (match, key) => vars[key] !== undefined ? vars[key] : match);
+      },
+      
+      // Deduplicate and format page citations into a single parenthetical
+      formatCitations(citations) {
+        if (!citations || citations.length === 0) return null;
+        
+        const style = this.data.citation_style?.en;
+        if (!style) return citations.join(', ');
+        
+        // Split all citations into individual page references, deduplicate
+        const allPages = [];
+        const seen = new Set();
+        citations.forEach(c => {
+          c.split(/,\s*/).forEach(page => {
+            const trimmed = page.replace(/^pp?\.\s*/, '').trim();
+            if (trimmed && !seen.has(trimmed)) {
+              seen.add(trimmed);
+              allPages.push(trimmed);
+            }
+          });
+        });
+        
+        if (allPages.length === 0) return null;
+        
+        const joined = allPages.join(style.separator);
+        const prefix = allPages.length > 1 || allPages.some(p => p.includes('–') || p.includes('-'))
+          ? style.plural
+          : style.singular;
+        
+        return style.template.replace('{pages}', `${prefix} ${joined}`);
+      }
+    };
+
     /* RULE REGISTRY - Phoneme Ribbon Blurbs — Maps transcription features → educational blurbs */
     const RuleRegistry = {
       // Blurb data loaded from data/rule-registry.json
@@ -8264,6 +8425,11 @@ function buildProvenanceLegend(lines) {
       
       // Look up blurb data for a transcriptionLog entry
       lookupBlurb(entry) {
+        // Try composed IPI blurb first (v6.0.98)
+        const composed = BlurbComposer.composeBlurb(entry);
+        if (composed) return composed;
+        
+        // Legacy fallback: rule-registry.json lookup
         const { features, char, ipa } = entry;
         
         // Check for regressive devoicing assimilation (v5.10.20)
