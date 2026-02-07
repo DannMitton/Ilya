@@ -1520,6 +1520,7 @@
 
     /* WORD STACK */
     .word-stack {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -1533,6 +1534,24 @@
     
     .word-stack:hover {
       background: rgba(168, 90, 58, 0.06);
+    }
+
+    /* STRESS PROVENANCE ICONS (v6.0.97) — Tiny silhouetted indicators showing stress source */
+    .stress-provenance {
+      position: absolute;
+      top: 0.2em;
+      right: 0.2em;
+      width: 0.5em;
+      height: 0.5em;
+      color: var(--ink-primary);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .stress-provenance svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      fill: currentColor;
     }
 
     .word-stack:focus {
@@ -4556,6 +4575,63 @@ function addAcuteToSyllable(syllable) {
     return result;
 }
 
+/**
+ * Return inline SVG icon for stress provenance, or empty string if none applies.
+ * Icons: book (dictionary), eighth note (composer), torso (user), question mark (unattributed).
+ * All 16x16 viewBox, solid silhouette fill, designed for 0.5em display.
+ * @param {string} stressSource - The word's stressSource value
+ * @param {boolean} hasYo - Whether the word contains ё
+ * @param {boolean} isInferred - Whether stress is inferred (unverified)
+ * @returns {string} HTML string with provenance icon, or ''
+ */
+function getProvenanceIcon(stressSource, hasYo, isInferred) {
+    // ё words: the letter ё is its own indicator
+    if (hasYo) return '';
+    // Inferred: dashed verification box is the indicator
+    if (isInferred) return '';
+
+    const svgOpen = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">';
+    const svgClose = '</svg>';
+
+    let icon = '';
+    switch (stressSource) {
+        case 'dictionary':
+        case 'supplement':
+        case 'yo-normalized':
+            // Open book: two pages meeting at spine
+            icon = svgOpen
+                + '<path d="M1.5 2.5C3.5 2 5.5 2 7.5 3.5V13C5.5 11.5 3.5 11.5 1.5 12V2.5Z"/>'
+                + '<path d="M14.5 2.5C12.5 2 10.5 2 8.5 3.5V13C10.5 11.5 12.5 11.5 14.5 12V2.5Z"/>'
+                + svgClose;
+            break;
+        case 'composer':
+            // Eighth note: notehead, stem, flag
+            icon = svgOpen
+                + '<circle cx="5" cy="12" r="2.8"/>'
+                + '<rect x="7" y="2" width="1.8" height="10.5" rx="0.5"/>'
+                + '<path d="M8.8 2.5c2.5 1 3.5 3.5 1.5 5.5l-1.5-.8c1.2-1.5.8-3-.5-3.8z"/>'
+                + svgClose;
+            break;
+        case 'user':
+            // Genderless torso: head circle + shoulders
+            icon = svgOpen
+                + '<circle cx="8" cy="4.5" r="3"/>'
+                + '<path d="M2 15c0-4 2.5-6 6-6s6 2 6 6z"/>'
+                + svgClose;
+            break;
+        default:
+            // Unattributed: bold question mark (stress source undefined)
+            icon = svgOpen
+                + '<path d="M5.8 5.8c0-2.2 1.8-3.5 3.5-3s2.5 2.2 1.2 3.8c-.8 1-1.5 1.4-1.5 2.5v.4H7.2v-.4c0-1.7.8-2.4 1.7-3.4.5-.7.3-1.6-.6-1.7-.9-.1-1.3.6-1.3 1.3z"/>'
+                + '<circle cx="8" cy="13" r="1.3"/>'
+                + svgClose;
+            break;
+    }
+
+    if (!icon) return '';
+    return '<span class="stress-provenance" aria-hidden="true">' + icon + '</span>';
+}
+
     /* TRANSCRIPTION PROFILES */
     const TRANSCRIPTION_PROFILES = {
       'old-muscovite': {
@@ -5187,6 +5263,7 @@ function addAcuteToSyllable(syllable) {
           `;
           const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
+              ${(tw.isProclitic || tw.isEnclitic) ? '' : getProvenanceIcon(tw.wordData?.stressSource, tw.hasYo, isInferred)}
               <span class="ipa">${tw.ipaDisplay}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${tw.isProclitic || tw.isEnclitic 
