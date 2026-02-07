@@ -1554,6 +1554,32 @@
       fill: currentColor;
     }
 
+    /* PROVENANCE LEGEND (v6.0.97) — Contextual key in page footer */
+    .provenance-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--ilya-border-light);
+    }
+    .provenance-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      font-family: var(--font-sans);
+      font-variant: small-caps;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      color: var(--ink-secondary);
+    }
+    .provenance-legend-item svg {
+      width: 0.7em;
+      height: 0.7em;
+      fill: var(--ink-primary);
+      flex-shrink: 0;
+    }
+
     .word-stack:focus {
       outline: 2px solid var(--ilya-accent);
       outline-offset: 2px;
@@ -3128,6 +3154,13 @@
         right: 0.75in;
         padding: 12px 0 24px 0;  /* Keep vertical padding only */
       }
+
+      .provenance-legend {
+        border-bottom-color: #ccc;
+      }
+      .provenance-legend-item svg {
+        fill: #1a1612;
+      }
       
       /* Page content: remove horizontal padding (paper-page provides it) */
       .page-content {
@@ -3731,6 +3764,22 @@ const UI_LABELS = {
   'pacifier.introduction': {
     en: 'I\u2019m Ilya.',
     fr: 'Je suis Ilya.'
+  },
+  'legend.dictionary': {
+    en: 'Dictionary',
+    fr: 'Dictionnaire'
+  },
+  'legend.composer': {
+    en: 'Composer',
+    fr: 'Compositeur'
+  },
+  'legend.user': {
+    en: 'User',
+    fr: 'Utilisateur'
+  },
+  'legend.unattributed': {
+    en: 'Unattributed',
+    fr: 'Non attribué'
   },
   'pacifier.firstLogin': {
     en: 'Each transcription carries its maker\'s name in the footer. What shall I call you?',
@@ -4632,6 +4681,69 @@ function getProvenanceIcon(stressSource, hasYo, isInferred) {
     return '<span class="stress-provenance" aria-hidden="true">' + icon + '</span>';
 }
 
+/**
+ * Build contextual provenance legend HTML for a page's footer.
+ * Only includes categories that appear among the page's words.
+ * @param {Array} lines - Array of transcribed word arrays for this page
+ * @returns {string} Legend HTML, or '' if no provenance icons are present
+ */
+function buildProvenanceLegend(lines) {
+    const categories = new Set();
+    const svgOpen = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">';
+    const svgClose = '</svg>';
+
+    for (const line of lines) {
+      for (const tw of line) {
+        const src = tw.wordData?.stressSource;
+        const hasYo = tw.hasYo;
+        const isInferred = src === 'inferred';
+        const isClitic = tw.isProclitic || tw.isEnclitic;
+        if (hasYo || isInferred || isClitic) continue;
+
+        if (src === 'dictionary' || src === 'supplement' || src === 'yo-normalized') {
+          categories.add('dictionary');
+        } else if (src === 'composer') {
+          categories.add('composer');
+        } else if (src === 'user') {
+          categories.add('user');
+        } else if (src === 'default' || src === '' || !src) {
+          categories.add('unattributed');
+        }
+      }
+    }
+
+    if (categories.size === 0) return '';
+
+    const lang = currentGlossLanguage || 'en';
+    const order = ['dictionary', 'composer', 'user', 'unattributed'];
+    const icons = {
+      dictionary: svgOpen
+        + '<path d="M1.5 2.5C3.5 2 5.5 2 7.5 3.5V13C5.5 11.5 3.5 11.5 1.5 12V2.5Z"/>'
+        + '<path d="M14.5 2.5C12.5 2 10.5 2 8.5 3.5V13C10.5 11.5 12.5 11.5 14.5 12V2.5Z"/>'
+        + svgClose,
+      composer: svgOpen
+        + '<circle cx="5" cy="12" r="2.8"/>'
+        + '<rect x="7" y="2" width="1.8" height="10.5" rx="0.5"/>'
+        + '<path d="M8.8 2.5c2.5 1 3.5 3.5 1.5 5.5l-1.5-.8c1.2-1.5.8-3-.5-3.8z"/>'
+        + svgClose,
+      user: svgOpen
+        + '<circle cx="8" cy="4.5" r="3"/>'
+        + '<path d="M2 15c0-4 2.5-6 6-6s6 2 6 6z"/>'
+        + svgClose,
+      unattributed: svgOpen
+        + '<path d="M5.8 5.8c0-2.2 1.8-3.5 3.5-3s2.5 2.2 1.2 3.8c-.8 1-1.5 1.4-1.5 2.5v.4H7.2v-.4c0-1.7.8-2.4 1.7-3.4.5-.7.3-1.6-.6-1.7-.9-.1-1.3.6-1.3 1.3z"/>'
+        + '<circle cx="8" cy="13" r="1.3"/>'
+        + svgClose
+    };
+
+    const items = order
+      .filter(cat => categories.has(cat))
+      .map(cat => `<span class="provenance-legend-item">${icons[cat]} ${UI_LABELS['legend.' + cat][lang]}</span>`)
+      .join('');
+
+    return `<div class="provenance-legend" aria-label="Stress source legend">${items}</div>`;
+}
+
     /* TRANSCRIPTION PROFILES */
     const TRANSCRIPTION_PROFILES = {
       'old-muscovite': {
@@ -5212,9 +5324,11 @@ function getProvenanceIcon(stressSource, hasYo, isInferred) {
           para2: `<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}`,
           pagination: `Page ${pageNumber} of ${totalPages}`
         };
+        const legendHTML = buildProvenanceLegend(lines);
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
+              ${legendHTML}
               <p>${footerText.para1}</p>
               <p>${footerText.para2}</p>
             </div>
