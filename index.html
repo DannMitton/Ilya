@@ -8543,6 +8543,432 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
+    /* RIBBON RENDERER — Phoneme ribbon HTML construction and syllable index calculation */
+    const RibbonRenderer = {
+      renderRibbon(wordData, targetContainer = null) {
+        const container = targetContainer;
+        if (!container) return;
+        
+        const log = wordData.transcriptionLog || [];
+        if (log.length === 0) {
+          container.innerHTML = '<div style="color: var(--ink-tertiary); font-size: 0.85rem; padding: 1rem; text-align: center;">No transcription data available</div>';
+          return;
+        }
+        
+        // Build displayLog with blurb data (memoized per Kimi's optimization)
+        const displayLog = RuleRegistry.buildDisplayLog(log);
+        
+        // Get boundary-adjusted syllables (v5.10.25)
+        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
+        const originalSyllables = wordData.syllables;
+        const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
+        const hasCustomBoundaries = BoundaryStack.hasCustomBoundaries(wordId);
+        
+        // Recalculate syllable assignments if boundaries were adjusted
+        let adjustedDisplayLog = displayLog;
+        if (hasCustomBoundaries) {
+          adjustedDisplayLog = this.recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables);
+        }
+        
+        // Group by (adjusted) syllable
+        const syllableGroups = new Map();
+        adjustedDisplayLog.forEach(entry => {
+          const sylIdx = entry.adjustedSyllableIndex ?? entry.syllableIndex ?? 0;
+          if (!syllableGroups.has(sylIdx)) {
+            syllableGroups.set(sylIdx, []);
+          }
+          syllableGroups.get(sylIdx).push(entry);
+        });
+        
+        // Get stressed syllable index
+        const syllables = wordData.syllables;
+        const stressedIdx = syllables.findIndex(s => s.isStressed);
+        
+        // Build vertical ribbon HTML
+        let html = '';
+        let isFirstSyllable = true;
+        
+        // Clitic detection (v6.0.17 - arrows replace tie bar)
+        const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
+        const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
+        
+        // Proclitic blurb (approved by Dann, Feb 3 2026)
+        const procliticBlurb = `Some short words — prepositions like "в" and "на," the negation "не" — don't carry their own stress. Instead, they lean forward and attach to the word that follows, forming a single unit of pronunciation. Voicing and palatalization flow right through the boundary as if it were one word. The arrow marks this forward binding.`;
+        const procliticCitation = `Grayson (2012), pp. 248–255`;
+        
+        // Enclitic blurb (approved by Dann, Feb 3 2026)
+        const encliticBlurb = `Certain particles — "ли" (question), "же" (emphasis), "бы" (conditional) — attach backward to the word before them. They're unstressed and form a single phonological unit with their host. The same assimilation rules apply across this bond as within any word. The arrow marks this backward binding.`;
+        const encliticCitation = `Grayson (2012), pp. 248–255`;
+        
+        syllableGroups.forEach((entries, sylIdx) => {
+          const isStressed = sylIdx === stressedIdx;
+          
+          // Wrap stressed syllable in tinted region
+          if (isStressed) {
+            html += `<div class="stressed-syllable-region">`;
+          }
+          
+          // Process entries, grouping merged clusters with two-layer architecture (v5.11.30)
+          let i = 0;
+          while (i < entries.length) {
+            const entry = entries[i];
+            const blurb = entry.blurbData;
+            const isFirstInSyllable = i === 0;
+            const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
+            const isSilent = entry.features?.silent || entry.ipa === '';
+            
+            // Check if this starts a merged cluster
+            if (entry.clusterMerged && entry.clusterStart) {
+              // Collect all cluster members
+              const clusterMembers = [entry];
+              let j = i + 1;
+              while (j < entries.length && entries[j].clusterSource === entry.clusterSource) {
+                clusterMembers.push(entries[j]);
+                j++;
+              }
+              
+              // Generate unique ID for this cluster group
+              const clusterId = `cluster-${entry.clusterSource}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+              
+              // Build cluster orthography string for aria-label
+              const clusterOrthography = clusterMembers.map(m => m.char).join('');
+              
+              // Render cluster group with two-layer architecture (v5.11.31)
+              // Per Kimi: rubric always visible, details accordion below
+              const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
+              html += `
+                <div class="cluster-group" id="${clusterId}"${syllableAttr}
+                     role="group"
+                     aria-label="Consonant cluster: ${clusterOrthography}"
+                     aria-expanded="false"
+                     data-cluster-ipa="${entry.ipa}"
+                     data-cluster-source="${entry.clusterSource}">
+                  <div class="cluster-perimeter" 
+                       tabindex="0" 
+                       role="button"
+                       aria-label="Show details for ${clusterOrthography} cluster"></div>
+                  ${clusterMembers.map(m => `
+                    <div class="phoneme-row cluster-member"
+                         data-cluster-id="${clusterId}">
+                      <div class="phoneme-mapping">
+                        <span class="phoneme-cyr">${m.char}</span>
+                        <span class="phoneme-arrow">›</span>
+                        <span class="phoneme-ipa">${entry.ipa}</span>
+                      </div>
+                    </div>
+                  `).join('')}
+                  <div class="cluster-overlay-container">
+                    <div class="cluster-rubric-row">
+                      <div class="cluster-connector"></div>
+                      <div class="cluster-rubric" role="button" tabindex="0">
+                        <span class="cluster-formula-ortho">${clusterOrthography}</span>
+                        <span class="cluster-formula-arrow">→</span>
+                        <span class="cluster-formula-ipa">/${entry.ipa}/</span>
+                      </div>
+                    </div>
+                    <div class="cluster-details">
+                      <div class="cluster-details-content">
+                        <div class="cluster-blurb-text">${extractBlurbText(blurb)}</div>
+                        ${blurb.citation ? `<div class="cluster-blurb-citation">${blurb.citation}</div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+              
+              // Skip past all cluster members
+              i = j;
+              continue;
+            }
+            
+            // Regular entry (non-cluster)
+            let rowClasses = 'phoneme-row';
+            if (isSilent) rowClasses += ' silent-letter';
+            
+            const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
+            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
+            
+            html += `
+              <div class="${rowClasses}"${syllableAttr}
+                   tabindex="0"
+                   role="button"
+                   aria-expanded="false"
+                   aria-label="${entry.char} becomes ${entry.ipa || 'nothing'}">
+                <div class="phoneme-mapping">
+                  <span class="phoneme-cyr">${entry.char}</span>
+                  <span class="phoneme-arrow">›</span>
+                  <span class="phoneme-ipa">${ipaDisplay}</span>
+                </div>
+                <div class="phoneme-blurb-overlay">
+                  <div class="blurb-text">${extractBlurbText(blurb)}</div>
+                  ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
+                </div>
+              </div>
+            `;
+            
+            i++;
+          }
+          
+          if (isStressed) {
+            html += `</div>`;
+          }
+          
+          isFirstSyllable = false;
+        });
+        
+        // Clitic arrow at END of ribbon (v6.0.17 - replaces tie bar)
+        // Proclitic: → points forward to host
+        // Enclitic: ← points backward to host
+        if (isProclitic) {
+          html += `
+            <div class="phoneme-row clitic-arrow-row" 
+                 tabindex="0"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Proclitic - this word attaches to the next">
+              <div class="phoneme-mapping">
+                <span class="arrow-symbol">→</span>
+                <span class="arrow-label">proclitic</span>
+              </div>
+              <div class="phoneme-blurb-overlay">
+                <div class="blurb-text">${procliticBlurb}</div>
+                <div class="blurb-citation">${procliticCitation}</div>
+              </div>
+            </div>
+          `;
+        }
+        
+        if (isEnclitic) {
+          html += `
+            <div class="phoneme-row clitic-arrow-row" 
+                 tabindex="0"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Enclitic - this word attaches to the previous">
+              <div class="phoneme-mapping">
+                <span class="arrow-symbol">←</span>
+                <span class="arrow-label">enclitic</span>
+              </div>
+              <div class="phoneme-blurb-overlay">
+                <div class="blurb-text">${encliticBlurb}</div>
+                <div class="blurb-citation">${encliticCitation}</div>
+              </div>
+            </div>
+          `;
+        }
+        
+        // Add backdrop at end (positioned via CSS)
+        html += `<div class="ribbon-backdrop"></div>`;
+        
+        container.innerHTML = html;
+        
+        // Event delegation for floating overlay (v5.5)
+        // Updated v5.11.31: Universal click-outside dismiss, cluster rubric always visible
+        // Only attach once per container to avoid stacking handlers
+        if (!container._ribbonListenerAttached) {
+          container._ribbonListenerAttached = true;
+          
+          container.addEventListener('click', (e) => {
+            const row = e.target.closest('.phoneme-row:not(.cluster-member)');
+            const clusterGroup = e.target.closest('.cluster-group');
+            const clusterPerimeter = e.target.closest('.cluster-perimeter');
+            const clusterRubric = e.target.closest('.cluster-rubric');
+            const clusterDetails = e.target.closest('.cluster-details');
+            const phonemeBlurb = e.target.closest('.phoneme-blurb-overlay');
+            const backdrop = container.querySelector('.ribbon-backdrop');
+            
+            // UNIVERSAL DISMISS: Close any expanded blurb if clicking outside its content
+            const activeRow = container.querySelector('.phoneme-row.expanded');
+            const activeCluster = container.querySelector('.cluster-group.active');
+            
+            // If clicking inside an open phoneme blurb, do nothing (let user read)
+            if (phonemeBlurb && activeRow) {
+              return;
+            }
+            
+            // If clicking inside cluster details, do nothing (let user read)
+            if (clusterDetails && activeCluster) {
+              return;
+            }
+            
+            // Close active phoneme blurb if clicking anywhere else
+            if (activeRow && !row?.classList.contains('expanded')) {
+              activeRow.classList.remove('expanded');
+              activeRow.setAttribute('aria-expanded', 'false');
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+            }
+            
+            // Close active cluster if clicking outside the cluster region entirely
+            if (activeCluster && !clusterGroup) {
+              activeCluster.classList.remove('active');
+              activeCluster.setAttribute('aria-expanded', 'false');
+            }
+            
+            // Handle cluster clicks (perimeter, rubric, or connector area)
+            if (clusterGroup && (clusterPerimeter || clusterRubric)) {
+              e.stopPropagation();
+              
+              const wasActive = clusterGroup.classList.contains('active');
+              
+              // Close any other active cluster
+              container.querySelectorAll('.cluster-group.active').forEach(c => {
+                if (c !== clusterGroup) {
+                  c.classList.remove('active');
+                  c.setAttribute('aria-expanded', 'false');
+                }
+              });
+              
+              // Toggle clicked cluster group
+              if (wasActive) {
+                clusterGroup.classList.remove('active');
+                clusterGroup.setAttribute('aria-expanded', 'false');
+              } else {
+                clusterGroup.classList.add('active');
+                clusterGroup.setAttribute('aria-expanded', 'true');
+              }
+              return;
+            }
+            
+            // Handle regular row clicks
+            if (!row) return;
+            
+            // Dismiss toast on phoneme interaction (v5.11.47 lifecycle)
+            DrawerState.hideYoToast();
+            
+            e.stopPropagation();
+            const wasExpanded = row.classList.contains('expanded');
+            
+            // Toggle clicked row
+            if (wasExpanded) {
+              row.classList.remove('expanded');
+              row.setAttribute('aria-expanded', 'false');
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+            } else {
+              row.classList.add('expanded');
+              row.setAttribute('aria-expanded', 'true');
+              container.classList.add('has-active-blurb');
+              backdrop?.classList.add('active');
+            }
+          });
+          
+          // Keyboard accessibility (cluster perimeter/rubric + regular rows)
+          container.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              const row = e.target.closest('.phoneme-row:not(.cluster-member)');
+              const perimeter = e.target.closest('.cluster-perimeter');
+              const rubric = e.target.closest('.cluster-rubric');
+              
+              if (perimeter || rubric) {
+                e.preventDefault();
+                (perimeter || rubric).click();
+              } else if (row) {
+                e.preventDefault();
+                row.click();
+              }
+            }
+            // Escape to close
+            if (e.key === 'Escape') {
+              const backdrop = container.querySelector('.ribbon-backdrop');
+              container.querySelectorAll('.phoneme-row.expanded, .cluster-group.active').forEach(r => {
+                r.classList.remove('expanded');
+                r.classList.remove('active');
+                r.setAttribute('aria-expanded', 'false');
+              });
+              container.classList.remove('has-active-blurb');
+              backdrop?.classList.remove('active');
+            }
+            
+            // Phase 4D: Arrow key navigation through ribbon rows
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+              const focusableRows = [...container.querySelectorAll('.phoneme-row:not(.cluster-member), .cluster-group, .clitic-arrow-row')];
+              const currentIdx = focusableRows.findIndex(row => row.contains(e.target) || row === e.target);
+              
+              if (currentIdx === -1) return;
+              
+              e.preventDefault();
+              let nextIdx;
+              if (e.key === 'ArrowDown') {
+                nextIdx = Math.min(currentIdx + 1, focusableRows.length - 1);
+              } else {
+                nextIdx = Math.max(currentIdx - 1, 0);
+              }
+              
+              const nextRow = focusableRows[nextIdx];
+              if (nextRow) {
+                // For cluster groups, focus the perimeter or rubric
+                const focusTarget = nextRow.querySelector('.cluster-perimeter, .cluster-rubric') || nextRow;
+                focusTarget.focus();
+                // Scroll into view if needed
+                focusTarget.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }
+            }
+          });
+        }
+      },
+
+      /**
+       * Recalculate syllable indices for ribbon entries based on boundary adjustments (v5.10.25)
+       * Maps each log entry to its new display syllable based on IPA token positions
+       */
+      recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables) {
+        // Build mapping: cumulative IPA token position → new syllable index
+        // First, calculate original token ranges for each syllable
+        const originalRanges = [];
+        let tokenOffset = 0;
+        originalSyllables.forEach((syl, sylIdx) => {
+          const tokens = IpaTokenizer.tokenize(syl.ipa);
+          originalRanges.push({
+            start: tokenOffset,
+            end: tokenOffset + tokens.length,
+            sylIdx
+          });
+          tokenOffset += tokens.length;
+        });
+        
+        // Calculate display token ranges
+        const displayRanges = [];
+        let displayOffset = 0;
+        displaySyllables.forEach((syl, sylIdx) => {
+          const tokens = IpaTokenizer.tokenize(syl.ipa);
+          displayRanges.push({
+            start: displayOffset,
+            end: displayOffset + tokens.length,
+            sylIdx
+          });
+          displayOffset += tokens.length;
+        });
+        
+        // For each log entry, find which display syllable its IPA token(s) now fall into
+        // Track cumulative token position as we iterate through entries
+        let cumulativeTokenPos = 0;
+        const adjustedLog = displayLog.map(entry => {
+          const entryTokens = IpaTokenizer.tokenize(entry.ipa || '');
+          const entryTokenCount = Math.max(1, entryTokens.length); // At least 1 for positioning
+          
+          // Find which display syllable contains this token position
+          let newSylIdx = entry.syllableIndex ?? 0;
+          for (const range of displayRanges) {
+            if (cumulativeTokenPos >= range.start && cumulativeTokenPos < range.end) {
+              newSylIdx = range.sylIdx;
+              break;
+            }
+          }
+          
+          // Advance cumulative position
+          cumulativeTokenPos += entryTokenCount;
+          
+          return {
+            ...entry,
+            adjustedSyllableIndex: newSylIdx
+          };
+        });
+        
+        return adjustedLog;
+      },
+    };
+
     /* DRAWER STATE MACHINE (v6.0) — Manages left-side drawer open/close and — Root/Drill internal state transitions. */
     const DrawerState = {
       drawer: null,
@@ -8829,433 +9255,6 @@ function addAcuteToSyllable(syllable) {
       
       // Update inspector display with current word (Phase 3B)
 
-      // Render Phoneme Ribbon — extracted from Popup (C.7)
-      // Builds vertical ribbon HTML with educational blurbs
-      // Render Phoneme Ribbon - Vertical Layout (v5.5)
-      // Content First redesign: educational ribbon always visible
-      // Phase 3C: Added optional targetContainer param for drawer reuse
-      renderRibbon(wordData, targetContainer = null) {
-        const container = targetContainer || this.inspectorElements.ribbon;
-        if (!container) return;
-        
-        const log = wordData.transcriptionLog || [];
-        if (log.length === 0) {
-          container.innerHTML = '<div style="color: var(--ink-tertiary); font-size: 0.85rem; padding: 1rem; text-align: center;">No transcription data available</div>';
-          return;
-        }
-        
-        // Build displayLog with blurb data (memoized per Kimi's optimization)
-        const displayLog = RuleRegistry.buildDisplayLog(log);
-        
-        // Get boundary-adjusted syllables (v5.10.25)
-        const wordId = `${wordData.lineIndex}-${wordData.wordIndex}`;
-        const originalSyllables = wordData.syllables;
-        const displaySyllables = BoundaryStack.applyOffsets(wordId, originalSyllables);
-        const hasCustomBoundaries = BoundaryStack.hasCustomBoundaries(wordId);
-        
-        // Recalculate syllable assignments if boundaries were adjusted
-        let adjustedDisplayLog = displayLog;
-        if (hasCustomBoundaries) {
-          adjustedDisplayLog = this._recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables);
-        }
-        
-        // Group by (adjusted) syllable
-        const syllableGroups = new Map();
-        adjustedDisplayLog.forEach(entry => {
-          const sylIdx = entry.adjustedSyllableIndex ?? entry.syllableIndex ?? 0;
-          if (!syllableGroups.has(sylIdx)) {
-            syllableGroups.set(sylIdx, []);
-          }
-          syllableGroups.get(sylIdx).push(entry);
-        });
-        
-        // Get stressed syllable index
-        const syllables = wordData.syllables;
-        const stressedIdx = syllables.findIndex(s => s.isStressed);
-        
-        // Build vertical ribbon HTML
-        let html = '';
-        let isFirstSyllable = true;
-        
-        // Clitic detection (v6.0.17 - arrows replace tie bar)
-        const isProclitic = wordData.isProclitic === 'true' || wordData.isProclitic === true;
-        const isEnclitic = wordData.isEnclitic === 'true' || wordData.isEnclitic === true;
-        
-        // Proclitic blurb (approved by Dann, Feb 3 2026)
-        const procliticBlurb = `Some short words — prepositions like "в" and "на," the negation "не" — don't carry their own stress. Instead, they lean forward and attach to the word that follows, forming a single unit of pronunciation. Voicing and palatalization flow right through the boundary as if it were one word. The arrow marks this forward binding.`;
-        const procliticCitation = `Grayson (2012), pp. 248–255`;
-        
-        // Enclitic blurb (approved by Dann, Feb 3 2026)
-        const encliticBlurb = `Certain particles — "ли" (question), "же" (emphasis), "бы" (conditional) — attach backward to the word before them. They're unstressed and form a single phonological unit with their host. The same assimilation rules apply across this bond as within any word. The arrow marks this backward binding.`;
-        const encliticCitation = `Grayson (2012), pp. 248–255`;
-        
-        syllableGroups.forEach((entries, sylIdx) => {
-          const isStressed = sylIdx === stressedIdx;
-          
-          // Wrap stressed syllable in tinted region
-          if (isStressed) {
-            html += `<div class="stressed-syllable-region">`;
-          }
-          
-          // Process entries, grouping merged clusters with two-layer architecture (v5.11.30)
-          let i = 0;
-          while (i < entries.length) {
-            const entry = entries[i];
-            const blurb = entry.blurbData;
-            const isFirstInSyllable = i === 0;
-            const syllableStart = isFirstInSyllable && !isFirstSyllable && !isStressed;
-            const isSilent = entry.features?.silent || entry.ipa === '';
-            
-            // Check if this starts a merged cluster
-            if (entry.clusterMerged && entry.clusterStart) {
-              // Collect all cluster members
-              const clusterMembers = [entry];
-              let j = i + 1;
-              while (j < entries.length && entries[j].clusterSource === entry.clusterSource) {
-                clusterMembers.push(entries[j]);
-                j++;
-              }
-              
-              // Generate unique ID for this cluster group
-              const clusterId = `cluster-${entry.clusterSource}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-              
-              // Build cluster orthography string for aria-label
-              const clusterOrthography = clusterMembers.map(m => m.char).join('');
-              
-              // Render cluster group with two-layer architecture (v5.11.31)
-              // Per Kimi: rubric always visible, details accordion below
-              const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
-              html += `
-                <div class="cluster-group" id="${clusterId}"${syllableAttr}
-                     role="group"
-                     aria-label="Consonant cluster: ${clusterOrthography}"
-                     aria-expanded="false"
-                     data-cluster-ipa="${entry.ipa}"
-                     data-cluster-source="${entry.clusterSource}">
-                  <div class="cluster-perimeter" 
-                       tabindex="0" 
-                       role="button"
-                       aria-label="Show details for ${clusterOrthography} cluster"></div>
-                  ${clusterMembers.map(m => `
-                    <div class="phoneme-row cluster-member"
-                         data-cluster-id="${clusterId}">
-                      <div class="phoneme-mapping">
-                        <span class="phoneme-cyr">${m.char}</span>
-                        <span class="phoneme-arrow">›</span>
-                        <span class="phoneme-ipa">${entry.ipa}</span>
-                      </div>
-                    </div>
-                  `).join('')}
-                  <div class="cluster-overlay-container">
-                    <div class="cluster-rubric-row">
-                      <div class="cluster-connector"></div>
-                      <div class="cluster-rubric" role="button" tabindex="0">
-                        <span class="cluster-formula-ortho">${clusterOrthography}</span>
-                        <span class="cluster-formula-arrow">→</span>
-                        <span class="cluster-formula-ipa">/${entry.ipa}/</span>
-                      </div>
-                    </div>
-                    <div class="cluster-details">
-                      <div class="cluster-details-content">
-                        <div class="cluster-blurb-text">${extractBlurbText(blurb)}</div>
-                        ${blurb.citation ? `<div class="cluster-blurb-citation">${blurb.citation}</div>` : ''}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-              
-              // Skip past all cluster members
-              i = j;
-              continue;
-            }
-            
-            // Regular entry (non-cluster)
-            let rowClasses = 'phoneme-row';
-            if (isSilent) rowClasses += ' silent-letter';
-            
-            const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
-            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
-            
-            html += `
-              <div class="${rowClasses}"${syllableAttr}
-                   tabindex="0"
-                   role="button"
-                   aria-expanded="false"
-                   aria-label="${entry.char} becomes ${entry.ipa || 'nothing'}">
-                <div class="phoneme-mapping">
-                  <span class="phoneme-cyr">${entry.char}</span>
-                  <span class="phoneme-arrow">›</span>
-                  <span class="phoneme-ipa">${ipaDisplay}</span>
-                </div>
-                <div class="phoneme-blurb-overlay">
-                  <div class="blurb-text">${extractBlurbText(blurb)}</div>
-                  ${blurb.citation ? `<div class="blurb-citation">${blurb.citation}</div>` : ''}
-                </div>
-              </div>
-            `;
-            
-            i++;
-          }
-          
-          if (isStressed) {
-            html += `</div>`;
-          }
-          
-          isFirstSyllable = false;
-        });
-        
-        // Clitic arrow at END of ribbon (v6.0.17 - replaces tie bar)
-        // Proclitic: → points forward to host
-        // Enclitic: ← points backward to host
-        if (isProclitic) {
-          html += `
-            <div class="phoneme-row clitic-arrow-row" 
-                 tabindex="0"
-                 role="button"
-                 aria-expanded="false"
-                 aria-label="Proclitic - this word attaches to the next">
-              <div class="phoneme-mapping">
-                <span class="arrow-symbol">→</span>
-                <span class="arrow-label">proclitic</span>
-              </div>
-              <div class="phoneme-blurb-overlay">
-                <div class="blurb-text">${procliticBlurb}</div>
-                <div class="blurb-citation">${procliticCitation}</div>
-              </div>
-            </div>
-          `;
-        }
-        
-        if (isEnclitic) {
-          html += `
-            <div class="phoneme-row clitic-arrow-row" 
-                 tabindex="0"
-                 role="button"
-                 aria-expanded="false"
-                 aria-label="Enclitic - this word attaches to the previous">
-              <div class="phoneme-mapping">
-                <span class="arrow-symbol">←</span>
-                <span class="arrow-label">enclitic</span>
-              </div>
-              <div class="phoneme-blurb-overlay">
-                <div class="blurb-text">${encliticBlurb}</div>
-                <div class="blurb-citation">${encliticCitation}</div>
-              </div>
-            </div>
-          `;
-        }
-        
-        // Add backdrop at end (positioned via CSS)
-        html += `<div class="ribbon-backdrop"></div>`;
-        
-        container.innerHTML = html;
-        
-        // Event delegation for floating overlay (v5.5)
-        // Updated v5.11.31: Universal click-outside dismiss, cluster rubric always visible
-        // Only attach once per container to avoid stacking handlers
-        if (!container._ribbonListenerAttached) {
-          container._ribbonListenerAttached = true;
-          
-          container.addEventListener('click', (e) => {
-            const row = e.target.closest('.phoneme-row:not(.cluster-member)');
-            const clusterGroup = e.target.closest('.cluster-group');
-            const clusterPerimeter = e.target.closest('.cluster-perimeter');
-            const clusterRubric = e.target.closest('.cluster-rubric');
-            const clusterDetails = e.target.closest('.cluster-details');
-            const phonemeBlurb = e.target.closest('.phoneme-blurb-overlay');
-            const backdrop = container.querySelector('.ribbon-backdrop');
-            
-            // UNIVERSAL DISMISS: Close any expanded blurb if clicking outside its content
-            const activeRow = container.querySelector('.phoneme-row.expanded');
-            const activeCluster = container.querySelector('.cluster-group.active');
-            
-            // If clicking inside an open phoneme blurb, do nothing (let user read)
-            if (phonemeBlurb && activeRow) {
-              return;
-            }
-            
-            // If clicking inside cluster details, do nothing (let user read)
-            if (clusterDetails && activeCluster) {
-              return;
-            }
-            
-            // Close active phoneme blurb if clicking anywhere else
-            if (activeRow && !row?.classList.contains('expanded')) {
-              activeRow.classList.remove('expanded');
-              activeRow.setAttribute('aria-expanded', 'false');
-              container.classList.remove('has-active-blurb');
-              backdrop?.classList.remove('active');
-            }
-            
-            // Close active cluster if clicking outside the cluster region entirely
-            if (activeCluster && !clusterGroup) {
-              activeCluster.classList.remove('active');
-              activeCluster.setAttribute('aria-expanded', 'false');
-            }
-            
-            // Handle cluster clicks (perimeter, rubric, or connector area)
-            if (clusterGroup && (clusterPerimeter || clusterRubric)) {
-              e.stopPropagation();
-              
-              const wasActive = clusterGroup.classList.contains('active');
-              
-              // Close any other active cluster
-              container.querySelectorAll('.cluster-group.active').forEach(c => {
-                if (c !== clusterGroup) {
-                  c.classList.remove('active');
-                  c.setAttribute('aria-expanded', 'false');
-                }
-              });
-              
-              // Toggle clicked cluster group
-              if (wasActive) {
-                clusterGroup.classList.remove('active');
-                clusterGroup.setAttribute('aria-expanded', 'false');
-              } else {
-                clusterGroup.classList.add('active');
-                clusterGroup.setAttribute('aria-expanded', 'true');
-              }
-              return;
-            }
-            
-            // Handle regular row clicks
-            if (!row) return;
-            
-            // Dismiss toast on phoneme interaction (v5.11.47 lifecycle)
-            this.hideYoToast();
-            
-            e.stopPropagation();
-            const wasExpanded = row.classList.contains('expanded');
-            
-            // Toggle clicked row
-            if (wasExpanded) {
-              row.classList.remove('expanded');
-              row.setAttribute('aria-expanded', 'false');
-              container.classList.remove('has-active-blurb');
-              backdrop?.classList.remove('active');
-            } else {
-              row.classList.add('expanded');
-              row.setAttribute('aria-expanded', 'true');
-              container.classList.add('has-active-blurb');
-              backdrop?.classList.add('active');
-            }
-          });
-          
-          // Keyboard accessibility (cluster perimeter/rubric + regular rows)
-          container.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              const row = e.target.closest('.phoneme-row:not(.cluster-member)');
-              const perimeter = e.target.closest('.cluster-perimeter');
-              const rubric = e.target.closest('.cluster-rubric');
-              
-              if (perimeter || rubric) {
-                e.preventDefault();
-                (perimeter || rubric).click();
-              } else if (row) {
-                e.preventDefault();
-                row.click();
-              }
-            }
-            // Escape to close
-            if (e.key === 'Escape') {
-              const backdrop = container.querySelector('.ribbon-backdrop');
-              container.querySelectorAll('.phoneme-row.expanded, .cluster-group.active').forEach(r => {
-                r.classList.remove('expanded');
-                r.classList.remove('active');
-                r.setAttribute('aria-expanded', 'false');
-              });
-              container.classList.remove('has-active-blurb');
-              backdrop?.classList.remove('active');
-            }
-            
-            // Phase 4D: Arrow key navigation through ribbon rows
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-              const focusableRows = [...container.querySelectorAll('.phoneme-row:not(.cluster-member), .cluster-group, .clitic-arrow-row')];
-              const currentIdx = focusableRows.findIndex(row => row.contains(e.target) || row === e.target);
-              
-              if (currentIdx === -1) return;
-              
-              e.preventDefault();
-              let nextIdx;
-              if (e.key === 'ArrowDown') {
-                nextIdx = Math.min(currentIdx + 1, focusableRows.length - 1);
-              } else {
-                nextIdx = Math.max(currentIdx - 1, 0);
-              }
-              
-              const nextRow = focusableRows[nextIdx];
-              if (nextRow) {
-                // For cluster groups, focus the perimeter or rubric
-                const focusTarget = nextRow.querySelector('.cluster-perimeter, .cluster-rubric') || nextRow;
-                focusTarget.focus();
-                // Scroll into view if needed
-                focusTarget.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-              }
-            }
-          });
-        }
-      },
-      
-      /**
-       * Recalculate syllable indices for ribbon entries based on boundary adjustments (v5.10.25)
-       * Maps each log entry to its new display syllable based on IPA token positions
-       */
-      _recalculateSyllableIndices(displayLog, originalSyllables, displaySyllables) {
-        // Build mapping: cumulative IPA token position → new syllable index
-        // First, calculate original token ranges for each syllable
-        const originalRanges = [];
-        let tokenOffset = 0;
-        originalSyllables.forEach((syl, sylIdx) => {
-          const tokens = IpaTokenizer.tokenize(syl.ipa);
-          originalRanges.push({
-            start: tokenOffset,
-            end: tokenOffset + tokens.length,
-            sylIdx
-          });
-          tokenOffset += tokens.length;
-        });
-        
-        // Calculate display token ranges
-        const displayRanges = [];
-        let displayOffset = 0;
-        displaySyllables.forEach((syl, sylIdx) => {
-          const tokens = IpaTokenizer.tokenize(syl.ipa);
-          displayRanges.push({
-            start: displayOffset,
-            end: displayOffset + tokens.length,
-            sylIdx
-          });
-          displayOffset += tokens.length;
-        });
-        
-        // For each log entry, find which display syllable its IPA token(s) now fall into
-        // Track cumulative token position as we iterate through entries
-        let cumulativeTokenPos = 0;
-        const adjustedLog = displayLog.map(entry => {
-          const entryTokens = IpaTokenizer.tokenize(entry.ipa || '');
-          const entryTokenCount = Math.max(1, entryTokens.length); // At least 1 for positioning
-          
-          // Find which display syllable contains this token position
-          let newSylIdx = entry.syllableIndex ?? 0;
-          for (const range of displayRanges) {
-            if (cumulativeTokenPos >= range.start && cumulativeTokenPos < range.end) {
-              newSylIdx = range.sylIdx;
-              break;
-            }
-          }
-          
-          // Advance cumulative position
-          cumulativeTokenPos += entryTokenCount;
-          
-          return {
-            ...entry,
-            adjustedSyllableIndex: newSylIdx
-          };
-        });
-        
-        return adjustedLog;
-      },
 
       updateInspector() {
         if (!this.currentWord) return;
@@ -9344,7 +9343,7 @@ function addAcuteToSyllable(syllable) {
         
         // Phoneme Ribbon (Phase 3C) - render phoneme ribbon in drawer
         if (this.inspectorElements.ribbon) {
-          this.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
+          RibbonRenderer.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
         }
         
         // Phase 4A: Reset scroll to top on every word selection
@@ -10108,7 +10107,7 @@ function addAcuteToSyllable(syllable) {
         
         // Re-render ribbon with updated syllable groupings
         if (this.inspectorElements.ribbon) {
-          this.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
+          RibbonRenderer.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
         }
       },
       
