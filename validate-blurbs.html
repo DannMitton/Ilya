@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ilya — Blurb Composer Audit</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+    h2 {
+      font-size: 1.1rem;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.25rem;
+    }
+    .summary {
+      background: #f7f7f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.2rem 0;
+    }
+    .summary-row.complete { color: #2a7d3f; }
+    .summary-row.partial { color: #b8860b; }
+    .summary-row.empty { color: #999; }
+    .bar-container {
+      width: 120px;
+      height: 14px;
+      background: #e8e8e8;
+      border-radius: 3px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 0.5rem;
+    }
+    .bar-fill {
+      height: 100%;
+      background: #2a7d3f;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+    .bar-fill.partial { background: #daa520; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      background: #f0eeeb;
+      border-bottom: 2px solid #ccc;
+      font-weight: 600;
+    }
+    td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid #eee;
+    }
+    .present { color: #2a7d3f; }
+    .missing { color: #c44; }
+    .orphan { color: #b8860b; }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .tag-present { background: #e6f4ea; color: #2a7d3f; }
+    .tag-missing { background: #fde8e8; color: #c44; }
+    .tag-orphan { background: #fef3d4; color: #96700a; }
+    .key { font-family: monospace; font-size: 0.85rem; }
+    .note {
+      font-size: 0.85rem;
+      color: #666;
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+    #loading { text-align: center; padding: 3rem; color: #999; }
+    #error { color: #c44; padding: 1rem; display: none; }
+  </style>
+</head>
+<body>
+  <h1>Blurb Composer Audit</h1>
+  <p class="subtitle">Development tool — validates IPI coverage in blurb-composer.json</p>
+  <div id="loading">Loading blurb-composer.json…</div>
+  <div id="error"></div>
+  <div id="report" style="display:none;"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // EXPECTED MATRIX — all (char, rule) pairs the engine can produce
+    // ═══════════════════════════════════════════════════════════════
+    
+    // All Cyrillic graphemes that need Identity entries
+    const VOWELS = ['а', 'я', 'о', 'ё', 'у', 'ю', 'ы', 'э', 'е', 'и'];
+    const SIGNS = ['ь', 'ъ'];
+    const CONSONANTS = ['б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ'];
+    const ALL_GRAPHEMES = [...VOWELS, ...SIGNS, ...CONSONANTS];
+    
+    // Reducing vowels (change sound in unstressed positions)
+    const REDUCING_HARD = ['а', 'о', 'э'];         // After hard consonants
+    const REDUCING_SOFT = ['я', 'е'];               // Soft-vowel counterparts
+    const REDUCING_ALL = [...REDUCING_HARD, ...REDUCING_SOFT];
+    
+    // Non-reducing vowels (same sound stressed or unstressed)
+    const NON_REDUCING = ['у', 'ю', 'ы', 'и', 'ё'];
+    
+    // Consonants that can be hard or soft (paired)
+    const PAIRED_CONSONANTS = ['б', 'в', 'г', 'д', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х'];
+    
+    // Consonants subject to voicing rules
+    const VOICED_OBSTRUENTS = ['б', 'в', 'г', 'д', 'ж', 'з'];
+    
+    // Always-hard, always-soft
+    const ALWAYS_HARD = ['ж', 'ш', 'ц'];
+    const ALWAYS_SOFT = ['ч', 'щ'];
+    
+    // Build the expected Process keys: rule:char
+    function buildExpectedProcesses() {
+      const expected = [];
+      
+      // --- Vowel positions ---
+      // Stressed: all vowels
+      VOWELS.forEach(v => expected.push(`stressed:${v}`));
+      
+      // Stressed interpalatal: е, э (between soft consonants)
+      ['е', 'э'].forEach(v => expected.push(`stressed-interpalatal:${v}`));
+      
+      // Pretonic: reducing vowels
+      REDUCING_ALL.forEach(v => expected.push(`pretonic:${v}`));
+      // и in pretonic (after hard → after-hard takes over, but standard pretonic exists)
+      expected.push('pretonic:и');
+      
+      // Initial: reducing vowels in word-initial position
+      REDUCING_ALL.forEach(v => expected.push(`initial:${v}`));
+      
+      // Remote: reducing vowels in remote unstressed position
+      REDUCING_ALL.forEach(v => expected.push(`remote:${v}`));
+      
+      // Post-stress immediate
+      REDUCING_ALL.forEach(v => expected.push(`post-stress-immediate:${v}`));
+      
+      // After hard: и and е after ж, ш, ц
+      ['и', 'е'].forEach(v => expected.push(`after-hard:${v}`));
+      
+      // Unstressed (non-reducing vowels — generic fallback)
+      NON_REDUCING.forEach(v => expected.push(`unstressed:${v}`));
+      
+      // --- Consonant states ---
+      // Hard and soft for paired consonants
+      PAIRED_CONSONANTS.forEach(c => {
+        expected.push(`hard:${c}`);
+        expected.push(`soft:${c}`);
+      });
+      
+      // Always-hard, always-soft, glide
+      ALWAYS_HARD.forEach(c => expected.push(`always-hard:${c}`));
+      ALWAYS_SOFT.forEach(c => expected.push(`always-soft:${c}`));
+      expected.push('glide:й');
+      
+      // --- Assimilation processes ---
+      VOICED_OBSTRUENTS.forEach(c => {
+        expected.push(`final-devoicing:${c}`);
+        expected.push(`regressive-devoicing:${c}`);
+        expected.push(`regressive-voicing:${c}`);
+      });
+      
+      // Special cases
+      expected.push('genitive:г');
+      expected.push('bog-exception:г');
+      
+      // --- Signs ---
+      expected.push('soft-sign:ь');
+      expected.push('hard-sign:ъ');
+      
+      // --- J-glide sources ---
+      // These use the triggeredBy vowel as the char, but the composer
+      // uses its own key format. Include the main variants.
+      expected.push('j-after-vowel:е');
+      expected.push('j-after-vowel:я');
+      expected.push('j-after-vowel:ю');
+      expected.push('j-after-sign:е');
+      expected.push('j-after-sign:я');
+      expected.push('j-after-sign:ю');
+      expected.push('j-after-sign:ё');
+      expected.push('j-ii-suffix:и');
+      
+      // --- Profile-conditional ---
+      // щ has Muscovite/Peterburgian variants (may be handled via profile variable)
+      // These are tracked but may share the always-soft:щ process key
+      
+      return expected;
+    }
+    
+    // ═══════════════════════════════════════════════════════════════
+    // AUDIT LOGIC
+    // ═══════════════════════════════════════════════════════════════
+    
+    async function runAudit() {
+      const loadingEl = document.getElementById('loading');
+      const errorEl = document.getElementById('error');
+      const reportEl = document.getElementById('report');
+      
+      let data;
+      try {
+        const response = await fetch('data/blurb-composer.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        data = await response.json();
+      } catch (e) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorEl.textContent = `Failed to load data/blurb-composer.json: ${e.message}. Run this file from the Ilya repo root.`;
+        return;
+      }
+      
+      loadingEl.style.display = 'none';
+      reportEl.style.display = 'block';
+      
+      const identities = data.identities || {};
+      const processes = data.processes || {};
+      const implications = data.implications || {};
+      const expectedProcesses = buildExpectedProcesses();
+      
+      // --- Identity audit ---
+      const identityPresent = ALL_GRAPHEMES.filter(g => identities[g]);
+      const identityMissing = ALL_GRAPHEMES.filter(g => !identities[g]);
+      const identityOrphans = Object.keys(identities).filter(k => !ALL_GRAPHEMES.includes(k));
+      
+      // --- Process audit ---
+      const processPresent = expectedProcesses.filter(k => processes[k]);
+      const processMissing = expectedProcesses.filter(k => !processes[k]);
+      const processOrphans = Object.keys(processes).filter(k => !expectedProcesses.includes(k));
+      
+      // --- Implication audit ---
+      // Implications are optional but tracked. Report which processes have them.
+      const implPresent = expectedProcesses.filter(k => implications[k]);
+      const implOrphans = Object.keys(implications).filter(k => !expectedProcesses.includes(k));
+      
+      // --- French coverage ---
+      const identityNoFr = Object.entries(identities).filter(([k, v]) => !v.fr).map(([k]) => k);
+      const processNoFr = Object.entries(processes).filter(([k, v]) => !v.fr).map(([k]) => k);
+      const implNoFr = Object.entries(implications).filter(([k, v]) => !v.fr).map(([k]) => k);
+      
+      // --- Legacy fallback estimate ---
+      const totalLookups = ALL_GRAPHEMES.length + expectedProcesses.length;
+      const composerCoverage = identityPresent.length + processPresent.length;
+      const legacyFallbacks = totalLookups - composerCoverage;
+      
+      // ═══════════════════════════════════════════════════════════
+      // RENDER REPORT
+      // ═══════════════════════════════════════════════════════════
+      
+      let html = '';
+      
+      // Summary
+      const idPct = ALL_GRAPHEMES.length > 0 ? Math.round(identityPresent.length / ALL_GRAPHEMES.length * 100) : 0;
+      const prPct = expectedProcesses.length > 0 ? Math.round(processPresent.length / expectedProcesses.length * 100) : 0;
+      const imPct = expectedProcesses.length > 0 ? Math.round(implPresent.length / expectedProcesses.length * 100) : 0;
+      
+      html += `<div class="summary">`;
+      html += summaryRow('Identities', identityPresent.length, ALL_GRAPHEMES.length, idPct);
+      html += summaryRow('Processes', processPresent.length, expectedProcesses.length, prPct);
+      html += summaryRow('Implications', implPresent.length, expectedProcesses.length, imPct);
+      html += `<div class="summary-row" style="margin-top:0.5rem; border-top:1px solid #ddd; padding-top:0.5rem;">
+        <span>Legacy fallbacks needed</span>
+        <span><strong>${legacyFallbacks}</strong> of ${totalLookups} lookups</span>
+      </div>`;
+      html += `</div>`;
+      
+      // Identity detail
+      html += `<h2>Identities (${identityPresent.length}/${ALL_GRAPHEMES.length})</h2>`;
+      html += buildTable(
+        ['Grapheme', 'Status', 'French'],
+        ALL_GRAPHEMES.map(g => [
+          g,
+          identities[g] ? tag('present', '✓') : tag('missing', 'missing'),
+          identities[g] ? (identities[g].fr ? tag('present', '✓') : tag('missing', 'no fr')) : '—'
+        ])
+      );
+      if (identityOrphans.length > 0) {
+        html += `<p class="note">Orphaned identity keys (not in expected set): ${identityOrphans.map(k => `<span class="key">${k}</span>`).join(', ')}</p>`;
+      }
+      
+      // Process detail — group by category for readability
+      html += `<h2>Processes (${processPresent.length}/${expectedProcesses.length})</h2>`;
+      
+      const processCategories = [
+        { label: 'Vowel — stressed', keys: expectedProcesses.filter(k => k.startsWith('stressed')) },
+        { label: 'Vowel — pretonic', keys: expectedProcesses.filter(k => k.startsWith('pretonic:')) },
+        { label: 'Vowel — initial', keys: expectedProcesses.filter(k => k.startsWith('initial:')) },
+        { label: 'Vowel — remote', keys: expectedProcesses.filter(k => k.startsWith('remote:')) },
+        { label: 'Vowel — post-stress', keys: expectedProcesses.filter(k => k.startsWith('post-stress')) },
+        { label: 'Vowel — after hard', keys: expectedProcesses.filter(k => k.startsWith('after-hard:')) },
+        { label: 'Vowel — unstressed (non-reducing)', keys: expectedProcesses.filter(k => k.startsWith('unstressed:')) },
+        { label: 'Consonant — hard/soft', keys: expectedProcesses.filter(k => /^(hard|soft):/.test(k)) },
+        { label: 'Consonant — always-hard/soft/glide', keys: expectedProcesses.filter(k => /^(always-hard|always-soft|glide):/.test(k)) },
+        { label: 'Assimilation — final devoicing', keys: expectedProcesses.filter(k => k.startsWith('final-devoicing:')) },
+        { label: 'Assimilation — regressive devoicing', keys: expectedProcesses.filter(k => k.startsWith('regressive-devoicing:')) },
+        { label: 'Assimilation — regressive voicing', keys: expectedProcesses.filter(k => k.startsWith('regressive-voicing:')) },
+        { label: 'Special', keys: expectedProcesses.filter(k => /^(genitive|bog-exception):/.test(k)) },
+        { label: 'Signs', keys: expectedProcesses.filter(k => /^(soft-sign|hard-sign):/.test(k)) },
+        { label: 'J-glides', keys: expectedProcesses.filter(k => k.startsWith('j-')) }
+      ];
+      
+      processCategories.forEach(cat => {
+        if (cat.keys.length === 0) return;
+        html += `<h3 style="font-size:0.9rem; margin-top:1rem; color:#555;">${cat.label}</h3>`;
+        html += buildTable(
+          ['Key', 'Status', 'Implication', 'French'],
+          cat.keys.map(k => [
+            `<span class="key">${k}</span>`,
+            processes[k] ? tag('present', '✓') : tag('missing', 'missing'),
+            implications[k] ? tag('present', '✓') : tag('orphan', '—'),
+            processes[k] ? (processes[k].fr ? tag('present', '✓') : tag('missing', 'no fr')) : '—'
+          ])
+        );
+      });
+      
+      if (processOrphans.length > 0) {
+        html += `<h3 style="font-size:0.9rem; margin-top:1rem; color:#b8860b;">Orphaned process keys</h3>`;
+        html += `<p class="note">These keys exist in blurb-composer.json but are not in the expected matrix:</p>`;
+        html += buildTable(
+          ['Key'],
+          processOrphans.map(k => [`<span class="key orphan">${k}</span>`])
+        );
+      }
+      
+      // Implication orphans
+      if (implOrphans.length > 0) {
+        html += `<h2>Orphaned Implications</h2>`;
+        html += `<p class="note">These implication keys don't match any expected process:</p>`;
+        html += buildTable(
+          ['Key'],
+          implOrphans.map(k => [`<span class="key orphan">${k}</span>`])
+        );
+      }
+      
+      reportEl.innerHTML = html;
+    }
+    
+    // ═══════════════════════════════════════════════════════════════
+    // HTML HELPERS
+    // ═══════════════════════════════════════════════════════════════
+    
+    function summaryRow(label, count, total, pct) {
+      const cls = pct === 100 ? 'complete' : pct > 0 ? 'partial' : 'empty';
+      const barCls = pct > 0 && pct < 100 ? 'partial' : '';
+      return `<div class="summary-row ${cls}">
+        <span>${label}</span>
+        <span>
+          <strong>${count}</strong> / ${total} (${pct}%)
+          <span class="bar-container"><span class="bar-fill ${barCls}" style="width:${pct}%"></span></span>
+        </span>
+      </div>`;
+    }
+    
+    function tag(type, text) {
+      return `<span class="tag tag-${type}">${text}</span>`;
+    }
+    
+    function buildTable(headers, rows) {
+      let html = '<table><thead><tr>';
+      headers.forEach(h => html += `<th>${h}</th>`);
+      html += '</tr></thead><tbody>';
+      rows.forEach(row => {
+        html += '<tr>';
+        row.forEach(cell => html += `<td>${cell}</td>`);
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      return html;
+    }
+    
+    // Run on load
+    runAudit();
+  </script>
+</body>
+</html>
