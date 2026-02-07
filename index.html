@@ -4793,7 +4793,6 @@ function addAcuteToSyllable(syllable) {
       activeLabel: null,
       paperSizeBtns: null,
       pageNumberEl: null,
-      paper: null,
       currentSize: 'letter',
       lineHeightCache: null,
       lineHeightCacheHash: null,
@@ -4807,7 +4806,6 @@ function addAcuteToSyllable(syllable) {
         this.activeLabel = document.getElementById('documentActive');
         this.paperSizeBtns = document.querySelectorAll('.paper-size-btn');
         this.pageNumberEl = document.getElementById('pageNumber');
-        this.paper = document.querySelector('.paper');
         if (!this.section) return;
         this.header.addEventListener('click', () => {
           this.section.classList.toggle('expanded');
@@ -4828,14 +4826,15 @@ function addAcuteToSyllable(syllable) {
           btn.classList.toggle('active', btn.dataset.size === size);
         });
         this.activeLabel.textContent = size === 'letter' ? 'Letter (8.5×11)' : 'A4 (210×297)';
-        this.paper?.classList.add('reflowing');
-        if (size === 'a4') {
-          this.paper?.setAttribute('data-size', 'a4');
-        } else {
-          this.paper?.removeAttribute('data-size');
-        }
+        const pages = document.querySelectorAll('.paper-page');
+        pages.forEach(page => {
+          if (size === 'a4') {
+            page.setAttribute('data-size', 'a4');
+          } else {
+            page.removeAttribute('data-size');
+          }
+        });
         setTimeout(() => {
-          this.paper?.classList.remove('reflowing');
           this.updatePageCount();
         }, 400);
       },
