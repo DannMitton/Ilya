@@ -1,0 +1,21 @@
+{
+  "identities": {},
+  "processes": {},
+  "implications": {},
+  "citation_style": {
+    "en": {
+      "template": "(Grayson, {pages})",
+      "separator": ", ",
+      "range_marker": "–",
+      "singular": "p.",
+      "plural": "pp."
+    },
+    "fr": {
+      "template": "(Grayson, {pages})",
+      "separator": ", ",
+      "range_marker": "–",
+      "singular": "p.",
+      "plural": "pp."
+    }
+  }
+}
