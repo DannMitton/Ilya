@@ -5014,7 +5014,7 @@ function addAcuteToSyllable(syllable) {
           
           // Re-render if content exists
           if (DocumentState.lines.length > 0) {
-            DrawerController.renderToPaper();
+            PaperRenderer.render();
           }
         }
       },
@@ -5074,7 +5074,7 @@ function addAcuteToSyllable(syllable) {
         DocumentState.userName = name || '';
         // Re-render to update footers
         if (DocumentState.lines.length > 0) {
-          DrawerController.renderToPaper();
+          PaperRenderer.render();
         }
       },
       
@@ -5082,7 +5082,7 @@ function addAcuteToSyllable(syllable) {
         // In multi-page mode, metadata is embedded in page templates
         // Re-render to update headers with new metadata
         if (DocumentState.lines.length > 0) {
-          DrawerController.renderToPaper();
+          PaperRenderer.render();
         }
       },
       
@@ -5097,179 +5097,13 @@ function addAcuteToSyllable(syllable) {
       }
     };
 
-    /* DRAWER CONTROLLER */
-    const DrawerController = {
-      // Phase 2C: Now uses left drawer elements directly
-      textInput: null,
-      clearBtn: null,
-      charCounter: null,
-      // OCR elements
-      ocrScanBtn: null,
-      ocrFileInput: null,
-      ocrStatus: null,
-      ocrStatusText: null,
-      
-      init() {
-        // Phase 2C: Use left drawer elements
-        this.textInput = document.getElementById('drawerTextInput');
-        this.clearBtn = document.getElementById('drawerClearBtn');
-        this.charCounter = document.getElementById('drawerCharCounter');
-        
-        // OCR elements (in left drawer)
-        this.ocrScanBtn = document.getElementById('drawerOcrBtn');
-        this.ocrFileInput = document.getElementById('drawerOcrFileInput');
-        this.ocrStatus = document.getElementById('drawerOcrStatus');
-        this.ocrStatusText = this.ocrStatus?.querySelector('.ocr-status-text');
-        
-        // Initialize OCR (lazy-loads Tesseract in background)
-        this.initOCR();
-        
-        // Update character counter when text changes
-        this.textInput?.addEventListener('input', () => this.updateCharCounter());
-        
-        // Clear button
-        this.clearBtn?.addEventListener('click', () => this.clear());
-      },
-      
-      updateCharCounter() {
-        if (!this.charCounter || !this.textInput) return;
-        const len = this.textInput.value.length;
-        if (len > 0) {
-          this.charCounter.textContent = `${len} ${UI_LABELS['counter.chars'][currentGlossLanguage || 'en']}`;
-          this.charCounter.classList.add('visible');
-          this.charCounter.classList.toggle('warning', len > 5000);
-          this.charCounter.classList.toggle('error', len > 10000);
-        } else {
-          this.charCounter.classList.remove('visible');
-        }
-      },
-      
-      clear() {
-        // If there's transcribed content, confirm before clearing
-        if (DocumentState.lines.length > 0) {
-          const msg = currentGlossLanguage === 'fr'
-            ? 'Effacer la transcription ? Cette action est irréversible.'
-            : 'Clear transcription? This cannot be undone.';
-          if (!confirm(msg)) {
-            return;
-          }
-        }
-        
-        // Clear input field
-        if (this.textInput) this.textInput.value = '';
-        this.updateCharCounter();
-        
-        // Clear document state
-        DocumentState.lines = [];
-        
-        // Re-render to show empty page with ghost text
-        this.renderToPaper();
-        
-        this.textInput?.focus();
-      },
-      
-      async transcribe() {
-        const text = this.textInput?.value?.trim() || '';
-        if (!text) {
-          this.textInput?.focus();
-          return;
-        }
-
-        // Ensure dictionary and supplement are loaded before any lookup
-        if (_supplementLoadPromise) {
-          await _supplementLoadPromise;
-        }
-        
-        // Parse lines into words
-        const lines = text.split('\n').filter(line => line.trim());
-        
-        // Invalidate pre-measurement cache when new content arrives (v5.11.17)
-        PaperManager.invalidateCache();
-        
-        // Convert to DocumentState format with dictionary lookup
-        DocumentState.lines = lines.map(line => {
-          const words = line.trim().split(/\s+/)
-            // Filter out punctuation-only tokens (v5.11.8)
-            .filter(word => {
-              const cleaned = word.replace(/[.,!?;:"""''–—\-]/g, '');
-              return cleaned.length > 0;
-            });
-          return words.map(word => {
-            const lookup = GraysonEngine.lookupStress(word);
-            
-            // Determine the display form (may be ё-restored)
-            let displayWord = word;
-            let wasYoRestored = false;
-            let dictionaryForm = null;
-            
-            if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
-              // Restore ё while preserving original case pattern
-              displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
-              dictionaryForm = displayWord;  // Store what Ilya found
-              wasYoRestored = true;
-            }
-            
-            // ё always carries stress — check the display form (which may now have ё)
-            const yoSyllable = GraysonEngine.findYoSyllable(displayWord);
-            let stress, stressSource, yoSource;
-            
-            if (yoSyllable !== -1) {
-              // ё found: stress is locked to that syllable
-              stress = yoSyllable;
-              stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
-              yoSource = wasYoRestored ? 'yo-restored' : null;  // null = native ё, no intervention
-            } else if (lookup) {
-              stress = lookup.stress;
-              stressSource = lookup.source;
-              yoSource = null;
-            } else {
-              // Unknown word: default to first syllable, marked for user verification
-              stress = 0;
-              stressSource = 'inferred';
-              yoSource = null;
-            }
-            
-            return {
-              cyrillic: displayWord,
-              stress: stress,
-              gloss: lookup ? lookup.gloss : '',
-              pos: lookup ? lookup.pos : '',
-              lemma: lookup ? lookup.lemma : '',
-              isHomograph: lookup ? lookup.isHomograph : false,
-              originalStress: stress,
-              stressSource: stressSource,
-              hasYo: yoSyllable !== -1,
-              originalInput: wasYoRestored ? word : null,  // What user typed (if different)
-              dictionaryForm: dictionaryForm,              // What Ilya found (if restored)
-              yoSource: yoSource,                          // yo-restored | user-yo-edit | null
-              rightBoundary: null,
-              boundarySource: null
-            };
-          });
-        }).filter(line => line.length > 0);  // Remove empty lines (v5.11.8)
-        
-        // Auto-detect boundary types for each line
-        DocumentState.lines.forEach(line => {
-          GraysonEngine.autoDetectBoundaries(line);
-        });
-        
-        // Render to paper
-        this.renderToPaper();
-        
-        // Close drawer after transcription
-        DrawerState.close();
-      },
-      
-      renderToPaper(fallbackMode = false) {
+    /* PAPER RENDERER — Paper DOM construction and page layout */
+    const PaperRenderer = {
+      render(fallbackMode = false) {
         const paperStack = document.getElementById('paperStack');
         const paperSize = PaperManager.getSize();
-        
         if (!paperStack) return;
-        
-        // Clear existing pages
         paperStack.innerHTML = '';
-        
-        // If no content, show empty title page with ghost text
         if (!DocumentState.lines || DocumentState.lines.length === 0) {
           const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
           paperStack.appendChild(emptyPage);
@@ -5277,20 +5111,12 @@ function addAcuteToSyllable(syllable) {
           DashboardController.updateExportButton();
           return;
         }
-        
-        // PHASE 1-2.5: Transcribe all lines
-        const transcribedLines = this.transcribeAllLines();
-        
-        // Distribute lines to pages
-        // Normal mode: 6/8, Fallback mode: 5/7 (guaranteed safe)
+        const transcribedLines = InputManager.transcribeAllLines();
         const targets = fallbackMode 
           ? { page1: 5, subsequent: 7 }
           : { page1: 6, subsequent: 8 };
-        
         const pages = PaperManager.distributeToPages(transcribedLines, targets, paperSize);
         const totalPages = pages.length;
-        
-        // Render each page
         pages.forEach((pageData, pageIdx) => {
           const pageElement = this.createPageElement(
             pageData.pageNumber,
@@ -5301,56 +5127,35 @@ function addAcuteToSyllable(syllable) {
           );
           paperStack.appendChild(pageElement);
         });
-        
-        // POST-RENDER OVERFLOW CHECK (v5.11.19)
-        // If overflow detected and not already in fallback mode, re-render with reduced counts
         if (!fallbackMode) {
           const hasOverflow = this.detectOverflow();
           if (hasOverflow) {
-            this.renderToPaper(true); // Recursive call with fallback
+            this.render(true);
             return;
           }
         }
-        
-        // Update page count display and export button state
         PaperManager.updatePageCount();
         DashboardController.updateExportButton();
       },
-      
-      /**
-       * Detect if any page has content overflow (v5.11.19)
-       * Returns true if any last verse-line extends into footer zone
-       */
       detectOverflow() {
         const pages = document.querySelectorAll('.paper-page');
         let hasOverflow = false;
-        
         pages.forEach((page, idx) => {
           const pageContent = page.querySelector('.page-content');
           const footer = page.querySelector('.page-footer');
-          
           if (!pageContent || !footer) return;
-          
           const lastVerseLine = pageContent.querySelector('.verse-line:last-child');
           if (!lastVerseLine) return;
-          
           const lineRect = lastVerseLine.getBoundingClientRect();
           const footerRect = footer.getBoundingClientRect();
           const lineBottom = lineRect.bottom;
           const footerTop = footerRect.top;
-          
-          // 20px safety margin
           if (lineBottom > footerTop - 20) {
             hasOverflow = true;
           }
         });
-        
         return hasOverflow;
       },
-      
-      /**
-       * Create a single page element with header, content, and footer
-       */
       createPageElement(pageNumber, template, lines, totalPages, paperSize) {
         const page = document.createElement('article');
         page.className = 'paper-page';
@@ -5359,30 +5164,21 @@ function addAcuteToSyllable(syllable) {
         if (paperSize === 'a4') {
           page.setAttribute('data-size', 'a4');
         }
-        
-        // Get metadata from dashboard
         const title = DashboardController.titleInput?.value || UI_LABELS['paper.songTitle'][currentGlossLanguage || 'en'];
         const opus = DashboardController.opusInput?.value || '';
-        // Format name from "Lastname, Firstname" to "Firstname Lastname"
         const formatNameForDisplay = (item) => {
           if (!item) return '';
           const name = item.latin || '';
           const dates = item.dates || '';
-          // Split "Lastname, Firstname" and reverse
           const parts = name.split(',').map(p => p.trim());
           const displayName = parts.length > 1 ? `${parts[1]} ${parts[0]}` : name;
           return dates ? `${displayName} (${dates})` : displayName;
         };
-        
         const composerDisplay = formatNameForDisplay(DashboardController.composerSelect?.selectedValue);
         const poetDisplay = formatNameForDisplay(DashboardController.poetSelect?.selectedValue);
-        // For running header, keep surname only
         const composerSurname = DashboardController.composerSelect?.selectedValue?.latin?.split(',')[0]?.trim() || '';
-        
         let headerHTML = '';
-        
         if (template === 'title') {
-          // Page 1: Full title block with logo
           headerHTML = `
             <div class="page-logo">
               <span class="bracket">[</span>
@@ -5401,7 +5197,6 @@ function addAcuteToSyllable(syllable) {
             </header>
           `;
         } else {
-          // Pages 2+: Running header
           const runningHeader = PaperManager.formatRunningHeader(composerSurname, title);
           headerHTML = `
             <header class="page-header-running">
@@ -5409,11 +5204,8 @@ function addAcuteToSyllable(syllable) {
             </header>
           `;
         }
-        
-        // Content area
         let contentHTML = '';
         if (lines.length === 0 && template === 'title') {
-          // Empty state — bilingual instruction to open drawer (v6.0.35)
           contentHTML = `
             <main class="page-content empty">
               <span class="page-ghost-text">
@@ -5423,7 +5215,6 @@ function addAcuteToSyllable(syllable) {
             </main>
           `;
         } else {
-          // Render verse lines
           const linesHTML = lines.map(line => this.renderVerseLine(line)).join('');
           contentHTML = `
             <main class="page-content">
@@ -5431,15 +5222,9 @@ function addAcuteToSyllable(syllable) {
             </main>
           `;
         }
-        
-        // Footer with attribution (2/3) and pagination (1/3)
         const storedName = DocumentState.userName;
         const hasName = storedName && storedName.trim() !== '';
         const canadaFlag = `<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="0.75em" viewBox="0 0 9600 4800" style="vertical-align: middle; margin-left: 0.25em;"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>`;
-        
-        // Bilingual footer text (v6.0.7, updated v6.0.34 for [unattributed])
-        // Named: "Transcribed by [Name] using Ilya..."
-        // Unattributed: "Transcription by [unattributed] using Ilya..."
         const footerText = currentGlossLanguage === 'fr' ? {
           para1: hasName 
             ? `Cette transcription a été réalisée par ${storedName} à l'aide d'<em>Ilya</em> v1.0, qui met en œuvre la <em>Russian Lyric Diction</em> du Dr Craig Grayson (Université de Washington, 2012). Données d'accentuation (1,3 million de mots) et gloses de traduction issues des Wiktionnaires anglais et français via <a href="https://kaikki.org" target="_blank">kaikki.org</a> (CC BY-SA 4.0).`
@@ -5453,7 +5238,6 @@ function addAcuteToSyllable(syllable) {
           para2: `<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists: neither it nor its transcriptions may be repackaged or sold. Made with love in Canada.${canadaFlag}`,
           pagination: `Page ${pageNumber} of ${totalPages}`
         };
-        
         const footerHTML = `
           <footer class="page-footer">
             <div class="footer-attribution">
@@ -5465,28 +5249,17 @@ function addAcuteToSyllable(syllable) {
             </div>
           </footer>
         `;
-        
         page.innerHTML = headerHTML + contentHTML + footerHTML;
-        
         return page;
       },
-      
-      /**
-       * Render a single verse line (array of transcribed words) to HTML
-       */
       renderVerseLine(transcribedWords) {
         if (!transcribedWords || !transcribedWords.length) return '';
-        
         const wordStacksHTML = transcribedWords.map((tw, wordIdx) => {
           const classes = ['word-stack'];
           if (tw.isProclitic) classes.push('proclitic');
           if (tw.isEnclitic) classes.push('enclitic');
           if (tw.isVowellessClitic) classes.push('vowelless-clitic');
-          
-          // Check if stress is inferred (unknown word, needs verification)
           const isInferred = tw.wordData?.stressSource === 'inferred';
-          
-          // Build data attributes
           const dataAttrs = `
             data-word-id="${tw.lineIdx}-${tw.wordIdx}"
             data-line-index="${tw.lineIdx}"
@@ -5514,8 +5287,6 @@ function addAcuteToSyllable(syllable) {
             data-dictionary-form="${tw.wordData?.dictionaryForm || ''}"
             data-yo-source="${tw.wordData?.yoSource || ''}"
           `;
-          
-          // Build word stack HTML
           const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               <span class="ipa">${tw.ipaDisplay}</span>
@@ -5525,8 +5296,6 @@ function addAcuteToSyllable(syllable) {
                 : formatGlossForDisplay(tw.wordData?.gloss, tw.wordData?.pos, tw.wordData?.lemma, tw.cleanWord)}</span>
             </div>
           `;
-          
-          // Wrap in Verify container if stress is inferred (v5.11.32)
           if (isInferred) {
             return `
               <div class="stress-unverified-container" data-word="${tw.cleanWord}">
@@ -5535,56 +5304,154 @@ function addAcuteToSyllable(syllable) {
               </div>
             `;
           }
-          
           return wordStackHTML;
         }).join('');
-        
         return `<div class="verse-line" role="row">${wordStacksHTML}</div>`;
+      }
+    };
+
+    /* INPUT MANAGER — Text input, transcription orchestration, and OCR */
+    const InputManager = {
+      textInput: null,
+      clearBtn: null,
+      charCounter: null,
+      ocrScanBtn: null,
+      ocrFileInput: null,
+      ocrStatus: null,
+      ocrStatusText: null,
+      init() {
+        this.textInput = document.getElementById('drawerTextInput');
+        this.clearBtn = document.getElementById('drawerClearBtn');
+        this.charCounter = document.getElementById('drawerCharCounter');
+        this.ocrScanBtn = document.getElementById('drawerOcrBtn');
+        this.ocrFileInput = document.getElementById('drawerOcrFileInput');
+        this.ocrStatus = document.getElementById('drawerOcrStatus');
+        this.ocrStatusText = this.ocrStatus?.querySelector('.ocr-status-text');
+        this.initOCR();
+        this.textInput?.addEventListener('input', () => this.updateCharCounter());
+        this.clearBtn?.addEventListener('click', () => this.clear());
       },
-      
-      /**
-       * Transcribe all lines (Phase 1-2.5)
-       * Returns array of arrays of transcribed word objects
-       */
+      updateCharCounter() {
+        if (!this.charCounter || !this.textInput) return;
+        const len = this.textInput.value.length;
+        if (len > 0) {
+          this.charCounter.textContent = `${len} ${UI_LABELS['counter.chars'][currentGlossLanguage || 'en']}`;
+          this.charCounter.classList.add('visible');
+          this.charCounter.classList.toggle('warning', len > 5000);
+          this.charCounter.classList.toggle('error', len > 10000);
+        } else {
+          this.charCounter.classList.remove('visible');
+        }
+      },
+      clear() {
+        if (DocumentState.lines.length > 0) {
+          const msg = currentGlossLanguage === 'fr'
+            ? 'Effacer la transcription ? Cette action est irréversible.'
+            : 'Clear transcription? This cannot be undone.';
+          if (!confirm(msg)) {
+            return;
+          }
+        }
+        if (this.textInput) this.textInput.value = '';
+        this.updateCharCounter();
+        DocumentState.lines = [];
+        PaperRenderer.render();
+        this.textInput?.focus();
+      },
+      async transcribe() {
+        const text = this.textInput?.value?.trim() || '';
+        if (!text) {
+          this.textInput?.focus();
+          return;
+        }
+        if (_supplementLoadPromise) {
+          await _supplementLoadPromise;
+        }
+        const lines = text.split('\n').filter(line => line.trim());
+        PaperManager.invalidateCache();
+        DocumentState.lines = lines.map(line => {
+          const words = line.trim().split(/\s+/)
+            .filter(word => {
+              const cleaned = word.replace(/[.,!?;:"""''–—\-]/g, '');
+              return cleaned.length > 0;
+            });
+          return words.map(word => {
+            const lookup = GraysonEngine.lookupStress(word);
+            let displayWord = word;
+            let wasYoRestored = false;
+            let dictionaryForm = null;
+            if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
+              displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
+              dictionaryForm = displayWord;
+              wasYoRestored = true;
+            }
+            const yoSyllable = GraysonEngine.findYoSyllable(displayWord);
+            let stress, stressSource, yoSource;
+            if (yoSyllable !== -1) {
+              stress = yoSyllable;
+              stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
+              yoSource = wasYoRestored ? 'yo-restored' : null;
+            } else if (lookup) {
+              stress = lookup.stress;
+              stressSource = lookup.source;
+              yoSource = null;
+            } else {
+              stress = 0;
+              stressSource = 'inferred';
+              yoSource = null;
+            }
+            return {
+              cyrillic: displayWord,
+              stress: stress,
+              gloss: lookup ? lookup.gloss : '',
+              pos: lookup ? lookup.pos : '',
+              lemma: lookup ? lookup.lemma : '',
+              isHomograph: lookup ? lookup.isHomograph : false,
+              originalStress: stress,
+              stressSource: stressSource,
+              hasYo: yoSyllable !== -1,
+              originalInput: wasYoRestored ? word : null,
+              dictionaryForm: dictionaryForm,
+              yoSource: yoSource,
+              rightBoundary: null,
+              boundarySource: null
+            };
+          });
+        }).filter(line => line.length > 0);
+        DocumentState.lines.forEach(line => {
+          GraysonEngine.autoDetectBoundaries(line);
+        });
+        PaperRenderer.render();
+        DrawerState.close();
+      },
       transcribeAllLines() {
         return DocumentState.lines.map((line, lineIdx) => {
-          // PHASE 1: Transcribe all words, store ipaUnderlying
           const transcribedWords = line.map((wordData, wordIdx) => {
-            // Capture trailing punctuation explicitly (v5.11.11 - fixes ghost text bug K)
             const trailingPunctMatch = wordData.cyrillic.match(/[.,!?;:"""'']+$/);
             const punct = trailingPunctMatch ? trailingPunctMatch[0] : '';
             const cleanWord = wordData.cyrillic
-              .replace(/[.,!?;:"""'']+$/, '')  // Remove trailing punct
-              .replace(/[-–—]/g, '');           // Remove hyphens/dashes (keep word intact)
-            
-            // Detect if line ends with question mark
+              .replace(/[.,!?;:"""'']+$/, '')
+              .replace(/[-–—]/g, '');
             const lineText = line.map(w => w.cyrillic).join(' ');
             const lineEndsWithQuestion = /\?$/.test(lineText.trim());
             const isFirstWord = wordIdx === 0;
-            
-            // Special case: "о" as interjection vs preposition
             const isO_Word = cleanWord.toLowerCase() === 'о';
             const hasFollowingPunct = /[,!]/.test(punct);
             const isO_Interjection = isO_Word && (
               hasFollowingPunct ||
               (isFirstWord && !lineEndsWithQuestion)
             );
-            
             const isProclitic = !isO_Interjection && GraysonEngine.proclitics.has(cleanWord.toLowerCase());
             const isEnclitic = GraysonEngine.enclitics.has(cleanWord.toLowerCase());
             const hasYo = GraysonEngine.hasYo(cleanWord);
-            
-            // For proclitics, determine reduction based on host word's stress position
             let procliticPosition = null;
             if (isProclitic && wordIdx < line.length - 1) {
               const nextWord = line[wordIdx + 1];
               const nextStress = nextWord.stress;
               procliticPosition = (nextStress === 0) ? 'pretonic' : 'remote';
             }
-            
             const cliticStress = (isProclitic || isEnclitic) ? -1 : wordData.stress;
             const result = GraysonEngine.transcribe(cleanWord, cliticStress, isProclitic || isEnclitic, procliticPosition);
-            
             return {
               wordData,
               wordIdx,
@@ -5607,24 +5474,16 @@ function addAcuteToSyllable(syllable) {
               boundarySource: wordData.boundarySource
             };
           });
-          
-          // PHASE 2: Apply cross-word assimilation
           GraysonEngine.applyCrossWordAssimilation(transcribedWords);
-          
-          // PHASE 2.5: Sync syllable IPA with surface form after final devoicing
           transcribedWords.forEach(tw => {
             if (tw.ipaSurface !== tw.ipaUnderlying && tw.syllables.length > 0) {
               const lastSyl = tw.syllables[tw.syllables.length - 1];
               const underlyingConcat = tw.syllables.map(s => s.ipa).join('');
-              // Remove stress marks AND spaces from surface for comparison
               const surfaceClean = tw.ipaSurface.replace(/[ˈ\s]+/g, '');
-              
               const prefixLen = underlyingConcat.length - lastSyl.ipa.length;
-              
               if (surfaceClean.length >= prefixLen) {
                 const newLastSylIpa = surfaceClean.slice(prefixLen);
                 lastSyl.ipa = newLastSylIpa;
-                
                 if (tw.transcriptionLog && tw.transcriptionLog.length > 0) {
                   for (let i = tw.transcriptionLog.length - 1; i >= 0; i--) {
                     const entry = tw.transcriptionLog[i];
@@ -5640,69 +5499,41 @@ function addAcuteToSyllable(syllable) {
                 }
               }
             }
-            
-            // Create IPA content (syllables with stress marks, spaces between)
-            // v5.11.11: Show stress marks on monosyllables too (Issue L)
             let ipaCore;
-            
-            // If cross-word assimilation modified ipaSurface, use that directly
-            // (e.g., sibilant merger: шумом after с → ˈʃːumʌm)
             if (tw.ipaSurface !== tw.ipaUnderlying) {
               ipaCore = tw.ipaSurface;
             } else {
-              // Normal case: build from syllables
               ipaCore = tw.syllables.map(s => {
                 return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
               }).join(' ');
             }
-            
-            // Store the actual IPA for fusion (v5.11.10)
             tw.ipaContent = ipaCore;
-            tw.ipaDisplay = ipaCore; // Will be overwritten for clitics
+            tw.ipaDisplay = ipaCore;
           });
-          
-          // PHASE 2.6: Clitic IPA fusion (v5.11.20)
-          // Vowelless clitics fuse directly (no space, no arrow) - they're not syllables
-          // Vowelled clitics keep space (they ARE syllables) and show directional arrows
-          // Use canonicalIpa from cliticData ONLY for vowelless clitics (syllabification fails)
-          // For vowelled clitics, use the dynamically calculated IPA (position-aware reduction)
           const cyrillicVowels = new Set(['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
                                           'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я']);
           const hasVowel = (word) => {
             return Array.from(word).some(char => cyrillicVowels.has(char));
           };
-          
           transcribedWords.forEach((tw, idx) => {
             if (tw.isProclitic || tw.isEnclitic) {
               const isVowelless = !hasVowel(tw.cleanWord);
               if (isVowelless) {
-                // Vowelless clitic: check if cross-word assimilation modified ipaSurface
-                // If ipaSurface differs from ipaUnderlying, use the modified version
-                // (e.g., sibilant merger: с + шумом → ipaSurface is empty, /s/ merged into host)
                 if (tw.ipaSurface !== tw.ipaUnderlying) {
-                  tw.ipaContent = tw.ipaSurface; // Use modified (possibly empty) IPA
+                  tw.ipaContent = tw.ipaSurface;
                 } else {
-                  // No cross-word modification: use canonical IPA
                   const cliticInfo = GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase());
                   tw.ipaContent = cliticInfo?.canonicalIpa || tw.ipaContent || '';
                 }
               }
-              // Vowelled clitics: keep dynamically calculated ipaContent (position-aware)
             }
-            
             if (tw.isProclitic) {
               const nextWord = transcribedWords[idx + 1];
               const isVowelless = !hasVowel(tw.cleanWord);
-              
               if (isVowelless) {
-                // Vowelless proclitic: show arrow, fuse IPA to host
-                tw.ipaDisplay = '→'; // Arrow shows attachment direction
+                tw.ipaDisplay = '→';
                 tw.isVowellessClitic = true;
                 if (nextWord && !nextWord.isProclitic) {
-                  // Fuse directly (no space)
-                  // If host starts with stress mark, move it before the proclitic consonant
-                  // Wrong: vˈstranst (stress mark after onset consonant)
-                  // Right: ˈvstranst (stress mark before entire syllable onset)
                   if (nextWord.ipaDisplay.startsWith('ˈ')) {
                     nextWord.ipaDisplay = 'ˈ' + tw.ipaContent + nextWord.ipaDisplay.slice(1);
                   } else {
@@ -5710,74 +5541,52 @@ function addAcuteToSyllable(syllable) {
                   }
                 }
               } else {
-                // Vowelled proclitic: show arrow, keep as separate syllable
                 tw.ipaDisplay = '→';
                 tw.isVowellessClitic = false;
                 if (nextWord && !nextWord.isProclitic) {
-                  // Prepend with space (clitic is a syllable)
                   nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaDisplay;
                 }
               }
             } else if (tw.isEnclitic) {
               const prevWord = transcribedWords[idx - 1];
               const isVowelless = !hasVowel(tw.cleanWord);
-              
               if (isVowelless) {
-                // Vowelless enclitic: show arrow, fuse IPA to host
-                tw.ipaDisplay = '←'; // Arrow shows attachment direction
+                tw.ipaDisplay = '←';
                 tw.isVowellessClitic = true;
                 if (prevWord && !prevWord.isEnclitic) {
-                  // Fuse directly (no space)
                   prevWord.ipaDisplay = prevWord.ipaDisplay + tw.ipaContent;
                 }
               } else {
-                // Vowelled enclitic: show arrow, keep as separate syllable
                 tw.ipaDisplay = '←';
                 tw.isVowellessClitic = false;
                 if (prevWord && !prevWord.isEnclitic) {
-                  // Append with space (clitic is a syllable)
                   prevWord.ipaDisplay = prevWord.ipaDisplay + ' ' + tw.ipaContent;
                 }
               }
             }
           });
-          
           return transcribedWords;
         });
       },
-      
-      // --- OCR Methods ---
-      /**
-       * Initialize OCR module (lazy-loads Tesseract in background)
-       */
       async initOCR() {
         if (!OCRModule.isSupported()) {
           if (this.ocrScanBtn) this.ocrScanBtn.style.display = 'none';
           return;
         }
-        
-        // Set up error callback
         OCRModule.onError((msg) => {
           this.showOCRStatus('error', msg);
         });
-        
-        // Scan button triggers hidden file input
         this.ocrScanBtn?.addEventListener('click', () => {
           if (this.ocrScanBtn && !this.ocrScanBtn.disabled) {
             this.ocrFileInput?.click();
           }
         });
-        
-        // File selected → process
         this.ocrFileInput?.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
           await this.processOCRFile(file);
-          // Reset input for re-use
           if (this.ocrFileInput) this.ocrFileInput.value = '';
         });
-        
-        // Start lazy-loading Tesseract
         try {
           const loaded = await OCRModule.init();
           if (loaded && this.ocrScanBtn) {
@@ -5788,15 +5597,8 @@ function addAcuteToSyllable(syllable) {
           if (this.ocrScanBtn) this.ocrScanBtn.title = 'OCR unavailable';
         }
       },
-      
-      /**
-       * Process uploaded image file through OCR
-       */
       async processOCRFile(file) {
-        // Hide normal status, show OCR status
         this.charCounter?.classList.remove('visible');
-        
-        // Status message mapping (Kimi's "narrated steps")
         const statusMessages = {
           'loading tesseract': 'Loading recognition engine...',
           'loading language': 'Loading Russian dictionary...',
@@ -5807,67 +5609,46 @@ function addAcuteToSyllable(syllable) {
           'recognizing': 'Reading Cyrillic text...',
           'cleaning': 'Cleaning up results...'
         };
-        
         try {
           const text = await OCRModule.processImage(file, (status, progress) => {
             const message = statusMessages[status] || status;
             this.showOCRStatus('processing', message);
           });
-          
           if (text && this.textInput) {
-            // Append to existing text with newline separator if not empty
             const existingText = this.textInput.value.trim();
             if (existingText) {
               this.textInput.value = existingText + '\n\n' + text;
             } else {
               this.textInput.value = text;
             }
-            
             this.updateCharCounter();
             this.showOCRStatus('success', 'Import complete');
-            
-            // Clear success message after 3 seconds
             setTimeout(() => this.hideOCRStatus(), 3000);
           }
         } catch (err) {
           this.showOCRStatus('error', err.message || 'Failed to read image');
-          
-          // Clear error after 5 seconds
           setTimeout(() => this.hideOCRStatus(), 5000);
         }
       },
-      
-      /**
-       * Show OCR status message
-       */
       showOCRStatus(type, message) {
         if (!this.ocrStatus) return;
-        
         this.ocrStatus.style.display = 'flex';
         this.ocrStatus.className = 'ocr-status ' + type;
-        
         if (this.ocrStatusText) {
           this.ocrStatusText.textContent = message;
         }
-        
-        // Show/hide spinner based on type
         const spinner = this.ocrStatus.querySelector('.spinner');
         if (spinner) {
           spinner.style.display = type === 'processing' ? 'block' : 'none';
         }
       },
-      
-      /**
-       * Hide OCR status and restore normal footer status
-       */
       hideOCRStatus() {
         if (this.ocrStatus) {
           this.ocrStatus.style.display = 'none';
         }
-        // Let updatePreview restore char counter if needed
-        this.updatePreview();
       }
     };
+
 
     /* LOOKUP TABLES: Composers and Poets */
     const COMPOSERS = [
@@ -8998,7 +8779,7 @@ function addAcuteToSyllable(syllable) {
           if (this.currentWord) {
             const newGloss = this.inspectorElements.glossInline.textContent.trim();
             DocumentState.updateGloss(this.currentWord.lineIndex, this.currentWord.wordIndex, newGloss);
-            DrawerController.renderToPaper();
+            PaperRenderer.render();
           }
         });
         
@@ -9996,7 +9777,7 @@ function addAcuteToSyllable(syllable) {
         this.inspectorElements.assimilationSeparated?.classList.toggle('active', boundary === 'hard');
         
         // Re-render paper
-        DrawerController.renderToPaper();
+        PaperRenderer.render();
       },
       
       // Phase 3D: Handle stress source selection
@@ -10033,7 +9814,7 @@ function addAcuteToSyllable(syllable) {
         }
         
         // Re-render paper
-        DrawerController.renderToPaper();
+        PaperRenderer.render();
         
         // Attribution fulfilled
         this.hideAttributionArrow();
@@ -10126,7 +9907,7 @@ function addAcuteToSyllable(syllable) {
         const { lineIndex, wordIndex } = this.currentWord;
         
         // Re-render paper
-        DrawerController.renderToPaper();
+        PaperRenderer.render();
         
         // Find the updated word element and refresh inspector data
         const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
@@ -10167,7 +9948,7 @@ function addAcuteToSyllable(syllable) {
         DocumentState.updateStress(lineIndex, wordIndex, newStressIdx);
         
         // Re-render paper
-        DrawerController.renderToPaper();
+        PaperRenderer.render();
         
         // Find the updated word element and refresh inspector data
         const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
@@ -10772,13 +10553,13 @@ function addAcuteToSyllable(syllable) {
     /* INITIALIZATION */
     document.addEventListener('DOMContentLoaded', () => {
       DrawerState.init();
-      DrawerController.init();
+      InputManager.init();
       TabController.init();
       DashboardController.init();
       ProfileController.init();
       PaperManager.init();
 
-      // DrawerBridge REMOVED in Phase 2C - DrawerController now uses left drawer directly
+      // DrawerBridge REMOVED in Phase 2C - InputManager now uses left drawer directly
 
       // --- PAPER GLOSS REFRESH (v6.0.54) — Re-renders all paper-surface glosses in currentGlossLanguage — without re-transcription. Called by pill handler on toggle. ---
       function refreshPaperGlosses() {
@@ -10850,7 +10631,7 @@ function addAcuteToSyllable(syllable) {
               setUILanguage(newLang);
               
               // Full re-render: glosses, verify badges, and footer attribution (v6.0.54)
-              DrawerController.renderToPaper();
+              PaperRenderer.render();
               
               if (mode === 'drill') {
                 const word = DrawerState.currentWord;
@@ -10914,17 +10695,17 @@ function addAcuteToSyllable(syllable) {
       const transcribeBtn = document.getElementById('drawerTranscribeBtn');
       if (transcribeBtn) {
         transcribeBtn.addEventListener('click', () => {
-          const hasText = DrawerController.textInput?.value?.trim().length > 0;
+          const hasText = InputManager.textInput?.value?.trim().length > 0;
           if (hasText) {
-            DrawerController.transcribe();
+            InputManager.transcribe();
           } else {
-            DrawerController.renderToPaper();
+            PaperRenderer.render();
           }
         });
       }
       
       // Render empty title page on load
-      DrawerController.renderToPaper();
+      PaperRenderer.render();
     });
 
     // Expose for tests.html
