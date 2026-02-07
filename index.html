@@ -3655,6 +3655,9 @@ let TIER2_LOADING = false;
 // Supports bilingual glosses: {en: '...', fr: '...'}
 let currentGlossLanguage = 'en';
 
+// Metadata form references (dissolved from DashboardController in D.3)
+let metaTitleInput, metaOpusInput, metaTranscriberInput, metaComposerSelect, metaPoetSelect, metaExportBtn;
+
 // --- UI_LABELS + setUILanguage() (v6.0.54) — i18n skin system for static UI text. — Keys match data-i18n attributes (Phase A, item 4). — Must be top-level scope so DocumentState/DrawerState can access. ---
 const UI_LABELS = {
   'welcome.text': {
@@ -4906,196 +4909,26 @@ function addAcuteToSyllable(syllable) {
       }
     };
     
-    /* DASHBOARD CONTROLLER */
-    const DashboardController = {
-      titleInput: null,
-      opusInput: null,
-      transcriberInput: null,
-      composerSelect: null,
-      poetSelect: null,
-      exportBtn: null,
-      // Welcome banner elements
-      welcomePreface: null,
-      welcomeNameInput: null,
-      welcomeSaveBtn: null,
-      welcomeSkipBtn: null,
-      
-      init() {
-        this.titleInput = document.getElementById('metaTitle');
-        this.opusInput = document.getElementById('metaOpus');
-        this.transcriberInput = document.getElementById('metaTranscriber');
-        this.exportBtn = document.getElementById('exportPdfBtn');
-        
-        // Welcome banner elements
-        this.welcomePreface = document.getElementById('welcomePreface');
-        this.welcomeNameInput = document.getElementById('welcomeNameInput');
-        this.welcomeSaveBtn = document.getElementById('welcomeSaveBtn');
-        this.welcomeSkipBtn = document.getElementById('welcomeSkipBtn');
-        
-        // Load saved name from localStorage and populate fields
-        this.loadSavedName();
-        
-        // Wire up welcome banner actions
-        this.welcomeSaveBtn?.addEventListener('click', () => this.handleWelcomeSave());
-        this.welcomeSkipBtn?.addEventListener('click', () => this.handleWelcomeSkip());
-        
-        // Initialize searchable selects
-        this.composerSelect = SearchableSelect.create({
-          id: 'composer',
-          trigger: document.getElementById('composerTrigger'),
-          dropdown: document.getElementById('composerDropdown'),
-          search: document.getElementById('composerSearch'),
-          options: document.getElementById('composerOptions'),
-          data: COMPOSERS,
-          onSelect: (item) => this.updatePaperMetadata()
-        });
-        
-        this.poetSelect = SearchableSelect.create({
-          id: 'poet',
-          trigger: document.getElementById('poetTrigger'),
-          dropdown: document.getElementById('poetDropdown'),
-          search: document.getElementById('poetSearch'),
-          options: document.getElementById('poetOptions'),
-          data: POETS,
-          onSelect: (item) => this.updatePaperMetadata()
-        });
-        
-        // Listen for text input changes
-        this.titleInput?.addEventListener('input', () => this.updatePaperMetadata());
-        this.opusInput?.addEventListener('input', () => this.updatePaperMetadata());
-        this.transcriberInput?.addEventListener('input', () => this.updateTranscriber());
-        // Also update localStorage on blur (for persistent changes)
-        this.transcriberInput?.addEventListener('blur', () => this.syncTranscriberToStorage());
-        
-        // Export PDF button
-        this.exportBtn?.addEventListener('click', () => this.exportPDF());
-        
-        // Update export button state
-        this.updateExportButton();
-      },
-      
-      // Load saved name from localStorage on init
-      loadSavedName() {
-        const savedName = localStorage.getItem('ilya_transcriber_name');
-        const welcomeCompleted = localStorage.getItem('ilya_welcome_completed');
-        
-        // Pre-populate fields if name exists
-        if (savedName) {
-          DocumentState.userName = savedName;
-          if (this.transcriberInput) {
-            this.transcriberInput.value = savedName;
-          }
-        } else {
-          DocumentState.userName = ''; // Empty = [unattributed]
-        }
-        
-        // Show welcome banner only if not yet completed
-        if (!welcomeCompleted && this.welcomePreface) {
-          this.welcomePreface.classList.remove('hidden');
-        }
-      },
-      
-      // Handle Save button in welcome banner
-      handleWelcomeSave() {
-        const name = this.welcomeNameInput?.value.trim();
-        if (name) {
-          // Save to localStorage
-          localStorage.setItem('ilya_transcriber_name', name);
-          localStorage.setItem('ilya_welcome_completed', 'true');
-          
-          // Update DocumentState and drawer field
-          DocumentState.userName = name;
-          if (this.transcriberInput) {
-            this.transcriberInput.value = name;
-          }
-          
-          // Hide banner
-          this.welcomePreface?.classList.add('hidden');
-          
-          // Re-render if content exists
-          if (DocumentState.lines.length > 0) {
-            PaperRenderer.render();
-          }
-        }
-      },
-      
-      // Handle Skip button in welcome banner
-      handleWelcomeSkip() {
-        // Mark as completed but don't save a name
-        localStorage.setItem('ilya_welcome_completed', 'true');
-        // Don't set ilya_transcriber_name — leaves it null/undefined
-        
-        // DocumentState.userName stays empty = [unattributed]
-        DocumentState.userName = '';
-        
-        // Hide banner
-        this.welcomePreface?.classList.add('hidden');
-      },
-      
-      // Sync transcriber field changes to localStorage
-      syncTranscriberToStorage() {
-        const name = this.transcriberInput?.value.trim();
-        if (name) {
-          localStorage.setItem('ilya_transcriber_name', name);
-        } else {
-          localStorage.removeItem('ilya_transcriber_name');
-        }
-      },
-      
-      updateExportButton() {
-        if (!this.exportBtn) return;
-        const hasContent = DocumentState.lines.length > 0;
-        this.exportBtn.disabled = !hasContent;
-        this.exportBtn.title = hasContent ? 'Export transcription as PDF' : 'Transcribe text first';
-      },
-      
-      exportPDF() {
-        if (DocumentState.lines.length === 0) {
-          alert('Please transcribe some text first.');
-          return;
-        }
-        
-        // Set document title for PDF filename suggestion
-        const title = this.titleInput?.value || 'Ilya Transcription';
-        const originalTitle = document.title;
-        document.title = title;
-        
-        // Trigger print dialog
-        window.print();
-        
-        // Restore document title after print dialog closes
-        setTimeout(() => {
-          document.title = originalTitle;
-        }, 1000);
-      },
-      
-      updateTranscriber() {
-        const name = this.transcriberInput?.value.trim();
-        DocumentState.userName = name || '';
-        // Re-render to update footers
-        if (DocumentState.lines.length > 0) {
-          PaperRenderer.render();
-        }
-      },
-      
-      updatePaperMetadata() {
-        // In multi-page mode, metadata is embedded in page templates
-        // Re-render to update headers with new metadata
-        if (DocumentState.lines.length > 0) {
-          PaperRenderer.render();
-        }
-      },
-      
-      getMetadata() {
-        return {
-          title: this.titleInput?.value || '',
-          opus: this.opusInput?.value || '',
-          composer: this.composerSelect?.selectedValue || null,
-          poet: this.poetSelect?.selectedValue || null,
-          transcriber: this.transcriberInput?.value || ''
-        };
+    /* METADATA UTILITIES */
+    function updateExportButton() {
+      if (!metaExportBtn) return;
+      const hasContent = DocumentState.lines.length > 0;
+      metaExportBtn.disabled = !hasContent;
+      metaExportBtn.title = hasContent ? 'Export transcription as PDF' : 'Transcribe text first';
+    }
+    function exportPDF() {
+      if (DocumentState.lines.length === 0) {
+        alert('Please transcribe some text first.');
+        return;
       }
-    };
+      const title = metaTitleInput?.value || 'Ilya Transcription';
+      const originalTitle = document.title;
+      document.title = title;
+      window.print();
+      setTimeout(() => {
+        document.title = originalTitle;
+      }, 1000);
+    }
 
     /* PAPER RENDERER — Paper DOM construction and page layout */
     const PaperRenderer = {
@@ -5108,7 +4941,7 @@ function addAcuteToSyllable(syllable) {
           const emptyPage = this.createPageElement(1, 'title', [], 1, paperSize);
           paperStack.appendChild(emptyPage);
           PaperManager.updatePageCount();
-          DashboardController.updateExportButton();
+          updateExportButton();
           return;
         }
         const transcribedLines = InputManager.transcribeAllLines();
@@ -5135,7 +4968,7 @@ function addAcuteToSyllable(syllable) {
           }
         }
         PaperManager.updatePageCount();
-        DashboardController.updateExportButton();
+        updateExportButton();
       },
       detectOverflow() {
         const pages = document.querySelectorAll('.paper-page');
@@ -5164,8 +4997,8 @@ function addAcuteToSyllable(syllable) {
         if (paperSize === 'a4') {
           page.setAttribute('data-size', 'a4');
         }
-        const title = DashboardController.titleInput?.value || UI_LABELS['paper.songTitle'][currentGlossLanguage || 'en'];
-        const opus = DashboardController.opusInput?.value || '';
+        const title = metaTitleInput?.value || UI_LABELS['paper.songTitle'][currentGlossLanguage || 'en'];
+        const opus = metaOpusInput?.value || '';
         const formatNameForDisplay = (item) => {
           if (!item) return '';
           const name = item.latin || '';
@@ -5174,9 +5007,9 @@ function addAcuteToSyllable(syllable) {
           const displayName = parts.length > 1 ? `${parts[1]} ${parts[0]}` : name;
           return dates ? `${displayName} (${dates})` : displayName;
         };
-        const composerDisplay = formatNameForDisplay(DashboardController.composerSelect?.selectedValue);
-        const poetDisplay = formatNameForDisplay(DashboardController.poetSelect?.selectedValue);
-        const composerSurname = DashboardController.composerSelect?.selectedValue?.latin?.split(',')[0]?.trim() || '';
+        const composerDisplay = formatNameForDisplay(metaComposerSelect?.selectedValue);
+        const poetDisplay = formatNameForDisplay(metaPoetSelect?.selectedValue);
+        const composerSurname = metaComposerSelect?.selectedValue?.latin?.split(',')[0]?.trim() || '';
         let headerHTML = '';
         if (template === 'title') {
           headerHTML = `
@@ -10555,7 +10388,84 @@ function addAcuteToSyllable(syllable) {
       DrawerState.init();
       InputManager.init();
       TabController.init();
-      DashboardController.init();
+      // Metadata, welcome flow, and export (dissolved from DashboardController in D.3)
+      metaTitleInput = document.getElementById('metaTitle');
+      metaOpusInput = document.getElementById('metaOpus');
+      metaTranscriberInput = document.getElementById('metaTranscriber');
+      metaExportBtn = document.getElementById('exportPdfBtn');
+      const welcomePreface = document.getElementById('welcomePreface');
+      const welcomeNameInput = document.getElementById('welcomeNameInput');
+      const welcomeSaveBtn = document.getElementById('welcomeSaveBtn');
+      const welcomeSkipBtn = document.getElementById('welcomeSkipBtn');
+      // Load saved name
+      const savedName = localStorage.getItem('ilya_transcriber_name');
+      const welcomeCompleted = localStorage.getItem('ilya_welcome_completed');
+      if (savedName) {
+        DocumentState.userName = savedName;
+        if (metaTranscriberInput) metaTranscriberInput.value = savedName;
+      } else {
+        DocumentState.userName = '';
+      }
+      if (!welcomeCompleted && welcomePreface) {
+        welcomePreface.classList.remove('hidden');
+      }
+      // Welcome banner actions
+      welcomeSaveBtn?.addEventListener('click', () => {
+        const name = welcomeNameInput?.value.trim();
+        if (name) {
+          localStorage.setItem('ilya_transcriber_name', name);
+          localStorage.setItem('ilya_welcome_completed', 'true');
+          DocumentState.userName = name;
+          if (metaTranscriberInput) metaTranscriberInput.value = name;
+          welcomePreface?.classList.add('hidden');
+          if (DocumentState.lines.length > 0) PaperRenderer.render();
+        }
+      });
+      welcomeSkipBtn?.addEventListener('click', () => {
+        localStorage.setItem('ilya_welcome_completed', 'true');
+        DocumentState.userName = '';
+        welcomePreface?.classList.add('hidden');
+      });
+      // Searchable selects
+      metaComposerSelect = SearchableSelect.create({
+        id: 'composer',
+        trigger: document.getElementById('composerTrigger'),
+        dropdown: document.getElementById('composerDropdown'),
+        search: document.getElementById('composerSearch'),
+        options: document.getElementById('composerOptions'),
+        data: COMPOSERS,
+        onSelect: () => { if (DocumentState.lines.length > 0) PaperRenderer.render(); }
+      });
+      metaPoetSelect = SearchableSelect.create({
+        id: 'poet',
+        trigger: document.getElementById('poetTrigger'),
+        dropdown: document.getElementById('poetDropdown'),
+        search: document.getElementById('poetSearch'),
+        options: document.getElementById('poetOptions'),
+        data: POETS,
+        onSelect: () => { if (DocumentState.lines.length > 0) PaperRenderer.render(); }
+      });
+      // Metadata input listeners
+      metaTitleInput?.addEventListener('input', () => {
+        if (DocumentState.lines.length > 0) PaperRenderer.render();
+      });
+      metaOpusInput?.addEventListener('input', () => {
+        if (DocumentState.lines.length > 0) PaperRenderer.render();
+      });
+      metaTranscriberInput?.addEventListener('input', () => {
+        DocumentState.userName = metaTranscriberInput.value.trim() || '';
+        if (DocumentState.lines.length > 0) PaperRenderer.render();
+      });
+      metaTranscriberInput?.addEventListener('blur', () => {
+        const name = metaTranscriberInput.value.trim();
+        if (name) {
+          localStorage.setItem('ilya_transcriber_name', name);
+        } else {
+          localStorage.removeItem('ilya_transcriber_name');
+        }
+      });
+      metaExportBtn?.addEventListener('click', () => exportPDF());
+      updateExportButton();
       ProfileController.init();
       PaperManager.init();
 
