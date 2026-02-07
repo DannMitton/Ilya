@@ -3230,6 +3230,15 @@
       padding: 0 1.5rem;
     }
 
+    .pacifier-introduction {
+      font-family: var(--font-sans);
+      font-variant: small-caps;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      color: #e8e0d4;
+      margin: 0 0 0.75rem 0;
+    }
+
     .pacifier-greeting {
       font-family: var(--font-sans);
       font-variant: small-caps;
@@ -3327,8 +3336,10 @@
 
   <!-- PACIFIER OVERLAY (v6.0.94) — Loading screen with Ilya avatar -->
   <div class="pacifier-overlay" id="pacifierOverlay">
-    <img class="pacifier-avatar" src="data/ilya-avatar.webp" alt="Ilya" draggable="false">
+    <img class="pacifier-avatar" src="data/ilya-avatar.webp" alt="Ilya" draggable="false"
+         onerror="this.style.display='none'">
     <div class="pacifier-content">
+      <p class="pacifier-introduction" id="pacifierIntro">I'm Ilya.</p>
       <p class="pacifier-greeting" id="pacifierGreeting">
         Each transcription carries its maker's name in the footer. What shall I call you?
       </p>
@@ -3698,6 +3709,10 @@ let metaTitleInput, metaOpusInput, metaTranscriberInput, metaComposerSelect, met
 
 // --- UI_LABELS + setUILanguage() (v6.0.54) — i18n skin system for static UI text. — Keys match data-i18n attributes (Phase A, item 4). — Must be top-level scope so DocumentState/DrawerState can access. ---
 const UI_LABELS = {
+  'pacifier.introduction': {
+    en: 'I\u2019m Ilya.',
+    fr: 'Je suis Ilya.'
+  },
   'pacifier.firstLogin': {
     en: 'Each transcription carries its maker\'s name in the footer. What shall I call you?',
     fr: 'Chaque transcription porte le nom de son auteur en pied de page. Comment dois-je vous appeler ?'
@@ -10476,9 +10491,10 @@ function addAcuteToSyllable(syllable) {
 
     /* INITIALIZATION */
     document.addEventListener('DOMContentLoaded', () => {
-      // PACIFIER INITIALIZATION (v6.0.95) — Loading gate with first-run vs return-visit branching
+      // PACIFIER INITIALIZATION (v6.0.96) — Loading gate with Ilya introduction
       const pacifierOverlay = document.getElementById('pacifierOverlay');
       if (pacifierOverlay) {
+        const pacifierIntro = document.getElementById('pacifierIntro');
         const pacifierGreeting = document.getElementById('pacifierGreeting');
         const pacifierNameForm = document.getElementById('pacifierNameForm');
         const pacifierNameInput = document.getElementById('pacifierNameInput');
@@ -10489,6 +10505,22 @@ function addAcuteToSyllable(syllable) {
         const browserLang = (navigator.language || '').slice(0, 2);
         const pacifierLang = browserLang === 'fr' ? 'fr' : browserLang === 'en' ? 'en' : 'both';
         const btnLang = pacifierLang === 'fr' ? 'fr' : 'en';
+
+        // Sync app language to browser preference (fr browsers start in French)
+        if (browserLang === 'fr') {
+          currentGlossLanguage = 'fr';
+        }
+
+        // Set introduction text
+        const enIntro = UI_LABELS['pacifier.introduction'].en;
+        const frIntro = UI_LABELS['pacifier.introduction'].fr;
+        if (pacifierLang === 'fr') {
+          pacifierIntro.textContent = frIntro;
+        } else if (pacifierLang === 'en') {
+          pacifierIntro.textContent = enIntro;
+        } else {
+          pacifierIntro.innerHTML = enIntro + ' <span class="bilingual-secondary" style="display:inline; margin-left:0.5em">' + frIntro + '</span>';
+        }
 
         // Track readiness: dictionary loaded + user has acted (first-run) or min time elapsed (return)
         let dictionaryReady = false;
@@ -10565,6 +10597,12 @@ function addAcuteToSyllable(syllable) {
           pacifierSkipBtn.textContent = UI_LABELS['pacifier.skip'][btnLang];
           if (pacifierNameInput) {
             pacifierNameInput.placeholder = UI_LABELS['pacifier.placeholder'][btnLang];
+            // Auto-focus after a brief delay (let the visual land first)
+            setTimeout(() => pacifierNameInput.focus(), 500);
+            // Enter key submits name
+            pacifierNameInput.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') pacifierSaveBtn.click();
+            });
           }
 
           // Save: store name, then dismiss when dictionary is ready
@@ -10783,6 +10821,19 @@ function addAcuteToSyllable(syllable) {
       // Initialize both pills
       initLangPill(document.getElementById('rootLangPill'), 'root');
       initLangPill(document.getElementById('drillLangPill'), 'drill');
+
+      // Sync pills to browser language if pacifier detected French (v6.0.96)
+      if (currentGlossLanguage === 'fr') {
+        document.querySelectorAll('.lang-toggle-pill').forEach(pill => {
+          pill.dataset.lang = 'fr';
+          pill.querySelectorAll('.lang-option').forEach(opt => {
+            const isActive = opt.dataset.lang === 'fr';
+            opt.classList.toggle('active', isActive);
+            opt.setAttribute('aria-checked', isActive);
+          });
+        });
+        setUILanguage('fr');
+      }
       
       // --- TRANSCRIBE BUTTON (v6.0.52) — Dedicated action button — label swaps with language pill ---
       const transcribeBtn = document.getElementById('drawerTranscribeBtn');
