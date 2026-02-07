@@ -3262,9 +3262,163 @@
         font-size: 0.85rem;
       }
     }
+
+    /* PACIFIER OVERLAY (v6.0.94) — Loading screen with Ilya avatar */
+    @keyframes pacifier-breathe {
+      0%, 100% { transform: scale(1.0); }
+      50% { transform: scale(0.98); }
+    }
+
+    .pacifier-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #201a12;
+      opacity: 1;
+      transition: opacity 400ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    }
+
+    .pacifier-overlay.dismissed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pacifier-avatar {
+      width: min(320px, 55vw);
+      height: auto;
+      border-radius: 12px;
+      animation: pacifier-breathe 4s ease-in-out infinite;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      user-select: none;
+    }
+
+    .pacifier-content {
+      text-align: center;
+      max-width: 420px;
+      padding: 0 1.5rem;
+    }
+
+    .pacifier-greeting {
+      font-family: var(--font-sans);
+      font-variant: small-caps;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+      color: #e8e0d4;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .pacifier-greeting .bilingual-secondary {
+      display: block;
+      font-style: italic;
+      color: #b0a898;
+      margin-top: 0.75rem;
+    }
+
+    .pacifier-name-form.hidden {
+      display: none;
+    }
+
+    .pacifier-field {
+      margin-bottom: 1rem;
+    }
+
+    .pacifier-field input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      border: 1px solid #4a4035;
+      border-radius: 6px;
+      background: #2a2318;
+      color: #e8e0d4;
+      text-align: center;
+      font-family: var(--font-sans);
+      box-sizing: border-box;
+    }
+
+    .pacifier-field input:focus {
+      outline: none;
+      border-color: var(--stationery-sage);
+      box-shadow: 0 0 0 3px rgba(139, 154, 125, 0.25);
+    }
+
+    .pacifier-field input::placeholder {
+      color: #7a7060;
+      font-style: italic;
+    }
+
+    .pacifier-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .pacifier-actions .pacifier-save {
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      color: white;
+      background: var(--stationery-sage);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .pacifier-actions .pacifier-save:hover {
+      background: var(--ilya-accent-hover);
+    }
+
+    .pacifier-actions .pacifier-skip {
+      font-size: 0.85rem;
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      color: #8a7f73;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 150ms ease;
+    }
+
+    .pacifier-actions .pacifier-skip:hover {
+      color: #b0a898;
+    }
+
+    @media print {
+      .pacifier-overlay { display: none; }
+    }
   </style>
 </head>
 <body class="notranslate">
+
+  <!-- PACIFIER OVERLAY (v6.0.94) — Loading screen with Ilya avatar -->
+  <div class="pacifier-overlay" id="pacifierOverlay">
+    <img class="pacifier-avatar" src="data/ilya-avatar.webp" alt="Ilya" draggable="false">
+    <div class="pacifier-content">
+      <p class="pacifier-greeting" id="pacifierGreeting">
+        Each transcription carries its maker's name in the footer. What shall I call you?
+      </p>
+      <div class="pacifier-name-form" id="pacifierNameForm">
+        <div class="pacifier-field">
+          <input type="text" id="pacifierNameInput"
+                 placeholder="e.g. Dr. Jane Smith"
+                 maxlength="50"
+                 autocomplete="name">
+        </div>
+        <div class="pacifier-actions">
+          <button class="pacifier-save" id="pacifierSaveBtn">Save</button>
+          <a class="pacifier-skip" id="pacifierSkipBtn">Skip</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="ilya-layout">
 
@@ -3639,6 +3793,26 @@ const UI_LABELS = {
   'welcome.save': {
     en: 'Save',
     fr: 'Enregistrer'
+  },
+  'pacifier.firstLogin': {
+    en: 'Each transcription carries its maker\'s name in the footer. What shall I call you?',
+    fr: 'Chaque transcription porte le nom de son auteur en pied de page. Comment dois-je vous appeler ?'
+  },
+  'pacifier.returnVisit': {
+    en: 'Welcome back, {name}!',
+    fr: 'Bon retour, {name} !'
+  },
+  'pacifier.save': {
+    en: 'Save',
+    fr: 'Enregistrer'
+  },
+  'pacifier.skip': {
+    en: 'Skip',
+    fr: 'Passer'
+  },
+  'pacifier.placeholder': {
+    en: 'e.g. Dr. Jane Smith',
+    fr: 'ex. Dr Jane Smith'
   },
   'input.placeholder': {
     en: 'Paste Russian lyrics here...',
@@ -10398,6 +10572,65 @@ function addAcuteToSyllable(syllable) {
 
     /* INITIALIZATION */
     document.addEventListener('DOMContentLoaded', () => {
+      // PACIFIER INITIALIZATION (v6.0.94)
+      const pacifierOverlay = document.getElementById('pacifierOverlay');
+      if (pacifierOverlay) {
+        const pacifierGreeting = document.getElementById('pacifierGreeting');
+        const pacifierNameForm = document.getElementById('pacifierNameForm');
+        const pacifierNameInput = document.getElementById('pacifierNameInput');
+        const pacifierSaveBtn = document.getElementById('pacifierSaveBtn');
+        const pacifierSkipBtn = document.getElementById('pacifierSkipBtn');
+
+        // Detect browser language: fr → French, en → English, else → bilingual
+        const browserLang = (navigator.language || '').slice(0, 2);
+        const pacifierLang = browserLang === 'fr' ? 'fr' : browserLang === 'en' ? 'en' : 'both';
+
+        // Set greeting text
+        const enText = UI_LABELS['pacifier.firstLogin'].en;
+        const frText = UI_LABELS['pacifier.firstLogin'].fr;
+        if (pacifierLang === 'fr') {
+          pacifierGreeting.textContent = frText;
+        } else if (pacifierLang === 'en') {
+          pacifierGreeting.textContent = enText;
+        } else {
+          pacifierGreeting.innerHTML = enText + '<span class="bilingual-secondary">' + frText + '</span>';
+        }
+
+        // Set button and placeholder text
+        const btnLang = pacifierLang === 'fr' ? 'fr' : 'en';
+        pacifierSaveBtn.textContent = UI_LABELS['pacifier.save'][btnLang];
+        pacifierSkipBtn.textContent = UI_LABELS['pacifier.skip'][btnLang];
+        if (pacifierNameInput) {
+          pacifierNameInput.placeholder = UI_LABELS['pacifier.placeholder'][btnLang];
+        }
+
+        // Dismiss handler
+        const dismissPacifier = () => {
+          pacifierOverlay.classList.add('dismissed');
+          setTimeout(() => pacifierOverlay.remove(), 400);
+        };
+
+        // Save: store name and dismiss
+        pacifierSaveBtn.addEventListener('click', () => {
+          const name = pacifierNameInput?.value.trim();
+          if (name) {
+            localStorage.setItem('ilya_transcriber_name', name);
+            localStorage.setItem('ilya_welcome_completed', 'true');
+            DocumentState.userName = name;
+            const metaField = document.getElementById('metaTranscriber');
+            if (metaField) metaField.value = name;
+            if (DocumentState.lines.length > 0) PaperRenderer.render();
+          }
+          dismissPacifier();
+        });
+
+        // Skip: mark complete and dismiss
+        pacifierSkipBtn.addEventListener('click', () => {
+          localStorage.setItem('ilya_welcome_completed', 'true');
+          dismissPacifier();
+        });
+      }
+
       DrawerState.init();
       InputManager.init();
       TabController.init();
