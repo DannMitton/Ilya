@@ -10614,7 +10614,7 @@ function addAcuteToSyllable(syllable) {
               DocumentState.userName = name;
               const metaField = document.getElementById('metaTranscriber');
               if (metaField) metaField.value = name;
-              if (DocumentState.lines.length > 0) PaperRenderer.render();
+              PaperRenderer.render();
             } else {
               localStorage.setItem('ilya_welcome_completed', 'true');
             }
