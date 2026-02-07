@@ -228,82 +228,6 @@
     }
 
     /* WELCOME PREFACE (First-run name collection) — Shows once on first drawer open, then never returns */
-    .welcome-preface {
-      margin-bottom: var(--space-lg);
-      padding-bottom: var(--space-lg);
-      border-bottom: 1px solid var(--ilya-border-light);
-    }
-    
-    .welcome-preface.hidden {
-      display: none;
-    }
-    
-    .preface-text {
-      font-size: 0.95em;
-      letter-spacing: 0.01em;
-      color: var(--ilya-text-secondary);
-      line-height: 1.5;
-      margin: 0 0 var(--space-md) 0;
-    }
-    
-    .preface-field {
-      margin-bottom: var(--space-md);
-    }
-    
-    .preface-field input {
-      width: 100%;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-      border: 1px solid var(--ilya-border);
-      border-radius: 6px;
-      background: var(--surface);
-      color: var(--ink-primary);
-    }
-    
-    .preface-field input:focus {
-      outline: none;
-      border-color: var(--ilya-border-focus);
-      box-shadow: 0 0 0 3px var(--ilya-accent-light);
-    }
-    
-    .preface-field input::placeholder {
-      color: var(--ilya-text-muted);
-    }
-    
-    .preface-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    
-    .preface-actions .btn-primary {
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: white;
-      background: var(--ilya-accent);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 150ms ease;
-    }
-    
-    .preface-actions .btn-primary:hover {
-      background: var(--ilya-accent-hover);
-    }
-    
-    .preface-actions .link-secondary {
-      font-size: 0.9rem;
-      color: var(--ilya-text-muted);
-      text-decoration: none;
-      cursor: pointer;
-      transition: color 150ms ease;
-    }
-    
-    .preface-actions .link-secondary:hover {
-      color: var(--ilya-text-secondary);
-    }
-
     /* Internal state containers */
     .drawer-root,
     .drawer-inspector {
@@ -3279,11 +3203,14 @@
       justify-content: center;
       background: #201a12;
       opacity: 1;
-      transition: opacity 400ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+      transform: translateX(0);
+      transition: opacity 400ms cubic-bezier(0.25, 0.1, 0.25, 1.0),
+                  transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
     }
 
     .pacifier-overlay.dismissed {
       opacity: 0;
+      transform: translateX(-25%);
       pointer-events: none;
     }
 
@@ -3442,21 +3369,6 @@
           </div>
         </div>
         <div class="drawer-body">
-
-          <!-- Welcome Preface (First-run name collection) -->
-          <div class="welcome-preface hidden" id="welcomePreface">
-            <p class="preface-text" data-i18n="welcome.text">Welcome to Ilya. Your name will appear in the footer of every transcription you make.</p>
-            <div class="preface-field">
-              <input type="text" id="welcomeNameInput" 
-                     placeholder="e.g. Dr. Jane Smith or J. Smith"
-                     maxlength="50"
-                     aria-label="Your name for attribution">
-            </div>
-            <div class="preface-actions">
-              <button class="btn-primary" id="welcomeSaveBtn" data-i18n="welcome.save">Save</button>
-              <a class="link-secondary" id="welcomeSkipBtn">Skip for now</a>
-            </div>
-          </div>
 
           <!-- Text Input (Phase 2B) -->
           <div class="drawer-input-section">
@@ -3786,14 +3698,6 @@ let metaTitleInput, metaOpusInput, metaTranscriberInput, metaComposerSelect, met
 
 // --- UI_LABELS + setUILanguage() (v6.0.54) — i18n skin system for static UI text. — Keys match data-i18n attributes (Phase A, item 4). — Must be top-level scope so DocumentState/DrawerState can access. ---
 const UI_LABELS = {
-  'welcome.text': {
-    en: 'Welcome to Ilya. Your name will appear in the footer of every transcription you make.',
-    fr: 'Bienvenue sur Ilya. Votre nom apparaîtra au bas de chaque transcription que vous réaliserez.'
-  },
-  'welcome.save': {
-    en: 'Save',
-    fr: 'Enregistrer'
-  },
   'pacifier.firstLogin': {
     en: 'Each transcription carries its maker\'s name in the footer. What shall I call you?',
     fr: 'Chaque transcription porte le nom de son auteur en pied de page. Comment dois-je vous appeler ?'
@@ -10572,7 +10476,7 @@ function addAcuteToSyllable(syllable) {
 
     /* INITIALIZATION */
     document.addEventListener('DOMContentLoaded', () => {
-      // PACIFIER INITIALIZATION (v6.0.94)
+      // PACIFIER INITIALIZATION (v6.0.95) — Loading gate with first-run vs return-visit branching
       const pacifierOverlay = document.getElementById('pacifierOverlay');
       if (pacifierOverlay) {
         const pacifierGreeting = document.getElementById('pacifierGreeting');
@@ -10584,94 +10488,127 @@ function addAcuteToSyllable(syllable) {
         // Detect browser language: fr → French, en → English, else → bilingual
         const browserLang = (navigator.language || '').slice(0, 2);
         const pacifierLang = browserLang === 'fr' ? 'fr' : browserLang === 'en' ? 'en' : 'both';
-
-        // Set greeting text
-        const enText = UI_LABELS['pacifier.firstLogin'].en;
-        const frText = UI_LABELS['pacifier.firstLogin'].fr;
-        if (pacifierLang === 'fr') {
-          pacifierGreeting.textContent = frText;
-        } else if (pacifierLang === 'en') {
-          pacifierGreeting.textContent = enText;
-        } else {
-          pacifierGreeting.innerHTML = enText + '<span class="bilingual-secondary">' + frText + '</span>';
-        }
-
-        // Set button and placeholder text
         const btnLang = pacifierLang === 'fr' ? 'fr' : 'en';
-        pacifierSaveBtn.textContent = UI_LABELS['pacifier.save'][btnLang];
-        pacifierSkipBtn.textContent = UI_LABELS['pacifier.skip'][btnLang];
-        if (pacifierNameInput) {
-          pacifierNameInput.placeholder = UI_LABELS['pacifier.placeholder'][btnLang];
-        }
 
-        // Dismiss handler
+        // Track readiness: dictionary loaded + user has acted (first-run) or min time elapsed (return)
+        let dictionaryReady = false;
+        let userReady = false;
+        const loadStart = Date.now();
+        const MIN_DISPLAY_MS = 1500;
+
+        // Dismiss: dissolve to left (Ilya becomes the drawer)
         const dismissPacifier = () => {
           pacifierOverlay.classList.add('dismissed');
           setTimeout(() => pacifierOverlay.remove(), 400);
         };
 
-        // Save: store name and dismiss
-        pacifierSaveBtn.addEventListener('click', () => {
-          const name = pacifierNameInput?.value.trim();
-          if (name) {
-            localStorage.setItem('ilya_transcriber_name', name);
-            localStorage.setItem('ilya_welcome_completed', 'true');
-            DocumentState.userName = name;
-            const metaField = document.getElementById('metaTranscriber');
-            if (metaField) metaField.value = name;
-            if (DocumentState.lines.length > 0) PaperRenderer.render();
-          }
-          dismissPacifier();
-        });
+        // Try to dismiss when both conditions are met
+        const tryDismiss = () => {
+          if (dictionaryReady && userReady) dismissPacifier();
+        };
 
-        // Skip: mark complete and dismiss
-        pacifierSkipBtn.addEventListener('click', () => {
-          localStorage.setItem('ilya_welcome_completed', 'true');
-          dismissPacifier();
-        });
+        // Mark dictionary ready when loading completes
+        if (_supplementLoadPromise) {
+          _supplementLoadPromise.then(() => {
+            dictionaryReady = true;
+            tryDismiss();
+          });
+        } else {
+          dictionaryReady = true;
+        }
+
+        // Detect first-run vs return visit
+        const isReturningUser = localStorage.getItem('ilya_welcome_completed') === 'true';
+        const storedName = localStorage.getItem('ilya_transcriber_name') || '';
+
+        if (isReturningUser) {
+          // RETURN VISIT: greeting, no form, auto-dismiss after load + minimum time
+          pacifierNameForm.classList.add('hidden');
+
+          // Build greeting with name
+          const enReturn = UI_LABELS['pacifier.returnVisit'].en.replace('{name}', storedName || '');
+          const frReturn = UI_LABELS['pacifier.returnVisit'].fr.replace('{name}', storedName || '');
+          // Clean up double space if no name
+          const enClean = enReturn.replace(', !', '!');
+          const frClean = frReturn.replace(',  !', ' !');
+
+          if (pacifierLang === 'fr') {
+            pacifierGreeting.textContent = frClean;
+          } else if (pacifierLang === 'en') {
+            pacifierGreeting.textContent = enClean;
+          } else {
+            pacifierGreeting.innerHTML = enClean + '<span class="bilingual-secondary">' + frClean + '</span>';
+          }
+
+          // Auto-dismiss after dictionary + minimum display time
+          const elapsed = Date.now() - loadStart;
+          const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+          setTimeout(() => {
+            userReady = true;
+            tryDismiss();
+          }, remaining);
+
+        } else {
+          // FIRST RUN: show name form, wait for user action
+          const enText = UI_LABELS['pacifier.firstLogin'].en;
+          const frText = UI_LABELS['pacifier.firstLogin'].fr;
+          if (pacifierLang === 'fr') {
+            pacifierGreeting.textContent = frText;
+          } else if (pacifierLang === 'en') {
+            pacifierGreeting.textContent = enText;
+          } else {
+            pacifierGreeting.innerHTML = enText + '<span class="bilingual-secondary">' + frText + '</span>';
+          }
+
+          // Set button and placeholder text
+          pacifierSaveBtn.textContent = UI_LABELS['pacifier.save'][btnLang];
+          pacifierSkipBtn.textContent = UI_LABELS['pacifier.skip'][btnLang];
+          if (pacifierNameInput) {
+            pacifierNameInput.placeholder = UI_LABELS['pacifier.placeholder'][btnLang];
+          }
+
+          // Save: store name, then dismiss when dictionary is ready
+          pacifierSaveBtn.addEventListener('click', () => {
+            const name = pacifierNameInput?.value.trim();
+            if (name) {
+              localStorage.setItem('ilya_transcriber_name', name);
+              localStorage.setItem('ilya_welcome_completed', 'true');
+              DocumentState.userName = name;
+              const metaField = document.getElementById('metaTranscriber');
+              if (metaField) metaField.value = name;
+              if (DocumentState.lines.length > 0) PaperRenderer.render();
+            } else {
+              localStorage.setItem('ilya_welcome_completed', 'true');
+            }
+            userReady = true;
+            tryDismiss();
+          });
+
+          // Skip: mark complete, then dismiss when dictionary is ready
+          pacifierSkipBtn.addEventListener('click', () => {
+            localStorage.setItem('ilya_welcome_completed', 'true');
+            userReady = true;
+            tryDismiss();
+          });
+        }
       }
 
       DrawerState.init();
       InputManager.init();
       TabController.init();
-      // Metadata, welcome flow, and export (dissolved from DashboardController in D.3)
+      // Metadata and export (dissolved from DashboardController in D.3)
       metaTitleInput = document.getElementById('metaTitle');
       metaOpusInput = document.getElementById('metaOpus');
       metaTranscriberInput = document.getElementById('metaTranscriber');
       metaExportBtn = document.getElementById('exportPdfBtn');
-      const welcomePreface = document.getElementById('welcomePreface');
-      const welcomeNameInput = document.getElementById('welcomeNameInput');
-      const welcomeSaveBtn = document.getElementById('welcomeSaveBtn');
-      const welcomeSkipBtn = document.getElementById('welcomeSkipBtn');
-      // Load saved name
+      // Load saved name (v6.0.95: pacifier now handles first-run collection)
       const savedName = localStorage.getItem('ilya_transcriber_name');
-      const welcomeCompleted = localStorage.getItem('ilya_welcome_completed');
       if (savedName) {
         DocumentState.userName = savedName;
         if (metaTranscriberInput) metaTranscriberInput.value = savedName;
       } else {
         DocumentState.userName = '';
       }
-      if (!welcomeCompleted && welcomePreface) {
-        welcomePreface.classList.remove('hidden');
-      }
-      // Welcome banner actions
-      welcomeSaveBtn?.addEventListener('click', () => {
-        const name = welcomeNameInput?.value.trim();
-        if (name) {
-          localStorage.setItem('ilya_transcriber_name', name);
-          localStorage.setItem('ilya_welcome_completed', 'true');
-          DocumentState.userName = name;
-          if (metaTranscriberInput) metaTranscriberInput.value = name;
-          welcomePreface?.classList.add('hidden');
-          if (DocumentState.lines.length > 0) PaperRenderer.render();
-        }
-      });
-      welcomeSkipBtn?.addEventListener('click', () => {
-        localStorage.setItem('ilya_welcome_completed', 'true');
-        DocumentState.userName = '';
-        welcomePreface?.classList.add('hidden');
-      });
       // Searchable selects
       metaComposerSelect = SearchableSelect.create({
         id: 'composer',
