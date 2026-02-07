@@ -8984,6 +8984,22 @@ function addAcuteToSyllable(syllable) {
       _ghostElement: null,
       _animationInProgress: false,
 
+      // ═══════════════════════════════════════════
+      // METHOD INDEX
+      // ═══════════════════════════════════════════
+      // DRAWER MECHANICS: init, get isOpen, get mode, open, close, switchMode
+      // INSPECTOR POPULATION: updateInspector, populateControls, _extractPhonemeList
+      // WORD MORPHING: _morphToNewWord, _highlightChangedPhonemes
+      // STRESS CONTROLS: handleStressChange, handleStressSourceSelect, showAttributionArrow, hideAttributionArrow
+      // Ё CONTROLS: handleVariantToggle, stageVariantToggle, cancelVariantToggle, applyVariantToggle, showYoLockMessage, hideYoLockMessage, showYoToast, hideYoToast, undoYoToggle
+      // BOUNDARY CONTROLS: handleAssimilationToggle, _setupDragHandlers, _attemptConsonantShed, _animateConsonantGhost, _flashInvalid, _cleanupGhost, _updateSyllableDisplay, _updateCustomizedState, _pulseAllConsonants
+      // REFRESH: refreshAfterChange
+      // NAVIGATION: _focusFirstElement
+      // SETUP: _setupSwipeToDismiss, _setupViewportListener
+      // ═══════════════════════════════════════════
+
+      // --- DRAWER MECHANICS ---
+
       init() {
         this.drawer = document.getElementById('ilyaDrawer');
         this.scrim = document.getElementById('drawerScrim');
@@ -9180,81 +9196,8 @@ function addAcuteToSyllable(syllable) {
       },
       
       // Phase 4A: Extract phoneme list from word data for comparison
-      _extractPhonemeList(wordData) {
-        if (!wordData?.transcriptionLog) return [];
-        return wordData.transcriptionLog.map(entry => ({
-          char: entry.char,
-          ipa: entry.ipa || ''
-        }));
-      },
-      
-      // Phase 4A: Morph animation to new word (250ms total)
-      _morphToNewWord(wordData) {
-        const inspectorBody = document.querySelector('.drawer-inspector .inspector-body');
-        if (!inspectorBody) {
-          // Fallback: update without animation
-          this.currentWord = wordData;
-          this.updateInspector();
-          return;
-        }
-        
-        // Phase 1: Fade out (125ms)
-        inspectorBody.classList.add('morphing');
-        inspectorBody.classList.remove('morph-in');
-        
-        setTimeout(() => {
-          // Update content while invisible
-          this.currentWord = wordData;
-          this.updateInspector();
-          
-          // Phase 2: Fade in (125ms)
-          inspectorBody.classList.remove('morphing');
-          inspectorBody.classList.add('morph-in');
-          
-          // Apply sage highlights to changed phonemes
-          this._highlightChangedPhonemes();
-          
-          // Clean up animation class after complete
-          setTimeout(() => {
-            inspectorBody.classList.remove('morph-in');
-          }, 125);
-        }, 125);
-      },
-      
-      // Phase 4A: Compare phonemes and highlight changes
-      _highlightChangedPhonemes() {
-        if (!this._previousPhonemes || !this.currentWord?.transcriptionLog) return;
-        
-        const currentPhonemes = this._extractPhonemeList(this.currentWord);
-        const ribbonContainer = this.inspectorElements.ribbon;
-        if (!ribbonContainer) return;
-        
-        // Get all phoneme rows and cluster groups
-        const rows = ribbonContainer.querySelectorAll('.phoneme-row:not(.clitic-arrow-row), .cluster-group');
-        
-        rows.forEach((row, idx) => {
-          const current = currentPhonemes[idx];
-          const previous = this._previousPhonemes[idx];
-          
-          // Highlight if phoneme is new, different char, or different IPA
-          const isChanged = !previous || 
-                           (current && (current.char !== previous.char || current.ipa !== previous.ipa));
-          
-          if (isChanged) {
-            row.classList.add('phoneme-changed');
-            // Remove highlight class after animation completes
-            setTimeout(() => {
-              row.classList.remove('phoneme-changed');
-            }, 400);
-          }
-        });
-        
-        // Clear stored phonemes
-        this._previousPhonemes = null;
-      },
-      
-      // Update inspector display with current word (Phase 3B)
 
+      // --- INSPECTOR POPULATION ---
 
       updateInspector() {
         if (!this.currentWord) return;
@@ -9341,8 +9284,7 @@ function addAcuteToSyllable(syllable) {
           this.inspectorElements.glossInline.textContent = gloss || '';
         }
         
-        // Phoneme Ribbon (Phase 3C) - render phoneme ribbon in drawer
-        if (this.inspectorElements.ribbon) {
+          if (this.inspectorElements.ribbon) {
           RibbonRenderer.renderRibbon(this.currentWord, this.inspectorElements.ribbon);
         }
         
@@ -9352,11 +9294,10 @@ function addAcuteToSyllable(syllable) {
           inspectorBody.scrollTop = 0;
         }
         
-        // Phase 3D: Populate controls
-        this.populateControls();
+          this.populateControls();
       },
       
-      // Phase 3D: Populate control modules based on current word
+
       populateControls() {
         if (!this.currentWord) return;
         
@@ -9447,66 +9388,203 @@ function addAcuteToSyllable(syllable) {
         this._updateCustomizedState();
       },
       
-      // Phase 3D: Stage variant toggle (shows confirmation)
-      stageVariantToggle(variant) {
-        if (!this.currentWord) return;
-        
-        const cyrillic = this.currentWord.cyrillic || '';
-        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
-        const currentVariant = hasYo ? 'yo' : 'ye';
-        
-        // If clicking current state, do nothing
-        if (variant === currentVariant) return;
-        
-        // Stage the change
-        this._stagedVariant = variant;
-        
-        // Update button states: remove active, add staged to target
-        this.inspectorElements.variantYo?.classList.remove('active', 'staged');
-        this.inspectorElements.variantYe?.classList.remove('active', 'staged');
-        
-        if (variant === 'yo') {
-          this.inspectorElements.variantYo?.classList.add('staged');
-        } else {
-          this.inspectorElements.variantYe?.classList.add('staged');
+
+      _extractPhonemeList(wordData) {
+        if (!wordData?.transcriptionLog) return [];
+        return wordData.transcriptionLog.map(entry => ({
+          char: entry.char,
+          ipa: entry.ipa || ''
+        }));
+      },
+      
+      // Phase 4A: Morph animation to new word (250ms total)
+
+      // --- WORD MORPHING ---
+
+      _morphToNewWord(wordData) {
+        const inspectorBody = document.querySelector('.drawer-inspector .inspector-body');
+        if (!inspectorBody) {
+          // Fallback: update without animation
+          this.currentWord = wordData;
+          this.updateInspector();
+          return;
         }
         
-        // Show confirmation row
-        this.inspectorElements.variantConfirm?.classList.add('visible');
+        // Phase 1: Fade out (125ms)
+        inspectorBody.classList.add('morphing');
+        inspectorBody.classList.remove('morph-in');
+        
+        setTimeout(() => {
+          // Update content while invisible
+          this.currentWord = wordData;
+          this.updateInspector();
+          
+          // Phase 2: Fade in (125ms)
+          inspectorBody.classList.remove('morphing');
+          inspectorBody.classList.add('morph-in');
+          
+          // Apply sage highlights to changed phonemes
+          this._highlightChangedPhonemes();
+          
+          // Clean up animation class after complete
+          setTimeout(() => {
+            inspectorBody.classList.remove('morph-in');
+          }, 125);
+        }, 125);
       },
       
-      // Phase 3D: Cancel variant toggle
-      cancelVariantToggle() {
-        // Restore button states
-        const cyrillic = this.currentWord?.cyrillic || '';
-        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+      // Phase 4A: Compare phonemes and highlight changes
+
+      _highlightChangedPhonemes() {
+        if (!this._previousPhonemes || !this.currentWord?.transcriptionLog) return;
         
-        this.inspectorElements.variantYo?.classList.remove('staged');
-        this.inspectorElements.variantYe?.classList.remove('staged');
-        this.inspectorElements.variantYo?.classList.toggle('active', hasYo);
-        this.inspectorElements.variantYe?.classList.toggle('active', !hasYo);
+        const currentPhonemes = this._extractPhonemeList(this.currentWord);
+        const ribbonContainer = this.inspectorElements.ribbon;
+        if (!ribbonContainer) return;
         
-        // Hide confirmation row
-        this.inspectorElements.variantConfirm?.classList.remove('visible');
-        this._stagedVariant = null;
+        // Get all phoneme rows and cluster groups
+        const rows = ribbonContainer.querySelectorAll('.phoneme-row:not(.clitic-arrow-row), .cluster-group');
+        
+        rows.forEach((row, idx) => {
+          const current = currentPhonemes[idx];
+          const previous = this._previousPhonemes[idx];
+          
+          // Highlight if phoneme is new, different char, or different IPA
+          const isChanged = !previous || 
+                           (current && (current.char !== previous.char || current.ipa !== previous.ipa));
+          
+          if (isChanged) {
+            row.classList.add('phoneme-changed');
+            // Remove highlight class after animation completes
+            setTimeout(() => {
+              row.classList.remove('phoneme-changed');
+            }, 400);
+          }
+        });
+        
+        // Clear stored phonemes
+        this._previousPhonemes = null;
+      },
+      // Update inspector display with current word (Phase 3B)
+      // --- STRESS CONTROLS ---
+
+      handleStressChange(newStressIdx) {
+        if (!this.currentWord) return;
+        
+        // Block stress changes for ё words (ё always carries stress)
+        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true ||
+                      GraysonEngine.hasYo(this.currentWord.cyrillic);
+        if (hasYo) {
+          this.showYoLockMessage();
+          return;
+        }
+        
+        const { lineIndex, wordIndex, syllables } = this.currentWord;
+        const currentStressIdx = syllables?.findIndex(s => s.isStressed) ?? -1;
+        
+        // No change needed
+        if (newStressIdx === currentStressIdx) return;
+        
+        // Update DocumentState
+        DocumentState.updateStress(lineIndex, wordIndex, newStressIdx);
+        
+        // Re-render paper
+        PaperRenderer.render();
+        
+        // Find the updated word element and refresh inspector data
+        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
+        if (wordStack) {
+          this.currentWord = {
+            ...this.currentWord,
+            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+            ipa: wordStack.dataset.ipa
+          };
+          this.updateInspector();
+        }
+        
+        // Prompt for attribution (scholarly act)
+        this.showAttributionArrow();
       },
       
-      // Phase 3D: Apply variant toggle
-      applyVariantToggle() {
-        if (!this._stagedVariant || !this.currentWord) return;
+      handleStressSourceSelect(source) {
+        if (!this.currentWord) return;
         
-        const variant = this._stagedVariant;
+        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
+        if (!word) return;
         
-        // Hide confirmation row first
-        this.inspectorElements.variantConfirm?.classList.remove('visible');
+        const currentSource = word.stressSource || 'dictionary';
+        const arrowVisible = this.inspectorElements.stressAttributionArrow?.classList.contains('visible');
         
-        // Execute the toggle
-        this.handleVariantToggle(variant);
+        // If clicking current state and no attribution pending, do nothing
+        if (source === currentSource && !arrowVisible) return;
         
-        this._stagedVariant = null;
+        // Update stress source
+        word.stressSource = source;
+        this.currentWord.stressSource = source;
+        
+        // Update UI
+        this.inspectorElements.stressDictionary?.classList.remove('active', 'committed');
+        this.inspectorElements.stressComposer?.classList.remove('active', 'committed');
+        this.inspectorElements.stressUser?.classList.remove('active', 'committed');
+        
+        const targetBtn = source === 'dictionary' ? this.inspectorElements.stressDictionary
+                        : source === 'composer' ? this.inspectorElements.stressComposer
+                        : this.inspectorElements.stressUser;
+        
+        if (targetBtn) {
+          targetBtn.classList.add('active');
+          if (source !== 'dictionary') {
+            targetBtn.classList.add('committed');
+          }
+        }
+        
+        // Re-render paper
+        PaperRenderer.render();
+        
+        // Attribution fulfilled
+        this.hideAttributionArrow();
       },
       
-      // Phase 3D: Handle variant toggle (ё ↔ е) - executes the change
+      // Attribution arrow: expand row and show the fixed overlay
+
+      showAttributionArrow() {
+        const arrow = this.inspectorElements.stressAttributionArrow;
+        const row = this.inspectorElements.stressSourceRow;
+        const buttons = this.inspectorElements.stressSourceButtons;
+        if (!arrow || !row) return;
+        
+        // Expand the row first
+        row.classList.add('expanded');
+        
+        // Position arrow after layout settles
+        requestAnimationFrame(() => {
+          const target = buttons || row;
+          const targetRect = target.getBoundingClientRect();
+          const drawer = document.getElementById('ilyaDrawer');
+          const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
+          
+          // Position: straddle the drawer edge, tip aligned with button row midpoint
+          arrow.style.left = (drawerRight - 20) + 'px';
+          arrow.style.top = (targetRect.top + targetRect.height / 2 - 38) + 'px';
+          
+          // Restart animation
+          arrow.classList.remove('visible');
+          void arrow.offsetWidth;
+          arrow.classList.add('visible');
+        });
+      },
+      
+      hideAttributionArrow() {
+        const arrow = this.inspectorElements.stressAttributionArrow;
+        if (arrow) arrow.classList.remove('visible');
+        // Collapse the row
+        this.inspectorElements.stressSourceRow?.classList.remove('expanded');
+      },
+      
+      // Show ё lock feedback message (auto-dismiss after 2s)
+
+      // --- Ё CONTROLS ---
+
       handleVariantToggle(variant, skipToast) {
         if (!this.currentWord) return;
         
@@ -9586,7 +9664,115 @@ function addAcuteToSyllable(syllable) {
         }
       },
       
-      // Phase 3D: Handle assimilation toggle (Linked/Separated)
+
+      stageVariantToggle(variant) {
+        if (!this.currentWord) return;
+        
+        const cyrillic = this.currentWord.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        const currentVariant = hasYo ? 'yo' : 'ye';
+        
+        // If clicking current state, do nothing
+        if (variant === currentVariant) return;
+        
+        // Stage the change
+        this._stagedVariant = variant;
+        
+        // Update button states: remove active, add staged to target
+        this.inspectorElements.variantYo?.classList.remove('active', 'staged');
+        this.inspectorElements.variantYe?.classList.remove('active', 'staged');
+        
+        if (variant === 'yo') {
+          this.inspectorElements.variantYo?.classList.add('staged');
+        } else {
+          this.inspectorElements.variantYe?.classList.add('staged');
+        }
+        
+        // Show confirmation row
+        this.inspectorElements.variantConfirm?.classList.add('visible');
+      },
+      
+
+      cancelVariantToggle() {
+        // Restore button states
+        const cyrillic = this.currentWord?.cyrillic || '';
+        const hasYo = cyrillic.includes('ё') || cyrillic.includes('Ё');
+        
+        this.inspectorElements.variantYo?.classList.remove('staged');
+        this.inspectorElements.variantYe?.classList.remove('staged');
+        this.inspectorElements.variantYo?.classList.toggle('active', hasYo);
+        this.inspectorElements.variantYe?.classList.toggle('active', !hasYo);
+        
+        // Hide confirmation row
+        this.inspectorElements.variantConfirm?.classList.remove('visible');
+        this._stagedVariant = null;
+      },
+      
+
+      applyVariantToggle() {
+        if (!this._stagedVariant || !this.currentWord) return;
+        
+        const variant = this._stagedVariant;
+        
+        // Hide confirmation row first
+        this.inspectorElements.variantConfirm?.classList.remove('visible');
+        
+        // Execute the toggle
+        this.handleVariantToggle(variant);
+        
+        this._stagedVariant = null;
+      },
+      
+
+      showYoLockMessage() {
+        const el = this.inspectorElements.yoLockMessage;
+        if (!el) return;
+        
+        el.classList.add('visible');
+        
+        clearTimeout(this._yoLockTimer);
+        this._yoLockTimer = setTimeout(() => {
+          el.classList.remove('visible');
+        }, 2000);
+      },
+      
+      hideYoLockMessage() {
+        this.inspectorElements.yoLockMessage?.classList.remove('visible');
+        clearTimeout(this._yoLockTimer);
+      },
+      
+
+      showYoToast(direction) {
+        // Update toast text based on direction
+        if (this.inspectorElements.yoToastText) {
+          const lang = currentGlossLanguage || 'en';
+          const key = direction === 'yo-to-ye' ? 'inspector.yoToastYoToYe' : 'inspector.yoToastYeToYo';
+          this.inspectorElements.yoToastText.textContent = UI_LABELS[key]?.[lang] ||
+            (direction === 'yo-to-ye' ? 'ё → е changes pronunciation' : 'е → ё changes pronunciation');
+        }
+        
+        this.inspectorElements.yoToast?.classList.add('visible');
+      },
+      
+
+      hideYoToast() {
+        this.inspectorElements.yoToast?.classList.remove('visible');
+      },
+      
+
+      undoYoToggle() {
+        if (!this._yoStateBeforeToggle) return;
+        
+        // Toggle back (suppress toast on undo)
+        this.handleVariantToggle(this._yoStateBeforeToggle, true);
+        
+        // Hide toast
+        this.inspectorElements.yoToast?.classList.remove('visible');
+      },
+      
+
+      // --- BOUNDARY CONTROLS ---
+
       handleAssimilationToggle(boundary) {
         if (!this.currentWord) return;
         
@@ -9612,192 +9798,7 @@ function addAcuteToSyllable(syllable) {
         PaperRenderer.render();
       },
       
-      // Phase 3D: Handle stress source selection
-      handleStressSourceSelect(source) {
-        if (!this.currentWord) return;
-        
-        const word = DocumentState.lines[this.currentWord.lineIndex]?.[this.currentWord.wordIndex];
-        if (!word) return;
-        
-        const currentSource = word.stressSource || 'dictionary';
-        const arrowVisible = this.inspectorElements.stressAttributionArrow?.classList.contains('visible');
-        
-        // If clicking current state and no attribution pending, do nothing
-        if (source === currentSource && !arrowVisible) return;
-        
-        // Update stress source
-        word.stressSource = source;
-        this.currentWord.stressSource = source;
-        
-        // Update UI
-        this.inspectorElements.stressDictionary?.classList.remove('active', 'committed');
-        this.inspectorElements.stressComposer?.classList.remove('active', 'committed');
-        this.inspectorElements.stressUser?.classList.remove('active', 'committed');
-        
-        const targetBtn = source === 'dictionary' ? this.inspectorElements.stressDictionary
-                        : source === 'composer' ? this.inspectorElements.stressComposer
-                        : this.inspectorElements.stressUser;
-        
-        if (targetBtn) {
-          targetBtn.classList.add('active');
-          if (source !== 'dictionary') {
-            targetBtn.classList.add('committed');
-          }
-        }
-        
-        // Re-render paper
-        PaperRenderer.render();
-        
-        // Attribution fulfilled
-        this.hideAttributionArrow();
-      },
-      
-      // Attribution arrow: expand row and show the fixed overlay
-      showAttributionArrow() {
-        const arrow = this.inspectorElements.stressAttributionArrow;
-        const row = this.inspectorElements.stressSourceRow;
-        const buttons = this.inspectorElements.stressSourceButtons;
-        if (!arrow || !row) return;
-        
-        // Expand the row first
-        row.classList.add('expanded');
-        
-        // Position arrow after layout settles
-        requestAnimationFrame(() => {
-          const target = buttons || row;
-          const targetRect = target.getBoundingClientRect();
-          const drawer = document.getElementById('ilyaDrawer');
-          const drawerRight = drawer ? drawer.getBoundingClientRect().right : 360;
-          
-          // Position: straddle the drawer edge, tip aligned with button row midpoint
-          arrow.style.left = (drawerRight - 20) + 'px';
-          arrow.style.top = (targetRect.top + targetRect.height / 2 - 38) + 'px';
-          
-          // Restart animation
-          arrow.classList.remove('visible');
-          void arrow.offsetWidth;
-          arrow.classList.add('visible');
-        });
-      },
-      
-      hideAttributionArrow() {
-        const arrow = this.inspectorElements.stressAttributionArrow;
-        if (arrow) arrow.classList.remove('visible');
-        // Collapse the row
-        this.inspectorElements.stressSourceRow?.classList.remove('expanded');
-      },
-      
-      // Show ё lock feedback message (auto-dismiss after 2s)
-      showYoLockMessage() {
-        const el = this.inspectorElements.yoLockMessage;
-        if (!el) return;
-        
-        el.classList.add('visible');
-        
-        clearTimeout(this._yoLockTimer);
-        this._yoLockTimer = setTimeout(() => {
-          el.classList.remove('visible');
-        }, 2000);
-      },
-      
-      hideYoLockMessage() {
-        this.inspectorElements.yoLockMessage?.classList.remove('visible');
-        clearTimeout(this._yoLockTimer);
-      },
-      
-      // Phase 3D: Show ё warning toast
-      showYoToast(direction) {
-        // Update toast text based on direction
-        if (this.inspectorElements.yoToastText) {
-          const lang = currentGlossLanguage || 'en';
-          const key = direction === 'yo-to-ye' ? 'inspector.yoToastYoToYe' : 'inspector.yoToastYeToYo';
-          this.inspectorElements.yoToastText.textContent = UI_LABELS[key]?.[lang] ||
-            (direction === 'yo-to-ye' ? 'ё → е changes pronunciation' : 'е → ё changes pronunciation');
-        }
-        
-        this.inspectorElements.yoToast?.classList.add('visible');
-      },
-      
-      // Phase 3D: Hide ё warning toast
-      hideYoToast() {
-        this.inspectorElements.yoToast?.classList.remove('visible');
-      },
-      
-      // Phase 3D: Undo ё toggle
-      undoYoToggle() {
-        if (!this._yoStateBeforeToggle) return;
-        
-        // Toggle back (suppress toast on undo)
-        this.handleVariantToggle(this._yoStateBeforeToggle, true);
-        
-        // Hide toast
-        this.inspectorElements.yoToast?.classList.remove('visible');
-      },
-      
-      // Phase 3D: Refresh inspector after word change
-      refreshAfterChange() {
-        const { lineIndex, wordIndex } = this.currentWord;
-        
-        // Re-render paper
-        PaperRenderer.render();
-        
-        // Find the updated word element and refresh inspector data
-        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
-        if (wordStack) {
-          this.currentWord = {
-            ...this.currentWord,
-            cyrillic: wordStack.dataset.cyrillic,
-            ipa: wordStack.dataset.ipa,
-            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
-            hasYo: wordStack.dataset.hasYo,
-            stressSource: wordStack.dataset.stressSource,
-            rightBoundary: wordStack.dataset.rightBoundary,
-            boundarySource: wordStack.dataset.boundarySource
-          };
-          this.updateInspector();
-        }
-      },
-      
-      // Handle stress change from syllable button click (Phase 3B)
-      handleStressChange(newStressIdx) {
-        if (!this.currentWord) return;
-        
-        // Block stress changes for ё words (ё always carries stress)
-        const hasYo = this.currentWord.hasYo === 'true' || this.currentWord.hasYo === true ||
-                      GraysonEngine.hasYo(this.currentWord.cyrillic);
-        if (hasYo) {
-          this.showYoLockMessage();
-          return;
-        }
-        
-        const { lineIndex, wordIndex, syllables } = this.currentWord;
-        const currentStressIdx = syllables?.findIndex(s => s.isStressed) ?? -1;
-        
-        // No change needed
-        if (newStressIdx === currentStressIdx) return;
-        
-        // Update DocumentState
-        DocumentState.updateStress(lineIndex, wordIndex, newStressIdx);
-        
-        // Re-render paper
-        PaperRenderer.render();
-        
-        // Find the updated word element and refresh inspector data
-        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
-        if (wordStack) {
-          this.currentWord = {
-            ...this.currentWord,
-            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
-            ipa: wordStack.dataset.ipa
-          };
-          this.updateInspector();
-        }
-        
-        // Prompt for attribution (scholarly act)
-        this.showAttributionArrow();
-      },
-      
-      // --- PHASE 4B: SYLLABLE BOUNDARY DRAGGING — Distance-on-release disambiguation: — - <10px = tap = reassign stress — - 10-40px = hesitation = silent cancel — - >40px horizontal = drag = shed consonant ---
+
       _setupDragHandlers() {
         const container = this.inspectorElements.syllableDisplay;
         if (!container) return;
@@ -9907,6 +9908,7 @@ function addAcuteToSyllable(syllable) {
        * Attempt to shed a consonant from syllable in given direction
        * Uses BoundaryStack for display-only boundary adjustments
        */
+
       _attemptConsonantShed(syllableIdx, direction) {
         if (!this.currentWord) return;
         
@@ -9986,6 +9988,7 @@ function addAcuteToSyllable(syllable) {
       /**
        * Animate a ghost consonant from source to target button
        */
+
       _animateConsonantGhost(consonant, sourceBtn, targetBtn, direction, onComplete) {
         // Set animation lock
         this._animationInProgress = true;
@@ -10041,6 +10044,7 @@ function addAcuteToSyllable(syllable) {
       /**
        * Flash invalid feedback on syllable button
        */
+
       _flashInvalid(syllableIdx) {
         const btn = this.inspectorElements.syllableDisplay.querySelector(`[data-syllable-index="${syllableIdx}"]`);
         if (btn) {
@@ -10052,6 +10056,7 @@ function addAcuteToSyllable(syllable) {
       /**
        * Clean up ghost element
        */
+
       _cleanupGhost() {
         if (this._ghostElement) {
           this._ghostElement.remove();
@@ -10063,6 +10068,7 @@ function addAcuteToSyllable(syllable) {
        * Update syllable button display with boundary offsets applied
        * Also syncs the word stack IPA on the paper and re-renders the ribbon
        */
+
       _updateSyllableDisplay() {
         if (!this.currentWord) return;
         
@@ -10114,6 +10120,7 @@ function addAcuteToSyllable(syllable) {
       /**
        * Update customized state: show/hide reset button based on boundary modifications
        */
+
       _updateCustomizedState() {
         if (!this.currentWord) return;
         
@@ -10148,6 +10155,7 @@ function addAcuteToSyllable(syllable) {
       /**
        * Pulse animation when resetting to default boundaries
        */
+
       _pulseAllConsonants() {
         const buttons = this.inspectorElements.syllableDisplay.querySelectorAll('.syllable-btn');
         buttons.forEach(btn => {
@@ -10164,6 +10172,35 @@ function addAcuteToSyllable(syllable) {
        * Root: textarea or first input
        * Inspect: back button
        */
+
+      // --- REFRESH ---
+
+      refreshAfterChange() {
+        const { lineIndex, wordIndex } = this.currentWord;
+        
+        // Re-render paper
+        PaperRenderer.render();
+        
+        // Find the updated word element and refresh inspector data
+        const wordStack = document.querySelector(`.word-stack[data-line-index="${lineIndex}"][data-word-index="${wordIndex}"]`);
+        if (wordStack) {
+          this.currentWord = {
+            ...this.currentWord,
+            cyrillic: wordStack.dataset.cyrillic,
+            ipa: wordStack.dataset.ipa,
+            syllables: JSON.parse(wordStack.dataset.syllables || '[]'),
+            hasYo: wordStack.dataset.hasYo,
+            stressSource: wordStack.dataset.stressSource,
+            rightBoundary: wordStack.dataset.rightBoundary,
+            boundarySource: wordStack.dataset.boundarySource
+          };
+          this.updateInspector();
+        }
+      },
+      
+
+      // --- NAVIGATION ---
+
       _focusFirstElement(mode) {
         if (!this.drawer) return;
         
@@ -10183,6 +10220,9 @@ function addAcuteToSyllable(syllable) {
        * Phase 5C: Set up swipe-to-dismiss for mobile bottom sheet
        * Only active when viewport ≤600px
        */
+
+      // --- SETUP ---
+
       _setupSwipeToDismiss() {
         const dragHandle = document.querySelector('.drawer-drag-handle');
         if (!dragHandle) return;
@@ -10239,6 +10279,7 @@ function addAcuteToSyllable(syllable) {
        * Phase 5C: Viewport resize state synchronization
        * Maintains drawer state when crossing breakpoints
        */
+
       _setupViewportListener() {
         const mobileQuery = window.matchMedia('(max-width: 600px)');
         const tabletQuery = window.matchMedia('(min-width: 601px) and (max-width: 899px)');
@@ -10258,6 +10299,7 @@ function addAcuteToSyllable(syllable) {
         mobileQuery.addEventListener('change', handleResize);
         tabletQuery.addEventListener('change', handleResize);
       }
+
     };
 
     /* EVENT DELEGATION */
