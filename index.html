@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.99 Composable blurb IPI layers</title>
+  <title>Ilya — v6.0.99 IPI blurb layers</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8239,7 +8239,10 @@ function buildProvenanceLegend(lines) {
         if (!this.data.identities || !this.data.processes) return null;
         
         const { char, ipa, features } = entry;
-        const lowerChar = char?.toLowerCase();
+        // J-glides log char as '' with the vowel in features.triggeredBy
+        const effectiveChar = (features?.type === 'glide' && features?.triggeredBy)
+          ? features.triggeredBy : char;
+        const lowerChar = effectiveChar?.toLowerCase();
         if (!lowerChar) return null;
         
         const rule = this.deriveRule(entry);
@@ -8252,9 +8255,23 @@ function buildProvenanceLegend(lines) {
           return null;
         }
         
-        // Process lookup (required for meaningful blurb)
+        // Process lookup (required unless Identity is self-sufficient)
         const process = this.data.processes[processKey];
         if (!process) {
+          if (identity.selfSufficient) {
+            // Identity tells the whole story — return it alone
+            const vars = { char: lowerChar, ipa: ipa || '', base_ipa: '', trigger: '', profile: '' };
+            const blurb = {};
+            const allCitations = [];
+            for (const lang of ['en', 'fr']) {
+              const idEntry = identity[lang] || identity.en;
+              if (!idEntry) { if (lang === 'en') return null; continue; }
+              blurb[lang] = this.substituteVars(idEntry.template, vars);
+              if (lang === 'en' && idEntry.citation) allCitations.push(idEntry.citation);
+            }
+            if (!blurb.fr) blurb.fr = blurb.en;
+            return { blurb, citation: this.formatCitations(allCitations), notable: false };
+          }
           console.warn(`[BlurbComposer] Missing process: "${processKey}"`);
           return null;
         }
