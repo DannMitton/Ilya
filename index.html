@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.98 Composable blurb scaffold</title>
+  <title>Ilya — v6.0.99 Composable blurb IPI layers</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8289,8 +8289,10 @@ function buildProvenanceLegend(lines) {
           }
           
           // Assemble: Identity + Process + Implication (if present)
-          let text = this.substituteVars(idEntry.template, vars);
-          text += ' ' + this.substituteVars(procEntry.template, vars);
+          // Standalone processes skip the Identity sentence
+          let text = process.standalone
+            ? this.substituteVars(procEntry.template, vars)
+            : this.substituteVars(idEntry.template, vars) + ' ' + this.substituteVars(procEntry.template, vars);
           if (implEntry?.template) {
             text += ' ' + this.substituteVars(implEntry.template, vars);
           }
@@ -8299,7 +8301,7 @@ function buildProvenanceLegend(lines) {
           
           // Collect citations once (from English pass)
           if (lang === 'en') {
-            if (idEntry.citation) allCitations.push(idEntry.citation);
+            if (!process.standalone && idEntry.citation) allCitations.push(idEntry.citation);
             if (procEntry.citation) allCitations.push(procEntry.citation);
             if (implEntry?.citation) allCitations.push(implEntry.citation);
           }
