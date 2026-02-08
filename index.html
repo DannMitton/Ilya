@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.109 interpalatal key split for pretonic ikanye</title>
+  <title>Ilya — v6.0.109 interpalatal key split, strip combining acutes, honest stress</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -5518,6 +5518,8 @@ function buildProvenanceLegend(lines) {
               return cleaned.length > 0;
             });
           return words.map(word => {
+            // Strip combining diacritical marks (e.g., stress acutes pasted from source text)
+            word = word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
             const lookup = GraysonEngine.lookupStress(word);
             let displayWord = word;
             let wasYoRestored = false;
@@ -5539,8 +5541,9 @@ function buildProvenanceLegend(lines) {
               yoSource = null;
             } else {
               // No stress data: either not in dictionary, or in dictionary without stress.
-              // Default to syllable 0 and flag as inferred so VERIFY badge shows.
-              stress = 0;
+              // Use -2 to signal unknown: all vowels render as cardinal (no reduction),
+              // no stress mark displayed. VERIFY badge shows via stressSource 'inferred'.
+              stress = -2;
               stressSource = 'inferred';
               yoSource = null;
             }
@@ -6381,7 +6384,7 @@ function buildProvenanceLegend(lines) {
       // Look up stress from dictionary
       // Handles both old format and new kaikki format (including homographs)
       lookupStress(word) {
-        const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const cleanWord = word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         
         // Helper to normalize entry format
         const normalizeEntry = (entry, source = 'dictionary') => {
@@ -6824,6 +6827,7 @@ function buildProvenanceLegend(lines) {
       
       getSyllablePosition(index, stressIndex, total) {
         if (index === stressIndex) return 'stressed';
+        if (stressIndex === -2) return 'stressed'; // Unknown stress: all vowels cardinal
         if (stressIndex === -1) return 'unstressed';
         if (index === stressIndex - 1) return 'pretonic';
         // Grayson p. 266, fn. 306: immediate post-tonic а stays /ɑ/ to distinguish from о
@@ -7237,7 +7241,7 @@ function buildProvenanceLegend(lines) {
           // v5.11.45: Always add stress mark for stressed syllables
           // Previously only polysyllables got marks in underlying IPA, causing
           // monosyllables to lose their mark after cross-word assimilation
-          if (position === 'stressed') {
+          if (position === 'stressed' && effectiveStress >= 0) {
             sylIpa += 'ˈ';
           }
           
@@ -7528,7 +7532,7 @@ function buildProvenanceLegend(lines) {
           syllableData.push({
             cyrillic: syl,
             ipa: sylIpa.replace(/^ˈ/, ''),
-            isStressed: position === 'stressed'
+            isStressed: position === 'stressed' && effectiveStress >= 0
           });
           
           ipa += sylIpa;
