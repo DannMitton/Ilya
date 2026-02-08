@@ -876,6 +876,48 @@
       },
       "fr": null
     },
+    "regressive-voicing:п": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:ф": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:к": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:т": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:ш": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:с": {
+      "en": {
+        "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
     "genitive:г": {
       "en": {
         "template": "In the genitive endings -ого and -его, ⟨{char}⟩ is traditionally pronounced [{ipa}].",
@@ -1412,6 +1454,48 @@
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
+      },
+      "fr": null
+    },
+    "regressive-voicing:п": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:ф": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:к": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:т": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:ш": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
+      },
+      "fr": null
+    },
+    "regressive-voicing:с": {
+      "en": {
+        "template": "The place and manner of articulation stay the same; only the voicing changes.",
+        "citation": "pp. 215–221"
       },
       "fr": null
     },
