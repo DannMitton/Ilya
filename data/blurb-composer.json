@@ -1,5 +1,237 @@
 {
-  "identities": {},
+  "identities": {
+    "а": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɑ/ in sung Russian.",
+        "citation": "p. 85"
+      },
+      "fr": null
+    },
+    "я": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɑ/ in sung Russian.",
+        "citation": "p. 85"
+      },
+      "fr": null
+    },
+    "о": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /o/ in sung Russian.",
+        "citation": "p. 86"
+      },
+      "fr": null
+    },
+    "ё": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ always carries stress and sounds like /o/.",
+        "citation": "p. 86"
+      },
+      "fr": null
+    },
+    "у": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /u/ and does not reduce, regardless of stress.",
+        "citation": "p. 96"
+      },
+      "fr": null
+    },
+    "ю": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /u/ and does not reduce, regardless of stress.",
+        "citation": "p. 96"
+      },
+      "fr": null
+    },
+    "ы": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like [ɨ] and does not change with stress.",
+        "citation": "pp. 89–90"
+      },
+      "fr": null
+    },
+    "э": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɛ/ in sung Russian.",
+        "citation": "p. 106"
+      },
+      "fr": null
+    },
+    "е": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɛ/ in sung Russian.",
+        "citation": "p. 106"
+      },
+      "fr": null
+    },
+    "и": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /i/ and never reduces in sung Russian.",
+        "citation": "pp. 96, 101"
+      },
+      "fr": null
+    },
+    "ь": {
+      "en": {
+        "template": "The soft sign has no sound of its own. It palatalizes the consonant before it.",
+        "citation": "p. 195"
+      },
+      "fr": null
+    },
+    "ъ": {
+      "en": {
+        "template": "The hard sign has no sound of its own. It keeps the preceding consonant hard and signals a /j/ glide before the next vowel.",
+        "citation": "p. 193"
+      },
+      "fr": null
+    },
+    "б": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /b/ in sung Russian.",
+        "citation": "p. 140"
+      },
+      "fr": null
+    },
+    "в": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /v/ in sung Russian.",
+        "citation": "p. 152"
+      },
+      "fr": null
+    },
+    "г": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɡ/ in sung Russian.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "д": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /d/ in sung Russian.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "ж": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /ʒ/ and is always hard.",
+        "citation": "p. 165"
+      },
+      "fr": null
+    },
+    "з": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /z/ in sung Russian.",
+        "citation": "p. 140"
+      },
+      "fr": null
+    },
+    "й": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ is a semivowel, sounding like the glide /j/.",
+        "citation": "p. 96"
+      },
+      "fr": null
+    },
+    "к": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /k/ in sung Russian.",
+        "citation": "p. 140"
+      },
+      "fr": null
+    },
+    "л": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /ɫ/ when hard, a distinctly Russian sound.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "м": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /m/ in sung Russian.",
+        "citation": "p. 140"
+      },
+      "fr": null
+    },
+    "н": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /n/ in sung Russian.",
+        "citation": "p. 152"
+      },
+      "fr": null
+    },
+    "п": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /p/ in sung Russian.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "р": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ is always trilled in sung Russian, sounding like /r/.",
+        "citation": "pp. 156–158"
+      },
+      "fr": null
+    },
+    "с": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /s/ in sung Russian.",
+        "citation": "p. 152"
+      },
+      "fr": null
+    },
+    "т": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /t/ in sung Russian.",
+        "citation": "p. 140"
+      },
+      "fr": null
+    },
+    "ф": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /f/ in sung Russian.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "х": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ usually sounds like /x/ in sung Russian.",
+        "citation": "p. 145"
+      },
+      "fr": null
+    },
+    "ц": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /ts/ and is always hard.",
+        "citation": "p. 166"
+      },
+      "fr": null
+    },
+    "ч": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /tʃʲ/ and is always soft.",
+        "citation": "p. 171"
+      },
+      "fr": null
+    },
+    "ш": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /ʃ/ and is always hard.",
+        "citation": "p. 162"
+      },
+      "fr": null
+    },
+    "щ": {
+      "en": {
+        "template": "The letter ⟨{char}⟩ sounds like /ʃʲʃʲ/ and is always soft.",
+        "citation": "p. 171"
+      },
+      "fr": null
+    }
+  },
   "processes": {},
   "implications": {},
   "citation_style": {
