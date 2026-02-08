@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.105 retire legacy rule-registry fallback</title>
+  <title>Ilya — v6.0.106 fix verbose gloss pass-through</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -4453,12 +4453,7 @@ const CURATED_GLOSSES = new Map([
  * Format gloss for word-stack display (minimal, translation only)
  */
 function formatGlossForDisplay(gloss, pos, lemma, word) {
-    // Bilingual gloss data takes priority (v6.0.48)
-    if (gloss && typeof gloss === 'object' && (gloss.en || gloss.fr)) {
-        return extractGloss(gloss);
-    }
-    
-    // Check curated glosses first (word form, then lemma)
+    // Curated glosses are hand-written and always clean — return as-is
     if (word && CURATED_GLOSSES.has(word.toLowerCase())) {
         return extractGloss(CURATED_GLOSSES.get(word.toLowerCase()));
     }
@@ -4466,11 +4461,17 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
         return extractGloss(CURATED_GLOSSES.get(lemma.toLowerCase()));
     }
     
+    // Resolve bilingual objects to string so dictionary glosses
+    // enter the cleaning pipeline (fixes verbose Wiktionary pass-through)
+    const resolvedGloss = (gloss && typeof gloss === 'object')
+        ? extractGloss(gloss)
+        : gloss;
+    
     // Blank for missing glosses: leave space for pencil users (v5.11.20)
-    if (!gloss) return '';
+    if (!resolvedGloss) return '';
     
     // First, try to extract a clean translation from verbose patterns
-    const cleanedGloss = extractCleanGloss(gloss);
+    const cleanedGloss = extractCleanGloss(resolvedGloss);
     
     // Detect verbose grammatical patterns from kaikki.org
     const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(cleanedGloss) 
@@ -4478,7 +4479,7 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
     
     if (isGrammatical) {
         // Try lemma field first, then extract from gloss text
-        const effectiveLemma = lemma || extractLemmaFromGloss(gloss);
+        const effectiveLemma = lemma || extractLemmaFromGloss(resolvedGloss);
         
         if (effectiveLemma) {
             // Look up lemma's semantic gloss
