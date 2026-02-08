@@ -5533,7 +5533,7 @@ function buildProvenanceLegend(lines) {
               stress = yoSyllable;
               stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
               yoSource = wasYoRestored ? 'yo-restored' : null;
-            } else if (lookup && lookup.stress != null) {
+            } else if (lookup && lookup.stress != null && lookup.stress >= 0) {
               stress = lookup.stress;
               stressSource = lookup.source;
               yoSource = null;
