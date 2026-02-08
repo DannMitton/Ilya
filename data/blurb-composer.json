@@ -934,45 +934,51 @@
     },
     "silent:д": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "pp. 242–243"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "silent:т": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "pp. 242–243"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "silent:в": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "pp. 244–245"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "silent:л": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "p. 244"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "silent:з": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "pp. 242–246"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "silent:с": {
       "en": {
-        "template": "In the cluster {trigger}, the ⟨{char}⟩ is silent; it is not pronounced.",
-        "citation": "pp. 235–236"
+        "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
+        "citation": "pp. 242–246"
       },
-      "fr": null
+      "fr": null,
+      "standalone": true
     },
     "muscovite:щ": {
       "en": {
@@ -1083,6 +1089,13 @@
       },
       "fr": null,
       "standalone": true
+    },
+    "hard:н": {
+      "en": {
+        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
+        "citation": "p. 152"
+      },
+      "fr": null
     }
   },
   "implications": {
@@ -1503,48 +1516,6 @@
       "en": {
         "template": "[{ipa}] sounds like /v/; this is a Russian spelling convention, not a phonological rule.",
         "citation": "p. 232"
-      },
-      "fr": null
-    },
-    "silent:д": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
-      },
-      "fr": null
-    },
-    "silent:т": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
-      },
-      "fr": null
-    },
-    "silent:в": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
-      },
-      "fr": null
-    },
-    "silent:л": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
-      },
-      "fr": null
-    },
-    "silent:з": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
-      },
-      "fr": null
-    },
-    "silent:с": {
-      "en": {
-        "template": "No adjustment needed; simply ignore.",
-        "citation": "pp. 235–236"
       },
       "fr": null
     }
