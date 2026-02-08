@@ -75,14 +75,16 @@
         "template": "The soft sign makes no sound of its own, but it is phonologically significant: ⟨{char}⟩ palatalizes most consonants that precede it.",
         "citation": "p. 195"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "ъ": {
       "en": {
         "template": "The hard sign makes no sound of its own, but it is phonologically significant in two ways: ⟨{char}⟩ preserves the hardness of the preceding consonant, then it triggers a /j/-glide before the next vowel.",
         "citation": "p. 193"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "б": {
       "en": {
@@ -117,7 +119,8 @@
         "template": "The letter ⟨{char}⟩ sounds like /ʒ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords or archaic traditional pronunciation.",
         "citation": "pp. 165, 174"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "з": {
       "en": {
@@ -131,7 +134,8 @@
         "template": "The letter ⟨{char}⟩ sounds like /j/; although English speakers call this a semi-vowel, Russian phonologists classify it as a palatalized consonant.",
         "citation": "p. 96"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "к": {
       "en": {
@@ -208,28 +212,32 @@
         "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in words with the suffix -ция.",
         "citation": "pp. 166, 283"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "ч": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /tʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "ш": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /ʃ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords.",
         "citation": "p. 162"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     },
     "щ": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /ʃʲʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
-      "fr": null
+      "fr": null,
+      "selfSufficient": true
     }
   },
   "processes": {
@@ -924,102 +932,6 @@
       },
       "fr": null
     },
-    "j-glide-initial:я": {
-      "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-initial:е": {
-      "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-initial:ё": {
-      "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-initial:ю": {
-      "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postvocalic:я": {
-      "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postvocalic:е": {
-      "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postvocalic:ё": {
-      "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postvocalic:ю": {
-      "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
-        "citation": "pp. 114–116"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postsign:я": {
-      "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
-        "citation": "pp. 114–116, 193–195"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postsign:е": {
-      "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
-        "citation": "pp. 114–116, 193–195"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postsign:ё": {
-      "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
-        "citation": "pp. 114–116, 193–195"
-      },
-      "fr": null,
-      "standalone": true
-    },
-    "j-glide-postsign:ю": {
-      "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
-        "citation": "pp. 114–116, 193–195"
-      },
-      "fr": null,
-      "standalone": true
-    },
     "muscovite:щ": {
       "en": {
         "template": "In the Old Muscovite style, ⟨{char}⟩ is pronounced as a long palatalized fricative: [{ipa}].",
@@ -1033,6 +945,102 @@
         "citation": "p. 181"
       },
       "fr": null
+    },
+    "j-glide:я": {
+      "en": {
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-glide:е": {
+      "en": {
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-glide:ё": {
+      "en": {
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-glide:ю": {
+      "en": {
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-vowel:я": {
+      "en": {
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-vowel:е": {
+      "en": {
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-vowel:ё": {
+      "en": {
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-vowel:ю": {
+      "en": {
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "citation": "pp. 114–116"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-sign:я": {
+      "en": {
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-sign:е": {
+      "en": {
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-sign:ё": {
+      "en": {
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "j-after-sign:ю": {
+      "en": {
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
+      "fr": null,
+      "standalone": true
     }
   },
   "implications": {
@@ -1171,91 +1179,91 @@
     },
     "soft:б": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:в": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:г": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:д": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:з": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:к": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:м": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:п": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:р": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:с": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:т": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:ф": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
     },
     "soft:х": {
       "en": {
-        "template": "[{ipa}] is the palatalized form; like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
+        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
       "fr": null
