@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.107 fix verbose gloss pipeline</title>
+  <title>Ilya — v6.0.108 fix devoicing, stress, spacing, footer</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1427,7 +1427,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 16px 40px 32px;
+      padding: 16px 72px 32px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 24px;
@@ -5533,11 +5533,13 @@ function buildProvenanceLegend(lines) {
               stress = yoSyllable;
               stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
               yoSource = wasYoRestored ? 'yo-restored' : null;
-            } else if (lookup) {
+            } else if (lookup && lookup.stress != null) {
               stress = lookup.stress;
               stressSource = lookup.source;
               yoSource = null;
             } else {
+              // No stress data: either not in dictionary, or in dictionary without stress.
+              // Default to syllable 0 and flag as inferred so VERIFY badge shows.
               stress = 0;
               stressSource = 'inferred';
               yoSource = null;
@@ -5643,14 +5645,11 @@ function buildProvenanceLegend(lines) {
                 }
               }
             }
-            let ipaCore;
-            if (tw.ipaSurface !== tw.ipaUnderlying) {
-              ipaCore = tw.ipaSurface;
-            } else {
-              ipaCore = tw.syllables.map(s => {
-                return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
-              }).join(' ');
-            }
+            // Always build display from syllable data to preserve intersyllabic spaces.
+            // Syllable IPA is already updated for cross-word assimilation (line above).
+            let ipaCore = tw.syllables.map(s => {
+              return s.isStressed ? 'ˈ' + s.ipa : s.ipa;
+            }).join(' ');
             tw.ipaContent = ipaCore;
             tw.ipaDisplay = ipaCore;
           });
@@ -7875,11 +7874,12 @@ function buildProvenanceLegend(lines) {
         }
         
         // Apply final devoicing to words that didn't undergo cross-word assimilation
+        // Grayson pp. 199-202: every word-final voiced obstruent devoices categorically.
+        // Only clitic boundaries suppress devoicing (phonologically attached).
+        // Cross-word re-voicing by a following voiced obstruent is handled above
+        // (sets skipFinalDevoicing = true), so those cases are already excluded.
         words.forEach((word, i) => {
-          const isLastWord = (i === words.length - 1);
-          const hasHardBoundary = (word.rightBoundary === 'hard');
-          
-          if ((isLastWord || hasHardBoundary) && !word.skipFinalDevoicing) {
+          if (!word.skipFinalDevoicing && word.rightBoundary !== 'clitic') {
             word.ipaSurface = this.applyFinalDevoicing(word.ipaSurface);
           }
         });
