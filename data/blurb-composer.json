@@ -1096,6 +1096,30 @@
         "citation": "p. 152"
       },
       "fr": null
+    },
+    "pretonic-interpalatal:е": {
+      "en": {
+        "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
+        "citation": "pp. 125, 127–128"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "pretonic-interpalatal:я": {
+      "en": {
+        "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
+        "citation": "pp. 125, 127–128"
+      },
+      "fr": null,
+      "standalone": true
+    },
+    "pretonic-interpalatal:э": {
+      "en": {
+        "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
+        "citation": "pp. 125, 127–128"
+      },
+      "fr": null,
+      "standalone": true
     }
   },
   "implications": {
