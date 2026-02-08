@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.113 merge j-glide + vowel into single ribbon row</title>
+  <title>Ilya — v6.0.113 merge j-glide ribbon rows, fix interpalatal after ъ</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -7455,7 +7455,7 @@ function buildProvenanceLegend(lines) {
                 
                 // Capture interpalatal and afterHard features
                 const prevConsonantForFeatures = this.isConsonant(prevCharInWord) ? prevCharInWord : null;
-                vowelFeatures.interpalatal = isPrecededByPal && isFollowedByPal;
+                vowelFeatures.interpalatal = isPrecededByPal && isFollowedByPal && prevCharInWord !== 'ъ';
                 vowelFeatures.afterHard = ['ж', 'ш', 'ц'].includes(prevConsonantForFeatures);
                 
                 vowelIpa = this.transcribeVowel(char, position, isPrecededByPal, isFollowedByPal, prevConsonantForFeatures);
@@ -8225,7 +8225,7 @@ function buildProvenanceLegend(lines) {
         if (features?.bogException) return 'bog-exception';
         
         // J-glide variants
-        if (features?.type === 'glide' && ipa === 'j') {
+        if (features?.type === 'glide' && features?.source) {
           if (features.source === 'ii-suffix') return 'j-ii-suffix';
           if (features.source === 'after-vowel') return 'j-after-vowel';
           if (features.source === 'after-sign') return 'j-after-sign';
@@ -8372,31 +8372,6 @@ function buildProvenanceLegend(lines) {
           : style.singular;
         
         return style.template.replace('{pages}', `${prefix} ${joined}`);
-      },
-      
-      // Merge two formatted citation strings into one deduplicated parenthetical
-      // E.g., "(Grayson, pp. 114–116)" + "(Grayson, pp. 127–128)" → "(Grayson, pp. 114–116, 127–128)"
-      mergeCitations(citation1, citation2) {
-        if (!citation1) return citation2;
-        if (!citation2) return citation1;
-        if (citation1 === citation2) return citation1;
-        
-        const extractPages = (cit) => {
-          const match = cit.match(/\(Grayson,\s*pp?\.\s*(.+)\)/);
-          if (!match) return [];
-          return match[1].split(/,\s*/).map(p => p.trim());
-        };
-        
-        const pages = [...extractPages(citation1), ...extractPages(citation2)];
-        const seen = new Set();
-        const unique = pages.filter(p => {
-          if (seen.has(p)) return false;
-          seen.add(p);
-          return true;
-        });
-        
-        if (unique.length === 0) return citation1;
-        return this.formatCitations(unique.map(p => `p. ${p}`));
       }
     };
 
@@ -8643,39 +8618,13 @@ function buildProvenanceLegend(lines) {
             
             const combinedIpa = 'j' + next.ipa;
             
-            // Re-compose j-glide blurb with combined IPA so template resolves to e.g. [jɪ]
-            const jGlideBlurb = this.lookupBlurb({
+            // Recompose j-glide blurb with combined IPA
+            // Template {ipa} resolves to e.g. 'jɑ' instead of 'j'
+            const mergedBlurb = RuleRegistry.lookupBlurb({
               char: '',
               ipa: combinedIpa,
               features: entry.features
             });
-            
-            const vowelBlurb = next.blurbData;
-            const isStressed = next.features?.position === 'stressed';
-            
-            let mergedBlurb;
-            if (isStressed || !vowelBlurb?.blurb) {
-              // Stressed: j-glide blurb alone (reduction not needed)
-              mergedBlurb = jGlideBlurb;
-            } else {
-              // Unstressed: concatenate j-glide blurb + vowel reduction blurb
-              const mergedText = {};
-              for (const lang of ['en', 'fr']) {
-                const jText = typeof jGlideBlurb.blurb === 'string'
-                  ? jGlideBlurb.blurb
-                  : (jGlideBlurb.blurb?.[lang] || jGlideBlurb.blurb?.en || '');
-                const vText = typeof vowelBlurb.blurb === 'string'
-                  ? vowelBlurb.blurb
-                  : (vowelBlurb.blurb?.[lang] || vowelBlurb.blurb?.en || '');
-                mergedText[lang] = jText + (vText ? ' ' + vText : '');
-              }
-              
-              mergedBlurb = {
-                blurb: mergedText,
-                citation: BlurbComposer.mergeCitations(jGlideBlurb.citation, vowelBlurb.citation),
-                notable: jGlideBlurb.notable || vowelBlurb.notable
-              };
-            }
             
             mergedLog.push({
               char: next.char,
