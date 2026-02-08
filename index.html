@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.99 IPI blurb layers</title>
+  <title>Ilya — v6.0.100 deriveRule non-reducing vowel fix</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8396,6 +8396,11 @@ function buildProvenanceLegend(lines) {
           // а is unaffected by preceding hard consonants - it still follows position rules
           const lowerChar = char?.toLowerCase();
           if (features.afterHard && (lowerChar === 'и' || lowerChar === 'е')) return 'after-hard';
+          // Non-reducing vowels (у, ю, ы, ё) use a single 'unstressed' key
+          // regardless of position. и is non-reducing except in pretonic
+          // position, where it has its own entry for ikanye.
+          if (['у', 'ю', 'ы', 'ё'].includes(lowerChar)) return 'unstressed';
+          if (lowerChar === 'и' && features.position !== 'pretonic') return 'unstressed';
           if (features.position === 'pretonic') return 'pretonic';
           if (features.position === 'initial') return 'initial';
           if (features.position === 'posttonic-immediate') return 'post-stress-immediate';
