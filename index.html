@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.104 silent consonant blurbs via BlurbComposer</title>
+  <title>Ilya — v6.0.105 retire legacy rule-registry fallback</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -4191,16 +4191,6 @@ async function loadSingerSupplement() {
     }
 }
 
-async function loadRuleRegistry() {
-    try {
-        const response = await fetch('data/rule-registry.json');
-        if (response.ok) {
-            RuleRegistry.blurbs = await response.json();
-        }
-    } catch (error) {
-    }
-}
-
 async function loadBlurbComposer() {
     try {
         const response = await fetch('data/blurb-composer.json');
@@ -4208,12 +4198,12 @@ async function loadBlurbComposer() {
             BlurbComposer.data = await response.json();
         }
     } catch (error) {
-        console.warn('[BlurbComposer] Failed to load blurb-composer.json; using legacy blurbs only');
+        console.warn('[BlurbComposer] Failed to load blurb-composer.json');
     }
 }
 
-// Start Tier 1, Singer's Supplement, Rule Registry, and Blurb Composer immediately
-_supplementLoadPromise = Promise.all([loadTier1(), loadSingerSupplement(), loadRuleRegistry(), loadBlurbComposer()]);
+// Start Tier 1, Singer's Supplement, and Blurb Composer immediately
+_supplementLoadPromise = Promise.all([loadTier1(), loadSingerSupplement(), loadBlurbComposer()]);
 
 /* GLOSS FORMATTING HELPERS — Handles verbose grammatical descriptions from kaikki.org */
 /**
@@ -8205,13 +8195,14 @@ function buildProvenanceLegend(lines) {
 
     /* BLURB COMPOSER — IPI (Identity-Process-Implication) assembly engine (v6.0.98) */
     /* Composes context-aware educational blurbs from modular layers.              */
-    /* Falls back to legacy rule-registry.json when composer data is incomplete.   */
+    /* Composes educational blurbs from Identity-Process-Implication layers.           */
+    /* Data: data/blurb-composer.json. See COMPOSABLE_BLURB_PLAN.md for architecture. */
     const BlurbComposer = {
       // Data loaded from data/blurb-composer.json
       data: {},
       
       // Derive the composer rule key from a transcription log entry.
-      // Covers all special cases that RuleRegistry.lookupBlurb handles.
+      // Maps engine features to process keys for blurb-composer.json lookup.
       deriveRule(entry) {
         const { features, char, ipa } = entry;
         
@@ -8374,10 +8365,8 @@ function buildProvenanceLegend(lines) {
       }
     };
 
-    /* RULE REGISTRY - Phoneme Ribbon Blurbs — Maps transcription features → educational blurbs */
+    /* RULE REGISTRY — Rule derivation, display log, and cluster blurbs */
     const RuleRegistry = {
-      // Blurb data loaded from data/rule-registry.json
-      blurbs: {},
       
       // Derive rule name from transcriptionLog features
       // Expected softTrigger values:
@@ -8452,101 +8441,10 @@ function buildProvenanceLegend(lines) {
       
       // Look up blurb data for a transcriptionLog entry
       lookupBlurb(entry) {
-        // Try composed IPI blurb first (v6.0.98)
         const composed = BlurbComposer.composeBlurb(entry);
         if (composed) return composed;
         
-        // Legacy fallback: rule-registry.json lookup
-        const { features, char, ipa } = entry;
-        
-        // Check for regressive devoicing assimilation (v5.10.20)
-        if (features?.voicingAssimilation && features?.devoiced) {
-          const key = `${ipa}:regressive-devoicing:${char}`;
-          if (this.blurbs[key]) {
-            return this.blurbs[key];
-          }
-        }
-        
-        // Check for regressive voicing assimilation (v5.10.21)
-        if (features?.voicingAssimilation && features?.voiced) {
-          const key = `${ipa}:regressive-voicing:${char}`;
-          if (this.blurbs[key]) {
-            return this.blurbs[key];
-          }
-        }
-        
-        // Check for final devoicing
-        if (features?.finalDevoicing) {
-          const key = `${ipa}:final-devoicing:${char}`;
-          if (this.blurbs[key]) {
-            return this.blurbs[key];
-          }
-        }
-        
-        // Check for genitive ending г → /v/ (Grayson p. 243)
-        if (features?.genitiveEnding) {
-          const key = `${ipa}:genitive:${char}`;
-          if (this.blurbs[key]) {
-            return this.blurbs[key];
-          }
-        }
-        
-        // Check for бог exception г → /x/ (Grayson p. 242)
-        if (features?.bogException) {
-          const key = `x:exception:бог`;
-          if (this.blurbs[key]) {
-            return this.blurbs[key];
-          }
-        }
-        
-        // Check for j-glide entries (v5.11.44)
-        if (features?.type === 'glide' && ipa === 'j') {
-          const source = features.source;
-          const triggeredBy = features.triggeredBy || 'е';
-          
-          // Map source to blurb key
-          if (source === 'ii-suffix') {
-            const key = 'j:ii-suffix:и';
-            if (this.blurbs[key]) {
-              return this.blurbs[key];
-            }
-          } else if (source === 'after-vowel') {
-            const key = `j:after-vowel:${triggeredBy}`;
-            if (this.blurbs[key]) {
-              return this.blurbs[key];
-            }
-          } else if (source === 'after-sign') {
-            const key = `j:after-sign:${triggeredBy}`;
-            if (this.blurbs[key]) {
-              return this.blurbs[key];
-            }
-          }
-          
-          // Default j-glide blurb
-          return {
-            blurb: {
-              en: 'The palatal glide /j/ precedes this vowel.',
-              fr: 'La glissante palatale /j/ précède cette voyelle.'
-            },
-            citation: 'pp. 114–124',
-            notable: false
-          };
-        }
-        
-        const rule = this.deriveRule(features, char);
-        
-        // Signs have empty IPA - key format is just 'rule:char' (e.g., 'soft-sign:ь')
-        const key = ipa ? `${ipa}:${rule}:${char}` : `${rule}:${char}`;
-        
-        if (this.blurbs[key]) return this.blurbs[key];
-        
-        // Fallback for non-reducing vowels (у, ю, и, ы): try generic 'unstressed' or 'stressed'
-        if (features?.type === 'vowel' && !this.blurbs[key]) {
-          const fallbackRule = features.position === 'stressed' ? 'stressed' : 'unstressed';
-          const fallbackKey = `${ipa}:${fallbackRule}:${char}`;
-          if (this.blurbs[fallbackKey]) return this.blurbs[fallbackKey];
-        }
-        
+        const { char, ipa } = entry;
         return {
           blurb: `${char} → ${ipa}`,
           citation: null,
