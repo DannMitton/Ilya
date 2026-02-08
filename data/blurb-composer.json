@@ -2,231 +2,231 @@
   "identities": {
     "а": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɑ/ in sung Russian.",
+        "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɑ/.",
         "citation": "p. 85"
       },
       "fr": null
     },
     "я": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɑ/ in sung Russian.",
+        "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɑ/.",
         "citation": "p. 85"
       },
       "fr": null
     },
     "о": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /o/ in sung Russian.",
+        "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /o/.",
         "citation": "p. 86"
       },
       "fr": null
     },
     "ё": {
       "en": {
-        "template": "The letter ⟨{char}⟩ always carries stress and sounds like /o/.",
+        "template": "The letter ⟨{char}⟩ always sounds like /o/; ⟨{char}⟩ inherently carries the stress, so it is never unstressed.",
         "citation": "p. 86"
       },
       "fr": null
     },
     "у": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /u/ and does not reduce, regardless of stress.",
+        "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
         "citation": "p. 96"
       },
       "fr": null
     },
     "ю": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /u/ and does not reduce, regardless of stress.",
+        "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
         "citation": "p. 96"
       },
       "fr": null
     },
     "ы": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like [ɨ] and does not change with stress.",
+        "template": "The letter ⟨{char}⟩ always sounds like /ɨ/, regardless of stress.",
         "citation": "pp. 89–90"
       },
       "fr": null
     },
     "э": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɛ/ in sung Russian.",
+        "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɛ/.",
         "citation": "p. 106"
       },
       "fr": null
     },
     "е": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɛ/ in sung Russian.",
+        "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɛ/.",
         "citation": "p. 106"
       },
       "fr": null
     },
     "и": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /i/ and never reduces in sung Russian.",
+        "template": "The letter ⟨{char}⟩ usually sounds like /i/; it seldom reduces in sung Russian.",
         "citation": "pp. 96, 101"
       },
       "fr": null
     },
     "ь": {
       "en": {
-        "template": "The soft sign has no sound of its own. It palatalizes the consonant before it.",
+        "template": "The soft sign makes no sound of its own, but it is phonologically significant: ⟨{char}⟩ palatalizes most consonants that precede it.",
         "citation": "p. 195"
       },
       "fr": null
     },
     "ъ": {
       "en": {
-        "template": "The hard sign has no sound of its own. It keeps the preceding consonant hard and signals a /j/ glide before the next vowel.",
+        "template": "The hard sign makes no sound of its own, but it is phonologically significant in two ways: ⟨{char}⟩ preserves the hardness of the preceding consonant, then it triggers a /j/-glide before the next vowel.",
         "citation": "p. 193"
       },
       "fr": null
     },
     "б": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /b/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /b/.",
         "citation": "p. 140"
       },
       "fr": null
     },
     "в": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /v/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /v/.",
         "citation": "p. 152"
       },
       "fr": null
     },
     "г": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɡ/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /ɡ/.",
         "citation": "p. 145"
       },
       "fr": null
     },
     "д": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /d/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /d/.",
         "citation": "p. 145"
       },
       "fr": null
     },
     "ж": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ʒ/ and is always hard.",
-        "citation": "p. 165"
+        "template": "The letter ⟨{char}⟩ sounds like /ʒ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords or archaic traditional pronunciation.",
+        "citation": "pp. 165, 174"
       },
       "fr": null
     },
     "з": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /z/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /z/.",
         "citation": "p. 140"
       },
       "fr": null
     },
     "й": {
       "en": {
-        "template": "The letter ⟨{char}⟩ is a semivowel, sounding like the glide /j/.",
+        "template": "The letter ⟨{char}⟩ sounds like /j/; although English speakers call this a semi-vowel, Russian phonologists classify it as a palatalized consonant.",
         "citation": "p. 96"
       },
       "fr": null
     },
     "к": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /k/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /k/.",
         "citation": "p. 140"
       },
       "fr": null
     },
     "л": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /ɫ/ when hard, a distinctly Russian sound.",
+        "template": "In sung Russian, ⟨{char}⟩ is never transcribed alone as simply /l/, but always as either its \"hard\" allophone [ɫ], or its soft allophone [lʲ].",
         "citation": "p. 145"
       },
       "fr": null
     },
     "м": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /m/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /m/.",
         "citation": "p. 140"
       },
       "fr": null
     },
     "н": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /n/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /n/.",
         "citation": "p. 152"
       },
       "fr": null
     },
     "п": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /p/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /p/.",
         "citation": "p. 145"
       },
       "fr": null
     },
     "р": {
       "en": {
-        "template": "The letter ⟨{char}⟩ is always trilled in sung Russian, sounding like /r/.",
+        "template": "In sung Russian, the letter ⟨{char}⟩ is a lightly trilled /r/.",
         "citation": "pp. 156–158"
       },
       "fr": null
     },
     "с": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /s/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /s/.",
         "citation": "p. 152"
       },
       "fr": null
     },
     "т": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /t/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /t/.",
         "citation": "p. 140"
       },
       "fr": null
     },
     "ф": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /f/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /f/.",
         "citation": "p. 145"
       },
       "fr": null
     },
     "х": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /x/ in sung Russian.",
+        "template": "The default sound for the letter ⟨{char}⟩ is /x/.",
         "citation": "p. 145"
       },
       "fr": null
     },
     "ц": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ts/ and is always hard.",
-        "citation": "p. 166"
+        "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in words with the suffix -ция.",
+        "citation": "pp. 166, 283"
       },
       "fr": null
     },
     "ч": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /tʃʲ/ and is always soft.",
+        "template": "The letter ⟨{char}⟩ sounds like /tʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
       "fr": null
     },
     "ш": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ʃ/ and is always hard.",
+        "template": "The letter ⟨{char}⟩ sounds like /ʃ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords.",
         "citation": "p. 162"
       },
       "fr": null
     },
     "щ": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ʃʲʃʲ/ and is always soft.",
+        "template": "The letter ⟨{char}⟩ sounds like /ʃʲʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
       "fr": null
