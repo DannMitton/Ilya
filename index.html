@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.106 fix verbose gloss pass-through</title>
+  <title>Ilya — v6.0.107 fix verbose gloss pipeline</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -4474,8 +4474,9 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
     const cleanedGloss = extractCleanGloss(resolvedGloss);
     
     // Detect verbose grammatical patterns from kaikki.org
-    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative )/i.test(cleanedGloss) 
-                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(cleanedGloss);
+    const isGrammatical = /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative |alternative (spelling|form) of)/i.test(cleanedGloss) 
+                       || /\b(singular|plural)\s+(of|past|present|future)\b/i.test(cleanedGloss)
+                       || /\b(participle|gerund|transgressive) of\b/i.test(cleanedGloss);
     
     if (isGrammatical) {
         // Try lemma field first, then extract from gloss text
@@ -4505,30 +4506,33 @@ function formatGlossForDisplay(gloss, pos, lemma, word) {
 function extractCleanGloss(gloss) {
     if (!gloss) return '';
     
+    // Take only the first sense before semicolons (duplicate senses in kaikki.org)
+    let working = gloss.split(';')[0].trim();
+    
     // Pattern: "translated as X" or "Translated as X" — extract X
-    let match = gloss.match(/translated as ["']?([^"'.,;\/]+)/i);
+    let match = working.match(/translated as ["']?([^"'.,;\/]+)/i);
     if (match) return match[1].replace(/["']/g, '').trim();
     
     // Pattern: "diminutive of X: Y" or "augmentative of X: Y" → extract Y
-    match = gloss.match(/^(?:diminutive|augmentative|pejorative|endearing form) of [^:]+:\s*(.+)$/i);
+    match = working.match(/^(?:diminutive|augmentative|pejorative|endearing form) of [^:]+:\s*(.+)$/i);
     if (match) return match[1].trim();
     
     // Pattern: simple gloss followed by verbose parenthetical explanation
     // e.g., "I (first-person singular subject pronoun)" → "I"
     // e.g., "house, building (a residential building)" → "house, building"
     // But keep useful clarifications like "birch (tree or wood)"
-    match = gloss.match(/^([^(]+)\s*\((?:a |the |first|second|third|singular|plural|subject|object|nominative|genitive|dative|accusative|masculine|feminine|neuter)[^)]*\)$/i);
+    match = working.match(/^([^(]+)\s*\((?:a |the |first|second|third|singular|plural|subject|object|nominative|genitive|dative|accusative|masculine|feminine|neuter)[^)]*\)$/i);
     if (match) return match[1].trim();
     
     // Pattern: starts with linguistic jargon followed by simple gloss in parens
     // e.g., "proximal demonstrative (this)" but NOT "birch (tree or wood)"
-    if (/^(mostly |generic |proximal |distal |demonstrative )/i.test(gloss)) {
-        match = gloss.match(/\(([a-z][^)]{0,20})\)\s*$/i);
+    if (/^(mostly |generic |proximal |distal |demonstrative )/i.test(working)) {
+        match = working.match(/\(([a-z][^)]{0,20})\)\s*$/i);
         if (match && !/\d/.test(match[1])) return match[1].trim();
     }
     
-    // No extraction pattern matched — return original
-    return gloss;
+    // No extraction pattern matched — return first sense
+    return working;
 }
 
 /**
