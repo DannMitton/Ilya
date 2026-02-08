@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.103 regressive-voicing voiceless consonant entries</title>
+  <title>Ilya — v6.0.104 silent consonant blurbs via BlurbComposer</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -8216,6 +8216,7 @@ function buildProvenanceLegend(lines) {
         const { features, char, ipa } = entry;
         
         // Assimilation processes (checked before generic derivation)
+        if (features?.silent && features?.deletionCluster) return 'silent';
         if (features?.voicingAssimilation && features?.devoiced) return 'regressive-devoicing';
         if (features?.voicingAssimilation && features?.voiced) return 'regressive-voicing';
         if (features?.finalDevoicing) return 'final-devoicing';
@@ -8261,7 +8262,7 @@ function buildProvenanceLegend(lines) {
         if (!process) {
           if (identity.selfSufficient) {
             // Identity tells the whole story — return it alone
-            const vars = { char: lowerChar, ipa: ipa || '', base_ipa: '', trigger: '', profile: '' };
+            const vars = { char: lowerChar, ipa: ipa || '', base_ipa: '', trigger: '', cluster: features?.clusterSource || '', profile: '' };
             const blurb = {};
             const allCitations = [];
             for (const lang of ['en', 'fr']) {
@@ -8286,6 +8287,7 @@ function buildProvenanceLegend(lines) {
           ipa: ipa || '',
           base_ipa: '',
           trigger: features?.trigger || '',
+          cluster: features?.clusterSource || '',
           profile: ''
         };
         
@@ -8561,16 +8563,16 @@ function buildProvenanceLegend(lines) {
           // Silent consonant clusters (Grayson pp. 235-236)
           'рдц': [
             { char: 'р', ipa: 'r', features: { type: 'consonant', soft: false } },
-            { char: 'д', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'д', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'рдц' } },
             { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } }
           ],
           'лнц': [
-            { char: 'л', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'л', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'лнц' } },
             { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } },
             { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } }
           ],
           'вств': [
-            { char: 'в', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true } },
+            { char: 'в', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'вств' } },
             { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
             { char: 'т', ipa: 't', features: { type: 'consonant', soft: false } },
             { char: 'в', ipa: 'v', features: { type: 'consonant', soft: false } }
@@ -8694,13 +8696,9 @@ function buildProvenanceLegend(lines) {
       lookupClusterCharBlurb(charEntry, clusterSource) {
         const { char, ipa, features } = charEntry;
         
-        // Silent letters get the deletion:cluster blurb
+        // Silent letters in deletion clusters — route through BlurbComposer
         if (features.silent && features.deletionCluster) {
-          return {
-            blurb: `In the cluster ⟨${clusterSource}⟩, the letter ⟨${char}⟩ is silent and not pronounced. This is one of several consonant clusters in Russian where a letter is written but has no phonetic realization.`,
-            citation: 'pp. 235–236',
-            notable: true
-          };
+          return this.lookupBlurb({ char, ipa, features });
         }
         
         // Geminate simplified
