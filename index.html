@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.109 interpalatal key split, strip combining acutes, honest stress</title>
+  <title>Ilya — v6.0.110 monoline question mark, descriptive legend labels</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1587,7 +1587,7 @@
       align-items: center;
       gap: 0.3em;
       font-family: var(--font-sans);
-      font-variant: small-caps;
+      font-variant-caps: all-small-caps;
       font-size: 0.65rem;
       letter-spacing: 0.04em;
       color: var(--ink-secondary);
@@ -3788,16 +3788,16 @@ const UI_LABELS = {
     fr: 'Je suis Ilya.'
   },
   'legend.dictionary': {
-    en: 'Dictionary',
-    fr: 'Dictionnaire'
+    en: 'Dictionary-verified stress',
+    fr: 'Accent vérifié au dictionnaire'
   },
   'legend.composer': {
-    en: 'Composer',
-    fr: 'Compositeur'
+    en: 'Composer-assigned stress (unusual)',
+    fr: 'Accent imposé par le compositeur (inhabituel)'
   },
   'legend.user': {
-    en: 'User',
-    fr: 'Utilisateur'
+    en: 'User-defined stress',
+    fr: 'Accent défini par l\'utilisateur'
   },
   'legend.unattributed': {
     en: 'Unattributed',
@@ -4783,8 +4783,8 @@ function buildProvenanceLegend(lines) {
         + '<text x="8" y="12.5" font-family="\'Noto Serif\', serif" font-size="14" font-weight="700" text-anchor="middle">ё</text>'
         + svgClose,
       unattributed: svgOpen
-        + '<path d="M5.8 5.8c0-2.2 1.8-3.5 3.5-3s2.5 2.2 1.2 3.8c-.8 1-1.5 1.4-1.5 2.5v.4H7.2v-.4c0-1.7.8-2.4 1.7-3.4.5-.7.3-1.6-.6-1.7-.9-.1-1.3.6-1.3 1.3z"/>'
-        + '<circle cx="8" cy="13" r="1.3"/>'
+        + '<path d="M5.5 5.5C5.5 3 7 1.5 8.5 1.5S11 3 11 5C11 7 9 7.5 8.5 9V10.5" style="fill:none;stroke:var(--ink-primary);stroke-width:1.8;stroke-linecap:round"/>'
+        + '<circle cx="8.5" cy="13.5" r="1.2"/>'
         + svgClose
     };
 
@@ -5440,7 +5440,7 @@ function buildProvenanceLegend(lines) {
           if (isInferred) {
             return `
               <div class="stress-unverified-container" data-word="${tw.cleanWord}">
-                <span class="verify-question-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5.8 5.8c0-2.2 1.8-3.5 3.5-3s2.5 2.2 1.2 3.8c-.8 1-1.5 1.4-1.5 2.5v.4H7.2v-.4c0-1.7.8-2.4 1.7-3.4.5-.7.3-1.6-.6-1.7-.9-.1-1.3.6-1.3 1.3z"/><circle cx="8" cy="13" r="1.3"/></svg></span>
+                <span class="verify-question-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5.5 5.5C5.5 3 7 1.5 8.5 1.5S11 3 11 5C11 7 9 7.5 8.5 9V10.5" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round"/><circle cx="8.5" cy="13.5" r="1.2" fill="currentColor"/></svg></span>
                 <span class="stress-unverified-label">${UI_LABELS['paper.verify'][currentGlossLanguage || 'en']}</span>
                 ${wordStackHTML}
               </div>
