@@ -996,7 +996,7 @@
     },
     "j-glide:я": {
       "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1004,7 +1004,7 @@
     },
     "j-glide:е": {
       "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1012,7 +1012,7 @@
     },
     "j-glide:ё": {
       "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1020,7 +1020,7 @@
     },
     "j-glide:ю": {
       "en": {
-        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1028,7 +1028,7 @@
     },
     "j-after-vowel:я": {
       "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1036,7 +1036,7 @@
     },
     "j-after-vowel:е": {
       "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1044,7 +1044,7 @@
     },
     "j-after-vowel:ё": {
       "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1052,7 +1052,7 @@
     },
     "j-after-vowel:ю": {
       "en": {
-        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it says its own name with a /j/-glide before its vowel sound, becoming [{ipa}].",
+        "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
       "fr": null,
@@ -1060,7 +1060,7 @@
     },
     "j-after-sign:я": {
       "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
       "fr": null,
@@ -1068,7 +1068,7 @@
     },
     "j-after-sign:е": {
       "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
       "fr": null,
@@ -1076,7 +1076,7 @@
     },
     "j-after-sign:ё": {
       "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
       "fr": null,
@@ -1084,7 +1084,7 @@
     },
     "j-after-sign:ю": {
       "en": {
-        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide, so ⟨{char}⟩ says its own name: [{ipa}].",
+        "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
       "fr": null,
@@ -1134,6 +1134,27 @@
       "en": {
         "template": "[{ipa}] is more open and centralized than the full stressed /ɑ/.",
         "citation": "p. 93"
+      },
+      "fr": null
+    },
+    "pretonic:я": {
+      "en": {
+        "template": "[{ipa}] is lighter and less distinct than a stressed vowel.",
+        "citation": "pp. 127–128"
+      },
+      "fr": null
+    },
+    "pretonic:е": {
+      "en": {
+        "template": "[{ipa}] is lighter and less distinct than a stressed vowel.",
+        "citation": "pp. 127–128"
+      },
+      "fr": null
+    },
+    "pretonic:э": {
+      "en": {
+        "template": "[{ipa}] is lighter and less distinct than a stressed vowel.",
+        "citation": "pp. 127–128"
       },
       "fr": null
     },
