@@ -4014,6 +4014,45 @@ let TIER2_LOADING = false;
 // Supports bilingual glosses: {en: '...', fr: '...'}
 let currentGlossLanguage = 'en';
 
+// Notation Preferences state (v6.0.115)
+// All false = Grayson defaults (left position on toggles)
+const NotationPreferences = {
+  reducedVowel: false,    // false = ʌ (Grayson), true = ə
+  geminate: false,         // false = nn (Grayson), true = nː
+  shcha: false,            // false = ʃʲʃʲ (Grayson), true = ʃʲː
+  palatalNasal: false,     // false = ɲ (Grayson), true = nʲ
+  reconstitution: false    // Phase 3 — not wired yet
+};
+
+/**
+ * Apply cosmetic notation preferences to an IPA string.
+ * Pure display transform — engine data is never modified.
+ * @param {string} ipa - The IPA string to transform
+ * @param {boolean} includeGeminates - Apply geminate notation (paper only, not ribbon)
+ * @returns {string} Transformed IPA string
+ */
+function applyNotationPreferences(ipa, includeGeminates = false) {
+  if (!ipa) return ipa;
+  let result = ipa;
+
+  if (NotationPreferences.reducedVowel) {
+    result = result.replace(/ʌ/g, 'ə');
+  }
+  if (NotationPreferences.shcha) {
+    result = result.replace(/ʃʲʃʲ/g, 'ʃʲː');
+  }
+  if (NotationPreferences.palatalNasal) {
+    result = result.replace(/ɲ/g, 'nʲ');
+  }
+  if (NotationPreferences.geminate && includeGeminates) {
+    // Identical consonant IPA across syllable boundary (space separator)
+    // Handles plain (n n) and palatalized (nʲ nʲ) geminates
+    result = result.replace(/([bdɡfgklɫmnɲprstvxzʃʒ]ʲ?) \1/g, '$1ː');
+  }
+
+  return result;
+}
+
 // Metadata form references (dissolved from DashboardController in D.3)
 let metaTitleInput, metaOpusInput, metaTranscriberInput, metaComposerSelect, metaPoetSelect, metaExportBtn;
 
@@ -4338,6 +4377,9 @@ function extractBlurbText(blurbData) {
     return '';
   }
   
+  // Apply notation preferences to IPA symbols in blurb text (v6.0.115)
+  text = applyNotationPreferences(text);
+
   // Prevent IPA notation from breaking across lines (v6.0.52)
   // Wraps /…/, […], and ⟨…⟩ in nowrap spans
   text = text.replace(/\/[^/]+\//g, m => `<span style="white-space:nowrap">${m}</span>`);
@@ -5683,7 +5725,7 @@ function buildProvenanceLegend(lines) {
           const wordStackHTML = `
             <div class="${classes.join(' ')}" tabindex="0" ${dataAttrs}>
               ${(tw.isProclitic || tw.isEnclitic) ? '' : getProvenanceIcon(tw.wordData, tw.hasYo, tw.isProclitic || tw.isEnclitic)}
-              <span class="ipa">${tw.ipaDisplay}</span>
+              <span class="ipa">${applyNotationPreferences(tw.ipaDisplay, true)}</span>
               <span class="cyrillic">${addStressMarkToCyrillic(tw.cleanWord, tw.syllables)}<span class="punct">${tw.punct}</span></span>
               <span class="gloss">${tw.isProclitic || tw.isEnclitic 
                 ? extractGloss(GraysonEngine.cliticData.get(tw.cleanWord.toLowerCase())?.gloss)
@@ -9350,7 +9392,7 @@ function buildProvenanceLegend(lines) {
                       <div class="phoneme-mapping">
                         <span class="phoneme-cyr">${m.char}</span>
                         <span class="phoneme-arrow">›</span>
-                        <span class="phoneme-ipa">${entry.ipa}</span>
+                        <span class="phoneme-ipa">${applyNotationPreferences(entry.ipa)}</span>
                       </div>
                     </div>
                   `).join('')}
@@ -9360,7 +9402,7 @@ function buildProvenanceLegend(lines) {
                       <div class="cluster-rubric" role="button" tabindex="0">
                         <span class="cluster-formula-ortho">${clusterOrthography}</span>
                         <span class="cluster-formula-arrow">→</span>
-                        <span class="cluster-formula-ipa">/${entry.ipa}/</span>
+                        <span class="cluster-formula-ipa">/${applyNotationPreferences(entry.ipa)}/</span>
                       </div>
                     </div>
                     <div class="cluster-details">
@@ -9383,7 +9425,7 @@ function buildProvenanceLegend(lines) {
             if (isSilent) rowClasses += ' silent-letter';
             
             const syllableAttr = syllableStart ? ' data-syllable-start="true"' : '';
-            const ipaDisplay = isSilent ? '[silent]' : (entry.ipa || '∅');
+            const ipaDisplay = isSilent ? '[silent]' : applyNotationPreferences(entry.ipa || '∅');
             
             html += `
               <div class="${rowClasses}"${syllableAttr}
@@ -11336,17 +11378,65 @@ function buildProvenanceLegend(lines) {
         });
       }
 
-      // Notation toggle visual flip (v6.0.114) — toggles render but change nothing yet
+      // Notation toggle behaviour (v6.0.115) — update state, breath animate, re-render
+      const notationToggleMap = {
+        toggleReducedVowel: 'reducedVowel',
+        toggleGeminate: 'geminate',
+        toggleShch: 'shcha',
+        togglePalatalNasal: 'palatalNasal',
+        toggleReconstitution: 'reconstitution'
+      };
+
       document.querySelectorAll('.notation-toggle-row').forEach(row => {
         const checkbox = row.querySelector('input[type="checkbox"]');
         const leftLabel = row.querySelector('.notation-label-left');
         const rightLabel = row.querySelector('.notation-label-right');
         if (checkbox && leftLabel && rightLabel) {
           checkbox.addEventListener('change', () => {
+            // Visual label flip
             leftLabel.classList.toggle('active', !checkbox.checked);
             leftLabel.classList.toggle('inactive', checkbox.checked);
             rightLabel.classList.toggle('active', checkbox.checked);
             rightLabel.classList.toggle('inactive', !checkbox.checked);
+
+            // Update state
+            const prefKey = notationToggleMap[checkbox.id];
+            if (prefKey) {
+              NotationPreferences[prefKey] = checkbox.checked;
+            }
+
+            // Reconstitution toggle — not wired yet (Phase 3)
+            if (checkbox.id === 'toggleReconstitution') return;
+
+            // Breath animation: same codepath as language switch (150ms out, 250ms in)
+            const drawerBody = document.querySelector('.drawer-body');
+            const inspectorBody = document.querySelector('.inspector-body');
+            const paperStack = document.getElementById('paperStack');
+            const breathTargets = [drawerBody, inspectorBody, paperStack].filter(Boolean);
+
+            breathTargets.forEach(el => {
+              el.classList.remove('breath-in');
+              el.classList.add('breath-out');
+            });
+
+            setTimeout(() => {
+              // Re-render paper (picks up notation preferences at display points)
+              PaperRenderer.render();
+
+              // Re-render inspector if a word is selected
+              if (DrawerState.currentWord) {
+                DrawerState.updateInspector();
+              }
+
+              breathTargets.forEach(el => {
+                el.classList.remove('breath-out');
+                el.classList.add('breath-in');
+              });
+
+              setTimeout(() => {
+                breathTargets.forEach(el => el.classList.remove('breath-in'));
+              }, 250);
+            }, 150);
           });
         }
       });
