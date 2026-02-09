@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.114 hairlines, notation preferences accordion scaffold</title>
+  <title>Ilya — v6.0.114 notation preferences scaffold with toggle switches</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -2997,6 +2997,96 @@
       margin: var(--space-md) 0;
     }
     
+    .notation-microcopy {
+      font-size: 10px;
+      font-style: italic;
+      color: var(--ilya-text-muted);
+      margin-bottom: var(--space-md);
+    }
+    
+    .notation-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0;
+    }
+    
+    .notation-toggle-row + .notation-toggle-row {
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    
+    .notation-label {
+      font-family: var(--font-ipa);
+      font-size: var(--text-sm);
+      color: var(--ilya-text-primary);
+      min-width: 32px;
+      text-align: center;
+    }
+    
+    .notation-label-left {
+      text-align: right;
+    }
+    
+    .notation-label-right {
+      text-align: left;
+    }
+    
+    .notation-label.active {
+      font-weight: 600;
+    }
+    
+    .notation-label.inactive {
+      opacity: 0.35;
+    }
+    
+    /* Toggle switch: 36×20px track, 16px thumb (Kimi spec) */
+    .notation-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    
+    .notation-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    
+    .notation-switch-track {
+      position: absolute;
+      inset: 0;
+      background: var(--ilya-border);
+      border-radius: 10px;
+      transition: background var(--duration-base) var(--ease-out);
+    }
+    
+    .notation-switch input:checked + .notation-switch-track {
+      background: var(--ilya-accent);
+    }
+    
+    .notation-switch-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+    
+    .notation-switch input:checked ~ .notation-switch-thumb {
+      transform: translateX(16px);
+    }
+    
+    .notation-switch input:focus-visible + .notation-switch-track {
+      box-shadow: 0 0 0 3px var(--ilya-accent-light);
+    }
+    
     /* DOCUMENT SECTION (v5.8.2) — Paper size selection in dashboard */
     .document-section {
       margin-top: var(--space-lg);
@@ -3683,7 +3773,62 @@
             </div>
             <div class="notation-content">
               <div class="notation-toggles" id="notationToggles">
-                <!-- Toggle switches wired in Step 3 -->
+                <div class="notation-microcopy" data-i18n="notation.defaults">Left values are Grayson defaults</div>
+
+                <!-- 1. Reduced vowel symbol -->
+                <div class="notation-toggle-row">
+                  <span class="notation-label notation-label-left active" id="notationReducedLeft">[ʌ]</span>
+                  <label class="notation-switch">
+                    <input type="checkbox" id="toggleReducedVowel">
+                    <span class="notation-switch-track"></span>
+                    <span class="notation-switch-thumb"></span>
+                  </label>
+                  <span class="notation-label notation-label-right inactive" id="notationReducedRight">[ə]</span>
+                </div>
+
+                <!-- 2. Geminate consonants -->
+                <div class="notation-toggle-row">
+                  <span class="notation-label notation-label-left active" id="notationGeminateLeft">/tt/</span>
+                  <label class="notation-switch">
+                    <input type="checkbox" id="toggleGeminate">
+                    <span class="notation-switch-track"></span>
+                    <span class="notation-switch-thumb"></span>
+                  </label>
+                  <span class="notation-label notation-label-right inactive" id="notationGeminateRight">/tː/</span>
+                </div>
+
+                <!-- 3. Щ notation -->
+                <div class="notation-toggle-row">
+                  <span class="notation-label notation-label-left active" id="notationShchLeft">/ʃʲʃʲ/</span>
+                  <label class="notation-switch">
+                    <input type="checkbox" id="toggleShch">
+                    <span class="notation-switch-track"></span>
+                    <span class="notation-switch-thumb"></span>
+                  </label>
+                  <span class="notation-label notation-label-right inactive" id="notationShchRight">/ʃʲː/</span>
+                </div>
+
+                <!-- 4. Palatalized nasals -->
+                <div class="notation-toggle-row">
+                  <span class="notation-label notation-label-left active" id="notationNasalLeft">/nʲ/</span>
+                  <label class="notation-switch">
+                    <input type="checkbox" id="togglePalatalNasal">
+                    <span class="notation-switch-track"></span>
+                    <span class="notation-switch-thumb"></span>
+                  </label>
+                  <span class="notation-label notation-label-right inactive" id="notationNasalRight">/ɲ/</span>
+                </div>
+
+                <!-- 5. Vowel reconstitution -->
+                <div class="notation-toggle-row">
+                  <span class="notation-label notation-label-left active" id="notationReconLeft" data-i18n="notation.off">OFF</span>
+                  <label class="notation-switch">
+                    <input type="checkbox" id="toggleReconstitution">
+                    <span class="notation-switch-track"></span>
+                    <span class="notation-switch-thumb"></span>
+                  </label>
+                  <span class="notation-label notation-label-right inactive" id="notationReconRight" data-i18n="notation.on">ON</span>
+                </div>
               </div>
             </div>
           </div>
@@ -3968,6 +4113,18 @@ const UI_LABELS = {
   'notation.heading': {
     en: 'Notation Preferences',
     fr: 'Préférences de notation'
+  },
+  'notation.defaults': {
+    en: 'Left values are Grayson defaults',
+    fr: 'Les valeurs de gauche sont les valeurs par défaut de Grayson'
+  },
+  'notation.off': {
+    en: 'OFF',
+    fr: 'INACTIF'
+  },
+  'notation.on': {
+    en: 'ON',
+    fr: 'ACTIF'
   },
   'page.heading': {
     en: 'Page',
@@ -11177,6 +11334,21 @@ function buildProvenanceLegend(lines) {
           notationSection.classList.toggle('expanded');
         });
       }
+
+      // Notation toggle visual flip (v6.0.114) — toggles render but change nothing yet
+      document.querySelectorAll('.notation-toggle-row').forEach(row => {
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        const leftLabel = row.querySelector('.notation-label-left');
+        const rightLabel = row.querySelector('.notation-label-right');
+        if (checkbox && leftLabel && rightLabel) {
+          checkbox.addEventListener('change', () => {
+            leftLabel.classList.toggle('active', !checkbox.checked);
+            leftLabel.classList.toggle('inactive', checkbox.checked);
+            rightLabel.classList.toggle('active', checkbox.checked);
+            rightLabel.classList.toggle('inactive', !checkbox.checked);
+          });
+        }
+      });
 
       // DrawerBridge REMOVED in Phase 2C - InputManager now uses left drawer directly
 
