@@ -4511,7 +4511,7 @@ function extractLemmaFromGloss(gloss) {
     const match = gloss.match(/of\s+([а-яёА-ЯЁ́]+)(?:\s*\(|$|\s|,)/i);
     if (match) {
         // Remove any combining accents from the extracted lemma
-        return match[1].normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC').toLowerCase();
+        return match[1].normalize('NFC').replace(/\u0301/g, '').toLowerCase();
     }
     return null;
 }
@@ -5813,8 +5813,9 @@ function buildProvenanceLegend(lines) {
               return cleaned.length > 0;
             });
           return words.map(word => {
-            // Strip combining diacritical marks (e.g., stress acutes pasted from source text)
-            word = word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
+            // Strip combining acute accents pasted from source text (U+0301 only)
+            // NFC first so precomposed ё (е + U+0308) is preserved
+            word = word.normalize('NFC').replace(/\u0301/g, '');
             const lookup = GraysonEngine.lookupStress(word);
             let displayWord = word;
             let wasYoRestored = false;
@@ -6679,7 +6680,7 @@ function buildProvenanceLegend(lines) {
       // Look up stress from dictionary
       // Handles both old format and new kaikki format (including homographs)
       lookupStress(word) {
-        const cleanWord = word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+        const cleanWord = word.normalize('NFC').replace(/\u0301/g, '').replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
         
         // Helper to normalize entry format
         const normalizeEntry = (entry, source = 'dictionary') => {
