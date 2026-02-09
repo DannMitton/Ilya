@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.114 extend hairlines to full width, verse-line spacing</title>
+  <title>Ilya — v6.0.114 hairlines, notation preferences accordion scaffold</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -2937,6 +2937,62 @@
       opacity: 0.5;
     }
     
+    /* NOTATION PREFERENCES (v6.0.114) — Display-level IPA toggles, per Kimi spec */
+    .notation-section {
+      margin-top: var(--space-lg);
+      border-top: 1px solid var(--ilya-border);
+      padding-top: var(--space-lg);
+    }
+    
+    .notation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: var(--space-sm) 0;
+    }
+    
+    .notation-header:hover {
+      opacity: 0.8;
+    }
+    
+    .notation-title {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--ilya-text-secondary);
+    }
+    
+    .notation-chevron {
+      width: 16px;
+      height: 16px;
+      stroke: var(--ilya-text-muted);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+    
+    .notation-section.expanded .notation-chevron {
+      transform: rotate(180deg);
+    }
+    
+    .notation-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--duration-base) var(--ease-out),
+                  opacity var(--duration-base) var(--ease-out);
+      opacity: 0;
+    }
+    
+    .notation-section.expanded .notation-content {
+      max-height: 400px;
+      opacity: 1;
+    }
+    
+    .notation-toggles {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    
     /* DOCUMENT SECTION (v5.8.2) — Paper size selection in dashboard */
     .document-section {
       margin-top: var(--space-lg);
@@ -3611,6 +3667,23 @@
             </div>
           </div>
 
+          <!-- Notation Preferences (v6.0.114) -->
+          <div class="notation-section" id="notationSection">
+            <div class="notation-header" id="notationHeader">
+              <div>
+                <span class="notation-title" data-i18n="notation.heading">Notation Preferences</span>
+              </div>
+              <svg class="notation-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="notation-content">
+              <div class="notation-toggles" id="notationToggles">
+                <!-- Toggle switches wired in Step 3 -->
+              </div>
+            </div>
+          </div>
+
           <!-- Document Settings -->
           <div class="drawer-section-label" data-i18n="page.heading">Page</div>
 
@@ -3887,6 +3960,10 @@ const UI_LABELS = {
   'profile.label': {
     en: 'Transcription Profile',
     fr: 'Profil de transcription'
+  },
+  'notation.heading': {
+    en: 'Notation Preferences',
+    fr: 'Préférences de notation'
   },
   'page.heading': {
     en: 'Page',
@@ -11087,6 +11164,15 @@ function buildProvenanceLegend(lines) {
       updateExportButton();
       ProfileController.init();
       PaperManager.init();
+
+      // Notation Preferences accordion toggle (v6.0.114)
+      const notationSection = document.getElementById('notationSection');
+      const notationHeader = document.getElementById('notationHeader');
+      if (notationSection && notationHeader) {
+        notationHeader.addEventListener('click', () => {
+          notationSection.classList.toggle('expanded');
+        });
+      }
 
       // DrawerBridge REMOVED in Phase 2C - InputManager now uses left drawer directly
 
