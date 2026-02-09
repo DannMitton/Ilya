@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>Ilya — v6.0.113 merge j-glide ribbon rows, fix interpalatal after ъ</title>
+  <title>Ilya — v6.0.114 extend hairlines to full width, verse-line spacing</title>
   
   <!-- Favicon: simple И in terracotta circle -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a85a3a'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='serif'>И</text></svg>">
@@ -1350,7 +1350,7 @@
     }
     
     .page-metadata-rule {
-      width: 200px;
+      width: 100%;
       height: 1px;
       background: var(--stationery-sage);
       margin-top: 16px;
@@ -1435,6 +1435,17 @@
       background: var(--stationery-cream);
     }
     
+    /* Full-width hairline at top of footer (v6.0.114) */
+    .page-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 72px;
+      right: 72px;
+      height: 1px;
+      background: var(--stationery-sage);
+    }
+    
     .footer-attribution {
       font-family: var(--font-sans);
       font-size: 8px;
@@ -1517,6 +1528,7 @@
 
     .verse-line:last-child {
       border-bottom: none;
+      margin-bottom: 8px; /* Compensate for footer hairline visual shift (v6.0.114) */
     }
 
     /* WORD STACK */
@@ -1579,8 +1591,6 @@
       flex-wrap: wrap;
       gap: 0.75rem;
       margin-bottom: 0.5rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--ilya-border-light);
     }
     .provenance-legend-item {
       display: inline-flex;
@@ -3174,9 +3184,12 @@
         padding: 12px 0 24px 0;  /* Keep vertical padding only */
       }
 
-      .provenance-legend {
-        border-bottom-color: #ccc;
+      /* Footer hairline uses margin edges in print (v6.0.114) */
+      .page-footer::before {
+        left: 0;
+        right: 0;
       }
+
       .provenance-legend-item svg {
         fill: #1a1612;
       }
