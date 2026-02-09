@@ -8201,6 +8201,231 @@ function buildProvenanceLegend(lines) {
         .map(([k, _]) => k)
     );
 
+    /* ═══════════════════════════════════════════════════════════════════
+       DEBUG INSTRUMENTATION (Phase 1, Task 1)
+       Added: 2026-02-09
+       Purpose: Captures intermediate processing stages for golden master
+       fixture generation. Does not modify any existing behaviour.
+       Usage: debugWord('сердце') in browser console
+       ═══════════════════════════════════════════════════════════════════ */
+    GraysonEngine.debugTranscribe = function(rawWord, options = {}) {
+      const {
+        stressOverride = null,  // Force a stress index (null = use lookup)
+        isClitic = false,
+        procliticPosition = null,
+        verbose = true          // Pretty-print to console
+      } = options;
+
+      const debug = {};
+
+      // ── Stage 0: Input normalisation ──
+      const normalized = rawWord.normalize('NFC').replace(/\u0301/g, '');
+      const cleanWord = normalized.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+      debug.input = {
+        raw: rawWord,
+        normalized: normalized,
+        clean: cleanWord
+      };
+
+      // ── Stage 1: Stress lookup ──
+      const lookup = this.lookupStress(normalized);
+      let displayWord = normalized;
+      let wasYoRestored = false;
+      let dictionaryForm = null;
+
+      if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
+        displayWord = this.applyCasePattern(normalized, lookup.canonicalForm);
+        dictionaryForm = displayWord;
+        wasYoRestored = true;
+      }
+
+      const yoSyllable = this.findYoSyllable(displayWord);
+      let stress, stressSource, yoSource;
+
+      if (stressOverride !== null) {
+        stress = stressOverride;
+        stressSource = 'debug-override';
+        yoSource = null;
+      } else if (yoSyllable !== -1) {
+        stress = yoSyllable;
+        stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
+        yoSource = wasYoRestored ? 'yo-restored' : null;
+      } else if (lookup && lookup.stress != null && lookup.stress >= 0) {
+        stress = lookup.stress;
+        stressSource = lookup.source;
+        yoSource = null;
+      } else {
+        stress = -2;
+        stressSource = 'inferred';
+        yoSource = null;
+      }
+
+      debug.stressAssignment = {
+        stressIndex: stress,
+        source: stressSource,
+        yoSyllable: yoSyllable,
+        yoSource: yoSource,
+        wasYoRestored: wasYoRestored,
+        dictionaryForm: dictionaryForm,
+        isHomograph: lookup?.isHomograph || false,
+        gloss: lookup?.gloss || null,
+        pos: lookup?.pos || '',
+        lemma: lookup?.lemma || ''
+      };
+
+      // ── Stage 2: Syllabification ──
+      const syllables = this.syllabify(cleanWord);
+      debug.syllabification = {
+        syllables: syllables,
+        syllableCount: syllables.length,
+        vowelCount: this.countVowels(cleanWord)
+      };
+
+      // ── Stage 3: Special clusters ──
+      const specialClusters = this.findSpecialClusters(cleanWord);
+      debug.specialClusters = specialClusters.map(c => ({
+        cluster: c.cluster,
+        ipa: c.ipa,
+        position: `${c.startIndex}–${c.endIndex}`
+      }));
+
+      // ── Stage 4: Palatalization map ──
+      const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, stress);
+      const chars = [...cleanWord];
+      debug.palatalizationMap = [];
+      for (let i = 0; i < chars.length; i++) {
+        if (this.isConsonant(chars[i])) {
+          debug.palatalizationMap.push({
+            index: i,
+            char: chars[i],
+            soft: softIndices.has(i),
+            directlyPalatalized: this.isPalatalized(chars[i], chars[i + 1])
+          });
+        }
+      }
+
+      // ── Stage 5: Transcription ──
+      const cliticStress = isClitic ? -1 : stress;
+      const result = this.transcribe(
+        cleanWord,
+        cliticStress,
+        isClitic,
+        procliticPosition
+      );
+
+      debug.transcription = {
+        ipaSurface: result.ipa,
+        ipaUnderlying: result.ipaUnderlying,
+        syllables: result.syllables,
+        transcriptionLog: result.transcriptionLog
+      };
+
+      // ── Stage 6: Syllable positions ──
+      debug.syllablePositions = syllables.map((syl, idx) => ({
+        syllable: syl,
+        position: this.getSyllablePosition(idx, stress, syllables.length)
+      }));
+
+      // ── Summary ──
+      debug._summary = {
+        word: cleanWord,
+        ipa: result.ipa,
+        stress: `${stressSource} (index ${stress})`,
+        syllables: syllables.join('·'),
+        softConsonants: debug.palatalizationMap
+          .filter(c => c.soft)
+          .map(c => c.char)
+          .join(', ') || '(none)',
+        clusters: debug.specialClusters
+          .map(c => `${c.cluster}→${c.ipa}`)
+          .join(', ') || '(none)'
+      };
+
+      if (verbose) {
+        console.group(`🔍 debugWord: ${cleanWord}`);
+        console.log('%c Summary', 'font-weight: bold; color: #2563eb');
+        console.table(debug._summary);
+        console.log('%c Stress Assignment', 'font-weight: bold; color: #059669');
+        console.log(debug.stressAssignment);
+        console.log('%c Syllabification', 'font-weight: bold; color: #d97706');
+        console.log(debug.syllabification);
+        console.log('%c Syllable Positions', 'font-weight: bold; color: #d97706');
+        console.table(debug.syllablePositions);
+        if (debug.specialClusters.length > 0) {
+          console.log('%c Special Clusters', 'font-weight: bold; color: #dc2626');
+          console.table(debug.specialClusters);
+        }
+        console.log('%c Palatalization Map', 'font-weight: bold; color: #7c3aed');
+        console.table(debug.palatalizationMap);
+        console.log('%c Transcription Log (per character)', 'font-weight: bold; color: #0891b2');
+        console.table(result.transcriptionLog.map(entry => ({
+          char: entry.char || '(glide)',
+          ipa: entry.ipa,
+          type: entry.features?.type,
+          position: entry.features?.position || '',
+          soft: entry.features?.soft || '',
+          softTrigger: entry.features?.softTrigger || '',
+          interpalatal: entry.features?.interpalatal || '',
+          exception: entry.features?.exception || ''
+        })));
+        console.log('%c Full debug object', 'font-weight: bold; color: #6b7280');
+        console.log(debug);
+        console.groupEnd();
+      }
+
+      return debug;
+    };
+
+    /**
+     * Console convenience function.
+     * Usage:
+     *   debugWord('сердце')
+     *   debugWord('молоко')
+     *   debugWord('объявить')
+     *   debugWord('ёлка')
+     *
+     * Options:
+     *   debugWord('замок', { stressOverride: 1 })  // force stress on syllable 1
+     *   debugWord('в', { isClitic: true })           // treat as clitic
+     */
+    window.debugWord = function(word, options = {}) {
+      if (typeof STRESS_DICTIONARY === 'undefined' || !STRESS_DICTIONARY) {
+        console.warn('⏳ Dictionary not loaded yet. Try again in a moment.');
+        return null;
+      }
+      return GraysonEngine.debugTranscribe(word, options);
+    };
+
+    /**
+     * Batch debug: run multiple words and return array of debug objects.
+     * Usage: debugWords(['сердце', 'молоко', 'ёлка', 'объявить'])
+     */
+    window.debugWords = function(words, options = {}) {
+      if (typeof STRESS_DICTIONARY === 'undefined' || !STRESS_DICTIONARY) {
+        console.warn('⏳ Dictionary not loaded yet. Try again in a moment.');
+        return null;
+      }
+      return words.map(word => GraysonEngine.debugTranscribe(word, { ...options, verbose: false }));
+    };
+
+    /**
+     * Export debug results as JSON (for golden master fixture generation).
+     * Usage: exportDebug(['сердце', 'молоко', 'ёлка'])
+     * Copies JSON to clipboard and logs it.
+     */
+    window.exportDebug = function(words, options = {}) {
+      const results = window.debugWords(words, options);
+      if (!results) return;
+      const json = JSON.stringify(results, null, 2);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(json).then(() => {
+          console.log(`✅ ${words.length} debug results copied to clipboard`);
+        });
+      }
+      console.log(json);
+      return results;
+    };
+
     /* OCR MODULE - Russian Text Recognition — Lazy-loads Tesseract.js for image-to-text */
     const OCRModule = {
       // Configuration
