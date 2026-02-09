@@ -3025,6 +3025,7 @@
     
     .notation-label-left {
       text-align: right;
+      min-width: 60px;
     }
     
     .notation-label-right {
@@ -3810,24 +3811,24 @@
 
                 <!-- 4. Palatalized nasals -->
                 <div class="notation-toggle-row">
-                  <span class="notation-label notation-label-left active" id="notationNasalLeft">/nʲ/</span>
+                  <span class="notation-label notation-label-left active" id="notationNasalLeft">/ɲ/</span>
                   <label class="notation-switch">
                     <input type="checkbox" id="togglePalatalNasal">
                     <span class="notation-switch-track"></span>
                     <span class="notation-switch-thumb"></span>
                   </label>
-                  <span class="notation-label notation-label-right inactive" id="notationNasalRight">/ɲ/</span>
+                  <span class="notation-label notation-label-right inactive" id="notationNasalRight">/nʲ/</span>
                 </div>
 
                 <!-- 5. Vowel reconstitution -->
                 <div class="notation-toggle-row">
-                  <span class="notation-label notation-label-left active" id="notationReconLeft" data-i18n="notation.off">OFF</span>
+                  <span class="notation-label notation-label-left active" id="notationReconLeft" data-i18n="notation.reduction">Reduction</span>
                   <label class="notation-switch">
                     <input type="checkbox" id="toggleReconstitution">
                     <span class="notation-switch-track"></span>
                     <span class="notation-switch-thumb"></span>
                   </label>
-                  <span class="notation-label notation-label-right inactive" id="notationReconRight" data-i18n="notation.on">ON</span>
+                  <span class="notation-label notation-label-right inactive" id="notationReconRight" data-i18n="notation.reconstitution">Reconstitution</span>
                 </div>
               </div>
             </div>
@@ -4118,13 +4119,13 @@ const UI_LABELS = {
     en: 'Left values are Grayson defaults',
     fr: 'Les valeurs de gauche sont les valeurs par défaut de Grayson'
   },
-  'notation.off': {
-    en: 'OFF',
-    fr: 'INACTIF'
+  'notation.reduction': {
+    en: 'Reduction',
+    fr: 'Réduction'
   },
-  'notation.on': {
-    en: 'ON',
-    fr: 'ACTIF'
+  'notation.reconstitution': {
+    en: 'Reconstitution',
+    fr: 'Reconstitution'
   },
   'page.heading': {
     en: 'Page',
