@@ -1,22 +1,61 @@
 /**
- * @ilya/blurb
+ * @ilya/blurb – Public API
  *
- * IPI blurb composer: assembles context-aware educational
- * explanations for Russian phonological processes.
+ * IPI (Identity-Process-Implication) blurb composition system.
+ * Composes context-aware educational blurbs for the inspector ribbon.
  *
- * This package will contain:
- * - composeBlurb(): Assemble identity + process explanation
- * - deriveRule(): Map engine features to process keys
- * - mergeJGlidePairs(): Post-processing for j-glide ribbon entries
- * - 209-entry IPI data file (blurb-composer.json)
+ * Usage:
+ *   import { setBlurbData, composeBlurb, deriveRule, buildDisplayLog } from '@ilya/blurb';
+ *
+ *   // After loading blurb-composer.json:
+ *   setBlurbData(jsonData);
+ *
+ *   // Compose a blurb for a single entry:
+ *   const result = composeBlurb(transcriptionLogEntry);
+ *
+ *   // Build the full display log for the inspector ribbon:
+ *   const displayLog = buildDisplayLog(transcriptionLog);
  */
 
-/** Placeholder — replaced during Task 10 (blurb extraction). */
-export function composeBlurb(entry: Record<string, unknown>): string {
-  return '';
-}
+// Composer functions
+export {
+  setBlurbData,
+  getBlurbData,
+  substituteVars,
+  formatCitations,
+  deriveRule,
+  deriveRuleStandard,
+  composeBlurb,
+  lookupBlurb,
+  lookupClusterCharBlurb,
+  mergeJGlidePairs,
+  buildDisplayLog,
+} from './composer';
 
-/** Placeholder — replaced during Task 10 (blurb extraction). */
-export function deriveRule(entry: Record<string, unknown>): string {
-  return '';
-}
+// Cluster breakdowns data
+export {
+  CLUSTER_BREAKDOWNS,
+  isMergedCluster,
+} from './cluster-breakdowns';
+
+// Types
+export type {
+  BlurbData,
+  BlurbResult,
+  BilingualBlurb,
+  TranscriptionFeatures,
+  TranscriptionLogEntry,
+  DisplayLogEntry,
+  IdentityEntry,
+  ProcessEntry,
+  ImplicationEntry,
+  CitationStyle,
+  IpiLangEntry,
+} from './types';
+
+export type {
+  ClusterBreakdown,
+  ClusterCharEntry,
+  MergedClusterBreakdown,
+  MergedClusterMember,
+} from './cluster-breakdowns';
