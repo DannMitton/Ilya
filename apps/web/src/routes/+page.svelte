@@ -3,7 +3,7 @@
 	import { transcribeWord } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
-	import type { LineData } from '$lib/types';
+	import type { LineData, WordStackData } from '$lib/types';
 	import Paper from '$lib/components/Paper/Paper.svelte';
 
 	// Engine connectivity check
@@ -24,6 +24,7 @@
 	let lines = $state<LineData[]>([]);
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
+	let selectedWord = $state<WordStackData | null>(null);
 
 	// Derived
 	const canTranscribe = $derived(
@@ -34,6 +35,7 @@
 	function handleTranscribe() {
 		if (!canTranscribe) return;
 		transcribeError = '';
+		selectedWord = null;
 		try {
 			const start = performance.now();
 			const result = processText(inputText);
@@ -60,10 +62,26 @@
 				console.groupEnd();
 			});
 			console.groupEnd();
+
+			// Focus first WordStack after render
+			requestAnimationFrame(() => {
+				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
+				first?.focus();
+			});
 		} catch (e: unknown) {
 			transcribeError = e instanceof Error ? e.message : String(e);
 			console.error('[Ilya] Transcription error:', e);
 		}
+	}
+
+	function handleWordClick(word: WordStackData) {
+		selectedWord = word;
+		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
+			stress: word.stressIndex,
+			source: word.stressSource,
+			gloss: word.gloss,
+			displayLog: word.displayLog,
+		});
 	}
 
 	onMount(() => {
@@ -126,12 +144,22 @@
 				{lines.reduce((sum, l) => sum + l.words.length, 0)} words in {transcribeMs}ms
 			</p>
 		{/if}
+
+		<!-- Temporary selected word display (moves to Inspector at Task 7) -->
+		{#if selectedWord}
+			<div class="selected-preview">
+				<strong>{selectedWord.cleanWord}</strong> → {selectedWord.ipaDisplay}
+				<span class="selected-detail">
+					stress: {selectedWord.stressIndex} ({selectedWord.stressSource}) · {selectedWord.gloss}
+				</span>
+			</div>
+		{/if}
 	</div>
 
 	<!-- Paper: the transcription surface -->
-	<Paper {lines} />
+	<Paper {lines} onwordclick={handleWordClick} />
 
-	<p class="version">Phase 2 — Task 4: Paper component</p>
+	<p class="version">Phase 2 — Task 5: VerseLine + WordStack</p>
 </main>
 
 <style>
@@ -240,6 +268,22 @@
 		font-size: 0.8rem;
 		color: var(--color-text-muted);
 		text-align: center;
+	}
+
+	.selected-preview {
+		margin-top: 0.75rem;
+		padding: 0.75rem 1rem;
+		background: #f3f4f6;
+		border-radius: 6px;
+		font-size: 0.9rem;
+		text-align: left;
+	}
+
+	.selected-detail {
+		display: block;
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+		margin-top: 0.25rem;
 	}
 
 	.version {
