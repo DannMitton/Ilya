@@ -6,6 +6,7 @@
 	import type { LineData, WordStackData } from '$lib/types';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
+	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
 
 	// Engine connectivity check
@@ -28,6 +29,7 @@
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
 	let drawerMode = $state<'root' | 'inspector'>('root');
+	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 
 	// Derived
 	const canTranscribe = $derived(
@@ -43,6 +45,7 @@
 		transcribeError = '';
 		selectedWord = null;
 		drawerMode = 'root';
+		lastFocusedWord = null;
 		try {
 			const start = performance.now();
 			const result = processText(inputText);
@@ -84,12 +87,26 @@
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
 		drawerMode = 'inspector';
+		lastFocusedWord = { line: word.lineIndex, word: word.wordIndex };
 		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
 			stress: word.stressIndex,
 			source: word.stressSource,
 			gloss: word.gloss,
 			displayLog: word.displayLog,
 		});
+	}
+
+	function handleInspectorBack() {
+		drawerMode = 'root';
+		// Return focus to the word that was selected
+		if (lastFocusedWord) {
+			requestAnimationFrame(() => {
+				const el = document.querySelector<HTMLElement>(
+					`[data-word-index="${lastFocusedWord!.line}-${lastFocusedWord!.word}"]`
+				);
+				el?.focus();
+			});
+		}
 	}
 
 	onMount(() => {
@@ -116,19 +133,12 @@
 		/>
 	{/snippet}
 	{#snippet inspectorPanel()}
-		<div class="inspector-placeholder">
-			{#if selectedWord}
-				<button class="back-btn" onclick={() => drawerMode = 'root'}>
-					← Back
-				</button>
-				<h2>{selectedWord.cleanWord}</h2>
-				<p class="inspector-ipa">{selectedWord.ipaDisplay}</p>
-				<p class="inspector-detail">
-					Stress: {selectedWord.stressIndex} ({selectedWord.stressSource})
-				</p>
-				<p class="inspector-detail">{selectedWord.gloss}</p>
-			{/if}
-		</div>
+		{#if selectedWord}
+			<InspectorPanel
+				word={selectedWord}
+				onback={handleInspectorBack}
+			/>
+		{/if}
 	{/snippet}
 </Drawer>
 
@@ -144,42 +154,5 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-	}
-
-	/* Temporary Inspector placeholder (replaced at Task 7) */
-	.inspector-placeholder {
-		padding: 1.5rem;
-	}
-
-	.back-btn {
-		background: none;
-		border: none;
-		color: var(--color-accent);
-		cursor: pointer;
-		font-size: 0.85rem;
-		padding: 0.25rem 0;
-		margin-bottom: 1rem;
-	}
-
-	.back-btn:hover {
-		text-decoration: underline;
-	}
-
-	.inspector-placeholder h2 {
-		font-family: var(--font-body);
-		font-size: 1.5rem;
-		font-weight: 400;
-		margin-bottom: 0.5rem;
-	}
-
-	.inspector-ipa {
-		font-size: 1.2rem;
-		margin-bottom: 0.75rem;
-	}
-
-	.inspector-detail {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		margin-bottom: 0.35rem;
 	}
 </style>
