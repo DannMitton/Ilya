@@ -4,3 +4,4 @@ dist/
 build/
 *.tsbuildinfo
 .DS_Store
+apps/web/static/data
