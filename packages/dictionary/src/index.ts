@@ -1,22 +1,38 @@
 /**
- * @ilya/dictionary
+ * @ilya/dictionary – Public API
  *
- * Dictionary loader, stress lookup, and gloss pipeline
- * for Russian lyric diction transcription.
- *
- * This package will contain:
- * - lookupStress(): Dictionary-based stress assignment with fallback chain
- * - formatGloss(): Bilingual gloss formatting (EN/FR)
- * - isGrammatical(): Regex-based grammatical form detection
- * - Curated glosses, singer supplement, lemma fallback
+ * Dictionary data management, gloss formatting pipeline,
+ * curated glosses, and Cyrillic display helpers.
  */
 
-/** Placeholder — replaced during Task 8 (dictionary extraction). */
-export function lookupStress(word: string): number {
-  return -1;
-}
+// Gloss pipeline
+export {
+  extractGloss,
+  extractCleanGloss,
+  isGrammatical,
+  extractLemmaFromGloss,
+  getLemmaGloss,
+  truncateGloss,
+  formatGlossForDisplay,
+  setGlossDictionary,
+} from './gloss';
 
-/** Placeholder — replaced during Task 8 (dictionary extraction). */
-export function formatGloss(entry: string, language: string): string {
-  return entry;
-}
+// Curated glosses
+export { CURATED_GLOSSES } from './curated-glosses';
+
+// Cyrillic display helpers
+export {
+  addStressMarkToCyrillic,
+  addAcuteToSyllable,
+} from './cyrillic';
+
+// Types
+export type {
+  BilingualGloss,
+  GlossLanguage,
+  DictionaryEntry,
+  StressDictionary,
+  SingerSupplement,
+} from './types';
+
+export type { SyllableInfo } from './cyrillic';
