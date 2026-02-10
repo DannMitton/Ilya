@@ -4,10 +4,17 @@
   "description": "Russian-to-IPA transcription tool for classical singers, based on Craig Grayson's Russian Lyric Diction (2012)",
   "license": "MIT",
   "scripts": {
-    "test": "pnpm --recursive test",
+    "test": "pnpm --recursive test && vitest run --config vitest.config.ts",
     "test:phonology": "pnpm --filter @ilya/phonology test",
     "test:dictionary": "pnpm --filter @ilya/dictionary test",
-    "test:blurb": "pnpm --filter @ilya/blurb test"
+    "test:blurb": "pnpm --filter @ilya/blurb test",
+    "test:integration": "vitest run --config vitest.config.ts"
+  },
+  "devDependencies": {
+    "@ilya/phonology": "workspace:*",
+    "@ilya/dictionary": "workspace:*",
+    "@ilya/blurb": "workspace:*",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -6,7 +6,20 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      '@ilya/blurb':
+        specifier: workspace:*
+        version: link:packages/blurb
+      '@ilya/dictionary':
+        specifier: workspace:*
+        version: link:packages/dictionary
+      '@ilya/phonology':
+        specifier: workspace:*
+        version: link:packages/phonology
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4
 
   apps/web: {}
 
