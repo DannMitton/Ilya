@@ -4,6 +4,8 @@
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
 	import type { LineData, WordStackData } from '$lib/types';
+	import Drawer from '$lib/components/Drawer/Drawer.svelte';
+	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
 
 	// Engine connectivity check
@@ -25,17 +27,22 @@
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
+	let drawerMode = $state<'root' | 'inspector'>('root');
 
 	// Derived
 	const canTranscribe = $derived(
 		inputText.trim().length > 0 && !loaderState.isLoading
 	);
 	const hasResults = $derived(lines.length > 0);
+	const wordCount = $derived(
+		lines.reduce((sum, l) => sum + l.words.length, 0)
+	);
 
 	function handleTranscribe() {
 		if (!canTranscribe) return;
 		transcribeError = '';
 		selectedWord = null;
+		drawerMode = 'root';
 		try {
 			const start = performance.now();
 			const result = processText(inputText);
@@ -76,6 +83,7 @@
 
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
+		drawerMode = 'inspector';
 		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
 			stress: word.stressIndex,
 			source: word.stressSource,
@@ -93,201 +101,85 @@
 	});
 </script>
 
+<Drawer mode={drawerMode}>
+	{#snippet rootPanel()}
+		<RootPanel
+			{inputText}
+			{loaderState}
+			{canTranscribe}
+			{hasResults}
+			{wordCount}
+			{transcribeMs}
+			{transcribeError}
+			oninput={(text) => inputText = text}
+			ontranscribe={handleTranscribe}
+		/>
+	{/snippet}
+	{#snippet inspectorPanel()}
+		<div class="inspector-placeholder">
+			{#if selectedWord}
+				<button class="back-btn" onclick={() => drawerMode = 'root'}>
+					← Back
+				</button>
+				<h2>{selectedWord.cleanWord}</h2>
+				<p class="inspector-ipa">{selectedWord.ipaDisplay}</p>
+				<p class="inspector-detail">
+					Stress: {selectedWord.stressIndex} ({selectedWord.stressSource})
+				</p>
+				<p class="inspector-detail">{selectedWord.gloss}</p>
+			{/if}
+		</div>
+	{/snippet}
+</Drawer>
+
 <main class="main-content">
-	<!-- Dev UI: moves into Drawer at Task 6 -->
-	<div class="dev-controls">
-		<h1>Ilya</h1>
-		<p class="subtitle">Russian Lyric Diction</p>
-
-		<div class="status-bar">
-			{#if engineReady}
-				<span class="status-ok">✓ Engine</span>
-			{:else}
-				<span class="status-err">✗ Engine</span>
-			{/if}
-
-			{#if loaderState.isLoading}
-				<span class="loading">Loading dictionary…</span>
-			{:else if loaderState.error}
-				<span class="status-err">✗ Dictionary: {loaderState.error}</span>
-			{:else if loaderState.entryCount > 0}
-				<span class="status-ok">
-					✓ {loaderState.entryCount.toLocaleString()} words
-					{#if loaderState.tier2Loaded}
-						+ {loaderState.tier2Count.toLocaleString()} inflections
-					{/if}
-				</span>
-			{/if}
-		</div>
-
-		<div class="input-area">
-			<textarea
-				bind:value={inputText}
-				placeholder="Paste Russian text here…"
-				rows="4"
-			></textarea>
-			<button
-				onclick={handleTranscribe}
-				disabled={!canTranscribe}
-				class="transcribe-btn"
-			>
-				{loaderState.isLoading ? 'Loading dictionary…' : 'Transcribe'}
-			</button>
-		</div>
-
-		{#if transcribeError}
-			<p class="status-err">{transcribeError}</p>
-		{/if}
-
-		{#if hasResults}
-			<p class="result-meta">
-				{lines.reduce((sum, l) => sum + l.words.length, 0)} words in {transcribeMs}ms
-			</p>
-		{/if}
-
-		<!-- Temporary selected word display (moves to Inspector at Task 7) -->
-		{#if selectedWord}
-			<div class="selected-preview">
-				<strong>{selectedWord.cleanWord}</strong> → {selectedWord.ipaDisplay}
-				<span class="selected-detail">
-					stress: {selectedWord.stressIndex} ({selectedWord.stressSource}) · {selectedWord.gloss}
-				</span>
-			</div>
-		{/if}
-	</div>
-
-	<!-- Paper: the transcription surface -->
 	<Paper {lines} onwordclick={handleWordClick} />
-
-	<p class="version">Phase 2 — Task 5: VerseLine + WordStack</p>
 </main>
 
 <style>
 	.main-content {
 		flex: 1;
+		overflow-y: auto;
+		padding: 2rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 2rem;
-		overflow-y: auto;
-		gap: 1.5rem;
 	}
 
-	/* ── Dev controls (temporary until Drawer) ────────────────── */
-
-	.dev-controls {
-		text-align: center;
-		max-width: 680px;
-		width: 100%;
+	/* Temporary Inspector placeholder (replaced at Task 7) */
+	.inspector-placeholder {
+		padding: 1.5rem;
 	}
 
-	h1 {
-		font-family: var(--font-body);
-		font-size: 3rem;
-		font-weight: 400;
-		letter-spacing: 0.05em;
-		margin-bottom: 0.25rem;
-	}
-
-	.subtitle {
-		font-family: var(--font-body);
-		font-style: italic;
-		color: var(--color-text-muted);
-		margin-bottom: 1.5rem;
-	}
-
-	.status-bar {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-		margin-bottom: 1.5rem;
+	.back-btn {
+		background: none;
+		border: none;
+		color: var(--color-accent);
+		cursor: pointer;
 		font-size: 0.85rem;
-	}
-
-	.status-ok {
-		color: #2f855a;
-		font-weight: 500;
-	}
-
-	.status-err {
-		color: #c53030;
-		font-weight: 500;
-	}
-
-	.loading {
-		color: var(--color-text-muted);
-		font-style: italic;
-	}
-
-	.input-area {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
+		padding: 0.25rem 0;
 		margin-bottom: 1rem;
 	}
 
-	textarea {
-		width: 100%;
-		padding: 0.75rem;
-		border: 1px solid #d1d5db;
-		border-radius: 6px;
+	.back-btn:hover {
+		text-decoration: underline;
+	}
+
+	.inspector-placeholder h2 {
 		font-family: var(--font-body);
-		font-size: 1rem;
-		resize: vertical;
-		line-height: 1.5;
+		font-size: 1.5rem;
+		font-weight: 400;
+		margin-bottom: 0.5rem;
 	}
 
-	textarea:focus {
-		outline: none;
-		border-color: #6b7280;
-		box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
+	.inspector-ipa {
+		font-size: 1.2rem;
+		margin-bottom: 0.75rem;
 	}
 
-	.transcribe-btn {
-		padding: 0.6rem 1.5rem;
-		background: #1a1a1a;
-		color: white;
-		border: none;
-		border-radius: 6px;
-		font-size: 0.95rem;
-		cursor: pointer;
-		transition: background 0.15s;
-	}
-
-	.transcribe-btn:hover:not(:disabled) {
-		background: #333;
-	}
-
-	.transcribe-btn:disabled {
-		background: #9ca3af;
-		cursor: not-allowed;
-	}
-
-	.result-meta {
-		font-size: 0.8rem;
-		color: var(--color-text-muted);
-		text-align: center;
-	}
-
-	.selected-preview {
-		margin-top: 0.75rem;
-		padding: 0.75rem 1rem;
-		background: #f3f4f6;
-		border-radius: 6px;
-		font-size: 0.9rem;
-		text-align: left;
-	}
-
-	.selected-detail {
-		display: block;
-		font-size: 0.8rem;
-		color: var(--color-text-muted);
-		margin-top: 0.25rem;
-	}
-
-	.version {
+	.inspector-detail {
 		font-size: 0.85rem;
 		color: var(--color-text-muted);
+		margin-bottom: 0.35rem;
 	}
 </style>
