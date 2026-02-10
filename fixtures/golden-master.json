@@ -1,0 +1,8 @@
+{
+  "_metadata": {
+    "description": "Golden master fixtures — validated engine outputs for regression testing",
+    "source": "Captured from GraysonEngine v6.0.116 via golden-master-capture.js",
+    "status": "Placeholder — full fixture data to be placed here during Task 6"
+  },
+  "fixtures": []
+}

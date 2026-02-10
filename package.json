@@ -1,29 +1,15 @@
 {
-  "name": "msr",
-  "version": "4.16.0",
-  "description": "My Sung Russian - IPA transcription tool for singers",
-  "type": "module",
-  "main": "src/index.js",
+  "name": "ilya",
+  "private": true,
+  "description": "Russian-to-IPA transcription tool for classical singers, based on Craig Grayson's Russian Lyric Diction (2012)",
+  "license": "MIT",
   "scripts": {
-    "build": "node build.mjs",
-    "dev": "node build.mjs && echo 'Watching...' && node -e \"require('fs').watch('src', {recursive:true}, ()=>require('child_process').execSync('node build.mjs'))\"",
-    "test": "echo 'Run tests in browser: open public/index.html, then runGoldenTests() in console'"
+    "test": "pnpm --recursive test",
+    "test:phonology": "pnpm --filter @ilya/phonology test",
+    "test:dictionary": "pnpm --filter @ilya/dictionary test",
+    "test:blurb": "pnpm --filter @ilya/blurb test"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DannMitton/msr"
-  },
-  "author": "Dann Mitton",
-  "license": "AGPL-3.0",
-  "devDependencies": {
-    "esbuild": "^0.20.0"
-  },
-  "keywords": [
-    "russian",
-    "ipa",
-    "transcription",
-    "singing",
-    "diction",
-    "phonetics"
-  ]
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
