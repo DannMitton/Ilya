@@ -1,17 +1,39 @@
 /**
- * @ilya/phonology
+ * @ilya/phonology — Russian phonological analysis for lyric diction
  *
- * GraysonEngine: Russian phonological analysis for lyric diction.
- * Based on Craig Grayson's doctoral dissertation
- * "Russian Lyric Diction" (2012).
+ * Implements Craig Grayson's 2012 dissertation "Russian Lyric Diction"
+ * as the sole phonological authority.
  *
- * This package will contain:
- * - transcribeWord(): Full phonological analysis pipeline
- * - applyNotationPreferences(): Display-level transforms
- * - Clitic lists, cluster exception maps, stress assignment logic
+ * @example
+ * ```ts
+ * import { transcribeWord, GraysonEngine } from '@ilya/phonology';
+ *
+ * const result = transcribeWord('молоко');
+ * console.log(result.ipa); // 'mʌɫɑˈko'
+ * ```
+ *
+ * @module @ilya/phonology
  */
 
-/** Placeholder — replaced during Task 6 (engine extraction). */
-export function transcribeWord(word: string): string {
-  return word;
-}
+// Engine and convenience API
+export {
+  GraysonEngine,
+  transcribeWord,
+  applyNotationPreferences,
+  setStressDictionary,
+  setSingerSupplement,
+  DEFAULT_ENGINE_CONFIG,
+} from './engine';
+
+// Types
+export type {
+  EngineConfig,
+  NotationPreferences,
+  TranscriptionResult,
+  SyllableData,
+  TranscriptionLogEntry,
+  StressLookupResult,
+  CliticEntry,
+  SpecialClusterInfo,
+  BoundaryWord,
+} from './engine';
