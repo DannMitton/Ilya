@@ -1,0 +1,6 @@
+{
+  "name": "@ilya/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ilya web application — SvelteKit (Phase 2)"
+}
