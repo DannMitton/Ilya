@@ -31,8 +31,8 @@
 		width: 100%;
 		margin: 0 auto;
 		padding: 3rem 2rem;
-		background: #fff;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		background: var(--paper-cream);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 		border-radius: 2px;
 		min-height: 12rem;
 	}
@@ -46,7 +46,8 @@
 
 	.empty-state {
 		text-align: center;
-		color: #9ca3af;
+		color: var(--ink-tertiary);
+		font-family: var(--font-serif);
 		font-style: italic;
 		padding: 4rem 1rem;
 		font-size: 0.95rem;

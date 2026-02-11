@@ -183,13 +183,14 @@
 		overflow-y: auto;
 	}
 
-	/* ── Back button ──────────────────────────────────────────── */
+	/* ── Back button ─────────────────────────────────────── */
 
 	.back-btn {
 		background: none;
 		border: none;
-		color: var(--color-accent);
+		color: var(--sage);
 		cursor: pointer;
+		font-family: var(--font-sans);
 		font-size: 0.85rem;
 		padding: 0.25rem 0;
 		margin-bottom: 1rem;
@@ -201,51 +202,56 @@
 		text-decoration: underline;
 	}
 
-	/* ── Word header ──────────────────────────────────────────── */
+	/* ── Word header ─────────────────────────────────────── */
 
 	.word-header {
 		margin-bottom: 1.5rem;
 	}
 
 	.word-cyrillic {
-		font-family: var(--font-body);
+		font-family: var(--font-serif);
 		font-size: 1.6rem;
-		font-weight: 400;
+		font-weight: 600;
+		color: var(--ink-primary);
 		margin-bottom: 0.25rem;
 	}
 
 	.word-ipa {
+		font-family: var(--font-sans);
 		font-size: 1.15rem;
+		color: var(--ink-secondary);
 		margin-bottom: 0.35rem;
 	}
 
 	.word-gloss {
+		font-family: var(--font-serif);
 		font-size: 0.85rem;
-		color: var(--color-text-muted);
+		color: var(--terracotta);
 		font-style: italic;
 	}
 
-	/* ── Sections ─────────────────────────────────────────────── */
+	/* ── Sections ────────────────────────────────────────── */
 
 	.section {
 		margin-bottom: 1.25rem;
 	}
 
 	.section-label {
-		font-family: var(--font-ui);
+		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--color-text-muted);
+		color: var(--sage);
 		margin-bottom: 0.5rem;
 	}
 
-	/* ── Stress info ──────────────────────────────────────────── */
+	/* ── Stress info ─────────────────────────────────────── */
 
 	.stress-info {
+		font-family: var(--font-sans);
 		font-size: 0.85rem;
-		color: var(--color-text);
+		color: var(--ink-primary);
 	}
 
 	.stress-text {
@@ -260,7 +266,7 @@
 		flex-shrink: 0;
 	}
 
-	/* ── Ribbon ───────────────────────────────────────────────── */
+	/* ── Ribbon ──────────────────────────────────────────── */
 
 	.ribbon {
 		display: flex;
@@ -274,35 +280,40 @@
 		align-items: center;
 		gap: 0.1rem;
 		padding: 0.35rem 0.4rem;
-		background: #f9fafb;
-		border: 1px solid var(--color-border);
+		background: var(--paper-cream);
+		border: 1px solid var(--stone-300);
 		border-radius: 4px;
 		min-width: 2rem;
 	}
 
 	.ribbon-cell.stressed {
-		background: #fffbeb;
-		border-color: #f59e0b;
+		background: #fdf6e8;
+		border-color: var(--sage);
 	}
 
 	.ribbon-char {
+		font-family: var(--font-serif);
 		font-size: 1rem;
-		font-weight: 500;
+		font-weight: 600;
+		color: var(--ink-primary);
 	}
 
 	.ribbon-arrow {
 		font-size: 0.6rem;
-		color: #9ca3af;
+		color: var(--ink-tertiary);
 		line-height: 1;
 	}
 
 	.ribbon-ipa {
+		font-family: var(--font-sans);
 		font-size: 0.95rem;
+		color: var(--ink-secondary);
 	}
 
 	.ribbon-rule {
+		font-family: var(--font-sans);
 		font-size: 0.65rem;
-		color: var(--color-text-muted);
+		color: var(--ink-tertiary);
 		text-align: center;
 		max-width: 4rem;
 		overflow: hidden;
@@ -310,7 +321,7 @@
 		white-space: nowrap;
 	}
 
-	/* ── Blurb notes ──────────────────────────────────────────── */
+	/* ── Blurb notes ─────────────────────────────────────── */
 
 	.blurb-list {
 		display: flex;
@@ -323,26 +334,30 @@
 	}
 
 	.blurb-char {
-		font-weight: 500;
+		font-family: var(--font-sans);
+		font-weight: 600;
+		color: var(--ink-secondary);
 		display: block;
 		margin-bottom: 0.2rem;
 	}
 
 	.blurb-text {
-		color: var(--color-text-muted);
+		font-family: var(--font-serif);
+		color: var(--ink-secondary);
 		line-height: 1.5;
 	}
 
-	/* ── Notation indicator ───────────────────────────────────── */
+	/* ── Notation indicator ──────────────────────────────── */
 
 	.notation-indicator {
 		margin-top: auto;
 		padding-top: 1rem;
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--stone-300);
 	}
 
 	.notation-note {
+		font-family: var(--font-sans);
 		font-size: 0.75rem;
-		color: var(--color-text-muted);
+		color: var(--ink-tertiary);
 	}
 </style>

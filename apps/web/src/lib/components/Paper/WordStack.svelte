@@ -119,11 +119,11 @@
 	}
 
 	.word-stack:hover:not(.print-mode) {
-		background: rgba(0, 0, 0, 0.04);
+		background: rgba(26, 22, 18, 0.04);
 	}
 
 	.word-stack:focus-visible {
-		outline: 2px solid #4a90d9;
+		outline: 2px solid var(--sage);
 		outline-offset: 2px;
 	}
 
@@ -133,11 +133,11 @@
 	}
 
 	.word-stack.unknown-stress {
-		border-bottom: 2px dashed #e2a500;
+		border-bottom: 2px dashed var(--stone-500);
 		padding-bottom: 0.15rem;
 	}
 
-	/* ── Provenance icon ─────────────────────────────────────── */
+	/* ── Provenance icon ─────────────────────────────────── */
 
 	.provenance {
 		position: absolute;
@@ -158,17 +158,21 @@
 	}
 
 	.ipa {
-		font-size: 1.1rem;
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		color: var(--ink-secondary);
 		letter-spacing: 0.02em;
 		white-space: nowrap;
 	}
 
 	.cyrillic {
-		font-size: 0.85rem;
-		color: #374151;
+		font-family: var(--font-serif);
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--ink-primary);
 	}
 
 	.punct {
-		color: #9ca3af;
+		color: var(--ink-tertiary);
 	}
 </style>

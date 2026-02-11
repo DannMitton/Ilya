@@ -1,15 +1,50 @@
-:root {
-	--color-bg: #f5f5f0;
-	--color-paper: #ffffff;
-	--color-text: #1a1a1a;
-	--color-text-muted: #6b6b6b;
-	--color-accent: #2c5282;
-	--color-border: #e2e2e2;
+/* ═══════════════════════════════════════════════════════════
+   ILYA — Design Tokens
+   Typography: Source Serif 4 (text) + Source Sans 3 (IPA, UI)
+   Palette: Kimi Round 2 — Calm Authority
+   ═══════════════════════════════════════════════════════════ */
 
-	--font-body: 'Georgia', 'Times New Roman', serif;
-	--font-ui: system-ui, -apple-system, 'Segoe UI', sans-serif;
+:root {
+	/* ── Typography ────────────────────────────────────────── */
+	--font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+	--font-sans: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: 'Menlo', 'Consolas', monospace;
+
+	/* ── Ink hierarchy ────────────────────────────────────── */
+	--ink-primary: #1a1612;       /* warm charcoal — headings, Cyrillic, body */
+	--ink-secondary: #4a4540;     /* warm grey — IPA, metadata, secondary text */
+	--ink-tertiary: #7a756e;      /* lighter warm grey — captions, placeholders */
+
+	/* ── Sage accent ──────────────────────────────────────── */
+	--sage: #8B9A7D;
+
+	/* ── Terracotta gloss ─────────────────────────────────── */
+	--terracotta: rgba(168, 90, 58, 0.75);
+
+	/* ── Stone palette (UI chrome) ────────────────────────── */
+	--stone-300: #d6d3d1;
+	--stone-500: #78716c;
+	--stone-700: #44403c;
+
+	/* ── Surfaces ─────────────────────────────────────────── */
+	--paper-cream: #F8F5F0;       /* stationery cream — page background on screen */
+	--drawer-bg: #e8e4de;         /* warm grey — drawer background (from prototype) */
+	--app-bg: #eee9e3;            /* main content area behind paper */
+
+	/* ── Backward-compatible aliases ──────────────────────── */
+	/* Components from Phase 2 reference these names.         */
+	/* New code should prefer the semantic names above.       */
+	--color-text: var(--ink-primary);
+	--color-text-muted: var(--ink-tertiary);
+	--color-accent: var(--sage);
+	--color-border: var(--stone-300);
+	--color-paper: var(--drawer-bg);
+	--color-bg: var(--app-bg);
+	--font-body: var(--font-serif);
+	--font-ui: var(--font-sans);
 }
+
+/* ── Reset ────────────────────────────────────────────────── */
 
 *,
 *::before,
@@ -25,9 +60,17 @@ body {
 }
 
 body {
-	font-family: var(--font-ui);
-	color: var(--color-text);
-	background-color: var(--color-bg);
+	font-family: var(--font-sans);
+	color: var(--ink-primary);
+	background-color: var(--app-bg);
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
+}
+
+/* ── Focus ring (global) ─────────────────────────────────── */
+/* Sage green focus ring, 2px offset, replaces browser blue   */
+
+:focus-visible {
+	outline: 2px solid var(--sage);
+	outline-offset: 2px;
 }

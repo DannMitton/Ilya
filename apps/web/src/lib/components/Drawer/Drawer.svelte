@@ -28,8 +28,8 @@
 		width: 360px;
 		min-width: 360px;
 		height: 100%;
-		background: var(--color-paper);
-		border-right: 1px solid var(--color-border);
+		background: var(--drawer-bg);
+		border-right: 1px solid var(--stone-300);
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;

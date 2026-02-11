@@ -150,17 +150,18 @@
 	}
 
 	h1 {
-		font-family: var(--font-body);
+		font-family: var(--font-serif);
 		font-size: 2rem;
 		font-weight: 400;
 		letter-spacing: 0.05em;
+		color: var(--ink-primary);
 		margin-bottom: 0.15rem;
 	}
 
 	.subtitle {
-		font-family: var(--font-body);
+		font-family: var(--font-serif);
 		font-style: italic;
-		color: var(--color-text-muted);
+		color: var(--ink-tertiary);
 		font-size: 0.9rem;
 	}
 
@@ -173,8 +174,8 @@
 	}
 
 	.status-ok {
-		color: #2f855a;
-		font-weight: 500;
+		color: var(--sage);
+		font-weight: 600;
 	}
 
 	.status-err {
@@ -183,7 +184,7 @@
 	}
 
 	.loading {
-		color: var(--color-text-muted);
+		color: var(--ink-tertiary);
 		font-style: italic;
 	}
 
@@ -196,19 +197,25 @@
 	textarea {
 		width: 100%;
 		padding: 0.75rem;
-		border: 1px solid var(--color-border);
+		border: 1px solid var(--stone-300);
 		border-radius: 6px;
-		font-family: var(--font-body);
+		font-family: var(--font-serif);
 		font-size: 0.95rem;
 		resize: vertical;
 		line-height: 1.5;
 		min-height: 8rem;
+		color: var(--ink-primary);
+		background: white;
+	}
+
+	textarea::placeholder {
+		color: var(--ink-tertiary);
 	}
 
 	textarea:focus {
 		outline: none;
-		border-color: #6b7280;
-		box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
+		border-color: var(--sage);
+		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.25);
 	}
 
 	.input-warning {
@@ -219,45 +226,46 @@
 
 	.transcribe-btn {
 		padding: 0.6rem 1.5rem;
-		background: #1a1a1a;
+		background: var(--ink-primary);
 		color: white;
 		border: none;
 		border-radius: 6px;
+		font-family: var(--font-sans);
 		font-size: 0.95rem;
 		cursor: pointer;
 		transition: background 0.15s;
 	}
 
 	.transcribe-btn:hover:not(:disabled) {
-		background: #333;
+		background: var(--ink-secondary);
 	}
 
 	.transcribe-btn:disabled {
-		background: #9ca3af;
+		background: var(--stone-500);
 		cursor: not-allowed;
 	}
 
 	.result-meta {
 		font-size: 0.8rem;
-		color: var(--color-text-muted);
+		color: var(--ink-tertiary);
 		text-align: center;
 	}
 
-	/* ── Notation toggles ─────────────────────────────────────── */
+	/* ── Notation toggles ────────────────────────────────── */
 
 	.notation-section {
 		margin-top: 0.5rem;
 		padding-top: 1rem;
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--stone-300);
 	}
 
 	.section-label {
-		font-family: var(--font-ui);
+		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--color-text-muted);
+		color: var(--sage);
 		margin-bottom: 0.75rem;
 	}
 
@@ -281,21 +289,22 @@
 	}
 
 	.toggle-label {
+		font-family: var(--font-sans);
 		font-size: 0.85rem;
-		color: var(--color-text);
+		color: var(--ink-primary);
 	}
 
 	.toggle-desc {
 		font-size: 0.7rem;
-		color: var(--color-text-muted);
-		font-family: var(--font-body);
+		color: var(--ink-tertiary);
+		font-family: var(--font-sans);
 	}
 
 	.toggle-switch {
 		position: relative;
 		width: 36px;
 		height: 20px;
-		background: #d1d5db;
+		background: var(--stone-300);
 		border: none;
 		border-radius: 10px;
 		cursor: pointer;
@@ -305,7 +314,7 @@
 	}
 
 	.toggle-switch.active {
-		background: var(--color-accent);
+		background: var(--sage);
 	}
 
 	.toggle-thumb {
