@@ -1,12 +1,24 @@
 <script lang="ts">
 	import type { WordStackData } from '$lib/types';
+	import type { NotationPreferences } from '@ilya/phonology';
+	import { applyNotationPreferences } from '@ilya/phonology';
 
 	interface Props {
 		word: WordStackData;
+		notationPrefs: NotationPreferences;
 		onclick?: (word: WordStackData) => void;
 	}
 
-	let { word, onclick }: Props = $props();
+	let { word, notationPrefs, onclick }: Props = $props();
+
+	const displayIpa = $derived((() => {
+		// Pick the correct base IPA: reconstituted or standard
+		const base = notationPrefs.reconstitution
+			? word.ipaReconstituted
+			: word.ipaDisplay;
+		// Apply string-based notation transforms (includeGeminates = true for Paper)
+		return applyNotationPreferences(base, notationPrefs, true);
+	})());
 
 	function handleClick() {
 		onclick?.(word);
@@ -28,11 +40,11 @@
 	data-word-index="{word.lineIndex}-{word.wordIndex}"
 	tabindex="0"
 	role="button"
-	aria-label="{word.cleanWord}, {word.ipaDisplay}"
+	aria-label="{word.cleanWord}, {displayIpa}"
 	onclick={handleClick}
 	onkeydown={handleKeydown}
 >
-	<span class="ipa">{word.ipaDisplay}</span>
+	<span class="ipa">{displayIpa}</span>
 	<span class="cyrillic">
 		{word.stressedCyrillic}<span class="punct">{word.punctuation}</span>
 	</span>

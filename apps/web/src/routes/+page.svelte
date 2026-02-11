@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { transcribeWord } from '@ilya/phonology';
+	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
 	import type { LineData, WordStackData } from '$lib/types';
@@ -30,6 +31,15 @@
 	let selectedWord = $state<WordStackData | null>(null);
 	let drawerMode = $state<'root' | 'inspector'>('root');
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
+
+	// Notation preferences -- persisted to localStorage
+	let notationPrefs = $state<NotationPreferences>({
+		reducedVowel: false,
+		shcha: false,
+		palatalNasal: false,
+		geminate: false,
+		reconstitution: false,
+	});
 
 	// Derived
 	const canTranscribe = $derived(
@@ -98,7 +108,6 @@
 
 	function handleInspectorBack() {
 		drawerMode = 'root';
-		// Return focus to the word that was selected
 		if (lastFocusedWord) {
 			requestAnimationFrame(() => {
 				const el = document.querySelector<HTMLElement>(
@@ -109,7 +118,41 @@
 		}
 	}
 
+	function handleNotationChange(prefs: NotationPreferences) {
+		notationPrefs = prefs;
+		try {
+			localStorage.setItem('ilya:notationPrefs', JSON.stringify(prefs));
+		} catch {
+			// localStorage unavailable (private browsing)
+		}
+	}
+
+	// Persist input text to localStorage
+	function handleInput(text: string) {
+		inputText = text;
+		try {
+			localStorage.setItem('ilya:inputText', text);
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
 	onMount(() => {
+		// Restore persisted state
+		try {
+			const savedPrefs = localStorage.getItem('ilya:notationPrefs');
+			if (savedPrefs) {
+				const parsed = JSON.parse(savedPrefs);
+				notationPrefs = { ...notationPrefs, ...parsed };
+			}
+			const savedText = localStorage.getItem('ilya:inputText');
+			if (savedText) {
+				inputText = savedText;
+			}
+		} catch {
+			// localStorage unavailable
+		}
+
 		loadDictionary({
 			onStateChange(state) {
 				loaderState = state;
@@ -128,8 +171,10 @@
 			{wordCount}
 			{transcribeMs}
 			{transcribeError}
-			oninput={(text) => inputText = text}
+			{notationPrefs}
+			oninput={handleInput}
 			ontranscribe={handleTranscribe}
+			onnotationchange={handleNotationChange}
 		/>
 	{/snippet}
 	{#snippet inspectorPanel()}
@@ -143,7 +188,7 @@
 </Drawer>
 
 <main class="main-content">
-	<Paper {lines} onwordclick={handleWordClick} />
+	<Paper {lines} {notationPrefs} onwordclick={handleWordClick} />
 </main>
 
 <style>

@@ -1,13 +1,15 @@
 <script lang="ts">
 	import type { LineData, WordStackData } from '$lib/types';
+	import type { NotationPreferences } from '@ilya/phonology';
 	import VerseLine from './VerseLine.svelte';
 
 	interface Props {
 		lines: LineData[];
+		notationPrefs: NotationPreferences;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, onwordclick }: Props = $props();
+	let { lines, notationPrefs, onwordclick }: Props = $props();
 
 	const hasTranscription = $derived(lines.length > 0);
 </script>
@@ -15,7 +17,7 @@
 <div class="paper" role="region" aria-label="Transcription">
 	{#if hasTranscription}
 		{#each lines as line (line.lineNumber)}
-			<VerseLine words={line.words} {onwordclick} />
+			<VerseLine words={line.words} {notationPrefs} {onwordclick} />
 		{/each}
 	{:else}
 		<p class="empty-state">Paste Russian text and click Transcribe to begin.</p>

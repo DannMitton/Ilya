@@ -30,6 +30,8 @@ import type { GlossLanguage } from '@ilya/dictionary';
 
 import { buildDisplayLog } from '@ilya/blurb';
 
+import { applyReconstitution } from './reconstitution';
+
 import type { WordStackData, LineData, ProcessTextOptions } from './types';
 
 // ── Constants ────────────────────────────────────────────────────
@@ -93,6 +95,7 @@ interface TranscribedWord {
   boundarySource: string | null;
   ipaContent?: string;
   ipaDisplay?: string;
+  ipaReconstituted?: string;
   isVowellessClitic?: boolean;
 }
 
@@ -185,6 +188,7 @@ export function processText(
           stressedCyrillic,
           result: tw.engineResult,
           ipaDisplay: tw.ipaDisplay ?? tw.ipaContent ?? '',
+          ipaReconstituted: tw.ipaReconstituted ?? tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaContent: tw.ipaContent ?? '',
           displayLog,
           gloss,
@@ -445,6 +449,11 @@ function transcribeLine(
       .join(' ');
     tw.ipaContent = ipaCore;
     tw.ipaDisplay = ipaCore;
+
+    // Pre-compute reconstituted IPA from per-word ipaContent + transcription log.
+    // This runs on the word's own IPA before clitic merging, so the positional
+    // vowel count in ipaContent always matches the transcription log's vowel count.
+    tw.ipaReconstituted = applyReconstitution(ipaCore, tw.transcriptionLog);
   });
 
   // ── Clitic display merging ──
@@ -466,13 +475,16 @@ function transcribeLine(
     }
   });
 
-  // Second pass: merge clitic IPA into host words for display
+  // Second pass: merge clitic IPA into host words for display.
+  // Both ipaDisplay and ipaReconstituted are merged in parallel
+  // so the reconstituted string has the same clitic structure.
   transcribedWords.forEach((tw, idx) => {
     if (tw.isProclitic) {
       const nextWord = transcribedWords[idx + 1];
       const isVowelless = !hasVowel(tw.cleanWord);
 
       tw.ipaDisplay = '→';
+      tw.ipaReconstituted = '→';
       tw.isVowellessClitic = isVowelless;
 
       if (nextWord && !nextWord.isProclitic) {
@@ -484,9 +496,19 @@ function transcribeLine(
           } else {
             nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaDisplay;
           }
+          // Same for reconstituted (clitic IPA is consonant-only, unaffected by reconstitution)
+          if (nextWord.ipaReconstituted?.startsWith('ˈ')) {
+            nextWord.ipaReconstituted =
+              'ˈ' + tw.ipaContent + nextWord.ipaReconstituted!.slice(1);
+          } else {
+            nextWord.ipaReconstituted = tw.ipaContent + nextWord.ipaReconstituted;
+          }
         } else {
           // Vowel-bearing proclitic: separate with space
           nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaDisplay;
+          // For reconstituted: use reconstituted clitic IPA + reconstituted host IPA
+          const cliticReconstituted = applyReconstitution(tw.ipaContent ?? '', tw.transcriptionLog);
+          nextWord.ipaReconstituted = cliticReconstituted + ' ' + nextWord.ipaReconstituted;
         }
       }
     } else if (tw.isEnclitic) {
@@ -494,14 +516,19 @@ function transcribeLine(
       const isVowelless = !hasVowel(tw.cleanWord);
 
       tw.ipaDisplay = '←';
+      tw.ipaReconstituted = '←';
       tw.isVowellessClitic = isVowelless;
 
       if (prevWord && !prevWord.isEnclitic) {
         if (isVowelless) {
           prevWord.ipaDisplay = (prevWord.ipaDisplay ?? '') + tw.ipaContent;
+          prevWord.ipaReconstituted = (prevWord.ipaReconstituted ?? '') + tw.ipaContent;
         } else {
           prevWord.ipaDisplay =
             (prevWord.ipaDisplay ?? '') + ' ' + tw.ipaContent;
+          const encliticReconstituted = applyReconstitution(tw.ipaContent ?? '', tw.transcriptionLog);
+          prevWord.ipaReconstituted =
+            (prevWord.ipaReconstituted ?? '') + ' ' + encliticReconstituted;
         }
       }
     }

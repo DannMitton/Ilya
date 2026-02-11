@@ -34,6 +34,13 @@ export interface WordStackData {
   result: TranscriptionResult;
   /** Final IPA for display (after cross-word assimilation and clitic merging). */
   ipaDisplay: string;
+  /**
+   * IPA with vowel reconstitution applied (Grayson Ch. 3, §8).
+   * Pre-computed at pipeline time using the transcription log for
+   * source-character disambiguation. Clitic merging applied in parallel
+   * with ipaDisplay so the two strings have identical structure.
+   */
+  ipaReconstituted: string;
   /** IPA content before clitic display merging (used for clitic prepend/append). */
   ipaContent: string;
 
