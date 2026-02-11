@@ -6,18 +6,19 @@
 	interface Props {
 		lines: LineData[];
 		notationPrefs: NotationPreferences;
+		printMode?: boolean;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, onwordclick }: Props = $props();
+	let { lines, notationPrefs, printMode = false, onwordclick }: Props = $props();
 
 	const hasTranscription = $derived(lines.length > 0);
 </script>
 
-<div class="paper" role="region" aria-label="Transcription">
+<div class="paper" class:print-mode={printMode} role="region" aria-label="Transcription">
 	{#if hasTranscription}
 		{#each lines as line (line.lineNumber)}
-			<VerseLine words={line.words} {notationPrefs} {onwordclick} />
+			<VerseLine words={line.words} {notationPrefs} {printMode} {onwordclick} />
 		{/each}
 	{:else}
 		<p class="empty-state">Paste Russian text and click Transcribe to begin.</p>
@@ -34,6 +35,13 @@
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 		border-radius: 2px;
 		min-height: 12rem;
+	}
+
+	.paper.print-mode {
+		box-shadow: none;
+		border-radius: 0;
+		padding: 0;
+		max-width: none;
 	}
 
 	.empty-state {

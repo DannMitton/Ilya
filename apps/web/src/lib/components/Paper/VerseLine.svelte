@@ -6,15 +6,16 @@
 	interface Props {
 		words: WordStackData[];
 		notationPrefs: NotationPreferences;
+		printMode?: boolean;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { words, notationPrefs, onwordclick }: Props = $props();
+	let { words, notationPrefs, printMode = false, onwordclick }: Props = $props();
 </script>
 
 <div class="verse-line">
 	{#each words as word (word.wordIndex)}
-		<WordStack {word} {notationPrefs} onclick={onwordclick} />
+		<WordStack {word} {notationPrefs} {printMode} onclick={onwordclick} />
 	{/each}
 </div>
 

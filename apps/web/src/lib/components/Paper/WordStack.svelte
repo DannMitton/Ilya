@@ -6,10 +6,11 @@
 	interface Props {
 		word: WordStackData;
 		notationPrefs: NotationPreferences;
+		printMode?: boolean;
 		onclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, onclick }: Props = $props();
+	let { word, notationPrefs, printMode = false, onclick }: Props = $props();
 
 	const displayIpa = $derived((() => {
 		// Pick the correct base IPA: reconstituted or standard
@@ -21,6 +22,7 @@
 	})());
 
 	const provenance = $derived((() => {
+		if (printMode) return null;
 		const src = word.stressSource;
 		if (word.isProclitic || word.isEnclitic) return null;
 		switch (src) {
@@ -41,10 +43,11 @@
 	})());
 
 	function handleClick() {
-		onclick?.(word);
+		if (!printMode) onclick?.(word);
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
+		if (printMode) return;
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.preventDefault();
 			onclick?.(word);
@@ -57,10 +60,11 @@
 	class:proclitic={word.isProclitic}
 	class:enclitic={word.isEnclitic}
 	class:unknown-stress={word.stressSource === 'inferred' || word.stressSource === 'unknown'}
+	class:print-mode={printMode}
 	data-word-index="{word.lineIndex}-{word.wordIndex}"
-	tabindex="0"
-	role="button"
-	aria-label="{word.cleanWord}, {displayIpa}"
+	tabindex={printMode ? -1 : 0}
+	role={printMode ? undefined : 'button'}
+	aria-label={printMode ? undefined : `${word.cleanWord}, ${displayIpa}`}
 	onclick={handleClick}
 	onkeydown={handleKeydown}
 >
@@ -109,7 +113,12 @@
 		position: relative;
 	}
 
-	.word-stack:hover {
+	.word-stack.print-mode {
+		cursor: default;
+		padding: 0.15rem 0.25rem;
+	}
+
+	.word-stack:hover:not(.print-mode) {
 		background: rgba(0, 0, 0, 0.04);
 	}
 
