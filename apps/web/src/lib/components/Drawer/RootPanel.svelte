@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { LoaderState } from '$lib/loader';
 	import type { NotationPreferences } from '@ilya/phonology';
+	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
 		inputText: string;
@@ -11,6 +12,7 @@
 		transcribeMs: number;
 		transcribeError: string;
 		notationPrefs: NotationPreferences;
+		language: Language;
 		oninput: (text: string) => void;
 		ontranscribe: () => void;
 		onnotationchange: (prefs: NotationPreferences) => void;
@@ -25,6 +27,7 @@
 		transcribeMs,
 		transcribeError,
 		notationPrefs,
+		language,
 		oninput,
 		ontranscribe,
 		onnotationchange,
@@ -42,37 +45,42 @@
 	}
 
 	function togglePref(key: keyof NotationPreferences) {
-		onnotationchange({
-			...notationPrefs,
-			[key]: !notationPrefs[key],
-		});
+		const newValue = !notationPrefs[key];
+		const updated = { ...notationPrefs, [key]: newValue };
+
+		// Geminates governs Shcha: toggling Geminates cascades to Shcha
+		if (key === 'geminate') {
+			updated.shcha = newValue;
+		}
+
+		onnotationchange(updated);
 	}
 
-	const toggles: { key: keyof NotationPreferences; label: string; description: string }[] = [
-		{ key: 'reducedVowel', label: 'Reduced vowel', description: 'ʌ → ə' },
-		{ key: 'shcha', label: 'Shcha notation', description: 'ʃ²ʃ² → ʃ²ː' },
-		{ key: 'palatalNasal', label: 'Palatal nasal', description: 'ɲ → nʲ' },
-		{ key: 'geminate', label: 'Geminates', description: 'Show length markers' },
-		{ key: 'reconstitution', label: 'Reconstitution', description: 'Show reconstitution' },
+	const toggleKeys: { key: keyof NotationPreferences; labelKey: string; descKey: string }[] = [
+		{ key: 'reducedVowel', labelKey: 'notation.reducedVowel', descKey: 'notation.reducedVowel.desc' },
+		{ key: 'palatalNasal', labelKey: 'notation.palatalNasal', descKey: 'notation.palatalNasal.desc' },
+		{ key: 'geminate',     labelKey: 'notation.geminates',    descKey: 'notation.geminates.desc' },
+		{ key: 'shcha',        labelKey: 'notation.shcha',        descKey: 'notation.shcha.desc' },
+		{ key: 'reconstitution', labelKey: 'notation.reconstitution', descKey: 'notation.reconstitution.desc' },
 	];
 </script>
 
 <div class="root-panel">
 	<div class="header">
 		<h1>Ilya</h1>
-		<p class="subtitle">Russian Lyric Diction</p>
+		<p class="subtitle">{t('app.subtitle', language)}</p>
 	</div>
 
 	<div class="status-bar">
 		{#if loaderState.isLoading}
-			<span class="loading">Loading dictionary…</span>
+			<span class="loading">{t('dict.loading', language)}</span>
 		{:else if loaderState.error}
 			<span class="status-err">✗ {loaderState.error}</span>
 		{:else if loaderState.entryCount > 0}
 			<span class="status-ok">
-				✓ {loaderState.entryCount.toLocaleString()} words
+				✓ {loaderState.entryCount.toLocaleString()} {t('dict.words', language)}
 				{#if loaderState.tier2Loaded}
-					+ {loaderState.tier2Count.toLocaleString()} inflections
+					+ {loaderState.tier2Count.toLocaleString()} {t('dict.inflections', language)}
 				{/if}
 			</span>
 		{/if}
@@ -83,12 +91,12 @@
 			value={inputText}
 			oninput={(e) => oninput(e.currentTarget.value)}
 			onkeydown={handleKeydown}
-			placeholder="Paste Russian text here…"
+			placeholder={t('input.placeholder', language)}
 			rows="6"
 		></textarea>
 		{#if inputWarning}
 			<p class="input-warning">
-				⚠ {inputLength.toLocaleString()} characters. Large texts may be slow to process.
+				⚠ {inputLength.toLocaleString()} {t('input.warning', language)}
 			</p>
 		{/if}
 		<button
@@ -96,7 +104,7 @@
 			disabled={!canTranscribe}
 			class="transcribe-btn"
 		>
-			{loaderState.isLoading ? 'Loading dictionary…' : 'Transcribe'}
+			{loaderState.isLoading ? t('input.transcribeLoading', language) : t('input.transcribe', language)}
 		</button>
 	</div>
 
@@ -106,19 +114,19 @@
 
 	{#if hasResults}
 		<p class="result-meta">
-			{wordCount} words in {transcribeMs}ms
+			{wordCount} {t('result.words', language)} {transcribeMs}ms
 		</p>
 	{/if}
 
 	<!-- Notation preferences -->
 	<div class="notation-section">
-		<h2 class="section-label">Notation</h2>
+		<h2 class="section-label">{t('notation.heading', language)}</h2>
 		<div class="toggle-list">
-			{#each toggles as toggle}
-				<label class="toggle-row">
+			{#each toggleKeys as toggle}
+				<label class="toggle-row" class:subordinate={toggle.key === 'shcha'}>
 					<div class="toggle-text">
-						<span class="toggle-label">{toggle.label}</span>
-						<span class="toggle-desc">{toggle.description}</span>
+						<span class="toggle-label">{t(toggle.labelKey, language)}</span>
+						<span class="toggle-desc">{t(toggle.descKey, language)}</span>
 					</div>
 					<button
 						class="toggle-switch"
@@ -281,6 +289,10 @@
 		justify-content: space-between;
 		gap: 0.75rem;
 		cursor: pointer;
+	}
+
+	.toggle-row.subordinate {
+		padding-left: 1rem;
 	}
 
 	.toggle-text {

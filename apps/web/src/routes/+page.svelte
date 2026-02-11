@@ -5,6 +5,8 @@
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
 	import type { LineData, WordStackData } from '$lib/types';
+	import type { Language } from '$lib/i18n';
+	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
@@ -22,6 +24,9 @@
 		tier2Loaded: false,
 		tier2Count: 0
 	});
+
+	// Language
+	let language = $state<Language>('en');
 
 	// Pipeline state
 	let inputText = $state('');
@@ -50,21 +55,32 @@
 		lines.reduce((sum, l) => sum + l.words.length, 0)
 	);
 
+	function runPipeline() {
+		transcribeError = '';
+		try {
+			const start = performance.now();
+			const result = processText(inputText, { language });
+			transcribeMs = Math.round(performance.now() - start);
+			lines = result;
+		} catch (e: unknown) {
+			transcribeError = e instanceof Error ? e.message : String(e);
+			console.error('[Ilya] Transcription error:', e);
+		}
+	}
+
 	function handleTranscribe() {
 		if (!canTranscribe) return;
 		transcribeError = '';
 		selectedWord = null;
 		drawerMode = 'root';
 		lastFocusedWord = null;
-		try {
-			const start = performance.now();
-			const result = processText(inputText);
-			transcribeMs = Math.round(performance.now() - start);
-			lines = result;
 
+		runPipeline();
+
+		if (lines.length > 0) {
 			// Console output for verification
 			console.group('[Ilya] Transcription result');
-			result.forEach((line, li) => {
+			lines.forEach((line, li) => {
 				console.group(`Line ${li}`);
 				line.words.forEach((w) => {
 					console.log(
@@ -88,9 +104,6 @@
 				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
 				first?.focus();
 			});
-		} catch (e: unknown) {
-			transcribeError = e instanceof Error ? e.message : String(e);
-			console.error('[Ilya] Transcription error:', e);
 		}
 	}
 
@@ -137,9 +150,26 @@
 		}
 	}
 
+	function handleLanguageChange(lang: Language) {
+		language = lang;
+		try {
+			localStorage.setItem('ilya:language', lang);
+		} catch {
+			// localStorage unavailable
+		}
+		// Re-run pipeline to update glosses in the new language
+		if (hasResults && inputText.trim().length > 0) {
+			runPipeline();
+		}
+	}
+
 	onMount(() => {
 		// Restore persisted state
 		try {
+			const savedLang = localStorage.getItem('ilya:language');
+			if (savedLang === 'en' || savedLang === 'fr') {
+				language = savedLang;
+			}
 			const savedPrefs = localStorage.getItem('ilya:notationPrefs');
 			if (savedPrefs) {
 				const parsed = JSON.parse(savedPrefs);
@@ -161,37 +191,49 @@
 	});
 </script>
 
-<Drawer mode={drawerMode}>
-	{#snippet rootPanel()}
-		<RootPanel
-			{inputText}
-			{loaderState}
-			{canTranscribe}
-			{hasResults}
-			{wordCount}
-			{transcribeMs}
-			{transcribeError}
-			{notationPrefs}
-			oninput={handleInput}
-			ontranscribe={handleTranscribe}
-			onnotationchange={handleNotationChange}
-		/>
-	{/snippet}
-	{#snippet inspectorPanel()}
-		{#if selectedWord}
-			<InspectorPanel
-				word={selectedWord}
-				onback={handleInspectorBack}
-			/>
-		{/if}
-	{/snippet}
-</Drawer>
+<HeaderBar {language} onlanguagechange={handleLanguageChange} />
 
-<main class="main-content">
-	<Paper {lines} {notationPrefs} onwordclick={handleWordClick} />
-</main>
+<div class="app-content">
+	<Drawer mode={drawerMode}>
+		{#snippet rootPanel()}
+			<RootPanel
+				{inputText}
+				{loaderState}
+				{canTranscribe}
+				{hasResults}
+				{wordCount}
+				{transcribeMs}
+				{transcribeError}
+				{notationPrefs}
+				{language}
+				oninput={handleInput}
+				ontranscribe={handleTranscribe}
+				onnotationchange={handleNotationChange}
+			/>
+		{/snippet}
+		{#snippet inspectorPanel()}
+			{#if selectedWord}
+				<InspectorPanel
+					word={selectedWord}
+					{language}
+					onback={handleInspectorBack}
+				/>
+			{/if}
+		{/snippet}
+	</Drawer>
+
+	<main class="main-content">
+		<Paper {lines} {notationPrefs} {language} onwordclick={handleWordClick} />
+	</main>
+</div>
 
 <style>
+	.app-content {
+		display: flex;
+		flex: 1;
+		overflow: hidden;
+	}
+
 	.main-content {
 		flex: 1;
 		overflow-y: auto;

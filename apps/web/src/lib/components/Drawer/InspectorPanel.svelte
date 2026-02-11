@@ -1,30 +1,20 @@
 <script lang="ts">
 	import type { WordStackData } from '$lib/types';
 	import type { DisplayLogEntry } from '@ilya/blurb';
+	import { t, stressSourceLabel, type Language } from '$lib/i18n';
 
 	interface Props {
 		word: WordStackData;
+		language: Language;
 		onback: () => void;
 	}
 
-	let { word, onback }: Props = $props();
+	let { word, language, onback }: Props = $props();
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
 			e.preventDefault();
 			onback();
-		}
-	}
-
-	function stressSourceLabel(source: string): string {
-		switch (source) {
-			case 'dictionary': return 'Verified from dictionary';
-			case 'supplement': return 'Singer supplement';
-			case 'yo-rule': return 'Derived from ё';
-			case 'yo-restored': return 'ё restored from dictionary';
-			case 'inferred': return 'Algorithmically inferred';
-			case 'unknown': return 'Unknown — verify manually';
-			default: return source;
 		}
 	}
 
@@ -55,13 +45,16 @@
 	function hasBlurb(entry: DisplayLogEntry): boolean {
 		return !!(entry.blurbData && (
 			(entry.blurbData as Record<string, unknown>).en ||
+			(entry.blurbData as Record<string, unknown>).fr ||
 			(entry.blurbData as Record<string, unknown>).text
 		));
 	}
 
-	function getBlurbText(entry: DisplayLogEntry): string {
+	function getBlurbText(entry: DisplayLogEntry, lang: Language): string {
 		if (!entry.blurbData) return '';
 		const data = entry.blurbData as Record<string, unknown>;
+		// Try requested language first, then fall back
+		if (typeof data[lang] === 'string') return data[lang] as string;
 		if (typeof data.en === 'string') return data.en;
 		if (typeof data.text === 'string') return data.text;
 		return '';
@@ -71,7 +64,7 @@
 <div class="inspector-panel" onkeydown={handleKeydown}>
 	<!-- Back button -->
 	<button class="back-btn" onclick={onback}>
-		← Back
+		{t('inspector.back', language)}
 	</button>
 
 	<!-- Word header -->
@@ -85,7 +78,7 @@
 
 	<!-- Stress provenance -->
 	<div class="section">
-		<h3 class="section-label">Stress</h3>
+		<h3 class="section-label">{t('inspector.stress', language)}</h3>
 		<div class="stress-info">
 			{#if word.stressIndex >= 0}
 				<p class="stress-text">
@@ -114,10 +107,10 @@
 							{/if}
 						</span>
 					{/if}
-					Syllable {word.stressIndex + 1} · {stressSourceLabel(word.stressSource)}
+					{t('inspector.syllable', language)} {word.stressIndex + 1} · {stressSourceLabel(word.stressSource, language)}
 				</p>
 			{:else if word.stressIndex === -1}
-				<p class="stress-text">Clitic (unstressed)</p>
+				<p class="stress-text">{t('inspector.clitic', language)}</p>
 			{:else}
 				<p class="stress-text">
 					{#if provenanceIcon}
@@ -127,7 +120,7 @@
 							</svg>
 						</span>
 					{/if}
-					Unknown stress · verify manually
+					{t('inspector.unknownStress', language)}
 				</p>
 			{/if}
 		</div>
@@ -136,7 +129,7 @@
 	<!-- Ribbon: per-character breakdown -->
 	{#if word.displayLog.length > 0}
 		<div class="section">
-			<h3 class="section-label">Character breakdown</h3>
+			<h3 class="section-label">{t('inspector.ribbon', language)}</h3>
 			<div class="ribbon">
 				{#each word.displayLog as entry, i}
 					<div class="ribbon-cell" class:stressed={entry.features?.stressed}>
@@ -155,12 +148,12 @@
 	<!-- Blurb details -->
 	{#if word.displayLog.some(hasBlurb)}
 		<div class="section">
-			<h3 class="section-label">Phonological notes</h3>
+			<h3 class="section-label">{t('inspector.blurbs', language)}</h3>
 			<div class="blurb-list">
 				{#each word.displayLog.filter(hasBlurb) as entry}
 					<div class="blurb-entry">
 						<span class="blurb-char">{entry.char} → {ribbonLabel(entry) || '∅'}</span>
-						<p class="blurb-text">{getBlurbText(entry)}</p>
+						<p class="blurb-text">{getBlurbText(entry, language)}</p>
 					</div>
 				{/each}
 			</div>
@@ -169,7 +162,7 @@
 
 	<!-- Notation indicator (read-only) -->
 	<div class="section notation-indicator">
-		<p class="notation-note">Notation: default (Grayson)</p>
+		<p class="notation-note">{t('inspector.notationDefault', language)}</p>
 	</div>
 </div>
 
