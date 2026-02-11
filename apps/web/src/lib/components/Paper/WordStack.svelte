@@ -20,6 +20,26 @@
 		return applyNotationPreferences(base, notationPrefs, true);
 	})());
 
+	const provenance = $derived((() => {
+		const src = word.stressSource;
+		if (word.isProclitic || word.isEnclitic) return null;
+		switch (src) {
+			case 'dictionary':
+				return { type: 'dictionary', label: 'Stress verified from dictionary', colour: '#059669' };
+			case 'supplement':
+				return { type: 'supplement', label: 'Stress from singer supplement', colour: '#2563eb' };
+			case 'yo-rule':
+			case 'yo-restored':
+				return { type: 'yo', label: 'Stress derived from ё', colour: '#7c3aed' };
+			case 'inferred':
+				return { type: 'inferred', label: 'Stress algorithmically inferred', colour: '#d97706' };
+			case 'unknown':
+				return { type: 'unknown', label: 'Unknown stress — verify manually', colour: '#d97706' };
+			default:
+				return null;
+		}
+	})());
+
 	function handleClick() {
 		onclick?.(word);
 	}
@@ -44,6 +64,31 @@
 	onclick={handleClick}
 	onkeydown={handleKeydown}
 >
+	{#if provenance}
+		<span class="provenance provenance-{provenance.type}" aria-label={provenance.label} title={provenance.label}>
+			{#if provenance.type === 'dictionary'}
+				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+					<path d="M1.5 5.5 L4 8 L8.5 2.5" fill="none" stroke={provenance.colour} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			{:else if provenance.type === 'supplement'}
+				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+					<path d="M5 0.8 L6.1 3.5 L9 3.7 L6.8 5.8 L7.4 8.8 L5 7.3 L2.6 8.8 L3.2 5.8 L1 3.7 L3.9 3.5 Z" fill={provenance.colour}/>
+				</svg>
+			{:else if provenance.type === 'yo'}
+				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+					<text x="5" y="9" text-anchor="middle" font-size="9" font-weight="600" fill={provenance.colour}>ё</text>
+				</svg>
+			{:else if provenance.type === 'inferred'}
+				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+					<path d="M1 6 Q3 3.5, 5 6 Q7 8.5, 9 6" fill="none" stroke={provenance.colour} stroke-width="1.5" stroke-linecap="round"/>
+				</svg>
+			{:else if provenance.type === 'unknown'}
+				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+					<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenance.colour}>?</text>
+				</svg>
+			{/if}
+		</span>
+	{/if}
 	<span class="ipa">{displayIpa}</span>
 	<span class="cyrillic">
 		{word.stressedCyrillic}<span class="punct">{word.punctuation}</span>
@@ -61,6 +106,7 @@
 		border-radius: 4px;
 		padding: 0.25rem 0.35rem;
 		transition: background 0.12s;
+		position: relative;
 	}
 
 	.word-stack:hover {
@@ -80,6 +126,26 @@
 	.word-stack.unknown-stress {
 		border-bottom: 2px dashed #e2a500;
 		padding-bottom: 0.15rem;
+	}
+
+	/* ── Provenance icon ─────────────────────────────────────── */
+
+	.provenance {
+		position: absolute;
+		top: 1px;
+		right: 2px;
+		width: 10px;
+		height: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.55;
+		transition: opacity 0.12s;
+		pointer-events: none;
+	}
+
+	.word-stack:hover .provenance {
+		opacity: 0.85;
 	}
 
 	.ipa {

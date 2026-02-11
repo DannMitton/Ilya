@@ -28,6 +28,25 @@
 		}
 	}
 
+	const provenanceIcon = $derived((() => {
+		const src = word.stressSource;
+		switch (src) {
+			case 'dictionary':
+				return { type: 'dictionary', colour: '#059669' };
+			case 'supplement':
+				return { type: 'supplement', colour: '#2563eb' };
+			case 'yo-rule':
+			case 'yo-restored':
+				return { type: 'yo', colour: '#7c3aed' };
+			case 'inferred':
+				return { type: 'inferred', colour: '#d97706' };
+			case 'unknown':
+				return { type: 'unknown', colour: '#d97706' };
+			default:
+				return null;
+		}
+	})());
+
 	function ribbonLabel(entry: DisplayLogEntry): string {
 		if (entry.ipa === '' || entry.ipa === null) return '';
 		return entry.ipa;
@@ -67,15 +86,51 @@
 	<!-- Stress provenance -->
 	<div class="section">
 		<h3 class="section-label">Stress</h3>
-		<p class="stress-info">
+		<div class="stress-info">
 			{#if word.stressIndex >= 0}
-				Syllable {word.stressIndex + 1} · {stressSourceLabel(word.stressSource)}
+				<p class="stress-text">
+					{#if provenanceIcon}
+						<span class="provenance-inline" aria-hidden="true">
+							{#if provenanceIcon.type === 'dictionary'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M1.5 5.5 L4 8 L8.5 2.5" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							{:else if provenanceIcon.type === 'supplement'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M5 0.8 L6.1 3.5 L9 3.7 L6.8 5.8 L7.4 8.8 L5 7.3 L2.6 8.8 L3.2 5.8 L1 3.7 L3.9 3.5 Z" fill={provenanceIcon.colour}/>
+								</svg>
+							{:else if provenanceIcon.type === 'yo'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<text x="5" y="9" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>ё</text>
+								</svg>
+							{:else if provenanceIcon.type === 'inferred'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M1 6 Q3 3.5, 5 6 Q7 8.5, 9 6" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round"/>
+								</svg>
+							{:else if provenanceIcon.type === 'unknown'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
+								</svg>
+							{/if}
+						</span>
+					{/if}
+					Syllable {word.stressIndex + 1} · {stressSourceLabel(word.stressSource)}
+				</p>
 			{:else if word.stressIndex === -1}
-				Clitic (unstressed)
+				<p class="stress-text">Clitic (unstressed)</p>
 			{:else}
-				Unknown stress · verify manually
+				<p class="stress-text">
+					{#if provenanceIcon}
+						<span class="provenance-inline" aria-hidden="true">
+							<svg width="12" height="12" viewBox="0 0 10 10">
+								<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
+							</svg>
+						</span>
+					{/if}
+					Unknown stress · verify manually
+				</p>
 			{/if}
-		</p>
+		</div>
 	</div>
 
 	<!-- Ribbon: per-character breakdown -->
@@ -191,6 +246,18 @@
 	.stress-info {
 		font-size: 0.85rem;
 		color: var(--color-text);
+	}
+
+	.stress-text {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	.provenance-inline {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
 	}
 
 	/* ── Ribbon ───────────────────────────────────────────────── */
