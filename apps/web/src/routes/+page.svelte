@@ -68,6 +68,26 @@
 	// Cleared on every transcribe or clear action
 	let spotReconstitution = $state<Map<string, boolean>>(new Map());
 
+	// Breath animation state
+	// paperBreathClass: animates Paper content only (transcription trigger)
+	// viewBreathClass: animates entire app content (language toggle)
+	let paperBreathClass = $state('');
+	let viewBreathClass = $state('');
+
+	function triggerPaperBreathIn() {
+		paperBreathClass = 'breath-in';
+		setTimeout(() => { paperBreathClass = ''; }, 300);
+	}
+
+	function triggerViewBreathCycle(callback: () => void) {
+		viewBreathClass = 'breath-out';
+		setTimeout(() => {
+			callback();
+			viewBreathClass = 'breath-in';
+			setTimeout(() => { viewBreathClass = ''; }, 300);
+		}, 150);
+	}
+
 	// Derived
 	const canTranscribe = $derived(
 		inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
@@ -101,6 +121,8 @@
 		runPipeline();
 
 		if (lines.length > 0) {
+			// Breath animation: content appears with breath-in
+			triggerPaperBreathIn();
 			// Console output for verification
 			console.group('[Ilya] Transcription result');
 			lines.forEach((line, li) => {
@@ -220,15 +242,24 @@
 	}
 
 	function handleLanguageChange(lang: Language) {
-		language = lang;
-		try {
-			localStorage.setItem('ilya:language', lang);
-		} catch {
-			// localStorage unavailable
-		}
-		// Re-run pipeline to update glosses in the new language
-		if (hasResults && inputText.trim().length > 0) {
-			runPipeline();
+		const doSwap = () => {
+			language = lang;
+			try {
+				localStorage.setItem('ilya:language', lang);
+			} catch {
+				// localStorage unavailable
+			}
+			// Re-run pipeline to update glosses in the new language
+			if (hasResults && inputText.trim().length > 0) {
+				runPipeline();
+			}
+		};
+
+		// If there's content visible, use breath cycle; otherwise swap immediately
+		if (hasResults) {
+			triggerViewBreathCycle(doSwap);
+		} else {
+			doSwap();
 		}
 	}
 
@@ -308,7 +339,7 @@
 	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
 </div>
 
-<div class="app-content">
+<div class="app-content {viewBreathClass}">
 	<div class="screen-only">
 		<Drawer
 			mode={drawerMode}
@@ -356,7 +387,7 @@
 		</Drawer>
 	</div>
 
-	<main class="main-content">
+	<main class="main-content {paperBreathClass}">
 		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
@@ -395,6 +426,31 @@
 		.main-content {
 			padding: 0;
 			overflow: visible;
+		}
+	}
+
+	/* Breath animation: two-phase CSS transitions for moments of meaning */
+	@keyframes breathOut {
+		from { opacity: 1; transform: translateY(0); }
+		to   { opacity: 0; transform: translateY(-2px); }
+	}
+	@keyframes breathIn {
+		from { opacity: 0; transform: translateY(-2px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	:global(.breath-out) {
+		animation: breathOut 150ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+	:global(.breath-in) {
+		animation: breathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	/* Respect reduced motion preferences */
+	@media (prefers-reduced-motion: reduce) {
+		:global(.breath-out),
+		:global(.breath-in) {
+			animation: none !important;
 		}
 	}
 </style>

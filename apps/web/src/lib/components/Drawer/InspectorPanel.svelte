@@ -18,6 +18,35 @@
 
 	// Whether spot reconstitution is effectively active for this word
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
+	const reconActive = $derived(notationPrefs.reconstitution || isSpotActive);
+
+	// Per-entry reconstituted IPA: derived by comparing ipaContent and ipaOwnReconstituted
+	// Both strings have identical structure (reconstitution only substitutes vowels, same length).
+	// We strip spaces and stress marks, walk in parallel with displayLog entries,
+	// and build a map of entry index → reconstituted IPA for entries that differ.
+	const reconstitutedIpaMap = $derived.by((): Map<number, string> => {
+		if (!word.ipaContent || !word.ipaOwnReconstituted) return new Map();
+		if (word.ipaContent === word.ipaOwnReconstituted) return new Map();
+
+		const strip = (s: string) => s.replace(/[\sˈ]/g, '');
+		const orig = strip(word.ipaContent);
+		const recon = strip(word.ipaOwnReconstituted);
+
+		if (orig.length !== recon.length) return new Map();
+
+		const map = new Map<number, string>();
+		let pos = 0;
+		for (let i = 0; i < word.displayLog.length; i++) {
+			const entryIpa = word.displayLog[i].ipa ?? '';
+			if (entryIpa.length === 0) continue;
+			const reconIpa = recon.substring(pos, pos + entryIpa.length);
+			if (reconIpa !== entryIpa) {
+				map.set(i, reconIpa);
+			}
+			pos += entryIpa.length;
+		}
+		return map;
+	});
 
 	// Display IPA in the word header: use ipaContent (pre-merge) for analysis context,
 	// not ipaDisplay (which contains fused clitic material on host words).
@@ -70,12 +99,17 @@
 		}
 
 		// Character cells from displayLog
-		for (const entry of word.displayLog) {
+		for (let di = 0; di < word.displayLog.length; di++) {
+			const entry = word.displayLog[di];
+			const baseIpa = entry.ipa ?? '';
+			const displayIpa = reconActive && reconstitutedIpaMap.has(di)
+				? reconstitutedIpaMap.get(di)!
+				: baseIpa;
 			entries.push({
 				type: 'character',
 				entry,
 				char: entry.char,
-				ipa: entry.ipa ?? '',
+				ipa: displayIpa,
 				index: idx,
 			});
 			idx++;
@@ -303,7 +337,6 @@
 				onkeydown={handleRibbonKeydown}
 				bind:this={ribbonEl}
 				tabindex="-1"
-				tabindex="-1"
 			>
 				{#each ribbonEntries as re, i}
 					{#if re.type === 'clitic-arrow'}
@@ -437,6 +470,18 @@
 		padding: 1.5rem;
 		height: 100%;
 		overflow-y: auto;
+		animation: inspectorBreathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) both;
+	}
+
+	@keyframes inspectorBreathIn {
+		from { opacity: 0; transform: translateY(-2px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.inspector-panel {
+			animation: none;
+		}
 	}
 
 	/* ── Back button ─────────────────────────────────────────── */
@@ -462,6 +507,13 @@
 
 	.word-header {
 		margin-bottom: 1.5rem;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-start;
+		border: 1px solid var(--sage);
+		border-radius: 2px;
+		padding: 0.5rem 0.75rem;
+		background: var(--paper-cream);
 	}
 
 	.word-cyrillic {
@@ -469,14 +521,16 @@
 		font-size: 1.6rem;
 		font-weight: 600;
 		color: var(--ink-primary);
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.1rem;
+		line-height: 1.3;
 	}
 
 	.word-ipa {
 		font-family: var(--font-sans);
 		font-size: 1.15rem;
 		color: var(--ink-secondary);
-		margin-bottom: 0.35rem;
+		margin-bottom: 0.15rem;
+		line-height: 1.3;
 	}
 
 	.word-gloss {
@@ -484,6 +538,7 @@
 		font-size: 0.85rem;
 		color: var(--terracotta);
 		font-style: italic;
+		line-height: 1.3;
 	}
 
 	/* ── Sections ──────────────────────────────────────────────── */
