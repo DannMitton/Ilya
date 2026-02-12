@@ -15,17 +15,18 @@
 		pageSize: PageSize;
 		totalPages: number;
 		showStressDiacritics?: boolean;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, language, metadata, pageSize, totalPages, showStressDiacritics = false, onwordclick }: Props = $props();
+	let { lines, notationPrefs, language, metadata, pageSize, totalPages, showStressDiacritics = false, spotReconstitution, onwordclick }: Props = $props();
 
 	const dims = $derived(PAGE_DIMENSIONS[pageSize]);
 	const hasMetadata = $derived(
 		metadata.title || metadata.composer || metadata.poet || metadata.opus
 	);
 	const hasContent = $derived(lines.length > 0);
-	const legend = $derived(buildProvenanceLegend(lines));
+	const legend = $derived(buildProvenanceLegend(lines, language, spotReconstitution));
 </script>
 
 <div
@@ -63,7 +64,7 @@
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
 				<div class="verse-line-wrapper">
-					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
+					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
 				</div>
 			{/each}
 		{:else}

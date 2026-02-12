@@ -9,10 +9,11 @@
 		notationPrefs: NotationPreferences;
 		showStressDiacritics?: boolean;
 		language?: Language;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { words, notationPrefs, showStressDiacritics = false, language = 'en', onwordclick }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, onwordclick }: Props = $props();
 
 	// Filter out punctuation-only tokens: only render words containing Cyrillic
 	const displayWords = $derived(
@@ -22,7 +23,15 @@
 
 <div class="verse-line">
 	{#each displayWords as word (word.wordIndex)}
-		<WordStack {word} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
+		{@const wordKey = `${word.lineIndex}-${word.wordIndex}`}
+		<WordStack
+			{word}
+			{notationPrefs}
+			{showStressDiacritics}
+			{language}
+			spotReconstituted={spotReconstitution?.has(wordKey) ?? false}
+			{onwordclick}
+		/>
 	{/each}
 </div>
 

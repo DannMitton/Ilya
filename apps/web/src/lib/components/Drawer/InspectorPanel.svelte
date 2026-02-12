@@ -1,15 +1,32 @@
 <script lang="ts">
 	import type { WordStackData } from '$lib/types';
 	import type { DisplayLogEntry } from '@ilya/blurb';
+	import { applyNotationPreferences } from '@ilya/phonology';
+	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, stressSourceLabel, type Language } from '$lib/i18n';
 
 	interface Props {
 		word: WordStackData;
 		language: Language;
+		notationPrefs: NotationPreferences;
+		spotReconstituted?: boolean;
 		onback: () => void;
+		onspotrecontoggle?: () => void;
 	}
 
-	let { word, language, onback }: Props = $props();
+	let { word, language, notationPrefs, spotReconstituted = false, onback, onspotrecontoggle }: Props = $props();
+
+	// Whether spot reconstitution is effectively active for this word
+	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
+
+	// Display IPA in the word header, reflecting spot reconstitution
+	const headerIpa = $derived.by(() => {
+		const useReconstituted =
+			(notationPrefs.reconstitution && word.ipaReconstituted) ||
+			(isSpotActive && word.ipaReconstituted);
+		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
+		return base ? applyNotationPreferences(base, notationPrefs) : '';
+	});
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
@@ -71,7 +88,7 @@
 	<!-- Word header -->
 	<div class="word-header">
 		<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
-		<p class="word-ipa">{word.ipaDisplay}</p>
+		<p class="word-ipa">{headerIpa}</p>
 		{#if word.gloss}
 			<p class="word-gloss">{word.gloss}</p>
 		{/if}
@@ -146,6 +163,49 @@
 		</div>
 	{/if}
 
+	<!-- Spot reconstitution toggle -->
+	{#if word.ipaReconstituted}
+		<div class="section">
+			<h3 class="section-label">{t('inspector.spotRecon.heading', language)}</h3>
+			{#if notationPrefs.reconstitution}
+				<!-- Global reconstitution is on: show disabled state with explanation -->
+				<div class="spot-recon-disabled">
+					<div class="spot-recon-row">
+						<span class="spot-label left">{t('inspector.spotRecon.left', language)}</span>
+						<button
+							class="toggle-switch disabled"
+							role="switch"
+							aria-checked="true"
+							aria-label={t('inspector.spotRecon.right', language)}
+							disabled
+							title={t('inspector.spotRecon.globalOn', language)}
+						>
+							<span class="toggle-thumb"></span>
+						</button>
+						<span class="spot-label right">{t('inspector.spotRecon.right', language)}</span>
+					</div>
+					<p class="spot-hint">{t('inspector.spotRecon.globalOn', language)}</p>
+				</div>
+			{:else}
+				<!-- Per-word toggle active -->
+				<div class="spot-recon-row">
+					<span class="spot-label left" class:active={!spotReconstituted}>{t('inspector.spotRecon.left', language)}</span>
+					<button
+						class="toggle-switch"
+						class:on={spotReconstituted}
+						role="switch"
+						aria-checked={spotReconstituted}
+						aria-label={t('inspector.spotRecon.right', language)}
+						onclick={() => onspotrecontoggle?.()}
+					>
+						<span class="toggle-thumb"></span>
+					</button>
+					<span class="spot-label right" class:active={spotReconstituted}>{t('inspector.spotRecon.right', language)}</span>
+				</div>
+			{/if}
+		</div>
+	{/if}
+
 	<!-- Blurb details -->
 	{#if word.displayLog.some(hasBlurb)}
 		<div class="section">
@@ -177,7 +237,7 @@
 		overflow-y: auto;
 	}
 
-	/* ── Back button ─────────────────────────────────────── */
+	/* ── Back button ─────────────────────────────────────────── */
 
 	.back-btn {
 		background: none;
@@ -196,7 +256,7 @@
 		text-decoration: underline;
 	}
 
-	/* ── Word header ─────────────────────────────────────── */
+	/* ── Word header ─────────────────────────────────────────── */
 
 	.word-header {
 		margin-bottom: 1.5rem;
@@ -224,7 +284,7 @@
 		font-style: italic;
 	}
 
-	/* ── Sections ────────────────────────────────────────── */
+	/* ── Sections ──────────────────────────────────────────────── */
 
 	.section {
 		margin-bottom: 1.25rem;
@@ -240,7 +300,7 @@
 		margin-bottom: 0.5rem;
 	}
 
-	/* ── Stress info ─────────────────────────────────────── */
+	/* ── Stress info ─────────────────────────────────────────── */
 
 	.stress-info {
 		font-family: var(--font-sans);
@@ -260,7 +320,7 @@
 		flex-shrink: 0;
 	}
 
-	/* ── Ribbon ──────────────────────────────────────────── */
+	/* ── Ribbon ────────────────────────────────────────────────── */
 
 	.ribbon {
 		display: flex;
@@ -315,7 +375,80 @@
 		white-space: nowrap;
 	}
 
-	/* ── Blurb notes ─────────────────────────────────────── */
+	/* ── Spot reconstitution toggle ──────────────────────────── */
+
+	.spot-recon-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.spot-label {
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--ink-tertiary);
+		transition: color 150ms ease;
+	}
+
+	.spot-label.active {
+		color: var(--ink-primary);
+		font-weight: 600;
+	}
+
+	.toggle-switch {
+		position: relative;
+		width: 32px;
+		height: 18px;
+		background: var(--stone-300);
+		border: none;
+		border-radius: 9px;
+		cursor: pointer;
+		padding: 0;
+		transition: background-color 200ms ease;
+		flex-shrink: 0;
+	}
+
+	.toggle-switch.on {
+		background: var(--sage);
+	}
+
+	.toggle-switch.disabled {
+		background: var(--stone-300);
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.toggle-thumb {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 14px;
+		height: 14px;
+		background: white;
+		border-radius: 50%;
+		transition: transform 200ms ease;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+	}
+
+	.toggle-switch.on .toggle-thumb {
+		transform: translateX(14px);
+	}
+
+	.spot-recon-disabled {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.spot-hint {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		line-height: 1.4;
+	}
+
+	/* ── Blurb notes ─────────────────────────────────────────── */
 
 	.blurb-list {
 		display: flex;
@@ -341,7 +474,7 @@
 		line-height: 1.5;
 	}
 
-	/* ── Notation indicator ──────────────────────────────── */
+	/* ── Notation indicator ──────────────────────────────────── */
 
 	.notation-indicator {
 		margin-top: auto;

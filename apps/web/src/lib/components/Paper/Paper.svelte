@@ -15,10 +15,11 @@
 		metadata: SongMetadata;
 		pageSize: PageSize;
 		showStressDiacritics?: boolean;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, language, metadata, pageSize, showStressDiacritics = false, onwordclick }: Props = $props();
+	let { lines, notationPrefs, language, metadata, pageSize, showStressDiacritics = false, spotReconstitution, onwordclick }: Props = $props();
 
 	const hasTranscription = $derived(lines.length > 0);
 	const pages = $derived(distributeLinesToPages(lines, pageSize));
@@ -37,6 +38,7 @@
 					{pageSize}
 					{totalPages}
 					{showStressDiacritics}
+					{spotReconstitution}
 					{onwordclick}
 				/>
 			{:else}
@@ -49,6 +51,7 @@
 					{pageSize}
 					{totalPages}
 					{showStressDiacritics}
+					{spotReconstitution}
 					{onwordclick}
 				/>
 			{/if}
@@ -62,6 +65,7 @@
 			{pageSize}
 			totalPages={1}
 			{showStressDiacritics}
+			{spotReconstitution}
 			{onwordclick}
 		/>
 	{/if}

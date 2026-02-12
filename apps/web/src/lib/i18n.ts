@@ -83,6 +83,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.blurbs':            { en: 'Phonological notes',           fr: 'Notes phonologiques' },
 	'inspector.notationDefault':   { en: 'Notation: default (Grayson)',  fr: 'Notation\u00a0: par défaut (Grayson)' },
 
+	// ── Spot reconstitution (per-word toggle in Inspector) ────
+	'inspector.spotRecon.heading':   { en: 'Reconstitution',              fr: 'Reconstitution' },
+	'inspector.spotRecon.left':      { en: 'Default reduction',           fr: 'Réduction par défaut' },
+	'inspector.spotRecon.right':     { en: 'Spot reconstitution',         fr: 'Reconstitution ponctuelle' },
+	'inspector.spotRecon.globalOn':  { en: 'Global reconstitution is active. Disable it in Cosmetic Options to use per-word reconstitution.', fr: 'La reconstitution globale est active. Désactivez-la dans les Options cosmétiques pour utiliser la reconstitution par mot.' },
+
 	// ── Stress source labels ─────────────────────────────────
 	'stress.dictionary':           { en: 'Verified from dictionary',     fr: 'Vérifié dans le dictionnaire' },
 	'stress.supplement':           { en: 'Singer supplement',            fr: 'Supplément pour chanteurs' },
@@ -97,12 +103,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
 
-	// ── Provenance legend (per-page footer) ──────────────────
+	// ── Per-page provenance legend ───────────────────────────
 	'legend.user-dictionary':      { en: 'Verified in dictionary',       fr: 'Vérifié dans le dictionnaire' },
-	'legend.user-composer':        { en: 'Composer setting',             fr: 'Mise en musique' },
-	'legend.user-override':        { en: 'User override',                fr: 'Choix de l\u2019utilisateur' },
-	'legend.yo':                   { en: 'Derived from ё',              fr: 'Dérivé de ё' },
-	'legend.inferred':             { en: 'Verify manually',              fr: 'À vérifier' },
+	'legend.user-composer':        { en: 'Composer setting',             fr: 'Réglage du compositeur' },
+	'legend.user-override':        { en: 'User override',                fr: 'Correction manuelle' },
+	'legend.yo':                   { en: 'ё stress',                     fr: 'Accent de ё' },
+	'legend.inferred':             { en: 'Verify stress',                fr: 'Vérifier l\u2019accent' },
+	'legend.spot-reconstitution':  { en: 'Spot reconstitution',          fr: 'Reconstitution ponctuelle' },
 
 	// ── Paper footer ─────────────────────────────────────────
 	// These strings contain <em> tags for italic rendering.

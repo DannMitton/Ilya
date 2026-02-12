@@ -64,6 +64,10 @@
 	// Display preferences
 	let showStressDiacritics = $state(false);
 
+	// Spot reconstitution: ephemeral per-word overrides, keyed by "lineIndex-wordIndex"
+	// Cleared on every transcribe or clear action
+	let spotReconstitution = $state<Map<string, boolean>>(new Map());
+
 	// Derived
 	const canTranscribe = $derived(
 		inputText.trim().length > 0 && !loaderState.isLoading
@@ -92,6 +96,7 @@
 		selectedWord = null;
 		drawerMode = 'root';
 		lastFocusedWord = null;
+		spotReconstitution = new Map();
 
 		runPipeline();
 
@@ -133,6 +138,7 @@
 		selectedWord = null;
 		drawerMode = 'root';
 		lastFocusedWord = null;
+		spotReconstitution = new Map();
 		try {
 			localStorage.setItem('ilya:inputText', '');
 		} catch {
@@ -188,6 +194,19 @@
 		} catch {
 			// localStorage unavailable
 		}
+	}
+
+	// Toggle spot reconstitution for the currently selected word
+	function handleSpotReconToggle() {
+		if (!selectedWord) return;
+		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		const newMap = new Map(spotReconstitution);
+		if (newMap.has(key)) {
+			newMap.delete(key);
+		} else {
+			newMap.set(key, true);
+		}
+		spotReconstitution = newMap;
 	}
 
 	// Persist input text to localStorage
@@ -323,10 +342,14 @@
 			{/snippet}
 			{#snippet inspectorPanel()}
 				{#if selectedWord}
+					{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
 					<InspectorPanel
 						word={selectedWord}
 						{language}
+						{notationPrefs}
+						spotReconstituted={spotReconstitution.has(wordKey)}
 						onback={handleInspectorBack}
+						onspotrecontoggle={handleSpotReconToggle}
 					/>
 				{/if}
 			{/snippet}
@@ -334,7 +357,7 @@
 	</div>
 
 	<main class="main-content">
-		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} onwordclick={handleWordClick} />
+		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
 

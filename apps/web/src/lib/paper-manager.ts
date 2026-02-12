@@ -9,24 +9,13 @@
  */
 
 import type { LineData, Page, PageSize, LegendItem } from './types';
+import { t, type Language } from './i18n';
 
 /** Maximum verse lines per template before overflow fallback. */
 const TITLE_MAX = 10;
 const TITLE_FALLBACK = 9;
 const SUBSEQUENT_MAX = 12;
 const SUBSEQUENT_FALLBACK = 11;
-
-/**
- * Display order for provenance legend entries.
- * Matches the icon table in the Phase 3 design spec.
- */
-const LEGEND_ORDER: string[] = [
-	'user-dictionary',
-	'user-composer',
-	'user-override',
-	'yo',
-	'inferred',
-];
 
 /**
  * Distribute lines across pages.
@@ -110,34 +99,75 @@ export function formatRunningHeader(
 	return `${surname.toUpperCase()} \u2014 ${title}`;
 }
 
+/** Fixed order for legend items. */
+const LEGEND_ORDER: LegendItem['type'][] = [
+	'user-dictionary',
+	'user-composer',
+	'user-override',
+	'yo',
+	'inferred',
+	'spot-reconstitution',
+];
+
 /**
- * Build the contextual provenance legend for a single page.
+ * Build a provenance legend for a single page.
+ * Scans all words on the page and returns legend items (pre-translated)
+ * for any non-standard stress sources present, in a fixed display order.
+ * Omitted entirely when a page has only dictionary/supplement stress.
  *
- * Scans all words on the page for non-standard stress sources
- * (anything other than dictionary, supplement, or clitic).
- * Returns legend items in fixed display order. If no special
- * provenance appears on the page, returns an empty array and
- * the footer omits the legend entirely.
- *
- * yo-rule and yo-restored are collapsed into a single "yo" entry.
+ * The optional spotReconstitution map flags words with per-word
+ * reconstitution active; when any such word appears on the page,
+ * a "Spot reconstitution" legend entry is included.
  */
-export function buildProvenanceLegend(lines: LineData[]): LegendItem[] {
-	const sources = new Set<string>();
+export function buildProvenanceLegend(
+	lines: LineData[],
+	language: Language,
+	spotReconstitution?: Map<string, boolean>
+): LegendItem[] {
+	const seen = new Set<LegendItem['type']>();
 
 	for (const line of lines) {
 		for (const word of line.words) {
-			const s = word.stressSource;
-			if (s === 'user-dictionary' || s === 'user-composer' || s === 'user-override') {
-				sources.add(s);
-			} else if (s === 'yo-rule' || s === 'yo-restored') {
-				sources.add('yo');
-			} else if (s === 'inferred') {
-				sources.add(s);
+			const src = word.stressSource;
+
+			// Map stress sources to legend types
+			switch (src) {
+				case 'user-dictionary':
+					seen.add('user-dictionary');
+					break;
+				case 'user-composer':
+					seen.add('user-composer');
+					break;
+				case 'user-override':
+					seen.add('user-override');
+					break;
+				case 'yo-rule':
+				case 'yo-restored':
+					seen.add('yo');
+					break;
+				case 'inferred':
+					seen.add('inferred');
+					break;
+				// dictionary, supplement, clitic: no legend entry
+			}
+
+			// Check for spot reconstitution on this word
+			if (spotReconstitution) {
+				const key = `${word.lineIndex}-${word.wordIndex}`;
+				if (spotReconstitution.has(key)) {
+					seen.add('spot-reconstitution');
+				}
 			}
 		}
 	}
 
+	if (seen.size === 0) return [];
+
+	// Return items in fixed order with translated labels
 	return LEGEND_ORDER
-		.filter((s) => sources.has(s))
-		.map((s) => ({ source: s, labelKey: `legend.${s}` }));
+		.filter(type => seen.has(type))
+		.map(type => ({
+			type,
+			label: t(`legend.${type}`, language),
+		}));
 }

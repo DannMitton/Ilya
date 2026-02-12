@@ -134,14 +134,10 @@ export interface Page {
 
 // ── Provenance legend ────────────────────────────────────────────
 
-/**
- * A single entry in the per-page provenance legend.
- * Rendered in the page footer only when special provenance
- * markers appear on that page.
- */
+/** A single entry in the per-page provenance legend. */
 export interface LegendItem {
-  /** Normalized source key: user-dictionary, user-composer, user-override, yo, inferred. */
-  source: string;
-  /** i18n key for the bilingual label (e.g. 'legend.yo'). */
-  labelKey: string;
+  /** Provenance type key. */
+  type: 'user-dictionary' | 'user-composer' | 'user-override' | 'yo' | 'inferred' | 'spot-reconstitution';
+  /** Pre-translated label for display. */
+  label: string;
 }

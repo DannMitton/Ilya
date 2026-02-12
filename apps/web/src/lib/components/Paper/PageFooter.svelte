@@ -22,23 +22,23 @@
 	<div class="footer-rule"></div>
 
 	{#if legend.length > 0}
-		<div class="provenance-legend" role="list" aria-label="Provenance legend">
-			{#each legend as item (item.source)}
-				<span class="legend-entry" role="listitem">
-					<span class="legend-icon" aria-hidden="true">
-						{#if item.source === 'user-dictionary'}
-							<svg viewBox="0 0 16 16" class="legend-svg"><path d="M2 1.5C2 .67 2.67 0 3.5 0h9c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5H4a2 2 0 0 1-2-2V1.5zM3.5 1a.5.5 0 0 0-.5.5V11h9V1.5a.5.5 0 0 0-.5-.5h-9zM3 12v1a1 1 0 0 0 1 1h8.5a.5.5 0 0 0 .5-.5V12H3z" fill="currentColor"/></svg>
-						{:else if item.source === 'user-composer'}
-							<svg viewBox="0 0 16 16" class="legend-svg"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
-						{:else if item.source === 'user-override'}
-							<svg viewBox="0 0 16 16" class="legend-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
-						{:else if item.source === 'yo'}
-							<span class="legend-yo">ё</span>
-						{:else if item.source === 'inferred'}
-							<svg viewBox="0 0 16 16" class="legend-svg"><rect x="0.5" y="0.5" width="15" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.5 1.5"/><text x="8" y="12" text-anchor="middle" fill="currentColor" font-family="var(--font-sans)" font-size="11" font-weight="600">?</text></svg>
-						{/if}
-					</span>
-					<span class="legend-label">{t(item.labelKey, language)}</span>
+		<div class="legend-row">
+			{#each legend as item}
+				<span class="legend-item">
+					{#if item.type === 'user-dictionary'}
+						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v13a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-13zM4.5 1a.5.5 0 0 0-.5.5v12h8v-12a.5.5 0 0 0-.5-.5h-7z" fill="currentColor"/></svg>
+					{:else if item.type === 'user-composer'}
+						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
+					{:else if item.type === 'user-override'}
+						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
+					{:else if item.type === 'yo'}
+						<span class="legend-yo">ё</span>
+					{:else if item.type === 'inferred'}
+						<span class="legend-question">?</span>
+					{:else if item.type === 'spot-reconstitution'}
+						<span class="legend-recon">R</span>
+					{/if}
+					<span class="legend-label">{item.label}</span>
 				</span>
 			{/each}
 		</div>
@@ -76,35 +76,26 @@
 		margin-bottom: 8px;
 	}
 
-	/* ── Provenance legend ───────────────────────────────── */
+	/* ── Provenance legend ─────────────────────────────────── */
 
-	.provenance-legend {
+	.legend-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 4px 14px;
+		gap: 4px 12px;
 		margin-bottom: 6px;
 	}
 
-	.legend-entry {
+	.legend-item {
 		display: inline-flex;
 		align-items: center;
 		gap: 3px;
+		color: #78716c;
 	}
 
 	.legend-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 10px;
-		height: 10px;
-		color: #78716c;
-		opacity: 0.7;
+		width: 9px;
+		height: 9px;
 		flex-shrink: 0;
-	}
-
-	.legend-svg {
-		width: 100%;
-		height: 100%;
 	}
 
 	.legend-yo {
@@ -112,18 +103,30 @@
 		font-weight: 700;
 		font-size: 9px;
 		line-height: 1;
-		color: #78716c;
+	}
+
+	.legend-question {
+		font-family: var(--font-sans);
+		font-weight: 700;
+		font-size: 9px;
+		line-height: 1;
+	}
+
+	.legend-recon {
+		font-family: var(--font-sans);
+		font-weight: 700;
+		font-size: 9px;
+		line-height: 1;
 	}
 
 	.legend-label {
 		font-family: var(--font-sans);
-		font-size: 9.5px;
+		font-size: 8.5px;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.04em;
-		color: #78716c;
 	}
 
-	/* ── Attribution and pagination ──────────────────────── */
+	/* ── Footer content ────────────────────────────────────── */
 
 	.footer-content {
 		display: flex;
@@ -175,11 +178,5 @@
 		font-variant-caps: all-small-caps;
 		letter-spacing: 1px;
 		color: var(--ink-secondary);
-	}
-
-	@media print {
-		.provenance-legend {
-			/* Legend prints as-is; icons are pure SVG/text, no opacity change needed */
-		}
 	}
 </style>

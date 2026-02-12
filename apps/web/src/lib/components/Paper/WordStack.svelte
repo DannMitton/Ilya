@@ -9,16 +9,23 @@
 		notationPrefs: NotationPreferences;
 		showStressDiacritics?: boolean;
 		language?: Language;
+		spotReconstituted?: boolean;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', onwordclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, onwordclick }: Props = $props();
 
-	// Use reconstituted IPA when toggle is on, otherwise display IPA
+	// Spot reconstitution active: per-word reconstitution is ON and global is OFF
+	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
+
+	// Use reconstituted IPA when:
+	//   - Global reconstitution toggle is on, OR
+	//   - Spot reconstitution is active for this word (and global is off)
 	const displayIpa = $derived.by(() => {
-		const base = notationPrefs.reconstitution && word.ipaReconstituted
-			? word.ipaReconstituted
-			: word.ipaDisplay;
+		const useReconstituted =
+			(notationPrefs.reconstitution && word.ipaReconstituted) ||
+			(isSpotActive && word.ipaReconstituted);
+		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
 		return base ? applyNotationPreferences(base, notationPrefs) : '';
 	});
 
@@ -69,7 +76,7 @@
 
 	const isClitic = $derived(word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic);
 
-	// Show provenance icon only for non-standard sources
+	// Show provenance icon only for non-standard sources (not dictionary, supplement, clitic)
 	const showProvenance = $derived(
 		word.stressSource !== 'dictionary' &&
 		word.stressSource !== 'supplement' &&
@@ -78,6 +85,9 @@
 	);
 
 	const isInferred = $derived(word.stressSource === 'inferred');
+
+	// Whether any top-right icon is present (provenance or R sigla)
+	const hasTopRightIcon = $derived((showProvenance && !isInferred) || isSpotActive);
 
 	function handleClick() {
 		onwordclick?.(word);
@@ -94,7 +104,7 @@
 <div
 	class="word-stack"
 	class:is-clitic={isClitic}
-	class:has-provenance={showProvenance && !isInferred}
+	class:has-top-right-icon={hasTopRightIcon}
 	class:is-inferred={isInferred}
 	role="button"
 	tabindex="0"
@@ -103,16 +113,24 @@
 	onkeydown={handleKeydown}
 	aria-label="{word.cyrillic}: {displayIpa}"
 >
-	{#if showProvenance && !isInferred}
-		<span class="provenance-icon" aria-hidden="true">
-			{#if word.stressSource === 'user-dictionary'}
-				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M2 1.5C2 .67 2.67 0 3.5 0h9c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5H4a2 2 0 0 1-2-2V1.5zM3.5 1a.5.5 0 0 0-.5.5V11h9V1.5a.5.5 0 0 0-.5-.5h-9zM3 12v1a1 1 0 0 0 1 1h8.5a.5.5 0 0 0 .5-.5V12H3z" fill="currentColor"/></svg>
-			{:else if word.stressSource === 'user-composer'}
-				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
-			{:else if word.stressSource === 'user-override'}
-				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
-			{:else if word.stressSource === 'yo-rule' || word.stressSource === 'yo-restored'}
-				<span class="yo-icon">ё</span>
+	<!-- Top-right icon area: provenance icons and/or R sigla -->
+	{#if (showProvenance && !isInferred) || isSpotActive}
+		<span class="icon-area" aria-hidden="true">
+			{#if showProvenance && !isInferred}
+				<span class="provenance-icon">
+					{#if word.stressSource === 'user-dictionary'}
+						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v13a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-13zM4.5 1a.5.5 0 0 0-.5.5v12h8v-12a.5.5 0 0 0-.5-.5h-7z" fill="currentColor"/></svg>
+					{:else if word.stressSource === 'user-composer'}
+						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
+					{:else if word.stressSource === 'user-override'}
+						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
+					{:else if word.stressSource === 'yo-rule' || word.stressSource === 'yo-restored'}
+						<span class="yo-icon">ё</span>
+					{/if}
+				</span>
+			{/if}
+			{#if isSpotActive}
+				<span class="recon-sigla">R</span>
 			{/if}
 		</span>
 	{/if}
@@ -227,29 +245,38 @@
 		padding-right: 1px;
 	}
 
-	/* Provenance icons — top-right with reserved padding to avoid IPA collision */
-	.has-provenance .ipa-row {
-		padding-right: 12px;
+	/* ── Top-right icon area ──────────────────────────────── */
+
+	/* Reserve right padding when any top-right icon is present */
+	.has-top-right-icon .ipa-row {
+		padding-right: 14px;
 	}
 
-	.provenance-icon {
+	.icon-area {
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 0.5em;
-		height: 0.5em;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1px;
 		color: #78716c;
 		opacity: 0.4;
 		transition: opacity 150ms ease;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		font-size: 12px;
 	}
 
-	.word-stack:hover .provenance-icon {
+	.word-stack:hover .icon-area {
 		opacity: 1;
 		color: #44403c;
+	}
+
+	.provenance-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 0.5em;
+		height: 0.5em;
 	}
 
 	.prov-svg {
@@ -258,6 +285,15 @@
 	}
 
 	.yo-icon {
+		font-family: var(--font-sans);
+		font-weight: 700;
+		font-size: 10px;
+		line-height: 1;
+	}
+
+	/* R sigla for spot reconstitution: thick monoline capital R,
+	   matching visual weight of ё and ? icons */
+	.recon-sigla {
 		font-family: var(--font-sans);
 		font-weight: 700;
 		font-size: 10px;
