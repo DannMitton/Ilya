@@ -43,6 +43,8 @@ export interface WordStackData {
   ipaReconstituted: string;
   /** IPA content before clitic display merging (used for clitic prepend/append). */
   ipaContent: string;
+  /** IPA with reconstitution applied, before clitic merging (for Inspector analysis). */
+  ipaOwnReconstituted: string;
 
   /** Display log entries from @ilya/blurb (for Inspector ribbon). */
   displayLog: DisplayLogEntry[];
@@ -130,14 +132,4 @@ export interface Page {
   maxLines: number;
   /** Fallback line count if overflow detected. */
   fallbackLines: number;
-}
-
-// ── Provenance legend ────────────────────────────────────────────
-
-/** A single entry in the per-page provenance legend. */
-export interface LegendItem {
-  /** Provenance type key. */
-  type: 'user-dictionary' | 'user-composer' | 'user-override' | 'yo' | 'inferred' | 'spot-reconstitution';
-  /** Pre-translated label for display. */
-  label: string;
 }

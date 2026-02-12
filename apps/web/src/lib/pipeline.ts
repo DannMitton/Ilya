@@ -96,6 +96,7 @@ interface TranscribedWord {
   ipaContent?: string;
   ipaDisplay?: string;
   ipaReconstituted?: string;
+  ipaOwnReconstituted?: string;
   isVowellessClitic?: boolean;
 }
 
@@ -190,6 +191,7 @@ export function processText(
           ipaDisplay: tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaReconstituted: tw.ipaReconstituted ?? tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaContent: tw.ipaContent ?? '',
+          ipaOwnReconstituted: tw.ipaOwnReconstituted ?? tw.ipaContent ?? '',
           displayLog,
           gloss,
           isProclitic: tw.isProclitic,
@@ -457,6 +459,13 @@ function transcribeLine(
   });
 
   // ── Clitic display merging ──
+
+  // Preserve pre-merge reconstituted IPA for Inspector analysis.
+  // After merge, ipaReconstituted on host words contains fused clitic material;
+  // Inspector needs the word's own reconstituted form.
+  transcribedWords.forEach((tw) => {
+    tw.ipaOwnReconstituted = tw.ipaReconstituted ?? tw.ipaContent ?? '';
+  });
 
   // First pass: resolve vowelless clitic IPA
   transcribedWords.forEach((tw) => {

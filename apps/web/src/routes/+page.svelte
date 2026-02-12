@@ -17,7 +17,7 @@
 
 	// Dictionary loading state
 	let loaderState = $state<LoaderState>({
-		isLoading: false,
+		isLoading: true,
 		error: null,
 		entryCount: 0,
 		durationMs: 0,
@@ -70,7 +70,7 @@
 
 	// Derived
 	const canTranscribe = $derived(
-		inputText.trim().length > 0 && !loaderState.isLoading
+		inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
 	const hasResults = $derived(lines.length > 0);
 	const wordCount = $derived(

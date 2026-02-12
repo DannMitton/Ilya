@@ -78,9 +78,16 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.stress':            { en: 'Stress',                       fr: 'Accent tonique' },
 	'inspector.syllable':          { en: 'Syllable',                     fr: 'Syllabe' },
 	'inspector.clitic':            { en: 'Clitic (unstressed)',          fr: 'Clitique (atone)' },
+	'inspector.cliticArrow.enclitic':       { en: 'Enclitic arrow',               fr: 'Flèche enclitique' },
+	'inspector.cliticArrow.proclitic':      { en: 'Proclitic arrow',              fr: 'Flèche proclitique' },
+	'inspector.cliticArrow.encliticLabel':  { en: 'Enclitic',                     fr: 'Enclitique' },
+	'inspector.cliticArrow.procliticLabel': { en: 'Proclitic',                    fr: 'Proclitique' },
+	'inspector.cliticArrow.encliticBlurb':  { en: 'This word is an enclitic: it has no stress of its own and attaches phonologically to the preceding word. Its vowels reduce relative to the host word\u2019s stress position. On the page, an arrow (\u2190) shows in place of IPA, and the clitic\u2019s phonetic material appears fused into the host word\u2019s IPA.', fr: 'Ce mot est un enclitique\u00a0: il n\u2019a pas d\u2019accent propre et s\u2019attache phonologiquement au mot précédent. Ses voyelles se réduisent en fonction de la position de l\u2019accent du mot hôte. Sur la page, une flèche (\u2190) remplace l\u2019API, et le matériel phonétique du clitique apparaît fusionné dans l\u2019API du mot hôte.' },
+	'inspector.cliticArrow.procliticBlurb': { en: 'This word is a proclitic: it has no stress of its own and attaches phonologically to the following word. Its vowels reduce relative to the host word\u2019s stress position. On the page, an arrow (\u2192) shows in place of IPA, and the clitic\u2019s phonetic material appears fused into the host word\u2019s IPA.', fr: 'Ce mot est un proclitique\u00a0: il n\u2019a pas d\u2019accent propre et s\u2019attache phonologiquement au mot suivant. Ses voyelles se réduisent en fonction de la position de l\u2019accent du mot hôte. Sur la page, une flèche (\u2192) remplace l\u2019API, et le matériel phonétique du clitique apparaît fusionné dans l\u2019API du mot hôte.' },
 	'inspector.unknownStress':     { en: 'Unknown stress \u00b7 verify manually', fr: 'Accent inconnu \u00b7 vérifier manuellement' },
 	'inspector.ribbon':            { en: 'Character breakdown',          fr: 'Décomposition par caractère' },
 	'inspector.blurbs':            { en: 'Phonological notes',           fr: 'Notes phonologiques' },
+	'inspector.noBlurb':           { en: 'No phonological note for this character.', fr: 'Aucune note phonologique pour ce caractère.' },
 	'inspector.notationDefault':   { en: 'Notation: default (Grayson)',  fr: 'Notation\u00a0: par défaut (Grayson)' },
 
 	// ── Spot reconstitution (per-word toggle in Inspector) ────

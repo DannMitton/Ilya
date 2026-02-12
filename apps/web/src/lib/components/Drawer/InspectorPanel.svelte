@@ -19,21 +19,170 @@
 	// Whether spot reconstitution is effectively active for this word
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
 
-	// Display IPA in the word header, reflecting spot reconstitution
+	// Display IPA in the word header: use ipaContent (pre-merge) for analysis context,
+	// not ipaDisplay (which contains fused clitic material on host words).
 	const headerIpa = $derived.by(() => {
 		const useReconstituted =
-			(notationPrefs.reconstitution && word.ipaReconstituted) ||
-			(isSpotActive && word.ipaReconstituted);
-		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
+			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
+			(isSpotActive && word.ipaOwnReconstituted);
+		const base = useReconstituted ? word.ipaOwnReconstituted : word.ipaContent;
 		return base ? applyNotationPreferences(base, notationPrefs) : '';
 	});
 
-	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') {
+	// ── Ribbon interaction state ────────────────────────────────
+	// Index of the currently selected (revealed) ribbon cell, or -1 if none
+	let selectedCellIndex = $state(-1);
+	// Index of the cell that has roving tabindex focus
+	let focusedCellIndex = $state(0);
+
+	// Reset selection when the inspected word changes
+	$effect(() => {
+		void word.cleanWord;
+		selectedCellIndex = -1;
+		focusedCellIndex = 0;
+	});
+
+	// ── Ribbon entries with clitic arrow ────────────────────────
+	// For clitics, prepend (enclitic) or append (proclitic) a directional arrow cell.
+	interface RibbonEntry {
+		type: 'character' | 'clitic-arrow';
+		entry?: DisplayLogEntry;
+		char: string;
+		ipa: string;
+		index: number;
+		direction?: 'proclitic' | 'enclitic';
+	}
+
+	const ribbonEntries = $derived.by((): RibbonEntry[] => {
+		const entries: RibbonEntry[] = [];
+		let idx = 0;
+
+		// Enclitic: arrow first
+		if (word.isEnclitic) {
+			entries.push({
+				type: 'clitic-arrow',
+				char: '←',
+				ipa: '',
+				index: idx,
+				direction: 'enclitic',
+			});
+			idx++;
+		}
+
+		// Character cells from displayLog
+		for (const entry of word.displayLog) {
+			entries.push({
+				type: 'character',
+				entry,
+				char: entry.char,
+				ipa: entry.ipa ?? '',
+				index: idx,
+			});
+			idx++;
+		}
+
+		// Proclitic: arrow last
+		if (word.isProclitic) {
+			entries.push({
+				type: 'clitic-arrow',
+				char: '→',
+				ipa: '',
+				index: idx,
+				direction: 'proclitic',
+			});
+			idx++;
+		}
+
+		return entries;
+	});
+
+	const selectedRibbonEntry = $derived(
+		selectedCellIndex >= 0 && selectedCellIndex < ribbonEntries.length
+			? ribbonEntries[selectedCellIndex]
+			: null
+	);
+
+	// ── Caret positioning via DOM measurement ───────────────
+	let caretLeft = $state(0);
+	let ribbonEl: HTMLElement | undefined = $state(undefined);
+
+	$effect(() => {
+		if (selectedCellIndex < 0 || !ribbonEl) return;
+		const cell = ribbonEl.querySelector<HTMLElement>(
+			`[data-cell-id="${word.lineIndex}-${word.wordIndex}-${selectedCellIndex}"]`
+		);
+		if (!cell) return;
+		const ribbonRect = ribbonEl.getBoundingClientRect();
+		const cellRect = cell.getBoundingClientRect();
+		caretLeft = cellRect.left - ribbonRect.left + cellRect.width / 2;
+	});
+
+	function handleCellClick(index: number) {
+		if (selectedCellIndex === index) {
+			selectedCellIndex = -1;
+		} else {
+			selectedCellIndex = index;
+		}
+		focusedCellIndex = index;
+	}
+
+	function handleRibbonKeydown(e: KeyboardEvent) {
+		const len = ribbonEntries.length;
+		if (len === 0) return;
+
+		switch (e.key) {
+			case 'ArrowRight': {
+				e.preventDefault();
+				const next = focusedCellIndex + 1;
+				if (next < len) {
+					focusedCellIndex = next;
+					focusCellByIndex(next);
+				}
+				break;
+			}
+			case 'ArrowLeft': {
+				e.preventDefault();
+				const prev = focusedCellIndex - 1;
+				if (prev >= 0) {
+					focusedCellIndex = prev;
+					focusCellByIndex(prev);
+				}
+				break;
+			}
+			case 'Enter':
+			case ' ': {
+				e.preventDefault();
+				handleCellClick(focusedCellIndex);
+				break;
+			}
+			case 'Escape': {
+				if (selectedCellIndex >= 0) {
+					e.preventDefault();
+					e.stopPropagation();
+					selectedCellIndex = -1;
+				}
+				break;
+			}
+		}
+	}
+
+	function focusCellByIndex(index: number) {
+		requestAnimationFrame(() => {
+			const el = document.querySelector<HTMLElement>(
+				`[data-cell-id="${word.lineIndex}-${word.wordIndex}-${index}"]`
+			);
+			el?.focus();
+		});
+	}
+
+	function handlePanelKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && selectedCellIndex < 0) {
 			e.preventDefault();
 			onback();
 		}
 	}
+
+	// ── Provenance icon ─────────────────────────────────────────
 
 	const provenanceIcon = $derived((() => {
 		const src = word.stressSource;
@@ -54,11 +203,6 @@
 		}
 	})());
 
-	function ribbonLabel(entry: DisplayLogEntry): string {
-		if (entry.ipa === '' || entry.ipa === null) return '';
-		return entry.ipa;
-	}
-
 	function hasBlurb(entry: DisplayLogEntry): boolean {
 		return !!(entry.blurbData && (
 			(entry.blurbData as Record<string, unknown>).en ||
@@ -70,7 +214,6 @@
 	function getBlurbText(entry: DisplayLogEntry, lang: Language): string {
 		if (!entry.blurbData) return '';
 		const data = entry.blurbData as Record<string, unknown>;
-		// Try requested language first, then fall back
 		if (typeof data[lang] === 'string') return data[lang] as string;
 		if (typeof data.en === 'string') return data.en;
 		if (typeof data.text === 'string') return data.text;
@@ -78,8 +221,12 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="inspector-panel" role="region" aria-label={word.stressedCyrillic} onkeydown={handleKeydown}>
+<div
+	class="inspector-panel"
+	role="region"
+	aria-label={word.stressedCyrillic}
+	onkeydown={handlePanelKeydown}
+>
 	<!-- Back button -->
 	<button class="back-btn" onclick={onback}>
 		{t('inspector.back', language)}
@@ -144,22 +291,91 @@
 		</div>
 	</div>
 
-	<!-- Ribbon: per-character breakdown -->
-	{#if word.displayLog.length > 0}
-		<div class="section">
+	<!-- Ribbon: click-to-reveal character breakdown -->
+	{#if ribbonEntries.length > 0}
+		<div class="section ribbon-section">
 			<h3 class="section-label">{t('inspector.ribbon', language)}</h3>
-			<div class="ribbon">
-				{#each word.displayLog as entry, i}
-					<div class="ribbon-cell" class:stressed={entry.features?.stressed}>
-						<span class="ribbon-char">{entry.char}</span>
-						<span class="ribbon-arrow">↓</span>
-						<span class="ribbon-ipa">{ribbonLabel(entry) || '∅'}</span>
-						{#if entry.features?.rule}
-							<span class="ribbon-rule">{entry.features.rule}</span>
-						{/if}
-					</div>
+			<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
+			<div
+				class="ribbon"
+				role="listbox"
+				aria-label={t('inspector.ribbon', language)}
+				aria-orientation="horizontal"
+				onkeydown={handleRibbonKeydown}
+				bind:this={ribbonEl}
+			>
+				{#each ribbonEntries as re, i}
+					{#if re.type === 'clitic-arrow'}
+						<button
+							class="ribbon-cell clitic-arrow"
+							class:selected={selectedCellIndex === i}
+							role="option"
+							aria-selected={selectedCellIndex === i}
+							aria-label={re.direction === 'enclitic' ? t('inspector.cliticArrow.enclitic', language) : t('inspector.cliticArrow.proclitic', language)}
+							tabindex={focusedCellIndex === i ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{i}"
+							onclick={() => handleCellClick(i)}
+						>
+							<span class="ribbon-arrow-icon">{re.char}</span>
+						</button>
+					{:else}
+						<button
+							class="ribbon-cell"
+							class:stressed={re.entry?.features?.stressed}
+							class:selected={selectedCellIndex === i}
+							class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+							role="option"
+							aria-selected={selectedCellIndex === i}
+							tabindex={focusedCellIndex === i ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{i}"
+							onclick={() => handleCellClick(i)}
+						>
+							<span class="ribbon-char">{re.char}</span>
+							<span class="ribbon-arrow">↓</span>
+							<span class="ribbon-ipa">{re.ipa || '∅'}</span>
+						</button>
+					{/if}
 				{/each}
 			</div>
+
+			<!-- Detail box with speech-bubble caret -->
+			{#if selectedRibbonEntry}
+				<div class="detail-container">
+					<div
+						class="detail-caret"
+						style="left: {caretLeft}px"
+					></div>
+					<div class="detail-box" aria-live="polite">
+						{#if selectedRibbonEntry.type === 'clitic-arrow'}
+							<p class="detail-header">
+								<span class="detail-char">{selectedRibbonEntry.char}</span>
+								<span class="detail-arrow">·</span>
+								<span class="detail-ipa">
+									{selectedRibbonEntry.direction === 'enclitic'
+										? t('inspector.cliticArrow.encliticLabel', language)
+										: t('inspector.cliticArrow.procliticLabel', language)}
+								</span>
+							</p>
+							<p class="detail-blurb">
+								{selectedRibbonEntry.direction === 'enclitic'
+									? t('inspector.cliticArrow.encliticBlurb', language)
+									: t('inspector.cliticArrow.procliticBlurb', language)}
+							</p>
+						{:else if selectedRibbonEntry.entry}
+							<p class="detail-header">
+								<span class="detail-char">{selectedRibbonEntry.char}</span>
+								<span class="detail-arrow">→</span>
+								<span class="detail-ipa">{selectedRibbonEntry.ipa || '∅'}</span>
+							</p>
+							{#if hasBlurb(selectedRibbonEntry.entry)}
+								<p class="detail-blurb">{getBlurbText(selectedRibbonEntry.entry, language)}</p>
+							{:else}
+								<p class="detail-no-blurb">{t('inspector.noBlurb', language)}</p>
+							{/if}
+						{/if}
+					</div>
+				</div>
+			{/if}
 		</div>
 	{/if}
 
@@ -203,21 +419,6 @@
 					<span class="spot-label right" class:active={spotReconstituted}>{t('inspector.spotRecon.right', language)}</span>
 				</div>
 			{/if}
-		</div>
-	{/if}
-
-	<!-- Blurb details -->
-	{#if word.displayLog.some(hasBlurb)}
-		<div class="section">
-			<h3 class="section-label">{t('inspector.blurbs', language)}</h3>
-			<div class="blurb-list">
-				{#each word.displayLog.filter(hasBlurb) as entry}
-					<div class="blurb-entry">
-						<span class="blurb-char">{entry.char} → {ribbonLabel(entry) || '∅'}</span>
-						<p class="blurb-text">{getBlurbText(entry, language)}</p>
-					</div>
-				{/each}
-			</div>
 		</div>
 	{/if}
 
@@ -320,7 +521,7 @@
 		flex-shrink: 0;
 	}
 
-	/* ── Ribbon ────────────────────────────────────────────────── */
+	/* ── Ribbon: clickable character cells ─────────────────────── */
 
 	.ribbon {
 		display: flex;
@@ -338,11 +539,67 @@
 		border: 1px solid var(--stone-300);
 		border-radius: 4px;
 		min-width: 1.75rem;
+		cursor: pointer;
+		font-family: inherit;
+		transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.ribbon-cell:hover {
+		border-color: var(--sage);
+		background: #faf8f4;
+	}
+
+	.ribbon-cell:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 1px;
 	}
 
 	.ribbon-cell.stressed {
 		background: #fdf6e8;
 		border-color: var(--sage);
+	}
+
+	.ribbon-cell.selected {
+		border: 2px solid var(--sage);
+		background: #FAF7F2;
+		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
+	}
+
+	/* Subtle dot indicator that a cell has a blurb */
+	.ribbon-cell.has-blurb::after {
+		content: '';
+		display: block;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--sage);
+		opacity: 0.4;
+		margin-top: 1px;
+	}
+
+	.ribbon-cell.selected.has-blurb::after {
+		opacity: 0.8;
+	}
+
+	/* Clitic directional arrow cell */
+	.ribbon-cell.clitic-arrow {
+		background: transparent;
+		border-color: var(--sage);
+		border-style: dashed;
+		min-width: 1.5rem;
+		justify-content: center;
+	}
+
+	.ribbon-cell.clitic-arrow.selected {
+		background: #FAF7F2;
+		border-style: solid;
+	}
+
+	.ribbon-arrow-icon {
+		font-size: 1.1rem;
+		color: var(--sage);
+		font-weight: 600;
+		line-height: 1;
 	}
 
 	.ribbon-char {
@@ -364,15 +621,85 @@
 		color: var(--ink-secondary);
 	}
 
-	.ribbon-rule {
-		font-family: var(--font-sans);
-		font-size: 0.65rem;
+	/* ── Detail box with speech-bubble caret ───────────────────── */
+
+	.detail-container {
+		position: relative;
+		margin-top: 12px;
+	}
+
+	.detail-caret {
+		position: absolute;
+		top: -8px;
+		width: 12px;
+		height: 8px;
+		margin-left: -6px;
+		clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+		background: #F5F0E8;
+		z-index: 1;
+		transition: left 200ms ease;
+	}
+
+	.detail-box {
+		background: #F5F0E8;
+		border: 1px solid var(--stone-300);
+		border-radius: 4px;
+		padding: 16px;
+		max-height: 200px;
+		overflow-y: auto;
+		animation: detailIn 250ms ease forwards;
+	}
+
+	@keyframes detailIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.detail-header {
+		display: flex;
+		align-items: baseline;
+		gap: 0.35rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.detail-char {
+		font-family: var(--font-serif);
+		font-variant-caps: all-small-caps;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--ink-primary);
+		letter-spacing: 0.03em;
+	}
+
+	.detail-arrow {
+		font-size: 0.7rem;
 		color: var(--ink-tertiary);
-		text-align: center;
-		max-width: 4rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+	}
+
+	.detail-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.95rem;
+		color: var(--ink-secondary);
+	}
+
+	.detail-blurb {
+		font-family: var(--font-serif);
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink-secondary);
+	}
+
+	.detail-no-blurb {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
 	}
 
 	/* ── Spot reconstitution toggle ──────────────────────────── */
@@ -446,32 +773,6 @@
 		color: var(--ink-tertiary);
 		font-style: italic;
 		line-height: 1.4;
-	}
-
-	/* ── Blurb notes ─────────────────────────────────────────── */
-
-	.blurb-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.blurb-entry {
-		font-size: 0.85rem;
-	}
-
-	.blurb-char {
-		font-family: var(--font-sans);
-		font-weight: 600;
-		color: var(--ink-secondary);
-		display: block;
-		margin-bottom: 0.2rem;
-	}
-
-	.blurb-text {
-		font-family: var(--font-serif);
-		color: var(--ink-secondary);
-		line-height: 1.5;
 	}
 
 	/* ── Notation indicator ──────────────────────────────────── */
