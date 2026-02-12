@@ -487,61 +487,97 @@ function transcribeLine(
   // Second pass: merge clitic IPA into host words for display.
   // Both ipaDisplay and ipaReconstituted are merged in parallel
   // so the reconstituted string has the same clitic structure.
-  transcribedWords.forEach((tw, idx) => {
+  //
+  // Proclitic chains are processed as units: when consecutive proclitics
+  // precede a host, ALL their IPA merges into the host in correct order
+  // (closest to host first, then farther proclitics prepend).
+  // Enclitic chains work symmetrically: consecutive enclitics after a host
+  // all merge into the host in forward order (e.g., ли бы: host absorbs both).
+  let idx = 0;
+  while (idx < transcribedWords.length) {
+    const tw = transcribedWords[idx];
+
     if (tw.isProclitic) {
-      const nextWord = transcribedWords[idx + 1];
-      const isVowelless = !hasVowel(tw.cleanWord);
+      // Collect the full proclitic chain
+      const chainStart = idx;
+      while (idx < transcribedWords.length && transcribedWords[idx].isProclitic) {
+        const p = transcribedWords[idx];
+        p.ipaDisplay = '→';
+        p.ipaReconstituted = '→';
+        p.isVowellessClitic = !hasVowel(p.cleanWord);
+        idx++;
+      }
+      // idx now points to the host (or end of array)
+      const hostWord = idx < transcribedWords.length ? transcribedWords[idx] : null;
 
-      tw.ipaDisplay = '→';
-      tw.ipaReconstituted = '→';
-      tw.isVowellessClitic = isVowelless;
+      if (hostWord) {
+        // Merge proclitics in reverse order (closest to host first).
+        // This ensures vowelless proclitics tuck into the stressed syllable
+        // correctly, and vowel-bearing proclitics prepend in reading order.
+        for (let ci = idx - 1; ci >= chainStart; ci--) {
+          const proclitic = transcribedWords[ci];
+          const isVowelless = !hasVowel(proclitic.cleanWord);
 
-      if (nextWord && !nextWord.isProclitic) {
-        if (isVowelless) {
-          // Vowelless proclitic: tuck IPA into host's stressed syllable
-          if (nextWord.ipaDisplay?.startsWith('ˈ')) {
-            nextWord.ipaDisplay =
-              'ˈ' + tw.ipaContent + nextWord.ipaDisplay!.slice(1);
+          if (isVowelless) {
+            // Vowelless proclitic: tuck IPA into host's stressed syllable
+            if (hostWord.ipaDisplay?.startsWith('ˈ')) {
+              hostWord.ipaDisplay =
+                'ˈ' + proclitic.ipaContent + hostWord.ipaDisplay!.slice(1);
+            } else {
+              hostWord.ipaDisplay = proclitic.ipaContent + hostWord.ipaDisplay;
+            }
+            if (hostWord.ipaReconstituted?.startsWith('ˈ')) {
+              hostWord.ipaReconstituted =
+                'ˈ' + proclitic.ipaContent + hostWord.ipaReconstituted!.slice(1);
+            } else {
+              hostWord.ipaReconstituted = proclitic.ipaContent + hostWord.ipaReconstituted;
+            }
           } else {
-            nextWord.ipaDisplay = tw.ipaContent + nextWord.ipaDisplay;
+            // Vowel-bearing proclitic: separate with space
+            hostWord.ipaDisplay = proclitic.ipaContent + ' ' + hostWord.ipaDisplay;
+            const cliticReconstituted = applyReconstitution(proclitic.ipaContent ?? '', proclitic.transcriptionLog);
+            hostWord.ipaReconstituted = cliticReconstituted + ' ' + hostWord.ipaReconstituted;
           }
-          // Same for reconstituted (clitic IPA is consonant-only, unaffected by reconstitution)
-          if (nextWord.ipaReconstituted?.startsWith('ˈ')) {
-            nextWord.ipaReconstituted =
-              'ˈ' + tw.ipaContent + nextWord.ipaReconstituted!.slice(1);
-          } else {
-            nextWord.ipaReconstituted = tw.ipaContent + nextWord.ipaReconstituted;
-          }
-        } else {
-          // Vowel-bearing proclitic: separate with space
-          nextWord.ipaDisplay = tw.ipaContent + ' ' + nextWord.ipaDisplay;
-          // For reconstituted: use reconstituted clitic IPA + reconstituted host IPA
-          const cliticReconstituted = applyReconstitution(tw.ipaContent ?? '', tw.transcriptionLog);
-          nextWord.ipaReconstituted = cliticReconstituted + ' ' + nextWord.ipaReconstituted;
         }
       }
+      // idx already points past the chain; continue to process host or next word
+      idx++;
     } else if (tw.isEnclitic) {
-      const prevWord = transcribedWords[idx - 1];
-      const isVowelless = !hasVowel(tw.cleanWord);
+      // Collect the full enclitic chain
+      const chainStart = idx;
+      while (idx < transcribedWords.length && transcribedWords[idx].isEnclitic) {
+        const e = transcribedWords[idx];
+        e.ipaDisplay = '←';
+        e.ipaReconstituted = '←';
+        e.isVowellessClitic = !hasVowel(e.cleanWord);
+        idx++;
+      }
+      // Host is the word before the chain
+      const hostWord = chainStart > 0 ? transcribedWords[chainStart - 1] : null;
 
-      tw.ipaDisplay = '←';
-      tw.ipaReconstituted = '←';
-      tw.isVowellessClitic = isVowelless;
+      if (hostWord && !hostWord.isProclitic) {
+        // Merge enclitics in forward order (closest to host first)
+        for (let ci = chainStart; ci < idx; ci++) {
+          const enclitic = transcribedWords[ci];
+          const isVowelless = !hasVowel(enclitic.cleanWord);
 
-      if (prevWord && !prevWord.isEnclitic) {
-        if (isVowelless) {
-          prevWord.ipaDisplay = (prevWord.ipaDisplay ?? '') + tw.ipaContent;
-          prevWord.ipaReconstituted = (prevWord.ipaReconstituted ?? '') + tw.ipaContent;
-        } else {
-          prevWord.ipaDisplay =
-            (prevWord.ipaDisplay ?? '') + ' ' + tw.ipaContent;
-          const encliticReconstituted = applyReconstitution(tw.ipaContent ?? '', tw.transcriptionLog);
-          prevWord.ipaReconstituted =
-            (prevWord.ipaReconstituted ?? '') + ' ' + encliticReconstituted;
+          if (isVowelless) {
+            hostWord.ipaDisplay = (hostWord.ipaDisplay ?? '') + enclitic.ipaContent;
+            hostWord.ipaReconstituted = (hostWord.ipaReconstituted ?? '') + enclitic.ipaContent;
+          } else {
+            hostWord.ipaDisplay =
+              (hostWord.ipaDisplay ?? '') + ' ' + enclitic.ipaContent;
+            const encliticReconstituted = applyReconstitution(enclitic.ipaContent ?? '', enclitic.transcriptionLog);
+            hostWord.ipaReconstituted =
+              (hostWord.ipaReconstituted ?? '') + ' ' + encliticReconstituted;
+          }
         }
       }
+      // idx already points past the chain; no increment needed
+    } else {
+      idx++;
     }
-  });
+  }
 
   return transcribedWords;
 }
