@@ -186,14 +186,13 @@
 		outline-offset: 2px;
 	}
 
-	/* Inferred stress: dashed border box with negative margins
-	   to neutralize the extra space so VERIFY stacks align with neighbours.
-	   Border: 1.5px, extra padding: 3px top/bottom and 3px left/right,
-	   plus the VERIFY label hangs below. Negative margins cancel the expansion. */
+	/* Inferred stress: dashed border box. Left and top negative margins
+	   keep text aligned with the hairline rule and prevent row height expansion.
+	   Small right margin adds daylight between adjacent VERIFY boxes. */
 	.is-inferred {
 		border: 1.5px dashed #78716c;
 		padding: 5px 7px;
-		margin: -4.5px -4.5px 0 -4.5px;
+		margin: -4.5px 3px 0 -4.5px;
 	}
 
 	/* Override focus ring for inferred words so outline doesn't fight border */

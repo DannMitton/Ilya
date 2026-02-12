@@ -163,8 +163,8 @@
 		</div>
 	{/if}
 
-	<!-- Spot reconstitution toggle -->
-	{#if word.ipaReconstituted}
+	<!-- Spot reconstitution toggle: only when reconstituted IPA differs from default -->
+	{#if word.ipaReconstituted && word.ipaReconstituted !== word.ipaDisplay}
 		<div class="section">
 			<h3 class="section-label">{t('inspector.spotRecon.heading', language)}</h3>
 			{#if notationPrefs.reconstitution}
