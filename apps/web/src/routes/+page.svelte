@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
 	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
-	import type { Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
@@ -39,6 +39,26 @@
 
 	// Drawer state
 	let drawerCollapsed = $state(false);
+
+	// Mobile awareness
+	let isMobile = $state(false);
+	let mobileDismissed = $state(false);
+	let mainContentEl: HTMLElement | undefined = $state(undefined);
+
+	async function handleMobileDismiss() {
+		mobileDismissed = true;
+		drawerCollapsed = true;
+		await tick();
+		if (mainContentEl) {
+			// Centre the Paper's content area in the viewport
+			// Paper is 816px wide, content area centred within it
+			// Scroll so the middle of the page aligns with the middle of the viewport
+			const paperCentreX = 408; // 96px margin + half of 624px content area
+			const viewportWidth = window.innerWidth - 24; // minus drawer lip
+			const scrollX = Math.max(0, paperCentreX - viewportWidth / 2);
+			mainContentEl.scrollLeft = scrollX;
+		}
+	}
 
 	// Page settings
 	let pageSize = $state<PageSize>('letter');
@@ -332,8 +352,34 @@
 				loaderState = state;
 			}
 		});
+
+		// Mobile detection
+		function checkMobile() {
+			isMobile = window.innerWidth < 768;
+		}
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+
+		return () => {
+			window.removeEventListener('resize', checkMobile);
+		};
 	});
 </script>
+
+{#if isMobile && !mobileDismissed}
+<div class="mobile-overlay">
+	<div class="mobile-card">
+		<div class="mobile-logo">
+			<span class="logo-bracket">[</span><span class="logo-ilya">Ilya</span><span class="logo-bracket">]</span>
+		</div>
+		<h1 class="mobile-heading">{t('mobile.heading', language)}</h1>
+		<p class="mobile-body">{t('mobile.body', language)}</p>
+		<button class="mobile-continue" onclick={handleMobileDismiss}>
+			{t('mobile.continue', language)}
+		</button>
+	</div>
+</div>
+{/if}
 
 <div class="screen-only">
 	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
@@ -387,7 +433,7 @@
 		</Drawer>
 	</div>
 
-	<main class="main-content {paperBreathClass}">
+	<main class="main-content {paperBreathClass}" bind:this={mainContentEl}>
 		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
@@ -451,6 +497,101 @@
 		:global(.breath-out),
 		:global(.breath-in) {
 			animation: none !important;
+		}
+	}
+
+	/* ── Mobile awareness ──────────────────────────────────── */
+
+	.mobile-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 1000;
+		background: var(--app-bg, #eee9e3);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
+
+	.mobile-card {
+		max-width: 360px;
+		text-align: center;
+	}
+
+	.mobile-logo {
+		font-size: 2rem;
+		margin-bottom: 1.5rem;
+		color: var(--sage);
+	}
+
+	.mobile-logo .logo-bracket {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-weight: 400;
+	}
+
+	.mobile-logo .logo-ilya {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+	}
+
+	.mobile-heading {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--ink-primary, #1a1612);
+		margin-bottom: 1rem;
+	}
+
+	.mobile-body {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 0.95rem;
+		color: var(--ink-secondary, #4a4540);
+		line-height: 1.6;
+		margin-bottom: 2rem;
+	}
+
+	.mobile-continue {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.85rem;
+		color: var(--ink-tertiary, #7a756e);
+		background: none;
+		border: 1px solid var(--stone-300, #d6d3d1);
+		border-radius: 4px;
+		padding: 0.5rem 1.25rem;
+		cursor: pointer;
+		transition: border-color 150ms ease, color 150ms ease;
+	}
+
+	.mobile-continue:hover {
+		border-color: var(--sage);
+		color: var(--ink-primary, #1a1612);
+	}
+
+	/* Responsive layout for narrow viewports */
+	@media (max-width: 767px) {
+		.app-content {
+			position: relative;
+		}
+
+		.main-content {
+			padding: 0.5rem;
+			width: 100%;
+			overflow: auto;
+			align-items: flex-start;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		/* Drawer overlays from the left on mobile */
+		:global(.drawer) {
+			position: absolute !important;
+			top: 0;
+			left: 0;
+			height: 100% !important;
+			z-index: 100;
+		}
+
+		:global(.drawer:not(.collapsed)) {
+			width: 100% !important;
 		}
 	}
 </style>

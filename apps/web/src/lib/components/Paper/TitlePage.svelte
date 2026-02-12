@@ -3,7 +3,6 @@
 	import { PAGE_DIMENSIONS } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
-	import { buildProvenanceLegend } from '$lib/paper-manager';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
 
@@ -15,18 +14,16 @@
 		pageSize: PageSize;
 		totalPages: number;
 		showStressDiacritics?: boolean;
-		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, language, metadata, pageSize, totalPages, showStressDiacritics = false, spotReconstitution, onwordclick }: Props = $props();
+	let { lines, notationPrefs, language, metadata, pageSize, totalPages, showStressDiacritics = false, onwordclick }: Props = $props();
 
 	const dims = $derived(PAGE_DIMENSIONS[pageSize]);
 	const hasMetadata = $derived(
 		metadata.title || metadata.composer || metadata.poet || metadata.opus
 	);
 	const hasContent = $derived(lines.length > 0);
-	const legend = $derived(buildProvenanceLegend(lines, language, spotReconstitution));
 </script>
 
 <div
@@ -64,7 +61,7 @@
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
 				<div class="verse-line-wrapper">
-					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
+					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
 				</div>
 			{/each}
 		{:else}
@@ -77,7 +74,6 @@
 		{totalPages}
 		transcriber={metadata.transcriber}
 		{language}
-		{legend}
 	/>
 </div>
 
@@ -160,14 +156,15 @@
 		border-bottom: none;
 	}
 
-	/* Empty state hint: centred in the content area, single line */
+	/* Empty state hint: centred in the content area */
 	.empty-hint {
 		color: var(--ink-tertiary);
 		font-family: var(--font-serif);
 		font-style: italic;
 		font-size: 0.95rem;
 		text-align: center;
-		white-space: nowrap;
 		padding-top: 6rem;
+		max-width: 280px;
+		margin: 0 auto;
 	}
 </style>

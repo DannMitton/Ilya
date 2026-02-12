@@ -105,7 +105,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'stress.unknown':              { en: 'Unknown \u2014 verify manually', fr: 'Inconnu \u2014 vérifier manuellement' },
 
 	// ── Paper empty state ────────────────────────────────────
-	'paper.empty':                 { en: 'To begin, enter your text in the drawer to the left.', fr: 'Pour commencer, saisissez votre texte dans le tiroir à gauche.' },
+	'paper.empty':                 { en: 'To begin, open the drawer and enter your text.', fr: 'Pour commencer, ouvrez le tiroir et saisissez votre texte.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -143,6 +143,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'provenance.yo':               { en: 'Stress derived from ё',               fr: 'Accent dérivé de ё' },
 	'provenance.inferred':         { en: 'Stress algorithmically inferred',      fr: 'Accent inféré algorithmiquement' },
 	'provenance.unknown':          { en: 'Unknown stress \u2014 verify manually', fr: 'Accent inconnu \u2014 vérifier manuellement' },
+
+	// ── Mobile awareness ─────────────────────────────────────
+	'mobile.heading':              { en: 'Ilya is designed for desktop',       fr: 'Ilya est conçu pour ordinateur' },
+	'mobile.body':                 { en: 'Ilya produces paginated transcription documents best experienced on a larger screen with a keyboard.', fr: 'Ilya produit des documents de transcription paginés, mieux adaptés à un écran plus grand avec un clavier.' },
+	'mobile.continue':             { en: 'Continue anyway',                    fr: 'Continuer quand même' },
 };
 
 /**
