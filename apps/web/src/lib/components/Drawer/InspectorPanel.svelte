@@ -295,7 +295,6 @@
 	{#if ribbonEntries.length > 0}
 		<div class="section ribbon-section">
 			<h3 class="section-label">{t('inspector.ribbon', language)}</h3>
-			<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 			<div
 				class="ribbon"
 				role="listbox"
@@ -303,6 +302,8 @@
 				aria-orientation="horizontal"
 				onkeydown={handleRibbonKeydown}
 				bind:this={ribbonEl}
+				tabindex="-1"
+				tabindex="-1"
 			>
 				{#each ribbonEntries as re, i}
 					{#if re.type === 'clitic-arrow'}
