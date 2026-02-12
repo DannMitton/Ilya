@@ -61,7 +61,8 @@
 	}
 </script>
 
-<div class="inspector-panel" onkeydown={handleKeydown}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="inspector-panel" role="region" aria-label={word.stressedCyrillic} onkeydown={handleKeydown}>
 	<!-- Back button -->
 	<button class="back-btn" onclick={onback}>
 		{t('inspector.back', language)}
@@ -264,7 +265,7 @@
 	.ribbon {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.15rem;
+		gap: 0.1rem;
 	}
 
 	.ribbon-cell {
@@ -272,11 +273,11 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.1rem;
-		padding: 0.35rem 0.4rem;
+		padding: 0.3rem 0.3rem;
 		background: var(--paper-cream);
 		border: 1px solid var(--stone-300);
 		border-radius: 4px;
-		min-width: 2rem;
+		min-width: 1.75rem;
 	}
 
 	.ribbon-cell.stressed {

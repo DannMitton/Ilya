@@ -97,3 +97,51 @@ export interface ProcessTextOptions {
   engineConfig?: EngineConfig;
   language?: GlossLanguage;
 }
+
+// ── WYSIWYG Paper ────────────────────────────────────────────────
+
+/** Page size options. */
+export type PageSize = 'letter' | 'a4';
+
+/** Dimensions in pixels at 96dpi. */
+export const PAGE_DIMENSIONS: Record<PageSize, { width: number; height: number }> = {
+  letter: { width: 816, height: 1056 },
+  a4: { width: 794, height: 1123 },
+};
+
+/** Song metadata for page headers and footers. */
+export interface SongMetadata {
+  title: string;
+  composer: string;
+  poet: string;
+  opus: string;
+  transcriber: string;
+}
+
+/** A page of distributed verse lines. */
+export interface Page {
+  /** 0-based page index. */
+  pageIndex: number;
+  /** 'title' for page 1, 'subsequent' for pages 2+. */
+  template: 'title' | 'subsequent';
+  /** Verse lines assigned to this page. */
+  lines: LineData[];
+  /** Maximum lines before overflow fallback. */
+  maxLines: number;
+  /** Fallback line count if overflow detected. */
+  fallbackLines: number;
+}
+
+// ── Provenance legend ────────────────────────────────────────────
+
+/**
+ * A single entry in the per-page provenance legend.
+ * Rendered in the page footer only when special provenance
+ * markers appear on that page.
+ */
+export interface LegendItem {
+  /** Normalized source key: user-dictionary, user-composer, user-override, yo, inferred. */
+  source: string;
+  /** i18n key for the bilingual label (e.g. 'legend.yo'). */
+  labelKey: string;
+}

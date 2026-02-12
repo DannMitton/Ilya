@@ -74,3 +74,47 @@ body {
 	outline: 2px solid var(--sage);
 	outline-offset: 2px;
 }
+
+/* ── Print styles ─────────────────────────────────────────── */
+/* WYSIWYG: the screen IS the document. Print overrides only  */
+/* remove screen chrome (shadows, cream bg) and set margins.  */
+
+@media print {
+	:root {
+		--paper-cream: #ffffff;
+	}
+
+	body {
+		background: white;
+	}
+
+	.paper-page {
+		page-break-after: always;
+		break-after: page;
+		box-shadow: none !important;
+		background: white !important;
+	}
+
+	.paper-page:last-child {
+		page-break-after: auto;
+		break-after: auto;
+	}
+
+	.watermark {
+		display: none !important;
+	}
+
+	.word-stack {
+		cursor: default !important;
+		background: transparent !important;
+	}
+
+	.word-stack:hover {
+		background: transparent !important;
+	}
+
+	@page {
+		margin: 0;
+		size: letter;
+	}
+}

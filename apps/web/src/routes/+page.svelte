@@ -4,7 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
-	import type { LineData, WordStackData } from '$lib/types';
+	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
 	import type { Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
@@ -37,6 +37,21 @@
 	let drawerMode = $state<'root' | 'inspector'>('root');
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 
+	// Drawer state
+	let drawerCollapsed = $state(false);
+
+	// Page settings
+	let pageSize = $state<PageSize>('letter');
+
+	// Song metadata
+	let metadata = $state<SongMetadata>({
+		title: '',
+		composer: '',
+		poet: '',
+		opus: '',
+		transcriber: '',
+	});
+
 	// Notation preferences -- persisted to localStorage
 	let notationPrefs = $state<NotationPreferences>({
 		reducedVowel: false,
@@ -45,6 +60,9 @@
 		geminate: false,
 		reconstitution: false,
 	});
+
+	// Display preferences
+	let showStressDiacritics = $state(false);
 
 	// Derived
 	const canTranscribe = $derived(
@@ -107,10 +125,33 @@
 		}
 	}
 
+	function handleClear() {
+		inputText = '';
+		lines = [];
+		transcribeError = '';
+		transcribeMs = 0;
+		selectedWord = null;
+		drawerMode = 'root';
+		lastFocusedWord = null;
+		try {
+			localStorage.setItem('ilya:inputText', '');
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
+	function handlePrint() {
+		window.print();
+	}
+
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
 		drawerMode = 'inspector';
 		lastFocusedWord = { line: word.lineIndex, word: word.wordIndex };
+		// Auto-expand drawer if collapsed when user clicks a word
+		if (drawerCollapsed) {
+			drawerCollapsed = false;
+		}
 		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
 			stress: word.stressIndex,
 			source: word.stressSource,
@@ -140,6 +181,15 @@
 		}
 	}
 
+	function handleStressDiacriticsChange(value: boolean) {
+		showStressDiacritics = value;
+		try {
+			localStorage.setItem('ilya:showStressDiacritics', JSON.stringify(value));
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
 	// Persist input text to localStorage
 	function handleInput(text: string) {
 		inputText = text;
@@ -163,6 +213,33 @@
 		}
 	}
 
+	function handleMetadataChange(meta: SongMetadata) {
+		metadata = meta;
+		try {
+			localStorage.setItem('ilya:metadata', JSON.stringify(meta));
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
+	function handlePageSizeChange(size: PageSize) {
+		pageSize = size;
+		try {
+			localStorage.setItem('ilya:pageSize', size);
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
+	function handleDrawerToggle() {
+		drawerCollapsed = !drawerCollapsed;
+		try {
+			localStorage.setItem('ilya:drawerCollapsed', JSON.stringify(drawerCollapsed));
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
 	onMount(() => {
 		// Restore persisted state
 		try {
@@ -179,6 +256,23 @@
 			if (savedText) {
 				inputText = savedText;
 			}
+			const savedMeta = localStorage.getItem('ilya:metadata');
+			if (savedMeta) {
+				const parsed = JSON.parse(savedMeta);
+				metadata = { ...metadata, ...parsed };
+			}
+			const savedPageSize = localStorage.getItem('ilya:pageSize');
+			if (savedPageSize === 'letter' || savedPageSize === 'a4') {
+				pageSize = savedPageSize;
+			}
+			const savedDiacritics = localStorage.getItem('ilya:showStressDiacritics');
+			if (savedDiacritics) {
+				showStressDiacritics = JSON.parse(savedDiacritics);
+			}
+			const savedCollapsed = localStorage.getItem('ilya:drawerCollapsed');
+			if (savedCollapsed) {
+				drawerCollapsed = JSON.parse(savedCollapsed);
+			}
 		} catch {
 			// localStorage unavailable
 		}
@@ -191,39 +285,56 @@
 	});
 </script>
 
-<HeaderBar {language} onlanguagechange={handleLanguageChange} />
+<div class="screen-only">
+	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
+</div>
 
 <div class="app-content">
-	<Drawer mode={drawerMode}>
-		{#snippet rootPanel()}
-			<RootPanel
-				{inputText}
-				{loaderState}
-				{canTranscribe}
-				{hasResults}
-				{wordCount}
-				{transcribeMs}
-				{transcribeError}
-				{notationPrefs}
-				{language}
-				oninput={handleInput}
-				ontranscribe={handleTranscribe}
-				onnotationchange={handleNotationChange}
-			/>
-		{/snippet}
-		{#snippet inspectorPanel()}
-			{#if selectedWord}
-				<InspectorPanel
-					word={selectedWord}
+	<div class="screen-only">
+		<Drawer
+			mode={drawerMode}
+			collapsed={drawerCollapsed}
+			{language}
+			ontogglecollapse={handleDrawerToggle}
+		>
+			{#snippet rootPanel()}
+				<RootPanel
+					{inputText}
+					{loaderState}
+					{canTranscribe}
+					{hasResults}
+					{wordCount}
+					{transcribeMs}
+					{transcribeError}
+					{notationPrefs}
+					{showStressDiacritics}
 					{language}
-					onback={handleInspectorBack}
+					{metadata}
+					{pageSize}
+					oninput={handleInput}
+					ontranscribe={handleTranscribe}
+					onclear={handleClear}
+					onprint={handlePrint}
+					onnotationchange={handleNotationChange}
+					onstressdiacriticschange={handleStressDiacriticsChange}
+					onmetadatachange={handleMetadataChange}
+					onpagesizechange={handlePageSizeChange}
 				/>
-			{/if}
-		{/snippet}
-	</Drawer>
+			{/snippet}
+			{#snippet inspectorPanel()}
+				{#if selectedWord}
+					<InspectorPanel
+						word={selectedWord}
+						{language}
+						onback={handleInspectorBack}
+					/>
+				{/if}
+			{/snippet}
+		</Drawer>
+	</div>
 
 	<main class="main-content">
-		<Paper {lines} {notationPrefs} {language} onwordclick={handleWordClick} />
+		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} onwordclick={handleWordClick} />
 	</main>
 </div>
 
@@ -241,5 +352,26 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
+
+	/* screen-only wrappers: visible on screen, hidden in print */
+	.screen-only {
+		display: contents;
+	}
+
+	@media print {
+		.screen-only {
+			display: none !important;
+		}
+
+		.app-content {
+			display: block;
+			overflow: visible;
+		}
+
+		.main-content {
+			padding: 0;
+			overflow: visible;
+		}
 	}
 </style>

@@ -1,21 +1,28 @@
 <script lang="ts">
 	import type { WordStackData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
+	import type { Language } from '$lib/i18n';
 	import WordStack from './WordStack.svelte';
 
 	interface Props {
 		words: WordStackData[];
 		notationPrefs: NotationPreferences;
-		printMode?: boolean;
+		showStressDiacritics?: boolean;
+		language?: Language;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { words, notationPrefs, printMode = false, onwordclick }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', onwordclick }: Props = $props();
+
+	// Filter out punctuation-only tokens: only render words containing Cyrillic
+	const displayWords = $derived(
+		words.filter(w => /[А-Яа-яЁё]/.test(w.cyrillic || ''))
+	);
 </script>
 
 <div class="verse-line">
-	{#each words as word (word.wordIndex)}
-		<WordStack {word} {notationPrefs} {printMode} onclick={onwordclick} />
+	{#each displayWords as word (word.wordIndex)}
+		<WordStack {word} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
 	{/each}
 </div>
 
@@ -23,12 +30,7 @@
 	.verse-line {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.25rem 0.5rem;
-		margin-bottom: 1.5rem;
-		align-items: flex-start;
-	}
-
-	.verse-line:last-child {
-		margin-bottom: 0;
+		gap: 0.15rem 0.4rem;
+		align-items: flex-end;
 	}
 </style>

@@ -2,124 +2,165 @@
 	import type { WordStackData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
+	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
 		word: WordStackData;
 		notationPrefs: NotationPreferences;
-		printMode?: boolean;
-		onclick?: (word: WordStackData) => void;
+		showStressDiacritics?: boolean;
+		language?: Language;
+		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, printMode = false, onclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', onwordclick }: Props = $props();
 
-	const displayIpa = $derived((() => {
-		// Pick the correct base IPA: reconstituted or standard
-		const base = notationPrefs.reconstitution
+	// Use reconstituted IPA when toggle is on, otherwise display IPA
+	const displayIpa = $derived.by(() => {
+		const base = notationPrefs.reconstitution && word.ipaReconstituted
 			? word.ipaReconstituted
 			: word.ipaDisplay;
-		// Apply string-based notation transforms (includeGeminates = true for Paper)
-		return applyNotationPreferences(base, notationPrefs, true);
-	})());
+		return base ? applyNotationPreferences(base, notationPrefs) : '';
+	});
 
-	const provenance = $derived((() => {
-		if (printMode) return null;
-		const src = word.stressSource;
-		if (word.isProclitic || word.isEnclitic) return null;
-		switch (src) {
-			case 'dictionary':
-				return { type: 'dictionary', label: 'Stress verified from dictionary', colour: '#059669' };
-			case 'supplement':
-				return { type: 'supplement', label: 'Stress from singer supplement', colour: '#2563eb' };
-			case 'yo-rule':
-			case 'yo-restored':
-				return { type: 'yo', label: 'Stress derived from ё', colour: '#7c3aed' };
-			case 'inferred':
-				return { type: 'inferred', label: 'Stress algorithmically inferred', colour: '#d97706' };
-			case 'unknown':
-				return { type: 'unknown', label: 'Unknown stress — verify manually', colour: '#d97706' };
-			default:
-				return null;
+	// Apply combining acute accent to the stressed vowel in Cyrillic
+	const displayCyrillic = $derived.by(() => {
+		if (!showStressDiacritics || !word.cyrillic) return word.cyrillic;
+		if (word.stressIndex === undefined || word.stressIndex < 0) return word.cyrillic;
+
+		const chars = [...word.cyrillic];
+		const vowels = 'аеёиоуыэюяАЕЁИОУЫЭЮЯ';
+		let vowelCount = 0;
+
+		for (let i = 0; i < chars.length; i++) {
+			if (vowels.includes(chars[i])) {
+				if (vowelCount === word.stressIndex) {
+					// ё and Ё are inherently stressed — never add acute accent
+					if (chars[i] !== 'ё' && chars[i] !== 'Ё') {
+						chars[i] = chars[i] + '\u0301';
+					}
+					break;
+				}
+				vowelCount++;
+			}
 		}
-	})());
+
+		return chars.join('');
+	});
+
+	// Strip leading subject pronouns from verb glosses, but ONLY when
+	// 2+ words remain after stripping (preserves conjugation signal).
+	// "we will descend" → "will descend" ✓
+	// "I love" → "I love" (kept: single word after strip looks like infinitive)
+	const displayGloss = $derived.by(() => {
+		if (!word.gloss) return '';
+		const pronouns = ['i ', 'you ', 'he ', 'she ', 'it ', 'we ', 'they ', 'one '];
+		const lower = word.gloss.toLowerCase();
+		for (const p of pronouns) {
+			if (lower.startsWith(p)) {
+				const remainder = word.gloss.slice(p.length);
+				// Only strip if remainder is multi-word (has a space)
+				if (remainder.includes(' ')) {
+					return remainder;
+				}
+			}
+		}
+		return word.gloss;
+	});
+
+	const isClitic = $derived(word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic);
+
+	// Show provenance icon only for non-standard sources
+	const showProvenance = $derived(
+		word.stressSource !== 'dictionary' &&
+		word.stressSource !== 'supplement' &&
+		word.stressSource !== 'clitic' &&
+		word.stressSource !== undefined
+	);
+
+	const isInferred = $derived(word.stressSource === 'inferred');
 
 	function handleClick() {
-		if (!printMode) onclick?.(word);
+		onwordclick?.(word);
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (printMode) return;
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.preventDefault();
-			onclick?.(word);
+			onwordclick?.(word);
 		}
 	}
 </script>
 
 <div
 	class="word-stack"
-	class:proclitic={word.isProclitic}
-	class:enclitic={word.isEnclitic}
-	class:unknown-stress={word.stressSource === 'inferred' || word.stressSource === 'unknown'}
-	class:print-mode={printMode}
+	class:is-clitic={isClitic}
+	class:has-provenance={showProvenance && !isInferred}
+	class:is-inferred={isInferred}
+	role="button"
+	tabindex="0"
 	data-word-index="{word.lineIndex}-{word.wordIndex}"
-	tabindex={printMode ? -1 : 0}
-	role={printMode ? undefined : 'button'}
-	aria-label={printMode ? undefined : `${word.cleanWord}, ${displayIpa}`}
 	onclick={handleClick}
 	onkeydown={handleKeydown}
+	aria-label="{word.cyrillic}: {displayIpa}"
 >
-	{#if provenance}
-		<span class="provenance provenance-{provenance.type}" aria-label={provenance.label} title={provenance.label}>
-			{#if provenance.type === 'dictionary'}
-				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-					<path d="M1.5 5.5 L4 8 L8.5 2.5" fill="none" stroke={provenance.colour} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
-			{:else if provenance.type === 'supplement'}
-				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-					<path d="M5 0.8 L6.1 3.5 L9 3.7 L6.8 5.8 L7.4 8.8 L5 7.3 L2.6 8.8 L3.2 5.8 L1 3.7 L3.9 3.5 Z" fill={provenance.colour}/>
-				</svg>
-			{:else if provenance.type === 'yo'}
-				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-					<text x="5" y="9" text-anchor="middle" font-size="9" font-weight="600" fill={provenance.colour}>ё</text>
-				</svg>
-			{:else if provenance.type === 'inferred'}
-				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-					<path d="M1 6 Q3 3.5, 5 6 Q7 8.5, 9 6" fill="none" stroke={provenance.colour} stroke-width="1.5" stroke-linecap="round"/>
-				</svg>
-			{:else if provenance.type === 'unknown'}
-				<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-					<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenance.colour}>?</text>
-				</svg>
+	{#if showProvenance && !isInferred}
+		<span class="provenance-icon" aria-hidden="true">
+			{#if word.stressSource === 'user-dictionary'}
+				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M2 1.5C2 .67 2.67 0 3.5 0h9c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5H4a2 2 0 0 1-2-2V1.5zM3.5 1a.5.5 0 0 0-.5.5V11h9V1.5a.5.5 0 0 0-.5-.5h-9zM3 12v1a1 1 0 0 0 1 1h8.5a.5.5 0 0 0 .5-.5V12H3z" fill="currentColor"/></svg>
+			{:else if word.stressSource === 'user-composer'}
+				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
+			{:else if word.stressSource === 'user-override'}
+				<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
+			{:else if word.stressSource === 'yo-rule' || word.stressSource === 'yo-restored'}
+				<span class="yo-icon">ё</span>
 			{/if}
 		</span>
 	{/if}
-	<span class="ipa">{displayIpa}</span>
-	<span class="cyrillic">
-		{word.stressedCyrillic}<span class="punct">{word.punctuation}</span>
+
+	<!-- IPA row -->
+	<span class="ipa-row" class:clitic-ipa={isClitic}>
+		{#if isClitic && word.cliticDirection === 'proclitic'}
+			<span class="clitic-arrow">→</span>
+		{:else if isClitic && word.cliticDirection === 'enclitic'}
+			<span class="clitic-arrow">←</span>
+		{:else}
+			{displayIpa}
+		{/if}
 	</span>
+
+	<!-- Cyrillic row -->
+	<span class="cyrillic-row">
+		{displayCyrillic}
+	</span>
+
+	<!-- Gloss row -->
+	{#if displayGloss}
+		<span class="gloss-row" class:clitic-gloss={isClitic}>
+			{displayGloss}
+		</span>
+	{/if}
+
+	<!-- VERIFY label for inferred stress: sits on the bottom border, interrupting it -->
+	{#if isInferred}
+		<span class="verify-label">{t('verify.label', language)}</span>
+	{/if}
 </div>
 
 <style>
 	.word-stack {
-		display: flex;
+		display: inline-flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 0.1rem;
-		min-width: 2.5rem;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0.25rem 0.35rem;
-		transition: background 0.12s;
+		align-items: flex-start;
 		position: relative;
+		cursor: pointer;
+		padding: 2px 4px;
+		border-radius: 2px;
+		transition: background-color 150ms ease;
+		line-height: 1.3;
 	}
 
-	.word-stack.print-mode {
-		cursor: default;
-		padding: 0.15rem 0.25rem;
-	}
-
-	.word-stack:hover:not(.print-mode) {
-		background: rgba(26, 22, 18, 0.04);
+	.word-stack:hover {
+		background-color: rgba(139, 154, 125, 0.08);
 	}
 
 	.word-stack:focus-visible {
@@ -127,52 +168,131 @@
 		outline-offset: 2px;
 	}
 
-	.word-stack.proclitic,
-	.word-stack.enclitic {
-		opacity: 0.6;
+	/* Inferred stress: dashed border box with negative margins
+	   to neutralize the extra space so VERIFY stacks align with neighbours.
+	   Border: 1.5px, extra padding: 3px top/bottom and 3px left/right,
+	   plus the VERIFY label hangs below. Negative margins cancel the expansion. */
+	.is-inferred {
+		border: 1.5px dashed #78716c;
+		padding: 5px 7px;
+		margin: -4.5px -4.5px 0 -4.5px;
 	}
 
-	.word-stack.unknown-stress {
-		border-bottom: 2px dashed var(--stone-500);
-		padding-bottom: 0.15rem;
+	/* Override focus ring for inferred words so outline doesn't fight border */
+	.is-inferred:focus-visible {
+		outline-offset: 4px;
 	}
 
-	/* ── Provenance icon ─────────────────────────────────── */
-
-	.provenance {
-		position: absolute;
-		top: 1px;
-		right: 2px;
-		width: 10px;
-		height: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		opacity: 0.55;
-		transition: opacity 0.12s;
-		pointer-events: none;
-	}
-
-	.word-stack:hover .provenance {
-		opacity: 0.85;
-	}
-
-	.ipa {
+	.ipa-row {
 		font-family: var(--font-sans);
 		font-size: 1rem;
 		color: var(--ink-secondary);
-		letter-spacing: 0.02em;
 		white-space: nowrap;
 	}
 
-	.cyrillic {
+	.cyrillic-row {
 		font-family: var(--font-serif);
 		font-size: 1rem;
 		font-weight: 600;
 		color: var(--ink-primary);
+		white-space: nowrap;
 	}
 
-	.punct {
+	.gloss-row {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		font-style: italic;
+		color: var(--terracotta);
+		white-space: nowrap;
+	}
+
+	/* Clitic: IPA shows arrow, gloss shows role */
+	.clitic-ipa {
 		color: var(--ink-tertiary);
+	}
+
+	.clitic-arrow {
+		color: var(--sage);
+		font-size: 0.85rem;
+	}
+
+	.clitic-gloss {
+		color: var(--ink-tertiary);
+		font-style: italic;
+	}
+
+	/* Reduced gap for clitics to visually connect with host */
+	.is-clitic {
+		padding-left: 1px;
+		padding-right: 1px;
+	}
+
+	/* Provenance icons — top-right with reserved padding to avoid IPA collision */
+	.has-provenance .ipa-row {
+		padding-right: 12px;
+	}
+
+	.provenance-icon {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 0.5em;
+		height: 0.5em;
+		color: #78716c;
+		opacity: 0.4;
+		transition: opacity 150ms ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+	}
+
+	.word-stack:hover .provenance-icon {
+		opacity: 1;
+		color: #44403c;
+	}
+
+	.prov-svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.yo-icon {
+		font-family: var(--font-sans);
+		font-weight: 700;
+		font-size: 10px;
+		line-height: 1;
+	}
+
+	/* VERIFY label: fieldset-legend pattern.
+	   Sits centred on the bottom border, background interrupts the dashed line. */
+	.verify-label {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 50%);
+		font-family: var(--font-sans);
+		font-size: 11px;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.04em;
+		color: #78716c;
+		background: var(--paper-cream);
+		padding: 0 6px;
+		white-space: nowrap;
+		line-height: 1;
+		z-index: 1;
+	}
+
+	@media print {
+		.word-stack {
+			cursor: default;
+			background: transparent !important;
+		}
+		.word-stack:hover {
+			background: transparent;
+		}
+		.verify-label {
+			background: white;
+		}
 	}
 </style>
