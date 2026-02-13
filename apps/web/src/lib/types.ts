@@ -8,6 +8,7 @@
 
 import type {
   TranscriptionResult,
+  SyllableData,
   EngineConfig,
 } from '@ilya/phonology';
 import type { DisplayLogEntry } from '@ilya/blurb';
@@ -48,6 +49,8 @@ export interface WordStackData {
 
   /** Display log entries from @ilya/blurb (for Inspector ribbon). */
   displayLog: DisplayLogEntry[];
+  /** Per-syllable transcription data from the engine (for Ribbon groupings). */
+  syllables: SyllableData[];
   /** Formatted gloss string for display. */
   gloss: string;
 

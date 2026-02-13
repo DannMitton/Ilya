@@ -195,6 +195,7 @@ export function processText(
           ipaContent: tw.ipaContent ?? '',
           ipaOwnReconstituted: tw.ipaOwnReconstituted ?? tw.ipaContent ?? '',
           displayLog,
+          syllables: tw.syllables,
           gloss,
           isProclitic: tw.isProclitic,
           isEnclitic: tw.isEnclitic,
