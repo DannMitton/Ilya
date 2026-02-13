@@ -43,25 +43,31 @@ export function setGlossDictionary(dict: StressDictionary): void {
  * Extract gloss in the specified language from bilingual format.
  * Handles both legacy string format and bilingual {en, fr} objects.
  *
+ * Returns empty string when the target language is unavailable.
+ * Blank glosses leave space for pencil users on the printed page.
+ *
  * @param g - A gloss value: string, BilingualGloss object, or null/undefined
  * @param language - Target language ('en' or 'fr')
- * @returns The resolved gloss string
+ * @returns The resolved gloss string, or '' if unavailable
  */
 export function extractGloss(
   g: string | BilingualGloss | null | undefined,
   language: GlossLanguage = 'en'
 ): string {
-  if (!g) return language === 'fr' ? 'À VÉRIFIER' : '';
+  if (!g) return '';
 
-  // String format = English-only (legacy)
+  // String format = English-only (legacy kaikki.org entries)
   if (typeof g === 'string') {
-    return language === 'fr' ? 'À VÉRIFIER' : g;
+    // French users get blank for English-only strings.
+    // The lemma fallback in formatGlossForDisplay will attempt
+    // to find a French gloss via the base form.
+    return language === 'fr' ? '' : g;
   }
 
-  // Object format = bilingual
+  // Object format = bilingual {en, fr}
   if (typeof g === 'object') {
     if (language === 'fr') {
-      return g.fr || 'À VÉRIFIER';
+      return g.fr || '';
     }
     return g.en || g.fr || '';
   }
@@ -88,6 +94,9 @@ export function extractCleanGloss(gloss: string): string {
 
   // Take only the first sense before semicolons (duplicate senses in kaikki.org)
   let working = gloss.split(';')[0].trim();
+
+  // Strip trailing period (common in French Wiktionary entries)
+  working = working.replace(/\.\s*$/, '');
 
   // Pattern: "translated as X" or "Translated as X" — extract X
   let match = working.match(/translated as ["']?([^"'.,;/]+)/i);
@@ -129,6 +138,8 @@ export function extractCleanGloss(gloss: string): string {
  *
  * Catches: inflection forms, case forms, alternative spellings,
  * participles, gerunds, transgressives, comparatives, superlatives.
+ * Handles both English (kaikki.org via English Wiktionary) and
+ * French (kaikki.org via French Wiktionary) patterns.
  *
  * @param gloss - Cleaned gloss string to test
  * @returns true if the gloss is a grammatical description
@@ -136,13 +147,29 @@ export function extractCleanGloss(gloss: string): string {
 export function isGrammatical(gloss: string): boolean {
   if (!gloss) return false;
 
-  return (
+  // English grammatical patterns (English Wiktionary via kaikki.org)
+  if (
     /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative |alternative (spelling|form) of)/i.test(
       gloss
     ) ||
     /\b(singular|plural)\s+(of|past|present|future)\b/i.test(gloss) ||
     /\b(participle|gerund|transgressive) of\b/i.test(gloss)
-  );
+  ) {
+    return true;
+  }
+
+  // French grammatical patterns (French Wiktionary via kaikki.org)
+  if (
+    /^(forme |flexion |nominatif |g[ée]nitif |datif |accusatif |instrumental |pr[ée]positionnel |comparatif |superlatif |variante )/i.test(
+      gloss
+    ) ||
+    /\b(singulier|pluriel)\s+(de|du|des)\b/i.test(gloss) ||
+    /\b(participe|g[ée]rondif) (de|du|pass[ée]|pr[ée]sent)\b/i.test(gloss)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -152,15 +179,18 @@ export function isGrammatical(gloss: string): boolean {
 /**
  * Extract lemma from grammatical gloss text.
  * e.g., "short feminine singular past indicative perfective of уга́снуть (ugásnutʹ)" -> "угаснуть"
+ * e.g., "forme féminine singulière de надежда" -> "надежда"
  *
- * @param gloss - Raw gloss string potentially containing "of CYRILLIC_WORD"
+ * Handles both English "of" and French "de/du/d'" prepositions.
+ *
+ * @param gloss - Raw gloss string potentially containing "of/de CYRILLIC_WORD"
  * @returns The extracted lowercase lemma, or null if not found
  */
 export function extractLemmaFromGloss(gloss: string): string | null {
   if (!gloss) return null;
 
-  // Pattern: "... of CYRILLIC_WORD (transliteration)" or just "... of CYRILLIC_WORD"
-  const match = gloss.match(/of\s+([а-яёА-ЯЁ\u0301]+)(?:\s*\(|$|\s|,)/i);
+  // Pattern: "... of/de/du/d' CYRILLIC_WORD (transliteration)" or just "... of/de CYRILLIC_WORD"
+  const match = gloss.match(/(?:of|de|du|d')\s+([а-яёА-ЯЁ\u0301]+)(?:\s*\(|$|\s|,)/i);
   if (match) {
     // Remove any combining accents from the extracted lemma
     return match[1]
@@ -198,22 +228,20 @@ export function getLemmaGloss(
   if (
     entryGloss &&
     typeof entryGloss === 'string' &&
-    !/^(short |inflection |nominative |genitive |dative |accusative |instrumental |prepositional )/i.test(
-      entryGloss
-    )
+    !isGrammatical(entryGloss)
   ) {
     return entryGloss;
   }
 
-  // Also handle bilingual objects — check the English side
+  // Also handle bilingual objects — check both sides for semantics
   if (entryGloss && typeof entryGloss === 'object') {
     const enGloss = (entryGloss as BilingualGloss).en || '';
-    if (
-      enGloss &&
-      !/^(short |inflection |nominative |genitive |dative |accusative |instrumental |prepositional )/i.test(
-        enGloss
-      )
-    ) {
+    if (enGloss && !isGrammatical(enGloss)) {
+      return entryGloss;
+    }
+    // English side is grammatical, but French side might be semantic
+    const frGloss = (entryGloss as BilingualGloss).fr || '';
+    if (frGloss && !isGrammatical(frGloss)) {
       return entryGloss;
     }
   }
@@ -271,9 +299,10 @@ export function truncateGloss(
     cleaned = truncatedWords.join(' ') || cleaned.slice(0, maxChars);
   }
 
-  // Remove dangling particles after comma/semicolon (v5.11.19)
-  // "to wander, to" -> "to wander" (the trailing "to" is semantically incomplete)
-  cleaned = cleaned.replace(/[,;]\s+(to|a|the|of|in|on|for|and|or)$/i, '');
+  // Remove dangling particles after comma/semicolon
+  // English: "to wander, to" -> "to wander"
+  // French: "errer, de" -> "errer"
+  cleaned = cleaned.replace(/[,;]\s+(to|a|the|of|in|on|for|and|or|de|du|des|le|la|les|un|une|et|ou)$/i, '');
 
   // Remove trailing punctuation for cleaner appearance
   cleaned = cleaned.replace(/[,;:]+$/, '');
@@ -290,10 +319,11 @@ export function truncateGloss(
  *
  * Pipeline:
  * 1. Check curated glosses (word form, then lemma) — return as-is if found
- * 2. Resolve bilingual objects to string
- * 3. Clean verbose dictionary patterns
- * 4. Detect grammatical descriptions — attempt lemma fallback
- * 5. Truncate to display limits
+ * 2. Resolve bilingual objects to target language via extractGloss
+ * 3. If no gloss in target language, try lemma fallback
+ * 4. Clean verbose dictionary patterns
+ * 5. Detect grammatical descriptions — attempt lemma fallback
+ * 6. Truncate to display limits
  *
  * @param gloss - Raw gloss from dictionary (string or BilingualGloss)
  * @param pos - Part of speech
@@ -317,43 +347,97 @@ export function formatGlossForDisplay(
     return extractGloss(CURATED_GLOSSES.get(lemma.toLowerCase())!, language);
   }
 
-  // Resolve bilingual objects to string so dictionary glosses
-  // enter the cleaning pipeline (fixes verbose Wiktionary pass-through)
-  const resolvedGloss =
+  // Keep raw English gloss for lemma extraction (grammatical patterns
+  // and Cyrillic lemma references are always in English from kaikki.org)
+  const rawEnglishGloss =
     gloss && typeof gloss === 'object'
-      ? extractGloss(gloss as BilingualGloss, language)
-      : (gloss as string | null | undefined);
+      ? ((gloss as BilingualGloss).en || '')
+      : ((gloss as string) || '');
 
-  // Blank for missing glosses: leave space for pencil users (v5.11.20)
-  if (!resolvedGloss) return '';
+  // Route ALL glosses through extractGloss for proper language resolution.
+  // Plain English strings return '' for French users (blank for pencil users).
+  // Bilingual objects return the target language value.
+  const resolvedGloss = extractGloss(gloss, language);
 
-  // First, try to extract a clean translation from verbose patterns
+  // No gloss in target language — try lemma fallback before giving up
+  if (!resolvedGloss) {
+    return attemptLemmaFallback(rawEnglishGloss, lemma, language);
+  }
+
+  // Clean verbose dictionary patterns
   const cleanedGloss = extractCleanGloss(resolvedGloss);
 
-  // Detect verbose grammatical patterns from kaikki.org
+  // Detect verbose grammatical patterns from kaikki.org (English or French)
   if (isGrammatical(cleanedGloss)) {
-    // Try lemma field first, then extract from gloss text
+    // Use rawEnglishGloss for lemma extraction (English patterns are more reliable),
+    // then fall back to resolvedGloss for French "de" patterns
     const effectiveLemma =
-      lemma || extractLemmaFromGloss(resolvedGloss);
+      lemma ||
+      extractLemmaFromGloss(rawEnglishGloss) ||
+      extractLemmaFromGloss(resolvedGloss);
 
     if (effectiveLemma) {
-      // Look up lemma's semantic gloss
       const semanticGloss = getLemmaGloss(effectiveLemma);
       if (semanticGloss) {
-        // Resolve bilingual if needed, then clean and truncate
-        const resolved =
-          typeof semanticGloss === 'object'
-            ? extractGloss(semanticGloss as BilingualGloss, language)
-            : semanticGloss;
-        return truncateGloss(extractCleanGloss(resolved), 5);
+        const resolved = extractGloss(semanticGloss, language);
+        if (resolved) {
+          return truncateGloss(extractCleanGloss(resolved), 5);
+        }
       }
-      // Fallback: leave blank for pencil users (no arrow — v5.11.22)
-      return '';
     }
-    // No lemma found: leave blank
+    // Grammatical description with no semantic fallback: blank for pencil users
     return '';
   }
 
   // Clean, semantic gloss — truncate to 5 words max for PDF display
   return truncateGloss(cleanedGloss, 5);
+}
+
+// ---------------------------------------------------------------------------
+// attemptLemmaFallback — Internal helper for lemma-based gloss recovery
+// ---------------------------------------------------------------------------
+
+/**
+ * When no direct gloss is available in the target language, attempt to
+ * find a semantic gloss via the lemma (base form).
+ *
+ * Uses the English gloss text for lemma extraction (more reliable patterns),
+ * then looks up the lemma entry for a gloss in the target language.
+ *
+ * @param rawEnglishGloss - The English gloss text for pattern extraction
+ * @param lemma - Explicit lemma from dictionary, if available
+ * @param language - Target display language
+ * @returns Formatted gloss or '' if no fallback available
+ */
+function attemptLemmaFallback(
+  rawEnglishGloss: string,
+  lemma: string | null | undefined,
+  language: GlossLanguage
+): string {
+  // Determine the lemma: explicit field first, then extract from English gloss
+  const effectiveLemma =
+    lemma || extractLemmaFromGloss(rawEnglishGloss);
+
+  if (effectiveLemma) {
+    // Check curated glosses for the lemma
+    if (CURATED_GLOSSES.has(effectiveLemma.toLowerCase())) {
+      const curated = extractGloss(
+        CURATED_GLOSSES.get(effectiveLemma.toLowerCase())!,
+        language
+      );
+      if (curated) return curated;
+    }
+
+    // Look up lemma's semantic gloss in the dictionary
+    const semanticGloss = getLemmaGloss(effectiveLemma);
+    if (semanticGloss) {
+      const resolved = extractGloss(semanticGloss, language);
+      if (resolved) {
+        return truncateGloss(extractCleanGloss(resolved), 5);
+      }
+    }
+  }
+
+  // No fallback available — blank for pencil users
+  return '';
 }

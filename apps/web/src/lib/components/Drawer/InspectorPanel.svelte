@@ -272,6 +272,8 @@
 		<p class="word-ipa">{headerIpa}</p>
 		{#if word.gloss}
 			<p class="word-gloss">{word.gloss}</p>
+		{:else if language === 'fr'}
+			<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
 		{/if}
 	</div>
 
@@ -539,6 +541,14 @@
 		color: var(--terracotta);
 		font-style: italic;
 		line-height: 1.3;
+	}
+
+	.word-gloss-missing {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		line-height: 1.4;
 	}
 
 	/* ── Sections ──────────────────────────────────────────────── */

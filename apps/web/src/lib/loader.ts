@@ -27,7 +27,7 @@ import { setBlurbData } from '@ilya/blurb';
 // Configuration
 // -------------------------------------------------------------------
 
-const CACHE_VERSION = '2026.3';
+const CACHE_VERSION = '2026.6';
 const DB_NAME = 'ilya-data';
 const STORE_NAME = 'cache';
 const WORKER_TIMEOUT_MS = 30_000;
@@ -332,6 +332,16 @@ async function loadTier2(
 		for (let i = 0; i < entries.length; i += chunkSize) {
 			const chunk = entries.slice(i, i + chunkSize);
 			for (const [k, v] of chunk) {
+				// Rescue French glosses from tier1 before tier2 overwrites.
+				// Tier2 has better stress/inflection data, but tier1 has
+				// bilingual glosses from the cascade build.
+				const existing = dictionary[k];
+				if (existing) {
+					const exG = (existing as Record<string, unknown>).g;
+					if (exG && typeof exG === 'object' && (exG as Record<string, unknown>).fr) {
+						(v as Record<string, unknown>).g = exG;
+					}
+				}
 				dictionary[k] = v;
 			}
 			// Yield to main thread between chunks

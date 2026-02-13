@@ -26,7 +26,7 @@ import {
   extractGloss,
   addStressMarkToCyrillic,
 } from '@ilya/dictionary';
-import type { GlossLanguage } from '@ilya/dictionary';
+import type { GlossLanguage, BilingualGloss } from '@ilya/dictionary';
 
 import { buildDisplayLog } from '@ilya/blurb';
 
@@ -58,7 +58,7 @@ interface PreTranscribeWord {
   punctuation: string;
   stress: number;
   stressSource: string;
-  gloss: string;
+  gloss: string | BilingualGloss | undefined;
   pos: string;
   lemma: string;
   isHomograph: boolean;

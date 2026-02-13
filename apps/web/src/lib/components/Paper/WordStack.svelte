@@ -135,7 +135,7 @@
 		</span>
 	{/if}
 
-	<!-- IPA row -->
+	<!-- IPA row: fixed height -->
 	<span class="ipa-row" class:clitic-ipa={isClitic}>
 		{#if isClitic && word.cliticDirection === 'proclitic'}
 			<span class="clitic-arrow">→</span>
@@ -146,17 +146,17 @@
 		{/if}
 	</span>
 
-	<!-- Cyrillic row -->
+	<!-- Cyrillic row: fixed height, anchor row -->
 	<span class="cyrillic-row">
 		{displayCyrillic}
 	</span>
 
-	<!-- Gloss row -->
-	{#if displayGloss}
-		<span class="gloss-row" class:clitic-gloss={isClitic}>
-			{displayGloss}
-		</span>
-	{/if}
+	<!-- Gloss row: ALWAYS rendered to reserve vertical space.
+	     Empty glosses produce a blank row at the same height,
+	     keeping Cyrillic baseline consistent across all stacks. -->
+	<span class="gloss-row" class:clitic-gloss={isClitic && displayGloss}>
+		{displayGloss || '\u00A0'}
+	</span>
 
 	<!-- VERIFY label for inferred stress: sits on the bottom border, interrupting it -->
 	{#if isInferred}
@@ -169,7 +169,7 @@
 		display: inline-flex;
 		flex-direction: column;
 		align-items: flex-start;
-		justify-content: center;
+		justify-content: flex-end;
 		position: relative;
 		cursor: pointer;
 		padding: 2px 4px;
@@ -241,6 +241,7 @@
 		font-style: italic;
 		color: var(--terracotta);
 		white-space: nowrap;
+		min-height: 1.04rem;
 	}
 
 	/* Clitic: IPA shows arrow, gloss shows role */
