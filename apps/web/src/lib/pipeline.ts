@@ -14,11 +14,13 @@
 import {
   GraysonEngine,
   DEFAULT_ENGINE_CONFIG,
+  resolveCliticChain,
 } from '@ilya/phonology';
 import type {
   EngineConfig,
   TranscriptionResult,
   SyllableData,
+  ProcliticPosition,
 } from '@ilya/phonology';
 
 import {
@@ -82,7 +84,7 @@ interface TranscribedWord {
   isOInterjection: boolean;
   isFirstWord: boolean;
   lineEndsWithQuestion: boolean;
-  procliticPosition: string | null;
+  procliticPosition: ProcliticPosition;
   hasYo: boolean;
   /** Raw engine result (syllables and transcriptionLog may be mutated in place). */
   engineResult: TranscriptionResult;
@@ -365,12 +367,13 @@ function transcribeLine(
         !isOInterjection && GraysonEngine.proclitics.has(cleanLower);
       const isEnclitic = GraysonEngine.enclitics.has(cleanLower);
 
-      // Determine proclitic reduction position relative to host stress
-      let procliticPosition: string | null = null;
+      // Determine proclitic reduction position relative to host stress.
+      // Forward-scans past any intervening proclitics to find the actual host.
+      // Fixes chain bug: "не в силах" — "не" must look past "в" to find "силах".
+      let procliticPosition: ProcliticPosition = null;
       if (isProclitic && wordIdx < preLine.length - 1) {
-        const nextWord = preLine[wordIdx + 1];
-        const nextStress = nextWord.stress;
-        procliticPosition = nextStress === 0 ? 'pretonic' : 'remote';
+        const chain = resolveCliticChain(preLine, wordIdx);
+        procliticPosition = chain.position;
       }
 
       // Clitic stress is -1 (unstressed)

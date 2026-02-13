@@ -76,6 +76,17 @@ export interface TranscriptionResult {
   source?: string;
 }
 
+/**
+ * Proclitic reduction position relative to host word stress.
+ * Determines vowel quality in proclitic transcription.
+ * Binary model for v1; structured type supports future distance-sensitive reduction.
+ */
+export type ProcliticPosition =
+  | null                    // Not a proclitic, or no host found
+  | { type: 'pretonic' }    // Adjacent to host stress (first pretonic)
+  | { type: 'remote' };     // Not adjacent to host stress
+  // Future: | { type: 'distance'; syllables: number }
+
 /** Clitic registry entry */
 export interface CliticEntry {
   type: 'proclitic' | 'enclitic';
@@ -1485,7 +1496,7 @@ export const GraysonEngine = {
     word: string,
     stressIndex: number = -1,
     isClitic: boolean = false,
-    procliticPosition: string | null = null,
+    procliticPosition: ProcliticPosition = null,
     config: EngineConfig = DEFAULT_ENGINE_CONFIG,
   ): TranscriptionResult {
     const cleanWord = word.replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
@@ -1555,7 +1566,7 @@ export const GraysonEngine = {
       // This overrides the default 'unstressed' position for accurate vowel reduction
       let position: string;
       if (isClitic && procliticPosition) {
-        position = procliticPosition;  // 'pretonic' or 'remote' based on host word stress
+        position = procliticPosition.type;  // 'pretonic' or 'remote' based on host word stress
       } else {
         position = this.getSyllablePosition(sylIdx, effectiveStress, syllables.length);
       }

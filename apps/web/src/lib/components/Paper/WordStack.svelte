@@ -137,9 +137,9 @@
 
 	<!-- IPA row: fixed height -->
 	<span class="ipa-row" class:clitic-ipa={isClitic}>
-		{#if isClitic && word.cliticDirection === 'proclitic'}
+		{#if word.isProclitic}
 			<span class="clitic-arrow">→</span>
-		{:else if isClitic && word.cliticDirection === 'enclitic'}
+		{:else if word.isEnclitic}
 			<span class="clitic-arrow">←</span>
 		{:else}
 			{displayIpa}

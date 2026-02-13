@@ -66,12 +66,12 @@ describe('extractGloss', () => {
       expect(extractGloss(undefined, 'en')).toBe('');
     });
 
-    it('returns À VÉRIFIER for null in French', () => {
-      expect(extractGloss(null, 'fr')).toBe('À VÉRIFIER');
+    it('returns empty string for null in French', () => {
+      expect(extractGloss(null, 'fr')).toBe('');
     });
 
-    it('returns À VÉRIFIER for undefined in French', () => {
-      expect(extractGloss(undefined, 'fr')).toBe('À VÉRIFIER');
+    it('returns empty string for undefined in French', () => {
+      expect(extractGloss(undefined, 'fr')).toBe('');
     });
   });
 
@@ -80,8 +80,8 @@ describe('extractGloss', () => {
       expect(extractGloss('heart', 'en')).toBe('heart');
     });
 
-    it('returns À VÉRIFIER for string in French (no French data)', () => {
-      expect(extractGloss('heart', 'fr')).toBe('À VÉRIFIER');
+    it('returns empty string for string in French (no French data)', () => {
+      expect(extractGloss('heart', 'fr')).toBe('');
     });
 
     it('handles empty string', () => {
@@ -102,12 +102,12 @@ describe('extractGloss', () => {
       expect(extractGloss({ en: '', fr: 'cœur' }, 'en')).toBe('cœur');
     });
 
-    it('returns À VÉRIFIER when fr is null (French mode)', () => {
-      expect(extractGloss({ en: 'heart', fr: null }, 'fr')).toBe('À VÉRIFIER');
+    it('returns empty string when fr is null (French mode)', () => {
+      expect(extractGloss({ en: 'heart', fr: null }, 'fr')).toBe('');
     });
 
-    it('returns À VÉRIFIER when fr is empty string (French mode)', () => {
-      expect(extractGloss({ en: 'heart', fr: '' }, 'fr')).toBe('À VÉRIFIER');
+    it('returns empty string when fr is empty string (French mode)', () => {
+      expect(extractGloss({ en: 'heart', fr: '' }, 'fr')).toBe('');
     });
 
     it('does not crash when fr is null (English mode)', () => {

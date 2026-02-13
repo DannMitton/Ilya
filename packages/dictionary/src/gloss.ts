@@ -160,7 +160,7 @@ export function isGrammatical(gloss: string): boolean {
 
   // French grammatical patterns (French Wiktionary via kaikki.org)
   if (
-    /^(forme |flexion |nominatif |g[ée]nitif |datif |accusatif |instrumental |pr[ée]positionnel |comparatif |superlatif |variante )/i.test(
+    /^(forme |flexion |inflexion |nominatif |g[ée]nitif |datif |accusatif |instrumental |pr[ée]positionnel |comparatif |superlatif |variante )/i.test(
       gloss
     ) ||
     /\b(singulier|pluriel)\s+(de|du|des)\b/i.test(gloss) ||

@@ -25,6 +25,10 @@ export {
   DEFAULT_ENGINE_CONFIG,
 } from './engine';
 
+// Clitic chain resolution
+export { resolveCliticChain } from './clitics';
+export type { ChainWord, CliticChainResult } from './clitics';
+
 // Types
 export type {
   EngineConfig,
@@ -34,6 +38,7 @@ export type {
   TranscriptionLogEntry,
   StressLookupResult,
   CliticEntry,
+  ProcliticPosition,
   SpecialClusterInfo,
   BoundaryWord,
 } from './engine';

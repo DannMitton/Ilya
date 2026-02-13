@@ -260,6 +260,7 @@
 	role="region"
 	aria-label={word.stressedCyrillic}
 	onkeydown={handlePanelKeydown}
+	tabindex="-1"
 >
 	<!-- Back button -->
 	<button class="back-btn" onclick={onback}>
