@@ -103,7 +103,7 @@
 		position: absolute;
 		left: 88px;
 		right: 96px;
-		overflow: hidden;
+		overflow: visible;
 		padding-top: 4px;
 		padding-left: 4px;
 

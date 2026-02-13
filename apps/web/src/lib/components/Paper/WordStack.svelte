@@ -137,9 +137,9 @@
 
 	<!-- IPA row: fixed height -->
 	<span class="ipa-row" class:clitic-ipa={isClitic}>
-		{#if word.isProclitic}
+		{#if isClitic && word.cliticDirection === 'proclitic'}
 			<span class="clitic-arrow">→</span>
-		{:else if word.isEnclitic}
+		{:else if isClitic && word.cliticDirection === 'enclitic'}
 			<span class="clitic-arrow">←</span>
 		{:else}
 			{displayIpa}
@@ -175,7 +175,7 @@
 		padding: 2px 4px;
 		border-radius: 2px;
 		transition: background-color 150ms ease;
-		line-height: 1.3;
+		line-height: 1.15;
 		box-sizing: border-box;
 		height: 100%;
 	}
@@ -198,14 +198,16 @@
 	}
 
 	/* Dashed box via pseudo-element for asymmetric sizing.
-	   Bottom edge drops further to clear gloss descenders and make room for centred VERIFY label. */
+	   Content fits within 56px row at line-height 1.15 (no overflow).
+	   Top: -4px for breathing room. Bottom: -5px to clear gloss descenders.
+	   VERIFY label at -6px. Total intrusion = 4 + 6 = 10px < 20px gap. No collisions. */
 	.is-inferred::before {
 		content: '';
 		position: absolute;
-		top: -2px;
+		top: -4px;
 		left: -2px;
 		right: -2px;
-		bottom: -7px;
+		bottom: -5px;
 		border: 1.5px dashed #78716c;
 		border-radius: 3px;
 		pointer-events: none;
@@ -273,7 +275,7 @@
 
 	.icon-area {
 		position: absolute;
-		top: -8px;
+		top: -12px;
 		right: 0;
 		display: flex;
 		flex-direction: column;
@@ -328,14 +330,15 @@
 	}
 
 	/* VERIFY label: fieldset-legend pattern.
-	   Sits centred on the bottom border, background interrupts the dashed line. */
+	   Sits centred on the bottom border, background interrupts the dashed line.
+	   10px smallcaps matches pagination weight. */
 	.verify-label {
 		position: absolute;
-		bottom: -8px;
+		bottom: -6px;
 		left: 50%;
 		transform: translateX(-50%);
 		font-family: var(--font-sans);
-		font-size: 8px;
+		font-size: 10px;
 		font-variant-caps: small-caps;
 		letter-spacing: 0.04em;
 		color: #78716c;

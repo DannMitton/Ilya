@@ -38,22 +38,23 @@ export const HEADER_HEIGHTS = {
 /** Maximum footer height with text-wrap allowance (px). */
 export const FOOTER_MAX_HEIGHT = 80;
 
-/** Gap between verse rows (px). Generous spacing prevents VERIFY boxes from crowding adjacent rows. */
-export const ROW_GAP = 12;
+/** Gap between verse rows (px). Generous spacing gives VERIFY boxes, sigla, and j-glide dots clearance. */
+export const ROW_GAP = 20;
 
 /**
  * Universal row height (px).
- * Derived from the tightest constraint: Letter subsequent page.
- * Available = 1056 - 48 - 48 - 50 - 80 - 16 = 814px.
- * 12 rows at 56px + 11 gaps at 12px = 672 + 132 = 804px. Buffer = 10px.
- * All four template/size combinations pass the ≥10px quality gate.
+ * Derived from the tightest constraint: Letter title page.
+ * Available = 1056 - 48 - 48 - 110 - 80 - 16 = 754px.
+ * Content uses overflow: visible; VERIFY decorations extend freely.
+ * 10 rows at 56px + 9 gaps at 20px = 740px. Buffer = 14px.
+ * All four template/size combinations render correctly.
  */
 export const ROW_HEIGHT = 56;
 
-/** Row capacity per page template. */
+/** Row capacity per page template. Uniform 10/10 model gives generous breathing room. */
 export const ROW_COUNTS = {
 	title: 10,
-	subsequent: 12,
+	subsequent: 10,
 } as const;
 
 // ── Page slicing ─────────────────────────────────────────────────
@@ -63,7 +64,7 @@ export const ROW_COUNTS = {
  *
  * - 0 lines → one empty page (for the empty state title page)
  * - First 10 lines → page 1 (title page)
- * - Every subsequent 12 lines → next page
+ * - Every subsequent 10 lines → next page
  *
  * Pure arithmetic. No measurement, no adjustment.
  */
