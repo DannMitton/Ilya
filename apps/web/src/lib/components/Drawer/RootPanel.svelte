@@ -3,6 +3,8 @@
 	import type { LoaderState } from '$lib/loader';
 	import type { SongMetadata, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
+	import { COMPOSERS, POETS, type PersonEntry } from '$lib/composers-poets';
+	import SearchableSelect from './SearchableSelect.svelte';
 
 	interface Props {
 		inputText: string;
@@ -73,6 +75,14 @@
 	function handleMetaField(field: keyof SongMetadata, value: string) {
 		onmetadatachange({ ...metadata, [field]: value });
 	}
+
+	function handleComposerSelect(value: string, _entry: PersonEntry | null) {
+		handleMetaField('composer', value);
+	}
+
+	function handlePoetSelect(value: string, _entry: PersonEntry | null) {
+		handleMetaField('poet', value);
+	}
 </script>
 
 <div class="root-panel" class:status-ok={dictReady}>
@@ -89,7 +99,7 @@
 		</div>
 	{/if}
 
-	<!-- Song Setup (metadata) -->
+	<!-- ── 1. Song Setup (metadata) — at the top ──────────── -->
 	<div class="section">
 		<h3 class="section-label">{t('meta.heading', language)}</h3>
 		<div class="meta-fields">
@@ -102,24 +112,35 @@
 					oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
 				/>
 			</label>
-			<label class="meta-label">
+
+			<!-- Composer: searchable dropdown -->
+			<div class="meta-label">
 				<span class="meta-key">{t('meta.composer', language)}</span>
-				<input
-					type="text"
-					class="meta-input"
-					value={metadata.composer}
-					oninput={(e) => handleMetaField('composer', (e.target as HTMLInputElement).value)}
-				/>
-			</label>
-			<label class="meta-label">
+				<div class="meta-select-wrapper">
+					<SearchableSelect
+						entries={COMPOSERS}
+						value={metadata.composer}
+						placeholder={t('meta.composer', language)}
+						{language}
+						onchange={handleComposerSelect}
+					/>
+				</div>
+			</div>
+
+			<!-- Poet: searchable dropdown -->
+			<div class="meta-label">
 				<span class="meta-key">{t('meta.poet', language)}</span>
-				<input
-					type="text"
-					class="meta-input"
-					value={metadata.poet}
-					oninput={(e) => handleMetaField('poet', (e.target as HTMLInputElement).value)}
-				/>
-			</label>
+				<div class="meta-select-wrapper">
+					<SearchableSelect
+						entries={POETS}
+						value={metadata.poet}
+						placeholder={t('meta.poet', language)}
+						{language}
+						onchange={handlePoetSelect}
+					/>
+				</div>
+			</div>
+
 			<label class="meta-label">
 				<span class="meta-key">{t('meta.opus', language)}</span>
 				<input
@@ -141,21 +162,32 @@
 		</div>
 	</div>
 
-	<!-- Textarea -->
+	<!-- ── 2. Textarea (taller) ────────────────────────────── -->
 	<textarea
 		class="text-input"
 		placeholder={t('input.placeholder', language)}
 		value={inputText}
 		oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
 		onkeydown={handleKeydown}
-		rows="6"
+		rows="12"
 	></textarea>
 
 	{#if showWarning}
 		<p class="char-warning">{charCount.toLocaleString()} {t('input.warning', language)}</p>
 	{/if}
 
-	<!-- Three equal-width buttons: Clear | Print | Transcribe -->
+	<!-- ── 3. Result summary: flush left under textarea ─────── -->
+	{#if hasResults}
+		<p class="result-summary">
+			{wordCount} {t('result.words', language)} {transcribeMs}ms
+		</p>
+	{/if}
+
+	{#if transcribeError}
+		<p class="error-text">{transcribeError}</p>
+	{/if}
+
+	<!-- ── 4. Button row: Clear | Print | Transcribe ───────── -->
 	<div class="button-row">
 		<button
 			class="action-btn btn-secondary"
@@ -179,40 +211,24 @@
 		</button>
 	</div>
 
-	<!-- Result summary (character count + timer) -->
-	{#if hasResults}
-		<p class="result-summary">
-			{wordCount} {t('result.words', language)} {transcribeMs}ms
-		</p>
-	{/if}
-
-	{#if transcribeError}
-		<p class="error-text">{transcribeError}</p>
-	{/if}
-
-	<!-- Display toggle -->
+	<!-- ── 5. Cosmetic Options (unified: stress acutes + IPA toggles) ── -->
 	<div class="section">
-		<h3 class="section-label">{t('display.heading', language)}</h3>
+		<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
 		<div class="cosmetic-grid">
-			<span class="cosmetic-label-left">{t('display.stressDiacritics.left', language)}</span>
+			<!-- Stress acutes (was in separate Display section) -->
+			<span class="cosmetic-label-left">{t('cosmetic.stressAcutes.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={showStressDiacritics}
 				role="switch"
 				aria-checked={showStressDiacritics}
-				aria-label={t('display.stressDiacritics.left', language)}
+				aria-label={t('cosmetic.stressAcutes.right', language)}
 				onclick={() => onstressdiacriticschange(!showStressDiacritics)}
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('display.stressDiacritics.right', language)}</span>
-		</div>
-	</div>
+			<span class="cosmetic-label-right">{t('cosmetic.stressAcutes.right', language)}</span>
 
-	<!-- Cosmetic Options (IPA display toggles) -->
-	<div class="section">
-		<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
-		<div class="cosmetic-grid">
 			<!-- Reduced vowel -->
 			<span class="cosmetic-label-left">{t('cosmetic.reducedVowel.left', language)}</span>
 			<button
@@ -285,7 +301,7 @@
 		</div>
 	</div>
 
-	<!-- Page size -->
+	<!-- ── 6. Page size ────────────────────────────────────── -->
 	<div class="section">
 		<h3 class="section-label">{t('pageSize.label', language)}</h3>
 		<div class="page-size-toggle">
@@ -365,6 +381,21 @@
 		font-family: var(--font-sans);
 	}
 
+	/* ── Result summary (flush left, directly under textarea) ── */
+
+	.result-summary {
+		font-size: 0.75rem;
+		color: var(--sage);
+		font-family: var(--font-sans);
+		margin-top: -0.4rem;
+	}
+
+	.error-text {
+		font-size: 0.75rem;
+		color: #d97706;
+		font-family: var(--font-sans);
+	}
+
 	/* ── Button row: Clear | Print | Transcribe ────────────── */
 
 	.button-row {
@@ -404,21 +435,7 @@
 		cursor: not-allowed;
 	}
 
-	/* ── Result summary ───────────────────────────────────── */
-
-	.result-summary {
-		font-size: 0.75rem;
-		color: var(--sage);
-		font-family: var(--font-sans);
-	}
-
-	.error-text {
-		font-size: 0.75rem;
-		color: #d97706;
-		font-family: var(--font-sans);
-	}
-
-	/* ── Section labels ───────────────────────────────────── */
+	/* ── Section labels (enlarged smallcaps) ──────────────── */
 
 	.section {
 		margin-top: 0.5rem;
@@ -426,7 +443,7 @@
 
 	.section-label {
 		font-family: var(--font-sans);
-		font-size: 0.7rem;
+		font-size: 1rem;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 1.5px;
 		color: var(--sage);
@@ -471,9 +488,13 @@
 		color: var(--ink-tertiary);
 	}
 
+	.meta-select-wrapper {
+		flex: 1;
+		min-width: 0;
+	}
+
 	/* ── Cosmetic toggle grid ────────────────────────────── */
 	/* Three-column grid: left label | toggle | right label   */
-	/* Toggles form a vertical column; labels flank them.     */
 
 	.cosmetic-grid {
 		display: grid;

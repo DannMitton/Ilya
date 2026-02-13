@@ -42,6 +42,8 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Cosmetic options (IPA display toggles) ───────────────
 	'cosmetic.heading':            { en: 'Cosmetic Options',             fr: 'Options cosmétiques' },
+	'cosmetic.stressAcutes.left':  { en: 'No stress marks',             fr: 'Sans accents toniques' },
+	'cosmetic.stressAcutes.right': { en: 'Apply stress acutes',         fr: 'Appliquer les accents toniques' },
 	'cosmetic.reducedVowel.left':  { en: 'Default [ʌ]',                 fr: 'Par défaut [ʌ]' },
 	'cosmetic.reducedVowel.right': { en: 'Display [ə] instead',         fr: 'Afficher [ə]' },
 	'cosmetic.palatalNasal.left':  { en: 'Palatal nasal [ɲ]',           fr: 'Nasale palatale [ɲ]' },
@@ -53,10 +55,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'cosmetic.reconstitution.left':  { en: 'Reduction',                  fr: 'Réduction' },
 	'cosmetic.reconstitution.right': { en: 'Reconstitution',             fr: 'Reconstitution' },
 
-	// ── Display section ──────────────────────────────────────
+	// ── Legacy display keys (backward compatibility) ─────────
 	'display.heading':             { en: 'Display',                      fr: 'Affichage' },
-	'display.stressDiacritics.left':  { en: 'Stress diacritics',         fr: 'Diacritiques d\u2019accent' },
-	'display.stressDiacritics.right': { en: 'Show acute accent',         fr: 'Afficher l\u2019accent aigu' },
+	'display.stressDiacritics.left':  { en: 'No stress marks',          fr: 'Sans accents toniques' },
+	'display.stressDiacritics.right': { en: 'Apply stress acutes',      fr: 'Appliquer les accents toniques' },
 
 	// ── Legacy notation keys (kept for backward compatibility) ──
 	'notation.heading':            { en: 'Notation',                     fr: 'Notation' },
@@ -105,7 +107,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'stress.unknown':              { en: 'Unknown \u2014 verify manually', fr: 'Inconnu \u2014 vérifier manuellement' },
 
 	// ── Paper empty state ────────────────────────────────────
-	'paper.empty':                 { en: 'To begin, open the drawer and enter your text.', fr: 'Pour commencer, ouvrez le tiroir et saisissez votre texte.' },
+	'paper.empty':                 { en: 'To begin, open the drawer on the left and enter your text.', fr: 'Pour commencer, ouvrez le tiroir à gauche et saisissez votre texte.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -143,6 +145,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'provenance.yo':               { en: 'Stress derived from ё',               fr: 'Accent dérivé de ё' },
 	'provenance.inferred':         { en: 'Stress algorithmically inferred',      fr: 'Accent inféré algorithmiquement' },
 	'provenance.unknown':          { en: 'Unknown stress \u2014 verify manually', fr: 'Accent inconnu \u2014 vérifier manuellement' },
+
+	// ── Searchable select ────────────────────────────────────
+	'select.filter':               { en: 'Type to filter\u2026',         fr: 'Filtrer\u2026' },
+	'select.notInList':            { en: 'Not in list (enter custom)',   fr: 'Absent de la liste (saisir manuellement)' },
 
 	// ── Mobile awareness ─────────────────────────────────────
 	'mobile.heading':              { en: 'Ilya is designed for desktop',       fr: 'Ilya est conçu pour ordinateur' },

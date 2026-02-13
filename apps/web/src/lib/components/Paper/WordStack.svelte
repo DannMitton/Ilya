@@ -169,12 +169,15 @@
 		display: inline-flex;
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: center;
 		position: relative;
 		cursor: pointer;
 		padding: 2px 4px;
 		border-radius: 2px;
 		transition: background-color 150ms ease;
 		line-height: 1.3;
+		box-sizing: border-box;
+		height: 100%;
 	}
 
 	.word-stack:hover {
@@ -186,20 +189,35 @@
 		outline-offset: 2px;
 	}
 
-	/* Inferred stress: dashed border box. Negative margins on top, bottom,
-	   and left cancel the extra space from border+padding so VERIFY stacks
-	   align flush with neighbours. Small right margin adds daylight between
-	   adjacent VERIFY boxes. The VERIFY label below is absolutely positioned
-	   and unaffected by the bottom margin. */
+	/* Inferred stress: dashed outline box.
+	   Outline paints outside the box model — zero layout impact.
+	   Content alignment is identical to non-VERIFY stacks. */
 	.is-inferred {
-		border: 1.5px dashed #78716c;
-		padding: 5px 7px;
-		margin: -4.5px 3px -4.5px -4.5px;
+		position: relative;
+		margin-right: 3px;
 	}
 
-	/* Override focus ring for inferred words so outline doesn't fight border */
+	/* Dashed box via pseudo-element for asymmetric sizing.
+	   Bottom edge drops further to clear gloss descenders and make room for centred VERIFY label. */
+	.is-inferred::before {
+		content: '';
+		position: absolute;
+		top: -2px;
+		left: -2px;
+		right: -2px;
+		bottom: -7px;
+		border: 1.5px dashed #78716c;
+		border-radius: 3px;
+		pointer-events: none;
+	}
+
+	/* Override focus ring for inferred words: sage ring outside the dashed box */
 	.is-inferred:focus-visible {
-		outline-offset: 4px;
+		outline: 2px solid var(--sage);
+		outline-offset: 5px;
+	}
+	.is-inferred:focus-visible::before {
+		display: none;
 	}
 
 	.ipa-row {
@@ -236,7 +254,6 @@
 	}
 
 	.clitic-gloss {
-		color: var(--ink-tertiary);
 		font-style: italic;
 	}
 
@@ -255,7 +272,7 @@
 
 	.icon-area {
 		position: absolute;
-		top: 0;
+		top: -8px;
 		right: 0;
 		display: flex;
 		flex-direction: column;
@@ -276,28 +293,36 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 0.5em;
-		height: 0.5em;
+		width: 16px;
+		height: 16px;
+		border: 1px solid currentColor;
+		border-radius: 50%;
 	}
 
 	.prov-svg {
-		width: 100%;
-		height: 100%;
+		width: 9px;
+		height: 9px;
 	}
 
 	.yo-icon {
 		font-family: var(--font-sans);
 		font-weight: 700;
-		font-size: 10px;
+		font-size: 9px;
 		line-height: 1;
 	}
 
-	/* R sigla for spot reconstitution: thick monoline capital R,
-	   matching visual weight of ё and ? icons */
+	/* R sigla for spot reconstitution: circular, matching provenance icons */
 	.recon-sigla {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		border: 1px solid currentColor;
+		border-radius: 50%;
 		font-family: var(--font-sans);
 		font-weight: 700;
-		font-size: 10px;
+		font-size: 9px;
 		line-height: 1;
 	}
 
@@ -305,16 +330,16 @@
 	   Sits centred on the bottom border, background interrupts the dashed line. */
 	.verify-label {
 		position: absolute;
-		bottom: 0;
+		bottom: -8px;
 		left: 50%;
-		transform: translate(-50%, 50%);
+		transform: translateX(-50%);
 		font-family: var(--font-sans);
-		font-size: 11px;
-		font-variant-caps: all-small-caps;
+		font-size: 8px;
+		font-variant-caps: small-caps;
 		letter-spacing: 0.04em;
 		color: #78716c;
 		background: var(--paper-cream);
-		padding: 0 6px;
+		padding: 0 4px;
 		white-space: nowrap;
 		line-height: 1;
 		z-index: 1;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LegendItem } from '$lib/types';
+	import type { LegendItem } from '$lib/provenance';
 	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
@@ -7,10 +7,10 @@
 		totalPages: number;
 		transcriber?: string;
 		language: Language;
-		legend?: LegendItem[];
+		legendItems?: LegendItem[];
 	}
 
-	let { pageNumber, totalPages, transcriber = '', language, legend = [] }: Props = $props();
+	let { pageNumber, totalPages, transcriber = '', language, legendItems = [] }: Props = $props();
 
 	const attribution1 = $derived(
 		t('footer.attribution1', language).replace('{name}', transcriber || '___')
@@ -19,19 +19,17 @@
 </script>
 
 <footer class="page-footer">
-	<div class="footer-rule"></div>
-
-	{#if legend.length > 0}
-		<div class="legend-row">
-			{#each legend as item}
+	{#if legendItems.length > 0}
+		<div class="provenance-legend">
+			{#each legendItems as item}
 				<span class="legend-item">
 					{#if item.type === 'user-dictionary'}
-						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v13a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-13zM4.5 1a.5.5 0 0 0-.5.5v12h8v-12a.5.5 0 0 0-.5-.5h-7z" fill="currentColor"/></svg>
+						<svg viewBox="0 0 16 16" class="legend-icon" aria-hidden="true"><path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v13a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-13zM4.5 1a.5.5 0 0 0-.5.5v12h8v-12a.5.5 0 0 0-.5-.5h-7z" fill="currentColor"/></svg>
 					{:else if item.type === 'user-composer'}
-						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
+						<svg viewBox="0 0 16 16" class="legend-icon" aria-hidden="true"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
 					{:else if item.type === 'user-override'}
-						<svg viewBox="0 0 16 16" class="legend-icon"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
-					{:else if item.type === 'yo'}
+						<svg viewBox="0 0 16 16" class="legend-icon" aria-hidden="true"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
+					{:else if item.type === 'yo-rule'}
 						<span class="legend-yo">ё</span>
 					{:else if item.type === 'inferred'}
 						<span class="legend-question">?</span>
@@ -43,6 +41,8 @@
 			{/each}
 		</div>
 	{/if}
+
+	<div class="footer-hairline"></div>
 
 	<div class="footer-content">
 		<div class="footer-attribution">
@@ -64,25 +64,22 @@
 <style>
 	.page-footer {
 		position: absolute;
-		bottom: 0;
-		left: 0;
+		bottom: 48px;
+		left: 96px;
+		right: 96px;
+	}
+
+	/* ── Provenance legend (above the footer box) ──────────── */
+
+	.provenance-legend {
+		position: absolute;
 		right: 0;
-		padding: 0 96px 28px;
-	}
-
-	.footer-rule {
-		height: 0;
-		border-top: 0.5px solid var(--sage);
+		bottom: 100%;
 		margin-bottom: 8px;
-	}
-
-	/* ── Provenance legend ─────────────────────────────────── */
-
-	.legend-row {
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: flex-end;
 		gap: 4px 12px;
-		margin-bottom: 6px;
 	}
 
 	.legend-item {
@@ -121,12 +118,19 @@
 
 	.legend-label {
 		font-family: var(--font-sans);
-		font-size: 8.5px;
-		font-variant-caps: all-small-caps;
+		font-size: 9.5px;
+		font-variant-caps: small-caps;
 		letter-spacing: 0.04em;
 	}
 
-	/* ── Footer content ────────────────────────────────────── */
+	/* ── Sage hairline ─────────────────────────────────────── */
+
+	.footer-hairline {
+		border-top: 0.5px solid var(--sage);
+		margin-bottom: 8px;
+	}
+
+	/* ── Attribution and pagination ─────────────────────────── */
 
 	.footer-content {
 		display: flex;
@@ -143,6 +147,7 @@
 		font-size: 9.5px;
 		line-height: 1.45;
 		color: var(--ink-secondary);
+		font-variant-caps: all-small-caps;
 		text-align: justify;
 		margin-bottom: 2px;
 	}

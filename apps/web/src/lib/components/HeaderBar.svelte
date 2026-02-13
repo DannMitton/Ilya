@@ -23,6 +23,10 @@
 </script>
 
 <header class="header-bar">
+	<div class="sigil" aria-label="Ilya">
+		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span>
+	</div>
+
 	<div class="language-toggle">
 		<span
 			class="lang-option"
@@ -52,11 +56,37 @@
 		flex-shrink: 0;
 		display: flex;
 		align-items: center;
-		justify-content: flex-end;
+		justify-content: space-between;
 		padding: 0 16px;
 		border-bottom: 1px solid var(--stone-300);
 		background: var(--app-bg);
 	}
+
+	/* ── [Ilya] sigil: matches paper logo size ───────────── */
+
+	.sigil {
+		display: flex;
+		align-items: baseline;
+		gap: 0;
+		user-select: none;
+	}
+
+	.sigil-bracket {
+		font-family: var(--font-mono, 'SF Mono', 'Fira Code', 'Cascadia Code', monospace);
+		font-size: 22px;
+		color: var(--sage);
+		font-weight: 400;
+	}
+
+	.sigil-name {
+		font-family: var(--font-serif);
+		font-size: 22px;
+		font-style: italic;
+		color: var(--sage);
+		font-weight: 400;
+	}
+
+	/* ── Language toggle ─────────────────────────────────── */
 
 	.language-toggle {
 		display: flex;

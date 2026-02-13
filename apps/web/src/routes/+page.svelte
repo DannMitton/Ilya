@@ -50,13 +50,23 @@
 		drawerCollapsed = true;
 		await tick();
 		if (mainContentEl) {
-			// Centre the Paper's content area in the viewport
-			// Paper is 816px wide, content area centred within it
-			// Scroll so the middle of the page aligns with the middle of the viewport
-			const paperCentreX = 408; // 96px margin + half of 624px content area
-			const viewportWidth = window.innerWidth - 24; // minus drawer lip
-			const scrollX = Math.max(0, paperCentreX - viewportWidth / 2);
-			mainContentEl.scrollLeft = scrollX;
+			// Centre the Paper's hint text area in the viewport.
+			// Horizontal: centre the content area (96px margin + 624px/2 = 408px).
+			// Vertical: hint text sits roughly 400px from page top (header + padding-top 6rem).
+			const contentCentreX = 408;
+			const hintAreaY = 400;
+			const drawerLip = 24;
+			const viewportWidth = window.innerWidth - drawerLip;
+			const viewportHeight = window.innerHeight;
+
+			const scrollX = Math.max(0, contentCentreX - viewportWidth / 2);
+			const scrollY = Math.max(0, hintAreaY - viewportHeight / 2);
+
+			mainContentEl.scrollTo({
+				left: scrollX,
+				top: scrollY,
+				behavior: 'smooth',
+			});
 		}
 	}
 
@@ -372,11 +382,14 @@
 		<div class="mobile-logo">
 			<span class="logo-bracket">[</span><span class="logo-ilya">Ilya</span><span class="logo-bracket">]</span>
 		</div>
-		<h1 class="mobile-heading">{t('mobile.heading', language)}</h1>
-		<p class="mobile-body">{t('mobile.body', language)}</p>
+		<h1 class="mobile-heading">{t('mobile.heading', 'en')}</h1>
+		<p class="mobile-body">{t('mobile.body', 'en')}</p>
 		<button class="mobile-continue" onclick={handleMobileDismiss}>
-			{t('mobile.continue', language)}
+			{t('mobile.continue', 'en')} / {t('mobile.continue', 'fr')}
 		</button>
+		<div class="mobile-divider"></div>
+		<h1 class="mobile-heading">{t('mobile.heading', 'fr')}</h1>
+		<p class="mobile-body">{t('mobile.body', 'fr')}</p>
 	</div>
 </div>
 {/if}
@@ -539,7 +552,7 @@
 		font-size: 1.25rem;
 		font-weight: 600;
 		color: var(--ink-primary, #1a1612);
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.mobile-body {
@@ -547,7 +560,14 @@
 		font-size: 0.95rem;
 		color: var(--ink-secondary, #4a4540);
 		line-height: 1.6;
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.mobile-divider {
+		width: 40px;
+		height: 0;
+		border-top: 0.5px solid var(--stone-300, #d6d3d1);
+		margin: 0.75rem auto 1.25rem;
 	}
 
 	.mobile-continue {
@@ -555,9 +575,10 @@
 		font-size: 0.85rem;
 		color: var(--ink-tertiary, #7a756e);
 		background: none;
-		border: 1px solid var(--stone-300, #d6d3d1);
+		border: 1.5px solid var(--sage, #8B9A7D);
 		border-radius: 4px;
 		padding: 0.5rem 1.25rem;
+		margin-top: 1rem;
 		cursor: pointer;
 		transition: border-color 150ms ease, color 150ms ease;
 	}

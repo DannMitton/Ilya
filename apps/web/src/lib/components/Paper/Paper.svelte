@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
-	import type { LineData, WordStackData, SongMetadata, PageSize, Page } from '$lib/types';
+	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
-	import { t } from '$lib/i18n';
-	import { distributeLinesToPages } from '$lib/paper-manager';
+	import { sliceLinesToPages, formatRunningHeader } from '$lib/page-config';
+	import { buildProvenanceLegend } from '$lib/provenance';
 	import TitlePage from './TitlePage.svelte';
 	import SubsequentPage from './SubsequentPage.svelte';
 
@@ -15,60 +14,57 @@
 		metadata: SongMetadata;
 		pageSize: PageSize;
 		showStressDiacritics?: boolean;
-		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, language, metadata, pageSize, showStressDiacritics = false, spotReconstitution, onwordclick }: Props = $props();
+	let {
+		lines,
+		notationPrefs,
+		language,
+		metadata,
+		pageSize,
+		showStressDiacritics = false,
+		onwordclick,
+	}: Props = $props();
 
-	const hasTranscription = $derived(lines.length > 0);
-	const pages = $derived(distributeLinesToPages(lines, pageSize));
-	const totalPages = $derived(Math.max(pages.length, 1));
+	const pages = $derived(sliceLinesToPages(lines));
+	const totalPages = $derived(pages.length);
+	const runningHeader = $derived(
+		formatRunningHeader(metadata.composer, metadata.title)
+	);
 </script>
 
 <div class="paper-container" role="region" aria-label="Transcription">
-	{#if hasTranscription}
-		{#each pages as page (page.pageIndex)}
-			{#if page.template === 'title'}
-				<TitlePage
-					lines={page.lines}
-					{notationPrefs}
-					{language}
-					{metadata}
-					{pageSize}
-					{totalPages}
-					{showStressDiacritics}
-					{spotReconstitution}
-					{onwordclick}
-				/>
-			{:else}
-				<SubsequentPage
-					pageNumber={page.pageIndex + 1}
-					lines={page.lines}
-					{notationPrefs}
-					{language}
-					{metadata}
-					{pageSize}
-					{totalPages}
-					{showStressDiacritics}
-					{spotReconstitution}
-					{onwordclick}
-				/>
-			{/if}
-		{/each}
-	{:else}
-		<TitlePage
-			lines={[]}
-			{notationPrefs}
-			{language}
-			{metadata}
-			{pageSize}
-			totalPages={1}
-			{showStressDiacritics}
-			{spotReconstitution}
-			{onwordclick}
-		/>
-	{/if}
+	{#each pages as pageLines, i}
+		{@const legendItems = buildProvenanceLegend(pageLines, language)}
+		{#if i === 0}
+			<TitlePage
+				lines={pageLines}
+				{notationPrefs}
+				{language}
+				{metadata}
+				{pageSize}
+				{totalPages}
+				{legendItems}
+				{showStressDiacritics}
+				{onwordclick}
+			/>
+		{:else}
+			<SubsequentPage
+				lines={pageLines}
+				{notationPrefs}
+				{language}
+				{pageSize}
+				pageNumber={i + 1}
+				{totalPages}
+				{runningHeader}
+				{legendItems}
+				transcriber={metadata.transcriber}
+				{showStressDiacritics}
+				{onwordclick}
+			/>
+		{/if}
+	{/each}
 </div>
 
 <style>

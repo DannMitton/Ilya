@@ -1,8 +1,12 @@
 <script lang="ts">
 	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
-	import { PAGE_DIMENSIONS } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import { t, type Language } from '$lib/i18n';
+	import type { Language } from '$lib/i18n';
+	import { t } from '$lib/i18n';
+	import type { LegendItem } from '$lib/provenance';
+	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_GAP, ROW_COUNTS } from '$lib/page-config';
+	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
+	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
 
@@ -13,158 +17,135 @@
 		metadata: SongMetadata;
 		pageSize: PageSize;
 		totalPages: number;
+		legendItems: LegendItem[];
 		showStressDiacritics?: boolean;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { lines, notationPrefs, language, metadata, pageSize, totalPages, showStressDiacritics = false, onwordclick }: Props = $props();
+	let {
+		lines,
+		notationPrefs,
+		language,
+		metadata,
+		pageSize,
+		totalPages,
+		legendItems,
+		showStressDiacritics = false,
+		onwordclick,
+	}: Props = $props();
 
-	const dims = $derived(PAGE_DIMENSIONS[pageSize]);
-	const hasMetadata = $derived(
-		metadata.title || metadata.composer || metadata.poet || metadata.opus
-	);
+	const dims = $derived(PAGE_SIZES[pageSize]);
 	const hasContent = $derived(lines.length > 0);
+
+	/** Transform composer/poet names for paper display: "Given Surname (dates)" */
+	const composerDisplay = $derived(formatNameForPaper(metadata.composer, COMPOSERS));
+	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS));
+
+	/** Content window positioning (px) */
+	const contentTop = MARGINS.vertical + HEADER_HEIGHTS.title + GAP;
+	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 </script>
 
 <div
-	class="paper-page title-page"
+	class="paper-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
-	<!-- Header area -->
-	<div class="title-header">
-		<div class="ilya-logo" aria-label="Ilya">
-			<span class="bracket">[</span><span class="logo-text">Ilya</span><span class="bracket">]</span>
-		</div>
-		{#if hasMetadata}
-			<div class="song-metadata">
-				{#if metadata.title}
-					<h1 class="song-title">{metadata.title}</h1>
-				{/if}
-				<div class="meta-fields">
-					{#if metadata.composer}
-						<span class="meta-field">{metadata.composer}</span>
-					{/if}
-					{#if metadata.opus}
-						<span class="meta-field">{metadata.opus}</span>
-					{/if}
-					{#if metadata.poet}
-						<span class="meta-field">{t('meta.textBy', language)} {metadata.poet}</span>
-					{/if}
-				</div>
-			</div>
-		{/if}
-		<div class="header-rule"></div>
-	</div>
+	<!-- Header layer: absolute, pinned to top margin -->
+	<TitleHeader
+		title={metadata.title}
+		composer={composerDisplay}
+		poet={poetDisplay}
+		opus={metadata.opus}
+		{language}
+	/>
 
-	<!-- Content area -->
-	<div class="page-content">
+	<!-- Content layer: absolute, fixed-height aperture -->
+	<div
+		class="page-content"
+		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-count: {ROW_COUNTS.title}; --row-gap: {ROW_GAP}px;"
+	>
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
-				<div class="verse-line-wrapper">
+				<div class="verse-row">
 					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
 				</div>
 			{/each}
 		{:else}
-			<p class="empty-hint">{t('paper.empty', language)}</p>
+			<div class="empty-directive">
+				<p>{t('paper.empty', language)}</p>
+			</div>
 		{/if}
 	</div>
 
+	<!-- Footer layer: absolute, pinned to bottom margin -->
 	<PageFooter
 		pageNumber={1}
 		{totalPages}
 		transcriber={metadata.transcriber}
 		{language}
+		{legendItems}
 	/>
 </div>
 
 <style>
 	.paper-page {
 		position: relative;
+		box-sizing: border-box;
 		background: var(--paper-cream);
 		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
-		overflow: hidden;
 		flex-shrink: 0;
+		break-after: page;
 	}
 
-	.title-header {
-		padding: 48px 96px 0;
-	}
+	/* ── Content window ────────────────────────────────────── */
 
-	.ilya-logo {
-		font-size: 22px;
-		color: var(--sage);
-		margin-bottom: 20px;
-	}
-
-	.bracket {
-		font-family: var(--font-mono);
-		font-weight: 400;
-	}
-
-	.logo-text {
-		font-family: var(--font-serif);
-		font-style: italic;
-		font-weight: 400;
-	}
-
-	.song-metadata {
-		margin-bottom: 12px;
-	}
-
-	.song-title {
-		font-family: var(--font-serif);
-		font-size: 28px;
-		font-weight: 400;
-		color: var(--ink-primary);
-		margin-bottom: 6px;
-		line-height: 1.2;
-	}
-
-	.meta-fields {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 16px;
-	}
-
-	.meta-field {
-		font-family: var(--font-sans);
-		font-size: 14px;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 1.5px;
-		color: var(--ink-secondary);
-	}
-
-	.header-rule {
-		height: 0;
-		border-top: 0.5px solid var(--sage);
-		margin-top: 12px;
-	}
-
-	/* Content: 92px left padding compensates for WordStack's 4px internal padding,
-	   so text aligns flush with the 96px header rule */
 	.page-content {
-		padding: 16px 96px 0 92px;
+		position: absolute;
+		left: 88px;
+		right: 96px;
+		overflow: hidden;
+		padding-top: 4px;
+		padding-left: 4px;
+
+		display: grid;
+		grid-template-rows: repeat(var(--row-count), var(--row-height));
+		row-gap: var(--row-gap);
+		align-content: start;
 	}
 
-	.verse-line-wrapper {
-		padding-bottom: 8px;
-		margin-bottom: 8px;
-		border-bottom: 0.5px solid rgba(139, 154, 125, 0.2);
+	.verse-row {
+		height: var(--row-height);
+		box-sizing: border-box;
 	}
 
-	.verse-line-wrapper:last-child {
-		border-bottom: none;
-	}
+	/* ── Empty state ───────────────────────────────────────── */
 
-	/* Empty state hint: centred in the content area */
-	.empty-hint {
-		color: var(--ink-tertiary);
-		font-family: var(--font-serif);
-		font-style: italic;
-		font-size: 0.95rem;
+	.empty-directive {
+		grid-column: 1;
+		grid-row: 1 / -1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		text-align: center;
-		padding-top: 6rem;
-		max-width: 280px;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		font-family: var(--font-serif);
+		font-size: 1rem;
+		line-height: 1.6;
+		max-width: 300px;
 		margin: 0 auto;
+	}
+
+	/* ── Print rules ───────────────────────────────────────── */
+
+	@media print {
+		.paper-page {
+			box-shadow: none;
+			background: white;
+		}
+
+		.empty-directive {
+			display: none;
+		}
 	}
 </style>

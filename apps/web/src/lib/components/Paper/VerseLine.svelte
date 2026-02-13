@@ -40,6 +40,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.15rem 0.4rem;
-		align-items: flex-end;
+		align-items: center;
+		height: 100%;
 	}
 </style>
