@@ -12,18 +12,18 @@
 		spotReconstituted?: boolean;
 		onback: () => void;
 		onspotrecontoggle?: () => void;
+		onstressassign?: (syllableIndex: number, source: string) => void;
+		onstressrevert?: () => void;
+		onyotoggle?: () => void;
 	}
 
-	let { word, language, notationPrefs, spotReconstituted = false, onback, onspotrecontoggle }: Props = $props();
+	let { word, language, notationPrefs, spotReconstituted = false, onback, onspotrecontoggle, onstressassign, onstressrevert, onyotoggle }: Props = $props();
 
-	// Whether spot reconstitution is effectively active for this word
+	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
 	const reconActive = $derived(notationPrefs.reconstitution || isSpotActive);
 
-	// Per-entry reconstituted IPA: derived by comparing ipaContent and ipaOwnReconstituted
-	// Both strings have identical structure (reconstitution only substitutes vowels, same length).
-	// We strip spaces and stress marks, walk in parallel with displayLog entries,
-	// and build a map of entry index → reconstituted IPA for entries that differ.
+	// Per-entry reconstituted IPA map (index → reconstituted IPA for entries that differ)
 	const reconstitutedIpaMap = $derived.by((): Map<number, string> => {
 		if (!word.ipaContent || !word.ipaOwnReconstituted) return new Map();
 		if (word.ipaContent === word.ipaOwnReconstituted) return new Map();
@@ -48,8 +48,7 @@
 		return map;
 	});
 
-	// Display IPA in the word header: use ipaContent (pre-merge) for analysis context,
-	// not ipaDisplay (which contains fused clitic material on host words).
+	// Header IPA: use ipaContent (pre-merge) for analysis, not ipaDisplay (fused clitic)
 	const headerIpa = $derived.by(() => {
 		const useReconstituted =
 			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
@@ -59,9 +58,7 @@
 	});
 
 	// ── Ribbon interaction state ────────────────────────────────
-	// Index of the currently selected (revealed) ribbon cell, or -1 if none
 	let selectedCellIndex = $state(-1);
-	// Index of the cell that has roving tabindex focus
 	let focusedCellIndex = $state(0);
 
 	// Reset selection when the inspected word changes
@@ -71,8 +68,7 @@
 		focusedCellIndex = 0;
 	});
 
-	// ── Ribbon entries with clitic arrow ────────────────────────
-	// For clitics, prepend (enclitic) or append (proclitic) a directional arrow cell.
+	// ── Ribbon entries with clitic arrows ────────────────────────
 	interface RibbonEntry {
 		type: 'character' | 'clitic-arrow';
 		entry?: DisplayLogEntry;
@@ -80,13 +76,15 @@
 		ipa: string;
 		index: number;
 		direction?: 'proclitic' | 'enclitic';
+		syllableIndex: number;
 	}
+
+	const isClitic = $derived(word.isProclitic || word.isEnclitic);
 
 	const ribbonEntries = $derived.by((): RibbonEntry[] => {
 		const entries: RibbonEntry[] = [];
 		let idx = 0;
 
-		// Enclitic: arrow first
 		if (word.isEnclitic) {
 			entries.push({
 				type: 'clitic-arrow',
@@ -94,28 +92,29 @@
 				ipa: '',
 				index: idx,
 				direction: 'enclitic',
+				syllableIndex: -1,
 			});
 			idx++;
 		}
 
-		// Character cells from displayLog
 		for (let di = 0; di < word.displayLog.length; di++) {
 			const entry = word.displayLog[di];
 			const baseIpa = entry.ipa ?? '';
 			const displayIpa = reconActive && reconstitutedIpaMap.has(di)
 				? reconstitutedIpaMap.get(di)!
 				: baseIpa;
+			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
 			entries.push({
 				type: 'character',
 				entry,
 				char: entry.char,
 				ipa: displayIpa,
 				index: idx,
+				syllableIndex: si,
 			});
 			idx++;
 		}
 
-		// Proclitic: arrow last
 		if (word.isProclitic) {
 			entries.push({
 				type: 'clitic-arrow',
@@ -123,12 +122,53 @@
 				ipa: '',
 				index: idx,
 				direction: 'proclitic',
+				syllableIndex: -1,
 			});
 			idx++;
 		}
 
 		return entries;
 	});
+
+	// ── Syllable groups for Grayson positional headers ──────────
+	interface SyllableGroup {
+		syllableIndex: number;
+		positionKey: string | null;
+		entries: RibbonEntry[];
+	}
+
+	function getGraysonPositionKey(syllableIndex: number, stressIndex: number): string | null {
+		if (stressIndex < 0) return null;
+		if (syllableIndex === stressIndex) return 'ribbon.stressed';
+		if (syllableIndex === stressIndex - 1) return 'ribbon.immediatePre';
+		if (syllableIndex < stressIndex - 1) return 'ribbon.remotePre';
+		if (syllableIndex === stressIndex + 1) return 'ribbon.immediatePost';
+		return 'ribbon.remotePost';
+	}
+
+	const syllableGroups = $derived.by((): SyllableGroup[] => {
+		const charEntries = ribbonEntries.filter(re => re.type === 'character');
+		if (charEntries.length === 0) return [];
+
+		const groups: SyllableGroup[] = [];
+		let currentGroup: SyllableGroup | null = null;
+
+		for (const re of charEntries) {
+			if (!currentGroup || currentGroup.syllableIndex !== re.syllableIndex) {
+				currentGroup = {
+					syllableIndex: re.syllableIndex,
+					positionKey: getGraysonPositionKey(re.syllableIndex, word.stressIndex),
+					entries: [],
+				};
+				groups.push(currentGroup);
+			}
+			currentGroup.entries.push(re);
+		}
+
+		return groups;
+	});
+
+	const showSyllableGroups = $derived(syllableGroups.length > 0);
 
 	const selectedRibbonEntry = $derived(
 		selectedCellIndex >= 0 && selectedCellIndex < ribbonEntries.length
@@ -152,6 +192,9 @@
 	});
 
 	function handleCellClick(index: number) {
+		const entry = ribbonEntries[index];
+		// Clitic arrows have no blurb
+		if (entry?.type === 'clitic-arrow') return;
 		if (selectedCellIndex === index) {
 			selectedCellIndex = -1;
 		} else {
@@ -216,27 +259,48 @@
 		}
 	}
 
-	// ── Provenance icon ─────────────────────────────────────────
+	// ── Rubric label HTML with hard line breaks ─────────────────
+	function getRubricHtml(positionKey: string, lang: Language): string {
+		const text = t(positionKey, lang);
+		if (positionKey === 'ribbon.stressed') return text;
+		return text.replace(' ', '<br>');
+	}
 
-	const provenanceIcon = $derived((() => {
-		const src = word.stressSource;
-		switch (src) {
-			case 'dictionary':
-				return { type: 'dictionary', colour: '#059669' };
-			case 'supplement':
-				return { type: 'supplement', colour: '#2563eb' };
-			case 'yo-rule':
-			case 'yo-restored':
-				return { type: 'yo', colour: '#7c3aed' };
-			case 'inferred':
-				return { type: 'inferred', colour: '#d97706' };
-			case 'unknown':
-				return { type: 'unknown', colour: '#d97706' };
-			default:
-				return null;
+	// ── Stress assignment state ─────────────────────────────────
+	const isUserStress = $derived(
+		word.stressSource === 'user-dictionary' ||
+		word.stressSource === 'user-composer' ||
+		word.stressSource === 'user-override'
+	);
+
+	const syllableCount = $derived(word.syllables?.length ?? 0);
+
+	const canAssignStress = $derived(
+		!word.isProclitic && !word.isEnclitic && syllableCount > 0
+	);
+
+	let assigningSyllable = $state<number | null>(null);
+	let _prevWord = '';
+
+	function handleSyllableHeaderClick(syllableIndex: number) {
+		if (!canAssignStress) return;
+		if (word.cleanWord !== _prevWord) {
+			_prevWord = word.cleanWord;
+			assigningSyllable = null;
 		}
-	})());
+		if (syllableIndex === word.stressIndex) {
+			assigningSyllable = assigningSyllable === syllableIndex ? null : syllableIndex;
+		} else {
+			assigningSyllable = syllableIndex;
+		}
+	}
 
+	function handleProvenanceChoice(syllableIndex: number, source: string) {
+		onstressassign?.(syllableIndex, source);
+		assigningSyllable = null;
+	}
+
+	// ── Blurb helpers ───────────────────────────────────────────
 	function hasBlurb(entry: DisplayLogEntry): boolean {
 		return !!(entry.blurbData && (
 			(entry.blurbData as Record<string, unknown>).en ||
@@ -262,12 +326,12 @@
 	onkeydown={handlePanelKeydown}
 	tabindex="-1"
 >
-	<!-- Back button -->
+	<!-- ═══ 1. Back button (pill) ═══ -->
 	<button class="back-btn" onclick={onback}>
 		{t('inspector.back', language)}
 	</button>
 
-	<!-- Word header -->
+	<!-- ═══ 2. Word header ═══ -->
 	<div class="word-header">
 		<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
 		<p class="word-ipa">{headerIpa}</p>
@@ -278,62 +342,12 @@
 		{/if}
 	</div>
 
-	<!-- Stress provenance -->
-	<div class="section">
-		<h3 class="section-label">{t('inspector.stress', language)}</h3>
-		<div class="stress-info">
-			{#if word.stressIndex >= 0}
-				<p class="stress-text">
-					{#if provenanceIcon}
-						<span class="provenance-inline" aria-hidden="true">
-							{#if provenanceIcon.type === 'dictionary'}
-								<svg width="12" height="12" viewBox="0 0 10 10">
-									<path d="M1.5 5.5 L4 8 L8.5 2.5" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-								</svg>
-							{:else if provenanceIcon.type === 'supplement'}
-								<svg width="12" height="12" viewBox="0 0 10 10">
-									<path d="M5 0.8 L6.1 3.5 L9 3.7 L6.8 5.8 L7.4 8.8 L5 7.3 L2.6 8.8 L3.2 5.8 L1 3.7 L3.9 3.5 Z" fill={provenanceIcon.colour}/>
-								</svg>
-							{:else if provenanceIcon.type === 'yo'}
-								<svg width="12" height="12" viewBox="0 0 10 10">
-									<text x="5" y="9" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>ё</text>
-								</svg>
-							{:else if provenanceIcon.type === 'inferred'}
-								<svg width="12" height="12" viewBox="0 0 10 10">
-									<path d="M1 6 Q3 3.5, 5 6 Q7 8.5, 9 6" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round"/>
-								</svg>
-							{:else if provenanceIcon.type === 'unknown'}
-								<svg width="12" height="12" viewBox="0 0 10 10">
-									<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
-								</svg>
-							{/if}
-						</span>
-					{/if}
-					{t('inspector.syllable', language)} {word.stressIndex + 1} · {stressSourceLabel(word.stressSource, language)}
-				</p>
-			{:else if word.stressIndex === -1}
-				<p class="stress-text">{t('inspector.clitic', language)}</p>
-			{:else}
-				<p class="stress-text">
-					{#if provenanceIcon}
-						<span class="provenance-inline" aria-hidden="true">
-							<svg width="12" height="12" viewBox="0 0 10 10">
-								<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
-							</svg>
-						</span>
-					{/if}
-					{t('inspector.unknownStress', language)}
-				</p>
-			{/if}
-		</div>
-	</div>
-
-	<!-- Ribbon: click-to-reveal character breakdown -->
+	<!-- ═══ 3. Organism (ribbon + blurb) ═══ -->
 	{#if ribbonEntries.length > 0}
-		<div class="section ribbon-section">
-			<h3 class="section-label">{t('inspector.ribbon', language)}</h3>
+		<div class="organism" class:blurb-open={selectedRibbonEntry !== null}>
+
 			<div
-				class="ribbon"
+				class="ribbon-body"
 				role="listbox"
 				aria-label={t('inspector.ribbon', language)}
 				aria-orientation="horizontal"
@@ -341,87 +355,221 @@
 				bind:this={ribbonEl}
 				tabindex="-1"
 			>
-				{#each ribbonEntries as re, i}
-					{#if re.type === 'clitic-arrow'}
+				<!-- Enclitic arrow (standalone atom, no molecule) -->
+				{#if word.isEnclitic}
+					{@const arrowEntry = ribbonEntries[0]}
+					<div class="syllable-column clitic-column">
+						<div class="rubric-spacer" aria-hidden="true"></div>
 						<button
-							class="ribbon-cell clitic-arrow"
-							class:selected={selectedCellIndex === i}
+							class="atom clitic-atom"
 							role="option"
-							aria-selected={selectedCellIndex === i}
-							aria-label={re.direction === 'enclitic' ? t('inspector.cliticArrow.enclitic', language) : t('inspector.cliticArrow.proclitic', language)}
-							tabindex={focusedCellIndex === i ? 0 : -1}
-							data-cell-id="{word.lineIndex}-{word.wordIndex}-{i}"
-							onclick={() => handleCellClick(i)}
+							aria-selected={false}
+							aria-label={t('inspector.cliticArrow.enclitic', language)}
+							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+							onclick={() => handleCellClick(arrowEntry.index)}
 						>
-							<span class="ribbon-arrow-icon">{re.char}</span>
+							<span class="atom-arrow-icon">{arrowEntry.char}</span>
 						</button>
-					{:else}
+						<div class="ordinal-spacer" aria-hidden="true"></div>
+					</div>
+				{/if}
+
+				<!-- Syllable columns -->
+				{#if showSyllableGroups}
+					{#each syllableGroups as group, gi}
+						<div class="syllable-column" role="group" aria-label="Syllable {group.syllableIndex + 1}">
+							<!-- Rubric label (Grayson positional, clickable for stress) -->
+							<button
+								class="rubric-label"
+								class:can-assign={canAssignStress}
+								class:is-stressed={group.syllableIndex === word.stressIndex && !isClitic}
+								onclick={() => handleSyllableHeaderClick(group.syllableIndex)}
+								disabled={!canAssignStress}
+								aria-label="Assign stress to syllable {group.syllableIndex + 1}"
+							>
+								{#if isClitic}
+									{t('ribbon.unstressed', language)}
+								{:else if group.positionKey}
+									{@html getRubricHtml(group.positionKey, language)}
+								{/if}
+							</button>
+
+							<!-- Molecule (syllable bounding box) -->
+							<div
+								class="molecule"
+								class:is-stressed={group.syllableIndex === word.stressIndex && !isClitic}
+							>
+								{#each group.entries as re, ai}
+									<button
+										class="atom"
+										class:stressed-vowel={re.entry?.features?.stressed && !isClitic}
+										class:selected={selectedCellIndex === re.index}
+										class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+										role="option"
+										aria-selected={selectedCellIndex === re.index}
+										tabindex={focusedCellIndex === re.index ? 0 : -1}
+										data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
+										onclick={() => handleCellClick(re.index)}
+									>
+										<span class="atom-char">{re.char}</span>
+										<span class="atom-arrow">↓</span>
+										<span class="atom-ipa">{re.ipa || '∅'}</span>
+									</button>
+								{/each}
+							</div>
+
+							<!-- Ordinal with stress dot -->
+							<div class="ordinal">
+								{#if group.syllableIndex === word.stressIndex && !isClitic}
+									<span class="stress-dot" aria-hidden="true"></span>
+								{/if}
+								<span class="ordinal-num">{group.syllableIndex + 1}</span>
+							</div>
+						</div>
+					{/each}
+				{:else}
+					<!-- Fallback: flat ribbon when no syllable data -->
+					{#each ribbonEntries.filter(re => re.type === 'character') as re}
+						<div class="syllable-column">
+							<div class="rubric-spacer" aria-hidden="true"></div>
+							<div class="molecule">
+								<button
+									class="atom"
+									class:selected={selectedCellIndex === re.index}
+									class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+									role="option"
+									aria-selected={selectedCellIndex === re.index}
+									tabindex={focusedCellIndex === re.index ? 0 : -1}
+									data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
+									onclick={() => handleCellClick(re.index)}
+								>
+									<span class="atom-char">{re.char}</span>
+									<span class="atom-arrow">↓</span>
+									<span class="atom-ipa">{re.ipa || '∅'}</span>
+								</button>
+							</div>
+							<div class="ordinal-spacer" aria-hidden="true"></div>
+						</div>
+					{/each}
+				{/if}
+
+				<!-- Proclitic arrow (standalone atom, no molecule) -->
+				{#if word.isProclitic}
+					{@const arrowEntry = ribbonEntries[ribbonEntries.length - 1]}
+					<div class="syllable-column clitic-column">
+						<div class="rubric-spacer" aria-hidden="true"></div>
 						<button
-							class="ribbon-cell"
-							class:stressed={re.entry?.features?.stressed}
-							class:selected={selectedCellIndex === i}
-							class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+							class="atom clitic-atom"
 							role="option"
-							aria-selected={selectedCellIndex === i}
-							tabindex={focusedCellIndex === i ? 0 : -1}
-							data-cell-id="{word.lineIndex}-{word.wordIndex}-{i}"
-							onclick={() => handleCellClick(i)}
+							aria-selected={false}
+							aria-label={t('inspector.cliticArrow.proclitic', language)}
+							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+							onclick={() => handleCellClick(arrowEntry.index)}
 						>
-							<span class="ribbon-char">{re.char}</span>
-							<span class="ribbon-arrow">↓</span>
-							<span class="ribbon-ipa">{re.ipa || '∅'}</span>
+							<span class="atom-arrow-icon">{arrowEntry.char}</span>
 						</button>
-					{/if}
-				{/each}
+						<div class="ordinal-spacer" aria-hidden="true"></div>
+					</div>
+				{/if}
 			</div>
 
-			<!-- Detail box with speech-bubble caret -->
-			{#if selectedRibbonEntry}
-				<div class="detail-container">
-					<div
-						class="detail-caret"
-						style="left: {caretLeft}px"
-					></div>
-					<div class="detail-box" aria-live="polite">
-						{#if selectedRibbonEntry.type === 'clitic-arrow'}
-							<p class="detail-header">
-								<span class="detail-char">{selectedRibbonEntry.char}</span>
-								<span class="detail-arrow">·</span>
-								<span class="detail-ipa">
-									{selectedRibbonEntry.direction === 'enclitic'
-										? t('inspector.cliticArrow.encliticLabel', language)
-										: t('inspector.cliticArrow.procliticLabel', language)}
-								</span>
-							</p>
-							<p class="detail-blurb">
-								{selectedRibbonEntry.direction === 'enclitic'
-									? t('inspector.cliticArrow.encliticBlurb', language)
-									: t('inspector.cliticArrow.procliticBlurb', language)}
-							</p>
-						{:else if selectedRibbonEntry.entry}
-							<p class="detail-header">
-								<span class="detail-char">{selectedRibbonEntry.char}</span>
-								<span class="detail-arrow">→</span>
-								<span class="detail-ipa">{selectedRibbonEntry.ipa || '∅'}</span>
-							</p>
-							{#if hasBlurb(selectedRibbonEntry.entry)}
-								<p class="detail-blurb">{getBlurbText(selectedRibbonEntry.entry, language)}</p>
-							{:else}
-								<p class="detail-no-blurb">{t('inspector.noBlurb', language)}</p>
-							{/if}
-						{/if}
-					</div>
+			<!-- Blurb area (inside organism, below ribbon body) -->
+			<div class="blurb-wrapper" class:open={selectedRibbonEntry !== null}>
+				<div class="blurb-inner">
+					{#if selectedRibbonEntry}
+						<div class="blurb-container">
+							<!-- SVG caret: 16x10px, sage border on angled sides only -->
+							<svg
+								class="blurb-caret"
+								width="16"
+								height="10"
+								viewBox="0 0 16 10"
+								aria-hidden="true"
+								style="left: {caretLeft}px"
+							>
+								<polygon points="0,10 8,0 16,10" fill="#F5F0E8" />
+								<polyline points="0,10 8,0 16,10" fill="none" stroke="var(--sage)" stroke-width="2" stroke-linejoin="round" />
+							</svg>
+							<div class="blurb-box" aria-live="polite">
+								{#if selectedRibbonEntry.entry}
+									<p class="blurb-header">
+										<span class="blurb-char">{selectedRibbonEntry.char}</span>
+										<span class="blurb-arrow-sep">→</span>
+										<span class="blurb-ipa">{selectedRibbonEntry.ipa || '∅'}</span>
+									</p>
+									{#if hasBlurb(selectedRibbonEntry.entry)}
+										<p class="blurb-text">{getBlurbText(selectedRibbonEntry.entry, language)}</p>
+									{:else}
+										<p class="blurb-no-text">{t('inspector.noBlurb', language)}</p>
+									{/if}
+								{/if}
+							</div>
+						</div>
+					{/if}
 				</div>
-			{/if}
+			</div>
 		</div>
 	{/if}
 
-	<!-- Spot reconstitution toggle: only when reconstituted IPA differs from default -->
+	<!-- ═══ 4. Provenance section (below organism) ═══ -->
+	{#if !isClitic}
+	<div class="section provenance-section">
+		<h3 class="section-label">{t('inspector.provenance', language)}</h3>
+		<div class="provenance-body">
+			{#if word.stressIndex >= 0}
+				<p class="provenance-status">
+					{t('inspector.syllable', language)} {word.stressIndex + 1} · {stressSourceLabel(word.stressSource, language)}
+				</p>
+			{:else}
+				<p class="provenance-status">{t('inspector.unknownStress', language)}</p>
+			{/if}
+
+			<!-- ё ↔ е toggle -->
+			{#if word.yoAlternation && word.yoAlternateForm}
+				<button class="provenance-link yo-link" onclick={() => onyotoggle?.()}>
+					{t('inspector.yoToggle', language)}
+				</button>
+			{:else}
+				<span class="provenance-link yo-link disabled" aria-hidden="true">
+					{t('inspector.yoToggle', language)}
+				</span>
+			{/if}
+
+			<!-- Stress assignment: provenance chooser (when assigning) -->
+			{#if assigningSyllable !== null}
+				<div class="provenance-chooser">
+					<span class="provenance-chooser-label">{t('inspector.syllable', language)} {assigningSyllable + 1}:</span>
+					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-dictionary')}>
+						{t('inspector.stressAssign.dictionary', language)}
+					</button>
+					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-composer')}>
+						{t('inspector.stressAssign.composer', language)}
+					</button>
+					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-override')}>
+						{t('inspector.stressAssign.myAssignment', language)}
+					</button>
+				</div>
+			{/if}
+
+			<!-- Revert link for user-assigned stress -->
+			{#if isUserStress}
+				<div class="provenance-revert">
+					<button class="provenance-link" onclick={() => onstressrevert?.()}>
+						{t('inspector.stressAssign.dictionary', language)}
+					</button>
+				</div>
+			{/if}
+		</div>
+	</div>
+	{/if}
+
+	<!-- ═══ 5. Spot reconstitution toggle ═══ -->
 	{#if word.ipaReconstituted && word.ipaReconstituted !== word.ipaDisplay}
 		<div class="section">
 			<h3 class="section-label">{t('inspector.spotRecon.heading', language)}</h3>
 			{#if notationPrefs.reconstitution}
-				<!-- Global reconstitution is on: show disabled state with explanation -->
 				<div class="spot-recon-disabled">
 					<div class="spot-recon-row">
 						<span class="spot-label left">{t('inspector.spotRecon.left', language)}</span>
@@ -440,7 +588,6 @@
 					<p class="spot-hint">{t('inspector.spotRecon.globalOn', language)}</p>
 				</div>
 			{:else}
-				<!-- Per-word toggle active -->
 				<div class="spot-recon-row">
 					<span class="spot-label left" class:active={!spotReconstituted}>{t('inspector.spotRecon.left', language)}</span>
 					<button
@@ -459,7 +606,7 @@
 		</div>
 	{/if}
 
-	<!-- Notation indicator (read-only) -->
+	<!-- ═══ 6. Notation indicator ═══ -->
 	<div class="section notation-indicator">
 		<p class="notation-note">{t('inspector.notationDefault', language)}</p>
 	</div>
@@ -487,26 +634,34 @@
 		}
 	}
 
-	/* ── Back button ─────────────────────────────────────────── */
+	/* ═══ 1. Back button (pill) ═══════════════════════════════════ */
 
 	.back-btn {
-		background: none;
-		border: none;
-		color: var(--sage);
+		background: transparent;
+		border: 1.5px solid var(--stone-300);
+		border-radius: 999px;
+		color: var(--ink-secondary);
 		cursor: pointer;
 		font-family: var(--font-sans);
-		font-size: 0.85rem;
-		padding: 0.25rem 0;
+		font-size: 0.8rem;
+		font-weight: 500;
+		padding: 6px 16px;
 		margin-bottom: 1rem;
 		text-align: left;
 		width: fit-content;
+		transition: border-color 150ms ease, color 150ms ease;
 	}
 
 	.back-btn:hover {
-		text-decoration: underline;
+		border-color: var(--stone-500, #78716c);
+		color: var(--ink-primary);
 	}
 
-	/* ── Word header ─────────────────────────────────────────── */
+	.back-btn:active {
+		border-color: var(--sage);
+	}
+
+	/* ═══ 2. Word header ═════════════════════════════════════════ */
 
 	.word-header {
 		margin-bottom: 1.5rem;
@@ -552,7 +707,326 @@
 		line-height: 1.4;
 	}
 
-	/* ── Sections ──────────────────────────────────────────────── */
+	/* ═══ 3. Organism (ribbon frame) ═════════════════════════════ */
+
+	.organism {
+		border-top: 1px solid var(--stone-300);
+		border-bottom: 1px solid var(--stone-300);
+		padding: 12px 0 8px;
+		margin-bottom: 1.25rem;
+	}
+
+	/* ── Ribbon body: flex row of syllable columns ─────────────── */
+
+	.ribbon-body {
+		display: flex;
+		align-items: flex-end;
+		gap: 12px;
+		flex-wrap: wrap;
+		row-gap: 8px;
+	}
+
+	/* ── Syllable column: rubric + molecule + ordinal ─────────── */
+
+	.syllable-column {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0;
+		flex-shrink: 0;
+	}
+
+	.clitic-column {
+		align-self: flex-end;
+	}
+
+	/* ── Rubric labels (Grayson positional headers) ───────────── */
+
+	.rubric-label {
+		font-family: var(--font-sans);
+		font-size: 0.6rem;
+		font-weight: 400;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.08em;
+		color: var(--ink-secondary);
+		line-height: 1.2;
+		text-align: center;
+		min-height: 28px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 0 2px 4px;
+		background: none;
+		border: none;
+		border-radius: 3px;
+		cursor: default;
+		width: 100%;
+		transition: background-color 150ms ease;
+	}
+
+	.rubric-label.can-assign {
+		cursor: pointer;
+	}
+
+	.rubric-label.can-assign:hover {
+		background: rgba(139, 154, 125, 0.08);
+	}
+
+	.rubric-label.is-stressed {
+		color: var(--ink-primary);
+		font-weight: 500;
+	}
+
+	.rubric-spacer {
+		min-height: 28px;
+		padding-bottom: 4px;
+	}
+
+	/* ── Molecules (syllable bounding boxes) ─────────────────── */
+
+	.molecule {
+		display: flex;
+		gap: 2px;
+		padding: 3px;
+		border: 1px solid var(--stone-300);
+		border-radius: 6px;
+		transition: border-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.molecule.is-stressed {
+		border: 2px solid var(--sage);
+		padding: 2px;
+		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.2);
+	}
+
+	/* ── Atoms (glyph cells) ─────────────────────────────────── */
+
+	.atom {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 3px;
+		width: 32px;
+		min-height: 72px;
+		padding: 8px 0;
+		background: var(--paper-cream);
+		border: 1px solid var(--stone-300);
+		border-radius: 4px;
+		cursor: pointer;
+		font-family: inherit;
+		transition: border-color 150ms ease, background-color 150ms ease;
+		user-select: none;
+	}
+
+	.atom:hover {
+		background: #faf8f4;
+		border-color: var(--sage);
+	}
+
+	.atom:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: -2px;
+		z-index: 1;
+	}
+
+	.atom.stressed-vowel {
+		background: #fdf6e8;
+	}
+
+	.atom.selected {
+		background: #FAF7F2;
+		border-color: var(--sage);
+		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
+	}
+
+	/* Subtle blurb indicator dot */
+	.atom.has-blurb::after {
+		content: '';
+		display: block;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--sage);
+		opacity: 0.4;
+		margin-top: 1px;
+	}
+
+	.atom.selected.has-blurb::after {
+		opacity: 0.8;
+	}
+
+	.atom-char {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--ink-primary);
+		line-height: 1;
+	}
+
+	.atom-arrow {
+		font-size: 0.6rem;
+		color: var(--ink-tertiary);
+		line-height: 1;
+	}
+
+	.atom-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		color: var(--ink-secondary);
+		line-height: 1;
+	}
+
+	/* ── Clitic arrow atom (standalone, no molecule) ──────────── */
+
+	.clitic-atom {
+		width: 32px;
+		min-height: 72px;
+		padding: 8px 0;
+		background: transparent;
+		border: 1px solid var(--stone-200, #e7e5e4);
+		border-radius: 0;
+		cursor: default;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: inherit;
+	}
+
+	.atom-arrow-icon {
+		font-size: 1.1rem;
+		color: var(--stone-400, #a8a29e);
+		font-weight: 600;
+		line-height: 1;
+	}
+
+	/* ── Ordinals ────────────────────────────────────────────── */
+
+	.ordinal {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 3px;
+		padding-top: 6px;
+		padding-left: 2px;
+	}
+
+	.ordinal-num {
+		font-family: var(--font-sans);
+		font-size: 0.6rem;
+		color: var(--ink-secondary);
+		line-height: 1;
+	}
+
+	.ordinal-spacer {
+		padding-top: 6px;
+		min-height: 12px;
+	}
+
+	.stress-dot {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--sage);
+		flex-shrink: 0;
+	}
+
+	/* ═══ Blurb (inside organism, below ribbon body) ══════════════ */
+
+	.blurb-wrapper {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 250ms ease;
+	}
+
+	.blurb-wrapper.open {
+		grid-template-rows: 1fr;
+	}
+
+	.blurb-inner {
+		overflow: hidden;
+	}
+
+	.blurb-container {
+		position: relative;
+		margin-top: 14px;
+		padding-bottom: 4px;
+		animation: blurbFadeIn 250ms ease both;
+	}
+
+	@keyframes blurbFadeIn {
+		from {
+			opacity: 0;
+			transform: scale(0.98) translateY(4px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+	}
+
+	.blurb-caret {
+		position: absolute;
+		top: -9px;
+		margin-left: -8px;
+		z-index: 1;
+		overflow: visible;
+		transition: left 200ms ease;
+	}
+
+	.blurb-box {
+		background: #F5F0E8;
+		border: 2px solid var(--sage);
+		border-radius: 6px;
+		padding: 16px;
+		max-height: 200px;
+		overflow-y: auto;
+		box-shadow: 0 4px 12px rgba(26, 22, 18, 0.08);
+	}
+
+	.blurb-header {
+		display: flex;
+		align-items: baseline;
+		gap: 0.35rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.blurb-char {
+		font-family: var(--font-serif);
+		font-variant-caps: all-small-caps;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--ink-primary);
+		letter-spacing: 0.03em;
+	}
+
+	.blurb-arrow-sep {
+		font-size: 0.7rem;
+		color: var(--ink-tertiary);
+	}
+
+	.blurb-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.95rem;
+		color: var(--ink-secondary);
+	}
+
+	.blurb-text {
+		font-family: var(--font-serif);
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink-secondary);
+	}
+
+	.blurb-no-text {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+	}
+
+	/* ═══ 4. Provenance section ══════════════════════════════════ */
 
 	.section {
 		margin-bottom: 1.25rem;
@@ -568,208 +1042,93 @@
 		margin-bottom: 0.5rem;
 	}
 
-	/* ── Stress info ─────────────────────────────────────────── */
+	.provenance-section {
+		/* Extra top spacing after organism */
+	}
 
-	.stress-info {
+	.provenance-body {
 		font-family: var(--font-sans);
 		font-size: 0.85rem;
 		color: var(--ink-primary);
 	}
 
-	.stress-text {
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
+	.provenance-status {
+		line-height: 1.4;
 	}
 
-	.provenance-inline {
-		display: inline-flex;
-		align-items: center;
-		flex-shrink: 0;
+	/* ── Provenance text links ───────────────────────────────── */
+
+	.provenance-link {
+		background: none;
+		border: none;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--sage);
+		cursor: pointer;
+		padding: 0.2rem 0;
+		display: inline-block;
+		text-align: left;
+		transition: color 150ms ease;
 	}
 
-	/* ── Ribbon: clickable character cells ─────────────────────── */
+	.provenance-link:hover {
+		text-decoration: underline;
+		color: #6b7d5f;
+	}
 
-	.ribbon {
+	.provenance-link.disabled {
+		opacity: 0.35;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.yo-link {
+		display: block;
+		margin-top: 0.25rem;
+	}
+
+	/* ── Provenance chooser (stress source selection) ──────── */
+
+	.provenance-chooser {
 		display: flex;
+		gap: 0.25rem;
 		flex-wrap: wrap;
-		gap: 0.1rem;
+		align-items: baseline;
+		margin-top: 0.5rem;
+		padding: 6px 0;
 	}
 
-	.ribbon-cell {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.1rem;
-		padding: 0.3rem 0.3rem;
+	.provenance-chooser-label {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-secondary);
+		margin-right: 0.25rem;
+	}
+
+	.provenance-choice {
 		background: var(--paper-cream);
 		border: 1px solid var(--stone-300);
-		border-radius: 4px;
-		min-width: 1.75rem;
+		border-radius: 3px;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		color: var(--ink-secondary);
 		cursor: pointer;
-		font-family: inherit;
-		transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+		padding: 2px 8px;
+		white-space: nowrap;
+		transition: border-color 150ms ease, background-color 150ms ease;
 	}
 
-	.ribbon-cell:hover {
+	.provenance-choice:hover {
 		border-color: var(--sage);
 		background: #faf8f4;
-	}
-
-	.ribbon-cell:focus-visible {
-		outline: 2px solid var(--sage);
-		outline-offset: 1px;
-	}
-
-	.ribbon-cell.stressed {
-		background: #fdf6e8;
-		border-color: var(--sage);
-	}
-
-	.ribbon-cell.selected {
-		border: 2px solid var(--sage);
-		background: #FAF7F2;
-		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
-	}
-
-	/* Subtle dot indicator that a cell has a blurb */
-	.ribbon-cell.has-blurb::after {
-		content: '';
-		display: block;
-		width: 4px;
-		height: 4px;
-		border-radius: 50%;
-		background: var(--sage);
-		opacity: 0.4;
-		margin-top: 1px;
-	}
-
-	.ribbon-cell.selected.has-blurb::after {
-		opacity: 0.8;
-	}
-
-	/* Clitic directional arrow cell */
-	.ribbon-cell.clitic-arrow {
-		background: transparent;
-		border-color: var(--sage);
-		border-style: dashed;
-		min-width: 1.5rem;
-		justify-content: center;
-	}
-
-	.ribbon-cell.clitic-arrow.selected {
-		background: #FAF7F2;
-		border-style: solid;
-	}
-
-	.ribbon-arrow-icon {
-		font-size: 1.1rem;
-		color: var(--sage);
-		font-weight: 600;
-		line-height: 1;
-	}
-
-	.ribbon-char {
-		font-family: var(--font-serif);
-		font-size: 1rem;
-		font-weight: 600;
 		color: var(--ink-primary);
 	}
 
-	.ribbon-arrow {
-		font-size: 0.6rem;
-		color: var(--ink-tertiary);
-		line-height: 1;
+	.provenance-revert {
+		margin-top: 0.25rem;
 	}
 
-	.ribbon-ipa {
-		font-family: var(--font-sans);
-		font-size: 0.95rem;
-		color: var(--ink-secondary);
-	}
-
-	/* ── Detail box with speech-bubble caret ───────────────────── */
-
-	.detail-container {
-		position: relative;
-		margin-top: 12px;
-	}
-
-	.detail-caret {
-		position: absolute;
-		top: -8px;
-		width: 12px;
-		height: 8px;
-		margin-left: -6px;
-		clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-		background: #F5F0E8;
-		z-index: 1;
-		transition: left 200ms ease;
-	}
-
-	.detail-box {
-		background: #F5F0E8;
-		border: 1px solid var(--stone-300);
-		border-radius: 4px;
-		padding: 16px;
-		max-height: 200px;
-		overflow-y: auto;
-		animation: detailIn 250ms ease forwards;
-	}
-
-	@keyframes detailIn {
-		from {
-			opacity: 0;
-			transform: translateY(-4px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	.detail-header {
-		display: flex;
-		align-items: baseline;
-		gap: 0.35rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.detail-char {
-		font-family: var(--font-serif);
-		font-variant-caps: all-small-caps;
-		font-size: 13px;
-		font-weight: 600;
-		color: var(--ink-primary);
-		letter-spacing: 0.03em;
-	}
-
-	.detail-arrow {
-		font-size: 0.7rem;
-		color: var(--ink-tertiary);
-	}
-
-	.detail-ipa {
-		font-family: var(--font-sans);
-		font-size: 0.95rem;
-		color: var(--ink-secondary);
-	}
-
-	.detail-blurb {
-		font-family: var(--font-serif);
-		font-size: 15px;
-		line-height: 1.6;
-		color: var(--ink-secondary);
-	}
-
-	.detail-no-blurb {
-		font-family: var(--font-serif);
-		font-size: 0.85rem;
-		color: var(--ink-tertiary);
-		font-style: italic;
-	}
-
-	/* ── Spot reconstitution toggle ──────────────────────────── */
+	/* ═══ 5. Spot reconstitution toggle ══════════════════════════ */
 
 	.spot-recon-row {
 		display: flex;
@@ -842,7 +1201,7 @@
 		line-height: 1.4;
 	}
 
-	/* ── Notation indicator ──────────────────────────────────── */
+	/* ═══ 6. Notation indicator ══════════════════════════════════ */
 
 	.notation-indicator {
 		margin-top: auto;

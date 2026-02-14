@@ -1,0 +1,1247 @@
+<script lang="ts">
+	import type { WordStackData } from '$lib/types';
+	import type { DisplayLogEntry } from '@ilya/blurb';
+	import { applyNotationPreferences } from '@ilya/phonology';
+	import type { NotationPreferences } from '@ilya/phonology';
+	import { t, stressSourceLabel, type Language } from '$lib/i18n';
+
+	interface Props {
+		word: WordStackData;
+		language: Language;
+		notationPrefs: NotationPreferences;
+		spotReconstituted?: boolean;
+		onback: () => void;
+		onspotrecontoggle?: () => void;
+		onstressassign?: (syllableIndex: number, source: string) => void;
+		onstressrevert?: () => void;
+		onyotoggle?: () => void;
+	}
+
+	let { word, language, notationPrefs, spotReconstituted = false, onback, onspotrecontoggle, onstressassign, onstressrevert, onyotoggle }: Props = $props();
+
+	// Whether spot reconstitution is effectively active for this word
+	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
+	const reconActive = $derived(notationPrefs.reconstitution || isSpotActive);
+
+	// Per-entry reconstituted IPA: derived by comparing ipaContent and ipaOwnReconstituted
+	// Both strings have identical structure (reconstitution only substitutes vowels, same length).
+	// We strip spaces and stress marks, walk in parallel with displayLog entries,
+	// and build a map of entry index → reconstituted IPA for entries that differ.
+	const reconstitutedIpaMap = $derived.by((): Map<number, string> => {
+		if (!word.ipaContent || !word.ipaOwnReconstituted) return new Map();
+		if (word.ipaContent === word.ipaOwnReconstituted) return new Map();
+
+		const strip = (s: string) => s.replace(/[\sˈ]/g, '');
+		const orig = strip(word.ipaContent);
+		const recon = strip(word.ipaOwnReconstituted);
+
+		if (orig.length !== recon.length) return new Map();
+
+		const map = new Map<number, string>();
+		let pos = 0;
+		for (let i = 0; i < word.displayLog.length; i++) {
+			const entryIpa = word.displayLog[i].ipa ?? '';
+			if (entryIpa.length === 0) continue;
+			const reconIpa = recon.substring(pos, pos + entryIpa.length);
+			if (reconIpa !== entryIpa) {
+				map.set(i, reconIpa);
+			}
+			pos += entryIpa.length;
+		}
+		return map;
+	});
+
+	// Display IPA in the word header: use ipaContent (pre-merge) for analysis context,
+	// not ipaDisplay (which contains fused clitic material on host words).
+	const headerIpa = $derived.by(() => {
+		const useReconstituted =
+			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
+			(isSpotActive && word.ipaOwnReconstituted);
+		const base = useReconstituted ? word.ipaOwnReconstituted : word.ipaContent;
+		return base ? applyNotationPreferences(base, notationPrefs) : '';
+	});
+
+	// ── Ribbon interaction state ────────────────────────────────
+	// Index of the currently selected (revealed) ribbon cell, or -1 if none
+	let selectedCellIndex = $state(-1);
+	// Index of the cell that has roving tabindex focus
+	let focusedCellIndex = $state(0);
+
+	// Reset selection when the inspected word changes
+	$effect(() => {
+		void word.cleanWord;
+		selectedCellIndex = -1;
+		focusedCellIndex = 0;
+	});
+
+	// ── Ribbon entries with clitic arrow ────────────────────────
+	// For clitics, prepend (enclitic) or append (proclitic) a directional arrow cell.
+	interface RibbonEntry {
+		type: 'character' | 'clitic-arrow';
+		entry?: DisplayLogEntry;
+		char: string;
+		ipa: string;
+		index: number;
+		direction?: 'proclitic' | 'enclitic';
+		syllableIndex: number;
+	}
+
+	const ribbonEntries = $derived.by((): RibbonEntry[] => {
+		const entries: RibbonEntry[] = [];
+		let idx = 0;
+
+		// Enclitic: arrow first
+		if (word.isEnclitic) {
+			entries.push({
+				type: 'clitic-arrow',
+				char: '←',
+				ipa: '',
+				index: idx,
+				direction: 'enclitic',
+				syllableIndex: -1,
+			});
+			idx++;
+		}
+
+		// Character cells from displayLog
+		for (let di = 0; di < word.displayLog.length; di++) {
+			const entry = word.displayLog[di];
+			const baseIpa = entry.ipa ?? '';
+			const displayIpa = reconActive && reconstitutedIpaMap.has(di)
+				? reconstitutedIpaMap.get(di)!
+				: baseIpa;
+			// syllableIndex is present on every DisplayLogEntry (confirmed in Task 6c)
+			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			entries.push({
+				type: 'character',
+				entry,
+				char: entry.char,
+				ipa: displayIpa,
+				index: idx,
+				syllableIndex: si,
+			});
+			idx++;
+		}
+
+		// Proclitic: arrow last
+		if (word.isProclitic) {
+			entries.push({
+				type: 'clitic-arrow',
+				char: '→',
+				ipa: '',
+				index: idx,
+				direction: 'proclitic',
+				syllableIndex: -1,
+			});
+			idx++;
+		}
+
+		return entries;
+	});
+
+	// ── Syllable groups for Grayson positional headers ──────────
+	interface SyllableGroup {
+		syllableIndex: number;
+		positionKey: string | null;
+		entries: RibbonEntry[];
+	}
+
+	function getGraysonPositionKey(syllableIndex: number, stressIndex: number): string | null {
+		if (stressIndex < 0) return null; // Clitics and unknown: no positional label
+		if (syllableIndex === stressIndex) return 'ribbon.stressed';
+		if (syllableIndex === stressIndex - 1) return 'ribbon.immediatePre';
+		if (syllableIndex < stressIndex - 1) return 'ribbon.remotePre';
+		if (syllableIndex === stressIndex + 1) return 'ribbon.immediatePost';
+		return 'ribbon.remotePost';
+	}
+
+	const syllableGroups = $derived.by((): SyllableGroup[] => {
+		const charEntries = ribbonEntries.filter(re => re.type === 'character');
+		if (charEntries.length === 0) return [];
+
+		const groups: SyllableGroup[] = [];
+		let currentGroup: SyllableGroup | null = null;
+
+		for (const re of charEntries) {
+			if (!currentGroup || currentGroup.syllableIndex !== re.syllableIndex) {
+				currentGroup = {
+					syllableIndex: re.syllableIndex,
+					positionKey: getGraysonPositionKey(re.syllableIndex, word.stressIndex),
+					entries: [],
+				};
+				groups.push(currentGroup);
+			}
+			currentGroup.entries.push(re);
+		}
+
+		return groups;
+	});
+
+	// Whether we have meaningful syllable data to show groups
+	const showSyllableGroups = $derived(syllableGroups.length > 0);
+
+	const selectedRibbonEntry = $derived(
+		selectedCellIndex >= 0 && selectedCellIndex < ribbonEntries.length
+			? ribbonEntries[selectedCellIndex]
+			: null
+	);
+
+	// ── Caret positioning via DOM measurement ───────────────
+	let caretLeft = $state(0);
+	let ribbonEl: HTMLElement | undefined = $state(undefined);
+
+	$effect(() => {
+		if (selectedCellIndex < 0 || !ribbonEl) return;
+		const cell = ribbonEl.querySelector<HTMLElement>(
+			`[data-cell-id="${word.lineIndex}-${word.wordIndex}-${selectedCellIndex}"]`
+		);
+		if (!cell) return;
+		const ribbonRect = ribbonEl.getBoundingClientRect();
+		const cellRect = cell.getBoundingClientRect();
+		caretLeft = cellRect.left - ribbonRect.left + cellRect.width / 2;
+	});
+
+	function handleCellClick(index: number) {
+		if (selectedCellIndex === index) {
+			selectedCellIndex = -1;
+		} else {
+			selectedCellIndex = index;
+		}
+		focusedCellIndex = index;
+	}
+
+	function handleRibbonKeydown(e: KeyboardEvent) {
+		const len = ribbonEntries.length;
+		if (len === 0) return;
+
+		switch (e.key) {
+			case 'ArrowRight': {
+				e.preventDefault();
+				const next = focusedCellIndex + 1;
+				if (next < len) {
+					focusedCellIndex = next;
+					focusCellByIndex(next);
+				}
+				break;
+			}
+			case 'ArrowLeft': {
+				e.preventDefault();
+				const prev = focusedCellIndex - 1;
+				if (prev >= 0) {
+					focusedCellIndex = prev;
+					focusCellByIndex(prev);
+				}
+				break;
+			}
+			case 'Enter':
+			case ' ': {
+				e.preventDefault();
+				handleCellClick(focusedCellIndex);
+				break;
+			}
+			case 'Escape': {
+				if (selectedCellIndex >= 0) {
+					e.preventDefault();
+					e.stopPropagation();
+					selectedCellIndex = -1;
+				}
+				break;
+			}
+		}
+	}
+
+	function focusCellByIndex(index: number) {
+		requestAnimationFrame(() => {
+			const el = document.querySelector<HTMLElement>(
+				`[data-cell-id="${word.lineIndex}-${word.wordIndex}-${index}"]`
+			);
+			el?.focus();
+		});
+	}
+
+	function handlePanelKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && selectedCellIndex < 0) {
+			e.preventDefault();
+			onback();
+		}
+	}
+
+	// ── Stress assignment state ─────────────────────────────────
+	// Whether current stress is user-assigned (not engine-derived)
+	const isUserStress = $derived(
+		word.stressSource === 'user-dictionary' ||
+		word.stressSource === 'user-composer' ||
+		word.stressSource === 'user-override'
+	);
+
+	// Syllable count for stress assignment buttons
+	const syllableCount = $derived(word.syllables.length);
+
+	// Whether stress can be assigned (not a clitic, has syllables)
+	const canAssignStress = $derived(
+		!word.isProclitic && !word.isEnclitic && syllableCount > 0
+	);
+
+	// Track which syllable header is being assigned (shows provenance links)
+	let assigningSyllable = $state<number | null>(null);
+
+	// Reset assigning state when word changes
+	$effect(() => {
+		void word.cleanWord;
+		assigningSyllable = null;
+	});
+
+	function handleSyllableHeaderClick(syllableIndex: number) {
+		if (!canAssignStress) return;
+		if (syllableIndex === word.stressIndex) {
+			// Already stressed here: toggle assigning panel
+			assigningSyllable = assigningSyllable === syllableIndex ? null : syllableIndex;
+		} else {
+			// Different syllable: show provenance chooser
+			assigningSyllable = syllableIndex;
+		}
+	}
+
+	function handleProvenanceChoice(syllableIndex: number, source: string) {
+		onstressassign?.(syllableIndex, source);
+		assigningSyllable = null;
+	}
+
+	// ── Provenance icon ─────────────────────────────────────────
+
+	const provenanceIcon = $derived((() => {
+		const src = word.stressSource;
+		switch (src) {
+			case 'dictionary':
+				return { type: 'dictionary', colour: '#059669' };
+			case 'supplement':
+				return { type: 'supplement', colour: '#2563eb' };
+			case 'yo-rule':
+			case 'yo-restored':
+				return { type: 'yo', colour: '#7c3aed' };
+			case 'inferred':
+				return { type: 'inferred', colour: '#d97706' };
+			case 'unknown':
+				return { type: 'unknown', colour: '#d97706' };
+			case 'user-dictionary':
+			case 'user-composer':
+			case 'user-override':
+				return { type: 'user', colour: '#059669' };
+			default:
+				return null;
+		}
+	})());
+
+	function hasBlurb(entry: DisplayLogEntry): boolean {
+		return !!(entry.blurbData && (
+			(entry.blurbData as Record<string, unknown>).en ||
+			(entry.blurbData as Record<string, unknown>).fr ||
+			(entry.blurbData as Record<string, unknown>).text
+		));
+	}
+
+	function getBlurbText(entry: DisplayLogEntry, lang: Language): string {
+		if (!entry.blurbData) return '';
+		const data = entry.blurbData as Record<string, unknown>;
+		if (typeof data[lang] === 'string') return data[lang] as string;
+		if (typeof data.en === 'string') return data.en;
+		if (typeof data.text === 'string') return data.text;
+		return '';
+	}
+</script>
+
+<div
+	class="inspector-panel"
+	role="region"
+	aria-label={word.stressedCyrillic}
+	onkeydown={handlePanelKeydown}
+	tabindex="-1"
+>
+	<!-- Back button -->
+	<button class="back-btn" onclick={onback}>
+		{t('inspector.back', language)}
+	</button>
+
+	<!-- Word header -->
+	<div class="word-header">
+		<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
+		<p class="word-ipa">{headerIpa}</p>
+		{#if word.gloss}
+			<p class="word-gloss">{word.gloss}</p>
+		{:else if language === 'fr'}
+			<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
+		{/if}
+	</div>
+
+	<!-- Stress provenance -->
+	<div class="section">
+		<h3 class="section-label">{t('inspector.stress', language)}</h3>
+		<div class="stress-info">
+			{#if word.stressIndex >= 0}
+				<p class="stress-text">
+					{#if provenanceIcon}
+						<span class="provenance-inline" aria-hidden="true">
+							{#if provenanceIcon.type === 'dictionary'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M1.5 5.5 L4 8 L8.5 2.5" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							{:else if provenanceIcon.type === 'supplement'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M5 0.8 L6.1 3.5 L9 3.7 L6.8 5.8 L7.4 8.8 L5 7.3 L2.6 8.8 L3.2 5.8 L1 3.7 L3.9 3.5 Z" fill={provenanceIcon.colour}/>
+								</svg>
+							{:else if provenanceIcon.type === 'yo'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<text x="5" y="9" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>ё</text>
+								</svg>
+							{:else if provenanceIcon.type === 'inferred'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<path d="M1 6 Q3 3.5, 5 6 Q7 8.5, 9 6" fill="none" stroke={provenanceIcon.colour} stroke-width="1.5" stroke-linecap="round"/>
+								</svg>
+							{:else if provenanceIcon.type === 'unknown'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
+								</svg>
+							{:else if provenanceIcon.type === 'user'}
+								<svg width="12" height="12" viewBox="0 0 10 10">
+									<circle cx="5" cy="3.5" r="2" fill={provenanceIcon.colour}/>
+									<path d="M1.5 9.5 Q1.5 6.5, 5 6.5 Q8.5 6.5, 8.5 9.5" fill={provenanceIcon.colour}/>
+								</svg>
+							{/if}
+						</span>
+					{/if}
+					{t('inspector.syllable', language)} {word.stressIndex + 1} · {stressSourceLabel(word.stressSource, language)}
+				</p>
+
+				<!-- ё ↔ е toggle (when applicable) -->
+				{#if word.yoAlternation && word.yoAlternateForm}
+					<button class="yo-toggle-link" onclick={() => onyotoggle?.()}>
+						{t('inspector.yoToggle', language)}
+					</button>
+				{/if}
+
+				<!-- Provenance links for user-assigned stress -->
+				{#if isUserStress}
+					<div class="provenance-links">
+						<button class="provenance-link" onclick={() => onstressrevert?.()}>
+							{t('inspector.stressAssign.dictionary', language)}
+						</button>
+					</div>
+				{/if}
+			{:else if word.stressIndex === -1}
+				<p class="stress-text">{t('inspector.clitic', language)}</p>
+			{:else}
+				<p class="stress-text">
+					{#if provenanceIcon}
+						<span class="provenance-inline" aria-hidden="true">
+							<svg width="12" height="12" viewBox="0 0 10 10">
+								<text x="5" y="8.5" text-anchor="middle" font-size="9" font-weight="600" fill={provenanceIcon.colour}>?</text>
+							</svg>
+						</span>
+					{/if}
+					{t('inspector.unknownStress', language)}
+				</p>
+
+				<!-- ё ↔ е toggle for unknown-stress words too -->
+				{#if word.yoAlternation && word.yoAlternateForm}
+					<button class="yo-toggle-link" onclick={() => onyotoggle?.()}>
+						{t('inspector.yoToggle', language)}
+					</button>
+				{/if}
+			{/if}
+		</div>
+	</div>
+
+	<!-- Ribbon: click-to-reveal character breakdown with syllable groupings -->
+	{#if ribbonEntries.length > 0}
+		<div class="section ribbon-section">
+			<h3 class="section-label">{t('inspector.ribbon', language)}</h3>
+			<div
+				class="ribbon"
+				role="listbox"
+				aria-label={t('inspector.ribbon', language)}
+				aria-orientation="horizontal"
+				onkeydown={handleRibbonKeydown}
+				bind:this={ribbonEl}
+				tabindex="-1"
+			>
+				<!-- Enclitic arrow before syllable groups -->
+				{#if word.isEnclitic}
+					{@const arrowEntry = ribbonEntries[0]}
+					<div class="ribbon-clitic-area" role="presentation">
+						<button
+							class="ribbon-cell clitic-arrow"
+							class:selected={selectedCellIndex === arrowEntry.index}
+							role="option"
+							aria-selected={selectedCellIndex === arrowEntry.index}
+							aria-label={t('inspector.cliticArrow.enclitic', language)}
+							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+							onclick={() => handleCellClick(arrowEntry.index)}
+						>
+							<span class="ribbon-arrow-icon">{arrowEntry.char}</span>
+						</button>
+					</div>
+					{#if showSyllableGroups}
+						<div class="syllable-divider" aria-hidden="true"></div>
+					{/if}
+				{/if}
+
+				<!-- Syllable groups with Grayson positional headers -->
+				{#if showSyllableGroups}
+					{#each syllableGroups as group, gi}
+						{#if gi > 0}
+							<div class="syllable-divider" aria-hidden="true"></div>
+						{/if}
+						<div
+							class="syllable-group"
+							role="group"
+							aria-label="{group.syllableIndex + 1}{group.positionKey ? ' · ' + t(group.positionKey, language) : ''}"
+						>
+							<button
+								class="syllable-header"
+								class:can-assign={canAssignStress}
+								class:is-stressed={group.syllableIndex === word.stressIndex}
+								class:is-assigning={assigningSyllable === group.syllableIndex}
+								onclick={() => handleSyllableHeaderClick(group.syllableIndex)}
+								aria-label="Assign stress to syllable {group.syllableIndex + 1}"
+								disabled={!canAssignStress}
+							>
+								{#if group.syllableIndex === word.stressIndex}
+									<span class="stress-dot" aria-hidden="true"></span>
+								{/if}
+								<span class="syllable-num">{group.syllableIndex + 1}</span>
+								{#if group.positionKey}
+									<span class="syllable-position">{t(group.positionKey, language)}</span>
+								{/if}
+							</button>
+							{#if assigningSyllable === group.syllableIndex}
+								<div class="provenance-chooser">
+									<button class="provenance-choice" onclick={() => handleProvenanceChoice(group.syllableIndex, 'user-dictionary')}>
+										{t('inspector.stressAssign.dictionary', language)}
+									</button>
+									<button class="provenance-choice" onclick={() => handleProvenanceChoice(group.syllableIndex, 'user-composer')}>
+										{t('inspector.stressAssign.composer', language)}
+									</button>
+									<button class="provenance-choice" onclick={() => handleProvenanceChoice(group.syllableIndex, 'user-override')}>
+										{t('inspector.stressAssign.myAssignment', language)}
+									</button>
+								</div>
+							{/if}
+							<div class="syllable-cells" role="presentation">
+								{#each group.entries as re}
+									<button
+										class="ribbon-cell"
+										class:stressed={re.entry?.features?.stressed}
+										class:selected={selectedCellIndex === re.index}
+										class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+										role="option"
+										aria-selected={selectedCellIndex === re.index}
+										tabindex={focusedCellIndex === re.index ? 0 : -1}
+										data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
+										onclick={() => handleCellClick(re.index)}
+									>
+										<span class="ribbon-char">{re.char}</span>
+										<span class="ribbon-arrow">↓</span>
+										<span class="ribbon-ipa">{re.ipa || '∅'}</span>
+									</button>
+								{/each}
+							</div>
+						</div>
+					{/each}
+				{:else}
+					<!-- Fallback: flat ribbon when no syllable data -->
+					{#each ribbonEntries.filter(re => re.type === 'character') as re}
+						<button
+							class="ribbon-cell"
+							class:stressed={re.entry?.features?.stressed}
+							class:selected={selectedCellIndex === re.index}
+							class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+							role="option"
+							aria-selected={selectedCellIndex === re.index}
+							tabindex={focusedCellIndex === re.index ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
+							onclick={() => handleCellClick(re.index)}
+						>
+							<span class="ribbon-char">{re.char}</span>
+							<span class="ribbon-arrow">↓</span>
+							<span class="ribbon-ipa">{re.ipa || '∅'}</span>
+						</button>
+					{/each}
+				{/if}
+
+				<!-- Proclitic arrow after syllable groups -->
+				{#if word.isProclitic}
+					{@const arrowEntry = ribbonEntries[ribbonEntries.length - 1]}
+					{#if showSyllableGroups}
+						<div class="syllable-divider" aria-hidden="true"></div>
+					{/if}
+					<div class="ribbon-clitic-area" role="presentation">
+						<button
+							class="ribbon-cell clitic-arrow"
+							class:selected={selectedCellIndex === arrowEntry.index}
+							role="option"
+							aria-selected={selectedCellIndex === arrowEntry.index}
+							aria-label={t('inspector.cliticArrow.proclitic', language)}
+							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+							onclick={() => handleCellClick(arrowEntry.index)}
+						>
+							<span class="ribbon-arrow-icon">{arrowEntry.char}</span>
+						</button>
+					</div>
+				{/if}
+			</div>
+
+			<!-- Detail box with speech-bubble caret -->
+			{#if selectedRibbonEntry}
+				<div class="detail-container">
+					<!-- SVG caret: 16x10px, sage border on angled sides only -->
+					<svg
+						class="detail-caret"
+						width="16"
+						height="10"
+						viewBox="0 0 16 10"
+						aria-hidden="true"
+						style="left: {caretLeft}px"
+					>
+						<polygon points="0,10 8,0 16,10" fill="#F5F0E8" />
+						<polyline points="0,10 8,0 16,10" fill="none" stroke="var(--sage)" stroke-width="2" stroke-linejoin="round" />
+					</svg>
+					<div class="detail-box" aria-live="polite">
+						{#if selectedRibbonEntry.type === 'clitic-arrow'}
+							<p class="detail-header">
+								<span class="detail-char">{selectedRibbonEntry.char}</span>
+								<span class="detail-arrow">·</span>
+								<span class="detail-ipa">
+									{selectedRibbonEntry.direction === 'enclitic'
+										? t('inspector.cliticArrow.encliticLabel', language)
+										: t('inspector.cliticArrow.procliticLabel', language)}
+								</span>
+							</p>
+							<p class="detail-blurb">
+								{selectedRibbonEntry.direction === 'enclitic'
+									? t('inspector.cliticArrow.encliticBlurb', language)
+									: t('inspector.cliticArrow.procliticBlurb', language)}
+							</p>
+						{:else if selectedRibbonEntry.entry}
+							<p class="detail-header">
+								<span class="detail-char">{selectedRibbonEntry.char}</span>
+								<span class="detail-arrow">→</span>
+								<span class="detail-ipa">{selectedRibbonEntry.ipa || '∅'}</span>
+							</p>
+							{#if hasBlurb(selectedRibbonEntry.entry)}
+								<p class="detail-blurb">{getBlurbText(selectedRibbonEntry.entry, language)}</p>
+							{:else}
+								<p class="detail-no-blurb">{t('inspector.noBlurb', language)}</p>
+							{/if}
+						{/if}
+					</div>
+				</div>
+			{/if}
+		</div>
+	{/if}
+
+	<!-- Spot reconstitution toggle: only when reconstituted IPA differs from default -->
+	{#if word.ipaReconstituted && word.ipaReconstituted !== word.ipaDisplay}
+		<div class="section">
+			<h3 class="section-label">{t('inspector.spotRecon.heading', language)}</h3>
+			{#if notationPrefs.reconstitution}
+				<!-- Global reconstitution is on: show disabled state with explanation -->
+				<div class="spot-recon-disabled">
+					<div class="spot-recon-row">
+						<span class="spot-label left">{t('inspector.spotRecon.left', language)}</span>
+						<button
+							class="toggle-switch disabled"
+							role="switch"
+							aria-checked="true"
+							aria-label={t('inspector.spotRecon.right', language)}
+							disabled
+							title={t('inspector.spotRecon.globalOn', language)}
+						>
+							<span class="toggle-thumb"></span>
+						</button>
+						<span class="spot-label right">{t('inspector.spotRecon.right', language)}</span>
+					</div>
+					<p class="spot-hint">{t('inspector.spotRecon.globalOn', language)}</p>
+				</div>
+			{:else}
+				<!-- Per-word toggle active -->
+				<div class="spot-recon-row">
+					<span class="spot-label left" class:active={!spotReconstituted}>{t('inspector.spotRecon.left', language)}</span>
+					<button
+						class="toggle-switch"
+						class:on={spotReconstituted}
+						role="switch"
+						aria-checked={spotReconstituted}
+						aria-label={t('inspector.spotRecon.right', language)}
+						onclick={() => onspotrecontoggle?.()}
+					>
+						<span class="toggle-thumb"></span>
+					</button>
+					<span class="spot-label right" class:active={spotReconstituted}>{t('inspector.spotRecon.right', language)}</span>
+				</div>
+			{/if}
+		</div>
+	{/if}
+
+	<!-- Notation indicator (read-only) -->
+	<div class="section notation-indicator">
+		<p class="notation-note">{t('inspector.notationDefault', language)}</p>
+	</div>
+</div>
+
+<style>
+	.inspector-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		padding: 1.5rem;
+		height: 100%;
+		overflow-y: auto;
+		animation: inspectorBreathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) both;
+	}
+
+	@keyframes inspectorBreathIn {
+		from { opacity: 0; transform: translateY(-2px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.inspector-panel {
+			animation: none;
+		}
+	}
+
+	/* ── Back button ─────────────────────────────────────────── */
+
+	.back-btn {
+		background: none;
+		border: none;
+		color: var(--sage);
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		padding: 0.25rem 0;
+		margin-bottom: 1rem;
+		text-align: left;
+		width: fit-content;
+	}
+
+	.back-btn:hover {
+		text-decoration: underline;
+	}
+
+	/* ── Word header ─────────────────────────────────────────── */
+
+	.word-header {
+		margin-bottom: 1.5rem;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-start;
+		border: 1px solid var(--sage);
+		border-radius: 2px;
+		padding: 0.5rem 0.75rem;
+		background: var(--paper-cream);
+	}
+
+	.word-cyrillic {
+		font-family: var(--font-serif);
+		font-size: 1.6rem;
+		font-weight: 600;
+		color: var(--ink-primary);
+		margin-bottom: 0.1rem;
+		line-height: 1.3;
+	}
+
+	.word-ipa {
+		font-family: var(--font-sans);
+		font-size: 1.15rem;
+		color: var(--ink-secondary);
+		margin-bottom: 0.15rem;
+		line-height: 1.3;
+	}
+
+	.word-gloss {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		color: var(--terracotta);
+		font-style: italic;
+		line-height: 1.3;
+	}
+
+	.word-gloss-missing {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		line-height: 1.4;
+	}
+
+	/* ── Sections ──────────────────────────────────────────────── */
+
+	.section {
+		margin-bottom: 1.25rem;
+	}
+
+	.section-label {
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--sage);
+		margin-bottom: 0.5rem;
+	}
+
+	/* ── Stress info ─────────────────────────────────────────── */
+
+	.stress-info {
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		color: var(--ink-primary);
+	}
+
+	.stress-text {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	/* ── ё ↔ е toggle link ─────────────────────────────────── */
+
+	.yo-toggle-link {
+		background: none;
+		border: none;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--sage);
+		cursor: pointer;
+		padding: 0.2rem 0;
+		margin-top: 0.25rem;
+		display: block;
+		text-align: left;
+	}
+
+	.yo-toggle-link:hover {
+		text-decoration: underline;
+		color: #6b7d5f;
+	}
+
+	/* ── Provenance links (revert to dictionary) ─────────── */
+
+	.provenance-links {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: 0.25rem;
+		flex-wrap: wrap;
+	}
+
+	.provenance-link {
+		background: none;
+		border: none;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--sage);
+		cursor: pointer;
+		padding: 0.15rem 0;
+	}
+
+	.provenance-link:hover {
+		text-decoration: underline;
+		color: #6b7d5f;
+	}
+
+	/* ── Provenance chooser (inline below syllable header) ── */
+
+	.provenance-chooser {
+		display: flex;
+		gap: 0.15rem;
+		flex-wrap: wrap;
+		padding: 2px 0;
+	}
+
+	.provenance-choice {
+		background: var(--paper-cream);
+		border: 1px solid var(--stone-300);
+		border-radius: 3px;
+		font-family: var(--font-sans);
+		font-size: 0.6rem;
+		color: var(--ink-secondary);
+		cursor: pointer;
+		padding: 1px 4px;
+		white-space: nowrap;
+		transition: border-color 150ms ease, background-color 150ms ease;
+	}
+
+	.provenance-choice:hover {
+		border-color: var(--sage);
+		background: #faf8f4;
+		color: var(--ink-primary);
+	}
+
+	/* ── Stress dot indicator ───────────────────────────────── */
+
+	.stress-dot {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--sage);
+		flex-shrink: 0;
+	}
+
+	.provenance-inline {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	/* ── Ribbon: syllable-grouped character cells ─────────────── */
+
+	.ribbon {
+		display: flex;
+		align-items: flex-end;
+		gap: 0;
+		overflow-x: auto;
+	}
+
+	/* ── Syllable groups ──────────────────────────────────────── */
+
+	.syllable-group {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		flex-shrink: 0;
+	}
+
+	.syllable-header {
+		display: flex;
+		align-items: baseline;
+		gap: 3px;
+		padding: 0 2px;
+		min-height: 14px;
+		background: none;
+		border: none;
+		border-radius: 3px;
+		cursor: default;
+		font-family: inherit;
+		transition: background-color 150ms ease;
+		width: 100%;
+	}
+
+	.syllable-header.can-assign {
+		cursor: pointer;
+	}
+
+	.syllable-header.can-assign:hover {
+		background: rgba(139, 154, 125, 0.08);
+	}
+
+	.syllable-header.is-stressed {
+		background: rgba(139, 154, 125, 0.06);
+	}
+
+	.syllable-header.is-assigning {
+		background: rgba(139, 154, 125, 0.12);
+	}
+
+	.syllable-num {
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		line-height: 1;
+	}
+
+	.syllable-position {
+		font-family: var(--font-sans);
+		font-size: 0.6rem;
+		color: var(--ink-tertiary);
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.04em;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	.syllable-cells {
+		display: flex;
+		gap: 0.1rem;
+	}
+
+	/* Vertical hairline between syllable groups */
+	.syllable-divider {
+		width: 1px;
+		height: 8px;
+		background: var(--stone-300);
+		align-self: flex-end;
+		margin: 0 6px 18px;
+		flex-shrink: 0;
+	}
+
+	/* Clitic arrow area: aligns with syllable cells at the bottom */
+	.ribbon-clitic-area {
+		display: flex;
+		align-items: flex-end;
+		flex-shrink: 0;
+	}
+
+	/* ── Ribbon cells ─────────────────────────────────────────── */
+
+	.ribbon-cell {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.1rem;
+		padding: 0.3rem 0.3rem;
+		background: var(--paper-cream);
+		border: 1px solid var(--stone-300);
+		border-radius: 4px;
+		min-width: 1.75rem;
+		cursor: pointer;
+		font-family: inherit;
+		transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.ribbon-cell:hover {
+		border-color: var(--sage);
+		background: #faf8f4;
+	}
+
+	.ribbon-cell:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 1px;
+	}
+
+	.ribbon-cell.stressed {
+		background: #fdf6e8;
+		border-color: var(--sage);
+	}
+
+	.ribbon-cell.selected {
+		border: 2px solid var(--sage);
+		background: #FAF7F2;
+		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
+	}
+
+	/* Subtle dot indicator that a cell has a blurb */
+	.ribbon-cell.has-blurb::after {
+		content: '';
+		display: block;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--sage);
+		opacity: 0.4;
+		margin-top: 1px;
+	}
+
+	.ribbon-cell.selected.has-blurb::after {
+		opacity: 0.8;
+	}
+
+	/* Clitic directional arrow cell */
+	.ribbon-cell.clitic-arrow {
+		background: transparent;
+		border-color: var(--sage);
+		border-style: dashed;
+		min-width: 1.5rem;
+		justify-content: center;
+	}
+
+	.ribbon-cell.clitic-arrow.selected {
+		background: #FAF7F2;
+		border-style: solid;
+	}
+
+	.ribbon-arrow-icon {
+		font-size: 1.1rem;
+		color: var(--sage);
+		font-weight: 600;
+		line-height: 1;
+	}
+
+	.ribbon-char {
+		font-family: var(--font-serif);
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--ink-primary);
+	}
+
+	.ribbon-arrow {
+		font-size: 0.6rem;
+		color: var(--ink-tertiary);
+		line-height: 1;
+	}
+
+	.ribbon-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.95rem;
+		color: var(--ink-secondary);
+	}
+
+	/* ── Detail box with speech-bubble caret ───────────────────── */
+
+	.detail-container {
+		position: relative;
+		margin-top: 14px;
+	}
+
+	.detail-caret {
+		position: absolute;
+		top: -9px;
+		margin-left: -8px;
+		z-index: 1;
+		overflow: visible;
+		transition: left 200ms ease;
+	}
+
+	.detail-box {
+		background: #F5F0E8;
+		border: 2px solid var(--sage);
+		border-radius: 6px;
+		padding: 16px;
+		max-height: 200px;
+		overflow-y: auto;
+		box-shadow: 0 4px 12px rgba(26, 22, 18, 0.08);
+		animation: detailIn 250ms ease forwards;
+	}
+
+	@keyframes detailIn {
+		from {
+			opacity: 0;
+			transform: scale(0.98) translateY(4px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+	}
+
+	.detail-header {
+		display: flex;
+		align-items: baseline;
+		gap: 0.35rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.detail-char {
+		font-family: var(--font-serif);
+		font-variant-caps: all-small-caps;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--ink-primary);
+		letter-spacing: 0.03em;
+	}
+
+	.detail-arrow {
+		font-size: 0.7rem;
+		color: var(--ink-tertiary);
+	}
+
+	.detail-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.95rem;
+		color: var(--ink-secondary);
+	}
+
+	.detail-blurb {
+		font-family: var(--font-serif);
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink-secondary);
+	}
+
+	.detail-no-blurb {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+	}
+
+	/* ── Spot reconstitution toggle ──────────────────────────── */
+
+	.spot-recon-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.spot-label {
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--ink-tertiary);
+		transition: color 150ms ease;
+	}
+
+	.spot-label.active {
+		color: var(--ink-primary);
+		font-weight: 600;
+	}
+
+	.toggle-switch {
+		position: relative;
+		width: 32px;
+		height: 18px;
+		background: var(--stone-300);
+		border: none;
+		border-radius: 9px;
+		cursor: pointer;
+		padding: 0;
+		transition: background-color 200ms ease;
+		flex-shrink: 0;
+	}
+
+	.toggle-switch.on {
+		background: var(--sage);
+	}
+
+	.toggle-switch.disabled {
+		background: var(--stone-300);
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.toggle-thumb {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 14px;
+		height: 14px;
+		background: white;
+		border-radius: 50%;
+		transition: transform 200ms ease;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+	}
+
+	.toggle-switch.on .toggle-thumb {
+		transform: translateX(14px);
+	}
+
+	.spot-recon-disabled {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.spot-hint {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		line-height: 1.4;
+	}
+
+	/* ── Notation indicator ──────────────────────────────────── */
+
+	.notation-indicator {
+		margin-top: auto;
+		padding-top: 1rem;
+		border-top: 1px solid var(--stone-300);
+	}
+
+	.notation-note {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+	}
+</style>

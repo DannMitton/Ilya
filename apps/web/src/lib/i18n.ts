@@ -87,11 +87,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.cliticArrow.encliticBlurb':  { en: 'This word is an enclitic: it has no stress of its own and attaches phonologically to the preceding word. Its vowels reduce relative to the host word\u2019s stress position. On the page, an arrow (\u2190) shows in place of IPA, and the clitic\u2019s phonetic material appears fused into the host word\u2019s IPA.', fr: 'Ce mot est un enclitique\u00a0: il n\u2019a pas d\u2019accent propre et s\u2019attache phonologiquement au mot précédent. Ses voyelles se réduisent en fonction de la position de l\u2019accent du mot hôte. Sur la page, une flèche (\u2190) remplace l\u2019API, et le matériel phonétique du clitique apparaît fusionné dans l\u2019API du mot hôte.' },
 	'inspector.cliticArrow.procliticBlurb': { en: 'This word is a proclitic: it has no stress of its own and attaches phonologically to the following word. Its vowels reduce relative to the host word\u2019s stress position. On the page, an arrow (\u2192) shows in place of IPA, and the clitic\u2019s phonetic material appears fused into the host word\u2019s IPA.', fr: 'Ce mot est un proclitique\u00a0: il n\u2019a pas d\u2019accent propre et s\u2019attache phonologiquement au mot suivant. Ses voyelles se réduisent en fonction de la position de l\u2019accent du mot hôte. Sur la page, une flèche (\u2192) remplace l\u2019API, et le matériel phonétique du clitique apparaît fusionné dans l\u2019API du mot hôte.' },
 	'inspector.unknownStress':     { en: 'Unknown stress \u00b7 verify manually', fr: 'Accent inconnu \u00b7 vérifier manuellement' },
+	'inspector.provenance':         { en: 'Provenance',                   fr: 'Provenance' },
 	'inspector.ribbon':            { en: 'Character breakdown',          fr: 'Décomposition par caractère' },
 	'inspector.blurbs':            { en: 'Phonological notes',           fr: 'Notes phonologiques' },
 	'inspector.noBlurb':           { en: 'No phonological note for this character.', fr: 'Aucune note phonologique pour ce caractère.' },
 	'inspector.notationDefault':   { en: 'Notation: default (Grayson)',  fr: 'Notation\u00a0: par défaut (Grayson)' },
 	'inspector.glossMissing':      { en: '',                              fr: 'Aucune traduction française disponible pour cette forme. Vérifiez avec un dictionnaire ou un répétiteur vocal.' },
+
+	// ── Grayson positional labels (Ribbon syllable group headers) ──
+	'ribbon.stressed':             { en: 'stressed',                     fr: 'tonique' },
+	'ribbon.unstressed':           { en: 'unstressed',                   fr: 'atone' },
+	'ribbon.immediatePre':         { en: 'immediate pre-stress',         fr: 'prétonique immédiate' },
+	'ribbon.remotePre':            { en: 'remote pre-stress',            fr: 'prétonique éloignée' },
+	'ribbon.immediatePost':        { en: 'immediate post-stress',        fr: 'posttonique immédiate' },
+	'ribbon.remotePost':           { en: 'remote post-stress',           fr: 'posttonique éloignée' },
 
 	// ── Spot reconstitution (per-word toggle in Inspector) ────
 	'inspector.spotRecon.heading':   { en: 'Reconstitution',              fr: 'Reconstitution' },
@@ -106,6 +115,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'stress.yoRestored':           { en: 'ё restored from dictionary',  fr: 'ё restauré du dictionnaire' },
 	'stress.inferred':             { en: 'Algorithmically inferred',    fr: 'Inféré algorithmiquement' },
 	'stress.unknown':              { en: 'Unknown \u2014 verify manually', fr: 'Inconnu \u2014 vérifier manuellement' },
+	'stress.userDictionary':       { en: 'User verified',               fr: 'Vérifié par l\u2019utilisateur' },
+	'stress.userComposer':         { en: 'Composer setting',            fr: 'Choix du compositeur' },
+	'stress.userOverride':         { en: 'User assignment',             fr: 'Choix de l\u2019utilisateur' },
+
+	// ── Stress assignment (Inspector) ─────────────────────────
+	'inspector.stressAssign.dictionary':    { en: 'Dictionary',          fr: 'Dictionnaire' },
+	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositeur' },
+	'inspector.stressAssign.myAssignment':  { en: 'My assignment',       fr: 'Mon choix' },
+	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
 
 	// ── Paper empty state ────────────────────────────────────
 	'paper.empty':                 { en: 'To begin, open the drawer on the left and enter your text.', fr: 'Pour commencer, ouvrez le tiroir à gauche et saisissez votre texte.' },
@@ -173,12 +191,15 @@ export function t(key: string, lang: Language): string {
  */
 export function stressSourceLabel(source: string, lang: Language): string {
 	switch (source) {
-		case 'dictionary':  return t('stress.dictionary', lang);
-		case 'supplement':  return t('stress.supplement', lang);
-		case 'yo-rule':     return t('stress.yoRule', lang);
-		case 'yo-restored': return t('stress.yoRestored', lang);
-		case 'inferred':    return t('stress.inferred', lang);
-		case 'unknown':     return t('stress.unknown', lang);
-		default:            return source;
+		case 'dictionary':       return t('stress.dictionary', lang);
+		case 'supplement':       return t('stress.supplement', lang);
+		case 'yo-rule':          return t('stress.yoRule', lang);
+		case 'yo-restored':      return t('stress.yoRestored', lang);
+		case 'inferred':         return t('stress.inferred', lang);
+		case 'unknown':          return t('stress.unknown', lang);
+		case 'user-dictionary':  return t('stress.userDictionary', lang);
+		case 'user-composer':    return t('stress.userComposer', lang);
+		case 'user-override':    return t('stress.userOverride', lang);
+		default:                 return source;
 	}
 }

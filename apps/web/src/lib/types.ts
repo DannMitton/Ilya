@@ -14,6 +14,14 @@ import type {
 import type { DisplayLogEntry } from '@ilya/blurb';
 import type { GlossLanguage } from '@ilya/dictionary';
 
+// ── User overrides ───────────────────────────────────────────────
+
+/** User stress override for a specific word (keyed by "lineIndex-wordIndex"). */
+export interface UserStressOverride {
+  stressIndex: number;
+  stressSource: 'user-dictionary' | 'user-composer' | 'user-override';
+}
+
 // ── Pipeline output ──────────────────────────────────────────────
 
 /** A single word fully processed for rendering. */
@@ -30,6 +38,15 @@ export interface WordStackData {
   stressSource: string;
   /** Cyrillic with combining acute on stressed vowel. */
   stressedCyrillic: string;
+
+  /** Engine's original stress assignment before any user override. */
+  originalStressIndex: number;
+  /** Engine's original stress source before any user override. */
+  originalStressSource: string;
+  /** Whether ё ↔ е toggle is available for this word. */
+  yoAlternation: boolean;
+  /** The other form (not currently displayed) for ё ↔ е toggle. Null if no alternation. */
+  yoAlternateForm: string | null;
 
   /** Engine transcription result (raw output from GraysonEngine.transcribe). */
   result: TranscriptionResult;
@@ -101,6 +118,10 @@ export interface LineData {
 export interface ProcessTextOptions {
   engineConfig?: EngineConfig;
   language?: GlossLanguage;
+  /** User stress overrides keyed by "lineIndex-wordIndex". */
+  userStressOverrides?: Map<string, UserStressOverride>;
+  /** ё ↔ е toggles keyed by "lineIndex-wordIndex". True = use alternate form. */
+  yoToggles?: Map<string, boolean>;
 }
 
 // ── WYSIWYG Paper ────────────────────────────────────────────────

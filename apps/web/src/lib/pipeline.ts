@@ -34,7 +34,7 @@ import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
 
-import type { WordStackData, LineData, ProcessTextOptions } from './types';
+import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride } from './types';
 
 // ── Constants ────────────────────────────────────────────────────
 
@@ -70,6 +70,14 @@ interface PreTranscribeWord {
   hasYo: boolean;
   rightBoundary: string | null;
   boundarySource: string | null;
+  /** Engine's original stress (before any user override). */
+  originalStress: number;
+  /** Engine's original stress source (before any user override). */
+  originalStressSource: string;
+  /** Whether ё ↔ е toggle is available (both forms exist independently). */
+  yoAlternation: boolean;
+  /** The other form (not currently displayed) for ё ↔ е toggle. */
+  yoAlternateForm: string | null;
 }
 
 /** Word data after engine transcription, used for cross-word assimilation. */
@@ -121,6 +129,8 @@ export function processText(
   const {
     engineConfig = DEFAULT_ENGINE_CONFIG,
     language = 'en' as GlossLanguage,
+    userStressOverrides,
+    yoToggles,
   } = options;
 
   if (!text.trim()) return [];
@@ -142,6 +152,29 @@ export function processText(
       return words.map((word) => buildPreTranscribeWord(word));
     })
     .filter((line) => line.length > 0);
+
+  // ── Step 1.5: Apply user overrides and yo toggles ────────────
+
+  if (userStressOverrides?.size || yoToggles?.size) {
+    preLines.forEach((line, lineIdx) => {
+      for (let wordIdx = 0; wordIdx < line.length; wordIdx++) {
+        const key = `${lineIdx}-${wordIdx}`;
+
+        // Apply yo toggle first (changes the word form entirely)
+        if (yoToggles?.get(key) && line[wordIdx].yoAlternateForm) {
+          const altRaw = line[wordIdx].yoAlternateForm + line[wordIdx].punctuation;
+          line[wordIdx] = buildPreTranscribeWord(altRaw);
+        }
+
+        // Apply stress override on top of current form
+        const override = userStressOverrides?.get(key);
+        if (override) {
+          line[wordIdx].stress = override.stressIndex;
+          line[wordIdx].stressSource = override.stressSource;
+        }
+      }
+    });
+  }
 
   // ── Step 2: Auto-detect boundaries per line ───────────────────
 
@@ -189,6 +222,10 @@ export function processText(
           stressIndex: tw.wordData.stress,
           stressSource: tw.wordData.stressSource,
           stressedCyrillic,
+          originalStressIndex: tw.wordData.originalStress,
+          originalStressSource: tw.wordData.originalStressSource,
+          yoAlternation: tw.wordData.yoAlternation,
+          yoAlternateForm: tw.wordData.yoAlternateForm,
           result: tw.engineResult,
           ipaDisplay: tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaReconstituted: tw.ipaReconstituted ?? tw.ipaDisplay ?? tw.ipaContent ?? '',
@@ -274,6 +311,54 @@ function buildPreTranscribeWord(rawWord: string): PreTranscribeWord {
     .replace(PUNCTUATION_REGEX, '')
     .replace(DASH_REGEX, '');
 
+  // ── Yo alternation detection ──────────────────────────────────
+  // Detect whether this word has a genuine ё ↔ е alternation,
+  // meaning both forms exist independently in the dictionary.
+
+  let yoAlternation = false;
+  let yoAlternateForm: string | null = null;
+
+  if (wasYoRestored) {
+    // For yo-restored words (user typed е-form, engine restored ё),
+    // the original form is the toggle target. Covers все/всё and similar pairs
+    // where Russians conventionally omit the dieresis.
+    const cleanOriginal = word.replace(PUNCTUATION_REGEX, '').replace(DASH_REGEX, '');
+    yoAlternation = true;
+    yoAlternateForm = cleanOriginal;
+  } else {
+    const hasYoChar = /[ёЁ]/.test(displayWord);
+
+    if (hasYoChar) {
+      // Word has native ё: check if the е-version exists as its own word
+      const eForm = displayWord.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
+      if (eForm !== displayWord) {
+        const eLookup = GraysonEngine.lookupStress(eForm);
+        if (eLookup && eLookup.source !== 'yo-restored') {
+          yoAlternation = true;
+          yoAlternateForm = eForm;
+        }
+      }
+    } else if (/[еЕ]/.test(displayWord)) {
+      // Word has no ё but has е: check each е→ё substitution
+      const chars = Array.from(displayWord);
+      for (let i = 0; i < chars.length; i++) {
+        const isLowerE = chars[i] === 'е';
+        const isUpperE = chars[i] === 'Е';
+        if (isLowerE || isUpperE) {
+          const swapped = [...chars];
+          swapped[i] = isLowerE ? 'ё' : 'Ё';
+          const yoForm = swapped.join('');
+          const yoLookup = GraysonEngine.lookupStress(yoForm);
+          if (yoLookup && yoLookup.stress != null && yoLookup.stress >= 0) {
+            yoAlternation = true;
+            yoAlternateForm = yoForm;
+            break; // Take the first valid alternation
+          }
+        }
+      }
+    }
+  }
+
   return {
     cyrillic: displayWord,
     cleanWord,
@@ -290,6 +375,10 @@ function buildPreTranscribeWord(rawWord: string): PreTranscribeWord {
     hasYo: yoSyllable !== -1,
     rightBoundary: null,
     boundarySource: null,
+    originalStress: stress,
+    originalStressSource: stressSource,
+    yoAlternation,
+    yoAlternateForm,
   };
 }
 
