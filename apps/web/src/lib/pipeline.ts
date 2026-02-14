@@ -34,7 +34,7 @@ import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
 
-import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride } from './types';
+import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 
 // ── Constants ────────────────────────────────────────────────────
 
@@ -158,16 +158,48 @@ export function processText(
   if (userStressOverrides?.size || yoToggles?.size) {
     preLines.forEach((line, lineIdx) => {
       for (let wordIdx = 0; wordIdx < line.length; wordIdx++) {
-        const key = `${lineIdx}-${wordIdx}`;
+        const wordKey = `${lineIdx}-${wordIdx}`;
 
-        // Apply yo toggle first (changes the word form entirely)
-        if (yoToggles?.get(key) && line[wordIdx].yoAlternateForm) {
-          const altRaw = line[wordIdx].yoAlternateForm + line[wordIdx].punctuation;
-          line[wordIdx] = buildPreTranscribeWord(altRaw);
+        // Apply character-level yo toggles first (changes individual е ↔ ё)
+        if (yoToggles?.size) {
+          const prefix = `${wordKey}-`;
+          const wordToggles: number[] = [];
+          for (const key of yoToggles.keys()) {
+            if (key.startsWith(prefix)) {
+              const charIdx = parseInt(key.substring(prefix.length), 10);
+              if (!isNaN(charIdx)) {
+                wordToggles.push(charIdx);
+              }
+            }
+          }
+          if (wordToggles.length > 0) {
+            // Swap е ↔ ё at specified character positions in the cyrillic string,
+            // then rebuild the PreTranscribeWord with yo-restoration suppressed
+            // so the pipeline doesn't auto-restore ё on top of a user's toggle.
+            const cyrillic = line[wordIdx].cyrillic;
+            const chars = Array.from(cyrillic);
+            // Map from cleanWord index to cyrillic index (skipping punctuation/dashes)
+            let cleanIdx = 0;
+            for (let ci = 0; ci < chars.length; ci++) {
+              const isPunct = /[.,!?;:"""''–—\-]/.test(chars[ci]);
+              if (isPunct) continue;
+              if (wordToggles.includes(cleanIdx)) {
+                switch (chars[ci]) {
+                  case 'е': chars[ci] = 'ё'; break;
+                  case 'ё': chars[ci] = 'е'; break;
+                  case 'Е': chars[ci] = 'Ё'; break;
+                  case 'Ё': chars[ci] = 'Е'; break;
+                }
+              }
+              cleanIdx++;
+            }
+            const modified = chars.join('');
+            line[wordIdx] = buildPreTranscribeWord(modified, true);
+          }
         }
 
         // Apply stress override on top of current form
-        const override = userStressOverrides?.get(key);
+        const override = userStressOverrides?.get(wordKey);
         if (override) {
           line[wordIdx].stress = override.stressIndex;
           line[wordIdx].stressSource = override.stressSource;
@@ -264,7 +296,7 @@ export function processText(
 
 // ── Step 1 helper: stress lookup and ё restoration ──────────────
 
-function buildPreTranscribeWord(rawWord: string): PreTranscribeWord {
+function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
   // Normalize NFC so precomposed ё is preserved, then strip combining acutes
   const word = rawWord.normalize('NFC').replace(/\u0301/g, '');
 
@@ -278,7 +310,7 @@ function buildPreTranscribeWord(rawWord: string): PreTranscribeWord {
   let wasYoRestored = false;
   let dictionaryForm: string | null = null;
 
-  if (lookup?.source === 'yo-restored' && lookup.canonicalForm) {
+  if (!suppressYoRestore && lookup?.source === 'yo-restored' && lookup.canonicalForm) {
     displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
     dictionaryForm = displayWord;
     wasYoRestored = true;

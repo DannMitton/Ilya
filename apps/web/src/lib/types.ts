@@ -22,6 +22,11 @@ export interface UserStressOverride {
   stressSource: 'user-dictionary' | 'user-composer' | 'user-override';
 }
 
+/** Character-level ё toggle (keyed by "lineIndex-wordIndex-charIndex"). */
+export interface YoToggle {
+  source: 'user-dictionary' | 'user-composer' | 'user-override';
+}
+
 // ── Pipeline output ──────────────────────────────────────────────
 
 /** A single word fully processed for rendering. */
@@ -120,8 +125,8 @@ export interface ProcessTextOptions {
   language?: GlossLanguage;
   /** User stress overrides keyed by "lineIndex-wordIndex". */
   userStressOverrides?: Map<string, UserStressOverride>;
-  /** ё ↔ е toggles keyed by "lineIndex-wordIndex". True = use alternate form. */
-  yoToggles?: Map<string, boolean>;
+  /** Character-level ё ↔ е toggles keyed by "lineIndex-wordIndex-charIndex". */
+  yoToggles?: Map<string, YoToggle>;
 }
 
 // ── WYSIWYG Paper ────────────────────────────────────────────────

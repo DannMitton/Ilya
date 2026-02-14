@@ -92,7 +92,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.blurbs':            { en: 'Phonological notes',           fr: 'Notes phonologiques' },
 	'inspector.noBlurb':           { en: 'No phonological note for this character.', fr: 'Aucune note phonologique pour ce caractère.' },
 	'inspector.notationDefault':   { en: 'Notation: default (Grayson)',  fr: 'Notation\u00a0: par défaut (Grayson)' },
-	'inspector.glossMissing':      { en: '',                              fr: 'Aucune traduction française disponible pour cette forme. Vérifiez avec un dictionnaire ou un répétiteur vocal.' },
+	'inspector.glossMissing':      { en: 'No translation available for this form.',                              fr: 'Aucune traduction française disponible pour cette forme.' },
 
 	// ── Grayson positional labels (Ribbon syllable group headers) ──
 	'ribbon.stressed':             { en: 'stressed',                     fr: 'tonique' },

@@ -119,9 +119,9 @@
 			{#if showProvenance && !isInferred}
 				<span class="provenance-icon">
 					{#if word.stressSource === 'user-dictionary'}
-						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v13a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-13zM4.5 1a.5.5 0 0 0-.5.5v12h8v-12a.5.5 0 0 0-.5-.5h-7z" fill="currentColor"/></svg>
+						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 2C6.5 1 4 .5 1 1v11c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2V1c-3-.5-5.5 0-7 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" stroke-width="1"/></svg>
 					{:else if word.stressSource === 'user-composer'}
-						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M9 0a1 1 0 0 1 1 1v5.268l4.562 2.084a1 1 0 0 1 .438.838v5.31a1.5 1.5 0 1 1-3 0V9.81L9 8.268V14.5a1.5 1.5 0 1 1-3 0V1a1 1 0 0 1 1-1h2z" fill="currentColor"/></svg>
+						<svg viewBox="0 0 16 16" class="prov-svg"><ellipse cx="4" cy="13" rx="2.5" ry="1.8" transform="rotate(-20 4 13)" fill="currentColor"/><ellipse cx="11.5" cy="12" rx="2.5" ry="1.8" transform="rotate(-20 11.5 12)" fill="currentColor"/><rect x="5.5" y="1.5" width="1.3" height="11.5" fill="currentColor"/><rect x="12.5" y="1.5" width="1.3" height="10.5" fill="currentColor"/><rect x="5.5" y="1.5" width="8.3" height="2" rx="0.3" fill="currentColor"/></svg>
 					{:else if word.stressSource === 'user-override'}
 						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
 					{:else if word.stressSource === 'yo-rule' || word.stressSource === 'yo-restored'}

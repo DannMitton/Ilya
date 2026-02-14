@@ -4,7 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
-	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
+	import type { LineData, WordStackData, SongMetadata, PageSize, UserStressOverride, YoToggle } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
@@ -98,6 +98,14 @@
 	// Cleared on every transcribe or clear action
 	let spotReconstitution = $state<Map<string, boolean>>(new Map());
 
+	// User stress overrides: keyed by "lineIndex-wordIndex"
+	// Cleared on every fresh transcription
+	let userStressOverrides = $state<Map<string, UserStressOverride>>(new Map());
+
+	// Character-level ё toggles: keyed by "lineIndex-wordIndex-charIndex"
+	// Cleared on every fresh transcription
+	let yoToggles = $state<Map<string, YoToggle>>(new Map());
+
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
 	// viewBreathClass: animates entire app content (language toggle)
@@ -131,9 +139,18 @@
 		transcribeError = '';
 		try {
 			const start = performance.now();
-			const result = processText(inputText, { language });
+			const result = processText(inputText, {
+				language,
+				userStressOverrides: userStressOverrides.size > 0 ? userStressOverrides : undefined,
+				yoToggles: yoToggles.size > 0 ? yoToggles : undefined,
+			});
 			transcribeMs = Math.round(performance.now() - start);
 			lines = result;
+			// Update selected word to reflect new pipeline results
+			if (selectedWord) {
+				const newWord = result[selectedWord.lineIndex]?.words?.[selectedWord.wordIndex];
+				if (newWord) selectedWord = newWord;
+			}
 		} catch (e: unknown) {
 			transcribeError = e instanceof Error ? e.message : String(e);
 			console.error('[Ilya] Transcription error:', e);
@@ -147,6 +164,8 @@
 		drawerMode = 'root';
 		lastFocusedWord = null;
 		spotReconstitution = new Map();
+		userStressOverrides = new Map();
+		yoToggles = new Map();
 
 		runPipeline();
 
@@ -191,6 +210,8 @@
 		drawerMode = 'root';
 		lastFocusedWord = null;
 		spotReconstitution = new Map();
+		userStressOverrides = new Map();
+		yoToggles = new Map();
 		try {
 			localStorage.setItem('ilya:inputText', '');
 		} catch {
@@ -259,6 +280,44 @@
 			newMap.set(key, true);
 		}
 		spotReconstitution = newMap;
+	}
+
+	// ── Stress assignment handler ────────────────────────────────
+	function handleStressAssign(syllableIndex: number, source: string) {
+		if (!selectedWord) return;
+		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		const newMap = new Map(userStressOverrides);
+		newMap.set(key, {
+			stressIndex: syllableIndex,
+			stressSource: source as UserStressOverride['stressSource'],
+		});
+		userStressOverrides = newMap;
+		runPipeline();
+	}
+
+	// ── Stress revert handler ────────────────────────────────────
+	function handleStressRevert() {
+		if (!selectedWord) return;
+		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		const newMap = new Map(userStressOverrides);
+		newMap.delete(key);
+		userStressOverrides = newMap;
+		runPipeline();
+	}
+
+	// ── Character-level ё toggle handler ─────────────────────────
+	function handleYoCharToggle(charIndex: number, source: string | null) {
+		if (!selectedWord) return;
+		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}-${charIndex}`;
+		const newMap = new Map(yoToggles);
+		if (source === null) {
+			// Revert: remove the toggle
+			newMap.delete(key);
+		} else {
+			newMap.set(key, { source: source as YoToggle['source'] });
+		}
+		yoToggles = newMap;
+		runPipeline();
 	}
 
 	// Persist input text to localStorage
@@ -433,13 +492,28 @@
 			{#snippet inspectorPanel()}
 				{#if selectedWord}
 					{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+					{@const wordYoToggles = (() => {
+						const prefix = `${wordKey}-`;
+						const m = new Map<number, import('$lib/types').YoToggle>();
+						for (const [k, v] of yoToggles) {
+							if (k.startsWith(prefix)) {
+								const ci = parseInt(k.substring(prefix.length), 10);
+								if (!isNaN(ci)) m.set(ci, v);
+							}
+						}
+						return m;
+					})()}
 					<InspectorPanel
 						word={selectedWord}
 						{language}
 						{notationPrefs}
 						spotReconstituted={spotReconstitution.has(wordKey)}
+						yoCharToggles={wordYoToggles}
 						onback={handleInspectorBack}
 						onspotrecontoggle={handleSpotReconToggle}
+						onstressassign={handleStressAssign}
+						onstressrevert={handleStressRevert}
+						onyochartoggle={handleYoCharToggle}
 					/>
 				{/if}
 			{/snippet}

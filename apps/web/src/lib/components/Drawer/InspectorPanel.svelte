@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WordStackData } from '$lib/types';
+	import type { WordStackData, YoToggle } from '$lib/types';
 	import type { DisplayLogEntry } from '@ilya/blurb';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
@@ -10,14 +10,17 @@
 		language: Language;
 		notationPrefs: NotationPreferences;
 		spotReconstituted?: boolean;
+		/** Character-level ё toggles for this word, keyed by charIndex. */
+		yoCharToggles?: Map<number, YoToggle>;
 		onback: () => void;
 		onspotrecontoggle?: () => void;
 		onstressassign?: (syllableIndex: number, source: string) => void;
 		onstressrevert?: () => void;
-		onyotoggle?: () => void;
+		/** Character-level ё toggle: source = provenance, or null to revert. */
+		onyochartoggle?: (charIndex: number, source: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, spotReconstituted = false, onback, onspotrecontoggle, onstressassign, onstressrevert, onyotoggle }: Props = $props();
+	let { word, language, notationPrefs, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle }: Props = $props();
 
 	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
@@ -66,6 +69,7 @@
 		void word.cleanWord;
 		selectedCellIndex = -1;
 		focusedCellIndex = 0;
+		assigningSyllable = null;
 	});
 
 	// ── Ribbon entries with clitic arrows ────────────────────────
@@ -75,6 +79,8 @@
 		char: string;
 		ipa: string;
 		index: number;
+		/** Index in word.displayLog / cleanWord chars. -1 for clitic arrows. */
+		displayLogIndex: number;
 		direction?: 'proclitic' | 'enclitic';
 		syllableIndex: number;
 	}
@@ -91,6 +97,7 @@
 				char: '←',
 				ipa: '',
 				index: idx,
+				displayLogIndex: -1,
 				direction: 'enclitic',
 				syllableIndex: -1,
 			});
@@ -110,6 +117,7 @@
 				char: entry.char,
 				ipa: displayIpa,
 				index: idx,
+				displayLogIndex: di,
 				syllableIndex: si,
 			});
 			idx++;
@@ -121,6 +129,7 @@
 				char: '→',
 				ipa: '',
 				index: idx,
+				displayLogIndex: -1,
 				direction: 'proclitic',
 				syllableIndex: -1,
 			});
@@ -280,16 +289,19 @@
 	);
 
 	let assigningSyllable = $state<number | null>(null);
-	let _prevWord = '';
 
-	function handleSyllableHeaderClick(syllableIndex: number) {
+	const showRevertOption = $derived(
+		assigningSyllable !== null &&
+		assigningSyllable === word.stressIndex &&
+		isUserStress
+	);
+
+	function handleCircleClick(syllableIndex: number) {
 		if (!canAssignStress) return;
-		if (word.cleanWord !== _prevWord) {
-			_prevWord = word.cleanWord;
+		// Close ё chooser if open (mutual exclusion)
+		yoTogglePending = null;
+		if (assigningSyllable === syllableIndex) {
 			assigningSyllable = null;
-		}
-		if (syllableIndex === word.stressIndex) {
-			assigningSyllable = assigningSyllable === syllableIndex ? null : syllableIndex;
 		} else {
 			assigningSyllable = syllableIndex;
 		}
@@ -298,6 +310,33 @@
 	function handleProvenanceChoice(syllableIndex: number, source: string) {
 		onstressassign?.(syllableIndex, source);
 		assigningSyllable = null;
+	}
+
+	function handleRevert() {
+		onstressrevert?.();
+		assigningSyllable = null;
+	}
+
+	// ── Stress circle icon SVGs (match WordStack provenance icons) ──
+	function getStressIconSvg(stressSource: string): string {
+		switch (stressSource) {
+			case 'dictionary':
+			case 'supplement':
+			case 'user-dictionary':
+				// Open book: two pages with visible spine crease
+				return '<path d="M8 2C6.5 1 4 .5 1 1v11c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2V1c-3-.5-5.5 0-7 1z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1"/>';
+			case 'user-composer':
+				// Beamed eighth notes: two noteheads, two stems, one beam
+				return '<ellipse cx="4" cy="13" rx="2.5" ry="1.8" transform="rotate(-20 4 13)" fill="white"/><ellipse cx="11.5" cy="12" rx="2.5" ry="1.8" transform="rotate(-20 11.5 12)" fill="white"/><rect x="5.5" y="1.5" width="1.3" height="11.5" fill="white"/><rect x="12.5" y="1.5" width="1.3" height="10.5" fill="white"/><rect x="5.5" y="1.5" width="8.3" height="2" rx="0.3" fill="white"/>';
+			case 'user-override':
+				// Genderless torso (same path as WordStack)
+				return '<path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="white"/>';
+			case 'inferred':
+				// Question mark
+				return '<text x="8" y="12" text-anchor="middle" font-size="12" font-weight="700" font-family="var(--font-sans)" fill="white">?</text>';
+			default:
+				return '<path d="M8 2C6.5 1 4 .5 1 1v11c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2V1c-3-.5-5.5 0-7 1z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1"/>';
+		}
 	}
 
 	// ── Blurb helpers ───────────────────────────────────────────
@@ -317,6 +356,71 @@
 		if (typeof data.text === 'string') return data.text;
 		return '';
 	}
+
+	// ── ё sigil interaction ──────────────────────────────────────
+
+	const YO_CHARS = new Set(['е', 'ё', 'Е', 'Ё']);
+	const YO_CANDIDATES = new Set(['е', 'Е']); // Only е can be toggled TO ё
+
+	function isYoChar(char: string): boolean {
+		return YO_CHARS.has(char);
+	}
+
+	/**
+	 * Whether a sigil should appear for this entry.
+	 * - е characters are candidates (could become ё)
+	 * - User-toggled positions always show sigil (for undo)
+	 * - Pipeline-confirmed ё characters do NOT show sigil
+	 */
+	function shouldShowYoSigil(re: RibbonEntry): boolean {
+		if (re.type !== 'character') return false;
+		if (yoCharToggles.has(re.displayLogIndex)) return true;
+		return YO_CANDIDATES.has(re.char);
+	}
+
+	/** Whether a character position is currently ё (filled circle). */
+	function isYoActive(char: string): boolean {
+		return char === 'ё' || char === 'Ё';
+	}
+
+	/** Pending yo toggle: charIndex of sigil awaiting provenance confirmation. */
+	let yoTogglePending = $state<number | null>(null);
+
+	// Reset yo pending when word changes
+	$effect(() => {
+		void word.cleanWord;
+		yoTogglePending = null;
+	});
+
+	function handleYoSigilClick(re: RibbonEntry) {
+		const charIdx = re.displayLogIndex;
+		if (charIdx < 0) return;
+
+		// Close stress chooser if open (mutual exclusion)
+		assigningSyllable = null;
+
+		// If this position already has a user toggle, clicking reverts (removes it)
+		if (yoCharToggles.has(charIdx)) {
+			onyochartoggle?.(charIdx, null);
+			yoTogglePending = null;
+			return;
+		}
+
+		// Otherwise, show provenance chooser for this position
+		if (yoTogglePending === charIdx) {
+			// Clicking same sigil again cancels
+			yoTogglePending = null;
+		} else {
+			yoTogglePending = charIdx;
+		}
+	}
+
+	function confirmYoToggle(source: string) {
+		if (yoTogglePending === null) return;
+		onyochartoggle?.(yoTogglePending, source);
+		yoTogglePending = null;
+	}
+
 </script>
 
 <div
@@ -337,7 +441,7 @@
 		<p class="word-ipa">{headerIpa}</p>
 		{#if word.gloss}
 			<p class="word-gloss">{word.gloss}</p>
-		{:else if language === 'fr'}
+		{:else}
 			<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
 		{/if}
 	</div>
@@ -360,17 +464,19 @@
 					{@const arrowEntry = ribbonEntries[0]}
 					<div class="syllable-column clitic-column">
 						<div class="rubric-spacer" aria-hidden="true"></div>
-						<button
-							class="atom clitic-atom"
-							role="option"
-							aria-selected={false}
-							aria-label={t('inspector.cliticArrow.enclitic', language)}
-							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
-							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
-							onclick={() => handleCellClick(arrowEntry.index)}
-						>
-							<span class="atom-arrow-icon">{arrowEntry.char}</span>
-						</button>
+						<div class="clitic-atom-wrap">
+							<button
+								class="atom clitic-atom"
+								role="option"
+								aria-selected={false}
+								aria-label={t('inspector.cliticArrow.enclitic', language)}
+								tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+								data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+								onclick={() => handleCellClick(arrowEntry.index)}
+							>
+								<span class="atom-arrow-icon">{arrowEntry.char}</span>
+							</button>
+						</div>
 						<div class="ordinal-spacer" aria-hidden="true"></div>
 					</div>
 				{/if}
@@ -379,31 +485,87 @@
 				{#if showSyllableGroups}
 					{#each syllableGroups as group, gi}
 						<div class="syllable-column" role="group" aria-label="Syllable {group.syllableIndex + 1}">
-							<!-- Rubric label (Grayson positional, clickable for stress) -->
-							<button
-								class="rubric-label"
-								class:can-assign={canAssignStress}
-								class:is-stressed={group.syllableIndex === word.stressIndex && !isClitic}
-								onclick={() => handleSyllableHeaderClick(group.syllableIndex)}
-								disabled={!canAssignStress}
-								aria-label="Assign stress to syllable {group.syllableIndex + 1}"
-							>
+							<!-- Rubric label (Grayson positional, display only) -->
+							<div class="rubric-label">
 								{#if isClitic}
 									{t('ribbon.unstressed', language)}
 								{:else if group.positionKey}
 									{@html getRubricHtml(group.positionKey, language)}
 								{/if}
-							</button>
+							</div>
 
 							<!-- Molecule (syllable bounding box) -->
 							<div
 								class="molecule"
 								class:is-stressed={group.syllableIndex === word.stressIndex && !isClitic}
 							>
-								{#each group.entries as re, ai}
+								<div class="atom-row">
+									{#each group.entries as re, ai}
+										<button
+											class="atom"
+											class:stressed-vowel={re.entry?.features?.stressed && !isClitic}
+											class:selected={selectedCellIndex === re.index}
+											class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+											role="option"
+											aria-selected={selectedCellIndex === re.index}
+											tabindex={focusedCellIndex === re.index ? 0 : -1}
+											data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
+											onclick={() => handleCellClick(re.index)}
+										>
+											<span class="atom-char">{re.char}</span>
+											<span class="atom-arrow">↓</span>
+											<span class="atom-ipa">{re.ipa || '∅'}</span>
+											{#if shouldShowYoSigil(re)}
+												<!-- svelte-ignore a11y_no_static_element_interactions -->
+												<span
+													class="yo-sigla"
+													class:pending={yoTogglePending === re.displayLogIndex}
+													class:toggled={yoCharToggles.has(re.displayLogIndex)}
+													class:is-yo={isYoActive(re.char)}
+													role="button"
+													tabindex={-1}
+													aria-label={isYoActive(re.char) ? 'ё → е' : 'е → ё'}
+													onclick={(e) => { e.stopPropagation(); handleYoSigilClick(re); }}
+													onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleYoSigilClick(re); } }}
+												>
+													<span class="sigil-yo-char">ё</span>
+												</span>
+											{/if}
+										</button>
+									{/each}
+								</div>
+							</div>
+
+							<!-- Ordinal with stress circle -->
+							<div class="ordinal">
+								<span class="ordinal-num">{group.syllableIndex + 1}</span>
+								{#if canAssignStress}
+									<button
+										class="stress-circle"
+										class:is-stressed={group.syllableIndex === word.stressIndex}
+										class:is-assigning={assigningSyllable === group.syllableIndex}
+										aria-label="{t('inspector.syllable', language)} {group.syllableIndex + 1}"
+										onclick={() => handleCircleClick(group.syllableIndex)}
+									>
+										{#if group.syllableIndex === word.stressIndex}
+											<svg class="stress-icon" viewBox="0 0 16 16" width="9" height="9" aria-hidden="true">
+												{@html getStressIconSvg(word.stressSource)}
+											</svg>
+										{/if}
+									</button>
+								{/if}
+							</div>
+						</div>
+					{/each}
+				{:else}
+					<!-- Fallback: flat ribbon when no syllable data -->
+					{#each ribbonEntries.filter(re => re.type === 'character') as re}
+						<div class="syllable-column">
+							<div class="rubric-spacer" aria-hidden="true"></div>
+							<div class="molecule">
+								<div class="atom-row">
 									<button
 										class="atom"
-										class:stressed-vowel={re.entry?.features?.stressed && !isClitic}
 										class:selected={selectedCellIndex === re.index}
 										class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
 										role="option"
@@ -416,38 +578,7 @@
 										<span class="atom-arrow">↓</span>
 										<span class="atom-ipa">{re.ipa || '∅'}</span>
 									</button>
-								{/each}
-							</div>
-
-							<!-- Ordinal with stress dot -->
-							<div class="ordinal">
-								{#if group.syllableIndex === word.stressIndex && !isClitic}
-									<span class="stress-dot" aria-hidden="true"></span>
-								{/if}
-								<span class="ordinal-num">{group.syllableIndex + 1}</span>
-							</div>
-						</div>
-					{/each}
-				{:else}
-					<!-- Fallback: flat ribbon when no syllable data -->
-					{#each ribbonEntries.filter(re => re.type === 'character') as re}
-						<div class="syllable-column">
-							<div class="rubric-spacer" aria-hidden="true"></div>
-							<div class="molecule">
-								<button
-									class="atom"
-									class:selected={selectedCellIndex === re.index}
-									class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
-									role="option"
-									aria-selected={selectedCellIndex === re.index}
-									tabindex={focusedCellIndex === re.index ? 0 : -1}
-									data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
-									onclick={() => handleCellClick(re.index)}
-								>
-									<span class="atom-char">{re.char}</span>
-									<span class="atom-arrow">↓</span>
-									<span class="atom-ipa">{re.ipa || '∅'}</span>
-								</button>
+								</div>
 							</div>
 							<div class="ordinal-spacer" aria-hidden="true"></div>
 						</div>
@@ -459,21 +590,68 @@
 					{@const arrowEntry = ribbonEntries[ribbonEntries.length - 1]}
 					<div class="syllable-column clitic-column">
 						<div class="rubric-spacer" aria-hidden="true"></div>
-						<button
-							class="atom clitic-atom"
-							role="option"
-							aria-selected={false}
-							aria-label={t('inspector.cliticArrow.proclitic', language)}
-							tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
-							data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
-							onclick={() => handleCellClick(arrowEntry.index)}
-						>
-							<span class="atom-arrow-icon">{arrowEntry.char}</span>
-						</button>
+						<div class="clitic-atom-wrap">
+							<button
+								class="atom clitic-atom"
+								role="option"
+								aria-selected={false}
+								aria-label={t('inspector.cliticArrow.proclitic', language)}
+								tabindex={focusedCellIndex === arrowEntry.index ? 0 : -1}
+								data-cell-id="{word.lineIndex}-{word.wordIndex}-{arrowEntry.index}"
+								onclick={() => handleCellClick(arrowEntry.index)}
+							>
+								<span class="atom-arrow-icon">{arrowEntry.char}</span>
+							</button>
+						</div>
 						<div class="ordinal-spacer" aria-hidden="true"></div>
 					</div>
 				{/if}
 			</div>
+
+			<!-- Yo provenance chooser (inside organism, below ribbon) -->
+			{#if yoTogglePending !== null}
+				<div class="yo-chooser-wrapper">
+					<div class="yo-chooser">
+						<span class="yo-chooser-label">
+							{t('inspector.yoToggle', language)}:
+						</span>
+						<button class="provenance-choice" onclick={() => confirmYoToggle('user-dictionary')}>
+							{t('inspector.stressAssign.dictionary', language)}
+						</button>
+						<button class="provenance-choice" onclick={() => confirmYoToggle('user-composer')}>
+							{t('inspector.stressAssign.composer', language)}
+						</button>
+						<button class="provenance-choice" onclick={() => confirmYoToggle('user-override')}>
+							{t('inspector.stressAssign.myAssignment', language)}
+						</button>
+					</div>
+				</div>
+			{/if}
+
+			<!-- Stress provenance chooser (inside organism, below ribbon) -->
+			{#if assigningSyllable !== null}
+				<div class="stress-chooser-wrapper">
+					<div class="stress-chooser">
+						<span class="chooser-label">
+							{t('inspector.syllable', language)} {assigningSyllable + 1}:
+						</span>
+						<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-dictionary')}>
+							{t('inspector.stressAssign.dictionary', language)}
+						</button>
+						<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-composer')}>
+							{t('inspector.stressAssign.composer', language)}
+						</button>
+						<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-override')}>
+							{t('inspector.stressAssign.myAssignment', language)}
+						</button>
+						{#if showRevertOption}
+							<button class="provenance-choice revert-choice" onclick={handleRevert}>
+								{t('inspector.stressAssign.default', language)}
+							</button>
+						{/if}
+					</div>
+				</div>
+			{/if}
 
 			<!-- Blurb area (inside organism, below ribbon body) -->
 			<div class="blurb-wrapper" class:open={selectedRibbonEntry !== null}>
@@ -524,42 +702,6 @@
 				</p>
 			{:else}
 				<p class="provenance-status">{t('inspector.unknownStress', language)}</p>
-			{/if}
-
-			<!-- ё ↔ е toggle -->
-			{#if word.yoAlternation && word.yoAlternateForm}
-				<button class="provenance-link yo-link" onclick={() => onyotoggle?.()}>
-					{t('inspector.yoToggle', language)}
-				</button>
-			{:else}
-				<span class="provenance-link yo-link disabled" aria-hidden="true">
-					{t('inspector.yoToggle', language)}
-				</span>
-			{/if}
-
-			<!-- Stress assignment: provenance chooser (when assigning) -->
-			{#if assigningSyllable !== null}
-				<div class="provenance-chooser">
-					<span class="provenance-chooser-label">{t('inspector.syllable', language)} {assigningSyllable + 1}:</span>
-					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-dictionary')}>
-						{t('inspector.stressAssign.dictionary', language)}
-					</button>
-					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-composer')}>
-						{t('inspector.stressAssign.composer', language)}
-					</button>
-					<button class="provenance-choice" onclick={() => handleProvenanceChoice(assigningSyllable!, 'user-override')}>
-						{t('inspector.stressAssign.myAssignment', language)}
-					</button>
-				</div>
-			{/if}
-
-			<!-- Revert link for user-assigned stress -->
-			{#if isUserStress}
-				<div class="provenance-revert">
-					<button class="provenance-link" onclick={() => onstressrevert?.()}>
-						{t('inspector.stressAssign.dictionary', language)}
-					</button>
-				</div>
 			{/if}
 		</div>
 	</div>
@@ -710,9 +852,9 @@
 	/* ═══ 3. Organism (ribbon frame) ═════════════════════════════ */
 
 	.organism {
-		border-top: 1px solid var(--stone-300);
-		border-bottom: 1px solid var(--stone-300);
-		padding: 12px 0 8px;
+		border-top: 3px solid var(--sage);
+		border-bottom: 3px solid var(--sage);
+		padding: 12px 0 16px;
 		margin-bottom: 1.25rem;
 	}
 
@@ -726,7 +868,7 @@
 		row-gap: 8px;
 	}
 
-	/* ── Syllable column: rubric + molecule + ordinal ─────────── */
+	/* ── Syllable column: rubric + molecule + sigla + ordinal ── */
 
 	.syllable-column {
 		display: flex;
@@ -737,7 +879,7 @@
 	}
 
 	.clitic-column {
-		align-self: flex-end;
+		/* Uniform structure: rubric-spacer + clitic-atom-wrap + ordinal-spacer */
 	}
 
 	/* ── Rubric labels (Grayson positional headers) ───────────── */
@@ -751,52 +893,148 @@
 		color: var(--ink-secondary);
 		line-height: 1.2;
 		text-align: center;
-		min-height: 28px;
+		min-height: 34px;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
 		padding: 0 2px 4px;
-		background: none;
-		border: none;
-		border-radius: 3px;
-		cursor: default;
 		width: 100%;
-		transition: background-color 150ms ease;
-	}
-
-	.rubric-label.can-assign {
-		cursor: pointer;
-	}
-
-	.rubric-label.can-assign:hover {
-		background: rgba(139, 154, 125, 0.08);
-	}
-
-	.rubric-label.is-stressed {
-		color: var(--ink-primary);
-		font-weight: 500;
 	}
 
 	.rubric-spacer {
-		min-height: 28px;
+		min-height: 34px;
 		padding-bottom: 4px;
 	}
 
 	/* ── Molecules (syllable bounding boxes) ─────────────────── */
 
 	.molecule {
+		position: relative;
 		display: flex;
 		gap: 2px;
 		padding: 3px;
-		border: 1px solid var(--stone-300);
+		border: 1.5px solid var(--stone-400, #a8a29e);
 		border-radius: 6px;
 		transition: border-color 150ms ease, box-shadow 150ms ease;
 	}
 
 	.molecule.is-stressed {
-		border: 2px solid var(--sage);
+		border: 2.5px solid var(--sage);
 		padding: 2px;
 		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.2);
+	}
+
+	.atom-row {
+		display: flex;
+		gap: 2px;
+	}
+
+	/* ── Yo sigla (ejected from bottom of atom) ────────────────── */
+
+	.yo-sigla {
+		margin-top: auto;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		border: 1px solid var(--stone-500, #78716c);
+		background: transparent;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.25;
+		cursor: pointer;
+		transition: opacity 150ms ease, background-color 150ms ease, border-color 150ms ease;
+		pointer-events: auto;
+	}
+
+	.yo-sigla:hover {
+		opacity: 1;
+	}
+
+	.yo-sigla:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 1px;
+		opacity: 1;
+	}
+
+	.yo-sigla.pending {
+		opacity: 0.8;
+		border-color: var(--sage);
+	}
+
+	.yo-sigla.is-yo {
+		opacity: 0.4;
+		background: var(--sage);
+		border-color: var(--sage);
+	}
+
+	.yo-sigla.is-yo .sigil-yo-char {
+		color: white;
+	}
+
+	.yo-sigla.is-yo:hover {
+		opacity: 1;
+	}
+
+	.yo-sigla.toggled {
+		opacity: 0.6;
+		border-color: var(--sage);
+	}
+
+	.sigil-yo-char {
+		font-family: var(--font-sans);
+		font-size: 9px;
+		font-weight: 700;
+		line-height: 1;
+		color: var(--stone-700, #44403c);
+	}
+
+	/* ── Yo provenance chooser (inside organism) ─────────────── */
+
+	.yo-chooser-wrapper {
+		padding: 8px 0 4px;
+		border-top: 1px solid var(--stone-200, #e7e5e4);
+		margin-top: 8px;
+	}
+
+	.yo-chooser {
+		display: flex;
+		gap: 0.25rem;
+		flex-wrap: wrap;
+		align-items: baseline;
+		animation: blurbFadeIn 200ms ease both;
+	}
+
+	.yo-chooser-label {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-secondary);
+		margin-right: 0.25rem;
+	}
+
+	.stress-chooser-wrapper {
+		padding: 8px 0 4px;
+		border-top: 1px solid var(--stone-200, #e7e5e4);
+		margin-top: 8px;
+	}
+
+	.stress-chooser {
+		display: flex;
+		gap: 0.25rem;
+		flex-wrap: wrap;
+		align-items: baseline;
+		animation: blurbFadeIn 200ms ease both;
+	}
+
+	.chooser-label {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-secondary);
+		margin-right: 0.25rem;
+	}
+
+	.revert-choice {
+		border-style: dashed;
 	}
 
 	/* ── Atoms (glyph cells) ─────────────────────────────────── */
@@ -805,11 +1043,11 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		gap: 3px;
+		justify-content: flex-start;
+		gap: 6px;
 		width: 32px;
-		min-height: 72px;
-		padding: 8px 0;
+		height: 100px;
+		padding: 18px 0 4px;
 		background: var(--paper-cream);
 		border: 1px solid var(--stone-300);
 		border-radius: 4px;
@@ -856,6 +1094,11 @@
 		opacity: 0.8;
 	}
 
+	/* Suppress blurb dot when yo sigla is present */
+	.atom:has(.yo-sigla).has-blurb::after {
+		display: none;
+	}
+
 	.atom-char {
 		font-family: var(--font-serif);
 		font-size: 0.85rem;
@@ -865,7 +1108,7 @@
 	}
 
 	.atom-arrow {
-		font-size: 0.6rem;
+		font-size: 0.7rem;
 		color: var(--ink-tertiary);
 		line-height: 1;
 	}
@@ -879,13 +1122,19 @@
 
 	/* ── Clitic arrow atom (standalone, no molecule) ──────────── */
 
+	.clitic-atom-wrap {
+		display: flex;
+		padding: 3px;
+		border: 1.5px solid transparent;
+	}
+
 	.clitic-atom {
 		width: 32px;
-		min-height: 72px;
-		padding: 8px 0;
+		height: 100px;
+		padding: 10px 0;
 		background: transparent;
 		border: 1px solid var(--stone-200, #e7e5e4);
-		border-radius: 0;
+		border-radius: 4px;
 		cursor: default;
 		display: flex;
 		align-items: center;
@@ -907,29 +1156,63 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: 3px;
-		padding-top: 6px;
+		margin-top: 4px;
 		padding-left: 2px;
 	}
 
 	.ordinal-num {
 		font-family: var(--font-sans);
-		font-size: 0.6rem;
+		font-size: 0.75rem;
+		font-weight: 600;
 		color: var(--ink-secondary);
 		line-height: 1;
 	}
 
 	.ordinal-spacer {
-		padding-top: 6px;
+		margin-top: 4px;
 		min-height: 12px;
 	}
 
-	.stress-dot {
-		display: inline-block;
-		width: 6px;
-		height: 6px;
+	.stress-circle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
 		border-radius: 50%;
-		background: var(--sage);
+		border: 1px solid var(--stone-500);
+		background: transparent;
+		opacity: 0.25;
+		cursor: pointer;
+		padding: 0;
 		flex-shrink: 0;
+		transition: opacity 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.stress-circle:hover {
+		opacity: 1;
+		border-color: var(--sage);
+	}
+
+	.stress-circle.is-stressed {
+		background: var(--sage);
+		border-color: var(--sage);
+		opacity: 1;
+	}
+
+	.stress-circle.is-stressed:hover {
+		background: #6b7d5f;
+		border-color: #6b7d5f;
+	}
+
+	.stress-circle.is-assigning {
+		border-color: var(--sage);
+		opacity: 1;
+		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.3);
+	}
+
+	.stress-icon {
+		display: block;
 	}
 
 	/* ═══ Blurb (inside organism, below ribbon body) ══════════════ */
@@ -994,11 +1277,9 @@
 
 	.blurb-char {
 		font-family: var(--font-serif);
-		font-variant-caps: all-small-caps;
-		font-size: 13px;
+		font-size: 1rem;
 		font-weight: 600;
 		color: var(--ink-primary);
-		letter-spacing: 0.03em;
 	}
 
 	.blurb-arrow-sep {
@@ -1056,54 +1337,7 @@
 		line-height: 1.4;
 	}
 
-	/* ── Provenance text links ───────────────────────────────── */
-
-	.provenance-link {
-		background: none;
-		border: none;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		color: var(--sage);
-		cursor: pointer;
-		padding: 0.2rem 0;
-		display: inline-block;
-		text-align: left;
-		transition: color 150ms ease;
-	}
-
-	.provenance-link:hover {
-		text-decoration: underline;
-		color: #6b7d5f;
-	}
-
-	.provenance-link.disabled {
-		opacity: 0.35;
-		cursor: default;
-		pointer-events: none;
-	}
-
-	.yo-link {
-		display: block;
-		margin-top: 0.25rem;
-	}
-
-	/* ── Provenance chooser (stress source selection) ──────── */
-
-	.provenance-chooser {
-		display: flex;
-		gap: 0.25rem;
-		flex-wrap: wrap;
-		align-items: baseline;
-		margin-top: 0.5rem;
-		padding: 6px 0;
-	}
-
-	.provenance-chooser-label {
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		color: var(--ink-secondary);
-		margin-right: 0.25rem;
-	}
+	/* ── Provenance choice buttons (shared by stress and ё choosers) ── */
 
 	.provenance-choice {
 		background: var(--paper-cream);
@@ -1122,10 +1356,6 @@
 		border-color: var(--sage);
 		background: #faf8f4;
 		color: var(--ink-primary);
-	}
-
-	.provenance-revert {
-		margin-top: 0.25rem;
 	}
 
 	/* ═══ 5. Spot reconstitution toggle ══════════════════════════ */
