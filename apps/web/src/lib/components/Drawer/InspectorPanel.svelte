@@ -395,20 +395,32 @@
 
 	// ── Blurb helpers ───────────────────────────────────────────
 	function hasBlurb(entry: DisplayLogEntry): boolean {
-		return !!(entry.blurbData && (
-			(entry.blurbData as Record<string, unknown>).en ||
-			(entry.blurbData as Record<string, unknown>).fr ||
-			(entry.blurbData as Record<string, unknown>).text
-		));
+		if (!entry.blurbData?.blurb) return false;
+		const b = entry.blurbData.blurb;
+		if (typeof b === 'string') return b.length > 0;
+		return !!(b.en || b.fr);
 	}
 
 	function getBlurbText(entry: DisplayLogEntry, lang: Language): string {
-		if (!entry.blurbData) return '';
-		const data = entry.blurbData as Record<string, unknown>;
-		if (typeof data[lang] === 'string') return data[lang] as string;
-		if (typeof data.en === 'string') return data.en;
-		if (typeof data.text === 'string') return data.text;
-		return '';
+		if (!entry.blurbData?.blurb) return '';
+		const b = entry.blurbData.blurb;
+		let text: string;
+		if (typeof b === 'string') {
+			text = b;
+		} else {
+			text = b[lang] ?? b.en ?? '';
+		}
+		// Apply notation preferences to IPA symbols in blurb text
+		text = applyNotationPreferences(text, notationPrefs);
+		// Prevent IPA notation from breaking across lines
+		text = text.replace(/\/[^/]+\//g, m => `<span style="white-space:nowrap">${m}</span>`);
+		text = text.replace(/\[[^\]]+\]/g, m => `<span style="white-space:nowrap">${m}</span>`);
+		text = text.replace(/⟨[^⟩]+⟩/g, m => `<span style="white-space:nowrap">${m}</span>`);
+		return text;
+	}
+
+	function getBlurbCitation(entry: DisplayLogEntry): string | null {
+		return entry.blurbData?.citation ?? null;
 	}
 
 	// ── ё sigil interaction ──────────────────────────────────────
@@ -784,13 +796,15 @@
 
 	<!-- ═══ 2. Word header ═══ -->
 	<div class="word-header">
-		<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
-		<p class="word-ipa">{headerIpa}</p>
-		{#if word.gloss}
-			<p class="word-gloss">{word.gloss}</p>
-		{:else}
-			<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
-		{/if}
+		<div class="word-stack">
+			<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
+			<p class="word-ipa">{headerIpa}</p>
+			{#if word.gloss}
+				<p class="word-gloss">{word.gloss}</p>
+			{:else}
+				<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
+			{/if}
+		</div>
 	</div>
 
 	<!-- ═══ 3. Organism (ribbon + blurb) ═══ -->
@@ -1064,7 +1078,10 @@
 										<span class="blurb-ipa">{selectedRibbonEntry.ipa || '∅'}</span>
 									</p>
 									{#if hasBlurb(selectedRibbonEntry.entry)}
-										<p class="blurb-text">{getBlurbText(selectedRibbonEntry.entry, language)}</p>
+										<p class="blurb-text">{@html getBlurbText(selectedRibbonEntry.entry, language)}</p>
+										{#if getBlurbCitation(selectedRibbonEntry.entry)}
+											<p class="blurb-citation">{getBlurbCitation(selectedRibbonEntry.entry)}</p>
+										{/if}
 									{:else}
 										<p class="blurb-no-text">{t('inspector.noBlurb', language)}</p>
 									{/if}
@@ -1193,11 +1210,16 @@
 
 	.word-header {
 		margin-bottom: 1.5rem;
+		display: flex;
+		justify-content: center;
+	}
+
+	.word-stack {
 		display: inline-flex;
 		flex-direction: column;
 		align-items: flex-start;
-		border: 1px solid var(--sage);
-		border-radius: 2px;
+		border: 1.5px solid var(--stone-400, #a8a29e);
+		border-radius: 6px;
 		padding: 0.5rem 0.75rem;
 		background: var(--paper-cream);
 	}
@@ -1250,6 +1272,7 @@
 	.ribbon-body {
 		display: flex;
 		align-items: flex-end;
+		justify-content: center;
 		gap: 12px;
 		flex-wrap: wrap;
 		row-gap: 8px;
@@ -1795,6 +1818,15 @@
 		font-size: 0.85rem;
 		color: var(--ink-tertiary);
 		font-style: italic;
+	}
+
+	.blurb-citation {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		opacity: 0.7;
+		margin-top: 0.35rem;
+		line-height: 1.4;
 	}
 
 	/* ═══ 4. Provenance section ══════════════════════════════════ */

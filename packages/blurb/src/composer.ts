@@ -383,15 +383,17 @@ export function composeBlurb(entry: TranscriptionLogEntry): BlurbResult | null {
 
 /**
  * Look up blurb data for a transcription log entry.
- * Falls back to a simple "char → ipa" string if composition fails.
+ * Falls back to a simple bilingual "char → ipa" if composition fails.
+ * Always returns BilingualBlurb (never bare string) for consumer consistency.
  */
 export function lookupBlurb(entry: TranscriptionLogEntry): BlurbResult {
   const composed = composeBlurb(entry);
   if (composed) return composed;
 
   const { char, ipa } = entry;
+  const fallback = `${char} → ${ipa}`;
   return {
-    blurb: `${char} → ${ipa}`,
+    blurb: { en: fallback, fr: fallback },
     citation: null,
     notable: false,
   };

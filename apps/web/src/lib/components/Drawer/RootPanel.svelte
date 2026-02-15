@@ -219,8 +219,8 @@
 	<div class="section">
 		<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
 		<div class="cosmetic-grid">
-			<!-- Stress acutes (was in separate Display section) -->
-			<span class="cosmetic-label-left">{t('cosmetic.stressAcutes.left', language)}</span>
+			<!-- Stress acutes -->
+			<span class="cosmetic-label-left" class:label-inactive={showStressDiacritics}>{t('cosmetic.stressAcutes.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={showStressDiacritics}
@@ -231,10 +231,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.stressAcutes.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!showStressDiacritics}>{t('cosmetic.stressAcutes.right', language)}</span>
 
 			<!-- Reduced vowel -->
-			<span class="cosmetic-label-left">{t('cosmetic.reducedVowel.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={notationPrefs.reducedVowel}>{t('cosmetic.reducedVowel.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={notationPrefs.reducedVowel}
@@ -245,10 +245,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.reducedVowel.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!notationPrefs.reducedVowel}>{t('cosmetic.reducedVowel.right', language)}</span>
 
 			<!-- Palatal nasal -->
-			<span class="cosmetic-label-left">{t('cosmetic.palatalNasal.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={notationPrefs.palatalNasal}>{t('cosmetic.palatalNasal.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={notationPrefs.palatalNasal}
@@ -259,10 +259,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.palatalNasal.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!notationPrefs.palatalNasal}>{t('cosmetic.palatalNasal.right', language)}</span>
 
 			<!-- Geminates -->
-			<span class="cosmetic-label-left">{t('cosmetic.geminates.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={notationPrefs.geminate}>{t('cosmetic.geminates.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={notationPrefs.geminate}
@@ -273,10 +273,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.geminates.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!notationPrefs.geminate}>{t('cosmetic.geminates.right', language)}</span>
 
 			<!-- Shcha -->
-			<span class="cosmetic-label-left">{t('cosmetic.shcha.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={notationPrefs.shcha}>{t('cosmetic.shcha.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={notationPrefs.shcha}
@@ -287,10 +287,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.shcha.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!notationPrefs.shcha}>{t('cosmetic.shcha.right', language)}</span>
 
 			<!-- Reconstitution -->
-			<span class="cosmetic-label-left">{t('cosmetic.reconstitution.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={notationPrefs.reconstitution}>{t('cosmetic.reconstitution.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={notationPrefs.reconstitution}
@@ -301,10 +301,10 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.reconstitution.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!notationPrefs.reconstitution}>{t('cosmetic.reconstitution.right', language)}</span>
 
 			<!-- Open syllabification -->
-			<span class="cosmetic-label-left">{t('cosmetic.openSyllabification.left', language)}</span>
+			<span class="cosmetic-label-left" class:label-inactive={openSyllabification}>{t('cosmetic.openSyllabification.left', language)}</span>
 			<button
 				class="toggle-switch"
 				class:active={openSyllabification}
@@ -315,7 +315,7 @@
 			>
 				<span class="toggle-thumb"></span>
 			</button>
-			<span class="cosmetic-label-right">{t('cosmetic.openSyllabification.right', language)}</span>
+			<span class="cosmetic-label-right" class:label-inactive={!openSyllabification}>{t('cosmetic.openSyllabification.right', language)}</span>
 		</div>
 	</div>
 
@@ -521,18 +521,25 @@
 		align-items: center;
 	}
 
-	.cosmetic-label-left {
+	.cosmetic-label-left,
+	.cosmetic-label-right {
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
 		color: var(--ink-primary);
+		transition: color 0.15s ease;
+	}
+
+	.cosmetic-label-left {
 		text-align: right;
 	}
 
 	.cosmetic-label-right {
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		color: var(--ink-tertiary);
 		text-align: left;
+	}
+
+	.cosmetic-label-left.label-inactive,
+	.cosmetic-label-right.label-inactive {
+		color: var(--ink-tertiary);
 	}
 
 	/* ── Page size toggle ─────────────────────────────────── */

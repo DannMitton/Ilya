@@ -923,11 +923,11 @@ describe('@ilya/blurb', () => {
       expect(result.citation).not.toBeNull();
     });
 
-    it('falls back to char → ipa string when composition fails', () => {
+    it('falls back to bilingual char → ipa when composition fails', () => {
       const result = lookupBlurb({
         char: 'щ', ipa: 'ʃʲ', features: { type: 'consonant' },
       });
-      expect(result.blurb).toBe('щ → ʃʲ');
+      expect(result.blurb).toEqual({ en: 'щ → ʃʲ', fr: 'щ → ʃʲ' });
       expect(result.citation).toBeNull();
       expect(result.notable).toBe(false);
     });
@@ -936,7 +936,7 @@ describe('@ilya/blurb', () => {
       const result = lookupBlurb({
         char: '', ipa: '', features: {},
       });
-      expect(result.blurb).toBe(' → ');
+      expect(result.blurb).toEqual({ en: ' → ', fr: ' → ' });
       expect(result.citation).toBeNull();
     });
   });
