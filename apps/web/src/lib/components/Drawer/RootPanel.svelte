@@ -107,62 +107,50 @@
 	<div class="section">
 		<h3 class="section-label">{t('meta.heading', language)}</h3>
 		<div class="meta-fields">
-			<label class="meta-label">
-				<span class="meta-key">{t('meta.title', language)}</span>
-				<input
-					type="text"
-					class="meta-input"
-					value={metadata.title}
-					oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
-				/>
-			</label>
+			<input
+				type="text"
+				class="meta-input"
+				placeholder={t('meta.title', language)}
+				value={metadata.title}
+				oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
+			/>
+
+			<input
+				type="text"
+				class="meta-input"
+				placeholder={t('meta.opus', language)}
+				value={metadata.opus}
+				oninput={(e) => handleMetaField('opus', (e.target as HTMLInputElement).value)}
+			/>
 
 			<!-- Composer: searchable dropdown -->
-			<div class="meta-label">
-				<span class="meta-key">{t('meta.composer', language)}</span>
-				<div class="meta-select-wrapper">
-					<SearchableSelect
-						entries={COMPOSERS}
-						value={metadata.composer}
-						placeholder={t('meta.composer', language)}
-						{language}
-						onchange={handleComposerSelect}
-					/>
-				</div>
-			</div>
+			<SearchableSelect
+				entries={COMPOSERS}
+				value={metadata.composer}
+				placeholder={t('meta.composer', language)}
+				{language}
+				onchange={handleComposerSelect}
+			/>
 
 			<!-- Poet: searchable dropdown -->
-			<div class="meta-label">
-				<span class="meta-key">{t('meta.poet', language)}</span>
-				<div class="meta-select-wrapper">
-					<SearchableSelect
-						entries={POETS}
-						value={metadata.poet}
-						placeholder={t('meta.poet', language)}
-						{language}
-						onchange={handlePoetSelect}
-					/>
-				</div>
-			</div>
+			<SearchableSelect
+				entries={POETS}
+				value={metadata.poet}
+				placeholder={t('meta.poet', language)}
+				{language}
+				onchange={handlePoetSelect}
+			/>
 
-			<label class="meta-label">
-				<span class="meta-key">{t('meta.opus', language)}</span>
-				<input
-					type="text"
-					class="meta-input"
-					value={metadata.opus}
-					oninput={(e) => handleMetaField('opus', (e.target as HTMLInputElement).value)}
-				/>
-			</label>
-			<label class="meta-label">
-				<span class="meta-key">{t('meta.transcriber', language)}</span>
-				<input
-					type="text"
-					class="meta-input"
-					value={metadata.transcriber}
-					oninput={(e) => handleMetaField('transcriber', (e.target as HTMLInputElement).value)}
-				/>
-			</label>
+			<input
+				type="text"
+				class="meta-input"
+				placeholder={t('meta.transcriber', language)}
+				value={metadata.transcriber}
+				oninput={(e) => handleMetaField('transcriber', (e.target as HTMLInputElement).value)}
+			/>
+			{#if !metadata.transcriber}
+				<p class="transcriber-hint">{t('meta.transcriber.hint', language)}</p>
+			{/if}
 		</div>
 	</div>
 
@@ -477,22 +465,8 @@
 		gap: 0.35rem;
 	}
 
-	.meta-label {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.meta-key {
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		color: var(--ink-secondary);
-		min-width: 6.5rem;
-		flex-shrink: 0;
-	}
-
 	.meta-input {
-		flex: 1;
+		width: 100%;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
 		color: var(--ink-primary);
@@ -500,15 +474,20 @@
 		border: 1px solid var(--stone-300);
 		border-radius: 3px;
 		padding: 0.2rem 0.4rem;
+		box-sizing: border-box;
 	}
 
 	.meta-input::placeholder {
 		color: var(--ink-tertiary);
 	}
 
-	.meta-select-wrapper {
-		flex: 1;
-		min-width: 0;
+	.transcriber-hint {
+		font-family: var(--font-serif);
+		font-size: 0.75rem;
+		font-style: italic;
+		color: var(--ink-tertiary);
+		margin: -0.1rem 0 0 0;
+		padding-left: 0.4rem;
 	}
 
 	/* ── Cosmetic toggle grid ────────────────────────────── */

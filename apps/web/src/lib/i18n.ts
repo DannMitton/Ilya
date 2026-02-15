@@ -33,12 +33,14 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Song setup (metadata fields) ─────────────────────────
 	'meta.heading':                { en: 'Song Setup',                   fr: 'Configuration du chant' },
-	'meta.title':                  { en: 'Title',                        fr: 'Titre' },
+	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
 	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
-	'meta.poet':                   { en: 'Poet / Librettist',            fr: 'Poète / Librettiste' },
-	'meta.opus':                   { en: 'Opus / Source',                fr: 'Opus / Source' },
+	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
+	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
+	'meta.transcriber.hint':       { en: 'Your name appears on every transcription you create with Ilya.', fr: 'Votre nom apparaît sur chaque transcription que vous créez avec Ilya.' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
+	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
 
 	// ── Cosmetic options (IPA display toggles) ───────────────
 	'cosmetic.heading':            { en: 'Cosmetic Options',             fr: 'Options cosmétiques' },

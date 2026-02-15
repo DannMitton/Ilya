@@ -35,7 +35,7 @@
 			{title.trim()}
 		{:else}
 			<span class="placeholder-text">
-				{#if language === 'fr'}Titre de la chanson{:else}Song Title{/if}
+				{t('meta.title', language)}
 			</span>
 		{/if}
 	</div>
@@ -45,7 +45,7 @@
 			{metadataLine}
 		{:else}
 			<span class="placeholder-text">
-				{#if language === 'fr'}Informations sur le compositeur, l'opus et le poète{:else}Composer, opus, and poet information{/if}
+				{t('meta.placeholderLine', language)}
 			</span>
 		{/if}
 	</div>
