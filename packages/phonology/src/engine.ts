@@ -1146,8 +1146,9 @@ export const GraysonEngine = {
   },
 
   // Transcribe vowel based on position and palatal context
-  // Grayson Ch. 3: Fronting to [a] or [e] requires INTERPALATAL position
-  // (sandwiched between two palatalized consonants or followed by й)
+  // Grayson Ch. 3: Fronting to [a] requires INTERPALATAL position (soft on both sides).
+  // Fronting to [e] is broader: preceded by soft OR always-hard (ж/ш/ц), AND followed by soft.
+  // These are separate code paths per Grayson Ch. 3 §4, pp. 104–107.
   transcribeVowel(
     vowel: string,
     position: string,
@@ -1169,10 +1170,16 @@ export const GraysonEngine = {
       if (vowel === 'а') return isInterpalatal ? 'a' : 'ɑ';
       if (vowel === 'о') return 'o';
 
-      // RULE B: -е- requires INTERPALATAL for [e] (Grayson p. 207)
-      // "е and its cluster /jɛ/ shift to [e]/[je] when interpalatal
-      // (between two palatalized consonants or palatalizing agents)"
-      if (vowel === 'е') return isInterpalatal ? 'e' : 'ɛ';
+      // RULE B: Stressed [e] allophone (Grayson Ch. 3 §4, pp. 106–107)
+      // Broader than interpalatal: preceded by soft consonant OR always-hard
+      // (ж/ш/ц), AND followed by soft consonant or /j/.
+      // The always-hard trio qualify as preceding triggers even though they
+      // never palatalize. Separate code path from bright [a] (which genuinely
+      // requires interpalatal — the always-hard trio do NOT qualify there).
+      if (vowel === 'е') {
+        const ePrecededByEligible = isPrecededByPalatalized || isAfterAlwaysHard;
+        return (ePrecededByEligible && isFollowedByPalatalized) ? 'e' : 'ɛ';
+      }
 
       if (vowel === 'ё') return 'o';
       // и after ж/ш/ц → ɨ (Grayson p. 93-95)
