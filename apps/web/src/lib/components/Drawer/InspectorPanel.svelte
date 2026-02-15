@@ -4,6 +4,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, stressSourceLabel, type Language } from '$lib/i18n';
+	import { fade } from 'svelte/transition';
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
 	interface Props {
@@ -794,6 +795,10 @@
 		{t('inspector.back', language)}
 	</button>
 
+	<!-- ═══ 2–5. Word content (breathes on word change) ═══ -->
+	{#key word.cleanWord}
+	<div class="word-content" in:fade={{ duration: 300 }}>
+
 	<!-- ═══ 2. Word header ═══ -->
 	<div class="word-header">
 		<div class="word-stack">
@@ -1151,6 +1156,9 @@
 		</div>
 	{/if}
 
+	</div>
+	{/key}
+
 	<!-- ═══ 6. Notation indicator ═══ -->
 	<div class="section notation-indicator">
 		<p class="notation-note">{t('inspector.notationDefault', language)}</p>
@@ -1177,6 +1185,12 @@
 		.inspector-panel {
 			animation: none;
 		}
+	}
+
+	/* ═══ Word-change breath (sections 2–5) ══════════════════════ */
+
+	.word-content {
+		/* Container for Svelte transition */
 	}
 
 	/* ═══ 1. Back button (pill) ═══════════════════════════════════ */
