@@ -4,11 +4,13 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, stressSourceLabel, type Language } from '$lib/i18n';
+	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables } from '$lib/syllable-utils';
 
 	interface Props {
 		word: WordStackData;
 		language: Language;
 		notationPrefs: NotationPreferences;
+		openSyllabification?: boolean;
 		spotReconstituted?: boolean;
 		/** Character-level ё toggles for this word, keyed by charIndex. */
 		yoCharToggles?: Map<number, YoToggle>;
@@ -20,7 +22,7 @@
 		onyochartoggle?: (charIndex: number, source: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle }: Props = $props();
 
 	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
@@ -56,8 +58,27 @@
 		const useReconstituted =
 			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
 			(isSpotActive && word.ipaOwnReconstituted);
+
+		if (openSyllabification && !useReconstituted && word.syllables?.length > 0) {
+			const resliced = openSyllabify(word.syllables);
+			const base = rebuildIpaFromSyllables(resliced);
+			return applyNotationPreferences(base, notationPrefs);
+		}
+
 		const base = useReconstituted ? word.ipaOwnReconstituted : word.ipaContent;
 		return base ? applyNotationPreferences(base, notationPrefs) : '';
+	});
+
+	// ── Open syllabification: remap char→syllable for Ribbon grouping ──
+	const effectiveSyllables = $derived(
+		openSyllabification && word.syllables?.length > 0
+			? openSyllabify(word.syllables)
+			: word.syllables
+	);
+
+	const charToSyllableRemap = $derived.by((): Map<number, number> | null => {
+		if (!openSyllabification || !word.syllables || word.syllables.length <= 1) return null;
+		return buildCharToSyllableMap(effectiveSyllables);
 	});
 
 	// ── Ribbon interaction state ────────────────────────────────
@@ -110,7 +131,8 @@
 			const displayIpa = reconActive && reconstitutedIpaMap.has(di)
 				? reconstitutedIpaMap.get(di)!
 				: baseIpa;
-			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			const originalSi = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			const si = charToSyllableRemap ? (charToSyllableRemap.get(di) ?? originalSi) : originalSi;
 			entries.push({
 				type: 'character',
 				entry,
