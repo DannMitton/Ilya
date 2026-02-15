@@ -54,6 +54,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'cosmetic.shcha.right':        { en: '[ʃʲː]',                       fr: '[ʃʲː]' },
 	'cosmetic.reconstitution.left':  { en: 'Reduction',                  fr: 'Réduction' },
 	'cosmetic.reconstitution.right': { en: 'Reconstitution',             fr: 'Reconstitution' },
+	'cosmetic.openSyllabification.left':  { en: 'Default syllabification', fr: 'Syllabification par défaut' },
+	'cosmetic.openSyllabification.right': { en: 'Open syllables',           fr: 'Syllabes ouvertes' },
 
 	// ── Legacy display keys (backward compatibility) ─────────
 	'display.heading':             { en: 'Display',                      fr: 'Affichage' },

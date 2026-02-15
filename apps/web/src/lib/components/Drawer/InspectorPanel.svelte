@@ -1,16 +1,18 @@
 <script lang="ts">
-	import type { WordStackData, YoToggle } from '$lib/types';
+	import type { WordStackData, YoToggle, SyllableOverride } from '$lib/types';
 	import type { DisplayLogEntry } from '@ilya/blurb';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, stressSourceLabel, type Language } from '$lib/i18n';
-	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables } from '$lib/syllable-utils';
+	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
 	interface Props {
 		word: WordStackData;
 		language: Language;
 		notationPrefs: NotationPreferences;
 		openSyllabification?: boolean;
+		/** Per-word syllable boundary override for this word, or null if none. */
+		syllableOverride?: SyllableOverride | null;
 		spotReconstituted?: boolean;
 		/** Character-level ё toggles for this word, keyed by charIndex. */
 		yoCharToggles?: Map<number, YoToggle>;
@@ -20,9 +22,13 @@
 		onstressrevert?: () => void;
 		/** Character-level ё toggle: source = provenance, or null to revert. */
 		onyochartoggle?: (charIndex: number, source: string | null) => void;
+		/** Per-word syllable boundary override committed from drag-and-drop. */
+		onsyllableoverride?: (override: SyllableOverride) => void;
+		/** Clear per-word syllable override, reverting to global behaviour. */
+		onsyllableoverrideclear?: () => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
 
 	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
@@ -59,25 +65,41 @@
 			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
 			(isSpotActive && word.ipaOwnReconstituted);
 
-		if (openSyllabification && !useReconstituted && word.syllables?.length > 0) {
-			const resliced = openSyllabify(word.syllables);
-			const base = rebuildIpaFromSyllables(resliced);
-			return applyNotationPreferences(base, notationPrefs);
+		if (!useReconstituted && word.syllables?.length > 0) {
+			// Check per-word override first, then global open syllabification
+			if (syllableOverride) {
+				const charIpas = word.displayLog.map(e => e.ipa ?? '');
+				const resliced = applySyllableOverride(word.syllables, charIpas, syllableOverride);
+				const base = rebuildIpaFromSyllables(resliced);
+				return applyNotationPreferences(base, notationPrefs);
+			}
+			if (openSyllabification) {
+				const resliced = openSyllabify(word.syllables);
+				const base = rebuildIpaFromSyllables(resliced);
+				return applyNotationPreferences(base, notationPrefs);
+			}
 		}
 
 		const base = useReconstituted ? word.ipaOwnReconstituted : word.ipaContent;
 		return base ? applyNotationPreferences(base, notationPrefs) : '';
 	});
 
-	// ── Open syllabification: remap char→syllable for Ribbon grouping ──
-	const effectiveSyllables = $derived(
-		openSyllabification && word.syllables?.length > 0
-			? openSyllabify(word.syllables)
-			: word.syllables
-	);
+	// ── Open syllabification: compute effective syllables for Ribbon ──
+	// Priority: per-word override > global open syllabification > engine default
+	const effectiveSyllables = $derived.by(() => {
+		if (!word.syllables || word.syllables.length <= 1) return word.syllables;
+		if (syllableOverride) {
+			const charIpas = word.displayLog.map(e => e.ipa ?? '');
+			return applySyllableOverride(word.syllables, charIpas, syllableOverride);
+		}
+		if (openSyllabification) {
+			return openSyllabify(word.syllables);
+		}
+		return word.syllables;
+	});
 
 	const charToSyllableRemap = $derived.by((): Map<number, number> | null => {
-		if (!openSyllabification || !word.syllables || word.syllables.length <= 1) return null;
+		if ((!openSyllabification && !syllableOverride) || !word.syllables || word.syllables.length <= 1) return null;
 		return buildCharToSyllableMap(effectiveSyllables);
 	});
 
@@ -91,6 +113,9 @@
 		selectedCellIndex = -1;
 		focusedCellIndex = 0;
 		assigningSyllable = null;
+		hoverDragIndices = new Set();
+		hoverPreview = null;
+		if (hoverDwellTimer) { clearTimeout(hoverDwellTimer); hoverDwellTimer = null; }
 	});
 
 	// ── Ribbon entries with clitic arrows ────────────────────────
@@ -222,7 +247,14 @@
 		caretLeft = cellRect.left - ribbonRect.left + cellRect.width / 2;
 	});
 
+	let dragJustEnded = $state(false);
+
 	function handleCellClick(index: number) {
+		// Ignore click if a drag just completed (pointer up after drag)
+		if (dragJustEnded) {
+			dragJustEnded = false;
+			return;
+		}
 		const entry = ribbonEntries[index];
 		// Clitic arrows have no blurb
 		if (entry?.type === 'clitic-arrow') return;
@@ -443,6 +475,299 @@
 		yoTogglePending = null;
 	}
 
+	// ── Character classification for drag eligibility ────────────
+	const CY_VOWELS_DRAG = new Set('аеёиоуыэюяАЕЁИОУЫЭЮЯ'.split(''));
+	const CY_SIGNS_SET = new Set(['ь', 'ъ', 'Ь', 'Ъ']);
+
+	function isCyVowelChar(ch: string): boolean {
+		return CY_VOWELS_DRAG.has(ch);
+	}
+
+	function isCySignChar(ch: string): boolean {
+		return CY_SIGNS_SET.has(ch);
+	}
+
+	// ── Drag eligibility (boundary consonants only) ──────────────
+
+	interface DragInfo {
+		canDragLeft: boolean;
+		canDragRight: boolean;
+		/** All ribbon entry indices in this drag unit (self + tethered sign/host). */
+		dragUnitIndices: number[];
+		/** Syllable group index the atom would land in if dragged left. */
+		leftTargetGroup?: number;
+		/** Syllable group index the atom would land in if dragged right. */
+		rightTargetGroup?: number;
+	}
+
+	const dragEligibility = $derived.by((): Map<number, DragInfo> => {
+		const map = new Map<number, DragInfo>();
+		if (isClitic || syllableGroups.length <= 1) return map;
+
+		for (let gi = 0; gi < syllableGroups.length; gi++) {
+			const group = syllableGroups[gi];
+			const entries = group.entries;
+			if (entries.length === 0) continue;
+
+			const hasPrev = gi > 0;
+			const hasNext = gi < syllableGroups.length - 1;
+
+			// RIGHT boundary: last entry(ies) can drag right if next syllable exists
+			if (hasNext) {
+				const lastIdx = entries.length - 1;
+				const lastChar = entries[lastIdx].char;
+
+				if (!isCyVowelChar(lastChar)) {
+					let unitIndices: number[];
+					if (isCySignChar(lastChar) && lastIdx > 0) {
+						// Sign at end: tethered pair with host consonant
+						unitIndices = [entries[lastIdx - 1].index, entries[lastIdx].index];
+					} else if (!isCySignChar(lastChar)) {
+						// Consonant at end
+						unitIndices = [entries[lastIdx].index];
+					} else {
+						continue; // Sign at position 0 with no host: skip
+					}
+
+					for (const idx of unitIndices) {
+						const existing = map.get(idx);
+						if (existing) {
+							existing.canDragRight = true;
+							existing.rightTargetGroup = gi + 1;
+							for (const ui of unitIndices) {
+								if (!existing.dragUnitIndices.includes(ui)) {
+									existing.dragUnitIndices.push(ui);
+								}
+							}
+						} else {
+							map.set(idx, {
+								canDragLeft: false,
+								canDragRight: true,
+								dragUnitIndices: [...unitIndices],
+								rightTargetGroup: gi + 1,
+							});
+						}
+					}
+				}
+			}
+
+			// LEFT boundary: first entry(ies) can drag left if previous syllable exists
+			if (hasPrev) {
+				const firstChar = entries[0].char;
+
+				if (!isCyVowelChar(firstChar) && !isCySignChar(firstChar)) {
+					// Consonant at start
+					let unitIndices: number[];
+					if (entries.length > 1 && isCySignChar(entries[1].char)) {
+						// Consonant followed by sign: tethered pair
+						unitIndices = [entries[0].index, entries[1].index];
+					} else {
+						unitIndices = [entries[0].index];
+					}
+
+					for (const idx of unitIndices) {
+						const existing = map.get(idx);
+						if (existing) {
+							existing.canDragLeft = true;
+							existing.leftTargetGroup = gi - 1;
+							for (const ui of unitIndices) {
+								if (!existing.dragUnitIndices.includes(ui)) {
+									existing.dragUnitIndices.push(ui);
+								}
+							}
+						} else {
+							map.set(idx, {
+								canDragLeft: true,
+								canDragRight: false,
+								dragUnitIndices: [...unitIndices],
+								leftTargetGroup: gi - 1,
+							});
+						}
+					}
+				}
+			}
+		}
+
+		return map;
+	});
+
+	// ── Hover preview state ─────────────────────────────────────
+	let hoverDragIndices = $state<Set<number>>(new Set());
+	let hoverPreview = $state<{
+		leftTargetGroup?: number;
+		rightTargetGroup?: number;
+		ghostCount: number;
+	} | null>(null);
+	let hoverDwellTimer: ReturnType<typeof setTimeout> | null = null;
+	const HOVER_DWELL_MS = 150;
+
+	function handleDragAtomEnter(ribbonIndex: number) {
+		const info = dragEligibility.get(ribbonIndex);
+		if (!info) return;
+
+		// Immediate: highlight the drag unit
+		hoverDragIndices = new Set(info.dragUnitIndices);
+
+		// Deferred: show preview slots after dwell
+		if (hoverDwellTimer) clearTimeout(hoverDwellTimer);
+		hoverDwellTimer = setTimeout(() => {
+			hoverPreview = {
+				leftTargetGroup: info.canDragLeft ? info.leftTargetGroup : undefined,
+				rightTargetGroup: info.canDragRight ? info.rightTargetGroup : undefined,
+				ghostCount: info.dragUnitIndices.length,
+			};
+		}, HOVER_DWELL_MS);
+	}
+
+	function handleDragAtomLeave() {
+		if (isDragging) return;
+		if (hoverDwellTimer) { clearTimeout(hoverDwellTimer); hoverDwellTimer = null; }
+		hoverDragIndices = new Set();
+		hoverPreview = null;
+	}
+
+	// ── Drag interaction (pointer-based) ─────────────────────────
+
+	let isDragging = $state(false);
+	let dragOriginX = $state(0);
+	let dragOriginY = $state(0);
+	let dragRibbonIndex = $state(-1);
+	let dragGhostLeft = $state(0);
+	let dragGhostTop = $state(0);
+	let dragGhostVisible = $state(false);
+	/** Which direction(s) the current drag can resolve to. */
+	let dragDirections = $state<{ left: boolean; right: boolean }>({ left: false, right: false });
+
+	// Threshold in px: horizontal displacement to commit a drag
+	const DRAG_THRESHOLD = 20;
+	// Threshold to distinguish click from drag intent
+	const DRAG_INTENT_THRESHOLD = 5;
+
+	function handleDragPointerDown(e: PointerEvent, ribbonIndex: number) {
+		const info = dragEligibility.get(ribbonIndex);
+		if (!info) return;
+		if (e.button !== 0) return;
+
+		e.preventDefault();
+
+		dragOriginX = e.clientX;
+		dragOriginY = e.clientY;
+		dragRibbonIndex = ribbonIndex;
+		dragDirections = { left: info.canDragLeft, right: info.canDragRight };
+		isDragging = false;
+		dragGhostVisible = false;
+
+		(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+	}
+
+	function handleDragPointerMove(e: PointerEvent) {
+		if (dragRibbonIndex < 0) return;
+
+		const dx = e.clientX - dragOriginX;
+		const dy = e.clientY - dragOriginY;
+		const dist = Math.sqrt(dx * dx + dy * dy);
+
+		if (!isDragging && dist > DRAG_INTENT_THRESHOLD) {
+			isDragging = true;
+			e.preventDefault();
+		}
+
+		if (isDragging) {
+			if (ribbonEl) {
+				const rect = ribbonEl.getBoundingClientRect();
+				dragGhostLeft = e.clientX - rect.left;
+				dragGhostTop = e.clientY - rect.top;
+				dragGhostVisible = true;
+			}
+		}
+	}
+
+	function handleDragPointerUp(e: PointerEvent) {
+		if (dragRibbonIndex < 0) return;
+
+		const wasDragging = isDragging;
+		const dx = e.clientX - dragOriginX;
+		const info = dragEligibility.get(dragRibbonIndex);
+
+		// Release pointer capture
+		try {
+			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+		} catch {
+			// Already released
+		}
+
+		// Reset drag state
+		const prevDragIndex = dragRibbonIndex;
+		isDragging = false;
+		dragRibbonIndex = -1;
+		dragGhostVisible = false;
+		hoverDragIndices = new Set();
+		hoverPreview = null;
+
+		if (!wasDragging || !info) return;
+
+		// Suppress the click event that follows pointerup
+		dragJustEnded = true;
+		setTimeout(() => { dragJustEnded = false; }, 50);
+
+		// Determine direction and check threshold
+		let direction: 'left' | 'right' | null = null;
+		if (dx < -DRAG_THRESHOLD && info.canDragLeft) {
+			direction = 'left';
+		} else if (dx > DRAG_THRESHOLD && info.canDragRight) {
+			direction = 'right';
+		}
+
+		if (!direction) return; // Snap back: no animation, no commit
+
+		commitDrag(prevDragIndex, direction, info);
+	}
+
+	function commitDrag(ribbonIndex: number, direction: 'left' | 'right', info: DragInfo) {
+		const re = ribbonEntries[ribbonIndex];
+		if (!re || re.type !== 'character') return;
+
+		const currentBoundaries = computeBoundaries(effectiveSyllables);
+		if (currentBoundaries.length === 0) return;
+
+		const dragUnitDisplayLogIndices = info.dragUnitIndices
+			.map(idx => ribbonEntries[idx]?.displayLogIndex)
+			.filter(di => di >= 0)
+			.sort((a, b) => a - b);
+
+		if (dragUnitDisplayLogIndices.length === 0) return;
+
+		const currentGroupIdx = re.syllableIndex;
+		const newBoundaries = [...currentBoundaries];
+
+		if (direction === 'right' && currentGroupIdx < newBoundaries.length) {
+			newBoundaries[currentGroupIdx] -= dragUnitDisplayLogIndices.length;
+		} else if (direction === 'left' && currentGroupIdx > 0) {
+			newBoundaries[currentGroupIdx - 1] += dragUnitDisplayLogIndices.length;
+		} else {
+			return;
+		}
+
+		// Validate: boundaries must be strictly ascending and non-negative
+		for (let i = 0; i < newBoundaries.length; i++) {
+			if (newBoundaries[i] < 0) return;
+			if (i > 0 && newBoundaries[i] <= newBoundaries[i - 1]) return;
+		}
+
+		// Trigger breathing animation on the affected molecules
+		breathingSource = currentGroupIdx;
+		breathingDest = direction === 'right' ? currentGroupIdx + 1 : currentGroupIdx - 1;
+		breathingActive = true;
+		setTimeout(() => { breathingActive = false; }, 300);
+
+		onsyllableoverride?.({ boundaries: newBoundaries });
+	}
+
+	// ── Breathing animation state (post-drag) ───────────────────
+	let breathingActive = $state(false);
+	let breathingSource = $state(-1);
+	let breathingDest = $state(-1);
+
 </script>
 
 <div
@@ -520,19 +845,36 @@
 							<div
 								class="molecule"
 								class:is-stressed={group.syllableIndex === word.stressIndex && !isClitic}
+								class:breathing-source={breathingActive && group.syllableIndex === breathingSource}
+								class:breathing-dest={breathingActive && group.syllableIndex === breathingDest}
 							>
 								<div class="atom-row">
+									<!-- Drag preview: ghost slot at start (atom dragging right INTO this group) -->
+									{#if hoverPreview?.rightTargetGroup === gi}
+										{#each Array(hoverPreview.ghostCount) as _}
+											<div class="drag-preview-slot" aria-hidden="true"></div>
+										{/each}
+									{/if}
 									{#each group.entries as re, ai}
+										{@const isDraggable = dragEligibility.has(re.index)}
 										<button
 											class="atom"
 											class:stressed-vowel={re.entry?.features?.stressed && !isClitic}
 											class:selected={selectedCellIndex === re.index}
 											class:has-blurb={re.entry ? hasBlurb(re.entry) : false}
+											class:draggable={isDraggable}
+											class:drag-highlight={hoverDragIndices.has(re.index)}
+											class:is-dragging={isDragging && hoverDragIndices.has(re.index)}
 											role="option"
 											aria-selected={selectedCellIndex === re.index}
 											tabindex={focusedCellIndex === re.index ? 0 : -1}
 											data-cell-id="{word.lineIndex}-{word.wordIndex}-{re.index}"
 											onclick={() => handleCellClick(re.index)}
+											onmouseenter={isDraggable ? () => handleDragAtomEnter(re.index) : undefined}
+											onmouseleave={isDraggable ? handleDragAtomLeave : undefined}
+											onpointerdown={isDraggable ? (e) => handleDragPointerDown(e, re.index) : undefined}
+											onpointermove={isDraggable ? handleDragPointerMove : undefined}
+											onpointerup={isDraggable ? handleDragPointerUp : undefined}
 										>
 											<span class="atom-char">{re.char}</span>
 											<span class="atom-arrow">↓</span>
@@ -555,6 +897,12 @@
 											{/if}
 										</button>
 									{/each}
+									<!-- Drag preview: ghost slot at end (atom dragging left INTO this group) -->
+									{#if hoverPreview?.leftTargetGroup === gi}
+										{#each Array(hoverPreview.ghostCount) as _}
+											<div class="drag-preview-slot" aria-hidden="true"></div>
+										{/each}
+									{/if}
 								</div>
 							</div>
 
@@ -629,6 +977,22 @@
 					</div>
 				{/if}
 			</div>
+
+			<!-- Drag ghost overlay -->
+			{#if dragGhostVisible && dragRibbonIndex >= 0}
+				{@const dragEntry = ribbonEntries.find(re => re.index === dragRibbonIndex)}
+				{#if dragEntry}
+					<div
+						class="drag-ghost"
+						style="left: {dragGhostLeft}px; top: {dragGhostTop}px;"
+						aria-hidden="true"
+					>
+						<span class="drag-ghost-char">{dragEntry.char}</span>
+						<span class="drag-ghost-arrow">↓</span>
+						<span class="drag-ghost-ipa">{dragEntry.ipa || '∅'}</span>
+					</div>
+				{/if}
+			{/if}
 
 			<!-- Yo provenance chooser (inside organism, below ribbon) -->
 			{#if yoTogglePending !== null}
@@ -874,6 +1238,7 @@
 	/* ═══ 3. Organism (ribbon frame) ═════════════════════════════ */
 
 	.organism {
+		position: relative;
 		border-top: 3px solid var(--sage);
 		border-bottom: 3px solid var(--sage);
 		padding: 12px 0 16px;
@@ -1119,6 +1484,109 @@
 	/* Suppress blurb dot when yo sigla is present */
 	.atom:has(.yo-sigla).has-blurb::after {
 		display: none;
+	}
+
+	/* ── Drag eligibility visual affordance ──────────────────── */
+
+	.atom.draggable {
+		cursor: grab;
+	}
+
+	.atom.drag-highlight {
+		border-color: var(--sage);
+		background: #faf8f4;
+		box-shadow: 0 0 0 1px rgba(139, 154, 125, 0.25);
+	}
+
+	/* ── Drag preview ghost slot ────────────────────────────── */
+
+	.drag-preview-slot {
+		width: 6px;
+		height: 80px;
+		align-self: center;
+		border: 1px dashed var(--stone-300, #d6d3d1);
+		border-radius: 2px;
+		opacity: 0.7;
+		flex-shrink: 0;
+	}
+
+	/* ── Atom during active drag ────────────────────────────── */
+
+	.atom.is-dragging {
+		opacity: 0.3;
+		border-style: dashed;
+	}
+
+	/* ── Drag ghost (follows cursor) ────────────────────────── */
+
+	.drag-ghost {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 6px;
+		width: 32px;
+		height: 100px;
+		padding: 18px 0 4px;
+		background: var(--paper-cream);
+		border: 1.5px solid var(--sage);
+		border-radius: 4px;
+		opacity: 0.4;
+		pointer-events: none;
+		z-index: 10;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 2px 8px rgba(26, 22, 18, 0.12);
+	}
+
+	.drag-ghost-char {
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--ink-primary);
+		line-height: 1;
+	}
+
+	.drag-ghost-arrow {
+		font-size: 0.7rem;
+		color: var(--ink-tertiary);
+		line-height: 1;
+	}
+
+	.drag-ghost-ipa {
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		color: var(--ink-secondary);
+		line-height: 1;
+	}
+
+	/* ── Breathing animation (post-drag commit) ─────────────── */
+
+	.molecule.breathing-source {
+		animation: breatheCompress 300ms ease;
+	}
+
+	.molecule.breathing-dest {
+		animation: breatheExpand 300ms ease;
+	}
+
+	@keyframes breatheCompress {
+		0%   { transform: scaleX(1); }
+		40%  { transform: scaleX(0.92); }
+		100% { transform: scaleX(1); }
+	}
+
+	@keyframes breatheExpand {
+		0%   { transform: scaleX(1); }
+		40%  { transform: scaleX(1.06); }
+		100% { transform: scaleX(1); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.molecule.breathing-source,
+		.molecule.breathing-dest {
+			animation: none;
+		}
 	}
 
 	.atom-char {

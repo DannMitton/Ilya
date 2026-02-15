@@ -4,7 +4,8 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
-	import type { LineData, WordStackData, SongMetadata, PageSize, UserStressOverride, YoToggle } from '$lib/types';
+	import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
+	import type { LineData, WordStackData, SongMetadata, PageSize, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
@@ -93,6 +94,7 @@
 
 	// Display preferences
 	let showStressDiacritics = $state(false);
+	let openSyllabification = $state(false);
 
 	// Spot reconstitution: ephemeral per-word overrides, keyed by "lineIndex-wordIndex"
 	// Cleared on every transcribe or clear action
@@ -105,6 +107,11 @@
 	// Character-level ё toggles: keyed by "lineIndex-wordIndex-charIndex"
 	// Cleared on every fresh transcription
 	let yoToggles = $state<Map<string, YoToggle>>(new Map());
+
+	// Per-word syllable boundary overrides: keyed by "lineIndex-wordIndex"
+	// Cleared when the global open syllabification toggle changes in either direction,
+	// and on every fresh transcription or clear action.
+	let syllableOverrides = $state<Map<string, SyllableOverride>>(new Map());
 
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
@@ -134,6 +141,15 @@
 	const wordCount = $derived(
 		lines.reduce((sum, l) => sum + l.words.length, 0)
 	);
+
+	// Apply open syllabification as a display-time transform (no pipeline re-run).
+	// Per-word syllable overrides take precedence when present.
+	const effectiveLines = $derived.by(() => {
+		if (openSyllabification || syllableOverrides.size > 0) {
+			return applyOpenSyllabificationToLines(lines, syllableOverrides, openSyllabification);
+		}
+		return lines;
+	});
 
 	function runPipeline() {
 		transcribeError = '';
@@ -166,6 +182,7 @@
 		spotReconstitution = new Map();
 		userStressOverrides = new Map();
 		yoToggles = new Map();
+		syllableOverrides = new Map();
 
 		runPipeline();
 
@@ -212,6 +229,7 @@
 		spotReconstitution = new Map();
 		userStressOverrides = new Map();
 		yoToggles = new Map();
+		syllableOverrides = new Map();
 		try {
 			localStorage.setItem('ilya:inputText', '');
 		} catch {
@@ -269,6 +287,17 @@
 		}
 	}
 
+	function handleOpenSyllabificationChange(value: boolean) {
+		openSyllabification = value;
+		// Spec requirement: toggling global in either direction clears all per-word overrides
+		syllableOverrides = new Map();
+		try {
+			localStorage.setItem('ilya:openSyllabification', JSON.stringify(value));
+		} catch {
+			// localStorage unavailable
+		}
+	}
+
 	// Toggle spot reconstitution for the currently selected word
 	function handleSpotReconToggle() {
 		if (!selectedWord) return;
@@ -318,6 +347,22 @@
 		}
 		yoToggles = newMap;
 		runPipeline();
+	}
+
+	// ── Per-word syllable override handler ────────────────────────
+	function handleSyllableOverride(lineIndex: number, wordIndex: number, override: SyllableOverride) {
+		const key = `${lineIndex}-${wordIndex}`;
+		const newMap = new Map(syllableOverrides);
+		newMap.set(key, override);
+		syllableOverrides = newMap;
+	}
+
+	// ── Per-word syllable override removal ────────────────────────
+	function handleSyllableOverrideClear(lineIndex: number, wordIndex: number) {
+		const key = `${lineIndex}-${wordIndex}`;
+		const newMap = new Map(syllableOverrides);
+		newMap.delete(key);
+		syllableOverrides = newMap;
 	}
 
 	// Persist input text to localStorage
@@ -408,6 +453,10 @@
 			if (savedDiacritics) {
 				showStressDiacritics = JSON.parse(savedDiacritics);
 			}
+			const savedOpenSyll = localStorage.getItem('ilya:openSyllabification');
+			if (savedOpenSyll) {
+				openSyllabification = JSON.parse(savedOpenSyll);
+			}
 			const savedCollapsed = localStorage.getItem('ilya:drawerCollapsed');
 			if (savedCollapsed) {
 				drawerCollapsed = JSON.parse(savedCollapsed);
@@ -476,6 +525,7 @@
 					{transcribeError}
 					{notationPrefs}
 					{showStressDiacritics}
+					{openSyllabification}
 					{language}
 					{metadata}
 					{pageSize}
@@ -485,6 +535,7 @@
 					onprint={handlePrint}
 					onnotationchange={handleNotationChange}
 					onstressdiacriticschange={handleStressDiacriticsChange}
+					onopensyllabificationchange={handleOpenSyllabificationChange}
 					onmetadatachange={handleMetadataChange}
 					onpagesizechange={handlePageSizeChange}
 				/>
@@ -507,6 +558,8 @@
 						word={selectedWord}
 						{language}
 						{notationPrefs}
+						{openSyllabification}
+						syllableOverride={syllableOverrides.get(wordKey) ?? null}
 						spotReconstituted={spotReconstitution.has(wordKey)}
 						yoCharToggles={wordYoToggles}
 						onback={handleInspectorBack}
@@ -514,6 +567,8 @@
 						onstressassign={handleStressAssign}
 						onstressrevert={handleStressRevert}
 						onyochartoggle={handleYoCharToggle}
+						onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+						onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
 					/>
 				{/if}
 			{/snippet}
@@ -521,7 +576,7 @@
 	</div>
 
 	<main class="main-content {paperBreathClass}" bind:this={mainContentEl}>
-		<Paper {lines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
+		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
 

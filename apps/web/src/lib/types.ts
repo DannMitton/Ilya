@@ -27,6 +27,16 @@ export interface YoToggle {
   source: 'user-dictionary' | 'user-composer' | 'user-override';
 }
 
+/** Per-word syllable boundary override (keyed by "lineIndex-wordIndex"). */
+export interface SyllableOverride {
+  /** Character indices of the last character in each non-final syllable.
+   *  For K syllables, boundaries has K-1 entries.
+   *  Example: москва as мос|ква → boundaries: [2]
+   *  Example: москва as мо|сква → boundaries: [1]
+   */
+  boundaries: number[];
+}
+
 // ── Pipeline output ──────────────────────────────────────────────
 
 /** A single word fully processed for rendering. */

@@ -16,6 +16,7 @@
 		transcribeError: string;
 		notationPrefs: NotationPreferences;
 		showStressDiacritics: boolean;
+		openSyllabification: boolean;
 		language: Language;
 		metadata: SongMetadata;
 		pageSize: PageSize;
@@ -25,6 +26,7 @@
 		onprint: () => void;
 		onnotationchange: (prefs: NotationPreferences) => void;
 		onstressdiacriticschange: (value: boolean) => void;
+		onopensyllabificationchange: (value: boolean) => void;
 		onmetadatachange: (meta: SongMetadata) => void;
 		onpagesizechange: (size: PageSize) => void;
 	}
@@ -39,6 +41,7 @@
 		transcribeError,
 		notationPrefs,
 		showStressDiacritics,
+		openSyllabification,
 		language,
 		metadata,
 		pageSize,
@@ -48,6 +51,7 @@
 		onprint,
 		onnotationchange,
 		onstressdiacriticschange,
+		onopensyllabificationchange,
 		onmetadatachange,
 		onpagesizechange,
 	}: Props = $props();
@@ -298,6 +302,20 @@
 				<span class="toggle-thumb"></span>
 			</button>
 			<span class="cosmetic-label-right">{t('cosmetic.reconstitution.right', language)}</span>
+
+			<!-- Open syllabification -->
+			<span class="cosmetic-label-left">{t('cosmetic.openSyllabification.left', language)}</span>
+			<button
+				class="toggle-switch"
+				class:active={openSyllabification}
+				role="switch"
+				aria-checked={openSyllabification}
+				aria-label={t('cosmetic.openSyllabification.right', language)}
+				onclick={() => onopensyllabificationchange(!openSyllabification)}
+			>
+				<span class="toggle-thumb"></span>
+			</button>
+			<span class="cosmetic-label-right">{t('cosmetic.openSyllabification.right', language)}</span>
 		</div>
 	</div>
 
