@@ -22,7 +22,7 @@
 					{@render rootPanel()}
 				</div>
 				{#if inspectorPanel}
-					<div class="panel" class:active={mode === 'inspector'}>
+					<div class="panel panel-inspector" class:active={mode === 'inspector'}>
 						{@render inspectorPanel()}
 					</div>
 				{/if}
@@ -91,6 +91,23 @@
 	.panel.active {
 		opacity: 1;
 		pointer-events: auto;
+	}
+
+	/* ── Inspector breath: settles into place when a word is clicked ── */
+
+	@keyframes breathIn {
+		from { opacity: 0; transform: translateY(-2px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	.panel-inspector.active {
+		animation: breathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.panel-inspector.active {
+			animation: none;
+		}
 	}
 
 	/* ── Lip: vertical strip on right edge ────────────────── */
