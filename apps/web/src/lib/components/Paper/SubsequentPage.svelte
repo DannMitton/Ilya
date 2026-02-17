@@ -79,7 +79,6 @@
 		background: var(--paper-cream);
 		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
 		flex-shrink: 0;
-		break-after: page;
 	}
 
 	/* ── Content window ────────────────────────────────────── */
