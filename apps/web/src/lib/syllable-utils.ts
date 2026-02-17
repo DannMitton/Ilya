@@ -13,6 +13,7 @@
 
 import type { SyllableData } from '@ilya/phonology';
 import type { LineData, WordStackData, SyllableOverride } from './types';
+import { applyReconstitution } from './reconstitution';
 
 // ── Character classification ────────────────────────────────────
 
@@ -268,12 +269,33 @@ function applyOpenSyllabificationToLineWords(
 
 			let ipa = rebuildIpaFromSyllables(resliced);
 
+			// Rebuild reconstituted IPA from re-sliced syllables.
+			// Reconstitution changes vowel values; open syllabification moves
+			// consonant boundaries. These transforms are independent, so we
+			// apply reconstitution to the re-sliced IPA string. The vowel
+			// sequence is unchanged by re-slicing, so positional matching
+			// against the transcription log remains correct.
+			let ipaRecon = ipa;
+			try {
+				if (word.result?.transcriptionLog) {
+					ipaRecon = applyReconstitution(ipa, word.result.transcriptionLog);
+				}
+			} catch {
+				// Fallback: use the un-reconstituted re-sliced IPA
+				ipaRecon = ipa;
+			}
+			const ipaOwnRecon = ipaRecon;
+
 			// Re-merge clitic material from adjacent words in the line.
+			// Both ipaDisplay and ipaReconstituted are merged in parallel
+			// so reconstitution composes correctly with open syllabification.
+			//
 			// Scan leftward for proclitics (closest to host first, then prepend outward).
 			for (let j = idx - 1; j >= 0; j--) {
 				const p = words[j];
 				if (!p || !p.isProclitic) break;
 				const cliticIpa = p.ipaContent ?? '';
+				const cliticRecon = p.ipaOwnReconstituted ?? cliticIpa;
 				if (!cliticIpa) continue;
 				if (p.isVowellessClitic) {
 					// Vowelless proclitic: tuck into host's stressed syllable
@@ -282,9 +304,15 @@ function applyOpenSyllabificationToLineWords(
 					} else {
 						ipa = cliticIpa + ipa;
 					}
+					if (ipaRecon.startsWith('ˈ')) {
+						ipaRecon = 'ˈ' + cliticRecon + ipaRecon.slice(1);
+					} else {
+						ipaRecon = cliticRecon + ipaRecon;
+					}
 				} else {
 					// Vowel-bearing proclitic: separate with space
 					ipa = cliticIpa + ' ' + ipa;
+					ipaRecon = cliticRecon + ' ' + ipaRecon;
 				}
 			}
 
@@ -293,15 +321,23 @@ function applyOpenSyllabificationToLineWords(
 				const e = words[j];
 				if (!e || !e.isEnclitic) break;
 				const cliticIpa = e.ipaContent ?? '';
+				const cliticRecon = e.ipaOwnReconstituted ?? cliticIpa;
 				if (!cliticIpa) continue;
 				if (e.isVowellessClitic) {
 					ipa = ipa + cliticIpa;
+					ipaRecon = ipaRecon + cliticRecon;
 				} else {
 					ipa = ipa + ' ' + cliticIpa;
+					ipaRecon = ipaRecon + ' ' + cliticRecon;
 				}
 			}
 
-			return { ...word, ipaDisplay: ipa };
+			return {
+				...word,
+				ipaDisplay: ipa,
+				ipaReconstituted: ipaRecon,
+				ipaOwnReconstituted: ipaOwnRecon,
+			};
 		} catch (err) {
 			console.error('[Ilya] openSyllabify error on word:', word.cleanWord, err);
 			return word;

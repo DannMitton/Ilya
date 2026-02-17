@@ -78,21 +78,76 @@ body {
 /* ── Print styles ─────────────────────────────────────────── */
 /* WYSIWYG: the screen IS the document. Print overrides only  */
 /* remove screen chrome (shadows, cream bg) and set margins.  */
+/*                                                             */
+/* IMPORTANT: All wrapper resets live here in app.css because  */
+/* this is truly global CSS. Svelte-scoped <style> blocks in  */
+/* individual components add hash suffixes that may not        */
+/* override reliably at print time. This single block is the   */
+/* authoritative print reset for the entire wrapper chain.     */
+/*                                                             */
+/* The font-size/line-height zero on .paper-container          */
+/* collapses whitespace text nodes between .paper-page divs.  */
+/* Without this, inherited line-height creates invisible line  */
+/* boxes that push total height past the page boundary,        */
+/* causing Chrome to generate a trailing blank page.           */
 
 @media print {
 	:root {
 		--paper-cream: #ffffff;
 	}
 
+	/* ── Wrapper chain reset ──────────────────────────────── */
+	/* Every container from <html> down to .paper-container    */
+	/* must be transparent at print time: no height caps, no   */
+	/* flex residue, no overflow clipping, no padding/margin,  */
+	/* no gap, no inherited line-height on whitespace nodes.   */
+
+	html,
+	body {
+		height: auto !important;
+		overflow: visible !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
 	body {
 		background: white;
 	}
+
+	.app-shell,
+	.app-content,
+	.main-content {
+		display: block !important;
+		height: auto !important;
+		overflow: visible !important;
+		flex: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		gap: 0 !important;
+	}
+
+	.paper-container {
+		display: block !important;
+		height: auto !important;
+		overflow: visible !important;
+		flex: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		gap: 0 !important;
+		font-size: 0 !important;
+		line-height: 0 !important;
+	}
+
+	/* ── Page-level print rules ───────────────────────────── */
 
 	.paper-page {
 		page-break-after: always;
 		break-after: page;
 		box-shadow: none !important;
 		background: white !important;
+		margin: 0 !important;
+		font-size: 16px;
+		line-height: normal;
 	}
 
 	.paper-page:last-child {

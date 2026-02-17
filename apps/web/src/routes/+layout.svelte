@@ -15,4 +15,12 @@
 		height: 100vh;
 		overflow: hidden;
 	}
+
+	@media print {
+		.app-shell {
+			display: block;
+			height: auto;
+			overflow: visible;
+		}
+	}
 </style>

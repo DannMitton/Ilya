@@ -34,6 +34,10 @@
 	);
 </script>
 
+<svelte:head>
+	{@html `<style id="ilya-print-page">@page { size: ${pageSize === 'a4' ? '210mm 297mm' : '8.5in 11in'}; margin: 0; }</style>`}
+</svelte:head>
+
 <div class="paper-container" role="region" aria-label="Transcription">
 	{#each pages as pageLines, i}
 		{@const legendItems = buildProvenanceLegend(pageLines, language)}
@@ -74,5 +78,13 @@
 		align-items: center;
 		gap: 2rem;
 		padding-bottom: 2rem;
+	}
+
+	@media print {
+		.paper-container {
+			display: block;
+			gap: 0;
+			padding: 0;
+		}
 	}
 </style>

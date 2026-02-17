@@ -12,6 +12,7 @@
 		language: Language;
 		notationPrefs: NotationPreferences;
 		openSyllabification?: boolean;
+		showStressDiacritics?: boolean;
 		/** Per-word syllable boundary override for this word, or null if none. */
 		syllableOverride?: SyllableOverride | null;
 		spotReconstituted?: boolean;
@@ -29,7 +30,7 @@
 		onsyllableoverrideclear?: () => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
 
 	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
@@ -72,17 +73,17 @@
 				const charIpas = word.displayLog.map(e => e.ipa ?? '');
 				const resliced = applySyllableOverride(word.syllables, charIpas, syllableOverride);
 				const base = rebuildIpaFromSyllables(resliced);
-				return applyNotationPreferences(base, notationPrefs);
+				return applyNotationPreferences(base, notationPrefs, true);
 			}
 			if (openSyllabification) {
 				const resliced = openSyllabify(word.syllables);
 				const base = rebuildIpaFromSyllables(resliced);
-				return applyNotationPreferences(base, notationPrefs);
+				return applyNotationPreferences(base, notationPrefs, true);
 			}
 		}
 
 		const base = useReconstituted ? word.ipaOwnReconstituted : word.ipaContent;
-		return base ? applyNotationPreferences(base, notationPrefs) : '';
+		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
 	});
 
 	// ── Open syllabification: compute effective syllables for Ribbon ──
@@ -159,11 +160,16 @@
 				: baseIpa;
 			const originalSi = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
 			const si = charToSyllableRemap ? (charToSyllableRemap.get(di) ?? originalSi) : originalSi;
+			// Apply combining acute accent to stressed vowel (ё/Ё are inherently stressed, never marked)
+			let displayChar = entry.char;
+			if (showStressDiacritics && entry.features?.stressed && entry.char !== 'ё' && entry.char !== 'Ё') {
+				displayChar = entry.char + '\u0301';
+			}
 			entries.push({
 				type: 'character',
 				entry,
-				char: entry.char,
-				ipa: displayIpa,
+				char: displayChar,
+				ipa: applyNotationPreferences(displayIpa, notationPrefs),
 				index: idx,
 				displayLogIndex: di,
 				syllableIndex: si,
@@ -442,12 +448,15 @@
 	function shouldShowYoSigil(re: RibbonEntry): boolean {
 		if (re.type !== 'character') return false;
 		if (yoCharToggles.has(re.displayLogIndex)) return true;
-		return YO_CANDIDATES.has(re.char);
+		// Use raw entry char (not display char which may have combining acute)
+		const rawChar = re.entry?.char ?? re.char;
+		return YO_CANDIDATES.has(rawChar);
 	}
 
 	/** Whether a character position is currently ё (filled circle). */
-	function isYoActive(char: string): boolean {
-		return char === 'ё' || char === 'Ё';
+	function isYoActive(re: RibbonEntry): boolean {
+		const rawChar = re.entry?.char ?? re.char;
+		return rawChar === 'ё' || rawChar === 'Ё';
 	}
 
 	/** Pending yo toggle: charIndex of sigil awaiting provenance confirmation. */
@@ -904,10 +913,10 @@
 													class="yo-sigla"
 													class:pending={yoTogglePending === re.displayLogIndex}
 													class:toggled={yoCharToggles.has(re.displayLogIndex)}
-													class:is-yo={isYoActive(re.char)}
+													class:is-yo={isYoActive(re)}
 													role="button"
 													tabindex={-1}
-													aria-label={isYoActive(re.char) ? 'ё → е' : 'е → ё'}
+													aria-label={isYoActive(re) ? 'ё → е' : 'е → ё'}
 													onclick={(e) => { e.stopPropagation(); handleYoSigilClick(re); }}
 													onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleYoSigilClick(re); } }}
 												>

@@ -26,7 +26,7 @@
 			(notationPrefs.reconstitution && word.ipaReconstituted) ||
 			(isSpotActive && word.ipaReconstituted);
 		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
-		return base ? applyNotationPreferences(base, notationPrefs) : '';
+		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
 	});
 
 	// Apply combining acute accent to the stressed vowel in Cyrillic

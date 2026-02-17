@@ -559,6 +559,7 @@
 						{language}
 						{notationPrefs}
 						{openSyllabification}
+						{showStressDiacritics}
 						syllableOverride={syllableOverrides.get(wordKey) ?? null}
 						spotReconstituted={spotReconstitution.has(wordKey)}
 						yoCharToggles={wordYoToggles}
@@ -612,6 +613,8 @@
 		}
 
 		.main-content {
+			display: block;
+			flex: none;
 			padding: 0;
 			overflow: visible;
 		}

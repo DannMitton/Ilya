@@ -43,7 +43,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
 
 	// ── Cosmetic options (IPA display toggles) ───────────────
-	'cosmetic.heading':            { en: 'Cosmetic Options',             fr: 'Options cosmétiques' },
+	'cosmetic.heading':            { en: 'Cosmetic Options (Global)',     fr: 'Options cosmétiques (globales)' },
 	'cosmetic.stressAcutes.left':  { en: 'No stress marks',             fr: 'Sans accents toniques' },
 	'cosmetic.stressAcutes.right': { en: 'Apply stress acutes',         fr: 'Appliquer les accents toniques' },
 	'cosmetic.reducedVowel.left':  { en: 'Default [ʌ]',                 fr: 'Par défaut [ʌ]' },
@@ -53,8 +53,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'cosmetic.geminates.left':     { en: 'Separate geminates [tt]',     fr: 'Géminées séparées [tt]' },
 	'cosmetic.geminates.right':    { en: 'Length markers [tː]',         fr: 'Marqueurs de durée [tː]' },
 	'cosmetic.shcha.left':         { en: 'Shcha notation [ʃʲʃʲ]',      fr: 'Notation chtcha [ʃʲʃʲ]' },
-	'cosmetic.shcha.right':        { en: '[ʃʲː]',                       fr: '[ʃʲː]' },
-	'cosmetic.reconstitution.left':  { en: 'Reduction',                  fr: 'Réduction' },
+	'cosmetic.shcha.right':        { en: 'Length marker [ʃʲː]',          fr: 'Marqueur de durée [ʃʲː]' },
+	'cosmetic.reconstitution.left':  { en: 'Default reduction',            fr: 'Réduction par défaut' },
 	'cosmetic.reconstitution.right': { en: 'Reconstitution',             fr: 'Reconstitution' },
 	'cosmetic.openSyllabification.left':  { en: 'Default syllabification', fr: 'Syllabification par défaut' },
 	'cosmetic.openSyllabification.right': { en: 'Open syllables',           fr: 'Syllabes ouvertes' },
