@@ -494,8 +494,9 @@
 	/* ── Word Console section ────────────────────────────── */
 
 	.console-section {
-		border-top: 1px solid var(--stone-300);
-		padding-top: 1rem;
+		border-top: 2px solid var(--sage);
+		border-bottom: 2px solid var(--sage);
+		padding: 1rem 0;
 	}
 
 	.console-placeholder-body {

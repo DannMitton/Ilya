@@ -3,7 +3,7 @@
 	import type { DisplayLogEntry } from '@ilya/blurb';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import { t, stressSourceLabel, type Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -31,9 +31,25 @@
 
 	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
 
-	// ── Reconstitution derivations ──────────────────────────────
-	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
-	const reconActive = $derived(notationPrefs.reconstitution || isSpotActive);
+	// ── Reconstitution derivations (bidirectional) ─────────────
+	// Spot override always inverts the global setting for this word.
+	// Global reduced (default) + spot checked = reconstitute this word.
+	// Global reconstituted + spot checked = reduce this word.
+	const reconActive = $derived(
+		spotReconstituted ? !notationPrefs.reconstitution : notationPrefs.reconstitution
+	);
+
+	// Contextual label: checkbox always offers the inverse of the global setting
+	const spotCheckboxLabel = $derived(
+		notationPrefs.reconstitution
+			? (language === 'en' ? 'Spot reduction' : 'Réduction ciblée')
+			: (language === 'en' ? 'Spot reconstitution' : 'Reconstitution ciblée')
+	);
+
+	// Whether this word has distinct reduced/reconstituted forms
+	const canSpotToggle = $derived(
+		!!word.ipaOwnReconstituted && !!word.ipaContent && word.ipaOwnReconstituted !== word.ipaContent
+	);
 
 	// Per-entry reconstituted IPA map (index → reconstituted IPA for entries that differ)
 	const reconstitutedIpaMap = $derived.by((): Map<number, string> => {
@@ -62,9 +78,7 @@
 
 	// Header IPA: use ipaContent (pre-merge) for analysis, not ipaDisplay (fused clitic)
 	const headerIpa = $derived.by(() => {
-		const useReconstituted =
-			(notationPrefs.reconstitution && word.ipaOwnReconstituted) ||
-			(isSpotActive && word.ipaOwnReconstituted);
+		const useReconstituted = reconActive && word.ipaOwnReconstituted;
 
 		if (!useReconstituted && word.syllables?.length > 0) {
 			// Check per-word override first, then global open syllabification
@@ -797,14 +811,31 @@
 
 	<!-- ═══ 2. Word header ═══ -->
 	<div class="word-header">
-		<div class="word-stack">
-			<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
-			<p class="word-ipa">{headerIpa}</p>
-			{#if word.gloss}
-				<p class="word-gloss">{word.gloss}</p>
-			{:else}
-				<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
-			{/if}
+		<div class="word-header-group">
+			<div class="word-stack">
+				<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
+				<p class="word-ipa">{headerIpa}</p>
+				{#if word.gloss}
+					<p class="word-gloss">{word.gloss}</p>
+				{:else}
+					<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
+				{/if}
+			</div>
+
+			<!-- Spot reconstitution/reduction checkbox (tethered to stack's right edge) -->
+			<div class="spot-checkbox-slot">
+				{#if canSpotToggle}
+					<label class="spot-checkbox-label">
+						<span class="spot-checkbox-text">{spotCheckboxLabel}</span>
+						<input
+							type="checkbox"
+							class="spot-checkbox"
+							checked={spotReconstituted}
+							onchange={() => onspotrecontoggle?.()}
+						/>
+					</label>
+				{/if}
+			</div>
 		</div>
 	</div>
 
@@ -1095,70 +1126,14 @@
 		</div>
 	{/if}
 
-	<!-- ═══ 4. Provenance section (below organism) ═══ -->
-	{#if !isClitic}
-	<div class="section provenance-section">
-		<h3 class="section-label">{t('inspector.provenance', language)}</h3>
-		<div class="provenance-body">
-			{#if word.stressIndex >= 0}
-				<p class="provenance-status">
-					{t('inspector.syllable', language)} {word.stressIndex + 1} · {stressSourceLabel(word.stressSource, language)}
-				</p>
-			{:else}
-				<p class="provenance-status">{t('inspector.unknownStress', language)}</p>
-			{/if}
-		</div>
-	</div>
-	{/if}
+	<!-- ═══ 4. Provenance section: REMOVED (Phase A vertical optimization) ═══ -->
 
-	<!-- ═══ 5. Spot reconstitution toggle ═══ -->
-	{#if word.ipaReconstituted && word.ipaReconstituted !== word.ipaDisplay}
-		<div class="section">
-			<h3 class="section-label">{t('inspector.spotRecon.heading', language)}</h3>
-			{#if notationPrefs.reconstitution}
-				<div class="spot-recon-disabled">
-					<div class="spot-recon-row">
-						<span class="spot-label left">{t('inspector.spotRecon.left', language)}</span>
-						<button
-							class="toggle-switch disabled"
-							role="switch"
-							aria-checked="true"
-							aria-label={t('inspector.spotRecon.right', language)}
-							disabled
-							title={t('inspector.spotRecon.globalOn', language)}
-						>
-							<span class="toggle-thumb"></span>
-						</button>
-						<span class="spot-label right">{t('inspector.spotRecon.right', language)}</span>
-					</div>
-					<p class="spot-hint">{t('inspector.spotRecon.globalOn', language)}</p>
-				</div>
-			{:else}
-				<div class="spot-recon-row">
-					<span class="spot-label left" class:active={!spotReconstituted}>{t('inspector.spotRecon.left', language)}</span>
-					<button
-						class="toggle-switch"
-						class:on={spotReconstituted}
-						role="switch"
-						aria-checked={spotReconstituted}
-						aria-label={t('inspector.spotRecon.right', language)}
-						onclick={() => onspotrecontoggle?.()}
-					>
-						<span class="toggle-thumb"></span>
-					</button>
-					<span class="spot-label right" class:active={spotReconstituted}>{t('inspector.spotRecon.right', language)}</span>
-				</div>
-			{/if}
-		</div>
-	{/if}
+	<!-- ═══ 5. Spot reconstitution: RELOCATED to below word card ═══ -->
 
 	</div>
 	{/key}
 
-	<!-- ═══ 6. Notation indicator ═══ -->
-	<div class="section notation-indicator">
-		<p class="notation-note">{t('inspector.notationDefault', language)}</p>
-	</div>
+	<!-- ═══ 6. Notation indicator: REMOVED (Phase A vertical optimization) ═══ -->
 </div>
 
 <style>
@@ -1189,9 +1164,15 @@
 	/* ═══ 2. Word header ═════════════════════════════════════════ */
 
 	.word-header {
-		margin-bottom: 1.5rem;
+		margin-bottom: 0.75rem;
 		display: flex;
 		justify-content: center;
+	}
+
+	.word-header-group {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	.word-stack {
@@ -1241,8 +1222,8 @@
 
 	.organism {
 		position: relative;
-		border-top: 3px solid var(--sage);
-		border-bottom: 3px solid var(--sage);
+		border-top: 1px solid var(--stone-300);
+		border-bottom: 1px solid var(--stone-300);
 		padding: 12px 0 16px;
 		margin-bottom: 1.25rem;
 	}
@@ -1808,35 +1789,7 @@
 		line-height: 1.4;
 	}
 
-	/* ═══ 4. Provenance section ══════════════════════════════════ */
-
-	.section {
-		margin-bottom: 1.25rem;
-	}
-
-	.section-label {
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--sage);
-		margin-bottom: 0.5rem;
-	}
-
-	.provenance-section {
-		/* Extra top spacing after organism */
-	}
-
-	.provenance-body {
-		font-family: var(--font-sans);
-		font-size: 0.85rem;
-		color: var(--ink-primary);
-	}
-
-	.provenance-status {
-		line-height: 1.4;
-	}
+	/* ═══ 4. Provenance section: REMOVED (Phase A) ══════════════════════ */
 
 	/* ── Provenance choice buttons (shared by stress and ё choosers) ── */
 
@@ -1859,90 +1812,39 @@
 		color: var(--ink-primary);
 	}
 
-	/* ═══ 5. Spot reconstitution toggle ══════════════════════════ */
+	/* ═══ 5. Spot reconstitution/reduction checkbox ═════════════════════ */
 
-	.spot-recon-row {
+	.spot-checkbox-slot {
+		min-height: 24px;
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		justify-content: flex-end;
+		margin-top: 0.35rem;
 	}
 
-	.spot-label {
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		color: var(--ink-tertiary);
-		transition: color 150ms ease;
-	}
-
-	.spot-label.active {
-		color: var(--ink-primary);
-		font-weight: 600;
-	}
-
-	.toggle-switch {
-		position: relative;
-		width: 32px;
-		height: 18px;
-		background: var(--stone-300);
-		border: none;
-		border-radius: 9px;
+	.spot-checkbox-label {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
 		cursor: pointer;
-		padding: 0;
-		transition: background-color 200ms ease;
+	}
+
+	.spot-checkbox {
+		width: 14px;
+		height: 14px;
+		accent-color: var(--sage);
+		cursor: pointer;
+		margin: 0;
 		flex-shrink: 0;
 	}
 
-	.toggle-switch.on {
-		background: var(--sage);
-	}
-
-	.toggle-switch.disabled {
-		background: var(--stone-300);
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.toggle-thumb {
-		position: absolute;
-		top: 2px;
-		left: 2px;
-		width: 14px;
-		height: 14px;
-		background: white;
-		border-radius: 50%;
-		transition: transform 200ms ease;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-	}
-
-	.toggle-switch.on .toggle-thumb {
-		transform: translateX(14px);
-	}
-
-	.spot-recon-disabled {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-
-	.spot-hint {
+	.spot-checkbox-text {
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-		font-style: italic;
-		line-height: 1.4;
+		color: var(--ink-secondary);
+		line-height: 1;
+		user-select: none;
 	}
 
-	/* ═══ 6. Notation indicator ══════════════════════════════════ */
-
-	.notation-indicator {
-		margin-top: auto;
-		padding-top: 1rem;
-		border-top: 1px solid var(--stone-300);
-	}
-
-	.notation-note {
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-	}
+	/* ═══ 6. Notation indicator: REMOVED (Phase A) ══════════════════════ */
 </style>
