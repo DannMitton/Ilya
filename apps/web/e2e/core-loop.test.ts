@@ -63,34 +63,18 @@ test.describe('Ilya core loop', () => {
 		await expect(ribbon).toBeVisible();
 	});
 
-	test('Escape returns from Inspector to Root panel', async ({ page }) => {
+	test('Clear button dismisses Word Console', async ({ page }) => {
 		await transcribe(page, 'молоко');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
 		await expect(page.locator('.inspector-panel')).toBeVisible();
 
-		await page.keyboard.press('Escape');
+		// Clear resets everything including selectedWord
+		const clearBtn = page.locator('.btn-secondary', { hasText: 'Clear' });
+		await clearBtn.click();
 
-		// Verify Root panel is back by checking for the textarea
-		const textarea = page.locator('textarea');
-		await expect(textarea).toBeVisible({ timeout: 5_000 });
-	});
-
-	test('focus returns to clicked word after Escape', async ({ page }) => {
-		await transcribe(page, 'молоко ещё');
-
-		const second = page.locator('[data-word-index="0-1"]');
-		await second.click();
-		await expect(page.locator('.inspector-panel')).toBeVisible();
-
-		await page.keyboard.press('Escape');
-
-		// Wait for root panel to be back
-		await expect(page.locator('textarea')).toBeVisible({ timeout: 5_000 });
-
-		const focused = page.locator('[data-word-index="0-1"]');
-		await expect(focused).toBeFocused();
+		await expect(page.locator('.inspector-panel')).not.toBeVisible({ timeout: 5_000 });
 	});
 
 	test('keyboard navigation: Tab between WordStacks', async ({ page }) => {

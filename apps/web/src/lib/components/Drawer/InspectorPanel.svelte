@@ -4,7 +4,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, stressSourceLabel, type Language } from '$lib/i18n';
-	import { fade } from 'svelte/transition';
+
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
 	interface Props {
@@ -18,7 +18,6 @@
 		spotReconstituted?: boolean;
 		/** Character-level ё toggles for this word, keyed by charIndex. */
 		yoCharToggles?: Map<number, YoToggle>;
-		onback: () => void;
 		onspotrecontoggle?: () => void;
 		onstressassign?: (syllableIndex: number, source: string) => void;
 		onstressrevert?: () => void;
@@ -30,7 +29,7 @@
 		onsyllableoverrideclear?: () => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onback, onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
 
 	// ── Reconstitution derivations ──────────────────────────────
 	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
@@ -322,12 +321,6 @@
 		});
 	}
 
-	function handlePanelKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape' && selectedCellIndex < 0) {
-			e.preventDefault();
-			onback();
-		}
-	}
 
 	// ── Rubric label HTML with hard line breaks ─────────────────
 	function getRubricHtml(positionKey: string, lang: Language): string {
@@ -796,17 +789,11 @@
 	class="inspector-panel"
 	role="region"
 	aria-label={word.stressedCyrillic}
-	onkeydown={handlePanelKeydown}
 	tabindex="-1"
 >
-	<!-- ═══ 1. Back button (pill) ═══ -->
-	<button class="back-btn" onclick={onback}>
-		{t('inspector.back', language)}
-	</button>
-
-	<!-- ═══ 2–5. Word content (breathes on word change) ═══ -->
+	<!-- ═══ Word content (breathes on word change) ═══ -->
 	{#key word.cleanWord}
-	<div class="word-content" in:fade={{ duration: 300 }}>
+	<div class="word-content">
 
 	<!-- ═══ 2. Word header ═══ -->
 	<div class="word-header">
@@ -1180,53 +1167,23 @@
 		flex-direction: column;
 		gap: 0;
 		padding: 1.5rem;
-		height: 100%;
-		overflow-y: auto;
-		animation: inspectorBreathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) both;
-	}
-
-	@keyframes inspectorBreathIn {
-		from { opacity: 0; transform: translateY(-2px); }
-		to   { opacity: 1; transform: translateY(0); }
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.inspector-panel {
-			animation: none;
-		}
 	}
 
 	/* ═══ Word-change breath (sections 2–5) ══════════════════════ */
 
 	.word-content {
-		/* Container for Svelte transition */
+		animation: breathIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
-	/* ═══ 1. Back button (pill) ═══════════════════════════════════ */
-
-	.back-btn {
-		background: transparent;
-		border: 1.5px solid var(--stone-300);
-		border-radius: 999px;
-		color: var(--ink-secondary);
-		cursor: pointer;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-weight: 500;
-		padding: 6px 16px;
-		margin-bottom: 1rem;
-		text-align: left;
-		width: fit-content;
-		transition: border-color 150ms ease, color 150ms ease;
+	@keyframes breathIn {
+		from { opacity: 0; transform: translateY(-2px); }
+		to   { opacity: 1; transform: translateY(0); }
 	}
 
-	.back-btn:hover {
-		border-color: var(--stone-500, #78716c);
-		color: var(--ink-primary);
-	}
-
-	.back-btn:active {
-		border-color: var(--sage);
+	@media (prefers-reduced-motion: reduce) {
+		.word-content {
+			animation: none;
+		}
 	}
 
 	/* ═══ 2. Word header ═════════════════════════════════════════ */
@@ -1297,8 +1254,7 @@
 		align-items: flex-end;
 		justify-content: center;
 		gap: 12px;
-		flex-wrap: wrap;
-		row-gap: 8px;
+		flex-wrap: nowrap;
 	}
 
 	/* ── Syllable column: rubric + molecule + sigla + ordinal ── */

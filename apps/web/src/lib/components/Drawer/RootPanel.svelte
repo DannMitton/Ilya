@@ -1,7 +1,8 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { LoaderState } from '$lib/loader';
-	import type { SongMetadata, PageSize } from '$lib/types';
+	import type { SongMetadata } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, POETS, type PersonEntry } from '$lib/composers-poets';
 	import SearchableSelect from './SearchableSelect.svelte';
@@ -19,7 +20,8 @@
 		openSyllabification: boolean;
 		language: Language;
 		metadata: SongMetadata;
-		pageSize: PageSize;
+		showInspector: boolean;
+		consoleContent?: Snippet;
 		oninput: (text: string) => void;
 		ontranscribe: () => void;
 		onclear: () => void;
@@ -28,7 +30,6 @@
 		onstressdiacriticschange: (value: boolean) => void;
 		onopensyllabificationchange: (value: boolean) => void;
 		onmetadatachange: (meta: SongMetadata) => void;
-		onpagesizechange: (size: PageSize) => void;
 	}
 
 	let {
@@ -44,7 +45,8 @@
 		openSyllabification,
 		language,
 		metadata,
-		pageSize,
+		showInspector,
+		consoleContent,
 		oninput,
 		ontranscribe,
 		onclear,
@@ -53,7 +55,6 @@
 		onstressdiacriticschange,
 		onopensyllabificationchange,
 		onmetadatachange,
-		onpagesizechange,
 	}: Props = $props();
 
 	const charCount = $derived(inputText.length);
@@ -154,26 +155,28 @@
 		</div>
 	</div>
 
-	<!-- ── 2. Textarea (taller) ────────────────────────────── -->
+	<!-- ── 2. Textarea (reduced to 6 rows: pasting, not composing) ── -->
 	<textarea
 		class="text-input"
 		placeholder={t('input.placeholder', language)}
 		value={inputText}
 		oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
 		onkeydown={handleKeydown}
-		rows="12"
+		rows="6"
 	></textarea>
 
 	{#if showWarning}
 		<p class="char-warning">{charCount.toLocaleString()} {t('input.warning', language)}</p>
 	{/if}
 
-	<!-- ── 3. Result summary: flush left under textarea ─────── -->
-	{#if hasResults}
-		<p class="result-summary">
+	<!-- ── 3. Result summary: always reserves space to prevent layout shift ── -->
+	<p class="result-summary" class:result-hidden={!hasResults}>
+		{#if hasResults}
 			{wordCount} {t('result.words', language)} {transcribeMs}ms
-		</p>
-	{/if}
+		{:else}
+			&nbsp;
+		{/if}
+	</p>
 
 	{#if transcribeError}
 		<p class="error-text">{transcribeError}</p>
@@ -203,7 +206,21 @@
 		</button>
 	</div>
 
-	<!-- ── 5. Cosmetic Options (unified: stress acutes + IPA toggles) ── -->
+	<!-- ── 5. Word Console section ────────────────────────── -->
+	<div class="section console-section">
+		<h3 class="section-label">{t('console.placeholder', language)}</h3>
+		{#if showInspector && consoleContent}
+			{@render consoleContent()}
+		{:else}
+			<div class="console-placeholder-body">
+				<p class="placeholder-hint">
+					{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
+				</p>
+			</div>
+		{/if}
+	</div>
+
+	<!-- ── 6. Cosmetic Options (unified: stress acutes + IPA toggles) ── -->
 	<div class="section">
 		<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
 		<div class="cosmetic-grid">
@@ -306,27 +323,6 @@
 			<span class="cosmetic-label-right" class:label-inactive={!openSyllabification}>{t('cosmetic.openSyllabification.right', language)}</span>
 		</div>
 	</div>
-
-	<!-- ── 6. Page size ────────────────────────────────────── -->
-	<div class="section">
-		<h3 class="section-label">{t('pageSize.label', language)}</h3>
-		<div class="page-size-toggle">
-			<button
-				class="size-btn"
-				class:active={pageSize === 'letter'}
-				onclick={() => onpagesizechange('letter')}
-			>
-				{t('pageSize.letter', language)}
-			</button>
-			<button
-				class="size-btn"
-				class:active={pageSize === 'a4'}
-				onclick={() => onpagesizechange('a4')}
-			>
-				{t('pageSize.a4', language)}
-			</button>
-		</div>
-	</div>
 </div>
 
 <style>
@@ -387,13 +383,18 @@
 		font-family: var(--font-sans);
 	}
 
-	/* ── Result summary (flush left, directly under textarea) ── */
+	/* ── Result summary: always reserves space ────────────── */
 
 	.result-summary {
 		font-size: 0.75rem;
 		color: var(--sage);
 		font-family: var(--font-sans);
 		margin-top: -0.4rem;
+		min-height: 1.2em;
+	}
+
+	.result-hidden {
+		visibility: hidden;
 	}
 
 	.error-text {
@@ -490,6 +491,29 @@
 		padding-left: 0.4rem;
 	}
 
+	/* ── Word Console section ────────────────────────────── */
+
+	.console-section {
+		border-top: 1px solid var(--stone-300);
+		padding-top: 1rem;
+	}
+
+	.console-placeholder-body {
+		min-height: 504px;
+		padding: 2rem 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.placeholder-hint {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		font-style: italic;
+		color: var(--ink-tertiary);
+	}
+
 	/* ── Cosmetic toggle grid ────────────────────────────── */
 	/* Three-column grid: left label | toggle | right label   */
 
@@ -519,37 +543,6 @@
 	.cosmetic-label-left.label-inactive,
 	.cosmetic-label-right.label-inactive {
 		color: var(--ink-tertiary);
-	}
-
-	/* ── Page size toggle ─────────────────────────────────── */
-
-	.page-size-toggle {
-		display: flex;
-		gap: 0;
-		border: 1px solid var(--stone-300);
-		border-radius: 4px;
-		overflow: hidden;
-		width: fit-content;
-	}
-
-	.size-btn {
-		padding: 0.2rem 0.8rem;
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		border: none;
-		background: white;
-		color: var(--ink-secondary);
-		cursor: pointer;
-		transition: background 0.12s, color 0.12s;
-	}
-
-	.size-btn + .size-btn {
-		border-left: 1px solid var(--stone-300);
-	}
-
-	.size-btn.active {
-		background: var(--sage);
-		color: white;
 	}
 
 	/* ── Toggle switches ──────────────────────────────────── */

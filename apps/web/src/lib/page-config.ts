@@ -9,7 +9,7 @@
  * after building PageFooter, TitleHeader, and RunningHeader (Step 4).
  */
 
-import type { LineData, PageSize } from './types';
+import type { LineData } from './types';
 
 // ── Page dimensions (px at 96dpi) ────────────────────────────────
 
@@ -17,8 +17,6 @@ export const PAGE_SIZES = {
 	letter: { width: 816, height: 1056 },
 	a4: { width: 794, height: 1123 },
 } as const;
-
-export type { PageSize };
 
 // ── Layout constants ─────────────────────────────────────────────
 

@@ -127,7 +127,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.stressAssign.dictionary':    { en: 'Dictionary',          fr: 'Dictionnaire' },
 	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositeur' },
 	'inspector.stressAssign.myAssignment':  { en: 'My assignment',       fr: 'Mon choix' },
+	'inspector.stressAssign.default':       { en: 'Default',             fr: 'Par défaut' },
 	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
+
+	// ── Word Console placeholder ─────────────────────────────
+	'console.placeholder':         { en: 'Word Console',                 fr: 'Console du mot' },
 
 	// ── Paper empty state ────────────────────────────────────
 	'paper.empty':                 { en: 'To begin, open the drawer on the left and enter your text.', fr: 'Pour commencer, ouvrez le tiroir à gauche et saisissez votre texte.' },
@@ -156,11 +160,6 @@ const strings: Record<string, Record<Language, string>> = {
 	},
 	'footer.page':                 { en: 'Page',                         fr: 'Page' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },
-
-	// ── Page size ────────────────────────────────────────────
-	'pageSize.label':              { en: 'Page size',                    fr: 'Format de page' },
-	'pageSize.letter':             { en: 'Letter',                       fr: 'Lettre' },
-	'pageSize.a4':                 { en: 'A4',                           fr: 'A4' },
 
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },

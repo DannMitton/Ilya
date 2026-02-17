@@ -3,29 +3,21 @@
 	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
-		mode: 'root' | 'inspector';
+		width: number;
 		collapsed: boolean;
 		language: Language;
 		rootPanel: Snippet;
-		inspectorPanel?: Snippet;
 		ontogglecollapse: () => void;
 	}
 
-	let { mode, collapsed, language, rootPanel, inspectorPanel, ontogglecollapse }: Props = $props();
+	let { width, collapsed, language, rootPanel, ontogglecollapse }: Props = $props();
 </script>
 
-<aside class="drawer" class:collapsed aria-label="Controls">
+<aside class="drawer" class:collapsed style="width: {collapsed ? 24 : width}px" aria-label="Controls">
 	<div class="drawer-body">
 		{#if !collapsed}
-			<div class="drawer-panels">
-				<div class="panel" class:active={mode === 'root'}>
-					{@render rootPanel()}
-				</div>
-				{#if inspectorPanel}
-					<div class="panel panel-inspector" class:active={mode === 'inspector'}>
-						{@render inspectorPanel()}
-					</div>
-				{/if}
+			<div class="drawer-content">
+				{@render rootPanel()}
 			</div>
 		{/if}
 	</div>
@@ -51,11 +43,7 @@
 		flex-direction: row;
 		height: 100%;
 		flex-shrink: 0;
-		transition: width 0.25s ease;
-	}
-
-	.drawer:not(.collapsed) {
-		width: 520px;
+		transition: width 600ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
 	}
 
 	.drawer.collapsed {
@@ -74,40 +62,9 @@
 		display: none;
 	}
 
-	.drawer-panels {
-		position: relative;
+	.drawer-content {
 		height: 100%;
-	}
-
-	.panel {
-		position: absolute;
-		inset: 0;
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 250ms ease;
 		overflow-y: auto;
-	}
-
-	.panel.active {
-		opacity: 1;
-		pointer-events: auto;
-	}
-
-	/* ── Inspector breath: settles into place when a word is clicked ── */
-
-	@keyframes breathIn {
-		from { opacity: 0; transform: translateY(-2px); }
-		to   { opacity: 1; transform: translateY(0); }
-	}
-
-	.panel-inspector.active {
-		animation: breathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.panel-inspector.active {
-			animation: none;
-		}
 	}
 
 	/* ── Lip: vertical strip on right edge ────────────────── */
@@ -131,5 +88,13 @@
 	.drawer-lip:hover {
 		color: var(--ink-primary);
 		background: var(--stone-300);
+	}
+
+	/* ── Reduced motion ──────────────────────────────────── */
+
+	@media (prefers-reduced-motion: reduce) {
+		.drawer {
+			transition: none;
+		}
 	}
 </style>

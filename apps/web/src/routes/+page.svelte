@@ -5,7 +5,7 @@
 	import { loadDictionary, type LoaderState } from '$lib/loader';
 	import { processText } from '$lib/pipeline';
 	import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
-	import type { LineData, WordStackData, SongMetadata, PageSize, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
+	import type { LineData, WordStackData, SongMetadata, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
@@ -35,7 +35,6 @@
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
-	let drawerMode = $state<'root' | 'inspector'>('root');
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 
 	// Drawer state
@@ -70,9 +69,6 @@
 			});
 		}
 	}
-
-	// Page settings
-	let pageSize = $state<PageSize>('letter');
 
 	// Song metadata
 	let metadata = $state<SongMetadata>({
@@ -133,7 +129,47 @@
 		}, 150);
 	}
 
+	// ── Dynamic drawer width: pure calculation from ribbon content ──
+	// Atoms are fixed 32px. Gaps, borders, and padding are constants.
+	// Width is computed before render (no DOM measurement, no flicker).
+	function calculateDrawerWidth(word: WordStackData): number {
+		const ATOM_W = 32;
+		const ATOM_GAP = 2;
+		const MOL_PAD_BORDER = 9; // 3px padding × 2 + 1.5px border × 2
+		const SYLLABLE_GAP = 12;
+		const CLITIC_COL_W = ATOM_W + MOL_PAD_BORDER; // 41px
+		const OVERHEAD = 70; // 32px panel padding + 24px lip + borders/scrollbar
+
+		// Count atoms per syllable from displayLog
+		const syllableAtomCounts = new Map<number, number>();
+		for (const entry of word.displayLog) {
+			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			syllableAtomCounts.set(si, (syllableAtomCounts.get(si) ?? 0) + 1);
+		}
+
+		let ribbonWidth = 0;
+		const syllableCount = syllableAtomCounts.size;
+
+		// Sum molecule widths
+		for (const [, atomCount] of syllableAtomCounts) {
+			ribbonWidth += atomCount * ATOM_W + (atomCount - 1) * ATOM_GAP + MOL_PAD_BORDER;
+		}
+
+		// Gaps between syllable columns
+		if (syllableCount > 1) {
+			ribbonWidth += (syllableCount - 1) * SYLLABLE_GAP;
+		}
+
+		// Clitic arrow columns (standalone, outside molecules)
+		if (word.isProclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
+		if (word.isEnclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
+
+		return Math.max(520, Math.min(720, ribbonWidth + OVERHEAD));
+	}
+
 	// Derived
+	const showInspector = $derived(selectedWord !== null);
+	const drawerWidth = $derived(selectedWord ? calculateDrawerWidth(selectedWord) : 520);
 	const canTranscribe = $derived(
 		inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
@@ -177,7 +213,6 @@
 		if (!canTranscribe) return;
 		transcribeError = '';
 		selectedWord = null;
-		drawerMode = 'root';
 		lastFocusedWord = null;
 		spotReconstitution = new Map();
 		userStressOverrides = new Map();
@@ -224,7 +259,6 @@
 		transcribeError = '';
 		transcribeMs = 0;
 		selectedWord = null;
-		drawerMode = 'root';
 		lastFocusedWord = null;
 		spotReconstitution = new Map();
 		userStressOverrides = new Map();
@@ -243,7 +277,6 @@
 
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
-		drawerMode = 'inspector';
 		lastFocusedWord = { line: word.lineIndex, word: word.wordIndex };
 		// Auto-expand drawer if collapsed when user clicks a word
 		if (drawerCollapsed) {
@@ -255,18 +288,6 @@
 			gloss: word.gloss,
 			displayLog: word.displayLog,
 		});
-	}
-
-	function handleInspectorBack() {
-		drawerMode = 'root';
-		if (lastFocusedWord) {
-			requestAnimationFrame(() => {
-				const el = document.querySelector<HTMLElement>(
-					`[data-word-index="${lastFocusedWord!.line}-${lastFocusedWord!.word}"]`
-				);
-				el?.focus();
-			});
-		}
 	}
 
 	function handleNotationChange(prefs: NotationPreferences) {
@@ -406,15 +427,6 @@
 		}
 	}
 
-	function handlePageSizeChange(size: PageSize) {
-		pageSize = size;
-		try {
-			localStorage.setItem('ilya:pageSize', size);
-		} catch {
-			// localStorage unavailable
-		}
-	}
-
 	function handleDrawerToggle() {
 		drawerCollapsed = !drawerCollapsed;
 		try {
@@ -444,10 +456,6 @@
 			if (savedMeta) {
 				const parsed = JSON.parse(savedMeta);
 				metadata = { ...metadata, ...parsed };
-			}
-			const savedPageSize = localStorage.getItem('ilya:pageSize');
-			if (savedPageSize === 'letter' || savedPageSize === 'a4') {
-				pageSize = savedPageSize;
 			}
 			const savedDiacritics = localStorage.getItem('ilya:showStressDiacritics');
 			if (savedDiacritics) {
@@ -509,7 +517,7 @@
 <div class="app-content {viewBreathClass}">
 	<div class="screen-only">
 		<Drawer
-			mode={drawerMode}
+			width={drawerWidth}
 			collapsed={drawerCollapsed}
 			{language}
 			ontogglecollapse={handleDrawerToggle}
@@ -528,7 +536,7 @@
 					{openSyllabification}
 					{language}
 					{metadata}
-					{pageSize}
+					{showInspector}
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
@@ -537,47 +545,46 @@
 					onstressdiacriticschange={handleStressDiacriticsChange}
 					onopensyllabificationchange={handleOpenSyllabificationChange}
 					onmetadatachange={handleMetadataChange}
-					onpagesizechange={handlePageSizeChange}
-				/>
-			{/snippet}
-			{#snippet inspectorPanel()}
-				{#if selectedWord}
-					{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
-					{@const wordYoToggles = (() => {
-						const prefix = `${wordKey}-`;
-						const m = new Map<number, import('$lib/types').YoToggle>();
-						for (const [k, v] of yoToggles) {
-							if (k.startsWith(prefix)) {
-								const ci = parseInt(k.substring(prefix.length), 10);
-								if (!isNaN(ci)) m.set(ci, v);
-							}
-						}
-						return m;
-					})()}
-					<InspectorPanel
-						word={selectedWord}
-						{language}
-						{notationPrefs}
-						{openSyllabification}
-						{showStressDiacritics}
-						syllableOverride={syllableOverrides.get(wordKey) ?? null}
-						spotReconstituted={spotReconstitution.has(wordKey)}
-						yoCharToggles={wordYoToggles}
-						onback={handleInspectorBack}
-						onspotrecontoggle={handleSpotReconToggle}
-						onstressassign={handleStressAssign}
-						onstressrevert={handleStressRevert}
-						onyochartoggle={handleYoCharToggle}
-						onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-						onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
-					/>
-				{/if}
+				>
+					{#snippet consoleContent()}
+						{#if selectedWord}
+							{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+							{@const wordYoToggles = (() => {
+								const prefix = `${wordKey}-`;
+								const m = new Map<number, import('$lib/types').YoToggle>();
+								for (const [k, v] of yoToggles) {
+									if (k.startsWith(prefix)) {
+										const ci = parseInt(k.substring(prefix.length), 10);
+										if (!isNaN(ci)) m.set(ci, v);
+									}
+								}
+								return m;
+							})()}
+							<InspectorPanel
+								word={selectedWord}
+								{language}
+								{notationPrefs}
+								{openSyllabification}
+								{showStressDiacritics}
+								syllableOverride={syllableOverrides.get(wordKey) ?? null}
+								spotReconstituted={spotReconstitution.has(wordKey)}
+								yoCharToggles={wordYoToggles}
+								onspotrecontoggle={handleSpotReconToggle}
+								onstressassign={handleStressAssign}
+								onstressrevert={handleStressRevert}
+								onyochartoggle={handleYoCharToggle}
+								onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+								onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
+							/>
+						{/if}
+					{/snippet}
+				</RootPanel>
 			{/snippet}
 		</Drawer>
 	</div>
 
 	<main class="main-content {paperBreathClass}" bind:this={mainContentEl}>
-		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} {pageSize} {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
+		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
 
