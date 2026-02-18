@@ -31,19 +31,20 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Result meta ──────────────────────────────────────────
 	'result.words':                { en: 'words in',                     fr: 'mots en' },
 
-	// ── Song setup (metadata fields) ─────────────────────────
-	'meta.heading':                { en: 'Song Setup',                   fr: 'Configuration du chant' },
+	// ── Metadata fields ─────────────────────────────────────
+	'meta.heading':                { en: 'Metadata',                     fr: 'Métadonnées' },
 	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
 	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
+	'meta.translator':             { en: 'Translator',                   fr: 'Traducteur' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
 	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
 
-	// ── Cosmetic options (IPA display toggles) ───────────────
-	'cosmetic.heading':            { en: 'Cosmetic Options (Global)',     fr: 'Options cosmétiques (globales)' },
+	// ── Notation options (IPA display toggles) ──────────────
+	'cosmetic.heading':            { en: 'Notation',                     fr: 'Notation' },
 	'cosmetic.stressAcutes.left':  { en: 'No stress marks',             fr: 'Sans accents toniques' },
 	'cosmetic.stressAcutes.right': { en: 'Apply stress acutes',         fr: 'Appliquer les accents toniques' },
 	'cosmetic.reducedVowel.left':  { en: 'Default [ʌ]',                 fr: 'Par défaut [ʌ]' },
@@ -131,7 +132,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
 
 	// ── Word Console placeholder ─────────────────────────────
-	'console.placeholder':         { en: 'Word Console',                 fr: 'Console du mot' },
+	'console.placeholder':         { en: 'Analysis',                     fr: 'Analyse' },
 
 	// ── Paper empty state ────────────────────────────────────
 	'paper.empty':                 { en: 'Enter your Cyrillic text in the drawer on the left.', fr: 'Saisissez votre texte cyrillique dans le tiroir à gauche.' },

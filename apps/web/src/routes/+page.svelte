@@ -12,10 +12,8 @@
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
-
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
-
 	// Dictionary loading state
 	let loaderState = $state<LoaderState>({
 		isLoading: true,
@@ -25,10 +23,8 @@
 		tier2Loaded: false,
 		tier2Count: 0
 	});
-
 	// Language
 	let language = $state<Language>('en');
-
 	// Pipeline state
 	let inputText = $state('');
 	let lines = $state<LineData[]>([]);
@@ -36,15 +32,12 @@
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
-
 	// Drawer state
 	let drawerCollapsed = $state(false);
-
 	// Mobile awareness
 	let isMobile = $state(false);
 	let mobileDismissed = $state(false);
 	let mainContentEl: HTMLElement | undefined = $state(undefined);
-
 	async function handleMobileDismiss() {
 		mobileDismissed = true;
 		drawerCollapsed = true;
@@ -58,10 +51,8 @@
 			const drawerLip = 24;
 			const viewportWidth = window.innerWidth - drawerLip;
 			const viewportHeight = window.innerHeight;
-
 			const scrollX = Math.max(0, contentCentreX - viewportWidth / 2);
 			const scrollY = Math.max(0, hintAreaY - viewportHeight / 2);
-
 			mainContentEl.scrollTo({
 				left: scrollX,
 				top: scrollY,
@@ -69,7 +60,6 @@
 			});
 		}
 	}
-
 	// Song metadata
 	let metadata = $state<SongMetadata>({
 		title: '',
@@ -79,7 +69,6 @@
 		opus: '',
 		transcriber: '',
 	});
-
 	// Notation preferences -- persisted to localStorage
 	let notationPrefs = $state<NotationPreferences>({
 		reducedVowel: false,
@@ -88,39 +77,31 @@
 		geminate: false,
 		reconstitution: false,
 	});
-
 	// Display preferences
 	let showStressDiacritics = $state(false);
 	let openSyllabification = $state(false);
-
 	// Spot reconstitution: ephemeral per-word overrides, keyed by "lineIndex-wordIndex"
 	// Cleared on every transcribe or clear action
 	let spotReconstitution = $state<Map<string, boolean>>(new Map());
-
 	// User stress overrides: keyed by "lineIndex-wordIndex"
 	// Cleared on every fresh transcription
 	let userStressOverrides = $state<Map<string, UserStressOverride>>(new Map());
-
 	// Character-level ё toggles: keyed by "lineIndex-wordIndex-charIndex"
 	// Cleared on every fresh transcription
 	let yoToggles = $state<Map<string, YoToggle>>(new Map());
-
 	// Per-word syllable boundary overrides: keyed by "lineIndex-wordIndex"
 	// Cleared when the global open syllabification toggle changes in either direction,
 	// and on every fresh transcription or clear action.
 	let syllableOverrides = $state<Map<string, SyllableOverride>>(new Map());
-
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
 	// viewBreathClass: animates entire app content (language toggle)
 	let paperBreathClass = $state('');
 	let viewBreathClass = $state('');
-
 	function triggerPaperBreathIn() {
 		paperBreathClass = 'breath-in';
 		setTimeout(() => { paperBreathClass = ''; }, 300);
 	}
-
 	function triggerViewBreathCycle(callback: () => void) {
 		viewBreathClass = 'breath-out';
 		setTimeout(() => {
@@ -129,7 +110,6 @@
 			setTimeout(() => { viewBreathClass = ''; }, 300);
 		}, 150);
 	}
-
 	// ── Dynamic drawer width: pure calculation from ribbon content ──
 	// Atoms are fixed 32px. Gaps, borders, and padding are constants.
 	// Width is computed before render (no DOM measurement, no flicker).
@@ -140,34 +120,27 @@
 		const SYLLABLE_GAP = 12;
 		const CLITIC_COL_W = ATOM_W + MOL_PAD_BORDER; // 41px
 		const OVERHEAD = 70; // 32px panel padding + 24px lip + borders/scrollbar
-
 		// Count atoms per syllable from displayLog
 		const syllableAtomCounts = new Map<number, number>();
 		for (const entry of word.displayLog) {
 			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
 			syllableAtomCounts.set(si, (syllableAtomCounts.get(si) ?? 0) + 1);
 		}
-
 		let ribbonWidth = 0;
 		const syllableCount = syllableAtomCounts.size;
-
 		// Sum molecule widths
 		for (const [, atomCount] of syllableAtomCounts) {
 			ribbonWidth += atomCount * ATOM_W + (atomCount - 1) * ATOM_GAP + MOL_PAD_BORDER;
 		}
-
 		// Gaps between syllable columns
 		if (syllableCount > 1) {
 			ribbonWidth += (syllableCount - 1) * SYLLABLE_GAP;
 		}
-
 		// Clitic arrow columns (standalone, outside molecules)
 		if (word.isProclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
 		if (word.isEnclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
-
 		return Math.max(520, Math.min(720, ribbonWidth + OVERHEAD));
 	}
-
 	// Derived
 	const showInspector = $derived(selectedWord !== null);
 	const drawerWidth = $derived(selectedWord ? calculateDrawerWidth(selectedWord) : 520);
@@ -178,7 +151,6 @@
 	const wordCount = $derived(
 		lines.reduce((sum, l) => sum + l.words.length, 0)
 	);
-
 	// Apply open syllabification as a display-time transform (no pipeline re-run).
 	// Per-word syllable overrides take precedence when present.
 	const effectiveLines = $derived.by(() => {
@@ -187,7 +159,6 @@
 		}
 		return lines;
 	});
-
 	function runPipeline() {
 		transcribeError = '';
 		try {
@@ -209,7 +180,6 @@
 			console.error('[Ilya] Transcription error:', e);
 		}
 	}
-
 	function handleTranscribe() {
 		if (!canTranscribe) return;
 		transcribeError = '';
@@ -219,9 +189,7 @@
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
-
 		runPipeline();
-
 		if (lines.length > 0) {
 			// Breath animation: content appears with breath-in
 			triggerPaperBreathIn();
@@ -245,7 +213,6 @@
 				console.groupEnd();
 			});
 			console.groupEnd();
-
 			// Focus first WordStack after render
 			requestAnimationFrame(() => {
 				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
@@ -253,7 +220,6 @@
 			});
 		}
 	}
-
 	function handleClear() {
 		inputText = '';
 		lines = [];
@@ -271,11 +237,9 @@
 			// localStorage unavailable
 		}
 	}
-
 	function handlePrint() {
 		window.print();
 	}
-
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
 		lastFocusedWord = { line: word.lineIndex, word: word.wordIndex };
@@ -290,7 +254,6 @@
 			displayLog: word.displayLog,
 		});
 	}
-
 	function handleNotationChange(prefs: NotationPreferences) {
 		notationPrefs = prefs;
 		try {
@@ -299,7 +262,6 @@
 			// localStorage unavailable (private browsing)
 		}
 	}
-
 	function handleStressDiacriticsChange(value: boolean) {
 		showStressDiacritics = value;
 		try {
@@ -308,7 +270,6 @@
 			// localStorage unavailable
 		}
 	}
-
 	function handleOpenSyllabificationChange(value: boolean) {
 		openSyllabification = value;
 		// Spec requirement: toggling global in either direction clears all per-word overrides
@@ -319,7 +280,6 @@
 			// localStorage unavailable
 		}
 	}
-
 	// Toggle spot reconstitution for the currently selected word
 	function handleSpotReconToggle() {
 		if (!selectedWord) return;
@@ -332,7 +292,6 @@
 		}
 		spotReconstitution = newMap;
 	}
-
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
@@ -345,7 +304,6 @@
 		userStressOverrides = newMap;
 		runPipeline();
 	}
-
 	// ── Stress revert handler ────────────────────────────────────
 	function handleStressRevert() {
 		if (!selectedWord) return;
@@ -355,7 +313,6 @@
 		userStressOverrides = newMap;
 		runPipeline();
 	}
-
 	// ── Character-level ё toggle handler ─────────────────────────
 	function handleYoCharToggle(charIndex: number, source: string | null) {
 		if (!selectedWord) return;
@@ -370,7 +327,6 @@
 		yoToggles = newMap;
 		runPipeline();
 	}
-
 	// ── Per-word syllable override handler ────────────────────────
 	function handleSyllableOverride(lineIndex: number, wordIndex: number, override: SyllableOverride) {
 		const key = `${lineIndex}-${wordIndex}`;
@@ -378,7 +334,6 @@
 		newMap.set(key, override);
 		syllableOverrides = newMap;
 	}
-
 	// ── Per-word syllable override removal ────────────────────────
 	function handleSyllableOverrideClear(lineIndex: number, wordIndex: number) {
 		const key = `${lineIndex}-${wordIndex}`;
@@ -386,13 +341,11 @@
 		newMap.delete(key);
 		syllableOverrides = newMap;
 	}
-
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
 		if (!selectedWord) return;
 		const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
 		let needsPipeline = false;
-
 		// Clear stress override
 		if (userStressOverrides.has(wordKey)) {
 			const newStress = new Map(userStressOverrides);
@@ -400,7 +353,6 @@
 			userStressOverrides = newStress;
 			needsPipeline = true;
 		}
-
 		// Clear ё toggles for this word (keys are "lineIndex-wordIndex-charIndex")
 		const yoPrefix = `${wordKey}-`;
 		const hasYoToggles = [...yoToggles.keys()].some(k => k.startsWith(yoPrefix));
@@ -412,24 +364,20 @@
 			yoToggles = newYo;
 			needsPipeline = true;
 		}
-
 		// Clear syllable override
 		if (syllableOverrides.has(wordKey)) {
 			const newSyll = new Map(syllableOverrides);
 			newSyll.delete(wordKey);
 			syllableOverrides = newSyll;
 		}
-
 		// Clear spot reconstitution
 		if (spotReconstitution.has(wordKey)) {
 			const newSpot = new Map(spotReconstitution);
 			newSpot.delete(wordKey);
 			spotReconstitution = newSpot;
 		}
-
 		if (needsPipeline) runPipeline();
 	}
-
 	// Persist input text to localStorage
 	function handleInput(text: string) {
 		inputText = text;
@@ -439,7 +387,6 @@
 			// localStorage unavailable
 		}
 	}
-
 	function handleLanguageChange(lang: Language) {
 		const doSwap = () => {
 			language = lang;
@@ -453,7 +400,6 @@
 				runPipeline();
 			}
 		};
-
 		// If there's content visible, use breath cycle; otherwise swap immediately
 		if (hasResults) {
 			triggerViewBreathCycle(doSwap);
@@ -461,7 +407,6 @@
 			doSwap();
 		}
 	}
-
 	function handleMetadataChange(meta: SongMetadata) {
 		metadata = meta;
 		try {
@@ -470,7 +415,6 @@
 			// localStorage unavailable
 		}
 	}
-
 	function handleDrawerToggle() {
 		drawerCollapsed = !drawerCollapsed;
 		try {
@@ -479,7 +423,6 @@
 			// localStorage unavailable
 		}
 	}
-
 	onMount(() => {
 		// Restore persisted state
 		try {
@@ -516,26 +459,22 @@
 		} catch {
 			// localStorage unavailable
 		}
-
 		loadDictionary({
 			onStateChange(state) {
 				loaderState = state;
 			}
 		});
-
 		// Mobile detection
 		function checkMobile() {
 			isMobile = window.innerWidth < 768;
 		}
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
-
 		return () => {
 			window.removeEventListener('resize', checkMobile);
 		};
 	});
 </script>
-
 {#if isMobile && !mobileDismissed}
 <div class="mobile-overlay">
 	<div class="mobile-card">
@@ -553,11 +492,9 @@
 	</div>
 </div>
 {/if}
-
 <div class="screen-only">
 	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
 </div>
-
 <div class="app-content {viewBreathClass}">
 	<div class="screen-only">
 		<Drawer
@@ -627,19 +564,16 @@
 			{/snippet}
 		</Drawer>
 	</div>
-
-	<main class="main-content {paperBreathClass}" bind:this={mainContentEl}>
+	<main class="main-content {paperBreathClass}" class:drawer-open={!drawerCollapsed} bind:this={mainContentEl}>
 		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
 	</main>
 </div>
-
 <style>
 	.app-content {
 		display: flex;
 		flex: 1;
 		overflow: hidden;
 	}
-
 	.main-content {
 		flex: 1;
 		overflow-y: auto;
@@ -647,31 +581,35 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		background-color: #E5E7E3;
+		transform: translateX(0);
+		transition: transform 2000ms cubic-bezier(0.25, 0, 0.15, 1);
 	}
 
+	/* When drawer is open, Paper yields gently rightward */
+	.main-content.drawer-open {
+		transform: translateX(20px);
+	}
 	/* screen-only wrappers: visible on screen, hidden in print */
 	.screen-only {
 		display: contents;
 	}
-
 	@media print {
 		.screen-only {
 			display: none !important;
 		}
-
 		.app-content {
 			display: block;
 			overflow: visible;
 		}
-
 		.main-content {
 			display: block;
 			flex: none;
 			padding: 0;
 			overflow: visible;
+			transform: none;
 		}
 	}
-
 	/* Breath animation: two-phase CSS transitions for moments of meaning */
 	@keyframes breathOut {
 		from { opacity: 1; transform: translateY(0); }
@@ -681,24 +619,23 @@
 		from { opacity: 0; transform: translateY(-2px); }
 		to   { opacity: 1; transform: translateY(0); }
 	}
-
 	:global(.breath-out) {
 		animation: breathOut 150ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 	}
 	:global(.breath-in) {
 		animation: breathIn 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 	}
-
 	/* Respect reduced motion preferences */
 	@media (prefers-reduced-motion: reduce) {
 		:global(.breath-out),
 		:global(.breath-in) {
 			animation: none !important;
 		}
+		.main-content {
+			transition: none !important;
+		}
 	}
-
 	/* ── Mobile awareness ──────────────────────────────────── */
-
 	.mobile-overlay {
 		position: fixed;
 		inset: 0;
@@ -709,28 +646,23 @@
 		justify-content: center;
 		padding: 2rem;
 	}
-
 	.mobile-card {
 		max-width: 360px;
 		text-align: center;
 	}
-
 	.mobile-logo {
 		font-size: 2rem;
 		margin-bottom: 1.5rem;
 		color: var(--sage);
 	}
-
 	.mobile-logo .logo-bracket {
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-weight: 400;
 	}
-
 	.mobile-logo .logo-ilya {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
 		font-style: italic;
 	}
-
 	.mobile-heading {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
 		font-size: 1.25rem;
@@ -738,7 +670,6 @@
 		color: var(--ink-primary, #1a1612);
 		margin-bottom: 0.5rem;
 	}
-
 	.mobile-body {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
 		font-size: 0.95rem;
@@ -746,14 +677,12 @@
 		line-height: 1.6;
 		margin-bottom: 1rem;
 	}
-
 	.mobile-divider {
 		width: 40px;
 		height: 0;
 		border-top: 0.5px solid var(--stone-300, #d6d3d1);
 		margin: 0.75rem auto 1.25rem;
 	}
-
 	.mobile-continue {
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-size: 0.85rem;
@@ -766,26 +695,23 @@
 		cursor: pointer;
 		transition: border-color 150ms ease, color 150ms ease;
 	}
-
 	.mobile-continue:hover {
 		border-color: var(--sage);
 		color: var(--ink-primary, #1a1612);
 	}
-
 	/* Responsive layout for narrow viewports */
 	@media (max-width: 767px) {
 		.app-content {
 			position: relative;
 		}
-
 		.main-content {
 			padding: 0.5rem;
 			width: 100%;
 			overflow: auto;
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
+			transform: none;
 		}
-
 		/* Drawer overlays from the left on mobile */
 		:global(.drawer) {
 			position: absolute !important;
@@ -794,7 +720,6 @@
 			height: 100% !important;
 			z-index: 100;
 		}
-
 		:global(.drawer:not(.collapsed)) {
 			width: 100% !important;
 		}

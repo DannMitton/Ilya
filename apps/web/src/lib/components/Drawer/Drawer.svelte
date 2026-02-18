@@ -13,7 +13,7 @@
 	let { width, collapsed, language, rootPanel, ontogglecollapse }: Props = $props();
 </script>
 
-<aside class="drawer" class:collapsed style="width: {collapsed ? 12 : width}px" aria-label="Controls">
+<aside class="drawer" class:collapsed style="width: {collapsed ? 6 : width}px" aria-label="Controls">
 	<div class="drawer-body">
 		{#if !collapsed}
 			<div class="drawer-content">
@@ -26,15 +26,7 @@
 		onclick={ontogglecollapse}
 		aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
 		title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-	>
-		<svg width="6" height="12" viewBox="0 0 6 12" fill="none" aria-hidden="true">
-			{#if collapsed}
-				<path d="M1 1 L5 6 L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-			{:else}
-				<path d="M5 1 L1 6 L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-			{/if}
-		</svg>
-	</button>
+	></button>
 </aside>
 
 <style>
@@ -44,7 +36,7 @@
 		flex-direction: row;
 		height: 100%;
 		flex-shrink: 0;
-		transition: width 600ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+		transition: width 1000ms cubic-bezier(0.25, 0, 0.15, 1);
 	}
 
 	/* Sage band at bottom of drawer: full bleed left, kisses lip on right */
@@ -53,7 +45,7 @@
 		position: absolute;
 		bottom: 0;
 		left: -20px;
-		right: 12px;
+		right: 6px;
 		height: 34px;
 		background: var(--sage);
 		border-radius: 0;
@@ -65,7 +57,7 @@
 	}
 
 	.drawer.collapsed {
-		width: 12px;
+		width: 6px;
 	}
 
 	.drawer-body {
@@ -84,46 +76,64 @@
 		overflow-y: auto;
 	}
 
-	/* ── Lip: thin sage rule with centred pull tab ────────── */
+	/* ── Lip: 6px sage edge with invisible 44px touch target ── */
 
 	.drawer-lip {
 		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 12px;
-		min-width: 12px;
+		width: 6px;
+		min-width: 6px;
 		height: 100%;
-		background: transparent;
+		background: var(--sage);
+		opacity: 0.6;
 		border: none;
-		border-right: 2px solid var(--ink-tertiary);
 		cursor: pointer;
-		color: white;
 		padding: 0;
+		transition: opacity 0.2s ease, width 0.2s ease;
 	}
 
-	/* Sage pull tab at vertical centre */
-	.drawer-lip::before {
+	/* Invisible touch target: 44px wide, extends into page area */
+	.drawer-lip::after {
 		content: '';
 		position: absolute;
-		top: 50%;
-		left: 0;
-		transform: translateY(-50%);
-		width: 100%;
-		height: 48px;
-		background: var(--sage);
-		border-radius: 0;
-		transition: height 0.15s ease, opacity 0.15s ease;
-	}
-
-	.drawer-lip svg {
-		position: relative;
+		top: 0;
+		left: -19px;
+		right: -19px;
+		bottom: 0;
 		z-index: 1;
 	}
 
-	.drawer-lip:hover::before {
-		height: 64px;
-		opacity: 0.85;
+	.drawer-lip:hover {
+		opacity: 0.9;
+		width: 8px;
+		min-width: 8px;
+	}
+
+	.drawer-lip:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 2px;
+	}
+
+	/* ── Mobile: drawer stays open below 768px ──────────── */
+
+	@media (max-width: 767px) {
+		.drawer.collapsed {
+			width: auto;
+		}
+
+		.drawer.collapsed .drawer-body {
+			display: block;
+		}
+
+		.drawer.collapsed::after {
+			display: block;
+		}
+
+		.drawer-lip {
+			display: none;
+		}
 	}
 
 	/* ── Reduced motion ──────────────────────────────────── */
