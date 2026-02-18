@@ -1164,7 +1164,7 @@
 	/* ═══ 2. Word header ═════════════════════════════════════════ */
 
 	.word-header {
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.5rem;
 		display: flex;
 		justify-content: center;
 	}
@@ -1222,10 +1222,13 @@
 
 	.organism {
 		position: relative;
-		border-top: 1px solid var(--stone-300);
-		border-bottom: 1px solid var(--stone-300);
-		padding: 12px 0 16px;
-		margin-bottom: 1.25rem;
+		background: rgba(139, 154, 125, 0.15);
+		border-radius: 0;
+		padding: 2px 1rem 10px;
+		margin-left: -1.5rem;
+		margin-right: -2.5rem;
+		margin-bottom: 0.5rem;
+		width: calc(100% + 4rem);
 	}
 
 	/* ── Ribbon body: flex row of syllable columns ─────────────── */

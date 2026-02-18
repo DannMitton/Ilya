@@ -25,7 +25,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },
 	'input.transcribe':            { en: 'Transcribe',                   fr: 'Transcrire' },
 	'input.transcribeLoading':     { en: 'Loading dictionary\u2026',     fr: 'Chargement du dictionnaire\u2026' },
-	'input.clear':                 { en: 'Clear',                        fr: 'Effacer' },
+	'input.clear':                 { en: 'Clear text',                   fr: 'Effacer le texte' },
 	'input.print':                 { en: 'Print',                        fr: 'Imprimer' },
 
 	// ── Result meta ──────────────────────────────────────────
@@ -38,7 +38,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
-	'meta.transcriber.hint':       { en: 'Your name appears on every transcription you create with Ilya.', fr: 'Votre nom apparaît sur chaque transcription que vous créez avec Ilya.' },
+	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
 	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
 

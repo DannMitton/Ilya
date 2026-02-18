@@ -88,6 +88,15 @@
 	function handlePoetSelect(value: string, _entry: PersonEntry | null) {
 		handleMetaField('poet', value);
 	}
+
+	const hasMetadata = $derived(
+		metadata.title !== '' || metadata.opus !== '' ||
+		metadata.composer !== '' || metadata.poet !== ''
+	);
+
+	function resetMetadata() {
+		onmetadatachange({ ...metadata, title: '', opus: '', composer: '', poet: '' });
+	}
 </script>
 
 <div class="root-panel" class:status-ok={dictReady}>
@@ -149,9 +158,15 @@
 				value={metadata.transcriber}
 				oninput={(e) => handleMetaField('transcriber', (e.target as HTMLInputElement).value)}
 			/>
-			{#if !metadata.transcriber}
-				<p class="transcriber-hint">{t('meta.transcriber.hint', language)}</p>
-			{/if}
+		</div>
+		<div class="meta-reset-row">
+			<button
+				class="btn-reset"
+				disabled={!hasMetadata}
+				onclick={resetMetadata}
+			>
+				{t('meta.reset', language)}
+			</button>
 		</div>
 	</div>
 
@@ -221,7 +236,7 @@
 	</div>
 
 	<!-- ── 6. Cosmetic Options (unified: stress acutes + IPA toggles) ── -->
-	<div class="section">
+	<div class="section cosmetic-section">
 		<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
 		<div class="cosmetic-grid">
 			<!-- Stress acutes -->
@@ -370,6 +385,7 @@
 		padding: 0.5rem 0.6rem;
 		resize: vertical;
 		line-height: 1.5;
+		margin-top: 8px;
 	}
 
 	.text-input::placeholder {
@@ -389,7 +405,7 @@
 		font-size: 0.75rem;
 		color: var(--sage);
 		font-family: var(--font-sans);
-		margin-top: -0.4rem;
+		margin-top: -4px;
 		min-height: 1.2em;
 	}
 
@@ -408,6 +424,7 @@
 	.button-row {
 		display: flex;
 		gap: 6px;
+		margin-top: 4px;
 	}
 
 	.action-btn {
@@ -482,13 +499,33 @@
 		color: var(--ink-tertiary);
 	}
 
-	.transcriber-hint {
-		font-family: var(--font-serif);
-		font-size: 0.75rem;
-		font-style: italic;
-		color: var(--ink-tertiary);
-		margin: -0.1rem 0 0 0;
-		padding-left: 0.4rem;
+	.meta-reset-row {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 0.25rem;
+	}
+
+	.btn-reset {
+		width: calc((100% - 12px) / 3);
+		padding: 0.45rem 0.5rem;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 600;
+		border: 1px solid var(--stone-300);
+		border-radius: 4px;
+		background: white;
+		color: var(--ink-secondary);
+		cursor: pointer;
+		transition: opacity 0.12s;
+	}
+
+	.btn-reset:hover:not(:disabled) {
+		opacity: 0.85;
+	}
+
+	.btn-reset:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
 	}
 
 	/* ── Word Console section ────────────────────────────── */
@@ -497,15 +534,17 @@
 		border-top: 2px solid var(--sage);
 		border-bottom: 2px solid var(--sage);
 		padding: 1rem 0;
+		margin-top: 12px;
+		overflow: visible;
+	}
+
+	.cosmetic-section {
+		margin-top: 20px;
 	}
 
 	.console-placeholder-body {
-		min-height: 504px;
-		padding: 2rem 0.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
+		min-height: 365px;
+		padding: 24px 0.5rem 0;
 	}
 
 	.placeholder-hint {
