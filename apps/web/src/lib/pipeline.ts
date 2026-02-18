@@ -244,14 +244,19 @@ export function processText(
 
         const stressedCyrillic = addStressMarkToCyrillic(
           tw.cleanWord,
-          tw.wordData.stress,
+          tw.syllables,
         );
+
+        // Derive effective stress from engine syllables (monosyllable normalization).
+        // The engine correctly marks monosyllables as stressed on syllable 0,
+        // but the pre-engine lookup may have -2 (unknown). Use engine truth.
+        const effectiveStressIndex = tw.syllables.findIndex(s => s.isStressed);
 
         return {
           cyrillic: tw.wordData.cyrillic,
           cleanWord: tw.cleanWord,
           punctuation: tw.punct,
-          stressIndex: tw.wordData.stress,
+          stressIndex: effectiveStressIndex >= 0 ? effectiveStressIndex : tw.wordData.stress,
           stressSource: tw.wordData.stressSource,
           stressedCyrillic,
           originalStressIndex: tw.wordData.originalStress,

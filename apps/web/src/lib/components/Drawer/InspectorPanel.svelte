@@ -76,6 +76,11 @@
 		return map;
 	});
 
+	// Cyrillic display: respect stress diacritics toggle (mirrors Paper WordStack pattern)
+	const displayCyrillic = $derived(
+		showStressDiacritics ? word.stressedCyrillic : word.cleanWord
+	);
+
 	// Header IPA: use ipaContent (pre-merge) for analysis, not ipaDisplay (fused clitic)
 	const headerIpa = $derived.by(() => {
 		const useReconstituted = reconActive && word.ipaOwnReconstituted;
@@ -175,7 +180,7 @@
 			const si = charToSyllableRemap ? (charToSyllableRemap.get(di) ?? originalSi) : originalSi;
 			// Apply combining acute accent to stressed vowel (ё/Ё are inherently stressed, never marked)
 			let displayChar = entry.char;
-			if (showStressDiacritics && entry.features?.stressed && entry.char !== 'ё' && entry.char !== 'Ё') {
+			if (showStressDiacritics && entry.features?.type === 'vowel' && entry.features?.position === 'stressed' && entry.char !== 'ё' && entry.char !== 'Ё') {
 				displayChar = entry.char + '\u0301';
 			}
 			entries.push({
@@ -802,7 +807,7 @@
 <div
 	class="inspector-panel"
 	role="region"
-	aria-label={word.stressedCyrillic}
+	aria-label={displayCyrillic}
 	tabindex="-1"
 >
 	<!-- ═══ Word content (breathes on word change) ═══ -->
@@ -813,7 +818,7 @@
 	<div class="word-header">
 		<div class="word-header-group">
 			<div class="word-stack">
-				<h2 class="word-cyrillic">{word.stressedCyrillic}</h2>
+				<h2 class="word-cyrillic">{displayCyrillic}</h2>
 				<p class="word-ipa">{headerIpa}</p>
 				{#if word.gloss}
 					<p class="word-gloss">{word.gloss}</p>
