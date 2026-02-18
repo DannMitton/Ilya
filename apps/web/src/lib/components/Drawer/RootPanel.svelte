@@ -213,7 +213,7 @@
 	<!-- ── 4. Button row: Clear | Print | Transcribe ───────── -->
 	<div class="button-row">
 		<button
-			class="action-btn btn-secondary"
+			class="action-btn btn-ghost"
 			onclick={onclear}
 		>
 			{t('input.clear', language)}
@@ -443,7 +443,6 @@
 	}
 
 	.action-btn {
-		flex: 1;
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
@@ -454,15 +453,24 @@
 		transition: opacity 0.12s;
 	}
 
-	.btn-primary {
-		color: white;
-		background: var(--sage);
+	.btn-ghost {
+		flex: 0 1 30%;
+		color: var(--stone-500);
+		background: transparent;
+		font-weight: 500;
 	}
 
 	.btn-secondary {
+		flex: 0 1 30%;
 		color: var(--ink-secondary);
 		background: white;
-		border: 1px solid var(--stone-300);
+		border: 1px solid var(--stone-500);
+	}
+
+	.btn-primary {
+		flex: 0 1 40%;
+		color: white;
+		background: var(--sage);
 	}
 
 	.action-btn:hover:not(:disabled) {
