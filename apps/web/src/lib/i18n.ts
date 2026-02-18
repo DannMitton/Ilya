@@ -36,11 +36,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
 	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
+	'meta.translator':             { en: 'Translator',                    fr: 'Traducteur ou traductrice' },
+	'meta.translatorAbbrev':       { en: 'Transl.',                       fr: 'Trad.' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
-	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
+	'meta.placeholderLine':        { en: 'Composer, opus, poet, and translator information', fr: 'Informations sur le compositeur, l\u2019opus, le poète et le traducteur' },
 
 	// ── Cosmetic options (IPA display toggles) ───────────────
 	'cosmetic.heading':            { en: 'Cosmetic Options (Global)',     fr: 'Options cosmétiques (globales)' },

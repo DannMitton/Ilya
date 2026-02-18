@@ -58,8 +58,8 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 16px;
-		border-bottom: 1px solid var(--stone-300);
-		background: var(--app-bg);
+		border-bottom: none;
+		background: var(--sage);
 	}
 
 	/* ── [Ilya] sigil: matches paper logo size ───────────── */
@@ -74,7 +74,7 @@
 	.sigil-bracket {
 		font-family: var(--font-mono, 'SF Mono', 'Fira Code', 'Cascadia Code', monospace);
 		font-size: 22px;
-		color: var(--sage);
+		color: white;
 		font-weight: 400;
 	}
 
@@ -82,7 +82,7 @@
 		font-family: var(--font-serif);
 		font-size: 22px;
 		font-style: italic;
-		color: var(--sage);
+		color: white;
 		font-weight: 400;
 	}
 
@@ -104,21 +104,21 @@
 	}
 
 	.lang-option.active {
-		color: #1c1917;
+		color: white;
 		font-weight: 600;
 	}
 
 	.lang-option:not(.active) {
-		color: var(--stone-500);
+		color: rgba(255, 255, 255, 0.6);
 	}
 
 	.lang-option:not(.active):hover {
 		text-decoration: underline;
-		color: var(--stone-700);
+		color: rgba(255, 255, 255, 0.85);
 	}
 
 	.lang-option:focus-visible {
-		outline: 2px solid var(--sage);
+		outline: 2px solid white;
 		outline-offset: 2px;
 		border-radius: 2px;
 	}
@@ -126,6 +126,6 @@
 	.lang-separator {
 		width: 1px;
 		height: 12px;
-		background: var(--stone-300);
+		background: rgba(255, 255, 255, 0.4);
 	}
 </style>

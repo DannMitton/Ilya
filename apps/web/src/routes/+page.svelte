@@ -75,6 +75,7 @@
 		title: '',
 		composer: '',
 		poet: '',
+		translator: '',
 		opus: '',
 		transcriber: '',
 	});

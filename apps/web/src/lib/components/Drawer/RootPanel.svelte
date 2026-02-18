@@ -89,13 +89,17 @@
 		handleMetaField('poet', value);
 	}
 
+	function handleTranslatorSelect(value: string, _entry: PersonEntry | null) {
+		handleMetaField('translator', value);
+	}
+
 	const hasMetadata = $derived(
 		metadata.title !== '' || metadata.opus !== '' ||
-		metadata.composer !== '' || metadata.poet !== ''
+		metadata.composer !== '' || metadata.poet !== '' || metadata.translator !== ''
 	);
 
 	function resetMetadata() {
-		onmetadatachange({ ...metadata, title: '', opus: '', composer: '', poet: '' });
+		onmetadatachange({ ...metadata, title: '', opus: '', composer: '', poet: '', translator: '' });
 	}
 </script>
 
@@ -149,6 +153,15 @@
 				placeholder={t('meta.poet', language)}
 				{language}
 				onchange={handlePoetSelect}
+			/>
+
+			<!-- Translator: searchable dropdown (shares poet data source) -->
+			<SearchableSelect
+				entries={POETS}
+				value={metadata.translator}
+				placeholder={t('meta.translator', language)}
+				{language}
+				onchange={handleTranslatorSelect}
 			/>
 
 			<input
@@ -344,8 +357,8 @@
 	.root-panel {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		padding: 1rem;
+		gap: 6px;
+		padding: 20px 1rem 40px;
 	}
 
 	/* ── Dictionary status (loading/error only) ──────────────── */
@@ -407,6 +420,7 @@
 		font-family: var(--font-sans);
 		margin-top: -4px;
 		min-height: 1.2em;
+		text-align: right;
 	}
 
 	.result-hidden {
@@ -425,6 +439,7 @@
 		display: flex;
 		gap: 6px;
 		margin-top: 4px;
+		margin-bottom: 6px;
 	}
 
 	.action-btn {
@@ -462,7 +477,7 @@
 	/* ── Section labels (enlarged smallcaps) ──────────────── */
 
 	.section {
-		margin-top: 0.5rem;
+		margin-top: 0;
 	}
 
 	.section-label {
@@ -533,18 +548,18 @@
 	.console-section {
 		border-top: 2px solid var(--sage);
 		border-bottom: 2px solid var(--sage);
-		padding: 1rem 0;
+		padding: 6px 0 6px 0;
 		margin-top: 12px;
 		overflow: visible;
 	}
 
 	.cosmetic-section {
-		margin-top: 20px;
+		margin-top: 0;
 	}
 
 	.console-placeholder-body {
 		min-height: 365px;
-		padding: 24px 0.5rem 0;
+		padding: 12px 0.5rem 0;
 	}
 
 	.placeholder-hint {

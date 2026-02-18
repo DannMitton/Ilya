@@ -155,6 +155,7 @@ export interface SongMetadata {
   title: string;
   composer: string;
   poet: string;
+  translator: string;
   opus: string;
   transcriber: string;
 }
