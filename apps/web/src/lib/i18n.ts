@@ -36,13 +36,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
 	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
-	'meta.translator':             { en: 'Translator',                    fr: 'Traducteur ou traductrice' },
-	'meta.translatorAbbrev':       { en: 'Transl.',                       fr: 'Trad.' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
-	'meta.placeholderLine':        { en: 'Composer, opus, poet, and translator information', fr: 'Informations sur le compositeur, l\u2019opus, le poète et le traducteur' },
+	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
 
 	// ── Cosmetic options (IPA display toggles) ───────────────
 	'cosmetic.heading':            { en: 'Cosmetic Options (Global)',     fr: 'Options cosmétiques (globales)' },
@@ -136,7 +134,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'console.placeholder':         { en: 'Word Console',                 fr: 'Console du mot' },
 
 	// ── Paper empty state ────────────────────────────────────
-	'paper.empty':                 { en: 'To begin, open the drawer on the left and enter your text.', fr: 'Pour commencer, ouvrez le tiroir à gauche et saisissez votre texte.' },
+	'paper.empty':                 { en: 'Enter your Cyrillic text in the drawer on the left.', fr: 'Saisissez votre texte cyrillique dans le tiroir à gauche.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -153,12 +151,16 @@ const strings: Record<string, Record<Language, string>> = {
 	// These strings contain <em> tags for italic rendering.
 	// PageFooter.svelte uses {@html} to render them.
 	'footer.attribution1':         {
-		en: 'This transcription was created by {name} using <em>Ilya</em>, which operationalizes Dr.\u00a0Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via kaikki.org (CC\u00a0BY-SA\u00a04.0).',
-		fr: 'Cette transcription a été créée par {name} à l\u2019aide d\u2019<em>Ilya</em>, qui met en \u0153uvre <em>Russian Lyric Diction</em> du Dr\u00a0Craig Grayson (University of Washington, 2012). Données d\u2019accentuation de 1,3\u00a0M de mots et glossaires de traduction du Wiktionnaire anglais et français via kaikki.org (CC\u00a0BY-SA\u00a04.0).'
+		en: 'This transcription was created by {name} using <em>Ilya</em>\u00a02026a, which operationalizes Dr.\u00a0Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via kaikki.org (CC\u00a0BY-SA\u00a04.0).',
+		fr: 'Cette transcription a été créée par {name} à l\u2019aide d\u2019<em>Ilya</em>\u00a02026a, qui met en \u0153uvre <em>Russian Lyric Diction</em> du Dr\u00a0Craig Grayson (University of Washington, 2012). Données d\u2019accentuation de 1,3\u00a0M de mots et glossaires de traduction du Wiktionnaire anglais et français via kaikki.org (CC\u00a0BY-SA\u00a04.0).'
 	},
 	'footer.attribution2':         {
-		en: '<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists. Neither <em>Ilya</em> nor the transcriptions you make with <em>Ilya</em> may be repackaged or sold. Made with love in Canada',
-		fr: '<em>Ilya</em> est un outil savant gratuit et à code ouvert pour les enseignants et les artistes interprètes. Ni <em>Ilya</em> ni les transcriptions que vous créez avec <em>Ilya</em> ne peuvent être reconditionnés ou vendus. Fait avec amour au Canada'
+		en: '<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists. Neither <em>Ilya</em> nor the transcriptions you make with <em>Ilya</em> may be repackaged or sold.',
+		fr: '<em>Ilya</em> est un outil savant gratuit et à code ouvert pour les enseignants et les artistes interprètes. Ni <em>Ilya</em> ni les transcriptions que vous créez avec <em>Ilya</em> ne peuvent être reconditionnés ou vendus.'
+	},
+	'footer.attribution3':         {
+		en: 'Made with love in Canada',
+		fr: 'Fait avec amour au Canada'
 	},
 	'footer.page':                 { en: 'Page',                         fr: 'Page' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },

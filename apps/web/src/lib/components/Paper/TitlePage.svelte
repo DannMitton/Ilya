@@ -133,7 +133,7 @@
 		font-family: var(--font-serif);
 		font-size: 1rem;
 		line-height: 1.6;
-		max-width: 300px;
+		max-width: 480px;
 		margin: 0 auto;
 	}
 

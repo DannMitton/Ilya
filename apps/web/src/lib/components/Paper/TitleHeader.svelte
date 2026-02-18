@@ -27,7 +27,7 @@
 
 <header class="title-header">
 	<div class="logo">
-		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span>
+		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version">2026a</span>
 	</div>
 
 	<div class="song-title">
@@ -78,6 +78,16 @@
 	.logo-name {
 		font-family: var(--font-serif);
 		font-style: italic;
+	}
+
+	.logo-version {
+		font-family: var(--font-sans);
+		font-size: 16px;
+		color: var(--sage);
+		font-weight: 400;
+		font-variant-caps: all-small-caps;
+		margin-left: 3px;
+		letter-spacing: 0.04em;
 	}
 
 	/* ── Song title ────────────────────────────────────────── */

@@ -23,8 +23,8 @@
 </script>
 
 <header class="header-bar">
-	<div class="sigil" aria-label="Ilya">
-		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span>
+	<div class="sigil" aria-label="Ilya 2026a">
+		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
 	</div>
 
 	<div class="language-toggle">
@@ -84,6 +84,17 @@
 		font-style: italic;
 		color: white;
 		font-weight: 400;
+	}
+
+	.sigil-version {
+		font-family: var(--font-sans);
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.7);
+		font-weight: 400;
+		font-variant-caps: all-small-caps;
+		margin-left: 3px;
+		letter-spacing: 0.04em;
+		align-self: baseline;
 	}
 
 	/* ── Language toggle ─────────────────────────────────── */

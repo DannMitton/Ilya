@@ -559,7 +559,11 @@
 
 	.console-placeholder-body {
 		min-height: 365px;
-		padding: 12px 0.5rem 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 0 0.5rem;
 	}
 
 	.placeholder-hint {
