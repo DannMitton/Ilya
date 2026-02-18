@@ -27,9 +27,11 @@
 		onsyllableoverride?: (override: SyllableOverride) => void;
 		/** Clear per-word syllable override, reverting to global behaviour. */
 		onsyllableoverrideclear?: () => void;
+		/** Reset all per-word overrides (stress, ё, syllable, spot reconstitution). */
+		onreset?: () => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset }: Props = $props();
 
 	// ── Reconstitution derivations (bidirectional) ─────────────
 	// Spot override always inverts the global setting for this word.
@@ -353,6 +355,11 @@
 		word.stressSource === 'user-dictionary' ||
 		word.stressSource === 'user-composer' ||
 		word.stressSource === 'user-override'
+	);
+
+	// Whether this word has any per-word overrides (controls reset button visibility)
+	const hasOverrides = $derived(
+		isUserStress || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted
 	);
 
 	const syllableCount = $derived(word.syllables?.length ?? 0);
@@ -842,9 +849,20 @@
 				{/if}
 			</div>
 		</div>
-	</div>
 
-	<!-- ═══ 3. Organism (ribbon + blurb) ═══ -->
+		<!-- Per-word reset: clears all overrides, returns to engine output -->
+		{#if hasOverrides}
+			<div class="reset-slot">
+				<button
+					class="reset-button"
+					aria-label={language === 'en' ? 'Reset word to engine defaults' : 'Réinitialiser le mot aux valeurs par défaut'}
+					onclick={() => onreset?.()}
+				>
+					<svg viewBox="0 0 16 16" class="reset-svg" aria-hidden="true"><path d="M3.5 6A5 5 0 1 1 4 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M1 5l2.5 1 1-2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				</button>
+			</div>
+		{/if}
+	</div>
 	{#if ribbonEntries.length > 0}
 		<div class="organism" class:blurb-open={selectedRibbonEntry !== null}>
 
@@ -1172,6 +1190,8 @@
 		margin-bottom: 0.5rem;
 		display: flex;
 		justify-content: center;
+		align-items: flex-start;
+		gap: 0.5rem;
 	}
 
 	.word-header-group {
@@ -1855,4 +1875,44 @@
 	}
 
 	/* ═══ 6. Notation indicator: REMOVED (Phase A) ══════════════════════ */
+
+	/* ═══ 7. Per-word reset button ═══════════════════════════════════════ */
+
+	.reset-slot {
+		display: flex;
+		align-items: center;
+		padding-top: 0.5rem;
+	}
+
+	.reset-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 1px solid var(--stone-400, #a8a29e);
+		border-radius: 50%;
+		background: var(--paper-cream);
+		color: var(--ink-secondary);
+		cursor: pointer;
+		padding: 0;
+		opacity: 0.5;
+		transition: opacity 150ms ease, border-color 150ms ease, color 150ms ease;
+	}
+
+	.reset-button:hover {
+		opacity: 1;
+		border-color: var(--sage);
+		color: var(--sage);
+	}
+
+	.reset-button:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 2px;
+	}
+
+	.reset-svg {
+		width: 12px;
+		height: 12px;
+	}
 </style>

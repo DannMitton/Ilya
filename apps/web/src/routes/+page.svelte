@@ -386,6 +386,49 @@
 		syllableOverrides = newMap;
 	}
 
+	// ── Per-word reset: clear all overrides for the selected word ──
+	function handleReset() {
+		if (!selectedWord) return;
+		const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		let needsPipeline = false;
+
+		// Clear stress override
+		if (userStressOverrides.has(wordKey)) {
+			const newStress = new Map(userStressOverrides);
+			newStress.delete(wordKey);
+			userStressOverrides = newStress;
+			needsPipeline = true;
+		}
+
+		// Clear ё toggles for this word (keys are "lineIndex-wordIndex-charIndex")
+		const yoPrefix = `${wordKey}-`;
+		const hasYoToggles = [...yoToggles.keys()].some(k => k.startsWith(yoPrefix));
+		if (hasYoToggles) {
+			const newYo = new Map(yoToggles);
+			for (const k of [...newYo.keys()]) {
+				if (k.startsWith(yoPrefix)) newYo.delete(k);
+			}
+			yoToggles = newYo;
+			needsPipeline = true;
+		}
+
+		// Clear syllable override
+		if (syllableOverrides.has(wordKey)) {
+			const newSyll = new Map(syllableOverrides);
+			newSyll.delete(wordKey);
+			syllableOverrides = newSyll;
+		}
+
+		// Clear spot reconstitution
+		if (spotReconstitution.has(wordKey)) {
+			const newSpot = new Map(spotReconstitution);
+			newSpot.delete(wordKey);
+			spotReconstitution = newSpot;
+		}
+
+		if (needsPipeline) runPipeline();
+	}
+
 	// Persist input text to localStorage
 	function handleInput(text: string) {
 		inputText = text;
@@ -575,6 +618,7 @@
 								onyochartoggle={handleYoCharToggle}
 								onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 								onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
+								onreset={handleReset}
 							/>
 						{/if}
 					{/snippet}
