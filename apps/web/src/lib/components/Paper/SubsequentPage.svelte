@@ -19,6 +19,7 @@
 		legendItems: LegendItem[];
 		transcriber?: string;
 		showStressDiacritics?: boolean;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -33,6 +34,7 @@
 		legendItems,
 		transcriber = '',
 		showStressDiacritics = false,
+		spotReconstitution,
 		onwordclick,
 	}: Props = $props();
 
@@ -57,7 +59,7 @@
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
-				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
+				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
 			</div>
 		{/each}
 	</div>

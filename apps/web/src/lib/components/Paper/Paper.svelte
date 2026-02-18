@@ -14,6 +14,7 @@
 		metadata: SongMetadata;
 		pageSize: PageSize;
 		showStressDiacritics?: boolean;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -24,6 +25,7 @@
 		metadata,
 		pageSize,
 		showStressDiacritics = false,
+		spotReconstitution = new Map(),
 		onwordclick,
 	}: Props = $props();
 
@@ -51,6 +53,7 @@
 				{totalPages}
 				{legendItems}
 				{showStressDiacritics}
+				{spotReconstitution}
 				{onwordclick}
 			/>
 		{:else}
@@ -65,6 +68,7 @@
 				{legendItems}
 				transcriber={metadata.transcriber}
 				{showStressDiacritics}
+				{spotReconstitution}
 				{onwordclick}
 			/>
 		{/if}

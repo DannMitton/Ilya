@@ -15,16 +15,14 @@
 
 	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, onwordclick }: Props = $props();
 
-	// Spot reconstitution active: per-word reconstitution is ON and global is OFF
-	const isSpotActive = $derived(spotReconstituted && !notationPrefs.reconstitution);
+	// Bidirectional XOR: spot always inverts the global setting for this word.
+	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
+	// Matches InspectorPanel's reconActive logic exactly.
+	const reconActive = $derived(spotReconstituted ? !notationPrefs.reconstitution : notationPrefs.reconstitution);
 
-	// Use reconstituted IPA when:
-	//   - Global reconstitution toggle is on, OR
-	//   - Spot reconstitution is active for this word (and global is off)
+	// Use reconstituted IPA when reconActive is true and the word has a reconstituted form
 	const displayIpa = $derived.by(() => {
-		const useReconstituted =
-			(notationPrefs.reconstitution && word.ipaReconstituted) ||
-			(isSpotActive && word.ipaReconstituted);
+		const useReconstituted = reconActive && word.ipaReconstituted;
 		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
 		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
 	});
@@ -87,7 +85,8 @@
 	const isInferred = $derived(word.stressSource === 'inferred');
 
 	// Whether any top-right icon is present (provenance or R sigla)
-	const hasTopRightIcon = $derived((showProvenance && !isInferred) || isSpotActive);
+	// R sigla shows whenever spot inverts the global, in either direction
+	const hasTopRightIcon = $derived((showProvenance && !isInferred) || spotReconstituted);
 
 	function handleClick() {
 		onwordclick?.(word);
@@ -114,7 +113,7 @@
 	aria-label="{word.cyrillic}: {displayIpa}"
 >
 	<!-- Top-right icon area: provenance icons and/or R sigla -->
-	{#if (showProvenance && !isInferred) || isSpotActive}
+	{#if (showProvenance && !isInferred) || spotReconstituted}
 		<span class="icon-area" aria-hidden="true">
 			{#if showProvenance && !isInferred}
 				<span class="provenance-icon">
@@ -133,7 +132,7 @@
 					-->
 				</span>
 			{/if}
-			{#if isSpotActive}
+			{#if spotReconstituted}
 				<span class="recon-sigla">R</span>
 			{/if}
 		</span>

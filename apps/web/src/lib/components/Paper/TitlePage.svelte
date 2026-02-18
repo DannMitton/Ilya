@@ -19,6 +19,7 @@
 		totalPages: number;
 		legendItems: LegendItem[];
 		showStressDiacritics?: boolean;
+		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -31,6 +32,7 @@
 		totalPages,
 		legendItems,
 		showStressDiacritics = false,
+		spotReconstitution,
 		onwordclick,
 	}: Props = $props();
 
@@ -67,7 +69,7 @@
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
 				<div class="verse-row">
-					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {onwordclick} />
+					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
 				</div>
 			{/each}
 		{:else}
