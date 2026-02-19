@@ -39,6 +39,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
 	'meta.translator':             { en: 'Translator',                   fr: 'Traducteur' },
+	'meta.transl':                 { en: 'TRANSL.',                      fr: 'TRAD.' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
 	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
@@ -151,17 +152,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Paper footer ─────────────────────────────────────────
 	// These strings contain <em> tags for italic rendering.
 	// PageFooter.svelte uses {@html} to render them.
-	'footer.attribution1':         {
-		en: 'This transcription was created by {name} using <em>Ilya</em>\u00a02026a, which operationalizes Dr.\u00a0Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). 1.3M-word stress data and translation glosses from English and French Wiktionary via kaikki.org (CC\u00a0BY-SA\u00a04.0).',
-		fr: 'Cette transcription a été créée par {name} à l\u2019aide d\u2019<em>Ilya</em>\u00a02026a, qui met en \u0153uvre <em>Russian Lyric Diction</em> du Dr\u00a0Craig Grayson (University of Washington, 2012). Données d\u2019accentuation de 1,3\u00a0M de mots et glossaires de traduction du Wiktionnaire anglais et français via kaikki.org (CC\u00a0BY-SA\u00a04.0).'
-	},
-	'footer.attribution2':         {
-		en: '<em>Ilya</em> is a free, open-source scholarly tool for teachers and performing artists. Neither <em>Ilya</em> nor the transcriptions you make with <em>Ilya</em> may be repackaged or sold.',
-		fr: '<em>Ilya</em> est un outil savant gratuit et à code ouvert pour les enseignants et les artistes interprètes. Ni <em>Ilya</em> ni les transcriptions que vous créez avec <em>Ilya</em> ne peuvent être reconditionnés ou vendus.'
-	},
-	'footer.attribution3':         {
-		en: 'Made with love in Canada',
-		fr: 'Fait avec amour au Canada'
+	'footer.attribution':          {
+		en: 'Free and open source, <em>Ilya</em>\u00a02026a operationalizes Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Made with love in Canada',
+		fr: 'Gratuit et à code ouvert, <em>Ilya</em>\u00a02026a met en \u0153uvre <em>Russian Lyric Diction</em> de Grayson (University of Washington, 2012). Données d\u2019accentuation et glossaires de traduction via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Fait avec amour au Canada'
 	},
 	'footer.page':                 { en: 'Page',                         fr: 'Page' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },

@@ -3,7 +3,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_GAP, ROW_COUNTS } from '$lib/page-config';
+	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_COUNTS } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
@@ -43,6 +43,17 @@
 	/** Content window positioning (px) */
 	const contentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
+
+	/**
+	 * Dynamic row gap for subsequent pages.
+	 * Distributes rows evenly across the available content height,
+	 * giving subsequent pages generous breathing room.
+	 */
+	const availableHeight = $derived(dims.height - contentTop - contentBottom);
+	const totalRowHeight = ROW_COUNTS.subsequent * ROW_HEIGHT;
+	const subsequentRowGap = $derived(
+		Math.floor((availableHeight - totalRowHeight) / (ROW_COUNTS.subsequent - 1))
+	);
 </script>
 
 <div
@@ -55,7 +66,7 @@
 	<!-- Content layer: absolute, fixed-height aperture -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-count: {ROW_COUNTS.subsequent}; --row-gap: {ROW_GAP}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-count: {ROW_COUNTS.subsequent}; --row-gap: {subsequentRowGap}px;"
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">

@@ -436,7 +436,8 @@
 	/* ── Button row: Clear | Print | Transcribe ────────────── */
 
 	.button-row {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr 2fr;
 		gap: 6px;
 		margin-top: 4px;
 		margin-bottom: 6px;
@@ -454,21 +455,18 @@
 	}
 
 	.btn-ghost {
-		flex: 0 1 30%;
 		color: var(--stone-500);
 		background: transparent;
 		font-weight: 500;
 	}
 
 	.btn-secondary {
-		flex: 0 1 30%;
 		color: var(--ink-secondary);
 		background: white;
-		border: 1px solid var(--stone-500);
+		border: 1px solid var(--stone-600, #57534e);
 	}
 
 	.btn-primary {
-		flex: 0 1 40%;
 		color: white;
 		background: var(--sage);
 	}
@@ -529,15 +527,14 @@
 	}
 
 	.btn-reset {
-		width: calc((100% - 12px) / 3);
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
-		font-weight: 600;
-		border: 1px solid var(--stone-300);
+		font-weight: 500;
+		border: none;
 		border-radius: 4px;
-		background: white;
-		color: var(--ink-secondary);
+		background: transparent;
+		color: var(--stone-500);
 		cursor: pointer;
 		transition: opacity 0.12s;
 	}

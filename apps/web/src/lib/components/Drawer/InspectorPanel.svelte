@@ -16,6 +16,8 @@
 		/** Per-word syllable boundary override for this word, or null if none. */
 		syllableOverride?: SyllableOverride | null;
 		spotReconstituted?: boolean;
+		/** True when this word was promoted from clitic status via user stress assignment. */
+		promotedFromClitic?: boolean;
 		/** Character-level ё toggles for this word, keyed by charIndex. */
 		yoCharToggles?: Map<number, YoToggle>;
 		onspotrecontoggle?: () => void;
@@ -31,7 +33,7 @@
 		onreset?: () => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset }: Props = $props();
 
 	// ── Reconstitution derivations (bidirectional) ─────────────
 	// Spot override always inverts the global setting for this word.
@@ -359,14 +361,12 @@
 
 	// Whether this word has any per-word overrides (controls reset button visibility)
 	const hasOverrides = $derived(
-		isUserStress || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted
+		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted
 	);
 
 	const syllableCount = $derived(word.syllables?.length ?? 0);
 
-	const canAssignStress = $derived(
-		!word.isProclitic && !word.isEnclitic && syllableCount > 0
-	);
+	const canAssignStress = $derived(syllableCount > 0);
 
 	let assigningSyllable = $state<number | null>(null);
 
@@ -1126,6 +1126,14 @@
 								<polyline points="0,10 8,0 16,10" fill="none" stroke="var(--sage)" stroke-width="2" stroke-linejoin="round" />
 							</svg>
 							<div class="blurb-box" aria-live="polite">
+								{#if promotedFromClitic}
+									<p class="blurb-promotion">
+										{language === 'en'
+											? 'This word was originally identified as an unstressed clitic. Independent stress has been assigned, and the word now receives its own phonological treatment.'
+											: 'Ce mot a été identifié comme un clitique atone. Un accent indépendant lui a été attribué, et il reçoit désormais son propre traitement phonologique.'}
+									</p>
+									<div class="blurb-promotion-divider"></div>
+								{/if}
 								{#if selectedRibbonEntry.entry}
 									<p class="blurb-header">
 										<span class="blurb-char">{selectedRibbonEntry.char}</span>
@@ -1806,6 +1814,21 @@
 		font-size: 0.85rem;
 		color: var(--ink-tertiary);
 		font-style: italic;
+	}
+
+	.blurb-promotion {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		line-height: 1.5;
+		color: var(--ink-secondary);
+		font-style: italic;
+	}
+
+	.blurb-promotion-divider {
+		width: 100%;
+		height: 0;
+		border-top: 0.5px solid var(--stone-300, #d6d3d1);
+		margin: 0.5rem 0;
 	}
 
 	.blurb-citation {

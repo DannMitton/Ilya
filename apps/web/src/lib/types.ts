@@ -20,6 +20,8 @@ import type { GlossLanguage } from '@ilya/dictionary';
 export interface UserStressOverride {
   stressIndex: number;
   stressSource: 'user-dictionary' | 'user-composer' | 'user-override';
+  /** True when a clitic has been silently promoted to independent word status. */
+  promotedFromClitic?: boolean;
 }
 
 /** Character-level ё toggle (keyed by "lineIndex-wordIndex-charIndex"). */

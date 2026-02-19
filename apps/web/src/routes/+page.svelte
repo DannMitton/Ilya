@@ -296,10 +296,13 @@
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		const existingOverride = userStressOverrides.get(key);
+		const isClitic = selectedWord.isProclitic || selectedWord.isEnclitic || existingOverride?.promotedFromClitic;
 		const newMap = new Map(userStressOverrides);
 		newMap.set(key, {
 			stressIndex: syllableIndex,
 			stressSource: source as UserStressOverride['stressSource'],
+			...(isClitic ? { promotedFromClitic: true } : {}),
 		});
 		userStressOverrides = newMap;
 		runPipeline();
@@ -549,6 +552,7 @@
 								{showStressDiacritics}
 								syllableOverride={syllableOverrides.get(wordKey) ?? null}
 								spotReconstituted={spotReconstitution.has(wordKey)}
+								promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
 								yoCharToggles={wordYoToggles}
 								onspotrecontoggle={handleSpotReconToggle}
 								onstressassign={handleStressAssign}

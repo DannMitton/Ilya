@@ -5,23 +5,33 @@
 		title: string;
 		composer: string;
 		poet: string;
+		translator: string;
 		opus: string;
 		language: Language;
 	}
 
-	let { title, composer, poet, opus, language }: Props = $props();
+	let { title, composer, poet, translator, opus, language }: Props = $props();
 
 	/**
-	 * Build the metadata line from available fields.
-	 * Format: COMPOSER    OPUS    TEXT BY POET
-	 * Empty segments omitted (no dangling separators).
+	 * Line 1: COMPOSER (DATES)    OPUS
+	 * Full formatted composer display name, then opus. Space-separated.
 	 */
-	const metadataLine = $derived.by(() => {
+	const composerLine = $derived.by(() => {
 		const parts: string[] = [];
 		if (composer.trim()) parts.push(composer.trim().toUpperCase());
 		if (opus.trim()) parts.push(opus.trim().toUpperCase());
-		if (poet.trim()) parts.push(`${t('meta.textBy', language).toUpperCase()} ${poet.trim().toUpperCase()}`);
 		return parts.join('    ');
+	});
+
+	/**
+	 * Line 2: POET (DATES) | TRANSLATOR (DATES) (TRANSL.)
+	 * Full formatted names with dates. Translator only when populated.
+	 */
+	const attributionLine = $derived.by(() => {
+		const parts: string[] = [];
+		if (poet.trim()) parts.push(poet.trim().toUpperCase());
+		if (translator.trim()) parts.push(`${translator.trim().toUpperCase()} (${t('meta.transl', language)})`);
+		return parts.join(' | ');
 	});
 </script>
 
@@ -40,13 +50,20 @@
 		{/if}
 	</div>
 
-	<div class="metadata-line">
-		{#if metadataLine}
-			{metadataLine}
+	<div class="metadata-block">
+		{#if composerLine || attributionLine}
+			{#if composerLine}
+				<div class="metadata-line">{composerLine}</div>
+			{/if}
+			{#if attributionLine}
+				<div class="metadata-line">{attributionLine}</div>
+			{/if}
 		{:else}
-			<span class="placeholder-text">
-				{t('meta.placeholderLine', language)}
-			</span>
+			<div class="metadata-line">
+				<span class="placeholder-text">
+					{t('meta.placeholderLine', language)}
+				</span>
+			</div>
 		{/if}
 	</div>
 
@@ -101,15 +118,20 @@
 		margin-bottom: 6px;
 	}
 
-	/* ── Metadata line ─────────────────────────────────────── */
+	/* ── Metadata block ────────────────────────────────────── */
+
+	.metadata-block {
+		margin-bottom: 8px;
+	}
 
 	.metadata-line {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: 14px;
+		font-weight: 600;
 		color: var(--ink-secondary);
 		letter-spacing: 1.5px;
-		line-height: 1.4;
-		margin-bottom: 8px;
+		line-height: 1.6;
+		font-variant-caps: all-small-caps;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;

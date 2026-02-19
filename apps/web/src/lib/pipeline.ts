@@ -78,6 +78,8 @@ interface PreTranscribeWord {
   yoAlternation: boolean;
   /** The other form (not currently displayed) for ё ↔ е toggle. */
   yoAlternateForm: string | null;
+  /** True when a clitic has been promoted to independent word via user stress assignment. */
+  promotedFromClitic?: boolean;
 }
 
 /** Word data after engine transcription, used for cross-word assimilation. */
@@ -203,6 +205,9 @@ export function processText(
         if (override) {
           line[wordIdx].stress = override.stressIndex;
           line[wordIdx].stressSource = override.stressSource;
+          if (override.promotedFromClitic) {
+            line[wordIdx].promotedFromClitic = true;
+          }
         }
       }
     });
@@ -436,13 +441,13 @@ function autoDetectBoundaries(words: PreTranscribeWord[]): void {
     const isLastWord = i === words.length - 1;
     const cleanLower = word.cleanWord.toLowerCase();
     const hasPunctuation = punctuationRegex.test(word.cyrillic);
-    const isProclitic = GraysonEngine.proclitics.has(cleanLower);
+    const isProclitic = GraysonEngine.proclitics.has(cleanLower) && !word.promotedFromClitic;
 
     // Check if next word is enclitic
     const nextWord = words[i + 1];
     const nextCleanLower = nextWord ? nextWord.cleanWord.toLowerCase() : null;
     const nextIsEnclitic =
-      nextCleanLower != null && GraysonEngine.enclitics.has(nextCleanLower);
+      nextCleanLower != null && GraysonEngine.enclitics.has(nextCleanLower) && !nextWord.promotedFromClitic;
 
     // Apply rules in priority order
     if (isLastWord) {
@@ -491,8 +496,8 @@ function transcribeLine(
         isOWord && (hasPunctAfter || (isFirstWord && !lineEndsWithQuestion));
 
       const isProclitic =
-        !isOInterjection && GraysonEngine.proclitics.has(cleanLower);
-      const isEnclitic = GraysonEngine.enclitics.has(cleanLower);
+        !isOInterjection && GraysonEngine.proclitics.has(cleanLower) && !wordData.promotedFromClitic;
+      const isEnclitic = GraysonEngine.enclitics.has(cleanLower) && !wordData.promotedFromClitic;
 
       // Determine proclitic reduction position relative to host stress.
       // Forward-scans past any intervening proclitics to find the actual host.

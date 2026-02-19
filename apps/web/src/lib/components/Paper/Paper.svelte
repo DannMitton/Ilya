@@ -32,7 +32,7 @@
 	const pages = $derived(sliceLinesToPages(lines));
 	const totalPages = $derived(pages.length);
 	const runningHeader = $derived(
-		formatRunningHeader(metadata.composer, metadata.title)
+		formatRunningHeader(metadata.composer, metadata.title, metadata.poet)
 	);
 </script>
 

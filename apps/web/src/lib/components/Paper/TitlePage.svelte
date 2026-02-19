@@ -39,9 +39,10 @@
 	const dims = $derived(PAGE_SIZES[pageSize]);
 	const hasContent = $derived(lines.length > 0);
 
-	/** Transform composer/poet names for paper display: "Given Surname (dates)" */
+	/** Transform names for paper display: "Given Surname (dates)" */
 	const composerDisplay = $derived(formatNameForPaper(metadata.composer, COMPOSERS));
 	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS));
+	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS));
 
 	/** Content window positioning (px) */
 	const contentTop = MARGINS.vertical + HEADER_HEIGHTS.title + GAP;
@@ -57,6 +58,7 @@
 		title={metadata.title}
 		composer={composerDisplay}
 		poet={poetDisplay}
+		translator={translatorDisplay}
 		opus={metadata.opus}
 		{language}
 	/>
