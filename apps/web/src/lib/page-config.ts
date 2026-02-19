@@ -27,29 +27,27 @@ export const GAP = 8;
 
 // ── Calibrated constants ─────────────────────────────────────────
 
-/** Header heights (px). Title = logo + title + metadata + rule. Subsequent = running header + underline + breathing room. */
+/** Header heights (px). Controls content origin below rule. Matched so rule-to-content gap is visually equal (~20px) on both page templates. */
 export const HEADER_HEIGHTS = {
-	title: 110,
-	subsequent: 50,
+	title: 135,
+	subsequent: 37,
 } as const;
 
 /** Maximum footer height with text-wrap allowance (px). */
 export const FOOTER_MAX_HEIGHT = 80;
 
-/** Gap between verse rows (px). Generous spacing gives VERIFY boxes, sigla, and j-glide dots clearance. */
+/** Gap between verse rows (px). */
 export const ROW_GAP = 20;
 
 /**
  * Universal row height (px).
- * Derived from the tightest constraint: Letter title page.
- * Available = 1056 - 48 - 48 - 110 - 80 - 16 = 754px.
- * Content uses overflow: visible; VERIFY decorations extend freely.
- * 10 rows at 56px + 9 gaps at 20px = 740px. Buffer = 14px.
- * All four template/size combinations render correctly.
+ * Content layer uses overflow: visible; rows render independently of
+ * header/footer layers. HEADER_HEIGHTS controls vertical positioning
+ * of the content origin, not a hard boundary.
  */
 export const ROW_HEIGHT = 56;
 
-/** Row capacity per page template. Uniform 10/10 model gives generous breathing room. */
+/** Row capacity per page template. */
 export const ROW_COUNTS = {
 	title: 10,
 	subsequent: 10,
@@ -91,39 +89,49 @@ export function sliceLinesToPages(lines: LineData[]): LineData[][] {
 // ── Running header ───────────────────────────────────────────────
 
 /**
+ * Extract a surname from a display name string.
+ *
+ * - Strips parenthesized content (dates, birth/death years)
+ * - If name contains a comma, text before the comma is the surname
+ * - Otherwise, the last word is the surname
+ * - Returns uppercase
+ */
+export function extractSurname(name: string): string {
+	const stripped = name.replace(/\s*\([^)]*\)/g, '').trim();
+
+	if (stripped.includes(',')) {
+		return stripped.split(',')[0].trim().toUpperCase();
+	}
+
+	const parts = stripped.split(/\s+/);
+	return parts[parts.length - 1].toUpperCase();
+}
+
+/**
  * Format a running header string for subsequent pages.
  *
- * - Strips parenthesized dates: "Dmitri Shostakovich (1906–1975)" → "Dmitri Shostakovich"
- * - If composer contains a comma, text before the comma is the surname
- * - Otherwise, the last word is the surname
- * - Returns "SURNAME — TITLE" in uppercase
- * - If composer is empty, returns title only in uppercase
- * - If title is empty, returns empty string
+ * Returns "COMPOSER SURNAME | POET SURNAME — TITLE" in uppercase.
+ * Poet omitted if empty. Composer omitted if empty.
+ * If title is empty, returns empty string.
  */
-export function formatRunningHeader(composer: string, title: string): string {
+export function formatRunningHeader(composer: string, title: string, poet?: string): string {
 	if (!title.trim()) {
 		return '';
 	}
 
 	const titleUpper = title.trim().toUpperCase();
 
-	if (!composer.trim()) {
+	const nameParts: string[] = [];
+	if (composer.trim()) {
+		nameParts.push(extractSurname(composer));
+	}
+	if (poet && poet.trim()) {
+		nameParts.push(extractSurname(poet));
+	}
+
+	if (nameParts.length === 0) {
 		return titleUpper;
 	}
 
-	// Strip parenthesized content (dates, birth/death years)
-	const stripped = composer.replace(/\s*\([^)]*\)/g, '').trim();
-
-	let surname: string;
-
-	if (stripped.includes(',')) {
-		// "Shostakovich, Dmitri" → surname is before the comma
-		surname = stripped.split(',')[0].trim();
-	} else {
-		// "Dmitri Shostakovich" → surname is the last word
-		const parts = stripped.split(/\s+/);
-		surname = parts[parts.length - 1];
-	}
-
-	return `${surname.toUpperCase()} \u2014 ${titleUpper}`;
+	return `${nameParts.join(' | ')} \u2014 ${titleUpper}`;
 }
