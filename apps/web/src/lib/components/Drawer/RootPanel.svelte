@@ -104,13 +104,8 @@
 </script>
 
 <div class="root-panel" class:status-ok={dictReady}>
-	<!-- Dictionary loading/error (hidden when ready) -->
-	{#if loaderState.isLoading}
-		<div class="dict-status">
-			<span class="status-dot loading"></span>
-			<span class="status-text">{t('dict.loading', language)}</span>
-		</div>
-	{:else if loaderState.error}
+	<!-- Dictionary error (persistent, stays at top) -->
+	{#if loaderState.error}
 		<div class="dict-status">
 			<span class="status-dot error"></span>
 			<span class="status-text">{loaderState.error}</span>
@@ -183,7 +178,7 @@
 		</div>
 	</div>
 
-	<!-- ── 2. Textarea (reduced to 6 rows: pasting, not composing) ── -->
+	<!-- ── 2. Textarea (disabled during dictionary load) ── -->
 	<textarea
 		class="text-input"
 		placeholder={t('input.placeholder', language)}
@@ -191,6 +186,7 @@
 		oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
 		onkeydown={handleKeydown}
 		rows="6"
+		disabled={loaderState.isLoading}
 	></textarea>
 
 	{#if showWarning}
@@ -241,9 +237,25 @@
 			{@render consoleContent()}
 		{:else}
 			<div class="console-placeholder-body">
-				<p class="placeholder-hint">
-					{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
-				</p>
+				{#if loaderState.isLoading}
+					<div class="dict-progress">
+						<span class="dict-progress-text">{t('dict.loading', language)}</span>
+						<div class="dict-progress-track">
+							{#if loaderState.progress >= 0}
+								<div
+									class="dict-progress-fill"
+									style="width: {Math.round(loaderState.progress * 100)}%"
+								></div>
+							{:else}
+								<div class="dict-progress-fill indeterminate"></div>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					<p class="placeholder-hint">
+						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
+					</p>
+				{/if}
 			</div>
 		{/if}
 	</div>
@@ -329,7 +341,7 @@
 				class:active={notationPrefs.reconstitution}
 				role="switch"
 				aria-checked={notationPrefs.reconstitution}
-				aria-label={t('cosmetic.reconstitution.left', language)}
+				aria-label={t('cosmetic.reconstitution.right', language)}
 				onclick={() => handleToggle('reconstitution', !notationPrefs.reconstitution)}
 			>
 				<span class="toggle-thumb"></span>
@@ -361,7 +373,48 @@
 		padding: 20px 1rem 40px;
 	}
 
-	/* ── Dictionary status (loading/error only) ──────────────── */
+	/* ── Dictionary progress bar (Kimi spec) ───────────────── */
+
+	.dict-progress {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: center;
+		width: 60%;
+	}
+
+	.dict-progress-text {
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		font-family: var(--font-sans);
+	}
+
+	.dict-progress-track {
+		width: 100%;
+		height: 4px;
+		background: var(--stone-300);
+		border-radius: 2px;
+		overflow: hidden;
+	}
+
+	.dict-progress-fill {
+		height: 100%;
+		background: var(--sage);
+		border-radius: 2px;
+		transition: width 200ms ease;
+	}
+
+	.dict-progress-fill.indeterminate {
+		width: 30%;
+		animation: indeterminate 1.5s ease-in-out infinite;
+	}
+
+	@keyframes indeterminate {
+		0% { transform: translateX(-100%); }
+		100% { transform: translateX(433%); }
+	}
+
+	/* ── Dictionary error (kept from original) ─────────────── */
 
 	.dict-status {
 		display: flex;
@@ -377,7 +430,6 @@
 		flex-shrink: 0;
 	}
 
-	.status-dot.loading { background: var(--stone-500); animation: pulse 1.5s infinite; }
 	.status-dot.error { background: #d97706; }
 
 	.status-text {
@@ -404,6 +456,11 @@
 	.text-input::placeholder {
 		color: var(--ink-tertiary);
 		font-style: italic;
+	}
+
+	.text-input:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
 	.char-warning {
@@ -642,10 +699,5 @@
 
 	.toggle-switch.active .toggle-thumb {
 		transform: translateX(14px);
-	}
-
-	@keyframes pulse {
-		0%, 100% { opacity: 1; }
-		50% { opacity: 0.4; }
 	}
 </style>

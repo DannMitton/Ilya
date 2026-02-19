@@ -20,8 +20,7 @@
 		error: null,
 		entryCount: 0,
 		durationMs: 0,
-		tier2Loaded: false,
-		tier2Count: 0
+		progress: 0
 	});
 	// Language
 	let language = $state<Language>('en');

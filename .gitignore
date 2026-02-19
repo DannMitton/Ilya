@@ -4,4 +4,6 @@ dist/
 build/
 *.tsbuildinfo
 .DS_Store
-apps/web/static/data
+apps/web/static/data/
+data/dictionary.*.json
+!apps/web/static/data/dictionary-manifest.json
