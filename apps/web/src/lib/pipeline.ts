@@ -183,7 +183,7 @@ export function processText(
             // Map from cleanWord index to cyrillic index (skipping punctuation/dashes)
             let cleanIdx = 0;
             for (let ci = 0; ci < chars.length; ci++) {
-              const isPunct = /[.,!?;:"""''–—\-]/.test(chars[ci]);
+              const isPunct = /[.,!?;:"""''–—\-«»]/.test(chars[ci]);
               if (isPunct) continue;
               if (wordToggles.includes(cleanIdx)) {
                 switch (chars[ci]) {
@@ -309,20 +309,26 @@ export function processText(
 function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
   // Normalize NFC so precomposed ё is preserved, then strip combining acutes
   const word = rawWord.normalize('NFC').replace(/\u0301/g, '');
+  // Strip guillemets for dictionary lookups only; word retains them for display
+  const bareWord = word.replace(/[«»]/g, '');
 
   // Extract trailing punctuation
   const trailingPunctMatch = word.match(TRAILING_PUNCT_REGEX);
   const punctuation = trailingPunctMatch ? trailingPunctMatch[0] : '';
 
-  const lookup = GraysonEngine.lookupStress(word);
+  const lookup = GraysonEngine.lookupStress(bareWord);
 
   let displayWord = word;
   let wasYoRestored = false;
   let dictionaryForm: string | null = null;
 
   if (!suppressYoRestore && lookup?.source === 'yo-restored' && lookup.canonicalForm) {
-    displayWord = GraysonEngine.applyCasePattern(word, lookup.canonicalForm);
-    dictionaryForm = displayWord;
+    const restored = GraysonEngine.applyCasePattern(bareWord, lookup.canonicalForm);
+    dictionaryForm = restored;
+    // Reattach guillemets for display fidelity
+    const gl = word.startsWith('«') ? '«' : '';
+    const gr = word.endsWith('»') ? '»' : '';
+    displayWord = gl + restored + gr;
     wasYoRestored = true;
   }
 
@@ -376,7 +382,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
       // Word has native ё: check if the е-version exists as its own word
       const eForm = displayWord.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
       if (eForm !== displayWord) {
-        const eLookup = GraysonEngine.lookupStress(eForm);
+        const eLookup = GraysonEngine.lookupStress(eForm.replace(/[«»]/g, ''));
         if (eLookup && eLookup.source !== 'yo-restored') {
           yoAlternation = true;
           yoAlternateForm = eForm;
@@ -392,7 +398,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
           const swapped = [...chars];
           swapped[i] = isLowerE ? 'ё' : 'Ё';
           const yoForm = swapped.join('');
-          const yoLookup = GraysonEngine.lookupStress(yoForm);
+          const yoLookup = GraysonEngine.lookupStress(yoForm.replace(/[«»]/g, ''));
           if (yoLookup && yoLookup.stress != null && yoLookup.stress >= 0) {
             yoAlternation = true;
             yoAlternateForm = yoForm;
@@ -434,7 +440,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
  * PreTranscribeWord[] before engine transcription.
  */
 function autoDetectBoundaries(words: PreTranscribeWord[]): void {
-  const punctuationRegex = /[.,!?;:"""''–—]$/;
+  const punctuationRegex = /[.,!?;:"""''–—«»]$/;
 
   words.forEach((word, i) => {
     // Preserve user-set boundaries (future feature)
