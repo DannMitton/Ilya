@@ -276,6 +276,7 @@ export const GraysonEngine = {
     ['ли', { type: 'enclitic', canonicalIpa: 'lʲi', gloss: { en: '(question)', fr: '(question)' } }],
     ['ль', { type: 'enclitic', canonicalIpa: 'lʲ', gloss: { en: '(question)', fr: '(question)' } }],
     ['же', { type: 'enclitic', canonicalIpa: 'ʒɨ', gloss: { en: '(emphasis)', fr: '(emphase)' } }],
+    ['ж', { type: 'enclitic', canonicalIpa: 'ʒ', gloss: { en: '(emphasis)', fr: '(emphase)' } }],
     ['бы', { type: 'enclitic', canonicalIpa: 'bɨ', gloss: { en: 'would', fr: '(conditionnel)' } }],
     ['б', { type: 'enclitic', canonicalIpa: 'b', gloss: { en: 'would', fr: '(conditionnel)' } }],
     ['то', { type: 'enclitic', canonicalIpa: 'tɑ', gloss: { en: '(then)', fr: '(alors)' } }],

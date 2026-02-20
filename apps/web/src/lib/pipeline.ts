@@ -39,7 +39,7 @@ import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, Y
 // ── Constants ────────────────────────────────────────────────────
 
 const PUNCTUATION_REGEX = /[.,!?;:"""''–—]/g;
-const TRAILING_PUNCT_REGEX = /[.,!?;:"""'']+$/;
+const TRAILING_PUNCT_REGEX = /[.,!?;:"""''\-–—]+$/;
 const DASH_REGEX = /[-–—]/g;
 
 const CYRILLIC_VOWELS = new Set([
@@ -49,6 +49,46 @@ const CYRILLIC_VOWELS = new Set([
 
 function hasVowel(word: string): boolean {
   return Array.from(word).some((char) => CYRILLIC_VOWELS.has(char));
+}
+
+// Hyphenated enclitic particles that should be split from their host
+// word for independent lookup and enclitic treatment. Lowercase forms
+// only; matching is case-insensitive.
+const HYPHENATED_PARTICLES = new Set(['ли', 'ль', 'бы', 'б', 'же', 'ж']);
+
+/**
+ * Expand hyphenated particles into separate tokens.
+ *
+ * "велит-ли" → ["велит-", "ли"]  (hyphen preserved on host for display)
+ * "места-б," → ["места-", "б,"]  (trailing punct stays on particle)
+ * "кое-что"  → ["кое-что"]       (unchanged: "что" is not a particle)
+ *
+ * Splits on the LAST hyphen only. The hyphen character stays on the
+ * host word as trailing punctuation so the Paper faithfully renders
+ * the source text.
+ */
+function expandHyphenatedParticles(tokens: string[]): string[] {
+  const result: string[] = [];
+  for (const token of tokens) {
+    // Find the last hyphen (regular, en-dash, or em-dash)
+    const lastHyphen = Math.max(
+      token.lastIndexOf('-'),
+      token.lastIndexOf('–'),
+      token.lastIndexOf('—'),
+    );
+    if (lastHyphen > 0 && lastHyphen < token.length - 1) {
+      const before = token.slice(0, lastHyphen + 1); // includes hyphen
+      const after = token.slice(lastHyphen + 1);
+      // Strip trailing punctuation from the suffix to test against particle set
+      const afterClean = after.replace(TRAILING_PUNCT_REGEX, '').toLowerCase();
+      if (HYPHENATED_PARTICLES.has(afterClean)) {
+        result.push(before, after);
+        continue;
+      }
+    }
+    result.push(token);
+  }
+  return result;
 }
 
 // ── Intermediate types (internal to pipeline) ────────────────────
@@ -151,7 +191,10 @@ export function processText(
           return cleaned.length > 0;
         });
 
-      return words.map((word) => buildPreTranscribeWord(word));
+      // Expand hyphenated particles into separate tokens before lookup
+      const expanded = expandHyphenatedParticles(words);
+
+      return expanded.map((word) => buildPreTranscribeWord(word));
     })
     .filter((line) => line.length > 0);
 
@@ -309,8 +352,8 @@ export function processText(
 function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
   // Normalize NFC so precomposed ё is preserved, then strip combining acutes
   const word = rawWord.normalize('NFC').replace(/\u0301/g, '');
-  // Strip guillemets for dictionary lookups only; word retains them for display
-  const bareWord = word.replace(/[«»]/g, '');
+  // Strip guillemets and trailing hyphens for dictionary lookups only; word retains them for display
+  const bareWord = word.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
 
   // Extract trailing punctuation
   const trailingPunctMatch = word.match(TRAILING_PUNCT_REGEX);
@@ -382,7 +425,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
       // Word has native ё: check if the е-version exists as its own word
       const eForm = displayWord.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
       if (eForm !== displayWord) {
-        const eLookup = GraysonEngine.lookupStress(eForm.replace(/[«»]/g, ''));
+        const eLookup = GraysonEngine.lookupStress(eForm.replace(/[«»]/g, '').replace(/[-–—]+$/, ''));
         if (eLookup && eLookup.source !== 'yo-restored') {
           yoAlternation = true;
           yoAlternateForm = eForm;
@@ -398,7 +441,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
           const swapped = [...chars];
           swapped[i] = isLowerE ? 'ё' : 'Ё';
           const yoForm = swapped.join('');
-          const yoLookup = GraysonEngine.lookupStress(yoForm.replace(/[«»]/g, ''));
+          const yoLookup = GraysonEngine.lookupStress(yoForm.replace(/[«»]/g, '').replace(/[-–—]+$/, ''));
           if (yoLookup && yoLookup.stress != null && yoLookup.stress >= 0) {
             yoAlternation = true;
             yoAlternateForm = yoForm;
