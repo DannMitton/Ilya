@@ -31,6 +31,10 @@
 	const displayCyrillic = $derived.by(() => {
 		if (!showStressDiacritics || !word.cyrillic) return word.cyrillic;
 		if (word.stressIndex === undefined || word.stressIndex < 0) return word.cyrillic;
+		// Acute accent is a confidence signal: suppress for clitics (no independent stress)
+		// and inferred/VERIFY words (stress uncertain). Unreduced cardinal vowels may
+		// still display — that is a vowel quality question, not a confidence question.
+		if (isClitic || word.stressSource === 'inferred') return word.cyrillic;
 
 		const chars = [...word.cyrillic];
 		const vowels = 'аеёиоуыэюяАЕЁИОУЫЭЮЯ';
@@ -82,7 +86,7 @@
 		word.stressSource !== undefined
 	);
 
-	const isInferred = $derived(word.stressSource === 'inferred');
+	const isInferred = $derived(word.stressSource === 'inferred' && !isClitic);
 
 	// Whether any top-right icon is present (provenance or R sigla)
 	// R sigla shows whenever spot inverts the global, in either direction

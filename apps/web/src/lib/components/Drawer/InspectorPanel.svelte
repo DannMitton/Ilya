@@ -80,9 +80,13 @@
 		return map;
 	});
 
-	// Cyrillic display: respect stress diacritics toggle (mirrors Paper WordStack pattern)
+	// Cyrillic display: respect stress diacritics toggle (mirrors Paper WordStack pattern).
+	// Acute accent is a confidence signal: suppress for clitics (no independent stress)
+	// and inferred/VERIFY words (stress uncertain).
 	const displayCyrillic = $derived(
-		showStressDiacritics ? word.stressedCyrillic : word.cleanWord
+		showStressDiacritics && !isClitic && word.stressSource !== 'inferred'
+			? word.stressedCyrillic
+			: word.cleanWord
 	);
 
 	// Header IPA: use ipaContent (pre-merge) for analysis, not ipaDisplay (fused clitic)
@@ -182,9 +186,10 @@
 				: baseIpa;
 			const originalSi = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
 			const si = charToSyllableRemap ? (charToSyllableRemap.get(di) ?? originalSi) : originalSi;
-			// Apply combining acute accent to stressed vowel (ё/Ё are inherently stressed, never marked)
+			// Apply combining acute accent to stressed vowel (ё/Ё are inherently stressed, never marked).
+			// Suppress for clitics (no independent stress) and inferred/VERIFY words (stress uncertain).
 			let displayChar = entry.char;
-			if (showStressDiacritics && entry.features?.type === 'vowel' && entry.features?.position === 'stressed' && entry.char !== 'ё' && entry.char !== 'Ё') {
+			if (showStressDiacritics && !isClitic && word.stressSource !== 'inferred' && entry.features?.type === 'vowel' && entry.features?.position === 'stressed' && entry.char !== 'ё' && entry.char !== 'Ё') {
 				displayChar = entry.char + '\u0301';
 			}
 			entries.push({

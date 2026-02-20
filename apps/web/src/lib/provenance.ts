@@ -86,7 +86,7 @@ const LEGEND_KEYS: Record<string, string> = {
  * Build a provenance legend for a single page's lines.
  *
  * 1. Scans all word stacks across the page's lines
- * 2. Collects unique provenance types that pass showProvenance()
+ * 2. Collects unique provenance types that match known legend entries (allowlist)
  * 3. Maps each type to its icon and bilingual label
  * 4. Returns in stable display order (ё first, inferred last)
  * 5. Returns empty array if no special provenance exists (legend omitted)
@@ -97,7 +97,12 @@ export function buildProvenanceLegend(lines: LineData[], language: Language): Le
 
 	for (const line of lines) {
 		for (const word of line.words) {
-			if (showProvenance(word.stressSource)) {
+			// Skip clitics (display as arrows, not word stacks) and synthetic
+			// pipeline entries (clitic arrows with negative stressIndex).
+			// Their stress source is irrelevant to the legend.
+			if (word.isProclitic || word.isEnclitic || word.stressSource === 'clitic') continue;
+			if (word.stressIndex < 0) continue;
+			if (LEGEND_ORDER.includes(word.stressSource)) {
 				seen.add(word.stressSource);
 			}
 		}

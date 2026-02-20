@@ -5,12 +5,11 @@
 	interface Props {
 		pageNumber: number;
 		totalPages: number;
-		transcriber?: string;
 		language: Language;
 		legendItems?: LegendItem[];
 	}
 
-	let { pageNumber, totalPages, transcriber = '', language, legendItems = [] }: Props = $props();
+	let { pageNumber, totalPages, language, legendItems = [] }: Props = $props();
 
 	const attribution = $derived(t('footer.attribution', language));
 </script>
@@ -30,7 +29,7 @@
 						{:else if item.type === 'user-override'}
 							<!-- User (head + shoulders) -->
 							<svg viewBox="0 0 16 16" class="legend-icon" fill="currentColor"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z"/></svg>
-						{:else if item.type === 'yo-rule'}
+						{:else if item.type === 'yo-restored'}
 							<!-- ё (two dots + curved e) -->
 							<svg viewBox="0 0 16 16" class="legend-icon" fill="currentColor" stroke="currentColor"><circle cx="5.5" cy="2.5" r="1.3" stroke="none"/><circle cx="10.5" cy="2.5" r="1.3" stroke="none"/><path d="M4 10h8c0-3-2-4.5-4-4.5S4 7 4 10c0 2.5 1.5 4.5 4 4.5 1.5 0 3-.5 4-2" fill="none" stroke-width="1.5" stroke-linecap="round"/></svg>
 						{:else if item.type === 'inferred'}
