@@ -4,7 +4,7 @@
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_GAP } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -21,6 +21,7 @@
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		onwordclick?: (word: WordStackData) => void;
+		onbudgetchange?: (maxRows: number) => void;
 	}
 
 	let {
@@ -34,6 +35,7 @@
 		showStressDiacritics = false,
 		spotReconstitution,
 		onwordclick,
+		onbudgetchange,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -44,9 +46,71 @@
 	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS));
 	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS));
 
-	/** Content window positioning (px) */
-	const contentTop = MARGINS.vertical + HEADER_HEIGHTS.title + GAP;
+	/** Measured header height (px). Updated via TitleHeader's onheightchange callback. */
+	let headerHeight = $state(0);
+
+	/**
+	 * Header-to-content gap for the title page (18px).
+	 *
+	 * Matches the perceived rule-to-content spacing on subsequent pages
+	 * (page 2 is the standard, this value was tuned to achieve visual
+	 * parity). One document, one rhythm: the gap below the horizontal
+	 * rule must feel identical on every page.
+	 *
+	 * 10 rows preserved with standard 127px header:
+	 *   available = 1056 - (48 + 127 + 18) - (48 + 80 + 8) = 727px
+	 *   10 × 56 + 9 × 18 = 722px. 5px clearance.
+	 */
+	const TITLE_HEADER_GAP = 18;
+
+	/** Content window positioning (px). Bottom is fixed; top adapts to measured header. */
+	const contentTop = $derived(MARGINS.vertical + headerHeight + TITLE_HEADER_GAP);
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
+
+	/**
+	 * Adaptive row configuration: compute rows and gap from measured header.
+	 *
+	 * Algorithm: try 10 rows first. Calculate the gap that would distribute
+	 * them evenly in the available height. If that gap falls below the
+	 * minimum (18px), cascade to 9 rows, then 8.
+	 *
+	 * minGap derivation (not a magic number):
+	 *   With measured 127px header and 18px TITLE_HEADER_GAP:
+	 *   available = 1056 - 193 - 136 = 727px
+	 *   10 rows at 56px = 560px; (727 - 560) / 9 = 18.56px → floor to 18
+	 */
+	const rowConfig = $derived.by(() => {
+		if (headerHeight === 0) return { rows: 9, gap: 20 };
+
+		const availableHeight = PAGE_SIZES[pageSize].height - contentTop - contentBottom;
+		const minGap = 18;
+		const maxGap = 28;
+
+		let rows = 10;
+		let gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
+
+		if (gap < minGap) {
+			rows = 9;
+			gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
+		}
+		if (gap < minGap) {
+			rows = 8;
+			gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
+		}
+
+		gap = Math.min(gap, maxGap);
+
+		return { rows, gap: Math.round(gap) };
+	});
+
+	/** Signal parent when row budget changes so Paper can re-slice. */
+	$effect(() => {
+		onbudgetchange?.(rowConfig.rows);
+	});
+
+	function handleHeaderHeight(height: number) {
+		headerHeight = height;
+	}
 </script>
 
 <div
@@ -61,12 +125,13 @@
 		translator={translatorDisplay}
 		opus={metadata.opus}
 		{language}
+		onheightchange={handleHeaderHeight}
 	/>
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {ROW_GAP}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {rowConfig.gap}px;"
 	>
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
@@ -85,7 +150,6 @@
 	<PageFooter
 		pageNumber={1}
 		{totalPages}
-		transcriber={metadata.transcriber}
 		{language}
 		{legendItems}
 	/>
