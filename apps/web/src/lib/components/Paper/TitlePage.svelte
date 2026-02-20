@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
+	import type { WordStackData, SongMetadata, PageSize, LineData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_GAP, ROW_COUNTS } from '$lib/page-config';
+	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_GAP } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -63,10 +63,10 @@
 		{language}
 	/>
 
-	<!-- Content layer: absolute, fixed-height aperture -->
+	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-count: {ROW_COUNTS.title}; --row-gap: {ROW_GAP}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {ROW_GAP}px;"
 	>
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
@@ -110,22 +110,20 @@
 		padding-top: 4px;
 		padding-left: 4px;
 
-		display: grid;
-		grid-template-rows: repeat(var(--row-count), var(--row-height));
-		row-gap: var(--row-gap);
-		align-content: start;
+		display: flex;
+		flex-direction: column;
+		gap: var(--row-gap);
 	}
 
 	.verse-row {
-		height: var(--row-height);
 		box-sizing: border-box;
+		min-height: var(--row-height);
+		overflow: visible;
 	}
 
 	/* ── Empty state ───────────────────────────────────────── */
 
 	.empty-directive {
-		grid-column: 1;
-		grid-row: 1 / -1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -137,6 +135,7 @@
 		line-height: 1.6;
 		max-width: 480px;
 		margin: 0 auto;
+		flex: 1;
 	}
 
 	/* ── Print rules ───────────────────────────────────────── */

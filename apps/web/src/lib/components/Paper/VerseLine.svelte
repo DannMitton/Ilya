@@ -39,8 +39,14 @@
 	.verse-line {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.15rem 0.4rem;
+		gap: var(--row-gap, 20px) 0.4rem;
 		align-items: center;
-		height: 100%;
+		padding-left: 28px;
+	}
+
+	/* Hanging indent: first word pulls back to the left edge.
+	   Wrapped lines start at the 28px padding (indented). */
+	.verse-line > :global(:first-child) {
+		margin-left: -28px;
 	}
 </style>

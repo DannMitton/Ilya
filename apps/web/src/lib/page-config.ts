@@ -5,8 +5,9 @@
  * no fallback logic. The page is a fixed-size box with absolutely positioned
  * header, content, and footer layers.
  *
- * Constants begin as provisional estimates and are calibrated empirically
- * after building PageFooter, TitleHeader, and RunningHeader (Step 4).
+ * Content rows use min-height in a flex column. If a line wraps, it grows
+ * and the next row starts below it. Page slicing budgets wide lines
+ * (>7 display words) as 2 slots to prevent 11-row pages.
  */
 
 import type { LineData } from './types';
@@ -36,33 +37,45 @@ export const HEADER_HEIGHTS = {
 /** Maximum footer height with text-wrap allowance (px). */
 export const FOOTER_MAX_HEIGHT = 80;
 
-/** Gap between verse rows (px). */
+/** Gap between verse rows (px). Used as baseline for title page. */
 export const ROW_GAP = 20;
 
 /**
- * Universal row height (px).
- * Content layer uses overflow: visible; rows render independently of
- * header/footer layers. HEADER_HEIGHTS controls vertical positioning
- * of the content origin, not a hard boundary.
+ * Minimum row height (px).
+ * Normal rows render at this height. Wrapping rows grow beyond it
+ * naturally via flex layout; the next row starts below.
  */
 export const ROW_HEIGHT = 56;
 
-/** Row capacity per page template. */
-export const ROW_COUNTS = {
-	title: 10,
-	subsequent: 10,
-} as const;
+/** Row-slot budget per page. */
+export const LINES_PER_PAGE = 10;
 
 // ── Page slicing ─────────────────────────────────────────────────
+
+/** Cyrillic character test (matches VerseLine's display filter). */
+const CYRILLIC_RE = /[А-Яа-яЁё]/;
+
+/**
+ * Budget a line's slot cost: 1 for normal, 2 for wide lines
+ * that will visually wrap in the flex layout.
+ *
+ * Simple word-count threshold. Lines with more than 7 Cyrillic
+ * display words are budgeted as 2 slots.
+ */
+function slotCost(line: LineData): 1 | 2 {
+	const displayWords = line.words.filter(
+		w => CYRILLIC_RE.test(w.cyrillic || '')
+	);
+	return displayWords.length > 7 ? 2 : 1;
+}
 
 /**
  * Slice an array of verse lines into pages.
  *
- * - 0 lines → one empty page (for the empty state title page)
- * - First 10 lines → page 1 (title page)
- * - Every subsequent 10 lines → next page
+ * Each page fills up to LINES_PER_PAGE slots (10). A wide line
+ * (>7 display words) costs 2 slots. All other lines cost 1.
  *
- * Pure arithmetic. No measurement, no adjustment.
+ * - 0 lines → one empty page (for the empty state title page)
  */
 export function sliceLinesToPages(lines: LineData[]): LineData[][] {
 	if (lines.length === 0) {
@@ -70,19 +83,23 @@ export function sliceLinesToPages(lines: LineData[]): LineData[][] {
 	}
 
 	const pages: LineData[][] = [];
+	let currentPage: LineData[] = [];
+	let currentUnits = 0;
 
-	// Page 1: up to ROW_COUNTS.title lines
-	const titleSlice = lines.slice(0, ROW_COUNTS.title);
-	pages.push(titleSlice);
+	for (const line of lines) {
+		const cost = slotCost(line);
 
-	// Subsequent pages: ROW_COUNTS.subsequent lines each
-	let offset = ROW_COUNTS.title;
-	while (offset < lines.length) {
-		const subsequentSlice = lines.slice(offset, offset + ROW_COUNTS.subsequent);
-		pages.push(subsequentSlice);
-		offset += ROW_COUNTS.subsequent;
+		if (currentUnits + cost > LINES_PER_PAGE && currentPage.length > 0) {
+			pages.push(currentPage);
+			currentPage = [line];
+			currentUnits = cost;
+		} else {
+			currentPage.push(line);
+			currentUnits += cost;
+		}
 	}
 
+	if (currentPage.length > 0) pages.push(currentPage);
 	return pages;
 }
 

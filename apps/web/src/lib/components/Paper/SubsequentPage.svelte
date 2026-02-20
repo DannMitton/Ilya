@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { LineData, WordStackData, PageSize } from '$lib/types';
+	import type { WordStackData, PageSize, LineData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT, ROW_COUNTS } from '$lib/page-config';
+	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
@@ -45,15 +45,11 @@
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 
 	/**
-	 * Dynamic row gap for subsequent pages.
-	 * Distributes rows evenly across the available content height,
-	 * giving subsequent pages generous breathing room.
+	 * Subsequent pages have more vertical space than the title page
+	 * (shorter header). 28px row gap distributes 10 rows evenly
+	 * across the taller content aperture.
 	 */
-	const availableHeight = $derived(dims.height - contentTop - contentBottom);
-	const totalRowHeight = ROW_COUNTS.subsequent * ROW_HEIGHT;
-	const subsequentRowGap = $derived(
-		Math.floor((availableHeight - totalRowHeight) / (ROW_COUNTS.subsequent - 1))
-	);
+	const subsequentRowGap = 28;
 </script>
 
 <div
@@ -63,10 +59,10 @@
 	<!-- Header layer: absolute, pinned to top margin -->
 	<RunningHeader headerText={runningHeader} />
 
-	<!-- Content layer: absolute, fixed-height aperture -->
+	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-count: {ROW_COUNTS.subsequent}; --row-gap: {subsequentRowGap}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {subsequentRowGap}px;"
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
@@ -104,15 +100,15 @@
 		padding-top: 4px;
 		padding-left: 4px;
 
-		display: grid;
-		grid-template-rows: repeat(var(--row-count), var(--row-height));
-		row-gap: var(--row-gap);
-		align-content: start;
+		display: flex;
+		flex-direction: column;
+		gap: var(--row-gap);
 	}
 
 	.verse-row {
-		height: var(--row-height);
 		box-sizing: border-box;
+		min-height: var(--row-height);
+		overflow: visible;
 	}
 
 	/* ── Print rules ───────────────────────────────────────── */
