@@ -13,7 +13,7 @@ import { t } from './i18n';
 // ── Legend item ───────────────────────────────────────────────────
 
 export interface LegendItem {
-	/** The provenance type key (e.g. 'yo-rule', 'inferred'). */
+	/** The provenance type key (e.g. 'yo-restored', 'inferred'). */
 	type: string;
 	/** Display icon: SVG reference key or text character. */
 	icon: string;
@@ -46,7 +46,6 @@ export function showProvenance(stressSource: string): boolean {
  * ё-rule first, then user types, then inferred last (the warning state).
  */
 const LEGEND_ORDER: string[] = [
-	'yo-rule',
 	'yo-restored',
 	'user-dictionary',
 	'user-composer',
@@ -61,7 +60,6 @@ const LEGEND_ORDER: string[] = [
  * Components use this to render the appropriate SVG or text.
  */
 const PROVENANCE_ICONS: Record<string, string> = {
-	'yo-rule': 'ё',
 	'yo-restored': 'ё',
 	'user-dictionary': 'book',
 	'user-composer': 'notes',
@@ -73,10 +71,8 @@ const PROVENANCE_ICONS: Record<string, string> = {
 
 /**
  * Map provenance type to its i18n legend key.
- * yo-rule and yo-restored share the same legend entry.
  */
 const LEGEND_KEYS: Record<string, string> = {
-	'yo-rule': 'legend.yo',
 	'yo-restored': 'legend.yo',
 	'user-dictionary': 'legend.user-dictionary',
 	'user-composer': 'legend.user-composer',
@@ -94,8 +90,6 @@ const LEGEND_KEYS: Record<string, string> = {
  * 3. Maps each type to its icon and bilingual label
  * 4. Returns in stable display order (ё first, inferred last)
  * 5. Returns empty array if no special provenance exists (legend omitted)
- *
- * yo-rule and yo-restored are consolidated into a single legend entry.
  */
 export function buildProvenanceLegend(lines: LineData[], language: Language): LegendItem[] {
 	// Collect unique provenance types on this page
@@ -113,22 +107,11 @@ export function buildProvenanceLegend(lines: LineData[], language: Language): Le
 		return [];
 	}
 
-	// Consolidate yo-rule and yo-restored into a single 'yo' display key
-	// to avoid duplicate legend entries
-	const displayKeys = new Set<string>();
-	for (const source of seen) {
-		if (source === 'yo-rule' || source === 'yo-restored') {
-			displayKeys.add('yo-rule'); // Use yo-rule as canonical key for both
-		} else {
-			displayKeys.add(source);
-		}
-	}
-
 	// Build legend items in stable order
 	const items: LegendItem[] = [];
 
 	for (const type of LEGEND_ORDER) {
-		if (displayKeys.has(type)) {
+		if (seen.has(type)) {
 			const legendKey = LEGEND_KEYS[type];
 			if (legendKey) {
 				items.push({

@@ -515,6 +515,7 @@
 		color: var(--stone-500);
 		background: transparent;
 		font-weight: 500;
+		border: 1px solid var(--stone-600, #57534e);
 	}
 
 	.btn-secondary {

@@ -334,7 +334,9 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
 
   if (yoSyllable !== -1) {
     stress = yoSyllable;
-    stressSource = wasYoRestored ? 'yo-restored' : 'yo-rule';
+    // Native ё (poet wrote it): stress is unambiguous, no departure to signal.
+    // Restored ё (engine changed е→ё): signal the departure with provenance icon.
+    stressSource = wasYoRestored ? 'yo-restored' : 'dictionary';
     yoSource = wasYoRestored ? 'yo-restored' : null;
   } else if (lookup && lookup.stress != null && lookup.stress >= 0) {
     stress = lookup.stress;
@@ -497,7 +499,16 @@ function transcribeLine(
 
       const isProclitic =
         !isOInterjection && GraysonEngine.proclitics.has(cleanLower) && !wordData.promotedFromClitic;
-      const isEnclitic = GraysonEngine.enclitics.has(cleanLower) && !wordData.promotedFromClitic;
+
+      // Enclitic guards: a word cannot attach leftward if there is nothing
+      // to attach to (first word) or if punctuation separates it from the
+      // preceding word. Resolves Issues #7, #10, #19.
+      const prevHasPunct = wordIdx > 0 && preLine[wordIdx - 1].punctuation.length > 0;
+      const isEnclitic =
+        !isFirstWord &&
+        !prevHasPunct &&
+        GraysonEngine.enclitics.has(cleanLower) &&
+        !wordData.promotedFromClitic;
 
       // Determine proclitic reduction position relative to host stress.
       // Forward-scans past any intervening proclitics to find the actual host.

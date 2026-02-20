@@ -123,7 +123,7 @@
 						<svg viewBox="0 0 16 16" class="prov-svg"><ellipse cx="4" cy="13" rx="2.5" ry="1.8" transform="rotate(-20 4 13)" fill="currentColor"/><ellipse cx="11.5" cy="12" rx="2.5" ry="1.8" transform="rotate(-20 11.5 12)" fill="currentColor"/><rect x="5.5" y="1.5" width="1.3" height="11.5" fill="currentColor"/><rect x="12.5" y="1.5" width="1.3" height="10.5" fill="currentColor"/><rect x="5.5" y="1.5" width="8.3" height="2" rx="0.3" fill="currentColor"/></svg>
 					{:else if word.stressSource === 'user-override'}
 						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 14s-1 0-1-1 1-5 6-5 6 4 6 5-1 1-1 1H3z" fill="currentColor"/></svg>
-					{:else if word.stressSource === 'yo-rule' || word.stressSource === 'yo-restored'}
+					{:else if word.stressSource === 'yo-restored'}
 						<svg viewBox="0 0 16 16" class="prov-svg"><circle cx="5.5" cy="2.5" r="1.3" fill="currentColor"/><circle cx="10.5" cy="2.5" r="1.3" fill="currentColor"/><path d="M4 10h8c0-3-2-4.5-4-4.5S4 7 4 10c0 2.5 1.5 4.5 4 4.5 1.5 0 3-.5 4-2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 					{/if}
 					<!-- Task 4.8 reset sigla (↺): counterclockwise arrow, same visual weight.
