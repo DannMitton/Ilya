@@ -28,7 +28,7 @@ export const GAP = 8;
 
 // ── Calibrated constants ─────────────────────────────────────────
 
-/** Header heights (px). Controls content origin below rule. Matched so rule-to-content gap is visually equal (~20px) on both page templates. */
+/** Header heights (px). Subsequent page uses fixed value. Title page measures dynamically via bind:offsetHeight. */
 export const HEADER_HEIGHTS = {
 	title: 135,
 	subsequent: 37,
@@ -72,12 +72,17 @@ function slotCost(line: LineData): 1 | 2 {
 /**
  * Slice an array of verse lines into pages.
  *
- * Each page fills up to LINES_PER_PAGE slots (10). A wide line
- * (>7 display words) costs 2 slots. All other lines cost 1.
+ * Each page fills up to its budget in slots. A wide line (>7 display
+ * words) costs 2 slots. All other lines cost 1.
+ *
+ * @param lines - All verse lines to paginate
+ * @param page1Budget - Row-slot budget for the first page (default: LINES_PER_PAGE).
+ *   TitlePage computes this from its measured header height and passes it
+ *   via Paper's reactive callback chain.
  *
  * - 0 lines → one empty page (for the empty state title page)
  */
-export function sliceLinesToPages(lines: LineData[]): LineData[][] {
+export function sliceLinesToPages(lines: LineData[], page1Budget: number = LINES_PER_PAGE): LineData[][] {
 	if (lines.length === 0) {
 		return [[]];
 	}
@@ -89,7 +94,8 @@ export function sliceLinesToPages(lines: LineData[]): LineData[][] {
 	for (const line of lines) {
 		const cost = slotCost(line);
 
-		if (currentUnits + cost > LINES_PER_PAGE && currentPage.length > 0) {
+		const currentBudget = pages.length === 0 ? page1Budget : LINES_PER_PAGE;
+		if (currentUnits + cost > currentBudget && currentPage.length > 0) {
 			pages.push(currentPage);
 			currentPage = [line];
 			currentUnits = cost;

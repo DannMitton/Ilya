@@ -158,14 +158,6 @@
 				{language}
 				onchange={handleTranslatorSelect}
 			/>
-
-			<input
-				type="text"
-				class="meta-input"
-				placeholder={t('meta.transcriber', language)}
-				value={metadata.transcriber}
-				oninput={(e) => handleMetaField('transcriber', (e.target as HTMLInputElement).value)}
-			/>
 		</div>
 		<div class="meta-reset-row">
 			<button

@@ -8,9 +8,10 @@
 		translator: string;
 		opus: string;
 		language: Language;
+		onheightchange?: (height: number) => void;
 	}
 
-	let { title, composer, poet, translator, opus, language }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -33,9 +34,18 @@
 		if (translator.trim()) parts.push(`${translator.trim().toUpperCase()} (${t('meta.transl', language)})`);
 		return parts.join(' | ');
 	});
+
+	/** Measured height of this header, including all content and the rule. */
+	let measuredHeight = $state(0);
+
+	$effect(() => {
+		if (measuredHeight > 0) {
+			onheightchange?.(measuredHeight);
+		}
+	});
 </script>
 
-<header class="title-header">
+<header class="title-header" bind:offsetHeight={measuredHeight}>
 	<div class="logo">
 		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version">2026a</span>
 	</div>

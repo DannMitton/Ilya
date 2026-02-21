@@ -649,14 +649,177 @@
 			<ReadingPaper {language}>
 				{#snippet content()}
 					{#if activeTab === 'learn'}
-						<div class="placeholder-content">
-							<h1>{language === 'fr' ? 'LEARN' : 'LEARN'}</h1>
-							<p>
-								{language === 'fr'
-									? 'En préparation. Le module LEARN présentera les principes de diction lyrique russe de Grayson dans un format pédagogique en ligne.'
-									: 'In preparation. The LEARN module will present Grayson\u2019s Russian lyric diction principles in a web-based pedagogical format.'}
-							</p>
-						</div>
+						{#if language === 'fr'}
+						<h1 id="learn-title">La diction lyrique russe pour chanteurs</h1>
+
+						<p>Nous partons d'un socle commun. Vous maîtrisez l'Alphabet phonétique international. Vous avez étudié la diction lyrique de l'anglais, du français, de l'italien et de l'allemand. Vous savez lire une transcription phonétique, et vous avez développé la coordination physique nécessaire pour produire les sons que ces transcriptions décrivent.</p>
+
+						<p>La diction lyrique russe s'appuie sur l'ensemble de ces acquis. Les sons du russe chanté ne sont pas aussi éloignés de ce que vous connaissez déjà qu'il n'y paraît au premier abord : nombre de consonnes se comportent exactement comme leurs équivalents dans les langues que vous avez étudiées, et le système vocalique, bien qu'il obéisse à des règles différentes, est plus restreint et plus ordonné que celui de l'anglais. Ce que le russe vous demande n'est pas un saut dans l'inconnu, mais une extension de compétences que vous possédez déjà, guidée par un cadre phonologique rigoureux et bien documenté.</p>
+
+						<h2 id="learn-about">À propos de ce module</h2>
+
+						<p>LEARN présente les principes fondamentaux de la diction lyrique russe tels qu'établis par Craig Grayson dans sa thèse de doctorat de 2012, <em>Russian Lyric Diction: A practical guide with introduction and annotations and a bibliography with annotations on selected sources</em> (Université de Washington). Ce qui suit est une réorganisation pédagogique du travail de Grayson, conçue pour les chanteurs plutôt que pour les linguistes, et structurée pour construire progressivement à partir de vos acquis.</p>
+
+						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse : un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour permettre au lecteur de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
+
+						<p>Trois limites protègent notre propos. Ceci n'est pas un cours de langue russe : nous enseignons la prononciation, non la grammaire, sauf lorsque la conscience grammaticale affecte directement la prononciation d'un mot. Ceci n'est pas un substitut à la thèse de Grayson : l'appareil savant complet demeure dans la source, et nous l'honorons en nous y appuyant plutôt qu'en le reproduisant. Et ceci n'est pas un guide d'utilisation d'Ilya; l'onglet Guide enseigne l'outil. LEARN enseigne la diction.</p>
+
+						<h2 id="learn-arc">L'arc d'apprentissage</h2>
+
+						<p>Le module est organisé en sept unités qui suivent un principe directeur unique : découvrir les sons d'abord, puis apprendre ce qui leur arrive.</p>
+
+						<h3 id="learn-unit-1">Unité 1 · Orientation</h3>
+
+						<p>Nous commençons par l'alphabet cyrillique, présenté à travers la Chanson de l'alphabet russe de Ken Griffiths, un outil mnémonique conçu expressément pour les non-russophones. (Griffiths a été mon coach à Tanglewood à l'été 1999 et sa chanson d'alphabet demeure le point d'entrée le plus accessible que je connaisse.) Avant toute complexité phonologique, vous aurez en main les trente-trois lettres et leurs noms.</p>
+
+						<p>Nous explorons ensuite ce qui distingue la diction lyrique russe du russe parlé. Les pratiques de diction lyrique sont un amalgame du dialecte moscovite ancien, filtré à travers les conventions de la prononciation <em>literaturnyĭ</em> (littéraire) et <em>stsenicheskoe</em> (scénique), issues d'une époque antérieure aux dispositifs d'amplification. Ce sont des cibles prescriptives pour la scène, non des descriptions du discours quotidien.</p>
+
+						<p>Nous abordons ensuite la question de comment le conduit vocal s'installe dans sa configuration russe. Le concept de « base d'articulation » (Honikman, 1964; Borissoff, 2011) propose que chaque langue possède une posture de repos et un ensemble de réglages articulatoires caractéristiques qui la distinguent des autres. Vous connaissez déjà quatre de ces configurations: la posture avancée et labiale du français, le placement vélaire de l'allemand, la légèreté palatale de l'italien, et la neutralité de l'anglais. Le russe en possède une qui lui est propre, et nous la construirons à partir de celles que vous avez déjà intégrées. Nous examinons enfin comment les conventions API de Grayson se rattachent aux symboles que vous lisez depuis votre premier cours de diction.</p>
+
+						<h3 id="learn-unit-2">Unité 2 · L'accent tonique</h3>
+
+						<p>L'accent tonique russe est imprévisible : contrairement à l'italien, où l'accent pénultième est la norme, ou au français, où l'accent tombe sur la dernière syllabe du groupe rythmique, l'accent russe doit être appris pour chaque mot. Les dix auteurs de diction lyrique russe comparés dans ma recherche doctorale s'accordent tous sur ce point : l'accent est suffisamment fondamental pour que chacun d'entre eux le marque, bien qu'ils le fassent avec des conventions différentes (le marqueur de l'API, un diacritique aigu, un accent grave).</p>
+
+						<p>Cette unité établit l'accent comme principe gouvernant l'ensemble du système. Chaque règle en aval (réduction vocalique, assimilation, reconstitution) dépend de la connaissance de la syllabe accentuée. Nous commençons par les homographes pour le démontrer. Le mot <em>мука</em>, par exemple, signifie « tourment » avec l'accent sur la première syllabe et « farine » avec l'accent sur la seconde. L'accent n'est pas un ornement; il change le sens, et il gouverne la prononciation de chaque voyelle du mot.</p>
+
+						<h3 id="learn-unit-3">Unité 3 · Les sons vocaliques</h3>
+
+						<p>Le russe possède dix sons vocaliques chantés distincts dans l'inventaire de Grayson : un ensemble gérable, plus restreint que celui de l'anglais. (D'autres auteurs en emploient de sept à dix, selon le degré de réduction vocalique qu'ils choisissent de transcrire.) Cette unité présente chaque son, établit sa correspondance avec les lettres cyrilliques qui le produisent, et le relie aux voyelles que vous connaissez déjà.</p>
+
+						<p>La voyelle ⟨о⟩ mérite une attention particulière. Grayson consacre un essai entier à ce phonème (« The Story of /o/: Is Russian /o/ open or closed? », pp. 359-397 de sa thèse), menant le lecteur à travers un raisonnement complexe pour conclure que le <code>[o]</code> russe chanté est une voyelle beaucoup plus ouverte et plus détendue que son allophone allemand fermé. Ilya adopte le symbole <code>[o]</code> de Grayson, en sachant que sa réalisation sonore diffère de ce que ce symbole désigne dans vos études de diction allemande.</p>
+
+						<p>Nous abordons également le choix de notation de Grayson pour le schwa russe : <code>[ʌ]</code> plutôt que <code>[ə]</code>. Ce choix est pédagogique: le symbole <code>[ə]</code> est si étroitement associé à la voyelle arrondie du français que les jeunes chanteurs ayant une formation en diction française ajoutent trop facilement un arrondissement des lèvres qui n'appartient pas au russe. L'assimilation contextuelle par laquelle la voyelle par défaut <code>[ɑ]</code> se rapproche en <code>[a]</code> entre deux consonnes palatalisées (le « fronting ») est également présentée ici.</p>
+
+						<h3 id="learn-unit-4">Unité 4 · Les sons consonantiques</h3>
+
+						<p>Une comparaison de dix auteurs de diction lyrique russe révèle une uniformité remarquable dans la notation de la majorité des consonnes. Les symboles correspondant aux lettres ⟨b d f g k m n p r s t v x z⟩ font l'unanimité. Là où les auteurs divergent (sur la latérale, sur la nasale palatale, sur les fricatives postalvéolaires), les différences reflètent des traditions concurrentes plutôt que des erreurs.</p>
+
+						<p>Nous organisons les consonnes à partir de ce que vous savez déjà, et non selon la relation historique du cyrillique avec d'autres systèmes d'écriture, comme le fait Grayson. Les consonnes qui se comportent de manière identique à leurs équivalents viennent en premier. Celles qui sont proches mais pas identiques suivent. Les sons véritablement nouveaux arrivent en dernier. En chemin, nous présentons les voyelles iotées (я, е, ё, ю), les signes mou et dur, et la première rencontre avec la palatalisation comme propriété inhérente de certaines consonnes. La fricative vélaire voisée <code>[ɣ]</code>, la version regressivement voisée de <code>[x]</code>, fait également son apparition ici; il semble que les auteurs qui l'incluent dans leur inventaire sont aussi ceux qui se montrent les plus attentifs aux autres aspects nuancés de leurs transcriptions.</p>
+
+						<h3 id="learn-unit-5">Unité 5 · La palatalisation</h3>
+
+						<p>Le pont entre l'inventaire et les processus. Certaines consonnes sont toujours palatalisées (vous les avez rencontrées à l'Unité 4). D'autres le deviennent selon leur contexte. L'enseignement de la palatalisation comme articulation secondaire appliquée à des phonèmes déjà familiers est une philosophie pédagogique délibérée : le russe ne vous demande pas d'apprendre des sons entièrement nouveaux, mais d'ajouter un geste à des sons que vous produisez déjà.</p>
+
+						<p>Grayson décrit le processus en trois temps : « arch, pronounce, peel » (cambrer, prononcer, décoller). Le dos de la langue s'arche vers le palais dur en préparation, la consonne est prononcée simultanément, puis le dorsum se décolle du palais. Un exemple simple illustre la différence : le mot russe <em>нет</em> (non) se transcrit <code>[ɲɛt]</code> et non <code>[njɛt]</code>. Les trois phonèmes familiers se succèdent; ce qui a changé est la nature de la nasale.</p>
+
+						<p>L'histoire de la notation de la palatalisation mérite un détour. Avant 1989, l'Association phonétique internationale préconisait un sous-ensemble de seize symboles spécialisés intégrant des crochets palataux. L'IPA les a abandonnés lors des réformes de Kiel, les remplaçant par le yod en exposant <code>[ʲ]</code> associé aux symboles consonantiques standard. Parmi les dix auteurs que j'ai comparés, seul Grayson utilise le marqueur de palatalisation approuvé par l'API. Les autres réutilisent des symboles prédéfinis (demi-anneaux, cédilles, crochets rétroflexes) qui signifient autre chose dans l'usage orthodoxe de l'API. Ilya suit Grayson.</p>
+
+						<p>Le sujet connexe du vélaire-i, la voyelle <code>[ɨ]</code>, est également présenté ici : une voyelle médiane, à mi-chemin entre <code>[i]</code> et <code>[u]</code> sur le quadrilatère vocalique de Jones.</p>
+
+						<h3 id="learn-unit-6">Unité 6 · La réduction vocalique</h3>
+
+						<p>Le système se rassemble. Vous connaissez le timbre des voyelles accentuées (Unité 3). Vous savez ce que la palatalisation fait à l'environnement consonantique (Unité 5). Vous savez que l'accent gouverne tout (Unité 2).</p>
+
+						<p>Cette unité complète le tableau en expliquant ce qui arrive aux voyelles inaccentuées. La réduction est hiérarchique et gouvernée par la proximité de l'accent. Considérons le mot <em>хорошо</em> (bien), où chaque ⟨о⟩ s'écrit identiquement, mais chacun se prononce différemment : le ⟨о⟩ accentué de la syllabe finale se chante <code>[o]</code>, le ⟨о⟩ pénultième se chante <code>[ɑ]</code>, et le ⟨о⟩ éloigné (deux syllabes avant l'accent) se réduit davantage à <code>[ʌ]</code>. La phonologie russe appelle ce processus <em>akanie</em>.</p>
+
+						<p>L'<em>ikanie</em> est un processus parallèle qui réduit les voyelles inaccentuées ⟨е⟩ et ⟨я⟩ à <code>[ɪ]</code>. Les amateurs de la prononciation pétersbourgeoise peuvent résister à ce type de réduction, mais elle est légitimée par le dialecte moscovite ancien sur lequel la diction lyrique est fondée.</p>
+
+						<p>La reconstitution vocalique permet aux chanteurs de prendre des décisions éclairées sur le moment de restaurer une voyelle réduite au service du legato ou de la clarté du texte. Par exemple, l'expression <em>то же</em> (aussi) peut se transcrire avec réduction comme <code>[to ʒɨ]</code>, ce qui conviendrait à un tempo vif sur une croche inaccentuée. Mais dans un tempo plus lent, sur une valeur rythmique plus longue, la reconstitution à <code>[to ʒɛ]</code> peut mieux honorer la formalité du texte poétique. La reconstitution est une question de goût, confirmée idéalement par un locuteur natif; il me semble que les Russes attendent moins de réduction dans la déclamation de textes poétiques, comme un moyen de distinguer l'art du discours quotidien.</p>
+
+						<h3 id="learn-unit-7">Unité 7 · Intégration</h3>
+
+						<p>Ce qui se passe quand les sons se rencontrent : l'assimilation à l'intérieur des mots, aux frontières entre les mots, et à travers les clitiques. Grayson, s'appuyant sur le travail de Derwing et Priestly, pose plusieurs principes pour l'assimilation régressive du voisement dans le russe chanté : la ponctuation stoppe l'assimilation; les sonantes (<code>[l m n r]</code>) et les voyelles n'influencent pas le voisement à travers la frontière du mot; et les phonèmes <code>/v/</code> et <code>/f/</code>, lorsqu'ils sont orthographiés avec un ⟨в⟩, présentent une faiblesse phonémique, n'exerçant aucun pouvoir assimilatif propre tout en étant influencés par les phonèmes adjacents.</p>
+
+						<p>Cette unité aborde les groupes consonantiques, les consonnes muettes, les géminées, et les cas particuliers qui produisent des symboles API inhabituels dans la sortie d'Ilya. Les consonnes doublées en russe chanté sont rares: « les lettres doublées qui représentent des consonnes sont plus souvent lues comme un seul phonème consonantique plutôt que comme une consonne double ou allongée, » note Grayson. À la fin de cette unité, chaque symbole produit par Ilya sera un symbole que vous aurez rencontré et compris.</p>
+
+						<h2 id="learn-try">Essayez</h2>
+
+						<p>Tout au long de LEARN, vous trouverez des invitations à coller un mot ou une phrase dans l'onglet Transcription. LEARN énonce le principe; Ilya le démontre en direct. L'outil devient le laboratoire du module. Lorsque nous discutons de l'accent et des homographes, par exemple, vous pourriez transcrire <em>мука</em> avec l'accent sur la première syllabe, puis sur la seconde, et observer la transcription entière se transformer sous vos yeux. Lorsque nous abordons la réduction vocalique, <em>хорошо</em> offre trois ⟨о⟩ identiques à l'écrit, prononcés de trois manières différentes.</p>
+
+						<h2 id="learn-notation">Note sur la notation</h2>
+
+						<p>La notation phonétique est paradigmatique, non absolue. Une comparaison de dix ressources imprimées de diction lyrique russe révèle dix approches différentes de la notation de la palatalisation seule, et des inventaires vocaliques allant de sept à dix symboles. Les choix API de Grayson représentent un ensemble cohérent et bien raisonné parmi plusieurs. Là où les autorités divergent (sur la transcription de ⟨щ⟩, sur la représentation des nasales palatalisées, sur les symboles de voyelles réduites), les différences reflètent des positions réfléchies, non des erreurs. Les sélecteurs de notation d'Ilya dans l'onglet Transcription rendent ces choix visibles et réversibles : vous pouvez lire à leur sujet ici, puis les voir en action là-bas. Il ne s'agit pas de tribalisme; il s'agit de comprendre les principes sous-jacents aux symboles, afin de prendre des décisions éclairées dans votre propre pratique.</p>
+
+						<hr />
+
+						<p><em>LEARN est une réorganisation pédagogique du travail doctoral de Craig Grayson, préparée avec son consentement. Le contenu est rédigé par Dann Mitton et s'appuie sur sa thèse de doctorat en musique (Université de Toronto) et vingt-cinq ans de pratique et d'enseignement du répertoire de basse d'opéra.</em></p>
+
+						{:else}
+						<h1 id="learn-title">Russian Lyric Diction for Singers</h1>
+
+						<p>We begin from a shared foundation. You have studied the International Phonetic Alphabet. You have worked through the lyric diction of English, French, Italian, and German. You know how to read a transcription, and you have developed the physical coordination to produce the sounds those transcriptions describe.</p>
+
+						<p>Russian lyric diction builds on all of that. The sounds of sung Russian are not as distant from what you already know as they may first appear: many of the consonants behave exactly as their counterparts do in the languages you have studied, and the vowel system, while it operates under different rules, is smaller and more orderly than English. What Russian asks of you is not a leap into the unknown but an extension of skills you already possess, guided by a clear and well-documented phonological framework.</p>
+
+						<h2 id="learn-about">About This Module</h2>
+
+						<p>LEARN presents the core principles of Russian lyric diction as established by Craig Grayson in his 2012 doctoral dissertation, <em>Russian Lyric Diction: A practical guide with introduction and annotations and a bibliography with annotations on selected sources</em> (University of Washington). What follows is a pedagogical resequencing of Grayson's work, designed for singers rather than linguists, and structured to build incrementally from what you already know.</p>
+
+						<p>Grayson is not the first to cover this ground. From Natalia Challis' pioneering Rachmaninoff volume (1989) through the transcriptions of Piatak and Avrashov (1991), Richter's six-volume series (1999-2008), Belov's libretti (2004), and the contributions of Olin (2012), McMaster (in Sheil, 2012), and Thomas (in Karna, 2010), singers have had resources of increasing value and scope. What Grayson provides is a consolidation: a diction guide grounded in orthodox IPA, informed by Russian phonology, and rigorous enough that the motivated reader can produce original transcriptions with a workable level of independence. In Sarah Dailey's useful taxonomy, the earlier resources serve primarily as "fast-track guides" offering ready-made transcriptions, while Grayson proposes an "independent study guide" that teaches the underlying system.</p>
+
+						<p>Three boundaries protect our focus. This is not a Russian language course: we teach pronunciation, not grammar, except where grammatical awareness directly affects how a word sounds. This is not a substitute for Grayson's dissertation: the full scholarly apparatus lives in the source, and we honour it by building on it rather than replicating it. And this is not a guide to using Ilya; the Guide tab teaches the tool. LEARN teaches the diction.</p>
+
+						<h2 id="learn-arc">The Learning Arc</h2>
+
+						<p>The module is organised into seven units that follow a single governing principle: meet the sounds first, then learn what happens to them.</p>
+
+						<h3 id="learn-unit-1">Unit 1 · Orientation</h3>
+
+						<p>We begin with the Cyrillic alphabet, introduced through Ken Griffiths' Westernised Russian Alphabet Song, a mnemonic device designed expressly for non-Russian speakers. (Griffiths was my coach at Tanglewood in the summer of 1999, and his alphabet song remains the most accessible entry point I know.) Before any phonological complexity arrives, you will have all thirty-three letters in hand, with their names.</p>
+
+						<p>From there, we explore what distinguishes Russian lyric diction from spoken Russian. Lyric diction practices are an amalgam of the Old Muscovite dialect filtered through <em>literaturnyĭ</em> (literary) and <em>stsenicheskoe</em> (stage) pronunciation conventions, from a time before the advent of amplification devices for public speaking. These are prescriptive targets for the stage, not descriptions of everyday speech.</p>
+
+						<p>We then turn to how the vocal tract settles into its Russian configuration. The concept of the "basis of articulation" (Honikman, 1964; Borissoff, 2011) proposes that each language has a characteristic resting posture and set of articulatory settings that distinguish it from other languages. You already know four such configurations: the forward, labial posture of French; the velar placement of German; the palatal lightness of Italian; and the relative neutrality of English. Russian has its own, and we will build it from the settings you have already internalised. Finally, we examine how Grayson's IPA conventions relate to the symbols you have been reading since your first diction course.</p>
+
+						<h3 id="learn-unit-2">Unit 2 · Stress</h3>
+
+						<p>Russian word stress is unpredictable: unlike Italian, where penultimate stress is the norm, or French, where stress falls on the final syllable of a phrase, Russian stress must be learned for each word individually. All ten Russian lyric diction authors compared in my doctoral research agree on this point: stress is fundamental enough that every one of them marks it, though they do so with different conventions (the IPA stress marker, an acute diacritic, a grave diacritic).</p>
+
+						<p>This unit establishes stress as the governing principle of the entire system. Every downstream rule in Russian lyric diction (vowel reduction, assimilation, reconstitution) depends on knowing which syllable carries the stress. We begin with homographs to demonstrate this. The word <em>мука</em>, for instance, means "torment" with stress on the first syllable and "flour" with stress on the second. Stress is not cosmetic; it changes meaning, and it governs the pronunciation of every vowel in the word.</p>
+
+						<h3 id="learn-unit-3">Unit 3 · The Vowel Sounds</h3>
+
+						<p>Russian has ten distinct sung vowel sounds in Grayson's inventory: a manageable set, smaller than English. (Other authors employ as few as seven or as many as ten, depending on the degree of vowel reduction they choose to transcribe.) This unit introduces each sound, maps it to the Cyrillic letters that produce it, and connects it to the vowels you already know from other languages.</p>
+
+						<p>Of particular interest is the vowel ⟨о⟩. Grayson devotes an entire essay to this phoneme ("The Story of /o/: Is Russian /o/ open or closed?", pp. 359-397 of his dissertation), leading the reader through a complex and well-reasoned argument to conclude that the sung Russian <code>[o]</code> is a much looser, much more open vowel than, for example, its tightly closed German allophone. Ilya adopts Grayson's <code>[o]</code> symbol, with the understanding that its sounding realisation differs from what that symbol denotes in your German diction studies.</p>
+
+						<p>We also address Grayson's notation choice for the Russian schwa: <code>[ʌ]</code> rather than <code>[ə]</code>. This choice is pedagogical: the symbol <code>[ə]</code> is so closely associated with the rounded French vowel that young singers with French diction training too readily add lip-rounding that does not belong in Russian. The contextual assimilation by which the default <code>[ɑ]</code> vowel fronts to <code>[a]</code> between two palatalized consonants (what we call "fronting") is also introduced here.</p>
+
+						<h3 id="learn-unit-4">Unit 4 · The Consonant Sounds</h3>
+
+						<p>A comparison of ten Russian lyric diction authors reveals a remarkable uniformity in the notation of the majority of consonants. The symbols corresponding to the letterforms ⟨b d f g k m n p r s t v x z⟩ are unanimous across all ten sources. Where the authors diverge (on the lateral approximant, on the palatal nasal, on the postalveolar fricatives), the differences reflect competing traditions rather than errors.</p>
+
+						<p>We organise the consonants by what you already know, rather than by the historical relationship of Cyrillic to other writing systems as Grayson does. Consonants that behave identically to their counterparts come first. Consonants that are close but not identical come next. Genuinely unfamiliar sounds come last. Along the way, we introduce the iotated vowels (я, е, ё, ю), the soft and hard signs, and the first encounter with palatalization as an inherent property of certain consonants. The voiced velar fricative <code>[ɣ]</code>, the regressively voiced version of <code>[x]</code>, also makes its appearance here; there seems to be a correspondence between sources that include it and those that are also thoughtful about other nuanced aspects of their transcriptions.</p>
+
+						<h3 id="learn-unit-5">Unit 5 · Palatalization</h3>
+
+						<p>The bridge between inventory and process. Some consonants are always palatalized (you met them in Unit 4). Others become palatalized depending on their context. Teaching palatalization as a secondary articulation applied to already-familiar phonemes is a deliberate pedagogical philosophy: Russian does not ask you to learn entirely new sounds, but to add a gesture to sounds you already produce.</p>
+
+						<p>Grayson describes the process in three steps: "arch, pronounce, peel." The body of the tongue arches toward the hard palate in preparation, the consonant is simultaneously pronounced, and the dorsum peels away from the palate. A simple example illustrates the difference: the Russian word <em>нет</em> (no) is transcribed <code>[ɲɛt]</code>, not <code>[njɛt]</code>. Three familiar phonemes in sequence; what has changed is the nature of the nasal.</p>
+
+						<p>The history of palatalization notation deserves a brief excursion. Before 1989, the International Phonetic Association advocated a specialised subset of sixteen symbols incorporating palatalization hooks. The IPA discontinued these at the Kiel Convention, replacing them with the superscript yod <code>[ʲ]</code> paired with standard consonant symbols. Among the ten authors I compared, Grayson alone uses the IPA-approved palatalization marker. The others repurpose predefined symbols (subscript half-rings, cedillas, retroflex hooks) that mean something else in orthodox IPA usage. This widespread repurposing demands attentive reinterpretation for anyone encountering these singers' transcriptions. Ilya follows Grayson.</p>
+
+						<p>The companion topic of velar-i, the vowel <code>[ɨ]</code>, is introduced here as well: a medial vowel, halfway between <code>[i]</code> and <code>[u]</code> on Jones' vowel quadrilateral.</p>
+
+						<h3 id="learn-unit-6">Unit 6 · Vowel Reduction</h3>
+
+						<p>Now the system comes together. You know what the vowels sound like when they are stressed (Unit 3). You know what palatalization does to the consonant environment (Unit 5). You know that stress governs everything (Unit 2).</p>
+
+						<p>This unit completes the picture by explaining what happens to vowels when they are not stressed. Reduction is hierarchical and governed by proximity to stress. Consider the word <em>хорошо</em> (good), in which each ⟨о⟩ is spelled identically yet each is pronounced differently: stressed ⟨о⟩ in the final syllable is sung as <code>[o]</code>, penultimate ⟨о⟩ is sung as <code>[ɑ]</code>, and the remote ⟨о⟩ two syllables before the stress reduces further to <code>[ʌ]</code>. Russian phonology calls this process <em>akanye</em>.</p>
+
+						<p><em>Ikanye</em> is a parallel process that reduces unstressed ⟨е⟩ or ⟨я⟩ to <code>[ɪ]</code>. Aficionados who favour the pronunciation conventions of St. Petersburg may not advocate this kind of reduction, but it is legitimised by the Old Muscovite dialect on which lyric diction is founded.</p>
+
+						<p>Vowel reconstitution is the choice to return a vowel to its unreduced value. In singing, this applies most notably to unstressed ⟨е⟩ or ⟨я⟩ which may reduce to <code>[ɪ]</code>. Reduction in some cases can sound too informal to a Russian speaker expecting the delivery of poetic texts with more formal precision. For example, the expression <em>то же</em> (also) can be transcribed with reduction as <code>[to ʒɨ]</code>, and that choice might agree with a brisk tempo and a short rhythmic value on an unstressed beat. But in a slower tempo, on a longer note, reconstitution to <code>[to ʒɛ]</code> may better honour the formality of the poetic text. Reconstitution is a matter of taste, best confirmed by a native Russian speaker; I have noticed that Russians seem to expect less reduction in the delivery of poetic texts, perhaps as a means of setting art apart from quotidian speech.</p>
+
+						<h3 id="learn-unit-7">Unit 7 · Integration</h3>
+
+						<p>What happens when sounds meet each other: assimilation within words, across word boundaries, and through the clitics. Grayson, drawing on the work of Derwing and Priestly, lays out several governing principles for the regressive assimilation of voicing in sung Russian: punctuation stops assimilation; sonorants (<code>[l m n r]</code>) and vowels do not influence voicing across the word boundary; and the phonemes <code>/v/</code> and <code>/f/</code>, when spelled with a ⟨в⟩, exhibit phonemic weakness, exerting no assimilative power of their own while being influenced by adjacent phonemes.</p>
+
+						<p>This unit addresses consonant clusters, silent letters, geminates, and the special cases that produce unfamiliar IPA symbols in Ilya's output. Doubled consonants in sung Russian are rare: "Doubled letters that represent consonants are more often read as a single consonant phoneme rather than as a double or elongated consonant," Grayson notes. By the end of this unit, every symbol Ilya produces will be one you have encountered and understood.</p>
+
+						<h2 id="learn-try">Try This</h2>
+
+						<p>Throughout LEARN, you will find prompts inviting you to paste a curated word or phrase into the Transcription tab. LEARN names the principle; Ilya demonstrates it live. The tool becomes the laboratory for the module. When we discuss stress and homographs, for example, you might transcribe <em>мука</em> with stress on the first syllable, then the second, and watch the entire transcription change beneath your hands. When we address vowel reduction, <em>хорошо</em> offers three identically spelled ⟨о⟩ vowels pronounced three different ways.</p>
+
+						<h2 id="learn-notation">A Note on Notation</h2>
+
+						<p>Phonetic notation is paradigmatic, not absolute. A comparison of ten Russian lyric diction print resources reveals ten different approaches to the notation of palatalization alone, and vowel inventories ranging from seven to ten symbols. Grayson's IPA choices are one well-reasoned set among several. Where authorities differ (on the transcription of ⟨щ⟩, on the representation of palatalized nasals, on reduced vowel symbols), the differences reflect considered positions, not errors. Ilya's notation toggles in the Transcription tab make these choices visible and reversible: you can read about them here, then see them in action there. This is not tribalism; it is understanding the principles beneath the symbols, so that you can make informed decisions in your own practice.</p>
+
+						<hr />
+
+						<p><em>LEARN is a pedagogical resequencing of Craig Grayson's doctoral work, prepared with his consent. The content is authored by Dann Mitton and draws on his Doctor of Musical Arts dissertation (University of Toronto) and twenty-five years of performance and teaching in operatic bass repertoire.</em></p>
+
+						{/if}
 					{:else}
 						<div class="placeholder-content">
 							<h1>{language === 'fr' ? 'Guide' : 'Guide'}</h1>
