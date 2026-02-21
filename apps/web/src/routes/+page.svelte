@@ -12,6 +12,8 @@
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
+	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
+	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -33,6 +35,11 @@
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
 	let drawerCollapsed = $state(false);
+	// Tab state
+	let activeTab = $state<TabId>('transcription');
+	// Tab transition animation
+	const TAB_ORDER: TabId[] = ['transcription', 'learn', 'guide'];
+	let tabTransitionClass = $state('');
 	// Mobile awareness
 	let isMobile = $state(false);
 	let mobileDismissed = $state(false);
@@ -145,7 +152,12 @@
 	}
 	// Derived
 	const showInspector = $derived(selectedWord !== null);
-	const drawerWidth = $derived(selectedWord ? calculateDrawerWidth(selectedWord) : 520);
+	const isReadingMode = $derived(activeTab !== 'transcription');
+	const drawerWidth = $derived(
+		activeTab === 'transcription'
+			? (selectedWord ? calculateDrawerWidth(selectedWord) : 520)
+			: 520
+	);
 	const canTranscribe = $derived(
 		inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
@@ -250,6 +262,15 @@
 		// Auto-expand drawer if collapsed when user clicks a word
 		if (drawerCollapsed) {
 			drawerCollapsed = false;
+		}
+		// Switch to Transcription tab if clicking a word from another tab
+		if (activeTab !== 'transcription') {
+			activeTab = 'transcription';
+			try {
+				localStorage.setItem('ilya:activeTab', 'transcription');
+			} catch {
+				// localStorage unavailable
+			}
 		}
 		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
 			stress: word.stressIndex,
@@ -448,6 +469,23 @@
 			// localStorage unavailable
 		}
 	}
+	function handleTabChange(tab: TabId) {
+		const oldIndex = TAB_ORDER.indexOf(activeTab);
+		const newIndex = TAB_ORDER.indexOf(tab);
+		// Compute direction: moving right in tab order → content enters from right
+		const direction = newIndex > oldIndex ? 'tab-enter-from-right' : 'tab-enter-from-left';
+		activeTab = tab;
+		tabTransitionClass = direction;
+		try {
+			localStorage.setItem('ilya:activeTab', tab);
+		} catch {
+			// localStorage unavailable
+		}
+		// Clear animation class after it completes (175ms + buffer)
+		setTimeout(() => {
+			tabTransitionClass = '';
+		}, 200);
+	}
 	onMount(() => {
 		// Restore persisted state
 		try {
@@ -480,6 +518,10 @@
 			const savedCollapsed = localStorage.getItem('ilya:drawerCollapsed');
 			if (savedCollapsed) {
 				drawerCollapsed = JSON.parse(savedCollapsed);
+			}
+			const savedTab = localStorage.getItem('ilya:activeTab');
+			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide') {
+				activeTab = savedTab;
 			}
 		} catch {
 			// localStorage unavailable
@@ -526,7 +568,10 @@
 			width={drawerWidth}
 			collapsed={drawerCollapsed}
 			{language}
+			{activeTab}
+			{tabTransitionClass}
 			ontogglecollapse={handleDrawerToggle}
+			ontabchange={handleTabChange}
 		>
 			{#snippet rootPanel()}
 				<RootPanel
@@ -592,8 +637,39 @@
 			{/snippet}
 		</Drawer>
 	</div>
-	<main class="main-content {paperBreathClass}" class:drawer-open={!drawerCollapsed} bind:this={mainContentEl}>
-		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
+	<main
+		class="main-content {paperBreathClass} {tabTransitionClass}"
+		class:drawer-open={!drawerCollapsed}
+		class:reading-mode={isReadingMode}
+		bind:this={mainContentEl}
+	>
+		{#if activeTab === 'transcription'}
+			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
+		{:else}
+			<ReadingPaper {language}>
+				{#snippet content()}
+					{#if activeTab === 'learn'}
+						<div class="placeholder-content">
+							<h1>{language === 'fr' ? 'LEARN' : 'LEARN'}</h1>
+							<p>
+								{language === 'fr'
+									? 'En préparation. Le module LEARN présentera les principes de diction lyrique russe de Grayson dans un format pédagogique en ligne.'
+									: 'In preparation. The LEARN module will present Grayson\u2019s Russian lyric diction principles in a web-based pedagogical format.'}
+							</p>
+						</div>
+					{:else}
+						<div class="placeholder-content">
+							<h1>{language === 'fr' ? 'Guide' : 'Guide'}</h1>
+							<p>
+								{language === 'fr'
+									? 'En préparation. Le Guide offrira un guide d\u2019utilisation, la méthodologie derrière Ilya et un contexte biographique.'
+									: 'In preparation. The Guide will offer a user guide, the methodology behind Ilya, and biographical context.'}
+							</p>
+						</div>
+					{/if}
+				{/snippet}
+			</ReadingPaper>
+		{/if}
 	</main>
 </div>
 <style>
@@ -614,10 +690,55 @@
 		transition: transform 2000ms cubic-bezier(0.25, 0, 0.15, 1);
 	}
 
-	/* When drawer is open, Paper yields gently rightward */
-	.main-content.drawer-open {
+	/* ── Transcription mode: Paper yields gently rightward when drawer is open ── */
+	.main-content.drawer-open:not(.reading-mode) {
 		transform: translateX(20px);
 	}
+
+	/*
+	 * Reading mode: no translateX offset. The Reading Paper fills available
+	 * width naturally via flex. When the Drawer collapses, the flex container
+	 * grows and ReadingPaper's max-width centres it. Smooth width transition
+	 * handled by the Drawer's own 1000ms cubic-bezier.
+	 */
+	.main-content.reading-mode {
+		transform: none;
+		justify-content: flex-start;
+		padding-top: 1rem;
+	}
+
+	/* ── Tab transition animations ──────────────────────── */
+
+	@keyframes tabSlideFromRight {
+		from {
+			opacity: 0;
+			transform: translateX(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes tabSlideFromLeft {
+		from {
+			opacity: 0;
+			transform: translateX(-12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	.main-content.tab-enter-from-right {
+		animation: tabSlideFromRight 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
+	}
+
+	.main-content.tab-enter-from-left {
+		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
+	}
+
 	/* screen-only wrappers: visible on screen, hidden in print */
 	.screen-only {
 		display: contents;
@@ -662,6 +783,15 @@
 		.main-content {
 			transition: none !important;
 		}
+		.main-content.tab-enter-from-right,
+		.main-content.tab-enter-from-left {
+			animation: none !important;
+		}
+	}
+	/* ── Placeholder content within ReadingPaper ──────────── */
+	.placeholder-content {
+		text-align: center;
+		padding: 4rem 0;
 	}
 	/* ── Mobile awareness ──────────────────────────────────── */
 	.mobile-overlay {

@@ -1,0 +1,189 @@
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import type { Language } from '$lib/i18n';
+
+	interface Props {
+		language: Language;
+		content: Snippet;
+	}
+
+	let { language, content }: Props = $props();
+</script>
+
+<article class="reading-paper" lang={language === 'fr' ? 'fr' : 'en'}>
+	<div class="reading-inner">
+		{@render content()}
+	</div>
+</article>
+
+<style>
+	.reading-paper {
+		width: 100%;
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 3rem 2rem;
+		background: var(--paper-cream, #FAF8F4);
+		border-radius: 4px;
+		box-shadow: 0 1px 4px rgba(26, 22, 18, 0.06);
+		min-height: 400px;
+	}
+
+	.reading-inner {
+		/* Typography system for long-form reading */
+	}
+
+	/* ── Heading hierarchy ────────────────────────────────── */
+
+	.reading-inner :global(h1) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.75rem;
+		font-weight: 600;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.3;
+		margin: 0 0 1.5rem 0;
+	}
+
+	.reading-inner :global(h2) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.35rem;
+		font-weight: 600;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.35;
+		margin: 2rem 0 1rem 0;
+	}
+
+	.reading-inner :global(h3) {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-secondary, #4a4540);
+		margin: 1.75rem 0 0.75rem 0;
+	}
+
+	/* ── Body text ────────────────────────────────────────── */
+
+	.reading-inner :global(p) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.05rem;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.75;
+		margin: 0 0 1.25rem 0;
+	}
+
+	/* ── Inline elements ──────────────────────────────────── */
+
+	.reading-inner :global(strong) {
+		font-weight: 600;
+	}
+
+	.reading-inner :global(em) {
+		font-style: italic;
+	}
+
+	/* IPA specimens: monospace for clarity */
+	.reading-inner :global(code) {
+		font-family: var(--font-mono, 'Source Code Pro', monospace);
+		font-size: 0.95em;
+		background: rgba(139, 154, 125, 0.1);
+		padding: 0.1em 0.35em;
+		border-radius: 3px;
+	}
+
+	/* ── Block quotations (Grayson citations) ─────────────── */
+
+	.reading-inner :global(blockquote) {
+		margin: 1.5rem 0;
+		padding: 1rem 1.25rem;
+		border-left: 3px solid var(--sage, #8B9A7D);
+		background: rgba(139, 154, 125, 0.06);
+		border-radius: 0 4px 4px 0;
+	}
+
+	.reading-inner :global(blockquote p) {
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.reading-inner :global(blockquote p:last-child) {
+		margin-bottom: 0;
+	}
+
+	/* ── Lists ─────────────────────────────────────────────── */
+
+	.reading-inner :global(ul),
+	.reading-inner :global(ol) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.05rem;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.75;
+		margin: 0 0 1.25rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.reading-inner :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	/* ── Links ─────────────────────────────────────────────── */
+
+	.reading-inner :global(a) {
+		color: var(--terracotta, #C17C60);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 2px;
+		transition: color 150ms ease;
+	}
+
+	.reading-inner :global(a:hover) {
+		color: var(--ink-primary, #1a1612);
+	}
+
+	/* ── Horizontal rules ──────────────────────────────────── */
+
+	.reading-inner :global(hr) {
+		border: none;
+		border-top: 1px solid var(--stone-300, #d6d3d1);
+		margin: 2rem 0;
+	}
+
+	/* ── Images ────────────────────────────────────────────── */
+
+	.reading-inner :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 4px;
+		margin: 1.5rem 0;
+	}
+
+	.reading-inner :global(figure) {
+		margin: 1.5rem 0;
+	}
+
+	.reading-inner :global(figcaption) {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.85rem;
+		color: var(--ink-secondary, #4a4540);
+		text-align: center;
+		margin-top: 0.5rem;
+	}
+
+	/* ── Responsive ────────────────────────────────────────── */
+
+	@media (max-width: 767px) {
+		.reading-paper {
+			padding: 1.5rem 1rem;
+			border-radius: 0;
+			box-shadow: none;
+		}
+
+		.reading-inner :global(h1) {
+			font-size: 1.4rem;
+		}
+
+		.reading-inner :global(h2) {
+			font-size: 1.15rem;
+		}
+	}
+</style>
