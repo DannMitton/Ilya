@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { WordStackData, YoToggle, SyllableOverride } from '$lib/types';
 	import type { DisplayLogEntry } from '@ilya/blurb';
+	import type { DictionaryEntry } from '@ilya/dictionary';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
@@ -31,9 +32,13 @@
 		onsyllableoverrideclear?: () => void;
 		/** Reset all per-word overrides (stress, ё, syllable, spot reconstitution). */
 		onreset?: () => void;
+		/** Current gloss override for this word, or undefined if none. */
+		glossOverride?: string;
+		/** Callback when the user edits the gloss in the Dictionary panel. */
+		onglossoverride?: (gloss: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, glossOverride, onglossoverride }: Props = $props();
 
 	// ── Reconstitution derivations (bidirectional) ─────────────
 	// Spot override always inverts the global setting for this word.
@@ -366,7 +371,7 @@
 
 	// Whether this word has any per-word overrides (controls reset button visibility)
 	const hasOverrides = $derived(
-		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted
+		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted || glossOverride !== undefined
 	);
 
 	const syllableCount = $derived(word.syllables?.length ?? 0);
@@ -814,6 +819,126 @@
 	let breathingSource = $state(-1);
 	let breathingDest = $state(-1);
 
+	// ── Dictionary panel state ──────────────────────────────────
+	let dictPanelOpen = $state(false);
+	let dictGlossInput = $state('');
+	let dictPanelEl: HTMLElement | undefined = $state(undefined);
+	let dictButtonEl: HTMLElement | undefined = $state(undefined);
+
+	// Close dictionary panel when the inspected word changes
+	$effect(() => {
+		void word.cleanWord;
+		dictPanelOpen = false;
+	});
+
+	// Sync input field with current gloss (override or dictionary)
+	$effect(() => {
+		if (dictPanelOpen) {
+			dictGlossInput = glossOverride ?? word.gloss ?? '';
+		}
+	});
+
+	function toggleDictPanel() {
+		dictPanelOpen = !dictPanelOpen;
+	}
+
+	function handleGlossInput(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const value = input.value.slice(0, 20);
+		dictGlossInput = value;
+		if (value === '' || value === word.gloss) {
+			// Revert to dictionary default
+			onglossoverride?.(null);
+		} else {
+			onglossoverride?.(value);
+		}
+	}
+
+	// Click-outside dismissal for dictionary panel
+	function handleDictClickOutside(e: MouseEvent) {
+		if (!dictPanelOpen || !dictPanelEl || !dictButtonEl) return;
+		const target = e.target as Node;
+		if (dictPanelEl.contains(target) || dictButtonEl.contains(target)) return;
+		dictPanelOpen = false;
+	}
+
+	$effect(() => {
+		if (dictPanelOpen) {
+			const handleEscape = (e: KeyboardEvent) => {
+				if (e.key === 'Escape') {
+					e.preventDefault();
+					e.stopPropagation();
+					dictPanelOpen = false;
+				}
+			};
+			// Defer to next tick so the opening click doesn't immediately close
+			const timer = setTimeout(() => {
+				document.addEventListener('click', handleDictClickOutside, true);
+				document.addEventListener('keydown', handleEscape, true);
+			}, 0);
+			return () => {
+				clearTimeout(timer);
+				document.removeEventListener('click', handleDictClickOutside, true);
+				document.removeEventListener('keydown', handleEscape, true);
+			};
+		}
+	});
+
+	// ── Dictionary entry formatting helpers ──────────────────────
+
+	/** Get the display gloss for the current language (full or truncated fallback). */
+	function getDictDisplayGloss(entry: DictionaryEntry, lang: Language): string {
+		if (lang === 'fr') {
+			return entry.F || entry.f || entry.E || entry.e || '';
+		}
+		return entry.E || entry.e || '';
+	}
+
+	/** Get the full gloss field (E/F), or empty string. */
+	function getDictFullGloss(entry: DictionaryEntry, lang: Language): string {
+		if (lang === 'fr') {
+			return entry.F || '';
+		}
+		return entry.E || '';
+	}
+
+	/** Format POS label from abbreviated dictionary field to readable label. */
+	function formatPos(pos: string): string {
+		const map: Record<string, string> = {
+			'noun': 'noun', 'verb': 'verb', 'adj': 'adjective', 'adv': 'adverb',
+			'prep': 'preposition', 'conj': 'conjunction', 'pron': 'pronoun',
+			'part': 'particle', 'intj': 'interjection', 'num': 'numeral',
+			'det': 'determiner', 'name': 'proper noun',
+		};
+		return map[pos] || pos;
+	}
+
+	/** Build the stress-marked Cyrillic for a dictionary entry's lemma. */
+	function getStressedLemma(entry: DictionaryEntry): string {
+		const lemma = entry.l || '';
+		const si = entry.s;
+		if (si < 0 || !lemma) return lemma;
+		// Find the si-th vowel and insert combining acute after it
+		const vowels = new Set('аеёиоуыэюяАЕЁИОУЫЭЮЯ'.split(''));
+		let vowelCount = 0;
+		for (let i = 0; i < lemma.length; i++) {
+			if (vowels.has(lemma[i])) {
+				if (vowelCount === si) {
+					return lemma.slice(0, i + 1) + '\u0301' + lemma.slice(i + 1);
+				}
+				vowelCount++;
+			}
+		}
+		return lemma;
+	}
+
+	// Derived: all dictionary entries for the current word, with stress-matched entry identified
+	const dictEntries = $derived(word.allDictEntries ?? []);
+	const stressMatchedIdx = $derived.by((): number => {
+		if (dictEntries.length <= 1) return 0;
+		return dictEntries.findIndex(e => e.s === word.stressIndex) ?? 0;
+	});
+
 </script>
 
 <div
@@ -832,10 +957,24 @@
 			<div class="word-stack">
 				<h2 class="word-cyrillic">{displayCyrillic}</h2>
 				<p class="word-ipa">{headerIpa}</p>
-				{#if word.gloss}
-					<p class="word-gloss">{word.gloss}</p>
-				{:else}
-					<p class="word-gloss-missing">{t('inspector.glossMissing', language)}</p>
+				<button
+					class="dict-button"
+					bind:this={dictButtonEl}
+					aria-expanded={dictPanelOpen}
+					onclick={toggleDictPanel}
+				>
+					{t('inspector.dictionary', language)}
+				</button>
+
+				<!-- Per-word reset: sigla-style, top-right corner of word stack -->
+				{#if hasOverrides}
+					<button
+						class="reset-button"
+						aria-label={language === 'en' ? 'Reset word to engine defaults' : 'Réinitialiser le mot aux valeurs par défaut'}
+						onclick={() => onreset?.()}
+					>
+						<svg viewBox="0 0 16 16" class="reset-svg" aria-hidden="true"><path d="M3.5 6A5 5 0 1 1 4 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M1 5l2.5 1 1-2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					</button>
 				{/if}
 			</div>
 
@@ -854,20 +993,58 @@
 				{/if}
 			</div>
 		</div>
-
-		<!-- Per-word reset: clears all overrides, returns to engine output -->
-		{#if hasOverrides}
-			<div class="reset-slot">
-				<button
-					class="reset-button"
-					aria-label={language === 'en' ? 'Reset word to engine defaults' : 'Réinitialiser le mot aux valeurs par défaut'}
-					onclick={() => onreset?.()}
-				>
-					<svg viewBox="0 0 16 16" class="reset-svg" aria-hidden="true"><path d="M3.5 6A5 5 0 1 1 4 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M1 5l2.5 1 1-2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-				</button>
-			</div>
-		{/if}
 	</div>
+
+	<!-- Dictionary expansion panel (overlay, full drawer width, terra cotta) -->
+	{#if dictPanelOpen}
+		<div class="dict-expansion-anchor">
+			<div class="dict-expansion" bind:this={dictPanelEl}>
+				<svg class="dict-caret" width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
+					<polygon points="0,10 8,0 16,10" fill="var(--terracotta, #C67D5B)" />
+				</svg>
+				<div class="dict-lip" aria-hidden="true"></div>
+				<div class="dict-panel">
+					<!-- Editable gloss cell -->
+					<div class="dict-edit-cell">
+						<input
+							class="dict-gloss-input"
+							type="text"
+							maxlength="20"
+							value={dictGlossInput}
+							oninput={handleGlossInput}
+							aria-label={language === 'en' ? 'Edit gloss' : 'Modifier le glose'}
+						/>
+						<p class="dict-capacity">{t('inspector.dictCapacity', language)}</p>
+					</div>
+
+					<div class="dict-separator" aria-hidden="true"></div>
+
+					<!-- Full dictionary entry (read-only) -->
+					<div class="dict-entry-cell">
+						{#if dictEntries.length === 0}
+							<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
+						{:else}
+							{#each dictEntries as entry, ei}
+								<div class="dict-entry" class:stress-matched={ei === stressMatchedIdx && dictEntries.length > 1}>
+									<p class="dict-lemma">{getStressedLemma(entry)}</p>
+									<p class="dict-pos">{formatPos(entry.p || '')}</p>
+									{#if getDictFullGloss(entry, language)}
+										<p class="dict-senses">{getDictFullGloss(entry, language)}</p>
+									{:else}
+										<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
+									{/if}
+								</div>
+								{#if ei < dictEntries.length - 1}
+									<div class="dict-entry-divider" aria-hidden="true"></div>
+								{/if}
+							{/each}
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+
 	{#if ribbonEntries.length > 0}
 		<div class="organism" class:blurb-open={selectedRibbonEntry !== null}>
 
@@ -1118,7 +1295,7 @@
 				<div class="blurb-inner">
 					{#if selectedRibbonEntry}
 						<div class="blurb-container">
-							<!-- SVG caret: 16x10px, sage border on angled sides only -->
+							<!-- SVG caret: filled sage, matching dict-caret pattern -->
 							<svg
 								class="blurb-caret"
 								width="16"
@@ -1127,9 +1304,9 @@
 								aria-hidden="true"
 								style="left: {caretLeft}px"
 							>
-								<polygon points="0,10 8,0 16,10" fill="#F5F0E8" />
-								<polyline points="0,10 8,0 16,10" fill="none" stroke="var(--sage)" stroke-width="2" stroke-linejoin="round" />
+								<polygon points="0,10 8,0 16,10" fill="var(--sage, #B2C5B2)" />
 							</svg>
+							<div class="blurb-lip" aria-hidden="true"></div>
 							<div class="blurb-box" aria-live="polite">
 								{#if promotedFromClitic}
 									<p class="blurb-promotion">
@@ -1205,6 +1382,9 @@
 		justify-content: center;
 		align-items: flex-start;
 		gap: 0.5rem;
+		margin-left: -1.5rem;
+		margin-right: -2.5rem;
+		width: calc(100% + 4rem);
 	}
 
 	.word-header-group {
@@ -1221,6 +1401,7 @@
 		border-radius: 6px;
 		padding: 0.5rem 0.75rem;
 		background: var(--paper-cream);
+		position: relative;
 	}
 
 	.word-cyrillic {
@@ -1254,6 +1435,180 @@
 		color: var(--ink-tertiary);
 		font-style: italic;
 		line-height: 1.4;
+	}
+
+	/* ═══ Dictionary panel ═══════════════════════════════════════ */
+
+	.dict-button {
+		display: block;
+		width: 100%;
+		min-width: 160px;
+		padding: 0.4rem 0.75rem;
+		margin-top: 0.25rem;
+		background: var(--terracotta, #C67D5B);
+		color: #fff;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		text-align: center;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 150ms ease, opacity 150ms ease;
+	}
+
+	.dict-button:hover {
+		background: #b06e4e;
+	}
+
+	.dict-button:focus-visible {
+		outline: 2px solid var(--terracotta, #C67D5B);
+		outline-offset: 2px;
+	}
+
+	.dict-button[aria-expanded="true"] {
+		background: #a5613f;
+	}
+
+	.dict-expansion-anchor {
+		position: relative;
+		z-index: 20;
+		margin-left: -1.5rem;
+		margin-right: -2.5rem;
+		width: calc(100% + 4rem);
+	}
+
+	.dict-expansion {
+		padding: 0 1rem;
+		animation: dictFadeIn 200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+	}
+
+	@keyframes dictFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.dict-expansion {
+			animation: none;
+		}
+	}
+
+	.dict-caret {
+		display: block;
+		margin: 0 auto -1px;
+		overflow: visible;
+	}
+
+	.dict-lip {
+		height: 6px;
+		background: var(--terracotta, #C67D5B);
+		border-radius: 3px 3px 0 0;
+	}
+
+	.dict-panel {
+		background: var(--paper-cream, #FDFBF7);
+		border: 2px solid var(--terracotta, #C67D5B);
+		border-top: none;
+		border-radius: 0 0 6px 6px;
+		overflow: hidden;
+	}
+
+	.dict-edit-cell {
+		padding: 0.5rem 0.6rem 0.3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		background: #fff;
+	}
+
+	.dict-gloss-input {
+		width: 100%;
+		font-family: var(--font-serif);
+		font-size: 0.85rem;
+		font-style: italic;
+		color: var(--terracotta, #C67D5B);
+		padding: 0.3rem 0.4rem;
+		border: 1px solid var(--terracotta, #C67D5B);
+		border-radius: 3px;
+		background: #fff;
+		outline: none;
+		box-sizing: border-box;
+		transition: border-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.dict-gloss-input:focus {
+		border-color: var(--terracotta, #C67D5B);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--terracotta, #C67D5B) 25%, transparent);
+	}
+
+	.dict-capacity {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--terracotta, #C67D5B);
+		text-align: right;
+		margin: 0;
+	}
+
+	.dict-separator {
+		height: 1px;
+		background: color-mix(in srgb, var(--terracotta, #C67D5B) 20%, transparent);
+	}
+
+	.dict-entry-cell {
+		padding: 0.6rem;
+		background: #F5F0EE;
+	}
+
+	.dict-entry {
+		font-weight: 400;
+	}
+
+	.dict-entry.stress-matched {
+		font-weight: 600;
+	}
+
+	.dict-lemma {
+		font-family: var(--font-serif);
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--ink-primary);
+		margin-bottom: 0.1rem;
+	}
+
+	.dict-pos {
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		color: var(--ink-tertiary);
+		font-style: italic;
+		margin-bottom: 0.25rem;
+	}
+
+	.dict-senses {
+		font-family: var(--font-serif);
+		font-size: 15px;
+		color: var(--ink-primary);
+		line-height: 1.6;
+	}
+
+	.dict-entry-missing {
+		font-family: var(--font-serif);
+		font-size: 0.8rem;
+		color: var(--terracotta, #C67D5B);
+		font-style: italic;
+	}
+
+	.dict-entry-divider {
+		height: 1px;
+		background: color-mix(in srgb, var(--terracotta, #C67D5B) 15%, transparent);
+		margin: 0.5rem 0;
 	}
 
 	/* ═══ 3. Organism (ribbon frame) ═════════════════════════════ */
@@ -1767,15 +2122,23 @@
 		position: absolute;
 		top: -9px;
 		margin-left: -8px;
+		margin-bottom: -1px;
 		z-index: 1;
 		overflow: visible;
 		transition: left 200ms ease;
 	}
 
+	.blurb-lip {
+		height: 6px;
+		background: var(--sage, #B2C5B2);
+		border-radius: 3px 3px 0 0;
+	}
+
 	.blurb-box {
 		background: #F5F0E8;
 		border: 2px solid var(--sage);
-		border-radius: 6px;
+		border-top: none;
+		border-radius: 0 0 6px 6px;
 		padding: 16px;
 		max-height: 200px;
 		overflow-y: auto;
@@ -1811,7 +2174,7 @@
 		font-family: var(--font-serif);
 		font-size: 15px;
 		line-height: 1.6;
-		color: var(--ink-secondary);
+		color: var(--ink-primary);
 	}
 
 	.blurb-no-text {
@@ -1904,15 +2267,13 @@
 
 	/* ═══ 6. Notation indicator: REMOVED (Phase A) ══════════════════════ */
 
-	/* ═══ 7. Per-word reset button ═══════════════════════════════════════ */
-
-	.reset-slot {
-		display: flex;
-		align-items: center;
-		padding-top: 0.5rem;
-	}
+	/* ═══ 7. Per-word reset button (sigla, top-right of word stack) ══════════ */
 
 	.reset-button {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.35rem;
+		z-index: 2;
 		display: flex;
 		align-items: center;
 		justify-content: center;

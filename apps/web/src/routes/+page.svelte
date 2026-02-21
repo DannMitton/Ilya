@@ -92,6 +92,9 @@
 	// Cleared when the global open syllabification toggle changes in either direction,
 	// and on every fresh transcription or clear action.
 	let syllableOverrides = $state<Map<string, SyllableOverride>>(new Map());
+	// Per-word gloss overrides: keyed by "lineIndex-wordIndex"
+	// Cleared on every fresh transcription or clear action, and by per-word reset.
+	let glossOverrides = $state<Map<string, string>>(new Map());
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
 	// viewBreathClass: animates entire app content (language toggle)
@@ -188,6 +191,7 @@
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
+		glossOverrides = new Map();
 		runPipeline();
 		if (lines.length > 0) {
 			// Breath animation: content appears with breath-in
@@ -230,6 +234,7 @@
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
+		glossOverrides = new Map();
 		try {
 			localStorage.setItem('ilya:inputText', '');
 		} catch {
@@ -343,6 +348,18 @@
 		newMap.delete(key);
 		syllableOverrides = newMap;
 	}
+	// ── Per-word gloss override handler ───────────────────────────
+	function handleGlossOverride(gloss: string | null) {
+		if (!selectedWord) return;
+		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
+		const newMap = new Map(glossOverrides);
+		if (gloss === null) {
+			newMap.delete(key);
+		} else {
+			newMap.set(key, gloss);
+		}
+		glossOverrides = newMap;
+	}
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
 		if (!selectedWord) return;
@@ -377,6 +394,12 @@
 			const newSpot = new Map(spotReconstitution);
 			newSpot.delete(wordKey);
 			spotReconstitution = newSpot;
+		}
+		// Clear gloss override
+		if (glossOverrides.has(wordKey)) {
+			const newGloss = new Map(glossOverrides);
+			newGloss.delete(wordKey);
+			glossOverrides = newGloss;
 		}
 		if (needsPipeline) runPipeline();
 	}
@@ -560,6 +583,8 @@
 								onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 								onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
 								onreset={handleReset}
+								glossOverride={glossOverrides.get(wordKey)}
+								onglossoverride={handleGlossOverride}
 							/>
 						{/if}
 					{/snippet}
@@ -568,7 +593,7 @@
 		</Drawer>
 	</div>
 	<main class="main-content {paperBreathClass}" class:drawer-open={!drawerCollapsed} bind:this={mainContentEl}>
-		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} onwordclick={handleWordClick} />
+		<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
 	</main>
 </div>
 <style>

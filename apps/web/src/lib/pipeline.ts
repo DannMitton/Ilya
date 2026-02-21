@@ -27,8 +27,9 @@ import {
   formatGlossForDisplay,
   extractGloss,
   addStressMarkToCyrillic,
+  lookupFullEntry,
 } from '@ilya/dictionary';
-import type { GlossLanguage, BilingualGloss } from '@ilya/dictionary';
+import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dictionary';
 
 import { buildDisplayLog } from '@ilya/blurb';
 
@@ -300,6 +301,33 @@ export function processText(
         // but the pre-engine lookup may have -2 (unknown). Use engine truth.
         const effectiveStressIndex = tw.syllables.findIndex(s => s.isStressed);
 
+        // ── Dictionary panel: full entry lookup ──────────────────
+        // Retrieve the raw dictionary entry with E/F (full gloss) fields
+        // for the Inspector's Dictionary expansion panel.
+        const rawEntry = lookupFullEntry(tw.cleanWord);
+        let fullGlossEn = '';
+        let fullGlossFr = '';
+        let allDictEntries: DictionaryEntry[] | null = null;
+
+        if (rawEntry) {
+          if (Array.isArray(rawEntry)) {
+            // Homograph: array of entries
+            allDictEntries = rawEntry;
+            // Use the stress-matched entry for primary display
+            const matched = rawEntry.find(
+              (ent: DictionaryEntry) => (ent.s ?? ent.stress) === (effectiveStressIndex >= 0 ? effectiveStressIndex : tw.wordData.stress)
+            );
+            const primary = matched || rawEntry[0];
+            fullGlossEn = (primary as any).E || (primary as any).e || '';
+            fullGlossFr = (primary as any).F || (primary as any).f || '';
+          } else {
+            // Single entry
+            allDictEntries = [rawEntry];
+            fullGlossEn = (rawEntry as any).E || (rawEntry as any).e || '';
+            fullGlossFr = (rawEntry as any).F || (rawEntry as any).f || '';
+          }
+        }
+
         return {
           cyrillic: tw.wordData.cyrillic,
           cleanWord: tw.cleanWord,
@@ -332,6 +360,9 @@ export function processText(
           originalInput: tw.wordData.originalInput,
           dictionaryForm: tw.wordData.dictionaryForm,
           yoSource: tw.wordData.yoSource,
+          fullGlossEn,
+          fullGlossFr,
+          allDictEntries,
           wordIndex: wordIdx,
           lineIndex: lineIdx,
         };

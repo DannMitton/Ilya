@@ -15,6 +15,7 @@ export {
   truncateGloss,
   formatGlossForDisplay,
   setGlossDictionary,
+  lookupFullEntry,
 } from './gloss';
 
 // Curated glosses

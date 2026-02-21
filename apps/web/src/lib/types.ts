@@ -12,7 +12,7 @@ import type {
   EngineConfig,
 } from '@ilya/phonology';
 import type { DisplayLogEntry } from '@ilya/blurb';
-import type { GlossLanguage } from '@ilya/dictionary';
+import type { GlossLanguage, DictionaryEntry } from '@ilya/dictionary';
 
 // ── User overrides ───────────────────────────────────────────────
 
@@ -116,6 +116,19 @@ export interface WordStackData {
   dictionaryForm: string | null;
   /** Source of ё: yo-restored or null. */
   yoSource: string | null;
+
+  // ── Dictionary panel fields ──────────────────────────────────
+
+  /** Full English gloss from dictionary (E field). Semicolon-separated senses. Empty string if absent. */
+  fullGlossEn: string;
+  /** Full French gloss from dictionary (F field). Semicolon-separated senses. Empty string if absent. */
+  fullGlossFr: string;
+  /**
+   * All dictionary entries for this word form. Null when no entry exists.
+   * Single-entry words have a one-element array. Homographs have multiple.
+   * Used by the Dictionary panel to display the full entry and homograph stack.
+   */
+  allDictEntries: DictionaryEntry[] | null;
 
   /** Position in the line (0-based). */
   wordIndex: number;

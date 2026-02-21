@@ -15,6 +15,7 @@
 		pageSize: PageSize;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
+		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -26,14 +27,22 @@
 		pageSize,
 		showStressDiacritics = false,
 		spotReconstitution = new Map(),
+		glossOverrides = new Map(),
 		onwordclick,
 	}: Props = $props();
 
-	const pages = $derived(sliceLinesToPages(lines));
+	/** Page-1 row budget, updated by TitlePage after header measurement. */
+	let page1Budget = $state(9);
+
+	const pages = $derived(sliceLinesToPages(lines, page1Budget));
 	const totalPages = $derived(pages.length);
 	const runningHeader = $derived(
 		formatRunningHeader(metadata.composer, metadata.title, metadata.poet)
 	);
+
+	function handleBudgetChange(maxRows: number) {
+		page1Budget = maxRows;
+	}
 </script>
 
 <svelte:head>
@@ -54,7 +63,9 @@
 				{legendItems}
 				{showStressDiacritics}
 				{spotReconstitution}
+				{glossOverrides}
 				{onwordclick}
+				onbudgetchange={handleBudgetChange}
 			/>
 		{:else}
 			<SubsequentPage
@@ -66,9 +77,9 @@
 				{totalPages}
 				{runningHeader}
 				{legendItems}
-				transcriber={metadata.transcriber}
 				{showStressDiacritics}
 				{spotReconstitution}
+				{glossOverrides}
 				{onwordclick}
 			/>
 		{/if}

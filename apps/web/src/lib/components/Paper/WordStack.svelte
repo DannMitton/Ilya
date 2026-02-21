@@ -10,10 +10,11 @@
 		showStressDiacritics?: boolean;
 		language?: Language;
 		spotReconstituted?: boolean;
+		glossOverride?: string;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, onwordclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, glossOverride, onwordclick }: Props = $props();
 
 	// Bidirectional XOR: spot always inverts the global setting for this word.
 	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
@@ -61,19 +62,21 @@
 	// "we will descend" → "will descend" ✓
 	// "I love" → "I love" (kept: single word after strip looks like infinitive)
 	const displayGloss = $derived.by(() => {
-		if (!word.gloss) return '';
+		// Gloss override from Dictionary panel takes precedence
+		const raw = glossOverride ?? word.gloss;
+		if (!raw) return '';
 		const pronouns = ['i ', 'you ', 'he ', 'she ', 'it ', 'we ', 'they ', 'one '];
-		const lower = word.gloss.toLowerCase();
+		const lower = raw.toLowerCase();
 		for (const p of pronouns) {
 			if (lower.startsWith(p)) {
-				const remainder = word.gloss.slice(p.length);
+				const remainder = raw.slice(p.length);
 				// Only strip if remainder is multi-word (has a space)
 				if (remainder.includes(' ')) {
 					return remainder;
 				}
 			}
 		}
-		return word.gloss;
+		return raw;
 	});
 
 	const isClitic = $derived(word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic);

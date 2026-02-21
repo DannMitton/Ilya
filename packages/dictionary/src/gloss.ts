@@ -18,7 +18,7 @@
  * pure and testable without global state.
  */
 
-import type { BilingualGloss, GlossLanguage, StressDictionary } from './types';
+import type { BilingualGloss, GlossLanguage, StressDictionary, DictionaryEntry } from './types';
 import { CURATED_GLOSSES } from './curated-glosses';
 
 // ---------------------------------------------------------------------------
@@ -33,6 +33,32 @@ let _dictionary: StressDictionary = {};
  */
 export function setGlossDictionary(dict: StressDictionary): void {
   _dictionary = dict;
+}
+
+/**
+ * Look up the raw dictionary entry for a word, preserving all fields
+ * including full glosses (E/F), part of speech (p), lemma (l), and
+ * stress (s). Returns null if the word is not found.
+ *
+ * Used by the Dictionary panel in the Inspector to display complete
+ * dictionary information. The returned entry is the same object stored
+ * in the dictionary — do not mutate it.
+ *
+ * For homographs, returns an array of entries.
+ *
+ * @param word - Cyrillic word to look up (any case, may include punctuation)
+ * @returns Raw dictionary entry, array of entries (homographs), or null
+ */
+export function lookupFullEntry(word: string): DictionaryEntry | DictionaryEntry[] | null {
+  const clean = word
+    .normalize('NFC')
+    .replace(/\u0301/g, '')
+    .replace(/[.,!?;:"""''–—«»]/g, '')
+    .replace(/[-–—]+$/, '')
+    .toLowerCase();
+  const entry = _dictionary[clean];
+  if (!entry) return null;
+  return entry;
 }
 
 // ---------------------------------------------------------------------------
@@ -217,12 +243,12 @@ export function getLemmaGloss(
 ): string | BilingualGloss | null {
   if (!lemma) return null;
 
-  const lemmaEntry = _dictionary[lemma];
-  if (!lemmaEntry) return null;
+  const entry = _dictionary[lemma.toLowerCase()];
+  if (!entry) return null;
 
-  const entryGloss = Array.isArray(lemmaEntry)
-    ? lemmaEntry[0].gloss ?? lemmaEntry[0].g ?? ''
-    : lemmaEntry.gloss ?? lemmaEntry.g ?? '';
+  // Handle homographs — try first entry
+  const singleEntry = Array.isArray(entry) ? entry[0] : entry;
+  const entryGloss = singleEntry.gloss ?? singleEntry.g;
 
   // Don't return if it's also a grammatical description
   if (
@@ -260,13 +286,13 @@ export function getLemmaGloss(
  *
  * @param gloss - Cleaned gloss string to truncate
  * @param maxWords - Maximum number of words (default: 5)
- * @param maxChars - Maximum number of characters (default: 18)
+ * @param maxChars - Maximum number of characters (default: 20)
  * @returns Truncated gloss string
  */
 export function truncateGloss(
   gloss: string,
   maxWords: number = 5,
-  maxChars: number = 18
+  maxChars: number = 20
 ): string {
   if (!gloss) return '';
 

@@ -10,10 +10,11 @@
 		showStressDiacritics?: boolean;
 		language?: Language;
 		spotReconstitution?: Map<string, boolean>;
+		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, onwordclick }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, onwordclick }: Props = $props();
 
 	// Filter out punctuation-only tokens: only render words containing Cyrillic
 	const displayWords = $derived(
@@ -30,6 +31,7 @@
 			{showStressDiacritics}
 			{language}
 			spotReconstituted={spotReconstitution?.has(wordKey) ?? false}
+			glossOverride={glossOverrides?.get(wordKey)}
 			{onwordclick}
 		/>
 	{/each}

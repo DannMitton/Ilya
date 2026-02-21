@@ -20,6 +20,7 @@
 		legendItems: LegendItem[];
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
+		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
 		onbudgetchange?: (maxRows: number) => void;
 	}
@@ -34,6 +35,7 @@
 		legendItems,
 		showStressDiacritics = false,
 		spotReconstitution,
+		glossOverrides,
 		onwordclick,
 		onbudgetchange,
 	}: Props = $props();
@@ -136,7 +138,7 @@
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
 				<div class="verse-row">
-					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
+					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {onwordclick} />
 				</div>
 			{/each}
 		{:else}

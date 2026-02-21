@@ -100,6 +100,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.notationDefault':   { en: 'Notation: default (Grayson)',  fr: 'Notation\u00a0: par défaut (Grayson)' },
 	'inspector.glossMissing':      { en: 'No translation available for this form.',                              fr: 'Aucune traduction française disponible pour cette forme.' },
 
+	// ── Dictionary panel (Inspector expansion) ───────────────
+	'inspector.dictionary':         { en: 'Dictionary',                   fr: 'Dictionnaire' },
+	'inspector.dictEntryMissing':   { en: 'Full entry unavailable',       fr: 'Entrée complète indisponible' },
+	'inspector.dictCapacity':       { en: 'Maximum 20 characters',         fr: 'Maximum de 20 caractères' },
+
 	// ── Grayson positional labels (Ribbon syllable group headers) ──
 	'ribbon.stressed':             { en: 'stressed',                     fr: 'tonique' },
 	'ribbon.unstressed':           { en: 'unstressed',                   fr: 'atone' },

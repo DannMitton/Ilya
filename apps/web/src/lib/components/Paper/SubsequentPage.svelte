@@ -17,9 +17,9 @@
 		totalPages: number;
 		runningHeader: string;
 		legendItems: LegendItem[];
-		transcriber?: string;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
+		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -32,9 +32,9 @@
 		totalPages,
 		runningHeader,
 		legendItems,
-		transcriber = '',
 		showStressDiacritics = false,
 		spotReconstitution,
+		glossOverrides,
 		onwordclick,
 	}: Props = $props();
 
@@ -66,7 +66,7 @@
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
-				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {onwordclick} />
+				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {onwordclick} />
 			</div>
 		{/each}
 	</div>
@@ -75,7 +75,6 @@
 	<PageFooter
 		{pageNumber}
 		{totalPages}
-		{transcriber}
 		{language}
 		{legendItems}
 	/>
