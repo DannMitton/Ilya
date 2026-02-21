@@ -51,6 +51,33 @@
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-1')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? '1 · Orientation' : '1 · Orientation'}
 								</button>
+								<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-alphabet')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'La Chanson de l\u2019alphabet' : 'The Alphabet Song'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-italian')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'L\u2019italien et le russe' : 'Italian and Russian'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-basis')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'La base d\u2019articulation' : 'The basis of articulation'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-lyric')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Diction lyrique et russe parl\u00e9' : 'Lyric diction vs. spoken Russian'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-ipa')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Conventions API' : 'IPA conventions'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-2')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -308,6 +335,28 @@
 	.toc-unit .toc-link {
 		padding-left: 1.5rem;
 		font-size: 0.85rem;
+	}
+
+	.toc-subsections {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.toc-subsections li {
+		margin: 0;
+		padding: 0;
+	}
+
+	.toc-sub {
+		padding-left: 2.5rem !important;
+		font-size: 0.8rem !important;
+		color: var(--ink-secondary, #4a4540);
+		opacity: 0.85;
+	}
+
+	.toc-sub:hover {
+		opacity: 1;
 	}
 
 	/* ── Mobile: drawer stays open below 768px ──────────── */
