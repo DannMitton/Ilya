@@ -83,6 +83,38 @@
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-2')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? '2 · L\u2019accent tonique' : '2 · Stress'}
 								</button>
+								<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-rhythm')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Rythme accentuel' : 'Stress-timed rhythm'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-governing')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Principe directeur' : 'The governing principle'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-unpredictable')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Un accent impr\u00e9visible' : 'Unpredictable stress'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-homographs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Les homographes' : 'Homographs'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-shifting')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'D\u00e9placement de l\u2019accent' : 'Shifting stress'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-role')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Le r\u00f4le d\u2019Ilya' : 'Ilya\u2019s role'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-3')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -122,14 +154,16 @@
 						</ul>
 					</nav>
 				{:else if activeTab === 'guide'}
-					<div class="placeholder-panel">
+					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières du Guide' : 'Guide table of contents'}>
 						<h2 class="section-label">GUIDE</h2>
-						<p class="placeholder-text">
-							{language === 'fr'
-								? 'En préparation. Le Guide offrira un guide d\u2019utilisation, la méthodologie derrière Ilya et un contexte biographique.'
-								: 'In preparation. The Guide will offer a user guide, the methodology behind Ilya, and biographical context.'}
-						</p>
-					</div>
+						<ul class="toc-list">
+							<li>
+								<button class="toc-link toc-title" onclick={() => document.getElementById('guide-how')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+									{language === 'fr' ? 'Comment fonctionne Ilya' : 'How Ilya Works'}
+								</button>
+							</li>
+						</ul>
+					</nav>
 				{/if}
 			</div>
 			<TabBar {activeTab} {language} {ontabchange} />

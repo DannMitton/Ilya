@@ -718,9 +718,61 @@
 
 						<h3 id="learn-unit-2">Unité 2 · L'accent tonique</h3>
 
-						<p>L'accent tonique russe est imprévisible : contrairement à l'italien, où l'accent pénultième est la norme, ou au français, où l'accent tombe sur la dernière syllabe du groupe rythmique, l'accent russe doit être appris pour chaque mot. Les dix auteurs de diction lyrique russe comparés dans ma recherche doctorale s'accordent tous sur ce point : l'accent est suffisamment fondamental pour que chacun d'entre eux le marque, bien qu'ils le fassent avec des conventions différentes (le marqueur de l'API, un diacritique aigu, un accent grave).</p>
+						<h4 id="learn-u2-rhythm">Rythme accentuel et l'avantage du chanteur</h4>
 
-						<p>Cette unité établit l'accent comme principe gouvernant l'ensemble du système. Chaque règle en aval (réduction vocalique, assimilation, reconstitution) dépend de la connaissance de la syllabe accentuée. Nous commençons par les homographes pour le démontrer. Le mot <em>мука</em>, par exemple, signifie « tourment » avec l'accent sur la première syllabe et « farine » avec l'accent sur la seconde. L'accent n'est pas un ornement; il change le sens, et il gouverne la prononciation de chaque voyelle du mot.</p>
+						<p>Le concept de types rythmiques linguistiques, proposé par Pike en 1945 et abondamment débattu depuis, repose sur une distinction binaire utile : les langues sont soit accentuelles, soit syllabiques. Cette dichotomie est simplifiée (les chercheurs peinent à en produire une preuve empirique constante, et certaines langues résistent à ces classifications nettes), mais elle demeure utile pour les chanteurs parce qu'elle met des mots sur des aspects du langage que nous percevons intuitivement sans toujours pouvoir les nommer.</p>
+
+						<p>Les langues syllabiques comme le français et le coréen accordent à leurs syllabes une durée théoriquement égale, ainsi qu'une réalisation de voyelles distinctes. Les mises en musique de textes en langues syllabiques exploitent cette égalité syllabique inhérente avec une exigence accrue de legato. C'est certainement plausible pour le français chanté et son célèbre style soutenu.</p>
+
+						<p>Les langues accentuelles comme l'anglais, l'allemand et le russe fonctionnent différemment. L'intervalle entre les syllabes accentuées établit une pulsation rythmique dans laquelle les syllabes inaccentuées s'inscrivent. Cela produit deux effets que tout chanteur a déjà expérimentés dans le répertoire anglais et allemand : même dans les passages legato, les syllabes inaccentuées reçoivent moins d'intensité et d'engagement articulatoire que leurs homologues accentuées, et les voyelles inaccentuées subissent une réduction (centralisation) vers une qualité centralisée. Dans la parole, ces différences se manifestent par des contrastes de durée littéraux; dans le chant, le compositeur prescrit le rythme, mais le chanteur communique le poids de l'accent par des micro-ajustements intentionnels, ou automatiques, d'intensité et d'engagement articulatoire à l'intérieur des valeurs rythmiques écrites sur la page. Nous l'entendons dans l'anglais chanté « behold » <code>[bɪ.ˈhoʊld]</code>, où la première syllabe se réduit de <code>[i]</code> vers le <code>[ɪ]</code> plus central. Les deux syllabes inaccentuées de l'allemand chanté « gekommen » <code>[ɡə.ˈkɔm.mən]</code> sont effectivement des <em>schwa</em> réduits.</p>
+
+						<p>Le russe suit le même schéma, mais avec une systématisation plus poussée. Les voyelles accentuées du russe chanté reçoivent davantage d'intensité et d'engagement articulatoire. Les voyelles inaccentuées sont perceptuellement plus légères, subissant une réduction vocalique (centralisation) qui obéit à des règles positionnelles précises. Le mot хорошо (bien, bon) en est la démonstration par excellence : trois lettres ⟨о⟩ identiques, chacune prononcée différemment selon sa proximité avec l'accent tonique. Le ⟨о⟩ final accentué se chante <code>[o]</code>. Le ⟨о⟩ pénultième (immédiatement avant l'accent) se réduit en <code>[ɑ]</code>. Le ⟨о⟩ éloigné (deux syllabes avant l'accent) se réduit davantage en <code>[ʌ]</code>. La transcription complète est <code>[xʌ.ɑ.ˈʃo]</code>. Un seul mot, une seule lettre, trois sons, entièrement gouvernés par la proximité avec l'accent tonique.</p>
+
+						<p>Cette réduction en cascade relève de l'unité 6. Pour l'instant, le constat est plus simple : tant que l'on ne sait pas où tombe l'accent, on ne peut pas vraiment savoir comment la plupart des autres voyelles du mot se prononceront. Le russe comporte tout de même quelques indicateurs fiables d'accent et deux voyelles qui ne se réduisent jamais : nous les verrons dans les leçons suivantes.</p>
+
+						<h4 id="learn-u2-governing">L'accent tonique comme principe directeur</h4>
+
+						<p>La syllabe accentuée est la cible. Tout le reste se rapproche d'elle ou s'en éloigne.</p>
+
+						<p>Cette priorité n'est pas propre au russe. Les chanteurs formés au répertoire anglais et allemand reconnaîtront ce principe immédiatement. Ce qui distingue le russe (également une langue accentuelle) n'est pas ce mécanisme, mais ses conséquences : le degré auquel les voyelles inaccentuées changent de qualité en russe peut être radical. Néanmoins, ces transformations suivent une logique systématique.</p>
+
+						<p>Dans notre discussion du russe chanté, nous travaillons à l'intérieur d'un modèle simplifié qui pose au maximum une syllabe accentuée par mot russe. Cette syllabe accentuée peut aussi être appelée syllabe tonique. Toutes les autres syllabes du mot sont, par définition, inaccentuées. Cette simplification ne tient certes pas dans le russe standard contemporain (RSC) parlé. Les emprunts et les mots composés brouillent les contours de cette règle générale. Néanmoins, dans le russe chanté, c'est la distinction binaire entre accentué et inaccentué qui gouverne toute la cascade phonologique qui suit.</p>
+
+						<p>Sachez où tombe l'accent.</p>
+
+						<h4 id="learn-u2-unpredictable">Un accent imprévisible</h4>
+
+						<p>Nous avons noté plus haut que le russe, comme l'anglais et l'allemand, est une langue accentuelle. Le contraste avec les langues syllabiques mérite qu'on s'y arrête. Dans le français chanté, chaque voyelle exprime sa valeur cardinale sans réduction. Le <em>schwa</em> français <code>[ə]</code> se distingue chez les langues chantées parce qu'il ne représente pas la réduction d'une voyelle autrement cardinale. C'est son propre phonème dans le français chanté, une cible vocalique distincte en soi. L'italien, tout simplement, ne possède pas de <em>schwa</em>, ni même le concept de voyelle réduite.</p>
+
+						<p>Le russe est une langue accentuelle. L'accent tonique en russe est imprévisible, tout comme il l'est en anglais. La position de l'accent doit s'apprendre soit par l'expérience, soit par confirmation auprès d'un locuteur russe natif fiable, soit en consultant un dictionnaire digne de confiance. L'accent russe peut tomber sur n'importe quelle syllabe d'un mot, et il se déplace fréquemment lorsque le même mot apparaît sous une forme grammaticale différente. De plus, une même orthographe peut présenter un sens et une prononciation quand l'accent tombe sur une syllabe, tandis que la même orthographe accentuée sur une autre syllabe communique un sens entièrement différent, une prononciation distincte et une étymologie convergente. Ces mots s'appellent des homographes, et ils sont courants dans les langues accentuelles comme dans les langues syllabiques. Nous y reviendrons dans la section suivante.</p>
+
+						<p>Cette volatilité explique pourquoi toutes les ressources de diction lyrique russe marquent l'accent. Ma comparaison de dix autorités en diction lyrique russe a montré une unanimité sur ce point : l'accent est suffisamment fondamental pour que chacune d'entre elles le marque, quoique selon des conventions différentes. Six utilisent le marqueur d'accent primaire de l'API <code>[ˈ]</code> positionné avant la syllabe accentuée. Trois (Cox, Olin et Richter) placent un accent aigu directement au-dessus de la voyelle accentuée, ce qui me semble être un indice visuel plus immédiat et intuitif pour les chanteurs. (C'est ce qui motive le choix d'offrir un marquage global par accent aigu des textes cyrilliques sources dans <em>Ilya</em>.) Une autorité en diction lyrique russe (McMaster) utilise un accent grave. Quoi qu'il en soit, la diversité de notation reflète une conviction partagée : sans accent, une transcription de russe chanté est incomplète et ne servira pas bien le chanteur.</p>
+
+						<p><em>Ilya</em> peut marquer l'accent au moyen de l'accent aigu combinant (◌́) placé au-dessus de la voyelle cyrillique accentuée du texte source, si vous choisissez cette option en l'activant dans la section Notation au bas du tiroir. Le marqueur d'accent de l'API est aussi le signal de confiance d'<em>Ilya</em> : il n'apparaît que sur les mots dont l'accent a été confirmé par le dictionnaire ou intentionnellement assigné par l'utilisateur. Les mots en attente de vérification ne portent aucun marquage d'accent, affichant plutôt un badge VERIFY en cadre pointillé, impossible à manquer. C'est un choix de conception délibéré : l'absence de marqueur d'accent signale une syllabe légitimement inaccentuée. La présence d'un badge VERIFY en cadre pointillé autour d'un bloc de transcription (les trois lignes superposées : API, cyrillique, glose) signifie l'incertitude, épargnant au chanteur une fausse confiance et attendant que l'utilisateur assigne une syllabe accentuée. Consultez donc un autre dictionnaire.</p>
+
+						<h4 id="learn-u2-homographs">Pourquoi l'accent compte : les homographes</h4>
+
+						<p>Le mot мука démontre pourquoi l'accent n'est pas cosmétique. Accentué sur la première syllabe (му́ка), il signifie « tourment ». Accentué sur la deuxième syllabe (мука́), il signifie « farine ». L'orthographe est identique. Le sens est entièrement différent. Et parce que l'accent gouverne la réduction vocalique, la prononciation de chaque voyelle du mot change lorsque l'accent se déplace.</p>
+
+						<p>Le mot russe стоит est un autre exemple classique d'homographe. C'est la troisième personne du singulier au présent de deux verbes différents, « coûter » et « se tenir debout », selon la syllabe accentuée : « Сколько это сто́ит? (Combien cela coûte-t-il ?) » vs. « На столе стои́т ваза. (Un vase se tient sur la table.) »</p>
+
+						<p>Transcrivez стоит dans <em>Ilya</em> avec l'accent sur la première syllabe : le ⟨о⟩ accentué conserve sa pleine qualité <code>[o]</code>, le и inaccentué ne se réduit pas en règle générale. Déplacez maintenant l'accent sur la deuxième syllabe : le и est désormais accentué, tandis que le ⟨о⟩ se réduit en <code>[ɑ]</code>. La différence est audible, et le sens pivote sur ce seul choix phonologique.</p>
+
+						<p>Les homographes ne sont pas de rares curiosités en russe. La langue en regorge. Lorsqu'<em>Ilya</em> rencontre un mot présentant plusieurs schémas d'accentuation possibles dans son dictionnaire, il sélectionne le premier parmi plusieurs. L'utilisateur doit exercer son jugement pour réassigner la lecture correcte au contexte poétique.</p>
+
+						<h4 id="learn-u2-shifting">Déplacement de l'accent selon les formes grammaticales</h4>
+
+						<p>Les homographes constituent le cas spectaculaire, mais une version plus discrète du même principe opère dans toute la langue. Les noms, verbes et adjectifs russes déplacent fréquemment leur accent lorsqu'ils changent de forme grammaticale. Le cas nominatif d'un nom peut accentuer une syllabe; le cas prépositionnel du même nom peut en accentuer une autre. Un verbe à l'infinitif peut porter l'accent sur une syllabe; sa forme féminine au passé peut le déplacer ailleurs.</p>
+
+						<p>Ce n'est pas un problème que le chanteur doit résoudre par la grammaire. C'est un problème dont le chanteur doit avoir conscience, parce qu'il signifie que reconnaître la racine d'un mot ne garantit pas de savoir où tombe son accent dans la forme parfois même archaïque que le poète a choisie. Le dictionnaire fait autorité. Lorsque le dictionnaire d'<em>Ilya</em> connaît la forme déclinée ou conjuguée précise, il fournit l'accent correct. Lorsqu'il ne connaît que la forme de base (le lemme), il signale le mot pour vérification. C'est une limitation honnête : l'accent morphologique russe est complexe, et aucun système fondé sur des règles ne peut prédire chaque cas. <em>Ilya</em> ne prétend pas le contraire.</p>
+
+						<h4 id="learn-u2-role">Le rôle d'Ilya</h4>
+
+						<p>Timour Baïtoukalov, le créateur de l'outil de transcription API russe en ligne easypronunciation.com, a écrit en correspondance personnelle que la construction de la base de données d'accents pour son excellent moteur de transcription du russe parlé avait exigé un travail considérable : constituer sa propre base à partir du dictionnaire de Zaliznyak, l'adapter à ses besoins, recenser tous les homographes, restaurer la lettre perdue « ё ». Sa conclusion, après avoir conçu l'algorithme de conversion en API : « Croyez-moi, c'est beaucoup de règles. »</p>
+
+						<p><em>Ilya</em> s'inspire de cette approche architecturale. Son dictionnaire, tiré de données Wiktionary et enrichi de corrections curatées, fournit les positions d'accent pour des centaines de milliers de mots russes. Le moteur applique ensuite les règles de Grayson pour dériver la transcription API correcte à partir de cette position d'accent. La tâche du chanteur est de vérifier que l'accent est correct pour le contexte poétique, lui permettant de faire un choix éclairé lorsque le dictionnaire propose des alternatives.</p>
+
+						<p>C'est pourquoi nous commençons ici. L'accent tonique n'est pas un sujet parmi d'autres. C'est le fondement sur lequel repose tout le système.</p>
 
 						<h3 id="learn-unit-3">Unité 3 · Les sons vocaliques</h3>
 
@@ -843,9 +895,61 @@
 
 						<h3 id="learn-unit-2">Unit 2 · Stress</h3>
 
-						<p>Russian word stress is unpredictable: unlike Italian, where penultimate stress is the norm, or French, where stress falls on the final syllable of a phrase, Russian stress must be learned for each word individually. All ten Russian lyric diction authors compared in my doctoral research agree on this point: stress is fundamental enough that every one of them marks it, though they do so with different conventions (the IPA stress marker, an acute diacritic, a grave diacritic).</p>
+						<h4 id="learn-u2-rhythm">Stress-timed rhythm and the singer's advantage</h4>
 
-						<p>This unit establishes stress as the governing principle of the entire system. Every downstream rule in Russian lyric diction (vowel reduction, assimilation, reconstitution) depends on knowing which syllable carries the stress. We begin with homographs to demonstrate this. The word <em>мука</em>, for instance, means "torment" with stress on the first syllable and "flour" with stress on the second. Stress is not cosmetic; it changes meaning, and it governs the pronunciation of every vowel in the word.</p>
+						<p>The concept of linguistic rhythm types, first proposed by Pike in 1945 and subsequently debated in the literature, proposes a useful binary: languages are either stress-timed or syllable-timed. This fork in the road is much simplified (scholars have struggled to produce consistent empirical evidence to prove the dichotomy, and some languages resist these neat classification paths), but the construct remains useful for singers because it underwrites aspects of language that we intuit but may not have been able to name.</p>
+
+						<p>Syllable-timed languages like French and Korean give their syllables a theoretically equal duration, as well as distinct vowel realization without reduction. The musical text settings of syllable-timed languages exploit this inherent syllabic equality with a heightened imperative for legato. This certainly seems plausible for sung French and its style soutenu.</p>
+
+						<p>Stress-timed languages like English, German, and Russian work differently. The interval between stressed syllables establishes a rhythmic pulse that unstressed syllables fit themselves into. This leads to two effects that every singer has already experienced in English and German repertoire: even in legato passages, unstressed syllables carry less intensity and articulatory commitment than their stressed counterparts, and unstressed vowels undergo reduction (centralization) toward a centralised quality. In speech, these differences manifest as literal durational contrasts; in singing, the composer prescribes the rhythm, but the singer communicates the weight of stress through intentional, or automatic, micro-adjustments to intensity and articulatory engagement within the rhythmic values on the page. We hear this in the sung English "behold" <code>[bɪ.ˈhoʊld]</code>, where the first syllable reduces from <code>[i]</code> to the more central <code>[ɪ]</code>. Both unstressed syllables in the sung German "gekommen" <code>[ɡə.ˈkɔm.mən]</code> are effectively reduced <em>schwa</em>.</p>
+
+						<p>Russian follows the same pattern, but with greater systematisation. The stressed vowels in sung Russian receive greater intensity and articulatory engagement. The unstressed vowels are perceptually lighter, undergoing vowel reduction (centralization) that follows specific, positional rules. The word хорошо (good) is the textbook demonstration: three identical ⟨о⟩ letters, each being pronounced differently depending on its proximity to the stress. The stressed final ⟨о⟩ is sung as <code>[o]</code>. The penultimate ⟨о⟩ (immediately before the stress) reduces to <code>[ɑ]</code>. The remote ⟨о⟩ (two syllables before the stress) reduces further to <code>[ʌ]</code>. The full transcription is <code>[xʌ.ɑ.ˈʃo]</code>. One word, one letter, three sounds, entirely governed by proximity to stress.</p>
+
+						<p>This cascading reduction is the domain of Unit 6. For now, the point is simpler: until you know where the stress falls, you cannot really know how most other vowels in the word will sound. Russian does feature a few surefire indicators of stress and two vowels that never reduce: we will see these in later lessons.</p>
+
+						<h4 id="learn-u2-governing">Stress as the governing principle</h4>
+
+						<p>The stressed syllable is the target. Everything else moves toward or away from it.</p>
+
+						<p>This priority is not unique to Russian. Singers trained in English and German repertoire will recognise this principle immediately. What distinguishes Russian (also a stress-timed language) is not this mechanism, but its consequences: the degree to which unstressed vowels change their quality in Russian can be radical. Nevertheless, these transformations follow systematic logic.</p>
+
+						<p>In our discussion of sung Russian, we work within a simplified model that assumes one stressed syllable per Russian word, maximum. This stressed syllable can also be called the tonic syllable. All other syllables within the word are, by this definition, unstressed. Admittedly, this simplification does not hold in Contemporary Standard Russian (CSR) speech. Loanwords and compound words blur the boundaries of this blanket statement. Nevertheless, in sung Russian, it is the binary distinction between stressed and unstressed that governs the entire phonological cascade that follows.</p>
+
+						<p>Know where the stress falls.</p>
+
+						<h4 id="learn-u2-unpredictable">Unpredictable stress</h4>
+
+						<p>We noted above that Russian, like English and German, is stress-timed. The contrast with syllable-timed languages is worth pausing on. In sung French, each vowel expresses its cardinal value without reduction. The French <em>schwa</em> <code>[ə]</code> stands out among sung languages because it does not represent the reduction of an otherwise cardinal vowel. It is its own phoneme in sung French, itself a distinct vowel target. Italian simply does not have a <em>schwa</em>, nor the concept of a reduced vowel at all.</p>
+
+						<p>Russian is a stress-timed language. Syllabic stress in Russian is unpredictable, just as it is in English. The location of word stress must be learned either through experience, by confirmation with a reliable native Russian speaker, or by consulting a trustworthy dictionary. Russian stress may fall on any syllable of a word, and stress frequently shifts when the same word appears in a different grammatical form. Further, one spelling may exhibit one meaning and pronunciation when stressing one syllable, while the same spelling stressed on another syllable communicates a completely different meaning, distinctive pronunciation, and convergent etymology. These words are called homographs, and they are common in both stress-timed and syllable-timed languages. More on this in the next section.</p>
+
+						<p>This volatility is the reason that every Russian lyric diction resource marks stress. My comparison of ten Russian lyric diction authorities showed unanimous agreement on this point: stress is fundamental enough that each one of them marks it, though they do so using differing conventions. Six of them use the IPA primary stress marker <code>[ˈ]</code> positioned before the stressed syllable. Three (Cox, Olin, and Richter) place an acute diacritic directly over the stressed vowel, which seems to me to be a more immediate and intuitive visual cue for singers. (This drives the choice to offer global acute markings for Cyrillic source texts in <em>Ilya</em>.) One Russian Lyric Diction authority (McMaster) uses a grave diacritic. Regardless, the diversity of notation reflects a shared conviction: without stress, a transcription of sung Russian is incomplete and will not serve the singer well.</p>
+
+						<p><em>Ilya</em> can mark stress with the combining acute accent (◌́) placed above the stressed Cyrillic source text vowel if you choose that option by toggling it in the Notation section at the bottom of the Drawer. The IPA stress mark is also <em>Ilya</em>'s confidence signal: it appears only on words whose stress has been confirmed by the dictionary or intentionally assigned by the user. Words awaiting verification carry no stress marking, instead featuring an unmistakeable dashed-line box VERIFY badge. This is a deliberate design choice: the absence of a stress mark communicates a legitimately unstressed syllable. The presence of a dashed-line box VERIFY badge around a word stack signifies uncertainty, sparing the singer from false confidence and awaiting user assignment of a stressed syllable. So consult another dictionary.</p>
+
+						<h4 id="learn-u2-homographs">Why stress matters: homographs</h4>
+
+						<p>The word мука demonstrates why stress is not cosmetic. With stress on the first syllable (му́ка), it means "torment." With stress on the second syllable, (мука́) means "flour." The spelling is identical. The meaning is entirely different. And because stress governs vowel reduction, the pronunciation of every vowel in the word changes when the stress moves.</p>
+
+						<p>The Russian word стоит is another classic example of a homograph. It is the third-person singular present tense form of two different verbs "to cost" and "to stand", depending on which syllable is stressed: "Сколько это сто́ит? (How much does this cost?)" vs. "На столе стои́т ваза. (A vase is standing/sitting on the table.)"</p>
+
+						<p>Transcribe стоит in <em>Ilya</em> with first-syllable stress: the stressed ⟨о⟩ preserves its full <code>[o]</code> quality, the unstressed и as a rule does not reduce. Now shift the stress to the second syllable: the и is now stressed, while the ⟨о⟩ reduces to <code>[ɑ]</code>. The difference is audible, and the meaning pivots on that single phonological choice.</p>
+
+						<p>Homographs are not rare curiosities in Russian. The language is full of them. When <em>Ilya</em> encounters a word with multiple possible stress patterns in its dictionary, it selects the first one among potentially several. The user must use their judgment to reassign the correct reading for the poetic context.</p>
+
+						<h4 id="learn-u2-shifting">Shifting stress across grammatical forms</h4>
+
+						<p>Homographs are the dramatic case, but a quieter version of the same principle operates throughout the language. Russian nouns, verbs, and adjectives frequently shift their stress when they change grammatical form. The nominative case of a noun may stress one syllable; the prepositional case of the same noun may stress another. A verb in the infinitive may carry stress on one syllable; its past tense feminine form may shift it elsewhere.</p>
+
+						<p>This is not a problem the singer needs to solve through grammar. It is a problem the singer needs to be aware of, because it means that recognising a word's root does not guarantee knowing where its stress falls in the sometimes even archaic form the poet has chosen. The dictionary is the authority. When <em>Ilya</em>'s dictionary knows the specific declined or conjugated form, it provides the correct stress. When it knows only the base form (the lemma), it flags the word for verification. This is an honest limitation: Russian morphological stress is complex, and no rule-based system can predict every case. <em>Ilya</em> does not pretend otherwise.</p>
+
+						<h4 id="learn-u2-role">Ilya's role</h4>
+
+						<p>Timur Baytukalov, the creator of the online Russian IPA transcription tool easypronunciation.com, wrote in personal correspondence that building the stress database for his excellent speech-based transcription engine required enormous labour: "for stress position in Russian words I created my own database from the dictionary by Zaliznyak... but it took me a lot of time to adopt it to my needs: to find all homographs, recover the lost letter 'ё', etc. I... create an algorithm that converts the text (with stressed vowels) into IPA. Believe me, it's a lot of rules."</p>
+
+						<p><em>Ilya</em> is inspired by this architectural approach. Its dictionary, drawn from Wiktionary data and enriched with curated corrections, provides stress positions for hundreds of thousands of Russian words. The engine then applies Grayson's rules to derive the correct IPA transcription from that stress position. The singer's task is to verify that the stress is correct for the poetic context, allowing them to make an informed choice when the dictionary offers alternatives.</p>
+
+						<p>This is why we begin here. Stress is not one topic among many. It is the foundation on which the entire system rests.</p>
 
 						<h3 id="learn-unit-3">Unit 3 · The Vowel Sounds</h3>
 
@@ -901,14 +1005,81 @@
 
 						{/if}
 					{:else}
-						<div class="placeholder-content">
-							<h1>{language === 'fr' ? 'Guide' : 'Guide'}</h1>
-							<p>
-								{language === 'fr'
-									? 'En préparation. Le Guide offrira un guide d\u2019utilisation, la méthodologie derrière Ilya et un contexte biographique.'
-									: 'In preparation. The Guide will offer a user guide, the methodology behind Ilya, and biographical context.'}
-							</p>
-						</div>
+						{#if language === 'fr'}
+						<h1>Guide</h1>
+
+						<h2 id="guide-how">Comment fonctionne Ilya</h2>
+
+						<h4>Que fait Ilya ?</h4>
+
+						<p><em>Ilya</em> poursuit un double objectif : ouvrir l'accès au corpus du russe chanté, et éduquer.</p>
+
+						<p><em>Ilya</em> équipe les chanteurs de transcriptions vérifiables et précises de textes russes chantés, supprimant ainsi la barrière qui défend le répertoire vocal russe classique des artistes non russophones qui souhaiteraient l'interpréter. <em>Ilya</em> dissipe la mystique en offrant un accès pratique et généralisé à la prononciation du russe chanté. <em>Ilya</em> automatise la transcription de textes russes cyrilliques en symboles de l'Alphabet phonétique international (API), selon une méthode conçue par Craig Grayson.</p>
+
+						<p><em>Ilya</em> propose également des leçons claires et vérifiables par des tiers sur son propre fonctionnement. Les utilisateurs peuvent progresser à travers une série de leçons séquencées qui expliquent en profondeur comment <em>Ilya</em> parvient à ses résultats, qu'ils soient familiers ou inattendus. Le module LEARN s'adresse aux utilisateurs qui apprécient la commodité d'<em>Ilya</em>, mais qui recherchent aussi un degré supérieur d'indépendance et d'aisance avec les textes cyrilliques.</p>
+
+						<h4>Que se passe-t-il lorsque je saisis un texte russe ?</h4>
+
+						<p><em>Ilya</em> fait ce que nous pouvons apprendre à faire manuellement, mais beaucoup plus vite. Il met à jour et normalise automatiquement l'orthographe, recherche l'accent tonique, détermine comment cet accent affecte les voyelles environnantes, applique les règles de voisement et de dévoisement des consonnes, propose une consultation du dictionnaire pour le sens, et produit trois lignes de contenu dans un format familier : ligne supérieure en API, ligne médiane en texte cyrillique source, et ligne inférieure en glose de traduction minimale. Ces transcriptions méritent un examen approfondi tout en restant lisibles d'un coup d'œil. Les utilisateurs peuvent exporter des PDF comme copies papier ou les conserver pour une étude ultérieure. <em>Ilya</em> ne sauvegarde pas les transcriptions, ne conservant entre les sessions que le travail en cours. <em>Ilya</em> est un outil savant actif destiné à la performance classique et à l'enseignement, pas un dépôt de transcriptions ni une maison d'édition.</p>
+
+						<h4>Pourquoi Ilya ne suit-il qu'une seule source ?</h4>
+
+						<p>Les origines d'<em>Ilya</em> ne sont pas aveugles à l'ensemble plus large des ressources en diction lyrique russe. Après avoir parcouru toute la littérature de diction lyrique russe à ses débuts, celle de Grayson était la seule ressource à centrer de manière satisfaisante l'attribution savante et la vérifiabilité par des tiers. D'autres sources reposent sur leur expérience pratique heuristique ou sur des connaissances reçues et une tradition orale et aurale, mais Grayson conçoit une mécanique finie pour ces transformations. C'est un pont qui donne à l'étudiant la capacité d'aborder n'importe quel texte cyrillique russe. L'ouvrage de Grayson était la seule source suffisamment robuste pour prioriser l'autonomie croissante de l'utilisateur, plutôt que de préconiser un modèle où l'utilisateur reste limité par la disponibilité de ressources imprimées donnant accès à un sous-ensemble fini du répertoire vocal russe. La méthode de Grayson permet à <em>Ilya</em> de traiter n'importe quel texte, produisant des résultats chantables dans un format que les étudiants en chant d'aujourd'hui sont formés à utiliser et à comprendre.</p>
+
+						<h4>Ilya est-il un outil d'IA ?</h4>
+
+						<p>Non. <em>Ilya</em> est fondé sur des règles, ce qui le rend déterministe : même entrée, même sortie, à chaque fois. La base de règles d'<em>Ilya</em> fonctionne que vous soyez connecté à l'internet ou non. C'est l'opérationnalisation de la thèse de Grayson, <em>Russian Lyric Diction</em> (University of Washington, 2012). Et en tant que moteur de transcription fondé sur des règles, les résultats d'<em>Ilya</em> seront toujours justifiables par une règle de diction lyrique russe méticuleusement citée, couverte dans le module LEARN.</p>
+
+						<h4>Quel est mon rôle en tant qu'utilisateur ?</h4>
+
+						<p>L'utilisateur est le créateur de la transcription. <em>Ilya</em> est l'outil avec lequel il la réalise. Les utilisateurs sont responsables de la vérification des accents toniques inconnus, de la désambiguïsation des homographes qui surviennent, de la sélection de leurs préférences de notation si elles divergent de celles que préconise Grayson, et de la décision de recourir à la réduction vocalique généralisée ou à la reconstitution pour les passages soutenus. Les utilisateurs apporteront les transcriptions réalisées avec <em>Ilya</em> à leurs séances de coaching et à leurs répétitions, d'où la version mobile, mais <em>Ilya</em> offre la meilleure expérience sur ordinateur de bureau pour une flexibilité maximale. Les transcriptions produites avec <em>Ilya</em> méritent une étude approfondie au fauteuil. Ce sont, très littéralement, des instructions chorégraphiques pour le tractus vocal. L'utilisateur est l'artiste qui les incarne.</p>
+
+						<h4>Quelles sont les limites d'Ilya ?</h4>
+
+						<p><em>Ilya</em> ne comprend pas le contexte, si bien que les gloses du dictionnaire pour les homographes paraissent parfois absurdes ou déroutantes. L'utilisateur résout cela en consultant la définition complète offerte dans le bloc de transcription d'analyse du tiroir et en sélectionnant une glose qui restitue le bon sens. <em>Ilya</em> ne peut pas vous empêcher d'imposer un accent tonique incorrect ou d'écraser de bonnes informations par de mauvaises. Il ne peut pas réorganiser la syntaxe de vers poétiques rendus obscurs par une traduction mot à mot. Et il ne peut pas préparer la сельдь под шубой, fort heureusement.</p>
+
+						<h4>Où va Ilya ?</h4>
+
+						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
+
+						{:else}
+						<h1>Guide</h1>
+
+						<h2 id="guide-how">How Ilya Works</h2>
+
+						<h4>What does Ilya do?</h4>
+
+						<p><em>Ilya</em> has twin purposes: to enable, and to educate.</p>
+
+						<p><em>Ilya</em> equips singers with verifiable, accurate IPA transcriptions of sung Russian texts, effectively removing the barrier imposed between classic Russian vocal repertoire and the body of non-native artists who would love to perform it. <em>Ilya</em> obviates a lack of literacy in Cyrillic, and dispels mystique by providing convenient, widespread access to how sung Russian is pronounced. <em>Ilya</em> automates transcriptions of Russian Cyrillic source texts into International Phonetic Symbols, following a method devised by Craig Grayson.</p>
+
+						<p><em>Ilya</em> also offers straightforward, third-party-verifiable lessons in how it does what it does. Users can progress through a series of sequenced lessons that explain in depth how <em>Ilya</em> arrives at familiar and unfamiliar output. The LEARN module is for users who appreciate the convenience <em>Ilya</em> provides, but who also seek a higher degree of independence and fluency with Cyrillic texts.</p>
+
+						<h4>What happens when I paste a Russian text?</h4>
+
+						<p><em>Ilya</em> does what we can learn to do manually, but much faster. It automatically updates and normalises spelling, looks up stress, decides how that stress affects surrounding vowels, applies consonant voicing and devoicing rules, offers a dictionary lookup for meaning, and outputs three rows of output formatted in familiar stacks: top line IPA, middle line Cyrillic source text, and bottom line minimal translation gloss. These transcriptions are worthy of inspection, yet still communicative at a glance. Users may export PDFs for use as hardcopies or to preserve for ongoing study. <em>Ilya</em> does not save transcriptions, retaining between sessions only current work that is underway. <em>Ilya</em> is an active scholarly tool designed to assist teachers and performing artists, not a publishing clearinghouse or transcription library.</p>
+
+						<h4>Why does Ilya follow only one source?</h4>
+
+						<p><em>Ilya</em>'s origins are not blind to the greater pool of Russian lyric diction resources. After searching the entire Russian lyric diction literature at its inception, Grayson's was the only resource to satisfactorily centre scholarly attribution and third-party verifiability. Other sources rest on their heuristic work experience or received knowledge and oral/aural tradition, but Grayson devises a finite mechanic for these transformations. It is a bridge that equips the student with the ability to access any Russian Cyrillic text. Grayson's work was the only source robust enough to prioritize the user's growing independence, rather than advocating a model where the user remains limited by the availability of print resources that unlock a finite subset of Russian vocal literature. Grayson's method allows <em>Ilya</em> to process any text at all, yielding singable results in a format that today's institutional voice students are trained to use and understand.</p>
+
+						<h4>Is Ilya an AI tool?</h4>
+
+						<p>No. <em>Ilya</em> is rule-based, which means it is deterministic: same input, same output, every time. <em>Ilya</em>'s rule base will work whether you are connected to the internet or not. It is the operationalization of Grayson's dissertation, <em>Russian Lyric Diction</em> (University of Washington, 2012). And as a rule-based transcription engine, <em>Ilya</em>'s output will always be justifiable through a meticulously cited rule of Russian lyric diction covered in the LEARN module.</p>
+
+						<h4>What is my role as the user?</h4>
+
+						<p>The user is the creator of the transcription. <em>Ilya</em> is the tool they make it with. Users are responsible for verifying unknown stress, for disambiguating homographs that arise, for selecting their notation preferences if they diverge from the ones Grayson advocates, and for deciding whether a passage will feature widespread vowel reduction or reconstitution for sustained passages. Users will bring the transcriptions they make with <em>Ilya</em> to their coaching sessions and rehearsals, so the tool has a mobile version, but <em>Ilya</em> is best experienced on desktop for the greatest flexibility. The transcriptions produced with <em>Ilya</em> are worthy of intense armchair study. These transcriptions are quite literally choreography instructions for the vocal tract. The user is the artist who embodies these instructions.</p>
+
+						<h4>What are Ilya's limitations?</h4>
+
+						<p><em>Ilya</em> cannot understand context, so sometimes dictionary glosses for homographs look absurd or confusing. The user solves this by investigating the full definition offered in the Drawer's Analysis Word Stack and selecting a gloss that conveys the right meaning. <em>Ilya</em> cannot stop you from imposing incorrect stress or overwriting good information with bad. It cannot reorganise the syntax of poetic lines garbled as word-for-word translations. And it cannot make сельдь под шубой, thank goodness.</p>
+
+						<h4>Where is Ilya headed?</h4>
+
+						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
+
+						{/if}
 					{/if}
 				{/snippet}
 			</ReadingPaper>
