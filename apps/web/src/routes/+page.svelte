@@ -1091,6 +1091,7 @@
 		display: flex;
 		flex: 1;
 		overflow: hidden;
+		background-color: #E5E7E3;
 	}
 	.main-content {
 		flex: 1;

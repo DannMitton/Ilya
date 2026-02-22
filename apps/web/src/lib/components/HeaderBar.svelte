@@ -62,10 +62,11 @@
 		background: var(--sage);
 	}
 
-	/* ── [Ilya] sigil: matches paper logo size ───────────── */
+	/* ── [Ilya] sigil: version nestled in y descender ─────── */
 
 	.sigil {
-		display: flex;
+		position: relative;
+		display: inline-flex;
 		align-items: baseline;
 		gap: 0;
 		user-select: none;
@@ -87,14 +88,16 @@
 	}
 
 	.sigil-version {
+		position: absolute;
+		top: 26px;
+		left: 34px;
 		font-family: var(--font-sans);
-		font-size: 14px;
-		color: rgba(255, 255, 255, 0.7);
-		font-weight: 400;
+		font-size: 10px;
+		color: rgba(255, 255, 255, 0.8);
+		font-weight: 600;
 		font-variant-caps: all-small-caps;
-		margin-left: 3px;
 		letter-spacing: 0.04em;
-		align-self: baseline;
+		line-height: 1;
 	}
 
 	/* ── Language toggle ─────────────────────────────────── */

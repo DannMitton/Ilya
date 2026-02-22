@@ -88,9 +88,11 @@
 		right: 96px;
 	}
 
-	/* ── Logo ──────────────────────────────────────────────── */
+	/* ── Logo: version nestled in y descender ──────────────── */
 
 	.logo {
+		position: relative;
+		display: inline-block;
 		margin-bottom: 8px;
 		margin-left: -6px;
 		color: var(--sage);
@@ -108,13 +110,16 @@
 	}
 
 	.logo-version {
+		position: absolute;
+		top: 21px;
+		left: 36px;
 		font-family: var(--font-sans);
-		font-size: 16px;
+		font-size: 12px;
 		color: var(--sage);
 		font-weight: 400;
 		font-variant-caps: all-small-caps;
-		margin-left: 3px;
 		letter-spacing: 0.04em;
+		line-height: 1;
 	}
 
 	/* ── Song title ────────────────────────────────────────── */
