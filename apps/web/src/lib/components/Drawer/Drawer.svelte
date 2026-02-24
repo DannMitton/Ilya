@@ -100,33 +100,28 @@
 								</button>
 								<ul class="toc-subsections">
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-rhythm')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Rythme accentuel' : 'Stress-timed rhythm'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-meaning')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'L\u2019accent change le sens' : 'Stress changes meaning'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-governing')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Principe directeur' : 'The governing principle'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-moves')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'L\u2019accent se d\u00e9place' : 'Stress moves'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-unpredictable')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Un accent impr\u00e9visible' : 'Unpredictable stress'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-dictionary')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Probl\u00e8me de dictionnaire' : 'A dictionary problem'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-homographs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Les homographes' : 'Homographs'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-sounds')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Comment l\u2019accent sonne' : 'How stress sounds'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-shifting')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'D\u00e9placement de l\u2019accent' : 'Shifting stress'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-role')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Le r\u00f4le d\u2019Ilya' : 'Ilya\u2019s role'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u2-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Essayez' : 'Try this'}
 										</button>
 									</li>
 								</ul>

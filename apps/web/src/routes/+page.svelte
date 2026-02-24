@@ -860,63 +860,74 @@
 
 						<p><em>Sources :</em> Craig M. Grayson, «&nbsp;Russian Lyric Diction&nbsp;» (thèse de doctorat, University of Washington, 2012), ch. 2, annexes B et D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya et Daniel Bunčić, «&nbsp;Russian,&nbsp;» <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
-						<h3 id="learn-unit-2">Unité 2 · L'accent tonique</h3>
+						<h3 id="learn-unit-2">Section 2 · L'accent tonique</h3>
 
-						<h4 id="learn-u2-rhythm">Rythme accentuel et l'avantage du chanteur</h4>
+						<p><strong>Ici, c'est l'accent qui gouverne chaque son.</strong></p>
 
-						<p>Le concept de types rythmiques linguistiques, proposé par Pike en 1945 et abondamment débattu depuis, repose sur une distinction binaire utile : les langues sont soit accentuelles, soit syllabiques. Cette dichotomie est simplifiée (les chercheurs peinent à en produire une preuve empirique constante, et certaines langues résistent à ces classifications nettes), mais elle demeure utile pour les chanteurs parce qu'elle met des mots sur des aspects du langage que nous percevons intuitivement sans toujours pouvoir les nommer.</p>
+						<p>En italien, l'accent tombe presque toujours sur la syllabe pénultième. En français, il se pose sur la dernière syllabe du groupe rythmique. Ni l'anglais ni le russe ne nous offrent cette régularité. L'accent tonique russe est lexical : il doit être appris mot par mot, vérifié mot par mot, et il peut se déplacer lorsqu'un mot change de forme grammaticale. C'est le fait le plus déterminant de la prononciation russe pour les chanteurs. Et c'est la raison pour laquelle <em>Ilya</em> intègre un dictionnaire de près d'un million d'entrées plutôt que de tenter de dériver l'accent à partir de règles.</p>
 
-						<p>Les langues syllabiques comme le français et le coréen accordent à leurs syllabes une durée théoriquement égale, ainsi qu'une réalisation de voyelles distinctes. Les mises en musique de textes en langues syllabiques exploitent cette égalité syllabique inhérente avec une exigence accrue de legato. C'est certainement plausible pour le français chanté et son célèbre style soutenu.</p>
+						<p>Selon la manière dont l'accent les affecte, nous pouvons classer les voyelles russes en trois catégories. Cette classification gouverne l'ensemble des Sections 3 et 4 :</p>
 
-						<p>Les langues accentuelles comme l'anglais, l'allemand et le russe fonctionnent différemment. L'intervalle entre les syllabes accentuées établit une pulsation rythmique dans laquelle les syllabes inaccentuées s'inscrivent. Cela produit deux effets que tout chanteur a déjà expérimentés dans le répertoire anglais et allemand : même dans les passages legato, les syllabes inaccentuées reçoivent moins d'intensité et d'engagement articulatoire que leurs homologues accentuées, et les voyelles inaccentuées subissent une réduction (centralisation) vers une qualité centralisée. Dans la parole, ces différences se manifestent par des contrastes de durée littéraux; dans le chant, le compositeur prescrit le rythme, mais le chanteur communique le poids de l'accent par des micro-ajustements intentionnels, ou automatiques, d'intensité et d'engagement articulatoire à l'intérieur des valeurs rythmiques écrites sur la page. Nous l'entendons dans l'anglais chanté « behold » <code>[bɪ.ˈhoʊld]</code>, où la première syllabe se réduit de <code>[i]</code> vers le <code>[ɪ]</code> plus central. Les deux syllabes inaccentuées de l'allemand chanté « gekommen » <code>[ɡə.ˈkɔm.mən]</code> sont effectivement des <em>schwa</em> réduits.</p>
+						<table>
+						<thead><tr><th>Catégorie</th><th>Voyelles</th><th>Comportement</th></tr></thead>
+						<tbody>
+						<tr><td>Non affectées par l'accent</td><td>/u/ (⟨у⟩ ou ⟨ю⟩), /i/ (⟨и⟩) et /ɨ/ (⟨ы⟩)</td><td>Qualité identique, accentuées ou non.</td></tr>
+						<tr><td>Accent uniquement</td><td>/o/ (⟨о⟩, ⟨ё⟩) et /ɛ/ (⟨э⟩, ⟨е⟩)</td><td>N'apparaissent que dans les syllabes accentuées. Sans accent, elles se réduisent à des sons entièrement différents.</td></tr>
+						<tr><td>Accent et position</td><td>/ɑ/ (⟨а⟩, ⟨я⟩)</td><td>La qualité varie selon l'accent et selon la position de la syllabe par rapport à l'accent.</td></tr>
+						</tbody>
+						</table>
 
-						<p>Le russe suit le même schéma, mais avec une systématisation plus poussée. Les voyelles accentuées du russe chanté reçoivent davantage d'intensité et d'engagement articulatoire. Les voyelles inaccentuées sont perceptuellement plus légères, subissant une réduction vocalique (centralisation) qui obéit à des règles positionnelles précises. Le mot хорошо (bien, bon) en est la démonstration par excellence : trois lettres ⟨о⟩ identiques, chacune prononcée différemment selon sa proximité avec l'accent tonique. Le ⟨о⟩ final accentué se chante <code>[o]</code>. Le ⟨о⟩ pénultième (immédiatement avant l'accent) se réduit en <code>[ɑ]</code>. Le ⟨о⟩ éloigné (deux syllabes avant l'accent) se réduit davantage en <code>[ʌ]</code>. La transcription complète est <code>[xʌ.ɑ.ˈʃo]</code>. Un seul mot, une seule lettre, trois sons, entièrement gouvernés par la proximité avec l'accent tonique.</p>
+						<p>Trois voyelles traversent l'accent sans être altérées. Deux n'existent que sous l'accent. Une répond à la fois à l'accent et à la distance qui l'en sépare. Ces catégories ne sont pas arbitraires; elles sont hiérarchiques, et la syllabe accentuée les gouverne.</p>
 
-						<p>Cette réduction en cascade relève de l'unité 6. Pour l'instant, le constat est plus simple : tant que l'on ne sait pas où tombe l'accent, on ne peut pas vraiment savoir comment la plupart des autres voyelles du mot se prononceront. Le russe comporte tout de même quelques indicateurs fiables d'accent et deux voyelles qui ne se réduisent jamais : nous les verrons dans les leçons suivantes.</p>
+						<h4 id="learn-u2-meaning">L'accent change le sens.</h4>
 
-						<h4 id="learn-u2-governing">L'accent tonique comme principe directeur</h4>
+						<p>Le russe possède de véritables homographes : des mots de graphie identique dont la prononciation et le sens changent selon la syllabe qui porte l'accent.</p>
 
-						<p>La syllabe accentuée est la cible. Tout le reste se rapproche d'elle ou s'en éloigne.</p>
+						<table>
+						<thead><tr><th>Mot</th><th>Position de l'accent</th><th>API</th><th>Sens</th></tr></thead>
+						<tbody>
+						<tr><td>⟨мука⟩</td><td>му́ка (première syllabe)</td><td><code>/ˈmu kɑ/</code></td><td>farine</td></tr>
+						<tr><td>⟨мука⟩</td><td>мука́ (deuxième syllabe)</td><td><code>/mu ˈkɑ/</code></td><td>tourment</td></tr>
+						<tr><td>⟨стоит⟩</td><td>сто́ит (première syllabe)</td><td><code>/ˈsto it/</code></td><td>coûte</td></tr>
+						<tr><td>⟨стоит⟩</td><td>стои́т (deuxième syllabe)</td><td><code>/stɑ ˈit/</code></td><td>se tient debout</td></tr>
+						<tr><td>⟨уже⟩</td><td>у́же (première syllabe)</td><td><code>/ˈu ʒɨ/</code></td><td>plus étroit</td></tr>
+						<tr><td>⟨уже⟩</td><td>уже́ (deuxième syllabe)</td><td><code>/u ˈʒɛ/</code></td><td>déjà</td></tr>
+						</tbody>
+						</table>
 
-						<p>Cette priorité n'est pas propre au russe. Les chanteurs formés au répertoire anglais et allemand reconnaîtront ce principe immédiatement. Ce qui distingue le russe (également une langue accentuelle) n'est pas ce mécanisme, mais ses conséquences : le degré auquel les voyelles inaccentuées changent de qualité en russe peut être radical. Néanmoins, ces transformations suivent une logique systématique.</p>
+						<p>Ce ne sont pas des cas marginaux. Les chanteurs rencontrent des homographes dans le répertoire courant, et un accent mal placé produit un autre mot. Dans ⟨мука⟩, l'accent détermine à lui seul si le chanteur déplore un tourment ou parle de pâtisserie.</p>
 
-						<p>Dans notre discussion du russe chanté, nous travaillons à l'intérieur d'un modèle simplifié qui pose au maximum une syllabe accentuée par mot russe. Cette syllabe accentuée peut aussi être appelée syllabe tonique. Toutes les autres syllabes du mot sont, par définition, inaccentuées. Cette simplification ne tient certes pas dans le russe standard contemporain (RSC) parlé. Les emprunts et les mots composés brouillent les contours de cette règle générale. Néanmoins, dans le russe chanté, c'est la distinction binaire entre accentué et inaccentué qui gouverne toute la cascade phonologique qui suit.</p>
+						<h4 id="learn-u2-moves">L'accent se déplace.</h4>
 
-						<p>Sachez où tombe l'accent.</p>
+						<p>Un même mot peut déplacer son accent d'une forme grammaticale à l'autre. Le substantif ⟨вода⟩ (eau) en offre un exemple :</p>
 
-						<h4 id="learn-u2-unpredictable">Un accent imprévisible</h4>
+						<table>
+						<thead><tr><th>Forme</th><th>Accent</th><th>API</th></tr></thead>
+						<tbody>
+						<tr><td>вода́ (nominatif singulier)</td><td>final</td><td><code>/vʌ ˈdɑ/</code></td></tr>
+						<tr><td>во́ды (génitif singulier)</td><td>initial</td><td><code>/ˈvo dɨ/</code></td></tr>
+						<tr><td>во́ду (accusatif singulier)</td><td>initial</td><td><code>/ˈvo du/</code></td></tr>
+						</tbody>
+						</table>
 
-						<p>Nous avons noté plus haut que le russe, comme l'anglais et l'allemand, est une langue accentuelle. Le contraste avec les langues syllabiques mérite qu'on s'y arrête. Dans le français chanté, chaque voyelle exprime sa valeur cardinale sans réduction. Le <em>schwa</em> français <code>[ə]</code> se distingue chez les langues chantées parce qu'il ne représente pas la réduction d'une voyelle autrement cardinale. C'est son propre phonème dans le français chanté, une cible vocalique distincte en soi. L'italien, tout simplement, ne possède pas de <em>schwa</em>, ni même le concept de voyelle réduite.</p>
+						<p>La voyelle ⟨о⟩ de la première syllabe sonne de manière tout à fait différente selon la forme rencontrée : <code>/ʌ/</code> lorsqu'elle est inaccentuée, <code>/o/</code> lorsqu'elle porte l'accent. Grayson identifie sept schémas d'accentuation distincts pour les seuls substantifs russes, auxquels s'ajoutent des schémas supplémentaires pour les verbes et leurs dérivés. Le chanteur n'a pas besoin de maîtriser cette grammaire. Il a besoin de savoir qu'elle existe, de sorte que lorsque l'accent d'un mot paraît inhabituel dans un cas oblique ou une forme conjuguée, le réflexe soit de vérifier plutôt que de deviner.</p>
 
-						<p>Le russe est une langue accentuelle. L'accent tonique en russe est imprévisible, tout comme il l'est en anglais. La position de l'accent doit s'apprendre soit par l'expérience, soit par confirmation auprès d'un locuteur russe natif fiable, soit en consultant un dictionnaire digne de confiance. L'accent russe peut tomber sur n'importe quelle syllabe d'un mot, et il se déplace fréquemment lorsque le même mot apparaît sous une forme grammaticale différente. De plus, une même orthographe peut présenter un sens et une prononciation quand l'accent tombe sur une syllabe, tandis que la même orthographe accentuée sur une autre syllabe communique un sens entièrement différent, une prononciation distincte et une étymologie convergente. Ces mots s'appellent des homographes, et ils sont courants dans les langues accentuelles comme dans les langues syllabiques. Nous y reviendrons dans la section suivante.</p>
+						<h4 id="learn-u2-dictionary">L'accent est un problème de dictionnaire.</h4>
 
-						<p>Cette volatilité explique pourquoi toutes les ressources de diction lyrique russe marquent l'accent. Ma comparaison de dix autorités en diction lyrique russe a montré une unanimité sur ce point : l'accent est suffisamment fondamental pour que chacune d'entre elles le marque, quoique selon des conventions différentes. Six utilisent le marqueur d'accent primaire de l'API <code>[ˈ]</code> positionné avant la syllabe accentuée. Trois (Cox, Olin et Richter) placent un accent aigu directement au-dessus de la voyelle accentuée, ce qui me semble être un indice visuel plus immédiat et intuitif pour les chanteurs. (C'est ce qui motive le choix d'offrir un marquage global par accent aigu des textes cyrilliques sources dans <em>Ilya</em>.) Une autorité en diction lyrique russe (McMaster) utilise un accent grave. Quoi qu'il en soit, la diversité de notation reflète une conviction partagée : sans accent, une transcription de russe chanté est incomplète et ne servira pas bien le chanteur.</p>
+						<p>Des schémas existent, certes, mais les exceptions sont si nombreuses qu'une attribution fiable de l'accent exige bel et bien la consultation d'un dictionnaire. C'est le conseil pratique de Grayson, et il valide la conception <em>d'Ilya</em> : le moteur résout l'accent par un dictionnaire de 943 096 entrées, et non par des règles de dérivation. Comme l'observe Baytukalov : «&nbsp;Believe me, it's a lot of rules&nbsp;» («&nbsp;Croyez-moi, les règles sont nombreuses&nbsp;»). La responsabilité du chanteur est de vérifier l'accent auprès d'une source fiable, et non nécessairement de mémoriser les règles qui le gouvernent.</p>
 
-						<p><em>Ilya</em> peut marquer l'accent au moyen de l'accent aigu combinant (◌́) placé au-dessus de la voyelle cyrillique accentuée du texte source, si vous choisissez cette option en l'activant dans la section Notation au bas du tiroir. Le marqueur d'accent de l'API est aussi le signal de confiance d'<em>Ilya</em> : il n'apparaît que sur les mots dont l'accent a été confirmé par le dictionnaire ou intentionnellement assigné par l'utilisateur. Les mots en attente de vérification ne portent aucun marquage d'accent, affichant plutôt un badge VERIFY en cadre pointillé, impossible à manquer. C'est un choix de conception délibéré : l'absence de marqueur d'accent signale une syllabe légitimement inaccentuée. La présence d'un badge VERIFY en cadre pointillé autour d'un bloc de transcription (les trois lignes superposées : API, cyrillique, glose) signifie l'incertitude, épargnant au chanteur une fausse confiance et attendant que l'utilisateur assigne une syllabe accentuée. Consultez donc un autre dictionnaire.</p>
+						<p>Lorsqu'<em>Ilya</em> rencontre un homographe, il sélectionne la première de plusieurs possibilités, qu'elle soit juste ou non. L'utilisateur doit choisir le bon homographe à l'aide d'indices contextuels ou d'une consultation externe. Lorsqu'<em>Ilya</em> rencontre un mot absent de son dictionnaire, il le signale pour attribution manuelle par un encadré À VÉRIFIER en pointillés. Dans les deux cas, le principe est le même : l'accent est trop déterminant pour être laissé à l'inférence.</p>
 
-						<h4 id="learn-u2-homographs">Pourquoi l'accent compte : les homographes</h4>
+						<h4 id="learn-u2-sounds">Comment l'accent sonne.</h4>
 
-						<p>Le mot мука démontre pourquoi l'accent n'est pas cosmétique. Accentué sur la première syllabe (му́ка), il signifie « tourment ». Accentué sur la deuxième syllabe (мука́), il signifie « farine ». L'orthographe est identique. Le sens est entièrement différent. Et parce que l'accent gouverne la réduction vocalique, la prononciation de chaque voyelle du mot change lorsque l'accent se déplace.</p>
+						<p>En chant, nous communiquons l'accent par l'intensité et l'engagement articulatoire, et non par la durée, qui nous est prescrite. Le compositeur écrit un rythme; le chanteur ne peut prolonger une syllabe accentuée au-delà de ce que la valeur de note permet. Mais même dans les passages legato où toutes les syllabes reçoivent un son soutenu, la syllabe accentuée porte un investissement physique plus grand : une voyelle plus engagée, une cible articulatoire plus nette, un noyau sonore plus brillant, et peut-être un peu plus d'intensité par comparaison avec les notes voisines. En russe chanté, les syllabes inaccentuées servent l'accent.</p>
 
-						<p>Le mot russe стоит est un autre exemple classique d'homographe. C'est la troisième personne du singulier au présent de deux verbes différents, « coûter » et « se tenir debout », selon la syllabe accentuée : « Сколько это сто́ит? (Combien cela coûte-t-il ?) » vs. « На столе стои́т ваза. (Un vase se tient sur la table.) »</p>
+						<h4 id="learn-u2-try">Essayez dans Ilya.</h4>
 
-						<p>Transcrivez стоит dans <em>Ilya</em> avec l'accent sur la première syllabe : le ⟨о⟩ accentué conserve sa pleine qualité <code>[o]</code>, le и inaccentué ne se réduit pas en règle générale. Déplacez maintenant l'accent sur la deuxième syllabe : le и est désormais accentué, tandis que le ⟨о⟩ se réduit en <code>[ɑ]</code>. La différence est audible, et le sens pivote sur ce seul choix phonologique.</p>
+						<p>Collez ⟨стоит⟩ dans l'onglet Transcription. Assignez l'accent à la première syllabe, puis à la deuxième. Observez le changement dans la ligne API. Les voyelles se transforment : non pas parce que les lettres ont changé, mais parce que l'accent seul s'est déplacé. Cette transformation est le sujet des Sections 3 et 4.</p>
 
-						<p>Les homographes ne sont pas de rares curiosités en russe. La langue en regorge. Lorsqu'<em>Ilya</em> rencontre un mot présentant plusieurs schémas d'accentuation possibles dans son dictionnaire, il sélectionne le premier parmi plusieurs. L'utilisateur doit exercer son jugement pour réassigner la lecture correcte au contexte poétique.</p>
+						<p><em>Source Grayson : ch. 7 (Syllabic Stress, pp. 263–273), ch. 2 (pp. 65–66). Baytukalov cité dans Grayson p. 273.</em></p>
 
-						<h4 id="learn-u2-shifting">Déplacement de l'accent selon les formes grammaticales</h4>
-
-						<p>Les homographes constituent le cas spectaculaire, mais une version plus discrète du même principe opère dans toute la langue. Les noms, verbes et adjectifs russes déplacent fréquemment leur accent lorsqu'ils changent de forme grammaticale. Le cas nominatif d'un nom peut accentuer une syllabe; le cas prépositionnel du même nom peut en accentuer une autre. Un verbe à l'infinitif peut porter l'accent sur une syllabe; sa forme féminine au passé peut le déplacer ailleurs.</p>
-
-						<p>Ce n'est pas un problème que le chanteur doit résoudre par la grammaire. C'est un problème dont le chanteur doit avoir conscience, parce qu'il signifie que reconnaître la racine d'un mot ne garantit pas de savoir où tombe son accent dans la forme parfois même archaïque que le poète a choisie. Le dictionnaire fait autorité. Lorsque le dictionnaire d'<em>Ilya</em> connaît la forme déclinée ou conjuguée précise, il fournit l'accent correct. Lorsqu'il ne connaît que la forme de base (le lemme), il signale le mot pour vérification. C'est une limitation honnête : l'accent morphologique russe est complexe, et aucun système fondé sur des règles ne peut prédire chaque cas. <em>Ilya</em> ne prétend pas le contraire.</p>
-
-						<h4 id="learn-u2-role">Le rôle d'Ilya</h4>
-
-						<p>Timour Baïtoukalov, le créateur de l'outil de transcription API russe en ligne easypronunciation.com, a écrit en correspondance personnelle que la construction de la base de données d'accents pour son excellent moteur de transcription du russe parlé avait exigé un travail considérable : constituer sa propre base à partir du dictionnaire de Zaliznyak, l'adapter à ses besoins, recenser tous les homographes, restaurer la lettre perdue « ё ». Sa conclusion, après avoir conçu l'algorithme de conversion en API : « Croyez-moi, c'est beaucoup de règles. »</p>
-
-						<p><em>Ilya</em> s'inspire de cette approche architecturale. Son dictionnaire, tiré de données Wiktionary et enrichi de corrections curatées, fournit les positions d'accent pour des centaines de milliers de mots russes. Le moteur applique ensuite les règles de Grayson pour dériver la transcription API correcte à partir de cette position d'accent. La tâche du chanteur est de vérifier que l'accent est correct pour le contexte poétique, lui permettant de faire un choix éclairé lorsque le dictionnaire propose des alternatives.</p>
-
-						<p>C'est pourquoi nous commençons ici. L'accent tonique n'est pas un sujet parmi d'autres. C'est le fondement sur lequel repose tout le système.</p>
 
 						<h3 id="learn-unit-3">Unité 3 · Les sons vocaliques</h3>
 
@@ -1181,63 +1192,74 @@
 
 						<p><em>Sources:</em> Craig M. Grayson, "Russian Lyric Diction" (D.M.A. dissertation, University of Washington, 2012), Ch. 2, Appendices B and D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya and Daniel Bunčić, "Russian," <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
-						<h3 id="learn-unit-2">Unit 2 · Stress</h3>
+						<h3 id="learn-unit-2">Section 2 · Stress</h3>
 
-						<h4 id="learn-u2-rhythm">Stress-timed rhythm and the singer's advantage</h4>
+						<p><strong>Every sound in this module depends on where the stress falls.</strong></p>
 
-						<p>The concept of linguistic rhythm types, first proposed by Pike in 1945 and subsequently debated in the literature, proposes a useful binary: languages are either stress-timed or syllable-timed. This fork in the road is much simplified (scholars have struggled to produce consistent empirical evidence to prove the dichotomy, and some languages resist these neat classification paths), but the construct remains useful for singers because it underwrites aspects of language that we intuit but may not have been able to name.</p>
+						<p>Stress in Italian almost always falls on the penultimate syllable. In French, it falls reliably on the final syllable. Like English, Russian offers no such courtesy. Stress in Russian is lexical: it must be learned word by word, verified word by word, and it can shift when the same word changes its grammatical form. This is the single most consequential fact about Russian pronunciation for singers. And it is the reason that <em>Ilya</em> incorporates a dictionary of nearly one million entries rather than attempting to derive stress from rules.</p>
 
-						<p>Syllable-timed languages like French and Korean give their syllables a theoretically equal duration, as well as distinct vowel realization without reduction. The musical text settings of syllable-timed languages exploit this inherent syllabic equality with a heightened imperative for legato. This certainly seems plausible for sung French and its style soutenu.</p>
+						<p>Based on how stress affects them, we can organize Russian vowels into three categories. This classification governs everything in Sections 3 and 4:</p>
 
-						<p>Stress-timed languages like English, German, and Russian work differently. The interval between stressed syllables establishes a rhythmic pulse that unstressed syllables fit themselves into. This leads to two effects that every singer has already experienced in English and German repertoire: even in legato passages, unstressed syllables carry less intensity and articulatory commitment than their stressed counterparts, and unstressed vowels undergo reduction (centralization) toward a centralised quality. In speech, these differences manifest as literal durational contrasts; in singing, the composer prescribes the rhythm, but the singer communicates the weight of stress through intentional, or automatic, micro-adjustments to intensity and articulatory engagement within the rhythmic values on the page. We hear this in the sung English "behold" <code>[bɪ.ˈhoʊld]</code>, where the first syllable reduces from <code>[i]</code> to the more central <code>[ɪ]</code>. Both unstressed syllables in the sung German "gekommen" <code>[ɡə.ˈkɔm.mən]</code> are effectively reduced <em>schwa</em>.</p>
+						<table>
+						<thead><tr><th>Category</th><th>Vowels</th><th>Behaviour</th></tr></thead>
+						<tbody>
+						<tr><td>Unaffected by stress</td><td>/u/ (⟨у⟩ or ⟨ю⟩), /i/ (⟨и⟩), and /ɨ/ (⟨ы⟩)</td><td>Same quality whether stressed or unstressed.</td></tr>
+						<tr><td>Stress-only</td><td>/o/ (⟨о⟩, ⟨ё⟩) and /ɛ/ (⟨э⟩, ⟨е⟩)</td><td>Appear only in stressed syllables. When unstressed, they reduce to different sounds entirely.</td></tr>
+						<tr><td>Stress-and-position</td><td>/ɑ/ (⟨а⟩, ⟨я⟩)</td><td>Quality varies by both stress and by the syllable's position relative to the stress.</td></tr>
+						</tbody>
+						</table>
 
-						<p>Russian follows the same pattern, but with greater systematisation. The stressed vowels in sung Russian receive greater intensity and articulatory engagement. The unstressed vowels are perceptually lighter, undergoing vowel reduction (centralization) that follows specific, positional rules. The word хорошо (good) is the textbook demonstration: three identical ⟨о⟩ letters, each being pronounced differently depending on its proximity to the stress. The stressed final ⟨о⟩ is sung as <code>[o]</code>. The penultimate ⟨о⟩ (immediately before the stress) reduces to <code>[ɑ]</code>. The remote ⟨о⟩ (two syllables before the stress) reduces further to <code>[ʌ]</code>. The full transcription is <code>[xʌ.ɑ.ˈʃo]</code>. One word, one letter, three sounds, entirely governed by proximity to stress.</p>
+						<p>Three vowels pass through stress unscathed. Two exist only under stress. One responds to both stress and distance from it. These categories are not arbitrary; they are hierarchical, and the stressed syllable governs them.</p>
 
-						<p>This cascading reduction is the domain of Unit 6. For now, the point is simpler: until you know where the stress falls, you cannot really know how most other vowels in the word will sound. Russian does feature a few surefire indicators of stress and two vowels that never reduce: we will see these in later lessons.</p>
+						<h4 id="learn-u2-meaning">Stress changes meaning.</h4>
 
-						<h4 id="learn-u2-governing">Stress as the governing principle</h4>
+						<p>Russian has true homographs: words spelled identically whose pronunciation and meaning change, depending entirely on which syllable carries the stress.</p>
 
-						<p>The stressed syllable is the target. Everything else moves toward or away from it.</p>
+						<table>
+						<thead><tr><th>Word</th><th>Stress position</th><th>IPA</th><th>Meaning</th></tr></thead>
+						<tbody>
+						<tr><td>⟨мука⟩</td><td>му́ка (first syllable)</td><td><code>/ˈmu kɑ/</code></td><td>flour</td></tr>
+						<tr><td>⟨мука⟩</td><td>мука́ (second syllable)</td><td><code>/mu ˈkɑ/</code></td><td>torment</td></tr>
+						<tr><td>⟨стоит⟩</td><td>сто́ит (first syllable)</td><td><code>/ˈsto it/</code></td><td>costs</td></tr>
+						<tr><td>⟨стоит⟩</td><td>стои́т (second syllable)</td><td><code>/stɑ ˈit/</code></td><td>stands</td></tr>
+						<tr><td>⟨уже⟩</td><td>у́же (first syllable)</td><td><code>/ˈu ʒɨ/</code></td><td>narrower</td></tr>
+						<tr><td>⟨уже⟩</td><td>уже́ (second syllable)</td><td><code>/u ˈʒɛ/</code></td><td>already</td></tr>
+						</tbody>
+						</table>
 
-						<p>This priority is not unique to Russian. Singers trained in English and German repertoire will recognise this principle immediately. What distinguishes Russian (also a stress-timed language) is not this mechanism, but its consequences: the degree to which unstressed vowels change their quality in Russian can be radical. Nevertheless, these transformations follow systematic logic.</p>
+						<p>These are not edge cases. Singers encounter homographs in standard repertoire, and the wrong stress produces the wrong word. In ⟨мука⟩, the stress determines whether the singer is lamenting torment or discussing baking.</p>
 
-						<p>In our discussion of sung Russian, we work within a simplified model that assumes one stressed syllable per Russian word, maximum. This stressed syllable can also be called the tonic syllable. All other syllables within the word are, by this definition, unstressed. Admittedly, this simplification does not hold in Contemporary Standard Russian (CSR) speech. Loanwords and compound words blur the boundaries of this blanket statement. Nevertheless, in sung Russian, it is the binary distinction between stressed and unstressed that governs the entire phonological cascade that follows.</p>
+						<h4 id="learn-u2-moves">Stress moves.</h4>
 
-						<p>Know where the stress falls.</p>
+						<p>The same word can shift its stress across grammatical forms. The noun ⟨вода⟩ (water) illustrates this:</p>
 
-						<h4 id="learn-u2-unpredictable">Unpredictable stress</h4>
+						<table>
+						<thead><tr><th>Form</th><th>Stress</th><th>IPA</th></tr></thead>
+						<tbody>
+						<tr><td>вода́ (nominative singular)</td><td>final</td><td><code>/vʌ ˈdɑ/</code></td></tr>
+						<tr><td>во́ды (genitive singular)</td><td>initial</td><td><code>/ˈvo dɨ/</code></td></tr>
+						<tr><td>во́ду (accusative singular)</td><td>initial</td><td><code>/ˈvo du/</code></td></tr>
+						</tbody>
+						</table>
 
-						<p>We noted above that Russian, like English and German, is stress-timed. The contrast with syllable-timed languages is worth pausing on. In sung French, each vowel expresses its cardinal value without reduction. The French <em>schwa</em> <code>[ə]</code> stands out among sung languages because it does not represent the reduction of an otherwise cardinal vowel. It is its own phoneme in sung French, itself a distinct vowel target. Italian simply does not have a <em>schwa</em>, nor the concept of a reduced vowel at all.</p>
+						<p>The vowel ⟨о⟩ in the first syllable sounds completely different depending on which form the singer encounters: <code>/ʌ/</code> when unstressed, <code>/o/</code> when stressed. Grayson identifies seven distinct stress patterns for Russian nouns alone, with additional patterns for verbs and their derivatives. The singer does not need to master this grammar. The singer needs to know that it exists, so that when a word's stress looks unfamiliar in an oblique case or a conjugated form, the instinct is to verify rather than to guess.</p>
 
-						<p>Russian is a stress-timed language. Syllabic stress in Russian is unpredictable, just as it is in English. The location of word stress must be learned either through experience, by confirmation with a reliable native Russian speaker, or by consulting a trustworthy dictionary. Russian stress may fall on any syllable of a word, and stress frequently shifts when the same word appears in a different grammatical form. Further, one spelling may exhibit one meaning and pronunciation when stressing one syllable, while the same spelling stressed on another syllable communicates a completely different meaning, distinctive pronunciation, and convergent etymology. These words are called homographs, and they are common in both stress-timed and syllable-timed languages. More on this in the next section.</p>
+						<h4 id="learn-u2-dictionary">Stress is a dictionary problem.</h4>
 
-						<p>This volatility is the reason that every Russian lyric diction resource marks stress. My comparison of ten Russian lyric diction authorities showed unanimous agreement on this point: stress is fundamental enough that each one of them marks it, though they do so using differing conventions. Six of them use the IPA primary stress marker <code>[ˈ]</code> positioned before the stressed syllable. Three (Cox, Olin, and Richter) place an acute diacritic directly over the stressed vowel, which seems to me to be a more immediate and intuitive visual cue for singers. (This drives the choice to offer global acute markings for Cyrillic source texts in <em>Ilya</em>.) One Russian Lyric Diction authority (McMaster) uses a grave diacritic. Regardless, the diversity of notation reflects a shared conviction: without stress, a transcription of sung Russian is incomplete and will not serve the singer well.</p>
+						<p>Patterns do exist, but the exceptions are so numerous that reliable stress assignment really does require dictionary lookup. This is Grayson's practical counsel, and it validates <em>Ilya's</em> design: the engine resolves stress through a dictionary of 943,096 entries, not through derivational rules. As Baytukalov observes: "Believe me, it's a lot of rules." The singer's responsibility is to verify stress from a reliable source, not to memorise the rules that govern it.</p>
 
-						<p><em>Ilya</em> can mark stress with the combining acute accent (◌́) placed above the stressed Cyrillic source text vowel if you choose that option by toggling it in the Notation section at the bottom of the Drawer. The IPA stress mark is also <em>Ilya</em>'s confidence signal: it appears only on words whose stress has been confirmed by the dictionary or intentionally assigned by the user. Words awaiting verification carry no stress marking, instead featuring an unmistakeable dashed-line box VERIFY badge. This is a deliberate design choice: the absence of a stress mark communicates a legitimately unstressed syllable. The presence of a dashed-line box VERIFY badge around a word stack signifies uncertainty, sparing the singer from false confidence and awaiting user assignment of a stressed syllable. So consult another dictionary.</p>
+						<p>When <em>Ilya</em> encounters a homograph, it selects the first of several possibilities, whether it is right or wrong. The user must select the right homograph through context clues or outside counsel. When <em>Ilya</em> encounters a word not in its dictionary, it flags the word for manual assignment with a dashed-line VERIFY box. In both cases, the principle is the same: stress is too consequential to leave to inference.</p>
 
-						<h4 id="learn-u2-homographs">Why stress matters: homographs</h4>
+						<h4 id="learn-u2-sounds">How stress sounds.</h4>
 
-						<p>The word мука demonstrates why stress is not cosmetic. With stress on the first syllable (му́ка), it means "torment." With stress on the second syllable, (мука́) means "flour." The spelling is identical. The meaning is entirely different. And because stress governs vowel reduction, the pronunciation of every vowel in the word changes when the stress moves.</p>
+						<p>In singing, we communicate stress through intensity and articulatory commitment, not through duration, which is prescribed. The composer writes a rhythm; the singer cannot lengthen a stressed syllable beyond what the note value permits. But even in legato passages where all syllables receive sustained tone, the stressed syllable carries greater physical investment: a more committed vowel, a clearer articulatory target, a brighter core to the sound, and perhaps a little more intensity by comparison to adjacent notes. In sung Russian, the unstressed syllables serve the stress.</p>
 
-						<p>The Russian word стоит is another classic example of a homograph. It is the third-person singular present tense form of two different verbs "to cost" and "to stand", depending on which syllable is stressed: "Сколько это сто́ит? (How much does this cost?)" vs. "На столе стои́т ваза. (A vase is standing/sitting on the table.)"</p>
+						<h4 id="learn-u2-try">Try this in Ilya.</h4>
 
-						<p>Transcribe стоит in <em>Ilya</em> with first-syllable stress: the stressed ⟨о⟩ preserves its full <code>[o]</code> quality, the unstressed и as a rule does not reduce. Now shift the stress to the second syllable: the и is now stressed, while the ⟨о⟩ reduces to <code>[ɑ]</code>. The difference is audible, and the meaning pivots on that single phonological choice.</p>
+						<p>Paste ⟨стоит⟩ into the Transcription tab. Assign stress to the first syllable, then to the second. Watch the IPA line change. The vowels transform: not because the letters changed, but because the stress moved. That transformation is the subject of Sections 3 and 4.</p>
 
-						<p>Homographs are not rare curiosities in Russian. The language is full of them. When <em>Ilya</em> encounters a word with multiple possible stress patterns in its dictionary, it selects the first one among potentially several. The user must use their judgment to reassign the correct reading for the poetic context.</p>
+						<p><em>Grayson source: Ch. 7 (Syllabic Stress, pp. 263–273), Ch. 2 (pp. 65–66). Baytukalov cited in Grayson p. 273.</em></p>
 
-						<h4 id="learn-u2-shifting">Shifting stress across grammatical forms</h4>
-
-						<p>Homographs are the dramatic case, but a quieter version of the same principle operates throughout the language. Russian nouns, verbs, and adjectives frequently shift their stress when they change grammatical form. The nominative case of a noun may stress one syllable; the prepositional case of the same noun may stress another. A verb in the infinitive may carry stress on one syllable; its past tense feminine form may shift it elsewhere.</p>
-
-						<p>This is not a problem the singer needs to solve through grammar. It is a problem the singer needs to be aware of, because it means that recognising a word's root does not guarantee knowing where its stress falls in the sometimes even archaic form the poet has chosen. The dictionary is the authority. When <em>Ilya</em>'s dictionary knows the specific declined or conjugated form, it provides the correct stress. When it knows only the base form (the lemma), it flags the word for verification. This is an honest limitation: Russian morphological stress is complex, and no rule-based system can predict every case. <em>Ilya</em> does not pretend otherwise.</p>
-
-						<h4 id="learn-u2-role">Ilya's role</h4>
-
-						<p>Timur Baytukalov, the creator of the online Russian IPA transcription tool easypronunciation.com, wrote in personal correspondence that building the stress database for his excellent speech-based transcription engine required enormous labour: "for stress position in Russian words I created my own database from the dictionary by Zaliznyak... but it took me a lot of time to adopt it to my needs: to find all homographs, recover the lost letter 'ё', etc. I... create an algorithm that converts the text (with stressed vowels) into IPA. Believe me, it's a lot of rules."</p>
-
-						<p><em>Ilya</em> is inspired by this architectural approach. Its dictionary, drawn from Wiktionary data and enriched with curated corrections, provides stress positions for hundreds of thousands of Russian words. The engine then applies Grayson's rules to derive the correct IPA transcription from that stress position. The singer's task is to verify that the stress is correct for the poetic context, allowing them to make an informed choice when the dictionary offers alternatives.</p>
-
-						<p>This is why we begin here. Stress is not one topic among many. It is the foundation on which the entire system rests.</p>
 
 						<h3 id="learn-unit-3">Unit 3 · The Vowel Sounds</h3>
 
