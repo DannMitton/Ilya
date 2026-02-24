@@ -169,6 +169,54 @@
 		margin-top: 0.5rem;
 	}
 
+	/* ── Tables ────────────────────────────────────────────── */
+
+	.reading-inner :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 0.95rem;
+		color: var(--ink-primary, #1a1612);
+		margin: 1.5rem 0;
+	}
+
+	.reading-inner :global(thead) {
+		border-bottom: 2px solid var(--stone-300, #d6d3d1);
+	}
+
+	.reading-inner :global(th) {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--ink-secondary, #4a4540);
+		text-align: left;
+		padding: 0.5rem 0.75rem;
+		white-space: nowrap;
+	}
+
+	.reading-inner :global(td) {
+		padding: 0.4rem 0.75rem;
+		border-bottom: 1px solid var(--stone-200, #e7e5e4);
+		line-height: 1.5;
+		vertical-align: top;
+	}
+
+	.reading-inner :global(tbody tr:hover) {
+		background: rgba(139, 154, 125, 0.04);
+	}
+
+	/* IPA cells: monospace for clarity */
+	.reading-inner :global(td code),
+	.reading-inner :global(th code) {
+		font-family: var(--font-mono, 'Source Code Pro', monospace);
+		font-size: 0.9em;
+		background: rgba(139, 154, 125, 0.1);
+		padding: 0.1em 0.3em;
+		border-radius: 2px;
+	}
+
 	/* ── Responsive ────────────────────────────────────────── */
 
 	@media (max-width: 767px) {
@@ -184,6 +232,18 @@
 
 		.reading-inner :global(h2) {
 			font-size: 1.15rem;
+		}
+
+		.reading-inner :global(table) {
+			display: block;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		.reading-inner :global(th),
+		.reading-inner :global(td) {
+			padding: 0.35rem 0.5rem;
+			font-size: 0.85rem;
 		}
 	}
 </style>

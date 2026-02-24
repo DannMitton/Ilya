@@ -668,53 +668,197 @@
 
 						<p>Le module est organisé en sept unités qui suivent un principe directeur unique : découvrir les sons d'abord, puis apprendre ce qui leur arrive.</p>
 
-						<h3 id="learn-unit-1">Unité 1 · Orientation</h3>
 
-						<h4 id="learn-u1-alphabet">La Chanson de l'alphabet russe</h4>
+						<h3 id="learn-unit-1">Section 1 · Les lettres</h3>
 
-						<p>Commençons par une chanson. Ken Griffiths était mon coach à Tanglewood à l'été de 1999, et la Chanson de l'alphabet russe qu'il m'a fait découvrir demeure le point d'entrée le plus accessible que je connaisse. Précisons que les enfants russes n'apprennent pas cette chanson; ils mémorisent l'alphabet cyrillique par répétition. Mais pour nous, apprenants non russophones, cette mise en musique (empruntée à une chanson à boire russe traditionnelle) sert à nous présenter les trente-trois lettres de l'alphabet cyrillique moderne. La chanson s'achève par une coda dont le sens est à peu près « Pour parler russe, il faut apprendre l'alphabet! » Avant toute complexité phonologique, vous aurez les trente-trois lettres fermement en tête, avec leurs noms.</p>
+						<p>Le russe standard contemporain (RSC) utilise trente-trois lettres. On rencontre parfois quatre caractères supplémentaires, aujourd'hui obsolètes, dans les partitions anciennes ; ceux-ci ont été abandonnés lors de la réforme orthographique de 1918. C'est là tout le système, et à la fin de cette section vous aurez fait connaissance avec chacun de ses membres.</p>
 
-						<p>Quelques-uns de ces noms méritent une attention particulière d'emblée. Les consonnes suivent un schéma prévisible : la plupart sont nommées en associant le son consonantique à <code>[ɛ]</code> (comme dans <code>[bɛ]</code>, <code>[vɛ]</code>, <code>[dɛ]</code>), tandis qu'un groupe plus restreint inverse l'ordre et place <code>[ɛ]</code> devant la consonne (<code>[ɛl]</code>, <code>[ɛm]</code>, <code>[ɛn]</code>, <code>[ɛr]</code>, <code>[ɛs]</code>, <code>[ɛf]</code>). Cela relève de la convention. Ce qui est moins conventionnel, parce qu'aucune source imprimée ne le mentionne, concerne le comportement de certaines voyelles prononcées isolément. Lorsque la lettre ⟨о⟩ est prononcée seule ou lorsqu'elle apparaît en fin de mot sous l'accent, elle se termine par un léger <em>offglide</em> (détente vocalique) : <code>[oːʌ̯]</code>. De même, lorsque ⟨ы⟩ (le i vélaire) est en position finale, il glisse vers <code>[i]</code> : <code>[ɨːi̯]</code>. J'ai observé que de nombreux locuteurs natifs russes produisent ces glissements de manière inconsciente, tout en niant qu'ils le font. Ces <em>offglides</em> ne sont jamais notés dans les transcriptions API pour chanteurs, mais je les enseigne comme partie intégrante d'une prononciation naturelle et idiomatique.</p>
+						<p>Commençons par une chanson.</p>
 
-						<p>L'alphabet cyrillique russe moderne compte trente-trois lettres. Dix d'entre elles sont des voyelles, mais pour nos besoins ces dix voyelles sont nos cinq allophones familiers /a e i o u/ déclinés en deux séries : une série « dure » et une série « molle ». Les consonnes russes sont au nombre de vingt et une. Enfin, deux lettres russes ne sonnent pas du tout : ces signes muets sont le signe dur (⟨ъ⟩, <em>tvyordyĭ znak</em>) et le signe mou (⟨ь⟩, <em>myagkiĭ znak</em>). Nous explorerons les fonctions de ces signes à l'Unité 4. Les chanteurs travaillant à partir de partitions publiées avant 1917 rencontreront quatre caractères supplémentaires (⟨ѣ⟩, ⟨і⟩, ⟨ѵ⟩, ⟨ѳ⟩), rendus obsolètes par des réformes orthographiques historiques. On peut simplement les remplacer par leurs équivalents modernes, et <em>Ilya</em> le fait automatiquement pour vous.</p>
+						<h4 id="learn-u1-song">La chanson de l'alphabet russe</h4>
 
-						<h4 id="learn-u1-italian">L'italien et le russe : un socle commun</h4>
+						<blockquote><p><em>[Image de la partition : Chanson de l'alphabet russe occidentalisée de Ken Griffiths, arr. Dann Mitton 2017. Voix de basse, si bémol majeur, Moderato (♩ = 72). Présentée sur fond blanc aux proportions Letter (8,5 × 11 po) avec marges standard.]</em></p></blockquote>
 
-						<p>La plupart des chanteurs classiques abordent les mélodies et vocalises italiennes tôt dans leurs études, parce que l'italien chanté emploie un inventaire de sept sons vocaliques cardinaux d'une grande simplicité : <code>[i e ɛ a ɔ o u]</code>. L'inventaire vocalique du russe chanté, quant à lui, comprend dix phonèmes (un nombre qui ne correspond pas aux dix lettres orthographiques, bien que la coïncidence soit frappante). Cet inventaire consolide un seul allophone de /o/, mais englobe les voyelles italiennes en y ajoutant quatre sons : <code>[ɪ ɨ ɑ ʌ]</code>. La ressemblance n'est pas fortuite. La Russie a directement injecté les pratiques du <em>bel canto</em> dans son école de chant solo en important compositeurs, chanteurs et professeurs de chant italiens au XVIIIe siècle. Le russe magistralement chanté présente en conséquence une qualité à l'italienne : une prédilection pour les voyelles musicalement étirées (ce qui risque de surprendre pour une langue slave), le legato et la beauté du timbre hérités de ces influenceurs italiens. Un vieil adage, souvent répété au conservatoire, résume cette parenté : « Pour sonner russe, chantez à l'italienne. »</p>
+						<p>Les enfants russes apprennent l'alphabet cyrillique par cœur. Cette chanson de l'alphabet russe est une construction occidentalisée sur la mélodie d'une chanson à boire traditionnelle. Elle présente les trente-trois lettres dans leur ordre du dictionnaire, chacune chantée sur son nom russe. La phrase finale offre ce conseil pragmatique : «&nbsp;Pour parler russe, il faut apprendre l'alphabet&nbsp;!&nbsp;» Chantez-la une ou deux fois dans la tonalité qui vous convient le mieux et vous aurez déjà la séquence sous les doigts.</p>
 
-						<p>Les parallèles ne s'arrêtent pas là. Ni l'italien ni le russe n'emploient de voyelles nasales. Vous qui êtes formés en diction française, vous apprécierez ce que cela implique : l'absence de nasalité s'accorde avec l'objectif classique de maintenir le port nasal scellé par un voile du palais constamment relevé. Ni l'un ni l'autre n'emploie de voyelles rhotiques (colorées par le /r/). Les deux langues reposent sur un équilibre constant de pression sous-glottique (le classique <em>appoggio</em> de la technique <em>bel canto</em>) associé à un flux soutenu de tonalité vibrante (<em>filare la voce</em>) pour maintenir le legato. En termes pratiques, le chanteur qui a intériorisé les coordinations physiques de l'italien chanté possède déjà un avantage considérable, ayant acquis bon nombre des coordinations que le russe chanté exige.</p>
+						<h4 id="learn-u1-before">Avant de commencer</h4>
 
-						<p>En 2018, la pédagogue réputée Janice Chapman a observé que les chanteurs italiens bénéficient de ce qu'elle appelle un « <em>marvellous advantage</em> » (un avantage merveilleux) : le réglage lingual de leur langue maternelle est plus élevé et plus reculé que celui de l'anglais ou de l'allemand, ce qui place le chanteur sur un flux d'air soutenu, avec une langue haute, un voile du palais relevé et un larynx abaissé simultanément. Chapman décrit cela comme « <em>the resonant sweet spot</em> » et comme « <em>a sort of pivot point for all the vowels to hang from</em> » (un point pivot autour duquel toutes les voyelles s'organisent). Le russe partage certains aspects de cet avantage. Le « point pivot » que Chapman décrit porte un nom : c'est la <em>base d'articulation</em>.</p>
+						<p>Quelques éléments utiles avant d'entrer dans le vif du sujet.</p>
 
-						<h4 id="learn-u1-basis">La base d'articulation</h4>
+						<p><strong>Vous lisez déjà l'API.</strong> <em>Ilya</em> part du principe que vous avez travaillé avec l'Alphabet phonétique international dans au moins une autre langue chantée. Si vous savez déjà lire une transcription de diction lyrique italienne, française ou allemande, vous possédez la plupart des outils nécessaires. Le russe n'ajoute qu'un petit nombre de symboles qui vous seront nouveaux. Nous les explorons sous peu.</p>
 
-						<p>La base d'articulation est un concept linguistique qui fonctionne comme une position de référence propre à chaque langue. Les linguistes l'associent à la posture et aux réglages par défaut du conduit vocal durant les pauses et les voyelles d'hésitation (le « euh... » du français, le « uh... » de l'anglais). Pour le chant, la base d'articulation est l'endroit où repose la masse linguale et la configuration par défaut du conduit vocal lorsque le chanteur expérimenté se prépare à chanter dans chaque langue.</p>
+						<p><strong>La diction lyrique est un registre stylisé.</strong> Le public russe attend un certain degré d'artifice dans le chant et la déclamation poétique. Tout comme chanter «&nbsp;dew&nbsp;» en <code>[djuː]</code> ne correspond pas à la prononciation courante chez la plupart des anglophones, ou que prononcer chaque e caduc en conversation courante sonnerait affecté en français, le russe chanté impose certaines prononciations stylisées. Le russe chanté n'est pas le russe conversationnel. La diction lyrique russe occupe un registre élevé : plus précis que la parole, façonné par les exigences de la production vocale soutenue et non amplifiée, et ancré dans la tradition de prononciation littéraire et scénique. La thèse de doctorat du Dr. Craig Grayson, <em>Russian Lyric Diction</em> (2012), décrit ce registre d'une manière systématique, et <em>Ilya</em> met en œuvre son travail pour vous. Lorsque vous voyez un symbole API dans <em>Ilya</em>, il reflète le style de notation de Grayson. Lorsque vous le rencontrez dans sa thèse, il signifie la même chose. Voilà notre promesse.</p>
 
-						<p>Beatrice Honikman, dans son essai fondateur de 1964 intitulé « Articulatory Settings », décrit cette posture comme « <em>the gross oral posture and mechanics, both external and internal, requisite as a framework for the comfortable, economic and fluent merging and integrating of the isolated sounds into that harmonious, cognizable whole which constitutes the established pronunciation of a language</em> » (la posture orale globale et la mécanique, tant externe qu'interne, nécessaires pour la fusion confortable, économique et fluide des sons isolés en un tout harmonieux et reconnaissable qui constitue la prononciation établie d'une langue). Elle compare le concept à des vitesses mécaniques. Honikman rapporte une anecdote de son enseignement : elle demandait à ses étudiants « <em>Are you in English gear?</em> » (« Êtes-vous en réglage anglais? »), et lorsqu'elle les entendait glisser vers un accent étranger, elle remarquait : « <em>You're out of gear</em> » (« Vous avez perdu le réglage »). Il convient de noter que l'essai influent d'Honikman s'insère curieusement dans un recueil dédié au russophile Daniel Jones, dont les propres travaux étaient entièrement étrangers au sujet. De surcroît, Honikman ne cite aucune référence corroborante : chaque note de fin est explicative, non référentielle. Peut-être cela donne-t-il l'impression qu'elle improvise sur ses considérables expériences empiriques de l'allemand, de l'anglais, du français, du russe, du turc et de plusieurs autres langues. Le concept demeure contesté parmi les linguistes; Heinrich affirme qu'il est impossible à vérifier instrumentalement. Pourtant, Gick, Wilson, Koch et Cook (2004) fournissent les premières preuves instrumentales, mesurant des différences propres à chaque langue en cinq points du conduit vocal chez des locuteurs anglophones et francophones. Et comme Kedrova et Borissoff l'ont observé en 2013, si l'intérêt des linguistes occidentaux pour la base d'articulation a diminué, chez les linguistes russes il est toujours resté un concept viable et attractif, notamment dans l'enseignement de la phonétique et de la typologie des langues.</p>
+						<p><strong>Les règles décrivent ce que fait le russe.</strong> Tout au long de LEARN, nous présentons les règles non comme des lois capricieuses à mémoriser, mais comme des descriptions synthétisées du comportement du russe : comment les mots subissent certaines transformations dans certains contextes. Nous nommons et décrivons ces transformations, nous vous offrons des exemples, et nous vous dirigeons vers <em>Ilya</em> pour que vous puissiez les observer en temps réel avec du vrai texte. Les règles sont des motifs à reconnaître, non des lois arbitraires à appliquer.</p>
 
-						<p>Parmi la constellation des réglages articulatoires, la base d'articulation d'une langue peut être associée à l'un de trois réglages linguaux généralisés : avancé (la masse linguale se tient en avant, comme en français), neutre (la langue est centralisée), ou rétracté (la langue se tient en arrière, comme en anglais nord-américain). Vous qui parlez français connaissez déjà intimement le réglage avancé : c'est la posture que votre langue adopte par défaut. Le russe, lui, présente une base d'articulation neutre : la masse linguale n'est ni avancée ni rétractée. Elle est centralisée. Mais ce qui rend le russe exceptionnel, c'est que sa base d'articulation neutre se manifeste en deux versions alternantes : une configuration non frontée (pour les sons non palatalisés) et une variation frontée (pour les sons palatalisés). Nous y reviendrons à l'Unité 5.</p>
+						<h4 id="learn-u1-alphabet">L'alphabet</h4>
 
-						<p>C'est ici que le lien avec le chant classique devient direct, et qu'un argument technique en faveur du russe chanté commence à se dessiner. Les travaux de Skalozub en cinématographie aux rayons X dans les années 1960 et 1970 montrent que les deux versions de la base d'articulation russe présentent un conduit vocal ouvert par défaut, contrairement aux autres langues examinées dans ses travaux. Cela correspond à l'idéal classique de la <em>gola aperta</em> (la « gorge ouverte »). En tant que posture pré-phonatoire, cette correspondance s'harmonise remarquablement avec la pédagogie vocale classique.</p>
+						<p>Le tableau ci-dessous présente les trente-trois lettres russes modernes dans leur ordre alphabétique standard, ainsi que les quatre lettres obsolètes d'avant 1918. Chaque lettre comporte son nom russe, sa catégorie sonore (voyelle, consonne ou signe) et un ancrage API de base : le son par défaut que cette lettre représente avant l'application de toute transformation contextuelle. Pour les voyelles, il s'agit de leur valeur cardinale accentuée. Pour les consonnes, il s'agit généralement de leur forme non palatalisée (ou «&nbsp;dure&nbsp;») par défaut, avec quelques exceptions mémorables.</p>
 
-						<p>Deux autres postures orales inhérentes au russe sont également des caractéristiques recherchées par la technique vocale classique. La langue reculée de la voyelle sombre <code>[ɑ]</code>, prédominante en russe chanté, présente une masse linguale centralisée reposant plus bas dans la bouche, favorisant un larynx bas et stable. La version frontée, activée par la palatalisation et la voyelle <code>[i]</code> (fréquente en russe), exige une langue frontée qui s'inscrit dans une stratégie de résonateur convergent. Lorsque la masse linguale avance, le reste de la langue doit suivre, dégageant le pharynx et créant un plus grand espace de résonance. Borissoff le résume ainsi : « <em>the Russian basis of articulation allows to produce both palatalised and non-palatalised sounds while the retracted centering of the English basis of articulation significantly restricts palatalisation</em> ». Autrement dit, le russe offre au chanteur les deux configurations que la technique classique recherche : une posture détendue à larynx bas et un résonateur convergent à gorge ouverte. Les deux peuvent alterner naturellement selon les exigences de la langue.</p>
+						<p>Les sections 2 à 7 enseignent ce que le russe fait à ces sons en contexte : comment l'accent modifie les voyelles, comment les consonnes «&nbsp;s'adoucissent&nbsp;» (ou se <em>palatalisent</em>) devant certaines lettres, et comment les sons influencent leurs voisins au-delà des frontières de mots. Pour l'instant, faisons connaissance avec les lettres alphabétiques et leurs identités les plus fondamentales telles qu'elles s'appliquent au russe chanté.</p>
 
-						<p>Les chanteurs qui apprennent à centraliser leurs articulateurs pour le russe chanté constateront vraisemblablement moins de tension ambiante et une plus grande aisance dans la production vocale. Lorsque les articulateurs sont plus libres de se détendre de manière constructive, l'os hyoïde peut descendre, permettant au larynx de se stabiliser en position basse, en accord avec la base d'articulation neutre. Ces gains techniques sont peut-être transférables à un chant efficace dans d'autres langues. Vous connaissez déjà quatre « réglages ». Le russe en introduit un cinquième, et c'est un réglage qui s'harmonise avec vos objectifs techniques.</p>
+						<table>
+						<thead><tr><th>#</th><th>Lettre</th><th>Nom</th><th>Catégorie</th><th>Ancrage</th><th>Notes</th></tr></thead>
+						<tbody>
+						<tr><td>1</td><td><strong>А а</strong></td><td>а <code>[ɑ]</code></td><td>voyelle</td><td><code>[ɑ]</code></td><td>Voyelle ouverte postérieure. Le chanteur la connaît du français.</td></tr>
+						<tr><td>2</td><td><strong>Б б</strong></td><td>бэ <code>[bɛ]</code></td><td>consonne</td><td><code>[b]</code></td><td>Occlusive bilabiale voisée.</td></tr>
+						<tr><td>3</td><td><strong>В в</strong></td><td>вэ <code>[vɛ]</code></td><td>consonne</td><td><code>[v]</code></td><td>Fricative labiodentale voisée. Ressemble au B latin ; se prononce comme V.</td></tr>
+						<tr><td>4</td><td><strong>Г г</strong></td><td>гэ <code>[gɛ]</code></td><td>consonne</td><td><code>[ɡ]</code></td><td>Occlusive vélaire voisée.</td></tr>
+						<tr><td>5</td><td><strong>Д д</strong></td><td>дэ <code>[dɛ]</code></td><td>consonne</td><td><code>[d]</code></td><td>Occlusive dentale voisée. Le <code>[d]</code> russe est dental, non alvéolaire.</td></tr>
+						<tr><td>6</td><td><strong>Е е</strong></td><td>е <code>[jɛ]</code></td><td>voyelle</td><td><code>[jɛ]</code></td><td>Voyelle iotée. Après une consonne, le <code>[j]</code> est absorbé sous forme de palatalisation de cette consonne.</td></tr>
+						<tr><td>7</td><td><strong>Ё ё</strong></td><td>ё <code>[jo]</code></td><td>voyelle</td><td><code>[jo]</code></td><td>Voyelle iotée. Toujours accentuée : la seule voyelle prévisible du russe. Souvent imprimée sans son tréma.</td></tr>
+						<tr><td>8</td><td><strong>Ж ж</strong></td><td>жэ <code>[ʒɛ]</code></td><td>consonne</td><td><code>[ʒ]</code></td><td>Fricative postalvéolaire voisée. Toujours dure : ne se palatalise jamais.</td></tr>
+						<tr><td>9</td><td><strong>З з</strong></td><td>зэ <code>[zɛ]</code></td><td>consonne</td><td><code>[z]</code></td><td>Fricative dentale voisée.</td></tr>
+						<tr><td>10</td><td><strong>И и</strong></td><td>и <code>[i]</code></td><td>voyelle</td><td><code>[i]</code></td><td>Voyelle fermée antérieure. Identique en italien, en français, en allemand et en diction lyrique anglaise.</td></tr>
+						<tr><td>11</td><td><strong>Й й</strong></td><td>и краткое <code>[ˈkrɑt kʌ jɛ]</code></td><td>consonne</td><td><code>[j]</code></td><td>La glissante palatale. Les Russes considèrent le «&nbsp;i bref&nbsp;» comme une consonne palatalisée, contrairement à son statut de semi-voyelle en anglais et en français.</td></tr>
+						<tr><td>12</td><td><strong>К к</strong></td><td>ка <code>[kɑ]</code></td><td>consonne</td><td><code>[k]</code></td><td>Occlusive vélaire sourde.</td></tr>
+						<tr><td>13</td><td><strong>Л л</strong></td><td>эл <code>[ɛl]</code></td><td>consonne</td><td><code>[l]</code> / <code>[ɫ]</code></td><td>Deux formes : soit palatalisé <code>[lʲ]</code>, soit vélarisé <code>[ɫ]</code>. Le contexte détermine laquelle.</td></tr>
+						<tr><td>14</td><td><strong>М м</strong></td><td>эм <code>[ɛm]</code></td><td>consonne</td><td><code>[m]</code></td><td>Nasale bilabiale.</td></tr>
+						<tr><td>15</td><td><strong>Н н</strong></td><td>эн <code>[ɛn]</code></td><td>consonne</td><td><code>[n]</code></td><td>Nasale dentale. Ressemble au H latin ; se prononce comme N.</td></tr>
+						<tr><td>16</td><td><strong>О о</strong></td><td>о <code>[o]</code></td><td>voyelle</td><td><code>[o]</code></td><td>Voyelle mi-fermée postérieure arrondie. N'apparaît comme <code>[o]</code> que sous l'accent. Seul ou en fin de mot, le <code>[o]</code> russe est <code>[oːʌ̯]</code>.</td></tr>
+						<tr><td>17</td><td><strong>П п</strong></td><td>пэ <code>[pɛ]</code></td><td>consonne</td><td><code>[p]</code></td><td>Occlusive bilabiale sourde.</td></tr>
+						<tr><td>18</td><td><strong>Р р</strong></td><td>эр <code>[ɛr]</code></td><td>consonne</td><td><code>[r]</code></td><td>Roulée dentale. Ressemble au P latin ; se prononce comme un R roulé.</td></tr>
+						<tr><td>19</td><td><strong>С с</strong></td><td>эс <code>[ɛs]</code></td><td>consonne</td><td><code>[s]</code></td><td>Fricative dentale sourde. Ressemble au C latin ; se prononce comme S.</td></tr>
+						<tr><td>20</td><td><strong>Т т</strong></td><td>тэ <code>[tɛ]</code></td><td>consonne</td><td><code>[t]</code></td><td>Occlusive dentale sourde. Le <code>[t]</code> russe est dental, non alvéolaire.</td></tr>
+						<tr><td>21</td><td><strong>У у</strong></td><td>у <code>[u]</code></td><td>voyelle</td><td><code>[u]</code></td><td>Voyelle fermée postérieure arrondie. Conserve sa qualité indépendamment de l'accent.</td></tr>
+						<tr><td>22</td><td><strong>Ф ф</strong></td><td>эф <code>[ɛf]</code></td><td>consonne</td><td><code>[f]</code></td><td>Fricative labiodentale sourde.</td></tr>
+						<tr><td>23</td><td><strong>Х х</strong></td><td>ха <code>[xɑ]</code></td><td>consonne</td><td><code>[x]</code></td><td>Fricative vélaire sourde. Ressemble au X latin ; cette fricative se produit au même point d'articulation que <code>[k]</code> et <code>[ɡ]</code>.</td></tr>
+						<tr><td>24</td><td><strong>Ц ц</strong></td><td>цэ <code>[tsɛ]</code></td><td>consonne</td><td><code>[ts]</code></td><td>Affriquée dentale sourde. Toujours dure : ne se palatalise jamais. <code>[ts]</code> est un digramme inséparable.</td></tr>
+						<tr><td>25</td><td><strong>Ч ч</strong></td><td>че <code>[tʃʲɛ]</code></td><td>consonne</td><td><code>[tʃʲ]</code></td><td>Affriquée postalvéolaire sourde. Toujours molle : intrinsèquement palatalisée. Trigramme inséparable.</td></tr>
+						<tr><td>26</td><td><strong>Ш ш</strong></td><td>ша <code>[ʃɑ]</code></td><td>consonne</td><td><code>[ʃ]</code></td><td>Fricative postalvéolaire sourde. Toujours dure : ne se palatalise jamais.</td></tr>
+						<tr><td>27</td><td><strong>Щ щ</strong></td><td>ща <code>[ʃtʃʲɑ]</code></td><td>consonne</td><td><code>[ʃʲʃʲ]</code></td><td>Fricative postalvéolaire palatalisée longue. Toujours molle. Notation moderne de Grayson.</td></tr>
+						<tr><td>28</td><td><strong>Ъ ъ</strong></td><td>твёрдый знак <code>[ˈtvʲor dɨj znɑk]</code></td><td>signe</td><td>—</td><td>Le signe dur. Un marqueur de frontière. Aucun son propre.</td></tr>
+						<tr><td>29</td><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td>voyelle</td><td><code>[ɨ]</code></td><td>Voyelle fermée centrale. Le son véritablement nouveau pour la plupart des chanteurs.</td></tr>
+						<tr><td>30</td><td><strong>Ь ь</strong></td><td>мягкий знак <code>[mʲɑxʲ kʲij znɑk]</code></td><td>signe</td><td>—</td><td>Le signe mou. Palatalise la consonne qui le précède. Aucun son propre.</td></tr>
+						<tr><td>31</td><td><strong>Э э</strong></td><td>э <code>[ɛ]</code></td><td>voyelle</td><td><code>[ɛ]</code></td><td>Voyelle mi-ouverte antérieure. Proche du ⟨è⟩ français ou du ⟨e⟩ ouvert italien.</td></tr>
+						<tr><td>32</td><td><strong>Ю ю</strong></td><td>ю <code>[ju]</code></td><td>voyelle</td><td><code>[ju]</code></td><td>Voyelle iotée. Après une consonne, le <code>[j]</code> est absorbé sous forme de palatalisation.</td></tr>
+						<tr><td>33</td><td><strong>Я я</strong></td><td>я <code>[jɑ]</code></td><td>voyelle</td><td><code>[jɑ]</code></td><td>Voyelle iotée. Après une consonne, le <code>[j]</code> est absorbé sous forme de palatalisation.</td></tr>
+						<tr><td>—</td><td><strong>Ѣ ѣ</strong></td><td>ять <code>[jɑtʲ]</code></td><td>obsolète</td><td>→ Е е</td><td>Avant 1918. Substituez son équivalent moderne.</td></tr>
+						<tr><td>—</td><td><strong>Ѳ ѳ</strong></td><td>фита <code>[fʲitɑ]</code></td><td>obsolète</td><td>→ Ф ф</td><td>Avant 1918. Substituez son équivalent moderne.</td></tr>
+						<tr><td>—</td><td><strong>І і</strong></td><td>и десятеричное <code>[i dʲɪ sʲɪ tʲɪ ˈrʲitʃʲ nɑ jɪ]</code></td><td>obsolète</td><td>→ И и</td><td>Avant 1918. «&nbsp;I décimal.&nbsp;» Substituez son équivalent moderne.</td></tr>
+						<tr><td>—</td><td><strong>Ѵ ѵ</strong></td><td>ижица <code>[ˈi ʒɨ tsɑ]</code></td><td>obsolète</td><td>→ И и</td><td>Avant 1918. Rare même avant la réforme. Substituez son équivalent moderne.</td></tr>
+						</tbody>
+						</table>
 
-						<h4 id="learn-u1-lyric">Diction lyrique et russe parlé</h4>
+						<p>Lorsque vous rencontrez une lettre obsolète dans une partition ancienne, <em>Ilya</em> la remplace automatiquement par son équivalent moderne.</p>
 
-						<p>Les pratiques de diction lyrique sont antérieures à l'ère de l'amplification. Pour le russe chanté spécifiquement, elles constituent un amalgame du vieux moscovite (Old Muscovite; OM) filtré à travers les conventions de la prononciation <em>literaturnyĭ</em> (littéraire) et <em>stsenicheskoe</em> (scénique). Ce sont des cibles prescriptives stylisées pour la scène, non des descriptions du russe standard contemporain. La diction lyrique russe se satisfait d'une prononciation peut-être recherchée, « d'une autre époque ». Nous pouvons reconnaître cette convention dans la diction lyrique française, où un chanteur prononce le « e » caduc dans des contextes où la parole quotidienne l'efface, ou maintient des liaisons que la conversation courante a abandonnées. Cela fait sens dans le chant, mais sonne recherché dans le discours courant. Cette compréhension mérite d'être établie dès le départ. La prononciation que vous apprendrez avec <em>Ilya</em> n'est pas celle des Russes dans la rue. C'est celle de la scène lyrique. Et elle deviendra la vôtre lorsque vous chanterez en russe.</p>
+						<h4 id="learn-u1-familiar">Ce que vous connaissez déjà</h4>
 
-						<p>La conséquence pratique est que certains phonèmes du russe parlé sont intentionnellement simplifiés en versions plus adaptables au chant : la lettre ⟨щ⟩, par exemple, est rendue en diction lyrique comme <code>[ʃʲː]</code> plutôt que le <code>[ʃʲtʃʲ]</code> que certains locuteurs natifs produiraient dans la parole. Les plosives russes et italiennes <code>[t]</code> et <code>[d]</code> partagent des temps d'attaque vocalique (<em>voice-onset times</em>) similaires, ce qui permet d'utiliser les plosives italiennes familières comme cibles raisonnables pour les plosives russes « dures » (non palatalisées). Ces simplifications constructives favorisent une continuité utile avec les autres langues chantées que vous connaissez déjà, offrant des points d'accès familiers aux chanteurs autrement peu accoutumés aux phonèmes russes. Il est bien entendu que les diagrammes et descriptions conçus pour des phonèmes du niveau de la parole (comme ceux offerts dans le <em>Conspectus of Russian Speech Sounds</em> de Bolla, 1981) n'ont aucune obligation de refléter les configurations convergentes et optimisées pour le chant, destinées à la performance classique. <em>Ilya</em> est un très bon outil, mais pour maîtriser les instantiations adéquates du russe chanté, rien ne remplace l'oreille d'un coach et professeur de chant averti. Préparez avec <em>Ilya</em>, ensuite recherchez l'accompagnement d'un locuteur natif.</p>
+						<p>Vous connaissez déjà plus de l'alphabet cyrillique que vous ne le pensez peut-être. Les tableaux ci-dessous regroupent les lettres selon leur degré de familiarité pour les lecteurs de l'alphabet latin. Il s'agit d'un tri purement visuel, et non phonologique : il porte sur la reconnaissance des formes, et non sur le fonctionnement des sons.</p>
 
-						<h4 id="learn-u1-ipa">Conventions API pour ce travail</h4>
+						<p><strong>Formes familières</strong></p>
 
-						<p>Les choix de symboles API de Grayson forment l'inventaire canonique d'<em>Ilya</em>. Cet inventaire fini est le suivant :</p>
+						<p>Ces lettres ressemblent à leurs équivalents latins et se comportent comme on s'y attend. Aucune surprise ici.</p>
 
-						<p class="ipa-specimen">[ː a ɑ b d e ɛ f ɡ ɣ h i ɪ ɨ j ʲ k l ɫ m n ɲ o p r s ʃ t u v ʌ x z ʒ]</p>
+						<table>
+						<thead><tr><th>Cyrillique</th><th>Équivalent latin</th><th>API</th><th>Ce que le chanteur connaît déjà</th></tr></thead>
+						<tbody>
+						<tr><td><strong>А а</strong></td><td>A a</td><td><code>[ɑ]</code></td><td>Le <code>[ɑ]</code> italien, comme dans «&nbsp;pâte&nbsp;». Le russe utilise par défaut le <code>[ɑ]</code> ouvert postérieur ; le <code>[a]</code> plus clair (pizza !) n'apparaît que dans certains environnements palataux spécifiques (Section 3).</td></tr>
+						<tr><td><strong>Е е</strong></td><td>E e</td><td><code>[jɛ]</code></td><td>La forme est familière ; le son inclut une glissante que le ⟨e⟩ français ne comporte pas. Le chanteur qui lit <code>[ɛ]</code> du français ou de l'italien est déjà presque à destination.</td></tr>
+						<tr><td><strong>К к</strong></td><td>K k</td><td><code>[k]</code></td><td>Identique.</td></tr>
+						<tr><td><strong>М м</strong></td><td>M m</td><td><code>[m]</code></td><td>Identique.</td></tr>
+						<tr><td><strong>О о</strong></td><td>O o</td><td><code>[o]</code></td><td>La forme est identique. Le <code>[o]</code> russe se situe légèrement plus ouvert que le <code>[o]</code> allemand, et peut comporter un glissement lorsqu'il termine un mot. Nous y reviendrons.</td></tr>
+						<tr><td><strong>Т т</strong></td><td>T t</td><td><code>[t]</code></td><td>Le russe le place aux dents (dental) plutôt qu'à la crête alvéolaire. Le chanteur qui a chanté les dentales italiennes ou françaises effectue déjà cet ajustement.</td></tr>
+						</tbody>
+						</table>
 
-						<p>Trente et un symboles plus la marque de longueur. Certains vous seront immédiatement familiers grâce à votre travail dans d'autres langues : les plosives, les fricatives, les sonantes, les voyelles cardinales. D'autres seront nouveaux ou porteront des valeurs différentes de celles auxquelles vous êtes habitués. La voyelle <code>[o]</code>, comme nous le verrons à l'Unité 3, n'est pas l'allophone allemand étroitement fermé, mais un son beaucoup plus détendu et ouvert, situé entre <code>[ɔ]</code> et <code>[o]</code>; néanmoins, il reste entièrement distinct de l'<code>[o]</code> français mi-ouvert. Le symbole <code>[ʌ]</code> ne représente pas la voyelle anglaise de « strut », mais un <em>schwa</em> russe spécifique, choisi explicitement pour éviter l'arrondissement labial que <code>[ə]</code> invite trop facilement. Vous qui connaissez le <code>[ə]</code> français, vous comprendrez immédiatement le risque : le réflexe d'arrondir les lèvres pour ce symbole est profondément ancré dans votre formation, et c'est précisément ce que le russe n'admet pas ici. Le <code>[ʲ]</code> en exposant est le marqueur de palatalisation secondaire approuvé par l'API, officiellement adopté lors de la Convention de Kiel en 1989. C'est le mécanisme central de l'Unité 5.</p>
+						<p><strong>Faux amis</strong></p>
 
-						<p>Là où l'inventaire de Grayson s'écarte de ce que vous connaissez actuellement, nous expliquerons la divergence. Là où il s'aligne, nous construirons sur cet alignement. Rappelons que la notation phonétique est paradigmatique, non absolue. Une comparaison de dix ressources de diction lyrique russe révèle dix approches différentes de la notation de la palatalisation seule, ainsi que des inventaires vocaliques allant de sept à dix symboles. Les choix de Grayson représentent un ensemble cohérent et bien raisonné parmi plusieurs, et les sélecteurs de notation d'<em>Ilya</em> dans l'onglet Transcription rendent ces choix à la fois visibles et réversibles.</p>
+						<p>Ces lettres ressemblent peut-être à quelque chose que vous reconnaissez de l'alphabet latin, mais elles représentent des sons différents de ceux auxquels les chanteurs non natifs sont habitués. Ce sont des pièges, et ils méritent un moment d'attention maintenant, pour ne pas vous surprendre plus tard.</p>
+
+						<table>
+						<thead><tr><th>Cyrillique</th><th>Ressemble à</th><th>Se prononce en réalité</th><th>API</th></tr></thead>
+						<tbody>
+						<tr><td><strong>В в</strong></td><td>B b</td><td>V</td><td><code>[v]</code></td></tr>
+						<tr><td><strong>Н н</strong></td><td>H h</td><td>N</td><td><code>[n]</code></td></tr>
+						<tr><td><strong>Р р</strong></td><td>P p</td><td>R roulé</td><td><code>[r]</code></td></tr>
+						<tr><td><strong>С с</strong></td><td>C c</td><td>S</td><td><code>[s]</code></td></tr>
+						<tr><td><strong>У у</strong></td><td>Y y (approximativement)</td><td><code>[u]</code> comme dans «&nbsp;fou&nbsp;»</td><td><code>[u]</code></td></tr>
+						<tr><td><strong>Х х</strong></td><td>X x</td><td>À ne pas confondre avec l'achlaut allemand <code>[χ]</code>, cette fricative se produit au même point d'articulation que <code>[k]</code> et <code>[ɡ]</code>.</td><td><code>[x]</code></td></tr>
+						</tbody>
+						</table>
+
+						<p>Un chanteur déchiffrant le cyrillique pour la première fois commettra presque certainement une erreur de lecture sur au moins l'une de ces lettres. C'est normal. Les connaître, c'est déjà s'en protéger.</p>
+
+						<p><strong>Formes nouvelles</strong></p>
+
+						<p>Ces vingt lettres n'ont pas d'équivalent latin. Leur apparence peut sembler inhabituelle, mais c'est en fait un avantage : il n'y a rien à désapprendre. Vous apprenez simplement chaque forme et son son à neuf.</p>
+
+						<table>
+						<thead><tr><th>Cyrillique</th><th>Nom</th><th>API</th><th>Catégorie</th></tr></thead>
+						<tbody>
+						<tr><td><strong>Б б</strong></td><td>бэ <code>[bɛ]</code></td><td><code>[b]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Г г</strong></td><td>гэ <code>[gɛ]</code></td><td><code>[ɡ]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Д д</strong></td><td>дэ <code>[dɛ]</code></td><td><code>[d]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Ж ж</strong></td><td>жэ <code>[ʒɛ]</code></td><td><code>[ʒ]</code></td><td>consonne (toujours dure)</td></tr>
+						<tr><td><strong>З з</strong></td><td>зэ <code>[zɛ]</code></td><td><code>[z]</code></td><td>consonne</td></tr>
+						<tr><td><strong>И и</strong></td><td>и <code>[i]</code></td><td><code>[i]</code></td><td>voyelle</td></tr>
+						<tr><td><strong>Й й</strong></td><td>и краткое</td><td><code>[j]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Л л</strong></td><td>эл <code>[ɛl]</code></td><td><code>[l]</code> / <code>[ɫ]</code></td><td>consonne</td></tr>
+						<tr><td><strong>П п</strong></td><td>пэ <code>[pɛ]</code></td><td><code>[p]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Ф ф</strong></td><td>эф <code>[ɛf]</code></td><td><code>[f]</code></td><td>consonne</td></tr>
+						<tr><td><strong>Ц ц</strong></td><td>цэ <code>[tsɛ]</code></td><td><code>[ts]</code></td><td>consonne (toujours dure)</td></tr>
+						<tr><td><strong>Ч ч</strong></td><td>че <code>[tʃʲɛ]</code></td><td><code>[tʃʲ]</code></td><td>consonne (toujours molle)</td></tr>
+						<tr><td><strong>Ш ш</strong></td><td>ша <code>[ʃɑ]</code></td><td><code>[ʃ]</code></td><td>consonne (toujours dure)</td></tr>
+						<tr><td><strong>Щ щ</strong></td><td>ща <code>[ʃtʃʲɑ]</code></td><td><code>[ʃʲʃʲ]</code></td><td>consonne (toujours molle)</td></tr>
+						<tr><td><strong>Ъ ъ</strong></td><td>твёрдый знак</td><td>—</td><td>signe (signe dur)</td></tr>
+						<tr><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td><code>[ɨ]</code></td><td>voyelle</td></tr>
+						<tr><td><strong>Ь ь</strong></td><td>мягкий знак</td><td>—</td><td>signe (signe mou)</td></tr>
+						<tr><td><strong>Э э</strong></td><td>э <code>[ɛ]</code></td><td><code>[ɛ]</code></td><td>voyelle</td></tr>
+						<tr><td><strong>Ю ю</strong></td><td>ю <code>[ju]</code></td><td><code>[ju]</code></td><td>voyelle</td></tr>
+						<tr><td><strong>Я я</strong></td><td>я <code>[jɑ]</code></td><td><code>[jɑ]</code></td><td>voyelle</td></tr>
+						</tbody>
+						</table>
+
+						<p>La plupart de ces lettres cyrilliques représentent des sons que vous produisez déjà dans d'autres langues. L'API le confirme : <code>[b]</code>, <code>[d]</code>, <code>[p]</code>, <code>[f]</code>, <code>[i]</code>, <code>[ɛ]</code>, <code>[u]</code> sont de vieilles connaissances sous de nouveaux habits. Quelques-unes sont véritablement nouvelles. La voyelle fermée centrale <code>[ɨ]</code> (⟨Ы⟩) n'a pas d'analogue proche dans les langues chantées d'Europe occidentale ; nous l'explorons à la Section 3. Les consonnes palatalisées <code>[tʃʲ]</code> et <code>[ʃʲʃʲ]</code> impliquent une position de la langue que la Section 6 vous enseignera.</p>
+
+						<h4 id="learn-u1-signs">Les deux signes</h4>
+
+						<p>Deux lettres cyrilliques ne produisent aucun son propre.</p>
+
+						<p><strong>⟨Ь⟩ (мягкий знак, le signe mou)</strong> palatalise («&nbsp;adoucit&nbsp;») la consonne qui le précède. Lorsque vous voyez ⟨Ь⟩ après une consonne, celle-ci acquiert une articulation secondaire : la lame de la langue s'élève vers le palais dur exactement comme si nous allions chanter la voyelle <code>[i]</code>. C'est le marqueur fonctionnel le plus important de l'orthographe russe. La Section 6 développe le processus physique de la palatalisation et ses conséquences plus larges.</p>
+
+						<p><strong>⟨Ъ⟩ (твёрдый знак, le signe dur)</strong> apparaît entre un préfixe et une voyelle iotée (⟨е⟩, ⟨ё⟩, ⟨ю⟩, ⟨я⟩). Il marquait autrefois chaque mot se terminant par un son consonantique «&nbsp;dur&nbsp;», mais la réforme orthographique de 1918 a éliminé cet usage ; vous rencontrerez toutefois des textes d'avant 1917 dominés par des signes durs terminaux, et c'est ce qui explique leur présence. Le signe dur empêche les voyelles iotées de palataliser la consonne précédente, préservant ainsi une frontière. Vous rencontrerez ⟨Ъ⟩ bien moins souvent que ⟨Ь⟩.</p>
+
+						<p>Aucun des deux signes n'apparaît dans les transcriptions API comme son indépendant. Ces signes silencieux sont des marqueurs orthographiques importants qui influencent les sons qui les entourent.</p>
+
+						<h4 id="learn-u1-yo">Note sur ⟨Ё⟩</h4>
+
+						<p>La lettre ⟨ё⟩ mérite une mise en garde particulière. Il est exaspérant de constater à quel point les imprimés russes, y compris les partitions musicales, omettent couramment le tréma et impriment ⟨ё⟩ comme ⟨е⟩. Or, ces deux lettres représentent des sons radicalement différents : ⟨ё⟩ est toujours accentuée et produit <code>[jo]</code> (ou <code>[o]</code> après une consonne), tandis que ⟨е⟩ produit <code>[jɛ]</code> (ou <code>[ɛ]</code> après une consonne). Lorsque le tréma (<em>umlaut</em> en allemand, <em>diaeresis</em> en anglais) est absent, le chanteur non natif doit savoir, soit par le contexte, soit par un dictionnaire, quelle lettre l'éditeur avait en tête. Le dictionnaire d'<em>Ilya</em> restaure automatiquement ⟨ё⟩ là où il convient et signale la transformation, mais le chanteur travaillant à partir d'une partition imprimée sans l'aide d'<em>Ilya</em> fait face à un véritable défi. C'est l'un des nombreux problèmes pratiques liés aux textes russes qu'un outil comme <em>Ilya</em> existe pour résoudre.</p>
+
+						<h4 id="learn-u1-glyphs">Le tableau des glyphes</h4>
+
+						<blockquote><p><em>[Espace réservé : tableau de 37 lettres. Chaque lettre présentée dans une grille de cellules carrées selon les formes suivantes :]</em></p></blockquote>
+
+						<table>
+						<thead><tr><th>Forme</th><th>Police</th><th>Usage</th></tr></thead>
+						<tbody>
+						<tr><td>Majuscule imprimée</td><td>Sérif (p. ex. Noto Serif)</td><td>Sous-textes de partitions</td></tr>
+						<tr><td>Minuscule imprimée</td><td>Sérif</td><td>Sous-textes de partitions</td></tr>
+						<tr><td>Majuscule imprimée</td><td>Sans sérif</td><td>Typographie contemporaine</td></tr>
+						<tr><td>Minuscule imprimée</td><td>Sans sérif</td><td>Typographie contemporaine</td></tr>
+						<tr><td>Majuscule italique</td><td>Sérif italique</td><td>Ressources imprimées tierces</td></tr>
+						<tr><td>Minuscule italique</td><td>Sérif italique</td><td>Ressources imprimées tierces</td></tr>
+						<tr><td>Majuscule italique</td><td>Sans sérif italique</td><td>Ressources imprimées tierces</td></tr>
+						<tr><td>Minuscule italique</td><td>Sans sérif italique</td><td>Ressources imprimées tierces</td></tr>
+						<tr><td>Majuscule cursive</td><td>SVG propisi commandé</td><td>Textes manuscrits, culture écrite</td></tr>
+						<tr><td>Minuscule cursive</td><td>SVG propisi commandé</td><td>Textes manuscrits, culture écrite</td></tr>
+						</tbody>
+						</table>
+
+						<p><em>Le tableau des glyphes est livré au lancement avec les formes imprimées et italiques. Les colonnes cursives sont réservées à des illustrations commandées dans le style d'écriture scolaire russe standard (прописи), avec les crochets de liaison (соединения) qui distinguent la cursive russe authentique des polices de script décoratives.</em></p>
+
+						<p>La raison de présenter chaque lettre sous plusieurs formes est de garantir que, peu importe où vous rencontreriez une lettre, vous pourriez la reconnaître. Les chanteurs rencontrent le cyrillique dans les partitions imprimées (souvent en sérif), dans les éditions contemporaines (souvent en sans sérif), dans les ressources savantes (souvent en italique), et occasionnellement dans des annotations manuscrites ou des manuscrits historiques (cursive). Remarquez à quel point certaines formes de lettres changent radicalement entre les versions régulière, italique et cursive.</p>
+
+						<h4 id="learn-u1-try">Essayez</h4>
+
+						<p>Ouvrez l'onglet Transcription d'<em>Ilya</em> et collez un court texte russe. Vous pourriez essayer l'ouverture de «&nbsp;Где ты, звёздочка?&nbsp;» de Moussorgski ou quelques vers de n'importe quelle mélodie de votre répertoire.</p>
+
+						<p>Observez les trois lignes qu'<em>Ilya</em> produit : API, cyrillique et glose de traduction. Vous pouvez déjà commencer à faire correspondre ce que vous voyez dans la ligne API aux ancrages que vous venez d'apprendre ici. Certaines lettres se seront transformées : un ⟨О⟩ non accentué peut apparaître comme <code>[ʌ]</code> plutôt que le <code>[o]</code> que vous avez rencontré dans le tableau ci-dessus. Une consonne devant ⟨Е⟩ peut porter un marqueur de palatalisation, <code>[ʲ]</code>, qui n'était pas encore démontré dans l'ancrage.</p>
+
+						<p>Ces transformations font l'objet des Sections 2 à 7. Pour l'instant, remarquez tout simplement que l'alphabet cyrillique russe est fini, et pourtant l'API vous est familier. <em>Ilya</em> peut vous montrer exactement ce qu'il fait à chaque lettre. Le reste de LEARN vous enseigne pourquoi.</p>
+
+						<p><em>Sources :</em> Craig M. Grayson, «&nbsp;Russian Lyric Diction&nbsp;» (thèse de doctorat, University of Washington, 2012), ch. 2, annexes B et D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya et Daniel Bunčić, «&nbsp;Russian,&nbsp;» <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
 						<h3 id="learn-unit-2">Unité 2 · L'accent tonique</h3>
 
@@ -845,53 +989,197 @@
 
 						<p>The module is organised into seven units that follow a single governing principle: meet the sounds first, then learn what happens to them.</p>
 
-						<h3 id="learn-unit-1">Unit 1 · Orientation</h3>
 
-						<h4 id="learn-u1-alphabet">The Russian Alphabet Song</h4>
+						<h3 id="learn-unit-1">Section 1 · The Letters</h3>
 
-						<p>We begin with a song. Ken Griffiths was my coach at Tanglewood in the summer of 1999, and the Westernised Russian Alphabet Song he shared remains the most accessible entry point I know. To be clear, Russian children do not learn this song; they learn by rote. But we non-native learners will use this musical setting (repurposed from a traditional Russian drinking song) to introduce the thirty-three letters of the modern Cyrillic alphabet. The song finishes with a coda that translates roughly as "To speak Russian you need to learn the alphabet!" Before any phonological complexity arrives, you will have all thirty-three letters firmly in mind, with their names.</p>
+						<p>Contemporary Standard Russian (CSR) uses thirty-three letters, but you will sometimes see four additional, obsolete characters in old print scores; these were discarded with the 1918 spelling reform. That is the entire system, and by the end of this section you will have met every member of it.</p>
 
-						<p>A few of these names deserve attention at the outset. The consonants follow a predictable pattern: most are named by pairing the consonant sound with <code>[ɛ]</code> (as in <code>[bɛ]</code>, <code>[vɛ]</code>, <code>[dɛ]</code>), while a smaller group reverses the order and pairs <code>[ɛ]</code> before the consonant (<code>[ɛl]</code>, <code>[ɛm]</code>, <code>[ɛn]</code>, <code>[ɛr]</code>, <code>[ɛs]</code>, <code>[ɛf]</code>). This is conventional. What is less conventional, because it appears in none of the print literature, is what happens when certain vowel letters are pronounced in isolation. When the letter ⟨о⟩ stands alone or occurs at the end of a word, under stress, it finishes with a slight offglide: <code>[oːʌ̯]</code>. Likewise, when ⟨ы⟩ (velar-i) is word-final, it offglides toward <code>[i]</code>: <code>[ɨːi̯]</code>. I have observed that many native Russian speakers unconsciously exhibit these offglides while denying that they do it. These offglides are never notated in singers' IPA transcriptions, but I teach them as part of a natural, idiomatic pronunciation. This is in the same spirit that we teach the idiomatic North American English ⟨o⟩ as <code>[oːʊ̯]</code> rather than as a pure monophthong.</p>
+						<p>We begin with a song.</p>
 
-						<p>The modern Russian Cyrillic alphabet uses thirty-three letters. Ten of these letters are vowels, but for our purposes the ten are our familiar five allophones /a e i o u/ rendered twice. Russian vowels are organized in two series: a "hard" series and a "soft" series. The Russian consonants are twenty-one in number. And finally, two Russian letters do not sound at all: these non-sounding signs are the hard sign (⟨ъ⟩, <em>tvyordyĭ znak</em>) and the soft sign (⟨ь⟩, <em>myagkiĭ znak</em>). We will explore the functions and purpose of the signs in Unit 4. Singers working from scores published before 1917 will encounter four additional characters (⟨ѣ⟩, ⟨і⟩, ⟨ѵ⟩, ⟨ѳ⟩), that have been made obsolete by historical spelling reforms. These letters can simply be substituted by their modern counterparts, and <em>Ilya</em> does this automatically for you.</p>
+						<h4 id="learn-u1-song">The Russian Alphabet Song</h4>
 
-						<h4 id="learn-u1-italian">Italian and Russian: a shared foundation</h4>
+						<blockquote><p><em>[Score image: Ken Griffiths' Westernised Russian Alphabet Song, arr. Dann Mitton 2017. Bass voice, B♭ major, Moderato (♩ = 72). Presented on a white field at Letter-sized (8.5 × 11″) proportions with standard margins.]</em></p></blockquote>
 
-						<p>Most classical singers encounter Italian songs and vocalises early in their study, because sung Italian employs a conservative inventory of seven cardinal vowel sounds: <code>[i e ɛ a ɔ o u]</code>. By comparison, sung Russian's ten-phoneme vowel inventory (not the orthographic letters, which coincidentally also number ten) consolidates a single /o/-allophone, but encompasses the remaining Italian set with four notable additions: <code>[ɪ ɨ ɑ ʌ]</code>. The resemblance is not coincidental. Russia directly injected its school of solo singing with <em>bel canto</em> practices by importing Italian composers, singers, and voice teachers in the eighteenth century. Correspondingly, masterfully sung Russian features an Italianate quality: a predilection for musically elongated vowels (which as a Slavic language may seem surprising to some), legato, and beauty of tone inherited from these Italian influencers. There is an old axiom, often repeated in the conservatoire: "To sound Russian, sing like an Italian."</p>
+						<p>Russian children learn the Cyrillic alphabet by rote. This Russian Alphabet Song is a Westernised construct set to the melody of a traditional drinking song. It sets all thirty-three letters in their dictionary order, each sung on its Russian letter-name. The closing phrase offers this pragmatic advice: "To speak Russian you need to learn the alphabet!" Sing through it once or twice in the key that best suits you and you will already have the sequence under your fingers.</p>
 
-						<p>The parallels extend further. Neither Italian nor Russian employs nasal vowels. This exclusion agrees with classical efforts to keep the nasal port sealed by means of a consistently raised soft palate. Neither employs rhotic (r-coloured) vowels. Both depend on a steady balance of subglottic pressure (the classic <em>appoggio</em> of <em>bel canto</em> technique) paired with a steady flow of vibrant tone (<em>filare la voce</em>) to maintain their legato. In practical terms, the singer who has internalised the physical coordinations of sung Italian has an advantage, having already acquired many of the coordinations that sung Russian requires.</p>
+						<h4 id="learn-u1-before">Before We Begin</h4>
 
-						<p>In a 2018 interview, the renowned pedagogue Janice Chapman observed that Italian singers enjoy what she calls a "marvellous advantage": their language's tongue setting is higher and further back than in either English or German, placing the singer on supported airflow with a high tongue, a raised soft palate, and a low(er) larynx simultaneously. Chapman described this as "the resonant sweet spot" and as "a sort of pivot point for all the vowels to hang from." Russian shares aspects of this advantage. The "pivot point" that Chapman is remarking on has a name: it is called the <em>basis of articulation</em>.</p>
+						<p>A few things worth knowing as we start.</p>
 
-						<h4 id="learn-u1-basis">The basis of articulation</h4>
+						<p><strong>You already read IPA.</strong> <em>Ilya</em> assumes you have worked with the International Phonetic Alphabet in at least one other sung language. If you can read an Italian, French, or German lyric diction transcription, you already have most of the tools you need. Russian adds a small number of unfamiliar symbols to the system. We explore those later.</p>
 
-						<p>The basis of articulation is a linguistics construct that functions as a language-specific home base. Linguists associate this with the default posture and settings of the vocal tract during inter-speech pauses and hesitation vowels (the English "uh..." or "er..."). For singing, the basis of articulation is where the tongue body rests and how the vocal tract is shaped by default as the experienced singer prepares to sing in each language.</p>
+						<p><strong>Lyric diction is a stylised register.</strong> Russian audiences expect a certain amount of artifice with their singing, stage work, and poetry. Just as singing "dew" as <code>[djuː]</code> is not how most English speakers talk, sung Russian imposes some stylised pronunciations. Sung Russian is not conversational Russian. Accordingly, Russian lyric diction occupies an elevated register: more precise than speech, shaped by the needs of sustained unamplified vocal production, and grounded in literary and stage pronunciation tradition. Dr. Craig Grayson's <em>Russian Lyric Diction</em> (2012) describes this register systematically, and <em>Ilya</em> operationalises his work for you. When you see an IPA symbol in <em>Ilya</em>, it reflects Grayson's style of notation. When you see the same symbol in his dissertation, it means the same thing. That is the promise.</p>
 
-						<p>Beatrice Honikman, in her seminal 1964 essay "Articulatory Settings," describes this as "the gross oral posture and mechanics, both external and internal, requisite as a framework for the comfortable, economic and fluent merging and integrating of the isolated sounds into that harmonious, cognizable whole which constitutes the established pronunciation of a language." She likens the concept to mechanical gears. Honikman offers an anecdote from her classroom: she would ask students, "Are you in English gear?" and when she heard them slipping back toward a foreign accent, she would remark, "You're out of gear." It is worth noting, as I observed in my doctoral research, that Honikman's influential essay fits oddly into its festschrift dedicated to Russophile Daniel Jones, whose own work was entirely divorced from its subject matter. Further, Honikman cites no corroborating references at all: every endnote is explanatory, not referential. Perhaps this conveys the impression that she is extemporizing on her considerable empirical experiences across French, English, Russian, German, Turkish, and several other languages. The concept is still contested among linguists today; Heinrich argues it is impossible to verify instrumentally. Yet Gick, Wilson, Koch, and Cook (2004) provide the first instrumental evidence of the basis of articulation, measuring language-specific differences at five locations in the vocal tract across English and French speakers. And as Kedrova and Borissoff observed in 2013, Western linguists' interest in the basis of articulation has waned, but for Russian linguists it has always remained a viable and attractive concept, especially in the teaching of phonetics and language typology.</p>
+						<p><strong>Rules describe what Russian does.</strong> Throughout LEARN, we present rules not as laws to memorise but as synthesised descriptions of how Russian behaves. Russian words undergo certain transformations in certain contexts. We name and describe those transformations, offer you examples, and point you to <em>Ilya</em> so you can see them happen in real time with real text. The rules are patterns for you to recognise, not arbitrary statutes to enforce.</p>
 
-						<p>Among the constellation of other articulatory settings, a language's basis of articulation can be said to correspond to one of three generalized tongue "settings": advanced (the tongue mass sits forward, as in French), neutral (the tongue is centralized), or retracted (the tongue sits back, as in North American English). Russian features a neutral basis of articulation: the tongue body is neither advanced nor retracted. It is centralized. But what makes Russian exceptional is that its neutral basis of articulation manifests in two alternating versions: a non-fronted configuration (for non-palatalized sounds) and a fronted variation (for palatalized sounds). More on this in Unit 5.</p>
+						<h4 id="learn-u1-alphabet">The Alphabet</h4>
 
-						<p>This is where the connection to classical singing becomes direct, and where a technical case for sung Russian begins to emerge. Skalozub's work with X-ray cinematography in the 1960s and 1970s showed that both versions of the Russian basis of articulation feature a default open vocal tract, as opposed to the other languages examined in her work. This corresponds to the classical ideal of the <em>gola aperta</em> (the "open throat"). As a pre-phonatory posture, this correspondence aligns beautifully with classical voice pedagogy.</p>
+						<p>The table below presents the thirty-three modern Russian letters in their standard dictionary order, plus the four pre-1918 obsolete letters. Each letter features its Russian name, its sound category (vowel, consonant, or sign), and a basic IPA anchor: the default sound that letter represents before any of the contextual transformations apply. For vowels, this is its stressed, cardinal value. For consonants, this is usually its unpalatalised (or, 'hard') default, with a few memorable exceptions.</p>
 
-						<p>Two more of Russian's inherent oral postures are hallmarks of classical singing technique. The backed tongue of sung Russian's predominant dark-a vowel <code>[ɑ]</code> features a centralized tongue resting lower in the mouth, facilitating a low, stable larynx. The fronted version, activated by palatalization and the frequent <code>[i]</code> vowel, requires a fronted tongue, known to form part of a convergent resonator strategy. When the tongue mass advances, the rest of the tongue must follow, vacating the throat and creating greater resonance space in the pharynx. Borissoff captures this succinctly: "the Russian basis of articulation allows to produce both palatalised and non-palatalised sounds while the retracted centering of the English basis of articulation significantly restricts palatalisation." In other words, Russian gives the singer both configurations that classical technique strives for: a relaxed, low-larynx posture with an open-throated, convergent resonator shape. The two may alternate naturally as the language demands.</p>
+						<p>Sections 2 through 7 teach what Russian does to these sounds in context: how stress impacts vowels, how consonants 'soften' (or, palatalise) before certain letters, and how sounds influence their neighbours across word boundaries. For now, let's meet the letters and their most basic identities as they apply to sung Russian.</p>
 
-						<p>Singers who learn to centralize their articulators for sung Russian are likely to experience less ambient tension and greater ease in tone production. With the articulators freer to constructively relax, the hyoid can descend, allowing the larynx to stabilize in a lower position in agreement with the neutral basis of articulation. These kinds of technical gains may well be portable to efficient singing in other languages. You already know four "gears." Russian introduces a fifth, and it is a gear that aligns with your technical goals.</p>
+						<table>
+						<thead><tr><th>#</th><th>Letter</th><th>Name</th><th>Category</th><th>Anchor</th><th>Notes</th></tr></thead>
+						<tbody>
+						<tr><td>1</td><td><strong>А а</strong></td><td>а <code>[ɑ]</code></td><td>vowel</td><td><code>[ɑ]</code></td><td>Open back vowel. The singer knows this from English.</td></tr>
+						<tr><td>2</td><td><strong>Б б</strong></td><td>бэ <code>[bɛ]</code></td><td>consonant</td><td><code>[b]</code></td><td>Voiced bilabial plosive.</td></tr>
+						<tr><td>3</td><td><strong>В в</strong></td><td>вэ <code>[vɛ]</code></td><td>consonant</td><td><code>[v]</code></td><td>Voiced labiodental fricative. Looks like Latin B; sounds like V.</td></tr>
+						<tr><td>4</td><td><strong>Г г</strong></td><td>гэ <code>[gɛ]</code></td><td>consonant</td><td><code>[ɡ]</code></td><td>Voiced velar plosive.</td></tr>
+						<tr><td>5</td><td><strong>Д д</strong></td><td>дэ <code>[dɛ]</code></td><td>consonant</td><td><code>[d]</code></td><td>Voiced dental plosive. Russian <code>[d]</code> is dental, not alveolar.</td></tr>
+						<tr><td>6</td><td><strong>Е е</strong></td><td>е <code>[jɛ]</code></td><td>vowel</td><td><code>[jɛ]</code></td><td>Iotated vowel. After a consonant, the <code>[j]</code> is absorbed as palatalisation of that consonant.</td></tr>
+						<tr><td>7</td><td><strong>Ё ё</strong></td><td>ё <code>[jo]</code></td><td>vowel</td><td><code>[jo]</code></td><td>Iotated vowel. Always stressed: the only predictable vowel in Russian. Often printed without its diaeresis.</td></tr>
+						<tr><td>8</td><td><strong>Ж ж</strong></td><td>жэ <code>[ʒɛ]</code></td><td>consonant</td><td><code>[ʒ]</code></td><td>Voiced postalveolar fricative. Always hard: never palatalises.</td></tr>
+						<tr><td>9</td><td><strong>З з</strong></td><td>зэ <code>[zɛ]</code></td><td>consonant</td><td><code>[z]</code></td><td>Voiced dental fricative.</td></tr>
+						<tr><td>10</td><td><strong>И и</strong></td><td>и <code>[i]</code></td><td>vowel</td><td><code>[i]</code></td><td>Close front vowel. Identical across Italian, French, German, and English lyric diction.</td></tr>
+						<tr><td>11</td><td><strong>Й й</strong></td><td>и краткое <code>[ˈkrɑt kʌ jɛ]</code></td><td>consonant</td><td><code>[j]</code></td><td>The palatal glide. Russians consider "Short i" to be a palatalised consonant, unlike its semivowel status in English and French.</td></tr>
+						<tr><td>12</td><td><strong>К к</strong></td><td>ка <code>[kɑ]</code></td><td>consonant</td><td><code>[k]</code></td><td>Voiceless velar plosive.</td></tr>
+						<tr><td>13</td><td><strong>Л л</strong></td><td>эл <code>[ɛl]</code></td><td>consonant</td><td><code>[l]</code> / <code>[ɫ]</code></td><td>Two forms: either palatalised <code>[lʲ]</code> or dark <code>[ɫ]</code>. Context determines which.</td></tr>
+						<tr><td>14</td><td><strong>М м</strong></td><td>эм <code>[ɛm]</code></td><td>consonant</td><td><code>[m]</code></td><td>Bilabial nasal.</td></tr>
+						<tr><td>15</td><td><strong>Н н</strong></td><td>эн <code>[ɛn]</code></td><td>consonant</td><td><code>[n]</code></td><td>Dental nasal. Looks like Latin H; sounds like N.</td></tr>
+						<tr><td>16</td><td><strong>О о</strong></td><td>о <code>[o]</code></td><td>vowel</td><td><code>[o]</code></td><td>Close-mid back rounded vowel. Only appears as <code>[o]</code> when stressed. Alone or at the end of words, Russian <code>[o]</code> is <code>[oːʌ̯]</code>.</td></tr>
+						<tr><td>17</td><td><strong>П п</strong></td><td>пэ <code>[pɛ]</code></td><td>consonant</td><td><code>[p]</code></td><td>Voiceless bilabial plosive.</td></tr>
+						<tr><td>18</td><td><strong>Р р</strong></td><td>эр <code>[ɛr]</code></td><td>consonant</td><td><code>[r]</code></td><td>Dental trill. Looks like Latin P; sounds like a rolled R.</td></tr>
+						<tr><td>19</td><td><strong>С с</strong></td><td>эс <code>[ɛs]</code></td><td>consonant</td><td><code>[s]</code></td><td>Voiceless dental fricative. Looks like Latin C; sounds like S.</td></tr>
+						<tr><td>20</td><td><strong>Т т</strong></td><td>тэ <code>[tɛ]</code></td><td>consonant</td><td><code>[t]</code></td><td>Voiceless dental plosive. Russian <code>[t]</code> is dental, not alveolar.</td></tr>
+						<tr><td>21</td><td><strong>У у</strong></td><td>у <code>[u]</code></td><td>vowel</td><td><code>[u]</code></td><td>Close back rounded vowel. Maintains its quality regardless of stress.</td></tr>
+						<tr><td>22</td><td><strong>Ф ф</strong></td><td>эф <code>[ɛf]</code></td><td>consonant</td><td><code>[f]</code></td><td>Voiceless labiodental fricative.</td></tr>
+						<tr><td>23</td><td><strong>Х х</strong></td><td>ха <code>[xɑ]</code></td><td>consonant</td><td><code>[x]</code></td><td>Voiceless velar fricative. Looks like Latin X; this fricative has the same place as <code>[k]</code> and <code>[ɡ]</code>.</td></tr>
+						<tr><td>24</td><td><strong>Ц ц</strong></td><td>цэ <code>[tsɛ]</code></td><td>consonant</td><td><code>[ts]</code></td><td>Voiceless dental affricate. Always hard: never palatalises. <code>[ts]</code> is an inseparable digraph.</td></tr>
+						<tr><td>25</td><td><strong>Ч ч</strong></td><td>че <code>[tʃʲɛ]</code></td><td>consonant</td><td><code>[tʃʲ]</code></td><td>Voiceless postalveolar affricate. Always soft: inherently palatalised. Inseparable trigraph.</td></tr>
+						<tr><td>26</td><td><strong>Ш ш</strong></td><td>ша <code>[ʃɑ]</code></td><td>consonant</td><td><code>[ʃ]</code></td><td>Voiceless postalveolar fricative. Always hard: never palatalises.</td></tr>
+						<tr><td>27</td><td><strong>Щ щ</strong></td><td>ща <code>[ʃtʃʲɑ]</code></td><td>consonant</td><td><code>[ʃʲʃʲ]</code></td><td>Long palatalised postalveolar fricative. Always soft. Grayson's modern rendering.</td></tr>
+						<tr><td>28</td><td><strong>Ъ ъ</strong></td><td>твёрдый знак <code>[ˈtvʲor dɨj znɑk]</code></td><td>sign</td><td>—</td><td>The hard sign. A boundary marker. No sound of its own.</td></tr>
+						<tr><td>29</td><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td>vowel</td><td><code>[ɨ]</code></td><td>Close central vowel. The genuinely new sound for most singers.</td></tr>
+						<tr><td>30</td><td><strong>Ь ь</strong></td><td>мягкий знак <code>[mʲɑxʲ kʲij znɑk]</code></td><td>sign</td><td>—</td><td>The soft sign. Palatalises the preceding consonant. No sound of its own.</td></tr>
+						<tr><td>31</td><td><strong>Э э</strong></td><td>э <code>[ɛ]</code></td><td>vowel</td><td><code>[ɛ]</code></td><td>Open-mid front vowel. Close to French ⟨è⟩ or Italian open ⟨e⟩.</td></tr>
+						<tr><td>32</td><td><strong>Ю ю</strong></td><td>ю <code>[ju]</code></td><td>vowel</td><td><code>[ju]</code></td><td>Iotated vowel. After a consonant, the <code>[j]</code> is absorbed as palatalisation.</td></tr>
+						<tr><td>33</td><td><strong>Я я</strong></td><td>я <code>[jɑ]</code></td><td>vowel</td><td><code>[jɑ]</code></td><td>Iotated vowel. After a consonant, the <code>[j]</code> is absorbed as palatalisation.</td></tr>
+						<tr><td>—</td><td><strong>Ѣ ѣ</strong></td><td>ять <code>[jɑtʲ]</code></td><td>obsolete</td><td>→ Е е</td><td>Pre-1918. Substitute its modern counterpart.</td></tr>
+						<tr><td>—</td><td><strong>Ѳ ѳ</strong></td><td>фита <code>[fʲitɑ]</code></td><td>obsolete</td><td>→ Ф ф</td><td>Pre-1918. Substitute its modern counterpart.</td></tr>
+						<tr><td>—</td><td><strong>І і</strong></td><td>и десятеричное <code>[dʲɪ sʲɪ tʲɪ ˈrʲitʃʲ nɑ jɪ]</code></td><td>obsolete</td><td>→ И и</td><td>Pre-1918. "Decimal i." Substitute its modern counterpart.</td></tr>
+						<tr><td>—</td><td><strong>Ѵ ѵ</strong></td><td>ижица <code>[ˈi ʒɨ tsɑ]</code></td><td>obsolete</td><td>→ И и</td><td>Pre-1918. Rare even before the reform. Substitute its modern counterpart.</td></tr>
+						</tbody>
+						</table>
 
-						<h4 id="learn-u1-lyric">Lyric diction versus spoken Russian</h4>
+						<p>When you encounter an obsolete letter in an older score, <em>Ilya</em> automatically swaps it for its modern counterpart.</p>
 
-						<p>Lyric diction practices arise from a time before the advent of amplification devices for public speaking. Specifically for sung Russian, they are an amalgam of the Old Muscovite dialect filtered through <em>literaturnyĭ</em> (literary) and <em>stsenicheskoe</em> (stage) pronunciation conventions. These are stylized prescriptive targets for the stage, not descriptions of Contemporary Standard Russian (CSR). Russian lyric diction contents itself with a perhaps-stilted pronunciation that is 'of a time.' We might recognize this willing suspension of disbelief in English when a singer sings "new" as /njuː/ rather than /nuː/. It makes sense in song, but sounds elevated or even arch in everyday speech. This understanding is worth normalising early. The pronunciation you will learn from <em>Ilya</em> is not how Russians speak on the street. It is how they sing. And it will become how you sing in Russian.</p>
+						<h4 id="learn-u1-familiar">What You Already Know</h4>
 
-						<p>The practical upshot is that some speech-level phonemes are intentionally simplified into more singable versions: the letter ⟨щ⟩, for instance, is rendered in lyric diction as <code>[ʃʲː]</code> rather than the <code>[ʃʲtʃʲ]</code> that some native speakers would produce in speech. Russian and Italian plosives <code>[t]</code> and <code>[d]</code> share similar voice-onset times, so we can use the familiar Italian plosives to serve as reasonable lyric diction targets for Russian "hard" (unpalatalized) plosives. These constructive simplifications promote a useful continuity with the other sung languages you already know, providing familiar points of access for singers otherwise unaccustomed to Russian phonemes. It is well understood that diagrams and descriptions conceived for speech-level phonemes (such as those offered in Bolla's <em>Conspectus of Russian Speech Sounds</em>, 1981) have no onus to reflect the additional convergent, singing-optimized vocal tract shapes necessary for classical performance. <em>Ilya</em> is a very good tool, but in terms of mastering suitable instantiations for sung Russian, nothing compares to the ear of an informed coach and voice teacher. Prepare with <em>Ilya</em>, then seek coaching from a native speaker.</p>
+						<p>You already know more of the Cyrillic alphabet than you might think. We grouped the tables below based on their familiarity to readers of Latin script. This is a purely visual sorting, not a phonological one: it is about letter recognition, not about how their sounds work.</p>
 
-						<h4 id="learn-u1-ipa">IPA conventions for this work</h4>
+						<p><strong>Familiar Shapes</strong></p>
 
-						<p>Grayson's choices of IPA symbols form the canonical inventory for <em>Ilya</em>. That finite inventory is:</p>
+						<p>These letters look like their Latin counterparts and behave as you would expect. No surprises here.</p>
 
-						<p class="ipa-specimen">[ː a ɑ b d e ɛ f ɡ ɣ h i ɪ ɨ j ʲ k l ɫ m n ɲ o p r s ʃ t u v ʌ x z ʒ]</p>
+						<table>
+						<thead><tr><th>Cyrillic</th><th>Latin lookalike</th><th>IPA</th><th>What the singer already knows</th></tr></thead>
+						<tbody>
+						<tr><td><strong>А а</strong></td><td>A a</td><td><code>[ɑ]</code></td><td>Italian <code>[ɑ]</code> as in <em>father</em>. Russian defaults to the open back <code>[ɑ]</code>; the brighter <code>[a]</code> (pizza!) appears only in specific palatal environments (Section 3).</td></tr>
+						<tr><td><strong>Е е</strong></td><td>E e</td><td><code>[jɛ]</code></td><td>The shape is familiar; the sound includes a glide that English E does not. A singer who reads <code>[ɛ]</code> from French or Italian is most of the way there.</td></tr>
+						<tr><td><strong>К к</strong></td><td>K k</td><td><code>[k]</code></td><td>Identical.</td></tr>
+						<tr><td><strong>М м</strong></td><td>M m</td><td><code>[m]</code></td><td>Identical.</td></tr>
+						<tr><td><strong>О о</strong></td><td>O o</td><td><code>[o]</code></td><td>The shape is identical. Russian <code>[o]</code> sits a touch more open than German <code>[o]</code>, and can involve an offglide. More on that later.</td></tr>
+						<tr><td><strong>Т т</strong></td><td>T t</td><td><code>[t]</code></td><td>Russian places it at the teeth (dental) rather than the alveolar ridge. The singer who has sung Italian or French dentals already makes this adjustment.</td></tr>
+						</tbody>
+						</table>
 
-						<p>Thirty-one symbols plus the length mark. Some of these you will recognise immediately from your work in other languages: the plosives, the fricatives, the sonorants, the cardinal vowels. Others will be new or will carry different values than you are accustomed to. The vowel <code>[o]</code>, as we will see in Unit 3, is not the tightly closed German allophone but a much looser, more open sound between <code>[ɔ]</code> and <code>[o]</code>. The symbol <code>[ʌ]</code> represents not the British English "strut" vowel but a specific Russian <em>schwa</em>, chosen explicitly to avoid the lip-rounding that <code>[ə]</code> too readily invites in singers trained in French. The superscript <code>[ʲ]</code> is the IPA-approved marker for secondary palatalization, officially adopted at the Kiel Convention in 1989. This is the central mechanism of Unit 5.</p>
+						<p><strong>False Friends</strong></p>
 
-						<p>Where Grayson's inventory departs from what you currently know, we will explain the departure. Where it aligns, we will build on that alignment. Remember that phonetic notation is paradigmatic, not absolute. A comparison of ten Russian lyric diction resources reveals ten different approaches to the notation of palatalization alone, as well as vowel inventories ranging anywhere from seven to ten symbols. Grayson's choices are one well-reasoned set among several, and <em>Ilya</em>'s notation toggles in the Transcription tab make these choices both visible and reversible.</p>
+						<p>These letters may look like something you recognise from Latin script, but they represent different sounds than the ones non-native singers are accustomed to. They are traps, and they deserve a moment's attention now, so they do not catch you off guard later.</p>
+
+						<table>
+						<thead><tr><th>Cyrillic</th><th>Looks like</th><th>Actually sounds like</th><th>IPA</th></tr></thead>
+						<tbody>
+						<tr><td><strong>В в</strong></td><td>B b</td><td>V</td><td><code>[v]</code></td></tr>
+						<tr><td><strong>Н н</strong></td><td>H h</td><td>N</td><td><code>[n]</code></td></tr>
+						<tr><td><strong>Р р</strong></td><td>P p</td><td>Rolled R</td><td><code>[r]</code></td></tr>
+						<tr><td><strong>С с</strong></td><td>C c</td><td>S</td><td><code>[s]</code></td></tr>
+						<tr><td><strong>У у</strong></td><td>Y y (roughly)</td><td><code>[u]</code> as in <em>food</em></td><td><code>[u]</code></td></tr>
+						<tr><td><strong>Х х</strong></td><td>X x</td><td>Not to be confused with the German achlaut <code>[χ]</code>, this fricative consonant is produced in the same place as <code>[k]</code> and <code>[ɡ]</code>.</td><td><code>[x]</code></td></tr>
+						</tbody>
+						</table>
+
+						<p>A singer sight-reading Cyrillic for the first time will almost certainly misread at least one of these. That is normal. The awareness that they exist is the first defence.</p>
+
+						<p><strong>New Shapes</strong></p>
+
+						<p>These twenty letters have no Latin counterpart. They may look unfamiliar, but that is actually an advantage: there is nothing to unlearn. You simply learn each shape and its sound fresh.</p>
+
+						<table>
+						<thead><tr><th>Cyrillic</th><th>Name</th><th>IPA</th><th>Category</th></tr></thead>
+						<tbody>
+						<tr><td><strong>Б б</strong></td><td>бэ <code>[bɛ]</code></td><td><code>[b]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Г г</strong></td><td>гэ <code>[gɛ]</code></td><td><code>[ɡ]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Д д</strong></td><td>дэ <code>[dɛ]</code></td><td><code>[d]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Ж ж</strong></td><td>жэ <code>[ʒɛ]</code></td><td><code>[ʒ]</code></td><td>consonant (always hard)</td></tr>
+						<tr><td><strong>З з</strong></td><td>зэ <code>[zɛ]</code></td><td><code>[z]</code></td><td>consonant</td></tr>
+						<tr><td><strong>И и</strong></td><td>и <code>[i]</code></td><td><code>[i]</code></td><td>vowel</td></tr>
+						<tr><td><strong>Й й</strong></td><td>и краткое</td><td><code>[j]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Л л</strong></td><td>эл <code>[ɛl]</code></td><td><code>[l]</code> / <code>[ɫ]</code></td><td>consonant</td></tr>
+						<tr><td><strong>П п</strong></td><td>пэ <code>[pɛ]</code></td><td><code>[p]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Ф ф</strong></td><td>эф <code>[ɛf]</code></td><td><code>[f]</code></td><td>consonant</td></tr>
+						<tr><td><strong>Ц ц</strong></td><td>цэ <code>[tsɛ]</code></td><td><code>[ts]</code></td><td>consonant (always hard)</td></tr>
+						<tr><td><strong>Ч ч</strong></td><td>че <code>[tʃʲɛ]</code></td><td><code>[tʃʲ]</code></td><td>consonant (always soft)</td></tr>
+						<tr><td><strong>Ш ш</strong></td><td>ша <code>[ʃɑ]</code></td><td><code>[ʃ]</code></td><td>consonant (always hard)</td></tr>
+						<tr><td><strong>Щ щ</strong></td><td>ща <code>[ʃtʃʲɑ]</code></td><td><code>[ʃʲʃʲ]</code></td><td>consonant (always soft)</td></tr>
+						<tr><td><strong>Ъ ъ</strong></td><td>твёрдый знак</td><td>—</td><td>sign (hard sign)</td></tr>
+						<tr><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td><code>[ɨ]</code></td><td>vowel</td></tr>
+						<tr><td><strong>Ь ь</strong></td><td>мягкий знак</td><td>—</td><td>sign (soft sign)</td></tr>
+						<tr><td><strong>Э э</strong></td><td>э <code>[ɛ]</code></td><td><code>[ɛ]</code></td><td>vowel</td></tr>
+						<tr><td><strong>Ю ю</strong></td><td>ю <code>[ju]</code></td><td><code>[ju]</code></td><td>vowel</td></tr>
+						<tr><td><strong>Я я</strong></td><td>я <code>[jɑ]</code></td><td><code>[jɑ]</code></td><td>vowel</td></tr>
+						</tbody>
+						</table>
+
+						<p>Most of these Cyrillic letters represent sounds you already produce in other languages. The IPA confirms this: <code>[b]</code>, <code>[d]</code>, <code>[p]</code>, <code>[f]</code>, <code>[i]</code>, <code>[ɛ]</code>, <code>[u]</code> are all old friends in new clothing. A handful are genuinely new. The close central vowel <code>[ɨ]</code> (⟨Ы⟩) has no close analogue in Western European singing languages; we explore it in Section 3. The palatalised consonants <code>[tʃʲ]</code> and <code>[ʃʲʃʲ]</code> involve a tongue position that Section 6 will teach you.</p>
+
+						<h4 id="learn-u1-signs">The Two Signs</h4>
+
+						<p>Two Cyrillic letters produce no sound of their own.</p>
+
+						<p><strong>⟨Ь⟩ (мягкий знак, the soft sign)</strong> palatalises ('softens') the consonant that precedes it. When you see ⟨Ь⟩ after a consonant, the consonant gains a secondary articulation: the tongue blade rises toward the hard palate just as if we are going to sing the vowel <code>[i]</code>. This is the single most important function marker in Russian orthography. Section 6 elaborates on the physical process of palatalisation and its broader consequences.</p>
+
+						<p><strong>⟨Ъ⟩ (твёрдый знак, the hard sign)</strong> appears between a prefix and an iotated vowel (⟨е⟩, ⟨ё⟩, ⟨ю⟩, ⟨я⟩). It used to mark every word ending in a 'hard' consonant sound, but again, the 1918 spelling reform eliminated this; however, you will still see pre-1917 texts dominated by terminal hard signs, and this is the reason why. The hard sign prevents iotated vowels from palatalising the preceding consonant, preserving a boundary. You will encounter ⟨Ъ⟩ far less often than ⟨Ь⟩.</p>
+
+						<p>Neither sign appears in IPA transcriptions as an independent sound. These silent signs are important orthographic markers that influence the sounds around them.</p>
+
+						<h4 id="learn-u1-yo">A Note on ⟨Ё⟩</h4>
+
+						<p>The letter ⟨ё⟩ deserves a caution of its own. It is maddeningly common for Russian print materials, including musical scores, to omit the diaeresis and print ⟨ё⟩ as ⟨е⟩. But these two letters represent radically different sounds: ⟨ё⟩ is always stressed and produces <code>[jo]</code> (or <code>[o]</code> after a consonant), while ⟨е⟩ produces <code>[jɛ]</code> (or <code>[ɛ]</code> after a consonant). When the diaeresis (<em>umlaut</em> in German, <em>tréma</em> in French) is absent, the non-native singer must know either from context or from a dictionary which letter the publisher intended. <em>Ilya</em>'s dictionary restores ⟨ё⟩ where it belongs and flags the transformation, but the singer working from a printed score without <em>Ilya</em>'s help faces a genuine challenge. This is one of the many practical problems with Russian texts that a tool like <em>Ilya</em> exists to solve.</p>
+
+						<h4 id="learn-u1-glyphs">The Glyph Table</h4>
+
+						<blockquote><p><em>[Placeholder: 37-letter glyph table. Each letter presented in a grid of square cells across the following forms:]</em></p></blockquote>
+
+						<table>
+						<thead><tr><th>Form</th><th>Font</th><th>Purpose</th></tr></thead>
+						<tbody>
+						<tr><td>Uppercase print</td><td>Serif (e.g., Noto Serif)</td><td>Score underlays</td></tr>
+						<tr><td>Lowercase print</td><td>Serif</td><td>Score underlays</td></tr>
+						<tr><td>Uppercase print</td><td>Sans serif</td><td>Contemporary typesetting</td></tr>
+						<tr><td>Lowercase print</td><td>Sans serif</td><td>Contemporary typesetting</td></tr>
+						<tr><td>Uppercase italic</td><td>Serif italic</td><td>Third-party print resources</td></tr>
+						<tr><td>Lowercase italic</td><td>Serif italic</td><td>Third-party print resources</td></tr>
+						<tr><td>Uppercase italic</td><td>Sans serif italic</td><td>Third-party print resources</td></tr>
+						<tr><td>Lowercase italic</td><td>Sans serif italic</td><td>Third-party print resources</td></tr>
+						<tr><td>Uppercase cursive</td><td>Commissioned propisi-style SVG</td><td>Handwritten texts, cultural literacy</td></tr>
+						<tr><td>Lowercase cursive</td><td>Commissioned propisi-style SVG</td><td>Handwritten texts, cultural literacy</td></tr>
+						</tbody>
+						</table>
+
+						<p><em>The glyph table ships at release with print and italic forms populated. Cursive columns are reserved for commissioned artwork in the standard Russian school handwriting (прописи) style, with the connecting hooks (соединения) that distinguish authentic Russian cursive from decorative script fonts.</em></p>
+
+						<p>The purpose of presenting every letter in multiple forms is to ensure that no matter where you meet a letter, you can recognise it. Singers encounter Cyrillic in printed scores (often serif), in contemporary editions (often sans serif), in scholarly resources (often italic), and occasionally in handwritten annotations or historical manuscripts (cursive). Notice how radically some letterforms change between regular, italic, and cursive forms.</p>
+
+						<h4 id="learn-u1-try">Try This</h4>
+
+						<p>Open <em>Ilya</em>'s Transcription tab and paste any short Russian text. You might try the opening of Musorgsky's "Где ты, звёздочка?" or a few lines from any song in your repertoire.</p>
+
+						<p>Look at the three lines <em>Ilya</em> produces: IPA, Cyrillic, and translation gloss. You can already begin to match what you see in the IPA line to the anchors you have just learned. Some letters will have transformed: an unstressed ⟨О⟩ may appear as <code>[ʌ]</code> rather than the <code>[o]</code> you met in the table above. A consonant before ⟨Е⟩ may carry a palatalisation marker, <code>[ʲ]</code>, which was not demonstrated in the default anchor.</p>
+
+						<p>Those transformations are the subject of Sections 2 through 7. For now, just notice that the Russian Cyrillic alphabet is finite, yet the IPA is familiar. <em>Ilya</em> can show you exactly what it does to every letter. The rest of LEARN teaches you why.</p>
+
+						<p><em>Sources:</em> Craig M. Grayson, "Russian Lyric Diction" (D.M.A. dissertation, University of Washington, 2012), Ch. 2, Appendices B and D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya and Daniel Bunčić, "Russian," <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
 						<h3 id="learn-unit-2">Unit 2 · Stress</h3>
 

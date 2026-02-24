@@ -49,32 +49,47 @@
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-1')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '1 · Orientation' : '1 · Orientation'}
+									{language === 'fr' ? '1 · Les lettres' : '1 · The Letters'}
 								</button>
 								<ul class="toc-subsections">
 									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-song')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'La chanson de l\u2019alphabet' : 'The Alphabet Song'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-before')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Avant de commencer' : 'Before We Begin'}
+										</button>
+									</li>
+									<li>
 										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-alphabet')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'La Chanson de l\u2019alphabet' : 'The Alphabet Song'}
+											{language === 'fr' ? 'L\u2019alphabet' : 'The Alphabet'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-italian')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'L\u2019italien et le russe' : 'Italian and Russian'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-familiar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Ce que vous connaissez d\u00e9j\u00e0' : 'What You Already Know'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-basis')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'La base d\u2019articulation' : 'The basis of articulation'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-signs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Les deux signes' : 'The Two Signs'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-lyric')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Diction lyrique et russe parl\u00e9' : 'Lyric diction vs. spoken Russian'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-yo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Note sur \u27E8\u0401\u27E9' : 'A Note on \u27E8\u0401\u27E9'}
 										</button>
 									</li>
 									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-ipa')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Conventions API' : 'IPA conventions'}
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-glyphs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Le tableau des glyphes' : 'The Glyph Table'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u1-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Essayez' : 'Try This'}
 										</button>
 									</li>
 								</ul>
