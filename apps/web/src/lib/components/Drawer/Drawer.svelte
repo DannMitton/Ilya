@@ -128,8 +128,35 @@
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-3')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '3 · Les sons vocaliques' : '3 · The Vowel Sounds'}
+									{language === 'fr' ? '3 · Les voyelles accentuées' : '3 · Stressed Vowels'}
 								</button>
+								<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u3-inventory')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Ce sont les voyelles accentu\u00e9es qui constituent les cibles' : 'Stressed vowels are the targets'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u3-interpalatal')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Deux voyelles changent de couleur au voisinage des consonnes molles' : 'Two vowels change colour near soft consonants'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u3-iotated')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Quatre lettres vocaliques portent une consonne cach\u00e9e' : 'Four vowel letters carry a hidden consonant'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u3-yo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? '\u27E8\u0451\u27E9 est toujours accentu\u00e9' : '\u27E8\u0451\u27E9 is always stressed'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u3-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Essayez dans Ilya' : 'Try this in Ilya'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-4')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>

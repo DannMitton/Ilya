@@ -929,13 +929,120 @@
 						<p><em>Source Grayson : ch. 7 (Syllabic Stress, pp. 263–273), ch. 2 (pp. 65–66). Baytukalov cité dans Grayson p. 273.</em></p>
 
 
-						<h3 id="learn-unit-3">Unité 3 · Les sons vocaliques</h3>
+						<h3 id="learn-unit-3">Section 3 · Les voyelles accentuées</h3>
 
-						<p>Le russe possède dix sons vocaliques chantés distincts dans l'inventaire de Grayson : un ensemble gérable, plus restreint que celui de l'anglais. (D'autres auteurs en emploient de sept à dix, selon le degré de réduction vocalique qu'ils choisissent de transcrire.) Cette unité présente chaque son, établit sa correspondance avec les lettres cyrilliques qui le produisent, et le relie aux voyelles que vous connaissez déjà.</p>
+						<p id="learn-u3-inventory"><strong>Ce sont les voyelles accentuées qui constituent les cibles.</strong></p>
 
-						<p>La voyelle ⟨о⟩ mérite une attention particulière. Grayson consacre un essai entier à ce phonème (« The Story of /o/: Is Russian /o/ open or closed? », pp. 359-397 de sa thèse), menant le lecteur à travers un raisonnement complexe pour conclure que le <code>[o]</code> russe chanté est une voyelle beaucoup plus ouverte et plus détendue que son allophone allemand fermé. Ilya adopte le symbole <code>[o]</code> de Grayson, en sachant que sa réalisation sonore diffère de ce que ce symbole désigne dans vos études de diction allemande.</p>
+						<p>Lorsqu'une voyelle russe porte l'accent, elle sonne comme elle-même, comme l'on attend. Ce sont les sons vocaliques cardinaux stables — ceux sur lesquels le chanteur peut compter avant que quoi que ce soit ne se transforme. La plupart de ces voyelles russes nous sont déjà familières grâce à l'italien, au français et à l'allemand. Apprenez ceux-ci d'abord&#8239;; tout ce qui suit dans les Sections 4&#160;à&#160;7 est une transformation de ce que vous entendez ici.</p>
 
-						<p>Nous abordons également le choix de notation de Grayson pour le schwa russe : <code>[ʌ]</code> plutôt que <code>[ə]</code>. Ce choix est pédagogique: le symbole <code>[ə]</code> est si étroitement associé à la voyelle arrondie du français que les jeunes chanteurs ayant une formation en diction française ajoutent trop facilement un arrondissement des lèvres qui n'appartient pas au russe. L'assimilation contextuelle par laquelle la voyelle par défaut <code>[ɑ]</code> se rapproche en <code>[a]</code> entre deux consonnes palatalisées (le « fronting ») est également présentée ici.</p>
+						<p>Le russe chanté possède six voyelles accentuées&#160;:</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>API</th>
+									<th>Cyrillique</th>
+									<th>Formation</th>
+									<th>Ce que vous connaissez déjà</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td><code>/ɑ/</code></td><td>⟨а⟩, ⟨я⟩</td><td>Ouverte postérieure, mi-langue</td><td>Comme «&#160;pâte&#160;» ou «&#160;âme&#160;». La voyelle par défaut du russe chanté pour ⟨а⟩.</td></tr>
+								<tr><td><code>/o/</code></td><td>⟨о⟩, ⟨ё⟩</td><td>Langue basse du /ɔ/ ouvert, lèvres arrondies du /o/ fermé, avec une chute audible en position finale [oːʌ̯]</td><td>Entre le <em>o</em> ouvert italien et le <em>o</em> fermé allemand, mais sans la tension de l'un ou de l'autre. Nulle part près du /ɔ/ français de <em>sauvage</em>.</td></tr>
+								<tr><td><code>/ɛ/</code></td><td>⟨э⟩, ⟨е⟩</td><td>Mi-ouverte antérieure</td><td>Le /ɛ/ français de <em>fête</em>, le <em>e</em> ouvert italien de <em>bello</em>.</td></tr>
+								<tr><td><code>/i/</code></td><td>⟨и⟩</td><td>Fermée antérieure</td><td>Le même /i/ en italien, en français, en allemand et en anglais (<em>see</em>).</td></tr>
+								<tr><td><code>/u/</code></td><td>⟨у⟩, ⟨ю⟩</td><td>Fermée postérieure arrondie, stable, langue haute en arrière</td><td>Le /u/ italien de <em>luna</em>. Le /u/ français de <em>toujours</em>. Pas de diphtongue.</td></tr>
+								<tr><td><code>[ɨ]</code></td><td>⟨ы⟩</td><td>Version vélarisée de /i/&#160;: langue entre les positions /i/ et /u/, lèvres non arrondies</td><td>Aucun analogue proche. Le seul son véritablement nouveau pour de nombreux chanteurs.</td></tr>
+							</tbody>
+						</table>
+
+						<p>Cinq de ces six sons sont de vieilles connaissances. Le sixième, [ɨ], mérite qu'on s'y attarde. C'est une version vélarisée de /i/, appelée <em>i vélaire</em> (<em>velar-i</em>)&#160;: l'avant de la langue maintient la position du /i/ tandis que l'arrière de la langue monte vers le vélum. Les lèvres restent non arrondies. Ce n'est <em>pas</em> pharyngal — le point de contact se situe à la transition entre le palais dur et le palais mou, pas plus en arrière vers la luette. Grayson note la parenté étroite du vélaire-i avec le ⟨л⟩ sombre (lui aussi étant vélaire) ([ɫ]), qui occupe le même espace vélarisé. Une seule règle gouverne [ɨ]&#160;: il n'apparaît qu'après une consonne non palatalisée (dure). Après une consonne palatalisée, la même lettre ⟨и⟩ produit le /i/ attendu.</p>
+
+						<p>Un mot sur le /o/. Grayson décrit le /o/ russe comme une légère diphtongue idiomatique [oːʌ] — la voyelle se relâche vers [ʌ] — et après des consonnes labiales, un [ʷoːʌ] labialisé, mais cette spécificité ne se note jamais. Grayson le simplifie en /o/ dans toutes ses transcriptions, et <em>Ilya</em> suit cette convention. Le chanteur doit savoir que le /o/ russe est beaucoup plus détendu que le /o/ fermé allemand ou français, et beaucoup plus arrondi que le /ɔ/ ouvert italien, tout en restant loin du /ɔ/ semi-ouvert français (celui de «&#160;<em>sauvage</em>&#160;»). Il vit entre ces voisins.</p>
+
+						<h4 id="learn-u3-interpalatal">Deux voyelles changent de couleur au voisinage des consonnes molles.</h4>
+
+						<p>Sous certaines conditions, la langue avance et une voyelle accentuée change de couleur. Grayson décrit ce déplacement comme une antériorisation&#8239;; voici notre cadre pour reconnaître quand elle se produit.</p>
+
+						<p><strong>Trois chemins vers [e]</strong></p>
+
+						<p>Le [e] fermé (proche du /e/ français, légèrement plus détendu) remplace le /ɛ/ ouvert sous trois conditions. Toutes trois partagent la même exigence de fermeture&#160;: la consonne <em>suivante</em> doit être palatalisée. Ce qui diffère, c'est l'environnement précédent.</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Chemin</th>
+									<th>Précédent</th>
+									<th>Suivant</th>
+									<th>Exemple</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>Interpalatal</td><td>Consonne palatalisée</td><td>Consonne palatalisée</td><td>дверь /dʲvʲ<strong>e</strong>rʲ/</td></tr>
+								<tr><td>Toujours dure</td><td>⟨ж⟩, ⟨ш⟩ ou ⟨ц⟩</td><td>Consonne palatalisée</td><td>шесть /ʃ<strong>e</strong>sʲtʲ/</td></tr>
+								<tr><td>⟨э⟩ initial</td><td>∅ (début de mot)</td><td>Consonne palatalisée</td><td>эти /<strong>e</strong>tʲi/</td></tr>
+							</tbody>
+						</table>
+
+						<p>La logique&#160;: ⟨е⟩ est une lettre indicatrice (sois-dit un agent palatalisateur) — elle palatalise toute consonne régulière qui la précède. Les seules consonnes qui peuvent précéder ⟨е⟩ en restant dures sont ⟨ж⟩, ⟨ш⟩ et ⟨ц⟩, parce que ces trois consonnes rejettent inhéremment la palatalisation. L'espace complet des environnements précédents pour ⟨е⟩ se réduit donc à exactement deux&#160;: palatalisé, ou l'un des trois consonnes toujours dures. La lettre ⟨э⟩ ne palatalise pas la consonne qui la précède. Son seul chemin vers [e] est en début de mot, sans rien devant. Un phonème ([e]), deux lettres (⟨е⟩ ou ⟨э⟩), trois conditions précédentes (consonne palatalisée, consonne toujours dure, ou rien), une seule condition de fermeture commune (une consonne palatalisée).</p>
+
+						<p>Les contre-exemples confirment la règle. Lorsque la consonne suivante est dure, la voyelle reste ouverte&#160;: шест /ʃɛst/ (/st/ dur suit), дверка /dʲvʲɛr kɑ/ (/k/ dur suit).</p>
+
+						<p><strong>Un seul chemin vers [a]</strong></p>
+
+						<p>Le rare [a] antériorisé (proche du /a/ français antérieur, mi-langue légèrement relevée) remplace le /ɑ/ ouvert postérieur sous une seule condition&#160;: un environnement véritablement interpalatal. Des agents palatalisateurs doivent encadrer (se trouver des <em>deux</em> côtés de) la voyelle accentuée.</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Précédent</th>
+									<th>Voyelle</th>
+									<th>Suivant</th>
+									<th>Exemple</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>Consonne palatalisée (y compris ⟨ч⟩, ⟨щ⟩)</td><td>⟨а⟩ ou ⟨я⟩ accentué → [a]</td><td>Consonne palatalisée</td><td>пять /pʲ<strong>a</strong>tʲ/</td></tr>
+							</tbody>
+						</table>
+
+						<p>Contre-exemple&#160;: пятый /ˈpʲɑ tɨj/. La consonne précédente est palatalisée (/pʲ/), mais la consonne suivante est dure (/t/). Un côté mou, un côté dur&#160;: la voyelle reste à /ɑ/. De même, мать /mɑtʲ/&#160;: le /m/ précédent est dur, donc malgré le /tʲ/ mou qui suit, la voyelle demeure /ɑ/.</p>
+
+						<h4 id="learn-u3-iotated">Quatre lettres vocaliques portent une consonne cachée.</h4>
+
+						<p>Les lettres ⟨я⟩, ⟨е⟩, ⟨ё⟩ et ⟨ю⟩ sont appelées <em>voyelles iotées</em>. Lorsqu'elles occupent trois positions spécifiques (début de mot, après une autre voyelle, ou après un signe, ⟨ъ⟩ ou ⟨ь⟩) — elles introduisent un glide en [j] avant la voyelle&#160;:</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Lettre</th>
+									<th>Cluster ioté (accentué)</th>
+									<th>Le glide en [j] +</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>⟨я⟩</td><td>[jɑ]</td><td>le /ɑ/ que le chanteur connaît déjà</td></tr>
+								<tr><td>⟨е⟩</td><td>[jɛ]</td><td>le /ɛ/ que le chanteur connaît déjà</td></tr>
+								<tr><td>⟨ё⟩</td><td>[jo]</td><td>le /o/ que le chanteur connaît déjà</td></tr>
+								<tr><td>⟨ю⟩</td><td>[ju]</td><td>le /u/ que le chanteur connaît déjà</td></tr>
+							</tbody>
+						</table>
+
+						<p>Le glide en [j] est le son du <em>y</em> anglais dans <em>yellow</em>, ou du <em>y</em> français dans <em>yeux</em>&#160;: voisé, bref, non soutenu. À noter&#160;: les Russes considèrent /j/ comme une consonne palatalisée, et non une semi-voyelle comme en français. Après le glide, la voyelle est exactement celle qui apparaît dans le tableau d'inventaire ci-dessus — aucun son nouveau, juste un préfixe consonantique.</p>
+
+						<p>Lorsque ces mêmes lettres apparaissent après une consonne (et non après une voyelle, un signe, ou en début de mot), elles ne produisent pas de glide en [j]. Elles signalent plutôt que la consonne précédente est palatalisée, et ne contribuent que la voyelle. C'est le système que Grayson appelle <em>indicator letters</em> (lettres indicatrices, ou bien <em>agents de palatalisation</em>)&#160;: ⟨я⟩, ⟨е⟩, ⟨ё⟩, ⟨ю⟩ indiquent «&#160;quelque chose de palatalisé précède la voyelle.&#160;»</p>
+
+						<p>Les règles d'antériorisation s'appliquent également aux voyelles iotées. Lorsqu'un ⟨я⟩ accentué en position de cluster ioté est suivi d'un phonème palatalisé, le résultat est [ja] plutôt que [jɑ]. Lorsqu'un ⟨е⟩ accentué en position de cluster ioté est suivi d'un phonème palatalisé, le résultat est [je] plutôt que [jɛ].</p>
+
+						<h4 id="learn-u3-yo">⟨ё⟩ est toujours accentué.</h4>
+
+						<p>De toutes les voyelles russes, ⟨ё⟩ est la seule dont l'accent est absolument garanti. Lorsque ⟨ё⟩ apparaît dans un mot, cette syllabe porte toujours l'accent sans faute. Le son est toujours /o/ (après une consonne palatalisée) ou /jo/ (en début de mot, après une voyelle, ou après un signe). Grayson exclut explicitement /ɔ/ comme option de notation pour le /o/ chanté en russe — ⟨ё⟩ produit /o/, pas /ɔ/.</p>
+
+						<p>Parce que les imprimeurs russes omettent couramment le tréma, imprimant ⟨е⟩ là où ⟨ё⟩ devrait figurer, <em>Ilya</em> la restaure automatiquement à partir de son dictionnaire, et signale la restauration avec le sigle ё. Lorsque vous voyez ce sigle, <em>Ilya</em> a identifié un mot où le ⟨е⟩ imprimé est en réalité un ⟨ё⟩ — et la qualité vocalique est lue comme /o/ au lieu de /ɛ/.</p>
+
+						<h4 id="learn-u3-try">Essayez dans Ilya.</h4>
+
+						<p>Transcrivez <strong>шесть</strong> et <strong>шест</strong>. Les deux commencent par ⟨ш⟩ + ⟨е⟩, mais шесть est suivi d'un cluster mou (⟨сть⟩ → /sʲtʲ/) et produit [e]. шест est suivi d'un cluster dur (⟨ст⟩ → /st/) et reste à /ɛ/. Le chemin de la consonne toujours dure vers [e] à l'œuvre — même lettre, voisin différent, couleur différente.</p>
 
 						<h3 id="learn-unit-4">Unité 4 · Les sons consonantiques</h3>
 
@@ -1261,13 +1368,120 @@
 						<p><em>Grayson source: Ch. 7 (Syllabic Stress, pp. 263–273), Ch. 2 (pp. 65–66). Baytukalov cited in Grayson p. 273.</em></p>
 
 
-						<h3 id="learn-unit-3">Unit 3 · The Vowel Sounds</h3>
+						<h3 id="learn-unit-3">Section 3 · Stressed Vowels</h3>
 
-						<p>Russian has ten distinct sung vowel sounds in Grayson's inventory: a manageable set, smaller than English. (Other authors employ as few as seven or as many as ten, depending on the degree of vowel reduction they choose to transcribe.) This unit introduces each sound, maps it to the Cyrillic letters that produce it, and connects it to the vowels you already know from other languages.</p>
+						<p id="learn-u3-inventory"><strong>Stressed vowels are the targets.</strong></p>
 
-						<p>Of particular interest is the vowel ⟨о⟩. Grayson devotes an entire essay to this phoneme ("The Story of /o/: Is Russian /o/ open or closed?", pp. 359-397 of his dissertation), leading the reader through a complex and well-reasoned argument to conclude that the sung Russian <code>[o]</code> is a much looser, much more open vowel than, for example, its tightly closed German allophone. Ilya adopts Grayson's <code>[o]</code> symbol, with the understanding that its sounding realisation differs from what that symbol denotes in your German diction studies.</p>
+						<p>When a Russian vowel carries stress, it sounds like itself. These are the stable cardinal vowel sounds — the ones the singer can expect before anything else changes. Most of them are already familiar to us from Italian, French, and German. Learn these first; everything that follows in Sections 4–7 is a transformation of what you hear here.</p>
 
-						<p>We also address Grayson's notation choice for the Russian schwa: <code>[ʌ]</code> rather than <code>[ə]</code>. This choice is pedagogical: the symbol <code>[ə]</code> is so closely associated with the rounded French vowel that young singers with French diction training too readily add lip-rounding that does not belong in Russian. The contextual assimilation by which the default <code>[ɑ]</code> vowel fronts to <code>[a]</code> between two palatalized consonants (what we call "fronting") is also introduced here.</p>
+						<p>Sung Russian has six stressed vowel sounds:</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>IPA</th>
+									<th>Cyrillic</th>
+									<th>Formation</th>
+									<th>What you already know</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td><code>/ɑ/</code></td><td>⟨а⟩, ⟨я⟩</td><td>Open back, mid-tongue slightly higher than English <em>father</em></td><td>Italian /ɑ/ in <em>casa</em>. The sung Russian default for ⟨а⟩.</td></tr>
+								<tr><td><code>/o/</code></td><td>⟨о⟩, ⟨ё⟩</td><td>Low tongue of open /ɔ/, rounded lips of closed /o/, with an audible offglide when it is word-final [oːʌ̯]</td><td>Between Italian open <em>o</em> and German closed <em>o</em>. Imagine someone from Queens NYC saying 'coffee'</td></tr>
+								<tr><td><code>/ɛ/</code></td><td>⟨э⟩, ⟨е⟩</td><td>Open-mid front</td><td>French <em>è</em>, Italian open <em>e</em> in <em>bello</em>.</td></tr>
+								<tr><td><code>/i/</code></td><td>⟨и⟩</td><td>Close front</td><td>The same /i/ across Italian, French, German, and English <em>see</em>.</td></tr>
+								<tr><td><code>/u/</code></td><td>⟨у⟩, ⟨ю⟩</td><td>Close back rounded, stable, tongue high in back</td><td>Italian /u/ in <em>luna</em>. No diphthong.</td></tr>
+								<tr><td><code>[ɨ]</code></td><td>⟨ы⟩</td><td>Velarized /i/: tongue between /i/ and /u/ positions, lips unrounded</td><td>No close analogue. The one genuinely new sound for many singers.</td></tr>
+							</tbody>
+						</table>
+
+						<p>Five of these six sounds are old friends. The sixth, [ɨ], deserves a moment. It is a velarized version of /i/, unceremoniously dubbed velar-i: the front of the tongue holds the /i/ position while the back of the tongue rises toward the velum. The lips stay unrounded. It is <em>not</em> pharyngeal — the contact point is at the transition between the hard and soft palate, not farther back toward the uvula. Grayson notes the close relationship of velar-i to the dark (velar) ⟨л⟩ ([ɫ]), which occupies the same velarized space. One rule governs [ɨ]: it appears only after unpalatalized (hard) consonants. After a palatalized consonant, the same letter ⟨и⟩ produces the expected /i/.</p>
+
+						<p>A note on /o/. Grayson describes Russian /o/ as idiomatically a slight diphthong [oːʌ] — the vowel releases toward [ʌ] — and after labial consonants, a labialized [ʷoːʌ], but this specificity is never notated. Grayson simplifies it to /o/ in all transcriptions, and <em>Ilya</em> follows this convention. The singer should know that Russian /o/ is much looser than the German or French closed /o/, and much rounder than the Italian open /ɔ/, yet nowhere near the semi-open-o of French (i.e. 'sauvage'). It lives between these neighbours.</p>
+
+						<h4 id="learn-u3-interpalatal">Two vowels change colour near soft consonants.</h4>
+
+						<p>Under certain conditions, as the tongue shifts forward, a stressed vowel changes its colour. Grayson describes this shift as 'fronting'; what follows is our framework for recognising when vowel fronting occurs.</p>
+
+						<p><strong>Three roads to [e]</strong></p>
+
+						<p>The closed [e] (close to French /e/, slightly more relaxed) replaces the open /ɛ/ under three conditions. All three share the same closing requirement: the <em>following</em> consonant must be palatalized. What differs is the preceding environment.</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Road</th>
+									<th>Preceding</th>
+									<th>Following</th>
+									<th>Example</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>Interpalatal</td><td>Palatalized consonant</td><td>Palatalized consonant</td><td>дверь /dʲvʲ<strong>e</strong>rʲ/</td></tr>
+								<tr><td>Always-hard</td><td>⟨ж⟩, ⟨ш⟩, or ⟨ц⟩</td><td>Palatalized consonant</td><td>шесть /ʃ<strong>e</strong>sʲtʲ/</td></tr>
+								<tr><td>Initial ⟨э⟩</td><td>∅ (word-initial)</td><td>Palatalized consonant</td><td>эти /<strong>e</strong>tʲi/</td></tr>
+							</tbody>
+						</table>
+
+						<p>The logic: ⟨е⟩ is an indicator letter (a.k.a. a palatalising agent) — it palatalizes any regular consonant before it. The only consonants that can precede ⟨е⟩ and remain hard are ⟨ж⟩, ⟨ш⟩, and ⟨ц⟩, because these three consonants inherently reject palatalization. So, the full space of preceding environments for ⟨е⟩ is exactly two: palatalized, or the set of three always-hard consonants. The letter ⟨э⟩ does not palatalize a preceding consonant. Its only path to [e] is at the start of a word, with nothing before it. One phoneme ([e]), two letters (⟨е⟩ or ⟨э⟩), three preceding conditions (palatalized consonant, always-hard consonant, or nothing), one shared closing condition (a palatalised consonant).</p>
+
+						<p>Counter-examples confirm the rule. When the following consonant is hard, the vowel stays open: шест /ʃɛst/ (hard /st/ follows), дверка /dʲvʲɛr kɑ/ (hard /k/ follows).</p>
+
+						<p><strong>One road to [a]</strong></p>
+
+						<p>The rare fronted [a] (close to French fronted /a/, mid-tongue slightly raised) replaces the open back /ɑ/ under one condition only: a truly interpalatal environment. Palatalizing agents must be sandwiching (present on <em>both</em> sides of the) stressed vowel.</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Preceding</th>
+									<th>Vowel</th>
+									<th>Following</th>
+									<th>Example</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>Palatalized consonant (incl. ⟨ч⟩, ⟨щ⟩)</td><td>Stressed ⟨а⟩ or ⟨я⟩ → [a]</td><td>Palatalized consonant</td><td>пять /pʲ<strong>a</strong>tʲ/</td></tr>
+							</tbody>
+						</table>
+
+						<p>Counter-example: пятый /ˈpʲɑ tɨj/. The preceding consonant is palatalized (/pʲ/), but the following consonant is hard (/t/). One side soft, one side hard: the vowel stays at /ɑ/. Similarly, мать /mɑtʲ/: the preceding /m/ is hard, so despite the soft /tʲ/ following, the vowel remains /ɑ/.</p>
+
+						<h4 id="learn-u3-iotated">Four vowel letters carry a hidden consonant.</h4>
+
+						<p>The letters ⟨я⟩, ⟨е⟩, ⟨ё⟩, and ⟨ю⟩ are called <em>iotated vowels</em>. When they occupy three specific positions (i.e. word-initial, after another vowel, or after a sign, ⟨ъ⟩ or ⟨ь⟩) — they introduce a j-glide before the vowel:</p>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Letter</th>
+									<th>Iotated cluster (stressed)</th>
+									<th>The j-glide +</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>⟨я⟩</td><td>[jɑ]</td><td>the /ɑ/ the singer already knows</td></tr>
+								<tr><td>⟨е⟩</td><td>[jɛ]</td><td>the /ɛ/ the singer already knows</td></tr>
+								<tr><td>⟨ё⟩</td><td>[jo]</td><td>the /o/ the singer already knows</td></tr>
+								<tr><td>⟨ю⟩</td><td>[ju]</td><td>the /u/ the singer already knows</td></tr>
+							</tbody>
+						</table>
+
+						<p>The j-glide is the sound of English <em>y</em> in <em>yellow</em>: voiced, brief, not sustained. Russians consider /j/ a palatalized consonant. After the glide, the vowel is exactly what appears in the inventory table above — no new sounds, just a consonant prefix.</p>
+
+						<p>When these same letters appear after a consonant (not after a vowel, sign, or at the start of a word), they do not produce a j-glide. Instead, they signal that the preceding consonant is palatalized, and they contribute only the vowel. This is the system Grayson calls <em>indicator letters</em>: ⟨я⟩, ⟨е⟩, ⟨ё⟩, ⟨ю⟩ indicate "something palatalized precedes the vowel."</p>
+
+						<p>The fronting rules apply to iotated vowels too. When a stressed ⟨я⟩ in j-cluster position is followed by a palatalized phoneme, the result is [ja] rather than [jɑ]. When a stressed ⟨е⟩ in j-cluster position is followed by a palatalized phoneme, the result is [je] rather than [jɛ].</p>
+
+						<h4 id="learn-u3-yo">⟨ё⟩ is always stressed.</h4>
+
+						<p>Of all Russian vowels, ⟨ё⟩ is the only one whose stress is guaranteed. When ⟨ё⟩ appears in a word, that syllable always carries the stress. The sound is always /o/ (after a palatalized consonant) or /jo/ (initial, after a vowel, or after a sign). Grayson explicitly excludes /ɔ/ as a notation option for sung Russian /o/ — ⟨ё⟩ produces /o/, not /ɔ/.</p>
+
+						<p>Because Russian printers routinely omit the diaeresis, printing ⟨е⟩ where ⟨ё⟩ belongs, Ilya automatically restores ⟨ё⟩ from its dictionary and signals the restoration with the ё sigla. When you see that sigla, Ilya has identified a word where the printed ⟨е⟩ is actually ⟨ё⟩ — and the vowel quality updates from /ɛ/ to /o/.</p>
+
+						<h4 id="learn-u3-try">Try this in Ilya.</h4>
+
+						<p>Transcribe <strong>шесть</strong> and <strong>шест</strong>. Both begin with ⟨ш⟩ + ⟨е⟩, but шесть has a soft cluster following (⟨сть⟩ → /sʲtʲ/) and produces [e]. шест has a hard cluster (⟨ст⟩ → /st/) and stays at /ɛ/. The always-hard road to [e] at work — same letter, different neighbour, different colour.</p>
 
 						<h3 id="learn-unit-4">Unit 4 · The Consonant Sounds</h3>
 
