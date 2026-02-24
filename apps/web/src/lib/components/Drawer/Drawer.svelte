@@ -160,17 +160,39 @@
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-4')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '4 · Les sons consonantiques' : '4 · The Consonant Sounds'}
+									{language === 'fr' ? '4 · La réduction vocalique' : '4 · Vowel Reduction'}
 								</button>
+								<ul>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-akanye')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? '⟨о⟩ et ⟨а⟩ sans accent' : '⟨о⟩ and ⟨а⟩ when unstressed'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-ikanye')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? '⟨е⟩ et ⟨я⟩ vers [ɪ]' : '⟨е⟩ and ⟨я⟩ toward [ɪ]'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-reconstitution')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'La reconstitution' : 'Reconstitution'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Essayez dans Ilya' : 'Try this in Ilya'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-5')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '5 · La palatalisation' : '5 · Palatalization'}
+									{language === 'fr' ? '5 · Les sons consonantiques' : '5 · The Consonant Sounds'}
 								</button>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-6')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '6 · La réduction vocalique' : '6 · Vowel Reduction'}
+									{language === 'fr' ? '6 · La palatalisation' : '6 · Palatalization'}
 								</button>
 							</li>
 							<li class="toc-unit">

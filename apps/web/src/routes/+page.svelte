@@ -1502,33 +1502,123 @@
 
 						<p>Transcrivez <strong>шесть</strong> et <strong>шест</strong>. Les deux commencent par ⟨ш⟩ + ⟨е⟩, mais шесть est suivi d'un cluster mou (⟨сть⟩ → /sʲtʲ/) et produit [e]. шест est suivi d'un cluster dur (⟨ст⟩ → /st/) et reste à /ɛ/. Le chemin de la consonne toujours dure vers [e] à l'œuvre — même lettre, voisin différent, couleur différente.</p>
 
-						<h3 id="learn-unit-4">Unité 4 · Les sons consonantiques</h3>
+						<h3 id="learn-unit-4">Section 4 &middot; La r&#x00E9;duction vocalique</h3>
 
-						<p>Une comparaison de dix auteurs de diction lyrique russe révèle une uniformité remarquable dans la notation de la majorité des consonnes. Les symboles correspondant aux lettres ⟨b d f g k m n p r s t v x z⟩ font l'unanimité. Là où les auteurs divergent (sur la latérale, sur la nasale palatale, sur les fricatives postalvéolaires), les différences reflètent des traditions concurrentes plutôt que des erreurs.</p>
+						<p><strong>Lorsqu&rsquo;une voyelle perd l&rsquo;accent, elle se transforme.</strong></p>
 
-						<p>Nous organisons les consonnes à partir de ce que vous savez déjà, et non selon la relation historique du cyrillique avec d'autres systèmes d'écriture, comme le fait Grayson. Les consonnes qui se comportent de manière identique à leurs équivalents viennent en premier. Celles qui sont proches mais pas identiques suivent. Les sons véritablement nouveaux arrivent en dernier. En chemin, nous présentons les voyelles iotées (я, е, ё, ю), les signes mou et dur, et la première rencontre avec la palatalisation comme propriété inhérente de certaines consonnes. La fricative vélaire voisée <code>[ɣ]</code>, la version regressivement voisée de <code>[x]</code>, fait également son apparition ici; il semble que les auteurs qui l'incluent dans leur inventaire sont aussi ceux qui se montrent les plus attentifs aux autres aspects nuancés de leurs transcriptions.</p>
+						<p>Le russe est une langue &#x00E0; rythme accentuel, comme l&rsquo;anglais. Il se d&#x00E9;roule en une s&#x00E9;rie de syllabes accentu&#x00E9;es et inaccentu&#x00E9;es, o&#x00F9; l&rsquo;intervalle entre les syllabes accentu&#x00E9;es reste &#x00E0; peu pr&#x00E8;s constant, tandis que les syllabes inaccentu&#x00E9;es s&rsquo;accommodent de ces pulsations r&#x00E9;guli&#x00E8;res en se comprimant entre elles et en perdant leur sp&#x00E9;cificit&#x00E9; vocalique. Cette perte de sp&#x00E9;cificit&#x00E9; s&rsquo;appelle la r&#x00E9;duction vocalique. La voyelle perd sa distinction par rapport &#x00E0; sa valeur cardinale par d&#x00E9;faut, d&#x00E9;rivant vers un son plus centralis&#x00E9; et moins engag&#x00E9;. En russe chant&#x00E9;, le compositeur prescrit les dur&#x00E9;es rythmiques, de sorte que la compression temporelle &#x00E9;vidente d&rsquo;une langue &#x00E0; rythme accentuel dans la parole spontan&#x00E9;e ne peut pas se manifester&#160;: elle est contr&#x00F4;l&#x00E9;e par le rythme et la vitesse de la m&#x00E9;lodie. Mais en tant que conteurs, la r&#x00E9;duction qualitative de la prosodie parl&#x00E9;e continue d&rsquo;&#x00E9;clairer notre approche des textes russes chant&#x00E9;s. La diction lyrique pr&#x00E9;serve davantage de qualit&#x00E9; vocalique pour le chant que la parole, mais le principe demeure&#160;: une voyelle inaccentu&#x00E9;e n&rsquo;a pas le m&#x00EA;me son d&#x00E9;fini qu&rsquo;a une voyelle accentu&#x00E9;e.</p>
 
-						<h3 id="learn-unit-5">Unité 5 · La palatalisation</h3>
+						<p>La Section 3 a &#x00E9;tabli les six cibles vocaliques accentu&#x00E9;es&#160;: <code>/&#x0251;/</code>, <code>/&#x025B;/</code>, <code>/i/</code>, <code>/o/</code>, <code>/u/</code> et <code>[&#x0268;]</code>. Trois d&rsquo;entre elles &mdash; <code>/i/</code>, <code>/u/</code> et <code>[&#x0268;]</code> &mdash; traversent l&rsquo;accent sans changer&#160;: elles conservent leur son cardinal, qu&rsquo;elles soient accentu&#x00E9;es ou non. Voil&#x00E0; qui rassurera ceux d&rsquo;entre nous qui aspirent &#x00E0; des r&#x00E8;gles fiables en russe chant&#x00E9;. Les trois restantes, et les plus fr&#x00E9;quentes &mdash; <code>/&#x0251;/</code>, <code>/&#x025B;/</code> et <code>/o/</code> &mdash; se transforment lorsqu&rsquo;elles perdent l&rsquo;accent. La nature pr&#x00E9;cise de la transformation d&#x00E9;pend de deux facteurs&#160;: l&rsquo;identit&#x00E9; de la lettre vocalique au d&#x00E9;part, et sa proximit&#x00E9; par rapport &#x00E0; la syllabe accentu&#x00E9;e.</p>
 
-						<p>Le pont entre l'inventaire et les processus. Certaines consonnes sont toujours palatalisées (vous les avez rencontrées à l'Unité 4). D'autres le deviennent selon leur contexte. L'enseignement de la palatalisation comme articulation secondaire appliquée à des phonèmes déjà familiers est une philosophie pédagogique délibérée : le russe ne vous demande pas d'apprendre des sons entièrement nouveaux, mais d'ajouter un geste à des sons que vous produisez déjà.</p>
+						<p>Nous cataloguons cinq sons vocaliques inaccentu&#x00E9;s en russe chant&#x00E9;&#160;:</p>
 
-						<p>Grayson décrit le processus en trois temps : « arch, pronounce, peel » (cambrer, prononcer, décoller). Le dos de la langue s'arche vers le palais dur en préparation, la consonne est prononcée simultanément, puis le dorsum se décolle du palais. Un exemple simple illustre la différence : le mot russe <em>нет</em> (non) se transcrit <code>[ɲɛt]</code> et non <code>[njɛt]</code>. Les trois phonèmes familiers se succèdent; ce qui a changé est la nature de la nasale.</p>
+						<table>
+						<thead><tr><th>API</th><th>Source</th><th>Ce que cela sonne</th></tr></thead>
+						<tbody>
+						<tr><td><code>/&#x0251;/</code></td><td>&#x27E8;&#x0430;&#x27E9; ou &#x27E8;&#x043E;&#x27E9; inaccentu&#x00E9; en position privil&#x00E9;gi&#x00E9;e</td><td>La m&#x00EA;me voyelle ouverte post&#x00E9;rieure de la Section 3, mais sans l&rsquo;engagement articulatoire de l&rsquo;accent.</td></tr>
+						<tr><td><code>[&#x028C;]</code></td><td>&#x27E8;&#x0430;&#x27E9; ou &#x27E8;&#x043E;&#x27E9; inaccentu&#x00E9; en position &#x00E9;loign&#x00E9;e</td><td>Une voyelle centralis&#x00E9;e, d&#x00E9;tendue&#8239;; c&rsquo;est le schwa du russe chant&#x00E9;&#160;: plus post&#x00E9;rieur que le <code>[&#x0259;]</code> fran&#x00E7;ais, sans arrondissement labial. Grayson note ce son <code>[&#x028C;]</code> plut&#x00F4;t que <code>[&#x0259;]</code> pr&#x00E9;cis&#x00E9;ment pour &#x00E9;viter que les chanteurs form&#x00E9;s en diction fran&#x00E7;aise n&rsquo;arrondissent les l&#x00E8;vres. <code>[&#x028C;]</code> n&rsquo;appara&#x00EE;t jamais en position accentu&#x00E9;e&#160;: il signale toujours une r&#x00E9;duction.</td></tr>
+						<tr><td><code>[&#x026A;]</code></td><td>&#x27E8;&#x0435;&#x27E9; ou &#x27E8;&#x044F;&#x27E9; inaccentu&#x00E9; apr&#x00E8;s une consonne palatalis&#x00E9;e</td><td>Une version relax&#x00E9;e et centralis&#x00E9;e de /i/. La seule voyelle de l&rsquo;inventaire de Grayson sans r&#x00E9;f&#x00E9;rence cardinale sur le quadrilat&#x00E8;re vocalique de Jones. <code>[&#x026A;]</code> n&rsquo;appara&#x00EE;t jamais en position accentu&#x00E9;e&#160;: il signale toujours une r&#x00E9;duction.</td></tr>
+						<tr><td><code>/i/</code></td><td>&#x27E8;&#x0435;&#x27E9; ou &#x27E8;&#x044F;&#x27E9; inaccentu&#x00E9; en environnement interpalatal</td><td>Le /i/ complet de la Section 3, ant&#x00E9;rioris&#x00E9; par les consonnes palatalis&#x00E9;es environnantes.</td></tr>
+						<tr><td><code>[&#x0268;]</code></td><td>&#x27E8;&#x0435;&#x27E9; inaccentu&#x00E9; apr&#x00E8;s une consonne toujours dure (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;)</td><td>Le m&#x00EA;me i v&#x00E9;laire de la Section 3. Ces consonnes rejettent la palatalisation&#8239;; la voyelle se v&#x00E9;larise au lieu de se r&#x00E9;duire &#x00E0; <code>[&#x026A;]</code>.</td></tr>
+						</tbody>
+						</table>
 
-						<p>L'histoire de la notation de la palatalisation mérite un détour. Avant 1989, l'Association phonétique internationale préconisait un sous-ensemble de seize symboles spécialisés intégrant des crochets palataux. L'IPA les a abandonnés lors des réformes de Kiel, les remplaçant par le yod en exposant <code>[ʲ]</code> associé aux symboles consonantiques standard. Parmi les dix auteurs que j'ai comparés, seul Grayson utilise le marqueur de palatalisation approuvé par l'API. Les autres réutilisent des symboles prédéfinis (demi-anneaux, cédilles, crochets rétroflexes) qui signifient autre chose dans l'usage orthodoxe de l'API. Ilya suit Grayson.</p>
+						<p>Deux processus gouvernent ces r&#x00E9;ductions. La phonologie russe les nomme <em>akani&#x00E9;</em> /&#x02C8;&#x0251; k&#x028C; &#x0272;e/ et <em>ikani&#x00E9;</em> /&#x02C8;i k&#x028C; &#x0272;e/.</p>
 
-						<p>Le sujet connexe du vélaire-i, la voyelle <code>[ɨ]</code>, est également présenté ici : une voyelle médiane, à mi-chemin entre <code>[i]</code> et <code>[u]</code> sur le quadrilatère vocalique de Jones.</p>
+						<h4 id="learn-u4-akanye">&#x27E8;&#x043E;&#x27E9; et &#x27E8;&#x0430;&#x27E9; suivent des chemins diff&#x00E9;rents sans accent.</h4>
 
-						<h3 id="learn-unit-6">Unité 6 · La réduction vocalique</h3>
+						<p>L&rsquo;akani&#x00E9; est le processus par lequel &#x27E8;&#x043E;&#x27E9; et &#x27E8;&#x0430;&#x27E9; inaccentu&#x00E9;s se r&#x00E9;duisent. Le mot lui-m&#x00EA;me vient de la lettre &#x27E8;&#x0430;&#x27E9;&#160;: en russe chant&#x00E9;, lorsque &#x27E8;&#x043E;&#x27E9; perd l&rsquo;accent, il commence &#x00E0; sonner comme &#x27E8;&#x0430;&#x27E9;. Mais ces deux lettres ne se r&#x00E9;duisent pas de fa&#x00E7;on sym&#x00E9;trique. Leurs chemins divergent en une position critique&#160;: la syllabe imm&#x00E9;diatement apr&#x00E8;s l&rsquo;accent.</p>
 
-						<p>Le système se rassemble. Vous connaissez le timbre des voyelles accentuées (Unité 3). Vous savez ce que la palatalisation fait à l'environnement consonantique (Unité 5). Vous savez que l'accent gouverne tout (Unité 2).</p>
+						<table>
+						<thead><tr><th>Position par rapport &#x00E0; l&rsquo;accent</th><th>&#x27E8;&#x043E;&#x27E9;</th><th>&#x27E8;&#x0430;&#x27E9;</th></tr></thead>
+						<tbody>
+						<tr><td>Accentu&#x00E9;e</td><td><code>/o/</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Imm&#x00E9;diatement avant l&rsquo;accent</td><td><code>/&#x0251;/</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Imm&#x00E9;diatement apr&#x00E8;s l&rsquo;accent</td><td><code>[&#x028C;]</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Deux syllabes ou plus avant l&rsquo;accent</td><td><code>[&#x028C;]</code></td><td><code>[&#x028C;]</code></td></tr>
+						<tr><td>Deux syllabes ou plus apr&#x00E8;s l&rsquo;accent</td><td><code>[&#x028C;]</code></td><td><code>[&#x028C;]</code></td></tr>
+						<tr><td>Initiale de mot (toute distance)</td><td><code>/&#x0251;/</code></td><td><code>/&#x0251;/</code></td></tr>
+						</tbody>
+						</table>
 
-						<p>Cette unité complète le tableau en expliquant ce qui arrive aux voyelles inaccentuées. La réduction est hiérarchique et gouvernée par la proximité de l'accent. Considérons le mot <em>хорошо</em> (bien), où chaque ⟨о⟩ s'écrit identiquement, mais chacun se prononce différemment : le ⟨о⟩ accentué de la syllabe finale se chante <code>[o]</code>, le ⟨о⟩ pénultième se chante <code>[ɑ]</code>, et le ⟨о⟩ éloigné (deux syllabes avant l'accent) se réduit davantage à <code>[ʌ]</code>. La phonologie russe appelle ce processus <em>akanie</em>.</p>
+						<p>L&rsquo;asym&#x00E9;trie se trouve &#x00E0; la troisi&#x00E8;me ligne. Imm&#x00E9;diatement apr&#x00E8;s l&rsquo;accent, &#x27E8;&#x043E;&#x27E9; se r&#x00E9;duit &#x00E0; <code>[&#x028C;]</code>, tandis que &#x27E8;&#x0430;&#x27E9; tient &#x00E0; <code>/&#x0251;/</code>. Le raisonnement de Grayson est auditif et s&#x00E9;mantique&#160;: la diff&#x00E9;rence entre <code>/&#x0251;/</code> et <code>[&#x028C;]</code> dans cette position aide l&rsquo;auditeur &#x00E0; distinguer les deux lettres vocaliques sous-jacentes, ce qui lui permet de comprendre la diff&#x00E9;rence entre des formes casuelles comme &#x27E8;&#x0431;&#x043B;&#x044E;&#x0434;&#x043E;&#x27E9; <code>/&#x02C8;bl&#x02B2;u d&#x028C;/</code> (un plat) et &#x27E8;&#x0431;&#x043B;&#x044E;&#x0434;&#x0430;&#x27E9; <code>/&#x02C8;bl&#x02B2;u d&#x0251;/</code> (des plats), o&#x00F9; la voyelle post-accentuelle porte &#x00E0; elle seule la diff&#x00E9;rence grammaticale (Grayson, p. 266, n. 306). Partout ailleurs, les chemins convergent.</p>
 
-						<p>L'<em>ikanie</em> est un processus parallèle qui réduit les voyelles inaccentuées ⟨е⟩ et ⟨я⟩ à <code>[ɪ]</code>. Les amateurs de la prononciation pétersbourgeoise peuvent résister à ce type de réduction, mais elle est légitimée par le dialecte moscovite ancien sur lequel la diction lyrique est fondée.</p>
+						<p>Voici une exception qui pr&#x00E9;vaut sur tout. Chaque fois que &#x27E8;&#x0430;&#x27E9; ou &#x27E8;&#x043E;&#x27E9; inaccentu&#x00E9; est la premi&#x00E8;re lettre du mot, la voyelle se lit <code>/&#x0251;/</code> quelle que soit sa distance par rapport &#x00E0; l&rsquo;accent.</p>
 
-						<p>La reconstitution vocalique permet aux chanteurs de prendre des décisions éclairées sur le moment de restaurer une voyelle réduite au service du legato ou de la clarté du texte. Par exemple, l'expression <em>то же</em> (aussi) peut se transcrire avec réduction comme <code>[to ʒɨ]</code>, ce qui conviendrait à un tempo vif sur une croche inaccentuée. Mais dans un tempo plus lent, sur une valeur rythmique plus longue, la reconstitution à <code>[to ʒɛ]</code> peut mieux honorer la formalité du texte poétique. La reconstitution est une question de goût, confirmée idéalement par un locuteur natif; il me semble que les Russes attendent moins de réduction dans la déclamation de textes poétiques, comme un moyen de distinguer l'art du discours quotidien.</p>
+						<p>Le mot &#x27E8;&#x0445;&#x043E;&#x0440;&#x043E;&#x0448;&#x043E;&#x27E9; (bien) illustre la cha&#x00EE;ne compl&#x00E8;te de l&rsquo;akani&#x00E9; en un seul mot. Trois &#x27E8;&#x043E;&#x27E9; identiques, trois prononciations diff&#x00E9;rentes&#160;: <code>/x&#x028C; r&#x0251; &#x02C8;&#x0283;o/</code>. Le premier &#x27E8;&#x043E;&#x27E9;, &#x00E9;loign&#x00E9;, se r&#x00E9;duit &#x00E0; <code>[&#x028C;]</code>. Le &#x27E8;&#x043E;&#x27E9; imm&#x00E9;diatement pr&#x00E9;-accentuel tient &#x00E0; <code>/&#x0251;/</code>. Le &#x27E8;&#x043E;&#x27E9; final accentu&#x00E9; sonne <code>/o/</code>.</p>
 
-						<h3 id="learn-unit-7">Unité 7 · Intégration</h3>
+						<h4 id="learn-u4-ikanye">&#x27E8;&#x0435;&#x27E9; et &#x27E8;&#x044F;&#x27E9; se r&#x00E9;duisent vers [&#x026A;].</h4>
+
+						<p>L&rsquo;ikani&#x00E9; est le processus parall&#x00E8;le pour les voyelles qui se trouvent en environnement interpalatal, o&#x00F9; la voyelle est prise en sandwich entre deux agents palatalisateurs. Les voyelles &#x27E8;&#x0435;&#x27E9; et &#x27E8;&#x044F;&#x27E9; se r&#x00E9;duisent toutes deux &#x00E0; <code>[&#x026A;]</code>. Contrairement &#x00E0; l&rsquo;akani&#x00E9;, o&#x00F9; la position par rapport &#x00E0; l&rsquo;accent cr&#x00E9;e une hi&#x00E9;rarchie, l&rsquo;ikani&#x00E9; est plus simple&#160;: ces deux voyelles orthographiques se r&#x00E9;duisent &#x00E0; <code>[&#x026A;]</code> dans toute position inaccentu&#x00E9;e.</p>
+
+						<p>Deux raffinements qualifient cette r&#x00E8;gle&#160;:</p>
+
+						<table>
+						<thead><tr><th>Condition</th><th>R&#x00E9;sultat</th><th>Pourquoi</th></tr></thead>
+						<tbody>
+						<tr><td>Apr&#x00E8;s une consonne toujours dure (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;)</td><td><code>[&#x0268;]</code>, et non <code>[&#x026A;]</code></td><td>Les trois consonnes de l&rsquo;ensemble toujours dur ne peuvent pas se palataliser. La voyelle se v&#x00E9;larise pour s&rsquo;accorder &#x00E0; l&rsquo;environnement consonantique dur.</td></tr>
+						<tr><td>Interpalatale (palatalis&#x00E9;e des deux c&#x00F4;t&#x00E9;s)</td><td><code>/i/</code>, et non <code>[&#x026A;]</code></td><td>Les consonnes palatalis&#x00E9;es environnantes ant&#x00E9;riorisent la voyelle compl&#x00E8;tement vers /i/.</td></tr>
+						</tbody>
+						</table>
+
+						<p>Les voyelles iot&#x00E9;es (&#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9; et &#x27E8;&#x044F;&#x27E9;) suivent la m&#x00EA;me logique. &#x27E8;&#x044F;&#x27E9; inaccentu&#x00E9; en position de cluster iot&#x00E9; (d&#x00E9;but de mot, apr&#x00E8;s une voyelle ou apr&#x00E8;s un signe) produit <code>[j&#x026A;]</code>&#8239;; en position interpalatale, il s&rsquo;ant&#x00E9;riorisera vers <code>[ji]</code>. Grayson est explicite&#160;: le cluster r&#x00E9;duit <code>[j&#x028C;]</code> doit &#x00EA;tre &#x00E9;vit&#x00E9; en russe chant&#x00E9;.</p>
+
+						<h4 id="learn-u4-reconstitution">La reconstitution est un choix &#x00E9;clair&#x00E9;, non une obligation.</h4>
+
+						<p>La reconstitution est la d&#x00E9;cision d&rsquo;annuler la r&#x00E9;duction compl&#x00E8;te, ou de ramener une voyelle r&#x00E9;duite vers sa valeur non r&#x00E9;duite. En chant, o&#x00F9; les valeurs de note peuvent soutenir une voyelle bien au-del&#x00E0; de sa dur&#x00E9;e parl&#x00E9;e, un son pleinement r&#x00E9;duit peut sembler trop informel pour &#x00EA;tre chant&#x00E9; comme valeur vocalique soutenue dans la livraison d&rsquo;un texte po&#x00E9;tique. La reconstitution offre au chanteur une option raisonn&#x00E9;e pour restaurer la formalit&#x00E9; et la distinction vocalique sans abandonner le syst&#x00E8;me phonologique de Grayson.</p>
+
+						<p>Le processus inverse la cha&#x00EE;ne de r&#x00E9;duction enti&#x00E8;rement pour la plupart des voyelles, mais seulement partiellement pour &#x27E8;&#x043E;&#x27E9;&#160;:</p>
+
+						<table>
+						<thead><tr><th>Son r&#x00E9;duit</th><th>Se reconstitue en</th><th>Ne se reconstitue pas en</th></tr></thead>
+						<tbody>
+						<tr><td><code>[&#x028C;]</code> (de &#x27E8;&#x0430;&#x27E9; ou &#x27E8;&#x043E;&#x27E9;)</td><td><code>/&#x0251;/</code></td><td>/o/ &mdash; la porte vers /o/ est &#x00E0; sens unique</td></tr>
+						<tr><td><code>[&#x026A;]</code> (de &#x27E8;&#x0435;&#x27E9;)</td><td><code>/&#x025B;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[&#x026A;]</code> (de &#x27E8;&#x044F;&#x27E9;)</td><td><code>/&#x0251;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[j&#x026A;]</code> (de &#x27E8;&#x044F;&#x27E9; en cluster iot&#x00E9;)</td><td><code>/j&#x0251;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[j&#x026A;]</code> (de &#x27E8;&#x0435;&#x27E9; en cluster iot&#x00E9;)</td><td><code>/j&#x025B;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[&#x0268;]</code> (apr&#x00E8;s une consonne toujours dure)</td><td>Ne se reconstitue pas</td><td>&mdash;</td></tr>
+						</tbody>
+						</table>
+
+						<p>La porte &#x00E0; sens unique est la contrainte la plus importante. Lorsque <code>[&#x028C;]</code> se reconstitue, il revient &#x00E0; <code>/&#x0251;/</code>, jamais &#x00E0; <code>/o/</code>. La r&#x00E9;duction de <code>/o/</code> &#x00E0; <code>/&#x0251;/</code> efface l&rsquo;arrondissement&#8239;; la reconstitution ne peut restaurer ce que l&rsquo;akani&#x00E9; a retir&#x00E9;. Grayson affirme que <code>[&#x0268;]</code> apr&#x00E8;s les consonnes toujours dures ne se reconstitue pas du tout&#160;: l&rsquo;environnement v&#x00E9;laris&#x00E9; est fixe.</p>
+
+						<blockquote class="learn-callout">
+						<p><strong>Un point de d&#x00E9;saccord respectueux, de la part de Dann.</strong></p>
+						<p>Grayson &#x00E9;crit que &#x00AB;&#160;&#x27E8;&#x0438;&#x27E9; read as [&#x0268;] (stressed or unstressed) and unstressed &#x27E8;&#x0435;&#x27E9; read as [&#x0268;] after a hard consonant (on long or short notes), remain sung as [&#x0268;]&#160;&#x00BB; (p. 129). Cette phrase contient deux affirmations, et &#x00E0; mon avis, elles ne sont pas &#x00E9;quivalentes.</p>
+						<p>La premi&#x00E8;re affirmation est juste. Lorsque &#x27E8;&#x0438;&#x27E9; suit une consonne dure, le [&#x0268;] qui en r&#x00E9;sulte n&rsquo;est pas une r&#x00E9;duction&#160;: c&rsquo;est l&rsquo;identit&#x00E9; de la voyelle dans cet environnement. Les russophones savent et comprennent que dans ce cas &#x27E8;&#x0438;&#x27E9; se prononce [&#x0268;], ou peut-&#x00EA;tre pouvons-nous comprendre que [&#x0268;] s&rsquo;&#x00E9;crit &#x27E8;&#x0438;&#x27E9; dans ce cas&#8239;; cela revient au m&#x00EA;me. Il n&rsquo;y a pas de voyelle source vers laquelle reconstituer, c&rsquo;est simplement la voyelle traditionnelle qui s&rsquo;ex&#x00E9;cute dans cette circonstance, reconnaissant que [&#x0268;] doit suivre une consonne non palatalis&#x00E9;e, jamais [i]. La consonne dure impose l&rsquo;expression du i v&#x00E9;laire. Je suis d&rsquo;accord avec Grayson ici&#8239;; la reconstitution ne s&rsquo;applique pas.</p>
+						<p>Je crois que sa seconde affirmation m&#x00E9;rite qu&rsquo;on en r&#x00E9;fl&#x00E9;chisse. Lorsque &#x27E8;&#x0435;&#x27E9; inaccentu&#x00E9; suit l&rsquo;une des consonnes toujours dures (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;) pour produire [&#x0268;], la voyelle sous-jacente est /&#x025B;/. /&#x025B;/ se r&#x00E9;duit pour devenir [&#x0268;] dans ce cas, et par cons&#x00E9;quent la logique de la reconstitution devrait rester disponible. J&rsquo;affirme que sur des notes tenues ou dans des tempi plus lents, le chanteur peut reconstituer vers [&#x025B;]. D&rsquo;apr&#x00E8;s mon exp&#x00E9;rience, les locuteurs natifs russes et les coaches pr&#x00E9;conisent syst&#x00E9;matiquement ce choix. Le D&#x02B3; Alexei Kochetov, locuteur natif russe et phon&#x00E9;ticien &#x00E0; l&rsquo;Universit&#x00E9; de Toronto, a offert pr&#x00E9;cis&#x00E9;ment cette note sur mon ex&#x00E9;cution de l&rsquo;Op. 52, n&#x00BA; 2 de Kabalevsky&#160;: &#x00AB;&#160;[toj &#x0292;&#x0268;] should probably be [toj &#x0292;&#x025B;] (with no reduction)&#160;&#x00BB; (&#x00AB;&#160;[toj &#x0292;&#x0268;] devrait probablement &#x00EA;tre [toj &#x0292;&#x025B;] (sans r&#x00E9;duction)&#160;&#x00BB;).</p>
+						<p>Un point de vue articulatoire peut-il soutenir la reconstitution dans ce cas&#160;? Les postures linguales de [&#x025B;] et des consonnes toujours dures [&#x0283;], [&#x0292;] et [ts] occupent le m&#x00EA;me voisinage m&#x00E9;dian&#8239;; [&#x025B;] n&rsquo;est pas assez ant&#x00E9;rioris&#x00E9; pour imposer un conflit. Ce n&rsquo;est pas analogue &#x00E0; la tentative de produire /i/ apr&#x00E8;s une consonne dure, o&#x00F9; l&rsquo;ant&#x00E9;riorisation contredit v&#x00E9;ritablement l&rsquo;environnement consonantique.</p>
+						<p>C&rsquo;est le seul point sur lequel <em>Ilya</em> s&rsquo;&#x00E9;carte des r&#x00E8;gles de reconstitution de Grayson. Lorsque le basculeur de reconstitution est actif, &#x27E8;&#x0435;&#x27E9; inaccentu&#x00E9; apr&#x00E8;s une consonne toujours dure se reconstitue en [&#x025B;]. N&#x00E9;anmoins, si vous n&rsquo;&#x00EA;tes pas d&rsquo;accord avec moi et souhaitez observer l&rsquo;engagement de Grayson envers l&rsquo;inviolabilit&#x00E9; de [&#x0268;] dans ce cas, vous pouvez cliquer sur la case &#x00AB;&#160;R&#x00E9;duction ponctuelle&#160;&#x00BB; sous la pile de mots dans le panneau, et votre [&#x0268;] r&#x00E9;appara&#x00EE;tra d&#x00FB;ment.</p>
+						</blockquote>
+
+						<p>Le moment de reconstituer est une question de contexte et de go&#x00FB;t. Une note br&#x00E8;ve sur un temps faible dans un tempo vif peut accueillir la r&#x00E9;duction compl&#x00E8;te. Une note tenue sur un temps fort dans un tempo lent peut appeler la reconstitution. Les Russes semblent attendre moins de r&#x00E9;duction dans la d&#x00E9;clamation de textes po&#x00E9;tiques, comme un moyen de distinguer l&rsquo;art du discours quotidien. La meilleure confirmation vient d&rsquo;un coach russe natif&#8239;; Ilya offre les deux options par le biais du basculeur de reconstitution, afin que le chanteur puisse comparer les deux lectures et faire un choix &#x00E9;clair&#x00E9;.</p>
+
+						<h4 id="learn-u4-try">Essayez dans Ilya.</h4>
+
+						<p>Transcrivez &#x27E8;&#x0445;&#x043E;&#x0440;&#x043E;&#x0448;&#x043E;&#x27E9;. Trois &#x27E8;&#x043E;&#x27E9; identiques produisent trois sons diff&#x00E9;rents&#160;: <code>[&#x028C;]</code>, <code>/&#x0251;/</code>, <code>/o/</code>. Activez ensuite la reconstitution&#160;: le <code>[&#x028C;]</code> &#x00E9;loign&#x00E9; revient &#x00E0; <code>/&#x0251;/</code>, mais aucune voyelle inaccentu&#x00E9;e ne revient &#x00E0; <code>/o/</code>. La porte &#x00E0; sens unique &#x00E0; l&rsquo;&#x0153;uvre.</p>
+
+						<p>Essayez ensuite &#x27E8;&#x0436;&#x0435;&#x043D;&#x0430;&#x27E9; (une &#x00E9;pouse). Sans reconstitution, le &#x27E8;&#x0435;&#x27E9; inaccentu&#x00E9; apr&#x00E8;s le &#x27E8;&#x0436;&#x27E9; toujours dur appara&#x00EE;t comme <code>[&#x0268;]</code>. Dans le panneau du tiroir, sous Notation, activez la reconstitution globale, et <em>Ilya</em> le restaure en <code>[&#x025B;]</code> &mdash; l&rsquo;&#x00E9;cart par rapport &#x00E0; Grayson d&#x00E9;crit ci-dessus. Quels que soient vos param&#x00E8;tres globaux, si vous pr&#x00E9;f&#x00E9;rez la r&#x00E8;gle originale de Grayson, vous pouvez cliquer sur &#x00AB;&#160;R&#x00E9;duction ponctuelle&#160;&#x00BB; ou &#x00AB;&#160;Reconstitution ponctuelle&#160;&#x00BB; sous la pile de mots dans le tiroir (ces intitul&#x00E9;s r&#x00E9;pondent contextuellement &#x00E0; vos param&#x00E8;tres globaux), et votre <code>[&#x0268;]</code> r&#x00E9;appara&#x00EE;tra d&#x00FB;ment.</p>
+
+						<p><em>Source Grayson&#160;: ch. 3 &sect;&sect;3, 5, 7&ndash;8 (pp. 97&ndash;129), ch. 7 &sect;1 (pp. 263&ndash;267). Tableau de reconstitution&#160;: p. 128, note p. 129. Diff&#x00E9;renciation auditive des formes casuelles&#160;: p. 266, n. 306. Cadre accentuel&#160;: Mitton (th&#x00E8;se, &sect;4.5). Note de Kochetov&#160;: communication personnelle, soutenance de r&#x00E9;cital DMA, Universit&#x00E9; de Toronto.</em></p>
+
+						<h3 id="learn-unit-5">Section 5 &middot; Les sons consonantiques</h3>
+
+						<p>Une comparaison de dix auteurs de diction lyrique russe r&#x00E9;v&#x00E8;le une uniformit&#x00E9; remarquable dans la notation de la majorit&#x00E9; des consonnes. Les symboles correspondant aux lettres &#x27E8;b d f g k m n p r s t v x z&#x27E9; font l&rsquo;unanimit&#x00E9;. L&#x00E0; o&#x00F9; les auteurs divergent (sur la lat&#x00E9;rale, sur la nasale palatale, sur les fricatives postalv&#x00E9;olaires), les diff&#x00E9;rences refl&#x00E8;tent des traditions concurrentes plut&#x00F4;t que des erreurs.</p>
+
+						<p>Nous organisons les consonnes &#x00E0; partir de ce que vous savez d&#x00E9;j&#x00E0;, et non selon la relation historique du cyrillique avec d&rsquo;autres syst&#x00E8;mes d&rsquo;&#x00E9;criture, comme le fait Grayson. Les consonnes qui se comportent de mani&#x00E8;re identique &#x00E0; leurs &#x00E9;quivalents viennent en premier. Celles qui sont proches mais pas identiques suivent. Les sons v&#x00E9;ritablement nouveaux arrivent en dernier. En chemin, nous pr&#x00E9;sentons les voyelles iot&#x00E9;es (&#x044F;, &#x0435;, &#x0451;, &#x044E;), les signes mou et dur, et la premi&#x00E8;re rencontre avec la palatalisation comme propri&#x00E9;t&#x00E9; inh&#x00E9;rente de certaines consonnes. La fricative v&#x00E9;laire vois&#x00E9;e <code>[&#x0263;]</code>, la version regressivement vois&#x00E9;e de <code>[x]</code>, fait &#x00E9;galement son apparition ici; il semble que les auteurs qui l&rsquo;incluent dans leur inventaire sont aussi ceux qui se montrent les plus attentifs aux autres aspects nuanc&#x00E9;s de leurs transcriptions.</p>
+
+						<h3 id="learn-unit-6">Section 6 &middot; La palatalisation</h3>
+
+						<p>Le pont entre l&rsquo;inventaire et les processus. Certaines consonnes sont toujours palatalis&#x00E9;es (vous les avez rencontr&#x00E9;es &#x00E0; la Section 5). D&rsquo;autres le deviennent selon leur contexte. L&rsquo;enseignement de la palatalisation comme articulation secondaire appliqu&#x00E9;e &#x00E0; des phon&#x00E8;mes d&#x00E9;j&#x00E0; familiers est une philosophie p&#x00E9;dagogique d&#x00E9;lib&#x00E9;r&#x00E9;e&#160;: le russe ne vous demande pas d&rsquo;apprendre des sons enti&#x00E8;rement nouveaux, mais d&rsquo;ajouter un geste &#x00E0; des sons que vous produisez d&#x00E9;j&#x00E0;.</p>
+
+						<p>Grayson d&#x00E9;crit le processus en trois temps&#160;: &#x00AB;&#160;arch, pronounce, peel&#160;&#x00BB; (cambrer, prononcer, d&#x00E9;coller). Le dos de la langue s&rsquo;arche vers le palais dur en pr&#x00E9;paration, la consonne est prononc&#x00E9;e simultan&#x00E9;ment, puis le dorsum se d&#x00E9;colle du palais. Un exemple simple illustre la diff&#x00E9;rence&#160;: le mot russe <em>&#x043D;&#x0435;&#x0442;</em> (non) se transcrit <code>[&#x0272;&#x025B;t]</code> et non <code>[nj&#x025B;t]</code>. Les trois phon&#x00E8;mes familiers se succ&#x00E8;dent; ce qui a chang&#x00E9; est la nature de la nasale.</p>
+
+						<p>L&rsquo;histoire de la notation de la palatalisation m&#x00E9;rite un d&#x00E9;tour. Avant 1989, l&rsquo;Association phon&#x00E9;tique internationale pr&#x00E9;conisait un sous-ensemble de seize symboles sp&#x00E9;cialis&#x00E9;s int&#x00E9;grant des crochets palataux. L&rsquo;IPA les a abandonn&#x00E9;s lors des r&#x00E9;formes de Kiel, les rempla&#x00E7;ant par le yod en exposant <code>[&#x02B2;]</code> associ&#x00E9; aux symboles consonantiques standard. Parmi les dix auteurs que j&rsquo;ai compar&#x00E9;s, seul Grayson utilise le marqueur de palatalisation approuv&#x00E9; par l&rsquo;API. Les autres r&#x00E9;utilisent des symboles pr&#x00E9;d&#x00E9;finis (demi-anneaux, c&#x00E9;dilles, crochets r&#x00E9;troflexes) qui signifient autre chose dans l&rsquo;usage orthodoxe de l&rsquo;API. Ilya suit Grayson.</p>
+
+						<p>Le sujet connexe du v&#x00E9;laire-i, la voyelle <code>[&#x0268;]</code>, est &#x00E9;galement pr&#x00E9;sent&#x00E9; ici&#160;: une voyelle m&#x00E9;diane, &#x00E0; mi-chemin entre <code>[i]</code> et <code>[u]</code> sur le quadrilat&#x00E8;re vocalique de Jones.</p>
+
+						<h3 id="learn-unit-7">Section 7 · Intégration</h3>
 
 						<p>Ce qui se passe quand les sons se rencontrent : l'assimilation à l'intérieur des mots, aux frontières entre les mots, et à travers les clitiques. Grayson, s'appuyant sur le travail de Derwing et Priestly, pose plusieurs principes pour l'assimilation régressive du voisement dans le russe chanté : la ponctuation stoppe l'assimilation; les sonantes (<code>[l m n r]</code>) et les voyelles n'influencent pas le voisement à travers la frontière du mot; et les phonèmes <code>/v/</code> et <code>/f/</code>, lorsqu'ils sont orthographiés avec un ⟨в⟩, présentent une faiblesse phonémique, n'exerçant aucun pouvoir assimilatif propre tout en étant influencés par les phonèmes adjacents.</p>
 
@@ -2393,33 +2483,123 @@
 
 						<p>Transcribe <strong>шесть</strong> and <strong>шест</strong>. Both begin with ⟨ш⟩ + ⟨е⟩, but шесть has a soft cluster following (⟨сть⟩ → /sʲtʲ/) and produces [e]. шест has a hard cluster (⟨ст⟩ → /st/) and stays at /ɛ/. The always-hard road to [e] at work — same letter, different neighbour, different colour.</p>
 
-						<h3 id="learn-unit-4">Unit 4 · The Consonant Sounds</h3>
+						<h3 id="learn-unit-4">Section 4 &middot; Vowel Reduction</h3>
 
-						<p>A comparison of ten Russian lyric diction authors reveals a remarkable uniformity in the notation of the majority of consonants. The symbols corresponding to the letterforms ⟨b d f g k m n p r s t v x z⟩ are unanimous across all ten sources. Where the authors diverge (on the lateral approximant, on the palatal nasal, on the postalveolar fricatives), the differences reflect competing traditions rather than errors.</p>
+						<p><strong>When a vowel loses stress, it changes.</strong></p>
 
-						<p>We organise the consonants by what you already know, rather than by the historical relationship of Cyrillic to other writing systems as Grayson does. Consonants that behave identically to their counterparts come first. Consonants that are close but not identical come next. Genuinely unfamiliar sounds come last. Along the way, we introduce the iotated vowels (я, е, ё, ю), the soft and hard signs, and the first encounter with palatalization as an inherent property of certain consonants. The voiced velar fricative <code>[ɣ]</code>, the regressively voiced version of <code>[x]</code>, also makes its appearance here; there seems to be a correspondence between sources that include it and those that are also thoughtful about other nuanced aspects of their transcriptions.</p>
+						<p>Russian is a stress-timed language, like English. It rolls out in a series of stressed and unstressed syllables, where the interval between stressed syllables stays roughly constant, but unstressed syllables accommodate these regular pulses by both compressing in between them and reducing in vowel specificity. This loss of specificity is called vowel reduction. The vowel loses its distinctiveness by comparison to its default cardinal value, drifting toward a more centralised, less committed sound. In sung Russian, the composer prescribes durations, so the obvious temporal compression of a stress-timed language in spontaneous speech can&rsquo;t manifest: it is controlled instead by the rhythm and speed of the melody. But as storytellers, the qualitative reduction of speech prosody still informs our approach to sung Russian texts. Lyric diction preserves more vowel quality for singing than speech does, yet the principle holds: an unstressed vowel is not the same defined sound as a stressed one.</p>
 
-						<h3 id="learn-unit-5">Unit 5 · Palatalization</h3>
+						<p>Section 3 established the six stressed vowel targets: <code>/&#x0251;/</code>, <code>/&#x025B;/</code>, <code>/i/</code>, <code>/o/</code>, <code>/u/</code>, and <code>[&#x0268;]</code>. Three of them &mdash; <code>/i/</code>, <code>/u/</code>, and <code>[&#x0268;]</code> &mdash; pass through stress unchanged: they retain their cardinal sound whether they are stressed or not. This will appeal to those of us who yearn for dependable rules in sung Russian. The remaining and most commonly-occurring three &mdash; <code>/&#x0251;/</code>, <code>/&#x025B;/</code>, and <code>/o/</code> &mdash; transform when they lose stress. The precise nature of the transformation depends on two factors: the identity of the vowel letter to start, and its proximity to the stressed syllable.</p>
 
-						<p>The bridge between inventory and process. Some consonants are always palatalized (you met them in Unit 4). Others become palatalized depending on their context. Teaching palatalization as a secondary articulation applied to already-familiar phonemes is a deliberate pedagogical philosophy: Russian does not ask you to learn entirely new sounds, but to add a gesture to sounds you already produce.</p>
+						<p>We catalogue five unstressed vowel sounds in sung Russian:</p>
 
-						<p>Grayson describes the process in three steps: "arch, pronounce, peel." The body of the tongue arches toward the hard palate in preparation, the consonant is simultaneously pronounced, and the dorsum peels away from the palate. A simple example illustrates the difference: the Russian word <em>нет</em> (no) is transcribed <code>[ɲɛt]</code>, not <code>[njɛt]</code>. Three familiar phonemes in sequence; what has changed is the nature of the nasal.</p>
+						<table>
+						<thead><tr><th>IPA</th><th>Source</th><th>What it sounds like</th></tr></thead>
+						<tbody>
+						<tr><td><code>/&#x0251;/</code></td><td>Unstressed &#x27E8;&#x0430;&#x27E9; or &#x27E8;&#x043E;&#x27E9; in privileged positions</td><td>The same open back vowel from Section 3, but without the articulatory commitment of stress.</td></tr>
+						<tr><td><code>[&#x028C;]</code></td><td>Unstressed &#x27E8;&#x0430;&#x27E9; or &#x27E8;&#x043E;&#x27E9; in remote positions</td><td>A centralized, relaxed vowel; this is the sung Russian schwa: further back than French <code>[&#x0259;]</code>, without lip rounding. Grayson notates this as <code>[&#x028C;]</code> rather than <code>[&#x0259;]</code> specifically to discourage singers with French training from rounding the sound. <code>[&#x028C;]</code> does not occur in stressed positions: it always signals a reduction.</td></tr>
+						<tr><td><code>[&#x026A;]</code></td><td>Unstressed &#x27E8;&#x0435;&#x27E9; or &#x27E8;&#x044F;&#x27E9; after palatalized consonants</td><td>A lax, centralized version of /i/. The only vowel in Grayson&rsquo;s inventory without a cardinal reference on Jones&rsquo; vowel chart. <code>[&#x026A;]</code> does not occur in stressed positions: it always signals a reduction.</td></tr>
+						<tr><td><code>/i/</code></td><td>Unstressed &#x27E8;&#x0435;&#x27E9; or &#x27E8;&#x044F;&#x27E9; in interpalatal environments</td><td>The full /i/ from Section 3, fronted by the surrounding palatalized consonants.</td></tr>
+						<tr><td><code>[&#x0268;]</code></td><td>Unstressed &#x27E8;&#x0435;&#x27E9; after always-hard consonants (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;)</td><td>The same velar-i from Section 3. These consonants reject palatalization, so the vowel velarizes instead of reducing to <code>[&#x026A;]</code>.</td></tr>
+						</tbody>
+						</table>
 
-						<p>The history of palatalization notation deserves a brief excursion. Before 1989, the International Phonetic Association advocated a specialised subset of sixteen symbols incorporating palatalization hooks. The IPA discontinued these at the Kiel Convention, replacing them with the superscript yod <code>[ʲ]</code> paired with standard consonant symbols. Among the ten authors I compared, Grayson alone uses the IPA-approved palatalization marker. The others repurpose predefined symbols (subscript half-rings, cedillas, retroflex hooks) that mean something else in orthodox IPA usage. This widespread repurposing demands attentive reinterpretation for anyone encountering these singers' transcriptions. Ilya follows Grayson.</p>
+						<p>Two processes govern these reductions. Russian phonology names them <em>akanye</em> /&#x02C8;&#x0251; k&#x028C; &#x0272;&#x026A;/ and <em>ikanye</em> /&#x02C8;i k&#x028C; &#x0272;&#x026A;/.</p>
 
-						<p>The companion topic of velar-i, the vowel <code>[ɨ]</code>, is introduced here as well: a medial vowel, halfway between <code>[i]</code> and <code>[u]</code> on Jones' vowel quadrilateral.</p>
+						<h4 id="learn-u4-akanye">&#x27E8;&#x043E;&#x27E9; and &#x27E8;&#x0430;&#x27E9; follow different paths when unstressed.</h4>
 
-						<h3 id="learn-unit-6">Unit 6 · Vowel Reduction</h3>
+						<p>Akanye is the process by which unstressed &#x27E8;&#x043E;&#x27E9; and &#x27E8;&#x0430;&#x27E9; reduce. The word itself comes from the letter &#x27E8;&#x0430;&#x27E9;: in sung Russian when &#x27E8;&#x043E;&#x27E9; loses stress, it begins to sound like &#x27E8;&#x0430;&#x27E9;. But these two letters do not reduce symmetrically. Their paths diverge in one critical position: the syllable immediately after the stress.</p>
 
-						<p>Now the system comes together. You know what the vowels sound like when they are stressed (Unit 3). You know what palatalization does to the consonant environment (Unit 5). You know that stress governs everything (Unit 2).</p>
+						<table>
+						<thead><tr><th>Position relative to stress</th><th>&#x27E8;&#x043E;&#x27E9;</th><th>&#x27E8;&#x0430;&#x27E9;</th></tr></thead>
+						<tbody>
+						<tr><td>Stressed</td><td><code>/o/</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Immediately before stress</td><td><code>/&#x0251;/</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Immediately after stress</td><td><code>[&#x028C;]</code></td><td><code>/&#x0251;/</code></td></tr>
+						<tr><td>Two or more syllables before stress</td><td><code>[&#x028C;]</code></td><td><code>[&#x028C;]</code></td></tr>
+						<tr><td>Two or more syllables after stress</td><td><code>[&#x028C;]</code></td><td><code>[&#x028C;]</code></td></tr>
+						<tr><td>Word-initial (any distance)</td><td><code>/&#x0251;/</code></td><td><code>/&#x0251;/</code></td></tr>
+						</tbody>
+						</table>
 
-						<p>This unit completes the picture by explaining what happens to vowels when they are not stressed. Reduction is hierarchical and governed by proximity to stress. Consider the word <em>хорошо</em> (good), in which each ⟨о⟩ is spelled identically yet each is pronounced differently: stressed ⟨о⟩ in the final syllable is sung as <code>[o]</code>, penultimate ⟨о⟩ is sung as <code>[ɑ]</code>, and the remote ⟨о⟩ two syllables before the stress reduces further to <code>[ʌ]</code>. Russian phonology calls this process <em>akanye</em>.</p>
+						<p>The asymmetry sits in row three. Immediately after the stress, &#x27E8;&#x043E;&#x27E9; reduces to <code>[&#x028C;]</code>, while &#x27E8;&#x0430;&#x27E9; holds at <code>/&#x0251;/</code>. Grayson&rsquo;s reasoning is aural and semantic: the difference between <code>/&#x0251;/</code> and <code>[&#x028C;]</code> in this position helps the listener distinguish between the two underlying vowel letters, which helps the listener understand the difference between case forms like &#x27E8;&#x0431;&#x043B;&#x044E;&#x0434;&#x043E;&#x27E9; <code>/&#x02C8;bl&#x02B2;u d&#x028C;/</code> (a platter) and &#x27E8;&#x0431;&#x043B;&#x044E;&#x0434;&#x0430;&#x27E9; <code>/&#x02C8;bl&#x02B2;u d&#x0251;/</code> (platters), where the post-stress vowel alone carries the grammatical difference (Grayson, p. 266, fn. 306). Everywhere else, the paths converge.</p>
 
-						<p><em>Ikanye</em> is a parallel process that reduces unstressed ⟨е⟩ or ⟨я⟩ to <code>[ɪ]</code>. Aficionados who favour the pronunciation conventions of St. Petersburg may not advocate this kind of reduction, but it is legitimised by the Old Muscovite dialect on which lyric diction is founded.</p>
+						<p>Here is an overriding exception. Whenever either unstressed &#x27E8;&#x0430;&#x27E9; or &#x27E8;&#x043E;&#x27E9; is the first letter of the word, they read as <code>/&#x0251;/</code> regardless of how far it sits from the stress.</p>
 
-						<p>Vowel reconstitution is the choice to return a vowel to its unreduced value. In singing, this applies most notably to unstressed ⟨е⟩ or ⟨я⟩ which may reduce to <code>[ɪ]</code>. Reduction in some cases can sound too informal to a Russian speaker expecting the delivery of poetic texts with more formal precision. For example, the expression <em>то же</em> (also) can be transcribed with reduction as <code>[to ʒɨ]</code>, and that choice might agree with a brisk tempo and a short rhythmic value on an unstressed beat. But in a slower tempo, on a longer note, reconstitution to <code>[to ʒɛ]</code> may better honour the formality of the poetic text. Reconstitution is a matter of taste, best confirmed by a native Russian speaker; I have noticed that Russians seem to expect less reduction in the delivery of poetic texts, perhaps as a means of setting art apart from quotidian speech.</p>
+						<p>The word &#x27E8;&#x0445;&#x043E;&#x0440;&#x043E;&#x0448;&#x043E;&#x27E9; (good, well) demonstrates the complete akanye chain in a single word. Three identical &#x27E8;&#x043E;&#x27E9; letters, three different pronunciations: <code>/x&#x028C; r&#x0251; &#x02C8;&#x0283;o/</code>. The remote first &#x27E8;&#x043E;&#x27E9; reduces to <code>[&#x028C;]</code>. The immediately pre-stress &#x27E8;&#x043E;&#x27E9; holds at <code>/&#x0251;/</code>. The stressed final &#x27E8;&#x043E;&#x27E9; sounds as <code>/o/</code>.</p>
 
-						<h3 id="learn-unit-7">Unit 7 · Integration</h3>
+						<h4 id="learn-u4-ikanye">&#x27E8;&#x0435;&#x27E9; and &#x27E8;&#x044F;&#x27E9; reduce toward [&#x026A;].</h4>
+
+						<p>Ikanye is the parallel process for vowels that sit in interpalatal environments, where the vowel is sandwiched on either side by a palatalizing agent. The vowels &#x27E8;&#x0435;&#x27E9; and &#x27E8;&#x044F;&#x27E9; both reduce to <code>[&#x026A;]</code>. Unlike akanye, where position relative to stress creates a hierarchy, ikanye is simpler: these two orthographic vowels reduce to <code>[&#x026A;]</code> in any unstressed position.</p>
+
+						<p>Two refinements qualify this rule:</p>
+
+						<table>
+						<thead><tr><th>Condition</th><th>Result</th><th>Why</th></tr></thead>
+						<tbody>
+						<tr><td>After always-hard consonants (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;)</td><td><code>[&#x0268;]</code>, not <code>[&#x026A;]</code></td><td>The three consonants in the always-hard set cannot palatalize. Instead, the vowel velarizes to match the hard consonant environment.</td></tr>
+						<tr><td>Interpalatal (palatalized on both sides)</td><td><code>/i/</code>, not <code>[&#x026A;]</code></td><td>The surrounding palatalized consonants front the vowel fully to /i/.</td></tr>
+						</tbody>
+						</table>
+
+						<p>Iotated vowels (&#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9;, and &#x27E8;&#x044F;&#x27E9;) follow the same logic. Unstressed &#x27E8;&#x044F;&#x27E9; in j-cluster position (word-initial, after a vowel, or after a sign) produces <code>[j&#x026A;]</code>; interpalatally, it will front to <code>[ji]</code>. Grayson is explicit that the reduced cluster <code>[j&#x028C;]</code> should be avoided in sung Russian.</p>
+
+						<h4 id="learn-u4-reconstitution">Reconstitution is an informed choice, not an obligation.</h4>
+
+						<p>Reconstitution is the decision to undo full reduction, or to return a reduced vowel partway toward its unreduced value. In singing, where note values can sustain a vowel well beyond its spoken duration, a fully-reduced sound can feel too informal to sing as a sustained vowel value for the delivery of poetic text. Reconstitution gives the singer a principled option to restore formality and vowel distinction without abandoning Grayson&rsquo;s phonological system.</p>
+
+						<p>The process reverses the reduction chain entirely for most vowels, but only partway for &#x27E8;&#x043E;&#x27E9;:</p>
+
+						<table>
+						<thead><tr><th>Reduced sound</th><th>Reconstitutes to</th><th>Does not reconstitute to</th></tr></thead>
+						<tbody>
+						<tr><td><code>[&#x028C;]</code> (from &#x27E8;&#x0430;&#x27E9; or &#x27E8;&#x043E;&#x27E9;)</td><td><code>/&#x0251;/</code></td><td>/o/ &mdash; the door to /o/ is one-way</td></tr>
+						<tr><td><code>[&#x026A;]</code> (from &#x27E8;&#x0435;&#x27E9;)</td><td><code>/&#x025B;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[&#x026A;]</code> (from &#x27E8;&#x044F;&#x27E9;)</td><td><code>/&#x0251;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[j&#x026A;]</code> (from &#x27E8;&#x044F;&#x27E9; in j-cluster)</td><td><code>/j&#x0251;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[j&#x026A;]</code> (from &#x27E8;&#x0435;&#x27E9; in j-cluster)</td><td><code>/j&#x025B;/</code></td><td>&mdash;</td></tr>
+						<tr><td><code>[&#x0268;]</code> (after always-hard consonants)</td><td>Does not reconstitute</td><td>&mdash;</td></tr>
+						</tbody>
+						</table>
+
+						<p>The one-way door is the most important constraint. When <code>[&#x028C;]</code> reconstitutes, it returns to <code>/&#x0251;/</code>, never to <code>/o/</code>. The reduction from <code>/o/</code> to <code>/&#x0251;/</code> erases the rounding; reconstitution cannot restore what akanye has removed. Grayson asserts that <code>[&#x0268;]</code> after always-hard consonants does not reconstitute at all: the velarized environment is fixed.</p>
+
+						<blockquote class="learn-callout">
+						<p><strong>A note of respectful disagreement from Dann.</strong></p>
+						<p>Grayson writes that &ldquo;&#x27E8;&#x0438;&#x27E9; read as [&#x0268;] (stressed or unstressed) and unstressed &#x27E8;&#x0435;&#x27E9; read as [&#x0268;] after a hard consonant (on long or short notes), remain sung as [&#x0268;]&rdquo; (p. 129). This sentence contains two claims, and in my opinion, they are not equivalent.</p>
+						<p>The first claim is sound. When &#x27E8;&#x0438;&#x27E9; follows a hard consonant, the resulting [&#x0268;] is not a reduction: it is the vowel&rsquo;s identity in that environment. Russians know and understand that in this instance &#x27E8;&#x0438;&#x27E9; is pronounced [&#x0268;], or perhaps we can understand it as [&#x0268;] being spelled &#x27E8;&#x0438;&#x27E9; in this case; they amount to the same outcome. There is no source vowel to reconstitute to, it is simply the traditional vowel that is performed in this circumstance, acknowledging that [&#x0268;] must follow an unpalatalized consonant, never [i]. The hard consonant forces the expression of the velar-i. I agree with Grayson here; reconstitution does not apply.</p>
+						<p>I believe his second claim warrants reconsideration. When unstressed &#x27E8;&#x0435;&#x27E9; follows one of the always-hard consonants (&#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, &#x27E8;&#x0446;&#x27E9;) to produce [&#x0268;], the underlying vowel is /&#x025B;/. /&#x025B;/ reduces to become [&#x0268;] in this case, and therefore the logic of reconstitution should still apply. I assert that on sustained notes or in slow(er) tempi, the singer can return (reconstitute) toward [&#x025B;]. In my experience, native Russian speakers and coaches consistently advocate this choice. Dr. Alexei Kochetov, a native Russian speaker and phonetician at the University of Toronto, offered precisely this note on my performance of Kabalevsky&rsquo;s Op. 52, no. 2: &ldquo;[toj &#x0292;&#x0268;] should probably be [toj &#x0292;&#x025B;] (with no reduction).&rdquo;</p>
+						<p>Perhaps an articulatory argument can support reconstitution in this case? The tongue postures of [&#x025B;] and the always-hard consonants [&#x0283;], [&#x0292;], and [ts] occupy the same medial neighbourhood; [&#x025B;] is not fronted enough to impose a conflict. This is not analogous to attempting /i/ after a hard consonant, where the fronting genuinely contradicts the consonant environment.</p>
+						<p>This is the single point on which <em>Ilya</em> departs from Grayson&rsquo;s reconstitution rules. When the reconstitution toggle is active, unstressed &#x27E8;&#x0435;&#x27E9; after an always-hard consonant reconstitutes to [&#x025B;]. Nevertheless, if you disagree with me and wish to observe Grayson&rsquo;s commitment to the inviolability of [&#x0268;] in this case, you can click the &ldquo;Spot reduction&rdquo; checkbox under the Word Stack in the Drawer and your [&#x0268;] will dutifully reappear.</p>
+						</blockquote>
+
+						<p>When to reconstitute is a matter of context and taste. A short note on a weak beat in a brisk tempo may welcome full reduction. A sustained note on a strong beat in a slow tempo may call for reconstitution. Russians seem to expect less reduction in the delivery of poetic texts, perhaps as a means of setting art apart from quotidian speech. The singer&rsquo;s best confirmation comes from a native Russian coach; Ilya offers both options through the reconstitution toggle, so the singer can compare the two readings and make an informed choice.</p>
+
+						<h4 id="learn-u4-try">Try this in Ilya.</h4>
+
+						<p>Transcribe &#x27E8;&#x0445;&#x043E;&#x0440;&#x043E;&#x0448;&#x043E;&#x27E9;. Three identical &#x27E8;&#x043E;&#x27E9; letters produce three different sounds: <code>[&#x028C;]</code>, <code>/&#x0251;/</code>, <code>/o/</code>. Then toggle reconstitution on: the remote <code>[&#x028C;]</code> returns to <code>/&#x0251;/</code>, but neither unstressed vowel returns to <code>/o/</code>. The one-way door at work.</p>
+
+						<p>Then try &#x27E8;&#x0436;&#x0435;&#x043D;&#x0430;&#x27E9; (a wife). With reconstitution off, the unstressed &#x27E8;&#x0435;&#x27E9; after always-hard &#x27E8;&#x0436;&#x27E9; appears as <code>[&#x0268;]</code>. On the Drawer panel under Notation, toggle global reconstitution on, and <em>Ilya</em> restores it to <code>[&#x025B;]</code> &mdash; the departure from Grayson described above. Regardless of your global settings, if you prefer Grayson&rsquo;s original rule, you can click &ldquo;Spot reduction&rdquo; or &ldquo;Spot reconstitution&rdquo; under the Word Stack in the Drawer (these labels respond contextually to your global settings), and your <code>[&#x0268;]</code> will dutifully reappear.</p>
+
+						<p><em>Grayson source: Ch. 3 &sect;&sect;3, 5, 7&ndash;8 (pp. 97&ndash;129), Ch. 7 &sect;1 (pp. 263&ndash;267). Reconstitution chart: p. 128, note p. 129. Aural differentiation of case forms: p. 266, fn. 306. Stress-timing framework: Mitton (dissertation, &sect;4.5). Kochetov correction: personal communication, DMA recital adjudication, University of Toronto.</em></p>
+
+						<h3 id="learn-unit-5">Section 5 &middot; The Consonant Sounds</h3>
+
+						<p>A comparison of ten Russian lyric diction authors reveals a remarkable uniformity in the notation of the majority of consonants. The symbols corresponding to the letterforms &#x27E8;b d f g k m n p r s t v x z&#x27E9; are unanimous across all ten sources. Where the authors diverge (on the lateral approximant, on the palatal nasal, on the postalveolar fricatives), the differences reflect competing traditions rather than errors.</p>
+
+						<p>We organise the consonants by what you already know, rather than by the historical relationship of Cyrillic to other writing systems as Grayson does. Consonants that behave identically to their counterparts come first. Consonants that are close but not identical come next. Genuinely unfamiliar sounds come last. Along the way, we introduce the iotated vowels (&#x044F;, &#x0435;, &#x0451;, &#x044E;), the soft and hard signs, and the first encounter with palatalization as an inherent property of certain consonants. The voiced velar fricative <code>[&#x0263;]</code>, the regressively voiced version of <code>[x]</code>, also makes its appearance here; there seems to be a correspondence between sources that include it and those that are also thoughtful about other nuanced aspects of their transcriptions.</p>
+
+						<h3 id="learn-unit-6">Section 6 &middot; Palatalization</h3>
+
+						<p>The bridge between inventory and process. Some consonants are always palatalized (you met them in Section 5). Others become palatalized depending on their context. Teaching palatalization as a secondary articulation applied to already-familiar phonemes is a deliberate pedagogical philosophy: Russian does not ask you to learn entirely new sounds, but to add a gesture to sounds you already produce.</p>
+
+						<p>Grayson describes the process in three steps: &ldquo;arch, pronounce, peel.&rdquo; The body of the tongue arches toward the hard palate in preparation, the consonant is simultaneously pronounced, and the dorsum peels away from the palate. A simple example illustrates the difference: the Russian word <em>&#x043D;&#x0435;&#x0442;</em> (no) is transcribed <code>[&#x0272;&#x025B;t]</code>, not <code>[nj&#x025B;t]</code>. Three familiar phonemes in sequence; what has changed is the nature of the nasal.</p>
+
+						<p>The history of palatalization notation deserves a brief excursion. Before 1989, the International Phonetic Association advocated a specialised subset of sixteen symbols incorporating palatalization hooks. The IPA discontinued these at the Kiel Convention, replacing them with the superscript yod <code>[&#x02B2;]</code> paired with standard consonant symbols. Among the ten authors I compared, Grayson alone uses the IPA-approved palatalization marker. The others repurpose predefined symbols (subscript half-rings, cedillas, retroflex hooks) that mean something else in orthodox IPA usage. This widespread repurposing demands attentive reinterpretation for anyone encountering these singers&rsquo; transcriptions. Ilya follows Grayson.</p>
+
+						<p>The companion topic of velar-i, the vowel <code>[&#x0268;]</code>, is introduced here as well: a medial vowel, halfway between <code>[i]</code> and <code>[u]</code> on Jones&rsquo; vowel quadrilateral.</p>
+
+						<h3 id="learn-unit-7">Section 7 · Integration</h3>
 
 						<p>What happens when sounds meet each other: assimilation within words, across word boundaries, and through the clitics. Grayson, drawing on the work of Derwing and Priestly, lays out several governing principles for the regressive assimilation of voicing in sung Russian: punctuation stops assimilation; sonorants (<code>[l m n r]</code>) and vowels do not influence voicing across the word boundary; and the phonemes <code>/v/</code> and <code>/f/</code>, when spelled with a ⟨в⟩, exhibit phonemic weakness, exerting no assimilative power of their own while being influenced by adjacent phonemes.</p>
 
@@ -2794,6 +2974,18 @@
 		.main-content.tab-enter-from-left {
 			animation: none !important;
 		}
+	}
+	/* ── LEARN callout box (scholarly disagreement) ────────── */
+	:global(.learn-callout) {
+		border: 1px solid var(--sage, #8B9A7D);
+		background: #f5f3ef;
+		padding: 1.25rem 1.5rem;
+		margin: 1.5rem 0;
+		border-radius: 2px;
+		font-size: 0.92em;
+	}
+	:global(.learn-callout p:last-child) {
+		margin-bottom: 0;
 	}
 	/* ── Placeholder content within ReadingPaper ──────────── */
 	.placeholder-content {
