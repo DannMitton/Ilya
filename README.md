@@ -78,7 +78,7 @@ Ilya is built in such a way that it can be improved and optimised. The three pac
 
 ## Design and Attribution
 
-Ilya was conceived and directed by Dann Mitton (Doctor of Musical Arts, University of Toronto), who serves as strategist, decision-maker, scholarly authority, content author, reluctant programmer, and warm, scholarly voice of all user-facing text.
+Ilya was conceived and directed by [Dann Mitton](https://www.dannmitton.com) (Doctor of Musical Arts, University of Toronto), who serves as strategist, decision-maker, scholarly authority, content author, reluctant programmer, and warm, scholarly voice of all user-facing text.
 
 Claude (Opus 4.6 Extended, by Anthropic) served as project manager and implementation lead: writing the code, managing task sequencing, conducting the Grayson dissertation audit, and co-authoring the LEARN module content under Dann's editorial authority. He also served as a sounding board, toady, confidante, research assistant, makeshift tutor, and scribe.
 
