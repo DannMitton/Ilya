@@ -1602,11 +1602,201 @@
 
 						<p><em>Source Grayson&#160;: ch. 3 &sect;&sect;3, 5, 7&ndash;8 (pp. 97&ndash;129), ch. 7 &sect;1 (pp. 263&ndash;267). Tableau de reconstitution&#160;: p. 128, note p. 129. Diff&#x00E9;renciation auditive des formes casuelles&#160;: p. 266, n. 306. Cadre accentuel&#160;: Mitton (th&#x00E8;se, &sect;4.5). Note de Kochetov&#160;: communication personnelle, soutenance de r&#x00E9;cital DMA, Universit&#x00E9; de Toronto.</em></p>
 
-						<h3 id="learn-unit-5">Section 5 &middot; Les sons consonantiques</h3>
+						<h3 id="learn-unit-5">Section 5 &middot; Les consonnes</h3>
 
-						<p>Une comparaison de dix auteurs de diction lyrique russe r&#x00E9;v&#x00E8;le une uniformit&#x00E9; remarquable dans la notation de la majorit&#x00E9; des consonnes. Les symboles correspondant aux lettres &#x27E8;b d f g k m n p r s t v x z&#x27E9; font l&rsquo;unanimit&#x00E9;. L&#x00E0; o&#x00F9; les auteurs divergent (sur la lat&#x00E9;rale, sur la nasale palatale, sur les fricatives postalv&#x00E9;olaires), les diff&#x00E9;rences refl&#x00E8;tent des traditions concurrentes plut&#x00F4;t que des erreurs.</p>
+						<p>Le russe compte vingt-et-une lettres consonantiques. Bonne nouvelle&#160;: la majorit&#x00E9; de ces consonnes produisent des sons que le chanteur conna&#x00EE;t d&#x00E9;j&#x00E0; de l&rsquo;anglais, de l&rsquo;italien, de l&rsquo;allemand ou du fran&#x00E7;ais. Quelques-unes exigent un ajustement, et seule une poign&#x00E9;e est v&#x00E9;ritablement nouvelle. Nous commen&#x00E7;ons par le familier, puis concentrons notre attention sur ce qui ne l&rsquo;est pas.</p>
 
-						<p>Nous organisons les consonnes &#x00E0; partir de ce que vous savez d&#x00E9;j&#x00E0;, et non selon la relation historique du cyrillique avec d&rsquo;autres syst&#x00E8;mes d&rsquo;&#x00E9;criture, comme le fait Grayson. Les consonnes qui se comportent de mani&#x00E8;re identique &#x00E0; leurs &#x00E9;quivalents viennent en premier. Celles qui sont proches mais pas identiques suivent. Les sons v&#x00E9;ritablement nouveaux arrivent en dernier. En chemin, nous pr&#x00E9;sentons les voyelles iot&#x00E9;es (&#x044F;, &#x0435;, &#x0451;, &#x044E;), les signes mou et dur, et la premi&#x00E8;re rencontre avec la palatalisation comme propri&#x00E9;t&#x00E9; inh&#x00E9;rente de certaines consonnes. La fricative v&#x00E9;laire vois&#x00E9;e <code>[&#x0263;]</code>, la version regressivement vois&#x00E9;e de <code>[x]</code>, fait &#x00E9;galement son apparition ici; il semble que les auteurs qui l&rsquo;incluent dans leur inventaire sont aussi ceux qui se montrent les plus attentifs aux autres aspects nuanc&#x00E9;s de leurs transcriptions.</p>
+						<p>Une diff&#x00E9;rence syst&#x00E9;matique gouverne l&rsquo;inventaire entier. Alors que les consonnes anglaises sont typiquement alv&#x00E9;olaires (la langue touche la cr&#x00EA;te situ&#x00E9;e derri&#x00E8;re les dents sup&#x00E9;rieures), les consonnes russes sont dentales&#160;: la pointe de la langue touche le dos des dents sup&#x00E9;rieures elles-m&#x00EA;mes, comme en italien. Les chanteurs form&#x00E9;s en diction italienne ou fran&#x00E7;aise ont d&#x00E9;j&#x00E0; int&#x00E9;rioris&#x00E9; cet ajustement. Ceux qui viennent de l&rsquo;anglais ou de l&rsquo;allemand constateront qu&rsquo;avancer consciemment la langue de quelques millim&#x00E8;tres produit la clart&#x00E9; caract&#x00E9;ristique de l&rsquo;articulation consonantique russe.</p>
+
+						<h4 id="learn-u5-familiar">Dans quelle mesure le syst&#x00E8;me consonantique russe est-il familier&#160;?</h4>
+
+						<p>De ce sous-ensemble de vingt-et-une lettres consonantiques, treize produisent des sons essentiellement identiques &#x00E0; des consonnes que le chanteur conna&#x00EE;t de l&rsquo;italien ou d&rsquo;une autre langue de diction standard&#160;: &#x27E8;&#x0431;&#x27E9;, &#x27E8;&#x0432;&#x27E9;, &#x27E8;&#x0433;&#x27E9;, &#x27E8;&#x0434;&#x27E9;, &#x27E8;&#x0437;&#x27E9;, &#x27E8;&#x0439;&#x27E9;, &#x27E8;&#x043A;&#x27E9;, &#x27E8;&#x043C;&#x27E9;, &#x27E8;&#x043D;&#x27E9;, &#x27E8;&#x043F;&#x27E9;, &#x27E8;&#x0441;&#x27E9;, &#x27E8;&#x0442;&#x27E9;, &#x27E8;&#x0444;&#x27E9;. Deux autres sont assez proches pour qu&rsquo;une br&#x00E8;ve remarque suffise&#160;: &#x27E8;&#x0440;&#x27E9; (roulez-le l&#x00E9;g&#x00E8;rement) et &#x27E8;&#x0436;&#x27E9; (les chanteurs francophones l&rsquo;ont d&#x00E9;j&#x00E0;). Nous distinguons le &#x27E8;&#x0445;&#x27E9; du russe chant&#x00E9; de l&rsquo;<em>achlaut</em> allemand (&laquo;&#160;uvulaire&#160;&raquo;), <code>[&#x03C7;]</code>). Les cinq restantes exigent une attention cibl&#x00E9;e et sont pr&#x00E9;sent&#x00E9;es dans le tableau ci-dessous.</p>
+
+						<table>
+						<thead><tr><th>Lettre</th><th>Nom</th><th>API</th><th>&#x00C9;quivalent le plus proche</th><th>Notes</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0431;&#x27E9;</td><td>&#x0431;&#x044D;</td><td><code>/b/</code></td><td><code>/b/</code> italien dans <em>bene</em> (&laquo;&#160;bien&#160;&raquo;)</td><td>Occlusion compl&#x00E8;te, sans souffle</td></tr>
+						<tr><td>&#x27E8;&#x0432;&#x27E9;</td><td>&#x0432;&#x044D;</td><td><code>/v/</code></td><td><code>/v/</code> italien dans <em>vino</em> (&laquo;&#160;vin&#160;&raquo;)</td><td>Pression d&rsquo;air plus l&#x00E9;g&#x00E8;re qu&rsquo;en anglais&#8239;; pleinement vois&#x00E9;</td></tr>
+						<tr><td>&#x27E8;&#x0433;&#x27E9;</td><td>&#x0433;&#x044D;</td><td><code>/&#x0261;/</code></td><td><code>/&#x0261;/</code> italien dans <em>gamba</em> (&laquo;&#160;jambe&#160;&raquo;)</td><td>Occlusive v&#x00E9;laire vois&#x00E9;e, sans rel&#x00E2;chement d&rsquo;air</td></tr>
+						<tr><td>&#x27E8;&#x0434;&#x27E9;</td><td>&#x0434;&#x044D;</td><td><code>/d/</code></td><td><code>/d/</code> italien dans <em>donna</em> (&laquo;&#160;femme&#160;&raquo;)</td><td>Dentale, sans rel&#x00E2;chement fort</td></tr>
+						<tr><td>&#x27E8;&#x0436;&#x27E9;</td><td>&#x0436;&#x044D;</td><td><code>/&#x0292;/</code></td><td><code>/&#x0292;/</code> fran&#x00E7;ais dans <em>je</em></td><td>Timbre sombre&#160;; langue en louche. Toujours dure</td></tr>
+						<tr><td>&#x27E8;&#x0437;&#x27E9;</td><td>&#x0437;&#x044D;</td><td><code>/z/</code></td><td><code>/z/</code> allemand vois&#x00E9; dans <em>See</em> (&laquo;&#160;lac&#160;&raquo;)</td><td>Timbre riche et bourdonnant</td></tr>
+						<tr><td>&#x27E8;&#x0439;&#x27E9;</td><td>&#x0438; &#x043A;&#x0440;&#x0430;&#x0442;&#x043A;&#x043E;&#x0435;</td><td><code>/j/</code></td><td><code>/j/</code> anglais dans <em>yes</em> (&laquo;&#160;oui&#160;&raquo;)</td><td>Vois&#x00E9;, non soutenu</td></tr>
+						<tr><td>&#x27E8;&#x043A;&#x27E9;</td><td>&#x043A;&#x0430;</td><td><code>/k/</code></td><td><code>/k/</code> italien dans <em>casa</em> (&laquo;&#160;maison&#160;&raquo;)</td><td>Sans souffle aspir&#x00E9;</td></tr>
+						<tr><td>&#x27E8;&#x043B;&#x27E9;</td><td>&#x044D;&#x043B;&#x044C;</td><td><code>/&#x026B;/</code> ou <code>/l&#x02B2;/</code></td><td>Voir &laquo;&#160;Les deux sons du &#x27E8;&#x043B;&#x27E9; russe&#160;&raquo; ci-dessous</td><td>Deux r&#x00E9;alisations fondamentalement diff&#x00E9;rentes</td></tr>
+						<tr><td>&#x27E8;&#x043C;&#x27E9;</td><td>&#x044D;&#x043C;</td><td><code>/m/</code></td><td>Identique dans les langues europ&#x00E9;ennes</td><td>Nasale, vois&#x00E9;e</td></tr>
+						<tr><td>&#x27E8;&#x043D;&#x27E9;</td><td>&#x044D;&#x043D;</td><td><code>/n/</code></td><td><code>/n/</code> dental italien</td><td>Placement dental</td></tr>
+						<tr><td>&#x27E8;&#x043F;&#x27E9;</td><td>&#x043F;&#x044D;</td><td><code>/p/</code></td><td><code>/p/</code> italien dans <em>padre</em> (&laquo;&#160;p&#x00E8;re&#160;&raquo;)</td><td>Occlusive sans rel&#x00E2;chement, sans souffle</td></tr>
+						<tr><td>&#x27E8;&#x0440;&#x27E9;</td><td>&#x044D;&#x0440;</td><td><code>/r/</code></td><td><code>/r/</code> roul&#x00E9; italien</td><td>Toujours l&#x00E9;g&#x00E8;rement roul&#x00E9; en chant&#160;; un roulement italien excessif sonnera comme une caricature en russe</td></tr>
+						<tr><td>&#x27E8;&#x0441;&#x27E9;</td><td>&#x044D;&#x0441;</td><td><code>/s/</code></td><td><code>/s/</code> dans <em>see</em> (&laquo;&#160;voir&#160;&raquo;)</td><td>Milieu de langue bas&#160;; timbre plus sombre qu&rsquo;en anglais</td></tr>
+						<tr><td>&#x27E8;&#x0442;&#x27E9;</td><td>&#x0442;&#x044D;</td><td><code>/t/</code></td><td><code>/t/</code> italien dans <em>terra</em> (&laquo;&#160;terre&#160;&raquo;)</td><td>Dentale, sans rel&#x00E2;chement fort</td></tr>
+						<tr><td>&#x27E8;&#x0444;&#x27E9;</td><td>&#x044D;&#x0444;</td><td><code>/f/</code></td><td>Identique dans les langues europ&#x00E9;ennes</td><td>Rare dans les mots russes natifs</td></tr>
+						<tr><td>&#x27E8;&#x0445;&#x27E9;</td><td>&#x0445;&#x0430;</td><td><code>/x/</code></td><td><em>achlaut</em> allemand (&laquo;&#160;uvulaire&#160;&raquo;) dans <em>Bach</em></td><td>Fricative v&#x00E9;laire. Pas un <code>/k/</code></td></tr>
+						<tr><td>&#x27E8;&#x0446;&#x27E9;</td><td>&#x0446;&#x044D;</td><td><code>/ts/</code></td><td><code>/ts/</code> allemand dans <em>Katze</em> (&laquo;&#160;chat&#160;&raquo;)</td><td>Un phon&#x00E8;me unique. Toujours dure</td></tr>
+						<tr><td>&#x27E8;&#x0447;&#x27E9;</td><td>&#x0447;&#x044D;</td><td><code>/t&#x0283;&#x02B2;/</code></td><td><code>/t&#x0283;/</code> italien dans <em>ciao</em> (&laquo;&#160;salut&#160;&raquo;), palatalis&#x00E9;</td><td>Un phon&#x00E8;me unique. Toujours molle</td></tr>
+						<tr><td>&#x27E8;&#x0448;&#x27E9;</td><td>&#x0448;&#x0430;</td><td><code>/&#x0283;/</code></td><td><code>/&#x0283;/</code> anglais dans <em>she</em> (&laquo;&#160;elle&#160;&raquo;)</td><td>Plus sombre qu&rsquo;en anglais. Toujours dure</td></tr>
+						<tr><td>&#x27E8;&#x0449;&#x27E9;</td><td>&#x0449;&#x0430;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>Pas d&rsquo;&#x00E9;quivalent proche</td><td>Double longueur palatalis&#x00E9;e. Toujours molle</td></tr>
+						</tbody>
+						</table>
+
+						<h4 id="learn-u5-pairs">Quelles consonnes forment des paires vois&#x00E9;es et non vois&#x00E9;es&#160;?</h4>
+
+						<p>Les consonnes russes s&rsquo;organisent en paires syst&#x00E9;matiques qui partagent la m&#x00EA;me articulation mais diff&#x00E8;rent par leur voisement. Le chanteur form&#x00E9; en diction allemande comprend d&#x00E9;j&#x00E0; ce principe&#160;: une consonne vois&#x00E9;e et sa partenaire non vois&#x00E9;e pr&#x00E9;parent des configurations identiques du conduit vocal, sauf que l&rsquo;une fait vibrer les cordes vocales (vois&#x00E9;e) et l&rsquo;autre non (non vois&#x00E9;e).</p>
+
+						<p>Ces paires prennent toute leur importance &#x00E0; la Section 7, o&#x00F9; nous abordons l&rsquo;assimilation de voisement (une consonne non vois&#x00E9;e devenant vois&#x00E9;e devant une voisine vois&#x00E9;e, ou vice versa), en plus du d&#x00E9;voisement final (une consonne vois&#x00E9;e perdant son voisement &#x00E0; la fin d&rsquo;un mot, comme en allemand). Retenez ces paires.</p>
+
+						<table>
+						<thead><tr><th>Vois&#x00E9;e</th><th>Lettre</th><th>Non vois&#x00E9;e</th><th>Lettre</th></tr></thead>
+						<tbody>
+						<tr><td><code>/b/</code></td><td>&#x27E8;&#x0431;&#x27E9;</td><td><code>/p/</code></td><td>&#x27E8;&#x043F;&#x27E9;</td></tr>
+						<tr><td><code>/v/</code></td><td>&#x27E8;&#x0432;&#x27E9;</td><td><code>/f/</code></td><td>&#x27E8;&#x0444;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0261;/</code></td><td>&#x27E8;&#x0433;&#x27E9;</td><td><code>/k/</code></td><td>&#x27E8;&#x043A;&#x27E9;</td></tr>
+						<tr><td><code>/d/</code></td><td>&#x27E8;&#x0434;&#x27E9;</td><td><code>/t/</code></td><td>&#x27E8;&#x0442;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0292;/</code></td><td>&#x27E8;&#x0436;&#x27E9;</td><td><code>/&#x0283;/</code></td><td>&#x27E8;&#x0448;&#x27E9;</td></tr>
+						<tr><td><code>/z/</code></td><td>&#x27E8;&#x0437;&#x27E9;</td><td><code>/s/</code></td><td>&#x27E8;&#x0441;&#x27E9;</td></tr>
+						</tbody>
+						</table>
+
+						<p>Dans le russe chant&#x00E9;, quatre consonnes existent en dehors du syst&#x00E8;me d&rsquo;appariement. Les sonantes (<code>/l/</code>, <code>/m/</code>, <code>/n/</code>, <code>/r/</code>) sont toujours vois&#x00E9;es et ne se d&#x00E9;voisent jamais, m&#x00EA;me &#x00E0; la fin d&rsquo;un mot. En plus, ces quatre sonantes sont exempt&#x00E9;es de l&rsquo;assimilation de voisement&#160;: elles ne la provoquent pas et n&rsquo;en sont pas affect&#x00E9;es. Le glide <code>/j/</code> &#x27E8;&#x0439;&#x27E9;, que les Russes consid&#x00E8;rent comme une consonne palatalis&#x00E9;e, est similairement exempt.</p>
+
+						<p>L&rsquo;affriqu&#x00E9;e <code>/ts/</code> (&#x27E8;&#x0446;&#x27E9;) et l&rsquo;affriqu&#x00E9;e palatalis&#x00E9;e <code>/t&#x0283;&#x02B2;/</code> (&#x27E8;&#x0447;&#x27E9;) partagent deux traits uniques&#160;: ni l&rsquo;une ni l&rsquo;autre n&rsquo;est not&#x00E9;e ici avec son propre symbole API d&#x00E9;di&#x00E9;. L&rsquo;une s&rsquo;&#x00E9;crit comme un digraphe indivisible, l&rsquo;autre comme un trigraphe. Toutes deux poss&#x00E8;dent des contreparties vois&#x00E9;es qui n&rsquo;apparaissent que par assimilation &#x00E0; la fronti&#x00E8;re du mot, mais jamais au travers d&rsquo;un glyphe orthographique qui leur est propre. Contrairement &#x00E0; ces deux sons, la fricative <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> se voit attribuer sa propre lettre, &#x27E8;&#x0449;&#x27E9;. Les formes vois&#x00E9;es allophoniques de ces lettres sont trait&#x00E9;es &#x00E0; la Section 7.</p>
+
+						<h4 id="learn-u5-attention">Quels sons exigent l&rsquo;attention cibl&#x00E9;e du chanteur&#160;?</h4>
+
+						<h5 id="learn-u5-l">Les deux sons du &#x27E8;&#x043B;&#x27E9; russe</h5>
+
+						<p>La lettre &#x27E8;&#x043B;&#x27E9; peut produire deux sons fondamentalement diff&#x00E9;rents, selon le contexte.</p>
+
+						<ol>
+						<li><strong>L v&#x00E9;laire <code>[&#x026B;]</code>, dit l-dur.</strong> Devant une consonne dure, devant &#x27E8;&#x0430;&#x27E9;, &#x27E8;&#x043E;&#x27E9;, &#x27E8;&#x044D;&#x27E9;, &#x27E8;&#x0443;&#x27E9;, &#x27E8;&#x044B;&#x27E9;, ou &#x00E0; la fin d&rsquo;un mot sans signe mou, &#x27E8;&#x043B;&#x27E9; est sombre&#160;: l v&#x00E9;laire, <code>/&#x026B;/</code>, la lat&#x00E9;rale dentale v&#x00E9;laris&#x00E9;e.</li>
+						<li><strong>L palatalis&#x00E9;</strong>, dit l-doux. Devant une consonne molle, devant &#x27E8;&#x044F;&#x27E9;, &#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9;, &#x27E8;&#x0438;&#x27E9;, ou devant le signe mou &#x27E8;&#x044C;&#x27E9;, &#x27E8;&#x043B;&#x27E9; est clair&#160;: <code>/l&#x02B2;/</code>, la lat&#x00E9;rale palatalis&#x00E9;e. Au sein des groupes consonantiques, seul le phon&#x00E8;me l-v&#x00E9;laire <code>/&#x026B;/</code> est employ&#x00E9;. R&#x00E9;ciproquement, le phon&#x00E8;me l-palatalis&#x00E9; <code>/l&#x02B2;/</code> ne se pr&#x00E9;sente devant aucune autre consonne palatalis&#x00E9;e que lui-m&#x00EA;me (c&rsquo;est-&#x00E0;-dire dans le groupe isol&#x00E9; <code>/l&#x02B2;l&#x02B2;/</code>).</li>
+						</ol>
+
+						<p>On ne trouvera pas le <code>[l]</code> simple comme symbole autonome dans le syst&#x00E8;me de Grayson&#160;: il sera toujours accompagn&#x00E9; soit du tilde m&#x00E9;dian pour indiquer la v&#x00E9;larisation (<code>[&#x026B;]</code>), soit d&rsquo;un marqueur de palatalisation (<code>[l&#x02B2;]</code>). L&rsquo;exception est le plus rare des emprunts&#160;: <em>tremolo</em> (&laquo;&#160;tr&#x00E9;molo&#160;&raquo;), (tr<code>&#x025B;</code> mo lo).</p>
+
+						<p>Le l-v&#x00E9;laire <code>/&#x026B;/</code> est ce que Grayson appelle &laquo;&#160;the only unpalatalized Russian consonant that does not have a familiar, coincident phoneme&#160;&raquo; (&laquo;&#160;la seule consonne russe non palatalis&#x00E9;e qui ne poss&#x00E8;de pas de phon&#x00E8;me familier et co&#x00EF;ncident&#160;&raquo;) dans les langues europ&#x00E9;ennes. C&rsquo;est peut-&#x00EA;tre vrai au sens le plus strict, mais les anglophones nord-am&#x00E9;ricains connaissent bien l&rsquo;allophone du <code>/l/</code> dans le mot <em>tall</em> (&laquo;&#160;grand&#160;&raquo;), et celui-ci approxime le l-v&#x00E9;laire russe (<code>[&#x026B;]</code>) suffisamment pour le chant. Il est v&#x00E9;laris&#x00E9;&#160;: la pointe de la langue touche les dents sup&#x00E9;rieures (comme pour toute consonne dentale), mais le dos de la langue s&rsquo;&#x00E9;l&#x00E8;ve simultan&#x00E9;ment pour entrer en contact avec l&rsquo;avant du voile du palais, &#x00E0; la transition entre le palais dur et le palais mou. Le son r&#x00E9;sultant poss&#x00E8;de une qualit&#x00E9; peut-&#x00EA;tre apparent&#x00E9;e au i-v&#x00E9;laire russe <code>/&#x0268;/</code>.</p>
+
+						<p>Pour obtenir <code>/&#x026B;/</code>&#160;: placez la langue dans la position du <code>/l/</code> dental italien. En maintenant cette position, prononcez la syllabe absurde &laquo;&#160;gou&#160;&raquo; et sentez le dos de la langue monter. Maintenez ce contact arri&#x00E8;re et tentez le pr&#x00E9;nom anglais <em>Luke</em>. Le r&#x00E9;sultat devrait approximer &#x043B;&#x0443;&#x043A; <code>/&#x026B;uk/</code> (&laquo;&#160;oignon&#160;&raquo; ou &laquo;&#160;arc&#160;&raquo;).</p>
+
+						<p>&laquo;&#160;Though the Russian <code>/l&#x02B2;/</code>-phoneme is similar to the Italian <code>[&#x028E;]</code>-allophone (as in the word <em>gli</em>), there is a major difference in the articulation between the two. The Italian <code>[&#x028E;]</code>-allophone is actually fricative; the laterally escaping air causes a friction or vibration between the sides of the tongue and the back molars. This produces the idiomatic, Italian, lateral lisp-like sound. In Russian, there is no friction, thus the sides of the tongue are sealed against the back molars and do not leak any air. The air actually passes around the base of the tongue and comes up from the well of the lower teeth. The Russian <code>/l&#x02B2;/</code> should be liquid (sonorant), not &ldquo;lisping&rdquo; (fricative).&#160;&raquo; (Grayson, p. 184)</p>
+
+						<p>&laquo;&#160;Bien que le phon&#x00E8;me russe <code>/l&#x02B2;/</code> ressemble &#x00E0; l&rsquo;allophone italien <code>[&#x028E;]</code> (comme dans le mot <em>gli</em>), il existe une diff&#x00E9;rence majeure d&rsquo;articulation. L&rsquo;allophone italien <code>[&#x028E;]</code> est en r&#x00E9;alit&#x00E9; fricatif&#160;: l&rsquo;air s&rsquo;&#x00E9;chappant lat&#x00E9;ralement provoque une friction ou une vibration entre les c&#x00F4;t&#x00E9;s de la langue et les derni&#x00E8;res molaires. Ceci produit le son italien idiomatique, lat&#x00E9;ral et z&#x00E9;zayant. En russe, il n&rsquo;y a pas de friction&#160;: les c&#x00F4;t&#x00E9;s de la langue sont scell&#x00E9;s contre les derni&#x00E8;res molaires et ne laissent passer aucun air. L&rsquo;air passe en r&#x00E9;alit&#x00E9; autour de la base de la langue et remonte du puits des dents inf&#x00E9;rieures. Le <code>/l&#x02B2;/</code> russe devrait &#x00EA;tre liquide (sonant), non z&#x00E9;zayant (fricatif).&#160;&raquo;</p>
+
+						<h5 id="learn-u5-x">&#x27E8;&#x0445;&#x27E9;&#160;: la fricative v&#x00E9;laire</h5>
+
+						<p>Les chanteurs form&#x00E9;s en diction allemande savent produire <code>/&#x03C7;/</code> pour l&rsquo;<em>achlaut</em> (&laquo;&#160;uvulaire&#160;&raquo;). Le <code>/x/</code> russe s&rsquo;en approche, bien que Grayson note qu&rsquo;il est &laquo;&#160;articulated on the front of the velum&#160;&raquo; (&laquo;&#160;articul&#x00E9; sur l&rsquo;avant du voile du palais&#160;&raquo;) plut&#x00F4;t que plus en arri&#x00E8;re. Les consonnes v&#x00E9;laires <code>[k]</code> et <code>[&#x0261;]</code> se forment toutes deux par contact entre la base de la langue et le palais mou&#160;; de m&#x00EA;me, <code>[x]</code> et sa partenaire vois&#x00E9;e <code>[&#x0263;]</code> se forment au m&#x00EA;me endroit. Au fur et &#x00E0; mesure que vous alternez entre occlusion et friction au palais mou, variez le voisement et le d&#x00E9;voisement pour ma&#x00EE;triser ces quatre consonnes sp&#x00E9;cifiquement localis&#x00E9;es, et pour affiner la capacit&#x00E9; &#x00E0; distinguer votre <code>[x]</code> de votre <code>[&#x03C7;]</code>.</p>
+
+						<h5 id="learn-u5-r">&#x27E8;&#x0440;&#x27E9;&#160;: le roulement</h5>
+
+						<p>Le <code>/r/</code> russe est toujours l&#x00E9;g&#x00E8;rement roul&#x00E9; en chant. Dans la parole courante, un <code>/r/</code> initial ou interne peut n&rsquo;&#x00EA;tre que frapp&#x00E9;, mais en diction lyrique un roulement l&#x00E9;ger est attendu. La longueur du roulement varie selon la position (plus court en d&#x00E9;but de mot, plus long en finale) et selon l&rsquo;intention expressive, mais davantage n&rsquo;est pas mieux. &#x00C9;vitez de ressembler &#x00E0; une caricature italienne en cultivant un roulement l&#x00E9;ger.</p>
+
+						<h5 id="learn-u5-hushers">Les chuintantes&#160;: &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9; et &#x27E8;&#x0449;&#x27E9;</h5>
+
+						<p>&#x27E8;&#x0436;&#x27E9; et &#x27E8;&#x0448;&#x27E9; forment une paire vois&#x00E9;e-non vois&#x00E9;e. Toutes deux se produisent avec une langue caract&#x00E9;ristiquement en forme de louche&#160;: la pointe se recourbe l&#x00E9;g&#x00E8;rement et l&rsquo;air passe en dessous, produisant un timbre sombre et large, bien diff&#x00E9;rent du &laquo;&#160;ch&#160;&raquo; fran&#x00E7;ais ou du <em>sh</em> anglais (&laquo;&#160;ch&#160;&raquo;). Les chanteurs francophones reconna&#x00EE;tront &#x27E8;&#x0436;&#x27E9; de <em>je</em>, <em>jour</em>, <em>rouge</em>.</p>
+
+						<p>&#x27E8;&#x0449;&#x27E9; se distingue. L&#x00E0; o&#x00F9; &#x27E8;&#x0448;&#x27E9; est une fricative courte unique, &#x27E8;&#x0449;&#x27E9; est une fricative palatalis&#x00E9;e de double longueur&#160;: <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code>. Grayson pr&#x00E9;f&#x00E8;re la notation <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> &#x00E0; <code>/&#x0283;&#x02B2;&#x02D0;/</code> parce que les locuteurs russes tendent &#x00E0; r&#x00E9;articuler ce son plut&#x00F4;t qu&rsquo;&#x00E0; simplement le soutenir. La prononciation moscovite <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> est la norme en diction lyrique&#160;; une variante p&#x00E9;tersbourgeoise plus ancienne <code>/&#x0283;&#x02B2;t&#x0283;&#x02B2;/</code> peut se rencontrer dans certaines r&#x00E9;f&#x00E9;rences, mais n&rsquo;est pas ce qu&rsquo;Ilya produit. Les apprenants non natifs peuvent se concentrer sur une diff&#x00E9;rence de hauteur pour distinguer les deux&#160;: &#x27E8;&#x0448;&#x27E9; <code>[&#x0283;]</code> est un son grave et chaud, tandis que &#x27E8;&#x0449;&#x27E9; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> sonne plus aigu et d&rsquo;une certaine fa&#x00E7;on plus rapide. La cause en est la forme de la langue. Pour &#x27E8;&#x0448;&#x27E9; <code>[&#x0283;]</code> la langue est plate ou en forme de louche, tandis que pour &#x27E8;&#x0449;&#x27E9; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> la langue prend la forme de la voyelle <code>[i]</code>, for&#x00E7;ant l&rsquo;air sortant &#x00E0; traverser une ouverture plus &#x00E9;troite, &#x00E9;levant la perception de la hauteur. Davantage sur les voyelles palatalis&#x00E9;es plus loin.</p>
+
+						<h5 id="learn-u5-affricates">Les affriqu&#x00E9;es&#160;: &#x27E8;&#x0446;&#x27E9; et &#x27E8;&#x0447;&#x27E9;</h5>
+
+						<p>&#x27E8;&#x0446;&#x27E9; produit <code>/ts/</code>, un phon&#x00E8;me unique malgr&#x00E9; son &#x00E9;criture en deux symboles API, un digraphe indivisible. Cette affriqu&#x00E9;e n&rsquo;est pas un <code>/t/</code> suivi d&rsquo;un <code>/s/</code> m&#x00EA;me si ces symboles ont &#x00E9;t&#x00E9; appari&#x00E9;s et adopt&#x00E9;s pour la d&#x00E9;crire&#160;: l&rsquo;air est projet&#x00E9; &#x00E0; travers un point d&rsquo;occlusion unique, et le son ne devrait pas prendre plus de temps &#x00E0; prononcer qu&rsquo;un seul <code>/t/</code> ou <code>/s/</code>. Les chanteurs germanophones connaissent ce son de <em>Katze</em> (&laquo;&#160;chat&#160;&raquo;), <em>Herz</em> (&laquo;&#160;c&#x0153;ur&#160;&raquo;), <em>Mozart</em>.</p>
+
+						<p>&#x27E8;&#x0447;&#x27E9; produit <code>/t&#x0283;&#x02B2;/</code>, similairement un phon&#x00E8;me unique. Les chanteurs italophones le connaissent de <em>ciao</em> (&laquo;&#160;salut&#160;&raquo;) et <em>dolce</em> (&laquo;&#160;doux&#160;&raquo;), bien qu&rsquo;en russe il porte une palatalisation inh&#x00E9;rente que la version italienne ne poss&#x00E8;de pas. L&rsquo;anglais palatalise cette affriqu&#x00E9;e <em>&#x00E0; la russe</em> dans les mots <em>cheese</em> (&laquo;&#160;fromage&#160;&raquo;), <em>cheer</em> (&laquo;&#160;acclamation&#160;&raquo;), <em>chief</em> (&laquo;&#160;chef&#160;&raquo;), <em>chinos</em> (&laquo;&#160;chinos&#160;&raquo;), ou partout o&#x00F9; le locuteur prononce cette affriqu&#x00E9;e en se pr&#x00E9;parant &#x00E0; la suivre de la voyelle <code>[i]</code>. Davantage sur ce sujet dans la discussion &#x00E0; venir sur la palatalisation.</p>
+
+						<h4 id="learn-u5-fixed">Quelles consonnes ne changent jamais de duret&#x00E9; ou de mollesse&#160;?</h4>
+
+						<p>La plupart des consonnes russes existent sous forme dure (non palatalis&#x00E9;e) et molle (palatalis&#x00E9;e). Les conditions qui d&#x00E9;clenchent la palatalisation font l&rsquo;objet de la Section 6. Mais le russe pr&#x00E9;sente cinq consonnes sp&#x00E9;ciales qui font exception&#160;: leur duret&#x00E9; ou leur mollesse est fixe et ne varie pas.</p>
+
+						<p><strong>Toujours dures (jamais palatalis&#x00E9;es)&#160;:</strong></p>
+
+						<table>
+						<thead><tr><th>Lettre</th><th>API</th><th>Caract&#x00E8;re</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0436;&#x27E9;</td><td><code>/&#x0292;/</code></td><td>Chuintante vois&#x00E9;e</td></tr>
+						<tr><td>&#x27E8;&#x0448;&#x27E9;</td><td><code>/&#x0283;/</code></td><td>Chuintante non vois&#x00E9;e</td></tr>
+						<tr><td>&#x27E8;&#x0446;&#x27E9;</td><td><code>/ts/</code></td><td>Affriqu&#x00E9;e non vois&#x00E9;e</td></tr>
+						</tbody>
+						</table>
+
+						<p>Fait &#x00E9;tonnant, un signe mou (&#x27E8;&#x044C;&#x27E9;) qui suit &#x27E8;&#x0436;&#x27E9; ou &#x27E8;&#x0448;&#x27E9; n&rsquo;indique pas la palatalisation&#160;; le signe remplit une fonction traditionnelle et grammaticale uniquement, et est ignor&#x00E9;. Le mot &#x0440;&#x043E;&#x0436;&#x044C; (&laquo;&#160;seigle&#160;&raquo;) se termine par <code>/&#x0292;/</code>, non par <code>/&#x0292;&#x02B2;/</code>. De m&#x00EA;me, &#x27E8;&#x044C;&#x27E9; apr&#x00E8;s &#x27E8;&#x0447;&#x27E9; ou &#x27E8;&#x0449;&#x27E9; n&rsquo;ajoute aucune mollesse suppl&#x00E9;mentaire, puisque ces consonnes sont d&#x00E9;j&#x00E0; intrins&#x00E8;quement molles et ne peuvent devenir plus molles.</p>
+
+						<p><strong>Toujours molles (toujours palatalis&#x00E9;es)&#160;:</strong></p>
+
+						<table>
+						<thead><tr><th>Lettre</th><th>API</th><th>Caract&#x00E8;re</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0447;&#x27E9;</td><td><code>/t&#x0283;&#x02B2;/</code></td><td>Affriqu&#x00E9;e palatalis&#x00E9;e</td></tr>
+						<tr><td>&#x27E8;&#x0449;&#x27E9;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>Double fricative palatalis&#x00E9;e</td></tr>
+						</tbody>
+						</table>
+
+						<p>Point important&#160;: ces cinq consonnes fixes servent de fronti&#x00E8;res au processus de palatalisation. Une cha&#x00EE;ne r&#x00E9;gressive de palatalisation s&rsquo;arr&#x00EA;te lorsqu&rsquo;elle rencontre &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9; ou &#x27E8;&#x0446;&#x27E9;. (Les consonnes toujours-molles &#x27E8;&#x0447;&#x27E9; et &#x27E8;&#x0449;&#x27E9; n&rsquo;arr&#x00EA;tent pas la cha&#x00EE;ne&#160;; elles sont elles-m&#x00EA;mes des agents palatalisants.) Ces interactions sont trait&#x00E9;es &#x00E0; la Section 6.</p>
+
+						<p>Les consonnes toujours-dures affectent &#x00E9;galement les voyelles qui les suivent. Comme nous l&rsquo;avons vu, le &#x27E8;&#x0435;&#x27E9; inaccentu&#x00E9; apr&#x00E8;s &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9; ou &#x27E8;&#x0446;&#x27E9; se r&#x00E9;duit &#x00E0; <code>/&#x0268;/</code> parce que l&rsquo;environnement consonantique dur bloque l&rsquo;ant&#x00E9;riorisation qui autrement permettrait <code>[&#x026A;]</code>. Ceci a &#x00E9;t&#x00E9; not&#x00E9; &#x00E0; la Section 4 (R&#x00E9;duction vocalique)&#160;; ici nous en nommons la cause.</p>
+
+						<h4 id="learn-u5-signs">Que font les deux signes&#160;?</h4>
+
+						<p>Deux lettres cyrilliques russes ne produisent aucun son par elles-m&#x00EA;mes. Mais toutes deux sont d&rsquo;importants marqueurs fonctionnels qui modifient la prononciation de la consonne qui les pr&#x00E9;c&#x00E8;de.</p>
+
+						<h5 id="learn-u5-soft">&#x27E8;&#x044C;&#x27E9; (&#x043C;&#x044F;&#x0433;&#x043A;&#x0438;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A;)&#160;: le signe mou</h5>
+
+						<p>Le signe mou (&#x043C;&#x044F;&#x0433;&#x043A;&#x0438;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A; <code>/&#x02C8;m&#x02B2;&#x0251;x&#x02B2;k&#x02B2;ij zn&#x0251;k/</code>) indique d&rsquo;habitude que la consonne imm&#x00E9;diatement avant lui devient molle, c&rsquo;est-&#x00E0;-dire palatalis&#x00E9;e. C&rsquo;est la fonction premi&#x00E8;re du signe mou. Mal prononcer une consonne palatalis&#x00E9;e comme dure (ou l&rsquo;inverse) peut changer le sens d&rsquo;un mot&#160;:</p>
+
+						<table>
+						<thead><tr><th>Avec &#x27E8;&#x044C;&#x27E9;</th><th>API</th><th>Sens</th><th>Sans &#x27E8;&#x044C;&#x27E9;</th><th>API</th><th>Sens</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0448;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/&#x0283;es&#x02B2;t&#x02B2;/</code></td><td>six</td><td>&#x0448;&#x0435;&#x0441;&#x0442;</td><td><code>/&#x0283;&#x025B;st/</code></td><td>une perche</td></tr>
+						<tr><td>&#x043F;&#x043E;&#x043B;&#x044C;&#x043A;&#x0430;</td><td><code>/&#x02C8;pol&#x02B2; k&#x0251;/</code></td><td>polka</td><td>&#x043F;&#x043E;&#x043B;&#x043A;&#x0430;</td><td><code>/&#x02C8;po&#x026B; k&#x0251;/</code></td><td>une &#x00E9;tag&#x00E8;re</td></tr>
+						<tr><td>&#x043C;&#x0430;&#x0442;&#x044C;</td><td><code>/m&#x0251;t&#x02B2;/</code></td><td>m&#x00E8;re</td><td>&#x043C;&#x0430;&#x0442;</td><td><code>/m&#x0251;t/</code></td><td>&#x00E9;chec et mat</td></tr>
+						</tbody>
+						</table>
+
+						<p>Lorsque &#x27E8;&#x044C;&#x27E9; se trouve entre une consonne pr&#x00E9;c&#x00E9;dente et une voyelle iot&#x00E9;e suivante (&#x27E8;&#x044F;&#x27E9;, &#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9;), il palatalise d&#x00FB;ment la consonne pr&#x00E9;c&#x00E9;dente mais force &#x00E9;galement l&rsquo;insertion d&rsquo;un glide <code>/j/</code> audible entre le signe mou et la voyelle qui suit. Cette dynamique implique aussi une aspiration notable, particuli&#x00E8;rement pour les occlusives ou sibilantes qui pr&#x00E9;c&#x00E8;dent le signe mou. Le mot &#x0434;&#x044C;&#x044F;&#x0432;&#x043E;&#x043B; (&laquo;&#160;diable&#160;&raquo;), par exemple, se prononce <code>/&#x02C8;d&#x02B2;j&#x0251; v&#x028C;&#x026B;/</code>&#160;: le &#x27E8;&#x044C;&#x27E9; palatalise le &#x27E8;&#x0434;&#x27E9; et introduit le glide <code>/j/</code> avant &#x27E8;&#x044F;&#x27E9;.</p>
+
+						<p>Le m&#x00E9;canisme de la palatalisation elle-m&#x00EA;me fait l&rsquo;objet de la Section 6. Ici, nous nommons simplement le r&#x00F4;le du signe mou&#160;: d&rsquo;habitude il indique au chanteur que la consonne pr&#x00E9;c&#x00E9;dente est molle.</p>
+
+						<h5 id="learn-u5-hard">&#x27E8;&#x044A;&#x27E9; (&#x0442;&#x0432;&#x0451;&#x0440;&#x0434;&#x044B;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A;)&#160;: le signe dur</h5>
+
+						<p>Le signe dur est bien moins fr&#x00E9;quent que le signe mou, mais quand il appara&#x00EE;t, il porte un sens.</p>
+
+						<p>&#x27E8;&#x044A;&#x27E9; (&#x0442;&#x0432;&#x0451;&#x0440;&#x0434;&#x044B;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A; <code>/&#x02C8;tv&#x02B2;ord&#x0268;j zn&#x0251;k/</code>) dominait autrefois les pages cyrilliques comme lettre indicatrice terminale pour chaque mot se terminant par une consonne dure. Cette pratique a &#x00E9;t&#x00E9; abolie avec la r&#x00E9;forme orthographique de 1918. Aujourd&rsquo;hui, le signe dur appara&#x00EE;t parfois entre un pr&#x00E9;fixe et une racine qui commence par une voyelle iot&#x00E9;e. Il cr&#x00E9;e une fronti&#x00E8;re&#160;: la consonne avant &#x27E8;&#x044A;&#x27E9; reste dure, et la voyelle iot&#x00E9;e apr&#x00E8;s &#x27E8;&#x044A;&#x27E9; ins&#x00E8;re un glide <code>/j/</code> initial entre elle et le signe dur. Sans le signe dur, la voyelle iot&#x00E9;e palataliserait la consonne pr&#x00E9;c&#x00E9;dente au lieu de produire un glide. C&rsquo;est une nuance cl&#x00E9; qui doit &#x00EA;tre saisie et ma&#x00EE;tris&#x00E9;e.</p>
+
+						<table>
+						<thead><tr><th>Avec &#x27E8;&#x044A;&#x27E9;</th><th>API</th><th>Sens</th><th>Sans &#x27E8;&#x044A;&#x27E9;</th><th>API</th><th>Sens</th></tr></thead>
+						<tbody>
+						<tr><td>&#x043E;&#x0431;&#x044A;&#x0435;&#x0434;&#x0430;&#x0442;&#x044C;</td><td><code>/&#x0251;b j&#x026A; &#x02C8;d&#x0251;t&#x02B2;/</code></td><td>manger autour</td><td>&#x043E;&#x0431;&#x0435;&#x0434;&#x0430;&#x0442;&#x044C;</td><td><code>/&#x0251; &#x02C8;b&#x02B2;&#x025B; d&#x0251;t&#x02B2;/</code></td><td>d&#x00EE;ner</td></tr>
+						<tr><td>&#x0441;&#x044A;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/s&#x02B2;jes&#x02B2;t&#x02B2;/</code></td><td>manger (compl.)</td><td>&#x0441;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/s&#x02B2;es&#x02B2;t&#x02B2;/</code></td><td>s&rsquo;asseoir</td></tr>
+						</tbody>
+						</table>
+
+						<h4 id="learn-u5-devoicing">Qu&rsquo;arrive-t-il aux consonnes vois&#x00E9;es &#x00E0; la fin d&rsquo;un mot&#160;?</h4>
+
+						<p>Les chanteurs form&#x00E9;s en diction allemande connaissent d&#x00E9;j&#x00E0; cette r&#x00E8;gle&#160;: les consonnes vois&#x00E9;es se d&#x00E9;voisent &#x00E0; la fin d&rsquo;un mot, ind&#x00E9;pendamment de l&rsquo;orthographe. Le russe suit le m&#x00EA;me principe. Un &#x27E8;&#x0431;&#x27E9; final sonne comme <code>/p/</code>, un &#x27E8;&#x0434;&#x27E9; final comme <code>/t/</code>, un &#x27E8;&#x0433;&#x27E9; final comme <code>/k/</code>, et ainsi de suite pour les six paires vois&#x00E9;es-non vois&#x00E9;es. Le d&#x00E9;voisement s&rsquo;applique &#x00E9;galement aux consonnes palatalis&#x00E9;es&#160;: le &#x27E8;&#x0434;&#x044C;&#x27E9; final sonne comme <code>/t&#x02B2;/</code>, le &#x27E8;&#x0437;&#x044C;&#x27E9; final comme <code>/s&#x02B2;/</code>.</p>
+
+						<table>
+						<thead><tr><th>Orthographe</th><th>Prononciation</th><th>API</th><th>Sens</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0437;&#x0443;&#x0431;</td><td>&#x27E8;&#x0431;&#x27E9; &rarr; <code>/p/</code></td><td><code>/zup/</code></td><td>une dent</td></tr>
+						<tr><td>&#x043A;&#x0440;&#x043E;&#x0432;</td><td>&#x27E8;&#x0432;&#x27E9; &rarr; <code>/f/</code></td><td><code>/krof/</code></td><td>un abri</td></tr>
+						<tr><td>&#x0434;&#x0440;&#x0443;&#x0433;</td><td>&#x27E8;&#x0433;&#x27E9; &rarr; <code>/k/</code></td><td><code>/druk/</code></td><td>un ami</td></tr>
+						<tr><td>&#x043E;&#x0431;&#x0435;&#x0434;</td><td>&#x27E8;&#x0434;&#x27E9; &rarr; <code>/t/</code></td><td><code>/&#x0251; &#x02C8;b&#x02B2;&#x025B;t/</code></td><td>le d&#x00E9;jeuner</td></tr>
+						<tr><td>&#x043D;&#x043E;&#x0436;</td><td>&#x27E8;&#x0436;&#x27E9; &rarr; <code>/&#x0283;/</code></td><td><code>/no&#x0283;/</code></td><td>un couteau</td></tr>
+						<tr><td>&#x0433;&#x043B;&#x0430;&#x0437;</td><td>&#x27E8;&#x0437;&#x27E9; &rarr; <code>/s/</code></td><td><code>/&#x0261;&#x026B;&#x0251;s/</code></td><td>un &#x0153;il</td></tr>
+						<tr><td>&#x043A;&#x043D;&#x044F;&#x0437;&#x044C;</td><td>&#x27E8;&#x0437;&#x044C;&#x27E9; &rarr; <code>/s&#x02B2;/</code></td><td><code>/k&#x02B2;n&#x0251;s&#x02B2;/</code></td><td>un prince</td></tr>
+						<tr><td>&#x043A;&#x0440;&#x043E;&#x0432;&#x044C;</td><td>&#x27E8;&#x0432;&#x044C;&#x27E9; &rarr; <code>/f&#x02B2;/</code></td><td><code>/krof&#x02B2;/</code></td><td>le sang</td></tr>
+						</tbody>
+						</table>
+
+						<p>Les sonantes (<code>/l/</code>, <code>/m/</code>, <code>/n/</code>, <code>/r/</code> et leurs formes palatalis&#x00E9;es) sont exempt&#x00E9;es&#160;: elles restent vois&#x00E9;es en toute position et ne se d&#x00E9;voisent pas.</p>
+
+						<p>Le d&#x00E9;voisement final est le premier de plusieurs processus d&rsquo;assimilation qui sont expliqu&#x00E9;s &#x00E0; la Section 7. Dans cette section, nous avons nomm&#x00E9; le d&#x00E9;voisement comme une propri&#x00E9;t&#x00E9; de l&rsquo;inventaire consonantique&#160;; &#x00E0; la Section 7, nous explorerons comment le d&#x00E9;voisement interagit avec les fronti&#x00E8;res de mots, les clitiques et les consonnes adjacentes.</p>
+
+						<h4 id="learn-u5-try">Essayez dans Ilya</h4>
+
+						<p>Transcrivez un mot contenant &#x27E8;&#x043B;&#x27E9; dans diff&#x00E9;rentes positions. Dans &#x043C;&#x0430;&#x043B; (&laquo;&#160;petit&#160;&raquo;, forme courte masculine), Ilya produit <code>/&#x026B;/</code> pour la consonne finale&#160;: sombre, v&#x00E9;laris&#x00E9;. Dans &#x043C;&#x0430;&#x043B;&#x044C;&#x0447;&#x0438;&#x043A; (&laquo;&#160;gar&#x00E7;on&#160;&raquo;), le signe mou palatalise la m&#x00EA;me lettre en <code>/l&#x02B2;/</code>&#160;: clair, dental. M&#x00EA;me lettre, contexte diff&#x00E9;rent, son diff&#x00E9;rent.</p>
+
+						<p>Transcrivez maintenant &#x0434;&#x0440;&#x0443;&#x0433; (&laquo;&#160;ami&#160;&raquo;). Remarquez que le &#x27E8;&#x0433;&#x27E9; final appara&#x00EE;t comme <code>/k/</code> dans la ligne API&#160;: d&#x00E9;vois&#x00E9;, exactement comme il le serait en allemand. La lettre cyrillique qui signale habituellement une consonne vois&#x00E9;e n&rsquo;est pas le son que vous chantez. Les consonnes finales se d&#x00E9;voisent en russe chant&#x00E9;.</p>
+
+						<p><em>Source Grayson&#160;: ch. 4 (toutes les sections), ch. 5 &sect;1</em></p>
 
 						<h3 id="learn-unit-6">Section 6 &middot; La palatalisation</h3>
 
@@ -2583,11 +2773,199 @@
 
 						<p><em>Grayson source: Ch. 3 &sect;&sect;3, 5, 7&ndash;8 (pp. 97&ndash;129), Ch. 7 &sect;1 (pp. 263&ndash;267). Reconstitution chart: p. 128, note p. 129. Aural differentiation of case forms: p. 266, fn. 306. Stress-timing framework: Mitton (dissertation, &sect;4.5). Kochetov correction: personal communication, DMA recital adjudication, University of Toronto.</em></p>
 
-						<h3 id="learn-unit-5">Section 5 &middot; The Consonant Sounds</h3>
+						<h3 id="learn-unit-5">Section 5 &middot; The Consonants</h3>
 
-						<p>A comparison of ten Russian lyric diction authors reveals a remarkable uniformity in the notation of the majority of consonants. The symbols corresponding to the letterforms &#x27E8;b d f g k m n p r s t v x z&#x27E9; are unanimous across all ten sources. Where the authors diverge (on the lateral approximant, on the palatal nasal, on the postalveolar fricatives), the differences reflect competing traditions rather than errors.</p>
+						<p>Russian has twenty-one consonant letters. The good news: the majority of these consonants produce sounds that the singer already knows from English, Italian, German, or French. A few require adjustment, and only a handful are genuinely new. We begin with the familiar and then focus our attention on what is not.</p>
 
-						<p>We organise the consonants by what you already know, rather than by the historical relationship of Cyrillic to other writing systems as Grayson does. Consonants that behave identically to their counterparts come first. Consonants that are close but not identical come next. Genuinely unfamiliar sounds come last. Along the way, we introduce the iotated vowels (&#x044F;, &#x0435;, &#x0451;, &#x044E;), the soft and hard signs, and the first encounter with palatalization as an inherent property of certain consonants. The voiced velar fricative <code>[&#x0263;]</code>, the regressively voiced version of <code>[x]</code>, also makes its appearance here; there seems to be a correspondence between sources that include it and those that are also thoughtful about other nuanced aspects of their transcriptions.</p>
+						<p>One systematic difference governs the entire inventory. Where English consonants are typically alveolar (the tongue touches the ridge behind the upper teeth), Russian consonants are dental: the tip of the tongue touches the backs of the upper teeth themselves, as in Italian. Singers trained in Italian or French diction have already internalised this adjustment. Those coming from English or German will find that consciously advancing the tongue by a few millimetres produces the characteristic clarity of Russian consonant articulation.</p>
+
+						<h4 id="learn-u5-familiar">How familiar is the Russian consonant system?</h4>
+
+						<p>Of this subset of twenty-one consonant letters, thirteen produce sounds essentially identical to consonants the singer knows from Italian or another standard diction language: &#x27E8;&#x0431;&#x27E9;, &#x27E8;&#x0432;&#x27E9;, &#x27E8;&#x0433;&#x27E9;, &#x27E8;&#x0434;&#x27E9;, &#x27E8;&#x0437;&#x27E9;, &#x27E8;&#x0439;&#x27E9;, &#x27E8;&#x043A;&#x27E9;, &#x27E8;&#x043C;&#x27E9;, &#x27E8;&#x043D;&#x27E9;, &#x27E8;&#x043F;&#x27E9;, &#x27E8;&#x0441;&#x27E9;, &#x27E8;&#x0442;&#x27E9;, &#x27E8;&#x0444;&#x27E9;. Two more are close enough that a brief remark suffices: &#x27E8;&#x0440;&#x27E9; (trill it lightly) and &#x27E8;&#x0436;&#x27E9; (francophone singers already have it). We distinguish Russian sung &#x27E8;&#x0445;&#x27E9; from the German <em>achlaut</em> (uvular), <code>[&#x03C7;]</code>). The remaining five require focused attention and are presented in the table below.</p>
+
+						<table>
+						<thead><tr><th>Letter</th><th>Name</th><th>IPA</th><th>Closest equivalent</th><th>Notes</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0431;&#x27E9;</td><td>&#x0431;&#x044D;</td><td><code>/b/</code></td><td>Italian <code>/b/</code> in <em>bene</em> (&ldquo;well&rdquo;)</td><td>Fully stopped, no puff of air</td></tr>
+						<tr><td>&#x27E8;&#x0432;&#x27E9;</td><td>&#x0432;&#x044D;</td><td><code>/v/</code></td><td>Italian <code>/v/</code> in <em>vino</em> (&ldquo;wine&rdquo;)</td><td>Lighter air pressure than English; fully voiced, not breathy</td></tr>
+						<tr><td>&#x27E8;&#x0433;&#x27E9;</td><td>&#x0433;&#x044D;</td><td><code>/&#x0261;/</code></td><td>Italian <code>/&#x0261;/</code> in <em>gamba</em> (&ldquo;leg&rdquo;)</td><td>Voiced velar stop, no released air</td></tr>
+						<tr><td>&#x27E8;&#x0434;&#x27E9;</td><td>&#x0434;&#x044D;</td><td><code>/d/</code></td><td>Italian <code>/d/</code> in <em>donna</em> (&ldquo;woman&rdquo;)</td><td>Dental, without strong release</td></tr>
+						<tr><td>&#x27E8;&#x0436;&#x27E9;</td><td>&#x0436;&#x044D;</td><td><code>/&#x0292;/</code></td><td>French <code>/&#x0292;/</code> in <em>je</em></td><td>Dark timbre; ladle-shaped tongue. Always hard</td></tr>
+						<tr><td>&#x27E8;&#x0437;&#x27E9;</td><td>&#x0437;&#x044D;</td><td><code>/z/</code></td><td>German voiced <code>/z/</code> in <em>See</em> (&ldquo;lake&rdquo;)</td><td>Rich buzzing timbre</td></tr>
+						<tr><td>&#x27E8;&#x0439;&#x27E9;</td><td>&#x0438; &#x043A;&#x0440;&#x0430;&#x0442;&#x043A;&#x043E;&#x0435;</td><td><code>/j/</code></td><td>English <code>/j/</code> in <em>yes</em></td><td>Voiced, not sustained</td></tr>
+						<tr><td>&#x27E8;&#x043A;&#x27E9;</td><td>&#x043A;&#x0430;</td><td><code>/k/</code></td><td>Italian <code>/k/</code> in <em>casa</em> (&ldquo;house&rdquo;)</td><td>No aspirated puff of air</td></tr>
+						<tr><td>&#x27E8;&#x043B;&#x27E9;</td><td>&#x044D;&#x043B;&#x044C;</td><td><code>/&#x026B;/</code> or <code>/l&#x02B2;/</code></td><td>See &ldquo;Two sounds of Russian &#x27E8;&#x043B;&#x27E9;&rdquo; below</td><td>Two fundamentally different realisations</td></tr>
+						<tr><td>&#x27E8;&#x043C;&#x27E9;</td><td>&#x044D;&#x043C;</td><td><code>/m/</code></td><td>Same across European languages</td><td>Nasal, voiced</td></tr>
+						<tr><td>&#x27E8;&#x043D;&#x27E9;</td><td>&#x044D;&#x043D;</td><td><code>/n/</code></td><td>Italian dental <code>/n/</code></td><td>Dental placement</td></tr>
+						<tr><td>&#x27E8;&#x043F;&#x27E9;</td><td>&#x043F;&#x044D;</td><td><code>/p/</code></td><td>Italian <code>/p/</code> in <em>padre</em> (&ldquo;father&rdquo;)</td><td>Unreleased stop, no puff of air</td></tr>
+						<tr><td>&#x27E8;&#x0440;&#x27E9;</td><td>&#x044D;&#x0440;</td><td><code>/r/</code></td><td>Italian trilled <code>/r/</code></td><td>Always lightly trilled when singing; an excessive Italian trill will sound like a caricature in Russian</td></tr>
+						<tr><td>&#x27E8;&#x0441;&#x27E9;</td><td>&#x044D;&#x0441;</td><td><code>/s/</code></td><td><code>/s/</code> in <em>see</em></td><td>Mid-tongue held low; darker timbre than English</td></tr>
+						<tr><td>&#x27E8;&#x0442;&#x27E9;</td><td>&#x0442;&#x044D;</td><td><code>/t/</code></td><td>Italian <code>/t/</code> in <em>terra</em> (&ldquo;earth&rdquo;)</td><td>Dental, without strong release</td></tr>
+						<tr><td>&#x27E8;&#x0444;&#x27E9;</td><td>&#x044D;&#x0444;</td><td><code>/f/</code></td><td>Same across European languages</td><td>Rare in native Russian words</td></tr>
+						<tr><td>&#x27E8;&#x0445;&#x27E9;</td><td>&#x0445;&#x0430;</td><td><code>/x/</code></td><td>German <em>achlaut</em> in <em>Bach</em></td><td>Velar fricative. Not a <code>/k/</code></td></tr>
+						<tr><td>&#x27E8;&#x0446;&#x27E9;</td><td>&#x0446;&#x044D;</td><td><code>/ts/</code></td><td>German <code>/ts/</code> in <em>Katze</em> (&ldquo;cat&rdquo;)</td><td>A single phoneme. Always hard</td></tr>
+						<tr><td>&#x27E8;&#x0447;&#x27E9;</td><td>&#x0447;&#x044D;</td><td><code>/t&#x0283;&#x02B2;/</code></td><td>Italian <code>/t&#x0283;/</code> in <em>ciao</em> (&ldquo;hello&rdquo;), palatalized</td><td>A single phoneme. Always soft</td></tr>
+						<tr><td>&#x27E8;&#x0448;&#x27E9;</td><td>&#x0448;&#x0430;</td><td><code>/&#x0283;/</code></td><td>English <code>/&#x0283;/</code> in <em>she</em></td><td>Darker than English. Always hard</td></tr>
+						<tr><td>&#x27E8;&#x0449;&#x27E9;</td><td>&#x0449;&#x0430;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>No close equivalent</td><td>Double-length palatalized. Always soft</td></tr>
+						</tbody>
+						</table>
+
+						<h4 id="learn-u5-pairs">Which consonants form voiced-voiceless pairs?</h4>
+
+						<p>Russian consonants organise themselves into systematic pairs that share the same articulation but differ in their voicing. The singer trained in German diction already understands this principle: a voiced consonant and its voiceless partner prepare identical vocal tract configurations, except that one vibrates the vocal folds (voiced) and the other does not (voiceless).</p>
+
+						<p>The importance of these pairs becomes clear in Section 7, where we address voicing assimilation (a voiceless consonant becoming voiced before a voiced neighbour, or vice versa), as well as final devoicing (a voiced consonant losing its voicing at the end of a word, as in German). Learn these pairs.</p>
+
+						<table>
+						<thead><tr><th>Voiced</th><th>Letter</th><th>Voiceless</th><th>Letter</th></tr></thead>
+						<tbody>
+						<tr><td><code>/b/</code></td><td>&#x27E8;&#x0431;&#x27E9;</td><td><code>/p/</code></td><td>&#x27E8;&#x043F;&#x27E9;</td></tr>
+						<tr><td><code>/v/</code></td><td>&#x27E8;&#x0432;&#x27E9;</td><td><code>/f/</code></td><td>&#x27E8;&#x0444;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0261;/</code></td><td>&#x27E8;&#x0433;&#x27E9;</td><td><code>/k/</code></td><td>&#x27E8;&#x043A;&#x27E9;</td></tr>
+						<tr><td><code>/d/</code></td><td>&#x27E8;&#x0434;&#x27E9;</td><td><code>/t/</code></td><td>&#x27E8;&#x0442;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0292;/</code></td><td>&#x27E8;&#x0436;&#x27E9;</td><td><code>/&#x0283;/</code></td><td>&#x27E8;&#x0448;&#x27E9;</td></tr>
+						<tr><td><code>/z/</code></td><td>&#x27E8;&#x0437;&#x27E9;</td><td><code>/s/</code></td><td>&#x27E8;&#x0441;&#x27E9;</td></tr>
+						</tbody>
+						</table>
+
+						<p>In sung Russian, four consonants exist outside the pairing system. The sonorants (<code>/l/</code>, <code>/m/</code>, <code>/n/</code>, <code>/r/</code>) are always voiced and never devoice, even at the end of a word. These four sonorants are exempt from voicing assimilation: they neither trigger it nor are affected by it. The glide <code>/j/</code> &#x27E8;&#x0439;&#x27E9;, which Russians consider a palatalized consonant, is similarly exempt.</p>
+
+						<p>The affricate <code>/ts/</code> (&#x27E8;&#x0446;&#x27E9;) and the palatalized affricate <code>/t&#x0283;&#x02B2;/</code> (&#x27E8;&#x0447;&#x27E9;) share two unique traits: neither is notated here with its own dedicated IPA symbol. One is written as an indivisible digraph, the other as a trigraph. Both have voiced counterparts that appear only through assimilation at the word boundary, but never through an orthographic glyph of their own. Unlike these two sounds, the fricative <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> is assigned its own letter, &#x27E8;&#x0449;&#x27E9;. The voiced allophonic forms of these letters are treated in Section 7.</p>
+
+						<h4 id="learn-u5-attention">Which sounds require the singer&rsquo;s focused attention?</h4>
+
+						<h5 id="learn-u5-l">The two sounds of Russian &#x27E8;&#x043B;&#x27E9;</h5>
+
+						<p>The letter &#x27E8;&#x043B;&#x27E9; can produce two fundamentally different sounds, depending on context.</p>
+
+						<ol>
+						<li><strong>Velarised l <code>[&#x026B;]</code>, called hard-l.</strong> Before a hard consonant, before &#x27E8;&#x0430;&#x27E9;, &#x27E8;&#x043E;&#x27E9;, &#x27E8;&#x044D;&#x27E9;, &#x27E8;&#x0443;&#x27E9;, &#x27E8;&#x044B;&#x27E9;, or at the end of a word without a soft sign, &#x27E8;&#x043B;&#x27E9; is dark: velarised l, <code>/&#x026B;/</code>, the velarised dental lateral.</li>
+						<li><strong>Palatalized l</strong>, called soft-l. Before a soft consonant, before &#x27E8;&#x044F;&#x27E9;, &#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9;, &#x27E8;&#x0438;&#x27E9;, or before the soft sign &#x27E8;&#x044C;&#x27E9;, &#x27E8;&#x043B;&#x27E9; is clear: <code>/l&#x02B2;/</code>, the palatalized lateral. Within consonant clusters, only the hard-l phoneme <code>/&#x026B;/</code> is used. Conversely, the soft-l phoneme <code>/l&#x02B2;/</code> does not occur before any other palatalized consonant except itself (that is, in the isolated cluster <code>/l&#x02B2;l&#x02B2;/</code>).</li>
+						</ol>
+
+						<p>You will not find plain <code>[l]</code> as a standalone symbol in Grayson&rsquo;s system: it will always carry either the medial tilde to indicate velarisation (<code>[&#x026B;]</code>), or a palatalization marker (<code>[l&#x02B2;]</code>). The exception is the rarest of loanwords: <em>tremolo</em>, (tr<code>&#x025B;</code> mo lo).</p>
+
+						<p>Velarised l <code>/&#x026B;/</code> is what Grayson calls &ldquo;the only unpalatalized Russian consonant that does not have a familiar, coincident phoneme&rdquo; in the European singing languages. This is perhaps true in the strictest sense, but North American English speakers know the allophone of <code>/l/</code> in the word <em>tall</em> well, and it approximates Russian velarised l (<code>[&#x026B;]</code>) closely enough for singing. It is velarised: the tongue tip contacts the upper teeth (as for any dental consonant), but the tongue body simultaneously rises to contact the front of the velum, at the transition between the hard and soft palates. The resulting sound has a quality perhaps akin to Russian velar-i <code>/&#x0268;/</code>.</p>
+
+						<p>To find <code>/&#x026B;/</code>: place the tongue in the position for Italian dental <code>/l/</code>. While holding that position, pronounce the nonsense syllable &ldquo;goo&rdquo; and feel the tongue body rise. Maintain that back contact and attempt the English name <em>Luke</em>. The result should approximate &#x043B;&#x0443;&#x043A; <code>/&#x026B;uk/</code> (&ldquo;onion&rdquo; or &ldquo;bow&rdquo;).</p>
+
+						<p>&ldquo;Though the Russian <code>/l&#x02B2;/</code>-phoneme is similar to the Italian <code>[&#x028E;]</code>-allophone (as in the word <em>gli</em>), there is a major difference in the articulation between the two. The Italian <code>[&#x028E;]</code>-allophone is actually fricative; the laterally escaping air causes a friction or vibration between the sides of the tongue and the back molars. This produces the idiomatic, Italian, lateral lisp-like sound. In Russian, there is no friction, thus the sides of the tongue are sealed against the back molars and do not leak any air. The air actually passes around the base of the tongue and comes up from the well of the lower teeth. The Russian <code>/l&#x02B2;/</code> should be liquid (sonorant), not &lsquo;lisping&rsquo; (fricative).&rdquo; (Grayson, p. 184)</p>
+
+						<h5 id="learn-u5-x">&#x27E8;&#x0445;&#x27E9;: the velar fricative</h5>
+
+						<p>Singers trained in German diction know how to produce <code>/&#x03C7;/</code> for the <em>achlaut</em> (uvular). Russian <code>/x/</code> is close, though Grayson notes that it is &ldquo;articulated on the front of the velum&rdquo; rather than further back. The velar consonants <code>[k]</code> and <code>[&#x0261;]</code> are both formed by contact between the tongue body and the soft palate; likewise, <code>[x]</code> and its voiced partner <code>[&#x0263;]</code> are formed at the same point. Practise alternating between stop and fricative at the soft palate, varying voicing and devoicing, to master these four specifically located consonants, and to sharpen the ability to distinguish your <code>[x]</code> from your <code>[&#x03C7;]</code>.</p>
+
+						<h5 id="learn-u5-r">&#x27E8;&#x0440;&#x27E9;: the trill</h5>
+
+						<p>Russian <code>/r/</code> is always lightly trilled in singing. In conversational speech, an initial or medial <code>/r/</code> may be merely tapped, but in lyric diction a light trill is expected. The length of the trill varies by position (shorter word-initially, longer word-finally) and by expressive intent, but more is not better. Avoid sounding like an Italian caricature by cultivating a light trill.</p>
+
+						<h5 id="learn-u5-hushers">The hushers: &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, and &#x27E8;&#x0449;&#x27E9;</h5>
+
+						<p>&#x27E8;&#x0436;&#x27E9; and &#x27E8;&#x0448;&#x27E9; form a voiced-voiceless pair. Both are produced with a characteristically ladle-shaped tongue: the tip curls slightly and air passes underneath, producing a dark, broad timbre quite different from English <em>sh</em> or French <em>ch</em>. Francophone singers will recognise &#x27E8;&#x0436;&#x27E9; from <em>je</em>, <em>jour</em>, <em>rouge</em>.</p>
+
+						<p>&#x27E8;&#x0449;&#x27E9; is different. Where &#x27E8;&#x0448;&#x27E9; is a single short fricative, &#x27E8;&#x0449;&#x27E9; is a double-length palatalized fricative: <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code>. Grayson prefers the notation <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> over <code>/&#x0283;&#x02B2;&#x02D0;/</code> because Russian speakers tend to rearticulate this sound rather than simply sustain it. The Moscow pronunciation <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> is the norm in lyric diction; an older St. Petersburg variant <code>/&#x0283;&#x02B2;t&#x0283;&#x02B2;/</code> may be encountered in some references, but is not what Ilya produces. Non-native learners can focus on a pitch difference to distinguish the two: &#x27E8;&#x0448;&#x27E9; <code>[&#x0283;]</code> is a low, warm sound, while &#x27E8;&#x0449;&#x27E9; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> sounds higher-pitched and somehow quicker. The cause is tongue shape. For &#x27E8;&#x0448;&#x27E9; <code>[&#x0283;]</code> the tongue is flat or ladle-shaped, while for &#x27E8;&#x0449;&#x27E9; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code> the tongue assumes the shape of the vowel <code>[i]</code>, forcing the exiting air through a narrower opening, raising the perception of pitch. More on palatalized vowels later.</p>
+
+						<h5 id="learn-u5-affricates">The affricates: &#x27E8;&#x0446;&#x27E9; and &#x27E8;&#x0447;&#x27E9;</h5>
+
+						<p>&#x27E8;&#x0446;&#x27E9; produces <code>/ts/</code>, a single phoneme despite its two-symbol IPA spelling, an indivisible digraph. This affricate is not a <code>/t/</code> followed by an <code>/s/</code> even though those symbols have been paired and adopted to describe it: the air is released through a single point of closure, and the sound should take no more time to pronounce than a single <code>/t/</code> or <code>/s/</code>. German-trained singers know this sound from <em>Katze</em> (&ldquo;cat&rdquo;), <em>Herz</em> (&ldquo;heart&rdquo;), <em>Mozart</em>.</p>
+
+						<p>&#x27E8;&#x0447;&#x27E9; produces <code>/t&#x0283;&#x02B2;/</code>, similarly a single phoneme. Italian-trained singers know it from <em>ciao</em> (&ldquo;hello&rdquo;) and <em>dolce</em> (&ldquo;sweet&rdquo;), though in Russian it carries an inherent palatalization that the Italian version does not. English palatalizes this affricate <em>&#x00E0; la russe</em> in the words <em>cheese</em>, <em>cheer</em>, <em>chief</em>, <em>chinos</em>, or wherever the speaker pronounces this affricate while preparing to follow it with the vowel <code>[i]</code>. More on this in the coming discussion of palatalization.</p>
+
+						<h4 id="learn-u5-fixed">Which consonants never change hardness or softness?</h4>
+
+						<p>Most Russian consonants exist in both hard (unpalatalized) and soft (palatalized) forms. The conditions that trigger palatalization are the subject of Section 6. But Russian has five special consonants that break the pattern: their hardness or softness is fixed and does not vary.</p>
+
+						<p><strong>Always hard (never palatalized):</strong></p>
+
+						<table>
+						<thead><tr><th>Letter</th><th>IPA</th><th>Character</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0436;&#x27E9;</td><td><code>/&#x0292;/</code></td><td>Voiced husher</td></tr>
+						<tr><td>&#x27E8;&#x0448;&#x27E9;</td><td><code>/&#x0283;/</code></td><td>Voiceless husher</td></tr>
+						<tr><td>&#x27E8;&#x0446;&#x27E9;</td><td><code>/ts/</code></td><td>Voiceless affricate</td></tr>
+						</tbody>
+						</table>
+
+						<p>Perhaps surprisingly, a soft sign (&#x27E8;&#x044C;&#x27E9;) following &#x27E8;&#x0436;&#x27E9; or &#x27E8;&#x0448;&#x27E9; does not signal palatalization; the sign serves a traditional grammatical function only, and is ignored. The word &#x0440;&#x043E;&#x0436;&#x044C; (&ldquo;rye&rdquo;) ends with <code>/&#x0292;/</code>, not <code>/&#x0292;&#x02B2;/</code>. Likewise, &#x27E8;&#x044C;&#x27E9; after &#x27E8;&#x0447;&#x27E9; or &#x27E8;&#x0449;&#x27E9; adds no additional softness, since these consonants are already inherently soft and cannot become softer.</p>
+
+						<p><strong>Always soft (always palatalized):</strong></p>
+
+						<table>
+						<thead><tr><th>Letter</th><th>IPA</th><th>Character</th></tr></thead>
+						<tbody>
+						<tr><td>&#x27E8;&#x0447;&#x27E9;</td><td><code>/t&#x0283;&#x02B2;/</code></td><td>Palatalized affricate</td></tr>
+						<tr><td>&#x27E8;&#x0449;&#x27E9;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>Double palatalized fricative</td></tr>
+						</tbody>
+						</table>
+
+						<p>An important point: these five fixed consonants serve as boundaries to the palatalization process. A regressive chain of palatalization stops when it encounters &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, or &#x27E8;&#x0446;&#x27E9;. (The always-soft &#x27E8;&#x0447;&#x27E9; and &#x27E8;&#x0449;&#x27E9; do not stop the chain; they are themselves palatalizing agents.) These interactions are treated in Section 6.</p>
+
+						<p>The always-hard consonants also affect the vowels that follow them. As we saw, unstressed &#x27E8;&#x0435;&#x27E9; after &#x27E8;&#x0436;&#x27E9;, &#x27E8;&#x0448;&#x27E9;, or &#x27E8;&#x0446;&#x27E9; reduces to <code>/&#x0268;/</code> because the hard consonant environment blocks the fronting that would otherwise permit <code>[&#x026A;]</code>. This was noted in Section 4 (Vowel Reduction); here we name its cause.</p>
+
+						<h4 id="learn-u5-signs">What do the two signs do?</h4>
+
+						<p>Two Russian Cyrillic letters produce no sound of their own. But both are important functional markers that modify the pronunciation of the consonant that precedes them.</p>
+
+						<h5 id="learn-u5-soft">&#x27E8;&#x044C;&#x27E9; (&#x043C;&#x044F;&#x0433;&#x043A;&#x0438;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A;): the soft sign</h5>
+
+						<p>The soft sign (&#x043C;&#x044F;&#x0433;&#x043A;&#x0438;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A; <code>/&#x02C8;m&#x02B2;&#x0251;x&#x02B2;k&#x02B2;ij zn&#x0251;k/</code>) usually indicates that the consonant immediately before it becomes soft, that is, palatalized. This is the soft sign&rsquo;s primary function. Mispronouncing a palatalized consonant as hard (or vice versa) can change the meaning of a word:</p>
+
+						<table>
+						<thead><tr><th>With &#x27E8;&#x044C;&#x27E9;</th><th>IPA</th><th>Meaning</th><th>Without &#x27E8;&#x044C;&#x27E9;</th><th>IPA</th><th>Meaning</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0448;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/&#x0283;es&#x02B2;t&#x02B2;/</code></td><td>six</td><td>&#x0448;&#x0435;&#x0441;&#x0442;</td><td><code>/&#x0283;&#x025B;st/</code></td><td>a pole</td></tr>
+						<tr><td>&#x043F;&#x043E;&#x043B;&#x044C;&#x043A;&#x0430;</td><td><code>/&#x02C8;pol&#x02B2; k&#x0251;/</code></td><td>polka</td><td>&#x043F;&#x043E;&#x043B;&#x043A;&#x0430;</td><td><code>/&#x02C8;po&#x026B; k&#x0251;/</code></td><td>a shelf</td></tr>
+						<tr><td>&#x043C;&#x0430;&#x0442;&#x044C;</td><td><code>/m&#x0251;t&#x02B2;/</code></td><td>mother</td><td>&#x043C;&#x0430;&#x0442;</td><td><code>/m&#x0251;t/</code></td><td>checkmate</td></tr>
+						</tbody>
+						</table>
+
+						<p>When &#x27E8;&#x044C;&#x27E9; sits between a preceding consonant and a following iotated vowel (&#x27E8;&#x044F;&#x27E9;, &#x27E8;&#x0435;&#x27E9;, &#x27E8;&#x0451;&#x27E9;, &#x27E8;&#x044E;&#x27E9;), it duly palatalizes the preceding consonant but also forces the insertion of an audible <code>/j/</code> glide between the soft sign and the vowel that follows. This dynamic also involves noticeable aspiration, particularly for stops or sibilants that precede the soft sign. The word &#x0434;&#x044C;&#x044F;&#x0432;&#x043E;&#x043B; (&ldquo;devil&rdquo;), for example, is pronounced <code>/&#x02C8;d&#x02B2;j&#x0251; v&#x028C;&#x026B;/</code>: the &#x27E8;&#x044C;&#x27E9; palatalizes the &#x27E8;&#x0434;&#x27E9; and introduces the <code>/j/</code> glide before &#x27E8;&#x044F;&#x27E9;.</p>
+
+						<p>The mechanism of palatalization itself is the subject of Section 6. Here, we are simply naming the role of the soft sign: usually it tells the singer that the preceding consonant is soft.</p>
+
+						<h5 id="learn-u5-hard">&#x27E8;&#x044A;&#x27E9; (&#x0442;&#x0432;&#x0451;&#x0440;&#x0434;&#x044B;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A;): the hard sign</h5>
+
+						<p>The hard sign is far less frequent than the soft sign, but when it appears, it carries meaning.</p>
+
+						<p>&#x27E8;&#x044A;&#x27E9; (&#x0442;&#x0432;&#x0451;&#x0440;&#x0434;&#x044B;&#x0439; &#x0437;&#x043D;&#x0430;&#x043A; <code>/&#x02C8;tv&#x02B2;ord&#x0268;j zn&#x0251;k/</code>) once dominated Cyrillic pages as a terminal indicator letter for every word ending in a hard consonant. This practice was abolished with the 1918 orthographic reform. Today, the hard sign appears occasionally between a prefix and a root that begins with an iotated vowel. It creates a boundary: the consonant before &#x27E8;&#x044A;&#x27E9; remains hard, and the iotated vowel after &#x27E8;&#x044A;&#x27E9; inserts an initial <code>/j/</code> glide between itself and the hard sign. Without the hard sign, the iotated vowel would palatalize the preceding consonant instead of producing a glide. This is a key nuance that must be grasped and mastered.</p>
+
+						<table>
+						<thead><tr><th>With &#x27E8;&#x044A;&#x27E9;</th><th>IPA</th><th>Meaning</th><th>Without &#x27E8;&#x044A;&#x27E9;</th><th>IPA</th><th>Meaning</th></tr></thead>
+						<tbody>
+						<tr><td>&#x043E;&#x0431;&#x044A;&#x0435;&#x0434;&#x0430;&#x0442;&#x044C;</td><td><code>/&#x0251;b j&#x026A; &#x02C8;d&#x0251;t&#x02B2;/</code></td><td>to eat around</td><td>&#x043E;&#x0431;&#x0435;&#x0434;&#x0430;&#x0442;&#x044C;</td><td><code>/&#x0251; &#x02C8;b&#x02B2;&#x025B; d&#x0251;t&#x02B2;/</code></td><td>to dine</td></tr>
+						<tr><td>&#x0441;&#x044A;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/s&#x02B2;jes&#x02B2;t&#x02B2;/</code></td><td>to eat up</td><td>&#x0441;&#x0435;&#x0441;&#x0442;&#x044C;</td><td><code>/s&#x02B2;es&#x02B2;t&#x02B2;/</code></td><td>to sit down</td></tr>
+						</tbody>
+						</table>
+
+						<h4 id="learn-u5-devoicing">What happens to voiced consonants at the end of a word?</h4>
+
+						<p>Singers trained in German diction already know this rule: voiced consonants devoice at the end of a word, regardless of spelling. Russian follows the same principle. A final &#x27E8;&#x0431;&#x27E9; sounds as <code>/p/</code>, a final &#x27E8;&#x0434;&#x27E9; as <code>/t/</code>, a final &#x27E8;&#x0433;&#x27E9; as <code>/k/</code>, and so on through the six voiced-voiceless pairs. Devoicing also applies to palatalized consonants: a final &#x27E8;&#x0434;&#x044C;&#x27E9; sounds as <code>/t&#x02B2;/</code>, a final &#x27E8;&#x0437;&#x044C;&#x27E9; as <code>/s&#x02B2;/</code>.</p>
+
+						<table>
+						<thead><tr><th>Spelling</th><th>Pronunciation</th><th>IPA</th><th>Meaning</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0437;&#x0443;&#x0431;</td><td>&#x27E8;&#x0431;&#x27E9; &rarr; <code>/p/</code></td><td><code>/zup/</code></td><td>a tooth</td></tr>
+						<tr><td>&#x043A;&#x0440;&#x043E;&#x0432;</td><td>&#x27E8;&#x0432;&#x27E9; &rarr; <code>/f/</code></td><td><code>/krof/</code></td><td>a shelter</td></tr>
+						<tr><td>&#x0434;&#x0440;&#x0443;&#x0433;</td><td>&#x27E8;&#x0433;&#x27E9; &rarr; <code>/k/</code></td><td><code>/druk/</code></td><td>a friend</td></tr>
+						<tr><td>&#x043E;&#x0431;&#x0435;&#x0434;</td><td>&#x27E8;&#x0434;&#x27E9; &rarr; <code>/t/</code></td><td><code>/&#x0251; &#x02C8;b&#x02B2;&#x025B;t/</code></td><td>lunch</td></tr>
+						<tr><td>&#x043D;&#x043E;&#x0436;</td><td>&#x27E8;&#x0436;&#x27E9; &rarr; <code>/&#x0283;/</code></td><td><code>/no&#x0283;/</code></td><td>a knife</td></tr>
+						<tr><td>&#x0433;&#x043B;&#x0430;&#x0437;</td><td>&#x27E8;&#x0437;&#x27E9; &rarr; <code>/s/</code></td><td><code>/&#x0261;&#x026B;&#x0251;s/</code></td><td>an eye</td></tr>
+						<tr><td>&#x043A;&#x043D;&#x044F;&#x0437;&#x044C;</td><td>&#x27E8;&#x0437;&#x044C;&#x27E9; &rarr; <code>/s&#x02B2;/</code></td><td><code>/k&#x02B2;n&#x0251;s&#x02B2;/</code></td><td>a prince</td></tr>
+						<tr><td>&#x043A;&#x0440;&#x043E;&#x0432;&#x044C;</td><td>&#x27E8;&#x0432;&#x044C;&#x27E9; &rarr; <code>/f&#x02B2;/</code></td><td><code>/krof&#x02B2;/</code></td><td>blood</td></tr>
+						</tbody>
+						</table>
+
+						<p>The sonorants (<code>/l/</code>, <code>/m/</code>, <code>/n/</code>, <code>/r/</code> and their palatalized forms) are exempt: they remain voiced in all positions and do not devoice.</p>
+
+						<p>Final devoicing is the first of several assimilation processes that are explained in Section 7. In this section, we have named devoicing as a property of the consonant inventory; in Section 7, we will explore how devoicing interacts with word boundaries, clitics, and adjacent consonants.</p>
+
+						<h4 id="learn-u5-try">Try this in Ilya</h4>
+
+						<p>Transcribe a word containing &#x27E8;&#x043B;&#x27E9; in different positions. In &#x043C;&#x0430;&#x043B; (&ldquo;small,&rdquo; masculine short form), Ilya produces <code>/&#x026B;/</code> for the final consonant: dark, velarised. In &#x043C;&#x0430;&#x043B;&#x044C;&#x0447;&#x0438;&#x043A; (&ldquo;boy&rdquo;), the soft sign palatalizes the same letter to <code>/l&#x02B2;/</code>: clear, dental. Same letter, different context, different sound.</p>
+
+						<p>Now transcribe &#x0434;&#x0440;&#x0443;&#x0433; (&ldquo;friend&rdquo;). Notice that the final &#x27E8;&#x0433;&#x27E9; appears as <code>/k/</code> in the IPA line: devoiced, exactly as it would be in German. The Cyrillic letter that signals a voiced consonant is not the sound you sing. Final consonants devoice in sung Russian.</p>
+
+						<p><em>Grayson source: Ch. 4 (all sections), Ch. 5 &sect;1</em></p>
 
 						<h3 id="learn-unit-6">Section 6 &middot; Palatalization</h3>
 

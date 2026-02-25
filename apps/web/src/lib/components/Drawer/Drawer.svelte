@@ -185,10 +185,47 @@
 									</li>
 								</ul>
 							</li>
-							<li class="toc-unit">
+								<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-5')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '5 · Les sons consonantiques' : '5 · The Consonant Sounds'}
+									{language === 'fr' ? '5 · Les consonnes' : '5 · The Consonants'}
 								</button>
+								<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-familiar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Le système consonantique' : 'The consonant system'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-pairs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Paires voisées-non voisées' : 'Voiced-voiceless pairs'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-attention')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Attention ciblée' : 'Focused attention'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-fixed')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Dureté ou mollesse fixe' : 'Fixed hardness or softness'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-signs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Les deux signes' : 'The two signs'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-devoicing')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Dévoisement final' : 'Final devoicing'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Essayez dans Ilya' : 'Try this in Ilya'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-6')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
