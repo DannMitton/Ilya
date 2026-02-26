@@ -1800,13 +1800,603 @@
 
 						<h3 id="learn-unit-6">Section 6 &middot; La palatalisation</h3>
 
-						<p>Le pont entre l&rsquo;inventaire et les processus. Certaines consonnes sont toujours palatalis&#x00E9;es (vous les avez rencontr&#x00E9;es &#x00E0; la Section 5). D&rsquo;autres le deviennent selon leur contexte. L&rsquo;enseignement de la palatalisation comme articulation secondaire appliqu&#x00E9;e &#x00E0; des phon&#x00E8;mes d&#x00E9;j&#x00E0; familiers est une philosophie p&#x00E9;dagogique d&#x00E9;lib&#x00E9;r&#x00E9;e&#160;: le russe ne vous demande pas d&rsquo;apprendre des sons enti&#x00E8;rement nouveaux, mais d&rsquo;ajouter un geste &#x00E0; des sons que vous produisez d&#x00E9;j&#x00E0;.</p>
+						<h4 id="learn-u6-what">Qu’est-ce que la palatalisation ?</h4>
+						<p>La palatalisation est une articulation secondaire nécessaire en
+						russe, sans lui être exclusive. Pour palataliser, le dos de la langue
+						(le dorsum) s’élève et s’avance vers le palais dur, reproduisant
+						approximativement la position de la voyelle [i], tandis que la consonne
+						conserve son lieu et son mode d’articulation habituels. Ces deux gestes
+						s’effectuent simultanément, et non successivement : c’est pourquoi on
+						parle de coarticulation. Grayson est précis : la consonne est articulée
+						dans une « integrally palatalized tongue position » « position linguale
+						intégralement palatalisée » (Grayson 2012, 169). Un [tʲ] palatalisé est
+						un évènement unique, et non un [t] suivi d’un [j]. Le mot тюк se
+						transcrit /tʲuk/ : trois phonèmes. Si ce que vous produisez ressemble à
+						/tjuk/, la langue arrive en retard. Prolongeant ce principe, Grayson
+						emploie [ɲ] au lieu du techniquement correct [nʲ], en raison de sa
+						familiarité pour les chanteurs habitués à la diction lyrique française
+						et italienne. Un débutant risque moins de confondre [ɲ] avec [nj], alors
+						que [nʲ] et [nj] peuvent sembler à peine distincts sur la page. Le mot
+						russe ⟨нет⟩ (non) est très souvent chanté incorrectement avec quatre
+						phonèmes, [njɛt], alors que sa transcription en [ɲɛt] met en valeur une
+						séquence de trois phonèmes tout à fait familiers, qui produisent un
+						russe idiomatique.</p>
+						<p><strong>[COMMANDE D’ILLUSTRATION : Coupe coronale de la langue
+						identifiant les régions : lame, pointe, dorsum. Vérifier l’exactitude
+						anatomique dans Gray’s Anatomy avant publication.]</strong></p>
+						<p>Vous faites déjà cela en permanence. Lorsque vous dites « qui » [ki],
+						votre langue prépare un espace buccal en forme de [i] avant même de
+						relâcher le /k/ ; comparez avec « car » [kɑʁ], où elle ne le fait pas.
+						Le /k/ de « car » est [k]. Le /k/ de « qui » est [kʲ]. La
+						palatalisation, c’est cette antériorisation anticipée de la langue, et
+						vous l’effectuez sans y penser. Le [ɲ] italien dans « ogni », le /d/
+						français dans « dire » : chacun mobilise le même geste. Une différence
+						notable, cependant : la palatalisation ne porte aucune valeur
+						distinctive en anglais, en français ou en italien, alors qu’elle en
+						porte une en russe.</p>
+						<p>En russe, la palatalisation signale un changement radical de sens :
+						мат /mat/ signifie « échec et mat », мать /matʲ/ signifie « mère » ;
+						брат /brat/ est « frère », брать /bratʲ/ est « prendre ». La
+						palatalisation est le seul vecteur de distinction lexicale entre ces
+						paires. Notre tâche pédagogique n’est pas d’acquérir une habileté
+						physique nouvelle de zéro, mais de développer un contrôle conscient sur
+						un geste inconscient que nous possédons déjà, et puis de l’appliquer
+						systématiquement partout où le russe l’exige.</p>
+						<p>Le modèle pratique de Grayson pour ce contrôle est « arch, pronounce,
+						peel » « arquer, prononcer, décoller » (Grayson 2012, 205). Nous
+						pourrions reformuler cela en Préparer, Prononcer, Décoller, où «
+						Préparer » désigne l’anticipation de la voûte linguale qui prévient la
+						séquence [C]+[j] contre laquelle Grayson nous met en garde. Le dos de la
+						langue s’arque vers la voûte du palais dur ; la consonne est prononcée
+						tandis que la langue maintient cette position arquée ; le dorsum se
+						décolle rapidement à mesure que la voyelle suivante se déploie. On gagne
+						à anticiper la posture [i] nécessaire pendant l’exécution de la consonne
+						désormais palatalisée : cela empêche le geste de se dégrader en une
+						production séquentielle. Travaillez lentement avec des consonnes
+						familières (/tʲ/, /dʲ/, /ɲ/) dans des séquences VCV avant de tenter des
+						combinaisons plus exposées, puis parcourez l’ensemble de l’inventaire
+						vocalique. C’est un travail progressif, et les erreurs en font
+						partie.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th></th>
+						<th>/i/</th>
+						<th>/e/</th>
+						<th>/ɛ/</th>
+						<th>/a/</th>
+						<th>/ɑ/</th>
+						<th>/o/</th>
+						<th>/u/</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>VCV avec /tʲ/</td>
+						<td>iːtʲi</td>
+						<td>iːtʲe</td>
+						<td>iːtʲɛ</td>
+						<td>iːtʲa</td>
+						<td>iːtʲɑ</td>
+						<td>iːtʲo</td>
+						<td>iːtʲu</td>
+						</tr>
+						<tr class="even">
+						<td>/tʲ/ exposé</td>
+						<td>tʲiː</td>
+						<td>tʲeː</td>
+						<td>tʲɛː</td>
+						<td>tʲaː</td>
+						<td>tʲɑː</td>
+						<td>tʲoː</td>
+						<td>tʲuː</td>
+						</tr>
+						<tr class="odd">
+						<td>VCV avec /dʲ/</td>
+						<td>iːdʲi</td>
+						<td>iːdʲe</td>
+						<td>iːdʲɛ</td>
+						<td>iːdʲa</td>
+						<td>iːdʲɑ</td>
+						<td>iːdʲo</td>
+						<td>iːdʲu</td>
+						</tr>
+						<tr class="even">
+						<td>/dʲ/ exposé</td>
+						<td>dʲiː</td>
+						<td>dʲeː</td>
+						<td>dʲɛː</td>
+						<td>dʲaː</td>
+						<td>dʲɑː</td>
+						<td>dʲoː</td>
+						<td>dʲuː</td>
+						</tr>
+						<tr class="odd">
+						<td>VCV avec /ɲ/</td>
+						<td>iːɲi</td>
+						<td>iːɲe</td>
+						<td>iːɲɛ</td>
+						<td>iːɲa</td>
+						<td>iːɲɑ</td>
+						<td>iːɲo</td>
+						<td>iːɲu</td>
+						</tr>
+						<tr class="even">
+						<td>/ɲ/ exposé</td>
+						<td>ɲiː</td>
+						<td>ɲeː</td>
+						<td>ɲɛː</td>
+						<td>ɲaː</td>
+						<td>ɲɑː</td>
+						<td>ɲoː</td>
+						<td>ɲuː</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>Pour ceux que l’acoustique intéresse : la palatalisation s’accorde
+						avec plusieurs objectifs de la technique vocale classique. La position
+						antérieure de la langue libère l’espace pharyngé, augmentant le volume
+						du résonateur pharyngien et facilitant une production « à gorge ouverte
+						» : ce que la pédagogie italienne appelle <em>la gola aperta</em>
+						(Mitton 2020, 20, 38 ; Bolla 1980, 8). Les mesures acoustiques du russe
+						chanté confirment que les effets sur les résonances du conduit vocal
+						sont présents mais subtils : <em>f</em><sub>R2</sub> s’élève tandis que
+						<em>f</em><sub>R1</sub> s’abaisse, reproduisant le profil acoustique de
+						la voyelle [i] qu’elle simule (Mitton 2020, 131–132). Le chanteur qui
+						palatalise bien optimise simultanément le conduit vocal pour une
+						résonance efficace.</p>
+						<h4 id="learn-u6-signals">Comment repérer la palatalisation à l’écrit ?</h4>
+						<p>Les voyelles ne peuvent pas être palatalisées. La palatalisation ne
+						s’applique qu’aux consonnes. Pourtant, dans les textes cyrilliques,
+						c’est le plus souvent dans les lettres-voyelles que la palatalisation se
+						signale. Elle est également indiquée par le signe mou. Grayson préfère
+						le terme générique « indicator letters » « lettres indicatrices » pour
+						désigner les lettres cyrilliques qui signalent la palatalisation. Je
+						préfère le terme plus descriptif, et tout aussi inventé, d’« agents
+						palatalisants ». Ils comprennent :</p>
+						<ul>
+						<li>le signe mou ⟨ь⟩</li>
+						<li>toute voyelle de la « série molle » : ⟨я /jɑ/, е /jɛ/, и /i/, ё
+						/jo/, ю /ju/⟩</li>
+						<li>l’une ou l’autre des deux consonnes toujours molles (⟨ч⟩ [tʃʲ] ou
+						⟨щ⟩ [ʃʲʃʲ])</li>
+						<li>une autre consonne palatalisée valide (traitée en 6.5)</li>
+						</ul>
+						<table>
+						<thead><tr><th>Agent palatalisant</th><th>Contrepartie dure</th><th>Ce que fait l’agent</th><th>Exemple</th></tr></thead>
+						<tbody>
+						<tr><td>⟨я⟩ palatalise + /ɑ/</td><td>⟨а⟩ ne palatalise pas ; même voyelle</td><td>La consonne précédente se palatalise ; la voyelle sonne /ɑ/ (accent) ou se réduit (hors accent).</td><td>мять /mʲatʲ/ (« froisser ») vs мать /mɑtʲ/ (« mère »)</td></tr>
+						<tr><td>⟨е⟩ palatalise + /ɛ/</td><td>⟨э⟩ ne palatalise pas ; même voyelle</td><td>La consonne précédente se palatalise ; la voyelle sonne /ɛ/ (accent) ou se réduit (hors accent).</td><td>нет /ɲɛt/ (« non ») vs нэп /nɛp/</td></tr>
+						<tr><td>⟨ё⟩ palatalise + /o/</td><td>⟨о⟩ ne palatalise pas ; même voyelle</td><td>La consonne précédente se palatalise ; la voyelle sonne /o/ (toujours accentuée).</td><td>тёмный /ˈtʲom nɨj/ (« sombre ») vs том /tom/ (« tome »)</td></tr>
+						<tr><td>⟨ю⟩ palatalise + /u/</td><td>⟨у⟩ ne palatalise pas ; même voyelle</td><td>La consonne précédente se palatalise ; la voyelle sonne /u/ (accentuée ou non).</td><td>тюк /tʲuk/ (« balle ») vs тук /tuk/ (« toc »)</td></tr>
+						<tr><td>⟨и⟩ palatalise + /i/</td><td>⟨ы⟩ /ɨ/ après consonne dure</td><td>La consonne précédente se palatalise ; la voyelle sonne /i/.</td><td>мир /mʲir/ (« monde »)</td></tr>
+						<tr><td>⟨ь⟩ (signe mou)</td><td>⟨ъ⟩ (signe dur)</td><td>Palatalise la consonne à sa gauche. Ne produit aucun son en lui-même.</td><td>мать /mɑtʲ/ (« mère ») vs подъезд /pɑdˈjest/</td></tr>
+						<tr><td>⟨ч⟩, ⟨щ⟩ (toujours molles)</td><td>⟨ж⟩, ⟨ш⟩, ⟨ц⟩ (toujours dures)</td><td>Palatalisées par nature ; peuvent palataliser nombre de consonnes précédentes dans un groupe consonantique.</td><td>мальчик /ˈmɑlʲtʃʲɪk/ (« garçon »)</td></tr>
+						<tr><td>Consonne déjà palatalisée</td><td>—</td><td>Propage la palatalisation vers la gauche au sein d’un groupe (assimilation régressive), jusqu’à ce qu’une frontière l’arrête.</td><td>гость /ɡosʲtʲ/ (« invité »)</td></tr>
+						</tbody>
+						</table>
+						<p>Cela introduit le corollaire bien documenté qu’on appelle
+						<em>l’assimilation régressive de la palatalisation</em>, ou
+						<em>palatalisation régressive</em> en abrégé. Une consonne palatalisée
+						(par quelque moyen que ce soit) peut en règle générale transmettre sa
+						palatalisation en arrière, à la consonne immédiatement à sa gauche, dans
+						certaines limites. Cette palatalisation régressive se propage de voisine
+						en voisine, de droite à gauche, jusqu’à ce que quelque chose
+						l’arrête.</p>
+						<p>Considérons гость : le ⟨ь⟩ palatalise le ⟨т⟩, et le ⟨т⟩ désormais
+						palatalisé palatalise le ⟨с⟩ qui le précède. Toujours vers la gauche. En
+						pratique, cela signifie qu’il faut anticiper la posture linguale
+						antérieure en [i] bien avant que la consonne palatalisée causale ne soit
+						même prononcée. Deux consonnes russes, ⟨ч⟩ /tʃʲ/ et ⟨щ⟩ /ʃʲʃʲ/, sont
+						intrinsèquement palatalisées (et les marqueurs de palatalisation
+						figurent dans leurs valeurs API par défaut en conséquence).</p>
+						<p>Ce qui arrête la propagation est le sujet de 6.3, et les règles
+						spécifiques régissant la participation des consonnes à l’assimilation
+						régressive sont traitées en 6.5.</p>
+						<p>Une transcription en API est infiniment plus lisible. En API, la
+						palatalisation est marquée par un symbole unique et cohérent : le [ʲ] en
+						exposant qui suit la consonne. Grayson adopte cette notation à la suite
+						de la convention de Kiel (1989) de l’Association phonétique
+						internationale, qui a abandonné un ensemble de symboles plus anciens au
+						profit de cet exposant uniforme (Grayson 2012, 61–62). Le chanteur qui
+						consulte la sortie d’Ilya voit [ʲ] partout où une consonne est
+						palatalisée : /tʲ/, /dʲ/, /sʲ/, /mʲ/, et ainsi de suite. La seule
+						exception est [ɲ], traitée en 6.1.</p>
+						<p>Les symboles abandonnés méritent une brève mention, car le chanteur
+						les rencontrera dans d’autres ressources. Avant 1989, l’API marquait la
+						palatalisation par des crochets palataux : de petites courbes
+						descendantes apposées à la base des lettres consonantiques. L’ouvrage de
+						Natalia Challis, <em>The Singer’s Rachmaninoff</em> (2006), parmi
+						d’autres références, utilise cette notation ancienne. Les symboles sont
+						visuellement distincts les uns des autres, là où l’exposant moderne [ʲ]
+						s’applique uniformément à toute consonne. Un tableau de correspondance
+						est fourni ici à titre de référence :</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Catégorie</th>
+						<th>Ancien → Moderne</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Labiales et labiodentales</td>
+						<td>ᶈ → pʲ, ᶀ → bʲ, ᶆ → mʲ, ᶂ → fʲ, ᶌ →
+						vʲ</td>
+						</tr>
+						<tr class="even">
+						<td>Dentales, alvéolaires et nasale</td>
+						<td>ƫ → tʲ, ᶁ → dʲ, ᶉ → rʲ, ᶊ → sʲ, ᶎ → zʲ, ᶋ
+						→ ʃʲ, ᶅ → lʲ, ᶇ → ɲ</td>
+						</tr>
+						<tr class="odd">
+						<td>Vélaires</td>
+						<td>ᶄ → kʲ, ᶃ → ɡʲ, ᶍ → xʲ</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>L’ouvrage de Cheri Montgomery, <em>Russian Lyric Diction
+						Workbook</em> (STM, 2021), est la seule autre ressource imprimée en
+						diction lyrique russe, outre Grayson, à employer systématiquement les
+						marqueurs de palatalisation API modernes adoptés lors de la convention
+						de Kiel de 1989. Les divergences entre les autres systèmes sont légion :
+						crochets palataux anciens, usage incohérent de l’exposant, et choix de
+						notation qui obscurcissent la distinction même que le chanteur a besoin
+						de voir. Ilya met en œuvre les conventions de notation de Grayson d’un
+						bout à l’autre, avec la souplesse nécessaire pour les modifier. Le
+						chanteur qui consulte d’autres ressources doit savoir que les symboles
+						peuvent différer, et s’y adapter.</p>
+						<h4 id="learn-u6-stops">Qu’est-ce qui arrête la propagation ?</h4>
+						<p>La palatalisation régressive se propage en arrière au sein d’un
+						groupe consonantique, mais pas indéfiniment. Le chanteur qui connait les
+						agents palatalisants (6.2) et les six frontières ci-dessous peut prédire
+						la palatalisation pour à peu près n’importe quel mot.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Frontière</th>
+						<th>Fonction</th>
+						<th>Exemple</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Consonnes toujours dures (⟨ж⟩, ⟨ш⟩,
+						⟨ц⟩)</td>
+						<td>Ces consonnes ne peuvent pas être
+						palatalisées et bloquent entièrement la propagation de la palatalisation
+						régressive. La chaine s’arrête là.</td>
+						<td>большой /bɑlʲ ˈʃoj/ : le ⟨ь⟩ palatalise le
+						⟨л⟩, mais le ⟨ш⟩ est toujours dur et n’absorbe rien.</td>
+						</tr>
+						<tr class="even">
+						<td>Une voyelle</td>
+						<td>La palatalisation ne s’applique qu’aux
+						consonnes ; une voyelle interrompt donc la chaine régressive. La voyelle
+						peut elle-même être le dernier élément influencé (voir ci-dessous).</td>
+						<td>мать /mɑtʲ/ : le ⟨ь⟩ palatalise le ⟨т⟩ ;
+						la voyelle /ɑ/ est la frontière.</td>
+						</tr>
+						<tr class="odd">
+						<td>Le signe dur ⟨ъ⟩</td>
+						<td>Frontière orthographique qui empêche la
+						palatalisation d’atteindre la consonne à sa gauche. Exception : ⟨в⟩, ⟨с⟩
+						et ⟨з⟩ se palatalisent malgré la présence du ⟨ъ⟩.</td>
+						<td>подъезд /pɑdˈjest/ : le ⟨ъ⟩ empêche le ⟨ё⟩
+						de palataliser le ⟨д⟩. Comparez съезд /sʲjest/ : le ⟨с⟩ se palatalise
+						parce qu’il fait partie des trois consonnes qui font exception.</td>
+						</tr>
+						<tr class="even">
+						<td>Un nouvel agent palatalisant</td>
+						<td>Non pas un mur, mais une réinitialisation.
+						Quand une deuxième lettre indicatrice ou un deuxième signe mou apparait,
+						il établit un nouveau point d’influence régressive, indépendant du
+						premier.</td>
+						<td>сестрёнка /sʲi ˈsʲtʲrʲon kɑ/ : le ⟨ё⟩
+						palatalise le groupe ⟨стр⟩ ; le ⟨е⟩ est un agent distinct qui palatalise
+						le ⟨с⟩ initial de manière indépendante.</td>
+						</tr>
+						<tr class="odd">
+						<td>La frontière de mot</td>
+						<td>La palatalisation ne franchit généralement
+						pas la frontière de mot. Cela la distingue de l’assimilation de
+						voisement, qui la franchit librement (section 7). Exception : lorsqu’un
+						mot se termine par ⟨в⟩, ⟨с⟩ ou ⟨з⟩ et que le mot suivant commence par
+						une lettre indicatrice autre que ⟨и⟩, la consonne finale se palatalise
+						au-delà de la frontière.</td>
+						<td>Traitement complet en section 7.</td>
+						</tr>
+						<tr class="even">
+						<td>La ponctuation</td>
+						<td>Absolue. Aucune assimilation, de quelque
+						nature que ce soit, ne franchit la ponctuation (Grayson 2012, 206).
+						C’est la seule frontière qui n’admet aucune exception.</td>
+						<td>Traitement complet en section 7.</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>La frontière que le chanteur rencontre le plus fréquemment à
+						l’intérieur d’un mot est la première : une consonne toujours dure. Nous
+						avons rencontré ⟨ж⟩, ⟨ш⟩ et ⟨ц⟩ en section 5 comme des consonnes qui ne
+						sont jamais palatalisées. Ici, elles jouent le rôle de murs contre la
+						palatalisation régressive. Dans большой, le ⟨ь⟩ palatalise le ⟨л⟩, mais
+						le ⟨ш⟩ à sa gauche est imperméable. La palatalisation s’arrête, et le
+						⟨б⟩ conserve sa dureté. Le chanteur qui a intériorisé les trois
+						consonnes toujours dures de la section 5 connait déjà la frontière la
+						plus importante du système.</p>
+						<p>La frontière vocalique mérite une brève clarification. Une voyelle
+						interrompt la chaine consonantique, mais la voyelle peut elle-même être
+						le dernier élément influencé : si elle se retrouve prise entre deux
+						consonnes palatalisées (en position interpalatale), elle s’antériorise
+						(voir section 3). Mais il ne s’agit pas de la palatalisation d’une
+						voyelle. Il s’agit plutôt d’une concession aux contraintes
+						physiologiques humaines. Le principe d’« économie des gestes de parole »
+						de Lindblom (1983) suggère que, dans la parole humaine, les valeurs
+						extrêmes des paramètres articulatoires tendent à être évitées. La langue
+						est en position arquée pour les phonèmes qui précèdent et qui suivent la
+						voyelle ; la voyelle prise en étau palatal ne retournera donc pas
+						entièrement à sa position de base, et s’antériorise vers un allophone
+						plus clair. C’est ainsi que l’antériorisation interpalatale transforme
+						[ɑ] en [a] et [ɛ] en [e]. Grayson nous rappelle que « all vowels
+						preceding palatalized consonants are fronted, even more so when
+						interpalatal » « toutes les voyelles qui précèdent des consonnes
+						palatalisées s’antériorisent, d’autant plus en position interpalatale »,
+						bien que « only [ja], [a], [je], and [e] are formally recognized in
+						Russian lyric diction as secondary allophones » « seuls [ja], [a], [je]
+						et [e] soient formellement reconnus en diction lyrique russe comme
+						allophones secondaires » (Grayson 2012, 208).</p>
+						<h4 id="learn-u6-paired">Consonnes appariées et non appariées</h4>
+						<p>Le chanteur sait désormais ce qu’est la palatalisation (6.1), ce qui
+						la déclenche (6.2) et ce qui l’arrête (6.3). La question suivante
+						s’impose naturellement : quelles consonnes peuvent être palatalisées
+						?</p>
+						<p>La plupart des consonnes russes sont appariées : elles existent sous
+						une forme dure et une forme molle, et la distinction entre les deux est
+						phonémique. Cinq consonnes sont non appariées : trois sont toujours
+						dures et ne peuvent jamais être palatalisées ; deux sont toujours molles
+						et ne se prononcent jamais sans palatalisation. Le chanteur les a toutes
+						rencontrées en section 5. Nous consolidons ici le tableau complet.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Catégorie</th>
+						<th>Consonnes</th>
+						<th>Notes</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Appariées (formes dure et molle)</td>
+						<td>б/бʲ, п/пʲ, в/вʲ, ф/фʲ, д/дʲ, т/тʲ, з/зʲ,
+						с/сʲ, г/гʲ, к/кʲ, х/хʲ, м/мʲ, н/нʲ[ɲ], р/рʲ, л[ɫ]/лʲ[lʲ]</td>
+						<td>Quinze consonnes. Chacune possède une
+						forme dure par défaut et une contrepartie molle produite par
+						palatalisation. La latérale dure se transcrit [ɫ] (l vélaire) ; la
+						nasale molle se transcrit [ɲ] plutôt que [nʲ] (voir 6.1).</td>
+						</tr>
+						<tr class="even">
+						<td>Toujours dures (non appariées)</td>
+						<td>ж [ʒ], ш [ʃ], ц [ts]</td>
+						<td>Ces trois consonnes sont imperméables à la
+						palatalisation. Elles jouent le rôle de frontières (6.3). Un signe mou
+						après ⟨ж⟩ ou ⟨ш⟩ n’a aucun effet phonétique : il signale le genre ou la
+						conjugaison, non la mollesse.</td>
+						</tr>
+						<tr class="odd">
+						<td>Toujours molles (non appariées)</td>
+						<td>ч [tʃʲ], щ [ʃʲʃʲ]</td>
+						<td>Deux consonnes. Elles sont intrinsèquement
+						palatalisées et peuvent agir comme agents palatalisants pour les
+						consonnes à leur gauche dans un groupe consonantique (6.2).</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>Vingt consonnes en tout. Quinze sont appariées ; cinq sont fixes. Le
+						chanteur qui a intériorisé ce tableau peut examiner n’importe quelle
+						consonne d’un mot russe et savoir immédiatement si elle est susceptible
+						de palatalisation. Si elle est appariée, il cherche un agent à sa
+						droite. Si elle est toujours dure, c’est un mur. Si elle est toujours
+						molle, c’est un agent.</p>
+						<h4 id="learn-u6-clusters">La palatalisation régressive dans les groupes consonantiques</h4>
+						<p>Les consonnes ne participent pas toutes à parts égales à la
+						palatalisation régressive. La diction lyrique russe suit la tradition
+						vieux-moscovite, qui palatalise plus généreusement au sein des groupes
+						consonantiques que le russe parlé contemporain (Grayson 2012, 209). Les
+						cinq règles ci-dessous, dérivées de Derwing et Priestly (1980, 76–87),
+						décrivent les contraintes qui régissent cette générosité. Lorsqu’un mot
+						spécifique s’écarte de ces règles selon les conventions de la
+						prononciation scénique, Ilya le traite comme une entrée individuelle
+						dans son dictionnaire, avec citation.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Règle</th>
+						<th>Contrainte</th>
+						<th>Exemple</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>1. /ɫ/ (l vélaire)</td>
+						<td>Ne se palatalise pas régressivement, sauf
+						lorsqu’il est doublé : ⟨-лль-⟩ → /lʲlʲ/.</td>
+						<td>Dans ⟨-лн-⟩, le ⟨л⟩ reste [ɫ] même si le
+						⟨н⟩ est palatalisé.</td>
+						</tr>
+						<tr class="even">
+						<td>2. /r/</td>
+						<td>Ne se palatalise pas régressivement, sauf
+						lorsqu’il est doublé : ⟨-ррь-⟩ → /rʲrʲ/. Voir l’exception progressive
+						ci-dessous.</td>
+						<td>Le roulé résiste à la palatalisation
+						régressive plus que toute autre consonne appariée.</td>
+						</tr>
+						<tr class="odd">
+						<td>3. /n/</td>
+						<td>Uniquement devant un autre /n/ palatalisé
+						ou devant une dentale palatalisée.</td>
+						<td>Devant une labiale ou une vélaire
+						palatalisée, /n/ conserve sa dureté.</td>
+						</tr>
+						<tr class="even">
+						<td>4. Vélaires (/k/, /ɡ/, /x/)</td>
+						<td>Uniquement devant une autre vélaire
+						palatalisée.</td>
+						<td>Une vélaire devant une dentale ou une
+						labiale palatalisée conserve sa dureté.</td>
+						</tr>
+						<tr class="odd">
+						<td>5. Labiales (/b/, /p/, /v/, /f/)</td>
+						<td>Uniquement devant une autre labiale
+						palatalisée.</td>
+						<td>Une labiale devant une dentale ou une
+						vélaire palatalisée conserve sa dureté.</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>Nous pourrions appeler le principe sous-jacent <em>l’affinité homorganique</em> : les consonnes reçoivent la palatalisation régressive d’autant plus facilement que la consonne voisine partage leur lieu d’articulation. Les dentales sont les plus perméables. Les vélaires et les labiales sont les plus restrictives. Le l vélaire et le roulé font exception même au sein de leurs propres catégories.</p>
+						<p><strong>L’exception progressive.</strong> Tout ce que nous avons
+						abordé dans la section 6 jusqu’ici était régressif : une influence
+						s’exerçant en arrière, de droite à gauche. La règle 2 contient une
+						exception unique, qui renverse entièrement la direction. Le roulé /r/ se
+						palatalise progressivement (vers l’avant, de gauche à droite) lorsqu’il
+						est précédé d’une voyelle antérieure accentuée : ⟨и⟩, ⟨е⟩ ou ⟨э⟩. Dans
+						cette configuration, la position de la langue pour la voyelle influence
+						la consonne qui la suit. Considérons первый /ˈpʲerʲ vɨj/ (« premier ») :
+						le ⟨е⟩ accentué palatalise le ⟨р⟩ à sa droite, bien qu’aucun agent
+						palatalisant n’apparaisse après lui. Il en va de même dans верность
+						/ˈvʲerʲ nʌsʲtʲ/ (« fidélité »). C’est la seule consonne du russe qui se
+						palatalise dans cette direction, et uniquement dans ces conditions :
+						syllabe accentuée, voyelle antérieure, immédiatement avant le roulé.
+						C’est une règle modeste, mais elle est structurellement unique.</p>
+						<h4 id="learn-u6-practice">Mise en pratique</h4>
+						<p>Les exemples détaillés qui suivent, adaptés de Grayson (2012,
+						210–211), appliquent les principes exposés de 6.1 à 6.5, par ordre
+						croissant de complexité. Chaque mot introduit une complication
+						nouvelle.</p>
+						<p><strong>стол → /stoɫ/.</strong> Aucun indicateur, aucun agent
+						palatalisant. Toutes les consonnes sont dures. Le ⟨л⟩ est un l vélaire
+						[ɫ].</p>
+						<p><strong>столь → /stolʲ/.</strong> Le signe mou ⟨ь⟩ palatalise le ⟨л⟩
+						: le l vélaire [ɫ] devient [lʲ]. La voyelle ⟨о⟩ est une frontière ; la
+						palatalisation ne se propage pas vers la gauche au-delà.</p>
+						<p><strong>мать → /mɑtʲ/.</strong> Le signe mou palatalise le ⟨т⟩. La
+						voyelle ⟨а⟩ est de nouveau une frontière, et puisqu’elle n’est pas
+						interpalatale (aucun agent palatalisant ne la précède), elle demeure
+						[ɑ].</p>
+						<p><strong>мять → /matʲ/.</strong> Deux agents palatalisants, cette fois
+						: ⟨я⟩ palatalise le ⟨м⟩, et ⟨ь⟩ palatalise le ⟨т⟩. La voyelle ⟨а⟩ est
+						interpalatale (consonne palatalisée de part et d’autre) et accentuée :
+						elle s’antériorise donc de [ɑ] à [a]. Comparez мать : même ossature,
+						qualité vocalique différente, parce que la palatalisation entoure
+						désormais la voyelle.</p>
+						<p><strong>большой → /bɑlʲ ˈʃoj/.</strong> Le signe mou palatalise le
+						⟨л⟩. La palatalisation ne peut pas se propager davantage vers la gauche,
+						car la voyelle ⟨о⟩ est une frontière. Elle ne peut pas se propager vers
+						la droite, car le ⟨ш⟩ est toujours dur : imperméable, il joue le rôle de
+						mur (6.3).</p>
+						<p><strong>сестрёнка → /sʲi ˈsʲtʲrʲon kɑ/.</strong> Le ⟨ё⟩ palatalise le
+						groupe consonantique à sa gauche : ⟨р⟩, puis ⟨т⟩, puis ⟨с⟩. Chaque
+						consonne palatalisée devient un agent pour la suivante, en se propageant
+						régressivement jusqu’à la frontière vocalique. Le ⟨е⟩ atone de la
+						première syllabe est lui aussi précédé d’un ⟨с⟩ palatalisé, ce qui le
+						place en position interpalatale ; il se réduit à /i/. Le ⟨к⟩ ne se
+						palatalise pas, car le ⟨а⟩ qui le suit n’est pas un agent
+						palatalisant.</p>
+						<p><strong>симметрический → /sʲi mʲmʲi ˈtʲrʲi tʃʲɪ skɨj/.</strong>
+						Palatalisation complète des groupes consonantiques sur plusieurs
+						syllabes, selon la tradition scénique vieux-moscovite. La terminaison
+						⟨-ский⟩ se résout en /skɨj/ par convention de diction lyrique (voir
+						section 5), et non en /sʲkʲij/ : le i vélaire [ɨ] apparait ici parce que
+						la palatalisation ne s’applique pas à cette terminaison morphologique
+						particulière.</p>
+						<p>Chaque exemple s’appuie sur le précédent. Le chanteur qui peut
+						expliquer pourquoi мять contient [a] là où мать contient [ɑ], et
+						pourquoi le ⟨ш⟩ de большой bloque ce que le groupe consonantique de
+						сестрёнка laisse passer, a intériorisé le système.</p>
+						<h4 id="learn-u6-velari">Le i vélaire [ɨ]</h4>
+						<p>Le i vélaire occupe l’espace où la palatalisation ne peut pas aller.
+						C’est le son vocalique qui apparait lorsque ⟨и⟩ suit une consonne
+						toujours dure (⟨ж⟩, ⟨ш⟩, ⟨ц⟩) ou lorsque certaines terminaisons
+						morphologiques résistent à la palatalisation par convention : la
+						terminaison ⟨-ский⟩ rencontrée dans симметрический en est un cas.</p>
+						<p>Le symbole est [ɨ], la voyelle centrale fermée non arrondie. La
+						langue s’avance comme pour [i], mais se rétracte en même temps vers le
+						centre de la bouche, à la manière du creux d’une louche. Les anglophones
+						produisent un son voisin dans les syllabes atones : la deuxième voyelle
+						de « roses » ou de « needed », où la langue se tient en position haute
+						sans s’engager franchement vers l’avant ni vers l’arrière. Ce n’est pas
+						un son difficile à produire. Ce qui est exigeant, c’est de le produire
+						volontairement et de le soutenir musicalement, car les anglophones ont
+						rarement besoin de le distinguer de [ɪ]. Les francophones n’ont pas
+						d’équivalent proche dans leur langue ; l’acquisition passe par la
+						description articulatoire et l’écoute. Les anglophones obtiennent
+						involontairement [ɨ] lorsque [ɪ] se colore au contact de [ɫ] en route
+						vers [k] dans « milk » prononcé familièrement.</p>
+						<p>Le russe fait de cette distinction un principe structurel. Après une
+						consonne palatalisée, ⟨и⟩ sonne [i] : la langue est déjà en position
+						antérieure, et la voyelle prolonge simplement cette posture. Après une
+						consonne toujours dure, la langue ne peut pas s’avancer (la consonne le
+						lui interdit), et c’est [ɨ] qui en résulte. Ces deux sons ne sont pas
+						des phonèmes distincts en russe ; ce sont des variantes positionnelles
+						d’une même voyelle, conditionnées entièrement par la dureté ou la
+						mollesse de la consonne précédente. Le chanteur ne choisit pas entre les
+						deux. C’est la consonne qui choisit.</p>
+						<p>Considérons жить /ʒɨtʲ/ (« vivre ») : le ⟨ж⟩ toujours dur force le
+						⟨и⟩ à se rétracter vers [ɨ], mais le ⟨ь⟩ palatalise le ⟨т⟩. Ou цирк
+						/tsɨrk/ (« cirque ») : le ⟨ц⟩ toujours dur rétracte de nouveau la
+						voyelle. Dans les deux cas, la lettre cyrillique est ⟨и⟩, mais le son
+						est [ɨ]. Ilya marque cela automatiquement.</p>
+						<p><strong>Essayez dans Ilya.</strong> Comparez нет /ɲɛt/ avec нот
+						/not/. Dans нет, le ⟨е⟩ palatalise le ⟨н⟩ en [ɲ] : un geste unique, et
+						non [nj]. Dans нот, rien ne se palatalise : le ⟨н⟩ est dur, la voyelle
+						est [o], et le ⟨т⟩ est dur. Deux mots courts, de longueur identique, aux
+						profils consonantiques entièrement différents. Si la palatalisation dans
+						нет est audible et que le ⟨н⟩ dans нот est clairement non palatalisé, le
+						système fonctionne.</p>
+						<p>Ce principe se prolonge au-delà de la frontière de mot. Considérons
+						la locution к Игорю (« chez Igor ») : la préposition к est une consonne
+						incapable de palatalisation par elle-même. La frontière de mot l’empêche
+						de se palataliser régressivement (6.3, frontière 5). Le к demeure dur.
+						Pourtant, la parole est linéaire : le conduit vocal doit passer de ce
+						[k] dur directement à la voyelle qui ouvre Игорю. La langue ne peut pas
+						bondir instantanément d’une position vélaire dure vers un [i] pleinement
+						antérieur. La voyelle s’accommode alors de la consonne qui la précède,
+						et se rétracte vers [ɨ]. Le texte cyrillique affiche toujours ⟨и⟩, mais
+						le son est [kɨ ˈɡorʲju]. Le i vélaire n’est donc pas réservé aux
+						consonnes toujours dures. Il est la conséquence acoustique de toute
+						consonne dure rencontrant ⟨и⟩ : la voyelle se plie à la réalité
+						articulatoire de la consonne.</p>
 
-						<p>Grayson d&#x00E9;crit le processus en trois temps&#160;: &#x00AB;&#160;arch, pronounce, peel&#160;&#x00BB; (cambrer, prononcer, d&#x00E9;coller). Le dos de la langue s&rsquo;arche vers le palais dur en pr&#x00E9;paration, la consonne est prononc&#x00E9;e simultan&#x00E9;ment, puis le dorsum se d&#x00E9;colle du palais. Un exemple simple illustre la diff&#x00E9;rence&#160;: le mot russe <em>&#x043D;&#x0435;&#x0442;</em> (non) se transcrit <code>[&#x0272;&#x025B;t]</code> et non <code>[nj&#x025B;t]</code>. Les trois phon&#x00E8;mes familiers se succ&#x00E8;dent; ce qui a chang&#x00E9; est la nature de la nasale.</p>
-
-						<p>L&rsquo;histoire de la notation de la palatalisation m&#x00E9;rite un d&#x00E9;tour. Avant 1989, l&rsquo;Association phon&#x00E9;tique internationale pr&#x00E9;conisait un sous-ensemble de seize symboles sp&#x00E9;cialis&#x00E9;s int&#x00E9;grant des crochets palataux. L&rsquo;IPA les a abandonn&#x00E9;s lors des r&#x00E9;formes de Kiel, les rempla&#x00E7;ant par le yod en exposant <code>[&#x02B2;]</code> associ&#x00E9; aux symboles consonantiques standard. Parmi les dix auteurs que j&rsquo;ai compar&#x00E9;s, seul Grayson utilise le marqueur de palatalisation approuv&#x00E9; par l&rsquo;API. Les autres r&#x00E9;utilisent des symboles pr&#x00E9;d&#x00E9;finis (demi-anneaux, c&#x00E9;dilles, crochets r&#x00E9;troflexes) qui signifient autre chose dans l&rsquo;usage orthodoxe de l&rsquo;API. Ilya suit Grayson.</p>
-
-						<p>Le sujet connexe du v&#x00E9;laire-i, la voyelle <code>[&#x0268;]</code>, est &#x00E9;galement pr&#x00E9;sent&#x00E9; ici&#160;: une voyelle m&#x00E9;diane, &#x00E0; mi-chemin entre <code>[i]</code> et <code>[u]</code> sur le quadrilat&#x00E8;re vocalique de Jones.</p>
 
 						<h3 id="learn-unit-7">Section 7 · Intégration</h3>
 
@@ -2969,13 +3559,559 @@
 
 						<h3 id="learn-unit-6">Section 6 &middot; Palatalization</h3>
 
-						<p>The bridge between inventory and process. Some consonants are always palatalized (you met them in Section 5). Others become palatalized depending on their context. Teaching palatalization as a secondary articulation applied to already-familiar phonemes is a deliberate pedagogical philosophy: Russian does not ask you to learn entirely new sounds, but to add a gesture to sounds you already produce.</p>
+						<h4 id="learn-u6-what">What Palatalization Is</h4>
+						<p>Palatalization is a secondary articulation that is necessary in
+						Russian but not unique to it. To palatalize, the tongue body (dorsum)
+						rises and fronts toward the hard palate, approximating the [i] vowel
+						position, while the primary consonant retains its usual place and manner
+						of production. These two gestures occur simultaneously, not
+						sequentially, which is why it is termed a coarticulation. Grayson is
+						precise: the consonant is articulated with an “integrally palatalized
+						tongue position” (Grayson 2012, 169). A palatalized [tʲ] is a single
+						event, not [t] followed by [j]. The word тюк is /tʲuk/: three phonemes.
+						If what you produce sounds like /tjuk/, the tongue is arriving late.
+						Extending this principle, Grayson uses [ɲ] in place of the technically
+						correct [nʲ] because of its familiarity to singers from French and
+						Italian lyric diction. Newcomers are less likely to confuse [ɲ] with
+						[nj], whereas [nʲ] and [nj] may seem marginally different on the page.
+						The Russian word ⟨нет⟩ (no) is very often sung incorrectly with four
+						phonemes as [njɛt], whereas its transcription as [ɲɛt] reinforces a
+						sequence of three quite familiar phonemes that produce idiomatic
+						Russian.</p>
+						<p><strong>[ARTWORK COMMISSION: Coronal section of the tongue
+						identifying regions: blade, tip, dorsum. Confirm anatomical accuracy
+						against Gray’s Anatomy before release.]</strong></p>
+						<p>You do this all the time. When you say “key,” your tongue prepares an
+						[i]-shaped oral space before it even releases the /k/; compare “car,”
+						where it does not. The /k/ in “car” is [k]. The /k/ in “key” is [kʲ].
+						Palatalization is that anticipatory tongue-fronting, and you perform it
+						without thinking. Italian [ɲ] in “ogni,” English “cute” versus “coot,”
+						French /d/ in “dire”: each involves the same gesture. A marked
+						difference, however, is that palatalization carries no inherent meaning
+						in English, French, or Italian, but it does in Russian.</p>
+						<p>In Russian, palatalization signals radical change in meaning: мат
+						/mat/ is “checkmate,” мать /matʲ/ is “mother”; брат /brat/ is “brother,”
+						брать /bratʲ/ is “to take.” Palatalization is the sole carrier of
+						lexical distinction between these pairs. Our pedagogical task is not to
+						learn a new physical skill from scratch, but to develop conscious
+						control over a gesture we already possess, and to apply it consistently
+						wherever Russian requires it.</p>
+						<p>Grayson’s practical model for this control is “arch, pronounce, peel”
+						(Grayson 2012, 205). We might reframe this as Prepare, Pronounce, Peel,
+						where “Prepare” names the anticipatory arch that prevents the [C]+[j]
+						sequence Grayson warns us against. The tongue body arches toward the
+						dome of the hard palate; the consonant is pronounced with the tongue
+						sustaining that arched position; the dorsum peels away rapidly as the
+						next vowel follows. We do well to think of anticipating the necessary
+						[i] posture while executing the now-palatalized consonant; this ensures
+						that the timing does not degrade into sequential production. Practise
+						slowly with familiar consonants (/tʲ/, /dʲ/, /ɲ/) in VCV groupings
+						before attempting more exposed combinations, then through the full vowel
+						inventory. It is gradual practice, and errors are requisite.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th></th>
+						<th>/i/</th>
+						<th>/e/</th>
+						<th>/ɛ/</th>
+						<th>/a/</th>
+						<th>/ɑ/</th>
+						<th>/o/</th>
+						<th>/u/</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>VCV with /tʲ/</td>
+						<td>iːtʲi</td>
+						<td>iːtʲe</td>
+						<td>iːtʲɛ</td>
+						<td>iːtʲa</td>
+						<td>iːtʲɑ</td>
+						<td>iːtʲo</td>
+						<td>iːtʲu</td>
+						</tr>
+						<tr class="even">
+						<td>Exposed /tʲ/</td>
+						<td>tʲiː</td>
+						<td>tʲeː</td>
+						<td>tʲɛː</td>
+						<td>tʲaː</td>
+						<td>tʲɑː</td>
+						<td>tʲoː</td>
+						<td>tʲuː</td>
+						</tr>
+						<tr class="odd">
+						<td>VCV with /dʲ/</td>
+						<td>iːdʲi</td>
+						<td>iːdʲe</td>
+						<td>iːdʲɛ</td>
+						<td>iːdʲa</td>
+						<td>iːdʲɑ</td>
+						<td>iːdʲo</td>
+						<td>iːdʲu</td>
+						</tr>
+						<tr class="even">
+						<td>Exposed /dʲ/</td>
+						<td>dʲiː</td>
+						<td>dʲeː</td>
+						<td>dʲɛː</td>
+						<td>dʲaː</td>
+						<td>dʲɑː</td>
+						<td>dʲoː</td>
+						<td>dʲuː</td>
+						</tr>
+						<tr class="odd">
+						<td>VCV with /ɲ/</td>
+						<td>iːɲi</td>
+						<td>iːɲe</td>
+						<td>iːɲɛ</td>
+						<td>iːɲa</td>
+						<td>iːɲɑ</td>
+						<td>iːɲo</td>
+						<td>iːɲu</td>
+						</tr>
+						<tr class="even">
+						<td>Exposed /ɲ/</td>
+						<td>ɲiː</td>
+						<td>ɲeː</td>
+						<td>ɲɛː</td>
+						<td>ɲaː</td>
+						<td>ɲɑː</td>
+						<td>ɲoː</td>
+						<td>ɲuː</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>For those with an interest in the acoustics: palatalization aligns
+						with several goals of classical vocal technique. The forward tongue
+						position vacates the pharyngeal space, increasing the volume of the
+						pharyngeal resonator and facilitating “open-throated” production: what
+						Italian pedagogy calls <em>la gola aperta</em> (Mitton 2020, 20, 38;
+						Bolla 1980, 8). Acoustic measurements of sung Russian confirm that the
+						effects on vocal tract resonances are present but subtle: fR2 raises
+						while fR1 drops, mimicking the acoustic profile of the [i] vowel it
+						simulates (Mitton 2020, 131–32). The singer who palatalizes well is
+						simultaneously optimising the vocal tract for efficient resonance.</p>
+						<h4 id="learn-u6-signals">What Signals Palatalization on the Page? What Do I Look for?</h4>
+						<p>Vowels cannot become palatalized. Palatalization only happens to
+						consonants. But in Cyrillic texts, palatalization is most often encoded
+						in the vowel letters. Palatalization is also signalled by the soft sign.
+						Grayson prefers “indicator letters” as an umbrella term for the Cyrillic
+						letters that signal palatalization. I prefer the more descriptive and
+						equally made-up term, “palatalizing agents.” They include:</p>
+						<ul>
+						<li>the soft sign ⟨ь⟩</li>
+						<li>any vowel from the “soft series:” ⟨я /jɑ/, е /jɛ/, и /i/, ё /jo/, ю
+						/ju/⟩</li>
+						<li>either of the two always-soft letters (⟨ч⟩ [tʃʲ] or ⟨щ⟩ [ʃʲʃʲ])</li>
+						<li>another valid palatalized consonant (treated in 6.5)</li>
+						</ul>
+						<table>
+						<thead><tr><th>Palatalizing agent</th><th>Hard counterpart</th><th>What the agent does</th><th>Example</th></tr></thead>
+						<tbody>
+						<tr><td>⟨я⟩ palatalizes + /ɑ/</td><td>⟨а⟩ does not palatalize; same vowel</td><td>Palatalizes the preceding consonant; the vowel sounds /ɑ/ (stressed) or reduces (unstressed).</td><td>мять /mʲatʲ/ (“to crumple”) vs мать /mɑtʲ/ (“mother”)</td></tr>
+						<tr><td>⟨е⟩ palatalizes + /ɛ/</td><td>⟨э⟩ does not palatalize; same vowel</td><td>Palatalizes the preceding consonant; the vowel sounds /ɛ/ (stressed) or reduces (unstressed).</td><td>нет /ɲɛt/ (“no”) vs нэп /nɛp/</td></tr>
+						<tr><td>⟨ё⟩ palatalizes + /o/</td><td>⟨о⟩ does not palatalize; same vowel</td><td>Palatalizes the preceding consonant; the vowel sounds /o/ (always stressed).</td><td>тёмный /ˈtʲom nɨj/ (“dark”) vs том /tom/ (“tome”)</td></tr>
+						<tr><td>⟨ю⟩ palatalizes + /u/</td><td>⟨у⟩ does not palatalize; same vowel</td><td>Palatalizes the preceding consonant; the vowel sounds /u/ (stressed or unstressed).</td><td>тюк /tʲuk/ (“bale”) vs тук /tuk/ (“knock”)</td></tr>
+						<tr><td>⟨и⟩ palatalizes + /i/</td><td>⟨ы⟩ /ɨ/ after hard consonant</td><td>Palatalizes the preceding consonant; the vowel sounds /i/.</td><td>мир /mʲir/ (“world”)</td></tr>
+						<tr><td>⟨ь⟩ (soft sign)</td><td>⟨ъ⟩ (hard sign)</td><td>Palatalizes the consonant to its left. Produces no sound of its own.</td><td>мать /mɑtʲ/ (“mother”) vs подъезд /pɑdˈjest/</td></tr>
+						<tr><td>⟨ч⟩, ⟨щ⟩ (always-soft)</td><td>⟨ж⟩, ⟨ш⟩, ⟨ц⟩ (always-hard)</td><td>Inherently palatalized; may palatalize many (but not all) preceding consonants in a cluster.</td><td>мальчик /ˈmɑlʲtʃʲɪk/ (“boy”)</td></tr>
+						<tr><td>Already-palatalized consonant</td><td>—</td><td>Spreads palatalization leftward through a cluster (regressive assimilation), until a boundary stops it.</td><td>гость /ɡosʲtʲ/ (“guest”)</td></tr>
+						</tbody>
+						</table>
+						<p>This introduces the well-documented corollary called the regressive
+						assimilation of palatalization, or regressive palatalization for short.
+						A palatalized consonant (through whatever means) can usually transmit
+						its palatalization backward, to the consonant immediately to its left,
+						with certain limits. This regressive palatalization proceeds backwards,
+						neighbour to neighbour, right-to-left until something stops it.</p>
+						<p>Consider гость: the ь palatalizes the т, and the now-palatalized т
+						palatalizes the с before it. Always to the left. In practice, this
+						signals an anticipation of putting the tongue in that fronted [i]
+						posture well before the causal palatalized consonant is even sounded.
+						Two Russian consonants, ⟨ч⟩ /tʃʲ/ and ⟨щ⟩ /ʃʲʃʲ/, are inherently
+						palatalized (and palatalization markers populate their default IPA
+						values accordingly).</p>
+						<p>What stops the spread is the subject of 6.3, and the specific rules
+						governing which consonants participate in regressive assimilation are
+						treated in 6.5.</p>
+						<p>An IPA transcription is blessedly more straightforward. In IPA,
+						palatalization is marked by a single, consistent symbol: the superscript
+						[ʲ] following the consonant. Grayson adopts this notation from the 1989
+						Kiel Convention of the International Phonetic Association, which
+						deprecated an older set of symbols in favour of this uniform superscript
+						(Grayson 2012, 61–62). The singer looking at Ilya’s output sees [ʲ]
+						wherever a consonant is palatalized: /tʲ/, /dʲ/, /sʲ/, /mʲ/, and so on.
+						The single exception is [ɲ], discussed in 6.1.</p>
+						<p>The deprecated symbols deserve brief mention because the singer will
+						encounter them in other resources. Before 1989, the IPA marked
+						palatalization with palatal hooks: small descending curves appended to
+						the base of consonant letters. Natalia Challis’s <em>The Singer’s
+						Rachmaninoff</em> (2006), among other references, uses this older
+						notation. The symbols are visually distinct from one another, whereas
+						the modern superscript [ʲ] applies uniformly to any consonant. A
+						correspondence table is provided here for reference:</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Category</th>
+						<th>Deprecated → Modern</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Labials and labiodentals</td>
+						<td>ᶈ → pʲ, ᶀ → bʲ, ᶆ → mʲ, ᶂ → fʲ, ᶌ →
+						vʲ</td>
+						</tr>
+						<tr class="even">
+						<td>Dentals, alveolars, and nasal</td>
+						<td>ƫ → tʲ, ᶁ → dʲ, ᶉ → rʲ, ᶊ → sʲ, ᶎ → zʲ, ᶋ
+						→ ʃʲ, ᶅ → lʲ, ᶇ → ɲ</td>
+						</tr>
+						<tr class="odd">
+						<td>Velars</td>
+						<td>ᶄ → kʲ, ᶃ → ɡʲ, ᶍ → xʲ</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>Cheri Montgomery’s <em>Russian Lyric Diction Workbook</em> (STM,
+						2021) is the only other Russian lyric diction print resource beside
+						Grayson to consistently employ the modern IPA palatalization markers
+						adopted at the 1989 Kiel Convention. The divergences across other
+						systems are legion: older palatal hook diacritics, inconsistent
+						superscript usage, and notational choices that obscure the very
+						distinction the singer needs to see. Ilya implements Grayson’s notation
+						conventions throughout, with the flexibility to change any of them. A
+						singer consulting other resources should be aware that symbols may
+						differ, and respond with flexibility.</p>
+						<h4 id="learn-u6-stops">What Stops the Spread?</h4>
+						<p>Regressive palatalization spreads backward through a consonant
+						cluster, but not indefinitely. The singer who knows the palatalizing
+						agents (6.2) and the six boundaries below can predict palatalization for
+						just about any word.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Boundary</th>
+						<th>What it does</th>
+						<th>Example</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Always-hard consonants (⟨ж⟩, ⟨ш⟩,
+						⟨ц⟩)</td>
+						<td>These consonants cannot be palatalized and
+						block the spread of regressive palatalization entirely. The chain stops
+						here.</td>
+						<td>большой /bɑlʲ ˈʃoj/: the ь palatalizes л,
+						but ш is always-hard and absorbs nothing.</td>
+						</tr>
+						<tr class="even">
+						<td>A vowel</td>
+						<td>Palatalization only applies to consonants,
+						so a vowel breaks the backward chain. The vowel may itself be the last
+						element to be influenced (see below).</td>
+						<td>мать /mɑtʲ/: the ь palatalizes т; the
+						vowel /ɑ/ is the boundary.</td>
+						</tr>
+						<tr class="odd">
+						<td>Hard sign ⟨ъ⟩</td>
+						<td>A spelling-based boundary that blocks
+						palatalization from reaching the consonant to its left. Exception: ⟨в⟩,
+						⟨с⟩, and ⟨з⟩ do palatalize before ⟨ъ⟩.</td>
+						<td>подъезд /pɑdˈjest/: the ъ prevents ё from
+						palatalizing д. Compare съезд /sʲjest/: the с palatalizes because it is
+						one of the three exception consonants.</td>
+						</tr>
+						<tr class="even">
+						<td>A new palatalizing agent</td>
+						<td>Not a wall but a reset. When a second
+						indicator letter or soft sign appears, it establishes a new, independent
+						point of regressive influence.</td>
+						<td>сестрёнка /sʲi ˈsʲtʲrʲon kɑ/: the ё
+						palatalizes the cluster стр; the е is a separate agent that palatalizes
+						the initial с independently.</td>
+						</tr>
+						<tr class="odd">
+						<td>Word boundary</td>
+						<td>Palatalization generally does not cross
+						the word boundary. This distinguishes it from voicing assimilation,
+						which does cross freely (Section 7). Exception: when a word ends in ⟨в⟩,
+						⟨с⟩, or ⟨з⟩ and the following word begins with an indicator letter other
+						than ⟨и⟩, the final consonant palatalizes across the boundary.</td>
+						<td>Full treatment in Section 7.</td>
+						</tr>
+						<tr class="even">
+						<td>Punctuation</td>
+						<td>Absolute. No assimilation of any kind
+						crosses punctuation (Grayson 2012, 206). This is the one boundary with
+						no exceptions.</td>
+						<td>Full treatment in Section 7.</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>The most common boundary the singer will encounter within a word is
+						the first: an always-hard consonant. We met ⟨ж⟩, ⟨ш⟩, and ⟨ц⟩ in Section
+						5 as consonants that are never palatalized. Here they function as walls
+						against regressive palatalization. In большой, the ⟨ь⟩ palatalizes the
+						⟨л⟩, but the ⟨ш⟩ to its left is impervious. The palatalization stops,
+						and the ⟨б⟩ retains its hardness. The singer who has internalised the
+						three always-hard consonants from Section 5 already knows the most
+						important boundary in the system.</p>
+						<p>The vowel boundary deserves a brief clarification. A vowel stops the
+						consonant-to-consonant chain, but the vowel may itself be the last
+						element to be influenced: if it finds itself sandwiched between two
+						palatalized consonants (interpalatal), it fronts (see Section 3). But
+						this is not the palatalization of a vowel. Rather, it is an
+						acknowledgment of human physiological constraints. Lindblom’s “economy
+						of speech gestures” rule (1983) suggests: “In human speech extreme
+						values of parameters are avoided.” The tongue is arched for the phonemes
+						before and after the vowel, so the palatally sandwiched vowel will not
+						return fully to its home base, instead “fronting” to a brighter
+						allophone. This is how interpalatal fronting transforms [ɑ] to [a] and
+						[ɛ] to [e]. Grayson reminds us that “all vowels preceding palatalized
+						consonants are fronted, even more so when interpalatal,” though “only
+						[ja], [a], [je], and [e] are formally recognized in Russian lyric
+						diction as secondary allophones” (Grayson 2012, 208).</p>
+						<h4 id="learn-u6-paired">Paired versus Unpaired</h4>
+						<p>The singer now knows what palatalization is (6.1), what triggers it
+						(6.2), and what stops it (6.3). The natural next question: which
+						consonants can be palatalized at all?</p>
+						<p>Most Russian consonants are paired: they exist in both hard and soft
+						forms, and the distinction between them is phonemic. Five consonants are
+						unpaired: three are always hard and can never be palatalized; two are
+						always soft and are never heard without palatalization. The singer has
+						met all five in Section 5. Here we consolidate the complete picture.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Category</th>
+						<th>Consonants</th>
+						<th>Notes</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>Paired (hard and soft forms)</td>
+						<td>б/бʲ, п/пʲ, в/вʲ, ф/фʲ, д/дʲ, т/тʲ, з/зʲ,
+						с/сʲ, г/гʲ, к/кʲ, х/хʲ, м/мʲ, н/нʲ[ɲ], р/рʲ, л[ɫ]/лʲ[lʲ]</td>
+						<td>Fifteen consonants. Each has a hard
+						default and a soft counterpart produced by palatalization. The hard
+						lateral is transcribed [ɫ] (dark l); the soft nasal is transcribed [ɲ]
+						rather than [nʲ] (see 6.1).</td>
+						</tr>
+						<tr class="even">
+						<td>Always hard (unpaired)</td>
+						<td>ж [ʒ], ш [ʃ], ц [ts]</td>
+						<td>These three consonants are impervious to
+						palatalization. They function as boundaries (6.3). A soft sign after ⟨ж⟩
+						or ⟨ш⟩ is ignored: it signals gender or conjugation, not softness.</td>
+						</tr>
+						<tr class="odd">
+						<td>Always soft (unpaired)</td>
+						<td>ч [tʃʲ], щ [ʃʲʃʲ]</td>
+						<td>Two consonants. These are inherently
+						palatalized and can act as palatalizing agents for consonants to their
+						left in clusters (6.2).</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>Twenty consonants in all. Fifteen are paired; five are fixed. The
+						singer who has internalised this table can look at any consonant in a
+						Russian word and know immediately whether it is capable of
+						palatalization. If it is paired, look for an agent to its right. If it
+						is always hard, it is a wall. If it is always soft, it is an agent.</p>
+						<h4 id="learn-u6-clusters">Regressive Palatalization in Clusters</h4>
+						<p>Not all consonants participate equally in regressive palatalization.
+						Russian lyric diction follows the Old Muscovite tradition, which
+						palatalizes more generously within consonant clusters than contemporary
+						spoken Russian does (Grayson 2012, 209). The five rules below, derived
+						from Derwing and Priestly (1980, 76–87), describe the constraints that
+						govern this generosity. Where a specific word departs from these rules
+						under Stage pronunciation conventions, Ilya handles it as an individual
+						dictionary entry, with citation.</p>
+						<table>
+						<colgroup>
+						<col />
+						<col />
+						<col />
+						</colgroup>
+						<thead>
+						<tr class="header">
+						<th>Rule</th>
+						<th>Constraint</th>
+						<th>Example</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="odd">
+						<td>1. /ɫ/ (dark l)</td>
+						<td>Does not regressively palatalize, except
+						when doubled: ⟨-лль-⟩ → /lʲlʲ/.</td>
+						<td>In ⟨-лн-⟩, the л remains [ɫ] even if н is
+						palatalized.</td>
+						</tr>
+						<tr class="even">
+						<td>2. /r/</td>
+						<td>Does not regressively palatalize, except
+						when doubled: ⟨-ррь-⟩ → /rʲrʲ/. See progressive exception below.</td>
+						<td>The trill resists regressive
+						palatalization more than any other paired consonant.</td>
+						</tr>
+						<tr class="odd">
+						<td>3. /n/</td>
+						<td>Only before another palatalized /n/ or a
+						palatalized dental.</td>
+						<td>Before a palatalized labial or velar, /n/
+						retains its hardness.</td>
+						</tr>
+						<tr class="even">
+						<td>4. Velars (/k/, /ɡ/, /x/)</td>
+						<td>Only before another palatalized
+						velar.</td>
+						<td>A velar before a palatalized dental or
+						labial retains its hardness.</td>
+						</tr>
+						<tr class="odd">
+						<td>5. Labials (/b/, /p/, /v/, /f/)</td>
+						<td>Only before another palatalized
+						labial.</td>
+						<td>A labial before a palatalized dental or
+						velar retains its hardness.</td>
+						</tr>
+						</tbody>
+						</table>
+						<p>We might call the underlying principle homorganic sympathy:
+						consonants receive regressive palatalization most readily from
+						neighbours that share their place of articulation. Dentals are the most
+						permissive. Velars and labials are the most restrictive. Dark l and the
+						trill are exceptional even among their own categories.</p>
+						<p><strong>The progressive exception.</strong> Everything we have
+						discussed in Section 6 so far has been regressive: influence flowing
+						backward, from right to left. Rule 2 contains a single exception, and it
+						reverses the direction entirely. The trill /r/ palatalizes progressively
+						(forward, left to right) when it is preceded by a stressed front vowel:
+						⟨и⟩, ⟨е⟩, or ⟨э⟩. In this configuration, the vowel’s tongue position
+						influences the consonant that follows it. Consider первый /ˈpʲerʲ vɨj/
+						(“first”): the stressed ⟨е⟩ palatalizes the р to its right, despite no
+						palatalizing agent appearing after it. The same holds in верность
+						/ˈvʲerʲ nʌsʲtʲ/ (“faithfulness”). This is the only consonant in Russian
+						that palatalizes in this direction, and only under these conditions:
+						stressed syllable, front vowel, immediately preceding the trill. It is a
+						small rule, but it is structurally unique.</p>
+						<h4 id="learn-u6-practice">Putting It Together</h4>
+						<p>The following worked examples, adapted from Grayson (2012, 210–211),
+						apply the principles from 6.1 through 6.5 in order of increasing
+						complexity. Each word introduces one new complication.</p>
+						<p><strong>стол → /stoɫ/.</strong> No indicators, no palatalizing
+						agents. Every consonant is hard. The л is dark [ɫ].</p>
+						<p><strong>столь → /stolʲ/.</strong> The soft sign ⟨ь⟩ palatalizes the
+						л: dark [ɫ] becomes [lʲ]. The vowel ⟨о⟩ is a boundary; palatalization
+						does not spread leftward past it.</p>
+						<p><strong>мать → /mɑtʲ/.</strong> The soft sign palatalizes the т. The
+						vowel ⟨а⟩ is again a boundary, and since it is not interpalatal (no
+						palatalizing agent precedes it), it remains [ɑ].</p>
+						<p><strong>мять → /matʲ/.</strong> Two palatalizing agents now: ⟨я⟩
+						palatalizes the м, and ⟨ь⟩ palatalizes the т. The ⟨а⟩ vowel is
+						interpalatal (palatalized consonant on both sides) and stressed, so it
+						fronts from [ɑ] to [a]. Compare мать: same skeletal structure, different
+						vowel quality, because palatalization now surrounds the vowel.</p>
+						<p><strong>большой → /bɑlʲ ˈʃoj/.</strong> The soft sign palatalizes the
+						л. Palatalization cannot spread further left because the vowel ⟨о⟩ is a
+						boundary. It cannot spread right because ⟨ш⟩ is always hard: impervious,
+						functioning as a wall (6.3).</p>
+						<p><strong>сестрёнка → /sʲi ˈsʲtʲrʲon kɑ/.</strong> The ⟨ё⟩ palatalizes
+						the cluster to its left: р, then т, then с. Each palatalized consonant
+						becomes an agent for the next, spreading regressively until the vowel
+						boundary. The unstressed ⟨е⟩ in the first syllable is also preceded by a
+						palatalized с, making it interpalatal; it reduces to /i/. The к does not
+						palatalize because the ⟨а⟩ that follows it is not a palatalizing
+						agent.</p>
+						<p><strong>симметрический → /sʲi mʲmʲi ˈtʲrʲi tʃʲɪ skɨj/.</strong> Full
+						cluster palatalization across multiple syllables, following the Old
+						Muscovite stage tradition. The ending ⟨-ский⟩ routes to /skɨj/ by lyric
+						diction convention (see Section 5), not /sʲkʲij/: the velar-i [ɨ]
+						appears here because palatalization does not apply to this particular
+						morphological ending.</p>
+						<p>Each example builds on the last. The singer who can explain why мять
+						has [a] where мать has [ɑ], and why большой’s ш blocks what сестрёнка’s
+						cluster permits, has internalised the system.</p>
+						<h4 id="learn-u6-velari">Velar-i [ɨ]</h4>
+						<p>Velar-i occupies the space where palatalization cannot go. It is the
+						vowel sound that appears when ⟨и⟩ follows an always-hard consonant (⟨ж⟩,
+						⟨ш⟩, ⟨ц⟩) or when certain morphological endings resist palatalization by
+						convention: the ⟨-ский⟩ ending we encountered in симметрический is one
+						such case.</p>
+						<p>The symbol is [ɨ], the close central unrounded vowel. The tongue
+						fronts as for [i], but also retracts toward the centre of the mouth like
+						the bowl of a ladle. English speakers produce something close to this
+						vowel in unstressed syllables: the second vowel in “roses” or “needed,”
+						where the tongue sits high but uncommitted to either front or back
+						position. It is not a difficult sound to produce. It is challenging to
+						produce on purpose, and to sustain musically, because anglophones rarely
+						need to distinguish it from [ɪ]. English speakers unwittingly achieve
+						[ɨ] as [ɪ] gets coloured by [ɫ] on the way to [k] in “milk” when it is
+						spoken casually.</p>
+						<p>Russian makes the distinction structurally. After a palatalized
+						consonant, ⟨и⟩ is [i]: the tongue is already fronted, and the vowel
+						simply continues the fronted posture. After an always-hard consonant,
+						the tongue cannot front (the consonant forbids it), and [ɨ] results. The
+						two sounds are not separate phonemes in Russian; they are positional
+						variants of a single vowel, conditioned entirely by the hardness or
+						softness of the preceding consonant. The singer does not choose between
+						them. The consonant chooses.</p>
+						<p>Consider жить /ʒɨtʲ/ (“to live”): the always-hard ⟨ж⟩ forces the ⟨и⟩
+						to retract to [ɨ], but the ⟨ь⟩ palatalizes the т. Or цирк /tsɨrk/
+						(“circus”): the always-hard ⟨ц⟩ again retracts the vowel. In both cases,
+						the Cyrillic letter is ⟨и⟩, but the sound is [ɨ]. Ilya marks this
+						automatically.</p>
+						<p><strong>Try this.</strong> Compare нет /ɲɛt/ with нот /not/. In нет,
+						the ⟨е⟩ palatalizes the н to [ɲ]: a single gesture, not [nj]. In нот,
+						nothing palatalizes: the н is hard, the vowel is [o], and the т is hard.
+						Two short words, identical in length, with entirely different consonant
+						profiles. If the palatalization in нет is audible and the н in нот is
+						clearly unpalatalized, the system is working.</p>
+						<p>This principle extends across word boundaries. Consider the phrase к
+						Игорю (“to Igor’s place”): the preposition к is a consonant incapable of
+						palatalization on its own. The word boundary prevents it from
+						regressively palatalizing (6.3, boundary 5). The к remains hard. Yet
+						speech is linear: the vocal tract must move from that hard [k] directly
+						into the vowel that begins Игорю. The tongue cannot leap instantaneously
+						from a hard velar position into a fully fronted [i]. Instead, the vowel
+						accommodates the consonant that precedes it, retracting to [ɨ]. The
+						Cyrillic text still reads ⟨и⟩, but the sound is [kɨ ˈɡorʲju]. Velar-i,
+						then, is not confined to always-hard consonants. It is the acoustic
+						consequence of any hard consonant meeting ⟨и⟩: the vowel yields to the
+						consonant’s articulatory reality.</p>
 
-						<p>Grayson describes the process in three steps: &ldquo;arch, pronounce, peel.&rdquo; The body of the tongue arches toward the hard palate in preparation, the consonant is simultaneously pronounced, and the dorsum peels away from the palate. A simple example illustrates the difference: the Russian word <em>&#x043D;&#x0435;&#x0442;</em> (no) is transcribed <code>[&#x0272;&#x025B;t]</code>, not <code>[nj&#x025B;t]</code>. Three familiar phonemes in sequence; what has changed is the nature of the nasal.</p>
-
-						<p>The history of palatalization notation deserves a brief excursion. Before 1989, the International Phonetic Association advocated a specialised subset of sixteen symbols incorporating palatalization hooks. The IPA discontinued these at the Kiel Convention, replacing them with the superscript yod <code>[&#x02B2;]</code> paired with standard consonant symbols. Among the ten authors I compared, Grayson alone uses the IPA-approved palatalization marker. The others repurpose predefined symbols (subscript half-rings, cedillas, retroflex hooks) that mean something else in orthodox IPA usage. This widespread repurposing demands attentive reinterpretation for anyone encountering these singers&rsquo; transcriptions. Ilya follows Grayson.</p>
-
-						<p>The companion topic of velar-i, the vowel <code>[&#x0268;]</code>, is introduced here as well: a medial vowel, halfway between <code>[i]</code> and <code>[u]</code> on Jones&rsquo; vowel quadrilateral.</p>
 
 						<h3 id="learn-unit-7">Section 7 · Integration</h3>
 

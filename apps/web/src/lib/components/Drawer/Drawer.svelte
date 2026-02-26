@@ -231,7 +231,44 @@
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-6')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? '6 · La palatalisation' : '6 · Palatalization'}
 								</button>
-							</li>
+															<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-what')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Qu\u2019est-ce que la palatalisation\u00A0?' : 'What palatalization is'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-signals')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Rep\u00E9rer la palatalisation \u00E0 l\u2019\u00E9crit' : 'Signals on the page'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-stops')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Les six fronti\u00E8res' : 'What stops the spread'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-paired')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Appari\u00E9es et non appari\u00E9es' : 'Paired versus unpaired'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-clusters')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'R\u00E9gressive dans les groupes' : 'Regressive in clusters'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-practice')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Mise en pratique' : 'Putting it together'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-velari')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Le i v\u00E9laire [\u0268]' : 'Velar-i [\u0268]'}
+										</button>
+									</li>
+								</ul>
+</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-7')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? '7 · Intégration' : '7 · Integration'}
