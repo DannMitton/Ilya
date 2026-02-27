@@ -2398,11 +2398,231 @@
 						articulatoire de la consonne.</p>
 
 
-						<h3 id="learn-unit-7">Section 7 · Intégration</h3>
+<h3 id="learn-unit-7">Section 7 &middot; Assimilation et fronti&egrave;res</h3>
 
-						<p>Ce qui se passe quand les sons se rencontrent : l'assimilation à l'intérieur des mots, aux frontières entre les mots, et à travers les clitiques. Grayson, s'appuyant sur le travail de Derwing et Priestly, pose plusieurs principes pour l'assimilation régressive du voisement dans le russe chanté : la ponctuation stoppe l'assimilation; les sonantes (<code>[l m n r]</code>) et les voyelles n'influencent pas le voisement à travers la frontière du mot; et les phonèmes <code>/v/</code> et <code>/f/</code>, lorsqu'ils sont orthographiés avec un ⟨в⟩, présentent une faiblesse phonémique, n'exerçant aucun pouvoir assimilatif propre tout en étant influencés par les phonèmes adjacents.</p>
+						<h4 id="learn-u7-two">Deux formes d&rsquo;assimilation r&eacute;gressive</h4>
 
-						<p>Cette unité aborde les groupes consonantiques, les consonnes muettes, les géminées, et les cas particuliers qui produisent des symboles API inhabituels dans la sortie d'Ilya. Les consonnes doublées en russe chanté sont rares: « les lettres doublées qui représentent des consonnes sont plus souvent lues comme un seul phonème consonantique plutôt que comme une consonne double ou allongée, » note Grayson. À la fin de cette unité, chaque symbole produit par Ilya sera un symbole que vous aurez rencontré et compris.</p>
+						<p>Nous venons d&rsquo;apprendre que la palatalisation se propage &agrave; rebours au travers d&rsquo;un groupe consonantique&#160;: en temps r&eacute;el, la langue s&rsquo;arque par anticipation d&rsquo;un agent palatalisant situ&eacute; en aval. Nous rencontrons &agrave; pr&eacute;sent un second processus qui se d&eacute;place dans la m&ecirc;me direction, et la ressemblance entre les deux justifie un moment d&rsquo;orientation avant de poursuivre.</p>
+
+						<p>L&rsquo;assimilation de voisement, comme la palatalisation, est r&eacute;gressive. Elle se propage de droite &agrave; gauche dans une s&eacute;quence consonantique, et pour la m&ecirc;me raison fondamentale&#160;: le conduit vocal anticipe ce qui suit. Les deux processus d&eacute;crivent toutefois deux questions physiques tr&egrave;s diff&eacute;rentes, ancr&eacute;es dans le corps et non dans l&rsquo;abstrait.</p>
+
+						<p>La palatalisation, nous l&rsquo;avons vu, pose une question &agrave; laquelle la langue r&eacute;pond. La lame est-elle arqu&eacute;e vers le palais dur, ou ne l&rsquo;est-elle pas&#160;? Nous avons travaill&eacute; cette opposition &agrave; la section 6&#160;: le <code>[&#x0272;]</code> de &#x43D;&#x0435;&#x0442;, o&ugrave; la langue s&rsquo;arque, face au <code>[n]</code> de &#x43D;&#x043E;&#x0442;, o&ugrave; elle ne le fait pas. Cet arc, ou son absence, constitue l&rsquo;&eacute;v&egrave;nement physique qui d&eacute;finit la palatalisation.</p>
+
+						<p>Le voisement pose une question &agrave; laquelle le larynx r&eacute;pond. Les cordes vocales vibrent-elles, ou non&#160;? Posez les doigts contre votre gorge et maintenez un <code>[z]</code>&#8239;; vous sentirez la vibration des cordes. Maintenez ensuite un <code>[s]</code> avec le m&ecirc;me effort de hauteur&#8239;; la vibration disparait. La bouche et la langue font la m&ecirc;me chose dans les deux cas. Ce qui change, c&rsquo;est l&rsquo;&eacute;tat des cordes vocales&#160;: ouvertes ou ferm&eacute;es. Voil&agrave; l&rsquo;opposition binaire du voisement.</p>
+
+						<table>
+						<thead><tr><th></th><th>Assimilation de voisement</th><th>Palatalisation</th></tr></thead>
+						<tbody>
+						<tr><td>Lieu physique</td><td>Larynx (cordes vocales)</td><td>Lame de la langue</td></tr>
+						<tr><td>L&rsquo;opposition binaire</td><td>Vibration ou non</td><td>Arc ou non</td></tr>
+						<tr><td>Direction</td><td>R&eacute;gressive (anticipatoire)</td><td>R&eacute;gressive (anticipatoire)</td></tr>
+						<tr><td>D&eacute;clench&eacute;e par</td><td>L&rsquo;&eacute;tat de voisement de l&rsquo;obstruante suivante</td><td>L&rsquo;agent palatalisant qui suit</td></tr>
+						</tbody>
+						</table>
+
+						<p>R&eacute;p&eacute;tons&#160;: les deux processus sont r&eacute;gressifs parce qu&rsquo;ils sont tous deux anticipatoires. Le syst&egrave;me articulatoire se pr&eacute;pare &agrave; ce qu&rsquo;il sait venir, et cette pr&eacute;paration remonte en amont dans ce qui pr&eacute;c&egrave;de. Ce fonctionnement, qui n&rsquo;est pas propre au russe, rel&egrave;ve de l&rsquo;efficacit&eacute; articulatoire et non de l&rsquo;arbitraire&#160;: vous r&eacute;alisez d&eacute;j&agrave; des ajustements anticipatoires de voisement en allemand, et une nasalisation anticipatoire en fran&ccedil;ais parl&eacute;, sans y penser. La direction est partag&eacute;e parce que le principe l&rsquo;est&#8239;; les m&eacute;canismes de la palatalisation (l&rsquo;arc de la langue) et du voisement (l&rsquo;opposition binaire des cordes vocales) ne le sont pas.</p>
+
+						<p>Cette ind&eacute;pendance permet &agrave; une consonne d&rsquo;&ecirc;tre simultan&eacute;ment d&eacute;vois&eacute;e (les cordes cessent de vibrer) et palatalis&eacute;e (la langue s&rsquo;arque). Les deux oppositions binaires coexistent sur la m&ecirc;me consonne sans interf&eacute;rer l&rsquo;une avec l&rsquo;autre. Lorsque la consonne suivante dans un groupe est &agrave; la fois molle et sourde, la consonne qui la pr&eacute;c&egrave;de peut subir les deux processus &agrave; la fois&#160;: la langue s&rsquo;arque et le voisement s&rsquo;&eacute;teint. Il ne s&rsquo;agit pas de transformations alternatives, mais de transformations concurrentes, superpos&eacute;es sur le m&ecirc;me son.</p>
+
+						<p>Cette distinction en main, passons &agrave; l&rsquo;assimilation de voisement consid&eacute;r&eacute;e pour elle-m&ecirc;me.</p>
+
+						<h4 id="learn-u7-voiced">Que se passe-t-il lorsqu&rsquo;une vois&eacute;e rencontre une sourde&#160;?</h4>
+
+						<p>Le russe ne tol&egrave;re pas la tension qualitative entre deux consonnes adjacentes dont l&rsquo;une est vois&eacute;e et l&rsquo;autre sourde. La consonne la plus &agrave; droite dans le groupe transmet son &eacute;tat de voisement (vois&eacute; ou sourd) &agrave; la consonne qui la pr&eacute;c&egrave;de, et ce transfert se communique &agrave; rebours au travers du groupe entier jusqu&rsquo;&agrave; ce que quelque chose l&rsquo;arr&ecirc;te.</p>
+
+						<p>Ce principe s&rsquo;&eacute;tend. Dans un groupe de deux consonnes, la seconde d&eacute;termine le voisement de la premi&egrave;re. Dans un groupe de trois ou quatre, c&rsquo;est toujours le dernier &eacute;l&eacute;ment qui gouverne&#160;: son voisement se propage vers la gauche et le groupe entier &eacute;merge avec un voisement uniforme. Grayson formule le principe sans d&eacute;tour&#160;: &laquo;&#160;the voicing of the entire cluster is that of the final member&#160;&raquo;. Consid&eacute;rons -&#x0442;&#x0433;-, o&ugrave; le <code>/&#x0261;/</code> vois&eacute; l&rsquo;emporte et le groupe se lit <code>/d&#x0261;/</code>&#8239;; ou -&#x0434;&#x043A;-, o&ugrave; le <code>/k/</code> sourd l&rsquo;emporte et le groupe se lit <code>/tk/</code>. &Eacute;tendons &agrave; quatre consonnes&#160;: -&#x043A;&#x0431;&#x0441;&#x0434;- se lit <code>/&#x0261;bzd/</code> (le <code>/d/</code> final est vois&eacute;, donc tout se voise), tandis que -&#x043A;&#x0431;&#x0441;&#x0442;- se lit <code>/kpst/</code> (le <code>/t/</code> final est sourd, donc tout s&rsquo;assourdit).</p>
+
+						<p>Toutes les consonnes ne participent toutefois pas &agrave; ce processus. Les linguistes identifient la classe de consonnes capables d&rsquo;alterner entre forme vois&eacute;e et forme sourde sous le nom d&rsquo;<em>obstruantes</em>. Ce sont les consonnes pour lesquelles l&rsquo;opposition binaire du voisement est active. Or toutes les consonnes ne sont pas des obstruantes, comme le montre le tableau ci-dessous&#160;:</p>
+
+						<table>
+						<thead><tr><th>Sourde</th><th>Vois&eacute;e</th><th>Lettres cyrilliques</th></tr></thead>
+						<tbody>
+						<tr><td><code>/p/</code></td><td><code>/b/</code></td><td>&#x27E8;&#x043F;&#x27E9; &middot; &#x27E8;&#x0431;&#x27E9;</td></tr>
+						<tr><td><code>/f/</code></td><td><code>/v/</code></td><td>&#x27E8;&#x0444;&#x27E9; &middot; &#x27E8;&#x0432;&#x27E9;</td></tr>
+						<tr><td><code>/t/</code></td><td><code>/d/</code></td><td>&#x27E8;&#x0442;&#x27E9; &middot; &#x27E8;&#x0434;&#x27E9;</td></tr>
+						<tr><td><code>/s/</code></td><td><code>/z/</code></td><td>&#x27E8;&#x0441;&#x27E9; &middot; &#x27E8;&#x0437;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0283;/</code></td><td><code>/&#x0292;/</code></td><td>&#x27E8;&#x0448;&#x27E9; &middot; &#x27E8;&#x0436;&#x27E9;</td></tr>
+						<tr><td><code>/k/</code></td><td><code>/&#x0261;/</code></td><td>&#x27E8;&#x043A;&#x27E9; &middot; &#x27E8;&#x0433;&#x27E9;</td></tr>
+						<tr><td><code>/ts/</code></td><td><code>[dz]</code></td><td>&#x27E8;&#x0446;&#x27E9; &middot; (aucune lettre)</td></tr>
+						<tr><td><code>/t&#x0283;&#x02B2;/</code></td><td><code>[d&#x0292;&#x02B2;]</code></td><td>&#x27E8;&#x0447;&#x27E9; &middot; (aucune lettre)</td></tr>
+						<tr><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td><code>[&#x0292;&#x02B2;&#x0292;&#x02B2;]</code></td><td>&#x27E8;&#x0449;&#x27E9; &middot; (aucune lettre)</td></tr>
+						</tbody>
+						</table>
+
+						<p>Le chanteur reconnaitra les six premi&egrave;res paires dans l&rsquo;inventaire consonantique de la section 5. Les trois derni&egrave;res m&eacute;ritent qu&rsquo;on s&rsquo;y arr&ecirc;te. Les formes vois&eacute;es <code>[dz]</code>, <code>[d&#x0292;&#x02B2;]</code> et <code>[&#x0292;&#x02B2;&#x0292;&#x02B2;]</code> ne poss&egrave;dent aucune lettre cyrillique qui leur soit propre&#8239;; elles n&rsquo;apparaissent que comme produits de l&rsquo;assimilation de voisement, le plus souvent aux fronti&egrave;res de mots, mais suffisamment fr&eacute;quentes ailleurs pour justifier un &oelig;il attentif. Nous avons aper&ccedil;u ces formes dans la discussion des affriqu&eacute;es &agrave; la section 5&#160;: ce sont les contreparties allophoniques vois&eacute;es qui ne naissent que du processus, jamais de la graphie. Rares au sein d&rsquo;un mot, le chanteur doit savoir qu&rsquo;elles existent, car Ilya les produira lorsque les conditions les exigeront.</p>
+
+						<p>Par contraste, une classe de consonnes appel&eacute;es <em>sonantes</em> ne participe pas au processus. Les consonnes du mn&eacute;monique &laquo;&#160;normal&#160;&raquo; (<code>/l/</code>, <code>/m/</code>, <code>/n/</code> et <code>/r/</code>, ainsi que leurs homologues palatalis&eacute;es) ne d&eacute;clenchent pas l&rsquo;assimilation de voisement et ne la subissent pas non plus. Les sonantes sont imperm&eacute;ables au voisement r&eacute;gressif&#160;: elles ne le transmettent ni ne le re&ccedil;oivent. La chaine de voisement s&rsquo;arr&ecirc;te &agrave; la sonante. En diction lyrique russe, les sonantes ne sont jamais d&eacute;vois&eacute;es, bien que nos coll&egrave;gues linguistes puissent attester qu&rsquo;elles le sont dans le russe parl&eacute; (par ex. <code>[l&#x0325; m&#x0325; n&#x0325; r&#x0325; l&#x0325;&#x02B2; m&#x0325;&#x02B2; &#x0272;&#x0325; r&#x0325;&#x02B2;]</code>)&#8239;; ces suprasegmentaux de voisement propres &agrave; la parole n&rsquo;apparaitront jamais dans la sortie d&rsquo;Ilya.</p>
+
+						<div class="learn-callout">
+						<p><strong>L&rsquo;exception du &#x27E8;&#x0432;&#x27E9;</strong></p>
+						<p>Sous la graphie &#x27E8;&#x0432;&#x27E9;, le phon&egrave;me <code>/v/</code> est phon&eacute;miquement faible en russe. Il ne d&eacute;clenche pas l&rsquo;assimilation de voisement. La lettre &#x27E8;&#x0432;&#x27E9; est influenc&eacute;e par les consonnes adjacentes (elle subit l&rsquo;assimilation et se d&eacute;voise en <code>/f/</code> devant une consonne sourde), mais elle n&rsquo;exerce aucune force assimilatrice propre. Lorsque le son <code>/v/</code> est produit en tant que variante vois&eacute;e de &#x27E8;&#x0444;&#x27E9;, cette restriction ne s&rsquo;applique &eacute;videmment pas.</p>
+						<p>Ce comportement n&rsquo;est pas intuitif pour le chanteur qui aborde la diction lyrique russe. On sait que <code>/v/</code> est vois&eacute;, et on s&rsquo;attend &agrave; ce qu&rsquo;il voise ce qui le pr&eacute;c&egrave;de, &agrave; l&rsquo;instar de <code>/b/</code> ou <code>/d/</code>. Il n&rsquo;en fait rien. Le contraste est parlant&#160;: dans &#x0441;&#x0431;&#x043E;&#x0440;, le &#x27E8;&#x0431;&#x27E9; voise le &#x27E8;&#x0441;&#x27E9; qui le pr&eacute;c&egrave;de, produisant <code>/zbor/</code>. Dans &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430;, le &#x27E8;&#x0432;&#x27E9; ne voise pas le &#x27E8;&#x0441;&#x27E9;, et le mot commence par <code>/sv/</code>, non <code>/zv/</code>. Le contexte est identique (une consonne vois&eacute;e suit le &#x27E8;&#x0441;&#x27E9;), mais le r&eacute;sultat diff&egrave;re parce que &#x27E8;&#x0432;&#x27E9; est phon&eacute;miquement faible&#160;: il se soumet &agrave; ses voisins sans jamais leur imposer quoi que ce soit.</p>
+						<p>Cette exception s&rsquo;applique de fa&ccedil;on constante et fr&eacute;quente. Chaque fois que le chanteur rencontre la lettre &#x27E8;&#x0432;&#x27E9; devant une autre consonne, le voisement de la consonne pr&eacute;c&eacute;dente n&rsquo;est pas modifi&eacute; par le &#x27E8;&#x0432;&#x27E9;. C&rsquo;est l&rsquo;une des r&egrave;gles les plus utiles de cette section, et l&rsquo;une des plus faciles &agrave; sous-estimer.</p>
+						</div>
+
+						<p>Une derni&egrave;re exception m&eacute;rite d&rsquo;&ecirc;tre signal&eacute;e ici. Il s&rsquo;agit d&rsquo;une relation particuli&egrave;re entre les trois v&eacute;laires (<code>/k &#x0261; x/</code>) dans le russe chant&eacute;. La lettre &#x27E8;&#x0433;&#x27E9;, lorsqu&rsquo;elle est suivie de &#x27E8;&#x043A;&#x27E9; ou de &#x27E8;&#x0447;&#x27E9; &agrave; l&rsquo;int&eacute;rieur d&rsquo;un mot, ne suit pas sa paire sourde habituelle. Au lieu de s&rsquo;assourdir en <code>/k/</code> (son partenaire normal), elle emprunte exceptionnellement la fricative v&eacute;laire <code>/x/</code>&#160;:</p>
+
+						<p>&#x27E8;&#x0433;&#x043A;&#x27E9; &rarr; <code>/xk/</code>&#160;: &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; <code>/&#x02C8;m&#x02B2;&#x0251;xk&#x028C;/</code>, &#x043B;&#x0435;&#x0433;&#x043A;&#x043E; <code>/l&#x02B2;&#x026A;x&#x02C8;ko/</code><br/>
+						&#x27E8;&#x0433;&#x0447;&#x27E9; &rarr; <code>/xt&#x0283;&#x02B2;/</code>&#160;: &#x043B;&#x0435;&#x0433;&#x0447;&#x0435; <code>/&#x02C8;l&#x02B2;&#x025B;xt&#x0283;&#x02B2;&#x026A;/</code>, &#x043C;&#x044F;&#x0433;&#x0447;&#x0435; <code>/&#x02C8;m&#x02B2;&#x0251;xt&#x0283;&#x02B2;&#x026A;/</code></p>
+
+						<p>Grayson nomme ces cas la r&egrave;gle de &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; et la r&egrave;gle de &#x043B;&#x0435;&#x0433;&#x0447;&#x0435;. Ce sont des cas particuliers, propres &agrave; ces radicaux et &agrave; leurs d&eacute;riv&eacute;s, et qui ne s&rsquo;appliquent qu&rsquo;&agrave; l&rsquo;int&eacute;rieur du mot, jamais au-del&agrave; d&rsquo;une fronti&egrave;re de mot.</p>
+
+						<p>Un mot sur l&rsquo;assourdissement en finale. Nous avons rencontr&eacute; l&rsquo;assourdissement en position finale (analogue &agrave; l&rsquo;allemand) &agrave; la section 5, en tant que propri&eacute;t&eacute; de l&rsquo;inventaire consonantique&#160;: les consonnes vois&eacute;es perdent leur voisement &agrave; la fin d&rsquo;un mot. Sous une condition fr&eacute;quente, elles peuvent toutefois se revoisir. La fa&ccedil;on dont l&rsquo;assourdissement final interagit avec les fronti&egrave;res de mots et les clitiques fait l&rsquo;objet de la section 7.4.</p>
+
+						<h4 id="learn-u7-stops">Qu&rsquo;est-ce qui arr&ecirc;te la propagation du voisement&#160;?</h4>
+
+						<p>Nous connaissons le m&eacute;canisme&#160;: la derni&egrave;re obstruante du groupe transmet son &eacute;tat de voisement de droite &agrave; gauche jusqu&rsquo;&agrave; ce que l&rsquo;ensemble du groupe partage un voisement uniforme. Mais &agrave; quoi sert un m&eacute;canisme sans limites&#160;? Nous apprenons maintenant ce qui le contraint. Quatre conditions limitent la propagation du voisement en diction lyrique russe, et elles d&eacute;finissent ensemble les fronti&egrave;res de ce syst&egrave;me.</p>
+
+						<p><strong>Seules les obstruantes d&eacute;clenchent l&rsquo;assimilation de voisement.</strong> L&rsquo;assimilation de voisement est un processus d&rsquo;obstruante &agrave; obstruante. Trois cat&eacute;gories de sons, bien qu&rsquo;intrins&egrave;quement vois&eacute;s, ne la d&eacute;clenchent pas. Les voyelles sont vois&eacute;es&#160;: les cordes vocales vibrent tout au long de leur production. Mais une voyelle n&rsquo;est pas une obstruante. Une voyelle plac&eacute;e apr&egrave;s une consonne sourde ne voise pas cette consonne. Les sonantes ne d&eacute;clenchent pas non plus le processus. Nous l&rsquo;avons vu &agrave; la section 7.2 avec le mn&eacute;monique &laquo;&#160;normal&#160;&raquo;&#160;: les consonnes <code>/l/</code>, <code>/m/</code>, <code>/n/</code> et <code>/r/</code> (ainsi que leurs homologues palatalis&eacute;es) ne subissent pas l&rsquo;assimilation de voisement et ne la transmettent pas. Le glide <code>/j/</code> se comporte de la m&ecirc;me mani&egrave;re. Le principe est simple&#160;: si le son &agrave; droite n&rsquo;est pas une obstruante, la chaine de voisement ne d&eacute;marre pas.</p>
+
+						<p><strong>Les sonantes bloquent la transmission.</strong> Une sonante n&rsquo;est pas simplement un son que la chaine traverserait sans effet&#8239;; c&rsquo;est un mur auquel la chaine s&rsquo;arr&ecirc;te. Si le chanteur rencontre un groupe de la forme obstruante + sonante + obstruante, le voisement de l&rsquo;obstruante la plus &agrave; droite ne traverse pas la sonante pour atteindre l&rsquo;obstruante la plus &agrave; gauche. La chaine prend fin &agrave; la fronti&egrave;re de la sonante.</p>
+
+						<p><strong>L&rsquo;exception du &#x27E8;&#x0432;&#x27E9;.</strong> Nous avons trait&eacute; ce point en d&eacute;tail dans l&rsquo;encadr&eacute; de la section 7.2 et le mentionnons ici pour compl&eacute;ter le tableau. La lettre &#x27E8;&#x0432;&#x27E9; subit l&rsquo;assimilation (elle s&rsquo;assourdit en <code>/f/</code> devant une consonne sourde) mais ne la d&eacute;clenche pas. Le chanteur a d&eacute;j&agrave; int&eacute;gr&eacute; le contraste&#160;: le &#x27E8;&#x0431;&#x27E9; de &#x0441;&#x0431;&#x043E;&#x0440; voise le &#x27E8;&#x0441;&#x27E9; pr&eacute;c&eacute;dent, produisant <code>/zbor/</code>, tandis que le &#x27E8;&#x0432;&#x27E9; de &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430; ne le fait pas, et le mot commence par <code>/sv/</code>.</p>
+
+						<p><strong>La ponctuation constitue la fronti&egrave;re absolue.</strong> Aucune assimilation, de quelque nature qu&rsquo;elle soit, ne franchit la ponctuation. C&rsquo;est l&rsquo;&eacute;nonc&eacute; de fronti&egrave;re le plus fort du syst&egrave;me, et il s&rsquo;applique non seulement &agrave; l&rsquo;assimilation de voisement, mais &agrave; tous les processus assimilatoires, palatalisation comprise (nous rejoignons ici la sixi&egrave;me fronti&egrave;re de la section 6). La ponctuation marque un moment o&ugrave; le conduit vocal se r&eacute;initialise. Dans le chant, cette r&eacute;initialisation porte un sens po&eacute;tique&#160;: la virgule, le point, le point-virgule, le point d&rsquo;interrogation signalent chacun une fronti&egrave;re que le syst&egrave;me phonologique respecte de mani&egrave;re absolue.</p>
+
+						<table>
+						<thead><tr><th>Condition</th><th>Ce qu&rsquo;elle signifie</th><th>Introduite en</th></tr></thead>
+						<tbody>
+						<tr><td>Seules les obstruantes d&eacute;clenchent</td><td>Les voyelles, les sonantes et <code>/j/</code> ne lancent pas la chaine</td><td>7.2 (implicite)&#8239;; 7.3 (explicite)</td></tr>
+						<tr><td>Les sonantes bloquent la transmission</td><td>La chaine s&rsquo;arr&ecirc;te aux sonantes (&laquo;&#160;normal&#160;&raquo;)&#160;: <code>/l/</code>, <code>/m/</code>, <code>/n/</code>, <code>/r/</code> et leurs homologues palatalis&eacute;es</td><td>7.2</td></tr>
+						<tr><td>&#x27E8;&#x0432;&#x27E9; ne d&eacute;clenche pas</td><td>&#x27E8;&#x0432;&#x27E9; subit l&rsquo;assimilation, mais ne l&rsquo;impose pas</td><td>7.2</td></tr>
+						<tr><td>La ponctuation est absolue</td><td>Aucune assimilation ne franchit la ponctuation</td><td>7.3</td></tr>
+						</tbody>
+						</table>
+
+						<p>Nous tenons &agrave; pr&eacute;sent l&rsquo;assimilation de voisement comme un syst&egrave;me d&eacute;limit&eacute;&#160;: ce qu&rsquo;elle fait (la derni&egrave;re obstruante l&rsquo;emporte), qui y participe (les obstruantes seulement), et ce qui l&rsquo;arr&ecirc;te (les sonantes, le &#x27E8;&#x0432;&#x27E9;, les sons non obstruants, la ponctuation). Une question reste ouverte. Si le chant est une phonation continue, un flux ininterrompu de son vois&eacute;, pourquoi l&rsquo;assimilation de voisement s&rsquo;arr&ecirc;terait-elle &agrave; une fronti&egrave;re de mot l&agrave; o&ugrave; il n&rsquo;y a ni ponctuation ni souffle&#160;? Telle est la question de la section 7.4.</p>
+
+						<h4 id="learn-u7-boundary">Les m&ecirc;mes r&egrave;gles s&rsquo;appliquent-elles d&rsquo;un mot &agrave; l&rsquo;autre&#160;?</h4>
+
+						<p>Oui. Lorsque des mots adjacents entretiennent un lien syntaxique &eacute;troit, sans ponctuation, pause ni souffle entre eux, l&rsquo;assimilation de voisement s&rsquo;applique au-del&agrave; de la fronti&egrave;re de mot, exactement comme elle le fait &agrave; l&rsquo;int&eacute;rieur du mot. La fronti&egrave;re de mot ne l&rsquo;arr&ecirc;te pas. La derni&egrave;re obstruante l&rsquo;emporte toujours. Les quatre conditions de la section 7.3 continuent de la contraindre.</p>
+
+						<p>Grayson identifie quatre r&egrave;gles pour l&rsquo;assimilation de voisement aux fronti&egrave;res de mots (pp. 250&ndash;251). La seule disposition nouvelle se trouve dans la deuxi&egrave;me r&egrave;gle&#160;: les sonantes et les voyelles qui commencent le mot suivant permettent &agrave; la consonne finale vois&eacute;e d&rsquo;une pr&eacute;position de conserver son voisement.</p>
+
+						<p><strong>Les clitiques&#160;: l&agrave; o&ugrave; la fronti&egrave;re se dissout.</strong> Un clitique est un petit mot qui ne peut pas fonctionner seul sur le plan phonologique&#8239;; il se rattache &agrave; un mot h&ocirc;te. Les <em>proclitiques</em> fonctionnent comme des pr&eacute;fixes et sont le plus souvent des pr&eacute;positions&#160;: &#x27E8;&#x0432;&#x27E9;, &#x27E8;&#x043A;&#x27E9;, &#x27E8;&#x0441;&#x27E9;, &#x27E8;&#x0438;&#x0437;&#x27E9;. Les <em>enclitiques</em> sont des particules qui se rattachent &agrave; la fin de leur mot h&ocirc;te&#160;: &#x27E8;&#x0431;&#x044B;&#x27E9;, &#x27E8;&#x043B;&#x0438;&#x27E9;, &#x27E8;&#x0436;&#x0435;&#x27E9;. Qu&rsquo;il soit proclitique ou enclitique, le clitique et son h&ocirc;te forment une seule unit&eacute; phonologique&#160;: un seul domaine pour l&rsquo;accent, la r&eacute;duction et le voisement. La fronti&egrave;re de mot entre &#x0432; et &#x0441;&#x0430;&#x0434;&#x0443; n&rsquo;est, phonologiquement, pas une fronti&egrave;re du tout&#160;: c&rsquo;est un art&eacute;fact de la graphie.</p>
+
+						<table>
+						<thead><tr><th>Type</th><th>Cyrillique</th><th>API</th><th>Glose</th></tr></thead>
+						<tbody>
+						<tr><td>Proclitique</td><td>&#x0432; &#x0441;&#x0430;&#x0434;&#x0443;</td><td><code>/fs&#x028C;&#x02C8;du/</code></td><td>dans le jardin</td></tr>
+						<tr><td>Proclitique</td><td>&#x043A; &#x0414;&#x043C;&#x0438;&#x0442;&#x0440;&#x0438;&#x044E;</td><td><code>/&#x0261; &#x02C8;d&#x02B2;m&#x02B2;it&#x02B2;r&#x02B2;iju/</code></td><td>vers Dmitri</td></tr>
+						<tr><td>Enclitique</td><td>&#x043A;&#x043E;&#x0442; &#x0431;&#x044B;</td><td><code>/kod b&#x0268;/</code></td><td>un matou pourrait</td></tr>
+						<tr><td>Enclitique</td><td>&#x0435;&#x0441;&#x043B;&#x0438; &#x0431; &#x043C;&#x043E;&#x0433;</td><td><code>/&#x02C8;jesl&#x02B2;i b mok/</code></td><td>si l&rsquo;on pouvait</td></tr>
+						</tbody>
+						</table>
+
+						<p>C&rsquo;est ici que le chanteur voit l&rsquo;assimilation transfrontali&egrave;re rendue visible dans Ilya. La notation fl&eacute;ch&eacute;e (&rarr;) relie un clitique &agrave; son h&ocirc;te, et Ilya traite l&rsquo;ensemble comme un domaine phonologique unique.</p>
+
+						<p><strong>Trois sons qui n&rsquo;existent que par ce processus.</strong> Trois consonnes vois&eacute;es n&rsquo;apparaissent que comme produits de l&rsquo;assimilation de voisement transfrontali&egrave;re&#160;: <code>[dz]</code>, <code>[d&#x0292;&#x02B2;]</code> et <code>[&#x0263;]</code>. Ces sons ne poss&egrave;dent pas de graphie propre&#8239;; ils &eacute;mergent lorsqu&rsquo;une obstruante sourde se voise par-del&agrave; une fronti&egrave;re devant une obstruante vois&eacute;e dans le mot suivant. Peu fr&eacute;quents mais non rares, le chanteur doit savoir qu&rsquo;ils existent, car Ilya les produira lorsque les conditions les exigeront.</p>
+
+						<p><strong>Quand les fronti&egrave;res interviennent.</strong> La continuit&eacute; est l&rsquo;&eacute;tat par d&eacute;faut, mais le chanteur ou le compositeur choisit quand la rompre. La ponctuation, comme nous l&rsquo;avons &eacute;tabli &agrave; la section 7.3, constitue la fronti&egrave;re absolue&#160;: aucune assimilation ne la franchit. Un souffle interrompt la phonation continue qui rend possible l&rsquo;assimilation transfrontali&egrave;re. Une pause, m&ecirc;me sans souffle, r&eacute;initialise le conduit vocal. Ces interruptions servent le sens po&eacute;tique&#8239;; elles ne sont pas des d&eacute;faillances de continuit&eacute;.</p>
+
+						<p><strong>Le traitement d&rsquo;Ilya.</strong> Ilya traite les clitiques de mani&egrave;re explicite&#160;: proclitiques et enclitiques sont joints &agrave; leurs mots h&ocirc;tes et trait&eacute;s comme des unit&eacute;s phonologiques uniques. Les fl&egrave;ches dans la ligne API indiquent l&rsquo;endroit o&ugrave; le clitique s&rsquo;est rattach&eacute;. Ilya ne peut toutefois pas mod&eacute;liser toutes les dimensions de la phonation li&eacute;e. L&rsquo;outil op&eacute;rationnalise une compr&eacute;hension de la fa&ccedil;on dont les fronti&egrave;res de mots fonctionnent dans le russe chant&eacute;, d&eacute;riv&eacute;e des r&egrave;gles de Grayson. L&rsquo;oreille du chanteur, son r&eacute;p&eacute;titeur et son instinct interpr&eacute;tatif demeurent indispensables l&agrave; o&ugrave; le mod&egrave;le d&rsquo;Ilya atteint ses limites.</p>
+
+						<h4 id="learn-u7-deletion">O&ugrave; est pass&eacute; le L&#160;? L&rsquo;effacement consonantique</h4>
+
+						<p>L&rsquo;<em>effacement</em> dans un groupe consonantique se produit lorsque la prononciation se simplifie par l&rsquo;omission d&rsquo;un ou de plusieurs phon&egrave;mes attendus. La graphie conserve une lettre vestigiale, mais la langue parl&eacute;e et chant&eacute;e ne la r&eacute;alise pas. Le chanteur connait d&eacute;j&agrave; ce ph&eacute;nom&egrave;ne par le fran&ccedil;ais&#160;: le &#x27E8;p&#x27E9; de &laquo;&#160;sculpture&#160;&raquo; ne se prononce pas, pas plus que le &#x27E8;p&#x27E9; de &laquo;&#160;bapt&ecirc;me&#160;&raquo; ou le &#x27E8;g&#x27E9; de &laquo;&#160;doigt&#160;&raquo;. Le russe poss&egrave;de son propre ensemble de groupes o&ugrave; l&rsquo;effacement se produit, et ceux-ci sont finis, pr&eacute;cis et m&eacute;morisables. Ilya les traite tous automatiquement.</p>
+
+						<table>
+						<thead><tr><th>Groupe</th><th>Lecture</th><th>Effac&eacute;</th><th>Exemple</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0442;&#x043D;</td><td><code>/sn/</code> ou <code>/s&#x02B2;&#x0272;/</code></td><td><code>/t/</code></td><td>&#x0441;&#x0442;&#x0440;&#x0430;&#x0441;&#x0442;&#x043D;&#x044B;&#x0439; <code>/&#x02C8;str&#x0251; sn&#x0268;j/</code></td></tr>
+						<tr><td>&#x0437;&#x0434;&#x043D;</td><td><code>/zn/</code> ou <code>/z&#x02B2;&#x0272;/</code></td><td><code>/d/</code></td><td>&#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E; <code>/&#x02C8;po zn&#x028C;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x043B;</td><td><code>/s&#x02B2;l&#x02B2;/</code></td><td><code>/t/</code></td><td>&#x0441;&#x0447;&#x0430;&#x0441;&#x0442;&#x043B;&#x0438;&#x0432;&#x043E; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;&#x0251; &#x02C8;s&#x02B2;l&#x02B2;i v&#x028C;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x0446;, &#x0437;&#x0434;&#x0446;</td><td><code>/sts/</code></td><td><code>/t/</code> ou <code>/d/</code></td><td>&#x0438;&#x0441;&#x0442;&#x0446;&#x0430; <code>/is &#x02C8;ts&#x0251;/</code></td></tr>
+						<tr><td>&#x043D;&#x0434;&#x0446; [&#x043D;&#x0442;&#x0446;]</td><td><code>/nts/</code></td><td><code>/d/</code></td><td>&#x0433;&#x043E;&#x043B;&#x043B;&#x0430;&#x043D;&#x0434;&#x0446;&#x044B; <code>/&#x0261;&#x0251; &#x02C8;&#x026B;&#x0251;n ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0440;&#x0434;&#x0446;</td><td><code>/rts/</code></td><td><code>/d/</code></td><td>&#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435; <code>/&#x02C8;s&#x02B2;&#x025B;r ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x0441;&#x043A;</td><td><code>/s&#x02B2;&#x02D0;k&#x02B2;/</code></td><td><code>/t/</code></td><td>&#x043C;&#x0430;&#x0440;&#x043A;&#x0441;&#x0438;&#x0441;&#x0442;&#x0441;&#x043A;&#x0438;&#x0439; <code>/m&#x028C;rk &#x02C8;s&#x02B2;i s&#x02B2;&#x02D0;k&#x02B2;ij/</code></td></tr>
+						<tr><td>&#x043D;&#x0434;&#x0441;&#x043A;, &#x043D;&#x0442;&#x0441;&#x043A;</td><td><code>/&#x0272;s&#x02B2;k&#x02B2;/</code></td><td><code>/d/</code> ou <code>/t/</code></td><td>&#x0433;&#x043E;&#x043B;&#x043B;&#x0430;&#x043D;&#x0434;&#x0441;&#x043A;&#x0438;&#x0439; <code>/&#x0261;&#x0251; &#x02C8;&#x026B;&#x0251;&#x0272; s&#x02B2;k&#x02B2;ij/</code></td></tr>
+						<tr><td>&#x043B;&#x043D;&#x0446;</td><td><code>/nts/</code></td><td><code>/l/</code></td><td>&#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435; <code>/&#x02C8;son ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0432;&#x0441;&#x0442;&#x0432;</td><td><code>/stv/</code> ou <code>/s&#x02B2;t&#x02B2;v&#x02B2;/</code></td><td>premier <code>/v/</code></td><td>&#x0447;&#x0443;&#x0432;&#x0441;&#x0442;&#x0432;&#x043E; <code>/&#x02C8;t&#x0283;&#x02B2;u stv&#x028C;/</code></td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>&#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435;</strong> (c&oelig;ur)&#160;: le &#x27E8;&#x0434;&#x27E9; est muet. <code>/&#x02C8;s&#x02B2;&#x025B;r ts&#x0268;/</code>. Parmi les mots les plus fr&eacute;quents de la litt&eacute;rature vocale russe.</p>
+						<p><strong>&#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E;</strong> (tard, trop tard)&#160;: le &#x27E8;&#x0434;&#x27E9; est muet. <code>/&#x02C8;po zn&#x028C;/</code>. Fr&eacute;quent dans la m&eacute;lodie et l&rsquo;op&eacute;ra.</p>
+						<p><strong>&#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435;</strong> (soleil)&#160;: le &#x27E8;&#x043B;&#x27E9; est muet. <code>/&#x02C8;son ts&#x0268;/</code>. C&rsquo;est lui qui a inspir&eacute; le titre de cette sous-section.</p>
+						<p><strong>&#x0437;&#x0434;&#x0440;&#x0430;&#x0432;&#x0441;&#x0442;&#x0432;&#x0443;&#x0439;&#x0442;&#x0435;</strong> (bonjour)&#160;: le premier &#x27E8;&#x0432;&#x27E9; est muet. <code>/&#x02C8;zdr&#x0251; stvuj t&#x02B2;&#x026A;/</code>. Chaque chanteur de russe connait cette salutation.</p>
+
+						<h4 id="learn-u7-mergers">Fusions et absorptions</h4>
+
+						<p>Transcrivez &#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; (bruler) dans Ilya. La graphie montre &#x27E8;&#x0441;&#x0436;&#x27E9;, deux consonnes, l&rsquo;une sourde et l&rsquo;autre vois&eacute;e. La ligne API affiche <code>/&#x0292;&#x02D0;/</code>, une seule fricative vois&eacute;e, allong&eacute;e. Ni le <code>/s/</code> ni le <code>/&#x0292;/</code> n&rsquo;ont surv&eacute;cu individuellement&#8239;; quelque chose de nouveau a pris leur place. C&rsquo;est la <em>fusion consonantique</em>&#160;: deux lettres entrent dans un groupe, et le groupe acquiert un son qui remplace ce que l&rsquo;une ou l&rsquo;autre des consonnes d&rsquo;origine aurait produit seule.</p>
+
+						<table>
+						<thead><tr><th>Groupe</th><th>Lecture</th><th>Exemple</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0448;, &#x0437;&#x0448;</td><td><code>/&#x0283;&#x02D0;/</code></td><td>&#x0431;&#x0435;&#x0441;&#x0448;&#x0443;&#x043C;&#x043D;&#x043E; <code>/b&#x02B2;&#x026A; &#x02C8;&#x0283;&#x02D0;um n&#x028C;/</code> (silencieusement)</td></tr>
+						<tr><td>&#x0437;&#x0436;, &#x0441;&#x0436;</td><td><code>/&#x0292;&#x02D0;/</code></td><td>&#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; <code>/&#x0292;&#x02D0;&#x0268; &#x02C8;&#x0261;&#x0251;t&#x02B2;/</code> (bruler)</td></tr>
+						</tbody>
+						</table>
+
+						<table>
+						<thead><tr><th>Groupe</th><th>Lecture</th><th>Exemple</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0447;, &#x0437;&#x0447;, &#x0436;&#x0447;, &#x0441;&#x0442;&#x0447;, &#x0437;&#x0434;&#x0447;, &#x0441;&#x0441;&#x0447;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>&#x043C;&#x0443;&#x0436;&#x0447;&#x0438;&#x043D;&#x0430; <code>/mu &#x02C8;&#x0283;&#x02B2;&#x0283;&#x02B2;i n&#x0251;/</code> (homme)</td></tr>
+						<tr><td>&#x0442;&#x0448;, &#x0434;&#x0448;, &#x0447;&#x0448;</td><td><code>/t&#x0283;&#x02D0;/</code></td><td>&#x043C;&#x043B;&#x0430;&#x0434;&#x0448;&#x0438;&#x0439; <code>/&#x02C8;m&#x026B;&#x0251; t&#x0283;&#x02D0;&#x0268;j/</code> (cadet)</td></tr>
+						<tr><td>&#x0434;&#x0436;, &#x0442;&#x0436;</td><td><code>/d&#x0292;&#x02D0;/</code></td><td>&#x043F;&#x043E;&#x0434;&#x0436;&#x0451;&#x0433; <code>/p&#x0251; &#x02C8;d&#x0292;&#x02D0;ok/</code> (il a mis le feu)</td></tr>
+						<tr><td>&#x0442;&#x0447;, &#x0434;&#x0447;</td><td><code>/t&#x02B2;&#x02D0;&#x0283;&#x02B2;&#x02D0;/</code></td><td>&#x0432;&#x043E;&#x0442;&#x0447;&#x0438;&#x043D;&#x0430; <code>/&#x02C8;vo t&#x02B2;&#x02D0;&#x0283;&#x02B2;&#x02D0;i n&#x028C;/</code> (domaine)</td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>Les groupes -&#x0442;&#x0441;-, -&#x0434;&#x0441;- et -&#x0442;&#x044C;&#x0441;-.</strong> Voici le seul cas, dans cette sous-section, o&ugrave; le contexte d&eacute;termine le r&eacute;sultat. <strong>Aux fronti&egrave;res de pr&eacute;fixe ou de mot,</strong> les consonnes restent s&eacute;par&eacute;es&#160;: <code>/t&ndash;s/</code>. &#x043E;&#x0442;&#x0441;&#x0442;&#x043E;&#x044F;&#x0442;&#x044C; <code>/&#x0251;t st&#x0251; &#x02C8;j&#x0251;t&#x02B2;/</code> (tenir bon). <strong>Dans les terminaisons de verbes r&eacute;fl&eacute;chis</strong> (-&#x0442;&#x0441;&#x044F;, -&#x0442;&#x044C;&#x0441;&#x044F;) <strong>et dans les groupes</strong> -&#x0442;&#x0446;-, -&#x0434;&#x0446;-, l&rsquo;occlusive s&rsquo;allonge l&eacute;g&egrave;rement avant la sibilante&#160;: <code>/t&#x02D0;s/</code>. &#x0431;&#x043E;&#x0438;&#x0442;&#x0441;&#x044F; <code>/b&#x0251; &#x02C8;i t&#x02D0;s&#x028C;/</code> (a peur), &#x043A;&#x0443;&#x043F;&#x0430;&#x0442;&#x044C;&#x0441;&#x044F; <code>/ku &#x02C8;p&#x0251; t&#x02D0;s&#x028C;/</code> (se baigner), &#x043E;&#x0442;&#x0446;&#x0430; <code>/&#x0251; &#x02C8;t&#x02D0;s&#x0251;/</code> (du p&egrave;re). <strong>L&rsquo;exception de &#x0446;&#x0432;&#x0435;&#x0442;&#160;:</strong> les d&eacute;riv&eacute;s de &#x0446;&#x0432;&#x0435;&#x0442; (couleur) palatalisent le groupe&#160;: &#x043E;&#x0442;&#x0446;&#x0432;&#x0435;&#x0442;&#x0430;&#x0442;&#x044C; <code>/&#x0251; t&#x02B2;&#x02D0;s&#x02B2;v&#x02B2;&#x026A; &#x02C8;t&#x0251;t&#x02B2;/</code> (se faner).</p>
+
+						<h4 id="learn-u7-unusual">Deux cas particuliers&#160;: &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; et &#x0447;&#x0442;&#x043E;</h4>
+
+						<p>Dans un petit nombre de mots, la consonne concern&eacute;e neutralise son &eacute;l&eacute;ment occlusif, ne laissant qu&rsquo;une articulation fricative qui repr&eacute;sente un phon&egrave;me apparent&eacute; mais distinct. Concr&egrave;tement, &#x27E8;&#x0447;&#x27E9; <code>/t&#x0283;&#x02B2;/</code> perd sa composante occlusive <code>[t]</code> et se r&eacute;duit &agrave; <code>/&#x0283;/</code>, caract&eacute;ristiquement non palatalis&eacute;. Grayson propose de nommer les deux contextes o&ugrave; &#x27E8;&#x0447;&#x27E9; se lit <code>/&#x0283;/</code> la r&egrave;gle de &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; et la r&egrave;gle de &#x0447;&#x0442;&#x043E;.</p>
+
+						<table>
+						<thead><tr><th>Groupe</th><th>Lecture</th><th>Exemples</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0447;&#x043D;</td><td><code>/&#x0283;n/</code></td><td>&#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x044B;&#x0439; <code>/&#x02C8;sku &#x0283;n&#x0268;j/</code>, &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;sku &#x0283;n&#x028C;/</code>, &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; <code>/k&#x0251; &#x02C8;&#x0272;&#x025B; &#x0283;n&#x028C;/</code></td></tr>
+						<tr><td>&#x0447;&#x0442;</td><td><code>/&#x0283;t/</code></td><td>&#x0447;&#x0442;&#x043E; <code>/&#x0283;to/</code>, &#x0447;&#x0442;&#x043E;&#x0431;&#x044B; <code>/&#x02C8;&#x0283;to b&#x0268;/</code>, &#x043D;&#x0438;&#x0447;&#x0442;&#x043E; <code>/&#x0272;&#x026A; &#x02C8;&#x0283;to/</code></td></tr>
+						</tbody>
+						</table>
+
+						<p>Notons les contre-exemples. &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x044B;&#x0439; conserve <code>/t&#x0283;&#x02B2;n/</code>&#160;: <code>/k&#x0251; &#x02C8;&#x0272;&#x025B;t&#x0283;&#x02B2; n&#x0268;j/</code>. &#x043D;&#x0435;&#x0447;&#x0442;&#x043E; conserve <code>/t&#x0283;&#x02B2;t/</code>&#160;: <code>/&#x02C8;&#x0272;&#x025B;t&#x0283;&#x02B2; t&#x028C;/</code>. Ces formes confirment que l&rsquo;exception est propre au mot, et non un sch&eacute;ma g&eacute;n&eacute;ralisable.</p>
+
+						<p>Un dernier ph&eacute;nom&egrave;ne nous attend. Lorsqu&rsquo;une m&ecirc;me consonne apparait deux fois, par la graphie ou au point de rencontre de deux mots, le chanteur la prononce-t-il une fois ou deux&#160;? C&rsquo;est la question de la section 7.8.</p>
+
+						<h4 id="learn-u7-geminates">Deux fois plut&ocirc;t qu&rsquo;une&#160;: les g&eacute;min&eacute;es</h4>
+
+						<p>De fa&ccedil;on nuanc&eacute;e. Le chanteur qui arrive de la diction italienne doit recalibrer ses attentes. Les g&eacute;min&eacute;es russes ne sont pas emphatiques&#8239;; elles sont discr&egrave;tes, d&rsquo;une dur&eacute;e &agrave; peine sup&eacute;rieure &agrave; celle d&rsquo;une consonne simple. Grayson formule le principe ainsi (p. 226)&#160;: &laquo;&#160;think of speaking the single consonant twice without any break in between&#160;&raquo;, sans pulsation sur la seconde it&eacute;ration.</p>
+
+						<p>La plupart des consonnes doubl&eacute;es &agrave; l&rsquo;&eacute;crit, au sein d&rsquo;un mot russe, se prononcent comme une consonne simple. Un exemple r&eacute;current est le mot &#x0440;&#x0443;&#x0441;&#x0441;&#x043A;&#x0438;&#x0439;, qui s&rsquo;&eacute;crit avec deux &#x27E8;&#x0441;&#x0441;&#x27E9; mais se prononce avec un seul <code>/s/</code>&#160;: <code>/&#x02C8;ru s&#x02B2;k&#x02B2;ij/</code>. Les doublements aux fronti&egrave;res de mots sont en revanche g&eacute;n&eacute;ralement prononc&eacute;s comme des consonnes doubl&eacute;es.</p>
+
+						<table>
+						<thead><tr><th>Comportement</th><th>Groupes</th><th>Exemples</th></tr></thead>
+						<tbody>
+						<tr><td>Toujours doubl&eacute;</td><td>&#x0433;&#x0433;, &#x0434;&#x0434;/&#x0442;&#x0434;, &#x0436;&#x0436;/&#x0437;&#x0436;, &#x0437;&#x0437;/&#x0441;&#x0437;</td><td>&#x043E;&#x0442;&#x0434;&#x0430;&#x0442;&#x044C;, &#x0436;&#x0443;&#x0436;&#x0436;&#x0430;&#x0442;&#x044C;</td></tr>
+						<tr><td>Le plus souvent doubl&eacute;</td><td>&#x0432;&#x0432;, &#x0431;&#x0431;</td><td>&#x0432;&#x0432;&#x043E;&#x0437; doubl&eacute;&#8239;; &#x0440;&#x0430;&#x0432;&#x0432;&#x0438;&#x043D; simple</td></tr>
+						<tr><td>Simple dans le mot, doubl&eacute; aux fronti&egrave;res</td><td>&#x0440;&#x0440;</td><td>&#x0442;&#x0435;&#x0440;&#x0440;&#x0430;&#x0441;&#x0430; simple&#8239;; &#x0430;&#x043A;&#x0442;&#x0451;&#x0440; &#x0440;&#x0430;&#x0434; doubl&eacute;</td></tr>
+						<tr><td>G&eacute;n&eacute;ralement simple</td><td>&#x043A;&#x043A;, &#x043B;&#x043B;, &#x043C;&#x043C;, &#x043F;&#x043F;, &#x0444;&#x0444;/&#x0432;&#x0444;</td><td>&#x0430;&#x043A;&#x043A;&#x043E;&#x0440;&#x0434; simple&#8239;; &#x043C;&#x043E;&#x043A;&#x043A;&#x043E; doubl&eacute;</td></tr>
+						<tr><td>Variable selon le contexte</td><td>&#x043D;&#x043D;, &#x0441;&#x0441;, &#x0442;&#x0442;/&#x0434;&#x0442;</td><td>&#x0432;&#x0430;&#x043D;&#x043D;&#x0430;, &#x043A;&#x0430;&#x0441;&#x0441;&#x0430;, &#x0433;&#x0435;&#x0442;&#x0442;&#x043E;</td></tr>
+						<tr><td>Tr&egrave;s rare, emprunts</td><td>&#x0446;&#x0446;, &#x0447;&#x0447;</td><td>&#x043F;&#x0430;&#x043B;&#x0430;&#x0446;&#x0446;&#x043E;, &#x043F;&#x0438;&#x0446;&#x0446;&#x0438;&#x043A;&#x0430;&#x0442;&#x043E;</td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>Les contrôles d&rsquo;Ilya.</strong> La notation par d&eacute;faut des g&eacute;min&eacute;es dans Ilya correspond &agrave; la pr&eacute;f&eacute;rence de Grayson pour les symboles API doubl&eacute;s. Le basculeur de g&eacute;min&eacute;es, dans la section Notation du Tiroir, permet d&rsquo;appliquer un changement global &agrave; la notation des g&eacute;min&eacute;es. La case &agrave; cocher dans les entr&eacute;es pertinentes du Tiroir permet de contr&ocirc;ler la notation localement, mot par mot. Ces contr&ocirc;les existent parce que la d&eacute;cision simple ou double rel&egrave;ve souvent de l&rsquo;interpr&eacute;tation, non de l&rsquo;absolu. L&agrave; encore, rien ne remplace l&rsquo;oreille d&rsquo;un r&eacute;p&eacute;titeur natif.</p>
+
+						<h4 id="learn-u7-tryit">&Agrave; vous de jouer dans Ilya</h4>
+
+						<p>Nous tenons &agrave; pr&eacute;sent le syst&egrave;me complet&#160;: l&rsquo;assimilation de voisement et les conditions qui la contraignent, l&rsquo;effacement, la fusion, les cas particuliers, et les g&eacute;min&eacute;es. Ce qui suit n&rsquo;est pas de la mati&egrave;re nouvelle. C&rsquo;est un exercice guid&eacute; qui permet de voir les principes des sections 7.1 &agrave; 7.8 &agrave; l&rsquo;&oelig;uvre dans Ilya.</p>
+
+						<p><strong>L&rsquo;assimilation de voisement.</strong> Transcrivez &#x0441;&#x0431;&#x043E;&#x0440; (collecte). Le &#x27E8;&#x0441;&#x27E9; s&rsquo;est vois&eacute; en <code>/z/</code> devant le &#x27E8;&#x0431;&#x27E9; vois&eacute;&#160;: la derni&egrave;re obstruante l&rsquo;emporte. Transcrivez maintenant &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430; (libert&eacute;). Le &#x27E8;&#x0441;&#x27E9; reste <code>/s/</code>, car le &#x27E8;&#x0432;&#x27E9; ne d&eacute;clenche pas l&rsquo;assimilation de voisement. Transcrivez &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; (doucement). Le &#x27E8;&#x0433;&#x27E9; ne s&rsquo;assourdit pas en son partenaire habituel <code>/k/</code>&#8239;; il emprunte la fricative v&eacute;laire <code>/x/</code>, produisant <code>/xk/</code>.</p>
+
+						<p><strong>Par-del&agrave; la fronti&egrave;re.</strong> Transcrivez &#x0432; &#x0441;&#x0430;&#x0434;&#x0443; (dans le jardin). Le proclitique &#x27E8;&#x0432;&#x27E9; s&rsquo;est assourdi en <code>/f/</code> devant le <code>/s/</code> sourd de son mot h&ocirc;te. Transcrivez maintenant &#x043A; &#x0414;&#x043C;&#x0438;&#x0442;&#x0440;&#x0438;&#x044E; (vers Dmitri). Le proclitique &#x27E8;&#x043A;&#x27E9; s&rsquo;est vois&eacute; en <code>/&#x0261;/</code> devant le <code>/d/</code> vois&eacute;.</p>
+
+						<p><strong>L&rsquo;effacement.</strong> Transcrivez &#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435; (c&oelig;ur), &#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435; (soleil) et &#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E; (tard). Dans chaque mot, comptez les consonnes dans la ligne cyrillique, puis comptez-les dans la ligne API. Une consonne que la graphie conserve a &eacute;t&eacute; silencieusement effac&eacute;e.</p>
+
+						<p><strong>La fusion.</strong> Transcrivez &#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; (bruler). Deux consonnes, &#x27E8;&#x0441;&#x0436;&#x27E9;, ont fusionn&eacute; en un <code>/&#x0292;&#x02D0;/</code> allong&eacute; unique. Transcrivez &#x043C;&#x0443;&#x0436;&#x0447;&#x0438;&#x043D;&#x0430; (homme). Le groupe &#x27E8;&#x0436;&#x0447;&#x27E9; se lit <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code>. Transcrivez &#x0431;&#x043E;&#x0438;&#x0442;&#x0441;&#x044F; (a peur). La terminaison r&eacute;fl&eacute;chie -&#x0442;&#x0441;&#x044F; se lit <code>/t&#x02D0;s&#x028C;/</code>.</p>
+
+						<p><strong>Les cas particuliers.</strong> Transcrivez &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; (bien s&ucirc;r) et &#x0447;&#x0442;&#x043E; (quoi). Dans les deux mots, &#x27E8;&#x0447;&#x27E9; a perdu sa composante occlusive et s&rsquo;est r&eacute;duit &agrave; <code>/&#x0283;/</code>.</p>
+
+						<p><strong>Les g&eacute;min&eacute;es.</strong> Transcrivez &#x0440;&#x0443;&#x0441;&#x0441;&#x043A;&#x0438;&#x0439; (russe). La graphie montre deux &#x27E8;&#x0441;&#x0441;&#x27E9;, mais la ligne API affiche un seul <code>/s/</code>. Ouvrez le Tiroir et rep&eacute;rez les contr&ocirc;les de g&eacute;min&eacute;es.</p>
+
+						<p>La couche d&rsquo;enseignement du module LEARN est compl&egrave;te. Chaque r&egrave;gle dont le chanteur a besoin pour lire un texte russe &agrave; l&rsquo;aide d&rsquo;Ilya a &eacute;t&eacute; pr&eacute;sent&eacute;e, de l&rsquo;alphabet jusqu&rsquo;&agrave; l&rsquo;assimilation. Pour le comportement complet de chaque lettre, la Couche de r&eacute;f&eacute;rence est alphab&eacute;tis&eacute;e, reli&eacute;e par hyperliens et encyclop&eacute;dique. Et pour ce qu&rsquo;aucune r&egrave;gle ni aucun outil ne saurait enti&egrave;rement saisir, il y a l&rsquo;oreille d&rsquo;un r&eacute;p&eacute;titeur natif.</p>
+
+						<p><em>Grayson source&#160;: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
 
 						<h2 id="learn-try">Essayez</h2>
 
@@ -4113,11 +4333,231 @@
 						consonant’s articulatory reality.</p>
 
 
-						<h3 id="learn-unit-7">Section 7 · Integration</h3>
+<h3 id="learn-unit-7">Section 7 &middot; Assimilation and Boundaries</h3>
 
-						<p>What happens when sounds meet each other: assimilation within words, across word boundaries, and through the clitics. Grayson, drawing on the work of Derwing and Priestly, lays out several governing principles for the regressive assimilation of voicing in sung Russian: punctuation stops assimilation; sonorants (<code>[l m n r]</code>) and vowels do not influence voicing across the word boundary; and the phonemes <code>/v/</code> and <code>/f/</code>, when spelled with a ⟨в⟩, exhibit phonemic weakness, exerting no assimilative power of their own while being influenced by adjacent phonemes.</p>
+						<h4 id="learn-u7-two">Two Kinds of Regressive Assimilation</h4>
 
-						<p>This unit addresses consonant clusters, silent letters, geminates, and the special cases that produce unfamiliar IPA symbols in Ilya's output. Doubled consonants in sung Russian are rare: "Doubled letters that represent consonants are more often read as a single consonant phoneme rather than as a double or elongated consonant," Grayson notes. By the end of this unit, every symbol Ilya produces will be one you have encountered and understood.</p>
+						<p>We have just learned that palatalization spreads backward through a consonant cluster on the page: in real time, the tongue arches in anticipation of a palatalizing agent that is present downstream. Now we meet a second process that moves in the same direction, and the resemblance is close enough to warrant a moment of orientation before we proceed.</p>
+
+						<p>Voicing assimilation, like palatalization, is regressive. It spreads from right to left through a consonant sequence, and for the same underlying reason: the vocal tract anticipates what comes next. But the two processes describe two very real, very different physical questions that live in the physical body, not just in the abstract.</p>
+
+						<p>Palatalization, as we have seen, poses a question that the tongue answers. Is the blade arched toward the hard palate, or is it not? You have practised this binary in Section 6: the <code>[&#x0272;]</code> in &#x43D;&#x0435;&#x0442;, where the tongue arches, versus the <code>[n]</code> in &#x43D;&#x043E;&#x0442;, where it does not. That arch, or its absence, is the physical event that captures and defines what palatalization is.</p>
+
+						<p>Voicing is a question that the larynx answers. Are the vocal folds vibrating, or are they not? Place your fingers against your throat and sustain <code>[z]</code>; you will feel the buzz of the folds in vibration. Now sustain <code>[s]</code> at the same pitch effort; the buzz disappears. The mouth and tongue are doing the same thing in both cases. What changes is whether the folds are open or closed. That is the voicing binary.</p>
+
+						<table>
+						<thead><tr><th></th><th>Voicing assimilation</th><th>Palatalization</th></tr></thead>
+						<tbody>
+						<tr><td>Physical locus</td><td>Larynx (vocal folds)</td><td>Tongue blade</td></tr>
+						<tr><td>The binary</td><td>Vibrating or not</td><td>Arched or not</td></tr>
+						<tr><td>Direction</td><td>Regressive (anticipatory)</td><td>Regressive (anticipatory)</td></tr>
+						<tr><td>Triggered by</td><td>Voicing state of the following obstruent</td><td>Palatalizing agent that follows</td></tr>
+						</tbody>
+						</table>
+
+						<p>To repeat, both processes are regressive because both are anticipatory. The articulatory system prepares for what it knows is coming, and that preparation reaches backward into what precedes it. This is efficient, not arbitrary, and it is not unique to Russian: you already perform anticipatory voicing adjustments in German, and anticipatory nasalization in spoken French, without thinking about it. The direction is shared because the principle is shared; but the mechanisms behind palatalization (tongue arch) and voicing (vocal fold binary) are not.</p>
+
+						<p>Accordingly, this independence allows for a consonant to be simultaneously devoiced (the folds stop vibrating) and palatalized (the tongue arches). The two binaries coexist on the same consonant without competing. When you encounter a cluster where the following consonant is both soft and voiceless, the preceding consonant may undergo both processes at once: its tongue arches and its voicing switches off. These are not alternative transformations; they are concurrent ones, layered onto the same sound.</p>
+
+						<p>With that distinction in hand, we turn to voicing assimilation on its own terms.</p>
+
+						<h4 id="learn-u7-voiced">What Happens When Voiced Meets Voiceless?</h4>
+
+						<p>Russian does not tolerate the qualitative tension between two adjacent consonants when one is voiced while the other is not. The consonant furthest to the right in the cluster transmits its voicing state (voiced or devoiced) to the consonant to its left, and this is communicated backward through the cluster until something stops it.</p>
+
+						<p>This principle scales. In a two-consonant cluster, the second determines the voicing of the first. In a cluster of three or four, the rightmost member still governs: its voicing propagates leftward through the entire chain, so that the cluster emerges with uniform voicing. Grayson&rsquo;s formulation is direct: &ldquo;the voicing of the entire cluster is that of the final member.&rdquo; Consider -&#x0442;&#x0433;-, where the voiced <code>/&#x0261;/</code> wins and the cluster reads as <code>/d&#x0261;/</code>; or -&#x0434;&#x043A;-, where the voiceless <code>/k/</code> wins and the cluster reads as <code>/tk/</code>. Now extend this to four consonants: -&#x043A;&#x0431;&#x0441;&#x0434;- reads as <code>/&#x0261;bzd/</code> (the final <code>/d/</code> is voiced, so everything voices), while -&#x043A;&#x0431;&#x0441;&#x0442;- reads as <code>/kpst/</code> (the final <code>/t/</code> is voiceless, so everything devoices).</p>
+
+						<p>But not all consonants participate in this process. Linguists identify the class of consonants that can switch between voiced and voiceless forms as <em>obstruents</em>. These are the consonants for which the voicing binary is active. Not all consonants are obstruents, as the table below shows us:</p>
+
+						<table>
+						<thead><tr><th>Voiceless</th><th>Voiced</th><th>Cyrillic letters</th></tr></thead>
+						<tbody>
+						<tr><td><code>/p/</code></td><td><code>/b/</code></td><td>&#x27E8;&#x043F;&#x27E9; &middot; &#x27E8;&#x0431;&#x27E9;</td></tr>
+						<tr><td><code>/f/</code></td><td><code>/v/</code></td><td>&#x27E8;&#x0444;&#x27E9; &middot; &#x27E8;&#x0432;&#x27E9;</td></tr>
+						<tr><td><code>/t/</code></td><td><code>/d/</code></td><td>&#x27E8;&#x0442;&#x27E9; &middot; &#x27E8;&#x0434;&#x27E9;</td></tr>
+						<tr><td><code>/s/</code></td><td><code>/z/</code></td><td>&#x27E8;&#x0441;&#x27E9; &middot; &#x27E8;&#x0437;&#x27E9;</td></tr>
+						<tr><td><code>/&#x0283;/</code></td><td><code>/&#x0292;/</code></td><td>&#x27E8;&#x0448;&#x27E9; &middot; &#x27E8;&#x0436;&#x27E9;</td></tr>
+						<tr><td><code>/k/</code></td><td><code>/&#x0261;/</code></td><td>&#x27E8;&#x043A;&#x27E9; &middot; &#x27E8;&#x0433;&#x27E9;</td></tr>
+						<tr><td><code>/ts/</code></td><td><code>[dz]</code></td><td>&#x27E8;&#x0446;&#x27E9; &middot; (no letter)</td></tr>
+						<tr><td><code>/t&#x0283;&#x02B2;/</code></td><td><code>[d&#x0292;&#x02B2;]</code></td><td>&#x27E8;&#x0447;&#x27E9; &middot; (no letter)</td></tr>
+						<tr><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td><code>[&#x0292;&#x02B2;&#x0292;&#x02B2;]</code></td><td>&#x27E8;&#x0449;&#x27E9; &middot; (no letter)</td></tr>
+						</tbody>
+						</table>
+
+						<p>The singer will recognise the first six pairs from Section 5&rsquo;s consonant inventory. The last three are worth pausing over. The voiced forms <code>[dz]</code>, <code>[d&#x0292;&#x02B2;]</code>, and <code>[&#x0292;&#x02B2;&#x0292;&#x02B2;]</code> have no default, dedicated Cyrillic letter of their own; they appear only as products of voicing assimilation, typically at word boundaries but common enough elsewhere to merit a keen eye. We previewed this in Section 5&rsquo;s discussion of affricates: these are the voiced allophonic counterparts that emerge only through process, never through spelling. They are rare within words, but the singer should know they exist, because Ilya will produce them when the conditions requiring their appearance are met.</p>
+
+						<p>Contrastively, a class of consonants called <em>sonorants</em> do not participate. The consonants in the mnemonic &ldquo;lemoner&rdquo; (<code>[l]</code>, <code>[m]</code>, <code>[n]</code>, and <code>[r]</code>, along with their palatalized forms) neither trigger voicing assimilation nor undergo it. Sonorants are effectively impervious to regressive voicing: they neither undergo it nor transmit it. The backward voicing chain stops at the sonorant. Sonorants are never devoiced in Russian lyric diction, although our linguistics colleagues can attest that they can be in spoken Russian, e.g. <code>[l&#x0325; m&#x0325; n&#x0325; r&#x0325; l&#x0325;&#x02B2; m&#x0325;&#x02B2; &#x0272;&#x0325; r&#x0325;&#x02B2;]</code>, but you will never see these speech-based voicing suprasegmentals in Ilya&rsquo;s output.</p>
+
+						<div class="learn-callout">
+						<p><strong>The &#x27E8;&#x0432;&#x27E9; exception</strong></p>
+						<p>When spelled as &#x27E8;&#x0432;&#x27E9;, the phoneme <code>/v/</code> is phonemically weak in Russian. It does not trigger voicing assimilation. The letter &#x27E8;&#x0432;&#x27E9; is influenced by adjacent consonants (it undergoes assimilation, devoicing to <code>/f/</code> before a voiceless consonant), but it exerts no assimilative power of its own. In cases where the sound <code>/v/</code> is produced as the voiced alternative to &#x27E8;&#x0444;&#x27E9;, this prohibition obviously does not apply.</p>
+						<p>This is not intuitive for newcomers to Russian lyric diction. The singer knows that <code>/v/</code> is voiced, and expects it to voice what precedes it, just as <code>/b/</code> or <code>/d/</code> would. It does not. The contrast is vivid: in &#x0441;&#x0431;&#x043E;&#x0440;, the &#x27E8;&#x0431;&#x27E9; voices the preceding &#x27E8;&#x0441;&#x27E9;, producing <code>/zbor/</code>. In &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430;, the &#x27E8;&#x0432;&#x27E9; does not voice the preceding &#x27E8;&#x0441;&#x27E9;, and the word begins <code>/sv/</code>, not <code>/zv/</code>. The mechanism is identical in both cases (a voiced consonant follows &#x27E8;&#x0441;&#x27E9;), but the outcome differs because &#x27E8;&#x0432;&#x27E9; is phonemically weak: it submits to its neighbours but does not impose on them.</p>
+						<p>This exception applies commonly and consistently. Any time the singer encounters the letter &#x27E8;&#x0432;&#x27E9; before another consonant, the preceding consonant&rsquo;s voicing is unaffected by the &#x27E8;&#x0432;&#x27E9;. It is one of the most practical rules in this section, and one of the easiest to underestimate.</p>
+						</div>
+
+						<p>One further exception deserves mention here, concerning a nuanced relationship between the three velars (<code>/k &#x0261; x/</code>) in sung Russian. The letter &#x27E8;&#x0433;&#x27E9;, when followed by &#x27E8;&#x043A;&#x27E9; or &#x27E8;&#x0447;&#x27E9; inside a word, does not follow its standard voiceless pair. Instead of devoicing to <code>/k/</code> (its usual partner), it exceptionally routes through the velar fricative <code>/x/</code>:</p>
+
+						<p>&#x27E8;&#x0433;&#x043A;&#x27E9; &rarr; <code>/xk/</code>: &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; <code>/&#x02C8;m&#x02B2;&#x0251;xk&#x028C;/</code>, &#x043B;&#x0435;&#x0433;&#x043A;&#x043E; <code>/l&#x02B2;&#x026A;x&#x02C8;ko/</code><br/>
+						&#x27E8;&#x0433;&#x0447;&#x27E9; &rarr; <code>/xt&#x0283;&#x02B2;/</code>: &#x043B;&#x0435;&#x0433;&#x0447;&#x0435; <code>/&#x02C8;l&#x02B2;&#x025B;xt&#x0283;&#x02B2;&#x026A;/</code>, &#x043C;&#x044F;&#x0433;&#x0447;&#x0435; <code>/&#x02C8;m&#x02B2;&#x0251;xt&#x0283;&#x02B2;&#x026A;/</code></p>
+
+						<p>Grayson names these the &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; rule and the &#x043B;&#x0435;&#x0433;&#x0447;&#x0435; rule. They are rules-of-one, specific to these root words and their derivatives, and they apply only within the word, not across word boundaries.</p>
+
+						<p>A note on final devoicing. We met final devoicing (akin to German) in Section 5 as a property of the consonant inventory: voiced consonants lose their voicing at the end of a word. But under a common condition, they can re-voice. How final devoicing interacts with word boundaries and clitics is the subject of Section 7.4.</p>
+
+						<h4 id="learn-u7-stops">What Stops the Spread of Voicing?</h4>
+
+						<p>We know the mechanism now: the rightmost obstruent in a cluster transmits its voicing state right-to-left until the entire cluster shares uniform voicing. But what is a mechanism without limits? We now learn what constrains it. Four conditions limit the spread of voicing in Russian lyric diction, and together they define the boundaries of this system.</p>
+
+						<p><strong>Only obstruents trigger voicing assimilation.</strong> Voicing assimilation is an obstruent-to-obstruent process. Three categories of sounds, despite being voiced themselves, do not trigger it. Vowels are voiced: the vocal folds vibrate throughout their production. But a vowel is not an obstruent. A vowel following a voiceless consonant does not voice that consonant. Sonorants likewise do not trigger the process. We met this in Section 7.2 with the mnemonic &ldquo;lemoner&rdquo; (<code>[l]</code>, <code>[m]</code>, <code>[n]</code>, and <code>[r]</code>, along with their palatalized forms): these consonants neither undergo voicing assimilation nor transmit it. The j-glide <code>/j/</code> behaves the same way. The principle is simple: if the sound to the right is not an obstruent, the voicing chain never starts.</p>
+
+						<p><strong>Sonorants block transmission.</strong> A sonorant is not merely a sound that the chain passes through without effect; it is a wall at which the chain stops entirely. If the singer encounters a cluster in the shape obstruent + sonorant + obstruent, the rightmost obstruent&rsquo;s voicing does not reach through the sonorant to affect the leftmost. The chain terminates at the sonorant boundary.</p>
+
+						<p><strong>The &#x27E8;&#x0432;&#x27E9; exception.</strong> We treated this at length in Section 7.2&rsquo;s callout box and list it here to complete the picture. The letter &#x27E8;&#x0432;&#x27E9; undergoes assimilation (it devoices to <code>/f/</code> before a voiceless consonant) but does not trigger it. The singer has already internalised the contrast: &#x27E8;&#x0431;&#x27E9; in &#x0441;&#x0431;&#x043E;&#x0440; voices the preceding &#x27E8;&#x0441;&#x27E9;, producing <code>/zbor/</code>, while &#x27E8;&#x0432;&#x27E9; in &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430; does not, and the word begins <code>/sv/</code>.</p>
+
+						<p><strong>Punctuation is the absolute boundary.</strong> No assimilation of any kind crosses punctuation. This is the strongest boundary statement in the system, and it applies not only to voicing assimilation but to all assimilatory processes, palatalization included (connecting back to Section 6&rsquo;s sixth boundary). Punctuation marks a moment where the vocal tract resets. In singing, this reset serves poetic meaning: a comma, a period, a semicolon, a question mark, each signals a boundary that the phonological system honours absolutely.</p>
+
+						<table>
+						<thead><tr><th>Condition</th><th>What it means</th><th>Where introduced</th></tr></thead>
+						<tbody>
+						<tr><td>Only obstruents trigger</td><td>Vowels, sonorants, and <code>/j/</code> do not start the chain</td><td>7.2 (implicit); 7.3 (explicit)</td></tr>
+						<tr><td>Sonorants block transmission</td><td>The chain stops at &ldquo;lemoner&rdquo;: <code>[l]</code>, <code>[m]</code>, <code>[n]</code>, <code>[r]</code> and their palatalized forms</td><td>7.2</td></tr>
+						<tr><td>&#x27E8;&#x0432;&#x27E9; does not trigger</td><td>&#x27E8;&#x0432;&#x27E9; undergoes assimilation but does not impose it</td><td>7.2</td></tr>
+						<tr><td>Punctuation is absolute</td><td>No assimilation of any kind crosses punctuation</td><td>7.3</td></tr>
+						</tbody>
+						</table>
+
+						<p>We now hold voicing assimilation as a bounded system: what it does (the rightmost obstruent wins), who participates (obstruents only), and what stops it (sonorants, &#x27E8;&#x0432;&#x27E9;, non-obstruent sounds, punctuation). One question remains open. If singing is connected phonation, a continuous stream of voiced sound, why would voicing assimilation stop at a word boundary where there is no punctuation and no breath? That question is the subject of Section 7.4.</p>
+
+						<h4 id="learn-u7-boundary">Do the Same Voicing Rules Apply between Words?</h4>
+
+						<p>They do. When adjacent words sit in close syntactic connection without intervening punctuation, pause, or breath, voicing assimilation applies across the word boundary, exactly as it does within the word. The word boundary does not stop it. The rightmost obstruent still wins. The same four conditions from Section 7.3 still constrain it.</p>
+
+						<p>Grayson identifies four rules for assimilation of voicing across word boundaries (pp. 250&ndash;251). The one new provision is in Rule 2: sonorants and vowels beginning the next word allow a preceding preposition&rsquo;s final voiced consonant to keep its voicing.</p>
+
+						<p><strong>Clitics: where the boundary dissolves entirely.</strong> A clitic is a small word that cannot stand on its own phonologically, so it joins with a host word. <em>Proclitics</em> work like prefixes and are typically prepositions: &#x27E8;&#x0432;&#x27E9;, &#x27E8;&#x043A;&#x27E9;, &#x27E8;&#x0441;&#x27E9;, &#x27E8;&#x0438;&#x0437;&#x27E9;. <em>Enclitics</em> are particles that connect to the end of their host word: &#x27E8;&#x0431;&#x044B;&#x27E9;, &#x27E8;&#x043B;&#x0438;&#x27E9;, &#x27E8;&#x0436;&#x0435;&#x27E9;. Whether proclitic or enclitic, the clitic and its host word form a single phonological unit: one domain for stress, reduction, and voicing. The word boundary between &#x0432; and &#x0441;&#x0430;&#x0434;&#x0443; is, phonologically, not a boundary at all, just an artifact of spelling.</p>
+
+						<table>
+						<thead><tr><th>Type</th><th>Cyrillic</th><th>IPA</th><th>Gloss</th></tr></thead>
+						<tbody>
+						<tr><td>Proclitic</td><td>&#x0432; &#x0441;&#x0430;&#x0434;&#x0443;</td><td><code>/fs&#x028C;&#x02C8;du/</code></td><td>in the garden</td></tr>
+						<tr><td>Proclitic</td><td>&#x043A; &#x0414;&#x043C;&#x0438;&#x0442;&#x0440;&#x0438;&#x044E;</td><td><code>/&#x0261; &#x02C8;d&#x02B2;m&#x02B2;it&#x02B2;r&#x02B2;iju/</code></td><td>to Dmitri</td></tr>
+						<tr><td>Enclitic</td><td>&#x043A;&#x043E;&#x0442; &#x0431;&#x044B;</td><td><code>/kod b&#x0268;/</code></td><td>a tomcat could</td></tr>
+						<tr><td>Enclitic</td><td>&#x0435;&#x0441;&#x043B;&#x0438; &#x0431; &#x043C;&#x043E;&#x0433;</td><td><code>/&#x02C8;jesl&#x02B2;i b mok/</code></td><td>if one could</td></tr>
+						</tbody>
+						</table>
+
+						<p>This is where the singer sees cross-boundary assimilation made visible in Ilya. The arrow notation (&rarr;) joins a clitic to its host, and Ilya processes the resulting unit as a single phonological domain.</p>
+
+						<p><strong>Three sounds that exist only through this process.</strong> Three voiced consonants appear only as products of cross-boundary voicing assimilation: <code>[dz]</code>, <code>[d&#x0292;&#x02B2;]</code>, and <code>[&#x0263;]</code>. These sounds have no default spelling of their own; they emerge when a voiceless obstruent voices across a boundary before a voiced obstruent in the next word. They are uncommon but not rare, and the singer should know they exist because Ilya will produce them when the conditions requiring their appearance are met.</p>
+
+						<p><strong>When boundaries do interrupt.</strong> Continuity is the default, but the singer and/or the composer chooses when to break it. Punctuation, as established in Section 7.3, is the absolute boundary: no assimilation of any kind crosses it. A breath interrupts the continuous phonation that enables cross-boundary assimilation. A pause, even without a breath, resets the vocal tract. These interruptions serve poetic meaning; they are not failures of continuity.</p>
+
+						<p><strong>How Ilya handles this.</strong> Ilya handles clitics explicitly: proclitics and enclitics are joined to their host words and processed as single phonological units. Arrows in the IPA line show you where the clitic attached. But Ilya cannot model every dimension of connected phonation. It operationalises one understanding of how word boundaries function in sung Russian, derived from Grayson&rsquo;s rules. The singer&rsquo;s ear, their coach, and their interpretive instincts remain essential where Ilya&rsquo;s model ends. This is the nature of any rule-based transcription system: it is a careful map, but it is not the territory.</p>
+
+						<h4 id="learn-u7-deletion">Where Did the L Go? Consonant Deletion</h4>
+
+						<p><em>Deletion</em> (also <em>syncope</em> or <em>elision</em>) in a consonant cluster happens when a pronunciation is simplified by the omission of one or more expected phonemes. The spelling preserves a vestigial letter, but the spoken and sung language does not. The singer already knows this phenomenon from English. &ldquo;Listen&rdquo; has no audible <code>/t/</code>. &ldquo;Castle&rdquo; has no audible <code>/t/</code>. Russian has its own set of clusters where deletion occurs, and they are finite, specific, and learnable. Ilya handles them all automatically.</p>
+
+						<table>
+						<thead><tr><th>Cluster</th><th>Reading</th><th>Deleted</th><th>Example</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0442;&#x043D;</td><td><code>/sn/</code> or <code>/s&#x02B2;&#x0272;/</code></td><td><code>/t/</code></td><td>&#x0441;&#x0442;&#x0440;&#x0430;&#x0441;&#x0442;&#x043D;&#x044B;&#x0439; <code>/&#x02C8;str&#x0251; sn&#x0268;j/</code></td></tr>
+						<tr><td>&#x0437;&#x0434;&#x043D;</td><td><code>/zn/</code> or <code>/z&#x02B2;&#x0272;/</code></td><td><code>/d/</code></td><td>&#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E; <code>/&#x02C8;po zn&#x028C;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x043B;</td><td><code>/s&#x02B2;l&#x02B2;/</code></td><td><code>/t/</code></td><td>&#x0441;&#x0447;&#x0430;&#x0441;&#x0442;&#x043B;&#x0438;&#x0432;&#x043E; <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;&#x0251; &#x02C8;s&#x02B2;l&#x02B2;i v&#x028C;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x0446;, &#x0437;&#x0434;&#x0446;</td><td><code>/sts/</code></td><td><code>/t/</code> or <code>/d/</code></td><td>&#x0438;&#x0441;&#x0442;&#x0446;&#x0430; <code>/is &#x02C8;ts&#x0251;/</code></td></tr>
+						<tr><td>&#x043D;&#x0434;&#x0446; [&#x043D;&#x0442;&#x0446;]</td><td><code>/nts/</code></td><td><code>/d/</code></td><td>&#x0433;&#x043E;&#x043B;&#x043B;&#x0430;&#x043D;&#x0434;&#x0446;&#x044B; <code>/&#x0261;&#x0251; &#x02C8;&#x026B;&#x0251;n ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0440;&#x0434;&#x0446;</td><td><code>/rts/</code></td><td><code>/d/</code></td><td>&#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435; <code>/&#x02C8;s&#x02B2;&#x025B;r ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0441;&#x0442;&#x0441;&#x043A;</td><td><code>/s&#x02B2;&#x02D0;k&#x02B2;/</code></td><td><code>/t/</code></td><td>&#x043C;&#x0430;&#x0440;&#x043A;&#x0441;&#x0438;&#x0441;&#x0442;&#x0441;&#x043A;&#x0438;&#x0439; <code>/m&#x028C;rk &#x02C8;s&#x02B2;i s&#x02B2;&#x02D0;k&#x02B2;ij/</code></td></tr>
+						<tr><td>&#x043D;&#x0434;&#x0441;&#x043A;, &#x043D;&#x0442;&#x0441;&#x043A;</td><td><code>/&#x0272;s&#x02B2;k&#x02B2;/</code></td><td><code>/d/</code> or <code>/t/</code></td><td>&#x0433;&#x043E;&#x043B;&#x043B;&#x0430;&#x043D;&#x0434;&#x0441;&#x043A;&#x0438;&#x0439; <code>/&#x0261;&#x0251; &#x02C8;&#x026B;&#x0251;&#x0272; s&#x02B2;k&#x02B2;ij/</code></td></tr>
+						<tr><td>&#x043B;&#x043D;&#x0446;</td><td><code>/nts/</code></td><td><code>/l/</code></td><td>&#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435; <code>/&#x02C8;son ts&#x0268;/</code></td></tr>
+						<tr><td>&#x0432;&#x0441;&#x0442;&#x0432;</td><td><code>/stv/</code> or <code>/s&#x02B2;t&#x02B2;v&#x02B2;/</code></td><td>first <code>/v/</code></td><td>&#x0447;&#x0443;&#x0432;&#x0441;&#x0442;&#x0432;&#x043E; <code>/&#x02C8;t&#x0283;&#x02B2;u stv&#x028C;/</code></td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>&#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435;</strong> (heart): the &#x27E8;&#x0434;&#x27E9; is silent. <code>/&#x02C8;s&#x02B2;&#x025B;r ts&#x0268;/</code>. Among the most common words in Russian vocal literature.</p>
+						<p><strong>&#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E;</strong> (late, too late): the &#x27E8;&#x0434;&#x27E9; is silent. <code>/&#x02C8;po zn&#x028C;/</code>. Frequent in art song and opera.</p>
+						<p><strong>&#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435;</strong> (sun): the &#x27E8;&#x043B;&#x27E9; is silent. <code>/&#x02C8;son ts&#x0268;/</code>. The inspiration for this subsection&rsquo;s title.</p>
+						<p><strong>&#x0437;&#x0434;&#x0440;&#x0430;&#x0432;&#x0441;&#x0442;&#x0432;&#x0443;&#x0439;&#x0442;&#x0435;</strong> (hello): the first &#x27E8;&#x0432;&#x27E9; is silent. <code>/&#x02C8;zdr&#x0251; stvuj t&#x02B2;&#x026A;/</code>. Every singer of Russian knows this greeting.</p>
+
+						<h4 id="learn-u7-mergers">Mergers and Acquisitions</h4>
+
+						<p>Transcribe &#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; (to burn) in Ilya. The spelling shows &#x27E8;&#x0441;&#x0436;&#x27E9;, two consonants, one voiceless and one voiced. The IPA line shows <code>/&#x0292;&#x02D0;/</code>, a single voiced fricative, lengthened. Neither the <code>/s/</code> nor the <code>/&#x0292;/</code> survived individually; something new took their place. This is consonant merger: two letters enter a cluster, and the cluster acquires a new sound that overwrites whatever sound either original consonant should make alone.</p>
+
+						<table>
+						<thead><tr><th>Cluster</th><th>Reading</th><th>Example</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0448;, &#x0437;&#x0448;</td><td><code>/&#x0283;&#x02D0;/</code></td><td>&#x0431;&#x0435;&#x0441;&#x0448;&#x0443;&#x043C;&#x043D;&#x043E; <code>/b&#x02B2;&#x026A; &#x02C8;&#x0283;&#x02D0;um n&#x028C;/</code> (silently)</td></tr>
+						<tr><td>&#x0437;&#x0436;, &#x0441;&#x0436;</td><td><code>/&#x0292;&#x02D0;/</code></td><td>&#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; <code>/&#x0292;&#x02D0;&#x0268; &#x02C8;&#x0261;&#x0251;t&#x02B2;/</code> (to burn)</td></tr>
+						</tbody>
+						</table>
+
+						<table>
+						<thead><tr><th>Cluster</th><th>Reading</th><th>Example</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0441;&#x0447;, &#x0437;&#x0447;, &#x0436;&#x0447;, &#x0441;&#x0442;&#x0447;, &#x0437;&#x0434;&#x0447;, &#x0441;&#x0441;&#x0447;</td><td><code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code></td><td>&#x043C;&#x0443;&#x0436;&#x0447;&#x0438;&#x043D;&#x0430; <code>/mu &#x02C8;&#x0283;&#x02B2;&#x0283;&#x02B2;i n&#x0251;/</code> (man)</td></tr>
+						<tr><td>&#x0442;&#x0448;, &#x0434;&#x0448;, &#x0447;&#x0448;</td><td><code>/t&#x0283;&#x02D0;/</code></td><td>&#x043C;&#x043B;&#x0430;&#x0434;&#x0448;&#x0438;&#x0439; <code>/&#x02C8;m&#x026B;&#x0251; t&#x0283;&#x02D0;&#x0268;j/</code> (younger)</td></tr>
+						<tr><td>&#x0434;&#x0436;, &#x0442;&#x0436;</td><td><code>/d&#x0292;&#x02D0;/</code></td><td>&#x043F;&#x043E;&#x0434;&#x0436;&#x0451;&#x0433; <code>/p&#x0251; &#x02C8;d&#x0292;&#x02D0;ok/</code> (he set fire to)</td></tr>
+						<tr><td>&#x0442;&#x0447;, &#x0434;&#x0447;</td><td><code>/t&#x02B2;&#x02D0;&#x0283;&#x02B2;&#x02D0;/</code></td><td>&#x0432;&#x043E;&#x0442;&#x0447;&#x0438;&#x043D;&#x0430; <code>/&#x02C8;vo t&#x02B2;&#x02D0;&#x0283;&#x02B2;&#x02D0;i n&#x028C;/</code> (estate)</td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>The -&#x0442;&#x0441;-, -&#x0434;&#x0441;-, and -&#x0442;&#x044C;&#x0441;- clusters.</strong> These are the one case in this subsection where context determines the outcome. <strong>At a prefix or word boundary,</strong> the consonants remain separate: <code>/t&ndash;s/</code>. &#x043E;&#x0442;&#x0441;&#x0442;&#x043E;&#x044F;&#x0442;&#x044C; <code>/&#x0251;t st&#x0251; &#x02C8;j&#x0251;t&#x02B2;/</code> (to stand one&rsquo;s ground). <strong>In reflexive verb endings</strong> (-&#x0442;&#x0441;&#x044F;, -&#x0442;&#x044C;&#x0441;&#x044F;) <strong>and in the clusters</strong> -&#x0442;&#x0446;-, -&#x0434;&#x0446;-, the stop lengthens slightly before the sibilant: <code>/t&#x02D0;s/</code>. &#x0431;&#x043E;&#x0438;&#x0442;&#x0441;&#x044F; <code>/b&#x0251; &#x02C8;i t&#x02D0;s&#x028C;/</code> (is afraid), &#x043A;&#x0443;&#x043F;&#x0430;&#x0442;&#x044C;&#x0441;&#x044F; <code>/ku &#x02C8;p&#x0251; t&#x02D0;s&#x028C;/</code> (to swim), &#x043E;&#x0442;&#x0446;&#x0430; <code>/&#x0251; &#x02C8;t&#x02D0;s&#x0251;/</code> (of a father). <strong>The &#x0446;&#x0432;&#x0435;&#x0442; exception:</strong> derivatives of &#x0446;&#x0432;&#x0435;&#x0442; (colour) palatalize the cluster: &#x043E;&#x0442;&#x0446;&#x0432;&#x0435;&#x0442;&#x0430;&#x0442;&#x044C; <code>/&#x0251; t&#x02B2;&#x02D0;s&#x02B2;v&#x02B2;&#x026A; &#x02C8;t&#x0251;t&#x02B2;/</code> (to fade, to finish blooming).</p>
+
+						<h4 id="learn-u7-unusual">Two Rules-of-One: &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; and &#x0447;&#x0442;&#x043E;</h4>
+
+						<p>In a handful of specific words, the affected consonant neutralizes a plosive element, leaving only a fricative articulation behind that represents a somewhat related but different phoneme. Specifically, &#x27E8;&#x0447;&#x27E9; <code>/t&#x0283;&#x02B2;/</code> loses its stop component <code>[t]</code> and reduces to <code>/&#x0283;/</code>, which is characteristically unpalatalized. For the sake of memory, Grayson suggests these rules-of-one where &#x27E8;&#x0447;&#x27E9; is <code>/&#x0283;/</code> be called the &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; rule and the &#x0447;&#x0442;&#x043E; rule.</p>
+
+						<table>
+						<thead><tr><th>Cluster</th><th>Reading</th><th>Examples</th></tr></thead>
+						<tbody>
+						<tr><td>&#x0447;&#x043D;</td><td><code>/&#x0283;n/</code></td><td>&#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x044B;&#x0439; <code>/&#x02C8;sku &#x0283;n&#x0268;j/</code>, &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;sku &#x0283;n&#x028C;/</code>, &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; <code>/k&#x0251; &#x02C8;&#x0272;&#x025B; &#x0283;n&#x028C;/</code></td></tr>
+						<tr><td>&#x0447;&#x0442;</td><td><code>/&#x0283;t/</code></td><td>&#x0447;&#x0442;&#x043E; <code>/&#x0283;to/</code>, &#x0447;&#x0442;&#x043E;&#x0431;&#x044B; <code>/&#x02C8;&#x0283;to b&#x0268;/</code>, &#x043D;&#x0438;&#x0447;&#x0442;&#x043E; <code>/&#x0272;&#x026A; &#x02C8;&#x0283;to/</code></td></tr>
+						</tbody>
+						</table>
+
+						<p>&#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x044B;&#x0439; retains <code>/t&#x0283;&#x02B2;n/</code>: <code>/k&#x0251; &#x02C8;&#x0272;&#x025B;t&#x0283;&#x02B2; n&#x0268;j/</code>. &#x043D;&#x0435;&#x0447;&#x0442;&#x043E; retains <code>/t&#x0283;&#x02B2;t/</code>: <code>/&#x02C8;&#x0272;&#x025B;t&#x0283;&#x02B2; t&#x028C;/</code>. These confirm that the exception is word-specific, not a generalizable pattern.</p>
+
+						<p>One final phenomenon awaits. When the same consonant appears twice, whether by spelling or at the meeting point of two words, does the singer pronounce it once or twice? That is the question of Section 7.8.</p>
+
+						<h4 id="learn-u7-geminates">Twice the Fun: Geminates</h4>
+
+						<p>Subtly. The singer arriving from Italian diction must recalibrate. Russian geminates are not emphatic; they are understated with a duration only slightly longer than a single consonant. Grayson&rsquo;s formulation (p. 226): &ldquo;think of speaking the single consonant twice without any break in between&rdquo; is fair, without a pulsation on the second iteration.</p>
+
+						<p>Most doubled spellings within Russian words are pronounced as single consonants. A recurring example is the word &#x0440;&#x0443;&#x0441;&#x0441;&#x043A;&#x0438;&#x0439;, spelled with two &#x27E8;&#x0441;&#x0441;&#x27E9; yet pronounced as a single <code>/s/</code>: <code>/&#x02C8;ru s&#x02B2;k&#x02B2;ij/</code>. Cross-boundary doubles are usually pronounced as doubled consonants, preserving the phoneme from both adjacent words.</p>
+
+						<table>
+						<thead><tr><th>Behaviour</th><th>Clusters</th><th>Examples</th></tr></thead>
+						<tbody>
+						<tr><td>Always doubled</td><td>&#x0433;&#x0433;, &#x0434;&#x0434;/&#x0442;&#x0434;, &#x0436;&#x0436;/&#x0437;&#x0436;, &#x0437;&#x0437;/&#x0441;&#x0437;</td><td>&#x043E;&#x0442;&#x0434;&#x0430;&#x0442;&#x044C;, &#x0436;&#x0443;&#x0436;&#x0436;&#x0430;&#x0442;&#x044C;</td></tr>
+						<tr><td>Mostly doubled, some exceptions</td><td>&#x0432;&#x0432;, &#x0431;&#x0431;</td><td>&#x0432;&#x0432;&#x043E;&#x0437; doubles; &#x0440;&#x0430;&#x0432;&#x0432;&#x0438;&#x043D; single</td></tr>
+						<tr><td>Always single within a word, doubled only across boundaries</td><td>&#x0440;&#x0440;</td><td>&#x0442;&#x0435;&#x0440;&#x0440;&#x0430;&#x0441;&#x0430; single; &#x0430;&#x043A;&#x0442;&#x0451;&#x0440; &#x0440;&#x0430;&#x0434; doubles</td></tr>
+						<tr><td>Usually single, with exceptions</td><td>&#x043A;&#x043A;, &#x043B;&#x043B;, &#x043C;&#x043C;, &#x043F;&#x043F;, &#x0444;&#x0444;/&#x0432;&#x0444;</td><td>&#x0430;&#x043A;&#x043A;&#x043E;&#x0440;&#x0434; single; &#x043C;&#x043E;&#x043A;&#x043A;&#x043E; doubles</td></tr>
+						<tr><td>Varied, context-dependent</td><td>&#x043D;&#x043D;, &#x0441;&#x0441;, &#x0442;&#x0442;/&#x0434;&#x0442;</td><td>&#x0432;&#x0430;&#x043D;&#x043D;&#x0430;, &#x043A;&#x0430;&#x0441;&#x0441;&#x0430;, &#x0433;&#x0435;&#x0442;&#x0442;&#x043E;</td></tr>
+						<tr><td>Extremely rare, borrowed</td><td>&#x0446;&#x0446;, &#x0447;&#x0447;</td><td>&#x043F;&#x0430;&#x043B;&#x0430;&#x0446;&#x0446;&#x043E;, &#x043F;&#x0438;&#x0446;&#x0446;&#x0438;&#x043A;&#x0430;&#x0442;&#x043E;</td></tr>
+						</tbody>
+						</table>
+
+						<p><strong>Ilya&rsquo;s controls.</strong> Ilya&rsquo;s default notation of geminates aligns with Grayson&rsquo;s preference for doubled IPA symbols. Use the geminate toggle in the Notation section of the Drawer to apply global changes to geminate notation, or choose the checkbox on relevant Drawer entries where you can control geminate notation locally per word. These controls exist because the single-vs-double decision is often interpretive, not absolute. Again, nothing replaces a native coach&rsquo;s ear.</p>
+
+						<h4 id="learn-u7-tryit">Try This in Ilya</h4>
+
+						<p>We now hold the complete system: voicing assimilation and the conditions that constrain it, deletion, merger, the rules-of-one, and geminates. What follows is not new material. It is a guided exercise in seeing the principles from Sections 7.1 through 7.8 at work inside Ilya.</p>
+
+						<p><strong>Voicing assimilation.</strong> Transcribe &#x0441;&#x0431;&#x043E;&#x0440; (collection). The &#x27E8;&#x0441;&#x27E9; has voiced to <code>/z/</code> before the voiced &#x27E8;&#x0431;&#x27E9;: the rightmost obstruent wins. Now transcribe &#x0441;&#x0432;&#x043E;&#x0431;&#x043E;&#x0434;&#x0430; (freedom). The &#x27E8;&#x0441;&#x27E9; stays <code>/s/</code>, because &#x27E8;&#x0432;&#x27E9; does not trigger voicing assimilation. Transcribe &#x043C;&#x044F;&#x0433;&#x043A;&#x043E; (softly). The &#x27E8;&#x0433;&#x27E9; does not devoice to its usual partner <code>/k/</code>; it routes through the velar fricative <code>/x/</code>, producing <code>/xk/</code>.</p>
+
+						<p><strong>Across the boundary.</strong> Transcribe &#x0432; &#x0441;&#x0430;&#x0434;&#x0443; (in the garden). The proclitic &#x27E8;&#x0432;&#x27E9; has devoiced to <code>/f/</code> before the voiceless <code>/s/</code> of its host word. Now transcribe &#x043A; &#x0414;&#x043C;&#x0438;&#x0442;&#x0440;&#x0438;&#x044E; (to Dmitri). The proclitic &#x27E8;&#x043A;&#x27E9; has voiced to <code>/&#x0261;/</code> before the voiced <code>/d/</code>.</p>
+
+						<p><strong>Deletion.</strong> Transcribe &#x0441;&#x0435;&#x0440;&#x0434;&#x0446;&#x0435; (heart), &#x0441;&#x043E;&#x043B;&#x043D;&#x0446;&#x0435; (sun), and &#x043F;&#x043E;&#x0437;&#x0434;&#x043D;&#x043E; (late). In each word, count the consonants in the Cyrillic line, then count them in the IPA line. A consonant that the spelling preserves has been silently dropped.</p>
+
+						<p><strong>Merger.</strong> Transcribe &#x0441;&#x0436;&#x0438;&#x0433;&#x0430;&#x0442;&#x044C; (to burn). Two consonants, &#x27E8;&#x0441;&#x0436;&#x27E9;, have merged into a single lengthened <code>/&#x0292;&#x02D0;/</code>. Now transcribe &#x043C;&#x0443;&#x0436;&#x0447;&#x0438;&#x043D;&#x0430; (man). The cluster &#x27E8;&#x0436;&#x0447;&#x27E9; reads as <code>/&#x0283;&#x02B2;&#x0283;&#x02B2;/</code>. Transcribe &#x0431;&#x043E;&#x0438;&#x0442;&#x0441;&#x044F; (is afraid). The reflexive ending -&#x0442;&#x0441;&#x044F; reads as <code>/t&#x02D0;s&#x028C;/</code>.</p>
+
+						<p><strong>Rules-of-one.</strong> Transcribe &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; (of course) and &#x0447;&#x0442;&#x043E; (what). In both words, &#x27E8;&#x0447;&#x27E9; has lost its stop component and reduced to <code>/&#x0283;/</code>.</p>
+
+						<p><strong>Geminates.</strong> Transcribe &#x0440;&#x0443;&#x0441;&#x0441;&#x043A;&#x0438;&#x0439; (Russian). The spelling shows two &#x27E8;&#x0441;&#x0441;&#x27E9;, but the IPA line shows a single <code>/s/</code>. Open the Drawer and look for the geminate controls.</p>
+
+						<p>The Teaching Layer of LEARN is complete. Every rule the singer needs to read a Russian text with Ilya&rsquo;s help has been introduced, from the alphabet through assimilation. For any letter&rsquo;s complete behaviour, the Reference Layer is alphabetised, hyperlinked, and encyclopedic. And for what no rule or tool can fully capture, there is a native coach&rsquo;s ear.</p>
+
+						<p><em>Grayson source: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
 
 						<h2 id="learn-try">Try This</h2>
 
