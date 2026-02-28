@@ -347,19 +347,53 @@
 									{language === 'fr' ? 'Comment fonctionne Ilya' : 'How Ilya Works'}
 								</button>
 							</li>
-							<li class="toc-unit">
-								<button class="toc-link" onclick={() => document.getElementById('guide-about')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? 'À propos' : 'About'}
+							<li>
+								<button class="toc-link toc-title" onclick={() => document.getElementById('guide-contributors')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+									{language === 'fr' ? 'Collaborateurs' : 'Contributors'}
 								</button>
 								<ul class="toc-subsections">
 									<li>
 										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-grayson')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 											Craig Grayson
 										</button>
+										<ul class="toc-subsections">
+											<li>
+												<button class="toc-link toc-deep" onclick={() => document.getElementById('guide-grayson')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+													{language === 'fr' ? 'Biographie' : 'Bio'}
+												</button>
+											</li>
+											<li>
+												<button class="toc-link toc-deep" onclick={() => document.getElementById('guide-grayson-intro')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+													{language === 'fr' ? 'Introduction à Russian Lyric Diction' : 'Introduction to Russian Lyric Diction'}
+												</button>
+											</li>
+										</ul>
 									</li>
 									<li>
 										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-mitton')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 											Dann Mitton
+										</button>
+										<ul class="toc-subsections">
+											<li>
+												<button class="toc-link toc-deep" onclick={() => document.getElementById('guide-mitton')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+													{language === 'fr' ? 'Biographie' : 'Bio'}
+												</button>
+											</li>
+											<li>
+												<button class="toc-link toc-deep" onclick={() => document.getElementById('guide-mitton-note')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+													{language === 'fr' ? 'Mot du créateur' : "Builder's Note"}
+												</button>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-claude')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											Claude
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-kimi')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											Kimi
 										</button>
 									</li>
 								</ul>
@@ -592,6 +626,17 @@
 	}
 
 	.toc-sub:hover {
+		opacity: 1;
+	}
+
+	.toc-deep {
+		padding-left: 3.5rem !important;
+		font-size: 0.75rem !important;
+		color: var(--ink-secondary, #4a4540);
+		opacity: 0.75;
+	}
+
+	.toc-deep:hover {
 		opacity: 1;
 	}
 

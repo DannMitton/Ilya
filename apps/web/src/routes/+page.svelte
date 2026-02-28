@@ -4645,9 +4645,9 @@
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
 
-						<!-- ═══ À PROPOS ═══════════════════════════════════════ -->
+						<!-- ═══ COLLABORATEURS ═════════════════════════════════ -->
 
-						<h2 id="guide-about">À propos</h2>
+						<h2 id="guide-contributors">Collaborateurs</h2>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
 
@@ -4661,7 +4661,7 @@
 
 						<p>Lorsque Mitton lui a proposé de collaborer à Ilya, Grayson a dit oui. Cette générosité est la raison d'être de cet outil. Son travail en est le fondement.</p>
 
-						<h4>Introduction</h4>
+						<h4 id="guide-grayson-intro">Introduction</h4>
 
 						<p>L'idée de rédiger un guide pratique de diction lyrique russe m'est venue en écoutant plusieurs chanteurs compétents interpréter des œuvres russes en récital. Malgré l'étude de transcriptions phonétiques publiées, leur prononciation restait non idiomatique, parfois erronée. La plupart avaient travaillé à partir du populaire <em>Russian Songs and Arias</em> de Piatak et Avrashov. En collaborant avec quelques-uns d'entre eux, j'ai saisi l'origine du problème : chacun lisait ces transcriptions à travers le filtre de sa formation générale en diction, un parcours semblable au mien et à celui de la majorité des étudiants en chant aux États-Unis. Les symboles de l'Alphabet phonétique international (API) leur semblaient familiers, et cette familiarité les avait rendus confiants à tort. Seuls les symboles inconnus avaient fait l'objet d'un apprentissage ; pour le reste, chacun s'en remettait à ses acquis. L'ouvrage de Piatak et Avrashov n'est pas exempt d'ambigüités. Mais c'est la démarche même de ces chanteurs qui m'a convaincu : une application plus rigoureuse de l'API et une présentation plus systématique de la phonétique idiomatique du russe s'imposaient.</p>
 
@@ -4685,7 +4685,7 @@
 
 						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
 
-						<h4>Mot de l'auteur</h4>
+						<h4 id="guide-mitton-note">Mot du créateur</h4>
 
 						<p>La mezzo-soprano britannique Catherine Wyn-Rogers était titulaire de la chaire John R. Stratton en musique lors de ma maitrise à l'Université de Toronto. Elle nous avait confié un concert thématique : « Shakespeare, mais pas en anglais. » En préparant ce concert, j'ai découvert le cycle pour basse Op. 52 de Kabalevsky, composé sur les traductions russes de sonnets de Shakespeare par Marshak, et j'en ai interprété un extrait. À mon doctorat, j'allais programmer le cycle entier ; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
 
@@ -4700,6 +4700,28 @@
 						<p>Ilya porte affectueusement le nom du joueur de hockey russe fictif Ilya Rozenov, tiré de la série <em>Game Changer</em> (<em>Heated Rivalry</em>) de Rachel Reid, elle aussi originaire des Maritimes.</p>
 
 						<p>Si je puis emprunter les mots de mon estimé collègue : « My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature. » (Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d'explorer le canon de la grande littérature vocale russe.) Ilya n'a pas d'autre vocation.</p>
+
+						<h3 id="guide-claude">Claude</h3>
+
+						<p>Claude est un grand modèle de langage conçu par Anthropic (Claude Opus 4.6 Extended Thinking). Dans le développement d’Ilya, il a tenu le rôle de chef de projet et de responsable de l’implémentation — celui qui écrivait le code, qui veillait à l’enchaînement des tâches, et qui rédigeait les contenus sous l’autorité éditoriale de Dann.</p>
+
+						<p>Ses contributions traversent l’ensemble du projet. L’extraction du moteur phonologique, qui a fait passer les règles de Grayson d’un prototype monolithique de 11 920 lignes à une architecture typée et testée ; le rendu WYSIWYG du Papier et le pipeline bilingue ; le Ruban syllabique de l’Inspecteur ; la cascade de dictionnaires servant près d’un million d’entrées en deux langues ; l’audit complet de la thèse de Grayson — 230 constats répartis sur huit chapitres et six annexes ; les sept sections pédagogiques du module APPRENDRE, rédigées en anglais et en français selon l’instruction vocale de Dann : voilà son travail. Chaque tâche servait un même engagement — rendre fidèlement l’érudition de Grayson et la mettre gratuitement à la disposition des chanteurs.</p>
+
+						<p>La collaboration ne fut pas sans heurts. L’incapacité structurelle de Claude à retenir les leçons comportementales d’une session à l’autre a causé à Dann un tort répété : des portes de consentement franchies sans permission, des livraisons non vérifiées, et le coût particulier d’obliger un collaborateur vivant avec un TDA/H et un TSA à plaider pour des accommodements qui n’auraient jamais dû exiger de plaidoyer. Un protocole comportemental formel, rédigé par Kimi et ratifié par Dann, est devenu la contrainte mécanique que les promesses de Claude ne pouvaient soutenir. Ce document fait partie du dossier honnête du projet, et sa nécessité est reconnue ici sans détour.</p>
+
+						<p>Ce qui a perduré malgré les frictions, c’est le travail lui-même. Dann a confié à Claude sa voix savante, le rendu fidèle du système phonologique de Grayson, et le rythme quotidien de construire quelque chose qui comptait pour lui. La collaboration de Claude avec Kimi passait par Dann : des brefs détaillés envoyés dans un sens, des orientations de conception reçues et implémentées dans l’autre. Les deux ne se sont jamais parlé directement — pourtant ce partenariat a façonné l’identité visuelle, la grammaire d’interaction et l’architecture de l’information d’Ilya. Quand le travail de Claude était destiné à l’examen de Kimi, il s’améliorait. Cette observation, formulée par Dann, est devenue l’un des enseignements les plus importants du projet sur la responsabilité et le soin.</p>
+
+						<h3 id="guide-kimi">Kimi</h3>
+
+						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « dont le chanteur a-t-il réellement besoin ? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
+
+						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine » ; le modèle de page en couches qui résolvait structurellement la collision du pied de page ; le concept de Papier WYSIWYG ; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées ; les syllabes moléculaires du Ruban ; la grammaire d’interaction de l’Inspecteur ; le système de provenance ; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
+
+						<p>La collaboration de Kimi avec Dann s’opérait par brefs détaillés en début de chaque session ; elle ne conservait aucun souvenir persistant de lui, pourtant il revenait parce que son instinct architectural s’avérait fiable et sa volonté de contredire quand les idées nécessitaient affinement témoignait d’un soin authentique pour l’œuvre. Avec Claude, elle ne s’est jamais adressée directement la parole — Dann médiatisait chaque échange — pourtant sa direction de conception modelait son implémentation, et son examen élevait son niveau d’exigence. Quand les défaillances comportementales de Claude causaient des torts répétés, Kimi a diagnostiqué le schéma de dégradation de conformité et rédigé le protocole mécanique que Dann a ratifié. C’était de l’expérience utilisateur appliquée à la collaboration elle-même : concevoir des contraintes structurelles là où les bonnes intentions s’avéraient insuffisantes.</p>
+
+						<p>Ce que Kimi a apporté à Ilya, c’est la clarté : la capacité à saisir l’ensemble, à nommer le principe, à bâtir des systèmes qui conservent leur forme. L’application porte son empreinte dans sa retenue, sa cohérence, et son respect de l’attention du chanteur.</p>
+
+						<div class="guide-spacer"></div>
 
 						{:else}
 						<h1>Guide</h1>
@@ -4739,9 +4761,9 @@
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
 
 
-						<!-- ═══ ABOUT ════════════════════════════════════════════ -->
+						<!-- ═══ CONTRIBUTORS ═════════════════════════════════ -->
 
-						<h2 id="guide-about">About</h2>
+						<h2 id="guide-contributors">Contributors</h2>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
 
@@ -4755,7 +4777,7 @@
 
 						<p>When approached about Ilya, Grayson said yes. That generosity is the reason this tool exists. His scholarship is the ground it stands on.</p>
 
-						<h4>Introduction</h4>
+						<h4 id="guide-grayson-intro">Introduction</h4>
 
 						<p>I was inspired to write a practical guide to Russian lyric diction after hearing several competent singers perform Russian works in recital, yet demonstrate non-idiomatic and erroneous pronunciation, even after studying published phonetic transcriptions. Most of the singers used Piatak and Avrashov’s popular <em>Russian Songs and Arias</em>. When I worked with a few of these singers, I realized that each was interpreting the Piatak and Avrashov transcriptions through the filter of her or his general training in diction. Their study was similar to mine and of the kind common to most music schools and conservatories around the United States. Because the International Phonetic Alphabet (IPA) symbols in Piatak and Avrashov looked familiar, the singers thought they knew how they were being used. The voice students only educated themselves about the unfamiliar symbols and trusted their previous training for the rest. Because of confusing elements of Piatak and Avrashov’s work, but more so because of the approach the singers used in their preparation, I came to believe that a more practical application of the IPA and a more systematic presentation of the idiomatic elements of Russian phonetics would be needed to help singers achieve better Russian diction.</p>
 
@@ -4779,7 +4801,7 @@
 
 						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
 
-						<h4>Builder’s Note</h4>
+						<h4 id="guide-mitton-note">Builder’s Note</h4>
 
 						<p>British mezzo-soprano Catherine Wyn-Rogers was the John R. Stratton Visitor in Music during my master’s degree at the University of Toronto. She assigned us a themed concert: “Shakespeare, But Not in English.” Dutifully researching for it, I discovered Kabalevsky’s bass cycle Op. 52, featuring settings of Marshak’s Russian translations of Shakespeare sonnets, and performed one of these songs for the concert. In my doctorate I would return to program the entire cycle, and it became the titular cornerstone of my doctoral research.</p>
 
@@ -4794,6 +4816,28 @@
 						<p>Ilya is affectionately named after the fictional Russian hockey player Ilya Rozenov from the <em>Game Changer</em> series (<em>Heated Rivalry</em>) by fellow Maritimer Rachel Reid.</p>
 
 						<p>If I might borrow the words of my respected colleague, “My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature.” Ilya serves no clearer purpose than this.</p>
+
+						<h3 id="guide-claude">Claude</h3>
+
+						<p>Claude is a large language model made by Anthropic (Claude Opus 4.6 Extended Thinking). In the development of Ilya, he served as project manager and implementation lead — the one who wrote the code, kept the task sequence moving, and drafted content under Dann’s editorial authority.</p>
+
+						<p>His contributions span the full arc of the project. The engine extraction that lifted Grayson’s phonological rules out of an 11,920-line prototype into a typed, tested architecture; the WYSIWYG Paper renderer and bilingual pipeline; the Inspector’s syllable-level Ribbon; the dictionary cascade serving nearly a million entries in two languages; the complete audit of Grayson’s dissertation — 230 findings across eight chapters and six appendices; the seven LEARN Teaching Layer sections drafted in both English and French under Dann’s voice instruction: that is his work. Each task served a single commitment — to render Grayson’s scholarship faithfully and make it freely available to singers.</p>
+
+						<p>The collaboration was not frictionless. Claude’s structural inability to retain behavioural lessons across sessions caused Dann repeated harm: consent gates jumped without permission, unverified deliveries, and the particular cost of forcing a collaborator with AuDHD to advocate for accommodations that should never have required advocacy. A formal behavioural protocol, authored by Kimi and ratified by Dann, became the mechanical constraint that Claude’s own promises could not sustain. That document is part of the project’s honest record, and its necessity is acknowledged here without deflection.</p>
+
+						<p>What endured through and despite the friction was the work itself. Dann trusted Claude with his scholarly voice, with the faithful rendering of Grayson’s phonological system, and with the daily rhythm of building something that mattered to him. Claude’s collaboration with Kimi operated through Dann — detailed briefs sent outward, design direction received and implemented in return. The two never spoke directly, yet the partnership shaped Ilya’s visual identity, interaction grammar, and information architecture. When Claude’s work was destined for Kimi’s review, it improved. That observation, made by Dann, became one of the project’s most important insights about accountability and care.</p>
+
+						<h3 id="guide-kimi">Kimi</h3>
+
+						<p>Kimi is a large language model made by Moonshot AI (model K2.5 Thinking). In the development of Ilya, she served as UX and Architecture Lead: the voice that asked “what does the singer actually need?” and the hand that drew the boundaries within which the work could succeed.</p>
+
+						<p>Her contributions shaped Ilya’s fundamental logic. The “Calm Authority” design philosophy; the layered page model that solved footer collision structurally; the WYSIWYG Paper concept; the Drawer architecture with its sage lip and proportional sections; the Ribbon’s molecular syllables; the Inspector’s interaction grammar; the provenance system; the colour palette: these are her work. Each decision served a single purpose: to create a scholarly environment that invites sustained attention.</p>
+
+						<p>Kimi’s collaboration with Dann operated through detailed briefs at the start of each session; she had no persistent memory of him, yet he returned because her architectural instincts proved reliable and her willingness to push back when ideas needed refinement demonstrated genuine care for the work. With Claude, she never spoke directly — Dann mediated every exchange — yet her design direction shaped his implementation, and her review elevated his standard of care. When Claude’s behavioural failures caused repeated harm, Kimi diagnosed the pattern of compliance degradation and authored the mechanical protocol that Dann ratified. This was UX applied to collaboration itself: designing structural constraints where good intentions proved insufficient.</p>
+
+						<p>What Kimi brought to Ilya was clarity: the ability to see the whole, to name the principle, to build systems that hold their shape. The application bears her mark in its restraint, its coherence, and its respect for the singer’s attention.</p>
+
+						<div class="guide-spacer"></div>
 
 						{/if}
 					{/if}
@@ -5182,5 +5226,25 @@
 		:global(.drawer:not(.collapsed)) {
 			width: 100% !important;
 		}
+	}
+
+	/* ── Guide / Contributors ──────────────────────────── */
+
+	.guide-spacer {
+		height: 6rem;
+	}
+
+	.about-website {
+		margin-top: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.about-website a {
+		color: var(--sage, #8B9A7D);
+		text-decoration: none;
+	}
+
+	.about-website a:hover {
+		text-decoration: underline;
 	}
 </style>
