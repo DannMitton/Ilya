@@ -10,19 +10,42 @@
 		showStressDiacritics?: boolean;
 		language?: Language;
 		spotReconstituted?: boolean;
+		adjacentCliticReconstituted?: boolean;
 		glossOverride?: string;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, glossOverride, onwordclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, onwordclick }: Props = $props();
 
 	// Bidirectional XOR: spot always inverts the global setting for this word.
 	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
 	// Matches InspectorPanel's reconActive logic exactly.
 	const reconActive = $derived(spotReconstituted ? !notationPrefs.reconstitution : notationPrefs.reconstitution);
 
-	// Use reconstituted IPA when reconActive is true and the word has a reconstituted form
+	// Determine the IPA string to display on the Paper.
+	//
+	// Cases:
+	// 1. Clitic, reconActive false → show pipeline's ipaDisplay ('→' or '←')
+	// 2. Clitic, reconActive true → show own reconstituted IPA (ipaOwnReconstituted)
+	// 3. Host with adjacentCliticReconstituted → show demerged IPA (ipaContent)
+	// 4. Normal word → existing logic (ipaReconstituted or ipaDisplay)
 	const displayIpa = $derived.by(() => {
+		const isCliticWord = word.isProclitic || word.isEnclitic;
+
+		if (isCliticWord) {
+			if (reconActive && word.ipaOwnReconstituted) {
+				return applyNotationPreferences(word.ipaOwnReconstituted, notationPrefs, true);
+			}
+			return word.ipaDisplay || '';
+		}
+
+		if (adjacentCliticReconstituted) {
+			const base = reconActive
+				? (word.ipaOwnReconstituted || word.ipaContent || word.ipaDisplay)
+				: (word.ipaContent || word.ipaDisplay);
+			return base ? applyNotationPreferences(base, notationPrefs, true) : '';
+		}
+
 		const useReconstituted = reconActive && word.ipaReconstituted;
 		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
 		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
@@ -146,11 +169,9 @@
 	{/if}
 
 	<!-- IPA row: fixed height -->
-	<span class="ipa-row" class:clitic-ipa={isClitic}>
-		{#if isClitic && word.cliticDirection === 'proclitic'}
-			<span class="clitic-arrow">→</span>
-		{:else if isClitic && word.cliticDirection === 'enclitic'}
-			<span class="clitic-arrow">←</span>
+	<span class="ipa-row" class:clitic-ipa={isClitic && !reconActive}>
+		{#if isClitic && !reconActive}
+			<span class="clitic-arrow">{displayIpa}</span>
 		{:else}
 			{displayIpa}
 		{/if}
