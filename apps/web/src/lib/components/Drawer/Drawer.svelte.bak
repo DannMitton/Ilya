@@ -160,170 +160,22 @@
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-4')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '4 · La réduction vocalique' : '4 · Vowel Reduction'}
+									{language === 'fr' ? '4 · Les sons consonantiques' : '4 · The Consonant Sounds'}
 								</button>
-								<ul>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-akanye')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? '⟨о⟩ et ⟨а⟩ sans accent' : '⟨о⟩ and ⟨а⟩ when unstressed'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-ikanye')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? '⟨е⟩ et ⟨я⟩ vers [ɪ]' : '⟨е⟩ and ⟨я⟩ toward [ɪ]'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-reconstitution')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'La reconstitution' : 'Reconstitution'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u4-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Essayez dans Ilya' : 'Try this in Ilya'}
-										</button>
-									</li>
-								</ul>
 							</li>
-								<li class="toc-unit">
+							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-5')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '5 · Les consonnes' : '5 · The Consonants'}
+									{language === 'fr' ? '5 · La palatalisation' : '5 · Palatalization'}
 								</button>
-								<ul class="toc-subsections">
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-familiar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Le système consonantique' : 'The consonant system'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-pairs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Paires voisées-non voisées' : 'Voiced-voiceless pairs'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-attention')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Attention ciblée' : 'Focused attention'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-fixed')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Dureté ou mollesse fixe' : 'Fixed hardness or softness'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-signs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Les deux signes' : 'The two signs'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-devoicing')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Dévoisement final' : 'Final devoicing'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u5-try')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Essayez dans Ilya' : 'Try this in Ilya'}
-										</button>
-									</li>
-								</ul>
 							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-6')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '6 · La palatalisation' : '6 · Palatalization'}
+									{language === 'fr' ? '6 · La réduction vocalique' : '6 · Vowel Reduction'}
 								</button>
-															<ul class="toc-subsections">
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-what')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Qu\u2019est-ce que la palatalisation\u00A0?' : 'What palatalization is'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-signals')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Rep\u00E9rer la palatalisation \u00E0 l\u2019\u00E9crit' : 'Signals on the page'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-stops')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Les six fronti\u00E8res' : 'What stops the spread'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-paired')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Appari\u00E9es et non appari\u00E9es' : 'Paired versus unpaired'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-clusters')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'R\u00E9gressive dans les groupes' : 'Regressive in clusters'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-practice')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Mise en pratique' : 'Putting it together'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u6-velari')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Le i v\u00E9laire [\u0268]' : 'Velar-i [\u0268]'}
-										</button>
-									</li>
-								</ul>
-</li>
+							</li>
 							<li class="toc-unit">
 								<button class="toc-link" onclick={() => document.getElementById('learn-unit-7')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? '7 · Assimilation et frontières' : '7 · Assimilation and Boundaries'}
-								</button>
-									<ul class="toc-subsections">
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-two')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Deux formes d\u2019assimilation' : 'Two kinds of assimilation'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-voiced')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Vois\u00E9e rencontre sourde' : 'Voiced meets voiceless'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-stops')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Les limites du voisement' : 'What stops the spread'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-boundary')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'D\u2019un mot \u00E0 l\u2019autre' : 'Across word boundaries'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-deletion')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'L\u2019effacement consonantique' : 'Consonant deletion'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-mergers')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Fusions et absorptions' : 'Mergers and acquisitions'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-unusual')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? '\u0441\u043A\u0443\u0447\u043D\u043E et \u0447\u0442\u043E' : '\u0441\u043A\u0443\u0447\u043D\u043E and \u0447\u0442\u043E'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-geminates')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? 'Les g\u00E9min\u00E9es' : 'Geminates'}
-										</button>
-									</li>
-									<li>
-										<button class="toc-link toc-sub" onclick={() => document.getElementById('learn-u7-tryit')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-											{language === 'fr' ? '\u00C0 vous de jouer' : 'Try this in Ilya'}
-										</button>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<button class="toc-link" onclick={() => document.getElementById('learn-coda')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-									{language === 'fr' ? 'Les inclassables' : 'What These Rules Do Not Teach'}
+									{language === 'fr' ? '7 · Intégration' : '7 · Integration'}
 								</button>
 							</li>
 							<li>

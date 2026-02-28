@@ -151,13 +151,22 @@ describe('Task 7b: Consonants and Clusters', () => {
   describe('palatalization: regressive (regression 4.6, smert chain)', () => {
 
     it('applies correct palatalization chain in smert', () => {
-      // смерть -> ˈsmʲerʲtʲ
-      // с = hard (м cannot regressively palatalize it)
+      // смерть -> ˈsʲmʲerʲtʲ (Craig-authorized, Feb 26 2026)
+      // с = soft (Stage pronunciation: dental palatalizes before мʲ;
+      //          D&P Rule 3R(a) p. 86, Avanesov p. 528, Grayson email)
       // м = soft (before front vowel е)
       // р = soft (progressive palatalization in stressed syllable)
       // т = soft (before ь)
       const result = transcribeWord('\u0441\u043C\u0435\u0440\u0442\u044C');
-      expect(result.ipa).toBe('\u02C8sm\u02B2er\u02B2t\u02B2');
+      expect(result.ipa).toBe('\u02C8s\u02B2m\u02B2er\u02B2t\u02B2');
+    });
+
+    it('does NOT palatalize dental before labial non-nasal: dver guard', () => {
+      // дверь -> ˈdvʲerʲ: д stays hard before вʲ
+      // Stage pronunciation allows dental before labial NASAL (м) only.
+      // Labial fricative в does not trigger cross-category palatalization.
+      const result = transcribeWord('\u0434\u0432\u0435\u0440\u044C');
+      expect(result.ipa).toBe('\u02C8dv\u02B2er\u02B2');
     });
 
     it('applies regressive palatalization in dver', () => {
@@ -395,9 +404,9 @@ describe('Task 7b: Consonants and Clusters', () => {
     });
 
     it('reduces -\u0442\u044C\u0441\u044F to t\u02D0s in smeyatsya', () => {
-      // смеяться -> smʲiˈjɑtːsʌ
+      // смеяться -> sʲmʲiˈjɑtːsʌ (с palatalizes before мʲ: Stage pronunciation)
       const result = transcribeWord('\u0441\u043C\u0435\u044F\u0442\u044C\u0441\u044F');
-      expect(result.ipa).toBe('sm\u02B2i\u02C8j\u0251t\u02D0s\u028C');
+      expect(result.ipa).toBe('s\u02B2m\u02B2i\u02C8j\u0251t\u02D0s\u028C');
     });
 
     it('reduces -\u0442\u0441\u044F to t\u02D0s in boitsya', () => {

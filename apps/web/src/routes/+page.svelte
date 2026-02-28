@@ -2624,6 +2624,23 @@
 
 						<p><em>Grayson source&#160;: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
 
+						<h2 id="learn-coda">Les inclassables</h2>
+
+						<p><em>Avons-nous tout couvert&#160;? Est-ce possible&#160;? Qui comble les vides&#160;?</em></p>
+
+						<p>Les sections pr&eacute;c&eacute;dentes enseignent un syst&egrave;me&#160;: les r&egrave;gles phonologiques de la diction lyrique russe telles que les formule Craig Grayson. Ce syst&egrave;me est puissant. Un chanteur qui en ma&icirc;trise les principes peut aborder un texte russe inconnu et, en appliquant les r&egrave;gles de Grayson, parvenir &agrave; une transcription d&eacute;fendable la plupart du temps. Ilya vit ici, dans ce premier palier de savoir phonologique&#160;: celui o&ugrave; les r&egrave;gles pr&eacute;disent les r&eacute;sultats et o&ugrave; le chanteur peut les appliquer &agrave; des mots jamais rencontr&eacute;s.</p>
+
+						<p>Or, toute prononciation correcte en diction lyrique russe n&rsquo;est pas d&eacute;ductible des r&egrave;gles de cette mani&egrave;re. Certaines prononciations &eacute;tablies r&eacute;sistent enti&egrave;rement &agrave; la d&eacute;duction&#160;: des pratiques observ&eacute;es qui &eacute;chappent &agrave; la syst&eacute;matisation.</p>
+
+						<!-- IPA for скучно, конечно, точно requires engine verification before commit -->
+						<p>Prenons quelques cas d&eacute;j&agrave; rencontr&eacute;s au fil de ces sections. L&rsquo;assourdissement final est une r&egrave;gle phonologique&#160;: on l&rsquo;apprend une fois, on l&rsquo;applique partout. Mais le <code>/s&#x02B2;/</code> palatalis&eacute; de &#x0441;&#x043C;&#x0435;&#x0440;&#x0442;&#x044C; <code>/s&#x02B2;m&#x02B2;er&#x02B2;t&#x02B2;/</code> (<em>mort</em>) rel&egrave;ve d&rsquo;un tout autre ordre. On peut en nommer la cause (une tradition th&eacute;&acirc;trale dite prononciation sc&eacute;nique, attest&eacute;e par Avanesov, Derwing et Priestly, et Grayson), mais aucun principe phonologique ne permet au chanteur de pr&eacute;dire que ce <code>/s/</code> pr&eacute;cis se palatalise. Savoir pourquoi enrichit la compr&eacute;hension sans modifier la consigne&#160;: devant &#x0441;&#x043C;&#x0435;&#x0440;&#x0442;&#x044C;, palatalisez le <code>/s/</code>. Consid&eacute;rons ensuite &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;sku &#x0283;n&#x028C;/</code> (<em>ennuyeux</em>), o&ugrave; la composante occlusive <code>/t/</code> de l&rsquo;affriqu&eacute;e &#x27E8;&#x0447;&#x27E9; <code>/t&#x0283;&#x02B2;/</code> s&rsquo;efface pour ne laisser que <code>[&#x0283;n]</code>. On peut d&eacute;crire ce qui se produit, mais on ne peut pr&eacute;dire quels mots le subissent. &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; <code>/k&#x0251; &#x02C8;&#x0272;&#x025B; &#x0283;n&#x028C;/</code> (<em>bien s&ucirc;r</em>) oui&#160;; &#x0442;&#x043E;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;to t&#x0283;&#x02B2;n&#x028C;/</code> (<em>exactement</em>) non.</p>
+
+						<p>Ces cas occupent deux paliers distincts au-del&agrave; des r&egrave;gles phonologiques. Dans l&rsquo;un, la cause est connue mais son application est impr&eacute;visible. Dans l&rsquo;autre, le m&eacute;canisme est descriptible mais sa survenance est gouvern&eacute;e par le lexique. Le fil conducteur des deux paliers est &eacute;tymologique et traditionnel, non phonologique. On peut nommer la cause apr&egrave;s coup. On ne peut engendrer la r&egrave;gle d&rsquo;avance.</p>
+
+						<p>Ilya rend compte de ces cas par des annotations cibl&eacute;es&#160;: propres &agrave; chaque mot, r&eacute;f&eacute;renc&eacute;es, et d&eacute;lib&eacute;r&eacute;ment non g&eacute;n&eacute;ralisantes. Ilya ne pr&eacute;sente pas ces cas comme des r&egrave;gles que le chanteur aurait manqu&eacute;es, car aucune r&egrave;gle n&rsquo;existait &agrave; manquer.</p>
+
+						<p>Ce qu&rsquo;Ilya ne pourra jamais faire, c&rsquo;est remplacer le savoir qui vit dans le corps, dans la tradition et dans le studio. Ilya pr&eacute;pare le chanteur &agrave; ces conversations, mais ne saurait s&rsquo;y substituer. Nous sommes convaincus que cette forme de transmission exigera toujours une expertise humaine, et nous y voyons une richesse de l&rsquo;art vocal, non une limite.</p>
+
 						<h2 id="learn-try">Essayez</h2>
 
 						<p>Tout au long de LEARN, vous trouverez des invitations à coller un mot ou une phrase dans l'onglet Transcription. LEARN énonce le principe; Ilya le démontre en direct. L'outil devient le laboratoire du module. Lorsque nous discutons de l'accent et des homographes, par exemple, vous pourriez transcrire <em>мука</em> avec l'accent sur la première syllabe, puis sur la seconde, et observer la transcription entière se transformer sous vos yeux. Lorsque nous abordons la réduction vocalique, <em>хорошо</em> offre trois ⟨о⟩ identiques à l'écrit, prononcés de trois manières différentes.</p>
@@ -4558,6 +4575,23 @@
 						<p>The Teaching Layer of LEARN is complete. Every rule the singer needs to read a Russian text with Ilya&rsquo;s help has been introduced, from the alphabet through assimilation. For any letter&rsquo;s complete behaviour, the Reference Layer is alphabetised, hyperlinked, and encyclopedic. And for what no rule or tool can fully capture, there is a native coach&rsquo;s ear.</p>
 
 						<p><em>Grayson source: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
+
+						<h2 id="learn-coda">What These Rules Do Not Teach</h2>
+
+						<p><em>Did we cover everything? Can we? Who fills the gap(s)?</em></p>
+
+						<p>The sections preceding this one teach a system: the phonological rules of Russian lyric diction as articulated by Craig Grayson. That system is powerful. A singer equipped with this knowledge can approach an unfamiliar Russian text and, applying Grayson&rsquo;s rules, arrive at a defensible transcription most of the time. Ilya lives here, in this tier of phonological knowledge: the tier where rules predict outcomes and the singer can apply them to words never encountered before.</p>
+
+						<p>But not every correct pronunciation in Russian lyric diction is derivable from rules this way. Certain established pronunciations resist derivation entirely: observed practice that resists systematization.</p>
+
+						<!-- IPA for скучно, конечно, точно requires engine verification before commit -->
+						<p>Consider some of the cases we have already met. Final devoicing is a phonological rule: learn it once, apply it everywhere. But the palatalized <code>/s&#x02B2;/</code> in &#x0441;&#x043C;&#x0435;&#x0440;&#x0442;&#x044C; <code>/s&#x02B2;m&#x02B2;er&#x02B2;t&#x02B2;/</code> (<em>death</em>) is something different. We can name its cause (a theatrical tradition called Stage pronunciation, attested by Avanesov, Derwing and Priestly, and Grayson), but a singer cannot predict from phonological principles alone that this particular <code>/s/</code> palatalizes. Knowing why enriches understanding but does not change the instruction: when you encounter &#x0441;&#x043C;&#x0435;&#x0440;&#x0442;&#x044C;, palatalize the <code>/s/</code>. Then there is &#x0441;&#x043A;&#x0443;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;sku &#x0283;n&#x028C;/</code> (<em>boring</em>), where the plosive component <code>/t/</code> of the affricate &#x27E8;&#x0447;&#x27E9; <code>/t&#x0283;&#x02B2;/</code> elides, leaving <code>[&#x0283;n]</code>. We can describe what happens, but we cannot predict which words undergo it. &#x043A;&#x043E;&#x043D;&#x0435;&#x0447;&#x043D;&#x043E; <code>/k&#x0251; &#x02C8;&#x0272;&#x025B; &#x0283;n&#x028C;/</code> (<em>of course</em>) does; &#x0442;&#x043E;&#x0447;&#x043D;&#x043E; <code>/&#x02C8;to t&#x0283;&#x02B2;n&#x028C;/</code> (<em>exactly</em>) does not.</p>
+
+						<p>These cases occupy two distinct tiers beyond the phonological rules. In one, the cause is known but its application is unpredictable. In the other, the mechanism is describable but its occurrence is lexically governed. The through-line for both tiers is etymological and traditional, not phonological. We can name the cause after the fact. We cannot generate the rule before the fact.</p>
+
+						<p>Ilya accounts for these cases through targeted annotations: word-specific, cited, and deliberately non-generalizing. Ilya does not frame these cases as rules the singer missed, because no rule was there to miss.</p>
+
+						<p>What Ilya can never do is replace the knowledge that lives in the body, the tradition, and the studio. Ilya prepares the singer for these conversations, but it cannot replace them. We are persuaded that this kind of tutoring will always require human expertise, and we consider that a feature of the art form, not a limitation.</p>
 
 						<h2 id="learn-try">Try This</h2>
 

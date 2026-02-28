@@ -987,10 +987,16 @@ export const GraysonEngine = {
       return this.labials.has(tc);
     }
 
-    // Dentals (т, д, с, з): only before palatalized dental (Grayson p. 209)
-    // Dentals do NOT palatalize before labials (e.g., д before в in дверь stays hard)
+    // Dentals (т, д, с, з): before palatalized dental (Grayson p. 209),
+    // AND before palatalized labial nasal м (Stage pronunciation principle).
+    // Three-authority convergence for the м exception:
+    //   Derwing & Priestly Rule 3R(a), p. 86 (смерть is a worked example)
+    //   Avanesov, Орфоэпический словарь, 5th ed., 1989, p. 528 ([с'м'] permitted)
+    //   Grayson, email to Dann Mitton, Feb 26, 2026: "Stage pronunciation
+    //   palatalizes everything in similar clusters, except always-hard consonants."
+    // Dentals do NOT palatalize before other labials (д before в in дверь stays hard).
     if (this.dentals.has(c)) {
-      return this.dentals.has(tc);
+      return this.dentals.has(tc) || tc === 'м';
     }
 
     // Others: can palatalize more freely
