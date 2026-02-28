@@ -26,6 +26,7 @@
 		border-radius: 4px;
 		box-shadow: 0 1px 4px rgba(26, 22, 18, 0.06);
 		min-height: 400px;
+		flex-shrink: 0;
 	}
 
 	.reading-inner {
