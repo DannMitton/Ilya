@@ -37,6 +37,8 @@
 	let drawerCollapsed = $state(false);
 	// Tab state
 	let activeTab = $state<TabId>('transcription');
+	// Active heading for TOC sync
+	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
 	const TAB_ORDER: TabId[] = ['transcription', 'learn', 'guide'];
 	let tabTransitionClass = $state('');
@@ -486,6 +488,63 @@
 			tabTransitionClass = '';
 		}, 200);
 	}
+
+	/* ── Heading navigation from Drawer TOC ────────────────── */
+
+	function handleHeadingNavigate(id: string) {
+		activeHeadingId = id;
+		const el = document.getElementById(id);
+		if (el) {
+			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			history.pushState(null, '', `#${id}`);
+		}
+	}
+
+	/* ── IntersectionObserver for scroll-based active heading ─ */
+
+	$effect(() => {
+		if (activeTab !== 'learn' && activeTab !== 'guide') return;
+		if (!mainContentEl) return;
+
+		// Collect all heading elements with ids inside main-content
+		const headings = mainContentEl.querySelectorAll('[id^="learn-"], [id^="guide-"]');
+		if (headings.length === 0) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				// Find the topmost intersecting heading
+				const visible = entries
+					.filter(e => e.isIntersecting)
+					.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+				if (visible.length > 0) {
+					activeHeadingId = visible[0].target.id;
+				}
+			},
+			{
+				root: mainContentEl,
+				rootMargin: '-25% 0px -60% 0px',
+				threshold: 0,
+			}
+		);
+
+		headings.forEach(h => observer.observe(h));
+		return () => observer.disconnect();
+	});
+
+	/* ── Handle URL hash on page load ──────────────────────── */
+
+	function handleHashNavigation() {
+		const hash = window.location.hash.slice(1);
+		if (hash) {
+			requestAnimationFrame(() => {
+				const el = document.getElementById(hash);
+				if (el) {
+					el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					activeHeadingId = hash;
+				}
+			});
+		}
+	}
 	onMount(() => {
 		// Restore persisted state
 		try {
@@ -537,6 +596,7 @@
 		}
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
+		handleHashNavigation();
 		return () => {
 			window.removeEventListener('resize', checkMobile);
 		};
@@ -575,9 +635,11 @@
 			collapsed={drawerCollapsed}
 			{language}
 			{activeTab}
+			{activeHeadingId}
 			{tabTransitionClass}
 			ontogglecollapse={handleDrawerToggle}
 			ontabchange={handleTabChange}
+			onheadingnavigate={handleHeadingNavigate}
 		>
 			{#snippet rootPanel()}
 				<RootPanel
@@ -2624,7 +2686,7 @@
 
 						<p><em>Grayson source&#160;: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
 
-						<h2 id="learn-coda">Les inclassables</h2>
+						<h2 id="learn-coda">8 · Les inclassables</h2>
 
 						<p><em>Avons-nous tout couvert&#160;? Est-ce possible&#160;? Qui comble les vides&#160;?</em></p>
 
@@ -4576,7 +4638,7 @@
 
 						<p><em>Grayson source: Ch. 5 &sect;&sect;2&ndash;5 (pp. 150&ndash;262), Ch. 7 &sect;2 (pp. 247&ndash;258). Appendix F (pp. 312&ndash;313).</em></p>
 
-						<h2 id="learn-coda">What These Rules Do Not Teach</h2>
+						<h2 id="learn-coda">8 · What These Rules Do Not Teach</h2>
 
 						<p><em>Did we cover everything? Can we? Who fills the gap(s)?</em></p>
 
