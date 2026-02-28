@@ -2158,11 +2158,19 @@ export const GraysonEngine = {
       const leftFinal = this.getFinalConsonant(leftWord.ipaSurface);
       const rightInitial = this.getInitialConsonant(rightWord.ipaSurface);
 
-      // Skip if either word lacks consonant at boundary
-      if (!leftFinal || !rightInitial) continue;
+      // Skip if left word has no final consonant
+      if (!leftFinal) continue;
 
-      // Skip if right initial is sonorant or /v/ (no assimilative influence)
-      if (this.isSonorantConsonant(rightInitial) || this.isVPhoneme(rightInitial)) continue;
+      // Voicing preservation (Grayson pp. 250-252, fn. 300-303; R7.14 Rule #2):
+      // Vowels and sonorants do not influence voicing across any boundary,
+      // but DO allow final voiced consonants to retain voicing.
+      // /v/ follows sonorant behaviour when followed by vowel or sonorant (p. 250).
+      if (!rightInitial || this.isSonorantConsonant(rightInitial) || this.isVPhoneme(rightInitial)) {
+        if (this.isVoicedObstruent(leftFinal)) {
+          leftWord.skipFinalDevoicing = true;
+        }
+        continue;
+      }
 
       // SIBILANT MERGERS (Grayson pp. 235-236)
       // с/з + ш → /ʃː/, с/з + ж → /ʒː/

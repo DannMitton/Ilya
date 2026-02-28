@@ -472,6 +472,59 @@ describe('Task 7c: Notation and Edge Cases', () => {
       expect(words[0].skipFinalDevoicing).toBe(true);
     });
 
+    it('preserves voicing before vowel-initial word at soft boundary (R7.14 Rule 2)', () => {
+      // глаз | открыт → ɡɫɑz (voiced) not ɡɫɑs (devoiced)
+      // Vowels allow preceding voiced consonants to retain voicing
+      const words = [
+        {
+          cyrillic: 'глаз', ipaSurface: '', ipaUnderlying: 'ˈɡɫɑz',
+          rightBoundary: 'soft' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+        {
+          cyrillic: 'открыт', ipaSurface: '', ipaUnderlying: 'ɑtˈkrɨt',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈɡɫɑz');
+      expect(words[0].skipFinalDevoicing).toBe(true);
+    });
+
+    it('preserves voicing before sonorant-initial word at soft boundary (R7.14 Rule 2)', () => {
+      // друг | мой → druɡ (voiced) not druk (devoiced)
+      // Sonorants allow preceding voiced consonants to retain voicing
+      const words = [
+        {
+          cyrillic: 'друг', ipaSurface: '', ipaUnderlying: 'ˈdruɡ',
+          rightBoundary: 'soft' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+        {
+          cyrillic: 'мой', ipaSurface: '', ipaUnderlying: 'ˈmoj',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈdruɡ');
+      expect(words[0].skipFinalDevoicing).toBe(true);
+    });
+
+    it('still devoices before vowel-initial word at hard boundary (punctuation guard)', () => {
+      // друг. Открыт → druk (devoiced: hard boundary blocks preservation)
+      const words = [
+        {
+          cyrillic: 'друг', ipaSurface: '', ipaUnderlying: 'ˈdruɡ',
+          rightBoundary: 'hard' as const, boundarySource: 'punctuation' as const, skipFinalDevoicing: false,
+        },
+        {
+          cyrillic: 'Открыт', ipaSurface: '', ipaUnderlying: 'ɑtˈkrɨt',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈdruk');
+      expect(words[0].skipFinalDevoicing).toBe(false);
+    });
+
   });
 
   // ─────────────────────────────────────────────────────────────────
