@@ -346,6 +346,43 @@
 								<button class="toc-link toc-title" onclick={() => document.getElementById('guide-how')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? 'Comment fonctionne Ilya' : 'How Ilya Works'}
 								</button>
+								<ul class="toc-subsections">
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-what')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Que fait Ilya ?' : 'What does Ilya do?'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-paste')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Saisie d\u2019un texte russe' : 'Pasting a Russian text'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-source')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Pourquoi une seule source ?' : 'Why only one source?'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-ai')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Ilya et l\u2019IA' : 'Is Ilya an AI tool?'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-role')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'R\u00f4le de l\u2019utilisateur' : 'Your role as user'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-limits')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'Limites d\u2019Ilya' : 'Limitations'}
+										</button>
+									</li>
+									<li>
+										<button class="toc-link toc-sub" onclick={() => document.getElementById('guide-future')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+											{language === 'fr' ? 'O\u00f9 va Ilya ?' : 'Where is Ilya headed?'}
+										</button>
+									</li>
+								</ul>
 							</li>
 							<li>
 								<button class="toc-link toc-title" onclick={() => document.getElementById('guide-contributors')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
