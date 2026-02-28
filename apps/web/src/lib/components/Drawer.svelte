@@ -347,8 +347,8 @@
 									{language === 'fr' ? 'Comment fonctionne Ilya' : 'How Ilya Works'}
 								</button>
 							</li>
-							<li class="toc-unit">
-								<button class="toc-link" onclick={() => document.getElementById('guide-about')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+							<li>
+								<button class="toc-link toc-title" onclick={() => document.getElementById('guide-about')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
 									{language === 'fr' ? 'À propos' : 'About'}
 								</button>
 								<ul class="toc-subsections">

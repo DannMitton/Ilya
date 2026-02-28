@@ -4644,6 +4644,63 @@
 
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
+
+						<!-- ═══ À PROPOS ═══════════════════════════════════════ -->
+
+						<h2 id="guide-about">À propos</h2>
+
+						<h3 id="guide-grayson">Craig Grayson</h3>
+
+						<p>Craig Grayson est une basse, un chercheur et un irréductible.</p>
+
+						<p>Formé à la Florida State University, au New England Conservatory et à l'University of Washington, où il a obtenu son doctorat en arts musicaux (<em>Doctor of Musical Arts</em>) en 2012, il est l'auteur de la thèse qui a rendu Ilya possible. <em>Russian Lyric Diction: A Practical Guide</em> demeure, à notre connaissance, le traitement le plus approfondi et le plus rigoureusement raisonné de la phonétique russe destiné aux chanteurs de langue anglaise. Grayson y convoque locuteurs natifs, linguistes et phonéticiens. Ses essais sur la notation du ‹о› chanté, sur l'histoire du ‹щ› et sur le problème du schwa [ə] témoignent d'une érudition minutieuse qui comble des lacunes longtemps ignorées dans la littérature.</p>
+
+						<p>Grayson chante sur scène depuis plus de quarante ans. Il a tenu des rôles principaux au Seattle Opera, au Tacoma Opera, au Pacific Northwest Opera et au Lyric Opera Northwest, et fait partie du chœur permanent du Seattle Opera depuis 2003. Professeur de chant et de musique au North Seattle College depuis plus de vingt ans, il y enseigne aussi bien la musique du monde que le cours individuel de chant.</p>
+
+						<p>Dann Mitton a découvert la thèse de Grayson lors de la revue de littérature de son propre doctorat à l'Université de Toronto. Les ressources en diction lyrique russe disponibles à l'époque étaient manifestement incomplètes, incohérentes, quand ce n'était pas les deux. Celle de Grayson ne l'était ni l'une ni l'autre : elle incarnait l'alliance de la rigueur scientifique et de l'application pratique. Elle a fixé un nouveau standard et est devenue le socle phonologique d'Ilya.</p>
+
+						<p>Lorsque Mitton lui a proposé de collaborer à Ilya, Grayson a dit oui. Cette générosité est la raison d'être de cet outil. Son travail en est le fondement.</p>
+
+						<h4>Introduction</h4>
+
+						<p>L'idée de rédiger un guide pratique de diction lyrique russe m'est venue en écoutant plusieurs chanteurs compétents interpréter des œuvres russes en récital. Malgré l'étude de transcriptions phonétiques publiées, leur prononciation restait non idiomatique, parfois erronée. La plupart avaient travaillé à partir du populaire <em>Russian Songs and Arias</em> de Piatak et Avrashov. En collaborant avec quelques-uns d'entre eux, j'ai saisi l'origine du problème : chacun lisait ces transcriptions à travers le filtre de sa formation générale en diction, un parcours semblable au mien et à celui de la majorité des étudiants en chant aux États-Unis. Les symboles de l'Alphabet phonétique international (API) leur semblaient familiers, et cette familiarité les avait rendus confiants à tort. Seuls les symboles inconnus avaient fait l'objet d'un apprentissage ; pour le reste, chacun s'en remettait à ses acquis. L'ouvrage de Piatak et Avrashov n'est pas exempt d'ambigüités. Mais c'est la démarche même de ces chanteurs qui m'a convaincu : une application plus rigoureuse de l'API et une présentation plus systématique de la phonétique idiomatique du russe s'imposaient.</p>
+
+						<p>Les guides existants, pour la plupart, se présentent sous forme d'anthologies de littérature vocale : textes transcrits, traduits, offerts à l'étude par cœur. Mon intention est tout autre. Je souhaite offrir au chanteur un ouvrage de référence couvrant l'ensemble des sons chantés du russe, des plus élémentaires aux plus subtils, accompagné des concepts et des règles qui permettent de préparer de manière autonome une partition inconnue, comme on le fait couramment en italien, en français ou en allemand. Cette démarche s'inscrit dans la lignée d'ouvrages tels que <em>Singers' Italian</em> de Colorni, <em>Singing in French</em> de Grubb, <em>German for Singers</em> d'Odom et Schollum, et <em>Singing in Czech</em> de Cheek, ainsi que de manuels multilingues comme ceux de Stapp, de Wall et de Moriarty. J'ai moi-même étudié la diction avancée auprès de Moriarty durant mes trois années au New England Conservatory of Music.</p>
+
+						<p>Ma thèse s'ouvre par un survol critique des guides existants, puis présente mon propre guide pratique. Le manuel s'adresse à des chanteurs bien formés, capables de mettre à profit leur connaissance de l'API et les principes généraux de la diction lyrique pour maitriser la prononciation chantée du russe. Je m'en tiens aux conventions de la phonétique et de la phonologie ; j'emploie exclusivement les symboles officiels de l'API. Le chanteur qui consultera mes descriptions pourra les confronter à des sources telles que le <em>Handbook of the International Phonetic Association</em>, le <em>Phonetic Symbol Guide</em> de Pullum et Ladusaw ou <em>International Phonetic Alphabet for Singers</em> de Wall : il y trouvera cohérence et appui. Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d'explorer le canon de la grande littérature vocale russe.</p>
+
+						<h3 id="guide-mitton">Dann Mitton</h3>
+
+						<p>Dann Mitton est une basse, un pédagogue et un bâtisseur.</p>
+
+						<p>Titulaire d'un doctorat en arts musicaux (<em>Doctor of Musical Arts</em>) en interprétation vocale avec spécialisation en pédagogie du chant de l'Université de Toronto, et d'un diplôme d'artiste de la Glenn Gould Professional School au Conservatoire royal de musique, il est l'auteur d'une thèse doctorale intitulée <em>Sung Russian for the Low Male Voice Classical Singer: The Latent Pedagogical Value of Sung Russian</em>, qui examine la question de savoir si le répertoire vocal russe recèle une valeur pédagogique intrinsèque et sous-estimée pour les voix graves masculines.</p>
+
+						<p>Mitton chante le répertoire russe depuis ses années de premier cycle. Deux fois boursier du Tanglewood Music Center, il s'est formé à l'Aspen Music Center, au Britten-Pears Young Artists Programme, au Wagner Intensive de Jane Eaglen, au Highlands Opera Studio de Richard Margison dans la belle campagne ontarienne, et à l'Institute for Young Dramatic Voices de Dolora Zajick. Au cours d'une carrière scénique de vingt-cinq ans, ses rôles de basse ont compris Sarastro, le Commandeur, Sparafucile, Don Alfonso et Zaccaria.</p>
+
+						<p>Ilya existe parce que Mitton avait besoin d'un outil que la profession n'avait pas créé. Les travaux de Grayson ont fourni le socle phonologique. Les recherches doctorales de Mitton ont fourni l'argumentaire. Ilya est le pont entre les deux : les règles de Grayson, opérationnalisées, offertes gratuitement aux chanteurs qui en ont besoin.</p>
+
+						<p>Mitton a publié dans le <em>Journal of Singing</em> et a siégé au comité de rédaction de la <em>Voice and Speech Review</em> de la VASTA. Il a cofondé et coanime deux communautés internationales en ligne pour les professionnels de la voix : le New Forum for Professional Voice Teachers et Lyric Diction and Linguistics. Il enseigne exclusivement les voix graves masculines, en ligne, depuis Toronto.</p>
+
+						<p>Né et élevé à Moncton, au Nouveau-Brunswick, Mitton vit dans l'est de Toronto avec son mari Bob et deux bouviers bernois gigantesques et parfaitement absurdes, Rory et Anson. Ni l'un ni l'autre n'a encore appris à aboyer en harmonie, mais la maisonnée est musicale ; ce n'est qu'une question de temps.</p>
+
+						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
+
+						<h4>Mot de l'auteur</h4>
+
+						<p>La mezzo-soprano britannique Catherine Wyn-Rogers était titulaire de la chaire John R. Stratton en musique lors de ma maitrise à l'Université de Toronto. Elle nous avait confié un concert thématique : « Shakespeare, mais pas en anglais. » En préparant ce concert, j'ai découvert le cycle pour basse Op. 52 de Kabalevsky, composé sur les traductions russes de sonnets de Shakespeare par Marshak, et j'en ai interprété un extrait. À mon doctorat, j'allais programmer le cycle entier ; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
+
+						<p>Pour ma recension des écrits, j'ai évalué chaque guide de diction lyrique russe alors disponible. La plupart étaient incomplets, incohérents, quand ce n'était pas les deux. Une thèse récente, <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), n'était ni l'un ni l'autre. Sa thèse incarnait le mariage de rigueur savante et d'application pratique que je recherchais pour mon propre travail ; elle est devenue le fondement phonologique auquel je me suis fié. Elle l'est toujours.</p>
+
+						<p>J'ai appliqué les règles minutieuses de Grayson pendant des mois pour arriver à des transcriptions manuscrites raisonnables, quoiqu'imparfaites, que j'ai continué d'affiner jusqu'à leur publication. Ilya automatise les règles de Grayson et peut produire le cycle entier de Kabalevsky, sans erreur, en environ trois secondes.</p>
+
+						<p>Il y a quelques années, mon collègue Derek Boemler a publié un mode d'emploi très recherché pour l'installation Mac de Madde (un synthétiseur vocal additif) sous licence Creative Commons Attribution 4.0 International. J'ai appris par la suite que cet élan avait été amorcé lors d'une conversation avec un autre ami et mentor, le Dr Ian Howell. Ces collègues m'ont montré l'exemple. Leur générosité, aussi naturelle chez eux que la respiration, ne m'a jamais quitté. Ils m'inspirent.</p>
+
+						<p>C'est peut-être le propre de la basse de ruminer ? Je réfléchis beaucoup au sens et à la finalité des choses. J'en suis venu à décider que mes raisons d'être sont 1) aimer ma famille, et 2) faire de l'art qui en vaut la peine. Le frère de mon mari, un homme accompli et avisé, m'a un jour transmis la question qui est devenue pour moi un réflexe premier : « How can I help? » (Comment puis-je aider ?) En créant Ilya et en l'offrant gratuitement à la communauté des chanteurs, j'essaie d'aider. Prolongement logique du texte de référence de Grayson, Ilya vise à éliminer les obstacles à la littératie cyrillique et à l'accès à des outils savants de qualité. N'importe qui peut utiliser Ilya. N'importe qui peut améliorer Ilya. L'invitation vous est ouverte.</p>
+
+						<p>Ilya porte affectueusement le nom du joueur de hockey russe fictif Ilya Rozenov, tiré de la série <em>Game Changer</em> (<em>Heated Rivalry</em>) de Rachel Reid, elle aussi originaire des Maritimes.</p>
+
+						<p>Si je puis emprunter les mots de mon estimé collègue : « My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature. » (Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d'explorer le canon de la grande littérature vocale russe.) Ilya n'a pas d'autre vocation.</p>
+
 						{:else}
 						<h1>Guide</h1>
 
@@ -4680,6 +4737,63 @@
 						<h4>Where is Ilya headed?</h4>
 
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
+
+
+						<!-- ═══ ABOUT ════════════════════════════════════════════ -->
+
+						<h2 id="guide-about">About</h2>
+
+						<h3 id="guide-grayson">Craig Grayson</h3>
+
+						<p>Craig Grayson is a bass, a scholar, and a lifer.</p>
+
+						<p>He trained at Florida State University, the New England Conservatory, and the University of Washington, where he earned his Doctor of Musical Arts in 2012. His dissertation, <em>Russian Lyric Diction: A Practical Guide</em>, is the work that made Ilya possible. It is, to the best of current knowledge, the most thorough and carefully reasoned treatment of Russian phonetics for singers in the English language. His dissertation cites native speakers, linguists, and phoneticians. His essays on the notation of sung Russian ‹о›, the history of ‹щ›, and the problem of schwa [ə] all reflect granular and insightful scholarship that responds to previous gaps in the literature.</p>
+
+						<p>Grayson has been a working singer for over forty years. He has sung principal roles with Seattle Opera, Tacoma Opera, Pacific Northwest Opera, and Lyric Opera Northwest, and has been a member of Seattle Opera’s Regular Chorus since 2003. He teaches voice and music at North Seattle College, where he has been for over two decades, covering everything from world music to individual voice instruction.</p>
+
+						<p>Dann Mitton discovered Grayson’s dissertation while carrying out the literature review for his own doctoral work at the University of Toronto. Russian lyric diction resources at that time were demonstrably incomplete, inconsistent, or both. Grayson’s was neither, modelling the marriage of scholarly rigour and practical application. It set a new standard, and has become the phonological foundation of Ilya.</p>
+
+						<p>When approached about Ilya, Grayson said yes. That generosity is the reason this tool exists. His scholarship is the ground it stands on.</p>
+
+						<h4>Introduction</h4>
+
+						<p>I was inspired to write a practical guide to Russian lyric diction after hearing several competent singers perform Russian works in recital, yet demonstrate non-idiomatic and erroneous pronunciation, even after studying published phonetic transcriptions. Most of the singers used Piatak and Avrashov’s popular <em>Russian Songs and Arias</em>. When I worked with a few of these singers, I realized that each was interpreting the Piatak and Avrashov transcriptions through the filter of her or his general training in diction. Their study was similar to mine and of the kind common to most music schools and conservatories around the United States. Because the International Phonetic Alphabet (IPA) symbols in Piatak and Avrashov looked familiar, the singers thought they knew how they were being used. The voice students only educated themselves about the unfamiliar symbols and trusted their previous training for the rest. Because of confusing elements of Piatak and Avrashov’s work, but more so because of the approach the singers used in their preparation, I came to believe that a more practical application of the IPA and a more systematic presentation of the idiomatic elements of Russian phonetics would be needed to help singers achieve better Russian diction.</p>
+
+						<p>As I began my research, I discovered that most guides to Russian singing diction were contained in anthologies of Russian vocal literature, like Piatak and Avrashov’s, in which all the texts are phonetically transcribed and translated for singers to study by rote. In contrast, I wish to supply to the singer with a reference of the sung sounds of the Russian language (from basic sounds to subtle nuances) and the concepts and rules that allow singers to prepare unfamiliar Russian vocal pieces on their own, as is expected of one approaching vocal works in Italian, French, and German. My approach is modeled on ones found in texts like Evelina Colorni’s <em>Singers’ Italian</em>, Thomas Grubb’s <em>Singing in French</em>, William Odom and Benno Schollum’s <em>German for Singers</em>, and Timothy Cheek’s <em>Singing in Czech</em>, as well as multi-language diction books such as Marcie Stapp’s <em>The Singers Guide to Languages</em>, Joan Wall’s <em>Diction for Singers</em>, and John Moriarty’s <em>Diction</em>. I have personal experience with Moriarty’s approach, as I studied advanced diction with him throughout my three years at the New England Conservatory of Music.</p>
+
+						<p>My dissertation begins with a survey of the available guides to Russian lyric diction, pointing up any confusing or erroneous information, and then presents my own practical guide. My manual is designed for well-trained singers who will use their existing knowledge of the IPA and general concepts of lyric diction to aid in understanding and mastering Russian sung pronunciation. In it, I adhere to the general concepts of phonetics and phonology and use the official symbols of the IPA. A singer should then be able to compare my descriptions of phonetic articulation and concepts to sources such as the <em>IPA Handbook</em>, Pullum and Ladusaw’s <em>Phonetic Symbol Guide</em> or Joan Wall’s <em>International Phonetic Alphabet for Singers</em>, and find consistency and support. My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature.</p>
+
+						<h3 id="guide-mitton">Dann Mitton</h3>
+
+						<p>Dann Mitton is a bass, a pedagogue, and a builder.</p>
+
+						<p>He holds a Doctor of Musical Arts in Performance (Voice) with a specialization in singing voice pedagogy from the University of Toronto, and an Artist Diploma from the Glenn Gould Professional School at the Royal Conservatory of Music. His doctoral dissertation, <em>Sung Russian for the Low Male Voice Classical Singer: The Latent Pedagogical Value of Sung Russian</em>, entertains the question whether Russian vocal repertoire holds inherent and undervalued pedagogical benefit for low male voices.</p>
+
+						<p>Mitton had been singing Russian repertoire since his undergraduate years. A two-time Tanglewood alumnus, he trained at the Aspen Music Center, the Britten-Pears Young Artists Programme, Jane Eaglen’s Wagner Intensive, Richard Margison’s Highlands Opera Studio in beautiful rural Ontario, and Dolora Zajick’s Institute for Young Dramatic Voices. Over a twenty-five-year performing career, his bass roles have included Sarastro, the Commendatore, Sparafucile, Don Alfonso, and Zaccaria.</p>
+
+						<p>Ilya exists because Mitton needed a tool that the field had not built. Grayson’s scholarship provided the phonological foundation. Mitton’s doctoral research provided the argument. Ilya is the bridge: Grayson’s rules, operationalized, given freely to singers who need them.</p>
+
+						<p>Mitton has published in the <em>Journal of Singing</em> and has served on the editorial board of VASTA’s <em>Voice and Speech Review</em>. He created and co-moderates two online communities for voice professionals: the New Forum for Professional Voice Teachers and Lyric Diction and Linguistics. He teaches low male voices exclusively, online, from Toronto.</p>
+
+						<p>Born and raised in Moncton, New Brunswick, Mitton lives in east-end Toronto with his husband Bob and two giant, ridiculous Bernese Mountain Dogs named Rory and Anson. They have not yet mastered barking in harmony, but it is a musical family, so it is only a matter of time.</p>
+
+						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
+
+						<h4>Builder’s Note</h4>
+
+						<p>British mezzo-soprano Catherine Wyn-Rogers was the John R. Stratton Visitor in Music during my master’s degree at the University of Toronto. She assigned us a themed concert: “Shakespeare, But Not in English.” Dutifully researching for it, I discovered Kabalevsky’s bass cycle Op. 52, featuring settings of Marshak’s Russian translations of Shakespeare sonnets, and performed one of these songs for the concert. In my doctorate I would return to program the entire cycle, and it became the titular cornerstone of my doctoral research.</p>
+
+						<p>For my literature review, I assessed every guide to Russian lyric diction for singers available at that time. Most were incomplete, inconsistent, or both. A new dissertation, Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012), was neither. His dissertation modelled the marriage of scholarly rigour and practical application that I wanted for my own work, and it became the phonological foundation I trusted. It still is.</p>
+
+						<p>I painstakingly applied Grayson’s meticulous rules for months to arrive at reasonable yet inconsistent handmade transcriptions that I continued to refine until their publication. Ilya automates Grayson’s rules, and can output Kabalevsky’s entire cycle perfectly in about three seconds.</p>
+
+						<p>Years ago my colleague Derek Boemler released an in-demand instruction sheet for the Mac installation of Madde (an additive singing synthesizer) under a Creative Commons Attribution 4.0 International License. I learned later that his largesse was primed in conversation with another friend and mentor, Dr. Ian Howell. These colleagues set the example, and their generosity, as natural to them as breathing, has stuck with me. They inspire me.</p>
+
+						<p>Maybe it is the ethos of the bass to ruminate? I think a lot about meaning and purpose. I have decided that for me, my reasons to be, are 1) to love my family, and 2) to make good art. My husband’s successful, savvy brother once shared the guiding question that has become a leading reflex for me to ask: “How can I help?” By creating Ilya, and releasing it for free to the singing community, I’m trying to help. As a logical extension of Grayson’s authoritative source text, Ilya is about eliminating barriers to Cyrillic literacy, and barriers to accessing quality scholarly tools. Anybody can use Ilya. Anybody can improve Ilya. You are invited to do both.</p>
+
+						<p>Ilya is affectionately named after the fictional Russian hockey player Ilya Rozenov from the <em>Game Changer</em> series (<em>Heated Rivalry</em>) by fellow Maritimer Rachel Reid.</p>
+
+						<p>If I might borrow the words of my respected colleague, “My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature.” Ilya serves no clearer purpose than this.</p>
 
 						{/if}
 					{/if}
