@@ -112,34 +112,41 @@
 		font-family: var(--font-sans);
 		font-size: 13px;
 		cursor: pointer;
-		transition: color 0.15s;
+		transition: color 0.2s ease-out, background-color 0.2s ease-out, text-decoration 0.15s ease;
 		user-select: none;
 		line-height: 1;
+		padding: 4px 12px;
+		border-radius: 9999px;
 	}
 
 	.lang-option.active {
 		color: white;
-		font-weight: 600;
+		font-weight: 500;
+		background: rgba(139, 154, 125, 0.15);
 	}
 
 	.lang-option:not(.active) {
-		color: rgba(255, 255, 255, 0.6);
+		color: rgba(255, 255, 255, 0.7);
+		background: transparent;
 	}
 
 	.lang-option:not(.active):hover {
 		text-decoration: underline;
-		color: rgba(255, 255, 255, 0.85);
+		text-decoration-color: var(--sage, #8B9A7D);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+		color: rgba(255, 255, 255, 0.9);
 	}
 
 	.lang-option:focus-visible {
 		outline: 2px solid white;
 		outline-offset: 2px;
-		border-radius: 2px;
+		border-radius: 9999px;
 	}
 
 	.lang-separator {
 		width: 1px;
 		height: 12px;
-		background: rgba(255, 255, 255, 0.4);
+		background: #C5C5C5;
 	}
 </style>

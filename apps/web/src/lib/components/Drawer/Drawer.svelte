@@ -120,7 +120,7 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed style="width: {collapsed ? 6 : width}px" aria-label="Controls">
+<aside class="drawer" class:collapsed style="width: {collapsed ? 3 : width}px" aria-label="Controls">
 	<div class="drawer-body">
 		{#if !collapsed}
 			<div
@@ -373,7 +373,11 @@
 		onclick={ontogglecollapse}
 		aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
 		title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-	></button>
+	>
+		<span class="drawer-handle" aria-hidden="true">
+			<svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,2 11,10 3,18" /></svg>
+		</span>
+	</button>
 </aside>
 
 <style>
@@ -387,7 +391,7 @@
 	}
 
 	.drawer.collapsed {
-		width: 6px;
+		width: 3px;
 	}
 
 	.drawer-body {
@@ -436,43 +440,68 @@
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
 	}
 
-	/* ── Lip: 6px sage edge with invisible 44px touch target ── */
+	/* ── Lip: 3px charcoal hairline with invisible 44px touch target ── */
 
 	.drawer-lip {
 		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 6px;
-		min-width: 6px;
+		width: 3px;
+		min-width: 3px;
 		height: 100%;
-		background: var(--sage);
-		opacity: 0.6;
+		background: rgba(45, 45, 45, 0.15);
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		transition: opacity 0.2s ease, width 0.2s ease;
+		transition: background 0.2s ease, width 0.2s ease;
 	}
 
 	.drawer-lip::after {
 		content: '';
 		position: absolute;
 		top: 0;
-		left: -19px;
-		right: -19px;
+		left: -22px;
+		right: -22px;
 		bottom: 0;
 		z-index: 1;
 	}
 
 	.drawer-lip:hover {
-		opacity: 0.9;
-		width: 8px;
-		min-width: 8px;
+		background: rgba(45, 45, 45, 0.3);
 	}
 
 	.drawer-lip:focus-visible {
 		outline: 2px solid var(--sage);
 		outline-offset: 2px;
+	}
+
+	/* ── Handle: sage semicircle + chevron, collapsed only ── */
+
+	.drawer-handle {
+		display: none;
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		width: 36px;
+		height: 72px;
+		background: var(--sage, #8B9A7D);
+		border-radius: 0 72px 72px 0;
+		align-items: center;
+		justify-content: center;
+		color: var(--drawer-bg, #FAF8F5);
+		z-index: 2;
+		pointer-events: none;
+		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
+	}
+
+	.collapsed .drawer-lip .drawer-handle {
+		display: flex;
+	}
+
+	.collapsed .drawer-lip:hover .drawer-handle {
+		background: var(--deeper-sage, #7A8A6C);
 	}
 
 	/* ── Placeholder panels ─────────────────────────────── */
@@ -533,7 +562,8 @@
 	}
 
 	.toc-link:hover {
-		border-left-color: var(--terracotta, #C17C60);
+		border-left-color: var(--light-sage, #A8B5A0);
+		background: rgba(139, 154, 125, 0.06);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -546,14 +576,16 @@
 	/* ── Active heading indicator ─────────────────────────── */
 
 	.toc-link.active {
-		border-left-color: var(--terracotta, #C17C60);
+		border-left-color: var(--dusty-rose, #A67B7B);
+		border-left-width: 4px;
 		color: var(--ink-primary, #1a1612);
-		background: rgba(183, 110, 84, 0.06);
+		background: rgba(166, 123, 123, 0.08);
 		font-weight: 500;
+		padding-left: calc(0.75rem - 1px);
 	}
 
 	.toc-link.active:hover {
-		border-left-color: var(--terracotta, #C17C60);
+		border-left-color: var(--dusty-rose, #A67B7B);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -640,7 +672,7 @@
 	}
 
 	.toc-chevron.contains-active {
-		color: var(--terracotta, #C17C60);
+		color: var(--dusty-rose, #A67B7B);
 	}
 
 	.toc-chevron:focus-visible {

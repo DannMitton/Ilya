@@ -22,7 +22,7 @@
 		max-width: 720px;
 		margin: 0 auto;
 		padding: 3rem 2rem;
-		background: var(--paper-cream, #FAF8F4);
+		background: var(--paper-cream, #F0EBE0);
 		border-radius: 4px;
 		box-shadow: 0 1px 4px rgba(26, 22, 18, 0.06);
 		min-height: 400px;
@@ -54,13 +54,25 @@
 	}
 
 	.reading-inner :global(h3) {
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-size: 0.8rem;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.35rem;
 		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--ink-secondary, #4a4540);
-		margin: 1.75rem 0 0.75rem 0;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.35;
+		border-top: 1px solid var(--dusty-rose, #A67B7B);
+		margin: 3.5rem 0 1.25rem 0;
+		padding-top: 1.25rem;
+	}
+
+	/* ── Subsection headings (h4) ─────────────────────────── */
+
+	.reading-inner :global(h4) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--ink-primary, #1a1612);
+		line-height: 1.4;
+		margin: 2rem 0 0.75rem 0;
 	}
 
 	/* ── Body text ────────────────────────────────────────── */
@@ -130,7 +142,7 @@
 	/* ── Links ─────────────────────────────────────────────── */
 
 	.reading-inner :global(a) {
-		color: var(--terracotta, #C17C60);
+		color: var(--dusty-rose, #A67B7B);
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 2px;

@@ -17,9 +17,12 @@
 
 	/* ── Sage accent ──────────────────────────────────────── */
 	--sage: #8B9A7D;
+	--light-sage: #A8B5A0;
+	--deeper-sage: #7A8A6C;
 
-	/* ── Terracotta gloss ─────────────────────────────────── */
-	--terracotta: rgba(168, 90, 58, 0.75);
+	/* ── Dusty Rose accent (replaces terra cotta) ────────── */
+	--dusty-rose: #A67B7B;
+	--terracotta: var(--dusty-rose);  /* backward-compatible alias */
 
 	/* ── Stone palette (UI chrome) ────────────────────────── */
 	--stone-300: #d6d3d1;
@@ -27,9 +30,16 @@
 	--stone-700: #44403c;
 
 	/* ── Surfaces ─────────────────────────────────────────── */
-	--paper-cream: #F8F5F0;       /* stationery cream — page background on screen */
-	--drawer-bg: #e8e4de;         /* warm grey — drawer background (from prototype) */
-	--app-bg: #eee9e3;            /* main content area behind paper */
+	--paper-cream: #F0EBE0;       /* Paper — primary reading surface */
+	--paper-light: #F5F1E8;       /* Paper Light — alternate/secondary backgrounds */
+	--drawer-bg: #FAF8F5;         /* UI Background — drawer, panels */
+	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
+	--app-bg: var(--desk-surface); /* main content area behind paper */
+
+	/* ── Tab-specific surrounds (Floating Paper, Approach A) ─ */
+	--surround-transcription: #D8D4C8;
+	--surround-learn: #E5E1D6;
+	--surround-guide: #F2EFE6;
 
 	/* ── Backward-compatible aliases ──────────────────────── */
 	/* Components from Phase 2 reference these names.         */

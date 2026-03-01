@@ -706,7 +706,7 @@
 		</Drawer>
 	</div>
 	<main
-		class="main-content {paperBreathClass} {tabTransitionClass}"
+		class="main-content tab-{activeTab} {paperBreathClass} {tabTransitionClass}"
 		class:drawer-open={!drawerCollapsed}
 		class:reading-mode={isReadingMode}
 		bind:this={mainContentEl}
@@ -5071,7 +5071,7 @@
 		display: flex;
 		flex: 1;
 		overflow: hidden;
-		background-color: #E5E7E3;
+		background-color: var(--desk-surface, #D8D4C8);
 	}
 	.main-content {
 		flex: 1;
@@ -5080,9 +5080,37 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #E5E7E3;
+		background-color: var(--desk-surface, #D8D4C8);
 		transform: translateX(0);
 		transition: transform 2000ms cubic-bezier(0.25, 0, 0.15, 1);
+	}
+
+	/* ── Floating Paper: tab-specific surrounds (Approach A) ── */
+
+	.main-content.tab-transcription {
+		background-color: var(--surround-transcription, #D8D4C8);
+	}
+
+	.main-content.tab-learn {
+		background-color: var(--surround-learn, #E5E1D6);
+	}
+
+	.main-content.tab-guide {
+		background-color: var(--surround-guide, #F2EFE6);
+	}
+
+	/* ── Floating Paper: tab-specific shadows ─────────────── */
+
+	.main-content.tab-transcription :global(.paper-page) {
+		box-shadow: 0 2px 8px rgba(45, 45, 45, 0.06);
+	}
+
+	.main-content.tab-learn :global(.reading-paper) {
+		box-shadow: 0 4px 20px rgba(45, 45, 45, 0.10);
+	}
+
+	.main-content.tab-guide :global(.reading-paper) {
+		box-shadow: 0 3px 12px rgba(45, 45, 45, 0.08);
 	}
 
 	/* ── Transcription mode: Paper yields gently rightward when drawer is open ── */
@@ -5183,29 +5211,76 @@
 			animation: none !important;
 		}
 	}
-	/* ── LEARN callout box (scholarly disagreement) ────────── */
+	/* ── Editorial mark callout (scholarly departure/note) ──── */
 	:global(.learn-callout) {
-		border: 1px solid var(--sage, #8B9A7D);
-		background: #f5f3ef;
-		padding: 1.25rem 1.5rem;
-		margin: 1.5rem 0;
-		border-radius: 2px;
+		border-left: 4px solid var(--dusty-rose, #A67B7B);
+		border-top: none;
+		border-right: none;
+		border-bottom: none;
+		background: none;
+		padding: 0 0 0 1rem;
+		margin: 2rem 0;
+		border-radius: 0;
 		font-size: 0.92em;
+		position: relative;
+	}
+	:global(.learn-callout)::before {
+		content: "NOTE";
+		display: block;
+		font-variant: small-caps;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		color: var(--dusty-rose, #A67B7B);
+		margin-bottom: 0.5rem;
+		margin-left: -4px;
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.85rem;
 	}
 	:global(.learn-callout p:last-child) {
 		margin-bottom: 0;
+	}
+	/* Variant labels via data attribute */
+	:global(.learn-callout[data-label="departure"])::before {
+		content: "DEPARTURE";
+	}
+	:global(.learn-callout[data-label="method"])::before {
+		content: "METHOD";
+	}
+	:global(.learn-callout[data-label="context"])::before {
+		content: "CONTEXT";
 	}
 	/* ── Placeholder content within ReadingPaper ──────────── */
 	.placeholder-content {
 		text-align: center;
 		padding: 4rem 0;
 	}
+
+	/* ── Guide question headers: welcoming landmarks ───────── */
+	.main-content.tab-guide :global(.reading-inner h4) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 1.35rem;
+		font-weight: 500;
+		color: var(--ink-primary, #1a1612);
+		margin-top: 3rem;
+		margin-bottom: 0.75rem;
+		line-height: 1.35;
+	}
+
+	/* ── Text input field: sage border (item 6) ──────────── */
+	/* Targets textarea within the Drawer's transcription panel */
+	:global(.drawer-content textarea) {
+		border: 3px solid var(--sage, #8B9A7D) !important;
+		transition: border-color 150ms ease;
+	}
+	:global(.drawer-content textarea:focus) {
+		border-color: var(--deeper-sage, #7A8A6C) !important;
+	}
 	/* ── Mobile awareness ──────────────────────────────────── */
 	.mobile-overlay {
 		position: fixed;
 		inset: 0;
 		z-index: 1000;
-		background: var(--app-bg, #eee9e3);
+		background: var(--desk-surface, #D8D4C8);
 		display: flex;
 		align-items: center;
 		justify-content: center;
