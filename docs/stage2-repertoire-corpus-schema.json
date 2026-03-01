@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0.0",
+  "harvested": "2026-03-01",
+  "description": "Repertoire-driven corpus for French gloss expansion. Poems are the primary unit; settings link composers to poems. Schema v1 designed by Claude, reviewed by Kimi (K2.5, Architecture & UX Lead), ratified by Dann Mitton. Schema v2 incorporates Kimi's Stage 3 architectural review: poet-centred harvesting, nullable opus fields, separated integer fields for sorting, cycle metadata, LiederNet ID capture for reproducibility.",
+  "harvest_strategy": {
+    "phase_a": "Top 10 poet index pages — target ~60% of Tier A settings via maximum deduplication",
+    "phase_b": "Tier A composer main pages — remaining 30-35%, catches minor poets not in Phase A",
+    "phase_c": "Targeted gap fill — opus-specific searches for composers below 95% coverage"
+  },
+  "poets": [
+    {
+      "poet_id": "pushkin",
+      "name_cyrillic": "Александр Пушкин",
+      "name_latin": "Alexander Pushkin",
+      "lieder_net_author_id": "1234"
+    }
+  ],
+  "poems": [
+    {
+      "poem_id": "pushkin-ya-vas-lyubil",
+      "poet_id": "pushkin",
+      "title_cyrillic": "Я вас любил",
+      "title_latin": "Ya vas lyubil",
+      "first_line": "Я вас любил: любовь ещё, быть может",
+      "language": "ru",
+      "lieder_net_text_id": "5678",
+      "source_url": null,
+      "retrieved_at": null,
+      "canonical_text": null,
+      "text_status": "not_fetched"
+    }
+  ],
+  "settings": [
+    {
+      "setting_id": "example-uuid-replace-with-generated",
+      "composer_id": "tchaikovsky",
+      "poem_id": "pushkin-ya-vas-lyubil",
+      "opus": "Op. 57",
+      "opus_number": 57,
+      "cycle_title": "Шесть романсов",
+      "position_in_cycle": 1,
+      "title_as_song": "Я вас любил",
+      "lieder_net_song_id": "9012",
+      "variant_notes": null
+    }
+  ],
+  "harvest_gaps": []
+}
