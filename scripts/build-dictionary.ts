@@ -99,10 +99,12 @@ const INFLECTION_SKIP_TAGS = new Set([
 // CLI Argument Parsing
 // ============================================================
 
-function parseArgs(): { enPath: string; frPath?: string; outDir: string } {
+function parseArgs(): { enPath: string; frPath?: string; stage7aPath?: string; stage7cPath?: string; outDir: string } {
   const args = process.argv.slice(2);
   let enPath = '';
   let frPath: string | undefined;
+  let stage7aPath: string | undefined;
+  let stage7cPath: string | undefined;
   let outDir = path.join(process.cwd(), 'apps', 'web', 'static', 'data');
 
   for (let i = 0; i < args.length; i++) {
@@ -112,6 +114,12 @@ function parseArgs(): { enPath: string; frPath?: string; outDir: string } {
         break;
       case '--fr':
         frPath = args[++i];
+        break;
+      case '--stage7a':
+        stage7aPath = args[++i];
+        break;
+      case '--stage7c':
+        stage7cPath = args[++i];
         break;
       case '--out':
         outDir = args[++i];
@@ -123,7 +131,7 @@ function parseArgs(): { enPath: string; frPath?: string; outDir: string } {
   }
 
   if (!enPath) {
-    console.error('Usage: npx tsx scripts/build-dictionary.ts --en <english.jsonl> [--fr <french.jsonl>] [--out <output-dir>]');
+    console.error('Usage: npx tsx scripts/build-dictionary.ts --en <english.jsonl> [--fr <french.jsonl>] [--stage7a <stage7a.json>] [--stage7c <stage7c.json>] [--out <output-dir>]');
     process.exit(1);
   }
 
@@ -137,7 +145,17 @@ function parseArgs(): { enPath: string; frPath?: string; outDir: string } {
     process.exit(1);
   }
 
-  return { enPath, frPath, outDir };
+  if (stage7aPath && !fs.existsSync(stage7aPath)) {
+    console.error(`Stage 7A JSON not found: ${stage7aPath}`);
+    process.exit(1);
+  }
+
+  if (stage7cPath && !fs.existsSync(stage7cPath)) {
+    console.error(`Stage 7C JSON not found: ${stage7cPath}`);
+    process.exit(1);
+  }
+
+  return { enPath, frPath, stage7aPath, stage7cPath, outDir };
 }
 
 // ============================================================
@@ -753,7 +771,7 @@ async function pass2(
   wordMap: Map<string, Pass1Entry>,
   lemmaIndex: Map<string, LemmaFrench>
 ): Promise<{
-  frenchMap: Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' }>;
+  frenchMap: Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' | 'supplement' }>;
   stats: {
     totalLines: number;
     russianEntries: number;
@@ -772,7 +790,7 @@ async function pass2(
   const fileSize = fs.statSync(frPath).size;
   console.log(`Source: ${path.basename(frPath)} (${(fileSize / 1024 / 1024).toFixed(1)} MB)`);
 
-  const frenchMap = new Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' }>();
+  const frenchMap = new Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' | 'supplement' }>();
 
   const stats = {
     totalLines: 0,
@@ -913,9 +931,172 @@ function shouldFlag(full: string, short: string): boolean {
   return false;
 }
 
+// ============================================================
+// Supplementary Glosses: Stage 7A + 7C Integration
+// ============================================================
+
+/**
+ * Categories from Stage 7A to include as dictionary entries.
+ * func/pron: true function words and pronouns (93.7% of tokens).
+ * verb/noun/adj/num: short forms with glosses.
+ * Excluded: frag (tokenization artifacts), ukr (Ukrainian), name (proper name fragments).
+ */
+const STAGE7A_INCLUDE_CATEGORIES = new Set(['func', 'pron', 'verb', 'noun', 'adj', 'num']);
+
+/**
+ * Apply supplementary French glosses from Stage 7A (function words)
+ * and Stage 7C (English-to-French gloss mapping) to the dictionary.
+ *
+ * Stage 7A: Adds new dictionary entries for words missing from Kaikki.
+ * Stage 7C: Adds French glosses to existing entries that lack them.
+ *
+ * Called between Pass 2 and Pass 3.
+ */
+function applySupplementaryGlosses(
+  stage7aPath: string | undefined,
+  stage7cPath: string | undefined,
+  wordMap: Map<string, Pass1Entry>,
+  frenchMap: Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' | 'supplement' }>
+): {
+  stage7aAdded: number;
+  stage7aSkipped: number;
+  stage7aAlreadyPresent: number;
+  stage7cApplied: number;
+  stage7cSkipped: number;
+  stage7cAlreadyHasFrench: number;
+} {
+  console.log('\n══════════════════════════════════════════');
+  console.log('  SUPPLEMENT: Stage 7A + 7C Integration');
+  console.log('══════════════════════════════════════════\n');
+
+  const stats = {
+    stage7aAdded: 0,
+    stage7aSkipped: 0,
+    stage7aAlreadyPresent: 0,
+    stage7cApplied: 0,
+    stage7cSkipped: 0,
+    stage7cAlreadyHasFrench: 0,
+  };
+
+  // ── Stage 7A: Function Word Table ──────────────────────────
+  if (stage7aPath) {
+    console.log(`  Stage 7A: ${path.basename(stage7aPath)}`);
+    const raw = JSON.parse(fs.readFileSync(stage7aPath, 'utf-8'));
+    const entries: any[] = raw.entries || [];
+    console.log(`  Entries in file: ${entries.length}`);
+
+    for (const entry of entries) {
+      const word = (entry.word || '').normalize('NFC').toLowerCase();
+      if (!word) continue;
+
+      const category = entry.category || '';
+
+      // Skip excluded categories
+      if (!STAGE7A_INCLUDE_CATEGORIES.has(category)) {
+        stats.stage7aSkipped++;
+        continue;
+      }
+
+      // Add to wordMap if not already present
+      if (!wordMap.has(word)) {
+        // Infer stress: monosyllabic → 0, else -1 (unknown)
+        const vowels = [...word].filter(ch => RUSSIAN_VOWELS.has(ch));
+        const stress = vowels.length === 1 ? 0 : -1;
+
+        const englishGloss = entry.gloss_en || '';
+
+        wordMap.set(word, {
+          stress,
+          englishShort: truncateAtWordBoundary(englishGloss),
+          englishFull: englishGloss,
+          pos: entry.pos || '',
+          lemma: entry.lemma || word,
+        });
+        stats.stage7aAdded++;
+      } else {
+        stats.stage7aAlreadyPresent++;
+      }
+
+      // Add French gloss (supplement takes priority only if no French exists)
+      if (!frenchMap.has(word)) {
+        const frenchGloss = entry.gloss_fr || '';
+        if (frenchGloss) {
+          frenchMap.set(word, {
+            frenchShort: truncateAtWordBoundary(frenchGloss),
+            frenchFull: frenchGloss,
+            provenance: 'supplement',
+          });
+        }
+      }
+    }
+
+    console.log(`  — Added to dictionary:   ${stats.stage7aAdded}`);
+    console.log(`  — Already in dictionary: ${stats.stage7aAlreadyPresent}`);
+    console.log(`  — Skipped (frag/ukr/name): ${stats.stage7aSkipped}`);
+  } else {
+    console.log('  [Skipping Stage 7A: no --stage7a flag provided]');
+  }
+
+  // ── Stage 7C: French Gloss Mapping ─────────────────────────
+  if (stage7cPath) {
+    console.log(`\n  Stage 7C: ${path.basename(stage7cPath)}`);
+    const raw = JSON.parse(fs.readFileSync(stage7cPath, 'utf-8'));
+    const entries: any[] = raw.entries || [];
+    console.log(`  Entries in file: ${entries.length}`);
+
+    for (const entry of entries) {
+      const word = (entry.word || '').normalize('NFC').toLowerCase();
+      if (!word) continue;
+
+      // Only apply to words that exist in wordMap (these are in-dictionary words missing French)
+      if (!wordMap.has(word)) {
+        stats.stage7cSkipped++;
+        continue;
+      }
+
+      // Skip if already has French from Kaikki or lemma fallback
+      if (frenchMap.has(word)) {
+        stats.stage7cAlreadyHasFrench++;
+        continue;
+      }
+
+      const frenchGloss = entry.gloss_fr || '';
+      const frenchGlossFull = entry.gloss_fr_full || frenchGloss;
+      if (!frenchGloss) {
+        stats.stage7cSkipped++;
+        continue;
+      }
+
+      frenchMap.set(word, {
+        frenchShort: truncateAtWordBoundary(frenchGloss),
+        frenchFull: frenchGlossFull,
+        provenance: 'supplement',
+      });
+      stats.stage7cApplied++;
+    }
+
+    console.log(`  — French glosses applied: ${stats.stage7cApplied}`);
+    console.log(`  — Already had French:    ${stats.stage7cAlreadyHasFrench}`);
+    console.log(`  — Not in dictionary:     ${stats.stage7cSkipped}`);
+  } else {
+    console.log('\n  [Skipping Stage 7C: no --stage7c flag provided]');
+  }
+
+  // Canary word check post-supplement
+  console.log('\n  Canary words (post-supplement):');
+  for (const canary of CANARY_WORDS) {
+    const inWord = wordMap.has(canary) ? '✓' : '✗';
+    const french = frenchMap.get(canary);
+    const frOk = french ? `✓ "${french.frenchShort}" (${french.provenance})` : '✗ no French';
+    console.log(`    ${canary.padEnd(12)} dict:${inWord}  fr:${frOk}`);
+  }
+
+  return stats;
+}
+
 async function pass3(
   wordMap: Map<string, Pass1Entry>,
-  frenchMap: Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' }>,
+  frenchMap: Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' | 'supplement' }>,
   outDir: string
 ): Promise<void> {
   console.log('\n══════════════════════════════════════════');
@@ -936,6 +1117,7 @@ async function pass3(
   let withEnglish = 0;
   let withFrenchDirect = 0;
   let withFrenchLemma = 0;
+  let withFrenchSupplement = 0;
   let withoutFrench = 0;
   let truncatedCount = 0;
   let homographCount = 0;
@@ -954,6 +1136,7 @@ async function pass3(
     let provenance: string = 'kaikki-en';
     if (frenchProvenance === 'kaikki-fr') provenance = 'kaikki-en'; // primary source is English
     if (frenchProvenance === 'lemma-fallback') provenance = 'kaikki-en';
+    if (frenchProvenance === 'supplement') provenance = 'supplement';
 
     // Stats
     if (pass1Entry.stress >= 0) withStress++;
@@ -963,6 +1146,7 @@ async function pass3(
 
     if (frenchProvenance === 'kaikki-fr') withFrenchDirect++;
     else if (frenchProvenance === 'lemma-fallback') withFrenchLemma++;
+    else if (frenchProvenance === 'supplement') withFrenchSupplement++;
     else withoutFrench++;
 
     // Check if short differs from full (needs fullField storage)
@@ -1027,7 +1211,7 @@ async function pass3(
   console.log(`  Written: scripts/flagged-glosses.json (${flagged.length.toLocaleString()} entries)`);
 
   // Validation report
-  const frenchTotalCoverage = withFrenchDirect + withFrenchLemma;
+  const frenchTotalCoverage = withFrenchDirect + withFrenchLemma + withFrenchSupplement;
   const frenchCoveragePct = ((frenchTotalCoverage / totalEntries) * 100).toFixed(1);
 
   const report = {
@@ -1040,6 +1224,7 @@ async function pass3(
     englishCoveragePct: ((withEnglish / totalEntries) * 100).toFixed(1),
     frenchDirect: withFrenchDirect,
     frenchLemmaFallback: withFrenchLemma,
+    frenchSupplement: withFrenchSupplement,
     frenchMissing: withoutFrench,
     frenchTotalCoverage,
     frenchCoveragePct,
@@ -1080,6 +1265,7 @@ async function pass3(
   console.log('  French glosses:');
   console.log(`    Direct:                 ${withFrenchDirect.toLocaleString()}`);
   console.log(`    Lemma fallback:         ${withFrenchLemma.toLocaleString()}`);
+  console.log(`    Supplement (7A+7C):     ${withFrenchSupplement.toLocaleString()}`);
   console.log(`    Total:                  ${frenchTotalCoverage.toLocaleString()} (${frenchCoveragePct}%)`);
   console.log(`    Missing:                ${withoutFrench.toLocaleString()}`);
   console.log();
@@ -1114,18 +1300,23 @@ async function main(): Promise<void> {
   console.log('║   Source: Kaikki.org / Wiktionary        ║');
   console.log('╚══════════════════════════════════════════╝');
 
-  const { enPath, frPath, outDir } = parseArgs();
+  const { enPath, frPath, stage7aPath, stage7cPath, outDir } = parseArgs();
 
   // Pass 1: English
   const { wordMap, lemmaIndex, stats: pass1Stats } = await pass1(enPath);
 
   // Pass 2: French (if provided)
-  let frenchMap = new Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' }>();
+  let frenchMap = new Map<string, { frenchShort: string; frenchFull: string; provenance: 'kaikki-fr' | 'lemma-fallback' | 'supplement' }>();
   if (frPath) {
     const pass2Result = await pass2(frPath, wordMap, lemmaIndex);
     frenchMap = pass2Result.frenchMap;
   } else {
     console.log('\n  [Skipping Pass 2: no --fr flag provided]');
+  }
+
+  // Supplement: Stage 7A + 7C (if provided)
+  if (stage7aPath || stage7cPath) {
+    applySupplementaryGlosses(stage7aPath, stage7cPath, wordMap, frenchMap);
   }
 
   // Pass 3: Output
