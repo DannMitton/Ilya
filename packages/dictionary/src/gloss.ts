@@ -190,7 +190,7 @@ export function isGrammatical(gloss: string): boolean {
 
   // English grammatical patterns (English Wiktionary via kaikki.org)
   if (
-    /^(short |inflection of|nominative |genitive |dative |accusative |instrumental |prepositional |comparative |superlative |alternative (spelling|form) of)/i.test(
+    /^(short|inflection of|nominative|genitive|dative|accusative|instrumental|prepositional|comparative|superlative|alternative (spelling|form) of)(?:\s|$)/i.test(
       gloss
     ) ||
     /\b(singular|plural)\s+(of|past|present|future)\b/i.test(gloss) ||
@@ -201,11 +201,11 @@ export function isGrammatical(gloss: string): boolean {
 
   // French grammatical patterns (French Wiktionary via kaikki.org)
   if (
-    /^(forme |flexion |inflexion |nominatif |g[ée]nitif |datif |accusatif |instrumental |pr[ée]positionnel |comparatif |superlatif |variante )/i.test(
+    /^(forme|flexion|inflexion|nominatif|g[ée]nitif|datif|accusatif|instrumental|pr[ée]positionnel|comparatif|superlatif|variante)(?:\s|$)/i.test(
       gloss
     ) ||
     // Verb tense, mood, and aspect patterns
-    /^(pass[ée] |pr[ée]sent |futur |imparfait |conditionnel |imp[ée]ratif |subjonctif |perfectif |imperfectif |infinitif )/i.test(
+    /^(pass[ée]|pr[ée]sent|futur|imparfait|conditionnel|imp[ée]ratif|subjonctif|perfectif|imperfectif|infinitif|aspect)(?:\s|$)/i.test(
       gloss
     ) ||
     // Person patterns (première/deuxième/troisième personne du...)
@@ -215,6 +215,20 @@ export function isGrammatical(gloss: string): boolean {
     /\b(singulier|pluriel)\s+(de|du|des)\b/i.test(gloss) ||
     /\b(participe|g[ée]rondif) (de|du|pass[ée]|pr[ée]sent)\b/i.test(gloss)
   ) {
+    return true;
+  }
+
+  // Catch-all: any gloss referencing a Cyrillic word via "of" is a
+  // grammatical description (e.g., "perfective of делать", "short form of бежать").
+  // A real semantic translation never contains Cyrillic.
+  if (/\bof\s+[а-яёА-ЯЁ]/i.test(gloss)) {
+    return true;
+  }
+
+  // Catch-all: any gloss referencing a Cyrillic word via de/du/d' is a
+  // grammatical description (e.g., "Perfectif de делать", "Forme de бежать").
+  // A real semantic translation never contains Cyrillic.
+  if (/(?:de|du|d')\s+[а-яёА-ЯЁ]/i.test(gloss)) {
     return true;
   }
 
@@ -433,7 +447,12 @@ export function formatGlossForDisplay(
       if (semanticGloss) {
         const resolved = extractGloss(semanticGloss, language);
         if (resolved) {
-          return truncateGloss(extractCleanGloss(resolved), 5);
+          // Guard: the lemma's own gloss may also be grammatical (circular reference,
+          // e.g., сделать's French gloss is "Perfectif de делать")
+          const cleanedResolved = extractCleanGloss(resolved);
+          if (!isGrammatical(cleanedResolved)) {
+            return truncateGloss(cleanedResolved, 5);
+          }
         }
       }
     }
@@ -485,7 +504,11 @@ function attemptLemmaFallback(
     if (semanticGloss) {
       const resolved = extractGloss(semanticGloss, language);
       if (resolved) {
-        return truncateGloss(extractCleanGloss(resolved), 5);
+        // Guard: the lemma's own gloss may also be grammatical (circular reference)
+        const cleanedResolved = extractCleanGloss(resolved);
+        if (!isGrammatical(cleanedResolved)) {
+          return truncateGloss(cleanedResolved, 5);
+        }
       }
     }
   }

@@ -306,6 +306,40 @@ describe('isGrammatical', () => {
     });
   });
 
+  describe('bare grammatical terms without trailing text', () => {
+    it('detects standalone Instrumental', () => {
+      expect(isGrammatical('Instrumental')).toBe(true);
+    });
+
+    it('detects standalone Nominative', () => {
+      expect(isGrammatical('Nominative')).toBe(true);
+    });
+
+    it('detects standalone Genitive', () => {
+      expect(isGrammatical('Genitive')).toBe(true);
+    });
+
+    it('detects standalone French forme', () => {
+      expect(isGrammatical('Forme')).toBe(true);
+    });
+
+    it('detects standalone French accusatif', () => {
+      expect(isGrammatical('Accusatif')).toBe(true);
+    });
+
+    it('detects Passé masculin with accented é', () => {
+      expect(isGrammatical('Passé masculin singulier de пойти')).toBe(true);
+    });
+
+    it('detects bare Passé masculin', () => {
+      expect(isGrammatical('Passé masculin')).toBe(true);
+    });
+
+    it('detects Perfectif de with accented characters', () => {
+      expect(isGrammatical('Perfectif de делать')).toBe(true);
+    });
+  });
+
   describe('rejection of clean semantic glosses', () => {
     it('rejects simple words', () => {
       expect(isGrammatical('heart')).toBe(false);
