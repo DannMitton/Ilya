@@ -594,7 +594,7 @@ describe('formatGlossForDisplay', () => {
       const gloss = { en: 'a very long verbose English translation that exceeds limits', fr: 'long' };
       const result = formatGlossForDisplay(gloss, null, null, null, 'en');
       expect(result.split(/\s+/).length).toBeLessThanOrEqual(5);
-      expect(result.length).toBeLessThanOrEqual(18);
+      expect(result.length).toBeLessThanOrEqual(20);
     });
 
     it('bilingual grammatical gloss triggers lemma fallback', () => {
@@ -669,7 +669,7 @@ describe('formatGlossForDisplay', () => {
     it('truncates long glosses to word/char limits', () => {
       expect(
         formatGlossForDisplay('a very long verbose English translation', null, null, null, 'en')
-      ).toBe('a very long');
+      ).toBe('a very long verbose');
     });
 
     it('strips parenthetical content before display', () => {

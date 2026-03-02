@@ -686,7 +686,11 @@
 	}
 
 	.toc-parent-nested {
-		padding-left: 1.5rem;
+		padding-left: 0;
+	}
+
+	.toc-parent-nested .toc-sub {
+		padding-left: calc(2.5rem - 20px) !important;
 	}
 
 	.toc-chevron-nested {
