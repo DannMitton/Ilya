@@ -120,7 +120,7 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed style="width: {collapsed ? 3 : width}px" aria-label="Controls">
+<aside class="drawer" class:collapsed style="width: {collapsed ? 0 : width}px" aria-label="Controls">
 	<div class="drawer-body">
 		{#if !collapsed}
 			<div
@@ -391,7 +391,7 @@
 	}
 
 	.drawer.collapsed {
-		width: 3px;
+		width: 0px;
 	}
 
 	.drawer-body {
@@ -443,32 +443,23 @@
 	/* ── Lip: 3px charcoal hairline with invisible 44px touch target ── */
 
 	.drawer-lip {
-		position: relative;
+		position: absolute;
+		right: -22px;
+		top: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 3px;
-		min-width: 3px;
+		width: 44px;
 		height: 100%;
-		background: rgba(45, 45, 45, 0.15);
+		background: transparent;
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		transition: background 0.2s ease, width 0.2s ease;
-	}
-
-	.drawer-lip::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -22px;
-		right: -22px;
-		bottom: 0;
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.drawer-lip:hover {
-		background: rgba(45, 45, 45, 0.3);
+		background: transparent;
 	}
 
 	.drawer-lip:focus-visible {
@@ -498,6 +489,11 @@
 
 	.collapsed .drawer-lip .drawer-handle {
 		display: flex;
+	}
+
+	.collapsed .drawer-lip {
+		right: auto;
+		left: 0;
 	}
 
 	.collapsed .drawer-lip:hover .drawer-handle {
@@ -647,7 +643,7 @@
 
 	.toc-parent .toc-link {
 		flex: 1;
-		min-width: 0;
+		min-width: 3px;
 	}
 
 	/* ── Chevron button ──────────────────────────────────── */

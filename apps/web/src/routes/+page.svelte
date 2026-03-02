@@ -5069,7 +5069,7 @@
 		display: flex;
 		flex: 1;
 		overflow: hidden;
-		background-color: var(--desk-surface, #D8D4C8);
+		background-color: var(--surround-transcription, #6B6560);
 	}
 	.main-content {
 		flex: 1;

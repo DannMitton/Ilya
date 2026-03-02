@@ -37,9 +37,9 @@
 	--app-bg: var(--desk-surface); /* main content area behind paper */
 
 	/* ── Tab-specific surrounds (Floating Paper, Approach A) ─ */
-	--surround-transcription: #D8D4C8;
-	--surround-learn: #E5E1D6;
-	--surround-guide: #F2EFE6;
+	--surround-transcription: #6B6560;
+	--surround-learn: #A8A39B;
+	--surround-guide: #E5E1D6;
 
 	/* ── Backward-compatible aliases ──────────────────────── */
 	/* Components from Phase 2 reference these names.         */

@@ -272,7 +272,7 @@
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
 		font-style: italic;
-		color: var(--terracotta);
+		color: var(--dusty-rose);
 		white-space: nowrap;
 		min-height: 1.04rem;
 	}
