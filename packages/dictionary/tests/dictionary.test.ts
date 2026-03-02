@@ -506,6 +506,28 @@ describe('truncateGloss', () => {
     });
   });
 
+  describe('ellipsis stripping from source dictionary', () => {
+    it('strips trailing triple dots', () => {
+      expect(truncateGloss('severe, strict,...', 5, 50)).toBe('severe, strict');
+    });
+
+    it('strips trailing Unicode ellipsis', () => {
+      expect(truncateGloss('severe, strict,\u2026', 5, 50)).toBe('severe, strict');
+    });
+
+    it('strips ellipsis then cleans dangling particle', () => {
+      expect(truncateGloss('to revolt, to...', 5, 50)).toBe('to revolt');
+    });
+
+    it('strips standalone trailing ellipsis', () => {
+      expect(truncateGloss('alternative form...', 5, 50)).toBe('alternative form');
+    });
+
+    it('strips ellipsis then cleans trailing comma', () => {
+      expect(truncateGloss("D'autrui,...", 5, 50)).toBe("D'autrui");
+    });
+  });
+
   describe('edge cases', () => {
     it('returns empty string for empty input', () => {
       expect(truncateGloss('', 5)).toBe('');

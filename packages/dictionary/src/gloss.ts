@@ -348,6 +348,9 @@ export function truncateGloss(
     cleaned = truncatedWords.join(' ') || cleaned.slice(0, maxChars);
   }
 
+  // Remove trailing ellipsis from source dictionary (indicates more definitions exist)
+  cleaned = cleaned.replace(/\s*(?:\.{2,}|…)\s*$/, '');
+
   // Remove dangling particles after comma/semicolon
   // English: "to wander, to" -> "to wander"
   // French: "errer, de" -> "errer"
