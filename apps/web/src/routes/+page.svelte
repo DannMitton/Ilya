@@ -710,6 +710,7 @@
 		class:drawer-open={!drawerCollapsed}
 		class:reading-mode={isReadingMode}
 		bind:this={mainContentEl}
+		tabindex="0"
 	>
 		{#if activeTab === 'transcription'}
 			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
@@ -897,7 +898,7 @@
 						<h4 id="learn-u1-glyphs">Le tableau des glyphes</h4>
 
 						<div class="gt-legend"><span class="gt-legend-swatch"></span> Forme graphique radicalement différente des lettres latines familières</div>
-						<div class="gt-scroll">
+						<div class="gt-scroll" tabindex="0" role="region" aria-label="Tableau des glyphes cyrilliques">
 						<table class="gt-table">
 						<thead>
 						<tr>
@@ -2894,7 +2895,7 @@
 						<h4 id="learn-u1-glyphs">The Glyph Table</h4>
 
 						<div class="gt-legend"><span class="gt-legend-swatch"></span> Letterform departs radically from familiar Latin shapes</div>
-						<div class="gt-scroll">
+						<div class="gt-scroll" tabindex="0" role="region" aria-label="Cyrillic glyph table">
 						<table class="gt-table">
 						<thead>
 						<tr>

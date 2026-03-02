@@ -13,7 +13,7 @@
 	/* ── Ink hierarchy ────────────────────────────────────── */
 	--ink-primary: #1a1612;       /* warm charcoal — headings, Cyrillic, body */
 	--ink-secondary: #4a4540;     /* warm grey — IPA, metadata, secondary text */
-	--ink-tertiary: #7a756e;      /* lighter warm grey — captions, placeholders */
+	--ink-tertiary: #6A655F;      /* lighter warm grey — captions, placeholders */
 
 	/* ── Sage accent ──────────────────────────────────────── */
 	--sage: #8B9A7D;

@@ -23,6 +23,7 @@
 </script>
 
 <header class="header-bar">
+	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
 	<div class="sigil" aria-label="Ilya 2026a">
 		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
 	</div>
@@ -98,6 +99,9 @@
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.04em;
 		line-height: 1;
+		background: var(--deeper-sage);
+		padding: 0 3px;
+		border-radius: 2px;
 	}
 
 	/* ── Language toggle ─────────────────────────────────── */
@@ -127,7 +131,7 @@
 
 	.lang-option:not(.active) {
 		color: rgba(255, 255, 255, 0.7);
-		background: transparent;
+		background: var(--deeper-sage);
 	}
 
 	.lang-option:not(.active):hover {
@@ -148,5 +152,17 @@
 		width: 1px;
 		height: 12px;
 		background: #C5C5C5;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
 	}
 </style>

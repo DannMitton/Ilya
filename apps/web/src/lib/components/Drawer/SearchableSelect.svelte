@@ -169,6 +169,7 @@
 		aria-expanded={isOpen}
 		aria-haspopup="listbox"
 		aria-controls={isOpen ? `${uid}-listbox` : undefined}
+		aria-label={placeholder}
 	>
 		{#if displayText}
 			<span class="trigger-text">{displayText}</span>

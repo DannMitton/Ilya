@@ -683,7 +683,7 @@
 		font-size: 1rem;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 1.5px;
-		color: var(--sage);
+		color: var(--ink-secondary);
 		margin-bottom: 0.4rem;
 		font-weight: 600;
 	}
