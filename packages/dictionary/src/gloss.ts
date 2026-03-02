@@ -204,6 +204,14 @@ export function isGrammatical(gloss: string): boolean {
     /^(forme |flexion |inflexion |nominatif |g[ée]nitif |datif |accusatif |instrumental |pr[ée]positionnel |comparatif |superlatif |variante )/i.test(
       gloss
     ) ||
+    // Verb tense, mood, and aspect patterns
+    /^(pass[ée] |pr[ée]sent |futur |imparfait |conditionnel |imp[ée]ratif |subjonctif |perfectif |imperfectif |infinitif )/i.test(
+      gloss
+    ) ||
+    // Person patterns (première/deuxième/troisième personne du...)
+    /^(premi[èe]re|deuxi[èe]me|troisi[èe]me) personne/i.test(gloss) ||
+    // Gender-form descriptions (Masculin singulier de..., Féminin pluriel de...)
+    /^(masculin|f[ée]minin) (singulier|pluriel)/i.test(gloss) ||
     /\b(singulier|pluriel)\s+(de|du|des)\b/i.test(gloss) ||
     /\b(participe|g[ée]rondif) (de|du|pass[ée]|pr[ée]sent)\b/i.test(gloss)
   ) {
