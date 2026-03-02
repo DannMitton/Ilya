@@ -61,6 +61,50 @@
 	const showWarning = $derived(charCount > 5000);
 	const dictReady = $derived(loaderState.entryCount > 0 && !loaderState.isLoading);
 
+	/* ── OCR state ─────────────────────────────────────────── */
+	let ocrProcessing = $state(false);
+	let ocrError = $state('');
+	let fileInputEl: HTMLInputElement;
+
+	function handleOcrClick() {
+		fileInputEl?.click();
+	}
+
+	async function handleOcrFile(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		ocrProcessing = true;
+		ocrError = '';
+
+		try {
+			const { createWorker } = await import('tesseract.js');
+			const worker = await createWorker('rus');
+			const { data: { text } } = await worker.recognize(file);
+			await worker.terminate();
+
+			if (text.trim()) {
+				oninput(text.trim());
+			} else {
+				ocrError = language === 'en'
+					? 'No text recognised in image.'
+					: 'Aucun texte reconnu dans l\u2019image.';
+			}
+		} catch (err) {
+			ocrError = language === 'en'
+				? 'OCR processing failed.'
+				: 'Échec du traitement OCR.';
+			console.error('OCR error:', err);
+		} finally {
+			ocrProcessing = false;
+			// Reset so the same file can be re-selected
+			input.value = '';
+		}
+	}
+
+	/* ── Existing handlers ─────────────────────────────────── */
+
 	function handleKeydown(e: KeyboardEvent) {
 		if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
 			e.preventDefault();
@@ -170,19 +214,58 @@
 		</div>
 	</div>
 
-	<!-- ── 2. Textarea (disabled during dictionary load) ── -->
-	<textarea
-		class="text-input"
-		placeholder={t('input.placeholder', language)}
-		value={inputText}
-		oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
-		onkeydown={handleKeydown}
-		rows="6"
-		disabled={loaderState.isLoading}
-	></textarea>
+	<!-- ── 2. Textarea with OCR overlay ────────────────────── -->
+	<div class="textarea-wrapper">
+		<textarea
+			class="text-input"
+			placeholder={t('input.placeholder', language)}
+			value={inputText}
+			oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
+			onkeydown={handleKeydown}
+			rows="6"
+			disabled={loaderState.isLoading || ocrProcessing}
+		></textarea>
+
+		<!-- OCR camera icon: top-right corner of textarea -->
+		<button
+			class="ocr-btn"
+			onclick={handleOcrClick}
+			disabled={loaderState.isLoading || ocrProcessing}
+			aria-label={language === 'en' ? 'Scan Cyrillic text from image' : 'Numériser du texte cyrillique à partir d\u2019une image'}
+			title={language === 'en' ? 'Scan image' : 'Numériser une image'}
+		>
+			{#if ocrProcessing}
+				<span class="ocr-spinner"></span>
+			{:else}
+				<!-- Viewfinder / scan frame icon -->
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+					<!-- Four corner brackets -->
+					<path d="M2 7V2h5"/>
+					<path d="M17 2h5v5"/>
+					<path d="M22 17v5h-5"/>
+					<path d="M7 22H2v-5"/>
+					<!-- Scan line -->
+					<line x1="5" y1="12" x2="19" y2="12"/>
+				</svg>
+			{/if}
+		</button>
+
+		<!-- Hidden file input for image selection -->
+		<input
+			type="file"
+			accept="image/*"
+			class="ocr-file-input"
+			bind:this={fileInputEl}
+			onchange={handleOcrFile}
+		/>
+	</div>
 
 	{#if showWarning}
 		<p class="char-warning">{charCount.toLocaleString()} {t('input.warning', language)}</p>
+	{/if}
+
+	{#if ocrError}
+		<p class="ocr-error">{ocrError}</p>
 	{/if}
 
 	<!-- ── 3. Result summary: always reserves space to prevent layout shift ── -->
@@ -429,7 +512,12 @@
 		font-family: var(--font-sans);
 	}
 
-	/* ── Textarea ─────────────────────────────────────────── */
+	/* ── Textarea with OCR overlay ────────────────────────── */
+
+	.textarea-wrapper {
+		position: relative;
+		margin-top: 8px;
+	}
 
 	.text-input {
 		width: 100%;
@@ -440,9 +528,10 @@
 		border: 1px solid var(--stone-300);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
+		padding-right: 2.2rem; /* room for the OCR icon */
 		resize: vertical;
 		line-height: 1.5;
-		margin-top: 8px;
+		box-sizing: border-box;
 	}
 
 	.text-input::placeholder {
@@ -453,6 +542,59 @@
 	.text-input:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+	}
+
+	/* ── OCR camera button ────────────────────────────────── */
+
+	.ocr-btn {
+		position: absolute;
+		top: 6px;
+		right: 6px;
+		width: 28px;
+		height: 28px;
+		padding: 4px;
+		border: none;
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.8);
+		color: var(--ink-tertiary);
+		cursor: pointer;
+		transition: color 0.15s ease, background 0.15s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.ocr-btn:hover:not(:disabled) {
+		color: var(--sage);
+		background: rgba(255, 255, 255, 0.95);
+	}
+
+	.ocr-btn:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+
+	.ocr-file-input {
+		display: none;
+	}
+
+	.ocr-spinner {
+		width: 16px;
+		height: 16px;
+		border: 2px solid var(--stone-300);
+		border-top-color: var(--sage);
+		border-radius: 50%;
+		animation: ocr-spin 0.8s linear infinite;
+	}
+
+	@keyframes ocr-spin {
+		to { transform: rotate(360deg); }
+	}
+
+	.ocr-error {
+		font-size: 0.7rem;
+		color: #d97706;
+		font-family: var(--font-sans);
 	}
 
 	.char-warning {

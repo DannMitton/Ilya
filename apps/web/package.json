@@ -12,10 +12,11 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ilya/phonology": "workspace:*",
-    "@ilya/dictionary": "workspace:*",
     "@ilya/blurb": "workspace:*",
-    "bits-ui": "^2.15.5"
+    "@ilya/dictionary": "workspace:*",
+    "@ilya/phonology": "workspace:*",
+    "bits-ui": "^2.15.5",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

@@ -20,6 +20,7 @@
 
 import type { BilingualGloss, GlossLanguage, StressDictionary, DictionaryEntry } from './types';
 import { CURATED_GLOSSES } from './curated-glosses';
+import { normalizePoetic } from './poetic-normalizer';
 
 // ---------------------------------------------------------------------------
 // Module-level dictionary reference (for lemma fallback lookups)
@@ -57,8 +58,22 @@ export function lookupFullEntry(word: string): DictionaryEntry | DictionaryEntry
     .replace(/[-–—]+$/, '')
     .toLowerCase();
   const entry = _dictionary[clean];
-  if (!entry) return null;
-  return entry;
+  if (entry) return entry;
+
+  // Poetic normalization fallback: try soft-sign contraction rules
+  const candidates = normalizePoetic(clean);
+  for (const candidate of candidates) {
+    const normalized = _dictionary[candidate];
+    if (normalized) {
+      // Return a shallow copy tagged with provenance (never mutate the dictionary)
+      if (Array.isArray(normalized)) {
+        return normalized.map((e) => ({ ...e, normalizedFrom: clean }));
+      }
+      return { ...normalized, normalizedFrom: clean };
+    }
+  }
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------

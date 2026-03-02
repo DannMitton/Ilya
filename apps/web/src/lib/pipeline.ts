@@ -28,6 +28,8 @@ import {
   extractGloss,
   addStressMarkToCyrillic,
   lookupFullEntry,
+  normalizePoetic,
+  restoreCasing,
 } from '@ilya/dictionary';
 import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dictionary';
 
@@ -390,7 +392,23 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   const trailingPunctMatch = word.match(TRAILING_PUNCT_REGEX);
   const punctuation = trailingPunctMatch ? trailingPunctMatch[0] : '';
 
-  const lookup = GraysonEngine.lookupStress(bareWord);
+  let lookup = GraysonEngine.lookupStress(bareWord);
+
+  // Poetic normalization fallback: if direct lookup misses,
+  // try soft-sign contraction rules (e.g., восстанье → восстание)
+  let normalizedToForm: string | null = null;
+  if (!lookup) {
+    const cleanForNormalize = bareWord.normalize('NFC').replace(/\u0301/g, '').replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
+    const candidates = normalizePoetic(cleanForNormalize);
+    for (const candidate of candidates) {
+      const normalized = GraysonEngine.lookupStress(candidate);
+      if (normalized) {
+        lookup = normalized;
+        normalizedToForm = restoreCasing(bareWord, candidate);
+        break;
+      }
+    }
+  }
 
   let displayWord = word;
   let wasYoRestored = false;
@@ -404,6 +422,11 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
     const gr = word.endsWith('»') ? '»' : '';
     displayWord = gl + restored + gr;
     wasYoRestored = true;
+  }
+
+  // Poetic normalisation: record the standard form for provenance
+  if (!dictionaryForm && normalizedToForm) {
+    dictionaryForm = normalizedToForm;
   }
 
   const yoSyllable = GraysonEngine.findYoSyllable(displayWord);

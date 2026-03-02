@@ -18,6 +18,12 @@ export {
   lookupFullEntry,
 } from './gloss';
 
+// Poetic form normalisation
+export {
+  normalizePoetic,
+  restoreCasing,
+} from './poetic-normalizer';
+
 // Curated glosses
 export { CURATED_GLOSSES } from './curated-glosses';
 

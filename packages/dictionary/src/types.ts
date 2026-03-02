@@ -34,6 +34,8 @@ export interface DictionaryEntry {
   l?: string;
   /** Source tag (e.g., 'supplement') */
   source?: string;
+  /** Original poetic form, present when entry was resolved via normalisation */
+  normalizedFrom?: string;
 }
 
 /**
