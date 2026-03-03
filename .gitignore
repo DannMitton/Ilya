@@ -1,9 +1,22 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
-.svelte-kit/
 build/
+.svelte-kit/
 *.tsbuildinfo
-.DS_Store
+
+# Dictionary (152.8 MB, built from build-dictionary.ts)
 apps/web/static/data/
 data/dictionary.*.json
 !apps/web/static/data/dictionary-manifest.json
+
+# Build artifacts
+scripts/flagged-glosses.json
+
+# Test output
+apps/web/test-results/
+
+# OS
+.DS_Store
