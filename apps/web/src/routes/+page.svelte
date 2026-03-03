@@ -4752,7 +4752,7 @@
 
 						<h4 id="guide-mitton-note">Mot du créateur</h4>
 
-						<p>La mezzo-soprano britannique Catherine Wyn-Rogers était titulaire de la chaire John R. Stratton en musique lors de ma maitrise à l'Université de Toronto. Elle nous avait confié un concert thématique : « Shakespeare, mais pas en anglais. » En préparant ce concert, j'ai découvert le cycle pour basse Op. 52 de Kabalevsky, composé sur les traductions russes de sonnets de Shakespeare par Marshak, et j'en ai interprété un extrait. À mon doctorat, j'allais programmer le cycle entier ; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
+						<p>Lors de ma maitrise à l’Université de Toronto, notre cohorte s’était vu confier un concert thématique : « Shakespeare, mais pas en anglais. » En préparant ce concert, j'ai découvert le cycle pour basse Op. 52 de Kabalevsky, composé sur les traductions russes de sonnets de Shakespeare par Marshak, et j'en ai interprété un extrait. À mon doctorat, j'allais programmer le cycle entier ; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
 
 						<p>Pour ma recension des écrits, j'ai évalué chaque guide de diction lyrique russe alors disponible. La plupart étaient incomplets, incohérents, quand ce n'était pas les deux. Une thèse récente, <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), n'était ni l'un ni l'autre. Sa thèse incarnait le mariage de rigueur savante et d'application pratique que je recherchais pour mon propre travail ; elle est devenue le fondement phonologique auquel je me suis fié. Elle l'est toujours.</p>
 
@@ -4868,7 +4868,7 @@
 
 						<h4 id="guide-mitton-note">Builder’s Note</h4>
 
-						<p>British mezzo-soprano Catherine Wyn-Rogers was the John R. Stratton Visitor in Music during my master’s degree at the University of Toronto. She assigned us a themed concert: “Shakespeare, But Not in English.” Dutifully researching for it, I discovered Kabalevsky’s bass cycle Op. 52, featuring settings of Marshak’s Russian translations of Shakespeare sonnets, and performed one of these songs for the concert. In my doctorate I would return to program the entire cycle, and it became the titular cornerstone of my doctoral research.</p>
+						<p>During my master’s degree at the University of Toronto, my cohort was assigned a themed concert: “Shakespeare, But Not in English.” Dutifully researching for it, I discovered Kabalevsky’s bass cycle Op. 52, featuring settings of Marshak’s Russian translations of Shakespeare sonnets, and performed one of these songs for the concert. In my doctorate I would return to program the entire cycle, and it became the titular cornerstone of my doctoral research.</p>
 
 						<p>For my literature review, I assessed every guide to Russian lyric diction for singers available at that time. Most were incomplete, inconsistent, or both. A new dissertation, Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012), was neither. His dissertation modelled the marriage of scholarly rigour and practical application that I wanted for my own work, and it became the phonological foundation I trusted. It still is.</p>
 
@@ -5265,6 +5265,26 @@
 		line-height: 1.35;
 	}
 
+	/* Tab-scoped heading colours */
+
+	.main-content.tab-learn :global(.reading-inner h1),
+	.main-content.tab-learn :global(.reading-inner h2),
+	.main-content.tab-learn :global(.reading-inner h3),
+	.main-content.tab-learn :global(.reading-inner h4) {
+		color: var(--dusty-rose, #A67B7B);
+	}
+
+	.main-content.tab-guide :global(.reading-inner h1),
+	.main-content.tab-guide :global(.reading-inner h2),
+	.main-content.tab-guide :global(.reading-inner h3),
+	.main-content.tab-guide :global(.reading-inner h4) {
+		color: var(--quiet-cobalt, #5C739E);
+	}
+
+	.main-content.tab-guide :global(.reading-inner h3) {
+		border-top-color: var(--quiet-cobalt, #5C739E);
+	}
+
 	/* ── Text input field: sage border (item 6) ──────────── */
 	/* Targets textarea within the Drawer's transcription panel */
 	:global(.drawer-content textarea) {
@@ -5376,7 +5396,7 @@
 	}
 
 	.about-website a {
-		color: var(--sage, #8B9A7D);
+		color: var(--quiet-cobalt, #5C739E);
 		text-decoration: none;
 	}
 
