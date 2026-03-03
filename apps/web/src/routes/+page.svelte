@@ -626,7 +626,7 @@
 </div>
 {/if}
 <div class="screen-only">
-	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
+	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
 </div>
 <div class="app-content {viewBreathClass}">
 	<Drawer

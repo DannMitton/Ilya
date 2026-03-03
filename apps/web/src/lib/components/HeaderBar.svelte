@@ -1,12 +1,14 @@
 <script lang="ts">
 	import type { Language } from '$lib/i18n';
+	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
 
 	interface Props {
 		language: Language;
+		activeTab: TabId;
 		onlanguagechange: (lang: Language) => void;
 	}
 
-	let { language, onlanguagechange }: Props = $props();
+	let { language, activeTab, onlanguagechange }: Props = $props();
 
 	function switchTo(lang: Language) {
 		if (lang !== language) {
@@ -22,7 +24,12 @@
 	}
 </script>
 
-<header class="header-bar">
+<header
+	class="header-bar"
+	class:tab-transcription={activeTab === 'transcription'}
+	class:tab-learn={activeTab === 'learn'}
+	class:tab-guide={activeTab === 'guide'}
+>
 	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
 	<div class="sigil" aria-label="Ilya 2026a">
 		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
@@ -60,7 +67,21 @@
 		justify-content: space-between;
 		padding: 0 16px;
 		border-bottom: none;
-		background: var(--sage);
+		transition: background-color 300ms ease;
+	}
+
+	/* ── Tab-responsive background ────────────────────────── */
+
+	.header-bar.tab-transcription {
+		background: var(--sage, #8B9A7D);
+	}
+
+	.header-bar.tab-learn {
+		background: var(--dusty-rose, #A67B7B);
+	}
+
+	.header-bar.tab-guide {
+		background: var(--quiet-cobalt, #5C739E);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
@@ -99,9 +120,21 @@
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.04em;
 		line-height: 1;
-		background: var(--deeper-sage);
 		padding: 0 3px;
 		border-radius: 2px;
+		transition: background-color 300ms ease;
+	}
+
+	.tab-transcription .sigil-version {
+		background: var(--deeper-sage, #7A8A6C);
+	}
+
+	.tab-learn .sigil-version {
+		background: #8F6A6A;
+	}
+
+	.tab-guide .sigil-version {
+		background: #4D6387;
 	}
 
 	/* ── Language toggle ─────────────────────────────────── */
@@ -126,20 +159,42 @@
 	.lang-option.active {
 		color: white;
 		font-weight: 500;
-		background: rgba(139, 154, 125, 0.15);
+		background: rgba(255, 255, 255, 0.15);
 	}
 
 	.lang-option:not(.active) {
 		color: rgba(255, 255, 255, 0.7);
-		background: var(--deeper-sage);
+	}
+
+	.tab-transcription .lang-option:not(.active) {
+		background: var(--deeper-sage, #7A8A6C);
+	}
+
+	.tab-learn .lang-option:not(.active) {
+		background: #8F6A6A;
+	}
+
+	.tab-guide .lang-option:not(.active) {
+		background: #4D6387;
 	}
 
 	.lang-option:not(.active):hover {
 		text-decoration: underline;
-		text-decoration-color: var(--sage, #8B9A7D);
 		text-decoration-thickness: 2px;
 		text-underline-offset: 3px;
 		color: rgba(255, 255, 255, 0.9);
+	}
+
+	.tab-transcription .lang-option:not(.active):hover {
+		text-decoration-color: var(--sage, #8B9A7D);
+	}
+
+	.tab-learn .lang-option:not(.active):hover {
+		text-decoration-color: var(--dusty-rose, #A67B7B);
+	}
+
+	.tab-guide .lang-option:not(.active):hover {
+		text-decoration-color: var(--quiet-cobalt, #5C739E);
 	}
 
 	.lang-option:focus-visible {
