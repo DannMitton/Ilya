@@ -134,7 +134,7 @@
 					{@render rootPanel()}
 				{:else if activeTab === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
-						<h2 class="section-label">LEARN</h2>
+						<h2 class="section-label section-label-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
 						<ul class="toc-list">
 							<li>
 								<button class="toc-link toc-title" class:active={isActive('learn-title')} data-heading-id="learn-title" onclick={() => handleTocClick('learn-title')}>
@@ -300,8 +300,8 @@
 						</ul>
 					</nav>
 				{:else if activeTab === 'guide'}
-					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières du Guide' : 'Guide table of contents'}>
-						<h2 class="section-label">GUIDE</h2>
+					<nav class="learn-toc guide-toc" aria-label={language === 'fr' ? 'Table des matières du Guide' : 'Guide table of contents'}>
+						<h2 class="section-label section-label-guide">GUIDE</h2>
 						<ul class="toc-list">
 
 							<!-- ── How Ilya Works ── -->
@@ -340,7 +340,6 @@
 											<button class="toc-link toc-sub" class:active={isActive('guide-grayson')} data-heading-id="guide-grayson" onclick={() => handleTocClick('guide-grayson')}>Craig Grayson</button>
 										</div>
 										<div class="toc-children" class:expanded={expandedSections.has('guide-grayson')}><div class="toc-children-inner"><ul class="toc-subsections">
-											<li><button class="toc-link toc-deep" class:active={isActive('guide-grayson')} data-heading-id="guide-grayson" onclick={() => handleTocClick('guide-grayson')}>{language === 'fr' ? 'Biographie' : 'Bio'}</button></li>
 											<li><button class="toc-link toc-deep" class:active={isActive('guide-grayson-intro')} data-heading-id="guide-grayson-intro" onclick={() => handleTocClick('guide-grayson-intro')}>{language === 'fr' ? 'Introduction \u00e0 Russian Lyric Diction' : 'Introduction to Russian Lyric Diction'}</button></li>
 										</ul></div></div>
 									</li>
@@ -352,7 +351,6 @@
 											<button class="toc-link toc-sub" class:active={isActive('guide-mitton')} data-heading-id="guide-mitton" onclick={() => handleTocClick('guide-mitton')}>Dann Mitton</button>
 										</div>
 										<div class="toc-children" class:expanded={expandedSections.has('guide-mitton')}><div class="toc-children-inner"><ul class="toc-subsections">
-											<li><button class="toc-link toc-deep" class:active={isActive('guide-mitton')} data-heading-id="guide-mitton" onclick={() => handleTocClick('guide-mitton')}>{language === 'fr' ? 'Biographie' : 'Bio'}</button></li>
 											<li><button class="toc-link toc-deep" class:active={isActive('guide-mitton-note')} data-heading-id="guide-mitton-note" onclick={() => handleTocClick('guide-mitton-note')}>{language === 'fr' ? 'Mot du cr\u00e9ateur' : "Builder's Note"}</button></li>
 										</ul></div></div>
 									</li>
@@ -517,6 +515,14 @@
 		margin: 0 0 1rem 0;
 	}
 
+	.section-label-learn {
+		color: var(--dusty-rose, #A67B7B);
+	}
+
+	.section-label-guide {
+		color: var(--quiet-cobalt, #5C739E);
+	}
+
 	.placeholder-text {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
 		font-size: 0.95rem;
@@ -559,8 +565,8 @@
 	}
 
 	.toc-link:hover {
-		border-left-color: var(--light-sage, #A8B5A0);
-		background: rgba(139, 154, 125, 0.06);
+		border-left-color: rgba(166, 123, 123, 0.4);
+		background: rgba(166, 123, 123, 0.06);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -670,6 +676,26 @@
 
 	.toc-chevron.contains-active {
 		color: var(--dusty-rose, #A67B7B);
+	}
+
+	/* -- Guide tab: quiet-cobalt colour identity ----------- */
+
+	.guide-toc .toc-link:hover {
+		border-left-color: rgba(92, 115, 158, 0.4);
+		background: rgba(92, 115, 158, 0.06);
+	}
+
+	.guide-toc .toc-link.active {
+		border-left-color: var(--quiet-cobalt, #5C739E);
+		background: rgba(92, 115, 158, 0.08);
+	}
+
+	.guide-toc .toc-link.active:hover {
+		border-left-color: var(--quiet-cobalt, #5C739E);
+	}
+
+	.guide-toc .toc-chevron.contains-active {
+		color: var(--quiet-cobalt, #5C739E);
 	}
 
 	.toc-chevron:focus-visible {
