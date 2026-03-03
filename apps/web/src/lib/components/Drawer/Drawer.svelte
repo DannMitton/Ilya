@@ -401,6 +401,7 @@
 		background: var(--drawer-bg);
 		display: flex;
 		flex-direction: column;
+		border-right: 2px double var(--ink-primary, #1a1612);
 	}
 
 	.collapsed .drawer-body {

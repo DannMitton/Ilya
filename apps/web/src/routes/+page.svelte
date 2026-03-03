@@ -629,18 +629,17 @@
 	<HeaderBar {language} onlanguagechange={handleLanguageChange} />
 </div>
 <div class="app-content {viewBreathClass}">
-	<div class="screen-only">
-		<Drawer
-			width={drawerWidth}
-			collapsed={drawerCollapsed}
-			{language}
-			{activeTab}
-			{activeHeadingId}
-			{tabTransitionClass}
-			ontogglecollapse={handleDrawerToggle}
-			ontabchange={handleTabChange}
-			onheadingnavigate={handleHeadingNavigate}
-		>
+	<Drawer
+		width={drawerWidth}
+		collapsed={drawerCollapsed}
+		{language}
+		{activeTab}
+		{activeHeadingId}
+		{tabTransitionClass}
+		ontogglecollapse={handleDrawerToggle}
+		ontabchange={handleTabChange}
+		onheadingnavigate={handleHeadingNavigate}
+	>
 			{#snippet rootPanel()}
 				<RootPanel
 					{inputText}
@@ -703,8 +702,7 @@
 					{/snippet}
 				</RootPanel>
 			{/snippet}
-		</Drawer>
-	</div>
+	</Drawer>
 	<main
 		class="main-content tab-{activeTab} {paperBreathClass} {tabTransitionClass}"
 		class:drawer-open={!drawerCollapsed}
@@ -5070,7 +5068,7 @@
 		display: flex;
 		flex: 1;
 		overflow: hidden;
-		background-color: var(--surround-transcription, #6B6560);
+		background-color: var(--drawer-bg, #FAF8F5);
 	}
 	.main-content {
 		flex: 1;
@@ -5080,8 +5078,7 @@
 		flex-direction: column;
 		align-items: center;
 		background-color: var(--desk-surface, #D8D4C8);
-		transform: translateX(0);
-		transition: transform 2000ms cubic-bezier(0.25, 0, 0.15, 1);
+		transform: none;
 	}
 
 	/* ── Floating Paper: tab-specific surrounds (Approach A) ── */
@@ -5112,10 +5109,7 @@
 		box-shadow: 0 3px 12px rgba(45, 45, 45, 0.08);
 	}
 
-	/* ── Transcription mode: Paper yields gently rightward when drawer is open ── */
-	.main-content.drawer-open:not(.reading-mode) {
-		transform: translateX(20px);
-	}
+	/* ── Transcription mode: Paper centres naturally within flex ── */
 
 	/*
 	 * Reading mode: no translateX offset. The Reading Paper fills available
