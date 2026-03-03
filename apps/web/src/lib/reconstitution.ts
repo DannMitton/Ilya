@@ -79,9 +79,14 @@ export function applyReconstitution(
     // i from е (interpalatal) → e (Grayson: "reverts to [e] or [je]")
     if (ipa === 'i' && char === 'е' && entry.features?.interpalatal) return 'e';
 
-    // ɨ stays ɨ (Grayson: "-и- read as [ɨ] ... remain sung as [ɨ]")
-    // ɨ from е after hard consonant stays ɨ (Grayson: "unstressed -е- read
-    //   as [ɨ] after a hard consonant ... remain sung as [ɨ]")
+    // ɨ from е after always-hard consonant (ж/ш/ц) → ɛ
+    // Dann's departure from Grayson p. 129. Grayson says [ɨ] after hard
+    // consonants does not reconstitute. Dann argues the underlying vowel
+    // is /ɛ/ and reconstitution should apply. Kochetov concurs.
+    // See LEARN Section 4 callout box.
+    if (ipa === 'ɨ' && char === 'е') return 'ɛ';
+
+    // ɨ from и stays ɨ (Grayson: "-и- read as [ɨ] ... remain sung as [ɨ]")
     // u, ɑ (pretonic), i (non-interpalatal): already unreduced, no change
     return ipa;
   });
