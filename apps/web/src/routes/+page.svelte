@@ -744,7 +744,10 @@
 
 						<h4 id="learn-u1-song">La chanson de l'alphabet russe</h4>
 
-						<blockquote><p><em>[Image de la partition : Chanson de l'alphabet russe occidentalisée de Ken Griffiths, arr. Dann Mitton 2017. Voix de basse, si bémol majeur, Moderato (♩ = 72). Présentée sur fond blanc aux proportions Letter (8,5 × 11 po) avec marges standard.]</em></p></blockquote>
+						<figure>
+							<img src="/images/russian-alphabet-song.png" alt="Chanson de l'alphabet russe, arrangement Dann Mitton 2017. Voix de basse en si bémol majeur, Moderato. Les trente-trois lettres cyrilliques dans l'ordre du dictionnaire avec transcription API sous chaque nom de lettre." style="width: 100%; height: auto; border-radius: 4px;" />
+							<figcaption>Chanson de l'alphabet russe, arr. Dann Mitton 2017. D'après Ken Griffiths.</figcaption>
+						</figure>
 
 						<p>Les enfants russes apprennent l'alphabet cyrillique par cœur. Cette chanson de l'alphabet russe est une construction occidentalisée sur la mélodie d'une chanson à boire traditionnelle. Elle présente les trente-trois lettres dans leur ordre du dictionnaire, chacune chantée sur son nom russe. La phrase finale offre ce conseil pragmatique : «&nbsp;Pour parler russe, il faut apprendre l'alphabet&nbsp;!&nbsp;» Chantez-la une ou deux fois dans la tonalité qui vous convient le mieux et vous aurez déjà la séquence sous les doigts.</p>
 
@@ -2741,7 +2744,10 @@
 
 						<h4 id="learn-u1-song">The Russian Alphabet Song</h4>
 
-						<blockquote><p><em>[Score image: Ken Griffiths' Westernised Russian Alphabet Song, arr. Dann Mitton 2017. Bass voice, B♭ major, Moderato (♩ = 72). Presented on a white field at Letter-sized (8.5 × 11″) proportions with standard margins.]</em></p></blockquote>
+						<figure>
+							<img src="/images/russian-alphabet-song.png" alt="Russian Alphabet Song, arranged by Dann Mitton 2017. Bass voice in B-flat major, Moderato. All thirty-three Cyrillic letters set in dictionary order with IPA transcription beneath each letter-name." style="width: 100%; height: auto; border-radius: 4px;" />
+							<figcaption>Russian Alphabet Song, arr. Dann Mitton 2017. After Ken Griffiths.</figcaption>
+						</figure>
 
 						<p>Russian children learn the Cyrillic alphabet by rote. This Russian Alphabet Song is a Westernised construct set to the melody of a traditional drinking song. It sets all thirty-three letters in their dictionary order, each sung on its Russian letter-name. The closing phrase offers this pragmatic advice: "To speak Russian you need to learn the alphabet!" Sing through it once or twice in the key that best suits you and you will already have the sequence under your fingers.</p>
 
@@ -5370,7 +5376,7 @@
 	}
 
 	.about-website a {
-		color: var(--quiet-cobalt, #5C739E);
+		color: var(--sage, #8B9A7D);
 		text-decoration: none;
 	}
 
