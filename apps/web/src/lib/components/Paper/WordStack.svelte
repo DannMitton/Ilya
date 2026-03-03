@@ -272,7 +272,7 @@
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
 		font-style: italic;
-		color: var(--dusty-rose);
+		color: var(--sage);
 		white-space: nowrap;
 		min-height: 1.04rem;
 	}

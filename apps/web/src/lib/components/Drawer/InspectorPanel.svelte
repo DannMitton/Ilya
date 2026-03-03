@@ -995,12 +995,12 @@
 		</div>
 	</div>
 
-	<!-- Dictionary expansion panel (overlay, full drawer width, dusty rose) -->
+	<!-- Dictionary expansion panel (overlay, full drawer width, sage) -->
 	{#if dictPanelOpen}
 		<div class="dict-expansion-anchor">
 			<div class="dict-expansion" bind:this={dictPanelEl}>
 				<svg class="dict-caret" width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
-					<polygon points="0,10 8,0 16,10" fill="var(--dusty-rose)" />
+					<polygon points="0,10 8,0 16,10" fill="var(--sage)" />
 				</svg>
 				<div class="dict-lip" aria-hidden="true"></div>
 				<div class="dict-panel">
@@ -1295,7 +1295,7 @@
 				<div class="blurb-inner">
 					{#if selectedRibbonEntry}
 						<div class="blurb-container">
-							<!-- SVG caret: filled dusty rose, matching dict-caret pattern -->
+							<!-- SVG caret: filled sage, matching dict-caret pattern -->
 							<svg
 								class="blurb-caret"
 								width="16"
@@ -1304,7 +1304,7 @@
 								aria-hidden="true"
 								style="left: {caretLeft}px"
 							>
-								<polygon points="0,10 8,0 16,10" fill="var(--dusty-rose)" />
+								<polygon points="0,10 8,0 16,10" fill="var(--sage)" />
 							</svg>
 							<div class="blurb-lip" aria-hidden="true"></div>
 							<div class="blurb-box" aria-live="polite">
@@ -1424,7 +1424,7 @@
 	.word-gloss {
 		font-family: var(--font-serif);
 		font-size: 0.85rem;
-		color: var(--dusty-rose);
+		color: var(--sage);
 		font-style: italic;
 		line-height: 1.3;
 	}
@@ -1445,7 +1445,7 @@
 		min-width: 160px;
 		padding: 0.4rem 0.75rem;
 		margin-top: 0.25rem;
-		background: var(--dusty-rose);
+		background: var(--sage);
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
@@ -1459,16 +1459,16 @@
 	}
 
 	.dict-button:hover {
-		background: #906B6B;
+		background: var(--deeper-sage, #7A8A6C);
 	}
 
 	.dict-button:focus-visible {
-		outline: 2px solid var(--dusty-rose);
+		outline: 2px solid var(--sage);
 		outline-offset: 2px;
 	}
 
 	.dict-button[aria-expanded="true"] {
-		background: #856262;
+		background: #6B7B5E;
 	}
 
 	.dict-expansion-anchor {
@@ -1509,13 +1509,13 @@
 
 	.dict-lip {
 		height: 6px;
-		background: var(--dusty-rose);
+		background: var(--sage);
 		border-radius: 3px 3px 0 0;
 	}
 
 	.dict-panel {
 		background: var(--paper-cream, #FDFBF7);
-		border: 2px solid var(--dusty-rose);
+		border: 2px solid var(--sage);
 		border-top: none;
 		border-radius: 0 0 6px 6px;
 		overflow: hidden;
@@ -1534,9 +1534,9 @@
 		font-family: var(--font-serif);
 		font-size: 0.85rem;
 		font-style: italic;
-		color: var(--dusty-rose);
+		color: var(--sage);
 		padding: 0.3rem 0.4rem;
-		border: 1px solid var(--dusty-rose);
+		border: 1px solid var(--sage);
 		border-radius: 3px;
 		background: #fff;
 		outline: none;
@@ -1545,26 +1545,26 @@
 	}
 
 	.dict-gloss-input:focus {
-		border-color: var(--dusty-rose);
-		box-shadow: 0 0 0 2px color-mix(in srgb, var(--dusty-rose) 25%, transparent);
+		border-color: var(--sage);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--sage) 25%, transparent);
 	}
 
 	.dict-capacity {
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
-		color: var(--dusty-rose);
+		color: var(--sage);
 		text-align: right;
 		margin: 0;
 	}
 
 	.dict-separator {
 		height: 1px;
-		background: color-mix(in srgb, var(--dusty-rose) 20%, transparent);
+		background: color-mix(in srgb, var(--sage) 20%, transparent);
 	}
 
 	.dict-entry-cell {
 		padding: 0.6rem;
-		background: #F5F0EE;
+		background: #F0F3EE;
 	}
 
 	.dict-entry {
@@ -1601,13 +1601,13 @@
 	.dict-entry-missing {
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
-		color: var(--dusty-rose);
+		color: var(--sage);
 		font-style: italic;
 	}
 
 	.dict-entry-divider {
 		height: 1px;
-		background: color-mix(in srgb, var(--dusty-rose) 15%, transparent);
+		background: color-mix(in srgb, var(--sage) 15%, transparent);
 		margin: 0.5rem 0;
 	}
 
@@ -1615,7 +1615,7 @@
 
 	.organism {
 		position: relative;
-		background: rgba(166, 123, 123, 0.15);
+		background: rgba(139, 154, 125, 0.15);
 		border-radius: 0;
 		padding: 2px 1rem 10px;
 		margin-left: -1.5rem;
@@ -1652,7 +1652,7 @@
 
 	.rubric-label {
 		font-family: var(--font-sans);
-		font-size: 0.6rem;
+		font-size: 0.7rem;
 		font-weight: 400;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.08em;
@@ -1685,9 +1685,9 @@
 	}
 
 	.molecule.is-stressed {
-		border: 2.5px solid var(--dusty-rose);
+		border: 2.5px solid var(--sage);
 		padding: 2px;
-		box-shadow: 0 0 0 2px rgba(166, 123, 123, 0.2);
+		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.2);
 	}
 
 	.atom-row {
@@ -1718,20 +1718,20 @@
 	}
 
 	.yo-sigla:focus-visible {
-		outline: 2px solid var(--dusty-rose);
+		outline: 2px solid var(--sage);
 		outline-offset: 1px;
 		opacity: 1;
 	}
 
 	.yo-sigla.pending {
 		opacity: 0.8;
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 	}
 
 	.yo-sigla.is-yo {
 		opacity: 0.4;
-		background: var(--dusty-rose);
-		border-color: var(--dusty-rose);
+		background: var(--sage);
+		border-color: var(--sage);
 	}
 
 	.yo-sigla.is-yo .sigil-yo-char {
@@ -1744,7 +1744,7 @@
 
 	.yo-sigla.toggled {
 		opacity: 0.6;
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 	}
 
 	.sigil-yo-char {
@@ -1825,11 +1825,11 @@
 
 	.atom:hover {
 		background: #faf8f4;
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 	}
 
 	.atom:focus-visible {
-		outline: 2px solid var(--dusty-rose);
+		outline: 2px solid var(--sage);
 		outline-offset: -2px;
 		z-index: 1;
 	}
@@ -1840,8 +1840,8 @@
 
 	.atom.selected {
 		background: #FAF7F2;
-		border-color: var(--dusty-rose);
-		box-shadow: inset 0 0 6px rgba(166, 123, 123, 0.15);
+		border-color: var(--sage);
+		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
 	}
 
 	/* Subtle blurb indicator dot */
@@ -1851,7 +1851,7 @@
 		width: 4px;
 		height: 4px;
 		border-radius: 50%;
-		background: var(--dusty-rose);
+		background: var(--sage);
 		opacity: 0.4;
 		margin-top: 1px;
 	}
@@ -1872,9 +1872,9 @@
 	}
 
 	.atom.drag-highlight {
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 		background: #faf8f4;
-		box-shadow: 0 0 0 1px rgba(166, 123, 123, 0.25);
+		box-shadow: 0 0 0 1px rgba(139, 154, 125, 0.25);
 	}
 
 	/* ── Drag preview ghost slot ────────────────────────────── */
@@ -1909,7 +1909,7 @@
 		height: 100px;
 		padding: 18px 0 4px;
 		background: var(--paper-cream);
-		border: 1.5px solid var(--dusty-rose);
+		border: 1.5px solid var(--sage);
 		border-radius: 4px;
 		opacity: 0.4;
 		pointer-events: none;
@@ -2060,24 +2060,24 @@
 
 	.stress-circle:hover {
 		opacity: 1;
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 	}
 
 	.stress-circle.is-stressed {
-		background: var(--dusty-rose);
-		border-color: var(--dusty-rose);
+		background: var(--sage);
+		border-color: var(--sage);
 		opacity: 1;
 	}
 
 	.stress-circle.is-stressed:hover {
-		background: #8C6868;
-		border-color: #8C6868;
+		background: var(--deeper-sage, #7A8A6C);
+		border-color: var(--deeper-sage, #7A8A6C);
 	}
 
 	.stress-circle.is-assigning {
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 		opacity: 1;
-		box-shadow: 0 0 0 2px rgba(166, 123, 123, 0.3);
+		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.3);
 	}
 
 	.stress-icon {
@@ -2130,13 +2130,13 @@
 
 	.blurb-lip {
 		height: 6px;
-		background: var(--dusty-rose);
+		background: var(--sage);
 		border-radius: 3px 3px 0 0;
 	}
 
 	.blurb-box {
 		background: #F5F0E8;
-		border: 2px solid var(--dusty-rose);
+		border: 2px solid var(--sage);
 		border-top: none;
 		border-radius: 0 0 6px 6px;
 		padding: 16px;
@@ -2226,7 +2226,7 @@
 	}
 
 	.provenance-choice:hover {
-		border-color: var(--dusty-rose);
+		border-color: var(--sage);
 		background: #faf8f4;
 		color: var(--ink-primary);
 	}
@@ -2251,7 +2251,7 @@
 	.spot-checkbox {
 		width: 14px;
 		height: 14px;
-		accent-color: var(--dusty-rose);
+		accent-color: var(--sage);
 		cursor: pointer;
 		margin: 0;
 		flex-shrink: 0;
@@ -2291,12 +2291,12 @@
 
 	.reset-button:hover {
 		opacity: 1;
-		border-color: var(--dusty-rose);
-		color: var(--dusty-rose);
+		border-color: var(--sage);
+		color: var(--sage);
 	}
 
 	.reset-button:focus-visible {
-		outline: 2px solid var(--dusty-rose);
+		outline: 2px solid var(--sage);
 		outline-offset: 2px;
 	}
 
