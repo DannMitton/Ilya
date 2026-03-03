@@ -232,7 +232,7 @@
 			onclick={handleOcrClick}
 			disabled={loaderState.isLoading || ocrProcessing}
 			aria-label={language === 'en' ? 'Scan Cyrillic text from image' : 'Numériser du texte cyrillique à partir d\u2019une image'}
-			title={language === 'en' ? 'Scan image' : 'Numériser une image'}
+			title={language === 'en' ? 'Click here for optical character recognition' : 'Cliquez ici pour la reconnaissance optique de caractères'}
 		>
 			{#if ocrProcessing}
 				<span class="ocr-spinner"></span>
@@ -558,7 +558,8 @@
 		background: rgba(255, 255, 255, 0.8);
 		color: var(--ink-tertiary);
 		cursor: pointer;
-		transition: color 0.15s ease, background 0.15s ease;
+		opacity: 0.3;
+		transition: color 0.15s ease, background 0.15s ease, opacity 0.2s ease;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -567,6 +568,7 @@
 	.ocr-btn:hover:not(:disabled) {
 		color: var(--sage);
 		background: rgba(255, 255, 255, 0.95);
+		opacity: 1;
 	}
 
 	.ocr-btn:disabled {
