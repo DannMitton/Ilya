@@ -24,7 +24,7 @@
 	/* ── Parent chain lookup for auto-expand ───────────────── */
 
 	const learnUnitChildren: Record<string, string> = {
-		'learn-u1-song': 'learn-unit-1', 'learn-u1-before': 'learn-unit-1', 'learn-u1-alphabet': 'learn-unit-1',
+		'learn-u1-song': 'learn-unit-1', 'learn-u1-alphabet': 'learn-unit-1',
 		'learn-u1-familiar': 'learn-unit-1', 'learn-u1-signs': 'learn-unit-1', 'learn-u1-yo': 'learn-unit-1',
 		'learn-u1-glyphs': 'learn-unit-1', 'learn-u1-try': 'learn-unit-1',
 		'learn-u2-meaning': 'learn-unit-2', 'learn-u2-moves': 'learn-unit-2', 'learn-u2-dictionary': 'learn-unit-2',
@@ -162,7 +162,6 @@
 								</div>
 								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-1')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-song')} data-heading-id="learn-u1-song" onclick={() => handleTocClick('learn-u1-song')}>{language === 'fr' ? 'La chanson de l\u2019alphabet' : 'The Alphabet Song'}</button></li>
-									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-before')} data-heading-id="learn-u1-before" onclick={() => handleTocClick('learn-u1-before')}>{language === 'fr' ? 'Avant de commencer' : 'Before We Begin'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-alphabet')} data-heading-id="learn-u1-alphabet" onclick={() => handleTocClick('learn-u1-alphabet')}>{language === 'fr' ? 'L\u2019alphabet' : 'The Alphabet'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-familiar')} data-heading-id="learn-u1-familiar" onclick={() => handleTocClick('learn-u1-familiar')}>{language === 'fr' ? 'Ce que vous connaissez d\u00e9j\u00e0' : 'What You Already Know'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-signs')} data-heading-id="learn-u1-signs" onclick={() => handleTocClick('learn-u1-signs')}>{language === 'fr' ? 'Les deux signes' : 'The Two Signs'}</button></li>
@@ -283,9 +282,12 @@
 
 							<!-- ── Section 8 + closing items ── -->
 							<li>
-								<button class="toc-link" class:active={isActive('learn-coda')} data-heading-id="learn-coda" onclick={() => handleTocClick('learn-coda')}>
-									{language === 'fr' ? '8 \u00b7 Les inclassables' : '8 \u00b7 What These Rules Do Not Teach'}
-								</button>
+								<div class="toc-parent">
+									<span class="toc-chevron-spacer" aria-hidden="true"></span>
+									<button class="toc-link" class:active={isActive('learn-coda')} data-heading-id="learn-coda" onclick={() => handleTocClick('learn-coda')}>
+										{language === 'fr' ? '8 \u00b7 Les inclassables' : '8 \u00b7 What These Rules Do Not Teach'}
+									</button>
+								</div>
 							</li>
 							<li>
 								<button class="toc-link" class:active={isActive('learn-try')} data-heading-id="learn-try" onclick={() => handleTocClick('learn-try')}>
@@ -677,6 +679,13 @@
 	.toc-chevron.contains-active {
 		color: var(--dusty-rose, #A67B7B);
 	}
+
+	.toc-chevron-spacer {
+		width: 24px;
+		height: 24px;
+		flex-shrink: 0;
+	}
+
 
 	/* -- Guide tab: quiet-cobalt colour identity ----------- */
 
