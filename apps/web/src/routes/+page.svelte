@@ -1911,8 +1911,7 @@
 						distinctive en anglais, en français ou en italien, alors qu’elle en
 						porte une en russe.</p>
 						<p>En russe, la palatalisation signale un changement radical de sens :
-						мат /mat/ signifie « échec et mat », мать /matʲ/ signifie « mère » ;
-						брат /brat/ est « frère », брать /bratʲ/ est « prendre ». La
+						мат [mat] (<em>échec et mat</em>), мать [matʲ] (<em>mère</em>) ; брат [brat] (<em>frère</em>), брать [bratʲ] (<em>prendre</em>). La
 						palatalisation est le seul vecteur de distinction lexicale entre ces
 						paires. Notre tâche pédagogique n’est pas d’acquérir une habileté
 						physique nouvelle de zéro, mais de développer un contrôle conscient sur
@@ -2069,7 +2068,7 @@
 						certaines limites. Cette palatalisation régressive se propage de voisine
 						en voisine, de droite à gauche, jusqu’à ce que quelque chose
 						l’arrête.</p>
-						<p>Considérons гость : le ⟨ь⟩ palatalise le ⟨т⟩, et le ⟨т⟩ désormais
+						<p>Considérons гость [ɡosʲtʲ] (<em>invité</em>) : le ⟨ь⟩ palatalise le ⟨т⟩, et le ⟨т⟩ désormais
 						palatalisé palatalise le ⟨с⟩ qui le précède. Toujours vers la gauche. En
 						pratique, cela signifie qu’il faut anticiper la posture linguale
 						antérieure en [i] bien avant que la consonne palatalisée causale ne soit
@@ -2416,7 +2415,7 @@
 						la palatalisation ne s’applique pas à cette terminaison morphologique
 						particulière.</p>
 						<p>Chaque exemple s’appuie sur le précédent. Le chanteur qui peut
-						expliquer pourquoi мять contient [a] là où мать contient [ɑ], et
+						expliquer pourquoi мять [matʲ] (<em>froisser</em>) contient [a] là où мать [mɑtʲ] (<em>mère</em>) contient [ɑ], et
 						pourquoi le ⟨ш⟩ de большой bloque ce que le groupe consonantique de
 						сестрёнка laisse passer, a intériorisé le système.</p>
 						<h4 id="learn-u6-velari">Le i vélaire [ɨ]</h4>
@@ -2543,7 +2542,7 @@
 						<p>⟨гк⟩ → <code>/xk/</code>&#160;: мягко <code>/ˈmʲɑxkʌ/</code>, легко <code>/lʲɪxˈko/</code><br/>
 						⟨гч⟩ → <code>/xtʃʲ/</code>&#160;: легче <code>/ˈlʲɛxtʃʲɪ/</code>, мягче <code>/ˈmʲɑxtʃʲɪ/</code></p>
 
-						<p>Grayson nomme ces cas la règle de мягко et la règle de легче. Ce sont des cas particuliers, propres à ces radicaux et à leurs dérivés, et qui ne s’appliquent qu’à l’intérieur du mot, jamais au-delà d’une frontière de mot.</p>
+						<p>Grayson nomme ces cas la règle de мягко [mʲɑxkʌ] (<em>doucement</em>) et la règle de легче [lʲɛxtʃʲɪ] (<em>plus légèrement</em>). Ce sont des cas particuliers, propres à ces radicaux et à leurs dérivés, et qui ne s’appliquent qu’à l’intérieur du mot, jamais au-delà d’une frontière de mot.</p>
 
 						<p>Un mot sur l’assourdissement en finale. Nous avons rencontré l’assourdissement en position finale (analogue à l’allemand) à la section 5, en tant que propriété de l’inventaire consonantique&#160;: les consonnes voisées perdent leur voisement à la fin d’un mot. Sous une condition fréquente, elles peuvent toutefois se revoisir. La façon dont l’assourdissement final interagit avec les frontières de mots et les clitiques fait l’objet de la section 7.4.</p>
 
@@ -2625,10 +2624,10 @@
 						</tbody>
 						</table>
 
-						<p><strong>сердце</strong> (cœur)&#160;: le ⟨д⟩ est muet. <code>/ˈsʲɛr tsɨ/</code>. Parmi les mots les plus fréquents de la littérature vocale russe.</p>
-						<p><strong>поздно</strong> (tard, trop tard)&#160;: le ⟨д⟩ est muet. <code>/ˈpo znʌ/</code>. Fréquent dans la mélodie et l’opéra.</p>
-						<p><strong>солнце</strong> (soleil)&#160;: le ⟨л⟩ est muet. <code>/ˈson tsɨ/</code>. C’est lui qui a inspiré le titre de cette sous-section.</p>
-						<p><strong>здравствуйте</strong> (bonjour)&#160;: le premier ⟨в⟩ est muet. <code>/ˈzdrɑ stvuj tʲɪ/</code>. Chaque chanteur de russe connait cette salutation.</p>
+						<p><strong>сердце</strong> [sʲɛrtsɨ] (<em>cœur</em>)&#160;: le ⟨д⟩ est muet. Parmi les mots les plus fréquents de la littérature vocale russe.</p>
+						<p><strong>поздно</strong> [poznʌ] (<em>tard</em>)&#160;: le ⟨д⟩ est muet. Fréquent dans la mélodie et l’opéra.</p>
+						<p><strong>солнце</strong> [sontsɨ] (<em>soleil</em>)&#160;: le ⟨л⟩ est muet. C’est lui qui a inspiré le titre de cette sous-section.</p>
+						<p><strong>здравствуйте</strong> [zdrɑstvujtʲɪ] (<em>bonjour</em>)&#160;: le premier ⟨в⟩ est muet. Chaque chanteur de russe connait cette salutation.</p>
 
 						<h4 id="learn-u7-mergers">Fusions et absorptions</h4>
 
@@ -2698,7 +2697,7 @@
 
 						<p><strong>Par-delà la frontière.</strong> Transcrivez в саду (dans le jardin). Le proclitique ⟨в⟩ s’est assourdi en <code>/f/</code> devant le <code>/s/</code> sourd de son mot hôte. Transcrivez maintenant к Дмитрию (vers Dmitri). Le proclitique ⟨к⟩ s’est voisé en <code>/ɡ/</code> devant le <code>/d/</code> voisé.</p>
 
-						<p><strong>L’effacement.</strong> Transcrivez сердце (cœur), солнце (soleil) et поздно (tard). Dans chaque mot, comptez les consonnes dans la ligne cyrillique, puis comptez-les dans la ligne API. Une consonne que la graphie conserve a été silencieusement effacée.</p>
+						<p><strong>L’effacement.</strong> Transcrivez сердце [sʲɛrtsɨ] (<em>cœur</em>), солнце [sontsɨ] (<em>soleil</em>) et поздно [poznʌ] (<em>tard</em>). Dans chaque mot, comptez les consonnes dans la ligne cyrillique, puis comptez-les dans la ligne API. Une consonne que la graphie conserve a été silencieusement effacée.</p>
 
 						<p><strong>La fusion.</strong> Transcrivez сжигать (bruler). Deux consonnes, ⟨сж⟩, ont fusionné en un <code>/ʒː/</code> allongé unique. Transcrivez мужчина (homme). Le groupe ⟨жч⟩ se lit <code>/ʃʲʃʲ/</code>. Transcrivez боится (a peur). La terminaison réfléchie -тся se lit <code>/tːsʌ/</code>.</p>
 
@@ -3926,9 +3925,7 @@
 						French /d/ in “dire”: each involves the same gesture. A marked
 						difference, however, is that palatalization carries no inherent meaning
 						in English, French, or Italian, but it does in Russian.</p>
-						<p>In Russian, palatalization signals radical change in meaning: мат
-						/mat/ is “checkmate,” мать /matʲ/ is “mother”; брат /brat/ is “brother,”
-						брать /bratʲ/ is “to take.” Palatalization is the sole carrier of
+						<p>In Russian, palatalization signals radical change in meaning: мат [mat] (<em>checkmate</em>), мать [matʲ] (<em>mother</em>); брат [brat] (<em>brother</em>), брать [bratʲ] (<em>to take</em>). Palatalization is the sole carrier of
 						lexical distinction between these pairs. Our pedagogical task is not to
 						learn a new physical skill from scratch, but to develop conscious
 						control over a gesture we already possess, and to apply it consistently
@@ -4074,7 +4071,7 @@
 						its palatalization backward, to the consonant immediately to its left,
 						with certain limits. This regressive palatalization proceeds backwards,
 						neighbour to neighbour, right-to-left until something stops it.</p>
-						<p>Consider гость: the ь palatalizes the т, and the now-palatalized т
+						<p>Consider гость [ɡosʲtʲ] (<em>guest</em>): the ь palatalizes the т, and the now-palatalized т
 						palatalizes the с before it. Always to the left. In practice, this
 						signals an anticipation of putting the tongue in that fronted [i]
 						posture well before the causal palatalized consonant is even sounded.
@@ -4398,8 +4395,7 @@
 						diction convention (see Section 5), not /sʲkʲij/: the velar-i [ɨ]
 						appears here because palatalization does not apply to this particular
 						morphological ending.</p>
-						<p>Each example builds on the last. The singer who can explain why мять
-						has [a] where мать has [ɑ], and why большой’s ⟨ш⟩ blocks what сестрёнка’s
+						<p>Each example builds on the last. The singer who can explain why мять [matʲ] (<em>to crumple</em>) has [a] where мать [mɑtʲ] (<em>mother</em>) has [ɑ], and why большой’s ⟨ш⟩ blocks what сестрёнка’s
 						cluster permits, has internalised the system.</p>
 						<h4 id="learn-u6-velari">Velar-i [ɨ]</h4>
 						<p>Velar-i occupies the space where palatalization cannot go. It is the
@@ -4519,7 +4515,7 @@
 						<p>⟨гк⟩ → <code>/xk/</code>: мягко <code>/ˈmʲɑxkʌ/</code>, легко <code>/lʲɪxˈko/</code><br/>
 						⟨гч⟩ → <code>/xtʃʲ/</code>: легче <code>/ˈlʲɛxtʃʲɪ/</code>, мягче <code>/ˈmʲɑxtʃʲɪ/</code></p>
 
-						<p>Grayson names these the мягко rule and the легче rule. They are rules-of-one, specific to these root words and their derivatives, and they apply only within the word, not across word boundaries.</p>
+						<p>Grayson names these the мягко [mʲɑxkʌ] (<em>softly</em>) rule and the легче [lʲɛxtʃʲɪ] (<em>more gently</em>) rule. They are rules-of-one, specific to these root words and their derivatives, and they apply only within the word, not across word boundaries.</p>
 
 						<p>A note on final devoicing. We met final devoicing (akin to German) in Section 5 as a property of the consonant inventory: voiced consonants lose their voicing at the end of a word. But under a common condition, they can re-voice. How final devoicing interacts with word boundaries and clitics is the subject of Section 7.4.</p>
 
@@ -4601,10 +4597,10 @@
 						</tbody>
 						</table>
 
-						<p><strong>сердце</strong> (heart): the ⟨д⟩ is silent. <code>/ˈsʲɛr tsɨ/</code>. Among the most common words in Russian vocal literature.</p>
-						<p><strong>поздно</strong> (late, too late): the ⟨д⟩ is silent. <code>/ˈpo znʌ/</code>. Frequent in art song and opera.</p>
-						<p><strong>солнце</strong> (sun): the ⟨л⟩ is silent. <code>/ˈson tsɨ/</code>. The inspiration for this subsection’s title.</p>
-						<p><strong>здравствуйте</strong> (hello): the first ⟨в⟩ is silent. <code>/ˈzdrɑ stvuj tʲɪ/</code>. Every singer of Russian knows this greeting.</p>
+						<p><strong>сердце</strong> [sʲɛrtsɨ] (<em>heart</em>): the ⟨д⟩ is silent. Among the most common words in Russian vocal literature.</p>
+						<p><strong>поздно</strong> [poznʌ] (<em>late</em>): the ⟨д⟩ is silent. Frequent in art song and opera.</p>
+						<p><strong>солнце</strong> [sontsɨ] (<em>sun</em>): the ⟨л⟩ is silent. The inspiration for this subsection’s title.</p>
+						<p><strong>здравствуйте</strong> [zdrɑstvujtʲɪ] (<em>hello</em>): the first ⟨в⟩ is silent. Every singer of Russian knows this greeting.</p>
 
 						<h4 id="learn-u7-mergers">Mergers and Acquisitions</h4>
 
@@ -4674,7 +4670,7 @@
 
 						<p><strong>Across the boundary.</strong> Transcribe в саду (in the garden). The proclitic ⟨в⟩ has devoiced to <code>/f/</code> before the voiceless <code>/s/</code> of its host word. Now transcribe к Дмитрию (to Dmitri). The proclitic ⟨к⟩ has voiced to <code>/ɡ/</code> before the voiced <code>/d/</code>.</p>
 
-						<p><strong>Deletion.</strong> Transcribe сердце (heart), солнце (sun), and поздно (late). In each word, count the consonants in the Cyrillic line, then count them in the IPA line. A consonant that the spelling preserves has been silently dropped.</p>
+						<p><strong>Deletion.</strong> Transcribe сердце [sʲɛrtsɨ] (<em>heart</em>), солнце [sontsɨ] (<em>sun</em>), and поздно [poznʌ] (<em>late</em>). In each word, count the consonants in the Cyrillic line, then count them in the IPA line. A consonant that the spelling preserves has been silently dropped.</p>
 
 						<p><strong>Merger.</strong> Transcribe сжигать (to burn). Two consonants, ⟨сж⟩, have merged into a single lengthened <code>/ʒː/</code>. Now transcribe мужчина (man). The cluster ⟨жч⟩ reads as <code>/ʃʲʃʲ/</code>. Transcribe боится (is afraid). The reflexive ending -тся reads as <code>/tːsʌ/</code>.</p>
 
