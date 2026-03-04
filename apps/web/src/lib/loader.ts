@@ -358,10 +358,6 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		const entryCount = Object.keys(dictionary).length;
 		const durationMs = Math.round(performance.now() - start);
 
-		console.log(
-			`[Ilya] ${entryCount.toLocaleString()} words loaded in ${durationMs}ms`
-		);
-
 		// Minimum display duration: the progress bar communicates substance.
 		// If loading finishes faster than this, hold the bar visible.
 		const MIN_DISPLAY_MS = 3000;
@@ -404,14 +400,12 @@ async function loadDictionaryData(
 	// Check IndexedDB cache first
 	const cached = await getCached(cacheKey);
 	if (cached) {
-		console.log(`[Ilya] Dictionary loaded from cache (hash: ${hash})`);
 		state.progress = 1;
 		callbacks.onStateChange({ ...state });
 		return cached;
 	}
 
 	// Cache miss — fetch with progress
-	console.log(`[Ilya] Fetching dictionary: ${url}`);
 	const text = await fetchWithProgress(url, (progress) => {
 		state.progress = progress;
 		callbacks.onStateChange({ ...state });

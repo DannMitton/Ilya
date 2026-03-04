@@ -210,26 +210,6 @@
 		if (lines.length > 0) {
 			// Breath animation: content appears with breath-in
 			triggerPaperBreathIn();
-			// Console output for verification
-			console.group('[Ilya] Transcription result');
-			lines.forEach((line, li) => {
-				console.group(`Line ${li}`);
-				line.words.forEach((w) => {
-					console.log(
-						`${w.cleanWord} → ${w.ipaDisplay}`,
-						{
-							stress: w.stressIndex,
-							source: w.stressSource,
-							boundary: w.rightBoundary,
-							proclitic: w.isProclitic,
-							enclitic: w.isEnclitic,
-							gloss: w.gloss,
-						}
-					);
-				});
-				console.groupEnd();
-			});
-			console.groupEnd();
 			// Focus first WordStack after render
 			requestAnimationFrame(() => {
 				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
@@ -274,12 +254,6 @@
 				// localStorage unavailable
 			}
 		}
-		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
-			stress: word.stressIndex,
-			source: word.stressSource,
-			gloss: word.gloss,
-			displayLog: word.displayLog,
-		});
 	}
 	function handleNotationChange(prefs: NotationPreferences) {
 		notationPrefs = prefs;

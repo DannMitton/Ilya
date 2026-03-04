@@ -21,7 +21,7 @@
 		const parts: string[] = [];
 		if (composer.trim()) parts.push(composer.trim().toUpperCase());
 		if (opus.trim()) parts.push(opus.trim().toUpperCase());
-		return parts.join('    ');
+		return parts.join(' | ');
 	});
 
 	/**
