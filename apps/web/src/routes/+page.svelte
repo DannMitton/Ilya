@@ -1539,7 +1539,7 @@
 							</tbody>
 						</table>
 
-						<p>Contre-exemple&#160;: пятый /ˈpʲɑ tɨj/. La consonne précédente est palatalisée (/pʲ/), mais la consonne suivante est dure (/t/). Un côté mou, un côté dur&#160;: la voyelle reste à /ɑ/. De même, мать /mɑtʲ/&#160;: le /m/ précédent est dur, donc malgré le /tʲ/ mou qui suit, la voyelle demeure /ɑ/. Comparez мяч /mʲatʃʲ/ (balle), où les deux côtés sont mous, avec мать /mɑtʲ/ (mère), où un seul l'est&#160;: la voyelle vous le dit.</p>
+						<p>Contre-exemple&#160;: пятый /ˈpʲɑ tɨj/ (<em>cinquième</em>). La consonne précédente est palatalisée (/pʲ/), mais la consonne suivante est dure (/t/). Un côté mou, un côté dur&#160;: la voyelle reste à /ɑ/. De même, мать /mɑtʲ/ (<em>mère</em>)&#160;: le /m/ précédent est dur, donc malgré le /tʲ/ mou qui suit, la voyelle demeure /ɑ/. Comparez мяч /mʲatʃʲ/ (balle), où les deux côtés sont mous, avec мать /mɑtʲ/ (mère), où un seul l'est&#160;: la voyelle vous le dit.</p>
 
 						<h4 id="learn-u3-iotated">Quatre lettres vocaliques portent une consonne cachée.</h4>
 
@@ -2451,8 +2451,7 @@
 						/tsɨrk/ (« cirque ») : le ⟨ц⟩ toujours dur rétracte de nouveau la
 						voyelle. Dans les deux cas, la lettre cyrillique est ⟨и⟩, mais le son
 						est [ɨ]. Ilya marque cela automatiquement.</p>
-						<p><strong>Essayez dans Ilya.</strong> Comparez нет /ɲɛt/ avec нот
-						/not/. Dans нет, le ⟨е⟩ palatalise le ⟨н⟩ en [ɲ] : un geste unique, et
+						<p><strong>Essayez dans Ilya.</strong> Comparez нет /ɲɛt/ (<em>non</em>) avec нот /not/ (<em>note</em>). Dans нет, le ⟨е⟩ palatalise le ⟨н⟩ en [ɲ] : un geste unique, et
 						non [nj]. Dans нот, rien ne se palatalise : le ⟨н⟩ est dur, la voyelle
 						est [o], et le ⟨т⟩ est dur. Deux mots courts, de longueur identique, aux
 						profils consonantiques entièrement différents. Si la palatalisation dans
@@ -3560,7 +3559,7 @@
 							</tbody>
 						</table>
 
-						<p>Counter-example: пятый /ˈpʲɑ tɨj/. The preceding consonant is palatalized (/pʲ/), but the following consonant is hard (/t/). One side soft, one side hard: the vowel stays at /ɑ/. Similarly, мать /mɑtʲ/: the preceding /m/ is hard, so despite the soft /tʲ/ following, the vowel remains /ɑ/. Compare мяч /mʲatʃʲ/ (ball), where both sides are soft, with мать /mɑtʲ/ (mother), where only one side is: the vowel tells you.</p>
+						<p>Counter-example: пятый /ˈpʲɑ tɨj/ (<em>fifth</em>). The preceding consonant is palatalized (/pʲ/), but the following consonant is hard (/t/). One side soft, one side hard: the vowel stays at /ɑ/. Similarly, мать /mɑtʲ/ (<em>mother</em>): the preceding /m/ is hard, so despite the soft /tʲ/ following, the vowel remains /ɑ/. Compare мяч /mʲatʃʲ/ (ball), where both sides are soft, with мать /mɑtʲ/ (mother), where only one side is: the vowel tells you.</p>
 
 						<h4 id="learn-u3-iotated">Four vowel letters carry a hidden consonant.</h4>
 
@@ -4426,7 +4425,7 @@
 						(“circus”): the always-hard ⟨ц⟩ again retracts the vowel. In both cases,
 						the Cyrillic letter is ⟨и⟩, but the sound is [ɨ]. Ilya marks this
 						automatically.</p>
-						<p><strong>Try this.</strong> Compare нет /ɲɛt/ with нот /not/. In нет,
+						<p><strong>Try this.</strong> Compare нет /ɲɛt/ (<em>no</em>) with нот /not/ (<em>note</em>). In нет,
 						the ⟨е⟩ palatalizes the н to [ɲ]: a single gesture, not [nj]. In нот,
 						nothing palatalizes: the н is hard, the vowel is [o], and the т is hard.
 						Two short words, identical in length, with entirely different consonant
