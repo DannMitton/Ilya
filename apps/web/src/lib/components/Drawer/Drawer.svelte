@@ -121,7 +121,8 @@
 </script>
 
 <aside class="drawer" class:collapsed style="width: {collapsed ? 0 : width}px" aria-label="Controls">
-	<div class="drawer-body">
+	<div class="drawer-clip">
+	<div class="drawer-body" style="width: {width}px">
 		<div
 			class="drawer-content {tabTransitionClass}"
 			role="tabpanel"
@@ -366,6 +367,7 @@
 		</div>
 		<TabBar {activeTab} {language} {ontabchange} />
 	</div>
+	</div>
 	<button
 		class="drawer-lip"
 		onclick={ontogglecollapse}
@@ -394,9 +396,16 @@
 		width: 0px;
 	}
 
-	.drawer-body {
+	.drawer-clip {
+		/* Clips the pinned-width body as drawer animates — lip lives outside this */
 		flex: 1;
 		min-width: 0;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.drawer-body {
+		height: 100%;
 		overflow: hidden;
 		background: var(--drawer-bg);
 		display: flex;
