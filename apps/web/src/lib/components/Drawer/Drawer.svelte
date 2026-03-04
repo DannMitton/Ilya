@@ -377,6 +377,9 @@
 		<span class="drawer-handle" aria-hidden="true">
 			<svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,2 11,10 3,18" /></svg>
 		</span>
+		<span class="drawer-close-handle" aria-hidden="true">
+			<svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,2 3,10 11,18" /></svg>
+		</span>
 	</button>
 </aside>
 
@@ -486,6 +489,35 @@
 		z-index: 2;
 		pointer-events: none;
 		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
+	}
+
+	/* ── Close handle: black semicircle, open state only ── */
+
+	.drawer-close-handle {
+		display: flex;
+		position: absolute;
+		top: 50%;
+		left: 22px;
+		transform: translateY(-50%);
+		width: 36px;
+		height: 72px;
+		background: rgba(26, 22, 18, 0.65);
+		border-radius: 0 72px 72px 0;
+		align-items: center;
+		justify-content: center;
+		color: var(--drawer-bg, #FAF8F5);
+		z-index: 2;
+		pointer-events: none;
+		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
+		transition: background 150ms ease;
+	}
+
+	.collapsed .drawer-lip .drawer-close-handle {
+		display: none;
+	}
+
+	.drawer-lip:hover .drawer-close-handle {
+		background: rgba(26, 22, 18, 0.82);
 	}
 
 	.collapsed .drawer-lip .drawer-handle {
