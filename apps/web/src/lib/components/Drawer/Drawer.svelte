@@ -370,15 +370,15 @@
 	</div>
 	<button
 		class="drawer-lip"
+		class:is-collapsed={collapsed}
 		onclick={ontogglecollapse}
 		aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
 		title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
 	>
 		<span class="drawer-handle" aria-hidden="true">
-			<svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,2 11,10 3,18" /></svg>
-		</span>
-		<span class="drawer-close-handle" aria-hidden="true">
-			<svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,2 3,10 11,18" /></svg>
+			<svg class="handle-chevron" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+				<polyline points="3,2 11,10 3,18" />
+			</svg>
 		</span>
 	</button>
 </aside>
@@ -390,7 +390,7 @@
 		flex-direction: row;
 		height: 100%;
 		flex-shrink: 0;
-		transition: width 1000ms cubic-bezier(0.25, 0, 0.15, 1);
+		transition: width 1500ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
 	.drawer.collapsed {
@@ -460,6 +460,13 @@
 		cursor: pointer;
 		padding: 0;
 		z-index: 2;
+		/* Synchronized with drawer: slow, deliberate, snap finish */
+		transition: right 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.drawer-lip.is-collapsed {
+		right: auto;
+		left: 0;
 	}
 
 	.drawer-lip:hover {
@@ -471,66 +478,62 @@
 		outline-offset: 2px;
 	}
 
-	/* ── Handle: sage semicircle + chevron, collapsed only ── */
+	/* ── Handle: single morphing element ────────────────── */
 
 	.drawer-handle {
-		display: none;
 		position: absolute;
 		top: 50%;
-		left: 0;
 		transform: translateY(-50%);
 		width: 36px;
 		height: 72px;
-		background: var(--sage, #8B9A7D);
 		border-radius: 0 72px 72px 0;
+		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: var(--drawer-bg, #FAF8F5);
 		z-index: 2;
 		pointer-events: none;
 		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
-	}
-
-	/* ── Close handle: black semicircle, open state only ── */
-
-	.drawer-close-handle {
-		display: flex;
-		position: absolute;
-		top: 50%;
+		will-change: background-color, left;
+		/* Open state: black semicircle, resting on drawer edge */
+		background-color: rgba(26, 22, 18, 0.65);
 		left: 22px;
-		transform: translateY(-50%);
-		width: 36px;
-		height: 72px;
-		background: rgba(26, 22, 18, 0.65);
-		border-radius: 0 72px 72px 0;
-		align-items: center;
-		justify-content: center;
-		color: var(--drawer-bg, #FAF8F5);
-		z-index: 2;
-		pointer-events: none;
-		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
-		transition: background 150ms ease;
+		/* Morph transitions: colour and position with snap easing */
+		transition:
+			background-color 1500ms cubic-bezier(0.22, 1, 0.36, 1),
+			left 1500ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.collapsed .drawer-lip .drawer-close-handle {
-		display: none;
-	}
-
-	.drawer-lip:hover .drawer-close-handle {
-		background: rgba(26, 22, 18, 0.82);
-	}
-
-	.collapsed .drawer-lip .drawer-handle {
-		display: flex;
-	}
-
-	.collapsed .drawer-lip {
-		right: auto;
+	/* Collapsed state: sage semicircle, flush with viewport */
+	.drawer-lip.is-collapsed .drawer-handle {
+		background-color: var(--sage, #8B9A7D);
 		left: 0;
 	}
 
-	.collapsed .drawer-lip:hover .drawer-handle {
-		background: var(--deeper-sage, #7A8A6C);
+	/* Hover states: immediate feedback */
+	.drawer-lip:hover .drawer-handle {
+		background-color: rgba(26, 22, 18, 0.82);
+		transition: background-color 200ms ease;
+	}
+
+	.drawer-lip.is-collapsed:hover .drawer-handle {
+		background-color: var(--deeper-sage, #7A8A6C);
+		transition: background-color 200ms ease;
+	}
+
+	/* ── Chevron: flips via scaleX ──────────────────────── */
+
+	.handle-chevron {
+		display: block;
+		/* Open: pointing left (flipped from base right-pointing SVG) */
+		transform: scaleX(-1);
+		transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+		will-change: transform;
+	}
+
+	/* Collapsed: pointing right (natural SVG orientation) */
+	.drawer-lip.is-collapsed .handle-chevron {
+		transform: scaleX(1);
 	}
 
 	/* ── Placeholder panels ─────────────────────────────── */
@@ -806,8 +809,11 @@
 	/* ── Reduced motion ──────────────────────────────────── */
 
 	@media (prefers-reduced-motion: reduce) {
-		.drawer {
-			transition: none;
+		.drawer,
+		.drawer-lip,
+		.drawer-handle,
+		.handle-chevron {
+			transition: none !important;
 		}
 
 		.drawer-content.tab-enter-from-right,
