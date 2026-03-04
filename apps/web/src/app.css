@@ -24,6 +24,9 @@
 	--dusty-rose: #A67B7B;
 	--terracotta: var(--dusty-rose);  /* backward-compatible alias */
 
+	/* ── Quiet Cobalt accent (Guide tab) ──────────────────── */
+	--quiet-cobalt: #5C739E;
+
 	/* ── Stone palette (UI chrome) ────────────────────────── */
 	--stone-300: #d6d3d1;
 	--stone-500: #78716c;
@@ -163,6 +166,16 @@ body {
 	.paper-page:last-child {
 		page-break-after: auto;
 		break-after: auto;
+	}
+
+	/* ── Hide screen chrome at print time ────────────────── */
+
+	.header-bar,
+	.drawer,
+	.drawer-lip,
+	.tab-bar,
+	.ribbon {
+		display: none !important;
 	}
 
 	.watermark {
