@@ -4922,7 +4922,7 @@
 
 						<p>I think a lot about meaning and purpose. (Maybe it is the ethos of the bass to ruminate?) I have decided that for me, my reasons to be, are 1) to love my family, and 2) to make good art. By creating <em>Ilya</em>, and releasing it for free to the singing community, I'm trying to help. <em>Ilya</em> is about eliminating barriers to Cyrillic literacy, and barriers to accessing quality scholarly tools. Anybody can use <em>Ilya</em>. Anybody can improve <em>Ilya</em>. You are invited to do both.</p>
 
-						<p>I'll borrow Craig's words: “My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature.” <em>Ilya</em> serves no clearer purpose than this.</p>
+						<p>To borrow Grayson's words: “My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature.” <em>Ilya</em> serves no clearer purpose than this.</p>
 
 						<p><em>Ilya is affectionately named after the fictional Russian hockey player Ilya Rozanov from the <em>Game Changer</em> series (<em>Heated Rivalry</em>) by fellow Maritimer Rachel Reid.</em></p>
 
