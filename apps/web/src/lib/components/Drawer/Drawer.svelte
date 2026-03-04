@@ -475,7 +475,7 @@
 	.drawer-handle {
 		position: absolute;
 		top: 50%;
-		left: 4px;
+		left: 22px;
 		transform: translateY(-50%);
 		width: 36px;
 		height: 72px;
