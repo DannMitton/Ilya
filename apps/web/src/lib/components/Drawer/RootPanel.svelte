@@ -674,7 +674,7 @@
 		cursor: not-allowed;
 	}
 
-	/* ── Section labels (enlarged smallcaps) ──────────────── */
+	/* ── Section labels (sage smallcaps, matching Drawer) ──────────────── */
 
 	.section {
 		margin-top: 0;
@@ -682,10 +682,10 @@
 
 	.section-label {
 		font-family: var(--font-sans);
-		font-size: 1rem;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 1.5px;
-		color: var(--ink-secondary);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--sage);
 		margin-bottom: 0.4rem;
 		font-weight: 600;
 	}

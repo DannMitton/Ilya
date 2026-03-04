@@ -49,12 +49,12 @@
 	<div class="footer-hairline"></div>
 
 	<div class="footer-content">
-		<div class="footer-attribution">
-			<p class="attribution-text">
-				{@html attribution}
-			</p>
+		<div class="attribution-cell">
+			<span class="attribution-text">
+				{@html attribution}&nbsp;&nbsp;<a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a>
+			</span>
 		</div>
-		<div class="footer-pagination">
+		<div class="pagination-cell">
 			<span class="page-number">{t('footer.page', language)} {pageNumber} {t('footer.of', language)} {totalPages}</span>
 		</div>
 	</div>
@@ -119,61 +119,60 @@
 		margin-bottom: 8px;
 	}
 
-	/* ── Attribution and pagination ─────────────────────── */
+	/* ── Two-column footer: invisible table layout ────────── */
 
 	.footer-content {
-		display: flex;
-		align-items: flex-end;
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: stretch;
+		gap: 0 32px;
 	}
 
-	.footer-attribution {
-		flex: 2;
-		padding-right: 16px;
+	/* Column 1: Attribution + URL, fully justified */
+	.attribution-cell {
+		text-align: justify;
 	}
 
 	.attribution-text {
+		display: block;
 		font-family: var(--font-sans);
-		font-size: 9.5px;
-		font-weight: 600;
-		line-height: 1.45;
+		font-size: 9.5pt;
 		color: var(--ink-secondary);
 		font-variant-caps: all-small-caps;
-		letter-spacing: 0.8px;
-		text-align: justify;
-		margin-bottom: 2px;
+		letter-spacing: 1px;
+		font-weight: 400;
 	}
 
-	.attribution-text:last-child {
-		margin-bottom: 0;
-	}
-
-	/* Italic styling for <em> tags rendered via {@html} */
+	/* Italic styling for book title */
 	.attribution-text :global(em) {
 		font-style: italic;
 	}
 
-	/* Link styling for attribution hyperlinks */
+	/* Link styling */
 	.attribution-text :global(a) {
 		color: var(--ink-secondary);
-		text-decoration: underline;
-		text-underline-offset: 1.5px;
+		text-decoration: none !important;
 	}
 
 	.attribution-text :global(a:hover) {
 		color: var(--ink-primary);
+		text-decoration: none !important;
 	}
 
-	.footer-pagination {
-		flex-shrink: 0;
-		text-align: right;
-		align-self: flex-end;
+	/* Column 2: Pagination - flush right, bottom-aligned */
+	.pagination-cell {
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		white-space: nowrap;
 	}
 
 	.page-number {
 		font-family: var(--font-sans);
-		font-size: 14px;
+		font-size: 9.5pt;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 1px;
 		color: var(--ink-secondary);
+		font-weight: 400;
 	}
 </style>
