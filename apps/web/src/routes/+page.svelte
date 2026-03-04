@@ -4806,7 +4806,7 @@
 
 						<p>Je réfléchis beaucoup au sens et à la finalité des choses. (C’est peut-être le propre de la basse de ruminer ?) J’en suis venu à décider que mes raisons d’être sont 1) aimer ma famille, et 2) faire de l’art qui en vaut la peine. En créant <em>Ilya</em> et en l’offrant gratuitement à la communauté des chanteurs, j’essaie d’aider. <em>Ilya</em> vise à éliminer les obstacles à la littératie cyrillique et à l’accès à des outils savants de qualité. N’importe qui peut utiliser <em>Ilya</em>. N’importe qui peut améliorer <em>Ilya</em>. L’invitation vous est ouverte.</p>
 
-						<p>J’emprunte les mots de Craig : « My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature. » (Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d’explorer le canon de la grande littérature vocale russe.) <em>Ilya</em> n’a pas d’autre vocation.</p>
+						<p>Pour reprendre les mots de Grayson : « My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature. » (Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d’explorer le canon de la grande littérature vocale russe.) <em>Ilya</em> n’a pas d’autre vocation.</p>
 
 						<p><em>Ilya porte affectueusement le nom du joueur de hockey russe fictif Ilya Rozanov, tiré de la série <em>Game Changer</em> (<em>Heated Rivalry</em>) de Rachel Reid, elle aussi originaire des Maritimes.</em></p>
 
