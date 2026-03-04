@@ -370,7 +370,6 @@
 	</div>
 	<button
 		class="drawer-lip"
-		class:is-collapsed={collapsed}
 		onclick={ontogglecollapse}
 		aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
 		title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
@@ -444,29 +443,22 @@
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
 	}
 
-	/* ── Lip: 3px charcoal hairline with invisible 44px touch target ── */
+	/* ── Lip: invisible full-height touch target ─────── */
 
 	.drawer-lip {
 		position: absolute;
-		right: -22px;
 		top: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		right: -22px;
 		width: 44px;
 		height: 100%;
-		background: transparent;
+		padding: 0;
+		margin: 0;
 		border: none;
 		cursor: pointer;
-		padding: 0;
+		background: transparent;
 		z-index: 2;
-		/* Synchronized with drawer: slow, deliberate, snap finish */
-		transition: right 1500ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	.drawer-lip.is-collapsed {
-		right: auto;
-		left: 0;
+		-webkit-tap-highlight-color: transparent;
+		touch-action: manipulation;
 	}
 
 	.drawer-lip:hover {
@@ -478,63 +470,74 @@
 		outline-offset: 2px;
 	}
 
-	/* ── Handle: single morphing element ────────────────── */
+	/* ── Handle: visible morphing semicircle (36×72) ─── */
 
 	.drawer-handle {
 		position: absolute;
 		top: 50%;
+		left: 4px;
 		transform: translateY(-50%);
 		width: 36px;
 		height: 72px;
-		border-radius: 0 72px 72px 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: var(--drawer-bg, #FAF8F5);
-		z-index: 2;
-		pointer-events: none;
+		border-radius: 0 72px 72px 0;
+		background-color: var(--handle-bg, rgba(26, 22, 18, 0.65));
 		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
-		will-change: background-color, left;
-		/* Open state: black semicircle, resting on drawer edge */
-		background-color: rgba(26, 22, 18, 0.65);
-		left: 22px;
-		/* Morph transitions: colour and position with snap easing */
-		transition:
-			background-color 1500ms cubic-bezier(0.22, 1, 0.36, 1),
-			left 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+		pointer-events: none;
+		user-select: none;
+		/* Colour morphs; position rides with drawer width */
+		transition: background-color 1500ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	/* Collapsed state: sage semicircle, flush with viewport */
-	.drawer-lip.is-collapsed .drawer-handle {
-		background-color: var(--sage, #8B9A7D);
-		left: 0;
-	}
-
-	/* Hover states: immediate feedback */
-	.drawer-lip:hover .drawer-handle {
-		background-color: rgba(26, 22, 18, 0.82);
-		transition: background-color 200ms ease;
-	}
-
-	.drawer-lip.is-collapsed:hover .drawer-handle {
-		background-color: var(--deeper-sage, #7A8A6C);
-		transition: background-color 200ms ease;
-	}
-
-	/* ── Chevron: flips via scaleX ──────────────────────── */
+	/* ── Chevron ─────────────────────────────────────── */
 
 	.handle-chevron {
-		display: block;
-		/* Open: pointing left (flipped from base right-pointing SVG) */
+		width: 14px;
+		height: 20px;
+		color: var(--handle-fg, #FAF8F5);
+		transition:
+			color 1500ms cubic-bezier(0.22, 1, 0.36, 1),
+			transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+		/* Open: right-pointing SVG flipped to point left */
 		transform: scaleX(-1);
-		transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
-		will-change: transform;
 	}
 
-	/* Collapsed: pointing right (natural SVG orientation) */
-	.drawer-lip.is-collapsed .handle-chevron {
+	/* ── State: expanded (default) — black, chevron left  */
+
+	.drawer:not(.collapsed) .drawer-handle {
+		--handle-bg: rgba(26, 22, 18, 0.65);
+	}
+
+	.drawer:not(.collapsed) .handle-chevron {
+		--handle-fg: var(--drawer-bg, #FAF8F5);
+		transform: scaleX(-1);
+	}
+
+	/* ── State: collapsed — sage, chevron right ─────── */
+
+	.drawer.collapsed .drawer-handle {
+		--handle-bg: var(--sage, #8B9A7D);
+	}
+
+	.drawer.collapsed .handle-chevron {
+		--handle-fg: var(--drawer-bg, #FAF8F5);
 		transform: scaleX(1);
 	}
+
+	/* ── Hover: immediate feedback ──────────────────── */
+
+	.drawer:not(.collapsed) .drawer-lip:hover .drawer-handle {
+		--handle-bg: rgba(26, 22, 18, 0.82);
+		transition: background-color 200ms ease;
+	}
+
+	.drawer.collapsed .drawer-lip:hover .drawer-handle {
+		--handle-bg: var(--deeper-sage, #7A8A6C);
+		transition: background-color 200ms ease;
+	}
+
 
 	/* ── Placeholder panels ─────────────────────────────── */
 
@@ -809,11 +812,13 @@
 	/* ── Reduced motion ──────────────────────────────────── */
 
 	@media (prefers-reduced-motion: reduce) {
-		.drawer,
-		.drawer-lip,
+		.drawer {
+			transition: none;
+		}
+
 		.drawer-handle,
 		.handle-chevron {
-			transition: none !important;
+			transition-duration: 0.01ms !important;
 		}
 
 		.drawer-content.tab-enter-from-right,
