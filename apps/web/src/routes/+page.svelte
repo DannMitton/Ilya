@@ -901,12 +901,12 @@
 						<tr>
 							<th>Maj.<br><span class="gt-col-sub">Sérif</span></th>
 							<th>Min.<br><span class="gt-col-sub">Sérif</span></th>
-							<th>Maj.<br><span class="gt-col-sub">Sans</span></th>
-							<th>Min.<br><span class="gt-col-sub">Sans</span></th>
 							<th>Maj.<br><span class="gt-col-sub">Sérif italique</span></th>
 							<th>Min.<br><span class="gt-col-sub">Sérif italique</span></th>
-							<th>Maj.<br><span class="gt-col-sub">Sans oblique</span></th>
-							<th>Min.<br><span class="gt-col-sub">Sans oblique</span></th>
+							<th>Maj.<br><span class="gt-col-sub">Sans</span></th>
+							<th>Min.<br><span class="gt-col-sub">Sans</span></th>
+							<th>Maj.<br><span class="gt-col-sub">Sans italique</span></th>
+							<th>Min.<br><span class="gt-col-sub">Sans italique</span></th>
 							<th class="gt-cursive-h">Maj.<br><span class="gt-col-sub">Cursive</span></th>
 							<th class="gt-cursive-h">Min.<br><span class="gt-col-sub">Cursive</span></th>
 						</tr>
@@ -915,10 +915,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">А</td>
 								<td class="gt-cell gt-serif">а</td>
-								<td class="gt-cell gt-sans">А</td>
-								<td class="gt-cell gt-sans">а</td>
 								<td class="gt-cell gt-serif-it">А</td>
 								<td class="gt-cell gt-serif-it">а</td>
+								<td class="gt-cell gt-sans">А</td>
+								<td class="gt-cell gt-sans">а</td>
 								<td class="gt-cell gt-sans-obl">А</td>
 								<td class="gt-cell gt-sans-obl">а</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -927,10 +927,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Б</td>
 								<td class="gt-cell gt-serif">б</td>
-								<td class="gt-cell gt-sans">Б</td>
-								<td class="gt-cell gt-sans">б</td>
 								<td class="gt-cell gt-serif-it">Б</td>
 								<td class="gt-cell gt-serif-it">б</td>
+								<td class="gt-cell gt-sans">Б</td>
+								<td class="gt-cell gt-sans">б</td>
 								<td class="gt-cell gt-sans-obl">Б</td>
 								<td class="gt-cell gt-sans-obl">б</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -939,10 +939,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">В</td>
 								<td class="gt-cell gt-serif">в</td>
-								<td class="gt-cell gt-sans">В</td>
-								<td class="gt-cell gt-sans">в</td>
 								<td class="gt-cell gt-serif-it">В</td>
 								<td class="gt-cell gt-serif-it">в</td>
+								<td class="gt-cell gt-sans">В</td>
+								<td class="gt-cell gt-sans">в</td>
 								<td class="gt-cell gt-sans-obl">В</td>
 								<td class="gt-cell gt-sans-obl">в</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -951,10 +951,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Г</td>
 								<td class="gt-cell gt-serif">г</td>
-								<td class="gt-cell gt-sans">Г</td>
-								<td class="gt-cell gt-sans">г</td>
 								<td class="gt-cell gt-serif-it">Г</td>
 								<td class="gt-cell gt-serif-it gt-hi">г</td>
+								<td class="gt-cell gt-sans">Г</td>
+								<td class="gt-cell gt-sans">г</td>
 								<td class="gt-cell gt-sans-obl">Г</td>
 								<td class="gt-cell gt-sans-obl gt-hi">г</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -963,10 +963,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Д</td>
 								<td class="gt-cell gt-serif">д</td>
-								<td class="gt-cell gt-sans">Д</td>
-								<td class="gt-cell gt-sans">д</td>
 								<td class="gt-cell gt-serif-it">Д</td>
 								<td class="gt-cell gt-serif-it">д</td>
+								<td class="gt-cell gt-sans">Д</td>
+								<td class="gt-cell gt-sans">д</td>
 								<td class="gt-cell gt-sans-obl">Д</td>
 								<td class="gt-cell gt-sans-obl">д</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -975,10 +975,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Е</td>
 								<td class="gt-cell gt-serif">е</td>
-								<td class="gt-cell gt-sans">Е</td>
-								<td class="gt-cell gt-sans">е</td>
 								<td class="gt-cell gt-serif-it">Е</td>
 								<td class="gt-cell gt-serif-it">е</td>
+								<td class="gt-cell gt-sans">Е</td>
+								<td class="gt-cell gt-sans">е</td>
 								<td class="gt-cell gt-sans-obl">Е</td>
 								<td class="gt-cell gt-sans-obl">е</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -987,10 +987,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ё</td>
 								<td class="gt-cell gt-serif">ё</td>
-								<td class="gt-cell gt-sans">Ё</td>
-								<td class="gt-cell gt-sans">ё</td>
 								<td class="gt-cell gt-serif-it">Ё</td>
 								<td class="gt-cell gt-serif-it">ё</td>
+								<td class="gt-cell gt-sans">Ё</td>
+								<td class="gt-cell gt-sans">ё</td>
 								<td class="gt-cell gt-sans-obl">Ё</td>
 								<td class="gt-cell gt-sans-obl">ё</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -999,10 +999,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ж</td>
 								<td class="gt-cell gt-serif">ж</td>
-								<td class="gt-cell gt-sans">Ж</td>
-								<td class="gt-cell gt-sans">ж</td>
 								<td class="gt-cell gt-serif-it">Ж</td>
 								<td class="gt-cell gt-serif-it">ж</td>
+								<td class="gt-cell gt-sans">Ж</td>
+								<td class="gt-cell gt-sans">ж</td>
 								<td class="gt-cell gt-sans-obl">Ж</td>
 								<td class="gt-cell gt-sans-obl">ж</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1011,10 +1011,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">З</td>
 								<td class="gt-cell gt-serif">з</td>
-								<td class="gt-cell gt-sans">З</td>
-								<td class="gt-cell gt-sans">з</td>
 								<td class="gt-cell gt-serif-it">З</td>
 								<td class="gt-cell gt-serif-it">з</td>
+								<td class="gt-cell gt-sans">З</td>
+								<td class="gt-cell gt-sans">з</td>
 								<td class="gt-cell gt-sans-obl">З</td>
 								<td class="gt-cell gt-sans-obl">з</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1023,10 +1023,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">И</td>
 								<td class="gt-cell gt-serif">и</td>
-								<td class="gt-cell gt-sans">И</td>
-								<td class="gt-cell gt-sans">и</td>
 								<td class="gt-cell gt-serif-it">И</td>
 								<td class="gt-cell gt-serif-it">и</td>
+								<td class="gt-cell gt-sans">И</td>
+								<td class="gt-cell gt-sans">и</td>
 								<td class="gt-cell gt-sans-obl">И</td>
 								<td class="gt-cell gt-sans-obl">и</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1035,10 +1035,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Й</td>
 								<td class="gt-cell gt-serif">й</td>
-								<td class="gt-cell gt-sans">Й</td>
-								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-serif-it">Й</td>
 								<td class="gt-cell gt-serif-it">й</td>
+								<td class="gt-cell gt-sans">Й</td>
+								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-sans-obl">Й</td>
 								<td class="gt-cell gt-sans-obl">й</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1047,10 +1047,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">К</td>
 								<td class="gt-cell gt-serif">к</td>
-								<td class="gt-cell gt-sans">К</td>
-								<td class="gt-cell gt-sans">к</td>
 								<td class="gt-cell gt-serif-it">К</td>
 								<td class="gt-cell gt-serif-it">к</td>
+								<td class="gt-cell gt-sans">К</td>
+								<td class="gt-cell gt-sans">к</td>
 								<td class="gt-cell gt-sans-obl">К</td>
 								<td class="gt-cell gt-sans-obl">к</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1059,10 +1059,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Л</td>
 								<td class="gt-cell gt-serif">л</td>
-								<td class="gt-cell gt-sans">Л</td>
-								<td class="gt-cell gt-sans">л</td>
 								<td class="gt-cell gt-serif-it">Л</td>
 								<td class="gt-cell gt-serif-it">л</td>
+								<td class="gt-cell gt-sans">Л</td>
+								<td class="gt-cell gt-sans">л</td>
 								<td class="gt-cell gt-sans-obl">Л</td>
 								<td class="gt-cell gt-sans-obl">л</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1071,10 +1071,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">М</td>
 								<td class="gt-cell gt-serif">м</td>
-								<td class="gt-cell gt-sans">М</td>
-								<td class="gt-cell gt-sans">м</td>
 								<td class="gt-cell gt-serif-it">М</td>
 								<td class="gt-cell gt-serif-it">м</td>
+								<td class="gt-cell gt-sans">М</td>
+								<td class="gt-cell gt-sans">м</td>
 								<td class="gt-cell gt-sans-obl">М</td>
 								<td class="gt-cell gt-sans-obl">м</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1083,10 +1083,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Н</td>
 								<td class="gt-cell gt-serif">н</td>
-								<td class="gt-cell gt-sans">Н</td>
-								<td class="gt-cell gt-sans">н</td>
 								<td class="gt-cell gt-serif-it">Н</td>
 								<td class="gt-cell gt-serif-it">н</td>
+								<td class="gt-cell gt-sans">Н</td>
+								<td class="gt-cell gt-sans">н</td>
 								<td class="gt-cell gt-sans-obl">Н</td>
 								<td class="gt-cell gt-sans-obl">н</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1095,10 +1095,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">О</td>
 								<td class="gt-cell gt-serif">о</td>
-								<td class="gt-cell gt-sans">О</td>
-								<td class="gt-cell gt-sans">о</td>
 								<td class="gt-cell gt-serif-it">О</td>
 								<td class="gt-cell gt-serif-it">о</td>
+								<td class="gt-cell gt-sans">О</td>
+								<td class="gt-cell gt-sans">о</td>
 								<td class="gt-cell gt-sans-obl">О</td>
 								<td class="gt-cell gt-sans-obl">о</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1107,10 +1107,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">П</td>
 								<td class="gt-cell gt-serif gt-hi">п</td>
-								<td class="gt-cell gt-sans">П</td>
-								<td class="gt-cell gt-sans gt-hi">п</td>
 								<td class="gt-cell gt-serif-it">П</td>
 								<td class="gt-cell gt-serif-it">п</td>
+								<td class="gt-cell gt-sans">П</td>
+								<td class="gt-cell gt-sans gt-hi">п</td>
 								<td class="gt-cell gt-sans-obl">П</td>
 								<td class="gt-cell gt-sans-obl">п</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1119,10 +1119,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Р</td>
 								<td class="gt-cell gt-serif">р</td>
-								<td class="gt-cell gt-sans">Р</td>
-								<td class="gt-cell gt-sans">р</td>
 								<td class="gt-cell gt-serif-it">Р</td>
 								<td class="gt-cell gt-serif-it">р</td>
+								<td class="gt-cell gt-sans">Р</td>
+								<td class="gt-cell gt-sans">р</td>
 								<td class="gt-cell gt-sans-obl">Р</td>
 								<td class="gt-cell gt-sans-obl">р</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1131,10 +1131,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">С</td>
 								<td class="gt-cell gt-serif">с</td>
-								<td class="gt-cell gt-sans">С</td>
-								<td class="gt-cell gt-sans">с</td>
 								<td class="gt-cell gt-serif-it">С</td>
 								<td class="gt-cell gt-serif-it">с</td>
+								<td class="gt-cell gt-sans">С</td>
+								<td class="gt-cell gt-sans">с</td>
 								<td class="gt-cell gt-sans-obl">С</td>
 								<td class="gt-cell gt-sans-obl">с</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1143,10 +1143,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Т</td>
 								<td class="gt-cell gt-serif">т</td>
-								<td class="gt-cell gt-sans">Т</td>
-								<td class="gt-cell gt-sans">т</td>
 								<td class="gt-cell gt-serif-it">Т</td>
 								<td class="gt-cell gt-serif-it gt-hi">т</td>
+								<td class="gt-cell gt-sans">Т</td>
+								<td class="gt-cell gt-sans">т</td>
 								<td class="gt-cell gt-sans-obl">Т</td>
 								<td class="gt-cell gt-sans-obl gt-hi">т</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1155,10 +1155,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">У</td>
 								<td class="gt-cell gt-serif">у</td>
-								<td class="gt-cell gt-sans">У</td>
-								<td class="gt-cell gt-sans">у</td>
 								<td class="gt-cell gt-serif-it">У</td>
 								<td class="gt-cell gt-serif-it">у</td>
+								<td class="gt-cell gt-sans">У</td>
+								<td class="gt-cell gt-sans">у</td>
 								<td class="gt-cell gt-sans-obl">У</td>
 								<td class="gt-cell gt-sans-obl">у</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1167,10 +1167,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ф</td>
 								<td class="gt-cell gt-serif">ф</td>
-								<td class="gt-cell gt-sans">Ф</td>
-								<td class="gt-cell gt-sans">ф</td>
 								<td class="gt-cell gt-serif-it">Ф</td>
 								<td class="gt-cell gt-serif-it">ф</td>
+								<td class="gt-cell gt-sans">Ф</td>
+								<td class="gt-cell gt-sans">ф</td>
 								<td class="gt-cell gt-sans-obl">Ф</td>
 								<td class="gt-cell gt-sans-obl">ф</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1179,10 +1179,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Х</td>
 								<td class="gt-cell gt-serif">х</td>
-								<td class="gt-cell gt-sans">Х</td>
-								<td class="gt-cell gt-sans">х</td>
 								<td class="gt-cell gt-serif-it">Х</td>
 								<td class="gt-cell gt-serif-it">х</td>
+								<td class="gt-cell gt-sans">Х</td>
+								<td class="gt-cell gt-sans">х</td>
 								<td class="gt-cell gt-sans-obl">Х</td>
 								<td class="gt-cell gt-sans-obl">х</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1191,10 +1191,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ц</td>
 								<td class="gt-cell gt-serif">ц</td>
-								<td class="gt-cell gt-sans">Ц</td>
-								<td class="gt-cell gt-sans">ц</td>
 								<td class="gt-cell gt-serif-it">Ц</td>
 								<td class="gt-cell gt-serif-it">ц</td>
+								<td class="gt-cell gt-sans">Ц</td>
+								<td class="gt-cell gt-sans">ц</td>
 								<td class="gt-cell gt-sans-obl">Ц</td>
 								<td class="gt-cell gt-sans-obl">ц</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1203,10 +1203,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ч</td>
 								<td class="gt-cell gt-serif">ч</td>
-								<td class="gt-cell gt-sans">Ч</td>
-								<td class="gt-cell gt-sans">ч</td>
 								<td class="gt-cell gt-serif-it">Ч</td>
 								<td class="gt-cell gt-serif-it">ч</td>
+								<td class="gt-cell gt-sans">Ч</td>
+								<td class="gt-cell gt-sans">ч</td>
 								<td class="gt-cell gt-sans-obl">Ч</td>
 								<td class="gt-cell gt-sans-obl">ч</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1215,10 +1215,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ш</td>
 								<td class="gt-cell gt-serif">ш</td>
-								<td class="gt-cell gt-sans">Ш</td>
-								<td class="gt-cell gt-sans">ш</td>
 								<td class="gt-cell gt-serif-it">Ш</td>
 								<td class="gt-cell gt-serif-it">ш</td>
+								<td class="gt-cell gt-sans">Ш</td>
+								<td class="gt-cell gt-sans">ш</td>
 								<td class="gt-cell gt-sans-obl">Ш</td>
 								<td class="gt-cell gt-sans-obl">ш</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1227,10 +1227,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Щ</td>
 								<td class="gt-cell gt-serif">щ</td>
-								<td class="gt-cell gt-sans">Щ</td>
-								<td class="gt-cell gt-sans">щ</td>
 								<td class="gt-cell gt-serif-it">Щ</td>
 								<td class="gt-cell gt-serif-it">щ</td>
+								<td class="gt-cell gt-sans">Щ</td>
+								<td class="gt-cell gt-sans">щ</td>
 								<td class="gt-cell gt-sans-obl">Щ</td>
 								<td class="gt-cell gt-sans-obl">щ</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1239,10 +1239,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ъ</td>
 								<td class="gt-cell gt-serif">ъ</td>
-								<td class="gt-cell gt-sans">Ъ</td>
-								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-serif-it">Ъ</td>
 								<td class="gt-cell gt-serif-it">ъ</td>
+								<td class="gt-cell gt-sans">Ъ</td>
+								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-sans-obl">Ъ</td>
 								<td class="gt-cell gt-sans-obl">ъ</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1251,10 +1251,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ы</td>
 								<td class="gt-cell gt-serif">ы</td>
-								<td class="gt-cell gt-sans">Ы</td>
-								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-serif-it">Ы</td>
 								<td class="gt-cell gt-serif-it">ы</td>
+								<td class="gt-cell gt-sans">Ы</td>
+								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-sans-obl">Ы</td>
 								<td class="gt-cell gt-sans-obl">ы</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1263,10 +1263,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ь</td>
 								<td class="gt-cell gt-serif">ь</td>
-								<td class="gt-cell gt-sans">Ь</td>
-								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-serif-it">Ь</td>
 								<td class="gt-cell gt-serif-it">ь</td>
+								<td class="gt-cell gt-sans">Ь</td>
+								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-sans-obl">Ь</td>
 								<td class="gt-cell gt-sans-obl">ь</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1275,10 +1275,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Э</td>
 								<td class="gt-cell gt-serif">э</td>
-								<td class="gt-cell gt-sans">Э</td>
-								<td class="gt-cell gt-sans">э</td>
 								<td class="gt-cell gt-serif-it">Э</td>
 								<td class="gt-cell gt-serif-it">э</td>
+								<td class="gt-cell gt-sans">Э</td>
+								<td class="gt-cell gt-sans">э</td>
 								<td class="gt-cell gt-sans-obl">Э</td>
 								<td class="gt-cell gt-sans-obl">э</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1287,10 +1287,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ю</td>
 								<td class="gt-cell gt-serif">ю</td>
-								<td class="gt-cell gt-sans">Ю</td>
-								<td class="gt-cell gt-sans">ю</td>
 								<td class="gt-cell gt-serif-it">Ю</td>
 								<td class="gt-cell gt-serif-it">ю</td>
+								<td class="gt-cell gt-sans">Ю</td>
+								<td class="gt-cell gt-sans">ю</td>
 								<td class="gt-cell gt-sans-obl">Ю</td>
 								<td class="gt-cell gt-sans-obl">ю</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1299,10 +1299,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Я</td>
 								<td class="gt-cell gt-serif">я</td>
-								<td class="gt-cell gt-sans">Я</td>
-								<td class="gt-cell gt-sans">я</td>
 								<td class="gt-cell gt-serif-it">Я</td>
 								<td class="gt-cell gt-serif-it">я</td>
+								<td class="gt-cell gt-sans">Я</td>
+								<td class="gt-cell gt-sans">я</td>
 								<td class="gt-cell gt-sans-obl">Я</td>
 								<td class="gt-cell gt-sans-obl">я</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -1314,57 +1314,56 @@
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѣ</td>
 								<td class="gt-cell gt-serif">ѣ</td>
-								<td class="gt-cell gt-sans">Ѣ</td>
-								<td class="gt-cell gt-sans">ѣ</td>
 								<td class="gt-cell gt-serif-it">Ѣ</td>
 								<td class="gt-cell gt-serif-it gt-hi">ѣ</td>
+								<td class="gt-cell gt-sans">Ѣ</td>
+								<td class="gt-cell gt-sans">ѣ</td>
 								<td class="gt-cell gt-sans-obl">Ѣ</td>
 								<td class="gt-cell gt-sans-obl">ѣ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѳ</td>
 								<td class="gt-cell gt-serif">ѳ</td>
-								<td class="gt-cell gt-sans">Ѳ</td>
-								<td class="gt-cell gt-sans">ѳ</td>
 								<td class="gt-cell gt-serif-it">Ѳ</td>
 								<td class="gt-cell gt-serif-it">ѳ</td>
+								<td class="gt-cell gt-sans">Ѳ</td>
+								<td class="gt-cell gt-sans">ѳ</td>
 								<td class="gt-cell gt-sans-obl">Ѳ</td>
 								<td class="gt-cell gt-sans-obl">ѳ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">І</td>
 								<td class="gt-cell gt-serif">і</td>
-								<td class="gt-cell gt-sans">І</td>
-								<td class="gt-cell gt-sans">і</td>
 								<td class="gt-cell gt-serif-it">І</td>
 								<td class="gt-cell gt-serif-it">і</td>
+								<td class="gt-cell gt-sans">І</td>
+								<td class="gt-cell gt-sans">і</td>
 								<td class="gt-cell gt-sans-obl">І</td>
 								<td class="gt-cell gt-sans-obl">і</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѵ</td>
 								<td class="gt-cell gt-serif">ѵ</td>
-								<td class="gt-cell gt-sans">Ѵ</td>
-								<td class="gt-cell gt-sans">ѵ</td>
 								<td class="gt-cell gt-serif-it">Ѵ</td>
 								<td class="gt-cell gt-serif-it">ѵ</td>
+								<td class="gt-cell gt-sans">Ѵ</td>
+								<td class="gt-cell gt-sans">ѵ</td>
 								<td class="gt-cell gt-sans-obl">Ѵ</td>
 								<td class="gt-cell gt-sans-obl">ѵ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 						</tbody>
 						</table>
 						</div>
 
 
-						<p><em>Le tableau des glyphes est livré au lancement avec les formes imprimées et italiques. Les colonnes cursives sont réservées à des illustrations commandées dans le style d'écriture scolaire russe standard (прописи), avec les crochets de liaison (соединения) qui distinguent la cursive russe authentique des polices de script décoratives.</em></p>
 
 						<p>La raison de présenter chaque lettre sous plusieurs formes est de garantir que, peu importe où vous rencontreriez une lettre, vous pourriez la reconnaître. Les chanteurs rencontrent le cyrillique dans les partitions imprimées (souvent en sérif), dans les éditions contemporaines (souvent en sans sérif), dans les ressources savantes (souvent en italique), et occasionnellement dans des annotations manuscrites ou des manuscrits historiques (cursive). Remarquez à quel point certaines formes de lettres changent radicalement entre les versions régulière, italique et cursive.</p>
 
@@ -2921,12 +2920,12 @@
 						<tr>
 							<th>Upper<br><span class="gt-col-sub">Serif</span></th>
 							<th>Lower<br><span class="gt-col-sub">Serif</span></th>
-							<th>Upper<br><span class="gt-col-sub">Sans</span></th>
-							<th>Lower<br><span class="gt-col-sub">Sans</span></th>
 							<th>Upper<br><span class="gt-col-sub">Serif Italic</span></th>
 							<th>Lower<br><span class="gt-col-sub">Serif Italic</span></th>
-							<th>Upper<br><span class="gt-col-sub">Sans Oblique</span></th>
-							<th>Lower<br><span class="gt-col-sub">Sans Oblique</span></th>
+							<th>Upper<br><span class="gt-col-sub">Sans</span></th>
+							<th>Lower<br><span class="gt-col-sub">Sans</span></th>
+							<th>Upper<br><span class="gt-col-sub">Sans Italic</span></th>
+							<th>Lower<br><span class="gt-col-sub">Sans Italic</span></th>
 							<th class="gt-cursive-h">Upper<br><span class="gt-col-sub">Cursive</span></th>
 							<th class="gt-cursive-h">Lower<br><span class="gt-col-sub">Cursive</span></th>
 						</tr>
@@ -2935,10 +2934,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">А</td>
 								<td class="gt-cell gt-serif">а</td>
-								<td class="gt-cell gt-sans">А</td>
-								<td class="gt-cell gt-sans">а</td>
 								<td class="gt-cell gt-serif-it">А</td>
 								<td class="gt-cell gt-serif-it">а</td>
+								<td class="gt-cell gt-sans">А</td>
+								<td class="gt-cell gt-sans">а</td>
 								<td class="gt-cell gt-sans-obl">А</td>
 								<td class="gt-cell gt-sans-obl">а</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -2947,10 +2946,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Б</td>
 								<td class="gt-cell gt-serif">б</td>
-								<td class="gt-cell gt-sans">Б</td>
-								<td class="gt-cell gt-sans">б</td>
 								<td class="gt-cell gt-serif-it">Б</td>
 								<td class="gt-cell gt-serif-it">б</td>
+								<td class="gt-cell gt-sans">Б</td>
+								<td class="gt-cell gt-sans">б</td>
 								<td class="gt-cell gt-sans-obl">Б</td>
 								<td class="gt-cell gt-sans-obl">б</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -2959,10 +2958,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">В</td>
 								<td class="gt-cell gt-serif">в</td>
-								<td class="gt-cell gt-sans">В</td>
-								<td class="gt-cell gt-sans">в</td>
 								<td class="gt-cell gt-serif-it">В</td>
 								<td class="gt-cell gt-serif-it">в</td>
+								<td class="gt-cell gt-sans">В</td>
+								<td class="gt-cell gt-sans">в</td>
 								<td class="gt-cell gt-sans-obl">В</td>
 								<td class="gt-cell gt-sans-obl">в</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -2971,10 +2970,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Г</td>
 								<td class="gt-cell gt-serif">г</td>
-								<td class="gt-cell gt-sans">Г</td>
-								<td class="gt-cell gt-sans">г</td>
 								<td class="gt-cell gt-serif-it">Г</td>
 								<td class="gt-cell gt-serif-it gt-hi">г</td>
+								<td class="gt-cell gt-sans">Г</td>
+								<td class="gt-cell gt-sans">г</td>
 								<td class="gt-cell gt-sans-obl">Г</td>
 								<td class="gt-cell gt-sans-obl gt-hi">г</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -2983,10 +2982,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Д</td>
 								<td class="gt-cell gt-serif">д</td>
-								<td class="gt-cell gt-sans">Д</td>
-								<td class="gt-cell gt-sans">д</td>
 								<td class="gt-cell gt-serif-it">Д</td>
 								<td class="gt-cell gt-serif-it">д</td>
+								<td class="gt-cell gt-sans">Д</td>
+								<td class="gt-cell gt-sans">д</td>
 								<td class="gt-cell gt-sans-obl">Д</td>
 								<td class="gt-cell gt-sans-obl">д</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -2995,10 +2994,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Е</td>
 								<td class="gt-cell gt-serif">е</td>
-								<td class="gt-cell gt-sans">Е</td>
-								<td class="gt-cell gt-sans">е</td>
 								<td class="gt-cell gt-serif-it">Е</td>
 								<td class="gt-cell gt-serif-it">е</td>
+								<td class="gt-cell gt-sans">Е</td>
+								<td class="gt-cell gt-sans">е</td>
 								<td class="gt-cell gt-sans-obl">Е</td>
 								<td class="gt-cell gt-sans-obl">е</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3007,10 +3006,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ё</td>
 								<td class="gt-cell gt-serif">ё</td>
-								<td class="gt-cell gt-sans">Ё</td>
-								<td class="gt-cell gt-sans">ё</td>
 								<td class="gt-cell gt-serif-it">Ё</td>
 								<td class="gt-cell gt-serif-it">ё</td>
+								<td class="gt-cell gt-sans">Ё</td>
+								<td class="gt-cell gt-sans">ё</td>
 								<td class="gt-cell gt-sans-obl">Ё</td>
 								<td class="gt-cell gt-sans-obl">ё</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3019,10 +3018,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ж</td>
 								<td class="gt-cell gt-serif">ж</td>
-								<td class="gt-cell gt-sans">Ж</td>
-								<td class="gt-cell gt-sans">ж</td>
 								<td class="gt-cell gt-serif-it">Ж</td>
 								<td class="gt-cell gt-serif-it">ж</td>
+								<td class="gt-cell gt-sans">Ж</td>
+								<td class="gt-cell gt-sans">ж</td>
 								<td class="gt-cell gt-sans-obl">Ж</td>
 								<td class="gt-cell gt-sans-obl">ж</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3031,10 +3030,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">З</td>
 								<td class="gt-cell gt-serif">з</td>
-								<td class="gt-cell gt-sans">З</td>
-								<td class="gt-cell gt-sans">з</td>
 								<td class="gt-cell gt-serif-it">З</td>
 								<td class="gt-cell gt-serif-it">з</td>
+								<td class="gt-cell gt-sans">З</td>
+								<td class="gt-cell gt-sans">з</td>
 								<td class="gt-cell gt-sans-obl">З</td>
 								<td class="gt-cell gt-sans-obl">з</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3043,10 +3042,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">И</td>
 								<td class="gt-cell gt-serif">и</td>
-								<td class="gt-cell gt-sans">И</td>
-								<td class="gt-cell gt-sans">и</td>
 								<td class="gt-cell gt-serif-it">И</td>
 								<td class="gt-cell gt-serif-it">и</td>
+								<td class="gt-cell gt-sans">И</td>
+								<td class="gt-cell gt-sans">и</td>
 								<td class="gt-cell gt-sans-obl">И</td>
 								<td class="gt-cell gt-sans-obl">и</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3055,10 +3054,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Й</td>
 								<td class="gt-cell gt-serif">й</td>
-								<td class="gt-cell gt-sans">Й</td>
-								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-serif-it">Й</td>
 								<td class="gt-cell gt-serif-it">й</td>
+								<td class="gt-cell gt-sans">Й</td>
+								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-sans-obl">Й</td>
 								<td class="gt-cell gt-sans-obl">й</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3067,10 +3066,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">К</td>
 								<td class="gt-cell gt-serif">к</td>
-								<td class="gt-cell gt-sans">К</td>
-								<td class="gt-cell gt-sans">к</td>
 								<td class="gt-cell gt-serif-it">К</td>
 								<td class="gt-cell gt-serif-it">к</td>
+								<td class="gt-cell gt-sans">К</td>
+								<td class="gt-cell gt-sans">к</td>
 								<td class="gt-cell gt-sans-obl">К</td>
 								<td class="gt-cell gt-sans-obl">к</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3079,10 +3078,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Л</td>
 								<td class="gt-cell gt-serif">л</td>
-								<td class="gt-cell gt-sans">Л</td>
-								<td class="gt-cell gt-sans">л</td>
 								<td class="gt-cell gt-serif-it">Л</td>
 								<td class="gt-cell gt-serif-it">л</td>
+								<td class="gt-cell gt-sans">Л</td>
+								<td class="gt-cell gt-sans">л</td>
 								<td class="gt-cell gt-sans-obl">Л</td>
 								<td class="gt-cell gt-sans-obl">л</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3091,10 +3090,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">М</td>
 								<td class="gt-cell gt-serif">м</td>
-								<td class="gt-cell gt-sans">М</td>
-								<td class="gt-cell gt-sans">м</td>
 								<td class="gt-cell gt-serif-it">М</td>
 								<td class="gt-cell gt-serif-it">м</td>
+								<td class="gt-cell gt-sans">М</td>
+								<td class="gt-cell gt-sans">м</td>
 								<td class="gt-cell gt-sans-obl">М</td>
 								<td class="gt-cell gt-sans-obl">м</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3103,10 +3102,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Н</td>
 								<td class="gt-cell gt-serif">н</td>
-								<td class="gt-cell gt-sans">Н</td>
-								<td class="gt-cell gt-sans">н</td>
 								<td class="gt-cell gt-serif-it">Н</td>
 								<td class="gt-cell gt-serif-it">н</td>
+								<td class="gt-cell gt-sans">Н</td>
+								<td class="gt-cell gt-sans">н</td>
 								<td class="gt-cell gt-sans-obl">Н</td>
 								<td class="gt-cell gt-sans-obl">н</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3115,10 +3114,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">О</td>
 								<td class="gt-cell gt-serif">о</td>
-								<td class="gt-cell gt-sans">О</td>
-								<td class="gt-cell gt-sans">о</td>
 								<td class="gt-cell gt-serif-it">О</td>
 								<td class="gt-cell gt-serif-it">о</td>
+								<td class="gt-cell gt-sans">О</td>
+								<td class="gt-cell gt-sans">о</td>
 								<td class="gt-cell gt-sans-obl">О</td>
 								<td class="gt-cell gt-sans-obl">о</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3127,10 +3126,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">П</td>
 								<td class="gt-cell gt-serif gt-hi">п</td>
-								<td class="gt-cell gt-sans">П</td>
-								<td class="gt-cell gt-sans gt-hi">п</td>
 								<td class="gt-cell gt-serif-it">П</td>
 								<td class="gt-cell gt-serif-it">п</td>
+								<td class="gt-cell gt-sans">П</td>
+								<td class="gt-cell gt-sans gt-hi">п</td>
 								<td class="gt-cell gt-sans-obl">П</td>
 								<td class="gt-cell gt-sans-obl">п</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3139,10 +3138,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Р</td>
 								<td class="gt-cell gt-serif">р</td>
-								<td class="gt-cell gt-sans">Р</td>
-								<td class="gt-cell gt-sans">р</td>
 								<td class="gt-cell gt-serif-it">Р</td>
 								<td class="gt-cell gt-serif-it">р</td>
+								<td class="gt-cell gt-sans">Р</td>
+								<td class="gt-cell gt-sans">р</td>
 								<td class="gt-cell gt-sans-obl">Р</td>
 								<td class="gt-cell gt-sans-obl">р</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3151,10 +3150,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">С</td>
 								<td class="gt-cell gt-serif">с</td>
-								<td class="gt-cell gt-sans">С</td>
-								<td class="gt-cell gt-sans">с</td>
 								<td class="gt-cell gt-serif-it">С</td>
 								<td class="gt-cell gt-serif-it">с</td>
+								<td class="gt-cell gt-sans">С</td>
+								<td class="gt-cell gt-sans">с</td>
 								<td class="gt-cell gt-sans-obl">С</td>
 								<td class="gt-cell gt-sans-obl">с</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3163,10 +3162,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Т</td>
 								<td class="gt-cell gt-serif">т</td>
-								<td class="gt-cell gt-sans">Т</td>
-								<td class="gt-cell gt-sans">т</td>
 								<td class="gt-cell gt-serif-it">Т</td>
 								<td class="gt-cell gt-serif-it gt-hi">т</td>
+								<td class="gt-cell gt-sans">Т</td>
+								<td class="gt-cell gt-sans">т</td>
 								<td class="gt-cell gt-sans-obl">Т</td>
 								<td class="gt-cell gt-sans-obl gt-hi">т</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3175,10 +3174,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">У</td>
 								<td class="gt-cell gt-serif">у</td>
-								<td class="gt-cell gt-sans">У</td>
-								<td class="gt-cell gt-sans">у</td>
 								<td class="gt-cell gt-serif-it">У</td>
 								<td class="gt-cell gt-serif-it">у</td>
+								<td class="gt-cell gt-sans">У</td>
+								<td class="gt-cell gt-sans">у</td>
 								<td class="gt-cell gt-sans-obl">У</td>
 								<td class="gt-cell gt-sans-obl">у</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3187,10 +3186,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ф</td>
 								<td class="gt-cell gt-serif">ф</td>
-								<td class="gt-cell gt-sans">Ф</td>
-								<td class="gt-cell gt-sans">ф</td>
 								<td class="gt-cell gt-serif-it">Ф</td>
 								<td class="gt-cell gt-serif-it">ф</td>
+								<td class="gt-cell gt-sans">Ф</td>
+								<td class="gt-cell gt-sans">ф</td>
 								<td class="gt-cell gt-sans-obl">Ф</td>
 								<td class="gt-cell gt-sans-obl">ф</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3199,10 +3198,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Х</td>
 								<td class="gt-cell gt-serif">х</td>
-								<td class="gt-cell gt-sans">Х</td>
-								<td class="gt-cell gt-sans">х</td>
 								<td class="gt-cell gt-serif-it">Х</td>
 								<td class="gt-cell gt-serif-it">х</td>
+								<td class="gt-cell gt-sans">Х</td>
+								<td class="gt-cell gt-sans">х</td>
 								<td class="gt-cell gt-sans-obl">Х</td>
 								<td class="gt-cell gt-sans-obl">х</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3211,10 +3210,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ц</td>
 								<td class="gt-cell gt-serif">ц</td>
-								<td class="gt-cell gt-sans">Ц</td>
-								<td class="gt-cell gt-sans">ц</td>
 								<td class="gt-cell gt-serif-it">Ц</td>
 								<td class="gt-cell gt-serif-it">ц</td>
+								<td class="gt-cell gt-sans">Ц</td>
+								<td class="gt-cell gt-sans">ц</td>
 								<td class="gt-cell gt-sans-obl">Ц</td>
 								<td class="gt-cell gt-sans-obl">ц</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3223,10 +3222,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ч</td>
 								<td class="gt-cell gt-serif">ч</td>
-								<td class="gt-cell gt-sans">Ч</td>
-								<td class="gt-cell gt-sans">ч</td>
 								<td class="gt-cell gt-serif-it">Ч</td>
 								<td class="gt-cell gt-serif-it">ч</td>
+								<td class="gt-cell gt-sans">Ч</td>
+								<td class="gt-cell gt-sans">ч</td>
 								<td class="gt-cell gt-sans-obl">Ч</td>
 								<td class="gt-cell gt-sans-obl">ч</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3235,10 +3234,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ш</td>
 								<td class="gt-cell gt-serif">ш</td>
-								<td class="gt-cell gt-sans">Ш</td>
-								<td class="gt-cell gt-sans">ш</td>
 								<td class="gt-cell gt-serif-it">Ш</td>
 								<td class="gt-cell gt-serif-it">ш</td>
+								<td class="gt-cell gt-sans">Ш</td>
+								<td class="gt-cell gt-sans">ш</td>
 								<td class="gt-cell gt-sans-obl">Ш</td>
 								<td class="gt-cell gt-sans-obl">ш</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3247,10 +3246,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Щ</td>
 								<td class="gt-cell gt-serif">щ</td>
-								<td class="gt-cell gt-sans">Щ</td>
-								<td class="gt-cell gt-sans">щ</td>
 								<td class="gt-cell gt-serif-it">Щ</td>
 								<td class="gt-cell gt-serif-it">щ</td>
+								<td class="gt-cell gt-sans">Щ</td>
+								<td class="gt-cell gt-sans">щ</td>
 								<td class="gt-cell gt-sans-obl">Щ</td>
 								<td class="gt-cell gt-sans-obl">щ</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3259,10 +3258,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ъ</td>
 								<td class="gt-cell gt-serif">ъ</td>
-								<td class="gt-cell gt-sans">Ъ</td>
-								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-serif-it">Ъ</td>
 								<td class="gt-cell gt-serif-it">ъ</td>
+								<td class="gt-cell gt-sans">Ъ</td>
+								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-sans-obl">Ъ</td>
 								<td class="gt-cell gt-sans-obl">ъ</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3271,10 +3270,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ы</td>
 								<td class="gt-cell gt-serif">ы</td>
-								<td class="gt-cell gt-sans">Ы</td>
-								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-serif-it">Ы</td>
 								<td class="gt-cell gt-serif-it">ы</td>
+								<td class="gt-cell gt-sans">Ы</td>
+								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-sans-obl">Ы</td>
 								<td class="gt-cell gt-sans-obl">ы</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3283,10 +3282,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ь</td>
 								<td class="gt-cell gt-serif">ь</td>
-								<td class="gt-cell gt-sans">Ь</td>
-								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-serif-it">Ь</td>
 								<td class="gt-cell gt-serif-it">ь</td>
+								<td class="gt-cell gt-sans">Ь</td>
+								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-sans-obl">Ь</td>
 								<td class="gt-cell gt-sans-obl">ь</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3295,10 +3294,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Э</td>
 								<td class="gt-cell gt-serif">э</td>
-								<td class="gt-cell gt-sans">Э</td>
-								<td class="gt-cell gt-sans">э</td>
 								<td class="gt-cell gt-serif-it">Э</td>
 								<td class="gt-cell gt-serif-it">э</td>
+								<td class="gt-cell gt-sans">Э</td>
+								<td class="gt-cell gt-sans">э</td>
 								<td class="gt-cell gt-sans-obl">Э</td>
 								<td class="gt-cell gt-sans-obl">э</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3307,10 +3306,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Ю</td>
 								<td class="gt-cell gt-serif">ю</td>
-								<td class="gt-cell gt-sans">Ю</td>
-								<td class="gt-cell gt-sans">ю</td>
 								<td class="gt-cell gt-serif-it">Ю</td>
 								<td class="gt-cell gt-serif-it">ю</td>
+								<td class="gt-cell gt-sans">Ю</td>
+								<td class="gt-cell gt-sans">ю</td>
 								<td class="gt-cell gt-sans-obl">Ю</td>
 								<td class="gt-cell gt-sans-obl">ю</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3319,10 +3318,10 @@
 							<tr>
 								<td class="gt-cell gt-serif">Я</td>
 								<td class="gt-cell gt-serif">я</td>
-								<td class="gt-cell gt-sans">Я</td>
-								<td class="gt-cell gt-sans">я</td>
 								<td class="gt-cell gt-serif-it">Я</td>
 								<td class="gt-cell gt-serif-it">я</td>
+								<td class="gt-cell gt-sans">Я</td>
+								<td class="gt-cell gt-sans">я</td>
 								<td class="gt-cell gt-sans-obl">Я</td>
 								<td class="gt-cell gt-sans-obl">я</td>
 								<td class="gt-cell gt-cursive">SVG</td>
@@ -3334,57 +3333,56 @@
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѣ</td>
 								<td class="gt-cell gt-serif">ѣ</td>
-								<td class="gt-cell gt-sans">Ѣ</td>
-								<td class="gt-cell gt-sans">ѣ</td>
 								<td class="gt-cell gt-serif-it">Ѣ</td>
 								<td class="gt-cell gt-serif-it gt-hi">ѣ</td>
+								<td class="gt-cell gt-sans">Ѣ</td>
+								<td class="gt-cell gt-sans">ѣ</td>
 								<td class="gt-cell gt-sans-obl">Ѣ</td>
 								<td class="gt-cell gt-sans-obl">ѣ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѳ</td>
 								<td class="gt-cell gt-serif">ѳ</td>
-								<td class="gt-cell gt-sans">Ѳ</td>
-								<td class="gt-cell gt-sans">ѳ</td>
 								<td class="gt-cell gt-serif-it">Ѳ</td>
 								<td class="gt-cell gt-serif-it">ѳ</td>
+								<td class="gt-cell gt-sans">Ѳ</td>
+								<td class="gt-cell gt-sans">ѳ</td>
 								<td class="gt-cell gt-sans-obl">Ѳ</td>
 								<td class="gt-cell gt-sans-obl">ѳ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">І</td>
 								<td class="gt-cell gt-serif">і</td>
-								<td class="gt-cell gt-sans">І</td>
-								<td class="gt-cell gt-sans">і</td>
 								<td class="gt-cell gt-serif-it">І</td>
 								<td class="gt-cell gt-serif-it">і</td>
+								<td class="gt-cell gt-sans">І</td>
+								<td class="gt-cell gt-sans">і</td>
 								<td class="gt-cell gt-sans-obl">І</td>
 								<td class="gt-cell gt-sans-obl">і</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 							<tr class="gt-obsolete">
 								<td class="gt-cell gt-serif">Ѵ</td>
 								<td class="gt-cell gt-serif">ѵ</td>
-								<td class="gt-cell gt-sans">Ѵ</td>
-								<td class="gt-cell gt-sans">ѵ</td>
 								<td class="gt-cell gt-serif-it">Ѵ</td>
 								<td class="gt-cell gt-serif-it">ѵ</td>
+								<td class="gt-cell gt-sans">Ѵ</td>
+								<td class="gt-cell gt-sans">ѵ</td>
 								<td class="gt-cell gt-sans-obl">Ѵ</td>
 								<td class="gt-cell gt-sans-obl">ѵ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 							</tr>
 						</tbody>
 						</table>
 						</div>
 
 
-						<p><em>The glyph table ships at release with print and italic forms populated. Cursive columns are reserved for commissioned artwork in the standard Russian school handwriting (прописи) style, with the connecting hooks (соединения) that distinguish authentic Russian cursive from decorative script fonts.</em></p>
 
 						<p>The purpose of presenting every letter in multiple forms is to ensure that no matter where you meet a letter, you can recognise it. Singers encounter Cyrillic in printed scores (often serif), in contemporary editions (often sans serif), in scholarly resources (often italic), and occasionally in handwritten annotations or historical manuscripts (cursive). Notice how radically some letterforms change between regular, italic, and cursive forms.</p>
 
@@ -4968,8 +4966,8 @@
 		width: 18px;
 		height: 18px;
 		border-radius: 3px;
-		background: #f0dbb8;
-		border: 1.5px solid #d4a843;
+		background: #F0D8D8;
+		border: 1.5px solid #C28888;
 		flex-shrink: 0;
 	}
 
@@ -5089,9 +5087,17 @@
 		letter-spacing: 0.03em;
 	}
 
+	:global(.gt-null) {
+		font-size: 1.15rem !important;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		line-height: 48px;
+		color: var(--dusty-rose, #A67B7B);
+	}
+
 	:global(.gt-hi) {
-		background: #f0dbb8 !important;
-		box-shadow: inset 0 0 0 1.5px #d4a843;
+		background: #F0D8D8 !important;
+		box-shadow: inset 0 0 0 1.5px #C28888;
 	}
 
 	:global(.gt-obsolete td) { background: #f8f6f0 !important; }
