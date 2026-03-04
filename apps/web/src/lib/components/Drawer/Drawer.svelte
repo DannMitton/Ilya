@@ -120,7 +120,7 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed style="width: {collapsed ? 0 : width}px" aria-label="Controls">
+<aside class="drawer" class:collapsed data-tab={activeTab} style="width: {collapsed ? 0 : width}px" aria-label="Controls">
 	<div class="drawer-clip">
 	<div class="drawer-body" style="width: {width}px">
 		<div
@@ -519,10 +519,18 @@
 		transform: scaleX(-1);
 	}
 
-	/* ── State: collapsed — sage, chevron right ─────── */
+	/* ── State: collapsed — tab-aware colour, chevron right ─── */
 
-	.drawer.collapsed .drawer-handle {
+	.drawer.collapsed[data-tab="transcription"] .drawer-handle {
 		--handle-bg: var(--sage, #8B9A7D);
+	}
+
+	.drawer.collapsed[data-tab="learn"] .drawer-handle {
+		--handle-bg: var(--dusty-rose, #A67B7B);
+	}
+
+	.drawer.collapsed[data-tab="guide"] .drawer-handle {
+		--handle-bg: var(--quiet-cobalt, #5C739E);
 	}
 
 	.drawer.collapsed .handle-chevron {
@@ -537,8 +545,18 @@
 		transition: background-color 200ms ease;
 	}
 
-	.drawer.collapsed .drawer-lip:hover .drawer-handle {
+	.drawer.collapsed[data-tab="transcription"] .drawer-lip:hover .drawer-handle {
 		--handle-bg: var(--deeper-sage, #7A8A6C);
+		transition: background-color 200ms ease;
+	}
+
+	.drawer.collapsed[data-tab="learn"] .drawer-lip:hover .drawer-handle {
+		--handle-bg: #8D6969;
+		transition: background-color 200ms ease;
+	}
+
+	.drawer.collapsed[data-tab="guide"] .drawer-lip:hover .drawer-handle {
+		--handle-bg: #4E6286;
 		transition: background-color 200ms ease;
 	}
 
