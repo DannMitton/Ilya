@@ -4399,7 +4399,7 @@
 						appears here because palatalization does not apply to this particular
 						morphological ending.</p>
 						<p>Each example builds on the last. The singer who can explain why мять
-						has [a] where мать has [ɑ], and why большой’s ш blocks what сестрёнка’s
+						has [a] where мать has [ɑ], and why большой’s ⟨ш⟩ blocks what сестрёнка’s
 						cluster permits, has internalised the system.</p>
 						<h4 id="learn-u6-velari">Velar-i [ɨ]</h4>
 						<p>Velar-i occupies the space where palatalization cannot go. It is the
