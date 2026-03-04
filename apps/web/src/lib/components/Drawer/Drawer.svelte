@@ -122,14 +122,13 @@
 
 <aside class="drawer" class:collapsed style="width: {collapsed ? 0 : width}px" aria-label="Controls">
 	<div class="drawer-body">
-		{#if !collapsed}
-			<div
-				class="drawer-content {tabTransitionClass}"
-				role="tabpanel"
-				id="tabpanel-{activeTab}"
-				aria-labelledby="tab-{activeTab}"
-				bind:this={drawerContentEl}
-			>
+		<div
+			class="drawer-content {tabTransitionClass}"
+			role="tabpanel"
+			id="tabpanel-{activeTab}"
+			aria-labelledby="tab-{activeTab}"
+			bind:this={drawerContentEl}
+		>
 				{#if activeTab === 'transcription'}
 					{@render rootPanel()}
 				{:else if activeTab === 'learn'}
@@ -364,9 +363,8 @@
 						</ul>
 					</nav>
 				{/if}
-			</div>
-			<TabBar {activeTab} {language} {ontabchange} />
-		{/if}
+		</div>
+		<TabBar {activeTab} {language} {ontabchange} />
 	</div>
 	<button
 		class="drawer-lip"
@@ -406,9 +404,6 @@
 		border-right: 2px double var(--ink-primary, #1a1612);
 	}
 
-	.collapsed .drawer-body {
-		display: none;
-	}
 
 	.drawer-content {
 		flex: 1;
