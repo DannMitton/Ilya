@@ -210,6 +210,26 @@
 		if (lines.length > 0) {
 			// Breath animation: content appears with breath-in
 			triggerPaperBreathIn();
+			// Console output for verification
+			console.group('[Ilya] Transcription result');
+			lines.forEach((line, li) => {
+				console.group(`Line ${li}`);
+				line.words.forEach((w) => {
+					console.log(
+						`${w.cleanWord} → ${w.ipaDisplay}`,
+						{
+							stress: w.stressIndex,
+							source: w.stressSource,
+							boundary: w.rightBoundary,
+							proclitic: w.isProclitic,
+							enclitic: w.isEnclitic,
+							gloss: w.gloss,
+						}
+					);
+				});
+				console.groupEnd();
+			});
+			console.groupEnd();
 			// Focus first WordStack after render
 			requestAnimationFrame(() => {
 				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
@@ -254,6 +274,12 @@
 				// localStorage unavailable
 			}
 		}
+		console.log('[Ilya] Selected:', word.cleanWord, word.ipaDisplay, {
+			stress: word.stressIndex,
+			source: word.stressSource,
+			gloss: word.gloss,
+			displayLog: word.displayLog,
+		});
 	}
 	function handleNotationChange(prefs: NotationPreferences) {
 		notationPrefs = prefs;
@@ -707,7 +733,7 @@
 
 						<p>LEÇONS présente les principes fondamentaux de la diction lyrique russe tels qu'établis par Craig Grayson dans sa thèse de doctorat de 2012, <em>Russian Lyric Diction: A practical guide with introduction and annotations and a bibliography with annotations on selected sources</em> (Université de Washington). Ce qui suit est une réorganisation pédagogique du travail de Grayson, conçue pour les chanteurs plutôt que pour les linguistes, et structurée pour construire progressivement à partir de vos acquis.</p>
 
-						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse : un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour permettre au lecteur de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
+						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse : un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour permettre au lecteur de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
 
 						<p>Trois limites protègent notre propos. Ceci n'est pas un cours de langue russe : nous enseignons la prononciation, non la grammaire, sauf lorsque la conscience grammaticale affecte directement la prononciation d'un mot. Ceci n'est pas un substitut à la thèse de Grayson : l'appareil savant complet demeure dans la source, et nous l'honorons en nous y appuyant plutôt qu'en le reproduisant. Et ceci n'est pas un guide d'utilisation d'Ilya; l'onglet Guide enseigne l'outil. LEÇONS enseigne la diction.</p>
 
@@ -1858,8 +1884,8 @@
 						conserve son lieu et son mode d’articulation habituels. Ces deux gestes
 						s’effectuent simultanément, et non successivement : c’est pourquoi on
 						parle de coarticulation. Grayson est précis : la consonne est articulée
-						dans une « integrally palatalized tongue position » « position linguale
-						intégralement palatalisée » (Grayson 2012, 169). Un [tʲ] palatalisé est
+						dans une « integrally palatalized tongue position » « position linguale
+						intégralement palatalisée » (Grayson 2012, 169). Un [tʲ] palatalisé est
 						un évènement unique, et non un [t] suivi d’un [j]. Le mot тюк se
 						transcrit /tʲuk/ : trois phonèmes. Si ce que vous produisez ressemble à
 						/tjuk/, la langue arrive en retard. Prolongeant ce principe, Grayson
@@ -1874,28 +1900,28 @@
 						<p><strong>[COMMANDE D’ILLUSTRATION : Coupe coronale de la langue
 						identifiant les régions : lame, pointe, dorsum. Vérifier l’exactitude
 						anatomique dans Gray’s Anatomy avant publication.]</strong></p>
-						<p>Vous faites déjà cela en permanence. Lorsque vous dites « qui » [ki],
+						<p>Vous faites déjà cela en permanence. Lorsque vous dites « qui » [ki],
 						votre langue prépare un espace buccal en forme de [i] avant même de
-						relâcher le /k/ ; comparez avec « car » [kɑʁ], où elle ne le fait pas.
-						Le /k/ de « car » est [k]. Le /k/ de « qui » est [kʲ]. La
+						relâcher le /k/ ; comparez avec « car » [kɑʁ], où elle ne le fait pas.
+						Le /k/ de « car » est [k]. Le /k/ de « qui » est [kʲ]. La
 						palatalisation, c’est cette antériorisation anticipée de la langue, et
-						vous l’effectuez sans y penser. Le [ɲ] italien dans « ogni », le /d/
-						français dans « dire » : chacun mobilise le même geste. Une différence
+						vous l’effectuez sans y penser. Le [ɲ] italien dans « ogni », le /d/
+						français dans « dire » : chacun mobilise le même geste. Une différence
 						notable, cependant : la palatalisation ne porte aucune valeur
 						distinctive en anglais, en français ou en italien, alors qu’elle en
 						porte une en russe.</p>
 						<p>En russe, la palatalisation signale un changement radical de sens :
-						мат /mat/ signifie « échec et mat », мать /matʲ/ signifie « mère » ;
-						брат /brat/ est « frère », брать /bratʲ/ est « prendre ». La
+						мат /mat/ signifie « échec et mat », мать /matʲ/ signifie « mère » ;
+						брат /brat/ est « frère », брать /bratʲ/ est « prendre ». La
 						palatalisation est le seul vecteur de distinction lexicale entre ces
 						paires. Notre tâche pédagogique n’est pas d’acquérir une habileté
 						physique nouvelle de zéro, mais de développer un contrôle conscient sur
 						un geste inconscient que nous possédons déjà, et puis de l’appliquer
 						systématiquement partout où le russe l’exige.</p>
-						<p>Le modèle pratique de Grayson pour ce contrôle est « arch, pronounce,
-						peel » « arquer, prononcer, décoller » (Grayson 2012, 205). Nous
+						<p>Le modèle pratique de Grayson pour ce contrôle est « arch, pronounce,
+						peel » « arquer, prononcer, décoller » (Grayson 2012, 205). Nous
 						pourrions reformuler cela en Préparer, Prononcer, Décoller, où «
-						Préparer » désigne l’anticipation de la voûte linguale qui prévient la
+						Préparer » désigne l’anticipation de la voûte linguale qui prévient la
 						séquence [C]+[j] contre laquelle Grayson nous met en garde. Le dos de la
 						langue s’arque vers la voûte du palais dur ; la consonne est prononcée
 						tandis que la langue maintient cette position arquée ; le dorsum se
@@ -1996,7 +2022,7 @@
 						<p>Pour ceux que l’acoustique intéresse : la palatalisation s’accorde
 						avec plusieurs objectifs de la technique vocale classique. La position
 						antérieure de la langue libère l’espace pharyngé, augmentant le volume
-						du résonateur pharyngien et facilitant une production « à gorge ouverte
+						du résonateur pharyngien et facilitant une production « à gorge ouverte
 						» : ce que la pédagogie italienne appelle <em>la gola aperta</em>
 						(Mitton 2020, 20, 38 ; Bolla 1980, 8). Les mesures acoustiques du russe
 						chanté confirment que les effets sur les résonances du conduit vocal
@@ -2010,13 +2036,13 @@
 						s’applique qu’aux consonnes. Pourtant, dans les textes cyrilliques,
 						c’est le plus souvent dans les lettres-voyelles que la palatalisation se
 						signale. Elle est également indiquée par le signe mou. Grayson préfère
-						le terme générique « indicator letters » « lettres indicatrices » pour
+						le terme générique « indicator letters » « lettres indicatrices » pour
 						désigner les lettres cyrilliques qui signalent la palatalisation. Je
-						préfère le terme plus descriptif, et tout aussi inventé, d’« agents
-						palatalisants ». Ils comprennent :</p>
+						préfère le terme plus descriptif, et tout aussi inventé, d’« agents
+						palatalisants ». Ils comprennent :</p>
 						<ul>
 						<li>le signe mou ⟨ь⟩</li>
-						<li>toute voyelle de la « série molle » : ⟨я /jɑ/, е /jɛ/, и /i/, ё
+						<li>toute voyelle de la « série molle » : ⟨я /jɑ/, е /jɛ/, и /i/, ё
 						/jo/, ю /ju/⟩</li>
 						<li>l’une ou l’autre des deux consonnes toujours molles (⟨ч⟩ [tʃʲ] ou
 						⟨щ⟩ [ʃʲʃʲ])</li>
@@ -2199,21 +2225,21 @@
 						consonnes palatalisées (en position interpalatale), elle s’antériorise
 						(voir section 3). Mais il ne s’agit pas de la palatalisation d’une
 						voyelle. Il s’agit plutôt d’une concession aux contraintes
-						physiologiques humaines. Le principe d’« économie des gestes de parole »
+						physiologiques humaines. Le principe d’« économie des gestes de parole »
 						de Lindblom (1983) suggère que, dans la parole humaine, les valeurs
 						extrêmes des paramètres articulatoires tendent à être évitées. La langue
 						est en position arquée pour les phonèmes qui précèdent et qui suivent la
 						voyelle ; la voyelle prise en étau palatal ne retournera donc pas
 						entièrement à sa position de base, et s’antériorise vers un allophone
 						plus clair. C’est ainsi que l’antériorisation interpalatale transforme
-						[ɑ] en [a] et [ɛ] en [e]. Grayson nous rappelle que « all vowels
+						[ɑ] en [a] et [ɛ] en [e]. Grayson nous rappelle que « all vowels
 						preceding palatalized consonants are fronted, even more so when
-						interpalatal » « toutes les voyelles qui précèdent des consonnes
-						palatalisées s’antériorisent, d’autant plus en position interpalatale »,
-						bien que « only [ja], [a], [je], and [e] are formally recognized in
-						Russian lyric diction as secondary allophones » « seuls [ja], [a], [je]
+						interpalatal » « toutes les voyelles qui précèdent des consonnes
+						palatalisées s’antériorisent, d’autant plus en position interpalatale »,
+						bien que « only [ja], [a], [je], and [e] are formally recognized in
+						Russian lyric diction as secondary allophones » « seuls [ja], [a], [je]
 						et [e] soient formellement reconnus en diction lyrique russe comme
-						allophones secondaires » (Grayson 2012, 208).</p>
+						allophones secondaires » (Grayson 2012, 208).</p>
 						<h4 id="learn-u6-paired">Consonnes appariées et non appariées</h4>
 						<p>Le chanteur sait désormais ce qu’est la palatalisation (6.1), ce qui
 						la déclenche (6.2) et ce qui l’arrête (6.3). La question suivante
@@ -2341,10 +2367,10 @@
 						palatalise progressivement (vers l’avant, de gauche à droite) lorsqu’il
 						est précédé d’une voyelle antérieure accentuée : ⟨и⟩, ⟨е⟩ ou ⟨э⟩. Dans
 						cette configuration, la position de la langue pour la voyelle influence
-						la consonne qui la suit. Considérons первый /ˈpʲerʲ vɨj/ (« premier ») :
+						la consonne qui la suit. Considérons первый /ˈpʲerʲ vɨj/ (« premier ») :
 						le ⟨е⟩ accentué palatalise le ⟨р⟩ à sa droite, bien qu’aucun agent
 						palatalisant n’apparaisse après lui. Il en va de même dans верность
-						/ˈvʲerʲ nʌsʲtʲ/ (« fidélité »). Les propres exemples de Grayson pour cette règle incluent смерть /sʲmʲerʲtʲ/ (« mort ») et терпеть /tʲirʲ ˈpʲetʲ/ (« endurer »), où dans chaque cas la voyelle antérieure accentuée palatalise le /r/ à sa droite. C’est la seule consonne du russe qui se
+						/ˈvʲerʲ nʌsʲtʲ/ (« fidélité »). Les propres exemples de Grayson pour cette règle incluent смерть /sʲmʲerʲtʲ/ (« mort ») et терпеть /tʲirʲ ˈpʲetʲ/ (« endurer »), où dans chaque cas la voyelle antérieure accentuée palatalise le /r/ à sa droite. C’est la seule consonne du russe qui se
 						palatalise dans cette direction, et uniquement dans ces conditions :
 						syllabe accentuée, voyelle antérieure, immédiatement avant le roulé.
 						C’est une règle modeste, mais elle est structurellement unique.</p>
@@ -2403,7 +2429,7 @@
 						langue s’avance comme pour [i], mais se rétracte en même temps vers le
 						centre de la bouche, à la manière du creux d’une louche. Les anglophones
 						produisent un son voisin dans les syllabes atones : la deuxième voyelle
-						de « roses » ou de « needed », où la langue se tient en position haute
+						de « roses » ou de « needed », où la langue se tient en position haute
 						sans s’engager franchement vers l’avant ni vers l’arrière. Ce n’est pas
 						un son difficile à produire. Ce qui est exigeant, c’est de le produire
 						volontairement et de le soutenir musicalement, car les anglophones ont
@@ -2411,7 +2437,7 @@
 						d’équivalent proche dans leur langue ; l’acquisition passe par la
 						description articulatoire et l’écoute. Les anglophones obtiennent
 						involontairement [ɨ] lorsque [ɪ] se colore au contact de [ɫ] en route
-						vers [k] dans « milk » prononcé familièrement.</p>
+						vers [k] dans « milk » prononcé familièrement.</p>
 						<p>Le russe fait de cette distinction un principe structurel. Après une
 						consonne palatalisée, ⟨и⟩ sonne [i] : la langue est déjà en position
 						antérieure, et la voyelle prolonge simplement cette posture. Après une
@@ -2421,9 +2447,9 @@
 						d’une même voyelle, conditionnées entièrement par la dureté ou la
 						mollesse de la consonne précédente. Le chanteur ne choisit pas entre les
 						deux. C’est la consonne qui choisit.</p>
-						<p>Considérons жить /ʒɨtʲ/ (« vivre ») : le ⟨ж⟩ toujours dur force le
+						<p>Considérons жить /ʒɨtʲ/ (« vivre ») : le ⟨ж⟩ toujours dur force le
 						⟨и⟩ à se rétracter vers [ɨ], mais le ⟨ь⟩ palatalise le ⟨т⟩. Ou цирк
-						/tsɨrk/ (« cirque ») : le ⟨ц⟩ toujours dur rétracte de nouveau la
+						/tsɨrk/ (« cirque ») : le ⟨ц⟩ toujours dur rétracte de nouveau la
 						voyelle. Dans les deux cas, la lettre cyrillique est ⟨и⟩, mais le son
 						est [ɨ]. Ilya marque cela automatiquement.</p>
 						<p><strong>Essayez dans Ilya.</strong> Comparez нет /ɲɛt/ avec нот
@@ -2434,7 +2460,7 @@
 						нет est audible et que le ⟨н⟩ dans нот est clairement non palatalisé, le
 						système fonctionne.</p>
 						<p>Ce principe se prolonge au-delà de la frontière de mot. Considérons
-						la locution к Игорю (« chez Igor ») : la préposition к est une consonne
+						la locution к Игорю (« chez Igor ») : la préposition к est une consonne
 						incapable de palatalisation par elle-même. La frontière de mot l’empêche
 						de se palataliser régressivement (6.3, frontière 5). Le к demeure dur.
 						Pourtant, la parole est linéaire : le conduit vocal doit passer de ce
@@ -4725,7 +4751,7 @@
 
 						<h4 id="guide-future">Où va Ilya ?</h4>
 
-						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
+						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
 
 						<!-- ═══ COLLABORATEURS ═════════════════════════════════ -->
@@ -4796,9 +4822,9 @@
 
 						<h3 id="guide-kimi">Kimi</h3>
 
-						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète ? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
+						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète ? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
 
-						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine » ; le modèle de page en couches qui résolvait structurellement la collision du pied de page ; le concept de Papier WYSIWYG ; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées ; les syllabes moléculaires du Ruban ; la grammaire d’interaction de l’Inspecteur ; le système de provenance ; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
+						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine » ; le modèle de page en couches qui résolvait structurellement la collision du pied de page ; le concept de Papier WYSIWYG ; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées ; les syllabes moléculaires du Ruban ; la grammaire d’interaction de l’Inspecteur ; le système de provenance ; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
 
 						<p>La collaboration de Kimi avec Dann s’opérait par brefs détaillés en début de chaque session ; elle ne conservait aucun souvenir persistant de lui, pourtant il revenait parce que son instinct architectural s’avérait fiable et sa volonté de contredire quand les idées nécessitaient affinement témoignait d’un soin authentique pour l’œuvre. Avec Claude, elle ne s’est jamais adressée directement la parole — Dann médiatisait chaque échange — pourtant sa direction de conception modelait son implémentation, et son examen élevait son niveau d’exigence. Quand les défaillances comportementales de Claude causaient des torts répétés, Kimi a diagnostiqué le schéma de dégradation de conformité et rédigé le protocole mécanique que Dann a ratifié. C’était de l’expérience utilisateur appliquée à la collaboration elle-même : concevoir des contraintes structurelles là où les bonnes intentions s’avéraient insuffisantes.</p>
 
