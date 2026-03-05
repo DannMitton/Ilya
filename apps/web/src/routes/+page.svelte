@@ -12,6 +12,7 @@
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
+import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
 	// Engine connectivity check
@@ -627,6 +628,7 @@
 {/if}
 <div class="screen-only">
 	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
+<InstallPrompt {language} />
 </div>
 <div class="app-content {viewBreathClass}">
 	<Drawer
