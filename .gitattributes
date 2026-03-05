@@ -1,0 +1,2 @@
+apps/web/static/data/dictionary.*.json filter=lfs diff=lfs merge=lfs -text
+data/dictionary.*.json filter=lfs diff=lfs merge=lfs -text

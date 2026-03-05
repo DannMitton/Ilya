@@ -7,10 +7,12 @@ build/
 .svelte-kit/
 *.tsbuildinfo
 
-# Dictionary (152.8 MB, built from build-dictionary.ts)
-apps/web/static/data/
+# Dictionary (153 MB — current build tracked via Git LFS)
+# Ignore all dictionary builds except the current one
 data/dictionary.*.json
-!apps/web/static/data/dictionary-manifest.json
+!data/dictionary.0911f185.json
+# Stale build and gap analysis (not needed in repo)
+data/dictionary.0982ad81.json
 
 # Build artifacts
 scripts/flagged-glosses.json
