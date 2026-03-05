@@ -48,6 +48,7 @@
 		if (!id) return [];
 		if (learnUnitChildren[id]) return [learnUnitChildren[id]];
 		if (['guide-what','guide-paste','guide-source','guide-ai','guide-role','guide-limits','guide-future'].includes(id)) return ['guide-how'];
+		if (['guide-walk-interface','guide-walk-tabs','guide-walk-metadata','guide-walk-transcribe','guide-walk-analysis','guide-walk-notation','guide-walk-print'].includes(id)) return ['guide-walkthrough'];
 		if (['guide-grayson','guide-mitton','guide-claude','guide-kimi'].includes(id)) return ['guide-contributors'];
 		if (id === 'guide-grayson-intro') return ['guide-contributors', 'guide-grayson'];
 		if (id === 'guide-mitton-note') return ['guide-contributors', 'guide-mitton'];
@@ -56,7 +57,7 @@
 
 	const collapsibleIds = new Set([
 		'learn-unit-1','learn-unit-2','learn-unit-3','learn-unit-4','learn-unit-5','learn-unit-6','learn-unit-7',
-		'guide-how','guide-contributors','guide-grayson','guide-mitton'
+		'guide-how','guide-walkthrough','guide-contributors','guide-grayson','guide-mitton'
 	]);
 
 	/* ── Interactions ──────────────────────────────────────── */
@@ -322,6 +323,25 @@
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-role')} data-heading-id="guide-role" onclick={() => handleTocClick('guide-role')}>{language === 'fr' ? 'R\u00f4le de l\u2019utilisateur' : 'Your role as user'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-limits')} data-heading-id="guide-limits" onclick={() => handleTocClick('guide-limits')}>{language === 'fr' ? 'Limites d\u2019Ilya' : 'Limitations'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-future')} data-heading-id="guide-future" onclick={() => handleTocClick('guide-future')}>{language === 'fr' ? 'O\u00f9 va Ilya ?' : 'Where is Ilya headed?'}</button></li>
+								</ul></div></div>
+							</li>
+
+							<!-- ── Walkthrough ── -->
+							<li>
+								<div class="toc-parent">
+									<button class="toc-chevron" class:expanded={expandedSections.has('guide-walkthrough')} class:contains-active={sectionContainsActive('guide-walkthrough')} onclick={() => toggleSection('guide-walkthrough')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-link toc-title" class:active={isActive('guide-walkthrough')} data-heading-id="guide-walkthrough" onclick={() => handleTocClick('guide-walkthrough')}>
+										{language === 'fr' ? 'Une visite guidée' : 'A Walkthrough'}
+									</button>
+								</div>
+								<div class="toc-children" class:expanded={expandedSections.has('guide-walkthrough')}><div class="toc-children-inner"><ul class="toc-subsections">
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-interface')} data-heading-id="guide-walk-interface" onclick={() => handleTocClick('guide-walk-interface')}>{language === 'fr' ? 'L’interface en un coup d’œil' : 'The interface at a glance'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-tabs')} data-heading-id="guide-walk-tabs" onclick={() => handleTocClick('guide-walk-tabs')}>{language === 'fr' ? 'Naviguer entre les onglets' : 'Navigating the tabs'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-metadata')} data-heading-id="guide-walk-metadata" onclick={() => handleTocClick('guide-walk-metadata')}>{language === 'fr' ? 'Renseigner les métadonnées' : 'Entering metadata'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-transcribe')} data-heading-id="guide-walk-transcribe" onclick={() => handleTocClick('guide-walk-transcribe')}>{language === 'fr' ? 'Transcrire' : 'Transcribing'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-analysis')} data-heading-id="guide-walk-analysis" onclick={() => handleTocClick('guide-walk-analysis')}>{language === 'fr' ? 'Analyser les mots' : 'Analysing words'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-notation')} data-heading-id="guide-walk-notation" onclick={() => handleTocClick('guide-walk-notation')}>{language === 'fr' ? 'Les préférences de notation' : 'Notation preferences'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-print')} data-heading-id="guide-walk-print" onclick={() => handleTocClick('guide-walk-print')}>{language === 'fr' ? 'Imprimer et réinitialiser' : 'Printing and resetting'}</button></li>
 								</ul></div></div>
 							</li>
 

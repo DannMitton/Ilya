@@ -4747,6 +4747,115 @@
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
 
+							<!-- ═══ VISITE GUIDÉE ══════════════════════════════════ -->
+
+							<h2 id="guide-walkthrough">Une visite guidée</h2>
+
+							<p>Cette visite guidée suit une session complète dans <em>Ilya</em>, de l'ouverture de l'outil jusqu'à l'impression d'une transcription achevée. Notre exemple de travail est l'air de Gremine dans <em>Eugène Onéguine</em> de Tchaïkovski — un texte exigeant pour tout moteur de transcription, et une pièce de choix du répertoire de basse russe.</p>
+
+							<p>Nous saisissons les métadonnées, transcrivons le texte, examinons les mots un par un, rédigeons des gloses personnalisées là où le dictionnaire est insuffisant, et réglons les préférences de notation avant d'imprimer. En chemin, nous parcourons chaque composante de l'interface d'<em>Ilya</em>.</p>
+
+							<h4 id="guide-walk-interface">L'interface en un coup d'œil</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-01.webp" alt="Ilya s'ouvre avec le Tiroir déployé à gauche et le document papier à droite, affichant trois sections et trois onglets de navigation." width="1200" loading="lazy" />
+								<figcaption><em>Ilya</em> s'ouvre avec le Tiroir déployé à gauche et le document papier à droite. Le Tiroir est organisé en trois sections : Métadonnées, Analyse et Notation. Les trois onglets au bas de l'écran permettent de naviguer entre les trois espaces d'<em>Ilya</em> : Transcription, Leçons et Guide.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-02.webp" alt="Le commutateur de langue en haut à droite de la barre de titre, affichant les options English et Français." width="1200" loading="lazy" />
+								<figcaption>Le commutateur de langue, en haut à droite, fait basculer l'intégralité de l'interface entre l'anglais et le français. Tout le contenu d'<em>Ilya</em> est entièrement bilingue : le module Leçons, le Guide et chaque étiquette du Tiroir.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-04.webp" alt="Le Tiroir replié à sa poignée, laissant toute la largeur de l'écran au document papier." width="1200" loading="lazy" />
+								<figcaption>La poignée du Tiroir est le demi-cercle au centre gauche de l'écran. Cliquez dessus pour replier le Tiroir et libérer de l'espace pour le Papier. La couleur de la poignée reflète l'onglet actif.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-tabs">Naviguer entre les onglets</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-06.webp" alt="L'onglet Leçons actif avec la table des matières du cours de diction lyrique russe visible dans le Tiroir." width="1200" loading="lazy" />
+								<figcaption>Le module Leçons présente un cours complet de diction lyrique russe pour chanteurs, réparti en huit sections. La table des matières apparaît dans le Tiroir. Le cours commence par l'alphabet et progresse à travers l'accent tonique, la réduction vocalique, les consonnes, la palatalisation, l'assimilation et les limites de ce que les règles peuvent enseigner.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-08.webp" alt="L'onglet Guide actif avec la table des matières affichant Comment fonctionne Ilya, Une visite guidée et Collaborateurs." width="1200" loading="lazy" />
+								<figcaption>L'onglet Guide contient les explications sur le fonctionnement d'<em>Ilya</em>, ses possibilités et ses limites, cette visite guidée, ainsi que les profils des collaborateurs. Le Guide est rédigé en français de manière autonome — non traduit de l'anglais.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-metadata">Renseigner les métadonnées</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-13.webp" alt="La section Métadonnées du Tiroir avec les champs de titre d'air, d'opéra ou de cycle de mélodies." width="1200" loading="lazy" />
+								<figcaption>Revenez à l'onglet Transcription. Saisissez un titre d'air ou de mélodie, un numéro d'opus ou un cycle de chansons. Ces champs (appelés Métadonnées dans <em>Ilya</em>) alimentent l'en-tête du document papier.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-14.webp" alt="Le champ Compositeur ouvert avec une liste déroulante de recherche affichant des noms de compositeurs dont Tchaïkovski." width="1200" loading="lazy" />
+								<figcaption>Le champ Compositeur propose une liste de recherche. Au fil de la saisie, <em>Ilya</em> affine les suggestions. Sélectionnez le nom dans la liste ; l'en-tête du document papier se met à jour immédiatement.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-16.webp" alt="Le texte russe de l'air de Gremine saisi dans la zone de texte, avec le bouton Transcrire visible." width="1200" loading="lazy" />
+								<figcaption>Métadonnées saisies et texte russe en place, cliquez sur Transcrire. <em>Ilya</em> traite le texte sur la base de son dictionnaire de 943&nbsp;000 entrées et peuple le document papier. L'air en entier prend environ trois secondes.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-transcribe">Transcrire</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-17.webp" alt="Le document papier peuplé avec la transcription API au-dessus de chaque mot et les gloses de traduction en dessous, avec l'en-tête de métadonnées en haut." width="1200" loading="lazy" />
+								<figcaption>La sortie est organisée en Piles de mots sur le Papier : API en haut, cyrillique source au milieu et glose de dictionnaire en bas.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-18.webp" alt="Un mot sélectionné sur le papier, avec la section Analyse du Tiroir affichant l'API et la décomposition syllabique du mot." width="1200" loading="lazy" />
+								<figcaption>Cliquez sur n'importe quel mot du Papier pour le sélectionner. Sa Pile de mots apparaît dans la section Analyse du Tiroir. La Pile de mots offre un contrôle sur la syllabification (glisser-déposer des consonnes à travers la frontière syllabique), le réajustement de l'accent, la reconstitution ponctuelle et le remplacement des trémas manquants sur ⟨ë⟩.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-analysis">Analyser les mots</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-20.webp" alt="L'onglet Compositeur dans le panneau Analyse montrant les règles phonologiques appliquées syllabe par syllabe, avec une colonne pour chaque position syllabique." width="1200" loading="lazy" />
+								<figcaption>L'onglet Compositeur offre un compte rendu règle par règle de la manière dont le moteur a généré la transcription. Chaque colonne syllabique indique quelles règles ont été appliquées et pourquoi. C'est la couche de vérification : chaque résultat est justifiable par une règle citée de la thèse de Grayson.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-22.webp" alt="L'onglet Dictionnaire affichant la transcription API, une glose de traduction tirée de Wiktionary et des informations grammaticales pour le mot sélectionné." width="1200" loading="lazy" />
+								<figcaption>L'onglet Dictionnaire présente la transcription API, une glose de traduction tirée des données Wiktionary et la forme complète du dictionnaire avec les informations grammaticales. Une case à cocher Reconstitution ponctuelle permet de déroger à la réduction vocalique du moteur pour ce mot uniquement.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-25.webp" alt="Le mot закалённому sélectionné sur le papier, affichant sa transcription API dans le panneau Analyse." width="1200" loading="lazy" />
+								<figcaption>Le mot <em>закалённому</em> contient la lettre ё, qui porte toujours l'accent tonique en russe. <em>Ilya</em> repère ё sans inférence : aucune consultation du dictionnaire n'est nécessaire pour placer l'accent sur un mot qui en contient une.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-32.webp" alt="Un autre mot sélectionné dans le panneau Analyse, affichant l'onglet Dictionnaire avec son API et sa glose." width="1200" loading="lazy" />
+								<figcaption>Si vous préférez voir votre voyelle centrale non accentuée sous la forme d'un schwa traditionnel, <em>Ilya</em> peut vous accommoder.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec l'onglet Ma traduction visible." width="1200" loading="lazy" />
+								<figcaption>Imprimez vers votre appareil ou enregistrez en PDF. <em>Ilya</em> conservera le travail de votre dernière session, mais pas un catalogue de transcriptions complétées : c'est à vous de l'organiser.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-notation">Les préférences de notation</h4>
+
+							<p>La section Notation du Tiroir contient huit commutateurs. Chacun contrôle un aspect distinct de l'affichage de la transcription sur le papier. Tous sont non destructifs : ils n'affectent que l'affichage, non l'analyse phonologique sous-jacente. Ils peuvent être librement combinés.</p>
+
+							<p>La syllabification ouverte modifie la représentation des frontières syllabiques. La reconstitution applique une variante savante pour le ⟨е⟩ non accentué après les consonnes toujours dures, élaborée en collaboration avec le Dr&nbsp;Alexei Kochetov à l'Université de Toronto. Les commutateurs pour le ‹щ›, les géminées et la nasale palatale permettent d'accommoder différentes traditions de notation. La paire de voyelles réduites contrôle l'affichage de [ʌ] ou de [ə] pour les voyelles centrales non accentuées. Les commutateurs d'accentuation placent les marques d'accent directement au-dessus des voyelles, ce que certains chanteurs trouvent plus lisible à tempo.</p>
+
+							<p>Le document papier est une représentation en temps réel de vos préférences de notation actuelles. Ce que vous voyez à l'écran est ce qui s'imprimera.</p>
+
+							<h4 id="guide-walk-print">Imprimer et réinitialiser</h4>
+
+							<p>Lorsque le document est complet, cliquez sur Imprimer. <em>Ilya</em> ouvre la boîte de dialogue d'impression du navigateur. Le document s'imprime exactement tel qu'il apparaît à l'écran : API, gloses, en-tête de métadonnées et toutes les préférences de notation appliquées.</p>
+
+							<p>Cliquez sur Réinitialiser pour effacer les champs de métadonnées tout en conservant le texte russe — utile pour transcrire plusieurs pièces avec le même texte mais une attribution différente. Cliquez sur Effacer le texte pour repartir de zéro. Les préférences de notation que vous avez établies restent actives jusqu'à ce que vous les modifiiez.</p>
+
+
+
 						<!-- ═══ COLLABORATEURS ═════════════════════════════════ -->
 
 						<h2 id="guide-contributors">Collaborateurs</h2>
@@ -4861,6 +4970,115 @@
 						<h4 id="guide-future">Where is Ilya headed?</h4>
 
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
+
+
+							<!-- ═══ WALKTHROUGH ════════════════════════════════════ -->
+
+							<h2 id="guide-walkthrough">A Walkthrough</h2>
+
+							<p>This walkthrough follows a complete <em>Ilya</em> session, from opening the tool to printing a finished transcription. Our working example is Gremin's Aria from Tchaikovsky's <em>Eugene Onegin</em> — a generous test for any transcription engine, and a worthy piece of Russian bass repertoire.</p>
+
+							<p>We enter metadata, transcribe the text, examine words one by one, write custom glosses where the dictionary falls short, and set notation preferences before printing. Along the way we touch each part of <em>Ilya</em>'s interface.</p>
+
+							<h4 id="guide-walk-interface">The interface at a glance</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-01.webp" alt="Ilya opens with the Drawer extended on the left and the paper document on the right, showing three Drawer sections and three navigation tabs." width="1200" loading="lazy" />
+								<figcaption><em>Ilya</em> opens with the Drawer on the left and the WYSIWYG Paper on the right. The three tabs at the bottom navigate between <em>Ilya</em>'s three areas: Transcription, Learn, and Guide. The Transcription tab is organised into three sections: Metadata, Analysis, and Notation.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-02.webp" alt="The language toggle in the upper right of the header bar, showing English and Français options." width="1200" loading="lazy" />
+								<figcaption>The language toggle in the upper right switches the entire interface between English and French. All content in <em>Ilya</em> is fully bilingual, including the LEARN module, the Guide, and every label in the Drawer.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-04.webp" alt="The Drawer collapsed to its handle, giving the paper document the full width of the screen." width="1200" loading="lazy" />
+								<figcaption>The Drawer Handle is the semicircle at the centre left of the screen. Click it to collapse the Drawer, giving the Paper more room. The Handle's colour reflects the active tab.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-tabs">Navigating the tabs</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-06.webp" alt="The LEARN tab active, with the table of contents for the Russian lyric diction course visible in the Drawer." width="1200" loading="lazy" />
+								<figcaption>The LEARN module presents a complete course in Russian lyric diction for singers, organised into eight sections. The table of contents appears in the Drawer. The course begins with the alphabet and moves through stress, vowel reduction, the consonants, palatalisation, assimilation, and the limits of rule-based transcription.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-08.webp" alt="The GUIDE tab active, with the table of contents showing How Ilya Works, A Walkthrough, and Contributors." width="1200" loading="lazy" />
+								<figcaption>The Guide tab contains explanatory material: how <em>Ilya</em> works, what it can and cannot do, this walkthrough, and the contributor profiles.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-metadata">Entering metadata</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-13.webp" alt="The Metadata section of the Drawer with the aria title field and opera or song cycle field visible." width="1200" loading="lazy" />
+								<figcaption>Return to the Transcription tab. Enter an aria or song title, opus number, or song cycle. These fields (called Metadata in <em>Ilya</em>) populate the header at the top of the paper document.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-14.webp" alt="The Composer field with a searchable dropdown listing composer names including Tchaikovsky." width="1200" loading="lazy" />
+								<figcaption>The Composer field offers a searchable list. As you type, <em>Ilya</em> narrows the suggestions. Select the name from the list and the paper header updates immediately to reflect the attribution.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-16.webp" alt="Russian text from Gremin's Aria entered in the text input area, with the Transcribe button visible." width="1200" loading="lazy" />
+								<figcaption>With metadata entered and Russian text in the input area, click Transcribe. <em>Ilya</em> processes the text against its 943,000-entry dictionary and populates the paper document. A complete aria takes about three seconds.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-transcribe">Transcribing</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-17.webp" alt="The paper document populated with IPA transcription above each word and translation glosses below, with the metadata header at the top." width="1200" loading="lazy" />
+								<figcaption>Output is arranged in Word Stacks on the Paper: IPA above, Cyrillic source text in the middle, and a dictionary gloss below.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-18.webp" alt="A word selected on the paper, with the Analysis section of the Drawer showing the word's IPA and syllable breakdown." width="1200" loading="lazy" />
+								<figcaption>Click any word on the Paper to select it. Its Word Stack appears in the Analysis section of the Drawer. The Drawer Word Stack offers control over syllabification (drag-and-drop consonants across the syllable boundary), stress re-assignment, spot reconstitution, and replacing missing diereses on ⟨ë⟩.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-analysis">Analysing words</h4>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-20.webp" alt="The Composer tab in the Analysis panel showing phonological rules applied syllable by syllable, with a column for each syllable position." width="1200" loading="lazy" />
+								<figcaption>The Composer tab provides a rule-by-rule account of how the engine generated the transcription. Each syllable column shows which rules were applied and why. This is the verification layer: every output is justifiable through a cited rule from Grayson's dissertation.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-22.webp" alt="The Dictionary tab showing IPA transcription, a Wiktionary-sourced translation gloss, and grammatical information for the selected word." width="1200" loading="lazy" />
+								<figcaption>The Dictionary tab shows the IPA transcription, a translation gloss from Wiktionary data, and the full dictionary form with grammatical information. A Spot reconstitution checkbox allows you to override the engine's default vowel reduction for this word specifically.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-25.webp" alt="The word закалённому selected on the paper, showing its IPA transcription in the Analysis panel." width="1200" loading="lazy" />
+								<figcaption>Dictionary glosses are sometimes grammatically accurate but dramatically inert. Double-click the gloss field to make it editable. The field accepts up to twenty characters and will appear on the paper in place of the auto-generated gloss. A custom gloss now appears beneath the word on the paper, replacing the dictionary entry. Custom glosses persist through re-transcriptions and will appear in the printed output.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-32.webp" alt="A second word selected in the Analysis panel, with the Dictionary tab showing its IPA and gloss." width="1200" loading="lazy" />
+								<figcaption>If you prefer to see your unstressed centralized vowel as a traditional schwa, <em>Ilya</em> can accommodate you.</figcaption>
+							</figure>
+
+							<figure class="guide-step-figure">
+								<img src="/guide/guide-step-35.webp" alt="A word flagged as Full entry unavailable in the Dictionary tab, with the My assignment tab visible alongside." width="1200" loading="lazy" />
+								<figcaption>Print to your device or save as a PDF. <em>Ilya</em> will retain your prior session's work, but not a catalogue of completed transcriptions: that is for you to organise on your own.</figcaption>
+							</figure>
+
+							<h4 id="guide-walk-notation">Notation preferences</h4>
+
+							<p>The Notation section of the Drawer contains eight toggles. Each controls a distinct aspect of how the transcription is displayed on the paper. All toggles are non-destructive: they affect the display only, not the underlying phonological analysis. They can be freely combined.</p>
+
+							<p>Open syllabification changes how syllable boundaries are represented. Reconstitution applies a scholarly alternative for unstressed ⟨е⟩ after always-hard consonants, developed in consultation with Dr. Alexei Kochetov at the University of Toronto. The shcha, geminate, and palatal nasal toggles accommodate different notational traditions. The reduced vowel pair controls whether <em>Ilya</em> displays [ʌ] or [ə] for unstressed central vowels. Stress acutes place marks directly above vowels, which some singers find easier to read at tempo.</p>
+
+							<p>The paper document is a live representation of your current notation settings. What you see on screen is what will print.</p>
+
+							<h4 id="guide-walk-print">Printing and resetting</h4>
+
+							<p>When the document is complete, click Print. <em>Ilya</em> opens the browser's print dialogue. The paper prints exactly as it appears on screen: IPA, glosses, metadata header, and all notation preferences applied.</p>
+
+							<p>Click Reset to clear the metadata fields while retaining the Russian text — useful when transcribing several pieces with the same text but different attribution. Click Clear text to start fresh. Any notation settings you have established remain active until you change them.</p>
+
 
 
 						<!-- ═══ CONTRIBUTORS ═════════════════════════════════ -->
@@ -5431,7 +5649,29 @@
 
 	/* ── Guide / Contributors ──────────────────────────── */
 
-	.guide-spacer {
+	.guide-step-figure {
+		margin: 2rem 0;
+		border: 1px solid var(--border-light, #ddd9d4);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+
+	.guide-step-figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.guide-step-figure figcaption {
+		padding: 0.75rem 1rem;
+		font-size: 0.85rem;
+		line-height: 1.55;
+		color: var(--ink-secondary, #4a4540);
+		background: var(--surface-subtle, #f9f7f5);
+		border-top: 1px solid var(--border-light, #ddd9d4);
+	}
+
+		.guide-spacer {
 		height: 6rem;
 	}
 
