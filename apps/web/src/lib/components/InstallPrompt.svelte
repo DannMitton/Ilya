@@ -5,14 +5,14 @@
 
   const strings = {
     en: {
-      heading: 'Make Ilya yours',
-      body: 'Install Ilya on this device for your own persistent workspace — it works offline too.',
+      heading: 'Make <em>Ilya</em> yours',
+      body: 'Install <em>Ilya</em> on this device for your own persistent workspace — it works offline too.',
       install: 'Install',
       dismiss: 'Not now'
     },
     fr: {
-      heading: "Faites d'Ilya le vôtre",
-      body: "Installez Ilya sur cet appareil pour disposer de votre propre espace de travail persistant — fonctionne aussi hors ligne.",
+      heading: "Faites d'<em>Ilya</em> le vôtre",
+      body: "Installez <em>Ilya</em> sur cet appareil pour disposer de votre propre espace de travail persistant — fonctionne aussi hors ligne.",
       install: 'Installer',
       dismiss: 'Plus tard'
     }
@@ -49,8 +49,8 @@
 {#if visible}
   <div class="install-prompt" role="dialog" aria-label={t.heading}>
     <div class="install-prompt-inner">
-      <p class="install-heading">{t.heading}</p>
-      <p class="install-body">{t.body}</p>
+      <p class="install-heading">{@html t.heading}</p>
+      <p class="install-body">{@html t.body}</p>
       <div class="install-actions">
         <button class="install-btn-primary" onclick={install}>{t.install}</button>
         <button class="install-btn-ghost" onclick={dismiss}>{t.dismiss}</button>
