@@ -1,5 +1,5 @@
 /**
- * Dictionary Loader (v4 — incremental merge architecture)
+ * Dictionary Loader (v3 — NDJSON streaming architecture)
  *
  * Replaces the single JSON.parse() call with a line-by-line NDJSON parser
  * that yields to the event loop every CHUNK_SIZE entries. IndexedDB writes
@@ -14,10 +14,6 @@
  * 5. Write parsed chunks to IndexedDB between event loop yields
  * 6. Load supplement + blurb in parallel with dictionary
  * 7. Inject into Phase 1 packages
- *
- * v4 change: parse each file immediately after fetch into a shared
- * dictionary object (mergeNDJSON), then discard raw lines before
- * fetching the next file. This halves peak heap on iOS Safari.
  *
  * Format detection: first character of dictionary text
  *   '[' → NDJSON (v3 build, streaming parse)
@@ -69,8 +65,7 @@ const LEGACY_CACHE_KEYS = ['tier1', 'tier2', 'supplement', 'blurb'];
 interface DictionaryManifest {
 	version: string;
 	hash: string;
-	file?: string;
-	files?: string[];
+	file: string;
 }
 
 export interface LoaderState {
@@ -337,27 +332,23 @@ function mapSingleEntry(entry: any): void {
 }
 
 // -------------------------------------------------------------------
-// NDJSON Parser — streaming, incremental merge, with event loop yields
+// NDJSON Parser — streaming, with event loop yields
 // -------------------------------------------------------------------
 
 /**
- * Parse NDJSON lines and merge entries into an existing dictionary object.
+ * Parse a dictionary from an array of NDJSON lines.
  * Each line is: ["word", {compressed entry}]
- *
- * v4: writes into a caller-supplied object rather than returning a new one.
- * This allows the caller to discard the raw lines array after each file,
- * enabling GC between file loads and halving peak heap on iOS Safari.
  *
  * Yields to the event loop every CHUNK_SIZE entries to prevent
  * the long-running-script kill on mobile browsers.
  *
  * Applies mapSingleEntry() per entry during parse — no separate pass needed.
  */
-async function mergeNDJSON(
+async function parseNDJSON(
 	lines: string[],
-	dictionary: Record<string, any>,
 	onProgress: (progress: number) => void
-): Promise<void> {
+): Promise<Record<string, any>> {
+	const dictionary: Record<string, any> = {};
 	const total = lines.length;
 
 	for (let i = 0; i < total; i++) {
@@ -377,6 +368,8 @@ async function mergeNDJSON(
 			await new Promise((r) => setTimeout(r, 0));
 		}
 	}
+
+	return dictionary;
 }
 
 // -------------------------------------------------------------------
@@ -415,51 +408,28 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		}
 
 		const cacheKey = `dict-${manifest.hash}`;
-
-		// Support both single-file (file) and split-file (files) manifest formats
-		const dictionaryFiles: string[] = manifest.files
-			? manifest.files
-			: manifest.file
-				? [manifest.file]
-				: [];
-
-		if (dictionaryFiles.length === 0) {
-			throw new Error('Dictionary manifest contains no file references.');
-		}
+		const dictionaryUrl = `/data/${manifest.file}`;
 
 		// Step 2: Clean legacy cache (fire-and-forget)
 		cleanLegacyCache(manifest.hash);
 
-		// Step 3: Load and parse each dictionary file immediately after fetch.
-		// Parsing into a shared object before fetching the next file allows
-		// the raw lines array to be GC'd, halving peak heap on iOS Safari.
-		const dictionary: Record<string, any> = {};
-
-		for (let i = 0; i < dictionaryFiles.length; i++) {
-			const file = dictionaryFiles[i];
-			const url = `/data/${file}`;
-			const fileCacheKey = dictionaryFiles.length > 1
-				? `${cacheKey}-part${i}`
-				: cacheKey;
-
-			const lines = await loadDictionaryData(fileCacheKey, url, state, callbacks);
-
-			state.progress = -1;
-			callbacks.onStateChange({ ...state });
-			
-			await mergeNDJSON(lines, dictionary, (progress) => {
-				state.progress = progress;
-				callbacks.onStateChange({ ...state });
-			});
-			// lines goes out of scope here — eligible for GC before next fetch
-		}
-
-		const [supplementData, blurbData] = await Promise.all([
+		// Step 3: Load dictionary, supplement, and blurb in parallel
+		const [dictionaryLines, supplementData, blurbData] = await Promise.all([
+			loadDictionaryData(cacheKey, dictionaryUrl, state, callbacks),
 			loadJsonFile(SUPPLEMENT_URL),
 			loadJsonFile(BLURB_URL)
 		]);
 
-		// Step 4: Inject into Phase 1 packages
+		// Step 4: Parse dictionary — line-by-line with event loop yields
+		state.progress = -1;
+		callbacks.onStateChange({ ...state });
+
+		const dictionary = await parseNDJSON(dictionaryLines, (progress) => {
+			state.progress = progress;
+			callbacks.onStateChange({ ...state });
+		});
+
+		// Step 5: Inject into Phase 1 packages
 		setStressDictionary(dictionary);
 		setSingerSupplement(supplementData);
 		setGlossDictionary(dictionary);
@@ -467,6 +437,13 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 
 		const entryCount = Object.keys(dictionary).length;
 		const durationMs = Math.round(performance.now() - start);
+
+		// Minimum display duration: the progress bar communicates substance.
+		const MIN_DISPLAY_MS = 3000;
+		const elapsed = performance.now() - start;
+		if (elapsed < MIN_DISPLAY_MS) {
+			await new Promise((r) => setTimeout(r, MIN_DISPLAY_MS - elapsed));
+		}
 
 		state.isLoading = false;
 		state.entryCount = entryCount;
@@ -490,7 +467,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 
 /**
  * Load dictionary lines from IndexedDB chunked cache or network.
- * Returns an array of NDJSON lines ready for mergeNDJSON().
+ * Returns an array of NDJSON lines ready for parseNDJSON().
  *
  * Cache read path: chunked IDB (v3) → legacy single-key IDB (v2) → network
  * Cache write path: chunked IDB only (v3)
