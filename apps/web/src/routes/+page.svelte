@@ -49,7 +49,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let mainContentEl: HTMLElement | undefined = $state(undefined);
 	async function handleMobileDismiss() {
 		mobileDismissed = true;
-		drawerCollapsed = true;
 		await tick();
 		if (mainContentEl) {
 			// Centre the Paper's hint text area in the viewport.
@@ -5580,6 +5579,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	.mobile-logo .logo-ilya {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
 		font-style: italic;
+	}
+	.mobile-logo .logo-version {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.5rem;
+		font-weight: 400;
+		vertical-align: super;
+		margin-left: 0.1em;
+		color: var(--sage);
+		text-transform: lowercase;
+		letter-spacing: 0.02em;
 	}
 	.mobile-heading {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
