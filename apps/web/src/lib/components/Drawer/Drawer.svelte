@@ -402,7 +402,9 @@
 					</nav>
 				{/if}
 		</div>
-		<TabBar {activeTab} {language} {ontabchange} />
+		<div class="drawer-tabbar">
+			<TabBar {activeTab} {language} {ontabchange} />
+		</div>
 	</div>
 	</div>
 	{#if !isMobile}
@@ -885,8 +887,9 @@
 			top: 0 !important;
 			left: 0 !important;
 			width: 100% !important;
-			height: 100vh !important;
-			z-index: 100;
+			height: calc(100vh - 56px) !important;
+			z-index: 60;
+			overflow: hidden;
 			transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 		}
 
@@ -909,6 +912,7 @@
 		.drawer-clip {
 			width: 100% !important;
 			height: 100%;
+			overflow: visible;
 		}
 
 		.drawer-body {
@@ -916,6 +920,18 @@
 			height: 100%;
 			flex-direction: column;
 			border-right: none;
+			overflow: visible;
+		}
+
+		/* Drawer content: allow scroll to prevent left clipping */
+		.drawer-content {
+			overflow-x: auto;
+			overflow-y: auto;
+		}
+
+		/* Internal TabBar hidden on mobile (fixed footer used instead) */
+		.drawer-tabbar {
+			display: none;
 		}
 
 		/* Top handle: fixed, semicircle pointing down */
