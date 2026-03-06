@@ -1184,12 +1184,16 @@ async function pass3(
 
   // Write dictionary file
   console.log('  Writing dictionary file...');
-  const jsonContent = JSON.stringify(output);
-  const contentHash = crypto.createHash('md5').update(jsonContent).digest('hex').slice(0, 8);
+  const dictLines = [];
+  for (const [word, entry] of Object.entries(output)) {
+    dictLines.push(JSON.stringify([word, entry]));
+  }
+  const ndjsonContent = dictLines.join('\n');
+  const contentHash = crypto.createHash('md5').update(ndjsonContent).digest('hex').slice(0, 8);
   const dictFilename = `dictionary.${contentHash}.json`;
   const dictPath = path.join(outDir, dictFilename);
 
-  fs.writeFileSync(dictPath, jsonContent, 'utf-8');
+  fs.writeFileSync(dictPath, ndjsonContent, 'utf-8');
   const fileSizeMB = (fs.statSync(dictPath).size / 1024 / 1024).toFixed(1);
   console.log(`  Written: ${dictFilename} (${fileSizeMB} MB)`);
 
