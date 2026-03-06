@@ -833,16 +833,39 @@
 	/* ── Mobile ──────────────────────────────────────────── */
 
 	@media (max-width: 767px) {
-		.drawer.collapsed {
-			width: auto;
-		}
-
-		.drawer.collapsed .drawer-body {
-			display: flex;
-		}
-
+		/* Handle pill: visible tap target at top of bottom sheet */
 		.drawer-lip {
+			display: flex !important;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			width: 100%;
+			height: 20px;
+			justify-content: center;
+			align-items: center;
+			padding: 0;
+			z-index: 101;
+		}
+
+		.handle-chevron {
 			display: none;
+		}
+
+		/* Reshape handle into a horizontal drag pill */
+		.drawer-handle {
+			position: static;
+			transform: none;
+			width: 36px;
+			height: 4px;
+			border-radius: 2px;
+			background-color: rgba(0, 0, 0, 0.18);
+			box-shadow: none;
+		}
+
+		/* Clear room for the handle pill */
+		.drawer-content {
+			padding-top: 20px;
 		}
 
 		.toc-chevron {

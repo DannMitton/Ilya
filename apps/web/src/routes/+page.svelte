@@ -601,6 +601,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
+		// On mobile with no saved drawer preference, start collapsed
+		if (isMobile) {
+			try {
+				if (!localStorage.getItem('ilya:drawerCollapsed')) {
+					drawerCollapsed = true;
+				}
+			} catch {
+				drawerCollapsed = true;
+			}
+		}
 		handleHashNavigation();
 		return () => {
 			window.removeEventListener('resize', checkMobile);
@@ -5638,22 +5648,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 		.main-content {
 			padding: 0.5rem;
+			padding-bottom: 57vh; /* room for the bottom-sheet drawer */
 			width: 100%;
 			overflow: auto;
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
 			transform: none;
 		}
-		/* Drawer overlays from the left on mobile */
+		/* Drawer as bottom sheet on mobile */
 		:global(.drawer) {
-			position: absolute !important;
-			top: 0;
-			left: 0;
-			height: 100% !important;
-			z-index: 100;
-		}
-		:global(.drawer:not(.collapsed)) {
+			position: fixed !important;
+			bottom: 0 !important;
+			left: 0 !important;
+			top: auto !important;
+			right: 0 !important;
+			height: auto !important;
+			max-height: 55vh !important;
 			width: 100% !important;
+			z-index: 100;
+			border-radius: 14px 14px 0 0;
+			box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+		}
+		:global(.drawer.collapsed) {
+			max-height: 44px !important;
 		}
 	}
 
