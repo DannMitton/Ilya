@@ -6,6 +6,7 @@
 	interface Props {
 		width: number;
 		collapsed: boolean;
+		isMobile: boolean;
 		language: Language;
 		activeTab: TabId;
 		activeHeadingId: string | null;
@@ -16,7 +17,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
 	let expandedSections = $state(new Set<string>());
 	let drawerContentEl: HTMLElement | undefined = $state();
@@ -121,9 +122,21 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed data-tab={activeTab} style="width: {collapsed ? 0 : width}px" aria-label="Controls">
+<aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls">
+	{#if isMobile}
+		<button
+			class="drawer-handle-top"
+			onclick={ontogglecollapse}
+			aria-label={t('drawer.collapse', language)}
+		>
+			<span class="handle-pill"></span>
+		</button>
+	{/if}
 	<div class="drawer-clip">
-	<div class="drawer-body" style="width: {width}px">
+	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
+		{#if isMobile}
+			<div class="mobile-handle-spacer"></div>
+		{/if}
 		<div
 			class="drawer-content {tabTransitionClass}"
 			role="tabpanel"
@@ -388,18 +401,20 @@
 		<TabBar {activeTab} {language} {ontabchange} />
 	</div>
 	</div>
-	<button
-		class="drawer-lip"
-		onclick={ontogglecollapse}
-		aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-		title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-	>
-		<span class="drawer-handle" aria-hidden="true">
-			<svg class="handle-chevron" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-				<polyline points="3,2 11,10 3,18" />
-			</svg>
-		</span>
-	</button>
+	{#if !isMobile}
+		<button
+			class="drawer-lip"
+			onclick={ontogglecollapse}
+			aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
+			title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
+		>
+			<span class="drawer-handle" aria-hidden="true">
+				<svg class="handle-chevron" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="3,2 11,10 3,18" />
+				</svg>
+			</span>
+		</button>
+	{/if}
 </aside>
 
 <style>
@@ -832,40 +847,83 @@
 
 	/* ── Mobile ──────────────────────────────────────────── */
 
+	/* ── Mobile top handle pill ─────────────────────────── */
+
+	.drawer-handle-top {
+		display: none;
+	}
+
+	.handle-pill {
+		display: block;
+		width: 36px;
+		height: 4px;
+		background: rgba(26, 22, 18, 0.65);
+		border-radius: 2px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	}
+
+	.mobile-handle-spacer {
+		height: 20px;
+		flex-shrink: 0;
+	}
+
 	@media (max-width: 767px) {
-		/* Handle pill: visible tap target at top of bottom sheet */
+		/* Drawer: full-screen overlay, slides up/down */
+		.drawer {
+			position: fixed !important;
+			top: 0 !important;
+			left: 0 !important;
+			width: 100% !important;
+			height: 100vh !important;
+			z-index: 100;
+			transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+		}
+
+		.drawer.collapsed {
+			transform: translateY(100%);
+			pointer-events: none;
+			width: 0 !important;
+		}
+
+		.drawer:not(.collapsed) {
+			transform: translateY(0);
+		}
+
+		/* Hide desktop lip */
 		.drawer-lip {
-			display: flex !important;
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			width: 100%;
-			height: 20px;
-			justify-content: center;
+			display: none !important;
+		}
+
+		/* Body fills full height */
+		.drawer-clip {
+			width: 100% !important;
+			height: 100%;
+		}
+
+		.drawer-body {
+			width: 100% !important;
+			height: 100%;
+			flex-direction: column;
+			border-right: none;
+		}
+
+		/* Top handle pill: fixed, always above content */
+		.drawer-handle-top {
+			display: flex;
 			align-items: center;
+			justify-content: center;
+			position: fixed;
+			top: 8px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 48px;
+			height: 24px;
 			padding: 0;
-			z-index: 101;
-		}
-
-		.handle-chevron {
-			display: none;
-		}
-
-		/* Reshape handle into a horizontal drag pill */
-		.drawer-handle {
-			position: static;
-			transform: none;
-			width: 36px;
-			height: 4px;
-			border-radius: 2px;
-			background-color: rgba(0, 0, 0, 0.18);
-			box-shadow: none;
-		}
-
-		/* Clear room for the handle pill */
-		.drawer-content {
-			padding-top: 20px;
+			border: none;
+			background: transparent;
+			z-index: 200;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
 		}
 
 		.toc-chevron {

@@ -601,7 +601,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
-		// On mobile with no saved drawer preference, start collapsed
+		// On mobile, default drawer to collapsed unless user has a saved preference
 		if (isMobile) {
 			try {
 				if (!localStorage.getItem('ilya:drawerCollapsed')) {
@@ -648,6 +648,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	<Drawer
 		width={drawerWidth}
 		collapsed={drawerCollapsed}
+		{isMobile}
 		{language}
 		{activeTab}
 		{activeHeadingId}
@@ -5175,6 +5176,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			</ReadingPaper>
 		{/if}
 	</main>
+	{#if isMobile && drawerCollapsed}
+		<button
+			class="paper-handle"
+			onclick={handleDrawerToggle}
+			aria-label={t('drawer.expand', language)}
+			data-tab={activeTab}
+		>
+			<span class="paper-handle-pill"></span>
+		</button>
+	{/if}
 </div>
 <style>
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */
@@ -5645,33 +5656,63 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	@media (max-width: 767px) {
 		.app-content {
 			position: relative;
+			height: 100vh;
+			overflow: hidden;
 		}
+
 		.main-content {
-			padding: 0.5rem;
-			padding-bottom: 57vh; /* room for the bottom-sheet drawer */
-			width: 100%;
+			height: 100vh;
 			overflow: auto;
+			padding: 0.5rem;
+			width: 100%;
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
 			transform: none;
 		}
-		/* Drawer as bottom sheet on mobile */
-		:global(.drawer) {
-			position: fixed !important;
-			bottom: 0 !important;
-			left: 0 !important;
-			top: auto !important;
-			right: 0 !important;
-			height: auto !important;
-			max-height: 55vh !important;
-			width: 100% !important;
-			z-index: 100;
-			border-radius: 14px 14px 0 0;
-			box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
-			overflow: hidden;
+	}
+
+	/* Paper handle: colored circle, fixed bottom, tab-aware */
+	.paper-handle {
+		display: none;
+	}
+
+	@media (max-width: 767px) {
+		.paper-handle {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: fixed;
+			bottom: 24px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 52px;
+			height: 52px;
+			padding: 0;
+			border: none;
+			background: transparent;
+			z-index: 90;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
 		}
-		:global(.drawer.collapsed) {
-			max-height: 44px !important;
+
+		.paper-handle-pill {
+			display: block;
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+		}
+
+		.paper-handle[data-tab="transcription"] .paper-handle-pill {
+			background: var(--sage, #8B9A7D);
+		}
+
+		.paper-handle[data-tab="learn"] .paper-handle-pill {
+			background: var(--dusty-rose, #A67B7B);
+		}
+
+		.paper-handle[data-tab="guide"] .paper-handle-pill {
+			background: var(--quiet-cobalt, #5C739E);
 		}
 	}
 
