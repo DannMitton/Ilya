@@ -8,40 +8,21 @@
       heading: 'Make <em>Ilya</em> yours',
       body: 'Install <em>Ilya</em> on this device for your own persistent workspace — it works offline too.',
       install: 'Install',
-      dismiss: 'Not now',
-      ios_heading: 'Add <em>Ilya</em> to your Home Screen',
-      ios_body: 'Tap the <strong>Share</strong> button below, then choose <strong>Add to Home Screen</strong>.',
-      ios_dismiss: 'Got it'
+      dismiss: 'Not now'
     },
     fr: {
       heading: "Faites d'<em>Ilya</em> le vôtre",
       body: "Installez <em>Ilya</em> sur cet appareil pour disposer de votre propre espace de travail persistant — fonctionne aussi hors ligne.",
       install: 'Installer',
-      dismiss: 'Plus tard',
-      ios_heading: 'Ajoutez <em>Ilya</em> à votre écran d’accueil',
-      ios_body: 'Appuyez sur le bouton <strong>Partager</strong> en bas, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
-      ios_dismiss: 'Compris'
+      dismiss: 'Plus tard'
     }
   };
 
   let deferredPrompt = $state(null);
   let visible = $state(false);
-  let isIos = $state(false);
 
   onMount(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) return;
-
-    const ua = navigator.userAgent;
-    const ios = /iphone|ipad|ipod/i.test(ua) && !(ua.includes('CriOS') || ua.includes('FxiOS'));
-
-    if (ios) {
-      isIos = true;
-      if (!sessionStorage.getItem('ilya-ios-hint-shown')) {
-        setTimeout(() => { visible = true; }, 6000);
-      }
-      return;
-    }
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -60,22 +41,19 @@
   function dismiss() {
     visible = false;
     deferredPrompt = null;
-    if (isIos) sessionStorage.setItem('ilya-ios-hint-shown', '1');
   }
 
   let t = $derived(strings[language] ?? strings.en);
 </script>
 
 {#if visible}
-  <div class="install-prompt" role="dialog" aria-label={isIos ? t.ios_heading : t.heading}>
+  <div class="install-prompt" role="dialog" aria-label={t.heading}>
     <div class="install-prompt-inner">
-      <p class="install-heading">{@html isIos ? t.ios_heading : t.heading}</p>
-      <p class="install-body">{@html isIos ? t.ios_body : t.body}</p>
+      <p class="install-heading">{@html t.heading}</p>
+      <p class="install-body">{@html t.body}</p>
       <div class="install-actions">
-        {#if !isIos}
-          <button class="install-btn-primary" onclick={install}>{t.install}</button>
-        {/if}
-        <button class="install-btn-ghost" onclick={dismiss}>{isIos ? t.ios_dismiss : t.dismiss}</button>
+        <button class="install-btn-primary" onclick={install}>{t.install}</button>
+        <button class="install-btn-ghost" onclick={dismiss}>{t.dismiss}</button>
       </div>
     </div>
   </div>
@@ -102,7 +80,11 @@
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
-  .install-prompt-inner { display: flex; flex-direction: column; gap: 8px; }
+  .install-prompt-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
   .install-heading {
     font-family: 'Source Serif 4', serif;
@@ -120,7 +102,11 @@
     line-height: 1.5;
   }
 
-  .install-actions { display: flex; gap: 10px; margin-top: 4px; }
+  .install-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
 
   .install-btn-primary {
     font-family: 'Source Sans 3', sans-serif;
@@ -135,7 +121,9 @@
     transition: background 0.15s;
   }
 
-  .install-btn-primary:hover { background: var(--deeper-sage, #7A8A6C); }
+  .install-btn-primary:hover {
+    background: var(--deeper-sage, #7A8A6C);
+  }
 
   .install-btn-ghost {
     font-family: 'Source Sans 3', sans-serif;
@@ -148,7 +136,11 @@
     cursor: pointer;
   }
 
-  .install-btn-ghost:hover { background: var(--surface-subtle, #ede8e0); }
+  .install-btn-ghost:hover {
+    background: var(--surface-subtle, #ede8e0);
+  }
 
-  @media print { .install-prompt { display: none; } }
+  @media print {
+    .install-prompt { display: none; }
+  }
 </style>

@@ -1,9 +1,8 @@
 {
   "name": "Ilya — Russian Lyric Diction",
   "short_name": "Ilya",
-  "description": "Russian lyric diction for classical singers, based on Craig Grayson’s Russian Lyric Diction (2012).",
+  "description": "Russian lyric diction for classical singers, based on Craig Grayson's Russian Lyric Diction (2012).",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
   "background_color": "#8B9A7D",
   "theme_color": "#8B9A7D",
