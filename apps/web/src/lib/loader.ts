@@ -65,7 +65,8 @@ const LEGACY_CACHE_KEYS = ['tier1', 'tier2', 'supplement', 'blurb'];
 interface DictionaryManifest {
 	version: string;
 	hash: string;
-	file: string;
+	file?: string;
+	files?: string[];
 }
 
 export interface LoaderState {
@@ -408,14 +409,31 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		}
 
 		const cacheKey = `dict-${manifest.hash}`;
-		const dictionaryUrl = `/data/${manifest.file}`;
+
+		// Support both single-file (file) and split-file (files) manifest formats
+		const dictionaryFiles: string[] = manifest.files
+			? manifest.files
+			: manifest.file
+				? [manifest.file]
+				: [];
+
+		if (dictionaryFiles.length === 0) {
+			throw new Error('Dictionary manifest contains no file references.');
+		}
 
 		// Step 2: Clean legacy cache (fire-and-forget)
 		cleanLegacyCache(manifest.hash);
 
-		// Step 3: Load dictionary, supplement, and blurb in parallel
-		const [dictionaryLines, supplementData, blurbData] = await Promise.all([
-			loadDictionaryData(cacheKey, dictionaryUrl, state, callbacks),
+		// Step 3: Load dictionary files sequentially, supplement and blurb in parallel
+		// Sequential fetch keeps mobile heap flat — no concurrent 75 MB buffers.
+		let dictionaryLines: string[] = [];
+		for (const file of dictionaryFiles) {
+			const url = `/data/${file}`;
+			const lines = await loadDictionaryData(cacheKey, url, state, callbacks);
+			dictionaryLines = dictionaryLines.concat(lines);
+		}
+
+		const [supplementData, blurbData] = await Promise.all([
 			loadJsonFile(SUPPLEMENT_URL),
 			loadJsonFile(BLURB_URL)
 		]);
