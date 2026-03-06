@@ -427,9 +427,15 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		// Step 3: Load dictionary files sequentially, supplement and blurb in parallel
 		// Sequential fetch keeps mobile heap flat — no concurrent 75 MB buffers.
 		let dictionaryLines: string[] = [];
-		for (const file of dictionaryFiles) {
+		for (let i = 0; i < dictionaryFiles.length; i++) {
+			const file = dictionaryFiles[i];
 			const url = `/data/${file}`;
-			const lines = await loadDictionaryData(cacheKey, url, state, callbacks);
+			// Each file gets its own cache key so the second file is not
+			// served from the first file's cached data.
+			const fileCacheKey = dictionaryFiles.length > 1
+				? `${cacheKey}-part${i}`
+				: cacheKey;
+			const lines = await loadDictionaryData(fileCacheKey, url, state, callbacks);
 			dictionaryLines = dictionaryLines.concat(lines);
 		}
 
