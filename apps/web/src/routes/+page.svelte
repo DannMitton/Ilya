@@ -5683,7 +5683,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	.about-website a:hover {
 		text-decoration: underline;
-	}ript lang="ts">
+	}
+</style>
+
+<script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
