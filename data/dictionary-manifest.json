@@ -1,5 +1,8 @@
 {
   "version": "2026-03-06",
   "hash": "1ee647d4",
-  "file": "dictionary.1ee647d4.json"
+  "files": [
+    "dictionary.1ee647d4-a.json",
+    "dictionary.1ee647d4-b.json"
+  ]
 }
