@@ -22,3 +22,6 @@ apps/web/test-results/
 
 # OS
 .DS_Store
+
+!data/dictionary.1ee647d4-a.json
+!data/dictionary.1ee647d4-b.json
