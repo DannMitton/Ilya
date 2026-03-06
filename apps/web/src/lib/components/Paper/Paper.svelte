@@ -13,6 +13,7 @@
 		language: Language;
 		metadata: SongMetadata;
 		pageSize: PageSize;
+		isMobile?: boolean;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
@@ -25,6 +26,7 @@
 		language,
 		metadata,
 		pageSize,
+		isMobile = false,
 		showStressDiacritics = false,
 		spotReconstitution = new Map(),
 		glossOverrides = new Map(),
@@ -61,6 +63,7 @@
 				{pageSize}
 				{totalPages}
 				{legendItems}
+				{isMobile}
 				{showStressDiacritics}
 				{spotReconstitution}
 				{glossOverrides}

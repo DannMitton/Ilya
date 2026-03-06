@@ -18,6 +18,7 @@
 		pageSize: PageSize;
 		totalPages: number;
 		legendItems: LegendItem[];
+		isMobile?: boolean;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
@@ -33,6 +34,7 @@
 		pageSize,
 		totalPages,
 		legendItems,
+		isMobile = false,
 		showStressDiacritics = false,
 		spotReconstitution,
 		glossOverrides,
@@ -143,7 +145,7 @@
 			{/each}
 		{:else}
 			<div class="empty-directive">
-				<p>{t('paper.empty', language)}</p>
+				<p>{isMobile ? t('paper.empty.mobile', language) : t('paper.empty', language)}</p>
 			</div>
 		{/if}
 	</div>

@@ -142,6 +142,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Paper empty state ────────────────────────────────────
 	'paper.empty':                 { en: 'Enter your Cyrillic text in the drawer on the left.', fr: 'Saisissez votre texte cyrillique dans le tiroir à gauche.' },
+	'paper.empty.mobile':          { en: 'Tap the chevron at the bottom to open the drawer.', fr: 'Appuyez sur le chevron en bas pour ouvrir le tiroir.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },

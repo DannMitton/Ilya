@@ -728,7 +728,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		tabindex="0"
 	>
 		{#if activeTab === 'transcription'}
-			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
+			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
 		{:else}
 			<ReadingPaper {language}>
 				{#snippet content()}
