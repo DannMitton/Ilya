@@ -129,7 +129,11 @@
 			onclick={ontogglecollapse}
 			aria-label={t('drawer.collapse', language)}
 		>
-			<span class="handle-pill"></span>
+			<span class="mobile-handle-shape" aria-hidden="true">
+				<svg class="mobile-handle-chevron" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="2,2 10,10 18,2" />
+				</svg>
+			</span>
 		</button>
 	{/if}
 	<div class="drawer-clip">
@@ -847,23 +851,30 @@
 
 	/* ── Mobile ──────────────────────────────────────────── */
 
-	/* ── Mobile top handle pill ─────────────────────────── */
+	/* ── Mobile top handle: downward-facing semicircle ──── */
 
 	.drawer-handle-top {
 		display: none;
 	}
 
-	.handle-pill {
-		display: block;
-		width: 36px;
-		height: 4px;
+	.mobile-handle-shape {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 72px;
+		height: 36px;
 		background: rgba(26, 22, 18, 0.65);
-		border-radius: 2px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 0 0 72px 72px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+	}
+
+	.mobile-handle-chevron {
+		color: #FAF8F5;
+		margin-top: 4px;
 	}
 
 	.mobile-handle-spacer {
-		height: 20px;
+		height: 36px;
 		flex-shrink: 0;
 	}
 
@@ -907,17 +918,17 @@
 			border-right: none;
 		}
 
-		/* Top handle pill: fixed, always above content */
+		/* Top handle: fixed, semicircle pointing down */
 		.drawer-handle-top {
 			display: flex;
-			align-items: center;
+			align-items: flex-end;
 			justify-content: center;
 			position: fixed;
-			top: 8px;
+			top: 0;
 			left: 50%;
 			transform: translateX(-50%);
-			width: 48px;
-			height: 24px;
+			width: 72px;
+			height: 36px;
 			padding: 0;
 			border: none;
 			background: transparent;

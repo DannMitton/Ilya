@@ -5183,7 +5183,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			aria-label={t('drawer.expand', language)}
 			data-tab={activeTab}
 		>
-			<span class="paper-handle-pill"></span>
+			<span class="paper-handle-shape" aria-hidden="true">
+				<svg class="paper-handle-chevron" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="2,10 10,2 18,10" />
+				</svg>
+			</span>
 		</button>
 	{/if}
 </div>
@@ -5671,7 +5675,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 
-	/* Paper handle: colored circle, fixed bottom, tab-aware */
+	/* Paper handle: upward-facing semicircle, fixed bottom, tab-aware */
 	.paper-handle {
 		display: none;
 	}
@@ -5679,14 +5683,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	@media (max-width: 767px) {
 		.paper-handle {
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			justify-content: center;
 			position: fixed;
-			bottom: 24px;
+			bottom: 0;
 			left: 50%;
 			transform: translateX(-50%);
-			width: 52px;
-			height: 52px;
+			width: 72px;
+			height: 36px;
 			padding: 0;
 			border: none;
 			background: transparent;
@@ -5695,23 +5699,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			-webkit-tap-highlight-color: transparent;
 		}
 
-		.paper-handle-pill {
-			display: block;
-			width: 36px;
+		.paper-handle-shape {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 72px;
 			height: 36px;
-			border-radius: 50%;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+			border-radius: 72px 72px 0 0;
+			box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.12);
 		}
 
-		.paper-handle[data-tab="transcription"] .paper-handle-pill {
+		.paper-handle-chevron {
+			color: #FAF8F5;
+			margin-bottom: 4px;
+		}
+
+		.paper-handle[data-tab="transcription"] .paper-handle-shape {
 			background: var(--sage, #8B9A7D);
 		}
 
-		.paper-handle[data-tab="learn"] .paper-handle-pill {
+		.paper-handle[data-tab="learn"] .paper-handle-shape {
 			background: var(--dusty-rose, #A67B7B);
 		}
 
-		.paper-handle[data-tab="guide"] .paper-handle-pill {
+		.paper-handle[data-tab="guide"] .paper-handle-shape {
 			background: var(--quiet-cobalt, #5C739E);
 		}
 	}
