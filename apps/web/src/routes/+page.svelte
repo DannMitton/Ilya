@@ -49,6 +49,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let mainContentEl: HTMLElement | undefined = $state(undefined);
 	async function handleMobileDismiss() {
 		mobileDismissed = true;
+		loadDictionary({
+			onStateChange(state) {
+				loaderState = state;
+			}
+		});
 		await tick();
 		if (mainContentEl) {
 			// Centre the Paper's hint text area in the viewport.
