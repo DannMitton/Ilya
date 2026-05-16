@@ -12,12 +12,13 @@
 		activeHeadingId: string | null;
 		tabTransitionClass: string;
 		rootPanel: Snippet;
+		shanePanel?: Snippet;
 		ontogglecollapse: () => void;
 		ontabchange: (tab: TabId) => void;
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
 	let expandedSections = $state(new Set<string>());
 	let drawerContentEl: HTMLElement | undefined = $state();
@@ -400,6 +401,8 @@
 							</li>
 						</ul>
 					</nav>
+				{:else if activeTab === 'shane'}
+					{@render shanePanel?.()}
 				{/if}
 		</div>
 		<div class="drawer-tabbar">

@@ -1,9 +1,10 @@
 <script module lang="ts">
-	export type TabId = 'transcription' | 'learn' | 'guide';
+	export type TabId = 'transcription' | 'learn' | 'guide' | 'shane';
 </script>
 
 <script lang="ts">
 	import type { Language } from '$lib/i18n';
+	import { INCLUDE_SHANE } from '$lib/wall';
 
 	interface Props {
 		activeTab: TabId;
@@ -18,10 +19,13 @@
 			case 'transcription': return 'Transcription';
 			case 'learn': return language === 'fr' ? 'Leçons' : 'Learn';
 			case 'guide': return 'Guide';
+			case 'shane': return 'Shane';
 		}
 	}
 
-	const tabIds: TabId[] = ['transcription', 'learn', 'guide'];
+	const tabIds: TabId[] = INCLUDE_SHANE
+		? ['transcription', 'learn', 'guide', 'shane']
+		: ['transcription', 'learn', 'guide'];
 
 	function handleKeydown(event: KeyboardEvent) {
 		const currentIndex = tabIds.findIndex(t => t === activeTab);
@@ -100,6 +104,7 @@
 	.tab-transcription { border-top-color: var(--sage, #8B9A7D); }
 	.tab-learn { border-top-color: var(--dusty-rose, #A67B7B); }
 	.tab-guide { border-top-color: var(--quiet-cobalt, #5C739E); }
+	.tab-shane { border-top-color: var(--muted-lavender, #A89BB5); }
 
 	/* Subtle separator between inactive tabs */
 	.tab:not(:last-child)::after {
@@ -144,6 +149,11 @@
 	.tab-guide.active {
 		background: var(--quiet-cobalt, #5C739E);
 		border-top-color: var(--quiet-cobalt, #5C739E);
+	}
+
+	.tab-shane.active {
+		background: var(--muted-lavender, #A89BB5);
+		border-top-color: var(--muted-lavender, #A89BB5);
 	}
 
 	.tab:focus-visible {

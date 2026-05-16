@@ -16,6 +16,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import TabBar from '$lib/components/Drawer/TabBar.svelte';
 	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
+	import { INCLUDE_SHANE } from '$lib/wall';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -719,6 +720,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{/if}
 					{/snippet}
 				</RootPanel>
+			{/snippet}
+			{#snippet shanePanel()}
+				{#if INCLUDE_SHANE}
+					<!-- Shane content surface, component pending -->
+				{/if}
 			{/snippet}
 	</Drawer>
 	<main
