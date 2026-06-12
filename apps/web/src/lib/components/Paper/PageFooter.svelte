@@ -51,7 +51,7 @@
 	<div class="footer-content">
 		<div class="attribution-cell">
 			<span class="attribution-text">
-				{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a>
+				{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
 			</span>
 		</div>
 		<div class="pagination-cell">

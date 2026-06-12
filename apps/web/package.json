@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Ilya web application — SvelteKit",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite dev",

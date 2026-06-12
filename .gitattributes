@@ -1,1 +1,4 @@
-apps/web/static/data/dictionary.*.json filter=lfs diff=lfs merge=lfs -text
+# Dictionary payloads are committed as plain files (no LFS).
+# Suppress text diffs for them: they are generated data, not source.
+data/dictionary.*.json -diff linguist-generated=true
+data/*.json linguist-generated=true

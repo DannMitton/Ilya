@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "GraysonEngine: Russian phonological analysis based on Craig Grayson's Russian Lyric Diction (2012)",
+  "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",

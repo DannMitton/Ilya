@@ -4906,7 +4906,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 						<p>Né et élevé à Moncton, au Nouveau-Brunswick, Mitton vit dans l'est de Toronto avec son mari Bob et deux bouviers bernois gigantesques et parfaitement absurdes, Rory et Anson. Ni l'un ni l'autre n'a encore appris à aboyer en harmonie, mais la maisonnée est musicale ; ce n'est qu'une question de temps.</p>
 
-						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
+						<p class="about-website"><a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a></p>
 
 						<h4 id="guide-mitton-note">Mot du créateur</h4>
 
@@ -5131,7 +5131,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 						<p>Born and raised in Moncton, New Brunswick, Mitton lives in east-end Toronto with his husband Bob and two giant, ridiculous Bernese Mountain Dogs named Rory and Anson. They have not yet mastered barking in harmony, but it is a musical family, so it is only a matter of time.</p>
 
-						<p class="about-website"><a href="https://www.dannmitton.com" target="_blank" rel="noopener">www.dannmitton.com</a></p>
+						<p class="about-website"><a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a></p>
 
 						<h4 id="guide-mitton-note">Builder's Note</h4>
 
