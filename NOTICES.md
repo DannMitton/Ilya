@@ -13,7 +13,9 @@ assimilation behaviour are derived from his work.
 ## Dictionary Data
 
 The Russian dictionary with stress markings is derived from
-[Kaikki.org](https://kaikki.org/) / [Wiktionary](https://en.wiktionary.org/).
+[Kaikki.org](https://kaikki.org/) extractions of
+[English Wiktionary](https://en.wiktionary.org/) and
+[French Wiktionnaire](https://fr.wiktionary.org/).
 Per kaikki.org, this data is made available under the same licences as
 Wiktionary: the [Creative Commons Attribution-ShareAlike 4.0 International
 License](https://creativecommons.org/licenses/by-sa/4.0/) and the
