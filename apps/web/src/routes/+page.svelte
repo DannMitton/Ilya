@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
+	import { updated } from '$app/state';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
@@ -39,6 +40,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let drawerCollapsed = $state(false);
 	// Tab state
 	let activeTab = $state<TabId>('transcription');
+	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
@@ -790,6 +792,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		<TabBar {activeTab} {language} ontabchange={handleTabChange} />
 	</div>
 {/if}
+{#if updated.current && !updateDismissed}
+	<div class="update-toast screen-only" role="status">
+		<span class="update-toast-text">{t('update.notice', language)}</span>
+		<button class="update-toast-action" onclick={() => location.reload()}>{t('update.action', language)}</button>
+		<button class="update-toast-dismiss" aria-label={t('update.dismiss', language)} onclick={() => (updateDismissed = true)}>×</button>
+	</div>
+{/if}
+
 <style>
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */
 
@@ -1312,6 +1322,58 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			height: 56px;
 			z-index: 50;
 			display: block;
+		}
+	}
+
+	/* ── Update notice toast ─────────────────────────── */
+
+	.update-toast {
+		position: fixed;
+		bottom: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 200;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6rem 0.9rem 0.6rem 1.1rem;
+		background: var(--paper, #faf7f2);
+		border: 1px solid var(--border-light, #ddd9d4);
+		border-radius: 999px;
+		box-shadow: 0 4px 16px rgba(40, 38, 35, 0.18);
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.88rem;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	.update-toast-action {
+		border: none;
+		border-radius: 999px;
+		padding: 0.35rem 0.9rem;
+		background: var(--sage, #8a9b7e);
+		color: #fff;
+		font-family: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+	}
+
+	.update-toast-action:hover {
+		filter: brightness(0.95);
+	}
+
+	.update-toast-dismiss {
+		border: none;
+		background: none;
+		color: var(--ink-secondary, #4a4540);
+		font-size: 1.1rem;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0.2rem;
+	}
+
+	@media print {
+		.update-toast {
+			display: none;
 		}
 	}
 </style>
