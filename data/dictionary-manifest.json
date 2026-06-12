@@ -1,8 +1,12 @@
 {
-  "version": "2026-03-06",
-  "hash": "1ee647d4",
+  "version": "2026-06-12",
+  "hash": "a6eb2952",
   "files": [
-    "dictionary.1ee647d4-a.json",
-    "dictionary.1ee647d4-b.json"
+    "dictionary.a6eb2952-a.json",
+    "dictionary.a6eb2952-b.json"
+  ],
+  "glossFiles": [
+    "dictionary.a6eb2952-gloss-a.json",
+    "dictionary.a6eb2952-gloss-b.json"
   ]
 }
