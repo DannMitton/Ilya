@@ -103,6 +103,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Dictionary panel (Inspector expansion) ───────────────
 	'inspector.dictionary':         { en: 'Dictionary',                   fr: 'Dictionnaire' },
 	'inspector.dictEntryMissing':   { en: 'Full entry unavailable',       fr: 'Entrée complète indisponible' },
+	'inspector.glossFallbackEN':    { en: 'Gloss available in English only', fr: 'Glose disponible en anglais seulement' },
+	'inspector.glossFallbackFR':    { en: 'Gloss available in French only',  fr: 'Glose disponible en français seulement' },
 	'inspector.dictCapacity':       { en: 'Maximum 20 characters',         fr: 'Maximum de 20 caractères' },
 
 	// ── Grayson positional labels (Ribbon syllable group headers) ──
