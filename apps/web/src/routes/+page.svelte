@@ -17,6 +17,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import TabBar from '$lib/components/Drawer/TabBar.svelte';
 	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
 	import { INCLUDE_SHANE } from '$lib/wall';
+	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -723,7 +724,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{/snippet}
 			{#snippet shanePanel()}
 				{#if INCLUDE_SHANE}
-					<!-- Shane content surface, component pending -->
+					<CalibrationWizard />
 				{/if}
 			{/snippet}
 	</Drawer>
@@ -736,6 +737,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	>
 		{#if activeTab === 'transcription'}
 			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
+		{:else if activeTab === 'shane'}
+			<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; min-height:60vh; padding:2rem; text-align:center;">
+				<p style="margin:0; color:var(--ink-secondary); font-family:var(--font-ui, var(--font-sans)); font-size:1.0625rem;">Calibrate your voice to begin.</p>
+				<p style="margin:0; color:var(--ink-tertiary); font-family:var(--font-ui, var(--font-sans)); font-size:0.9375rem;">Your repertoire-fit results will appear here.</p>
+			</div>
 		{:else}
 			<ReadingPaper {language}>
 				{#snippet content()}
