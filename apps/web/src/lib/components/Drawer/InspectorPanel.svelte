@@ -5,6 +5,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
+	import { resolveFullGloss } from '$lib/gloss-resolve';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -894,14 +895,6 @@
 		return entry.E || entry.e || '';
 	}
 
-	/** Get the full gloss field (E/F), or empty string. */
-	function getDictFullGloss(entry: DictionaryEntry, lang: Language): string {
-		if (lang === 'fr') {
-			return entry.F || '';
-		}
-		return entry.E || '';
-	}
-
 	/** Format POS label from abbreviated dictionary field to readable label. */
 	function formatPos(pos: string): string {
 		const map: Record<string, string> = {
@@ -1025,11 +1018,19 @@
 							<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
 						{:else}
 							{#each dictEntries as entry, ei}
+								{@const fullGloss = resolveFullGloss(entry, language)}
 								<div class="dict-entry" class:stress-matched={ei === stressMatchedIdx && dictEntries.length > 1}>
 									<p class="dict-lemma">{getStressedLemma(entry)}</p>
 									<p class="dict-pos">{formatPos(entry.p || '')}</p>
-									{#if getDictFullGloss(entry, language)}
-										<p class="dict-senses">{getDictFullGloss(entry, language)}</p>
+									{#if fullGloss}
+										<p class="dict-senses">
+											{#if fullGloss.fallback}
+												<span
+													class="gloss-lang-chip"
+													aria-label={t(fullGloss.source === 'en' ? 'inspector.glossFallbackEN' : 'inspector.glossFallbackFR', language)}
+												>{fullGloss.source === 'en' ? 'EN' : 'FR'}</span>
+											{/if}{fullGloss.text}
+										</p>
 									{:else}
 										<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
 									{/if}
@@ -1589,6 +1590,20 @@
 		color: var(--ink-tertiary);
 		font-style: italic;
 		margin-bottom: 0.25rem;
+	}
+
+	.gloss-lang-chip {
+		font-family: var(--font-sans);
+		font-size: 0.65rem;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.08em;
+		color: var(--ink-tertiary);
+		border: 1px solid var(--ink-tertiary);
+		border-radius: 3px;
+		padding: 0 0.3em;
+		margin-right: 0.45em;
+		vertical-align: 0.08em;
+		font-style: normal;
 	}
 
 	.dict-senses {

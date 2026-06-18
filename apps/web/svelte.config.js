@@ -14,6 +14,10 @@ const config = {
 		}),
 		paths: {
 			base: ''
+		},
+		version: {
+			// Poll for new deployments so the update notice can appear.
+			pollInterval: 60_000
 		}
 	}
 };

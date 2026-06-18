@@ -35,6 +35,12 @@ self.addEventListener('fetch', (event) => {
   // Never intercept dictionary files — app manages these in IndexedDB
   if (url.pathname.includes('dictionary.') && url.pathname.endsWith('.json')) return;
 
+  // Network-first for version probe (powers the update notice)
+  if (url.pathname.endsWith('/_app/version.json')) {
+    event.respondWith(fetch(request).catch(() => caches.match(request)));
+    return;
+  }
+
   // Network-first for dictionary manifest
   if (url.pathname.endsWith('dictionary-manifest.json')) {
     event.respondWith(fetch(request).catch(() => caches.match(request)));

@@ -68,17 +68,15 @@ Ilya/
 │   ├── dictionary/                 # Dictionary loader and gloss pipeline
 │   └── blurb/                      # Pedagogical explanations for each transcription decision
 ├── data/                           # Dictionary and rule data
-├── tests/
-│   └── integration.test.ts         # Cross-package pipeline tests
-└── fixtures/
-    └── golden-master.json          # Validated engine outputs
+└── tests/
+    └── integration.test.ts         # Cross-package pipeline tests
 ```
 
 Ilya is built in such a way that it can be improved and optimised. The three packages (`@ilya/phonology`, `@ilya/dictionary`, `@ilya/blurb`) are independently testable with clear boundaries. Russian linguistics aficionados can adjust the phonology and frontend developers can alter the interface.
 
 ## Design and Attribution
 
-Ilya was conceived and directed by [Dann Mitton](https://www.dannmitton.com) (Doctor of Musical Arts, University of Toronto), who serves as strategist, decision-maker, scholarly authority, content author, reluctant programmer, and warm, scholarly voice of all user-facing text.
+Ilya was conceived and directed by [Dann Mitton](https://dannmitton.com) (Doctor of Musical Arts, University of Toronto), who serves as strategist, decision-maker, scholarly authority, content author, reluctant programmer, and warm, scholarly voice of all user-facing text.
 
 Claude (Opus 4.6 Extended, by Anthropic) served as project manager and implementation lead: writing the code, managing task sequencing, conducting the Grayson dissertation audit, and co-authoring the LEARN module content under Dann's editorial authority. He also served as a sounding board, toady, confidante, research assistant, makeshift tutor, and scribe.
 
@@ -100,6 +98,6 @@ Copyright (c) 2026 Dann Mitton. MIT. See [LICENSE](./LICENSE).
 
 Craig M. Grayson, *Russian Lyric Diction: A Practical Guide with Introduction and Annotations and a Bibliography with Annotations on Selected Sources* (D.M.A. dissertation, University of Washington, 2012).
 
-Dictionary stress data and translation glosses from English and French Wiktionary via [kaikki.org](https://kaikki.org/) (CC BY-SA 4.0).
+Dictionary stress data and translation glosses from English and French Wiktionary via [kaikki.org](https://kaikki.org/), dual-licensed under CC BY-SA 4.0 and the GFDL.
 
 See [NOTICES.md](./NOTICES.md) for full scholarly attribution and dependency licences.

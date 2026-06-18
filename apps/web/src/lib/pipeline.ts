@@ -41,7 +41,7 @@ import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, Y
 
 // ── Constants ────────────────────────────────────────────────────
 
-const PUNCTUATION_REGEX = /[.,!?;:"""''–—]/g;
+const PUNCTUATION_REGEX = /[.,!?;:"""''–—…()«»]/g;
 const TRAILING_PUNCT_REGEX = /[.,!?;:"""''\-–—]+$/;
 const DASH_REGEX = /[-–—]/g;
 

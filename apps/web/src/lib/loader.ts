@@ -28,11 +28,16 @@
  *   s (number)             →  s (pass-through; engine reads entry.s)
  *   e (englishShort)  }    →  g: { en, fr } (BilingualGloss object)
  *   f (frenchShort)   }
- *   E (englishFull)        →  E (pass-through; future Inspector use)
- *   F (frenchFull)         →  F (pass-through; future Inspector use)
+ *   E (englishFull)        →  E (lazy gloss tier; merged in background)
+ *   F (frenchFull)         →  F (lazy gloss tier; merged in background)
  *   p (pos)                →  p (pass-through; engine reads entry.p)
  *   l (lemma)              →  l (pass-through; engine reads entry.l)
- *   r (provenance)         →  provenance (build provenance; engine ignores)
+ *
+ * Tier 2 (2026-06): the build provenance field (r) is no longer shipped;
+ * full glosses (E/F) live in a separate gloss tier listed in the manifest
+ * as glossFiles, fetched in the background after the app is interactive
+ * and merged into entries in place. Inspector/pipeline fall back to short
+ * glosses (entry.F || entry.f) until the merge lands.
  *
  * Failure modes handled:
  * - IndexedDB unavailable (private browsing) → skips caching, still loads
@@ -71,6 +76,8 @@ interface DictionaryManifest {
 	hash: string;
 	file?: string;
 	files?: string[];
+	/** Lazy gloss tier (Tier 2): full E/F glosses, fetched after interactive */
+	glossFiles?: string[];
 }
 
 export interface LoaderState {
@@ -217,17 +224,18 @@ async function cleanLegacyCache(currentHash: string): Promise<void> {
 			store.delete(key);
 		}
 
-		// Remove stale dictionary entries
-		// Keep anything that starts with dict-{currentHash} (chunks + meta)
-		// Delete everything else that starts with dict-
+		// Remove stale dictionary and gloss-tier entries
+		// Keep anything that starts with dict-{currentHash} or gloss-{currentHash}
+		// (chunks + meta); delete everything else under those prefixes.
 		const keysReq = store.getAllKeys();
 		keysReq.onsuccess = () => {
 			for (const key of keysReq.result) {
-				if (
-					typeof key === 'string' &&
-					key.startsWith('dict-') &&
-					!key.startsWith(`dict-${currentHash}`)
-				) {
+				if (typeof key !== 'string') continue;
+				const staleDict =
+					key.startsWith('dict-') && !key.startsWith(`dict-${currentHash}`);
+				const staleGloss =
+					key.startsWith('gloss-') && !key.startsWith(`gloss-${currentHash}`);
+				if (staleDict || staleGloss) {
 					store.delete(key);
 				}
 			}
@@ -327,13 +335,8 @@ function mapSingleEntry(entry: any): void {
 		};
 	}
 
-	// Build provenance (r) is how the data was assembled (kaikki-en, lemma-fallback, etc.).
-	// It is NOT stress provenance. Keep as 'provenance' for auditing.
-	if (entry.r !== undefined) {
-		entry.provenance = entry.r;
-	}
-
-	// E and F (full glosses) pass through untouched.
+	// E and F (full glosses) arrive later via the lazy gloss tier and are
+	// merged in place by mergeGlossTier(). Nothing to map here.
 }
 
 // -------------------------------------------------------------------
@@ -376,6 +379,99 @@ async function mergeNDJSON(
 			onProgress(-1);
 			await new Promise((r) => setTimeout(r, 0));
 		}
+	}
+}
+
+// -------------------------------------------------------------------
+// Gloss tier (Tier 2) — lazy background load of full glosses
+// -------------------------------------------------------------------
+
+/**
+ * Merge gloss-tier NDJSON lines into the live dictionary in place.
+ * Each line is: ["word", { E?, F? }]
+ *
+ * Entries are mutated directly. Both @ilya/phonology and @ilya/dictionary
+ * hold the same dictionary object by reference, so merged full glosses
+ * become visible everywhere without re-injection. Words absent from the
+ * dictionary (none expected) are skipped silently.
+ *
+ * Yields to the event loop every CHUNK_SIZE entries, same as mergeNDJSON.
+ */
+async function mergeGlossTier(
+	lines: string[],
+	dictionary: Record<string, any>
+): Promise<void> {
+	const total = lines.length;
+	for (let i = 0; i < total; i++) {
+		const line = lines[i];
+		if (!line.trim()) continue;
+		try {
+			const [word, gloss] = JSON.parse(line);
+			const entry = dictionary[word];
+			if (entry) {
+				if (gloss.E !== undefined) entry.E = gloss.E;
+				if (gloss.F !== undefined) entry.F = gloss.F;
+			}
+		} catch {
+			// Skip malformed lines silently
+		}
+		if (i > 0 && i % CHUNK_SIZE === 0) {
+			await new Promise((r) => setTimeout(r, 0));
+		}
+	}
+}
+
+/**
+ * Fetch and merge the lazy gloss tier listed in the manifest.
+ * Cache keys: gloss-{hash}-part{i} (chunked, same machinery as the
+ * core dictionary). Failures are non-fatal: the app keeps running on
+ * short glosses, and the next visit retries.
+ */
+async function loadGlossTier(
+	manifest: DictionaryManifest,
+	dictionary: Record<string, any>
+): Promise<void> {
+	const glossFiles = manifest.glossFiles ?? [];
+	for (let i = 0; i < glossFiles.length; i++) {
+		const cacheKey = `gloss-${manifest.hash}-part${i}`;
+
+		let lines = await getCachedChunked(cacheKey);
+		if (!lines) {
+			const response = await fetch(`/data/${glossFiles[i]}`);
+			if (!response.ok) {
+				throw new Error(`Gloss tier fetch failed: HTTP ${response.status}`);
+			}
+			const text = await response.text();
+			lines = text.split(/\r?\n/).filter((l) => l.trim());
+			// Cache in the background
+			setCacheChunked(cacheKey, lines);
+		}
+
+		await mergeGlossTier(lines, dictionary);
+		// lines goes out of scope here — eligible for GC before next fetch
+	}
+}
+
+/**
+ * Schedule the gloss tier to load after the app is interactive.
+ * Uses requestIdleCallback where available, with a setTimeout fallback.
+ */
+function scheduleGlossTier(
+	manifest: DictionaryManifest,
+	dictionary: Record<string, any>
+): void {
+	if (!manifest.glossFiles || manifest.glossFiles.length === 0) return;
+
+	const start = () => {
+		loadGlossTier(manifest, dictionary).catch((err) => {
+			console.warn('[Ilya] Gloss tier load failed (short glosses remain in use):', err);
+		});
+	};
+
+	if (typeof requestIdleCallback === 'function') {
+		requestIdleCallback(start, { timeout: 5000 });
+	} else {
+		setTimeout(start, 1500);
 	}
 }
 
@@ -473,6 +569,10 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		state.durationMs = durationMs;
 		state.progress = 1;
 		callbacks.onStateChange({ ...state });
+
+		// Tier 2: schedule the lazy gloss tier (full E/F glosses) now that
+		// the app is interactive. Non-blocking; failures are non-fatal.
+		scheduleGlossTier(manifest, dictionary);
 	} catch (error: unknown) {
 		const message = error instanceof Error ? error.message : String(error);
 		console.error('[Ilya] Dictionary loading failed:', message);

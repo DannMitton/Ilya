@@ -54,7 +54,7 @@ export function lookupFullEntry(word: string): DictionaryEntry | DictionaryEntry
   const clean = word
     .normalize('NFC')
     .replace(/\u0301/g, '')
-    .replace(/[.,!?;:"""''–—«»]/g, '')
+    .replace(/[.,!?;:"""''–—«»…()]/g, '')
     .replace(/[-–—]+$/, '')
     .toLowerCase();
   const entry = _dictionary[clean];

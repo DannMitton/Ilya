@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "description": "Ilya web application — SvelteKit",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "prepare": "svelte-kit sync",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
     "test:unit": "vitest run",

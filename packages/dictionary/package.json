@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Dictionary loader, stress lookup, and gloss pipeline for Russian lyric diction",
+  "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",

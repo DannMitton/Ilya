@@ -7,15 +7,19 @@ build/
 .svelte-kit/
 *.tsbuildinfo
 
-# Dictionary (153 MB — current build tracked via Git LFS)
-# Ignore all dictionary builds except the current one
+# Dictionary payload (committed as plain files, no LFS)
+# Ignore all dictionary builds except the current generation
 data/dictionary.*.json
-!data/dictionary.0911f185.json
+!data/dictionary.86d83340-a.json
+!data/dictionary.86d83340-b.json
+!data/dictionary.86d83340-gloss-a.json
+!data/dictionary.86d83340-gloss-b.json
 # Stale build and gap analysis (not needed in repo)
 data/dictionary.0982ad81.json
 
 # Build artifacts
 scripts/flagged-glosses.json
+scripts/frwikt-enrichment-report.json
 
 # Test output
 apps/web/test-results/
@@ -23,5 +27,3 @@ apps/web/test-results/
 # OS
 .DS_Store
 
-!data/dictionary.1ee647d4-a.json
-!data/dictionary.1ee647d4-b.json
