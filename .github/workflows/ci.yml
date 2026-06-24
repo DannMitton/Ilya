@@ -2,12 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, Shane]
   pull_request:
 
 jobs:
   test:
-    name: Test and build
+    name: Test, type-check, and build
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -26,6 +26,48 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Type-check the whole web project with svelte-check, including modules that
+      # nothing imports yet (the engine batch core). vite build tree-shakes those
+      # away and esbuild does not type-check, so this step is what actually guards
+      # them. The branch carries a known baseline of pre-existing errors, so this
+      # gate fails only when the count rises above that baseline: green means this
+      # push added zero new type errors. The live count prints on every run, so if
+      # the real baseline ever differs from the number below, the log shows it and
+      # you change one value.
+      - name: Type-check (svelte-check, gated on baseline)
+        working-directory: apps/web
+        env:
+          SVELTE_CHECK_BASELINE: "23"
+        run: |
+          # svelte-kit sync regenerates .svelte-kit/tsconfig.json that the app
+          # tsconfig extends. It runs on install via the prepare script; run it
+          # again explicitly so the generated config is guaranteed present.
+          pnpm exec svelte-kit sync
+
+          # svelte-check exits non-zero whenever any error exists, so capture the
+          # output and decide from the baseline rather than from the exit code.
+          pnpm exec svelte-check --tsconfig ./tsconfig.json --output machine \
+            | tee svelte-check.log || true
+
+          # The machine output ends with a line shaped like:
+          #   <ts> COMPLETED <n> FILES <n> ERRORS <n> WARNINGS <n> FILES_WITH_PROBLEMS
+          # Read the field immediately before the ERRORS token.
+          ERRORS=$(awk '/ COMPLETED /{for (i = 1; i <= NF; i++) if ($i == "ERRORS") print $(i - 1)}' svelte-check.log)
+
+          if [ -z "$ERRORS" ]; then
+            echo "::error::svelte-check produced no COMPLETED line, so it likely crashed rather than reporting type errors. Failing so this is not a silent pass."
+            exit 1
+          fi
+
+          echo "svelte-check errors: $ERRORS (baseline: $SVELTE_CHECK_BASELINE)"
+
+          if [ "$ERRORS" -gt "$SVELTE_CHECK_BASELINE" ]; then
+            echo "::error::svelte-check found $ERRORS errors, above the baseline of $SVELTE_CHECK_BASELINE. This push introduced new type errors; open the log above to see which files."
+            exit 1
+          fi
+
+          echo "OK: no new type errors above the baseline of $SVELTE_CHECK_BASELINE."
 
       - name: Run all tests
         run: pnpm test
