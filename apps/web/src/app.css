@@ -4,6 +4,20 @@
    Palette: Kimi Round 2 — Calm Authority
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Shane pacifier font: self-hosted Lato IPA subset ─────────
+   Google Fonts' served Lato omits the five IPA Extensions vowels
+   the pacifier needs, so Shane self-hosts a verified subset under
+   the distinct family 'Lato IPA' (spec §5, §5a). The woff2 sits at
+   static/fonts/lato-ipa.woff2, served at /fonts/lato-ipa.woff2.
+   ───────────────────────────────────────────────────────────── */
+@font-face {
+	font-family: 'Lato IPA';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/lato-ipa.woff2') format('woff2');
+}
+
 :root {
 	/* ── Typography ────────────────────────────────────────── */
 	--font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -43,6 +57,19 @@
 	--surround-transcription: #6B6560;
 	--surround-learn: #A8A39B;
 	--surround-guide: #E5E1D6;
+
+	/* ── Shane pacifier (fourth tab) ──────────────────────── */
+	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */
+	/* --paper-cream and the ink hierarchy above are reused as-is.     */
+	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
+	/* the pacifier contrast checker (contrast.ts), not here.          */
+	--surround-shane: #D8D0E0;    /* the pacifier band, on white */
+	--muted-lavender: #A89BB5;
+	--light-lavender: #C4BACF;
+	--deeper-lavender: #8E7E9B;   /* captured outline */
+	--arc-green: #1DB954;         /* progress arc (owned exception) */
+	--signal-red: #A32D2D;        /* retake flash and badge */
+	--prep-amber: #BC7E08;        /* prep-countdown flash (policy-pending) */
 
 	/* ── Backward-compatible aliases ──────────────────────── */
 	/* Components from Phase 2 reference these names.         */
