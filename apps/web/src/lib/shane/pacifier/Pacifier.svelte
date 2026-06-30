@@ -185,7 +185,30 @@
 	const after = (ms: number, fn: () => void) => {
 		timers.push(setTimeout(fn, ms));
 	};
-	const spoken = (g: Vowel): string => `the ${g} vowel`;
+	// Speakable per-vowel names for the button labels and the aria-live caption.
+	// Sourced from Mitton (2020) §4.6, which names all ten vowels, so a blind
+	// listener hears the same nicknames sighted users see, and the bare IPA
+	// glyphs never reach the speech engine. This is the fix for English TTS
+	// collapsing [ɪ] and [ɨ] onto the [i] ("ee") value: a named label is read
+	// as words, not a vowel the engine has to guess at. [i] uses Dann's
+	// 'cardinal-i' (Cardinal Vowel 1), completing the i-triplet with velar-i
+	// and smallcaps-i; [o] and [u] have no §4.6 nickname, so they keep the
+	// plain letter rather than an invented term. Keyword anchors (English
+	// 'as in bit', French mots-repères) are deferred to the bilingual anchor
+	// work, where they become one designed feature across both languages.
+	const SPOKEN_NAME: Record<Vowel, string> = {
+		i: 'cardinal-i',
+		e: 'close-e',
+		ɪ: 'smallcaps-i',
+		ɨ: 'velar-i',
+		ɛ: 'open-e',
+		a: 'bright-a',
+		ɑ: 'dark-a',
+		ʌ: 'turned-v',
+		o: 'o',
+		u: 'u'
+	};
+	const spoken = (g: Vowel): string => `the ${SPOKEN_NAME[g]} vowel`;
 
 	const restingState = (n: PNode): NodeState =>
 		n.skipped
@@ -594,7 +617,7 @@
 				class="vowel"
 				role="button"
 				tabindex="0"
-				aria-label={`vowel ${v.g}`}
+				aria-label={spoken(v.g)}
 				onpointerdown={() => onPointerDown(i)}
 				onpointermove={onPointerMove}
 				onpointerup={() => onPointerUp(i)}
