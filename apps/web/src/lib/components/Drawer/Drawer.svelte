@@ -577,6 +577,14 @@
 		--handle-bg: var(--quiet-cobalt, #5C739E);
 	}
 
+	/* Shane's identity colour: --deeper-lavender, same purple used for the
+	   header bar and a captured vowel in the pacifier. Was missing here for
+	   the same reason as HeaderBar.svelte — never added when the other three
+	   tabs got their closed-mode handle colours. */
+	.drawer.collapsed[data-tab="shane"] .drawer-handle {
+		--handle-bg: var(--deeper-lavender, #8E7E9B);
+	}
+
 	.drawer.collapsed .handle-chevron {
 		--handle-fg: var(--drawer-bg, #FAF8F5);
 		transform: scaleX(1);
@@ -601,6 +609,13 @@
 
 	.drawer.collapsed[data-tab="guide"] .drawer-lip:hover .drawer-handle {
 		--handle-bg: #4E6286;
+		transition: background-color 200ms ease;
+	}
+
+	/* Deeper shade of --deeper-lavender (#8E7E9B), same hand-computed value
+	   used for Shane's header-bar sigil badge, kept consistent across both. */
+	.drawer.collapsed[data-tab="shane"] .drawer-lip:hover .drawer-handle {
+		--handle-bg: #74677F;
 		transition: background-color 200ms ease;
 	}
 

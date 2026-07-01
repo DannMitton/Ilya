@@ -29,6 +29,7 @@
 	class:tab-transcription={activeTab === 'transcription'}
 	class:tab-learn={activeTab === 'learn'}
 	class:tab-guide={activeTab === 'guide'}
+	class:tab-shane={activeTab === 'shane'}
 >
 	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
 	<div class="sigil" aria-label="Ilya 2026a">
@@ -84,6 +85,14 @@
 		background: var(--quiet-cobalt, #5C739E);
 	}
 
+	/* Shane's identity colour: --deeper-lavender, the same purple that marks
+	   a captured vowel in the pacifier (spec v6 §13). Was missing entirely;
+	   'shane' has been a valid TabId since the wall mechanism, this case was
+	   just never added when the other three tabs got their bar colours. */
+	.header-bar.tab-shane {
+		background: var(--deeper-lavender, #8E7E9B);
+	}
+
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
 
 	.sigil {
@@ -137,6 +146,14 @@
 		background: #4D6387;
 	}
 
+	/* Deeper shade of --deeper-lavender (#8E7E9B), computed the same way the
+	   Learn and Guide deepened badge shades were hand-picked, not a token
+	   that exists yet. If Kimi or Dann want a precise locked value, this is
+	   the one to revisit. */
+	.tab-shane .sigil-version {
+		background: #74677F;
+	}
+
 	/* ── Language toggle ─────────────────────────────────── */
 
 	.language-toggle {
@@ -178,6 +195,10 @@
 		background: #4D6387;
 	}
 
+	.tab-shane .lang-option:not(.active) {
+		background: #74677F;
+	}
+
 	.lang-option:not(.active):hover {
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
@@ -195,6 +216,10 @@
 
 	.tab-guide .lang-option:not(.active):hover {
 		text-decoration-color: var(--quiet-cobalt, #5C739E);
+	}
+
+	.tab-shane .lang-option:not(.active):hover {
+		text-decoration-color: var(--deeper-lavender, #8E7E9B);
 	}
 
 	.lang-option:focus-visible {
