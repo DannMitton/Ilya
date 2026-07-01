@@ -1,8 +1,40 @@
+<script module lang="ts">
+	import type { Vowel } from '$lib/shane/engine/types';
+
+	// Speakable per-vowel names for the button labels and the aria-live caption.
+	// Sourced from Mitton (2020) §4.6, which names all ten vowels, so a blind
+	// listener hears the same nicknames sighted users see, and the bare IPA
+	// glyphs never reach the speech engine. This is the fix for English TTS
+	// collapsing [ɪ] and [ɨ] onto the [i] ("ee") value: a named label is read
+	// as words, not a vowel the engine has to guess at. [i] uses Dann's
+	// 'cardinal-i' (Cardinal Vowel 1), completing the i-triplet with velar-i
+	// and smallcaps-i; [o] and [u] have no §4.6 nickname, so they keep the
+	// plain letter rather than an invented term. Keyword anchors (English
+	// 'as in bit', French mots-repères) are deferred to the bilingual anchor
+	// work, where they become one designed feature across both languages.
+	// Exported at module scope (not duplicated) so the guided-director wizard
+	// (wizard spec v1 §3, "Accessibility") announces vowels by the identical
+	// name a sighted user sees and a screen-reader user hears here.
+	export const SPOKEN_NAME: Record<Vowel, string> = {
+		i: 'cardinal-i',
+		e: 'close-e',
+		ɪ: 'smallcaps-i',
+		ɨ: 'velar-i',
+		ɛ: 'open-e',
+		a: 'bright-a',
+		ɑ: 'dark-a',
+		ʌ: 'turned-v',
+		o: 'o',
+		u: 'u'
+	};
+	export const spoken = (g: Vowel): string => `the ${SPOKEN_NAME[g]} vowel`;
+</script>
+
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { StubCaptureSession } from '$lib/shane/engine/stub';
 	import type { CaptureSession, CaptureHandlers } from '$lib/shane/engine/session';
-	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
+	import type { VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 
 	type NodeState =
@@ -21,8 +53,18 @@
 		session?: CaptureSession;
 		calibrationOrder?: Vowel[];
 		countdownTicks?: boolean;
+		/** Wizard spec v1 §2 Phase 2: the five-anchor achievement overlay. On by default; a guided-director host never needs to opt in. */
+		minimumMetOverlay?: boolean;
 		onVowelCaptured?: (vowel: Vowel, formant: CalibratedFormant) => void;
 		onProfileChange?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
+		/**
+		 * Wizard spec v1 §3, the re-take rule: fires when a re-take reads
+		 * Provisional and the previous reading was Captured, so the previous
+		 * value is kept and this formant is discarded rather than applied.
+		 * `onVowelCaptured` and `onProfileChange` do NOT fire for a rolled-back
+		 * re-take, since nothing in the profile changed.
+		 */
+		onRetakeRolledBack?: (vowel: Vowel, rejectedFormant: CalibratedFormant) => void;
 	}
 
 	// Advisory counterclockwise tour of the vowel space (spec §8). Overridable;
@@ -35,8 +77,10 @@
 		session = new StubCaptureSession(),
 		calibrationOrder = DEFAULT_ORDER,
 		countdownTicks = true,
+		minimumMetOverlay = true,
 		onVowelCaptured,
-		onProfileChange
+		onProfileChange,
+		onRetakeRolledBack
 	}: PacifierProps = $props();
 
 	// ── Locked geometry, ported verbatim from the prototype ──────────────────
@@ -132,6 +176,26 @@
 		.filter((v): v is GeomVowel => !!v)
 		.concat(geomVowels.filter((v) => !calibrationOrder.includes(v.g)));
 
+	// ── Minimum-met achievement overlay (wizard spec v1 §2 Phase 2, §4) ──────
+	// The five-anchor floor {[i], [e], [ɛ], [ɑ], [u]} is the research-grounded
+	// minimum (Fox and Jacewicz 2017). A non-destructive overlay: nothing moves,
+	// the deselected [ɨ], [ɪ], [ʌ] stay dashed in their canonical home
+	// positions, and this polygon lights in behind the vowel nodes once all
+	// five are sampled. The draw order is computed by angle around the shape's
+	// centre rather than hand-ordered, so it is a simple, non-self-intersecting
+	// polygon regardless of exactly where the five anchors sit on the locked
+	// Jones geometry. Contrast for this overlay is not yet a locked obligation
+	// in contrast.ts; the rendering itself is flagged open in wizard spec v1 §5
+	// ("confirm it reads as intended at the port").
+	const FLOOR_ANCHORS: Vowel[] = ['i', 'e', 'ɛ', 'ɑ', 'u'];
+	const floorAnchorGeom: GeomVowel[] = FLOOR_ANCHORS.map((g) => geomVowels.find((v) => v.g === g))
+		.filter((v): v is GeomVowel => !!v)
+		.sort((p, q) => Math.atan2(p.cy - CY, p.cx - CX) - Math.atan2(q.cy - CY, q.cx - CX));
+	const floorPolygonPath: string =
+		floorAnchorGeom.length === FLOOR_ANCHORS.length
+			? 'M' + floorAnchorGeom.map((v) => f([v.cx, v.cy])).join('L') + 'Z'
+			: '';
+
 	// ── Reactive per-vowel state ─────────────────────────────────────────────
 	interface PNode {
 		state: NodeState;
@@ -163,6 +227,31 @@
 	let reducedMotion = $state(false);
 	let activeIdx = $state(-1);
 
+	// The floor is "met" once every anchor has a reading, captured or
+	// provisional; a provisional first attempt still counts; a skipped vowel
+	// does not. Recomputed from `nodes`, which is deeply reactive.
+	let floorComplete = $derived(
+		FLOOR_ANCHORS.every((g) => {
+			const i = layout.findIndex((v) => v.g === g);
+			return i !== -1 && nodes[i].sampled && !nodes[i].skipped;
+		})
+	);
+	let floorPulsing = $state(false);
+	let floorWasComplete = false;
+	$effect(() => {
+		if (floorComplete && !floorWasComplete) {
+			floorWasComplete = true;
+			if (!reducedMotion) {
+				floorPulsing = true;
+				after(900, () => {
+					floorPulsing = false;
+				});
+			}
+		} else if (!floorComplete) {
+			floorWasComplete = false;
+		}
+	});
+
 	// ── Non-reactive control state ───────────────────────────────────────────
 	let timers: ReturnType<typeof setTimeout>[] = [];
 	let rafId = 0;
@@ -185,30 +274,6 @@
 	const after = (ms: number, fn: () => void) => {
 		timers.push(setTimeout(fn, ms));
 	};
-	// Speakable per-vowel names for the button labels and the aria-live caption.
-	// Sourced from Mitton (2020) §4.6, which names all ten vowels, so a blind
-	// listener hears the same nicknames sighted users see, and the bare IPA
-	// glyphs never reach the speech engine. This is the fix for English TTS
-	// collapsing [ɪ] and [ɨ] onto the [i] ("ee") value: a named label is read
-	// as words, not a vowel the engine has to guess at. [i] uses Dann's
-	// 'cardinal-i' (Cardinal Vowel 1), completing the i-triplet with velar-i
-	// and smallcaps-i; [o] and [u] have no §4.6 nickname, so they keep the
-	// plain letter rather than an invented term. Keyword anchors (English
-	// 'as in bit', French mots-repères) are deferred to the bilingual anchor
-	// work, where they become one designed feature across both languages.
-	const SPOKEN_NAME: Record<Vowel, string> = {
-		i: 'cardinal-i',
-		e: 'close-e',
-		ɪ: 'smallcaps-i',
-		ɨ: 'velar-i',
-		ɛ: 'open-e',
-		a: 'bright-a',
-		ɑ: 'dark-a',
-		ʌ: 'turned-v',
-		o: 'o',
-		u: 'u'
-	};
-	const spoken = (g: Vowel): string => `the ${SPOKEN_NAME[g]} vowel`;
 
 	const restingState = (n: PNode): NodeState =>
 		n.skipped
@@ -369,6 +434,29 @@
 
 	function completePoor(idx: number, formant: CalibratedFormant) {
 		const n = nodes[idx];
+		// Wizard spec v1 §3, the re-take rule: replace-on-re-take, with one
+		// automatic rollback. A Provisional re-take never overwrites a Captured
+		// previous; the engine's own reading is the arbiter, never the raw
+		// numbers, so the singer is never asked to adjudicate two fR1/fR2
+		// pairs. This only applies to a genuine re-take (a previous Captured
+		// reading already sits on this vowel); a first attempt that reads
+		// Provisional always proceeds as usual below.
+		const previousWasCaptured = n.sampled && !n.skipped && n.formant?.reading === 'captured';
+		if (previousWasCaptured) {
+			if (!reducedMotion) n.completeFlash = 'flash-retake';
+			const finish = () => {
+				n.completeFlash = '';
+				n.arcProgress = 0;
+				n.state = 'captured'; // the kept previous, unchanged
+				restoreResting(idx);
+				activeIdx = -1;
+				announce = `${spoken(layout[idx].g)}: new sample was less certain, so the previous one was kept.`;
+				onRetakeRolledBack?.(layout[idx].g, formant);
+			};
+			if (reducedMotion) finish();
+			else after(COMPLETE_MS, finish);
+			return;
+		}
 		n.formant = formant;
 		n.sampled = true;
 		n.skipped = false;
@@ -465,6 +553,18 @@
 			case 'working':
 				break; // ignore; Escape cancels an in-progress capture
 		}
+	}
+
+	/**
+	 * Guided-director wizard hook (wizard spec v1 §2 Phase 2, §3). Drives the
+	 * exact same state transition a real tap drives, so a wizard's auto-advance
+	 * can move focus to (and arm) the next vowel without a second, separate
+	 * interaction path to keep in sync with the locked ritual. Calling this on
+	 * a vowel already mid-capture is a no-op, matching onActivate's own guard.
+	 */
+	export function activateVowel(g: Vowel): void {
+		const idx = layout.findIndex((v) => v.g === g);
+		if (idx !== -1) onActivate(idx);
 	}
 
 	function onLongPressFire(idx: number) {
@@ -608,6 +708,19 @@
 			stroke-linejoin="round"
 			stroke-linecap="round"
 		/>
+		{#if minimumMetOverlay && floorComplete && floorPolygonPath}
+			<path
+				class="floor-overlay"
+				class:floor-overlay-pulse={floorPulsing}
+				d={floorPolygonPath}
+				fill="var(--sage)"
+				fill-opacity="0.14"
+				stroke="var(--sage)"
+				stroke-opacity="0.9"
+				stroke-width="2"
+				aria-hidden="true"
+			/>
+		{/if}
 		{#each layout as v, i (v.g)}
 			{@const n = nodes[i]}
 			{@const vw = view(n)}
@@ -786,12 +899,30 @@
 	.arc-ready {
 		animation: arcReady 1.2s ease-in-out infinite;
 	}
+	.floor-overlay {
+		transition: opacity 0.3s ease-out;
+	}
+	@keyframes floorPulse {
+		0% {
+			opacity: 0.55;
+		}
+		40% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0.55;
+		}
+	}
+	.floor-overlay-pulse {
+		animation: floorPulse 0.9s ease-in-out 1;
+	}
 	@media (prefers-reduced-motion: reduce) {
 		.complete-flash-good,
 		.complete-flash-retake,
 		.swell,
 		.arc-ready,
-		.prep-flash {
+		.prep-flash,
+		.floor-overlay-pulse {
 			animation: none;
 			transition: none;
 		}
