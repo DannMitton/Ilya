@@ -25,7 +25,7 @@
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { tick } from 'svelte';
-	import Pacifier, { SPOKEN_NAME, spoken } from '$lib/shane/pacifier/Pacifier.svelte';
+	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
@@ -284,39 +284,30 @@
 		}
 	}
 
-	// Computed here, after every $state they read, rather than narrowed in
-	// the template: template-block narrowing of a $state value is not
-	// something to lean on, so any use of a possibly-undefined vowel is
-	// resolved to a plain string in script instead.
-	let progressCaption = $derived(
-		currentVowel ? `Vowel ${queueIndex + 1} of ${queue.length} — ${spoken(currentVowel)}` : 'All set.'
-	);
-	let cueCaption = $derived(
-		currentVowel ? `Tap the ${SPOKEN_NAME[currentVowel]} vowel to arm it, tap again to begin.` : ''
-	);
-	let holdCaption = $derived.by(() => {
-		if (!holdVowel) return '';
-		if (holdKind === 'good') return `${spoken(holdVowel)}, captured.`;
-		if (holdKind === 'rolled-back') return 'New sample was less certain, so the previous one was kept.';
-		return 'Noted, moving on. You can re-take it from the summary.';
-	});
-
 	$effect(() => () => clearAllTimers());
 </script>
+
+<!--
+	Vowel label: the IPA glyph followed by its informal name (Dann, 2026-07-01,
+	e.g. "[i] cardinal-i"). The glyph is aria-hidden, matching the discipline
+	behind the aria-label speakable-name fix shipped last night: a raw IPA
+	glyph read aloud by a screen reader still collapses [ɪ]/[ɨ] onto "ee," so
+	only the informal name is announced. Sighted users see both.
+-->
+{#snippet vowelTag(g: Vowel)}<span class="ipa-tag" aria-hidden="true">[{g}]</span
+	>{SPOKEN_NAME[g]}{/snippet}
 
 <section class="calibration-wizard" aria-label="Your Resonances: voice calibration">
 	{#if phase === 'welcome'}
 		<div class="wizard-phase">
-			<h2 id="wizard-title">Your Resonances</h2>
+			<h2 id="wizard-title">Finding Your Resonances</h2>
+			<!-- Phase 0 onboarding copy, Dann's draft (2026-07-01), closing the
+			     placeholder flagged in wizard spec v1 §5 / pacifier spec v11 §15. -->
 			<p class="wizard-lede">
-				A short, guided pass through your vowels in vocal fry, so Shane can measure your own
-				resonances instead of a generic default. A few minutes, including any re-takes.
-			</p>
-			<!-- Placeholder copy: Phase 0 onboarding and the IPA-competence line are
-			     open items (wizard spec v1 §5; pacifier spec v11 §15). Replace when drafted. -->
-			<p class="wizard-note">
-				This walkthrough assumes you read IPA. Each vowel is also named aloud, so nothing here
-				depends on sight alone.
+				Shane will measure your voice to build a formant profile, which is a map of your voice's
+				resonances that will be applied to the repertoire to determine fit. Follow the prompts.
+				This wizard assumes you read IPA. Your device needs a working mic and you should be in a
+				quiet space for the best capture of your resonances.
 			</p>
 			<details class="wizard-expander">
 				<summary>What is vocal fry?</summary>
@@ -350,9 +341,17 @@
 		</div>
 	{:else if phase === 'capture'}
 		<div class="wizard-phase">
-			<div class="wizard-progress" role="status" aria-live="polite">{progressCaption}</div>
+			<div class="wizard-progress" role="status" aria-live="polite">
+				{#if currentVowel}
+					Vowel {queueIndex + 1} of {queue.length} — {@render vowelTag(currentVowel!)}
+				{:else}
+					All set.
+				{/if}
+			</div>
 			{#if currentVowel}
-				<p class="wizard-cue">{cueCaption}</p>
+				<p class="wizard-cue">
+					Tap the {@render vowelTag(currentVowel!)} vowel to arm it, tap again to begin.
+				</p>
 			{/if}
 			<div class="wizard-pacifier-wrap">
 				<Pacifier
@@ -377,7 +376,15 @@
 				</div>
 			{:else if holdActive && holdVowel}
 				<div class="wizard-inline-banner" role="status" aria-live="polite">
-					<p>{holdCaption}</p>
+					<p>
+						{#if holdKind === 'good'}
+							{@render vowelTag(holdVowel!)}, captured.
+						{:else if holdKind === 'rolled-back'}
+							New sample was less certain, so the previous one was kept.
+						{:else}
+							Noted, moving on. You can re-take it from the summary.
+						{/if}
+					</p>
 					<div class="wizard-hold-actions">
 						<button type="button" onclick={holdContinue}>Continue</button>
 						<button type="button" onclick={holdRetake}>Re-take</button>
@@ -415,7 +422,7 @@
 					{#each ALL_VOWELS as g (g)}
 						{@const f = profile[g]}
 						<li class="wizard-summary-row">
-							<span class="wizard-summary-vowel">{SPOKEN_NAME[g]}</span>
+							<span class="wizard-summary-vowel">{@render vowelTag(g)}</span>
 							<span class="wizard-summary-reading" class:is-provisional={f?.reading === 'provisional'}>
 								{readingLabel(f?.reading)}
 							</span>
@@ -427,7 +434,7 @@
 				</ul>
 				{#if !optionalOffered}
 					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
-						Add the three optional vowels for a fuller profile
+						Experienced singers can provide direct samples for the three optional vowels.
 					</button>
 				{/if}
 				<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
@@ -454,6 +461,12 @@
 		max-width: 32rem;
 	}
 
+	.ipa-tag {
+		font-family: 'Lato IPA', sans-serif;
+		opacity: 0.7;
+		margin-right: 0.3em;
+	}
+
 	.wizard-phase h2 {
 		margin: 0;
 		font-family: var(--font-serif);
@@ -464,7 +477,6 @@
 	}
 
 	.wizard-lede,
-	.wizard-note,
 	.wizard-guidance {
 		margin: 0;
 		max-width: 30rem;
@@ -473,11 +485,6 @@
 		line-height: 1.5;
 		text-align: center;
 		color: var(--ink-secondary);
-	}
-
-	.wizard-note {
-		color: var(--ink-tertiary);
-		font-size: 0.875rem;
 	}
 
 	.wizard-guidance {
