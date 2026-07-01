@@ -982,6 +982,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		background-color: var(--surround-guide, #F2EFE6);
 	}
 
+	.main-content.tab-shane {
+		background-color: var(--surround-shane, #D8D0E0);
+	}
+
 	/* ── Floating Paper: tab-specific shadows ─────────────── */
 
 	.main-content.tab-transcription :global(.paper-page) {
@@ -1317,6 +1321,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 		.paper-handle[data-tab="guide"] .paper-handle-shape {
 			background: var(--quiet-cobalt, #5C739E);
+		}
+
+		.paper-handle[data-tab="shane"] .paper-handle-shape {
+			background: var(--deeper-lavender, #8E7E9B);
 		}
 	}
 
