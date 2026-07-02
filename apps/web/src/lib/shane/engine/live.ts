@@ -111,6 +111,19 @@ class ShaneCaptureTap extends AudioWorkletProcessor {
 registerProcessor('${WORKLET_NAME}', ShaneCaptureTap);
 `;
 
+/**
+ * TEMPORARY diagnostic switch (2026-07-02): logs the capture pipeline to the
+ * browser console so the gate's behaviour can be read on real devices and
+ * rooms. Flip to false (or strip the dbg calls) once the gate is tuned.
+ */
+const DEBUG = true;
+function dbg(...args: unknown[]): void {
+	if (DEBUG) console.info('[shane-live]', ...args);
+}
+function fmt(x: number | null, digits = 2): string {
+	return x === null || Number.isNaN(x) ? 'n/a' : x.toFixed(digits);
+}
+
 /** Map a getUserMedia rejection onto the locked CaptureError vocabulary. */
 function mapMicError(e: unknown): CaptureError {
 	const name = e instanceof DOMException || e instanceof Error ? e.name : '';
@@ -139,6 +152,7 @@ export class LiveCaptureSession implements CaptureSession {
 	private sampleRate = TARGET_SR;
 	private chunks: Float32Array[] = [];
 	private chunkSamples = 0;
+	private loggedFirstChunk = false;
 	private gateTimer: ReturnType<typeof setInterval> | null = null;
 	private stopTimer: ReturnType<typeof setTimeout> | null = null;
 	private listenTimer: ReturnType<typeof setTimeout> | null = null;
@@ -154,6 +168,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.chunkSamples = 0;
 		this.recording = false;
 		this.lastFailed = [];
+		this.loggedFirstChunk = false;
 		this.releaseAudio();
 		this.active = true;
 		this.handlers = handlers;
@@ -181,6 +196,7 @@ export class LiveCaptureSession implements CaptureSession {
 	/** Terminal failure: release everything, then report once. */
 	private fail(gen: number, error: ShaneEngineError): void {
 		if (gen !== this.gen) return;
+		dbg('fail:', error.code, '—', error.message, 'cause' in error ? JSON.stringify(error.cause) : '');
 		const handlers = this.handlers;
 		this.active = false;
 		this.recording = false;
@@ -219,6 +235,9 @@ export class LiveCaptureSession implements CaptureSession {
 			return;
 		}
 		this.stream = stream;
+		const track = stream.getAudioTracks()[0];
+		dbg('mic acquired:', track?.label ?? '(unlabelled)');
+		dbg('track settings:', JSON.stringify(track?.getSettings() ?? {}));
 
 		let ctx: AudioContext;
 		try {
@@ -228,6 +247,7 @@ export class LiveCaptureSession implements CaptureSession {
 		}
 		this.ctx = ctx;
 		this.sampleRate = ctx.sampleRate;
+		dbg('audio context: sampleRate', ctx.sampleRate, 'state', ctx.state);
 		try {
 			if (ctx.state === 'suspended') await ctx.resume();
 		} catch {
@@ -276,6 +296,7 @@ export class LiveCaptureSession implements CaptureSession {
 					outputChannelCount: [1]
 				});
 				node.port.onmessage = (ev: MessageEvent) => this.onChunk(gen, ev.data as Float32Array);
+				dbg('tap: AudioWorklet');
 				return node;
 			} catch {
 				// Fall through to the ScriptProcessor path.
@@ -284,11 +305,16 @@ export class LiveCaptureSession implements CaptureSession {
 		const node = ctx.createScriptProcessor(4096, 1, 1);
 		node.onaudioprocess = (ev: AudioProcessingEvent) =>
 			this.onChunk(gen, new Float32Array(ev.inputBuffer.getChannelData(0)));
+		dbg('tap: ScriptProcessor fallback');
 		return node;
 	}
 
 	private onChunk(gen: number, data: Float32Array): void {
 		if (gen !== this.gen || !this.active) return;
+		if (!this.loggedFirstChunk) {
+			this.loggedFirstChunk = true;
+			dbg('first audio chunk received:', data.length, 'samples');
+		}
 		this.chunks.push(data);
 		this.chunkSamples += data.length;
 		if (!this.recording) this.trimToTail(Math.floor(LISTEN_RETAIN_S * this.sampleRate));
@@ -319,9 +345,26 @@ export class LiveCaptureSession implements CaptureSession {
 	private gateTick(gen: number, vowel: Vowel, voiceType: VoiceType | undefined): void {
 		if (gen !== this.gen || !this.active || this.recording) return;
 		const win = Math.floor(GATE_WINDOW_S * this.sampleRate);
-		if (this.chunkSamples < win) return;
-		const det = detect(this.tail(win), this.sampleRate);
+		if (this.chunkSamples < win) {
+			dbg('gate: buffering', this.chunkSamples, '/', win, 'samples');
+			return;
+		}
+		const y = this.tail(win);
+		let sumSq = 0;
+		for (let i = 0; i < y.length; i++) sumSq += y[i] * y[i];
+		const rms = Math.sqrt(sumSq / y.length);
+		const det = detect(y, this.sampleRate);
 		this.lastFailed = det.failed;
+		dbg(
+			'gate: rms', rms.toFixed(4),
+			'| pulses', det.nPulses,
+			'| rate', fmt(det.rateHz, 1), 'Hz',
+			'| cv', fmt(det.cv),
+			'| decay', fmt(det.decay),
+			'| flatness', det.flatness.toFixed(3),
+			'| snr', det.snrDb.toFixed(1), 'dB',
+			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', ')
+		);
 		if (!det.accept) return;
 		// Stable fry confirmed: the second beat. Keep the settling pre-roll,
 		// record the 3.0 s sweep, then analyse.
@@ -335,6 +378,7 @@ export class LiveCaptureSession implements CaptureSession {
 			this.listenTimer = null;
 		}
 		this.trimToTail(Math.floor(PREROLL_S * this.sampleRate));
+		dbg('stable fry confirmed; sweep started');
 		this.handlers?.onStableFry();
 		this.stopTimer = setTimeout(() => this.finish(gen, vowel, voiceType), SWEEP_S * 1000);
 	}
@@ -355,6 +399,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.chunkSamples = 0;
 		this.releaseAudio();
 
+		dbg('sweep complete; analysing', total, 'samples at', sr, 'Hz');
 		const full = new Float64Array(total);
 		let off = 0;
 		for (const c of chunks) {
@@ -380,6 +425,7 @@ export class LiveCaptureSession implements CaptureSession {
 			handlers?.onError({ code: 'EXTRACTION_FAILED', message: 'Analysis failed unexpectedly.', cause: e });
 			return;
 		}
+		dbg('outcome:', JSON.stringify(outcome));
 		if (outcome.outcome === 'reading') handlers?.onComplete(outcome.formant);
 		else if (outcome.outcome === 'reprompt')
 			handlers?.onError({
