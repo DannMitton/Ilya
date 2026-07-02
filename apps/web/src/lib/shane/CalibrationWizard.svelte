@@ -17,15 +17,18 @@
 	 * end to end against StubCaptureSession, with the readiness phase as UI
 	 * and permission scaffolding only, its measurements mocked because the
 	 * stub cannot supply live audio; (2) the live CaptureSession, gated on
-	 * Dann's separate go; (3) polish (toast-threshold tuning, copy). Every
-	 * mock in this file is commented at its point of use and is the single
-	 * seam where live audio will be wired in later.
+	 * Dann's separate go; (3) polish (toast-threshold tuning, copy). Step
+	 * 2's capture side landed 2026-07-02: the Pacifier below now runs
+	 * against LiveCaptureSession (engine/live.ts), so vowel captures are
+	 * real audio. The readiness phase's measurements remain mocked (the one
+	 * remaining seam); wiring them live is the next gated step.
 	 *
 	 * Replaces the earlier placeholder shell (Ilya2006B fold-in), which
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { tick } from 'svelte';
 	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
+	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
@@ -54,7 +57,8 @@
 		/**
 		 * Stub-era test hook only. Forces the Readiness phase's mocked outcome
 		 * so the fry-range guidance and the room-SNR toast can be exercised
-		 * without real audio (there is no live CaptureSession yet). Defaults to
+		 * without real audio (the readiness phase is not yet wired to the live
+		 * CaptureSession; captures are). Defaults to
 		 * the clean path. This prop, and the mocked readiness timers below, are
 		 * the one seam meant to be removed when the live CaptureSession lands
 		 * (spec v1 §2 Phase 1).
@@ -82,6 +86,13 @@
 	}: CalibrationWizardProps = $props();
 
 	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
+
+	// The live auditory input (locked port order step 2, capture side). One
+	// session instance for the wizard's lifetime; each capture opens and
+	// releases the microphone itself, so the mic indicator rests dark
+	// between vowels. Construction touches no browser API; getUserMedia is
+	// requested only inside start().
+	const captureSession = new LiveCaptureSession();
 
 	let phase = $state<Phase>('welcome');
 	let profile = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
@@ -364,6 +375,7 @@
 			<div class="wizard-pacifier-wrap">
 				<Pacifier
 					bind:this={pacifierRef}
+					session={captureSession}
 					{voiceType}
 					initialFormants={profile}
 					onVowelCaptured={handleVowelCaptured}
