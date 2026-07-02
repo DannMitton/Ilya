@@ -29,6 +29,7 @@
 	import { tick } from 'svelte';
 	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
+	import { derive } from '$lib/shane/engine/derivations';
 	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
@@ -303,6 +304,47 @@
 		}
 	}
 
+	// ── Working values in the summary (Dann, 2026-07-02) ────────────────────
+	// An interim confirmation surface ahead of the output-page legend design:
+	// each row publishes the working fR1/fR2 so the singer sees what was
+	// received. For the three optional vowels, an unsampled row shows the
+	// engine's derived value (reading: Estimated), greyed, computed by the
+	// same derive() the analysis layer uses — display-only, single source of
+	// formulae (Mitton 2020 §5.3.3; the formulae themselves are never shown),
+	// and the stored profile keeps only what was actually sung.
+
+	/** The anchors each derivable optional vowel needs (derivations.ts). */
+	const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
+		ɨ: ['i', 'u'],
+		ɪ: ['e', 'i'],
+		ʌ: ['ɑ', 'ɛ']
+	};
+
+	/** Usable as a derivation anchor: sampled, not Provisional, both formants present. */
+	function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedFormant & { f2: number } {
+		return !!f && f.reading !== 'provisional' && typeof f.f2 === 'number';
+	}
+
+	/** The row's display value: the direct sample, or a derived preview for optional vowels. */
+	function displayFormant(g: Vowel): CalibratedFormant | undefined {
+		const direct = profile[g];
+		if (direct) return direct;
+		const need = DERIVE_ANCHORS[g];
+		if (!need) return undefined;
+		const cap: Record<string, { f1: number; f2: number }> = {};
+		for (const a of need) {
+			const f = profile[a];
+			if (!usableAnchor(f)) return undefined;
+			cap[a] = { f1: f.f1, f2: f.f2 };
+		}
+		return derive(g, cap) ?? undefined;
+	}
+
+	function valueLabel(f: CalibratedFormant): string {
+		const f1 = `fR1 ${Math.round(f.f1)} Hz`;
+		return typeof f.f2 === 'number' ? `${f1} · fR2 ${Math.round(f.f2)} Hz` : f1;
+	}
+
 	$effect(() => () => clearAllTimers());
 </script>
 
@@ -440,13 +482,17 @@
 				</p>
 				<ul class="wizard-summary-list">
 					{#each ALL_VOWELS as g (g)}
-						{@const f = profile[g]}
-						<li class="wizard-summary-row">
+						{@const direct = profile[g]}
+						{@const f = displayFormant(g)}
+						<li class="wizard-summary-row" class:is-muted={!direct && OPTIONAL_VOWELS.includes(g)}>
 							<span class="wizard-summary-vowel">{@render vowelTag(g)}</span>
+							{#if f}
+								<span class="wizard-summary-values">{valueLabel(f)}</span>
+							{/if}
 							<span class="wizard-summary-reading" class:is-provisional={f?.reading === 'provisional'}>
 								{readingLabel(f?.reading)}
 							</span>
-							{#if f}
+							{#if direct}
 								<button type="button" onclick={() => retakeFromSummary(g)}>Re-take</button>
 							{/if}
 						</li>
@@ -685,8 +731,18 @@
 		font-weight: 600;
 		flex: 1;
 	}
+	.wizard-summary-values {
+		color: var(--ink-secondary);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
 	.wizard-summary-reading {
 		color: var(--ink-tertiary);
+	}
+	/* The three optional vowels rest greyed until sampled directly; their
+	   derived preview reads as quieter than a sung capture (Dann, 2026-07-02). */
+	.wizard-summary-row.is-muted {
+		opacity: 0.6;
 	}
 	.wizard-summary-reading.is-provisional {
 		color: var(--signal-red);
