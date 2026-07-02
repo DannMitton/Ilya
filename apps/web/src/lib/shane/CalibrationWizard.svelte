@@ -36,7 +36,13 @@
 	const DEFAULT_VOWELS: Vowel[] = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u'];
 	const OPTIONAL_VOWELS: Vowel[] = ['ɨ', 'ɪ', 'ʌ'];
 	const ALL_VOWELS: Vowel[] = [...DEFAULT_VOWELS, ...OPTIONAL_VOWELS];
-	const HOLD_MS = 2500; // spec v1 §2 Phase 2: the confirming beat before auto-advance
+	// The confirming beat before auto-advance (spec v1 §2 Phase 2), retimed in
+	// the pacing pass of 2026-07-02: the Pacifier reports a capture only after
+	// its 0.9 s completion animation (COMPLETE_MS, pacifier spec v11), so this
+	// hold runs concurrently with the seam rather than stacking on it —
+	// 0.9 s + 1.6 s = 2.5 s total from end of voicing to advance, replacing
+	// the previous 0.9 s + 2.5 s = 3.4 s stack.
+	const HOLD_MS = 1600;
 
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
 	type ReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr';
@@ -91,7 +97,8 @@
 	let fryMarginal = $state(false);
 	let snrMarginal = $state(false);
 
-	// ── Phase 2, the 2.5 s confirming hold (spec v1 §2 Phase 2, §3) ──────────
+	// ── Phase 2, the confirming hold (spec v1 §2 Phase 2, §3; retimed, see
+	// HOLD_MS above) ──────────
 	let holdActive = $state(false);
 	let holdVowel = $state<Vowel | undefined>(undefined);
 	let holdKind = $state<HoldKind>('good');
@@ -253,8 +260,9 @@
 
 	async function retakeFromSummary(vowel: Vowel) {
 		// Re-enter the guided flow for this one vowel; the queue becomes a
-		// single-item pass, so the ritual (and the 2.5 s hold) still applies,
-		// and finishing it returns to the summary via the normal advance path.
+		// single-item pass, so the ritual (and the post-capture hold) still
+		// applies, and finishing it returns to the summary via the normal
+		// advance path.
 		queue = [vowel];
 		queueIndex = 0;
 		phase = 'capture';
