@@ -46,7 +46,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
-	const TAB_ORDER: TabId[] = ['transcription', 'learn', 'guide'];
+	const TAB_ORDER: TabId[] = ['transcription', 'learn', 'guide', 'shane'];
 	let tabTransitionClass = $state('');
 	// Mobile awareness
 	let isMobile = $state(false);
@@ -611,7 +611,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				drawerCollapsed = JSON.parse(savedCollapsed);
 			}
 			const savedTab = localStorage.getItem('ilya:activeTab');
-			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide') {
+			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide' || (savedTab === 'shane' && INCLUDE_SHANE)) {
 				activeTab = savedTab;
 			}
 		} catch {
