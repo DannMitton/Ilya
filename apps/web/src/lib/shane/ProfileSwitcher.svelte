@@ -150,9 +150,18 @@
 {#if voices.length === 0}
 	<!-- First launch: ask immediately (Kimi). The field is prefilled and
 	     pre-selected, so a single tap-through still works; this is a beat
-	     of orientation, not a gate. -->
+	     of orientation, not a gate.
+	     The contextual lede is the pane's typographic hero, with the form
+	     subordinate (Kimi's first-run-orientation ruling, 2026-07-11: a
+	     local lede, weight inverted; no step numbering, no phase rails —
+	     each phase's opening surface carries one sentence of context).
+	     Copy is Dann's. The lede remains the input's <label> so the
+	     name/field association survives the promotion. -->
 	<div class="ps ps-first">
-		<label class="ps-label" for="ps-first-name">What shall we call this voice?</label>
+		<label class="ps-first-lede" for="ps-first-name"
+			>Please name your profile so we can map your voice across the ten sung Russian
+			vowels.</label
+		>
 		<div class="ps-name-row">
 			<input
 				id="ps-first-name"
@@ -263,9 +272,20 @@
 	.ps-first {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.875rem;
 		align-items: center;
-		padding: 0.5rem 0;
+		padding: 0.75rem 0 0.5rem;
+	}
+	/* The first-launch lede: the pane's typographic hero (Kimi, 2026-07-11).
+	   Larger, centred, primary ink; the input row below reads as the
+	   response to this invitation, not the main event. */
+	.ps-first-lede {
+		font-size: 1.0625rem;
+		font-weight: 600;
+		line-height: 1.45;
+		color: var(--ink-primary);
+		text-align: center;
+		max-width: 22rem;
 	}
 	/* The always-interactive header: quiet in degree (small, muted), never
 	   absent in kind (Kimi's ruling on the solo-header contradiction). */
