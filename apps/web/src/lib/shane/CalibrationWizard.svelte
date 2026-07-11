@@ -39,6 +39,7 @@
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import { derive } from '$lib/shane/engine/derivations';
+	import { applyIghDivergence } from '$lib/shane/engine/divergence';
 	import {
 		loadStore,
 		saveStore,
@@ -135,6 +136,36 @@
 
 	function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
 		return Object.keys(f).length > 0;
+	}
+
+	/**
+	 * The profile-level [ɨ] divergence pass, wired 2026-07-11 (it existed in
+	 * divergence.ts since the batch core landed but was called by nothing, so
+	 * a directly sampled [ɨ] skipped the check entirely — the standing
+	 * correctness gap). Engine spec §7, relocation Option A: a sampled [ɨ] is
+	 * checked against the expectation built from the singer's own [i] and
+	 * [u]; divergence, or a missing/Provisional anchor, resolves [ɨ] to
+	 * Provisional (Dann's locked anchor rule). Runs on every profile
+	 * mutation; a no-op unless a direct [ɨ] sample exists. The pass mutates,
+	 * so it runs on a clone, and the internal isDivergent flag is stripped —
+	 * the §9 boundary keeps that flag internal, and the resolved reading is
+	 * the whole outcome the UI and the store need.
+	 *
+	 * Known seam, recorded: if the pass downgrades a just-captured [ɨ]
+	 * mid-flow, the roster shows Provisional immediately but the Pacifier's
+	 * node keeps its ✓ until the capture phase next remounts (the locked
+	 * component owns its node state; reconciling live would need a new hook,
+	 * not added unreviewed).
+	 */
+	function withIghPass(
+		map: Partial<Record<Vowel, CalibratedFormant>>
+	): Partial<Record<Vowel, CalibratedFormant>> {
+		const igh = map['ɨ'];
+		if (!igh) return map;
+		const clone = { ...map, ɨ: { ...igh } };
+		applyIghDivergence(clone);
+		delete (clone['ɨ'] as { isDivergent?: boolean | null }).isDivergent;
+		return clone;
 	}
 
 	// Hydration: the active voice's readings become the working profile; a
@@ -363,16 +394,21 @@
 	// the tour is waiting on holds and advances; an out-of-turn capture
 	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
-		profile = { ...profile, [vowel]: formant };
+		profile = withIghPass({ ...profile, [vowel]: formant });
 		persist();
+		// The hold and the announcement use the post-pass reading: a divergent
+		// [ɨ] that the pass resolved to Provisional must not be celebrated as
+		// captured (no capture-time modal, per the locked decision — the
+		// ordinary provisional hold wording carries it).
+		const effective = profile[vowel] ?? formant;
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
-		logAnnounce = `Added to progress: ${SPOKEN_NAME[vowel]}, ${Math.round(formant.f1)} hertz, ${readingLabel(formant.reading)}.`;
-		onVowelCaptured?.(vowel, formant);
+		logAnnounce = `Added to progress: ${SPOKEN_NAME[vowel]}, ${Math.round(effective.f1)} hertz, ${readingLabel(effective.reading)}.`;
+		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
-			beginHold(vowel, formant.reading === 'captured' ? 'good' : 'provisional');
+			beginHold(vowel, effective.reading === 'captured' ? 'good' : 'provisional');
 		} else if (currentVowel) {
 			// Out of turn: the roster took the value; the tour stays put.
 			pacifierRef?.activateVowel(currentVowel);
@@ -389,9 +425,11 @@
 		for (const [g, f] of Object.entries(formants) as [Vowel, CalibratedFormant][]) {
 			if (f && f.reading !== 'estimated') direct[g] = f;
 		}
-		profile = direct;
+		// The [ɨ] pass runs here too: a long-press skip can remove an anchor,
+		// which must resolve a sampled [ɨ] to Provisional (anchor rule).
+		profile = withIghPass(direct);
 		persist();
-		onProfileChange?.(direct);
+		onProfileChange?.(profile);
 	}
 
 	function handleRolledBack(vowel: Vowel) {
