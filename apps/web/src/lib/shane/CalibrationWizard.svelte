@@ -380,9 +380,18 @@
 	}
 
 	function handleProfileChange(formants: Partial<Record<Vowel, CalibratedFormant>>) {
-		profile = formants;
+		// The Pacifier now receives the merged map (sung plus derived
+		// previews, for the ≈ badge) and reports its full map back, so
+		// estimated entries must be stripped here or synthetic values would
+		// leak into the stored profile — the only-sung-is-stored rule
+		// (Mitton 2020 §5.3.3 discipline) enforced at the boundary.
+		const direct: Partial<Record<Vowel, CalibratedFormant>> = {};
+		for (const [g, f] of Object.entries(formants) as [Vowel, CalibratedFormant][]) {
+			if (f && f.reading !== 'estimated') direct[g] = f;
+		}
+		profile = direct;
 		persist();
-		onProfileChange?.(formants);
+		onProfileChange?.(direct);
 	}
 
 	function handleRolledBack(vowel: Vowel) {
@@ -555,9 +564,20 @@
 		ʌ: ['ɑ', 'ɛ']
 	};
 
-	/** Usable as a derivation anchor: sampled, not Provisional, both formants present. */
+	/**
+	 * Usable as a derivation anchor: sampled with both resonances present.
+	 * A Provisional anchor still derives (Dann, 2026-07-11): a greyed
+	 * synthetic value beats an empty cell, and the derivation math needs
+	 * numbers, not confidence labels. The earlier not-Provisional gate
+	 * blocked every derivation whenever a session ran Provisional-heavy,
+	 * which is exactly when the singer most wants the full picture. The
+	 * locked anchor rule (a Provisional [i]/[u] resolves [ɨ] to
+	 * Provisional) belongs to the engine's resolution pass
+	 * (applyIghDivergence, not yet wired); this preview stays display-only
+	 * and labelled Estimated until that pass takes over.
+	 */
 	function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedFormant & { f2: number } {
-		return !!f && f.reading !== 'provisional' && typeof f.f2 === 'number';
+		return !!f && typeof f.f2 === 'number';
 	}
 
 	/** The row's display value: the direct sample, or a derived preview for optional vowels. */
@@ -574,6 +594,21 @@
 		}
 		return derive(g, cap) ?? undefined;
 	}
+
+	// The chart receives the merged map (Kimi's ruling, 2026-07-11): sung
+	// values plus derived previews, so an estimated node wears its ≈ badge
+	// and "the chart knows what the roster knows." Display-only flow: the
+	// return path strips estimated entries (see handleProfileChange).
+	let pacifierFormants = $derived.by(() => {
+		const m: Partial<Record<Vowel, CalibratedFormant>> = { ...profile };
+		for (const g of OPTIONAL_VOWELS) {
+			if (!m[g]) {
+				const d = displayFormant(g);
+				if (d) m[g] = d;
+			}
+		}
+		return m;
+	});
 
 	$effect(() => () => clearAllTimers());
 </script>
@@ -642,6 +677,12 @@
 								class="wizard-roster-reading"
 								class:is-provisional={f.reading === 'provisional'}
 							>
+								<!-- The derived siglum (Dann, 2026-07-11): ≈ joins the
+								     calibration sigla (✓ captured, ↻ provisional) marking
+								     synthetic values. aria-hidden: the word "Estimated"
+								     already says it for screen readers. The matching
+								     Pacifier node badge is with Kimi for review. -->
+								{#if f.reading === 'estimated'}<span aria-hidden="true">≈&nbsp;</span>{/if}
 								{readingLabel(f.reading)}
 							</span>
 						{/if}
@@ -763,7 +804,7 @@
 						bind:this={pacifierRef}
 						session={captureSession}
 						{voiceType}
-						initialFormants={profile}
+						initialFormants={pacifierFormants}
 						onVowelCaptured={handleVowelCaptured}
 						onProfileChange={handleProfileChange}
 						onRetakeRolledBack={handleRolledBack}

@@ -37,6 +37,13 @@
 	import type { VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 
+	// 'estimated' added 2026-07-11 (Kimi's ruling, additive-only): a node
+	// whose value is a derived preview, not a sung capture. It rests with
+	// dormant's exact visuals plus the ≈ accounting badge, and it arms and
+	// captures exactly like dormant — a singer can always supersede a
+	// synthetic value by singing. "The chart should know what the roster
+	// knows": without this state, a derived vowel showed as a plain dormant
+	// circle while the roster beneath displayed its value.
 	type NodeState =
 		| 'deselected'
 		| 'dormant'
@@ -45,7 +52,8 @@
 		| 'listening'
 		| 'working'
 		| 'captured'
-		| 'provisional';
+		| 'provisional'
+		| 'estimated';
 
 	interface PacifierProps {
 		voiceType?: VoiceType;
@@ -211,7 +219,13 @@
 	const initNode = (g: Vowel): PNode => {
 		const fm = initialFormants?.[g];
 		return {
-			state: fm ? (fm.reading === 'provisional' ? 'provisional' : 'captured') : 'dormant',
+			state: fm
+				? fm.reading === 'provisional'
+					? 'provisional'
+					: fm.reading === 'estimated'
+						? 'estimated'
+						: 'captured'
+				: 'dormant',
 			sampled: !!fm && fm.reading !== 'estimated',
 			skipped: false,
 			formant: fm,
@@ -282,7 +296,9 @@
 				? 'provisional'
 				: n.sampled
 					? 'captured'
-					: 'dormant';
+					: n.formant?.reading === 'estimated'
+						? 'estimated'
+						: 'dormant';
 
 	const formantsMap = (): Partial<Record<Vowel, CalibratedFormant>> => {
 		const m: Partial<Record<Vowel, CalibratedFormant>> = {};
@@ -440,7 +456,9 @@
 		// numbers, so the singer is never asked to adjudicate two fR1/fR2
 		// pairs. This only applies to a genuine re-take (a previous Captured
 		// reading already sits on this vowel); a first attempt that reads
-		// Provisional always proceeds as usual below.
+		// Provisional always proceeds as usual below. (An estimated preview is
+		// not a Captured previous: a sung Provisional supersedes a synthetic
+		// value, bespoke-first.)
 		const previousWasCaptured = n.sampled && !n.skipped && n.formant?.reading === 'captured';
 		if (previousWasCaptured) {
 			if (!reducedMotion) n.completeFlash = 'flash-retake';
@@ -533,6 +551,11 @@
 				announce = `${spoken(layout[idx].g)} selected.`;
 				break;
 			case 'dormant':
+			// An estimated node arms exactly like a dormant one (Kimi's
+			// ruling, 2026-07-11): the replacement of a synthetic value by a
+			// sung one is silent and automatic, and the arming caption stays
+			// procedural — no metadata chatter at the moment of breath.
+			case 'estimated':
 				n.state = 'armed';
 				announce = `${spoken(layout[idx].g)} armed. Tap again to begin.`;
 				break;
@@ -626,6 +649,17 @@
 		let sigilColor = '';
 		switch (n.state) {
 			case 'dormant':
+				break;
+			// The ≈ accounting badge (Kimi's ruling, 2026-07-11): an estimated
+			// node keeps dormant's exact resting visuals — no third stroke
+			// treatment competing with the capture ritual's feedback — plus the
+			// badge alone. Tertiary ink on the white badge measures 5.77:1
+			// (computed against app.css values), clearing the 3:1 bar, so no
+			// ghost pill is needed. ≈ is an accounting mark, not an achievement
+			// mark: it says "this node carries a value, but not a sung one."
+			case 'estimated':
+				sigil = '≈';
+				sigilColor = 'var(--ink-tertiary)';
 				break;
 			case 'deselected':
 				stroke = 'var(--ink-tertiary)';
