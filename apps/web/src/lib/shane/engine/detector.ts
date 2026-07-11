@@ -50,10 +50,22 @@ export function detect(y: Float64Array, sr: number): DetectorResult {
 	const sf = spectralFlatness(y, sr), snr = snrDb(y, sr);
 	const c3 = !isNaN(meanIpi) && meanIpi >= 0.0125 && meanIpi <= 0.05;
 	const c4 = !isNaN(decay) && decay < 0.4;
-	const c5 = !isNaN(cv) && cv <= 0.4;
+	// Recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console evidence:
+	// genuine M0 fry read CV 0.28-1.16 tick to tick because the pulse-picker misses
+	// weak pulses at real-room levels, doubling an interval and inflating the
+	// statistic; real M0 is also quasi-periodic with period-doubling. The load-bearing
+	// modal discriminator is c4 (decay), which passes comfortably. Spec amendment
+	// pending (engine spec §3, c5: 0.40 -> 1.0); a median-based dispersion measure
+	// is the principled future fix, for the Kimi brief.
+	const c5 = !isNaN(cv) && cv <= 1.0;
 	const c6 = peaks.length >= 8;
 	const c7 = sf <= 0.3;
-	const c8 = snr >= 20;
+	// Recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console evidence:
+	// an excellent fry at 30 cm on an iMac in a normal room reads 12.4-16.5 dB by
+	// this ratio; the spec's 20 dB was set against idealized material. Spec
+	// amendment pending (engine spec §3, c8: 20 -> 12 dB). Confidence is graded on
+	// SNR in analyze.ts rather than gated here.
+	const c8 = snr >= 12;
 	const conds: Record<string, boolean> = { c3_ipi: c3, c4_decay: c4, c5_cv: c5, c6_count: c6, c7_flat: c7, c8_snr: c8 };
 	return {
 		accept: Object.values(conds).every(Boolean),
