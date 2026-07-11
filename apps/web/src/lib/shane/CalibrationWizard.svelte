@@ -599,10 +599,22 @@
 		<div class="wizard-phase">
 			<h2 id="wizard-title">Profile summary</h2>
 			{#if finished}
+				<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
+				     roster stays visible and curatable — Re-take still works and
+				     the optional-vowels invitation survives. Until persistence
+				     (development plan Phase 2b) and the repertoire-fit surface
+				     consume the profile, this view remains the singer's home,
+				     so it must never strand them on a bare confirmation. -->
 				<p class="wizard-lede">
 					Saved for this session. Profile persistence is a later build (development plan Phase
-					2b), so this won't survive a reload yet.
+					2b), so this won't survive a reload yet. You can keep refining any reading below.
 				</p>
+				{@render rosterTable(true)}
+				{#if !optionalOffered && defaultsComplete}
+					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
+						Experienced singers can provide direct samples for the three optional vowels.
+					</button>
+				{/if}
 			{:else}
 				<p class="wizard-lede">
 					{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
