@@ -23,13 +23,29 @@
 	 * real audio. The readiness phase's measurements remain mocked (the one
 	 * remaining seam); wiring them live is the next gated step.
 	 *
+	 * Persistence (development plan Phase 2b) landed 2026-07-11 on Kimi's
+	 * gate, and widened the same session to multiple named voices
+	 * (Claude-Kimi-Dann consensus; see profileStore.ts and
+	 * ProfileSwitcher.svelte for the full consensus record). The switcher
+	 * heads the drawer; the active voice's readings hydrate this wizard,
+	 * saving on every change; first launch asks for a name before the
+	 * Welcome phase; Start over clears the active voice's readings only.
+	 *
 	 * Replaces the earlier placeholder shell (Ilya2006B fold-in), which
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { tick } from 'svelte';
 	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
+	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import { derive } from '$lib/shane/engine/derivations';
+	import {
+		loadStore,
+		saveStore,
+		newVoiceId,
+		type ProfileStore,
+		type StoredVoice
+	} from '$lib/shane/profileStore';
 	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
@@ -47,6 +63,12 @@
 	// 0.9 s + 1.6 s = 2.5 s total from end of voicing to advance, replacing
 	// the previous 0.9 s + 2.5 s = 3.4 s stack.
 	const HOLD_MS = 1600;
+
+	// The default-name base ("Voice 1", "Voice 2", …), Kimi's ruling:
+	// domain-appropriate, scales to variants and guests without special
+	// pleading. French mode ("Voix N") lands with the calibration-UI French
+	// pass (standing open item).
+	const DEFAULT_NAME_BASE = 'Voice';
 
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
 	type ReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr';
@@ -71,9 +93,10 @@
 		onProfileChange?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
 		/**
 		 * Fires once the singer taps Finish on the Profile summary (spec v1 §2
-		 * Phase 3). No persistence is wired up yet (development plan Phase 2b,
-		 * localStorage persistence: not started); a parent can hook this in
-		 * when that lands. Until then the wizard just acknowledges completion.
+		 * Phase 3). The profile persists to device storage continuously
+		 * (profileStore.ts), so this hook is for a parent that wants the
+		 * completion moment itself (the future profile-ready main-pane state,
+		 * Kimi-gated behind persistence, which is now real).
 		 */
 		onComplete?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
 	}
@@ -95,8 +118,34 @@
 	// requested only inside start().
 	const captureSession = new LiveCaptureSession();
 
-	let phase = $state<Phase>('welcome');
-	let profile = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
+	// ── The voice store (Phase 2b v2, multiple named voices, 2026-07-11) ─────
+	// One read at construction; a v1 single profile migrates transparently
+	// to become the first named voice. All mutations flow through the
+	// functions below and save the whole store, failure-silent.
+	let store = $state<ProfileStore>(loadStore(`${DEFAULT_NAME_BASE} 1`));
+	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
+	// The smallest unused sequential default, so deletions never cause
+	// name collisions ("Voice 2" existing skips to "Voice 3").
+	let nextDefaultName = $derived.by(() => {
+		const names = new Set(store.voices.map((v) => v.name));
+		let n = store.voices.length + 1;
+		while (names.has(`${DEFAULT_NAME_BASE} ${n}`)) n += 1;
+		return `${DEFAULT_NAME_BASE} ${n}`;
+	});
+
+	function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
+		return Object.keys(f).length > 0;
+	}
+
+	// Hydration: the active voice's readings become the working profile; a
+	// voice with readings reopens at the summary (the workshop, per Kimi's
+	// division of labour), a fresh one at Welcome. With no voices at all,
+	// the switcher renders the first-launch naming and the phases wait.
+	// svelte-ignore state_referenced_locally
+	const initialFormants = store.voices.find((v) => v.id === store.activeId)?.formants ?? {};
+	let profile = $state<Partial<Record<Vowel, CalibratedFormant>>>({ ...initialFormants });
+	let phase = $state<Phase>(hasAnyReadings(initialFormants) ? 'summary' : 'welcome');
+
 	let queue = $state<Vowel[]>([...DEFAULT_VOWELS]);
 	let queueIndex = $state(0);
 	let optionalOffered = $state(false);
@@ -107,6 +156,88 @@
 	// (Dann, 2026-07-10): it must not appear when the summary is reached
 	// early by any path (a single-vowel re-take pass, or a queue bug).
 	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
+
+	function persistStore() {
+		saveStore($state.snapshot(store) as ProfileStore);
+	}
+	/** Write the working profile into the active voice and save (failure-silent). */
+	function persist() {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (!v) return;
+		v.formants = $state.snapshot(profile) as Partial<Record<Vowel, CalibratedFormant>>;
+		v.updatedAt = new Date().toISOString();
+		persistStore();
+	}
+
+	// ── Voice management (consensus, 2026-07-11) ─────────────────────────────
+	/** Interrupt everything transient and land on the given phase. */
+	function resetFlow(to: Phase) {
+		clearAllTimers();
+		holdTimer = undefined;
+		holdActive = false;
+		holdVowel = undefined;
+		paused = false;
+		confirmingReset = false;
+		toastVisible = false;
+		queue = [...DEFAULT_VOWELS];
+		queueIndex = 0;
+		optionalOffered = false;
+		finished = false;
+		phase = to;
+	}
+
+	function createVoice(name: string, fromFormants?: Partial<Record<Vowel, CalibratedFormant>>) {
+		const now = new Date().toISOString();
+		const v: StoredVoice = {
+			id: newVoiceId(),
+			name,
+			createdAt: now,
+			updatedAt: now,
+			formants: fromFormants ?? {}
+		};
+		store.voices.push(v);
+		store.activeId = v.id;
+		profile = { ...v.formants };
+		resetFlow(hasAnyReadings(profile) ? 'summary' : 'welcome');
+		persistStore();
+	}
+
+	function duplicateActiveVoice(name: string) {
+		// A duplicate serves Dann's cases 2 and 3: a style variant you re-take
+		// a few vowels on, or a progress snapshot you leave alone.
+		createVoice(name, $state.snapshot(profile) as Partial<Record<Vowel, CalibratedFormant>>);
+	}
+
+	function selectVoice(id: string) {
+		if (id === store.activeId) return;
+		const v = store.voices.find((x) => x.id === id);
+		if (!v) return;
+		store.activeId = id;
+		profile = { ...v.formants };
+		resetFlow(hasAnyReadings(profile) ? 'summary' : 'welcome');
+		persistStore();
+	}
+
+	function renameActiveVoice(name: string) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (!v) return;
+		v.name = name;
+		persistStore();
+	}
+
+	function deleteActiveVoice() {
+		// Only reachable when more than one voice exists (the switcher hides
+		// Delete when solo; Start over covers the solo case).
+		if (store.voices.length <= 1) return;
+		const idx = store.voices.findIndex((v) => v.id === store.activeId);
+		if (idx === -1) return;
+		store.voices.splice(idx, 1);
+		const next = store.voices[0];
+		store.activeId = next.id;
+		profile = { ...next.formants };
+		resetFlow(hasAnyReadings(profile) ? 'summary' : 'welcome');
+		persistStore();
+	}
 
 	// ── Phase 1, readiness (mocked; see readinessOutcome doc above) ──────────
 	let readinessStep = $state<'quiet' | 'fry' | 'done'>('quiet');
@@ -141,6 +272,14 @@
 	// snippet. One source in the code; the convention extends across Shane
 	// and Ilya as other surfaces are touched.
 	let logAnnounce = $state('');
+	// The hold banner's announcement text; delivered through a persistent
+	// hidden live region (see beginHold and Kimi's review, 2026-07-11).
+	let holdAnnounce = $state('');
+
+	// Start over (Phase 2b): clearing a voice's captures deserves one
+	// deliberate confirmation, phrased as a question naming the action,
+	// never a verdict. It clears readings only; the voice keeps its name.
+	let confirmingReset = $state(false);
 
 	// Pause / resume (spec v1 §3). Best-effort: the Pacifier does not yet
 	// surface a "mid-ritual" signal to a host component, so Pause is offered
@@ -156,7 +295,12 @@
 
 	let timers: ReturnType<typeof setTimeout>[] = [];
 	function after(ms: number, fn: () => void): ReturnType<typeof setTimeout> {
-		const t = setTimeout(fn, ms);
+		// A fired timer prunes itself from the list (Kimi's review polish),
+		// so repeated phase entries never accumulate stale ids.
+		const t = setTimeout(() => {
+			timers = timers.filter((x) => x !== t);
+			fn();
+		}, ms);
 		timers.push(t);
 		return t;
 	}
@@ -220,6 +364,7 @@
 	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
 		profile = { ...profile, [vowel]: formant };
+		persist();
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
@@ -236,16 +381,17 @@
 
 	function handleProfileChange(formants: Partial<Record<Vowel, CalibratedFormant>>) {
 		profile = formants;
+		persist();
 		onProfileChange?.(formants);
 	}
 
 	function handleRolledBack(vowel: Vowel) {
 		// Spec v1 §3, the re-take rule: the previous Captured value stands and
 		// the profile did not change, so there is no onVowelCaptured /
-		// onProfileChange to forward (and no roster change or announcement
-		// either; the banner alone explains the rollback). Same out-of-turn
-		// guard as handleVowelCaptured: only the current vowel's rollback
-		// holds and advances the tour.
+		// onProfileChange to forward (and no roster change, announcement, or
+		// save either; the banner alone explains the rollback). Same
+		// out-of-turn guard as handleVowelCaptured: only the current vowel's
+		// rollback holds and advances the tour.
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
 			beginHold(vowel, 'rolled-back');
@@ -258,6 +404,17 @@
 		holdVowel = vowel;
 		holdKind = kind;
 		holdActive = true;
+		// The hold's announcement goes through the persistent hidden live
+		// region (Kimi's review, 2026-07-11): a live region inserted into the
+		// DOM together with its content is often missed by screen readers, so
+		// the visual banner renders conditionally for sighted users while the
+		// announcement text lands in a region that always exists.
+		holdAnnounce =
+			kind === 'good'
+				? `${SPOKEN_NAME[vowel]}, captured.`
+				: kind === 'rolled-back'
+					? 'New sample was less certain, so the previous one was kept.'
+					: 'Noted, moving on. You can re-take it from the summary.';
 		holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
 			holdTimer = undefined;
@@ -337,9 +494,37 @@
 		paused = !paused;
 	}
 
+	/**
+	 * The escape hatch (Kimi's review, 2026-07-11): the optional-vowel tail
+	 * and the single-vowel re-take pass both re-enter the capture phase with
+	 * no way back to the summary short of completing every capture — a trap
+	 * door violating the no-dead-ends principle. This quiet affordance shows
+	 * only when the default set is already complete (so the main seven-vowel
+	 * tour is never interrupted by it) and returns to the summary, cancelling
+	 * any capture in flight (the session teardown is fire-and-forget and the
+	 * Pacifier handles the CANCELLED callback gracefully).
+	 */
+	function returnToSummary() {
+		captureSession.cancel();
+		clearAllTimers();
+		holdTimer = undefined;
+		holdActive = false;
+		holdVowel = undefined;
+		paused = false;
+		phase = 'summary';
+	}
+
 	function finish() {
+		persist();
 		onComplete?.(profile);
 		finished = true;
+	}
+
+	// ── Start over: clears the active voice's readings, keeps its name ──────
+	function confirmReset() {
+		profile = {};
+		persist();
+		resetFlow('welcome');
 	}
 
 	function readingLabel(reading: CalibratedFormant['reading'] | undefined): string {
@@ -423,6 +608,16 @@
 	start, greyed until a value lands, so the full schema is always
 	accounted for and the layout never shifts.
 -->
+<!-- The optional-vowels invitation, single-sourced (Kimi's review polish):
+     the summary renders it in both its finished and unfinished states. -->
+{#snippet optionalInvite()}
+	{#if !optionalOffered && defaultsComplete}
+		<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
+			Experienced singers can provide direct samples for the three optional vowels.
+		</button>
+	{/if}
+{/snippet}
+
 {#snippet rosterTable(showActions: boolean)}
 	<table class="wizard-roster">
 		<thead>
@@ -486,149 +681,189 @@
 	     Rendered unconditionally so the region exists before its first
 	     update, which some screen readers require to announce reliably. -->
 	<div class="visually-hidden" role="status">{logAnnounce}</div>
-	{#if phase === 'welcome'}
-		<div class="wizard-phase">
-			<h2 id="wizard-title">Finding Your Resonances</h2>
-			<!-- Phase 0 onboarding copy, Dann's draft (2026-07-01), closing the
-			     placeholder flagged in wizard spec v1 §5 / pacifier spec v11 §15. -->
-			<p class="wizard-lede">
-				Shane will measure your voice to build a formant profile, which is a map of your voice's
-				resonances that will be applied to the repertoire to determine fit. Follow the prompts.
-				This wizard assumes you read IPA. Your device needs a working mic and you should be in a
-				quiet space for the best capture of your resonances.
-			</p>
-			<details class="wizard-expander">
-				<summary>What is vocal fry?</summary>
-				<!-- Placeholder: the newcomer fry-description copy is deferred
-				     (wizard spec v1 §5; pacifier spec v11 §17). Ground in Titze
-				     1988 and Roubeau et al. 2009 when drafted. -->
-				<p>
-					A low, creaky voice register, easy to sustain and gentle on the voice. Shane reads its
-					resonances rather than your sung pitch, so comfort matters more than pitch here.
+	<!-- The hold banner's persistent live region (Kimi's review, 2026-07-11):
+	     always in the DOM so its first announcement is never missed; the
+	     visual banner below renders conditionally and carries no aria-live. -->
+	<div class="visually-hidden" role="status">{holdAnnounce}</div>
+
+	<!-- The voice switcher heads the drawer (Kimi: whose-voice-is-this is
+	     settled before any capture; the main pane stays a pure gallery).
+	     Inert during an active capture. With no voices saved, it renders
+	     the first-launch naming and the wizard phases wait behind it. -->
+	<ProfileSwitcher
+		voices={store.voices}
+		activeId={store.activeId}
+		disabled={phase === 'capture'}
+		{nextDefaultName}
+		onSelect={selectVoice}
+		onCreate={(n) => createVoice(n)}
+		onDuplicate={duplicateActiveVoice}
+		onRename={renameActiveVoice}
+		onDelete={deleteActiveVoice}
+	/>
+
+	{#if activeVoice}
+		{#if phase === 'welcome'}
+			<div class="wizard-phase">
+				<h2 id="wizard-title">Finding Your Resonances</h2>
+				<!-- Phase 0 onboarding copy, Dann's draft (2026-07-01), closing the
+				     placeholder flagged in wizard spec v1 §5 / pacifier spec v11 §15. -->
+				<p class="wizard-lede">
+					Shane will measure your voice to build a formant profile, which is a map of your voice's
+					resonances that will be applied to the repertoire to determine fit. Follow the prompts.
+					This wizard assumes you read IPA. Your device needs a working mic and you should be in a
+					quiet space for the best capture of your resonances.
 				</p>
-			</details>
-			<button type="button" class="wizard-primary" onclick={beginReadiness}>Begin</button>
-		</div>
-	{:else if phase === 'readiness'}
-		<div class="wizard-phase" aria-live="polite">
-			<h2 id="wizard-title">Getting ready</h2>
-			{#if readinessStep === 'quiet'}
-				<p class="wizard-lede">Listening for quiet. Stay silent for a moment.</p>
-			{:else if readinessStep === 'fry'}
-				<p class="wizard-lede">Now a throwaway fry, just to check the mic hears you.</p>
-			{:else}
-				<p class="wizard-lede">Readiness check complete.</p>
-				{#if fryMarginal}
-					<p class="wizard-guidance">
-						Your fry is reading near the edge of our range; a little lower or higher may read
-						cleaner.
+				<details class="wizard-expander">
+					<summary>What is vocal fry?</summary>
+					<!-- Placeholder: the newcomer fry-description copy is deferred
+					     (wizard spec v1 §5; pacifier spec v11 §17). Ground in Titze
+					     1988 and Roubeau et al. 2009 when drafted. -->
+					<p>
+						A low, creaky voice register, easy to sustain and gentle on the voice. Shane reads its
+						resonances rather than your sung pitch, so comfort matters more than pitch here.
 					</p>
-				{/if}
-				<button type="button" class="wizard-primary" onclick={beginCapture}>Continue</button>
-			{/if}
-		</div>
-	{:else if phase === 'capture'}
-		<div class="wizard-phase">
-			<div class="wizard-progress" role="status" aria-live="polite">
-				{#if currentVowel}
-					Vowel {queueIndex + 1} of {queue.length} — {@render vowelTag(currentVowel!)}
+				</details>
+				<button type="button" class="wizard-primary" onclick={beginReadiness}>Begin</button>
+			</div>
+		{:else if phase === 'readiness'}
+			<div class="wizard-phase" aria-live="polite">
+				<h2 id="wizard-title">Getting ready</h2>
+				{#if readinessStep === 'quiet'}
+					<p class="wizard-lede">Listening for quiet. Stay silent for a moment.</p>
+				{:else if readinessStep === 'fry'}
+					<p class="wizard-lede">Now a throwaway fry, just to check the mic hears you.</p>
 				{:else}
-					All set.
+					<p class="wizard-lede">Readiness check complete.</p>
+					{#if fryMarginal}
+						<p class="wizard-guidance">
+							Your fry is reading near the edge of our range; a little lower or higher may read
+							cleaner.
+						</p>
+					{/if}
+					<button type="button" class="wizard-primary" onclick={beginCapture}>Continue</button>
 				{/if}
 			</div>
-			{#if currentVowel}
-				<p class="wizard-cue">
-					Tap the {@render vowelTag(currentVowel!)} vowel to arm it, tap again to begin.
-				</p>
-			{/if}
-			<div class="wizard-pacifier-wrap">
-				<Pacifier
-					bind:this={pacifierRef}
-					session={captureSession}
-					{voiceType}
-					initialFormants={profile}
-					onVowelCaptured={handleVowelCaptured}
-					onProfileChange={handleProfileChange}
-					onRetakeRolledBack={handleRolledBack}
-				/>
+		{:else if phase === 'capture'}
+			<div class="wizard-phase">
+				<div class="wizard-progress" role="status" aria-live="polite">
+					{#if currentVowel}
+						Vowel {queueIndex + 1} of {queue.length} — {@render vowelTag(currentVowel!)}
+					{:else}
+						All set.
+					{/if}
+				</div>
+				{#if currentVowel}
+					<p class="wizard-cue">
+						Tap the {@render vowelTag(currentVowel!)} vowel to arm it, tap again to begin.
+					</p>
+				{/if}
+				<div class="wizard-pacifier-wrap">
+					<Pacifier
+						bind:this={pacifierRef}
+						session={captureSession}
+						{voiceType}
+						initialFormants={profile}
+						onVowelCaptured={handleVowelCaptured}
+						onProfileChange={handleProfileChange}
+						onRetakeRolledBack={handleRolledBack}
+					/>
+					{#if paused}
+						<div class="wizard-catcher" role="presentation"></div>
+					{/if}
+					{#if holdActive}
+						<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
+					{/if}
+				</div>
+				{@render rosterTable(false)}
 				{#if paused}
-					<div class="wizard-catcher" role="presentation"></div>
+					<div class="wizard-inline-banner">
+						<p>Paused. Resume when you're ready.</p>
+						<button type="button" class="wizard-primary" onclick={togglePause}>Resume</button>
+					</div>
+				{:else if holdActive && holdVowel}
+					<div class="wizard-inline-banner">
+						<p>
+							{#if holdKind === 'good'}
+								{@render vowelTag(holdVowel!)}, captured.
+							{:else if holdKind === 'rolled-back'}
+								New sample was less certain, so the previous one was kept.
+							{:else}
+								Noted, moving on. You can re-take it from the summary.
+							{/if}
+						</p>
+						<div class="wizard-hold-actions">
+							<button type="button" onclick={holdContinue}>Continue</button>
+							<button type="button" onclick={holdRetake}>Re-take</button>
+						</div>
+					</div>
+				{:else if currentVowel}
+					<div class="wizard-quiet-actions">
+						<button type="button" class="wizard-pause" onclick={togglePause}>Pause</button>
+						{#if defaultsComplete}
+							<!-- The escape hatch (Kimi's review): only offered once the
+							     seven defaults are complete, i.e. during the optional
+							     tail or a re-take pass, never mid-tour. -->
+							<button type="button" class="wizard-pause" onclick={returnToSummary}>
+								Return to summary
+							</button>
+						{/if}
+					</div>
 				{/if}
-				{#if holdActive}
-					<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
+				{#if toastVisible}
+					<div class="wizard-toast" role="status">
+						<p>
+							The room sounds a little lively. Your sample is still good, but a quieter space
+							would help.
+						</p>
+						<button
+							type="button"
+							class="wizard-toast-dismiss"
+							onclick={dismissToast}
+							aria-label="Dismiss">×</button
+						>
+					</div>
 				{/if}
 			</div>
-			{@render rosterTable(false)}
-			{#if paused}
-				<div class="wizard-inline-banner">
-					<p>Paused. Resume when you're ready.</p>
-					<button type="button" class="wizard-primary" onclick={togglePause}>Resume</button>
-				</div>
-			{:else if holdActive && holdVowel}
-				<div class="wizard-inline-banner" role="status" aria-live="polite">
-					<p>
-						{#if holdKind === 'good'}
-							{@render vowelTag(holdVowel!)}, captured.
-						{:else if holdKind === 'rolled-back'}
-							New sample was less certain, so the previous one was kept.
-						{:else}
-							Noted, moving on. You can re-take it from the summary.
-						{/if}
+		{:else if phase === 'summary'}
+			<div class="wizard-phase">
+				<h2 id="wizard-title">Profile summary</h2>
+				{#if finished}
+					<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
+					     roster stays visible and curatable — Re-take still works and
+					     the optional-vowels invitation survives. With persistence
+					     (Phase 2b) the confirmation is true across reloads. -->
+					<p class="wizard-lede">
+						Your profile is saved on this device. You can keep refining any reading below.
 					</p>
-					<div class="wizard-hold-actions">
-						<button type="button" onclick={holdContinue}>Continue</button>
-						<button type="button" onclick={holdRetake}>Re-take</button>
+					{@render rosterTable(true)}
+					{@render optionalInvite()}
+				{:else}
+					<p class="wizard-lede">
+						{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
+						anything uncertain before you finish.
+					</p>
+					{@render rosterTable(true)}
+					{@render optionalInvite()}
+					<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
+				{/if}
+				{#if confirmingReset}
+					<div class="wizard-inline-banner">
+						<p>This clears every reading saved for this voice. Start fresh?</p>
+						<div class="wizard-hold-actions">
+							<button type="button" onclick={confirmReset}>Start fresh</button>
+							<button type="button" onclick={() => (confirmingReset = false)}>
+								Keep my profile
+							</button>
+						</div>
 					</div>
-				</div>
-			{:else if currentVowel}
-				<button type="button" class="wizard-pause" onclick={togglePause}>Pause</button>
-			{/if}
-			{#if toastVisible}
-				<div class="wizard-toast" role="status">
-					<p>
-						The room sounds a little lively. Your sample is still good, but a quieter space would
-						help.
-					</p>
-					<button type="button" class="wizard-toast-dismiss" onclick={dismissToast} aria-label="Dismiss"
-						>×</button
-					>
-				</div>
-			{/if}
-		</div>
-	{:else if phase === 'summary'}
-		<div class="wizard-phase">
-			<h2 id="wizard-title">Profile summary</h2>
-			{#if finished}
-				<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
-				     roster stays visible and curatable — Re-take still works and
-				     the optional-vowels invitation survives. Until persistence
-				     (development plan Phase 2b) and the repertoire-fit surface
-				     consume the profile, this view remains the singer's home,
-				     so it must never strand them on a bare confirmation. -->
-				<p class="wizard-lede">
-					Saved for this session. Profile persistence is a later build (development plan Phase
-					2b), so this won't survive a reload yet. You can keep refining any reading below.
-				</p>
-				{@render rosterTable(true)}
-				{#if !optionalOffered && defaultsComplete}
-					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
-						Experienced singers can provide direct samples for the three optional vowels.
+				{:else}
+					<button type="button" class="wizard-pause" onclick={() => (confirmingReset = true)}>
+						Start over
 					</button>
 				{/if}
-			{:else}
-				<p class="wizard-lede">
-					{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
-					anything uncertain before you finish.
-				</p>
-				{@render rosterTable(true)}
-				{#if !optionalOffered && defaultsComplete}
-					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
-						Experienced singers can provide direct samples for the three optional vowels.
-					</button>
-				{/if}
-				<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
-			{/if}
-		</div>
+			</div>
+		{/if}
 	{/if}
 </section>
 
@@ -861,6 +1096,36 @@
 	.wizard-roster-action button:hover {
 		border-color: var(--sage);
 		color: var(--sage);
+	}
+	/* Narrow-viewport hardening (Dann's call on Kimi's review, 2026-07-11):
+	   the column form holds at every width; small screens get tighter
+	   padding and wrapping vowel names rather than a different layout. */
+	@media (max-width: 380px) {
+		.wizard-roster {
+			font-size: 0.8125rem;
+		}
+		.wizard-roster thead th,
+		.wizard-roster-vowel,
+		.wizard-roster-value {
+			padding: 0.3125rem 0.375rem;
+		}
+		.wizard-roster-vowel {
+			overflow-wrap: anywhere;
+		}
+		.wizard-roster-action {
+			padding: 0.3125rem 0.25rem;
+		}
+		.wizard-roster-action button {
+			padding: 0.25rem 0.5rem;
+		}
+	}
+
+	.wizard-quiet-actions {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
 	}
 
 	.wizard-inline-banner {
