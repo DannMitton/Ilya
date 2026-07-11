@@ -103,6 +103,10 @@
 	let finished = $state(false);
 	let currentVowel = $derived<Vowel | undefined>(queue[queueIndex]);
 	let capturedCount = $derived(Object.values(profile).filter((f) => !!f).length);
+	// The optional-vowels invitation waits for a complete default set
+	// (Dann, 2026-07-10): it must not appear when the summary is reached
+	// early by any path (a single-vowel re-take pass, or a queue bug).
+	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
 
 	// ── Phase 1, readiness (mocked; see readinessOutcome doc above) ──────────
 	let readinessStep = $state<'quiet' | 'fry' | 'done'>('quiet');
@@ -205,6 +209,15 @@
 	}
 
 	// ── Capture-completion routing ────────────────────────────────────────
+	// Bug fix (Dann's report, 2026-07-10): the queue previously advanced on
+	// ANY completed capture, without checking which vowel had completed. An
+	// out-of-turn capture (re-taking an earlier vowel mid-flow through the
+	// Pacifier's own two-tap ritual) therefore burned one of the remaining
+	// queue slots per completion, and enough of them exhausted the queue and
+	// opened the summary after only four unique vowels. Now: every capture
+	// updates the profile and the roster, but only a capture of the vowel
+	// the tour is waiting on holds and advances; an out-of-turn capture
+	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
 		profile = { ...profile, [vowel]: formant };
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
@@ -213,7 +226,12 @@
 		logAnnounce = `Added to progress: ${SPOKEN_NAME[vowel]}, ${Math.round(formant.f1)} hertz, ${readingLabel(formant.reading)}.`;
 		onVowelCaptured?.(vowel, formant);
 		if (phase !== 'capture' || paused) return;
-		beginHold(vowel, formant.reading === 'captured' ? 'good' : 'provisional');
+		if (vowel === currentVowel) {
+			beginHold(vowel, formant.reading === 'captured' ? 'good' : 'provisional');
+		} else if (currentVowel) {
+			// Out of turn: the roster took the value; the tour stays put.
+			pacifierRef?.activateVowel(currentVowel);
+		}
 	}
 
 	function handleProfileChange(formants: Partial<Record<Vowel, CalibratedFormant>>) {
@@ -225,9 +243,15 @@
 		// Spec v1 §3, the re-take rule: the previous Captured value stands and
 		// the profile did not change, so there is no onVowelCaptured /
 		// onProfileChange to forward (and no roster change or announcement
-		// either; the banner alone explains the rollback).
+		// either; the banner alone explains the rollback). Same out-of-turn
+		// guard as handleVowelCaptured: only the current vowel's rollback
+		// holds and advances the tour.
 		if (phase !== 'capture' || paused) return;
-		beginHold(vowel, 'rolled-back');
+		if (vowel === currentVowel) {
+			beginHold(vowel, 'rolled-back');
+		} else if (currentVowel) {
+			pacifierRef?.activateVowel(currentVowel);
+		}
 	}
 
 	function beginHold(vowel: Vowel, kind: HoldKind) {
@@ -585,7 +609,7 @@
 					anything uncertain before you finish.
 				</p>
 				{@render rosterTable(true)}
-				{#if !optionalOffered}
+				{#if !optionalOffered && defaultsComplete}
 					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
 						Experienced singers can provide direct samples for the three optional vowels.
 					</button>
