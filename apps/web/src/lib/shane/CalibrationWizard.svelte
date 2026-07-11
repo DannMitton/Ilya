@@ -116,6 +116,23 @@
 	let holdKind = $state<HoldKind>('good');
 	let holdTimer: ReturnType<typeof setTimeout> | undefined;
 
+	// ── Capture progress log (Claude-Kimi consensus, 2026-07-10) ─────────────
+	// A read-only log under the quadrilateral, one row per completed vowel.
+	// Kimi's ruling, in full: values shown but structurally subordinate (the
+	// reading word is the visual anchor; the numbers are metadata, "Hz"
+	// appended, never coloured); the container appears once, on the first
+	// capture, claims a fixed height, and never shifts layout afterward;
+	// internal scroll on overflow with an instant (non-smooth) jump to the
+	// newest row; the two-line row form at every width; read-only as a
+	// single-source-of-truth boundary (the table is a log, the quadrilateral
+	// is the instrument — no Re-take buttons here); and a dedicated
+	// visually-hidden polite live region announcing each committed row,
+	// because this log is a screen-reader user's first exposure to the
+	// numeric value (the hold banner carries no number).
+	let progressOrder = $state<Vowel[]>([]);
+	let logEl: HTMLElement | undefined = $state();
+	let logAnnounce = $state('');
+
 	// Pause / resume (spec v1 §3). Best-effort: the Pacifier does not yet
 	// surface a "mid-ritual" signal to a host component, so Pause is offered
 	// whenever the wizard is not itself in the post-capture hold. A singer
@@ -185,6 +202,13 @@
 	// ── Capture-completion routing ────────────────────────────────────────
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
 		profile = { ...profile, [vowel]: formant };
+		// The progress log: append once per vowel (a re-take updates the
+		// existing row through `profile`; the log's order is capture order).
+		if (!progressOrder.includes(vowel)) progressOrder = [...progressOrder, vowel];
+		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
+		// confirmation, this is the number's first availability to non-visual
+		// users. Speakable name, never the raw glyph (§4.6 discipline).
+		logAnnounce = `Added to progress: ${SPOKEN_NAME[vowel]}, ${Math.round(formant.f1)} hertz, ${readingLabel(formant.reading)}.`;
 		onVowelCaptured?.(vowel, formant);
 		if (phase !== 'capture' || paused) return;
 		beginHold(vowel, formant.reading === 'captured' ? 'good' : 'provisional');
@@ -198,7 +222,8 @@
 	function handleRolledBack(vowel: Vowel) {
 		// Spec v1 §3, the re-take rule: the previous Captured value stands and
 		// the profile did not change, so there is no onVowelCaptured /
-		// onProfileChange to forward. The sequence still continues.
+		// onProfileChange to forward (and no progress-log change or
+		// announcement either; the banner alone explains the rollback).
 		if (phase !== 'capture' || paused) return;
 		beginHold(vowel, 'rolled-back');
 	}
@@ -345,6 +370,28 @@
 		return typeof f.f2 === 'number' ? `${f1} · fR2 ${Math.round(f.f2)} Hz` : f1;
 	}
 
+	/**
+	 * The progress log's value line. Stricter than the summary's valueLabel:
+	 * fR2 appears mid-flow only when scored clear (f2Quality, engine spec §1),
+	 * so a marginal fR2 never dangles an uncertain number in front of a singer
+	 * mid-sequence; the summary remains the place to inspect marginal values.
+	 */
+	function logValueLabel(f: CalibratedFormant): string {
+		const f1 = `fR1 ${Math.round(f.f1)} Hz`;
+		return typeof f.f2 === 'number' && f.f2Quality === 'clear'
+			? `${f1} · fR2 ${Math.round(f.f2)} Hz`
+			: f1;
+	}
+
+	// Instant (non-smooth) jump to the newest log row when the count grows
+	// (Kimi, 2026-07-10: "a state change, not layout churn"). $effect runs
+	// after the DOM updates, so scrollHeight already includes the new row.
+	// On most viewports all seven default rows fit and this is a no-op.
+	$effect(() => {
+		void progressOrder.length;
+		if (logEl) logEl.scrollTop = logEl.scrollHeight;
+	});
+
 	$effect(() => () => clearAllTimers());
 </script>
 
@@ -359,6 +406,13 @@
 	>{SPOKEN_NAME[g]}{/snippet}
 
 <section class="calibration-wizard" aria-label="Your Resonances: voice calibration">
+	<!-- The dedicated polite live region for progress-log announcements
+	     (Kimi consensus, 2026-07-10). A single-purpose hidden region rather
+	     than aria-live on the log itself: table/list semantics plus live
+	     region semantics can double-announce or announce structural noise.
+	     Rendered unconditionally so the region exists before its first
+	     update, which some screen readers require to announce reliably. -->
+	<div class="visually-hidden" role="status">{logAnnounce}</div>
 	{#if phase === 'welcome'}
 		<div class="wizard-phase">
 			<h2 id="wizard-title">Finding Your Resonances</h2>
@@ -431,6 +485,33 @@
 					<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
 				{/if}
 			</div>
+			<!-- The capture progress log (Claude-Kimi consensus, 2026-07-10).
+			     Map → log → action: quadrilateral above, this log, then the
+			     status line. Appears once, on the first capture, at its fixed
+			     height (the one sanctioned layout shift); after that, rows
+			     enter with a 120 ms opacity fade and never move the container.
+			     Read-only by ruling: the log reports, the quadrilateral acts. -->
+			{#if progressOrder.length > 0}
+				<ul class="wizard-log" bind:this={logEl} aria-label="Capture progress">
+					{#each progressOrder as g (g)}
+						{@const f = profile[g]}
+						{#if f}
+							<li class="wizard-log-row">
+								<div class="wizard-log-head">
+									<span class="wizard-log-vowel">{@render vowelTag(g)}</span>
+									<span
+										class="wizard-log-reading"
+										class:is-provisional={f.reading === 'provisional'}
+									>
+										{readingLabel(f.reading)}
+									</span>
+								</div>
+								<div class="wizard-log-values">{logValueLabel(f)}</div>
+							</li>
+						{/if}
+					{/each}
+				</ul>
+			{/if}
 			{#if paused}
 				<div class="wizard-inline-banner">
 					<p>Paused. Resume when you're ready.</p>
@@ -533,6 +614,18 @@
 		margin-right: 0.3em;
 	}
 
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	.wizard-phase h2 {
 		margin: 0;
 		font-family: var(--font-serif);
@@ -626,6 +719,82 @@
 		inset: 0;
 		z-index: 2;
 		cursor: default;
+	}
+
+	/* ── The capture progress log (Claude-Kimi consensus, 2026-07-10) ──────
+	   Fixed height, content-independent, claimed once on first appearance:
+	   tall enough for the seven default rows on most drawers, capped by
+	   viewport height on short screens, where the internal instant scroll
+	   keeps the newest row in view. No border or background: the reserved
+	   space reads as whitespace, not an empty box, while rows fill in. */
+	.wizard-log {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		max-width: 26rem;
+		height: min(21rem, 32vh);
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		scroll-behavior: auto; /* instant by ruling; never smooth */
+	}
+	/* The universal two-line row (Kimi: one form at every width). Line 1:
+	   vowel identity left, reading word right as a compact pill. Line 2: the
+	   working value, muted, subordinate — metadata, not a score. */
+	.wizard-log-row {
+		flex-shrink: 0;
+		padding: 0.375rem 0.75rem;
+		border-radius: 0.5rem;
+		background: var(--drawer-bg);
+		font-family: var(--font-ui, var(--font-sans));
+		animation: wizard-log-row-in 120ms ease-out;
+	}
+	@keyframes wizard-log-row-in {
+		from {
+			opacity: 0;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.wizard-log-row {
+			animation: none;
+		}
+	}
+	.wizard-log-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+	.wizard-log-vowel {
+		color: var(--ink-primary);
+		font-weight: 600;
+		font-size: 0.875rem;
+	}
+	/* The reading word is the row's visual anchor: the strongest colour
+	   weight in the row, amber for Provisional (calibration vocabulary). */
+	.wizard-log-reading {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		padding: 0.125rem 0.5rem;
+		border-radius: 999px;
+		border: 1px solid var(--stone-300);
+		color: var(--ink-secondary);
+		white-space: nowrap;
+	}
+	.wizard-log-reading.is-provisional {
+		border-color: var(--prep-amber);
+		color: var(--prep-amber);
+	}
+	/* The numbers are metadata: secondary colour, lighter weight than the
+	   reading word, tabular figures for alignment, never coloured. */
+	.wizard-log-values {
+		margin-top: 0.125rem;
+		font-size: 0.8125rem;
+		font-weight: 400;
+		color: var(--ink-tertiary);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.wizard-inline-banner {
