@@ -116,21 +116,26 @@
 	let holdKind = $state<HoldKind>('good');
 	let holdTimer: ReturnType<typeof setTimeout> | undefined;
 
-	// ── Capture progress log (Claude-Kimi consensus, 2026-07-10) ─────────────
-	// A read-only log under the quadrilateral, one row per completed vowel.
-	// Kimi's ruling, in full: values shown but structurally subordinate (the
-	// reading word is the visual anchor; the numbers are metadata, "Hz"
-	// appended, never coloured); the container appears once, on the first
-	// capture, claims a fixed height, and never shifts layout afterward;
-	// internal scroll on overflow with an instant (non-smooth) jump to the
-	// newest row; the two-line row form at every width; read-only as a
-	// single-source-of-truth boundary (the table is a log, the quadrilateral
-	// is the instrument — no Re-take buttons here); and a dedicated
-	// visually-hidden polite live region announcing each committed row,
-	// because this log is a screen-reader user's first exposure to the
-	// numeric value (the hold banner carries no number).
-	let progressOrder = $state<Vowel[]>([]);
-	let logEl: HTMLElement | undefined = $state();
+	// ── The resonance roster (Dann's direction, 2026-07-10) ──────────────────
+	// One table, both surfaces: all ten vowels accounted for from the start,
+	// in the canonical order, greyed until a value lands. Columns: vowel
+	// (with the reading word beneath, amber for Provisional), fR1, fR2 (and
+	// Re-take in the summary). This supersedes the same-day Claude-Kimi
+	// consensus's grow-as-you-capture log, fixed-height container, and
+	// scroll-to-newest machinery — a static roster is inherently
+	// layout-stable, which honours the ruling those mechanisms served. The
+	// unified table also supersedes the summary's earlier red Provisional
+	// colouring in favour of the locked calibration amber. An empty fR2 cell
+	// on a sampled vowel reads "Try again" (Dann's corrective-as-invitation
+	// copy register): the missing second resonance names its next action,
+	// not a deficiency. To be recorded in the Kimi file.
+	//
+	// Typography (Dann, 2026-07-10, per international mathematical-notation
+	// convention): the resonance symbol is an italic f (a variable) with an
+	// upright roman subscript (a label, not a product of variables), set as
+	// a true subscript slightly smaller than the base — see the frSym
+	// snippet. One source in the code; the convention extends across Shane
+	// and Ilya as other surfaces are touched.
 	let logAnnounce = $state('');
 
 	// Pause / resume (spec v1 §3). Best-effort: the Pacifier does not yet
@@ -202,9 +207,6 @@
 	// ── Capture-completion routing ────────────────────────────────────────
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
 		profile = { ...profile, [vowel]: formant };
-		// The progress log: append once per vowel (a re-take updates the
-		// existing row through `profile`; the log's order is capture order).
-		if (!progressOrder.includes(vowel)) progressOrder = [...progressOrder, vowel];
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
@@ -222,8 +224,8 @@
 	function handleRolledBack(vowel: Vowel) {
 		// Spec v1 §3, the re-take rule: the previous Captured value stands and
 		// the profile did not change, so there is no onVowelCaptured /
-		// onProfileChange to forward (and no progress-log change or
-		// announcement either; the banner alone explains the rollback).
+		// onProfileChange to forward (and no roster change or announcement
+		// either; the banner alone explains the rollback).
 		if (phase !== 'capture' || paused) return;
 		beginHold(vowel, 'rolled-back');
 	}
@@ -325,14 +327,13 @@
 			case 'estimated':
 				return 'Estimated';
 			default:
-				return 'Not yet sampled';
+				return '';
 		}
 	}
 
-	// ── Working values in the summary (Dann, 2026-07-02) ────────────────────
-	// An interim confirmation surface ahead of the output-page legend design:
-	// each row publishes the working fR1/fR2 so the singer sees what was
-	// received. For the three optional vowels, an unsampled row shows the
+	// ── Working values (Dann, 2026-07-02) ────────────────────────────────────
+	// Each roster row publishes the working fR1/fR2 so the singer sees what
+	// was received. For the three optional vowels, an unsampled row shows the
 	// engine's derived value (reading: Estimated), greyed, computed by the
 	// same derive() the analysis layer uses — display-only, single source of
 	// formulae (Mitton 2020 §5.3.3; the formulae themselves are never shown),
@@ -365,33 +366,6 @@
 		return derive(g, cap) ?? undefined;
 	}
 
-	function valueLabel(f: CalibratedFormant): string {
-		const f1 = `fR1 ${Math.round(f.f1)} Hz`;
-		return typeof f.f2 === 'number' ? `${f1} · fR2 ${Math.round(f.f2)} Hz` : f1;
-	}
-
-	/**
-	 * The progress log's value line. Stricter than the summary's valueLabel:
-	 * fR2 appears mid-flow only when scored clear (f2Quality, engine spec §1),
-	 * so a marginal fR2 never dangles an uncertain number in front of a singer
-	 * mid-sequence; the summary remains the place to inspect marginal values.
-	 */
-	function logValueLabel(f: CalibratedFormant): string {
-		const f1 = `fR1 ${Math.round(f.f1)} Hz`;
-		return typeof f.f2 === 'number' && f.f2Quality === 'clear'
-			? `${f1} · fR2 ${Math.round(f.f2)} Hz`
-			: f1;
-	}
-
-	// Instant (non-smooth) jump to the newest log row when the count grows
-	// (Kimi, 2026-07-10: "a state change, not layout churn"). $effect runs
-	// after the DOM updates, so scrollHeight already includes the new row.
-	// On most viewports all seven default rows fit and this is a no-op.
-	$effect(() => {
-		void progressOrder.length;
-		if (logEl) logEl.scrollTop = logEl.scrollHeight;
-	});
-
 	$effect(() => () => clearAllTimers());
 </script>
 
@@ -405,11 +379,86 @@
 {#snippet vowelTag(g: Vowel)}<span class="ipa-tag" aria-hidden="true">[{g}]</span
 	>{SPOKEN_NAME[g]}{/snippet}
 
+<!--
+	The resonance symbol (Dann, 2026-07-10): italic f (variable), upright
+	roman subscript (label, so it cannot be misread as f × R × 1), subscript
+	set slightly smaller than the base. The single source of this convention
+	in the code. Screen readers announce the aria-label; the styled glyphs
+	are hidden from them because "f" plus a subscript reads as noise.
+-->
+{#snippet frSym(n: number)}<span class="fr-sym" aria-label={`f R ${n}`}><em aria-hidden="true"
+			>f</em
+		><sub aria-hidden="true">R{n}</sub></span
+	>{/snippet}
+
+<!--
+	The resonance roster (Dann's direction, 2026-07-10; see the script-side
+	comment for full provenance). One table on both surfaces: the guided
+	flow renders it read-only under the quadrilateral; the summary renders
+	the same table with a Re-take column. All ten vowels present from the
+	start, greyed until a value lands, so the full schema is always
+	accounted for and the layout never shifts.
+-->
+{#snippet rosterTable(showActions: boolean)}
+	<table class="wizard-roster">
+		<thead>
+			<tr>
+				<th scope="col">Vowel</th>
+				<th scope="col">{@render frSym(1)}</th>
+				<th scope="col">{@render frSym(2)}</th>
+				{#if showActions}
+					<th scope="col"><span class="visually-hidden">Actions</span></th>
+				{/if}
+			</tr>
+		</thead>
+		<tbody>
+			{#each ALL_VOWELS as g (g)}
+				{@const direct = profile[g]}
+				{@const f = displayFormant(g)}
+				<tr class:is-muted={!direct}>
+					<th scope="row" class="wizard-roster-vowel">
+						{@render vowelTag(g)}
+						{#if f && readingLabel(f.reading)}
+							<span
+								class="wizard-roster-reading"
+								class:is-provisional={f.reading === 'provisional'}
+							>
+								{readingLabel(f.reading)}
+							</span>
+						{/if}
+					</th>
+					<td class="wizard-roster-value">
+						{#if f}{Math.round(f.f1)} Hz{/if}
+					</td>
+					<td class="wizard-roster-value">
+						{#if f}
+							{#if typeof f.f2 === 'number'}
+								{Math.round(f.f2)} Hz
+							{:else}
+								<!-- Corrective-as-invitation (Dann): the missing second
+								     resonance names its next action, not a deficiency. -->
+								<span class="wizard-roster-tryagain">Try again</span>
+							{/if}
+						{/if}
+					</td>
+					{#if showActions}
+						<td class="wizard-roster-action">
+							{#if direct}
+								<button type="button" onclick={() => retakeFromSummary(g)}>Re-take</button>
+							{/if}
+						</td>
+					{/if}
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+{/snippet}
+
 <section class="calibration-wizard" aria-label="Your Resonances: voice calibration">
-	<!-- The dedicated polite live region for progress-log announcements
-	     (Kimi consensus, 2026-07-10). A single-purpose hidden region rather
-	     than aria-live on the log itself: table/list semantics plus live
-	     region semantics can double-announce or announce structural noise.
+	<!-- The dedicated polite live region for roster announcements (Kimi
+	     consensus, 2026-07-10). A single-purpose hidden region rather than
+	     aria-live on the table itself: table semantics plus live region
+	     semantics can double-announce or announce structural noise.
 	     Rendered unconditionally so the region exists before its first
 	     update, which some screen readers require to announce reliably. -->
 	<div class="visually-hidden" role="status">{logAnnounce}</div>
@@ -485,33 +534,7 @@
 					<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
 				{/if}
 			</div>
-			<!-- The capture progress log (Claude-Kimi consensus, 2026-07-10).
-			     Map → log → action: quadrilateral above, this log, then the
-			     status line. Appears once, on the first capture, at its fixed
-			     height (the one sanctioned layout shift); after that, rows
-			     enter with a 120 ms opacity fade and never move the container.
-			     Read-only by ruling: the log reports, the quadrilateral acts. -->
-			{#if progressOrder.length > 0}
-				<ul class="wizard-log" bind:this={logEl} aria-label="Capture progress">
-					{#each progressOrder as g (g)}
-						{@const f = profile[g]}
-						{#if f}
-							<li class="wizard-log-row">
-								<div class="wizard-log-head">
-									<span class="wizard-log-vowel">{@render vowelTag(g)}</span>
-									<span
-										class="wizard-log-reading"
-										class:is-provisional={f.reading === 'provisional'}
-									>
-										{readingLabel(f.reading)}
-									</span>
-								</div>
-								<div class="wizard-log-values">{logValueLabel(f)}</div>
-							</li>
-						{/if}
-					{/each}
-				</ul>
-			{/if}
+			{@render rosterTable(false)}
 			{#if paused}
 				<div class="wizard-inline-banner">
 					<p>Paused. Resume when you're ready.</p>
@@ -561,24 +584,7 @@
 					{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
 					anything uncertain before you finish.
 				</p>
-				<ul class="wizard-summary-list">
-					{#each ALL_VOWELS as g (g)}
-						{@const direct = profile[g]}
-						{@const f = displayFormant(g)}
-						<li class="wizard-summary-row" class:is-muted={!direct && OPTIONAL_VOWELS.includes(g)}>
-							<span class="wizard-summary-vowel">{@render vowelTag(g)}</span>
-							{#if f}
-								<span class="wizard-summary-values">{valueLabel(f)}</span>
-							{/if}
-							<span class="wizard-summary-reading" class:is-provisional={f?.reading === 'provisional'}>
-								{readingLabel(f?.reading)}
-							</span>
-							{#if direct}
-								<button type="button" onclick={() => retakeFromSummary(g)}>Re-take</button>
-							{/if}
-						</li>
-					{/each}
-				</ul>
+				{@render rosterTable(true)}
 				{#if !optionalOffered}
 					<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
 						Experienced singers can provide direct samples for the three optional vowels.
@@ -624,6 +630,18 @@
 		clip: rect(0 0 0 0);
 		white-space: nowrap;
 		border: 0;
+	}
+
+	/* The resonance symbol: italic variable, upright subscript, subscript
+	   slightly smaller than the base (Dann, 2026-07-10). */
+	.fr-sym em {
+		font-style: italic;
+		font-weight: inherit;
+	}
+	.fr-sym sub {
+		font-style: normal;
+		font-size: 0.72em;
+		line-height: 1;
 	}
 
 	.wizard-phase h2 {
@@ -721,80 +739,92 @@
 		cursor: default;
 	}
 
-	/* ── The capture progress log (Claude-Kimi consensus, 2026-07-10) ──────
-	   Fixed height, content-independent, claimed once on first appearance:
-	   tall enough for the seven default rows on most drawers, capped by
-	   viewport height on short screens, where the internal instant scroll
-	   keeps the newest row in view. No border or background: the reserved
-	   space reads as whitespace, not an empty box, while rows fill in. */
-	.wizard-log {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+	/* ── The resonance roster (Dann's direction, 2026-07-10) ─────────────────
+	   All ten vowels always present, so the table never changes size; rows
+	   grey until a value lands. Header carries Shane's signature lavender. */
+	.wizard-roster {
 		width: 100%;
 		max-width: 26rem;
-		height: min(21rem, 32vh);
-		overflow-y: auto;
-		display: flex;
-		flex-direction: column;
-		gap: 0.375rem;
-		scroll-behavior: auto; /* instant by ruling; never smooth */
-	}
-	/* The universal two-line row (Kimi: one form at every width). Line 1:
-	   vowel identity left, reading word right as a compact pill. Line 2: the
-	   working value, muted, subordinate — metadata, not a score. */
-	.wizard-log-row {
-		flex-shrink: 0;
-		padding: 0.375rem 0.75rem;
-		border-radius: 0.5rem;
-		background: var(--drawer-bg);
+		border-collapse: collapse;
 		font-family: var(--font-ui, var(--font-sans));
-		animation: wizard-log-row-in 120ms ease-out;
-	}
-	@keyframes wizard-log-row-in {
-		from {
-			opacity: 0;
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.wizard-log-row {
-			animation: none;
-		}
-	}
-	.wizard-log-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-	}
-	.wizard-log-vowel {
-		color: var(--ink-primary);
-		font-weight: 600;
 		font-size: 0.875rem;
 	}
-	/* The reading word is the row's visual anchor: the strongest colour
-	   weight in the row, amber for Provisional (calibration vocabulary). */
-	.wizard-log-reading {
+	.wizard-roster thead th {
+		background: var(--deeper-lavender);
+		color: #ffffff;
+		font-weight: 600;
+		font-size: 0.8125rem;
+		text-align: left;
+		padding: 0.375rem 0.75rem;
+	}
+	.wizard-roster thead th:first-child {
+		border-radius: 0.375rem 0 0 0.375rem;
+	}
+	.wizard-roster thead th:last-child {
+		border-radius: 0 0.375rem 0.375rem 0;
+	}
+	.wizard-roster tbody tr {
+		border-bottom: 1px solid var(--stone-300);
+	}
+	.wizard-roster tbody tr:last-child {
+		border-bottom: none;
+	}
+	/* Unsampled rows rest greyed, so the whole ten-vowel schema is visibly
+	   accounted for; a derived Estimated preview stays greyed too, reading
+	   as quieter than a sung capture (Dann, 2026-07-02). */
+	.wizard-roster tbody tr.is-muted {
+		opacity: 0.5;
+	}
+	.wizard-roster-vowel {
+		text-align: left;
+		font-weight: 600;
+		color: var(--ink-primary);
+		padding: 0.375rem 0.75rem;
+	}
+	/* The reading word beneath the vowel name (Dann's placement call,
+	   2026-07-10), amber for Provisional per the calibration vocabulary. */
+	.wizard-roster-reading {
+		display: block;
 		font-size: 0.6875rem;
 		font-weight: 600;
-		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
-		border: 1px solid var(--stone-300);
-		color: var(--ink-secondary);
-		white-space: nowrap;
+		color: var(--ink-tertiary);
+		margin-top: 0.0625rem;
 	}
-	.wizard-log-reading.is-provisional {
-		border-color: var(--prep-amber);
+	.wizard-roster-reading.is-provisional {
 		color: var(--prep-amber);
 	}
-	/* The numbers are metadata: secondary colour, lighter weight than the
-	   reading word, tabular figures for alignment, never coloured. */
-	.wizard-log-values {
-		margin-top: 0.125rem;
-		font-size: 0.8125rem;
+	/* The numbers: metadata, never coloured (Kimi, 2026-07-10). */
+	.wizard-roster-value {
+		padding: 0.375rem 0.75rem;
+		color: var(--ink-secondary);
 		font-weight: 400;
-		color: var(--ink-tertiary);
 		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+		vertical-align: top;
+	}
+	.wizard-roster-tryagain {
+		color: var(--prep-amber);
+		font-size: 0.8125rem;
+	}
+	.wizard-roster-action {
+		padding: 0.375rem 0.5rem;
+		text-align: right;
+		vertical-align: top;
+	}
+	.wizard-roster-action button {
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 0.25rem 0.75rem;
+		border-radius: 999px;
+		border: 1px solid var(--stone-300);
+		background: #ffffff;
+		color: var(--ink-secondary);
+		cursor: pointer;
+	}
+	.wizard-roster-action button:hover {
+		border-color: var(--sage);
+		color: var(--sage);
 	}
 
 	.wizard-inline-banner {
@@ -872,63 +902,5 @@
 		line-height: 1;
 		cursor: pointer;
 		padding: 0.125rem 0.375rem;
-	}
-
-	.wizard-summary-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		width: 100%;
-		max-width: 26rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.375rem;
-	}
-	.wizard-summary-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-		padding: 0.5rem 0.75rem;
-		border-radius: 0.5rem;
-		background: var(--drawer-bg);
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.875rem;
-	}
-	.wizard-summary-vowel {
-		color: var(--ink-primary);
-		font-weight: 600;
-		flex: 1;
-	}
-	.wizard-summary-values {
-		color: var(--ink-secondary);
-		font-variant-numeric: tabular-nums;
-		white-space: nowrap;
-	}
-	.wizard-summary-reading {
-		color: var(--ink-tertiary);
-	}
-	/* The three optional vowels rest greyed until sampled directly; their
-	   derived preview reads as quieter than a sung capture (Dann, 2026-07-02). */
-	.wizard-summary-row.is-muted {
-		opacity: 0.6;
-	}
-	.wizard-summary-reading.is-provisional {
-		color: var(--signal-red);
-	}
-	.wizard-summary-row button {
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.75rem;
-		font-weight: 600;
-		padding: 0.25rem 0.75rem;
-		border-radius: 999px;
-		border: 1px solid var(--stone-300);
-		background: #ffffff;
-		color: var(--ink-secondary);
-		cursor: pointer;
-	}
-	.wizard-summary-row button:hover {
-		border-color: var(--sage);
-		color: var(--sage);
 	}
 </style>
