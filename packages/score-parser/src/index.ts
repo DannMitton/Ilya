@@ -45,3 +45,11 @@ export {
   type RequiredGlyphName,
 } from './smufl-metadata';
 export { demoScore, demoProfile, demoResolver, renderDemo, syntheticSmuflFont } from './demo-fixture';
+export {
+  paginateScore,
+  sliceScore,
+  sliceWidth,
+  type PageLayoutOptions,
+  type PaginatedScore,
+  type SystemSlice,
+} from './page-layout';
