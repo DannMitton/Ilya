@@ -1074,16 +1074,23 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
-		padding: 1rem;
+		/* The transcription panel's vertical rhythm (RootPanel: 20px top,
+		   40px bottom, 1rem sides), matched here so the two drawers read
+		   as one designed surface (Dann's consistency ruling, 2026-07-12). */
+		padding: 20px 1rem 40px;
 	}
 
+	/* Drawer-margin alignment (Dann, 2026-07-12): the wizard's structural
+	   elements (phase container, roster, banners) span the panel's full
+	   width, sharing the transcription panel's 1rem content edges, so the
+	   two drawers read as one designed surface. Prose lines keep a
+	   readable measure inside that width. */
 	.wizard-phase {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 0.875rem;
 		width: 100%;
-		max-width: 32rem;
 	}
 
 	.ipa-tag {
@@ -1116,13 +1123,27 @@
 		line-height: 1;
 	}
 
+	/* Drawer kinship (Dann, 2026-07-12): the wizard adopts Ilya's drawer
+	   vocabulary — the phase heading renders in the section-label recipe
+	   (sans smallcaps, 0.12em tracking, the tab's accent colour: sage on
+	   Ilya, deeper lavender here), and a 2px accent rule fences the
+	   working area from the voice switcher, echoing the transcription
+	   panel's fenced console. Headings stay h2 semantically. */
+	.wizard-phase {
+		border-top: 2px solid var(--deeper-lavender);
+		padding-top: 0.875rem;
+	}
+
 	.wizard-phase h2 {
 		margin: 0;
-		font-family: var(--font-serif);
-		color: var(--ink-primary);
-		font-size: 1.375rem;
+		width: 100%;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--deeper-lavender);
 		font-weight: 600;
-		text-align: center;
+		text-align: left;
 	}
 
 	.wizard-lede,
@@ -1216,7 +1237,6 @@
 	   grey until a value lands. Header carries Shane's signature lavender. */
 	.wizard-roster {
 		width: 100%;
-		max-width: 26rem;
 		border-collapse: collapse;
 		font-family: var(--font-ui, var(--font-sans));
 		font-size: 0.875rem;
@@ -1369,7 +1389,6 @@
 		background: var(--drawer-bg);
 		border: 1px solid var(--stone-300);
 		width: 100%;
-		max-width: 26rem;
 	}
 	.wizard-inline-banner p {
 		margin: 0;

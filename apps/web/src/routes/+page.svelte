@@ -172,7 +172,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	// Derived
 	const showInspector = $derived(selectedWord !== null);
-	const isReadingMode = $derived(activeTab !== 'transcription');
+	// Reading mode means the long-form reading tabs. Shane is a
+	// paper-on-desk gallery like Transcription (Dann's consistency ruling,
+	// 2026-07-12): its page sits exactly where the transcription page
+	// sits, sharing the full 2rem desk padding rather than reading mode's
+	// trimmed 1rem.
+	const isReadingMode = $derived(activeTab === 'learn' || activeTab === 'guide');
 	const drawerWidth = $derived(
 		activeTab === 'transcription'
 			? (selectedWord ? calculateDrawerWidth(selectedWord) : 520)
@@ -1007,7 +1012,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	.main-content.tab-shane {
-		background-color: var(--surround-shane, #D8D0E0);
+		/* One desk, many papers (Dann's consistency ruling, 2026-07-12,
+		   superseding the Round 8 lavender surround for this surface only):
+		   the Shane gallery shares the transcription desk tone, and Shane's
+		   lavender identity lives in the tab bar, the drawer handle, and
+		   the Pacifier band (--surround-shane, unchanged). Carry this to
+		   the next Kimi relay with provenance. */
+		background-color: var(--surround-transcription, #D8D4C8);
 	}
 
 	/* ── Floating Paper: tab-specific shadows ─────────────── */

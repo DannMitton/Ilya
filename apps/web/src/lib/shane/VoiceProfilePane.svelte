@@ -16,16 +16,19 @@
 	 * pages inherit this exact page geometry and furniture with no
 	 * reframing.
 	 *
-	 * The two interim states (copy LOCKED, Dann's register, 2026-07-11):
+	 * The two interim states (copy Dann's, 2026-07-12, superseding the
+	 * 2026-07-11 trio and folding the Workshop cue and forward pointer
+	 * into two body paragraphs):
 	 * - Pre-calibration: the single line "Calibrate your voice to begin."
-	 * - Post-calibration: the centred copy trio, with line two's count and
-	 *   provisional-vowel list computed from the active voice's readings.
-	 *   Beneath it, the quiet non-animated "Workshop" wayfinding cue toward
-	 *   the drawer (Kimi's refinement: singers must discover the drawer),
-	 *   and the non-actionable forward pointer for the coming score surface.
-	 *   No score-input control is wired anywhere here — "Please input your
-	 *   score…" ships only when ingestion is live (never advertise an
-	 *   action that isn't wired).
+	 * - Post-calibration: (1) "Your repertoire-fit results will appear
+	 *   here once you upload your score." — the upload clause names an
+	 *   unwired action; Claude raised the never-advertise rule once, Dann
+	 *   ruled it acceptable because ingestion is the next build (2026-07-12,
+	 *   closed). (2) The profile line with the captured count and the
+	 *   provisional vowels in the wizard's vowelTag convention, closing
+	 *   with the drawer wayfinding. Counts, lists, and grammar degrade
+	 *   mechanically (singular vowel, none captured, none provisional).
+	 *   Still no score-input CONTROL is wired anywhere here.
 	 *
 	 * Header content: the title line carries the active voice's name (the
 	 * page's subject, as the song title is the transcription page's), and
@@ -68,10 +71,18 @@
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
 
-	// The subtitle rides TitleHeader's first metadata line (the composer
-	// slot on the transcription page), which renders it in the same
-	// small-caps register. Wording from the wizard's Welcome copy.
-	const SUBTITLE = 'Formant profile: a map of your voice’s resonances';
+	// The header ruling (Dann, 2026-07-12): the title slot belongs to the
+	// SONG, verbatim as on the Ilya page — the italic "Aria or song title"
+	// placeholder until a real score arrives (which is exactly what this
+	// envelope awaits). The voice's identity lives in the qualifier line
+	// beneath (the composer/opus/poet slot on the Ilya page): "Formant
+	// profile: a map of <voice>'s resonances", with the voice name
+	// substituted, falling back to "your voice" in the brief window
+	// before first-launch naming. TitleHeader renders the line in its
+	// small-caps register.
+	const subtitle = $derived(
+		`Formant profile: a map of ${voiceName ? `${voiceName}’s` : 'your voice’s'} resonances`,
+	);
 
 	// The roster's canonical display order (wizard spec v1 §2: the seven
 	// defaults in the fixed counterclockwise order, then the three optional
@@ -119,6 +130,17 @@
 		return COUNT_WORDS[n] ?? String(n);
 	}
 
+	// Built as an expression so the leading space survives Svelte's
+	// block-boundary whitespace trimming (the "setwith" bug, caught by
+	// Dann in live testing, 2026-07-12).
+	let capturedClause = $derived(
+		capturedVowels.length > 0
+			? ` with ${countWord(capturedVowels.length).toLowerCase()} ${
+					capturedVowels.length === 1 ? 'vowel' : 'vowels'
+				} successfully captured`
+			: '',
+	);
+
 	/**
 	 * The separator before item `idx` in a natural-language list, Oxford
 	 * comma applied: "a and b" for two, "a, b, and c" for three or more.
@@ -131,16 +153,14 @@
 </script>
 
 <!--
-	Vowel glyph for the trio's provisional list: the locked copy shows the
-	bare bracketed glyph ("[i], [e], and [o]"), so unlike the wizard's
-	vowelTag there is no visible informal name — but the §4.6 speakable-name
-	discipline still holds: the glyph is aria-hidden and a visually hidden
-	spoken name carries it to screen readers, which otherwise collapse
-	[ɪ]/[ɨ] onto "ee".
+	Vowel tag in the wizard's convention (Dann's copy, 2026-07-12): the
+	bracketed glyph followed by its visible informal name ("[i] cardinal-i").
+	The §4.6 speakable-name discipline holds — the glyph is aria-hidden, so
+	screen readers announce only the informal name and [ɪ]/[ɨ] never
+	collapse onto "ee".
 -->
-{#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span><span
-		class="visually-hidden">{SPOKEN_NAME[g]}</span
-	>{/snippet}
+{#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span
+	>{SPOKEN_NAME[g]}{/snippet}
 
 <article
 	class="paper-page profile-page"
@@ -148,11 +168,13 @@
 	aria-label="Voice profile"
 >
 	<!-- Header layer: the same TitleHeader the transcription page renders,
-	     pinned to the top margin. Title = the voice's name; the composer
-	     slot carries the formant-profile subtitle. -->
+	     pinned to the top margin. Title = the song's (placeholder until a
+	     score arrives, verbatim as on the Ilya page); the composer slot
+	     carries the voice-qualified formant-profile line (Dann's header
+	     ruling, 2026-07-12). -->
 	<TitleHeader
-		title={voiceName ?? 'Your voice'}
-		composer={SUBTITLE}
+		title=""
+		composer={subtitle}
 		poet=""
 		translator=""
 		opus=""
@@ -167,36 +189,21 @@
 		{#if hasReadings}
 			<div class="profile-copy">
 				<p class="profile-line profile-lede">
-					Here is your voice, mapped across the ten Russian vowels.
+					Your repertoire-fit results will appear here once you upload your score.
 				</p>
 				<p class="profile-line profile-status">
-					{#if capturedVowels.length > 0}{countWord(capturedVowels.length)}
-						{capturedVowels.length === 1 ? 'vowel is' : 'vowels are'} captured.{/if}
+					Your profile is now set{capturedClause}.
 					{#if provisionalVowels.length > 0}Your
 						{#each provisionalVowels as g, i (g)}{listSep(
 								i,
 								provisionalVowels.length
 							)}{@render vowelGlyph(g)}{/each}
-						{provisionalVowels.length === 1 ? 'is' : 'are'} provisional, sound enough to use now.{/if}
-				</p>
-				<p class="profile-line profile-status">
-					Your profile is now set, but you can re-take samples anytime.
+						{provisionalVowels.length === 1 ? 'is' : 'are'} provisional, and you can update
+						{provisionalVowels.length === 1 ? 'this value' : 'these values'} anytime through the
+						drawer on the left.{:else}You can update these values anytime through the drawer on
+						the left.{/if}
 				</p>
 			</div>
-			<!-- The Workshop wayfinding cue (Kimi's refinement, 2026-07-11):
-			     quiet and deliberately non-animated, pointing at the drawer,
-			     where the F1/F2 chart and the readings roster live by ruling
-			     (the plot is instrumentation, not the steak). Informational
-			     text, not a control: opening the drawer stays the drawer's
-			     own affordance. -->
-			<p class="profile-workshop">
-				<span class="profile-workshop-chevron" aria-hidden="true">‹</span>
-				Workshop: your readings and vowel chart live in the drawer.
-			</p>
-			<!-- The non-actionable forward pointer for the coming score
-			     surface. The line is the shipped placeholder copy carried
-			     forward; no input control accompanies it by ruling. -->
-			<p class="profile-forward">Your repertoire-fit results will appear here.</p>
 		{:else}
 			<!-- Pre-calibration empty state: a single line by ruling. -->
 			<p class="profile-empty">Calibrate your voice to begin.</p>
@@ -222,21 +229,27 @@
 
 	/* ── Content window ────────────────────────────────────── */
 
+	/* The typography ruling (Dann, 2026-07-12): one reading size,
+	   left-justified, a document rather than an eye chart. The body sets
+	   in the reading papers' measure (serif, 1.05rem, generous leading),
+	   aligned to the page's text column; the quiet furniture below keeps
+	   its own smaller sans register but shares the left edge. Vertical
+	   centring within the content window stays. */
 	.profile-content {
 		position: absolute;
 		left: 96px;
 		right: 96px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
-		text-align: center;
+		text-align: left;
 	}
 
 	.profile-copy {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		gap: 1rem;
 		max-width: 34rem;
 	}
@@ -244,61 +257,31 @@
 	.profile-line {
 		margin: 0;
 		font-family: var(--font-serif, 'Source Serif 4', serif);
-		line-height: 1.6;
+		font-size: 1.05rem;
+		line-height: 1.75;
 	}
 
 	.profile-lede {
-		font-size: 1.35rem;
-		font-weight: 500;
 		color: var(--ink-primary, #1a1612);
 	}
 
 	.profile-status {
-		font-size: 1.05rem;
 		color: var(--ink-secondary, #4a4540);
 	}
 
-	/* The IPA glyphs keep the calibration surfaces' IPA face. */
+	/* The IPA glyphs keep the calibration surfaces' IPA face, with the
+	   wizard's 0.3em breath between glyph and informal name. */
 	.profile-ipa {
 		font-family: 'Lato IPA', sans-serif;
-	}
-
-	/* Quiet wayfinding: no animation, no transition, tertiary ink. */
-	.profile-workshop {
-		margin: 3rem 0 0;
-		font-family: var(--font-ui, var(--font-sans, sans-serif));
-		font-size: 0.875rem;
-		color: var(--ink-tertiary, #6a655f);
-	}
-
-	.profile-workshop-chevron {
-		margin-right: 0.25em;
-	}
-
-	.profile-forward {
-		margin: 0.5rem 0 0;
-		font-family: var(--font-ui, var(--font-sans, sans-serif));
-		font-size: 0.875rem;
-		color: var(--ink-tertiary, #6a655f);
+		margin-right: 0.3em;
 	}
 
 	.profile-empty {
 		margin: 0;
 		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 1.1rem;
+		font-size: 1.05rem;
+		line-height: 1.75;
 		color: var(--ink-secondary, #4a4540);
-	}
-
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		white-space: nowrap;
-		border: 0;
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */
