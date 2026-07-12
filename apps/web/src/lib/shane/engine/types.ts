@@ -23,6 +23,17 @@ export interface CalibratedFormant {
 	confidence: 'high' | 'medium' | 'low'; // fR1-primary
 	f2Quality?: 'clear' | 'marginal' | 'absent'; // fR2 scored separately
 	reading: 'captured' | 'estimated' | 'provisional';
+	/**
+	 * The plausibility guard's verdict (engine-spec amendment, 2026-07-11):
+	 * a vowel-aware fR1 window check against Bozeman's published bands (or
+	 * the singer's own anchors for the four Bozeman-absent vowels).
+	 * Tri-state by ruling: `unchecked` is a valid outcome (window
+	 * unavailable), not an error. Orthogonal to `confidence` (signal
+	 * quality) by ruling — an implausible reading resolves to Provisional at
+	 * the wizard boundary but its confidence is never touched. Optional:
+	 * absent on values predating the guard and on derived/estimated values.
+	 */
+	plausibility?: 'plausible' | 'implausible' | 'unchecked';
 	source:
 		| 'measured-user'
 		| 'derived-retracted-i'

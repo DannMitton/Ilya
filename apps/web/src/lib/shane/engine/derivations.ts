@@ -4,6 +4,22 @@ export const DERIV_SOURCE: Record<string, CalibratedFormant['source']> = {
 	ɨ: 'derived-retracted-i', ɪ: 'derived-interpolated', ʌ: 'derived-interpolated', a: 'derived-interpolated',
 };
 
+/**
+ * The fR1 component of the four derivations, exported separately so the
+ * plausibility guard (plausibility.ts, engine-spec amendment 2026-07-11)
+ * can compute anchor-derived window centres without requiring fR2 on the
+ * anchors (fR2 is often absent on real captures; the guard is fR1-only in
+ * v1). Single source of truth: these ratios are the same ones `derive`
+ * uses below — change them in one place only.
+ */
+export function expectedF1(vowel: Vowel, f1s: Partial<Record<Vowel, number>>): number | null {
+	if (vowel === 'ɨ') return f1s.i !== undefined ? 1.365 * f1s.i : null;
+	if (vowel === 'ɪ') return f1s.e ?? null;
+	if (vowel === 'ʌ') return f1s['ɑ'] ?? null;
+	if (vowel === 'a') return f1s['ɑ'] !== undefined ? 1.15 * f1s['ɑ'] : null;
+	return null;
+}
+
 /** The four synthesis derivations (pacifier v11 §9.2). cap holds captured anchors. */
 export function derive(vowel: Vowel, cap: Record<string, { f1: number; f2: number }>): CalibratedFormant | null {
 	let f1: number, f2: number;

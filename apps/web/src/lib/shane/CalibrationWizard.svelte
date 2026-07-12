@@ -40,6 +40,7 @@
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import { derive } from '$lib/shane/engine/derivations';
 	import { applyIghDivergence } from '$lib/shane/engine/divergence';
+	import { checkPlausibility, buildPlausibilityEvent } from '$lib/shane/engine/plausibility';
 	import {
 		loadStore,
 		saveStore,
@@ -73,7 +74,7 @@
 
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
 	type ReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr';
-	type HoldKind = 'good' | 'provisional' | 'rolled-back';
+	type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
 
 	interface CalibrationWizardProps {
 		/** Routing key to the Bozeman value-sets; undefined until a selector lands. */
@@ -166,6 +167,45 @@
 		applyIghDivergence(clone);
 		delete (clone['ɨ'] as { isDivergent?: boolean | null }).isDivergent;
 		return clone;
+	}
+
+	// ── The plausibility guard, wizard boundary (amendment LOCKED 2026-07-11) ─
+	// One session id per wizard mount, so the console evidence (ruled schema)
+	// can group a sitting's extractions for manual audit.
+	const guardSessionId =
+		typeof crypto !== 'undefined' && 'randomUUID' in crypto
+			? crypto.randomUUID()
+			: `s-${Date.now().toString(36)}`;
+	/**
+	 * Runs the vowel-aware fR1 window check on a just-captured reading and
+	 * returns a clone carrying the verdict. An `implausible` reading resolves
+	 * to Provisional (never a block, nothing discarded; the sigla and the
+	 * hold copy carry it) while `confidence` stays untouched — plausibility
+	 * and signal quality are orthogonal facts (Kimi's ruling: "the machine
+	 * heard you perfectly, but you sang a different vowel than intended" is
+	 * itself useful information). Guard placement at this boundary follows
+	 * the withIghPass precedent: the profile (the anchors) lives here, not in
+	 * the §9 core. The structured console event is emitted for EVERY
+	 * extraction (ruled): the distance-to-edge distribution of honest
+	 * readings is the evidence base for any future margin tightening.
+	 */
+	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
+		if (formant.source !== 'measured-user') return formant;
+		const anchorF1s: Partial<Record<Vowel, number>> = {};
+		for (const [g, f] of Object.entries(profile) as [Vowel, CalibratedFormant][]) {
+			if (f && f.reading !== 'estimated') anchorF1s[g] = f.f1;
+		}
+		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1s);
+		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
+		if (res.plausibility === 'implausible' && out.reading === 'captured')
+			out.reading = 'provisional';
+		const rePromptShown =
+			res.plausibility === 'implausible' && phase === 'capture' && !paused && vowel === currentVowel;
+		console.info(
+			'[shane] plausibility',
+			JSON.stringify(buildPlausibilityEvent(vowel, formant.f1, res, rePromptShown, guardSessionId, voiceType))
+		);
+		return out;
 	}
 
 	// Hydration: the active voice's readings become the working profile; a
@@ -394,13 +434,14 @@
 	// the tour is waiting on holds and advances; an out-of-turn capture
 	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
-		profile = withIghPass({ ...profile, [vowel]: formant });
+		const checked = withPlausibility(vowel, formant);
+		profile = withIghPass({ ...profile, [vowel]: checked });
 		persist();
 		// The hold and the announcement use the post-pass reading: a divergent
 		// [ɨ] that the pass resolved to Provisional must not be celebrated as
 		// captured (no capture-time modal, per the locked decision — the
 		// ordinary provisional hold wording carries it).
-		const effective = profile[vowel] ?? formant;
+		const effective = profile[vowel] ?? checked;
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
@@ -408,7 +449,18 @@
 		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
-			beginHold(vowel, effective.reading === 'captured' ? 'good' : 'provisional');
+			// The implausible hold outranks the ordinary provisional wording:
+			// same Provisional resolution, but the copy names the mismatch
+			// (signed-off re-prompt line, 2026-07-11) instead of the generic
+			// uncertainty wording. Never a block: Continue stands.
+			beginHold(
+				vowel,
+				effective.plausibility === 'implausible'
+					? 'implausible'
+					: effective.reading === 'captured'
+						? 'good'
+						: 'provisional'
+			);
 		} else if (currentVowel) {
 			// Out of turn: the roster took the value; the tour stays put.
 			pacifierRef?.activateVowel(currentVowel);
@@ -461,7 +513,9 @@
 				? `${SPOKEN_NAME[vowel]}, captured.`
 				: kind === 'rolled-back'
 					? 'New sample was less certain, so the previous one was kept.'
-					: 'Noted, moving on. You can re-take it from the summary.';
+					: kind === 'implausible'
+						? `That reading looks unlikely for ${SPOKEN_NAME[vowel]}. Try again?`
+						: 'Noted, moving on. You can re-take it from the summary.';
 		holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
 			holdTimer = undefined;
@@ -867,6 +921,12 @@
 								{@render vowelTag(holdVowel!)}, captured.
 							{:else if holdKind === 'rolled-back'}
 								New sample was less certain, so the previous one was kept.
+							{:else if holdKind === 'implausible'}
+								<!-- The guard's re-prompt (signed off 2026-07-11): factual
+								     observation, no fault assigned — an implausible reading
+								     can equally be a mis-extraction — and the invitation
+								     rides the existing Re-take affordance below. -->
+								That reading looks unlikely for {@render vowelTag(holdVowel!)}. Try again?
 							{:else}
 								Noted, moving on. You can re-take it from the summary.
 							{/if}
