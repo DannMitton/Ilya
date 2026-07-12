@@ -761,6 +761,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							shaneFormants = f;
 							shaneVoiceName = name;
 						}}
+						onOpenLearnNote={() => {
+							// The sung-[o] glyph's deep link: Learn tab, then the
+							// note's anchor. handleHeadingNavigate already retries
+							// while the lazy Learn content mounts, and the return
+							// path is the Shane tab itself (the wizard rehydrates
+							// to the summary).
+							handleTabChange('learn');
+							handleHeadingNavigate('learn-u3-note-o');
+						}}
 					/>
 				{/if}
 			{/snippet}

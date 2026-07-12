@@ -117,6 +117,18 @@
 			formants: Partial<Record<Vowel, CalibratedFormant>>,
 			voiceName: string | undefined
 		) => void;
+		/**
+		 * Opens the Learn module's sung-[o] note (anchor learn-u3-note-o).
+		 * The sung-[o] précis ruling (Kimi 2026-07-11; copy Dann's, approved
+		 * same day): ONE quiet tertiary ⓘ glyph on the [o] roster row is the
+		 * whole affordance — the glyph is the affordance ceiling, there is
+		 * no per-vowel framework (Dann gates each vowel individually, and
+		 * only [o] is ruled), and it is hidden mid-wizard: the glyph renders
+		 * on the summary surface only, never inside a capture ritual. The
+		 * return path is the Shane tab itself; the wizard rehydrates to the
+		 * summary because the voice has readings.
+		 */
+		onOpenLearnNote?: () => void;
 	}
 
 	let {
@@ -125,7 +137,8 @@
 		onVowelCaptured,
 		onProfileChange,
 		onComplete,
-		onActiveProfileChange
+		onActiveProfileChange,
+		onOpenLearnNote
 	}: CalibrationWizardProps = $props();
 
 	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
@@ -793,6 +806,17 @@
 				<tr class:is-muted={!direct}>
 					<th scope="row" class="wizard-roster-vowel">
 						{@render vowelTag(g)}
+						{#if showActions && g === 'o' && onOpenLearnNote}
+							<!-- The sung-[o] note glyph (see the onOpenLearnNote doc):
+							     [o] only, summary only, and the ⓘ is the affordance
+							     ceiling. Speakable label, no raw glyph announced. -->
+							<button
+								type="button"
+								class="wizard-info-glyph"
+								aria-label="About the sung o vowel (opens the Learn note)"
+								onclick={onOpenLearnNote}
+							>ⓘ</button>
+						{/if}
 						{#if f && readingLabel(f.reading)}
 							<span
 								class="wizard-roster-reading"
@@ -1273,6 +1297,22 @@
 	.wizard-roster-action button:hover {
 		border-color: var(--sage);
 		color: var(--sage);
+	}
+	/* The sung-[o] note glyph: quiet and tertiary by ruling — no border,
+	   no fill, no animation. The markup gates it to the summary surface. */
+	.wizard-info-glyph {
+		background: none;
+		border: none;
+		padding: 0 0.25rem;
+		margin-left: 0.125rem;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.875rem;
+		line-height: 1;
+		color: var(--ink-tertiary);
+		cursor: pointer;
+	}
+	.wizard-info-glyph:hover {
+		color: var(--ink-secondary);
 	}
 	/* Narrow-viewport hardening (Dann's call on Kimi's review, 2026-07-11):
 	   the column form holds at every width; small screens get tighter
