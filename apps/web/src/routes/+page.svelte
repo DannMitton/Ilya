@@ -54,7 +54,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
-	const TAB_ORDER: TabId[] = ['transcription', 'learn', 'guide', 'shane'];
+	// Fit (engine codename 'shane') sits adjacent to Transcription; the
+	// slide-direction order matches the visible tab order (Dann, 2026-07-12).
+	const TAB_ORDER: TabId[] = ['transcription', 'shane', 'learn', 'guide'];
 	let tabTransitionClass = $state('');
 	// Mobile awareness
 	let isMobile = $state(false);

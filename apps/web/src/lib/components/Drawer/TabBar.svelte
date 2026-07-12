@@ -19,12 +19,18 @@
 			case 'transcription': return 'Transcription';
 			case 'learn': return language === 'fr' ? 'Leçons' : 'Learn';
 			case 'guide': return 'Guide';
-			case 'shane': return 'Shane';
+			// The engine codename is 'shane' throughout the code; the tab
+			// wears the user-facing 'Fit' (Dann's ruling, 2026-07-12). A
+			// French label rides the deferred calibration-UI French pass.
+			case 'shane': return 'Fit';
 		}
 	}
 
+	// Fit sits adjacent to Transcription (Dann's IA ruling, 2026-07-12):
+	// the two operable tools together, the two references (Learn, Guide)
+	// after. Internal id stays 'shane'.
 	const tabIds: TabId[] = INCLUDE_SHANE
-		? ['transcription', 'learn', 'guide', 'shane']
+		? ['transcription', 'shane', 'learn', 'guide']
 		: ['transcription', 'learn', 'guide'];
 
 	function handleKeydown(event: KeyboardEvent) {
