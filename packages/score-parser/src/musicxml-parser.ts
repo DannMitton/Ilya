@@ -1,122 +1,740 @@
 /**
  * MusicXML score parser.
  *
- * Reads MusicXML input (XML string or pre-parsed Document) and produces
- * Shane's canonical `ParsedScore`. Supports MusicXML 3.1 and 4.0. Older
- * pre-3.1 features (where present) are noted via `'musicxml-pre-3-1-feature'`
- * warnings; the parser does not refuse them but may simplify their
- * representation.
+ * Reads MusicXML input (an XML string or a pre-parsed DOM Document) and
+ * produces Shane's canonical `ParsedScore`. Supports the partwise MusicXML
+ * 3.1 / 4.0 subset Shane needs: the vocal part's notes, rests, ties,
+ * lyrics (with verse and elision awareness), articulations, fermatas, the
+ * divisions-based duration model, key/time/tempo, and provenance. Features
+ * outside that subset are noted via warnings and skipped, never fatal.
  *
  * Conversion paths that feed this parser:
- *   - Direct upload of `.xml` or `.mxl` (origin `'musicxml-direct'`). The
- *     runner is responsible for `.mxl` (zip) extraction before handoff.
- *   - MuseScore CLI export from `.mscz` (origin
- *     `'musescore-cli-musicxml-from-mscz'`).
- *   - PDFtoMusic Pro user-side conversion from vector PDF (origin
- *     `'pdftomusic-pro-musicxml-from-vector-pdf'`).
- *   - homr OMR from raster PDF or image (origin
- *     `'homr-musicxml-from-image'`).
- *   - MIDI converter output (origin `'midi-converted-musicxml'`); produces
- *     a ParsedScore with `syllable: undefined` on every vocal event since
- *     MIDI carries no lyrics.
+ *   - Direct upload of `.xml` / `.mxl` (origin `'musicxml-direct'`; the
+ *     runner unzips `.mxl` before handoff).
+ *   - MuseScore export from `.mscz` (origin `'musescore-cli-musicxml-from-mscz'`).
+ *   - PDFtoMusic Pro from a vector PDF (origin `'pdftomusic-pro-musicxml-from-vector-pdf'`).
+ *   - homr OMR from a raster PDF/image (origin `'homr-musicxml-from-image'`).
+ *   - MIDI converter output (origin `'midi-converted-musicxml'`); no lyrics.
  *
- * @invariant The parser must keep `measures[i].timeSignature` and
- *   `measures[i].keySignature` consistent with the score-wide
- *   `timeSignatures[]` and `keySignatures[]` arrays. Any future write
- *   path (correction GUI edits, measure insertion, signature changes)
- *   must update both structures atomically. Per Round 9 review (Kimi),
- *   the parallel-data redundancy is accepted for query performance;
- *   the consistency burden is on the parser and any future mutator.
+ * @invariant Mirrors the MnxScoreParser invariants exactly:
+ *   `measures[i].timeSignature` / `keySignature` stay consistent with the
+ *   score-wide change arrays; `VocalLineEvent.id` is the deterministic
+ *   `m{measureIndex}-{numerator}-{denominator}` composite key;
+ *   `SyllableInfo.id` is a UUID.
  *
- * @invariant `VocalLineEvent.id` uses a deterministic composite key
- *   of the form `m{measureIndex}-{numerator}-{denominator}` (optionally
- *   suffixed with `-{voice}` if a polyphonic vocal part ever arrives).
- *   Composite keys are reproducible across re-parses, which matters for
- *   testability, renderer regression tests, and inspecting `data-note-id`
- *   in dev tools. `SyllableInfo.id` uses UUID v4 (via
- *   `crypto.randomUUID()` where available, falling back to the `uuid`
- *   package). UUID v4 is sufficient because syllables need only
- *   session-stability for the v1.x cross-tab jump, and correction-GUI
- *   mutations make deterministic syllable keys fragile.
+ * DOM access: the parser reads through a minimal structural `XmlEl`
+ * interface (a subset every W3C DOM Element and the test mini-DOM both
+ * satisfy), so the package needs no `lib.dom` surface beyond the `Document`
+ * type at the input boundary and no XML-library dependency. In the browser
+ * a string is parsed with the global `DOMParser`; in Node tests a Document
+ * (real or mini) is passed directly.
  *
- * Status: Phase 1 stub. Real parsing deferred to Phase 2 against a
- *   test corpus (Round 9 §"Open questions" item on test corpus structure
- *   pending).
+ * Shared helpers (fraction arithmetic, note-base values, wordContext, the
+ * markings map, syllable ids) are duplicated from the MNX parser rather
+ * than extracted, to keep this an additive change that does not re-open the
+ * already-pushed `mnx-parser.ts`. A future shared `internal.ts` refactor is
+ * flagged for the whole-app audit.
+ *
+ * Ground truth: built against faithful synthetic MusicXML 3.1/4.0 partwise
+ * fixtures (see `musicxml-parser.test.ts`); no real copyrighted MusicXML is
+ * required, since the format's structure is public and stable.
  */
 
 import type {
-  MusicXmlScoreInput,
-  ParseResult,
-  ScoreInput,
-  ScoreParser,
+	Articulation,
+	Duration,
+	Fraction,
+	KeySignature,
+	KeySignatureChange,
+	Measure,
+	MusicXmlScoreInput,
+	NoteBase,
+	ParseError,
+	ParseResult,
+	ParseWarning,
+	ParsedScore,
+	Pitch,
+	ScoreInput,
+	ScoreParser,
+	SyllableInfo,
+	TempoMarking,
+	TimeSignature,
+	TimeSignatureChange,
+	TupletInfo,
+	VocalLineEvent,
 } from './types';
 
+// ── Minimal DOM surface the parser reads ───────────────────────────
+
+interface XmlEl {
+	readonly tagName: string;
+	getAttribute(name: string): string | null;
+	getElementsByTagName(name: string): ArrayLike<XmlEl>;
+	readonly children: ArrayLike<XmlEl>;
+	readonly textContent: string | null;
+}
+
+function kids(el: XmlEl): XmlEl[] {
+	return Array.from(el.children);
+}
+function directChildren(el: XmlEl, tag: string): XmlEl[] {
+	return kids(el).filter((c) => c.tagName === tag);
+}
+function firstChild(el: XmlEl, tag: string): XmlEl | undefined {
+	return kids(el).find((c) => c.tagName === tag);
+}
+function descendants(el: XmlEl, tag: string): XmlEl[] {
+	return Array.from(el.getElementsByTagName(tag));
+}
+function firstDesc(el: XmlEl, tag: string): XmlEl | undefined {
+	return descendants(el, tag)[0];
+}
+function textOf(el: XmlEl | undefined): string {
+	return (el?.textContent ?? '').trim();
+}
+function childText(el: XmlEl, tag: string): string {
+	return textOf(firstChild(el, tag));
+}
+function intAttr(el: XmlEl, name: string): number | undefined {
+	const v = el.getAttribute(name);
+	if (v === null) return undefined;
+	const n = parseInt(v, 10);
+	return Number.isFinite(n) ? n : undefined;
+}
+
+// ── Exact rational arithmetic (mirrors mnx-parser.ts) ──────────────
+
+function gcd(a: number, b: number): number {
+	let x = Math.abs(a);
+	let y = Math.abs(b);
+	while (y !== 0) {
+		const t = y;
+		y = x % y;
+		x = t;
+	}
+	return x === 0 ? 1 : x;
+}
+function frac(numerator: number, denominator: number): Fraction {
+	if (denominator === 0) return { numerator: 0, denominator: 1 };
+	const g = gcd(numerator, denominator);
+	const sign = denominator < 0 ? -1 : 1;
+	return { numerator: (sign * numerator) / g, denominator: (sign * denominator) / g };
+}
+function addFrac(a: Fraction, b: Fraction): Fraction {
+	return frac(a.numerator * b.denominator + b.numerator * a.denominator, a.denominator * b.denominator);
+}
+function subFrac(a: Fraction, b: Fraction): Fraction {
+	return frac(a.numerator * b.denominator - b.numerator * a.denominator, a.denominator * b.denominator);
+}
+function fracCompare(a: Fraction, b: Fraction): number {
+	return a.numerator * b.denominator - b.numerator * a.denominator;
+}
+const ZERO: Fraction = { numerator: 0, denominator: 1 };
+
+const BASE_VALUES: Record<NoteBase, Fraction> = {
+	breve: { numerator: 2, denominator: 1 },
+	whole: { numerator: 1, denominator: 1 },
+	half: { numerator: 1, denominator: 2 },
+	quarter: { numerator: 1, denominator: 4 },
+	eighth: { numerator: 1, denominator: 8 },
+	'16th': { numerator: 1, denominator: 16 },
+	'32nd': { numerator: 1, denominator: 32 },
+	'64th': { numerator: 1, denominator: 64 },
+	'128th': { numerator: 1, denominator: 128 },
+};
+function isNoteBase(x: unknown): x is NoteBase {
+	return typeof x === 'string' && x in BASE_VALUES;
+}
+/** Nearest note base for a sounding fraction, when `<type>` is absent. */
+function baseFromFraction(f: Fraction): NoteBase {
+	let best: NoteBase = 'quarter';
+	let bestDiff = Infinity;
+	for (const b of Object.keys(BASE_VALUES) as NoteBase[]) {
+		const bf = BASE_VALUES[b];
+		const diff = Math.abs(bf.numerator / bf.denominator - f.numerator / f.denominator);
+		if (diff < bestDiff) {
+			bestDiff = diff;
+			best = b;
+		}
+	}
+	return best;
+}
+
+// ── Articulations (MusicXML uses the same hyphenated names) ─────────
+
+const MARKING_TO_ARTICULATION: Record<string, Articulation> = {
+	accent: 'accent',
+	'strong-accent': 'strong-accent',
+	staccato: 'staccato',
+	tenuto: 'tenuto',
+	'detached-legato': 'detached-legato',
+	staccatissimo: 'staccatissimo',
+	'breath-mark': 'breath-mark',
+	caesura: 'caesura',
+	stress: 'stress',
+	unstress: 'unstress',
+};
+
+const PITCH_STEPS = new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+
+function syllableId(): string {
+	try {
+		if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+			return crypto.randomUUID();
+		}
+	} catch {
+		// fall through
+	}
+	return `syl-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function pitchKey(p: Pitch): string {
+	return `${p.step}${p.alter}/${p.octave}`;
+}
+
 export class MusicXmlScoreParser implements ScoreParser {
-  canParse(input: ScoreInput): boolean {
-    return input.format === 'musicxml';
-  }
+	canParse(input: ScoreInput): boolean {
+		return input.format === 'musicxml';
+	}
 
-  async parse(input: ScoreInput): Promise<ParseResult> {
-    if (!this.canParse(input)) {
-      throw new Error(
-        `MusicXmlScoreParser cannot parse input of format '${input.format}'`,
-      );
-    }
+	async parse(input: ScoreInput): Promise<ParseResult> {
+		if (!this.canParse(input)) {
+			throw new Error(`MusicXmlScoreParser cannot parse input of format '${input.format}'`);
+		}
+		const xmlInput = input as MusicXmlScoreInput;
 
-    // Narrow type and resolve string/Document polymorphism for downstream
-    // use once full parsing lands.
-    void (input as MusicXmlScoreInput);
+		const warnings: ParseWarning[] = [];
+		const errors: ParseError[] = [];
+		const warnedMarkingKeys = new Set<string>();
 
-    // TODO Phase 2: implement full MusicXML parsing.
-    //
-    // Pipeline:
-    //   1. Resolve input: if `data` is a string, parse via DOMParser
-    //      (browser) or @xmldom/xmldom (Node test environment). If it
-    //      is already a Document, use directly. Emit
-    //      `'invalid-musicxml'` fatal error on parse failure.
-    //   2. Identify the vocal part: scan `<score-part>` entries for the
-    //      one with `<lyric>` children attached to its notes; fall back
-    //      to the first part. Emit `'multiple-vocal-parts'` warning if
-    //      more than one candidate carries lyrics; emit
-    //      `'no-vocal-part-identified'` fatal error if none.
-    //   3. Walk `<measure>` elements to build `Measure[]` with
-    //      snapshotted signatures (see @invariant above). MusicXML
-    //      uses `<attributes>` blocks for key/time changes; track active
-    //      state across measures.
-    //   4. Walk the vocal part's `<note>` elements into `VocalLineEvent[]`:
-    //        a. Generate deterministic `id` from
-    //           `m{measureIndex}-{rhythmicPosition.numerator}-{rhythmicPosition.denominator}`.
-    //           MusicXML uses `<duration>` in divisions-per-quarter-note;
-    //           the parser converts to whole-note Fraction by dividing by
-    //           (divisions * 4).
-    //        b. Map `<type>`, `<dot>`, `<time-modification>` to `Duration`,
-    //           computing `fraction` once.
-    //        c. Map `<pitch>` (`<step>`, `<octave>`, `<alter>`) to `Pitch`.
-    //        d. Extract lyric from `<lyric>` child:
-    //             - `<syllabic>` (single/begin/middle/end) maps to
-    //               `SyllableInfo.type` ('whole'/'start'/'middle'/'end').
-    //             - `verseNumber` from `<lyric number="N">`.
-    //             - `id` = UUID v4.
-    //             - `wordContext` computed by buffering contiguous
-    //               `start`/`middle`/`end` syllables of the same verse;
-    //               on `end` or `whole`, flush the buffer and assign the
-    //               concatenation to all syllables in the word.
-    //        e. Map `<tie>`/`<tied>`, `<fermata>`, `<articulations>`.
-    //   5. Collect tempo markings from `<direction>` blocks containing
-    //      `<metronome>` or `<sound tempo="...">`. The two encoding paths
-    //      can coexist in one score; prefer `<metronome>` for the visible
-    //      beat-unit, fall back to `<sound>` for the BPM if `<metronome>`
-    //      is absent.
-    //   6. Determine `source.fidelity` and `source.origin` from
-    //      `input.sourcePath` extension, `<encoding>/<software>` metadata
-    //      (MuseScore, PDFtoMusic Pro, and homr all stamp themselves
-    //      here), and any other runner-injected hints.
-    //
-    // Reference: MusicXML 4.0 spec, MusicXML Tutorial (Recordare/W3C),
-    //   and the existing OCR-side reading patterns in
-    //   `apps/web/src/lib/components/RootPanel.svelte` for browser DOM
-    //   parsing conventions used in this codebase.
+		const fail = (code: ParseError['code'], message: string): ParseResult => {
+			errors.push({ code, message, fatal: true });
+			return { score: emptyScore(xmlInput), warnings, errors };
+		};
 
-    throw new Error('MusicXmlScoreParser.parse() not yet implemented');
-  }
+		// 1. Resolve the document root to an XmlEl.
+		let doc: XmlEl;
+		try {
+			doc = resolveDocument(xmlInput.data);
+		} catch (e) {
+			return fail('invalid-musicxml', e instanceof Error ? e.message : 'Could not read MusicXML input.');
+		}
+		if (descendants(doc, 'parsererror').length > 0) {
+			return fail('invalid-musicxml', 'MusicXML is not well-formed (parser error).');
+		}
+		const scorePartwise = firstDesc(doc, 'score-partwise') ?? (doc.tagName === 'score-partwise' ? doc : undefined);
+		if (!scorePartwise) {
+			if (firstDesc(doc, 'score-timewise')) {
+				return fail('invalid-musicxml', 'Timewise MusicXML is not supported; convert to partwise first.');
+			}
+			return fail('invalid-musicxml', 'No <score-partwise> root found.');
+		}
+
+		// MusicXML version (attribute on the root). Newer than tested → warn, parse on.
+		const version = scorePartwise.getAttribute('version');
+		if (version && /^(\d+)/.test(version) && parseInt(version, 10) < 3) {
+			warnings.push({
+				code: 'musicxml-pre-3-1-feature',
+				message: `MusicXML version ${version} predates 3.1; parsing the stable subset.`,
+			});
+		}
+
+		const parts = descendants(scorePartwise, 'part');
+		if (parts.length === 0) {
+			return fail('no-vocal-part-identified', 'MusicXML has no <part> elements.');
+		}
+
+		// 2. Vocal-part identification: the first part whose notes carry lyrics.
+		const lyricParts: number[] = [];
+		for (let i = 0; i < parts.length; i++) {
+			if (descendants(parts[i], 'lyric').length > 0) lyricParts.push(i);
+		}
+		let vocalIndex: number;
+		if (lyricParts.length === 0) {
+			vocalIndex = 0;
+			warnings.push({ code: 'no-lyrics-found', message: 'No part carries lyrics; using the first part as the vocal line.' });
+		} else {
+			vocalIndex = lyricParts[0];
+			if (lyricParts.length > 1) {
+				warnings.push({
+					code: 'multiple-vocal-parts',
+					message: `${lyricParts.length} parts carry lyrics; using the first (index ${vocalIndex}).`,
+				});
+			}
+		}
+		const vocalPart = parts[vocalIndex];
+		const partId = vocalPart.getAttribute('id') ?? `P${vocalIndex + 1}`;
+		const partName = resolvePartName(scorePartwise, partId) ?? partId;
+
+		// 3. Verse detection over the vocal part (mirrors the MNX two-stage
+		//    logic): the maximum count of distinct verse numbers on any one
+		//    note decides whether this is a verse structure at all.
+		const seenVersesInOrder: number[] = [];
+		let maxVersesPerNote = 0;
+		for (const note of descendants(vocalPart, 'note')) {
+			const lyrics = directChildren(note, 'lyric');
+			if (lyrics.length > maxVersesPerNote) maxVersesPerNote = lyrics.length;
+			for (const ly of lyrics) {
+				const n = intAttr(ly, 'number') ?? 1;
+				if (!seenVersesInOrder.includes(n)) seenVersesInOrder.push(n);
+			}
+		}
+		// Canonical verse numbering: MusicXML's `number` attribute is already
+		// 1..N by convention, so we use it directly, remapping to 1-based
+		// appearance order only if the numbers are non-sequential.
+		const orderedVerses = [...seenVersesInOrder].sort((a, b) => a - b);
+		const verseToCanonical = new Map<number, number>();
+		orderedVerses.forEach((v, i) => verseToCanonical.set(v, i + 1));
+
+		// 4. Walk the vocal part's measures.
+		const measureEls = directChildren(vocalPart, 'measure');
+		if (measureEls.length === 0) {
+			return fail('no-measures', 'Vocal part has no <measure> elements.');
+		}
+
+		const measures: Measure[] = [];
+		const timeSignatures: TimeSignatureChange[] = [];
+		const keySignatures: KeySignatureChange[] = [];
+		const tempoMarkings: TempoMarking[] = [];
+		const vocalLine: VocalLineEvent[] = [];
+		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
+
+		let divisions = readInitialDivisions(vocalPart) ?? readInitialDivisions(parts[0]);
+		if (!divisions || divisions <= 0) {
+			divisions = 1;
+			warnings.push({ code: 'unrecognised-element', message: 'No <divisions> found; assuming 1 division per quarter note.' });
+		}
+		let currentTime: TimeSignature | null = null;
+		let currentKey: KeySignature | null = null;
+
+		for (let mi = 0; mi < measureEls.length; mi++) {
+			const measureEl = measureEls[mi];
+			let cursor: Fraction = ZERO;
+
+			for (const child of kids(measureEl)) {
+				switch (child.tagName) {
+					case 'attributes': {
+						const divText = childText(child, 'divisions');
+						if (divText) {
+							const d = parseInt(divText, 10);
+							if (Number.isFinite(d) && d > 0) divisions = d;
+						}
+						const keyEl = firstChild(child, 'key');
+						if (keyEl) {
+							const fifths = parseInt(childText(keyEl, 'fifths') || '0', 10);
+							const mode = childText(keyEl, 'mode');
+							currentKey = { fifths: Number.isFinite(fifths) ? fifths : 0 };
+							if (mode === 'major' || mode === 'minor') currentKey.mode = mode;
+							keySignatures.push({ measureIndex: mi, signature: currentKey });
+						}
+						const timeEl = firstChild(child, 'time');
+						if (timeEl) {
+							const beats = parseInt(childText(timeEl, 'beats') || '0', 10);
+							const beatType = parseInt(childText(timeEl, 'beat-type') || '0', 10);
+							if (beats > 0 && beatType > 0) {
+								currentTime = { beats, beatType };
+								const symbol = timeEl.getAttribute('symbol');
+								if (symbol === 'common' || symbol === 'cut') currentTime.symbol = symbol;
+								timeSignatures.push({ measureIndex: mi, signature: currentTime });
+							}
+						}
+						break;
+					}
+					case 'direction': {
+						const t = readTempo(child, mi, cursor);
+						if (t) tempoMarkings.push(t);
+						break;
+					}
+					case 'backup': {
+						const d = parseInt(childText(child, 'duration') || '0', 10);
+						if (Number.isFinite(d) && d > 0) {
+							cursor = subFrac(cursor, frac(d, divisions * 4));
+							if (fracCompare(cursor, ZERO) < 0) cursor = ZERO;
+						}
+						break;
+					}
+					case 'forward': {
+						const d = parseInt(childText(child, 'duration') || '0', 10);
+						if (Number.isFinite(d) && d > 0) cursor = addFrac(cursor, frac(d, divisions * 4));
+						break;
+					}
+					case 'note': {
+						cursor = this.readNote(child, mi, cursor, divisions, {
+							vocalLine,
+							tieFlags,
+							warnings,
+							errors,
+							warnedMarkingKeys,
+							verseToCanonical,
+						});
+						break;
+					}
+					default:
+						break;
+				}
+			}
+
+			// Signature defaults for the first measure if none seen yet.
+			if (currentTime === null) {
+				currentTime = { beats: 4, beatType: 4 };
+				timeSignatures.push({ measureIndex: mi, signature: currentTime });
+				warnings.push({ code: 'unrecognised-element', message: 'No initial time signature; assuming 4/4.', location: { measureIndex: mi } });
+			}
+			if (currentKey === null) {
+				currentKey = { fifths: 0 };
+				keySignatures.push({ measureIndex: mi, signature: currentKey });
+				warnings.push({ code: 'unrecognised-element', message: 'No initial key signature; assuming no sharps or flats.', location: { measureIndex: mi } });
+			}
+
+			const numberAttr = measureEl.getAttribute('number');
+			const expected = frac(currentTime.beats, currentTime.beatType);
+			const measure: Measure = {
+				index: mi,
+				number: numberAttr && numberAttr.length > 0 ? numberAttr : String(mi + 1),
+				timeSignature: currentTime,
+				keySignature: currentKey,
+				expectedDuration: expected,
+			};
+			// Pickup / mismatch accounting.
+			const cmp = fracCompare(cursor, expected);
+			if (cmp !== 0 && cursor.numerator > 0) {
+				if (mi === 0 && cmp < 0) {
+					measure.isPickup = true;
+				} else {
+					warnings.push({
+						code: 'measure-duration-mismatch',
+						message: `Measure ${mi} content lasts ${cursor.numerator}/${cursor.denominator} whole notes against an expected ${expected.numerator}/${expected.denominator}.`,
+						location: { measureIndex: mi, partId },
+					});
+				}
+			}
+			measures.push(measure);
+		}
+
+		// 5. Tie resolution: types first, then best-effort partner linkage by
+		//    same-pitch adjacency (MusicXML ties are not id-targeted).
+		const byId = new Map(vocalLine.map((e) => [e.id, e]));
+		for (const ev of vocalLine) {
+			const f = tieFlags.get(ev.id);
+			if (!f || (!f.start && !f.stop)) continue;
+			ev.tied = { type: f.start && f.stop ? 'continue' : f.start ? 'start' : 'stop' };
+		}
+		const openByPitch = new Map<string, string>();
+		for (const ev of vocalLine) {
+			if (ev.type !== 'note' || !ev.pitch) continue;
+			const f = tieFlags.get(ev.id);
+			if (!f) continue;
+			const key = pitchKey(ev.pitch);
+			if (f.stop) {
+				const openId = openByPitch.get(key);
+				if (openId) {
+					const openEv = byId.get(openId);
+					if (openEv && openEv.tied) openEv.tied.partnerEventId = ev.id;
+					if (ev.tied) ev.tied.partnerEventId = openId;
+					openByPitch.delete(key);
+				}
+			}
+			if (f.start) openByPitch.set(key, ev.id);
+		}
+
+		// 6. wordContext per verse (mirrors the MNX pass).
+		assignWordContexts(vocalLine, warnings);
+
+		// 7. Provenance.
+		const software = readSoftware(scorePartwise);
+		const { origin, fidelity } = resolveOrigin(xmlInput.sourcePath, software);
+		const cyrillic = vocalLine.some((e) => e.syllable && e.syllable.verseNumber === 1 && /[Ѐ-ӿ]/.test(e.syllable.text));
+
+		const score: ParsedScore = {
+			source: {
+				format: 'musicxml',
+				fidelity,
+				origin,
+				...(cyrillic ? { languageHint: 'rus' } : {}),
+				sourceWarnings: warnings.map((w) => w.message),
+			},
+			vocalPart: { partId, partName },
+			measures,
+			keySignatures,
+			timeSignatures,
+			tempoMarkings,
+			vocalLine,
+		};
+
+		return { score, warnings, errors };
+	}
+
+	/** Read one `<note>` into the vocal line; return the advanced cursor. */
+	private readNote(
+		note: XmlEl,
+		measureIndex: number,
+		cursor: Fraction,
+		divisions: number,
+		ctx: {
+			vocalLine: VocalLineEvent[];
+			tieFlags: Map<string, { start: boolean; stop: boolean }>;
+			warnings: ParseWarning[];
+			errors: ParseError[];
+			warnedMarkingKeys: Set<string>;
+			verseToCanonical: Map<number, number>;
+		},
+	): Fraction {
+		// Grace notes carry no rhythmic duration; skip (v1 attends to sustained events).
+		if (firstChild(note, 'grace')) {
+			ctx.warnings.push({ code: 'unrecognised-element', message: 'grace note skipped (no rhythmic duration).', location: { measureIndex } });
+			return cursor;
+		}
+		// A chord tone shares the previous note's position; keep the first,
+		// warn, do not advance.
+		const isChord = !!firstChild(note, 'chord');
+		if (isChord) {
+			ctx.warnings.push({ code: 'unrecognised-element', message: 'Chord tone in the vocal line ignored (monophonic line expected).', location: { measureIndex } });
+			return cursor;
+		}
+
+		const durText = childText(note, 'duration');
+		const durDivs = parseInt(durText || '', 10);
+		if (!Number.isFinite(durDivs) || durDivs <= 0) {
+			ctx.errors.push({ code: 'invalid-musicxml', message: 'Note without a readable <duration>; event dropped.', location: { measureIndex }, fatal: false });
+			return cursor;
+		}
+		const soundingFraction = frac(durDivs, divisions * 4);
+		const position = frac(cursor.numerator, cursor.denominator);
+		const eventId = `m${measureIndex}-${position.numerator}-${position.denominator}`;
+
+		const isRest = !!firstChild(note, 'rest');
+
+		// Duration display fields from <type>/<dot>/<time-modification>;
+		// the sounding length is the divisions-derived fraction (source of truth).
+		const typeText = childText(note, 'type');
+		const base: NoteBase = isNoteBase(typeText) ? typeText : baseFromFraction(soundingFraction);
+		if (typeText && !isNoteBase(typeText)) {
+			ctx.warnings.push({ code: 'unrecognised-element', message: `Unsupported note <type> '${typeText}'; inferred '${base}'.`, location: { measureIndex, eventId } });
+		}
+		const dots = directChildren(note, 'dot').length;
+		let tuplet: TupletInfo | undefined;
+		const tm = firstChild(note, 'time-modification');
+		if (tm) {
+			const actual = parseInt(childText(tm, 'actual-notes') || '', 10);
+			const normal = parseInt(childText(tm, 'normal-notes') || '', 10);
+			const normalType = childText(tm, 'normal-type');
+			if (Number.isFinite(actual) && Number.isFinite(normal) && actual > 0 && normal > 0) {
+				tuplet = { actualNotes: actual, normalNotes: normal, normalType: isNoteBase(normalType) ? normalType : base };
+			}
+		}
+		const duration: Duration = { base, dots, ...(tuplet ? { tuplet } : {}), fraction: soundingFraction };
+
+		let pitch: Pitch | undefined;
+		if (!isRest) {
+			const pitchEl = firstChild(note, 'pitch');
+			const step = pitchEl ? childText(pitchEl, 'step') : '';
+			const octaveText = pitchEl ? childText(pitchEl, 'octave') : '';
+			const octave = parseInt(octaveText, 10);
+			if (!pitchEl || !PITCH_STEPS.has(step) || !Number.isFinite(octave)) {
+				ctx.errors.push({ code: 'invalid-musicxml', message: 'Note without a readable <pitch>; event dropped.', location: { measureIndex, eventId }, fatal: false });
+				return addFrac(cursor, soundingFraction);
+			}
+			const alterText = childText(pitchEl!, 'alter');
+			const alter = alterText ? parseInt(alterText, 10) : 0;
+			pitch = { step: step as Pitch['step'], octave, alter: Number.isFinite(alter) ? alter : 0 };
+
+			// Ties (the sounding <tie>, not the notational <tied>).
+			let tieStart = false;
+			let tieStop = false;
+			for (const tie of directChildren(note, 'tie')) {
+				const t = tie.getAttribute('type');
+				if (t === 'start') tieStart = true;
+				else if (t === 'stop') tieStop = true;
+			}
+			if (tieStart || tieStop) ctx.tieFlags.set(eventId, { start: tieStart, stop: tieStop });
+		}
+
+		// Notations: fermata + articulations.
+		let fermata = false;
+		let articulations: Articulation[] | undefined;
+		const notations = firstChild(note, 'notations');
+		if (notations && !isRest) {
+			if (firstChild(notations, 'fermata')) fermata = true;
+			const artBlock = firstChild(notations, 'articulations');
+			if (artBlock) {
+				for (const art of kids(artBlock)) {
+					const mapped = MARKING_TO_ARTICULATION[art.tagName];
+					if (mapped) {
+						(articulations ??= []).push(mapped);
+					} else if (!ctx.warnedMarkingKeys.has(art.tagName)) {
+						ctx.warnedMarkingKeys.add(art.tagName);
+						ctx.warnings.push({ code: 'unsupported-articulation', message: `Articulation '${art.tagName}' is not in the v1 set; ignored.`, location: { measureIndex, eventId } });
+					}
+				}
+			}
+		}
+
+		// Lyrics: one syllable per verse; keep the lowest-canonical verse on
+		// the event. Elision (multiple <text> in one <lyric>) is combined into
+		// one syllable's text and flagged (the data-model split is a banked
+		// question for the engine-spec bump).
+		let syllable: SyllableInfo | undefined;
+		if (!isRest) {
+			for (const ly of directChildren(note, 'lyric')) {
+				const texts = directChildren(ly, 'text').map(textOf).filter((t) => t.length > 0);
+				if (texts.length === 0) continue;
+				const elided = texts.length > 1;
+				const text = elided ? texts.join('‿') : texts[0]; // U+203F undertie
+				if (elided) {
+					ctx.warnings.push({
+						code: 'unrecognised-element',
+						message: `Elided syllables combined on one note ('${text}'); split deferred to the correction UI.`,
+						location: { measureIndex, eventId },
+					});
+				}
+				const syllabic = childText(ly, 'syllabic');
+				const type: SyllableInfo['type'] =
+					syllabic === 'begin' ? 'start' : syllabic === 'middle' ? 'middle' : syllabic === 'end' ? 'end' : 'whole';
+				const rawVerse = intAttr(ly, 'number') ?? 1;
+				const verseNumber = ctx.verseToCanonical.get(rawVerse) ?? rawVerse;
+				const candidate: SyllableInfo = { id: syllableId(), text, type, verseNumber, wordContext: text };
+				if (!syllable || candidate.verseNumber < syllable.verseNumber) syllable = candidate;
+			}
+		}
+
+		ctx.vocalLine.push({
+			id: eventId,
+			type: isRest ? 'rest' : 'note',
+			measureIndex,
+			rhythmicPosition: { fraction: position },
+			duration,
+			...(pitch ? { pitch } : {}),
+			...(syllable ? { syllable } : {}),
+			...(fermata ? { fermata: {} } : {}),
+			...(articulations ? { articulations } : {}),
+		});
+
+		return addFrac(cursor, soundingFraction);
+	}
+}
+
+// ── Module helpers ─────────────────────────────────────────────────
+
+function resolveDocument(data: string | Document): XmlEl {
+	if (typeof data === 'string') {
+		const g = globalThis as { DOMParser?: new () => { parseFromString(s: string, t: string): unknown } };
+		if (!g.DOMParser) {
+			throw new Error('String MusicXML needs a DOM parser; pass a pre-parsed Document in this environment.');
+		}
+		return new g.DOMParser().parseFromString(data, 'application/xml') as unknown as XmlEl;
+	}
+	return data as unknown as XmlEl;
+}
+
+function readInitialDivisions(part: XmlEl): number | undefined {
+	const el = firstDesc(part, 'divisions');
+	if (!el) return undefined;
+	const n = parseInt(textOf(el), 10);
+	return Number.isFinite(n) && n > 0 ? n : undefined;
+}
+
+function resolvePartName(scorePartwise: XmlEl, partId: string): string | undefined {
+	for (const sp of descendants(scorePartwise, 'score-part')) {
+		if (sp.getAttribute('id') === partId) {
+			const name = childText(sp, 'part-name');
+			return name.length > 0 ? name : undefined;
+		}
+	}
+	return undefined;
+}
+
+function readTempo(direction: XmlEl, measureIndex: number, cursor: Fraction): TempoMarking | undefined {
+	const metronome = firstDesc(direction, 'metronome');
+	const soundEl = firstDesc(direction, 'sound');
+	let bpm: number | undefined;
+	let beatUnit: NoteBase = 'quarter';
+	let beatUnitDots = 0;
+	if (metronome) {
+		const unit = childText(metronome, 'beat-unit');
+		if (isNoteBase(unit)) beatUnit = unit;
+		beatUnitDots = directChildren(metronome, 'beat-unit-dot').length;
+		const per = parseInt(childText(metronome, 'per-minute') || '', 10);
+		if (Number.isFinite(per) && per > 0) bpm = per;
+	}
+	if (bpm === undefined && soundEl) {
+		const t = parseFloat(soundEl.getAttribute('tempo') || '');
+		if (Number.isFinite(t) && t > 0) bpm = Math.round(t);
+	}
+	if (bpm === undefined) return undefined;
+	return { measureIndex, rhythmicPosition: { fraction: cursor }, bpm, beatUnit, beatUnitDots };
+}
+
+function readSoftware(scorePartwise: XmlEl): string {
+	// <identification><encoding><software> may repeat; concatenate.
+	return descendants(scorePartwise, 'software').map(textOf).join(' ').toLowerCase();
+}
+
+function resolveOrigin(
+	sourcePath: string | undefined,
+	software: string,
+): { origin: ParsedScore['source']['origin']; fidelity: ParsedScore['source']['fidelity'] } {
+	if (software.includes('homr')) return { origin: 'homr-musicxml-from-image', fidelity: 'medium' };
+	if (software.includes('pdftomusic')) return { origin: 'pdftomusic-pro-musicxml-from-vector-pdf', fidelity: 'high' };
+	if (software.includes('musescore')) return { origin: 'musescore-cli-musicxml-from-mscz', fidelity: 'high' };
+	void sourcePath;
+	return { origin: 'musicxml-direct', fidelity: 'native' };
+}
+
+/**
+ * The wordContext pass (identical logic to the MNX parser): per verse,
+ * contiguous start/middle syllables buffer until the word's end syllable,
+ * then the concatenation is assigned to every syllable in the word. `whole`
+ * syllables are their own word.
+ */
+function assignWordContexts(vocalLine: VocalLineEvent[], warnings: ParseWarning[]): void {
+	const open = new Map<number, SyllableInfo[]>();
+	const flush = (verse: number, malformed: boolean): void => {
+		const buffer = open.get(verse);
+		if (!buffer || buffer.length === 0) return;
+		const word = buffer.map((s) => s.text).join('');
+		for (const s of buffer) s.wordContext = word;
+		open.delete(verse);
+		if (malformed) {
+			warnings.push({
+				code: 'unrecognised-element',
+				message: `A lyric word in verse ${verse} was interrupted before its end syllable; context assigned from the partial word.`,
+			});
+		}
+	};
+	for (const event of vocalLine) {
+		const s = event.syllable;
+		if (!s) continue;
+		switch (s.type) {
+			case 'whole':
+				flush(s.verseNumber, true);
+				s.wordContext = s.text;
+				break;
+			case 'start':
+				flush(s.verseNumber, true);
+				open.set(s.verseNumber, [s]);
+				break;
+			case 'middle':
+			case 'end': {
+				const buffer = open.get(s.verseNumber);
+				if (buffer) buffer.push(s);
+				else open.set(s.verseNumber, [s]);
+				if (s.type === 'end') flush(s.verseNumber, false);
+				break;
+			}
+		}
+	}
+	for (const verse of [...open.keys()]) flush(verse, true);
+}
+
+function emptyScore(input: MusicXmlScoreInput): ParsedScore {
+	const { origin, fidelity } = resolveOrigin(input.sourcePath, '');
+	return {
+		source: { format: 'musicxml', fidelity, origin, sourceWarnings: [] },
+		vocalPart: { partId: '', partName: '' },
+		measures: [],
+		keySignatures: [],
+		timeSignatures: [],
+		tempoMarkings: [],
+		vocalLine: [],
+	};
 }
