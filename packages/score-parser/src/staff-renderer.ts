@@ -7,12 +7,17 @@
  * melody-only staff is bounded enough to render ourselves and own every
  * coordinate (and every `data-event-id` for the correction UI).
  *
- * This is the production layout engine (increment 1). It handles:
+ * This is the production layout engine (increment 2). It handles:
  *   - proportional rhythmic spacing (x by onset time, with a minimum gap);
  *   - multiple measures with barlines;
  *   - a bass clef and the key signature at the system head;
  *   - accidentals (♯ ♭ ♮) with per-measure state and key-signature carry;
- *   - ledger lines; rests; simple flags for unbeamed short notes;
+ *   - ledger lines; rests; flags for unbeamed short notes;
+ *   - beaming, derived by beat (Dann's ruling, 2026-07-12): the data model
+ *     carries no source beams, and the forced semantic stems would break an
+ *     engraver's groups anyway, so groups are computed here — flagged notes
+ *     joined within one measure, one beat (compound-metre aware), and one
+ *     timbre, with multi-level beams and stubs for mixed values;
  *   - the four analytical marks (forced semantic stems, grey turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break.
@@ -20,12 +25,12 @@
  * Deliberately deferred to later increments (documented so nothing is a
  * surprise): SMuFL / Bravura glyph references in place of the shape
  * primitives (Kimi's production constraint — a swap behind this same
- * layout, verified in-browser where the font loads); beaming; multi-system
+ * layout, verified in-browser where the font loads); multi-system
  * pagination onto the letter Paper page; wiring to live overlay data and the
  * correction-UI editable bindings.
  */
 
-import type { NoteBase, ParsedScore, Pitch, VocalLineEvent } from './types';
+import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEvent } from './types';
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 
 export interface StaffRenderOptions {
@@ -85,6 +90,35 @@ interface Placed {
   newMeasure: boolean;
 }
 
+// ── Beaming ────────────────────────────────────────────────────────
+// Groups are derived by beat, not read from the source (Dann's ruling,
+// 2026-07-12): `ParsedScore` carries no beam data, and the semantic stems
+// (open = down, close = up) would force breaks in an engraver's groups
+// wherever the timbre changes, so source beams could not be honoured
+// verbatim regardless.
+
+const STEM_HALF = 5.5;   // stem x-offset from the notehead centre
+const STEM_MIN = 26;     // minimum stem length under a beam
+const BEAM_STROKE = 4;   // beam thickness
+const BEAM_GAP = 7;      // spacing between beam levels
+const BEAM_STUB = 9;     // length of a partial (stub) beam
+const MAX_BEAM_SLOPE = 0.18; // px of rise per px of run, clamped
+
+/**
+ * Beat length in whole-note units, for beam grouping. Compound metres
+ * (6/8, 9/8, 12/8) group by the dotted beat; simple metres by denominator.
+ */
+function beatFraction(ts: TimeSignature): Fraction {
+  const compound = ts.beatType >= 8 && ts.beats % 3 === 0 && ts.beats > 3;
+  return { numerator: compound ? 3 : 1, denominator: ts.beatType };
+}
+
+/** 0-based index of the beat containing a rhythmic position. */
+function beatIndexOf(pos: Fraction, ts: TimeSignature): number {
+  const b = beatFraction(ts);
+  return Math.floor((pos.numerator * b.denominator) / (pos.denominator * b.numerator));
+}
+
 /** Render the analysed vocal line to a standalone SVG string. */
 export function renderAnalyzedStaff(
   parsed: ParsedScore,
@@ -116,6 +150,86 @@ export function renderAnalyzedStaff(
   }
   const contentRight = (placed[placed.length - 1]?.x ?? o.leftMargin) + Math.max(o.minGap, prevDurWhole * o.pxPerWhole);
   const width = contentRight + 24;
+
+  // ── Beam pass: group flagged notes by measure, beat, and timbre ──
+  // A group needs at least two consecutive members; it breaks at rests,
+  // barlines, beat boundaries, unanalysed notes, and timbre changes
+  // (semantic stems make mixed-timbre beams impossible).
+  const beamStemById = new Map<string, { sx: number; tipY: number }>();
+  const beamParts: string[] = [];
+  {
+    interface BeamNote { id: string; x: number; noteY: number; flags: number }
+    let group: BeamNote[] = [];
+    let groupUp = false;
+    let groupKey = '';
+
+    const emit = (notes: BeamNote[], stemUp: boolean): void => {
+      const dir = stemUp ? -1 : 1;
+      const sxOf = (n: BeamNote): number => (stemUp ? n.x + STEM_HALF : n.x - STEM_HALF);
+      const first = notes[0];
+      const last = notes[notes.length - 1];
+      const x0 = sxOf(first);
+      const rawSlope = (last.noteY - first.noteY) / (sxOf(last) - x0);
+      const slope = Math.max(-MAX_BEAM_SLOPE, Math.min(MAX_BEAM_SLOPE, rawSlope));
+      // Anchor the beam so every stem in the group reaches at least STEM_MIN.
+      let anchor = stemUp ? Infinity : -Infinity;
+      for (const n of notes) {
+        const cand = n.noteY + dir * STEM_MIN - slope * (sxOf(n) - x0);
+        anchor = stemUp ? Math.min(anchor, cand) : Math.max(anchor, cand);
+      }
+      const beamY = (x: number): number => anchor + slope * (x - x0);
+      for (const n of notes) {
+        beamStemById.set(n.id, { sx: sxOf(n), tipY: beamY(sxOf(n)) });
+      }
+      // Level 1 is the primary beam; higher levels draw as runs of two or
+      // more, or as stubs on singletons (a stub points at its left
+      // neighbour when it has one, otherwise right).
+      const maxFlags = Math.max(...notes.map((n) => n.flags));
+      for (let level = 1; level <= maxFlags; level++) {
+        const yOff = (level - 1) * BEAM_GAP * -dir; // step toward the noteheads
+        let i = 0;
+        while (i < notes.length) {
+          if (notes[i].flags < level) { i++; continue; }
+          let j = i;
+          while (j + 1 < notes.length && notes[j + 1].flags >= level) j++;
+          let xa: number;
+          let xb: number;
+          if (j > i) {
+            xa = sxOf(notes[i]);
+            xb = sxOf(notes[j]);
+          } else if (level > 1) {
+            const sx = sxOf(notes[i]);
+            xa = i > 0 ? sx - BEAM_STUB : sx;
+            xb = i > 0 ? sx : sx + BEAM_STUB;
+          } else {
+            i = j + 1;
+            continue;
+          }
+          beamParts.push(`<line x1="${xa}" y1="${beamY(xa) + yOff}" x2="${xb}" y2="${beamY(xb) + yOff}" stroke="#1a1612" stroke-width="${BEAM_STROKE}" data-beam-level="${level}"/>`);
+          i = j + 1;
+        }
+      }
+    };
+
+    const flush = (): void => {
+      if (group.length >= 2) emit(group, groupUp);
+      group = [];
+      groupKey = '';
+    };
+
+    for (const { ev, x: nx } of placed) {
+      const a = ev.type === 'note' && ev.pitch ? analyzed.events[ev.id] : undefined;
+      const flags = ev.type === 'note' ? flagCount(ev.duration.base) : 0;
+      if (!a || !ev.pitch || flags < 1) { flush(); continue; }
+      const ts = parsed.measures[ev.measureIndex]?.timeSignature ?? { beats: 4, beatType: 4 };
+      const key = `${ev.measureIndex}|${beatIndexOf(ev.rhythmicPosition.fraction, ts)}|${a.timbre}`;
+      if (key !== groupKey) flush();
+      groupKey = key;
+      groupUp = a.timbre === 'close';
+      group.push({ id: ev.id, x: nx, noteY: yFor(ev.pitch), flags });
+    }
+    flush();
+  }
 
   const parts: string[] = [];
   parts.push(`<svg viewBox="0 0 ${width} ${staffBottom + 64}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`);
@@ -198,15 +312,22 @@ export function renderAnalyzedStaff(
     // Forced stem: open timbre = down, close = up. (No stem on a whole note.)
     const stemUp = a ? a.timbre === 'close' : false;
     if (a && ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
-      const sx = stemUp ? nx + 5.5 : nx - 5.5;
-      const sy1 = stemUp ? y - 1 : y + 1;
-      const sy2 = stemUp ? y - 30 : y + 30;
-      parts.push(`<line x1="${sx}" y1="${sy1}" x2="${sx}" y2="${sy2}" stroke="#1a1612" stroke-width="1.5"/>`);
-      // Simple flags for unbeamed short notes.
-      const flags = flagCount(ev.duration.base);
-      for (let f = 0; f < flags; f++) {
-        const fy = sy2 + f * 6 * (stemUp ? 1 : -1);
-        parts.push(`<path d="M${sx} ${fy} q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>`);
+      const beamed = beamStemById.get(ev.id);
+      if (beamed) {
+        // The stem meets the beam; the beam replaces flags.
+        const sy1 = stemUp ? y - 1 : y + 1;
+        parts.push(`<line x1="${beamed.sx}" y1="${sy1}" x2="${beamed.sx}" y2="${beamed.tipY}" stroke="#1a1612" stroke-width="1.5"/>`);
+      } else {
+        const sx = stemUp ? nx + STEM_HALF : nx - STEM_HALF;
+        const sy1 = stemUp ? y - 1 : y + 1;
+        const sy2 = stemUp ? y - 30 : y + 30;
+        parts.push(`<line x1="${sx}" y1="${sy1}" x2="${sx}" y2="${sy2}" stroke="#1a1612" stroke-width="1.5"/>`);
+        // Simple flags for unbeamed short notes.
+        const flags = flagCount(ev.duration.base);
+        for (let f = 0; f < flags; f++) {
+          const fy = sy2 + f * 6 * (stemUp ? 1 : -1);
+          parts.push(`<path d="M${sx} ${fy} q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>`);
+        }
       }
     }
 
@@ -229,6 +350,9 @@ export function renderAnalyzedStaff(
     if (cyr) parts.push(`<text x="${nx}" y="${staffBottom + 28}" text-anchor="middle" font-size="12.5" fill="#1a1612">${esc(cyr)}</text>`);
     if (ipa) parts.push(`<text x="${nx}" y="${staffBottom + 44}" text-anchor="middle" font-size="12" fill="#6a655f" font-style="italic">${esc(ipa)}</text>`);
   }
+
+  // Beams (drawn once, after the notes they join).
+  parts.push(...beamParts);
 
   // Final barline.
   parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="1.6"/>`);
