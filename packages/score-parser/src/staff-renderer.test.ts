@@ -1,9 +1,9 @@
 /**
- * Staff-renderer spike tests. Asserts that the bespoke SVG carries all four
- * hard criteria (forced stems, grey turning-pitch noteheads, red crossing
- * boxes, dual Cyrillic/IPA underlay), the `#` phonation break, and a
- * `data-event-id` per note. String assertions over the SVG output, which is
- * a pure function — no browser needed.
+ * Staff-renderer tests (production layout). A two-measure fixture in 3/4,
+ * one flat, exercising rhythmic spacing, a barline, an accidental (B
+ * natural against the flat key), a rest, flags, and all four analytical
+ * marks plus the `#` phonation break. String assertions over the pure SVG
+ * output — no browser needed.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -13,22 +13,21 @@ import type { Fraction, NoteBase, ParsedScore, Pitch, VocalLineEvent } from './t
 import type { VoiceProfileSnapshot } from './analysis-types';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
-function frac(n: number, d: number): Fraction {
-  return { numerator: n, denominator: d };
-}
-function note(id: string, pitch: Pitch, base: NoteBase, verses: [string, string]): VocalLineEvent {
-  const dur: Record<NoteBase, Fraction> = {
-    breve: frac(2, 1), whole: frac(1, 1), half: frac(1, 2), quarter: frac(1, 4), eighth: frac(1, 8),
-    '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
-  };
+const frac = (n: number, d: number): Fraction => ({ numerator: n, denominator: d });
+const DUR: Record<NoteBase, Fraction> = {
+  breve: frac(2, 1), whole: frac(1, 1), half: frac(1, 2), quarter: frac(1, 4), eighth: frac(1, 8),
+  '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
+};
+
+function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string]): VocalLineEvent {
   return {
     id,
-    type: 'note',
-    measureIndex: 0,
-    rhythmicPosition: { fraction: frac(0, 1) },
-    duration: { base, dots: 0, fraction: dur[base] },
-    pitch,
-    syllable: { id: `s-${id}`, text: verses[0], type: 'whole', verseNumber: 1, wordContext: verses[0], verses },
+    type: pitch ? 'note' : 'rest',
+    measureIndex,
+    rhythmicPosition: { fraction: pos },
+    duration: { base, dots: 0, fraction: DUR[base] },
+    ...(pitch ? { pitch } : {}),
+    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: 'whole', verseNumber: 1, wordContext: verses[0], verses } } : {}),
   };
 }
 
@@ -40,23 +39,25 @@ const profile: VoiceProfileSnapshot = {
   label: 'bass',
 };
 
-const vowelById: Record<string, string> = { n1: 'a', n2: 'o', n3: 'u', n4: 'i', n5: 'i' };
+const vowelById: Record<string, string> = { n1: 'a', n2: 'o', n3: 'o', n5: 'i', n6: 'i' };
 const resolver: VowelResolver = (e) => vowelById[e.id];
 
 function demoScore(): ParsedScore {
   const events = [
-    note('n1', P('F', 2), 'quarter', ['Ты', 'tɨ']),
-    note('n2', P('A', 2), 'quarter', ['по', 'po']),
-    note('n3', P('D', 3), 'quarter', ['гру', 'gru']),
-    note('n4', P('A', 3), 'quarter', ['зи', 'zi']),
-    note('n5', P('D', 4), 'half', ['сь', 'sʲ']),
+    note('n1', 0, frac(0, 1), P('F', 2), 'quarter', ['Ты', 'tɨ']),
+    note('n2', 0, frac(1, 4), P('A', 2), 'eighth', ['по', 'po']),
+    note('n3', 0, frac(3, 8), P('B', 2), 'eighth', ['гру', 'gru']), // B natural vs Bb key → ♮
+    note('n4', 0, frac(1, 2), null, 'quarter'), // rest
+    note('n5', 1, frac(0, 1), P('A', 3), 'quarter', ['зи', 'zi']),
+    note('n6', 1, frac(1, 4), P('D', 4), 'half', ['сь', 'sʲ']), // crossing (≈ fR1 300)
   ];
+  const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });
   return {
     source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
     vocalPart: { partId: 'P1', partName: 'Voice' },
-    measures: [{ index: 0, number: '1', timeSignature: { beats: 4, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(1, 1) }],
+    measures: [m(0), m(1)],
     keySignatures: [{ measureIndex: 0, signature: { fifths: -1 } }],
-    timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
+    timeSignatures: [{ measureIndex: 0, signature: { beats: 3, beatType: 4 } }],
     tempoMarkings: [],
     vocalLine: events,
   };
@@ -70,7 +71,7 @@ export function renderDemo(): string {
   return renderAnalyzedStaff(parsed, analyzed);
 }
 
-describe('staff renderer: the four hard criteria', () => {
+describe('staff renderer: layout', () => {
   const svg = renderDemo();
 
   it('is a well-formed standalone SVG', () => {
@@ -78,31 +79,49 @@ describe('staff renderer: the four hard criteria', () => {
     expect(svg.trimEnd().endsWith('</svg>')).toBe(true);
   });
 
-  it('1. carries forced stems in both directions (open down, close up)', () => {
-    // Open notes (n1–n3, low) get down-stems; close notes (n4–n5, high) get up-stems.
-    const stems = svg.match(/stroke-width="1\.5"/g) ?? [];
-    expect(stems.length).toBeGreaterThan(1);
+  it('renders the key signature (one flat) at the head', () => {
+    expect(svg.includes('♭')).toBe(true);
   });
 
-  it('2. draws grey stemless turning-pitch noteheads', () => {
+  it('renders a natural accidental where the note contradicts the key (B natural)', () => {
+    expect(svg.includes('♮')).toBe(true);
+  });
+
+  it('draws a barline between the two measures and a final barline', () => {
+    const barlines = svg.match(/y1="72"[^>]*y2="120"/g) ?? [];
+    expect(barlines.length).toBeGreaterThan(1); // internal + final
+  });
+
+  it('draws a rest', () => {
+    expect(svg.includes('width="10" height="6"')).toBe(true);
+  });
+
+  it('flags the unbeamed eighth notes', () => {
+    expect(svg.includes('q8 3 7 12')).toBe(true);
+  });
+});
+
+describe('staff renderer: the four analytical criteria', () => {
+  const svg = renderDemo();
+
+  it('1. forced stems in both directions (open down, close up)', () => {
+    expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
+  });
+  it('2. grey stemless turning-pitch noteheads', () => {
     expect(svg.includes('fill="#9a968f"')).toBe(true);
   });
-
-  it('3. draws a red squircle at the fR1/fo crossing (n5)', () => {
+  it('3. red squircle at the fR1/fo crossing (n6)', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);
   });
-
-  it('4. draws the dual Cyrillic / IPA underlay', () => {
-    expect(svg.includes('>Ты<')).toBe(true); // verse 1, Cyrillic
-    expect(svg.includes('>tɨ<')).toBe(true); // verse 2, IPA
+  it('4. dual Cyrillic / IPA underlay', () => {
+    expect(svg.includes('>Ты<')).toBe(true);
+    expect(svg.includes('>tɨ<')).toBe(true);
   });
-
-  it('draws the # phonation break on n2', () => {
+  it('draws the # phonation break', () => {
     expect(svg.includes('>#<')).toBe(true);
   });
-
-  it('binds every note by data-event-id for the correction UI', () => {
-    for (const id of ['n1', 'n2', 'n3', 'n4', 'n5']) {
+  it('binds every note by data-event-id', () => {
+    for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
       expect(svg.includes(`data-event-id="${id}"`)).toBe(true);
     }
   });
