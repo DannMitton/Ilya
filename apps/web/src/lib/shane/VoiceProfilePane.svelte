@@ -180,6 +180,7 @@
 		opus=""
 		{language}
 		onheightchange={handleHeaderHeight}
+		versionAccent="#8E7E9B"
 	/>
 
 	<!-- Content layer: the envelope's interim states, centred in the

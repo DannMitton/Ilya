@@ -111,10 +111,12 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
 };
 
 /**
- * Turning-pitch layer colour: the App. B sample's sage midtone (estimated
- * from the p. 210 image; awaiting Dann's in-browser confirmation).
+ * Turning-pitch layer colour: Calm Authority's core sage accent, `--sage`
+ * in app.css (Dann's ruling, 2026-07-12: use the existing colour story,
+ * not an invented estimate). Baked as hex because this module is pure and
+ * DOM-free; keep in sync with the app token.
  */
-const TURNING_COLOUR = '#8FA294';
+const TURNING_COLOUR = '#8B9A7D';
 
 /**
  * Standard per-clef octave placement for key-signature accidentals.

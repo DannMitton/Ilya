@@ -86,16 +86,16 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   const svg = renderDemo();
 
   it('renders the turning layer in the appendix sage, not the old grey', () => {
-    expect(svg.includes('fill="#8FA294"')).toBe(true);
+    expect(svg.includes('fill="#8B9A7D"')).toBe(true);
     expect(svg.includes('#9a968f')).toBe(false);
   });
 
   it('shows the turning D# sharp once, then carries it through the measure', () => {
-    expect((svg.match(/fill="#8FA294">♯</g) ?? []).length).toBe(1);
+    expect((svg.match(/fill="#8B9A7D">♯</g) ?? []).length).toBe(1);
   });
 
   it('draws no turning accidental for natural turning pitches', () => {
-    expect((svg.match(/fill="#8FA294">♮/g) ?? []).length).toBe(0);
+    expect((svg.match(/fill="#8B9A7D">♮/g) ?? []).length).toBe(0);
   });
 
   it('brackets the triplet in black with its numeral', () => {
@@ -117,7 +117,7 @@ describe('staff renderer: the four analytical criteria', () => {
     expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
   });
   it('2. sage stemless turning-pitch noteheads', () => {
-    expect(svg.includes('fill="#8FA294"')).toBe(true);
+    expect(svg.includes('fill="#8B9A7D"')).toBe(true);
   });
   it('3. red squircle at the fR1/fo crossing (n6)', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);
@@ -157,7 +157,7 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
   it('renders key-signature and layer accidentals as glyphs (flat, natural, sage sharp)', () => {
     expect(svg.includes(String.fromCodePoint(0xe260))).toBe(true); // accidentalFlat (key)
     expect(svg.includes(String.fromCodePoint(0xe261))).toBe(true); // accidentalNatural (n3)
-    const sageSharp = new RegExp(`fill="#8FA294">${String.fromCodePoint(0xe262)}<`, 'g');
+    const sageSharp = new RegExp(`fill="#8B9A7D">${String.fromCodePoint(0xe262)}<`, 'g');
     expect((svg.match(sageSharp) ?? []).length).toBe(1); // turning D#, carried
   });
 

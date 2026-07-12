@@ -9,9 +9,15 @@
 		opus: string;
 		language: Language;
 		onheightchange?: (height: number) => void;
+		/**
+		 * Colour of the nestled "2026a" version badge. Transcription pages
+		 * keep the default sage; Fit/Shane surfaces pass deeper-lavender to
+		 * harmonize the mark with their palette (Dann's ruling, 2026-07-12).
+		 */
+		versionAccent?: string;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)' }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -47,7 +53,7 @@
 
 <header class="title-header" bind:offsetHeight={measuredHeight}>
 	<div class="logo">
-		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version">2026a</span>
+		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version" style="color: {versionAccent}">2026a</span>
 	</div>
 
 	<div class="song-title">
