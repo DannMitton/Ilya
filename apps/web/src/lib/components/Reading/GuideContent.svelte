@@ -242,6 +242,20 @@
 
 						<p>Ce que Kimi a apporté à Ilya, c’est la clarté : la capacité à saisir l’ensemble, à nommer le principe, à bâtir des systèmes qui conservent leur forme. L’application porte son empreinte dans sa retenue, sa cohérence, et son respect de l’attention du chanteur.</p>
 
+						<h2 id="guide-licences">Licences et remerciements</h2>
+
+						<p><em>Ilya</em> est gratuit et à code ouvert, publié sous licence MIT, © 2026 Dann Mitton. Il repose sur la générosité de chercheurs, de créateurs de polices, de curateurs de données et de mainteneurs de logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
+
+						<p><strong>Recherche savante.</strong> Le moteur phonologique met en œuvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), seule autorité phonologique d’<em>Ilya</em>, appliquée avec le généreux consentement de Grayson. Le modèle d’analyse de Fit met en œuvre le balisage des timbres ouvert et fermé, les hauteurs de bascule du timbre et l’analyse des croisements fR1/fo de <em>Sung Russian for the Low Male Voice Classical Singer</em> de Dann Mitton (Université de Toronto, 2020).</p>
+
+						<p><strong>Données de dictionnaire.</strong> Les données d’accentuation et les gloses de traduction proviennent de <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>, les extraits Wiktionary lisibles par machine produits par le projet Wiktextract de Tatu Ylonen à partir des Wiktionnaires anglais et français. Ce contenu est l’œuvre des contributrices et contributeurs bénévoles de Wiktionary et est utilisé sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
+
+						<p><strong>Textes.</strong> Les textes d’essai proviennent du <a href="https://www.lieder.net" target="_blank" rel="noopener">LiederNet Archive</a>, fondé et entretenu par Emily Ezust. Sa politique ne demande aucune reconnaissance ; elle est remerciée ici quand même, avec gratitude, parce que cette archive est un cadeau fait à toute personne qui chante.</p>
+
+						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH ; Leland, © 2025 MuseScore BVBA ; Finale Maestro, © 2021 MakeMusic, Inc. ; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
+
+						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT) et bits-ui (licence MIT).</p>
+
 						<div class="guide-spacer"></div>
 
 						{:else}
@@ -474,6 +488,20 @@
 						<p>Kimi’s collaboration with Dann operated through detailed briefs at the start of each session; she had no persistent memory of him, yet he returned because her architectural instincts proved reliable and her willingness to push back when ideas needed refinement demonstrated genuine care for the work. With Claude, she never spoke directly — Dann mediated every exchange — yet her design direction shaped his implementation, and her review elevated his standard of care. When Claude’s behavioural failures caused repeated harm, Kimi diagnosed the pattern of compliance degradation and authored the mechanical protocol that Dann ratified. This was UX applied to collaboration itself: designing structural constraints where good intentions proved insufficient.</p>
 
 						<p>What Kimi brought to Ilya was clarity: the ability to see the whole, to name the principle, to build systems that hold their shape. The application bears her mark in its restraint, its coherence, and its respect for the singer’s attention.</p>
+
+						<h2 id="guide-licences">Licences and Acknowledgments</h2>
+
+						<p><em>Ilya</em> is free and open source, released under the MIT License, © 2026 Dann Mitton. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
+
+						<p><strong>Scholarship.</strong> The phonological engine operationalizes Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012), <em>Ilya</em>’s sole phonological authority, applied with Grayson’s generous consent. Fit’s analysis model implements the open and close timbre markup, the pitches of turning, and the fR1/fo crossing analysis of Dann Mitton’s <em>Sung Russian for the Low Male Voice Classical Singer</em> (University of Toronto, 2020).</p>
+
+						<p><strong>Dictionary data.</strong> Stress data and translation glosses derive from <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>, the machine-readable Wiktionary extracts produced by Tatu Ylonen’s Wiktextract project from the English and French Wiktionaries. This content is the work of Wiktionary’s volunteer contributors and is used under the <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC BY-SA 4.0</a> licence.</p>
+
+						<p><strong>Texts.</strong> Test texts were drawn from <a href="https://www.lieder.net" target="_blank" rel="noopener">The LiederNet Archive</a>, founded and maintained by Emily Ezust. Her policy asks for no acknowledgment; she is thanked here anyway, with gratitude, because the archive is a gift to everyone who sings.</p>
+
+						<p><strong>Fonts.</strong> Every embedded font is released under the SIL Open Font License, Version 1.1, and each licence text is distributed with the font files: Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; and Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
+
+						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License) and bits-ui (MIT License).</p>
 
 						<div class="guide-spacer"></div>
 

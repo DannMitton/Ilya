@@ -401,6 +401,9 @@
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-kimi')} data-heading-id="guide-kimi" onclick={() => handleTocClick('guide-kimi')}>Kimi</button></li>
 								</ul></div></div>
 							</li>
+
+							<!-- Licences -->
+							<li><button class="toc-link" class:active={isActive('guide-licences')} data-heading-id="guide-licences" onclick={() => handleTocClick('guide-licences')}>{language === 'fr' ? 'Licences et remerciements' : 'Licences and Acknowledgments'}</button></li>
 						</ul>
 					</nav>
 				{:else if activeTab === 'shane'}
