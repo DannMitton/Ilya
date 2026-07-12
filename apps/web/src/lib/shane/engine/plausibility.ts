@@ -144,13 +144,18 @@ export interface PlausibilityResult {
 	windowLow?: number;
 	windowHigh?: number;
 	/**
-	 * Signed semitone distance from the extracted fR1 to the nearest guarded
-	 * window edge: positive = outside the window (how far past the edge),
-	 * negative = inside (how much headroom). Logged for EVERY extraction
-	 * (ruled): the distribution of honest readings near the borders is the
-	 * evidence base for any future margin tightening.
+	 * Semitone headroom ABOVE the floor: positive = inside (this far above the
+	 * floor), negative = breached the floor (this far below it).
+	 * Semitone headroom BELOW the ceiling: positive = inside, negative =
+	 * breached the ceiling.
+	 * BOTH are logged for EVERY extraction (Kimi's ruling, 2026-07-11): the
+	 * floor and ceiling margins now differ (3 vs 2 st), so a single
+	 * nearest-edge number would lose the trail needed to tune each edge
+	 * independently. The distribution of honest readings near each border is
+	 * the evidence base for any future margin change.
 	 */
-	distanceToEdgeSemitones?: number;
+	distanceToFloorSemitones?: number;
+	distanceToCeilingSemitones?: number;
 	anchorSource: 'bozeman' | 'anchors-derived' | null;
 	voiceTypeBucket: VoiceTypeBucket;
 }
@@ -198,18 +203,19 @@ export function checkPlausibility(
 	const windowLow = coreLo! / FLOOR_RATIO;
 	const windowHigh = coreHi! * CEILING_RATIO;
 	const inside = f1 >= windowLow && f1 <= windowHigh;
-	// Signed distance to the NEAREST edge, positive outside.
-	const dLow = st(windowLow, f1); // >0 when f1 below the floor
-	const dHigh = st(f1, windowHigh); // >0 when f1 above the ceiling
-	const distanceToEdgeSemitones = inside
-		? Math.max(dLow, dHigh) // both negative inside; the larger is nearest
-		: Math.max(dLow, dHigh);
+	// Both edge distances (Kimi's ruling): floor headroom = st above the floor,
+	// ceiling headroom = st below the ceiling. Positive inside, negative when
+	// that edge is breached. Keeping both preserves a separate tuning trail per
+	// edge now that the margins differ.
+	const distanceToFloorSemitones = st(f1, windowLow); // + = above floor
+	const distanceToCeilingSemitones = st(windowHigh, f1); // + = below ceiling
 
 	return {
 		plausibility: inside ? 'plausible' : 'implausible',
 		windowLow: Math.round(windowLow * 100) / 100,
 		windowHigh: Math.round(windowHigh * 100) / 100,
-		distanceToEdgeSemitones: Math.round(distanceToEdgeSemitones * 100) / 100,
+		distanceToFloorSemitones: Math.round(distanceToFloorSemitones * 100) / 100,
+		distanceToCeilingSemitones: Math.round(distanceToCeilingSemitones * 100) / 100,
 		anchorSource,
 		voiceTypeBucket
 	};
@@ -227,7 +233,8 @@ export interface PlausibilityEvent {
 	extractedFR1: number;
 	windowLow: number | null;
 	windowHigh: number | null;
-	distanceToEdgeSemitones: number | null;
+	distanceToFloorSemitones: number | null;
+	distanceToCeilingSemitones: number | null;
 	plausibility: Plausibility;
 	rePromptShown: boolean;
 	anchorSource: 'bozeman' | 'anchors-derived' | null;
@@ -248,7 +255,8 @@ export function buildPlausibilityEvent(
 		extractedFR1: Math.round(f1 * 10) / 10,
 		windowLow: result.windowLow ?? null,
 		windowHigh: result.windowHigh ?? null,
-		distanceToEdgeSemitones: result.distanceToEdgeSemitones ?? null,
+		distanceToFloorSemitones: result.distanceToFloorSemitones ?? null,
+		distanceToCeilingSemitones: result.distanceToCeilingSemitones ?? null,
 		plausibility: result.plausibility,
 		rePromptShown,
 		anchorSource: result.anchorSource,

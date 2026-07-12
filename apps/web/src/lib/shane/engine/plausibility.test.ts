@@ -74,7 +74,8 @@ describe('the motivating case: 1063 Hz [i]', () => {
 		for (const t of ['soprano', 'mezzo', 'tenor', 'baritone', 'bass', undefined]) {
 			const r = checkPlausibility(1063, 'i', t);
 			expect(r.plausibility).toBe('implausible');
-			expect(r.distanceToEdgeSemitones!).toBeGreaterThan(0);
+			// Breached the ceiling: ceiling headroom is negative.
+			expect(r.distanceToCeilingSemitones!).toBeLessThan(0);
 		}
 	});
 });
@@ -104,17 +105,29 @@ describe('anchor-derived windows ([ɨ] [ɪ] [a] [ʌ])', () => {
 	});
 });
 
-describe('distance-to-edge (logged for every extraction, ruled)', () => {
-	it('is negative inside the window and positive outside', () => {
-		expect(checkPlausibility(380, 'i', 'soprano').distanceToEdgeSemitones!).toBeLessThan(0);
-		expect(checkPlausibility(1063, 'i', 'soprano').distanceToEdgeSemitones!).toBeGreaterThan(0);
+describe('both edge distances (logged for every extraction, Kimi 2026-07-11)', () => {
+	it('both positive inside the window; the breached edge goes negative outside', () => {
+		const inside = checkPlausibility(380, 'i', 'soprano');
+		expect(inside.distanceToFloorSemitones!).toBeGreaterThan(0);
+		expect(inside.distanceToCeilingSemitones!).toBeGreaterThan(0);
+		const high = checkPlausibility(1063, 'i', 'soprano');
+		expect(high.distanceToCeilingSemitones!).toBeLessThan(0); // above ceiling
+		expect(high.distanceToFloorSemitones!).toBeGreaterThan(0); // still above floor
 	});
-	it('measures ~semitones past the edge for the motivating case', () => {
+	it('measures ~semitones past the ceiling for the motivating case', () => {
 		// Union guarded ceiling for [i] = 440 × 2^(2/12) ≈ 493.9;
-		// 12·log2(1063/493.9) ≈ 13.3 st.
+		// ceiling headroom = 12·log2(493.9/1063) ≈ −13.3 st.
 		const r = checkPlausibility(1063, 'i');
-		expect(r.distanceToEdgeSemitones!).toBeGreaterThan(13);
-		expect(r.distanceToEdgeSemitones!).toBeLessThan(14);
+		expect(r.distanceToCeilingSemitones!).toBeLessThan(-13);
+		expect(r.distanceToCeilingSemitones!).toBeGreaterThan(-14);
+	});
+	it('a dark bass [u] at 255 Hz sits inside, with small floor headroom (3 st margin)', () => {
+		// Bass [u] core floor 293.66; guarded floor = 293.66 / 2^(3/12) ≈ 246.9.
+		// 255 is ~0.56 st above the guarded floor: honest, and no longer a false alarm.
+		const r = checkPlausibility(255, 'u', 'bass');
+		expect(r.plausibility).toBe('plausible');
+		expect(r.distanceToFloorSemitones!).toBeGreaterThan(0);
+		expect(r.distanceToFloorSemitones!).toBeLessThan(1.5);
 	});
 });
 
@@ -141,7 +154,8 @@ describe('no-block invariant and event schema', () => {
 		});
 		expect(typeof ev.windowLow).toBe('number');
 		expect(typeof ev.windowHigh).toBe('number');
-		expect(typeof ev.distanceToEdgeSemitones).toBe('number');
+		expect(typeof ev.distanceToFloorSemitones).toBe('number');
+		expect(typeof ev.distanceToCeilingSemitones).toBe('number');
 	});
 });
 

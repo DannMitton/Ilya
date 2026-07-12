@@ -101,6 +101,22 @@
 		 * Kimi-gated behind persistence, which is now real).
 		 */
 		onComplete?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
+		/**
+		 * Fires with the active voice's working profile and name whenever
+		 * either changes, including the paths the Pacifier-forwarded
+		 * onProfileChange cannot see: hydration on mount, voice switching,
+		 * creation, duplication, deletion, rename, and Start over. This is
+		 * the main pane's subscription — the Voice Profile envelope
+		 * (VoiceProfilePane.svelte, handover v30 §C.1) mirrors the
+		 * workshop's readings through the page shell, so the gallery always
+		 * shows the voice the drawer is working on, and its TitleHeader
+		 * carries the voice's name (Dann's page-furniture ruling in review).
+		 * The name is undefined only before first-launch naming.
+		 */
+		onActiveProfileChange?: (
+			formants: Partial<Record<Vowel, CalibratedFormant>>,
+			voiceName: string | undefined
+		) => void;
 	}
 
 	let {
@@ -108,7 +124,8 @@
 		readinessOutcome = 'clear',
 		onVowelCaptured,
 		onProfileChange,
-		onComplete
+		onComplete,
+		onActiveProfileChange
 	}: CalibrationWizardProps = $props();
 
 	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
@@ -702,6 +719,18 @@
 		return m;
 	});
 
+	// The envelope's mirror (see onActiveProfileChange above): $state.snapshot
+	// reads the profile deeply, and activeVoice?.name is read here too, so
+	// this effect re-runs on every path that can change a reading or the
+	// title — per-vowel writes, whole-object reassignment on voice switch,
+	// rename, and the Start over clear — and the main pane never goes stale.
+	$effect(() => {
+		onActiveProfileChange?.(
+			$state.snapshot(profile) as Partial<Record<Vowel, CalibratedFormant>>,
+			activeVoice?.name
+		);
+	});
+
 	$effect(() => () => clearAllTimers());
 </script>
 
@@ -908,35 +937,44 @@
 						<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
 					{/if}
 				</div>
-				{@render rosterTable(false)}
-				{#if paused}
-					<div class="wizard-inline-banner">
-						<p>Paused. Resume when you're ready.</p>
-						<button type="button" class="wizard-primary" onclick={togglePause}>Resume</button>
-					</div>
-				{:else if holdActive && holdVowel}
-					<div class="wizard-inline-banner">
-						<p>
-							{#if holdKind === 'good'}
-								{@render vowelTag(holdVowel!)}, captured.
-							{:else if holdKind === 'rolled-back'}
-								New sample was less certain, so the previous one was kept.
-							{:else if holdKind === 'implausible'}
-								<!-- The guard's re-prompt (signed off 2026-07-11): factual
-								     observation, no fault assigned — an implausible reading
-								     can equally be a mis-extraction — and the invitation
-								     rides the existing Re-take affordance below. -->
-								That reading looks unlikely for {@render vowelTag(holdVowel!)}. Try again?
-							{:else}
-								Noted, moving on. You can re-take it from the summary.
-							{/if}
-						</p>
-						<div class="wizard-hold-actions">
-							<button type="button" onclick={holdContinue}>Continue</button>
-							<button type="button" onclick={holdRetake}>Re-take</button>
+				<!-- The hold slot (Dann's direction, 2026-07-11, evening): the
+				     post-capture banner sits directly beneath the quadrilateral
+				     and above the roster, and the slot's height is reserved
+				     whether or not a banner is showing, so the roster never
+				     shifts when one appears — the same layout-stability
+				     principle the static ten-row roster serves. -->
+				<div class="wizard-hold-slot">
+					{#if paused}
+						<div class="wizard-inline-banner">
+							<p>Paused. Resume when you're ready.</p>
+							<button type="button" class="wizard-primary" onclick={togglePause}>Resume</button>
 						</div>
-					</div>
-				{:else if currentVowel}
+					{:else if holdActive && holdVowel}
+						<div class="wizard-inline-banner">
+							<p>
+								{#if holdKind === 'good'}
+									{@render vowelTag(holdVowel!)}, captured.
+								{:else if holdKind === 'rolled-back'}
+									New sample was less certain, so the previous one was kept.
+								{:else if holdKind === 'implausible'}
+									<!-- The guard's re-prompt (signed off 2026-07-11): factual
+									     observation, no fault assigned — an implausible reading
+									     can equally be a mis-extraction — and the invitation
+									     rides the existing Re-take affordance below. -->
+									That reading looks unlikely for {@render vowelTag(holdVowel!)}. Try again?
+								{:else}
+									Noted, moving on. You can re-take it from the summary.
+								{/if}
+							</p>
+							<div class="wizard-hold-actions">
+								<button type="button" onclick={holdContinue}>Continue</button>
+								<button type="button" onclick={holdRetake}>Re-take</button>
+							</div>
+						</div>
+					{/if}
+				</div>
+				{@render rosterTable(false)}
+				{#if !paused && !(holdActive && holdVowel) && currentVowel}
 					<div class="wizard-quiet-actions">
 						<button type="button" class="wizard-pause" onclick={togglePause}>Pause</button>
 						{#if defaultsComplete}
@@ -1265,6 +1303,20 @@
 		align-items: center;
 		justify-content: center;
 		flex-wrap: wrap;
+	}
+
+	/* The hold slot: space for the post-capture banner is reserved even
+	   while empty (Dann's direction, 2026-07-11, evening), so the roster
+	   below holds still when a banner lands. The min-height covers the
+	   banner's tallest common form (a two-line message plus the
+	   Continue/Re-take row); a rarer taller wrap grows the slot, never
+	   overlaps. */
+	.wizard-hold-slot {
+		width: 100%;
+		min-height: 6.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.wizard-inline-banner {

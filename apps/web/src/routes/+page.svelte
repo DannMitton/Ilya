@@ -19,6 +19,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
 	import { INCLUDE_SHANE } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
+	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
+	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -42,6 +44,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let drawerCollapsed = $state(false);
 	// Tab state
 	let activeTab = $state<TabId>('transcription');
+	// Shane: the active voice's stored readings and name, published by the
+	// wizard in the drawer (the workshop) so the main pane (the gallery,
+	// the Voice Profile envelope) mirrors the voice the drawer is working
+	// on. The wizard owns the profile store; this is a read-only reflection.
+	let shaneFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
+	let shaneVoiceName = $state<string | undefined>(undefined);
 	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
@@ -748,7 +756,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{/snippet}
 			{#snippet shanePanel()}
 				{#if INCLUDE_SHANE}
-					<CalibrationWizard />
+					<CalibrationWizard
+						onActiveProfileChange={(f, name) => {
+							shaneFormants = f;
+							shaneVoiceName = name;
+						}}
+					/>
 				{/if}
 			{/snippet}
 	</Drawer>
@@ -762,10 +775,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{#if activeTab === 'transcription'}
 			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
 		{:else if activeTab === 'shane'}
-			<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; min-height:60vh; padding:2rem; text-align:center;">
-				<p style="margin:0; color:var(--ink-secondary); font-family:var(--font-ui, var(--font-sans)); font-size:1.0625rem;">Calibrate your voice to begin.</p>
-				<p style="margin:0; color:var(--ink-tertiary); font-family:var(--font-ui, var(--font-sans)); font-size:0.9375rem;">Your repertoire-fit results will appear here.</p>
-			</div>
+			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
+			     per Dann's review ruling): the interim main pane, a fixed
+			     letter page with the Paper system's header and footer. The
+			     wizard in the drawer publishes the active voice's readings
+			     and name into the state above. -->
+			<VoiceProfilePane formants={shaneFormants} voiceName={shaneVoiceName} {language} />
 		{:else}
 			<ReadingPaper {language}>
 				{#snippet content()}
