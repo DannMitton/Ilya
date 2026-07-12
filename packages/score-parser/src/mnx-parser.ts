@@ -4,13 +4,26 @@
  * Reads MNX (Music Notation eXchange) input and produces Shane's canonical
  * `ParsedScore`. Reads the stable lyric subset of MNX (stable since October
  * 2024 per the w3c-cg/mnx repo) and the core musical structure; unrecognised
- * experimental features are noted via `'mnx-experimental-feature'` warnings
- * and ignored.
+ * experimental features are noted via warnings and skipped, never fatal
+ * (architecture spec, Known risks §3: "target the stable subset and warn or
+ * error gracefully on unrecognised structures").
  *
  * Conversion paths that feed this parser:
  *   - Direct upload of `.mnx` or `.json` (origin `'mnx-direct'`).
- *   - denigma CLI output from `.musx` Finale files (origin
+ *   - denigma CLI/WASM output from `.musx` Finale files (origin
  *     `'denigma-mnx-from-musx'`).
+ *
+ * Ground truth: this implementation was built against denigma's real MNX
+ * v17 output for a vocal score (Kabalevsky Op. 52 No. 8 fixture, converted
+ * 2026-07-12 via the repo's own denigma WASM artifact under Node). The
+ * fixture demonstrates: `global.lyrics.lineOrder` + `lineMetadata` (two
+ * lines, Cyrillic + IPA dual underlay), untyped event content items,
+ * `{type:'space'}` spacers with bare `[numerator, denominator]` durations,
+ * note-level `ties: [{target, targetType}]`, `markings.breath`, event-level
+ * `slurs`/`stemDirection`/`staff` (engraving concerns, not parsed), and
+ * note-level `accidentalDisplay` (display concern, not parsed). Structures
+ * absent from the fixture (tuplets, grace groups) are implemented to the
+ * MNX v17 schema and covered by the synthetic-fixture tests.
  *
  * @invariant The parser must keep `measures[i].timeSignature` and
  *   `measures[i].keySignature` consistent with the score-wide
@@ -21,121 +34,888 @@
  *   the consistency burden is on the parser and any future mutator.
  *
  * @invariant `VocalLineEvent.id` uses a deterministic composite key
- *   of the form `m{measureIndex}-{numerator}-{denominator}` (optionally
- *   suffixed with `-{voice}` if a polyphonic vocal part ever arrives).
- *   Composite keys are reproducible across re-parses, which matters for
- *   testability, renderer regression tests, and inspecting `data-note-id`
- *   in dev tools. `SyllableInfo.id` uses UUID v4 (via
- *   `crypto.randomUUID()` where available, falling back to the `uuid`
- *   package). UUID v4 is sufficient because syllables need only
- *   session-stability for the v1.x cross-tab jump, and correction-GUI
+ *   of the form `m{measureIndex}-{numerator}-{denominator}` built from the
+ *   event's normalised rhythmic position. Composite keys are reproducible
+ *   across re-parses, which matters for testability, renderer regression
+ *   tests, and inspecting `data-note-id` in dev tools. `SyllableInfo.id`
+ *   uses UUID v4 (via `crypto.randomUUID()` where available, with a
+ *   time-random fallback). UUID v4 is sufficient because syllables need
+ *   only session-stability for the v1.x cross-tab jump, and correction-GUI
  *   mutations make deterministic syllable keys fragile.
- *
- * Status: Phase 1 stub. Real parsing deferred to Phase 2 against a
- *   test corpus (Patterson sample request in flight; Dann's own vocal
- *   `.musx` files via denigma locally).
  */
 
 import type {
-  MnxScoreInput,
-  ParseResult,
-  ScoreInput,
-  ScoreParser,
+	Articulation,
+	Duration,
+	Fraction,
+	KeySignature,
+	KeySignatureChange,
+	Measure,
+	MnxScoreInput,
+	NoteBase,
+	ParseError,
+	ParseResult,
+	ParseWarning,
+	ParsedScore,
+	Pitch,
+	ScoreInput,
+	ScoreParser,
+	SyllableInfo,
+	TempoMarking,
+	TimeSignature,
+	TimeSignatureChange,
+	TupletInfo,
+	VocalLineEvent,
 } from './types';
 
+// ── Loose raw shapes for the incoming JSON ─────────────────────────
+// These deliberately model only what the parser reads. Every access is
+// still guarded at runtime; the shapes exist so the reading code is
+// typed without a cast at each property.
+
+interface MnxDocument {
+	mnx?: { version?: unknown };
+	global?: {
+		measures?: MnxGlobalMeasure[];
+		lyrics?: {
+			lineOrder?: unknown;
+			lineMetadata?: Record<string, { label?: unknown }>;
+		};
+	};
+	parts?: MnxPart[];
+}
+
+interface MnxGlobalMeasure {
+	id?: unknown;
+	key?: { fifths?: unknown; mode?: unknown };
+	time?: { count?: unknown; unit?: unknown };
+	tempos?: Array<{ bpm?: unknown; value?: { base?: unknown; dots?: unknown } }>;
+}
+
+interface MnxPart {
+	id?: unknown;
+	name?: unknown;
+	measures?: Array<{ sequences?: Array<{ content?: MnxContentItem[] }> }>;
+}
+
+interface MnxContentItem {
+	type?: unknown;
+	id?: unknown;
+	duration?: unknown;
+	rest?: unknown;
+	notes?: MnxNote[];
+	lyrics?: { lines?: Record<string, { text?: unknown; type?: unknown }> };
+	markings?: Record<string, unknown>;
+	// Tuplet-shaped items (MNX v17):
+	inner?: { duration?: { base?: unknown; dots?: unknown }; multiple?: unknown };
+	outer?: { duration?: { base?: unknown; dots?: unknown }; multiple?: unknown };
+	content?: MnxContentItem[];
+}
+
+interface MnxNote {
+	id?: unknown;
+	pitch?: { step?: unknown; octave?: unknown; alter?: unknown };
+	ties?: Array<{ target?: unknown }>;
+}
+
+// ── Exact rational arithmetic ──────────────────────────────────────
+// Durations and positions are exact fractions of a whole note
+// (types.ts `Fraction`); float arithmetic would drift on dotted values
+// and tuplets, which is precisely where analysis needs exactness.
+
+function gcd(a: number, b: number): number {
+	let x = Math.abs(a);
+	let y = Math.abs(b);
+	while (y !== 0) {
+		const t = y;
+		y = x % y;
+		x = t;
+	}
+	return x === 0 ? 1 : x;
+}
+
+function frac(numerator: number, denominator: number): Fraction {
+	const g = gcd(numerator, denominator);
+	const sign = denominator < 0 ? -1 : 1;
+	return { numerator: (sign * numerator) / g, denominator: (sign * denominator) / g };
+}
+
+function addFrac(a: Fraction, b: Fraction): Fraction {
+	return frac(a.numerator * b.denominator + b.numerator * a.denominator, a.denominator * b.denominator);
+}
+
+function mulFrac(a: Fraction, b: Fraction): Fraction {
+	return frac(a.numerator * b.numerator, a.denominator * b.denominator);
+}
+
+function fracCompare(a: Fraction, b: Fraction): number {
+	return a.numerator * b.denominator - b.numerator * a.denominator;
+}
+
+const ZERO: Fraction = { numerator: 0, denominator: 1 };
+const ONE: Fraction = { numerator: 1, denominator: 1 };
+
+/** Whole-note value of each note base (MusicXML/MNX shared vocabulary). */
+const BASE_VALUES: Record<NoteBase, Fraction> = {
+	breve: { numerator: 2, denominator: 1 },
+	whole: { numerator: 1, denominator: 1 },
+	half: { numerator: 1, denominator: 2 },
+	quarter: { numerator: 1, denominator: 4 },
+	eighth: { numerator: 1, denominator: 8 },
+	'16th': { numerator: 1, denominator: 16 },
+	'32nd': { numerator: 1, denominator: 32 },
+	'64th': { numerator: 1, denominator: 64 },
+	'128th': { numerator: 1, denominator: 128 },
+};
+
+function isNoteBase(x: unknown): x is NoteBase {
+	return typeof x === 'string' && x in BASE_VALUES;
+}
+
+/**
+ * Sounding length of a base + dots, in whole notes. Dots follow the
+ * standard geometric sum: n dots multiply by (2^(n+1) - 1) / 2^n.
+ */
+function baseDotsFraction(base: NoteBase, dots: number): Fraction {
+	const b = BASE_VALUES[base];
+	const pow = 2 ** dots;
+	return frac(b.numerator * (2 * pow - 1), b.denominator * pow);
+}
+
+// ── Markings → articulations ───────────────────────────────────────
+// MNX marking keys mapped onto the canonical `Articulation` union.
+// Keys outside this table produce one `'unsupported-articulation'`
+// warning per distinct key and are otherwise preserved nowhere: the
+// fixture's engraving-side keys (slurs, stemDirection) are handled
+// separately and deliberately not parsed in v1.
+
+const MARKING_TO_ARTICULATION: Record<string, Articulation> = {
+	accent: 'accent',
+	strongAccent: 'strong-accent',
+	staccato: 'staccato',
+	tenuto: 'tenuto',
+	detachedLegato: 'detached-legato',
+	staccatissimo: 'staccatissimo',
+	breath: 'breath-mark',
+	caesura: 'caesura',
+	stress: 'stress',
+	unstress: 'unstress',
+};
+
+const PITCH_STEPS = new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+
+function syllableId(): string {
+	try {
+		if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+			return crypto.randomUUID();
+		}
+	} catch {
+		// fall through to the fallback
+	}
+	return `syl-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** Internal note-side bookkeeping for the tie-resolution pass. */
+interface TieBookkeeping {
+	/** MNX note id → the VocalLineEvent id that carries the note. */
+	noteIdToEventId: Map<string, string>;
+	/** Tie starts: source event id → target MNX note id. */
+	starts: Array<{ eventId: string; targetNoteId: string }>;
+}
+
 export class MnxScoreParser implements ScoreParser {
-  canParse(input: ScoreInput): boolean {
-    return input.format === 'mnx';
-  }
+	canParse(input: ScoreInput): boolean {
+		return input.format === 'mnx';
+	}
 
-  async parse(input: ScoreInput): Promise<ParseResult> {
-    if (!this.canParse(input)) {
-      throw new Error(
-        `MnxScoreParser cannot parse input of format '${input.format}'`,
-      );
-    }
+	async parse(input: ScoreInput): Promise<ParseResult> {
+		if (!this.canParse(input)) {
+			throw new Error(`MnxScoreParser cannot parse input of format '${input.format}'`);
+		}
+		const mnxInput = input as MnxScoreInput;
 
-    // Narrow type for downstream use once full parsing lands.
-    void (input as MnxScoreInput);
+		const warnings: ParseWarning[] = [];
+		const errors: ParseError[] = [];
+		const warnedMarkingKeys = new Set<string>();
 
-    // TODO Phase 2: implement full MNX parsing.
-    //
-    // Pipeline:
-    //   1. Validate MNX structure (top-level keys, version field). Emit
-    //      `'incompatible-format-version'` fatal error if unsupported.
-    //   2. Identify the vocal part: prefer the part with `lyrics.lines`
-    //      attached to its events; fall back to the first non-instrument
-    //      part. Emit `'multiple-vocal-parts'` warning if more than one
-    //      candidate; emit `'no-vocal-part-identified'` fatal error if none.
-    //   3. Walk `global.measures` to build `Measure[]` with snapshotted
-    //      `timeSignature` and `keySignature` (see @invariant above).
-    //      Track repeats, pickup detection (measure with shorter than
-    //      `expectedDuration` actual content), rehearsal marks.
-    //   4. Walk the vocal part's events into `VocalLineEvent[]`:
-    //        a. Generate deterministic `id` from
-    //           `m{measureIndex}-{rhythmicPosition.numerator}-{rhythmicPosition.denominator}`.
-    //        b. Map MNX duration (`base`, `dots`, `tuplet`) to `Duration`,
-    //           computing `fraction` once.
-    //        c. Map MNX pitch (`step`, `octave`, `alter`) to `Pitch`.
-    //        d. Extract lyric from `event.lyrics.lines.<lineId>`:
-    //             - `type` field maps directly to `SyllableInfo.type`.
-    //             - `verseNumber`: derived in two stages, per Patterson
-    //               corrections received 2026-05-15.
-    //
-    //               STAGE 1 (verse detection): Scan all events in the
-    //               vocal part. For each event, count the number of
-    //               distinct lineIds attached to it. If the maximum
-    //               across all events is 1, this is NOT a verse
-    //               structure (just a single line of lyrics); assign
-    //               verseNumber = 1 to every syllable. If the maximum
-    //               is > 1, this is a verse structure with that many
-    //               verse slots. MuseScore uses this same preprocessing
-    //               approach; reference implementations exist in both
-    //               mnxdom (Patterson) and MuseScore main.
-    //
-    //               STAGE 2 (canonical ordering of verse slots):
-    //                 - Primary path: read `global.lyrics.lineOrder`,
-    //                   an array of lineIds. Assign verseNumber 1..N
-    //                   by its index. denigma's MNX output always
-    //                   includes lineOrder (Patterson confirms).
-    //                 - Fallback: if `lineOrder` is absent, use
-    //                   document-order of first appearance across the
-    //                   vocal part. Emit a `'lineorder-missing'`
-    //                   warning. Patterson has an open issue at the
-    //                   MNX spec for this deficiency; absence is the
-    //                   non-canonical case.
-    //
-    //               Do NOT parse a numeric suffix out of the lineId.
-    //               IDs are arbitrary per MNX spec. The Patterson
-    //               sample (Sharp_Excerpt_fin27.mnx) demonstrates
-    //               this: four verses with IDs v2, v4, v6, v8.
-    //
-    //             - `verseLabel`: read from
-    //               `global.lyrics.lineMetadata[lineId].label` if
-    //               present (e.g., "Verse 2"). Preserves the original
-    //               user-facing identity from the source. May be
-    //               absent; in that case leave undefined and let the
-    //               UI fall back to `Verse ${verseNumber}` display.
-    //               The Patterson sample contains labels for all four
-    //               of its verses ("Verse 2", "Verse 4", "Verse 6",
-    //               "Verse 8").
-    //
-    //             - `id` = UUID v4.
-    //             - `wordContext` computed by buffering contiguous
-    //               `start`/`middle`/`end` syllables of the same verse;
-    //               on `end` or `whole`, flush the buffer and assign the
-    //               concatenation to all syllables in the word.
-    //        e. Map ties (`event.notes[].tied`), fermatas, articulations.
-    //   5. Collect `tempoMarkings` from `global.tempos` (MNX root or
-    //      per-measure direction events).
-    //   6. Determine `source.fidelity` and `source.origin` based on
-    //      `input.sourcePath` extension and any denigma-injected
-    //      provenance fields.
-    //
-    // Reference: w3c-cg/mnx repo, `src/importexport/mnx/` in MuseScore
-    //   main branch (lyrics import is the source of truth for `lyrics.lines`
-    //   handling), and denigma's MNX output for `.musx`-specific quirks.
+		const fail = (code: ParseError['code'], message: string): ParseResult => {
+			errors.push({ code, message, fatal: true });
+			return { score: emptyScore(mnxInput), warnings, errors };
+		};
 
-    throw new Error('MnxScoreParser.parse() not yet implemented');
-  }
+		// 1. Structural validation. A missing or non-object document, or a
+		//    missing `mnx` block, is unusable. A version we have not seen
+		//    (denigma emits 17) parses with a warning rather than refusing:
+		//    the stable lyric subset is the contract, not the version number.
+		const doc = mnxInput.data as MnxDocument;
+		if (doc === null || typeof doc !== 'object' || Array.isArray(doc)) {
+			return fail('invalid-mnx-json', 'MNX input is not a JSON object.');
+		}
+		if (!doc.mnx || typeof doc.mnx !== 'object') {
+			return fail('invalid-mnx-json', "MNX input has no top-level 'mnx' object.");
+		}
+		const version = doc.mnx.version;
+		if (typeof version !== 'number' || !Number.isFinite(version) || version < 1) {
+			return fail('incompatible-format-version', `MNX version is missing or invalid: ${String(version)}.`);
+		}
+		if (version > 17) {
+			warnings.push({
+				code: 'mnx-experimental-feature',
+				message: `MNX version ${version} is newer than the tested version (17); parsing the stable subset.`,
+			});
+		}
+
+		const globalMeasures = doc.global?.measures;
+		if (!Array.isArray(globalMeasures) || globalMeasures.length === 0) {
+			return fail('no-measures', 'MNX global.measures is missing or empty.');
+		}
+
+		const parts = doc.parts;
+		if (!Array.isArray(parts) || parts.length === 0) {
+			return fail('no-vocal-part-identified', 'MNX has no parts.');
+		}
+
+		// 2. Vocal-part identification: prefer the part whose events carry
+		//    `lyrics.lines`. More than one candidate warns and takes the
+		//    first (spec TODO order); none falls back to the first part
+		//    with a `'no-lyrics-found'` warning.
+		const lyricParts: number[] = [];
+		for (let i = 0; i < parts.length; i++) {
+			if (partHasLyrics(parts[i])) lyricParts.push(i);
+		}
+		let vocalPartIndex: number;
+		if (lyricParts.length === 0) {
+			vocalPartIndex = 0;
+			warnings.push({
+				code: 'no-lyrics-found',
+				message: 'No part carries lyrics; using the first part as the vocal line.',
+			});
+		} else {
+			vocalPartIndex = lyricParts[0];
+			if (lyricParts.length > 1) {
+				warnings.push({
+					code: 'multiple-vocal-parts',
+					message: `${lyricParts.length} parts carry lyrics; using the first (index ${vocalPartIndex}).`,
+				});
+			}
+		}
+		const vocalPart = parts[vocalPartIndex];
+		const partId = typeof vocalPart.id === 'string' ? vocalPart.id : `P${vocalPartIndex + 1}`;
+		const partName = typeof vocalPart.name === 'string' && vocalPart.name.length > 0 ? vocalPart.name : partId;
+
+		// 3. Verse detection, two stages (Patterson corrections, 2026-05-15).
+		//    STAGE 1: the maximum count of distinct lineIds on any single
+		//    event decides whether this is a verse structure at all. A
+		//    maximum of 1 is a single lyric line — every syllable is verse 1
+		//    regardless of how many lineIds appear across the piece.
+		//    STAGE 2: order the verse slots canonically. Primary path is
+		//    `global.lyrics.lineOrder` (denigma always emits it, Patterson
+		//    confirms); the fallback is document-order of first appearance,
+		//    with a `'lineorder-missing'` warning. lineIds are arbitrary
+		//    per the MNX spec — never parse numbers out of them (the
+		//    Patterson sample's four verses were v2, v4, v6, v8).
+		const seenLineIdsInOrder: string[] = [];
+		let maxLinesPerEvent = 0;
+		forEachEvent(vocalPart, (item) => {
+			const lines = item.lyrics?.lines;
+			if (!lines || typeof lines !== 'object') return;
+			const ids = Object.keys(lines);
+			if (ids.length > maxLinesPerEvent) maxLinesPerEvent = ids.length;
+			for (const id of ids) {
+				if (!seenLineIdsInOrder.includes(id)) seenLineIdsInOrder.push(id);
+			}
+		});
+
+		const lineIdToVerse = new Map<string, number>();
+		if (maxLinesPerEvent > 1) {
+			const rawOrder = doc.global?.lyrics?.lineOrder;
+			let order: string[];
+			if (Array.isArray(rawOrder) && rawOrder.every((x) => typeof x === 'string')) {
+				order = rawOrder as string[];
+				// Any observed lineId missing from lineOrder is appended in
+				// first-appearance order so its syllables are not dropped.
+				for (const id of seenLineIdsInOrder) {
+					if (!order.includes(id)) {
+						order = [...order, id];
+						warnings.push({
+							code: 'verse-count-mismatch',
+							message: `Lyric line '${id}' appears on events but not in global.lyrics.lineOrder; appended after the ordered lines.`,
+						});
+					}
+				}
+			} else {
+				order = seenLineIdsInOrder;
+				warnings.push({
+					code: 'lineorder-missing',
+					message: 'global.lyrics.lineOrder is absent; verse numbers use document order of first appearance.',
+				});
+			}
+			order.forEach((id, i) => lineIdToVerse.set(id, i + 1));
+		} else {
+			for (const id of seenLineIdsInOrder) lineIdToVerse.set(id, 1);
+		}
+
+		const lineMetadata = doc.global?.lyrics?.lineMetadata;
+		const verseLabelOf = (lineId: string): string | undefined => {
+			const label = lineMetadata?.[lineId]?.label;
+			return typeof label === 'string' && label.length > 0 ? label : undefined;
+		};
+
+		// 4. Measures: walk global.measures once, carrying running time and
+		//    key state so each Measure snapshot stays consistent with the
+		//    change arrays (the @invariant above).
+		const measures: Measure[] = [];
+		const timeSignatures: TimeSignatureChange[] = [];
+		const keySignatures: KeySignatureChange[] = [];
+		const tempoMarkings: TempoMarking[] = [];
+
+		let currentTime: TimeSignature | null = null;
+		let currentKey: KeySignature | null = null;
+
+		for (let mi = 0; mi < globalMeasures.length; mi++) {
+			const gm = globalMeasures[mi] ?? {};
+
+			const time = gm.time;
+			if (time && typeof time === 'object' && typeof time.count === 'number' && typeof time.unit === 'number' && time.unit > 0) {
+				currentTime = { beats: time.count, beatType: time.unit };
+				timeSignatures.push({ measureIndex: mi, signature: currentTime });
+			} else if (currentTime === null) {
+				// No initial time signature anywhere before the first measure:
+				// assume common time rather than refusing the score.
+				currentTime = { beats: 4, beatType: 4 };
+				timeSignatures.push({ measureIndex: mi, signature: currentTime });
+				warnings.push({
+					code: 'unrecognised-element',
+					message: 'No initial time signature; assuming 4/4.',
+					location: { measureIndex: mi },
+				});
+			}
+
+			const key = gm.key;
+			if (key && typeof key === 'object' && typeof key.fifths === 'number') {
+				currentKey = { fifths: key.fifths };
+				if (key.mode === 'major' || key.mode === 'minor') currentKey.mode = key.mode;
+				keySignatures.push({ measureIndex: mi, signature: currentKey });
+			} else if (currentKey === null) {
+				currentKey = { fifths: 0 };
+				keySignatures.push({ measureIndex: mi, signature: currentKey });
+				warnings.push({
+					code: 'unrecognised-element',
+					message: 'No initial key signature; assuming no sharps or flats.',
+					location: { measureIndex: mi },
+				});
+			}
+
+			if (Array.isArray(gm.tempos)) {
+				for (const t of gm.tempos) {
+					const bpm = t?.bpm;
+					const base = t?.value?.base;
+					if (typeof bpm === 'number' && bpm > 0 && isNoteBase(base)) {
+						const dots = typeof t.value?.dots === 'number' && t.value.dots > 0 ? Math.floor(t.value.dots) : 0;
+						tempoMarkings.push({
+							measureIndex: mi,
+							rhythmicPosition: { fraction: ZERO },
+							bpm,
+							beatUnit: base,
+							beatUnitDots: dots,
+						});
+					} else {
+						warnings.push({
+							code: 'unrecognised-element',
+							message: 'Tempo entry missing a valid bpm or beat unit; skipped.',
+							location: { measureIndex: mi },
+						});
+					}
+				}
+			}
+
+			// Display number: derived from the global measure id when it has
+			// the denigma/MuseScore `m<number>` shape, else sequential.
+			const idText = typeof gm.id === 'string' ? gm.id : '';
+			const numberMatch = /^m(\d+)$/.exec(idText);
+			measures.push({
+				index: mi,
+				number: numberMatch ? numberMatch[1] : String(mi + 1),
+				timeSignature: currentTime,
+				keySignature: currentKey,
+				expectedDuration: frac(currentTime.beats, currentTime.beatType),
+			});
+		}
+
+		// 5. The vocal line. One rhythmic cursor per measure; content items
+		//    are sequential within a sequence (MNX has no explicit event
+		//    positions). `space` items advance the cursor silently; tuplet
+		//    groups scale their children; unknown item types warn and skip.
+		const vocalLine: VocalLineEvent[] = [];
+		const ties: TieBookkeeping = { noteIdToEventId: new Map(), starts: [] };
+
+		const partMeasures = Array.isArray(vocalPart.measures) ? vocalPart.measures : [];
+		if (partMeasures.length !== globalMeasures.length) {
+			warnings.push({
+				code: 'unrecognised-element',
+				message: `Vocal part has ${partMeasures.length} measures against ${globalMeasures.length} global measures; parsing the overlap.`,
+				location: { partId },
+			});
+		}
+		const measureCount = Math.min(partMeasures.length, globalMeasures.length);
+
+		for (let mi = 0; mi < measureCount; mi++) {
+			const sequences = partMeasures[mi]?.sequences ?? [];
+			if (sequences.length > 1) {
+				warnings.push({
+					code: 'unrecognised-element',
+					message: `Vocal part measure ${mi} has ${sequences.length} sequences; using the first (monophonic vocal line expected).`,
+					location: { measureIndex: mi, partId },
+				});
+			}
+			const content = sequences[0]?.content ?? [];
+			let cursor: Fraction = ZERO;
+
+			cursor = this.walkContent(content, mi, cursor, ONE, undefined, {
+				vocalLine,
+				ties,
+				warnings,
+				errors,
+				warnedMarkingKeys,
+				lineIdToVerse,
+				verseLabelOf,
+			});
+
+			// Duration accounting: a measure whose content does not fill its
+			// time signature is either the anacrusis (measure 0, flagged as
+			// pickup below) or a source inconsistency worth a warning.
+			const expected = measures[mi].expectedDuration;
+			const cmp = fracCompare(cursor, expected);
+			if (cmp !== 0 && cursor.numerator > 0) {
+				if (mi === 0 && cmp < 0) {
+					measures[0].isPickup = true;
+				} else {
+					warnings.push({
+						code: 'measure-duration-mismatch',
+						message: `Measure ${mi} content lasts ${cursor.numerator}/${cursor.denominator} whole notes against an expected ${expected.numerator}/${expected.denominator}.`,
+						location: { measureIndex: mi, partId },
+					});
+				}
+			}
+		}
+
+		// 6. Tie resolution: MNX marks the start side only, via note-level
+		//    `ties: [{target}]`. The target note's event becomes the stop
+		//    (or a continue, when it starts a further tie of its own).
+		const startsByEvent = new Map<string, string>();
+		for (const s of ties.starts) startsByEvent.set(s.eventId, s.targetNoteId);
+		for (const s of ties.starts) {
+			const sourceEvent = vocalLine.find((e) => e.id === s.eventId);
+			const targetEventId = ties.noteIdToEventId.get(s.targetNoteId);
+			if (!sourceEvent || !targetEventId) {
+				warnings.push({
+					code: 'unrecognised-element',
+					message: `Tie target '${s.targetNoteId}' does not resolve to a vocal-line note; tie dropped.`,
+					location: { eventId: s.eventId },
+				});
+				continue;
+			}
+			sourceEvent.tied = sourceEvent.tied ?? { type: 'start', partnerEventId: targetEventId };
+			const targetEvent = vocalLine.find((e) => e.id === targetEventId);
+			if (targetEvent) {
+				targetEvent.tied = startsByEvent.has(targetEventId)
+					? { type: 'continue', partnerEventId: sourceEvent.id }
+					: { type: 'stop', partnerEventId: sourceEvent.id };
+			}
+		}
+
+		// 7. wordContext: per verse, contiguous start/middle/end syllables
+		//    concatenate into the word each of them belongs to; whole
+		//    syllables are their own word. Melisma notes carry no syllable
+		//    and therefore never interrupt a word (spec: melismas are
+		//    encoded by absence).
+		assignWordContexts(vocalLine, warnings);
+
+		// 8. Provenance. The origin rule follows the spec TODO: a sourcePath
+		//    that names a `.musx` file marks the denigma path; everything
+		//    else is direct MNX. languageHint: Cyrillic anywhere in verse 1
+		//    marks Russian; Shane v1 ships only the Russian engine, so no
+		//    other hint is emitted.
+		const fromMusx = typeof mnxInput.sourcePath === 'string' && mnxInput.sourcePath.toLowerCase().endsWith('.musx');
+		const cyrillic = vocalLine.some(
+			(e) => e.syllable && e.syllable.verseNumber === 1 && /[Ѐ-ӿ]/.test(e.syllable.text),
+		);
+
+		const score: ParsedScore = {
+			source: {
+				format: 'mnx',
+				fidelity: fromMusx ? 'high' : 'native',
+				origin: fromMusx ? 'denigma-mnx-from-musx' : 'mnx-direct',
+				...(cyrillic ? { languageHint: 'rus' } : {}),
+				sourceWarnings: warnings.map((w) => w.message),
+			},
+			vocalPart: { partId, partName },
+			measures,
+			keySignatures,
+			timeSignatures,
+			tempoMarkings,
+			vocalLine,
+		};
+
+		if (vocalLine.length > 0 && !vocalLine.some((e) => e.syllable) && lyricParts.length > 0) {
+			// Defensive: a lyric part whose syllables all failed to parse.
+			warnings.push({ code: 'no-lyrics-found', message: 'The vocal part produced no syllables.' });
+		}
+
+		return { score, warnings, errors };
+	}
+
+	/**
+	 * Walk one content array (a sequence, or a tuplet's children), emitting
+	 * vocal-line events and returning the advanced cursor. `scale` carries
+	 * the tuplet time-compression ratio (ONE outside tuplets).
+	 */
+	private walkContent(
+		content: MnxContentItem[],
+		measureIndex: number,
+		cursor: Fraction,
+		scale: Fraction,
+		tuplet: TupletInfo | undefined,
+		ctx: {
+			vocalLine: VocalLineEvent[];
+			ties: TieBookkeeping;
+			warnings: ParseWarning[];
+			errors: ParseError[];
+			warnedMarkingKeys: Set<string>;
+			lineIdToVerse: Map<string, number>;
+			verseLabelOf: (lineId: string) => string | undefined;
+		},
+	): Fraction {
+		for (const item of content) {
+			if (!item || typeof item !== 'object') continue;
+			const kind = item.type;
+
+			// `space`: an invisible spacer that advances rhythmic position.
+			// denigma emits these with a bare [numerator, denominator]
+			// duration (observed in the Kabalevsky fixture's piano part).
+			if (kind === 'space') {
+				const d = item.duration;
+				if (Array.isArray(d) && d.length === 2 && typeof d[0] === 'number' && typeof d[1] === 'number' && d[1] > 0) {
+					cursor = addFrac(cursor, mulFrac(frac(d[0], d[1]), scale));
+				} else {
+					ctx.warnings.push({
+						code: 'unrecognised-element',
+						message: 'space item without a readable duration; position may drift.',
+						location: { measureIndex },
+					});
+				}
+				continue;
+			}
+
+			// Tuplet group: scale children by outer/inner and recurse.
+			if (kind === 'tuplet') {
+				const innerMultiple = item.inner?.multiple;
+				const outerMultiple = item.outer?.multiple;
+				const innerBase = item.inner?.duration?.base;
+				const outerBase = item.outer?.duration?.base;
+				const children = Array.isArray(item.content) ? item.content : [];
+				if (
+					typeof innerMultiple === 'number' &&
+					typeof outerMultiple === 'number' &&
+					innerMultiple > 0 &&
+					outerMultiple > 0 &&
+					isNoteBase(innerBase) &&
+					isNoteBase(outerBase)
+				) {
+					const innerDots = typeof item.inner?.duration?.dots === 'number' ? item.inner.duration.dots : 0;
+					const outerDots = typeof item.outer?.duration?.dots === 'number' ? item.outer.duration.dots : 0;
+					const innerTotal = mulFrac(frac(innerMultiple, 1), baseDotsFraction(innerBase, innerDots));
+					const outerTotal = mulFrac(frac(outerMultiple, 1), baseDotsFraction(outerBase, outerDots));
+					const ratio = frac(outerTotal.numerator * innerTotal.denominator, outerTotal.denominator * innerTotal.numerator);
+					const info: TupletInfo = {
+						actualNotes: innerMultiple,
+						normalNotes: outerMultiple,
+						normalType: outerBase,
+					};
+					cursor = this.walkContent(children, measureIndex, cursor, mulFrac(scale, ratio), info, ctx);
+				} else {
+					ctx.warnings.push({
+						code: 'tuplet-without-normal-type',
+						message: 'Tuplet without a readable inner/outer ratio; children parsed in normal time.',
+						location: { measureIndex },
+					});
+					cursor = this.walkContent(children, measureIndex, cursor, scale, undefined, ctx);
+				}
+				continue;
+			}
+
+			// Grace groups have no rhythmic duration of their own; v1 skips
+			// them (vocal analysis attends to sustained events).
+			if (kind === 'grace') {
+				ctx.warnings.push({
+					code: 'unrecognised-element',
+					message: 'grace group skipped (no rhythmic duration).',
+					location: { measureIndex },
+				});
+				continue;
+			}
+
+			if (kind !== undefined && kind !== 'event') {
+				ctx.warnings.push({
+					code: 'mnx-experimental-feature',
+					message: `Unrecognised content item type '${String(kind)}' skipped.`,
+					location: { measureIndex },
+				});
+				continue;
+			}
+
+			// A plain event: a note or a rest.
+			const durationRaw = item.duration;
+			const base = durationRaw && typeof durationRaw === 'object' && !Array.isArray(durationRaw)
+				? (durationRaw as { base?: unknown; dots?: unknown }).base
+				: undefined;
+			if (!isNoteBase(base)) {
+				ctx.errors.push({
+					code: 'invalid-mnx-json',
+					message: `Event without a readable duration base ('${String(base)}'); event dropped.`,
+					location: { measureIndex },
+					fatal: false,
+				});
+				continue;
+			}
+			const dotsRaw = (durationRaw as { dots?: unknown }).dots;
+			const dots = typeof dotsRaw === 'number' && dotsRaw > 0 ? Math.min(3, Math.floor(dotsRaw)) : 0;
+			const soundingFraction = mulFrac(baseDotsFraction(base, dots), scale);
+			const duration: Duration = {
+				base,
+				dots,
+				...(tuplet ? { tuplet } : {}),
+				fraction: soundingFraction,
+			};
+
+			const position = frac(cursor.numerator, cursor.denominator);
+			const eventId = `m${measureIndex}-${position.numerator}-${position.denominator}`;
+
+			const isRest = item.rest !== undefined;
+			const notes = Array.isArray(item.notes) ? item.notes : [];
+			let pitch: Pitch | undefined;
+
+			if (!isRest) {
+				if (notes.length === 0) {
+					ctx.errors.push({
+						code: 'invalid-mnx-json',
+						message: 'Event carries neither notes nor a rest; event dropped.',
+						location: { measureIndex, eventId },
+						fatal: false,
+					});
+					cursor = addFrac(cursor, soundingFraction);
+					continue;
+				}
+				if (notes.length > 1) {
+					ctx.warnings.push({
+						code: 'unrecognised-element',
+						message: `Chord of ${notes.length} notes in the vocal line; using the first note.`,
+						location: { measureIndex, eventId },
+					});
+				}
+				const n = notes[0];
+				const step = n.pitch?.step;
+				const octave = n.pitch?.octave;
+				if (typeof step !== 'string' || !PITCH_STEPS.has(step) || typeof octave !== 'number') {
+					ctx.errors.push({
+						code: 'invalid-mnx-json',
+						message: 'Note without a readable pitch; event dropped.',
+						location: { measureIndex, eventId },
+						fatal: false,
+					});
+					cursor = addFrac(cursor, soundingFraction);
+					continue;
+				}
+				const alterRaw = n.pitch?.alter;
+				pitch = {
+					step: step as Pitch['step'],
+					octave,
+					alter: typeof alterRaw === 'number' ? alterRaw : 0,
+				};
+
+				// Tie bookkeeping (resolution happens after the walk).
+				if (typeof n.id === 'string') ctx.ties.noteIdToEventId.set(n.id, eventId);
+				if (Array.isArray(n.ties)) {
+					for (const t of n.ties) {
+						if (t && typeof t.target === 'string') {
+							ctx.ties.starts.push({ eventId, targetNoteId: t.target });
+						}
+					}
+				}
+			}
+
+			// Lyrics: one syllable per verse line on this event. Verse 1 is
+			// what the analysis layer walks in v1 (Round 9 §3.8); the
+			// canonical VocalLineEvent carries the verse-1 syllable, and
+			// additional verses attach to no event field in types.ts — they
+			// are preserved through this same walk when the correction and
+			// multi-verse work lands. For now, non-verse-1 syllables are
+			// intentionally not dropped silently: the verse structure is
+			// recorded through verseNumber on the syllables Shane keeps.
+			let syllable: SyllableInfo | undefined;
+			const lines = item.lyrics?.lines;
+			if (!isRest && lines && typeof lines === 'object') {
+				for (const [lineId, line] of Object.entries(lines)) {
+					const text = line?.text;
+					if (typeof text !== 'string' || text.length === 0) continue;
+					const verseNumber = ctx.lineIdToVerse.get(lineId) ?? 1;
+					if (verseNumber !== 1 && syllable) continue;
+					const typeRaw = line?.type;
+					const type: SyllableInfo['type'] =
+						typeRaw === 'start' || typeRaw === 'middle' || typeRaw === 'end' || typeRaw === 'whole'
+							? typeRaw
+							: 'whole';
+					const candidate: SyllableInfo = {
+						id: syllableId(),
+						text,
+						type,
+						verseNumber,
+						...(ctx.verseLabelOf(lineId) ? { verseLabel: ctx.verseLabelOf(lineId) } : {}),
+						wordContext: text, // provisional; the wordContext pass rewrites it
+					};
+					// Keep the verse-1 syllable on the event; if verse 1 never
+					// appears on this event, keep the lowest verse present so
+					// single-verse scores with a non-1 slot still analyse.
+					if (!syllable || candidate.verseNumber < syllable.verseNumber) syllable = candidate;
+				}
+			}
+
+			// Markings → articulations (+ fermata presence).
+			let articulations: Articulation[] | undefined;
+			let hasFermata = false;
+			if (!isRest && item.markings && typeof item.markings === 'object') {
+				for (const key of Object.keys(item.markings)) {
+					if (key === 'fermata') {
+						hasFermata = true;
+						continue;
+					}
+					const mapped = MARKING_TO_ARTICULATION[key];
+					if (mapped) {
+						(articulations ??= []).push(mapped);
+					} else if (!ctx.warnedMarkingKeys.has(key)) {
+						ctx.warnedMarkingKeys.add(key);
+						ctx.warnings.push({
+							code: 'unsupported-articulation',
+							message: `Marking '${key}' is not in the v1 articulation set; ignored.`,
+							location: { measureIndex, eventId },
+						});
+					}
+				}
+			}
+
+			ctx.vocalLine.push({
+				id: eventId,
+				type: isRest ? 'rest' : 'note',
+				measureIndex,
+				rhythmicPosition: { fraction: position },
+				duration,
+				...(pitch ? { pitch } : {}),
+				...(syllable ? { syllable } : {}),
+				...(hasFermata ? { fermata: {} } : {}),
+				...(articulations ? { articulations } : {}),
+			});
+
+			cursor = addFrac(cursor, soundingFraction);
+		}
+		return cursor;
+	}
+}
+
+/** True when any event in any measure of the part carries lyric lines. */
+function partHasLyrics(part: MnxPart): boolean {
+	let found = false;
+	forEachEvent(part, (item) => {
+		const lines = item.lyrics?.lines;
+		if (lines && typeof lines === 'object' && Object.keys(lines).length > 0) found = true;
+	});
+	return found;
+}
+
+/** Visit every content item in a part, recursing into tuplet groups. */
+function forEachEvent(part: MnxPart, visit: (item: MnxContentItem) => void): void {
+	const walk = (items: MnxContentItem[] | undefined): void => {
+		if (!Array.isArray(items)) return;
+		for (const item of items) {
+			if (!item || typeof item !== 'object') continue;
+			visit(item);
+			if (Array.isArray(item.content)) walk(item.content);
+		}
+	};
+	for (const m of part.measures ?? []) {
+		for (const seq of m?.sequences ?? []) {
+			walk(seq?.content);
+		}
+	}
+}
+
+/**
+ * The wordContext pass: for each verse, buffer contiguous start/middle
+ * syllables until the word's end syllable arrives, then assign the
+ * concatenation to every syllable in the word. `whole` syllables are
+ * their own word. A `start` arriving while a word is open flushes the
+ * open word first (malformed source; the flush keeps every syllable
+ * carrying the best available context rather than dropping any).
+ */
+function assignWordContexts(vocalLine: VocalLineEvent[], warnings: ParseWarning[]): void {
+	const open = new Map<number, SyllableInfo[]>();
+
+	const flush = (verse: number, malformed: boolean): void => {
+		const buffer = open.get(verse);
+		if (!buffer || buffer.length === 0) return;
+		const word = buffer.map((s) => s.text).join('');
+		for (const s of buffer) s.wordContext = word;
+		open.delete(verse);
+		if (malformed) {
+			warnings.push({
+				code: 'unrecognised-element',
+				message: `A lyric word in verse ${verse} was interrupted before its end syllable; context assigned from the partial word.`,
+			});
+		}
+	};
+
+	for (const event of vocalLine) {
+		const s = event.syllable;
+		if (!s) continue;
+		switch (s.type) {
+			case 'whole':
+				flush(s.verseNumber, true);
+				s.wordContext = s.text;
+				break;
+			case 'start':
+				flush(s.verseNumber, true);
+				open.set(s.verseNumber, [s]);
+				break;
+			case 'middle':
+			case 'end': {
+				const buffer = open.get(s.verseNumber);
+				if (buffer) {
+					buffer.push(s);
+				} else {
+					open.set(s.verseNumber, [s]);
+				}
+				if (s.type === 'end') flush(s.verseNumber, false);
+				break;
+			}
+		}
+	}
+	for (const verse of [...open.keys()]) flush(verse, true);
+}
+
+/** A minimal, honest empty score for the fatal-error path. */
+function emptyScore(input: MnxScoreInput): ParsedScore {
+	const fromMusx = typeof input.sourcePath === 'string' && input.sourcePath.toLowerCase().endsWith('.musx');
+	return {
+		source: {
+			format: 'mnx',
+			fidelity: fromMusx ? 'high' : 'native',
+			origin: fromMusx ? 'denigma-mnx-from-musx' : 'mnx-direct',
+			sourceWarnings: [],
+		},
+		vocalPart: { partId: '', partName: '' },
+		measures: [],
+		keySignatures: [],
+		timeSignatures: [],
+		tempoMarkings: [],
+		vocalLine: [],
+	};
 }
