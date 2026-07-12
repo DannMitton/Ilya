@@ -98,6 +98,12 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     expect((svg.match(/fill="#8B9A7D">♮/g) ?? []).length).toBe(0);
   });
 
+  it('offsets a colliding turning notehead beside the sung note (two-voice rule)', () => {
+    // n5: sung D3 on [i], turning pitch also D3 (unison). The sage
+    // notehead shifts right of the sung one: cx = 306 + 12.4 + 1.6 = 320.
+    expect(svg.includes('cx="320"')).toBe(true);
+  });
+
   it('brackets the triplet in black with its numeral', () => {
     expect((svg.match(/data-tuplet="3"/g) ?? []).length).toBe(1);
     expect(svg.includes('font-style="italic" fill="#1a1612">3<')).toBe(true);

@@ -66,7 +66,10 @@ export function demoScore(): ParsedScore {
     note('n2', 0, frac(1, 4), P('A', 2), 'eighth', ['по', 'po']),
     note('n3', 0, frac(3, 8), P('B', 2), 'eighth', ['гру', 'gru']), // B natural vs Bb key → ♮
     note('n4', 0, frac(1, 2), null, 'quarter'), // rest
-    note('n5', 1, frac(0, 1), P('A', 3), 'quarter', ['зи', 'zi']),
+    // Sung D3 on [i]: the turning pitch for [i] (fR1 300 → 150 Hz) is ALSO
+    // D3, a deliberate unison collision exercising the two-voice offset
+    // rule (turning notehead displaced beside the sung note).
+    note('n5', 1, frac(0, 1), P('D', 3), 'quarter', ['зи', 'zi']),
     note('n6', 1, frac(1, 4), P('D', 4), 'half', ['сь', 'sʲ']), // crossing (≈ fR1 300)
     // Measure 3: beaming cases. Beat 1: an eighth pair, both open → one
     // primary beam despite differing vowels (grouping is by timbre).

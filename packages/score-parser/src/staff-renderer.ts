@@ -520,10 +520,18 @@ export function renderAnalyzedStaff(
         }
         turningAcc[tKey] = tp.alter;
       }
+      // Two-voice collision rule: at a unison or second with the sung
+      // note, the turning notehead offsets horizontally beside it rather
+      // than overprinting (standard practice for voices sharing a staff;
+      // Dann's legibility ruling, 2026-07-12).
+      const collides = Math.abs(ty - y) <= o.lineGap;
+      const tx = collides
+        ? nx + (smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4) + 1.6
+        : nx;
       if (smufl) {
-        parts.push(glyphAt('noteheadBlack', nx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '));
+        parts.push(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '));
       } else {
-        parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
+        parts.push(`<ellipse cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`);
       }
       lowestInk = Math.max(lowestInk, ty + 6);
     }
