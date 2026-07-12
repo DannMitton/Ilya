@@ -32,3 +32,16 @@ export {
   type VowelResolver,
   type AnalyzeOptions,
 } from './overlay-engine';
+export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
+export {
+  prepareSmuflFont,
+  spToPx,
+  smuflFontSizePx,
+  REQUIRED_GLYPHS,
+  SMUFL_CODEPOINTS,
+  type PreparedSmuflFont,
+  type SmuflGlyphMetrics,
+  type SmuflEngravingDefaults,
+  type RequiredGlyphName,
+} from './smufl-metadata';
+export { demoScore, demoProfile, demoResolver, renderDemo, syntheticSmuflFont } from './demo-fixture';

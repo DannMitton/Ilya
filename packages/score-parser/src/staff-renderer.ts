@@ -7,11 +7,12 @@
  * melody-only staff is bounded enough to render ourselves and own every
  * coordinate (and every `data-event-id` for the correction UI).
  *
- * This is the production layout engine (increment 3). It handles:
+ * This is the production layout engine (increment 4). It handles:
  *   - proportional rhythmic spacing (x by onset time, with a minimum gap);
  *   - multiple measures with barlines;
- *   - a bass clef and the key signature at the system head;
- *   - accidentals (♯ ♭ ♮) with per-measure state and key-signature carry;
+ *   - a bass clef and the key signature at standard bass-clef positions;
+ *   - accidentals (sung line and turning layer) with per-measure carry and
+ *     the measure-opening barline nudge (Kimi's collision rule);
  *   - ledger lines; rests; flags for unbeamed short notes;
  *   - beaming, derived by beat (Dann's ruling, 2026-07-12): the data model
  *     carries no source beams, and the forced semantic stems would break an
@@ -26,18 +27,21 @@
  *     p. 206) renders in the sample's sage (#8FA294, pending Dann's
  *     in-browser sign-off), noteheads and accidentals in one colour, with
  *     its own per-measure accidental carry state independent of the sung
- *     line (Dann's rulings, 2026-07-12).
+ *     line (Dann's rulings, 2026-07-12);
+ *   - TWO RENDERING MODES: pass `options.font` (a `PreparedSmuflFont`) and
+ *     `options.fontFamily` for production SMuFL glyph output (clef, heads,
+ *     accidentals, rests, flags as font glyphs; stems from the font's
+ *     anchors; thicknesses from its engraving defaults). Omit `font` for
+ *     the primitive shapes, which stay byte-stable for sandbox tests.
  *
- * Deliberately deferred to later increments (documented so nothing is a
- * surprise): SMuFL / Bravura glyph references in place of the shape
- * primitives (Kimi's production constraint — a swap behind this same
- * layout, verified in-browser where the font loads); multi-system
- * pagination onto the letter Paper page; wiring to live overlay data and the
- * correction-UI editable bindings.
+ * Deliberately deferred to later increments: multi-system pagination onto
+ * the letter Paper page; wiring to live overlay data and the correction-UI
+ * editable bindings.
  */
 
 import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEvent } from './types';
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
+import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
 
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
@@ -45,14 +49,19 @@ export interface StaffRenderOptions {
   leftMargin?: number;  // x where the staff content begins (after clef/key)
   pxPerWhole?: number;  // horizontal px per whole-note of onset time
   minGap?: number;      // minimum px between successive events
+  /** SMuFL mode: prepared font metadata. Omit for primitive shapes. */
+  font?: PreparedSmuflFont;
+  /** CSS font-family for SMuFL glyph text (must match the loaded FontFace). */
+  fontFamily?: string;
 }
 
-const DEFAULTS: Required<StaffRenderOptions> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
   pxPerWhole: 240,
   minGap: 40,
+  fontFamily: 'Bravura',
 };
 
 const DIATONIC: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
@@ -78,6 +87,28 @@ function keySignatureAlter(step: Pitch['step'], fifths: number): number {
 }
 
 const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '♮', 2: '𝄪', [-2]: '𝄫' };
+
+/** SMuFL glyph names by alteration. */
+const ACCIDENTAL_SMUFL: Record<number, RequiredGlyphName> = {
+  1: 'accidentalSharp',
+  [-1]: 'accidentalFlat',
+  0: 'accidentalNatural',
+  2: 'accidentalDoubleSharp',
+  [-2]: 'accidentalDoubleFlat',
+};
+
+/** SMuFL rest glyphs by note base (64th/128th clamp to 32nd for v1). */
+const REST_SMUFL: Record<NoteBase, RequiredGlyphName> = {
+  breve: 'restWhole', whole: 'restWhole', half: 'restHalf', quarter: 'restQuarter',
+  eighth: 'rest8th', '16th': 'rest16th', '32nd': 'rest32nd', '64th': 'rest32nd', '128th': 'rest32nd',
+};
+
+/** SMuFL flag glyphs [up, down] by flag count (clamped at 3 for v1). */
+const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
+  1: ['flag8thUp', 'flag8thDown'],
+  2: ['flag16thUp', 'flag16thDown'],
+  3: ['flag32ndUp', 'flag32ndDown'],
+};
 
 /**
  * Turning-pitch layer colour: the App. B sample's sage midtone (estimated
@@ -120,10 +151,10 @@ interface Placed {
 // wherever the timbre changes, so source beams could not be honoured
 // verbatim regardless.
 
-const STEM_HALF = 5.5;   // stem x-offset from the notehead centre
+const STEM_HALF = 5.5;   // primitive-mode stem x-offset from the notehead centre
 const STEM_MIN = 26;     // minimum stem length under a beam
-const BEAM_STROKE = 4;   // beam thickness
-const BEAM_GAP = 7;      // spacing between beam levels
+const BEAM_STROKE = 4;   // primitive-mode beam thickness
+const BEAM_GAP = 7;      // primitive-mode spacing between beam levels
 const BEAM_STUB = 9;     // length of a partial (stub) beam
 const MAX_BEAM_SLOPE = 0.18; // px of rise per px of run, clamped
 
@@ -149,12 +180,42 @@ export function renderAnalyzedStaff(
   options: StaffRenderOptions = {},
 ): string {
   const o = { ...DEFAULTS, ...options };
+  const smufl = options.font;
   const half = o.lineGap / 2;
   const staffTop = o.staffMidY - 2 * o.lineGap;
   const staffBottom = o.staffMidY + 2 * o.lineGap;
   const yFor = (p: Pitch): number => o.staffMidY - (diatonicNumber(p) - MIDDLE_LINE_DIATONIC) * half;
 
   const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
+
+  // ── SMuFL metrics (undefined in primitive mode) ──
+  const glyphSize = smuflFontSizePx(o.lineGap);
+  const sp = (v: number): number => v * o.lineGap;
+  const round2 = (v: number): number => Math.round(v * 100) / 100;
+  /** Glyph text at a horizontal CENTRE (or left origin when anchorLeft). */
+  const glyphAt = (name: RequiredGlyphName, x: number, y: number, fill: string, anchorLeft = false): string => {
+    const g = smufl!.glyph(name);
+    const gx = anchorLeft ? x : x - sp(g.widthSp / 2);
+    return `<text x="${round2(gx)}" y="${round2(y)}" font-size="${glyphSize}px" font-family="${esc(o.fontFamily)}" fill="${fill}">${g.char}</text>`;
+  };
+  const headNameFor = (base: NoteBase): RequiredGlyphName =>
+    base === 'whole' || base === 'breve' ? 'noteheadWhole' : base === 'half' ? 'noteheadHalf' : 'noteheadBlack';
+
+  const ed = smufl?.engravingDefaults;
+  const stemT = smufl ? sp(ed!.stemThickness) : 1.5;
+  const beamT = smufl ? sp(ed!.beamThickness) : BEAM_STROKE;
+  const beamLevelGap = smufl ? sp(ed!.beamThickness + ed!.beamSpacing) : BEAM_GAP;
+  // Stem x-offsets from the notehead centre, from the black notehead's
+  // anchors (half noteheads differ by a hair; v1 accepts the approximation
+  // so the beam pass and the stem pass agree).
+  let stemHalfUp = STEM_HALF;
+  let stemHalfDown = -STEM_HALF;
+  if (smufl) {
+    const nh = smufl.glyph('noteheadBlack');
+    const w = nh.widthSp;
+    stemHalfUp = sp((nh.anchors.stemUpSE?.[0] ?? w) - w / 2) - stemT / 2;
+    stemHalfDown = sp((nh.anchors.stemDownNW?.[0] ?? 0) - w / 2) + stemT / 2;
+  }
 
   // ── Layout: assign x by onset, insert barlines at measure changes ──
   const placed: Placed[] = [];
@@ -188,7 +249,7 @@ export function renderAnalyzedStaff(
 
     const emit = (notes: BeamNote[], stemUp: boolean): void => {
       const dir = stemUp ? -1 : 1;
-      const sxOf = (n: BeamNote): number => (stemUp ? n.x + STEM_HALF : n.x - STEM_HALF);
+      const sxOf = (n: BeamNote): number => n.x + (stemUp ? stemHalfUp : stemHalfDown);
       const first = notes[0];
       const last = notes[notes.length - 1];
       const x0 = sxOf(first);
@@ -209,7 +270,7 @@ export function renderAnalyzedStaff(
       // neighbour when it has one, otherwise right).
       const maxFlags = Math.max(...notes.map((n) => n.flags));
       for (let level = 1; level <= maxFlags; level++) {
-        const yOff = (level - 1) * BEAM_GAP * -dir; // step toward the noteheads
+        const yOff = (level - 1) * beamLevelGap * -dir; // step toward the noteheads
         let i = 0;
         while (i < notes.length) {
           if (notes[i].flags < level) { i++; continue; }
@@ -228,7 +289,7 @@ export function renderAnalyzedStaff(
             i = j + 1;
             continue;
           }
-          beamParts.push(`<line x1="${xa}" y1="${beamY(xa) + yOff}" x2="${xb}" y2="${beamY(xb) + yOff}" stroke="#1a1612" stroke-width="${BEAM_STROKE}" data-beam-level="${level}"/>`);
+          beamParts.push(`<line x1="${xa}" y1="${round2(beamY(xa) + yOff)}" x2="${xb}" y2="${round2(beamY(xb) + yOff)}" stroke="#1a1612" stroke-width="${beamT}" data-beam-level="${level}"/>`);
           i = j + 1;
         }
       }
@@ -259,24 +320,36 @@ export function renderAnalyzedStaff(
   parts.push(`<rect x="0" y="0" width="${width}" height="${staffBottom + 64}" fill="#F0EBE0"/>`);
 
   // Staff lines.
+  const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;
-    parts.push(`<line x1="24" y1="${y}" x2="${width - 12}" y2="${y}" stroke="#3a352f" stroke-width="1"/>`);
+    parts.push(`<line x1="24" y1="${y}" x2="${width - 12}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
-  // Bass clef placeholder (two dots around the F3 line; SMuFL glyph later).
+  // Bass clef: SMuFL glyph on the F3 line, or the primitive placeholder.
   const fLineY = o.staffMidY - o.lineGap;
-  parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
-  parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
+  if (smufl) {
+    parts.push(glyphAt('fClef', 34, fLineY, '#3a352f', true));
+  } else {
+    parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
+    parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
+  }
 
   // Key signature at the head, at standard bass-clef staff positions.
   const order = fifths >= 0 ? SHARP_ORDER : FLAT_ORDER;
   const glyph = fifths >= 0 ? ACCIDENTAL_GLYPH[1] : ACCIDENTAL_GLYPH[-1];
+  const ksName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
   const ksTable = fifths >= 0 ? KS_OCTAVES.bass.sharps : KS_OCTAVES.bass.flats;
+  let ksX = 62;
   for (let i = 0; i < Math.abs(fifths); i++) {
     const step = order[i];
     const ky = yFor({ step, octave: ksTable[step], alter: 0 });
-    parts.push(`<text x="${62 + i * 9}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
+    if (smufl) {
+      parts.push(glyphAt(ksName, ksX, ky, '#3a352f', true));
+      ksX += sp(smufl.glyph(ksName).widthSp) + 1;
+    } else {
+      parts.push(`<text x="${62 + i * 9}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
+    }
   }
 
   // ── Tuplet pass: bracket runs of identical tuplet info ──
@@ -287,6 +360,7 @@ export function renderAnalyzedStaff(
   {
     let run: Placed[] = [];
     let runKey = '';
+    const tupletT = smufl ? round2(sp(ed!.tupletBracketThickness)) : 1;
     const emit = (): void => {
       if (run.length >= 2) {
         const t = run[0].ev.duration.tuplet!;
@@ -302,10 +376,10 @@ export function renderAnalyzedStaff(
         const midX = (xa + xb) / 2;
         tupletParts.push(
           `<g data-tuplet="${t.actualNotes}">` +
-          `<line x1="${xa}" y1="${yBr + 5}" x2="${xa}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
-          `<line x1="${xa}" y1="${yBr}" x2="${midX - 7}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
-          `<line x1="${midX + 7}" y1="${yBr}" x2="${xb}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
-          `<line x1="${xb}" y1="${yBr}" x2="${xb}" y2="${yBr + 5}" stroke="#1a1612" stroke-width="1"/>` +
+          `<line x1="${xa}" y1="${yBr + 5}" x2="${xa}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
+          `<line x1="${xa}" y1="${yBr}" x2="${midX - 7}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
+          `<line x1="${midX + 7}" y1="${yBr}" x2="${xb}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
+          `<line x1="${xb}" y1="${yBr}" x2="${xb}" y2="${yBr + 5}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
           `<text x="${midX}" y="${yBr + 3.5}" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">${t.actualNotes}</text>` +
           `</g>`,
         );
@@ -337,24 +411,35 @@ export function renderAnalyzedStaff(
       turningAcc = {}; // the turning layer carries its own state
     }
     if (newMeasure) {
-      parts.push(`<line x1="${nx - 18}" y1="${staffTop}" x2="${nx - 18}" y2="${staffBottom}" stroke="#3a352f" stroke-width="1"/>`);
+      const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
+      parts.push(`<line x1="${nx - 18}" y1="${staffTop}" x2="${nx - 18}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
     }
 
     if (ev.type === 'rest') {
-      parts.push(`<rect x="${nx - 5}" y="${o.staffMidY - 3}" width="10" height="6" rx="1.5" fill="#3a352f"/>`);
+      if (smufl) {
+        const rest = REST_SMUFL[ev.duration.base];
+        const ry = rest === 'restWhole' ? o.staffMidY - o.lineGap : o.staffMidY;
+        parts.push(glyphAt(rest, nx, ry, '#3a352f'));
+      } else {
+        parts.push(`<rect x="${nx - 5}" y="${o.staffMidY - 3}" width="10" height="6" rx="1.5" fill="#3a352f"/>`);
+      }
       continue;
     }
     const pitch = ev.pitch;
     if (!pitch) continue;
     const y = yFor(pitch);
     const a: AnalyzedEvent | undefined = analyzed.events[ev.id];
+    const headName = headNameFor(ev.duration.base);
+    const headHalfW = smufl ? sp(smufl.glyph(headName).widthSp / 2) : 6.2;
 
     // Ledger lines.
+    const ledgerHalf = smufl ? round2(headHalfW + sp(ed!.legerLineExtension)) : 11;
+    const ledgerT = smufl ? round2(sp(ed!.legerLineThickness)) : 1;
     for (let ly = o.staffMidY - 3 * o.lineGap; ly >= y - 1; ly -= o.lineGap) {
-      parts.push(`<line x1="${nx - 11}" y1="${ly}" x2="${nx + 11}" y2="${ly}" stroke="#3a352f" stroke-width="1"/>`);
+      parts.push(`<line x1="${round2(nx - ledgerHalf)}" y1="${ly}" x2="${round2(nx + ledgerHalf)}" y2="${ly}" stroke="#3a352f" stroke-width="${ledgerT}"/>`);
     }
     for (let ly = o.staffMidY + 3 * o.lineGap; ly <= y + 1; ly += o.lineGap) {
-      parts.push(`<line x1="${nx - 11}" y1="${ly}" x2="${nx + 11}" y2="${ly}" stroke="#3a352f" stroke-width="1"/>`);
+      parts.push(`<line x1="${round2(nx - ledgerHalf)}" y1="${ly}" x2="${round2(nx + ledgerHalf)}" y2="${ly}" stroke="#3a352f" stroke-width="${ledgerT}"/>`);
     }
 
     // Accidental, if the note's alter differs from what's in effect.
@@ -363,8 +448,17 @@ export function renderAnalyzedStaff(
     const accKey = `${pitch.step}${pitch.octave}`;
     const inEffect = accKey in measureAcc ? measureAcc[accKey] : keySignatureAlter(pitch.step, fifths);
     if (pitch.alter !== inEffect) {
-      const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
-      if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`);
+      if (smufl) {
+        const name = ACCIDENTAL_SMUFL[pitch.alter];
+        if (name) {
+          const accW = sp(smufl.glyph(name).widthSp);
+          const gx = Math.max(nx - headHalfW - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
+          parts.push(glyphAt(name, gx, y, '#1a1612', true));
+        }
+      } else {
+        const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
+        if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`);
+      }
       measureAcc[accKey] = pitch.alter;
     }
 
@@ -378,37 +472,64 @@ export function renderAnalyzedStaff(
       const tKey = `${tp.step}${tp.octave}`;
       const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, fifths);
       if (tp.alter !== tInEffect) {
-        const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
-        if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+        if (smufl) {
+          const name = ACCIDENTAL_SMUFL[tp.alter];
+          if (name) {
+            const accW = sp(smufl.glyph(name).widthSp);
+            const gx = Math.max(nx - sp(smufl.glyph('noteheadBlack').widthSp / 2) - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
+            parts.push(glyphAt(name, gx, ty, TURNING_COLOUR, true));
+          }
+        } else {
+          const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
+          if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+        }
         turningAcc[tKey] = tp.alter;
       }
-      parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
+      if (smufl) {
+        parts.push(glyphAt('noteheadBlack', nx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '));
+      } else {
+        parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
+      }
     }
 
     // Sung notehead: open for half and longer, filled otherwise.
     const openHead = ev.duration.base === 'half' || ev.duration.base === 'whole' || ev.duration.base === 'breve';
-    parts.push(openHead
-      ? `<ellipse cx="${nx}" cy="${y}" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 ${nx} ${y})"/>`
-      : `<ellipse cx="${nx}" cy="${y}" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 ${nx} ${y})"/>`);
+    if (smufl) {
+      parts.push(glyphAt(headName, nx, y, '#1a1612'));
+    } else {
+      parts.push(openHead
+        ? `<ellipse cx="${nx}" cy="${y}" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 ${nx} ${y})"/>`
+        : `<ellipse cx="${nx}" cy="${y}" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 ${nx} ${y})"/>`);
+    }
 
     // Forced stem: open timbre = down, close = up. (No stem on a whole note.)
     const stemUp = a ? a.timbre === 'close' : false;
     if (a && ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
       const beamed = beamStemById.get(ev.id);
+      // Stem contact y: from the notehead's anchor in SMuFL mode.
+      const anchors = smufl ? smufl.glyph(headName).anchors : undefined;
+      const contactY = smufl
+        ? y - sp((stemUp ? anchors?.stemUpSE?.[1] : anchors?.stemDownNW?.[1]) ?? 0)
+        : stemUp ? y - 1 : y + 1;
       if (beamed) {
         // The stem meets the beam; the beam replaces flags.
-        const sy1 = stemUp ? y - 1 : y + 1;
-        parts.push(`<line x1="${beamed.sx}" y1="${sy1}" x2="${beamed.sx}" y2="${beamed.tipY}" stroke="#1a1612" stroke-width="1.5"/>`);
+        parts.push(`<line x1="${round2(beamed.sx)}" y1="${round2(contactY)}" x2="${round2(beamed.sx)}" y2="${round2(beamed.tipY)}" stroke="#1a1612" stroke-width="${stemT}"/>`);
       } else {
-        const sx = stemUp ? nx + STEM_HALF : nx - STEM_HALF;
-        const sy1 = stemUp ? y - 1 : y + 1;
+        const sx = nx + (stemUp ? stemHalfUp : stemHalfDown);
         const sy2 = stemUp ? y - 30 : y + 30;
-        parts.push(`<line x1="${sx}" y1="${sy1}" x2="${sx}" y2="${sy2}" stroke="#1a1612" stroke-width="1.5"/>`);
-        // Simple flags for unbeamed short notes.
+        parts.push(`<line x1="${round2(sx)}" y1="${round2(contactY)}" x2="${round2(sx)}" y2="${sy2}" stroke="#1a1612" stroke-width="${stemT}"/>`);
+        // Flags for unbeamed short notes.
         const flags = flagCount(ev.duration.base);
-        for (let f = 0; f < flags; f++) {
-          const fy = sy2 + f * 6 * (stemUp ? 1 : -1);
-          parts.push(`<path d="M${sx} ${fy} q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>`);
+        if (flags > 0) {
+          if (smufl) {
+            const fg = FLAG_SMUFL[Math.min(flags, 3)];
+            parts.push(glyphAt(stemUp ? fg[0] : fg[1], sx - stemT / 2, sy2, '#1a1612', true));
+          } else {
+            for (let f = 0; f < flags; f++) {
+              const fy = sy2 + f * 6 * (stemUp ? 1 : -1);
+              parts.push(`<path d="M${sx} ${fy} q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>`);
+            }
+          }
         }
       }
     }
@@ -438,7 +559,8 @@ export function renderAnalyzedStaff(
   parts.push(...tupletParts);
 
   // Final barline.
-  parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="1.6"/>`);
+  const finalBarT = smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6;
+  parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${finalBarT}"/>`);
   parts.push('</svg>');
   return parts.join('\n');
 }

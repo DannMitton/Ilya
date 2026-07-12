@@ -32,6 +32,9 @@ importers:
       '@ilya/phonology':
         specifier: workspace:*
         version: link:../../packages/phonology
+      '@ilya/score-parser':
+        specifier: workspace:*
+        version: link:../../packages/score-parser
       bits-ui:
         specifier: ^2.15.5
         version: 2.15.5(@internationalized/date@3.11.0)(@sveltejs/kit@2.50.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.50.1)(vite@6.4.1))(svelte@5.50.1)(typescript@5.9.3)(vite@6.4.1))(svelte@5.50.1)

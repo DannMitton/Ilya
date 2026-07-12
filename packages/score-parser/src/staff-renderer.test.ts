@@ -1,104 +1,18 @@
 /**
- * Staff-renderer tests (production layout). A three-measure fixture in 3/4,
- * one flat, exercising rhythmic spacing, barlines, an accidental (B
- * natural against the flat key), a rest, flags, derived-by-beat beaming
- * (primary, secondary, and the timbre-change break), and all four
- * analytical marks plus the `#` phonation break. String assertions over
- * the pure SVG output — no browser needed.
+ * Staff-renderer tests (production layout). The shared four-measure demo
+ * fixture (see `demo-fixture.ts`) exercises rhythmic spacing, barlines,
+ * accidentals (sung and turning layers, with the measure-opening nudge),
+ * rests, flags, derived-by-beat beaming (primary, secondary, and the
+ * timbre-change break), a bracketed triplet, and all four analytical marks
+ * plus the `#` phonation break. String assertions over the pure SVG
+ * output — no browser needed.
+ *
+ * Two modes are covered: the primitive shapes (byte-stable, the sandbox
+ * default) and SMuFL glyph mode against a synthetic font.
  */
 
 import { describe, expect, it } from 'vitest';
-import { analyzeScore, type VowelResolver } from './overlay-engine';
-import { renderAnalyzedStaff } from './staff-renderer';
-import type { Fraction, NoteBase, ParsedScore, Pitch, TupletInfo, VocalLineEvent } from './types';
-import type { VoiceProfileSnapshot } from './analysis-types';
-
-const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
-const frac = (n: number, d: number): Fraction => ({ numerator: n, denominator: d });
-const DUR: Record<NoteBase, Fraction> = {
-  breve: frac(2, 1), whole: frac(1, 1), half: frac(1, 2), quarter: frac(1, 4), eighth: frac(1, 8),
-  '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
-};
-
-function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo): VocalLineEvent {
-  const plain = DUR[base];
-  const fraction = tuplet
-    ? { numerator: plain.numerator * tuplet.normalNotes, denominator: plain.denominator * tuplet.actualNotes }
-    : plain;
-  return {
-    id,
-    type: pitch ? 'note' : 'rest',
-    measureIndex,
-    rhythmicPosition: { fraction: pos },
-    duration: { base, dots: 0, fraction, ...(tuplet ? { tuplet } : {}) },
-    ...(pitch ? { pitch } : {}),
-    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: 'whole', verseNumber: 1, wordContext: verses[0], verses } } : {}),
-  };
-}
-
-const TRIPLET: TupletInfo = { actualNotes: 3, normalNotes: 2, normalType: 'eighth' };
-
-const profile: VoiceProfileSnapshot = {
-  fR1: { a: 650, o: 450, u: 350, i: 300, e: 400, ɛ: 500, ɑ: 622 },
-  range: { lowest: P('C', 2), highest: P('E', 4) },
-  tessitura: { low: P('F', 2), high: P('C', 3) },
-  passaggio: { primo: P('A', 2), secondo: P('D', 3) },
-  label: 'bass',
-};
-
-const vowelById: Record<string, string> = {
-  n1: 'a', n2: 'o', n3: 'o', n5: 'i', n6: 'i',
-  n7: 'o', n8: 'u', n9: 'o', n10: 'o', n11: 'i',
-  n13: 'ɑ', n14: 'ɑ', n15: 'ɑ', n16: 'a',
-};
-const resolver: VowelResolver = (e) => vowelById[e.id];
-
-function demoScore(): ParsedScore {
-  const events = [
-    note('n1', 0, frac(0, 1), P('F', 2), 'quarter', ['Ты', 'tɨ']),
-    note('n2', 0, frac(1, 4), P('A', 2), 'eighth', ['по', 'po']),
-    note('n3', 0, frac(3, 8), P('B', 2), 'eighth', ['гру', 'gru']), // B natural vs Bb key → ♮
-    note('n4', 0, frac(1, 2), null, 'quarter'), // rest
-    note('n5', 1, frac(0, 1), P('A', 3), 'quarter', ['зи', 'zi']),
-    note('n6', 1, frac(1, 4), P('D', 4), 'half', ['сь', 'sʲ']), // crossing (≈ fR1 300)
-    // Measure 3: beaming cases. Beat 1: an eighth pair, both open → one
-    // primary beam despite differing vowels (grouping is by timbre).
-    // Beat 2: a 16th pair (open, double beam) then an eighth whose vowel
-    // flips the timbre to close → the beam breaks and it takes a flag.
-    note('n7', 2, frac(0, 1), P('F', 2), 'eighth', ['но', 'no']),
-    note('n8', 2, frac(1, 8), P('G', 2), 'eighth', ['чу', 'tʃʲu']),
-    note('n9', 2, frac(1, 4), P('A', 2), '16th', ['по', 'po']),
-    note('n10', 2, frac(5, 16), P('B', 2, -1), '16th', ['го', 'go']),
-    note('n11', 2, frac(3, 8), P('E', 3), 'eighth', ['ди', 'dʲi']), // close vs open n9/n10 → beam break
-    note('n12', 2, frac(1, 2), null, 'quarter'), // rest
-    // Measure 4: an eighth-note triplet on dark-a (fR1 622 → turning D#4:
-    // the sage sharp appears once and carries through the measure), then a
-    // quarter on [a] whose natural turning E4 needs no accidental.
-    note('n13', 3, frac(0, 1), P('A', 2), 'eighth', ['тьма', 'tʲmɑ'], TRIPLET),
-    note('n14', 3, frac(1, 12), P('B', 2, -1), 'eighth', ['на', 'nɑ'], TRIPLET),
-    note('n15', 3, frac(1, 6), P('C', 3), 'eighth', ['ста', 'stɑ'], TRIPLET),
-    note('n16', 3, frac(1, 4), P('D', 3), 'quarter', ['ла', 'łɑ']),
-    note('n17', 3, frac(1, 2), null, 'quarter'), // rest
-  ];
-  const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });
-  return {
-    source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
-    vocalPart: { partId: 'P1', partName: 'Voice' },
-    measures: [m(0), m(1), m(2), m(3)],
-    keySignatures: [{ measureIndex: 0, signature: { fifths: -1 } }],
-    timeSignatures: [{ measureIndex: 0, signature: { beats: 3, beatType: 4 } }],
-    tempoMarkings: [],
-    vocalLine: events,
-  };
-}
-
-/** Analyse the demo and mark n2 as a phonation break (as the diction layer would). */
-export function renderDemo(): string {
-  const parsed = demoScore();
-  const analyzed = analyzeScore(parsed, profile, resolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
-  analyzed.events.n2.phonationBreak = true;
-  return renderAnalyzedStaff(parsed, analyzed);
-}
+import { renderDemo, syntheticSmuflFont } from './demo-fixture';
 
 describe('staff renderer: layout', () => {
   const svg = renderDemo();
@@ -202,5 +116,50 @@ describe('staff renderer: the four analytical criteria', () => {
     for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
       expect(svg.includes(`data-event-id="${id}"`)).toBe(true);
     }
+  });
+});
+
+describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
+  const font = syntheticSmuflFont();
+  const svg = renderDemo({ font, fontFamily: 'TestFont' });
+
+  it('replaces every shape primitive with glyphs (no ellipses, no flag paths)', () => {
+    expect(svg.includes('<ellipse')).toBe(false);
+    expect(svg.includes('q8 3 7 12')).toBe(false);
+    expect(svg.includes('width="10" height="6"')).toBe(false); // primitive rest
+  });
+
+  it('renders the bass clef, noteheads, and rests as SMuFL codepoints', () => {
+    expect(svg.includes(String.fromCodePoint(0xe062))).toBe(true); // fClef
+    expect(svg.includes(String.fromCodePoint(0xe0a4))).toBe(true); // noteheadBlack
+    expect(svg.includes(String.fromCodePoint(0xe0a3))).toBe(true); // noteheadHalf (n6)
+    expect(svg.includes(String.fromCodePoint(0xe4e5))).toBe(true); // restQuarter
+  });
+
+  it('renders key-signature and layer accidentals as glyphs (flat, natural, sage sharp)', () => {
+    expect(svg.includes(String.fromCodePoint(0xe260))).toBe(true); // accidentalFlat (key)
+    expect(svg.includes(String.fromCodePoint(0xe261))).toBe(true); // accidentalNatural (n3)
+    const sageSharp = new RegExp(`fill="#8FA294">${String.fromCodePoint(0xe262)}<`, 'g');
+    expect((svg.match(sageSharp) ?? []).length).toBe(1); // turning D#, carried
+  });
+
+  it('renders the lone flag as a glyph (up-stem eighth n11)', () => {
+    expect(svg.includes(String.fromCodePoint(0xe240))).toBe(true); // flag8thUp
+  });
+
+  it('derives stem thickness and beam thickness from engraving defaults', () => {
+    expect(svg.includes('stroke-width="1.44"')).toBe(true); // 0.12 sp × 12
+    expect((svg.match(/stroke-width="6" data-beam-level/g) ?? []).length).toBe(5); // 0.5 sp × 12
+  });
+
+  it('tags glyph text with the requested font family', () => {
+    expect(svg.includes('font-family="TestFont"')).toBe(true);
+  });
+
+  it('keeps the analytical marks and event bindings intact in glyph mode', () => {
+    expect(svg.includes('stroke="#b23b3b"')).toBe(true);
+    expect(svg.includes('>#<')).toBe(true);
+    expect(svg.includes('data-event-id="n13"')).toBe(true);
+    expect(svg.includes('>Ты<')).toBe(true);
   });
 });
