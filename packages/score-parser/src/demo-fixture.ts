@@ -84,7 +84,10 @@ export function demoScore(): ParsedScore {
     note('n13', 3, frac(0, 1), P('A', 2), 'eighth', ['тьма', 'tʲmɑ'], TRIPLET),
     note('n14', 3, frac(1, 12), P('B', 2, -1), 'eighth', ['на', 'nɑ'], TRIPLET),
     note('n15', 3, frac(1, 6), P('C', 3), 'eighth', ['ста', 'stɑ'], TRIPLET),
-    note('n16', 3, frac(1, 4), P('D', 3), 'quarter', ['ла', 'łɑ']),
+    // «пять» [pʲatʲ]: interpalatal bright-a (Mitton 2020 §4.6.6), placed
+    // beside the dark-a [ɑ] syllables so the a/ɑ contrast is visually
+    // checkable in the font lab.
+    note('n16', 3, frac(1, 4), P('D', 3), 'quarter', ['пять', 'pʲatʲ']),
     note('n17', 3, frac(1, 2), null, 'quarter'), // rest
   ];
   const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });

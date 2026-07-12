@@ -43,6 +43,23 @@ describe('staff renderer: layout', () => {
   it('flags exactly the one unbeamed eighth note (n11, isolated by the timbre break)', () => {
     expect((svg.match(/q8 3 7 12/g) ?? []).length).toBe(1);
   });
+
+  it('sets IPA upright in Lato IPA, preserving the bright-a/dark-a contrast', () => {
+    // Both allophones present: dark [ɑ] (тьма) and interpalatal bright [a]
+    // (пять, §4.6.6). The IPA line must never be italic: italics flatten
+    // double-storey [a] and merge the two.
+    expect(svg.includes('>tʲmɑ<')).toBe(true);
+    expect(svg.includes('>pʲatʲ<')).toBe(true);
+    expect(svg.includes(`fill="#6a655f" font-family="'Lato IPA', sans-serif"`)).toBe(true);
+    expect(svg.includes('font-style="italic" fill="#6a655f"')).toBe(false);
+  });
+
+  it('places the underlay baselines clear of the lowest notation (collision fix)', () => {
+    const cyrY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12\.5"/)?.[1]);
+    const inkBottoms = [...svg.matchAll(/y2="([\d.]+)" stroke="#1a1612" stroke-width="1\.5"/g)].map((m) => Number(m[1]));
+    expect(inkBottoms.length).toBeGreaterThan(0);
+    expect(cyrY > Math.max(...inkBottoms)).toBe(true);
+  });
 });
 
 describe('staff renderer: beaming (derived by beat)', () => {
@@ -109,8 +126,9 @@ describe('staff renderer: the four analytical criteria', () => {
     expect(svg.includes('>Ты<')).toBe(true);
     expect(svg.includes('>tɨ<')).toBe(true);
   });
-  it('draws the # phonation break', () => {
-    expect(svg.includes('>#<')).toBe(true);
+  it('renders the phonation break as [#] on the IPA line, not above the staff', () => {
+    expect(svg.includes('>[#]<')).toBe(true);
+    expect(svg.includes('fill="#4a4540"')).toBe(false); // the old above-staff mark
   });
   it('binds every note by data-event-id', () => {
     for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
@@ -158,7 +176,7 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
 
   it('keeps the analytical marks and event bindings intact in glyph mode', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);
-    expect(svg.includes('>#<')).toBe(true);
+    expect(svg.includes('>[#]<')).toBe(true);
     expect(svg.includes('data-event-id="n13"')).toBe(true);
     expect(svg.includes('>Ты<')).toBe(true);
   });

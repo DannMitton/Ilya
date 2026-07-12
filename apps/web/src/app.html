@@ -22,9 +22,20 @@ rel="stylesheet"
 <body data-sveltekit-preload-data="hover">
 <div style="display: contents">%sveltekit.body%</div>
 <script>
+  // Production only: a service worker on localhost serves stale dev bundles
+  // (stale-while-revalidate cached an old route manifest and 404'd new
+  // routes, 2026-07-12). Any worker registered by an earlier dev session
+  // is actively unregistered so its caches stop intercepting.
   if ('serviceWorker' in navigator) {
+    const isDevHost = ['localhost', '127.0.0.1'].includes(location.hostname);
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      if (isDevHost) {
+        navigator.serviceWorker.getRegistrations()
+          .then((rs) => rs.forEach((r) => r.unregister()))
+          .catch(() => {});
+      } else {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
     });
   }
 </script>

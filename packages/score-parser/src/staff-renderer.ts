@@ -316,8 +316,10 @@ export function renderAnalyzedStaff(
   }
 
   const parts: string[] = [];
-  parts.push(`<svg viewBox="0 0 ${width} ${staffBottom + 64}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`);
-  parts.push(`<rect x="0" y="0" width="${width}" height="${staffBottom + 64}" fill="#F0EBE0"/>`);
+  // The svg tag and background are patched at the end, once the true
+  // height (underlay placed clear of the lowest ink) is known.
+  parts.push('');
+  parts.push('');
 
   // Staff lines.
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
@@ -364,13 +366,27 @@ export function renderAnalyzedStaff(
     const emit = (): void => {
       if (run.length >= 2) {
         const t = run[0].ev.duration.tuplet!;
+        // The bracket clears ALL ink above the run (Dann's collision fix,
+        // 2026-07-12): noteheads, the turning layer AND its accidentals,
+        // and up-stem tips (beamed or flagged), not noteheads alone.
+        const accClear = smufl ? Math.max(6, sp(smufl.glyph('accidentalSharp').bBoxNE[1])) : 12;
         let minY = staffTop;
         for (const p of run) {
-          if (p.ev.pitch) minY = Math.min(minY, yFor(p.ev.pitch));
-          const a = analyzed.events[p.ev.id];
-          if (a) minY = Math.min(minY, yFor(a.turningPitch));
+          const ev = p.ev;
+          if (!ev.pitch) continue;
+          const y = yFor(ev.pitch);
+          minY = Math.min(minY, y - 6);
+          const a = analyzed.events[ev.id];
+          if (a) {
+            const ty = yFor(a.turningPitch);
+            minY = Math.min(minY, ty - accClear);
+            if (a.timbre === 'close' && ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
+              const beamed = beamStemById.get(ev.id);
+              minY = Math.min(minY, beamed ? beamed.tipY : y - 30);
+            }
+          }
         }
-        const yBr = minY - 10;
+        const yBr = minY - 8;
         const xa = run[0].x - 8;
         const xb = run[run.length - 1].x + 8;
         const midX = (xa + xb) / 2;
@@ -404,6 +420,22 @@ export function renderAnalyzedStaff(
   let turningAcc: Record<string, number> = {};
   let curMeasure = -1;
 
+  // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
+  // are collected during the draw and placed below the lowest ink of the
+  // system, never at a fixed offset that a down-stem beam can crash into.
+  const underlay: Array<{ x: number; cyr: string; ipa: string }> = [];
+  // Phonation breaks render as [#] ON THE IPA LINE (Dann's ruling,
+  // 2026-07-12): the break is a diction event, so it lives with the
+  // diction, at the junction between the pair of notes it clips; above
+  // the staff it reads as a stray sharp. Square brackets command
+  // attention wherever one occurs.
+  const breaks: number[] = [];
+  const nextXById = new Map<string, number>();
+  for (let i = 0; i < placed.length; i++) {
+    nextXById.set(placed[i].ev.id, placed[i + 1]?.x ?? placed[i].x + 40);
+  }
+  let lowestInk = staffBottom;
+
   for (const { ev, x: nx, newMeasure } of placed) {
     if (ev.measureIndex !== curMeasure) {
       curMeasure = ev.measureIndex;
@@ -431,6 +463,7 @@ export function renderAnalyzedStaff(
     const a: AnalyzedEvent | undefined = analyzed.events[ev.id];
     const headName = headNameFor(ev.duration.base);
     const headHalfW = smufl ? sp(smufl.glyph(headName).widthSp / 2) : 6.2;
+    lowestInk = Math.max(lowestInk, y + 6);
 
     // Ledger lines.
     const ledgerHalf = smufl ? round2(headHalfW + sp(ed!.legerLineExtension)) : 11;
@@ -490,6 +523,7 @@ export function renderAnalyzedStaff(
       } else {
         parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
       }
+      lowestInk = Math.max(lowestInk, ty + 6);
     }
 
     // Sung notehead: open for half and longer, filled otherwise.
@@ -514,9 +548,11 @@ export function renderAnalyzedStaff(
       if (beamed) {
         // The stem meets the beam; the beam replaces flags.
         parts.push(`<line x1="${round2(beamed.sx)}" y1="${round2(contactY)}" x2="${round2(beamed.sx)}" y2="${round2(beamed.tipY)}" stroke="#1a1612" stroke-width="${stemT}"/>`);
+        lowestInk = Math.max(lowestInk, beamed.tipY + beamT / 2);
       } else {
         const sx = nx + (stemUp ? stemHalfUp : stemHalfDown);
         const sy2 = stemUp ? y - 30 : y + 30;
+        lowestInk = Math.max(lowestInk, sy2);
         parts.push(`<line x1="${round2(sx)}" y1="${round2(contactY)}" x2="${round2(sx)}" y2="${sy2}" stroke="#1a1612" stroke-width="${stemT}"/>`);
         // Flags for unbeamed short notes.
         const flags = flagCount(ev.duration.base);
@@ -537,21 +573,44 @@ export function renderAnalyzedStaff(
     // Red squircle around an fR1/fo crossing.
     if (a?.crossing) {
       parts.push(`<rect x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`);
+      lowestInk = Math.max(lowestInk, y + 11);
     }
 
-    // '#' phonation break above the staff.
+    // Phonation break: collected for the IPA line, drawn after the loop.
     if (a?.phonationBreak) {
-      parts.push(`<text x="${nx}" y="${staffTop - 8}" text-anchor="middle" font-size="14" fill="#4a4540">#</text>`);
+      breaks.push((nx + (nextXById.get(ev.id) ?? nx + 40)) / 2);
     }
 
     parts.push(`</g>`);
 
-    // Dual underlay: Cyrillic (verse 1) over IPA (verse 2 / analysed vowel).
+    // Dual underlay, collected now and placed after the loop, once the
+    // lowest ink is known (baseline repositioning, Dann's fix).
     const syl = ev.syllable;
     const cyr = syl?.verses?.[0] ?? syl?.text ?? '';
     const ipa = syl?.verses?.[1] ?? a?.vowel ?? '';
-    if (cyr) parts.push(`<text x="${nx}" y="${staffBottom + 28}" text-anchor="middle" font-size="12.5" fill="#1a1612">${esc(cyr)}</text>`);
-    if (ipa) parts.push(`<text x="${nx}" y="${staffBottom + 44}" text-anchor="middle" font-size="12" fill="#6a655f" font-style="italic">${esc(ipa)}</text>`);
+    if (cyr || ipa) underlay.push({ x: nx, cyr, ipa });
+  }
+
+  // Beams contribute ink below the staff on down-stem groups.
+  for (const s of beamStemById.values()) {
+    lowestInk = Math.max(lowestInk, s.tipY + beamT / 2);
+  }
+
+  // Underlay baselines: clear of the lowest ink, never above the classic
+  // fixed offsets (compact systems keep their compact look).
+  const cyrY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
+  const ipaY = cyrY + 16;
+  for (const u of underlay) {
+    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="middle" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
+    // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
+    // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward
+    // single-storey, destroying the bright-a / dark-a contrast that sung
+    // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
+    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
+  }
+  // Phonation breaks: [#] on the IPA line, in full ink for attention.
+  for (const bx of breaks) {
+    parts.push(`<text x="${bx}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif">[#]</text>`);
   }
 
   // Beams and tuplet brackets (drawn once, after the notes they govern).
@@ -562,5 +621,10 @@ export function renderAnalyzedStaff(
   const finalBarT = smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6;
   parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${finalBarT}"/>`);
   parts.push('</svg>');
+
+  // Patch the svg tag and background with the true height.
+  const height = ipaY + 20;
+  parts[0] = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`;
+  parts[1] = `<rect x="0" y="0" width="${width}" height="${height}" fill="#F0EBE0"/>`;
   return parts.join('\n');
 }

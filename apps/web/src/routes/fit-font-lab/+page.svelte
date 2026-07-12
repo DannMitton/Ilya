@@ -32,7 +32,9 @@
 	}
 
 	let fonts = $state<Record<string, LoadedFont>>({});
-	let selected = $state('bravura');
+	// Finale Maestro is the product default (Dann's ruling, 2026-07-12);
+	// Bravura and Leland remain as user customization options.
+	let selected = $state('finale-maestro');
 	let compare = $state(false);
 	let status = $state('Loading fonts…');
 	let error = $state('');
