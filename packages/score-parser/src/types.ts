@@ -499,6 +499,57 @@ export interface SyllableInfo {
    * For `type: 'whole'` syllables, `wordContext` equals `text`.
    */
   wordContext: string;
+
+  /**
+   * All verse texts for this event, index 0 = verse 1 (Kimi's multi-verse
+   * ruling, 2026-07-12; her `verses?: string[]`, kept in our naming).
+   * Absent means single-verse. `text` remains the primary (verse-1) lens
+   * that v1 analysis reads; the correction UI and a future multi-verse
+   * underlay iterate `verses`. A flat array by deliberate choice — no
+   * nested side structure — since the renderer walks it directly.
+   */
+  verses?: string[];
+
+  /**
+   * Elision segments for the *primary* verse: the two-or-more syllables a
+   * composer set on this one note (commoner in Italian, real in Russian).
+   * `text` holds the concatenated printed pair; `segments` holds the split
+   * (Kimi's ruling, 2026-07-12). For v1 this describes verse 1 only; a
+   * future per-verse split (`versesSegments?: SyllableSegment[][]`) has
+   * room to grow but is not paid for now. Absent means no elision.
+   */
+  segments?: SyllableSegment[];
+
+  /**
+   * Parser flag surfaced to the correction UI (Kimi's
+   * `parseWarning: 'ELIDED_SYLLABLE'`, kept in our lowercase style):
+   * `'elided'` marks a syllable whose `text` was detected as an elided
+   * pair and auto-split into `segments`. The correction UI offers to
+   * accept the split, merge it, or re-segment. Complements the aggregate
+   * `ParseWarning[]`; this per-syllable marker lets the UI find the exact
+   * token. Extensible to further per-syllable flags.
+   */
+  parseFlag?: 'elided';
+}
+
+/**
+ * One segment of an elided syllable (Kimi's `SyllableSegment`, 2026-07-12,
+ * in our naming): a composer's two-syllables-on-one-note case split into
+ * its parts, each with its own syllabic role and, once Ilya has routed it,
+ * its own vowel identity for the acoustic analysis.
+ */
+export interface SyllableSegment {
+  /** The segment's printed text. */
+  text: string;
+
+  /** Syllabic role of this segment (same vocabulary as `SyllableInfo.type`). */
+  type: 'whole' | 'start' | 'middle' | 'end';
+
+  /**
+   * IPA vowel for this segment, from Ilya via `languageHint`, post-routing.
+   * Populated by the analysis layer, not the parser; absent at parse time.
+   */
+  vowelIdentity?: string;
 }
 
 // ── Accompaniment (deferred for v1; shape declared for forward compat) ──

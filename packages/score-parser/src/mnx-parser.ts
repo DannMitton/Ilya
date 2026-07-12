@@ -61,6 +61,7 @@ import type {
 	ScoreInput,
 	ScoreParser,
 	SyllableInfo,
+	SyllableSegment,
 	TempoMarking,
 	TimeSignature,
 	TimeSignatureChange,
@@ -752,31 +753,45 @@ export class MnxScoreParser implements ScoreParser {
 			// multi-verse work lands. For now, non-verse-1 syllables are
 			// intentionally not dropped silently: the verse structure is
 			// recorded through verseNumber on the syllables Shane keeps.
+			// The primary syllable is the lowest-verse text (verse 1 for
+			// v1 analysis); all verse texts are collected into `verses`
+			// (Kimi's multi-verse ruling, 2026-07-12). MNX's stable subset
+			// carries no explicit elision markup, so an elided pair arrives
+			// as one combined token; `splitElision` detects it heuristically
+			// (an undertie or internal whitespace) and fills `segments` +
+			// `parseFlag` for the correction UI.
 			let syllable: SyllableInfo | undefined;
 			const lines = item.lyrics?.lines;
 			if (!isRest && lines && typeof lines === 'object') {
+				const verseTexts = new Map<number, string>();
+				let primary: SyllableInfo | undefined;
 				for (const [lineId, line] of Object.entries(lines)) {
 					const text = line?.text;
 					if (typeof text !== 'string' || text.length === 0) continue;
 					const verseNumber = ctx.lineIdToVerse.get(lineId) ?? 1;
-					if (verseNumber !== 1 && syllable) continue;
+					verseTexts.set(verseNumber, text);
+					if (primary && verseNumber >= primary.verseNumber) continue;
 					const typeRaw = line?.type;
 					const type: SyllableInfo['type'] =
 						typeRaw === 'start' || typeRaw === 'middle' || typeRaw === 'end' || typeRaw === 'whole'
 							? typeRaw
 							: 'whole';
-					const candidate: SyllableInfo = {
+					const segments = splitElision(text);
+					primary = {
 						id: syllableId(),
 						text,
 						type,
 						verseNumber,
 						...(ctx.verseLabelOf(lineId) ? { verseLabel: ctx.verseLabelOf(lineId) } : {}),
 						wordContext: text, // provisional; the wordContext pass rewrites it
+						...(segments ? { segments, parseFlag: 'elided' as const } : {}),
 					};
-					// Keep the verse-1 syllable on the event; if verse 1 never
-					// appears on this event, keep the lowest verse present so
-					// single-verse scores with a non-1 slot still analyse.
-					if (!syllable || candidate.verseNumber < syllable.verseNumber) syllable = candidate;
+				}
+				if (primary) {
+					if (verseTexts.size > 1) {
+						primary.verses = [...verseTexts.entries()].sort((a, b) => a[0] - b[0]).map(([, t]) => t);
+					}
+					syllable = primary;
 				}
 			}
 
@@ -899,6 +914,20 @@ function assignWordContexts(vocalLine: VocalLineEvent[], warnings: ParseWarning[
 		}
 	}
 	for (const verse of [...open.keys()]) flush(verse, true);
+}
+
+/**
+ * Heuristic elision split for a combined lyric token (Kimi's parser
+ * contract, 2026-07-12): an undertie (U+203F) or internal whitespace
+ * separates syllables a composer set on one note. Returns the segments
+ * when more than one is found, else undefined. Each segment is typed
+ * `'whole'` here, since the combined token carries no per-part syllabic
+ * role; the correction UI can refine roles when it offers the split.
+ */
+function splitElision(text: string): SyllableSegment[] | undefined {
+	const parts = text.split(/[‿\s]+/).filter((p) => p.length > 0);
+	if (parts.length <= 1) return undefined;
+	return parts.map((p) => ({ text: p, type: 'whole' as const }));
 }
 
 /** A minimal, honest empty score for the fatal-error path. */

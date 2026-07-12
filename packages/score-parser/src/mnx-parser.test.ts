@@ -325,7 +325,7 @@ describe('MnxScoreParser: the main fixture', () => {
 		expect(tripletLast.pitch).toEqual({ step: 'B', octave: 3, alter: -1 });
 	});
 
-	it('carries verse-1 syllables regardless of object-key order, with labels', async () => {
+	it('carries verse-1 syllables regardless of object-key order, with labels and both verses', async () => {
 		const { score } = await parseMain();
 		const first = score.vocalLine[0].syllable!;
 		expect(first.text).toBe('Ты');
@@ -333,6 +333,7 @@ describe('MnxScoreParser: the main fixture', () => {
 		expect(first.verseNumber).toBe(1);
 		expect(first.verseLabel).toBe('Verse 1');
 		expect(first.id.length).toBeGreaterThan(0);
+		expect(first.verses).toEqual(['Ты', 'tɨ']);
 	});
 
 	it('encodes the melisma by absence and assigns wordContext across it', async () => {

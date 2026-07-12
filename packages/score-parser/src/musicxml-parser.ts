@@ -57,6 +57,7 @@ import type {
 	ScoreInput,
 	ScoreParser,
 	SyllableInfo,
+	SyllableSegment,
 	TempoMarking,
 	TimeSignature,
 	TimeSignatureChange,
@@ -569,31 +570,46 @@ export class MusicXmlScoreParser implements ScoreParser {
 			}
 		}
 
-		// Lyrics: one syllable per verse; keep the lowest-canonical verse on
-		// the event. Elision (multiple <text> in one <lyric>) is combined into
-		// one syllable's text and flagged (the data-model split is a banked
-		// question for the engine-spec bump).
+		// Lyrics: MusicXML carries elision explicitly (a `<lyric>` may hold
+		// several `<syllabic>`/`<text>` pairs joined by `<elision>`), so we
+		// split into real `segments` with per-part syllabic roles and flag
+		// the token `'elided'` (Kimi's ruling, 2026-07-12). The primary
+		// syllable is the lowest-canonical verse; all verse texts collect
+		// into `verses`.
 		let syllable: SyllableInfo | undefined;
 		if (!isRest) {
+			const verseTexts = new Map<number, string>();
+			let primary: SyllableInfo | undefined;
 			for (const ly of directChildren(note, 'lyric')) {
-				const texts = directChildren(ly, 'text').map(textOf).filter((t) => t.length > 0);
-				if (texts.length === 0) continue;
-				const elided = texts.length > 1;
-				const text = elided ? texts.join('‿') : texts[0]; // U+203F undertie
+				const segs = readLyricSegments(ly);
+				if (segs.length === 0) continue;
+				const elided = segs.length > 1;
+				const text = elided ? segs.map((s) => s.text).join('‿') : segs[0].text; // U+203F undertie
+				const rawVerse = intAttr(ly, 'number') ?? 1;
+				const verseNumber = ctx.verseToCanonical.get(rawVerse) ?? rawVerse;
+				verseTexts.set(verseNumber, text);
 				if (elided) {
 					ctx.warnings.push({
 						code: 'unrecognised-element',
-						message: `Elided syllables combined on one note ('${text}'); split deferred to the correction UI.`,
+						message: `Elided syllables split on one note ('${text}'); the correction UI can merge or re-segment.`,
 						location: { measureIndex, eventId },
 					});
 				}
-				const syllabic = childText(ly, 'syllabic');
-				const type: SyllableInfo['type'] =
-					syllabic === 'begin' ? 'start' : syllabic === 'middle' ? 'middle' : syllabic === 'end' ? 'end' : 'whole';
-				const rawVerse = intAttr(ly, 'number') ?? 1;
-				const verseNumber = ctx.verseToCanonical.get(rawVerse) ?? rawVerse;
-				const candidate: SyllableInfo = { id: syllableId(), text, type, verseNumber, wordContext: text };
-				if (!syllable || candidate.verseNumber < syllable.verseNumber) syllable = candidate;
+				if (primary && verseNumber >= primary.verseNumber) continue;
+				primary = {
+					id: syllableId(),
+					text,
+					type: segs[0].type,
+					verseNumber,
+					wordContext: text,
+					...(elided ? { segments: segs, parseFlag: 'elided' as const } : {}),
+				};
+			}
+			if (primary) {
+				if (verseTexts.size > 1) {
+					primary.verses = [...verseTexts.entries()].sort((a, b) => a[0] - b[0]).map(([, t]) => t);
+				}
+				syllable = primary;
 			}
 		}
 
@@ -624,6 +640,28 @@ function resolveDocument(data: string | Document): XmlEl {
 		return new g.DOMParser().parseFromString(data, 'application/xml') as unknown as XmlEl;
 	}
 	return data as unknown as XmlEl;
+}
+
+/**
+ * Read a `<lyric>` into ordered elision segments. MusicXML nests the
+ * pieces as `<syllabic>`/`<text>` pairs (a bare `<text>` defaults to
+ * `whole`), separated by `<elision>` boundaries; a single pair is the
+ * common non-elided case.
+ */
+function readLyricSegments(ly: XmlEl): SyllableSegment[] {
+	const out: SyllableSegment[] = [];
+	let curType: SyllableSegment['type'] = 'whole';
+	for (const c of kids(ly)) {
+		if (c.tagName === 'syllabic') {
+			const s = textOf(c);
+			curType = s === 'begin' ? 'start' : s === 'middle' ? 'middle' : s === 'end' ? 'end' : 'whole';
+		} else if (c.tagName === 'text') {
+			const t = textOf(c);
+			if (t.length > 0) out.push({ text: t, type: curType });
+		}
+		// <elision> elements are boundaries; nothing to record.
+	}
+	return out;
 }
 
 function readInitialDivisions(part: XmlEl): number | undefined {

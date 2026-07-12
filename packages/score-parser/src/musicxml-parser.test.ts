@@ -305,12 +305,14 @@ describe('MusicXmlScoreParser: the main fixture', () => {
 		expect(tripletLast.pitch).toEqual({ step: 'B', octave: 3, alter: -1 });
 	});
 
-	it('keeps verse-1 (Cyrillic) even when the number=2 lyric is listed first', async () => {
+	it('keeps verse-1 (Cyrillic) primary and collects both verses', async () => {
 		const { score } = await parseMain();
 		const first = score.vocalLine[0].syllable!;
 		expect(first.text).toBe('Ты');
 		expect(first.type).toBe('whole');
 		expect(first.verseNumber).toBe(1);
+		expect(first.verses).toEqual(['Ты', 'tɨ']);
+		expect(first.segments).toBeUndefined();
 	});
 
 	it('encodes the melisma by absence and assigns wordContext across it', async () => {
@@ -385,15 +387,21 @@ describe('MusicXmlScoreParser: diagnostics and degraded sources', () => {
 		expect(r.score.vocalLine[0].id).toBe('m0-0-1');
 	});
 
-	it('combines an elided syllable pair and warns', async () => {
+	it('splits an elided syllable pair into segments and flags it', async () => {
 		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
       <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time></attributes>
         <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type>
-          <lyric number="1"><syllabic>single</syllabic><text>ко</text><elision>‿</elision><syllabic>single</syllabic><text>я</text></lyric>
+          <lyric number="1"><syllabic>end</syllabic><text>ко</text><elision>‿</elision><syllabic>begin</syllabic><text>я</text></lyric>
         </note></measure></part></score-partwise>`;
 		const r = await parser.parse(xmlInput(doc));
 		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /[Ee]lided/.test(w.message))).toBe(true);
-		expect(r.score.vocalLine[0].syllable!.text).toBe('ко‿я');
+		const s = r.score.vocalLine[0].syllable!;
+		expect(s.text).toBe('ко‿я');
+		expect(s.parseFlag).toBe('elided');
+		expect(s.segments).toEqual([
+			{ text: 'ко', type: 'end' },
+			{ text: 'я', type: 'start' },
+		]);
 	});
 
 	it('drops a note with an unreadable duration as a non-fatal error', async () => {
