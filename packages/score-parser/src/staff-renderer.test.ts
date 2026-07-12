@@ -10,7 +10,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore, type VowelResolver } from './overlay-engine';
 import { renderAnalyzedStaff } from './staff-renderer';
-import type { Fraction, NoteBase, ParsedScore, Pitch, VocalLineEvent } from './types';
+import type { Fraction, NoteBase, ParsedScore, Pitch, TupletInfo, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -20,20 +20,26 @@ const DUR: Record<NoteBase, Fraction> = {
   '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
 };
 
-function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string]): VocalLineEvent {
+function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo): VocalLineEvent {
+  const plain = DUR[base];
+  const fraction = tuplet
+    ? { numerator: plain.numerator * tuplet.normalNotes, denominator: plain.denominator * tuplet.actualNotes }
+    : plain;
   return {
     id,
     type: pitch ? 'note' : 'rest',
     measureIndex,
     rhythmicPosition: { fraction: pos },
-    duration: { base, dots: 0, fraction: DUR[base] },
+    duration: { base, dots: 0, fraction, ...(tuplet ? { tuplet } : {}) },
     ...(pitch ? { pitch } : {}),
     ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: 'whole', verseNumber: 1, wordContext: verses[0], verses } } : {}),
   };
 }
 
+const TRIPLET: TupletInfo = { actualNotes: 3, normalNotes: 2, normalType: 'eighth' };
+
 const profile: VoiceProfileSnapshot = {
-  fR1: { a: 650, o: 450, u: 350, i: 300, e: 400, ɛ: 500 },
+  fR1: { a: 650, o: 450, u: 350, i: 300, e: 400, ɛ: 500, ɑ: 622 },
   range: { lowest: P('C', 2), highest: P('E', 4) },
   tessitura: { low: P('F', 2), high: P('C', 3) },
   passaggio: { primo: P('A', 2), secondo: P('D', 3) },
@@ -43,6 +49,7 @@ const profile: VoiceProfileSnapshot = {
 const vowelById: Record<string, string> = {
   n1: 'a', n2: 'o', n3: 'o', n5: 'i', n6: 'i',
   n7: 'o', n8: 'u', n9: 'o', n10: 'o', n11: 'i',
+  n13: 'ɑ', n14: 'ɑ', n15: 'ɑ', n16: 'a',
 };
 const resolver: VowelResolver = (e) => vowelById[e.id];
 
@@ -59,17 +66,25 @@ function demoScore(): ParsedScore {
     // Beat 2: a 16th pair (open, double beam) then an eighth whose vowel
     // flips the timbre to close → the beam breaks and it takes a flag.
     note('n7', 2, frac(0, 1), P('F', 2), 'eighth', ['но', 'no']),
-    note('n8', 2, frac(1, 8), P('G', 2), 'eighth', ['чу', 'tɕu']),
+    note('n8', 2, frac(1, 8), P('G', 2), 'eighth', ['чу', 'tʃʲu']),
     note('n9', 2, frac(1, 4), P('A', 2), '16th', ['по', 'po']),
     note('n10', 2, frac(5, 16), P('B', 2, -1), '16th', ['го', 'go']),
     note('n11', 2, frac(3, 8), P('E', 3), 'eighth', ['ди', 'dʲi']), // close vs open n9/n10 → beam break
     note('n12', 2, frac(1, 2), null, 'quarter'), // rest
+    // Measure 4: an eighth-note triplet on dark-a (fR1 622 → turning D#4:
+    // the sage sharp appears once and carries through the measure), then a
+    // quarter on [a] whose natural turning E4 needs no accidental.
+    note('n13', 3, frac(0, 1), P('A', 2), 'eighth', ['тьма', 'tʲmɑ'], TRIPLET),
+    note('n14', 3, frac(1, 12), P('B', 2, -1), 'eighth', ['на', 'nɑ'], TRIPLET),
+    note('n15', 3, frac(1, 6), P('C', 3), 'eighth', ['ста', 'stɑ'], TRIPLET),
+    note('n16', 3, frac(1, 4), P('D', 3), 'quarter', ['ла', 'łɑ']),
+    note('n17', 3, frac(1, 2), null, 'quarter'), // rest
   ];
   const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });
   return {
     source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
     vocalPart: { partId: 'P1', partName: 'Voice' },
-    measures: [m(0), m(1), m(2)],
+    measures: [m(0), m(1), m(2), m(3)],
     keySignatures: [{ measureIndex: 0, signature: { fifths: -1 } }],
     timeSignatures: [{ measureIndex: 0, signature: { beats: 3, beatType: 4 } }],
     tempoMarkings: [],
@@ -118,8 +133,8 @@ describe('staff renderer: layout', () => {
 describe('staff renderer: beaming (derived by beat)', () => {
   const svg = renderDemo();
 
-  it('draws three primary beams (n2+n3, n7+n8, n9+n10)', () => {
-    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(3);
+  it('draws four primary beams (n2+n3, n7+n8, n9+n10, and the triplet)', () => {
+    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(4);
   });
 
   it('double-beams the 16th pair (one secondary segment, no stubs needed)', () => {
@@ -129,9 +144,31 @@ describe('staff renderer: beaming (derived by beat)', () => {
   it('breaks the beam where the timbre changes (n11 beams with nothing)', () => {
     // n11 shares measure and beat with n9/n10 but is close-timbre where
     // they are open; it must fall back to a flag (asserted above) and the
-    // level-1 beam count must not include a fourth group.
-    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(3);
+    // level-1 beam count must not gain a group for it.
+    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(4);
     expect(svg.includes('data-event-id="n11"')).toBe(true);
+  });
+});
+
+describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', () => {
+  const svg = renderDemo();
+
+  it('renders the turning layer in the appendix sage, not the old grey', () => {
+    expect(svg.includes('fill="#8FA294"')).toBe(true);
+    expect(svg.includes('#9a968f')).toBe(false);
+  });
+
+  it('shows the turning D# sharp once, then carries it through the measure', () => {
+    expect((svg.match(/fill="#8FA294">♯</g) ?? []).length).toBe(1);
+  });
+
+  it('draws no turning accidental for natural turning pitches', () => {
+    expect((svg.match(/fill="#8FA294">♮/g) ?? []).length).toBe(0);
+  });
+
+  it('brackets the triplet in black with its numeral', () => {
+    expect((svg.match(/data-tuplet="3"/g) ?? []).length).toBe(1);
+    expect(svg.includes('font-style="italic" fill="#1a1612">3<')).toBe(true);
   });
 });
 
@@ -141,8 +178,8 @@ describe('staff renderer: the four analytical criteria', () => {
   it('1. forced stems in both directions (open down, close up)', () => {
     expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
   });
-  it('2. grey stemless turning-pitch noteheads', () => {
-    expect(svg.includes('fill="#9a968f"')).toBe(true);
+  it('2. sage stemless turning-pitch noteheads', () => {
+    expect(svg.includes('fill="#8FA294"')).toBe(true);
   });
   it('3. red squircle at the fR1/fo crossing (n6)', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);

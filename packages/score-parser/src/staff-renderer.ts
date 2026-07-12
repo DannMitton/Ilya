@@ -7,7 +7,7 @@
  * melody-only staff is bounded enough to render ourselves and own every
  * coordinate (and every `data-event-id` for the correction UI).
  *
- * This is the production layout engine (increment 2). It handles:
+ * This is the production layout engine (increment 3). It handles:
  *   - proportional rhythmic spacing (x by onset time, with a minimum gap);
  *   - multiple measures with barlines;
  *   - a bass clef and the key signature at the system head;
@@ -18,9 +18,15 @@
  *     engraver's groups anyway, so groups are computed here — flagged notes
  *     joined within one measure, one beat (compound-metre aware), and one
  *     timbre, with multi-level beams and stubs for mixed values;
- *   - the four analytical marks (forced semantic stems, grey turning-pitch
+ *   - tuplet brackets and numerals in standard black (Dann's ruling,
+ *     2026-07-12: the appendix sample's blue is engraving cosmetics);
+ *   - the four analytical marks (forced semantic stems, sage turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
- *     `#` phonation break.
+ *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
+ *     p. 206) renders in the sample's sage (#8FA294, pending Dann's
+ *     in-browser sign-off), noteheads and accidentals in one colour, with
+ *     its own per-measure accidental carry state independent of the sung
+ *     line (Dann's rulings, 2026-07-12).
  *
  * Deliberately deferred to later increments (documented so nothing is a
  * surprise): SMuFL / Bravura glyph references in place of the shape
@@ -72,6 +78,12 @@ function keySignatureAlter(step: Pitch['step'], fifths: number): number {
 }
 
 const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '♮', 2: '𝄪', [-2]: '𝄫' };
+
+/**
+ * Turning-pitch layer colour: the App. B sample's sage midtone (estimated
+ * from the p. 210 image; awaiting Dann's in-browser confirmation).
+ */
+const TURNING_COLOUR = '#8FA294';
 
 function flagCount(base: NoteBase): number {
   switch (base) {
@@ -256,14 +268,62 @@ export function renderAnalyzedStaff(
     parts.push(`<text x="${62 + i * 9}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
   }
 
+  // ── Tuplet pass: bracket runs of identical tuplet info ──
+  // Chunked by `actualNotes` (adjacent same-ratio groups split correctly);
+  // rests inside a tuplet belong to its bracket. Standard black ink: the
+  // appendix sample's blue is engraving cosmetics (Dann, 2026-07-12).
+  const tupletParts: string[] = [];
+  {
+    let run: Placed[] = [];
+    let runKey = '';
+    const emit = (): void => {
+      if (run.length >= 2) {
+        const t = run[0].ev.duration.tuplet!;
+        let minY = staffTop;
+        for (const p of run) {
+          if (p.ev.pitch) minY = Math.min(minY, yFor(p.ev.pitch));
+          const a = analyzed.events[p.ev.id];
+          if (a) minY = Math.min(minY, yFor(a.turningPitch));
+        }
+        const yBr = minY - 10;
+        const xa = run[0].x - 8;
+        const xb = run[run.length - 1].x + 8;
+        const midX = (xa + xb) / 2;
+        tupletParts.push(
+          `<g data-tuplet="${t.actualNotes}">` +
+          `<line x1="${xa}" y1="${yBr + 5}" x2="${xa}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
+          `<line x1="${xa}" y1="${yBr}" x2="${midX - 7}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
+          `<line x1="${midX + 7}" y1="${yBr}" x2="${xb}" y2="${yBr}" stroke="#1a1612" stroke-width="1"/>` +
+          `<line x1="${xb}" y1="${yBr}" x2="${xb}" y2="${yBr + 5}" stroke="#1a1612" stroke-width="1"/>` +
+          `<text x="${midX}" y="${yBr + 3.5}" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">${t.actualNotes}</text>` +
+          `</g>`,
+        );
+      }
+      run = [];
+      runKey = '';
+    };
+    for (const p of placed) {
+      const t = p.ev.duration.tuplet;
+      if (!t) { emit(); continue; }
+      const key = `${p.ev.measureIndex}|${t.actualNotes}:${t.normalNotes}:${t.normalType}`;
+      if (key !== runKey) emit();
+      runKey = key;
+      run.push(p);
+      if (run.length === t.actualNotes) emit();
+    }
+    emit();
+  }
+
   // ── Draw ──
   let measureAcc: Record<string, number> = {};
+  let turningAcc: Record<string, number> = {};
   let curMeasure = -1;
 
   for (const { ev, x: nx, newMeasure } of placed) {
     if (ev.measureIndex !== curMeasure) {
       curMeasure = ev.measureIndex;
       measureAcc = {}; // accidental state resets each measure
+      turningAcc = {}; // the turning layer carries its own state
     }
     if (newMeasure) {
       parts.push(`<line x1="${nx - 18}" y1="${staffTop}" x2="${nx - 18}" y2="${staffBottom}" stroke="#3a352f" stroke-width="1"/>`);
@@ -297,10 +357,19 @@ export function renderAnalyzedStaff(
 
     parts.push(`<g data-event-id="${esc(ev.id)}">`);
 
-    // Grey stemless turning-pitch notehead.
+    // Sage stemless turning-pitch notehead, with its own accidental state
+    // (standard per-measure carry, independent of the sung line).
     if (a) {
-      const ty = yFor(a.turningPitch);
-      parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="#9a968f" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
+      const tp = a.turningPitch;
+      const ty = yFor(tp);
+      const tKey = `${tp.step}${tp.octave}`;
+      const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, fifths);
+      if (tp.alter !== tInEffect) {
+        const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
+        if (g) parts.push(`<text x="${nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+        turningAcc[tKey] = tp.alter;
+      }
+      parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);
     }
 
     // Sung notehead: open for half and longer, filled otherwise.
@@ -351,8 +420,9 @@ export function renderAnalyzedStaff(
     if (ipa) parts.push(`<text x="${nx}" y="${staffBottom + 44}" text-anchor="middle" font-size="12" fill="#6a655f" font-style="italic">${esc(ipa)}</text>`);
   }
 
-  // Beams (drawn once, after the notes they join).
+  // Beams and tuplet brackets (drawn once, after the notes they govern).
   parts.push(...beamParts);
+  parts.push(...tupletParts);
 
   // Final barline.
   parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="1.6"/>`);
