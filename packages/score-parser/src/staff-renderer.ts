@@ -85,6 +85,17 @@ const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '�
  */
 const TURNING_COLOUR = '#8FA294';
 
+/**
+ * Standard per-clef octave placement for key-signature accidentals.
+ * v1 renders the bass clef; keyed by clef so the treble pass has a home.
+ */
+const KS_OCTAVES: Record<'bass', { sharps: Record<Pitch['step'], number>; flats: Record<Pitch['step'], number> }> = {
+  bass: {
+    sharps: { F: 3, C: 3, G: 3, D: 3, A: 2, E: 3, B: 2 },
+    flats: { B: 2, E: 3, A: 2, D: 3, G: 2, C: 3, F: 2 },
+  },
+};
+
 function flagCount(base: NoteBase): number {
   switch (base) {
     case 'eighth': return 1;
@@ -258,13 +269,13 @@ export function renderAnalyzedStaff(
   parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
   parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
 
-  // Key signature at the head.
+  // Key signature at the head, at standard bass-clef staff positions.
   const order = fifths >= 0 ? SHARP_ORDER : FLAT_ORDER;
   const glyph = fifths >= 0 ? ACCIDENTAL_GLYPH[1] : ACCIDENTAL_GLYPH[-1];
-  const ksOctave = 3; // place the accidentals in a readable bass-staff octave
+  const ksTable = fifths >= 0 ? KS_OCTAVES.bass.sharps : KS_OCTAVES.bass.flats;
   for (let i = 0; i < Math.abs(fifths); i++) {
     const step = order[i];
-    const ky = yFor({ step, octave: ksOctave, alter: 0 });
+    const ky = yFor({ step, octave: ksTable[step], alter: 0 });
     parts.push(`<text x="${62 + i * 9}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
   }
 
@@ -347,11 +358,13 @@ export function renderAnalyzedStaff(
     }
 
     // Accidental, if the note's alter differs from what's in effect.
+    // Measure-opening notes nudge the accidental right so it clears the
+    // barline at nx - 18 (Kimi's collision rule, 2026-07-12).
     const accKey = `${pitch.step}${pitch.octave}`;
     const inEffect = accKey in measureAcc ? measureAcc[accKey] : keySignatureAlter(pitch.step, fifths);
     if (pitch.alter !== inEffect) {
       const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
-      if (g) parts.push(`<text x="${nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`);
+      if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`);
       measureAcc[accKey] = pitch.alter;
     }
 
@@ -366,7 +379,7 @@ export function renderAnalyzedStaff(
       const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, fifths);
       if (tp.alter !== tInEffect) {
         const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
-        if (g) parts.push(`<text x="${nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+        if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
         turningAcc[tKey] = tp.alter;
       }
       parts.push(`<ellipse cx="${nx}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${nx} ${ty})"/>`);

@@ -108,8 +108,9 @@ describe('staff renderer: layout', () => {
     expect(svg.trimEnd().endsWith('</svg>')).toBe(true);
   });
 
-  it('renders the key signature (one flat) at the head', () => {
-    expect(svg.includes('♭')).toBe(true);
+  it('renders the key signature (one flat) at the bass-clef B2 position', () => {
+    // B2 sits on the second staff line from the bottom: y 108, text baseline 112.
+    expect(svg.includes('x="62" y="112"')).toBe(true);
   });
 
   it('renders a natural accidental where the note contradicts the key (B natural)', () => {
@@ -169,6 +170,12 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   it('brackets the triplet in black with its numeral', () => {
     expect((svg.match(/data-tuplet="3"/g) ?? []).length).toBe(1);
     expect(svg.includes('font-style="italic" fill="#1a1612">3<')).toBe(true);
+  });
+
+  it('nudges a measure-opening turning accidental clear of the barline', () => {
+    // n13 opens measure 4: its sage sharp sits at nx - 13 (x 761), right of
+    // the barline at nx - 18, instead of the mid-measure nx - 19.
+    expect(svg.includes('x="761" y="58"')).toBe(true);
   });
 });
 
