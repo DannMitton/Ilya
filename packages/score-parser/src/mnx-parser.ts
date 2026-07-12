@@ -917,15 +917,20 @@ function assignWordContexts(vocalLine: VocalLineEvent[], warnings: ParseWarning[
 }
 
 /**
- * Heuristic elision split for a combined lyric token (Kimi's parser
- * contract, 2026-07-12): an undertie (U+203F) or internal whitespace
- * separates syllables a composer set on one note. Returns the segments
- * when more than one is found, else undefined. Each segment is typed
- * `'whole'` here, since the combined token carries no per-part syllabic
- * role; the correction UI can refine roles when it offers the split.
+ * Conservative heuristic elision split for a combined lyric token (Kimi's
+ * parser contract + guardrail, 2026-07-12). MNX's stable subset carries no
+ * elision markup, so a composer's two-syllables-on-one-note arrives as one
+ * token; this splits it ONLY on unambiguous signals — the Unicode undertie
+ * (U+203F) or a hard internal space (U+0020) — and deliberately NOT on a
+ * soft hyphen (U+00AD), a hyphen, or a lyric extender. When the signal is
+ * absent, it does not split and the caller does not set `parseFlag`,
+ * because a false split silently corrupts the lyric-to-note alignment,
+ * whereas a missed elision is caught by the singer in the correction UI.
+ * Each part is typed `'whole'`, since the combined token carries no
+ * per-part syllabic role.
  */
 function splitElision(text: string): SyllableSegment[] | undefined {
-	const parts = text.split(/[‿\s]+/).filter((p) => p.length > 0);
+	const parts = text.split(/[‿ ]+/).filter((p) => p.length > 0);
 	if (parts.length <= 1) return undefined;
 	return parts.map((p) => ({ text: p, type: 'whole' as const }));
 }

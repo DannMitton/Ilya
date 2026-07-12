@@ -403,6 +403,42 @@ describe('MnxScoreParser: diagnostics and degraded sources', () => {
 		expect(r.score.vocalPart.partId).toBe('P1');
 	});
 
+	it('splits a MNX combined token on an undertie but NOT on a soft hyphen (conservative guardrail)', async () => {
+		const doc = {
+			mnx: { version: 17 },
+			global: { measures: [{ time: { count: 2, unit: 4 }, key: { fifths: 0 } }] },
+			parts: [
+				{
+					id: 'P1',
+					measures: [
+						{
+							sequences: [
+								{
+									content: [
+										// Undertie U+203F: an unambiguous elision → split.
+										ev('quarter', { lyrics: { v1: { text: 'ко‿я', type: 'whole' } } }),
+										// Soft hyphen U+00AD inside a single syllable → must NOT split.
+										ev('quarter', { lyrics: { v1: { text: 'сло­во', type: 'whole' } } }),
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		};
+		const r = await parser.parse(mnxInput(doc));
+		const [a, b] = r.score.vocalLine;
+		expect(a.syllable!.parseFlag).toBe('elided');
+		expect(a.syllable!.segments).toEqual([
+			{ text: 'ко', type: 'whole' },
+			{ text: 'я', type: 'whole' },
+		]);
+		expect(b.syllable!.parseFlag).toBeUndefined();
+		expect(b.syllable!.segments).toBeUndefined();
+		expect(b.syllable!.text).toBe('сло­во');
+	});
+
 	it('advances the cursor across space items', async () => {
 		const doc = {
 			mnx: { version: 17 },
