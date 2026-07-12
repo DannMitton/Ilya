@@ -49,7 +49,7 @@
 	function getParentIds(id: string | null): string[] {
 		if (!id) return [];
 		if (learnUnitChildren[id]) return [learnUnitChildren[id]];
-		if (['guide-what','guide-paste','guide-source','guide-ai','guide-role','guide-limits','guide-future'].includes(id)) return ['guide-how'];
+		if (['guide-what','guide-paste','guide-source','guide-ai','guide-role','guide-limits','guide-future','guide-fit-forecast'].includes(id)) return ['guide-how'];
 		if (['guide-walk-interface','guide-walk-tabs','guide-walk-metadata','guide-walk-transcribe','guide-walk-analysis','guide-walk-notation','guide-walk-print'].includes(id)) return ['guide-walkthrough'];
 		if (['guide-grayson','guide-mitton','guide-claude','guide-kimi'].includes(id)) return ['guide-contributors'];
 		if (id === 'guide-grayson-intro') return ['guide-contributors', 'guide-grayson'];
@@ -342,6 +342,7 @@
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-role')} data-heading-id="guide-role" onclick={() => handleTocClick('guide-role')}>{language === 'fr' ? 'R\u00f4le de l\u2019utilisateur' : 'Your role as user'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-limits')} data-heading-id="guide-limits" onclick={() => handleTocClick('guide-limits')}>{language === 'fr' ? 'Limites d\u2019Ilya' : 'Limitations'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-future')} data-heading-id="guide-future" onclick={() => handleTocClick('guide-future')}>{language === 'fr' ? 'O\u00f9 va Ilya ?' : 'Where is Ilya headed?'}</button></li>
+								<li><button class="toc-link toc-sub" class:active={isActive('guide-fit-forecast')} data-heading-id="guide-fit-forecast" onclick={() => handleTocClick('guide-fit-forecast')}>{language === 'fr' ? 'Fit pr\u00e9voit, il ne d\u00e9clare pas' : 'Fit forecasts, it doesn\u2019t declare'}</button></li>
 								</ul></div></div>
 							</li>
 

@@ -49,6 +49,13 @@
 
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
+						<!-- La philosophie de prévision de Fit (copie de Dann, 2026-07-12).
+						     Traduction française attentive mais non native, à valider lors
+						     de la passe française de l'interface de calibration. -->
+						<h4 id="guide-fit-forecast">Fit prévoit, il ne déclare pas</h4>
+
+						<p><em>Fit</em> prévoit ; il ne déclare pas. À partir d'une poignée d'échantillons de fry sur un micro grand public, il ne peut pas, et ne doit pas, se prononcer sur votre larynx. Ce qu'il peut honnêtement faire, c'est prendre vos résonances mesurées et prévoir comment une pièce du répertoire est susceptible de rencontrer votre voix : où le timbre va probablement basculer, où la zona di passaggio risque de se situer, où la tessiture devient exigeante. Certains chanteurs s'accorderont avec la prévision, d'autres non, et cette différence est elle aussi une information, non une erreur. L'outil offre au chanteur une connaissance de lui-même et de la manière dont la musique impose ses exigences, puis remet les décisions entre ses mains et celles de son professeur.</p>
+
 
 							<!-- ═══ VISITE GUIDÉE ══════════════════════════════════ -->
 
@@ -273,6 +280,14 @@
 						<h4 id="guide-future">Where is Ilya headed?</h4>
 
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
+
+							<!-- The Fit forecast philosophy (Dann's copy, 2026-07-12): the
+							     statement of what the Fit tab is and is not. Its own findable
+							     heading, per Dann. FR flagged for the deferred calibration-UI
+							     French pass. -->
+							<h4 id="guide-fit-forecast">Fit forecasts, it doesn't declare</h4>
+
+							<p><em>Fit</em> forecasts; it does not declare. From a handful of fry samples on a consumer mic, it cannot and must not pronounce on your larynx. What it can honestly do is take your measured resonances and forecast how a piece of repertoire is likely to meet your voice: where the timbre will probably turn, where the zona di passaggio is likely to fall, where the range gets demanding. Some singers will align with the forecast, some won't, and that difference is information too, not error. The tool offers a singer knowledge of themselves and of how the music makes demands, then hands the decisions to them and their teacher.</p>
 
 
 							<!-- ═══ WALKTHROUGH ════════════════════════════════════ -->

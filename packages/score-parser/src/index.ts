@@ -17,7 +17,18 @@
  */
 
 export * from './types';
+export * from './analysis-types';
 
 export { MnxScoreParser } from './mnx-parser';
 export { MusicXmlScoreParser } from './musicxml-parser';
 export { generateRendererMusicXml } from './renderer-output';
+export {
+  analyzeScore,
+  scoreContentId,
+  pitchToHz,
+  pitchToMidi,
+  hzToPitch,
+  centsBetween,
+  type VowelResolver,
+  type AnalyzeOptions,
+} from './overlay-engine';
