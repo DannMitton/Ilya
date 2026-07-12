@@ -514,20 +514,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	/* ── Heading navigation from Drawer TOC ────────────────── */
 
-	function handleHeadingNavigate(id: string) {
-		activeHeadingId = id;
+	/**
+	 * Scroll a lazily-rendered anchor to the top of the reading pane,
+	 * robust against post-scroll reflow. LearnContent/GuideContent fire
+	 * their ready signal in onMount, before the web fonts swap in and the
+	 * large glyph table settles, so a one-shot scrollIntoView undershoots:
+	 * the target moves down after the scroll has already landed. This
+	 * retries until the element exists, scrolls once, then re-snaps to the
+	 * target after the fonts are ready and across a short settle window,
+	 * correcting for that late reflow. Caught by Dann's sung-[o] deep link
+	 * landing at the Section 3 head instead of the note (2026-07-12).
+	 */
+	function scrollToAnchor(id: string, smoothFirst = true) {
 		let attempts = 0;
-		const tryScroll = () => {
-			const el = document.getElementById(id);
-			if (el) {
-				el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				history.pushState(null, '', `#${id}`);
-			} else if (attempts++ < 60) {
-				// Content may still be lazy-loading; retry briefly.
-				requestAnimationFrame(tryScroll);
+		const snap = (behavior: ScrollBehavior) =>
+			document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
+		const find = () => {
+			if (!document.getElementById(id)) {
+				if (attempts++ < 90) requestAnimationFrame(find);
+				return;
+			}
+			snap(smoothFirst ? 'smooth' : 'auto');
+			// Corrective re-snaps: font swap and late layout shift the
+			// target after the first scroll. Instant, so they only close
+			// the residual gap rather than re-animating.
+			[120, 300, 600].forEach((ms) => setTimeout(() => snap('auto'), ms));
+			if (typeof document !== 'undefined' && 'fonts' in document) {
+				document.fonts.ready.then(() => snap('auto')).catch(() => {});
 			}
 		};
-		tryScroll();
+		find();
+	}
+
+	function handleHeadingNavigate(id: string) {
+		activeHeadingId = id;
+		history.pushState(null, '', `#${id}`);
+		scrollToAnchor(id);
 	}
 
 	/* ── Lazy reading content: readiness signal ──────────── */
@@ -576,18 +598,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleHashNavigation() {
 		const hash = window.location.hash.slice(1);
 		if (hash) {
-			let attempts = 0;
-			const tryScroll = () => {
-				const el = document.getElementById(hash);
-				if (el) {
-					el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-					activeHeadingId = hash;
-				} else if (attempts++ < 60) {
-					// Content may still be lazy-loading; retry briefly.
-					requestAnimationFrame(tryScroll);
-				}
-			};
-			requestAnimationFrame(tryScroll);
+			activeHeadingId = hash;
+			scrollToAnchor(hash);
 		}
 	}
 	onMount(() => {

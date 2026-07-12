@@ -31,7 +31,7 @@
 		'learn-u1-glyphs': 'learn-unit-1', 'learn-u1-try': 'learn-unit-1',
 		'learn-u2-meaning': 'learn-unit-2', 'learn-u2-moves': 'learn-unit-2', 'learn-u2-dictionary': 'learn-unit-2',
 		'learn-u2-sounds': 'learn-unit-2', 'learn-u2-try': 'learn-unit-2',
-		'learn-u3-inventory': 'learn-unit-3', 'learn-u3-interpalatal': 'learn-unit-3', 'learn-u3-iotated': 'learn-unit-3',
+		'learn-u3-inventory': 'learn-unit-3', 'learn-u3-note-o': 'learn-unit-3', 'learn-u3-interpalatal': 'learn-unit-3', 'learn-u3-iotated': 'learn-unit-3',
 		'learn-u3-yo': 'learn-unit-3', 'learn-u3-try': 'learn-unit-3',
 		'learn-u4-akanye': 'learn-unit-4', 'learn-u4-ikanye': 'learn-unit-4', 'learn-u4-reconstitution': 'learn-unit-4',
 		'learn-u4-try': 'learn-unit-4',
@@ -217,6 +217,7 @@
 								</div>
 								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-3')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-inventory')} data-heading-id="learn-u3-inventory" onclick={() => handleTocClick('learn-u3-inventory')}>{language === 'fr' ? 'Ce sont les voyelles accentu\u00e9es qui constituent les cibles' : 'Stressed vowels are the targets'}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-note-o')} data-heading-id="learn-u3-note-o" onclick={() => handleTocClick('learn-u3-note-o')}>{language === 'fr' ? 'Un mot sur le /o/' : 'A note on /o/'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-interpalatal')} data-heading-id="learn-u3-interpalatal" onclick={() => handleTocClick('learn-u3-interpalatal')}>{language === 'fr' ? 'Deux voyelles changent de couleur au voisinage des consonnes molles' : 'Two vowels change colour near soft consonants'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-iotated')} data-heading-id="learn-u3-iotated" onclick={() => handleTocClick('learn-u3-iotated')}>{language === 'fr' ? 'Quatre lettres vocaliques portent une consonne cach\u00e9e' : 'Four vowel letters carry a hidden consonant'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-yo')} data-heading-id="learn-u3-yo" onclick={() => handleTocClick('learn-u3-yo')}>{language === 'fr' ? '\u27E8\u0451\u27E9 est toujours accentu\u00e9' : '\u27E8\u0451\u27E9 is always stressed'}</button></li>
