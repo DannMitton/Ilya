@@ -21,6 +21,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
+	import EngravingControls from '$lib/shane/EngravingControls.svelte';
+	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
@@ -56,6 +58,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
+	// Fit engraving preferences (drawer panel, Dann's ruling 2026-07-13):
+	// user-adjustable notation geometry, Appendix-derived defaults.
+	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
 	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
@@ -788,14 +793,26 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						<!-- Shared chrome: same Metadata block as Transcription, one
 						     source of truth (Kimi placement ruling). -->
 						<MetadataFields {metadata} {language} onchange={handleMetadataChange} />
-					<ScoreUploader
-						{language}
-						oningested={(ingested) => {
-							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
-							// as paginated notation in the Fit main pane.
-							ingestedScore = ingested;
-						}}
-					/>
+					<!-- The drop surface is a drag-and-drop target, not a typing
+					     field, so it cedes width to the engraving panel beside it.
+					     Engraving sits LEFT so its section header aligns flush
+					     with the headers below; the drop surface sits nearest
+					     the page GUI (Dann's placement ruling, 2026-07-13). -->
+					<div class="shane-upload-row">
+						<div class="shane-engraving-col">
+							<EngravingControls values={engraving} {language} onchange={(v) => (engraving = v)} />
+						</div>
+						<div class="shane-upload-col">
+							<ScoreUploader
+								{language}
+								oningested={(ingested) => {
+									// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
+									// as paginated notation in the Fit main pane.
+									ingestedScore = ingested;
+								}}
+							/>
+						</div>
+					</div>
 					<CalibrationWizard
 						onActiveProfileChange={(f, name) => {
 							shaneFormants = f;
@@ -836,6 +853,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{language}
 				ingested={ingestedScore}
 				scoreTitle={metadata.title}
+				{engraving}
 			/>
 		{:else}
 			<ReadingPaper {language}>
@@ -892,6 +910,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		flex-direction: column;
 		gap: 6px;
 		padding: 20px 1rem 40px;
+	}
+
+	/* The upload row: the drop surface (a drag target, not a typing
+	   field) beside the engraving panel (Dann's split ruling,
+	   2026-07-13). Equal halves; both columns may shrink. */
+	.shane-upload-row {
+		display: flex;
+		gap: 0.75rem;
+		align-items: flex-start;
+	}
+
+	.shane-upload-col,
+	.shane-engraving-col {
+		flex: 1 1 0;
+		min-width: 0;
 	}
 
 	/* Fit surfaces use the tab's lavender for the focus ring, not the global

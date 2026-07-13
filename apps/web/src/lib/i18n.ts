@@ -188,6 +188,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'mobile.body':                 { en: 'Ilya produces paginated transcription documents best experienced on a larger screen with a keyboard.', fr: 'Ilya produit des documents de transcription paginés, mieux adaptés à un écran plus grand avec un clavier.' },
 	'mobile.continue':             { en: 'Continue anyway',                    fr: 'Continuer quand même' },
 
+	// ── Fit engraving controls (drawer panel beside the drop surface;
+	//    agentless; copy flagged for Dann's review with the §A.13 strings) ──
+	'engraving.heading':           { en: 'Engraving',                    fr: 'Gravure' },
+	'engraving.staveSize':         { en: 'Stave size',                   fr: 'Taille de la portée' },
+	'engraving.noteSpacing':       { en: 'Note spacing',                 fr: 'Espacement des notes' },
+	'engraving.systemSpacing':     { en: 'Between systems',              fr: 'Entre les systèmes' },
+	'engraving.reset':             { en: 'Reset',                        fr: 'Réinitialiser' },
+
 	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },

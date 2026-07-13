@@ -363,11 +363,10 @@
 		background: white;
 		box-sizing: border-box;
 		cursor: pointer;
-		/* Same expand affordance as the Transcription textarea (resize: vertical),
-		   so the dropzone carries the identical native handle in its lower-right
-		   corner and grows the same way. */
-		resize: vertical;
-		overflow: auto;
+		/* No resize affordance (Dann's ruling, 2026-07-13): the textarea's
+		   handle serves growing TYPED content; a drop target's content
+		   never grows. The box twins the Transcription field's border and
+		   fill but holds its half-width drawer dimension. */
 		transition: background 0.15s ease;
 		text-align: center;
 	}

@@ -62,6 +62,7 @@
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { notationOnlyOverlay } from '$lib/shane/notation-overlay';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -87,6 +88,12 @@
 		 * conflict rules are the deferred §A.6 behaviours.
 		 */
 		scoreTitle?: string;
+		/**
+		 * Engraving preferences from the drawer panel (Dann's ruling,
+		 * 2026-07-13). Defaults to the Appendix-derived values so the
+		 * pane renders correctly standalone.
+		 */
+		engraving?: EngravingValues;
 	}
 
 	let {
@@ -96,6 +103,7 @@
 		pageSize = 'letter',
 		ingested = null,
 		scoreTitle = undefined,
+		engraving = ENGRAVING_DEFAULTS,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -201,6 +209,11 @@
 					marginBottom: 0,
 					marginLeft: 0,
 					marginRight: 0,
+					lineGap: engraving.lineGap,
+					pxPerWhole: engraving.pxPerWhole,
+					minGap: engraving.minGap,
+					systemGap: engraving.systemGap,
+					leftMargin: engraving.leftMargin,
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,
