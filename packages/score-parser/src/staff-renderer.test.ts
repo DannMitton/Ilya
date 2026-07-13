@@ -104,6 +104,12 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     expect(svg.includes('cx="320"')).toBe(true);
   });
 
+  it('keeps the rising diagonal at a second: lower turning note goes left (Gould v5, r103/104)', () => {
+    // n11: sung E3 (y 90), turning D3 (y 96), a second with the turning
+    // note BELOW → it displaces left: cx = 660 - 14 = 646.
+    expect(svg.includes('cx="646"')).toBe(true);
+  });
+
   it('brackets the triplet in black with its numeral', () => {
     expect((svg.match(/data-tuplet="3"/g) ?? []).length).toBe(1);
     expect(svg.includes('font-style="italic" fill="#1a1612">3<')).toBe(true);

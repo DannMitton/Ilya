@@ -520,13 +520,19 @@ export function renderAnalyzedStaff(
         }
         turningAcc[tKey] = tp.alter;
       }
-      // Two-voice collision rule: at a unison or second with the sung
-      // note, the turning notehead offsets horizontally beside it rather
-      // than overprinting (standard practice for voices sharing a staff;
-      // Dann's legibility ruling, 2026-07-12).
-      const collides = Math.abs(ty - y) <= o.lineGap;
-      const tx = collides
-        ? nx + (smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4) + 1.6
+      // Two-voice collision rule, refined per the Gould extraction (v5
+      // rules 103/104/109/180; Dann's legibility ruling, 2026-07-12).
+      // The melody always keeps system alignment (offsets are collision
+      // devices, never timing statements). Unison: turning note displaces
+      // right. Second: the pair keeps the fixed rising diagonal, so the
+      // turning note goes right when it is the upper note and left when
+      // it is the lower. Ties and dots may refine this again at the
+      // melisma build (v5 rule 169).
+      const offset = (smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4) + 1.6;
+      const gap = Math.abs(ty - y);
+      const tx = gap === 0 ? nx + offset            // unison
+        : gap <= o.lineGap ? (ty < y ? nx + offset  // second, turning above
+        : nx - offset)                              // second, turning below
         : nx;
       if (smufl) {
         parts.push(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '));
