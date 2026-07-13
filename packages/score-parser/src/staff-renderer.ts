@@ -433,6 +433,9 @@ export function renderAnalyzedStaff(
   // stay centred. (Gould extraction rules 4 to 6.)
   const melismaStart = new Set<string>();
   const melismaEndX = new Map<string, number>(); // start id → last continuation notehead x
+  interface MelismaSpan { startIdx: number; endIdx: number; id: string; slur: boolean }
+  const melismaSpans: MelismaSpan[] = [];
+  const slurredIdx = new Set<number>(); // placed indices under a syllabic slur
   {
     for (let i = 0; i < placed.length; i++) {
       const e = placed[i].ev;
@@ -446,6 +449,19 @@ export function renderAnalyzedStaff(
       if (lastX !== null) {
         melismaStart.add(e.id);
         melismaEndX.set(e.id, lastX);
+        // A melisma that is nothing but tied unisons takes no slur: the
+        // tie already joins the syllable (extraction r5, r69, r150).
+        let needsSlur = false;
+        for (let k = i; k < j - 1; k++) {
+          const a1 = placed[k].ev;
+          const b1 = placed[k + 1].ev;
+          const tiedUnison = !!a1.tied && (a1.tied.type === 'start' || a1.tied.type === 'continue')
+            && !!a1.pitch && !!b1.pitch
+            && a1.pitch.step === b1.pitch.step && a1.pitch.octave === b1.pitch.octave && a1.pitch.alter === b1.pitch.alter;
+          if (!tiedUnison) { needsSlur = true; break; }
+        }
+        melismaSpans.push({ startIdx: i, endIdx: j - 1, id: e.id, slur: needsSlur });
+        if (needsSlur) for (let k = i; k <= j - 1; k++) slurredIdx.add(k);
       }
     }
   }
@@ -656,11 +672,15 @@ export function renderAnalyzedStaff(
     const y1 = yFor(e.pitch);
     const a1 = analyzed.events[e.id];
     const a2 = analyzed.events[nxt.ev.id];
-    // Direction: away from shared stems (open = stems down → tie up);
-    // mixed or unanalysed: away from the middle staff line.
-    const up = a1 && a2 && a1.timbre === a2.timbre
-      ? a1.timbre === 'open'
-      : y1 < o.staffMidY;
+    // Direction: OPPOSITE the syllabic slur when one arches above the
+    // span (extraction r174); otherwise away from shared stems (open =
+    // stems down → tie up); mixed or unanalysed: away from the middle
+    // staff line.
+    const up = slurredIdx.has(i)
+      ? false
+      : a1 && a2 && a1.timbre === a2.timbre
+        ? a1.timbre === 'open'
+        : y1 < o.staffMidY;
     const half1 = smufl ? sp(smufl.glyph(headNameFor(e.duration.base)).widthSp / 2) : 6.2;
     const half2 = smufl ? sp(smufl.glyph(headNameFor(nxt.ev.duration.base)).widthSp / 2) : 6.2;
     const x1 = placed[i].x + half1 + 1;
@@ -675,6 +695,38 @@ export function renderAnalyzedStaff(
     }
     parts.push(`<path d="M${round2(x1)} ${round2(ey)} Q ${round2((x1 + x2) / 2)} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)}" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="${esc(e.id)}"/>`);
     lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
+  }
+
+  // ── Syllabic slurs (melisma build 4; extraction r69, r71, r174).
+  // One arc joins the notes of a syllable, above the staff for a bass
+  // melody so the text corridor below stays untouched, cleared above the
+  // turning layer, its accidentals, and any up-stem or beam tips. Rests
+  // never sit inside a span (detection breaks at rests), so the r70
+  // suppression case cannot arise. Deeper than ties by design.
+  {
+    const accClearSlur = smufl ? Math.max(6, sp(smufl.glyph('accidentalSharp').bBoxNE[1])) : 12;
+    for (const s of melismaSpans) {
+      if (!s.slur) continue;
+      const first = placed[s.startIdx];
+      const last = placed[s.endIdx];
+      let top = staffTop;
+      for (let k = s.startIdx; k <= s.endIdx; k++) {
+        const ev2 = placed[k].ev;
+        if (!ev2.pitch) continue;
+        const y2 = yFor(ev2.pitch);
+        top = Math.min(top, y2 - 6);
+        const a2 = analyzed.events[ev2.id];
+        if (a2) {
+          top = Math.min(top, yFor(a2.turningPitch) - accClearSlur);
+          if (a2.timbre === 'close' && ev2.duration.base !== 'whole' && ev2.duration.base !== 'breve') {
+            top = Math.min(top, beamStemById.get(ev2.id)?.tipY ?? y2 - 30);
+          }
+        }
+      }
+      const sy = top - 6;
+      const lift = Math.min(24, 10 + (last.x - first.x) / 20);
+      parts.push(`<path d="M${round2(first.x)} ${round2(sy)} Q ${round2((first.x + last.x) / 2)} ${round2(sy - lift)} ${round2(last.x)} ${round2(sy)}" fill="none" stroke="#1a1612" stroke-width="1.3" data-slur="${esc(s.id)}"/>`);
+    }
   }
 
   // Beams contribute ink below the staff on down-stem groups.

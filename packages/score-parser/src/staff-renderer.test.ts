@@ -119,10 +119,18 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     expect(svg.includes('data-tie="n19"')).toBe(true);
   });
 
-  it('curves the tie away from the shared down-stems (upward)', () => {
+  it('curves the tie OPPOSITE the syllabic slur above it (downward, r174)', () => {
     const m = svg.match(/M[\d.]+ ([\d.]+) Q [\d.]+ ([\d.]+) [\d.]+ [\d.]+" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="n19"/);
     expect(m !== null).toBe(true);
-    expect(Number(m![2]) < Number(m![1])).toBe(true); // control point above endpoints
+    expect(Number(m![2]) > Number(m![1])).toBe(true); // control point below endpoints
+  });
+
+  it('draws one syllabic slur over the melisma, arching above the staff', () => {
+    expect((svg.match(/data-slur="/g) ?? []).length).toBe(1);
+    const m = svg.match(/M[\d.]+ ([\d.]+) Q [\d.]+ ([\d.]+) [\d.]+ [\d.]+" fill="none" stroke="#1a1612" stroke-width="1.3" data-slur="n18"/);
+    expect(m !== null).toBe(true);
+    expect(Number(m![1]) < 72).toBe(true); // endpoints above the top staff line
+    expect(Number(m![2]) < Number(m![1])).toBe(true); // slur bows upward: opposite the tie
   });
 
   it('draws no underlay under melisma continuation notes', () => {
