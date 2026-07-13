@@ -187,6 +187,55 @@ const strings: Record<string, Record<Language, string>> = {
 	'mobile.heading':              { en: 'Ilya is designed for desktop',       fr: 'Ilya est conçu pour ordinateur' },
 	'mobile.body':                 { en: 'Ilya produces paginated transcription documents best experienced on a larger screen with a keyboard.', fr: 'Ilya produit des documents de transcription paginés, mieux adaptés à un écran plus grand avec un clavier.' },
 	'mobile.continue':             { en: 'Continue anyway',                    fr: 'Continuer quand même' },
+
+	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
+	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
+	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
+	'upload.drop.acceptedNow':     { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx)', fr: 'Acceptés maintenant : MNX, MusicXML, .mxl, Finale (.musx)' },
+	'upload.drop.comingSoon':      { en: 'Coming soon: MuseScore (.mscz), PDF, image, MIDI', fr: 'Bientôt : MuseScore (.mscz), PDF, image, MIDI' },
+	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
+
+	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
+	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
+
+	'upload.format.mnxDirect':     { en: 'Format: MNX (direct)',         fr: 'Format : MNX (direct)' },
+	'upload.format.musicxmlDirect':{ en: 'Format: MusicXML (direct)',    fr: 'Format : MusicXML (direct)' },
+	'upload.format.mxl':           { en: 'Format: MusicXML (.mxl)',      fr: 'Format : MusicXML (.mxl)' },
+	'upload.format.musxDenigma':   { en: 'Format: Finale .musx → MNX', fr: 'Format : Finale .musx → MNX' },
+	'upload.format.msczWebmscore': { en: 'Format: MuseScore → MusicXML', fr: 'Format : MuseScore → MusicXML' },
+
+	'upload.banner.denigma':       { en: 'Converted from Finale format by denigma. Lyric alignment and measure structure are preserved. Verify custom expressions or complex layouts if the score appears unusual.', fr: 'Converti depuis le format Finale par denigma. L’alignement des paroles et la structure des mesures sont préservés. Vérifiez les expressions personnalisées ou les mises en page complexes si la partition semble inhabituelle.' },
+	'upload.banner.dismiss':       { en: 'Dismiss',                      fr: 'Ignorer' },
+
+	'upload.continue':             { en: 'Continue to analysis',         fr: 'Continuer vers l’analyse' },
+	'upload.tryAnother':           { en: 'Try another file',             fr: 'Essayer un autre fichier' },
+
+	'upload.mus.trigger':          { en: 'Have an older Finale file (.mus, pre-2014)?', fr: 'Vous avez un ancien fichier Finale (.mus, avant 2014) ?' },
+	'upload.mus.intro':            { en: 'Finale files from 2014 onward (.musx) are supported. For older .mus files, there are three options:', fr: 'Les fichiers Finale à partir de 2014 (.musx) sont pris en charge. Pour les anciens fichiers .mus, trois options s’offrent à vous :' },
+	'upload.mus.opt1':             { en: '1. Open the file in any Finale version from 2014 or later and resave it as .musx, then upload.', fr: '1. Ouvrez le fichier dans une version de Finale de 2014 ou ultérieure et réenregistrez-le en .musx, puis téléversez-le.' },
+	'upload.mus.opt2':             { en: '2. Print to PDF and upload the PDF. (PDF import is coming soon.)', fr: '2. Imprimez en PDF et téléversez le PDF. (L’import PDF arrive bientôt.)' },
+	'upload.mus.opt3':             { en: '3. Export to MusicXML from Finale and upload that file.', fr: '3. Exportez en MusicXML depuis Finale et téléversez ce fichier.' },
+	'upload.mus.trial':            { en: 'If Finale is no longer available, a trial version can be downloaded for this purpose.', fr: 'Si Finale n’est plus disponible, une version d’essai peut être téléchargée à cette fin.' },
+
+	'upload.soon.mscz':            { en: 'MuseScore (.mscz) import is coming soon.', fr: 'L’import MuseScore (.mscz) arrive bientôt.' },
+	'upload.soon.pdf':             { en: 'PDF import is coming soon.',    fr: 'L’import PDF arrive bientôt.' },
+	'upload.soon.image':           { en: 'Image import is coming soon.',  fr: 'L’import d’image arrive bientôt.' },
+	'upload.soon.midi':            { en: 'MIDI import is coming soon.',   fr: 'L’import MIDI arrive bientôt.' },
+
+	'upload.err.mus':              { en: 'This is a pre-2014 Finale file (.mus). This closed format cannot be read directly. Resave it as .musx in Finale 2014 or later, or export it to MusicXML, then upload again.', fr: 'Ceci est un fichier Finale antérieur à 2014 (.mus). Ce format fermé ne peut pas être lu directement. Réenregistrez-le en .musx dans Finale 2014 ou ultérieur, ou exportez-le en MusicXML, puis téléversez-le à nouveau.' },
+	'upload.err.invalidMnxJson':   { en: 'This .mnx file is not valid MNX JSON.', fr: 'Ce fichier .mnx n’est pas un MNX JSON valide.' },
+	'upload.err.jsonNotMnx':       { en: 'This JSON file is not an MNX score.', fr: 'Ce fichier JSON n’est pas une partition MNX.' },
+	'upload.err.xmlNotMusicxml':   { en: 'This XML file is not MusicXML.', fr: 'Ce fichier XML n’est pas du MusicXML.' },
+	'upload.err.xmlRootIs':        { en: 'The root element is %s.',      fr: 'L’élément racine est %s.' },
+	'upload.err.zipUnrecognised':  { en: 'This ZIP file is not a recognised score container.', fr: 'Ce fichier ZIP n’est pas un conteneur de partition reconnu.' },
+	'upload.err.mxlUnreadable':    { en: 'This .mxl file could not be opened. It may be corrupt.', fr: 'Ce fichier .mxl n’a pas pu être ouvert. Il est peut-être corrompu.' },
+	'upload.err.mxlNoRootfile':    { en: 'No score was found inside this .mxl archive.', fr: 'Aucune partition n’a été trouvée dans cette archive .mxl.' },
+	'upload.err.msczUnreadable':   { en: 'This .mscz file could not be opened. It may be corrupt.', fr: 'Ce fichier .mscz n’a pas pu être ouvert. Il est peut-être corrompu.' },
+	'upload.err.conversionFailed': { en: 'This Finale file could not be converted.', fr: 'Ce fichier Finale n’a pas pu être converti.' },
+	'upload.err.wasmLoadFailed':   { en: 'The Finale converter could not load. Reload the page and try again.', fr: 'Le convertisseur Finale n’a pas pu se charger. Rechargez la page et réessayez.' },
+	'upload.err.tooLarge':         { en: 'This score is too large to process on this device.', fr: 'Cette partition est trop volumineuse pour être traitée sur cet appareil.' },
+	'upload.err.parseFailed':      { en: 'This score could not be read. It may be incomplete or use unsupported features.', fr: 'Cette partition n’a pas pu être lue. Elle est peut-être incomplète ou utilise des fonctions non prises en charge.' },
+	'upload.err.unrecognised':     { en: 'This file was not recognised as a score.', fr: 'Ce fichier n’a pas été reconnu comme une partition.' },
 };
 
 /**

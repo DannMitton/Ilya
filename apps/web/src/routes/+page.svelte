@@ -20,6 +20,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import { INCLUDE_SHANE } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
+	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
+	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
@@ -50,6 +52,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// on. The wizard owns the profile store; this is a read-only reflection.
 	let shaneFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
 	let shaneVoiceName = $state<string | undefined>(undefined);
+	// The most recently ingested score from the Fit uploader. Live wiring
+	// (handover v35 §E.7) connects this into the renderer and analysis path.
+	let ingestedScore = $state<IngestedScore | null>(null);
 	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
@@ -775,6 +780,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{/snippet}
 			{#snippet shanePanel()}
 				{#if INCLUDE_SHANE}
+					<ScoreUploader
+						{language}
+						oningested={(ingested) => {
+							// Seam for live wiring (§E.7); for now, hold the result.
+							ingestedScore = ingested;
+						}}
+					/>
 					<CalibrationWizard
 						onActiveProfileChange={(f, name) => {
 							shaneFormants = f;
