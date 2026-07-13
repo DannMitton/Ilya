@@ -593,6 +593,10 @@ export class MnxScoreParser implements ScoreParser {
 			(e) => e.syllable && e.syllable.verseNumber === 1 && /[Ѐ-ӿ]/.test(e.syllable.text),
 		);
 
+		// No workMetadata: the MNX format defines no work-title or creator
+		// fields anywhere in its document model (spec root and global
+		// objects checked 2026-07-13; real denigma output confirms). The
+		// §A.6 merge treats MNX scores as carrying no header metadata.
 		const score: ParsedScore = {
 			source: {
 				format: 'mnx',

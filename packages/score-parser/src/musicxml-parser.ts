@@ -65,6 +65,7 @@ import type {
 	TimeSignatureChange,
 	TupletInfo,
 	VocalLineEvent,
+	WorkMetadata,
 } from './types';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
@@ -477,9 +478,10 @@ export class MusicXmlScoreParser implements ScoreParser {
 		// 6. wordContext per verse (mirrors the MNX pass).
 		assignWordContexts(vocalLine, warnings);
 
-		// 7. Provenance.
+		// 7. Provenance and work metadata (§A.6/§A.16).
 		const software = readSoftware(scorePartwise);
 		const { origin, fidelity } = resolveOrigin(xmlInput.sourcePath, software);
+		const workMetadata = readWorkMetadata(scorePartwise);
 		const cyrillic = vocalLine.some((e) => e.syllable && e.syllable.verseNumber === 1 && /[Ѐ-ӿ]/.test(e.syllable.text));
 
 		const score: ParsedScore = {
@@ -491,6 +493,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 				sourceWarnings: warnings.map((w) => w.message),
 			},
 			vocalPart: { partId, partName },
+			...(workMetadata ? { workMetadata } : {}),
 			measures,
 			keySignatures,
 			clefs,
@@ -742,6 +745,49 @@ function readTempo(direction: XmlEl, measureIndex: number, cursor: Fraction): Te
 function readSoftware(scorePartwise: XmlEl): string {
 	// <identification><encoding><software> may repeat; concatenate.
 	return descendants(scorePartwise, 'software').map(textOf).join(' ').toLowerCase();
+}
+
+/**
+ * Work metadata from the header (§A.6/§A.16): `<work-title>` (falling
+ * back to `<movement-title>`), `<work-number>` as the opus slot, and
+ * typed `<creator>` elements. Multiple creators of one type join with
+ * a comma. Returns undefined when the header carries nothing.
+ */
+function readWorkMetadata(scorePartwise: XmlEl): WorkMetadata | undefined {
+	const clean = (s: string | null | undefined): string | undefined => {
+		const t = s?.trim();
+		return t && t.length > 0 ? t : undefined;
+	};
+	const work = firstChild(scorePartwise, 'work');
+	const title = clean(work ? childText(work, 'work-title') : undefined) ?? clean(childText(scorePartwise, 'movement-title'));
+	const opus = clean(work ? childText(work, 'work-number') : undefined);
+
+	const byType = new Map<string, string[]>();
+	for (const c of descendants(scorePartwise, 'creator')) {
+		const type = (c.getAttribute('type') ?? '').toLowerCase();
+		const text = clean(textOf(c));
+		if (!text) continue;
+		const list = byType.get(type) ?? [];
+		list.push(text);
+		byType.set(type, list);
+	}
+	const joined = (...types: string[]): string | undefined => {
+		const all = types.flatMap((t) => byType.get(t) ?? []);
+		return all.length > 0 ? all.join(', ') : undefined;
+	};
+
+	const meta: WorkMetadata = {};
+	if (title) meta.title = title;
+	if (opus) meta.opus = opus;
+	const composer = joined('composer');
+	if (composer) meta.composer = composer;
+	const poet = joined('lyricist', 'poet');
+	if (poet) meta.poet = poet;
+	const translator = joined('translator');
+	if (translator) meta.translator = translator;
+	const arranger = joined('arranger');
+	if (arranger) meta.arranger = arranger;
+	return Object.keys(meta).length > 0 ? meta : undefined;
 }
 
 function resolveOrigin(

@@ -443,6 +443,61 @@ describe('MusicXmlScoreParser: diagnostics and degraded sources', () => {
 	});
 });
 
+describe('MusicXmlScoreParser: work metadata (§A.6/§A.16)', () => {
+	const HEADER_DOC = (header: string): string => `<score-partwise version="4.0">
+      ${header}
+      <part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time></attributes>
+        <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type>
+          <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure></part></score-partwise>`;
+
+	it('extracts title, opus, and typed creators (the Gretchen header shape)', async () => {
+		const r = await parser.parse(xmlInput(HEADER_DOC(`
+      <work><work-title>Gretchen am Spinnrade</work-title><work-number>Op. 2, D. 118</work-number></work>
+      <identification>
+        <creator type="composer">Franz Schubert</creator>
+        <creator type="lyricist">Johann Wolfgang von Goethe</creator>
+        <creator type="arranger">Transcribed by bradleykunda</creator>
+      </identification>`)));
+		expect(r.score.workMetadata).toEqual({
+			title: 'Gretchen am Spinnrade',
+			opus: 'Op. 2, D. 118',
+			composer: 'Franz Schubert',
+			poet: 'Johann Wolfgang von Goethe',
+			arranger: 'Transcribed by bradleykunda',
+		});
+	});
+
+	it('falls back to movement-title and maps poet and translator creator types', async () => {
+		const r = await parser.parse(xmlInput(HEADER_DOC(`
+      <movement-title>Ты помнишь ли вечер</movement-title>
+      <identification>
+        <creator type="poet">Алексей Толстой</creator>
+        <creator type="translator">Dann Mitton</creator>
+      </identification>`)));
+		expect(r.score.workMetadata).toEqual({
+			title: 'Ты помнишь ли вечер',
+			poet: 'Алексей Толстой',
+			translator: 'Dann Mitton',
+		});
+	});
+
+	it('joins multiple creators of one type and skips empty elements', async () => {
+		const r = await parser.parse(xmlInput(HEADER_DOC(`
+      <identification>
+        <creator type="composer">A. Composer</creator>
+        <creator type="composer">B. Composer</creator>
+        <creator type="lyricist">   </creator>
+      </identification>`)));
+		expect(r.score.workMetadata).toEqual({ composer: 'A. Composer, B. Composer' });
+	});
+
+	it('leaves workMetadata absent when the header carries nothing (main fixture)', async () => {
+		const r = await parseMain();
+		expect(r.score.workMetadata).toBeUndefined();
+	});
+});
+
 describe('MusicXmlScoreParser: clefs (v37 §A.17)', () => {
 	it('captures the main fixture treble clef and snapshots it onto every measure', async () => {
 		const r = await parseMain();

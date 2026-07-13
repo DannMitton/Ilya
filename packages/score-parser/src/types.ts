@@ -45,6 +45,12 @@ export interface ParsedScore {
   vocalPart: VocalPart;
 
   /**
+   * Work-level metadata from the source header, when the source carries
+   * any (§A.6/§A.16). Absent when nothing was found.
+   */
+  workMetadata?: WorkMetadata;
+
+  /**
    * Ordered measures, the score's coordinate system. Time, key, and
    * tempo state at each measure is snapshotted from the change events
    * below for direct access without walking the timeline.
@@ -79,6 +85,33 @@ export interface ParsedScore {
    * change when accompaniment support lands.
    */
   accompaniment?: AccompanimentLine[];
+}
+
+// ── Work metadata (§A.6/§A.16; shape approved by Dann, 2026-07-13) ──
+
+/**
+ * Work-level metadata extracted from source headers, mirroring Ilya's
+ * drawer `SongMetadata` fields so the §A.6 auto-populate is a straight
+ * field-for-field merge (score wins, singer overrides).
+ *
+ * MusicXML carries these richly (`<work-title>`, `<work-number>`, typed
+ * `<creator>` elements). Real denigma MNX carries none (verified against
+ * the Sharp Excerpt, 2026-07-13), so MNX extraction is a guarded read
+ * that usually returns nothing; downstream merging must tolerate a
+ * wholly absent `workMetadata`.
+ *
+ * `arranger` is preserved for provenance display but deliberately has
+ * no drawer slot: a transcriber credit must not masquerade as the poet.
+ */
+export interface WorkMetadata {
+  title?: string;
+  /** Opus / catalogue designation (MusicXML `<work-number>`). */
+  opus?: string;
+  composer?: string;
+  /** MusicXML creator types `lyricist` and `poet` both land here. */
+  poet?: string;
+  translator?: string;
+  arranger?: string;
 }
 
 // ── Source provenance ────────────────────────────────────────────
