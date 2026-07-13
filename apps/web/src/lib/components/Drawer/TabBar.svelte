@@ -20,8 +20,12 @@
 			case 'learn': return language === 'fr' ? 'Leçons' : 'Learn';
 			case 'guide': return 'Guide';
 			// The engine codename is 'shane' throughout the code; the tab
-			// wears the user-facing 'Fit' (Dann's ruling, 2026-07-12). A
-			// French label rides the deferred calibration-UI French pass.
+			// wears the user-facing 'Fit' (Dann's ruling, 2026-07-12).
+			// French naming RULED (Dann, 2026-07-13): 'Fit' is invariant, a
+			// proper name like 'Ilya', never translated — the FR guide's
+			// italicized-name treatment is the precedent. This supersedes
+			// the earlier note deferring a French label to the calibration
+			// French pass; there is no French label to draft.
 			case 'shane': return 'Fit';
 		}
 	}

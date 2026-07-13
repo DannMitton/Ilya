@@ -7,7 +7,9 @@
 	 * reconciled between Claude and Kimi over two review rounds, recorded in
 	 * handover v27. This wraps the pacifier's locked per-vowel ritual (spec
 	 * v11 §3, §4, §6, §7, §8, §11) in four phases — Welcome, Readiness,
-	 * Guided capture, Profile summary — without altering that ritual; the
+	 * Guided capture, Profile summary — plus the skippable Voice
+	 * characteristics phase behind the summary (E.5 slice 3, Kimi's Q5
+	 * ruling, v39 §A.31) — without altering that ritual; the
 	 * two-tap arming, the 3-2-1 prep, the fixed 3.0 s arc, and the calm
 	 * reset-sigla path all stay exactly as the Pacifier already implements
 	 * them. This wizard only decides *which* vowel is current and moves
@@ -34,10 +36,13 @@
 	 * Replaces the earlier placeholder shell (Ilya2006B fold-in), which
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
+	import NotePicker from '$lib/shane/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
 	import { derive } from '$lib/shane/engine/derivations';
 	import { applyIghDivergence } from '$lib/shane/engine/divergence';
 	import { checkPlausibility, buildPlausibilityEvent } from '$lib/shane/engine/plausibility';
@@ -48,7 +53,12 @@
 		type ProfileStore,
 		type StoredVoice
 	} from '$lib/shane/profileStore';
-	import type { Vowel, VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
+	import type {
+		Vowel,
+		VoiceType,
+		CalibratedFormant,
+		VoiceCharacteristics
+	} from '$lib/shane/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
 	// The seven default vowels, in the spec's fixed counterclockwise order.
@@ -72,7 +82,12 @@
 	// pass (standing open item).
 	const DEFAULT_NAME_BASE = 'Voice';
 
-	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
+	// 'characteristics' is the fifth phase (E.5 slice 3; Kimi's Q5 ruling,
+	// v39 §A.31): typed range/tessitura/passaggio through note pickers.
+	// Skippable and never a gate — entered only through the quiet summary
+	// button (Dann's slice-3 decision, 2026-07-13), and Done returns to
+	// the summary. Editable later through the same button.
+	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
 	type ReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr';
 	type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
 
@@ -316,6 +331,85 @@
 	function persistStore() {
 		saveStore($state.snapshot(store) as ProfileStore);
 	}
+
+	// ── Voice characteristics (E.5 slice 3; Kimi's Q5 ruling, v39 §A.31) ─────
+	// The six pickers share one notation font load (memoized in the shared
+	// loader; the Fit pane's own load makes this a cache hit). Failure falls
+	// back to the pickers' primitive shapes — never blocking.
+	let notationFont = $state<LoadedNotationFont | null>(null);
+	onMount(() => {
+		let alive = true;
+		loadNotationFont()
+			.then((f) => {
+				if (alive) notationFont = f;
+			})
+			.catch(() => {
+				/* primitive-mode fallback; the pickers stay fully functional */
+			});
+		return () => {
+			alive = false;
+		};
+	});
+
+	type CharacteristicField =
+		| 'rangeLow'
+		| 'rangeHigh'
+		| 'tessituraLow'
+		| 'tessituraHigh'
+		| 'passaggioPrimary'
+		| 'passaggioSecondary';
+	const CHARACTERISTIC_FIELDS: CharacteristicField[] = [
+		'rangeLow',
+		'rangeHigh',
+		'tessituraLow',
+		'tessituraHigh',
+		'passaggioPrimary',
+		'passaggioSecondary'
+	];
+
+	/**
+	 * Write one characteristic into the active voice, saving on every
+	 * change like the formant path. Source is 'manual' — typed entry. The
+	 * template seam (Kimi's Q5): a fach-preset pre-fill is this same write
+	 * with source 'declared-template', BLOCKED on §A.34's citation-grade
+	 * values; no visible affordance renders until they arrive (a greyed
+	 * control would advertise what cannot be delivered). Clearing the last
+	 * field removes the object entirely, so a fully cleared phase reads as
+	 * skipped and analyzeScore's per-dimension defaults apply cleanly.
+	 */
+	function setCharacteristic(field: CharacteristicField, p: Pitch | undefined) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (!v) return;
+		const next: VoiceCharacteristics = {
+			...(v.characteristics ?? { source: 'manual' }),
+			source: 'manual'
+		};
+		if (p) next[field] = p;
+		else delete next[field];
+		v.characteristics = CHARACTERISTIC_FIELDS.some((f) => !!next[f]) ? next : undefined;
+		v.updatedAt = new Date().toISOString();
+		persistStore();
+	}
+
+	let hasCharacteristics = $derived.by(() => {
+		const c = activeVoice?.characteristics;
+		return !!c && CHARACTERISTIC_FIELDS.some((f) => !!c[f]);
+	});
+	// Gentle consistency notes (amber, never a block): an inverted pair is
+	// almost certainly a typo, but the phase is not a gate and analysis
+	// copes, so the note only names what it sees. Enharmonic-aware through
+	// pitchToMidi. Copy flagged for Dann's review with the slice-3 strings.
+	let rangeInverted = $derived.by(() => {
+		const c = activeVoice?.characteristics;
+		return !!(c?.rangeLow && c.rangeHigh) && pitchToMidi(c.rangeLow) > pitchToMidi(c.rangeHigh);
+	});
+	let tessituraInverted = $derived.by(() => {
+		const c = activeVoice?.characteristics;
+		return (
+			!!(c?.tessituraLow && c.tessituraHigh) &&
+			pitchToMidi(c.tessituraLow) > pitchToMidi(c.tessituraHigh)
+		);
+	});
 	/** Write the working profile into the active voice and save (failure-silent). */
 	function persist() {
 		const v = store.voices.find((x) => x.id === store.activeId);
@@ -842,6 +936,17 @@
 	{/if}
 {/snippet}
 
+<!-- The Voice characteristics entry (E.5 slice 3, Dann's decision,
+     2026-07-13): one quiet secondary button on the summary, both in its
+     finished and unfinished states — opt-in first time, the edit path
+     afterward. Skippable and never a gate: Finish never routes through
+     the phase. -->
+{#snippet characteristicsButton()}
+	<button type="button" class="wizard-secondary" onclick={() => (phase = 'characteristics')}>
+		{hasCharacteristics ? 'Edit voice characteristics' : 'Add voice characteristics'}
+	</button>
+{/snippet}
+
 {#snippet rosterTable(showActions: boolean)}
 	<table class="wizard-roster">
 		<thead>
@@ -1115,6 +1220,7 @@
 					</p>
 					{@render rosterTable(true)}
 					{@render optionalInvite()}
+					{@render characteristicsButton()}
 				{:else}
 					<p class="wizard-lede">
 						{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
@@ -1122,6 +1228,7 @@
 					</p>
 					{@render rosterTable(true)}
 					{@render optionalInvite()}
+					{@render characteristicsButton()}
 					<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
 				{/if}
 				{#if confirmingReset}
@@ -1139,6 +1246,80 @@
 						Start over
 					</button>
 				{/if}
+			</div>
+		{:else if phase === 'characteristics'}
+			<!-- E.5 slice 3 (Kimi's Q5 ruling, v39 §A.31): typed-first capture
+			     through note pickers; sung capture, when it arrives, verifies
+			     and never discovers. Every field optional; values save on
+			     every change (source 'manual'); Done returns to the summary.
+			     Copy is agentless throughout and EN-only pending the standing
+			     calibration-French pass; all strings flagged for Dann's copy
+			     review. -->
+			<div class="wizard-phase">
+				<h2 id="wizard-title">Voice characteristics</h2>
+				<p class="wizard-lede">
+					These optional values sharpen the fit analysis. Any field can stay blank; where a value
+					is missing, the analysis simply stays broad for that dimension.
+				</p>
+				<div class="charx-group">
+					<h3 class="charx-heading">Range</h3>
+					<NotePicker
+						label="Lowest comfortable note"
+						value={activeVoice.characteristics?.rangeLow}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('rangeLow', p)}
+					/>
+					<NotePicker
+						label="Highest comfortable note"
+						value={activeVoice.characteristics?.rangeHigh}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('rangeHigh', p)}
+					/>
+					{#if rangeInverted}
+						<p class="charx-note" role="status">The lowest note is set above the highest.</p>
+					{/if}
+				</div>
+				<div class="charx-group">
+					<h3 class="charx-heading">Tessitura</h3>
+					<!-- Kimi's ruled copy, verbatim (v39 §A.31). -->
+					<p class="charx-hint">Where you live, not your edges.</p>
+					<NotePicker
+						label="Tessitura floor"
+						value={activeVoice.characteristics?.tessituraLow}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('tessituraLow', p)}
+					/>
+					<NotePicker
+						label="Tessitura ceiling"
+						value={activeVoice.characteristics?.tessituraHigh}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('tessituraHigh', p)}
+					/>
+					{#if tessituraInverted}
+						<p class="charx-note" role="status">The tessitura floor is set above its ceiling.</p>
+					{/if}
+				</div>
+				<div class="charx-group">
+					<h3 class="charx-heading">Passaggio</h3>
+					<!-- Kimi's example string redrafted agentless (the §A.31 copy
+					     flag): the app never speaks as "Shane". -->
+					<p class="charx-hint">If left blank, passaggio events are not flagged.</p>
+					<NotePicker
+						label="Primary passaggio"
+						value={activeVoice.characteristics?.passaggioPrimary}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
+					/>
+					<NotePicker
+						label="Secondary passaggio"
+						value={activeVoice.characteristics?.passaggioSecondary}
+						font={notationFont}
+						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
+					/>
+				</div>
+				<button type="button" class="wizard-primary" onclick={() => (phase = 'summary')}>
+					Done
+				</button>
 			</div>
 		{/if}
 	{/if}
@@ -1476,6 +1657,42 @@
 		.wizard-roster-action button {
 			padding: 0.25rem 0.5rem;
 		}
+	}
+
+	/* ── Voice characteristics (E.5 slice 3) ─────────────────────────────
+	   Groups fence with a quiet rule; the group heading takes a smaller
+	   cut of the phase-heading recipe so the hierarchy reads at a glance. */
+	.charx-group {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+		padding-top: 0.625rem;
+		border-top: 1px solid var(--stone-300);
+	}
+	.charx-heading {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: 0.65rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--ink-tertiary);
+		font-weight: 600;
+		text-align: left;
+	}
+	.charx-hint {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.8125rem;
+		color: var(--ink-tertiary);
+		line-height: 1.4;
+	}
+	.charx-note {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.8125rem;
+		color: var(--prep-amber);
+		line-height: 1.4;
 	}
 
 	.wizard-quiet-actions {
