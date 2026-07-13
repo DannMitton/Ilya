@@ -425,20 +425,28 @@ export function renderAnalyzedStaff(
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
   // are collected during the draw and placed below the lowest ink of the
   // system, never at a fixed offset that a down-stem beam can crash into.
-  const underlay: Array<{ x: number; cyr: string; ipa: string; align: 'middle' | 'start' }> = [];
+  const underlay: Array<{ x: number; cyr: string; ipa: string; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
   // Melisma detection: the data model encodes a melisma by ABSENCE of
   // syllable on continuation notes, so a syllabled note followed by an
   // unsyllabled note starts one. Its syllable left-aligns at the first
   // notehead (the reading eye moves rightward); single-note syllables
   // stay centred. (Gould extraction rules 4 to 6.)
   const melismaStart = new Set<string>();
+  const melismaEndX = new Map<string, number>(); // start id → last continuation notehead x
   {
-    const evs = parsed.vocalLine;
-    for (let i = 0; i < evs.length; i++) {
-      const e = evs[i];
+    for (let i = 0; i < placed.length; i++) {
+      const e = placed[i].ev;
       if (e.type !== 'note' || !e.syllable) continue;
-      const nxt = evs[i + 1];
-      if (nxt && nxt.type === 'note' && !nxt.syllable) melismaStart.add(e.id);
+      let j = i + 1;
+      let lastX: number | null = null;
+      while (j < placed.length && placed[j].ev.type === 'note' && !placed[j].ev.syllable) {
+        lastX = placed[j].x;
+        j++;
+      }
+      if (lastX !== null) {
+        melismaStart.add(e.id);
+        melismaEndX.set(e.id, lastX);
+      }
     }
   }
   // Phonation breaks render as [#] ON THE IPA LINE (Dann's ruling,
@@ -626,6 +634,8 @@ export function renderAnalyzedStaff(
         cyr,
         ipa,
         align: isMelisma ? 'start' : 'middle',
+        sylType: syl?.type,
+        evId: ev.id,
       });
     }
   }
@@ -650,6 +660,51 @@ export function renderAnalyzedStaff(
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {
     parts.push(`<text x="${bx}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif">[#]</text>`);
+  }
+
+  // ── Hyphens and extenders (melisma build 2; Dann's Gould extraction,
+  // rules 26–40). The distinction is semantic: a hyphen is RAISED and
+  // means the word continues; an extender sits ON THE BASELINE at
+  // staff-line thickness and means the word has ended while its final
+  // sound continues, running to the last notehead and no further.
+  {
+    const estW = (s: string): number => s.length * 7.5; // width estimate at 12.5px
+    const rightEdgeOf = (u: (typeof underlay)[number]): number =>
+      u.align === 'start' ? u.x + estW(u.cyr) : u.x + estW(u.cyr) / 2;
+    const leftEdgeOf = (u: (typeof underlay)[number]): number =>
+      u.align === 'start' ? u.x : u.x - estW(u.cyr) / 2;
+    const noteXs = placed.filter((p) => p.ev.type === 'note').map((p) => p.x);
+    const hyphenY = cyrY - 4; // raised to roughly x-height midpoint
+
+    // Hyphens: between consecutive syllables of one word (start|middle
+    // followed by middle|end). One per gap; wide gaps fill at intervals;
+    // a hyphen never sits directly under a note column (nudged clear).
+    for (let i = 0; i < underlay.length - 1; i++) {
+      const a = underlay[i];
+      const b = underlay[i + 1];
+      const joins = (a.sylType === 'start' || a.sylType === 'middle') && (b.sylType === 'middle' || b.sylType === 'end');
+      if (!joins || !a.cyr || !b.cyr) continue;
+      const from = rightEdgeOf(a) + 2;
+      const to = leftEdgeOf(b) - 2;
+      if (to <= from) continue;
+      const count = Math.max(1, Math.floor((to - from) / 60));
+      for (let k = 1; k <= count; k++) {
+        let hx = from + ((to - from) * k) / (count + 1);
+        if (noteXs.some((x2) => Math.abs(x2 - hx) < 7)) hx += 8; // clear of note columns
+        parts.push(`<line x1="${round2(hx - 2.5)}" y1="${hyphenY}" x2="${round2(hx + 2.5)}" y2="${hyphenY}" stroke="#1a1612" stroke-width="1" data-hyphen="${esc(a.evId)}"/>`);
+      }
+    }
+
+    // Extenders: word-final syllable (whole|end) opening a melisma.
+    for (const u of underlay) {
+      if ((u.sylType === 'whole' || u.sylType === 'end') && melismaEndX.has(u.evId)) {
+        const x1 = rightEdgeOf(u) + 3;
+        const x2 = melismaEndX.get(u.evId)! + 6;
+        if (x2 > x1) {
+          parts.push(`<line x1="${round2(x1)}" y1="${cyrY}" x2="${round2(x2)}" y2="${cyrY}" stroke="#1a1612" stroke-width="${staffLineT}" data-extender="${esc(u.evId)}"/>`);
+        }
+      }
+    }
   }
 
   // Beams and tuplet brackets (drawn once, after the notes they govern).

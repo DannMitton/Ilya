@@ -91,6 +91,29 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     expect((svg.match(/text-anchor="start"/g) ?? []).length).toBe(2);
   });
 
+  it('draws raised hyphens between syllables of one word, including across the rest', () => {
+    // по-гру (one gap), гру-зи (across rest n4, wide gap), зи-сь: at
+    // least three hyphens, all raised above the Cyrillic baseline.
+    const hyphens = (svg.match(/data-hyphen="/g) ?? []).length;
+    expect(hyphens > 2).toBe(true);
+    expect(svg.includes('data-hyphen="n2"')).toBe(true); // по → гру
+    expect(svg.includes('data-hyphen="n3"')).toBe(true); // гру → зи (rest between)
+    expect(svg.includes('data-hyphen="n5"')).toBe(true); // зи → сь
+  });
+
+  it('never hyphenates after a whole-word syllable', () => {
+    expect(svg.includes('data-hyphen="n1"')).toBe(false); // Ты is a whole word
+  });
+
+  it('draws a baseline extender for the word-final melisma, to the last notehead', () => {
+    expect((svg.match(/data-extender="/g) ?? []).length).toBe(1);
+    expect(svg.includes('data-extender="n18"')).toBe(true);
+  });
+
+  it('draws no extender on long single notes (n6, half note, no melisma)', () => {
+    expect(svg.includes('data-extender="n6"')).toBe(false);
+  });
+
   it('draws no underlay under melisma continuation notes', () => {
     // n19 and n20 carry no syllable; their columns must be empty of text.
     expect(svg.includes('data-event-id="n19"')).toBe(true);

@@ -27,7 +27,7 @@ const DUR: Record<NoteBase, Fraction> = {
   '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
 };
 
-function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo): VocalLineEvent {
+function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo, sylType: 'whole' | 'start' | 'middle' | 'end' = 'whole'): VocalLineEvent {
   const plain = DUR[base];
   const fraction = tuplet
     ? { numerator: plain.numerator * tuplet.normalNotes, denominator: plain.denominator * tuplet.actualNotes }
@@ -39,7 +39,7 @@ function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | nu
     rhythmicPosition: { fraction: pos },
     duration: { base, dots: 0, fraction, ...(tuplet ? { tuplet } : {}) },
     ...(pitch ? { pitch } : {}),
-    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: 'whole', verseNumber: 1, wordContext: verses[0], verses } } : {}),
+    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: sylType, verseNumber: 1, wordContext: verses[0], verses } } : {}),
   };
 }
 
@@ -63,15 +63,18 @@ export const demoResolver: VowelResolver = (e) => vowelById[e.id];
 
 export function demoScore(): ParsedScore {
   const events = [
+    // «Ты погрузись»: the polysyllable по-гру-зи-сь carries syllable types
+    // (start/middle/middle/end) so hyphenation is exercised, including
+    // across the rest n4 (hyphens flank rests, Gould extraction r32).
     note('n1', 0, frac(0, 1), P('F', 2), 'quarter', ['Ты', 'tɨ']),
-    note('n2', 0, frac(1, 4), P('A', 2), 'eighth', ['по', 'po']),
-    note('n3', 0, frac(3, 8), P('B', 2), 'eighth', ['гру', 'gru']), // B natural vs Bb key → ♮
+    note('n2', 0, frac(1, 4), P('A', 2), 'eighth', ['по', 'po'], undefined, 'start'),
+    note('n3', 0, frac(3, 8), P('B', 2), 'eighth', ['гру', 'gru'], undefined, 'middle'), // B natural vs Bb key → ♮
     note('n4', 0, frac(1, 2), null, 'quarter'), // rest
     // Sung D3 on [i]: the turning pitch for [i] (fR1 300 → 150 Hz) is ALSO
     // D3, a deliberate unison collision exercising the two-voice offset
     // rule (turning notehead displaced beside the sung note).
-    note('n5', 1, frac(0, 1), P('D', 3), 'quarter', ['зи', 'zi']),
-    note('n6', 1, frac(1, 4), P('D', 4), 'half', ['сь', 'sʲ']), // crossing (≈ fR1 300)
+    note('n5', 1, frac(0, 1), P('D', 3), 'quarter', ['зи', 'zi'], undefined, 'middle'),
+    note('n6', 1, frac(1, 4), P('D', 4), 'half', ['сь', 'sʲ'], undefined, 'end'), // crossing (≈ fR1 300)
     // Measure 3: beaming cases. Beat 1: an eighth pair, both open → one
     // primary beam despite differing vowels (grouping is by timbre).
     // Beat 2: a 16th pair (open, double beam) then an eighth whose vowel
