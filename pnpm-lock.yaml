@@ -41,6 +41,9 @@ importers:
       tesseract.js:
         specifier: ^7.0.0
         version: 7.0.0
+      webmscore:
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       '@playwright/test':
         specifier: ^1.51.0
@@ -1231,6 +1234,9 @@ packages:
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
+  webmscore@1.2.1:
+    resolution: {integrity: sha512-TB0HxsX+KBAA3qRzvDOn2SEnA/Fxm//AJkFhTMOblUIrhcgcXygfWELLg54AIW0yPo73xOiBjs3BVTveCQ5OLQ==}
+
   whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
@@ -2146,6 +2152,8 @@ snapshots:
   wasm-feature-detect@1.8.0: {}
 
   webidl-conversions@3.0.1: {}
+
+  webmscore@1.2.1: {}
 
   whatwg-url@5.0.0:
     dependencies:
