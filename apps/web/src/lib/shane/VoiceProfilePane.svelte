@@ -51,11 +51,15 @@
 	 */
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
-	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP } from '$lib/page-config';
+	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
+	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
 	import type { PageSize } from '$lib/types';
 	import type { Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
+	import { paginateScore } from '@ilya/score-parser';
+	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
+	import { notationOnlyOverlay } from '$lib/shane/notation-overlay';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -65,9 +69,32 @@
 		language: Language;
 		/** Mirrors Paper.svelte's prop; the page shell passes letter today. */
 		pageSize?: PageSize;
+		/**
+		 * The accepted upload from the Fit uploader (live wiring, v36 §E.7).
+		 * When present, the envelope's content window carries the rendered
+		 * score pages instead of the interim copy. Slice 1 (Dann's scope
+		 * ruling, 2026-07-13) renders notation only: real systems and
+		 * underlay through paginateScore, no acoustic marks (see
+		 * notation-overlay.ts for why that is the engine's own semantics).
+		 */
+		ingested?: IngestedScore | null;
+		/**
+		 * The song title for the page-1 header (the title slot belongs to
+		 * the SONG, per the header ruling). Sourced from the shared drawer
+		 * metadata today; parser-extracted titles and the score-wins
+		 * conflict rules are the deferred §A.6 behaviours.
+		 */
+		scoreTitle?: string;
 	}
 
-	let { formants, voiceName = undefined, language, pageSize = 'letter' }: Props = $props();
+	let {
+		formants,
+		voiceName = undefined,
+		language,
+		pageSize = 'letter',
+		ingested = null,
+		scoreTitle = undefined,
+	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
 
@@ -126,6 +153,41 @@
 		headerHeight = height;
 	}
 
+	// ── Score pages (live wiring slice 1: notation only) ─────────────────
+	// The parsed score paginates into the page-1 content window's geometry
+	// (the smaller window, since the measured TitleHeader outweighs the
+	// running header), so every page's systems fit every page type; pages
+	// after the first simply carry a little extra room at the bottom.
+	const parsed = $derived(ingested?.result.score ?? null);
+	const contentWidth = $derived(dims.width - 2 * MARGINS.horizontal);
+	const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);
+	const subsequentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
+
+	// paginateScore paints a white full-page backing rect (its pages are
+	// standalone artifacts); here the Paper page provides the surface, so
+	// the rect is stripped. Upstream option (background: null) noted for
+	// the package.
+	const stripBackingRect = (svg: string): string =>
+		svg.replace(/<rect x="0" y="0" width="\d+" height="\d+" fill="#FFFFFF"\/>/, '');
+
+	const scorePages = $derived(
+		parsed
+			? paginateScore(parsed, notationOnlyOverlay(parsed), {
+					pageWidth: contentWidth,
+					pageHeight: page1WindowHeight,
+					marginTop: 0,
+					marginBottom: 0,
+					marginLeft: 0,
+					marginRight: 0,
+				}).pages.map(stripBackingRect)
+			: null,
+	);
+
+	// Interim running-header text for pages 2+: the song title when the
+	// singer has one in the shared metadata, else the profile subtitle.
+	// Interim copy, flagged for Dann's eye with the §A.6 behaviours.
+	const runningHeader = $derived(scoreTitle?.trim() ? scoreTitle : subtitle);
+
 	function countWord(n: number): string {
 		return COUNT_WORDS[n] ?? String(n);
 	}
@@ -162,6 +224,46 @@
 {#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span
 	>{SPOKEN_NAME[g]}{/snippet}
 
+{#if scorePages && scorePages.length > 0}
+	<!-- Score state (live wiring slice 1): the uploaded score's systems,
+	     paginated into the envelope's exact page geometry and furniture,
+	     mirroring Paper.svelte's TitlePage/SubsequentPage pattern. The
+	     SVG pages come from paginateScore, notation only for now (no
+	     acoustic marks; see notation-overlay.ts). -->
+	<div class="fit-paper-container" role="region" aria-label="Repertoire fit score">
+		{#each scorePages as page, i (i)}
+			<article
+				class="paper-page profile-page"
+				style="width: {dims.width}px; height: {dims.height}px;"
+				aria-label="Score page {i + 1} of {scorePages.length}"
+			>
+				{#if i === 0}
+					<TitleHeader
+						title={scoreTitle ?? ''}
+						composer={subtitle}
+						poet=""
+						translator=""
+						opus=""
+						{language}
+						onheightchange={handleHeaderHeight}
+						versionAccent="#8E7E9B"
+						markAccent="#8E7E9B"
+					/>
+					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
+						{@html page}
+					</div>
+				{:else}
+					<RunningHeader headerText={runningHeader} />
+					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
+						{@html page}
+					</div>
+				{/if}
+				<PageFooter pageNumber={i + 1} totalPages={scorePages.length} {language} legendItems={[]} />
+			</article>
+		{/each}
+	</div>
+{:else}
 <article
 	class="paper-page profile-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
@@ -219,6 +321,7 @@
 	     until the score pane brings provenance to this surface. -->
 	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} />
 </article>
+{/if}
 
 <style>
 	/* The envelope page: TitlePage's .paper-page geometry, twinned so the
@@ -290,6 +393,35 @@
 		font-size: 1.05rem;
 		line-height: 1.75;
 		color: var(--ink-secondary, #4a4540);
+	}
+
+	/* ── Score state (live wiring slice 1) ─────────────────── */
+
+	/* Mirrors Paper.svelte's .paper-container so a multi-page score
+	   stacks with the same rhythm as the transcription document. */
+	.fit-paper-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
+		padding-bottom: 2rem;
+	}
+
+	/* The content window a score page renders into: the same left/right
+	   text column as .profile-content, top set inline per page type. The
+	   SVG keeps its 1:1 scale (viewBox width equals the window width) and
+	   anchors to the top of the window. */
+	.score-window {
+		position: absolute;
+		left: 96px;
+		right: 96px;
+		overflow: hidden;
+	}
+
+	.score-window :global(svg) {
+		display: block;
+		width: 100%;
+		height: auto;
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */

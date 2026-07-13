@@ -791,7 +791,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					<ScoreUploader
 						{language}
 						oningested={(ingested) => {
-							// Seam for live wiring (§E.7); for now, hold the result.
+							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
+							// as paginated notation in the Fit main pane.
 							ingestedScore = ingested;
 						}}
 					/>
@@ -829,7 +830,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     letter page with the Paper system's header and footer. The
 			     wizard in the drawer publishes the active voice's readings
 			     and name into the state above. -->
-			<VoiceProfilePane formants={shaneFormants} voiceName={shaneVoiceName} {language} />
+			<VoiceProfilePane
+				formants={shaneFormants}
+				voiceName={shaneVoiceName}
+				{language}
+				ingested={ingestedScore}
+				scoreTitle={metadata.title}
+			/>
 		{:else}
 			<ReadingPaper {language}>
 				{#snippet content()}
