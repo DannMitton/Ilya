@@ -85,8 +85,17 @@ let denigma: DenigmaModule | null = null;
 /** Instantiate the warm module once on startup, then announce readiness. */
 void (async () => {
 	try {
+		// The specifier lives in a variable so Vite's import-analysis treats
+		// this as a fully dynamic import and leaves it alone. As a literal,
+		// Vite 6 refuses it outright ("Cannot import non-asset file ... inside
+		// /public"), @vite-ignore notwithstanding — first surfaced by the
+		// first-ever dev-server file drop, 2026-07-13. The glue is served
+		// as-is from the static root at runtime, exactly as before; this also
+		// removes the §C.4 tsc paths-neutralizer need, since tsc no longer
+		// sees a literal specifier to resolve.
+		const gluePath = '/denigma_wasm_mnx.js';
 		const { default: createModule } = (await import(
-			/* @vite-ignore */ '/denigma_wasm_mnx.js'
+			/* @vite-ignore */ gluePath
 		)) as { default: DenigmaModuleFactory };
 		denigma = await createModule({
 			print: () => {},
