@@ -570,6 +570,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		handleMetadataChange({ ...metadata, ...incoming });
 		fromScoreFields = new Set(Object.keys(incoming) as Array<keyof SongMetadata>);
 	}
+
+	// Q4 provenance line (Kimi's §A.28 ruling, 2026-07-13): an arranger
+	// detected in the score header surfaces as a small line beneath the
+	// Metadata block — never a drawer field — and is omitted entirely when
+	// absent. The format label names where it was detected; in practice
+	// only MusicXML-parsed scores can carry one (MNX defines no work
+	// metadata anywhere, v38 §A.27).
+	const PROVENANCE_FORMAT_LABELS: Record<IngestedScore['provenance']['format'], string> = {
+		musicxml: 'MusicXML',
+		mnx: 'MNX'
+	};
+	let arrangerProvenance = $derived.by(() => {
+		const s = ingestedScore;
+		const name = s?.result.score.workMetadata?.arranger;
+		if (!s || !name) return null;
+		return `${t('meta.arrAbbr', language)} ${name} · ${t('meta.detectedFrom', language)} ${PROVENANCE_FORMAT_LABELS[s.provenance.format]}`;
+	});
 	function handleDrawerToggle() {
 		drawerCollapsed = !drawerCollapsed;
 		try {
@@ -870,6 +887,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							fromScore={fromScoreFields}
 							onrevert={ingestedScore?.result.score.workMetadata ? revertToScoreHeader : undefined}
 						/>
+						{#if arrangerProvenance}
+							<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata
+							     block, never a drawer field, omitted when absent.
+							     Clamped to one line (Dann's ruling, 2026-07-13, on the
+							     Gretchen IMSLP-blob evidence): verbatim, never parsed,
+							     but the drawer stays quiet; title carries the full
+							     string on hover. -->
+							<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
+						{/if}
 					<!-- The drop surface is a drag-and-drop target, not a typing
 					     field, so it cedes width to the engraving panel beside it.
 					     Engraving sits LEFT so its section header aligns flush
@@ -1015,6 +1041,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   sage, so focusing a Fit field mirrors the sage ring in purple. */
 	.shane-panel :global(:focus-visible) {
 		outline-color: var(--deeper-lavender);
+	}
+
+	/* The Q4 provenance line: tertiary, one quiet line beneath the
+	   Metadata block, sharing the drawer's content edges. Clamped to a
+	   single line with an ellipsis (Dann's ruling, 2026-07-13): real
+	   headers carry IMSLP credit blobs and URLs; the text stays verbatim
+	   (no parsing of publisher habits) but never wraps. */
+	.shane-provenance {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */

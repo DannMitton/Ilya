@@ -192,6 +192,11 @@ const strings: Record<string, Record<Language, string>> = {
 	//    agentless; copy flagged for Dann's review) ──
 	'meta.fromScore':              { en: 'from score',                   fr: 'de la partition' },
 	'meta.revertToScore':          { en: 'Revert to score header',       fr: 'Rétablir l’en-tête de la partition' },
+	// The Q4 provenance line composes as "Arr. {name} · {detectedFrom} {format}"
+	// (Kimi's §A.28 example); the format label (MusicXML, MNX) is a proper
+	// name, never translated.
+	'meta.arrAbbr':                { en: 'Arr.',                         fr: 'Arr.' },
+	'meta.detectedFrom':           { en: 'Detected from',                fr: 'Détecté dans le fichier' },
 
 	// ── Fit engraving controls (drawer panel beside the drop surface;
 	//    agentless; copy flagged for Dann's review with the §A.13 strings) ──
