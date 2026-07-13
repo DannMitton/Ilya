@@ -446,7 +446,7 @@
 		font-size: 0.9rem;
 		color: var(--ink-primary);
 		background: white;
-		border: 1px solid var(--stone-300);
+		border: 3px solid var(--sage);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
 		padding-right: 2.2rem; /* room for the OCR icon */

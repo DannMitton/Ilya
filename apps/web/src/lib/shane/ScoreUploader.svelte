@@ -305,6 +305,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		/* Match the Transcription textarea-wrapper's 8px top margin, so the
+		   input box sits the same 14px below the metadata on both tabs. */
+		margin-top: 8px;
 		font-family: var(--font-sans);
 	}
 
@@ -317,38 +320,47 @@
 		justify-content: center;
 		gap: 0.25rem;
 		width: 100%;
-		min-height: 132px;
-		padding: 1rem;
-		/* Same squircle form as the Transcription text field (solid 1px border,
-		   4px radius, white fill), but carrying the Fit tab's lavender rather
-		   than Ilya's sage (Dann, 2026-07-13). */
-		border: 1px solid var(--muted-lavender);
+		/* A true visual twin of the Transcription text field (.text-input),
+		   whose live design is a 3px solid sage border, 4px radius, white fill,
+		   6-row height. Same box, only the colour differs: the Fit tab's
+		   lavender (Dann, measured from the live site 2026-07-13). */
+		min-height: 152px;
+		padding: 0.5rem 0.6rem;
+		border: 3px solid var(--deeper-lavender);
 		border-radius: 4px;
 		background: white;
+		box-sizing: border-box;
 		cursor: pointer;
-		transition: border-color 0.15s ease, background 0.15s ease;
+		/* Same expand affordance as the Transcription textarea (resize: vertical),
+		   so the dropzone carries the identical native handle in its lower-right
+		   corner and grows the same way. */
+		resize: vertical;
+		overflow: auto;
+		transition: background 0.15s ease;
 		text-align: center;
 	}
 
 	.dropzone:hover {
-		border-color: var(--deeper-lavender);
+		background: rgba(142, 126, 155, 0.06);
 	}
 
 	.dropzone.dragging {
-		border-color: var(--deeper-lavender);
-		background: white;
+		background: rgba(142, 126, 155, 0.12);
 	}
 
 	/* ── Score-from-image scan icon (visual only, coming soon) ── */
 
 	.dz-wrap {
 		position: relative;
+		/* Preserve negative space below the input box, mirroring the room
+		   beneath the Transcription textarea before the next control. */
+		margin-bottom: 0.5rem;
 	}
 
 	.scan-btn {
 		position: absolute;
-		top: 8px;
-		right: 8px;
+		top: 6px;
+		right: 6px;
 		width: 28px;
 		height: 28px;
 		padding: 4px;

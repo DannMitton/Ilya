@@ -887,6 +887,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		padding: 20px 1rem 40px;
 	}
 
+	/* Fit surfaces use the tab's lavender for the focus ring, not the global
+	   sage, so focusing a Fit field mirrors the sage ring in purple. */
+	.shane-panel :global(:focus-visible) {
+		outline-color: var(--deeper-lavender);
+	}
+
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */
 
 	:global(.gt-table) {
