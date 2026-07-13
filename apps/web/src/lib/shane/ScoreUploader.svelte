@@ -5,18 +5,21 @@
 	IngestError code. Agentless throughout: the copy never speaks as an agent,
 	IPA and analysis live elsewhere.
 
-	This component owns the denigma ScoreReader lifecycle (§B.2): it constructs
-	a WorkerScoreReader lazily on first use and disposes it on destroy. The
-	.mscz converter (webmscore) is wired at §E.6; until then a dropped .mscz
-	resolves to a calm "coming soon" note via MSCZ_CONVERTER_UNAVAILABLE. The
-	parsed result is handed up through `oningested`; live wiring (§E.7) consumes
-	it. PDF, image, and MIDI are advertised as coming soon and, if dropped,
-	answered with a note rather than a hard error.
+	This component owns both converter lifecycles (§B.2): it constructs a
+	WorkerScoreReader (denigma, .musx) and a WebmscoreMsczConverter (webmscore,
+	.mscz) lazily on first need and disposes them on destroy. The webmscore
+	converter is constructed only when a .mscz actually arrives, since its
+	warm-up prefetches ~17.5 MB of runtime assets; the denigma reader keeps its
+	original any-drop construction. The parsed result is handed up through
+	`oningested`; live wiring (§E.7) consumes it. PDF, image, and MIDI are
+	advertised as coming soon and, if dropped, answered with a note rather
+	than a hard error.
 -->
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { WorkerScoreReader } from './engine/score-reader';
+	import { WebmscoreMsczConverter } from './engine/mscz-converter';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -54,10 +57,15 @@
 	let bannerDismissed = $state(false);
 	let fileInputEl: HTMLInputElement;
 
-	/* ── denigma reader lifecycle (this component owns it, §B.2) ────── */
+	/* ── converter lifecycles (this component owns them, §B.2) ──────── */
 	let reader: WorkerScoreReader | null = null;
 	const getReader = (): WorkerScoreReader => (reader ??= new WorkerScoreReader());
-	onDestroy(() => reader?.dispose());
+	let converter: WebmscoreMsczConverter | null = null;
+	const getConverter = (): WebmscoreMsczConverter => (converter ??= new WebmscoreMsczConverter());
+	onDestroy(() => {
+		reader?.dispose();
+		converter?.dispose();
+	});
 
 	/* ── Intake ─────────────────────────────────────────────────────── */
 
@@ -90,13 +98,29 @@
 
 	async function handleFile(file: File): Promise<void> {
 		bannerDismissed = false;
-		// A .musx routes through denigma conversion; name the wait honestly.
-		const converting = /\.musx$/i.test(file.name);
-		ui = { kind: 'busy', label: converting ? T('upload.status.converting') : T('upload.status.reading') };
+		// A .musx or .mscz routes through conversion; name the wait honestly.
+		const isMusx = /\.musx$/i.test(file.name);
+		const isMscz = /\.mscz$/i.test(file.name);
+		// Start the webmscore warm-up (module import + asset prefetch) while
+		// the bytes are read and the container pre-check runs.
+		if (isMscz) getConverter();
+		ui = {
+			kind: 'busy',
+			label: isMusx
+				? T('upload.status.converting')
+				: isMscz
+					? T('upload.status.convertingMscz')
+					: T('upload.status.reading'),
+		};
 
 		let outcome: IngestOutcome;
 		try {
-			outcome = await ingestScoreFile(file, { scoreReader: getReader() });
+			outcome = await ingestScoreFile(file, {
+				scoreReader: getReader(),
+				// Constructed inside the closure, so only a real .mscz pays the
+				// converter's warm-up.
+				msczConvert: (bytes, name) => getConverter().convert(bytes, name),
+			});
 		} catch (err) {
 			console.error('[ScoreUploader] unexpected ingest failure:', err);
 			ui = { kind: 'error', message: T('upload.err.parseFailed') };
@@ -107,7 +131,7 @@
 			ui = { kind: 'done', ingested: outcome.ingested };
 			return;
 		}
-		const c = classify(outcome.error);
+		const c = classify(outcome.error, isMscz);
 		ui = c.soon ? { kind: 'soon', message: c.message } : { kind: 'error', message: c.message };
 	}
 
@@ -136,8 +160,10 @@
 	}
 
 	/** Map a typed ingest error to user copy, and flag the "coming soon" cases
-	 *  so they render as a calm note rather than an error. */
-	function classify(err: IngestError): { soon: boolean; message: string } {
+	 *  so they render as a calm note rather than an error. CONVERSION_FAILED
+	 *  and WASM_LOAD_FAILED are shared between the denigma (.musx) and
+	 *  webmscore (.mscz) paths, so the dropped file's kind picks the copy. */
+	function classify(err: IngestError, isMscz = false): { soon: boolean; message: string } {
 		switch (err.code) {
 			case 'DETECTION_FAILED': {
 				const f = err.failure;
@@ -181,9 +207,15 @@
 			case 'MSCZ_CONVERTER_UNAVAILABLE':
 				return { soon: true, message: T('upload.soon.mscz') };
 			case 'CONVERSION_FAILED':
-				return { soon: false, message: T('upload.err.conversionFailed') };
+				return {
+					soon: false,
+					message: T(isMscz ? 'upload.err.msczConversionFailed' : 'upload.err.conversionFailed'),
+				};
 			case 'WASM_LOAD_FAILED':
-				return { soon: false, message: T('upload.err.wasmLoadFailed') };
+				return {
+					soon: false,
+					message: T(isMscz ? 'upload.err.msczWasmLoadFailed' : 'upload.err.wasmLoadFailed'),
+				};
 			case 'SCORE_TOO_LARGE_FOR_DEVICE':
 				return {
 					soon: false,

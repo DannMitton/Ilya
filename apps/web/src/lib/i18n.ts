@@ -191,13 +191,14 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	'upload.drop.acceptedNow':     { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx)', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx)' },
-	'upload.drop.comingSoon':      { en: 'Coming soon: MuseScore (.mscz), PDF, image, MIDI', fr: 'Bientôt\u00a0: MuseScore (.mscz), PDF, image, MIDI' },
+	'upload.drop.acceptedNow':     { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)' },
+	'upload.drop.comingSoon':      { en: 'Coming soon: PDF, image, MIDI', fr: 'Bientôt\u00a0: PDF, image, MIDI' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	'upload.scanTooltip':          { en: 'Scan a score from an image (coming soon)', fr: 'Numériser une partition à partir d’une image (bientôt)' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
 	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
+	'upload.status.convertingMscz':{ en: 'Converting MuseScore file…', fr: 'Conversion du fichier MuseScore…' },
 
 	'upload.format.mnxDirect':     { en: 'Format: MNX (direct)',         fr: 'Format\u00a0: MNX (direct)' },
 	'upload.format.musicxmlDirect':{ en: 'Format: MusicXML (direct)',    fr: 'Format\u00a0: MusicXML (direct)' },
@@ -234,6 +235,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.err.msczUnreadable':   { en: 'This .mscz file could not be opened. It may be corrupt.', fr: 'Ce fichier .mscz n’a pas pu être ouvert. Il est peut-être corrompu.' },
 	'upload.err.conversionFailed': { en: 'This Finale file could not be converted.', fr: 'Ce fichier Finale n’a pas pu être converti.' },
 	'upload.err.wasmLoadFailed':   { en: 'The Finale converter could not load. Reload the page and try again.', fr: 'Le convertisseur Finale n’a pas pu se charger. Rechargez la page et réessayez.' },
+	'upload.err.msczConversionFailed': { en: 'This MuseScore file could not be converted.', fr: 'Ce fichier MuseScore n’a pas pu être converti.' },
+	'upload.err.msczWasmLoadFailed':   { en: 'The MuseScore converter could not load. Reload the page and try again.', fr: 'Le convertisseur MuseScore n’a pas pu se charger. Rechargez la page et réessayez.' },
 	'upload.err.tooLarge':         { en: 'This score is too large to process on this device.', fr: 'Cette partition est trop volumineuse pour être traitée sur cet appareil.' },
 	'upload.err.parseFailed':      { en: 'This score could not be read. It may be incomplete or use unsupported features.', fr: 'Cette partition n’a pas pu être lue. Elle est peut-être incomplète ou utilise des fonctions non prises en charge.' },
 	'upload.err.unrecognised':     { en: 'This file was not recognised as a score.', fr: 'Ce fichier n’a pas été reconnu comme une partition.' },
