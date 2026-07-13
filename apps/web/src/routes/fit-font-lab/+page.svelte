@@ -10,21 +10,13 @@
 -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { prepareSmuflFont, renderDemo, type PreparedSmuflFont } from '@ilya/score-parser';
+	import { renderDemo, type PreparedSmuflFont } from '@ilya/score-parser';
+	import { NOTATION_FONTS, loadNotationFont } from '$lib/shane/engine/notation-fonts';
 
-	interface Candidate {
-		id: string;
-		label: string;
-		file: string;
-		meta: string;
-		family: string;
-	}
-
-	const CANDIDATES: Candidate[] = [
-		{ id: 'bravura', label: 'Bravura', file: '/fonts/bravura/Bravura.woff2', meta: '/fonts/bravura/bravura_metadata.json', family: 'Bravura' },
-		{ id: 'leland', label: 'Leland', file: '/fonts/leland/Leland.otf', meta: '/fonts/leland/leland_metadata.json', family: 'Leland' },
-		{ id: 'finale-maestro', label: 'Finale Maestro', file: '/fonts/finale-maestro/FinaleMaestro.otf', meta: '/fonts/finale-maestro/FinaleMaestro.json', family: 'Finale Maestro' },
-	];
+	// The lab now loads through the shared notation-font loader (extracted
+	// at font wiring, 2026-07-13), so the lab and the live pane cannot
+	// drift: same files, same metadata, same Bravura-fallback guardrail.
+	const CANDIDATES = NOTATION_FONTS;
 
 	interface LoadedFont {
 		prepared: PreparedSmuflFont;
@@ -41,16 +33,10 @@
 
 	onMount(async () => {
 		try {
-			let bravura: PreparedSmuflFont | undefined;
 			for (const c of CANDIDATES) {
 				status = `Loading ${c.label}…`;
-				const face = new FontFace(c.family, `url(${c.file})`);
-				await face.load();
-				document.fonts.add(face);
-				const meta = await (await fetch(c.meta)).json();
-				const prepared = prepareSmuflFont(meta, bravura);
-				if (c.id === 'bravura') bravura = prepared;
-				fonts[c.id] = { prepared, svg: renderDemo({ font: prepared, fontFamily: c.family }) };
+				const { prepared, family } = await loadNotationFont(c.id);
+				fonts[c.id] = { prepared, svg: renderDemo({ font: prepared, fontFamily: family }) };
 			}
 			status = '';
 		} catch (e) {

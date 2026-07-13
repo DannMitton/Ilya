@@ -49,6 +49,7 @@
 	 * calibration-UI French pass is the standing open item, v29/v30); the
 	 * header and footer components are already bilingual through t().
 	 */
+	import { onMount } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
@@ -60,6 +61,7 @@
 	import { paginateScore } from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { notationOnlyOverlay } from '$lib/shane/notation-overlay';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -170,6 +172,26 @@
 	const stripBackingRect = (svg: string): string =>
 		svg.replace(/<rect x="0" y="0" width="\d+" height="\d+" fill="#FFFFFF"\/>/, '');
 
+	// SMuFL font wiring (Dann's ruling, 2026-07-13): Finale Maestro is the
+	// default for ALL renderings. Loaded async through the shared loader;
+	// until it arrives (or if it fails) the render falls back to the
+	// package's primitive shapes, so a dropped score is never blocked on a
+	// font fetch.
+	let notationFont = $state<LoadedNotationFont | null>(null);
+	onMount(() => {
+		let alive = true;
+		loadNotationFont()
+			.then((f) => {
+				if (alive) notationFont = f;
+			})
+			.catch(() => {
+				/* primitive-mode fallback; the pane stays fully functional */
+			});
+		return () => {
+			alive = false;
+		};
+	});
+
 	const scorePages = $derived(
 		parsed
 			? paginateScore(parsed, notationOnlyOverlay(parsed), {
@@ -179,6 +201,7 @@
 					marginBottom: 0,
 					marginLeft: 0,
 					marginRight: 0,
+					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,
 	);
