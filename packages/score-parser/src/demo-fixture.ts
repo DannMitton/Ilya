@@ -57,6 +57,7 @@ const vowelById: Record<string, string> = {
   n1: 'a', n2: 'o', n3: 'o', n5: 'i', n6: 'i',
   n7: 'o', n8: 'u', n9: 'o', n10: 'o', n11: 'i',
   n13: 'ɑ', n14: 'ɑ', n15: 'ɑ', n16: 'a',
+  n18: 'o', n19: 'o', n20: 'o', // melisma: the vowel carries across
 };
 export const demoResolver: VowelResolver = (e) => vowelById[e.id];
 
@@ -92,12 +93,20 @@ export function demoScore(): ParsedScore {
     // checkable in the font lab.
     note('n16', 3, frac(1, 4), P('D', 3), 'quarter', ['пять', 'pʲatʲ']),
     note('n17', 3, frac(1, 2), null, 'quarter'), // rest
+    // Measure 5: a three-note melisma on «по» (syllable on n18 only;
+    // n19 and n20 continue the vowel, encoded by absent syllables per the
+    // data model). Exercises melisma detection and Gould's left-aligned
+    // melisma syllable (extraction rules 4 to 6).
+    note('n18', 4, frac(0, 1), P('G', 2), 'eighth', ['по', 'po']),
+    note('n19', 4, frac(1, 8), P('A', 2), 'eighth'),
+    note('n20', 4, frac(1, 4), P('B', 2, -1), 'quarter'),
+    note('n21', 4, frac(1, 2), null, 'quarter'), // rest
   ];
   const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });
   return {
     source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
     vocalPart: { partId: 'P1', partName: 'Voice' },
-    measures: [m(0), m(1), m(2), m(3)],
+    measures: [m(0), m(1), m(2), m(3), m(4)],
     keySignatures: [{ measureIndex: 0, signature: { fifths: -1 } }],
     timeSignatures: [{ measureIndex: 0, signature: { beats: 3, beatType: 4 } }],
     tempoMarkings: [],

@@ -425,7 +425,22 @@ export function renderAnalyzedStaff(
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
   // are collected during the draw and placed below the lowest ink of the
   // system, never at a fixed offset that a down-stem beam can crash into.
-  const underlay: Array<{ x: number; cyr: string; ipa: string }> = [];
+  const underlay: Array<{ x: number; cyr: string; ipa: string; align: 'middle' | 'start' }> = [];
+  // Melisma detection: the data model encodes a melisma by ABSENCE of
+  // syllable on continuation notes, so a syllabled note followed by an
+  // unsyllabled note starts one. Its syllable left-aligns at the first
+  // notehead (the reading eye moves rightward); single-note syllables
+  // stay centred. (Gould extraction rules 4 to 6.)
+  const melismaStart = new Set<string>();
+  {
+    const evs = parsed.vocalLine;
+    for (let i = 0; i < evs.length; i++) {
+      const e = evs[i];
+      if (e.type !== 'note' || !e.syllable) continue;
+      const nxt = evs[i + 1];
+      if (nxt && nxt.type === 'note' && !nxt.syllable) melismaStart.add(e.id);
+    }
+  }
   // Phonation breaks render as [#] ON THE IPA LINE (Dann's ruling,
   // 2026-07-12): the break is a diction event, so it lives with the
   // diction, at the junction between the pair of notes it clips; above
@@ -604,7 +619,15 @@ export function renderAnalyzedStaff(
     const syl = ev.syllable;
     const cyr = syl?.verses?.[0] ?? syl?.text ?? '';
     const ipa = syl?.verses?.[1] ?? a?.vowel ?? '';
-    if (cyr || ipa) underlay.push({ x: nx, cyr, ipa });
+    if (cyr || ipa) {
+      const isMelisma = melismaStart.has(ev.id);
+      underlay.push({
+        x: isMelisma ? round2(nx - headHalfW) : nx,
+        cyr,
+        ipa,
+        align: isMelisma ? 'start' : 'middle',
+      });
+    }
   }
 
   // Beams contribute ink below the staff on down-stem groups.
@@ -617,12 +640,12 @@ export function renderAnalyzedStaff(
   const cyrY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
   const ipaY = cyrY + 16;
   for (const u of underlay) {
-    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="middle" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
+    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
     // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
     // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward
     // single-storey, destroying the bright-a / dark-a contrast that sung
     // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
-    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
+    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
   }
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {

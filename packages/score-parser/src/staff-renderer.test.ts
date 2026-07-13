@@ -65,8 +65,8 @@ describe('staff renderer: layout', () => {
 describe('staff renderer: beaming (derived by beat)', () => {
   const svg = renderDemo();
 
-  it('draws four primary beams (n2+n3, n7+n8, n9+n10, and the triplet)', () => {
-    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(4);
+  it('draws five primary beams (n2+n3, n7+n8, n9+n10, the triplet, and the melisma pair)', () => {
+    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(5);
   });
 
   it('double-beams the 16th pair (one secondary segment, no stubs needed)', () => {
@@ -77,8 +77,26 @@ describe('staff renderer: beaming (derived by beat)', () => {
     // n11 shares measure and beat with n9/n10 but is close-timbre where
     // they are open; it must fall back to a flag (asserted above) and the
     // level-1 beam count must not gain a group for it.
-    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(4);
+    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(5);
     expect(svg.includes('data-event-id="n11"')).toBe(true);
+  });
+});
+
+describe('staff renderer: melisma (build 1: detection and alignment)', () => {
+  const svg = renderDemo();
+
+  it('left-aligns the melisma syllable at its first notehead (Gould r5)', () => {
+    // n18 opens a three-note melisma: both text lines anchor "start";
+    // every single-note syllable stays centred.
+    expect((svg.match(/text-anchor="start"/g) ?? []).length).toBe(2);
+  });
+
+  it('draws no underlay under melisma continuation notes', () => {
+    // n19 and n20 carry no syllable; their columns must be empty of text.
+    expect(svg.includes('data-event-id="n19"')).toBe(true);
+    expect(svg.includes('data-event-id="n20"')).toBe(true);
+    const cyrTexts = (svg.match(/font-size="12\.5"/g) ?? []).length;
+    expect(cyrTexts).toBe(15); // 15 syllabled notes, unchanged by the melisma
   });
 });
 
@@ -179,7 +197,7 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
 
   it('derives stem thickness and beam thickness from engraving defaults', () => {
     expect(svg.includes('stroke-width="1.44"')).toBe(true); // 0.12 sp × 12
-    expect((svg.match(/stroke-width="6" data-beam-level/g) ?? []).length).toBe(5); // 0.5 sp × 12
+    expect((svg.match(/stroke-width="6" data-beam-level/g) ?? []).length).toBe(6); // 0.5 sp × 12; 5 primary + 1 secondary
   });
 
   it('tags glyph text with the requested font family', () => {
