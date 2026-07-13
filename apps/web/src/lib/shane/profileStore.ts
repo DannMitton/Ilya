@@ -31,7 +31,7 @@
  * engine-spec version bump (the Ilya2006B / three-tier error contract
  * bump already queued).
  */
-import type { Vowel, CalibratedFormant } from './engine/types';
+import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 
 const KEY_V1 = 'shane.profile.v1';
 const KEY = 'shane.profiles.v2';
@@ -46,6 +46,22 @@ export interface StoredVoice {
 	updatedAt: string;
 	/** Direct samples only; derived previews are never stored. */
 	formants: Partial<Record<Vowel, CalibratedFormant>>;
+	/**
+	 * The singer's self-declared voice type (Kimi's standing ruling: a
+	 * routing key to Bozeman value-sets and template pre-fill, never a
+	 * label imposed on the singer). Optional and additive — voices saved
+	 * before the Q5 build simply lack it, and validVoice() deliberately
+	 * does not require it (same version-2 shape, no migration).
+	 */
+	voiceType?: VoiceType;
+	/**
+	 * Typed range/tessitura/passaggio (Kimi's Q5 ruling, 2026-07-13).
+	 * Optional and additive, same discipline as voiceType: absent on
+	 * voices that skipped the wizard's Voice characteristics phase, and
+	 * analyzeScore falls back to permissive defaults when it is missing
+	 * or incomplete.
+	 */
+	characteristics?: VoiceCharacteristics;
 }
 
 export interface ProfileStore {

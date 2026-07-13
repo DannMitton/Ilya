@@ -6,6 +6,8 @@
  * so they live at the engine boundary rather than inside the pacifier.
  */
 
+import type { Pitch } from '@ilya/score-parser';
+
 /** The ten Russian sung vowels (Mitton 2020, Fig 4.2). */
 export type Vowel = 'i' | 'e' | 'ɪ' | 'ɨ' | 'ɛ' | 'a' | 'ɑ' | 'ʌ' | 'o' | 'u';
 
@@ -49,4 +51,37 @@ export interface VoiceProfile {
 	calibratedFormants?: Record<Vowel, CalibratedFormant>;
 	calibrationDate?: Date;
 	version: 1;
+}
+
+/**
+ * The singer's typed voice characteristics (Kimi's Q5 ruling, 2026-07-13):
+ * range, tessitura, and passaggio, captured typed-first through note
+ * pickers — the capture machinery exists for verification, not discovery
+ * (range extremes sung on demand invite pushing; tessitura is inherently
+ * subjective; passaggio is pedagogical knowledge for most trained
+ * singers). Every field optional: the wizard phase is skippable and never
+ * a gate. `analyzeScore` integration treats incompleteness per dimension —
+ * missing range/tessitura yields permissive defaults and an honest
+ * "broad analysis" note; a blank passaggio simply means no positional
+ * passaggio flagging (ruled copy pattern).
+ *
+ * `Pitch` is the score-parser's canonical spelled pitch (imported at the
+ * top of this file), so the picker, the store, and the overlay engine
+ * share one representation with no conversion seam.
+ */
+export interface VoiceCharacteristics {
+	/** Lowest comfortable note (typed; optionally sung-verified). */
+	rangeLow?: Pitch;
+	/** Highest comfortable note (typed; optionally sung-verified). */
+	rangeHigh?: Pitch;
+	/** Tessitura floor: "where you live, not your edges" (ruled copy). */
+	tessituraLow?: Pitch;
+	/** Tessitura ceiling. */
+	tessituraHigh?: Pitch;
+	/** The primary passaggio (break) note; blank = no passaggio flagging. */
+	passaggioPrimary?: Pitch;
+	/** Optional second break (some voices carry two distinct breaks). */
+	passaggioSecondary?: Pitch;
+	/** Provenance of the values as a set (Kimi's ruled vocabulary). */
+	source: 'declared-template' | 'manual' | 'sung-verified';
 }
