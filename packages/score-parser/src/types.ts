@@ -54,6 +54,15 @@ export interface ParsedScore {
   /** Initial key signature plus all changes, in measure order. */
   keySignatures: KeySignatureChange[];
 
+  /**
+   * Initial clef plus all changes on the vocal staff, in measure order.
+   * Parsers that see clef information always set this (empty array =
+   * the source carried none). Optional so sources with no clef concept
+   * and older fixtures stay valid; absence and emptiness both route
+   * downstream clef selection to the tessitura heuristic.
+   */
+  clefs?: ClefChange[];
+
   /** Initial time signature plus all changes, in measure order. */
   timeSignatures: TimeSignatureChange[];
 
@@ -176,6 +185,12 @@ export interface Measure {
   keySignature: KeySignature;
 
   /**
+   * Active printed clef for this measure, snapshotted from `clefs`.
+   * Undefined when the source carries no clef information.
+   */
+  clef?: Clef;
+
+  /**
    * Expected total duration in whole-note units, derived from
    * `timeSignature`. A regular 4/4 measure is `{numerator: 1, denominator: 1}`.
    */
@@ -228,6 +243,39 @@ export interface KeySignatureChange {
   /** Measure at which this key begins. */
   measureIndex: number;
   signature: KeySignature;
+}
+
+// ── Clefs ─────────────────────────────────────────────────────────
+
+/**
+ * Printed clef, captured from the source when present. Modern vocal
+ * scores use treble (G2) and bass (F4) only; a tenor part is written in
+ * treble sounding an octave lower, ideally treble-with-8 (Gould
+ * extraction v5, rule 76). C clefs are preserved here for source
+ * fidelity, but the renderer never draws one: clef selection maps them
+ * through the tessitura heuristic instead.
+ */
+export interface Clef {
+  /** Clef sign as printed. */
+  sign: 'G' | 'F' | 'C';
+
+  /**
+   * Staff line the sign centres on, 1 = bottom line. Standard values:
+   * G on 2 (treble), F on 4 (bass), C on 3 (alto) or 4 (tenor).
+   */
+  line: number;
+
+  /**
+   * Printed octave displacement: -1 for the tenor treble-with-8 below,
+   * +1 for an octave-up clef. Undefined when none is printed.
+   */
+  octaveChange?: number;
+}
+
+export interface ClefChange {
+  /** Measure at which this clef begins. */
+  measureIndex: number;
+  clef: Clef;
 }
 
 // ── Tempo markings ────────────────────────────────────────────────

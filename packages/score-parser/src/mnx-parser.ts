@@ -46,6 +46,8 @@
 
 import type {
 	Articulation,
+	Clef,
+	ClefChange,
 	Duration,
 	Fraction,
 	KeySignature,
@@ -96,7 +98,22 @@ interface MnxGlobalMeasure {
 interface MnxPart {
 	id?: unknown;
 	name?: unknown;
-	measures?: Array<{ sequences?: Array<{ content?: MnxContentItem[] }> }>;
+	measures?: Array<{
+		clefs?: Array<{ clef?: MnxClef; staff?: unknown }>;
+		sequences?: Array<{ content?: MnxContentItem[] }>;
+	}>;
+}
+
+/**
+ * Raw MNX clef, as observed in real denigma output (Sharp Excerpt,
+ * verified 2026-07-13): `{glyph, sign, staffPosition}`, where
+ * `staffPosition` counts staff steps from the MIDDLE line (G clef −2,
+ * F clef +2). `octave` is read guardedly for octave-displaced clefs.
+ */
+interface MnxClef {
+	sign?: unknown;
+	staffPosition?: unknown;
+	octave?: unknown;
 }
 
 interface MnxContentItem {
@@ -460,7 +477,41 @@ export class MnxScoreParser implements ScoreParser {
 		}
 		const measureCount = Math.min(partMeasures.length, globalMeasures.length);
 
+		// Clefs live on the PART measures in MNX (verified against real
+		// denigma output, 2026-07-13), so they are captured in this walk,
+		// not the global one. `staffPosition` counts staff steps from the
+		// middle line; our `Clef.line` is 1-based from the bottom line.
+		const clefs: ClefChange[] = [];
+		let currentClef: Clef | null = null;
+
 		for (let mi = 0; mi < measureCount; mi++) {
+			const clefEntries = partMeasures[mi]?.clefs;
+			if (Array.isArray(clefEntries)) {
+				// The vocal staff's clef is the unnumbered one or staff 1.
+				const entry = clefEntries.find((c) => c && typeof c === 'object' && (c.staff === undefined || c.staff === 1));
+				const raw = entry?.clef;
+				const sign = raw && typeof raw === 'object' ? raw.sign : undefined;
+				if (sign === 'G' || sign === 'F' || sign === 'C') {
+					const defaultLine = sign === 'G' ? 2 : sign === 'F' ? 4 : 3;
+					const sp = raw!.staffPosition;
+					const line =
+						typeof sp === 'number' && Number.isInteger(sp) && sp % 2 === 0 && sp >= -4 && sp <= 4
+							? 3 + sp / 2
+							: defaultLine;
+					currentClef = { sign, line };
+					const oct = raw!.octave;
+					if (typeof oct === 'number' && Number.isInteger(oct) && oct !== 0) currentClef.octaveChange = oct;
+					clefs.push({ measureIndex: mi, clef: currentClef });
+				} else if (sign !== undefined) {
+					warnings.push({
+						code: 'unrecognised-element',
+						message: `Unsupported clef sign "${String(sign)}"; clef ignored.`,
+						location: { measureIndex: mi, partId },
+					});
+				}
+			}
+			if (currentClef) measures[mi].clef = currentClef;
+
 			const sequences = partMeasures[mi]?.sequences ?? [];
 			if (sequences.length > 1) {
 				warnings.push({
@@ -553,6 +604,7 @@ export class MnxScoreParser implements ScoreParser {
 			vocalPart: { partId, partName },
 			measures,
 			keySignatures,
+			clefs,
 			timeSignatures,
 			tempoMarkings,
 			vocalLine,
@@ -948,6 +1000,7 @@ function emptyScore(input: MnxScoreInput): ParsedScore {
 		vocalPart: { partId: '', partName: '' },
 		measures: [],
 		keySignatures: [],
+		clefs: [],
 		timeSignatures: [],
 		tempoMarkings: [],
 		vocalLine: [],

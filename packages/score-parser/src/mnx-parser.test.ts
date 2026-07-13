@@ -583,3 +583,102 @@ if (t08Path.length > 0) {
 		expect(score.source.fidelity).toBe('high');
 	});
 });
+
+describe('MnxScoreParser: clefs (v37 §A.17)', () => {
+	/** One-measure document with a configurable part-measure clefs array. */
+	function clefDoc(clefs: unknown): Record<string, unknown> {
+		return {
+			mnx: { version: 17 },
+			global: { measures: [{ time: { count: 1, unit: 4 }, key: { fifths: 0 } }] },
+			parts: [
+				{
+					id: 'P1',
+					measures: [
+						{
+							...(clefs !== undefined ? { clefs } : {}),
+							sequences: [
+								{
+									content: [
+										ev('quarter', { lyrics: { v1: { text: 'a', type: 'whole' } } }),
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		};
+	}
+
+	it('captures a G clef from staffPosition -2 (denigma shape) and snapshots the measure', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([{ clef: { glyph: 'gClef', sign: 'G', staffPosition: -2 } }])));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2 } }]);
+		expect(r.score.measures[0].clef).toEqual({ sign: 'G', line: 2 });
+	});
+
+	it('captures an F clef from staffPosition 2', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([{ clef: { glyph: 'fClef', sign: 'F', staffPosition: 2 } }])));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'F', line: 4 } }]);
+	});
+
+	it('defaults the line by sign when staffPosition is absent or malformed', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([{ clef: { sign: 'F', staffPosition: 'x' } }])));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'F', line: 4 } }]);
+	});
+
+	it('takes the staff-1 clef from a multi-staff clefs array', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([
+			{ clef: { sign: 'F', staffPosition: 2 }, staff: 2 },
+			{ clef: { sign: 'G', staffPosition: -2 }, staff: 1 },
+		])));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2 } }]);
+	});
+
+	it('reads a guarded octave displacement', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([{ clef: { sign: 'G', staffPosition: -2, octave: -1 } }])));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2, octaveChange: -1 } }]);
+	});
+
+	it('warns on an unsupported sign and leaves clefs empty', async () => {
+		const r = await parser.parse(mnxInput(clefDoc([{ clef: { sign: 'percussion' } }])));
+		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /clef sign/i.test(w.message))).toBe(true);
+		expect(r.score.clefs).toEqual([]);
+		expect(r.score.measures[0].clef).toBeUndefined();
+	});
+
+	it('leaves clefs empty and measures unclefted when the source carries none', async () => {
+		const r = await parser.parse(mnxInput(clefDoc(undefined)));
+		expect(r.score.clefs).toEqual([]);
+		expect(r.score.measures[0].clef).toBeUndefined();
+	});
+
+	it('carries a clef change across measures onto later snapshots', async () => {
+		const doc = {
+			mnx: { version: 17 },
+			global: { measures: [{ time: { count: 1, unit: 4 }, key: { fifths: 0 } }, {}, {}] },
+			parts: [
+				{
+					id: 'P1',
+					measures: [
+						{
+							clefs: [{ clef: { sign: 'F', staffPosition: 2 } }],
+							sequences: [{ content: [ev('quarter', { lyrics: { v1: { text: 'a', type: 'whole' } } })] }],
+						},
+						{ sequences: [{ content: [ev('quarter', { lyrics: { v1: { text: 'b', type: 'whole' } } })] }] },
+						{
+							clefs: [{ clef: { sign: 'G', staffPosition: -2 } }],
+							sequences: [{ content: [ev('quarter', { lyrics: { v1: { text: 'c', type: 'whole' } } })] }],
+						},
+					],
+				},
+			],
+		};
+		const r = await parser.parse(mnxInput(doc));
+		expect(r.score.clefs).toEqual([
+			{ measureIndex: 0, clef: { sign: 'F', line: 4 } },
+			{ measureIndex: 2, clef: { sign: 'G', line: 2 } },
+		]);
+		expect(r.score.measures[1].clef).toEqual({ sign: 'F', line: 4 });
+		expect(r.score.measures[2].clef).toEqual({ sign: 'G', line: 2 });
+	});
+});

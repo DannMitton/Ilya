@@ -70,6 +70,7 @@ export interface PreparedSmuflFont {
 
 export const SMUFL_CODEPOINTS = {
   gClef: 0xe050,
+  gClef8vb: 0xe052,
   fClef: 0xe062,
   timeSig0: 0xe080,
   timeSig1: 0xe081,

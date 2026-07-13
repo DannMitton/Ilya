@@ -10,7 +10,9 @@
  * This is the production layout engine (increment 4). It handles:
  *   - proportional rhythmic spacing (x by onset time, with a minimum gap);
  *   - multiple measures with barlines;
- *   - a bass clef and the key signature at standard bass-clef positions;
+ *   - a clef (treble, treble-8vb, or bass; source clef when captured,
+ *     else the tessitura heuristic — v37 §A.17) and the key signature
+ *     at that clef's standard positions;
  *   - accidentals (sung line and turning layer) with per-measure carry and
  *     the measure-opening barline nudge (Kimi's collision rule);
  *   - ledger lines; rests; flags for unbeamed short notes;
@@ -42,6 +44,7 @@
 import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEvent } from './types';
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
+import { chooseClef, type RenderClef } from './clef-select';
 
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
@@ -49,13 +52,20 @@ export interface StaffRenderOptions {
   leftMargin?: number;  // x where the staff content begins (after clef/key)
   pxPerWhole?: number;  // horizontal px per whole-note of onset time
   minGap?: number;      // minimum px between successive events
+  /**
+   * Render clef. Omit to let the renderer assess the input and choose
+   * (source clef when captured, else the tessitura heuristic; v37
+   * §A.17). `paginateScore` resolves this ONCE per score so systems
+   * never flip clef mid-piece.
+   */
+  clef?: RenderClef;
   /** SMuFL mode: prepared font metadata. Omit for primitive shapes. */
   font?: PreparedSmuflFont;
   /** CSS font-family for SMuFL glyph text (must match the loaded FontFace). */
   fontFamily?: string;
 }
 
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -65,7 +75,13 @@ const DEFAULTS: Required<Omit<StaffRenderOptions, 'font'>> = {
 };
 
 const DIATONIC: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
-const MIDDLE_LINE_DIATONIC = 3 * 7 + DIATONIC.D; // bass staff middle line = D3
+
+/** Diatonic number of the middle staff line, per clef (bass D3, treble B4). */
+const MIDDLE_LINE: Record<RenderClef, number> = {
+  bass: 3 * 7 + DIATONIC.D,
+  treble: 4 * 7 + DIATONIC.B,
+  'treble-8vb': 4 * 7 + DIATONIC.B, // written pitches; the 8 is sounding-only
+};
 
 function diatonicNumber(p: Pitch): number {
   return p.octave * 7 + DIATONIC[p.step];
@@ -120,12 +136,17 @@ const TURNING_COLOUR = '#8B9A7D';
 
 /**
  * Standard per-clef octave placement for key-signature accidentals.
- * v1 renders the bass clef; keyed by clef so the treble pass has a home.
+ * treble-8vb shares the treble tables: it is treble geometry with a
+ * sounding-octave marker, not a different staff mapping.
  */
-const KS_OCTAVES: Record<'bass', { sharps: Record<Pitch['step'], number>; flats: Record<Pitch['step'], number> }> = {
+const KS_OCTAVES: Record<'bass' | 'treble', { sharps: Record<Pitch['step'], number>; flats: Record<Pitch['step'], number> }> = {
   bass: {
     sharps: { F: 3, C: 3, G: 3, D: 3, A: 2, E: 3, B: 2 },
     flats: { B: 2, E: 3, A: 2, D: 3, G: 2, C: 3, F: 2 },
+  },
+  treble: {
+    sharps: { F: 5, C: 5, G: 5, D: 5, A: 4, E: 5, B: 4 },
+    flats: { B: 4, E: 5, A: 4, D: 5, G: 4, C: 5, F: 4 },
   },
 };
 
@@ -183,10 +204,11 @@ export function renderAnalyzedStaff(
 ): string {
   const o = { ...DEFAULTS, ...options };
   const smufl = options.font;
+  const clef: RenderClef = options.clef ?? chooseClef(parsed);
   const half = o.lineGap / 2;
   const staffTop = o.staffMidY - 2 * o.lineGap;
   const staffBottom = o.staffMidY + 2 * o.lineGap;
-  const yFor = (p: Pitch): number => o.staffMidY - (diatonicNumber(p) - MIDDLE_LINE_DIATONIC) * half;
+  const yFor = (p: Pitch): number => o.staffMidY - (diatonicNumber(p) - MIDDLE_LINE[clef]) * half;
 
   const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
 
@@ -330,20 +352,38 @@ export function renderAnalyzedStaff(
     parts.push(`<line x1="24" y1="${y}" x2="${width - 12}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
-  // Bass clef: SMuFL glyph on the F3 line, or the primitive placeholder.
-  const fLineY = o.staffMidY - o.lineGap;
-  if (smufl) {
-    parts.push(glyphAt('fClef', 34, fLineY, '#3a352f', true));
+  // Clef at the head: SMuFL glyph on its reference line (treble winds
+  // around the G line, bass around the F line with its dots either side;
+  // Gould extraction v5, rule 80), or the primitive placeholder.
+  parts.push(`<g data-clef="${clef}">`);
+  if (clef === 'bass') {
+    const fLineY = o.staffMidY - o.lineGap;
+    if (smufl) {
+      parts.push(glyphAt('fClef', 34, fLineY, '#3a352f', true));
+    } else {
+      parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
+      parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
+    }
   } else {
-    parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
-    parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
+    const gLineY = o.staffMidY + o.lineGap;
+    if (smufl) {
+      parts.push(glyphAt(clef === 'treble-8vb' ? 'gClef8vb' : 'gClef', 34, gLineY, '#3a352f', true));
+    } else {
+      parts.push(`<line x1="46" y1="${staffTop - 8}" x2="46" y2="${gLineY + 10}" stroke="#3a352f" stroke-width="2.2"/>`);
+      parts.push(`<circle cx="46" cy="${gLineY}" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>`);
+      if (clef === 'treble-8vb') {
+        parts.push(`<text x="46" y="${gLineY + 22}" text-anchor="middle" font-size="9" fill="#3a352f">8</text>`);
+      }
+    }
   }
+  parts.push('</g>');
 
-  // Key signature at the head, at standard bass-clef staff positions.
+  // Key signature at the head, at the selected clef's standard positions.
   const order = fifths >= 0 ? SHARP_ORDER : FLAT_ORDER;
   const glyph = fifths >= 0 ? ACCIDENTAL_GLYPH[1] : ACCIDENTAL_GLYPH[-1];
   const ksName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
-  const ksTable = fifths >= 0 ? KS_OCTAVES.bass.sharps : KS_OCTAVES.bass.flats;
+  const ksClef = clef === 'bass' ? KS_OCTAVES.bass : KS_OCTAVES.treble;
+  const ksTable = fifths >= 0 ? ksClef.sharps : ksClef.flats;
   let ksX = 62;
   for (let i = 0; i < Math.abs(fifths); i++) {
     const step = order[i];

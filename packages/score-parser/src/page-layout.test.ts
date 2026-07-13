@@ -86,4 +86,21 @@ describe('page layout: system packing and page assembly', () => {
     const out = paginateScore(parsed, analyzed, { pageWidth: 500 });
     expect((out.pages.join('\n').match(/data-system="/g) ?? []).length).toBe(out.systems.length);
   });
+
+  it('resolves ONE clef for the whole score, never per slice (v37 §A.17)', () => {
+    const out = paginateScore(parsed, analyzed, { pageWidth: 500 });
+    // The low demo assesses to bass; every system head carries it.
+    for (const s of out.systems) {
+      expect(s.svg.includes('data-clef="bass"')).toBe(true);
+    }
+  });
+
+  it('honours an explicit clef override on every system', () => {
+    const out = paginateScore(parsed, analyzed, { pageWidth: 500, clef: 'treble' });
+    expect(out.systems.length).toBeGreaterThan(1);
+    for (const s of out.systems) {
+      expect(s.svg.includes('data-clef="treble"')).toBe(true);
+      expect(s.svg.includes('data-clef="bass"')).toBe(false);
+    }
+  });
 });

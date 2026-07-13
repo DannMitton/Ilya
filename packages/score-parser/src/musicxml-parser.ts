@@ -42,6 +42,8 @@
 
 import type {
 	Articulation,
+	Clef,
+	ClefChange,
 	Duration,
 	Fraction,
 	KeySignature,
@@ -296,6 +298,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const measures: Measure[] = [];
 		const timeSignatures: TimeSignatureChange[] = [];
 		const keySignatures: KeySignatureChange[] = [];
+		const clefs: ClefChange[] = [];
 		const tempoMarkings: TempoMarking[] = [];
 		const vocalLine: VocalLineEvent[] = [];
 		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
@@ -307,6 +310,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		}
 		let currentTime: TimeSignature | null = null;
 		let currentKey: KeySignature | null = null;
+		let currentClef: Clef | null = null;
 
 		for (let mi = 0; mi < measureEls.length; mi++) {
 			const measureEl = measureEls[mi];
@@ -337,6 +341,37 @@ export class MusicXmlScoreParser implements ScoreParser {
 								const symbol = timeEl.getAttribute('symbol');
 								if (symbol === 'common' || symbol === 'cut') currentTime.symbol = symbol;
 								timeSignatures.push({ measureIndex: mi, signature: currentTime });
+							}
+						}
+						// Clef: the vocal staff's is the unnumbered one or staff 1
+						// (a multi-staff part numbers its clefs; the vocal line
+						// lives on staff 1 by MusicXML convention).
+						const clefEls = directChildren(child, 'clef')
+							.filter((c) => {
+								const n = c.getAttribute('number');
+								return n === null || n === '1';
+							});
+						const clefEl = clefEls[0];
+						if (clefEl) {
+							const sign = childText(clefEl, 'sign');
+							if (sign === 'G' || sign === 'F' || sign === 'C') {
+								const lineText = childText(clefEl, 'line');
+								const lineNum = lineText ? parseInt(lineText, 10) : NaN;
+								const defaultLine = sign === 'G' ? 2 : sign === 'F' ? 4 : 3;
+								currentClef = {
+									sign,
+									line: Number.isFinite(lineNum) && lineNum >= 1 && lineNum <= 5 ? lineNum : defaultLine,
+								};
+								const octText = childText(clefEl, 'clef-octave-change');
+								const oct = octText ? parseInt(octText, 10) : 0;
+								if (Number.isFinite(oct) && oct !== 0) currentClef.octaveChange = oct;
+								clefs.push({ measureIndex: mi, clef: currentClef });
+							} else if (sign) {
+								warnings.push({
+									code: 'unrecognised-element',
+									message: `Unsupported clef sign "${sign}"; clef ignored.`,
+									location: { measureIndex: mi, partId },
+								});
 							}
 						}
 						break;
@@ -394,6 +429,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 				number: numberAttr && numberAttr.length > 0 ? numberAttr : String(mi + 1),
 				timeSignature: currentTime,
 				keySignature: currentKey,
+				...(currentClef ? { clef: currentClef } : {}),
 				expectedDuration: expected,
 			};
 			// Pickup / mismatch accounting.
@@ -457,6 +493,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 			vocalPart: { partId, partName },
 			measures,
 			keySignatures,
+			clefs,
 			timeSignatures,
 			tempoMarkings,
 			vocalLine,

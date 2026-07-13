@@ -253,3 +253,48 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
     expect(svg.includes('>Ты<')).toBe(true);
   });
 });
+
+describe('staff renderer: clef passes (v37 §A.17)', () => {
+  it('assesses the input when no clef option is given: the low demo takes bass', () => {
+    expect(renderDemo().includes('data-clef="bass"')).toBe(true);
+  });
+
+  it('renders the treble pass on request: G-line circle, no bass dots', () => {
+    const svg = renderDemo({ clef: 'treble' });
+    expect(svg.includes('data-clef="treble"')).toBe(true);
+    // Primitive treble marker circles the G4 line (staffMidY 96 + lineGap 12).
+    expect(svg.includes('<circle cx="46" cy="108" r="4"')).toBe(true);
+    // The bass primitive's paired dots must be gone.
+    expect(svg.includes('cx="54"')).toBe(false);
+  });
+
+  it('places the treble key signature at the treble position (one flat on B4)', () => {
+    const svg = renderDemo({ clef: 'treble' });
+    // B4 = middle staff line y 96; primitive text baseline y + 4.
+    expect(svg.includes('x="62" y="100"')).toBe(true);
+  });
+
+  it('moves the notes with the clef: the same pitch sits lower on a treble staff', () => {
+    const bass = renderDemo();
+    const treble = renderDemo({ clef: 'treble' });
+    const firstHeadY = (svg: string): number => Number(svg.match(/<ellipse cx="92" cy="([\d.-]+)"/)?.[1]);
+    // Treble middle line is B4, twelve diatonic steps above bass's D3, so
+    // the same written pitch drops by 12 half-gap steps (6 × lineGap = 72).
+    expect(firstHeadY(treble) - firstHeadY(bass)).toBe(72);
+  });
+
+  it('renders treble-8vb with the primitive 8 below the clef', () => {
+    const svg = renderDemo({ clef: 'treble-8vb' });
+    expect(svg.includes('data-clef="treble-8vb"')).toBe(true);
+    expect(svg.includes('>8<')).toBe(true);
+  });
+
+  it('renders the SMuFL gClef and gClef8vb codepoints in glyph mode', () => {
+    const font = syntheticSmuflFont();
+    const treble = renderDemo({ clef: 'treble', font, fontFamily: 'TestFont' });
+    expect(treble.includes(String.fromCodePoint(0xe050))).toBe(true); // gClef
+    expect(treble.includes(String.fromCodePoint(0xe062))).toBe(false); // no fClef
+    const tenor = renderDemo({ clef: 'treble-8vb', font, fontFamily: 'TestFont' });
+    expect(tenor.includes(String.fromCodePoint(0xe052))).toBe(true); // gClef8vb
+  });
+});

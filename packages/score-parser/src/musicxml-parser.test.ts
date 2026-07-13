@@ -442,3 +442,74 @@ describe('MusicXmlScoreParser: diagnostics and degraded sources', () => {
 		expect(r.warnings.some((w) => w.code === 'measure-duration-mismatch' && w.location?.measureIndex === 1)).toBe(true);
 	});
 });
+
+describe('MusicXmlScoreParser: clefs (v37 §A.17)', () => {
+	it('captures the main fixture treble clef and snapshots it onto every measure', async () => {
+		const r = await parseMain();
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2 } }]);
+		expect(r.score.measures[0].clef).toEqual({ sign: 'G', line: 2 });
+		expect(r.score.measures[2].clef).toEqual({ sign: 'G', line: 2 });
+	});
+
+	it('captures a bass clef with octave change (treble-with-8 pattern)', async () => {
+		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef></attributes>
+        <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type>
+          <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure></part></score-partwise>`;
+		const r = await parser.parse(xmlInput(doc));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2, octaveChange: -1 } }]);
+	});
+
+	it('defaults the line by sign when <line> is absent (F → 4)', async () => {
+		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign></clef></attributes>
+        <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type>
+          <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure></part></score-partwise>`;
+		const r = await parser.parse(xmlInput(doc));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'F', line: 4 } }]);
+	});
+
+	it('records a mid-score clef change and snapshots each measure with its own clef', async () => {
+		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1">
+        <measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time>
+          <clef><sign>F</sign><line>4</line></clef></attributes>
+          <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type>
+            <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure>
+        <measure number="2"><attributes><clef><sign>G</sign><line>2</line></clef></attributes>
+          <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type>
+            <lyric number="1"><syllabic>single</syllabic><text>b</text></lyric></note></measure>
+      </part></score-partwise>`;
+		const r = await parser.parse(xmlInput(doc));
+		expect(r.score.clefs).toEqual([
+			{ measureIndex: 0, clef: { sign: 'F', line: 4 } },
+			{ measureIndex: 1, clef: { sign: 'G', line: 2 } },
+		]);
+		expect(r.score.measures[0].clef).toEqual({ sign: 'F', line: 4 });
+		expect(r.score.measures[1].clef).toEqual({ sign: 'G', line: 2 });
+	});
+
+	it('takes the staff-1 clef from a numbered multi-staff attributes block', async () => {
+		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time>
+        <clef number="2"><sign>F</sign><line>4</line></clef><clef number="1"><sign>G</sign><line>2</line></clef></attributes>
+        <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type>
+          <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure></part></score-partwise>`;
+		const r = await parser.parse(xmlInput(doc));
+		expect(r.score.clefs).toEqual([{ measureIndex: 0, clef: { sign: 'G', line: 2 } }]);
+	});
+
+	it('warns on an unsupported clef sign and leaves clefs empty', async () => {
+		const doc = `<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>V</part-name></score-part></part-list>
+      <part id="P1"><measure number="1"><attributes><divisions>4</divisions><time><beats>1</beats><beat-type>4</beat-type></time>
+        <clef><sign>percussion</sign></clef></attributes>
+        <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type>
+          <lyric number="1"><syllabic>single</syllabic><text>a</text></lyric></note></measure></part></score-partwise>`;
+		const r = await parser.parse(xmlInput(doc));
+		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /clef sign/i.test(w.message))).toBe(true);
+		expect(r.score.clefs).toEqual([]);
+		expect(r.score.measures[0].clef).toBeUndefined();
+	});
+});

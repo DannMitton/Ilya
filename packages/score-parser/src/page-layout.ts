@@ -22,6 +22,7 @@
 import type { ParsedScore } from './types';
 import type { AnalyzedScore } from './analysis-types';
 import { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
+import { chooseClef } from './clef-select';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
   /** Page size in px at 96 dpi. Defaults: US letter, 816 × 1056. */
@@ -81,6 +82,7 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
     ...parsed,
     measures,
     keySignatures: [{ measureIndex: 0, signature: first.keySignature }],
+    clefs: first.clef ? [{ measureIndex: 0, clef: first.clef }] : [],
     timeSignatures: [{ measureIndex: 0, signature: first.timeSignature }],
     tempoMarkings: parsed.tempoMarkings
       .filter((t) => t.measureIndex >= fromMeasure && t.measureIndex <= toMeasure)
@@ -133,6 +135,10 @@ export function paginateScore(
   const innerBottom = o.pageHeight - o.marginBottom;
   const measureCount = parsed.measures.length;
 
+  // Resolve the clef ONCE for the whole score (v37 §A.17): a slice-level
+  // heuristic could flip clefs between systems on a wide-range melody.
+  const renderOptions: StaffRenderOptions = { ...options, clef: options.clef ?? chooseClef(parsed) };
+
   // ── Pack measures into systems against the inner width ──
   const ranges: Array<[number, number]> = [];
   let from = 0;
@@ -150,7 +156,7 @@ export function paginateScore(
 
   // ── Render each system ──
   const systems: SystemSlice[] = ranges.map(([a, b]) => {
-    const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, options);
+    const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, renderOptions);
     const { width, height } = viewBoxOf(svg);
     return { fromMeasure: a, toMeasure: b, svg, width, height };
   });
