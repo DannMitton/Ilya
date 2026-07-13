@@ -82,22 +82,24 @@ const isImage = (b: Uint8Array) =>
 // ── Text decoding ────────────────────────────────────────────────
 
 /**
- * Decode the sniff window as text, honouring a UTF-16 BOM if present
- * (MusicXML exporters vary). Falls back to UTF-8. Returns the decoded
- * head with leading whitespace stripped.
+ * Decode score-file bytes as text, honouring a UTF-16 BOM if present
+ * (MusicXML exporters vary). Falls back to UTF-8. Shared with the dispatch
+ * layer, which decodes whole `.mxl` payloads and MNX/MusicXML uploads with
+ * the same rules detection sniffs by.
  */
-function decodeHead(bytes: Uint8Array): string {
-	let text: string;
+export function decodeScoreText(bytes: Uint8Array): string {
 	if (bytes[0] === 0xff && bytes[1] === 0xfe) {
-		text = new TextDecoder('utf-16le').decode(bytes.subarray(2));
-	} else if (bytes[0] === 0xfe && bytes[1] === 0xff) {
-		text = new TextDecoder('utf-16be').decode(bytes.subarray(2));
-	} else {
-		// TextDecoder('utf-8') strips a UTF-8 BOM itself.
-		text = new TextDecoder('utf-8').decode(bytes);
+		return new TextDecoder('utf-16le').decode(bytes.subarray(2));
 	}
-	return text.replace(/^\s+/, '');
+	if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+		return new TextDecoder('utf-16be').decode(bytes.subarray(2));
+	}
+	// TextDecoder('utf-8') strips a UTF-8 BOM itself.
+	return new TextDecoder('utf-8').decode(bytes);
 }
+
+/** Decoded sniff window with leading whitespace stripped. */
+const decodeHead = (bytes: Uint8Array): string => decodeScoreText(bytes).replace(/^\s+/, '');
 
 /**
  * First element name in an XML head, skipping the prolog, comments, and any
