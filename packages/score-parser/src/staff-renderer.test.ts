@@ -114,6 +114,17 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     expect(svg.includes('data-extender="n6"')).toBe(false);
   });
 
+  it('draws a flat, head-anchored tie between the tied melisma notes (n19→n20)', () => {
+    expect((svg.match(/data-tie="/g) ?? []).length).toBe(1);
+    expect(svg.includes('data-tie="n19"')).toBe(true);
+  });
+
+  it('curves the tie away from the shared down-stems (upward)', () => {
+    const m = svg.match(/M[\d.]+ ([\d.]+) Q [\d.]+ ([\d.]+) [\d.]+ [\d.]+" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="n19"/);
+    expect(m !== null).toBe(true);
+    expect(Number(m![2]) < Number(m![1])).toBe(true); // control point above endpoints
+  });
+
   it('draws no underlay under melisma continuation notes', () => {
     // n19 and n20 carry no syllable; their columns must be empty of text.
     expect(svg.includes('data-event-id="n19"')).toBe(true);

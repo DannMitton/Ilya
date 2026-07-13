@@ -640,6 +640,43 @@ export function renderAnalyzedStaff(
     }
   }
 
+  // ── Ties (melisma build 3; Dann's Gould extraction, Section R). A tie
+  // is FLAT and HEAD-ANCHORED — those two properties are its identity
+  // against the slur. It curves away from the stems when the pair shares
+  // a direction, away from the middle staff line when directions mix,
+  // and its apex is nudged off staff lines. Drawn here, before the
+  // underlay baselines are computed, because a downward tie is ink the
+  // text must clear.
+  for (let i = 0; i < placed.length; i++) {
+    const e = placed[i].ev;
+    if (e.type !== 'note' || !e.pitch || !e.tied) continue;
+    if (e.tied.type !== 'start' && e.tied.type !== 'continue') continue;
+    const nxt = placed[i + 1];
+    if (!nxt || nxt.ev.type !== 'note' || !nxt.ev.pitch) continue;
+    const y1 = yFor(e.pitch);
+    const a1 = analyzed.events[e.id];
+    const a2 = analyzed.events[nxt.ev.id];
+    // Direction: away from shared stems (open = stems down → tie up);
+    // mixed or unanalysed: away from the middle staff line.
+    const up = a1 && a2 && a1.timbre === a2.timbre
+      ? a1.timbre === 'open'
+      : y1 < o.staffMidY;
+    const half1 = smufl ? sp(smufl.glyph(headNameFor(e.duration.base)).widthSp / 2) : 6.2;
+    const half2 = smufl ? sp(smufl.glyph(headNameFor(nxt.ev.duration.base)).widthSp / 2) : 6.2;
+    const x1 = placed[i].x + half1 + 1;
+    const x2 = nxt.x - half2 - 1;
+    if (x2 <= x1) continue;
+    const ey = y1 + (up ? -4 : 4);
+    let depth = (up ? -1 : 1) * o.lineGap * 0.9; // shallow: flatness is identity
+    // Quadratic apex sits at ey + depth/2; keep it off staff lines.
+    const apex = ey + depth / 2;
+    if (apex >= staffTop && apex <= staffBottom && Math.abs((apex - staffTop) % o.lineGap) < 1.5) {
+      depth += up ? -3 : 3;
+    }
+    parts.push(`<path d="M${round2(x1)} ${round2(ey)} Q ${round2((x1 + x2) / 2)} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)}" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="${esc(e.id)}"/>`);
+    lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
+  }
+
   // Beams contribute ink below the staff on down-stem groups.
   for (const s of beamStemById.values()) {
     lowestInk = Math.max(lowestInk, s.tipY + beamT / 2);

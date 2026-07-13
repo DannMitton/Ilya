@@ -17,7 +17,7 @@
 import { analyzeScore, type VowelResolver } from './overlay-engine';
 import { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 import { prepareSmuflFont, REQUIRED_GLYPHS, type PreparedSmuflFont } from './smufl-metadata';
-import type { Fraction, NoteBase, ParsedScore, Pitch, TupletInfo, VocalLineEvent } from './types';
+import type { Fraction, NoteBase, ParsedScore, Pitch, TieInfo, TupletInfo, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -27,7 +27,7 @@ const DUR: Record<NoteBase, Fraction> = {
   '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
 };
 
-function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo, sylType: 'whole' | 'start' | 'middle' | 'end' = 'whole'): VocalLineEvent {
+function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo, sylType: 'whole' | 'start' | 'middle' | 'end' = 'whole', tied?: TieInfo): VocalLineEvent {
   const plain = DUR[base];
   const fraction = tuplet
     ? { numerator: plain.numerator * tuplet.normalNotes, denominator: plain.denominator * tuplet.actualNotes }
@@ -39,6 +39,7 @@ function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | nu
     rhythmicPosition: { fraction: pos },
     duration: { base, dots: 0, fraction, ...(tuplet ? { tuplet } : {}) },
     ...(pitch ? { pitch } : {}),
+    ...(tied ? { tied } : {}),
     ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: sylType, verseNumber: 1, wordContext: verses[0], verses } } : {}),
   };
 }
@@ -100,9 +101,11 @@ export function demoScore(): ParsedScore {
     // n19 and n20 continue the vowel, encoded by absent syllables per the
     // data model). Exercises melisma detection and Gould's left-aligned
     // melisma syllable (extraction rules 4 to 6).
+    // n19 ties into n20 (same pitch): the tie is a melisma-interior case,
+    // exercising flat head-anchored tie rendering (extraction Section R).
     note('n18', 4, frac(0, 1), P('G', 2), 'eighth', ['по', 'po']),
-    note('n19', 4, frac(1, 8), P('A', 2), 'eighth'),
-    note('n20', 4, frac(1, 4), P('B', 2, -1), 'quarter'),
+    note('n19', 4, frac(1, 8), P('A', 2), 'eighth', undefined, undefined, 'whole', { type: 'start' }),
+    note('n20', 4, frac(1, 4), P('A', 2), 'quarter', undefined, undefined, 'whole', { type: 'stop' }),
     note('n21', 4, frac(1, 2), null, 'quarter'), // rest
   ];
   const m = (index: number) => ({ index, number: String(index + 1), timeSignature: { beats: 3, beatType: 4 }, keySignature: { fifths: -1 }, expectedDuration: frac(3, 4) });
