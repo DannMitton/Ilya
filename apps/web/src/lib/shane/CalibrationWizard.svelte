@@ -118,6 +118,24 @@
 			voiceName: string | undefined
 		) => void;
 		/**
+		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
+		 * successful score renders in the Fit main pane — loaded, parsed,
+		 * AND rendered; a load failure never increments (the error belongs
+		 * to the uploader slot). Each increment collapses the wizard to
+		 * its compact header, unless a capture is mid-flight, in which
+		 * case the collapse waits for the summary (Dann's deferral ruling,
+		 * 2026-07-13): the ritual is never interrupted. 0 = no score yet,
+		 * and no collapse chrome renders at all.
+		 */
+		scoreRenders?: number;
+		/**
+		 * The collapse state, bindable so the page shell can carry it
+		 * across drawer tab switches (the shane panel unmounts when the
+		 * tab changes, so wizard-local state would forget an expansion).
+		 * The compact-header chevron toggles it both ways.
+		 */
+		collapsed?: boolean;
+		/**
 		 * Opens the Learn module's sung-[o] note (anchor learn-u3-note-o).
 		 * The sung-[o] précis ruling (Kimi 2026-07-11; copy Dann's, approved
 		 * same day): ONE quiet tertiary ⓘ glyph on the [o] roster row is the
@@ -134,6 +152,8 @@
 	let {
 		voiceType = undefined,
 		readinessOutcome = 'clear',
+		scoreRenders = 0,
+		collapsed = $bindable(false),
 		onVowelCaptured,
 		onProfileChange,
 		onComplete,
@@ -257,6 +277,41 @@
 	// (Dann, 2026-07-10): it must not appear when the summary is reached
 	// early by any path (a single-vowel re-take pass, or a queue bug).
 	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
+
+	// ── Q3 wizard collapse (Kimi §A.28; Dann's mid-capture deferral) ─────────
+	// A new successful render (the counter incremented) collapses the wizard
+	// to its compact header — including a re-collapse after the singer
+	// expanded, since each fresh score render re-triggers (Dann's default,
+	// 2026-07-13). Mid-capture, the trigger is remembered and lands when the
+	// phase next reaches the summary; the ritual is never torn down. Plain
+	// variables: both are compared inside effects, never rendered.
+	// svelte-ignore state_referenced_locally
+	let seenScoreRenders = scoreRenders;
+	let pendingCollapse = false;
+	$effect(() => {
+		if (scoreRenders > seenScoreRenders) {
+			seenScoreRenders = scoreRenders;
+			if (phase === 'capture') pendingCollapse = true;
+			else collapsed = true;
+		}
+	});
+	$effect(() => {
+		if (phase === 'summary' && pendingCollapse) {
+			pendingCollapse = false;
+			collapsed = true;
+		}
+	});
+	// The compact header's line, Kimi's "Dann — bass (provisional) — 7/10
+	// vowels" style. The voice-type segment waits for the Q5 declaration
+	// build (no selector exists yet); the separator is a middle dot per the
+	// no-em-dash constraint. The aria-label speaks the counts in words, the
+	// §4.6 discipline (a raw "7/10" reads as a fraction).
+	let compactLabel = $derived(
+		`${activeVoice ? `${activeVoice.name} · ` : ''}${capturedCount}/${ALL_VOWELS.length} vowels`
+	);
+	let compactSpokenLabel = $derived(
+		`${activeVoice ? `${activeVoice.name}, ` : ''}${capturedCount} of ${ALL_VOWELS.length} vowels sampled`
+	);
 
 	function persistStore() {
 		saveStore($state.snapshot(store) as ProfileStore);
@@ -872,6 +927,27 @@
 	     visual banner below renders conditionally and carries no aria-live. -->
 	<div class="visually-hidden" role="status">{holdAnnounce}</div>
 
+	<!-- The Q3 collapse header (Kimi §A.28): renders only once a score has
+	     rendered (before that there is nothing to cede the drawer to). One
+	     accordion row in both states — chevron flips, body shows or hides —
+	     so the affordance is reversible in place. The visible glyph is
+	     aria-hidden; aria-expanded and the spoken label carry the state. -->
+	{#if scoreRenders > 0 || collapsed}
+		<button
+			type="button"
+			class="wizard-compact-toggle"
+			aria-expanded={!collapsed}
+			aria-controls="calibration-wizard-body"
+			aria-label={compactSpokenLabel}
+			onclick={() => (collapsed = !collapsed)}
+		>
+			<span class="wizard-compact-chevron" aria-hidden="true">{collapsed ? '▸' : '▾'}</span>
+			<span aria-hidden="true">{compactLabel}</span>
+		</button>
+	{/if}
+
+	{#if !collapsed}
+	<div class="wizard-body" id="calibration-wizard-body">
 	<!-- The voice switcher heads the drawer (Kimi: whose-voice-is-this is
 	     settled before any capture; the main pane stays a pure gallery).
 	     Inert during an active capture. With no voices saved, it renders
@@ -1066,6 +1142,8 @@
 			</div>
 		{/if}
 	{/if}
+	</div>
+	{/if}
 </section>
 
 <style>
@@ -1092,6 +1170,48 @@
 		align-items: center;
 		gap: 0.875rem;
 		width: 100%;
+	}
+
+	/* The collapse body wrapper reproduces the section's own column layout
+	   (flex, centred, 1rem gap), so wrapping the switcher and phases for
+	   the Q3 accordion moves nothing visually. */
+	.wizard-body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		width: 100%;
+	}
+
+	/* The Q3 compact header: the phase-heading recipe (sans smallcaps,
+	   0.12em tracking, the Fit drawer's deeper lavender), rendered as one
+	   full-width accordion row. The chevron column is fixed-width so the
+	   label does not shift when the glyph flips. */
+	.wizard-compact-toggle {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+		background: none;
+		border: none;
+		padding: 0.125rem 0;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--deeper-lavender);
+		font-weight: 600;
+		text-align: left;
+		cursor: pointer;
+	}
+	.wizard-compact-toggle:hover {
+		color: var(--ink-primary);
+	}
+	.wizard-compact-chevron {
+		display: inline-block;
+		width: 0.875rem;
+		font-size: 0.75rem;
+		line-height: 1;
 	}
 
 	.ipa-tag {

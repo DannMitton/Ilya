@@ -63,6 +63,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Fit engraving preferences (drawer panel, Dann's ruling 2026-07-13):
 	// user-adjustable notation geometry, Appendix-derived defaults.
 	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
+	// Q3 wizard collapse (Kimi §A.28): successful-render counter and the
+	// wizard's collapse state, both held here so they survive the shane
+	// panel's unmount on tab switches. The pane reports a render once per
+	// mount; renderCountedFor dedupes by score identity across remounts,
+	// so returning to the Fit tab never re-collapses an expanded wizard.
+	let scoreRenders = $state(0);
+	let wizardCollapsed = $state(false);
+	let renderCountedFor: IngestedScore | null = null;
+	function handleScoreRendered() {
+		if (!ingestedScore || renderCountedFor === ingestedScore) return;
+		renderCountedFor = ingestedScore;
+		scoreRenders += 1;
+	}
 	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
@@ -882,6 +895,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						</div>
 					</div>
 					<CalibrationWizard
+						{scoreRenders}
+						bind:collapsed={wizardCollapsed}
 						onActiveProfileChange={(f, name) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
@@ -922,6 +937,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				ingested={ingestedScore}
 				scoreTitle={metadata.title}
 				{engraving}
+				onrendered={handleScoreRendered}
 			/>
 		{:else}
 			<ReadingPaper {language}>

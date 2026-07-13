@@ -94,6 +94,16 @@
 		 * pane renders correctly standalone.
 		 */
 		engraving?: EngravingValues;
+		/**
+		 * Q3 wizard-collapse trigger (Kimi's §A.28 ruling, 2026-07-13):
+		 * fires once per ingested score when it has actually produced
+		 * rendered pages — loaded, parsed, AND rendered, never on failure
+		 * (failures stay in the uploader slot and this pane never sees
+		 * them). Engraving re-paginations of the same score do not
+		 * re-fire; a pane remount does, so the page shell dedupes by
+		 * score identity across mounts.
+		 */
+		onrendered?: () => void;
 	}
 
 	let {
@@ -104,6 +114,7 @@
 		ingested = null,
 		scoreTitle = undefined,
 		engraving = ENGRAVING_DEFAULTS,
+		onrendered = undefined,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -218,6 +229,17 @@
 				}).pages.map(stripBackingRect)
 			: null,
 	);
+
+	// The Q3 render report (see the onrendered prop doc): once per score
+	// identity, only when pagination yielded at least one page. A plain
+	// variable, not state — it is compared, never rendered.
+	let reportedRenderFor: IngestedScore | null = null;
+	$effect(() => {
+		if (ingested && scorePages && scorePages.length > 0 && reportedRenderFor !== ingested) {
+			reportedRenderFor = ingested;
+			onrendered?.();
+		}
+	});
 
 	// Interim running-header text for pages 2+: the song title when the
 	// singer has one in the shared metadata, else the profile subtitle.
