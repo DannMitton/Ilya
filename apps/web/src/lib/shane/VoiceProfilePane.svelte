@@ -181,6 +181,7 @@
 		{language}
 		onheightchange={handleHeaderHeight}
 		versionAccent="#8E7E9B"
+		markAccent="#8E7E9B"
 	/>
 
 	<!-- Content layer: the envelope's interim states, centred in the
@@ -190,10 +191,12 @@
 		{#if hasReadings}
 			<div class="profile-copy">
 				<p class="profile-line profile-lede">
-					Your repertoire-fit results will appear here once you upload your score.
+					Your repertoire-fit results will appear here after Ilya processes the score you upload.
 				</p>
 				<p class="profile-line profile-status">
 					Your profile is now set{capturedClause}.
+				</p>
+				<p class="profile-line profile-status">
 					{#if provisionalVowels.length > 0}Your
 						{#each provisionalVowels as g, i (g)}{listSep(
 								i,
@@ -232,7 +235,7 @@
 
 	/* The typography ruling (Dann, 2026-07-12): one reading size,
 	   left-justified, a document rather than an eye chart. The body sets
-	   in the reading papers' measure (serif, 1.05rem, generous leading),
+	   in the Transcription empty-state's measure (serif italic, 1rem),
 	   aligned to the page's text column; the quiet furniture below keeps
 	   its own smaller sans register but shares the left edge. Vertical
 	   centring within the content window stays. */
@@ -257,9 +260,13 @@
 
 	.profile-line {
 		margin: 0;
+		/* Match the Transcription empty-state ("Enter your Cyrillic text…"):
+		   serif italic, 1rem, 1.6 leading. Left-justified via .profile-content,
+		   and each sentence sits on its own line (Dann, 2026-07-13). */
 		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 1.05rem;
-		line-height: 1.75;
+		font-style: italic;
+		font-size: 1rem;
+		line-height: 1.6;
 	}
 
 	.profile-lede {

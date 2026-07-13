@@ -201,24 +201,44 @@
 
 <div class="uploader">
 	{#if ui.kind === 'idle'}
-		<button
-			type="button"
-			class="dropzone"
-			class:dragging
-			onclick={browse}
-			ondragover={onDragOver}
-			ondragleave={onDragLeave}
-			ondrop={onDrop}
-		>
-			{#if dragging}
-				<p class="dz-title">{T('upload.drop.release')}</p>
-			{:else}
-				<p class="dz-title">{T('upload.drop.title')}</p>
-				<p class="dz-browse">{T('upload.drop.browse')}</p>
-			{/if}
-			<p class="dz-accepted">{T('upload.drop.acceptedNow')}</p>
-			<p class="dz-soon">{T('upload.drop.comingSoon')}</p>
-		</button>
+		<div class="dz-wrap">
+			<button
+				type="button"
+				class="dropzone"
+				class:dragging
+				onclick={browse}
+				ondragover={onDragOver}
+				ondragleave={onDragLeave}
+				ondrop={onDrop}
+			>
+				{#if dragging}
+					<p class="dz-title">{T('upload.drop.release')}</p>
+				{:else}
+					<p class="dz-title">{T('upload.drop.title')}</p>
+					<p class="dz-browse">{T('upload.drop.browse')}</p>
+				{/if}
+				<p class="dz-accepted">{T('upload.drop.acceptedNow')}</p>
+				<p class="dz-soon">{T('upload.drop.comingSoon')}</p>
+			</button>
+			<!-- Score-from-image scan, mirroring the Transcription OCR icon.
+			     Visual only until the OMR/image path ships (Round 9); the
+			     tooltip marks it coming soon, and it takes no action yet. -->
+			<button
+				type="button"
+				class="scan-btn"
+				title={T('upload.scanTooltip')}
+				aria-label={T('upload.scanTooltip')}
+				aria-disabled="true"
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+					<path d="M2 7V2h5" />
+					<path d="M17 2h5v5" />
+					<path d="M22 17v5h-5" />
+					<path d="M7 22H2v-5" />
+					<line x1="5" y1="12" x2="19" y2="12" />
+				</svg>
+			</button>
+		</div>
 	{:else if ui.kind === 'busy'}
 		<div class="status">
 			<span class="spinner"></span>
@@ -299,23 +319,54 @@
 		width: 100%;
 		min-height: 132px;
 		padding: 1rem;
-		border: 1.5px dashed var(--stone-300);
-		border-radius: 6px;
-		background: rgba(255, 255, 255, 0.5);
+		/* Same squircle form as the Transcription text field (solid 1px border,
+		   4px radius, white fill), but carrying the Fit tab's lavender rather
+		   than Ilya's sage (Dann, 2026-07-13). */
+		border: 1px solid var(--muted-lavender);
+		border-radius: 4px;
+		background: white;
 		cursor: pointer;
 		transition: border-color 0.15s ease, background 0.15s ease;
 		text-align: center;
 	}
 
 	.dropzone:hover {
-		border-color: var(--sage);
-		background: rgba(255, 255, 255, 0.8);
+		border-color: var(--deeper-lavender);
 	}
 
 	.dropzone.dragging {
-		border-color: var(--sage);
-		border-style: solid;
-		background: rgba(255, 255, 255, 0.95);
+		border-color: var(--deeper-lavender);
+		background: white;
+	}
+
+	/* ── Score-from-image scan icon (visual only, coming soon) ── */
+
+	.dz-wrap {
+		position: relative;
+	}
+
+	.scan-btn {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		width: 28px;
+		height: 28px;
+		padding: 4px;
+		border: none;
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.8);
+		color: var(--ink-tertiary);
+		opacity: 0.4;
+		cursor: default;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: color 0.15s ease, opacity 0.2s ease;
+	}
+
+	.scan-btn:hover {
+		opacity: 0.7;
+		color: var(--deeper-lavender);
 	}
 
 	.dz-title {

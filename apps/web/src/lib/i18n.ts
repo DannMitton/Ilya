@@ -191,18 +191,19 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	'upload.drop.acceptedNow':     { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx)', fr: 'Acceptés maintenant : MNX, MusicXML, .mxl, Finale (.musx)' },
-	'upload.drop.comingSoon':      { en: 'Coming soon: MuseScore (.mscz), PDF, image, MIDI', fr: 'Bientôt : MuseScore (.mscz), PDF, image, MIDI' },
+	'upload.drop.acceptedNow':     { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx)', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx)' },
+	'upload.drop.comingSoon':      { en: 'Coming soon: MuseScore (.mscz), PDF, image, MIDI', fr: 'Bientôt\u00a0: MuseScore (.mscz), PDF, image, MIDI' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
+	'upload.scanTooltip':          { en: 'Scan a score from an image (coming soon)', fr: 'Numériser une partition à partir d’une image (bientôt)' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
 	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
 
-	'upload.format.mnxDirect':     { en: 'Format: MNX (direct)',         fr: 'Format : MNX (direct)' },
-	'upload.format.musicxmlDirect':{ en: 'Format: MusicXML (direct)',    fr: 'Format : MusicXML (direct)' },
-	'upload.format.mxl':           { en: 'Format: MusicXML (.mxl)',      fr: 'Format : MusicXML (.mxl)' },
-	'upload.format.musxDenigma':   { en: 'Format: Finale .musx → MNX', fr: 'Format : Finale .musx → MNX' },
-	'upload.format.msczWebmscore': { en: 'Format: MuseScore → MusicXML', fr: 'Format : MuseScore → MusicXML' },
+	'upload.format.mnxDirect':     { en: 'Format: MNX (direct)',         fr: 'Format\u00a0: MNX (direct)' },
+	'upload.format.musicxmlDirect':{ en: 'Format: MusicXML (direct)',    fr: 'Format\u00a0: MusicXML (direct)' },
+	'upload.format.mxl':           { en: 'Format: MusicXML (.mxl)',      fr: 'Format\u00a0: MusicXML (.mxl)' },
+	'upload.format.musxDenigma':   { en: 'Format: Finale .musx → MNX', fr: 'Format\u00a0: Finale .musx → MNX' },
+	'upload.format.msczWebmscore': { en: 'Format: MuseScore → MusicXML', fr: 'Format\u00a0: MuseScore → MusicXML' },
 
 	'upload.banner.denigma':       { en: 'Converted from Finale format by denigma. Lyric alignment and measure structure are preserved. Verify custom expressions or complex layouts if the score appears unusual.', fr: 'Converti depuis le format Finale par denigma. L’alignement des paroles et la structure des mesures sont préservés. Vérifiez les expressions personnalisées ou les mises en page complexes si la partition semble inhabituelle.' },
 	'upload.banner.dismiss':       { en: 'Dismiss',                      fr: 'Ignorer' },
@@ -210,8 +211,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.continue':             { en: 'Continue to analysis',         fr: 'Continuer vers l’analyse' },
 	'upload.tryAnother':           { en: 'Try another file',             fr: 'Essayer un autre fichier' },
 
-	'upload.mus.trigger':          { en: 'Have an older Finale file (.mus, pre-2014)?', fr: 'Vous avez un ancien fichier Finale (.mus, avant 2014) ?' },
-	'upload.mus.intro':            { en: 'Finale files from 2014 onward (.musx) are supported. For older .mus files, there are three options:', fr: 'Les fichiers Finale à partir de 2014 (.musx) sont pris en charge. Pour les anciens fichiers .mus, trois options s’offrent à vous :' },
+	'upload.mus.trigger':          { en: 'Have an older Finale file (.mus, pre-2014)?', fr: 'Vous avez un ancien fichier Finale (.mus, avant 2014)\u00a0?' },
+	'upload.mus.intro':            { en: 'Finale files from 2014 onward (.musx) are supported. For older .mus files, there are three options:', fr: 'Les fichiers Finale à partir de 2014 (.musx) sont pris en charge. Pour les anciens fichiers .mus, trois options s’offrent à vous\u00a0:' },
 	'upload.mus.opt1':             { en: '1. Open the file in any Finale version from 2014 or later and resave it as .musx, then upload.', fr: '1. Ouvrez le fichier dans une version de Finale de 2014 ou ultérieure et réenregistrez-le en .musx, puis téléversez-le.' },
 	'upload.mus.opt2':             { en: '2. Print to PDF and upload the PDF. (PDF import is coming soon.)', fr: '2. Imprimez en PDF et téléversez le PDF. (L’import PDF arrive bientôt.)' },
 	'upload.mus.opt3':             { en: '3. Export to MusicXML from Finale and upload that file.', fr: '3. Exportez en MusicXML depuis Finale et téléversez ce fichier.' },

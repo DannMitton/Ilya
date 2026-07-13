@@ -21,6 +21,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
+	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
 	// Engine connectivity check
@@ -780,6 +781,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{/snippet}
 			{#snippet shanePanel()}
 				{#if INCLUDE_SHANE}
+					<!-- One shared column, identical to the Transcription drawer's
+					     .root-panel (20px top, 1rem sides, 40px bottom, 6px gaps),
+					     so both drawers read as one surface. -->
+					<div class="shane-panel">
+						<!-- Shared chrome: same Metadata block as Transcription, one
+						     source of truth (Kimi placement ruling). -->
+						<MetadataFields {metadata} {language} onchange={handleMetadataChange} />
 					<ScoreUploader
 						{language}
 						oningested={(ingested) => {
@@ -802,6 +810,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							handleHeadingNavigate('learn-u3-note-o');
 						}}
 					/>
+					</div>
 				{/if}
 			{/snippet}
 	</Drawer>
@@ -868,6 +877,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 {/if}
 
 <style>
+	/* ── Fit drawer column: identical to RootPanel's .root-panel, so the
+	   Transcription and Fit drawers share one layout (Dann, 2026-07-13). The
+	   CalibrationWizard's own outer padding is dropped in favour of this. */
+	.shane-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 20px 1rem 40px;
+	}
+
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */
 
 	:global(.gt-table) {

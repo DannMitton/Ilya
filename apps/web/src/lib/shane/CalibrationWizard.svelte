@@ -1074,10 +1074,11 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
-		/* The transcription panel's vertical rhythm (RootPanel: 20px top,
-		   40px bottom, 1rem sides), matched here so the two drawers read
-		   as one designed surface (Dann's consistency ruling, 2026-07-12). */
-		padding: 20px 1rem 40px;
+		/* Outer padding (20px top, 40px bottom, 1rem sides) now comes from the
+		   shared .shane-panel column in +page.svelte, which wraps the whole Fit
+		   drawer so it reads as one surface with the Transcription drawer
+		   (Dann's consistency ruling, 2026-07-12; unified 2026-07-13). */
+		padding: 0;
 	}
 
 	/* Drawer-margin alignment (Dann, 2026-07-12): the wizard's structural

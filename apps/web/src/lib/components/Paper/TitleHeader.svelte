@@ -15,9 +15,16 @@
 		 * harmonize the mark with their palette (Dann's ruling, 2026-07-12).
 		 */
 		versionAccent?: string;
+		/**
+		 * Colour of the "[Ilya]" wordmark itself (brackets and name).
+		 * Transcription keeps the default sage; Fit/Shane surfaces pass
+		 * deeper-lavender so the whole mark harmonizes, not just the version
+		 * badge (Dann's ruling, 2026-07-13).
+		 */
+		markAccent?: string;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)' }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)' }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -52,7 +59,7 @@
 </script>
 
 <header class="title-header" bind:offsetHeight={measuredHeight}>
-	<div class="logo">
+	<div class="logo" style="color: {markAccent}">
 		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version" style="color: {versionAccent}">2026a</span>
 	</div>
 
