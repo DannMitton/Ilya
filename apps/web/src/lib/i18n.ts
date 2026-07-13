@@ -188,6 +188,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'mobile.body':                 { en: 'Ilya produces paginated transcription documents best experienced on a larger screen with a keyboard.', fr: 'Ilya produit des documents de transcription paginés, mieux adaptés à un écran plus grand avec un clavier.' },
 	'mobile.continue':             { en: 'Continue anyway',                    fr: 'Continuer quand même' },
 
+	// ── Fit metadata auto-populate (§A.6; Kimi's rulings, 2026-07-13;
+	//    agentless; copy flagged for Dann's review) ──
+	'meta.fromScore':              { en: 'from score',                   fr: 'de la partition' },
+	'meta.revertToScore':          { en: 'Revert to score header',       fr: 'Rétablir l’en-tête de la partition' },
+
 	// ── Fit engraving controls (drawer panel beside the drop surface;
 	//    agentless; copy flagged for Dann's review with the §A.13 strings) ──
 	'engraving.heading':           { en: 'Engraving',                    fr: 'Gravure' },

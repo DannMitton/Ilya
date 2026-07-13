@@ -23,6 +23,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import EngravingControls from '$lib/shane/EngravingControls.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
+	import type { WorkMetadata } from '@ilya/score-parser';
+	import { formatNameForPaper, COMPOSERS, POETS } from '$lib/composers-poets';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
@@ -492,12 +494,68 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	function handleMetadataChange(meta: SongMetadata) {
+		// A "from score" tag fades on the field's first edit (Kimi's Q1
+		// refinement, 2026-07-13): any field whose value changes by hand
+		// loses its tag. applyScoreHeader/revert set the tags AFTER
+		// calling this, so their own writes do not clear them.
+		if (fromScoreFields.size > 0) {
+			const edited = (Object.keys(meta) as (keyof SongMetadata)[]).filter(
+				(k) => meta[k] !== metadata[k] && fromScoreFields.has(k),
+			);
+			if (edited.length > 0) {
+				const next = new Set(fromScoreFields);
+				for (const k of edited) next.delete(k);
+				fromScoreFields = next;
+			}
+		}
 		metadata = meta;
 		try {
 			localStorage.setItem('ilya:metadata', JSON.stringify(meta));
 		} catch {
 			// localStorage unavailable
 		}
+	}
+
+	// ── §A.6 metadata auto-populate (Kimi's rulings, 2026-07-13) ──
+	// Fill blanks only: the score header populates empty fields; anything
+	// the singer typed survives. The header itself stays immutable on the
+	// parsed score (workMetadata); the drawer fields are the singer's
+	// working copy, always editable. Known composers/poets canonicalize
+	// through formatNameForPaper (exact match only, no guessing).
+	let fromScoreFields = $state<ReadonlySet<keyof SongMetadata>>(new Set());
+
+	function scoreHeaderAsFields(wm: WorkMetadata): Partial<Record<keyof SongMetadata, string>> {
+		return {
+			...(wm.title ? { title: wm.title } : {}),
+			...(wm.opus ? { opus: wm.opus } : {}),
+			...(wm.composer ? { composer: formatNameForPaper(wm.composer, COMPOSERS) } : {}),
+			...(wm.poet ? { poet: formatNameForPaper(wm.poet, POETS) } : {}),
+			...(wm.translator ? { translator: formatNameForPaper(wm.translator, POETS) } : {}),
+		};
+	}
+
+	function applyScoreHeader(wm: WorkMetadata) {
+		const incoming = scoreHeaderAsFields(wm);
+		const next = { ...metadata };
+		const filled = new Set<keyof SongMetadata>();
+		for (const [k, v] of Object.entries(incoming) as Array<[keyof SongMetadata, string]>) {
+			if ((next[k] ?? '').trim() === '') {
+				next[k] = v;
+				filled.add(k);
+			}
+		}
+		if (filled.size > 0) handleMetadataChange(next);
+		fromScoreFields = filled;
+	}
+
+	// Kimi's Q2 safety net: restore the header's fields verbatim (fields
+	// the header does not carry are left untouched).
+	function revertToScoreHeader() {
+		const wm = ingestedScore?.result.score.workMetadata;
+		if (!wm) return;
+		const incoming = scoreHeaderAsFields(wm);
+		handleMetadataChange({ ...metadata, ...incoming });
+		fromScoreFields = new Set(Object.keys(incoming) as Array<keyof SongMetadata>);
 	}
 	function handleDrawerToggle() {
 		drawerCollapsed = !drawerCollapsed;
@@ -792,7 +850,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					<div class="shane-panel">
 						<!-- Shared chrome: same Metadata block as Transcription, one
 						     source of truth (Kimi placement ruling). -->
-						<MetadataFields {metadata} {language} onchange={handleMetadataChange} />
+						<MetadataFields
+							{metadata}
+							{language}
+							onchange={handleMetadataChange}
+							fromScore={fromScoreFields}
+							onrevert={ingestedScore?.result.score.workMetadata ? revertToScoreHeader : undefined}
+						/>
 					<!-- The drop surface is a drag-and-drop target, not a typing
 					     field, so it cedes width to the engraving panel beside it.
 					     Engraving sits LEFT so its section header aligns flush
@@ -809,6 +873,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
 									// as paginated notation in the Fit main pane.
 									ingestedScore = ingested;
+									// §A.6 auto-populate (Kimi's Q1 ruling): fill blank
+									// metadata fields from the score header, if any.
+									const wm = ingested.result.score.workMetadata;
+									if (wm) applyScoreHeader(wm);
 								}}
 							/>
 						</div>

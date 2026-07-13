@@ -16,9 +16,21 @@
 		metadata: SongMetadata;
 		language: Language;
 		onchange: (meta: SongMetadata) => void;
+		/**
+		 * Fields auto-populated from a score header (§A.6; Kimi's Q1
+		 * ruling, 2026-07-13): each carries a subtle "from score" tag
+		 * that the caller removes on first edit. Optional; the
+		 * Transcription drawer never passes it.
+		 */
+		fromScore?: ReadonlySet<string>;
+		/**
+		 * "Revert to score header" affordance (Kimi's Q2 ruling): shown
+		 * only when a score header exists to revert to.
+		 */
+		onrevert?: () => void;
 	}
 
-	let { metadata, language, onchange }: Props = $props();
+	let { metadata, language, onchange, fromScore = undefined, onrevert = undefined }: Props = $props();
 
 	function handleMetaField(field: keyof SongMetadata, value: string) {
 		onchange({ ...metadata, [field]: value });
@@ -49,50 +61,70 @@
 <div class="section">
 	<h3 class="section-label">{t('meta.heading', language)}</h3>
 	<div class="meta-fields">
-		<input
-			type="text"
-			class="meta-input"
-			placeholder={t('meta.title', language)}
-			value={metadata.title}
-			oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
-		/>
+		<div class="meta-field-wrap">
+			<input
+				type="text"
+				class="meta-input"
+				placeholder={t('meta.title', language)}
+				value={metadata.title}
+				oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
+			/>
+			{#if fromScore?.has('title')}<span class="meta-from-score">{t('meta.fromScore', language)}</span>{/if}
+		</div>
 
-		<input
-			type="text"
-			class="meta-input"
-			placeholder={t('meta.opus', language)}
-			value={metadata.opus}
-			oninput={(e) => handleMetaField('opus', (e.target as HTMLInputElement).value)}
-		/>
+		<div class="meta-field-wrap">
+			<input
+				type="text"
+				class="meta-input"
+				placeholder={t('meta.opus', language)}
+				value={metadata.opus}
+				oninput={(e) => handleMetaField('opus', (e.target as HTMLInputElement).value)}
+			/>
+			{#if fromScore?.has('opus')}<span class="meta-from-score">{t('meta.fromScore', language)}</span>{/if}
+		</div>
 
 		<!-- Composer: searchable dropdown -->
-		<SearchableSelect
-			entries={COMPOSERS}
-			value={metadata.composer}
-			placeholder={t('meta.composer', language)}
-			{language}
-			onchange={handleComposerSelect}
-		/>
+		<div class="meta-field-wrap">
+			<SearchableSelect
+				entries={COMPOSERS}
+				value={metadata.composer}
+				placeholder={t('meta.composer', language)}
+				{language}
+				onchange={handleComposerSelect}
+			/>
+			{#if fromScore?.has('composer')}<span class="meta-from-score meta-from-score-select">{t('meta.fromScore', language)}</span>{/if}
+		</div>
 
 		<!-- Poet: searchable dropdown -->
-		<SearchableSelect
-			entries={POETS}
-			value={metadata.poet}
-			placeholder={t('meta.poet', language)}
-			{language}
-			onchange={handlePoetSelect}
-		/>
+		<div class="meta-field-wrap">
+			<SearchableSelect
+				entries={POETS}
+				value={metadata.poet}
+				placeholder={t('meta.poet', language)}
+				{language}
+				onchange={handlePoetSelect}
+			/>
+			{#if fromScore?.has('poet')}<span class="meta-from-score meta-from-score-select">{t('meta.fromScore', language)}</span>{/if}
+		</div>
 
 		<!-- Translator: searchable dropdown (shares poet data source) -->
-		<SearchableSelect
-			entries={POETS}
-			value={metadata.translator}
-			placeholder={t('meta.translator', language)}
-			{language}
-			onchange={handleTranslatorSelect}
-		/>
+		<div class="meta-field-wrap">
+			<SearchableSelect
+				entries={POETS}
+				value={metadata.translator}
+				placeholder={t('meta.translator', language)}
+				{language}
+				onchange={handleTranslatorSelect}
+			/>
+			{#if fromScore?.has('translator')}<span class="meta-from-score meta-from-score-select">{t('meta.fromScore', language)}</span>{/if}
+		</div>
 	</div>
 	<div class="meta-reset-row">
+		{#if onrevert}
+			<button class="btn-reset" onclick={onrevert}>
+				{t('meta.revertToScore', language)}
+			</button>
+		{/if}
 		<button
 			class="btn-reset"
 			disabled={!hasMetadata}
@@ -122,6 +154,28 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.35rem;
+	}
+
+	.meta-field-wrap {
+		position: relative;
+	}
+
+	/* The §A.6 provenance tag: subtle, non-blocking, removed by the
+	   caller on the field's first edit (Kimi's Q1 refinement). */
+	.meta-from-score {
+		position: absolute;
+		right: 8px;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+		font-family: var(--font-sans);
+		font-size: 0.62rem;
+		font-style: italic;
+		color: var(--ink-tertiary);
+	}
+
+	.meta-from-score-select {
+		right: 28px; /* clear of the dropdown chevron */
 	}
 
 	.meta-input {
