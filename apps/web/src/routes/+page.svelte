@@ -27,7 +27,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import { formatNameForPaper, COMPOSERS, POETS } from '$lib/composers-poets';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
-	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
+	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -57,6 +57,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// on. The wizard owns the profile store; this is a read-only reflection.
 	let shaneFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
 	let shaneVoiceName = $state<string | undefined>(undefined);
+	let shaneCharacteristics = $state<VoiceCharacteristics | undefined>(undefined);
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
@@ -923,9 +924,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					<CalibrationWizard
 						{scoreRenders}
 						bind:collapsed={wizardCollapsed}
-						onActiveProfileChange={(f, name) => {
+						onActiveProfileChange={(f, name, characteristics) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
+							shaneCharacteristics = characteristics;
 						}}
 						onOpenLearnNote={() => {
 							// The sung-[o] glyph's deep link: Learn tab, then the
@@ -959,6 +961,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			<VoiceProfilePane
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}
+				characteristics={shaneCharacteristics}
 				{language}
 				ingested={ingestedScore}
 				scoreTitle={metadata.title}

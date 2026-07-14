@@ -57,16 +57,24 @@
 	import type { PageSize } from '$lib/types';
 	import type { Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
-	import type { Vowel, CalibratedFormant } from '$lib/shane/engine/types';
-	import { paginateScore } from '@ilya/score-parser';
+	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { paginateScore, analyzeScore } from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
-	import { notationOnlyOverlay } from '$lib/shane/notation-overlay';
+	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
+	import { buildVoiceProfileSnapshot, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
 		formants: Partial<Record<Vowel, CalibratedFormant>>;
+		/**
+		 * The active voice's typed range/tessitura/passaggio (E.5 slice 4).
+		 * Undefined when the singer skipped the Voice characteristics phase;
+		 * the adapter then fills each missing dimension with a permissive
+		 * default and the broad-analysis note appears (§A.31).
+		 */
+		characteristics?: VoiceCharacteristics;
 		/** The active voice's name; undefined before first-launch naming. */
 		voiceName?: string;
 		language: Language;
@@ -108,6 +116,7 @@
 
 	let {
 		formants,
+		characteristics = undefined,
 		voiceName = undefined,
 		language,
 		pageSize = 'letter',
@@ -211,9 +220,44 @@
 		};
 	});
 
+	// ── The acoustic overlay (E.5 slice 4) ───────────────────────────────
+	// The adapter builds the overlay engine's snapshot from the active
+	// voice's measured formants and typed characteristics, filling any
+	// missing dimension with a permissive default (see analyze-score-adapter
+	// for the sentinel proof). buildVowelResolver supplies Ilya's per-event
+	// sung vowel; a non-Russian score resolves nothing and renders notation
+	// only, correctly (§A.35). This replaces notationOnlyOverlay: with no
+	// resolvable vowels or no fR1, analyzeScore omits every event, so the
+	// same plain vocal line renders, no acoustic claim made.
+	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName));
+	const vowelResolver = $derived(parsed ? buildVowelResolver(parsed) : null);
+	const analyzed = $derived(
+		parsed && vowelResolver ? analyzeScore(parsed, adapted.snapshot, vowelResolver) : null,
+	);
+
+	// The broad-analysis note fires only when the overlay actually carries
+	// acoustic marks (at least one resolved event) AND a characteristics
+	// dimension was left blank. A notation-only render (no marks) has nothing
+	// to qualify, so the note stays silent there.
+	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
+	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
+
+	// Composed per-dimension, DRAFT copy flagged for Dann's review (§D). EN
+	// only, matching this pane's standing EN-only body copy; the FR follows
+	// the calibration-French pass. Agentless, "sustain" discipline, no
+	// em-dash; two-item list takes no Oxford comma ("a and b").
+	const broadNoteText = $derived.by(() => {
+		const c = adapted.completeness;
+		const missing: string[] = [];
+		if (!c.range || !c.tessitura) missing.push('range guidance');
+		if (!c.passaggio) missing.push('positional passaggio flags');
+		const list = missing.length === 2 ? `${missing[0]} and ${missing[1]}` : missing[0];
+		return `Broad analysis: this score is shown without ${list}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.`;
+	});
+
 	const scorePages = $derived(
-		parsed
-			? paginateScore(parsed, notationOnlyOverlay(parsed), {
+		parsed && analyzed
+			? paginateScore(parsed, analyzed, {
 					pageWidth: contentWidth,
 					pageHeight: page1WindowHeight,
 					marginTop: 0,
@@ -289,6 +333,13 @@
 	     SVG pages come from paginateScore, notation only for now (no
 	     acoustic marks; see notation-overlay.ts). -->
 	<div class="fit-paper-container" role="region" aria-label="Repertoire fit score">
+		{#if showBroadNote}
+			<!-- The honest broad-analysis note (§A.31), shown when acoustic marks
+			     render but a characteristics dimension was left blank. Prints with
+			     the artifact (no print-hide). DRAFT copy, flagged for Dann; folding
+			     it into the Paper PageFooter's legend grammar is a follow-up. -->
+			<p class="fit-broad-note" role="note">{broadNoteText}</p>
+		{/if}
 		{#each scorePages as page, i (i)}
 			<article
 				class="paper-page profile-page"
@@ -463,6 +514,21 @@
 		align-items: center;
 		gap: 2rem;
 		padding-bottom: 2rem;
+	}
+
+	/* The broad-analysis note (E.5 slice 4): a quiet, non-blocking line above
+	   the score pages. Serif italic to match the pane's body register; prints
+	   with the artifact. DRAFT styling, flagged with the copy. */
+	.fit-broad-note {
+		margin: 0;
+		max-width: 34rem;
+		align-self: center;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+		font-size: 0.9rem;
+		line-height: 1.6;
+		color: var(--ink-secondary, #4a4540);
+		text-align: center;
 	}
 
 	/* The content window a score page renders into: the same left/right

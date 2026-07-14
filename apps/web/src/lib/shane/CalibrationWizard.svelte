@@ -130,7 +130,8 @@
 		 */
 		onActiveProfileChange?: (
 			formants: Partial<Record<Vowel, CalibratedFormant>>,
-			voiceName: string | undefined
+			voiceName: string | undefined,
+			characteristics: VoiceCharacteristics | undefined
 		) => void;
 		/**
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
@@ -889,7 +890,11 @@
 	$effect(() => {
 		onActiveProfileChange?.(
 			$state.snapshot(profile) as Partial<Record<Vowel, CalibratedFormant>>,
-			activeVoice?.name
+			activeVoice?.name,
+			// Reading activeVoice?.characteristics here tracks it, so the effect
+			// re-runs when the Voice characteristics phase writes (E.5 slice 4)
+			// and the main pane re-analyses. Snapshotted like the formants.
+			$state.snapshot(activeVoice?.characteristics) as VoiceCharacteristics | undefined
 		);
 	});
 
