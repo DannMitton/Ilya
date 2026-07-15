@@ -32,6 +32,14 @@ export interface DictionaryEntry {
   /** Lemma (base form) */
   lemma?: string;
   l?: string;
+  /** Short English gloss, composed into g.en by the loader's mapSingleEntry() */
+  e?: string;
+  /** Short French gloss, composed into g.fr by the loader's mapSingleEntry() */
+  f?: string;
+  /** Full English gloss (Tier 2), merged in place by the loader's mergeGlossTier() after interactive */
+  E?: string;
+  /** Full French gloss (Tier 2), merged in place by the loader's mergeGlossTier() after interactive */
+  F?: string;
   /** Source tag (e.g., 'supplement') */
   source?: string;
   /** Original poetic form, present when entry was resolved via normalisation */

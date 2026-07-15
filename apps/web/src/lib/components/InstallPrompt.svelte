@@ -1,7 +1,20 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import type { Language } from '$lib/i18n';
 
-  let { language = 'en' } = $props();
+  interface Props {
+    language?: Language;
+  }
+
+  let { language = 'en' }: Props = $props();
+
+  // The 'beforeinstallprompt' event is a de facto web standard, implemented
+  // by Chromium browsers, but is not part of TypeScript's DOM lib, so the
+  // event and its payload are typed by hand here rather than assumed as 'any'.
+  interface BeforeInstallPromptEvent extends Event {
+    prompt(): Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  }
 
   const strings = {
     en: {
@@ -24,7 +37,7 @@
     }
   };
 
-  let deferredPrompt = $state(null);
+  let deferredPrompt = $state<BeforeInstallPromptEvent | null>(null);
   let visible = $state(false);
   let isIos = $state(false);
 
@@ -42,9 +55,9 @@
       return;
     }
 
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', (e: Event) => {
       e.preventDefault();
-      deferredPrompt = e;
+      deferredPrompt = e as BeforeInstallPromptEvent;
       setTimeout(() => { visible = true; }, 8000);
     });
   });

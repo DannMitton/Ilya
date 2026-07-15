@@ -49,6 +49,7 @@
 import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { setBlurbData } from '@ilya/blurb';
+import type { BlurbData } from '@ilya/blurb';
 
 // -------------------------------------------------------------------
 // Configuration
@@ -314,7 +315,7 @@ async function fetchWithProgress(
 // Simple File Loading (supplement, blurb)
 // -------------------------------------------------------------------
 
-async function loadJsonFile(url: string): Promise<Record<string, unknown>> {
+async function loadJsonFile<T = Record<string, unknown>>(url: string): Promise<T> {
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP ${response.status}: ${response.statusText} (${url})`);
@@ -552,7 +553,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 
 		const [supplementData, blurbData] = await Promise.all([
 			loadJsonFile(SUPPLEMENT_URL),
-			loadJsonFile(BLURB_URL)
+			loadJsonFile<BlurbData>(BLURB_URL)
 		]);
 
 		// Step 4: Inject into Phase 1 packages

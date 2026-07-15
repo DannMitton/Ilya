@@ -111,8 +111,8 @@ interface PreTranscribeWord {
   dictionaryForm: string | null;
   yoSource: string | null;
   hasYo: boolean;
-  rightBoundary: string | null;
-  boundarySource: string | null;
+  rightBoundary: 'hard' | 'soft' | 'clitic';
+  boundarySource: 'user' | 'auto' | 'punctuation';
   /** Engine's original stress (before any user override). */
   originalStress: number;
   /** Engine's original stress source (before any user override). */
@@ -130,6 +130,9 @@ interface TranscribedWord {
   wordData: PreTranscribeWord;
   wordIdx: number;
   lineIdx: number;
+  /** Flattened from wordData.cyrillic; GraysonEngine.applyCrossWordAssimilation
+   * expects BoundaryWord, which requires cyrillic at the top level. */
+  cyrillic: string;
   cleanWord: string;
   punct: string;
   isProclitic: boolean;
@@ -144,10 +147,13 @@ interface TranscribedWord {
   syllables: SyllableData[];
   ipaUnderlying: string;
   transcriptionLog: any[];
-  ipaSurface: string | null;
+  /** Placeholder until GraysonEngine.applyCrossWordAssimilation() runs; that
+   * call unconditionally overwrites this with ipaUnderlying before anything
+   * else in the pipeline reads it, so the placeholder itself is never observed. */
+  ipaSurface: string;
   skipFinalDevoicing: boolean;
-  rightBoundary: string | null;
-  boundarySource: string | null;
+  rightBoundary: 'hard' | 'soft' | 'clitic';
+  boundarySource: 'user' | 'auto' | 'punctuation';
   ipaContent?: string;
   ipaDisplay?: string;
   ipaReconstituted?: string;
@@ -520,8 +526,13 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
     dictionaryForm,
     yoSource,
     hasYo: yoSyllable !== -1,
-    rightBoundary: null,
-    boundarySource: null,
+    // Placeholder until autoDetectBoundaries() runs immediately after, in Step 2
+    // below; every word passes through one of its branches (the 'user' guard is
+    // dead code today, nothing sets boundarySource to 'user' anywhere yet), so
+    // these placeholders are never observed. Matches the function's own 'soft'/
+    // 'auto' default branch.
+    rightBoundary: 'soft',
+    boundarySource: 'auto',
     originalStress: stress,
     originalStressSource: stressSource,
     yoAlternation,
@@ -639,6 +650,7 @@ function transcribeLine(
         wordData,
         wordIdx,
         lineIdx,
+        cyrillic: wordData.cyrillic,
         cleanWord,
         punct: wordData.punctuation,
         isProclitic,
@@ -652,7 +664,7 @@ function transcribeLine(
         syllables: engineResult.syllables,
         ipaUnderlying: engineResult.ipaUnderlying,
         transcriptionLog: engineResult.transcriptionLog,
-        ipaSurface: null,
+        ipaSurface: '',
         skipFinalDevoicing: false,
         rightBoundary: wordData.rightBoundary,
         boundarySource: wordData.boundarySource,
@@ -773,13 +785,13 @@ function transcribeLine(
               hostWord.ipaDisplay =
                 'ˈ' + proclitic.ipaContent + hostWord.ipaDisplay!.slice(1);
             } else {
-              hostWord.ipaDisplay = proclitic.ipaContent + hostWord.ipaDisplay;
+              hostWord.ipaDisplay = (proclitic.ipaContent ?? '') + (hostWord.ipaDisplay ?? '');
             }
             if (hostWord.ipaReconstituted?.startsWith('ˈ')) {
               hostWord.ipaReconstituted =
                 'ˈ' + proclitic.ipaContent + hostWord.ipaReconstituted!.slice(1);
             } else {
-              hostWord.ipaReconstituted = proclitic.ipaContent + hostWord.ipaReconstituted;
+              hostWord.ipaReconstituted = (proclitic.ipaContent ?? '') + (hostWord.ipaReconstituted ?? '');
             }
           } else {
             // Vowel-bearing proclitic: separate with space

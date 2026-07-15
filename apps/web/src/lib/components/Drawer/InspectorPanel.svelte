@@ -41,6 +41,11 @@
 
 	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, glossOverride, onglossoverride }: Props = $props();
 
+	// Whether this word is a proclitic or enclitic (no independent stress).
+	// Declared here, ahead of displayCyrillic below, because it depends only
+	// on word and nothing declared between here and its old position.
+	const isClitic = $derived(word.isProclitic || word.isEnclitic);
+
 	// ── Reconstitution derivations (bidirectional) ─────────────
 	// Spot override always inverts the global setting for this word.
 	// Global reduced (default) + spot checked = reconstitute this word.
@@ -165,8 +170,6 @@
 		syllableIndex: number;
 	}
 
-	const isClitic = $derived(word.isProclitic || word.isEnclitic);
-
 	const ribbonEntries = $derived.by((): RibbonEntry[] => {
 		const entries: RibbonEntry[] = [];
 		let idx = 0;
@@ -190,7 +193,7 @@
 			const displayIpa = reconActive && reconstitutedIpaMap.has(di)
 				? reconstitutedIpaMap.get(di)!
 				: baseIpa;
-			const originalSi = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			const originalSi = entry.syllableIndex ?? 0;
 			const si = charToSyllableRemap ? (charToSyllableRemap.get(di) ?? originalSi) : originalSi;
 			// Apply combining acute accent to stressed vowel (ё/Ё are inherently stressed, never marked).
 			// Suppress for clitics (no independent stress) and inferred/VERIFY words (stress uncertain).
@@ -909,7 +912,10 @@
 	/** Build the stress-marked Cyrillic for a dictionary entry's lemma. */
 	function getStressedLemma(entry: DictionaryEntry): string {
 		const lemma = entry.l || '';
-		const si = entry.s;
+		// entry.s absent means "no stress data": treat the same as the type's
+		// own -2 "unknown" sentinel (packages/dictionary/src/types.ts), which
+		// already falls into the unmarked-lemma branch below. Same output either way.
+		const si = entry.s ?? -2;
 		if (si < 0 || !lemma) return lemma;
 		// Find the si-th vowel and insert combining acute after it
 		const vowels = new Set('аеёиоуыэюяАЕЁИОУЫЭЮЯ'.split(''));
