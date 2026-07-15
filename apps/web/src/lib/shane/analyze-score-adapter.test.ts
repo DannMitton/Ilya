@@ -89,6 +89,52 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completeness.formants).toBe(true);
 	});
 
+	// §B.4 (Dann, 2026-07-15): plausibility excludes, confidence does not. The
+	// two are orthogonal by ruling, and only plausibility says whether the
+	// number can be the vowel.
+	it('excludes a reading the plausibility guard judged implausible', () => {
+		const { snapshot } = buildVoiceProfileSnapshot(
+			{
+				a: formant(800),
+				// The motivating class: 1063 Hz extracted for a sung [i]. The guard
+				// demotes an implausible capture to provisional AND records the verdict.
+				i: {
+					f1: 1063,
+					confidence: 'high',
+					reading: 'provisional',
+					source: 'measured-user',
+					plausibility: 'implausible',
+				},
+			} as Partial<Record<'a' | 'i', CalibratedFormant>>,
+			undefined,
+		);
+		expect(snapshot.fR1).toEqual({ a: 800 });
+	});
+
+	it('keeps a provisional reading with no implausible verdict: a noisy room is not a bad vowel', () => {
+		const { snapshot, completeness } = buildVoiceProfileSnapshot(
+			{
+				// Dann's real stored [i]: provisional purely from confidence: 'low'
+				// (analyze.ts:34), and plausible on the guard's own window.
+				i: { f1: 247.03, confidence: 'low', reading: 'provisional', source: 'measured-user' },
+			} as Partial<Record<'i', CalibratedFormant>>,
+			undefined,
+		);
+		expect(snapshot.fR1).toEqual({ i: 247.03 });
+		expect(completeness.formants).toBe(true);
+	});
+
+	it('keeps readings the guard never judged: absent or unchecked is not a verdict', () => {
+		const { snapshot } = buildVoiceProfileSnapshot(
+			{
+				a: formant(800), // no plausibility field: predates the guard
+				o: { ...formant(500), plausibility: 'unchecked' }, // window unavailable
+			} as Partial<Record<'a' | 'o', CalibratedFormant>>,
+			undefined,
+		);
+		expect(snapshot.fR1).toEqual({ a: 800, o: 500 });
+	});
+
 	it('reports every dimension broad when characteristics are absent', () => {
 		const { completeness } = buildVoiceProfileSnapshot(FORMANTS_A, undefined);
 		expect(completeness).toEqual({ formants: true, range: false, tessitura: false, passaggio: false });

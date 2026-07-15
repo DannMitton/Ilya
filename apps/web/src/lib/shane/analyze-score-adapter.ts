@@ -99,7 +99,8 @@ export function isBroadAnalysis(c: AnalysisCompleteness): boolean {
  * it is sandbox-testable the way `analyzeScore` is.
  *
  * @param formants the active voice's direct-sample formants (captured or
- *   provisional); a reading with no usable f1 contributes no fR1.
+ *   provisional); a reading with no usable f1, or one the plausibility guard
+ *   judged implausible, contributes no fR1 (§B.4).
  * @param characteristics the typed range/tessitura/passaggio, or undefined
  *   when the singer skipped the phase entirely.
  * @param label optional citation-block label (e.g. the voice name or type).
@@ -112,9 +113,33 @@ export function buildVoiceProfileSnapshot(
 	// fR1 per vowel from the measured formants. A vowel the singer never sang,
 	// or a reading with no usable f1, contributes nothing: the engine already
 	// omits any event whose vowel has no fR1, so silence here is honest.
+	//
+	// §B.4 RULED (Dann, 2026-07-15): the same silence extends to a reading the
+	// plausibility guard judged IMPLAUSIBLE, and to nothing else. Fit will not
+	// build acoustic marks on a number the engine has already decided cannot be
+	// that vowel (the motivating class: fR1 ≈ 1063 Hz extracted for a sung [i]).
+	//
+	// What is deliberately NOT excluded, and why: `reading: 'provisional'` is a
+	// SIGNAL-QUALITY verdict, not a physical one. analyze.ts:30-34 sets it from
+	// `confidence === 'low'`, which means no stable window, a rejected detection,
+	// or SNR under 12 dB. A noisy capture of an honest vowel is still an honest
+	// vowel, and analyze.ts:26-29 records that real-room captures land there
+	// routinely. Excluding on `reading` would silently drop good data for any
+	// singer without a quiet room. Plausibility and confidence are orthogonal by
+	// ruling (engine/types.ts), and only plausibility speaks to whether the
+	// number can be the vowel.
+	//
+	// `plausibility` absent means the guard never ran (values predating it, or
+	// derived values), which is `unchecked`, not a verdict. Unchecked is kept:
+	// the guard's own tri-state ruling says absence of a window is not a failure.
 	const fR1: Record<string, number> = {};
 	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
-		if (formant && typeof formant.f1 === 'number' && formant.f1 > 0) {
+		if (
+			formant &&
+			typeof formant.f1 === 'number' &&
+			formant.f1 > 0 &&
+			formant.plausibility !== 'implausible'
+		) {
 			fR1[vowel] = formant.f1;
 		}
 	}
