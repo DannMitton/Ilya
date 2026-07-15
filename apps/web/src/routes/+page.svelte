@@ -21,7 +21,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
-	import EngravingControls from '$lib/shane/EngravingControls.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import type { WorkMetadata } from '@ilya/score-parser';
 	import { formatNameForPaper, COMPOSERS, POETS } from '$lib/composers-poets';
@@ -61,8 +60,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
-	// Fit engraving preferences (drawer panel, Dann's ruling 2026-07-13):
-	// user-adjustable notation geometry, Appendix-derived defaults.
+	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
+	// No user control; the Appendix-derived defaults are the product, and the
+	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
 	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
 	// Q3 wizard collapse (Kimi §A.28): successful-render counter and the
 	// wizard's collapse state, both held here so they survive the shane
@@ -897,30 +897,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							     string on hover. -->
 							<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
 						{/if}
-					<!-- The drop surface is a drag-and-drop target, not a typing
-					     field, so it cedes width to the engraving panel beside it.
-					     Engraving sits LEFT so its section header aligns flush
-					     with the headers below; the drop surface sits nearest
-					     the page GUI (Dann's placement ruling, 2026-07-13). -->
-					<div class="shane-upload-row">
-						<div class="shane-engraving-col">
-							<EngravingControls values={engraving} {language} onchange={(v) => (engraving = v)} />
-						</div>
-						<div class="shane-upload-col">
-							<ScoreUploader
-								{language}
-								oningested={(ingested) => {
-									// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
-									// as paginated notation in the Fit main pane.
-									ingestedScore = ingested;
-									// §A.6 auto-populate (Kimi's Q1 ruling): fill blank
-									// metadata fields from the score header, if any.
-									const wm = ingested.result.score.workMetadata;
-									if (wm) applyScoreHeader(wm);
-								}}
-							/>
-						</div>
-					</div>
+					<!-- The drop surface sits full-width directly beneath the
+					     Metadata block, twinning Ilya's headerless textarea. The
+					     EngravingControls panel is removed and the stave target
+					     is fixed (Dann's ruling, 2026-07-15; Kimi Q1 and Q2). -->
+					<ScoreUploader
+						{language}
+						oningested={(ingested) => {
+							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
+							// as paginated notation in the Fit main pane.
+							ingestedScore = ingested;
+							// §A.6 auto-populate (Kimi's Q1 ruling): fill blank
+							// metadata fields from the score header, if any.
+							const wm = ingested.result.score.workMetadata;
+							if (wm) applyScoreHeader(wm);
+						}}
+					/>
 					<CalibrationWizard
 						{scoreRenders}
 						bind:collapsed={wizardCollapsed}
@@ -1023,21 +1015,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		flex-direction: column;
 		gap: 6px;
 		padding: 20px 1rem 40px;
-	}
-
-	/* The upload row: the drop surface (a drag target, not a typing
-	   field) beside the engraving panel (Dann's split ruling,
-	   2026-07-13). Equal halves; both columns may shrink. */
-	.shane-upload-row {
-		display: flex;
-		gap: 0.75rem;
-		align-items: flex-start;
-	}
-
-	.shane-upload-col,
-	.shane-engraving-col {
-		flex: 1 1 0;
-		min-width: 0;
 	}
 
 	/* Fit surfaces use the tab's lavender for the focus ring, not the global
