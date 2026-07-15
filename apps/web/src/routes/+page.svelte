@@ -181,7 +181,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// Count atoms per syllable from displayLog
 		const syllableAtomCounts = new Map<number, number>();
 		for (const entry of word.displayLog) {
-			const si = (entry as Record<string, unknown>).syllableIndex as number ?? 0;
+			const si = entry.syllableIndex ?? 0;
 			syllableAtomCounts.set(si, (syllableAtomCounts.get(si) ?? 0) + 1);
 		}
 		let ribbonWidth = 0;
