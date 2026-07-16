@@ -17,7 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
-import { buildVoiceProfileSnapshot, isBroadAnalysis } from './analyze-score-adapter';
+import { buildVoiceProfileSnapshot, completenessOf, isBroadAnalysis } from './analyze-score-adapter';
 import type { CalibratedFormant, VoiceCharacteristics } from './engine/types';
 
 // ── fixtures ────────────────────────────────────────────────────────
@@ -141,6 +141,26 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(isBroadAnalysis(completeness)).toBe(true);
 	});
 
+	// Option A (Dann, 2026-07-15): no sentinel band. A missing dimension is
+	// omitted from the snapshot entirely, not filled with an inert placeholder.
+	it('omits range, tessitura, and passaggio from the snapshot when characteristics are absent: no sentinel band', () => {
+		const { snapshot } = buildVoiceProfileSnapshot(FORMANTS_A, undefined);
+		expect(snapshot.range).toBeUndefined();
+		expect(snapshot.tessitura).toBeUndefined();
+		expect(snapshot.passaggio).toBeUndefined();
+		expect('range' in snapshot).toBe(false);
+		expect('tessitura' in snapshot).toBe(false);
+		expect('passaggio' in snapshot).toBe(false);
+	});
+
+	it('completenessOf derives the same signal from the snapshot as buildVoiceProfileSnapshot reports: the two channels cannot disagree', () => {
+		const complete = buildVoiceProfileSnapshot(FORMANTS_A, COMPLETE, 'Test voice');
+		expect(completenessOf(complete.snapshot)).toEqual(complete.completeness);
+
+		const broad = buildVoiceProfileSnapshot(FORMANTS_A, undefined);
+		expect(completenessOf(broad.snapshot)).toEqual(broad.completeness);
+	});
+
 	it('treats a single declared passaggio as complete (point band)', () => {
 		const { snapshot, completeness } = buildVoiceProfileSnapshot(FORMANTS_A, {
 			source: 'manual',
@@ -181,20 +201,24 @@ describe('analyzeScore through the adapter', () => {
 		expect(s.hi.pass).toBe(false);
 	});
 
-	it('all dimensions missing: no note is ever out-of-range, in-tessitura, or in passaggio', () => {
+	// Option A (Dann, 2026-07-15): absence is genuine, not a permissive
+	// default. With no characteristics at all, nothing was assessed: every
+	// note's rangeStatus and inPassaggio is `undefined`, never a settled
+	// negative finding.
+	it('all dimensions missing: rangeStatus and inPassaggio are undefined, not a settled negative finding', () => {
 		const s = statusOf(undefined);
 		for (const probe of [s.lo, s.mid, s.hi]) {
-			expect(probe.range).toBe('in-range');
-			expect(probe.pass).toBe(false);
+			expect(probe.range).toBeUndefined();
+			expect(probe.pass).toBeUndefined();
 		}
 	});
 
-	it('per-dimension independence: range alone still bites; tessitura and passaggio stay silent', () => {
+	it('per-dimension independence: range alone still bites; tessitura falls back to in-range, passaggio stays undefined', () => {
 		const s = statusOf({ source: 'manual', rangeLow: P('E', 3), rangeHigh: P('A', 4) });
 		expect(s.lo.range).toBe('out-of-range');
 		expect(s.hi.range).toBe('out-of-range');
 		expect(s.mid.range).toBe('in-range');
-		expect(s.mid.pass).toBe(false);
+		expect(s.mid.pass).toBeUndefined();
 	});
 
 	it('no fR1: every event is omitted (notation-only), regardless of characteristics', () => {

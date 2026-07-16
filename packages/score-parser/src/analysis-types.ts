@@ -37,18 +37,26 @@ export interface VoiceProfileSnapshot {
    */
   fR1: Record<string, number>;
 
-  /** The singer's absolute range (lowest and highest singable pitch). */
-  range: { lowest: Pitch; highest: Pitch };
+  /**
+   * The singer's absolute range (lowest and highest singable pitch).
+   * Absent when the singer skipped the wizard phase that supplies it:
+   * genuine absence, not a permissive default (Dann, 2026-07-15, Option A).
+   */
+  range?: { lowest: Pitch; highest: Pitch };
 
-  /** The singer's comfortable tessitura. */
-  tessitura: { low: Pitch; high: Pitch };
+  /**
+   * The singer's comfortable tessitura. Absent when not provided; see
+   * `range` above.
+   */
+  tessitura?: { low: Pitch; high: Pitch };
 
   /**
    * The forecast zona di passaggio band: the primo and secondo passaggio
    * pitches for this voice (from voice-type norms and the profile). A
-   * forecast, not a measured boundary.
+   * forecast, not a measured boundary. Absent when not provided; see
+   * `range` above.
    */
-  passaggio: { primo: Pitch; secondo: Pitch };
+  passaggio?: { primo: Pitch; secondo: Pitch };
 
   /** Optional label carried through for the citation block (e.g. voice type). */
   label?: string;
@@ -79,8 +87,11 @@ export interface AnalyzedGlobal {
   /** Where the melody mostly sits (a percentile band of the sung pitches). */
   tessitura: { low: Pitch; high: Pitch };
 
-  /** The singer's forecast passaggio band, carried from the profile for overlay display. */
-  passaggio: { primo: Pitch; secondo: Pitch };
+  /**
+   * The singer's forecast passaggio band, carried from the profile for
+   * overlay display. Absent when the profile carried no passaggio.
+   */
+  passaggio?: { primo: Pitch; secondo: Pitch };
 
   /** Fifths of the initial key signature (from ParsedScore). */
   keyFifths: number;
@@ -117,11 +128,20 @@ export interface AnalyzedEvent {
   phonationBreak: boolean;
 
   // ── Position relative to the singer's voice (forecast) ──
-  /** The note's pitch falls within the forecast zona di passaggio band. */
-  inPassaggio: boolean;
+  /**
+   * The note's pitch falls within the forecast zona di passaggio band.
+   * `undefined` means the singer's profile carried no passaggio, so the
+   * note was never assessed: not the same as `false`, which would claim
+   * the note was checked and cleared.
+   */
+  inPassaggio?: boolean;
 
-  /** Where the note sits relative to the singer's tessitura and absolute range. */
-  rangeStatus: 'in-tessitura' | 'in-range' | 'out-of-range';
+  /**
+   * Where the note sits relative to the singer's tessitura and absolute
+   * range. `undefined` means the singer's profile carried no range, so the
+   * note was never assessed.
+   */
+  rangeStatus?: 'in-tessitura' | 'in-range' | 'out-of-range';
 
   // ── Diction target + advice ──
   /** The operative sung vowel (IPA), from Ilya via the vowel resolver. */

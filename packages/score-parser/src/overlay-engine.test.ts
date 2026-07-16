@@ -163,9 +163,9 @@ describe('overlay engine: analyzeScore', () => {
     const mutable: VoiceProfileSnapshot = JSON.parse(JSON.stringify(profile));
     const a = analyzeScore(fixture, mutable, bySyllable);
     mutable.fR1.a = 999;
-    mutable.passaggio.primo.octave = 9;
+    if (mutable.passaggio) mutable.passaggio.primo.octave = 9; // profile is complete: always defined here
     expect(a.calibrationSnapshot.fR1.a).toBe(600);
-    expect(a.calibrationSnapshot.passaggio.primo.octave).toBe(3);
+    expect(a.calibrationSnapshot.passaggio?.primo.octave).toBe(3);
   });
 });
 
@@ -181,5 +181,54 @@ describe('overlay engine: melisma carries the sustained vowel', () => {
     expect(Object.keys(a.events).sort()).toEqual(['m1', 'm2']);
     expect(a.events.m2.vowel).toBe('a');
     expect(a.events.m2.turningPitch).toEqual({ step: 'D', octave: 4, alter: 0 });
+  });
+});
+
+// Dann ruled 2026-07-15 (Option A): a dimension the singer never provided is
+// genuinely absent, not defaulted to a negative finding. `undefined` means
+// "not assessed"; it must never read as `false` or a settled range status.
+describe('overlay engine: absent dimensions are not assessed, not negative findings', () => {
+  it('omits rangeStatus and inPassaggio entirely when the whole profile has no range, tessitura, or passaggio', () => {
+    const bare: VoiceProfileSnapshot = { fR1: { a: 600 } };
+    const a = analyzeScore(fixture, bare, bySyllable);
+    for (const id of ['n1', 'n2', 'n3']) {
+      expect(a.events[id].rangeStatus).toBeUndefined();
+      expect(a.events[id].inPassaggio).toBeUndefined();
+      expect('rangeStatus' in a.events[id]).toBe(false);
+      expect('inPassaggio' in a.events[id]).toBe(false);
+    }
+  });
+
+  it('assesses range without tessitura: in-tessitura never fires, but out-of-range and in-range still do', () => {
+    const rangeOnly: VoiceProfileSnapshot = { fR1: { a: 600 }, range: profile.range };
+    const a = analyzeScore(fixture, rangeOnly, bySyllable);
+    expect(a.events.n1.rangeStatus).toBe('in-range'); // E3: would be in-tessitura with tessitura present
+    expect(a.events.n2.rangeStatus).toBe('in-range');
+    expect(a.events.n3.rangeStatus).toBe('out-of-range'); // D5 still above C5
+    expect(a.events.n1.inPassaggio).toBeUndefined(); // no passaggio supplied
+  });
+
+  it('assesses passaggio independently of range and tessitura', () => {
+    const passaggioOnly: VoiceProfileSnapshot = { fR1: { a: 600 }, passaggio: profile.passaggio };
+    const a = analyzeScore(fixture, passaggioOnly, bySyllable);
+    expect(a.events.n1.inPassaggio).toBe(true); // E3 165 in [147,196]
+    expect(a.events.n2.inPassaggio).toBe(false);
+    expect(a.events.n1.rangeStatus).toBeUndefined(); // no range supplied
+  });
+
+  it('omits global.passaggio and calibrationSnapshot.passaggio when the profile has none', () => {
+    const noPassaggio: VoiceProfileSnapshot = { fR1: { a: 600 }, range: profile.range, tessitura: profile.tessitura };
+    const a = analyzeScore(fixture, noPassaggio, bySyllable);
+    expect(a.global.passaggio).toBeUndefined();
+    expect(a.calibrationSnapshot.passaggio).toBeUndefined();
+    expect('passaggio' in a.global).toBe(false);
+    expect('passaggio' in a.calibrationSnapshot).toBe(false);
+  });
+
+  it('a complete profile is unaffected: the full three-way rangeStatus branch still runs', () => {
+    const a = analyzeScore(fixture, profile, bySyllable);
+    expect(a.events.n1.rangeStatus).toBe('in-tessitura');
+    expect(a.events.n2.rangeStatus).toBe('in-range');
+    expect(a.events.n3.rangeStatus).toBe('out-of-range');
   });
 });

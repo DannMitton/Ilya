@@ -131,12 +131,15 @@ export function analyzeScore(
   vowelForEvent: VowelResolver,
   options: AnalyzeOptions = {},
 ): AnalyzedScore {
-  const rangeLowHz = pitchToHz(profile.range.lowest);
-  const rangeHighHz = pitchToHz(profile.range.highest);
-  const tessLowHz = pitchToHz(profile.tessitura.low);
-  const tessHighHz = pitchToHz(profile.tessitura.high);
-  const primoHz = pitchToHz(profile.passaggio.primo);
-  const secondoHz = pitchToHz(profile.passaggio.secondo);
+  // Each pair derived only when its dimension is present. Absence here is
+  // what makes `rangeStatus` and `inPassaggio` genuinely absent below,
+  // rather than defaulted to a negative finding (Dann, 2026-07-15, Option A).
+  const rangeLowHz = profile.range ? pitchToHz(profile.range.lowest) : undefined;
+  const rangeHighHz = profile.range ? pitchToHz(profile.range.highest) : undefined;
+  const tessLowHz = profile.tessitura ? pitchToHz(profile.tessitura.low) : undefined;
+  const tessHighHz = profile.tessitura ? pitchToHz(profile.tessitura.high) : undefined;
+  const primoHz = profile.passaggio ? pitchToHz(profile.passaggio.primo) : undefined;
+  const secondoHz = profile.passaggio ? pitchToHz(profile.passaggio.secondo) : undefined;
 
   const events: Record<string, AnalyzedEvent> = {};
   const sungMidis: number[] = [];
@@ -158,15 +161,24 @@ export function analyzeScore(
     // Crossing: fo within a semitone of fR1 itself.
     const crossing = Math.abs(centsBetween(pitchHz, fR1)) <= CROSSING_TOLERANCE_CENTS;
 
-    // Positional facts.
-    const inPassaggio = pitchHz >= primoHz - 1e-6 && pitchHz <= secondoHz + 1e-6;
+    // Positional facts. Undefined means not assessed: the profile carried no
+    // passaggio or no range, so no claim, positive or negative, is made.
+    const inPassaggio =
+      primoHz !== undefined && secondoHz !== undefined
+        ? pitchHz >= primoHz - 1e-6 && pitchHz <= secondoHz + 1e-6
+        : undefined;
+
     let rangeStatus: AnalyzedEvent['rangeStatus'];
-    if (
+    if (rangeLowHz === undefined || rangeHighHz === undefined) {
+      rangeStatus = undefined; // no range: nothing to assess
+    } else if (
       centsBetween(rangeLowHz, pitchHz) < -RANGE_EPSILON_CENTS ||
       centsBetween(rangeHighHz, pitchHz) > RANGE_EPSILON_CENTS
     ) {
       rangeStatus = 'out-of-range';
     } else if (
+      tessLowHz !== undefined &&
+      tessHighHz !== undefined &&
       centsBetween(tessLowHz, pitchHz) >= -RANGE_EPSILON_CENTS &&
       centsBetween(tessHighHz, pitchHz) <= RANGE_EPSILON_CENTS
     ) {
@@ -181,8 +193,8 @@ export function analyzeScore(
       turningPitch: hzToPitch(turningHz),
       crossing,
       phonationBreak: false, // set by the diction layer / correction UI
-      inPassaggio,
-      rangeStatus,
+      ...(inPassaggio !== undefined ? { inPassaggio } : {}),
+      ...(rangeStatus !== undefined ? { rangeStatus } : {}),
       vowel,
     };
   }
@@ -212,7 +224,9 @@ function buildGlobal(parsed: ParsedScore, profile: VoiceProfileSnapshot, sungMid
   return {
     range: { lowest: midiToPitch(lowestMidi), highest: midiToPitch(highestMidi) },
     tessitura: { low: midiToPitch(tessLowMidi), high: midiToPitch(tessHighMidi) },
-    passaggio: { primo: { ...profile.passaggio.primo }, secondo: { ...profile.passaggio.secondo } },
+    ...(profile.passaggio
+      ? { passaggio: { primo: { ...profile.passaggio.primo }, secondo: { ...profile.passaggio.secondo } } }
+      : {}),
     keyFifths: firstKey?.fifths ?? 0,
     timeSignature: firstTime ? `${firstTime.beats}/${firstTime.beatType}` : '4/4',
   };
@@ -222,9 +236,11 @@ function buildGlobal(parsed: ParsedScore, profile: VoiceProfileSnapshot, sungMid
 function deepCopyProfile(p: VoiceProfileSnapshot): VoiceProfileSnapshot {
   return {
     fR1: { ...p.fR1 },
-    range: { lowest: { ...p.range.lowest }, highest: { ...p.range.highest } },
-    tessitura: { low: { ...p.tessitura.low }, high: { ...p.tessitura.high } },
-    passaggio: { primo: { ...p.passaggio.primo }, secondo: { ...p.passaggio.secondo } },
+    ...(p.range ? { range: { lowest: { ...p.range.lowest }, highest: { ...p.range.highest } } } : {}),
+    ...(p.tessitura ? { tessitura: { low: { ...p.tessitura.low }, high: { ...p.tessitura.high } } } : {}),
+    ...(p.passaggio
+      ? { passaggio: { primo: { ...p.passaggio.primo }, secondo: { ...p.passaggio.secondo } } }
+      : {}),
     ...(p.label !== undefined ? { label: p.label } : {}),
   };
 }
