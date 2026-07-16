@@ -1308,7 +1308,7 @@
 					<h3 class="charx-heading">Passaggio</h3>
 					<!-- Kimi's example string redrafted agentless (the §A.31 copy
 					     flag): the app never speaks as "Shane". -->
-					<p class="charx-hint">If left blank, passaggio events are not flagged.</p>
+					<p class="charx-hint">The zona lies between two turns, a lower and an upper. Enter both to flag it; with either blank it stays unmarked, which does not mean it is absent.</p>
 					<NotePicker
 						label="Primary passaggio"
 						value={activeVoice.characteristics?.passaggioPrimary}
