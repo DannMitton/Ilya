@@ -364,6 +364,7 @@
 						onheightchange={handleHeaderHeight}
 						versionAccent="#8E7E9B"
 						markAccent="#8E7E9B"
+						ruleAccent="#8E7E9B"
 					/>
 					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
@@ -400,6 +401,7 @@
 		onheightchange={handleHeaderHeight}
 		versionAccent="#8E7E9B"
 		markAccent="#8E7E9B"
+		ruleAccent="#8E7E9B"
 	/>
 
 	<!-- Content layer: the envelope's interim states, centred in the

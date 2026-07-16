@@ -22,9 +22,15 @@
 		 * badge (Dann's ruling, 2026-07-13).
 		 */
 		markAccent?: string;
+		/**
+		 * Colour of the header rule beneath the metadata. Transcription keeps
+		 * the default sage; Fit/Shane surfaces pass deeper-lavender so the header
+		 * harmonizes with the footer hairline (Dann's ruling, 2026-07-16).
+		 */
+		ruleAccent?: string;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)' }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)' }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -90,7 +96,7 @@
 		{/if}
 	</div>
 
-	<div class="header-rule"></div>
+	<div class="header-rule" style="border-bottom-color: {ruleAccent}"></div>
 </header>
 
 <style>
