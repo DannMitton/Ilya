@@ -189,7 +189,10 @@ describe('overlay engine: melisma carries the sustained vowel', () => {
 // "not assessed"; it must never read as `false` or a settled range status.
 describe('overlay engine: absent dimensions are not assessed, not negative findings', () => {
   it('omits rangeStatus and inPassaggio entirely when the whole profile has no range, tessitura, or passaggio', () => {
-    const bare: VoiceProfileSnapshot = { fR1: { a: 600 } };
+    // fR1 must cover every vowel the fixture sings ('a' and 'i'), or the engine
+    // omits those events entirely (no fR1 → no forecast) and there is nothing
+    // to assert absence on.
+    const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
     const a = analyzeScore(fixture, bare, bySyllable);
     for (const id of ['n1', 'n2', 'n3']) {
       expect(a.events[id].rangeStatus).toBeUndefined();
@@ -200,7 +203,7 @@ describe('overlay engine: absent dimensions are not assessed, not negative findi
   });
 
   it('assesses range without tessitura: in-tessitura never fires, but out-of-range and in-range still do', () => {
-    const rangeOnly: VoiceProfileSnapshot = { fR1: { a: 600 }, range: profile.range };
+    const rangeOnly: VoiceProfileSnapshot = { fR1: profile.fR1, range: profile.range };
     const a = analyzeScore(fixture, rangeOnly, bySyllable);
     expect(a.events.n1.rangeStatus).toBe('in-range'); // E3: would be in-tessitura with tessitura present
     expect(a.events.n2.rangeStatus).toBe('in-range');
@@ -209,7 +212,7 @@ describe('overlay engine: absent dimensions are not assessed, not negative findi
   });
 
   it('assesses passaggio independently of range and tessitura', () => {
-    const passaggioOnly: VoiceProfileSnapshot = { fR1: { a: 600 }, passaggio: profile.passaggio };
+    const passaggioOnly: VoiceProfileSnapshot = { fR1: profile.fR1, passaggio: profile.passaggio };
     const a = analyzeScore(fixture, passaggioOnly, bySyllable);
     expect(a.events.n1.inPassaggio).toBe(true); // E3 165 in [147,196]
     expect(a.events.n2.inPassaggio).toBe(false);
