@@ -62,8 +62,9 @@ export interface VoiceProfile {
  * singers). Every field optional: the wizard phase is skippable and never
  * a gate. `analyzeScore` integration treats incompleteness per dimension —
  * missing range/tessitura yields permissive defaults and an honest
- * "broad analysis" note; a blank passaggio simply means no positional
- * passaggio flagging (ruled copy pattern).
+ * "broad analysis" note; passaggio flagging needs BOTH edges, since the zona
+ * di passaggio is the span between primo and secondo (§B.3), so a blank or
+ * single-edge passaggio simply means no positional passaggio flagging.
  *
  * `Pitch` is the score-parser's canonical spelled pitch (imported at the
  * top of this file), so the picker, the store, and the overlay engine
@@ -78,9 +79,9 @@ export interface VoiceCharacteristics {
 	tessituraLow?: Pitch;
 	/** Tessitura ceiling. */
 	tessituraHigh?: Pitch;
-	/** The primary passaggio (break) note; blank = no passaggio flagging. */
+	/** Primo passaggio (lower zona boundary). Positional flagging needs both edges (§B.3). */
 	passaggioPrimary?: Pitch;
-	/** Optional second break (some voices carry two distinct breaks). */
+	/** Secondo passaggio (upper zona boundary); with primo it defines the zona di passaggio. */
 	passaggioSecondary?: Pitch;
 	/** Provenance of the values as a set (Kimi's ruled vocabulary). */
 	source: 'declared-template' | 'manual' | 'sung-verified';

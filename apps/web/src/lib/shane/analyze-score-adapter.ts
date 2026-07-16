@@ -45,7 +45,7 @@ export interface AnalysisCompleteness {
 	range: boolean;
 	/** Both tessitura edges were provided. */
 	tessitura: boolean;
-	/** The primary passaggio was provided (a secondary is optional). */
+	/** Both passaggio edges were provided: the zona di passaggio needs primo and secondo (§B.3). */
 	passaggio: boolean;
 }
 
@@ -133,7 +133,7 @@ export function buildVoiceProfileSnapshot(
 	const c = characteristics;
 	const hasRange = c?.rangeLow !== undefined && c?.rangeHigh !== undefined;
 	const hasTessitura = c?.tessituraLow !== undefined && c?.tessituraHigh !== undefined;
-	const hasPassaggio = c?.passaggioPrimary !== undefined;
+	const hasPassaggio = c?.passaggioPrimary !== undefined && c?.passaggioSecondary !== undefined;
 
 	// A dimension the singer did not provide is simply omitted: genuine
 	// absence, not a permissive default (Option A). The overlay engine reads
@@ -142,15 +142,16 @@ export function buildVoiceProfileSnapshot(
 
 	const tessitura = hasTessitura ? { low: { ...c!.tessituraLow! }, high: { ...c!.tessituraHigh! } } : undefined;
 
+	// §B.3 RULED (Dann, 2026-07-16): the zona di passaggio is derived only when
+	// BOTH edges are declared. Primo and secondo are the lower and upper
+	// boundaries of the zone (Miller, The Structure of Singing, pp. 116-117); a
+	// single self-declared pitch is a boundary, not a zone. A lone edge yields
+	// no passaggio, so `inPassaggio` stays `undefined` (not assessed), never a
+	// point band that would read as a negative finding for every off-break note.
+	// No width is inferred from one edge: individual variation is carried by
+	// self-declaration, not a synthesized span.
 	const passaggio = hasPassaggio
-		? {
-				primo: { ...c!.passaggioPrimary! },
-				// A single declared break reads as a point band (secondo = primo):
-				// inPassaggio then flags only the exact break pitch, the honest
-				// reading of one passaggio. PROVISIONAL: point band vs no flagging
-				// vs a pedagogical zone is flagged for Dann and Fable.
-				secondo: { ...(c!.passaggioSecondary ?? c!.passaggioPrimary!) },
-			}
+		? { primo: { ...c!.passaggioPrimary! }, secondo: { ...c!.passaggioSecondary! } }
 		: undefined;
 
 	const snapshot: VoiceProfileSnapshot = {

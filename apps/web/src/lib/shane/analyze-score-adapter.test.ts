@@ -161,13 +161,33 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completenessOf(broad.snapshot)).toEqual(broad.completeness);
 	});
 
-	it('treats a single declared passaggio as complete (point band)', () => {
-		const { snapshot, completeness } = buildVoiceProfileSnapshot(FORMANTS_A, {
+	it('a single declared passaggio yields no zona: one edge is a boundary, not a zone (§B.3)', () => {
+		// Primo only: the zona needs both edges (Dann ruled 2026-07-16). No point
+		// band, no inferred width; the analysis reads passaggio as not assessed.
+		const primoOnly = buildVoiceProfileSnapshot(FORMANTS_A, {
 			source: 'manual',
 			passaggioPrimary: P('F', 4),
 		});
-		expect(completeness.passaggio).toBe(true);
-		expect(snapshot.passaggio).toEqual({ primo: P('F', 4), secondo: P('F', 4) });
+		expect(primoOnly.snapshot.passaggio).toBeUndefined();
+		expect('passaggio' in primoOnly.snapshot).toBe(false);
+		expect(primoOnly.completeness.passaggio).toBe(false);
+
+		// Secondo only: symmetric, also no zona.
+		const secondoOnly = buildVoiceProfileSnapshot(FORMANTS_A, {
+			source: 'manual',
+			passaggioSecondary: P('F', 4),
+		});
+		expect(secondoOnly.snapshot.passaggio).toBeUndefined();
+		expect(secondoOnly.completeness.passaggio).toBe(false);
+
+		// Both edges: the zona is derived.
+		const both = buildVoiceProfileSnapshot(FORMANTS_A, {
+			source: 'manual',
+			passaggioPrimary: P('F', 4),
+			passaggioSecondary: P('A', 4),
+		});
+		expect(both.snapshot.passaggio).toEqual({ primo: P('F', 4), secondo: P('A', 4) });
+		expect(both.completeness.passaggio).toBe(true);
 	});
 
 	it('marks a half-filled dimension incomplete (range needs both edges)', () => {
