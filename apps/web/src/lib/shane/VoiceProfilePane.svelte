@@ -163,7 +163,9 @@
 		'Ten'
 	];
 
-	let capturedVowels = $derived(ROSTER_ORDER.filter((g) => formants[g]?.reading === 'captured'));
+	// The provisional roster still reads capture STATUS: it names which vowels
+	// the singer may want to re-take. That is a different question from what
+	// the forecast is built on; see `analysedVowels` below (§B.2).
 	let provisionalVowels = $derived(
 		ROSTER_ORDER.filter((g) => formants[g]?.reading === 'provisional')
 	);
@@ -230,6 +232,22 @@
 	// resolvable vowels or no fR1, analyzeScore omits every event, so the
 	// same plain vocal line renders, no acoustic claim made.
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName));
+
+	/**
+	 * The vowels the FORECAST reads, which is not the same as the vowels that
+	 * were cleanly captured (Dann's §B.2 ruling, 2026-07-15: the pane's count
+	 * reports what the analysis used; capture quality is the drawer's job,
+	 * where Re-take lives).
+	 *
+	 * Derived from the snapshot itself rather than re-testing `reading`, so it
+	 * can never drift from what `analyzeScore` is actually given. §A.48 admits
+	 * provisional and unchecked readings into fR1 and excludes only those the
+	 * plausibility guard judged implausible. Before that ruling a provisional
+	 * reading was excluded, and the old capture-status count happened to match;
+	 * it no longer does, which is why this exists.
+	 */
+	const analysedVowels = $derived(ROSTER_ORDER.filter((g) => adapted.snapshot.fR1[g] !== undefined));
+
 	const vowelResolver = $derived(parsed ? buildVowelResolver(parsed) : null);
 	const analyzed = $derived(
 		parsed && vowelResolver ? analyzeScore(parsed, adapted.snapshot, vowelResolver) : null,
@@ -297,11 +315,15 @@
 	// Built as an expression so the leading space survives Svelte's
 	// block-boundary whitespace trimming (the "setwith" bug, caught by
 	// Dann in live testing, 2026-07-12).
-	let capturedClause = $derived(
-		capturedVowels.length > 0
-			? ` with ${countWord(capturedVowels.length).toLowerCase()} ${
-					capturedVowels.length === 1 ? 'vowel' : 'vowels'
-				} successfully captured`
+	// DRAFT copy, flagged for Dann (§B.2). "measured" replaces "successfully
+	// captured": the count now spans every reading the forecast reads, which
+	// includes provisional ones, and "successfully captured" would overclaim
+	// their quality.
+	let analysedClause = $derived(
+		analysedVowels.length > 0
+			? ` with ${countWord(analysedVowels.length).toLowerCase()} ${
+					analysedVowels.length === 1 ? 'vowel' : 'vowels'
+				} measured`
 			: '',
 	);
 
@@ -405,7 +427,7 @@
 					Your repertoire-fit results will appear here after Ilya processes the score you upload.
 				</p>
 				<p class="profile-line profile-status">
-					Your profile is now set{capturedClause}.
+					Your profile is now set{analysedClause}.
 				</p>
 				<p class="profile-line profile-status">
 					{#if provisionalVowels.length > 0}Your
