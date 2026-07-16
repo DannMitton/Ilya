@@ -61,7 +61,7 @@
 	import { paginateScore, analyzeScore } from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
-	import { buildVoiceProfileSnapshot, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
+	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 
@@ -260,18 +260,10 @@
 	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
-	// Composed per-dimension, DRAFT copy flagged for Dann's review (§D). EN
-	// only, matching this pane's standing EN-only body copy; the FR follows
-	// the calibration-French pass. Agentless, "sustain" discipline, no
-	// em-dash; two-item list takes no Oxford comma ("a and b").
-	const broadNoteText = $derived.by(() => {
-		const c = adapted.completeness;
-		const missing: string[] = [];
-		if (!c.range || !c.tessitura) missing.push('range guidance');
-		if (!c.passaggio) missing.push('positional passaggio flags');
-		const list = missing.length === 2 ? `${missing[0]} and ${missing[1]}` : missing[0];
-		return `Broad analysis: this score is shown without ${list}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.`;
-	});
+	// The broad-analysis legend text (§B.5): composed from localized parts by
+	// the adapter (EN and FR), rendered print-native in the PageFooter legend
+	// zone rather than as a banner above the score. Empty when nothing is broad.
+	const broadNoteText = $derived(composeBroadNote(adapted.completeness, language));
 
 	const scorePages = $derived(
 		parsed && analyzed
@@ -355,13 +347,6 @@
 	     SVG pages come from paginateScore, notation only for now (no
 	     acoustic marks; see notation-overlay.ts). -->
 	<div class="fit-paper-container" role="region" aria-label="Repertoire fit score">
-		{#if showBroadNote}
-			<!-- The honest broad-analysis note (§A.31), shown when acoustic marks
-			     render but a characteristics dimension was left blank. Prints with
-			     the artifact (no print-hide). DRAFT copy, flagged for Dann; folding
-			     it into the Paper PageFooter's legend grammar is a follow-up. -->
-			<p class="fit-broad-note" role="note">{broadNoteText}</p>
-		{/if}
 		{#each scorePages as page, i (i)}
 			<article
 				class="paper-page profile-page"
@@ -390,7 +375,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={scorePages.length} {language} legendItems={[]} />
+				<PageFooter pageNumber={i + 1} totalPages={scorePages.length} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
 			</article>
 		{/each}
 	</div>
@@ -450,7 +435,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} hairlineAccent="#8E7E9B" />
 </article>
 {/if}
 
@@ -538,20 +523,6 @@
 		padding-bottom: 2rem;
 	}
 
-	/* The broad-analysis note (E.5 slice 4): a quiet, non-blocking line above
-	   the score pages. Serif italic to match the pane's body register; prints
-	   with the artifact. DRAFT styling, flagged with the copy. */
-	.fit-broad-note {
-		margin: 0;
-		max-width: 34rem;
-		align-self: center;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 0.9rem;
-		line-height: 1.6;
-		color: var(--ink-secondary, #4a4540);
-		text-align: center;
-	}
 
 	/* The content window a score page renders into: the same left/right
 	   text column as .profile-content, top set inline per page type. The

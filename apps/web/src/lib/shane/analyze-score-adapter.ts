@@ -32,6 +32,7 @@
  */
 
 import type { VoiceProfileSnapshot } from '@ilya/score-parser';
+import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from './engine/types';
 
 /**
@@ -166,4 +167,22 @@ export function buildVoiceProfileSnapshot(
 		snapshot,
 		completeness: completenessOf(snapshot),
 	};
+}
+
+/**
+ * The broad-analysis legend text (§B.5): the print-native disclosure shown
+ * in the Fit page footer when acoustic marks render but a characteristics
+ * dimension was left blank. Composed from localized parts so EN and FR share
+ * one structure; the two-item join is language-specific (EN "and", FR "ni",
+ * the idiomatic "sans X ni Y"). Returns '' when nothing is broad, so an empty
+ * result reads as "no legend".
+ */
+export function composeBroadNote(c: AnalysisCompleteness, language: Language): string {
+	const items: string[] = [];
+	if (!c.range || !c.tessitura) items.push(t('fit.broad.itemRange', language));
+	if (!c.passaggio) items.push(t('fit.broad.itemPassaggio', language));
+	if (items.length === 0) return '';
+	const list =
+		items.length === 2 ? `${items[0]} ${t('fit.broad.join', language)} ${items[1]}` : items[0];
+	return t('fit.broad.body', language).replace('{items}', list);
 }

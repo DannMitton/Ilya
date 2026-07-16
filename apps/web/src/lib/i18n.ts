@@ -172,6 +172,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'update.dismiss':              { en: 'Dismiss',                      fr: 'Ignorer' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },
 
+	// ── Fit broad-analysis legend (§B.5) ─────────────────
+	// Composed from parts so EN and FR share one structure; the two-item
+	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
+	'fit.broad.body':              { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large : cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
+	'fit.broad.itemRange':         { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
+	'fit.broad.itemPassaggio':     { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
+	'fit.broad.join':              { en: 'and',                          fr: 'ni' },
+
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
 	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteurs' },

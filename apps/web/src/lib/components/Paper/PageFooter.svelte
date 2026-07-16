@@ -7,14 +7,18 @@
 		totalPages: number;
 		language: Language;
 		legendItems?: LegendItem[];
+		/** The broad-analysis legend sentence (§B.5); absent on non-Fit pages. */
+		broadNote?: string;
+		/** Footer hairline accent: sage (Transcription) default, deeper-lavender for Fit. */
+		hairlineAccent?: string;
 	}
 
-	let { pageNumber, totalPages, language, legendItems = [] }: Props = $props();
+	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)' }: Props = $props();
 
 	const attribution = $derived(t('footer.attribution', language));
 </script>
 
-<footer class="page-footer">
+<footer class="page-footer" style="--footer-accent: {hairlineAccent};">
 	{#if legendItems.length > 0}
 		<div class="provenance-legend">
 			{#each legendItems as item}
@@ -44,6 +48,10 @@
 				</span>
 			{/each}
 		</div>
+	{/if}
+
+	{#if broadNote}
+		<p class="fit-broad-legend" role="note">{broadNote}</p>
 	{/if}
 
 	<div class="footer-hairline"></div>
@@ -115,7 +123,7 @@
 	/* ── Sage hairline ─────────────────────────────────────── */
 
 	.footer-hairline {
-		border-top: 0.5px solid var(--sage);
+		border-top: 0.5px solid var(--footer-accent);
 		margin-bottom: 8px;
 	}
 
@@ -174,5 +182,15 @@
 		letter-spacing: 1px;
 		color: var(--ink-secondary);
 		font-weight: 400;
+	}
+	/* The broad-analysis legend (§B.5): shares the sigla legend's type
+	   language (sans, ~9.5px, stone) but upright roman sentence case for
+	   readability (Gould rule 12), left-aligned to the content margin. */
+	.fit-broad-legend {
+		margin: 0 0 8px 0;
+		font-family: var(--font-sans);
+		font-size: 9.5px;
+		line-height: 1.4;
+		color: #78716c;
 	}
 </style>

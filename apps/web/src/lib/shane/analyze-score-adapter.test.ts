@@ -17,7 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
-import { buildVoiceProfileSnapshot, completenessOf, isBroadAnalysis } from './analyze-score-adapter';
+import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis } from './analyze-score-adapter';
 import type { CalibratedFormant, VoiceCharacteristics } from './engine/types';
 
 // ── fixtures ────────────────────────────────────────────────────────
@@ -245,5 +245,38 @@ describe('analyzeScore through the adapter', () => {
 		const { snapshot } = buildVoiceProfileSnapshot({}, COMPLETE);
 		const analyzed = analyzeScore(SCORE, snapshot, resolveA, { generatedAt: '2026-07-14T00:00:00Z' });
 		expect(Object.keys(analyzed.events)).toHaveLength(0);
+	});
+});
+
+describe('composeBroadNote (§B.5 print legend)', () => {
+	const full = { formants: true, range: true, tessitura: true, passaggio: true };
+	const EN_SUFFIX = ', because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.';
+
+	it('returns empty string when nothing is broad', () => {
+		expect(composeBroadNote(full, 'en')).toBe('');
+		expect(composeBroadNote(full, 'fr')).toBe('');
+	});
+
+	it('range guidance only: EN and FR', () => {
+		const c = { formants: true, range: false, tessitura: true, passaggio: true };
+		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without range guidance' + EN_SUFFIX);
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
+	});
+
+	it('tessitura blank alone also reads as range guidance', () => {
+		const c = { formants: true, range: true, tessitura: false, passaggio: true };
+		expect(composeBroadNote(c, 'en')).toContain('without range guidance,');
+	});
+
+	it('positional passaggio flags only: EN and FR', () => {
+		const c = { formants: true, range: true, tessitura: true, passaggio: false };
+		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without positional passaggio flags' + EN_SUFFIX);
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
+	});
+
+	it('both dimensions blank: EN joins with and, FR joins with ni', () => {
+		const c = { formants: true, range: false, tessitura: true, passaggio: false };
+		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without range guidance and positional passaggio flags' + EN_SUFFIX);
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus ni le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
 	});
 });
