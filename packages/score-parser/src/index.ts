@@ -33,6 +33,12 @@ export {
   type AnalyzeOptions,
 } from './overlay-engine';
 export { sungVerseNumbers } from './verses';
+export {
+  resolveTempoTerm,
+  TEMPO_TIER_BANDS,
+  type TempoTier,
+  type TempoTermResolution,
+} from './tempo-terms';
 export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';
 export {
