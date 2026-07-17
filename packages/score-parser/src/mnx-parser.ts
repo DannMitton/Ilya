@@ -551,14 +551,20 @@ export class MnxScoreParser implements ScoreParser {
 				) {
 					passes = (nums as number[]).map((x) => Math.floor(x));
 				} else {
+					// numbers absent OR malformed. The MNX spec does NOT define the
+					// numbers-absent case (Sonnet verification, 2026-07-17), so a
+					// silent pass-1 default would be a quiet guess, against the
+					// fail-loud principle (§A.78). Default to pass 1 but always warn,
+					// tagging the absent case as the spec-silent JUDGEMENT it is.
 					passes = [1];
-					if (nums !== undefined) {
-						warnings.push({
-							code: 'unrecognised-element',
-							message: `Ending at measure ${mi} has an unreadable 'numbers' value; defaulting to pass 1.`,
-							location: { measureIndex: mi },
-						});
-					}
+					warnings.push({
+						code: 'unrecognised-element',
+						message:
+							nums === undefined
+								? `Ending at measure ${mi} declares no 'numbers'; the MNX spec does not define this case, so its pass membership is assumed to be pass 1. Verify against the source.`
+								: `Ending at measure ${mi} has an unreadable 'numbers' value; defaulting to pass 1.`,
+						location: { measureIndex: mi },
+					});
 				}
 				endingDecls.push({ startIndex: mi, span, passes });
 			}

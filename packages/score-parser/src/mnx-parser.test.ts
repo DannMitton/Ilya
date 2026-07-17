@@ -763,6 +763,12 @@ describe('MnxScoreParser: control-flow capture', () => {
 		expect(r.score.measures[1].ending).toEqual({ passes: [2], startsHere: true, endsHere: true });
 	});
 
+	it('warns and defaults to pass 1 when an ending declares no numbers (MNX spec is silent, §A.78 fail-loud)', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{}, { ending: { duration: 1 } }])));
+		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /declares no 'numbers'/.test(w.message))).toBe(true);
+		expect(r.score.measures[1].ending).toEqual({ passes: [1], startsHere: true, endsHere: true });
+	});
+
 	it('captures a plain Dal Segno (type "segno") and unfolds the return to the end', async () => {
 		const r = await parser.parse(
 			mnxInput(
