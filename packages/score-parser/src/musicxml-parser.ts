@@ -762,7 +762,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		// into `verses`.
 		let syllable: SyllableInfo | undefined;
 		if (!isRest) {
-			const verseTexts = new Map<number, string>();
+			const verseData = new Map<number, { text: string; type: SyllableInfo['type'] }>();
 			let primary: SyllableInfo | undefined;
 			for (const ly of directChildren(note, 'lyric')) {
 				const segs = readLyricSegments(ly);
@@ -771,7 +771,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 				const text = elided ? segs.map((s) => s.text).join('‿') : segs[0].text; // U+203F undertie
 				const rawVerse = intAttr(ly, 'number') ?? 1;
 				const verseNumber = ctx.verseToCanonical.get(rawVerse) ?? rawVerse;
-				verseTexts.set(verseNumber, text);
+				verseData.set(verseNumber, { text, type: segs[0].type });
 				if (elided) {
 					ctx.warnings.push({
 						code: 'unrecognised-element',
@@ -790,8 +790,10 @@ export class MusicXmlScoreParser implements ScoreParser {
 				};
 			}
 			if (primary) {
-				if (verseTexts.size > 1) {
-					primary.verses = [...verseTexts.entries()].sort((a, b) => a[0] - b[0]).map(([, t]) => t);
+				if (verseData.size > 1) {
+					const sorted = [...verseData.entries()].sort((a, b) => a[0] - b[0]);
+					primary.versesInfo = sorted.map(([verseNumber, d]) => ({ verseNumber, text: d.text, type: d.type }));
+					primary.verses = sorted.map(([, d]) => d.text);
 				}
 				syllable = primary;
 			}

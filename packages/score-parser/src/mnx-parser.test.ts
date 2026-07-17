@@ -337,6 +337,65 @@ describe('MnxScoreParser: the main fixture', () => {
 		expect(first.verses).toEqual(['Ты', 'tɨ']);
 	});
 
+	it('exposes structured versesInfo for every verse on a multi-verse event', async () => {
+		const { score } = await parseMain();
+		const first = score.vocalLine[0].syllable!;
+		expect(first.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'Ты', type: 'whole' },
+			{ verseNumber: 2, text: 'tɨ', type: 'whole' },
+		]);
+		expect(first.verses).toEqual(first.versesInfo!.map((v) => v.text));
+		const start = score.vocalLine.find((e) => e.id === 'm1-0-1')!.syllable!;
+		expect(start.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'по', type: 'start' },
+			{ verseNumber: 2, text: 'pʌ', type: 'start' },
+		]);
+	});
+
+	it('recovers a verse across notes when verses diverge on a melisma (§A.95)', async () => {
+		// Note 2: verse 1 melisma (no lyric line), verse 2 sings, so verse 2 is
+		// note 2's primary and keeps its own verse number.
+		const doc = {
+			mnx: { version: 17 },
+			global: {
+				lyrics: {
+					lineOrder: ['v1', 'v2'],
+					lineMetadata: { v1: { label: 'Verse 1' }, v2: { label: 'Verse 2' } },
+				},
+				measures: [{ id: 'm1', time: { count: 2, unit: 4 } }],
+			},
+			parts: [
+				{
+					id: 'P1',
+					measures: [
+						{
+							sequences: [
+								{
+									content: [
+										ev('quarter', { step: 'C', octave: 4, lyrics: { v1: { text: 'да', type: 'whole' }, v2: { text: 'da', type: 'whole' } } }),
+										ev('quarter', { step: 'D', octave: 4, lyrics: { v2: { text: 'ла', type: 'whole' } } }),
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		};
+		const r = await parser.parse(mnxInput(doc));
+		expect(r.errors).toHaveLength(0);
+		const [n1, n2] = r.score.vocalLine;
+		expect(n1.syllable!.verseNumber).toBe(1);
+		expect(n1.syllable!.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'да', type: 'whole' },
+			{ verseNumber: 2, text: 'da', type: 'whole' },
+		]);
+		expect(n2.syllable!.verseNumber).toBe(2);
+		expect(n2.syllable!.text).toBe('ла');
+		expect(n2.syllable!.type).toBe('whole');
+		expect(n2.syllable!.versesInfo).toBeUndefined();
+	});
+
 	it('encodes the melisma by absence and assigns wordContext across it', async () => {
 		const { score } = await parseMain();
 		const byId = new Map(score.vocalLine.map((e) => [e.id, e]));

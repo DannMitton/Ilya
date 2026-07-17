@@ -634,11 +634,35 @@ export interface SyllableInfo {
    * All verse texts for this event, index 0 = verse 1 (Kimi's multi-verse
    * ruling, 2026-07-12; her `verses?: string[]`, kept in our naming).
    * Absent means single-verse. `text` remains the primary (verse-1) lens
-   * that v1 analysis reads; the correction UI and a future multi-verse
-   * underlay iterate `verses`. A flat array by deliberate choice — no
-   * nested side structure — since the renderer walks it directly.
+   * that v1 analysis reads. Now derived from `versesInfo`, one text per
+   * entry in the same order: kept as a convenience for callers that need
+   * only the text, but `versesInfo` is the authoritative per-verse record.
    */
   verses?: string[];
+
+  /**
+   * Structured per-verse syllable data for every verse present on this
+   * event, ordered by canonical `verseNumber` (Option B, Dann's ruling
+   * 2026-07-17, §A.95). Present only when more than one verse sings on the
+   * event; absent means single-verse, so read the primary fields above.
+   * Includes the primary verse's own entry, so this is a complete,
+   * self-describing view: each entry carries its own `verseNumber`, which
+   * lets a verse-N reconstruction (`collectScoreWords` generalised) gather
+   * a verse across notes without positional guessing, even when verses are
+   * sparse. Sparse verses are the core case here, not an edge: on a note
+   * where verse 1 holds a melisma but verse 2 sings a new syllable, verse 2
+   * is stored as this event's primary while on neighbouring notes it is
+   * not, and only a self-describing per-verse record recovers it losslessly.
+   * `verses` equals `versesInfo.map((v) => v.text)`.
+   *
+   * Each entry carries `text` and the syllabic `type`. `type` was
+   * previously kept only for the primary verse, which is exactly what
+   * blocked reconstructing any verse but verse 1 (§A.95). Per-verse
+   * `wordContext`, elision `segments`, and `verseLabel` are deliberately
+   * not stored here yet; they are follow-ons for when multi-verse
+   * reconstruction and rendering consume this.
+   */
+  versesInfo?: VerseSyllable[];
 
   /**
    * Elision segments for the *primary* verse: the two-or-more syllables a
@@ -660,6 +684,29 @@ export interface SyllableInfo {
    * token. Extensible to further per-syllable flags.
    */
   parseFlag?: 'elided';
+}
+
+/**
+ * One verse's syllable on a single event: the minimal self-describing
+ * record needed to reconstruct that verse's words independently of the
+ * primary verse (Dann's Option B ruling, 2026-07-17, §A.95). Lives in
+ * `SyllableInfo.versesInfo`. Deliberately minimal: `wordContext`, elision
+ * `segments`, and `verseLabel` are follow-ons, added when a multi-verse
+ * consumer needs them.
+ */
+export interface VerseSyllable {
+  /** Canonical 1-indexed verse number this syllable belongs to. */
+  verseNumber: number;
+
+  /** Syllable text as printed in the source (same rules as `SyllableInfo.text`). */
+  text: string;
+
+  /**
+   * MNX-style syllabic role for this verse's syllable on this note: the
+   * word-boundary marker word reconstruction walks. Same vocabulary as
+   * `SyllableInfo.type`.
+   */
+  type: 'whole' | 'start' | 'middle' | 'end';
 }
 
 /**

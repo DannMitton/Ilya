@@ -316,6 +316,56 @@ describe('MusicXmlScoreParser: the main fixture', () => {
 		expect(first.segments).toBeUndefined();
 	});
 
+	it('exposes structured versesInfo for every verse on a multi-verse event', async () => {
+		const { score } = await parseMain();
+		const first = score.vocalLine[0].syllable!;
+		expect(first.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'Ты', type: 'whole' },
+			{ verseNumber: 2, text: 'tɨ', type: 'whole' },
+		]);
+		// verses stays derivable from versesInfo (same order, text only).
+		expect(first.verses).toEqual(first.versesInfo!.map((v) => v.text));
+		// The syllabic type is now kept per verse, not only for the primary:
+		const start = score.vocalLine.find((e) => e.id === 'm1-0-1')!.syllable!;
+		expect(start.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'по', type: 'start' },
+			{ verseNumber: 2, text: 'pʌ', type: 'start' },
+		]);
+	});
+
+	it('recovers a verse across notes when verses diverge on a melisma (§A.95)', async () => {
+		// Note 1: both verses sing. Note 2: verse 1 holds a melisma (no lyric),
+		// verse 2 sings a new syllable, so verse 2 becomes note 2's primary.
+		const sparse =
+			'<score-partwise version="4.0">' +
+			'<part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list>' +
+			'<part id="P1"><measure number="1">' +
+			'<attributes><divisions>1</divisions><time><beats>2</beats><beat-type>4</beat-type></time>' +
+			'<clef><sign>G</sign><line>2</line></clef></attributes>' +
+			'<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>' +
+			'<lyric number="1"><syllabic>single</syllabic><text>да</text></lyric>' +
+			'<lyric number="2"><syllabic>single</syllabic><text>da</text></lyric></note>' +
+			'<note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>' +
+			'<lyric number="2"><syllabic>single</syllabic><text>ла</text></lyric></note>' +
+			'</measure></part></score-partwise>';
+		const r = await parser.parse(xmlInput(sparse));
+		expect(r.errors).toHaveLength(0);
+		const [n1, n2] = r.score.vocalLine;
+		// Note 1 carries both verses, each self-describing.
+		expect(n1.syllable!.verseNumber).toBe(1);
+		expect(n1.syllable!.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'да', type: 'whole' },
+			{ verseNumber: 2, text: 'da', type: 'whole' },
+		]);
+		// Note 2: verse 2 is the primary here, and it carries its own verse
+		// number, so verse 2 is recoverable across both notes (versesInfo entry
+		// on note 1, primary on note 2). Single verse present, so no versesInfo.
+		expect(n2.syllable!.verseNumber).toBe(2);
+		expect(n2.syllable!.text).toBe('ла');
+		expect(n2.syllable!.type).toBe('whole');
+		expect(n2.syllable!.versesInfo).toBeUndefined();
+	});
+
 	it('encodes the melisma by absence and assigns wordContext across it', async () => {
 		const { score } = await parseMain();
 		const byId = new Map(score.vocalLine.map((e) => [e.id, e]));

@@ -969,19 +969,19 @@ export class MnxScoreParser implements ScoreParser {
 			let syllable: SyllableInfo | undefined;
 			const lines = item.lyrics?.lines;
 			if (!isRest && lines && typeof lines === 'object') {
-				const verseTexts = new Map<number, string>();
+				const verseData = new Map<number, { text: string; type: SyllableInfo['type'] }>();
 				let primary: SyllableInfo | undefined;
 				for (const [lineId, line] of Object.entries(lines)) {
 					const text = line?.text;
 					if (typeof text !== 'string' || text.length === 0) continue;
 					const verseNumber = ctx.lineIdToVerse.get(lineId) ?? 1;
-					verseTexts.set(verseNumber, text);
-					if (primary && verseNumber >= primary.verseNumber) continue;
 					const typeRaw = line?.type;
 					const type: SyllableInfo['type'] =
 						typeRaw === 'start' || typeRaw === 'middle' || typeRaw === 'end' || typeRaw === 'whole'
 							? typeRaw
 							: 'whole';
+					verseData.set(verseNumber, { text, type });
+					if (primary && verseNumber >= primary.verseNumber) continue;
 					const segments = splitElision(text);
 					primary = {
 						id: syllableId(),
@@ -994,8 +994,10 @@ export class MnxScoreParser implements ScoreParser {
 					};
 				}
 				if (primary) {
-					if (verseTexts.size > 1) {
-						primary.verses = [...verseTexts.entries()].sort((a, b) => a[0] - b[0]).map(([, t]) => t);
+					if (verseData.size > 1) {
+						const sorted = [...verseData.entries()].sort((a, b) => a[0] - b[0]);
+						primary.versesInfo = sorted.map(([verseNumber, d]) => ({ verseNumber, text: d.text, type: d.type }));
+						primary.verses = sorted.map(([, d]) => d.text);
 					}
 					syllable = primary;
 				}
