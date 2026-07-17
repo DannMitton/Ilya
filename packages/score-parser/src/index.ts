@@ -32,6 +32,7 @@ export {
   type VowelResolver,
   type AnalyzeOptions,
 } from './overlay-engine';
+export { sungVerseNumbers } from './verses';
 export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';
 export {
