@@ -63,9 +63,25 @@ export interface StaffRenderOptions {
   font?: PreparedSmuflFont;
   /** CSS font-family for SMuFL glyph text (must match the loaded FontFace). */
   fontFamily?: string;
+  /**
+   * Per event id, the full syllable IPA for the underlay's second line
+   * (Dann, 2026-07-17: every lyric Fit underlays gets two lines, Cyrillic
+   * then IPA; "one vowel per syllable per rhythmic value" is the rule,
+   * consonants included, never just the acoustic vowel). Verbatim from
+   * Ilya's GraysonEngine; the renderer never synthesizes IPA (Dann's
+   * tethering requirement, 2026-07-12). In production this is built by
+   * `buildUnderlayResolvers` (`apps/web/.../vowel-resolver.ts`) walking
+   * every event through its `.ipa` resolver; the demo fixture supplies its
+   * own placeholder strings for the font lab instead. Not to be confused
+   * with `SyllableInfo.verses`, which carries real sung text for OTHER
+   * verses (§A.86) and must never be read as an IPA source (the two were
+   * conflated here until a 2026-07-17 fix). NOT YET WIRED to a live
+   * `VoiceProfilePane` render call; today only `renderDemo` populates it.
+   */
+  ipaPreview?: Record<string, string>;
 }
 
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -681,8 +697,18 @@ export function renderAnalyzedStaff(
     // Dual underlay, collected now and placed after the loop, once the
     // lowest ink is known (baseline repositioning, Dann's fix).
     const syl = ev.syllable;
-    const cyr = syl?.verses?.[0] ?? syl?.text ?? '';
-    const ipa = syl?.verses?.[1] ?? a?.vowel ?? '';
+    // `syl.text` is the primary (verse-1 lens) syllable text (§A.35); never
+    // read `syl.verses` here, that array is real sung text for OTHER verses
+    // (§A.86), not a display convenience, and must not be shown as if it
+    // were this note's IPA. `options.ipaPreview` carries the full syllable
+    // IPA (production: `buildUnderlayResolvers(...).ipa`, not yet wired to
+    // a live render call; demo/test: the fixture's placeholder strings).
+    // The `a?.vowel` fallback is a degrade path only, for when no full-IPA
+    // resolver ran at all; it is a single acoustic vowel, not the real
+    // syllable transcription, so it will read as sparser than the intended
+    // line 2 until the production wiring lands.
+    const cyr = syl?.text ?? '';
+    const ipa = options.ipaPreview?.[ev.id] ?? a?.vowel ?? '';
     if (cyr || ipa) {
       const isMelisma = melismaStart.has(ev.id);
       underlay.push({

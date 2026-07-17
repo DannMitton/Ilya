@@ -16,7 +16,7 @@ import { describe, expect, it } from 'vitest';
 import { demoScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent } from '@ilya/score-parser';
 import { processText } from '$lib/pipeline';
-import { buildVowelResolver } from './vowel-resolver';
+import { buildVowelResolver, buildUnderlayResolvers } from './vowel-resolver';
 
 const TEN_VOWELS = new Set(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u']);
 
@@ -86,6 +86,16 @@ function expectedVowel(text: string, wordIdx: number, sylIdx: number): string | 
 	return entries[0].ipa.replace(/[ˈˌ]/g, '');
 }
 
+/** Independent extraction: the full syllable IPA of word `w`, syllable
+ * `k`, straight from a fresh processText run (the display-IPA resolver's
+ * ground truth, distinct from `expectedVowel`'s single extracted vowel). */
+function expectedSyllableIpa(text: string, wordIdx: number, sylIdx: number): string | undefined {
+	const words = processText(text)[0]?.words ?? [];
+	const w = words[wordIdx];
+	if (!w) return undefined;
+	return w.result.syllables[sylIdx]?.ipa;
+}
+
 // ── The demo fixture: the package's own Russian vocal line ──────────
 
 describe('buildVowelResolver on the demo score', () => {
@@ -125,6 +135,41 @@ describe('buildVowelResolver on the demo score', () => {
 		const line = 'Ты погрузись но чу по го ди тьма на ста пять по';
 		expect(at('n13')).toBe(expectedVowel(line, 7, 0)); // тьма
 		expect(at('n16')).toBe(expectedVowel(line, 10, 0)); // пять
+	});
+});
+
+// ── The display IPA resolver (underlay line 2, Dann's 2026-07-17 ruling) ──
+
+describe('buildUnderlayResolvers: the display-IPA line', () => {
+	const parsed = demoScore();
+	const { ipa, vowel } = buildUnderlayResolvers(parsed);
+	const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+	const ipaAt = (id: string) => ipa(byId.get(id)!);
+	const vowelAt = (id: string) => vowel(byId.get(id)!);
+
+	it('matches an independent pipeline extraction of the full syllable, not just the vowel', () => {
+		const line = 'Ты погрузись но чу по го ди тьма на ста пять по';
+		expect(ipaAt('n13')).toBe(expectedSyllableIpa(line, 7, 0)); // тьма
+		expect(ipaAt('n16')).toBe(expectedSyllableIpa(line, 10, 0)); // пять
+		// The display IPA is the whole syllable (consonants included), so it
+		// is not simply equal to the single acoustic vowel at the same event.
+		expect(ipaAt('n16')).not.toBe(vowelAt('n16'));
+	});
+
+	it('is blank on melisma continuation notes, unlike the vowel, which sustains', () => {
+		expect(ipaAt('n18')).toBeDefined();
+		expect(ipaAt('n19')).toBeUndefined();
+		expect(ipaAt('n20')).toBeUndefined();
+		// The acoustic vowel still sustains through the same notes (Dann:
+		// the turning-pitch marks keep appearing on every melisma note).
+		expect(vowelAt('n19')).toBe(vowelAt('n18'));
+		expect(vowelAt('n20')).toBe(vowelAt('n18'));
+	});
+
+	it('is blank on rests', () => {
+		for (const ev of parsed.vocalLine) {
+			if (ev.type === 'rest') expect(ipa(ev)).toBeUndefined();
+		}
 	});
 });
 

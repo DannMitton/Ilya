@@ -8,7 +8,10 @@
  * Used by `staff-renderer.test.ts` (string assertions) and by the
  * in-browser font lab (visual taste test). NOT production data.
  *
- * The IPA strings here are PLACEHOLDERS for layout work only. Production
+ * The IPA strings here are PLACEHOLDERS for layout work only, carried via
+ * `lastIpaPreview` / `StaffRenderOptions.ipaPreview`, never on
+ * `SyllableInfo.verses` (that field is real sung text for other verses,
+ * §A.86, and the two were conflated here until a 2026-07-17 fix). Production
  * underlay comes verbatim from Ilya's GraysonEngine via processText
  * (post-assimilation); the renderer never synthesizes IPA (Dann's
  * tethering requirement, 2026-07-12).
@@ -27,11 +30,20 @@ const DUR: Record<NoteBase, Fraction> = {
   '16th': frac(1, 16), '32nd': frac(1, 32), '64th': frac(1, 64), '128th': frac(1, 128),
 };
 
+/**
+ * Reset per `demoScore()` call, then read by `renderDemo()`. A demo-only
+ * side channel for the font-lab's placeholder IPA row; module-scoped
+ * because `demoScore()` is deterministic and this module has no
+ * concurrent/re-entrant callers. Never touches `SyllableInfo.verses`.
+ */
+let lastIpaPreview: Map<string, string> = new Map();
+
 function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | null, base: NoteBase, verses?: [string, string], tuplet?: TupletInfo, sylType: 'whole' | 'start' | 'middle' | 'end' = 'whole', tied?: TieInfo): VocalLineEvent {
   const plain = DUR[base];
   const fraction = tuplet
     ? { numerator: plain.numerator * tuplet.normalNotes, denominator: plain.denominator * tuplet.actualNotes }
     : plain;
+  if (verses) lastIpaPreview.set(id, verses[1]);
   return {
     id,
     type: pitch ? 'note' : 'rest',
@@ -40,7 +52,7 @@ function note(id: string, measureIndex: number, pos: Fraction, pitch: Pitch | nu
     duration: { base, dots: 0, fraction, ...(tuplet ? { tuplet } : {}) },
     ...(pitch ? { pitch } : {}),
     ...(tied ? { tied } : {}),
-    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: sylType, verseNumber: 1, wordContext: verses[0], verses } } : {}),
+    ...(verses ? { syllable: { id: `s-${id}`, text: verses[0], type: sylType, verseNumber: 1, wordContext: verses[0] } } : {}),
   };
 }
 
@@ -63,6 +75,7 @@ const vowelById: Record<string, string> = {
 export const demoResolver: VowelResolver = (e) => vowelById[e.id];
 
 export function demoScore(): ParsedScore {
+  lastIpaPreview = new Map(); // fresh per call; note() repopulates it below
   const events = [
     // «Ты погрузись»: the polysyllable по-гру-зи-сь carries syllable types
     // (start/middle/middle/end) so hyphenation is exercised, including
@@ -122,10 +135,11 @@ export function demoScore(): ParsedScore {
 
 /** Analyse the demo and mark n2 as a phonation break (as the diction layer would). */
 export function renderDemo(options?: StaffRenderOptions): string {
-  const parsed = demoScore();
+  const parsed = demoScore(); // populates lastIpaPreview as a side effect
+  const ipaPreview = Object.fromEntries(lastIpaPreview);
   const analyzed = analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
   analyzed.events.n2.phonationBreak = true;
-  return renderAnalyzedStaff(parsed, analyzed, options);
+  return renderAnalyzedStaff(parsed, analyzed, { ...options, ipaPreview });
 }
 
 /**

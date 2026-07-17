@@ -43,11 +43,33 @@
  * syllable's vowel ("sustain", the overlay engine's documented
  * semantics); a rest ends the sustain. A syllable from another verse is
  * treated as a continuation of verse 1, the v1 UI's verse rule.
+ *
+ * DISPLAY IPA (Dann, 2026-07-17): the underlay's second line is the full
+ * syllable transcription (consonants and vowel, verbatim from the
+ * engine's `syllables[sylIdx].ipa`), not the single extracted vowel that
+ * drives the acoustic forecast. Unlike the vowel, which sustains across
+ * melisma continuation notes for the turning/timbre/crossing marks, the
+ * display IPA appears only at syllable onset and is blank on melisma
+ * continuation notes ("the IPA will blank"), matching the Cyrillic line's
+ * existing onset-only behaviour. `buildUnderlayResolvers` builds both
+ * from one reconstruction pass; `buildVowelResolver` is a thin wrapper
+ * kept for existing callers that need only the acoustic vowel.
+ *
+ * A word whose score-side note-to-syllable count and pipeline-side
+ * syllable count diverge is honestly omitted entirely, never guessed.
+ * That divergence has two possible causes, not one: a genuine encoding
+ * problem, or a composer's deliberate elision (two syllables set on one
+ * rhythmic value; rare in Russian, real in opera recitative and dialect
+ * folk song). Both are legitimate inputs, not errors, and today's word
+ * reconstruction cannot yet tell them apart, so both honestly omit rather
+ * than guess which vowel governs the note. A future elision-aware pass
+ * could recognise `SyllableInfo.segments`/`parseFlag: 'elided'` explicitly
+ * and resolve both vowels onto the one note; that is not built here.
  */
 
 import { processText } from '$lib/pipeline';
 import type { WordStackData } from '$lib/types';
-import type { ParsedScore, VowelResolver } from '@ilya/score-parser';
+import type { ParsedScore, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
 
 /** The ten Russian sung vowels (engine/types.ts `Vowel`), as a lookup set. */
 const TEN_VOWELS: ReadonlySet<string> = new Set([
@@ -204,12 +226,40 @@ function vowelOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
 }
 
 /**
- * Build the resolver for one parsed score. All work happens here, once;
- * the returned function is a Map lookup, safe to call per event in
- * `analyzeScore`'s hot loop.
+ * The full syllable's IPA (consonants and vowel), verbatim from the
+ * engine's `syllables` array at the given index: the underlay's "line 2"
+ * display value (Dann, 2026-07-17), distinct from `vowelOfSyllable`'s
+ * single extracted vowel, which drives only the acoustic forecast.
+ * Undefined only when the engine produced no syllable at that index,
+ * which should not occur wherever `vowelOfSyllable` also succeeded, since
+ * both read the same `sylIdx` from the same `w.result`.
  */
-export function buildVowelResolver(parsed: ParsedScore): VowelResolver {
-	const byEvent = new Map<string, string>();
+function ipaOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
+	return w.result.syllables[sylIdx]?.ipa;
+}
+
+/**
+ * Both per-event resolvers built from one parsed score: the acoustic
+ * vowel (sustained across a melisma, feeding the turning/timbre/crossing
+ * marks) and the full-syllable display IPA (onset only; undefined on
+ * melisma continuation notes, matching the Cyrillic line's own onset-only
+ * behaviour).
+ */
+export interface UnderlayResolvers {
+	/** The operative sung vowel per event; sustains across melisma. */
+	vowel: VowelResolver;
+	/** The full syllable IPA for display; present only at syllable onset. */
+	ipa: (event: VocalLineEvent) => string | undefined;
+}
+
+/**
+ * Build both resolvers for one parsed score. All work happens here, once;
+ * both returned functions are Map lookups, safe to call per event in
+ * `analyzeScore`'s hot loop and the renderer's underlay pass.
+ */
+export function buildUnderlayResolvers(parsed: ParsedScore): UnderlayResolvers {
+	const byEventVowel = new Map<string, string>();
+	const byEventIpa = new Map<string, string>();
 
 	const scoreWords = collectScoreWords(parsed);
 	if (scoreWords.length > 0) {
@@ -252,20 +302,52 @@ export function buildVowelResolver(parsed: ParsedScore): VowelResolver {
 					sylOwners.push({ word: mw, localIdx: k });
 				}
 			}
-			// The score's syllabification must agree with the engine's; a
-			// mismatch resolves this word to nothing (honest omission).
+			// The score's per-note syllable count and the engine's per-word
+			// syllable count must agree for this word to resolve; when they
+			// diverge, the whole word is honestly omitted rather than guessed.
+			// The divergence has two possible causes, not one: a genuine
+			// encoding problem, or a composer's deliberate elision (two
+			// syllables set on one rhythmic value; rare in Russian, real in
+			// opera recitative and dialect folk song). Both are legitimate
+			// inputs, and today's reconstruction cannot yet tell them apart,
+			// so both honestly omit rather than guess which vowel governs the
+			// note (see the module doc comment).
 			if (sylOwners.length !== sw.slots.length) continue;
 
 			for (let k = 0; k < sw.slots.length; k++) {
 				const owner = sylOwners[k];
+				const slot = sw.slots[k];
 				const vowel = vowelOfSyllable(owner.word, owner.localIdx);
-				if (!vowel) continue;
-				for (const eventId of sw.slots[k]) {
-					byEvent.set(eventId, vowel);
+				if (vowel) {
+					// Sustained across the whole slot (onset + any melisma
+					// continuation events): the acoustic marks persist through
+					// the sustain.
+					for (const eventId of slot) {
+						byEventVowel.set(eventId, vowel);
+					}
+				}
+				const ipa = ipaOfSyllable(owner.word, owner.localIdx);
+				if (ipa && slot.length > 0) {
+					// Onset only: the display IPA does not repeat under melisma
+					// continuation notes.
+					byEventIpa.set(slot[0], ipa);
 				}
 			}
 		}
 	}
 
-	return (event) => byEvent.get(event.id);
+	return {
+		vowel: (event) => byEventVowel.get(event.id),
+		ipa: (event) => byEventIpa.get(event.id)
+	};
+}
+
+/**
+ * Build the resolver for one parsed score. All work happens here, once;
+ * the returned function is a Map lookup, safe to call per event in
+ * `analyzeScore`'s hot loop. A thin wrapper over `buildUnderlayResolvers`
+ * for existing callers that need only the acoustic vowel.
+ */
+export function buildVowelResolver(parsed: ParsedScore): VowelResolver {
+	return buildUnderlayResolvers(parsed).vowel;
 }
