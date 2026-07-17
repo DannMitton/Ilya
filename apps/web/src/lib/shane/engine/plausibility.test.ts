@@ -90,7 +90,7 @@ describe('anchor-derived windows ([ɨ] [ɪ] [a] [ʌ])', () => {
 		expect(checkPlausibility(404 * CEILING * 1.02, 'ɨ', undefined, anchors).plausibility).toBe(
 			'implausible'
 		);
-		// [ɪ] centre = e.f1; [ʌ] centre = ɑ.f1; [a] centre = 1.15 × ɑ.f1.
+		// [ɪ] centre = 1.0315 × e.f1; [ʌ] centre = ɑ.f1; [a] centre = 1.15 × ɑ.f1.
 		expect(checkPlausibility(381, 'ɪ', undefined, anchors).plausibility).toBe('plausible');
 		expect(checkPlausibility(617, 'ʌ', undefined, anchors).plausibility).toBe('plausible');
 		expect(checkPlausibility(709.6, 'a', undefined, anchors).plausibility).toBe('plausible');

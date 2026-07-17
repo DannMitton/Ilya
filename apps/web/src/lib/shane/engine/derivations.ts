@@ -11,10 +11,14 @@ export const DERIV_SOURCE: Record<string, CalibratedFormant['source']> = {
  * anchors (fR2 is often absent on real captures; the guard is fR1-only in
  * v1). Single source of truth: these ratios are the same ones `derive`
  * uses below — change them in one place only.
+ *
+ * The ɪ f1 ratio (1.0315 = 393 / 381) reconciles the derivation with the
+ * measured Table 5.3 anchor; it previously read e.f1 directly, a 12 Hz
+ * (≈3.15%) gap flagged by the Sonnet provenance check (2026-07-17).
  */
 export function expectedF1(vowel: Vowel, f1s: Partial<Record<Vowel, number>>): number | null {
 	if (vowel === 'ɨ') return f1s.i !== undefined ? 1.365 * f1s.i : null;
-	if (vowel === 'ɪ') return f1s.e ?? null;
+	if (vowel === 'ɪ') return f1s.e !== undefined ? 1.0315 * f1s.e : null;
 	if (vowel === 'ʌ') return f1s['ɑ'] ?? null;
 	if (vowel === 'a') return f1s['ɑ'] !== undefined ? 1.15 * f1s['ɑ'] : null;
 	return null;
@@ -24,7 +28,7 @@ export function expectedF1(vowel: Vowel, f1s: Partial<Record<Vowel, number>>): n
 export function derive(vowel: Vowel, cap: Record<string, { f1: number; f2: number }>): CalibratedFormant | null {
 	let f1: number, f2: number;
 	if (vowel === 'ɨ') { const { i, u } = cap; f1 = 1.365 * i.f1; f2 = i.f2 - 0.67 * (i.f2 - u.f2); }
-	else if (vowel === 'ɪ') { const { e, i } = cap; f1 = e.f1; f2 = e.f2 + 0.39 * (i.f2 - e.f2); }
+	else if (vowel === 'ɪ') { const { e, i } = cap; f1 = 1.0315 * e.f1; f2 = e.f2 + 0.39 * (i.f2 - e.f2); }
 	else if (vowel === 'ʌ') { const ad = cap['ɑ'], eps = cap['ɛ']; f1 = ad.f1; f2 = ad.f2 + 0.52 * (eps.f2 - ad.f2); }
 	else if (vowel === 'a') { const ad = cap['ɑ']; f1 = 1.15 * ad.f1; f2 = 1.10 * ad.f2; }
 	else return null;

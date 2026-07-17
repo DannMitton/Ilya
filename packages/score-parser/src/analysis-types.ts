@@ -108,7 +108,7 @@ export interface AnalyzedEvent {
   /** Matches `VocalLineEvent.id`. */
   eventId: string;
 
-  // ── Acoustic marks (Mitton 2020 Appendix B; from fR1) ──
+  // ── Acoustic marks (values: Mitton 2020 Table 5.3 / §5.3.3; concept: Bozeman vowel migration; demonstrated in Mitton 2020 Appendix B; all from fR1) ──
   /** Likely timbre: `'open'` below the turning pitch, `'close'` above. Stem down = open, up = close. */
   timbre: 'open' | 'close';
 
