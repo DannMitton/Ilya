@@ -26,6 +26,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { MnxScoreParser } from './mnx-parser';
+import { markersFromMeasures, unfold } from './unfold';
 import type { MnxScoreInput, ParseResult } from './types';
 
 // This package carries no @types/node (tests are its only Node-touching
@@ -680,5 +681,149 @@ describe('MnxScoreParser: clefs (v37 §A.17)', () => {
 		]);
 		expect(r.score.measures[1].clef).toEqual({ sign: 'F', line: 4 });
 		expect(r.score.measures[2].clef).toEqual({ sign: 'G', line: 2 });
+	});
+});
+
+// ── Control-flow capture: repeats, endings (voltas), and the MNX jump family ──
+// MNX expresses control flow through global-measure objects (W3C MNX reference,
+// verified 2026-07-17): `repeatStart`/`repeatEnd{times}`, `ending{numbers,
+// duration}` where duration is a BAR COUNT, `segno`/`fine` markers, and a
+// `jump{type}` whose enum is exactly 'segno' (D.S.) and 'dsalfine' (D.S. al
+// Fine). Da Capo and the coda family are outside that enum (§A.78); a dropped
+// coda leaves no trace, so no format-ceiling flag is emitted here (§A.79b).
+// Each test asserts both the captured `Measure` markers AND the end-to-end
+// performance order via the source-agnostic unfolder, proving the seam.
+describe('MnxScoreParser: control-flow capture', () => {
+	/**
+	 * Build a control-flow document: N global measures (the first carries a 1/4
+	 * time signature so a single quarter note fills each bar and no duration
+	 * mismatch warns), each with a one-syllable vocal event so the part is
+	 * lyric-bearing. Caller-supplied global-measure props are merged in.
+	 */
+	function ctrlDoc(globalMeasures: Array<Record<string, unknown>>): Record<string, unknown> {
+		const gm = globalMeasures.map((g, i) => ({
+			...(i === 0 ? { time: { count: 1, unit: 4 }, key: { fifths: 0 } } : {}),
+			...g,
+		}));
+		const partMeasures = gm.map(() => ({
+			sequences: [{ content: [ev('quarter', { lyrics: { v1: { text: 'а', type: 'whole' } } })] }],
+		}));
+		return { mnx: { version: 17 }, global: { measures: gm }, parts: [{ id: 'P1', measures: partMeasures }] };
+	}
+
+	/** Parse a control-flow doc and return the unfolded source-measure order. */
+	function orderOf(score: ParseResult['score']): number[] {
+		const res = unfold(markersFromMeasures(score.measures));
+		expect(res.ok).toBe(true);
+		return res.ok ? res.order.map((o) => o.source) : [];
+	}
+
+	it('captures simple repeat barlines with a times count and unfolds all passes', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{ repeatStart: {} }, {}, { repeatEnd: { times: 3 } }])));
+		expect(r.errors).toHaveLength(0);
+		expect(r.score.measures[0].repeatStart).toBe(true);
+		expect(r.score.measures[2].repeatEnd).toBe(true);
+		expect(r.score.measures[2].repeatTimes).toBe(3);
+		expect(orderOf(r.score)).toEqual([0, 1, 2, 0, 1, 2, 0, 1, 2]);
+	});
+
+	it('defaults a repeat with no times to two passes', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{ repeatStart: {} }, { repeatEnd: {} }])));
+		expect(r.score.measures[1].repeatEnd).toBe(true);
+		expect(r.score.measures[1].repeatTimes).toBeUndefined();
+		expect(orderOf(r.score)).toEqual([0, 1, 0, 1]);
+	});
+
+	it('captures first and second endings and unfolds the volta', async () => {
+		const r = await parser.parse(
+			mnxInput(
+				ctrlDoc([
+					{ repeatStart: {} },
+					{},
+					{ ending: { numbers: [1], duration: 1 }, repeatEnd: {} },
+					{ ending: { numbers: [2], duration: 1 } },
+				]),
+			),
+		);
+		expect(r.score.measures[2].ending).toEqual({ passes: [1], startsHere: true, endsHere: true });
+		expect(r.score.measures[3].ending).toEqual({ passes: [2], startsHere: true, endsHere: true });
+		expect(orderOf(r.score)).toEqual([0, 1, 2, 0, 1, 3]);
+	});
+
+	it('resolves a multi-bar ending span across measures with startsHere and endsHere', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{}, { ending: { numbers: [1], duration: 2 } }, {}, {}])));
+		expect(r.score.measures[1].ending).toEqual({ passes: [1], startsHere: true });
+		expect(r.score.measures[2].ending).toEqual({ passes: [1], endsHere: true });
+		expect(r.score.measures[3].ending).toBeUndefined();
+	});
+
+	it('defaults a duration-less ending to a single bar with a warning', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{}, { ending: { numbers: [2] } }])));
+		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /no readable bar-count duration/.test(w.message))).toBe(true);
+		expect(r.score.measures[1].ending).toEqual({ passes: [2], startsHere: true, endsHere: true });
+	});
+
+	it('captures a plain Dal Segno (type "segno") and unfolds the return to the end', async () => {
+		const r = await parser.parse(
+			mnxInput(
+				ctrlDoc([
+					{},
+					{ segno: { location: { fraction: [0, 1] } } },
+					{},
+					{ jump: { type: 'segno', location: { fraction: [1, 1] } } },
+				]),
+			),
+		);
+		expect(r.score.measures[1].jump).toEqual({ segno: 'mnx-segno' });
+		expect(r.score.measures[3].jump).toEqual({ dalSegno: 'mnx-segno' });
+		expect(orderOf(r.score)).toEqual([0, 1, 2, 3, 1, 2, 3]);
+	});
+
+	it('captures a Dal Segno al Fine (type "dsalfine") and stops at Fine on the return', async () => {
+		const r = await parser.parse(
+			mnxInput(
+				ctrlDoc([
+					{ segno: { location: { fraction: [0, 1] } } },
+					{ fine: { location: { fraction: [1, 1] } } },
+					{},
+					{ jump: { type: 'dsalfine', location: { fraction: [1, 1] } } },
+				]),
+			),
+		);
+		expect(r.score.measures[0].jump).toEqual({ segno: 'mnx-segno' });
+		expect(r.score.measures[1].jump).toEqual({ fine: true });
+		expect(r.score.measures[3].jump).toEqual({ dalSegno: 'mnx-segno' });
+		expect(orderOf(r.score)).toEqual([0, 1, 2, 3, 0, 1]);
+	});
+
+	it('warns on an unrecognised jump type and captures no jump marker (falls back to as-written)', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{}, { jump: { type: 'dcalcoda' } }])));
+		expect(r.warnings.some((w) => w.code === 'mnx-experimental-feature' && /Unrecognised jump type/.test(w.message))).toBe(true);
+		expect(r.score.measures[1].jump).toBeUndefined();
+		expect(orderOf(r.score)).toEqual([0, 1]);
+	});
+
+	it('warns when a dsalfine jump has no Fine marker anywhere', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{ segno: {} }, {}, { jump: { type: 'dsalfine' } }])));
+		expect(r.warnings.some((w) => w.code === 'unrecognised-element' && /no Fine marker was found/.test(w.message))).toBe(true);
+	});
+
+	it('does not emit any coda format-ceiling flag from the parser (MNX leaves no coda trace, §A.79b)', async () => {
+		// A jump-heavy intent reaching MNX simply cannot carry a coda; there is
+		// nothing in the document to read, so the parser stays silent about it
+		// rather than inventing a flag. The as-written order is the honest result.
+		const r = await parser.parse(mnxInput(ctrlDoc([{ segno: {} }, {}, { jump: { type: 'segno' } }])));
+		expect(r.warnings.some((w) => /coda/i.test(w.message))).toBe(false);
+		expect(r.errors).toHaveLength(0);
+	});
+
+	it('leaves control-flow markers unset on an ordinary measure', async () => {
+		const r = await parser.parse(mnxInput(ctrlDoc([{}, {}])));
+		for (const m of r.score.measures) {
+			expect(m.repeatStart).toBeUndefined();
+			expect(m.repeatEnd).toBeUndefined();
+			expect(m.ending).toBeUndefined();
+			expect(m.jump).toBeUndefined();
+		}
 	});
 });

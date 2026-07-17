@@ -93,7 +93,32 @@ interface MnxGlobalMeasure {
 	key?: { fifths?: unknown; mode?: unknown };
 	time?: { count?: unknown; unit?: unknown };
 	tempos?: Array<{ bpm?: unknown; value?: { base?: unknown; dots?: unknown } }>;
+	// ── Control flow (W3C MNX global-measure objects) ──────────────────
+	// Verified against the MNX reference (w3c-cg.github.io/mnx, 2026-07-17):
+	// `repeatStart`/`repeatEnd` are objects (empty for a bare barline; the
+	// backward repeat carries an optional `times`); `ending` declares a volta
+	// on ONE measure with a bar-count `duration` and a `numbers` pass array;
+	// `segno`/`fine` are marker objects with a `location`; `jump` carries a
+	// `type` whose enum is exactly `'segno'` and `'dsalfine'` (no Da Capo, no
+	// coda family: the MNX format ceiling, §A.78). Intra-measure `location`
+	// is not read here, matching the MusicXML parser's measure-level capture.
+	repeatStart?: unknown;
+	repeatEnd?: { times?: unknown } | unknown;
+	ending?: { numbers?: unknown; duration?: unknown; open?: unknown } | unknown;
+	segno?: unknown;
+	fine?: unknown;
+	jump?: { type?: unknown; location?: unknown } | unknown;
 }
+
+/**
+ * Synthetic segno token. MNX carries a single, tokenless segno (its jump-type
+ * enum references "the" segno positionally, not by a matching string), so we
+ * assign one shared token to the segno destination and the dal-segno origin;
+ * the source-agnostic unfolder then matches them by the same string-equality
+ * rule it applies to MusicXML's `<sound>` tokens. A second segno in one part
+ * (malformed for MNX) then correctly trips the unfolder's `multiple-targets`.
+ */
+const MNX_SEGNO_TOKEN = 'mnx-segno';
 
 interface MnxPart {
 	id?: unknown;
@@ -390,6 +415,14 @@ export class MnxScoreParser implements ScoreParser {
 		let currentTime: TimeSignature | null = null;
 		let currentKey: KeySignature | null = null;
 
+		// Volta declarations, resolved to per-measure pass membership after the
+		// walk: MNX declares an ending on one measure with a bar-count span,
+		// unlike MusicXML's start/stop barlines. Coda-family / dsalfine hygiene
+		// trackers are used for a fail-loud consistency warning below.
+		const endingDecls: Array<{ startIndex: number; span: number; passes: number[] }> = [];
+		let sawDsAlFine = false;
+		let sawFine = false;
+
 		for (let mi = 0; mi < globalMeasures.length; mi++) {
 			const gm = globalMeasures[mi] ?? {};
 
@@ -447,6 +480,89 @@ export class MnxScoreParser implements ScoreParser {
 				}
 			}
 
+			// Control flow. Repeats and the jump family are measure-local and
+			// attached here; endings span a bar count and are resolved after the
+			// walk. Read from the structural MNX objects only (§A.78's source-
+			// agnostic seam; the MusicXML parser fills the same `Measure` markers).
+			let mRepeatStart: true | undefined;
+			let mRepeatEnd: true | undefined;
+			let mRepeatTimes: number | undefined;
+			if (gm.repeatStart !== undefined && gm.repeatStart !== null) mRepeatStart = true;
+			const re = gm.repeatEnd;
+			if (re !== undefined && re !== null) {
+				mRepeatEnd = true;
+				const t = (re as { times?: unknown }).times;
+				if (typeof t === 'number' && Number.isFinite(t) && t >= 1) mRepeatTimes = Math.floor(t);
+			}
+
+			// Jump family. MNX expresses only the dal-segno variants: a `segno`
+			// marker (destination), a `fine` marker, and a `jump` whose type is
+			// `'segno'` (plain D.S.) or `'dsalfine'` (D.S. al Fine). Da Capo and
+			// every coda jump are outside the MNX jump-type enum, and a dropped
+			// coda leaves NO trace in the document, so no coda format-ceiling
+			// flag is emitted from this parser (§A.79b): there is nothing to read.
+			const mJump: NonNullable<Measure['jump']> = {};
+			let mHasJumpNav = false;
+			if (gm.segno !== undefined && gm.segno !== null) {
+				mJump.segno = MNX_SEGNO_TOKEN;
+				mHasJumpNav = true;
+			}
+			if (gm.fine !== undefined && gm.fine !== null) {
+				mJump.fine = true;
+				mHasJumpNav = true;
+				sawFine = true;
+			}
+			const jmp = gm.jump;
+			if (jmp !== undefined && jmp !== null && typeof jmp === 'object') {
+				const jtype = (jmp as { type?: unknown }).type;
+				if (jtype === 'segno' || jtype === 'dsalfine') {
+					mJump.dalSegno = MNX_SEGNO_TOKEN;
+					mHasJumpNav = true;
+					if (jtype === 'dsalfine') sawDsAlFine = true;
+				} else {
+					warnings.push({
+						code: 'mnx-experimental-feature',
+						message: `Unrecognised jump type '${String(jtype)}'; MNX expresses only 'segno' and 'dsalfine', so this jump is ignored and performance order falls back to as-written.`,
+						location: { measureIndex: mi },
+					});
+				}
+			}
+
+			// Ending (volta): declared on this measure, spanning `duration` bars
+			// (W3C MNX ending-duration: an integer bar count ≥ 1). Collected now,
+			// applied to each spanned measure after the walk.
+			const end = gm.ending;
+			if (end !== undefined && end !== null && typeof end === 'object') {
+				const dur = (end as { duration?: unknown }).duration;
+				const span = typeof dur === 'number' && Number.isFinite(dur) && dur >= 1 ? Math.floor(dur) : 1;
+				if (typeof dur !== 'number' || !Number.isFinite(dur) || dur < 1) {
+					warnings.push({
+						code: 'unrecognised-element',
+						message: `Ending at measure ${mi} has no readable bar-count duration; assuming a single-bar ending.`,
+						location: { measureIndex: mi },
+					});
+				}
+				const nums = (end as { numbers?: unknown }).numbers;
+				let passes: number[];
+				if (
+					Array.isArray(nums) &&
+					nums.length > 0 &&
+					nums.every((x) => typeof x === 'number' && Number.isFinite(x) && x >= 1)
+				) {
+					passes = (nums as number[]).map((x) => Math.floor(x));
+				} else {
+					passes = [1];
+					if (nums !== undefined) {
+						warnings.push({
+							code: 'unrecognised-element',
+							message: `Ending at measure ${mi} has an unreadable 'numbers' value; defaulting to pass 1.`,
+							location: { measureIndex: mi },
+						});
+					}
+				}
+				endingDecls.push({ startIndex: mi, span, passes });
+			}
+
 			// Display number: derived from the global measure id when it has
 			// the denigma/MuseScore `m<number>` shape, else sequential.
 			const idText = typeof gm.id === 'string' ? gm.id : '';
@@ -457,6 +573,34 @@ export class MnxScoreParser implements ScoreParser {
 				timeSignature: currentTime,
 				keySignature: currentKey,
 				expectedDuration: frac(currentTime.beats, currentTime.beatType),
+				...(mRepeatStart ? { repeatStart: true } : {}),
+				...(mRepeatEnd ? { repeatEnd: true } : {}),
+				...(mRepeatTimes !== undefined ? { repeatTimes: mRepeatTimes } : {}),
+				...(mHasJumpNav ? { jump: mJump } : {}),
+			});
+		}
+
+		// Resolve volta spans into per-measure pass membership. MNX gives one
+		// declaration measure plus a bar count; the source-agnostic unfolder
+		// consumes the same `ending` shape the MusicXML parser fills from its
+		// start/stop barlines. `startsHere`/`endsHere` drive the bracket later.
+		for (const decl of endingDecls) {
+			const last = Math.min(decl.startIndex + decl.span - 1, measures.length - 1);
+			for (let idx = decl.startIndex; idx <= last; idx++) {
+				measures[idx].ending = {
+					passes: decl.passes,
+					...(idx === decl.startIndex ? { startsHere: true } : {}),
+					...(idx === last ? { endsHere: true } : {}),
+				};
+			}
+		}
+
+		// Fail-loud hygiene: a `dsalfine` jump with no Fine marker anywhere is a
+		// malformed source; the return would silently play to the end (plain D.S.).
+		if (sawDsAlFine && !sawFine) {
+			warnings.push({
+				code: 'unrecognised-element',
+				message: "A 'dsalfine' jump is present but no Fine marker was found; the da-capo return will play to the end of the piece.",
 			});
 		}
 
