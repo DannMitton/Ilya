@@ -180,6 +180,17 @@ const strings: Record<string, Record<Language, string>> = {
 	'fit.broad.itemPassaggio':     { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
 	'fit.broad.join':              { en: 'and',                          fr: 'ni' },
 
+	// ── Fit textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
+	//    English ruled by Dann 2026-07-16; French pending Dann's validation) ──
+	'fit.witness.heading':         { en: 'Textual witnesses',            fr: 'Témoins textuels' },
+	'fit.witness.agree':           { en: 'Score and poem agree',         fr: 'La partition et le poème concordent' },
+	'fit.witness.divergePrefix':   { en: 'Score and poem diverge in',    fr: 'La partition et le poème divergent à' },
+	'fit.witness.placeOne':        { en: 'place',                        fr: 'endroit' },
+	'fit.witness.placeMany':       { en: 'places',                       fr: 'endroits' },
+	'fit.witness.scoreLabel':      { en: 'Score',                        fr: 'Partition' },
+	'fit.witness.poemLabel':       { en: 'Poem',                         fr: 'Poème' },
+	'fit.witness.measureAbbr':     { en: 'm.',                           fr: 'm.' },
+
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
 	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteurs' },

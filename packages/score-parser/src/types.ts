@@ -236,6 +236,20 @@ export interface Measure {
   repeatStart?: boolean;
   repeatEnd?: boolean;
 
+  /** Backward-repeat play count from `<repeat times>`; the unfolder defaults to 2 when absent. */
+  repeatTimes?: number;
+
+  /**
+   * Ending (volta) membership, resolved to the passes this measure sounds on.
+   * `passes` drives performance-order unfolding; `startsHere`/`endsHere` mark the
+   * first and last measure of the ending, for drawing the bracket later.
+   */
+  ending?: {
+    passes: number[];
+    startsHere?: boolean;
+    endsHere?: boolean;
+  };
+
   /** Optional rehearsal mark text (`'A'`, `'Verse 2'`, and so on). */
   rehearsalMark?: string;
 }

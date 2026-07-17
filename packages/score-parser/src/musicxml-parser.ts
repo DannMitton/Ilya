@@ -84,6 +84,15 @@ function kids(el: XmlEl): XmlEl[] {
 function directChildren(el: XmlEl, tag: string): XmlEl[] {
 	return kids(el).filter((c) => c.tagName === tag);
 }
+
+/** Parse an <ending number> attribute ("1" or "1,2") into a pass-set; defaults to [1]. */
+function parseEndingNumbers(attr: string | null): number[] {
+	const out = (attr ?? '')
+		.split(',')
+		.map((x) => parseInt(x.trim(), 10))
+		.filter((x) => Number.isFinite(x) && x > 0);
+	return out.length > 0 ? out : [1];
+}
 function firstChild(el: XmlEl, tag: string): XmlEl | undefined {
 	return kids(el).find((c) => c.tagName === tag);
 }
@@ -312,10 +321,19 @@ export class MusicXmlScoreParser implements ScoreParser {
 		let currentTime: TimeSignature | null = null;
 		let currentKey: KeySignature | null = null;
 		let currentClef: Clef | null = null;
+		// Cross-measure ending (volta) state: an ending opened by a start barline
+		// stays open, stamping each measure with its pass-set, until a stop closes it.
+		let openEnding: { passes: number[] } | null = null;
 
 		for (let mi = 0; mi < measureEls.length; mi++) {
 			const measureEl = measureEls[mi];
 			let cursor: Fraction = ZERO;
+			// Barline markings accumulated across this measure's (possibly two) barlines.
+			let mRepeatStart = false;
+			let mRepeatEnd = false;
+			let mRepeatTimes: number | undefined;
+			let mEndingStartsHere = false;
+			let mEndingEndsHere = false;
 
 			for (const child of kids(measureEl)) {
 				switch (child.tagName) {
@@ -406,6 +424,30 @@ export class MusicXmlScoreParser implements ScoreParser {
 						});
 						break;
 					}
+					case 'barline': {
+						for (const rep of directChildren(child, 'repeat')) {
+							const dir = rep.getAttribute('direction');
+							if (dir === 'forward') mRepeatStart = true;
+							else if (dir === 'backward') {
+								mRepeatEnd = true;
+								const ts = rep.getAttribute('times');
+								if (ts) {
+									const nt = parseInt(ts, 10);
+									if (Number.isFinite(nt) && nt > 0) mRepeatTimes = nt;
+								}
+							}
+						}
+						for (const endEl of directChildren(child, 'ending')) {
+							const endType = endEl.getAttribute('type');
+							if (endType === 'start') {
+								openEnding = { passes: parseEndingNumbers(endEl.getAttribute('number')) };
+								mEndingStartsHere = true;
+							} else if (endType === 'stop' || endType === 'discontinue') {
+								mEndingEndsHere = true;
+							}
+						}
+						break;
+					}
 					default:
 						break;
 				}
@@ -425,6 +467,16 @@ export class MusicXmlScoreParser implements ScoreParser {
 
 			const numberAttr = measureEl.getAttribute('number');
 			const expected = frac(currentTime.beats, currentTime.beatType);
+			// Ending (volta) membership for this measure, resolved from the open ending.
+			let measureEnding: Measure['ending'] | undefined;
+			if (openEnding) {
+				measureEnding = {
+					passes: openEnding.passes,
+					...(mEndingStartsHere ? { startsHere: true } : {}),
+					...(mEndingEndsHere ? { endsHere: true } : {}),
+				};
+			}
+			if (mEndingEndsHere) openEnding = null;
 			const measure: Measure = {
 				index: mi,
 				number: numberAttr && numberAttr.length > 0 ? numberAttr : String(mi + 1),
@@ -432,6 +484,10 @@ export class MusicXmlScoreParser implements ScoreParser {
 				keySignature: currentKey,
 				...(currentClef ? { clef: currentClef } : {}),
 				expectedDuration: expected,
+				...(mRepeatStart ? { repeatStart: true } : {}),
+				...(mRepeatEnd ? { repeatEnd: true } : {}),
+				...(mRepeatTimes !== undefined ? { repeatTimes: mRepeatTimes } : {}),
+				...(measureEnding ? { ending: measureEnding } : {}),
 			};
 			// Pickup / mismatch accounting.
 			const cmp = fracCompare(cursor, expected);

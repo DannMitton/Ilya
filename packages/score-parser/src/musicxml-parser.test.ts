@@ -22,6 +22,7 @@
 import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser } from './musicxml-parser';
 import type { MusicXmlScoreInput, ParseResult } from './types';
+import { markersFromMeasures, unfold, type UnfoldResult } from './unfold';
 
 const parser = new MusicXmlScoreParser();
 
@@ -567,4 +568,53 @@ describe('MusicXmlScoreParser: clefs (v37 §A.17)', () => {
 		expect(r.score.clefs).toEqual([]);
 		expect(r.score.measures[0].clef).toBeUndefined();
 	});
+});
+
+
+describe('barline capture (repeats and voltas)', () => {
+  const ATTRS =
+    '<attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>';
+  const note = (t: string) =>
+    `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><lyric number="1"><syllabic>single</syllabic><text>${t}</text></lyric></note>`;
+  const wrap = (measures: string) =>
+    `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1">${measures}</part></score-partwise>`;
+  const seq = (r: UnfoldResult) =>
+    r.ok ? r.order.map((o) => `${o.source}.${o.pass}`).join(' ') : `FLAG:${r.flag.code}`;
+
+  it('captures a simple repeat and unfolds it', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2"><barline location="left"><repeat direction="forward"/></barline>${note('b')}</measure>` +
+            `<measure number="3">${note('c')}<barline location="right"><repeat direction="backward"/></barline></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].repeatStart).toBe(true);
+    expect(m[2].repeatEnd).toBe(true);
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 1.2 2.2');
+  });
+
+  it('captures a two-ending volta and unfolds it', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2"><barline location="left"><repeat direction="forward"/></barline>${note('b')}</measure>` +
+            `<measure number="3"><barline location="left"><ending number="1" type="start"/></barline>${note('c')}<barline location="right"><ending number="1" type="stop"/><repeat direction="backward"/></barline></measure>` +
+            `<measure number="4"><barline location="left"><ending number="2" type="start"/></barline>${note('d')}<barline location="right"><ending number="2" type="stop"/></barline></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].repeatStart).toBe(true);
+    expect(m[2].ending?.passes).toEqual([1]);
+    expect(m[2].ending?.startsHere).toBe(true);
+    expect(m[2].ending?.endsHere).toBe(true);
+    expect(m[2].repeatEnd).toBe(true);
+    expect(m[3].ending?.passes).toEqual([2]);
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 1.2 3.2');
+  });
 });
