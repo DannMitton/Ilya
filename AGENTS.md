@@ -46,9 +46,9 @@ A pnpm workspace monorepo, Node 18+, TypeScript, SvelteKit with Svelte 5 runes, 
 
 ## Gould protocol
 
-Engraving rules come **only** from `gould-vocal-engraving-rules_v5` (190 rules). Never re-derive them, and never cite *Behind Bars* from memory.
+Engraving rules come **only** from `gould-vocal-engraving-rules_v6` (226 rules). Never re-derive them, and never cite *Behind Bars* from memory.
 
-If a rule number exceeds 190, you are misremembering. Say so.
+If a rule number exceeds 226, you are misremembering. Say so.
 
 When citing a rule, quote its words, then give your interpretation as a clearly separate line, mirroring the extraction's own paraphrase-then-*Fit:* shape. Tag every claim **SOURCED** (rule N, quoted), **INFERENCE** (drawn from rule N, not stated by it), or **JUDGEMENT** (design taste, unsourced). JUDGEMENT is a fully respected answer; honest taste beats a citation stretched to cover it. Any number, measurement, or threshold carries a rule number or is tagged JUDGEMENT.
 
