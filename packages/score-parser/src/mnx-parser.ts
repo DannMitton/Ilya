@@ -951,17 +951,15 @@ export class MnxScoreParser implements ScoreParser {
 				}
 			}
 
-			// Lyrics: one syllable per verse line on this event. Verse 1 is
-			// what the analysis layer walks in v1 (Round 9 §3.8); the
-			// canonical VocalLineEvent carries the verse-1 syllable, and
-			// additional verses attach to no event field in types.ts — they
-			// are preserved through this same walk when the correction and
-			// multi-verse work lands. For now, non-verse-1 syllables are
-			// intentionally not dropped silently: the verse structure is
-			// recorded through verseNumber on the syllables Shane keeps.
-			// The primary syllable is the lowest-verse text (verse 1 for
-			// v1 analysis); all verse texts are collected into `verses`
-			// (Kimi's multi-verse ruling, 2026-07-12). MNX's stable subset
+			// Lyrics: one syllable per verse line on this event. The primary
+			// syllable is the lowest-verse text present (verse 1 on a normal
+			// note; a higher verse on a note where verse 1 is melisma-ing).
+			// When more than one verse sings here, the full self-describing
+			// per-verse record is written to `versesInfo` (sorted by
+			// verseNumber, the primary's own entry included) and `verses`
+			// mirrors its texts (Kimi's multi-verse ruling, 2026-07-12;
+			// Option B, §A.98). That record is what lets a consumer
+			// reconstruct any verse, not just verse 1. MNX's stable subset
 			// carries no explicit elision markup, so an elided pair arrives
 			// as one combined token; `splitElision` detects it heuristically
 			// (an undertie or internal whitespace) and fills `segments` +
