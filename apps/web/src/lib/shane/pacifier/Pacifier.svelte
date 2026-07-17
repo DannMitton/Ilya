@@ -185,8 +185,14 @@
 		.concat(geomVowels.filter((v) => !calibrationOrder.includes(v.g)));
 
 	// ── Minimum-met achievement overlay (wizard spec v1 §2 Phase 2, §4) ──────
-	// The five-anchor floor {[i], [e], [ɛ], [ɑ], [u]} is the research-grounded
-	// minimum (Fox and Jacewicz 2017). A non-destructive overlay: nothing moves,
+	// The five-anchor floor {[i], [e], [ɛ], [ɑ], [u]} is Fit's engineering
+	// minimum: exactly the anchors the four derivations consume to reconstruct
+	// the rest of Grayson's ten idealized sung-Russian vowels (see derivations.ts).
+	// It targets Grayson's schema, not phonetic vowel-space completeness. JUDGEMENT.
+	// (Earlier this cited Fox and Jacewicz 2017; removed 2026-07-17: that is
+	// speech-dialect VSA work that critiques corner-vowel sets rather than
+	// endorsing a five-vowel minimum, and does not cross into sung vowels.)
+	// A non-destructive overlay: nothing moves,
 	// the deselected [ɨ], [ɪ], [ʌ] stay dashed in their canonical home
 	// positions, and this polygon lights in behind the vowel nodes once all
 	// five are sampled. The draw order is computed by angle around the shape's
