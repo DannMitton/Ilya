@@ -240,6 +240,12 @@ export interface Measure {
   repeatTimes?: number;
 
   /**
+   * `<repeat after-jump="yes">`: this repeat is re-taken on a da-capo/dal-segno pass.
+   * Captured for fidelity; the unfolder does not yet support it and flags instead.
+   */
+  repeatAfterJump?: boolean;
+
+  /**
    * Ending (volta) membership, resolved to the passes this measure sounds on.
    * `passes` drives performance-order unfolding; `startsHere`/`endsHere` mark the
    * first and last measure of the ending, for drawing the bracket later.
@@ -248,6 +254,35 @@ export interface Measure {
     passes: number[];
     startsHere?: boolean;
     endsHere?: boolean;
+  };
+
+  /**
+   * Jump-family navigation for this measure, read from MusicXML `<sound>` control
+   * flow only (never printed `<direction-type>` glyphs or words), per §A.78. Drives
+   * performance-order unfolding; source-agnostic (an MNX or OMR front end that learns
+   * to express jumps would populate the same shape). `segno`/`coda` are destination
+   * tokens; `dalSegno`/`toCoda` are origin tokens matched to them by string equality.
+   */
+  jump?: {
+    /** This measure is a segno destination; token from `<sound segno>`. */
+    segno?: string;
+    /** This measure is a coda destination; token from `<sound coda>`. */
+    coda?: string;
+    /** Da Capo origin (jump to the top). From `<sound dacapo="yes">`. */
+    daCapo?: boolean;
+    /** Dal Segno origin; token matching a `segno`. From `<sound dalsegno>`. */
+    dalSegno?: string;
+    /** To Coda origin; token matching a `coda`. From `<sound tocoda>`. */
+    toCoda?: string;
+    /** Fine: ends the piece on a da-capo/dal-segno return. From `<sound fine="yes">`. */
+    fine?: boolean;
+    /** A navigation `<sound>` carried `time-only`; the unfolder does not support it and flags. */
+    timeOnly?: boolean;
+    /**
+     * A printed jump mark (segno/coda glyph, or navigation words) with no `<sound>`
+     * to make it playable. The unfolder flags rather than guessing (§A.78).
+     */
+    markWithoutSound?: boolean;
   };
 
   /** Optional rehearsal mark text (`'A'`, `'Verse 2'`, and so on). */

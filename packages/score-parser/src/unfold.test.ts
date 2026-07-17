@@ -145,3 +145,137 @@ describe('asWrittenOrder', () => {
 		]);
 	});
 });
+
+// ── Increment 2: the jump family ──────────────────────────────────────────────
+// Jump marker builders. Tokens default to 'A' so the single-pair case is terse.
+const dc = (): MeasureRepeatMarkers => ({ daCapo: true });
+const ds = (token = 'A'): MeasureRepeatMarkers => ({ dalSegno: token });
+const segno = (token = 'A'): MeasureRepeatMarkers => ({ segno: token });
+const coda = (token = 'A'): MeasureRepeatMarkers => ({ coda: token });
+const tocoda = (token = 'A'): MeasureRepeatMarkers => ({ toCoda: token });
+const fine = (): MeasureRepeatMarkers => ({ fine: true });
+
+describe('unfold: jumps (increment 2)', () => {
+	it('plain D.C. plays the whole piece twice', () => {
+		expect(seq(unfold([plain(), plain(), dc()]))).toBe('0.1 1.1 2.1 0.2 1.2 2.2');
+	});
+	it('D.C. al Fine da-capos and stops at Fine', () => {
+		// m1 is Fine; on the first pass Fine is inert, on the return it ends the piece.
+		expect(seq(unfold([plain(), fine(), dc()]))).toBe('0.1 1.1 2.1 0.2 1.2');
+	});
+	it('D.C. al Coda da-capos, then jumps at To Coda to the coda section', () => {
+		expect(seq(unfold([plain(), tocoda(), dc(), coda()]))).toBe('0.1 1.1 2.1 0.2 1.2 3.1');
+	});
+	it('D.S. al Fine returns to the segno and stops at Fine', () => {
+		expect(seq(unfold([plain(), segno(), fine(), ds()]))).toBe('0.1 1.1 2.1 3.1 1.2 2.2');
+	});
+	it('D.S. al Coda returns to the segno, then jumps at To Coda', () => {
+		expect(seq(unfold([plain(), segno(), tocoda(), ds(), coda()]))).toBe(
+			'0.1 1.1 2.1 3.1 1.2 2.2 4.1'
+		);
+	});
+	it('a simple repeat is taken on the first pass but not on the da-capo return (minuet convention)', () => {
+		// m0..m1 repeat, m2 Fine, m3 D.C. On the da capo the repeat is suppressed.
+		const m = [start(), end(), fine(), dc()];
+		expect(seq(unfold(m))).toBe('0.1 1.1 0.2 1.2 2.1 3.1 0.3 1.3 2.2');
+	});
+	it('a lone segno with no Dal Segno is inert and falls back to identity order', () => {
+		expect(seq(unfold([segno(), plain(), plain()]))).toBe('0.1 1.1 2.1');
+	});
+});
+
+describe('unfold: jump flags (fall back to as-written, never guess)', () => {
+	it('flags an unstructured jump as unsupported (legacy hasJump path)', () => {
+		const r = unfold([plain(), { hasJump: true }]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) {
+			expect(r.flag.code).toBe('jump-unsupported-v1');
+			expect(r.flag.kind).toBe('unsupported');
+			expect(r.flag.at).toBe(1);
+		}
+	});
+	it('flags a printed jump mark with no <sound> as ambiguous', () => {
+		const r = unfold([plain(), { jumpMarkWithoutSound: true }]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) {
+			expect(r.flag.code).toBe('jump-mark-without-sound');
+			expect(r.flag.kind).toBe('ambiguous');
+			expect(r.flag.at).toBe(1);
+		}
+	});
+	it('flags voltas combined with a jump as unsupported', () => {
+		const m = [start(), e([1]), e([1], { endRepeat: true }), e([2]), dc()];
+		expect(seq(unfold(m))).toBe('FLAG:volta-with-jump');
+	});
+	it('flags more than one jump as unsupported', () => {
+		expect(seq(unfold([dc(), plain(), dc()]))).toBe('FLAG:multiple-jumps');
+	});
+	it('flags a Dal Segno with no segno as ambiguous', () => {
+		const r = unfold([plain(), ds()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('jump-target-missing');
+	});
+	it('flags a To Coda with no matching Coda as ambiguous', () => {
+		const r = unfold([tocoda(), dc()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('jump-target-missing');
+	});
+	it('flags a jump control sharing a barline with a repeat as ambiguous', () => {
+		const r = unfold([plain(), { daCapo: true, endRepeat: true }]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('jump-repeat-collision');
+	});
+	it('flags after-jump as unsupported', () => {
+		const m = [start(), { endRepeat: true, afterJump: true }, fine(), dc()];
+		expect(seq(unfold(m))).toBe('FLAG:after-jump-unsupported');
+	});
+	it('flags time-only as unsupported', () => {
+		expect(seq(unfold([plain(), { toCoda: 'A', timeOnly: true }, dc(), coda()]))).toBe(
+			'FLAG:time-only-unsupported'
+		);
+	});
+	it('flags a Coda placed before its To Coda as ambiguous', () => {
+		const r = unfold([coda(), tocoda(), dc()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('coda-before-tocoda');
+	});
+	it('flags a segno placed after its Dal Segno as ambiguous', () => {
+		const r = unfold([ds(), segno()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('segno-after-dalsegno');
+	});
+	it('flags both Fine and Coda on one jump as ambiguous', () => {
+		const r = unfold([tocoda(), fine(), dc(), coda()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('fine-and-coda');
+	});
+	it('flags a Coda or Fine with no origin to trigger it as ambiguous', () => {
+		const r = unfold([plain(), fine(), plain()]);
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.flag.code).toBe('jump-marker-without-origin');
+	});
+});
+
+describe('markersFromMeasures: jump fields', () => {
+	it('bridges parsed jump navigation to unfolder markers, then unfolds a D.C. al Coda', () => {
+		const measures: MeasureLike[] = [
+			{},
+			{ jump: { toCoda: 'A' } },
+			{ jump: { daCapo: true } },
+			{ jump: { coda: 'A' } }
+		];
+		const markers = markersFromMeasures(measures);
+		expect(markers).toEqual([{}, { toCoda: 'A' }, { daCapo: true }, { coda: 'A' }]);
+		expect(seq(unfold(markers))).toBe('0.1 1.1 2.1 0.2 1.2 3.1');
+	});
+	it('maps after-jump and the mark-without-sound flag through', () => {
+		const measures: MeasureLike[] = [
+			{ repeatEnd: true, repeatAfterJump: true },
+			{ jump: { markWithoutSound: true } }
+		];
+		expect(markersFromMeasures(measures)).toEqual([
+			{ endRepeat: true, afterJump: true },
+			{ jumpMarkWithoutSound: true }
+		]);
+	});
+});

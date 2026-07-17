@@ -115,6 +115,71 @@ function intAttr(el: XmlEl, name: string): number | undefined {
 	return Number.isFinite(n) ? n : undefined;
 }
 
+// ── Jump-family navigation (§A.78: control flow from <sound> only) ──────────────
+
+/** Accumulator for a measure's `<sound>`-derived jump navigation. */
+type JumpAcc = NonNullable<Measure['jump']>;
+
+/**
+ * Read jump navigation attributes from one `<sound>` element into the accumulator.
+ * Returns true if any navigation attribute was present. `<sound>` also carries tempo,
+ * dynamics, and other playback data read elsewhere; only the control-flow attributes
+ * are our concern here.
+ */
+function readSoundNav(soundEl: XmlEl, acc: JumpAcc): boolean {
+	let found = false;
+	const segno = soundEl.getAttribute('segno');
+	if (segno) {
+		acc.segno = segno;
+		found = true;
+	}
+	const coda = soundEl.getAttribute('coda');
+	if (coda) {
+		acc.coda = coda;
+		found = true;
+	}
+	if (soundEl.getAttribute('dacapo') === 'yes') {
+		acc.daCapo = true;
+		found = true;
+	}
+	const dalsegno = soundEl.getAttribute('dalsegno');
+	if (dalsegno) {
+		acc.dalSegno = dalsegno;
+		found = true;
+	}
+	const tocoda = soundEl.getAttribute('tocoda');
+	if (tocoda) {
+		acc.toCoda = tocoda;
+		found = true;
+	}
+	const fine = soundEl.getAttribute('fine');
+	if (fine) {
+		acc.fine = true;
+		found = true;
+	}
+	if (found && soundEl.getAttribute('time-only') !== null) acc.timeOnly = true;
+	return found;
+}
+
+/** Printed navigation words ("D.C.", "D.S. al Fine", "To Coda", "Fine", "Coda", …). */
+const NAV_WORDS_RE = /\b(d\s*\.?\s*[cs]\s*\.?|da\s+capo|dal\s+segno|to\s+coda|al\s+coda|al\s+fine|fine|coda)\b/i;
+
+/**
+ * True when a `<direction>` prints a jump mark: a `<segno>` or `<coda>` glyph, or
+ * `<words>` naming a jump. Used only to detect a printed jump with no `<sound>` to
+ * make it playable, which the unfolder flags rather than guessing (§A.78).
+ */
+function directionHasPrintedJumpMark(direction: XmlEl): boolean {
+	for (const dt of directChildren(direction, 'direction-type')) {
+		if (directChildren(dt, 'segno').length > 0) return true;
+		if (directChildren(dt, 'coda').length > 0) return true;
+		for (const w of directChildren(dt, 'words')) {
+			if (NAV_WORDS_RE.test(textOf(w))) return true;
+		}
+	}
+	return false;
+}
+
 // ── Exact rational arithmetic (mirrors mnx-parser.ts) ──────────────
 
 function gcd(a: number, b: number): number {
@@ -332,8 +397,13 @@ export class MusicXmlScoreParser implements ScoreParser {
 			let mRepeatStart = false;
 			let mRepeatEnd = false;
 			let mRepeatTimes: number | undefined;
+			let mRepeatAfterJump = false;
 			let mEndingStartsHere = false;
 			let mEndingEndsHere = false;
+			// Jump-family navigation accumulated from this measure's <sound> elements.
+			const mJump: JumpAcc = {};
+			let mHasSoundNav = false;
+			let mHasPrintedJumpMark = false;
 
 			for (const child of kids(measureEl)) {
 				switch (child.tagName) {
@@ -398,6 +468,16 @@ export class MusicXmlScoreParser implements ScoreParser {
 					case 'direction': {
 						const t = readTempo(child, mi, cursor);
 						if (t) tempoMarkings.push(t);
+						// Control flow from <sound> only; the printed marks are display.
+						for (const s of directChildren(child, 'sound')) {
+							if (readSoundNav(s, mJump)) mHasSoundNav = true;
+						}
+						if (directionHasPrintedJumpMark(child)) mHasPrintedJumpMark = true;
+						break;
+					}
+					case 'sound': {
+						// A bare <sound> in the measure body (not inside a <direction>).
+						if (readSoundNav(child, mJump)) mHasSoundNav = true;
 						break;
 					}
 					case 'backup': {
@@ -435,6 +515,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 									const nt = parseInt(ts, 10);
 									if (Number.isFinite(nt) && nt > 0) mRepeatTimes = nt;
 								}
+								if (rep.getAttribute('after-jump') === 'yes') mRepeatAfterJump = true;
 							}
 						}
 						for (const endEl of directChildren(child, 'ending')) {
@@ -477,6 +558,11 @@ export class MusicXmlScoreParser implements ScoreParser {
 				};
 			}
 			if (mEndingEndsHere) openEnding = null;
+			// Jump navigation: <sound> attributes win; a printed mark with no <sound>
+			// is recorded as unplayable so the unfolder flags rather than guesses (§A.78).
+			let measureJump: Measure['jump'] | undefined;
+			if (mHasSoundNav) measureJump = { ...mJump };
+			else if (mHasPrintedJumpMark) measureJump = { markWithoutSound: true };
 			const measure: Measure = {
 				index: mi,
 				number: numberAttr && numberAttr.length > 0 ? numberAttr : String(mi + 1),
@@ -487,7 +573,9 @@ export class MusicXmlScoreParser implements ScoreParser {
 				...(mRepeatStart ? { repeatStart: true } : {}),
 				...(mRepeatEnd ? { repeatEnd: true } : {}),
 				...(mRepeatTimes !== undefined ? { repeatTimes: mRepeatTimes } : {}),
+				...(mRepeatAfterJump ? { repeatAfterJump: true } : {}),
 				...(measureEnding ? { ending: measureEnding } : {}),
+				...(measureJump ? { jump: measureJump } : {}),
 			};
 			// Pickup / mismatch accounting.
 			const cmp = fracCompare(cursor, expected);

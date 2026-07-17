@@ -618,3 +618,107 @@ describe('barline capture (repeats and voltas)', () => {
     expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 1.2 3.2');
   });
 });
+
+describe('jump capture (D.C., D.S., coda, fine from <sound>)', () => {
+  const ATTRS =
+    '<attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>';
+  const note = (t: string) =>
+    `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><lyric number="1"><syllabic>single</syllabic><text>${t}</text></lyric></note>`;
+  const wrap = (measures: string) =>
+    `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1">${measures}</part></score-partwise>`;
+  const seq = (r: UnfoldResult) =>
+    r.ok ? r.order.map((o) => `${o.source}.${o.pass}`).join(' ') : `FLAG:${r.flag.code}`;
+
+  it('captures a bare <sound> D.C. al Fine and unfolds it', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2">${note('b')}<sound fine="yes"/></measure>` +
+            `<measure number="3">${note('c')}<sound dacapo="yes"/></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].jump?.fine).toBe(true);
+    expect(m[2].jump?.daCapo).toBe(true);
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 0.2 1.2');
+  });
+
+  it('captures a direction-wrapped <sound> D.C. al Coda (words + sound), and does not flag mark-without-sound', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2">${note('b')}<direction placement="above"><direction-type><words>To Coda</words></direction-type><sound tocoda="c1"/></direction></measure>` +
+            `<measure number="3">${note('c')}<direction><direction-type><words>D.C. al Coda</words></direction-type><sound dacapo="yes"/></direction></measure>` +
+            `<measure number="4">${note('d')}<direction><direction-type><coda/></direction-type><sound coda="c1"/></direction></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].jump?.toCoda).toBe('c1');
+    expect(m[1].jump?.markWithoutSound).toBeUndefined();
+    expect(m[2].jump?.daCapo).toBe(true);
+    expect(m[3].jump?.coda).toBe('c1');
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 0.2 1.2 3.1');
+  });
+
+  it('captures a D.S. al Fine and unfolds it', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2">${note('b')}<sound segno="s1"/></measure>` +
+            `<measure number="3">${note('c')}<sound fine="yes"/></measure>` +
+            `<measure number="4">${note('d')}<sound dalsegno="s1"/></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].jump?.segno).toBe('s1');
+    expect(m[3].jump?.dalSegno).toBe('s1');
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('0.1 1.1 2.1 3.1 1.2 2.2');
+  });
+
+  it('captures repeat after-jump and flags it in unfolding', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}<barline location="left"><repeat direction="forward"/></barline>${note('a')}</measure>` +
+            `<measure number="2">${note('b')}<barline location="right"><repeat direction="backward" after-jump="yes"/></barline></measure>` +
+            `<measure number="3">${note('c')}<sound fine="yes"/></measure>` +
+            `<measure number="4">${note('d')}<sound dacapo="yes"/></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].repeatAfterJump).toBe(true);
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('FLAG:after-jump-unsupported');
+  });
+
+  it('records a printed jump mark with no <sound> and flags it rather than guessing', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}</measure>` +
+            `<measure number="2">${note('b')}<direction><direction-type><words>D.C. al Fine</words></direction-type></direction></measure>`
+        )
+      )
+    );
+    const m = r.score.measures;
+    expect(m[1].jump?.markWithoutSound).toBe(true);
+    expect(seq(unfold(markersFromMeasures(m)))).toBe('FLAG:jump-mark-without-sound');
+  });
+
+  it('does not create a jump from a tempo-only <sound>', async () => {
+    const r = await parser.parse(
+      xmlInput(
+        wrap(
+          `<measure number="1">${ATTRS}${note('a')}<direction><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>96</per-minute></metronome></direction-type><sound tempo="96"/></direction></measure>`
+        )
+      )
+    );
+    expect(r.score.measures[0].jump).toBeUndefined();
+  });
+});
