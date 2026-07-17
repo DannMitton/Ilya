@@ -61,6 +61,40 @@ function rest(id: string): VocalLineEvent {
 	};
 }
 
+type SylType = 'whole' | 'start' | 'middle' | 'end';
+
+/**
+ * A multi-verse note: the primary `syllable` (whichever verse sings it as
+ * this event's primary) plus the self-describing `versesInfo` record when
+ * more than one verse sings here. Mirrors the parser's Option-B model
+ * (§A.98): `versesInfo` is present only on multi-verse events and includes
+ * the primary verse's own entry.
+ */
+function mvNote(
+	id: string,
+	primary: { text: string; type: SylType; verse: number },
+	versesInfo?: Array<{ text: string; type: SylType; verse: number }>
+): VocalLineEvent {
+	return {
+		id,
+		type: 'note',
+		measureIndex: 0,
+		rhythmicPosition: { fraction: { numerator: 0, denominator: 1 } },
+		duration: { base: 'quarter', dots: 0, fraction: { numerator: 1, denominator: 4 } },
+		pitch: P('C', 4),
+		syllable: {
+			id: `s-${id}`,
+			text: primary.text,
+			type: primary.type,
+			verseNumber: primary.verse,
+			wordContext: primary.text,
+			...(versesInfo
+				? { versesInfo: versesInfo.map((v) => ({ verseNumber: v.verse, text: v.text, type: v.type })) }
+				: {})
+		}
+	};
+}
+
 function scoreOf(events: VocalLineEvent[]): ParsedScore {
 	return {
 		source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
@@ -224,5 +258,57 @@ describe('buildVowelResolver bail rules', () => {
 		expect(v1).toBeDefined();
 		// The verse-2 note reads as a continuation of verse 1: it sustains.
 		expect(resolve(byId.get('d2')!)).toBe(v1);
+	});
+});
+
+// ── Verse 2+ reconstruction (§A.98; Option 1, Dann 2026-07-17) ────────
+
+describe('buildVowelResolver reconstructs any verse from versesInfo', () => {
+	// A sparse two-verse line on three shared notes. Verse 1 sings «вас» then
+	// «нет» (melisma-ing across m2); verse 2 sings «го»+«ре» = «горе»
+	// (melisma-ing across m3). m1 carries both verses, so versesInfo is present
+	// and includes verse 1's own entry; m2 and m3 each carry a single verse, so
+	// versesInfo is absent and the primary syllable stands in. This is the
+	// sparse case the self-describing record exists to recover (§A.98).
+	const parsed = scoreOf([
+		mvNote('m1', { text: 'вас', type: 'whole', verse: 1 }, [
+			{ text: 'вас', type: 'whole', verse: 1 },
+			{ text: 'го', type: 'start', verse: 2 }
+		]),
+		mvNote('m2', { text: 'ре', type: 'end', verse: 2 }),
+		mvNote('m3', { text: 'нет', type: 'whole', verse: 1 })
+	]);
+	const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+
+	const resolve1 = buildVowelResolver(parsed, 1);
+	const resolve2 = buildVowelResolver(parsed, 2);
+	const at1 = (id: string) => resolve1(byId.get(id)!);
+	const at2 = (id: string) => resolve2(byId.get(id)!);
+
+	it('resolves verse 2 to its own words, matching an independent extraction of «горе»', () => {
+		expect(at2('m1')).toBe(expectedVowel('горе', 0, 0)); // го
+		expect(at2('m2')).toBe(expectedVowel('горе', 0, 1)); // ре
+		for (const id of ['m1', 'm2']) {
+			const v = at2(id);
+			expect(v, `event ${id}`).toBeDefined();
+			expect(TEN_VOWELS.has(v!), `event ${id} resolved to ${v}`).toBe(true);
+		}
+	});
+
+	it('sustains the verse-2 melisma across m3 (verse 2 sings no new syllable there)', () => {
+		expect(at2('m3')).toBe(at2('m2'));
+	});
+
+	it('reads verse 1 independently on the same score, and the two verses differ on m1', () => {
+		expect(at1('m1')).toBe(expectedVowel('вас нет', 0, 0)); // вас
+		expect(at1('m2')).toBe(at1('m1')); // verse 1 melisma-sustains across m2
+		expect(at1('m3')).toBe(expectedVowel('вас нет', 1, 0)); // нет
+		// The whole point: the same note m1 reads a different vowel per verse
+		// (вас vs the first syllable of горе), proving the selector switches.
+		expect(at1('m1')).not.toBe(at2('m1'));
+	});
+
+	it('defaults to verse 1 when no verse is given (the primary lens, unchanged)', () => {
+		expect(buildVowelResolver(parsed)(byId.get('m1')!)).toBe(at1('m1'));
 	});
 });

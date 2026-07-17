@@ -11,12 +11,14 @@
  *
  * How the mapping works, in four honest moves:
  *
- * 1. WORD RECONSTRUCTION (score-side only). Verse-1 syllables are walked
- *    in vocal-line order; `whole` is a word, `start`…`end` joins one
- *    (melisma continuation notes carry no syllable by the canonical
- *    model). Malformed sequences (a `middle` with no open word, a `start`
- *    inside an open word) close and open words defensively rather than
- *    throwing: real engraving is imperfect.
+ * 1. WORD RECONSTRUCTION (score-side only). The selected verse's syllables
+ *    are walked in vocal-line order; `whole` is a word, `start`…`end` joins
+ *    one (a note the verse does not sing carries no syllable for it).
+ *    Malformed sequences (a `middle` with no open word, a `start` inside an
+ *    open word) close and open words defensively rather than throwing: real
+ *    engraving is imperfect. The verse's syllable per event comes from
+ *    `versesInfo` when present (authoritative and self-describing, §A.98),
+ *    falling back to the primary `syllable` on single-verse notes.
  *
  * 2. TRANSCRIPTION. The reconstructed words are joined into one line and
  *    fed through the full `processText` pipeline — stress lookup,
@@ -39,10 +41,11 @@
  *    bare glyphs). Zero or multiple vowel entries, or a glyph outside
  *    the ten sung vowels (Mitton 2020, Fig 4.2), resolve to undefined.
  *
- * Melisma: a note with no verse-1 syllable sustains the previous
- * syllable's vowel ("sustain", the overlay engine's documented
- * semantics); a rest ends the sustain. A syllable from another verse is
- * treated as a continuation of verse 1, the v1 UI's verse rule.
+ * Melisma: a note on which the selected verse sings no new syllable
+ * sustains the previous syllable's vowel ("sustain", the overlay engine's
+ * documented semantics); a rest ends the sustain. A note whose syllable
+ * belongs only to other verses is, for the selected verse, exactly such a
+ * continuation.
  *
  * DISPLAY IPA (Dann, 2026-07-17): the underlay's second line is the full
  * syllable transcription (consonants and vowel, verbatim from the
@@ -123,8 +126,33 @@ interface OpenWord {
 	syls: Array<{ text: string; events: string[] }>;
 }
 
-/** Reconstruct verse-1 words and their per-nucleus event slots. */
-function collectScoreWords(parsed: ParsedScore): ScoreWord[] {
+/**
+ * The syllable text and syllabic role sung by verse `verseNumber` on this
+ * event, or undefined when that verse sings no new syllable here (a rest, a
+ * melisma continuation, or a note this verse does not reach).
+ *
+ * `versesInfo`, when present, is authoritative and self-describing: it carries
+ * every verse that sings on the event, including the primary verse's own entry
+ * (§A.98), so every verse, verse 1 included, is read from it losslessly, even
+ * on a sparse note whose primary `syllable` belongs to a different verse. When
+ * `versesInfo` is absent the note is single-verse, so the primary `syllable`
+ * is that verse's only syllable and is used directly.
+ */
+function verseSyllableOf(
+	ev: VocalLineEvent,
+	verseNumber: number
+): { text: string; type: 'whole' | 'start' | 'middle' | 'end' } | undefined {
+	const syl = ev.syllable;
+	if (!syl) return undefined;
+	if (syl.versesInfo && syl.versesInfo.length > 0) {
+		const entry = syl.versesInfo.find((v) => v.verseNumber === verseNumber);
+		return entry ? { text: entry.text, type: entry.type } : undefined;
+	}
+	return syl.verseNumber === verseNumber ? { text: syl.text, type: syl.type } : undefined;
+}
+
+/** Reconstruct the selected verse's words and their per-nucleus event slots. */
+function collectScoreWords(parsed: ParsedScore, verseNumber: number): ScoreWord[] {
 	const words: ScoreWord[] = [];
 	let cur: OpenWord | null = null;
 	// The sustain pointer: the slot melisma continuation notes join. Always
@@ -166,11 +194,11 @@ function collectScoreWords(parsed: ParsedScore): ScoreWord[] {
 			sustain = null;
 			continue;
 		}
-		const syl = ev.syllable;
-		if (!syl || syl.verseNumber !== 1) {
-			// Melisma continuation (or another verse's text, treated as
-			// continuation per the v1 verse rule): the note sustains the
-			// current syllable's vowel, if any.
+		const syl = verseSyllableOf(ev, verseNumber);
+		if (!syl) {
+			// The selected verse sings no new syllable here (a melisma
+			// continuation, or a note carrying only other verses' text): the
+			// note sustains the current syllable's vowel, if any.
 			if (sustain) sustain.push(ev.id);
 			continue;
 		}
@@ -253,15 +281,18 @@ export interface UnderlayResolvers {
 }
 
 /**
- * Build both resolvers for one parsed score. All work happens here, once;
- * both returned functions are Map lookups, safe to call per event in
- * `analyzeScore`'s hot loop and the renderer's underlay pass.
+ * Build both resolvers for one parsed score and one verse (`verseNumber`,
+ * default 1). All work happens here, once; both returned functions are Map
+ * lookups, safe to call per event in `analyzeScore`'s hot loop and the
+ * renderer's underlay pass. Each verse sings the same notes with different
+ * text, so a per-verse overlay is this builder run once per verse, feeding the
+ * unchanged verse-agnostic `analyzeScore` (Option 1, Dann 2026-07-17).
  */
-export function buildUnderlayResolvers(parsed: ParsedScore): UnderlayResolvers {
+export function buildUnderlayResolvers(parsed: ParsedScore, verseNumber = 1): UnderlayResolvers {
 	const byEventVowel = new Map<string, string>();
 	const byEventIpa = new Map<string, string>();
 
-	const scoreWords = collectScoreWords(parsed);
+	const scoreWords = collectScoreWords(parsed, verseNumber);
 	if (scoreWords.length > 0) {
 		let pipelineWords: WordStackData[] = [];
 		try {
@@ -343,11 +374,12 @@ export function buildUnderlayResolvers(parsed: ParsedScore): UnderlayResolvers {
 }
 
 /**
- * Build the resolver for one parsed score. All work happens here, once;
- * the returned function is a Map lookup, safe to call per event in
- * `analyzeScore`'s hot loop. A thin wrapper over `buildUnderlayResolvers`
- * for existing callers that need only the acoustic vowel.
+ * Build the acoustic-vowel resolver for one parsed score and one verse
+ * (`verseNumber`, default 1). All work happens here, once; the returned
+ * function is a Map lookup, safe to call per event in `analyzeScore`'s hot
+ * loop. A thin wrapper over `buildUnderlayResolvers` for callers that need
+ * only the acoustic vowel.
  */
-export function buildVowelResolver(parsed: ParsedScore): VowelResolver {
-	return buildUnderlayResolvers(parsed).vowel;
+export function buildVowelResolver(parsed: ParsedScore, verseNumber = 1): VowelResolver {
+	return buildUnderlayResolvers(parsed, verseNumber).vowel;
 }
