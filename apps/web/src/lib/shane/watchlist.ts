@@ -54,13 +54,9 @@ const PASSAGGIO_EDGE_WINDOW_CENTS = 100;
 /** Sustain threshold in seconds. SOURCED §A.117 (≥ 2.5 s OR a fermata). */
 const SUSTAIN_SECONDS_THRESHOLD = 2.5;
 
-/**
- * Soft-tier cap: timbre turns and sustains TOGETHER show at most this many;
- * the remainder closes as an honest overflow line. SOURCED §7.4 ("soft tiers
- * ... capped at 2 ... adjustable"). INTERPRETATION (flag for Dann): read as a
- * combined cap across both soft tiers, not 2-per-tier.
- */
-const SOFT_TIER_CAP = 2;
+// No cap (Dann, 2026-07-18): the watch list renders on its own page after the
+// score, so every item shows. A tighter curation ("highlights, not a novella")
+// is a deferred design pass, not a cap.
 
 /** Header line. APPROVED §7.5. */
 export const WATCH_HEADER = 'Places to watch';
@@ -78,11 +74,6 @@ const TIER_OF: Record<WatchKind, 1 | 2 | 3 | 4 | 5> = {
 	timbre: 4,
 	sustain: 5
 };
-
-/** Tiers 1–3 are hard (shown uncapped); 4–5 are soft (capped). SOURCED §7.4. */
-function isHardTier(tier: number): boolean {
-	return tier <= 3;
-}
 
 /** One note that earned a place, at its most severe tier. */
 export interface WatchEntry {
@@ -111,10 +102,8 @@ export interface WatchEntry {
 }
 
 export interface WatchList {
-	/** Final, sorted, capped entries to render. Empty = render nothing (§7.3). */
+	/** Final, sorted entries to render, all of them. Empty = render nothing (§7.3). */
 	entries: WatchEntry[];
-	/** Soft-tier entries dropped by the cap, for the "and N more" line (§7.4). */
-	overflowCount: number;
 }
 
 // ── Rhythm → seconds (for the sustain test) ─────────────────────────
@@ -307,15 +296,10 @@ export function buildWatchList(
 		return (orderById.get(x.eventId) ?? 0) - (orderById.get(y.eventId) ?? 0);
 	});
 
-	// Severity-gated cap: hard tiers uncapped, soft tiers capped, honest
-	// overflow. Sorted order puts all hard entries before all soft ones.
-	const hard = raw.filter((e) => isHardTier(e.tier));
-	const soft = raw.filter((e) => !isHardTier(e.tier));
-	const shownSoft = soft.slice(0, SOFT_TIER_CAP);
-	return {
-		entries: [...hard, ...shownSoft],
-		overflowCount: soft.length - shownSoft.length
-	};
+	// Show all (Dann, 2026-07-18): the list renders on its own page after the
+	// score, so nothing is capped or hidden. `raw` is already sorted. (A tighter
+	// upthread curation — highlights, not a novella — is a deferred design pass.)
+	return { entries: raw };
 }
 
 /** Bar number from the measure's own `.number`, never `measureIndex + 1` (audit §3, §A). */
@@ -355,9 +339,4 @@ export function watchEntryLine(entry: WatchEntry): string {
 		case 'sustain': // DRAFT — copy is Dann's; §7.5 approved no sustain line.
 			return `Bar ${bar}: the ${v} you sustain here sits on its turning pitch, so the colour may feel unsteady as you hold it.`;
 	}
-}
-
-/** The overflow line, when soft entries were capped (§7.4). APPROVED shape. */
-export function watchOverflowLine(overflowCount: number): string {
-	return `and ${overflowCount} more places to watch`;
 }

@@ -1,6 +1,6 @@
 /**
  * Watch-list generator tests (design C; §7.2 tiers, §A.117 sustain, §A.126
- * passaggio edge, §A.135 density-within-tier, §7.4 cap).
+ * passaggio edge, §A.135 density-within-tier, show-all list).
  *
  * The generator is fed REAL overlay output: each test builds a minimal
  * `ParsedScore` plus a `VoiceProfileSnapshot`, runs the unchanged
@@ -21,7 +21,7 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelResolver
 } from '@ilya/score-parser';
-import { WATCH_HEADER, buildWatchList, watchEntryLine, watchOverflowLine } from './watchlist';
+import { WATCH_HEADER, buildWatchList, watchEntryLine } from './watchlist';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 type SylType = SyllableInfo['type'];
@@ -196,11 +196,10 @@ describe('buildWatchList — tiers', () => {
 		const snap: VoiceProfileSnapshot = { fR1: { a: 700 }, range: WIDE_RANGE, tessitura: WIDE_TESS };
 		const wl = buildWatchList(parsed, analyze(parsed, snap, { n1: 'a' }));
 		expect(wl.entries).toHaveLength(0);
-		expect(wl.overflowCount).toBe(0);
 	});
 });
 
-describe('buildWatchList — sort and cap', () => {
+describe('buildWatchList — sort and show-all', () => {
 	it('within a tier, the more acute (higher, lower d) note sorts first', () => {
 		const parsed = scoreOf([
 			note('nC6', { pitch: P('C', 6) }),
@@ -216,7 +215,7 @@ describe('buildWatchList — sort and cap', () => {
 		expect(wl.entries[0].density).toBeLessThan(wl.entries[1].density);
 	});
 
-	it('hard tiers sort ahead of soft; soft tiers cap at 2 with an honest overflow', () => {
+	it('shows every entry, hard tiers sorted ahead of soft (no cap)', () => {
 		const parsed = scoreOf([
 			note('nRange', { pitch: P('C', 6) }), // tier 1
 			note('nCross', { pitch: P('A', 4) }), // tier 2
@@ -231,10 +230,9 @@ describe('buildWatchList — sort and cap', () => {
 		};
 		const vowels = { nRange: 'a', nCross: 'i', sus1: 'a', sus2: 'a', sus3: 'a' };
 		const wl = buildWatchList(parsed, analyze(parsed, snap, vowels));
-		expect(wl.entries.map((e) => e.tier)).toEqual([1, 2, 5, 5]);
+		expect(wl.entries.map((e) => e.tier)).toEqual([1, 2, 5, 5, 5]);
 		expect(wl.entries[0].eventId).toBe('nRange');
 		expect(wl.entries[1].eventId).toBe('nCross');
-		expect(wl.overflowCount).toBe(1);
 	});
 
 	it('reads the bar from the measure number, not measureIndex + 1', () => {
@@ -297,7 +295,4 @@ describe('watch-list copy', () => {
 		expect(line).toContain('rises above the range you gave');
 	});
 
-	it('overflow line matches the ruled shape', () => {
-		expect(watchOverflowLine(2)).toBe('and 2 more places to watch');
-	});
 });

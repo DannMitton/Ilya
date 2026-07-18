@@ -58,13 +58,18 @@
 	import type { Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
-	import { paginateScore, analyzeScore } from '@ilya/score-parser';
+	import {
+		paginateScore,
+		analyzeScore,
+		resolveVocalReadingOctave,
+		shiftVocalOctave
+	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
-	import { buildWatchList, watchEntryLine, watchOverflowLine, WATCH_HEADER } from '$lib/shane/watchlist';
+	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/shane/watchlist';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -248,24 +253,37 @@
 	 */
 	const analysedVowels = $derived(ROSTER_ORDER.filter((g) => adapted.snapshot.fR1[g] !== undefined));
 
-	const vowelResolver = $derived(parsed ? buildVowelResolver(parsed) : null);
+	// ── Vocal reading octave (denigma treble-8vb repair) ─────────────────
+	// A treble-notated lower-voice line arrives an octave too high (denigma
+	// flattens the octave clef). Resolve the octave that fits the singer's own
+	// declared range and read BOTH the analysis and the render there, so the
+	// marks and the engraving stay coherent (a shifted-down line lands in bass
+	// clef via the tessitura heuristic). Non-destructive; `parsed` is untouched.
+	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
+	const readingScore = $derived(
+		parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed,
+	);
+	const showOctaveNotice = $derived(octaveShift !== 0);
+	// Approved copy (Dann, 2026-07-18); shown only when the reading octave shifted.
+	const OCTAVE_NOTICE =
+		"This voice line is notated in treble clef but sits an octave above the range you gave, so it's being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score's clef if that's not right.";
+
+	const vowelResolver = $derived(readingScore ? buildVowelResolver(readingScore) : null);
 	const analyzed = $derived(
-		parsed && vowelResolver ? analyzeScore(parsed, adapted.snapshot, vowelResolver) : null,
+		readingScore && vowelResolver ? analyzeScore(readingScore, adapted.snapshot, vowelResolver) : null,
 	);
 
-	// ── The head-of-score watch list (design C) ──────────────────────────
-	// A print-native "Places to watch" band above the first system, built
-	// purely from the marks the overlay already computed (watchlist.ts);
-	// verse 1 today. Silent on zero challenge (§7.3). Its MEASURED height
-	// folds into the page-1 score window's top so it never overlaps the
-	// first system — a measured handshake like the header's, never a CSS
-	// guess (§D standing constraint).
-	const watchList = $derived(parsed && analyzed ? buildWatchList(parsed, analyzed, 1) : null);
+	// ── The "Places to watch" list (design C) ────────────────────────────
+	// Built purely from the marks the overlay already computed (watchlist.ts);
+	// verse 1 today. Silent on zero challenge (§7.3). Rendered AFTER the score
+	// (Dann's placement ruling, 2026-07-18) so a variable-length list never
+	// displaces the score markup, which also frees the full page-1 height for
+	// pagination.
+	const watchList = $derived(readingScore && analyzed ? buildWatchList(readingScore, analyzed, 1) : null);
 	const showWatchBand = $derived(!!watchList && watchList.entries.length > 0);
-	const WATCH_BAND_GAP = 18;
-	let watchBandHeight = $state(0);
-	const page1ScoreTop = $derived(contentTop + (showWatchBand ? watchBandHeight + WATCH_BAND_GAP : 0));
-	const page1ScoreHeight = $derived(dims.height - page1ScoreTop - contentBottom);
+	// Page-1 score window: the measured header sets contentTop; the score fills
+	// the window below it, undisplaced by the watch list.
+	const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);
 
 	// The broad-analysis note fires only when the overlay actually carries
 	// acoustic marks (at least one resolved event) AND a characteristics
@@ -280,10 +298,10 @@
 	const broadNoteText = $derived(composeBroadNote(adapted.completeness, language));
 
 	const scorePages = $derived(
-		parsed && analyzed
-			? paginateScore(parsed, analyzed, {
+		readingScore && analyzed
+			? paginateScore(readingScore, analyzed, {
 					pageWidth: contentWidth,
-					pageHeight: page1ScoreHeight,
+					pageHeight: page1WindowHeight,
 					marginTop: 0,
 					marginBottom: 0,
 					marginLeft: 0,
@@ -296,6 +314,15 @@
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,
+	);
+
+	// The commentary (octave notice + watch list) prints on its own trailing
+	// page sheet AFTER the score (Dann's placement ruling, 2026-07-18), so it
+	// sits inside the page boundary like the score and expands freely there
+	// without displacing the markup. Numbered as a continuation of the score.
+	const hasCommentaryPage = $derived(showOctaveNotice || showWatchBand);
+	const totalPages = $derived(
+		scorePages ? scorePages.length + (hasCommentaryPage ? 1 : 0) : 0,
 	);
 
 	// The Q3 render report (see the onrendered prop doc): once per score
@@ -380,29 +407,7 @@
 						markAccent="#8E7E9B"
 						ruleAccent="#8E7E9B"
 					/>
-					{#if showWatchBand && watchList}
-						<!-- The lavender "Places to watch" band, print-native, above the
-						     first system; outline-only squircle in the Fit accent (§7.1). -->
-						<aside
-							class="watch-band"
-							style="top: {contentTop}px;"
-							bind:offsetHeight={watchBandHeight}
-							aria-label={WATCH_HEADER}
-						>
-							<p class="watch-band-header">{WATCH_HEADER}</p>
-							<ul class="watch-band-list">
-								{#each watchList.entries as entry (entry.eventId)}
-									<li class="watch-band-line">{watchEntryLine(entry)}</li>
-								{/each}
-								{#if watchList.overflowCount > 0}
-									<li class="watch-band-line watch-band-overflow">
-										{watchOverflowLine(watchList.overflowCount)}
-									</li>
-								{/if}
-							</ul>
-						</aside>
-					{/if}
-					<div class="score-window" style="top: {page1ScoreTop}px; bottom: {contentBottom}px;">
+					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
 						{@html page}
 					</div>
@@ -412,9 +417,38 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={scorePages.length} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
 			</article>
 		{/each}
+		{#if hasCommentaryPage}
+			<!-- A trailing "notes" page: the octave notice and the "Places to
+			     watch" list on their own sheet AFTER the score (Dann's placement
+			     ruling, 2026-07-18) so they sit within the page boundary and
+			     expand freely without displacing the markup. -->
+			<article
+				class="paper-page profile-page"
+				style="width: {dims.width}px; height: {dims.height}px;"
+				aria-label="Analysis notes"
+			>
+				<RunningHeader headerText={runningHeader} />
+				<div class="commentary-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
+					{#if showOctaveNotice}
+						<aside class="octave-notice">{OCTAVE_NOTICE}</aside>
+					{/if}
+					{#if showWatchBand && watchList}
+						<aside class="watch-band" aria-label={WATCH_HEADER}>
+							<p class="watch-band-header">{WATCH_HEADER}</p>
+							<ul class="watch-band-list">
+								{#each watchList.entries as entry (entry.eventId)}
+									<li class="watch-band-line">{watchEntryLine(entry)}</li>
+								{/each}
+							</ul>
+						</aside>
+					{/if}
+				</div>
+				<PageFooter pageNumber={totalPages} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#8E7E9B" />
+			</article>
+		{/if}
 	</div>
 {:else}
 <article
@@ -579,19 +613,38 @@
 		height: auto;
 	}
 
-	/* ── The watch band (design C, §7.1) ───────────────────── */
+	/* ── The trailing notes page (design C, §7.1) ──────────── */
 
-	/* Outline-only lavender squircle at the head of the first score page,
-	   sharing the text column's left/right edge (96px), part of the printed
-	   document. First-pass visual treatment; copy and design are Dann's. */
-	.watch-band {
+	/* The notes page's content window: the same text column as the score, a
+	   column of the octave notice then the "Places to watch" band. The octave
+	   notice and band render AFTER the score on their own sheet (Dann's
+	   placement ruling, 2026-07-18). First-pass treatment; design is Dann's. */
+	.commentary-window {
 		position: absolute;
 		left: 96px;
 		right: 96px;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		overflow: hidden;
+	}
+
+	.octave-notice {
+		box-sizing: border-box;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+		font-size: 0.92rem;
+		line-height: 1.5;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	/* Outline-only lavender squircle; an in-flow block below the score. */
+	.watch-band {
 		box-sizing: border-box;
 		border: 1px solid #8e7e9b;
 		border-radius: 12px;
-		padding: 0.6rem 1rem 0.7rem;
+		padding: 0.7rem 1.1rem 0.8rem;
+		background: var(--paper-cream);
 	}
 
 	.watch-band-header {
@@ -617,11 +670,6 @@
 		font-size: 0.9rem;
 		line-height: 1.45;
 		color: var(--ink-secondary, #4a4540);
-	}
-
-	.watch-band-overflow {
-		font-style: italic;
-		color: var(--ink-tertiary, #6a6560);
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */
