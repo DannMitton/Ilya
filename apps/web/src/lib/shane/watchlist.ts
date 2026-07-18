@@ -100,6 +100,8 @@ export interface WatchEntry {
 	word?: string;
 	/** Direction of a timbre turn, when this note anchors one. */
 	timbreDirection?: 'open-to-close' | 'close-to-open';
+	/** For a range entry: above the ceiling or below the floor the singer gave. */
+	rangeDirection?: 'above' | 'below';
 	/**
 	 * Harmonic density d = fR1/fo (number of harmonics at/below the first
 	 * resonance). Lower = higher in the voice = more acute; sorts first within
@@ -273,6 +275,14 @@ export function buildWatchList(
 
 		if (kinds.length === 0) continue; // silence is the feature (§7.3 / §1)
 
+		// A range event is above the ceiling or below the floor; the copy differs.
+		let rangeDirection: 'above' | 'below' | undefined;
+		if (kinds.includes('range')) {
+			const singerRange = analyzed.calibrationSnapshot.range;
+			rangeDirection =
+				singerRange && pitchToMidi(ev.pitch) < pitchToMidi(singerRange.lowest) ? 'below' : 'above';
+		}
+
 		kinds.sort((x, y) => TIER_OF[x] - TIER_OF[y]);
 		raw.push({
 			eventId: id,
@@ -282,6 +292,7 @@ export function buildWatchList(
 			vowel: a.vowel,
 			...(wordByEvent.has(id) ? { word: wordByEvent.get(id) } : {}),
 			...(turn ? { timbreDirection: turn.direction } : {}),
+			...(rangeDirection ? { rangeDirection } : {}),
 			// d = fR1/fo, and fR1 = 2·(turning-pitch Hz), so d = 2·turningHz/fo.
 			density: (2 * pitchToHz(a.turningPitch)) / foHz
 		});
@@ -326,8 +337,10 @@ export function watchEntryLine(entry: WatchEntry): string {
 	const bar = entry.bar;
 	const v = `/${entry.vowel}/`;
 	switch (entry.kinds[0]) {
-		case 'range': // APPROVED §7.5
-			return `Bar ${bar} rises above the range you gave; you may want a transposition.`;
+		case 'range': // above: APPROVED §7.5. below: DRAFT (copy is Dann's), mirrors the approved line.
+			return entry.rangeDirection === 'below'
+				? `Bar ${bar} drops below the range you gave; you may want a transposition.`
+				: `Bar ${bar} rises above the range you gave; you may want a transposition.`;
 		case 'crossing': // APPROVED §7.5 (illustrative "sustained" dropped: not every crossing is held)
 			return `Bar ${bar}: your ${v} sits on your first resonance, so the vowel may lock or whistle.`;
 		case 'passaggio': // APPROVED §7.5

@@ -41,6 +41,7 @@ export {
 } from './tempo-terms';
 export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';
+export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
 export {
   prepareSmuflFont,
   spToPx,

@@ -96,7 +96,23 @@ describe('buildWatchList — tiers', () => {
 		};
 		const wl = buildWatchList(parsed, analyze(parsed, snap, { n1: 'a' }));
 		expect(wl.entries).toHaveLength(1);
-		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 1, kinds: ['range'] });
+		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 1, kinds: ['range'], rangeDirection: 'above' });
+		expect(watchEntryLine(wl.entries[0])).toContain('rises above');
+	});
+
+	it('tier 1: a note below the given range flags below, with its own copy', () => {
+		const parsed = scoreOf([note('n1', { pitch: P('C', 3) })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { a: 700 },
+			range: { lowest: P('C', 4), highest: P('C', 5) },
+			tessitura: { low: P('C', 4), high: P('C', 5) }
+		};
+		const wl = buildWatchList(parsed, analyze(parsed, snap, { n1: 'a' }));
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0]).toMatchObject({ tier: 1, kinds: ['range'], rangeDirection: 'below' });
+		expect(watchEntryLine(wl.entries[0])).toBe(
+			'Bar 1 drops below the range you gave; you may want a transposition.'
+		);
 	});
 
 	it('tier 2: the fundamental on the first resonance flags a crossing', () => {

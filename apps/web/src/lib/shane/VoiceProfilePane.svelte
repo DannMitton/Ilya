@@ -64,6 +64,7 @@
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
+	import { buildWatchList, watchEntryLine, watchOverflowLine, WATCH_HEADER } from '$lib/shane/watchlist';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -192,7 +193,6 @@
 	// after the first simply carry a little extra room at the bottom.
 	const parsed = $derived(ingested?.result.score ?? null);
 	const contentWidth = $derived(dims.width - 2 * MARGINS.horizontal);
-	const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);
 	const subsequentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
 
 	// paginateScore paints a white full-page backing rect (its pages are
@@ -253,6 +253,20 @@
 		parsed && vowelResolver ? analyzeScore(parsed, adapted.snapshot, vowelResolver) : null,
 	);
 
+	// ── The head-of-score watch list (design C) ──────────────────────────
+	// A print-native "Places to watch" band above the first system, built
+	// purely from the marks the overlay already computed (watchlist.ts);
+	// verse 1 today. Silent on zero challenge (§7.3). Its MEASURED height
+	// folds into the page-1 score window's top so it never overlaps the
+	// first system — a measured handshake like the header's, never a CSS
+	// guess (§D standing constraint).
+	const watchList = $derived(parsed && analyzed ? buildWatchList(parsed, analyzed, 1) : null);
+	const showWatchBand = $derived(!!watchList && watchList.entries.length > 0);
+	const WATCH_BAND_GAP = 18;
+	let watchBandHeight = $state(0);
+	const page1ScoreTop = $derived(contentTop + (showWatchBand ? watchBandHeight + WATCH_BAND_GAP : 0));
+	const page1ScoreHeight = $derived(dims.height - page1ScoreTop - contentBottom);
+
 	// The broad-analysis note fires only when the overlay actually carries
 	// acoustic marks (at least one resolved event) AND a characteristics
 	// dimension was left blank. A notation-only render (no marks) has nothing
@@ -269,7 +283,7 @@
 		parsed && analyzed
 			? paginateScore(parsed, analyzed, {
 					pageWidth: contentWidth,
-					pageHeight: page1WindowHeight,
+					pageHeight: page1ScoreHeight,
 					marginTop: 0,
 					marginBottom: 0,
 					marginLeft: 0,
@@ -366,7 +380,29 @@
 						markAccent="#8E7E9B"
 						ruleAccent="#8E7E9B"
 					/>
-					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
+					{#if showWatchBand && watchList}
+						<!-- The lavender "Places to watch" band, print-native, above the
+						     first system; outline-only squircle in the Fit accent (§7.1). -->
+						<aside
+							class="watch-band"
+							style="top: {contentTop}px;"
+							bind:offsetHeight={watchBandHeight}
+							aria-label={WATCH_HEADER}
+						>
+							<p class="watch-band-header">{WATCH_HEADER}</p>
+							<ul class="watch-band-list">
+								{#each watchList.entries as entry (entry.eventId)}
+									<li class="watch-band-line">{watchEntryLine(entry)}</li>
+								{/each}
+								{#if watchList.overflowCount > 0}
+									<li class="watch-band-line watch-band-overflow">
+										{watchOverflowLine(watchList.overflowCount)}
+									</li>
+								{/if}
+							</ul>
+						</aside>
+					{/if}
+					<div class="score-window" style="top: {page1ScoreTop}px; bottom: {contentBottom}px;">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
 						{@html page}
 					</div>
@@ -541,6 +577,51 @@
 		display: block;
 		width: 100%;
 		height: auto;
+	}
+
+	/* ── The watch band (design C, §7.1) ───────────────────── */
+
+	/* Outline-only lavender squircle at the head of the first score page,
+	   sharing the text column's left/right edge (96px), part of the printed
+	   document. First-pass visual treatment; copy and design are Dann's. */
+	.watch-band {
+		position: absolute;
+		left: 96px;
+		right: 96px;
+		box-sizing: border-box;
+		border: 1px solid #8e7e9b;
+		border-radius: 12px;
+		padding: 0.6rem 1rem 0.7rem;
+	}
+
+	.watch-band-header {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-variant: small-caps;
+		letter-spacing: 0.06em;
+		font-size: 0.8rem;
+		color: #8e7e9b;
+	}
+
+	.watch-band-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.watch-band-line {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 0.9rem;
+		line-height: 1.45;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	.watch-band-overflow {
+		font-style: italic;
+		color: var(--ink-tertiary, #6a6560);
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */
