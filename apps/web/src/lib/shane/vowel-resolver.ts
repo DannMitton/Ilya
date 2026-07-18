@@ -92,7 +92,7 @@ const TEN_VOWELS: ReadonlySet<string> = new Set([
  * bare glyph is the fR1 key. Anything else fails the ten-vowel check. */
 const STRESS_MARKS = /[ˈˌ]/g;
 
-interface ScoreWord {
+export interface ScoreWord {
 	/** Joined syllable text, verbatim from the source. */
 	raw: string;
 	/** Lowercased, punctuation- and dash-stripped, for alignment. */
@@ -152,7 +152,7 @@ function verseSyllableOf(
 }
 
 /** Reconstruct the selected verse's words and their per-nucleus event slots. */
-function collectScoreWords(parsed: ParsedScore, verseNumber: number): ScoreWord[] {
+export function collectScoreWords(parsed: ParsedScore, verseNumber: number): ScoreWord[] {
 	const words: ScoreWord[] = [];
 	let cur: OpenWord | null = null;
 	// The sustain pointer: the slot melisma continuation notes join. Always
