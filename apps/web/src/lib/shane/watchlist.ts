@@ -3,15 +3,30 @@
  *
  * A pure translation layer: it reads the acoustic marks Fit already computes
  * per note (`AnalyzedScore.events`, all from the singer's own fR1) and the
- * parsed score, and returns a severity-ranked, capped list of the places in
- * the song most likely to challenge THIS singer as profiled. It computes no
- * new acoustics and makes no claim the per-note marks do not already carry:
- * "Fit forecasts, it does not declare" (overlay-engine.ts).
+ * parsed score, and returns a severity-ranked, adaptively filtered list of the
+ * places in the song most likely to challenge THIS singer as profiled. It
+ * computes no new acoustics and makes no claim the per-note marks do not
+ * already carry: "Fit forecasts, it does not declare" (overlay-engine.ts).
  *
  * Rulings this implements (project knowledge):
  *   - §7.1–§7.5 (`fit-watchlist-rulings_2026-07-17.md`): placement as a head
- *     band, the severity order, print-nothing on zero challenge, the
- *     severity-gated cap with honest overflow, and the bar-first copy.
+ *     band, the severity order, print-nothing on zero challenge, and the
+ *     bar-first copy.
+ *   - §A.149 (`fit-acoustic-framework_2026-07-20.md` §5): the ADAPTIVE
+ *     inclusion rule that replaces show-all. A note earns a line when ANY of:
+ *     (1) it carries a markup-invisible fact (out-of-range, at a declared
+ *     passaggio edge, or a long sustain on its turning pitch) — always;
+ *     (2) it carries a markup-visible mark (crossing or timbre turn) that is
+ *     BOTH rare in this score AND advice-bearing; (3) it is a hazard —
+ *     DEFERRED (§B), not yet wired (definition and copy both pending Dann);
+ *     (4) it stacks (two or more flagged kinds). Otherwise it is left to the
+ *     staff markup; silence stays the feature (§7.3).
+ *   - §A.150: the closed copy — the whoop crossing line (the retired "lock or
+ *     whistle" line was acoustically wrong and is gone), and the sustain line
+ *     on the "pitch of turning".
+ *   - §A.151: the range line offers a transposition computed by
+ *     `suggestTranspositions`, named as a key when the score declares a mode
+ *     and as an interval when it does not (Dann, 2026-07-20).
  *   - §A.126: the passaggio tier is proximity to EITHER declared edge, not
  *     whole-band membership; the interior stays quiet. Window ruled ±1
  *     semitone (Dann, 2026-07-18).
@@ -22,8 +37,8 @@
  *
  * Tags: SOURCED (from the running code, a type, or a ruling), INFERENCE
  * (derived from them), JUDGEMENT (my build-time default, Dann rules). Copy is
- * Dann's; the templates below marked APPROVED are from §7.5, the one marked
- * DRAFT awaits his ruling.
+ * Dann's; the copy below is CLOSED (§A.150) except the hazard line, deferred
+ * with its definition (§B).
  *
  * This module is PURE and framework-free, so it is unit-testable the way the
  * parsers are. `VoiceProfilePane` consumes it for the printed band.
@@ -33,11 +48,15 @@ import {
 	centsBetween,
 	pitchToHz,
 	pitchToMidi,
+	suggestTranspositions,
 	type AnalyzedScore,
 	type NoteBase,
 	type ParsedScore,
 	type TempoMarking,
-	type VocalLineEvent
+	type TranspositionSuggestion,
+	type VocalLineEvent,
+	type VoiceProfileSnapshot,
+	type VowelResolver
 } from '@ilya/score-parser';
 import { collectScoreWords } from './vowel-resolver';
 
@@ -54,9 +73,20 @@ const PASSAGGIO_EDGE_WINDOW_CENTS = 100;
 /** Sustain threshold in seconds. SOURCED §A.117 (≥ 2.5 s OR a fermata). */
 const SUSTAIN_SECONDS_THRESHOLD = 2.5;
 
-// No cap (Dann, 2026-07-18): the watch list renders on its own page after the
-// score, so every item shows. A tighter curation ("highlights, not a novella")
-// is a deferred design pass, not a cap.
+/**
+ * Rarity ceiling for a markup-visible kind (crossing, timbre turn): a kind
+ * carried by at most this many notes across the whole score counts as "rare"
+ * and earns a watch line (§A.149 clause 2); above it, the staff mark carries
+ * it and the list stays quiet (a crossing is routine for a soprano, rare for a
+ * low male voice — the dial reads that from the score, no Fach). DEFERRED
+ * JUDGEMENT (§B): a PROVISIONAL default, to be CALIBRATED against real scores,
+ * NOT pinned here. Single-point-of-change.
+ */
+const RARE_KIND_MAX_NOTES = 3;
+
+// No cap (Dann, 2026-07-18): every note the adaptive rule INCLUDES renders,
+// on the list's own page after the score. The filtering happens at inclusion
+// (§A.149), not by a downstream cap.
 
 /** Header line. APPROVED §7.5. */
 export const WATCH_HEADER = 'Places to watch';
@@ -65,6 +95,12 @@ export const WATCH_HEADER = 'Places to watch';
 
 /** A watch kind, in severity order; its index+1 is not the tier (see TIER_OF). */
 export type WatchKind = 'range' | 'crossing' | 'passaggio' | 'timbre' | 'sustain';
+
+/** The markup-visible marks the adaptive dial gates on rarity (§A.149 clause 2). */
+const MARKUP_VISIBLE: ReadonlySet<WatchKind> = new Set(['crossing', 'timbre']);
+
+/** The markup-invisible facts that always earn a line (§A.149 clause 1). */
+const ALWAYS_KINDS: ReadonlySet<WatchKind> = new Set(['range', 'passaggio', 'sustain']);
 
 /** Severity tier per kind, hardest first. SOURCED §7.2. */
 const TIER_OF: Record<WatchKind, 1 | 2 | 3 | 4 | 5> = {
@@ -94,6 +130,14 @@ export interface WatchEntry {
 	/** For a range entry: above the ceiling or below the floor the singer gave. */
 	rangeDirection?: 'above' | 'below';
 	/**
+	 * The ready range-line transposition fragment, baked on at build time so
+	 * `watchEntryLine` stays entry-only (Dann's ruling A, 2026-07-20). E.g.
+	 * "to E flat major or D flat major" (mode known) or "down a major third or a
+	 * perfect fourth" (mode-less fallback). Absent when the module found no
+	 * improving key: then the range line names the fact alone (§A.150).
+	 */
+	transpositionPhrase?: string;
+	/**
 	 * Harmonic density d = fR1/fo (number of harmonics at/below the first
 	 * resonance). Lower = higher in the voice = more acute; sorts first within
 	 * a tier. INFERENCE on Bozeman pp. 42–43 (§A.135).
@@ -104,6 +148,23 @@ export interface WatchEntry {
 export interface WatchList {
 	/** Final, sorted entries to render, all of them. Empty = render nothing (§7.3). */
 	entries: WatchEntry[];
+}
+
+/**
+ * The inputs the range line's transposition suggestion needs (Dann's ruling A,
+ * 2026-07-20: `buildWatchList` computes the one song-level suggestion itself).
+ * Optional to `buildWatchList`; when omitted, range lines name the fact alone.
+ */
+export interface WatchTranspositionInput {
+	/**
+	 * The performance-order score the analysis was built from — what the search
+	 * transposes, so its forecast crossings match the marks on the page.
+	 */
+	analysisScore: ParsedScore;
+	/** The singer's profile snapshot (fR1 per vowel + declared range). */
+	profile: VoiceProfileSnapshot;
+	/** The id-keyed vowel resolver. */
+	resolver: VowelResolver;
 }
 
 // ── Rhythm → seconds (for the sustain test) ─────────────────────────
@@ -180,16 +241,66 @@ function isLongSustain(ev: VocalLineEvent, tempos: TempoMarking[]): boolean {
 	return s !== null && s >= SUSTAIN_SECONDS_THRESHOLD;
 }
 
+// ── The adaptive dial (§A.149) ──────────────────────────────────────
+
+/** Per-kind note counts across the detected notes; feeds the rarity predicate. */
+function countKinds(detected: WatchEntry[]): Record<WatchKind, number> {
+	const counts: Record<WatchKind, number> = {
+		range: 0,
+		crossing: 0,
+		passaggio: 0,
+		timbre: 0,
+		sustain: 0
+	};
+	for (const e of detected) for (const k of e.kinds) counts[k]++;
+	return counts;
+}
+
+/** Rare in THIS score: at or below the (deferred, provisional) rarity ceiling. */
+function isRare(kind: WatchKind, counts: Record<WatchKind, number>): boolean {
+	return counts[kind] <= RARE_KIND_MAX_NOTES;
+}
+
+/**
+ * Whether a markup-visible mark carries (or will carry) advice (§A.149
+ * clause 2). For M1 the crossing and timbre-turn kinds are STRUCTURALLY
+ * advice-bearing; the actual advice STRINGS are the M3 `vowelModification`
+ * layer (§C.2). This refines to check the resolved advice when that lands.
+ */
+function isAdviceBearing(_kind: WatchKind): boolean {
+	return true;
+}
+
+/**
+ * The §A.149 adaptive inclusion rule. A note (by its detected kinds) earns a
+ * line when ANY of the clauses hold. Clause 3 (a hazard, regardless of
+ * frequency) is DEFERRED — its definition and its copy are both pending Dann
+ * (§A.150, §B) — so it is not yet wired here; this implements clauses 1, 2,
+ * and 4. When clause 3 is ruled, add its predicate (an open vowel forced
+ * near/above its fR1) and copy.
+ */
+function isIncluded(kinds: WatchKind[], counts: Record<WatchKind, number>): boolean {
+	// Clause 1 — a markup-invisible fact: always.
+	if (kinds.some((k) => ALWAYS_KINDS.has(k))) return true;
+	// Clause 4 — stacking: two or more flagged kinds on one note.
+	if (kinds.length >= 2) return true;
+	// Clause 2 — a rare, advice-bearing markup-visible mark.
+	return kinds.some((k) => MARKUP_VISIBLE.has(k) && isRare(k, counts) && isAdviceBearing(k));
+}
+
 // ── The generator ───────────────────────────────────────────────────
 
 /**
  * Build the watch list for one verse (default 1) from the parsed score and its
- * analysis overlay. Pure and deterministic.
+ * analysis overlay. Pure and deterministic. When `transposition` is supplied
+ * and a range violation exists, the one song-level transposition suggestion is
+ * computed and its phrase baked onto every range entry (§A.151).
  */
 export function buildWatchList(
 	parsed: ParsedScore,
 	analyzed: AnalyzedScore,
-	verseNumber = 1
+	verseNumber = 1,
+	transposition?: WatchTranspositionInput
 ): WatchList {
 	// Join index: every analyzed key is a `VocalLineEvent.id` (audit §2), so a
 	// single map replaces an O(n) find per flagged note.
@@ -229,7 +340,9 @@ export function buildWatchList(
 	}
 
 	const passaggio = analyzed.global.passaggio;
-	const raw: WatchEntry[] = [];
+
+	// Pass 1 — detect every note's candidate kinds (the pre-dial population).
+	const detected: WatchEntry[] = [];
 
 	for (const [id, a] of Object.entries(analyzed.events)) {
 		const ev = eventById.get(id);
@@ -273,7 +386,7 @@ export function buildWatchList(
 		}
 
 		kinds.sort((x, y) => TIER_OF[x] - TIER_OF[y]);
-		raw.push({
+		detected.push({
 			eventId: id,
 			tier: TIER_OF[kinds[0]],
 			kinds,
@@ -287,19 +400,34 @@ export function buildWatchList(
 		});
 	}
 
+	// Pass 2 — the adaptive dial (§A.149): count kinds across the score, then
+	// keep only the notes the inclusion rule earns; the rest stay with the
+	// staff markup (silence is the feature).
+	const kindNoteCounts = countKinds(detected);
+	const included = detected.filter((e) => isIncluded(e.kinds, kindNoteCounts));
+
 	// Sort: tier asc → stacking (more kinds first) → density asc (more acute
 	// first) → score order. SOURCED §7.2 + the density ruling (within-tier).
-	raw.sort((x, y) => {
+	included.sort((x, y) => {
 		if (x.tier !== y.tier) return x.tier - y.tier;
 		if (x.kinds.length !== y.kinds.length) return y.kinds.length - x.kinds.length;
 		if (x.density !== y.density) return x.density - y.density;
 		return (orderById.get(x.eventId) ?? 0) - (orderById.get(y.eventId) ?? 0);
 	});
 
-	// Show all (Dann, 2026-07-18): the list renders on its own page after the
-	// score, so nothing is capped or hidden. `raw` is already sorted. (A tighter
-	// upthread curation — highlights, not a novella — is a deferred design pass.)
-	return { entries: raw };
+	// Transposition (§A.151): one song-level suggestion, shared by every range
+	// line and baked on here. Computed only when a range violation exists and
+	// the caller supplied the inputs; empty suggestion → the fact alone.
+	if (transposition && included.some((e) => e.kinds.includes('range'))) {
+		const phrase = transpositionPhrase(
+			suggestTranspositions(transposition.analysisScore, transposition.profile, transposition.resolver)
+		);
+		if (phrase) {
+			for (const e of included) if (e.kinds.includes('range')) e.transpositionPhrase = phrase;
+		}
+	}
+
+	return { entries: included };
 }
 
 /** Bar number from the measure's own `.number`, never `measureIndex + 1` (audit §3, §A). */
@@ -310,7 +438,34 @@ function barOf(parsed: ParsedScore, ev: VocalLineEvent): string {
 	return m ? m.number : String(ev.measureIndex + 1);
 }
 
-// ── Copy (EN). Templates: APPROVED = §7.5, DRAFT = awaiting Dann. ────
+// ── Transposition phrasing (§A.151; Dann's copy ruling, 2026-07-20) ──
+
+/**
+ * The ready range-line fragment for one song-level suggestion, or null to say
+ * nothing (the range line then names the fact alone). Key names when the
+ * printed score declared a mode (every candidate carries a `targetKey`);
+ * otherwise the interval fallback, since three flats is both E flat major and C
+ * minor and naming a key there would be a guess.
+ */
+function transpositionPhrase(s: TranspositionSuggestion): string | null {
+	if (s.suggestions.length === 0) return null;
+	if (s.suggestions.every((c) => c.targetKey)) {
+		return `to ${s.suggestions.map((c) => c.targetKey).join(' or ')}`;
+	}
+	return joinIntervals(s.suggestions.map((c) => c.intervalName));
+}
+
+/** "down a major third or a perfect fourth"; elides a repeated leading direction. */
+function joinIntervals(names: string[]): string {
+	if (names.length <= 1) return names[0] ?? '';
+	const dir = names[0].split(' ')[0];
+	if (names.every((n) => n.startsWith(`${dir} `))) {
+		return `${dir} ${names.map((n) => n.slice(dir.length + 1)).join(' or ')}`;
+	}
+	return names.join(' or ');
+}
+
+// ── Copy (EN). CLOSED §A.150 except the hazard line (deferred, §B). ──
 
 /**
  * The rendered line for an entry, leading with the bar (§7.5). Uses the most
@@ -321,12 +476,20 @@ export function watchEntryLine(entry: WatchEntry): string {
 	const bar = entry.bar;
 	const v = `/${entry.vowel}/`;
 	switch (entry.kinds[0]) {
-		case 'range': // above: APPROVED §7.5. below: DRAFT (copy is Dann's), mirrors the approved line.
-			return entry.rangeDirection === 'below'
-				? `Bar ${bar} drops below the range you gave; you may want a transposition.`
-				: `Bar ${bar} rises above the range you gave; you may want a transposition.`;
-		case 'crossing': // APPROVED §7.5 (illustrative "sustained" dropped: not every crossing is held)
-			return `Bar ${bar}: your ${v} sits on your first resonance, so the vowel may lock or whistle.`;
+		case 'range': {
+			// CLOSED §A.150: name the fact, then offer a transposition when the
+			// module found one (key names, or intervals when the score is mode-less,
+			// baked on as `transpositionPhrase`), else the fact alone.
+			const base =
+				entry.rangeDirection === 'below'
+					? `Bar ${bar} drops below the range you gave`
+					: `Bar ${bar} rises above the range you gave`;
+			return entry.transpositionPhrase
+				? `${base}; you may want to transpose ${entry.transpositionPhrase}.`
+				: `${base}.`;
+		}
+		case 'crossing': // CLOSED §A.150 (retired "lock or whistle": a crossing is whoop coupling)
+			return `Bar ${bar}: your ${v} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.`;
 		case 'passaggio': // APPROVED §7.5
 			return entry.word
 				? `Bar ${bar}: '${entry.word}' falls near your passaggio; expect the turn to want managing.`
@@ -336,7 +499,7 @@ export function watchEntryLine(entry: WatchEntry): string {
 			const on = entry.word ? ` on '${entry.word}'` : '';
 			return `Bar ${bar}: your ${v}${on} turns ${dir} inside the word, so the colour shifts as you sing it.`;
 		}
-		case 'sustain': // DRAFT — copy is Dann's; §7.5 approved no sustain line.
-			return `Bar ${bar}: the ${v} you sustain here sits on its turning pitch, so the colour may feel unsteady as you hold it.`;
+		case 'sustain': // CLOSED §A.150 ("pitch of turning"; "sustain", never "held")
+			return `Bar ${bar}: the longer ${v} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.`;
 	}
 }

@@ -28,7 +28,7 @@
  */
 
 import { analyzeScore, pitchToMidi, type VowelResolver } from './overlay-engine';
-import type { ParsedScore, Pitch, VocalLineEvent } from './types';
+import type { KeySignature, ParsedScore, Pitch, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
 
 /** Default search window, in semitones either side (a tritone). JUDGEMENT. */
@@ -103,6 +103,13 @@ export interface TranspositionCandidate {
   crossings: number;
   /** True when this transposition removes every range violation. */
   resolvesRange: boolean;
+  /**
+   * The named target key ("E flat major"), when the printed score declared a
+   * mode; undefined when the source carried no mode, in which case the caller
+   * falls back to the interval name (Dann, 2026-07-20). Spelled on the circle
+   * of fifths and respelled to stay within seven accidentals.
+   */
+  targetKey?: string;
 }
 
 export interface TranspositionSuggestion {
@@ -140,6 +147,44 @@ export function intervalName(semitones: number): string {
   return `${dir} ${name}`;
 }
 
+// ── Key naming (for the watch-list range line's "transpose to X or Y") ──
+
+/** Major-key tonic name by key-signature fifths; index = fifths + 7 (−7…+7). Words, not glyphs. */
+const MAJOR_TONIC_BY_FIFTHS = [
+  'C flat', 'G flat', 'D flat', 'A flat', 'E flat', 'B flat', 'F',
+  'C', 'G', 'D', 'A', 'E', 'B', 'F sharp', 'C sharp',
+];
+
+/** Minor-key tonic name by key-signature fifths; index = fifths + 7 (−7…+7). */
+const MINOR_TONIC_BY_FIFTHS = [
+  'A flat', 'E flat', 'B flat', 'F', 'C', 'G', 'D',
+  'A', 'E', 'B', 'F sharp', 'C sharp', 'G sharp', 'D sharp', 'A sharp',
+];
+
+/**
+ * The named key a score lands in after transposing by `semitones`, spelled on
+ * the circle of fifths from the printed key signature and respelled to stay
+ * within seven accidentals (so "A flat major", never "G sharp major"). Returns
+ * null when the source carries no mode: three flats is both E flat major and C
+ * minor, so naming a key there would be a guess, and the caller falls back to
+ * the interval instead (Dann's ruling, 2026-07-20). Pure.
+ */
+export function keyNameAfterTransposition(
+  source: KeySignature | undefined,
+  semitones: number,
+): string | null {
+  if (!source || source.mode === undefined) return null;
+  // Fifths displacement for transposing up by `semitones`: seven fifths per
+  // semitone on the circle, folded to the nearest representative in [−5, 6].
+  const r = (((7 * semitones) % 12) + 12) % 12;
+  const delta = r > 6 ? r - 12 : r;
+  let fifths = source.fifths + delta;
+  if (fifths > 7) fifths -= 12;
+  else if (fifths < -7) fifths += 12;
+  const tonic = (source.mode === 'minor' ? MINOR_TONIC_BY_FIFTHS : MAJOR_TONIC_BY_FIFTHS)[fifths + 7];
+  return tonic === undefined ? null : `${tonic} ${source.mode}`;
+}
+
 /**
  * Suggest transpositions that resolve the singer's range violations with the
  * fewest added challenges. See the file header for the ranking and the
@@ -153,6 +198,7 @@ export function suggestTranspositions(
 ): TranspositionSuggestion {
   const window = options.maxSemitones ?? DEFAULT_MAX_SEMITONES;
   const cap = options.maxSuggestions ?? DEFAULT_MAX_SUGGESTIONS;
+  const sourceKey = parsed.keySignatures[0]?.signature;
 
   const currentOutOfRange = countOutOfRange(parsed, profile);
   const currentCrossings = countCrossings(parsed, profile, vowel);
@@ -168,12 +214,14 @@ export function suggestTranspositions(
     const shifted = transposeScore(parsed, s);
     const outOfRange = countOutOfRange(shifted, profile);
     if (outOfRange >= currentOutOfRange) continue; // must strictly improve the range fit
+    const targetKey = keyNameAfterTransposition(sourceKey, s);
     candidates.push({
       semitones: s,
       intervalName: intervalName(s),
       outOfRange,
       crossings: countCrossings(shifted, profile, vowel),
       resolvesRange: outOfRange === 0,
+      ...(targetKey !== null ? { targetKey } : {}),
     });
   }
 

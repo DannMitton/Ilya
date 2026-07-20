@@ -298,7 +298,19 @@
 	// (Dann's placement ruling, 2026-07-18) so a variable-length list never
 	// displaces the score markup, which also frees the full page-1 height for
 	// pagination.
-	const watchList = $derived(readingScore && analyzed ? buildWatchList(readingScore, analyzed, 1) : null);
+	// The transposition inputs (Dann's ruling A, 2026-07-20): the watch list
+	// computes the one song-level suggestion itself, run over the SAME
+	// performance-order score the analysis used, so its forecast crossings match
+	// the marks on the page.
+	const watchList = $derived(
+		readingScore && analyzed && analysisScore && vowelResolver
+			? buildWatchList(readingScore, analyzed, 1, {
+					analysisScore,
+					profile: adapted.snapshot,
+					resolver: vowelResolver
+				})
+			: null,
+	);
 	const showWatchBand = $derived(!!watchList && watchList.entries.length > 0);
 	// Page-1 score window: the measured header sets contentTop; the score fills
 	// the window below it, undisplaced by the watch list.

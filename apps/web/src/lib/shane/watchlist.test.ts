@@ -110,9 +110,8 @@ describe('buildWatchList — tiers', () => {
 		const wl = buildWatchList(parsed, analyze(parsed, snap, { n1: 'a' }));
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ tier: 1, kinds: ['range'], rangeDirection: 'below' });
-		expect(watchEntryLine(wl.entries[0])).toBe(
-			'Bar 1 drops below the range you gave; you may want a transposition.'
-		);
+		// No transposition input supplied → the fact alone (§A.150 fallback).
+		expect(watchEntryLine(wl.entries[0])).toBe('Bar 1 drops below the range you gave.');
 	});
 
 	it('tier 2: the fundamental on the first resonance flags a crossing', () => {
@@ -262,10 +261,12 @@ describe('watch-list copy', () => {
 		expect(WATCH_HEADER).toBe('Places to watch');
 		expect(
 			watchEntryLine({ eventId: 'e', tier: 1, kinds: ['range'], bar: '12', vowel: 'a', density: 1 })
-		).toBe('Bar 12 rises above the range you gave; you may want a transposition.');
+		).toBe('Bar 12 rises above the range you gave.');
 		expect(
 			watchEntryLine({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'i', density: 1 })
-		).toBe('Bar 9: your /i/ sits on your first resonance, so the vowel may lock or whistle.');
+		).toBe(
+			'Bar 9: your /i/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
+		);
 		expect(
 			watchEntryLine({ eventId: 'e', tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край', density: 1 })
 		).toBe("Bar 4: 'край' falls near your passaggio; expect the turn to want managing.");
@@ -295,4 +296,65 @@ describe('watch-list copy', () => {
 		expect(line).toContain('rises above the range you gave');
 	});
 
+	it('renders the closed sustain line ("pitch of turning", "sustain")', () => {
+		expect(
+			watchEntryLine({ eventId: 'e', tier: 5, kinds: ['sustain'], bar: '5', vowel: 'o', density: 1 })
+		).toBe(
+			'Bar 5: the longer /o/ here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.'
+		);
+	});
+});
+
+describe('buildWatchList — adaptive dial (§A.149)', () => {
+	it('shows rare markup-visible marks but hides routine ones (provisional threshold)', () => {
+		// Each A4 on /i/ (fR1 440) is a crossing. At or below the provisional
+		// rarity ceiling they surface; above it they recede to the staff mark.
+		// Couples to RARE_KIND_MAX_NOTES; revisit when Dann calibrates it.
+		const snap: VoiceProfileSnapshot = { fR1: { i: 440 }, range: WIDE_RANGE, tessitura: WIDE_TESS };
+		const three = [0, 1, 2].map((i) => note(`c${i}`, { pitch: P('A', 4), measureIndex: i }));
+		const four = [0, 1, 2, 3].map((i) => note(`c${i}`, { pitch: P('A', 4), measureIndex: i }));
+		const p3 = scoreOf(three);
+		const p4 = scoreOf(four);
+		expect(buildWatchList(p3, analyze(p3, snap, { c0: 'i', c1: 'i', c2: 'i' })).entries).toHaveLength(3);
+		expect(
+			buildWatchList(p4, analyze(p4, snap, { c0: 'i', c1: 'i', c2: 'i', c3: 'i' })).entries
+		).toHaveLength(0);
+	});
+});
+
+describe('buildWatchList — transposition wiring (§A.151)', () => {
+	const snap: VoiceProfileSnapshot = {
+		fR1: { a: 600 },
+		range: { lowest: P('C', 3), highest: P('C', 5) },
+		tessitura: { low: P('C', 3), high: P('C', 5) }
+	};
+	const resolver = resolverOf({ n1: 'a' });
+	// E5 (76) sits above the C5 ceiling; down a major third resolves it to C5.
+	const outOfRange = (mode?: 'major' | 'minor'): ParsedScore => ({
+		...scoreOf([note('n1', { pitch: P('E', 5) })]),
+		keySignatures: [{ measureIndex: 0, signature: { fifths: 0, ...(mode ? { mode } : {}) } }]
+	});
+
+	it('fills the range line with a named key when the score declares a mode', () => {
+		const parsed = outOfRange('major'); // C major
+		const analyzed = analyze(parsed, snap, { n1: 'a' });
+		const wl = buildWatchList(parsed, analyzed, 1, { analysisScore: parsed, profile: snap, resolver });
+		expect(wl.entries[0].kinds).toContain('range');
+		// C major down a major third (E5 → C5) is A flat major.
+		expect(watchEntryLine(wl.entries[0])).toContain('you may want to transpose to A flat major');
+	});
+
+	it('falls back to an interval when the score declares no mode', () => {
+		const parsed = outOfRange(); // fifths, no mode
+		const analyzed = analyze(parsed, snap, { n1: 'a' });
+		const wl = buildWatchList(parsed, analyzed, 1, { analysisScore: parsed, profile: snap, resolver });
+		expect(watchEntryLine(wl.entries[0])).toContain('you may want to transpose down a major third');
+	});
+
+	it('names the fact alone when no transposition input is supplied', () => {
+		const parsed = outOfRange('major');
+		const analyzed = analyze(parsed, snap, { n1: 'a' });
+		const wl = buildWatchList(parsed, analyzed, 1);
+		expect(watchEntryLine(wl.entries[0])).toBe('Bar 1 rises above the range you gave.');
+	});
 });

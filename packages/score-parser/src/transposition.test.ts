@@ -11,6 +11,7 @@ import {
   transposePitch,
   transposeScore,
   intervalName,
+  keyNameAfterTransposition,
   type TranspositionCandidate,
 } from './transposition';
 import { pitchToMidi, type VowelResolver } from './overlay-engine';
@@ -140,5 +141,58 @@ describe('suggestTranspositions', () => {
     for (let i = 1; i < out.suggestions.length; i++) {
       expect(le(out.suggestions[i - 1], out.suggestions[i])).toBe(true);
     }
+  });
+
+  it('attaches the named target key when the score declares a mode', () => {
+    // Range C3..C5; E5 is out of range, best fully-resolving move is down a
+    // major third (E5 -> C5). C major transposed down a major third is A flat.
+    const cMajor = inKey(buildScore([note('n1', P('C', 4), 'a'), note('n2', P('E', 5), 'a')]), 0, 'major');
+    const out = suggestTranspositions(cMajor, profile, bySyllable);
+    expect(out.suggestions[0].semitones).toBe(-4);
+    expect(out.suggestions[0].targetKey).toBe('A flat major');
+  });
+
+  it('omits the target key when the score declares no mode', () => {
+    // buildScore's default key signature carries fifths but no mode.
+    const score = buildScore([note('n1', P('C', 4), 'a'), note('n2', P('E', 5), 'a')]);
+    const out = suggestTranspositions(score, profile, bySyllable);
+    expect(out.suggestions.length).toBeGreaterThan(0);
+    for (const c of out.suggestions) expect(c.targetKey).toBeUndefined();
+  });
+});
+
+/** Re-key a hand-built score so key-name derivation has a mode to read. */
+function inKey(score: ParsedScore, fifths: number, mode?: 'major' | 'minor'): ParsedScore {
+  return {
+    ...score,
+    keySignatures: [{ measureIndex: 0, signature: { fifths, ...(mode ? { mode } : {}) } }],
+  };
+}
+
+describe('keyNameAfterTransposition', () => {
+  it('names major targets on the circle of fifths', () => {
+    const cMaj = { fifths: 0, mode: 'major' as const };
+    expect(keyNameAfterTransposition(cMaj, -4)).toBe('A flat major'); // down a major third
+    expect(keyNameAfterTransposition(cMaj, 7)).toBe('G major'); // up a perfect fifth
+    expect(keyNameAfterTransposition(cMaj, 1)).toBe('D flat major'); // up a semitone
+    expect(keyNameAfterTransposition(cMaj, 5)).toBe('F major'); // up a perfect fourth
+  });
+
+  it('names minor targets from the same signature table', () => {
+    const aMin = { fifths: 0, mode: 'minor' as const };
+    expect(keyNameAfterTransposition(aMin, -4)).toBe('F minor'); // down a major third
+    expect(keyNameAfterTransposition(aMin, 2)).toBe('B minor'); // up a whole tone
+  });
+
+  it('respells beyond seven accidentals to a normal key', () => {
+    // C sharp major up a whole tone is D sharp major (nine sharps) -> E flat major.
+    expect(keyNameAfterTransposition({ fifths: 7, mode: 'major' }, 2)).toBe('E flat major');
+    // C flat major down a whole tone is B double-flat major -> A major.
+    expect(keyNameAfterTransposition({ fifths: -7, mode: 'major' }, -2)).toBe('A major');
+  });
+
+  it('returns null when there is no mode to trust', () => {
+    expect(keyNameAfterTransposition({ fifths: -1 }, -4)).toBeNull();
+    expect(keyNameAfterTransposition(undefined, -4)).toBeNull();
   });
 });
