@@ -42,6 +42,8 @@ export {
 export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';
 export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
+export { scoreInPerformanceOrder, type PerformanceOrderScore } from './performance-order';
+export type { UnfoldFlag } from './unfold';
 export {
   prepareSmuflFont,
   spToPx,

@@ -62,7 +62,8 @@
 		paginateScore,
 		analyzeScore,
 		resolveVocalReadingOctave,
-		shiftVocalOctave
+		shiftVocalOctave,
+		scoreInPerformanceOrder
 	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
@@ -268,9 +269,27 @@
 	const OCTAVE_NOTICE =
 		"This voice line is notated in treble clef but sits an octave above the range you gave, so it's being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score's clef if that's not right.";
 
+	// ── Performance order for the analysis path (M0 jump-family wiring) ───
+	// analyzeScore and the watch list should see the score as it is actually
+	// SUNG: repeats taken, the D.C./D.S. jump family followed, and material after
+	// a Fine (or jumped over) absent, so a note earns an acoustic forecast only
+	// where the singer reaches it. The RENDER keeps the notated `readingScore`
+	// below (repeats and jumps drawn as written); this does not pre-empt the open
+	// strophic-render ruling (D3). When a structure cannot be unfolded, the
+	// projection falls back to as-written and carries the unfolder's own flags.
+	const performanceOrder = $derived(readingScore ? scoreInPerformanceOrder(readingScore) : null);
+	const analysisScore = $derived(performanceOrder ? performanceOrder.score : null);
+	// Score-level notices for a later UI to read (§M0.3): the unfolder's flags for
+	// a jump structure it could not follow. Not rendered here — no new UI, and the
+	// flag copy is the unfolder's, awaiting Dann's sign-off before it is shown.
+	const analysisNotices = $derived(performanceOrder ? performanceOrder.flags : []);
+
+	// The resolver is keyed by event id and built from the NOTATED line, so it
+	// resolves every sung occurrence (same ids) identically; feed analyzeScore the
+	// performance-order view so the overlay reflects the sung sequence.
 	const vowelResolver = $derived(readingScore ? buildVowelResolver(readingScore) : null);
 	const analyzed = $derived(
-		readingScore && vowelResolver ? analyzeScore(readingScore, adapted.snapshot, vowelResolver) : null,
+		analysisScore && vowelResolver ? analyzeScore(analysisScore, adapted.snapshot, vowelResolver) : null,
 	);
 
 	// ── The "Places to watch" list (design C) ────────────────────────────
@@ -387,7 +406,18 @@
 	     mirroring Paper.svelte's TitlePage/SubsequentPage pattern. The
 	     SVG pages come from paginateScore, notation only for now (no
 	     acoustic marks; see notation-overlay.ts). -->
-	<div class="fit-paper-container" role="region" aria-label="Repertoire fit score">
+	<!-- data-analysis-notices carries the unfolder's flag codes (machine tags,
+	     not user copy) for a later notice UI to read; absent when the sung order
+	     was computed cleanly. No visible surface is built here (§M0.3). -->
+	<div
+		class="fit-paper-container"
+		role="region"
+		aria-label="Repertoire fit score"
+		data-analysis-notices={analysisNotices.length
+			? analysisNotices.map((f) => f.code).join(' ')
+			: undefined}
+	>
+
 		{#each scorePages as page, i (i)}
 			<article
 				class="paper-page profile-page"

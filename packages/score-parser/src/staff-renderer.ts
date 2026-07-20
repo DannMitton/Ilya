@@ -1,7 +1,7 @@
 /**
  * Bespoke SVG staff renderer for the isolated vocal melody plus Shane's
  * Appendix B analytical markup. Chosen over driving an engraver (OSMD /
- * Verovio) by the renderer spike (2026-07-12): the grey turning-pitch
+ * Verovio) by the renderer spike (2026-07-12): the sage turning-pitch
  * noteheads and red crossing boxes are not notation primitives, so any
  * engraver route needs a fragile coordinate-mapping overlay anyway; the
  * melody-only staff is bounded enough to render ourselves and own every
@@ -26,8 +26,9 @@
  *   - the four analytical marks (forced semantic stems, sage turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
- *     p. 206) renders in the sample's sage (#8FA294, pending Dann's
- *     in-browser sign-off), noteheads and accidentals in one colour, with
+ *     p. 206) renders in Calm Authority's sage (#8B9A7D, the `--sage` app
+ *     token; see the TURNING_COLOUR constant below), noteheads and
+ *     accidentals in one colour, with
  *     its own per-measure accidental carry state independent of the sung
  *     line (Dann's rulings, 2026-07-12);
  *   - TWO RENDERING MODES: pass `options.font` (a `PreparedSmuflFont`) and
