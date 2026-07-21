@@ -37,6 +37,7 @@ import type {
   AnalyzedScore,
   VoiceProfileSnapshot,
 } from './analysis-types';
+import { isLongSustain } from './sustain';
 
 /** Resolves the operative sung vowel (IPA) for an event, or undefined if none applies. */
 export type VowelResolver = (event: VocalLineEvent) => string | undefined;
@@ -187,6 +188,23 @@ export function analyzeScore(
       rangeStatus = 'in-range';
     }
 
+    // The three-gate exposure forecast for the [o]→[ɑ] cover trigger (§A.179,
+    // Option B): (1) close timbre, (2) at or above the singer's declared
+    // ceiling, and (3) a long sustain (§A.117). Content-free — no vowel, no
+    // advice; the resolver ANDs `vowel === 'o'` and ships the sourced target.
+    // Gate (2) is at-or-above, NOT the strict-above `rangeStatus ===
+    // 'out-of-range'`: the documented exemplar sits exactly AT Mitton's E4
+    // ceiling (§A.180). Undefined when no ceiling was declared, so the gate is
+    // unassessable (Option A), matching `rangeStatus`/`inPassaggio` above.
+    let sustainedCeilingExposure: boolean | undefined;
+    if (rangeHighHz === undefined) {
+      sustainedCeilingExposure = undefined;
+    } else {
+      const atOrAboveCeiling = centsBetween(rangeHighHz, pitchHz) >= -RANGE_EPSILON_CENTS;
+      sustainedCeilingExposure =
+        timbre === 'close' && atOrAboveCeiling && isLongSustain(ev, parsed.tempoMarkings);
+    }
+
     events[ev.id] = {
       eventId: ev.id,
       timbre,
@@ -195,6 +213,7 @@ export function analyzeScore(
       phonationBreak: false, // set by the diction layer / correction UI
       ...(inPassaggio !== undefined ? { inPassaggio } : {}),
       ...(rangeStatus !== undefined ? { rangeStatus } : {}),
+      ...(sustainedCeilingExposure !== undefined ? { sustainedCeilingExposure } : {}),
       vowel,
     };
   }

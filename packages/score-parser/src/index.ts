@@ -33,6 +33,7 @@ export {
   type AnalyzeOptions,
 } from './overlay-engine';
 export { modificationTarget, type ModificationTarget } from './modification-engine';
+export { isLongSustain, SUSTAIN_SECONDS_THRESHOLD } from './sustain';
 export { sungVerseNumbers } from './verses';
 export {
   resolveTempoTerm,

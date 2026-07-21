@@ -235,3 +235,63 @@ describe('overlay engine: absent dimensions are not assessed, not negative findi
     expect(a.events.n3.rangeStatus).toBe('out-of-range');
   });
 });
+
+// ── The [o]→[ɑ] cover exposure predicate (sustainedCeilingExposure) ──
+//
+// Three gates, all in the pure math: close timbre + at-or-above the declared
+// ceiling + a long sustain (§A.117). Ceiling set to E4 (Mitton's measured
+// ceiling, §A.180), so the exemplar sits AT it, not above.
+
+describe('overlay engine: [o] cover exposure (sustainedCeilingExposure)', () => {
+  // 'o' fR1 489 → turning ≈ 244.5 Hz (B3), so a ceiling-region note is close.
+  // 'ɛ' fR1 900 → turning 450 Hz (above E4), so E4 on 'ɛ' is OPEN (fails gate 1).
+  const coverProfile: VoiceProfileSnapshot = {
+    fR1: { o: 489, ɛ: 900 },
+    range: { lowest: P('C', 2), highest: P('E', 4) }, // ceiling E4 ≈ 329.6 Hz
+    tessitura: { low: P('G', 2), high: P('C', 4) }, // so E4 reads in-range, not in-tessitura
+    label: 'bass',
+  };
+  const fermata = (e: VocalLineEvent): VocalLineEvent => ({ ...e, fermata: { shape: 'normal' } });
+  const analyze = (e: VocalLineEvent, profile = coverProfile) =>
+    analyzeScore(buildScore([e]), profile, bySyllable, { generatedAt: 'T' }).events[e.id];
+
+  it('fires when all three gates hold: close [o] sustained at the ceiling (E4)', () => {
+    const a = analyze(fermata(note('x', P('E', 4), 'o')));
+    expect(a.timbre).toBe('close');
+    expect(a.sustainedCeilingExposure).toBe(true);
+    // Load-bearing: it fires AT the ceiling, where rangeStatus is NOT out-of-range.
+    expect(a.rangeStatus).toBe('in-range');
+    expect(a.rangeStatus).not.toBe('out-of-range');
+  });
+
+  it('does NOT fire without the sustain gate: close [o] at the ceiling but a plain quarter (no tempo, no fermata)', () => {
+    const a = analyze(note('x', P('E', 4), 'o'));
+    expect(a.timbre).toBe('close');
+    expect(a.sustainedCeilingExposure).toBe(false);
+  });
+
+  it('does NOT fire below the ceiling: a sustained close [o] at C4 (under E4)', () => {
+    const a = analyze(fermata(note('x', P('C', 4), 'o')));
+    expect(a.timbre).toBe('close'); // C4 262 > turning 244.5
+    expect(a.sustainedCeilingExposure).toBe(false);
+  });
+
+  it('does NOT fire in open timbre: a sustained [ɛ] at the ceiling reads open, so gate 1 fails', () => {
+    const a = analyze(fermata(note('x', P('E', 4), 'ɛ')));
+    expect(a.timbre).toBe('open'); // E4 329.6 < turning 450
+    expect(a.sustainedCeilingExposure).toBe(false);
+  });
+
+  it('also fires ABOVE the ceiling (at-or-above): a sustained close [o] at F4, and rangeStatus is out-of-range there', () => {
+    const a = analyze(fermata(note('x', P('F', 4), 'o')));
+    expect(a.sustainedCeilingExposure).toBe(true);
+    expect(a.rangeStatus).toBe('out-of-range');
+  });
+
+  it('is omitted entirely when the profile carried no range (ceiling gate unassessable, Option A)', () => {
+    const noRange: VoiceProfileSnapshot = { fR1: { o: 489 } };
+    const a = analyze(fermata(note('x', P('E', 4), 'o')), noRange);
+    expect(a.sustainedCeilingExposure).toBeUndefined();
+    expect('sustainedCeilingExposure' in a).toBe(false);
+  });
+});

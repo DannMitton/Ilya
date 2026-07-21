@@ -161,6 +161,25 @@ export interface AnalyzedEvent {
    */
   rangeStatus?: 'in-tessitura' | 'in-range' | 'out-of-range';
 
+  /**
+   * The three-gate exposure forecast the `[o]→[ɑ]` cover trigger reads
+   * (§A.179, RULED Option B): this note is in `close` timbre AND carried at or
+   * above the singer's declared range ceiling (top-N with N = 0, Dann
+   * 2026-07-21) AND a long sustain (§A.117, `isLongSustain`). Content-free — it
+   * names no vowel and prescribes nothing; the sourced `[o]→[ɑ]` content and
+   * copy live in the advice resolver, which ANDs this with `vowel === 'o'`.
+   *
+   * `undefined` when the singer's profile carried no range, so the ceiling gate
+   * could not be assessed: genuine absence, not `false` (Option A, §A.56), the
+   * same discipline as `rangeStatus`/`inPassaggio` above.
+   *
+   * Deliberately NOT `rangeStatus === 'out-of-range'`, which is strict-above:
+   * that would miss a note sitting exactly AT the ceiling, and the documented
+   * exemplar (Kabalevsky 5 mm. 69–70) sits at Mitton's E4 ceiling, not above
+   * it. "At or above" is the load-bearing distinction (§A.180).
+   */
+  sustainedCeilingExposure?: boolean;
+
   // ── Diction target + advice ──
   /** The operative sung vowel (IPA), from Ilya via the vowel resolver. */
   vowel: string;
