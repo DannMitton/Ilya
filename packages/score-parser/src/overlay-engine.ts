@@ -236,6 +236,7 @@ function buildGlobal(parsed: ParsedScore, profile: VoiceProfileSnapshot, sungMid
 function deepCopyProfile(p: VoiceProfileSnapshot): VoiceProfileSnapshot {
   return {
     fR1: { ...p.fR1 },
+    ...(p.fR2 ? { fR2: { ...p.fR2 } } : {}),
     ...(p.range ? { range: { lowest: { ...p.range.lowest }, highest: { ...p.range.highest } } } : {}),
     ...(p.tessitura ? { tessitura: { low: { ...p.tessitura.low }, high: { ...p.tessitura.high } } } : {}),
     ...(p.passaggio

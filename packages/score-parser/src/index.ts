@@ -32,6 +32,7 @@ export {
   type VowelResolver,
   type AnalyzeOptions,
 } from './overlay-engine';
+export { modificationTarget, type ModificationTarget } from './modification-engine';
 export { sungVerseNumbers } from './verses';
 export {
   resolveTempoTerm,

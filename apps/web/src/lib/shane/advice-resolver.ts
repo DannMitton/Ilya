@@ -17,12 +17,18 @@
  * advice. It is NOT threaded through `analyzeScore`, keeping the pure engine
  * content-free.
  *
- * What it advises today (§A.161 v1 hazard set): the `[i]→[ɪ]` crossing ONLY,
- * the first shippable slice of the general modification engine (§A.162, a later
- * beat that supersedes the hardcoded case without waste). The `[o]→[ɑ]` cover
- * and the higher-voice cases (soprano "open vowel carried high", tenor F2
- * tune-toward) are DEFERRED to their sourcing beats and slot in here as new
- * entries in `ADVICE_CASES`, each with its own predicate and verified citation.
+ * The general modification engine (§A.162, score-parser `modificationTarget`)
+ * now supersedes the v1 hardcoded `[i]→[ɪ]` case without waste: each case names
+ * a source vowel and its SOURCED target, and the resolver reads the engine's
+ * computed target from the singer's own measured matrix. The SOURCED target
+ * governs what the singer is told (Dann, 2026-07-21): over the curated measured
+ * matrix the computed target equals the sourced one, and if a future Jones-full
+ * search ever diverges (e.g. computing `[o]→[ɔ]` where Grayson prescribes
+ * `[ɑ]`), or the profile is too sparse to compute a target at all, the sourced
+ * target still wins. The computed target is the forecast layer, never the
+ * uncited prescription. The `[o]→[ɑ]` cover and the higher-voice cases slot in
+ * here as new entries in `ADVICE_CASES`, each with its own predicate, sourced
+ * target, and verified citation, at their sourcing beats.
  *
  * Integrity (framework §8): every advice string carries a `citation`, an
  * INTERNAL provenance record verified on the actual source page before it ships
@@ -38,7 +44,11 @@
  * Pure and framework-free, so it unit-tests the way the parsers do.
  */
 
-import type { AnalyzedEvent, AnalyzedScore } from '@ilya/score-parser';
+import {
+	modificationTarget,
+	type AnalyzedEvent,
+	type AnalyzedScore
+} from '@ilya/score-parser';
 
 /** The machine-readable register tag on the resolved advice (§A.159). */
 type Register = 'hazard' | 'opportunity';
@@ -46,17 +56,28 @@ type Register = 'hazard' | 'opportunity';
 /**
  * One sourced advice case. The v1 set has a single entry; higher voices slot in
  * as additional entries (the resolver's extension seam, §A.162). Each case is a
- * pure predicate over an analysed event plus the sourced advice it emits.
+ * pure predicate over an analysed event plus the sourced advice it emits, with
+ * the SOURCED target vowel it names and its verified internal citation.
  */
 interface AdviceCase {
 	/** Stable identifier, for provenance and debugging (never rendered). */
 	readonly id: string;
 	/** The register this case emits (§A.159). */
 	readonly register: Register;
+	/** The operative sung vowel (IPA) this case advises on. */
+	readonly sourceVowel: string;
+	/**
+	 * The SOURCED target vowel (IPA) the pedagogue prescribes: what the singer is
+	 * told to lean toward. The sourced target governs the shipped advice (Dann,
+	 * 2026-07-21), even where the general engine's computed target would differ.
+	 */
+	readonly sourcedTarget: string;
+	/** The internal provenance record, verified on the source; never printed. */
+	readonly citation: string;
 	/** Does this event trigger the case? Pure, side-effect-free. */
 	matches(ev: AnalyzedEvent): boolean;
-	/** The sourced advice to attach (text + internal citation). */
-	build(ev: AnalyzedEvent): { text: string; citation: string };
+	/** The sourced advice copy, given the target vowel to lean toward. */
+	copy(target: string): string;
 }
 
 /**
@@ -73,29 +94,27 @@ const MITTON_I_TO_LAX_I_CITATION =
 	'to [ɪ], moving the fR1 of [i] up and out of the way of the sung pitch."';
 
 /**
- * The APPROVED advice copy for the `[i]→[ɪ]` crossing (§A.169). Verbatim,
- * Dann's copy: "first resonance" not "first formant" (§A.164 consistency); the
- * forecast-not-declare hedge "you may find it helpful"; slashes `/ɪ/` to match
- * the crossing line's `/i/`. The target vowel is fixed for v1; the general
- * engine (§A.162) will fill it from the measured matrix.
- */
-const I_TO_LAX_I_TEXT =
-	'You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more ' +
-	'space, which lifts your first resonance clear of the pitch.';
-
-/**
  * v1 case (§A.161): an `[i]` vowel on a forecast fR1/fo crossing. `ev.vowel` is
  * the operative sung vowel (IPA verbatim from the resolver); `ev.crossing` is
  * the engine's forecast that fo has reached fR1. A hazard (§A.159): a fix is
  * offered. Detection generalises via the crossing predicate landing on
  * different vowels per voice (§A.162); the ADVICE is voice-specific and sourced,
  * so higher voices need their own cases, not a widened predicate here.
+ *
+ * The APPROVED copy (§A.169) is templated on the target vowel: "first
+ * resonance" not "first formant" (§A.164 consistency); the forecast-not-declare
+ * hedge "you may find it helpful"; slashes `/ɪ/` to match the crossing line's
+ * `/i/`. For the sourced target `ɪ` it renders Dann's approved string verbatim.
  */
 const I_CROSSING: AdviceCase = {
 	id: 'i-to-lax-i-crossing',
 	register: 'hazard',
+	sourceVowel: 'i',
+	sourcedTarget: 'ɪ',
+	citation: MITTON_I_TO_LAX_I_CITATION,
 	matches: (ev) => ev.crossing === true && ev.vowel === 'i',
-	build: () => ({ text: I_TO_LAX_I_TEXT, citation: MITTON_I_TO_LAX_I_CITATION })
+	copy: (target) =>
+		`You may find it helpful to relax the jaw and lean it toward /${target}/, giving it a touch more space, which lifts your first resonance clear of the pitch.`
 };
 
 /**
@@ -114,14 +133,31 @@ const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING];
  * carried through unchanged, including a crossing with no v1 advice, which keeps
  * its descriptive whoop line in the watch list (§A.149 dial is additive, Dann's
  * ruling B, 2026-07-21): advice is an add-on, never a gate.
+ *
+ * The general modification engine computes the acoustic target from the singer's
+ * own measured matrix (§A.162, `modificationTarget`); the SOURCED target governs
+ * what ships (Dann, 2026-07-21). The engine is read and confirmed here, and the
+ * sourced target is what fills the copy: over the curated measured matrix they
+ * coincide, and a divergent or uncomputable target never overrides the source.
  */
 export function resolveAdvice(analyzed: AnalyzedScore): AnalyzedScore {
 	const events: Record<string, AnalyzedEvent> = {};
 	for (const [id, ev] of Object.entries(analyzed.events)) {
-		const hit = ev.vowelModification ? undefined : ADVICE_CASES.find((c) => c.matches(ev));
-		events[id] = hit
-			? { ...ev, vowelModification: { ...hit.build(ev), register: hit.register } }
-			: ev;
+		if (ev.vowelModification) {
+			events[id] = ev;
+			continue;
+		}
+		const hit = ADVICE_CASES.find((c) => c.matches(ev));
+		if (!hit) {
+			events[id] = ev;
+			continue;
+		}
+		const computed = modificationTarget(ev.vowel, analyzed.calibrationSnapshot);
+		const target = computed?.vowel === hit.sourcedTarget ? computed.vowel : hit.sourcedTarget;
+		events[id] = {
+			...ev,
+			vowelModification: { text: hit.copy(target), citation: hit.citation, register: hit.register }
+		};
 	}
 	return { ...analyzed, events };
 }
