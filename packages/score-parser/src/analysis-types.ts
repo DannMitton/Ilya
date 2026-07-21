@@ -38,6 +38,16 @@ export interface VoiceProfileSnapshot {
   fR1: Record<string, number>;
 
   /**
+   * Per-vowel second-resonance frequency in Hz, keyed by IPA vowel, when
+   * the singer's fR2 was measured with usable quality. Absent for a vowel
+   * whose fR2 read was `absent` or implausible: genuine absence, so any
+   * fR2-based mark degrades to nothing rather than guessing. Higher voices
+   * whose fundamental reaches the second resonance read these; a low voice
+   * may carry fR2 values no event ever reaches, which is honest and inert.
+   */
+  fR2?: Record<string, number>;
+
+  /**
    * The singer's absolute range (lowest and highest singable pitch).
    * Absent when the singer skipped the wizard phase that supplies it:
    * genuine absence, not a permissive default (Dann, 2026-07-15, Option A).

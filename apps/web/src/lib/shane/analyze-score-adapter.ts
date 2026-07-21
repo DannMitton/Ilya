@@ -131,6 +131,27 @@ export function buildVoiceProfileSnapshot(
 		}
 	}
 
+	// fR2 per vowel, for the higher-voice second-resonance work. Mirrors the
+	// fR1 gating (a positive number, not judged implausible) plus the f2-specific
+	// quality: an `absent` read contributes nothing. `marginal` is KEPT, parallel
+	// to fR1 keeping `provisional` above (a signal-quality verdict, not a physical
+	// one); tighten this to `clear`-only if smoke shows marginal fR2 misfiring. A
+	// vowel with no usable fR2 is omitted, so any fR2-based mark degrades to
+	// nothing rather than guessing. A low voice may populate fR2 no event reaches:
+	// honest and inert.
+	const fR2: Record<string, number> = {};
+	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
+		if (
+			formant &&
+			typeof formant.f2 === 'number' &&
+			formant.f2 > 0 &&
+			formant.f2Quality !== 'absent' &&
+			formant.plausibility !== 'implausible'
+		) {
+			fR2[vowel] = formant.f2;
+		}
+	}
+
 	const c = characteristics;
 	const hasRange = c?.rangeLow !== undefined && c?.rangeHigh !== undefined;
 	const hasTessitura = c?.tessituraLow !== undefined && c?.tessituraHigh !== undefined;
@@ -157,6 +178,7 @@ export function buildVoiceProfileSnapshot(
 
 	const snapshot: VoiceProfileSnapshot = {
 		fR1,
+		...(Object.keys(fR2).length > 0 ? { fR2 } : {}),
 		...(range ? { range } : {}),
 		...(tessitura ? { tessitura } : {}),
 		...(passaggio ? { passaggio } : {}),

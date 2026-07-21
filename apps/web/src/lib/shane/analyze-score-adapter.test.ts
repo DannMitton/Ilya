@@ -27,6 +27,10 @@ function formant(f1: number): CalibratedFormant {
 	return { f1, confidence: 'high', reading: 'captured', source: 'measured-user' };
 }
 
+function formantF2(f1: number, f2: number, f2Quality: 'clear' | 'marginal' | 'absent'): CalibratedFormant {
+	return { f1, f2, f2Quality, confidence: 'high', reading: 'captured', source: 'measured-user' };
+}
+
 function note(id: string, pitch: Pitch): VocalLineEvent {
 	return {
 		id,
@@ -133,6 +137,51 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 			undefined,
 		);
 		expect(snapshot.fR1).toEqual({ a: 800, o: 500 });
+	});
+
+	// fR2 wiring (§A.153): the second resonance is carried per vowel for the
+	// higher-voice work, gated like fR1 plus the f2-specific quality.
+	it('maps fR2 per vowel when quality is usable, and omits fR2 entirely when none is', () => {
+		const withF2 = buildVoiceProfileSnapshot(
+			{ i: formantF2(296, 1705, 'clear') } as Partial<Record<'i', CalibratedFormant>>,
+			COMPLETE,
+		).snapshot;
+		expect(withF2.fR2).toEqual({ i: 1705 });
+
+		const noF2 = buildVoiceProfileSnapshot(FORMANTS_A, COMPLETE).snapshot;
+		expect(noF2.fR2).toBeUndefined();
+	});
+
+	it('keeps a marginal fR2, drops an absent one, and never guesses a missing f2', () => {
+		const { snapshot } = buildVoiceProfileSnapshot(
+			{
+				i: formantF2(296, 1705, 'clear'),
+				e: formantF2(381, 1532, 'marginal'),
+				a: formantF2(800, 1200, 'absent'),
+				o: formant(489), // no f2 at all
+			} as Partial<Record<'i' | 'e' | 'a' | 'o', CalibratedFormant>>,
+			COMPLETE,
+		);
+		expect(snapshot.fR2).toEqual({ i: 1705, e: 1532 });
+	});
+
+	it('excludes an fR2 from a reading the plausibility guard judged implausible', () => {
+		const { snapshot } = buildVoiceProfileSnapshot(
+			{
+				i: formantF2(296, 1705, 'clear'),
+				a: {
+					f1: 800,
+					f2: 1200,
+					f2Quality: 'clear',
+					confidence: 'high',
+					reading: 'captured',
+					source: 'measured-user',
+					plausibility: 'implausible',
+				},
+			} as Partial<Record<'i' | 'a', CalibratedFormant>>,
+			COMPLETE,
+		);
+		expect(snapshot.fR2).toEqual({ i: 1705 });
 	});
 
 	it('reports every dimension broad when characteristics are absent', () => {
