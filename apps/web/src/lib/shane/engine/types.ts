@@ -18,7 +18,16 @@ export type Vowel = 'i' | 'e' | 'ɪ' | 'ɨ' | 'ɛ' | 'a' | 'ɑ' | 'ʌ' | 'o' | '
  */
 export type VoiceType = string;
 
-/** A per-vowel formant reading with provenance (engine spec v1 §1). */
+/**
+ * A per-vowel formant reading with provenance (engine spec v1 §1).
+ *
+ * Provenance (§A.164): `f1`/`f2` are fry-derived vocal-tract RESONANCE
+ * estimates (`fR1`/`fR2` in the Titze-consensus sense), not measured formants.
+ * Fit captures them via vocal fry, whose densely spaced harmonics sample the
+ * tract transfer function with minimal source-filter interaction, so the LTAS
+ * peaks read the tract's own resonances. The field names stay `f1`/`f2` for
+ * continuity; the values are resonances, kept distinct from the sung formant.
+ */
 export interface CalibratedFormant {
 	f1: number; // Hz
 	f2?: number; // Hz, optional

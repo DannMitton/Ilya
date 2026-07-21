@@ -27,6 +27,14 @@ import type { Pitch } from './types';
  * recalibration cannot retroactively alter an already-analysed score).
  * This is the minimal shape the overlay engine reads; the app adapts its
  * fuller `VoiceProfile` into this.
+ *
+ * Provenance of the `fR` values (§A.164): these are fry-derived vocal-tract
+ * RESONANCE estimates, not measured formants. Fit captures them via vocal fry
+ * (Titze/Walker/Maxfield), whose densely spaced harmonics sample the tract's
+ * transfer function with minimal source-filter interaction, so the LTAS peaks
+ * read the tract's own resonances. They are `fRn` in the Titze-consensus sense
+ * (Titze 2015/2016), kept distinct from the sung formant, which coincides with
+ * a resonance only when a harmonic lands on it.
  */
 export interface VoiceProfileSnapshot {
   /**
@@ -157,8 +165,19 @@ export interface AnalyzedEvent {
   /** The operative sung vowel (IPA), from Ilya via the vowel resolver. */
   vowel: string;
 
-  /** Cover / vowel-migration advice, with a source. Populated by the analysis-application layer, not the overlay engine. */
-  vowelModification?: { text: string; citation: string };
+  /**
+   * Cover / vowel-migration advice, with a source and a machine-readable
+   * register tag (§A.159). Populated by the analysis-application layer's advice
+   * resolver (a pure post-pass in `apps/web`, §A.158), NOT the overlay engine,
+   * which leaves this `undefined` so the pure engine stays content-free
+   * (`overlay-engine.test.ts` asserts as much). `register` lets downstream code
+   * branch without parsing prose: `'hazard'` = a fix is offered (the v1
+   * `[i]→[ɪ]` crossing advice), `'opportunity'` = a colour is available (names
+   * provisional, §A.159). `citation` is an INTERNAL provenance record, verified
+   * on the source before it ships; it is never printed on the paper apparatus
+   * (attribution lives in Learn/Guide, Dann 2026-07-21).
+   */
+  vowelModification?: { text: string; citation: string; register: 'hazard' | 'opportunity' };
 
   // ── Provenance ──
   /** User corrections overlay the forecast; a non-empty array raises the "user-corrected" tier. */

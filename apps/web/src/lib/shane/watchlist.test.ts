@@ -303,6 +303,31 @@ describe('watch-list copy', () => {
 			'Bar 5: the longer /o/ here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.'
 		);
 	});
+
+	it('appends resolved advice to the crossing line, space-joined (§A.168/§A.169)', () => {
+		expect(
+			watchEntryLine({
+				eventId: 'e',
+				tier: 2,
+				kinds: ['crossing'],
+				bar: '37',
+				vowel: 'i',
+				advice:
+					'You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more space, which lifts your first resonance clear of the pitch.',
+				density: 1
+			})
+		).toBe(
+			'Bar 37: your /i/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop. You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more space, which lifts your first resonance clear of the pitch.'
+		);
+	});
+
+	it('renders the crossing line alone when no advice resolved (additive dial, ruling B)', () => {
+		expect(
+			watchEntryLine({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'e', density: 1 })
+		).toBe(
+			'Bar 9: your /e/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
+		);
+	});
 });
 
 describe('buildWatchList — adaptive dial (§A.149)', () => {

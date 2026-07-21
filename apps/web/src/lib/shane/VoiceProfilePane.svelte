@@ -67,6 +67,7 @@
 	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
+	import { resolveAdvice } from '$lib/shane/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
@@ -288,8 +289,14 @@
 	// resolves every sung occurrence (same ids) identically; feed analyzeScore the
 	// performance-order view so the overlay reflects the sung sequence.
 	const vowelResolver = $derived(readingScore ? buildVowelResolver(readingScore) : null);
+	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
+	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
+	// `buildWatchList` reads it below. It leaves the pure engine content-free and
+	// only adds the sourced advice (v1: the [i]→[ɪ] crossing, §A.161/§A.169).
 	const analyzed = $derived(
-		analysisScore && vowelResolver ? analyzeScore(analysisScore, adapted.snapshot, vowelResolver) : null,
+		analysisScore && vowelResolver
+			? resolveAdvice(analyzeScore(analysisScore, adapted.snapshot, vowelResolver))
+			: null,
 	);
 
 	// ── The "Places to watch" list (design C) ────────────────────────────

@@ -138,6 +138,16 @@ export interface WatchEntry {
 	 */
 	transpositionPhrase?: string;
 	/**
+	 * The resolved, ready-to-append advice clause: the actionable second half of
+	 * the crossing line (§A.168), baked on from `AnalyzedEvent.vowelModification`
+	 * at build time so `watchEntryLine` stays entry-only. Present only when the
+	 * advice resolver matched a sourced case (v1: an `[i]→[ɪ]` crossing, §A.161);
+	 * absent otherwise, and the line renders its description alone (ruling B,
+	 * Dann 2026-07-21). The citation is NOT carried here: it is never printed on
+	 * the paper apparatus (attribution lives in Learn/Guide).
+	 */
+	advice?: string;
+	/**
 	 * Harmonic density d = fR1/fo (number of harmonics at/below the first
 	 * resonance). Lower = higher in the voice = more acute; sorts first within
 	 * a tier. INFERENCE on Bozeman pp. 42–43 (§A.135).
@@ -262,10 +272,16 @@ function isRare(kind: WatchKind, counts: Record<WatchKind, number>): boolean {
 }
 
 /**
- * Whether a markup-visible mark carries (or will carry) advice (§A.149
- * clause 2). For M1 the crossing and timbre-turn kinds are STRUCTURALLY
- * advice-bearing; the actual advice STRINGS are the M3 `vowelModification`
- * layer (§C.2). This refines to check the resolved advice when that lands.
+ * Whether a markup-visible mark is worth a watch line under §A.149 clause 2.
+ * RULED ADDITIVE (Dann's ruling B, 2026-07-21): a crossing and a timbre turn
+ * are STRUCTURALLY advice-bearing, i.e. worth a line when rare, whether or not
+ * the advice resolver (`advice-resolver.ts`) found a sourced fix for them. The
+ * resolved `[i]→[ɪ]` advice is APPENDED to the crossing line at render
+ * (`watchEntryLine`), never used to GATE inclusion here: a rare crossing Fit can
+ * describe (the whoop) but not yet advise still earns its line, so the dial
+ * never silently hides an honest forecast. Kept as a structural predicate (not
+ * inlined) so the deferred hazard clause (§A.149 clause 3) can later branch on
+ * the resolved register without reworking the inclusion rule.
  */
 function isAdviceBearing(_kind: WatchKind): boolean {
 	return true;
@@ -395,6 +411,10 @@ export function buildWatchList(
 			...(wordByEvent.has(id) ? { word: wordByEvent.get(id) } : {}),
 			...(turn ? { timbreDirection: turn.direction } : {}),
 			...(rangeDirection ? { rangeDirection } : {}),
+			// The advice resolver's resolved clause, baked on for render (§A.168).
+			// Populated only on a matched case (v1: an [i]→[ɪ] crossing); the
+			// citation is deliberately not carried (never printed, Dann 2026-07-21).
+			...(a.vowelModification ? { advice: a.vowelModification.text } : {}),
 			// d = fR1/fo, and fR1 = 2·(turning-pitch Hz), so d = 2·turningHz/fo.
 			density: (2 * pitchToHz(a.turningPitch)) / foHz
 		});
@@ -488,8 +508,14 @@ export function watchEntryLine(entry: WatchEntry): string {
 				? `${base}; you may want to transpose ${entry.transpositionPhrase}.`
 				: `${base}.`;
 		}
-		case 'crossing': // CLOSED §A.150 (retired "lock or whistle": a crossing is whoop coupling)
-			return `Bar ${bar}: your ${v} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.`;
+		case 'crossing': {
+			// CLOSED §A.150 (the whoop description). The advice resolver's clause
+			// is APPENDED when present (§A.168 render (a); v1 = the [i]→[ɪ] copy,
+			// §A.169); a crossing with no resolved advice renders the description
+			// alone (ruling B, additive, Dann 2026-07-21).
+			const whoop = `Bar ${bar}: your ${v} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.`;
+			return entry.advice ? `${whoop} ${entry.advice}` : whoop;
+		}
 		case 'passaggio': // APPROVED §7.5
 			return entry.word
 				? `Bar ${bar}: '${entry.word}' falls near your passaggio; expect the turn to want managing.`
