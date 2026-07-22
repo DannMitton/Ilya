@@ -170,6 +170,31 @@ describe('resolveAdvice: the exposed close-vowel active-open (tracking) case (H2
 	});
 });
 
+describe('resolveAdvice: the [ɔ] crossing (H1, soprano whoop-coupling)', () => {
+	it('populates the articulatory advice on an [ɔ] crossing, hazard-tagged, no target', () => {
+		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { 'ɔ': 440 }, { n1: 'ɔ' }));
+		expect(out.events.n1.crossing).toBe(true);
+		const mod = out.events.n1.vowelModification;
+		expect(mod?.register).toBe('hazard');
+		expect(mod?.text).toBe(
+			'You may find it helpful to allow the turn and let the vowel open into that fuller, headier resonance; up here it settles the tone rather than straining to stay bright.'
+		);
+		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.citation).toContain('Godin & Howell 2015');
+	});
+
+	it('stays silent on an [ɔ] that does not cross', () => {
+		const out = resolveAdvice(analyze([note('n1', P('A', 2))], { 'ɔ': 440 }, { n1: 'ɔ' }));
+		expect(out.events.n1.crossing).toBe(false);
+		expect(out.events.n1.vowelModification).toBeUndefined();
+	});
+
+	it('leaves the [i] crossing to Mitton, not the [ɔ] case (match order)', () => {
+		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' }));
+		expect(out.events.n1.vowelModification?.text).toContain('lean it toward /ɪ/');
+	});
+});
+
 describe('resolveAdvice — purity and idempotence', () => {
 	it('does not mutate the input analysis', () => {
 		const analyzed = analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' });

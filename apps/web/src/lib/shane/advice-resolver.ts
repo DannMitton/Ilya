@@ -128,6 +128,48 @@ const I_CROSSING: AdviceCase = {
 };
 
 /**
+ * SOURCED (Godin & Howell 2015, Opus-verified on the rendered poster,
+ * 2026-07-22). The internal provenance record for the [ɔ] crossing advice, never
+ * printed. At its own crossing (fo meets fR1) the soprano [ɔ] reaches WHOOP
+ * coupling (F1/H1), and the poster's fix is to OPEN and MAINTAIN that coupling.
+ * Quoted verbatim in the poster's own "F1"/"H1"/"C#5" notation; our own usage is
+ * fR1/fo (§A.164/§A.165).
+ */
+const GODIN_HOWELL_O_CROSSING_CITATION =
+	'Godin & Howell 2015, "Setting Vowels in the Female Secondo Passaggio" (New England ' +
+	'Conservatory, poster), Mussorgsky "Serenade" analysis and Fig. 10: [ɔ] "presents the biggest ' +
+	'problem ... where the first formant sits on C#5"; the lower-passaggio vowels [o], [ɔ], and [e] ' +
+	'"can open the vowel to maintain this F1/H1 coupling" (Yell and Whoop). Opus-verified on the ' +
+	'rendered poster, 2026-07-22.';
+
+/**
+ * The [ɔ] crossing case (H1, Dann 2026-07-22). SOURCED (Godin & Howell 2015).
+ * ARTICULATORY and vowel-specific to [ɔ] (open-o), DISTINCT from O_COVER's close
+ * [o]. At its own crossing (fo meets fR1) the soprano [ɔ] reaches whoop coupling
+ * (F1/H1); the sourced fix is to OPEN and MAINTAIN the coupling, the OPPOSITE
+ * intent to the [i] crossing (which opens to clear fR1 off the pitch, §A.161), so
+ * it is its own case, never a widening of [i]. Firing is voice-safe: only a high
+ * voice reaches [ɔ]'s high fR1. It reuses the crossing watch kind and line (no
+ * watchlist change); §A.188 surfaces the exposed, climactic instance (the poster's
+ * "biggest problem" spot). No target vowel: the fix is a manoeuvre, not a
+ * substitution.
+ *
+ * The APPROVED copy is Dann's (2026-07-22, "Candidate 3"): forecast-not-declare;
+ * it follows the crossing line's whoop observation and says "let it"; no notation
+ * on the page (fR1/fo stay in our voice; the poster's F1/H1 live only in the
+ * citation quote).
+ */
+const OPEN_O_CROSSING: AdviceCase = {
+	id: 'open-o-whoop-crossing',
+	register: 'hazard',
+	sourceVowel: 'ɔ',
+	citation: GODIN_HOWELL_O_CROSSING_CITATION,
+	matches: (ev) => ev.crossing === true && ev.vowel === 'ɔ',
+	copy: () =>
+		`You may find it helpful to allow the turn and let the vowel open into that fuller, headier resonance; up here it settles the tone rather than straining to stay bright.`
+};
+
+/**
  * SOURCED (§A.185, Opus-verified on the pages, 2026-07-21). The internal
  * provenance record for the `[o]→[ɑ]` cover advice, never printed. The cover is
  * MITTON's own synthesis (§6.2.5, via his §3.2.4 cover theory after
@@ -223,7 +265,7 @@ const OPEN_TRACKING: AdviceCase = {
  */
 // OPEN_TRACKING is the general, vowel-agnostic articulatory case; it MUST come
 // last so the specific named-target cases (crossing, cover) match first (H2).
-const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, O_COVER, OPEN_TRACKING];
+const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, OPEN_O_CROSSING, O_COVER, OPEN_TRACKING];
 
 /**
  * Populate `vowelModification` on every event a sourced case matches, returning

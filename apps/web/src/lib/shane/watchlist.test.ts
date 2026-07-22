@@ -489,3 +489,22 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 		expect(wl.entries[0].kinds).toEqual(['cover']);
 	});
 });
+
+describe('buildWatchList: the [ɔ] crossing advice (H1)', () => {
+	it('surfaces an exposed [ɔ] crossing with its whoop advice appended', () => {
+		const parsed = scoreOf([note('n1', { pitch: P('A', 4), fermata: true })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { 'ɔ': 440 },
+			range: { lowest: P('C', 3), highest: P('A', 4) },
+			tessitura: { low: P('C', 4), high: P('A', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'ɔ' }));
+		expect(analyzed.events.n1.crossing).toBe(true);
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0].kinds).toEqual(['crossing']);
+		const line = watchEntryLine(wl.entries[0]);
+		expect(line).toContain('toward a whoop'); // the descriptive crossing line
+		expect(line).toContain('settles the tone rather than straining'); // the H1 advice appended
+	});
+});
