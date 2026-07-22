@@ -462,15 +462,18 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 		);
 	});
 
-	it('always earns a line: a sustained close [e] at the ceiling routes to tracking, advice appended', () => {
-		const parsed = scoreOf([note('n1', { pitch: P('E', 4), fermata: true })]);
+	it('always earns a line: a sustained close [e] carried above its fR1 routes to tracking, advice appended', () => {
+		// Whoop side (§A.190): A5 (880 Hz) is above fR1 440, so aboveFirstResonance
+		// holds and the tracking case (not the turnover case) fires.
+		const parsed = scoreOf([note('n1', { pitch: P('A', 5), fermata: true })]);
 		const snap: VoiceProfileSnapshot = {
-			fR1: { e: 489 },
-			range: { lowest: P('C', 2), highest: P('E', 4) },
-			tessitura: { low: P('C', 3), high: P('C', 4) }
+			fR1: { e: 440 },
+			range: { lowest: P('C', 3), highest: P('A', 5) },
+			tessitura: { low: P('C', 4), high: P('C', 5) }
 		};
 		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'e' }));
 		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.n1.aboveFirstResonance).toBe(true);
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 2, kinds: ['tracking'] });
@@ -487,6 +490,44 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'o' }));
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries[0].kinds).toEqual(['cover']);
+	});
+});
+
+describe('buildWatchList: the male turnover hazard, turned side (§A.190)', () => {
+	it('renders the turnover hazard line with the articulatory advice appended', () => {
+		expect(
+			watchEntryLine({
+				eventId: 'e',
+				tier: 2,
+				kinds: ['turnover'],
+				bar: '52',
+				vowel: 'e',
+				advice:
+					'You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.',
+				density: 1
+			})
+		).toBe(
+			'Bar 52: the /e/ at the top of your range and sustained here is an exposed spot where the tone can spread or press. You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.'
+		);
+	});
+
+	it('always earns a line: a sustained close [e] below its fR1 routes to turnover, advice appended', () => {
+		// Turned side (§A.190): E4 (330 Hz) is below fR1 489, so aboveFirstResonance
+		// is false and the male turnover case (not tracking) fires. This is the very
+		// fixture the tracking routing used before the guard.
+		const parsed = scoreOf([note('n1', { pitch: P('E', 4), fermata: true })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { e: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'e' }));
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.n1.aboveFirstResonance).toBe(false);
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 2, kinds: ['turnover'] });
+		expect(watchEntryLine(wl.entries[0])).toContain('turn and gather');
 	});
 });
 

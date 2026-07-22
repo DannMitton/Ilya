@@ -237,11 +237,16 @@ const GODIN_HOWELL_TRACKING_CITATION =
  * 2026-07-22). VOWEL-AGNOSTIC: it keys on the CIRCUMSTANCE, not the vowel,
  * because the fix (open, drop the jaw, raise fR1 to track fo) is the mechanism,
  * not a per-vowel substitution. Fires on the engine's content-free exposure
- * forecast (close timbre + at-or-above ceiling + long sustain; §A.183), and not
- * on a crossing (the [i] crossing case and the crossing kind cover that). A
+ * forecast (close timbre + at-or-above ceiling + long sustain; §A.183), NOT on
+ * a crossing (the [i] crossing case and the crossing kind cover that), AND only
+ * on the WHOOP side of the ladder (`aboveFirstResonance`, fo above fR1; §A.190).
+ * The guard matters: "raise fR1 to track fo" is only coherent once fo has
+ * reached fR1, so a male voice's turned-over-but-below-crossing close vowel is
+ * NOT this case; it goes to MALE_TURNOVER, whose sourced fix is the opposite. A
  * hazard (§A.159): the fix is offered, no target vowel named. Ordered AFTER the
  * crossing and the cover in `ADVICE_CASES`, so [i] stays the crossing and [o]
- * stays the Russian cover; this catches every other exposed close vowel.
+ * stays the Russian cover; this catches every other exposed close vowel held
+ * above its own fR1 (sopranos, and male [i]/[u] at the very top).
  *
  * The APPROVED copy is Dann's (2026-07-22): the forecast-not-declare hedge; it
  * names the sung vowel it fires on (no target vowel); a semicolon, not an
@@ -253,19 +258,80 @@ const OPEN_TRACKING: AdviceCase = {
 	id: 'exposed-close-vowel-open-tracking',
 	register: 'hazard',
 	citation: GODIN_HOWELL_TRACKING_CITATION,
-	matches: (ev) => ev.sustainedCeilingExposure === true && ev.crossing !== true,
+	matches: (ev) =>
+		ev.sustainedCeilingExposure === true && ev.crossing !== true && ev.aboveFirstResonance === true,
 	copy: (vowel) =>
 		`You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /${vowel}/ squeezed this high.`
 };
 
 /**
+ * SOURCED (Bozeman 2008, Choral Journal 48/12, p.69; Bozeman 2010, Journal of
+ * Singing 66/3, p.292; Opus-verified on the rendered pages, 2026-07-22). The
+ * internal provenance for the male turnover advice, never printed. For a male
+ * voice a close vowel carried past its turn but with fo still below fR1 is let
+ * to turn over and settle, NOT opened to chase the coupling: opening early
+ * "becomes a yell with increasingly pressed phonation" (2010, p.292); "after H2
+ * has passed through F1 and the tone has shifted, mouth opening can and should
+ * follow" (2008, p.69). Quoted verbatim in Bozeman's F1/H2 notation; our own
+ * usage is fR1/fo/2fo (§A.164/§A.165).
+ */
+const BOZEMAN_MALE_TURNOVER_CITATION =
+	'Bozeman 2008, "Registration Strategies for Training the Male Passaggio" (Choral Journal 48/12), ' +
+	'p.69, and Bozeman 2010, "The Role of the First Formant in Training the Male Singing Voice" ' +
+	'(Journal of Singing 66/3), p.292: a close vowel is allowed to turn over rather than opened to chase ' +
+	'the coupling, which "becomes a yell with increasingly pressed phonation"; "after H2 has passed ' +
+	'through F1 and the tone has shifted, mouth opening can and should follow." Opus-verified on the ' +
+	'rendered pages, 2026-07-22.';
+
+/**
+ * The male turnover case (§A.190; Dann 2026-07-22). SOURCED (Bozeman 2008/2010).
+ * ARTICULATORY and VOWEL-AGNOSTIC, the turned-side sibling of OPEN_TRACKING: it
+ * fires on the SAME three-gate exposure (close timbre + at-or-above ceiling +
+ * long sustain; §A.183), and not on a crossing, but on the TURNED side of the
+ * ladder, where fo is still below fR1 (`aboveFirstResonance !== true`; §A.190).
+ * There the sourced fix is the OPPOSITE of OPEN_TRACKING's whoop-tracking: let
+ * the vowel turn and settle into its closer, ringier place, do not force it open
+ * (which presses toward the yell). No target vowel: the fix is a manoeuvre. `[o]`
+ * is claimed first by O_COVER (ordered earlier), so this catches every OTHER
+ * exposed close vowel held below its own fR1 at the top of the range (the tenor /
+ * higher-voice terrain; the low male's own exposed [i] at the ceiling is a
+ * crossing, not this).
+ *
+ * The APPROVED copy is Dann's (2026-07-22, "draft 1"): the forecast-not-declare
+ * hedge; it names the sung vowel it fires on (no target vowel); "the ring" is
+ * the singer's-formant redirect in lay terms; a semicolon, not an em-dash, for
+ * the nested thought. Its direction is the opposite of OPEN_TRACKING's, so a
+ * tenor who sees both lines is told the right thing on each.
+ */
+const MALE_TURNOVER: AdviceCase = {
+	id: 'exposed-close-vowel-turnover',
+	register: 'hazard',
+	citation: BOZEMAN_MALE_TURNOVER_CITATION,
+	matches: (ev) =>
+		ev.sustainedCeilingExposure === true && ev.crossing !== true && ev.aboveFirstResonance !== true,
+	copy: (vowel) =>
+		`You may find it helpful to let the /${vowel}/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.`
+};
+
+/**
  * The sourced advice cases, in match order (first match wins). The extension
  * seam for the general engine and per-voice pedagogy (§A.162, build order §C
- * items 3–4). `[i]→[ɪ]` (crossing) and `[o]→[ɑ]` (the exposed-sustain cover).
+ * items 3–4). Named-target cases first (`[i]→[ɪ]` crossing, `[ɔ]` crossing,
+ * `[o]→[ɑ]` cover), then the two articulatory exposure siblings split by ladder
+ * side: OPEN_TRACKING on the whoop side (fo above fR1) and MALE_TURNOVER on the
+ * turned side (fo below fR1); the two are mutually exclusive (§A.190).
  */
-// OPEN_TRACKING is the general, vowel-agnostic articulatory case; it MUST come
-// last so the specific named-target cases (crossing, cover) match first (H2).
-const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, OPEN_O_CROSSING, O_COVER, OPEN_TRACKING];
+// The specific named-target cases (crossings, cover) MUST precede the two
+// articulatory exposure siblings so [i]/[ɔ] stay crossings and [o] stays the
+// cover. OPEN_TRACKING and MALE_TURNOVER are mutually exclusive on the ladder
+// side, so their order relative to each other is immaterial.
+const ADVICE_CASES: readonly AdviceCase[] = [
+	I_CROSSING,
+	OPEN_O_CROSSING,
+	O_COVER,
+	OPEN_TRACKING,
+	MALE_TURNOVER
+];
 
 /**
  * Populate `vowelModification` on every event a sourced case matches, returning

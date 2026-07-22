@@ -122,26 +122,29 @@ describe('resolveAdvice — the [o]→[ɑ] cover (§A.185)', () => {
 	});
 });
 
-describe('resolveAdvice: the exposed close-vowel active-open (tracking) case (H2)', () => {
-	// Same exposure setup as the cover, on a non-[o] close vowel: fR1 489 →
-	// turning ≈ B3, so E4 reads close; E4 is the ceiling; the fermata sustains.
-	// All three exposure gates hold and it is not a crossing (§A.183).
-	function exposedClose(vowel: string): AnalyzedScore {
-		const events: VocalLineEvent[] = [{ ...note('n1', P('E', 4)), fermata: {} }];
+describe('resolveAdvice: the exposed close-vowel active-open (tracking) case, whoop side (H2, guarded §A.190)', () => {
+	// A soprano-realistic exposed close vowel carried well ABOVE its own fR1, so
+	// fo is above fR1 (the whoop side the source describes: "well above their
+	// first formant location"). fR1 440 → turning 220 ≈ A3, so A5 reads close;
+	// A5 is the ceiling; the fermata sustains; A5 (880 Hz) is an octave above fR1
+	// 440, so aboveFirstResonance holds and it is not a crossing (§A.183/§A.190).
+	function exposedWhoop(vowel: string): AnalyzedScore {
+		const events: VocalLineEvent[] = [{ ...note('n1', P('A', 5)), fermata: {} }];
 		const snap: VoiceProfileSnapshot = {
-			fR1: { [vowel]: 489 },
-			range: { lowest: P('C', 2), highest: P('E', 4) },
-			tessitura: { low: P('C', 3), high: P('C', 4) }
+			fR1: { [vowel]: 440 },
+			range: { lowest: P('C', 3), highest: P('A', 5) },
+			tessitura: { low: P('C', 4), high: P('C', 5) }
 		};
 		return analyzeScore(scoreOf(events), snap, resolverOf({ n1: vowel }), {
 			generatedAt: '2020-01-01T00:00:00.000Z'
 		});
 	}
 
-	it('populates the articulatory advice on an exposed non-[o] close vowel, hazard-tagged, naming the sung vowel with no target', () => {
-		const analyzed = exposedClose('e');
+	it('populates the tracking advice on an exposed close vowel above its fR1, hazard-tagged, no target', () => {
+		const analyzed = exposedWhoop('e');
 		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
 		expect(analyzed.events.n1.crossing).toBe(false);
+		expect(analyzed.events.n1.aboveFirstResonance).toBe(true);
 		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
 		expect(mod?.register).toBe('hazard');
 		expect(mod?.text).toBe(
@@ -153,20 +156,65 @@ describe('resolveAdvice: the exposed close-vowel active-open (tracking) case (H2
 	});
 
 	it('interpolates whichever close vowel triggered it (vowel-agnostic)', () => {
-		const mod = resolveAdvice(exposedClose('u')).events.n1.vowelModification;
+		const mod = resolveAdvice(exposedWhoop('u')).events.n1.vowelModification;
 		expect(mod?.text).toContain('holding a close /u/ squeezed this high');
-	});
-
-	it('leaves an exposed [o] to the cover, not the tracking case (match order)', () => {
-		const mod = resolveAdvice(exposedClose('o')).events.n1.vowelModification;
-		expect(mod?.text).toContain('darken toward /ɑ/'); // the Russian cover wins
-		expect(mod?.text).not.toContain('let the jaw drop'); // not the tracking case
 	});
 
 	it('stays silent on a close vowel that is not exposed (mid-range)', () => {
 		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { e: 489 }, { n1: 'e' }));
 		expect(out.events.n1.sustainedCeilingExposure).toBe(false);
 		expect(out.events.n1.vowelModification).toBeUndefined();
+	});
+});
+
+describe('resolveAdvice: the male turnover case, turned side (§A.190)', () => {
+	// An exposed close vowel carried past its turn but with fo still BELOW fR1
+	// (the turned side). fR1 489 → turning ≈ B3, so E4 reads close; E4 is the
+	// ceiling; the fermata sustains; E4 (330 Hz) is below fR1 489, so it is not
+	// a crossing and aboveFirstResonance is false. This is the very fixture the
+	// tracking case used to fire on before the §A.190 guard: a low male voice's
+	// exposed close vowel at the top, indistinguishable from the old H2 fixture.
+	function exposedTurned(vowel: string): AnalyzedScore {
+		const events: VocalLineEvent[] = [{ ...note('n1', P('E', 4)), fermata: {} }];
+		const snap: VoiceProfileSnapshot = {
+			fR1: { [vowel]: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		return analyzeScore(scoreOf(events), snap, resolverOf({ n1: vowel }), {
+			generatedAt: '2020-01-01T00:00:00.000Z'
+		});
+	}
+
+	it('populates the male turnover advice on an exposed close vowel below its fR1, hazard-tagged, no target', () => {
+		const analyzed = exposedTurned('e');
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.n1.crossing).toBe(false);
+		expect(analyzed.events.n1.aboveFirstResonance).toBe(false);
+		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
+		expect(mod?.register).toBe('hazard');
+		expect(mod?.text).toBe(
+			'You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.'
+		);
+		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.citation).toContain('Bozeman 2008');
+		expect(mod?.citation).toContain('Bozeman 2010');
+	});
+
+	it('interpolates whichever close vowel triggered it (vowel-agnostic)', () => {
+		const mod = resolveAdvice(exposedTurned('u')).events.n1.vowelModification;
+		expect(mod?.text).toContain('let the /u/ turn and gather');
+	});
+
+	it('does not fire the whoop tracking case on the turned side (the §A.190 guard)', () => {
+		const mod = resolveAdvice(exposedTurned('e')).events.n1.vowelModification;
+		expect(mod?.text).not.toContain('let the jaw drop'); // tracking is guarded off here
+	});
+
+	it('leaves an exposed [o] to the cover, not the turnover case (match order)', () => {
+		const mod = resolveAdvice(exposedTurned('o')).events.n1.vowelModification;
+		expect(mod?.text).toContain('darken toward /ɑ/'); // the Russian cover wins
+		expect(mod?.text).not.toContain('turn and gather'); // not the turnover case
 	});
 });
 

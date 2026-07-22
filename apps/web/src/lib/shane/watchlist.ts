@@ -94,7 +94,15 @@ export const WATCH_HEADER = 'Places to watch';
 // ── The model ───────────────────────────────────────────────────────
 
 /** A watch kind, in severity order; its index+1 is not the tier (see TIER_OF). */
-export type WatchKind = 'range' | 'crossing' | 'cover' | 'tracking' | 'passaggio' | 'timbre' | 'sustain';
+export type WatchKind =
+	| 'range'
+	| 'crossing'
+	| 'cover'
+	| 'tracking'
+	| 'turnover'
+	| 'passaggio'
+	| 'timbre'
+	| 'sustain';
 
 /** The markup-visible marks the adaptive dial gates on rarity (§A.149 clause 2). */
 const MARKUP_VISIBLE: ReadonlySet<WatchKind> = new Set(['crossing', 'timbre']);
@@ -108,6 +116,7 @@ const TIER_OF: Record<WatchKind, 1 | 2 | 3 | 4 | 5> = {
 	crossing: 2,
 	cover: 2, // the [o]→[ɑ] cover hazard, co-equal with a crossing (§A.185). PROVISIONAL rank, Dann's to re-order.
 	tracking: 2, // the exposed close-vowel active-open (formant-tracking) hazard, co-equal with the cover (H2, Dann 2026-07-22). PROVISIONAL rank.
+	turnover: 2, // the male turnover hazard (turned side of the ladder), co-equal with its sibling tracking (§A.190, Dann 2026-07-22). PROVISIONAL rank.
 	passaggio: 3,
 	timbre: 4,
 	sustain: 5
@@ -262,6 +271,7 @@ function countKinds(detected: WatchEntry[]): Record<WatchKind, number> {
 		crossing: 0,
 		cover: 0,
 		tracking: 0,
+		turnover: 0,
 		passaggio: 0,
 		timbre: 0,
 		sustain: 0
@@ -298,8 +308,9 @@ function isAdviceBearing(_kind: WatchKind): boolean {
  * exposed-sustain hazard, always earns a line. Clauses 1, 2, and 4 unchanged.
  */
 function isIncluded(kinds: WatchKind[], counts: Record<WatchKind, number>): boolean {
-	// Clause 3 — a hazard (the [o]→[ɑ] cover): always, regardless of frequency.
-	if (kinds.includes('cover') || kinds.includes('tracking')) return true;
+	// Clause 3 — a hazard (the [o]→[ɑ] cover, the exposed tracking or turnover
+	// hazard): always, regardless of frequency.
+	if (kinds.includes('cover') || kinds.includes('tracking') || kinds.includes('turnover')) return true;
 	// Clause 1 — a markup-invisible fact: always.
 	if (kinds.some((k) => ALWAYS_KINDS.has(k))) return true;
 	// Clause 4 — stacking: two or more flagged kinds on one note.
@@ -401,16 +412,17 @@ export function buildWatchList(
 		if (isLongSustain(ev, parsed.tempoMarkings) && pitchToMidi(ev.pitch) === pitchToMidi(a.turningPitch))
 			kinds.push('sustain');
 
-		// Clause 3 (§A.149; §A.185) — the [o]→[ɑ] cover hazard: the engine's
-		// content-free exposure forecast (close timbre + at-or-above ceiling +
-		// long sustain; §A.183), carrying a resolved hazard advice, and not itself
-		// a crossing (the crossing kind already covers that). Advice appends at
-		// render. The [o]→[ɑ] Russian cover is its own kind; every other exposed
-		// close vowel is the general active-open (formant-tracking) hazard (H2,
-		// Dann 2026-07-22). Local vowel split; promote to a resolver-stamped
-		// routing tag if more higher-voice exposure cases land.
+		// Clause 3 (§A.149; §A.185; §A.190) — the exposed-sustain hazards: the
+		// engine's content-free exposure forecast (close timbre + at-or-above
+		// ceiling + long sustain; §A.183), carrying a resolved hazard advice, and
+		// not itself a crossing (the crossing kind already covers that). Advice
+		// appends at render. Three kinds, mirroring the three advice cases the
+		// resolver fires here: the [o]→[ɑ] Russian cover; on the whoop side of the
+		// ladder (fo above fR1) the active-open tracking hazard; on the turned side
+		// (fo below fR1) the male turnover hazard (§A.190). The split matches the
+		// resolver's predicates exactly, so the kind and the appended advice agree.
 		if (a.sustainedCeilingExposure === true && !a.crossing && a.vowelModification?.register === 'hazard')
-			kinds.push(a.vowel === 'o' ? 'cover' : 'tracking');
+			kinds.push(a.vowel === 'o' ? 'cover' : a.aboveFirstResonance ? 'tracking' : 'turnover');
 
 		if (kinds.length === 0) continue; // silence is the feature (§7.3 / §1)
 
@@ -554,6 +566,15 @@ export function watchEntryLine(entry: WatchEntry): string {
 			// names whatever close vowel triggered it, unlike the [o]-only cover.
 			const exposedTrack = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
 			return entry.advice ? `${exposedTrack} ${entry.advice}` : exposedTrack;
+		}
+		case 'turnover': {
+			// CLOSED (Dann, 2026-07-22): the male turnover hazard line, the turned-
+			// side sibling of 'tracking' (§A.190); the resolved articulatory advice
+			// APPENDS when present (§A.168; additive, ruling B). The risk here is the
+			// opposite of tracking's tightening: spreading the vowel open and pressing
+			// toward the yell, so the line names that risk, not tightening.
+			const exposedTurn = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the tone can spread or press.`;
+			return entry.advice ? `${exposedTurn} ${entry.advice}` : exposedTurn;
 		}
 		case 'passaggio': // APPROVED §7.5
 			return entry.word
