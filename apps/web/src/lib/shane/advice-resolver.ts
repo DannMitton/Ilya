@@ -222,15 +222,20 @@ const O_COVER: AdviceCase = {
  * ARTICULATORY and names no target vowel: a close vowel carried above its first
  * resonance is opened by dropping the jaw so fR1 rises to track fo (the
  * fundamental). Quoted verbatim in the poster's own "F1"/"H1" notation; our own
- * usage is fR1/fo (§A.164/§A.165). Bozeman KVP2 formant tracking (P4, p.96;
- * glossary, p.141) joins this once its pages are re-verified.
+ * usage is fR1/fo (§A.164/§A.165). Bozeman KVP2 formant tracking (Ch.10 p.96;
+ * glossary p.141) corroborates, Opus-verified on the photographed pages 2026-07-22.
  */
 const GODIN_HOWELL_TRACKING_CITATION =
 	'Godin & Howell 2015, "Setting Vowels in the Female Secondo Passaggio" (New England ' +
 	'Conservatory, poster), Brahms "Immer Leiser" analysis and Fig. 9: vowels carried above ' +
 	'their first formant location "will only function if F1 is raised to track H1. To accomplish ' +
-	'this, Ms. Godin drops her jaw." Opus-verified on the rendered poster, 2026-07-22. Bozeman ' +
-	'KVP2 formant tracking (P4 p.96; glossary p.141) to be added on page re-verification.';
+	'this, Ms. Godin drops her jaw." Opus-verified on the rendered poster, 2026-07-22. ' +
+	'Corroborated by Bozeman, Kinesthetic Voice Pedagogy 2 (Inside View Press, 2021), ' +
+	'Ch. 10 p.96 ("fR1 must be raised approximately in tandem with the sung pitch to track the ' +
+	'1fo") and glossary p.141 ("Formant tracking: the tuning of a resonance to follow or track ' +
+	'a specific harmonic, such as fR1:1fo, tracking of whoop timbre, upper treble voice ' +
+	'strategy"); KVP2 writes fR1/1fo (Titze consensus, §A.164), no translation needed. ' +
+	'Opus-verified on the photographed pages, 2026-07-22.';
 
 /**
  * The exposed close-vowel active-open (formant-tracking) case (H2; Dann,
