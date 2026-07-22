@@ -122,6 +122,54 @@ describe('resolveAdvice — the [o]→[ɑ] cover (§A.185)', () => {
 	});
 });
 
+describe('resolveAdvice: the exposed close-vowel active-open (tracking) case (H2)', () => {
+	// Same exposure setup as the cover, on a non-[o] close vowel: fR1 489 →
+	// turning ≈ B3, so E4 reads close; E4 is the ceiling; the fermata sustains.
+	// All three exposure gates hold and it is not a crossing (§A.183).
+	function exposedClose(vowel: string): AnalyzedScore {
+		const events: VocalLineEvent[] = [{ ...note('n1', P('E', 4)), fermata: {} }];
+		const snap: VoiceProfileSnapshot = {
+			fR1: { [vowel]: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		return analyzeScore(scoreOf(events), snap, resolverOf({ n1: vowel }), {
+			generatedAt: '2020-01-01T00:00:00.000Z'
+		});
+	}
+
+	it('populates the articulatory advice on an exposed non-[o] close vowel, hazard-tagged, naming the sung vowel with no target', () => {
+		const analyzed = exposedClose('e');
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.n1.crossing).toBe(false);
+		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
+		expect(mod?.register).toBe('hazard');
+		expect(mod?.text).toBe(
+			'You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.'
+		);
+		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.citation).toContain('Godin & Howell 2015');
+		expect(mod?.citation).toContain('track H1');
+	});
+
+	it('interpolates whichever close vowel triggered it (vowel-agnostic)', () => {
+		const mod = resolveAdvice(exposedClose('u')).events.n1.vowelModification;
+		expect(mod?.text).toContain('holding a close /u/ squeezed this high');
+	});
+
+	it('leaves an exposed [o] to the cover, not the tracking case (match order)', () => {
+		const mod = resolveAdvice(exposedClose('o')).events.n1.vowelModification;
+		expect(mod?.text).toContain('darken toward /ɑ/'); // the Russian cover wins
+		expect(mod?.text).not.toContain('let the jaw drop'); // not the tracking case
+	});
+
+	it('stays silent on a close vowel that is not exposed (mid-range)', () => {
+		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { e: 489 }, { n1: 'e' }));
+		expect(out.events.n1.sustainedCeilingExposure).toBe(false);
+		expect(out.events.n1.vowelModification).toBeUndefined();
+	});
+});
+
 describe('resolveAdvice — purity and idempotence', () => {
 	it('does not mutate the input analysis', () => {
 		const analyzed = analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' });

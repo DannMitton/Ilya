@@ -418,3 +418,49 @@ describe('buildWatchList: the [o]→[ɑ] cover (clause 3, §A.185)', () => {
 		expect(watchEntryLine(wl.entries[0])).toContain('open and darken toward /ɑ/');
 	});
 });
+
+describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () => {
+	it('renders the tracking hazard line with the articulatory advice appended', () => {
+		expect(
+			watchEntryLine({
+				eventId: 'e',
+				tier: 2,
+				kinds: ['tracking'],
+				bar: '52',
+				vowel: 'e',
+				advice:
+					'You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.',
+				density: 1
+			})
+		).toBe(
+			'Bar 52: the /e/ at the top of your range and sustained here is an exposed spot where the vowel can tighten. You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.'
+		);
+	});
+
+	it('always earns a line: a sustained close [e] at the ceiling routes to tracking, advice appended', () => {
+		const parsed = scoreOf([note('n1', { pitch: P('E', 4), fermata: true })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { e: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'e' }));
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 2, kinds: ['tracking'] });
+		expect(watchEntryLine(wl.entries[0])).toContain('raising your first resonance to the pitch');
+	});
+
+	it('routes an exposed [o] to the cover, not tracking (the vowel split)', () => {
+		const parsed = scoreOf([note('n1', { pitch: P('E', 4), fermata: true })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { o: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'o' }));
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries[0].kinds).toEqual(['cover']);
+	});
+});

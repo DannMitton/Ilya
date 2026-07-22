@@ -94,7 +94,7 @@ export const WATCH_HEADER = 'Places to watch';
 // ── The model ───────────────────────────────────────────────────────
 
 /** A watch kind, in severity order; its index+1 is not the tier (see TIER_OF). */
-export type WatchKind = 'range' | 'crossing' | 'cover' | 'passaggio' | 'timbre' | 'sustain';
+export type WatchKind = 'range' | 'crossing' | 'cover' | 'tracking' | 'passaggio' | 'timbre' | 'sustain';
 
 /** The markup-visible marks the adaptive dial gates on rarity (§A.149 clause 2). */
 const MARKUP_VISIBLE: ReadonlySet<WatchKind> = new Set(['crossing', 'timbre']);
@@ -107,6 +107,7 @@ const TIER_OF: Record<WatchKind, 1 | 2 | 3 | 4 | 5> = {
 	range: 1,
 	crossing: 2,
 	cover: 2, // the [o]→[ɑ] cover hazard, co-equal with a crossing (§A.185). PROVISIONAL rank, Dann's to re-order.
+	tracking: 2, // the exposed close-vowel active-open (formant-tracking) hazard, co-equal with the cover (H2, Dann 2026-07-22). PROVISIONAL rank.
 	passaggio: 3,
 	timbre: 4,
 	sustain: 5
@@ -260,6 +261,7 @@ function countKinds(detected: WatchEntry[]): Record<WatchKind, number> {
 		range: 0,
 		crossing: 0,
 		cover: 0,
+		tracking: 0,
 		passaggio: 0,
 		timbre: 0,
 		sustain: 0
@@ -297,7 +299,7 @@ function isAdviceBearing(_kind: WatchKind): boolean {
  */
 function isIncluded(kinds: WatchKind[], counts: Record<WatchKind, number>): boolean {
 	// Clause 3 — a hazard (the [o]→[ɑ] cover): always, regardless of frequency.
-	if (kinds.includes('cover')) return true;
+	if (kinds.includes('cover') || kinds.includes('tracking')) return true;
 	// Clause 1 — a markup-invisible fact: always.
 	if (kinds.some((k) => ALWAYS_KINDS.has(k))) return true;
 	// Clause 4 — stacking: two or more flagged kinds on one note.
@@ -396,9 +398,13 @@ export function buildWatchList(
 		// Clause 3 (§A.149; §A.185) — the [o]→[ɑ] cover hazard: the engine's
 		// content-free exposure forecast (close timbre + at-or-above ceiling +
 		// long sustain; §A.183), carrying a resolved hazard advice, and not itself
-		// a crossing (the crossing kind already covers that). Advice appends at render.
+		// a crossing (the crossing kind already covers that). Advice appends at
+		// render. The [o]→[ɑ] Russian cover is its own kind; every other exposed
+		// close vowel is the general active-open (formant-tracking) hazard (H2,
+		// Dann 2026-07-22). Local vowel split; promote to a resolver-stamped
+		// routing tag if more higher-voice exposure cases land.
 		if (a.sustainedCeilingExposure === true && !a.crossing && a.vowelModification?.register === 'hazard')
-			kinds.push('cover');
+			kinds.push(a.vowel === 'o' ? 'cover' : 'tracking');
 
 		if (kinds.length === 0) continue; // silence is the feature (§7.3 / §1)
 
@@ -528,9 +534,18 @@ export function watchEntryLine(entry: WatchEntry): string {
 		case 'cover': {
 			// CLOSED (Dann, 2026-07-22): the exposed-sustain hazard line; the
 			// resolved [o]→[ɑ] advice APPENDS when present (§A.168; additive,
-			// ruling B). The only clause-3 hazard is the [o] cover, so v = /o/.
+			// ruling B). Detection routes only the [o] cover here, so v = /o/; H2's
+			// active-open hazard is the separate 'tracking' kind, below.
 			const exposed = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
 			return entry.advice ? `${exposed} ${entry.advice}` : exposed;
+		}
+		case 'tracking': {
+			// CLOSED (Dann, 2026-07-22): the exposed close-vowel active-open
+			// (formant-tracking) hazard line; the resolved articulatory advice
+			// APPENDS when present (§A.168; additive, ruling B). Vowel-agnostic: it
+			// names whatever close vowel triggered it, unlike the [o]-only cover.
+			const exposedTrack = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
+			return entry.advice ? `${exposedTrack} ${entry.advice}` : exposedTrack;
 		}
 		case 'passaggio': // APPROVED §7.5
 			return entry.word

@@ -64,20 +64,30 @@ interface AdviceCase {
 	readonly id: string;
 	/** The register this case emits (§A.159). */
 	readonly register: Register;
-	/** The operative sung vowel (IPA) this case advises on. */
-	readonly sourceVowel: string;
+	/**
+	 * The operative sung vowel (IPA) this case advises on, or omitted for a
+	 * VOWEL-AGNOSTIC case that keys on the circumstance, not the vowel (H2, Dann
+	 * 2026-07-22); documentation only, since `matches` carries the predicate.
+	 */
+	readonly sourceVowel?: string;
 	/**
 	 * The SOURCED target vowel (IPA) the pedagogue prescribes: what the singer is
 	 * told to lean toward. The sourced target governs the shipped advice (Dann,
 	 * 2026-07-21), even where the general engine's computed target would differ.
+	 * Omitted for an ARTICULATORY case, whose sourced fix is a manoeuvre (open,
+	 * drop the jaw), not a vowel substitution, and which names no target (H2).
 	 */
-	readonly sourcedTarget: string;
+	readonly sourcedTarget?: string;
 	/** The internal provenance record, verified on the source; never printed. */
 	readonly citation: string;
 	/** Does this event trigger the case? Pure, side-effect-free. */
 	matches(ev: AnalyzedEvent): boolean;
-	/** The sourced advice copy, given the target vowel to lean toward. */
-	copy(target: string): string;
+	/**
+	 * The sourced advice copy. Receives the operative sung vowel and, for a
+	 * named-target case, the target vowel to lean toward (`undefined` for an
+	 * articulatory case).
+	 */
+	copy(vowel: string, target?: string): string;
 }
 
 /**
@@ -113,7 +123,7 @@ const I_CROSSING: AdviceCase = {
 	sourcedTarget: 'ɪ',
 	citation: MITTON_I_TO_LAX_I_CITATION,
 	matches: (ev) => ev.crossing === true && ev.vowel === 'i',
-	copy: (target) =>
+	copy: (_vowel, target) =>
 		`You may find it helpful to relax the jaw and lean it toward /${target}/, giving it a touch more space, which lifts your first resonance clear of the pitch.`
 };
 
@@ -159,8 +169,51 @@ const O_COVER: AdviceCase = {
 	sourcedTarget: 'ɑ',
 	citation: MITTON_O_COVER_CITATION,
 	matches: (ev) => ev.vowel === 'o' && ev.sustainedCeilingExposure === true,
-	copy: (target) =>
+	copy: (_vowel, target) =>
 		`You may find it helpful to allow the vowel to open and darken toward /${target}/; that is a more comfortable option than a close /o/ this high.`
+};
+
+/**
+ * SOURCED (Godin & Howell 2015, Opus-verified on the rendered poster,
+ * 2026-07-22). The internal provenance record for the exposed close-vowel
+ * active-open (formant-tracking) advice, never printed. The poster's fix is
+ * ARTICULATORY and names no target vowel: a close vowel carried above its first
+ * resonance is opened by dropping the jaw so fR1 rises to track fo (the
+ * fundamental). Quoted verbatim in the poster's own "F1"/"H1" notation; our own
+ * usage is fR1/fo (§A.164/§A.165). Bozeman KVP2 formant tracking (P4, p.96;
+ * glossary, p.141) joins this once its pages are re-verified.
+ */
+const GODIN_HOWELL_TRACKING_CITATION =
+	'Godin & Howell 2015, "Setting Vowels in the Female Secondo Passaggio" (New England ' +
+	'Conservatory, poster), Brahms "Immer Leiser" analysis and Fig. 9: vowels carried above ' +
+	'their first formant location "will only function if F1 is raised to track H1. To accomplish ' +
+	'this, Ms. Godin drops her jaw." Opus-verified on the rendered poster, 2026-07-22. Bozeman ' +
+	'KVP2 formant tracking (P4 p.96; glossary p.141) to be added on page re-verification.';
+
+/**
+ * The exposed close-vowel active-open (formant-tracking) case (H2; Dann,
+ * 2026-07-22). VOWEL-AGNOSTIC: it keys on the CIRCUMSTANCE, not the vowel,
+ * because the fix (open, drop the jaw, raise fR1 to track fo) is the mechanism,
+ * not a per-vowel substitution. Fires on the engine's content-free exposure
+ * forecast (close timbre + at-or-above ceiling + long sustain; §A.183), and not
+ * on a crossing (the [i] crossing case and the crossing kind cover that). A
+ * hazard (§A.159): the fix is offered, no target vowel named. Ordered AFTER the
+ * crossing and the cover in `ADVICE_CASES`, so [i] stays the crossing and [o]
+ * stays the Russian cover; this catches every other exposed close vowel.
+ *
+ * The APPROVED copy is Dann's (2026-07-22): the forecast-not-declare hedge; it
+ * names the sung vowel it fires on (no target vowel); a semicolon, not an
+ * em-dash, for the nested thought; "first resonance" not "first formant"
+ * (§A.164). "Raising to the pitch" is formant tracking of fo in lay terms, the
+ * opposite direction to the [i] crossing's "clear of the pitch".
+ */
+const OPEN_TRACKING: AdviceCase = {
+	id: 'exposed-close-vowel-open-tracking',
+	register: 'hazard',
+	citation: GODIN_HOWELL_TRACKING_CITATION,
+	matches: (ev) => ev.sustainedCeilingExposure === true && ev.crossing !== true,
+	copy: (vowel) =>
+		`You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /${vowel}/ squeezed this high.`
 };
 
 /**
@@ -168,7 +221,9 @@ const O_COVER: AdviceCase = {
  * seam for the general engine and per-voice pedagogy (§A.162, build order §C
  * items 3–4). `[i]→[ɪ]` (crossing) and `[o]→[ɑ]` (the exposed-sustain cover).
  */
-const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, O_COVER];
+// OPEN_TRACKING is the general, vowel-agnostic articulatory case; it MUST come
+// last so the specific named-target cases (crossing, cover) match first (H2).
+const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, O_COVER, OPEN_TRACKING];
 
 /**
  * Populate `vowelModification` on every event a sourced case matches, returning
@@ -198,11 +253,17 @@ export function resolveAdvice(analyzed: AnalyzedScore): AnalyzedScore {
 			events[id] = ev;
 			continue;
 		}
-		const computed = modificationTarget(ev.vowel, analyzed.calibrationSnapshot);
-		const target = computed?.vowel === hit.sourcedTarget ? computed.vowel : hit.sourcedTarget;
+		// The SOURCED target governs (§A.176); the engine's computed target is read
+		// and confirmed for a named-target case but never overrides the source. An
+		// ARTICULATORY case (no `sourcedTarget`) names no vowel to lean toward (H2).
+		let target: string | undefined;
+		if (hit.sourcedTarget !== undefined) {
+			const computed = modificationTarget(ev.vowel, analyzed.calibrationSnapshot);
+			target = computed?.vowel === hit.sourcedTarget ? computed.vowel : hit.sourcedTarget;
+		}
 		events[id] = {
 			...ev,
-			vowelModification: { text: hit.copy(target), citation: hit.citation, register: hit.register }
+			vowelModification: { text: hit.copy(ev.vowel, target), citation: hit.citation, register: hit.register }
 		};
 	}
 	return { ...analyzed, events };
