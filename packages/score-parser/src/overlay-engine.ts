@@ -21,6 +21,11 @@
  *     (2·fo < fR1), `'close'` when above.
  *   - **crossing** = the sung fundamental fo sits within a semitone of fR1
  *     itself (rare for the low male voice, routine for treble voices).
+ *   - **aboveFirstResonance** = fo sits above fR1 (fo > fR1), the whoop side
+ *     of the crossing. Distinct from `timbre` (which turns an octave lower, at
+ *     2·fo = fR1) and from `crossing` (the semitone band at fR1). Content-free;
+ *     the advice resolver reads it to tell the whoop regime from the
+ *     turned-over-but-below-crossing regime (§A.190).
  *
  * The Shane↔Ilya seam: the operative sung vowel per event is supplied by
  * the caller through `vowelForEvent` (app-side, Ilya's `processText`
@@ -162,6 +167,13 @@ export function analyzeScore(
     // Crossing: fo within a semitone of fR1 itself.
     const crossing = Math.abs(centsBetween(pitchHz, fR1)) <= CROSSING_TOLERANCE_CENTS;
 
+    // Ladder fact: fo above fR1 (the whoop side of the crossing). Content-free
+    // (§A.190). The advice resolver reads it to separate the whoop regime (open
+    // and let fR1 track fo) from the turned-over-but-below-crossing regime (the
+    // male turnover case). Its exact boundary is unshared with the crossing
+    // cases, which own the ±semitone band via `crossing`.
+    const aboveFirstResonance = pitchHz > fR1;
+
     // Positional facts. Undefined means not assessed: the profile carried no
     // passaggio or no range, so no claim, positive or negative, is made.
     const inPassaggio =
@@ -210,6 +222,7 @@ export function analyzeScore(
       timbre,
       turningPitch: hzToPitch(turningHz),
       crossing,
+      aboveFirstResonance,
       phonationBreak: false, // set by the diction layer / correction UI
       ...(inPassaggio !== undefined ? { inPassaggio } : {}),
       ...(rangeStatus !== undefined ? { rangeStatus } : {}),

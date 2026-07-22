@@ -136,6 +136,19 @@ export interface AnalyzedEvent {
   /** A forecast fR1/fo crossing (the sung fundamental sits within a semitone of fR1). Red squircle. */
   crossing: boolean;
 
+  /**
+   * Content-free ladder fact: the sung fundamental fo sits ABOVE the vowel's
+   * first resonance fR1 (fo > fR1), the whoop side of the crossing. Distinct
+   * from `crossing` (fo within a semitone of fR1) and from `timbre` (which
+   * turns an octave lower, at 2·fo = fR1). Names no vowel and prescribes
+   * nothing; the advice resolver reads it to separate the whoop regime (open
+   * and let fR1 track fo) from the turned-over-but-below-crossing regime, so
+   * `OPEN_TRACKING` fires only on the former and the male turnover case only on
+   * the latter (§A.190). Always assessed (an event exists only where fR1 is
+   * known), so non-optional, like `timbre`/`crossing`.
+   */
+  aboveFirstResonance: boolean;
+
   // ── Diction mark (Grayson; Dann's '#') ──
   /**
    * Intentional legato interruption on the first note of the pair, for

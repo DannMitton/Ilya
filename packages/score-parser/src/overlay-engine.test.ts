@@ -120,6 +120,12 @@ describe('overlay engine: analyzeScore', () => {
     expect(analyzed.events.n3.crossing).toBe(true); // 587 vs 600 (≈ −38 cents)
   });
 
+  it('flags aboveFirstResonance when fo sits above fR1 (the whoop side)', () => {
+    expect(analyzed.events.n1.aboveFirstResonance).toBe(false); // E3 165 < fR1 600 ('a')
+    expect(analyzed.events.n2.aboveFirstResonance).toBe(true); // A4 440 > fR1 300 ('i')
+    expect(analyzed.events.n3.aboveFirstResonance).toBe(false); // D5 587 < fR1 600 ('a')
+  });
+
   it('marks passaggio position (D3–G3 band)', () => {
     expect(analyzed.events.n1.inPassaggio).toBe(true); // E3 165 in [147,196]
     expect(analyzed.events.n2.inPassaggio).toBe(false); // A4 440
