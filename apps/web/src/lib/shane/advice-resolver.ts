@@ -118,11 +118,57 @@ const I_CROSSING: AdviceCase = {
 };
 
 /**
- * The sourced advice cases, in match order (first match wins). v1: one case.
- * The extension seam for the general engine and per-voice pedagogy (§A.162,
- * build order §C items 3–4).
+ * SOURCED (§A.185, Opus-verified on the pages, 2026-07-21). The internal
+ * provenance record for the `[o]→[ɑ]` cover advice, never printed. The cover is
+ * MITTON's own synthesis (§6.2.5, via his §3.2.4 cover theory after
+ * Doscher/Bozeman), NOT Grayson's (Grayson's `/o/` diction target is the
+ * diphthong `[oːʌ]`, and his high-note `[ɑ]` is universal, not Russian-specific).
+ * The dark, backed character of the `[ɑ]` target is grounded in the backed
+ * articulation of sung Russian `/o/` (Grayson 2012, the sung `/o/` "drawn back
+ * toward the pharynx") and Mitton's dark-a-dominant repertoire, NOT in the
+ * "basis of articulation" (a spoken-language descriptor, neutral for Russian);
+ * corroborated by Kochetov (U of T phonetician, DMA-recital note, 2016). Cite
+ * E4, not the prose typo "E3" (§A.180).
  */
-const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING];
+const MITTON_O_COVER_CITATION =
+	'Mitton 2020, Sung Russian for the Low Male Voice Classical Singer (Univ. of Toronto DMA), ' +
+	'§6.2.5 (Kabalevsky Op. 52 no. 5, mm. 69–70): the LMV "may find it easier to modify the ' +
+	'climactic [o] vowel ... toward [ɑ]" (E4, the range ceiling; the prose "E3" is a typo, §A.180), ' +
+	'via §3.2.4 on Cover. Dark/backed target grounded in Grayson 2012 (sung Russian [o] drawn back ' +
+	'toward the pharynx) and Mitton Ch. 6 (dark-a-dominant repertoire); NOT the basis of articulation ' +
+	'(§A.185). Corroborated by A. Kochetov (U of T), DMA-recital note, 2016.';
+
+/**
+ * The `[o]→[ɑ]` cover case (§A.185, RULED Option B trigger §A.179). Fires on the
+ * engine's content-free exposure forecast: a `close`-timbre `[o]` carried at or
+ * above the singer's declared ceiling AND sustained (`ev.sustainedCeilingExposure`,
+ * the three-gate predicate score-parser computes; §A.183). A hazard (§A.159): a
+ * fix is offered. The ADVICE is voice- and language-specific and sourced, so the
+ * predicate is narrow (`vowel === 'o'` here); the watch list surfaces the same
+ * exposure via a hazard kind (clause 3, §A.149).
+ *
+ * The APPROVED copy is Dann's (2026-07-22), templated on the target vowel: the
+ * forecast-not-declare hedge "you may find it helpful"; slashes to match the
+ * watch line; a semicolon (not an em-dash) for the nested thought. For the
+ * sourced target `ɑ` it renders Dann's approved string verbatim.
+ */
+const O_COVER: AdviceCase = {
+	id: 'o-to-dark-a-cover',
+	register: 'hazard',
+	sourceVowel: 'o',
+	sourcedTarget: 'ɑ',
+	citation: MITTON_O_COVER_CITATION,
+	matches: (ev) => ev.vowel === 'o' && ev.sustainedCeilingExposure === true,
+	copy: (target) =>
+		`You may find it helpful to allow the vowel to open and darken toward /${target}/; that is a more comfortable option than a close /o/ this high.`
+};
+
+/**
+ * The sourced advice cases, in match order (first match wins). The extension
+ * seam for the general engine and per-voice pedagogy (§A.162, build order §C
+ * items 3–4). `[i]→[ɪ]` (crossing) and `[o]→[ɑ]` (the exposed-sustain cover).
+ */
+const ADVICE_CASES: readonly AdviceCase[] = [I_CROSSING, O_COVER];
 
 /**
  * Populate `vowelModification` on every event a sourced case matches, returning

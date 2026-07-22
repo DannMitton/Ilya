@@ -94,7 +94,7 @@ export const WATCH_HEADER = 'Places to watch';
 // ── The model ───────────────────────────────────────────────────────
 
 /** A watch kind, in severity order; its index+1 is not the tier (see TIER_OF). */
-export type WatchKind = 'range' | 'crossing' | 'passaggio' | 'timbre' | 'sustain';
+export type WatchKind = 'range' | 'crossing' | 'cover' | 'passaggio' | 'timbre' | 'sustain';
 
 /** The markup-visible marks the adaptive dial gates on rarity (§A.149 clause 2). */
 const MARKUP_VISIBLE: ReadonlySet<WatchKind> = new Set(['crossing', 'timbre']);
@@ -106,6 +106,7 @@ const ALWAYS_KINDS: ReadonlySet<WatchKind> = new Set(['range', 'passaggio', 'sus
 const TIER_OF: Record<WatchKind, 1 | 2 | 3 | 4 | 5> = {
 	range: 1,
 	crossing: 2,
+	cover: 2, // the [o]→[ɑ] cover hazard, co-equal with a crossing (§A.185). PROVISIONAL rank, Dann's to re-order.
 	passaggio: 3,
 	timbre: 4,
 	sustain: 5
@@ -258,6 +259,7 @@ function countKinds(detected: WatchEntry[]): Record<WatchKind, number> {
 	const counts: Record<WatchKind, number> = {
 		range: 0,
 		crossing: 0,
+		cover: 0,
 		passaggio: 0,
 		timbre: 0,
 		sustain: 0
@@ -290,12 +292,12 @@ function isAdviceBearing(_kind: WatchKind): boolean {
 /**
  * The §A.149 adaptive inclusion rule. A note (by its detected kinds) earns a
  * line when ANY of the clauses hold. Clause 3 (a hazard, regardless of
- * frequency) is DEFERRED — its definition and its copy are both pending Dann
- * (§A.150, §B) — so it is not yet wired here; this implements clauses 1, 2,
- * and 4. When clause 3 is ruled, add its predicate (an open vowel forced
- * near/above its fR1) and copy.
+ * frequency) is now WIRED (§A.185, RULED Option A): the `[o]→[ɑ]` cover, the
+ * exposed-sustain hazard, always earns a line. Clauses 1, 2, and 4 unchanged.
  */
 function isIncluded(kinds: WatchKind[], counts: Record<WatchKind, number>): boolean {
+	// Clause 3 — a hazard (the [o]→[ɑ] cover): always, regardless of frequency.
+	if (kinds.includes('cover')) return true;
 	// Clause 1 — a markup-invisible fact: always.
 	if (kinds.some((k) => ALWAYS_KINDS.has(k))) return true;
 	// Clause 4 — stacking: two or more flagged kinds on one note.
@@ -390,6 +392,13 @@ export function buildWatchList(
 		// "on its turning pitch" = the same semitone (enharmonic-safe via MIDI).
 		if (isLongSustain(ev, parsed.tempoMarkings) && pitchToMidi(ev.pitch) === pitchToMidi(a.turningPitch))
 			kinds.push('sustain');
+
+		// Clause 3 (§A.149; §A.185) — the [o]→[ɑ] cover hazard: the engine's
+		// content-free exposure forecast (close timbre + at-or-above ceiling +
+		// long sustain; §A.183), carrying a resolved hazard advice, and not itself
+		// a crossing (the crossing kind already covers that). Advice appends at render.
+		if (a.sustainedCeilingExposure === true && !a.crossing && a.vowelModification?.register === 'hazard')
+			kinds.push('cover');
 
 		if (kinds.length === 0) continue; // silence is the feature (§7.3 / §1)
 
@@ -515,6 +524,13 @@ export function watchEntryLine(entry: WatchEntry): string {
 			// alone (ruling B, additive, Dann 2026-07-21).
 			const whoop = `Bar ${bar}: your ${v} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.`;
 			return entry.advice ? `${whoop} ${entry.advice}` : whoop;
+		}
+		case 'cover': {
+			// CLOSED (Dann, 2026-07-22): the exposed-sustain hazard line; the
+			// resolved [o]→[ɑ] advice APPENDS when present (§A.168; additive,
+			// ruling B). The only clause-3 hazard is the [o] cover, so v = /o/.
+			const exposed = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
+			return entry.advice ? `${exposed} ${entry.advice}` : exposed;
 		}
 		case 'passaggio': // APPROVED §7.5
 			return entry.word

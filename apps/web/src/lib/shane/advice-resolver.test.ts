@@ -91,6 +91,37 @@ describe('resolveAdvice — the [i]→[ɪ] crossing (v1, §A.161)', () => {
 	});
 });
 
+describe('resolveAdvice — the [o]→[ɑ] cover (§A.185)', () => {
+	it('populates the cover advice on a sustained close [o] at the ceiling, tagged hazard', () => {
+		// [o] fR1 489 → turning ≈ B3, so E4 reads close; E4 is the ceiling; the
+		// fermata makes it a long sustain. All three exposure gates hold (§A.183).
+		const events: VocalLineEvent[] = [{ ...note('n1', P('E', 4)), fermata: {} }];
+		const snap: VoiceProfileSnapshot = {
+			fR1: { o: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		const analyzed = analyzeScore(scoreOf(events), snap, resolverOf({ n1: 'o' }), {
+			generatedAt: '2020-01-01T00:00:00.000Z'
+		});
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.n1.crossing).toBe(false); // a cover, not a crossing
+		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
+		expect(mod?.register).toBe('hazard');
+		expect(mod?.text).toBe(
+			'You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.'
+		);
+		expect(mod?.citation).toContain('Mitton 2020');
+		expect(mod?.citation).toContain('§6.2.5');
+	});
+
+	it('stays silent on a close [o] that is not exposed (mid-range)', () => {
+		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { o: 489 }, { n1: 'o' }));
+		expect(out.events.n1.sustainedCeilingExposure).toBe(false); // A4 well below the C7 ceiling
+		expect(out.events.n1.vowelModification).toBeUndefined();
+	});
+});
+
 describe('resolveAdvice — purity and idempotence', () => {
 	it('does not mutate the input analysis', () => {
 		const analyzed = analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' });

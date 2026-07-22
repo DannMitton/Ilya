@@ -22,6 +22,7 @@ import {
 	type VowelResolver
 } from '@ilya/score-parser';
 import { WATCH_HEADER, buildWatchList, watchEntryLine } from './watchlist';
+import { resolveAdvice } from './advice-resolver';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 type SylType = SyllableInfo['type'];
@@ -381,5 +382,39 @@ describe('buildWatchList — transposition wiring (§A.151)', () => {
 		const analyzed = analyze(parsed, snap, { n1: 'a' });
 		const wl = buildWatchList(parsed, analyzed, 1);
 		expect(watchEntryLine(wl.entries[0])).toBe('Bar 1 rises above the range you gave.');
+	});
+});
+
+describe('buildWatchList: the [o]→[ɑ] cover (clause 3, §A.185)', () => {
+	it('renders the cover hazard line with the advice appended', () => {
+		expect(
+			watchEntryLine({
+				eventId: 'e',
+				tier: 2,
+				kinds: ['cover'],
+				bar: '70',
+				vowel: 'o',
+				advice:
+					'You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.',
+				density: 1
+			})
+		).toBe(
+			'Bar 70: the /o/ at the top of your range and sustained here is an exposed spot where the vowel can tighten. You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.'
+		);
+	});
+
+	it('always earns a line: a sustained close [o] at the ceiling, advice appended', () => {
+		const parsed = scoreOf([note('n1', { pitch: P('E', 4), fermata: true })]);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { o: 489 },
+			range: { lowest: P('C', 2), highest: P('E', 4) },
+			tessitura: { low: P('C', 3), high: P('C', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { n1: 'o' }));
+		expect(analyzed.events.n1.sustainedCeilingExposure).toBe(true);
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', kinds: ['cover'] });
+		expect(watchEntryLine(wl.entries[0])).toContain('open and darken toward /ɑ/');
 	});
 });
