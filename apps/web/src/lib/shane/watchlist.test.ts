@@ -346,6 +346,31 @@ describe('buildWatchList — adaptive dial (§A.149)', () => {
 			buildWatchList(p4, analyze(p4, snap, { c0: 'i', c1: 'i', c2: 'i', c3: 'i' })).entries
 		).toHaveLength(0);
 	});
+
+	it('an exposed [i] crossing always surfaces, even when routine crossings recede (H2 refinement)', () => {
+		// fR1 440 → A4 is a crossing; ceiling A4 → an A4 [i] sits at the ceiling.
+		// Four crossings (above the rarity ceiling) so routine ones recede; the one
+		// with a fermata is also sustained-at-ceiling (exposed) and must stay.
+		const events = [
+			note('c0', { pitch: P('A', 4) }),
+			note('c1', { pitch: P('A', 4), measureIndex: 1 }),
+			note('c2', { pitch: P('A', 4), measureIndex: 2 }),
+			note('exposed', { pitch: P('A', 4), measureIndex: 3, fermata: true })
+		];
+		const parsed = scoreOf(events);
+		const snap: VoiceProfileSnapshot = {
+			fR1: { i: 440 },
+			range: { lowest: P('C', 3), highest: P('A', 4) },
+			tessitura: { low: P('C', 4), high: P('A', 4) }
+		};
+		const analyzed = resolveAdvice(analyze(parsed, snap, { c0: 'i', c1: 'i', c2: 'i', exposed: 'i' }));
+		expect(analyzed.events.exposed.sustainedCeilingExposure).toBe(true);
+		expect(analyzed.events.c0.sustainedCeilingExposure).toBe(false);
+		const wl = buildWatchList(parsed, analyzed);
+		expect(wl.entries).toHaveLength(1);
+		expect(wl.entries[0].eventId).toBe('exposed');
+		expect(wl.entries[0].kinds).toEqual(['crossing']); // still a crossing, not tracking
+	});
 });
 
 describe('buildWatchList — transposition wiring (§A.151)', () => {

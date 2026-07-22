@@ -363,6 +363,11 @@ export function buildWatchList(
 
 	// Pass 1 — detect every note's candidate kinds (the pre-dial population).
 	const detected: WatchEntry[] = [];
+	// An exposed crossing (a crossing that also trips the exposure gate) is a
+	// hazard grade of crossing: it must always surface, even when routine
+	// crossings recede on the rarity dial (H2 refinement, Dann 2026-07-22). The
+	// crossing predicate and its [i]→[ɪ] advice are unchanged; only inclusion is.
+	const exposedCrossings = new Set<string>();
 
 	for (const [id, a] of Object.entries(analyzed.events)) {
 		const ev = eventById.get(id);
@@ -375,6 +380,7 @@ export function buildWatchList(
 
 		// Tier 2 — the fundamental meets the first resonance. SOURCED §7.2.
 		if (a.crossing) kinds.push('crossing');
+		if (a.crossing === true && a.sustainedCeilingExposure === true) exposedCrossings.add(id);
 
 		// Tier 3 — within ±1 semitone of EITHER declared edge; interior quiet.
 		// SOURCED §A.126. Only when the singer declared both edges.
@@ -439,7 +445,9 @@ export function buildWatchList(
 	// keep only the notes the inclusion rule earns; the rest stay with the
 	// staff markup (silence is the feature).
 	const kindNoteCounts = countKinds(detected);
-	const included = detected.filter((e) => isIncluded(e.kinds, kindNoteCounts));
+	// An exposed crossing always earns its line (a hazard); routine crossings
+	// stay rarity-gated by isIncluded (H2 refinement, Dann 2026-07-22).
+	const included = detected.filter((e) => exposedCrossings.has(e.eventId) || isIncluded(e.kinds, kindNoteCounts));
 
 	// Sort: tier asc → stacking (more kinds first) → density asc (more acute
 	// first) → score order. SOURCED §7.2 + the density ruling (within-tier).
