@@ -4,3 +4,11 @@ _to_delete/
 _unzip_tmp/
 robustness-samples/
 _rhythm_spike/recognized.b64
+
+# Worker staging artifacts. A delivery tarball is assembled, unpacked, and then
+# superseded by the loose files; the tarball is a stale generation of content
+# that output/ already ignores. Measured 2026-07-27: 46 of 53 files inside
+# _e16-render-fidelity-delivery.tar.gz differed from their on-disk successors.
+_*.tar.gz
+testwrite.txt
+.DS_Store
