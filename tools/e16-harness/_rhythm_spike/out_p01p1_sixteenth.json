@@ -1,0 +1,1111 @@
+{
+  "pieceId": "mussorgsky---sunless-01---within-four-walls",
+  "clef": {
+    "sign": "F",
+    "line": 4
+  },
+  "keySignature": {
+    "fifths": 2
+  },
+  "verses": [
+    {
+      "verseNumber": 1,
+      "notes": [
+        {
+          "id": "r1-0-1-780",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r1-1-4-898",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r1-1-2-1016",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r1-3-4-1134",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r1-1-1-1252",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 53
+        },
+        {
+          "id": "r1-5-4-1370",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 53
+        },
+        {
+          "id": "r1-11-8-1446",
+          "type": "rest",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r2-0-1-1548",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 59
+        },
+        {
+          "id": "r2-1-4-1666",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r2-1-2-1784",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 55
+        },
+        {
+          "id": "r2-5-8-1860",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r2-3-4-1937",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 61
+        },
+        {
+          "id": "r2-9-8-2132",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "midi": 57
+        },
+        {
+          "id": "r2-19-16-2183",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 19,
+            "denominator": 16
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "midi": 57
+        },
+        {
+          "id": "r2-5-4-2261",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 57
+        },
+        {
+          "id": "r2-11-8-2355",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r3-0-1-403",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r3-1-4-512",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r3-1-2-610",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 50
+        },
+        {
+          "id": "r3-3-4-708",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 57
+        },
+        {
+          "id": "r3-9-8-870",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 52
+        },
+        {
+          "id": "r3-5-4-935",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r4-0-1-1084",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r4-1-4-1182",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 50
+        },
+        {
+          "id": "r4-1-2-1280",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 49
+        },
+        {
+          "id": "r4-3-4-1378",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 53
+        },
+        {
+          "id": "r4-9-8-1540",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 50
+        },
+        {
+          "id": "r4-5-4-1640",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 50
+        },
+        {
+          "id": "r4-11-8-1704",
+          "type": "rest",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r5-0-1-1791",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r5-1-4-1889",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 54
+        },
+        {
+          "id": "r5-3-8-1952",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r5-1-2-2017",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r5-3-4-2115",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 62
+        },
+        {
+          "id": "r5-9-8-2240",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 56
+        },
+        {
+          "id": "r5-5-4-2305",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 56
+        },
+        {
+          "id": "r5-11-8-2368",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r6-0-1-365",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r6-1-4-463",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r6-1-2-560",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r6-3-4-665",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 58
+        },
+        {
+          "id": "r6-9-8-790",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 50
+        },
+        {
+          "id": "r6-5-4-854",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 50
+        },
+        {
+          "id": "r6-11-8-944",
+          "type": "rest",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r7-0-1-1031",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r7-1-4-1129",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 49
+        },
+        {
+          "id": "r7-1-2-1266",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 50
+        },
+        {
+          "id": "r7-3-4-1387",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 54
+        },
+        {
+          "id": "r7-1-1-1485",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 50
+        },
+        {
+          "id": "r7-9-8-1548",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r7-5-4-1612",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r7-11-8-1676",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 49
+        },
+        {
+          "id": "r8-0-1-1763",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r8-1-4-1860",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 49
+        },
+        {
+          "id": "r8-1-2-1958",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 50
+        },
+        {
+          "id": "r8-3-4-2055",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 57
+        },
+        {
+          "id": "r8-9-8-2216",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 54
+        },
+        {
+          "id": "r8-5-4-2305",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 54
+        },
+        {
+          "id": "r8-11-8-2368",
+          "type": "rest",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r9-0-1-390",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r9-1-4-484",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r9-1-2-577",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 53
+        },
+        {
+          "id": "r9-3-4-675",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r9-1-1-769",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 57
+        },
+        {
+          "id": "r9-5-4-862",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r10-0-1-1037",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 60
+        },
+        {
+          "id": "r10-1-4-1139",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r10-1-2-1256",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 60
+        },
+        {
+          "id": "r10-3-4-1368",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "midi": 56
+        },
+        {
+          "id": "r10-9-8-1579",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 56
+        },
+        {
+          "id": "r10-5-4-1664",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 56
+        },
+        {
+          "id": "r10-11-8-1724",
+          "type": "rest",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r11-0-1-1830",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r11-1-4-1923",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 52
+        },
+        {
+          "id": "r11-1-2-2016",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        },
+        {
+          "id": "r11-3-4-2110",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 58
+        },
+        {
+          "id": "r11-1-1-2203",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "midi": 55
+        },
+        {
+          "id": "r11-9-8-2270",
+          "type": "rest",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          }
+        },
+        {
+          "id": "r11-5-4-2339",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "midi": 55
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+import { readFileSync } from 'node:fs';
+import { scoreVerse } from './scorer_local.ts';
+const gt = JSON.parse(readFileSync(new URL('../output/mussorgsky---sunless-01---within-four-walls/ground-truth.json', import.meta.url), 'utf8'));
+const rec = JSON.parse(readFileSync(new URL('./recognized.json', import.meta.url), 'utf8'));
+// page 1 = measures 0..11. Filter truth verse notes to that span.
+const truth = { ...gt, verses: gt.verses.map((v:any)=>({ ...v, notes: v.notes.filter((n:any)=>n.measureIndex<=11) })) };
+const recVerse = rec.verses[0];
+const vs = scoreVerse(truth as any, 1, recVerse);
+const n = vs.notes;
+const f = (x:number)=> (x==null? 'n/a' : x.toFixed(4));
+const F1 = (p:number,r:number)=> (p+r===0?0:2*p*r/(p+r));
+console.log('=== HARNESS SCORER: piece 01 page 1 (measures 0-11), verse 1 ===');
+console.log('truthNoteCount      :', n.truthNoteCount);
+console.log('recognizedNoteCount :', n.recognizedNoteCount);
+console.log('matchedCount        :', n.matchedCount);
+console.log('unmatchedTruth (miss):', n.unmatchedTruth);
+console.log('unmatchedRecognized (spurious):', n.unmatchedRecognized);
+console.log('--- RHYTHM ---');
+console.log('rhythmPrecision     :', f(n.rhythmPrecision));
+console.log('rhythmRecall        :', f(n.rhythmRecall));
+console.log('rhythmF1            :', f(F1(n.rhythmPrecision,n.rhythmRecall)));
+console.log('meanOnsetShift      :', f(n.meanOnsetShiftWholeNotes));
+console.log('meanDurationShift   :', f(n.meanDurationShiftWholeNotes));

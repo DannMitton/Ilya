@@ -1,0 +1,12 @@
+import { readFileSync } from 'node:fs';
+import { scoreVerse } from './scorer_local.ts';
+const gt = JSON.parse(readFileSync('gt_e264_v2.json','utf8'));
+const rec = JSON.parse(readFileSync('recognized_e264_v2.json','utf8'));
+const lo = 0, hi = 11;
+const truth = { ...gt, verses: gt.verses.map((v:any)=>({ ...v, notes: v.notes.filter((n:any)=>n.measureIndex>=lo && n.measureIndex<=hi) })) };
+const vs = scoreVerse(truth as any, 1, rec.verses[0]);
+const n = vs.notes;
+const f=(x:number)=>(x==null?'n/a':x.toFixed(4));
+const F1=(p:number,r:number)=>(p+r===0?0:2*p*r/(p+r));
+console.log(`truth=${n.truthNoteCount} recognized=${n.recognizedNoteCount} matched=${n.matchedCount} missed=${n.unmatchedTruth} spurious=${n.unmatchedRecognized}`);
+console.log(`  PITCH F1=${f(F1(n.pitchPrecision,n.pitchRecall))}   RHYTHM F1=${f(F1(n.rhythmPrecision,n.rhythmRecall))}`);

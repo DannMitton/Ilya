@@ -1,0 +1,12 @@
+import { readFileSync } from 'node:fs';
+import { scoreVerse } from './scorer_local.ts';
+const gt = JSON.parse(readFileSync(new URL('../output/mussorgsky---sunless-01---within-four-walls/ground-truth.json', import.meta.url),'utf8'));
+const rec = JSON.parse(readFileSync(new URL('./combined.json', import.meta.url),'utf8'));
+const truth = { ...gt, verses: gt.verses.map((v:any)=>({...v, notes: v.notes.filter((n:any)=>n.measureIndex<=11)})) };
+const vs = scoreVerse(truth as any, 1, rec.verses[0]);
+const n = vs.notes; const f=(x:number)=>x==null?'n/a':x.toFixed(4); const F1=(p:number,r:number)=>p+r===0?0:2*p*r/(p+r);
+console.log('=== HARNESS SCORER: piece 01 page 1 (m0-11) verse 1 — PITCH ===');
+console.log('truthNoteCount:',n.truthNoteCount,' recognizedNoteCount:',n.recognizedNoteCount,' matched:',n.matchedCount);
+console.log('pitchPrecision:',f(n.pitchPrecision),' pitchRecall:',f(n.pitchRecall),' pitchF1:',f(F1(n.pitchPrecision,n.pitchRecall)));
+console.log('meanPitchShiftSemitones:',f(n.meanPitchShiftSemitones));
+console.log('(rhythm still) rhythmF1:',f(F1(n.rhythmPrecision,n.rhythmRecall)));

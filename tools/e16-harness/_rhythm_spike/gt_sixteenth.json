@@ -1,0 +1,3991 @@
+{
+  "pieceId": "mussorgsky---sunless-01---within-four-walls",
+  "sourceMusxPath": "/sessions/confident-hopeful-albattani/mnt/Finale Files/Mussorgsky - Sunless 01 - Within four walls.musx",
+  "parser": {
+    "warnings": 0,
+    "errors": 0,
+    "errorDetail": []
+  },
+  "vocalPart": {
+    "partId": "P1",
+    "partName": "Bass"
+  },
+  "clef": {
+    "sign": "F",
+    "line": 4
+  },
+  "keySignature": {
+    "fifths": 2
+  },
+  "tempoMarkings": [
+    {
+      "measureIndex": 0,
+      "bpm": 82
+    },
+    {
+      "measureIndex": 13,
+      "bpm": 82
+    },
+    {
+      "measureIndex": 15,
+      "bpm": 82
+    }
+  ],
+  "sungVerseNumbers": [
+    1,
+    2
+  ],
+  "measureDurations": [
+    {
+      "index": 0,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 4
+      }
+    },
+    {
+      "index": 1,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 2,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 3,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 4,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 5,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 6,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 7,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 8,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 9,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 10,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 11,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 12,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 13,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 14,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 15,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 16,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    {
+      "index": 17,
+      "expectedDuration": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    }
+  ],
+  "verses": [
+    {
+      "verseNumber": 1,
+      "verseLabel": "Verse 1",
+      "notes": [
+        {
+          "id": "m1-0-1",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 0.75,
+          "midi": 57,
+          "syllableText": "\u041a\u043e\u043c",
+          "syllableType": "start"
+        },
+        {
+          "id": "m1-1-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1,
+          "midi": 57,
+          "syllableText": "\u043d\u0430\u0442",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m1-1-2",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.25,
+          "midi": 57,
+          "syllableText": "\u043a\u0430",
+          "syllableType": "end"
+        },
+        {
+          "id": "m1-3-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.5,
+          "midi": 58,
+          "syllableText": "\u0442\u0435\u0441",
+          "syllableType": "start"
+        },
+        {
+          "id": "m1-1-1",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.75,
+          "midi": 53,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m1-5-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2,
+          "midi": 53,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m1-11-8",
+          "type": "rest",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.125
+        },
+        {
+          "id": "m2-0-1",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 2.25,
+          "midi": 59,
+          "syllableText": "\u0442\u0438",
+          "syllableType": "start"
+        },
+        {
+          "id": "m2-1-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 2.5,
+          "midi": 55,
+          "syllableText": "\u0445\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m2-1-2",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.75,
+          "midi": 55,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m2-5-8",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.875
+        },
+        {
+          "id": "m2-3-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3,
+          "midi": 61,
+          "syllableText": "\u043c\u0438",
+          "syllableType": "start"
+        },
+        {
+          "id": "m2-9-8a",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "onsetAbsolute": 3.375,
+          "midi": 57,
+          "syllableText": "\u043b\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m2-9-8b",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 19,
+            "denominator": 16
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "onsetAbsolute": 3.4375,
+          "midi": 57,
+          "syllableType": "middle"
+        },
+        {
+          "id": "m2-5-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.5,
+          "midi": 57,
+          "syllableText": "\u044f;",
+          "syllableType": "end"
+        },
+        {
+          "id": "m2-11-8",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.625
+        },
+        {
+          "id": "m3-0-1",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 3.75,
+          "midi": 58,
+          "syllableText": "\u0442\u0435\u043d\u044c",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m3-1-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 4,
+          "midi": 52,
+          "syllableText": "\u043d\u0435",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m3-1-2",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 4.25,
+          "midi": 50,
+          "syllableText": "\u043f\u0440\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m3-3-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 4.5,
+          "midi": 57,
+          "syllableText": "\u0433\u043b\u044f\u0434",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m3-9-8",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 4.875,
+          "midi": 52,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m3-5-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5,
+          "midi": 52,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m4-0-1",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.25,
+          "midi": 55,
+          "syllableText": "\u0442\u0435\u043d\u044c",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m4-1-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.5,
+          "midi": 50,
+          "syllableText": "\u0431\u0435\u0437",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m4-1-2",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.75,
+          "midi": 49,
+          "syllableText": "\u043e\u0442",
+          "syllableType": "start"
+        },
+        {
+          "id": "m4-3-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6,
+          "midi": 53,
+          "syllableText": "\u0432\u0435\u0442",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m4-9-8",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.375,
+          "midi": 50,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m4-5-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.5,
+          "midi": 50,
+          "syllableText": "\u044f;",
+          "syllableType": "end"
+        },
+        {
+          "id": "m4-11-8",
+          "type": "rest",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.625
+        },
+        {
+          "id": "m5-0-1",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 6.75,
+          "midi": 57,
+          "syllableText": "\u0434\u0443",
+          "syllableType": "start"
+        },
+        {
+          "id": "m5-1-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7,
+          "midi": 54,
+          "syllableText": "\u043c\u0430",
+          "syllableType": "end"
+        },
+        {
+          "id": "m5-3-8",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.125
+        },
+        {
+          "id": "m5-1-2",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 7.25,
+          "midi": 57,
+          "syllableText": "\u0433\u043b\u0443",
+          "syllableType": "start"
+        },
+        {
+          "id": "m5-3-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.5,
+          "midi": 62,
+          "syllableText": "\u0431\u043e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m5-9-8",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.875,
+          "midi": 56,
+          "syllableText": "\u043a\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m5-5-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 8,
+          "midi": 56,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m5-11-8",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 8.125
+        },
+        {
+          "id": "m6-0-1",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.25,
+          "midi": 55,
+          "syllableText": "\u043f\u0435\u0441",
+          "syllableType": "start"
+        },
+        {
+          "id": "m6-1-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.5,
+          "midi": 55,
+          "syllableText": "\u043d\u044f",
+          "syllableType": "end"
+        },
+        {
+          "id": "m6-1-2",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.75,
+          "midi": 55,
+          "syllableText": "\u0443",
+          "syllableType": "start"
+        },
+        {
+          "id": "m6-3-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9,
+          "midi": 58,
+          "syllableText": "\u043d\u044b",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m6-9-8",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.375,
+          "midi": 50,
+          "syllableText": "\u043b\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m6-5-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.5,
+          "midi": 50,
+          "syllableText": "\u044f;",
+          "syllableType": "end"
+        },
+        {
+          "id": "m6-11-8",
+          "type": "rest",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.625
+        },
+        {
+          "id": "m7-0-1",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 9.75,
+          "midi": 52,
+          "syllableText": "\u0432\u00a0\u0431\u044c\u044e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m7-1-4",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10,
+          "midi": 49,
+          "syllableText": "\u0449\u0435\u043c",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m7-1-2",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10.25,
+          "midi": 50,
+          "syllableText": "\u0441\u044f",
+          "syllableType": "end"
+        },
+        {
+          "id": "m7-3-4",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10.5,
+          "midi": 54,
+          "syllableText": "\u0441\u0435\u0440\u0434",
+          "syllableType": "start"
+        },
+        {
+          "id": "m7-1-1",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 10.75,
+          "midi": 50,
+          "syllableText": "\u0446\u0435",
+          "syllableType": "end"
+        },
+        {
+          "id": "m7-9-8",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 10.875
+        },
+        {
+          "id": "m7-5-4",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 11
+        },
+        {
+          "id": "m7-11-8",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 11.125,
+          "midi": 49,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "start"
+        },
+        {
+          "id": "m8-0-1",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.25,
+          "midi": 52,
+          "syllableText": "\u0434\u0435\u0436",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-1-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.5,
+          "midi": 49,
+          "syllableText": "\u0434\u0430",
+          "syllableType": "end"
+        },
+        {
+          "id": "m8-1-2",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.75,
+          "midi": 50,
+          "syllableText": "\u0437\u0430",
+          "syllableType": "start"
+        },
+        {
+          "id": "m8-3-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12,
+          "midi": 57,
+          "syllableText": "\u0432\u0435\u0442",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-9-8",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.375,
+          "midi": 54,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-5-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.5,
+          "midi": 54,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m8-11-8",
+          "type": "rest",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.625
+        },
+        {
+          "id": "m9-0-1",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 12.75,
+          "midi": 58,
+          "syllableText": "\u0431\u044b\u0441\u0442",
+          "syllableType": "start"
+        },
+        {
+          "id": "m9-1-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13,
+          "midi": 52,
+          "syllableText": "\u0440\u044b\u0439",
+          "syllableType": "end"
+        },
+        {
+          "id": "m9-1-2",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.25,
+          "midi": 53,
+          "syllableText": "\u043f\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m9-3-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.5,
+          "midi": 55,
+          "syllableText": "\u043b\u0451\u0442",
+          "syllableType": "end"
+        },
+        {
+          "id": "m9-1-1",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.75,
+          "midi": 57,
+          "syllableText": "\u0437\u0430",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m9-5-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14,
+          "midi": 58,
+          "syllableText": "\u043c\u0433\u043d\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m10-0-1",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.25,
+          "midi": 60,
+          "syllableText": "\u0432\u0435",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-1-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.5,
+          "midi": 58,
+          "syllableText": "\u043d\u044c\u0435\u043c",
+          "syllableType": "end"
+        },
+        {
+          "id": "m10-1-2",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.75,
+          "midi": 60,
+          "syllableText": "\u043c\u0433\u043d\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m10-3-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15,
+          "midi": 56,
+          "syllableText": "\u0432\u0435",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-9-8",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.375,
+          "midi": 56,
+          "syllableText": "\u043d\u0438",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-5-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.5,
+          "midi": 56,
+          "syllableText": "\u044f;",
+          "syllableType": "end"
+        },
+        {
+          "id": "m10-11-8",
+          "type": "rest",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.625
+        },
+        {
+          "id": "m11-0-1",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 15.75,
+          "midi": 55,
+          "syllableText": "\u0432\u0437\u043e\u0440",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m11-1-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16,
+          "midi": 52,
+          "syllableText": "\u043d\u0435",
+          "syllableType": "start"
+        },
+        {
+          "id": "m11-1-2",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16.25,
+          "midi": 55,
+          "syllableText": "\u043f\u043e\u0434",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m11-3-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16.5,
+          "midi": 58,
+          "syllableText": "\u0432\u0438\u0436",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m11-1-1",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 16.75,
+          "midi": 55,
+          "syllableText": "\u043d\u044b\u0439",
+          "syllableType": "end"
+        },
+        {
+          "id": "m11-9-8",
+          "type": "rest",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 16.875
+        },
+        {
+          "id": "m11-5-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17,
+          "midi": 55,
+          "syllableText": "\u043d\u0430",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m12-0-1",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.25,
+          "midi": 52,
+          "syllableText": "\u0441\u0447\u0430",
+          "syllableType": "start"
+        },
+        {
+          "id": "m12-1-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.5,
+          "midi": 50,
+          "syllableText": "\u0441\u0442\u044c\u0435",
+          "syllableType": "end"
+        },
+        {
+          "id": "m12-1-2",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.75,
+          "midi": 52,
+          "syllableText": "\u0434\u0430",
+          "syllableType": "start"
+        },
+        {
+          "id": "m12-3-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18,
+          "midi": 58,
+          "syllableText": "\u043b\u0451",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m12-9-8",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.375,
+          "midi": 55,
+          "syllableText": "\u043a\u043e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m12-5-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.5,
+          "midi": 55,
+          "syllableText": "\u0435;",
+          "syllableType": "end"
+        },
+        {
+          "id": "m12-11-8",
+          "type": "rest",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.625
+        },
+        {
+          "id": "m13-0-1",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 18.75,
+          "midi": 58,
+          "syllableText": "\u043c\u043d\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m13-1-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 19,
+          "midi": 57,
+          "syllableText": "\u0433\u043e",
+          "syllableType": "end"
+        },
+        {
+          "id": "m13-1-2",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 19.25,
+          "midi": 55,
+          "syllableText": "\u0441\u043e\u043c",
+          "syllableType": "start"
+        },
+        {
+          "id": "m13-3-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 19.5,
+          "midi": 58,
+          "syllableText": "\u043d\u0435",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m13-9-8",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 19.875,
+          "midi": 57,
+          "syllableText": "\u043d\u0438",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m13-5-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20,
+          "midi": 57,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-0-1",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.25,
+          "midi": 58,
+          "syllableText": "\u043c\u043d\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m14-1-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.5,
+          "midi": 57,
+          "syllableText": "\u0433\u043e",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-1-2",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.75,
+          "midi": 55,
+          "syllableText": "\u0442\u0435\u0440",
+          "syllableType": "start"
+        },
+        {
+          "id": "m14-3-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21,
+          "midi": 61,
+          "syllableText": "\u043f\u0435",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m14-9-8",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.375,
+          "midi": 57,
+          "syllableText": "\u043d\u0438",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m14-5-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.5,
+          "midi": 57,
+          "syllableText": "\u044f.",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-11-8",
+          "type": "rest",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.625
+        },
+        {
+          "id": "m15-0-1",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.75,
+          "midi": 57,
+          "syllableText": "\u0412\u043e\u0442",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m15-3-8",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.125,
+          "midi": 53,
+          "syllableText": "\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m15-1-2",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.25,
+          "midi": 53,
+          "syllableText": "\u043d\u0430,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m15-5-8",
+          "type": "rest",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 5,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.375
+        },
+        {
+          "id": "m15-3-4",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 22.5,
+          "midi": 55,
+          "syllableText": "\u043d\u043e\u0447\u044c",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m15-1-1",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 22.75,
+          "midi": 50,
+          "syllableText": "\u043c\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m15-5-4",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 23,
+          "midi": 50,
+          "syllableText": "\u044f,",
+          "syllableType": "end"
+        },
+        {
+          "id": "m15-11-8",
+          "type": "rest",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 23.125
+        },
+        {
+          "id": "m16-0-1",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "onsetAbsolute": 23.25,
+          "midi": 52,
+          "syllableText": "\u043d\u043e\u0447\u044c",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m16-1-2",
+          "type": "rest",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 23.75
+        },
+        {
+          "id": "m16-3-4",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24,
+          "midi": 52,
+          "syllableText": "\u043e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m16-9-8",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24.375,
+          "midi": 52,
+          "syllableText": "\u0434\u0438",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-0-1",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24.75,
+          "midi": 54,
+          "syllableText": "\u043d\u043e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-3-8",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 25.125,
+          "midi": 50,
+          "syllableText": "\u043a\u0430",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-1-2",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 25.25,
+          "midi": 50,
+          "syllableText": "\u044f.",
+          "syllableType": "end"
+        },
+        {
+          "id": "m17-3-4",
+          "type": "rest",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "onsetAbsolute": 25.5
+        },
+        {
+          "id": "m17-5-4",
+          "type": "rest",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 26
+        }
+      ]
+    },
+    {
+      "verseNumber": 2,
+      "notes": [
+        {
+          "id": "m1-0-1",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 0.75,
+          "midi": 57,
+          "syllableText": "\u02c8ko",
+          "syllableType": "start"
+        },
+        {
+          "id": "m1-1-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1,
+          "midi": 57,
+          "syllableText": "mn\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m1-1-2",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.25,
+          "midi": 57,
+          "syllableText": "tk\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m1-3-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.5,
+          "midi": 58,
+          "syllableText": "\u02c8t\u02b2\u025b",
+          "syllableType": "start"
+        },
+        {
+          "id": "m1-1-1",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 1.75,
+          "midi": 53,
+          "syllableText": "sn\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m1-5-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2,
+          "midi": 53,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m1-11-8",
+          "type": "rest",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.125
+        },
+        {
+          "id": "m2-0-1",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 2.25,
+          "midi": 59,
+          "syllableText": "\u02c8t\u02b2i",
+          "syllableType": "start"
+        },
+        {
+          "id": "m2-1-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 2.5,
+          "midi": 55,
+          "syllableText": "x\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m2-1-2",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.75,
+          "midi": 55,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m2-5-8",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.875
+        },
+        {
+          "id": "m2-3-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3,
+          "midi": 61,
+          "syllableText": "\u02c8m\u02b2i",
+          "syllableType": "start"
+        },
+        {
+          "id": "m2-9-8",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.375,
+          "midi": 57,
+          "syllableText": "\u026b\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m2-5-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.5,
+          "midi": 57,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m2-11-8",
+          "type": "rest",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.625
+        },
+        {
+          "id": "m3-0-1",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 3.75,
+          "midi": 58,
+          "syllableText": "t\u02b2e\u0272",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m3-1-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 4,
+          "midi": 52,
+          "syllableText": "\u0272\u026a",
+          "syllableType": "start"
+        },
+        {
+          "id": "m3-1-2",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 4.25,
+          "midi": 50,
+          "syllableText": "pr\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m3-3-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 4.5,
+          "midi": 57,
+          "syllableText": "\u02c8\u0261l\u02b2\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m3-9-8",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 4.875,
+          "midi": 52,
+          "syllableText": "dn\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m3-5-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5,
+          "midi": 52,
+          "syllableText": "j\u0251\u00a0#",
+          "syllableType": "end"
+        },
+        {
+          "id": "m4-0-1",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.25,
+          "midi": 55,
+          "syllableText": "t\u02b2e\u0272",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m4-1-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.5,
+          "midi": 50,
+          "syllableText": "b\u02b2\u026a",
+          "syllableType": "start"
+        },
+        {
+          "id": "m4-1-2",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 5.75,
+          "midi": 49,
+          "syllableText": "z\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m4-3-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6,
+          "midi": 53,
+          "syllableText": "\u02c8tv\u02b2\u025b",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m4-9-8",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.375,
+          "midi": 50,
+          "syllableText": "tn\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m4-5-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.5,
+          "midi": 50,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m4-11-8",
+          "type": "rest",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 6.625
+        },
+        {
+          "id": "m5-0-1",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 6.75,
+          "midi": 57,
+          "syllableText": "\u02c8du",
+          "syllableType": "start"
+        },
+        {
+          "id": "m5-1-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7,
+          "midi": 54,
+          "syllableText": "m\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m5-3-8",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.125
+        },
+        {
+          "id": "m5-1-2",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 7.25,
+          "midi": 57,
+          "syllableText": "\u0261\u026bu",
+          "syllableType": "start"
+        },
+        {
+          "id": "m5-3-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.5,
+          "midi": 62,
+          "syllableText": "\u02c8bo",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m5-9-8",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 7.875,
+          "midi": 56,
+          "syllableText": "k\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m5-5-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 8,
+          "midi": 56,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m5-11-8",
+          "type": "rest",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 8.125
+        },
+        {
+          "id": "m6-0-1",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.25,
+          "midi": 55,
+          "syllableText": "\u02c8p\u02b2e",
+          "syllableType": "start"
+        },
+        {
+          "id": "m6-1-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.5,
+          "midi": 55,
+          "syllableText": "s\u02b2\u0272\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m6-1-2",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 8.75,
+          "midi": 55,
+          "syllableText": "u",
+          "syllableType": "start"
+        },
+        {
+          "id": "m6-3-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9,
+          "midi": 58,
+          "syllableText": "\u02c8n\u0268",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m6-9-8",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.375,
+          "midi": 50,
+          "syllableText": "\u026b\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m6-5-4",
+          "type": "note",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.5,
+          "midi": 50,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m6-11-8",
+          "type": "rest",
+          "measureIndex": 6,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 9.625
+        },
+        {
+          "id": "m7-0-1",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 9.75,
+          "midi": 52,
+          "syllableText": "\u02c8v\u02b2b\u02b2u",
+          "syllableType": "start"
+        },
+        {
+          "id": "m7-1-4",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10,
+          "midi": 49,
+          "syllableText": "\u0283\u02b2\u02d0\u026a",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m7-1-2",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10.25,
+          "midi": 50,
+          "syllableText": "ms\u028c",
+          "syllableType": "end"
+        },
+        {
+          "id": "m7-3-4",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 10.5,
+          "midi": 54,
+          "syllableText": "\u02c8s\u02b2\u025b",
+          "syllableType": "start"
+        },
+        {
+          "id": "m7-1-1",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 10.75,
+          "midi": 50,
+          "syllableText": "rts\u028c",
+          "syllableType": "end"
+        },
+        {
+          "id": "m7-9-8",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 10.875
+        },
+        {
+          "id": "m7-5-4",
+          "type": "rest",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 11
+        },
+        {
+          "id": "m7-11-8",
+          "type": "note",
+          "measureIndex": 7,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 11.125,
+          "midi": 49,
+          "syllableText": "n\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m8-0-1",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.25,
+          "midi": 52,
+          "syllableText": "\u02c8d\u02b2\u025b",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-1-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.5,
+          "midi": 49,
+          "syllableText": "\u0292d\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m8-1-2",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 11.75,
+          "midi": 50,
+          "syllableText": "z\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m8-3-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12,
+          "midi": 57,
+          "syllableText": "\u02c8v\u02b2\u025b",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-9-8",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.375,
+          "midi": 54,
+          "syllableText": "tn\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m8-5-4",
+          "type": "note",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.5,
+          "midi": 54,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m8-11-8",
+          "type": "rest",
+          "measureIndex": 8,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 12.625
+        },
+        {
+          "id": "m9-0-1",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 12.75,
+          "midi": 58,
+          "syllableText": "\u02c8b\u0268",
+          "syllableType": "start"
+        },
+        {
+          "id": "m9-1-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13,
+          "midi": 52,
+          "syllableText": "str\u0268j",
+          "syllableType": "end"
+        },
+        {
+          "id": "m9-1-2",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.25,
+          "midi": 53,
+          "syllableText": "p\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m9-3-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.5,
+          "midi": 55,
+          "syllableText": "\u02c8l\u02b2ot",
+          "syllableType": "end"
+        },
+        {
+          "id": "m9-1-1",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 13.75,
+          "midi": 57,
+          "syllableText": "z\u0251",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m9-5-4",
+          "type": "note",
+          "measureIndex": 9,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14,
+          "midi": 58,
+          "syllableText": "m\u0261n\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m10-0-1",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.25,
+          "midi": 60,
+          "syllableText": "\u02c8v\u02b2e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-1-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.5,
+          "midi": 58,
+          "syllableText": "\u0272j\u026am",
+          "syllableType": "end"
+        },
+        {
+          "id": "m10-1-2",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 14.75,
+          "midi": 60,
+          "syllableText": "m\u0261n\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m10-3-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15,
+          "midi": 56,
+          "syllableText": "\u02c8v\u02b2e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-9-8",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.375,
+          "midi": 56,
+          "syllableText": "\u0272i",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m10-5-4",
+          "type": "note",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.5,
+          "midi": 56,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m10-11-8",
+          "type": "rest",
+          "measureIndex": 10,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 15.625
+        },
+        {
+          "id": "m11-0-1",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 15.75,
+          "midi": 55,
+          "syllableText": "vzor",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m11-1-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16,
+          "midi": 52,
+          "syllableText": "\u0272\u026a",
+          "syllableType": "start"
+        },
+        {
+          "id": "m11-1-2",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16.25,
+          "midi": 55,
+          "syllableText": "p\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m11-3-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 16.5,
+          "midi": 58,
+          "syllableText": "\u02c8d\u02b2v\u02b2i",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m11-1-1",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 16.75,
+          "midi": 55,
+          "syllableText": "\u0292n\u0268j",
+          "syllableType": "end"
+        },
+        {
+          "id": "m11-9-8",
+          "type": "rest",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 16.875
+        },
+        {
+          "id": "m11-5-4",
+          "type": "note",
+          "measureIndex": 11,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17,
+          "midi": 55,
+          "syllableText": "n\u0251",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m12-0-1",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.25,
+          "midi": 52,
+          "syllableText": "\u02c8\u0283\u02b2\u02d0\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m12-1-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.5,
+          "midi": 50,
+          "syllableText": "s\u02b2t\u02b2j\u025b",
+          "syllableType": "end"
+        },
+        {
+          "id": "m12-1-2",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 17.75,
+          "midi": 52,
+          "syllableText": "d\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m12-3-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18,
+          "midi": 58,
+          "syllableText": "\u02c8l\u02b2jo",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m12-9-8",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.375,
+          "midi": 55,
+          "syllableText": "k\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m12-5-4",
+          "type": "note",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.5,
+          "midi": 55,
+          "syllableText": "j\u025b",
+          "syllableType": "end"
+        },
+        {
+          "id": "m12-11-8",
+          "type": "rest",
+          "measureIndex": 12,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 18.625
+        },
+        {
+          "id": "m13-0-1",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 18.75,
+          "midi": 58,
+          "syllableText": "\u02c8mno",
+          "syllableType": "start"
+        },
+        {
+          "id": "m13-1-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 19,
+          "midi": 57,
+          "syllableText": "\u0261\u028c",
+          "syllableType": "end"
+        },
+        {
+          "id": "m13-1-2",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 19.25,
+          "midi": 55,
+          "syllableText": "s\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m13-3-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 19.5,
+          "midi": 58,
+          "syllableText": "\u02c8m\u0272e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m13-9-8",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 19.875,
+          "midi": 57,
+          "syllableText": "\u0272i",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m13-5-4",
+          "type": "note",
+          "measureIndex": 13,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20,
+          "midi": 57,
+          "syllableText": "j\u0251\u00a0#",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-0-1",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.25,
+          "midi": 58,
+          "syllableText": "\u02c8mno",
+          "syllableType": "start"
+        },
+        {
+          "id": "m14-1-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.5,
+          "midi": 57,
+          "syllableText": "\u0261\u028c",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-1-2",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 20.75,
+          "midi": 55,
+          "syllableText": "t\u02b2\u026a",
+          "syllableType": "start"
+        },
+        {
+          "id": "m14-3-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21,
+          "midi": 61,
+          "syllableText": "\u02c8rp\u02b2e",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m14-9-8",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.375,
+          "midi": 57,
+          "syllableText": "\u0272i",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m14-5-4",
+          "type": "note",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.5,
+          "midi": 57,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m14-11-8",
+          "type": "rest",
+          "measureIndex": 14,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.625
+        },
+        {
+          "id": "m15-0-1",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 21.75,
+          "midi": 57,
+          "syllableText": "vot",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m15-3-8",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.125,
+          "midi": 53,
+          "syllableText": "\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m15-1-2",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.25,
+          "midi": 53,
+          "syllableText": "\u02c8n\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m15-5-8",
+          "type": "rest",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 5,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 22.375
+        },
+        {
+          "id": "m15-3-4",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 22.5,
+          "midi": 55,
+          "syllableText": "not\u0283\u02b2",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m15-1-1",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 22.75,
+          "midi": 50,
+          "syllableText": "m\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m15-5-4",
+          "type": "note",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 23,
+          "midi": 50,
+          "syllableText": "\u02c8j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m15-11-8",
+          "type": "rest",
+          "measureIndex": 15,
+          "onset": {
+            "numerator": 11,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 23.125
+        },
+        {
+          "id": "m16-0-1",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "onsetAbsolute": 23.25,
+          "midi": 52,
+          "syllableText": "not\u0283\u02b2",
+          "syllableType": "whole"
+        },
+        {
+          "id": "m16-1-2",
+          "type": "rest",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 23.75
+        },
+        {
+          "id": "m16-3-4",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24,
+          "midi": 52,
+          "syllableText": "\u0251",
+          "syllableType": "start"
+        },
+        {
+          "id": "m16-9-8",
+          "type": "note",
+          "measureIndex": 16,
+          "onset": {
+            "numerator": 9,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24.375,
+          "midi": 52,
+          "syllableText": "d\u02b2i",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-0-1",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "onsetAbsolute": 24.75,
+          "midi": 54,
+          "syllableText": "\u02c8no",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-3-8",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 25.125,
+          "midi": 50,
+          "syllableText": "k\u0251",
+          "syllableType": "middle"
+        },
+        {
+          "id": "m17-1-2",
+          "type": "note",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 25.25,
+          "midi": 50,
+          "syllableText": "j\u0251",
+          "syllableType": "end"
+        },
+        {
+          "id": "m17-3-4",
+          "type": "rest",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 3,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "onsetAbsolute": 25.5
+        },
+        {
+          "id": "m17-5-4",
+          "type": "rest",
+          "measureIndex": 17,
+          "onset": {
+            "numerator": 5,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "onsetAbsolute": 26
+        }
+      ]
+    }
+  ]
+}
