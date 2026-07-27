@@ -1,2 +1,6 @@
 node_modules/
 output/
+_to_delete/
+_unzip_tmp/
+robustness-samples/
+_rhythm_spike/recognized.b64

@@ -9,6 +9,7 @@
 		"run": "node src/run-harness.ts"
 	},
 	"dependencies": {
+		"fast-xml-parser": "^5.10.1",
 		"verovio": "^6.2.0"
 	},
 	"engines": {
