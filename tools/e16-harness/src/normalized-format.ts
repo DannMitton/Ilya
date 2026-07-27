@@ -26,6 +26,18 @@ export interface Abstain {
 	onset?: string;
 	duration?: string;
 	pitch?: string;
+	/**
+	 * MEASURE-LEVEL facets (fable-spec-e16-front3a_2026-07-27, revision 3,
+	 * decision 8, ratified). Deliberately the SAME object on a new record
+	 * type, not a second mechanism. `metre` when the measure's metre is
+	 * unresolved; `sum` when the metre is known but the measure's duration
+	 * sum is not, carrying either `empty_bar_no_events` (decision 7's
+	 * printed-but-empty bar) or `contains_duration_abstention`;
+	 * `beatBoundaries` when an irregular measure's grouping is unresolved.
+	 */
+	metre?: string;
+	sum?: string;
+	beatBoundaries?: string;
 }
 
 export interface RecognizedNote {
@@ -58,6 +70,45 @@ export interface RecognizedVerse {
 	notes: RecognizedNote[];
 }
 
+/**
+ * One measure of the piece, on the MUSICAL axis (fable-spec-e16-front3a_2026-07-27,
+ * revision 3, decisions 2, 6, and 8, ratified by Dann). `measureIndex` is
+ * GLOBAL across the piece, not page-local: it is the envelope's
+ * `measureIndexOffset` plus the page-local index, which is what cross-page
+ * inheritance requires.
+ *
+ * A page is where a fact was OBSERVED, recorded in `printedAt`; it is never
+ * where the fact lives. `source` is `printed` when this measure's own ink
+ * carries the signature, `inherited` when it persists from an earlier measure
+ * or page, and `null` when the metre is unresolved.
+ */
+export interface RecognizedMeasure {
+	measureIndex: number;
+	/** `null` when no printed signature reaches this measure by print or inheritance. */
+	metre: { beats: number; beatType: number } | null;
+	/** The measure's duration in whole notes. An X/Y signature gives X/Y directly. */
+	measureDuration: { numerator: number; denominator: number } | null;
+	classification: 'simple' | 'compound' | 'irregular' | null;
+	/**
+	 * INTERIOR beat boundaries only, as whole-note offsets from the measure
+	 * start; the start and end are implicit. `null` for an irregular measure
+	 * whose grouping is unresolved, which also sets `abstain.beatBoundaries`.
+	 */
+	beatBoundaries: Array<{ numerator: number; denominator: number }> | null;
+	source: 'printed' | 'inherited' | null;
+	printedAt: { page: number; measureIndex: number } | null;
+	/**
+	 * The measure-integrity flag, in its four ratified states: `false` passes
+	 * (the emitted durations sum to the metre), `true` is a defect, `null` is
+	 * a LEGAL PICKUP at the piece's own measure 0 (not a failure), and
+	 * `'abstain'` is the fourth state, reused for all three abstention causes.
+	 * Which cause applies is visible in `abstain`, never in this field.
+	 */
+	integrity: boolean | null | 'abstain';
+	/** See `Abstain`. Absent means confidence on every facet present here. */
+	abstain?: Abstain;
+}
+
 export interface RecognizedOutput {
 	pieceId: string;
 	clef?: { sign: string; line: number };
@@ -65,6 +116,13 @@ export interface RecognizedOutput {
 	/** Representative tempo in BPM, if the engine detected one. A single number: engines are not expected to track mid-piece tempo changes in v1. */
 	tempoBpm?: number;
 	verses: RecognizedVerse[];
+	/**
+	 * ADDITIVE (decision 6, ratified). Absent on every archived output
+	 * predating Front 3a, and the scorer's metre figures are inert when it is
+	 * absent, which acceptance test A3 proves against the frozen close
+	 * artifact. Confident note records are unaffected and stay byte-identical.
+	 */
+	measures?: RecognizedMeasure[];
 }
 
 /**
