@@ -1,0 +1,552 @@
+{
+  "pieceId": "e16-irregular-fixture-a---numerals-with-persistence",
+  "sourceMusxPath": "fixture-a.musicxml (MusicXML source, this procurement; no .musx exists)",
+  "parser": {
+    "warnings": 0,
+    "errors": 0,
+    "errorDetail": []
+  },
+  "vocalPart": {
+    "partId": "P1",
+    "partName": "Voice"
+  },
+  "clef": {
+    "sign": "G",
+    "line": 2
+  },
+  "keySignature": {
+    "fifths": 0
+  },
+  "tempoMarkings": [],
+  "sungVerseNumbers": [
+    1
+  ],
+  "measureDurations": [
+    {
+      "index": 0,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    },
+    {
+      "index": 1,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    },
+    {
+      "index": 2,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    },
+    {
+      "index": 3,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    },
+    {
+      "index": 4,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    },
+    {
+      "index": 5,
+      "expectedDuration": {
+        "numerator": 5,
+        "denominator": 8
+      }
+    }
+  ],
+  "printedGroupingByMeasure": [
+    {
+      "index": 0,
+      "printedGrouping": "3+2"
+    },
+    {
+      "index": 1,
+      "printedGrouping": "3+2"
+    },
+    {
+      "index": 2,
+      "printedGrouping": null
+    },
+    {
+      "index": 3,
+      "printedGrouping": "2+3"
+    },
+    {
+      "index": 4,
+      "printedGrouping": null
+    },
+    {
+      "index": 5,
+      "printedGrouping": null
+    }
+  ],
+  "verses": [
+    {
+      "verseNumber": 1,
+      "verseLabel": "Verse 1",
+      "notes": [
+        {
+          "id": "m0-0-1",
+          "type": "note",
+          "measureIndex": 0,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.0,
+          "midi": 72
+        },
+        {
+          "id": "m0-1-8",
+          "type": "note",
+          "measureIndex": 0,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.125,
+          "midi": 74
+        },
+        {
+          "id": "m0-1-4",
+          "type": "note",
+          "measureIndex": 0,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.25,
+          "midi": 76
+        },
+        {
+          "id": "m0-3-8",
+          "type": "note",
+          "measureIndex": 0,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.375,
+          "midi": 77
+        },
+        {
+          "id": "m0-1-2",
+          "type": "note",
+          "measureIndex": 0,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.5,
+          "midi": 79
+        },
+        {
+          "id": "m1-0-1",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.625,
+          "midi": 81
+        },
+        {
+          "id": "m1-1-8",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.75,
+          "midi": 79
+        },
+        {
+          "id": "m1-1-4",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 0.875,
+          "midi": 77
+        },
+        {
+          "id": "m1-3-8",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.0,
+          "midi": 76
+        },
+        {
+          "id": "m1-1-2",
+          "type": "note",
+          "measureIndex": 1,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.125,
+          "midi": 74
+        },
+        {
+          "id": "m2-0-1",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.25,
+          "midi": 72
+        },
+        {
+          "id": "m2-1-8",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.375,
+          "midi": 74
+        },
+        {
+          "id": "m2-1-4",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.5,
+          "midi": 76
+        },
+        {
+          "id": "m2-3-8",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.625,
+          "midi": 77
+        },
+        {
+          "id": "m2-1-2",
+          "type": "note",
+          "measureIndex": 2,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.75,
+          "midi": 79
+        },
+        {
+          "id": "m3-0-1",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 1.875,
+          "midi": 79
+        },
+        {
+          "id": "m3-1-8",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.0,
+          "midi": 77
+        },
+        {
+          "id": "m3-1-4",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.125,
+          "midi": 76
+        },
+        {
+          "id": "m3-3-8",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.25,
+          "midi": 74
+        },
+        {
+          "id": "m3-1-2",
+          "type": "note",
+          "measureIndex": 3,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.375,
+          "midi": 72
+        },
+        {
+          "id": "m4-0-1",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.5,
+          "midi": 74
+        },
+        {
+          "id": "m4-1-8",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.625,
+          "midi": 76
+        },
+        {
+          "id": "m4-1-4",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.75,
+          "midi": 77
+        },
+        {
+          "id": "m4-3-8",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 2.875,
+          "midi": 79
+        },
+        {
+          "id": "m4-1-2",
+          "type": "note",
+          "measureIndex": 4,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.0,
+          "midi": 81
+        },
+        {
+          "id": "m5-0-1",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 0,
+            "denominator": 1
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.125,
+          "midi": 71
+        },
+        {
+          "id": "m5-1-8",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.25,
+          "midi": 72
+        },
+        {
+          "id": "m5-1-4",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.375,
+          "midi": 74
+        },
+        {
+          "id": "m5-3-8",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 3,
+            "denominator": 8
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.5,
+          "midi": 76
+        },
+        {
+          "id": "m5-1-2",
+          "type": "note",
+          "measureIndex": 5,
+          "onset": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "duration": {
+            "numerator": 1,
+            "denominator": 8
+          },
+          "onsetAbsolute": 3.625,
+          "midi": 77
+        }
+      ]
+    }
+  ]
+}

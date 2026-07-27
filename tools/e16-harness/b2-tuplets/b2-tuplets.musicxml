@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>E.16 Fixture B2 - Tuplets at Multiple Ratios</work-title>
+  </work>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Voice</part-name>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <!-- Measure 1 (index 0), 4/4: eighth triplet 3:2, BRACKETED, beamed, G4-A4-B4,
+         then three plain quarters filling the remaining 3 beats. -->
+    <measure number="1">
+      <attributes>
+        <divisions>420</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>140</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>
+        <beam number="1">begin</beam>
+        <notations><tuplet type="start" bracket="yes" placement="above"><tuplet-actual><tuplet-number>3</tuplet-number></tuplet-actual><tuplet-normal><tuplet-number>2</tuplet-number></tuplet-normal></tuplet></notations>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>140</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>140</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>
+        <beam number="1">end</beam>
+        <notations><tuplet type="stop"/></notations>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!-- Measure 2 (index 1), 4/4: sixteenth quintuplet 5:4, UNBRACKETED, beamed,
+         F4-G4-A4-B4-C5, then three plain quarters. -->
+    <measure number="2">
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>84</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>5</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">begin</beam>
+        <notations><tuplet type="start" bracket="no" placement="above"><tuplet-actual><tuplet-number>5</tuplet-number></tuplet-actual><tuplet-normal><tuplet-number>4</tuplet-number></tuplet-normal></tuplet></notations>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>84</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>5</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>84</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>5</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>84</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>5</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>84</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>5</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">end</beam>
+        <notations><tuplet type="stop"/></notations>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!-- Measure 3 (index 2), 4/4: sixteenth sextuplet 6:4, UNBRACKETED, beamed,
+         C5-D5-E5-F5-G5-A5, then three plain quarters. -->
+    <measure number="3">
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">begin</beam>
+        <notations><tuplet type="start" bracket="no" placement="above"><tuplet-actual><tuplet-number>6</tuplet-number></tuplet-actual><tuplet-normal><tuplet-number>4</tuplet-number></tuplet-normal></tuplet></notations>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>5</octave></pitch>
+        <duration>70</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>6</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">end</beam>
+        <notations><tuplet type="stop"/></notations>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!-- Measure 4 (index 3), 4/4: sixteenth septuplet 7:4, BRACKETED, beamed,
+         G4-A4-B4-C5-D5-E5-F5, then three plain quarters. -->
+    <measure number="4">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">begin</beam>
+        <notations><tuplet type="start" bracket="yes" placement="above"><tuplet-actual><tuplet-number>7</tuplet-number></tuplet-actual><tuplet-normal><tuplet-number>4</tuplet-number></tuplet-normal></tuplet></notations>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">continue</beam>
+      </note>
+      <note>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>60</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification>
+        <beam number="1">end</beam>
+        <notations><tuplet type="stop"/></notations>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>420</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!-- Measure 5 (index 4), 6/8: eighth duplet 2:3 (compound-metre inversion),
+         BRACKETED, beamed, D5-C5, then three plain eighths filling the second
+         dotted-quarter beat. -->
+    <measure number="5">
+      <attributes>
+        <time><beats>6</beats><beat-type>8</beat-type></time>
+      </attributes>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>315</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification>
+        <beam number="1">begin</beam>
+        <notations><tuplet type="start" bracket="yes" placement="above"><tuplet-actual><tuplet-number>2</tuplet-number></tuplet-actual><tuplet-normal><tuplet-number>3</tuplet-number></tuplet-normal></tuplet></notations>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>315</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification>
+        <beam number="1">end</beam>
+        <notations><tuplet type="stop"/></notations>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>210</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="2">begin</beam>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>210</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="2">continue</beam>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>210</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="2">end</beam>
+      </note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+</score-partwise>
