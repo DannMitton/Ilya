@@ -1,0 +1,450 @@
+{
+  "FIX:close-fixture:1": {
+    "count": 1,
+    "note": "certified by construction; synthetic, no SVG",
+    "per_system": null,
+    "svg": null
+  },
+  "LEG:mussorgsky---sunless-01---within-four-walls:1": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-01---within-four-walls/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-01---within-four-walls:2": {
+    "count": 4,
+    "per_system": [
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-01---within-four-walls/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-02---you-did-not-recognize-me:1": {
+    "count": 6,
+    "per_system": [
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-02---you-did-not-recognize-me:2": {
+    "count": 4,
+    "per_system": [
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:1": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:2": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:3": {
+    "count": 6,
+    "per_system": [
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/page3.svg"
+  },
+  "LEG:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:4": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/page4.svg"
+  },
+  "LEG:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:5": {
+    "count": 2,
+    "per_system": [
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/page5.svg"
+  },
+  "LEG:mussorgsky---sunless-04---be-bored:1": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-04---be-bored/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-04---be-bored:2": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-04---be-bored/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-05---elegy:1": {
+    "count": 10,
+    "per_system": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-05---elegy:2": {
+    "count": 10,
+    "per_system": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-05---elegy:3": {
+    "count": 10,
+    "per_system": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/page3.svg"
+  },
+  "LEG:mussorgsky---sunless-05---elegy:4": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/page4.svg"
+  },
+  "LEG:mussorgsky---sunless-05---elegy:5": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/page5.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:1": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page1.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:2": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page2.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:3": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page3.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:4": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page4.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:5": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page5.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:6": {
+    "count": 8,
+    "per_system": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page6.svg"
+  },
+  "LEG:mussorgsky---sunless-06---on-the-river:7": {
+    "count": 4,
+    "per_system": [
+      2,
+      2
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/page7.svg"
+  },
+  "REP:mussorgsky---sunless-01---within-four-walls:1": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-01---within-four-walls/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-01---within-four-walls:2": {
+    "count": 6,
+    "per_system": [
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-01---within-four-walls/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-02---you-did-not-recognize-me:1": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-02---you-did-not-recognize-me:2": {
+    "count": 6,
+    "per_system": [
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:1": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:2": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:3": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/repaired/page3.svg"
+  },
+  "REP:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:4": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/repaired/page4.svg"
+  },
+  "REP:mussorgsky---sunless-03---finished-is-the-noisy-idle-day:5": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-03---finished-is-the-noisy-idle-day/repaired/page5.svg"
+  },
+  "REP:mussorgsky---sunless-04---be-bored:1": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-04---be-bored/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-04---be-bored:2": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-04---be-bored/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-04---be-bored:3": {
+    "count": 6,
+    "per_system": [
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-04---be-bored/repaired/page3.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:1": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:2": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:3": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page3.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:4": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page4.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:5": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page5.svg"
+  },
+  "REP:mussorgsky---sunless-05---elegy:6": {
+    "count": 3,
+    "per_system": [
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-05---elegy/repaired/page6.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:1": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page1.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:2": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page2.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:3": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page3.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:4": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page4.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:5": {
+    "count": 12,
+    "per_system": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page5.svg"
+  },
+  "REP:mussorgsky---sunless-06---on-the-river:6": {
+    "count": 9,
+    "per_system": [
+      3,
+      3,
+      3
+    ],
+    "svg": "/mnt/user-data/uploads/e16-harness/output/mussorgsky---sunless-06---on-the-river/repaired/page6.svg"
+  }
+}

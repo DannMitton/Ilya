@@ -12,9 +12,191 @@ LETIDX = {'C':0,'D':1,'E':2,'F':3,'G':4,'A':5,'B':6}
 SEMI = {'C':0,'D':2,'E':4,'F':5,'G':7,'A':9,'B':11}
 
 # ---------- staff detection ----------
-def detect_staves(img):
+def _derive_rowfrac_gate(rowfrac, floor=0.015, span_bound=0.0137, min_members=5):
+    """PER-PAGE ROWFRAC GATE, derived (detect-staves-gate fix, 2026-07-27,
+    Fable's ruling on the detect_staves gate, same-day amendment, ratified by
+    Dann; span_bound re-derived same day by the oracle amendment, also
+    ratified by Dann -- see fable-ruling-e16-oracle-amendment.md). Replaces
+    the fixed literal rowfrac>0.35. Same 1-D gap-statistic primitive as
+    STAFF-BREAK THRESHOLD below, applied to the page's own distribution of
+    per-row ink coverage instead of to line-position gaps.
+
+    A single fixed cutoff cannot separate real staff lines from contamination
+    across pages: on repaired sunless-03 p4, contamination rows peak at
+    0.358-0.463; on legacy sunless-03 p4 they peak at 0.5391 -- HIGHER than
+    the real (short-final-system) staff lines on repaired sunless-03 p5,
+    which sit at 0.5226-0.5286, and higher still than legacy sunless-03 p5's
+    real short-system lines at ~0.5157. No single constant separates real
+    lines from contamination across every page.
+
+    Nor can "take the largest gap in the sorted coverage distribution"
+    substitute for a per-page derivation: measured directly on repaired
+    sunless-03 p5, the single largest gap (0.5286->0.9004) sits BETWEEN two
+    real populations -- a short final system (six lines, ~0.52-0.53) and the
+    page's full-width systems (~0.90) -- and choosing it silently deletes the
+    short system's lines. The derivation below must instead find the boundary
+    of the noise population: the lowest qualifying cut above the near-zero
+    background, not the largest gap wherever it falls.
+
+    Method: sort the page's per-row coverage values and split them into
+    segments wherever a consecutive gap exceeds FLOOR (0.015 rowfrac,
+    comfortably above the ~0.0002-0.001 spacing measured within one genuine
+    coverage population, comfortably below the smallest confirmed population
+    boundary measured anywhere in this corpus, 0.0472 on repaired sunless-03
+    p5). The page's highest segment is always real (nothing else on a page
+    reaches that much continuous ink). Walk downward from it, accepting each
+    further segment as ALSO real staff-line evidence only if it is BOTH tight
+    (span < SPAN_BOUND, strict) AND carries at least MIN_MEMBERS samples.
+    The gate is set at the midpoint of the boundary gap immediately below
+    the lowest ACCEPTED segment. Named, unit-bearing (rowfrac, a coverage
+    fraction), fitted per page and discarded: same primitive, same "fitting
+    is not training" fence as the staff-break threshold.
+
+    SPAN_BOUND = 0.0137, STRICT COMPARISON (span < span_bound).
+
+    *** DERIVATION STRUCK, VALUE RETAINED. CORRECTION EIGHT, 2026-07-27. ***
+    (claude/fable-ruling-e16-correction-eight-exemplar-contamination_2026-07-27.md)
+
+    The midpoint derivation recorded below until 2026-07-27 is STRUCK. Both
+    exemplars it was drawn from contain ZERO staff lines: they are the same
+    kind of object as each other, and a constant derived as the midpoint
+    between two objects of the same kind is not a boundary between kinds.
+    The VALUE 0.0137 is RETAINED, demoted to an empirically pinned constant
+    whose sole remaining authority is the thrice-verified corpus outcome
+    (45 correct, 1 loud, 1 silent, zero silent repaired). It is scheduled for
+    replacement by the unified 5.1 + 5.2 track. NO NEW WORK MAY CITE THE
+    MIDPOINT DERIVATION.
+
+    The vocabulary the record was missing, and everything below depends on
+    it: "accept" was carrying two distinct verdicts. IDENTITY asks whether a
+    segment is staff-line ink. PASSAGE asks whether the gate must lie below
+    it. Under a prefix walk these coincide often enough that the difference
+    went unnoticed. A ratified verdict can be correct while its ratified
+    reason is false, and the two rot at different rates.
+
+    Exemplars, corrected. Truth from Verovio SVG staff-path row geometry
+    (standing law V1), independently confirmed on two separately written
+    scripts. "Members" means DISTINCT COVERAGE VALUES, which is the quantity
+    min_members gates via len(seg); the p6 segment also spans 11 member rows,
+    and the two figures count different things:
+      - must-ACCEPT exemplar: span 0.012903225806451535, repaired
+        sunless-06 p6, second-highest-coverage segment, 6 members. THIS
+        SEGMENT CONTAINS ZERO STAFF LINES. It is contamination, consistent
+        with lyric text between staves: its rows (526 to 549) sit between a
+        staff ending at row 506 and a staff beginning at row 634. It must
+        nonetheless be accepted, because acceptance is a prefix walk from the
+        top: the page's genuine third system (oracle total 9, per-system
+        [3, 3, 3]) lies in a LOWER segment at coverage 0.4540 to 0.4573, and
+        rejecting this segment stops the walk before reaching it, returning a
+        silent 6 against a true 9. Acceptance here is a PASSAGE verdict, not
+        an IDENTITY verdict: it is the price of reaching real staff lines
+        below, not a judgement that this segment is staff ink. The former
+        description of this segment as "a GENUINE system of three staves" was
+        false and is retracted.
+      - must-REJECT exemplar: span 0.014516129032258074, repaired
+        sunless-06 p5, 5 members. LIKEWISE CONTAMINATION WITH ZERO STAFF
+        LINES. On that page every genuine staff line lies in the top segment,
+        so nothing below the top segment warrants passage. Accepting it (as
+        the old floor=0.015 did) converts a correct page into an abstention
+        and drops the corpus from 45 correct to 43 against the oracle.
+      - What actually separates the two exemplars is therefore a LOOKAHEAD
+        property, whether continuing the walk reaches real staff lines, and
+        span is a LOCAL property of the segment under test. On every
+        run-structure measure the two segments agree to three decimal places.
+        The 0.0016 span difference between two pieces of lyric text is noise
+        that fell on the right side of a line.
+      - midpoint = 0.013709677419354804, recorded as 0.0137. STRUCK as a
+        derivation, per the ruling above. Retained here only so that the
+        provenance of the retained value is legible, never as justification.
+      - guard interval (0.0129032..., 0.0145161...], admissible only under
+        strict comparison: at a bound of 0.0129032... the must-accept
+        segment must still be accepted (span == bound must pass), and at
+        0.0145161... the must-reject segment must still be rejected (span
+        == bound must fail). Only "span < span_bound" satisfies both.
+      - re-derivation trigger, ratified: any conditionally tested genuine
+        segment measuring wider than 0.0129032..., or any contamination
+        segment measuring narrower than 0.0145161..., moves this interval.
+        The constant returns to Fable before any new value is chosen.
+      - THE POOLING TRAP, recorded with the procedure because it has
+        already corrupted a derivation once: the topmost coverage segment
+        on each page is accepted UNCONDITIONALLY (it is always real -- see
+        "the page's highest segment is always real" above) and must be
+        EXCLUDED from exemplar extraction. Pooling it into the must-accept /
+        must-reject candidate pool silently corrupts the derivation.
+    Superseded: the prior value 0.012 (no explicit operator, read as "<="
+    in practice) and the prior claimed genuine-population range
+    0.0060-0.0089 and prior contamination span 0.0141 on repaired
+    sunless-03 p4. Both prior span claims were measured against the
+    detector's OWN frozen counts, which were themselves wrong on two pages
+    the oracle later caught; they are struck, not merely superseded, per
+    Fable's process rule that no acceptance test (and, by the same
+    reasoning, no constant derivation) may take its expected value from the
+    mechanism under test.
+
+    MIN_MEMBERS = 5 (one staff's worth of lines). Measured admissible range
+    at span_bound=0.0137, against the oracle: [4, 5] give identical corpus
+    outcomes (45 correct, 1 loud, 1 silent); 3 degrades. 5 is RETAINED on
+    the structural argument alone (five lines to a staff), not because the
+    margin is zero: the prior ruling's claim of a zero lower margin is
+    struck, it was an artifact of a wrong (detector-circular) check.
+    Re-derivation trigger: if any genuine conditionally tested segment ever
+    measures fewer than 5 members, coverage quantization has merged genuine
+    lines and the constant returns to Fable.
+
+    FLOOR = 0.015. Accepted, no longer provisional. Evidential guards
+    against the oracle: 0.0095 and 0.010 give 4 silent failures; 0.015
+    through 0.030 give 2. The exact boundary in (0.010, 0.015) and which
+    segments flip there remain unmeasured and unprocured; that does not
+    block this value, which sits inside a band whose failure modes are
+    measured on both sides.
+
+    The 0.005 pre-filter (`rowfrac[rowfrac > 0.005]` below) is declared and
+    left in place. Measured inert range [0.0, 0.1]: removal was never among
+    the measured conditions and is not proposed here.
+
+    Verified 2026-07-27 against the SVG oracle (oracle.py) covering the
+    full 47-page rendered corpus (24 repaired + 23 legacy) plus the
+    synthetic close fixture (certified by construction, count 1): AT-8 at
+    span_bound=0.0137 measures 45 correct, 1 loud (repaired sunless-06 p6,
+    the must-accept exemplar, now correctly abstaining instead of lying),
+    1 known-silent (legacy sunless-05 p5, a named mechanism-gap ledger item
+    per the ruling's 1.5, out of AT-1's repaired scope). Every REPAIRED page
+    either matches the oracle or raises: zero silent repaired pages
+    (AT-1, restated hard invariant).
+    """
+    nz = rowfrac[rowfrac > 0.005]
+    if len(nz) == 0:
+        return 1.0   # nothing on the page clears the noise floor; let "no staff lines" fire below
+    vals = np.unique(nz)
+    if len(vals) == 1:
+        return float(vals[0]) / 2.0
+    diffs = np.diff(vals)
+    n = len(vals)
+    splits = [i for i in range(len(diffs)) if diffs[i] > floor]
+    bounds = [0] + [i + 1 for i in splits] + [n]
+    segments = [vals[bounds[k]:bounds[k + 1]] for k in range(len(bounds) - 1)]
+    idx = len(segments) - 1
+    accepted_lo_val = segments[idx][0]
+    idx -= 1
+    while idx >= 0:
+        seg = segments[idx]
+        span = seg[-1] - seg[0]
+        if span < span_bound and len(seg) >= min_members:
+            accepted_lo_val = seg[0]
+            idx -= 1
+        else:
+            break
+    below = vals[vals < accepted_lo_val]
+    if len(below):
+        gate = (below.max() + accepted_lo_val) / 2.0
+    else:
+        gate = accepted_lo_val / 2.0
+    return gate
+
+def detect_staves(img, page=None):
     rowfrac=(img<128).mean(axis=1)
-    line_rows=np.where(rowfrac>0.35)[0]
+    gate=_derive_rowfrac_gate(rowfrac)
+    line_rows=np.where(rowfrac>gate)[0]
     if len(line_rows)==0: raise RuntimeError("no staff lines")
     lines=[]; cur=[line_rows[0]]
     for r in line_rows[1:]:
@@ -48,8 +230,31 @@ def detect_staves(img):
         if lines[i]-cur[-1] > break_thr: staves.append(cur); cur=[lines[i]]
         else: cur.append(lines[i])
     staves.append(cur)
-    staves=[st for st in staves if len(st)==5]
-    return staves, s
+    # ABSTENTION ON CONTAMINATED STAVES (detect-staves-gate fix, 2026-07-27,
+    # Fable's ruling, ratified by Dann). The old `[st for st in staves if
+    # len(st)==5]` silently discarded any group that was not exactly 5 lines.
+    # A contaminated staff (5 real lines plus 1-2 absorbed false rows) was
+    # thrown away WHOLE, not repaired, shifting every later staff index and
+    # losing a real staff outright. Measured across 24 repaired pages: every
+    # undersize group (1 or 2 lines) is spurious ink -- discard it as before,
+    # nothing real is lost that way. But a group of 3 or more lines carries a
+    # MAJORITY of a five-line staff and is evidence of a staff plus
+    # contamination, not evidence of no staff: silently dropping it is the
+    # exact defect this fix exists to close. Loud abstention replaces silent
+    # discard for that case, matching the "no staff lines" precedent already
+    # above in this function.
+    checked=[]
+    for st in staves:
+        if len(st) <= 2:
+            continue
+        elif len(st) == 5:
+            checked.append(st)
+        else:
+            raise RuntimeError(
+                "detect_staves: contaminated staff group on page %r: group of "
+                "%d lines is not a valid 5-line staff (all group sizes: %r)"
+                % (page, len(st), [len(s) for s in staves]))
+    return checked, s
 
 def select_vocal(staves, s):
     tops=[st[0] for st in staves]; bots=[st[-1] for st in staves]
@@ -181,7 +386,7 @@ def has_stem(nl, hx, hy, s, min_len=2.0, lo=0.35, hi=1.05, max_w=0.42):
 
 def read_page_geometry(cfg):
     img=cv2.imread(cfg['png'],cv2.IMREAD_GRAYSCALE)
-    staves,s=detect_staves(img)
+    staves,s=detect_staves(img,page=cfg.get('png'))
     vocal=cfg['vocal'] if 'vocal' in cfg else select_vocal(staves,s)
     # ONE non-destructive removal, computed once, consumed by every downstream
     # stage (tier-1 unification -- see the note above remove_lines()). nl and
