@@ -45,6 +45,45 @@ COMPOUND_NUMERATORS = {6, 9, 12, 15}
 BEAT_TYPES = (2, 4, 8, 16)
 
 
+class IncompleteBarDurations(ValueError):
+    """Raised by narrow_by_duration_division's completeness guard (Fable's
+    ruling, 2026-07-28, Q1 restated) when sum(durations) does not equal the
+    bar's notated length exactly. An early return is also a report, and
+    V2-B assertions run before any report is issued, so an incomplete bar
+    RAISES rather than returning a phantom None."""
+
+
+class InvalidGrouping(ValueError):
+    """Raised when a grouping tuple fails Fable's restated domain invariant
+    (2026-07-28, Phase 2): every element must be a positive integer, and
+    sum(g_i) * grouping_unit(beats, beat_type) must equal Fraction(beats,
+    beat_type) exactly. NOT "sum equals the numerator" -- that wording was
+    struck because it raises on 15/8's own lawful alternatives (see
+    grouping_to_boundaries)."""
+
+
+class DottedBarlineQuarantine(RuntimeError):
+    """Raised by detect_irregular_grouping's step 2 when detect_dotted_barlines
+    reports a nonempty hit list. Fable's ruling, 2026-07-28 (A7 three
+    falsifications): converting a printed dotted-barline pixel x position
+    into a grouping tuple needs a time-to-position reference, and the
+    survivorship corollary forbids assembling one exclusively from detected
+    structure (a reference built only from detected structure is a page
+    reference with respect to undetected structure). Step 2 is HELD, not
+    fixed, pending Fable's Q3 re-specification; there is no fall-through to
+    step 3 on this path, and no silent return either."""
+
+
+class OversizedBarNumeralComponent(RuntimeError):
+    """Raised by step 1's replacement mechanism (Fable's ruling, Phase 6,
+    2026-07-28) when a connected component in the start-of-bar numeral band
+    is wider than the widest admissible digit template at the page's
+    measured s, and the matcher cannot resolve the band into the lawful
+    digit, plus, digit sequence. Oversized ink at the start of a bar in the
+    numeral band is structure the mechanism was told exists and cannot
+    silently miss, so this raises rather than abstaining."""
+
+
 def classify_metre(beats, beat_type):
     """Return (classification, boundaries). boundaries is a list of interior
     Fraction offsets (whole notes) from the start of the measure, or None if
@@ -159,41 +198,70 @@ def measure_duration(beats, beat_type):
 # runner).
 # ---------------------------------------------------------------------------
 
-def _find_plus_sign(nl, x0, x1, y0, y1, s):
-    """Locate a compact '+' glyph (a component with both a horizontal and a
-    vertical stroke crossing near its centre) in the given pixel band.
-    INFERENCE: no fixture exists to calibrate this against; parameters are
-    a first-principles compact-glyph guess (roughly 0.4s-0.9s square,
-    ink fraction consistent with a thin cross) named here so a future
-    calibration pass has a concrete starting point rather than nothing."""
-    import cv2
-    import numpy as np
-    band = nl[int(y0):int(y1), int(x0):int(x1)]
-    if band.size == 0:
-        return None
-    num, lab, stats, cent = cv2.connectedComponentsWithStats(band.astype('uint8'), 8)
-    for i in range(1, num):
-        x, y, w, h, area = stats[i]
-        if not (0.4 * s <= w <= 0.9 * s and 0.4 * s <= h <= 0.9 * s):
-            continue
-        comp = (lab[y:y + h, x:x + w] == i).astype('uint8')
-        colsum = comp.sum(axis=0)
-        rowsum = comp.sum(axis=1)
-        has_vert = (colsum > 0.5 * h).any()
-        has_horiz = (rowsum > 0.5 * w).any()
-        if has_vert and has_horiz:
-            return dict(x=int(x0 + x + w / 2), y=int(y0 + y + h / 2))
-    return None
-
-
-def detect_start_of_bar_numerals(nl, staves, s, vocal_staff_idx, bar_x, s_search_width=3.0):
+def detect_start_of_bar_numerals(nl, staves, s, vocal_staff_idx, bar_x, next_bar_x):
     """Step 1 of the search order (SOURCED position: "Place the numerals at
     the beginning of the bar", persistence SOURCED: "numerical division
     holds good until contradicted"). Vertical band [top - 3s, top) above the
-    staff (INFERENCE, module docstring), searched for digit-plus-digit(-plus-
-    digit) patterns using the same digit templates timesig.py already
-    builds. Returns a grouping tuple e.g. (3, 2) or None."""
-    from timesig import _digits_in_band
+    staff (INFERENCE, module docstring).
+
+    RESTATED MECHANISM (Fable's ruling, Phase 6, 2026-07-28, COMPLETED by
+    Fable's ruling, 2026-07-29). STRUCK: the former fixed `s_search_width=
+    3.0` pixel window. Measured, SOURCED: at the corpus's s=21.0, the
+    narrowest lawful digit-plus-digit sequence needs 3.686s to 3.733s held
+    at ZERO inter-glyph gap, and the requirement never falls below roughly
+    3.44-3.50s at the asymptote as s grows; the old 3.000s window could not
+    hold any Table 1 alternative on any page, at any page size, so step 1
+    never fired. `s_search_width` is gone; `next_bar_x` (already available
+    at the call site, already passed to detect_dotted_barlines) replaces it
+    as the search boundary. No distance figure appears anywhere in this
+    mechanism: adjacency, not distance, is the criterion.
+
+    STRUCK, 2026-07-29: `_find_plus_sign`, a connected-component-then-
+    classify detector for the plus glyph alone, gated on component size
+    (0.4s-0.9s). Fable's own restatement of this mechanism ("glyphs are
+    identified by the matchTemplate plus NMS matcher run within component
+    extents") named the defect: "the sentence said glyphs and the mechanism
+    delivered digits." The plus had stayed on the one CC-classification
+    gate the earlier strike (of the whole-mechanism CC-then-classify
+    approach) did not cover. MEASURED, SOURCED, this session: a genuine
+    ink merge between the plus and a neighbouring digit (verified via
+    tight-cropped glyphs at the minimal overlap that produces an actual
+    connectedComponentsWithStats merge) produced a merged component (43px
+    at s=21, versus the 0.4s-0.9s = 8.4-18.9px gate) that _find_plus_sign
+    could never pass, while timesig._digits_in_band still read both
+    digits correctly at 0.977 confidence -- proving the plus, not the
+    digits, was the fragile half of the prior hybrid.
+
+    Three parts, and the split between them is the whole point:
+
+      1. EXTENT. The walk supplies geometry only. Connected components in
+         x order within the numeral band, over the bar's measured extent
+         [bar_x, next_bar_x). Robust to touching ink, because merging
+         changes component count, not the union of ink.
+      2. IDENTITY. The SAME matchTemplate + NMS matcher for every glyph,
+         digits and the plus alike (timesig._digits_and_plus_in_band),
+         within the numeral band. The plus glyph (SMuFL timeSigPlus,
+         U+E08D) is rendered through the exact same font/calibration
+         pipeline as every digit (timesig.render_plus_glyph), and
+         competes in the SAME candidate pool and the SAME NMS pass as the
+         digits -- not a separate CC-size gate. The sequence criterion
+         applies to MATCHED GLYPHS in x order, not to raw components: the
+         leftmost matches must read digit, plus, digit, with no foreign
+         component (from part 1) lying wholly between consecutive members
+         of the triple.
+      3. RAISE. A component wider than the widest admissible digit
+         template at this page's measured s, which the matcher cannot
+         resolve into the lawful sequence, RAISES (OversizedBarNumeralComponent)
+         rather than abstaining. "Widest admissible digit template" is
+         measured from timesig.render_digit at page s (digits only; the
+         plus's own template width plays no part in this gate, unchanged
+         from Fable's Phase 6 ruling), so no constant enters.
+
+    Returns a grouping tuple, e.g. (3, 2), or None (abstain). Raises
+    OversizedBarNumeralComponent per part 3."""
+    from timesig import _digits_and_plus_in_band, render_digit
+    import cv2
+
     st = staves[vocal_staff_idx]
     top = st[0]
     band_top = int(top - 3.0 * s)
@@ -201,15 +269,59 @@ def detect_start_of_bar_numerals(nl, staves, s, vocal_staff_idx, bar_x, s_search
     if band_top >= band_bot:
         return None
     x_lo = int(bar_x)
-    x_hi = int(bar_x + s_search_width * s)
+    x_hi = int(next_bar_x)
+    if x_hi <= x_lo:
+        return None
     band = (nl[band_top:band_bot, x_lo:x_hi] > 0).astype('uint8')
-    digits = _digits_in_band(band, s)
-    if not digits:
+
+    # PART 1: EXTENT. Geometry only; this walk classifies nothing.
+    num, lab, stats, cent = cv2.connectedComponentsWithStats(band, 8)
+    components = sorted((int(stats[i][0]), int(stats[i][0] + stats[i][2])) for i in range(1, num))
+    if not components:
         return None
-    plus = _find_plus_sign(nl, x_lo, x_hi, band_top, band_bot, s)
-    if plus is None or len(digits) < 2:
+
+    def _component_at(x):
+        for c in components:
+            if c[0] <= x < c[1]:
+                return c
         return None
-    return tuple(d for _, d, _ in digits)
+
+    # PART 2: IDENTITY. One unified matcher call; `glyphs` is already
+    # sorted left to right and mixes digits (int label) with the plus
+    # (label '+') in the SAME NMS pool. All x are band-relative, matching
+    # `components`' own frame, so no coordinate conversion is needed here
+    # (STRUCK, 2026-07-28's version needed one for _find_plus_sign's
+    # page-absolute x; this version does not).
+    glyphs = _digits_and_plus_in_band(band, s)
+
+    grouping = None
+    if len(glyphs) >= 3 and [isinstance(g[1], int) for g in glyphs[:3]] == [True, False, True] \
+            and glyphs[1][1] == '+':
+        members = [_component_at(g[0]) for g in glyphs[:3]]
+        foreign = False
+        for lo_member, hi_member in zip(members[:-1], members[1:]):
+            if lo_member is None or hi_member is None:
+                continue
+            lo_edge, hi_edge = lo_member[1], hi_member[0]
+            for c in components:
+                if c != lo_member and c != hi_member and lo_edge <= c[0] and c[1] <= hi_edge:
+                    foreign = True
+        if not foreign:
+            grouping = (glyphs[0][1], glyphs[2][1])
+
+    if grouping is not None:
+        return grouping
+
+    # PART 3: RAISE branch.
+    widest_digit = max(render_digit(d, s).shape[1] for d in range(10))
+    if any((c1 - c0) > widest_digit for c0, c1 in components):
+        raise OversizedBarNumeralComponent(
+            "component wider (%d px) than the widest admissible digit template (%d px "
+            "at s=%s) in the numeral band [%s, %s), and the matcher could not resolve "
+            "the lawful digit, plus, digit sequence"
+            % (max(c1 - c0 for c0, c1 in components), widest_digit, s, bar_x, next_bar_x))
+
+    return None
 
 
 def detect_dotted_barlines(nl, staves, s, vocal_staff_idx, x_lo, x_hi):
@@ -241,47 +353,131 @@ def detect_dotted_barlines(nl, staves, s, vocal_staff_idx, x_lo, x_hi):
 
 def narrow_by_duration_division(beats, beat_type, durations):
     """Step 3 (SOURCED, p. 178: "or by the particular division of longer
-    notes and rests"). `durations` is the list of CONFIDENTLY read note/rest
-    durations (whole notes) in the measure, in onset order, excluding any
-    abstained facet. Adopt an alternative from IRREGULAR_ALTERNATIVES only
-    when it is the UNIQUE grouping whose cumulative-duration boundary
-    positions match the durations' own cumulative onsets. Returns a
-    grouping tuple or None (no unique narrowing)."""
+    notes and rests"). `durations` is the bar's notated event durations,
+    notes and rests alike, in onset order, as exact Fraction semibreve
+    values. Tied notes are separate events and are not merged. No
+    tolerance anywhere.
+
+    THE RULED CRITERION (Fable, 2026-07-27 Q2, restated 2026-07-28 Q1),
+    which REPLACES the prior onset-coincidence rule Fable rejected:
+
+      1. The completeness guard runs FIRST, before anything else,
+         including the fixed-set check. If sum(durations) !=
+         Fraction(beats, beat_type), RAISE IncompleteBarDurations. An
+         early return is also a report, and V2-B assertions run before
+         any report is issued.
+      2. If the metre is not one of Table 1's fixed-set rows (5/16, 5/8,
+         7/8, 7/4, 15/8), return None. 8/8, 10/8, and 8/4 permit "any
+         other combination", so there is no fixed set to narrow.
+      3. For each Table 1 alternative for the metre, compute each group's
+         start position and length in semibreve fractions, using
+         grouping_unit(beats, beat_type) as the counting unit.
+      4. An alternative qualifies if and only if, for every group, there
+         exists an event whose onset equals the group start exactly AND
+         whose duration equals the group length exactly. Notes and rests
+         both count. Beams, onsets alone, and longest-note comparisons
+         play no part. Every group must be spanned, not one. No
+         partial-span relaxation.
+      5. Exactly one alternative qualifies -> return it. Zero -> None.
+         More than one -> None (defensive; unreachable with a monophonic
+         event list).
+
+    Onsets are recovered from `durations` by cumulative sum. This is
+    sound, and it is what the completeness guard protects: a gapless,
+    complete duration list in onset order determines every onset by
+    prefix sum.
+
+    THE GUARD'S STATED LIMIT, so it is not mistaken for coverage: it
+    checks completeness, not order or correctness. A misread duration
+    compensating a dropped one restores the sum and defeats it; that is
+    an upstream falsification, out of scope. Onset order is uncheckable
+    from durations alone and remains a contract on the producer.
+
+    CONTRACT, AMENDED (STRUCK: "excluding any abstained facet"): step 3
+    is not consulted for a bar containing an abstained duration facet,
+    and an upstream abstention surfaces as a named halt rather than a
+    phantom None here.
+
+    Returns a grouping tuple or None (no unique narrowing). Raises
+    IncompleteBarDurations if `durations` does not sum to the bar's
+    notated length exactly."""
+    bar_length = Fraction(beats, beat_type)
+    total = sum(durations, Fraction(0))
+    if total != bar_length:
+        raise IncompleteBarDurations(
+            "%s/%s bar: sum(durations) = %s, expected %s (durations=%r)"
+            % (beats, beat_type, total, bar_length, durations))
     alt = IRREGULAR_ALTERNATIVES.get(beats)
     if alt is None or alt.get('groupings') is None:
         return None
     unit = grouping_unit(beats, beat_type)   # classification-dependent; see its docstring
-    onsets = []
+    events = []
     acc = Fraction(0)
     for d in durations:
-        onsets.append(acc)
+        events.append((acc, d))
         acc += d
     matches = []
     for grouping in alt['groupings']:
-        boundary_onsets = []
-        acc2 = Fraction(0)
-        for g in grouping[:-1]:
-            acc2 += g * unit
-            boundary_onsets.append(acc2)
-        if all(b in onsets for b in boundary_onsets):
+        start = Fraction(0)
+        spans_every_group = True
+        for g in grouping:
+            length = g * unit
+            if not any(onset == start and dur == length for onset, dur in events):
+                spans_every_group = False
+                break
+            start += length
+        if spans_every_group:
             matches.append(grouping)
     if len(matches) == 1:
         return matches[0]
     return None
 
 
-def grouping_to_boundaries(grouping, beat_type, beats=None):
+def _assert_valid_grouping(grouping, beats, beat_type):
+    """The restated domain invariant (Fable, 2026-07-28, Phase 2), applied
+    at grouping_to_boundaries: every element of `grouping` is a positive
+    integer, and sum(g_i) * grouping_unit(beats, beat_type) ==
+    Fraction(beats, beat_type) exactly.
+
+    NOT "sum equals the numerator": Fable struck that wording himself. 15/8
+    classifies compound, IRREGULAR_ALTERNATIVES[15] = [(3, 2), (2, 3)], and
+    sum(g) = 5 against a numerator of 15, so the struck form would raise on
+    both of 15/8's own lawful alternatives. This unit-aware form is verified
+    to hold on all ten alternatives in the ruled sets (5, 7, 15 at their
+    Table 1 rows)."""
+    for g in grouping:
+        if isinstance(g, bool) or not isinstance(g, int) or g <= 0:
+            raise InvalidGrouping(
+                "grouping element %r is not a positive integer (grouping=%r)" % (g, grouping))
+    unit = grouping_unit(beats, beat_type)   # classification-dependent; see its docstring
+    total = sum(grouping) * unit
+    want = Fraction(beats, beat_type)
+    if total != want:
+        raise InvalidGrouping(
+            "grouping %r at beats=%s, beat_type=%s sums to %s under unit %s (%s/%s); "
+            "expected %s" % (grouping, beats, beat_type, total, unit, beats, beat_type, want))
+
+
+def grouping_to_boundaries(grouping, beat_type, beats):
     """Convert a printed grouping tuple, e.g. (3, 2), into interior
     beatBoundaries (Fraction whole-note offsets), consistent with the
     simple/compound boundary convention used elsewhere in this module.
 
-    `beats` is required whenever the metre may be compound, because the unit a
-    grouping integer counts is classification-dependent (grouping_unit). It
-    defaults to sum(grouping), which is correct for every IRREGULAR metre,
-    where the grouping integers sum to the numerator, and which therefore
-    preserves every existing call site's behaviour exactly."""
-    if beats is None:
-        beats = sum(grouping)
+    `beats` is REQUIRED (Fable's ruling, 2026-07-28; the signature change is
+    licensed explicitly). STRUCK: the former default `beats = sum(grouping)`.
+    The unit a grouping integer counts is classification-dependent
+    (grouping_unit), and the pair (3, 2) is ambiguous between an irregular 5
+    reading (unit 1/8) and a compound 15 reading (unit 3/8); nothing in the
+    grouping alone can disambiguate it. Measured, SOURCED:
+    grouping_to_boundaries((3, 2), 8, beats=15) returns [9/8], the sourced
+    value, while the old grouping_to_boundaries((3, 2), 8) returned [3/8],
+    because the default's beats = 5 classifies irregular and collapses the
+    unit to 1/8. The default silently reintroduced the exact bug
+    grouping_unit's own docstring records as fixed.
+
+    Raises InvalidGrouping if `grouping` fails the domain invariant (see
+    _assert_valid_grouping)."""
+    _assert_valid_grouping(grouping, beats, beat_type)
     unit = grouping_unit(beats, beat_type)   # classification-dependent; see its docstring
     boundaries = []
     acc = Fraction(0)
@@ -300,14 +496,30 @@ def detect_irregular_grouping(nl, staves, s, vocal_staff_idx, bar_x, next_bar_x,
     2a has not landed); this function never calls into beams.py.
 
     Returns (grouping_tuple_or_None, source) where source is one of
-    'printed_numerals', 'printed_dotted_barline', 'printed_duration_division',
-    'inherited', or None (abstain)."""
-    numerals = detect_start_of_bar_numerals(nl, staves, s, vocal_staff_idx, bar_x)
+    'printed_numerals', 'printed_duration_division', 'inherited', or None
+    (abstain). 'printed_dotted_barline' is no longer a possible source
+    (Fable's ruling, 2026-07-28): step 2 is QUARANTINED, not wired to a
+    source label -- see DottedBarlineQuarantine.
+
+    STEP 2 IS HELD, NOT FIXED (Fable's ruling). Three violations named
+    separately in the prior body: the label 'printed_dotted_barline'
+    asserted a printed division was read while emitting pixel x positions
+    that yield no boundaries (a false provenance claim, the inverse of
+    V2-B); the early return silently suppressed step 3; the type error
+    survived because the consumer never asserted its domain (Phase 2 fixes
+    that last point). Converting a barline x position into a grouping needs
+    a time-to-position reference, every candidate reference in the tree is
+    assembled from detected structure, and the survivorship corollary
+    forbids it. No conversion is attempted here and none is invented."""
+    numerals = detect_start_of_bar_numerals(nl, staves, s, vocal_staff_idx, bar_x, next_bar_x)
     if numerals is not None:
         return numerals, 'printed_numerals'
     dotted = detect_dotted_barlines(nl, staves, s, vocal_staff_idx, bar_x, next_bar_x)
     if dotted:
-        return tuple(dotted), 'printed_dotted_barline'
+        raise DottedBarlineQuarantine(
+            "dotted-barline structure detected at %r in [%s, %s); step 2's conversion to "
+            "a grouping tuple is HELD pending Fable's Q3 re-specification. No fall-through "
+            "to step 3, no silent return." % (dotted, bar_x, next_bar_x))
     narrowed = narrow_by_duration_division(beats, beat_type, confident_durations)
     if narrowed is not None:
         return narrowed, 'printed_duration_division'

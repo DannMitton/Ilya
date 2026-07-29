@@ -198,7 +198,18 @@ def run(cfg, ctx_in=None):
             # return memo's "what I did not do" section.
             if cur_grouping['source'] in ('printed', 'inherited') and cur_grouping['value'] is not None:
                 grouping = tuple(cur_grouping['value'])
-                beat_boundaries_out = metre_mod.grouping_to_boundaries(grouping, beat_type)
+                # RUNTIME FILE MOVES UNDER THIS ORDER (Fable's ruling,
+                # 2026-07-28, Phase 2.3): `beats` is now required by
+                # grouping_to_boundaries. Pass the measure's own `beats`,
+                # already in scope from `mv['beats']` above -- confirmed a
+                # repair, not design, since a wrong default here would
+                # silently collapse a compound reading to an irregular one
+                # (see metre.grouping_to_boundaries' docstring). This branch
+                # is dormant on every real page (see the comment above);
+                # Fable waived a dedicated acceptance test for that stated
+                # reason, and the protection that matters is the domain
+                # assertion now running inside grouping_to_boundaries itself.
+                beat_boundaries_out = metre_mod.grouping_to_boundaries(grouping, beat_type, beats)
                 cur_grouping = dict(value=list(grouping), source='inherited', at=dict(cur_grouping['at']))
             else:
                 abstain['beatBoundaries'] = 'no_printed_division'

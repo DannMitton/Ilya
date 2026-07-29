@@ -49,6 +49,14 @@ from reader import nms  # reuse the same NMS used by detect_heads/detect_rests_m
 CACHE_PATH = os.path.expanduser("~/.cache/timesig_templates_leipzig.json")
 
 DIGIT_CODEPOINTS = {str(d): f'U+{0xE080+d:04X}' for d in range(10)}
+# PLUS GLYPH, added by Fable's ruling, 2026-07-29 (struck a′'s own
+# restatement: "glyphs are identified by the matchTemplate plus NMS matcher
+# run within component extents" had left the plus on the struck
+# connected-component _find_plus_sign gate, the one glyph the strike did
+# not cover). SMuFL "Time signatures" range, timeSigPlus, U+E08D -- the
+# same range as timeSigX U+E080-U+E089 above. The anti-invention citation
+# is SMuFL itself, not a measurement of this corpus.
+DIGIT_CODEPOINTS['+'] = 'U+E08D'
 
 _MEI_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 <mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="4.0.1">
@@ -124,6 +132,14 @@ def load_font(force=False):
     # covered by 10's '1'; ones digit '0' covered here) so every digit 0-9
     # appears at least once somewhere in the sequence of rendered numerators.
     measures.append(_MEASURE_TEMPLATE.format(count=20, n=11))
+    # PLUS GLYPH (Fable's ruling, 2026-07-29). An additive meter.count, per
+    # MEI's own convention, forces Verovio to emit the printed '+' between
+    # its two numerals -- SMuFL timeSigPlus, U+E08D -- into the same
+    # rendered SVG defs the digits are extracted from. "2+3" is arbitrary
+    # only in its digit values (already covered above); what matters is
+    # that a plus is printed at all. Same render pass, same font, same
+    # calibration as every digit measure.
+    measures.append(_MEASURE_TEMPLATE.format(count="2+3", n=12))
     mei = _MEI_TEMPLATE.format(measures="\n      ".join(measures))
 
     with tempfile.TemporaryDirectory() as td:
@@ -148,8 +164,9 @@ def load_font(force=False):
         use_scale=use_scale,
         page_units_per_space=page_units_per_space,
         source=(f"{verovio_version}; font=Leipzig (verovio default SMuFL font); "
-                f"provenance={VEROVIO_DIR} (node_modules/verovio@6.2.0), timeSig0-9 glyph outlines "
-                f"extracted from VerovioToolkit.renderToSVG() with svgRemoveXlink+svgFormatRaw"),
+                f"provenance={VEROVIO_DIR} (node_modules/verovio@6.2.0), timeSig0-9 and timeSigPlus "
+                f"(U+E08D, added 2026-07-29, Fable's ruling) glyph outlines extracted from "
+                f"VerovioToolkit.renderToSVG() with svgRemoveXlink+svgFormatRaw"),
     )
     os.makedirs(os.path.dirname(CACHE_PATH), exist_ok=True)
     with open(CACHE_PATH, 'w') as f:
@@ -289,15 +306,39 @@ def render_digit(digit, s):
     return _fill_nonzero(polygons, W, H)
 
 
-def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
-    """Sliding-window matched-filter digit detection over `band` (a 2D 0/1
-    array already restricted to one staff-half's rows), for all ten digit
-    templates at once -- the SAME matchTemplate+NMS pattern already used for
-    rests (detect_rests_multi, run_page2.py), not connected-component-then-
-    classify (a CC-then-classify approach was tried first; sliding-window
-    matching is more robust to touching ink between neighbouring glyphs
-    since it does not depend on isolating a clean per-glyph bounding box
-    first).
+def render_plus_glyph(s):
+    """Rasterize the printed time-signature '+' glyph (SMuFL timeSigPlus,
+    U+E08D) at staff-space size s (pixels), through the EXACT SAME pipeline
+    as render_digit: same font, same calibration (raw_units_per_space),
+    same nonzero-winding fill rule. A thin, purely-for-readability wrapper
+    around render_digit('+', s) -- render_digit itself is UNCHANGED and
+    already resolves any glyph name present in font['paths'] via
+    str(digit), so no new rasterization logic exists here.
+
+    Fable's ruling, 2026-07-29: STRIKES the separate connected-component
+    _find_plus_sign detector (metre.py). The plus is now identified by the
+    SAME matchTemplate + NMS matcher as the digits, not by CC
+    classification -- see _match_glyphs_in_band below."""
+    return render_digit('+', s)
+
+
+def _match_glyphs_in_band(band, s, glyph_names, thr=0.38, nms_rad_frac=1.0):
+    """Sliding-window matched-filter glyph detection over `band` (a 2D 0/1
+    array already restricted to one staff-half's rows), for every glyph
+    name in `glyph_names` at once -- the SAME matchTemplate+NMS pattern
+    already used for rests (detect_rests_multi, run_page2.py), not
+    connected-component-then-classify (a CC-then-classify approach was
+    tried first; sliding-window matching is more robust to touching ink
+    between neighbouring glyphs since it does not depend on isolating a
+    clean per-glyph bounding box first).
+
+    EXTRACTED, 2026-07-29 (Fable's ruling), from what was `_digits_in_band`'s
+    own body, so the plus glyph can compete in the SAME candidate pool and
+    the SAME NMS pass as the digits, rather than being found by a separate,
+    CC-based mechanism that does not share this robustness. `_digits_in_band`
+    below now calls this with glyph_names=range(10), UNCHANGED in every
+    observable way (same templates, same threshold, same NMS, same digit-only
+    output shape) from its pre-extraction behaviour.
 
     thr=0.38, not the higher bars used elsewhere in this codebase (rests
     use 0.62, noteheads 0.84): measured directly on the two available
@@ -314,18 +355,20 @@ def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
     a healthy margin over the next-best wrong digit (piece 01: "2" 0.52 vs
     "4" 0.46; piece 02: "2" 0.45 vs "9" 0.39) -- 0.38 is set with margin
     below the lower of the two measured genuine matches, not tuned to
-    force a single case through.
+    force a single case through. The plus glyph shares this same threshold
+    unchanged (Fable's ruling: "at the same threshold").
 
-    Returns a list of (cx, digit, score), left-to-right, after NMS collapses
-    overlapping hits from different digit templates at the same location to
-    the single best-scoring one."""
+    Returns a list of (cx, label, score), left-to-right, after NMS collapses
+    overlapping hits from different glyph templates at the same location to
+    the single best-scoring one. `label` is an int 0-9 for a digit or the
+    string '+' for the plus."""
     if band.size == 0:
         return []
     band_u8 = (band * 255).astype(np.uint8)
     bh, bw = band_u8.shape
     cands = []
-    for d in range(10):
-        tmpl = render_digit(d, s)
+    for name in glyph_names:
+        tmpl = render_digit(name, s)
         th, tw = tmpl.shape
         if th > bh or tw > bw:
             continue
@@ -334,7 +377,7 @@ def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
         ys, xs = np.where(res >= thr)
         for yy, xx in zip(ys, xs):
             cx, cy = xx + tw / 2.0, yy + th / 2.0
-            cands.append(dict(x=cx, y=cy, score=float(res[yy, xx]), digit=d))
+            cands.append(dict(x=cx, y=cy, score=float(res[yy, xx]), digit=name))
     if not cands:
         return []
     # V2, COINCIDENT-"1" ARBITRATION (Front 3a decision 1, as AMENDED by
@@ -342,6 +385,10 @@ def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
     # previous rationale withdrawn as measured false -- see
     # _suppress_ones_in_clusters' docstring). Cluster radius 1.0s unchanged
     # and still SOURCED; the new constant is the score margin ONE_MARGIN.
+    # A plus candidate here is just another non-'1' rival class: the
+    # function's own `o['digit'] == 1` check already treats any non-1 label
+    # (int or the '+' string) identically, so no change was needed to admit
+    # the plus into this arbitration.
     cands = _suppress_ones_in_clusters(cands, s, cluster_rad_frac=1.0)
     if not cands:
         return []
@@ -351,6 +398,31 @@ def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
     out = [(cands[i]['x'], cands[i]['digit'], cands[i]['score']) for i in keep]
     out.sort(key=lambda t: t[0])
     return out
+
+
+def _digits_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
+    """Digits only. UNCHANGED in every observable way since before the
+    2026-07-29 extraction of _match_glyphs_in_band (same ten templates,
+    same threshold, same NMS radius, same output shape): a thin call
+    through to _match_glyphs_in_band with glyph_names=range(10). Existing
+    callers (read_time_signature, read_time_signature_v2) are unaffected.
+
+    Returns a list of (cx, digit, score), left-to-right; digit is always an
+    int 0-9, never '+' (the plus never enters this glyph set)."""
+    return _match_glyphs_in_band(band, s, range(10), thr, nms_rad_frac)
+
+
+def _digits_and_plus_in_band(band, s, thr=0.38, nms_rad_frac=1.0):
+    """Digits AND the plus, in one shared matchTemplate+NMS candidate pool
+    (Fable's ruling, 2026-07-29: "glyphs are identified by the matchTemplate
+    plus NMS matcher run within component extents" -- glyphs, plural,
+    covering the plus as well as the digits, not the plus on a separate
+    connected-component gate). Used by metre.py's step 1 detector
+    (detect_start_of_bar_numerals) in place of the STRUCK _find_plus_sign.
+
+    Returns a list of (cx, label, score), left-to-right; label is an int
+    0-9 for a digit or the string '+' for the plus."""
+    return _match_glyphs_in_band(band, s, list(range(10)) + ['+'], thr, nms_rad_frac)
 
 
 # V2's score margin (Fable's V2 ruling, 2026-07-27). A digit-"1" candidate

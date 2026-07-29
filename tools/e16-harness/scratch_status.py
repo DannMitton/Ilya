@@ -46,7 +46,7 @@ SCRATCH_DIR = '/home/claude'
 PINNED = {
     'reader.py', 'oracle.py', 'beams.py', 'hollow.py', 'rest_templates.py',
     'timesig.py', 'run_page2.py', 'metre.py', 'envelope.py', 'test_metre.py',
-    'verify_toolchain.py', 'scratch_status.py',
+    'verify_toolchain.py', 'scratch_status.py', 'substrate.py',
 }
 
 BANNER_RE = re.compile(r'SUPERSEDED', re.I)

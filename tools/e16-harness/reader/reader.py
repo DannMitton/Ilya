@@ -254,6 +254,16 @@ def detect_staves(img, page=None):
                 "detect_staves: contaminated staff group on page %r: group of "
                 "%d lines is not a valid 5-line staff (all group sizes: %r)"
                 % (page, len(st), [len(s) for s in staves]))
+    # THE SENTINEL, ratified 2026-07-28. This is a RULED ACCEPTANCE point: the
+    # rows below have been validated as staff lines and every downstream stage
+    # trusts them. It binds HERE and not at the gate above, because the gate is
+    # CANDIDATE GENERATION whose over-acceptance is lawful by design, and a
+    # sentinel on the candidate stream would fire on rows no decider ever
+    # accepted. Downstream of every decision, upstream of none.
+    import substrate as _sub
+    _s = _sub.page_substrate(img)
+    _sub.sentinel(_s, [y for st in checked for y in st],
+                  'reader.detect_staves five-line validation', page)
     return checked, s
 
 def select_vocal(staves, s):
@@ -298,11 +308,11 @@ def clef_topD(sign, line, octaveChange=0):
 # array. There is one removal path, computed once per page, in
 # `read_page_geometry` below; nothing downstream can silently receive the
 # destructive one because it no longer exists.
-def remove_lines(img, s, staves):
+def remove_lines(img, s, staves, page=None):
     """Kept as a thin, explicitly-named alias so call sites read as what they
     are: the single non-destructive removal, not a second implementation."""
     from beams import remove_lines_safe
-    return remove_lines_safe(img, s, staves)
+    return remove_lines_safe(img, s, staves, page)
 
 def band_of(y, staves, vocal, s, pad=3.5):
     for bi,b in enumerate(vocal):
@@ -394,7 +404,7 @@ def read_page_geometry(cfg):
     # a special second path used only by stems/beams/hollow, it is simply THE
     # removal. Keeping both names avoids touching every call site that already
     # reads G['nl'] vs G['nl_safe'].
-    bw,nl=remove_lines(img,s,staves)
+    bw,nl=remove_lines(img,s,staves,cfg.get("png"))
     nl_safe=nl
     heads=detect_heads(img,staves,vocal,s,thr=cfg.get('head_thr',0.84))
     if cfg.get('require_stem', True):

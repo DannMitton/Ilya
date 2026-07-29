@@ -21,6 +21,47 @@ TWO changes, both with precedent (T4):
    Duration = 1/(4 * 2**nbeams).
 """
 import cv2, numpy as np
+import substrate
+
+# ---------------------------------------------------------------------------
+# T_REL -- C2(b)'s tolerance, ratified 2026-07-28.
+#
+# THE FORM is Fable's, the clearance rule instantiated on the deviation axis:
+# a row is extent-consistent with the reference iff its deviation, divided by
+# the CLAIMED STRUCTURE'S EXTENT, is at most T_REL, where T_REL equals the
+# measured minimum deviation ratio among non-member rows MINUS one sample
+# standard deviation of the non-member deviation ratios. Direction check, from
+# the ruling: too-small T rejects true member rows, which is under-extension
+# and the silent lie; too-large T admits non-members, which is over-extension
+# and the loud abstention. So T sits against the non-member floor with the
+# minimal measured margin and spends its discretion on the silent side.
+#
+# STRUCTURE-RELATIVE, not pixels. The pixel form of this constant, T =
+# 541.1885 px, is SUPERSEDED. Its sample standard deviation was computed over
+# a non-member population pooled across systems ranging from 812 to 2,233 px
+# wide, so it measured between-system width variation rather than dispersion
+# around the floor, and its D3 distribution was visibly bimodal for that
+# reason. Dividing the width out collapses the sd from 0.11 to 0.007894 and
+# the bimodality with it. The margin is fourteen times thinner and it is
+# honest: the pixel form's fat margin was borrowed capital.
+#
+# THE VALUE is a MEASUREMENT, recomputed over the current corpus, not a
+# ratified number. Measured 2026-07-28 with every band row serving as seed in
+# turn (anchor-independence, AT3), non-member rows taken as the walk's
+# terminating rows:
+#     member ratios      n = 5,220,  maximum 0.001799
+#     non-member ratios  n = 6,120,  minimum 0.801164, sample sd 0.007894
+#     D3, 0.1 bins:      {0.8: 5, 0.9: 19, 1.0: 6096}
+#     T_REL = 0.801164 - 0.007894 = 0.793270
+# The derivation RAISES unless T_REL strictly exceeds the maximum member
+# ratio; it does, by better than two orders of magnitude. Re-derive whenever
+# the corpus changes.
+T_REL = 0.793270
+
+
+class WalkRaise(RuntimeError):
+    """The band walk could not answer, and abstain beats guess."""
+
 
 BEAM_KERNEL_W   = 1.8   # in staff spaces: wider than a flag (measured 1.29 s)
 BEAM_MIN_W      = 2.2   # a beam joins two stems, which sit >= 2 staff spaces apart
@@ -31,7 +72,80 @@ STEM_SEARCH     = (0.35, 1.05)   # staff spaces either side of the head centre
 STEM_MIN_LEN    = 1.8            # a real stem runs at least this far
 
 
-def remove_lines_safe(img, s, staves):
+def _extent_consistent(ext, r, ref_extent, staff_extent, nrows):
+    """C2(b), the ONE membership condition. Structure-relative.
+
+    A row is extent-consistent with the reference iff its principal bridged
+    extent deviates from the reference by at most T_REL of the claimed
+    staff's extent. A blank row has no raw runs, hence no principal run,
+    hence extent 0 by the substrate's own definitions, hence a deviation
+    ratio of 1 relative to the claimed structure. That needs no special case
+    and gets none.
+    """
+    if r < 0 or r >= nrows:
+        return False
+    return abs(int(ext[r]) - ref_extent) <= T_REL * staff_extent
+
+
+def _snap_seed(ext, y, staff_extent, s, nrows, page):
+    """S2. Snap to the nearest row satisfying membership, searching outward.
+
+    The bound is HALF THE RULE SPACING, and it is derived rather than tuned:
+    beyond half the spacing the nearest satisfying row lies in an adjacent
+    rule's basin, and returning it would answer a different rule's question.
+    Exhaustion RAISES.
+
+    At snap time no validated seed exists, so extent-consistency is measured
+    against the claimed staff's own extent rather than a seed's. That is the
+    ordering that closes the circularity between S1 and S2.
+
+    Ties RAISE. Two satisfying rows equidistant on opposite sides is
+    ambiguity, and abstain beats guess. On this corpus the measured
+    corrections are one-sided, so this clause is predicted never to fire,
+    which is the correct price for honesty.
+    """
+    bound = max(1, int(round(s / 2.0)))
+    if _extent_consistent(ext, y, staff_extent, staff_extent, nrows):
+        return y
+    for off in range(1, bound + 1):
+        lo_ok = _extent_consistent(ext, y - off, staff_extent, staff_extent,
+                                   nrows)
+        hi_ok = _extent_consistent(ext, y + off, staff_extent, staff_extent,
+                                   nrows)
+        if lo_ok and hi_ok:
+            raise WalkRaise("walk S2: snap tie at row %d, offset %d, on page "
+                            "%r. Two satisfying rows equidistant on opposite "
+                            "sides is ambiguity." % (y, off, page))
+        if lo_ok:
+            return y - off
+        if hi_ok:
+            return y + off
+    raise WalkRaise("walk S2: snap exhausted at row %d on page %r within half "
+                    "the rule spacing (%d px); no row satisfies membership "
+                    "against staff extent %d" % (y, page, bound, staff_extent))
+
+
+def _walk_band(ext, seed, staff_extent, nrows):
+    """S3, S4, S5. Symmetric membership walk from a validated seed.
+
+    S4: termination by membership failure ONLY. There is no thickness cap; a
+    "max 2 rows" cap would be corpus-fitted and resolution-fragile.
+    S5: one rule, both directions, no directional term.
+    """
+    ref = int(ext[seed])
+    members = [seed]
+    r = seed - 1
+    while _extent_consistent(ext, r, ref, staff_extent, nrows):
+        members.append(r)
+        r -= 1
+    r = seed + 1
+    while _extent_consistent(ext, r, ref, staff_extent, nrows):
+        members.append(r)
+        r += 1
+    return sorted(members)
+
+
+def remove_lines_safe(img, s, staves, page=None):
     """Staff-line removal with SYMBOL PRESERVATION (classical OMR; oemer's stage
     without the learned mask).
 
@@ -49,17 +163,52 @@ def remove_lines_safe(img, s, staves):
     hk = cv2.getStructuringElement(cv2.MORPH_RECT, (int(1.7 * s), 1))
     opened = cv2.morphologyEx(bw, cv2.MORPH_OPEN, hk)
 
-    rowfrac = bw.mean(axis=1)
-    allowed = np.zeros(img.shape[0], bool)
+    # THE BAND WALK, S1 to S6, ratified 2026-07-28. Replaces the literal
+    # `rowfrac > 0.35`, which was a page-relative coverage test: it compared a
+    # row's dark fraction to a fixed constant with no reference to the
+    # structure the row was claimed to belong to, so it read a narrow system's
+    # genuine rule rows and a full-width system's contamination on the same
+    # scale. Membership is now C2(b) alone, on the bridged substrate,
+    # referenced to the claimed staff's own extent.
+    #
+    # Concentration is NOT a membership condition. C2's clause (a) was struck
+    # 2026-07-28: bridged concentration's keep and discard extremes coincide
+    # at 1.0000, so it separates nothing. It survives as the sentinel below,
+    # which halts rather than classifies.
+    sub = substrate.page_substrate(img)
+    ext = sub['extent']
+    nrows = sub['nrows']
+    allowed = np.zeros(nrows, bool)
     thicknesses = []
+    accepted = []
     for st in staves:
+        # D4: this value is consumed as a reference frame for every
+        # measurement below, so it is itself a measurement and is named.
+        # It denotes the extent of the drawn rules of the staff these seed
+        # rows are claimed to belong to, taken from detect_staves' VALIDATED
+        # output, never from the page and never from the row under test.
+        staff_extent = int(max(int(ext[y]) for y in st))
+        if staff_extent <= 0:
+            raise WalkRaise("walk: staff on page %r has no inked rule rows; "
+                            "its extent is undefined" % (page,))
         for y in st:
-            lo = y
-            while lo > 0 and rowfrac[lo - 1] > 0.35: lo -= 1
-            hi = y
-            while hi < len(rowfrac) - 1 and rowfrac[hi + 1] > 0.35: hi += 1
-            allowed[max(0, lo - 1):hi + 2] = True
-            thicknesses.append(hi - lo + 1)
+            seed = _snap_seed(ext, y, staff_extent, s, nrows, page)   # S2
+            # S1, seed assertion: a failing seed RAISES. True by construction
+            # of the snap; asserted anyway, because a silent change to the
+            # snap must not silently invalidate the walk (V2-B).
+            if not _extent_consistent(ext, seed, staff_extent, staff_extent,
+                                      nrows):
+                raise WalkRaise("walk: snapped seed %d on page %r fails "
+                                "membership against staff extent %d"
+                                % (seed, page, staff_extent))
+            members = _walk_band(ext, seed, staff_extent, nrows)  # S3, S4, S5
+            allowed[max(0, members[0] - 1):members[-1] + 2] = True
+            thicknesses.append(len(members))                      # S6
+            accepted.extend(members)
+    # The sentinel binds HERE, downstream of the walk's decision and upstream
+    # of nothing. Ruled acceptances only.
+    substrate.sentinel(sub, accepted, 'beams.remove_lines_safe band walk',
+                       page)
     line_t = float(np.median(thicknesses)) if thicknesses else 3.0
 
     # vertical run length through every ink pixel
@@ -139,9 +288,9 @@ def beams_on_stem(stem, bars, s):
     return n
 
 
-def read_beams(img, s, staves, heads):
+def read_beams(img, s, staves, heads, page=None):
     """Full beam read for a page. Returns per-head beam counts plus the bars found."""
-    bw, nl = remove_lines_safe(img, s, staves)
+    bw, nl = remove_lines_safe(img, s, staves, page)
     bars = detect_beam_bars(nl, s)
     out = []
     for h in heads:
