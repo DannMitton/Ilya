@@ -99,14 +99,27 @@ export function contrastRatio(a: RGB, b: RGB): number {
 // ---------------------------------------------------------------------------
 // Shane palette (spec v6 §13 + Ilya tokens referenced by name)
 //
-// NOTE: these placeholder hex values mirror Ilya's Calm Authority palette.
-// At integration time the Ilya design tokens are authoritative; if any token
-// value changes upstream, update it here and the test will re-verify every
-// obligation against the new value. `arc-green` and `signal-red` are
-// Shane-specific additions (spec v6 §13) not present in Ilya's app.css;
-// `white` is the Route B interior and field colour. `prep-amber` (v11,
-// spec §13) is the prep-countdown flash, a full-opacity fill on the white
-// interior, registered below as two locked obligations.
+// These values mirror Ilya's Calm Authority palette, and `app.css` is
+// authoritative for every one of them that it declares. That mirroring is no
+// longer maintained by hand: R20's check in contrast.test.ts reads `app.css`
+// at check time and fails if any value here disagrees with the token of the
+// same name, so a token change upstream breaks the build rather than
+// silently invalidating this file.
+//
+// CORRECTION, 2026-07-30. This comment previously stated that `arc-green` and
+// `signal-red` are "Shane-specific additions (spec v6 §13) not present in
+// Ilya's app.css". That is false as of `app.css` md5
+// cf7bd6350fed1945c9aba775f957d618, read 2026-07-30: `arc-green`,
+// `signal-red`, `prep-amber`, `surround-shane`, and `light-lavender` are all
+// declared in its `:root` block, under a header reading "Shane pacifier
+// (fourth tab)". The sentence was the source R20's original exemption list
+// was written from, and it exempted from the drift check the five tokens most
+// likely to drift. This note asserts present falsity only and makes no claim
+// about whether the sentence was true when it was written. See Fable's
+// Ruling 1 and Ruling 2 amendment three, both 2026-07-30.
+//
+// `prep-amber` (v11, spec §13) is the prep-countdown flash, a full-opacity
+// fill on the white interior, registered below as two locked obligations.
 // ---------------------------------------------------------------------------
 
 export const PALETTE = {
@@ -125,6 +138,21 @@ export const PALETTE = {
 } as const;
 
 export type Token = keyof typeof PALETTE;
+
+/**
+ * Membership asserts one thing only: `app.css` declares no token of this name.
+ *
+ * It is not a statement about ownership, provenance, or which product a colour
+ * belongs to. R20 checks membership in both directions, so a key listed here
+ * fails if `app.css` ever gains a token of that name, and a key absent from
+ * here fails if `app.css` has none. Measured 2026-07-30 against `app.css` md5
+ * cf7bd6350fed1945c9aba775f957d618: `white` is the only such key.
+ *
+ * SCOPE, stated in the rule (Fable, Ruling 2 amendment two, 2026-07-30): R20
+ * governs the values of keys that exist in PALETTE. It is not a completeness
+ * guarantee. Deleting a key removes it from the rule.
+ */
+export const NO_UPSTREAM_TOKEN: readonly Token[] = ['white'];
 
 // ---------------------------------------------------------------------------
 // WCAG thresholds
