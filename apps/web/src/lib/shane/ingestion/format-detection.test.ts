@@ -100,6 +100,62 @@ describe('detectScoreFormat: recognised refusals', () => {
 		}
 	});
 
+	/**
+	 * The expected value here is NOT derived from the detector. It is the
+	 * literal 32-byte header of a real iPhone photograph of a Musorgsky score,
+	 * read with `xxd` on 2026-08-03 (`IMG_5042.HEIC` and `IMG_5043.HEIC`,
+	 * byte-identical headers). Standing Rule V1: no acceptance test takes its
+	 * expected value from the mechanism under test.
+	 *
+	 *     0000: 00 00 00 28  66 74 79 70  68 65 69 63   ...(  ftyp  heic
+	 *     0010: 6d 69 66 31  4d 69 48 45  4d 69 50 72   mif1  MiHE  MiPr
+	 */
+	const IPHONE_HEIC_HEADER = new Uint8Array([
+		0x00, 0x00, 0x00, 0x28, 0x66, 0x74, 0x79, 0x70, 0x68, 0x65, 0x69, 0x63,
+		0x00, 0x00, 0x00, 0x00, 0x6d, 0x69, 0x66, 0x31, 0x4d, 0x69, 0x48, 0x45,
+		0x4d, 0x69, 0x50, 0x72, 0x6d, 0x69, 0x61, 0x66
+	]);
+
+	it('refuses a real iPhone HEIC photograph as an image, not a generic shrug', () => {
+		expect(detectScoreFormat('IMG_5042.HEIC', IPHONE_HEIC_HEADER)).toEqual({
+			ok: false,
+			failure: { kind: 'image' }
+		});
+	});
+
+	it('refuses HEIC by content even when the extension lies', () => {
+		expect(detectScoreFormat('score.musicxml', IPHONE_HEIC_HEADER)).toEqual({
+			ok: false,
+			failure: { kind: 'image' }
+		});
+	});
+
+	it('refuses AVIF, the same container family', () => {
+		const avif = new Uint8Array([
+			0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x61, 0x76, 0x69, 0x66
+		]);
+		expect(detectScoreFormat('scan.avif', avif)).toEqual({
+			ok: false,
+			failure: { kind: 'image' }
+		});
+	});
+
+	/**
+	 * NEGATIVE CONTROL, Standing Rule V2. An MP4 video is also ISO-BMFF and
+	 * also carries `ftyp` at offset 4. If this passes only because the
+	 * predicate matches `ftyp` alone, it is not reading the brand, and the
+	 * detector would call every MP4 an image. The brand here is `isom`.
+	 */
+	it('does NOT call a non-image ISO-BMFF file an image', () => {
+		const mp4 = new Uint8Array([
+			0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6f, 0x6d
+		]);
+		expect(detectScoreFormat('clip.mp4', mp4)).toEqual({
+			ok: false,
+			failure: { kind: 'unrecognised' }
+		});
+	});
+
 	it('refuses JSON that is not MNX', () => {
 		expect(detectScoreFormat('data.json', utf8('{ "notMnx": true }'))).toEqual({
 			ok: false,

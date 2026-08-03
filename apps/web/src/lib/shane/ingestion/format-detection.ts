@@ -71,13 +71,52 @@ const isMidi = (b: Uint8Array) => startsWithBytes(b, [0x4d, 0x54, 0x68, 0x64]); 
 
 const isPdf = (b: Uint8Array) => startsWithBytes(b, [0x25, 0x50, 0x44, 0x46]); // "%PDF"
 
+const hasBytesAt = (bytes: Uint8Array, offset: number, sig: number[]): boolean =>
+	sig.every((b, i) => bytes[offset + i] === b);
+
+/**
+ * ISO-BMFF still-image brands: HEIC/HEIF (iPhone's capture default) and AVIF.
+ *
+ * These CANNOT be matched from offset 0. An ISO-BMFF file opens with a
+ * four-byte box SIZE, which varies per file, then the literal `ftyp` at
+ * offset 4, then the major brand at offset 8. A `startsWithBytes` list
+ * therefore misses every one of them, which is why a photographed score
+ * previously fell through to `unrecognised` and earned a generic error
+ * instead of the honest "images are coming soon" note.
+ *
+ * SOURCED, measured 2026-08-03 from two iPhone photographs of a Musorgsky
+ * score (`IMG_5042.HEIC`, `IMG_5043.HEIC`, byte-identical headers):
+ *
+ *     0000: 00 00 00 28  66 74 79 70  68 65 69 63   ...(  ftyp  heic
+ *     0010: 6d 69 66 31  ...                        mif1
+ *
+ * The brand list is deliberately broad. A false positive costs only a
+ * slightly wrong refusal message on a file we refuse either way; a false
+ * negative is the defect being fixed here.
+ */
+const ISO_BMFF_IMAGE_BRANDS = [
+	'heic', 'heix', 'heim', 'heis', // HEIF still images
+	'hevc', 'hevx', 'hevm', 'hevs', // HEIF image sequences
+	'mif1', 'msf1', // generic HEIF image / image-sequence brands
+	'avif', 'avis', // AVIF, same container family
+];
+
+const FTYP = [0x66, 0x74, 0x79, 0x70]; // "ftyp"
+
+const isIsoBmffImage = (b: Uint8Array): boolean => {
+	if (!hasBytesAt(b, 4, FTYP)) return false;
+	const brand = String.fromCharCode(b[8], b[9], b[10], b[11]).toLowerCase();
+	return ISO_BMFF_IMAGE_BRANDS.includes(brand);
+};
+
 const isImage = (b: Uint8Array) =>
 	startsWithBytes(b, [0x89, 0x50, 0x4e, 0x47]) || // PNG
 	startsWithBytes(b, [0xff, 0xd8, 0xff]) || // JPEG
 	startsWithBytes(b, [0x47, 0x49, 0x46, 0x38]) || // GIF
 	startsWithBytes(b, [0x42, 0x4d]) || // BMP
 	(startsWithBytes(b, [0x52, 0x49, 0x46, 0x46]) && // RIFF …
-		b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50); // … WEBP
+		b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50) || // … WEBP
+	isIsoBmffImage(b); // HEIC / HEIF / AVIF
 
 // ── Text decoding ────────────────────────────────────────────────
 
