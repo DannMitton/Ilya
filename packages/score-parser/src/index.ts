@@ -9,6 +9,9 @@
  *   - `MnxScoreParser` and `MusicXmlScoreParser`, the two `ScoreParser`
  *     implementations.
  *   - `generateRendererMusicXml`, the renderer-output function.
+ *   - The E.20 measurement layer: phonation aggregation, the diction-mark
+ *     fold, Pacheco tessitura, and the tempo seam. See the block at the
+ *     foot of this file.
  *
  * Consumers (Shane's analysis layer, the OMR runners, the rendering
  * layer) import from this barrel and do not reach into the package
@@ -75,3 +78,103 @@ export {
   type PaginatedScore,
   type SystemSlice,
 } from './page-layout';
+
+/*
+ * ── The measurement layer (built E.20, wired E.21) ───────────────────────
+ *
+ * Four modules, built and tested against the corpus in E.20 and exported
+ * here so the app can reach them without touching package internals. Each
+ * carries its own abstention discipline:
+ *
+ *   phonation      sums sounding duration per pitch, per vowel, and per
+ *                  pitch-per-vowel. Reads `base`/`dots`/`tuplet`, NOT
+ *                  `duration.fraction`, which on `musx2mxl` output omits the
+ *                  tuplet adjustment and overstated Sunless 3 by 21 percent.
+ *                  Carries `PhonationTrust`, naming the bars that close
+ *                  under no metre.
+ *   diction-marks  folds `#` out of the syllable slot it should never have
+ *                  occupied (Dann's ruling, 2026-07-30: it is a non-syllabic
+ *                  boundary, concatenated onto the preceding phoneme).
+ *                  `vowelResolverAbstentions` distinguishes a vacated tail
+ *                  event from a melisma; the two look identical afterward.
+ *   tessitura      Pacheco's half-maximum band over summed durations, with
+ *                  the degeneracy fallback. A DIFFERENT quantity from the
+ *                  app's current 15th-to-85th-percentile band over note
+ *                  counts; which one ships is open item A5.
+ *   tempo-seam     singer's override, then encoded metronome mark, then
+ *                  verbal term via Quantz's tiers, then ABSTAIN. Never a
+ *                  default bpm. Exact rationals throughout; the decimals are
+ *                  display only.
+ *
+ * `lookupTempoLexicon` must be consulted BEFORE `resolveTempoTerm`, which
+ * fuzzy-matches and would resolve "Sehr langsam" through "langsam" alone,
+ * losing the "sehr" that makes it adagio. That order is load-bearing.
+ */
+
+export {
+  aggregatePhonation,
+  secondsFor,
+  totalFoldCycles,
+  nominalOscillations,
+  soundingFromNotation,
+  soundingFromFraction,
+  normalizeFraction,
+  fractionToNumber,
+  midiOf,
+  hzOf,
+  type PhonationOptions,
+  type PhonationTotals,
+  type PhonationTrust,
+  type PhonationCoverage,
+  type BarReading,
+  type BarVerdict,
+  type VowelForEvent,
+  type SecondsResult,
+  type FoldCycleResult,
+} from './phonation';
+
+export {
+  foldDictionMarks,
+  vowelResolverAbstentions,
+  phonationBreakEventIds,
+  PHONATION_BREAK_MARK,
+  type DictionMarkFold,
+  type DictionBreak,
+} from './diction-marks';
+
+export {
+  pachecoTessitura,
+  optimalRegion,
+  thresholdAsNumber,
+  DEFAULT_MARGIN,
+  type TessituraResult,
+  type TessituraOptions,
+  type TessituraBasis,
+} from './tessitura';
+
+export {
+  resolveTempo,
+  tempoCaveats,
+  feltBeat,
+  feltBeatInWholes,
+  timeSignatureAt,
+  readModifiers,
+  bandPosition,
+  classifyCue,
+  classifyGradualCue,
+  rampSeconds,
+  type TempoResolution,
+  type TempoProvenance,
+  type ResolveTempoOptions,
+  type FeltBeat,
+  type GradualCue,
+  type ModifierEffect,
+} from './tempo-seam';
+
+export {
+  lookupTempoLexicon,
+  lexiconHeadTerms,
+  lexiconSize,
+  type LexiconHit,
+  type TempoLanguage,
+} from './tempo-lexicon';

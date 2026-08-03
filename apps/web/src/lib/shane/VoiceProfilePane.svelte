@@ -72,6 +72,7 @@
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/shane/watchlist';
+	import { scoreMetrics } from '$lib/shane/score-metrics';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -319,6 +320,42 @@
 			: null,
 	);
 	const showWatchBand = $derived(!!watchList && watchList.entries.length > 0);
+
+	// ── The measurement layer (E.20 built, E.21 wired) ───────────────────
+	// Phonation time per pitch and per vowel, Pacheco's tessitura, the tempo
+	// seam, seconds, and the nominal fold-cycle count, from one call.
+	//
+	// Read from `analysisScore`, the PERFORMANCE-ORDER projection, for the same
+	// reason `analyzed` is: the question Fit answers is what the singer actually
+	// sings, repeats taken and jumps followed, not what the page shows.
+	//
+	// The resolver is passed only when there is one. Its absence makes the
+	// per-vowel totals ABSENT rather than empty, which is the seam's own
+	// discipline: no vowel was ever asked for, so no claim is made about any.
+	// No tempo override is passed, because the singer has no way to set one yet
+	// (A9 is unbuilt). The seam then abstains wherever the score states no
+	// tempo, and never invents a bpm.
+	//
+	// NOT RENDERED HERE, and deliberately so. The same treatment as
+	// `analysisNotices` above: the data path lands, the pixels wait on Dann's
+	// copy and Kimi's component, because a figure about a singer's voice should
+	// not reach them in wording nobody signed off. Two things must surface when
+	// it is drawn (Fable A.2 and A.3, binding): `tessitura.basis`, and
+	// `tessitura.marginal`, since a knife-edge band presented as robust is a
+	// wrong answer wearing confidence.
+	//
+	// One caveat travels with `phonation.byVowel` until the diction-mark fold
+	// lands: `#` still occupies a syllable slot, so the per-vowel split is
+	// provisional. `byPitch`, `total`, `tessitura`, `seconds`, and `foldCycles`
+	// never consult a syllable and are unaffected.
+	const metrics = $derived(
+		analysisScore
+			? scoreMetrics(analysisScore, {
+					...(vowelResolver ? { vowelForEvent: vowelResolver } : {})
+				})
+			: null,
+	);
+
 	// Page-1 score window: the measured header sets contentTop; the score fills
 	// the window below it, undisplaced by the watch list.
 	const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);

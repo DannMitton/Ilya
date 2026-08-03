@@ -75,6 +75,19 @@ export interface ParsedScore {
   /** Initial tempo plus all changes, in score order. */
   tempoMarkings: TempoMarking[];
 
+  /**
+   * Verbal tempo directions as printed, in document order. Optional so every
+   * existing consumer is unaffected; absent means the parser did not collect
+   * them, NOT that the score has none.
+   */
+  tempoWords?: TempoWord[];
+
+  /**
+   * Metric modulations ("♩ = ♩."), in document order. Optional; absent means the
+   * parser did not collect them, NOT that the score has none.
+   */
+  metricModulations?: MetricModulation[];
+
   /** The vocal line's ordered events: notes and rests, with attached syllables. */
   vocalLine: VocalLineEvent[];
 
@@ -361,6 +374,44 @@ export interface ClefChange {
 }
 
 // ── Tempo markings ────────────────────────────────────────────────
+
+/**
+ * A verbal tempo direction as printed, with no number attached.
+ *
+ * Kept SEPARATE from `TempoMarking`, which requires a `bpm`. A word like
+ * "Andante tranquillo" states a tempo without stating a number, and inventing a
+ * bpm for it at parse time would bury an inference inside a parse result. The
+ * tempo seam resolves these against Quantz's tiers and labels the outcome
+ * `inferred`; until then they are exactly what the page says and no more.
+ *
+ * MEASURED 2026-07-30: five of the six Sunless scores carry a verbal tempo and
+ * no metronome mark, so this is the common case in this repertoire, not an edge.
+ */
+/**
+ * A metric modulation: "♩ = ♩." — the note on the left, in the OLD tempo, lasts
+ * as long as the note on the right in the new one.
+ *
+ * MusicXML writes this as a `<metronome>` carrying TWO `<beat-unit>` elements and
+ * NO `<per-minute>`. An earlier `readTempo` required `per-minute` and returned
+ * undefined, so these were dropped silently — and this is exactly the marking a
+ * composer writes when the default "hold the smallest common value constant"
+ * reading is NOT what they want, which is the simple-to-compound case.
+ */
+export interface MetricModulation {
+  measureIndex: number;
+  rhythmicPosition: RhythmicPosition;
+  /** The beat as counted before the change. */
+  from: { base: NoteBase; dots: number };
+  /** The beat it becomes equal to. */
+  to: { base: NoteBase; dots: number };
+}
+
+export interface TempoWord {
+  measureIndex: number;
+  rhythmicPosition: RhythmicPosition;
+  /** The direction text exactly as printed. */
+  text: string;
+}
 
 export interface TempoMarking {
   /** Where this tempo begins. */

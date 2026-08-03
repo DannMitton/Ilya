@@ -61,6 +61,8 @@ import type {
 	SyllableInfo,
 	SyllableSegment,
 	TempoMarking,
+	TempoWord,
+	MetricModulation,
 	TimeSignature,
 	TimeSignatureChange,
 	TupletInfo,
@@ -375,6 +377,8 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const keySignatures: KeySignatureChange[] = [];
 		const clefs: ClefChange[] = [];
 		const tempoMarkings: TempoMarking[] = [];
+		const tempoWords: TempoWord[] = [];
+		const metricModulations: MetricModulation[] = [];
 		const vocalLine: VocalLineEvent[] = [];
 		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
 
@@ -468,6 +472,13 @@ export class MusicXmlScoreParser implements ScoreParser {
 					case 'direction': {
 						const t = readTempo(child, mi, cursor);
 						if (t) tempoMarkings.push(t);
+						// A printed tempo WORD, kept whether or not a number accompanies it.
+						// Five of six corpus scores state a word and no metronome, so
+						// dropping these is what left the tempo unresolvable (§E.20).
+						const mod = readMetricModulation(child, mi, cursor);
+						if (mod) metricModulations.push(mod);
+						const dirWords = readDirectionWords(child);
+						if (dirWords) tempoWords.push({ measureIndex: mi, rhythmicPosition: { fraction: cursor }, text: dirWords });
 						// Control flow from <sound> only; the printed marks are display.
 						for (const s of directChildren(child, 'sound')) {
 							if (readSoundNav(s, mJump)) mHasSoundNav = true;
@@ -643,6 +654,8 @@ export class MusicXmlScoreParser implements ScoreParser {
 			clefs,
 			timeSignatures,
 			tempoMarkings,
+			tempoWords,
+			metricModulations,
 			vocalLine,
 		};
 
@@ -885,7 +898,64 @@ function readTempo(direction: XmlEl, measureIndex: number, cursor: Fraction): Te
 		if (Number.isFinite(t) && t > 0) bpm = Math.round(t);
 	}
 	if (bpm === undefined) return undefined;
-	return { measureIndex, rhythmicPosition: { fraction: cursor }, bpm, beatUnit, beatUnitDots };
+	const printed = readDirectionWords(direction);
+	return {
+		measureIndex,
+		rhythmicPosition: { fraction: cursor },
+		bpm,
+		beatUnit,
+		beatUnitDots,
+		...(printed ? { text: printed } : {}),
+	};
+}
+
+/**
+ * The printed text of a `<direction>`, joining every `<words>` it contains.
+ * Returns undefined when the direction prints no words (a bare metronome, a
+ * dynamic glyph, a wedge).
+ */
+function readDirectionWords(direction: XmlEl): string | undefined {
+	const parts: string[] = [];
+	for (const dt of directChildren(direction, 'direction-type')) {
+		for (const w of directChildren(dt, 'words')) {
+			const s = textOf(w).trim();
+			if (s) parts.push(s);
+		}
+	}
+	const joined = parts.join(' ').replace(/\s+/g, ' ').trim();
+	return joined.length > 0 ? joined : undefined;
+}
+
+/**
+ * A metric modulation from a `<metronome>` with two `<beat-unit>` children and no
+ * `<per-minute>`. Returns undefined for an ordinary numbered mark, which
+ * `readTempo` handles, and for anything malformed.
+ */
+function readMetricModulation(
+	direction: XmlEl,
+	measureIndex: number,
+	cursor: Fraction,
+): MetricModulation | undefined {
+	const metronome = firstDesc(direction, 'metronome');
+	if (!metronome) return undefined;
+	// A numbered mark is not a modulation.
+	if (childText(metronome, 'per-minute')) return undefined;
+
+	// Children in document order: beat-unit [beat-unit-dot...] beat-unit [beat-unit-dot...]
+	const beats: Array<{ base: NoteBase; dots: number }> = [];
+	const kids = metronome.children;
+	for (let i = 0; i < kids.length; i++) {
+		const child = kids[i];
+		if (child.tagName === 'beat-unit') {
+			const v = textOf(child).trim();
+			if (!isNoteBase(v)) return undefined;
+			beats.push({ base: v, dots: 0 });
+		} else if (child.tagName === 'beat-unit-dot' && beats.length > 0) {
+			beats[beats.length - 1].dots += 1;
+		}
+	}
+	if (beats.length < 2) return undefined;
+	return { measureIndex, rhythmicPosition: { fraction: cursor }, from: beats[0], to: beats[1] };
 }
 
 function readSoftware(scorePartwise: XmlEl): string {
@@ -1002,6 +1072,8 @@ function emptyScore(input: MusicXmlScoreInput): ParsedScore {
 		keySignatures: [],
 		timeSignatures: [],
 		tempoMarkings: [],
+		tempoWords: [],
+		metricModulations: [],
 		vocalLine: [],
 	};
 }
