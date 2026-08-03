@@ -26,14 +26,21 @@
  * "band". Mitton (2020) hit this at *Sunless 4* and re-based on the next most
  * frequent pitch. The degeneracy is drawn on his own Fig. 6.27, physical p. 117,
  * which shows BOTH lines: the short one spanning only F♯3 and the long one
- * running E3 to C♯4. An implementation must detect the case and record which
+ * running E3 to C4. An implementation must detect the case and record which
  * basis it used rather than silently returning a single note.
+ *
+ * The band is E3–C4, not E3–C♯4. Mitton's prose at printed p. 99 states it, and
+ * the rows-52-to-71 block of his workbook reproduces it. An earlier reading of
+ * this docstring took the long line's endpoint off the figure by eye and called
+ * it C♯4; that estimate is superseded by the arithmetic and the prose, per
+ * `claude/e21-tessitura-block-audit_2026-08-02.md`. "Physical p. 117" is right.
  *
  * ── And one property of the method worth surfacing ────────────────────
  *
- * **The threshold has a knife-edge.** At *Sunless 4*, C♯4 holds 10.5 quavers and
- * C4 holds 11, so any threshold in (10.5, 11] separates them and the two
- * candidate answers differ by a single half-quaver bar. The rule is unstable
+ * **The threshold has a knife-edge.** At *Sunless 4*, C♯4 holds 9 quavers against
+ * a threshold of 9.5, so it falls half a quaver short of the band while C4 at 12
+ * sits just above the line. The upper edge turns on that half quaver, and any
+ * threshold at or below 9 would admit C♯4 instead. The rule is unstable
  * whenever bars cluster near the line. This module reports how many bars sit
  * within a margin of the threshold and marks the band `marginal` when any do.
  * That is the abstention discipline applied to a statistic: a knife-edge band

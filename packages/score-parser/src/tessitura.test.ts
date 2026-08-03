@@ -102,25 +102,38 @@ describe("Pacheco's own published example, Journal of Singing 69/5 (2013) p. 559
 });
 
 describe('the degeneracy, and Mitton\'s documented fallback', () => {
-	// Sunless 4's bars, read VERBATIM from `shane_mitton_reference_dataset.json`
-	// on 2026-07-30, with the bare key `G` resolved to G3 per Dann's ruling of the
-	// same date. Fourteen bars, transcribed in the dataset's own order.
+	// Sunless 4's bars, ROWS 52 TO 71 of `Mitton_Daniel_A_202006_DMA_datatables.xlsx`.
 	//
-	// Read, not recalled: a first version of this fixture was reconstructed from
-	// memory of a summary, invented a D3 bar the dataset does not contain, and got
-	// six of fourteen heights wrong. It produced a plausible band and a failing
-	// test, which is the lucky outcome; the unlucky one is a plausible band and a
-	// passing test.
+	// PROVENANCE CHAIN, stated in full because the last version of this fixture was
+	// read faithfully and was still wrong. These heights are read from
+	// `claude/e21-tessitura-block-audit_2026-08-02.md` §3, which is itself a
+	// recorded reading of the workbook with `openpyxl`, loaded twice, once
+	// `data_only=True` for values and once for formula text, on 2026-08-02.
+	// The workbook is one further link up and was not reachable from a connected
+	// folder when this correction was made.
+	//
+	// WHY THE BLOCK CHANGED. The workbook carries TWO per-song row blocks, rows
+	// 3-22 and rows 52-71, differing on almost every pitch. The prior fixture was
+	// rows 3-22, read verbatim from `shane_mitton_reference_dataset.json`, which
+	// was itself built from that block. The workbook's own `Worksheet sums` and
+	// the dissertation prose both use rows 52-71. Printed p. 99, verbatim:
+	// "F#3 occurs so frequently in this song (the equivalent of 50 out of 165
+	// eighth notes)... If we calculate using the next most frequent value (G3)
+	// instead, the tessitura becomes E3-C4." Both 165 and E3-C4 are this block.
+	//
+	// Reading protects you from inventing a number. It does not protect you from
+	// inheriting one. Ask what the file you are reading was derived from.
 	const SUNLESS_4 = barsOf({
-		'D#4': 1, D4: 4, 'C#4': 10.5, C4: 11, B3: 15.5, 'A#3': 11, A3: 10,
-		'G#3': 10, G3: 17, 'F#3': 52.5, E3: 15, 'D#3': 4, 'C#3': 3, B2: 1.5,
+		'D#4': 1, D4: 4, 'C#4': 9, C4: 12, B3: 15.5, 'A#3': 11, A3: 9,
+		'G#3': 10, G3: 19, 'F#3': 51.5, E3: 15, 'D#3': 3.5, 'C#3': 3, B2: 1.5,
 	});
 
 	it("returns a ONE-NOTE band under the published rule, exactly as Fig. 6.27 draws it", () => {
-		// 52.5 / 2 = 26.25 cuts only F#3. The degeneracy is drawn on Mitton's own
-		// page, so reproducing it is the correct behaviour, not a bug.
+		// 51.5 / 2 = 25.75 cuts only F#3, the next bar being G3 at 19. The
+		// degeneracy is drawn on Mitton's own page, so reproducing it is the
+		// correct behaviour, not a bug.
 		const r = pachecoTessitura(SUNLESS_4, { allowFallback: false })!;
-		expect(thresholdAsNumber(r)).toBe(26.25);
+		expect(thresholdAsNumber(r)).toBe(25.75);
 		expect(r.barsReaching).toBe(1);
 		expect(r.low).toBe(midi('F#3'));
 		expect(r.high).toBe(midi('F#3'));
@@ -128,18 +141,22 @@ describe('the degeneracy, and Mitton\'s documented fallback', () => {
 	});
 
 	it('re-bases on half the second-tallest bar and records that it did', () => {
-		// Half of G3's 17 is 8.5, which admits E3 up to C#4.
+		// Half of G3's 19 is 9.5, which admits E3 up to C4. This reproduces the
+		// dissertation's own stated answer at printed p. 99, which is the
+		// independent side of this cross-measure: the expected value comes from a
+		// 2020 published sentence, never from `pachecoTessitura`.
 		const r = pachecoTessitura(SUNLESS_4)!;
 		expect(r.degenerate).toBe(true);
 		expect(r.basis).toBe('half-second-maximum');
-		expect(thresholdAsNumber(r)).toBe(8.5);
+		expect(thresholdAsNumber(r)).toBe(9.5);
 		expect(r.low).toBe(midi('E3'));
-		expect(r.high).toBe(midi('C#4'));
+		expect(r.high).toBe(midi('C4'));
 	});
 
 	it('flags the knife-edge, which is a property of the method', () => {
-		// C#4 holds 10.5 and C4 holds 11: a threshold anywhere in (10.5, 11]
-		// separates them, so the band's upper edge turns on half a quaver.
+		// C#4 holds 9 against a threshold of 9.5, so it falls HALF A QUAVER short
+		// of the band, and C4 at 12 is the bar immediately above the line. The
+		// upper edge turns on that half quaver, which is why it is reported.
 		const r = pachecoTessitura(SUNLESS_4, { margin: q(2.5) })!;
 		expect(r.marginal).toBe(true);
 		expect(r.marginalPitches).toContain(midi('C#4'));
