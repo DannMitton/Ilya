@@ -34,12 +34,20 @@
  *   2. Bank one quiet second, after a short settling discard, as the ambient
  *      noise floor. Then onQuiet(), and the wizard asks for the fry.
  *   3. Listen for the throwaway fry with the same detector on the same
- *      trailing window. Finish on the first accepting window.
+ *      trailing window. A window is only considered at all once it carries
+ *      something above the banked quiet second (item 1.4a, E.26); finish on the
+ *      first accepting window that does.
  *   4. On timeout, finish anyway from the most recent window that yielded an
  *      inter-pulse rate. This is deliberate: the range check is guidance, not
  *      gatekeeping (spec §2 Phase 1, "flag, do not block"), so a fry at 15 Hz
  *      must produce a range verdict, not a failure. Only a run that never
  *      recovered any rate at all is an honest failure.
+ *
+ *      The presence test in step 3 is what makes step 4 mean anything. It was
+ *      added after a walk, not a reading: on 2026-08-04 the detector accepted a
+ *      window of Dann's silent room, so the run finished about one second after
+ *      the fry prompt appeared and reported 23.1 Hz for a fry that never
+ *      happened. The ten-second timeout had been unreachable in practice.
  *   5. Release the microphone, then measure through readiness.ts. No formant
  *      extraction and no vowel are involved at any point.
  *
@@ -72,7 +80,7 @@ import type { Vowel, VoiceType } from './types';
 import type { CaptureError, ShaneEngineError } from './errors';
 import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import { detect } from './detector';
-import { assessReadiness } from './readiness';
+import { assessReadiness, bandPower, classifyFryPresence, roomSnrDb } from './readiness';
 import { runCapture, type CaptureOutcome } from './analyze';
 
 /** Preferred capture rate; the engine's FFT constants assume 44.1/48 kHz. */
@@ -189,6 +197,13 @@ export class LiveCaptureSession implements CaptureSession {
 	private lastFailed: string[] = [];
 	/** The banked ambient second of a readiness run. */
 	private quietBuf: Float64Array | null = null;
+	/**
+	 * The banked ambient second's band power, held so the readiness tick can ask
+	 * "is anything actually happening?" every hop without recomputing a Welch
+	 * PSD over a buffer that never changes. `null` = not measurable, which the
+	 * tick treats as "cannot tell", never as "nothing there".
+	 */
+	private quietPower: number | null = null;
 	/** The most recent readiness window that yielded an inter-pulse rate. */
 	private fryBuf: Float64Array | null = null;
 
@@ -224,6 +239,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.lastFailed = [];
 		this.loggedFirstChunk = false;
 		this.quietBuf = null;
+		this.quietPower = null;
 		this.fryBuf = null;
 		this.releaseAudio();
 	}
@@ -245,6 +261,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.chunks = [];
 		this.chunkSamples = 0;
 		this.quietBuf = null;
+		this.quietPower = null;
 		this.fryBuf = null;
 		this.releaseAudio();
 		if (wasActive) {
@@ -267,6 +284,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.chunks = [];
 		this.chunkSamples = 0;
 		this.quietBuf = null;
+		this.quietPower = null;
 		this.fryBuf = null;
 		this.releaseAudio();
 		handlers?.onError(error);
@@ -372,11 +390,17 @@ export class LiveCaptureSession implements CaptureSession {
 				this.quietTimer = null;
 			}
 			this.quietBuf = this.tail(want);
+			// The reference for every presence test below (E.26). Measured once
+			// here rather than per hop, because this buffer never changes again.
+			this.quietPower = bandPower(this.quietBuf, this.sampleRate);
 			// Start the fry side from an empty buffer, so no ambient audio can
 			// leak into the sample that supplies the signal side of the ratio.
 			this.chunks = [];
 			this.chunkSamples = 0;
-			dbg('readiness: quiet second banked,', want, 'samples at', this.sampleRate, 'Hz');
+			dbg(
+				'readiness: quiet second banked,', want, 'samples at', this.sampleRate, 'Hz',
+				'| quiet band power', this.quietPower === null ? 'n/a' : this.quietPower.toExponential(3)
+			);
 			this.readinessHandlers?.onQuiet();
 			if (gen !== this.gen || !this.active) return;
 			this.gateTimer = setInterval(() => this.readinessTick(gen), GATE_HOP_MS);
@@ -510,11 +534,28 @@ export class LiveCaptureSession implements CaptureSession {
 		const y = this.tail(win);
 		const det = detect(y, this.sampleRate);
 		this.lastFailed = det.failed;
+		// Is anything happening at all? (E.26.) The detector answers "at what
+		// rate", never "is there a voice", and on 2026-08-04 it answered the
+		// first question about a silent room and was believed. The room ratio
+		// is the instrument for the second question, and we already hold both
+		// sides of it here.
+		const snr = roomSnrDb(this.quietPower, bandPower(y, this.sampleRate));
+		const heard = classifyFryPresence(snr);
 		dbg(
 			'readiness gate: pulses', det.nPulses,
 			'| rate', fmt(det.rateHz, 1), 'Hz',
+			'| room', fmt(snr, 1), 'dB',
+			'| heard', heard === null ? 'n/a' : heard,
 			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', ')
 		);
+		// Nothing above the ambient second: this window is a second reading of
+		// the room. Keep listening. The singer gets the full
+		// READINESS_FRY_TIMEOUT_MS to actually fry, which is what the timeout
+		// was for; before E.26 an accepting window of room noise could end the
+		// run about a second after the prompt appeared, and the singer never
+		// got a turn. `heard === null` does not veto: an unmeasurable ratio is
+		// not evidence of silence.
+		if (heard === false) return;
 		// An accepting window always carries a rate (c3 gates on the interval),
 		// so this assignment covers the accepting case as well.
 		if (det.rateHz !== null) this.fryBuf = y;
@@ -539,6 +580,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.chunks = [];
 		this.chunkSamples = 0;
 		this.quietBuf = null;
+		this.quietPower = null;
 		this.fryBuf = null;
 		this.releaseAudio();
 

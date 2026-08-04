@@ -28,6 +28,14 @@
  * `detector.ts:24` (`if (!noise.length) return 60;`), which is item 1.4b and is
  * NOT touched here; the word a singer reads for an unmeasurable noise floor is
  * Dann's ruling and is not pre-empted. This module makes no claim instead.
+ *
+ * E.26 added the other half of that discipline, which was missing. Abstaining
+ * when a measurement CANNOT be made is only useful if the module also declines
+ * to describe a measurement it had no business making: before E.26 the gate
+ * classified whatever inter-pulse rate the detector recovered, including one
+ * recovered from a silent room, and handed the singer range guidance about a
+ * fry that never happened. See `classifyFryPresence` and the presence veto in
+ * `assessReadiness`.
  */
 
 import { welchPSD } from './dsp';
@@ -73,6 +81,32 @@ export const PSD_NPERSEG = 2048;
  */
 export const ROOM_SNR_TOAST_DB = 25;
 
+/**
+ * The minimum room ratio, in dB, at which the throwaway sample is taken to
+ * carry a fry AT ALL. Below this the sample is a second reading of the room,
+ * and any inter-pulse rate recovered from it describes the room rather than a
+ * voice.
+ *
+ * PLACEHOLDER, and named as one, on the same footing as `ROOM_SNR_TOAST_DB`
+ * above. What it currently stands on is one measurement and one arithmetic
+ * fact, both of which bound it from below and neither of which fixes it:
+ *
+ *   - MEASURED, E.26, 2026-08-04, Dann's iMac, deployed build `a1d58e4`: a
+ *     readiness run in which the singer did not fry at all returned
+ *     `snrDb: 0.708`. The gate nonetheless recovered 17 pulses, called them
+ *     23.1 Hz, and told the singer their fry was near the edge of our range.
+ *   - ARITHMETIC: two independent draws of the same room differ only by
+ *     estimator variance, so noise-against-noise sits at 0 dB by construction.
+ *     Synthetic controls in `readiness.test.ts` read -0.15 to +0.07 dB.
+ *
+ * So the floor must clear roughly 1 dB. 6 dB is a power factor of four, which
+ * is far above that and far below any phonation, but the SEPARATION between a
+ * real fry and a real room has NOT been measured through this path on any
+ * device. Item 1.5 (Dann's microphone against a preview build) is the step that
+ * anchors it. Do not treat this number as measured.
+ */
+export const FRY_PRESENCE_MIN_SNR_DB = 6;
+
 /** What the quiet second and the throwaway fry say about the room. */
 export interface RoomMeasurement {
 	/** Mean PSD over the SNR band of the quiet second. `null` = not measurable. */
@@ -97,7 +131,20 @@ export type FryRangeVerdict = 'clear' | 'marginal' | 'out-of-range' | 'not-measu
 
 export interface ReadinessResult {
 	room: RoomMeasurement;
-	/** The throwaway fry's inter-pulse rate, Hz. `null` = not recovered. */
+	/**
+	 * Whether the throwaway sample carried anything above the ambient second
+	 * (`FRY_PRESENCE_MIN_SNR_DB`). `null` when the room ratio itself could not
+	 * be measured, which is not the same as `false` and must never be shown as
+	 * one: `false` says we listened and heard nothing; `null` says we could not
+	 * tell. Same discipline as `plausibility: 'unchecked'` and item 1.4b's
+	 * `noiseFloor: 'unmeasured'`.
+	 */
+	fryHeard: boolean | null;
+	/**
+	 * The throwaway fry's inter-pulse rate, Hz. `null` = not recovered, OR
+	 * recovered from a sample that carried no fry, which is the same answer to
+	 * the singer and for the same reason.
+	 */
 	fryRateHz: number | null;
 	fryRange: FryRangeVerdict;
 	/**
@@ -156,11 +203,35 @@ export function bandPower(
 export function measureRoom(quiet: Float64Array, fry: Float64Array, sr: number): RoomMeasurement {
 	const noiseFloor = bandPower(quiet, sr);
 	const signal = bandPower(fry, sr);
-	if (noiseFloor === null || signal === null || noiseFloor <= 0 || signal <= 0) {
-		return { noiseFloor, signal, snrDb: null, lively: false };
-	}
-	const snrDb = 10 * Math.log10(signal / noiseFloor);
-	return { noiseFloor, signal, snrDb, lively: snrDb < ROOM_SNR_TOAST_DB };
+	const snrDb = roomSnrDb(noiseFloor, signal);
+	return { noiseFloor, signal, snrDb, lively: snrDb !== null && snrDb < ROOM_SNR_TOAST_DB };
+}
+
+/**
+ * The ratio itself, split out from `measureRoom` so the live driver can hold
+ * the quiet second's band power once and re-ask the question every hop without
+ * recomputing a Welch PSD over an unchanging buffer (`live.ts`, the readiness
+ * tick). Same abstention rule: `null` when either side has no answer, and a
+ * non-positive power is no answer rather than a very small one.
+ */
+export function roomSnrDb(noiseFloor: number | null, signal: number | null): number | null {
+	if (noiseFloor === null || signal === null || noiseFloor <= 0 || signal <= 0) return null;
+	return 10 * Math.log10(signal / noiseFloor);
+}
+
+/**
+ * Did the throwaway sample carry a fry at all?
+ *
+ * This is the question the gate did not ask before E.26, and its absence is why
+ * a silent room could be handed back to a singer as a fry reading near the edge
+ * of our range. Mirrors `classifyFryRate` below: a small named classifier over
+ * one measured quantity, so the threshold is reachable by `vitest`.
+ *
+ * `null` is an abstention, not a "no". See `ReadinessResult.fryHeard`.
+ */
+export function classifyFryPresence(snrDb: number | null): boolean | null {
+	if (snrDb === null) return null;
+	return snrDb >= FRY_PRESENCE_MIN_SNR_DB;
 }
 
 /**
@@ -186,10 +257,30 @@ export function assessReadiness(
 	sr: number
 ): ReadinessResult {
 	const det = detect(fry, sr);
+	const room = measureRoom(quiet, fry, sr);
+	const heard = classifyFryPresence(room.snrDb);
+	/*
+	 * The presence veto (E.26). A pulse detector asked for the rate of a buffer
+	 * will find one; whether the buffer contains a voice is a different question
+	 * and it has a different instrument, which this function already computes
+	 * one line above. Before E.26 the answer was discarded except to decide a
+	 * toast, and every rate the detector recovered was passed on and classified,
+	 * including rates recovered from an empty room.
+	 *
+	 * MEASURED, synthetic control in `readiness.test.ts`: two independent draws
+	 * of the same noise yield rates of 26 to 37 Hz, which `classifyFryRate`
+	 * reports as `clear`. A CONFIDENT WRONG ANSWER where an abstention belongs,
+	 * which is the same defect shape as `detector.ts`'s old `return 60`.
+	 *
+	 * `heard === null` does NOT veto. An unmeasurable ratio is not evidence of
+	 * silence, and refusing on it would be the mirror of the fault above.
+	 */
+	const rateHz = heard === false ? null : det.rateHz;
 	return {
-		room: measureRoom(quiet, fry, sr),
-		fryRateHz: det.rateHz,
-		fryRange: classifyFryRate(det.rateHz),
+		room,
+		fryHeard: heard,
+		fryRateHz: rateHz,
+		fryRange: classifyFryRate(rateHz),
 		fryAccepted: det.accept,
 		fryFailed: det.failed,
 		fryUndecided: det.undecided

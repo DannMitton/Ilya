@@ -33,7 +33,9 @@ import { describe, it, expect } from 'vitest';
 import {
 	assessReadiness,
 	bandPower,
+	classifyFryPresence,
 	classifyFryRate,
+	FRY_PRESENCE_MIN_SNR_DB,
 	measureRoom,
 	PSD_NPERSEG,
 	ROOM_SNR_TOAST_DB
@@ -229,5 +231,82 @@ describe('assessReadiness end to end, on synthetic audio', () => {
 		const result = assessReadiness(quiet, add(fryPulses(SR, SR, 15, 0.2), noise(SR, 0.0005)), SR);
 		expect(result.fryRange).toBe('out-of-range');
 		expect(Array.isArray(result.fryFailed)).toBe(true);
+	});
+});
+
+/*
+ * ── The presence veto (E.26) ──────────────────────────────────────────────
+ *
+ * Added after a walk on the artifact, not after a code reading. On 2026-08-04,
+ * build `a1d58e4`, Dann ran the readiness gate and did not fry. The gate
+ * recovered 17 pulses from his silent room, called them 23.1 Hz, and printed
+ * "your fry is reading near the edge of our range" while its own room ratio
+ * read 0.708 dB. Every test in this file passed at the time, because every
+ * fixture in it contained a fry.
+ *
+ * The expected values below are the construction, never the mechanism: a buffer
+ * built from room noise contains no voice, so the only honest verdict about its
+ * fry is that there was not one.
+ */
+describe('the presence veto: a room is not a fry', () => {
+	it('classifyFryPresence reads the placeholder floor, and abstains above nothing', () => {
+		expect(classifyFryPresence(null)).toBeNull();
+		expect(classifyFryPresence(FRY_PRESENCE_MIN_SNR_DB - 0.001)).toBe(false);
+		expect(classifyFryPresence(FRY_PRESENCE_MIN_SNR_DB)).toBe(true);
+		expect(classifyFryPresence(FRY_PRESENCE_MIN_SNR_DB + 0.001)).toBe(true);
+		expect(classifyFryPresence(0.708)).toBe(false); // Dann's measured room, E.26
+	});
+
+	it('two independent draws of one room yield no rate and no range verdict', () => {
+		const quiet = noise(SR, 0.001, 1);
+		const room = noise(SR, 0.001, 2); // the "throwaway fry" that never happened
+		const result = assessReadiness(quiet, room, SR);
+
+		// The fixture is the dangerous one: noise against noise sits at 0 dB by
+		// construction, so this is the silent case and not a quiet fry.
+		expect(Math.abs(result.room.snrDb as number)).toBeLessThan(1);
+
+		expect(result.fryHeard).toBe(false);
+		expect(result.fryRateHz).toBeNull();
+		expect(result.fryRange).toBe('not-measured');
+	});
+
+	it('and the control: the same buffer DOES carry a recoverable rate', () => {
+		// Non-vacuity. If the detector simply found nothing in noise, the test
+		// above would pass for the wrong reason and would not have caught the
+		// defect it was written for. Hold the sample fixed and lower only the
+		// REFERENCE, which lifts the ratio clear of the floor and nothing else:
+		// the rate reappears, so it was the veto that withheld it.
+		const room = noise(SR, 0.001, 2);
+		const loud = assessReadiness(scaled(noise(SR, 0.001, 1), 0.01), room, SR);
+		expect(loud.room.snrDb as number).toBeGreaterThan(FRY_PRESENCE_MIN_SNR_DB);
+		expect(loud.fryHeard).toBe(true);
+		expect(loud.fryRateHz).not.toBeNull();
+		expect(loud.fryRange).not.toBe('not-measured');
+	});
+
+	it('a real fry above the floor is untouched', () => {
+		// The veto must not be a blanket. A pulse train at a known rate still
+		// reads back at that rate, which is the construction parameter.
+		const quiet = noise(SR, 0.0005);
+		const fry = add(fryPulses(SR, SR, 40, 0.2), noise(SR, 0.0005));
+		const result = assessReadiness(quiet, fry, SR);
+		expect(result.room.snrDb as number).toBeGreaterThanOrEqual(FRY_PRESENCE_MIN_SNR_DB);
+		expect(result.fryHeard).toBe(true);
+		expect(result.fryRateHz as number).toBeCloseTo(40, 0);
+		expect(result.fryRange).toBe('clear');
+	});
+
+	it('an unmeasurable ratio does NOT veto, because it is not evidence of silence', () => {
+		// The mirror of the fault this veto exists to stop. A quiet second too
+		// short to measure tells us nothing about the singer, so refusing their
+		// fry on it would invent a second wrong answer.
+		const shortQuiet = noise(PSD_NPERSEG - 1, 0.0005);
+		const fry = add(fryPulses(SR, SR, 40, 0.2), noise(SR, 0.0005));
+		const result = assessReadiness(shortQuiet, fry, SR);
+		expect(result.room.snrDb).toBeNull();
+		expect(result.fryHeard).toBeNull();
+		expect(result.fryRateHz as number).toBeCloseTo(40, 0);
+		expect(result.fryRange).toBe('clear');
 	});
 });

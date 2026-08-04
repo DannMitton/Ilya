@@ -21,7 +21,12 @@
 
 import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import type { Vowel, VoiceType, CalibratedFormant } from './types';
-import { classifyFryRate, ROOM_SNR_TOAST_DB, type ReadinessResult } from './readiness';
+import {
+	classifyFryPresence,
+	classifyFryRate,
+	ROOM_SNR_TOAST_DB,
+	type ReadinessResult
+} from './readiness';
 
 /** Illustrative, non-authoritative formant pairs, one per vowel. Stub data only. */
 const STUB_FORMANTS: Record<Vowel, { f1: number; f2: number }> = {
@@ -82,6 +87,11 @@ function stubReadiness(outcome: Exclude<StubReadinessOutcome, 'no-microphone'>):
 			snrDb,
 			lively: snrDb < ROOM_SNR_TOAST_DB
 		},
+		// Through the real classifier, per this function's own rule above: both
+		// stub outcomes sit well clear of the presence floor, and if that floor
+		// ever moves past them the stub follows rather than asserting the old
+		// answer.
+		fryHeard: classifyFryPresence(snrDb),
 		fryRateHz,
 		fryRange: classifyFryRate(fryRateHz),
 		fryAccepted: true,
