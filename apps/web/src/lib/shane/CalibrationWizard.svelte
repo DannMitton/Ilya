@@ -75,12 +75,21 @@
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
 	// The seven default vowels, in the spec's fixed counterclockwise order.
-	// The three optional vowels are offered afterward from the summary, never
-	// required (spec v1 §2 Phase 2, "the remaining two default vowels and the
-	// optional three extend a bespoke profile but are not required").
+	// The other three are offered afterward from the summary and are not
+	// required to finish (spec v1 §2 Phase 2, "the remaining two default vowels
+	// and the optional three extend a bespoke profile but are not required").
+	//
+	// RENAMED 2026-08-04 on Dann's ruling, and the word mattered enough to move
+	// an identifier: **none of the ten vowels is optional.** All ten are
+	// necessary for sung Russian. Five are the floor the four derivations
+	// consume (`Pacifier.svelte:204`); seven are what the guided tour asks for;
+	// these three are simply the hardest for a new singer to produce on demand,
+	// so Ilya derives them as an assistance until the singer chooses to sing
+	// them. **`OPTIONAL_VOWELS` encoded a claim about importance that is false,
+	// and a singer reading the surface it fed would have inherited it.**
 	const DEFAULT_VOWELS: Vowel[] = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u'];
-	const OPTIONAL_VOWELS: Vowel[] = ['ɨ', 'ɪ', 'ʌ'];
-	const ALL_VOWELS: Vowel[] = [...DEFAULT_VOWELS, ...OPTIONAL_VOWELS];
+	const CHALLENGING_VOWELS: Vowel[] = ['ɨ', 'ɪ', 'ʌ'];
+	const ALL_VOWELS: Vowel[] = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
 	// The confirming beat before auto-advance (spec v1 §2 Phase 2), retimed in
 	// the pacing pass of 2026-07-02: the Pacifier reports a capture only after
 	// its 0.9 s completion animation (COMPLETE_MS, pacifier spec v11), so this
@@ -294,11 +303,11 @@
 
 	let queue = $state<Vowel[]>([...DEFAULT_VOWELS]);
 	let queueIndex = $state(0);
-	let optionalOffered = $state(false);
+	let challengingOffered = $state(false);
 	let finished = $state(false);
 	let currentVowel = $derived<Vowel | undefined>(queue[queueIndex]);
 	let capturedCount = $derived(Object.values(profile).filter((f) => !!f).length);
-	// The optional-vowels invitation waits for a complete default set
+	// The invitation to sing the remaining three waits for a complete default set
 	// (Dann, 2026-07-10): it must not appear when the summary is reached
 	// early by any path (a single-vowel re-take pass, or a queue bug).
 	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
@@ -452,7 +461,7 @@
 		toastVisible = false;
 		queue = [...DEFAULT_VOWELS];
 		queueIndex = 0;
-		optionalOffered = false;
+		challengingOffered = false;
 		finished = false;
 		phase = to;
 	}
@@ -777,15 +786,46 @@
 		}
 	}
 
+	/**
+	 * Are these two readings the same extraction?
+	 *
+	 * The Pacifier holds the RAW formant the session handed it
+	 * (`Pacifier.svelte`, `n.formant = formant`), while `profile` holds the
+	 * clone `withPlausibility` returned. They describe one capture and differ
+	 * only in the fields the guard added. Comparing the measured numbers and
+	 * the provenance identifies that pair without trusting either copy's
+	 * verdict, which is the field under dispute.
+	 */
+	function sameExtraction(a?: CalibratedFormant, b?: CalibratedFormant): boolean {
+		return !!a && !!b && a.f1 === b.f1 && a.f2 === b.f2 && a.source === b.source;
+	}
+
 	function handleProfileChange(formants: Partial<Record<Vowel, CalibratedFormant>>) {
 		// The Pacifier now receives the merged map (sung plus derived
 		// previews, for the ≈ badge) and reports its full map back, so
 		// estimated entries must be stripped here or synthetic values would
 		// leak into the stored profile — the only-sung-is-stored rule
 		// (Mitton 2020 §5.3.3 discipline) enforced at the boundary.
+		//
+		// E.26, AND THIS IS A DEFECT FIX RATHER THAN A TIDY-UP. `Pacifier.svelte`
+		// fires onVowelCaptured and onProfileChange back to back in one tick.
+		// The first ran the plausibility guard, wrote its verdict, and demoted
+		// an implausible `captured` to `provisional` (`:275-276`). This function
+		// then rebuilt the profile wholesale from the Pacifier's un-guarded map
+		// and persisted it, **erasing both**. MEASURED, 2026-08-04, build
+		// b6d2828: eight `[shane] plausibility` events fired, one per vowel, and
+		// `plausibility` was `undefined` on every reading in every stored
+		// profile. Dann's [i] was judged `implausible` with `rePromptShown:
+		// true` and was stored as `reading: 'captured'`.
+		//
+		// So: when the Pacifier reports a reading we already hold a guarded copy
+		// of, keep ours. Anything genuinely new (a re-take, a different
+		// extraction) still comes from the Pacifier, and a removal still removes.
 		const direct: Partial<Record<Vowel, CalibratedFormant>> = {};
 		for (const [g, f] of Object.entries(formants) as [Vowel, CalibratedFormant][]) {
-			if (f && f.reading !== 'estimated') direct[g] = f;
+			if (!f || f.reading === 'estimated') continue;
+			const held = profile[g];
+			direct[g] = sameExtraction(held, f) ? (held as CalibratedFormant) : f;
 		}
 		// The [ɨ] pass runs here too: a long-press skip can remove an anchor,
 		// which must resolve a sampled [ɨ] to Provisional (anchor rule).
@@ -880,9 +920,9 @@
 		pacifierRef?.activateVowel(queue[queueIndex]);
 	}
 
-	async function addOptionalVowels() {
-		optionalOffered = true;
-		queue = [...DEFAULT_VOWELS, ...OPTIONAL_VOWELS];
+	async function addChallengingVowels() {
+		challengingOffered = true;
+		queue = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
 		queueIndex = DEFAULT_VOWELS.length; // resume right where the default set ended
 		phase = 'capture';
 		await tick();
@@ -906,7 +946,7 @@
 	}
 
 	/**
-	 * The escape hatch (Kimi's review, 2026-07-11): the optional-vowel tail
+	 * The escape hatch (Kimi's review, 2026-07-11): the challenging-vowel tail
 	 * and the single-vowel re-take pass both re-enter the capture phase with
 	 * no way back to the summary short of completing every capture — a trap
 	 * door violating the no-dead-ends principle. This quiet affordance shows
@@ -953,13 +993,13 @@
 
 	// ── Working values (Dann, 2026-07-02) ────────────────────────────────────
 	// Each roster row publishes the working fR1/fR2 so the singer sees what
-	// was received. For the three optional vowels, an unsampled row shows the
+	// was received. For the three challenging vowels, an unsampled row shows the
 	// engine's derived value (reading: Estimated), greyed, computed by the
 	// same derive() the analysis layer uses — display-only, single source of
 	// formulae (Mitton 2020 §5.3.3; the formulae themselves are never shown),
 	// and the stored profile keeps only what was actually sung.
 
-	/** The anchors each derivable optional vowel needs (derivations.ts). */
+	/** The anchors each derivable challenging vowel needs (derivations.ts). */
 	const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
 		ɨ: ['i', 'u'],
 		ɪ: ['e', 'i'],
@@ -982,7 +1022,7 @@
 		return !!f && typeof f.f2 === 'number';
 	}
 
-	/** The row's display value: the direct sample, or a derived preview for optional vowels. */
+	/** The row's display value: the direct sample, or a derived preview for the challenging three. */
 	function displayFormant(g: Vowel): CalibratedFormant | undefined {
 		const direct = profile[g];
 		if (direct) return direct;
@@ -1003,7 +1043,7 @@
 	// return path strips estimated entries (see handleProfileChange).
 	let pacifierFormants = $derived.by(() => {
 		const m: Partial<Record<Vowel, CalibratedFormant>> = { ...profile };
-		for (const g of OPTIONAL_VOWELS) {
+		for (const g of CHALLENGING_VOWELS) {
 			if (!m[g]) {
 				const d = displayFormant(g);
 				if (d) m[g] = d;
@@ -1061,13 +1101,29 @@
 	start, greyed until a value lands, so the full schema is always
 	accounted for and the layout never shifts.
 -->
-<!-- The optional-vowels invitation, single-sourced (Kimi's review polish):
-     the summary renders it in both its finished and unfinished states. -->
-{#snippet optionalInvite()}
-	{#if !optionalOffered && defaultsComplete}
-		<button type="button" class="wizard-secondary" onclick={addOptionalVowels}>
-			Experienced singers can provide direct samples for the three optional vowels.
+<!-- The invitation to sing the remaining three, single-sourced (Kimi's review
+     polish): the summary renders it in both its finished and unfinished states.
+
+     REWORDED 2026-08-04, Dann's report as a user: "Fit flashed completion before
+     I had the chance to enter velar-i or smallcaps-i. The user should be able to
+     attempt these values if they choose." **The control was already here and
+     already worked.** It failed as an affordance: its label was a sentence about
+     who is permitted rather than a verb saying what would happen, and it is the
+     quietest control in the last position on the page. So the label is now the
+     action and the reasoning moved to a caption beneath it.
+
+     BOTH STRINGS ARE PLACEHOLDER and flagged for Dann, who writes copy. The
+     shape is ruled and the wording is not. What must not change is that the
+     button says what it does, and that nothing here calls a vowel optional. -->
+{#snippet challengingInvite()}
+	{#if !challengingOffered && defaultsComplete}
+		<button type="button" class="wizard-secondary" onclick={addChallengingVowels}>
+			Sing the three Ilya derived for you
 		</button>
+		<p class="wizard-caption">
+			None of the ten vowels is optional. These three are the hardest to produce on demand, so
+			Ilya derives them from your own anchors until you choose to sing them.
+		</p>
 	{/if}
 {/snippet}
 
@@ -1374,7 +1430,7 @@
 						<button type="button" class="wizard-pause" onclick={togglePause}>Pause</button>
 						{#if defaultsComplete}
 							<!-- The escape hatch (Kimi's review): only offered once the
-							     seven defaults are complete, i.e. during the optional
+							     seven defaults are complete, i.e. during the challenging
 							     tail or a re-take pass, never mid-tour. -->
 							<button type="button" class="wizard-pause" onclick={returnToSummary}>
 								Return to summary
@@ -1403,13 +1459,13 @@
 				{#if finished}
 					<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
 					     roster stays visible and curatable — Re-take still works and
-					     the optional-vowels invitation survives. With persistence
+					     the invitation to sing the remaining three survives. With persistence
 					     (Phase 2b) the confirmation is true across reloads. -->
 					<p class="wizard-lede">
 						Your profile is saved on this device. You can keep refining any reading below.
 					</p>
 					{@render rosterTable(true)}
-					{@render optionalInvite()}
+					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
 					<p class="wizard-lede">
@@ -1417,7 +1473,7 @@
 						anything uncertain before you finish.
 					</p>
 					{@render rosterTable(true)}
-					{@render optionalInvite()}
+					{@render challengingInvite()}
 					{@render characteristicsButton()}
 					<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
 				{/if}
@@ -1701,6 +1757,19 @@
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
 	   Deliberately plain: this is the wizard's own furniture, not the result
 	   surface, and it borrows the same tokens as everything else here. */
+	/* The caption under the invitation to sing the remaining three. Quieter than
+	   the button above it, because the button is the action and this explains
+	   it. */
+	.wizard-caption {
+		margin: 0.375rem 0 0;
+		max-width: 26rem;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.8125rem;
+		line-height: 1.45;
+		text-align: center;
+		color: var(--ink-tertiary);
+	}
+
 	.wizard-count {
 		margin: 0;
 		font-family: var(--font-ui, var(--font-sans));
