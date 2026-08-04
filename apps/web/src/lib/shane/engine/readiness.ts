@@ -107,6 +107,57 @@ export const ROOM_SNR_TOAST_DB = 25;
  */
 export const FRY_PRESENCE_MIN_SNR_DB = 6;
 
+/**
+ * The interaction pacing of the throwaway-fry step, held here rather than in the
+ * component so the engine's clock and the wizard's clock read one source.
+ *
+ * These are NOT measurement thresholds and nothing in the gate's arithmetic
+ * depends on them. They are the answer to a defect Dann reported as a user on
+ * 2026-08-04: *"The step ... is too rapid. A new user will assume there was an
+ * error. A human being will expect 3-5 seconds to carry out this task."*
+ *
+ * **The engine needs about one `GATE_WINDOW_S` of fry and no more.** The window
+ * below is deliberately longer, and that is a design choice rather than a
+ * measurement claim: a singer given a countdown and a bar that completes knows
+ * their voice was heard and knows when to stop, and neither of those is worth
+ * trading for 1.7 saved seconds. **The precedent is the house's own**, at
+ * `pacifier/Pacifier.svelte:412`: *"The arc is a fixed 3.0 s clock that never
+ * stalls, independent of the engine's delivery time."* The vowel steps already
+ * ask a singer to sustain longer than the extractor strictly requires.
+ *
+ * Both numbers are taken from the vowel steps so the two phases feel like one
+ * instrument: `3 × COUNT_INTERVAL` (`Pacifier.svelte:282`) and `SWEEP_MS`
+ * (`Pacifier.svelte:284`).
+ */
+export const READINESS_PREP_MS = 2100;
+export const READINESS_CAPTURE_MS = 3000;
+
+/**
+ * Rank a listening window as a candidate for the throwaway fry. Higher wins,
+ * and **zero means unusable**.
+ *
+ * Before E.26 the readiness driver ended the run on the first accepting window,
+ * which is why the step was over before the singer could act. It now collects
+ * for the whole of `READINESS_CAPTURE_MS` and keeps the best window it saw, so
+ * this is the rule that decides "best". Ties go to the later window, which is
+ * the driver's business rather than this function's.
+ *
+ *   0. No rate recovered, or the room says nothing was there. Unusable.
+ *   1. A rate, above the room, but the detector refused it. **Still usable**,
+ *      because the range check is guidance and not gatekeeping: a fry at 15 Hz
+ *      must yield a verdict rather than a failure (wizard spec §2 Phase 1).
+ *   2. A rate, above the room, and the detector accepted. Best.
+ */
+export function fryCandidateRank(
+	heard: boolean | null,
+	rateHz: number | null,
+	accepted: boolean
+): 0 | 1 | 2 {
+	if (rateHz === null || !Number.isFinite(rateHz)) return 0;
+	if (heard === false) return 0;
+	return accepted ? 2 : 1;
+}
+
 /** What the quiet second and the throwaway fry say about the room. */
 export interface RoomMeasurement {
 	/** Mean PSD over the SNR band of the quiet second. `null` = not measurable. */

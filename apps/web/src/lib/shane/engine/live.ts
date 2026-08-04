@@ -33,21 +33,27 @@
  *   1. Acquire the microphone exactly as above.
  *   2. Bank one quiet second, after a short settling discard, as the ambient
  *      noise floor. Then onQuiet(), and the wizard asks for the fry.
- *   3. Listen for the throwaway fry with the same detector on the same
- *      trailing window. A window is only considered at all once it carries
- *      something above the banked quiet second (item 1.4a, E.26); finish on the
- *      first accepting window that does.
- *   4. On timeout, finish anyway from the most recent window that yielded an
- *      inter-pulse rate. This is deliberate: the range check is guidance, not
- *      gatekeeping (spec §2 Phase 1, "flag, do not block"), so a fry at 15 Hz
- *      must produce a range verdict, not a failure. Only a run that never
- *      recovered any rate at all is an honest failure.
+ *   3. Hold for READINESS_PREP_MS while the wizard counts the singer in, then
+ *      discard that audio: a recording of someone reading a prompt is not a
+ *      sample of their voice.
+ *   4. Collect for exactly READINESS_CAPTURE_MS, running the same detector on
+ *      the same trailing window every hop, and keep the best window seen
+ *      (`fryCandidateRank`). A window is only a candidate at all once it
+ *      carries something above the banked quiet second (E.26). **The run does
+ *      not end early when the detector is satisfied**, because the wizard is
+ *      drawing that window as a bar and a bar that empties early is worse than
+ *      no bar. Only a window that never carried anything is an honest failure.
  *
- *      The presence test in step 3 is what makes step 4 mean anything. It was
- *      added after a walk, not a reading: on 2026-08-04 the detector accepted a
- *      window of Dann's silent room, so the run finished about one second after
- *      the fry prompt appeared and reported 23.1 Hz for a fry that never
- *      happened. The ten-second timeout had been unreachable in practice.
+ *      Both of those came from walks rather than readings, on 2026-08-04, and
+ *      the second came from Dann as a user rather than as an author. First: the
+ *      detector accepted a window of his SILENT room, reported 23.1 Hz, and
+ *      ended the run about a second after the prompt appeared, so the presence
+ *      test in step 4 exists. Then, with that fixed, a real fry ended the run
+ *      1.3 s after the prompt, and he wrote: *"It is too rapid. A new user will
+ *      assume there was an error ... A human being will expect 3-5 seconds."*
+ *      **The range check is still guidance and not gatekeeping** (spec §2 Phase
+ *      1, "flag, do not block"): a fry at 15 Hz yields a verdict, not a failure,
+ *      which is why rank 1 exists.
  *   5. Release the microphone, then measure through readiness.ts. No formant
  *      extraction and no vowel are involved at any point.
  *
@@ -80,7 +86,15 @@ import type { Vowel, VoiceType } from './types';
 import type { CaptureError, ShaneEngineError } from './errors';
 import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import { detect } from './detector';
-import { assessReadiness, bandPower, classifyFryPresence, roomSnrDb } from './readiness';
+import {
+	assessReadiness,
+	bandPower,
+	classifyFryPresence,
+	fryCandidateRank,
+	READINESS_CAPTURE_MS,
+	READINESS_PREP_MS,
+	roomSnrDb
+} from './readiness';
 import { runCapture, type CaptureOutcome } from './analyze';
 
 /** Preferred capture rate; the engine's FFT constants assume 44.1/48 kHz. */
@@ -108,8 +122,13 @@ const QUIET_S = 1.0;
  * cap below is 2.0 s and this plus QUIET_S is 1.25 s.
  */
 const QUIET_SETTLE_S = 0.25;
-/** Listening timeout for the throwaway fry, counted from the end of the quiet second. */
-const READINESS_FRY_TIMEOUT_MS = 10_000;
+/*
+ * The throwaway-fry step's two clocks live in `readiness.ts` so the wizard and
+ * this driver read one source: READINESS_PREP_MS (the countdown, during which
+ * nothing is collected) and READINESS_CAPTURE_MS (the fixed window that the
+ * wizard draws as a bar). Their sum replaces the old ten-second listening
+ * timeout, which was indeterminate and therefore undrawable.
+ */
 
 const WORKLET_NAME = 'shane-capture-tap';
 /**
@@ -194,6 +213,8 @@ export class LiveCaptureSession implements CaptureSession {
 	private stopTimer: ReturnType<typeof setTimeout> | null = null;
 	private listenTimer: ReturnType<typeof setTimeout> | null = null;
 	private quietTimer: ReturnType<typeof setInterval> | null = null;
+	/** The throwaway fry's countdown, during which no audio is collected. */
+	private prepTimer: ReturnType<typeof setTimeout> | null = null;
 	private lastFailed: string[] = [];
 	/** The banked ambient second of a readiness run. */
 	private quietBuf: Float64Array | null = null;
@@ -204,8 +225,10 @@ export class LiveCaptureSession implements CaptureSession {
 	 * tick treats as "cannot tell", never as "nothing there".
 	 */
 	private quietPower: number | null = null;
-	/** The most recent readiness window that yielded an inter-pulse rate. */
+	/** The best readiness window seen inside the capture clock. */
 	private fryBuf: Float64Array | null = null;
+	/** That window's `fryCandidateRank`; 0 while nothing usable has been seen. */
+	private fryRank: 0 | 1 | 2 = 0;
 
 	start(vowel: Vowel, voiceType: VoiceType | undefined, handlers: CaptureHandlers): void {
 		// A new start supersedes any prior capture silently, matching the
@@ -241,6 +264,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.quietBuf = null;
 		this.quietPower = null;
 		this.fryBuf = null;
+		this.fryRank = 0;
 		this.releaseAudio();
 	}
 
@@ -263,6 +287,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.quietBuf = null;
 		this.quietPower = null;
 		this.fryBuf = null;
+		this.fryRank = 0;
 		this.releaseAudio();
 		if (wasActive) {
 			const cancelled: ShaneEngineError = { code: 'CANCELLED', message: 'Capture cancelled.' };
@@ -286,6 +311,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.quietBuf = null;
 		this.quietPower = null;
 		this.fryBuf = null;
+		this.fryRank = 0;
 		this.releaseAudio();
 		handlers?.onError(error);
 		readinessHandlers?.onError(error);
@@ -403,12 +429,23 @@ export class LiveCaptureSession implements CaptureSession {
 			);
 			this.readinessHandlers?.onQuiet();
 			if (gen !== this.gen || !this.active) return;
-			this.gateTimer = setInterval(() => this.readinessTick(gen), GATE_HOP_MS);
-			this.listenTimer = setTimeout(() => {
+			// The countdown. Nothing is collected during it: the singer is being
+			// given time to draw breath, and audio captured while they read a
+			// prompt is audio of them reading a prompt. The wizard runs its own
+			// clock of the same length off the same constant.
+			this.prepTimer = setTimeout(() => {
 				if (gen !== this.gen || !this.active) return;
-				dbg('readiness: fry listen timed out; reporting best evidence');
-				this.finishReadiness(gen);
-			}, READINESS_FRY_TIMEOUT_MS);
+				// Discard the countdown's audio so the capture window starts clean.
+				this.chunks = [];
+				this.chunkSamples = 0;
+				dbg('readiness: countdown over; fry capture window open for', READINESS_CAPTURE_MS, 'ms');
+				this.gateTimer = setInterval(() => this.readinessTick(gen), GATE_HOP_MS);
+				this.listenTimer = setTimeout(() => {
+					if (gen !== this.gen || !this.active) return;
+					dbg('readiness: capture window closed; reporting best evidence');
+					this.finishReadiness(gen);
+				}, READINESS_CAPTURE_MS);
+			}, READINESS_PREP_MS);
 		}, GATE_HOP_MS);
 	}
 
@@ -548,19 +585,20 @@ export class LiveCaptureSession implements CaptureSession {
 			'| heard', heard === null ? 'n/a' : heard,
 			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', ')
 		);
-		// Nothing above the ambient second: this window is a second reading of
-		// the room. Keep listening. The singer gets the full
-		// READINESS_FRY_TIMEOUT_MS to actually fry, which is what the timeout
-		// was for; before E.26 an accepting window of room noise could end the
-		// run about a second after the prompt appeared, and the singer never
-		// got a turn. `heard === null` does not veto: an unmeasurable ratio is
-		// not evidence of silence.
-		if (heard === false) return;
-		// An accepting window always carries a rate (c3 gates on the interval),
-		// so this assignment covers the accepting case as well.
-		if (det.rateHz !== null) this.fryBuf = y;
-		if (!det.accept) return;
-		this.finishReadiness(gen);
+		// Keep the best window seen, and DO NOT end the run early. The capture
+		// window is a fixed clock the wizard is drawing as a bar, so finishing
+		// the instant the detector is satisfied would empty the bar's meaning
+		// and take the step away from the singer mid-phonation. Ties go to the
+		// later window, which is why the comparison is >= rather than >.
+		//
+		// `heard === false` scores zero: that window is a second reading of the
+		// room. `heard === null` does not, because an unmeasurable ratio is not
+		// evidence of silence.
+		const rank = fryCandidateRank(heard, det.rateHz, det.accept);
+		if (rank > 0 && rank >= this.fryRank) {
+			this.fryRank = rank;
+			this.fryBuf = y;
+		}
 	}
 
 	/** Release the microphone, then measure. Terminal for a readiness run. */
@@ -582,6 +620,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.quietBuf = null;
 		this.quietPower = null;
 		this.fryBuf = null;
+		this.fryRank = 0;
 		this.releaseAudio();
 
 		if (!quiet || !fry) {
@@ -662,6 +701,10 @@ export class LiveCaptureSession implements CaptureSession {
 		if (this.quietTimer) {
 			clearInterval(this.quietTimer);
 			this.quietTimer = null;
+		}
+		if (this.prepTimer) {
+			clearTimeout(this.prepTimer);
+			this.prepTimer = null;
 		}
 		if (this.stopTimer) {
 			clearTimeout(this.stopTimer);

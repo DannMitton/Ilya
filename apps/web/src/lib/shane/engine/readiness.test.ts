@@ -35,6 +35,7 @@ import {
 	bandPower,
 	classifyFryPresence,
 	classifyFryRate,
+	fryCandidateRank,
 	FRY_PRESENCE_MIN_SNR_DB,
 	measureRoom,
 	PSD_NPERSEG,
@@ -295,6 +296,21 @@ describe('the presence veto: a room is not a fry', () => {
 		expect(result.fryHeard).toBe(true);
 		expect(result.fryRateHz as number).toBeCloseTo(40, 0);
 		expect(result.fryRange).toBe('clear');
+	});
+
+	it('ranks a listening window: a room scores zero, a refused fry still counts', () => {
+		// The driver collects for a fixed window now and keeps the best thing it
+		// saw, so this is the rule that decides "best". Expected values are the
+		// stated policy, not a reading of the mechanism.
+		//                        heard, rateHz, accepted
+		expect(fryCandidateRank(false, 40, true)).toBe(0); // the room, however convincing
+		expect(fryCandidateRank(true, null, false)).toBe(0); // no rate, nothing to say
+		expect(fryCandidateRank(true, NaN, true)).toBe(0);
+		// Refused but heard is still usable: the range check flags, it does not
+		// gatekeep, so a 15 Hz fry must yield a verdict rather than a failure.
+		expect(fryCandidateRank(true, 15, false)).toBe(1);
+		expect(fryCandidateRank(null, 40, false)).toBe(1); // unmeasurable ratio is not silence
+		expect(fryCandidateRank(true, 40, true)).toBe(2); // heard and accepted wins
 	});
 
 	it('an unmeasurable ratio does NOT veto, because it is not evidence of silence', () => {

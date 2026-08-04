@@ -47,7 +47,11 @@
 	import NotePicker from '$lib/shane/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import type { CaptureSession } from '$lib/shane/engine/session';
-	import type { ReadinessResult } from '$lib/shane/engine/readiness';
+	import {
+		READINESS_CAPTURE_MS,
+		READINESS_PREP_MS,
+		type ReadinessResult
+	} from '$lib/shane/engine/readiness';
 	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
@@ -436,6 +440,9 @@
 		readinessResult = undefined;
 		readinessError = undefined;
 		readinessStep = 'quiet';
+		readinessCount = '';
+		readinessProgress = 0;
+		clearReadinessTimers();
 		clearAllTimers();
 		holdTimer = undefined;
 		holdActive = false;
@@ -507,9 +514,37 @@
 	// 'unmeasured' is the abstention: the gate could not measure, so the
 	// wizard says so and makes no claim about the room or the fry. It is a
 	// state, never a block; Continue stands from it exactly as from 'done'.
-	let readinessStep = $state<'quiet' | 'fry' | 'done' | 'unmeasured'>('quiet');
+	// 'prepare' and 'capture' split what used to be one 'fry' step, on Dann's
+	// ruling of 2026-08-04 after he walked it as a user: "The step ... is too
+	// rapid. A new user will assume there was an error ... A human being will
+	// expect 3-5 seconds to carry out this task." The engine reaches its verdict
+	// in about one second; the step is longer on purpose, so the singer is
+	// counted in and can see when they have given enough. Same shape as the
+	// vowel steps (`pacifier/Pacifier.svelte:360` and `:412`).
+	let readinessStep = $state<'quiet' | 'prepare' | 'capture' | 'done' | 'unmeasured'>('quiet');
 	let readinessResult = $state<ReadinessResult | undefined>(undefined);
 	let readinessError = $state<ShaneEngineError | undefined>(undefined);
+	/** The count-in beat, 'Three.' | 'Two.' | 'One.'. */
+	let readinessCount = $state('');
+	/** 0 to 1 across READINESS_CAPTURE_MS. Drawn as the bar; never a measurement. */
+	let readinessProgress = $state(0);
+	let readinessTimers: ReturnType<typeof setTimeout>[] = [];
+	let readinessRaf = 0;
+
+	/**
+	 * The wizard's own clock. It does NOT drive the engine and the engine does
+	 * not drive it: both read READINESS_PREP_MS and READINESS_CAPTURE_MS from
+	 * `engine/readiness.ts`, which is the same decoupling the vowel arc uses
+	 * ("a fixed 3.0 s clock that never stalls, independent of the engine's
+	 * delivery time", `Pacifier.svelte:412`). If they ever disagree, the bar is
+	 * wrong and the measurement is not.
+	 */
+	function clearReadinessTimers() {
+		for (const t of readinessTimers) clearTimeout(t);
+		readinessTimers = [];
+		if (readinessRaf) cancelAnimationFrame(readinessRaf);
+		readinessRaf = 0;
+	}
 	// One source of truth: the two flags the UI reads are views of the gate's
 	// verdict, never separately assignable state that could disagree with it.
 	// An out-of-range fry takes the same guidance line as a marginal one; that
@@ -611,6 +646,9 @@
 		readinessStep = 'quiet';
 		readinessResult = undefined;
 		readinessError = undefined;
+		readinessCount = '';
+		readinessProgress = 0;
+		clearReadinessTimers();
 		// Item 1.4a. Two steps, in this order, because SNR needs a quiet
 		// reference and a fry is not quiet (wizard spec v1 §2 Phase 1). Both
 		// are measured through the session's own microphone; the two `after()`
@@ -618,9 +656,31 @@
 		// blocks: every terminal state below offers Continue.
 		captureSession.startReadiness({
 			onQuiet: () => {
-				readinessStep = 'fry';
+				// Count the singer in, then draw the capture window. Three beats
+				// at a third of the countdown each, matching COUNT_INTERVAL on
+				// the vowel steps, then the bar.
+				readinessStep = 'prepare';
+				readinessCount = 'Three.';
+				readinessProgress = 0;
+				const beat = READINESS_PREP_MS / 3;
+				readinessTimers.push(setTimeout(() => (readinessCount = 'Two.'), beat));
+				readinessTimers.push(setTimeout(() => (readinessCount = 'One.'), 2 * beat));
+				readinessTimers.push(
+					setTimeout(() => {
+						readinessStep = 'capture';
+						readinessCount = '';
+						const t0 = performance.now();
+						const step = (t: number) => {
+							readinessProgress = Math.min(1, (t - t0) / READINESS_CAPTURE_MS);
+							readinessRaf = readinessProgress < 1 ? requestAnimationFrame(step) : 0;
+						};
+						readinessRaf = requestAnimationFrame(step);
+					}, READINESS_PREP_MS)
+				);
 			},
 			onComplete: (result) => {
+				clearReadinessTimers();
+				readinessProgress = 1;
 				readinessResult = result;
 				readinessStep = 'done';
 				recordReadiness({
@@ -636,6 +696,7 @@
 				// CANCELLED is the singer leaving, not a finding: there is
 				// nothing to say and nothing to record.
 				if (error.code === 'CANCELLED') return;
+				clearReadinessTimers();
 				readinessError = error;
 				readinessStep = 'unmeasured';
 				recordReadiness({
@@ -1188,8 +1249,28 @@
 				<h2 id="wizard-title">Getting ready</h2>
 				{#if readinessStep === 'quiet'}
 					<p class="wizard-lede">Listening for quiet. Stay silent for a moment.</p>
-				{:else if readinessStep === 'fry'}
+				{:else if readinessStep === 'prepare'}
+					<!-- The count-in. PLACEHOLDER COPY, flagged for Dann. The shape
+					     is ruled and the wording is not: the singer is told what is
+					     coming and given time to draw breath before anything is
+					     collected. Nothing is recorded during this step. -->
 					<p class="wizard-lede">Now a throwaway fry, just to check the mic hears you.</p>
+					<p class="wizard-count" aria-hidden="true">{readinessCount}</p>
+				{:else if readinessStep === 'capture'}
+					<!-- PLACEHOLDER COPY, flagged for Dann. The bar is the point: it
+					     says the microphone is hearing them AND when they have given
+					     enough, which is the pair Dann named. -->
+					<p class="wizard-lede">Fry now, and keep going until the bar fills.</p>
+					<div
+						class="readiness-meter"
+						role="progressbar"
+						aria-label="Recording your throwaway fry"
+						aria-valuemin="0"
+						aria-valuemax="100"
+						aria-valuenow={Math.round(readinessProgress * 100)}
+					>
+						<div class="readiness-meter-fill" style="width: {readinessProgress * 100}%"></div>
+					</div>
 				{:else if readinessStep === 'unmeasured'}
 					<!-- The abstention (item 1.4a, "abstain with no microphone").
 					     PLACEHOLDER COPY, flagged for Dann, who writes copy: the
@@ -1615,6 +1696,34 @@
 	.wizard-secondary:hover {
 		border-color: var(--sage);
 		color: var(--sage);
+	}
+
+	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
+	   Deliberately plain: this is the wizard's own furniture, not the result
+	   surface, and it borrows the same tokens as everything else here. */
+	.wizard-count {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 1.5rem;
+		font-weight: 600;
+		line-height: 1;
+		color: var(--ink-secondary);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.readiness-meter {
+		width: 100%;
+		max-width: 18rem;
+		height: 0.375rem;
+		border-radius: 999px;
+		background: var(--stone-300);
+		overflow: hidden;
+	}
+	.readiness-meter-fill {
+		height: 100%;
+		background: var(--sage);
+		/* No CSS transition: the width is driven per frame from one clock, so a
+		   transition would add a second, slower clock that disagrees with it. */
 	}
 
 	.wizard-progress {

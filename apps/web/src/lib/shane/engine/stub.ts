@@ -24,6 +24,8 @@ import type { Vowel, VoiceType, CalibratedFormant } from './types';
 import {
 	classifyFryPresence,
 	classifyFryRate,
+	READINESS_CAPTURE_MS,
+	READINESS_PREP_MS,
 	ROOM_SNR_TOAST_DB,
 	type ReadinessResult
 } from './readiness';
@@ -166,7 +168,10 @@ export class StubCaptureSession implements CaptureSession {
 							return;
 						}
 						handlers.onComplete(stubReadiness(outcome));
-					}, 1200)
+						// Paced to the live driver so the wizard's countdown and bar
+						// read true against the stub as well: the countdown, then the
+						// fixed capture window.
+					}, READINESS_PREP_MS + READINESS_CAPTURE_MS)
 				);
 			}, 1000)
 		);
