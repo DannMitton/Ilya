@@ -32,6 +32,35 @@
  * bump already queued).
  */
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
+import type { FryRangeVerdict } from './engine/readiness';
+
+/**
+ * What the readiness gate found at the moment this voice was calibrated (item
+ * 1.4a: "add the room-monitor toast recorded in the profile's provenance").
+ *
+ * This is provenance, not a reading: it says what the room and the throwaway
+ * fry were like when the vowels below were sampled, so a Fit result printed
+ * from this voice can say so rather than implying laboratory conditions. Every
+ * field distinguishes "measured" from "not measured"; nothing here stands in
+ * for an absent measurement.
+ */
+export interface ReadinessRecord {
+	/** ISO 8601, when the gate ran. */
+	measuredAt: string;
+	/** False when the gate abstained outright, e.g. no microphone was reachable. */
+	measured: boolean;
+	/** Room SNR over the engine's [100, 4000] Hz band, dB. `null` = not measured. */
+	roomSnrDb: number | null;
+	/**
+	 * True only when a measured room reading warranted the room-monitor toast.
+	 * An abstention is never lively; see `readiness.ts`.
+	 */
+	roomLively: boolean;
+	/** The throwaway fry's inter-pulse rate, Hz. `null` = not recovered. */
+	fryRateHz: number | null;
+	/** The verdict against the published 20-80 Hz band. */
+	fryRange: FryRangeVerdict;
+}
 
 const KEY_V1 = 'shane.profile.v1';
 const KEY = 'shane.profiles.v2';
@@ -62,6 +91,14 @@ export interface StoredVoice {
 	 * or incomplete.
 	 */
 	characteristics?: VoiceCharacteristics;
+	/**
+	 * The readiness gate's record for this voice (item 1.4a). Optional and
+	 * additive, the same discipline as voiceType and characteristics: voices
+	 * saved before the gate measured simply lack it, `validVoice()` deliberately
+	 * does not require it, and its absence means "we do not know what the room
+	 * was like", never "the room was fine".
+	 */
+	readiness?: ReadinessRecord;
 }
 
 export interface ProfileStore {

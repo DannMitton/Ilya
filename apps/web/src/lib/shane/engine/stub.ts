@@ -10,10 +10,18 @@
  *
  * The formant values below are throwaway illustrative numbers, NOT measured and
  * NOT the dissertation's Table 5.3 values; they exist only to render the UI.
+ *
+ * The readiness half (added 2026-08-04 for item 1.4a) works the same way: it is
+ * timed, not measured, and its numbers are illustrative. It exists so the
+ * wizard stays clickable end to end without a microphone, which is the same
+ * reason the capture half exists. The REAL readiness measurements are in
+ * `readiness.ts` and are tested by synthetic injection there; nothing in this
+ * file is evidence of anything.
  */
 
-import type { CaptureSession, CaptureHandlers } from './session';
+import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import type { Vowel, VoiceType, CalibratedFormant } from './types';
+import { classifyFryRate, ROOM_SNR_TOAST_DB, type ReadinessResult } from './readiness';
 
 /** Illustrative, non-authoritative formant pairs, one per vowel. Stub data only. */
 const STUB_FORMANTS: Record<Vowel, { f1: number; f2: number }> = {
@@ -31,6 +39,9 @@ const STUB_FORMANTS: Record<Vowel, { f1: number; f2: number }> = {
 
 /** Force a specific outcome regardless of vowel, for testing the UI paths. */
 export type StubOutcome = 'captured' | 'provisional-low' | 'provisional-divergent';
+
+/** Force a specific readiness outcome, for exercising the wizard's three paths. */
+export type StubReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr' | 'no-microphone';
 
 function stubFormant(vowel: Vowel, outcome: StubOutcome): CalibratedFormant {
 	const { f1, f2 } = STUB_FORMANTS[vowel];
@@ -53,6 +64,32 @@ function stubFormant(vowel: Vowel, outcome: StubOutcome): CalibratedFormant {
 	return base;
 }
 
+/**
+ * A canned ReadinessResult. Illustrative numbers only. The verdicts are run
+ * through the real classifiers rather than hardcoded, so a threshold change in
+ * `readiness.ts` cannot leave the stub asserting the old rule.
+ */
+function stubReadiness(outcome: Exclude<StubReadinessOutcome, 'no-microphone'>): ReadinessResult {
+	const snrDb = outcome === 'marginal-snr' ? ROOM_SNR_TOAST_DB - 7 : ROOM_SNR_TOAST_DB + 9;
+	const fryRateHz = outcome === 'marginal-fry' ? 22 : 48;
+	// Any positive floor works; the pair is kept internally consistent with
+	// snrDb so nothing downstream can read a contradictory triple.
+	const noiseFloor = 1e-8;
+	return {
+		room: {
+			noiseFloor,
+			signal: noiseFloor * Math.pow(10, snrDb / 10),
+			snrDb,
+			lively: snrDb < ROOM_SNR_TOAST_DB
+		},
+		fryRateHz,
+		fryRange: classifyFryRate(fryRateHz),
+		fryAccepted: true,
+		fryFailed: [],
+		fryUndecided: []
+	};
+}
+
 /** The default per-vowel script: most capture cleanly; two exercise the sigla. */
 function defaultOutcome(vowel: Vowel): StubOutcome {
 	if (vowel === 'ɨ') return 'provisional-divergent';
@@ -64,10 +101,15 @@ export class StubCaptureSession implements CaptureSession {
 	private timers: ReturnType<typeof setTimeout>[] = [];
 	private active = false;
 	private readonly forced?: StubOutcome;
+	private readonly readiness: StubReadinessOutcome;
 
-	/** Pass a StubOutcome to force every capture down one path. */
-	constructor(forced?: StubOutcome) {
+	/**
+	 * Pass a StubOutcome to force every capture down one path, and a
+	 * StubReadinessOutcome to force the readiness gate's verdict.
+	 */
+	constructor(forced?: StubOutcome, readiness: StubReadinessOutcome = 'clear') {
 		this.forced = forced;
+		this.readiness = readiness;
 	}
 
 	start(vowel: Vowel, _voiceType: VoiceType | undefined, handlers: CaptureHandlers): void {
@@ -89,6 +131,34 @@ export class StubCaptureSession implements CaptureSession {
 				this.active = false;
 				handlers.onComplete(stubFormant(vowel, outcome));
 			}, completeDelay)
+		);
+	}
+
+	/**
+	 * The readiness gate, timed rather than measured. The two delays mirror the
+	 * shape of a real run (a quiet second, then a fry that takes a moment to
+	 * settle) so the wizard's prompts read at a human pace without a device.
+	 */
+	startReadiness(handlers: ReadinessHandlers): void {
+		this.cancel();
+		this.active = true;
+		const outcome = this.readiness;
+		this.timers.push(
+			setTimeout(() => {
+				if (!this.active) return;
+				handlers.onQuiet();
+				this.timers.push(
+					setTimeout(() => {
+						if (!this.active) return;
+						this.active = false;
+						if (outcome === 'no-microphone') {
+							handlers.onError({ code: 'MIC_NOT_FOUND', message: 'No microphone was found.' });
+							return;
+						}
+						handlers.onComplete(stubReadiness(outcome));
+					}, 1200)
+				);
+			}, 1000)
 		);
 	}
 

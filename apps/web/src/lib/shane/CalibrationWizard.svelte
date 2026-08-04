@@ -22,8 +22,13 @@
 	 * Dann's separate go; (3) polish (toast-threshold tuning, copy). Step
 	 * 2's capture side landed 2026-07-02: the Pacifier below now runs
 	 * against LiveCaptureSession (engine/live.ts), so vowel captures are
-	 * real audio. The readiness phase's measurements remain mocked (the one
-	 * remaining seam); wiring them live is the next gated step.
+	 * real audio. Step 2's READINESS side landed 2026-08-04 (item 1.4a):
+	 * the quiet second and the throwaway fry are measured through the same
+	 * session, the two mocked `after()` timers that stood in for them are
+	 * gone, and the `readinessOutcome` test hook is retired with them. The
+	 * numbers themselves live in engine/readiness.ts, where vitest can
+	 * reach them; this component renders what that returns and decides
+	 * nothing numeric.
 	 *
 	 * Persistence (development plan Phase 2b) landed 2026-07-11 on Kimi's
 	 * gate, and widened the same session to multiple named voices
@@ -41,6 +46,9 @@
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
 	import NotePicker from '$lib/shane/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
+	import type { CaptureSession } from '$lib/shane/engine/session';
+	import type { ReadinessResult } from '$lib/shane/engine/readiness';
+	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
 	import { derive } from '$lib/shane/engine/derivations';
@@ -51,7 +59,8 @@
 		saveStore,
 		newVoiceId,
 		type ProfileStore,
-		type StoredVoice
+		type StoredVoice,
+		type ReadinessRecord
 	} from '$lib/shane/profileStore';
 	import type {
 		Vowel,
@@ -88,22 +97,20 @@
 	// button (Dann's slice-3 decision, 2026-07-13), and Done returns to
 	// the summary. Editable later through the same button.
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
-	type ReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr';
 	type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
 
 	interface CalibrationWizardProps {
 		/** Routing key to the Bozeman value-sets; undefined until a selector lands. */
 		voiceType?: VoiceType;
 		/**
-		 * Stub-era test hook only. Forces the Readiness phase's mocked outcome
-		 * so the fry-range guidance and the room-SNR toast can be exercised
-		 * without real audio (the readiness phase is not yet wired to the live
-		 * CaptureSession; captures are). Defaults to
-		 * the clean path. This prop, and the mocked readiness timers below, are
-		 * the one seam meant to be removed when the live CaptureSession lands
-		 * (spec v1 §2 Phase 1).
+		 * The auditory input, injectable on the same pattern the Pacifier
+		 * already uses (Pacifier.svelte:85). Defaults to the live session, so
+		 * the page shell needs no change; a harness can pass a
+		 * StubCaptureSession to drive the readiness and capture paths without a
+		 * microphone. This replaces the retired `readinessOutcome` hook, which
+		 * forced a mocked outcome the gate no longer produces.
 		 */
-		readinessOutcome?: ReadinessOutcome;
+		session?: CaptureSession;
 		/** Forwarded from the Pacifier, so a future parent can subscribe. */
 		onVowelCaptured?: (vowel: Vowel, formant: CalibratedFormant) => void;
 		/** Forwarded from the Pacifier, so a future parent can subscribe. */
@@ -167,7 +174,12 @@
 
 	let {
 		voiceType = undefined,
-		readinessOutcome = 'clear',
+		// The live auditory input (locked port order step 2). One session
+		// instance for the wizard's lifetime; each capture and each readiness
+		// run opens and releases the microphone itself, so the mic indicator
+		// rests dark between them. Construction touches no browser API;
+		// getUserMedia is requested only inside start() and startReadiness().
+		session: captureSession = new LiveCaptureSession(),
 		scoreRenders = 0,
 		collapsed = $bindable(false),
 		onVowelCaptured,
@@ -178,13 +190,6 @@
 	}: CalibrationWizardProps = $props();
 
 	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
-
-	// The live auditory input (locked port order step 2, capture side). One
-	// session instance for the wizard's lifetime; each capture opens and
-	// releases the microphone itself, so the mic indicator rests dark
-	// between vowels. Construction touches no browser API; getUserMedia is
-	// requested only inside start().
-	const captureSession = new LiveCaptureSession();
 
 	// ── The voice store (Phase 2b v2, multiple named voices, 2026-07-11) ─────
 	// One read at construction; a v1 single profile migrates transparently
@@ -423,6 +428,14 @@
 	// ── Voice management (consensus, 2026-07-11) ─────────────────────────────
 	/** Interrupt everything transient and land on the given phase. */
 	function resetFlow(to: Phase) {
+		// A readiness run holds the microphone, so leaving the phase must
+		// release it. Scoped to that phase deliberately: a capture in flight is
+		// the Pacifier's to cancel, and reaching across would change a shipped
+		// path this item does not touch.
+		if (phase === 'readiness') captureSession.cancel();
+		readinessResult = undefined;
+		readinessError = undefined;
+		readinessStep = 'quiet';
 		clearAllTimers();
 		holdTimer = undefined;
 		holdActive = false;
@@ -490,10 +503,28 @@
 		persistStore();
 	}
 
-	// ── Phase 1, readiness (mocked; see readinessOutcome doc above) ──────────
-	let readinessStep = $state<'quiet' | 'fry' | 'done'>('quiet');
-	let fryMarginal = $state(false);
-	let snrMarginal = $state(false);
+	// ── Phase 1, readiness (measured; item 1.4a) ─────────────────────────────
+	// 'unmeasured' is the abstention: the gate could not measure, so the
+	// wizard says so and makes no claim about the room or the fry. It is a
+	// state, never a block; Continue stands from it exactly as from 'done'.
+	let readinessStep = $state<'quiet' | 'fry' | 'done' | 'unmeasured'>('quiet');
+	let readinessResult = $state<ReadinessResult | undefined>(undefined);
+	let readinessError = $state<ShaneEngineError | undefined>(undefined);
+	// One source of truth: the two flags the UI reads are views of the gate's
+	// verdict, never separately assignable state that could disagree with it.
+	// An out-of-range fry takes the same guidance line as a marginal one; that
+	// line is Dann's copy and a distinct out-of-range string is flagged, not
+	// invented here.
+	let fryMarginal = $derived(
+		readinessResult?.fryRange === 'marginal' || readinessResult?.fryRange === 'out-of-range'
+	);
+	let snrMarginal = $derived(readinessResult?.room.lively ?? false);
+	/** True when no microphone could be reached, as opposed to no fry heard. */
+	let readinessNoMic = $derived(
+		readinessError?.code === 'MIC_NOT_FOUND' ||
+			readinessError?.code === 'MIC_PERMISSION_DENIED' ||
+			readinessError?.code === 'NO_AUDIO_INPUT'
+	);
 
 	// ── Phase 2, the confirming hold (spec v1 §2 Phase 2, §3; retimed, see
 	// HOLD_MS above) ──────────
@@ -560,24 +591,62 @@
 		timers = [];
 	}
 
+	/**
+	 * Write the readiness gate's finding into the active voice (item 1.4a,
+	 * "recorded in the profile's provenance"). Failure-silent, like persist():
+	 * a voice that cannot be found simply keeps no record, and an absent record
+	 * means "we do not know what the room was like", never "the room was fine".
+	 */
+	function recordReadiness(record: ReadinessRecord) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (!v) return;
+		v.readiness = record;
+		v.updatedAt = new Date().toISOString();
+		persistStore();
+	}
+
 	// ── Phase 0 → 1 ────────────────────────────────────────────────────────
 	function beginReadiness() {
 		phase = 'readiness';
 		readinessStep = 'quiet';
-		fryMarginal = false;
-		snrMarginal = false;
-		// Quiet second (spec v1 §2 Phase 1, step 1): the ambient noise floor,
-		// the SNR baseline. Timed here but not measured; the real measurement
-		// needs the live CaptureSession's getUserMedia.
-		after(1000, () => {
-			readinessStep = 'fry';
-			// Throwaway fry (step 2): mic check, the 20-80 Hz range check, and
-			// the SNR signal side. Also timed, not measured, against the stub.
-			after(1200, () => {
-				fryMarginal = readinessOutcome === 'marginal-fry';
-				snrMarginal = readinessOutcome === 'marginal-snr';
+		readinessResult = undefined;
+		readinessError = undefined;
+		// Item 1.4a. Two steps, in this order, because SNR needs a quiet
+		// reference and a fry is not quiet (wizard spec v1 §2 Phase 1). Both
+		// are measured through the session's own microphone; the two `after()`
+		// timers that stood here, and read a stub, are deleted. The gate never
+		// blocks: every terminal state below offers Continue.
+		captureSession.startReadiness({
+			onQuiet: () => {
+				readinessStep = 'fry';
+			},
+			onComplete: (result) => {
+				readinessResult = result;
 				readinessStep = 'done';
-			});
+				recordReadiness({
+					measuredAt: new Date().toISOString(),
+					measured: true,
+					roomSnrDb: result.room.snrDb,
+					roomLively: result.room.lively,
+					fryRateHz: result.fryRateHz,
+					fryRange: result.fryRange
+				});
+			},
+			onError: (error) => {
+				// CANCELLED is the singer leaving, not a finding: there is
+				// nothing to say and nothing to record.
+				if (error.code === 'CANCELLED') return;
+				readinessError = error;
+				readinessStep = 'unmeasured';
+				recordReadiness({
+					measuredAt: new Date().toISOString(),
+					measured: false,
+					roomSnrDb: null,
+					roomLively: false,
+					fryRateHz: null,
+					fryRange: 'not-measured'
+				});
+			}
 		});
 	}
 
@@ -996,6 +1065,22 @@
 								{readingLabel(f.reading)}
 							</span>
 						{/if}
+						{#if f?.noiseFloor === 'unmeasured'}
+							<!-- Item 1.4b. The word is Dann's ruling of 4 August. It sits
+							     on its own line rather than beside the reading, because it
+							     is orthogonal to it: we can capture a vowel cleanly and
+							     still be unable to measure the room, so "Captured
+							     Unmeasured" on one line would read as a contradiction
+							     rather than as two separate facts. Never amber: this is
+							     not a fault in the singer's sample and must not be
+							     coloured like one. The qualifying clause in the title is
+							     PLACEHOLDER copy, flagged with the readiness-gate strings;
+							     the ruled word itself is not. -->
+							<span
+								class="wizard-roster-noisefloor"
+								title="The room's noise floor could not be measured for this sample."
+							>Noise floor: Unmeasured</span>
+						{/if}
 					</th>
 					<td class="wizard-roster-value">
 						{#if f}{Math.round(f.f1)} Hz{/if}
@@ -1105,6 +1190,25 @@
 					<p class="wizard-lede">Listening for quiet. Stay silent for a moment.</p>
 				{:else if readinessStep === 'fry'}
 					<p class="wizard-lede">Now a throwaway fry, just to check the mic hears you.</p>
+				{:else if readinessStep === 'unmeasured'}
+					<!-- The abstention (item 1.4a, "abstain with no microphone").
+					     PLACEHOLDER COPY, flagged for Dann, who writes copy: the
+					     register is right (states what happened, assigns no
+					     fault, names the next action) but the strings are not
+					     signed off. What must not change is the shape: the gate
+					     makes no claim about the room or the fry here, and it
+					     does not block. -->
+					{#if readinessNoMic}
+						<p class="wizard-lede">
+							We could not reach your microphone, so nothing was measured.
+						</p>
+					{:else}
+						<p class="wizard-lede">We did not hear a fry, so nothing was measured.</p>
+					{/if}
+					<p class="wizard-guidance">
+						You can carry on; each vowel asks for the microphone again.
+					</p>
+					<button type="button" class="wizard-primary" onclick={beginCapture}>Continue</button>
 				{:else}
 					<p class="wizard-lede">Readiness check complete.</p>
 					{#if fryMarginal}
@@ -1591,6 +1695,16 @@
 	}
 	.wizard-roster-reading.is-provisional {
 		color: var(--prep-amber);
+	}
+	/* Item 1.4b. Deliberately the quietest tier available and deliberately NOT
+	   --prep-amber: amber is the project's "something about your sample needs
+	   your attention" colour, and an unmeasurable room is not that. It is a
+	   statement about our instrument. */
+	.wizard-roster-noisefloor {
+		display: block;
+		font-size: 0.6875rem;
+		font-weight: 400;
+		color: var(--ink-tertiary);
 	}
 	/* The numbers: metadata, never coloured (Kimi, 2026-07-10). */
 	.wizard-roster-value {

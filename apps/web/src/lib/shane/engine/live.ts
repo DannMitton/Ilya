@@ -28,6 +28,21 @@
  *      goes through runCapture(): structural checks, the post-hoc detector
  *      pass, then the §9 analyze().
  *
+ * Shape of a readiness run (item 1.4a; wizard spec v1 §2 Phase 1), added
+ * 2026-08-04 on Dann's Option A ruling. Same acquisition, different driver:
+ *   1. Acquire the microphone exactly as above.
+ *   2. Bank one quiet second, after a short settling discard, as the ambient
+ *      noise floor. Then onQuiet(), and the wizard asks for the fry.
+ *   3. Listen for the throwaway fry with the same detector on the same
+ *      trailing window. Finish on the first accepting window.
+ *   4. On timeout, finish anyway from the most recent window that yielded an
+ *      inter-pulse rate. This is deliberate: the range check is guidance, not
+ *      gatekeeping (spec §2 Phase 1, "flag, do not block"), so a fry at 15 Hz
+ *      must produce a range verdict, not a failure. Only a run that never
+ *      recovered any rate at all is an honest failure.
+ *   5. Release the microphone, then measure through readiness.ts. No formant
+ *      extraction and no vowel are involved at any point.
+ *
  * Engineering decisions taken in this file (raised once at build time,
  * recorded in the handover):
  *   - AudioWorklet first, inlined as a Blob URL so this stays one file with
@@ -55,8 +70,9 @@
 
 import type { Vowel, VoiceType } from './types';
 import type { CaptureError, ShaneEngineError } from './errors';
-import type { CaptureSession, CaptureHandlers } from './session';
+import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import { detect } from './detector';
+import { assessReadiness } from './readiness';
 import { runCapture, type CaptureOutcome } from './analyze';
 
 /** Preferred capture rate; the engine's FFT constants assume 44.1/48 kHz. */
@@ -75,6 +91,17 @@ const TRIM_S = 0.5;
 const LISTEN_RETAIN_S = 2.0;
 /** Listening timeout, counted from mic-live. */
 const LISTEN_TIMEOUT_MS = 10_000;
+
+/** The ambient window (wizard spec v1 §2 Phase 1, "measured over one second"). */
+const QUIET_S = 1.0;
+/**
+ * Discarded ahead of the quiet window. A track that has just gone live can
+ * carry a switch-on transient, and the settling costs nothing: the retention
+ * cap below is 2.0 s and this plus QUIET_S is 1.25 s.
+ */
+const QUIET_SETTLE_S = 0.25;
+/** Listening timeout for the throwaway fry, counted from the end of the quiet second. */
+const READINESS_FRY_TIMEOUT_MS = 10_000;
 
 const WORKLET_NAME = 'shane-capture-tap';
 /**
@@ -144,6 +171,8 @@ export class LiveCaptureSession implements CaptureSession {
 	private active = false;
 	private recording = false;
 	private handlers: CaptureHandlers | null = null;
+	/** Set for a readiness run instead of `handlers`; never both at once. */
+	private readinessHandlers: ReadinessHandlers | null = null;
 	private stream: MediaStream | null = null;
 	private ctx: AudioContext | null = null;
 	private srcNode: MediaStreamAudioSourceNode | null = null;
@@ -156,23 +185,47 @@ export class LiveCaptureSession implements CaptureSession {
 	private gateTimer: ReturnType<typeof setInterval> | null = null;
 	private stopTimer: ReturnType<typeof setTimeout> | null = null;
 	private listenTimer: ReturnType<typeof setTimeout> | null = null;
+	private quietTimer: ReturnType<typeof setInterval> | null = null;
 	private lastFailed: string[] = [];
+	/** The banked ambient second of a readiness run. */
+	private quietBuf: Float64Array | null = null;
+	/** The most recent readiness window that yielded an inter-pulse rate. */
+	private fryBuf: Float64Array | null = null;
 
 	start(vowel: Vowel, voiceType: VoiceType | undefined, handlers: CaptureHandlers): void {
 		// A new start supersedes any prior capture silently, matching the
 		// stub; CANCELLED is reserved for the explicit cancel() gesture.
+		this.reset();
+		this.active = true;
+		this.handlers = handlers;
+		void this.run(this.gen, vowel, voiceType);
+	}
+
+	/**
+	 * The readiness gate (item 1.4a). Supersedes any run in flight on the same
+	 * terms as start(), and shares the whole microphone lifecycle below.
+	 */
+	startReadiness(handlers: ReadinessHandlers): void {
+		this.reset();
+		this.active = true;
+		this.readinessHandlers = handlers;
+		void this.runReadiness(this.gen);
+	}
+
+	/** Common pre-run teardown: supersede silently and clear every buffer. */
+	private reset(): void {
 		this.gen++;
 		this.active = false;
 		this.handlers = null;
+		this.readinessHandlers = null;
 		this.chunks = [];
 		this.chunkSamples = 0;
 		this.recording = false;
 		this.lastFailed = [];
 		this.loggedFirstChunk = false;
+		this.quietBuf = null;
+		this.fryBuf = null;
 		this.releaseAudio();
-		this.active = true;
-		this.handlers = handlers;
-		void this.run(this.gen, vowel, voiceType);
 	}
 
 	/**
@@ -184,13 +237,21 @@ export class LiveCaptureSession implements CaptureSession {
 		this.gen++;
 		const wasActive = this.active;
 		const handlers = this.handlers;
+		const readinessHandlers = this.readinessHandlers;
 		this.active = false;
 		this.recording = false;
 		this.handlers = null;
+		this.readinessHandlers = null;
 		this.chunks = [];
 		this.chunkSamples = 0;
+		this.quietBuf = null;
+		this.fryBuf = null;
 		this.releaseAudio();
-		if (wasActive) handlers?.onError({ code: 'CANCELLED', message: 'Capture cancelled.' });
+		if (wasActive) {
+			const cancelled: ShaneEngineError = { code: 'CANCELLED', message: 'Capture cancelled.' };
+			handlers?.onError(cancelled);
+			readinessHandlers?.onError(cancelled);
+		}
 	}
 
 	/** Terminal failure: release everything, then report once. */
@@ -198,16 +259,27 @@ export class LiveCaptureSession implements CaptureSession {
 		if (gen !== this.gen) return;
 		dbg('fail:', error.code, '—', error.message, 'cause' in error ? JSON.stringify(error.cause) : '');
 		const handlers = this.handlers;
+		const readinessHandlers = this.readinessHandlers;
 		this.active = false;
 		this.recording = false;
 		this.handlers = null;
+		this.readinessHandlers = null;
 		this.chunks = [];
 		this.chunkSamples = 0;
+		this.quietBuf = null;
+		this.fryBuf = null;
 		this.releaseAudio();
 		handlers?.onError(error);
+		readinessHandlers?.onError(error);
 	}
 
-	private async run(gen: number, vowel: Vowel, voiceType: VoiceType | undefined): Promise<void> {
+	/**
+	 * Acquire the microphone and stand up the graph. Shared by both drivers:
+	 * one owner of getUserMedia, which is the whole reason Option A was ruled.
+	 * Returns false when the run has failed or been superseded, in which case
+	 * the caller must do nothing further.
+	 */
+	private async acquire(gen: number): Promise<boolean> {
 		let stream: MediaStream;
 		try {
 			const md = typeof navigator !== 'undefined' ? navigator.mediaDevices : undefined;
@@ -216,7 +288,7 @@ export class LiveCaptureSession implements CaptureSession {
 					code: 'MIC_NOT_FOUND',
 					message: 'Microphone capture is not available in this browser context.'
 				});
-				return;
+				return false;
 			}
 			stream = await md.getUserMedia({
 				audio: {
@@ -228,11 +300,11 @@ export class LiveCaptureSession implements CaptureSession {
 			});
 		} catch (e) {
 			this.fail(gen, mapMicError(e));
-			return;
+			return false;
 		}
 		if (gen !== this.gen) {
 			for (const t of stream.getTracks()) t.stop();
-			return;
+			return false;
 		}
 		this.stream = stream;
 		const track = stream.getAudioTracks()[0];
@@ -253,7 +325,7 @@ export class LiveCaptureSession implements CaptureSession {
 		} catch {
 			// Best-effort; the two-tap arming means a user gesture preceded this.
 		}
-		if (gen !== this.gen) return;
+		if (gen !== this.gen) return false;
 
 		try {
 			this.srcNode = ctx.createMediaStreamSource(stream);
@@ -261,14 +333,18 @@ export class LiveCaptureSession implements CaptureSession {
 			this.sinkNode.gain.value = 0; // capture-only: the mic must never be audible
 			this.sinkNode.connect(ctx.destination);
 			this.tapNode = await this.buildTap(ctx, gen);
-			if (gen !== this.gen) return;
+			if (gen !== this.gen) return false;
 			this.srcNode.connect(this.tapNode);
 			this.tapNode.connect(this.sinkNode);
 		} catch (e) {
 			this.fail(gen, { code: 'EXTRACTION_FAILED', message: 'Audio capture setup failed.', cause: e });
-			return;
+			return false;
 		}
+		return true;
+	}
 
+	private async run(gen: number, vowel: Vowel, voiceType: VoiceType | undefined): Promise<void> {
+		if (!(await this.acquire(gen))) return;
 		this.gateTimer = setInterval(() => this.gateTick(gen, vowel, voiceType), GATE_HOP_MS);
 		this.listenTimer = setTimeout(() => {
 			if (gen !== this.gen || !this.active || this.recording) return;
@@ -278,6 +354,38 @@ export class LiveCaptureSession implements CaptureSession {
 				cause: { reason: 'gate-timeout', failed: this.lastFailed }
 			});
 		}, LISTEN_TIMEOUT_MS);
+	}
+
+	/** The readiness driver: bank the quiet second, then listen for the fry. */
+	private async runReadiness(gen: number): Promise<void> {
+		if (!(await this.acquire(gen))) return;
+		const need = Math.floor((QUIET_SETTLE_S + QUIET_S) * this.sampleRate);
+		const want = Math.floor(QUIET_S * this.sampleRate);
+		this.quietTimer = setInterval(() => {
+			if (gen !== this.gen || !this.active) return;
+			if (this.chunkSamples < need) {
+				dbg('readiness quiet: buffering', this.chunkSamples, '/', need, 'samples');
+				return;
+			}
+			if (this.quietTimer) {
+				clearInterval(this.quietTimer);
+				this.quietTimer = null;
+			}
+			this.quietBuf = this.tail(want);
+			// Start the fry side from an empty buffer, so no ambient audio can
+			// leak into the sample that supplies the signal side of the ratio.
+			this.chunks = [];
+			this.chunkSamples = 0;
+			dbg('readiness: quiet second banked,', want, 'samples at', this.sampleRate, 'Hz');
+			this.readinessHandlers?.onQuiet();
+			if (gen !== this.gen || !this.active) return;
+			this.gateTimer = setInterval(() => this.readinessTick(gen), GATE_HOP_MS);
+			this.listenTimer = setTimeout(() => {
+				if (gen !== this.gen || !this.active) return;
+				dbg('readiness: fry listen timed out; reporting best evidence');
+				this.finishReadiness(gen);
+			}, READINESS_FRY_TIMEOUT_MS);
+		}, GATE_HOP_MS);
 	}
 
 	/** AudioWorklet tap, with a ScriptProcessorNode fallback. */
@@ -362,8 +470,11 @@ export class LiveCaptureSession implements CaptureSession {
 			'| cv', fmt(det.cv),
 			'| decay', fmt(det.decay),
 			'| flatness', det.flatness.toFixed(3),
-			'| snr', det.snrDb.toFixed(1), 'dB',
-			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', ')
+			// fmt() rather than toFixed(): snrDb is nullable since item 1.4b, and
+			// a null here means the device's sample rate collapsed the noise band.
+			'| snr', fmt(det.snrDb, 1), 'dB',
+			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', '),
+			det.undecided.length ? '| undecided: ' + det.undecided.join(', ') : ''
 		);
 		if (!det.accept) return;
 		// Stable fry confirmed: the second beat. Keep the settling pre-roll,
@@ -381,6 +492,70 @@ export class LiveCaptureSession implements CaptureSession {
 		dbg('stable fry confirmed; sweep started');
 		this.handlers?.onStableFry();
 		this.stopTimer = setTimeout(() => this.finish(gen, vowel, voiceType), SWEEP_S * 1000);
+	}
+
+	/**
+	 * The readiness gate's listening tick. Deliberately NOT the capture gate:
+	 * it keeps every window that yielded an inter-pulse rate, so a fry outside
+	 * the 20-80 Hz band still produces a range verdict rather than a timeout.
+	 * An accepting window ends the run at once.
+	 */
+	private readinessTick(gen: number): void {
+		if (gen !== this.gen || !this.active) return;
+		const win = Math.floor(GATE_WINDOW_S * this.sampleRate);
+		if (this.chunkSamples < win) {
+			dbg('readiness gate: buffering', this.chunkSamples, '/', win, 'samples');
+			return;
+		}
+		const y = this.tail(win);
+		const det = detect(y, this.sampleRate);
+		this.lastFailed = det.failed;
+		dbg(
+			'readiness gate: pulses', det.nPulses,
+			'| rate', fmt(det.rateHz, 1), 'Hz',
+			'|', det.accept ? 'ACCEPT' : 'refused: ' + det.failed.join(', ')
+		);
+		// An accepting window always carries a rate (c3 gates on the interval),
+		// so this assignment covers the accepting case as well.
+		if (det.rateHz !== null) this.fryBuf = y;
+		if (!det.accept) return;
+		this.finishReadiness(gen);
+	}
+
+	/** Release the microphone, then measure. Terminal for a readiness run. */
+	private finishReadiness(gen: number): void {
+		if (gen !== this.gen || !this.active) return;
+		const handlers = this.readinessHandlers;
+		const quiet = this.quietBuf;
+		const fry = this.fryBuf;
+		const sr = this.sampleRate;
+		const failed = this.lastFailed;
+		// Terminal before any callback, so a cancel() issued from inside a
+		// callback is a no-op rather than a spurious CANCELLED.
+		this.active = false;
+		this.recording = false;
+		this.handlers = null;
+		this.readinessHandlers = null;
+		this.chunks = [];
+		this.chunkSamples = 0;
+		this.quietBuf = null;
+		this.fryBuf = null;
+		this.releaseAudio();
+
+		if (!quiet || !fry) {
+			// No inter-pulse rate was ever recovered. There is nothing to give
+			// range guidance about, so this is an honest failure rather than a
+			// verdict of "out of range".
+			handlers?.onError({
+				code: 'EXTRACTION_FAILED',
+				message: 'No vocal fry was heard during the readiness check.',
+				cause: { reason: 'readiness-timeout', failed }
+			});
+			return;
+		}
+		const result = assessReadiness(quiet, fry, sr);
+		dbg('readiness outcome:', JSON.stringify(result));
+		handlers?.onComplete(result);
 	}
 
 	/** Sweep over: release the microphone, trim, and run the §9 core. */
@@ -441,6 +616,10 @@ export class LiveCaptureSession implements CaptureSession {
 		if (this.gateTimer) {
 			clearInterval(this.gateTimer);
 			this.gateTimer = null;
+		}
+		if (this.quietTimer) {
+			clearInterval(this.quietTimer);
+			this.quietTimer = null;
 		}
 		if (this.stopTimer) {
 			clearTimeout(this.stopTimer);

@@ -45,6 +45,22 @@ export interface CalibratedFormant {
 	 * absent on values predating the guard and on derived/estimated values.
 	 */
 	plausibility?: 'plausible' | 'implausible' | 'unchecked';
+	/**
+	 * Whether the room's noise floor could be measured for this sample (item
+	 * 1.4b; engine spec §3's c8 condition, `detector.ts`).
+	 *
+	 * Follows the `plausibility` precedent above exactly, and for the same
+	 * reason: `'unmeasured'` is a valid outcome, not an error, and it is
+	 * ORTHOGONAL to both `confidence` and `reading`. We can hear the singer
+	 * perfectly and still be unable to measure their room, which happens on any
+	 * device whose sample rate collapses the detector's noise band. Recording
+	 * it separately is what stops an unmeasurable floor from being reported to
+	 * a singer as a fault in their voice.
+	 *
+	 * Optional: absent on values predating item 1.4b, and on derived or
+	 * estimated values, which were never measured in a room at all.
+	 */
+	noiseFloor?: 'measured' | 'unmeasured';
 	source:
 		| 'measured-user'
 		| 'derived-retracted-i'

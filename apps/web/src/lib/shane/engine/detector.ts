@@ -13,7 +13,14 @@ function spectralFlatness(y: Float64Array, sr: number, lo = 100, hi = 4000): num
 	return Math.exp(logsum / n) / (sum / n);
 }
 
-function snrDb(y: Float64Array, sr: number): number {
+/**
+ * The in-buffer proxy SNR: the [100, 4000] Hz signal band against a 5-10 kHz
+ * noise band inside the same sample. Not a room SNR; that is measured across
+ * two buffers in `readiness.ts` and the two thresholds are not transferable.
+ *
+ * Returns `null` when the question cannot be asked (item 1.4b).
+ */
+function snrDb(y: Float64Array, sr: number): number | null {
 	const { freqs, psd } = welchPSD(y, sr, 2048);
 	let sigSum = 0, sigN = 0; const noise: number[] = [];
 	const hiNoise = Math.min(sr / 2 - 200, 10000);
@@ -21,13 +28,45 @@ function snrDb(y: Float64Array, sr: number): number {
 		if (freqs[k] >= 100 && freqs[k] <= 4000) { sigSum += psd[k]; sigN++; }
 		if (freqs[k] >= 5000 && freqs[k] <= hiNoise) noise.push(psd[k]);
 	}
-	if (!noise.length) return 60;
+	// ITEM 1.4b. This line read `if (!noise.length) return 60;`, and the 60 was
+	// not a harmless fallback. It was a SILENT PASS: 60 clears c8's 12 dB
+	// threshold unconditionally, and the noise band collapses to empty whenever
+	// `hiNoise` falls below 5000, which is whenever `sr < 10400`. So at any
+	// sample rate under 10.4 kHz the eight-condition gate was really a
+	// seven-condition gate, and nothing said so. `live.ts` requests 48 kHz and
+	// falls back to the device default, so that was reachable, not theoretical.
+	// Abstaining obliges every caller to handle the absence instead.
+	if (!noise.length) return null;
+	// Same family, same treatment: no bins in the signal band would make
+	// `sigSum / sigN` a NaN, which propagates into a comparison as a silent
+	// false. There is no honest number here either.
+	if (!sigN) return null;
 	return 10 * Math.log10((sigSum / sigN + 1e-20) / (median(noise) + 1e-20));
 }
 
 export interface DetectorResult {
+	/**
+	 * Nothing that could be checked failed. Item 1.4b widened this from "every
+	 * condition passed": a condition that could not be evaluated does not
+	 * block, because refusing every capture forever on a device whose sample
+	 * rate collapses the noise band is not a product. The difference from the
+	 * 60 this replaced is DISCLOSURE, not permissiveness: what could not be
+	 * checked is named in `undecided` rather than silently assumed to pass.
+	 * Same shape as plausibility's `unchecked` (Kimi, 2026-07-11): a valid
+	 * outcome, not an error.
+	 */
 	accept: boolean; nPulses: number; rateHz: number | null; cv: number | null;
-	decay: number | null; flatness: number; snrDb: number; failed: string[];
+	decay: number | null; flatness: number;
+	/** `null` when the noise band could not be formed at this sample rate. */
+	snrDb: number | null;
+	/** Conditions evaluated and failed. Disjoint from `undecided`. */
+	failed: string[];
+	/**
+	 * Conditions that could not be evaluated at all on this sample. A name in
+	 * here must NEVER be reported to a singer as a fault: it says the
+	 * instrument could not answer, not that the singer did something wrong.
+	 */
+	undecided: string[];
 }
 
 export function detect(y: Float64Array, sr: number): DetectorResult {
@@ -65,12 +104,15 @@ export function detect(y: Float64Array, sr: number): DetectorResult {
 	// this ratio; the spec's 20 dB was set against idealized material. Spec
 	// amendment pending (engine spec §3, c8: 20 -> 12 dB). Confidence is graded on
 	// SNR in analyze.ts rather than gated here.
-	const c8 = snr >= 12;
-	const conds: Record<string, boolean> = { c3_ipi: c3, c4_decay: c4, c5_cv: c5, c6_count: c6, c7_flat: c7, c8_snr: c8 };
+	// `null` = undecidable, and it is deliberately not `false` (item 1.4b).
+	const c8 = snr === null ? null : snr >= 12;
+	const conds: Record<string, boolean | null> = { c3_ipi: c3, c4_decay: c4, c5_cv: c5, c6_count: c6, c7_flat: c7, c8_snr: c8 };
+	const entries = Object.entries(conds);
 	return {
-		accept: Object.values(conds).every(Boolean),
+		accept: entries.every(([, v]) => v !== false),
 		nPulses: peaks.length, rateHz: isNaN(rate) ? null : rate, cv: isNaN(cv) ? null : cv,
 		decay: isNaN(decay) ? null : decay, flatness: sf, snrDb: snr,
-		failed: Object.entries(conds).filter(([, v]) => !v).map(([k]) => k),
+		failed: entries.filter(([, v]) => v === false).map(([k]) => k),
+		undecided: entries.filter(([, v]) => v === null).map(([k]) => k),
 	};
 }

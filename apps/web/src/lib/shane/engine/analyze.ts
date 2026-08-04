@@ -27,15 +27,24 @@ export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: 
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
 	// when the gate passed it. Graded on the same evidence as the c8 recalibration:
 	// low under 12 dB, medium 12-18 dB, high above 18 dB. Spec amendment pending.
+	// Item 1.4b: an unmeasurable SNR is neither low nor high. It cannot drag the
+	// reading down to Provisional, because nothing was heard that was poor; and
+	// it cannot clear the 18 dB bar for 'high', because nothing was heard that
+	// was good. It lands in the honest middle, and the fact that the floor went
+	// unmeasured travels on `noiseFloor` instead of being smuggled into a
+	// quality grade.
+	const snrLow = det.snrDb !== null && det.snrDb < 12;
+	const snrHigh = det.snrDb !== null && det.snrDb > 18;
 	const confidence: CalibratedFormant['confidence'] =
-		g.reading === 'Provisional' || !det.accept || det.snrDb < 12 ? 'low'
-		: det.snrDb > 18 && g.fullWindow ? 'high'
+		g.reading === 'Provisional' || !det.accept || snrLow ? 'low'
+		: snrHigh && g.fullWindow ? 'high'
 		: 'medium';
 	const reading: CalibratedFormant['reading'] = confidence === 'low' ? 'provisional' : 'captured';
 	const out: CalibratedFormant = {
 		f1: ex.f1 ?? 0,
 		confidence, reading, source: 'measured-user',
 		f2Quality: f2Quality(ex.f2, ex.f1, ex.f2Prom, g.reading === 'Captured'),
+		noiseFloor: det.snrDb === null ? 'unmeasured' : 'measured',
 	};
 	if (ex.f2 !== null) out.f2 = ex.f2;
 	return out;
