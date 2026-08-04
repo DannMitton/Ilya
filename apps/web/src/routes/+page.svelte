@@ -22,8 +22,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
-	import type { WorkMetadata } from '@ilya/score-parser';
-	import { formatNameForPaper, COMPOSERS, POETS } from '$lib/composers-poets';
+	import {
+		dropTagsForEdits,
+		onScoreIngested,
+		parseFromScore,
+		revertToScoreHeader,
+		serializeFromScore,
+		type MetadataField,
+		type MetadataState,
+	} from '$lib/metadata-provenance';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
@@ -509,19 +516,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	function handleMetadataChange(meta: SongMetadata) {
 		// A "from score" tag fades on the field's first edit (Kimi's Q1
-		// refinement, 2026-07-13): any field whose value changes by hand
-		// loses its tag. applyScoreHeader/revert set the tags AFTER
+		// refinement, 2026-07-13). The callers below set the tags AFTER
 		// calling this, so their own writes do not clear them.
-		if (fromScoreFields.size > 0) {
-			const edited = (Object.keys(meta) as (keyof SongMetadata)[]).filter(
-				(k) => meta[k] !== metadata[k] && fromScoreFields.has(k),
-			);
-			if (edited.length > 0) {
-				const next = new Set(fromScoreFields);
-				for (const k of edited) next.delete(k);
-				fromScoreFields = next;
-			}
-		}
+		const kept = dropTagsForEdits(metadata, meta, fromScoreFields);
+		if (kept !== fromScoreFields) setFromScoreFields(kept);
 		metadata = meta;
 		try {
 			localStorage.setItem('ilya:metadata', JSON.stringify(meta));
@@ -530,46 +528,38 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 
-	// ── §A.6 metadata auto-populate (Kimi's rulings, 2026-07-13) ──
-	// Fill blanks only: the score header populates empty fields; anything
-	// the singer typed survives. The header itself stays immutable on the
-	// parsed score (workMetadata); the drawer fields are the singer's
-	// working copy, always editable. Known composers/poets canonicalize
-	// through formatNameForPaper (exact match only, no guessing).
-	let fromScoreFields = $state<ReadonlySet<keyof SongMetadata>>(new Set());
+	// ── §A.6 metadata provenance ──
+	// The transitions live in $lib/metadata-provenance, where vitest can
+	// reach them; this component holds the state and the persistence.
+	// Kimi's rulings, 2026-07-13, on filling blanks and fading a tag on a
+	// hand edit; Dann's ruling, 2026-08-04, on what a second score does to
+	// the first score's identity.
+	const FROM_SCORE_KEY = 'ilya:metadataFromScore';
+	let fromScoreFields = $state<ReadonlySet<MetadataField>>(new Set());
 
-	function scoreHeaderAsFields(wm: WorkMetadata): Partial<Record<keyof SongMetadata, string>> {
-		return {
-			...(wm.title ? { title: wm.title } : {}),
-			...(wm.opus ? { opus: wm.opus } : {}),
-			...(wm.composer ? { composer: formatNameForPaper(wm.composer, COMPOSERS) } : {}),
-			...(wm.poet ? { poet: formatNameForPaper(wm.poet, POETS) } : {}),
-			...(wm.translator ? { translator: formatNameForPaper(wm.translator, POETS) } : {}),
-		};
+	// The tags are persisted beside the values. Without this the values
+	// come back after a reload and their provenance does not, so every
+	// restored field reads as hand-typed and nothing can be cleared safely.
+	function setFromScoreFields(next: ReadonlySet<MetadataField>) {
+		fromScoreFields = next;
+		try {
+			localStorage.setItem(FROM_SCORE_KEY, serializeFromScore(next));
+		} catch {
+			// localStorage unavailable
+		}
 	}
 
-	function applyScoreHeader(wm: WorkMetadata) {
-		const incoming = scoreHeaderAsFields(wm);
-		const next = { ...metadata };
-		const filled = new Set<keyof SongMetadata>();
-		for (const [k, v] of Object.entries(incoming) as Array<[keyof SongMetadata, string]>) {
-			if ((next[k] ?? '').trim() === '') {
-				next[k] = v;
-				filled.add(k);
-			}
-		}
-		if (filled.size > 0) handleMetadataChange(next);
-		fromScoreFields = filled;
+	function commitMetadataState(next: MetadataState) {
+		handleMetadataChange(next.metadata);
+		setFromScoreFields(next.fromScore);
 	}
 
 	// Kimi's Q2 safety net: restore the header's fields verbatim (fields
 	// the header does not carry are left untouched).
-	function revertToScoreHeader() {
+	function handleRevertToScoreHeader() {
 		const wm = ingestedScore?.result.score.workMetadata;
 		if (!wm) return;
-		const incoming = scoreHeaderAsFields(wm);
-		handleMetadataChange({ ...metadata, ...incoming });
-		fromScoreFields = new Set(Object.keys(incoming) as Array<keyof SongMetadata>);
+		commitMetadataState(revertToScoreHeader({ metadata, fromScore: fromScoreFields }, wm));
 	}
 
 	// Q4 provenance line (Kimi's §A.28 ruling, 2026-07-13): an arranger
@@ -724,6 +714,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			if (savedMeta) {
 				const parsed = JSON.parse(savedMeta);
 				metadata = { ...metadata, ...parsed };
+			}
+			// Restore the provenance tags after the values, since a tag is
+			// only honoured for a field that came back with something in it.
+			const savedFromScore = localStorage.getItem(FROM_SCORE_KEY);
+			if (savedFromScore) {
+				setFromScoreFields(parseFromScore(savedFromScore, metadata));
 			}
 			const savedDiacritics = localStorage.getItem('ilya:showStressDiacritics');
 			if (savedDiacritics) {
@@ -886,7 +882,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{language}
 							onchange={handleMetadataChange}
 							fromScore={fromScoreFields}
-							onrevert={ingestedScore?.result.score.workMetadata ? revertToScoreHeader : undefined}
+							onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
 						/>
 						{#if arrangerProvenance}
 							<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata
@@ -907,10 +903,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
 							// as paginated notation in the Fit main pane.
 							ingestedScore = ingested;
-							// §A.6 auto-populate (Kimi's Q1 ruling): fill blank
-							// metadata fields from the score header, if any.
-							const wm = ingested.result.score.workMetadata;
-							if (wm) applyScoreHeader(wm);
+							// A new score arrives: clear whatever the previous score
+							// filled, then fill the blanks from this score's header
+							// if it carries one. A score with no header still
+							// clears, and that case is the whole point: at E.23,
+							// Musorgsky's Sunless 1 rendered under the Schubert's
+							// title, composer, and poet, because a header-less score
+							// reached no code that touched metadata at all.
+							commitMetadataState(
+								onScoreIngested(
+									{ metadata, fromScore: fromScoreFields },
+									ingested.result.score.workMetadata,
+								),
+							);
 						}}
 					/>
 					<CalibrationWizard
