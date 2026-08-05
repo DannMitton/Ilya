@@ -192,7 +192,21 @@ interface Placed {
 // verbatim regardless.
 
 const STEM_HALF = 5.5;   // primitive-mode stem x-offset from the notehead centre
-const STEM_MIN = 26;     // minimum stem length under a beam
+/**
+ * Standard stem length, in STAVE-SPACES: an octave, 3.5 stave-spaces from
+ * the notehead centre (Gould r86). Expressed in stave-spaces because the
+ * stave-space is notation's base unit (r79), and because the production
+ * stave is less than half the size of the test and font-lab default: the
+ * hardcoded 26 and 30 px this replaces measured 4.7 and 5.45 stave-spaces
+ * on the printed page, a stem longer than the staff is tall (Dann at the
+ * browser, 2026-08-05).
+ *
+ * NOT implemented from r86, recorded for N.6: ledger-line notes' stems
+ * reach the middle staff line; stems shorten progressively outside the
+ * staff to a floor of 2.5 stave-spaces; and r87 lengthens the stem for
+ * each beam past the second.
+ */
+const STEM_LENGTH_SP = 3.5;
 const BEAM_STROKE = 4;   // primitive-mode beam thickness
 const BEAM_GAP = 7;      // primitive-mode spacing between beam levels
 const BEAM_STUB = 9;     // length of a partial (stub) beam
@@ -257,6 +271,8 @@ export function renderAnalyzedStaff(
     stemHalfUp = sp((nh.anchors.stemUpSE?.[0] ?? w) - w / 2) - stemT / 2;
     stemHalfDown = sp((nh.anchors.stemDownNW?.[0] ?? 0) - w / 2) + stemT / 2;
   }
+  /** Standard stem length in px at this stave size (Gould r86). */
+  const stemLen = sp(STEM_LENGTH_SP);
 
   // ── Layout: assign x by onset, insert barlines at measure changes ──
   const placed: Placed[] = [];
@@ -298,10 +314,11 @@ export function renderAnalyzedStaff(
       const x0 = sxOf(first);
       const rawSlope = (last.noteY - first.noteY) / (sxOf(last) - x0);
       const slope = Math.max(-MAX_BEAM_SLOPE, Math.min(MAX_BEAM_SLOPE, rawSlope));
-      // Anchor the beam so every stem in the group reaches at least STEM_MIN.
+      // Anchor the beam so every stem in the group reaches the standard
+      // length (r86); the slope then lengthens the rest.
       let anchor = stemUp ? Infinity : -Infinity;
       for (const n of notes) {
-        const cand = n.noteY + dir * STEM_MIN - slope * (sxOf(n) - x0);
+        const cand = n.noteY + dir * stemLen - slope * (sxOf(n) - x0);
         anchor = stemUp ? Math.min(anchor, cand) : Math.max(anchor, cand);
       }
       const beamY = (x: number): number => anchor + slope * (x - x0);
@@ -381,6 +398,19 @@ export function renderAnalyzedStaff(
     }
     flush();
   }
+
+  /**
+   * Stem direction for one note, and the SINGLE source of truth for it:
+   * semantics first, then a beamed note's group direction, then Gould's
+   * positional default. Every consumer must call this rather than restate
+   * the precedence, or the two copies drift and a stem silently stops
+   * meaning what the legend says it means.
+   */
+  const stemUpFor = (ev: VocalLineEvent, noteY: number): boolean => {
+    const a = ev.pitch ? analyzed.events[ev.id] : undefined;
+    const beamed = beamStemById.get(ev.id);
+    return a ? a.timbre === 'close' : beamed ? beamed.up : noteY > o.staffMidY;
+  };
 
   const parts: string[] = [];
   // The svg tag and background are patched at the end, once the true
@@ -462,13 +492,14 @@ export function renderAnalyzedStaff(
           const y = yFor(ev.pitch);
           minY = Math.min(minY, y - 6);
           const a = analyzed.events[ev.id];
-          if (a) {
-            const ty = yFor(a.turningPitch);
-            minY = Math.min(minY, ty - accClear);
-            if (a.timbre === 'close' && ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
-              const beamed = beamStemById.get(ev.id);
-              minY = Math.min(minY, beamed ? beamed.tipY : y - 30);
-            }
+          if (a) minY = Math.min(minY, yFor(a.turningPitch) - accClear);
+          // Any up-stem rises above the notehead and the bracket must clear
+          // it, measured or not. Before N.4 only a close-timbre note could
+          // stem up, so this was gated on `a`; unmeasured pages now stem up
+          // positionally too and the old gate would let a bracket collide.
+          if (ev.duration.base !== 'whole' && ev.duration.base !== 'breve' && stemUpFor(ev, y)) {
+            const beamed = beamStemById.get(ev.id);
+            minY = Math.min(minY, beamed ? beamed.tipY : y - stemLen);
           }
         }
         const yBr = minY - 8;
@@ -693,7 +724,7 @@ export function renderAnalyzedStaff(
     // page still gets stems, and a stemless notehead stays reserved for a
     // turning pitch. Whole notes and breves excepted.
     const beamed = beamStemById.get(ev.id);
-    const stemUp = a ? a.timbre === 'close' : beamed ? beamed.up : y > o.staffMidY;
+    const stemUp = stemUpFor(ev, y);
     if (ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
       // Stem contact y: from the notehead's anchor in SMuFL mode.
       const anchors = smufl ? smufl.glyph(headName).anchors : undefined;
@@ -706,7 +737,7 @@ export function renderAnalyzedStaff(
         lowestInk = Math.max(lowestInk, beamed.tipY + beamT / 2);
       } else {
         const sx = nx + (stemUp ? stemHalfUp : stemHalfDown);
-        const sy2 = stemUp ? y - 30 : y + 30;
+        const sy2 = stemUp ? y - stemLen : y + stemLen;
         lowestInk = Math.max(lowestInk, sy2);
         parts.push(`<line x1="${round2(sx)}" y1="${round2(contactY)}" x2="${round2(sx)}" y2="${sy2}" stroke="#1a1612" stroke-width="${stemT}"/>`);
         // Flags for unbeamed short notes.

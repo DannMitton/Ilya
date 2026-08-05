@@ -328,6 +328,21 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
     expect(tip).toBeLessThan(contact);
   });
 
+  it('measures the stem in stave-spaces, not pixels (Gould r86: 3.5)', () => {
+    // The mutation control for the defect Dann found on the printed page:
+    // a hardcoded 30 px stem is 2.5 stave-spaces at the test stave size and
+    // 5.45 at the production stave size of 5.5, longer than the staff is
+    // tall. Stem length must hold at 3.5 stave-spaces at ANY size, so this
+    // asserts it at two, and fails for any hardcoded pixel value.
+    for (const lineGap of [12, 6]) {
+      const s = renderDemoUnmeasured({ lineGap });
+      const g = eventGroup(s, 'n6'); // unbeamed half note, no turning head
+      const headY = Number(g.match(/<ellipse cx="[\d.]+" cy="([\d.-]+)"[^>]*fill="none"/)![1]);
+      const tipY = Number(g.match(/<line [^>]*y2="([\d.-]+)"/)![1]);
+      expect(Math.abs(tipY - headY)).toBeCloseTo(3.5 * lineGap, 5);
+    }
+  });
+
   it('beams by beat with no flags left over, where the measured page flags n11', () => {
     expect((svg.match(/q8 3 7 12/g) ?? []).length).toBe(0);
     expect((measured.match(/q8 3 7 12/g) ?? []).length).toBe(1);
