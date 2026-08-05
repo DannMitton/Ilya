@@ -12,7 +12,22 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { renderDemo, syntheticSmuflFont } from './demo-fixture';
+import { renderDemo, renderDemoUnmeasured, syntheticSmuflFont } from './demo-fixture';
+
+/** The rendered contents of one note's `<g data-event-id>` wrapper. */
+function eventGroup(svg: string, id: string): string {
+  return svg.match(new RegExp(`<g data-event-id="${id}">([\\s\\S]*?)</g>`))?.[1] ?? '';
+}
+
+/**
+ * A note's stem, as [contactY, tipY], from the single `<line>` inside its
+ * event group (ledger lines and accidentals are emitted before the wrapper
+ * opens). tipY > contactY is a down-stem.
+ */
+function stemEnds(svg: string, id: string): [number, number] | null {
+  const m = eventGroup(svg, id).match(/<line [^>]*y1="([\d.]+)"[^>]*y2="([\d.]+)"/);
+  return m ? [Number(m[1]), Number(m[2])] : null;
+}
 
 describe('staff renderer: layout', () => {
   const svg = renderDemo();
@@ -71,6 +86,18 @@ describe('staff renderer: beaming (derived by beat)', () => {
 
   it('double-beams the 16th pair (one secondary segment, no stubs needed)', () => {
     expect((svg.match(/data-beam-level="2"/g) ?? []).length).toBe(1);
+  });
+
+  it('never lets a beam override the semantic direction (open n9 down, close n11 up)', () => {
+    // Where a turning pitch shares the stave the melody's stem must state
+    // its timbre, so a beam can never dictate direction: n9 and n10 are
+    // open and beam together with stems down; n11 is close, stems up, and
+    // is therefore flagged rather than beamed with them. Mutation control
+    // for the precedence order in the stem block.
+    const [c9, t9] = stemEnds(svg, 'n9')!;
+    expect(t9).toBeGreaterThan(c9);
+    const [c11, t11] = stemEnds(svg, 'n11')!;
+    expect(t11).toBeLessThan(c11);
   });
 
   it('breaks the beam where the timbre changes (n11 beams with nothing)', () => {
@@ -251,6 +278,60 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
     expect(svg.includes('>[#]<')).toBe(true);
     expect(svg.includes('data-event-id="n13"')).toBe(true);
     expect(svg.includes('>Ты<')).toBe(true);
+  });
+});
+
+describe('staff renderer: the unmeasured page (N.4)', () => {
+  // Before this fix the stem was gated on the acoustic event, so a page
+  // rendered without a measured voice carried NO stems at all — and a
+  // stemless notehead is this app's mark for a turning pitch, so every
+  // printed melody note asserted something untrue. Nothing in the suite
+  // covered this path: every note in the demo fixture is analysed.
+  const svg = renderDemoUnmeasured();
+  const measured = renderDemo();
+  const stems = (s: string): number => (s.match(/stroke="#1a1612" stroke-width="1\.5"/g) ?? []).length;
+
+  it('draws no acoustic marks at all: no turning layer, no crossing', () => {
+    expect(svg.includes('#8B9A7D')).toBe(false);
+    expect(svg.includes('stroke="#b23b3b"')).toBe(false);
+  });
+
+  it('stems every melody note, as many as the measured page does', () => {
+    expect(stems(svg)).toBeGreaterThan(0);
+    expect(stems(svg)).toBe(stems(measured));
+  });
+
+  it('takes Gould r84 below the middle line: F2 stems up', () => {
+    const [contact, tip] = stemEnds(svg, 'n1')!;
+    expect(tip).toBeLessThan(contact);
+  });
+
+  it('takes Gould r84 above the middle line: D4 stems down, where measured it stems up', () => {
+    const [contact, tip] = stemEnds(svg, 'n6')!;
+    expect(tip).toBeGreaterThan(contact);
+    // The same note measured is close timbre, so semantics reverse it.
+    const [mContact, mTip] = stemEnds(measured, 'n6')!;
+    expect(mTip).toBeLessThan(mContact);
+  });
+
+  it('takes r85 on the middle line: D3 has no clear case, so it stems down', () => {
+    const [contact, tip] = stemEnds(svg, 'n16')!;
+    expect(tip).toBeGreaterThan(contact);
+  });
+
+  it('gives a beat-group one direction from its furthest note, not per note (r92)', () => {
+    // n9 (A2), n10 (Bb2), and n11 (E3) share measure 2, beat 1. A2 is
+    // furthest from the middle line and lies below it, so the whole group
+    // takes up-stems — including n11, which alone would stem down. The
+    // group is never split for position; only timbre splits a group.
+    const [contact, tip] = stemEnds(svg, 'n11')!;
+    expect(tip).toBeLessThan(contact);
+  });
+
+  it('beams by beat with no flags left over, where the measured page flags n11', () => {
+    expect((svg.match(/q8 3 7 12/g) ?? []).length).toBe(0);
+    expect((measured.match(/q8 3 7 12/g) ?? []).length).toBe(1);
+    expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(5);
   });
 });
 

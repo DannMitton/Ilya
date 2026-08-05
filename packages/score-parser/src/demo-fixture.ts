@@ -143,6 +143,28 @@ export function renderDemo(options?: StaffRenderOptions): string {
 }
 
 /**
+ * The demo profile with NO measured formants. `overlay-engine.ts:160-161`
+ * skips a note whose vowel has no fR1, so `analyzed.events` comes back
+ * empty and the render takes the notation-only path a singer sees before
+ * measuring. The declared range, tessitura, and passaggio stay in place so
+ * the fixture isolates the one gate that matters, `completenessOf`'s
+ * `formants` at `analyze-score-adapter.ts:76`.
+ */
+export const demoProfileUnmeasured: VoiceProfileSnapshot = { ...demoProfile, fR1: {} };
+
+/**
+ * Render the demo with no measured voice: notation only, no acoustic marks.
+ * No phonation break is set here, unlike `renderDemo`: with no events there
+ * is no `analyzed.events.n2` to mark.
+ */
+export function renderDemoUnmeasured(options?: StaffRenderOptions): string {
+  const parsed = demoScore(); // populates lastIpaPreview as a side effect
+  const ipaPreview = Object.fromEntries(lastIpaPreview);
+  const analyzed = analyzeScore(parsed, demoProfileUnmeasured, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+  return renderAnalyzedStaff(parsed, analyzed, { ...options, ipaPreview });
+}
+
+/**
  * A complete synthetic SMuFL font for tests: every required glyph gets the
  * same bounding box and stem anchors, so assertions are deterministic
  * without shipping a real metadata file into the test bundle.

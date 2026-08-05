@@ -280,12 +280,14 @@ export function renderAnalyzedStaff(
   // A group needs at least two consecutive members; it breaks at rests,
   // barlines, beat boundaries, unanalysed notes, and timbre changes
   // (semantic stems make mixed-timbre beams impossible).
-  const beamStemById = new Map<string, { sx: number; tipY: number }>();
+  const beamStemById = new Map<string, { sx: number; tipY: number; up: boolean }>();
   const beamParts: string[] = [];
   {
     interface BeamNote { id: string; x: number; noteY: number; flags: number }
     let group: BeamNote[] = [];
-    let groupUp = false;
+    // `undefined` means "no acoustic data, settle the direction positionally
+    // at flush"; a boolean is a semantic direction already known per note.
+    let groupUp: boolean | undefined = false;
     let groupKey = '';
 
     const emit = (notes: BeamNote[], stemUp: boolean): void => {
@@ -304,7 +306,7 @@ export function renderAnalyzedStaff(
       }
       const beamY = (x: number): number => anchor + slope * (x - x0);
       for (const n of notes) {
-        beamStemById.set(n.id, { sx: sxOf(n), tipY: beamY(sxOf(n)) });
+        beamStemById.set(n.id, { sx: sxOf(n), tipY: beamY(sxOf(n)), up: stemUp });
       }
       // Level 1 is the primary beam; higher levels draw as runs of two or
       // more, or as stubs on singletons (a stub points at its left
@@ -336,8 +338,28 @@ export function renderAnalyzedStaff(
       }
     };
 
+    /**
+     * Gould's positional direction for a group with no acoustic data: the
+     * note furthest from the middle line decides, and an equidistant group
+     * takes down-stems (r84; r85's no-clear-case convention; r91). One
+     * direction serves the whole group, so a beat-group never splits for
+     * position alone (r92). Semantic direction is the only thing that can
+     * disagree within a beat, and that case still breaks the group above.
+     *
+     * INFERENCE, gap named: Gould's own beamed-group stem page (p. 24) is
+     * missing from our extraction, and r102's furthest-from-the-middle-line
+     * rule is stated for chords.
+     */
+    const positionalUp = (notes: BeamNote[]): boolean => {
+      let furthest = notes[0];
+      for (const n of notes) {
+        if (Math.abs(n.noteY - o.staffMidY) > Math.abs(furthest.noteY - o.staffMidY)) furthest = n;
+      }
+      return furthest.noteY > o.staffMidY; // below the middle line → up-stem
+    };
+
     const flush = (): void => {
-      if (group.length >= 2) emit(group, groupUp);
+      if (group.length >= 2) emit(group, groupUp ?? positionalUp(group));
       group = [];
       groupKey = '';
     };
@@ -345,12 +367,16 @@ export function renderAnalyzedStaff(
     for (const { ev, x: nx } of placed) {
       const a = ev.type === 'note' && ev.pitch ? analyzed.events[ev.id] : undefined;
       const flags = ev.type === 'note' ? flagCount(ev.duration.base) : 0;
-      if (!a || !ev.pitch || flags < 1) { flush(); continue; }
+      if (!ev.pitch || flags < 1) { flush(); continue; }
       const ts = parsed.measures[ev.measureIndex]?.timeSignature ?? { beats: 4, beatType: 4 };
-      const key = `${ev.measureIndex}|${beatIndexOf(ev.rhythmicPosition.fraction, ts)}|${a.timbre}`;
+      // Timbre stays in the key, so adjacent notes that disagree still break
+      // the group and fall back to flags (Dann's ruling, 2026-07-12). An
+      // unanalysed note has no timbre to disagree about, so it groups by
+      // beat alone and the group's direction is settled at flush.
+      const key = `${ev.measureIndex}|${beatIndexOf(ev.rhythmicPosition.fraction, ts)}|${a ? a.timbre : 'positional'}`;
       if (key !== groupKey) flush();
       groupKey = key;
-      groupUp = a.timbre === 'close';
+      groupUp = a ? a.timbre === 'close' : undefined;
       group.push({ id: ev.id, x: nx, noteY: yFor(ev.pitch), flags });
     }
     flush();
@@ -648,10 +674,27 @@ export function renderAnalyzedStaff(
         : `<ellipse cx="${nx}" cy="${y}" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 ${nx} ${y})"/>`);
     }
 
-    // Forced stem: open timbre = down, close = up. (No stem on a whole note.)
-    const stemUp = a ? a.timbre === 'close' : false;
-    if (a && ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
-      const beamed = beamStemById.get(ev.id);
+    // Stem direction, in precedence order. SEMANTICS FIRST, and the order
+    // is the rule, not a convenience (Dann's ruling, 2026-08-05):
+    //   1. where a turning pitch shares the stave, the melody's stem MUST
+    //      state its timbre — open = down, close = up (analysis-types.ts:130).
+    //      A beam may never override it. Adjacent notes of opposing timbre
+    //      therefore cannot share a beam, which is why the beam pass keys
+    //      its groups on timbre and the odd note out takes a flag.
+    //   2. no acoustic data, but beamed: the group's direction, settled
+    //      positionally at flush. Without it the stem would attach to the
+    //      wrong side of the notehead.
+    //   3. no acoustic data, unbeamed: Gould's positional default (r84).
+    //      Above the middle line takes a down-stem, below takes an up-stem,
+    //      on the line takes a down-stem by r85's no-clear-case convention.
+    // 1 and 3 never both apply: `a` exists only where a profile does, so
+    // Gould's positional rule is active only when no voice data constrains
+    // the melody. The stem itself is no longer gated on `a`: an unmeasured
+    // page still gets stems, and a stemless notehead stays reserved for a
+    // turning pitch. Whole notes and breves excepted.
+    const beamed = beamStemById.get(ev.id);
+    const stemUp = a ? a.timbre === 'close' : beamed ? beamed.up : y > o.staffMidY;
+    if (ev.duration.base !== 'whole' && ev.duration.base !== 'breve') {
       // Stem contact y: from the notehead's anchor in SMuFL mode.
       const anchors = smufl ? smufl.glyph(headName).anchors : undefined;
       const contactY = smufl
