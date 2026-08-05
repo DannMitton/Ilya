@@ -565,9 +565,19 @@
 	     pinned to the top margin. Title = the song's (placeholder until a
 	     score arrives, verbatim as on the Ilya page); the composer slot
 	     carries the voice-qualified formant-profile line (Dann's header
-	     ruling, 2026-07-12). -->
+	     ruling, 2026-07-12).
+
+	     Item 1.8, 2026-08-05: this passed `title=""` and had done since the
+	     envelope was written, so the comment above described an intent the
+	     code never carried out. A singer with «Gretchen am Spinnrade» in the
+	     drawer printed a Fit sheet that could not name its own subject.
+	     OBSERVED by Dann in a browser print preview on dc7cf09. The score
+	     branch at :503 was already passing `scoreTitle`; this is the envelope
+	     catching up to it, not a new decision. An empty title still falls
+	     through to TitleHeader's own placeholder, so the no-metadata state is
+	     unchanged. -->
 	<TitleHeader
-		title=""
+		title={scoreTitle ?? ''}
 		composer={subtitle}
 		poet=""
 		translator=""
