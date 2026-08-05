@@ -386,6 +386,59 @@
 	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
+	// ── Item 1.8, the withheld statement (2026-08-05) ─────────────────────
+	// The clause this serves: "read or print a complete Fit result that never
+	// guesses where calibration is absent." The ENGINE already satisfies it, by
+	// Dann's Option A ruling of 2026-07-15: with no fR1 it omits every event and
+	// the render is notation-only (analyze-score-adapter.ts:60-64). What it does
+	// not do is SAY so, and a silent page is indistinguishable from a page whose
+	// analysis came back clean.
+	//
+	// THE CONDITION IS THE PROFILE, NOT THE EVENTS. `hasAcousticMarks` above is
+	// also false for a fully measured singer whose score happens to contain no
+	// crossings and no timbre turns, and telling that singer "nothing was
+	// checked" would be a lie in the opposite direction. `completeness.formants`
+	// (analyze-score-adapter.ts:76) is `Object.keys(fR1).length > 0`, so this
+	// fires only when no measured resonance exists and nothing COULD be
+	// forecast.
+	//
+	// VOCABULARY: Dann ruled 2026-08-05 that this app's verb is MEASURE, in both
+	// languages. `étalonner` is the accurate metrological term but reverses the
+	// relation, since Ilya is calibrated against the voice rather than the other
+	// way round, and `mesuré` was already shipped at fit-legend.ts:76 and in
+	// i18n's `fit.broad.body`. A vocabulary sweep of the older `calibrate`
+	// strings is recorded as its own item.
+	//
+	// PLACEHOLDER copy, flagged for Dann, same status as fit-legend.ts's. The
+	// French is mine and needs his eye more than the English does.
+	const showWithheld = $derived(!adapted.completeness.formants);
+	const WITHHELD_COPY: Record<
+		Language,
+		{ heading: string; lede: string; items: string[]; close: string }
+	> = {
+		en: {
+			heading: 'Nothing is claimed about your voice',
+			lede: 'Ilya has read your score, but no voice has been measured, so there is nothing to compare this line against.',
+			items: [
+				'Every acoustic mark: no crossings, no timbre turns.',
+				'The watch list, entirely. An empty list is the truthful output here.',
+				'Any reading of your range, your tessitura, or your passaggio.'
+			],
+			close: 'The stave carries no marks because none can be earned.'
+		},
+		fr: {
+			heading: 'Rien n’est affirmé sur votre voix',
+			lede: 'Ilya a lu votre partition, mais aucune voix n’a été mesurée, donc il n’y a rien à quoi comparer cette ligne.',
+			items: [
+				'Toute marque acoustique : aucun croisement, aucun changement de timbre.',
+				'La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête.',
+				'Toute lecture de votre ambitus, de votre tessiture ou de votre passaggio.'
+			],
+			close: 'La portée ne porte aucune marque, car aucune ne peut être fondée.'
+		}
+	};
+	const withheld = $derived(WITHHELD_COPY[language]);
+
 	// The broad-analysis legend text (§B.5): composed from localized parts by
 	// the adapter (EN and FR), rendered print-native in the PageFooter legend
 	// zone rather than as a banner above the score. Empty when nothing is broad.
@@ -414,7 +467,12 @@
 	// page sheet AFTER the score (Dann's placement ruling, 2026-07-18), so it
 	// sits inside the page boundary like the score and expands freely there
 	// without displacing the markup. Numbered as a continuation of the score.
-	const hasCommentaryPage = $derived(showOctaveNotice || showWatchBand);
+	// Item 1.8: the withheld statement is a third reason for this sheet to
+	// exist. Without it there is no trailing page at all in the uncalibrated
+	// state, and the statement lands in exactly the position the watch list
+	// would have occupied: the page that would have carried the conclusions
+	// instead says why there are none.
+	const hasCommentaryPage = $derived(showOctaveNotice || showWatchBand || showWithheld);
 	const totalPages = $derived(
 		scorePages ? scorePages.length + (hasCommentaryPage ? 1 : 0) : 0,
 	);
@@ -537,6 +595,22 @@
 			>
 				<RunningHeader headerText={runningHeader} />
 				<div class="commentary-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
+					{#if showWithheld}
+						<!-- Item 1.8: absence as a positive object on the page, not a
+						     gap. Placed FIRST, above the octave notice, because it
+						     governs everything else on the sheet: if no voice has been
+						     measured, nothing below it could have been forecast. -->
+						<aside class="withheld" aria-label={withheld.heading}>
+							<p class="withheld-heading">{withheld.heading}</p>
+							<p class="withheld-lede">{withheld.lede}</p>
+							<ul class="withheld-list">
+								{#each withheld.items as item (item)}
+									<li class="withheld-line">{item}</li>
+								{/each}
+							</ul>
+							<p class="withheld-close">{withheld.close}</p>
+						</aside>
+					{/if}
 					{#if showOctaveNotice}
 						<aside class="octave-notice">{OCTAVE_NOTICE}</aside>
 					{/if}
@@ -750,6 +824,61 @@
 		font-style: italic;
 		font-size: 0.92rem;
 		line-height: 1.5;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	/* Item 1.8, the withheld statement. Twinned on .watch-band deliberately:
+	   it stands in the place the watch list would have stood, so it should
+	   carry the same weight rather than read as a warning. Same squircle, same
+	   lavender, same small-caps header. The only departure is the closing line,
+	   which is italic serif to match .octave-notice, because it is a remark
+	   about the page rather than an item in a list. */
+	.withheld {
+		box-sizing: border-box;
+		border: 1px solid #8e7e9b;
+		border-radius: 12px;
+		padding: 0.7rem 1.1rem 0.8rem;
+		background: var(--paper-cream);
+	}
+
+	.withheld-heading {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-variant: small-caps;
+		letter-spacing: 0.06em;
+		font-size: 0.8rem;
+		color: #8e7e9b;
+	}
+
+	.withheld-lede {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 0.9rem;
+		line-height: 1.45;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	.withheld-list {
+		margin: 0 0 0.5rem;
+		padding-left: 1.1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.withheld-line {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-size: 0.9rem;
+		line-height: 1.45;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	.withheld-close {
+		margin: 0;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+		font-size: 0.9rem;
+		line-height: 1.45;
 		color: var(--ink-secondary, #4a4540);
 	}
 
