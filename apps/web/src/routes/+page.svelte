@@ -936,6 +936,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							handleHeadingNavigate('learn-u3-note-o');
 						}}
 					/>
+					<!-- The Fit print control (item 1.8). TWINNED, not invented:
+					     the Transcription drawer's Print button is
+					     RootPanel.svelte:213-219, and this reuses its label key so
+					     one word means one thing on both surfaces.
+
+					     `handlePrint` is a bare window.print() with no tab coupling
+					     (:317-319), and app.css:200-205 already hides .header-bar,
+					     .drawer, .drawer-lip, .tab-bar and .ribbon at print time,
+					     so printing from Fit emits the page alone. OBSERVED in a
+					     browser, E.27, 2026-08-05: one sheet, no chrome. The
+					     capability was always reachable by Cmd-P; what was missing
+					     was any way to SEE it.
+
+					     Disabled when the page holds nothing worth putting on
+					     paper: no score ingested AND no reading captured. In that
+					     state VoiceProfilePane.svelte:607-608 renders the single
+					     line "Calibrate your voice to begin", which is honest and
+					     is not a result. -->
+					<div class="shane-output">
+						<button
+							class="shane-print-btn"
+							disabled={!ingestedScore && Object.keys(shaneFormants).length === 0}
+							onclick={handlePrint}
+						>
+							{t('input.print', language)}
+						</button>
+					</div>
 					</div>
 				{/if}
 			{/snippet}
@@ -1026,6 +1053,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   sage, so focusing a Fit field mirrors the sage ring in purple. */
 	.shane-panel :global(:focus-visible) {
 		outline-color: var(--deeper-lavender);
+	}
+
+	/* The Fit print control (item 1.8). RootPanel's .action-btn and
+	   .btn-secondary are scoped to that component, so their values are twinned
+	   here rather than imported: same padding, weight, radius and border, so
+	   the two drawers still read as one surface, which is what the
+	   .shane-panel comment above already asks for.
+
+	   Two departures, both deliberate and both named. It is full width because
+	   Fit has one output action where Transcription has a row of three. And it
+	   carries a disabled style, which RootPanel's Print button does not: a
+	   control that cannot be used should not look identical to one that can.
+	   RECORDED, NOT CHASED: RootPanel.svelte:213-219 has no :disabled rule at
+	   all, so Transcription's Print button looks enabled while disabled. */
+	.shane-output {
+		display: flex;
+		margin-top: 6px;
+	}
+
+	.shane-print-btn {
+		flex: 1;
+		padding: 0.45rem 0.5rem;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		background: white;
+		border: 1px solid var(--stone-600, #57534e);
+		border-radius: 4px;
+		cursor: pointer;
+		transition: opacity 0.12s;
+	}
+
+	.shane-print-btn:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
 	}
 
 	/* The Q4 provenance line: tertiary, one quiet line beneath the
