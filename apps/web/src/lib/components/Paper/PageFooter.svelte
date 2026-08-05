@@ -23,7 +23,12 @@
 		<div class="provenance-legend">
 			{#each legendItems as item}
 				<span class="legend-item">
-					<span class="legend-circle" aria-hidden="true">
+					<!-- item.textOnly (item 1.6): the Fit legend's states are words
+					     in that page's prose, not glyphs, so it carries no circle.
+					     Absent means "draw it", which is every Transcribe item's
+					     behaviour unchanged. -->
+					{#if !item.textOnly}
+						<span class="legend-circle" aria-hidden="true">
 						{#if item.type === 'user-dictionary'}
 							<!-- Dictionary (open book with spine) -->
 							<svg viewBox="0 0 16 16" class="legend-icon" fill="none"><path d="M8 2C6.5 1 4 .5 1 1v11c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2V1c-3-.5-5.5 0-7 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" stroke-width="1"/></svg>
@@ -44,6 +49,7 @@
 							<svg viewBox="348 458 854 1063" class="legend-icon" fill="currentColor"><path d="M408 989.5V1474h202v-351l81.7.2 81.7.3 90.1 175.2 90 175.3h114.9c91.4 0 114.7-.3 114.3-1.2-.3-.7-46.2-86.6-102-190.8-95.7-178.8-101.3-189.6-99.3-190.4 10.4-4.5 35.9-17.6 43.1-22.2 64.8-41.4 109.9-110.8 124.5-191.4 6.4-35.6 7-83.2 1.4-121-12.7-86.9-55.2-153.9-125.7-198.2-37.3-23.5-81.9-39.5-133.2-47.7-35.9-5.8-22.8-5.5-262.7-5.8l-220.8-.4zM798 664c58.3 3.7 100.8 26.3 127.2 67.6 14.2 22.2 21.8 51.9 21.8 85.4 0 44.8-12.6 80-38 106.4-24.5 25.4-55.6 39.5-98.5 44.5-5.7.7-43.8 1.1-104.7 1.1H610V816.7c0-83.8.3-152.7.7-153 1-1.1 170.2-.8 187.3.3"/></svg>
 						{/if}
 					</span>
+					{/if}
 					<span class="legend-label">{item.label}</span>
 				</span>
 			{/each}

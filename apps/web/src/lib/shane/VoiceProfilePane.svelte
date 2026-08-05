@@ -58,6 +58,7 @@
 	import type { Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { buildFitLegend } from '$lib/shane/fit-legend';
 	import {
 		paginateScore,
 		analyzeScore,
@@ -179,6 +180,24 @@
 		ROSTER_ORDER.filter((g) => formants[g]?.reading === 'provisional')
 	);
 	let hasReadings = $derived(Object.keys(formants).length > 0);
+
+	/**
+	 * The provenance legend (item 1.6), built from this voice's own readings.
+	 *
+	 * It defines the vocabulary this page already uses in prose: the sentences
+	 * above say "with seven vowels measured" and "are provisional", and until
+	 * now nothing on the printed page said what those words mean. Empty for an
+	 * uncalibrated profile, so the footer omits the row rather than printing a
+	 * glossary for readings that do not exist (E.22 §4, "never guesses where
+	 * calibration is absent").
+	 *
+	 * ONCE PER DOCUMENT, on the first page. A four-line glossary repeated on
+	 * every sheet of a printed Fit result is noise, and the singer's page is
+	 * where a glossary belongs. Deliberately NOT the same placement rule as
+	 * `broadNote`, which repeats because it qualifies the analysis printed on
+	 * each sheet; this qualifies the calibration behind all of them.
+	 */
+	let fitLegend = $derived(buildFitLegend(formants, language));
 
 	// ── Page geometry, mirrored from TitlePage.svelte ────────────────────
 	// The header is measured (its height varies with wrapping), the footer
@@ -503,7 +522,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
 			</article>
 		{/each}
 		{#if hasCommentaryPage}
@@ -593,7 +612,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} hairlineAccent="#8E7E9B" />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" />
 </article>
 {/if}
 
