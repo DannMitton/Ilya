@@ -49,8 +49,11 @@ describe('page layout: slicing', () => {
     // The final system is exempt only when it stands alone on its own page,
     // which this single-page fixture does not produce; the test below does.
     for (const s of out.systems) expect(s.width).toBe(500);
-    // The stave itself spans the width, not merely the box around it.
-    for (const s of out.systems) expect(s.svg).toContain('<line x1="0" y1=');
+    // The stave itself reaches the right margin, not merely the box around it.
+    // Its LEFT edge is no longer 0: it is derived, one stave-space before the
+    // clef (Gould r81), so only the right end is asserted here and the indent
+    // has its own test in `staff-renderer.test.ts`.
+    for (const s of out.systems) expect(s.svg).toContain('x2="500"');
   });
 
   it('lets a system standing alone on the last page keep its natural width', () => {

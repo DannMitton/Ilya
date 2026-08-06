@@ -564,38 +564,70 @@ export function renderAnalyzedStaff(
   parts.push('');
   parts.push('');
 
+  // ── Header geometry, derived instead of hardcoded ──
+  // The clef sat at a fixed x of 34 and the key signature at 62, which at the
+  // print stave put the clef 6.2 stave-spaces into the stave: a gap, not an
+  // indent (Dann at the browser, 2026-08-06).
+  //
+  // Laid out BACKWARDS from `leftMargin`, where the first note sits, so the
+  // caller still owns the content start and `sliceWidth` needs no knowledge of
+  // the font to agree with this. Gould, in reverse order of application:
+  //   r240, p. 42: two and a half stave-spaces from the last header symbol to
+  //                a first note carrying no accidental;
+  //   r236, p. 41: clef and key signature separated by one to one and a half;
+  //   r81,  p. 6:  the clef is indented into the stave by one stave-space or
+  //                slightly less, which is what fixes the stave's left edge.
+  //
+  // NOT implemented from r240, recorded: the run-in shortens to 1½ or 1
+  // stave-spaces when the first note carries one or more accidentals.
+  const clefGlyphName: RequiredGlyphName =
+    clef === 'bass' ? 'fClef' : clef === 'treble-8vb' ? 'gClef8vb' : 'gClef';
+  const ksGlyphName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
+  const clefW = smufl ? sp(smufl.glyph(clefGlyphName).widthSp) : 24;
+  const ksCount = Math.abs(fifths);
+  const ksStep = smufl ? sp(smufl.glyph(ksGlyphName).widthSp) + 1 : 9;
+  const ksEnd = o.leftMargin - sp(2.5);
+  const ksStart = ksEnd - ksCount * ksStep;
+  const clefX = Math.max(0, (ksCount > 0 ? ksStart - sp(1) : ksEnd) - clefW);
+  const staveLeft = round2(Math.max(0, clefX - sp(1)));
+
   // Staff lines.
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;
-    // The stave spans the full measure of the line, margin to margin (Dann's
-    // ruling, 2026-08-06). Gould r81 puts the clef INSIDE the stave rather
-    // than the stave inside a blank inset, which the old x1 of 24 did.
-    parts.push(`<line x1="0" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
+    parts.push(`<line x1="${staveLeft}" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
   // Clef at the head: SMuFL glyph on its reference line (treble winds
   // around the G line, bass around the F line with its dots either side;
   // Gould extraction v5, rule 80), or the primitive placeholder.
   parts.push(`<g data-clef="${clef}">`);
+  // Primitive mode's clef shapes carry absolute coordinates drawn around the
+  // old fixed x of 34, so they are translated as a group rather than rewritten;
+  // primitive mode is the sandbox and font-lab path, not production.
+  const primitiveShift = round2(clefX - 34);
   if (clef === 'bass') {
     const fLineY = o.staffMidY - o.lineGap;
     if (smufl) {
-      parts.push(glyphAt('fClef', 34, fLineY, '#3a352f', true));
+      parts.push(glyphAt('fClef', round2(clefX), fLineY, '#3a352f', true));
     } else {
+      parts.push(`<g transform="translate(${primitiveShift},0)">`);
       parts.push(`<path d="M40 ${fLineY - 5} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="#3a352f" stroke-width="2.2"/>`);
       parts.push(`<circle cx="54" cy="${fLineY - 3}" r="1.7" fill="#3a352f"/><circle cx="54" cy="${fLineY + 3}" r="1.7" fill="#3a352f"/>`);
+      parts.push('</g>');
     }
   } else {
     const gLineY = o.staffMidY + o.lineGap;
     if (smufl) {
-      parts.push(glyphAt(clef === 'treble-8vb' ? 'gClef8vb' : 'gClef', 34, gLineY, '#3a352f', true));
+      parts.push(glyphAt(clef === 'treble-8vb' ? 'gClef8vb' : 'gClef', round2(clefX), gLineY, '#3a352f', true));
     } else {
+      parts.push(`<g transform="translate(${primitiveShift},0)">`);
       parts.push(`<line x1="46" y1="${staffTop - 8}" x2="46" y2="${gLineY + 10}" stroke="#3a352f" stroke-width="2.2"/>`);
       parts.push(`<circle cx="46" cy="${gLineY}" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>`);
       if (clef === 'treble-8vb') {
         parts.push(`<text x="46" y="${gLineY + 22}" text-anchor="middle" font-size="9" fill="#3a352f">8</text>`);
       }
+      parts.push('</g>');
     }
   }
   parts.push('</g>');
@@ -603,19 +635,18 @@ export function renderAnalyzedStaff(
   // Key signature at the head, at the selected clef's standard positions.
   const order = fifths >= 0 ? SHARP_ORDER : FLAT_ORDER;
   const glyph = fifths >= 0 ? ACCIDENTAL_GLYPH[1] : ACCIDENTAL_GLYPH[-1];
-  const ksName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
   const ksClef = clef === 'bass' ? KS_OCTAVES.bass : KS_OCTAVES.treble;
   const ksTable = fifths >= 0 ? ksClef.sharps : ksClef.flats;
-  let ksX = 62;
-  for (let i = 0; i < Math.abs(fifths); i++) {
+  let ksX = ksStart;
+  for (let i = 0; i < ksCount; i++) {
     const step = order[i];
     const ky = yFor({ step, octave: ksTable[step], alter: 0 });
     if (smufl) {
-      parts.push(glyphAt(ksName, ksX, ky, '#3a352f', true));
-      ksX += sp(smufl.glyph(ksName).widthSp) + 1;
+      parts.push(glyphAt(ksGlyphName, round2(ksX), ky, '#3a352f', true));
     } else {
-      parts.push(`<text x="${62 + i * 9}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
+      parts.push(`<text x="${round2(ksX)}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
     }
+    ksX += ksStep;
   }
 
   // ── Tuplet pass: bracket runs of identical tuplet info ──

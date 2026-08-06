@@ -40,7 +40,11 @@ describe('staff renderer: layout', () => {
 
   it('renders the key signature (one flat) at the bass-clef B2 position', () => {
     // B2 sits on the second staff line from the bottom: y 108, text baseline 112.
-    expect(svg.includes('x="62" y="112"')).toBe(true);
+    // x is now DERIVED, not the old hardcoded 62: the key signature ends two
+    // and a half stave-spaces before the first note (Gould r240), so at the
+    // default stave it ends at leftMargin 92 − 30 = 62 and its single flat,
+    // 9 px wide in primitive mode, starts at 53.
+    expect(svg.includes('x="53" y="112"')).toBe(true);
   });
 
   it('renders a natural accidental where the note contradicts the key (B natural)', () => {
@@ -366,8 +370,14 @@ describe('staff renderer: how a system ends (N.6b-1)', () => {
   // the song was over, and the stave then ran on past it into empty space.
   const plain = renderDemo();
   const final = renderDemo({ finalBarline: true });
-  const staffRight = (s: string): number =>
-    Number(s.match(/<line x1="0" y1="[\d.]+" x2="([\d.]+)"/)![1]);
+  // The first `<line>` in the document is the top staff line. Its x1 is no
+  // longer 0: the stave's left edge is derived, one stave-space before the
+  // clef (Gould r81), so the pattern must not assume a fixed origin.
+  const staffLine = (s: string): { x1: number; x2: number } => {
+    const m = s.match(/<line x1="([\d.]+)" y1="[\d.]+" x2="([\d.]+)"/)!;
+    return { x1: Number(m[1]), x2: Number(m[2]) };
+  };
+  const staffRight = (s: string): number => staffLine(s).x2;
   const barXs = (s: string): number[] =>
     [...s.matchAll(/<line x1="([\d.]+)" y1="72" x2="[\d.]+" y2="120"/g)].map((m) => Number(m[1]));
 
@@ -395,6 +405,19 @@ describe('staff renderer: how a system ends (N.6b-1)', () => {
     const gap = xs[xs.length - 1] - xs[xs.length - 2];
     expect(gap).toBeGreaterThan(0);
     expect(gap).toBeLessThan(12); // one lineGap at the default stave
+  });
+
+  it('indents the clef one stave-space into the stave (Gould r81)', () => {
+    // SMuFL mode, because there the clef is a single glyph whose x can be read;
+    // the primitive clef is a translated group of hand-drawn shapes.
+    const s = renderDemo({ font: syntheticSmuflFont(), fontFamily: 'TestFont' });
+    const clefX = Number(
+      s.match(new RegExp(`<text x="([\\d.]+)"[^>]*>${String.fromCodePoint(0xe062)}<`))![1],
+    );
+    // One stave-space at the default lineGap of 12. Before this the clef sat at
+    // a fixed x of 34 while the stave began at 24: a ten-pixel gap that read as
+    // an inset rather than an indent, and 6.2 stave-spaces at the print stave.
+    expect(clefX - staffLine(s).x1).toBeCloseTo(12, 1);
   });
 
   it('gives the last syllable a full stave-space before the barline', () => {
@@ -491,8 +514,10 @@ describe('staff renderer: clef passes (v37 §A.17)', () => {
 
   it('places the treble key signature at the treble position (one flat on B4)', () => {
     const svg = renderDemo({ clef: 'treble' });
-    // B4 = middle staff line y 96; primitive text baseline y + 4.
-    expect(svg.includes('x="62" y="100"')).toBe(true);
+    // B4 = middle staff line y 96; primitive text baseline y + 4. Same derived
+    // x as the bass pass: the header geometry does not depend on the clef's
+    // pitch mapping, only on the clef's width.
+    expect(svg.includes('x="53" y="100"')).toBe(true);
   });
 
   it('moves the notes with the clef: the same pitch sits lower on a treble staff', () => {
