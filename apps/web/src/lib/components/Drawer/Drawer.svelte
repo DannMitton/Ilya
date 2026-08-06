@@ -13,12 +13,23 @@
 		tabTransitionClass: string;
 		rootPanel: Snippet;
 		shanePanel?: Snippet;
+		/**
+		 * NOTATION (item N.7). Rendered ONCE, outside the tab switch, anchored
+		 * below the scrolling panel so it holds the same position on every tab
+		 * that shows it. Dann's ruling, 2026-08-06: predictable, and within a
+		 * thumb's reach on mobile, where :908-929 fixes the drawer to
+		 * calc(100vh - 56px) and the tab bar owns the 56px beneath it.
+		 *
+		 * A snippet rather than props, matching rootPanel and shanePanel, so
+		 * the state stays in +page.svelte and nothing is drilled through here.
+		 */
+		notationPanel?: Snippet;
 		ontogglecollapse: () => void;
 		ontabchange: (tab: TabId) => void;
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
 	let expandedSections = $state(new Set<string>());
 	let drawerContentEl: HTMLElement | undefined = $state();
@@ -412,6 +423,16 @@
 					{@render shanePanel?.()}
 				{/if}
 		</div>
+		<!-- NOTATION (item N.7), anchored. Sibling of .drawer-content rather
+		     than a child of it, so it sits outside the scroll (:468-471) and
+		     holds the same position on both tabs. Gated to the two surfaces
+		     that HAVE a document: Learn and Guide are reading surfaces with no
+		     transcription in front of the reader. -->
+		{#if notationPanel && (activeTab === 'transcription' || activeTab === 'shane')}
+			<div class="drawer-anchor">
+				{@render notationPanel()}
+			</div>
+		{/if}
 		<div class="drawer-tabbar">
 			<TabBar {activeTab} {language} {ontabchange} />
 		</div>
@@ -468,6 +489,25 @@
 	.drawer-content {
 		flex: 1;
 		overflow-y: auto;
+	}
+
+	/* ── NOTATION anchor (N.7) ───────────────────────────── */
+	/* A sibling of .drawer-content, not a child, so it never scrolls away.
+	   flex-shrink: 0 because .drawer-content owns the flexible height and
+	   this block must keep its own; without it a long panel would compress
+	   the toggles rather than scroll behind them.
+
+	   Side padding is 1rem, matching .root-panel and .shane-panel, so the
+	   toggles keep the same left edge as everything above them. The rule is
+	   the drawer's own border language (the 2px double of .drawer-body's
+	   border-right) rather than the sage of RootPanel's .console-section,
+	   because this shelf is now shared by two surfaces and must not carry
+	   either one's identity colour. The section label inside it does that. */
+	.drawer-anchor {
+		flex-shrink: 0;
+		padding: 10px 1rem 12px;
+		background: var(--drawer-bg);
+		border-top: 2px double var(--ink-primary, #1a1612);
 	}
 
 	/* ── Tab transition animations ──────────────────────── */

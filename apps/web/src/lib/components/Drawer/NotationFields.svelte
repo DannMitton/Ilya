@@ -32,6 +32,20 @@
 		showStressDiacritics: boolean;
 		openSyllabification: boolean;
 		language: Language;
+		/**
+		 * Colour of the section label and of an engaged toggle. Transcription
+		 * keeps the default sage; Fit/Shane passes deeper-lavender, that
+		 * surface's identity colour (Drawer.svelte:587, HeaderBar.svelte:88).
+		 * Twinned on TitleHeader.svelte and PageFooter.svelte, which take their
+		 * accents the same way rather than inheriting one.
+		 *
+		 * Anchored at the foot of the drawer this component renders ONCE, so
+		 * the accent follows activeTab rather than being fixed per render site.
+		 * Dann's ruling, 2026-08-06: the colour follows the tab. The control is
+		 * document-level, but a singer should still see which surface they are
+		 * changing.
+		 */
+		accent?: string;
 		onnotationchange: (prefs: NotationPreferences) => void;
 		onstressdiacriticschange: (value: boolean) => void;
 		onopensyllabificationchange: (value: boolean) => void;
@@ -42,6 +56,7 @@
 		showStressDiacritics,
 		openSyllabification,
 		language,
+		accent = 'var(--sage)',
 		onnotationchange,
 		onstressdiacriticschange,
 		onopensyllabificationchange,
@@ -57,7 +72,7 @@
 	}
 </script>
 
-<div class="section cosmetic-section">
+<div class="section cosmetic-section" style="--notation-accent: {accent}">
 	<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
 	<div class="cosmetic-grid">
 		<!-- Stress acutes -->
@@ -172,7 +187,7 @@
 		font-size: 0.7rem;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		color: var(--sage);
+		color: var(--notation-accent, var(--sage));
 		margin-bottom: 0.4rem;
 		font-weight: 600;
 	}
@@ -228,7 +243,7 @@
 	}
 
 	.toggle-switch.active {
-		background: var(--sage);
+		background: var(--notation-accent, var(--sage));
 	}
 
 	.toggle-thumb {

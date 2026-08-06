@@ -817,9 +817,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{wordCount}
 					{transcribeMs}
 					{transcribeError}
-					{notationPrefs}
-					{showStressDiacritics}
-					{openSyllabification}
 					{language}
 					{metadata}
 					{showInspector}
@@ -827,9 +824,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
 					onprint={handlePrint}
-					onnotationchange={handleNotationChange}
-					onstressdiacriticschange={handleStressDiacriticsChange}
-					onopensyllabificationchange={handleOpenSyllabificationChange}
 					onmetadatachange={handleMetadataChange}
 				>
 					{#snippet consoleContent()}
@@ -977,32 +971,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							handleHeadingNavigate('learn-u3-note-o');
 						}}
 					/>
-					<!-- NOTATION (item N.7). The same component the Transcription
-					     drawer renders (RootPanel.svelte), from the same state
-					     (:135, persisted), so one control governs one document.
-					     Fit already OBEYED these preferences: notationPrefs and
-					     openSyllabification reach VoiceProfilePane below at
-					     :1006-1007. Only the control was tab-scoped, which made
-					     its placement lie about its scope.
-
-					     POSITION twins by ORDER, not by y. In the Transcription
-					     drawer the section is the last thing in the panel, after
-					     the Word Console; here it is the last thing in the panel,
-					     after the wizard. Exact y-twinning is not available: the
-					     Transcription panel reserves a 365px console
-					     (RootPanel.svelte's .console-placeholder-body), so the two
-					     panels are different heights by construction. -->
-					<NotationFields
-						{notationPrefs}
-						{showStressDiacritics}
-						{openSyllabification}
-						{language}
-						onnotationchange={handleNotationChange}
-						onstressdiacriticschange={handleStressDiacriticsChange}
-						onopensyllabificationchange={handleOpenSyllabificationChange}
-					/>
 					</div>
 				{/if}
+			{/snippet}
+			{#snippet notationPanel()}
+				<!-- NOTATION (item N.7). ONE instance, anchored by the Drawer
+				     below its scrolling panel, shown on Transcription and Fit.
+				     The state was always document-level and persisted (:135,
+				     :344-346, :704-707) and Fit always obeyed it: notationPrefs
+				     and openSyllabification reach VoiceProfilePane at
+				     :1006-1007. Only the CONTROL was tab-scoped, which made its
+				     placement lie about its scope.
+
+				     Rendering it once rather than once per panel is Dann's
+				     improvement on my first pass: two instances sharing state
+				     can drift, and one cannot.
+
+				     The accent follows the tab (Dann's ruling, 2026-08-06):
+				     sage on Transcription, deeper-lavender on Fit, that
+				     surface's identity colour (Drawer.svelte:587). Twinned on
+				     TitleHeader and PageFooter, which take accents the same way.
+
+				     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
+				     will appear on Fit and change nothing there, because
+				     showStressDiacritics never reaches VoiceProfilePane
+				     (:998-1009). Fit's IPA stress mark is a separate and
+				     unconditional thing (pipeline.ts:711). -->
+				<NotationFields
+					{notationPrefs}
+					{showStressDiacritics}
+					{openSyllabification}
+					{language}
+					accent={activeTab === 'shane' ? 'var(--deeper-lavender)' : 'var(--sage)'}
+					onnotationchange={handleNotationChange}
+					onstressdiacriticschange={handleStressDiacriticsChange}
+					onopensyllabificationchange={handleOpenSyllabificationChange}
+				/>
 			{/snippet}
 	</Drawer>
 	<main

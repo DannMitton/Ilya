@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { NotationPreferences } from '@ilya/phonology';
 	import type { LoaderState } from '$lib/loader';
 	import type { SongMetadata } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import MetadataFields from './MetadataFields.svelte';
-	import NotationFields from './NotationFields.svelte';
 
 	interface Props {
 		inputText: string;
@@ -15,9 +13,6 @@
 		wordCount: number;
 		transcribeMs: number;
 		transcribeError: string;
-		notationPrefs: NotationPreferences;
-		showStressDiacritics: boolean;
-		openSyllabification: boolean;
 		language: Language;
 		metadata: SongMetadata;
 		showInspector: boolean;
@@ -26,9 +21,6 @@
 		ontranscribe: () => void;
 		onclear: () => void;
 		onprint: () => void;
-		onnotationchange: (prefs: NotationPreferences) => void;
-		onstressdiacriticschange: (value: boolean) => void;
-		onopensyllabificationchange: (value: boolean) => void;
 		onmetadatachange: (meta: SongMetadata) => void;
 	}
 
@@ -40,9 +32,6 @@
 		wordCount,
 		transcribeMs,
 		transcribeError,
-		notationPrefs,
-		showStressDiacritics,
-		openSyllabification,
 		language,
 		metadata,
 		showInspector,
@@ -51,9 +40,6 @@
 		ontranscribe,
 		onclear,
 		onprint,
-		onnotationchange,
-		onstressdiacriticschange,
-		onopensyllabificationchange,
 		onmetadatachange,
 	}: Props = $props();
 
@@ -113,8 +99,10 @@
 	}
 
 	// Metadata field handlers now live in MetadataFields.svelte.
-	// The notation toggles and their cascade now live in NotationFields.svelte
-	// (item N.7), which the Fit drawer renders from the same state.
+	// The notation toggles and their cascade left this panel at item N.7.
+	// They are NotationFields.svelte, rendered once by Drawer.svelte and
+	// anchored below the scroll, because they govern the document rather than
+	// this tab. This panel no longer sees notationPrefs at all.
 </script>
 
 <div class="root-panel" class:status-ok={dictReady}>
@@ -250,19 +238,6 @@
 		{/if}
 	</div>
 
-	<!-- ── 6. NOTATION — document-level, twinned into the Fit drawer (N.7) ──
-	     Extracted to NotationFields.svelte so one control governs one document.
-	     The Fit drawer renders the same component from the same state
-	     (+page.svelte:135). -->
-	<NotationFields
-		{notationPrefs}
-		{showStressDiacritics}
-		{openSyllabification}
-		{language}
-		{onnotationchange}
-		{onstressdiacriticschange}
-		{onopensyllabificationchange}
-	/>
 </div>
 
 <style>
