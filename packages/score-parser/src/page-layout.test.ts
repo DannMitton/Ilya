@@ -45,6 +45,20 @@ describe('page layout: system packing and page assembly', () => {
     expect(out.pages[0].startsWith('<svg viewBox="0 0 816 1056"')).toBe(true);
   });
 
+  it('carries each system’s cropped min-y into its nested svg (N.6a)', () => {
+    // The renderer crops the unoccupied space above the staff, so a system's
+    // coordinate space no longer starts at 0. `viewBoxOf` and the nested
+    // `<svg>` both have to honour that; a hardcoded 0 here would scroll the
+    // staff off the top of every system on the page. The print stave is where
+    // the crop is non-zero, so assert there.
+    const out = paginateScore(parsed, analyzed, { lineGap: 5.5 });
+    expect(out.systems.length).toBeGreaterThan(0);
+    for (const s of out.systems) {
+      expect(s.minY).toBeGreaterThan(0);
+      expect(out.pages.join('\n')).toContain(`viewBox="0 ${s.minY} ${s.width} ${s.height}"`);
+    }
+  });
+
   it('breaks into multiple systems when the page is narrow', () => {
     const out = paginateScore(parsed, analyzed, { pageWidth: 500 });
     expect(out.systems.length).toBeGreaterThan(1);

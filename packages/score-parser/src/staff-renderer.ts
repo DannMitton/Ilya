@@ -240,6 +240,17 @@ export function renderAnalyzedStaff(
   const half = o.lineGap / 2;
   const staffTop = o.staffMidY - 2 * o.lineGap;
   const staffBottom = o.staffMidY + 2 * o.lineGap;
+  // The mirror of `lowestInk`, which the underlay has always used. The top of
+  // the system never had one, so nothing knew how much space above the staff
+  // was actually occupied and `staffMidY`'s fixed 96 px was reserved
+  // regardless (N.6a).
+  //
+  // DECLARED HERE, not beside `lowestInk`, and the reason is a bug this
+  // already caused: the tuplet and beam passes run BEFORE that point and both
+  // write to it, so a `let` down there is read inside a closure during its own
+  // temporal dead zone and every render throws. `tsc` cannot see it, because
+  // it cannot prove when a nested arrow runs; only the suite caught it.
+  let highestInk = staffTop;
   const yFor = (p: Pitch): number => o.staffMidY - (diatonicNumber(p) - MIDDLE_LINE[clef]) * half;
 
   const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
@@ -504,6 +515,7 @@ export function renderAnalyzedStaff(
           }
         }
         const yBr = minY - 8;
+        highestInk = Math.min(highestInk, yBr);
         const xa = run[0].x - 8;
         const xb = run[run.length - 1].x + 8;
         const midX = (xa + xb) / 2;
@@ -620,6 +632,7 @@ export function renderAnalyzedStaff(
     const headName = headNameFor(ev.duration.base);
     const headHalfW = smufl ? sp(smufl.glyph(headName).widthSp / 2) : 6.2;
     lowestInk = Math.max(lowestInk, y + 6);
+    highestInk = Math.min(highestInk, y - 6);
 
     // Ledger lines.
     const ledgerHalf = smufl ? round2(headHalfW + sp(ed!.legerLineExtension)) : 11;
@@ -694,6 +707,7 @@ export function renderAnalyzedStaff(
         parts.push(`<ellipse cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`);
       }
       lowestInk = Math.max(lowestInk, ty + 6);
+      highestInk = Math.min(highestInk, ty - 6);
     }
 
     // Sung notehead: open for half and longer, filled otherwise.
@@ -736,10 +750,12 @@ export function renderAnalyzedStaff(
         // The stem meets the beam; the beam replaces flags.
         parts.push(`<line x1="${round2(beamed.sx)}" y1="${round2(contactY)}" x2="${round2(beamed.sx)}" y2="${round2(beamed.tipY)}" stroke="#1a1612" stroke-width="${stemT}"/>`);
         lowestInk = Math.max(lowestInk, beamed.tipY + beamT / 2);
+        highestInk = Math.min(highestInk, beamed.tipY - beamT / 2);
       } else {
         const sx = nx + (stemUp ? stemHalfUp : stemHalfDown);
         const sy2 = stemUp ? y - stemLen : y + stemLen;
         lowestInk = Math.max(lowestInk, sy2);
+        highestInk = Math.min(highestInk, sy2);
         parts.push(`<line x1="${round2(sx)}" y1="${round2(contactY)}" x2="${round2(sx)}" y2="${sy2}" stroke="#1a1612" stroke-width="${stemT}"/>`);
         // Flags for unbeamed short notes.
         const flags = flagCount(ev.duration.base);
@@ -761,6 +777,7 @@ export function renderAnalyzedStaff(
     if (a?.crossing) {
       parts.push(`<rect x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`);
       lowestInk = Math.max(lowestInk, y + 11);
+      highestInk = Math.min(highestInk, y - 11);
     }
 
     // Phonation break: collected for the IPA line, drawn after the loop.
@@ -837,6 +854,7 @@ export function renderAnalyzedStaff(
     }
     parts.push(`<path d="M${round2(x1)} ${round2(ey)} Q ${round2((x1 + x2) / 2)} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)}" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="${esc(e.id)}"/>`);
     lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
+    highestInk = Math.min(highestInk, ey + Math.min(0, depth));
   }
 
   // ── Syllabic slurs (melisma build 4; extraction r69, r71, r174).
@@ -858,15 +876,20 @@ export function renderAnalyzedStaff(
         const y2 = yFor(ev2.pitch);
         top = Math.min(top, y2 - 6);
         const a2 = analyzed.events[ev2.id];
-        if (a2) {
-          top = Math.min(top, yFor(a2.turningPitch) - accClearSlur);
-          if (a2.timbre === 'close' && ev2.duration.base !== 'whole' && ev2.duration.base !== 'breve') {
-            top = Math.min(top, beamStemById.get(ev2.id)?.tipY ?? y2 - 30);
-          }
+        if (a2) top = Math.min(top, yFor(a2.turningPitch) - accClearSlur);
+        // The same two N.4 faults the tuplet bracket had: this was gated on
+        // close timbre, so an unmeasured page's positional up-stems never
+        // pushed the slur clear, and the fallback was a hardcoded 30 px that
+        // ignored the stave size.
+        if (ev2.duration.base !== 'whole' && ev2.duration.base !== 'breve' && stemUpFor(ev2, y2)) {
+          top = Math.min(top, beamStemById.get(ev2.id)?.tipY ?? y2 - stemLen);
         }
       }
       const sy = top - 6;
       const lift = Math.min(24, 10 + (last.x - first.x) / 20);
+      // The control point, not the apex: the quadratic peaks at half the lift,
+      // so this over-reserves rather than clipping.
+      highestInk = Math.min(highestInk, sy - lift);
       parts.push(`<path d="M${round2(first.x)} ${round2(sy)} Q ${round2((first.x + last.x) / 2)} ${round2(sy - lift)} ${round2(last.x)} ${round2(sy)}" fill="none" stroke="#1a1612" stroke-width="1.3" data-slur="${esc(s.id)}"/>`);
     }
   }
@@ -874,6 +897,7 @@ export function renderAnalyzedStaff(
   // Beams contribute ink below the staff on down-stem groups.
   for (const s of beamStemById.values()) {
     lowestInk = Math.max(lowestInk, s.tipY + beamT / 2);
+    highestInk = Math.min(highestInk, s.tipY - beamT / 2);
   }
 
   // Underlay baselines: clear of the lowest ink, never above the classic
@@ -960,10 +984,26 @@ export function renderAnalyzedStaff(
   parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${finalBarT}"/>`);
   parts.push('</svg>');
 
-  // Patch the svg tag and background with the true height. The LOWER of the
-  // two underlay baselines governs, which is the Cyrillic since the swap.
-  const height = cyrY + 20;
-  parts[0] = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`;
-  parts[1] = `<rect x="0" y="0" width="${width}" height="${height}" fill="#F0EBE0"/>`;
+  // Patch the svg tag and background with the true extent. The LOWER of the
+  // two underlay baselines governs the bottom, which is the Cyrillic since
+  // the swap; `highestInk` governs the top (N.6a).
+  //
+  // WHY THE TOP IS CROPPED RATHER THAN `staffMidY` REDUCED. `staffMidY`
+  // defaults to a fixed 96 px and no caller scales it with `lineGap`, so on
+  // the print sheet's 5.5 px stave every system reserved about 85 px above a
+  // 22 px staff and a page fitted four systems where six belong (Dann at the
+  // browser, 2026-08-06). Shrinking `staffMidY` would move every coordinate
+  // in the system and could clip a high tessitura; cropping the viewBox
+  // leaves every element's own y untouched, so the `data-event-id`
+  // hit-testing math is unaffected, and the headroom is sized by what
+  // actually occupies it (Gould r184: a gap is sized by what must live
+  // inside it), never by a constant.
+  //
+  // `paginateScore` MUST read this viewBox's min-y. `viewBoxOf` was written
+  // when the origin was always 0.
+  const top = Math.max(0, Math.floor(Math.min(highestInk, staffTop) - sp(1)));
+  const height = cyrY + 20 - top;
+  parts[0] = `<svg viewBox="0 ${top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`;
+  parts[1] = `<rect x="0" y="${top}" width="${width}" height="${height}" fill="#F0EBE0"/>`;
   return parts.join('\n');
 }

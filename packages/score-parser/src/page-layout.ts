@@ -63,6 +63,13 @@ export interface SystemSlice {
   /** Parsed from the system's viewBox. */
   width: number;
   height: number;
+  /**
+   * The system's viewBox min-y. Non-zero since N.6a: the renderer crops the
+   * unoccupied space above the staff rather than reserving a fixed 96 px, so
+   * a system's coordinate space no longer starts at 0 and the nested `<svg>`
+   * has to carry the offset or the staff is clipped out of view.
+   */
+  minY: number;
 }
 
 export interface PaginatedScore {
@@ -119,9 +126,9 @@ export function sliceWidth(parsed: ParsedScore, fromMeasure: number, toMeasure: 
   return x + Math.max(minGap, prevDurWhole * pxPerWhole) + RIGHT_PAD;
 }
 
-function viewBoxOf(svg: string): { width: number; height: number } {
-  const m = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
-  return { width: Number(m?.[1] ?? 0), height: Number(m?.[2] ?? 0) };
+function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
+  const m = svg.match(/viewBox="0 ([\d.]+) ([\d.]+) ([\d.]+)"/);
+  return { minY: Number(m?.[1] ?? 0), width: Number(m?.[2] ?? 0), height: Number(m?.[3] ?? 0) };
 }
 
 /** Paginate an analysed score onto letter pages. */
@@ -157,8 +164,8 @@ export function paginateScore(
   // ── Render each system ──
   const systems: SystemSlice[] = ranges.map(([a, b]) => {
     const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, renderOptions);
-    const { width, height } = viewBoxOf(svg);
-    return { fromMeasure: a, toMeasure: b, svg, width, height };
+    const { minY, width, height } = viewBoxOf(svg);
+    return { fromMeasure: a, toMeasure: b, svg, width, height, minY };
   });
 
   // ── Stack systems onto pages ──
@@ -183,9 +190,11 @@ export function paginateScore(
       openPage();
     }
     // Nested svg keeps every system's internal coordinate space intact,
-    // so data-event-id hit-testing math stays system-local.
+    // so data-event-id hit-testing math stays system-local. The viewBox
+    // carries the system's own min-y (N.6a) so the cropped headroom is
+    // honoured; passing 0 here would scroll the staff off the top.
     pageParts.push(
-      `<svg x="${o.marginLeft}" y="${y}" width="${s.width}" height="${s.height}" viewBox="0 0 ${s.width} ${s.height}" data-system="${s.fromMeasure}-${s.toMeasure}">`,
+      `<svg x="${o.marginLeft}" y="${y}" width="${s.width}" height="${s.height}" viewBox="0 ${s.minY} ${s.width} ${s.height}" data-system="${s.fromMeasure}-${s.toMeasure}">`,
     );
     pageParts.push(s.svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''));
     pageParts.push('</svg>');

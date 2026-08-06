@@ -359,6 +359,45 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
   });
 });
 
+describe('staff renderer: system headroom (N.6a)', () => {
+  // `staffMidY` is a fixed 96 px that no caller scales with `lineGap`, so at
+  // the PRINT stave of 5.5 every system reserved roughly 85 px above a 22 px
+  // staff and a page fitted four systems where six belong. At the default
+  // stave of 12 the same 96 px is genuinely occupied (a D4 up-stem reaches
+  // y 12), which is why the waste was invisible in this suite for months.
+  const vbOf = (s: string) => {
+    const m = s.match(/viewBox="0 ([\d.]+) ([\d.]+) ([\d.]+)"/)!;
+    return { minY: Number(m[1]), width: Number(m[2]), height: Number(m[3]) };
+  };
+  /** Every y-bearing attribute of DRAWN content: lines 0 and 1 are the svg
+   *  tag and the background rect, and the rect sits at min-y by definition,
+   *  so including it would make the clipping assertion unfailable. Path data
+   *  (slurs, ties) carries no y attribute and is not covered here; those are
+   *  bounded in `highestInk` by their control point, which over-reserves. */
+  const drawnYs = (s: string): number[] =>
+    [...s.split('\n').slice(2).join('\n').matchAll(/\s(?:y|y1|y2|cy)="(-?[\d.]+)"/g)].map((m) => Number(m[1]));
+
+  it('crops the unoccupied headroom at the print stave', () => {
+    expect(vbOf(renderDemo({ lineGap: 5.5 })).minY).toBeGreaterThan(0);
+  });
+
+  it('clips nothing at either stave size', () => {
+    for (const lineGap of [12, 5.5]) {
+      const s = renderDemo({ lineGap });
+      const ys = drawnYs(s);
+      expect(ys.length).toBeGreaterThan(20);
+      expect(Math.min(...ys)).toBeGreaterThanOrEqual(vbOf(s).minY);
+    }
+  });
+
+  it('shortens the system by exactly what it cropped', () => {
+    const s = renderDemo({ lineGap: 5.5 });
+    const { minY, height } = vbOf(s);
+    const cyrY = Number(s.match(/y="([\d.]+)" text-anchor="middle" font-size="12\.5"/)![1]);
+    expect(height).toBe(cyrY + 20 - minY);
+  });
+});
+
 describe('staff renderer: clef passes (v37 §A.17)', () => {
   it('assesses the input when no clef option is given: the low demo takes bass', () => {
     expect(renderDemo().includes('data-clef="bass"')).toBe(true);
