@@ -52,8 +52,11 @@ const PAGE_DEFAULTS = {
 // renderer, so the estimate and the rendering cannot drift apart at all
 // rather than merely failing a test when they do (N.6b-1).
 const RENDER_DEFAULTS = { leftMargin: 92 };
-/** Stroke room past the closing barline; mirrors the renderer's `width`. */
-const RIGHT_PAD = 2;
+/**
+ * Nothing past the closing barline: the renderer's `width` is exactly its
+ * `contentRight` and the barline's stroke sits inside it (N.6b-2).
+ */
+const RIGHT_PAD = 0;
 
 /** Vertical justification produces fractional offsets; keep the SVG tidy. */
 const round2 = (v: number): number => Math.round(v * 100) / 100;
@@ -170,6 +173,11 @@ export function paginateScore(
     const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, {
       ...renderOptions,
       finalBarline: i === ranges.length - 1,
+      // Every system fills the line, so they all come out the same width and
+      // all reach both margins (Dann's ruling, 2026-08-06). `sliceWidth` above
+      // still packs on NATURAL widths, which is what decides how many measures
+      // a line can hold; this only spends the leftover.
+      targetWidth: innerWidth,
     });
     const { minY, width, height } = viewBoxOf(svg);
     return { fromMeasure: a, toMeasure: b, svg, width, height, minY };
@@ -197,6 +205,29 @@ export function paginateScore(
       }
     }
     if (group.length > 0) pageGroups.push(group);
+  }
+
+  // Dann's ruling, 2026-08-06, the horizontal mirror of his page rule: systems
+  // that SHARE a page must be visually consistent, so they are all justified to
+  // the line; a system standing ALONE on the final page has nothing to be
+  // consistent with and takes the width its content wants.
+  //
+  // Re-rendered rather than decided up front, because whether a system ends up
+  // alone is only known after heights are, and heights are only known after
+  // rendering. Safe in this direction: dropping the stretch can only shorten a
+  // system (the syllabic slur's lift grows with span), so a system that already
+  // fit its page still fits.
+  const lastGroup = pageGroups[pageGroups.length - 1];
+  if (lastGroup && lastGroup.length === 1 && pageGroups.length > 1) {
+    const solo = lastGroup[0];
+    const svg = renderAnalyzedStaff(sliceScore(parsed, solo.fromMeasure, solo.toMeasure), analyzed, {
+      ...renderOptions,
+      finalBarline: true,
+    });
+    const box = viewBoxOf(svg);
+    const natural: SystemSlice = { ...solo, svg, width: box.width, height: box.height, minY: box.minY };
+    lastGroup[0] = natural;
+    systems[systems.length - 1] = natural;
   }
 
   const pages: string[] = [];

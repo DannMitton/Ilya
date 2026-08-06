@@ -367,7 +367,7 @@ describe('staff renderer: how a system ends (N.6b-1)', () => {
   const plain = renderDemo();
   const final = renderDemo({ finalBarline: true });
   const staffRight = (s: string): number =>
-    Number(s.match(/<line x1="24" y1="[\d.]+" x2="([\d.]+)"/)![1]);
+    Number(s.match(/<line x1="0" y1="[\d.]+" x2="([\d.]+)"/)![1]);
   const barXs = (s: string): number[] =>
     [...s.matchAll(/<line x1="([\d.]+)" y1="72" x2="[\d.]+" y2="120"/g)].map((m) => Number(m[1]));
 

@@ -106,12 +106,27 @@ export interface StaffRenderOptions {
    * slice; a standalone render leaves it false and gets an ordinary barline.
    */
   finalBarline?: boolean;
+  /**
+   * The width the system must fill (N.6b-2). Dann's ruling, 2026-08-06:
+   * every system is the SAME width and touches both margins. The renderer
+   * lays the columns out at their minimum widths first, then stretches the
+   * whole span to land exactly here.
+   *
+   * Stretch only, never compress: the minimums come from `columnAdvance`,
+   * which enforces Gould r235's half-stave-space floor, so squeezing below
+   * them would put the collisions back. A system whose natural width already
+   * exceeds the target is left alone and overflows, which is visible rather
+   * than silent.
+   *
+   * Omit for a standalone render, which then sizes to its content.
+   */
+  targetWidth?: number;
 }
 
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'finalBarline'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'finalBarline' | 'targetWidth'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -376,24 +391,42 @@ export function renderAnalyzedStaff(
   const stemLen = sp(STEM_LENGTH_SP);
 
   // ── Layout: assign x by onset, insert barlines at measure changes ──
-  const placed: Placed[] = [];
-  let x = o.leftMargin;
+  // Pass one: every column's MINIMUM advance, from `columnAdvance`.
+  const steps: Array<{ ev: VocalLineEvent; advance: number; newMeasure: boolean }> = [];
   let prevMeasure = -1;
   let prevDurWhole = 0;
   let prevEv: VocalLineEvent | undefined;
   for (const ev of parsed.vocalLine) {
     const newMeasure = ev.measureIndex !== prevMeasure;
-    if (prevEv) {
-      x += columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
-    }
-    placed.push({ ev, x, newMeasure: newMeasure && placed.length > 0 });
+    steps.push({
+      ev,
+      advance: prevEv
+        ? columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0)
+        : 0,
+      newMeasure: newMeasure && steps.length > 0,
+    });
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
     prevEv = ev;
   }
-  const lastEv = placed[placed.length - 1]?.ev;
-  const contentRight = (placed[placed.length - 1]?.x ?? o.leftMargin) +
-    (lastEv ? columnAdvance(lastEv, undefined, prevDurWhole, options) : 0);
+  const trailing = prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0;
+  const naturalSpan = steps.reduce((total, s) => total + s.advance, 0) + trailing;
+
+  // Pass two: justify. The whole span scales by one factor, so the duration
+  // proportions the advances encode survive the stretch (Gould r97 spaces by
+  // a compressed duration curve; stretching uniformly preserves whatever
+  // curve is in force). Stretch only: `columnAdvance` already returned the
+  // minimum each column needs, and compressing would undo r235's floor.
+  const targetSpan = (options.targetWidth ?? 0) - o.leftMargin;
+  const stretch = naturalSpan > 0 && targetSpan > naturalSpan ? targetSpan / naturalSpan : 1;
+
+  const placed: Placed[] = [];
+  let x = o.leftMargin;
+  for (const s of steps) {
+    x += s.advance * stretch;
+    placed.push({ ev: s.ev, x: round2(x), newMeasure: s.newMeasure });
+  }
+  const contentRight = round2(o.leftMargin + naturalSpan * stretch);
   // The system ends AT its barline. No empty stave past it: Gould's r242
   // end-of-stave allowance is for a barline falling before the stave's end,
   // and where the barline is the end there is nothing to allow for (Dann's
@@ -403,7 +436,7 @@ export function renderAnalyzedStaff(
   // Kept identical for a final system: the r96 thin-plus-thick pair is drawn
   // INSIDE this width rather than added to it, so `sliceWidth`'s packing
   // estimate cannot diverge from the rendering by knowing which slice is last.
-  const width = contentRight + 2;
+  const width = contentRight;
 
   // ── Beam pass: group flagged notes by measure, beat, and timbre ──
   // A group needs at least two consecutive members; it breaks at rests,
@@ -535,7 +568,10 @@ export function renderAnalyzedStaff(
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;
-    parts.push(`<line x1="24" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
+    // The stave spans the full measure of the line, margin to margin (Dann's
+    // ruling, 2026-08-06). Gould r81 puts the clef INSIDE the stave rather
+    // than the stave inside a blank inset, which the old x1 of 24 did.
+    parts.push(`<line x1="0" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
   // Clef at the head: SMuFL glyph on its reference line (treble winds

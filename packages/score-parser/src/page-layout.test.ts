@@ -27,12 +27,46 @@ describe('page layout: slicing', () => {
     expect(slice.timeSignatures[0].signature.beats).toBe(3);
   });
 
-  it('slice width matches the renderer’s own layout for the full score', () => {
+  it('packs on natural width, then justifies every system to the line (N.6b-2)', () => {
+    // This test used to assert `rendered.width === sliceWidth(...)`, back when
+    // a system was as wide as its content happened to be. Since justification
+    // those are DIFFERENT numbers on purpose: `sliceWidth` is the natural
+    // width and decides how many measures fit, and the rendered width is the
+    // line it is then stretched to fill. Both still matter, so both are
+    // asserted rather than the old equality being loosened away.
     const { parsed: p, analyzed } = demo();
-    const full = sliceWidth(p, 0, p.measures.length - 1);
+    const natural = sliceWidth(p, 0, p.measures.length - 1);
     const rendered = paginateScore(p, analyzed, { pageWidth: 4000, marginLeft: 0, marginRight: 0 });
     expect(rendered.systems).toHaveLength(1);
-    expect(rendered.systems[0].width).toBe(full);
+    expect(natural).toBeLessThan(4000);          // it fit, which is why there is one system
+    expect(rendered.systems[0].width).toBe(4000); // and it was stretched to the full line
+  });
+
+  it('gives systems sharing a page the same width, reaching both margins', () => {
+    const { parsed: p, analyzed } = demo();
+    const out = paginateScore(p, analyzed, { pageWidth: 500, marginLeft: 0, marginRight: 0 });
+    expect(out.systems.length).toBeGreaterThan(1);
+    // The final system is exempt only when it stands alone on its own page,
+    // which this single-page fixture does not produce; the test below does.
+    for (const s of out.systems) expect(s.width).toBe(500);
+    // The stave itself spans the width, not merely the box around it.
+    for (const s of out.systems) expect(s.svg).toContain('<line x1="0" y1=');
+  });
+
+  it('lets a system standing alone on the last page keep its natural width', () => {
+    // Page height sized from the REAL heights to fit exactly all but one
+    // system, so the final page holds precisely one and the exemption applies.
+    const { parsed: p, analyzed } = demo();
+    const base = { pageWidth: 500, marginLeft: 0, marginRight: 0, marginTop: 40, marginBottom: 40, systemGap: 10 };
+    const all = paginateScore(p, analyzed, { ...base, pageHeight: 100000 });
+    const heights = all.systems.map((s) => s.height);
+    expect(heights.length).toBeGreaterThanOrEqual(3);
+    const head = heights.slice(0, -1);
+    const need = head.reduce((a, b) => a + b, 0) + (head.length - 1) * base.systemGap;
+    const out = paginateScore(p, analyzed, { ...base, pageHeight: base.marginTop + need + base.marginBottom });
+    expect(out.pageCount).toBe(2);
+    for (const s of out.systems.slice(0, -1)) expect(s.width).toBe(500);
+    expect(out.systems[out.systems.length - 1].width).toBeLessThan(500);
   });
 });
 
