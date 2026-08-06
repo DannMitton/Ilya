@@ -32,6 +32,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
+	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	// Engine connectivity check
@@ -975,6 +976,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							handleTabChange('learn');
 							handleHeadingNavigate('learn-u3-note-o');
 						}}
+					/>
+					<!-- NOTATION (item N.7). The same component the Transcription
+					     drawer renders (RootPanel.svelte), from the same state
+					     (:135, persisted), so one control governs one document.
+					     Fit already OBEYED these preferences: notationPrefs and
+					     openSyllabification reach VoiceProfilePane below at
+					     :1006-1007. Only the control was tab-scoped, which made
+					     its placement lie about its scope.
+
+					     POSITION twins by ORDER, not by y. In the Transcription
+					     drawer the section is the last thing in the panel, after
+					     the Word Console; here it is the last thing in the panel,
+					     after the wizard. Exact y-twinning is not available: the
+					     Transcription panel reserves a 365px console
+					     (RootPanel.svelte's .console-placeholder-body), so the two
+					     panels are different heights by construction. -->
+					<NotationFields
+						{notationPrefs}
+						{showStressDiacritics}
+						{openSyllabification}
+						{language}
+						onnotationchange={handleNotationChange}
+						onstressdiacriticschange={handleStressDiacriticsChange}
+						onopensyllabificationchange={handleOpenSyllabificationChange}
 					/>
 					</div>
 				{/if}
