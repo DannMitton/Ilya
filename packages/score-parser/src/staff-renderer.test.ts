@@ -69,11 +69,20 @@ describe('staff renderer: layout', () => {
     expect(svg.includes('font-style="italic" fill="#6a655f"')).toBe(false);
   });
 
-  it('places the underlay baselines clear of the lowest notation (collision fix)', () => {
-    const cyrY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12\.5"/)?.[1]);
+  it('places the NEAR underlay baseline clear of the lowest notation (collision fix)', () => {
+    // Since the 2026-08-05 swap the IPA is the near line, so it is the one
+    // that has to clear the ink. Asserting the Cyrillic here would pass
+    // trivially, being the further of the two.
+    const ipaY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12" fill="#6a655f"/)![1]);
     const inkBottoms = [...svg.matchAll(/y2="([\d.]+)" stroke="#1a1612" stroke-width="1\.5"/g)].map((m) => Number(m[1]));
     expect(inkBottoms.length).toBeGreaterThan(0);
-    expect(cyrY > Math.max(...inkBottoms)).toBe(true);
+    expect(ipaY > Math.max(...inkBottoms)).toBe(true);
+  });
+
+  it('puts the IPA nearest the stave with the Cyrillic beneath it, matching Transcribe', () => {
+    const ipaY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12" fill="#6a655f"/)![1]);
+    const cyrY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12\.5"/)![1]);
+    expect(ipaY).toBeLessThan(cyrY);
   });
 });
 

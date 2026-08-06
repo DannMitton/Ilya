@@ -65,9 +65,10 @@ export interface StaffRenderOptions {
   /** CSS font-family for SMuFL glyph text (must match the loaded FontFace). */
   fontFamily?: string;
   /**
-   * Per event id, the full syllable IPA for the underlay's second line
-   * (Dann, 2026-07-17: every lyric Fit underlays gets two lines, Cyrillic
-   * then IPA; "one vowel per syllable per rhythmic value" is the rule,
+   * Per event id, the full syllable IPA for the underlay's NEAR line, the
+   * one closest to the stave since the 2026-08-05 swap
+   * (Dann, 2026-07-17: every lyric Fit underlays gets two lines, IPA then
+   * Cyrillic; "one vowel per syllable per rhythmic value" is the rule,
    * consonants included, never just the acoustic vowel). Verbatim from
    * Ilya's GraysonEngine; the renderer never synthesizes IPA (Dann's
    * tethering requirement, 2026-07-12). In production this is built by
@@ -877,8 +878,21 @@ export function renderAnalyzedStaff(
 
   // Underlay baselines: clear of the lowest ink, never above the classic
   // fixed offsets (compact systems keep their compact look).
-  const cyrY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
-  const ipaY = cyrY + 16;
+  //
+  // IPA IS THE NEAR LINE, Cyrillic beneath it (Dann's ruling, 2026-08-05).
+  // Two reasons, and neither is cosmetic. Transcribe's word stack is already
+  // IPA over Cyrillic (`Paper/WordStack.svelte:172, :181`), and Ilya's output
+  // is ONE study document, so a singer learns the reading order once and
+  // never relearns it when the score pages begin. And the IPA is the line
+  // acted on at the moment of phonation, so it belongs nearest the notes:
+  // Gould r13 asks the text to sit as close to the stave as it can and does
+  // not say which line, so this serves her rationale rather than departing
+  // from it (INFERENCE, r13 states no order for a pronunciation line; r45's
+  // original-language-nearest rule governs two LANGUAGES, and IPA is not a
+  // second language but a pronunciation guide, which she treats separately
+  // at r49 and r50 without ordering it).
+  const ipaY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
+  const cyrY = ipaY + 16;
   for (const u of underlay) {
     if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
     // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
@@ -946,8 +960,9 @@ export function renderAnalyzedStaff(
   parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${finalBarT}"/>`);
   parts.push('</svg>');
 
-  // Patch the svg tag and background with the true height.
-  const height = ipaY + 20;
+  // Patch the svg tag and background with the true height. The LOWER of the
+  // two underlay baselines governs, which is the Cyrillic since the swap.
+  const height = cyrY + 20;
   parts[0] = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`;
   parts[1] = `<rect x="0" y="0" width="${width}" height="${height}" fill="#F0EBE0"/>`;
   return parts.join('\n');

@@ -1003,6 +1003,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				ingested={ingestedScore}
 				scoreTitle={metadata.title}
 				{engraving}
+				{notationPrefs}
 				onrendered={handleScoreRendered}
 			/>
 		{:else}

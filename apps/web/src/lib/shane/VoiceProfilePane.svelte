@@ -67,7 +67,9 @@
 		scoreInPerformanceOrder
 	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
-	import { buildVowelResolver } from '$lib/shane/vowel-resolver';
+	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
+	import type { NotationPreferences } from '@ilya/phonology';
+	import { applyNotationPreferences } from '@ilya/phonology';
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
@@ -122,6 +124,16 @@
 		 * score identity across mounts.
 		 */
 		onrendered?: () => void;
+		/**
+		 * The singer's notation preferences (N.5, 2026-08-05). Ilya's output
+		 * is ONE study document, and Transcribe already spells its IPA to
+		 * these preferences (`Paper/WordStack.svelte`), so the score pages
+		 * must use the same set or конь prints `ˈkonʲ` on one page and
+		 * `ˈkoɲ` on the next. Required rather than defaulted: a silent
+		 * default here is exactly the unlabelled preference set that
+		 * `DIRECTIVE-all-ipa-through-ilya.md` forbids on a printed page.
+		 */
+		notationPrefs: NotationPreferences;
 	}
 
 	let {
@@ -134,6 +146,7 @@
 		scoreTitle = undefined,
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
+		notationPrefs,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -308,7 +321,28 @@
 	// The resolver is keyed by event id and built from the NOTATED line, so it
 	// resolves every sung occurrence (same ids) identically; feed analyzeScore the
 	// performance-order view so the overlay reflects the sung sequence.
-	const vowelResolver = $derived(readingScore ? buildVowelResolver(readingScore) : null);
+	// N.5: BOTH resolvers, from one reconstruction pass. `buildVowelResolver`
+	// is a wrapper that returns only `.vowel` (`vowel-resolver.ts:384`), so
+	// the display IPA was being computed and thrown away on every render.
+	const underlayResolvers = $derived(readingScore ? buildUnderlayResolvers(readingScore) : null);
+	const vowelResolver = $derived(underlayResolvers?.vowel ?? null);
+
+	// N.5: the printed IPA line. Every string is Ilya's own, read from the
+	// engine's syllable transcription (`vowel-resolver.ts:265-266`), then
+	// spelled to the singer's preferences so the score pages agree with the
+	// transcription pages. Fit synthesizes nothing, per
+	// `DIRECTIVE-all-ipa-through-ilya.md`; where the engine resolves no
+	// syllable the event is simply absent and the renderer prints no IPA for
+	// it, which is the correct abstention rather than a guess.
+	const ipaPreview = $derived.by(() => {
+		if (!readingScore || !underlayResolvers) return undefined;
+		const out: Record<string, string> = {};
+		for (const ev of readingScore.vocalLine) {
+			const ipa = underlayResolvers.ipa(ev);
+			if (ipa) out[ev.id] = applyNotationPreferences(ipa, notationPrefs, true);
+		}
+		return Object.keys(out).length > 0 ? out : undefined;
+	});
 	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
 	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
 	// `buildWatchList` reads it below. It leaves the pure engine content-free and
@@ -458,6 +492,7 @@
 					minGap: engraving.minGap,
 					systemGap: engraving.systemGap,
 					leftMargin: engraving.leftMargin,
+					...(ipaPreview ? { ipaPreview } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,
