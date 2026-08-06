@@ -96,6 +96,58 @@ describe('page layout: system packing and page assembly', () => {
     }
   });
 
+  it('fills full pages and leaves the last one short (N.6c, Dann’s ruling 2026-08-06)', () => {
+    // Size the page from the REAL system heights rather than an estimate, so
+    // the last page is guaranteed to hold TWO systems. A last page of one has
+    // no gaps at all, and the inheritance assertion below then passes without
+    // ever running: that is precisely what happened to the first version of
+    // this fixture, and it is why the vacuity guards are here.
+    const base = { pageWidth: 500, marginTop: 40, marginBottom: 40, systemGap: 10 };
+    const all = paginateScore(parsed, analyzed, { ...base, pageHeight: 100000 });
+    const heights = all.systems.map((s) => s.height);
+    expect(heights.length).toBeGreaterThanOrEqual(4);
+    const head = heights.slice(0, heights.length - 2);
+    // Exact fit for `head`, plus slack that must be distributed but is far too
+    // small to admit another system, so page 1 is full AND has a real gap.
+    const SLACK = 60;
+    expect(SLACK).toBeLessThan(Math.min(...heights));
+    const need = head.reduce((a, b) => a + b, 0) + (head.length - 1) * base.systemGap;
+    const opts = { ...base, pageHeight: base.marginTop + need + SLACK + base.marginBottom };
+    const innerBottom = opts.pageHeight - opts.marginBottom;
+    const out = paginateScore(parsed, analyzed, opts);
+    expect(out.pageCount).toBe(2);
+
+    const boxes = (page: string): Array<{ y: number; h: number }> =>
+      [...page.matchAll(/<svg x="[\d.]+" y="([\d.]+)" width="[\d.]+" height="([\d.]+)"/g)]
+        .map((m) => ({ y: Number(m[1]), h: Number(m[2]) }));
+    const gapsOf = (b: Array<{ y: number; h: number }>): number[] =>
+      b.slice(1).map((box, i) => box.y - (b[i].y + b[i].h));
+
+    // Every page but the last reaches the bottom margin: the slack sits
+    // BETWEEN the systems, not in one lump above the footer, and the first
+    // system still starts on the top margin.
+    let distributed = 0;
+    for (const page of out.pages.slice(0, -1)) {
+      const b = boxes(page);
+      expect(b[0].y).toBe(opts.marginTop);
+      if (b.length < 2) continue; // a page holding one tall system cannot fill
+      distributed++;
+      expect(b[b.length - 1].y + b[b.length - 1].h).toBeCloseTo(innerBottom, 1);
+      for (const g of gapsOf(b)) expect(g).toBeGreaterThanOrEqual(opts.systemGap);
+    }
+    expect(distributed).toBeGreaterThan(0);
+
+    // The last page is not justified, but it is not free-form either: it
+    // repeats the spacing the earlier pages established, so the document
+    // reads as one rhythm. Collapsing it to the floor would fail here.
+    const prevGaps = gapsOf(boxes(out.pages[out.pages.length - 2]));
+    const lastGaps = gapsOf(boxes(out.pages[out.pages.length - 1]));
+    expect(prevGaps.length).toBeGreaterThan(0);
+    expect(prevGaps[0]).toBeGreaterThan(opts.systemGap); // else this is vacuous
+    expect(lastGaps.length).toBeGreaterThan(0); // else the inheritance is untested
+    for (const g of lastGaps) expect(g).toBeCloseTo(prevGaps[0], 1);
+  });
+
   it('keeps each system’s coordinate space intact via nested svg', () => {
     const out = paginateScore(parsed, analyzed, { pageWidth: 500 });
     expect((out.pages.join('\n').match(/data-system="/g) ?? []).length).toBe(out.systems.length);

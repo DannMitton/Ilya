@@ -54,6 +54,9 @@ const RENDER_DEFAULTS = { leftMargin: 92, pxPerWhole: 240, minGap: 40 };
 const BARLINE_ROOM = 14;
 const RIGHT_PAD = 24;
 
+/** Vertical justification produces fractional offsets; keep the SVG tidy. */
+const round2 = (v: number): number => Math.round(v * 100) / 100;
+
 export interface SystemSlice {
   /** Measure range in ORIGINAL indices, inclusive. */
   fromMeasure: number;
@@ -168,39 +171,81 @@ export function paginateScore(
     return { fromMeasure: a, toMeasure: b, svg, width, height, minY };
   });
 
-  // ── Stack systems onto pages ──
+  // ── Assign systems to pages, THEN lay each page out ──
+  // Two passes, not one, and the reason is N.6c: a page's spare vertical
+  // space cannot be distributed between its systems until the page knows
+  // which systems it holds. The single-pass version placed each system the
+  // moment it arrived, so every page's slack landed in one lump above the
+  // footer and the page read top-heavy.
+  const pageGroups: SystemSlice[][] = [];
+  {
+    let group: SystemSlice[] = [];
+    let used = 0;
+    for (const s of systems) {
+      const need = group.length === 0 ? s.height : used + o.systemGap + s.height;
+      if (group.length > 0 && o.marginTop + need > innerBottom) {
+        pageGroups.push(group);
+        group = [s];
+        used = s.height;
+      } else {
+        group.push(s);
+        used = need;
+      }
+    }
+    if (group.length > 0) pageGroups.push(group);
+  }
+
   const pages: string[] = [];
-  let pageParts: string[] = [];
-  let y = o.marginTop;
-  const openPage = (): void => {
-    pageParts = [
-      `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-fit-page="${pages.length + 1}">`,
+  // The spacing the full pages settled on, carried forward to the short one.
+  let establishedGap = o.systemGap;
+  pageGroups.forEach((group, pageIndex) => {
+    // Dann's rulings, 2026-08-06, in two parts.
+    //
+    // FIRST: fill full pages, leave the LAST page short. Justifying the final
+    // sheet would give a closing page of two systems absurd gaps.
+    //
+    // SECOND: the short page is still not free-form. It repeats the spacing
+    // the pages before it established, so the document reads as one
+    // deliberate rhythm instead of a filled run followed by a remainder
+    // slapped at the top. `o.systemGap` is therefore a FLOOR, never the
+    // value, except on a document short enough to have no earlier page to be
+    // consistent with.
+    //
+    // The slack goes BETWEEN systems only, so the first system still sits on
+    // the top margin. Gould r184 supplies the floor, a gap is sized by what
+    // must live inside it; distributing the remainder above that floor is
+    // INFERENCE from r235's evenness principle applied vertically, and it is
+    // NOT something Gould states anywhere we hold. p. 491 continues her
+    // vertical-alignment discussion and has never been photographed.
+    const isLast = pageIndex === pageGroups.length - 1;
+    const inkHeight = group.reduce((total, s) => total + s.height, 0);
+    const gapCount = group.length - 1;
+    let gap = establishedGap;
+    if (!isLast && gapCount > 0) {
+      gap = Math.max(o.systemGap, (innerBottom - o.marginTop - inkHeight) / gapCount);
+      establishedGap = gap;
+    }
+
+    const pageParts: string[] = [
+      `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-fit-page="${pageIndex + 1}">`,
       `<rect x="0" y="0" width="${o.pageWidth}" height="${o.pageHeight}" fill="#FFFFFF"/>`,
     ];
-    y = o.marginTop;
-  };
-  const closePage = (): void => {
+    let y = o.marginTop;
+    for (const s of group) {
+      // Nested svg keeps every system's internal coordinate space intact,
+      // so data-event-id hit-testing math stays system-local. The viewBox
+      // carries the system's own min-y (N.6a) so the cropped headroom is
+      // honoured; passing 0 here would scroll the staff off the top.
+      pageParts.push(
+        `<svg x="${o.marginLeft}" y="${round2(y)}" width="${s.width}" height="${s.height}" viewBox="0 ${s.minY} ${s.width} ${s.height}" data-system="${s.fromMeasure}-${s.toMeasure}">`,
+      );
+      pageParts.push(s.svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''));
+      pageParts.push('</svg>');
+      y += s.height + gap;
+    }
     pageParts.push('</svg>');
     pages.push(pageParts.join('\n'));
-  };
-  openPage();
-  for (const s of systems) {
-    if (y + s.height > innerBottom && y > o.marginTop) {
-      closePage();
-      openPage();
-    }
-    // Nested svg keeps every system's internal coordinate space intact,
-    // so data-event-id hit-testing math stays system-local. The viewBox
-    // carries the system's own min-y (N.6a) so the cropped headroom is
-    // honoured; passing 0 here would scroll the staff off the top.
-    pageParts.push(
-      `<svg x="${o.marginLeft}" y="${y}" width="${s.width}" height="${s.height}" viewBox="0 ${s.minY} ${s.width} ${s.height}" data-system="${s.fromMeasure}-${s.toMeasure}">`,
-    );
-    pageParts.push(s.svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''));
-    pageParts.push('</svg>');
-    y += s.height + o.systemGap;
-  }
-  closePage();
+  });
 
   return { pages, systems, pageCount: pages.length };
 }
