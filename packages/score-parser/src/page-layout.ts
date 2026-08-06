@@ -21,7 +21,7 @@
 
 import type { ParsedScore } from './types';
 import type { AnalyzedScore } from './analysis-types';
-import { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
+import { renderAnalyzedStaff, columnAdvance, BARLINE_ROOM, type StaffRenderOptions } from './staff-renderer';
 import { chooseClef } from './clef-select';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
@@ -47,11 +47,11 @@ const PAGE_DEFAULTS = {
   systemGap: 28,
 };
 
-// Mirrors of the staff renderer's layout constants. Kept in one place so
-// a renderer spacing change shows up here as a failing pagination test,
-// not as a silent drift between estimate and rendering.
-const RENDER_DEFAULTS = { leftMargin: 92, pxPerWhole: 240, minGap: 40 };
-const BARLINE_ROOM = 14;
+// The renderer's own left margin default. The advance arithmetic is NO LONGER
+// mirrored here: `columnAdvance` and `BARLINE_ROOM` are imported from the
+// renderer, so the estimate and the rendering cannot drift apart at all
+// rather than merely failing a test when they do (N.6b-1).
+const RENDER_DEFAULTS = { leftMargin: 92 };
 const RIGHT_PAD = 24;
 
 /** Vertical justification produces fractional offsets; keep the SVG tidy. */
@@ -110,23 +110,21 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
  */
 export function sliceWidth(parsed: ParsedScore, fromMeasure: number, toMeasure: number, options: StaffRenderOptions = {}): number {
   const leftMargin = options.leftMargin ?? RENDER_DEFAULTS.leftMargin;
-  const pxPerWhole = options.pxPerWhole ?? RENDER_DEFAULTS.pxPerWhole;
-  const minGap = options.minGap ?? RENDER_DEFAULTS.minGap;
   const events = parsed.vocalLine.filter((e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure);
   let x = leftMargin;
   let prevMeasure = -1;
   let prevDurWhole = 0;
-  let count = 0;
+  let prevEv: (typeof events)[number] | undefined;
   for (const ev of events) {
     const newMeasure = ev.measureIndex !== prevMeasure;
-    if (count > 0) {
-      x += Math.max(minGap, prevDurWhole * pxPerWhole) + (newMeasure ? BARLINE_ROOM : 0);
+    if (prevEv) {
+      x += columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
     }
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
-    count++;
+    prevEv = ev;
   }
-  return x + Math.max(minGap, prevDurWhole * pxPerWhole) + RIGHT_PAD;
+  return x + (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0) + RIGHT_PAD;
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {

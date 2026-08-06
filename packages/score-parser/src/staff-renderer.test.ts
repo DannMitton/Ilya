@@ -12,7 +12,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { renderDemo, renderDemoUnmeasured, syntheticSmuflFont } from './demo-fixture';
+import { demoScore, renderDemo, renderDemoUnmeasured, syntheticSmuflFont } from './demo-fixture';
+import { columnAdvance } from './staff-renderer';
 
 /** The rendered contents of one note's `<g data-event-id>` wrapper. */
 function eventGroup(svg: string, id: string): string {
@@ -356,6 +357,38 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
     expect((svg.match(/q8 3 7 12/g) ?? []).length).toBe(0);
     expect((measured.match(/q8 3 7 12/g) ?? []).length).toBe(1);
     expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(5);
+  });
+});
+
+describe('column advance: text-aware spacing (N.6b-1)', () => {
+  // Real fixture events, read rather than reconstructed. n1 carries "Ты",
+  // n13 carries "тьма", so their underlays differ in width.
+  const byId = new Map(demoScore().vocalLine.map((e) => [e.id, e]));
+  const n1 = byId.get('n1')!;
+  const n13 = byId.get('n13')!;
+  // Starve the duration and floor terms so the text term is what is under
+  // test; all three compete for the maximum.
+  const opts = { lineGap: 5.5, minGap: 1, pxPerWhole: 1 };
+
+  it('lets the text term govern once duration and floor are small', () => {
+    expect(columnAdvance(n1, n13, 0, opts)).toBeGreaterThan(opts.minGap);
+  });
+
+  it('grows with a wider syllable', () => {
+    expect(columnAdvance(n13, n13, 0, opts)).toBeGreaterThan(columnAdvance(n1, n1, 0, opts));
+  });
+
+  it('discounts modifier letters rather than counting code points', () => {
+    // Five code points each, but two of the second string's are modifier
+    // letters that carry almost no advance. A character count would call
+    // these equal; the measured table must not.
+    const plain = columnAdvance(n1, n1, 0, { ...opts, ipaPreview: { n1: 'nitui' } });
+    const modified = columnAdvance(n1, n1, 0, { ...opts, ipaPreview: { n1: 'nʲitʲ' } });
+    expect(modified).toBeLessThan(plain);
+  });
+
+  it('never returns less than the floor', () => {
+    expect(columnAdvance(n1, n13, 0, { ...opts, minGap: 500 })).toBe(500);
   });
 });
 

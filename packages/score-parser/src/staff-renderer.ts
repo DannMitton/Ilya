@@ -46,6 +46,22 @@ import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEv
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
 import { chooseClef, type RenderClef } from './clef-select';
+import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
+
+/**
+ * Underlay type sizes. Both are still absolute px that do NOT scale with
+ * `lineGap`, which `claude/e18-thread-opener_v1_2026-07-29.md` §3.2 recorded
+ * on 29 July as one of eight such sites; the correct value against Gould r12
+ * (lyric x-height about one stave-space) has never been measured and is held
+ * pending a render at three `lineGap` values. Named here so the drawing sites
+ * and the width measurement cannot disagree, and so that when they are
+ * finally scaled there is one place to change.
+ */
+const CYR_FONT_PX = 12.5;
+const IPA_FONT_PX = 12;
+
+/** Extra room at a barline, shared with `page-layout.ts`'s width estimate. */
+export const BARLINE_ROOM = 14;
 
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
@@ -185,6 +201,65 @@ interface Placed {
   newMeasure: boolean;
 }
 
+/**
+ * Half the rendered width of an event's underlay: the wider of its Cyrillic
+ * syllable and its IPA, both measured from real glyph advances rather than a
+ * character count (`underlay-widths.ts`).
+ *
+ * Halved because both lines are centre-anchored on the notehead. The one
+ * exception is a melisma-opening syllable, which is left-anchored (Gould r5)
+ * and therefore extends its FULL width rightward: that is safe to ignore
+ * here, because the columns following a melisma opening carry no syllable at
+ * all by the data model, so there is nothing for it to collide with.
+ */
+function underlayHalfWidth(ev: VocalLineEvent, ipaPreview?: Record<string, string>): number {
+  const cyr = ev.syllable?.text ?? '';
+  const ipa = ipaPreview?.[ev.id] ?? '';
+  if (!cyr && !ipa) return 0;
+  return Math.max(
+    cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_PX) : 0,
+    ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0,
+  ) / 2;
+}
+
+/**
+ * The minimum x-advance from one event's column to the next, and the SINGLE
+ * definition of it: `page-layout.ts` calls this rather than mirroring the
+ * arithmetic, because that file's own comment warned that a renderer spacing
+ * change would otherwise drift silently away from the pagination estimate.
+ *
+ * Three terms compete and the widest wins:
+ *   1. `minGap`, the floor;
+ *   2. the duration term, `pxPerWhole` per whole note (still strictly
+ *      proportional, which Gould p. 40 prints as the version NOT to use;
+ *      contradiction 38, not addressed here);
+ *   3. the TEXT term, new in N.6b-1: half the previous column's underlay plus
+ *      half this one's, plus half a stave-space of clearance. Gould r8 makes
+ *      vocal spacing answer to syllable width as well as rhythm, and r235
+ *      sets that half-stave-space as the hard floor with nothing colliding.
+ *
+ * Before this existed the IPA line held one character, so text width never
+ * governed. N.5 gave it full syllable transcriptions and the columns began to
+ * collide on the printed page.
+ */
+export function columnAdvance(
+  prevEv: VocalLineEvent,
+  ev: VocalLineEvent | undefined,
+  prevDurWhole: number,
+  options: StaffRenderOptions = {},
+): number {
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const minGap = options.minGap ?? DEFAULTS.minGap;
+  const pxPerWhole = options.pxPerWhole ?? DEFAULTS.pxPerWhole;
+  // `ev` is undefined for the trailing advance past the final column, where
+  // there is no following text to clear, only the last syllable's own half.
+  const textNeed =
+    underlayHalfWidth(prevEv, options.ipaPreview) +
+    (ev ? underlayHalfWidth(ev, options.ipaPreview) : 0) +
+    lineGap * 0.5;
+  return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed);
+}
+
 // ── Beaming ────────────────────────────────────────────────────────
 // Groups are derived by beat, not read from the source (Dann's ruling,
 // 2026-07-12): `ParsedScore` carries no beam data, and the semantic stems
@@ -291,17 +366,20 @@ export function renderAnalyzedStaff(
   let x = o.leftMargin;
   let prevMeasure = -1;
   let prevDurWhole = 0;
+  let prevEv: VocalLineEvent | undefined;
   for (const ev of parsed.vocalLine) {
     const newMeasure = ev.measureIndex !== prevMeasure;
-    if (placed.length > 0) {
-      const advance = Math.max(o.minGap, prevDurWhole * o.pxPerWhole);
-      x += advance + (newMeasure ? 14 : 0); // a little breathing room across barlines
+    if (prevEv) {
+      x += columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
     }
     placed.push({ ev, x, newMeasure: newMeasure && placed.length > 0 });
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
+    prevEv = ev;
   }
-  const contentRight = (placed[placed.length - 1]?.x ?? o.leftMargin) + Math.max(o.minGap, prevDurWhole * o.pxPerWhole);
+  const lastEv = placed[placed.length - 1]?.ev;
+  const contentRight = (placed[placed.length - 1]?.x ?? o.leftMargin) +
+    (lastEv ? columnAdvance(lastEv, undefined, prevDurWhole, options) : 0);
   const width = contentRight + 24;
 
   // ── Beam pass: group flagged notes by measure, beat, and timbre ──
@@ -936,7 +1014,11 @@ export function renderAnalyzedStaff(
   // staff-line thickness and means the word has ended while its final
   // sound continues, running to the last notehead and no further.
   {
-    const estW = (s: string): number => s.length * 7.5; // width estimate at 12.5px
+    // Measured advances, not a character count. The old `s.length * 7.5`
+    // overstated any string with modifier letters by more than twice, so
+    // hyphen and extender ends were computed from a width the glyphs never
+    // occupied (`underlay-widths.ts`).
+    const estW = (s: string): number => estimateCyrillicWidthPx(s, CYR_FONT_PX);
     const rightEdgeOf = (u: (typeof underlay)[number]): number =>
       u.align === 'start' ? u.x + estW(u.cyr) : u.x + estW(u.cyr) / 2;
     const leftEdgeOf = (u: (typeof underlay)[number]): number =>
