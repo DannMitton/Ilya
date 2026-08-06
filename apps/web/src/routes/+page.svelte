@@ -1004,6 +1004,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				scoreTitle={metadata.title}
 				{engraving}
 				{notationPrefs}
+				{openSyllabification}
 				onrendered={handleScoreRendered}
 			/>
 		{:else}

@@ -108,7 +108,10 @@ export interface StaffRenderOptions {
   finalBarline?: boolean;
 }
 
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview'>> = {
+// `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
+// off `options` rather than defaulted here, and leaving it out of the Omit
+// makes `Required` demand a default that would be meaningless.
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'finalBarline'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,

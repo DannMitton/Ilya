@@ -134,6 +134,14 @@
 		 * `DIRECTIVE-all-ipa-through-ilya.md` forbids on a printed page.
 		 */
 		notationPrefs: NotationPreferences;
+		/**
+		 * The singer's open-syllable preference (N.8, 2026-08-06). Applies to
+		 * the IPA line ONLY on this page: Dann's ruling is that the Cyrillic
+		 * keeps the engraver's hyphenation, as printed in the score they
+		 * perform from, so the two lines may legitimately differ here.
+		 * Transcribe is unaffected and continues to divide both lines.
+		 */
+		openSyllabification?: boolean;
 	}
 
 	let {
@@ -147,6 +155,7 @@
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
 		notationPrefs,
+		openSyllabification = false,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -324,7 +333,9 @@
 	// N.5: BOTH resolvers, from one reconstruction pass. `buildVowelResolver`
 	// is a wrapper that returns only `.vowel` (`vowel-resolver.ts:384`), so
 	// the display IPA was being computed and thrown away on every render.
-	const underlayResolvers = $derived(readingScore ? buildUnderlayResolvers(readingScore) : null);
+	const underlayResolvers = $derived(
+		readingScore ? buildUnderlayResolvers(readingScore, 1, { openSyllabification }) : null,
+	);
 	const vowelResolver = $derived(underlayResolvers?.vowel ?? null);
 
 	// N.5: the printed IPA line. Every string is Ilya's own, read from the

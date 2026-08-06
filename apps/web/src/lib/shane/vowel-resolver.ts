@@ -71,6 +71,8 @@
  */
 
 import { processText } from '$lib/pipeline';
+import { openSyllabify } from '$lib/syllable-utils';
+import type { SyllableData } from '@ilya/phonology';
 import type { WordStackData } from '$lib/types';
 import type { ParsedScore, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
 
@@ -262,8 +264,8 @@ function vowelOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
  * which should not occur wherever `vowelOfSyllable` also succeeded, since
  * both read the same `sylIdx` from the same `w.result`.
  */
-function ipaOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
-	return w.result.syllables[sylIdx]?.ipa;
+function ipaOfSyllable(syllables: readonly SyllableData[], sylIdx: number): string | undefined {
+	return syllables[sylIdx]?.ipa;
 }
 
 /**
@@ -288,9 +290,39 @@ export interface UnderlayResolvers {
  * text, so a per-verse overlay is this builder run once per verse, feeding the
  * unchanged verse-agnostic `analyzeScore` (Option 1, Dann 2026-07-17).
  */
-export function buildUnderlayResolvers(parsed: ParsedScore, verseNumber = 1): UnderlayResolvers {
+export function buildUnderlayResolvers(
+	parsed: ParsedScore,
+	verseNumber = 1,
+	options: { openSyllabification?: boolean } = {},
+): UnderlayResolvers {
 	const byEventVowel = new Map<string, string>();
 	const byEventIpa = new Map<string, string>();
+
+	// N.8: the singer's open-syllable preference, applied to the IPA line only.
+	//
+	// `openSyllabify` (`syllable-utils.ts:48`) re-slices the engine's syllables
+	// so inter-vocalic consonants migrate rightward into the following onset,
+	// which is the consonant-forward division Gould sanctions at r22 to r24
+	// and which her Fit note calls the right priority for a tool whose whole
+	// subject is sung sound. It PRESERVES the syllable count, so the score's
+	// syllable-to-note mapping and its start/middle/end types are untouched:
+	// only IPA characters move between adjacent notes.
+	//
+	// Dann's ruling, 2026-08-06: the IPA line follows this preference, the
+	// Cyrillic line stays the engraver's as printed in the score the singer
+	// performs from. The two can therefore differ wherever an engraver's
+	// hyphenation differs from Ilya's open division, which is accepted.
+	//
+	// Memoised per word: a word spanning several notes is re-sliced once.
+	const slicedByWord = new Map<WordStackData, readonly SyllableData[]>();
+	const syllablesOf = (w: WordStackData): readonly SyllableData[] => {
+		let s = slicedByWord.get(w);
+		if (!s) {
+			s = options.openSyllabification ? openSyllabify(w.result.syllables) : w.result.syllables;
+			slicedByWord.set(w, s);
+		}
+		return s;
+	};
 
 	const scoreWords = collectScoreWords(parsed, verseNumber);
 	if (scoreWords.length > 0) {
@@ -357,7 +389,7 @@ export function buildUnderlayResolvers(parsed: ParsedScore, verseNumber = 1): Un
 						byEventVowel.set(eventId, vowel);
 					}
 				}
-				const ipa = ipaOfSyllable(owner.word, owner.localIdx);
+				const ipa = ipaOfSyllable(syllablesOf(owner.word), owner.localIdx);
 				if (ipa && slot.length > 0) {
 					// Onset only: the display IPA does not repeat under melisma
 					// continuation notes.
