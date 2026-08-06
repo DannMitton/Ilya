@@ -127,7 +127,14 @@ function expectedSyllableIpa(text: string, wordIdx: number, sylIdx: number): str
 	const words = processText(text)[0]?.words ?? [];
 	const w = words[wordIdx];
 	if (!w) return undefined;
-	return w.result.syllables[sylIdx]?.ipa;
+	const syl = w.result.syllables[sylIdx];
+	if (!syl) return undefined;
+	// The display contract includes the primary-stress mark, which the engine
+	// carries as a FLAG on the syllable rather than a character in its `.ipa`
+	// (`engine.ts:52-56`). Derived from that flag here, so this stays an
+	// independent extraction: the IPA content still comes from a fresh pipeline
+	// run and never from a string written by hand.
+	return syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa;
 }
 
 // ── The demo fixture: the package's own Russian vocal line ──────────
@@ -188,6 +195,17 @@ describe('buildUnderlayResolvers: the display-IPA line', () => {
 		// The display IPA is the whole syllable (consonants included), so it
 		// is not simply equal to the single acoustic vowel at the same event.
 		expect(ipaAt('n16')).not.toBe(vowelAt('n16'));
+	});
+
+	it('carries the stress mark exactly where the engine marks stress', () => {
+		// Fails in BOTH directions: a mark where the engine reports no stress
+		// fails as loudly as a missing one. Both sides come from the engine, so
+		// no claim about Russian stress is made here.
+		const line = 'Ты погрузись но чу по го ди тьма на ста пять по';
+		const words = processText(line)[0]?.words ?? [];
+		const marked = (id: string): boolean => (ipaAt(id) ?? '').startsWith('ˈ');
+		expect(marked('n13')).toBe(words[7]?.result.syllables[0]?.isStressed === true);
+		expect(marked('n16')).toBe(words[10]?.result.syllables[0]?.isStressed === true);
 	});
 
 	it('is blank on melisma continuation notes, unlike the vowel, which sustains', () => {

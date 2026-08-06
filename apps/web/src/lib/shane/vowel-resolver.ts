@@ -72,6 +72,14 @@
 
 import { processText } from '$lib/pipeline';
 import { openSyllabify } from '$lib/syllable-utils';
+
+/**
+ * The IPA primary-stress mark, U+02C8. The engine's own symbol, declared at
+ * `packages/phonology/src/engine.ts:230` as `'stress': 'ˈ'`; repeated here
+ * rather than imported because that table is private to the engine. If it is
+ * ever exported, import it and delete this.
+ */
+const STRESS_MARK = 'ˈ';
 import type { SyllableData } from '@ilya/phonology';
 import type { WordStackData } from '$lib/types';
 import type { ParsedScore, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
@@ -265,7 +273,24 @@ function vowelOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
  * both read the same `sylIdx` from the same `w.result`.
  */
 function ipaOfSyllable(syllables: readonly SyllableData[], sylIdx: number): string | undefined {
-	return syllables[sylIdx]?.ipa;
+	const syl = syllables[sylIdx];
+	if (!syl) return undefined;
+	// Stress is a FLAG on the syllable (`engine.ts:52-56`), not a character in
+	// its `.ipa`, so reading `.ipa` alone silently dropped it and the printed
+	// page carried Ilya's transcription with the stress removed (Dann at the
+	// browser, 2026-08-06). The mark precedes its syllable, which is how the
+	// engine's own word-level output reads: ɑtʲ + ˈtʲɛ + nʌk.
+	//
+	// The character is the engine's, declared at `engine.ts:230` as
+	// `'stress': 'ˈ'` (U+02C8), not one chosen here.
+	//
+	// No monosyllable special case, per Dann's ruling 2026-08-06: a stressed
+	// monosyllable takes a mark, and clitics and negation particles do not
+	// because the engine does not mark them stressed. The stress model is the
+	// engine's business, not this resolver's.
+	//
+	// Guarded against a double mark in case a future engine change embeds it.
+	return syl.isStressed && !syl.ipa.includes(STRESS_MARK) ? STRESS_MARK + syl.ipa : syl.ipa;
 }
 
 /**
