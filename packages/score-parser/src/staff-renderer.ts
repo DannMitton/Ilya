@@ -97,6 +97,15 @@ export interface StaffRenderOptions {
    * `VoiceProfilePane` render call; today only `renderDemo` populates it.
    */
   ipaPreview?: Record<string, string>;
+  /**
+   * True only for the system that ends the PIECE. Gould r96 gives the
+   * beam-thick-plus-thin final barline to the end of a movement, and r224
+   * restates it: only the bar that actually ends the piece takes it. Before
+   * this option every system drew one, so every system announced the song was
+   * over (Dann's ruling, 2026-08-06). `paginateScore` sets it on the last
+   * slice; a standalone render leaves it false and gets an ordinary barline.
+   */
+  finalBarline?: boolean;
 }
 
 const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview'>> = {
@@ -253,10 +262,12 @@ export function columnAdvance(
   const pxPerWhole = options.pxPerWhole ?? DEFAULTS.pxPerWhole;
   // `ev` is undefined for the trailing advance past the final column, where
   // there is no following text to clear, only the last syllable's own half.
+  // That case gets a FULL stave-space rather than a half: the barline lands
+  // there, and half a stave-space put the last syllable hard against it
+  // (Dann at the browser, 2026-08-06, on [nuf]).
   const textNeed =
     underlayHalfWidth(prevEv, options.ipaPreview) +
-    (ev ? underlayHalfWidth(ev, options.ipaPreview) : 0) +
-    lineGap * 0.5;
+    (ev ? underlayHalfWidth(ev, options.ipaPreview) + lineGap * 0.5 : lineGap);
   return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed);
 }
 
@@ -380,7 +391,16 @@ export function renderAnalyzedStaff(
   const lastEv = placed[placed.length - 1]?.ev;
   const contentRight = (placed[placed.length - 1]?.x ?? o.leftMargin) +
     (lastEv ? columnAdvance(lastEv, undefined, prevDurWhole, options) : 0);
-  const width = contentRight + 24;
+  // The system ends AT its barline. No empty stave past it: Gould's r242
+  // end-of-stave allowance is for a barline falling before the stave's end,
+  // and where the barline is the end there is nothing to allow for (Dann's
+  // ruling, 2026-08-06, against his own Appendix C engraving). The 2 px is
+  // stroke room so the barline is not clipped by the viewBox.
+  //
+  // Kept identical for a final system: the r96 thin-plus-thick pair is drawn
+  // INSIDE this width rather than added to it, so `sliceWidth`'s packing
+  // estimate cannot diverge from the rendering by knowing which slice is last.
+  const width = contentRight + 2;
 
   // ── Beam pass: group flagged notes by measure, beat, and timbre ──
   // A group needs at least two consecutive members; it breaks at rests,
@@ -512,7 +532,7 @@ export function renderAnalyzedStaff(
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;
-    parts.push(`<line x1="24" y1="${y}" x2="${width - 12}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
+    parts.push(`<line x1="24" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
   // Clef at the head: SMuFL glyph on its reference line (treble winds
@@ -1062,8 +1082,21 @@ export function renderAnalyzedStaff(
   parts.push(...tupletParts);
 
   // Final barline.
-  const finalBarT = smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6;
-  parts.push(`<line x1="${contentRight - 6}" y1="${staffTop}" x2="${contentRight - 6}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${finalBarT}"/>`);
+  // The right-hand barline, at the stave's end. Ordinary weight on every
+  // system; the thin-plus-thick pair of Gould r96 only where the piece ends,
+  // with the thin line half a stave-space before the thick one, both inside
+  // the width already committed to above.
+  const endBarT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
+  const endBarX = round2(contentRight - endBarT / 2);
+  if (options.finalBarline) {
+    const thickT = smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6;
+    const thickX = round2(contentRight - thickT / 2);
+    const thinX = round2(thickX - sp(0.5) - thickT / 2);
+    parts.push(`<line x1="${thinX}" y1="${staffTop}" x2="${thinX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
+    parts.push(`<line x1="${thickX}" y1="${staffTop}" x2="${thickX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${thickT}"/>`);
+  } else {
+    parts.push(`<line x1="${endBarX}" y1="${staffTop}" x2="${endBarX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
+  }
   parts.push('</svg>');
 
   // Patch the svg tag and background with the true extent. The LOWER of the

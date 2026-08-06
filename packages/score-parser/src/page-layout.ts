@@ -52,7 +52,8 @@ const PAGE_DEFAULTS = {
 // renderer, so the estimate and the rendering cannot drift apart at all
 // rather than merely failing a test when they do (N.6b-1).
 const RENDER_DEFAULTS = { leftMargin: 92 };
-const RIGHT_PAD = 24;
+/** Stroke room past the closing barline; mirrors the renderer's `width`. */
+const RIGHT_PAD = 2;
 
 /** Vertical justification produces fractional offsets; keep the SVG tidy. */
 const round2 = (v: number): number => Math.round(v * 100) / 100;
@@ -163,8 +164,13 @@ export function paginateScore(
   }
 
   // ── Render each system ──
-  const systems: SystemSlice[] = ranges.map(([a, b]) => {
-    const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, renderOptions);
+  const systems: SystemSlice[] = ranges.map(([a, b], i) => {
+    // Only the slice that ends the piece gets Gould r96's final barline; every
+    // other system closes with an ordinary one (Dann's ruling, 2026-08-06).
+    const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, {
+      ...renderOptions,
+      finalBarline: i === ranges.length - 1,
+    });
     const { minY, width, height } = viewBoxOf(svg);
     return { fromMeasure: a, toMeasure: b, svg, width, height, minY };
   });

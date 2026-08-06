@@ -360,6 +360,50 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
   });
 });
 
+describe('staff renderer: how a system ends (N.6b-1)', () => {
+  // Gould r96 and r224: the beam-thick-plus-thin pair belongs to the bar that
+  // ends the PIECE. Every system used to draw one, so every system announced
+  // the song was over, and the stave then ran on past it into empty space.
+  const plain = renderDemo();
+  const final = renderDemo({ finalBarline: true });
+  const staffRight = (s: string): number =>
+    Number(s.match(/<line x1="24" y1="[\d.]+" x2="([\d.]+)"/)![1]);
+  const barXs = (s: string): number[] =>
+    [...s.matchAll(/<line x1="([\d.]+)" y1="72" x2="[\d.]+" y2="120"/g)].map((m) => Number(m[1]));
+
+  it('stops the stave at its closing barline, with no empty continuation', () => {
+    // The barline's CENTRE sits half its stroke inside the stave end so the
+    // stroke's outer edge lands exactly there. The property under test is
+    // that no stave runs on past it, not that the two numbers are equal: the
+    // old design continued 18 px beyond, which this catches and half a pixel
+    // of stroke geometry does not.
+    const overhang = staffRight(plain) - Math.max(...barXs(plain));
+    expect(overhang).toBeGreaterThanOrEqual(0);
+    expect(overhang).toBeLessThanOrEqual(1);
+  });
+
+  it('closes an ordinary system with an ordinary barline, not the thick one', () => {
+    // Primitive mode: thin barlines are 1, the r96 thick line is 1.6.
+    expect(plain.includes('y1="72" x2')).toBe(true);
+    expect(plain.includes('y2="120" stroke="#3a352f" stroke-width="1.6"')).toBe(false);
+  });
+
+  it('draws the r96 pair only when the piece ends there', () => {
+    expect(final.includes('y2="120" stroke="#3a352f" stroke-width="1.6"')).toBe(true);
+    // The thin partner sits half a stave-space before the thick line.
+    const xs = barXs(final).sort((a, b) => a - b);
+    const gap = xs[xs.length - 1] - xs[xs.length - 2];
+    expect(gap).toBeGreaterThan(0);
+    expect(gap).toBeLessThan(12); // one lineGap at the default stave
+  });
+
+  it('gives the last syllable a full stave-space before the barline', () => {
+    // A half stave-space put [nuf] hard against it. Same width either way,
+    // because the r96 pair is drawn inside the committed width.
+    expect(staffRight(plain)).toBeCloseTo(staffRight(final), 0);
+  });
+});
+
 describe('column advance: text-aware spacing (N.6b-1)', () => {
   // Real fixture events, read rather than reconstructed. n1 carries "Ты",
   // n13 carries "тьма", so their underlays differ in width.
