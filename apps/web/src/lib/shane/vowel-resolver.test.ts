@@ -279,6 +279,71 @@ describe('buildVowelResolver bail rules', () => {
 	});
 });
 
+// ── N.9: the vowelless clitic owns no slot ───────────────────────────
+
+describe('buildUnderlayResolvers: a host behind a vowelless proclitic', () => {
+	// Found by Dann at the browser, 2026-08-06, twice on one Kabalevsky page:
+	// «в по – след – ний» and «в раз – до – ре» printed their Cyrillic with no
+	// IPA at all, while «по – след – ней» with no clitic in front of it printed
+	// correctly on the same page. The engraver sets «в по» on one note, so the
+	// score offers three vowel-bearing slots; the pipeline tokenises «в»
+	// separately and the engine returns one syllable for it, which owns no slot
+	// because `close()` gives slots only to vowel-bearing syllables. The two
+	// sides counted by different rules, four against three, and the resolver's
+	// mismatch guard omitted a word that had aligned correctly.
+	const parsed = scoreOf([
+		note('e1', { text: 'в по', type: 'start' }),
+		note('e2', { text: 'след', type: 'middle' }),
+		note('e3', { text: 'ний', type: 'end' })
+	]);
+	const { ipa } = buildUnderlayResolvers(parsed);
+	const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+	const ipaAt = (id: string) => ipa(byId.get(id)!);
+
+	it('resolves every syllable of the host, rather than omitting the word', () => {
+		for (const id of ['e1', 'e2', 'e3']) {
+			expect(ipaAt(id), `event ${id}`).toBeDefined();
+		}
+	});
+
+	it('tucks the proclitic’s IPA into the first syllable, behind any stress mark', () => {
+		// Both halves come from a fresh pipeline run, never from the resolver:
+		// `ipaContent` is the field `pipeline.ts:752-758` itself reads when it
+		// merges a vowelless proclitic, and the host syllable comes from the
+		// same independent extraction the tests above use.
+		const words = processText('в последний')[0]?.words ?? [];
+		const cliticIpa = words[0]?.ipaContent ?? '';
+		expect(cliticIpa, 'the pipeline gives «в» no IPA content').not.toBe('');
+		const hostSyl0 = expectedSyllableIpa('в последний', 1, 0)!;
+		expect(ipaAt('e1')).toBe(
+			hostSyl0.startsWith('ˈ') ? 'ˈ' + cliticIpa + hostSyl0.slice(1) : cliticIpa + hostSyl0
+		);
+	});
+
+	it('does the same for «в раздоре», the second instance on that page', () => {
+		const second = scoreOf([
+			note('f1', { text: 'в раз', type: 'start' }),
+			note('f2', { text: 'до', type: 'middle' }),
+			note('f3', { text: 'ре', type: 'end' })
+		]);
+		const r = buildUnderlayResolvers(second).ipa;
+		const ids = new Map(second.vocalLine.map((e) => [e.id, e]));
+		for (const id of ['f1', 'f2', 'f3']) {
+			expect(r(ids.get(id)!), `event ${id}`).toBeDefined();
+		}
+	});
+
+	it('still abstains on a genuine count divergence, which N.9 must not switch off', () => {
+		// Two engine syllables set on one note, both of them vowel-bearing.
+		// This is the elision case `vowel-resolver.ts` documents and cannot yet
+		// tell apart from an encoding fault, so it must stay silent.
+		const elided = scoreOf([note('g1', { text: 'горе', type: 'whole' })]);
+		const r = buildUnderlayResolvers(elided).ipa;
+		const ids = new Map(elided.vocalLine.map((e) => [e.id, e]));
+		expect(r(ids.get('g1')!)).toBeUndefined();
+	});
+});
+
 // ── Verse 2+ reconstruction (§A.98; Option 1, Dann 2026-07-17) ────────
 
 describe('buildVowelResolver reconstructs any verse from versesInfo', () => {

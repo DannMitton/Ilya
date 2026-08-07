@@ -384,8 +384,38 @@ export function buildUnderlayResolvers(
 			if (!matched) break; // alignment lost: stop mapping, never guess
 
 			// The word's syllables, concatenated across a particle split.
+			//
+			// N.9. A word with no vowel can never own a slot on the score side:
+			// `close()` gives a slot only to a syllable matching CYRILLIC_VOWEL
+			// (`:181`) and merges the rest into a neighbour (`:183`, `:188`).
+			// The engine nevertheless returns one syllable for it
+			// (`engine.ts:1119` falls back to `[word]`, and `:1879` pushes one
+			// entry per element), so counting it here made the two sides count
+			// by different rules and the guard below omitted words that had
+			// aligned correctly. Found by Dann at the browser, 2026-08-06, on
+			// "в последний" and "в раздоре"; the same host resolves without the
+			// clitic in front of it, on the same page.
+			//
+			// The clitic's IPA is not dropped, and where it goes is not decided
+			// here: `pipeline.ts:752-758` and `syllable-utils.ts:300-315` both
+			// already tuck a vowelless proclitic into the front of its host,
+			// after the stress mark when the host's IPA carries one, and append
+			// a vowelless enclitic. This mirrors that rule at syllable
+			// granularity, which is the granularity the underlay prints at.
+			// `ipaContent` is the field those two sites read for exactly this
+			// purpose (`types.ts:80`).
 			const sylOwners: Array<{ word: WordStackData; localIdx: number }> = [];
+			let procliticIpa = '';
+			let encliticIpa = '';
 			for (const mw of matched) {
+				if (!CYRILLIC_VOWEL.test(mw.cleanWord)) {
+					const cliticIpa = mw.ipaContent || ipaOfSyllable(syllablesOf(mw), 0) || '';
+					// Before any nucleus it is proclitic, after one enclitic:
+					// the same ordering `matched` was built in.
+					if (sylOwners.length === 0) procliticIpa += cliticIpa;
+					else encliticIpa += cliticIpa;
+					continue;
+				}
 				for (let k = 0; k < mw.syllables.length; k++) {
 					sylOwners.push({ word: mw, localIdx: k });
 				}
@@ -414,7 +444,18 @@ export function buildUnderlayResolvers(
 						byEventVowel.set(eventId, vowel);
 					}
 				}
-				const ipa = ipaOfSyllable(syllablesOf(owner.word), owner.localIdx);
+				let ipa = ipaOfSyllable(syllablesOf(owner.word), owner.localIdx);
+				// N.9: the vowelless clitics that own no slot ride on the
+				// syllables at either end, following `pipeline.ts:752-758`.
+				// A stress mark stays leftmost; the clitic tucks in behind it.
+				if (ipa !== undefined && procliticIpa && k === 0) {
+					ipa = ipa.startsWith(STRESS_MARK)
+						? STRESS_MARK + procliticIpa + ipa.slice(STRESS_MARK.length)
+						: procliticIpa + ipa;
+				}
+				if (ipa !== undefined && encliticIpa && k === sw.slots.length - 1) {
+					ipa = ipa + encliticIpa;
+				}
 				if (ipa && slot.length > 0) {
 					// Onset only: the display IPA does not repeat under melisma
 					// continuation notes.
