@@ -13,7 +13,50 @@
 
 import { describe, expect, it } from 'vitest';
 import { demoScore, renderDemo, renderDemoUnmeasured, syntheticSmuflFont } from './demo-fixture';
-import { columnAdvance } from './staff-renderer';
+import { columnAdvance, clampHyphenX, HYPHEN_HALF } from './staff-renderer';
+
+// ── N.11: a hyphen's ink stays inside the gap ────────────────────────
+//
+// Found by Dann at the browser, 2026-08-06: hyphens struck through the
+// following letter, in «та-я», in «е-го», and twice on Kabalevsky page 2.
+// The cause was the note-column nudge at the placement loop, which moves a
+// hyphen 8 px right and never rechecks that it still fits.
+//
+// This covers the arithmetic. It does not prove the renderer calls it on
+// every path; that is Dann's eye, and it is recorded as such.
+describe('clampHyphenX', () => {
+  it('leaves a hyphen that already fits exactly where it is', () => {
+    expect(clampHyphenX(50, 40, 60)).toBe(50);
+  });
+
+  it('pulls back a hyphen the note-column nudge pushed past the right edge', () => {
+    // The gap is 40 to 52 and the nudge lands the centre at 56, so the ink
+    // would run from 53.5 to 58.5, entirely inside the following glyph.
+    const hx = clampHyphenX(56, 40, 52);
+    expect(hx + HYPHEN_HALF).toBeLessThanOrEqual(52);
+    expect(hx - HYPHEN_HALF).toBeGreaterThanOrEqual(40);
+  });
+
+  it('never lets the ink cross either edge, wherever the nudge lands it', () => {
+    const from = 100;
+    const to = 130;
+    for (let hx = 80; hx <= 150; hx += 0.5) {
+      const c = clampHyphenX(hx, from, to);
+      expect(c - HYPHEN_HALF, `centre ${hx}`).toBeGreaterThanOrEqual(from);
+      expect(c + HYPHEN_HALF, `centre ${hx}`).toBeLessThanOrEqual(to);
+    }
+  });
+
+  it('centres in a gap too narrow to hold the hyphen, rather than favouring one side', () => {
+    // No legal centre exists here. Overhang both neighbours equally: half of
+    // one of them is worse than a sliver of each.
+    const from = 100;
+    const to = 103;
+    const c = clampHyphenX(120, from, to);
+    expect(c).toBe(101.5);
+    expect(c - from).toBe(to - c);
+  });
+});
 
 /** The rendered contents of one note's `<g data-event-id>` wrapper. */
 function eventGroup(svg: string, id: string): string {

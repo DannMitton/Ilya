@@ -269,6 +269,33 @@ function underlayHalfWidth(ev: VocalLineEvent, ipaPreview?: Record<string, strin
  * governed. N.5 gave it full syllable transcriptions and the columns began to
  * collide on the printed page.
  */
+/** Half the drawn width of a hyphen: its ink spans `hx ± HYPHEN_HALF`. */
+export const HYPHEN_HALF = 2.5;
+
+/**
+ * Keep a hyphen's INK inside the gap between two syllables (N.11).
+ *
+ * The placement loop nudges a hyphen 8 px right when it would sit under a
+ * note column. That nudge is unconditional, rightward only, and unbounded,
+ * so in a tight pair it pushed the ink inside the following glyph: Dann at
+ * the browser, 2026-08-06, found it through «я» in «та-я», through «го» in
+ * «е-го», and twice more on Kabalevsky page 2.
+ *
+ * The gap `[from, to]` is measured from real ink edges by the caller. The
+ * hyphen is centred on `hx` and draws `HYPHEN_HALF` either side, so the legal
+ * window for the CENTRE is `[from + half, to - half]`.
+ *
+ * When the gap is narrower than the hyphen itself that window is empty and
+ * there is no correct answer; the centre of the gap is the least-bad one,
+ * overhanging both neighbours slightly rather than one of them entirely.
+ * Omitting the hyphen instead is a Gould question (rules 26 to 40, unread),
+ * so it is not taken here.
+ */
+export function clampHyphenX(hx: number, from: number, to: number, half = HYPHEN_HALF): number {
+  if (to - from < half * 2) return (from + to) / 2;
+  return Math.min(Math.max(hx, from + half), to - half);
+}
+
 export function columnAdvance(
   prevEv: VocalLineEvent,
   ev: VocalLineEvent | undefined,
@@ -1131,7 +1158,8 @@ export function renderAnalyzedStaff(
       for (let k = 1; k <= count; k++) {
         let hx = from + ((to - from) * k) / (count + 1);
         if (noteXs.some((x2) => Math.abs(x2 - hx) < 7)) hx += 8; // clear of note columns
-        parts.push(`<line x1="${round2(hx - 2.5)}" y1="${hyphenY}" x2="${round2(hx + 2.5)}" y2="${hyphenY}" stroke="#1a1612" stroke-width="1" data-hyphen="${esc(a.evId)}"/>`);
+        hx = clampHyphenX(hx, from, to); // N.11: the nudge above is unbounded
+        parts.push(`<line x1="${round2(hx - HYPHEN_HALF)}" y1="${hyphenY}" x2="${round2(hx + HYPHEN_HALF)}" y2="${hyphenY}" stroke="#1a1612" stroke-width="1" data-hyphen="${esc(a.evId)}"/>`);
       }
     }
 
