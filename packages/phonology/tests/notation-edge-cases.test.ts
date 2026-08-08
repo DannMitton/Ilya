@@ -525,6 +525,70 @@ describe('Task 7c: Notation and Edge Cases', () => {
       expect(words[0].skipFinalDevoicing).toBe(false);
     });
 
+    it('preserves voicing before voiced-obstruent-initial word at soft boundary (N.13)', () => {
+      // муж | дома → muʒ (voiced) not muʃ (devoiced).
+      // Regressive assimilation of voicing: a following voiced obstruent blocks
+      // the categorical final devoicing. Before N.13 no branch matched this
+      // environment, skipFinalDevoicing stayed false, and the final devoiced.
+      const words = [
+        {
+          cyrillic: 'муж', ipaSurface: '', ipaUnderlying: 'ˈmuʒ',
+          rightBoundary: 'soft' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+        {
+          // Stress on the right word is supplied by the dictionary at runtime.
+          // It is present here only for its initial consonant, which is what the
+          // boundary rule reads.
+          cyrillic: 'дома', ipaSurface: '', ipaUnderlying: 'domɑ',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈmuʒ');
+      expect(words[0].skipFinalDevoicing).toBe(true);
+    });
+
+    it('preserves voicing across a second voiced-obstruent pair (N.13)', () => {
+      // нож | брата → noʒ (voiced) not noʃ (devoiced).
+      const words = [
+        {
+          cyrillic: 'нож', ipaSurface: '', ipaUnderlying: 'ˈnoʒ',
+          rightBoundary: 'soft' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+        {
+          // Stress on the right word is supplied by the dictionary at runtime.
+          // It is present here only for its initial consonant, which is what the
+          // boundary rule reads.
+          cyrillic: 'брата', ipaSurface: '', ipaUnderlying: 'brɑtɑ',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈnoʒ');
+      expect(words[0].skipFinalDevoicing).toBe(true);
+    });
+
+    it('still devoices before voiced-obstruent-initial word at hard boundary (N.13 guard)', () => {
+      // муж. Дома → muʃ (devoiced): a hard boundary blocks the new branch too,
+      // so the branch cannot silently suppress devoicing everywhere.
+      const words = [
+        {
+          cyrillic: 'муж', ipaSurface: '', ipaUnderlying: 'ˈmuʒ',
+          rightBoundary: 'hard' as const, boundarySource: 'punctuation' as const, skipFinalDevoicing: false,
+        },
+        {
+          // Stress on the right word is supplied by the dictionary at runtime.
+          // It is present here only for its initial consonant, which is what the
+          // boundary rule reads.
+          cyrillic: 'дома', ipaSurface: '', ipaUnderlying: 'domɑ',
+          rightBoundary: 'hard' as const, boundarySource: 'auto' as const, skipFinalDevoicing: false,
+        },
+      ];
+      GraysonEngine.applyCrossWordAssimilation(words);
+      expect(words[0].ipaSurface).toBe('ˈmuʃ');
+      expect(words[0].skipFinalDevoicing).toBe(false);
+    });
+
   });
 
   // ─────────────────────────────────────────────────────────────────

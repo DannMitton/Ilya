@@ -2215,6 +2215,13 @@ export const GraysonEngine = {
         // Grayson: /v/ doesn't TRIGGER voicing, but DOES UNDERGO devoicing
         leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
         leftWord.skipFinalDevoicing = true;
+      } else if (this.isVoicedObstruent(rightInitial) && this.isVoicedObstruent(leftFinal)) {
+        // N.13. Voiced obstruent before voiced obstruent: муж дома, нож брата,
+        // дождь был. Nothing changes segmentally, but the following voiced
+        // obstruent blocks the categorical final devoicing applied below.
+        // Without this the fall-through left skipFinalDevoicing false and
+        // :2221 devoiced a consonant that regressive assimilation protects.
+        leftWord.skipFinalDevoicing = true;
       }
     }
 
