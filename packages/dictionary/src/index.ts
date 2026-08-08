@@ -28,6 +28,7 @@ export {
 // `modernisePreReform` is the intake entry point and returns one form or null;
 // `normalizePreReform` is the candidate-list form and delegates to it.
 export {
+  hasAbolishedLetter,
   modernisePreReform,
   normalizePreReform,
 } from './pre-reform-normalizer';

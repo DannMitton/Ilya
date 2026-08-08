@@ -29,6 +29,7 @@ import {
   addStressMarkToCyrillic,
   lookupFullEntry,
   normalizePoetic,
+  hasAbolishedLetter,
   modernisePreReform,
   restoreCasing,
 } from '@ilya/dictionary';
@@ -428,9 +429,42 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   //
   //   PROVENANCE. `preReformSource` retains what the engraver set, so the change
   //   is quiet rather than invisible.
-  const modernisedForm = modernisePreReform(rawNormalized);
+  //   THE DICTIONARY DISPOSES, AT DISPLAY AS WELL AS AT LOOKUP. Dann ruled on
+  //   2026-08-08 that intake modernisation adopts its own output only when the
+  //   modernised form is a word Ilya knows. This is the module's existing "the
+  //   rule proposes, the dictionary disposes" discipline extended from the lookup
+  //   to the page.
+  //
+  //   Without the gate, the 322 dictionary-attested words that need the
+  //   morphological endings print a form that never existed in any orthography:
+  //   большія → большия, однѣхъ → однех where the real modern form is одних.
+  //   Gated, дети modernises and большія stays exactly as the engraver set it,
+  //   which is at least historically true. Sized by the census at
+  //   `claude/sonnet-memo-e33-pre-reform-dictionary-census_2026-08-08.md`.
+  //
+  //   The probe strips guillemets and a trailing dash to match `bareWord` below,
+  //   because `lookupStress` strips punctuation and lowercases but does neither of
+  //   those. A wholly modern word costs nothing here: `modernisePreReform` returns
+  //   null and the lookup is never reached.
+  const modernisedCandidate = modernisePreReform(rawNormalized);
+  const candidateIsKnown =
+    modernisedCandidate !== null &&
+    GraysonEngine.lookupStress(
+      modernisedCandidate.replace(/[«»]/g, '').replace(/[-–—]+$/, ''),
+    ) !== null;
+  const modernisedForm = candidateIsKnown ? modernisedCandidate : null;
   const word = modernisedForm ?? rawNormalized;
   const preReformSource = modernisedForm !== null ? rawNormalized : null;
+
+  //   AND WHEN THE GATE DECLINES, ABSTAIN. Dann ruled on 2026-08-08 that a printed
+  //   form still carrying an abolished letter gets no stress mark at all. It is a
+  //   word Ilya could not resolve, so it says so, rather than borrowing the
+  //   pre-reform entry's number: большіе's own entry gives stress 0 where большие
+  //   gives 1, and the engine has already deleted the і from the IPA. The gloss is
+  //   still trusted, because the census found the pre-reform and modern glosses
+  //   agree where the stress values do not.
+  const unresolvedPreReform =
+    modernisedCandidate !== null && !candidateIsKnown && hasAbolishedLetter(word);
 
   // Strip guillemets and trailing hyphens for dictionary lookups only; word retains them for display
   const bareWord = word.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
@@ -500,7 +534,14 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   let stressSource: string;
   let yoSource: string | null;
 
-  if (yoSyllable !== -1) {
+  if (unresolvedPreReform) {
+    // Abstention, and it outranks ё detection: whatever the stress would have
+    // been, the transcription below is built from a spelling the engine cannot
+    // read, so no mark on it would be honest.
+    stress = -2;
+    stressSource = 'inferred';
+    yoSource = null;
+  } else if (yoSyllable !== -1) {
     stress = yoSyllable;
     // Native ё (poet wrote it): stress is unambiguous, no departure to signal.
     // Restored ё (engine changed е→ё): signal the departure with provenance icon.

@@ -47,6 +47,13 @@
  * what Ilya displays, transcribes, AND looks up. One string, four jobs, each of
  * them correct. The engraver wrote дѣти and Ilya prints дети.
  *
+ * BUT THE DICTIONARY STILL DISPOSES. Dann ruled, the same day, that the caller
+ * adopts this module's output only when the modernised form is a word Ilya knows.
+ * What this function returns is a PROPOSAL for the page as much as for the query.
+ * Ungated, the words needing the morphological endings would print a form that
+ * never existed: большія → большия, однѣхъ → однех. So a caller that puts this on
+ * the page must check it against the dictionary first, as `pipeline.ts` does.
+ *
  * Three of Ilya's own artefacts already said so, and only the code did not:
  *   - `GuideContent.svelte:291`, its published description: "It automatically
  *     updates and normalises spelling."
@@ -189,6 +196,37 @@ const PART_FINAL_HARD_SIGN = /([а-яА-ЯёЁ])[ъЪ](?![а-яА-ЯёЁ])/g;
  *                so a line-initial capital is not silently skipped.
  * @returns At most one candidate modern form; empty if nothing pre-reform was found.
  */
+/**
+ * Does this token still carry a letter the reform abolished?
+ *
+ * Lives here, beside ABOLISHED_LETTERS, so no caller has to mirror the inventory.
+ *
+ * WHY A CALLER NEEDS THIS. Dann ruled on 2026-08-08 that when the dictionary gate
+ * declines a modernised form, and the printed form therefore keeps its pre-reform
+ * spelling, Ilya must ABSTAIN on stress rather than trust the pre-reform
+ * dictionary entry. большіе's own entry gives stress 0 where большие gives 1
+ * (census, 2026-08-08), and `GraysonEngine`'s inventory (`engine.ts:232-233`)
+ * silently deletes the і, so the IPA is corrupt as well. A confident stress mark
+ * over a corrupted transcription is worse than an honest VERIFY box.
+ *
+ * The terminal hard sign is deliberately NOT one of these letters. It is silent to
+ * the engine (measured: Іисусъ gives `iˈsus`), and the census found terminal-ъ-only
+ * entries mostly agree with their modern twin on stress, so a word whose only
+ * pre-reform feature is a hard sign needs no abstention.
+ *
+ * ѳ fita counts even though it is a consonant, because the engine drops it too:
+ * мараѳонъ transcribes to `mʌrɑˈon`, with the ф simply gone.
+ *
+ * @param token - Cyrillic word, any case, punctuation permitted.
+ * @returns true if any of ѣ Ѣ ѳ Ѳ і І ѵ Ѵ is present.
+ */
+export function hasAbolishedLetter(token: string): boolean {
+	for (const ch of Array.from(token.normalize('NFC'))) {
+		if (ABOLISHED_LETTERS.has(ch)) return true;
+	}
+	return false;
+}
+
 export function modernisePreReform(token: string): string | null {
 	if (!token) return null;
 

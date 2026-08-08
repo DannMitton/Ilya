@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { modernisePreReform, normalizePreReform } from '../src/pre-reform-normalizer';
+import { hasAbolishedLetter, modernisePreReform, normalizePreReform } from '../src/pre-reform-normalizer';
 
 describe('normalizePreReform: the abolished letters', () => {
 	it('maps ѣ (yat) → е (дѣти → дети)', () => {
@@ -161,5 +161,30 @@ describe('modernisePreReform: the intake entry point', () => {
 			const one = modernisePreReform(w);
 			expect(normalizePreReform(w)).toEqual(one === null ? [] : [one]);
 		}
+	});
+});
+
+describe('hasAbolishedLetter: the abstention predicate', () => {
+	it('is true for a form that kept its abolished letter (большія)', () => {
+		expect(hasAbolishedLetter('большія')).toBe(true);
+	});
+
+	it('is false once the letter is gone (большия)', () => {
+		expect(hasAbolishedLetter('большия')).toBe(false);
+	});
+
+	it('counts ѳ fita, because the engine deletes it too', () => {
+		// Measured in E.33: мараѳонъ transcribes to mʌrɑˈon, with the ф simply gone.
+		expect(hasAbolishedLetter('мараѳонъ')).toBe(true);
+	});
+
+	it('does NOT count a terminal hard sign, which is silent to the engine', () => {
+		// Іисусъ gives iˈsus: the ъ contributes nothing, so a word whose only
+		// pre-reform feature is a hard sign needs no abstention.
+		expect(hasAbolishedLetter('Рыбинскъ')).toBe(false);
+	});
+
+	it('is false for an ordinary modern word', () => {
+		expect(hasAbolishedLetter('окно')).toBe(false);
 	});
 });
