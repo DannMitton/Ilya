@@ -207,27 +207,56 @@ export function paginateScore(
     if (group.length > 0) pageGroups.push(group);
   }
 
-  // Dann's ruling, 2026-08-06, the horizontal mirror of his page rule: systems
-  // that SHARE a page must be visually consistent, so they are all justified to
-  // the line; a system standing ALONE on the final page has nothing to be
-  // consistent with and takes the width its content wants.
+  // THE LAST SYSTEM OF THE PIECE IS NEVER STRETCHED TO THE MARGIN.
   //
-  // Re-rendered rather than decided up front, because whether a system ends up
-  // alone is only known after heights are, and heights are only known after
-  // rendering. Safe in this direction: dropping the stretch can only shorten a
-  // system (the syllabic slur's lift grows with span), so a system that already
-  // fit its page still fits.
+  // Dann's ruling, 8 August 2026, in his words: "a final system on the final
+  // page of the contiguous musical notation that would not otherwise meet the
+  // right margin must not be stretched to meet it; rather, this final system
+  // should be spaced properly and allowed to terminate short of the right
+  // margin."
+  //
+  // THIS SUPERSEDES RULING 9 of 6 August, which exempted only a system
+  // standing ALONE on the final page. That test asked the wrong question: a
+  // short final system sharing its page with four others is just as stretched,
+  // and it was, on Kabalevsky Op. 52 No. 9 page 2, which is what prompted this.
+  // The old rule survives as a special case of this one.
+  //
+  // It carries NO fill threshold. The 40 percent figure belongs to C11's
+  // rebalance trigger ("rebalance so no page ends with a lone measure"), and
+  // the E.30 handover's summary welded the two together. The condition here is
+  // simply whether the system would otherwise reach the margin.
+  //
+  // Ruling 8 still binds everywhere else: every other system, final page or
+  // not, is justified to the line.
+  //
+  // Re-rendered rather than decided up front, because the natural width is not
+  // known until it is drawn. Safe in this direction: dropping the stretch can
+  // only shorten a system (the syllabic slur's lift grows with span), so a
+  // system that already fit its page still fits.
   const lastGroup = pageGroups[pageGroups.length - 1];
-  if (lastGroup && lastGroup.length === 1 && pageGroups.length > 1) {
-    const solo = lastGroup[0];
-    const svg = renderAnalyzedStaff(sliceScore(parsed, solo.fromMeasure, solo.toMeasure), analyzed, {
-      ...renderOptions,
-      finalBarline: true,
-    });
+  const lastSystem = systems[systems.length - 1];
+  if (lastGroup && lastSystem) {
+    const svg = renderAnalyzedStaff(
+      sliceScore(parsed, lastSystem.fromMeasure, lastSystem.toMeasure),
+      analyzed,
+      { ...renderOptions, finalBarline: true },
+    );
     const box = viewBoxOf(svg);
-    const natural: SystemSlice = { ...solo, svg, width: box.width, height: box.height, minY: box.minY };
-    lastGroup[0] = natural;
-    systems[systems.length - 1] = natural;
+    // Only when it falls short. A final system whose content genuinely fills
+    // the line, or overflows it, is left exactly as it was rendered.
+    if (box.width < innerWidth) {
+      const natural: SystemSlice = {
+        ...lastSystem,
+        svg,
+        width: box.width,
+        height: box.height,
+        minY: box.minY,
+      };
+      // The last element of the last page group IS the last system: the groups
+      // hold the same objects, pushed in order.
+      lastGroup[lastGroup.length - 1] = natural;
+      systems[systems.length - 1] = natural;
+    }
   }
 
   const pages: string[] = [];
