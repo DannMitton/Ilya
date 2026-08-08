@@ -989,12 +989,13 @@ export function renderAnalyzedStaff(
     // read `syl.verses` here, that array is real sung text for OTHER verses
     // (§A.86), not a display convenience, and must not be shown as if it
     // were this note's IPA. `options.ipaPreview` carries the full syllable
-    // IPA (production: `buildUnderlayResolvers(...).ipa`, not yet wired to
-    // a live render call; demo/test: the fixture's placeholder strings).
+    // IPA. IT IS WIRED: `VoiceProfilePane.svelte:506` passes it into
+    // `paginateScore` from `buildUnderlayResolvers(...).ipa` (N.5, 5 August).
+    // This comment claimed otherwise until N.10 corrected it on 8 August;
+    // demo and test callers still pass the fixture's placeholder strings.
     // The `a?.vowel` fallback is a degrade path only, for when no full-IPA
     // resolver ran at all; it is a single acoustic vowel, not the real
-    // syllable transcription, so it will read as sparser than the intended
-    // line 2 until the production wiring lands.
+    // syllable transcription, so it reads as sparser wherever it is taken.
     const cyr = syl?.text ?? '';
     const ipa = options.ipaPreview?.[ev.id] ?? a?.vowel ?? '';
     if (cyr || ipa) {

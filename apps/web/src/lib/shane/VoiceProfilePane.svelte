@@ -54,7 +54,7 @@
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
 	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
-	import type { PageSize } from '$lib/types';
+	import type { LineData, PageSize } from '$lib/types';
 	import type { Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
@@ -142,6 +142,23 @@
 		 * Transcribe is unaffected and continues to divide both lines.
 		 */
 		openSyllabification?: boolean;
+		/**
+		 * The singer's own transcription (N.10, Dann's ruling of 7 August:
+		 * "Fit consumes Transcription's output including the singer's stress
+		 * overrides").
+		 *
+		 * Fit and Transcribe share the pipeline and share no state (E.31 §1.2),
+		 * so before this prop existed a word the singer had corrected in
+		 * Transcribe printed here with the engine's original stress, and the
+		 * control that would fix it lived on a tab whose output never reached
+		 * this one. Where a score word pairs with a transcribed word the
+		 * singer's result is used; where it does not, Fit's own run stands for
+		 * that word alone (Path C, E.31 §1.5).
+		 *
+		 * Undefined, or an empty array, means no donor pass runs and the page
+		 * is exactly what it was before N.10.
+		 */
+		transcribedLines?: readonly LineData[];
 	}
 
 	let {
@@ -156,6 +173,7 @@
 		onrendered = undefined,
 		notationPrefs,
 		openSyllabification = false,
+		transcribedLines = undefined,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -334,7 +352,12 @@
 	// is a wrapper that returns only `.vowel` (`vowel-resolver.ts:384`), so
 	// the display IPA was being computed and thrown away on every render.
 	const underlayResolvers = $derived(
-		readingScore ? buildUnderlayResolvers(readingScore, 1, { openSyllabification }) : null,
+		readingScore
+			? buildUnderlayResolvers(readingScore, 1, {
+					openSyllabification,
+					...(transcribedLines ? { transcribedLines } : {}),
+				})
+			: null,
 	);
 	const vowelResolver = $derived(underlayResolvers?.vowel ?? null);
 

@@ -17,6 +17,7 @@ import { demoScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent } from '@ilya/score-parser';
 import { processText } from '$lib/pipeline';
 import { buildVowelResolver, buildUnderlayResolvers } from './vowel-resolver';
+import type { LineData, UserStressOverride, WordStackData } from '$lib/types';
 
 const TEN_VOWELS = new Set(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u']);
 
@@ -393,5 +394,118 @@ describe('buildVowelResolver reconstructs any verse from versesInfo', () => {
 
 	it('defaults to verse 1 when no verse is given (the primary lens, unchanged)', () => {
 		expect(buildVowelResolver(parsed)(byId.get('m1')!)).toBe(at1('m1'));
+	});
+});
+
+// ── N.10: Fit consumes Transcription's output ────────────────────────
+//
+// Dann's ruling, 7 August 2026: "Fit consumes Transcription's output
+// including the singer's stress overrides, and an unratified word says so on
+// the page rather than printing bare." This block covers the first clause;
+// the second is N.10b's, with the marks and the legend.
+//
+// Every expected value here comes from a fresh `processText` run, never from
+// the resolver and never from a string written by hand. What is asserted is
+// only WHICH run the resolver read a word from.
+
+/** The display contract's syllable string, from a pipeline word. */
+function sylIpaOf(word: WordStackData, sylIdx: number): string | undefined {
+	const syl = word.result.syllables[sylIdx];
+	if (!syl) return undefined;
+	return syl.isStressed ? 'ˈ' + syl.ipa : syl.ipa;
+}
+
+const overrideAt = (key: string, stressIndex: number): Map<string, UserStressOverride> =>
+	new Map<string, UserStressOverride>([
+		[key, { stressIndex, stressSource: 'user-override' }]
+	]);
+
+describe('buildUnderlayResolvers: the singer’s overrides reach the score page', () => {
+	// по–след–ний, the word E.30 walked at the browser, set one syllable per
+	// note so the score offers exactly three vowel-bearing slots.
+	const wordEvents = (prefix: string) => [
+		note(`${prefix}1`, { text: 'по', type: 'start' }),
+		note(`${prefix}2`, { text: 'след', type: 'middle' }),
+		note(`${prefix}3`, { text: 'ний', type: 'end' })
+	];
+
+	const plainLines: LineData[] = processText('последний');
+	const overriddenLines: LineData[] = processText('последний', {
+		userStressOverrides: overrideAt('0-0', 0)
+	});
+
+	it('the override changes the engine’s own output, or nothing below means anything', () => {
+		// The precondition, stated as a test rather than assumed. If the
+		// pipeline ever stopped honouring an override before transcription
+		// (`pipeline.ts:270-277`, applied ahead of Step 3 at `:288`), every
+		// assertion in this block would pass vacuously.
+		const plainFlags = plainLines[0].words[0].result.syllables.map((sy) => sy.isStressed);
+		const overFlags = overriddenLines[0].words[0].result.syllables.map((sy) => sy.isStressed);
+		expect(overFlags).not.toEqual(plainFlags);
+	});
+
+	it('prints the singer’s corrected syllable, not the dictionary’s', () => {
+		const parsed = scoreOf(wordEvents('h'));
+		const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+		const withDonor = buildUnderlayResolvers(parsed, 1, {
+			transcribedLines: overriddenLines
+		}).ipa;
+		const without = buildUnderlayResolvers(parsed).ipa;
+
+		for (let k = 0; k < 3; k++) {
+			const id = `h${k + 1}`;
+			expect(withDonor(byId.get(id)!), `event ${id}`).toBe(
+				sylIpaOf(overriddenLines[0].words[0], k)
+			);
+		}
+		// And it is a real difference, not two names for the same string.
+		expect(withDonor(byId.get('h1')!)).not.toBe(without(byId.get('h1')!));
+	});
+
+	it('gives a repeated word the donor at its OWN position', () => {
+		// The case that decides whether this is an alignment or the
+		// spelling-keyed map E.31 §1.5 rejected. The singer corrects the
+		// SECOND последний only; the first must be untouched.
+		const parsed = scoreOf([...wordEvents('p'), ...wordEvents('q')]);
+		const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+		const donor = processText('последний последний', {
+			userStressOverrides: overrideAt('0-1', 0)
+		});
+		expect(donor[0].words).toHaveLength(2);
+		const ipa = buildUnderlayResolvers(parsed, 1, { transcribedLines: donor }).ipa;
+
+		expect(ipa(byId.get('p1')!)).toBe(sylIpaOf(donor[0].words[0], 0));
+		expect(ipa(byId.get('q1')!)).toBe(sylIpaOf(donor[0].words[1], 0));
+		// The two occurrences must NOT print alike: the correction landed on
+		// one of them. A rule that keyed by spelling would fail here.
+		expect(ipa(byId.get('p1')!)).not.toBe(ipa(byId.get('q1')!));
+	});
+
+	it('falls back per word where the singer never typed that word', () => {
+		// The score sings two words; the poem holds only the second. Path C's
+		// per-word fallback, not Path A's blank remainder.
+		const parsed = scoreOf([
+			note('k1', { text: 'тьма', type: 'whole' }),
+			...wordEvents('m')
+		]);
+		const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+		const ipa = buildUnderlayResolvers(parsed, 1, {
+			transcribedLines: processText('последний')
+		}).ipa;
+		// The unpaired word still prints, from Fit's own run of the pipeline.
+		expect(ipa(byId.get('k1')!)).toBe(expectedSyllableIpa('тьма последний', 0, 0));
+		// The paired one prints from the poem's run.
+		expect(ipa(byId.get('m1')!)).toBe(sylIpaOf(plainLines[0].words[0], 0));
+	});
+
+	it('is unchanged from the pre-N.10 page when nothing has been transcribed', () => {
+		const parsed = scoreOf(wordEvents('u'));
+		const before = buildUnderlayResolvers(parsed).ipa;
+		for (const opts of [{ transcribedLines: [] }, {}]) {
+			const after = buildUnderlayResolvers(parsed, 1, opts).ipa;
+			for (const ev of parsed.vocalLine) {
+				expect(after(ev), `event ${ev.id}`).toBe(before(ev));
+			}
+		}
 	});
 });

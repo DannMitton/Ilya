@@ -1024,7 +1024,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     letter page with the Paper system's header and footer. The
 			     wizard in the drawer publishes the active voice's readings
 			     and name into the state above. -->
+			<!-- N.10 (Dann, 7 August): Fit consumes Transcription's output.
+			     `lines` is passed RAW, not `effectiveLines` — the Fit resolver
+			     applies its own open syllabification, so the display view would
+			     be sliced twice. -->
 			<VoiceProfilePane
+				transcribedLines={lines}
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}
 				characteristics={shaneCharacteristics}

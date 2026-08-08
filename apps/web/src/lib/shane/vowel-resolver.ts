@@ -22,17 +22,33 @@
  *
  * 2. TRANSCRIPTION. The reconstructed words are joined into one line and
  *    fed through the full `processText` pipeline — stress lookup,
- *    clitics, cross-word assimilation — not a reduced path, so the IPA
- *    is exactly what Ilya's Transcription tab would print. The
+ *    clitics, cross-word assimilation — not a reduced path. The
  *    architectural guardrail stands: this module imports the pipeline,
  *    never @ilya/phonology directly.
  *
- * 3. ALIGNMENT. Score words and pipeline words are walked in parallel and
- *    matched on their cleaned Cyrillic. One divergence class is handled:
- *    the pipeline's hyphenated-particle expansion ("велит-ли" becomes two
- *    tokens), matched by joining two pipeline words. Any other mismatch
- *    stops the mapping from that word onward — a partial honest overlay
- *    beats a misaligned one.
+ *    N.10 CORRECTS A CLAIM THAT USED TO SIT HERE. This comment said the IPA
+ *    "is exactly what Ilya's Transcription tab would print." That was true
+ *    when written, and the override feature made it false: this call passes
+ *    no `ProcessTextOptions`, so it sees none of the singer's stress
+ *    overrides and none of their ё toggles (E.31 §1.2). It is now the
+ *    FALLBACK run. Where the singer has transcribed the same word, their
+ *    result is used instead — see move 3 — and only there do the two
+ *    surfaces agree by construction rather than by luck.
+ *
+ * 3. ALIGNMENT, in two independent passes.
+ *
+ *    Score words against THIS module's own pipeline words: walked in
+ *    parallel and matched on their cleaned Cyrillic. One divergence class
+ *    is handled, the pipeline's hyphenated-particle expansion ("велит-ли"
+ *    becomes two tokens), matched by joining two pipeline words. A mismatch
+ *    latches this walk off, because its index is meaningless afterwards.
+ *
+ *    Score words against the SINGER'S transcribed words (N.10, Dann's
+ *    ruling of 7 August): a longest common subsequence over the cleaned
+ *    forms, in `underlay-donor.ts`. A paired word is read from the singer's
+ *    transcription, overrides included; an unpaired one falls back to the
+ *    first pass; a word neither pass supplies is omitted and the walk
+ *    continues. Fail-soft per word, which is Path C of E.31 §1.5.
  *
  * 4. VOWEL EXTRACTION. The k-th score syllable of a word maps to the
  *    engine's syllable k; its vowel is the single vowel-typed character
@@ -72,6 +88,7 @@
 
 import { processText } from '$lib/pipeline';
 import { openSyllabify } from '$lib/syllable-utils';
+import { flattenTranscribedWords, matchDonors } from './underlay-donor';
 
 /**
  * The IPA primary-stress mark, U+02C8. The engine's own symbol, declared at
@@ -81,7 +98,7 @@ import { openSyllabify } from '$lib/syllable-utils';
  */
 const STRESS_MARK = 'ˈ';
 import type { SyllableData } from '@ilya/phonology';
-import type { WordStackData } from '$lib/types';
+import type { LineData, WordStackData } from '$lib/types';
 import type { ParsedScore, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
 
 /** The ten Russian sung vowels (engine/types.ts `Vowel`), as a lookup set. */
@@ -318,7 +335,20 @@ export interface UnderlayResolvers {
 export function buildUnderlayResolvers(
 	parsed: ParsedScore,
 	verseNumber = 1,
-	options: { openSyllabification?: boolean } = {},
+	options: {
+		openSyllabification?: boolean;
+		/**
+		 * N.10: the singer's own transcription, `lines` from `+page.svelte`.
+		 *
+		 * Passed RAW, never `effectiveLines`: that view has already had open
+		 * syllabification and the per-word boundary overrides applied for
+		 * Transcribe's display, and this builder applies its own open
+		 * syllabification below (`syllablesOf`), so it would be sliced twice.
+		 * Absent means no donor pass runs at all, which is the pre-N.10
+		 * behaviour exactly.
+		 */
+		transcribedLines?: readonly LineData[];
+	} = {},
 ): UnderlayResolvers {
 	const byEventVowel = new Map<string, string>();
 	const byEventIpa = new Map<string, string>();
@@ -361,27 +391,62 @@ export function buildUnderlayResolvers(
 			pipelineWords = [];
 		}
 
+		// N.10: one donor slot per score word, null where the singer has not
+		// transcribed that word. Empty when no transcription was passed, so
+		// every word takes the fallback and the page is what it was before.
+		const donorWords = options.transcribedLines
+			? flattenTranscribedWords(options.transcribedLines)
+			: [];
+		const donorFor =
+			donorWords.length > 0
+				? matchDonors(
+						scoreWords.map((w) => w.clean),
+						donorWords.map((w) => cleanForAlignment(w.cleanWord)),
+					)
+				: [];
+
 		let j = 0;
-		for (const sw of scoreWords) {
+		// Once the fallback walk loses sync its `j` means nothing, so it is
+		// latched off rather than allowed to re-sync at a wrong offset and
+		// print a confident wrong syllable.
+		let localLost = false;
+		for (let swIdx = 0; swIdx < scoreWords.length; swIdx++) {
+			const sw = scoreWords[swIdx];
 			// Match this score word to one pipeline word, or to two when the
 			// pipeline split a hyphenated particle.
 			let matched: WordStackData[] | null = null;
-			const one = pipelineWords[j];
-			if (one && cleanForAlignment(one.cleanWord) === sw.clean) {
-				matched = [one];
-				j += 1;
-			} else {
-				const two = pipelineWords[j + 1];
-				if (
-					one &&
-					two &&
-					cleanForAlignment(one.cleanWord + two.cleanWord) === sw.clean
-				) {
-					matched = [one, two];
-					j += 2;
+			if (!localLost) {
+				const one = pipelineWords[j];
+				if (one && cleanForAlignment(one.cleanWord) === sw.clean) {
+					matched = [one];
+					j += 1;
+				} else {
+					const two = pipelineWords[j + 1];
+					if (
+						one &&
+						two &&
+						cleanForAlignment(one.cleanWord + two.cleanWord) === sw.clean
+					) {
+						matched = [one, two];
+						j += 2;
+					}
 				}
+				if (!matched) localLost = true;
 			}
-			if (!matched) break; // alignment lost: stop mapping, never guess
+			// N.10, Path C (E.31 §1.5). Where the singer has transcribed this
+			// word, THEIR transcription wins: `pipeline.ts:270-277` writes the
+			// override onto the pre-transcribe word BEFORE the engine runs at
+			// `:288`, so the donor carries the correction in its stress flag and
+			// in its reduced vowels, not merely as a mark. Where they have not,
+			// the fallback run stands for that word alone.
+			const donorIdx = donorFor[swIdx];
+			if (donorIdx !== undefined && donorIdx !== null) {
+				matched = [donorWords[donorIdx]];
+			}
+			// Fail-soft per word: nothing honest to print HERE, but a later word
+			// the singer did transcribe still resolves. Path A blanked the rest
+			// of the page from this point and was rejected for it.
+			if (!matched) continue;
 
 			// The word's syllables, concatenated across a particle split.
 			//
