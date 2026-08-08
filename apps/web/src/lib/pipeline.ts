@@ -29,6 +29,7 @@ import {
   addStressMarkToCyrillic,
   lookupFullEntry,
   normalizePoetic,
+  modernisePreReform,
   restoreCasing,
 } from '@ilya/dictionary';
 import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dictionary';
@@ -109,6 +110,18 @@ interface PreTranscribeWord {
   isHomograph: boolean;
   originalInput: string | null;
   dictionaryForm: string | null;
+  /**
+   * The spelling the engraver set, when N.12 modernised a pre-1918 form at
+   * intake; null otherwise. NOT for display: the page prints the modernised
+   * form. This retains the score's witness so the change is recoverable, and it
+   * is the homograph disambiguator the reform destroyed, because миръ and міръ
+   * both print мир today. Consuming it for the homograph pick is NOT built.
+   *
+   * Deliberately a field of its own rather than a second use of `originalInput`,
+   * which belongs to ё restoration. A word can be both, and one field cannot
+   * carry two reasons.
+   */
+  preReformSource: string | null;
   yoSource: string | null;
   hasYo: boolean;
   rightBoundary: 'hard' | 'soft' | 'clitic';
@@ -390,7 +403,35 @@ export function processText(
 
 function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
   // Normalize NFC so precomposed ё is preserved, then strip combining acutes
-  const word = rawWord.normalize('NFC').replace(/\u0301/g, '');
+  const rawNormalized = rawWord.normalize('NFC').replace(/\u0301/g, '');
+
+  // ── N.12: INTAKE MODERNISATION ──────────────────────────────────
+  // Dann ruled on 2026-08-08 that a pre-1918 spelling is modernised HERE, at the
+  // top, before anything downstream sees the word. One string then serves all
+  // four jobs, and each is correct for the first time:
+  //
+  //   DISPLAY. Fit and Transcribe print дети. This keeps the promise Ilya already
+  //   makes at `GuideContent.svelte:291`, "It automatically updates and normalises
+  //   spelling", and the instruction its own Learn table gives the singer at
+  //   `LearnContent.svelte:2124-2127`, "Substitute its modern counterpart."
+  //
+  //   TRANSCRIPTION. `cleanWord` below is what reaches `GraysonEngine.transcribe`,
+  //   whose grapheme inventory (`engine.ts:232-233`) holds NO pre-reform letter
+  //   and silently DELETES what it does not recognise. Measured in E.33: дѣти as
+  //   printed gives `ˈttʲi`, because dropping ѣ leaves д beside т and the д
+  //   assimilates. As дети it gives `ˈdʲetʲi`.
+  //
+  //   LOOKUP. The dictionary holds 12,119 pre-reform headwords, of which 2,756
+  //   carry a stress index disagreeing with their modern twin and 926 mark a
+  //   content word unstressed at -1. Modernising first reads the modern entry
+  //   instead. Census: `claude/sonnet-memo-e33-pre-reform-dictionary-census_2026-08-08.md`.
+  //
+  //   PROVENANCE. `preReformSource` retains what the engraver set, so the change
+  //   is quiet rather than invisible.
+  const modernisedForm = modernisePreReform(rawNormalized);
+  const word = modernisedForm ?? rawNormalized;
+  const preReformSource = modernisedForm !== null ? rawNormalized : null;
+
   // Strip guillemets and trailing hyphens for dictionary lookups only; word retains them for display
   const bareWord = word.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
 
@@ -400,13 +441,31 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
 
   let lookup = GraysonEngine.lookupStress(bareWord);
 
-  // Poetic normalization fallback: if direct lookup misses,
-  // try soft-sign contraction rules (e.g., восстанье → восстание)
+  // Normalisation fallback, tried ONLY when the direct lookup above misses.
+  // That ordering is the safety property the whole design rests on: a word
+  // that is already modern resolves before any rule here can touch it.
+  //
+  // ONE normaliser remains here. N.12's pre-reform modernisation moved to intake
+  // at the top of this function on Dann's ruling of 2026-08-08, so `bareWord` is
+  // already modern by the time we arrive and a pre-reform candidate could never
+  // differ from it. What is left is `normalizePoetic`, which undoes soft-sign
+  // contractions (восстанье → восстание).
+  //
+  // The two are no longer siblings, and the asymmetry is why. A poetic
+  // contraction is a spelling modern Russian actually uses, so the engine reads it
+  // and the printed form is kept: measured in E.33, восстанье transcribes to
+  // `vɑssˈtɑɲjɪ`, correct for what is printed, and only the LOOKUP needs
+  // восстание. A pre-reform letter is a spelling Russian abandoned and the engine
+  // has never heard of it, so only that one has its display changed.
+  //
+  // Every candidate is only a PROPOSAL. It becomes the answer solely by hitting
+  // the 943,096-entry dictionary, which is what stops a rule from overreaching
+  // onto a modern word that merely looks contracted.
   let normalizedToForm: string | null = null;
   if (!lookup) {
     const cleanForNormalize = bareWord.normalize('NFC').replace(/\u0301/g, '').replace(/[.,!?;:"""''–—]/g, '').toLowerCase();
-    const candidates = normalizePoetic(cleanForNormalize);
-    for (const candidate of candidates) {
+
+    for (const candidate of normalizePoetic(cleanForNormalize)) {
       const normalized = GraysonEngine.lookupStress(candidate);
       if (normalized) {
         lookup = normalized;
@@ -524,6 +583,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
     isHomograph: lookup ? lookup.isHomograph ?? false : false,
     originalInput: wasYoRestored ? rawWord : null,
     dictionaryForm,
+    preReformSource,
     yoSource,
     hasYo: yoSyllable !== -1,
     // Placeholder until autoDetectBoundaries() runs immediately after, in Step 2

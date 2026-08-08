@@ -24,6 +24,14 @@ export {
   restoreCasing,
 } from './poetic-normalizer';
 
+// Pre-1918 orthography normalisation (N.12)
+// `modernisePreReform` is the intake entry point and returns one form or null;
+// `normalizePreReform` is the candidate-list form and delegates to it.
+export {
+  modernisePreReform,
+  normalizePreReform,
+} from './pre-reform-normalizer';
+
 // Curated glosses
 export { CURATED_GLOSSES } from './curated-glosses';
 
