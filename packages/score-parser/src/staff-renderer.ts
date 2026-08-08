@@ -80,18 +80,41 @@ export const WITHHELD_SIGLA = {
 	h: 751,
 	path: 'M426.5 348.1c-53.8 4.4-96.8 20.7-133.1 50.3-29.3 23.9-51.8 62.6-59.9 103.1-2.1 10.7-4.5 30.4-4.5 37.7v2.8h125.9l.5-3.3c.3-1.7 1-6.6 1.6-10.7 2.7-18.4 10.2-33.1 23.5-46.6 16.8-16.8 34.3-24.3 61.2-26 38.3-2.5 72.4 14.5 86.7 43.1 5.9 11.7 7.1 17.9 7 35.5 0 16.9-1.7 25.8-6.8 37.4-7.6 17.3-25.5 34.2-57.4 54.6-41.3 26.4-54.8 36.7-66.3 50.6-25.5 30.8-32.8 56.2-31.3 108.6l.7 22.8h123.4l.6-18.8c.6-21.6 2.2-29.7 8.7-42.8 4.6-9.4 14.3-21.1 25.1-30.2 7.7-6.6 31.6-22.8 51-34.6 50.9-31.1 79.7-68 89.8-115.1 8.2-38 3.5-81.4-12.4-114-23.1-47.4-71.3-82.9-132.5-97.4-29.8-7.1-68.2-9.7-101.5-7m2 538c-18.7 1.7-38 12-50 26.7-11.4 13.7-15.9 26.8-15.9 45.7 0 8.3.6 14 1.8 18.5 6.2 22.6 23.2 41.1 45.5 49.4 9.8 3.6 15.9 4.6 29 4.6 13.8 0 24.8-2.6 36.2-8.6 38.6-20.3 51-69.7 26.3-105-11.7-16.7-32.4-29.1-51.4-30.9-3.6-.3-8.1-.7-10-.9s-7.1 0-11.5.5',
 	colour: '#8E7E9B',
-	/** Drawn height on the page, a little under the IPA line's cap height. */
-	heightPx: 11,
+
+	// THE RING, and it is the sigla's graphic identity rather than decoration.
+	// Dann, 8 August: "Our siglas are enclosed in a circle. This is a visual
+	// identifier." Measured off the two places that already draw one, which
+	// agree exactly: `WordStack.svelte:326-338`, the inline mark on Transcribe's
+	// page, and `PageFooter.svelte`'s `.legend-circle`. Both are a 16px circle
+	// with a 1px ring around a 9px glyph.
+	//
+	// SCALED TO 75 PERCENT HERE, ratio preserved, because 16px does not fit this
+	// page: `cyrY = ipaY + 16`, so a full-size ring centred on the IPA line
+	// would sit on the Cyrillic beneath it. 16:1:9 becomes 12:0.75:6.75.
+	/** Outer diameter of the ring. 16 x 0.75. */
+	diameterPx: 12,
+	/** Ring thickness. 1 x 0.75. */
+	ringPx: 0.75,
+	/** Glyph height inside the ring. 9 x 0.75, holding the 9:16 proportion. */
+	glyphPx: 6.75,
+	/**
+	 * How far the ring's centre sits above the IPA baseline, so the mark reads
+	 * as occupying the same optical band as the transcription it stands in for
+	 * rather than hanging below it. Leaves the ring's foot about 4.5px clear of
+	 * the Cyrillic line's cap.
+	 */
+	baselineLiftPx: 3.5,
 } as const;
 
 /**
- * The sigla's drawn width, derived rather than stated so it cannot fall out of
- * step with `heightPx`. About 7.2px, which is narrower than the `[?]` it
- * replaces (12.72px measured) and about the width of a one-letter Cyrillic
- * syllable, so it asks less of the spacing engine than the first version did.
+ * The ink width the spacing engine must reserve: the ring, not the glyph.
+ *
+ * 12px, which is within a whisker of the 12.72px the typeset `[?]` measured,
+ * so the column spacing Dann walked on 8 August is unchanged by the switch to
+ * a sigla. Still wider than a one-letter Cyrillic syllable (`я`, 7.31px),
+ * which is why it is fed to `underlayHalfWidth` at all.
  */
-export const WITHHELD_SIGLA_WIDTH_PX =
-	(WITHHELD_SIGLA.w * WITHHELD_SIGLA.heightPx) / WITHHELD_SIGLA.h;
+export const WITHHELD_SIGLA_WIDTH_PX = WITHHELD_SIGLA.diameterPx;
 
 /**
  * Underlay type sizes. Both are still absolute px that do NOT scale with
@@ -1206,14 +1229,26 @@ export function renderAnalyzedStaff(
     // `data-withheld` with the event id, matching `data-hyphen` and
     // `data-extender`, so the mark is addressable in the DOM.
     else if (u.withheld) {
-      const sc = WITHHELD_SIGLA.heightPx / WITHHELD_SIGLA.h;
+      const g = WITHHELD_SIGLA;
+      const r = g.diameterPx / 2;
       // Melisma openings are left-anchored (Gould r5) and everything else is
       // centred, so the sigla follows whichever anchor its column uses.
-      const half = u.align === 'start' ? 0 : (sc * WITHHELD_SIGLA.w) / 2;
-      const tx = round2(u.x - sc * WITHHELD_SIGLA.x - half);
-      const ty = round2(ipaY - sc * (WITHHELD_SIGLA.y + WITHHELD_SIGLA.h));
+      const cx = round2(u.align === 'start' ? u.x + r : u.x);
+      const cy = round2(ipaY - g.baselineLiftPx);
+      // The glyph is centred in the ring, not baselined, because the ring is
+      // now what sits on the line.
+      const sc = g.glyphPx / g.h;
+      const tx = round2(cx - sc * (g.x + g.w / 2));
+      const ty = round2(cy - sc * (g.y + g.h / 2));
+      // The stroke straddles the path, so the drawn radius is pulled in by
+      // half the ring to keep the OUTER diameter at `diameterPx`, which is
+      // what `WITHHELD_SIGLA_WIDTH_PX` promised the spacing engine.
+      const ringR = round2(r - g.ringPx / 2);
       parts.push(
-        `<g transform="translate(${tx} ${ty}) scale(${sc.toFixed(5)})" fill="${WITHHELD_SIGLA.colour}" data-withheld="${esc(u.evId)}"><path d="${WITHHELD_SIGLA.path}"/></g>`,
+        `<g data-withheld="${esc(u.evId)}">` +
+          `<circle cx="${cx}" cy="${cy}" r="${ringR}" fill="none" stroke="${g.colour}" stroke-width="${g.ringPx}"/>` +
+          `<g transform="translate(${tx} ${ty}) scale(${sc.toFixed(5)})" fill="${g.colour}"><path d="${g.path}"/></g>` +
+        `</g>`,
       );
     }
   }
