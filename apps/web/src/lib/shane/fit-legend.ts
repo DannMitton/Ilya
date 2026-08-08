@@ -78,6 +78,30 @@ const FIT_LEGEND_COPY: Record<FitLegendType, Record<Language, string>> = {
 };
 
 /**
+ * N.10b: the withheld-syllable entry, and it is NOT one of the four above.
+ *
+ * The four are states of the singer's VOICE, derived from their formants.
+ * This one is a state of the SCORE: Ilya declined to transcribe a syllable
+ * because the engraver's division and the engine's disagree there. It is
+ * kept out of `FitLegendType` and out of `fitLegendTypes` so that function
+ * keeps its single subject, and it is appended by `buildFitLegend` on a flag
+ * the caller supplies from the render, which is the only place that knows.
+ *
+ * The label quotes the mark literally, because the Fit legend draws no icon
+ * circles (see `buildFitLegend`) and a legend that names a glyph it does not
+ * show would send the reader back to the page to guess which one it meant.
+ * The mark itself is `WITHHELD_MARK` in `staff-renderer.ts`; if that string
+ * changes, this copy changes with it.
+ *
+ * PLACEHOLDER copy, flagged for Dann, on the same footing as the four above.
+ * The French is mine and needs his eye more than the English does.
+ */
+const FIT_WITHHELD_COPY: Record<Language, string> = {
+	en: '[?] The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
+	fr: '[?] La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
+};
+
+/**
  * Which legend entries does this profile actually warrant?
  *
  * Split out from `buildFitLegend` so the decision is reachable by `vitest`
@@ -115,12 +139,26 @@ export function fitLegendTypes(
  */
 export function buildFitLegend(
 	formants: Partial<Record<Vowel, CalibratedFormant>>,
-	language: Language
+	language: Language,
+	options: { withheldSyllables?: boolean } = {}
 ): LegendItem[] {
-	return fitLegendTypes(formants).map((type) => ({
+	const items: LegendItem[] = fitLegendTypes(formants).map((type) => ({
 		type,
 		icon: '',
 		label: FIT_LEGEND_COPY[type][language],
 		textOnly: true
 	}));
+	// N.10b. Last, and emitted only when the page actually carries the mark,
+	// on the same discipline as everything above it: a legend that lists a
+	// state the page does not have is an explanation of nothing. It is last
+	// because it is the only entry that is not about the singer's voice.
+	if (options.withheldSyllables) {
+		items.push({
+			type: 'fit-withheld',
+			icon: '',
+			label: FIT_WITHHELD_COPY[language],
+			textOnly: true
+		});
+	}
+	return items;
 }

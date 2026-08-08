@@ -44,7 +44,7 @@ export {
   type TempoTier,
   type TempoTermResolution,
 } from './tempo-terms';
-export { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
+export { renderAnalyzedStaff, WITHHELD_MARK, type StaffRenderOptions } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';
 export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
 export { scoreInPerformanceOrder, type PerformanceOrderScore } from './performance-order';

@@ -236,8 +236,13 @@
 	 * where a glossary belongs. Deliberately NOT the same placement rule as
 	 * `broadNote`, which repeats because it qualifies the analysis printed on
 	 * each sheet; this qualifies the calibration behind all of them.
+	 * DECLARED BELOW, beside `withheldIpa`, not here: N.10b gave this a
+	 * dependency on the render, and `withheldIpa` cannot be computed until
+	 * `readingScore` and the resolvers exist. A `$derived` reading a `const`
+	 * declared later is a temporal dead zone, and `svelte-check` does not see
+	 * one.
 	 */
-	let fitLegend = $derived(buildFitLegend(formants, language));
+
 
 	// ── Page geometry, mirrored from TitlePage.svelte ────────────────────
 	// The header is measured (its height varies with wrapping), the footer
@@ -377,6 +382,24 @@
 		}
 		return Object.keys(out).length > 0 ? out : undefined;
 	});
+	// N.10b: the onsets the resolver declined to transcribe (Dann's ruling of
+	// 7 August, E.29 §5.1 ruled A). Undefined when the page carries none, so
+	// the renderer and the legend both take their existing no-op path and an
+	// unaffected score is byte-for-byte what it was.
+	const withheldIpa = $derived.by(() => {
+		if (!readingScore || !underlayResolvers) return undefined;
+		const out = new Set<string>();
+		for (const ev of readingScore.vocalLine) {
+			if (underlayResolvers.withheld(ev)) out.add(ev.id);
+		}
+		return out.size > 0 ? out : undefined;
+	});
+
+	// The Fit legend (item 1.6). Declared here rather than beside its doc
+	// comment above, because N.10b's entry depends on `withheldIpa`.
+	let fitLegend = $derived(
+		buildFitLegend(formants, language, { withheldSyllables: !!withheldIpa })
+	);
 	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
 	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
 	// `buildWatchList` reads it below. It leaves the pure engine content-free and
@@ -527,6 +550,7 @@
 					systemGap: engraving.systemGap,
 					leftMargin: engraving.leftMargin,
 					...(ipaPreview ? { ipaPreview } : {}),
+					...(withheldIpa ? { withheldIpa } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,

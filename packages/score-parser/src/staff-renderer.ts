@@ -49,6 +49,19 @@ import { chooseClef, type RenderClef } from './clef-select';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 
 /**
+ * N.10b: the mark for a syllable the resolver declined to transcribe.
+ *
+ * Bracketed, on the same convention as the phonation break's `[#]` already
+ * drawn on this line, so a reader meets one rule rather than two: square
+ * brackets on the IPA line mean "this is a marker, not a transcription."
+ *
+ * PLACEHOLDER, chosen by Opus and flagged for Dann, on the same footing as
+ * `fit-legend.ts`'s copy. Three glyphs was the constraint, because the mark
+ * sits in a column sized for one syllable.
+ */
+export const WITHHELD_MARK = '[?]';
+
+/**
  * Underlay type sizes. Both are still absolute px that do NOT scale with
  * `lineGap`, which `claude/e18-thread-opener_v1_2026-07-29.md` §3.2 recorded
  * on 29 July as one of eight such sites; the correct value against Gould r12
@@ -93,10 +106,29 @@ export interface StaffRenderOptions {
    * own placeholder strings for the font lab instead. Not to be confused
    * with `SyllableInfo.verses`, which carries real sung text for OTHER
    * verses (§A.86) and must never be read as an IPA source (the two were
-   * conflated here until a 2026-07-17 fix). NOT YET WIRED to a live
-   * `VoiceProfilePane` render call; today only `renderDemo` populates it.
+   * conflated here until a 2026-07-17 fix). WIRED since N.5:
+   * `VoiceProfilePane.svelte` passes it into `paginateScore`, and
+   * `renderDemo` populates it too. This comment claimed the opposite until
+   * N.10 corrected it on 8 August 2026.
    */
   ipaPreview?: Record<string, string>;
+  /**
+   * N.10b: the events whose syllable the resolver DECLINED to transcribe.
+   *
+   * Dann's ruling of 7 August, E.29 §5.1 ruled A: a withheld syllable
+   * carries a mark at the syllable itself. `vowel-resolver.ts` abstains
+   * where the score's per-note syllable count and the engine's per-word
+   * count disagree, and that abstention is correct. What it was not, until
+   * now, is visible: the syllable keeps its Cyrillic and simply has nothing
+   * above it, which is why `RULE-the-page-walk.md` needed an item to catch
+   * it and why Dann found it with a checklist rather than with his eye.
+   *
+   * The mark is drawn only where no IPA reached the column by any path, so
+   * it can never displace a transcription, and it is fed into
+   * `underlayHalfWidth` below, because ink the spacing engine cannot see is
+   * ink that collides.
+   */
+  withheldIpa?: ReadonlySet<string>;
   /**
    * True only for the system that ends the PIECE. Gould r96 gives the
    * beam-thick-plus-thin final barline to the end of a movement, and r224
@@ -126,7 +158,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'finalBarline' | 'targetWidth'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'finalBarline' | 'targetWidth'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -239,9 +271,17 @@ interface Placed {
  * here, because the columns following a melisma opening carry no syllable at
  * all by the data model, so there is nothing for it to collide with.
  */
-function underlayHalfWidth(ev: VocalLineEvent, ipaPreview?: Record<string, string>): number {
+function underlayHalfWidth(
+  ev: VocalLineEvent,
+  ipaPreview?: Record<string, string>,
+  withheldIpa?: ReadonlySet<string>,
+): number {
   const cyr = ev.syllable?.text ?? '';
-  const ipa = ipaPreview?.[ev.id] ?? '';
+  // N.10b: the withheld mark occupies the IPA line's slot, so it is text this
+  // function must measure exactly as it measures a transcription. It is
+  // narrower than most Cyrillic syllables and the max() below will usually
+  // ignore it; under a one-letter syllable it will not.
+  const ipa = ipaPreview?.[ev.id] ?? (withheldIpa?.has(ev.id) ? WITHHELD_MARK : '');
   if (!cyr && !ipa) return 0;
   return Math.max(
     cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_PX) : 0,
@@ -311,8 +351,10 @@ export function columnAdvance(
   // there, and half a stave-space put the last syllable hard against it
   // (Dann at the browser, 2026-08-06, on [nuf]).
   const textNeed =
-    underlayHalfWidth(prevEv, options.ipaPreview) +
-    (ev ? underlayHalfWidth(ev, options.ipaPreview) + lineGap * 0.5 : lineGap);
+    underlayHalfWidth(prevEv, options.ipaPreview, options.withheldIpa) +
+    (ev
+      ? underlayHalfWidth(ev, options.ipaPreview, options.withheldIpa) + lineGap * 0.5
+      : lineGap);
   return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed);
 }
 
@@ -747,7 +789,7 @@ export function renderAnalyzedStaff(
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
   // are collected during the draw and placed below the lowest ink of the
   // system, never at a fixed offset that a down-stem beam can crash into.
-  const underlay: Array<{ x: number; cyr: string; ipa: string; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
+  const underlay: Array<{ x: number; cyr: string; ipa: string; withheld: boolean; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
   // Melisma detection: the data model encodes a melisma by ABSENCE of
   // syllable on continuation notes, so a syllabled note followed by an
   // unsyllabled note starts one. Its syllable left-aligns at the first
@@ -998,12 +1040,18 @@ export function renderAnalyzedStaff(
     // syllable transcription, so it reads as sparser wherever it is taken.
     const cyr = syl?.text ?? '';
     const ipa = options.ipaPreview?.[ev.id] ?? a?.vowel ?? '';
+    // N.10b. Withheld ONLY where nothing supplied ink, so the mark can never
+    // displace a transcription, not even the degraded single-vowel one. A
+    // melisma continuation carries no Cyrillic and is not withheld: it is
+    // correctly silent, which is the distinction the mark exists to draw.
+    const withheld = !ipa && !!cyr && options.withheldIpa?.has(ev.id) === true;
     if (cyr || ipa) {
       const isMelisma = melismaStart.has(ev.id);
       underlay.push({
         x: isMelisma ? round2(nx - headHalfW) : nx,
         cyr,
         ipa,
+        withheld,
         align: isMelisma ? 'start' : 'middle',
         sylType: syl?.type,
         evId: ev.id,
@@ -1120,6 +1168,13 @@ export function renderAnalyzedStaff(
     // single-storey, destroying the bright-a / dark-a contrast that sung
     // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
     if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
+    // N.10b: the withheld mark, in the IPA line's slot, in FULL ink on the
+    // same footing as the phonation break's [#] below. Full ink because the
+    // entire defect it answers is that the abstention was invisible; setting
+    // it in the transcription's grey would restate the problem quietly.
+    // Tagged `data-withheld` with the event id, matching `data-hyphen` and
+    // `data-extender`, so the mark is addressable in the DOM.
+    else if (u.withheld) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif" data-withheld="${esc(u.evId)}">${WITHHELD_MARK}</text>`);
   }
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {

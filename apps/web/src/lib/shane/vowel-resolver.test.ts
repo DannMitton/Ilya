@@ -509,3 +509,72 @@ describe('buildUnderlayResolvers: the singer’s overrides reach the score page'
 		}
 	});
 });
+
+// ── N.10b: the withheld mark ─────────────────────────────────────────
+//
+// Dann's ruling of 7 August, E.29 §5.1 ruled A: a syllable Fit declined to
+// transcribe says so at the syllable. The abstention itself is unchanged and
+// the tests above still pin it; what is new is that the resolver now reports
+// it. The discrimination that matters is the last test in this block: an
+// absent IPA and a WITHHELD IPA are different facts, and a melisma
+// continuation is the first without being the second.
+
+describe('buildUnderlayResolvers: withheld syllables report themselves', () => {
+	it('reports the count divergence E.29 §5.1 asked about', () => {
+		// Two engine syllables on one note. Still omitted, now not silently.
+		const elided = scoreOf([note('w1', { text: 'горе', type: 'whole' })]);
+		const { ipa, withheld } = buildUnderlayResolvers(elided);
+		const ev = elided.vocalLine[0];
+		expect(ipa(ev)).toBeUndefined();
+		expect(withheld(ev)).toBe(true);
+	});
+
+	it('withholds nothing on a word that resolves', () => {
+		// The control. If this ever went true the mark would print under every
+		// syllable on every page, which is the failure mode worth guarding.
+		const parsed = scoreOf([
+			note('x1', { text: 'по', type: 'start' }),
+			note('x2', { text: 'след', type: 'middle' }),
+			note('x3', { text: 'ний', type: 'end' })
+		]);
+		const { ipa, withheld } = buildUnderlayResolvers(parsed);
+		for (const ev of parsed.vocalLine) {
+			expect(ipa(ev), `event ${ev.id}`).toBeDefined();
+			expect(withheld(ev), `event ${ev.id}`).toBe(false);
+		}
+	});
+
+	it('marks the onset of each nucleus, and only the onset', () => {
+		// A withheld word sustained over a melisma marks the syllable, not the
+		// notes that continue it, so the page carries one mark per syllable.
+		const elided = scoreOf([
+			note('y1', { text: 'горе', type: 'whole' }),
+			note('y2') // melisma continuation on the same syllable
+		]);
+		const { withheld } = buildUnderlayResolvers(elided);
+		const byId = new Map(elided.vocalLine.map((e) => [e.id, e]));
+		expect(withheld(byId.get('y1')!)).toBe(true);
+		expect(withheld(byId.get('y2')!)).toBe(false);
+	});
+
+	it('does NOT withhold a melisma continuation, which is correctly silent', () => {
+		// THE DISCRIMINATION. On the demo score n19 and n20 carry no IPA and
+		// must carry no mark either: they are notes with no syllable of their
+		// own, and a mark there would claim a failure that did not happen.
+		// n18, their onset, resolves.
+		const parsed = demoScore();
+		const { ipa, withheld } = buildUnderlayResolvers(parsed);
+		const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
+		expect(ipa(byId.get('n18')!)).toBeDefined();
+		for (const id of ['n19', 'n20']) {
+			expect(ipa(byId.get(id)!), `event ${id}`).toBeUndefined();
+			expect(withheld(byId.get(id)!), `event ${id}`).toBe(false);
+		}
+	});
+
+	it('withholds nothing at all on a score with no lyrics', () => {
+		const parsed = scoreOf([note('z1'), note('z2'), rest('z3')]);
+		const { withheld } = buildUnderlayResolvers(parsed);
+		for (const ev of parsed.vocalLine) expect(withheld(ev)).toBe(false);
+	});
+});

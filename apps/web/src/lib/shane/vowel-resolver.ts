@@ -322,6 +322,19 @@ export interface UnderlayResolvers {
 	vowel: VowelResolver;
 	/** The full syllable IPA for display; present only at syllable onset. */
 	ipa: (event: VocalLineEvent) => string | undefined;
+	/**
+	 * N.10b: true at a syllable ONSET this builder declined to transcribe.
+	 *
+	 * Dann's ruling of 7 August, E.29 §5.1 ruled A. Every abstention in this
+	 * module is deliberate and every one of them was invisible: the syllable
+	 * keeps its Cyrillic and simply has nothing above it. This reports them
+	 * so the renderer can say so.
+	 *
+	 * FALSE on a melisma continuation note, which is correctly silent rather
+	 * than withheld, and false wherever `ipa` returned a string. The two are
+	 * mutually exclusive by construction.
+	 */
+	withheld: (event: VocalLineEvent) => boolean;
 }
 
 /**
@@ -352,6 +365,14 @@ export function buildUnderlayResolvers(
 ): UnderlayResolvers {
 	const byEventVowel = new Map<string, string>();
 	const byEventIpa = new Map<string, string>();
+	// N.10b: the onsets this builder declined to transcribe.
+	const withheldOnsets = new Set<string>();
+	/** Withhold every nucleus of a word, at its onset event. */
+	const withholdWord = (sw: ScoreWord): void => {
+		for (const slot of sw.slots) {
+			if (slot.length > 0) withheldOnsets.add(slot[0]);
+		}
+	};
 
 	// N.8: the singer's open-syllable preference, applied to the IPA line only.
 	//
@@ -445,8 +466,12 @@ export function buildUnderlayResolvers(
 			}
 			// Fail-soft per word: nothing honest to print HERE, but a later word
 			// the singer did transcribe still resolves. Path A blanked the rest
-			// of the page from this point and was rejected for it.
-			if (!matched) continue;
+			// of the page from this point and was rejected for it. N.10b: and it
+			// now says so at the syllable rather than leaving a blank.
+			if (!matched) {
+				withholdWord(sw);
+				continue;
+			}
 
 			// The word's syllables, concatenated across a particle split.
 			//
@@ -495,7 +520,13 @@ export function buildUnderlayResolvers(
 			// inputs, and today's reconstruction cannot yet tell them apart,
 			// so both honestly omit rather than guess which vowel governs the
 			// note (see the module doc comment).
-			if (sylOwners.length !== sw.slots.length) continue;
+			if (sylOwners.length !== sw.slots.length) {
+				// N.10b: this is the abstention E.29 §5.1 asked about by name, and
+				// the one Dann found on the Kabalevsky page with a checklist. It
+				// stays an abstention; it stops being a silent one.
+				withholdWord(sw);
+				continue;
+			}
 
 			for (let k = 0; k < sw.slots.length; k++) {
 				const owner = sylOwners[k];
@@ -521,10 +552,20 @@ export function buildUnderlayResolvers(
 				if (ipa !== undefined && encliticIpa && k === sw.slots.length - 1) {
 					ipa = ipa + encliticIpa;
 				}
-				if (ipa && slot.length > 0) {
-					// Onset only: the display IPA does not repeat under melisma
-					// continuation notes.
-					byEventIpa.set(slot[0], ipa);
+				if (slot.length > 0) {
+					if (ipa) {
+						// Onset only: the display IPA does not repeat under melisma
+						// continuation notes.
+						byEventIpa.set(slot[0], ipa);
+					} else {
+						// N.10b: the word aligned, and THIS syllable still produced
+						// nothing. `ipaOfSyllable` returns undefined only where the
+						// engine holds no syllable at that index, which should not
+						// happen after the count guard above; it is withheld rather
+						// than dropped so that if it ever does, the page says so
+						// instead of printing a gap nobody can account for.
+						withheldOnsets.add(slot[0]);
+					}
 				}
 			}
 		}
@@ -532,7 +573,8 @@ export function buildUnderlayResolvers(
 
 	return {
 		vowel: (event) => byEventVowel.get(event.id),
-		ipa: (event) => byEventIpa.get(event.id)
+		ipa: (event) => byEventIpa.get(event.id),
+		withheld: (event) => withheldOnsets.has(event.id)
 	};
 }
 

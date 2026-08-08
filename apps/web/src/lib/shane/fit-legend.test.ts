@@ -18,6 +18,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildFitLegend, fitLegendTypes, FIT_LEGEND_ORDER } from './fit-legend';
 import type { CalibratedFormant, Vowel } from './engine/types';
+import { WITHHELD_MARK } from '@ilya/score-parser';
 
 /** A reading with only the fields this legend reads; the rest is scaffolding. */
 function reading(
@@ -147,5 +148,56 @@ describe('the built items carry what the footer needs', () => {
 			expect(built).toContain(type);
 		}
 		expect(built).toEqual([...FIT_LEGEND_ORDER]);
+	});
+});
+
+// ── N.10b: the withheld-syllable entry ───────────────────────────────
+//
+// Dann's ruling of 7 August, E.29 §5.1 ruled A. The contract these obey is
+// the one the four voice states already obey, applied to a fifth thing that
+// is not a voice state at all: emitted only when the page carries the mark,
+// last because it is the only entry not about the singer, and never allowed
+// to disturb the four when the flag is off.
+
+describe('the withheld-syllable entry (N.10b)', () => {
+	const captured: CalibratedFormant = {
+		reading: 'captured'
+	} as CalibratedFormant;
+
+	it('is absent when the page carries no withheld syllable', () => {
+		expect(buildFitLegend({}, 'en')).toEqual([]);
+		expect(buildFitLegend({}, 'en', {})).toEqual([]);
+		expect(buildFitLegend({}, 'en', { withheldSyllables: false })).toEqual([]);
+	});
+
+	it('is the whole legend on an uncalibrated page that withheld a syllable', () => {
+		// The two subjects are independent: a singer with no profile at all can
+		// still have a score whose division Ilya could not follow.
+		const built = buildFitLegend({}, 'en', { withheldSyllables: true });
+		expect(built).toHaveLength(1);
+		expect(built[0].type).toBe('fit-withheld');
+	});
+
+	it('sits last, after every voice state', () => {
+		const formants = { i: captured } as Partial<Record<Vowel, CalibratedFormant>>;
+		const built = buildFitLegend(formants, 'en', { withheldSyllables: true });
+		expect(built.length).toBeGreaterThan(1);
+		expect(built[built.length - 1].type).toBe('fit-withheld');
+		// And it did not displace the voice states, which is the control: the
+		// flag must add an entry, never rewrite the list.
+		expect(built.slice(0, -1)).toEqual(buildFitLegend(formants, 'en'));
+	});
+
+	it('quotes the mark in both languages, and draws no icon circle', () => {
+		// The Fit legend draws no circles (`buildFitLegend`'s own contract), so
+		// the label has to carry the glyph or the reader cannot match it to the
+		// page. Asserted against the renderer's exported constant, never
+		// against a string written here.
+		for (const language of ['en', 'fr'] as const) {
+			const item = buildFitLegend({}, language, { withheldSyllables: true })[0];
+			expect(item.textOnly).toBe(true);
+			expect(item.icon).toBe('');
+			expect(item.label).toContain(WITHHELD_MARK);
+		}
 	});
 });
