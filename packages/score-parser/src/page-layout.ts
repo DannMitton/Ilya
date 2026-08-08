@@ -136,6 +136,18 @@ function viewBoxOf(svg: string): { minY: number; width: number; height: number }
   return { minY: Number(m?.[1] ?? 0), width: Number(m?.[2] ?? 0), height: Number(m?.[3] ?? 0) };
 }
 
+/**
+ * The fill at or below which the piece's last system keeps its natural width
+ * (Dann's ruling, 8 August 2026). Above it the system justifies to the line.
+ *
+ * Exported so it is tunable in one place and visible to a test. The trade it
+ * encodes, stated so nobody has to rediscover it: the lower this number, the
+ * more short systems get stretched, and a system landing just above the limit
+ * takes the largest stretch on the page. At 0.75 a 76 percent system has every
+ * gap opened by roughly a third. Dann set it knowing that.
+ */
+export const LAST_SYSTEM_JUSTIFY_FILL = 0.75;
+
 /** Paginate an analysed score onto letter pages. */
 export function paginateScore(
   parsed: ParsedScore,
@@ -207,7 +219,7 @@ export function paginateScore(
     if (group.length > 0) pageGroups.push(group);
   }
 
-  // THE LAST SYSTEM OF THE PIECE IS NEVER STRETCHED TO THE MARGIN.
+  // THE LAST SYSTEM OF THE PIECE IS NOT STRETCHED WHEN IT FALLS SHORT ENOUGH.
   //
   // Dann's ruling, 8 August 2026, in his words: "a final system on the final
   // page of the contiguous musical notation that would not otherwise meet the
@@ -221,10 +233,28 @@ export function paginateScore(
   // and it was, on Kabalevsky Op. 52 No. 9 page 2, which is what prompted this.
   // The old rule survives as a special case of this one.
   //
-  // It carries NO fill threshold. The 40 percent figure belongs to C11's
-  // rebalance trigger ("rebalance so no page ends with a lone measure"), and
-  // the E.30 handover's summary welded the two together. The condition here is
-  // simply whether the system would otherwise reach the margin.
+  // THE THRESHOLD, Dann's ruling of 8 August: "a final system that is > 75
+  // percent full will fully justify to the right margin and space accordingly.
+  // So 75 percent is our limit for no justification, 76 percent justifies."
+  // At or below the limit the system keeps its natural width; above it, the
+  // stretch is small enough to be invisible and consistency wins.
+  //
+  // Measured on the case that prompted the whole rule: Kabalevsky Op. 52 No. 9
+  // page 2's last system is 229.58px against a 624px line, 36.8 percent, so it
+  // sits far below the limit. Read off the live DOM, 8 August 2026, not
+  // estimated.
+  //
+  // The 40 percent figure that used to attach here is NOT this number. It
+  // belongs to C11's rebalance trigger, "rebalance so no page ends with a lone
+  // measure", which is still unbuilt; the E.30 handover's summary welded the
+  // two together.
+  //
+  // ALONENESS SURVIVES AS A SEPARATE EXEMPTION, and deliberately. Ruling 9's
+  // stated reason was that "a system standing ALONE on the final page has
+  // nothing to be consistent with", and that reason is about company rather
+  // than about fill: an 80 percent system alone on a page has no neighbour to
+  // look ragged beside. So it is a union, not a replacement. One line to drop
+  // if Dann rules otherwise.
   //
   // Ruling 8 still binds everywhere else: every other system, final page or
   // not, is justified to the line.
@@ -242,9 +272,9 @@ export function paginateScore(
       { ...renderOptions, finalBarline: true },
     );
     const box = viewBoxOf(svg);
-    // Only when it falls short. A final system whose content genuinely fills
-    // the line, or overflows it, is left exactly as it was rendered.
-    if (box.width < innerWidth) {
+    const aloneOnFinalPage = lastGroup.length === 1 && pageGroups.length > 1;
+    const fallsShort = box.width < innerWidth;
+    if (fallsShort && (box.width <= innerWidth * LAST_SYSTEM_JUSTIFY_FILL || aloneOnFinalPage)) {
       const natural: SystemSlice = {
         ...lastSystem,
         svg,

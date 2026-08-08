@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore } from './overlay-engine';
 import { demoProfile, demoResolver, demoScore } from './demo-fixture';
-import { paginateScore, sliceScore, sliceWidth } from './page-layout';
+import { LAST_SYSTEM_JUSTIFY_FILL, paginateScore, sliceScore, sliceWidth } from './page-layout';
 
 function demo() {
   const parsed = demoScore();
@@ -68,6 +68,32 @@ describe('page layout: slicing', () => {
     for (const s of body) expect(s.svg).toContain('x2="500"');
     // And the exempt one does NOT, which is the whole point of the ruling.
     expect(last.svg).not.toContain('x2="500"');
+  });
+
+  it('justifies the last system above the fill limit and not below it', () => {
+    // Dann's ruling of 8 August: 75 percent is the limit for no justification,
+    // 76 percent justifies. BOTH branches are exercised here, because a test
+    // that only ever took the un-justified path would pass on the commit
+    // before the threshold existed and would therefore prove nothing.
+    //
+    // The line width is derived from the content rather than chosen, so the
+    // fill is known by construction: at pageWidth = natural / 0.95 the sole
+    // system is about 95 percent full, and at natural / 0.5 about 50 percent.
+    // pageHeight is huge so everything lands on one page and the aloneness
+    // exemption cannot fire and confuse the reading.
+    const { parsed: p, analyzed } = demo();
+    const natural = sliceWidth(p, 0, p.measures.length - 1);
+    const base = { pageHeight: 100000, marginLeft: 0, marginRight: 0 };
+
+    const wide = Math.ceil(natural / 0.95); // ~95% full: above the limit
+    const above = paginateScore(p, analyzed, { ...base, pageWidth: wide });
+    expect(above.systems).toHaveLength(1);
+    expect(above.systems[0].width).toBe(wide);
+
+    const roomy = Math.ceil(natural / 0.5); // ~50% full: below the limit
+    const below = paginateScore(p, analyzed, { ...base, pageWidth: roomy });
+    expect(below.systems).toHaveLength(1);
+    expect(below.systems[0].width).toBeLessThanOrEqual(roomy * LAST_SYSTEM_JUSTIFY_FILL);
   });
 
   it('lets a system standing alone on the last page keep its natural width', () => {
