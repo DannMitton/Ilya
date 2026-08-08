@@ -268,7 +268,28 @@ export function modernisePreReform(token: string): string | null {
 		changed = true;
 	}
 
-	return changed ? dropped : null;
+	// NFC ON THE WAY OUT, and it is not housekeeping. The dictionary carries 60
+	// headwords where a yat is followed by U+0308 COMBINING DIAERESIS, звѣ̈зды and
+	// гнѣ̈зда among them, and that convention marks a yat whose modern outcome is ё
+	// rather than е. Mapping ѣ→е leaves а DECOMPOSED е + U+0308, and composing it
+	// here is what turns that into a precomposed ё (U+0451). No extra rule is
+	// needed: the dictionary's own diaeresis carries the information and NFC does
+	// the work.
+	//
+	// Measured in E.33, on звѣ̈зды, before this line existed:
+	//   - transcribe(decomposed) gave `ˈzvʲɛzdɨ`; transcribe(NFC) gives `ˈzvʲozdɨ`.
+	//     `GraysonEngine.transcribe` does NOT normalise, so it read the bare е and
+	//     dropped the combining mark, printing the wrong vowel.
+	//   - `findYoSyllable` returned -1 on the decomposed form and 0 on the NFC one,
+	//     so the ё stress path never fired.
+	//   - `lookupStress` DOES normalise internally, so the caller's dictionary gate
+	//     accepted the word anyway. It passed the gate, took a confident stress from
+	//     the dictionary, raised no VERIFY box, and printed a wrong vowel. Being
+	//     accepted was worse than being rejected.
+	//
+	// The guard is the test asserting on CODEPOINTS rather than on a string literal,
+	// because a decomposed literal in the test file would pass while the bug lived.
+	return changed ? dropped.normalize('NFC') : null;
 }
 
 /**

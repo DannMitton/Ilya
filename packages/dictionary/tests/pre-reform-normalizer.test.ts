@@ -188,3 +188,22 @@ describe('hasAbolishedLetter: the abstention predicate', () => {
 		expect(hasAbolishedLetter('окно')).toBe(false);
 	});
 });
+
+describe('modernisePreReform: NFC on the way out', () => {
+	it('composes yat plus a combining diaeresis into a precomposed ё (звѣ̈зды → звёзды)', () => {
+		// Both sides written as escapes on purpose. A decomposed literal in this file
+		// would let this test pass while the defect survived, because the two render
+		// identically. GraysonEngine.transcribe does not normalise, so a decomposed
+		// е + U+0308 reads as bare е and gives ˈzvʲɛzdɨ where ё gives ˈzvʲozdɨ.
+		const out = modernisePreReform('зв\u0463\u0308зды');
+		expect(out).not.toBeNull();
+		expect(Array.from(out as string).map((c) => c.codePointAt(0))).toEqual([
+			0x0437, 0x0432, 0x0451, 0x0437, 0x0434, 0x044b,
+		]);
+	});
+
+	it('returns an NFC string for an ordinary case as well', () => {
+		const out = modernisePreReform('дѣти');
+		expect(out).toBe((out as string).normalize('NFC'));
+	});
+});
