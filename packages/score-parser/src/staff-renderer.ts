@@ -49,17 +49,49 @@ import { chooseClef, type RenderClef } from './clef-select';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 
 /**
- * N.10b: the mark for a syllable the resolver declined to transcribe.
+ * N.10b: the sigla for a syllable the resolver declined to transcribe.
  *
- * Bracketed, on the same convention as the phonation break's `[#]` already
- * drawn on this line, so a reader meets one rule rather than two: square
- * brackets on the IPA line mean "this is a marker, not a transcription."
+ * DANN'S RULING, 8 August 2026, and his reasoning is the point: "Human beings
+ * will see a question mark sigla and know to seek out a legend. That's what is
+ * important here, not the semantics of the sigla itself." A typeset `[?]` was
+ * built first and he rejected it, correctly: set in a text face on the IPA
+ * line it reads as content, and nothing about it says look this up. A drawn
+ * mark in a colour the transcription never uses reads as apparatus.
  *
- * PLACEHOLDER, chosen by Opus and flagged for Dann, on the same footing as
- * `fit-legend.ts`'s copy. Three glyphs was the constraint, because the mark
- * sits in a column sized for one syllable.
+ * It is the same traced question mark `PageFooter.svelte` already draws for
+ * Transcribe's `inferred`, deliberately reused rather than invented. That
+ * carries a known ambiguity, put to Dann and accepted by him: on Transcribe
+ * the glyph means "the engine had no entry and guessed", here it means
+ * "nothing was printed at all". He ruled the recognisability worth more than
+ * the distinction.
+ *
+ * The path lives HERE, in the module that draws it on the page, and
+ * `PageFooter` imports it for the legend circle, so the mark and its legend
+ * entry cannot drift into being two different glyphs.
+ *
+ * `--deeper-lavender`, `app.css:69`. Fit's own accent, and a colour the
+ * underlay's ink and the acoustic marks both leave alone.
  */
-export const WITHHELD_MARK = '[?]';
+export const WITHHELD_SIGLA = {
+	/** The traced glyph's own coordinate box, from `PageFooter.svelte`. */
+	x: 208,
+	y: 315,
+	w: 493,
+	h: 751,
+	path: 'M426.5 348.1c-53.8 4.4-96.8 20.7-133.1 50.3-29.3 23.9-51.8 62.6-59.9 103.1-2.1 10.7-4.5 30.4-4.5 37.7v2.8h125.9l.5-3.3c.3-1.7 1-6.6 1.6-10.7 2.7-18.4 10.2-33.1 23.5-46.6 16.8-16.8 34.3-24.3 61.2-26 38.3-2.5 72.4 14.5 86.7 43.1 5.9 11.7 7.1 17.9 7 35.5 0 16.9-1.7 25.8-6.8 37.4-7.6 17.3-25.5 34.2-57.4 54.6-41.3 26.4-54.8 36.7-66.3 50.6-25.5 30.8-32.8 56.2-31.3 108.6l.7 22.8h123.4l.6-18.8c.6-21.6 2.2-29.7 8.7-42.8 4.6-9.4 14.3-21.1 25.1-30.2 7.7-6.6 31.6-22.8 51-34.6 50.9-31.1 79.7-68 89.8-115.1 8.2-38 3.5-81.4-12.4-114-23.1-47.4-71.3-82.9-132.5-97.4-29.8-7.1-68.2-9.7-101.5-7m2 538c-18.7 1.7-38 12-50 26.7-11.4 13.7-15.9 26.8-15.9 45.7 0 8.3.6 14 1.8 18.5 6.2 22.6 23.2 41.1 45.5 49.4 9.8 3.6 15.9 4.6 29 4.6 13.8 0 24.8-2.6 36.2-8.6 38.6-20.3 51-69.7 26.3-105-11.7-16.7-32.4-29.1-51.4-30.9-3.6-.3-8.1-.7-10-.9s-7.1 0-11.5.5',
+	colour: '#8E7E9B',
+	/** Drawn height on the page, a little under the IPA line's cap height. */
+	heightPx: 11,
+} as const;
+
+/**
+ * The sigla's drawn width, derived rather than stated so it cannot fall out of
+ * step with `heightPx`. About 7.2px, which is narrower than the `[?]` it
+ * replaces (12.72px measured) and about the width of a one-letter Cyrillic
+ * syllable, so it asks less of the spacing engine than the first version did.
+ */
+export const WITHHELD_SIGLA_WIDTH_PX =
+	(WITHHELD_SIGLA.w * WITHHELD_SIGLA.heightPx) / WITHHELD_SIGLA.h;
 
 /**
  * Underlay type sizes. Both are still absolute px that do NOT scale with
@@ -277,15 +309,16 @@ function underlayHalfWidth(
   withheldIpa?: ReadonlySet<string>,
 ): number {
   const cyr = ev.syllable?.text ?? '';
-  // N.10b: the withheld mark occupies the IPA line's slot, so it is text this
-  // function must measure exactly as it measures a transcription. It is
-  // narrower than most Cyrillic syllables and the max() below will usually
-  // ignore it; under a one-letter syllable it will not.
-  const ipa = ipaPreview?.[ev.id] ?? (withheldIpa?.has(ev.id) ? WITHHELD_MARK : '');
-  if (!cyr && !ipa) return 0;
+  // N.10b: the withheld sigla occupies the IPA line's slot, so it is ink this
+  // function must measure exactly as it measures a transcription. Ink the
+  // spacing engine cannot see is ink that collides.
+  const ipa = ipaPreview?.[ev.id] ?? '';
+  const sigla = !ipa && withheldIpa?.has(ev.id) === true;
+  if (!cyr && !ipa && !sigla) return 0;
   return Math.max(
     cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_PX) : 0,
     ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0,
+    sigla ? WITHHELD_SIGLA_WIDTH_PX : 0,
   ) / 2;
 }
 
@@ -1168,13 +1201,21 @@ export function renderAnalyzedStaff(
     // single-storey, destroying the bright-a / dark-a contrast that sung
     // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
     if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
-    // N.10b: the withheld mark, in the IPA line's slot, in FULL ink on the
-    // same footing as the phonation break's [#] below. Full ink because the
-    // entire defect it answers is that the abstention was invisible; setting
-    // it in the transcription's grey would restate the problem quietly.
-    // Tagged `data-withheld` with the event id, matching `data-hyphen` and
+    // N.10b: the withheld sigla, standing in the IPA line's slot, sitting on
+    // the same baseline as the transcription it replaces. Tagged
+    // `data-withheld` with the event id, matching `data-hyphen` and
     // `data-extender`, so the mark is addressable in the DOM.
-    else if (u.withheld) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif" data-withheld="${esc(u.evId)}">${WITHHELD_MARK}</text>`);
+    else if (u.withheld) {
+      const sc = WITHHELD_SIGLA.heightPx / WITHHELD_SIGLA.h;
+      // Melisma openings are left-anchored (Gould r5) and everything else is
+      // centred, so the sigla follows whichever anchor its column uses.
+      const half = u.align === 'start' ? 0 : (sc * WITHHELD_SIGLA.w) / 2;
+      const tx = round2(u.x - sc * WITHHELD_SIGLA.x - half);
+      const ty = round2(ipaY - sc * (WITHHELD_SIGLA.y + WITHHELD_SIGLA.h));
+      parts.push(
+        `<g transform="translate(${tx} ${ty}) scale(${sc.toFixed(5)})" fill="${WITHHELD_SIGLA.colour}" data-withheld="${esc(u.evId)}"><path d="${WITHHELD_SIGLA.path}"/></g>`,
+      );
+    }
   }
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {

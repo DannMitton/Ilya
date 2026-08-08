@@ -18,7 +18,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildFitLegend, fitLegendTypes, FIT_LEGEND_ORDER } from './fit-legend';
 import type { CalibratedFormant, Vowel } from './engine/types';
-import { WITHHELD_MARK } from '@ilya/score-parser';
+import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
 /** A reading with only the fields this legend reads; the rest is scaffolding. */
 function reading(
@@ -188,16 +188,21 @@ describe('the withheld-syllable entry (N.10b)', () => {
 		expect(built.slice(0, -1)).toEqual(buildFitLegend(formants, 'en'));
 	});
 
-	it('quotes the mark in both languages, and draws no icon circle', () => {
-		// The Fit legend draws no circles (`buildFitLegend`'s own contract), so
-		// the label has to carry the glyph or the reader cannot match it to the
-		// page. Asserted against the renderer's exported constant, never
-		// against a string written here.
+	it('is the one Fit entry that draws a circle, in both languages', () => {
+		// Dann's ruling of 8 August: the page mark is a drawn sigla, so the
+		// legend shows the sigla. Every other Fit entry is a word in the page's
+		// prose and carries no circle, which the tests above assert.
 		for (const language of ['en', 'fr'] as const) {
 			const item = buildFitLegend({}, language, { withheldSyllables: true })[0];
-			expect(item.textOnly).toBe(true);
-			expect(item.icon).toBe('');
-			expect(item.label).toContain(WITHHELD_MARK);
+			expect(item.textOnly).toBe(false);
+			expect(item.label.length).toBeGreaterThan(20);
+			// The old typeset mark must not survive in the copy: the glyph is
+			// drawn now, and a label quoting brackets would name a mark the page
+			// no longer prints.
+			expect(item.label).not.toContain('[?]');
 		}
+		// And the renderer's constant is real, which is what PageFooter draws.
+		expect(WITHHELD_SIGLA.path.length).toBeGreaterThan(100);
+		expect(WITHHELD_SIGLA.colour).toMatch(/^#[0-9A-Fa-f]{6}$/);
 	});
 });

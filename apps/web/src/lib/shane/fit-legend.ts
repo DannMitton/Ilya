@@ -87,18 +87,20 @@ const FIT_LEGEND_COPY: Record<FitLegendType, Record<Language, string>> = {
  * keeps its single subject, and it is appended by `buildFitLegend` on a flag
  * the caller supplies from the render, which is the only place that knows.
  *
- * The label quotes the mark literally, because the Fit legend draws no icon
- * circles (see `buildFitLegend`) and a legend that names a glyph it does not
- * show would send the reader back to the page to guess which one it meant.
- * The mark itself is `WITHHELD_MARK` in `staff-renderer.ts`; if that string
- * changes, this copy changes with it.
+ * This entry is the ONE exception to the Fit legend's no-circle rule, and
+ * Dann's ruling of 8 August is why: the page mark is now a drawn sigla rather
+ * than a typeset character, and "human beings will see a question mark sigla
+ * and know to seek out a legend." A legend that named the glyph in words
+ * while refusing to show it would send the reader back to the page to guess
+ * which mark was meant. So it carries the circle, and `PageFooter` draws it
+ * from `WITHHELD_SIGLA`, the same constant the renderer draws on the stave.
  *
  * PLACEHOLDER copy, flagged for Dann, on the same footing as the four above.
  * The French is mine and needs his eye more than the English does.
  */
 const FIT_WITHHELD_COPY: Record<Language, string> = {
-	en: '[?] The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
-	fr: '[?] La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
+	en: 'The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
+	fr: 'La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
 };
 
 /**
@@ -155,9 +157,11 @@ export function buildFitLegend(
 	if (options.withheldSyllables) {
 		items.push({
 			type: 'fit-withheld',
-			icon: '',
+			icon: 'question',
 			label: FIT_WITHHELD_COPY[language],
-			textOnly: true
+			// The exception: this one is a glyph on the page, so it is a glyph
+			// here. Every entry above it is a word in the page's prose.
+			textOnly: false
 		});
 	}
 	return items;
