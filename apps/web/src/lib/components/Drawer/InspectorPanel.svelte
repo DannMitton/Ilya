@@ -1718,10 +1718,10 @@
 		background: rgba(139, 154, 125, 0.15);
 		border-radius: 0;
 		padding: 2px 1rem 10px;
-		margin-left: -1.5rem;
+		margin-left: -2.5rem;
 		margin-right: -2.5rem;
 		margin-bottom: 0.5rem;
-		width: calc(100% + 4rem);
+		width: calc(100% + 5rem);
 	}
 
 	/* ── Ribbon body: flex row of syllable columns ─────────────── */
