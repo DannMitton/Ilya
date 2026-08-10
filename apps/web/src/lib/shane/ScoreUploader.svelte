@@ -7,10 +7,13 @@
 
 	This component owns both converter lifecycles (§B.2): it constructs a
 	WorkerScoreReader (denigma, .musx) and a WebmscoreMsczConverter (webmscore,
-	.mscz) lazily on first need and disposes them on destroy. The webmscore
-	converter is constructed only when a .mscz actually arrives, since its
-	warm-up prefetches ~17.5 MB of runtime assets; the denigma reader keeps its
-	original any-drop construction. The parsed result is handed up through
+	.mscz) lazily on first need and disposes them on destroy. Each is
+	constructed only when a file of its own kind actually arrives: the webmscore
+	converter's warm-up prefetches ~17.5 MB of runtime assets, and the denigma
+	reader's pulls a 4,511,746-byte WASM artifact (1,039,849 gzipped, measured
+	2026-08-10). N.26 gave the reader the same treatment the converter always
+	had; before it, a drop of any kind paid for denigma. The parsed result is
+	handed up through
 	`oningested`; live wiring (§E.7) consumes it. PDF, image, and MIDI are
 	advertised as coming soon and, if dropped, answered with a note rather
 	than a hard error.
@@ -101,8 +104,12 @@
 		// A .musx or .mscz routes through conversion; name the wait honestly.
 		const isMusx = /\.musx$/i.test(file.name);
 		const isMscz = /\.mscz$/i.test(file.name);
-		// Start the webmscore warm-up (module import + asset prefetch) while
-		// the bytes are read and the container pre-check runs.
+		// Start the matching converter's warm-up (module import + asset
+		// prefetch) while the bytes are read and the container pre-check runs.
+		// N.26: the denigma reader is warmed on a real .musx only, the same way
+		// the webmscore converter always has been, so a MusicXML or .mxl drop no
+		// longer pulls a WASM artifact it cannot use.
+		if (isMusx) getReader();
 		if (isMscz) getConverter();
 		ui = {
 			kind: 'busy',
@@ -116,9 +123,12 @@
 		let outcome: IngestOutcome;
 		try {
 			outcome = await ingestScoreFile(file, {
-				scoreReader: getReader(),
-				// Constructed inside the closure, so only a real .mscz pays the
-				// converter's warm-up.
+				// Both constructed inside their closures, so only a real .musx
+				// and a real .mscz pay their converter's warm-up (N.26).
+				scoreReader: {
+					convert: (f: File) => getReader().convert(f),
+					dispose: () => reader?.dispose(),
+				},
 				msczConvert: (bytes, name) => getConverter().convert(bytes, name),
 			});
 		} catch (err) {
