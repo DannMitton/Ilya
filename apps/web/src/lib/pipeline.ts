@@ -362,10 +362,14 @@ export function processText(
         // singer has not touched is untouched too, because the effective stress
         // is still element 0's and it is the first entry carrying it.
         // Only a stress the SINGER set may move the printed gloss. Anything
-        // else and the two files disagreeing about a word would rewrite the
-        // page on load: singer-supplement.json gives вода stress 0 while the
-        // dictionary gives вода́ stress 1 for water and stress 0 for the
-        // tag-game sense, so a stress-only test turned "water" into "it".
+        // else and a disagreement between singer-supplement.json, which is
+        // consulted first (engine.ts:735), and the dictionary would rewrite the
+        // page on load rather than on a tap. вода was the case that exposed
+        // this: the supplement asserted stress 0 with the gloss "water" while
+        // the dictionary holds вода́ at stress 1 for water and вóда at stress 0
+        // for the tag-game sense, and a stress-only test printed "it". That
+        // entry has since been removed from the supplement, so the example is
+        // historical, but the guard is not: it holds for the next one.
         const chosenBySinger =
           typeof tw.wordData.stressSource === "string" &&
           tw.wordData.stressSource.startsWith("user-");
