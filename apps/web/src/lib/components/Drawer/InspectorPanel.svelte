@@ -1731,7 +1731,7 @@
 		align-items: flex-end;
 		justify-content: center;
 		gap: 12px;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 	}
 
 	/* ── Syllable column: rubric + molecule + sigla + ordinal ── */
