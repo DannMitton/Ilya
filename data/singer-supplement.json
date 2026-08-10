@@ -328,7 +328,7 @@
     "source": "supplement"
   },
   "ещё": {
-    "stress": 0,
+    "stress": 1,
     "gloss": {
       "en": "still/yet",
       "fr": "encore"
@@ -648,7 +648,7 @@
     "source": "supplement"
   },
   "иди": {
-    "stress": 0,
+    "stress": 1,
     "gloss": {
       "en": "go!",
       "fr": "va !"
@@ -920,7 +920,7 @@
     "source": "supplement"
   },
   "огонь": {
-    "stress": 0,
+    "stress": 1,
     "gloss": {
       "en": "fire",
       "fr": "feu"
@@ -928,7 +928,7 @@
     "source": "supplement"
   },
   "земля": {
-    "stress": 0,
+    "stress": 1,
     "gloss": {
       "en": "earth",
       "fr": "terre"
