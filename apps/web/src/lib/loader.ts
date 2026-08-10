@@ -59,6 +59,8 @@ const DB_NAME = 'ilya-data';
 const STORE_NAME = 'cache';
 const MANIFEST_URL = '/data/dictionary-manifest.json';
 const SUPPLEMENT_URL = '/data/singer-supplement.json';
+/** N.14: array-valued entries for spellings with more than one stress. */
+const HOMOGRAPH_URL = '/data/homographs.json';
 const BLURB_URL = '/data/blurb-composer.json';
 const CACHE_HASH_KEY = 'ilya-dict-hash';
 
@@ -398,7 +400,7 @@ async function mergeNDJSON(
  *
  * Yields to the event loop every CHUNK_SIZE entries, same as mergeNDJSON.
  */
-async function mergeGlossTier(
+export async function mergeGlossTier(
 	lines: string[],
 	dictionary: Record<string, any>
 ): Promise<void> {
@@ -410,8 +412,17 @@ async function mergeGlossTier(
 			const [word, gloss] = JSON.parse(line);
 			const entry = dictionary[word];
 			if (entry) {
-				if (gloss.E !== undefined) entry.E = gloss.E;
-				if (gloss.F !== undefined) entry.F = gloss.F;
+				// N.14: a homograph headword holds an ARRAY of entries. The gloss
+				// tier was generated against the one-entry-per-headword shards, so
+				// its E/F belong to the entry those shards shipped, which
+				// build-homographs.mjs guarantees is element 0. Writing E onto the
+				// array itself would set a property nothing reads and lose the full
+				// gloss silently.
+				const target = Array.isArray(entry) ? entry[0] : entry;
+				if (target) {
+					if (gloss.E !== undefined) target.E = gloss.E;
+					if (gloss.F !== undefined) target.F = gloss.F;
+				}
 			}
 		} catch {
 			// Skip malformed lines silently
@@ -450,6 +461,90 @@ async function loadGlossTier(
 
 		await mergeGlossTier(lines, dictionary);
 		// lines goes out of scope here — eligible for GC before next fetch
+	}
+}
+
+// -------------------------------------------------------------------
+// Homograph tier (N.14) — lazy background load of array-valued entries
+// -------------------------------------------------------------------
+
+/**
+ * Fetch data/homographs.json and install its array-valued entries into the
+ * live dictionary in place.
+ *
+ * The shards hold exactly one entry per headword, so a spelling with two
+ * stress positions can only ship one of them. This tier supplies the rest.
+ * Every consumer already reads arrays: engine.ts:707-717 returns isHomograph
+ * with allEntries, gloss.ts:53 returns them, pipeline.ts:338-343 picks the
+ * entry matching the singer's stress, and InspectorPanel.svelte:1026-1044
+ * renders them all.
+ *
+ * Element 0 is the entry the shards shipped, verbatim, so nothing a singer
+ * has already transcribed changes. Failures are non-fatal: the app keeps the
+ * single-entry behaviour it has today.
+ */
+async function loadHomographTier(dictionary: Record<string, any>): Promise<void> {
+	const response = await fetch(HOMOGRAPH_URL);
+	if (!response.ok) {
+		throw new Error(`Homograph tier fetch failed: HTTP ${response.status}`);
+	}
+	const payload: Record<string, any[]> = await response.json();
+	installHomographEntries(dictionary, payload);
+}
+
+/**
+ * Install array-valued entries into a live dictionary, in place.
+ *
+ * Pure apart from the mutation it is asked to perform, and exported so the
+ * rules below are testable without a network:
+ *
+ *  - A word the shards never shipped is skipped. This tier corrects entries;
+ *    it does not introduce headwords.
+ *  - A word already holding an array is skipped, so a second run is a no-op.
+ *  - Every entry is passed through mapSingleEntry(), because the shards are
+ *    mapped on parse and this payload is raw. Without it lookupStress reads an
+ *    undefined gloss and the printed gloss goes blank.
+ *  - E/F already merged onto the scalar entry by the gloss tier are carried
+ *    onto element 0, so the two tiers may land in either order.
+ *
+ * @returns the number of headwords replaced.
+ */
+export function installHomographEntries(
+	dictionary: Record<string, any>,
+	payload: Record<string, any[]>
+): number {
+	let installed = 0;
+	for (const [word, entries] of Object.entries(payload)) {
+		if (!Array.isArray(entries) || entries.length < 2) continue;
+		const existing = dictionary[word];
+		if (!existing || Array.isArray(existing)) continue;
+
+		for (const entry of entries) mapSingleEntry(entry);
+
+		if (existing.E !== undefined && entries[0].E === undefined) entries[0].E = existing.E;
+		if (existing.F !== undefined && entries[0].F === undefined) entries[0].F = existing.F;
+
+		dictionary[word] = entries;
+		installed++;
+	}
+	return installed;
+}
+
+/**
+ * Schedule the homograph tier after the app is interactive, on the same
+ * idle machinery as the gloss tier. Non-fatal by design.
+ */
+function scheduleHomographTier(dictionary: Record<string, any>): void {
+	const start = () => {
+		loadHomographTier(dictionary).catch((error: unknown) => {
+			const message = error instanceof Error ? error.message : String(error);
+			console.warn('[Ilya] Homograph tier unavailable:', message);
+		});
+	};
+	if (typeof requestIdleCallback === 'function') {
+		requestIdleCallback(start, { timeout: 5000 });
+	} else {
+		setTimeout(start, 0);
 	}
 }
 
@@ -574,6 +669,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		// Tier 2: schedule the lazy gloss tier (full E/F glosses) now that
 		// the app is interactive. Non-blocking; failures are non-fatal.
 		scheduleGlossTier(manifest, dictionary);
+		scheduleHomographTier(dictionary);
 	} catch (error: unknown) {
 		const message = error instanceof Error ? error.message : String(error);
 		console.error('[Ilya] Dictionary loading failed:', message);
