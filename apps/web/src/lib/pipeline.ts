@@ -330,6 +330,8 @@ export function processText(
         let fullGlossEn = '';
         let fullGlossFr = '';
         let allDictEntries: DictionaryEntry[] | null = null;
+        /** N.14c: the homograph reading the singer's stress selects, if any. */
+        let matchedEntry: DictionaryEntry | null = null;
 
         if (rawEntry) {
           if (Array.isArray(rawEntry)) {
@@ -339,6 +341,7 @@ export function processText(
             const matched = rawEntry.find(
               (ent: DictionaryEntry) => (ent.s ?? ent.stress) === (effectiveStressIndex >= 0 ? effectiveStressIndex : tw.wordData.stress)
             );
+            matchedEntry = matched ?? null;
             const primary = matched || rawEntry[0];
             fullGlossEn = (primary as any).E || (primary as any).e || '';
             fullGlossFr = (primary as any).F || (primary as any).f || '';
@@ -348,6 +351,39 @@ export function processText(
             fullGlossEn = (rawEntry as any).E || (rawEntry as any).e || '';
             fullGlossFr = (rawEntry as any).F || (rawEntry as any).f || '';
           }
+        }
+
+        // N.14c. The printed gloss must name the reading the singer chose.
+        // buildWordData took its gloss from normalizeEntry, which returns
+        // element 0 of a homograph array unconditionally (engine.ts:709), so
+        // without this the page would carry the stress of one word above the
+        // meaning of another. Non-homographs are untouched: there is one entry,
+        // it is element 0, and matchedEntry is that same entry. A homograph the
+        // singer has not touched is untouched too, because the effective stress
+        // is still element 0's and it is the first entry carrying it.
+        // Only a stress the SINGER set may move the printed gloss. Anything
+        // else and the two files disagreeing about a word would rewrite the
+        // page on load: singer-supplement.json gives вода stress 0 while the
+        // dictionary gives вода́ stress 1 for water and stress 0 for the
+        // tag-game sense, so a stress-only test turned "water" into "it".
+        const chosenBySinger =
+          typeof tw.wordData.stressSource === "string" &&
+          tw.wordData.stressSource.startsWith("user-");
+        if (
+          chosenBySinger &&
+          allDictEntries &&
+          allDictEntries.length > 1 &&
+          matchedEntry &&
+          !tw.isProclitic &&
+          !tw.isEnclitic
+        ) {
+          gloss = formatGlossForDisplay(
+            (matchedEntry as any).g ?? (matchedEntry as any).gloss,
+            matchedEntry.p ?? '',
+            matchedEntry.l ?? '',
+            tw.cleanWord,
+            language,
+          );
         }
 
         return {

@@ -106,6 +106,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.glossFallbackEN':    { en: 'Gloss available in English only', fr: 'Glose disponible en anglais seulement' },
 	'inspector.glossFallbackFR':    { en: 'Gloss available in French only',  fr: 'Glose disponible en français seulement' },
 	'inspector.dictCapacity':       { en: 'Maximum 20 characters',         fr: 'Maximum de 20 caractères' },
+	'inspector.dictChoose':        { en: 'Use this reading:',           fr: 'Utiliser cette lecture :' },
 
 	// ── Grayson positional labels (Ribbon syllable group headers) ──
 	'ribbon.stressed':             { en: 'stressed',                     fr: 'tonique' },

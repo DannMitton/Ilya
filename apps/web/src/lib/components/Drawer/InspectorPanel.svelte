@@ -938,6 +938,31 @@
 		return dictEntries.findIndex(e => e.s === word.stressIndex) ?? 0;
 	});
 
+	/**
+	 * N.14b. An entry is a control only when there is a choice to make and the
+	 * entry names a real syllable. -1 is the monosyllable sentinel and -2 the
+	 * unknown one (packages/dictionary/src/types.ts); neither is somewhere a
+	 * stress can be put.
+	 */
+	function isEntrySelectable(entry: DictionaryEntry): boolean {
+		if (dictEntries.length <= 1) return false;
+		const s = entry.s;
+		return typeof s === 'number' && s >= 0;
+	}
+
+	/**
+	 * Choosing a reading assigns its stress. The source is 'user-dictionary'
+	 * because the dictionary is where this stress came from, and pipeline.ts
+	 * writes the override before the engine runs, so the word re-transcribes
+	 * rather than merely re-marking: го́ре is ˈɡorʲɪ where горе́ is ɡɑˈrʲɛ.
+	 */
+	function handleDictEntryClick(entry: DictionaryEntry): void {
+		const s = entry.s;
+		if (typeof s !== 'number' || s < 0) return;
+		if (s === word.stressIndex) return;
+		onstressassign?.(s, 'user-dictionary');
+	}
+
 </script>
 
 <div
@@ -1023,24 +1048,43 @@
 						{#if dictEntries.length === 0}
 							<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
 						{:else}
-							{#each dictEntries as entry, ei}
+							<!-- N.14b: with more than one reading, each entry is the control that
+							     chooses it. onstressassign re-runs the pipeline, so the vowels
+							     reduce to the new stress and the gloss follows it (pipeline.ts:270). -->
+							{#snippet dictEntryBody(entry: DictionaryEntry)}
 								{@const fullGloss = resolveFullGloss(entry, language)}
-								<div class="dict-entry" class:stress-matched={ei === stressMatchedIdx && dictEntries.length > 1}>
-									<p class="dict-lemma">{getStressedLemma(entry)}</p>
-									<p class="dict-pos">{formatPos(entry.p || '')}</p>
-									{#if fullGloss}
-										<p class="dict-senses">
-											{#if fullGloss.fallback}
-												<span
-													class="gloss-lang-chip"
-													aria-label={t(fullGloss.source === 'en' ? 'inspector.glossFallbackEN' : 'inspector.glossFallbackFR', language)}
-												>{fullGloss.source === 'en' ? 'EN' : 'FR'}</span>
-											{/if}{fullGloss.text}
-										</p>
-									{:else}
-										<p class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</p>
-									{/if}
-								</div>
+								<span class="dict-lemma">{getStressedLemma(entry)}</span>
+								<span class="dict-pos">{formatPos(entry.p || '')}</span>
+								{#if fullGloss}
+									<span class="dict-senses">
+										{#if fullGloss.fallback}
+											<span
+												class="gloss-lang-chip"
+												aria-label={t(fullGloss.source === 'en' ? 'inspector.glossFallbackEN' : 'inspector.glossFallbackFR', language)}
+											>{fullGloss.source === 'en' ? 'EN' : 'FR'}</span>
+										{/if}{fullGloss.text}
+									</span>
+								{:else}
+									<span class="dict-entry-missing">{t('inspector.dictEntryMissing', language)}</span>
+								{/if}
+							{/snippet}
+							{#each dictEntries as entry, ei}
+								{#if isEntrySelectable(entry)}
+									<button
+										type="button"
+										class="dict-entry dict-entry-option"
+										class:stress-matched={ei === stressMatchedIdx}
+										aria-current={ei === stressMatchedIdx ? 'true' : undefined}
+										aria-label={t('inspector.dictChoose', language) + ' ' + getStressedLemma(entry)}
+										onclick={() => handleDictEntryClick(entry)}
+									>
+										{@render dictEntryBody(entry)}
+									</button>
+								{:else}
+									<div class="dict-entry" class:stress-matched={ei === stressMatchedIdx && dictEntries.length > 1}>
+										{@render dictEntryBody(entry)}
+									</div>
+								{/if}
 								{#if ei < dictEntries.length - 1}
 									<div class="dict-entry-divider" aria-hidden="true"></div>
 								{/if}
@@ -1582,7 +1626,39 @@
 		font-weight: 600;
 	}
 
+	/* N.14b: an entry that can be chosen. Reset to the surrounding type rather
+	   than a button's, so the panel reads as prose until it is touched. */
+	.dict-entry-option {
+		display: block;
+		width: 100%;
+		text-align: left;
+		background: none;
+		border: none;
+		font: inherit;
+		color: inherit;
+		padding: 0.25rem;
+		margin: -0.25rem;
+		border-radius: 3px;
+		cursor: pointer;
+	}
+
+	.dict-entry-option:hover {
+		background: color-mix(in srgb, var(--sage) 12%, transparent);
+	}
+
+	.dict-entry-option:focus-visible {
+		outline: 2px solid var(--sage);
+		outline-offset: 1px;
+	}
+
+	.dict-entry-option[aria-current='true'],
+	.dict-entry-option[aria-current='true']:hover {
+		cursor: default;
+		background: none;
+	}
+
 	.dict-lemma {
+		display: block;
 		font-family: var(--font-serif);
 		font-size: 0.95rem;
 		font-weight: 600;
@@ -1591,6 +1667,7 @@
 	}
 
 	.dict-pos {
+		display: block;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		color: var(--ink-tertiary);
@@ -1613,6 +1690,7 @@
 	}
 
 	.dict-senses {
+		display: block;
 		font-family: var(--font-serif);
 		font-size: 15px;
 		color: var(--ink-primary);
@@ -1620,6 +1698,7 @@
 	}
 
 	.dict-entry-missing {
+		display: block;
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
 		color: var(--sage);
