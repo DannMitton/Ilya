@@ -82,7 +82,7 @@
 </script>
 
 <div class="section cosmetic-section" style="--notation-accent: {accent}">
-	<h3 class="section-label">
+	<h3 class="section-label" class:collapsed={!expanded}>
 		<button
 			class="notation-disclosure"
 			aria-expanded={expanded}
@@ -213,6 +213,12 @@
 		font-weight: 600;
 	}
 
+	/* Nothing below the label when collapsed, so the gap separates it from
+	   the anchor's own padding and reads as slack. */
+	.section-label.collapsed {
+		margin-bottom: 0;
+	}
+
 	/* N.43: the whole header row is the control, so the tap target is the
 	   control's own visible box. The E.36 touch ruling of 2026-08-10
 	   prefers that over an invisible centred region, and says two
@@ -237,8 +243,16 @@
 		cursor: pointer;
 	}
 
+	/* Bottom-anchored accordion, not a tree. The panel is pinned to the
+	   foot of the drawer and grows UPWARD, so closed points up ("more is
+	   up there") and open points down ("push it back"). Dann's
+	   correction, 2026-08-11. The first pass borrowed .toc-chevron's
+	   right-to-down rotation, which is a TREE convention and belongs to a
+	   hierarchy, not to a panel. The glyph is still the TOC's; only the
+	   rotation differs. */
 	.chevron-icon {
 		flex-shrink: 0;
+		transform: rotate(-90deg);
 		transition: transform 150ms ease;
 	}
 
