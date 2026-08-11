@@ -49,6 +49,13 @@
 		onnotationchange: (prefs: NotationPreferences) => void;
 		onstressdiacriticschange: (value: boolean) => void;
 		onopensyllabificationchange: (value: boolean) => void;
+		/**
+		 * N.43. Collapsed state lives in +page.svelte, not here, so it
+		 * survives a trip to Learn and back (this component is destroyed
+		 * when the anchor's tab guard closes, Drawer.svelte:431).
+		 */
+		expanded: boolean;
+		onexpandedchange: (value: boolean) => void;
 	}
 
 	let {
@@ -60,6 +67,8 @@
 		onnotationchange,
 		onstressdiacriticschange,
 		onopensyllabificationchange,
+		expanded,
+		onexpandedchange,
 	}: Props = $props();
 
 	function handleToggle(key: keyof NotationPreferences, value: boolean) {
@@ -73,8 +82,19 @@
 </script>
 
 <div class="section cosmetic-section" style="--notation-accent: {accent}">
-	<h3 class="section-label">{t('cosmetic.heading', language)}</h3>
-	<div class="cosmetic-grid">
+	<h3 class="section-label">
+		<button
+			class="notation-disclosure"
+			aria-expanded={expanded}
+			aria-controls={expanded ? "notation-toggles" : undefined}
+			onclick={() => onexpandedchange(!expanded)}
+		>
+			<span>{t('cosmetic.heading', language)}</span>
+			<svg class="chevron-icon" class:expanded width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
+		</button>
+	</h3>
+	{#if expanded}
+	<div class="cosmetic-grid" id="notation-toggles">
 		<!-- Stress acutes -->
 		<span class="cosmetic-label-left" class:label-inactive={showStressDiacritics}>{t('cosmetic.stressAcutes.left', language)}</span>
 		<button
@@ -173,6 +193,7 @@
 		</button>
 		<span class="cosmetic-label-right" class:label-inactive={!openSyllabification}>{t('cosmetic.openSyllabification.right', language)}</span>
 	</div>
+	{/if}
 </div>
 
 <style>
@@ -190,6 +211,45 @@
 		color: var(--notation-accent, var(--sage));
 		margin-bottom: 0.4rem;
 		font-weight: 600;
+	}
+
+	/* N.43: the whole header row is the control, so the tap target is the
+	   control's own visible box. The E.36 touch ruling of 2026-08-10
+	   prefers that over an invisible centred region, and says two
+	   exemptions exist and a third must not be created silently. This
+	   creates none. The 44px floor is twinned on .toc-chevron
+	   (Drawer.svelte:1021-1024), the only control in the app that
+	   already meets it. The chevron is the TOC's own 10x10 glyph, so no
+	   new affordance enters the vocabulary. */
+	.notation-disclosure {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0;
+		background: none;
+		border: none;
+		font: inherit;
+		color: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.chevron-icon {
+		flex-shrink: 0;
+		transition: transform 150ms ease;
+	}
+
+	.chevron-icon.expanded {
+		transform: rotate(90deg);
+	}
+
+	@media (pointer: coarse) {
+		.notation-disclosure {
+			min-height: 44px;
+		}
 	}
 
 	.cosmetic-section {

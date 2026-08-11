@@ -56,6 +56,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
 	let drawerCollapsed = $state(false);
+	// N.43: Notation collapse. Deliberately NOT persisted: a remembered
+	// collapse hides the toggles from a singer who forgot they exist.
+	let notationExpanded = $state(true);
 	// Tab state
 	let activeTab = $state<TabId>('transcription');
 	// Shane: the active voice's stored readings and name, published by the
@@ -1024,6 +1027,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onnotationchange={handleNotationChange}
 					onstressdiacriticschange={handleStressDiacriticsChange}
 					onopensyllabificationchange={handleOpenSyllabificationChange}
+					expanded={notationExpanded}
+					onexpandedchange={(v) => (notationExpanded = v)}
 				/>
 			{/snippet}
 	</Drawer>
