@@ -954,6 +954,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						</button>
 					</div>
 					<CalibrationWizard
+						{language}
 						{scoreRenders}
 						bind:collapsed={wizardCollapsed}
 						onActiveProfileChange={(f, name, characteristics) => {

@@ -43,6 +43,7 @@
 	 */
 	import { onMount, tick } from 'svelte';
 	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
+	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
 	import NotePicker from '$lib/shane/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
@@ -100,9 +101,9 @@
 
 	// The default-name base ("Voice 1", "Voice 2", …), Kimi's ruling:
 	// domain-appropriate, scales to variants and guests without special
-	// pleading. French mode ("Voix N") lands with the calibration-UI French
-	// pass (standing open item).
-	const DEFAULT_NAME_BASE = 'Voice';
+	// pleading. N.22: DEFAULT_NAME_BASE moved below the props destructure
+	// (declared there, see near `const T =`) so it can read
+	// calib.defaultVoiceName through T(), which needs `language`.
 
 	// 'characteristics' is the fifth phase (E.5 slice 3; Kimi's Q5 ruling,
 	// v39 §A.31): typed range/tessitura/passaggio through note pickers.
@@ -183,6 +184,8 @@
 		 * summary because the voice has readings.
 		 */
 		onOpenLearnNote?: () => void;
+		/** N.22: active display language, threaded to the i18n dictionary. */
+		language: Language;
 	}
 
 	let {
@@ -199,8 +202,22 @@
 		onProfileChange,
 		onComplete,
 		onActiveProfileChange,
-		onOpenLearnNote
+		onOpenLearnNote,
+		language
 	}: CalibrationWizardProps = $props();
+
+	// N.22: dictionary lookup, following ScoreUploader.svelte and
+	// VoiceProfilePane.svelte's convention.
+	const T = (key: string) => t(key, language);
+	// Reactive, for names not yet created: a voice added while the page is in
+	// French should be offered as "Voix 3".
+	const DEFAULT_NAME_BASE = $derived(T('calib.defaultVoiceName'));
+	// NOT reactive, deliberately. `loadStore` runs once at construction and the
+	// name it falls back to is PERSISTED. A derived here would rename a voice
+	// the singer has already saved whenever they switch language, which is
+	// rewriting their own data underneath them.
+	// svelte-ignore state_referenced_locally
+	const INITIAL_NAME_BASE = t('calib.defaultVoiceName', language);
 
 	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
 
@@ -208,7 +225,7 @@
 	// One read at construction; a v1 single profile migrates transparently
 	// to become the first named voice. All mutations flow through the
 	// functions below and save the whole store, failure-silent.
-	let store = $state<ProfileStore>(loadStore(`${DEFAULT_NAME_BASE} 1`));
+	let store = $state<ProfileStore>(loadStore(`${INITIAL_NAME_BASE} 1`));
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
@@ -341,10 +358,10 @@
 	// no-em-dash constraint. The aria-label speaks the counts in words, the
 	// §4.6 discipline (a raw "7/10" reads as a fraction).
 	let compactLabel = $derived(
-		`${activeVoice ? `${activeVoice.name} · ` : ''}${capturedCount}/${ALL_VOWELS.length} vowels`
+		`${activeVoice ? `${activeVoice.name} · ` : ''}${capturedCount}/${ALL_VOWELS.length} ${T('calib.common.vowels')}`
 	);
 	let compactSpokenLabel = $derived(
-		`${activeVoice ? `${activeVoice.name}, ` : ''}${capturedCount} of ${ALL_VOWELS.length} vowels sampled`
+		`${activeVoice ? `${activeVoice.name}, ` : ''}${capturedCount} ${T('calib.common.of')} ${ALL_VOWELS.length} ${T('calib.compact.vowelsSampled')}`
 	);
 
 	function persistStore() {
@@ -669,11 +686,11 @@
 				// at a third of the countdown each, matching COUNT_INTERVAL on
 				// the vowel steps, then the bar.
 				readinessStep = 'prepare';
-				readinessCount = 'Three.';
+				readinessCount = T('calib.readiness.countThree');
 				readinessProgress = 0;
 				const beat = READINESS_PREP_MS / 3;
-				readinessTimers.push(setTimeout(() => (readinessCount = 'Two.'), beat));
-				readinessTimers.push(setTimeout(() => (readinessCount = 'One.'), 2 * beat));
+				readinessTimers.push(setTimeout(() => (readinessCount = T('calib.readiness.countTwo')), beat));
+				readinessTimers.push(setTimeout(() => (readinessCount = T('calib.readiness.countOne')), 2 * beat));
 				readinessTimers.push(
 					setTimeout(() => {
 						readinessStep = 'capture';
@@ -764,7 +781,7 @@
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
-		logAnnounce = `Added to progress: ${SPOKEN_NAME[vowel]}, ${Math.round(effective.f1)} hertz, ${readingLabel(effective.reading)}.`;
+		logAnnounce = `${T('calib.log.addedPrefix')} ${SPOKEN_NAME[vowel]}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
 		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
@@ -860,12 +877,12 @@
 		// announcement text lands in a region that always exists.
 		holdAnnounce =
 			kind === 'good'
-				? `${SPOKEN_NAME[vowel]}, captured.`
+				? `${SPOKEN_NAME[vowel]}${T('calib.capture.hold.captured')}`
 				: kind === 'rolled-back'
-					? 'New sample was less certain, so the previous one was kept.'
+					? T('calib.capture.hold.rolledBack')
 					: kind === 'implausible'
-						? `That reading looks unlikely for ${SPOKEN_NAME[vowel]}. Try again?`
-						: 'Noted, moving on. You can re-take it from the summary.';
+						? `${T('calib.capture.hold.implausiblePrefix')} ${SPOKEN_NAME[vowel]}. ${T('calib.capture.hold.tryAgain')}`
+						: T('calib.capture.hold.noted');
 		holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
 			holdTimer = undefined;
@@ -981,11 +998,11 @@
 	function readingLabel(reading: CalibratedFormant['reading'] | undefined): string {
 		switch (reading) {
 			case 'captured':
-				return 'Captured';
+				return T('calib.roster.reading.captured');
 			case 'provisional':
-				return 'Provisional';
+				return T('calib.roster.reading.provisional');
 			case 'estimated':
-				return 'Estimated';
+				return T('calib.roster.reading.estimated');
 			default:
 				return '';
 		}
@@ -1118,11 +1135,10 @@
 {#snippet challengingInvite()}
 	{#if !challengingOffered && defaultsComplete}
 		<button type="button" class="wizard-secondary" onclick={addChallengingVowels}>
-			Sing the three Ilya derived for you
+			{T('calib.challengingInvite.button')}
 		</button>
 		<p class="wizard-caption">
-			None of the ten vowels is optional. These three are the hardest to produce on demand, so
-			Ilya derives them from your own anchors until you choose to sing them.
+			{T('calib.challengingInvite.caption')}
 		</p>
 	{/if}
 {/snippet}
@@ -1134,7 +1150,7 @@
      the phase. -->
 {#snippet characteristicsButton()}
 	<button type="button" class="wizard-secondary" onclick={() => (phase = 'characteristics')}>
-		{hasCharacteristics ? 'Edit voice characteristics' : 'Add voice characteristics'}
+		{hasCharacteristics ? T('calib.characteristics.editButton') : T('calib.characteristics.addButton')}
 	</button>
 {/snippet}
 
@@ -1142,11 +1158,11 @@
 	<table class="wizard-roster">
 		<thead>
 			<tr>
-				<th scope="col">Vowel</th>
+				<th scope="col">{T('calib.common.vowelWord')}</th>
 				<th scope="col">{@render frSym(1)}</th>
 				<th scope="col">{@render frSym(2)}</th>
 				{#if showActions}
-					<th scope="col"><span class="visually-hidden">Actions</span></th>
+					<th scope="col"><span class="visually-hidden">{T('calib.roster.actionsHeader')}</span></th>
 				{/if}
 			</tr>
 		</thead>
@@ -1164,7 +1180,7 @@
 							<button
 								type="button"
 								class="wizard-info-glyph"
-								aria-label="About the sung o vowel (opens the Learn note)"
+								aria-label={T('calib.roster.oNoteAria')}
 								onclick={onOpenLearnNote}
 							>ⓘ</button>
 						{/if}
@@ -1195,28 +1211,28 @@
 							     the ruled word itself is not. -->
 							<span
 								class="wizard-roster-noisefloor"
-								title="The room's noise floor could not be measured for this sample."
-							>Noise floor: Unmeasured</span>
+								title={T('calib.roster.noiseFloorTitle')}
+							>{T('calib.roster.noiseFloorLabel')}</span>
 						{/if}
 					</th>
 					<td class="wizard-roster-value">
-						{#if f}{Math.round(f.f1)} Hz{/if}
+						{#if f}{Math.round(f.f1)} {T('calib.common.hz')}{/if}
 					</td>
 					<td class="wizard-roster-value">
 						{#if f}
 							{#if typeof f.f2 === 'number'}
-								{Math.round(f.f2)} Hz
+								{Math.round(f.f2)} {T('calib.common.hz')}
 							{:else}
 								<!-- Corrective-as-invitation (Dann): the missing second
 								     resonance names its next action, not a deficiency. -->
-								<span class="wizard-roster-tryagain">Try again</span>
+								<span class="wizard-roster-tryagain">{T('calib.roster.tryAgain')}</span>
 							{/if}
 						{/if}
 					</td>
 					{#if showActions}
 						<td class="wizard-roster-action">
 							{#if direct}
-								<button type="button" onclick={() => retakeFromSummary(g)}>Re-take</button>
+								<button type="button" onclick={() => retakeFromSummary(g)}>{T('calib.common.retake')}</button>
 							{/if}
 						</td>
 					{/if}
@@ -1226,7 +1242,7 @@
 	</table>
 {/snippet}
 
-<section class="calibration-wizard" aria-label="Your Resonances: voice calibration">
+<section class="calibration-wizard" aria-label={T('calib.section.ariaLabel')}>
 	<!-- The dedicated polite live region for roster announcements (Kimi
 	     consensus, 2026-07-10). A single-purpose hidden region rather than
 	     aria-live on the table itself: table semantics plus live region
@@ -1279,48 +1295,44 @@
 	{#if activeVoice}
 		{#if phase === 'welcome'}
 			<div class="wizard-phase">
-				<h2 id="wizard-title">Finding Your Resonances</h2>
+				<h2 id="wizard-title">{T('calib.welcome.title')}</h2>
 				<!-- Phase 0 onboarding copy, Dann's draft (2026-07-01), closing the
 				     placeholder flagged in wizard spec v1 §5 / pacifier spec v11 §15. -->
 				<p class="wizard-lede">
-					Shane will measure your voice to build a formant profile, which is a map of your voice's
-					resonances that will be applied to the repertoire to determine fit. Follow the prompts.
-					This wizard assumes you read IPA. Your device needs a working mic and you should be in a
-					quiet space for the best capture of your resonances.
+					{T('calib.welcome.lede')}
 				</p>
 				<details class="wizard-expander">
-					<summary>What is vocal fry?</summary>
+					<summary>{T('calib.welcome.fryQuestion')}</summary>
 					<!-- Placeholder: the newcomer fry-description copy is deferred
 					     (wizard spec v1 §5; pacifier spec v11 §17). Ground in Titze
 					     1988 and Roubeau et al. 2009 when drafted. -->
 					<p>
-						A low, creaky voice register, easy to sustain and gentle on the voice. Shane reads its
-						resonances rather than your sung pitch, so comfort matters more than pitch here.
+						{T('calib.welcome.fryAnswer')}
 					</p>
 				</details>
-				<button type="button" class="wizard-primary" onclick={beginReadiness}>Begin</button>
+				<button type="button" class="wizard-primary" onclick={beginReadiness}>{T('calib.welcome.beginButton')}</button>
 			</div>
 		{:else if phase === 'readiness'}
 			<div class="wizard-phase" aria-live="polite">
-				<h2 id="wizard-title">Getting ready</h2>
+				<h2 id="wizard-title">{T('calib.readiness.title')}</h2>
 				{#if readinessStep === 'quiet'}
-					<p class="wizard-lede">Listening for quiet. Stay silent for a moment.</p>
+					<p class="wizard-lede">{T('calib.readiness.quiet')}</p>
 				{:else if readinessStep === 'prepare'}
 					<!-- The count-in. PLACEHOLDER COPY, flagged for Dann. The shape
 					     is ruled and the wording is not: the singer is told what is
 					     coming and given time to draw breath before anything is
 					     collected. Nothing is recorded during this step. -->
-					<p class="wizard-lede">Now a throwaway fry, just to check the mic hears you.</p>
+					<p class="wizard-lede">{T('calib.readiness.prepareLede')}</p>
 					<p class="wizard-count" aria-hidden="true">{readinessCount}</p>
 				{:else if readinessStep === 'capture'}
 					<!-- PLACEHOLDER COPY, flagged for Dann. The bar is the point: it
 					     says the microphone is hearing them AND when they have given
 					     enough, which is the pair Dann named. -->
-					<p class="wizard-lede">Fry now, and keep going until the bar fills.</p>
+					<p class="wizard-lede">{T('calib.readiness.captureLede')}</p>
 					<div
 						class="readiness-meter"
 						role="progressbar"
-						aria-label="Recording your throwaway fry"
+						aria-label={T('calib.readiness.captureAria')}
 						aria-valuemin="0"
 						aria-valuemax="100"
 						aria-valuenow={Math.round(readinessProgress * 100)}
@@ -1337,38 +1349,37 @@
 					     does not block. -->
 					{#if readinessNoMic}
 						<p class="wizard-lede">
-							We could not reach your microphone, so nothing was measured.
+							{T('calib.readiness.noMic')}
 						</p>
 					{:else}
-						<p class="wizard-lede">We did not hear a fry, so nothing was measured.</p>
+						<p class="wizard-lede">{T('calib.readiness.noFry')}</p>
 					{/if}
 					<p class="wizard-guidance">
-						You can carry on; each vowel asks for the microphone again.
+						{T('calib.readiness.guidance')}
 					</p>
-					<button type="button" class="wizard-primary" onclick={beginCapture}>Continue</button>
+					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
 				{:else}
-					<p class="wizard-lede">Readiness check complete.</p>
+					<p class="wizard-lede">{T('calib.readiness.complete')}</p>
 					{#if fryMarginal}
 						<p class="wizard-guidance">
-							Your fry is reading near the edge of our range; a little lower or higher may read
-							cleaner.
+							{T('calib.readiness.marginal')}
 						</p>
 					{/if}
-					<button type="button" class="wizard-primary" onclick={beginCapture}>Continue</button>
+					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
 				{/if}
 			</div>
 		{:else if phase === 'capture'}
 			<div class="wizard-phase">
 				<div class="wizard-progress" role="status" aria-live="polite">
 					{#if currentVowel}
-						Vowel {queueIndex + 1} of {queue.length} — {@render vowelTag(currentVowel!)}
+						{T('calib.common.vowelWord')} {queueIndex + 1} {T('calib.common.of')} {queue.length} — {@render vowelTag(currentVowel!)}
 					{:else}
-						All set.
+						{T('calib.capture.allSet')}
 					{/if}
 				</div>
 				{#if currentVowel}
 					<p class="wizard-cue">
-						Tap the {@render vowelTag(currentVowel!)} vowel to arm it, tap again to begin.
+						{T('calib.capture.cuePrefix')} {@render vowelTag(currentVowel!)} {T('calib.capture.cueSuffix')}
 					</p>
 				{/if}
 				<div class="wizard-pacifier-wrap">
@@ -1397,29 +1408,29 @@
 				<div class="wizard-hold-slot">
 					{#if paused}
 						<div class="wizard-inline-banner">
-							<p>Paused. Resume when you're ready.</p>
-							<button type="button" class="wizard-primary" onclick={togglePause}>Resume</button>
+							<p>{T('calib.capture.paused')}</p>
+							<button type="button" class="wizard-primary" onclick={togglePause}>{T('calib.capture.resumeButton')}</button>
 						</div>
 					{:else if holdActive && holdVowel}
 						<div class="wizard-inline-banner">
 							<p>
 								{#if holdKind === 'good'}
-									{@render vowelTag(holdVowel!)}, captured.
+									{@render vowelTag(holdVowel!)}{T('calib.capture.hold.captured')}
 								{:else if holdKind === 'rolled-back'}
-									New sample was less certain, so the previous one was kept.
+									{T('calib.capture.hold.rolledBack')}
 								{:else if holdKind === 'implausible'}
 									<!-- The guard's re-prompt (signed off 2026-07-11): factual
 									     observation, no fault assigned — an implausible reading
 									     can equally be a mis-extraction — and the invitation
 									     rides the existing Re-take affordance below. -->
-									That reading looks unlikely for {@render vowelTag(holdVowel!)}. Try again?
+									{T('calib.capture.hold.implausiblePrefix')} {@render vowelTag(holdVowel!)}. {T('calib.capture.hold.tryAgain')}
 								{:else}
-									Noted, moving on. You can re-take it from the summary.
+									{T('calib.capture.hold.noted')}
 								{/if}
 							</p>
 							<div class="wizard-hold-actions">
-								<button type="button" onclick={holdContinue}>Continue</button>
-								<button type="button" onclick={holdRetake}>Re-take</button>
+								<button type="button" onclick={holdContinue}>{T('calib.common.continue')}</button>
+								<button type="button" onclick={holdRetake}>{T('calib.common.retake')}</button>
 							</div>
 						</div>
 					{/if}
@@ -1427,13 +1438,13 @@
 				{@render rosterTable(false)}
 				{#if !paused && !(holdActive && holdVowel) && currentVowel}
 					<div class="wizard-quiet-actions">
-						<button type="button" class="wizard-pause" onclick={togglePause}>Pause</button>
+						<button type="button" class="wizard-pause" onclick={togglePause}>{T('calib.capture.pauseButton')}</button>
 						{#if defaultsComplete}
 							<!-- The escape hatch (Kimi's review): only offered once the
 							     seven defaults are complete, i.e. during the challenging
 							     tail or a re-take pass, never mid-tour. -->
 							<button type="button" class="wizard-pause" onclick={returnToSummary}>
-								Return to summary
+								{T('calib.capture.returnToSummary')}
 							</button>
 						{/if}
 					</div>
@@ -1441,55 +1452,53 @@
 				{#if toastVisible}
 					<div class="wizard-toast" role="status">
 						<p>
-							The room sounds a little lively. Your sample is still good, but a quieter space
-							would help.
+							{T('calib.capture.toast')}
 						</p>
 						<button
 							type="button"
 							class="wizard-toast-dismiss"
 							onclick={dismissToast}
-							aria-label="Dismiss">×</button
+							aria-label={T('calib.capture.toastDismissAria')}>×</button
 						>
 					</div>
 				{/if}
 			</div>
 		{:else if phase === 'summary'}
 			<div class="wizard-phase">
-				<h2 id="wizard-title">Profile summary</h2>
+				<h2 id="wizard-title">{T('calib.summary.title')}</h2>
 				{#if finished}
 					<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
 					     roster stays visible and curatable — Re-take still works and
 					     the invitation to sing the remaining three survives. With persistence
 					     (Phase 2b) the confirmation is true across reloads. -->
 					<p class="wizard-lede">
-						Your profile is saved on this device. You can keep refining any reading below.
+						{T('calib.summary.savedLede')}
 					</p>
 					{@render rosterTable(true)}
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
 					<p class="wizard-lede">
-						{capturedCount} of {ALL_VOWELS.length} vowels sampled. Review each reading and re-take
-						anything uncertain before you finish.
+						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
 					</p>
 					{@render rosterTable(true)}
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
-					<button type="button" class="wizard-primary" onclick={finish}>Finish</button>
+					<button type="button" class="wizard-primary" onclick={finish}>{T('calib.summary.finishButton')}</button>
 				{/if}
 				{#if confirmingReset}
 					<div class="wizard-inline-banner">
-						<p>This clears every reading saved for this voice. Start fresh?</p>
+						<p>{T('calib.summary.resetConfirm')}</p>
 						<div class="wizard-hold-actions">
-							<button type="button" onclick={confirmReset}>Start fresh</button>
+							<button type="button" onclick={confirmReset}>{T('calib.summary.startFreshButton')}</button>
 							<button type="button" onclick={() => (confirmingReset = false)}>
-								Keep my profile
+								{T('calib.summary.keepProfileButton')}
 							</button>
 						</div>
 					</div>
 				{:else}
 					<button type="button" class="wizard-pause" onclick={() => (confirmingReset = true)}>
-						Start over
+						{T('calib.summary.startOverButton')}
 					</button>
 				{/if}
 			</div>
@@ -1502,69 +1511,68 @@
 			     calibration-French pass; all strings flagged for Dann's copy
 			     review. -->
 			<div class="wizard-phase">
-				<h2 id="wizard-title">Voice characteristics</h2>
+				<h2 id="wizard-title">{T('calib.characteristics.title')}</h2>
 				<p class="wizard-lede">
-					These optional values sharpen the fit analysis. Any field can stay blank; where a value
-					is missing, the analysis simply stays broad for that dimension.
+					{T('calib.characteristics.lede')}
 				</p>
 				<div class="charx-group">
-					<h3 class="charx-heading">Range</h3>
+					<h3 class="charx-heading">{T('calib.characteristics.rangeHeading')}</h3>
 					<NotePicker
-						label="Lowest comfortable note"
+						label={T('calib.characteristics.rangeLowLabel')}
 						value={activeVoice.characteristics?.rangeLow}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('rangeLow', p)}
 					/>
 					<NotePicker
-						label="Highest comfortable note"
+						label={T('calib.characteristics.rangeHighLabel')}
 						value={activeVoice.characteristics?.rangeHigh}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('rangeHigh', p)}
 					/>
 					{#if rangeInverted}
-						<p class="charx-note" role="status">The lowest note is set above the highest.</p>
+						<p class="charx-note" role="status">{T('calib.characteristics.rangeInvertedNote')}</p>
 					{/if}
 				</div>
 				<div class="charx-group">
-					<h3 class="charx-heading">Tessitura</h3>
+					<h3 class="charx-heading">{T('calib.characteristics.tessituraHeading')}</h3>
 					<!-- Kimi's ruled copy, verbatim (v39 §A.31). -->
-					<p class="charx-hint">Where you live, not your edges.</p>
+					<p class="charx-hint">{T('calib.characteristics.tessituraHint')}</p>
 					<NotePicker
-						label="Tessitura floor"
+						label={T('calib.characteristics.tessituraLowLabel')}
 						value={activeVoice.characteristics?.tessituraLow}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('tessituraLow', p)}
 					/>
 					<NotePicker
-						label="Tessitura ceiling"
+						label={T('calib.characteristics.tessituraHighLabel')}
 						value={activeVoice.characteristics?.tessituraHigh}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('tessituraHigh', p)}
 					/>
 					{#if tessituraInverted}
-						<p class="charx-note" role="status">The tessitura floor is set above its ceiling.</p>
+						<p class="charx-note" role="status">{T('calib.characteristics.tessituraInvertedNote')}</p>
 					{/if}
 				</div>
 				<div class="charx-group">
-					<h3 class="charx-heading">Passaggio</h3>
+					<h3 class="charx-heading">{T('calib.characteristics.passaggioHeading')}</h3>
 					<!-- Kimi's example string redrafted agentless (the §A.31 copy
 					     flag): the app never speaks as "Shane". -->
-					<p class="charx-hint">The zona lies between two turns, a lower and an upper. Enter both to flag it; with either blank it stays unmarked, which does not mean it is absent.</p>
+					<p class="charx-hint">{T('calib.characteristics.passaggioHint')}</p>
 					<NotePicker
-						label="Primary passaggio"
+						label={T('calib.characteristics.passaggioPrimaryLabel')}
 						value={activeVoice.characteristics?.passaggioPrimary}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
 					/>
 					<NotePicker
-						label="Secondary passaggio"
+						label={T('calib.characteristics.passaggioSecondaryLabel')}
 						value={activeVoice.characteristics?.passaggioSecondary}
 						font={notationFont}
 						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
 					/>
 				</div>
 				<button type="button" class="wizard-primary" onclick={() => (phase = 'summary')}>
-					Done
+					{T('calib.characteristics.doneButton')}
 				</button>
 			</div>
 		{/if}

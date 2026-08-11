@@ -45,9 +45,9 @@
 	 * estimated previews are display-only in the workshop and never
 	 * persisted), so the trio's counts are counts of what was actually sung.
 	 *
-	 * Body copy is EN-only for now, matching the calibration surfaces (the
-	 * calibration-UI French pass is the standing open item, v29/v30); the
-	 * header and footer components are already bilingual through t().
+	 * Body copy now reads through the i18n dictionary (N.22 extraction), with
+	 * French values placeholder (English verbatim) pending Dann's copy pass;
+	 * the header and footer components were already bilingual through t().
 	 */
 	import { onMount } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
@@ -55,7 +55,7 @@
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
 	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
 	import type { LineData, PageSize } from '$lib/types';
-	import type { Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	import { buildFitLegend } from '$lib/shane/fit-legend';
@@ -176,6 +176,9 @@
 		transcribedLines = undefined,
 	}: Props = $props();
 
+	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
+	const T = (key: string) => t(key, language);
+
 	const dims = $derived(PAGE_SIZES[pageSize]);
 
 	// The header ruling (Dann, 2026-07-12): the title slot belongs to the
@@ -188,7 +191,7 @@
 	// before first-launch naming. TitleHeader renders the line in its
 	// small-caps register.
 	const subtitle = $derived(
-		`Formant profile: a map of ${voiceName ? `${voiceName}’s` : 'your voice’s'} resonances`,
+		T('profile.subtitle').replace('{voice}', voiceName ? `${voiceName}’s` : T('profile.yourVoice')),
 	);
 
 	// The roster's canonical display order (wizard spec v1 §2: the seven
@@ -199,19 +202,19 @@
 
 	// Counts are spelled out in the locked copy's register ("Seven vowels
 	// are captured"), so the words live here; the roster caps at ten.
-	const COUNT_WORDS = [
-		'No',
-		'One',
-		'Two',
-		'Three',
-		'Four',
-		'Five',
-		'Six',
-		'Seven',
-		'Eight',
-		'Nine',
-		'Ten'
-	];
+	const COUNT_WORDS = $derived([
+		T('profile.count.0'),
+		T('profile.count.1'),
+		T('profile.count.2'),
+		T('profile.count.3'),
+		T('profile.count.4'),
+		T('profile.count.5'),
+		T('profile.count.6'),
+		T('profile.count.7'),
+		T('profile.count.8'),
+		T('profile.count.9'),
+		T('profile.count.10')
+	]);
 
 	// The provisional roster still reads capture STATUS: it names which vowels
 	// the singer may want to re-take. That is a different question from what
@@ -332,8 +335,7 @@
 	);
 	const showOctaveNotice = $derived(octaveShift !== 0);
 	// Approved copy (Dann, 2026-07-18); shown only when the reading octave shifted.
-	const OCTAVE_NOTICE =
-		"This voice line is notated in treble clef but sits an octave above the range you gave, so it's being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score's clef if that's not right.";
+	const OCTAVE_NOTICE = $derived(T('profile.octaveNotice'));
 
 	// ── Performance order for the analysis path (M0 jump-family wiring) ───
 	// analyzeScore and the watch list should see the score as it is actually
@@ -500,35 +502,19 @@
 	// i18n's `fit.broad.body`. A vocabulary sweep of the older `calibrate`
 	// strings is recorded as its own item.
 	//
-	// PLACEHOLDER copy, flagged for Dann, same status as fit-legend.ts's. The
-	// French is mine and needs his eye more than the English does.
+	// N.22: migrated into i18n.ts under profile.withheld.*, preserving the
+	// French verbatim (it is Dann's, still flagged for his eye).
 	const showWithheld = $derived(!adapted.completeness.formants);
-	const WITHHELD_COPY: Record<
-		Language,
-		{ heading: string; lede: string; items: string[]; close: string }
-	> = {
-		en: {
-			heading: 'Nothing is claimed about your voice',
-			lede: 'Ilya has read your score, but no voice has been measured, so there is nothing to compare this line against.',
-			items: [
-				'Every acoustic mark: no crossings, no timbre turns.',
-				'The watch list, entirely. An empty list is the truthful output here.',
-				'Any reading of your range, your tessitura, or your passaggio.'
-			],
-			close: 'The stave carries no marks because none can be earned.'
-		},
-		fr: {
-			heading: 'Rien n’est affirmé sur votre voix',
-			lede: 'Ilya a lu votre partition, mais aucune voix n’a été mesurée, donc il n’y a rien à quoi comparer cette ligne.',
-			items: [
-				'Toute marque acoustique : aucun croisement, aucun changement de timbre.',
-				'La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête.',
-				'Toute lecture de votre ambitus, de votre tessiture ou de votre passaggio.'
-			],
-			close: 'La portée ne porte aucune marque, car aucune ne peut être fondée.'
-		}
-	};
-	const withheld = $derived(WITHHELD_COPY[language]);
+	const withheld = $derived({
+		heading: T('profile.withheld.heading'),
+		lede: T('profile.withheld.lede'),
+		items: [
+			T('profile.withheld.item1'),
+			T('profile.withheld.item2'),
+			T('profile.withheld.item3')
+		],
+		close: T('profile.withheld.close')
+	});
 
 	// The broad-analysis legend text (§B.5): composed from localized parts by
 	// the adapter (EN and FR), rendered print-native in the PageFooter legend
@@ -599,9 +585,12 @@
 	// their quality.
 	let analysedClause = $derived(
 		analysedVowels.length > 0
-			? ` with ${countWord(analysedVowels.length).toLowerCase()} ${
-					analysedVowels.length === 1 ? 'vowel' : 'vowels'
-				} measured`
+			? T('profile.analysedClause')
+					.replace('{count}', countWord(analysedVowels.length).toLowerCase())
+					.replace(
+						'{vowelWord}',
+						analysedVowels.length === 1 ? T('profile.vowelSingular') : T('profile.vowelPlural')
+					)
 			: '',
 	);
 
@@ -638,7 +627,7 @@
 	<div
 		class="fit-paper-container"
 		role="region"
-		aria-label="Repertoire fit score"
+		aria-label={T('profile.scoreRegionAria')}
 		data-analysis-notices={analysisNotices.length
 			? analysisNotices.map((f) => f.code).join(' ')
 			: undefined}
@@ -648,7 +637,7 @@
 			<article
 				class="paper-page profile-page"
 				style="width: {dims.width}px; height: {dims.height}px;"
-				aria-label="Score page {i + 1} of {scorePages.length}"
+				aria-label={T('profile.scorePageAria').replace('{n}', String(i + 1)).replace('{total}', String(scorePages.length))}
 			>
 				{#if i === 0}
 					<TitleHeader
@@ -684,7 +673,7 @@
 			<article
 				class="paper-page profile-page"
 				style="width: {dims.width}px; height: {dims.height}px;"
-				aria-label="Analysis notes"
+				aria-label={T('profile.notesPageAria')}
 			>
 				<RunningHeader headerText={runningHeader} />
 				<div class="commentary-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
@@ -726,7 +715,7 @@
 <article
 	class="paper-page profile-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
-	aria-label="Voice profile"
+	aria-label={T('profile.emptyStateAria')}
 >
 	<!-- Header layer: the same TitleHeader the transcription page renders,
 	     pinned to the top margin. Title = the song's (placeholder until a
@@ -763,26 +752,30 @@
 		{#if hasReadings}
 			<div class="profile-copy">
 				<p class="profile-line profile-lede">
-					Your repertoire-fit results will appear here after Ilya processes the score you upload.
+					{T('profile.lede')}
 				</p>
 				<p class="profile-line profile-status">
-					Your profile is now set{analysedClause}.
+					{T('profile.statusSet').replace('{clause}', analysedClause)}
 				</p>
 				<p class="profile-line profile-status">
-					{#if provisionalVowels.length > 0}Your
+					{#if provisionalVowels.length > 0}{T('profile.provisional.your')}
 						{#each provisionalVowels as g, i (g)}{listSep(
 								i,
 								provisionalVowels.length
 							)}{@render vowelGlyph(g)}{/each}
-						{provisionalVowels.length === 1 ? 'is' : 'are'} provisional, and you can update
-						{provisionalVowels.length === 1 ? 'this value' : 'these values'} anytime through the
-						drawer on the left.{:else}You can update these values anytime through the drawer on
-						the left.{/if}
+						{provisionalVowels.length === 1
+							? T('profile.provisional.isSingular')
+							: T('profile.provisional.isPlural')} {T('profile.provisional.afterIs')}
+						{provisionalVowels.length === 1
+							? T('profile.provisional.thisValue')
+							: T('profile.provisional.theseValues')} {T('profile.provisional.tail')}{:else}{T(
+							'profile.provisional.noneMessage'
+						)}{/if}
 				</p>
 			</div>
 		{:else}
 			<!-- Pre-calibration empty state: a single line by ruling. -->
-			<p class="profile-empty">Calibrate your voice to begin.</p>
+			<p class="profile-empty">{T('profile.emptyState')}</p>
 		{/if}
 	</div>
 
