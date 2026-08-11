@@ -1433,9 +1433,12 @@
 		justify-content: center;
 		align-items: flex-start;
 		gap: 0.5rem;
-		margin-left: -1.5rem;
+		/* N.24: symmetric with .organism. The right margin cancels all 40px of
+		   inset and the left must too, or the box is 16px narrower on the left
+		   and its contents centre 8px right of the drawer's true centre. */
+		margin-left: -2.5rem;
 		margin-right: -2.5rem;
-		width: calc(100% + 4rem);
+		width: calc(100% + 5rem);
 	}
 
 	.word-header-group {
@@ -1525,9 +1528,12 @@
 	.dict-expansion-anchor {
 		position: relative;
 		z-index: 20;
-		margin-left: -1.5rem;
+		/* N.24: symmetric with .organism. The right margin cancels all 40px of
+		   inset and the left must too, or the box is 16px narrower on the left
+		   and its contents centre 8px right of the drawer's true centre. */
+		margin-left: -2.5rem;
 		margin-right: -2.5rem;
-		width: calc(100% + 4rem);
+		width: calc(100% + 5rem);
 	}
 
 	.dict-expansion {
