@@ -20,6 +20,18 @@ const strings: Record<string, Record<Language, string>> = {
 	'drawer.collapse':             { en: 'Collapse drawer',              fr: 'Réduire le tiroir' },
 	'drawer.expand':               { en: 'Expand drawer',                fr: 'Ouvrir le tiroir' },
 
+	// ── Tab bar (N.36) ───────────────────────────────────────
+	//    The labels lived in the component, so French lived in two
+	//    places. Three of the four are invariant by ruling; they are
+	//    keyed anyway, so the invariance is recorded here as identical
+	//    en/fr values rather than as an absence from the dictionary.
+	//    'Fit' is invariant by Dann's ruling of 13 July 2026; the
+	//    internal tab id stays 'shane', the dictionary key does not.
+	'tab.transcription':           { en: 'Transcription',                fr: 'Transcription' },
+	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
+	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
+	'tab.fit':                     { en: 'Fit',                          fr: 'Fit' },
+
 	// ── Input area ───────────────────────────────────────────
 	'input.placeholder':           { en: 'Paste Russian text here\u2026',       fr: 'Collez le texte russe ici\u2026' },
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },

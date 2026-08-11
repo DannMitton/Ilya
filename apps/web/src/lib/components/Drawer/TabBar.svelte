@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import type { Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 	import { INCLUDE_SHANE } from '$lib/wall';
 
 	interface Props {
@@ -14,11 +14,13 @@
 
 	let { activeTab, language, ontabchange }: Props = $props();
 
+	const T = (key: string) => t(key, language);
+
 	function getLabel(id: TabId): string {
 		switch (id) {
-			case 'transcription': return 'Transcription';
-			case 'learn': return language === 'fr' ? 'Leçons' : 'Learn';
-			case 'guide': return 'Guide';
+			case 'transcription': return T('tab.transcription');
+			case 'learn': return T('tab.learn');
+			case 'guide': return T('tab.guide');
 			// The engine codename is 'shane' throughout the code; the tab
 			// wears the user-facing 'Fit' (Dann's ruling, 2026-07-12).
 			// French naming RULED (Dann, 2026-07-13): 'Fit' is invariant, a
@@ -26,7 +28,7 @@
 			// italicized-name treatment is the precedent. This supersedes
 			// the earlier note deferring a French label to the calibration
 			// French pass; there is no French label to draft.
-			case 'shane': return 'Fit';
+			case 'shane': return T('tab.fit');
 		}
 	}
 
@@ -38,7 +40,7 @@
 		: ['transcription', 'learn', 'guide'];
 
 	function handleKeydown(event: KeyboardEvent) {
-		const currentIndex = tabIds.findIndex(t => t === activeTab);
+		const currentIndex = tabIds.findIndex((id) => id === activeTab);
 		let newIndex = currentIndex;
 
 		if (event.key === 'ArrowRight') {

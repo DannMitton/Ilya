@@ -654,6 +654,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		handleHashNavigation();
 	}
 
+	/* ── N.40: mirror the language state onto <html lang> ────
+	   app.html:2 hardcodes lang="en" and nothing ever wrote the
+	   attribute afterwards, so a screen reader announced every French
+	   string with English pronunciation rules. It also governs
+	   hyphenation and quote rendering.
+
+	   This tracks `language` itself rather than its three writers (the
+	   initialiser, handleLanguageChange, and the onMount restore), so
+	   no path can miss it.
+
+	   RESIDUAL, stated rather than hidden: the served document is
+	   lang="en" until hydration, because the language is restored from
+	   localStorage on the client and the server cannot know it. */
+	$effect(() => {
+		document.documentElement.lang = language;
+	});
+
 	/* ── IntersectionObserver for scroll-based active heading ─ */
 
 	$effect(() => {
