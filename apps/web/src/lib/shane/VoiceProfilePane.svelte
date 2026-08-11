@@ -583,15 +583,25 @@
 	// captured": the count now spans every reading the forecast reads, which
 	// includes provisional ones, and "successfully captured" would overclaim
 	// their quality.
-	let analysedClause = $derived(
-		analysedVowels.length > 0
-			? T('profile.analysedClause')
-					.replace('{count}', countWord(analysedVowels.length).toLowerCase())
-					.replace(
-						'{vowelWord}',
-						analysedVowels.length === 1 ? T('profile.vowelSingular') : T('profile.vowelPlural')
-					)
-			: '',
+	let statusLine = $derived(
+		analysedVowels.length === 0
+			? T('profile.statusSetPlain')
+			: (analysedVowels.length === 1
+					? T('profile.statusSetMeasuredSingular')
+					: T('profile.statusSetMeasuredPlural')
+				).replace('{count}', countWord(analysedVowels.length).toLowerCase()),
+	);
+
+	// N.22: split around {vowels} so the glyph snippet renders in the gap. The
+	// split point travels with the translation, which is the entire point: the
+	// fragments this replaced could not be translated, because French needs a
+	// noun English omits ("Votre voyelle [ɛ]") and the gender then
+	// propagates through the participle.
+	let provisionalParts = $derived(
+		(provisionalVowels.length === 1
+			? T('profile.provisional.sentenceSingular')
+			: T('profile.provisional.sentencePlural')
+		).split('{vowels}'),
 	);
 
 	/**
@@ -755,20 +765,13 @@
 					{T('profile.lede')}
 				</p>
 				<p class="profile-line profile-status">
-					{T('profile.statusSet').replace('{clause}', analysedClause)}
+					{statusLine}
 				</p>
 				<p class="profile-line profile-status">
-					{#if provisionalVowels.length > 0}{T('profile.provisional.your')}
-						{#each provisionalVowels as g, i (g)}{listSep(
+					{#if provisionalVowels.length > 0}{provisionalParts[0]}{#each provisionalVowels as g, i (g)}{listSep(
 								i,
 								provisionalVowels.length
-							)}{@render vowelGlyph(g)}{/each}
-						{provisionalVowels.length === 1
-							? T('profile.provisional.isSingular')
-							: T('profile.provisional.isPlural')} {T('profile.provisional.afterIs')}
-						{provisionalVowels.length === 1
-							? T('profile.provisional.thisValue')
-							: T('profile.provisional.theseValues')} {T('profile.provisional.tail')}{:else}{T(
+							)}{@render vowelGlyph(g)}{/each}{provisionalParts[1] ?? ''}{:else}{T(
 							'profile.provisional.noneMessage'
 						)}{/if}
 				</p>
