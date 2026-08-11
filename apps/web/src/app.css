@@ -223,3 +223,33 @@ body {
 		size: letter;
 	}
 }
+
+/* ── N.23: iOS Safari's focus zoom ─────────────────────────────────────
+   Safari zooms the page whenever a focused form control's font-size is
+   below 16px, and a zoomed page pans sideways. Measured in E.37 against
+   .text-input at 0.9rem (14.4px): zoom factor 16 / 14.4 = 1.1111,
+   predicted pan 43.0 CSS px, measured 43.2. The pan reads as breakage and
+   it silently corrupts any layout measurement taken while a field has
+   focus, which is the expensive part.
+
+   This answers to MODALITY rather than form factor (ruling 4, sixth
+   clause), so a fine pointer keeps today's sizes exactly.
+
+   max(1rem, 16px) rather than a bare 16px: it guarantees the threshold
+   that stops the zoom while still scaling up for a singer who has raised
+   their browser's base font size.
+
+   !important is required, not casual: Svelte scopes component styles with
+   a generated class, so .text-input.svelte-xxxx outranks a bare element
+   selector here. The @media print block above uses the same device for
+   the same reason.
+
+   maximum-scale=1 is NOT on the table. It would also stop the zoom, and
+   it kills pinch, which Dann kept deliberately (E.36 section 7.6). */
+@media (pointer: coarse) {
+	input,
+	select,
+	textarea {
+		font-size: max(1rem, 16px) !important;
+	}
+}
