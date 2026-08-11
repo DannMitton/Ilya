@@ -505,7 +505,10 @@
 	   either one's identity colour. The section label inside it does that. */
 	.drawer-anchor {
 		flex-shrink: 0;
-		padding: 10px 1rem 12px;
+		/* 6px top to match .console-section's padding exactly
+		   (RootPanel.svelte:498), so ANALYSIS and NOTATION sit the same
+		   distance below their rules. */
+		padding: 6px 1rem 12px;
 		background: var(--drawer-bg);
 		border-top: 2px double var(--ink-primary, #1a1612);
 	}

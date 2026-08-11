@@ -227,9 +227,14 @@
 	   (Drawer.svelte:1021-1024), the only control in the app that
 	   already meets it. The chevron is the TOC's own 10x10 glyph, so no
 	   new affordance enters the vocabulary. */
+	/* Top-aligned, not centred. Centring a 0.7rem label inside a 44px box
+	   put NOTATION's label 25px below its rule while ANALYSIS sat 6px
+	   below its own (RootPanel.svelte:495-498). Dann caught the 19px.
+	   The target stays 44 by 44 and simply extends downward from the
+	   label rather than being centred on it, so no exemption is created. */
 	.notation-disclosure {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		width: 100%;
 		padding: 0;
