@@ -17,8 +17,8 @@
 		 * NOTATION (item N.7). Rendered ONCE, outside the tab switch, anchored
 		 * below the scrolling panel so it holds the same position on every tab
 		 * that shows it. Dann's ruling, 2026-08-06: predictable, and within a
-		 * thumb's reach on mobile, where :908-929 fixes the drawer to
-		 * calc(100vh - 56px) and the tab bar owns the 56px beneath it.
+		 * thumb's reach on mobile, where :955 fixes the drawer to
+		 * calc(100dvh - 56px) and the tab bar owns the 56px beneath it.
 		 *
 		 * A snippet rather than props, matching rootPanel and shanePanel, so
 		 * the state stays in +page.svelte and nothing is drilled through here.
@@ -952,7 +952,7 @@
 			top: 0 !important;
 			left: 0 !important;
 			width: 100% !important;
-			height: calc(100vh - 56px) !important;
+			height: calc(100dvh - 56px) !important;
 			z-index: 60;
 			overflow: hidden;
 			transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1) !important;
