@@ -23,9 +23,12 @@
 	 *   prop, driven by the wizard's phase): preventive, not punitive.
 	 * - "Voice", not "User" or "Singer": Shane measures the instrument, not
 	 *   the identity, and the default scales cleanly to variants and guests.
-	 *   French mode ("Voix N") lands with the calibration-UI French pass
-	 *   (standing open item); the parent supplies the default text.
+	 *   French mode ("Voix N") arrived with N.22 (E.40, 2026-08-11). The
+	 *   parent still supplies the default name text; this component now
+	 *   reads its own strings from the dictionary.
 	 */
+	import { t, type Language } from '$lib/i18n';
+
 	interface VoiceMeta {
 		id: string;
 		name: string;
@@ -36,6 +39,8 @@
 		activeId: string | null;
 		/** Inert during an active capture; the wizard drives this. */
 		disabled?: boolean;
+		/** N.22: active display language, threaded to the i18n dictionary. */
+		language: Language;
 		/** The prefilled sequential default for New/Duplicate/first launch. */
 		nextDefaultName: string;
 		onSelect: (id: string) => void;
@@ -51,6 +56,7 @@
 		voices,
 		activeId,
 		disabled = false,
+		language,
 		nextDefaultName,
 		onSelect,
 		onCreate,
@@ -58,6 +64,8 @@
 		onRename,
 		onDelete
 	}: Props = $props();
+
+	const T = (key: string) => t(key, language);
 
 	type Mode = 'closed' | 'list' | 'new' | 'duplicate' | 'rename';
 	let mode = $state<Mode>('closed');
@@ -134,7 +142,10 @@
 
 	function fmtDate(iso: string): string {
 		try {
-			return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+			return new Date(iso).toLocaleDateString(language === 'fr' ? 'fr-CA' : 'en-CA', {
+				month: 'short',
+				day: 'numeric'
+			});
 		} catch {
 			return '';
 		}
@@ -159,8 +170,7 @@
 	     name/field association survives the promotion. -->
 	<div class="ps ps-first">
 		<label class="ps-first-lede" for="ps-first-name"
-			>Please name your profile so we can map your voice across the ten sung Russian
-			vowels.</label
+			>{T('calib.switcher.firstLaunchLede')}</label
 		>
 		<div class="ps-name-row">
 			<input
@@ -174,11 +184,15 @@
 				}}
 				use:selectAll
 			/>
-			<button type="button" class="ps-primary" onclick={submitFirst}>Start</button>
+			<button type="button" class="ps-primary" onclick={submitFirst}>{T('calib.switcher.startButton')}</button>
 		</div>
 	</div>
 {:else}
 	<div class="ps">
+		<!-- N.22 (E.40): the ", options" suffix is deliberately NOT keyed.
+		     "options" is already a French word, so this accessible name is
+		     correct in both languages. Dann's ruling, 2026-08-11. Do not
+		     "fix" this into the dictionary. -->
 		<button
 			type="button"
 			class="ps-header"
@@ -220,19 +234,19 @@
 				{/if}
 				{#if confirmingDelete}
 					<div class="ps-confirm">
-						<p>This deletes {active?.name} and its readings from this device. Delete?</p>
+						<p>{T('calib.switcher.deleteConfirm').replace('{name}', active?.name ?? '')}</p>
 						<div class="ps-verbs">
-							<button type="button" onclick={confirmDelete}>Delete</button>
-							<button type="button" onclick={() => (confirmingDelete = false)}>Keep it</button>
+							<button type="button" onclick={confirmDelete}>{T('calib.switcher.deleteButton')}</button>
+							<button type="button" onclick={() => (confirmingDelete = false)}>{T('calib.switcher.keepButton')}</button>
 						</div>
 					</div>
 				{:else}
 					<div class="ps-verbs">
-						<button type="button" onclick={beginNew}>New</button>
-						<button type="button" onclick={beginDuplicate}>Duplicate</button>
-						<button type="button" onclick={beginRename}>Rename</button>
+						<button type="button" onclick={beginNew}>{T('calib.switcher.newButton')}</button>
+						<button type="button" onclick={beginDuplicate}>{T('calib.switcher.duplicateButton')}</button>
+						<button type="button" onclick={beginRename}>{T('calib.switcher.renameButton')}</button>
 						{#if voices.length > 1}
-							<button type="button" onclick={() => (confirmingDelete = true)}>Delete</button>
+							<button type="button" onclick={() => (confirmingDelete = true)}>{T('calib.switcher.deleteButton')}</button>
 						{/if}
 					</div>
 				{/if}
@@ -240,7 +254,7 @@
 		{:else if mode === 'new' || mode === 'duplicate' || mode === 'rename'}
 			<div class="ps-panel">
 				<label class="ps-label" for="ps-name">
-					{mode === 'rename' ? 'Rename this voice' : 'What shall we call this voice?'}
+					{mode === 'rename' ? T('calib.switcher.renameLabel') : T('calib.switcher.nameLabel')}
 				</label>
 				<div class="ps-name-row">
 					<input
@@ -254,8 +268,8 @@
 						}}
 						use:selectAll
 					/>
-					<button type="button" class="ps-primary" onclick={submitName}>Save</button>
-					<button type="button" class="ps-quiet" onclick={() => (mode = 'list')}>Cancel</button>
+					<button type="button" class="ps-primary" onclick={submitName}>{T('calib.switcher.saveButton')}</button>
+					<button type="button" class="ps-quiet" onclick={() => (mode = 'list')}>{T('calib.switcher.cancelButton')}</button>
 				</div>
 			</div>
 		{/if}

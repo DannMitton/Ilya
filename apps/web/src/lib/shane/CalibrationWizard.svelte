@@ -1284,6 +1284,7 @@
 		voices={store.voices}
 		activeId={store.activeId}
 		disabled={phase === 'capture'}
+		{language}
 		{nextDefaultName}
 		onSelect={selectVoice}
 		onCreate={(n) => createVoice(n)}

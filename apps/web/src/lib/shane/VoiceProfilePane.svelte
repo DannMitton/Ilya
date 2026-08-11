@@ -190,8 +190,15 @@
 	// substituted, falling back to "your voice" in the brief window
 	// before first-launch naming. TitleHeader renders the line in its
 	// small-caps register.
+	// N.22 (E.40): one key per shape, so each language owns its own word
+	// order. The old form glued an English possessive onto the name and
+	// rendered "de Voix 1's" in French. The guillemets in the French also
+	// dodge elision: a bare "de {voice}" breaks on a vowel-initial name
+	// ("d’Anne", not "de Anne"). Dann's ruling, 2026-08-11.
 	const subtitle = $derived(
-		T('profile.subtitle').replace('{voice}', voiceName ? `${voiceName}’s` : T('profile.yourVoice')),
+		voiceName
+			? T('profile.subtitleNamed').replace('{voice}', voiceName)
+			: T('profile.subtitleYours'),
 	);
 
 	// The roster's canonical display order (wizard spec v1 §2: the seven
@@ -202,8 +209,11 @@
 
 	// Counts are spelled out in the locked copy's register ("Seven vowels
 	// are captured"), so the words live here; the roster caps at ten.
+	// N.22 (E.40): `profile.count.0` is deleted. `countWord` has exactly one
+	// caller (`statusLine`, below), and that caller sends a zero count to
+	// `profile.statusSetPlain` instead, so index 0 could never render in
+	// either language. The array now starts at one; `countWord` shifts.
 	const COUNT_WORDS = $derived([
-		T('profile.count.0'),
 		T('profile.count.1'),
 		T('profile.count.2'),
 		T('profile.count.3'),
@@ -573,7 +583,7 @@
 	const runningHeader = $derived(scoreTitle?.trim() ? scoreTitle : subtitle);
 
 	function countWord(n: number): string {
-		return COUNT_WORDS[n] ?? String(n);
+		return COUNT_WORDS[n - 1] ?? String(n);
 	}
 
 	// Built as an expression so the leading space survives Svelte's
