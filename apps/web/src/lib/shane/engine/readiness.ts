@@ -127,8 +127,8 @@ export const FRY_PRESENCE_MIN_SNR_DB = 6;
  * strictly requires.
  *
  * Both numbers are taken from the vowel steps so the two phases feel like one
- * instrument: `3 × COUNT_INTERVAL` (`Pacifier.svelte:282`) and `SWEEP_MS`
- * (`Pacifier.svelte:284`).
+ * instrument: `3 × COUNT_INTERVAL` and `SWEEP_MS`, both named in
+ * `Pacifier.svelte`.
  */
 export const READINESS_PREP_MS = 2100;
 export const READINESS_CAPTURE_MS = 3000;

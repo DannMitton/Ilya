@@ -480,6 +480,25 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.withheld.item1': { en: 'Every acoustic mark: no crossings, no timbre turns.', fr: 'Toute marque acoustique : aucun croisement, aucun changement de timbre.' },
 	'profile.withheld.item2': { en: 'The watch list, entirely. An empty list is the truthful output here.', fr: 'La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête.' },
 	'profile.withheld.item3': { en: 'Any reading of your range, your tessitura, or your passaggio.', fr: 'Toute lecture de votre ambitus, de votre tessiture ou de votre passaggio.' },
+	// ── NotePicker (N.50) ─────────────────
+	//    Scope B, ruled by Dann E.43: the three aria-labels, Clear, the
+	//    empty readout, and the five accidental options. The accidental
+	//    OPTIONS carry no glyph: a native iOS picker wheel ignores CSS, so
+	//    the glyph could be neither kerned nor set in the notation font,
+	//    and a word reads better on a wheel than a mis-set symbol.
+	//    French adopted from GuideContent.svelte:64, which names this exact
+	//    control: "choisissez la lettre, l'altération et l'octave".
+	//    dièse, bécarre and double dièse are COINED, E.43.
+	'notePicker.letterAria':      { en: 'Note letter', fr: 'Lettre de la note' },
+	'notePicker.accidentalAria':  { en: 'Accidental',  fr: 'Altération' },
+	'notePicker.octaveAria':      { en: 'Octave',      fr: 'Octave' },
+	'notePicker.clear':           { en: 'Clear',       fr: 'Effacer' },
+	'notePicker.empty':           { en: 'No note set', fr: 'Aucune note définie' },
+	'notePicker.acc.doubleFlat':  { en: 'double flat',  fr: 'double bémol' },
+	'notePicker.acc.flat':        { en: 'flat',         fr: 'bémol' },
+	'notePicker.acc.natural':     { en: 'natural',      fr: 'bécarre' },
+	'notePicker.acc.sharp':       { en: 'sharp',        fr: 'dièse' },
+	'notePicker.acc.doubleSharp': { en: 'double sharp', fr: 'double dièse' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 

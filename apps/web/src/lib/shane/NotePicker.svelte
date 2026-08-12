@@ -27,6 +27,7 @@
 	 * Accidental and octave persist while unset, so re-choosing a letter
 	 * restores the singer's staged context instead of resetting it.
 	 */
+	import { t, type Language } from '$lib/i18n';
 	import type { Pitch, RequiredGlyphName } from '@ilya/score-parser';
 	import { smuflFontSizePx, spToPx } from '@ilya/score-parser';
 	import type { LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
@@ -47,9 +48,14 @@
 		/** Shared notation font; null falls back to primitive shapes. */
 		font?: LoadedNotationFont | null;
 		onchange: (p: Pitch | undefined) => void;
+		/** N.50: active display language, threaded to the dictionary. */
+		language: Language;
 	}
 
-	let { label, value = undefined, font = null, onchange }: Props = $props();
+	let { label, value = undefined, font = null, onchange, language }: Props = $props();
+
+	// N.50: the house dictionary pattern, per `const T` in CalibrationWizard.svelte.
+	const T = (key: string) => t(key, language);
 
 	// Staged accidental and octave survive while no letter is chosen (and
 	// after Clear), so the controls never snap back mid-entry.
@@ -60,12 +66,16 @@
 	let curOctave = $derived(value ? value.octave : stagedOctave);
 
 	const OCTAVES = [1, 2, 3, 4, 5, 6];
-	const ACCIDENTALS: { alter: number; label: string }[] = [
-		{ alter: -2, label: '♭♭ double flat' },
-		{ alter: -1, label: '♭ flat' },
-		{ alter: 0, label: '♮ natural' },
-		{ alter: 1, label: '♯ sharp' },
-		{ alter: 2, label: '♯♯ double sharp' }
+	// N.50: the option text is a dictionary KEY, not a literal. The glyphs
+	// were dropped with the translation (Dann, E.43): a native picker wheel
+	// takes no CSS, so ♯♯ could be neither kerned nor replaced by the
+	// notation font's single x-shaped accidentalDoubleSharp.
+	const ACCIDENTALS: { alter: number; key: string }[] = [
+		{ alter: -2, key: 'notePicker.acc.doubleFlat' },
+		{ alter: -1, key: 'notePicker.acc.flat' },
+		{ alter: 0, key: 'notePicker.acc.natural' },
+		{ alter: 1, key: 'notePicker.acc.sharp' },
+		{ alter: 2, key: 'notePicker.acc.doubleSharp' }
 	];
 
 	function setStep(step: string) {
@@ -140,7 +150,7 @@
 		<div class="np-controls">
 			<select
 				class="np-select"
-				aria-label="Note letter"
+				aria-label={T('notePicker.letterAria')}
 				value={curStep}
 				onchange={(e) => setStep(e.currentTarget.value)}
 			>
@@ -151,17 +161,17 @@
 			</select>
 			<select
 				class="np-select"
-				aria-label="Accidental"
+				aria-label={T('notePicker.accidentalAria')}
 				value={String(curAlter)}
 				onchange={(e) => setAlter(Number(e.currentTarget.value))}
 			>
 				{#each ACCIDENTALS as a (a.alter)}
-					<option value={String(a.alter)}>{a.label}</option>
+					<option value={String(a.alter)}>{T(a.key)}</option>
 				{/each}
 			</select>
 			<select
 				class="np-select"
-				aria-label="Octave"
+				aria-label={T('notePicker.octaveAria')}
 				value={String(curOctave)}
 				onchange={(e) => setOctave(Number(e.currentTarget.value))}
 			>
@@ -259,10 +269,10 @@
 			{#if value}
 				<span class="np-name" aria-hidden="true">{pitchLabel(value)}</span>
 				<span class="visually-hidden">{spokenPitchLabel(value)}</span>
-				<button type="button" class="np-clear" onclick={clear}>Clear</button>
+				<button type="button" class="np-clear" onclick={clear}>{T('notePicker.clear')}</button>
 			{:else}
 				<span class="np-name np-name-empty" aria-hidden="true">—</span>
-				<span class="visually-hidden">No note set</span>
+				<span class="visually-hidden">{T('notePicker.empty')}</span>
 			{/if}
 		</div>
 	</div>

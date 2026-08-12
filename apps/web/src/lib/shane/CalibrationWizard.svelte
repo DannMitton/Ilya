@@ -83,7 +83,7 @@
 	// RENAMED 2026-08-04 on Dann's ruling, and the word mattered enough to move
 	// an identifier: **none of the ten vowels is optional.** All ten are
 	// necessary for sung Russian. Five are the floor the four derivations
-	// consume (`Pacifier.svelte:204`); seven are what the guided tour asks for;
+	// consume (`FLOOR_ANCHORS` in `Pacifier.svelte`); seven are what the tour asks;
 	// these three are simply the hardest for a new singer to produce on demand,
 	// so Ilya derives them as an assistance until the singer chooses to sing
 	// them. **`OPTIONAL_VOWELS` encoded a claim about importance that is false,
@@ -118,7 +118,8 @@
 		voiceType?: VoiceType;
 		/**
 		 * The auditory input, injectable on the same pattern the Pacifier
-		 * already uses (Pacifier.svelte:85). Defaults to the live session, so
+		 * already uses (the `session` prop in `Pacifier.svelte`). Defaults to
+		 * the live session, so
 		 * the page shell needs no change; a harness can pass a
 		 * StubCaptureSession to drive the readiness and capture paths without a
 		 * microphone. This replaces the retired `readinessOutcome` hook, which
@@ -563,7 +564,7 @@
 	 * not drive it: both read READINESS_PREP_MS and READINESS_CAPTURE_MS from
 	 * `engine/readiness.ts`, which is the same decoupling the vowel arc uses
 	 * ("a fixed 3.0 s clock that never stalls, independent of the engine's
-	 * delivery time", `Pacifier.svelte:412`). If they ever disagree, the bar is
+	 * delivery time", `SWEEP_MS` in `Pacifier.svelte`). If they disagree, the bar is
 	 * wrong and the measurement is not.
 	 */
 	function clearReadinessTimers() {
@@ -850,6 +851,20 @@
 		profile = withIghPass(direct);
 		persist();
 		onProfileChange?.(profile);
+	}
+
+	/**
+	 * N.48: the guided tour moves on when the singer skips the vowel it is
+	 * waiting on. ONLY that vowel. A long-press anywhere else on the roster
+	 * is curation, not a decision about the tour, and must not move the
+	 * queue. `defaultsComplete` at the escape hatch is deliberately left
+	 * alone (Dann, 2026-07-10, via Kimi's review): this unsticks the tour
+	 * rather than opening the mid-tour exit that guard exists to prevent.
+	 */
+	function handleVowelSkipped(vowel: Vowel) {
+		if (phase !== 'capture' || holdActive) return;
+		if (vowel !== currentVowel) return;
+		advance();
 	}
 
 	function handleRolledBack(vowel: Vowel) {
@@ -1393,6 +1408,7 @@
 						onVowelCaptured={handleVowelCaptured}
 						onProfileChange={handleProfileChange}
 						onRetakeRolledBack={handleRolledBack}
+						onVowelSkipped={handleVowelSkipped}
 						{language}
 					/>
 					{#if paused}
@@ -1524,12 +1540,14 @@
 						label={T('calib.characteristics.rangeLowLabel')}
 						value={activeVoice.characteristics?.rangeLow}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('rangeLow', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.rangeHighLabel')}
 						value={activeVoice.characteristics?.rangeHigh}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('rangeHigh', p)}
 					/>
 					{#if rangeInverted}
@@ -1544,12 +1562,14 @@
 						label={T('calib.characteristics.tessituraLowLabel')}
 						value={activeVoice.characteristics?.tessituraLow}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('tessituraLow', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.tessituraHighLabel')}
 						value={activeVoice.characteristics?.tessituraHigh}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('tessituraHigh', p)}
 					/>
 					{#if tessituraInverted}
@@ -1565,12 +1585,14 @@
 						label={T('calib.characteristics.passaggioPrimaryLabel')}
 						value={activeVoice.characteristics?.passaggioPrimary}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.passaggioSecondaryLabel')}
 						value={activeVoice.characteristics?.passaggioSecondary}
 						font={notationFont}
+						{language}
 						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
 					/>
 				</div>

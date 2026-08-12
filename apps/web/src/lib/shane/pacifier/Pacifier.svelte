@@ -67,6 +67,13 @@
 		 * re-take, since nothing in the profile changed.
 		 */
 		onRetakeRolledBack?: (vowel: Vowel, rejectedFormant: CalibratedFormant) => void;
+		/**
+		 * N.48: the long-press skip is a promise the interface already makes
+		 * (it announces `pacifier.skipped`) and no host could keep, because
+		 * nothing routed the skip back out. Fires with the skipped vowel.
+		 * The Pacifier has no tour of its own and advances nothing here.
+		 */
+		onVowelSkipped?: (vowel: Vowel) => void;
 		/** N.22/N.35: active display language, threaded to the i18n dictionary. */
 		language: Language;
 	}
@@ -85,10 +92,11 @@
 		onVowelCaptured,
 		onProfileChange,
 		onRetakeRolledBack,
+		onVowelSkipped,
 		language
 	}: PacifierProps = $props();
 
-	// N.35: the house dictionary pattern, per CalibrationWizard.svelte:211.
+	// N.35: the house dictionary pattern, per `const T` in CalibrationWizard.svelte.
 	const T = (key: string) => t(key, language);
 	// Every caption that names a vowel puts it mid-sentence, Dann's ruling of
 	// 2026-08-12, so {v} is substituted rather than concatenated at the front.
@@ -609,6 +617,7 @@
 		n.state = 'deselected';
 		announce = say('pacifier.skipped', layout[idx].g);
 		onProfileChange?.(formantsMap());
+		onVowelSkipped?.(layout[idx].g);
 	}
 
 	// ── Pointer: distinguish a tap from a long-press ─────────────────────────
@@ -859,6 +868,12 @@
 	.vowel {
 		cursor: pointer;
 		-webkit-tap-highlight-color: transparent;
+		/* N.48: iOS raises the callout and selection UI on a long press and
+		   swallows the gesture before LONGPRESS_MS fires. `user-select` takes
+		   the house form already used at HeaderBar.svelte:103 and
+		   Drawer.svelte:587; `-webkit-touch-callout` is new to this tree. */
+		-webkit-touch-callout: none;
+		user-select: none;
 	}
 	.vowel:focus {
 		outline: none;
