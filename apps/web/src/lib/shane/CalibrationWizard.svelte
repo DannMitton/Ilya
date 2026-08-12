@@ -42,7 +42,7 @@
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { onMount, tick } from 'svelte';
-	import Pacifier, { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
+	import Pacifier, { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
 	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
 	import NotePicker from '$lib/shane/NotePicker.svelte';
@@ -546,7 +546,8 @@
 	// expect 3-5 seconds to carry out this task." The engine reaches its verdict
 	// in about one second; the step is longer on purpose, so the singer is
 	// counted in and can see when they have given enough. Same shape as the
-	// vowel steps (`pacifier/Pacifier.svelte:360` and `:412`).
+	// vowel steps (`pacifier/Pacifier.svelte`'s `beginPrepare`, and its
+	// `SWEEP_MS` arc).
 	let readinessStep = $state<'quiet' | 'prepare' | 'capture' | 'done' | 'unmeasured'>('quiet');
 	let readinessResult = $state<ReadinessResult | undefined>(undefined);
 	let readinessError = $state<ShaneEngineError | undefined>(undefined);
@@ -781,7 +782,7 @@
 		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
 		// confirmation, this is the number's first availability to non-visual
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
-		logAnnounce = `${T('calib.log.addedPrefix')} ${SPOKEN_NAME[vowel]}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
+		logAnnounce = `${T('calib.log.addedPrefix')} ${spokenName(vowel, language)}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
 		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
@@ -877,11 +878,11 @@
 		// announcement text lands in a region that always exists.
 		holdAnnounce =
 			kind === 'good'
-				? `${SPOKEN_NAME[vowel]}${T('calib.capture.hold.captured')}`
+				? `${spokenName(vowel, language)}${T('calib.capture.hold.captured')}`
 				: kind === 'rolled-back'
 					? T('calib.capture.hold.rolledBack')
 					: kind === 'implausible'
-						? `${T('calib.capture.hold.implausiblePrefix')} ${SPOKEN_NAME[vowel]}. ${T('calib.capture.hold.tryAgain')}`
+						? `${T('calib.capture.hold.implausiblePrefix')} ${spokenName(vowel, language)}. ${T('calib.capture.hold.tryAgain')}`
 						: T('calib.capture.hold.noted');
 		holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
@@ -1096,7 +1097,7 @@
 	only the informal name is announced. Sighted users see both.
 -->
 {#snippet vowelTag(g: Vowel)}<span class="ipa-tag" aria-hidden="true">[{g}]</span
-	>{SPOKEN_NAME[g]}{/snippet}
+	>{spokenName(g, language)}{/snippet}
 
 <!--
 	The resonance symbol (Dann, 2026-07-10): italic f (variable), upright
@@ -1392,6 +1393,7 @@
 						onVowelCaptured={handleVowelCaptured}
 						onProfileChange={handleProfileChange}
 						onRetakeRolledBack={handleRolledBack}
+						{language}
 					/>
 					{#if paused}
 						<div class="wizard-catcher" role="presentation"></div>

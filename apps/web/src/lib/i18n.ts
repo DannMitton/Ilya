@@ -367,6 +367,53 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
 	'calib.capture.toast': { en: 'The room sounds a little lively. Your sample is still good, but a quieter space would help.', fr: 'La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait.' },
 	'calib.capture.toastDismissAria': { en: 'Dismiss', fr: 'Fermer' },
+
+	// ── Vowel names (N.35) ────────────────────────
+	//    Mitton (2020) §4.6's speakable nicknames, moved out of
+	//    Pacifier.svelte, where they were English-only. Keyed by IPA
+	//    glyph, as the old SPOKEN_NAME Record<Vowel, string> was.
+	//    [o] and [u] were bare letters until Dann named them on
+	//    2026-08-12: Russian-o after Grayson (2012) Appendix K, 'The
+	//    Story of /o/', already cited at LearnContent.svelte:2819;
+	//    cardinal-u to parallel cardinal-i and stand off horseshoe-u.
+	//    FIVE of the French forms are the tree's own, not coinages:
+	//    i vélaire (LearnContent.svelte:787), e fermé (:807), e ouvert,
+	//    a clair and a sombre (GuideContent.svelte:70). The other five
+	//    are proposals Dann ratified on 2026-08-12.
+	'vowel.name.i': { en: 'cardinal-i', fr: 'i cardinal' },
+	'vowel.name.e': { en: 'close-e', fr: 'e fermé' },
+	'vowel.name.ɪ': { en: 'smallcaps-i', fr: 'i petite capitale' },
+	'vowel.name.ɨ': { en: 'velar-i', fr: 'i vélaire' },
+	'vowel.name.ɛ': { en: 'open-e', fr: 'e ouvert' },
+	'vowel.name.a': { en: 'bright-a', fr: 'a clair' },
+	'vowel.name.ɑ': { en: 'dark-a', fr: 'a sombre' },
+	'vowel.name.ʌ': { en: 'turned-v', fr: 'v culbuté' },
+	'vowel.name.o': { en: 'Russian-o', fr: 'o russe' },
+	'vowel.name.u': { en: 'cardinal-u', fr: 'u cardinal' },
+	'vowel.spoken': { en: 'the {name} vowel', fr: 'la voyelle {name}' },
+
+	// ── Pacifier captions (N.35) ──────────────────
+	//    {v} is the whole phrase from 'vowel.spoken'. Dann ruled on
+	//    2026-08-12 that {v} never opens a French sentence, so the
+	//    French shapes differ from the English deliberately.
+	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
+	'pacifier.preparing': { en: 'Preparing {v}. Three.', fr: 'Préparation de {v}. Trois.' },
+	'pacifier.beginPhonating': { en: 'Begin phonating now. {v} in vocal fry.', fr: 'Commencez la phonation maintenant\u00a0: {v} en friture vocale.' },
+	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
+	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
+	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
+	'pacifier.sampleUncertain': { en: '{v} sample uncertain. Tap to retry.', fr: 'Échantillon incertain pour {v}. Touchez pour réessayer.' },
+	'pacifier.cancelled': { en: 'Capture cancelled.', fr: 'Capture annulée.' },
+	'pacifier.selected': { en: '{v} selected.', fr: 'Sélection de {v}.' },
+	'pacifier.armed': { en: '{v} armed. Tap again to begin.', fr: 'Activation de {v}. Touchez de nouveau pour commencer.' },
+	'pacifier.armedRetake': { en: '{v} armed for re-take. Tap again to begin.', fr: 'Activation de {v} pour une nouvelle capture. Touchez de nouveau pour commencer.' },
+	'pacifier.skipped': { en: '{v} skipped.', fr: 'Capture ignorée pour {v}.' },
+	'pacifier.error.micPermission': { en: 'Microphone access is needed to hear your fry. Can you allow it and try again?', fr: 'L\u2019accès au microphone est nécessaire pour entendre votre friture. Pouvez-vous l\u2019autoriser et réessayer\u00a0?' },
+	'pacifier.error.micNotFound': { en: 'No microphone was found. Can you connect one and try again?', fr: 'Aucun microphone n\u2019a été trouvé. Pouvez-vous en brancher un et réessayer\u00a0?' },
+	'pacifier.error.noAudio': { en: 'No sound came through. Can you check the microphone and try again?', fr: 'Aucun son n\u2019est parvenu. Pouvez-vous vérifier le microphone et réessayer\u00a0?' },
+	'pacifier.error.tooShort': { en: 'That sample was a little short. Can you sustain the fry a moment longer?', fr: 'Cet échantillon était un peu court. Pouvez-vous soutenir la friture un instant de plus\u00a0?' },
+	'pacifier.error.default': { en: 'That sample could not be read. Can you try that again?', fr: 'Cet échantillon n\u2019a pas pu être lu. Pouvez-vous réessayer\u00a0?' },
+	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to select it, tap again to begin capture, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour la sélectionner, touchez-la de nouveau pour lancer la capture, appuyez longuement pour l\u2019ignorer.' },
 	'calib.summary.title': { en: 'Profile summary', fr: 'Sommaire du profil' },
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },
 	'calib.summary.progressLedeSuffix': { en: 'vowels sampled. Review each reading and re-take anything uncertain before you finish.', fr: 'voyelles échantillonnées. Passez en revue chaque lecture et refaites tout ce qui est incertain avant de terminer.' },
@@ -414,6 +461,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.statusSetMeasuredPlural': { en: 'Your profile is now set with {count} vowels measured.', fr: 'Votre profil est maintenant établi, avec {count} voyelles mesurées.' },
 	'profile.provisional.sentenceSingular': { en: 'Your {vowels} is provisional, and you can update this value anytime through the drawer on the left.', fr: 'Votre voyelle {vowels} est provisoire, et vous pouvez modifier cette valeur à tout moment depuis le tiroir à gauche.' },
 	'profile.provisional.sentencePlural': { en: 'Your {vowels} are provisional, and you can update these values anytime through the drawer on the left.', fr: 'Vos voyelles {vowels} sont provisoires, et vous pouvez modifier ces valeurs à tout moment depuis le tiroir à gauche.' },
+
+	// ── List separators (N.34) ───────────────────
+	//    listSep hardcoded English joins. French takes no serial comma,
+	//    so its pair and final joins are the same word. The medial is
+	//    keyed although it is invariant, on the tab bar's precedent above.
+	'profile.provisional.listSepPair': { en: ' and ', fr: ' et ' },
+	'profile.provisional.listSepFinal': { en: ', and ', fr: ' et ' },
+	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
 	'profile.emptyState': { en: 'Calibrate your voice to begin.', fr: 'Calibrez votre voix pour commencer.' },
 	'profile.octaveNotice': { en: 'This voice line is notated in treble clef but sits an octave above the range you gave, so it\'s being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score\'s clef if that\'s not right.', fr: 'Cette ligne vocale est notée en clé de sol, mais se situe une octave au-dessus de l\u2019ambitus que vous avez indiqué. Elle est donc lue une octave plus bas pour correspondre à votre voix, comme les voix graves chantent souvent des parties en clé de sol. Vérifiez la clé de la partition si ce n\u2019est pas le cas.' },
 	'profile.scoreRegionAria': { en: 'Repertoire fit score', fr: 'Partition annotée du répertoire' },

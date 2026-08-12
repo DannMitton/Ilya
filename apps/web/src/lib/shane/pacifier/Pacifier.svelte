@@ -1,5 +1,6 @@
 <script module lang="ts">
 	import type { Vowel } from '$lib/shane/engine/types';
+	import { t, type Language } from '$lib/i18n';
 
 	// Speakable per-vowel names for the button labels and the aria-live caption.
 	// Sourced from Mitton (2020) §4.6, which names all ten vowels, so a blind
@@ -15,19 +16,12 @@
 	// Exported at module scope (not duplicated) so the guided-director wizard
 	// (wizard spec v1 §3, "Accessibility") announces vowels by the identical
 	// name a sighted user sees and a screen-reader user hears here.
-	export const SPOKEN_NAME: Record<Vowel, string> = {
-		i: 'cardinal-i',
-		e: 'close-e',
-		ɪ: 'smallcaps-i',
-		ɨ: 'velar-i',
-		ɛ: 'open-e',
-		a: 'bright-a',
-		ɑ: 'dark-a',
-		ʌ: 'turned-v',
-		o: 'o',
-		u: 'u'
-	};
-	export const spoken = (g: Vowel): string => `the ${SPOKEN_NAME[g]} vowel`;
+	// N.35, 2026-08-12: these were English string literals. They now read
+	// the dictionary, so both take the active language. `spokenName` keeps the
+	// old Record's shape as a lookup; the keys are 'vowel.name.<glyph>'.
+	export const spokenName = (g: Vowel, lang: Language): string => t(`vowel.name.${g}`, lang);
+	export const spoken = (g: Vowel, lang: Language): string =>
+		t('vowel.spoken', lang).replace('{name}', spokenName(g, lang));
 </script>
 
 <script lang="ts">
@@ -73,6 +67,8 @@
 		 * re-take, since nothing in the profile changed.
 		 */
 		onRetakeRolledBack?: (vowel: Vowel, rejectedFormant: CalibratedFormant) => void;
+		/** N.22/N.35: active display language, threaded to the i18n dictionary. */
+		language: Language;
 	}
 
 	// Advisory counterclockwise tour of the vowel space (spec §8). Overridable;
@@ -88,8 +84,15 @@
 		minimumMetOverlay = true,
 		onVowelCaptured,
 		onProfileChange,
-		onRetakeRolledBack
+		onRetakeRolledBack,
+		language
 	}: PacifierProps = $props();
+
+	// N.35: the house dictionary pattern, per CalibrationWizard.svelte:211.
+	const T = (key: string) => t(key, language);
+	// Every caption that names a vowel puts it mid-sentence, Dann's ruling of
+	// 2026-08-12, so {v} is substituted rather than concatenated at the front.
+	const say = (key: string, g: Vowel) => T(key).replace('{v}', spoken(g, language));
 
 	// ── Locked geometry, ported verbatim from the prototype ──────────────────
 	const VERTS: [number, number][] = [
@@ -243,7 +246,7 @@
 		};
 	};
 	let nodes = $state<PNode[]>(layout.map((v) => initNode(v.g)));
-	let announce = $state('Tap a vowel to capture it.');
+	let announce = $state(T('pacifier.tapToCapture'));
 	let reducedMotion = $state(false);
 	let activeIdx = $state(-1);
 
@@ -361,16 +364,16 @@
 		clearTimers();
 		focusVowel(idx);
 		nodes[idx].state = 'preparing';
-		announce = `Preparing ${spoken(layout[idx].g)}. Three.`;
+		announce = say('pacifier.preparing', layout[idx].g);
 		flashBeat(idx);
 		tick();
 		after(COUNT_INTERVAL, () => {
-			announce = 'Two.';
+			announce = T('calib.readiness.countTwo');
 			flashBeat(idx);
 			tick();
 		});
 		after(2 * COUNT_INTERVAL, () => {
-			announce = 'One.';
+			announce = T('calib.readiness.countOne');
 			flashBeat(idx);
 			tick();
 		});
@@ -384,7 +387,7 @@
 		n.arcProgress = 0;
 		arcDone = false;
 		pendingResult = null;
-		announce = `Begin phonating now. ${spoken(layout[idx].g)} in vocal fry.`;
+		announce = say('pacifier.beginPhonating', layout[idx].g);
 		const handlers: CaptureHandlers = {
 			onStableFry: () => startSweep(idx),
 			onComplete: (formant) => deliverResult(idx, formant),
@@ -396,7 +399,7 @@
 	function startSweep(idx: number) {
 		const n = nodes[idx];
 		n.state = 'working';
-		announce = 'Now sustain. Sample recording.';
+		announce = T('pacifier.nowSustain');
 		arcDone = false;
 		if (!reducedMotion) {
 			const t0 = performance.now();
@@ -446,7 +449,7 @@
 			n.state = 'captured';
 			restoreResting(idx);
 			activeIdx = -1;
-			announce = `${spoken(layout[idx].g)} captured.`;
+			announce = say('pacifier.captured', layout[idx].g);
 			onVowelCaptured?.(layout[idx].g, formant);
 			onProfileChange?.(formantsMap());
 		};
@@ -474,7 +477,7 @@
 				n.state = 'captured'; // the kept previous, unchanged
 				restoreResting(idx);
 				activeIdx = -1;
-				announce = `${spoken(layout[idx].g)}: new sample was less certain, so the previous one was kept.`;
+				announce = say('pacifier.rolledBack', layout[idx].g);
 				onRetakeRolledBack?.(layout[idx].g, formant);
 			};
 			if (reducedMotion) finish();
@@ -491,7 +494,7 @@
 			n.state = 'provisional';
 			restoreResting(idx);
 			activeIdx = -1;
-			announce = `${spoken(layout[idx].g)} sample uncertain. Tap to retry.`;
+			announce = say('pacifier.sampleUncertain', layout[idx].g);
 			onVowelCaptured?.(layout[idx].g, formant);
 			onProfileChange?.(formantsMap());
 		};
@@ -502,15 +505,15 @@
 	function errorCaption(code: string): string {
 		switch (code) {
 			case 'MIC_PERMISSION_DENIED':
-				return 'Microphone access is needed to hear your fry. Can you allow it and try again?';
+				return T('pacifier.error.micPermission');
 			case 'MIC_NOT_FOUND':
-				return 'No microphone was found. Can you connect one and try again?';
+				return T('pacifier.error.micNotFound');
 			case 'NO_AUDIO_INPUT':
-				return 'No sound came through. Can you check the microphone and try again?';
+				return T('pacifier.error.noAudio');
 			case 'SAMPLE_TOO_SHORT':
-				return 'That sample was a little short. Can you sustain the fry a moment longer?';
+				return T('pacifier.error.tooShort');
 			default:
-				return 'That sample could not be read. Can you try that again?';
+				return T('pacifier.error.default');
 		}
 	}
 
@@ -522,7 +525,7 @@
 			n.state = restingState(n);
 			restoreResting(idx);
 			activeIdx = -1;
-			announce = 'Capture cancelled.';
+			announce = T('pacifier.cancelled');
 			return;
 		}
 		n.arcProgress = 0;
@@ -544,7 +547,7 @@
 		n.state = restingState(n);
 		restoreResting(idx);
 		activeIdx = -1;
-		announce = 'Capture cancelled.';
+		announce = T('pacifier.cancelled');
 	}
 
 	function onActivate(idx: number) {
@@ -554,7 +557,7 @@
 			case 'deselected':
 				n.skipped = false;
 				n.state = 'dormant';
-				announce = `${spoken(layout[idx].g)} selected.`;
+				announce = say('pacifier.selected', layout[idx].g);
 				break;
 			case 'dormant':
 			// An estimated node arms exactly like a dormant one (Kimi's
@@ -563,7 +566,7 @@
 			// procedural — no metadata chatter at the moment of breath.
 			case 'estimated':
 				n.state = 'armed';
-				announce = `${spoken(layout[idx].g)} armed. Tap again to begin.`;
+				announce = say('pacifier.armed', layout[idx].g);
 				break;
 			case 'armed':
 				beginPrepare(idx);
@@ -573,7 +576,7 @@
 				break;
 			case 'captured':
 				n.state = 'armed'; // re-take via two taps; a stray tap only arms
-				announce = `${spoken(layout[idx].g)} armed for re-take. Tap again to begin.`;
+				announce = say('pacifier.armedRetake', layout[idx].g);
 				break;
 			case 'provisional':
 				beginPrepare(idx); // a single tap on a provisional vowel re-takes
@@ -604,7 +607,7 @@
 		n.sampled = false;
 		n.formant = undefined;
 		n.state = 'deselected';
-		announce = `${spoken(layout[idx].g)} skipped.`;
+		announce = say('pacifier.skipped', layout[idx].g);
 		onProfileChange?.(formantsMap());
 	}
 
@@ -738,7 +741,7 @@
 		class="pacifier"
 		viewBox="-44 -44 548 424"
 		role="group"
-		aria-label="Vowel calibration. Tap a vowel to select it, tap again to begin capture, long-press to skip."
+		aria-label={T('pacifier.wheelAria')}
 	>
 		<path
 			d={bandPath}
@@ -770,7 +773,7 @@
 				class="vowel"
 				role="button"
 				tabindex="0"
-				aria-label={spoken(v.g)}
+				aria-label={spoken(v.g, language)}
 				onpointerdown={() => onPointerDown(i)}
 				onpointermove={onPointerMove}
 				onpointerup={() => onPointerUp(i)}

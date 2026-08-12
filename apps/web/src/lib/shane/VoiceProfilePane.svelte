@@ -56,7 +56,7 @@
 	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
 	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
-	import { SPOKEN_NAME } from '$lib/shane/pacifier/Pacifier.svelte';
+	import { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	import { buildFitLegend } from '$lib/shane/fit-legend';
 	import {
@@ -615,13 +615,17 @@
 	);
 
 	/**
-	 * The separator before item `idx` in a natural-language list, Oxford
-	 * comma applied: "a and b" for two, "a, b, and c" for three or more.
+	 * The separator before item `idx` in a natural-language list. N.34: the
+	 * joins are dictionary keys, because English takes the Oxford comma
+	 * ("a, b, and c") and French does not ("a, b et c"), which collapses the
+	 * French pair and final joins onto the same word.
 	 */
 	function listSep(idx: number, len: number): string {
 		if (idx === 0) return '';
-		if (len === 2) return ' and ';
-		return idx === len - 1 ? ', and ' : ', ';
+		if (len === 2) return T('profile.provisional.listSepPair');
+		return idx === len - 1
+			? T('profile.provisional.listSepFinal')
+			: T('profile.provisional.listSepMedial');
 	}
 </script>
 
@@ -633,7 +637,7 @@
 	collapse onto "ee".
 -->
 {#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span
-	>{SPOKEN_NAME[g]}{/snippet}
+	>{spokenName(g, language)}{/snippet}
 
 {#if scorePages && scorePages.length > 0}
 	<!-- Score state (live wiring slice 1): the uploaded score's systems,
