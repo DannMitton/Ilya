@@ -252,6 +252,10 @@
 			right: auto;
 			bottom: auto;
 			margin-top: 0;
+			/* Match .page-content's 0.75rem so the footer's left edge lines up
+			   with the transcription above it. Dann caught it sitting flush. */
+			padding-left: 0.75rem;
+			padding-right: 0.75rem;
 		}
 
 		.page-footer.is-last-page {
@@ -274,6 +278,21 @@
 		}
 
 		.pagination-cell {
+			display: none;
+		}
+
+		/* The footer is a two-column grid, 1fr auto with a 32px gap. Hiding
+		   .pagination-cell removes the ITEM but not the track or the gap, so
+		   the attribution still stopped 32px short on the right while sitting
+		   flush on the left. One column, no gap, symmetric. */
+		.footer-content {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		/* Fit's per-page broad note consolidates with everything else, so a
+		   non-last footer emits nothing at all and occupies no height. */
+		.page-footer:not(.is-last-page) .fit-broad-legend {
 			display: none;
 		}
 	}
