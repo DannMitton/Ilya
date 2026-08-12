@@ -1105,7 +1105,25 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 {#if updated.current && !updateDismissed}
 	<div class="update-toast screen-only" role="status">
 		<span class="update-toast-text">{t('update.notice', language)}</span>
-		<button class="update-toast-action" onclick={() => location.reload()}>{t('update.action', language)}</button>
+		<!-- N.54: location.reload() alone lands the singer back on the OLD build.
+		     static/sw.js serves the app shell stale-while-revalidate, so a plain
+		     reload returns the cached document and only then fetches the new one.
+		     Dropping the caches that worker owns (same 'ilya-' prefix it filters
+		     on in its own activate handler) sends the reload to the network. -->
+		<button
+			class="update-toast-action"
+			onclick={async () => {
+				try {
+					const keys = await caches.keys();
+					await Promise.all(
+						keys.filter((k) => k.startsWith('ilya-')).map((k) => caches.delete(k))
+					);
+				} catch {
+					// No CacheStorage, or it refused. Reload anyway: no worse than before.
+				}
+				location.reload();
+			}}>{t('update.action', language)}</button
+		>
 		<button class="update-toast-dismiss" aria-label={t('update.dismiss', language)} onclick={() => (updateDismissed = true)}>×</button>
 	</div>
 {/if}
