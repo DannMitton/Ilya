@@ -88,7 +88,7 @@ describe('pitchLabel and spokenPitchLabel', () => {
 	});
 
 	it('renders double accidentals', () => {
-		expect(pitchLabel(p('G', 5, 2))).toBe('G♯♯5');
+		expect(pitchLabel(p('G', 5, 2))).toBe('Gx5');
 		expect(spokenPitchLabel(p('G', 5, 2))).toBe('G double sharp 5');
 		expect(pitchLabel(p('E', 2, -2))).toBe('E♭♭2');
 		expect(spokenPitchLabel(p('E', 2, -2))).toBe('E double flat 2');

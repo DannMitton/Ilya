@@ -76,7 +76,9 @@ const ALTER_GLYPH: Record<number, string> = {
 	[-1]: '♭',
 	0: '',
 	1: '♯',
-	2: '♯♯'
+	// N.52: 'x', not two sharps. Plain text cannot draw the real glyph, and
+	// two adjacent sharps is not a double sharp. Matches ACC_TEXT in NotePicker.
+	2: 'x'
 };
 
 /** Spoken accidental word by alteration (empty for natural). */

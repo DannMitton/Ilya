@@ -36,7 +36,6 @@
 		clefFor,
 		staffOffset,
 		ledgerOffsets,
-		pitchLabel,
 		spokenPitchLabel,
 		type Step
 	} from '$lib/shane/note-picker';
@@ -136,7 +135,11 @@
 		2: 'accidentalDoubleSharp'
 	};
 	// Primitive-fallback accidental text (Unicode, not SMuFL).
-	const ACC_TEXT: Record<number, string> = { [-2]: '♭♭', [-1]: '♭', 1: '♯', 2: '♯♯' };
+	// N.52: 'x' for the double sharp. Two adjacent sharps is the wrong form,
+	// and this path exists precisely when the notation font cannot draw the
+	// right one. 'x' is the conventional plain-text double sharp and carries
+	// no font-coverage risk, which U+1D12A would.
+	const ACC_TEXT: Record<number, string> = { [-2]: '♭♭', [-1]: '♭', 1: '♯', 2: 'x' };
 
 	/** The x that centres a SMuFL glyph (drawn from its left edge) on `x`. */
 	function glyphX(name: RequiredGlyphName, x: number): number {
@@ -267,7 +270,13 @@
 
 		<div class="np-readout">
 			{#if value}
-				<span class="np-name" aria-hidden="true">{pitchLabel(value)}</span>
+				<!-- N.52: the accidental is DRAWN by the notation font, never written
+				     with interface-font characters, and never as two adjacent sharps.
+				     Same source as the staff beside it: ACC_GLYPH -> prepared.glyph().
+				     Without the font, letter and octave only (Dann, E.43): the staff
+				     carries the accidental, and a picker is never blocked on a font.
+				     One line deliberately: a newline inside .np-name is text. -->
+				<span class="np-name" aria-hidden="true">{value.step}{#if prepared && font && value.alter !== 0}<span class="np-acc" style="font-family: {font.family};">{prepared.glyph(ACC_GLYPH[value.alter]).char}</span>{/if}{value.octave}</span>
 				<span class="visually-hidden">{spokenPitchLabel(value)}</span>
 				<button type="button" class="np-clear" onclick={clear}>{T('notePicker.clear')}</button>
 			{:else}
@@ -321,6 +330,17 @@
 		align-items: flex-start;
 		gap: 0.25rem;
 		min-width: 3.5rem;
+	}
+	/* N.52. 1.067em puts the SMuFL sharp (0.683 em tall in Finale Maestro,
+	   measured off the font) at a humanist sans cap height (~0.729 em), so
+	   every other accidental keeps the proportion the engraver drew: the
+	   x-shaped double sharp lands at 37% of cap height, as intended.
+	   line-height 0 keeps a glyph whose em box spans four staff spaces from
+	   opening up the readout line. */
+	.np-acc {
+		font-size: 1.067em;
+		line-height: 0;
+		vertical-align: baseline;
 	}
 	.np-name {
 		font-family: var(--font-ui, var(--font-sans));
