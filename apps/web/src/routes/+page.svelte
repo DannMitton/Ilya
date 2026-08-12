@@ -1741,26 +1741,40 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	/* ── Update notice toast ─────────────────────────── */
 
+	/* N.53. The shape did not hold: a shrink-wrapped flex row with no width
+	   let the French string wrap to five lines, and border-radius 999px on a
+	   tall box is a squircle rather than a pill. Width is now determinate
+	   (left/right + margin auto + max-width) instead of shrink-to-fit, so the
+	   radius always resolves against a known height. Dann, E.43: keep the
+	   pill, bind it in a thicker lavender border. */
 	.update-toast {
 		position: fixed;
 		bottom: 1.25rem;
-		left: 50%;
-		transform: translateX(-50%);
+		left: 1rem;
+		right: 1rem;
+		margin: 0 auto;
+		max-width: 30rem;
 		z-index: 200;
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
 		padding: 0.6rem 0.9rem 0.6rem 1.1rem;
 		background: var(--paper, #faf7f2);
-		border: 1px solid var(--border-light, #ddd9d4);
+		border: 2px solid var(--muted-lavender, #A89BB5);
 		border-radius: 999px;
 		box-shadow: 0 4px 16px rgba(40, 38, 35, 0.18);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-size: 0.88rem;
 		color: var(--ink-secondary, #4a4540);
 	}
+	/* The sentence takes the slack; the two controls never shrink. */
+	.update-toast-text {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
 
 	.update-toast-action {
+		flex: 0 0 auto;
 		border: none;
 		border-radius: 999px;
 		padding: 0.35rem 0.9rem;
@@ -1783,6 +1797,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		line-height: 1;
 		cursor: pointer;
 		padding: 0.2rem;
+	}
+
+	/* N.53: clear the fixed tab bar rather than sit on it. .mobile-tabbar is
+	   bottom 0, height 56px, z-index 50; this was bottom 1.25rem at z-index
+	   200, so it covered the bar's upper 36px. Same breakpoint as the bar. */
+	@media (max-width: 767px) {
+		.update-toast {
+			bottom: calc(56px + 0.75rem);
+		}
 	}
 
 	@media print {
