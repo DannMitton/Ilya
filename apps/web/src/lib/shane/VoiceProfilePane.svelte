@@ -737,7 +737,7 @@
 	</div>
 {:else}
 <article
-	class="paper-page profile-page"
+	class="paper-page profile-page envelope-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
 	aria-label={T('profile.emptyStateAria')}
 >
@@ -1017,6 +1017,35 @@
 		font-size: 0.9rem;
 		line-height: 1.45;
 		color: var(--ink-secondary, #4a4540);
+	}
+
+	/* N.44, E.44, 12 August 2026. Fit had taken HALF of N.45's phone
+	   treatment. PageFooter.svelte:248 sets the footer to `position: static`
+	   under this same breakpoint, but this page kept its inline 816 x 1056
+	   and its absolutely positioned content, so on a phone the footer was the
+	   only child left in the flow and rendered at the TOP of the sheet, with
+	   the body hanging below it at its absolute offset. Observed by Dann on
+	   his own phone in portrait, 12 August 2026, on 8345803.
+
+	   Mirrors TitlePage.svelte:225-237.
+
+	   Scoped to .envelope-page deliberately. The score and commentary pages
+	   carry an SVG drawn 1:1 against contentWidth (:280 and :893), so
+	   reflowing their page would CLIP the notation rather than re-break it.
+	   That is N.46, and it is unruled. */
+	@media (max-width: 767px) {
+		.paper-page.envelope-page {
+			width: 100% !important;
+			height: auto !important;
+			box-shadow: none;
+		}
+
+		.envelope-page .profile-content {
+			position: static;
+			left: auto;
+			right: auto;
+			padding: 0.75rem;
+		}
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */
