@@ -112,6 +112,39 @@
 
 	/* ── Print rules ───────────────────────────────────────── */
 
+	/* SPIKE for N.45. THIS IS NOT A FEATURE.
+	   Dann's ruling, 11 August 2026: desktop keeps WYSIWYG, mobile adopts a
+	   content-viewing paradigm, and the printed artefact is unchanged because
+	   the @media print block below overrides this one.
+
+	   It answers exactly one question: does legible reflowed transcription
+	   feel right in the hand. It does NOT implement the header and footer
+	   treatment Dann ruled, because the provenance legend's home on mobile is
+	   unruled, and fit-legend.ts calls that legend load-bearing for the
+	   ratified never-guesses clause. Half a ruling is how things get lost.
+
+	   Content is still pre-paginated by sliceLinesToPages, so the old letter
+	   page boundaries remain visible. N.45 proper would bypass pagination on
+	   this breakpoint. Reverting this spike is one commit. */
+	@media (max-width: 767px) {
+		.paper-page {
+			width: 100% !important;
+			height: auto !important;
+			box-shadow: none;
+		}
+
+		.page-content {
+			position: static;
+			left: auto;
+			right: auto;
+			padding: 0.75rem;
+		}
+
+		.verse-row {
+			min-height: 0;
+		}
+	}
+
 	@media print {
 		.paper-page {
 			box-shadow: none;
