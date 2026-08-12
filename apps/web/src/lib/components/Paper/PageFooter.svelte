@@ -206,4 +206,43 @@
 		line-height: 1.4;
 		color: #78716c;
 	}
+
+	/* N.45. The footer carries THREE things and they are not equal.
+
+	   Page numbers are meaningless without visible pages, so they go.
+
+	   The provenance legend STAYS. fit-legend.ts calls it the surface
+	   through which a singer sees where calibration is absent, load-bearing
+	   for the ratified never-guesses clause. Ilya must not disclose less on
+	   a phone than on a desktop.
+
+	   The attribution STAYS. Integrity is Dann's first principle, and the
+	   kaikki.org credit is a CC BY-SA 4.0 condition rather than a courtesy.
+
+	   Both become static so they flow after the content instead of being
+	   positioned into the middle of it.
+
+	   RESIDUAL, stated rather than hidden: the attribution now repeats at
+	   every old page boundary, because pagination has not been bypassed
+	   yet. Ruled destination is one colophon at the end plus a link, and a
+	   sticky collapsible Legend anchor. Neither is built here. */
+	@media (max-width: 767px) {
+		.page-footer {
+			position: static;
+			left: auto;
+			right: auto;
+			bottom: auto;
+			margin-top: 1.5rem;
+		}
+
+		.provenance-legend {
+			position: static;
+			justify-content: flex-start;
+			margin-bottom: 8px;
+		}
+
+		.pagination-cell {
+			display: none;
+		}
+	}
 </style>

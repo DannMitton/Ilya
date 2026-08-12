@@ -190,4 +190,17 @@
 			display: none;
 		}
 	}
+
+	/* N.45. Dann's ruling, 11 August 2026: on a phone the paper is a
+	   content view, not a picture of the printed page. This header carries
+	   only metadata, and the metadata already lives in the drawer's
+	   METADATA section, so on this breakpoint it is duplication that costs
+	   height. It is absolutely positioned to letter-page coordinates, so
+	   with an auto-height page it also overlays the transcription.
+	   Unchanged for print and for landscape, which is above 767px. */
+	@media (max-width: 767px) {
+		.title-header {
+			display: none;
+		}
+	}
 </style>
