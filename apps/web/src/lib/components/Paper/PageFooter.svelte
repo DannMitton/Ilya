@@ -19,7 +19,11 @@
 	const attribution = $derived(t('footer.attribution', language));
 </script>
 
-<footer class="page-footer" style="--footer-accent: {hairlineAccent};">
+<footer
+	class="page-footer"
+	class:is-last-page={pageNumber === totalPages}
+	style="--footer-accent: {hairlineAccent};"
+>
 	{#if legendItems.length > 0}
 		<div class="provenance-legend">
 			{#each legendItems as item}
@@ -226,12 +230,31 @@
 	   every old page boundary, because pagination has not been bypassed
 	   yet. Ruled destination is one colophon at the end plus a link, and a
 	   sticky collapsible Legend anchor. Neither is built here. */
+	/* N.45, Dann's ruling of 11 August 2026: in portrait, ONE attribution
+	   footer for the whole text, not one per page. Landscape is above this
+	   breakpoint and print overrides it, so both keep the block on every
+	   page. The concession is portrait's alone and it is deliberate.
+
+	   PageFooter already receives pageNumber and totalPages, so it knows
+	   whether it is last without a new prop.
+
+	   The provenance legend does NOT consolidate. A legend explains the
+	   marks on the text above it, so it belongs where those marks are.
+	   fit-broad-legend stays with it for the same reason.
+
+	   The top margin lives on the elements that actually render, not on
+	   the footer, so a non-last page whose footer emits nothing leaves no
+	   phantom gap in the paper. */
 	@media (max-width: 767px) {
 		.page-footer {
 			position: static;
 			left: auto;
 			right: auto;
 			bottom: auto;
+			margin-top: 0;
+		}
+
+		.page-footer.is-last-page {
 			margin-top: 1.5rem;
 		}
 
@@ -239,6 +262,15 @@
 			position: static;
 			justify-content: flex-start;
 			margin-bottom: 8px;
+		}
+
+		.page-footer:not(.is-last-page) .provenance-legend {
+			margin-top: 1.5rem;
+		}
+
+		.page-footer:not(.is-last-page) .footer-hairline,
+		.page-footer:not(.is-last-page) .footer-content {
+			display: none;
 		}
 
 		.pagination-cell {
