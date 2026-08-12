@@ -1647,6 +1647,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
 			transform: none;
+	
+			/* The bottom 92px of the viewport is fixed furniture: the tab bar
+			   at 56px (:1720) and the paper handle sitting on it at 36px
+			   (:1663-1668). Without this the last line of the document cannot
+			   be scrolled clear of them. Dann found it under the attribution's
+			   final line, 11 August 2026.
+
+			   Padding rather than a shorter scroll region, deliberately: the
+			   tab bar is an overlay on the desk by design, and shortening the
+			   region would end the desk colour above it and cut the paper's
+			   surround short. The overlay stays; the content gets room.
+
+			   On .main-content rather than .paper-container because this is
+			   the scroll region for all four destinations, and Learn and Guide
+			   have the same defect unlooked-at. */
+			padding-bottom: calc(56px + 36px + 0.5rem);
 		}
 	}
 
