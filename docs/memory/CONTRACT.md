@@ -66,6 +66,18 @@ availability, or your own actions**, and that is where the damage has been done.
   session**, **snippet only**, or **not read**.
 - When you have not opened a thing, say "not read." Do not talk around it.
 
+### 15. NEW, 2026-08-13. Reason in the domain, not in the proxy.
+
+A tag count is not a reading of a score. A grep hit is not a reading of code.
+**Rests carry no lyric.** That is elementary notation, and on 2026-08-13 a
+script's `<note>` count was allowed to overrule it, which produced a wrong
+claim about the music and made Dann do the checking.
+
+**Before reporting anything about a score, a text, or a voice, ask what a
+musician would say, and let that veto the script.** The standing rule "do not
+trust a number your own script printed" is the same rule, and it was already
+written down.
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about

@@ -25,8 +25,20 @@ same six notes.
 1. Transcribe some Russian, or the queue is empty and nothing draws.
 2. Switch to Fit **before touching any file input.**
 3. Upload `no-lyrics-control.musicxml`, press *Continue to analysis*.
-4. **Expect:** the station in the drawer with a `4 / 5` count, the syllables under
-   the notes, **and no dashed boxes.**
+4. **Expect:** the station in the drawer at `5 / 5`, the syllables under the
+   notes, the rest bare, **and no dashed boxes.**
+
+**THE FIXTURE, READ OUT OF THE FILE 2026-08-13. Do not re-derive it.**
+`no-lyrics-control.musicxml` holds **five pitched notes and one half rest**:
+C4 D4 E4 F4 quarters, G4 half, then a half rest. **It is NOT six notes.**
+The stripped lyric line was five syllables. Its header title is a different
+text from its lyric line, which is why a queue drawn from the title gives a
+different count from one drawn from the lyrics.
+
+**WALKED 2026-08-13: `5 / 5`. Five syllables onto five notes, nothing on the
+rest, no dashed boxes. The feature is correct.** The E.47/E.48 opener was
+wrong twice in one sentence: it said "same six notes" and expected `4 / 5`.
+Both are struck.
 
 After the walk: the reconciliation, checking **two citations by opening the files**,
 one of them E.47's. Then **one** question for Dann, not several.
