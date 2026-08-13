@@ -474,6 +474,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.46 / E.44: portrait defers the notation to landscape. `appareil` is
 	// adopted (:290, :316, :418) and matches the ratified line's own wording.
 	'profile.rotateForScore': { en: 'Turn your device sideways to read the score.', fr: 'Tournez votre appareil à l\u2019horizontale pour lire la partition.' },
+	// The twin, chosen by showWithheld: « annotée » is claimed only when acoustic
+	// marks exist. Dann's wording, 13 August 2026.
+	'profile.rotateForScoreMarked': { en: 'Turn your device sideways to read the marked-up score.', fr: 'Tournez votre appareil à l\u2019horizontale pour lire la partition annotée.' },
 	'profile.scoreRegionAria': { en: 'Repertoire fit score', fr: 'Partition annotée du répertoire' },
 	'profile.scorePageAria': { en: 'Score page {n} of {total}', fr: 'Page {n} sur {total} de la partition' },
 	'profile.notesPageAria': { en: 'Analysis notes', fr: 'Notes d\u2019analyse' },

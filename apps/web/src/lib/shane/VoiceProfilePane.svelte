@@ -687,7 +687,11 @@
 					</div>
 				{/if}
 				{#if i === 0}
-					<p class="rotate-notice">{T('profile.rotateForScore')}</p>
+					<p class="rotate-notice">
+						<!-- Bound to showWithheld, not to a second judgement of its own, so
+						     this line and profile.withheld.close cannot contend on one sheet. -->
+						{T(showWithheld ? 'profile.rotateForScore' : 'profile.rotateForScoreMarked')}
+					</p>
 				{/if}
 				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
 			</article>
@@ -1071,6 +1075,13 @@
 			width: 100% !important;
 			height: auto !important;
 			box-shadow: none;
+		}
+
+		/* N.45’s ruling, “only the seam goes”, which Paper.svelte:113 already
+		   applies to the transcription document. Fit had kept its 2rem gap, so a
+		   strip of desk sat between the score sheet and the notes sheet. */
+		.fit-paper-container {
+			gap: 0;
 		}
 
 		/* One notice for the score, not one per page. */
