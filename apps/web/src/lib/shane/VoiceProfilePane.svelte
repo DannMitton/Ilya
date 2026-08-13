@@ -71,7 +71,6 @@
 	import {
 		withPairedVowel,
 		pairedCyrillic,
-		proposedEventIds,
 		type PairingMap,
 	} from '$lib/shane/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
@@ -171,6 +170,8 @@
 		 * pairing exists and every derivation below takes its prior path.
 		 */
 		pairings?: PairingMap;
+		/** N.55b R4: a click resolving to a note, by event id. */
+		onnotepick?: (eventId: string) => void;
 	}
 
 	let {
@@ -187,7 +188,25 @@
 		openSyllabification = false,
 		transcribedLines = undefined,
 		pairings = undefined,
+		onnotepick = undefined,
 	}: Props = $props();
+
+	// N.55b R4. The score is injected as an SVG STRING, so there is no
+	// element here to hang a Svelte handler on, and putting one on the
+	// wrapper div would need a role and a tabindex it should not have. A
+	// delegated listener costs no markup and no a11y exception. The
+	// `data-hit` rectangles exist nowhere else in the app.
+	$effect(() => {
+		const pick = onnotepick;
+		if (!pick) return;
+		const handler = (e: MouseEvent) => {
+			const el = (e.target as Element | null)?.closest?.('[data-hit]');
+			const id = el?.getAttribute('data-hit');
+			if (id) pick(id);
+		};
+		document.addEventListener('click', handler);
+		return () => document.removeEventListener('click', handler);
+	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
 	const T = (key: string) => t(key, language);
@@ -433,8 +452,6 @@
 	// N.55b R6: the Cyrillic channel. A score that arrived with no lyric
 	// underlay has no other source for the word under the note.
 	const cyrPreview = $derived(pairedCyrillic(pairings));
-	// N.55b R2: the dashed enclosure. "Ilya may propose, never claim."
-	const proposedUnderlay = $derived(proposedEventIds(pairings));
 
 	// The Fit legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.
@@ -577,7 +594,6 @@
 					...(ipaPreview ? { ipaPreview } : {}),
 					...(withheldIpa ? { withheldIpa } : {}),
 					...(cyrPreview ? { cyrPreview } : {}),
-					...(proposedUnderlay ? { proposedUnderlay } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,

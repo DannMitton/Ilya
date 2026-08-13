@@ -15,6 +15,7 @@
 		firstPass,
 		type PairingMap,
 	} from '$lib/shane/pairings';
+	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
@@ -83,6 +84,27 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// written and unused until it has one.
 	let pairings = $state<PairingMap>({});
 	let noLyricsFile = $state<string | null>(null);
+	// The syllable the NEXT note click will place. Finale's insertion point.
+	let pairingCursor = $state(0);
+	const slotQueue = $derived(buildSlotQueue(lines));
+
+	function handleNotePick(eventId: string): void {
+		const slot = slotQueue[pairingCursor];
+		if (!slot) return;
+		pairings = {
+			...pairings,
+			[eventId]: {
+				kind: 'syllable',
+				cyrillic: slot.cyrillic,
+				ipa: slot.ipa,
+				vowel: slot.vowel,
+				origin: slot.origin,
+			},
+		};
+		// Advance, and stop at the end rather than wrapping: a wrap would
+		// silently start overwriting from the top.
+		pairingCursor = Math.min(pairingCursor + 1, slotQueue.length - 1);
+	}
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
@@ -1024,6 +1046,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 										buildSlotQueue(lines),
 									)
 								: {};
+							// The cursor lands on the first syllable the pass did not reach.
+							pairingCursor = Math.min(Object.keys(pairings).length, Math.max(0, slotQueue.length - 1));
 							// A new score arrives: clear whatever the previous score
 							// filled, then fill the blanks from this score's header
 							// if it carries one. A score with no header still
@@ -1046,6 +1070,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     purpose for the first walk. -->
 						<p class="shane-no-lyrics">{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
 					{/if}
+					<SyllableStation
+						slots={slotQueue}
+						{pairings}
+						cursor={pairingCursor}
+						{language}
+						oncursor={(i) => (pairingCursor = i)}
+					/>
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
 					     twinned in POSITION as well as in style (Dann's walk ruling,
 					     2026-08-05: the first pass was full width at the foot of the
@@ -1167,6 +1198,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			<VoiceProfilePane
 				transcribedLines={lines}
 				{pairings}
+				onnotepick={handleNotePick}
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}
 				characteristics={shaneCharacteristics}

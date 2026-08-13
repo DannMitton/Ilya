@@ -195,18 +195,6 @@ export interface StaffRenderOptions {
    */
   cyrPreview?: Record<string, string>;
   /**
-   * N.55b, R2 (Dann, E.46). The event ids whose underlay Ilya PROPOSED
-   * rather than read from the score. They take a dashed enclosure,
-   * twinning Transcribe's inferred-stress box (`WordStack.svelte:235-245`,
-   * 1.5px dashed #78716c at a 3px radius). Transcribe's VERIFY label is
-   * deliberately NOT adopted: the band is 47px, already carries two text
-   * lines, and after a first pass the label would sit under every note.
-   *
-   * "Ilya may propose, never claim." Without this mark a pre-filled pass
-   * is an assertion rather than a starting position inside an editor.
-   */
-  proposedUnderlay?: ReadonlySet<string>;
-  /**
    * True only for the system that ends the PIECE. Gould r96 gives the
    * beam-thick-plus-thin final barline to the end of a movement, and r224
    * restates it: only the bar that actually ends the piece takes it. Before
@@ -235,7 +223,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'proposedUnderlay' | 'finalBarline' | 'targetWidth'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'finalBarline' | 'targetWidth'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -348,19 +336,6 @@ interface Placed {
  * here, because the columns following a melisma opening carry no syllable at
  * all by the data model, so there is nothing for it to collide with.
  */
-/* N.55b R2: the dashed enclosure's geometry. The 1.5px stroke, the
- * #78716c ink and the 3px radius are Transcribe's, read from
- * `WordStack.svelte:235-245`. The dash PATTERN is mine: CSS `dashed`
- * lets the browser choose, and SVG will not, so 3-on-2-off is a choice
- * and not an inheritance. The pad twins `left: -2px; right: -2px`. */
-const PROPOSED_PAD_PX = 2;
-const PROPOSED_RISE_PX = 11;
-const PROPOSED_DROP_PX = 4;
-const PROPOSED_RADIUS_PX = 3;
-const PROPOSED_STROKE_PX = 1.5;
-const PROPOSED_COLOUR = '#78716c';
-const PROPOSED_DASH = '3 2';
-
 function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): number {
   // N.55b R6: a pairing's Cyrillic outranks the score's, because a score
   // with no underlay has none and the singer's decision is the only text
@@ -377,9 +352,7 @@ function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): num
     ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0,
     sigla ? WITHHELD_SIGLA_WIDTH_PX : 0,
   );
-  // The enclosure is ink too, and the spacing engine must see it.
-  const pad = options.proposedUnderlay?.has(ev.id) === true ? PROPOSED_PAD_PX * 2 : 0;
-  return (inked + pad) / 2;
+  return inked / 2;
 }
 
 /**
@@ -1282,24 +1255,6 @@ export function renderAnalyzedStaff(
   const ipaY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
   const cyrY = ipaY + 16;
   for (const u of underlay) {
-    // N.55b R2: the provenance mark, drawn FIRST so both text lines sit
-    // over it, and spanning BOTH lines because the pairing proposed both.
-    // It carries no fill, so it prints as an outline and hides nothing.
-    if (options.proposedUnderlay?.has(u.evId) === true && (u.cyr || u.ipa)) {
-      const w = Math.max(
-        u.cyr ? estimateCyrillicWidthPx(u.cyr, CYR_FONT_PX) : 0,
-        u.ipa ? estimateIpaWidthPx(u.ipa, IPA_FONT_PX) : 0,
-      );
-      const bx = round2((u.align === 'start' ? u.x : u.x - w / 2) - PROPOSED_PAD_PX);
-      const by = round2(ipaY - PROPOSED_RISE_PX);
-      parts.push(
-        `<rect data-proposed="${esc(u.evId)}" x="${bx}" y="${by}"` +
-          ` width="${round2(w + PROPOSED_PAD_PX * 2)}"` +
-          ` height="${round2(cyrY + PROPOSED_DROP_PX - by)}"` +
-          ` rx="${PROPOSED_RADIUS_PX}" fill="none" stroke="${PROPOSED_COLOUR}"` +
-          ` stroke-width="${PROPOSED_STROKE_PX}" stroke-dasharray="${PROPOSED_DASH}"/>`,
-      );
-    }
     if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
     // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
     // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward

@@ -42,6 +42,22 @@ import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/shane/vowel-resolver';
  */
 const STRESS_MARK = '\u02C8';
 
+/**
+ * U+00A0 NO-BREAK SPACE, between a clitic and its host on the CYRILLIC line.
+ *
+ * The IPA line fuses a vowelless clitic to its host with NO space, because
+ * that is the phonetics and because it is what the tree already does
+ * (`pipeline.ts:967` for an enclitic, `:923-936` for a proclitic tucking in
+ * behind the stress mark). THE CYRILLIC IS DIFFERENT: «v lesu» is two words
+ * and keeps its space in the orthography. It is a hard space rather than an
+ * ordinary one because the two sit inside a single underlay cell under a
+ * single note, and nothing may break them apart there.
+ *
+ * Dann, E.47, catching that this code dropped the clitic's Cyrillic
+ * altogether rather than spacing it.
+ */
+const NBSP = '\u00A0';
+
 /** The localStorage key. Interim until N.67; migrated wholesale then (R5). */
 export const PAIRINGS_KEY = 'ilya:pairings';
 
@@ -85,10 +101,9 @@ export type Pairing =
 			ipa: string;
 			vowel: string | undefined;
 			origin: SlotOrigin;
-			by: 'ilya' | 'user';
 	  }
-	| { kind: 'melisma'; by: 'ilya' | 'user' }
-	| { kind: 'empty'; by: 'user' };
+	| { kind: 'melisma' }
+	| { kind: 'empty' };
 
 /** Event id to pairing. Sparse: an absent id is UNDECIDED, and draws bare. */
 export type PairingMap = Record<string, Pairing>;
@@ -99,6 +114,30 @@ export type PairingMap = Record<string, Pairing>;
  *  Stress is a FLAG on `SyllableData` (`engine.ts:52-56`), not a character
  *  in `.ipa`, and reading `.ipa` alone once printed Ilya's transcription
  *  with the stress removed (`vowel-resolver.ts:295-299`). */
+/**
+ * The syllable's Cyrillic WITH THE SINGER'S CASE.
+ *
+ * `engine.ts:1026` lowercases before syllabifying, so `SyllableData.cyrillic`
+ * has lost the capital the singer typed. That never mattered while these
+ * strings stayed inside Transcribe's own display, and it started mattering
+ * the moment N.55b put them on the page: the score-underlay path prints the
+ * capital and this path printed lowercase, on the same sheet. Observed on
+ * `08a0dae`, 13 August, with a lyric-bearing negative control beside it.
+ *
+ * `cleanWord` keeps the case and the syllabifier only lowercases and slices,
+ * so the offsets line up. Where they do not, the engine's own string stands
+ * rather than a wrong slice.
+ */
+function cyrOfSyllable(w: WordStackData, k: number): string {
+	const own = w.syllables[k]?.cyrillic ?? '';
+	let at = 0;
+	for (let i = 0; i < k; i++) at += w.syllables[i]?.cyrillic.length ?? 0;
+	const slice = w.cleanWord.slice(at, at + own.length);
+	return slice.length === own.length && slice.toLowerCase() === own.toLowerCase()
+		? slice
+		: own;
+}
+
 function syllableIpa(w: WordStackData, k: number): string {
 	const syl = w.syllables[k];
 	if (!syl) return '';
@@ -126,27 +165,37 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 	for (const line of lines) {
 		// Proclitic IPA waiting for the next nucleus in THIS line. A clitic
 		// never reaches across a line break.
-		let pending = '';
+		let pendingIpa = '';
+		let pendingCyr = '';
 		let lastInLine: Slot | null = null;
 		for (let wordIndex = 0; wordIndex < line.words.length; wordIndex++) {
 			const w = line.words[wordIndex];
 			if (!CYRILLIC_VOWEL.test(w.cleanWord)) {
 				const cliticIpa = w.ipaContent || '';
-				if (!cliticIpa) continue;
+				const cliticCyr = w.cleanWord;
+				if (!cliticIpa && !cliticCyr) continue;
 				const enclitic = w.isEnclitic || (!w.isProclitic && lastInLine !== null);
-				if (enclitic && lastInLine) lastInLine.ipa = lastInLine.ipa + cliticIpa;
-				else pending += cliticIpa;
+				if (enclitic && lastInLine) {
+					lastInLine.ipa = lastInLine.ipa + cliticIpa;
+					lastInLine.cyrillic = lastInLine.cyrillic + NBSP + cliticCyr;
+				} else {
+					pendingIpa += cliticIpa;
+					pendingCyr = pendingCyr ? pendingCyr + NBSP + cliticCyr : cliticCyr;
+				}
 				continue;
 			}
 			for (let k = 0; k < w.syllables.length; k++) {
 				let ipa = syllableIpa(w, k);
-				if (k === 0 && pending) {
+				if (k === 0 && pendingIpa) {
+					// The stress mark stays leftmost and the clitic tucks in behind
+					// it, following `vowel-resolver.ts:547-551`.
 					ipa = ipa.startsWith(STRESS_MARK)
-						? STRESS_MARK + pending + ipa.slice(STRESS_MARK.length)
-						: pending + ipa;
+						? STRESS_MARK + pendingIpa + ipa.slice(STRESS_MARK.length)
+						: pendingIpa + ipa;
 				}
+				const cyr = cyrOfSyllable(w, k);
 				const slot: Slot = {
-					cyrillic: w.syllables[k]?.cyrillic ?? '',
+					cyrillic: k === 0 && pendingCyr ? pendingCyr + NBSP + cyr : cyr,
 					ipa,
 					vowel: vowelOfSyllable(w, k),
 					origin: { lineIndex: w.lineIndex, wordIndex, slotIndex: k },
@@ -154,12 +203,9 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 				queue.push(slot);
 				lastInLine = slot;
 			}
-			pending = '';
+			pendingIpa = '';
+			pendingCyr = '';
 		}
-		// A line ending in an unattached proclitic drops it rather than
-		// tucking it into the next line's first note. Recorded, not silent:
-		// the audit below cannot see this, so it is a known limit, not a bug
-		// to be discovered later.
 	}
 	return queue;
 }
@@ -167,17 +213,21 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 /* ── The first pass (R3) ────────────────────────────────────────── */
 
 /**
- * One slot per note, in document order, until one side runs out. Every
- * placement is `by: 'ilya'`.
+ * One slot per note, in document order, until one side runs out.
  *
  * IT NEVER CREATES A MELISMA (Dann, E.46). The ordinary outcome on a
- * melismatic setting is trailing notes with an empty queue, and that
- * leftover IS the information: it is the shape of the work remaining.
+ * melismatic setting is trailing notes with an empty queue.
  *
- * "Ilya may propose, never claim." Every pairing this writes carries
- * `by: 'ilya'` so the renderer can draw the dashed enclosure; without that
- * mark a pre-filled pass would be an assertion rather than a starting
- * position inside an editor.
+ * NOTHING IS CONSUMED AND NOTHING IS DISCARDED. The queue is rebuilt from
+ * the transcription on every accept, so slots this pass did not reach are
+ * still there to be assigned by hand, which is Finale's behaviour too: the
+ * Lyrics window keeps what you have not clicked yet.
+ *
+ * NO PROVENANCE IS RECORDED, and that is Dann's ruling of E.47, against my
+ * design. A mark on every syllable carries no information, and unlike
+ * inferred stress or a withheld syllable, a misplaced syllable is something
+ * the singer can simply SEE. The drawer says in one sentence that these are
+ * proposals; the page says it with the syllables themselves.
  *
  * @param eventIds sung note events in document order, rests already excluded
  */
@@ -192,7 +242,6 @@ export function firstPass(eventIds: readonly string[], queue: readonly Slot[]): 
 			ipa: slot.ipa,
 			vowel: slot.vowel,
 			origin: slot.origin,
-			by: 'ilya',
 		};
 	}
 	return map;
@@ -331,18 +380,4 @@ export function pairedCyrillic(map: PairingMap | undefined): Record<string, stri
 		if (p.kind === 'syllable' && p.cyrillic) out[id] = p.cyrillic;
 	}
 	return Object.keys(out).length > 0 ? out : undefined;
-}
-
-/**
- * The events whose underlay Ilya PROPOSED rather than the singer set. These
- * take the dashed enclosure (R2). The `empty` state can only ever be the
- * singer's, so it can never appear here.
- */
-export function proposedEventIds(map: PairingMap | undefined): Set<string> | undefined {
-	if (!map) return undefined;
-	const out = new Set<string>();
-	for (const [id, p] of Object.entries(map)) {
-		if (p.by === 'ilya') out.add(id);
-	}
-	return out.size > 0 ? out : undefined;
 }
