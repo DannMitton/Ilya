@@ -162,6 +162,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Per-word gloss overrides: keyed by "lineIndex-wordIndex"
 	// Cleared on every fresh transcription or clear action, and by per-word reset.
 	let glossOverrides = $state<Map<string, string>>(new Map());
+	// N.57: the Cyrillic word each gloss was written for, same keys as
+	// glossOverrides. A gloss survives a re-transcription only where that word
+	// is still at that position; otherwise it falls away rather than
+	// re-attaching to whatever moved into the slot.
+	let glossAnchors = $state<Map<string, string>>(new Map());
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
 	// viewBreathClass: animates entire app content (language toggle)
@@ -268,8 +273,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
-		glossOverrides = new Map();
+		// N.57: glosses are deliberately NOT wiped here. runPipeline() rebuilds
+		// `lines`, then keepSurvivingGlosses() drops only the ones whose word
+		// moved. The Guide has promised this since before it was true.
 		runPipeline();
+		keepSurvivingGlosses();
 		if (lines.length > 0) {
 			// Breath animation: content appears with breath-in
 			triggerPaperBreathIn();
@@ -312,8 +320,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		yoToggles = new Map();
 		syllableOverrides = new Map();
 		glossOverrides = new Map();
+		glossAnchors = new Map();
 		try {
 			localStorage.setItem('ilya:inputText', '');
+			localStorage.removeItem(GLOSS_KEY);
 		} catch {
 			// localStorage unavailable
 		}
@@ -439,12 +449,53 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
 		const newMap = new Map(glossOverrides);
+		const newAnchors = new Map(glossAnchors);
 		if (gloss === null) {
 			newMap.delete(key);
+			newAnchors.delete(key);
 		} else {
 			newMap.set(key, gloss);
+			newAnchors.set(key, selectedWord.cleanWord);
 		}
 		glossOverrides = newMap;
+		glossAnchors = newAnchors;
+		persistGlosses();
+	}
+	// ---- N.57: gloss persistence and the survival guard -------------
+	//
+	// The comparison is lowercased and yo-folded, because the dictionary is
+	// keyed by lowercase word form (curated-glosses.ts) and a yo toggle
+	// re-spells a word without making it a different word.
+	const GLOSS_KEY = 'ilya:glossOverrides';
+	function glossAnchorForm(word: string): string {
+		return word.toLowerCase().replace(/\u0451/g, '\u0435');
+	}
+	function persistGlosses() {
+		try {
+			const payload = [...glossOverrides].map(
+				([key, gloss]) => [key, gloss, glossAnchors.get(key) ?? '']
+			);
+			localStorage.setItem(GLOSS_KEY, JSON.stringify(payload));
+		} catch {
+			// localStorage unavailable
+		}
+	}
+	function keepSurvivingGlosses() {
+		const nextGloss = new Map<string, string>();
+		const nextAnchor = new Map<string, string>();
+		for (const [key, gloss] of glossOverrides) {
+			const anchor = glossAnchors.get(key);
+			if (!anchor) continue;
+			const [lineIdx, wordIdx] = key.split('-').map(Number);
+			const word = lines[lineIdx]?.words?.[wordIdx];
+			if (word && glossAnchorForm(word.cleanWord) === glossAnchorForm(anchor)) {
+				nextGloss.set(key, gloss);
+				nextAnchor.set(key, anchor);
+			}
+		}
+		glossOverrides = nextGloss;
+		glossAnchors = nextAnchor;
+		persistGlosses();
 	}
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
@@ -486,6 +537,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			const newGloss = new Map(glossOverrides);
 			newGloss.delete(wordKey);
 			glossOverrides = newGloss;
+			const newAnchors = new Map(glossAnchors);
+			newAnchors.delete(wordKey);
+			glossAnchors = newAnchors;
+			persistGlosses();
 		}
 		if (needsPipeline) runPipeline();
 	}
@@ -758,6 +813,27 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide' || (savedTab === 'shane' && INCLUDE_SHANE)) {
 				activeTab = savedTab;
 			}
+			// N.57: restore the glosses and the words they were written for.
+			// keepSurvivingGlosses() is deliberately NOT called here: onMount does
+			// not run the pipeline, so `lines` is empty and the guard would drop
+			// everything. It runs on the next Transcribe, which is also the first
+			// moment the glosses can be seen.
+			const savedGlosses = localStorage.getItem('ilya:glossOverrides');
+			if (savedGlosses) {
+				const parsed = JSON.parse(savedGlosses);
+				if (Array.isArray(parsed)) {
+					const restoredGloss = new Map<string, string>();
+					const restoredAnchor = new Map<string, string>();
+					for (const row of parsed) {
+						if (Array.isArray(row) && typeof row[0] === 'string' && typeof row[1] === 'string' && typeof row[2] === 'string' && row[2] !== '') {
+							restoredGloss.set(row[0], row[1]);
+							restoredAnchor.set(row[0], row[2]);
+						}
+					}
+					glossOverrides = restoredGloss;
+					glossAnchors = restoredAnchor;
+				}
+			}
 		} catch {
 			// localStorage unavailable
 		}
@@ -952,7 +1028,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     on both surfaces: EN "Print", FR "Imprimer".
 
 					     `handlePrint` is a bare window.print() with no tab coupling
-					     (:317-319), and app.css:200-205 already hides .header-bar,
+					     (see handlePrint above), and app.css:200-205 already hides .header-bar,
 					     .drawer, .drawer-lip, .tab-bar and .ribbon at print time, so
 					     printing from Fit emits the page alone. OBSERVED in a browser
 					     on ea9556f, 2026-08-05: one sheet, no chrome, in both
@@ -998,10 +1074,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{#snippet notationPanel()}
 				<!-- NOTATION (item N.7). ONE instance, anchored by the Drawer
 				     below its scrolling panel, shown on Transcription and Fit.
-				     The state was always document-level and persisted (:135,
-				     :344-346, :704-707) and Fit always obeyed it: notationPrefs
-				     and openSyllabification reach VoiceProfilePane at
-				     :1006-1007. Only the CONTROL was tab-scoped, which made its
+				     The state was always document-level and persisted (the notationPrefs and
+				     openSyllabification declarations and their writers) and Fit obeyed it:
+				     both reach VoiceProfilePane through its own props of
+				     those names. Only the CONTROL was tab-scoped, which made its
 				     placement lie about its scope.
 
 				     Rendering it once rather than once per panel is Dann's
@@ -1016,7 +1092,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
 				     will appear on Fit and change nothing there, because
 				     showStressDiacritics never reaches VoiceProfilePane
-				     (:998-1009). Fit's IPA stress mark is a separate and
+				     (it is never given that prop). Fit's IPA stress mark is a separate and
 				     unconditional thing (pipeline.ts:711). -->
 				<NotationFields
 					{notationPrefs}
@@ -1667,8 +1743,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			transform: none;
 	
 			/* The bottom 92px of the viewport is fixed furniture: the tab bar
-			   at 56px (:1720) and the paper handle sitting on it at 36px
-			   (:1663-1668). Without this the last line of the document cannot
+			   at 56px (.mobile-tabbar) and the paper handle sitting on it at 36px
+			   (.paper-handle). Without this the last line of the document cannot
 			   be scrolled clear of them. Dann found it under the attribution's
 			   final line, 11 August 2026.
 

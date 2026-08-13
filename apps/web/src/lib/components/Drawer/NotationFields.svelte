@@ -2,9 +2,9 @@
 	/* ── NOTATION (item N.7) ────────────────────────────────────────────
 	   Extracted from RootPanel.svelte, where this section lived inside the
 	   Transcription drawer alone. The state it writes was already
-	   document-level and persisted (+page.svelte:135, :344-346, :704-707),
+	   document-level and persisted (the notationPrefs and openSyllabification declarations),
 	   and Fit already obeyed it: notationPrefs and openSyllabification reach
-	   VoiceProfilePane at +page.svelte:1006-1007. Only the CONTROL was
+	   VoiceProfilePane through its own props of those names. Only the CONTROL was
 	   tab-scoped, so its placement lied about the scope of what it governs.
 
 	   Twinned on the MetadataFields precedent: one component, state owned by
@@ -14,7 +14,7 @@
 	   KNOWN GAP, recorded rather than fixed here. Six of the seven toggles
 	   govern both surfaces. The seventh, stress acutes, does not: Fit's
 	   VoiceProfilePane is not passed showStressDiacritics
-	   (+page.svelte:998-1009), and it is read only at WordStack.svelte:56 and
+	   (it is never given that prop), and it is read only at WordStack.svelte:56 and
 	   InspectorPanel.svelte:98,201, both Transcription-only. Fit's IPA stress
 	   mark is a separate and unconditional thing (pipeline.ts:711). Wiring the
 	   Cyrillic acute into Fit's underlay changes the printed page and needs
