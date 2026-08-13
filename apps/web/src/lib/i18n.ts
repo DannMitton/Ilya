@@ -508,7 +508,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.55a/N.55b (Dann's ruling, E.47; French ratified by Dann, E.47).
 	// %s is the file name, substituted with .replace('%s', ...) at the
 	// call site, the convention 'upload.err.xmlRootIs' already uses.
-	'upload.banner.noLyrics': { en: 'No part in %s carries lyrics, so Ilya read the first part as the vocal line and set your transcription under the notes, one syllable per note. Every syllable is Ilya’s proposal, marked as one until you accept it.', fr: 'Dans %s, aucune partie ne porte de paroles. Ilya a donc lu la première partie comme la ligne vocale et a placé votre transcription sous les notes, une syllabe par note. Chaque syllabe est une proposition d’Ilya, marquée comme telle jusqu’à ce que vous l’acceptiez.' },
+	'upload.banner.noLyrics': { en: 'This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Votre texte se trouve sous les notes, une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	'station.syllables': { en: 'Syllables', fr: 'Syllabes' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
