@@ -659,7 +659,7 @@
 
 		{#each scorePages as page, i (i)}
 			<article
-				class="paper-page profile-page"
+				class="paper-page profile-page score-page"
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={T('profile.scorePageAria').replace('{n}', String(i + 1)).replace('{total}', String(scorePages.length))}
 			>
@@ -686,6 +686,9 @@
 						{@html page}
 					</div>
 				{/if}
+				{#if i === 0}
+					<p class="rotate-notice">{T('profile.rotateForScore')}</p>
+				{/if}
 				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
 			</article>
 		{/each}
@@ -695,7 +698,7 @@
 			     ruling, 2026-07-18) so they sit within the page boundary and
 			     expand freely without displacing the markup. -->
 			<article
-				class="paper-page profile-page"
+				class="paper-page profile-page commentary-page"
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={T('profile.notesPageAria')}
 			>
@@ -1030,7 +1033,7 @@
 	   Mirrors TitlePage.svelte:225-237.
 
 	   Scoped to .envelope-page deliberately. The score and commentary pages
-	   carry an SVG drawn 1:1 against contentWidth (:280 and :893), so
+	   carry an SVG drawn 1:1 against contentWidth, which .score-window anchors, so
 	   reflowing their page would CLIP the notation rather than re-break it.
 	   That is N.46, and it is unruled. */
 	@media (max-width: 767px) {
@@ -1046,6 +1049,63 @@
 			right: auto;
 			padding: 0.75rem;
 		}
+	}
+
+	/* N.46, E.44, ruled by Dann 12 August 2026 as shape A. Portrait defers the
+	   NOTATION to landscape and reflows everything that is prose. The score and
+	   commentary pages take the same treatment the envelope took for N.44; the
+	   SVG itself is withheld rather than shrunk, because the stave may not be
+	   scaled down (Dann's standing ruling) and re-breaking the systems at 414px
+	   is a renderer job, not a stylesheet one.
+
+	   Landscape needs nothing: 932px is above this breakpoint, so the page
+	   renders at 1:1. OBSERVED by Dann on his own phone, 12 August 2026, on
+	   two separate origins.
+
+	   The header, the footer, the provenance legend and the attribution all
+	   survive, because only .score-window is hidden. fitLegend is passed to page
+	   one’s PageFooter alone, and page one is the page that stays. */
+	@media (max-width: 767px) {
+		.paper-page.score-page,
+		.paper-page.commentary-page {
+			width: 100% !important;
+			height: auto !important;
+			box-shadow: none;
+		}
+
+		/* One notice for the score, not one per page. */
+		.score-page ~ .score-page {
+			display: none;
+		}
+
+		.score-page .score-window {
+			display: none;
+		}
+
+		.score-page .rotate-notice {
+			display: block;
+		}
+
+		.commentary-page .commentary-window {
+			position: static;
+			left: auto;
+			right: auto;
+			overflow: visible;
+			padding: 0.75rem;
+		}
+	}
+
+	/* Hidden above the breakpoint: in landscape and on a desk the notation is
+	   there to be read, so the line would be a lie. */
+	.rotate-notice {
+		display: none;
+		margin: 0;
+		padding: 0.75rem;
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+		font-size: 1rem;
+		line-height: 1.6;
+		color: var(--ink-secondary, #4a4540);
 	}
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */

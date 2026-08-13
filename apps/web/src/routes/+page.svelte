@@ -961,7 +961,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 					     Disabled when the page holds nothing worth putting on paper:
 					     no score ingested AND no reading captured. In that state
-					     VoiceProfilePane.svelte:607-608 renders the single line
+					     VoiceProfilePane.svelte's .profile-empty renders the single line
 					     "Calibrate your voice to begin", which is honest and is not a
 					     result. OBSERVED greyed out on a fresh voice. -->
 					<div class="shane-button-row">

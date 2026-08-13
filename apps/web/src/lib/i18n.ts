@@ -471,6 +471,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
 	'profile.emptyState': { en: 'Calibrate your voice to begin.', fr: 'Calibrez votre voix pour commencer.' },
 	'profile.octaveNotice': { en: 'This voice line is notated in treble clef but sits an octave above the range you gave, so it\'s being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score\'s clef if that\'s not right.', fr: 'Cette ligne vocale est notée en clé de sol, mais se situe une octave au-dessus de l\u2019ambitus que vous avez indiqué. Elle est donc lue une octave plus bas pour correspondre à votre voix, comme les voix graves chantent souvent des parties en clé de sol. Vérifiez la clé de la partition si ce n\u2019est pas le cas.' },
+	// N.46 / E.44: portrait defers the notation to landscape. `appareil` is
+	// adopted (:290, :316, :418) and matches the ratified line's own wording.
+	'profile.rotateForScore': { en: 'Turn your device sideways to read the score.', fr: 'Tournez votre appareil à l\u2019horizontale pour lire la partition.' },
 	'profile.scoreRegionAria': { en: 'Repertoire fit score', fr: 'Partition annotée du répertoire' },
 	'profile.scorePageAria': { en: 'Score page {n} of {total}', fr: 'Page {n} sur {total} de la partition' },
 	'profile.notesPageAria': { en: 'Analysis notes', fr: 'Notes d\u2019analyse' },
