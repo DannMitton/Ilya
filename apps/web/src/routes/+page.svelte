@@ -10,6 +10,11 @@
 	import { t, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
+	import {
+		buildSlotQueue,
+		firstPass,
+		type PairingMap,
+	} from '$lib/shane/pairings';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
@@ -71,6 +76,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
+	// N.55b: the pairing map, and the N.55a courtesy notice's file name.
+	// IN MEMORY ONLY for now. R5's `ilya:pairings` needs a user-visible
+	// failure message (it must not swallow, N.27), that message needs
+	// French, and no French has been ratified for it. `savePairings` is
+	// written and unused until it has one.
+	let pairings = $state<PairingMap>({});
+	let noLyricsFile = $state<string | null>(null);
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
@@ -994,6 +1006,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
 							// as paginated notation in the Fit main pane.
 							ingestedScore = ingested;
+							// N.55b R3: the first pass runs on accept, and the N.55a courtesy
+							// message arrives in the same moment or it has no moment at all.
+							//
+							// It runs ONLY where the file carried no lyrics. Where the score has
+							// an underlay, Ilya READS it (`vowel-resolver.ts`), and proposing over
+							// it would be Ilya claiming where the score already speaks. That is an
+							// INFERENCE from R3 and N.55a together, not a ruling of Dann's.
+							const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
+							noLyricsFile = noLyrics ? ingested.fileName : null;
+							// One slot per note, in document order, until one side runs out.
+							// Rests are skipped: they have no hit target either
+							// (`staff-renderer.ts:920-928`), so they can never be clicked.
+							pairings = noLyrics
+								? firstPass(
+										ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+										buildSlotQueue(lines),
+									)
+								: {};
 							// A new score arrives: clear whatever the previous score
 							// filled, then fill the blanks from this score's header
 							// if it carries one. A score with no header still
@@ -1009,6 +1039,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							);
 						}}
 					/>
+					{#if noLyricsFile}
+						<!-- N.55a's courtesy message (Dann, E.47). It lives in the DRAWER and
+						     not on the page because it names the FILE, and a file name dates a
+						     printed study sheet to an export rather than to a song. Unstyled on
+						     purpose for the first walk. -->
+						<p class="shane-no-lyrics">{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
+					{/if}
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
 					     twinned in POSITION as well as in style (Dann's walk ruling,
 					     2026-08-05: the first pass was full width at the foot of the
@@ -1129,6 +1166,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     be sliced twice. -->
 			<VoiceProfilePane
 				transcribedLines={lines}
+				{pairings}
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}
 				characteristics={shaneCharacteristics}

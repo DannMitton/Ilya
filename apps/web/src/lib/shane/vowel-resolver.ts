@@ -136,7 +136,7 @@ export interface ScoreWord {
 	slots: string[][];
 }
 
-const CYRILLIC_VOWEL = /[аеёиоуыэюя]/iu;
+export const CYRILLIC_VOWEL = /[аеёиоуыэюя]/iu;
 
 function cleanForAlignment(s: string): string {
 	// Letters and combining marks only (a score syllable can carry a
@@ -271,7 +271,7 @@ export function collectScoreWords(parsed: ParsedScore, verseNumber: number): Sco
  * from the engine's transcription log, or undefined when the syllable
  * does not carry exactly one vowel from the ten-vowel roster.
  */
-function vowelOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
+export function vowelOfSyllable(w: WordStackData, sylIdx: number): string | undefined {
 	const entries = w.result.transcriptionLog.filter(
 		(e) => e.features?.type === 'vowel' && e.syllableIndex === sylIdx
 	);

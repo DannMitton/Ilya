@@ -68,6 +68,12 @@
 	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
+	import {
+		withPairedVowel,
+		pairedCyrillic,
+		proposedEventIds,
+		type PairingMap,
+	} from '$lib/shane/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
@@ -159,6 +165,12 @@
 		 * is exactly what it was before N.10.
 		 */
 		transcribedLines?: readonly LineData[];
+		/**
+		 * N.55b: the singer's pairing map, keyed by event id, owned by
+		 * `+page.svelte` and stored at `ilya:pairings` (R5). Absent means no
+		 * pairing exists and every derivation below takes its prior path.
+		 */
+		pairings?: PairingMap;
 	}
 
 	let {
@@ -174,6 +186,7 @@
 		notationPrefs,
 		openSyllabification = false,
 		transcribedLines = undefined,
+		pairings = undefined,
 	}: Props = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
@@ -376,7 +389,11 @@
 				})
 			: null,
 	);
-	const vowelResolver = $derived(underlayResolvers?.vowel ?? null);
+	// N.55b R7/R8: a hand pairing outranks the resolver, its whole-word
+	// withhold included, and carries the vowel glyph the forecast needs.
+	const vowelResolver = $derived(
+		underlayResolvers ? withPairedVowel(underlayResolvers.vowel, pairings) : null,
+	);
 
 	// N.5: the printed IPA line. Every string is Ilya's own, read from the
 	// engine's syllable transcription (`vowel-resolver.ts:265-266`), then
@@ -389,7 +406,10 @@
 		if (!readingScore || !underlayResolvers) return undefined;
 		const out: Record<string, string> = {};
 		for (const ev of readingScore.vocalLine) {
-			const ipa = underlayResolvers.ipa(ev);
+			// N.55b R7: the pairing's IPA outranks the resolver's, and outranks
+			// its abstention too.
+			const paired = pairings?.[ev.id];
+			const ipa = paired?.kind === 'syllable' ? paired.ipa : underlayResolvers.ipa(ev);
 			if (ipa) out[ev.id] = applyNotationPreferences(ipa, notationPrefs, true);
 		}
 		return Object.keys(out).length > 0 ? out : undefined;
@@ -402,10 +422,19 @@
 		if (!readingScore || !underlayResolvers) return undefined;
 		const out = new Set<string>();
 		for (const ev of readingScore.vocalLine) {
+			// N.55b R7: a paired event is no longer withheld, or the page would
+			// draw the withheld siglum and the paired syllable at the same time.
+			if (pairings?.[ev.id]?.kind === 'syllable') continue;
 			if (underlayResolvers.withheld(ev)) out.add(ev.id);
 		}
 		return out.size > 0 ? out : undefined;
 	});
+
+	// N.55b R6: the Cyrillic channel. A score that arrived with no lyric
+	// underlay has no other source for the word under the note.
+	const cyrPreview = $derived(pairedCyrillic(pairings));
+	// N.55b R2: the dashed enclosure. "Ilya may propose, never claim."
+	const proposedUnderlay = $derived(proposedEventIds(pairings));
 
 	// The Fit legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.
@@ -547,6 +576,8 @@
 					leftMargin: engraving.leftMargin,
 					...(ipaPreview ? { ipaPreview } : {}),
 					...(withheldIpa ? { withheldIpa } : {}),
+					...(cyrPreview ? { cyrPreview } : {}),
+					...(proposedUnderlay ? { proposedUnderlay } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
 				}).pages.map(stripBackingRect)
 			: null,
