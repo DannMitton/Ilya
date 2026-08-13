@@ -895,6 +895,15 @@ export function renderAnalyzedStaff(
   for (let i = 0; i < placed.length; i++) {
     nextXById.set(placed[i].ev.id, placed[i + 1]?.x ?? placed[i].x + 40);
   }
+
+  // N.55b, path A (Dann's ruling, 2026-08-13). The PREVIOUS column's x,
+  // mirroring `nextXById`. The two together bound each event's hit target at
+  // the midpoints to its neighbours, so the targets tile the system without
+  // overlapping and a click can never resolve to the wrong note.
+  const prevXById = new Map<string, number>();
+  for (let i = 0; i < placed.length; i++) {
+    prevXById.set(placed[i].ev.id, placed[i - 1]?.x ?? placed[i].x - 40);
+  }
   let lowestInk = staffBottom;
 
   for (const { ev, x: nx, newMeasure } of placed) {
@@ -958,6 +967,22 @@ export function renderAnalyzedStaff(
     }
 
     parts.push(`<g data-event-id="${esc(ev.id)}">`);
+
+    // N.55b, path A (Dann's ruling, 2026-08-13). A transparent hit target,
+    // because the inked notehead measures about 7 px across and SVG hit-tests
+    // painted geometry only: measured in Chrome on the deployed build, a click
+    // 8 px off the glyph resolved to nothing at all. The rectangle carries no
+    // paint, so it prints nothing, and it is emitted FIRST so every mark in
+    // this group still draws over it. `highestInk` is deliberately untouched,
+    // so the viewBox crop at the foot of this function is unaffected and the
+    // rectangle is simply clipped to the page like any other element.
+    {
+      const hitL = ((prevXById.get(ev.id) ?? nx - 40) + nx) / 2;
+      const hitR = (nx + (nextXById.get(ev.id) ?? nx + 40)) / 2;
+      const hitTop = staffTop - 3.5 * o.lineGap;
+      const hitBottom = staffBottom + 3.5 * o.lineGap;
+      parts.push(`<rect data-hit="${esc(ev.id)}" x="${round2(hitL)}" y="${round2(hitTop)}" width="${round2(hitR - hitL)}" height="${round2(hitBottom - hitTop)}" fill="transparent" pointer-events="all"/>`);
+    }
 
     // Sage stemless turning-pitch notehead, with its own accidental state
     // (standard per-measure carry, independent of the sung line).

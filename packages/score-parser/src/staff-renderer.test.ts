@@ -291,6 +291,25 @@ describe('staff renderer: the four analytical criteria', () => {
       expect(svg.includes(`data-event-id="${id}"`)).toBe(true);
     }
   });
+
+  // N.55b, path A. The hit target exists, it is transparent, and the targets
+  // TILE without overlapping. An overlap would resolve a click to the wrong
+  // note, which is a worse failure than the 7 px of ink it replaces.
+  it('gives every bound note a transparent, non-overlapping hit target', () => {
+    const rects = [
+      ...svg.matchAll(
+        /<rect data-hit="([^"]+)" x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="transparent" pointer-events="all"\/>/g,
+      ),
+    ].map((m) => ({ id: m[1], x: +m[2], w: +m[4] }));
+    for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
+      expect(rects.some((r) => r.id === id), id).toBe(true);
+    }
+    for (const r of rects) expect(r.w, r.id).toBeGreaterThan(0);
+    const spans = rects.map((r) => [r.x, r.x + r.w]).sort((a, b) => a[0] - b[0]);
+    for (let i = 1; i < spans.length; i++) {
+      expect(spans[i][0] + 0.02, `span ${i}`).toBeGreaterThanOrEqual(spans[i - 1][1]);
+    }
+  });
 });
 
 describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
