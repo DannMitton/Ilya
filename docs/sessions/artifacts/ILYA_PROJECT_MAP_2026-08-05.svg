@@ -1,0 +1,484 @@
+<svg viewBox="0 0 1400 2250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mapTitle mapDesc">
+  <title id="mapTitle">Ilya project map, 5 August 2026, updated at the close of E.27. The reference map.</title>
+  <desc id="mapDesc">A whole-project map of Ilya and its Fit pane, drawn to be updated rather than replaced. It carries the ratified beta line in Dann's own words at the top, then eight zones and a gate tracker. Zone one, what a singer opens: Transcribe, Fit, Learn, and Guide. Zone two, Fit's pipeline: Calibrate, Ingest, Resolve, Analyse, and Engrave; the calibration gate measures, and item 1.8 closed on 5 August so the printed result now states what it withholds. Zone three, the measurement layer built in episode twenty and wired in episode twenty-one, every part of which computes correctly and still reaches no pixel. Zone four, the engine packages with their measured test counts. Zone five, the advice layer. Zone six, the score reader. Zone seven, the photograph path. Zone eight, the design system. Then the gate tracker: six gates, A through E plus P, every item marked closed, open, yours to decide, or farmed to Sonnet, with a new defect D9, the stemless melody notes. Finally what is cut from this release and what lies ahead, and a legend of six outline states. Outline rather than colour carries status throughout, so the map survives greyscale.</desc>
+
+  <style>
+    .t    { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text-primary, #1a1a18); }
+    .h1   { font-size: 19px; font-weight: 650; }
+    .band { font-size: 11px; font-weight: 650; letter-spacing: 0.09em; text-transform: uppercase; fill: var(--text-tertiary, #8a8a82); }
+    .nm   { font-size: 14px; font-weight: 620; }
+    .nmS  { font-size: 12.5px; font-weight: 650; }
+    .sub  { font-size: 11.5px; fill: var(--text-secondary, #6b6b63); }
+    .met  { font-size: 10.5px; fill: var(--text-tertiary, #8a8a82); font-variant-numeric: tabular-nums; }
+    .gate { font-size: 10px; fill: var(--text-primary, #1a1a18); font-variant-numeric: tabular-nums; }
+    .gateD{ font-size: 10px; fill: var(--text-tertiary, #8a8a82); font-variant-numeric: tabular-nums; }
+    .cap  { font-size: 12px; fill: var(--text-secondary, #6b6b63); }
+    .goal { font-size: 13px; fill: var(--text-primary, #1a1a18); }
+
+    .ship { fill: var(--bg-secondary, #f3f2ee); stroke: var(--border-default, #d9d7cf); stroke-width: 1; }
+    .open { fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 2; }
+    .built{ fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 2; }
+    .bIn  { fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 0.75; }
+    .plan { fill: none; stroke: var(--border-default, #c9c7bf); stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .cut  { fill: none; stroke: var(--text-tertiary, #8a8a82); stroke-width: 1.25; stroke-dasharray: 1.5 3; }
+    .limit{ fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 1.5; stroke-dasharray: 9 3 2 3; }
+    .planT{ fill: var(--text-tertiary, #8a8a82); }
+    .arw  { stroke: var(--border-default, #c9c7bf); stroke-width: 1.25; fill: none; }
+    .rule { stroke: var(--border-default, #e4e2da); stroke-width: 1; }
+    .pillO{ fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 1.25; }
+    .pillT{ font-size: 9px; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--text-secondary, #6b6b63); }
+  </style>
+
+  <defs>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 1 L7 4 L0 7" fill="none" stroke="var(--border-default, #c9c7bf)" stroke-width="1.25"/>
+    </marker>
+  </defs>
+
+  <text class="t h1"  x="40" y="34">Ilya</text>
+  <text class="t cap" x="82" y="34">project map, 5 August 2026, UPDATED at the close of E.27. THE REFERENCE MAP: update this file, do not start a new one. Branch Shane, PUSHED at a86661b.</text>
+
+  <!-- ================= GOAL ================= -->
+  <text class="t band" x="40" y="70">Done means this, and only this &#183; ratified by Dann, 30 July 2026, in his own words</text>
+  <line class="rule" x1="40" y1="80" x2="1360" y2="80"/>
+
+  <rect class="open" x="40" y="94" width="1320" height="106" rx="4"/>
+  <text class="t goal" x="64" y="122">&#8220;A singer can, on their own device, in one sitting: use Transcribe, Fit, Learn, and Guide effectively for the purposes they were created. Users can calibrate their voice</text>
+  <text class="t goal" x="64" y="144">with real audio through a gate that measures; upload a score in a supported digital format including PDF and photograph; and read or print a complete Fit result</text>
+  <text class="t goal" x="64" y="166">that never guesses where calibration is absent. We may also incorporate some of the analysis graphs I feature in Chapter 6 of my dissertation if they prove to add value.&#8221;</text>
+  <text class="t met"  x="64" y="188">&#8220;A gate that measures&#8221; CLOSED 4 Aug, E.26. &#8220;Never guesses where calibration is absent&#8221; CLOSED 5 Aug, E.27, item 1.8: the print says what it withholds, walked EN and FR.</text>
+
+  <!-- ================= ZONE 1: tabs ================= -->
+  <text class="t band" x="40" y="238">1 &#183; What a singer opens</text>
+  <line class="rule" x1="40" y1="248" x2="1360" y2="248"/>
+
+  <rect class="ship" x="40"   y="264" width="315" height="66" rx="4"/>
+  <text class="t nm"  x="56"  y="288">Transcribe</text>
+  <text class="t sub" x="56"  y="307">Russian text to Grayson-faithful IPA</text>
+  <text class="t met" x="56"  y="323">Photographed Cyrillic TEXT ships too: tesseract.js</text>
+
+  <rect class="open" x="375"  y="264" width="315" height="66" rx="4"/>
+  <text class="t nm"  x="391" y="288">Fit</text>
+  <text class="t sub" x="391" y="307">Does this piece suit my voice?</text>
+  <text class="t met" x="391" y="323">Its DRAWER is English-only. Release blocker, unnumbered</text>
+
+  <rect class="ship" x="710"  y="264" width="315" height="66" rx="4"/>
+  <text class="t nm"  x="726" y="288">Learn</text>
+  <text class="t sub" x="726" y="307">Seven sections, Grayson throughout</text>
+  <text class="t met" x="726" y="323">Shipped. Verify in the E1 run, do not rebuild</text>
+
+  <rect class="ship" x="1045" y="264" width="315" height="66" rx="4"/>
+  <text class="t nm"  x="1061" y="288">Guide</text>
+  <text class="t sub" x="1061" y="307">How to use it, and why it chose that</text>
+  <text class="t met" x="1061" y="323">E2: credits bits-ui (unimported), &#8220;Cosmetic Options&#8221;</text>
+
+  <path class="arw" d="M532 330 L532 372" marker-end="url(#a)"/>
+
+  <!-- ================= ZONE 2: pipeline ================= -->
+  <text class="t band" x="40" y="368">2 &#183; Fit's pipeline &#183; engine codename Shane, branch Shane</text>
+  <line class="rule" x1="40" y1="378" x2="1360" y2="378"/>
+
+  <rect class="open" x="40"   y="394" width="248" height="112" rx="4"/>
+  <text class="t nm"  x="56"  y="418">Calibrate</text>
+  <text class="t sub" x="56"  y="436">Sing ten vowels, measure</text>
+  <text class="t met" x="56"  y="455">GATE B SEAM CLOSED, E.26:</text>
+  <text class="t met" x="56"  y="470">measures, abstains, counts you in</text>
+  <text class="t met" x="56"  y="485">Still open: 1.5, copy + thresholds</text>
+  <text class="t met" x="56"  y="500">TWELVE placeholder strings owed</text>
+
+  <rect class="ship" x="308"  y="394" width="248" height="112" rx="4"/>
+  <text class="t nm"  x="324" y="418">Ingest</text>
+  <text class="t sub" x="324" y="436">Drop in a score</text>
+  <text class="t met" x="324" y="455">MNX, MusicXML, .mxl,</text>
+  <text class="t met" x="324" y="470">.musx, .mscz</text>
+  <text class="t met" x="324" y="485">durations survive conversion:</text>
+  <text class="t met" x="324" y="500">PROVEN 5 Aug. But metadata does NOT</text>
+
+  <rect class="ship" x="576"  y="394" width="248" height="112" rx="4"/>
+  <text class="t nm"  x="592" y="418">Resolve</text>
+  <text class="t sub" x="592" y="436">Which vowel is sung</text>
+  <text class="t met" x="592" y="455">GraysonEngine, verbatim</text>
+  <text class="t met" x="592" y="470">verse-aware, any verse</text>
+  <text class="t met" x="592" y="485">held out: foldDictionMarks,</text>
+  <text class="t met" x="592" y="500">by ruling. Additive first</text>
+
+  <rect class="ship" x="844"  y="394" width="248" height="112" rx="4"/>
+  <text class="t nm"  x="860" y="418">Analyse</text>
+  <text class="t sub" x="860" y="436">Resonance meets pitch</text>
+  <text class="t met" x="860" y="455">Absence stays absent, BY</text>
+  <text class="t met" x="860" y="470">CONSTRUCTION: Option A,</text>
+  <text class="t met" x="860" y="485">15 July. No fR1, no events.</text>
+  <text class="t met" x="860" y="500">1.8 made the page SAY so</text>
+
+  <rect class="open" x="1112" y="394" width="248" height="112" rx="4"/>
+  <text class="t nm"  x="1128" y="418">Engrave</text>
+  <text class="t sub" x="1128" y="436">A real score, marked up</text>
+  <text class="t met" x="1128" y="455">D9 CONFIRMED 5 Aug: stems drawn</text>
+  <text class="t met" x="1128" y="470">only when an acoustic event exists.</text>
+  <text class="t met" x="1128" y="485">staff-renderer.ts:653. N.4</text>
+  <text class="t met" x="1128" y="500">N.5 IPA underlay unwired &#183; N.6 Gould</text>
+
+  <path class="arw" d="M288 450 L304 450" marker-end="url(#a)"/>
+  <path class="arw" d="M556 450 L572 450" marker-end="url(#a)"/>
+  <path class="arw" d="M824 450 L840 450" marker-end="url(#a)"/>
+  <path class="arw" d="M1092 450 L1108 450" marker-end="url(#a)"/>
+
+  <text class="t cap" x="40" y="528">E.26 found four live defects here, three by Dann using the app. E.27 found three more the same way: two in its own new control, and the stemless notes, which no suite we own has an opinion about.</text>
+
+  <!-- ================= ZONE 3: measurement layer ================= -->
+  <text class="t band" x="40" y="576">3 &#183; The measurement layer &#183; the thing the project is named for &#183; BUILT E.20, WIRED E.21, STILL DRAWN NOWHERE</text>
+  <line class="rule" x1="40" y1="586" x2="1360" y2="586"/>
+
+  <rect class="built" x="40"  y="602" width="248" height="120" rx="4"/>
+  <rect class="bIn"   x="45"  y="607" width="238" height="110" rx="3"/>
+  <text class="t nm"  x="58"  y="626">phonation.ts</text>
+  <text class="t sub" x="58"  y="644">Time on each vowel</text>
+  <text class="t met" x="58"  y="663">per-pitch, per-vowel, and</text>
+  <text class="t met" x="58"  y="678">per-pitch-per-vowel sums</text>
+  <text class="t met" x="58"  y="693">quavers, seconds, fold cycles</text>
+  <text class="t met" x="58"  y="708">Reads the BAR LINE, not fraction</text>
+
+  <rect class="built" x="308" y="602" width="248" height="120" rx="4"/>
+  <rect class="bIn"   x="313" y="607" width="238" height="110" rx="3"/>
+  <text class="t nm"  x="326" y="626">tessitura.ts</text>
+  <text class="t sub" x="326" y="644">Where the voice lives</text>
+  <text class="t met" x="326" y="663">Pacheco 2013 p. 559, half-max</text>
+  <text class="t met" x="326" y="678">degeneracy fallback + basis</text>
+  <text class="t met" x="326" y="693">marginal flag near the knife edge</text>
+  <text class="t met" x="326" y="708">A5 RULED, Fable, 2 Aug: it ships</text>
+
+  <rect class="built" x="576" y="602" width="248" height="120" rx="4"/>
+  <rect class="bIn"   x="581" y="607" width="238" height="110" rx="3"/>
+  <text class="t nm"  x="594" y="626">diction-marks.ts</text>
+  <text class="t sub" x="594" y="644">The # boundary</text>
+  <text class="t met" x="594" y="663">folds # out of a syllable slot</text>
+  <text class="t met" x="594" y="678">per-vowel error 18.46% &#8594; 8.15%</text>
+  <text class="t met" x="594" y="693">improves five, worsens none</text>
+  <text class="t met" x="594" y="708">HELD OUT of the chain, by ruling</text>
+
+  <rect class="built" x="844" y="602" width="248" height="120" rx="4"/>
+  <rect class="bIn"   x="849" y="607" width="238" height="110" rx="3"/>
+  <text class="t nm"  x="862" y="626">tempo-seam.ts</text>
+  <text class="t sub" x="862" y="644">How fast, and who said so</text>
+  <text class="t met" x="862" y="663">override &#8594; encoded &#8594; verbal</text>
+  <text class="t met" x="862" y="678">&#8594; ABSTAIN. Never a default bpm</text>
+  <text class="t met" x="862" y="693">felt beat from the metre, 5 langs</text>
+  <text class="t met" x="862" y="708">A9: the UI is designed, not built</text>
+
+  <rect class="built" x="1112" y="602" width="248" height="120" rx="4"/>
+  <rect class="bIn"   x="1117" y="607" width="238" height="110" rx="3"/>
+  <text class="t nm"  x="1130" y="626">score-metrics.ts</text>
+  <text class="t sub" x="1130" y="644">The composition seam</text>
+  <text class="t met" x="1130" y="663">12 tests, mutation-checked</text>
+  <text class="t met" x="1130" y="678">one tempo object, threaded once</text>
+  <text class="t met" x="1130" y="693">every optional field OMITTED,</text>
+  <text class="t met" x="1130" y="708">never defaulted</text>
+
+  <path class="arw" d="M1236 722 L1236 746" marker-end="url(#a)"/>
+  <rect class="open" x="1112" y="746" width="248" height="60" rx="4"/>
+  <text class="t nmS" x="1130" y="768">VoiceProfilePane.metrics</text>
+  <text class="t met" x="1130" y="785">A $derived that reaches NO PIXEL</text>
+  <text class="t met" x="1130" y="799">This is item C8, Phase 1.3</text>
+
+  <text class="t cap" x="40" y="770">Still one step short of a singer. 5 Aug: the Fit page now carries the 1.6 legend, its own title, and a withheld statement when no voice has been measured.</text>
+  <text class="t cap" x="40" y="792">Those are statements about PROVENANCE. The forty-eight measurement fields above remain unread by any pixel and are a separate matter. Do not conflate them.</text>
+
+  <!-- ================= ZONE 4: engines ================= -->
+  <text class="t band" x="40" y="842">4 &#183; What powers it &#183; @ilya/web MEASURED 5 August in Dann's terminal &#183; the rest carried from 2 August</text>
+  <line class="rule" x1="40" y1="852" x2="1360" y2="852"/>
+
+  <rect class="open" x="40"   y="868" width="248" height="100" rx="4"/>
+  <text class="t nm"  x="56"  y="892">phonology</text>
+  <text class="t sub" x="56"  y="910">GraysonEngine. The heart.</text>
+  <text class="t met" x="56"  y="929">213 tests, CARRIED from 22 July</text>
+  <text class="t met" x="56"  y="944">D1: transcribeWord vouches for a</text>
+  <text class="t met" x="56"  y="955">wrong output. engine.ts:2266, :1147</text>
+
+  <rect class="ship" x="308"  y="868" width="248" height="100" rx="4"/>
+  <text class="t nm"  x="324" y="892">dictionary</text>
+  <text class="t sub" x="324" y="910">Stress and glosses</text>
+  <text class="t met" x="324" y="929">202 tests, CARRIED</text>
+  <text class="t met" x="324" y="944">943,106 stress entries</text>
+  <text class="t met" x="324" y="955">P4: static/data payload UNMEASURED</text>
+
+  <rect class="ship" x="576"  y="868" width="248" height="100" rx="4"/>
+  <text class="t nm"  x="592" y="892">blurb</text>
+  <text class="t sub" x="592" y="910">Why Ilya chose that</text>
+  <text class="t met" x="592" y="929">140 tests, CARRIED</text>
+  <text class="t met" x="592" y="944">Oldest count on this map</text>
+
+  <rect class="ship" x="844"  y="868" width="248" height="100" rx="4"/>
+  <text class="t nm"  x="860" y="892">score-parser</text>
+  <text class="t sub" x="860" y="910">Ingest, measure, analyse</text>
+  <text class="t met" x="860" y="929">398 passed, 5 skipped, 19 files</text>
+  <text class="t met" x="860" y="944">CARRIED from 2 Aug 20:49</text>
+  <text class="t met" x="860" y="955">Holds staff-renderer.ts. D9 lives here</text>
+
+  <rect class="ship" x="1112" y="868" width="248" height="100" rx="4"/>
+  <text class="t nm"  x="1128" y="892">@ilya/web</text>
+  <text class="t sub" x="1128" y="910">The app itself</text>
+  <text class="t met" x="1128" y="929">369 passed, 21 files. MEASURED 5 Aug</text>
+  <text class="t met" x="1128" y="944">svelte-check: 0 ERRORS, 7 warnings.</text>
+  <text class="t met" x="1128" y="955">Gate E5 CLOSED. None of the 7 in shane/</text>
+
+  <text class="t cap" x="40" y="984">A green number only vouches for what its instrument read. E.27 ran four gate pairs, every one matching an expectation written before it ran, and the suite still had</text>
+  <text class="t cap" x="40" y="1004">nothing to say about a page full of stemless notes. vitest transpiles without typechecking and never compiles a .svelte file. svelte-check is what looks at those.</text>
+
+  <!-- ================= ZONE 5: advice ================= -->
+  <text class="t band" x="40" y="1046">5 &#183; The advice layer &#183; sourced pedagogy, prescriptive only &#183; carried, not re-verified</text>
+  <line class="rule" x1="40" y1="1056" x2="1360" y2="1056"/>
+
+  <rect class="ship" x="40"   y="1072" width="315" height="72" rx="4"/>
+  <text class="t nm"  x="56"  y="1096">Modification engine</text>
+  <text class="t sub" x="56"  y="1114">Computes the target</text>
+  <text class="t met" x="56"  y="1132">82c28fb &#183; &#167;A.162</text>
+
+  <rect class="ship" x="375"  y="1072" width="315" height="72" rx="4"/>
+  <text class="t nm"  x="391" y="1096">[i] to [&#618;] crossing</text>
+  <text class="t sub" x="391" y="1114">Whoop-coupling advice</text>
+  <text class="t met" x="391" y="1132">a7c4213 &#183; shipped</text>
+
+  <rect class="ship" x="710"  y="1072" width="315" height="72" rx="4"/>
+  <text class="t nm"  x="726" y="1096">[o] to [&#593;] cover</text>
+  <text class="t sub" x="726" y="1114">Russian upper register</text>
+  <text class="t met" x="726" y="1132">8cdbbcb + 56eea4e</text>
+
+  <rect class="open" x="1045" y="1072" width="315" height="72" rx="4"/>
+  <text class="t nm"  x="1061" y="1096">Per-voice sourcing</text>
+  <text class="t sub" x="1061" y="1114">Soprano shipped; tenor half</text>
+  <text class="t met" x="1061" y="1132">NEW 5 Aug: every guard run reads voiceType NULL</text>
+
+  <!-- ================= ZONE 6: reader ================= -->
+  <text class="t band" x="40" y="1186">6 &#183; The score reader &#183; Python, tools/e16-harness &#183; floor re-proved cold 30 July, six of six, every control firing &#183; DO NOT RE-PROVE, it costs a day</text>
+  <line class="rule" x1="40" y1="1196" x2="1360" y2="1196"/>
+
+  <rect class="open" x="40"   y="1212" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="56"  y="1236">Staff detection</text>
+  <text class="t sub" x="56"  y="1254">Find the staves</text>
+  <text class="t met" x="56"  y="1273">45 of 47 &#183; 1 loud, 1 SILENT &#183; re-proved 30 July</text>
+  <text class="t met" x="56"  y="1288">smude needs a 348 MB U-Net for this stage. We own it</text>
+  <text class="t met" x="56"  y="1301">Binarisation fixed at img &lt; 128. Adaptive: ABSENT</text>
+
+  <rect class="open" x="375"  y="1212" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="391" y="1236">Beams</text>
+  <text class="t sub" x="391" y="1254">Which notes are beamed</text>
+  <text class="t met" x="391" y="1273">false negative contained</text>
+  <text class="t met" x="391" y="1288">false positive still confident</text>
+  <text class="t met" x="391" y="1301">containment licensed, frozen, unopened</text>
+
+  <rect class="open" x="710"  y="1212" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="726" y="1236">Metre and signature</text>
+  <text class="t sub" x="726" y="1254">What time is it in</text>
+  <text class="t met" x="726" y="1273">62 of 62, re-proved 30 July</text>
+  <text class="t met" x="726" y="1288">1 wrong read across 47 pages</text>
+  <text class="t met" x="726" y="1301">threshold + argmax deferred</text>
+
+  <rect class="limit" x="1045" y="1212" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="1061" y="1236">Durations</text>
+  <text class="t sub" x="1061" y="1254">How long is each note</text>
+  <text class="t met" x="1061" y="1273">tuplets unhandled</text>
+  <text class="t met" x="1061" y="1288">flagged, never vouched for</text>
+  <text class="t met" x="1061" y="1301">standing limitation, re-entry by ruling</text>
+
+  <!-- ================= ZONE 7: photograph path ================= -->
+  <text class="t band" x="40" y="1350">7 &#183; The photograph path &#183; E.19 measured it down from &#8220;a second project&#8221; to four bounded pieces &#183; A4 decides whether they ship in this release</text>
+  <line class="rule" x1="40" y1="1360" x2="1360" y2="1360"/>
+
+  <rect class="built" x="40"  y="1376" width="315" height="88" rx="4"/>
+  <rect class="bIn"   x="45"  y="1381" width="305" height="78" rx="3"/>
+  <text class="t nm"  x="58"  y="1400">Deskewer</text>
+  <text class="t sub" x="58"  y="1418">Half a degree of tilt takes the reader 45 &#8594; 0</text>
+  <text class="t met" x="58"  y="1437">Written and measured: recovers 0 &#8594; 28 of 47</text>
+  <text class="t met" x="58"  y="1452">Container-only. RE-CREATE from E.19 §4, do not hunt</text>
+
+  <rect class="plan" x="375"  y="1376" width="315" height="88" rx="4"/>
+  <text class="t nm planT"  x="391" y="1400">Page-corner homography</text>
+  <text class="t sub planT" x="391" y="1418">Perspective: 0 correct, and 40 of 47 SILENT</text>
+  <text class="t met planT" x="391" y="1437">The real work, and the dangerous failure mode</text>
+  <text class="t met planT" x="391" y="1452">A 3x3 matrix on Canvas. No 348 MB model, by ruling</text>
+
+  <rect class="plan" x="710"  y="1376" width="315" height="88" rx="4"/>
+  <text class="t nm planT"  x="726" y="1400">Resolution gate</text>
+  <text class="t sub planT" x="726" y="1418">Low resolution fails LOUDLY, 45 of 47</text>
+  <text class="t met planT" x="726" y="1437">Cheap. Refuse outside the proven envelope,</text>
+  <text class="t met planT" x="726" y="1452">and treat zero staves as a refusal. Item D4</text>
+
+  <rect class="plan" x="1045" y="1376" width="315" height="88" rx="4"/>
+  <text class="t nm planT"  x="1061" y="1400">Capture format</text>
+  <text class="t sub planT" x="1061" y="1418">JPEG q85 alone costs 45 &#8594; 21</text>
+  <text class="t met planT" x="1061" y="1437">Prefer the iPhone's native HEIC over a re-encode</text>
+  <text class="t met planT" x="1061" y="1452">One line of code. The cheapest win on this map</text>
+
+  <text class="t cap" x="40" y="1490">Everything measured so far is SYNTHETIC. Ten real photographs from your phone would cost you an hour and would turn A4 from a preference into evidence.</text>
+
+  <!-- ================= ZONE 8: design ================= -->
+  <text class="t band" x="40" y="1532">8 &#183; The design system &#183; r2.3 adopted 30 July, md5 3b0c9cf4 &#183; one rule of twenty-five is in the tree &#183; Design's five mockups assessed 5 Aug</text>
+  <line class="rule" x1="40" y1="1542" x2="1360" y2="1542"/>
+
+  <rect class="ship" x="40"   y="1558" width="315" height="88" rx="4"/>
+  <text class="t nm"  x="56"  y="1582">The document</text>
+  <text class="t sub" x="56"  y="1600">Rules a checker can read</text>
+  <text class="t met" x="56"  y="1619">r2.3 adopted, 25 rules, three errata in place</text>
+
+  <rect class="ship" x="375"  y="1558" width="315" height="88" rx="4"/>
+  <text class="t nm"  x="391" y="1582">R20, palette drift</text>
+  <text class="t sub" x="391" y="1600">PALETTE checked against app.css</text>
+  <text class="t met" x="391" y="1619">Landed at 85355b3. 60 tests. First rule outside a doc</text>
+
+  <rect class="open" x="710"  y="1558" width="315" height="88" rx="4"/>
+  <text class="t nm"  x="726" y="1582">Tier 2, the phantoms</text>
+  <text class="t sub" x="726" y="1600">Nine tokens referenced, never defined</text>
+  <text class="t met" x="726" y="1619">Census briefed, unrun. Items D2 and P5, one job</text>
+
+  <rect class="open" x="1045" y="1558" width="315" height="88" rx="4"/>
+  <text class="t nm"  x="1061" y="1582">Design's return, E.27</text>
+  <text class="t sub" x="1061" y="1600">Handout and Analysis States are buildable</text>
+  <text class="t met" x="1061" y="1619">Ease Map collapses in greyscale: 1.35:1 and 1.07:1</text>
+
+  <text class="t cap" x="40" y="1672">The disease R20 cures, at ten times the scale: 104 hardcoded var(--token, #hex) fallbacks across six tokens and ten-plus components. The pacifier already does this right.</text>
+
+  <!-- ================= GATE TRACKER ================= -->
+  <text class="t band" x="40" y="1714">The six gates &#183; the operative plan is claude/e22-the-sequence-to-done_2026-08-03 &#183; marks updated 5 August at the close of E.27</text>
+  <line class="rule" x1="40" y1="1724" x2="1360" y2="1724"/>
+
+  <!-- Gate A -->
+  <rect class="open" x="40" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="56" y="1762">A &#183; Decisions</text>
+  <text class="t met"  x="56" y="1778">Yours alone. Nobody else</text>
+  <text class="t gateD" x="56" y="1800">&#9632; A1 beta scope, ratified</text>
+  <text class="t gateD" x="56" y="1818">&#9632; A5 tessitura, RULED</text>
+  <text class="t gateD" x="56" y="1836">&#9632; A12 verb is MEASURE</text>
+  <text class="t gate"  x="56" y="1854">&#9650; A3 watch-list rules</text>
+  <text class="t gate"  x="56" y="1872">&#9650; A4 photograph ceiling</text>
+  <text class="t gate"  x="56" y="1890">&#9650; A9 tempo UI shape</text>
+  <text class="t gate"  x="56" y="1908">&#9650; A2 fRn + strophic</text>
+  <text class="t gate"  x="56" y="1926">&#9650; A13 turning-head colour</text>
+  <text class="t gate"  x="56" y="1944">&#9650; A7 &#183; A10 &#183; A11 &#183; C7</text>
+  <text class="t met"   x="56" y="1966">A12: mesuré, not étalonner. A13:</text>
+  <text class="t met"   x="56" y="1982">code says sage, legend says grey</text>
+
+  <!-- Gate B -->
+  <rect class="open" x="263" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="279" y="1762">B &#183; The last seam</text>
+  <text class="t met"  x="279" y="1778">Was the ONE item that failed</text>
+  <text class="t met"  x="279" y="1792">the beta line outright</text>
+  <text class="t gateD" x="279" y="1814">&#9632; B1 readiness MEASURES</text>
+  <text class="t gateD" x="279" y="1832">&#9632; B4 real microphone</text>
+  <text class="t gate"  x="279" y="1850">&#9633; B2 room-monitor toast</text>
+  <text class="t gate"  x="279" y="1868">&#9633; B3 fidelity test, V2</text>
+  <text class="t gate"  x="279" y="1886">&#9650; B5 calibration copy</text>
+  <text class="t met"   x="279" y="1910">B1 CLOSED 4 Aug, E.26. Walked</text>
+  <text class="t met"   x="279" y="1924">five times. Measures, abstains,</text>
+  <text class="t met"   x="279" y="1938">counts the singer in, draws a bar.</text>
+  <text class="t met"   x="279" y="1958">B5 is TWELVE strings now.</text>
+  <text class="t met"   x="279" y="1978">English settles first, then French</text>
+
+  <!-- Gate C -->
+  <rect class="open" x="486" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="502" y="1762">C &#183; The Fit result</text>
+  <text class="t met"  x="502" y="1778">Complete enough to read</text>
+  <text class="t met"  x="502" y="1792">and to print</text>
+  <text class="t gateD" x="502" y="1814">&#9632; C1 provenance legend</text>
+  <text class="t gateD" x="502" y="1828">   CLOSED 5 Aug &#183; item 1.6</text>
+  <text class="t gateD" x="502" y="1846">&#9632; C6 print one real page</text>
+  <text class="t gateD" x="502" y="1860">   CLOSED 5 Aug &#183; item 1.8</text>
+  <text class="t gate"  x="502" y="1878">&#9633; C8 DRAW THE METRICS &#183; 1.3</text>
+  <text class="t gate"  x="502" y="1896">&#9633; C3 IPA underlay &#183; N.5</text>
+  <text class="t gate"  x="502" y="1914">&#9633; C9 Gould page setting &#183; N.6</text>
+  <text class="t gate"  x="502" y="1932">&#9633; C2 resolver tier labels</text>
+  <text class="t gate"  x="502" y="1950">&#9633; C4 override UI &#183; &#8594; C5 sweep</text>
+  <text class="t met"   x="502" y="1972">1.8 CLOSED: control, title, and a</text>
+  <text class="t met"   x="502" y="1986">withheld statement. All three walked</text>
+
+  <!-- Gate D -->
+  <rect class="open" x="709" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="725" y="1762">D &#183; Wrong answers</text>
+  <text class="t met"  x="725" y="1778">Things that ship a confident</text>
+  <text class="t met"  x="725" y="1792">falsehood today</text>
+  <text class="t gate"  x="725" y="1814">&#9633; D9 STEMLESS MELODY</text>
+  <text class="t gateD" x="725" y="1828">   NEW 5 Aug &#183; :653 &#183; item N.4</text>
+  <text class="t gateD" x="725" y="1846">&#9632; D8 verdict erased, CLOSED</text>
+  <text class="t gate"  x="725" y="1864">&#9633; D6 two pinned numbers</text>
+  <text class="t gate"  x="725" y="1882">&#9633; D1 transcribeWord</text>
+  <text class="t gate"  x="725" y="1900">&#9633; D3 strip fit-font-lab</text>
+  <text class="t gate"  x="725" y="1918">&#9633; D2 tier 2 phantoms</text>
+  <text class="t gate"  x="725" y="1936">&#9633; D4 &#183; D5 &#183; D7</text>
+  <text class="t met"   x="725" y="1958">D9: a stemless head MEANS a turning</text>
+  <text class="t met"   x="725" y="1972">pitch here. Every melody note is</text>
+  <text class="t met"   x="725" y="1986">making that claim. Direction is safe</text>
+
+  <!-- Gate P -->
+  <rect class="open" x="932" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="948" y="1762">P &#183; Pruning</text>
+  <text class="t met"  x="948" y="1778">Non-negotiable, by your own</text>
+  <text class="t met"  x="948" y="1792">ruling. Runs before the tag</text>
+  <text class="t gate"  x="948" y="1814">&#8594; P1 eight dead items</text>
+  <text class="t gate"  x="948" y="1832">&#8594; P2 parser utilities</text>
+  <text class="t gate"  x="948" y="1850">&#8594; P3 test builders</text>
+  <text class="t gate"  x="948" y="1868">&#8594; P4 static/data payload</text>
+  <text class="t gate"  x="948" y="1886">&#9633; P5 104 hex fallbacks</text>
+  <text class="t gate"  x="948" y="1904">&#9633; P6 seven vowel sets</text>
+  <text class="t gate"  x="948" y="1922">&#8594; P11 &#8220;calibrate&#8221; sweep</text>
+  <text class="t met"   x="948" y="1944">Zero unreferenced files in</text>
+  <text class="t met"   x="948" y="1956">the whole tree.</text>
+  <text class="t met"   x="948" y="1976">Do NOT delete analyzePerVerse</text>
+  <text class="t met"   x="948" y="1990">P11 follows A12. Mechanical, farm it</text>
+
+  <!-- Gate E -->
+  <rect class="open" x="1155" y="1740" width="205" height="262" rx="4"/>
+  <text class="t nmS"  x="1171" y="1762">E &#183; The gate</text>
+  <text class="t met"  x="1171" y="1778">Everything green, in a clean</text>
+  <text class="t met"  x="1171" y="1792">environment, then the tag</text>
+  <text class="t gateD" x="1171" y="1814">&#9632; E5 svelte-check CLEAN</text>
+  <text class="t gateD" x="1171" y="1828">   0 errors, 7 warnings, 5 Aug</text>
+  <text class="t gate"  x="1171" y="1846">&#8594; E2 Guide claims</text>
+  <text class="t gate"  x="1171" y="1864">&#9633; E3 smoke corpus</text>
+  <text class="t gate"  x="1171" y="1882">&#8594; E1 clean-env suite run</text>
+  <text class="t gate"  x="1171" y="1900">&#9650; E4 terminal gate, TAG</text>
+  <text class="t met"   x="1171" y="1924">E1 runs LAST, not first: it</text>
+  <text class="t met"   x="1171" y="1936">is the record, not a check.</text>
+  <text class="t met"   x="1171" y="1958">No agent commits, ever.</text>
+  <text class="t met"   x="1171" y="1970">E4 is yours and only yours.</text>
+  <text class="t met"   x="1171" y="1988">Preflight is now the Vercel SHA</text>
+
+  <!-- ================= CUT / AHEAD ================= -->
+  <text class="t band" x="40" y="2044">Out of this release, none of it cancelled &#183; and what lies ahead</text>
+  <line class="rule" x1="40" y1="2054" x2="1360" y2="2054"/>
+
+  <rect class="cut" x="40" y="2070" width="650" height="64" rx="4"/>
+  <text class="t nmS planT" x="56" y="2092">Cut, capability line 12 &#183; each re-enters by YOUR decision, never by drift</text>
+  <text class="t met planT" x="56" y="2111">witnesses pane &#183; profile manager &#183; pre-1917 normalization &#183; composer-era tempo &#183; verbal-tempo lane</text>
+  <text class="t met planT" x="56" y="2126">alignment engine &#183; strophic reprint* &#183; the fRn / nfo mark* &#183; design tiers 3-5 &#183; tab consolidation (1.9 and Fable's Packet) &#183; *A2</text>
+
+  <rect class="plan" x="710" y="2070" width="650" height="64" rx="4"/>
+  <text class="t nmS planT" x="726" y="2092">Ahead &#183; the release after this one</text>
+  <text class="t met planT" x="726" y="2111">11c, a photographed score actually READ end to end &#183; MIDI &#183; TEI, MEI, CollateX &#183; the alignment engine</text>
+  <text class="t met planT" x="726" y="2126">Curvature: vanishing point and spline interpolation, for a bound book that will not lie flat</text>
+
+  <!-- ================= LEGEND ================= -->
+  <line class="rule" x1="40" y1="2162" x2="1360" y2="2162"/>
+
+  <rect class="ship" x="40" y="2178" width="26" height="16" rx="3"/>
+  <text class="t met" x="74" y="2190">Shipped or landed</text>
+
+  <rect class="built" x="196" y="2178" width="26" height="16" rx="3"/>
+  <rect class="bIn"   x="199" y="2181" width="20" height="10" rx="2"/>
+  <text class="t met" x="230" y="2190">Built and wired, drawn nowhere</text>
+
+  <rect class="open" x="424" y="2178" width="26" height="16" rx="3"/>
+  <text class="t met" x="458" y="2190">In progress, or open</text>
+
+  <rect class="plan" x="592" y="2178" width="26" height="16" rx="3"/>
+  <text class="t met" x="626" y="2190">Planned, not built</text>
+
+  <rect class="cut" x="742" y="2178" width="26" height="16" rx="3"/>
+  <text class="t met" x="776" y="2190">Out of this release</text>
+
+  <rect class="limit" x="896" y="2178" width="26" height="16" rx="3"/>
+  <text class="t met" x="930" y="2190">Standing limitation, no fix pending</text>
+
+  <text class="t met" x="1150" y="2190">&#9632; closed &#183; &#9633; open &#183; &#9650; yours &#183; &#8594; farmed</text>
+
+  <text class="t met" x="40" y="2218">Outline carries status, never colour, so this map survives greyscale. A band marked CARRIED was not re-verified in this pass. Counts marked MEASURED were read from Dann's own terminal.</text>
+  <text class="t met" x="40" y="2236">To update: change the date in the credit line and the filename, move the outline classes, and re-file the gate marks. Do not start a new file; this one is the reference.</text>
+</svg>
