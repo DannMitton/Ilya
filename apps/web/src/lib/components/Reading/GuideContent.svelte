@@ -83,8 +83,8 @@
 							<h4 id="guide-walk-interface">L'interface en un coup d'œil</h4>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-01.webp" alt="Ilya s'ouvre avec le Tiroir déployé à gauche et le document papier à droite, affichant trois sections et trois onglets de navigation." width="1200" loading="lazy" />
-								<figcaption><em>Ilya</em> s'ouvre avec le Tiroir déployé à gauche et le document papier à droite. Le Tiroir est organisé en trois sections : Métadonnées, Analyse et Notation. Les trois onglets au bas de l'écran permettent de naviguer entre les trois espaces d'<em>Ilya</em> : Transcription, Leçons et Guide.</figcaption>
+								<img src="/guide/guide-step-01.webp" alt="Ilya s'ouvre avec le Tiroir déployé à gauche et le document papier à droite, affichant trois sections et quatre onglets de navigation." width="1200" loading="lazy" />
+								<figcaption><em>Ilya</em> s'ouvre avec le Tiroir déployé à gauche et le document papier à droite. Le Tiroir est organisé en trois sections : Métadonnées, Analyse et Notation. Les quatre onglets au bas de l'écran permettent de naviguer entre les quatre espaces d'<em>Ilya</em> : Transcription, Fit, Leçons et Guide.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -167,7 +167,7 @@
 
 							<h4 id="guide-walk-notation">Les préférences de notation</h4>
 
-							<p>La section Notation du Tiroir contient huit commutateurs. Chacun contrôle un aspect distinct de l'affichage de la transcription sur le papier. Tous sont non destructifs : ils n'affectent que l'affichage, non l'analyse phonologique sous-jacente. Ils peuvent être librement combinés.</p>
+							<p>La section Notation du Tiroir contient sept commutateurs. Chacun contrôle un aspect distinct de l'affichage de la transcription sur le papier. Tous sont non destructifs : ils n'affectent que l'affichage, non l'analyse phonologique sous-jacente. Ils peuvent être librement combinés.</p>
 
 							<p>La syllabification ouverte modifie la représentation des frontières syllabiques. La reconstitution applique une variante savante pour le ⟨е⟩ non accentué après les consonnes toujours dures, élaborée en collaboration avec le Dr&nbsp;Alexei Kochetov à l'Université de Toronto. Les commutateurs pour le ‹щ›, les géminées et la nasale palatale permettent d'accommoder différentes traditions de notation. La paire de voyelles réduites contrôle l'affichage de [ʌ] ou de [ə] pour les voyelles centrales non accentuées. Les commutateurs d'accentuation placent les marques d'accent directement au-dessus des voyelles, ce que certains chanteurs trouvent plus lisible à tempo.</p>
 
@@ -345,8 +345,8 @@
 							<h4 id="guide-walk-interface">The interface at a glance</h4>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-01.webp" alt="Ilya opens with the Drawer extended on the left and the paper document on the right, showing three Drawer sections and three navigation tabs." width="1200" loading="lazy" />
-								<figcaption><em>Ilya</em> opens with the Drawer on the left and the WYSIWYG Paper on the right. The three tabs at the bottom navigate between <em>Ilya</em>'s three areas: Transcription, Learn, and Guide. The Transcription tab is organised into three sections: Metadata, Analysis, and Notation.</figcaption>
+								<img src="/guide/guide-step-01.webp" alt="Ilya opens with the Drawer extended on the left and the paper document on the right, showing three Drawer sections and four navigation tabs." width="1200" loading="lazy" />
+								<figcaption><em>Ilya</em> opens with the Drawer on the left and the WYSIWYG Paper on the right. The four tabs at the bottom navigate between <em>Ilya</em>'s four areas: Transcription, Fit, Learn, and Guide. The Transcription tab is organised into three sections: Metadata, Analysis, and Notation.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -429,7 +429,7 @@
 
 							<h4 id="guide-walk-notation">Notation preferences</h4>
 
-							<p>The Notation section of the Drawer contains eight toggles. Each controls a distinct aspect of how the transcription is displayed on the paper. All toggles are non-destructive: they affect the display only, not the underlying phonological analysis. They can be freely combined.</p>
+							<p>The Notation section of the Drawer contains seven toggles. Each controls a distinct aspect of how the transcription is displayed on the paper. All toggles are non-destructive: they affect the display only, not the underlying phonological analysis. They can be freely combined.</p>
 
 							<p>Open syllabification changes how syllable boundaries are represented. Reconstitution applies a scholarly alternative for unstressed ⟨е⟩ after always-hard consonants, developed in consultation with Dr. Alexei Kochetov at the University of Toronto. The shcha, geminate, and palatal nasal toggles accommodate different notational traditions. The reduced vowel pair controls whether <em>Ilya</em> displays [ʌ] or [ə] for unstressed central vowels. Stress acutes place marks directly above vowels, which some singers find easier to read at tempo.</p>
 
