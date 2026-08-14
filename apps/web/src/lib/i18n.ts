@@ -510,6 +510,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// call site, the convention 'upload.err.xmlRootIs' already uses.
 	'upload.banner.noLyrics': { en: 'This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Votre texte se trouve sous les notes, une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	'station.syllables': { en: 'Syllables', fr: 'Syllabes' },
+	'station.textChanged': { en: 'Text changed', fr: 'Texte modifié' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 

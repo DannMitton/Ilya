@@ -1,9 +1,10 @@
 # STATE — where we are
 
-**Updated at the close of every session. This is the only file that changes often.**
+**Rewritten clean at the close of E.48, 2026-08-13.** Updated at the close of
+every session. This is the only file that changes often, and it is the handover.
 
-Repository: branch `Shane` at `25d2246`. **Expected, unverified.** Ask Dann for the
-state in one line; you do not run git.
+Repository: branch `Shane` at `02f62cf`, working tree clean. **Expected,
+unverified.** Ask Dann in one line; you do not run git.
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
@@ -13,48 +14,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> **Wire the drift count into the drawer.** `reconcilePairings` is correct and
-> tested at `2868d58`, and NOTHING CALLS IT. `auditPairings` had no callers
-> before it either, so no behaviour visible to Dann has changed yet.
+> **Wire the drift count into the drawer.**
 >
-> Then **N.55b's station shape**, §11.3. Dann has ruled the direction:
-> Finale's running text, hyphenated at slot boundaries, ONE moving highlight,
-> a read-out rather than a field, the whole verse present, the pane at full
-> height carried by the drawer's own scroll. **Shift Lyrics commands live in
-> the pane**, per design §8: to the End of the Lyric, to the Next Open Note,
-> Rotate. Every one is a permutation of a map, free to undo, testable without
-> a browser. **Accepted: this is easier on desktop than on mobile.**
->
-> **The tab must be FOREGROUND.** Backgrounded, Chrome throttles the 12.8 MB
-> dictionary from about 8 seconds to about 40. `document.hidden` is only a
-> proxy; the direct hydration test is whether the app reacts to input.
+> `reconcilePairings` is correct and tested at `2868d58`, and **nothing calls
+> it.** `auditPairings` had no callers before it either, so no behaviour Dann
+> can see has changed yet. This is the smallest piece that makes the pairing
+> layer visible, and it is the only thing standing between a working engine and
+> a singer who can tell it is working.
 
-### The walk, four steps
-
-All three scores in `~/Downloads` carry lyrics. **`no-lyrics-control.musicxml` is
-the instrument**: the Pushkin fixture with its five `<lyric>` elements stripped,
-same six notes.
-
-1. Transcribe some Russian, or the queue is empty and nothing draws.
-2. Switch to Fit **before touching any file input.**
-3. Upload `no-lyrics-control.musicxml`, press *Continue to analysis*.
-4. **Expect:** the station in the drawer at `5 / 5`, the syllables under the
-   notes, the rest bare, **and no dashed boxes.**
-
-**THE FIXTURE, READ OUT OF THE FILE 2026-08-13. Do not re-derive it.**
-`no-lyrics-control.musicxml` holds **five pitched notes and one half rest**:
-C4 D4 E4 F4 quarters, G4 half, then a half rest. **It is NOT six notes.**
-The stripped lyric line was five syllables. Its header title is a different
-text from its lyric line, which is why a queue drawn from the title gives a
-different count from one drawn from the lyrics.
-
-**WALKED 2026-08-13: `5 / 5`. Five syllables onto five notes, nothing on the
-rest, no dashed boxes. The feature is correct.** The E.47/E.48 opener was
-wrong twice in one sentence: it said "same six notes" and expected `4 / 5`.
-Both are struck.
-
-After the walk: the reconciliation, checking **two citations by opening the files**,
-one of them E.47's. Then **one** question for Dann, not several.
+Behind it, in order: **the slot station** (ruled, below), then **storage**
+(`ilya:pairings`, which needs French Dann has not seen).
 
 ---
 
@@ -62,82 +31,124 @@ one of them E.47's. Then **one** question for Dann, not several.
 
 **The goal: a working beta. PDF, photograph, and MIDI stay in it.**
 
-Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[F]` farmed
+Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule
 
-### The blocking seven, and one is ready to close
+### The blocking SIX
 
 | | item | state |
 |---|---|---|
-| `[x]` | **N.55b** Click Assignment | **2B CLOSED by Dann, 2026-08-13**, on the observed `5 / 5`. Increments 1, 2A and 2B all observed |
-| `[D]` | **N.55b station shape** | **The design's own §11.3 is UNRULED: what the slot station IS.** Dann's reference is Finale's Lyrics window: the poem kept whole and hyphenated at slot boundaries, ONE moving highlight, click a note to place and advance. **Question put to him and unanswered:** is the station a read-out rather than a field, given §7 says Transcribe is the Lyrics window and only one of the two may take typing |
-| `[x]` | **N.32** the no-lyrics banner | **DONE.** `07225ce`, five gates at baseline, **walked on the deployed build 2026-08-13 in EN and FR**, both strings read out of the DOM verbatim |
-| `[x]` | **N.55a** the score with no underlay | **CLOSED by Dann, 2026-08-13. The blocking number is SIX.** Observed twice with a negative control: E.47 on `08a0dae` (4 pairings on the stripped score, 0 on the same music with lyrics), and on `07225ce` in EN and FR. **No written done-test for it ever existed anywhere in the estate; the standard applied was the register's own definition of `DONE`, a browser observation.** |
-| `[D]` | **N.56** draw the withheld page badly, once | R7 shrank it. Not yet placed in the order. |
-| `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55a and N.55b |
-| `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** |
-| `[ ]` | **N.32** four false claims left | two are Dann's prose; two may belong to N.33 |
-| `[ ]` | **N.47** print, from a phone, once | ten minutes, Dann's |
+| `[ ]` | **N.55b** Click Assignment | **`PART DONE`. NEXT.** Increments 1, 2A and 2B all shipped and OBSERVED. Re-division propagation shipped `2868d58` and **unwired**. Remaining: the drift count in the drawer, the station's shape (ruled, see below), Shift Lyrics, storage |
+| `[D]` | **N.56** draw the withheld page badly, once | R7 shrank its scope. **Still unplaced in Dann's ordering. Ask him** |
+| `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55b |
+| `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
+| `[ ]` | **N.32** the Guide's false claims, prose only | **`PART DONE`**, shipped `821c5f5`. **FOUR sites remain**, three of them alt text on screenshots nobody has opened; if the images show those tabs, the owner is N.33 |
+| `[ ]` | **N.47** print, from a phone, once | a gate, not a build. Ten minutes, Dann's |
 
-### What N.55b still needs, and it is short
+**Closed 2026-08-13:** **N.55a**, the score with no underlay. Observed twice with
+a negative control. That is what took the number from seven to six.
 
-- **Storage.** `ilya:pairings` is deliberately unbuilt. `savePairings` is written
-  and unused, because a save that must not swallow needs a visible failure message,
-  **and that needs French Dann has not seen. Bring him the string table, not a
-  question about whether to have one.**
-- **Tests for `pairings.ts`.** None exist. **Tell Dann the new gate number before he
-  runs the ship script.**
-- **Then the walk decides the rest.** Do not plan increments past what he has
-  looked at.
+**A label to correct.** Commit `07225ce`, the no-lyrics banner, is messaged
+`N.32`. **That label was mine and it is probably wrong**: N.32 is the Guide's
+four remaining prose claims, and the banner is not one of them. The banner fix is
+real, shipped, and walked; it is simply unnumbered. **N.32 did not move.**
+
+### N.55b's station shape — RULED by Dann, 2026-08-13
+
+The design's §11.3 asked what the slot station IS. Answered:
+
+- **Finale's Lyrics window is the model**, from the manual and from the image
+  Dann supplied: the lyric kept **whole and readable**, hyphenated at slot
+  boundaries, with **one moving highlight** marking where you are.
+- **A read-out, not a field.** No border, no caret, set in Ilya's own type.
+  Transcribe owns every text operation and only one surface may take typing.
+- **No IPA row.** Dann's formulation: the station reorients you in the poem as
+  source text; the IPA reappears under the note once the correspondence exists.
+  Putting IPA in the station states a correspondence before one is made.
+- **The whole verse is present**, not a window onto it. The pane grows to full
+  height and **the drawer's own scroll carries it** — one scroll, never two.
+  Nested scrolling inside the drawer is the failure mode being avoided.
+- **The 44 px floor is not spent.** Give the *cursor* a 44 px handle rather than
+  every syllable. Direct tapping stays available; pinch-zoom is live and
+  deliberately protected (`app.html:5`, and `app.css:247` says
+  `maximum-scale=1` is not on the table).
+- **Shift Lyrics lives in the pane**, per design §8: *to the End of the Lyric*,
+  *to the Next Open Note*, *Rotate syllables*. Each is a permutation of the
+  pairing map, so each is free to undo and testable without a browser.
+- **Accepted cost:** this is easier on desktop than on mobile, and that is fine.
+  On a phone the drawer is the whole screen (`Drawer.svelte:958`), so drawer and
+  paper cannot both be visible. Some things are just harder on mobile.
+
+**Arias:** `PRODUCT.md`'s "verse 1 only" does not bound a through-composed text.
+Running text scales to it — 400 slots is roughly 25 to 30 lines of prose. The
+same 400 as chips is about 1,600 px of boxes. Pagination is downstream layout and
+does not touch this: the pairing map is keyed by event id, and events exist
+before `paginateScore` runs.
 
 ### The GUI track. Ruled, none started, displaces nothing
 
-**N.66** Studio · **N.42** the selector · **N.64** the shared intake · **N.65** the
-anchors.
-
-**Fable's timing ruling: none of it is built before the beta closes.** Its §S0 is
-six one-line rulings Dann owes first. Open
-`claude/e44-fable-ruling-studio-architecture_2026-08-13.md` before any GUI opinion.
+**N.66** Studio · **N.42** the selector · **N.64** the shared intake · **N.65**
+the anchors. **Fable's timing ruling: none of it is built before the beta
+closes**, and its §S0 is six one-line rulings Dann owes first. **Open
+`claude/e44-fable-ruling-studio-architecture_2026-08-13.md` before any GUI
+opinion.** That rule was broken in two consecutive sessions.
 
 ### The visible list. Built only if a day finishes early
 
 **N.62** · **N.63** · **N.45's remainder** · the **French colon spacing** (eight
-sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** · **N.6**
-(Gould r86/r87 stem lengths, OPEN and unbuilt).
+sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** ·
+**N.6** (Gould r86/r87 stem lengths, OPEN and unbuilt).
 
 ---
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
-- **Does N.55a close?**
+- **N.56's place** in the order.
 - **N.63.** Killing the interstitial is ruled; **where the honest residue goes is
   not.** Asked in E.45, still unanswered.
 - **N.45's remainder.**
-- **N.56's place** in the order.
 - **N.67's displacement**, or it waits.
 - **The French question mark.** Eleven strings carry U+00A0 before `?`, which is
   France's practice; the OQLF opts for none.
+- **The Shift Lyrics command labels**, English and French, when the pane is
+  built. Bring him the table, not a question about whether to have one.
 - *(Not yet: what a deliberately empty note draws. Nothing depends on it. Do not
   raise it until something does.)*
 
 ---
 
-## THE SCHEMA. It has survived seven sessions
+## THE SCHEMA. It has survived eight sessions
 
 1. Only blocking work gets built.
 2. **A new cardinal displaces a named one or waits. Say which.**
 3. Half of every build day is reserved for what the previous day's walk found.
 4. Every build day ends in a deploy and a walk.
 5. N.48 may be unclosable; it needs a `[u]` that fails.
-6. Rebuild the tracker at the close.
+
+---
+
+## THE FIXTURE. Read out of the file, do not re-derive it
+
+`~/Downloads/no-lyrics-control.musicxml` is the only instrument that exercises
+the no-underlay path; all three of Dann's own scores carry lyrics.
+
+**It holds five pitched notes and one half rest:** C4 D4 E4 F4 quarters, G4 half,
+then a half rest. **It is NOT six notes** — two sessions in a row counted
+`<note>` elements and reported a rest as a note. Its stripped lyric line was five
+syllables, «Я тебя любил». **Its header title is a different text from its lyric
+line**, which is why a queue drawn from the title gives a different count.
+
+**The walk, four steps.** Transcribe some Russian, or the queue is empty and
+nothing draws. Switch to Fit **before touching any file input.** Upload the
+control, press *Continue to analysis*. **Expect `5 / 5`, syllables under the
+notes, the rest bare, no dashed boxes.** Walked and confirmed 2026-08-13.
 
 ---
 
 ## STILL UNSETTLED. Not yours to settle alone
 
-- "The page carries no chrome."
-- "Do not introduce a slider."
+- "The page carries no chrome." · "Do not introduce a slider."
 - **N.51:** whether per-tab colour may propagate past the tab bar.
-- Whether `claude/shane-project-map_2026-07-25.md` is stale. **Unopened after nine
+- Whether `claude/shane-project-map_2026-07-25.md` is stale. **Unopened for ten
   sessions.**
 - **D3's Job A**, per-verse reprints, ruled in E.36 and still unnumbered.
 - **The per-format score arrival audit**, asked for in E.45 and never written.
@@ -149,17 +160,17 @@ sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** �
 
 ## Register corrections owed
 
-**The N.55a row in `claude/ILYA-REGISTER_2026-08-11.md` is FALSE.** It reads
-`RULED`, unbuilt, and "AND IT REACHES NOTHING: no component in `apps/web/src`
-reads parse warnings." Both were true at revision 10 and both were falsified by
-`08a0dae` the same day. **N.55a is now CLOSED. The register needs revision 11 and
-the blocking number there is SIX, not seven.**
+`claude/ILYA-REGISTER_2026-08-11.md` is at revision 10 and needs revision 11.
 
+- **Its N.55a row is FALSE.** It reads `RULED`, unbuilt, and "AND IT REACHES
+  NOTHING: no component reads parse warnings." Both were falsified by `08a0dae`
+  on the same day. **N.55a is CLOSED and the blocking number there is SIX.**
+- It says "ten cardinals" over a list of twelve. **Five actually remain and none
+  is in the tree: N.1, N.2, N.3, N.18, N.21.**
+- **N.6 is OPEN and unbuilt** and belongs on the visible list.
 
-The register at `claude/ILYA-REGISTER_2026-08-11.md` says "ten cardinals" over a
-list of twelve. **Five actually remain, and none is in the tree at all: N.1, N.2,
-N.3, N.18, N.21.** **N.6 is OPEN and unbuilt** and belongs on the visible list.
-Fix the register, or fold it into this file and retire it.
+**Or fold the register into this file and retire it.** It is the last piece of
+canon still living in project knowledge.
 
 ---
 
@@ -167,14 +178,18 @@ Fix the register, or fold it into this file and retire it.
 
 | date | what changed |
 |---|---|
-| 2026-08-13 | **`2868d58`: an Inspector re-division propagates instead of reporting drift.** `SlotOrigin` gains `word`, the discriminator; new `reconcilePairings`; `auditPairings` defined in terms of it. **Eight tests, web-test 408 to 416.** **Dann ruled the distinction:** a re-division moves consonants within one word, nuclei never move, slot count cannot change, so the pairing is stale rather than wrong and is refreshed. A re-transcription is a different decision and stays drift. **VERIFIED IN THE TREE, not inferred:** `openSyllabify` is a `map` over its input; `InspectorPanel.svelte:781-818` only ever moves a boundary value, never pushes or splices. **The design document's §4.3 claim that boundary edits change how many slots a word has is WRONG.** |
-| 2026-08-13 | **RULED, Dann: the notes never move; the syllables slide along them.** Recorded in `PRODUCT.md`. |
-| 2026-08-13 | **N.55a CLOSED. The blocking number is SIX.** |
-| 2026-08-13 | **N.32 WALKED on `ilya-9r34lgd7j`, EN and FR. `DONE`.** Station `SYLLABES 5 / 5`, rest bare, no dashed boxes. |
+| 2026-08-13 | **STATE.md rewritten clean.** Incremental edits through the session had left it self-contradictory: stale commit, "blocking seven", a closed question still listed as owed, two N.32 rows. **A log that only appends drifts; rewrite this file at the close, do not just patch it.** |
+| 2026-08-13 | **`2868d58`: an Inspector re-division propagates instead of reporting drift.** `SlotOrigin` gains `word`, the discriminator; new `reconcilePairings`; `auditPairings` defined in terms of it. Eight tests, **web-test baseline 408 → 416** (`ilya-ship.sh:79`, moved with Dann's permission). **Dann ruled the distinction:** a re-division moves consonants within one word, nuclei never move, slot count cannot change, so the pairing is stale rather than wrong and is refreshed; a re-transcription is a different decision and stays drift. **VERIFIED IN THE TREE:** `openSyllabify` is a `map` over its input; `InspectorPanel.svelte:781-818` only ever moves a boundary value. **The design's §4.3 claim that boundary edits change how many slots a word has is WRONG.** |
+| 2026-08-13 | **RULED, Dann: the notes never move; the syllables slide along them.** In `PRODUCT.md`. |
+| 2026-08-13 | **RULED, Dann: N.55b's station shape.** See the tracker. |
+| 2026-08-13 | **N.55a CLOSED.** The blocking number is SIX. |
+| 2026-08-13 | **N.32-labelled banner `07225ce` walked on `ilya-9r34lgd7j` in EN and FR. Done, and unnumbered.** Rewritten from the singer's side; the old copy promised a mark struck in E.47 and an accept action that does not exist. French ratified by Dann, `se trouve` his correction of a calque. |
 | 2026-08-13 | **N.55b increment 2B walked and CLOSED.** Five syllables onto five notes, nothing on the rest, no dashed boxes. |
-| 2026-08-13 | **`07225ce`** the no-lyrics banner rewritten from the singer's side, EN and FR. The old copy promised a per-syllable mark struck in E.47 and an accept action that does not exist. New EN: "This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable." French ratified by Dann; `se trouve` is his correction of my calque. Five gates at baseline. **Not walked.** |
-| 2026-08-13 | This folder created. Project memory moved out of Claude project knowledge and into the repository. 35 superseded thread openers and one superseded map SVG removed from project knowledge; the SVG is archived at `docs/sessions/artifacts/`. Project knowledge went 1,714,457 to 1,495,255 units, 85.7% to 74.8%, measured. |
+| 2026-08-13 | **This folder created.** Project memory moved out of Claude project knowledge into the repository. 35 superseded openers and one superseded map SVG removed; the SVG archived at `docs/sessions/artifacts/`. Project knowledge 1,714,457 → 1,495,255 units, **85.7% → 74.8%**, measured. |
 
 ---
-*SOURCED from `claude/e48-thread-opener_v1_2026-08-13.md`, read in full 2026-08-13.
-The 2026-08-13 log line is measured directly by `project_info`.*
+*E.48. Facts above are SOURCED from files read in full this session — the E.48
+opener, the E.47 handover, the ILYA-REGISTER, the N.55b design, Fable's Studio
+ruling — or measured directly from the tree, the deployed build, or
+`project_info`. Where a claim rests on a comment beside code rather than on the
+code, it says so.*

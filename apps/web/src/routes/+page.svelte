@@ -13,6 +13,7 @@
 	import {
 		buildSlotQueue,
 		firstPass,
+		reconcilePairings,
 		type PairingMap,
 	} from '$lib/shane/pairings';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
@@ -87,6 +88,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The syllable the NEXT note click will place. Finale's insertion point.
 	let pairingCursor = $state(0);
 	const slotQueue = $derived(buildSlotQueue(lines));
+	// N.55b: the pairing layer, wired. `reconcilePairings` (pairings.ts:318)
+	// is the ONE rule for what counts as drift. A re-division moves consonants
+	// within a word, so the nucleus the singer paired is still the same nucleus
+	// and its text is refreshed. A re-transcription is a different decision and
+	// stays drift, and R6 holds: the page prints what the singer decided.
+	//
+	// PROJECTED, NOT WRITTEN BACK. The refreshed map is derived from the live
+	// queue on every render, so nothing derived is stored (CONTRACT s6) and
+	// `pairings` stays the singer's own record. R5's `ilya:pairings` will save
+	// the raw map, not this one.
+	const reconciliation = $derived(reconcilePairings(pairings, slotQueue));
+	const shownPairings = $derived(reconciliation.map);
+	const driftCount = $derived(reconciliation.drift.length);
 
 	function handleNotePick(eventId: string): void {
 		const slot = slotQueue[pairingCursor];
@@ -1072,7 +1086,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{/if}
 					<SyllableStation
 						slots={slotQueue}
-						{pairings}
+						pairings={shownPairings}
+						drift={driftCount}
 						cursor={pairingCursor}
 						{language}
 						oncursor={(i) => (pairingCursor = i)}
@@ -1197,7 +1212,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     be sliced twice. -->
 			<VoiceProfilePane
 				transcribedLines={lines}
-				{pairings}
+				pairings={shownPairings}
 				onnotepick={handleNotePick}
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}

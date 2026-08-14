@@ -52,6 +52,35 @@ them and why the project knowledge estate filled up four times in a month.
 
 ---
 
+## Opening a session
+
+Dann pastes this and nothing else. Everything it used to say now lives in the
+files above, which is the whole point of this folder.
+
+```
+Claude, I'm Dann.
+
+Read ~/Desktop/ilya-rewrite/docs/memory/README.md first and follow its read
+order. Do not read the whole folder.
+
+Your first call is device_request_folder_access for
+/Users/dannmitton/Desktop/ilya-rewrite and /Users/dannmitton/Downloads.
+Folder grants do not carry between sessions.
+
+Emit the sequence-position block from CONTRACT.md §0 before your first tool
+call.
+
+Then ask me for the repository state in one line. You do not run git, ever.
+
+Then start on THE ONE THING in STATE.md and stop after one question.
+```
+
+**If that prompt ever needs to grow, something has gone wrong in this folder
+instead.** The E.48 opener it replaced ran to about six thousand words, and
+forty-seven of its predecessors were written and thrown away.
+
+---
+
 ## Closing a session
 
 1. Update `STATE.md`: the one thing, the tracker marks, what moved.

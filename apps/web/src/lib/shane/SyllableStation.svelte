@@ -20,8 +20,16 @@
   the transcription on every render, so a syllable you have not placed is
   still here, and one you place twice is still here.
 
-  The count is a numeral pair rather than a sentence, so it needs no
+  The placed count is a numeral pair rather than a sentence, so it needs no
   translation and no plural agreement.
+
+  THE DRIFT LINE is the one string here that does need translating, and its
+  wording was ratified by Dann on 2026-08-14: it agrees with `texte`, not
+  with the count, so one string covers every number in both languages. It is
+  drawn ONLY when the count is above zero, so it is not a mark that appears
+  on everything and therefore says nothing. It is set in the same muted grey
+  as the placed count and takes no alarm colour: a re-transcription is a
+  thing the singer did on purpose, not a fault.
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
@@ -32,10 +40,13 @@
 		pairings: PairingMap;
 		/** Index into `slots` of the syllable the next note click will place. */
 		cursor: number;
+		/** Pairings whose stored text the current transcription no longer
+		    produces. Counted by `reconcilePairings` (pairings.ts:318). */
+		drift?: number;
 		language: Language;
 		oncursor: (index: number) => void;
 	}
-	let { slots, pairings, cursor, language, oncursor }: Props = $props();
+	let { slots, pairings, cursor, language, oncursor, drift = 0 }: Props = $props();
 
 	const keyOf = (s: Slot) => `${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`;
 
@@ -60,6 +71,12 @@
 			<h3>{t('station.syllables', language)}</h3>
 			<span class="station-count">{placedCount}&thinsp;/&thinsp;{slots.length}</span>
 		</div>
+		{#if drift > 0}
+			<p class="station-drift">
+				<span>{t('station.textChanged', language)}</span>
+				<span class="station-count">{drift}</span>
+			</p>
+		{/if}
 		<ol class="slot-row">
 			{#each slots as s, i (keyOf(s))}
 				<li>
@@ -98,6 +115,15 @@
 		text-transform: uppercase;
 		color: #6a655f;
 		font-weight: 600;
+	}
+	/* Mirrors .station-head so the numeral sits in the same column. */
+	.station-drift {
+		margin: 0;
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		font-size: 0.75rem;
+		color: #6a655f;
 	}
 	.station-count {
 		font-size: 0.75rem;
