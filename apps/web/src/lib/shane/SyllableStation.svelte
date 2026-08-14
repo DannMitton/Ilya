@@ -3,6 +3,17 @@
 
   N.55b R4: Finale's Lyrics window, in Ilya's drawer.
 
+  Updated 2026-08-14 to the shape RULED by Dann, 2026-08-13 (STATE.md,
+  "N.55b's station shape"): the lyric runs as ONE piece of readable text,
+  hyphenated at slot boundaries, not a wrapped grid of chips. No IPA row —
+  the station reorients you in the poem as source text; IPA reappears under
+  the note once the correspondence exists. One moving highlight marks the
+  cursor. The whole verse is present; this component sets no height and no
+  overflow of its own, so the drawer's own scroll (`Drawer.svelte`'s
+  `.drawer-content`) carries it and there is never a second, nested scroll.
+  The 44 px touch floor sits on the cursor alone, not on every syllable;
+  direct tapping of any syllable stays available regardless of its size.
+
   Finale puts the text in one window and the notes in another: you place the
   cursor at a syllable, then click notes in the score. Neither gesture is
   overloaded and there is no mode. Transcribe is the Lyrics window, but it is
@@ -63,6 +74,33 @@
 		return s;
 	});
 	const placedCount = $derived(slots.filter((s) => placed.has(keyOf(s))).length);
+
+	// The reading order for the running text: a new line at a line boundary,
+	// a space at a word boundary, a hyphen (kept inside the PRECEDING
+	// syllable's own button, not a separate element) at a boundary within one
+	// word. `buildSlotQueue` (pairings.ts:187) already walks slots in that
+	// document order, so this only has to look at neighbours.
+	type Lead = 'line' | 'space' | null;
+	const items = $derived.by(() => {
+		return slots.map((s, i) => {
+			const prev = i > 0 ? slots[i - 1] : undefined;
+			const next = i < slots.length - 1 ? slots[i + 1] : undefined;
+			let lead: Lead = null;
+			if (prev) {
+				lead =
+					prev.origin.lineIndex !== s.origin.lineIndex
+						? 'line'
+						: prev.origin.wordIndex !== s.origin.wordIndex
+							? 'space'
+							: null;
+			}
+			const trailingHyphen =
+				next !== undefined &&
+				next.origin.lineIndex === s.origin.lineIndex &&
+				next.origin.wordIndex === s.origin.wordIndex;
+			return { slot: s, index: i, lead, trailingHyphen };
+		});
+	});
 </script>
 
 {#if slots.length > 0}
@@ -77,23 +115,16 @@
 				<span class="station-count">{drift}</span>
 			</p>
 		{/if}
-		<ol class="slot-row">
-			{#each slots as s, i (keyOf(s))}
-				<li>
-					<button
-						type="button"
-						class="slot"
-						class:is-placed={placed.has(keyOf(s))}
-						class:is-cursor={i === cursor}
-						aria-current={i === cursor ? 'true' : undefined}
-						onclick={() => oncursor(i)}
-					>
-						<span class="slot-ipa">{s.ipa}</span>
-						<span class="slot-cyr">{s.cyrillic}</span>
-					</button>
-				</li>
-			{/each}
-		</ol>
+		<p class="station-text">
+			{#each items as it (keyOf(it.slot))}{#if it.lead === 'line'}<br />{:else if it.lead === 'space'}{' '}{/if}<button
+					type="button"
+					class="slot"
+					class:is-placed={placed.has(keyOf(it.slot))}
+					class:is-cursor={it.index === cursor}
+					aria-current={it.index === cursor ? 'true' : undefined}
+					onclick={() => oncursor(it.index)}
+				>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{/each}
+		</p>
 	</section>
 {/if}
 
@@ -130,55 +161,48 @@
 		color: #6a655f;
 		font-variant-numeric: tabular-nums;
 	}
-	.slot-row {
-		list-style: none;
+	/* The whole verse as one piece of readable text, hyphenated at slot
+	   boundaries. No height and no overflow here: the drawer's own scroll
+	   carries it (`Drawer.svelte`'s `.drawer-content`, overflow-y: auto).
+	   A second overflow on this element would be the nested-scroll failure
+	   mode the ruling names. */
+	.station-text {
+		margin: 0;
+		font-size: 0.8125rem;
+		line-height: 1.6;
+		color: #1a1612;
+	}
+	/* Plain inline text, not a chip: only the cursor (below) gets a visible
+	   box and the 44 px floor. Every other syllable is a same-size word in
+	   the sentence, still a real button, still directly tappable. */
+	.slot {
+		display: inline;
+		border: none;
+		background: none;
 		margin: 0;
 		padding: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px;
-	}
-	/* The ruled touch floor is 44 by 44 with two exemptions and no third
-	   (E.36 §1.5). A syllable chip is not a third exemption: it takes the
-	   floor. */
-	.slot {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 1px;
-		min-height: 44px;
-		min-width: 44px;
-		padding: 4px 8px;
-		border: 1px solid transparent;
-		border-radius: 3px;
-		background: #F5F1E8;
+		border-radius: 2px;
 		cursor: pointer;
-		color: #1a1612;
+		color: inherit;
 		font: inherit;
 	}
-	/* IPA above Cyrillic, matching the page and Transcribe's word stack, so
-	   the reading order is learned once (`staff-renderer.ts:1231-1234`). */
-	.slot-ipa {
-		font-size: 0.75rem;
-		color: #6a655f;
-		font-family: 'Lato IPA', sans-serif;
-		line-height: 1.1;
-	}
-	.slot-cyr {
-		font-size: 0.8125rem;
-		line-height: 1.1;
-	}
 	.slot.is-placed {
-		background: transparent;
-	}
-	.slot.is-placed .slot-cyr,
-	.slot.is-placed .slot-ipa {
 		color: #9a948c;
 	}
+	/* The one moving highlight (STATE.md, "N.55b's station shape"). This is
+	   the sole surface that spends the 44 px touch floor; every other
+	   syllable stays plain text, per the same ruling. */
 	.slot.is-cursor {
-		border-color: #8E7E9B;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		min-width: 44px;
+		padding: 2px 6px;
+		color: #1a1612;
 		background: #FFFFFF;
+		border: 1px solid #8E7E9B;
+		vertical-align: middle;
 	}
 	.slot:focus-visible {
 		outline: 2px solid #8E7E9B;
