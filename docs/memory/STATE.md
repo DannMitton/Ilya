@@ -1,17 +1,31 @@
 # STATE — where we are
 
-**Rewritten clean at the close of E.48, 2026-08-13. Updated at the close of E.49,
+**Rewritten clean at the close of E.48, 2026-08-13. Updated at the close of E.50,
 2026-08-14.** Updated at the close of every session. This is the only file that
 changes often, and it is the handover.
 
-Repository: branch `Shane` at `b617a4b`, working tree clean. **Expected,
-unverified next session.** Ask Dann in one line; you do not run git.
-This session shipped three commits: `c6fc3ba` (N.68 filed), `4cfa5f0` (N.32:
-Composer tab, gloss double-click, Ma traduction to Mon choix; also the
+**A label to correct.** Commit `2814fc3` says "close E.50." It was early: the
+N.32 walk, N.56's parking, and N.58's scoping all happened in the same
+conversation afterward. **This is E.50's real close.** The next session opens
+as **E.51**.
+
+Repository: branch `Shane`, HEAD `b5e8777` as of the last ship, working tree
+**not clean** — this STATE.md update (N.56 parked, N.58 scoped as unclear,
+the marks legend) is written to disk but not yet committed. **Ask Dann to run
+the ship command below before treating this file as final.** Expected
+resulting HEAD is unverified; ask Dann in one line; you do not run git.
+
+This session (E.50) shipped four commits: `c6fc3ba` (N.68 filed), `4cfa5f0`
+(N.32: Composer tab, gloss double-click, Ma traduction to Mon choix; also the
 ilya-ship.sh fix noted in `ENVIRONMENT.md`), `b617a4b` (N.32: the French
 provenance sentence, the gloss-persistence caveat, Mon choix's noun corrected
-to a button). All five gates at baseline throughout, web-test still 438.
-Nothing is in flight.
+to a button), `b5e8777` (N.32 closed, walked and observed on `b617a4b`). All
+five gates at baseline throughout, web-test still 438. One more commit is
+pending: this file's N.56/N.58 update, below.
+
+```
+sh ~/Downloads/ilya-ship.sh "STATE: close E.50, N.56 parked (Dann's ruling, trigger unrecoverable), N.58 scoped as unclear"
+```
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
@@ -30,14 +44,20 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **N.32 closed this session**, shipped and browser-observed (`4cfa5f0`,
 > `b617a4b`). **N.58's "cheap" label does not hold** (see the tracker); its
-> real scope is NOT ESTABLISHED.
+> real scope is NOT ESTABLISHED. **N.56 PARKED this session**, Dann's ruling:
+> the trigger is unrecoverable from memory, and the general mechanism was
+> observed working live (see the tracker).
 >
-> Four blocking items sit open with nothing chosen among them: **N.56** (still
-> unplaced in Dann's ordering), **N.58** (scope unclear, see tracker),
-> **N.59** (the reader in the browser, Pyodide, pin the versions), **N.47**
-> (print from a phone, a gate not a build, ten minutes, Dann's). A separate,
-> non-blocking finding from this session is numbered **N.68** — see the
-> visible list.
+> Three blocking items sit open with nothing chosen among them: **N.58**
+> (scope unclear, see tracker), **N.59** (the reader in the browser, Pyodide,
+> pin the versions), **N.47** (print from a phone, a gate not a build, ten
+> minutes, Dann's). A separate, non-blocking finding from this session is
+> numbered **N.68** — see the visible list.
+>
+> **Still owed to Dann from E.50's four-part ask** ("explain N.56 / N.58 /
+> N.59 / N.68, one at a time"): N.56 and N.58 delivered this session. **N.59
+> and N.68 not yet explained. Start E.51 there before anything else**, then
+> N.47 in the afternoon per Dann's own deferral.
 
 ---
 
@@ -45,15 +65,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 **The goal: a working beta. PDF, photograph, and MIDI stay in it.**
 
-Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule
+Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 ### The blocking SIX
 
 | | item | state |
 |---|---|---|
 | `[x]` | **N.55b** Click Assignment | **DONE for its named active scope.** Increments 1, 2A, 2B, and the drift count shipped and OBSERVED before this session. **This session:** the station's ruled shape shipped `87317a8`, walked; Shift Lyrics (to the End of the Lyric, to the Next Open Note) wired with a caller, shipped `ccfdabd`, walked in both languages; `ilya:pairings` storage (save and load, neither swallows a failure) shipped `7b1a1d2`, walked with a distinctive-value proof (see the log). **Rotate syllables `PARKED`**, dropped from active scope by Dann 2026-08-14: built, tested, zero callers, not missed until something needs it |
-| `[D]` | **N.56** draw the withheld page badly, once | R7 shrank its scope. **Still unplaced in Dann's ordering. Ask him** |
-| `[ ]` | **N.58** MIDI import | **"cheap" does not hold.** `format-detection.ts:14-15,180` marks MIDI detection not-yet-built; `ingest.ts:55-56` references an "OMR/MIDI brief to Kimi" not located in project knowledge this session. Register cites `claude/e44-handover_v1_2026-08-13.md` §3.1 as primary source, unread. Real scope NOT ESTABLISHED |
+| `[~]` | **N.56** draw the withheld page badly, once | **PARKED, Dann's ruling, 2026-08-14.** The trigger for "once" and the meaning of "R7" are unrecoverable from Dann's memory. This session's own browser observation (branch-alias origin, Dann's real "Dann" profile, 7/10 vowels, a real score uploaded and printed) showed the general withheld-page mechanism rendering correctly and honestly in steady state, no bad draw. That does not prove N.56 is fixed, since the trigger was never identified and so was never tested. Parked, not closed. Revisit only if a bad draw resurfaces on its own |
+| `[ ]` | **N.58** MIDI import | **"cheap" does not hold.** `format-detection.ts:14-15,180` marks MIDI detection not-yet-built; `ingest.ts:55-56` references an "OMR/MIDI brief to Kimi" not located in project knowledge this session. Register cites `claude/e44-handover_v1_2026-08-13.md` §3.1 as primary source, unread. Real scope NOT ESTABLISHED. **FARM-OUT proposed, not yet answered**: Sonnet, read `e44-handover` §3.1 and locate (or confirm absent) the Kimi brief, return N.58's real scope. Ask Dann yes/no before writing the brief |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 | `[x]` | **N.32** the Guide's false claims, prose only | **`DONE`.** All four remaining sites shipped this session (`4cfa5f0`, `b617a4b`) and OBSERVED on the live `b617a4b` deployment, this session, by reading the rendered DOM text directly (not a screenshot read): the Ribbon replaces "Composer tab" in both languages, "Click Dictionary" replaces "Double-click," the gloss-persistence caveat is live, the French provenance sentence is the ruled replacement, and "le bouton Mon choix" replaced "l'onglet Mon choix." Zero occurrences remain of any of the four original false strings |
 | `[ ]` | **N.47** print, from a phone, once | a gate, not a build. Ten minutes, Dann's |
@@ -65,6 +85,11 @@ a negative control. That is what took the number from seven to six.
 Shipped and OBSERVED this session (`4cfa5f0`, `b617a4b`). That is what takes
 the SIX to five still open: N.56, N.58, N.59, N.47, plus N.55b's active scope
 already closed.
+
+**Parked 2026-08-14:** **N.56**, draw the withheld page badly, once. Dann's
+ruling: the trigger and "R7" are unrecoverable from memory; browser-observed
+this session, the general mechanism works honestly in steady state. Takes the
+five still open down to three not counting N.68: N.58, N.59, N.47.
 
 **A label to correct.** Commit `07225ce`, the no-lyrics banner, is messaged
 `N.32`. **That label was mine and it is probably wrong**: the banner fix is
@@ -123,9 +148,8 @@ finding).
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
-- **Which of the five open blocking items is next**, now that N.55b no longer
+- **Which of the three open blocking items is next**, now that N.55b no longer
   names it. See THE ONE THING.
-- **N.56's place** in the order.
 - **N.63.** Killing the interstitial is ruled; **where the honest residue goes is
   not.** Asked in E.45, still unanswered.
 - **N.45's remainder.**

@@ -107,6 +107,12 @@ Send a QR only for a build whose change he can see.
   pass `/mnt/user-data/uploads/...`.
 - **`form_input` triggers Svelte's binding; `computer`'s `type` did not.** Clicks
   dispatched from `javascript_tool` drove the whole flow in E.47.
+- **`computer`'s `left_click` can silently no-op on a real, visible, enabled
+  button.** No error, no DOM change, a follow-up screenshot looks identical.
+  Confirmed E.50 on "Continuer vers l'analyse." Don't diagnose by retrying
+  coordinates: check the button's own state via `javascript_tool`
+  (`disabled`, `outerHTML`) first, then drive it with a dispatched `.click()`
+  from `javascript_tool` directly.
 - **`javascript_tool` has a 45-second CDP ceiling**, and it redacts base64-looking
   strings as `[BLOCKED: JWT token]`, so an unreadable `localStorage` key is not an
   absent one.
