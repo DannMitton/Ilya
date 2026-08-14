@@ -468,3 +468,190 @@ export function pairedCyrillic(map: PairingMap | undefined): Record<string, stri
 	}
 	return Object.keys(out).length > 0 ? out : undefined;
 }
+
+/* -- Shift Lyrics (N.55b design, section 8) ------------------------ */
+
+/** What a shift displaced off the end of its range. Never silently dropped. */
+export interface ShiftResult {
+	map: PairingMap;
+	displaced: Pairing[];
+}
+
+export type ShiftDirection = 'forward' | 'back';
+
+/**
+ * Clamp `fromIndex`/`toIndex` into a valid, ordered range over `eventIds`.
+ *
+ * Returns null for a range with nothing to act on: an empty `eventIds`, or
+ * `toIndex < fromIndex` once both are clamped into bounds. Every exported
+ * function below treats null as a no-op that still returns a fresh copy of
+ * the map, matching `reconcilePairings`' habit of always handing back a new
+ * object rather than the one it was given.
+ *
+ * `fromIndex > toIndex` is refused rather than swapped. Swapping would guess
+ * which of the two the caller meant as the anchor, and nobody has ruled that
+ * guess (brief section 3, "shape decisions made by this brief"). A no-op is
+ * the sane default until Dann rules it.
+ */
+function clampRange(
+	eventIds: readonly string[],
+	fromIndex: number,
+	toIndex: number,
+): { from: number; to: number } | null {
+	if (eventIds.length === 0) return null;
+	const last = eventIds.length - 1;
+	const from = Math.max(0, Math.min(Math.trunc(fromIndex), last));
+	const to = Math.max(0, Math.min(Math.trunc(toIndex), last));
+	if (to < from) return null;
+	return { from, to };
+}
+
+/**
+ * Shift the pairings across `eventIds[from..to]` by one position and report
+ * whatever fell off the end that direction pushes toward.
+ *
+ * A DUPLICATE EVENT ID within the range is resolved by iteration order: the
+ * write at the higher local index wins, because the map is keyed by event
+ * id and cannot hold two values under one key. Nobody has ruled this either;
+ * it is pinned by a test rather than left to chance.
+ */
+function shiftRange(
+	map: PairingMap,
+	eventIds: readonly string[],
+	from: number,
+	to: number,
+	direction: ShiftDirection,
+): ShiftResult {
+	const next: PairingMap = { ...map };
+	const len = to - from + 1;
+	const vals: (Pairing | undefined)[] = [];
+	for (let j = 0; j < len; j++) vals.push(map[eventIds[from + j]]);
+
+	const newVals: (Pairing | undefined)[] = new Array(len).fill(undefined);
+	let displacedVal: Pairing | undefined;
+	if (direction === 'forward') {
+		for (let j = 1; j < len; j++) newVals[j] = vals[j - 1];
+		displacedVal = vals[len - 1];
+	} else {
+		for (let j = 0; j < len - 1; j++) newVals[j] = vals[j + 1];
+		displacedVal = vals[0];
+	}
+
+	for (let j = 0; j < len; j++) {
+		const id = eventIds[from + j];
+		const v = newVals[j];
+		if (v === undefined) delete next[id];
+		else next[id] = v;
+	}
+
+	return { map: next, displaced: displacedVal !== undefined ? [displacedVal] : [] };
+}
+
+/**
+ * Shift every pairing from `fromIndex` to the last event in `eventIds`.
+ *
+ * The range always runs to the end of `eventIds`, gaps included: an
+ * undecided event partway through does not stop this one, unlike
+ * `shiftToNextOpenNote`. A pairing shifted onto a gap fills it, and the
+ * value pushed past the last index comes back in `displaced`.
+ */
+export function shiftToEndOfLyric(
+	map: PairingMap,
+	eventIds: readonly string[],
+	fromIndex: number,
+	direction: ShiftDirection,
+): ShiftResult {
+	const range = clampRange(eventIds, fromIndex, eventIds.length - 1);
+	if (!range) return { map: { ...map }, displaced: [] };
+	return shiftRange(map, eventIds, range.from, range.to, direction);
+}
+
+/**
+ * Shift from `fromIndex` INTO the nearest undecided event in the direction of
+ * travel, which absorbs the shift so nothing is displaced.
+ *
+ * An undecided event is one with no entry in the map at all; `melisma` and
+ * `empty` are decisions and do not stop the shift.
+ *
+ * THE OPEN NOTE IS INCLUDED IN THE RANGE, and that is the whole scope. The
+ * design says of this scope that "section 3's state is what makes this scope
+ * mean anything," and the work the undecided state does here is to CATCH the
+ * shifted pairing. An earlier revision of this function stopped one short of
+ * the gap, which pushed a pairing into `displaced` while an empty note sat
+ * beside it. That threw away a decision the singer had made, which R6 exists
+ * to prevent. Opus wrote that error into the brief, 2026-08-14.
+ *
+ * Direction decides which way we look, because the gap can only absorb a
+ * shift that travels toward it:
+ *
+ * - `forward` searches UP from `fromIndex + 1`. With no gap above, the range
+ *   runs to the last event and this behaves exactly like `shiftToEndOfLyric`.
+ * - `back` searches DOWN from `fromIndex - 1`. With no gap below, the range
+ *   runs to index 0 and the pairing there falls off the front.
+ */
+export function shiftToNextOpenNote(
+	map: PairingMap,
+	eventIds: readonly string[],
+	fromIndex: number,
+	direction: ShiftDirection,
+): ShiftResult {
+	const anchor = clampRange(eventIds, fromIndex, fromIndex);
+	if (!anchor) return { map: { ...map }, displaced: [] };
+	const at = anchor.from;
+	if (direction === 'forward') {
+		let end = eventIds.length - 1;
+		for (let i = at + 1; i < eventIds.length; i++) {
+			if (map[eventIds[i]] === undefined) {
+				end = i;
+				break;
+			}
+		}
+		return shiftRange(map, eventIds, at, end, 'forward');
+	}
+	let start = 0;
+	for (let i = at - 1; i >= 0; i--) {
+		if (map[eventIds[i]] === undefined) {
+			start = i;
+			break;
+		}
+	}
+	return shiftRange(map, eventIds, start, at, 'back');
+}
+
+/**
+ * Cycle the pairings within `[fromIndex, toIndex]` inclusive. Nothing falls
+ * off either end, so `displaced` is always empty: a value that would leave
+ * the high end wraps to the low end, and vice versa, depending on
+ * `direction`.
+ */
+export function rotateSyllables(
+	map: PairingMap,
+	eventIds: readonly string[],
+	fromIndex: number,
+	toIndex: number,
+	direction: ShiftDirection,
+): ShiftResult {
+	const range = clampRange(eventIds, fromIndex, toIndex);
+	if (!range) return { map: { ...map }, displaced: [] };
+	const { from, to } = range;
+	const next: PairingMap = { ...map };
+	const len = to - from + 1;
+	const vals: (Pairing | undefined)[] = [];
+	for (let j = 0; j < len; j++) vals.push(map[eventIds[from + j]]);
+
+	const newVals: (Pairing | undefined)[] = new Array(len);
+	if (direction === 'forward') {
+		for (let j = 0; j < len; j++) newVals[j] = vals[(j - 1 + len) % len];
+	} else {
+		for (let j = 0; j < len; j++) newVals[j] = vals[(j + 1) % len];
+	}
+
+	for (let j = 0; j < len; j++) {
+		const id = eventIds[from + j];
+		const v = newVals[j];
+		if (v === undefined) delete next[id];
+		else next[id] = v;
+	}
+
+	return { map: next, displaced: [] };
+}

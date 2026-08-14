@@ -17,6 +17,14 @@ a path, or a gate. Every line here cost someone an hour.
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 
+**A BRIEF THAT ASKS A FARMED-OUT AGENT TO RUN A GATE IS A BROKEN BRIEF.** No
+gate runs anywhere but Dann's own Terminal, for the reason two sections down:
+`node_modules` is macOS and every VM in reach is Linux arm64. Tell the agent
+that in the brief, and make its definition of done "the tests are written and
+hand-traced," with the gate run listed under what Dann must do. **Running the
+task on Dann's computer instead of in the cloud does NOT fix this**: that mode
+is a Linux VM too.
+
 **The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
 Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`.
 
