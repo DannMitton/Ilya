@@ -198,7 +198,7 @@
 	   height. It is absolutely positioned to letter-page coordinates, so
 	   with an auto-height page it also overlays the transcription.
 	   Unchanged for print and for landscape, which is above 767px. */
-	@media (max-width: 767px) {
+	@media screen and (max-width: 767px) {
 		.title-header {
 			display: none;
 		}

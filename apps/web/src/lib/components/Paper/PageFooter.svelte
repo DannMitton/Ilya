@@ -245,7 +245,7 @@
 	   The top margin lives on the elements that actually render, not on
 	   the footer, so a non-last page whose footer emits nothing leaves no
 	   phantom gap in the paper. */
-	@media (max-width: 767px) {
+	@media screen and (max-width: 767px) {
 		.page-footer {
 			position: static;
 			left: auto;

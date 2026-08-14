@@ -37,7 +37,7 @@
 	/* N.45. A running head is a per-page artefact and the mobile document
 	   has no pages a reader can see. Same absolute-positioning problem as
 	   TitleHeader. Unchanged for print and for landscape. */
-	@media (max-width: 767px) {
+	@media screen and (max-width: 767px) {
 		.running-header {
 			display: none;
 		}
