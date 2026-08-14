@@ -4,10 +4,14 @@
 2026-08-14.** Updated at the close of every session. This is the only file that
 changes often, and it is the handover.
 
-Repository: branch `Shane` at `7b1a1d2`, working tree clean. **Expected,
-unverified.** Ask Dann in one line; you do not run git.
-`7b1a1d2` shipped the `ilya:pairings` storage wiring, all five gates at
-baseline, web-test still 438. Nothing is in flight.
+Repository: branch `Shane` at `b617a4b`, working tree clean. **Expected,
+unverified next session.** Ask Dann in one line; you do not run git.
+This session shipped three commits: `c6fc3ba` (N.68 filed), `4cfa5f0` (N.32:
+Composer tab, gloss double-click, Ma traduction to Mon choix; also the
+ilya-ship.sh fix noted in `ENVIRONMENT.md`), `b617a4b` (N.32: the French
+provenance sentence, the gloss-persistence caveat, Mon choix's noun corrected
+to a button). All five gates at baseline throughout, web-test still 438.
+Nothing is in flight.
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
@@ -24,11 +28,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > before (see the tracker). Rotate syllables is `PARKED`, not blocking.
 > **N.55b no longer names the next build.**
 >
-> Five blocking items sit open with nothing chosen among them: **N.56** (still
-> unplaced in Dann's ordering), **N.58** (MIDI import, cheap, was behind
-> N.55b, now clear), **N.59** (the reader in the browser, Pyodide, pin the
-> versions), **N.32** (Guide's four remaining prose sites), **N.47** (print
-> from a phone, a gate not a build, ten minutes, Dann's). A separate,
+> **N.32 moved this session:** all four remaining sites shipped (`4cfa5f0`,
+> `b617a4b`), `WRITTEN` not yet `DONE`, needs one browser walk to close.
+> **N.58's "cheap" label does not hold** (see the tracker); its real scope is
+> NOT ESTABLISHED.
+>
+> Four blocking items sit open with nothing chosen among them: **N.56** (still
+> unplaced in Dann's ordering), **N.58** (scope unclear, see tracker),
+> **N.59** (the reader in the browser, Pyodide, pin the versions), **N.47**
+> (print from a phone, a gate not a build, ten minutes, Dann's). A separate,
 > non-blocking finding from this session is numbered **N.68** — see the
 > visible list.
 
@@ -46,9 +54,9 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule
 |---|---|---|
 | `[x]` | **N.55b** Click Assignment | **DONE for its named active scope.** Increments 1, 2A, 2B, and the drift count shipped and OBSERVED before this session. **This session:** the station's ruled shape shipped `87317a8`, walked; Shift Lyrics (to the End of the Lyric, to the Next Open Note) wired with a caller, shipped `ccfdabd`, walked in both languages; `ilya:pairings` storage (save and load, neither swallows a failure) shipped `7b1a1d2`, walked with a distinctive-value proof (see the log). **Rotate syllables `PARKED`**, dropped from active scope by Dann 2026-08-14: built, tested, zero callers, not missed until something needs it |
 | `[D]` | **N.56** draw the withheld page badly, once | R7 shrank its scope. **Still unplaced in Dann's ordering. Ask him** |
-| `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55b |
+| `[ ]` | **N.58** MIDI import | **"cheap" does not hold.** `format-detection.ts:14-15,180` marks MIDI detection not-yet-built; `ingest.ts:55-56` references an "OMR/MIDI brief to Kimi" not located in project knowledge this session. Register cites `claude/e44-handover_v1_2026-08-13.md` §3.1 as primary source, unread. Real scope NOT ESTABLISHED |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
-| `[ ]` | **N.32** the Guide's false claims, prose only | **`PART DONE`**, shipped `821c5f5`. **FOUR sites remain**, three of them alt text on screenshots nobody has opened; if the images show those tabs, the owner is N.33 |
+| `[ ]` | **N.32** the Guide's false claims, prose only | **`WRITTEN`, not yet observed.** All four remaining sites shipped this session: the Composer tab, the gloss double-click claim, and Ma traduction to Mon choix (`4cfa5f0`); the French provenance sentence, a gloss-persistence caveat, and Mon choix's noun corrected to "bouton" (`b617a4b`, verified against `InspectorPanel.svelte:1313,1333`). Needs a browser walk before it closes |
 | `[ ]` | **N.47** print, from a phone, once | a gate, not a build. Ten minutes, Dann's |
 
 **Closed 2026-08-13:** **N.55a**, the score with no underlay. Observed twice with
