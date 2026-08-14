@@ -28,10 +28,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > before (see the tracker). Rotate syllables is `PARKED`, not blocking.
 > **N.55b no longer names the next build.**
 >
-> **N.32 moved this session:** all four remaining sites shipped (`4cfa5f0`,
-> `b617a4b`), `WRITTEN` not yet `DONE`, needs one browser walk to close.
-> **N.58's "cheap" label does not hold** (see the tracker); its real scope is
-> NOT ESTABLISHED.
+> **N.32 closed this session**, shipped and browser-observed (`4cfa5f0`,
+> `b617a4b`). **N.58's "cheap" label does not hold** (see the tracker); its
+> real scope is NOT ESTABLISHED.
 >
 > Four blocking items sit open with nothing chosen among them: **N.56** (still
 > unplaced in Dann's ordering), **N.58** (scope unclear, see tracker),
@@ -56,16 +55,21 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule
 | `[D]` | **N.56** draw the withheld page badly, once | R7 shrank its scope. **Still unplaced in Dann's ordering. Ask him** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold.** `format-detection.ts:14-15,180` marks MIDI detection not-yet-built; `ingest.ts:55-56` references an "OMR/MIDI brief to Kimi" not located in project knowledge this session. Register cites `claude/e44-handover_v1_2026-08-13.md` §3.1 as primary source, unread. Real scope NOT ESTABLISHED |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
-| `[ ]` | **N.32** the Guide's false claims, prose only | **`WRITTEN`, not yet observed.** All four remaining sites shipped this session: the Composer tab, the gloss double-click claim, and Ma traduction to Mon choix (`4cfa5f0`); the French provenance sentence, a gloss-persistence caveat, and Mon choix's noun corrected to "bouton" (`b617a4b`, verified against `InspectorPanel.svelte:1313,1333`). Needs a browser walk before it closes |
+| `[x]` | **N.32** the Guide's false claims, prose only | **`DONE`.** All four remaining sites shipped this session (`4cfa5f0`, `b617a4b`) and OBSERVED on the live `b617a4b` deployment, this session, by reading the rendered DOM text directly (not a screenshot read): the Ribbon replaces "Composer tab" in both languages, "Click Dictionary" replaces "Double-click," the gloss-persistence caveat is live, the French provenance sentence is the ruled replacement, and "le bouton Mon choix" replaced "l'onglet Mon choix." Zero occurrences remain of any of the four original false strings |
 | `[ ]` | **N.47** print, from a phone, once | a gate, not a build. Ten minutes, Dann's |
 
 **Closed 2026-08-13:** **N.55a**, the score with no underlay. Observed twice with
 a negative control. That is what took the number from seven to six.
 
+**Closed 2026-08-14:** **N.32**, the Guide's four remaining false claims.
+Shipped and OBSERVED this session (`4cfa5f0`, `b617a4b`). That is what takes
+the SIX to five still open: N.56, N.58, N.59, N.47, plus N.55b's active scope
+already closed.
+
 **A label to correct.** Commit `07225ce`, the no-lyrics banner, is messaged
-`N.32`. **That label was mine and it is probably wrong**: N.32 is the Guide's
-four remaining prose claims, and the banner is not one of them. The banner fix is
-real, shipped, and walked; it is simply unnumbered. **N.32 did not move.**
+`N.32`. **That label was mine and it is probably wrong**: the banner fix is
+real, shipped, and walked; it is simply unnumbered, and was never part of what
+closed N.32 above.
 
 ### N.55b's station shape — RULED by Dann, 2026-08-13
 
