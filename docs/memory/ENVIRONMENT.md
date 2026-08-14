@@ -12,10 +12,17 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | 408 |
+| web-test | **416** |
 | score-parser | 442 passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
+
+**The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
+Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`.
+
+**`mscz-converter.test.ts` prints to stderr on three tests by design.** They
+exercise failure paths. The ship script echoes those lines when a gate
+deviates, and they are not failures. **Read the count, not the verdict.**
 
 `vitest` never compiles a `.svelte` file. If logic needs testing it does not belong
 in a `.svelte` file. `svelte-check` is what looks at components.

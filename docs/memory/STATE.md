@@ -13,8 +13,17 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> **N.55b's station shape.** The design's own §11.3, unruled: what the slot
-> station IS. Under discussion 2026-08-13.
+> **Wire the drift count into the drawer.** `reconcilePairings` is correct and
+> tested at `2868d58`, and NOTHING CALLS IT. `auditPairings` had no callers
+> before it either, so no behaviour visible to Dann has changed yet.
+>
+> Then **N.55b's station shape**, §11.3. Dann has ruled the direction:
+> Finale's running text, hyphenated at slot boundaries, ONE moving highlight,
+> a read-out rather than a field, the whole verse present, the pane at full
+> height carried by the drawer's own scroll. **Shift Lyrics commands live in
+> the pane**, per design §8: to the End of the Lyric, to the Next Open Note,
+> Rotate. Every one is a permutation of a map, free to undo, testable without
+> a browser. **Accepted: this is easier on desktop than on mobile.**
 >
 > **The tab must be FOREGROUND.** Backgrounded, Chrome throttles the 12.8 MB
 > dictionary from about 8 seconds to about 40. `document.hidden` is only a
@@ -158,6 +167,9 @@ Fix the register, or fold it into this file and retire it.
 
 | date | what changed |
 |---|---|
+| 2026-08-13 | **`2868d58`: an Inspector re-division propagates instead of reporting drift.** `SlotOrigin` gains `word`, the discriminator; new `reconcilePairings`; `auditPairings` defined in terms of it. **Eight tests, web-test 408 to 416.** **Dann ruled the distinction:** a re-division moves consonants within one word, nuclei never move, slot count cannot change, so the pairing is stale rather than wrong and is refreshed. A re-transcription is a different decision and stays drift. **VERIFIED IN THE TREE, not inferred:** `openSyllabify` is a `map` over its input; `InspectorPanel.svelte:781-818` only ever moves a boundary value, never pushes or splices. **The design document's §4.3 claim that boundary edits change how many slots a word has is WRONG.** |
+| 2026-08-13 | **RULED, Dann: the notes never move; the syllables slide along them.** Recorded in `PRODUCT.md`. |
+| 2026-08-13 | **N.55a CLOSED. The blocking number is SIX.** |
 | 2026-08-13 | **N.32 WALKED on `ilya-9r34lgd7j`, EN and FR. `DONE`.** Station `SYLLABES 5 / 5`, rest bare, no dashed boxes. |
 | 2026-08-13 | **N.55b increment 2B walked and CLOSED.** Five syllables onto five notes, nothing on the rest, no dashed boxes. |
 | 2026-08-13 | **`07225ce`** the no-lyrics banner rewritten from the singer's side, EN and FR. The old copy promised a per-syllable mark struck in E.47 and an accept action that does not exist. New EN: "This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable." French ratified by Dann; `se trouve` is his correction of my calque. Five gates at baseline. **Not walked.** |
