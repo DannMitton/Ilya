@@ -106,7 +106,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-08.webp" alt="L'onglet Guide actif avec la table des matières affichant Comment fonctionne Ilya, Une visite guidée et Collaborateurs." width="1200" loading="lazy" />
-								<figcaption>L'onglet Guide contient les explications sur le fonctionnement d'<em>Ilya</em>, ses possibilités et ses limites, cette visite guidée, ainsi que les profils des collaborateurs. Le Guide est rédigé en français de manière autonome — non traduit de l'anglais.</figcaption>
+								<figcaption>L'onglet Guide contient les explications sur le fonctionnement d'<em>Ilya</em>, ses possibilités et ses limites, cette visite guidée, ainsi que les profils des collaborateurs. Le Guide combine des passages rédigés directement en français et des passages traduits de l'anglais, certains encore à valider.</figcaption>
 							</figure>
 
 							<h4 id="guide-walk-metadata">Renseigner les métadonnées</h4>
@@ -161,7 +161,7 @@
 							</figure>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec l'onglet Mon choix visible." width="1200" loading="lazy" />
+								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec le bouton Mon choix visible." width="1200" loading="lazy" />
 								<figcaption>Imprimez vers votre appareil ou enregistrez en PDF. <em>Ilya</em> conservera le travail de votre dernière session, mais pas un catalogue de transcriptions complétées : c'est à vous de l'organiser.</figcaption>
 							</figure>
 
@@ -414,7 +414,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-25.webp" alt="The word закалённому selected on the paper, showing its IPA transcription in the Analysis panel." width="1200" loading="lazy" />
-								<figcaption>Dictionary glosses are sometimes grammatically accurate but dramatically inert. Click Dictionary to make the gloss field editable. The field accepts up to twenty characters and will appear on the paper in place of the auto-generated gloss. A custom gloss now appears beneath the word on the paper, replacing the dictionary entry. Custom glosses persist through re-transcriptions and will appear in the printed output.</figcaption>
+								<figcaption>Dictionary glosses are sometimes grammatically accurate but dramatically inert. Click Dictionary to make the gloss field editable. The field accepts up to twenty characters and will appear on the paper in place of the auto-generated gloss. A custom gloss now appears beneath the word on the paper, replacing the dictionary entry. Custom glosses persist through re-transcriptions and will appear in the printed output, unless the specific word beneath a gloss changes between transcriptions, in which case that gloss is dropped.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
