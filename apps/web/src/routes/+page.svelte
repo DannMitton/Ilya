@@ -16,6 +16,8 @@
 		reconcilePairings,
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
+		savePairings,
+		loadPairings,
 		type PairingMap,
 		type ShiftDirection,
 	} from '$lib/shane/pairings';
@@ -83,11 +85,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
 	// N.55b: the pairing map, and the N.55a courtesy notice's file name.
-	// IN MEMORY ONLY for now. R5's `ilya:pairings` needs a user-visible
-	// failure message (it must not swallow, N.27), that message needs
-	// French, and no French has been ratified for it. `savePairings` is
-	// written and unused until it has one.
+	// R5's `ilya:pairings`, restored in `onMount` below and saved on every
+	// change thereafter. THE SAVE DOES NOT SWALLOW ITS EXCEPTION
+	// (pairings.ts:385-389): `pairingsSaveError` / `pairingsLoadFailed`
+	// carry whatever `savePairings` / `loadPairings` report, and the drawer
+	// shows it. French ratified by Dann, 2026-08-14.
 	let pairings = $state<PairingMap>({});
+	// Guards the save effect below against the one race that matters: on
+	// first render `pairings` is still its `{}` default, one render ahead of
+	// `onMount`'s restore. An unguarded effect would fire on that default
+	// and briefly overwrite a real saved map with an empty one before the
+	// restore ran. Flips true once, at the end of the restore, never back.
+	let pairingsRestored = $state(false);
+	let pairingsSaveError = $state<'quota' | 'generic' | null>(null);
+	let pairingsLoadFailed = $state(false);
 	let noLyricsFile = $state<string | null>(null);
 	// The syllable the NEXT note click will place. Finale's insertion point.
 	let pairingCursor = $state(0);
@@ -158,6 +169,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				: shiftToNextOpenNote(pairings, eventIds, fromIndex, direction);
 		pairings = result.map;
 	}
+
+	// R5 storage. Runs on every `pairings` change once `pairingsRestored`
+	// is true (see that flag's own comment, above, for the race it avoids).
+	// `savePairings` never throws (pairings.ts:390-403); the failure comes
+	// back as a reason, not an exception, so there is nothing to catch here.
+	$effect(() => {
+		if (!pairingsRestored) return;
+		const result = savePairings(pairings);
+		pairingsSaveError = result.ok ? null : result.reason === 'quota-exceeded' ? 'quota' : 'generic';
+	});
 
 	function handleNotePick(eventId: string): void {
 		const slot = slotQueue[pairingCursor];
@@ -942,6 +963,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		} catch {
 			// localStorage unavailable
 		}
+		// R5: restore `ilya:pairings`. Separate from the block above on
+		// purpose: `loadPairings` (pairings.ts:408-422) already catches its
+		// own failures and reports a reason rather than throwing, so it does
+		// not belong inside a try/catch built for APIs that throw. THE LOAD
+		// DOES NOT SWALLOW ITS EXCEPTION either: a reason sets
+		// `pairingsLoadFailed` for the drawer to show, same as the save
+		// side. `pairingsRestored` flips last, so the save effect above
+		// never fires on the pre-restore default.
+		const loaded = loadPairings();
+		pairings = loaded.map;
+		if (loaded.reason) pairingsLoadFailed = true;
+		pairingsRestored = true;
 		loadDictionary({
 			onStateChange(state) {
 				loaderState = state;
@@ -1150,6 +1183,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						oncursor={(i) => (pairingCursor = i)}
 					/>
 					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
+					{#if pairingsSaveError}
+						<!-- R5, N.27: the save does not swallow its exception. Unstyled
+						     on purpose, matching 'shane-no-lyrics' below. -->
+						<p class="shane-storage-notice">
+							{t(pairingsSaveError === 'quota' ? 'storage.saveFailed.quota' : 'storage.saveFailed.generic', language)}
+						</p>
+					{:else if pairingsLoadFailed}
+						<p class="shane-storage-notice">{t('storage.loadFailed', language)}</p>
+					{/if}
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
 					     twinned in POSITION as well as in style (Dann's walk ruling,
 					     2026-08-05: the first pass was full width at the foot of the

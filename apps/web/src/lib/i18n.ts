@@ -521,13 +521,26 @@ const strings: Record<string, Record<Language, string>> = {
 	// from N.55b's active scope (no selection UI exists to drive it), so it
 	// has no key here; add one only if it is ever un-parked.
 	'shiftLyrics.title': { en: 'Shift Lyrics', fr: 'Décaler les paroles' },
-	'shiftLyrics.toEndOfLyric': { en: 'to the End of the Lyric', fr: "jusqu'à la fin du texte" },
-	'shiftLyrics.toNextOpenNote': { en: 'to the Next Open Note', fr: "jusqu'à la prochaine note libre" },
+	'shiftLyrics.toEndOfLyric': { en: 'to the End of the Lyric', fr: 'jusqu’à la fin du texte' },
+	'shiftLyrics.toNextOpenNote': { en: 'to the Next Open Note', fr: 'jusqu’à la prochaine note libre' },
 	// Direction is icon-only in the UI (arrows), never visible text, per
 	// Dann's ruling, 2026-08-14. These two strings exist ONLY as aria-label
 	// text for screen readers; nothing renders them.
 	'shiftLyrics.forwardAria': { en: 'Forward', fr: "Vers l'avant" },
 	'shiftLyrics.backAria': { en: 'Back', fr: "Vers l'arrière" },
+	// N.27 / N.55b storage (R5). COINED, ratified by Dann, 2026-08-14, one
+	// correction along the way: "lorsque", not "si" — leaving the page WILL
+	// lose the work, it is not conditional, and the English already said
+	// "when". Reuses 'enregistré' (calib.summary.savedLede, :418) and
+	// 'syllabe' (upload.banner.noLyrics, :511). THE SAVE DOES NOT SWALLOW ITS
+	// EXCEPTION (pairings.ts:385-389): 'no-storage' and 'write-failed' share
+	// storage.saveFailed.generic, Dann's own collapse; quota gets its own
+	// line because the design doc named it by name. Load's three reasons
+	// ('no-storage', 'malformed', 'unparseable', pairings.ts:405-422) share
+	// one message, same collapse, unopposed.
+	'storage.saveFailed.quota': { en: 'Your device’s storage is full. Your syllable placements could not be saved and will be lost when you leave this page.', fr: 'Le stockage de cet appareil est plein. Vos syllabes n’ont pas pu être enregistrées et seront perdues lorsque vous quittez cette page.' },
+	'storage.saveFailed.generic': { en: 'Your syllable placements could not be saved on this device. They will be lost when you leave this page.', fr: 'Vos syllabes n’ont pas pu être enregistrées sur cet appareil. Elles seront perdues lorsque vous quittez cette page.' },
+	'storage.loadFailed': { en: 'Your saved syllable placements could not be read back.', fr: 'Vos syllabes enregistrées n’ont pas pu être relues.' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 
