@@ -222,7 +222,7 @@
 	   Content is still pre-paginated by sliceLinesToPages, so the old letter
 	   page boundaries remain visible. N.45 proper would bypass pagination on
 	   this breakpoint. Reverting this spike is one commit. */
-	@media (max-width: 767px) {
+	@media screen and (max-width: 767px) {
 		.paper-page {
 			width: 100% !important;
 			height: auto !important;

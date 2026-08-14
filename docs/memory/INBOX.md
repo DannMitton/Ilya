@@ -14,7 +14,7 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 
 | id | date | the thought |
 |---|---|---|
-| | | *(empty)* |
+| I.01 | 2026-08-14 | Mobile: Notation is anchored to the bottom and opens fully expanded, so you cannot reach the metadata fields without closing it. Its open state should be closed. |
 
 ---
 *Created 2026-08-13.*
