@@ -141,8 +141,8 @@
 							<h4 id="guide-walk-analysis">Analyser les mots</h4>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-20.webp" alt="L'onglet Compositeur dans le panneau Analyse montrant les règles phonologiques appliquées syllabe par syllabe, avec une colonne pour chaque position syllabique." width="1200" loading="lazy" />
-								<figcaption>L'onglet Compositeur offre un compte rendu règle par règle de la manière dont le moteur a généré la transcription. Chaque colonne syllabique indique quelles règles ont été appliquées et pourquoi. C'est la couche de vérification : chaque résultat est justifiable par une règle citée de la thèse de Grayson.</figcaption>
+								<img src="/guide/guide-step-20.webp" alt="Le Ruban syllabique de l'Inspecteur dans le panneau Analyse montrant les règles phonologiques appliquées syllabe par syllabe, avec une colonne pour chaque position syllabique." width="1200" loading="lazy" />
+								<figcaption>Le Ruban syllabique de l'Inspecteur offre un compte rendu règle par règle de la manière dont le moteur a généré la transcription. Chaque colonne syllabique indique quelles règles ont été appliquées et pourquoi. C'est la couche de vérification : chaque résultat est justifiable par une règle citée de la thèse de Grayson.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -161,7 +161,7 @@
 							</figure>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec l'onglet Ma traduction visible." width="1200" loading="lazy" />
+								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec l'onglet Mon choix visible." width="1200" loading="lazy" />
 								<figcaption>Imprimez vers votre appareil ou enregistrez en PDF. <em>Ilya</em> conservera le travail de votre dernière session, mais pas un catalogue de transcriptions complétées : c'est à vous de l'organiser.</figcaption>
 							</figure>
 
@@ -403,8 +403,8 @@
 							<h4 id="guide-walk-analysis">Analysing words</h4>
 
 							<figure class="guide-step-figure">
-								<img src="/guide/guide-step-20.webp" alt="The Composer tab in the Analysis panel showing phonological rules applied syllable by syllable, with a column for each syllable position." width="1200" loading="lazy" />
-								<figcaption>The Composer tab provides a rule-by-rule account of how the engine generated the transcription. Each syllable column shows which rules were applied and why. This is the verification layer: every output is justifiable through a cited rule from Grayson's dissertation.</figcaption>
+								<img src="/guide/guide-step-20.webp" alt="The Inspector's syllable-level Ribbon in the Analysis panel showing phonological rules applied syllable by syllable, with a column for each syllable position." width="1200" loading="lazy" />
+								<figcaption>The Inspector's syllable-level Ribbon provides a rule-by-rule account of how the engine generated the transcription. Each syllable column shows which rules were applied and why. This is the verification layer: every output is justifiable through a cited rule from Grayson's dissertation.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -414,7 +414,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-25.webp" alt="The word закалённому selected on the paper, showing its IPA transcription in the Analysis panel." width="1200" loading="lazy" />
-								<figcaption>Dictionary glosses are sometimes grammatically accurate but dramatically inert. Double-click the gloss field to make it editable. The field accepts up to twenty characters and will appear on the paper in place of the auto-generated gloss. A custom gloss now appears beneath the word on the paper, replacing the dictionary entry. Custom glosses persist through re-transcriptions and will appear in the printed output.</figcaption>
+								<figcaption>Dictionary glosses are sometimes grammatically accurate but dramatically inert. Click Dictionary to make the gloss field editable. The field accepts up to twenty characters and will appear on the paper in place of the auto-generated gloss. A custom gloss now appears beneath the word on the paper, replacing the dictionary entry. Custom glosses persist through re-transcriptions and will appear in the printed output.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">

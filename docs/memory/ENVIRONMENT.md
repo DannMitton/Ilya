@@ -54,9 +54,10 @@ clear the refusal at line 45-50. It does not apply to an already-tracked file
 like `STATE.md`, and applying it anyway is what surfaced this. Don't pre-stage
 a tracked file; let the script's own `git add -u` (line 94) do it.
 
-**The fix, unapplied, pending Dann's yes:** line 52 should read
+**Fixed, 2026-08-14, Dann's yes given.** Line 52 now reads
 `git -C "$REPO" diff --name-only HEAD`, which sees staged and unstaged changes
-both.
+both. Written to `~/Downloads/ilya-ship.sh` directly; not yet exercised against
+a real staged-then-shipped commit.
 
 ---
 
