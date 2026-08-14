@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **416** |
+| web-test | **438** |
 | score-parser | 442 passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -26,7 +26,8 @@ task on Dann's computer instead of in the cloud does NOT fix this**: that mode
 is a Linux VM too.
 
 **The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
-Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`.
+Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
+then 416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`.
 
 **`mscz-converter.test.ts` prints to stderr on three tests by design.** They
 exercise failure paths. The ship script echoes those lines when a gate
@@ -91,6 +92,16 @@ Send a QR only for a build whose change he can see.
 - **Browsers and origins do not share state.** The branch alias and each deployment
   URL are separate origins with separate `localStorage`. Nine voice profiles exist
   in Chrome; **"Dann", 11 juillet, is the one with readings.**
+- **A reload does not restore the ingested score.** `ingestedScore` is never
+  persisted, so Fit comes back showing "Drop a score here" and "Calibrate your
+  voice to begin"; only `ilya:pairings` and, separately, the Transcription
+  textarea's own text survive. **Verified 2026-08-14.**
+- **A no-lyrics score upload always overwrites `pairings`** with a fresh
+  `firstPass()` (`+page.svelte:1147-1152`), with no check against what is
+  already there. To see a restored `ilya:pairings` value in the UI you must
+  reload WITHOUT re-uploading; the moment a no-lyrics file is (re-)ingested,
+  the restored map is gone. Confirmed by planting a value no `firstPass` could
+  produce, reloading, and reading it off the DOM before touching the uploader.
 
 ---
 
@@ -109,6 +120,12 @@ Send a QR only for a build whose change he can see.
 - **Re-staging a path already staged this session can return a STALE copy while
   reporting the NEW size.** After re-staging, check `wc -c` against the reported
   `bytes`, or read the device directly.
+- **Re-staging a path AFTER editing your local copy overwrites the edit with
+  the old device content**, not the other way round — the device is still the
+  pre-edit version at that point. Fetch a fresh `mtimeMs` for the commit guard
+  some other way (`device_list_dir`), or stage before you edit, not after.
+  Hit 2026-08-14; no damage that time only because `SendUserFile` had already
+  captured the correct content before the re-stage clobbered the local file.
 - **THE BRIDGE DROPS.** `RefreshMcpTools` on `remote-devices`, then `ToolSearch` by
   exact name. **A ToolSearch that returns nothing during a drop is a dropped
   connection, not a missing tool.**
