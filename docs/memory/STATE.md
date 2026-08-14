@@ -28,8 +28,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > unplaced in Dann's ordering), **N.58** (MIDI import, cheap, was behind
 > N.55b, now clear), **N.59** (the reader in the browser, Pyodide, pin the
 > versions), **N.32** (Guide's four remaining prose sites), **N.47** (print
-> from a phone, a gate not a build, ten minutes, Dann's). A sixth surfaced
-> this session, unnumbered — see "A finding this session," below.
+> from a phone, a gate not a build, ten minutes, Dann's). A separate,
+> non-blocking finding from this session is numbered **N.68** — see the
+> visible list.
 
 ---
 
@@ -102,7 +103,9 @@ opinion.** That rule was broken in two consecutive sessions.
 
 **N.62** · **N.63** · **N.45's remainder** · the **French colon spacing** (eight
 sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** ·
-**N.6** (Gould r86/r87 stem lengths, OPEN and unbuilt).
+**N.6** (Gould r86/r87 stem lengths, OPEN and unbuilt) · **N.68** (no-lyrics
+re-upload overwrites a restored `ilya:pairings` map, OPEN, this session's
+finding).
 
 ---
 
@@ -117,15 +120,12 @@ sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** �
 - **N.67's displacement**, or it waits.
 - **The French question mark.** Eleven strings carry U+00A0 before `?`, which is
   France's practice; the OQLF opts for none.
-- **Whether to number this session's finding** (the no-lyrics first pass
-  overwriting a restored `ilya:pairings` map). Recommendation: yes, N.68,
-  OPEN, not built now. See "A finding this session."
 - *(Not yet: what a deliberately empty note draws. Nothing depends on it. Do not
   raise it until something does.)*
 
 ---
 
-## A finding this session. Not yet numbered
+## N.68. Ruled OPEN, not built now, 2026-08-14
 
 `+page.svelte:1147-1152`: any no-lyrics score upload sets `pairings =
 firstPass(...)` unconditionally, with no check against what is already there.
@@ -146,11 +146,9 @@ only rules the TEXT-side reconciliation (`origin` compared against the current
 slot) and says nothing about SCORE-side re-ingestion. **Not N.67** (that
 migrates the storage mechanism, not this logic).
 
-**Recommendation: number it N.68, rule OPEN, do not build now.** Real gap,
-nothing downstream depends on it yet, and a fix means deciding how a fresh
-first pass should merge against a restored map — a design question, not a bug
-fix. Cost of leaving it unnumbered: the next session re-discovers it from
-scratch. Cost of numbering it: one line in the register.
+**Ruled: N.68, OPEN, not built now.** Real gap, nothing downstream depends on
+it yet, and a fix means deciding how a fresh first pass should merge against a
+restored map — a design question, not a bug fix.
 
 ---
 

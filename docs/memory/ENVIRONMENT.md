@@ -38,6 +38,28 @@ in a `.svelte` file. `svelte-check` is what looks at components.
 
 ---
 
+## The ship script has a bug. `ilya-ship.sh:52`
+
+**`CHANGED=$(git -C "$REPO" diff --name-only)` only sees UNSTAGED changes.** A
+file staged with `git add` first (index differs from HEAD, working tree matches
+index) reads as clean to this line, so the script prints "Working tree clean.
+Nothing to commit" and skips the commit even though a real, staged change is
+sitting there. **Confirmed 2026-08-14**: `git add`ed `STATE.md`, ran the script
+twice, got "nothing to commit" both times while `git status --porcelain` showed
+`M  docs/memory/STATE.md` the whole time.
+
+**Trigger: pre-staging before running the script.** CONTRACT §5's "ask Dann to
+`git add` a new file before you ask him to ship" is about UNTRACKED files, to
+clear the refusal at line 45-50. It does not apply to an already-tracked file
+like `STATE.md`, and applying it anyway is what surfaced this. Don't pre-stage
+a tracked file; let the script's own `git add -u` (line 94) do it.
+
+**The fix, unapplied, pending Dann's yes:** line 52 should read
+`git -C "$REPO" diff --name-only HEAD`, which sees staged and unstaged changes
+both.
+
+---
+
 ## Deploys
 
 `WRITTEN` until a browser observation exists, then `DONE`. Builds run 26 to 27
