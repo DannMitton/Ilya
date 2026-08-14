@@ -13,9 +13,11 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> **Walk `07225ce` and confirm the no-lyrics banner in EN and FR.**
-> `WRITTEN`, never observed in a browser. Deploy READY at
-> `ilya-9r34lgd7j-dannmittons-projects.vercel.app`, matched by SHA.
+> **Blocked on a ruling: does N.55a close?** Its done-test is met. Closing it
+> takes the blocking seven to six.
+>
+> Also open and unanswered: **N.55b's station shape**, the design's own
+> §11.3. See the tracker.
 >
 > **The tab must be FOREGROUND.** Backgrounded, Chrome throttles the 12.8 MB
 > dictionary from about 8 seconds to about 40. `document.hidden` is only a
@@ -62,7 +64,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[F]` farmed
 |---|---|---|
 | `[x]` | **N.55b** Click Assignment | **2B CLOSED by Dann, 2026-08-13**, on the observed `5 / 5`. Increments 1, 2A and 2B all observed |
 | `[D]` | **N.55b station shape** | **The design's own §11.3 is UNRULED: what the slot station IS.** Dann's reference is Finale's Lyrics window: the poem kept whole and hyphenated at slot boundaries, ONE moving highlight, click a note to place and advance. **Question put to him and unanswered:** is the station a read-out rather than a field, given §7 says Transcribe is the Lyrics window and only one of the two may take typing |
-| `[ ]` | **N.32** the no-lyrics banner | **`WRITTEN` at `07225ce`**, five gates at baseline, **not walked**. EN and FR both replaced |
+| `[x]` | **N.32** the no-lyrics banner | **DONE.** `07225ce`, five gates at baseline, **walked on the deployed build 2026-08-13 in EN and FR**, both strings read out of the DOM verbatim |
 | `[D]` | **N.55a** the score with no underlay | **ITS DONE-TEST IS MET. Ask Dann to close it and the number is six.** |
 | `[D]` | **N.56** draw the withheld page badly, once | R7 shrank it. Not yet placed in the order. |
 | `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55a and N.55b |
@@ -152,6 +154,7 @@ Fix the register, or fold it into this file and retire it.
 
 | date | what changed |
 |---|---|
+| 2026-08-13 | **N.32 WALKED on `ilya-9r34lgd7j`, EN and FR. `DONE`.** Station `SYLLABES 5 / 5`, rest bare, no dashed boxes. |
 | 2026-08-13 | **N.55b increment 2B walked and CLOSED.** Five syllables onto five notes, nothing on the rest, no dashed boxes. |
 | 2026-08-13 | **`07225ce`** the no-lyrics banner rewritten from the singer's side, EN and FR. The old copy promised a per-syllable mark struck in E.47 and an accept action that does not exist. New EN: "This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable." French ratified by Dann; `se trouve` is his correction of my calque. Five gates at baseline. **Not walked.** |
 | 2026-08-13 | This folder created. Project memory moved out of Claude project knowledge and into the repository. 35 superseded thread openers and one superseded map SVG removed from project knowledge; the SVG is archived at `docs/sessions/artifacts/`. Project knowledge went 1,714,457 to 1,495,255 units, 85.7% to 74.8%, measured. |
