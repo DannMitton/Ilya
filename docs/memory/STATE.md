@@ -13,11 +13,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> **Blocked on a ruling: does N.55a close?** Its done-test is met. Closing it
-> takes the blocking seven to six.
->
-> Also open and unanswered: **N.55b's station shape**, the design's own
-> §11.3. See the tracker.
+> **N.55b's station shape.** The design's own §11.3, unruled: what the slot
+> station IS. Under discussion 2026-08-13.
 >
 > **The tab must be FOREGROUND.** Backgrounded, Chrome throttles the 12.8 MB
 > dictionary from about 8 seconds to about 40. `document.hidden` is only a
@@ -65,7 +62,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[F]` farmed
 | `[x]` | **N.55b** Click Assignment | **2B CLOSED by Dann, 2026-08-13**, on the observed `5 / 5`. Increments 1, 2A and 2B all observed |
 | `[D]` | **N.55b station shape** | **The design's own §11.3 is UNRULED: what the slot station IS.** Dann's reference is Finale's Lyrics window: the poem kept whole and hyphenated at slot boundaries, ONE moving highlight, click a note to place and advance. **Question put to him and unanswered:** is the station a read-out rather than a field, given §7 says Transcribe is the Lyrics window and only one of the two may take typing |
 | `[x]` | **N.32** the no-lyrics banner | **DONE.** `07225ce`, five gates at baseline, **walked on the deployed build 2026-08-13 in EN and FR**, both strings read out of the DOM verbatim |
-| `[D]` | **N.55a** the score with no underlay | **ITS DONE-TEST IS MET. Ask Dann to close it and the number is six.** |
+| `[x]` | **N.55a** the score with no underlay | **CLOSED by Dann, 2026-08-13. The blocking number is SIX.** Observed twice with a negative control: E.47 on `08a0dae` (4 pairings on the stripped score, 0 on the same music with lyrics), and on `07225ce` in EN and FR. **No written done-test for it ever existed anywhere in the estate; the standard applied was the register's own definition of `DONE`, a browser observation.** |
 | `[D]` | **N.56** draw the withheld page badly, once | R7 shrank it. Not yet placed in the order. |
 | `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55a and N.55b |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** |
@@ -142,6 +139,13 @@ sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.27** · **N.61** �
 ---
 
 ## Register corrections owed
+
+**The N.55a row in `claude/ILYA-REGISTER_2026-08-11.md` is FALSE.** It reads
+`RULED`, unbuilt, and "AND IT REACHES NOTHING: no component in `apps/web/src`
+reads parse warnings." Both were true at revision 10 and both were falsified by
+`08a0dae` the same day. **N.55a is now CLOSED. The register needs revision 11 and
+the blocking number there is SIX, not seven.**
+
 
 The register at `claude/ILYA-REGISTER_2026-08-11.md` says "ten cardinals" over a
 list of twelve. **Five actually remain, and none is in the tree at all: N.1, N.2,

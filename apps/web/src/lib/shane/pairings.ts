@@ -72,6 +72,22 @@ export interface SlotOrigin {
 	wordIndex: number;
 	/** The nucleus ordinal WITHIN its word, not within the line. */
 	slotIndex: number;
+	/**
+	 * The word's cleaned Cyrillic, verbatim. THE DISCRIMINATOR between a
+	 * re-division and a re-transcription (Dann, 2026-08-13).
+	 *
+	 * Both reslicers reslice the SAME concatenated letters: `openSyllabify`
+	 * maps over its input and cannot change length, and
+	 * `applySyllableOverride` takes its count from the override, whose
+	 * boundary list `InspectorPanel.svelte:781-818` only ever MOVES, never
+	 * pushes or splices. So a re-division leaves this string identical and
+	 * only changes where it splits. A re-transcription changes it.
+	 *
+	 * The syllable text itself cannot serve: a slot growing a consonant is
+	 * indistinguishable from a real edit. Nor can the vowel: two different
+	 * words can carry the same vowel sequence.
+	 */
+	word: string;
 }
 
 /**
@@ -198,7 +214,7 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 					cyrillic: k === 0 && pendingCyr ? pendingCyr + NBSP + cyr : cyr,
 					ipa,
 					vowel: vowelOfSyllable(w, k),
-					origin: { lineIndex: w.lineIndex, wordIndex, slotIndex: k },
+					origin: { lineIndex: w.lineIndex, wordIndex, slotIndex: k, word: w.cleanWord },
 				};
 				queue.push(slot);
 				lastInLine = slot;
@@ -263,21 +279,92 @@ export interface PairingDrift {
  * singer decided, because that is what they decided; the drawer reports the
  * count. Drawer manipulates, page displays and prints.
  */
-export function auditPairings(map: PairingMap, queue: readonly Slot[]): PairingDrift[] {
+/**
+ * The result of reconciling a stored map against the current queue.
+ *
+ * `refreshed` counts pairings whose word was re-divided and whose text was
+ * brought forward. `drift` is what genuinely no longer matches.
+ */
+export interface Reconciliation {
+	map: PairingMap;
+	drift: PairingDrift[];
+	refreshed: number;
+}
+
+/**
+ * Reconcile a stored map against the current queue.
+ *
+ * TWO EVENTS THAT ARE NOT THE SAME EVENT (Dann, 2026-08-13).
+ *
+ * A RE-DIVISION moves consonants between slots of the same word. The nuclei
+ * are the syllables, so they never move, the slot count cannot change, and
+ * the pairing the singer made still refers to the same nucleus. Its text is
+ * simply out of date, so it is REFRESHED from the live slot and is not drift.
+ *
+ * A RE-TRANSCRIPTION rebuilds the word objects from scratch
+ * (`+page.svelte:275`, `:321`, `:376`). A different word at the same position
+ * is a different decision, so it stays DRIFT and R6 holds: the page prints
+ * what the singer decided.
+ *
+ * `origin.word` is the discriminator; see its own doc comment for why the
+ * syllable text and the vowel both fail as tests.
+ *
+ * NOTHING IS MUTATED. A new map is returned.
+ *
+ * A pairing stored before `origin.word` existed carries `undefined`, which
+ * matches no word and therefore falls through to the old text comparison.
+ * That is the pre-existing behaviour and it is deliberate.
+ */
+export function reconcilePairings(map: PairingMap, queue: readonly Slot[]): Reconciliation {
 	const byOrigin = new Map<string, Slot>();
 	for (const s of queue) {
 		byOrigin.set(`${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`, s);
 	}
+	const next: PairingMap = {};
 	const drift: PairingDrift[] = [];
+	let refreshed = 0;
 	for (const [eventId, p] of Object.entries(map)) {
-		if (p.kind !== 'syllable') continue;
+		if (p.kind !== 'syllable') {
+			next[eventId] = p;
+			continue;
+		}
 		const key = `${p.origin.lineIndex}-${p.origin.wordIndex}-${p.origin.slotIndex}`;
 		const current = byOrigin.get(key);
+		const sameWord =
+			current !== undefined &&
+			p.origin.word !== undefined &&
+			current.origin.word === p.origin.word;
+		if (sameWord && current.cyrillic !== p.cyrillic) {
+			next[eventId] = {
+				kind: 'syllable',
+				cyrillic: current.cyrillic,
+				ipa: current.ipa,
+				vowel: current.vowel,
+				origin: current.origin,
+			};
+			refreshed++;
+			continue;
+		}
+		next[eventId] = p;
 		if (current?.cyrillic !== p.cyrillic) {
 			drift.push({ eventId, stored: p.cyrillic, current: current?.cyrillic });
 		}
 	}
-	return drift;
+	return { map: next, drift, refreshed };
+}
+
+/**
+ * Compare every stored pairing against the current queue at its origin.
+ *
+ * A mismatch NEITHER DELETES NOR SILENTLY USES. The page prints what the
+ * singer decided, because that is what they decided; the drawer reports the
+ * count. Drawer manipulates, page displays and prints.
+ *
+ * Defined in terms of `reconcilePairings` so there is exactly one rule for
+ * what counts as drift. A re-divided word is not drift.
+ */
+export function auditPairings(map: PairingMap, queue: readonly Slot[]): PairingDrift[] {
+	return reconcilePairings(map, queue).drift;
 }
 
 /* ── Storage (R5) ───────────────────────────────────────────────── */

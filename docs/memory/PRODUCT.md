@@ -15,6 +15,12 @@ Open this before forming any opinion about what Ilya should do or look like.
   both.**
 - **The portrait scroll is never printed. Print renders the paper.**
 - **DRAWER MANIPULATES. PAGE DISPLAYS AND PRINTS.**
+- **THE NOTES NEVER MOVE; THE SYLLABLES SLIDE ALONG THEM.** Ruled by Dann,
+  2026-08-13, adopting Finale's grammar. The engraving is the composer's and
+  is never a function of the text. This is why the pairing is a correction
+  layer keyed by event id and never writes to `ParsedScore`, and it is why
+  every Shift Lyrics operation is a permutation of a map: free to undo, and
+  testable without a browser.
 
 The portrait HTML scroll is an accommodation to a phone's form factor. In Dann's
 words: *"Let's not confuse our GUIs with the actual musico-textual object."*
