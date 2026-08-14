@@ -3,9 +3,10 @@
 **Rewritten clean at the close of E.48, 2026-08-13.** Updated at the close of
 every session. This is the only file that changes often, and it is the handover.
 
-Repository: branch `Shane` at `c8de52f` plus **one unshipped change set**:
-Shift Lyrics in `pairings.ts`, the new `shift-lyrics.test.ts`, and this file.
-**Expected, unverified.** Ask Dann in one line; you do not run git.
+Repository: branch `Shane` at `26eb2fa`, working tree clean. **Expected,
+unverified.** Ask Dann in one line; you do not run git.
+`26eb2fa` shipped Shift Lyrics with all five gates at baseline, **web-test now
+438**. Nothing is in flight.
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
