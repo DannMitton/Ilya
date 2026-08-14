@@ -14,9 +14,13 @@
 		buildSlotQueue,
 		firstPass,
 		reconcilePairings,
+		shiftToEndOfLyric,
+		shiftToNextOpenNote,
 		type PairingMap,
+		type ShiftDirection,
 	} from '$lib/shane/pairings';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
+	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
@@ -101,6 +105,59 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const reconciliation = $derived(reconcilePairings(pairings, slotQueue));
 	const shownPairings = $derived(reconciliation.map);
 	const driftCount = $derived(reconciliation.drift.length);
+
+	// N.55b Shift Lyrics (§8). Notes, in document order, one slot per note
+	// until one side runs out — the SAME order `firstPass` consumes them in,
+	// below. `shiftToEndOfLyric` / `shiftToNextOpenNote` (pairings.ts:558,
+	// :592) index into this, not into `slotQueue`: they operate on notes
+	// already carrying a decision, not on the syllable queue.
+	const eventIds = $derived(
+		ingestedScore ? ingestedScore.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id) : [],
+	);
+
+	// The anchor, confirmed with Dann 2026-08-14: not the cursor itself (it
+	// indexes `slotQueue`, a different sequence), but the note that CURRENTLY
+	// holds the pairing whose origin matches the cursor's slot. Read from
+	// `pairings`, the singer's own record (R6), not `shownPairings`: a
+	// reconciled/refreshed origin could match a slot that drifted away from
+	// what the singer actually decided, and shifting from the wrong note
+	// silently would be worse than the button doing nothing.
+	function shiftAnchorEventId(): string | null {
+		const slot = slotQueue[pairingCursor];
+		if (!slot) return null;
+		const o = slot.origin;
+		for (const id of eventIds) {
+			const p = pairings[id];
+			if (
+				p &&
+				p.kind === 'syllable' &&
+				p.origin.lineIndex === o.lineIndex &&
+				p.origin.wordIndex === o.wordIndex &&
+				p.origin.slotIndex === o.slotIndex
+			) {
+				return id;
+			}
+		}
+		return null;
+	}
+	const shiftDisabled = $derived(shiftAnchorEventId() === null);
+
+	// Never silently dropped (`ShiftResult.displaced`, pairings.ts:474): a
+	// displaced pairing's note returns to undecided and its syllable shows
+	// unplaced again in the station, both already visible without a toast.
+	// Nothing else consumes `displaced` yet; if that turns out not to be
+	// enough, it is a UI decision layered on top of this, not a change here.
+	function handleShift(scope: 'end' | 'nextOpen', direction: ShiftDirection): void {
+		const anchor = shiftAnchorEventId();
+		if (anchor === null) return;
+		const fromIndex = eventIds.indexOf(anchor);
+		if (fromIndex === -1) return;
+		const result =
+			scope === 'end'
+				? shiftToEndOfLyric(pairings, eventIds, fromIndex, direction)
+				: shiftToNextOpenNote(pairings, eventIds, fromIndex, direction);
+		pairings = result.map;
+	}
 
 	function handleNotePick(eventId: string): void {
 		const slot = slotQueue[pairingCursor];
@@ -1092,6 +1149,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{language}
 						oncursor={(i) => (pairingCursor = i)}
 					/>
+					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
 					     twinned in POSITION as well as in style (Dann's walk ruling,
 					     2026-08-05: the first pass was full width at the foot of the

@@ -232,8 +232,10 @@ Canadian spelling, Oxford comma, no em-dashes.
   his voice; read the N.49 document first.
 - Do not write to Robert Patterson, and do not tell the MNX team anything.
 - **Do not commission Fable or write to Design without telling Dann.**
-- Do not create a third touch-geometry exemption. The syllable chips take the 44 px
-  floor rather than asking for one.
+- Do not create a third touch-geometry exemption. **Corrected 2026-08-14**: N.55b's
+  station shape (`STATE.md`, RULED 2026-08-13) reversed the syllable-chip half of
+  this. The cursor alone takes the 44 px floor now; every other syllable is plain
+  text and stays directly tappable without one.
 - Do not unspool a repeat whose text does not vary.
 - Do not print an aggregate that is not crossed with his own measurements.
 - Do not write IPA without Ilya, and do not hand-roll a phonological predicate.

@@ -511,6 +511,23 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.banner.noLyrics': { en: 'This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Votre texte se trouve sous les notes, une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	'station.syllables': { en: 'Syllables', fr: 'Syllabes' },
 	'station.textChanged': { en: 'Text changed', fr: 'Texte modifié' },
+	// N.55b Shift Lyrics. English ADOPTED verbatim from Finale's own manual
+	// (`e46-n55b-click-assignment-design_2026-08-13.md` §8; cross-verified,
+	// `ILYA-REGISTER_2026-08-11.md`). French COINED and ratified by Dann,
+	// 2026-08-14: Finale's French localization could not be confirmed (its
+	// Lyrics-tool chapter at finalemusic.fr refuses WebFetch, robots.txt).
+	// Reuses the register already ratified at 'station.textChanged' (texte).
+	// Rotate syllables was ratified in the same pass but is PARKED, dropped
+	// from N.55b's active scope (no selection UI exists to drive it), so it
+	// has no key here; add one only if it is ever un-parked.
+	'shiftLyrics.title': { en: 'Shift Lyrics', fr: 'Décaler les paroles' },
+	'shiftLyrics.toEndOfLyric': { en: 'to the End of the Lyric', fr: "jusqu'à la fin du texte" },
+	'shiftLyrics.toNextOpenNote': { en: 'to the Next Open Note', fr: "jusqu'à la prochaine note libre" },
+	// Direction is icon-only in the UI (arrows), never visible text, per
+	// Dann's ruling, 2026-08-14. These two strings exist ONLY as aria-label
+	// text for screen readers; nothing renders them.
+	'shiftLyrics.forwardAria': { en: 'Forward', fr: "Vers l'avant" },
+	'shiftLyrics.backAria': { en: 'Back', fr: "Vers l'arrière" },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 
