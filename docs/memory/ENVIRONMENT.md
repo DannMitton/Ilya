@@ -49,10 +49,26 @@ Send a QR only for a build whose change he can see.
 
 - **A TAB THAT LOADED WHILE HIDDEN NEVER HYDRATES.** Reload it. `document.hidden`
   first, always.
+- **`document.hasFocus()` can be TRUE while `visibilityState` is `hidden`**, when
+  the Chrome window is not the frontmost window on the Mac. Focus is not
+  visibility. Nothing you can do from here fixes it: **ask Dann to bring the
+  window to the front**, and do not report a reading taken before he has.
+- **The language toggle is not a `<button>`.** `querySelectorAll('button')` misses
+  `Francais`. Use `'button,a,[role=button]'`.
 - **A BACKGROUNDED CHROME TAB IS NOT AN INSTRUMENT.** Throttling makes a
   two-second load look like a hang.
 - The extension's tab group can drop. Recreate with `createIfEmpty: true` and
   re-navigate.
+- **The Fit file input is NOT in the accessibility tree.** `read_page` with
+  `filter: interactive` does not list it, and forcing it visible with a `style`
+  and an `aria-label` does not make it list either, so **`file_upload` cannot be
+  given a ref**. What works: build a `File` in `javascript_tool`, put it on the
+  input through a `DataTransfer`, then dispatch `input` and `change`. Verified
+  2026-08-14. **Record and restore any attribute you set on the page first.**
+- **A fixture's JS `.length` is not its byte count.** The control file is 1757
+  bytes and 1747 JS characters; the difference is exactly the ten Cyrillic
+  characters in its `work-title`, at two UTF-8 bytes each. A short count after
+  an injection is not evidence of truncation until you have done that sum.
 - **`file_upload` needs the Fit tab ACTIVE FIRST.** With Fit active there is exactly
   one file input and its `accept` list carries `.musicxml`. Transcription's OCR
   input will take a `.musicxml` and fail. Stage first with `device_stage_files`,

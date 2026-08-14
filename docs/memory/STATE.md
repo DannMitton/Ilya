@@ -3,8 +3,10 @@
 **Rewritten clean at the close of E.48, 2026-08-13.** Updated at the close of
 every session. This is the only file that changes often, and it is the handover.
 
-Repository: branch `Shane` at `02f62cf`, working tree clean. **Expected,
+Repository: branch `Shane` at `0656758`, working tree clean. **Expected,
 unverified.** Ask Dann in one line; you do not run git.
+`0656758` was shipped on 2026-08-14 with all five gates at baseline, and it
+swept up two stale `docs/memory/` edits that predated it.
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
@@ -14,16 +16,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> **Wire the drift count into the drawer.**
+> **Build the slot station's ruled shape.**
 >
-> `reconcilePairings` is correct and tested at `2868d58`, and **nothing calls
-> it.** `auditPairings` had no callers before it either, so no behaviour Dann
-> can see has changed yet. This is the smallest piece that makes the pairing
-> layer visible, and it is the only thing standing between a working engine and
-> a singer who can tell it is working.
+> The shape is already RULED in full, in the tracker below: Finale's Lyrics
+> window, the whole verse present, a read-out and not a field, no IPA row, one
+> moving highlight, the drawer's own scroll carrying it, and a 44 px handle on
+> the cursor rather than on every chip. **Nothing here is Dann's to decide
+> again.** What exists today is `SyllableStation.svelte`, a flat wrapped row of
+> chips, which is not that.
+>
+> Shift Lyrics lives in the same pane and is three permutations of the pairing
+> map, so it is testable without a browser.
 
-Behind it, in order: **the slot station** (ruled, below), then **storage**
-(`ilya:pairings`, which needs French Dann has not seen).
+Behind it: **storage** (`ilya:pairings`, which needs French Dann has not seen).
 
 ---
 
@@ -37,7 +42,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.55b** Click Assignment | **`PART DONE`. NEXT.** Increments 1, 2A and 2B all shipped and OBSERVED. Re-division propagation shipped `2868d58` and **unwired**. Remaining: the drift count in the drawer, the station's shape (ruled, see below), Shift Lyrics, storage |
+| `[ ]` | **N.55b** Click Assignment | **`PART DONE`. NEXT.** Increments 1, 2A and 2B shipped and OBSERVED. **The drift count is DONE**, shipped `0656758` and walked in both languages with a negative control; `reconcilePairings` now has a caller and re-division propagation is live. Remaining: the station's shape (ruled, see below), Shift Lyrics, storage |
 | `[D]` | **N.56** draw the withheld page badly, once | R7 shrank its scope. **Still unplaced in Dann's ordering. Ask him** |
 | `[ ]` | **N.58** MIDI import | cheap to parse, behind N.55b |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
@@ -178,6 +183,7 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-14 | **`0656758`: the drift count reaches the drawer, and `reconcilePairings` has a caller.** `+page.svelte` derives the reconciliation from `pairings` and `slotQueue` and passes `shownPairings` to both `SyllableStation` and `VoiceProfilePane`. **PROJECTED, NEVER WRITTEN BACK**, because storing the refreshed map would store something derived. New string `station.textChanged`, `Text changed` / `Texte modifié`, **ratified by Dann 2026-08-14**: it agrees with `texte`, not with the count, so one string covers every number in both languages. **WALKED AND OBSERVED on `ilya-9cu1dd958`, both languages, with a negative control:** five syllables onto five notes read `SYLLABLES 5 / 5` and **no drift line at all**; re-transcribing to a different text then read `4 / 5` with `Text changed 5` and `Texte modifié 5`. The page went on printing the syllables the singer had placed, which is R6 holding. **N.55b's drift count is DONE.** |
 | 2026-08-13 | **STATE.md rewritten clean.** Incremental edits through the session had left it self-contradictory: stale commit, "blocking seven", a closed question still listed as owed, two N.32 rows. **A log that only appends drifts; rewrite this file at the close, do not just patch it.** |
 | 2026-08-13 | **`2868d58`: an Inspector re-division propagates instead of reporting drift.** `SlotOrigin` gains `word`, the discriminator; new `reconcilePairings`; `auditPairings` defined in terms of it. Eight tests, **web-test baseline 408 → 416** (`ilya-ship.sh:79`, moved with Dann's permission). **Dann ruled the distinction:** a re-division moves consonants within one word, nuclei never move, slot count cannot change, so the pairing is stale rather than wrong and is refreshed; a re-transcription is a different decision and stays drift. **VERIFIED IN THE TREE:** `openSyllabify` is a `map` over its input; `InspectorPanel.svelte:781-818` only ever moves a boundary value. **The design's §4.3 claim that boundary edits change how many slots a word has is WRONG.** |
 | 2026-08-13 | **RULED, Dann: the notes never move; the syllables slide along them.** In `PRODUCT.md`. |

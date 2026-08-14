@@ -9,7 +9,11 @@ Read this page. Then read only what it sends you to. Do not read the whole folde
 
 ## THE ONE THING
 
-> **Walk `25d2246`. It has never been looked at.**
+> **Whatever `STATE.md` says it is. Open that file and read its first section.**
+>
+> **Do not restate the one thing here.** On 2026-08-14 this block still named a
+> commit that `STATE.md` had never heard of, and the session opened on a
+> contradiction it had to resolve before it could start.
 > The syllable station and the note click are `WRITTEN`, not `DONE`.
 > Recipe: `STATE.md` §The walk.
 
