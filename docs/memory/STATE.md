@@ -155,6 +155,34 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 
 ---
 
+## WHAT A SECOND SCORE DOES TODAY. Measured at `5c9c7f3`, not modelled
+
+**Walked in a browser: score one, then a structurally different score two,
+reading `ilya-library` after each.**
+
+- **Nothing is orphaned and nothing accumulates.** One record, one source, one
+  id, one `ilya:activeSongId`, before and after. Storage is clean.
+- **But song one is OVERWRITTEN IN PLACE.** Its title and its stored score file
+  become score two's. Its placements survive onto music they were never made
+  for, and **two of five silently landed on notes of the new piece**, because
+  event ids are positional. The drawer reported *"3 placements have no note in
+  this score. They have been kept."* and the counter still read `5 / 5`.
+- **Why: §2.6 has TWO upload branches and only one is reachable.** "Upload into
+  the open song" is built (step 3). "Upload from a neutral state (no open song,
+  or the singer pressed New song)" cannot occur, because there is always an open
+  song and there is no New song control. **A singer has no way to say "this is a
+  different piece."**
+- **The design's rule holds literally**: an upload never destroys placements.
+  Nothing in it protects the SONG.
+
+**Does step 5 depend on step 4?** Partly, and the split is sharp. **Works
+single-song:** export one song, and restore a one-song binder into an emptied
+library, which is the eviction fire escape §8 justifies. **Needs step 4:**
+"unknown song id, imported whole" while keeping the current one; "keep both",
+which re-ids the incoming copy and is plural by definition; and any multi-song
+binder. The binder is not blocked by step 4, but everything that makes it a
+LIBRARY backup rather than a SONG backup is.
+
 ## OWED, RULED BUT NOT YET DONE
 
 - **Remove `bits-ui` from `apps/web/package.json`.** Ruled 2026-08-16: native
@@ -164,11 +192,10 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
   hygiene, not weight, and it is a lockfile operation. **Do it clean, on its own.**
   Measured before the ruling: one `AlertDialog` cost **+18.7 KB gzipped**
   (392,547 to 411,292), against Fable's ~8 KB budget for all of N.67.
-- **`InstallPrompt.svelte:83` claims `role="dialog"` on what is a bottom
-  banner** (`position: fixed; bottom: 56px`, 167 lines, zero focus or Escape
-  handling). **It must NOT become a modal `<dialog>`**: `showModal()` would trap
-  a singer inside an install suggestion. The correct fix is one line, dropping
-  the false role. **Raised 2026-08-16, Dann to rule.**
+- ~~`InstallPrompt.svelte:83`'s false `role="dialog"`~~ **DONE 2026-08-16**,
+  Dann's ruling. It is a bottom banner, not a modal, and `showModal()` would
+  have trapped a singer inside an install suggestion. Now `role="region"`, which
+  keeps the `aria-label` exposed where a bare div would have dropped it.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 

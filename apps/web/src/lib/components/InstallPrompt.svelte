@@ -80,7 +80,7 @@
 </script>
 
 {#if visible}
-  <div class="install-prompt" role="dialog" aria-label={isIos ? t.ios_heading : t.heading}>
+  <div class="install-prompt" role="region" aria-label={isIos ? t.ios_heading : t.heading}>
     <div class="install-prompt-inner">
       <p class="install-heading">{@html isIos ? t.ios_heading : t.heading}</p>
       <p class="install-body">{@html isIos ? t.ios_body : t.body}</p>
