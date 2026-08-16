@@ -269,7 +269,7 @@
 
 						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH ; Leland, © 2025 MuseScore BVBA ; Finale Maestro, © 2021 MakeMusic, Inc. ; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
-						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT) et bits-ui (licence MIT).</p>
+						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT).</p>
 
 						<div class="guide-spacer"></div>
 
@@ -531,7 +531,7 @@
 
 						<p><strong>Fonts.</strong> Every embedded font is released under the SIL Open Font License, Version 1.1, and each licence text is distributed with the font files: Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; and Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
-						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License) and bits-ui (MIT License).</p>
+						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License).</p>
 
 						<div class="guide-spacer"></div>
 

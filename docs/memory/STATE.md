@@ -155,6 +155,21 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 
 ---
 
+## OWED, RULED BUT NOT YET DONE
+
+- **Remove `bits-ui` from `apps/web/package.json`.** Ruled 2026-08-16: native
+  `<dialog>` + `showModal()` is the answer for the delete confirmation AND the
+  fingerprint prompt, not bits-ui. **Dann's ruling on timing: not in step 4's
+  commit.** It costs zero bytes while nothing imports it, so removing it is
+  hygiene, not weight, and it is a lockfile operation. **Do it clean, on its own.**
+  Measured before the ruling: one `AlertDialog` cost **+18.7 KB gzipped**
+  (392,547 to 411,292), against Fable's ~8 KB budget for all of N.67.
+- **`InstallPrompt.svelte:83` claims `role="dialog"` on what is a bottom
+  banner** (`position: fixed; bottom: 56px`, 167 lines, zero focus or Escape
+  handling). **It must NOT become a modal `<dialog>`**: `showModal()` would trap
+  a singer inside an install suggestion. The correct fix is one line, dropping
+  the false role. **Raised 2026-08-16, Dann to rule.**
+
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
 - **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
