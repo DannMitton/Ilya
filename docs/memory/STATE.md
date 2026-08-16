@@ -4,9 +4,9 @@
 Again at E.52, 2026-08-16.** Updated at the close of every session. This is the
 only file that changes often, and it is the handover.
 
-Repository: branch `Shane`, HEAD **`b73f674`** plus E.54's uncommitted work at
-the moment this was written. **Ask Dann for the state in one line. You do not
-run git.**
+Repository: branch `Shane`, HEAD **`6b0adb3`** at the close of E.54, which is
+the commit carrying N.67 steps 1 and 2. **Ask Dann for the state in one line.
+You do not run git.**
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
