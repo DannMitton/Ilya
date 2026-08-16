@@ -16,11 +16,14 @@
 		reconcilePairings,
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
-		savePairings,
-		loadPairings,
-		type PairingMap,
 		type ShiftDirection,
 	} from '$lib/shane/pairings';
+	// N.67 step 0: the song document owns the per-song state and is the only
+	// thing that talks to storage. `savePairings` / `loadPairings` are no
+	// longer called from here; the legacy driver writes the same key.
+	import { SongDocument, LEGACY_SONG_ID } from '$lib/library/document.svelte';
+	import { Library } from '$lib/library/library';
+	import { createLegacyDriver, readLegacySync } from '$lib/library/driver';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
@@ -38,9 +41,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import {
 		dropTagsForEdits,
 		onScoreIngested,
-		parseFromScore,
 		revertToScoreHeader,
-		serializeFromScore,
 		type MetadataField,
 		type MetadataState,
 	} from '$lib/metadata-provenance';
@@ -60,8 +61,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	});
 	// Language
 	let language = $state<Language>('en');
+	// N.67 step 0, the socket. The per-song state, all seven pieces of it,
+	// lives on this object and no longer on this component: the poem, the
+	// metadata and its provenance tags, the glosses and their anchors, the
+	// open-syllabification choice, and the pairing map. The page reads and
+	// writes `doc.<field>` and never touches storage again.
+	//
+	// LOADED BEFORE IT EXISTS, WHICH IS THE WHOLE POINT. `readLegacySync`
+	// reads the six keys, and the document is constructed FROM that result, so
+	// there is no interval in which an unrestored default could be saved over
+	// real work. That is why `pairingsRestored` and its apology are gone
+	// rather than moved. Synchronous construction is safe here because
+	// `+page.ts` sets `ssr = false`: this component never renders on a server,
+	// so there is no hydration pass to disagree with.
+	const library = new Library(createLegacyDriver());
+	const doc = SongDocument.fromLoaded(library, readLegacySync(LEGACY_SONG_ID));
 	// Pipeline state
-	let inputText = $state('');
 	let lines = $state<LineData[]>([]);
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
@@ -84,21 +99,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
-	// N.55b: the pairing map, and the N.55a courtesy notice's file name.
-	// R5's `ilya:pairings`, restored in `onMount` below and saved on every
-	// change thereafter. THE SAVE DOES NOT SWALLOW ITS EXCEPTION
-	// (pairings.ts:385-389): `pairingsSaveError` / `pairingsLoadFailed`
-	// carry whatever `savePairings` / `loadPairings` report, and the drawer
-	// shows it. French ratified by Dann, 2026-08-14.
-	let pairings = $state<PairingMap>({});
-	// Guards the save effect below against the one race that matters: on
-	// first render `pairings` is still its `{}` default, one render ahead of
-	// `onMount`'s restore. An unguarded effect would fire on that default
-	// and briefly overwrite a real saved map with an empty one before the
-	// restore ran. Flips true once, at the end of the restore, never back.
-	let pairingsRestored = $state(false);
-	let pairingsSaveError = $state<'quota' | 'generic' | null>(null);
-	let pairingsLoadFailed = $state(false);
+	// N.55b: the N.55a courtesy notice's file name. The pairing map itself is
+	// `doc.pairings` now, and the save still does not swallow its exception:
+	// `doc.saveFailure` and `doc.loadFailure` carry the reason the whole song
+	// save or load reported, and the drawer shows it exactly as before.
+	// French ratified by Dann, 2026-08-14.
 	let noLyricsFile = $state<string | null>(null);
 	// The syllable the NEXT note click will place. Finale's insertion point.
 	let pairingCursor = $state(0);
@@ -113,7 +118,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// queue on every render, so nothing derived is stored (CONTRACT s6) and
 	// `pairings` stays the singer's own record. R5's `ilya:pairings` will save
 	// the raw map, not this one.
-	const reconciliation = $derived(reconcilePairings(pairings, slotQueue));
+	const reconciliation = $derived(reconcilePairings(doc.pairings, slotQueue));
 	const shownPairings = $derived(reconciliation.map);
 	const driftCount = $derived(reconciliation.drift.length);
 
@@ -138,7 +143,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (!slot) return null;
 		const o = slot.origin;
 		for (const id of eventIds) {
-			const p = pairings[id];
+			const p = doc.pairings[id];
 			if (
 				p &&
 				p.kind === 'syllable' &&
@@ -165,26 +170,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (fromIndex === -1) return;
 		const result =
 			scope === 'end'
-				? shiftToEndOfLyric(pairings, eventIds, fromIndex, direction)
-				: shiftToNextOpenNote(pairings, eventIds, fromIndex, direction);
-		pairings = result.map;
+				? shiftToEndOfLyric(doc.pairings, eventIds, fromIndex, direction)
+				: shiftToNextOpenNote(doc.pairings, eventIds, fromIndex, direction);
+		doc.pairings = result.map;
 	}
-
-	// R5 storage. Runs on every `pairings` change once `pairingsRestored`
-	// is true (see that flag's own comment, above, for the race it avoids).
-	// `savePairings` never throws (pairings.ts:390-403); the failure comes
-	// back as a reason, not an exception, so there is nothing to catch here.
-	$effect(() => {
-		if (!pairingsRestored) return;
-		const result = savePairings(pairings);
-		pairingsSaveError = result.ok ? null : result.reason === 'quota-exceeded' ? 'quota' : 'generic';
-	});
 
 	function handleNotePick(eventId: string): void {
 		const slot = slotQueue[pairingCursor];
 		if (!slot) return;
-		pairings = {
-			...pairings,
+		doc.pairings = {
+			...doc.pairings,
 			[eventId]: {
 				kind: 'syllable',
 				cyrillic: slot.cyrillic,
@@ -252,15 +247,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			});
 		}
 	}
-	// Song metadata
-	let metadata = $state<SongMetadata>({
-		title: '',
-		composer: '',
-		poet: '',
-		translator: '',
-		opus: '',
-		transcriber: '',
-	});
+	// Song metadata: `doc.metadata`, N.67 step 0.
 	// Notation preferences -- persisted to localStorage
 	let notationPrefs = $state<NotationPreferences>({
 		reducedVowel: false,
@@ -271,7 +258,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	});
 	// Display preferences
 	let showStressDiacritics = $state(false);
-	let openSyllabification = $state(false);
+	// The open-syllabification choice is `doc.openSyllabification`, N.67 step
+	// 0. Its localStorage key is unchanged, and stays the default for new
+	// songs when step 4 makes songs plural (design §2.2).
 	// Spot reconstitution: ephemeral per-word overrides, keyed by "lineIndex-wordIndex"
 	// Cleared on every transcribe or clear action
 	let spotReconstitution = $state<Map<string, boolean>>(new Map());
@@ -285,14 +274,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Cleared when the global open syllabification toggle changes in either direction,
 	// and on every fresh transcription or clear action.
 	let syllableOverrides = $state<Map<string, SyllableOverride>>(new Map());
-	// Per-word gloss overrides: keyed by "lineIndex-wordIndex"
-	// Cleared on every fresh transcription or clear action, and by per-word reset.
-	let glossOverrides = $state<Map<string, string>>(new Map());
-	// N.57: the Cyrillic word each gloss was written for, same keys as
-	// glossOverrides. A gloss survives a re-transcription only where that word
+	// Per-word gloss overrides are `doc.glossOverrides`, keyed by
+	// "lineIndex-wordIndex", cleared on every fresh transcription or clear
+	// action, and by per-word reset.
+	//
+	// N.57: `doc.glossAnchors` holds the Cyrillic word each gloss was written
+	// for, same keys. A gloss survives a re-transcription only where that word
 	// is still at that position; otherwise it falls away rather than
 	// re-attaching to whatever moved into the slot.
-	let glossAnchors = $state<Map<string, string>>(new Map());
 	// Breath animation state
 	// paperBreathClass: animates Paper content only (transcription trigger)
 	// viewBreathClass: animates entire app content (language toggle)
@@ -355,7 +344,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			: 520
 	);
 	const canTranscribe = $derived(
-		inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
+		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
 	const hasResults = $derived(lines.length > 0);
 	const wordCount = $derived(
@@ -364,8 +353,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Apply open syllabification as a display-time transform (no pipeline re-run).
 	// Per-word syllable overrides take precedence when present.
 	const effectiveLines = $derived.by(() => {
-		if (openSyllabification || syllableOverrides.size > 0) {
-			return applyOpenSyllabificationToLines(lines, syllableOverrides, openSyllabification);
+		if (doc.openSyllabification || syllableOverrides.size > 0) {
+			return applyOpenSyllabificationToLines(lines, syllableOverrides, doc.openSyllabification);
 		}
 		return lines;
 	});
@@ -373,7 +362,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		transcribeError = '';
 		try {
 			const start = performance.now();
-			const result = processText(inputText, {
+			const result = processText(doc.inputText, {
 				language,
 				userStressOverrides: userStressOverrides.size > 0 ? userStressOverrides : undefined,
 				yoToggles: yoToggles.size > 0 ? yoToggles : undefined,
@@ -435,7 +424,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	function handleClear() {
-		inputText = '';
+		doc.inputText = '';
 		lines = [];
 		transcribeError = '';
 		transcribeMs = 0;
@@ -445,14 +434,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
-		glossOverrides = new Map();
-		glossAnchors = new Map();
-		try {
-			localStorage.setItem('ilya:inputText', '');
-			localStorage.removeItem(GLOSS_KEY);
-		} catch {
-			// localStorage unavailable
-		}
+		doc.glossOverrides = new Map();
+		doc.glossAnchors = new Map();
+		// The document writes the cleared poem and the cleared glosses itself.
+		// Clearing used to REMOVE the gloss key and write an empty poem; it now
+		// writes an empty list and an empty poem, which restores identically.
 	}
 	function handlePrint() {
 		window.print();
@@ -497,14 +483,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	function handleOpenSyllabificationChange(value: boolean) {
-		openSyllabification = value;
+		doc.openSyllabification = value;
 		// Spec requirement: toggling global in either direction clears all per-word overrides
 		syllableOverrides = new Map();
-		try {
-			localStorage.setItem('ilya:openSyllabification', JSON.stringify(value));
-		} catch {
-			// localStorage unavailable
-		}
 	}
 	// Toggle spot reconstitution for the currently selected word
 	function handleSpotReconToggle() {
@@ -574,8 +555,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleGlossOverride(gloss: string | null) {
 		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		const newMap = new Map(glossOverrides);
-		const newAnchors = new Map(glossAnchors);
+		const newMap = new Map(doc.glossOverrides);
+		const newAnchors = new Map(doc.glossAnchors);
 		if (gloss === null) {
 			newMap.delete(key);
 			newAnchors.delete(key);
@@ -583,34 +564,25 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			newMap.set(key, gloss);
 			newAnchors.set(key, selectedWord.cleanWord);
 		}
-		glossOverrides = newMap;
-		glossAnchors = newAnchors;
-		persistGlosses();
+		doc.glossOverrides = newMap;
+		doc.glossAnchors = newAnchors;
 	}
 	// ---- N.57: gloss persistence and the survival guard -------------
 	//
 	// The comparison is lowercased and yo-folded, because the dictionary is
 	// keyed by lowercase word form (curated-glosses.ts) and a yo toggle
 	// re-spells a word without making it a different word.
-	const GLOSS_KEY = 'ilya:glossOverrides';
 	function glossAnchorForm(word: string): string {
 		return word.toLowerCase().replace(/\u0451/g, '\u0435');
 	}
-	function persistGlosses() {
-		try {
-			const payload = [...glossOverrides].map(
-				([key, gloss]) => [key, gloss, glossAnchors.get(key) ?? '']
-			);
-			localStorage.setItem(GLOSS_KEY, JSON.stringify(payload));
-		} catch {
-			// localStorage unavailable
-		}
-	}
+	// The gloss rows are assembled and written by the library now
+	// (`library.ts`, `recordFromFields`), in the same shape and under the same
+	// key. `persistGlosses()` is gone: assigning the maps is the save.
 	function keepSurvivingGlosses() {
 		const nextGloss = new Map<string, string>();
 		const nextAnchor = new Map<string, string>();
-		for (const [key, gloss] of glossOverrides) {
-			const anchor = glossAnchors.get(key);
+		for (const [key, gloss] of doc.glossOverrides) {
+			const anchor = doc.glossAnchors.get(key);
 			if (!anchor) continue;
 			const [lineIdx, wordIdx] = key.split('-').map(Number);
 			const word = lines[lineIdx]?.words?.[wordIdx];
@@ -619,9 +591,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				nextAnchor.set(key, anchor);
 			}
 		}
-		glossOverrides = nextGloss;
-		glossAnchors = nextAnchor;
-		persistGlosses();
+		doc.glossOverrides = nextGloss;
+		doc.glossAnchors = nextAnchor;
 	}
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
@@ -659,25 +630,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			spotReconstitution = newSpot;
 		}
 		// Clear gloss override
-		if (glossOverrides.has(wordKey)) {
-			const newGloss = new Map(glossOverrides);
+		if (doc.glossOverrides.has(wordKey)) {
+			const newGloss = new Map(doc.glossOverrides);
 			newGloss.delete(wordKey);
-			glossOverrides = newGloss;
-			const newAnchors = new Map(glossAnchors);
+			doc.glossOverrides = newGloss;
+			const newAnchors = new Map(doc.glossAnchors);
 			newAnchors.delete(wordKey);
-			glossAnchors = newAnchors;
-			persistGlosses();
+			doc.glossAnchors = newAnchors;
 		}
 		if (needsPipeline) runPipeline();
 	}
-	// Persist input text to localStorage
 	function handleInput(text: string) {
-		inputText = text;
-		try {
-			localStorage.setItem('ilya:inputText', text);
-		} catch {
-			// localStorage unavailable
-		}
+		doc.inputText = text;
 	}
 	function handleLanguageChange(lang: Language) {
 		const doSwap = () => {
@@ -688,7 +652,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				// localStorage unavailable
 			}
 			// Re-run pipeline to update glosses in the new language
-			if (hasResults && inputText.trim().length > 0) {
+			if (hasResults && doc.inputText.trim().length > 0) {
 				runPipeline();
 			}
 		};
@@ -703,35 +667,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// A "from score" tag fades on the field's first edit (Kimi's Q1
 		// refinement, 2026-07-13). The callers below set the tags AFTER
 		// calling this, so their own writes do not clear them.
-		const kept = dropTagsForEdits(metadata, meta, fromScoreFields);
-		if (kept !== fromScoreFields) setFromScoreFields(kept);
-		metadata = meta;
-		try {
-			localStorage.setItem('ilya:metadata', JSON.stringify(meta));
-		} catch {
-			// localStorage unavailable
-		}
+		const kept = dropTagsForEdits(doc.metadata, meta, doc.fromScoreFields);
+		if (kept !== doc.fromScoreFields) setFromScoreFields(kept);
+		doc.metadata = meta;
 	}
 
 	// ── §A.6 metadata provenance ──
 	// The transitions live in $lib/metadata-provenance, where vitest can
-	// reach them; this component holds the state and the persistence.
+	// reach them; the document holds the state and the library persists it.
 	// Kimi's rulings, 2026-07-13, on filling blanks and fading a tag on a
 	// hand edit; Dann's ruling, 2026-08-04, on what a second score does to
 	// the first score's identity.
-	const FROM_SCORE_KEY = 'ilya:metadataFromScore';
-	let fromScoreFields = $state<ReadonlySet<MetadataField>>(new Set());
-
-	// The tags are persisted beside the values. Without this the values
-	// come back after a reload and their provenance does not, so every
-	// restored field reads as hand-typed and nothing can be cleared safely.
+	//
+	// The tags are persisted beside the values, in the same record now, so
+	// the provenance can no longer come back without its values or the values
+	// without their provenance.
 	function setFromScoreFields(next: ReadonlySet<MetadataField>) {
-		fromScoreFields = next;
-		try {
-			localStorage.setItem(FROM_SCORE_KEY, serializeFromScore(next));
-		} catch {
-			// localStorage unavailable
-		}
+		doc.fromScoreFields = next;
 	}
 
 	function commitMetadataState(next: MetadataState) {
@@ -744,7 +696,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleRevertToScoreHeader() {
 		const wm = ingestedScore?.result.score.workMetadata;
 		if (!wm) return;
-		commitMetadataState(revertToScoreHeader({ metadata, fromScore: fromScoreFields }, wm));
+		commitMetadataState(revertToScoreHeader({ metadata: doc.metadata, fromScore: doc.fromScoreFields }, wm));
 	}
 
 	// Q4 provenance line (Kimi's §A.28 ruling, 2026-07-13): an arranger
@@ -897,7 +849,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	onMount(() => {
-		// Restore persisted state
+		// Restore persisted state.
+		//
+		// N.67 step 0: the six per-song keys are NOT read here any more. The
+		// document read them before this component rendered, which is why the
+		// pairings guard flag could be deleted rather than moved. What is left
+		// in this block is the device preferences, which are not a song and do
+		// not move (design §2.2).
 		try {
 			const savedLang = localStorage.getItem('ilya:language');
 			if (savedLang === 'en' || savedLang === 'fr') {
@@ -908,28 +866,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				const parsed = JSON.parse(savedPrefs);
 				notationPrefs = { ...notationPrefs, ...parsed };
 			}
-			const savedText = localStorage.getItem('ilya:inputText');
-			if (savedText) {
-				inputText = savedText;
-			}
-			const savedMeta = localStorage.getItem('ilya:metadata');
-			if (savedMeta) {
-				const parsed = JSON.parse(savedMeta);
-				metadata = { ...metadata, ...parsed };
-			}
-			// Restore the provenance tags after the values, since a tag is
-			// only honoured for a field that came back with something in it.
-			const savedFromScore = localStorage.getItem(FROM_SCORE_KEY);
-			if (savedFromScore) {
-				setFromScoreFields(parseFromScore(savedFromScore, metadata));
-			}
 			const savedDiacritics = localStorage.getItem('ilya:showStressDiacritics');
 			if (savedDiacritics) {
 				showStressDiacritics = JSON.parse(savedDiacritics);
-			}
-			const savedOpenSyll = localStorage.getItem('ilya:openSyllabification');
-			if (savedOpenSyll) {
-				openSyllabification = JSON.parse(savedOpenSyll);
 			}
 			const savedCollapsed = localStorage.getItem('ilya:drawerCollapsed');
 			if (savedCollapsed) {
@@ -939,42 +878,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide' || (savedTab === 'shane' && INCLUDE_SHANE)) {
 				activeTab = savedTab;
 			}
-			// N.57: restore the glosses and the words they were written for.
-			// keepSurvivingGlosses() is deliberately NOT called here: onMount does
-			// not run the pipeline, so `lines` is empty and the guard would drop
-			// everything. It runs on the next Transcribe, which is also the first
-			// moment the glosses can be seen.
-			const savedGlosses = localStorage.getItem('ilya:glossOverrides');
-			if (savedGlosses) {
-				const parsed = JSON.parse(savedGlosses);
-				if (Array.isArray(parsed)) {
-					const restoredGloss = new Map<string, string>();
-					const restoredAnchor = new Map<string, string>();
-					for (const row of parsed) {
-						if (Array.isArray(row) && typeof row[0] === 'string' && typeof row[1] === 'string' && typeof row[2] === 'string' && row[2] !== '') {
-							restoredGloss.set(row[0], row[1]);
-							restoredAnchor.set(row[0], row[2]);
-						}
-					}
-					glossOverrides = restoredGloss;
-					glossAnchors = restoredAnchor;
-				}
-			}
 		} catch {
 			// localStorage unavailable
 		}
-		// R5: restore `ilya:pairings`. Separate from the block above on
-		// purpose: `loadPairings` (pairings.ts:408-422) already catches its
-		// own failures and reports a reason rather than throwing, so it does
-		// not belong inside a try/catch built for APIs that throw. THE LOAD
-		// DOES NOT SWALLOW ITS EXCEPTION either: a reason sets
-		// `pairingsLoadFailed` for the drawer to show, same as the save
-		// side. `pairingsRestored` flips last, so the save effect above
-		// never fires on the pre-restore default.
-		const loaded = loadPairings();
-		pairings = loaded.map;
-		if (loaded.reason) pairingsLoadFailed = true;
-		pairingsRestored = true;
+		// N.57's note, kept because it still governs: keepSurvivingGlosses() is
+		// deliberately NOT called at boot. The pipeline has not run, so `lines`
+		// is empty and the guard would drop every gloss. It runs on the next
+		// Transcribe, which is also the first moment the glosses can be seen.
 		loadDictionary({
 			onStateChange(state) {
 				loaderState = state;
@@ -1044,7 +954,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	>
 			{#snippet rootPanel()}
 				<RootPanel
-					{inputText}
+					inputText={doc.inputText}
 					{loaderState}
 					{canTranscribe}
 					{hasResults}
@@ -1052,7 +962,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{transcribeMs}
 					{transcribeError}
 					{language}
-					{metadata}
+					metadata={doc.metadata}
 					{showInspector}
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
@@ -1078,7 +988,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								word={selectedWord}
 								{language}
 								{notationPrefs}
-								{openSyllabification}
+								openSyllabification={doc.openSyllabification}
 								{showStressDiacritics}
 								syllableOverride={syllableOverrides.get(wordKey) ?? null}
 								spotReconstituted={spotReconstitution.has(wordKey)}
@@ -1091,7 +1001,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 								onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
 								onreset={handleReset}
-								glossOverride={glossOverrides.get(wordKey)}
+								glossOverride={doc.glossOverrides.get(wordKey)}
 								onglossoverride={handleGlossOverride}
 							/>
 						{/if}
@@ -1107,10 +1017,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						<!-- Shared chrome: same Metadata block as Transcription, one
 						     source of truth (Kimi placement ruling). -->
 						<MetadataFields
-							{metadata}
+							metadata={doc.metadata}
 							{language}
 							onchange={handleMetadataChange}
-							fromScore={fromScoreFields}
+							fromScore={doc.fromScoreFields}
 							onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
 						/>
 						{#if arrangerProvenance}
@@ -1144,14 +1054,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							// One slot per note, in document order, until one side runs out.
 							// Rests are skipped: they have no hit target either
 							// (`staff-renderer.ts:920-928`), so they can never be clicked.
-							pairings = noLyrics
+							doc.pairings = noLyrics
 								? firstPass(
 										ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
 										buildSlotQueue(lines),
 									)
 								: {};
 							// The cursor lands on the first syllable the pass did not reach.
-							pairingCursor = Math.min(Object.keys(pairings).length, Math.max(0, slotQueue.length - 1));
+							pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
 							// A new score arrives: clear whatever the previous score
 							// filled, then fill the blanks from this score's header
 							// if it carries one. A score with no header still
@@ -1161,7 +1071,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							// reached no code that touched metadata at all.
 							commitMetadataState(
 								onScoreIngested(
-									{ metadata, fromScore: fromScoreFields },
+									{ metadata: doc.metadata, fromScore: doc.fromScoreFields },
 									ingested.result.score.workMetadata,
 								),
 							);
@@ -1183,13 +1093,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						oncursor={(i) => (pairingCursor = i)}
 					/>
 					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
-					{#if pairingsSaveError}
+					{#if doc.saveFailure}
 						<!-- R5, N.27: the save does not swallow its exception. Unstyled
-						     on purpose, matching 'shane-no-lyrics' below. -->
+						     on purpose, matching 'shane-no-lyrics' below. N.67 step 0:
+						     this now reports the WHOLE song's save, not the pairing
+						     map's alone, so the five sites that used to fail in silence
+						     (the poem, the metadata, its tags, the glosses, and the
+						     syllabification choice) report here too. Same two strings. -->
 						<p class="shane-storage-notice">
-							{t(pairingsSaveError === 'quota' ? 'storage.saveFailed.quota' : 'storage.saveFailed.generic', language)}
+							{t(doc.saveFailure === 'quota-exceeded' ? 'storage.saveFailed.quota' : 'storage.saveFailed.generic', language)}
 						</p>
-					{:else if pairingsLoadFailed}
+					{:else if doc.loadFailure}
 						<p class="shane-storage-notice">{t('storage.loadFailed', language)}</p>
 					{/if}
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
@@ -1280,7 +1194,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				<NotationFields
 					{notationPrefs}
 					{showStressDiacritics}
-					{openSyllabification}
+					openSyllabification={doc.openSyllabification}
 					{language}
 					accent={activeTab === 'shane' ? 'var(--deeper-lavender)' : 'var(--sage)'}
 					onnotationchange={handleNotationChange}
@@ -1299,7 +1213,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		tabindex="0"
 	>
 		{#if activeTab === 'transcription'}
-			<Paper lines={effectiveLines} {notationPrefs} {language} {metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} {glossOverrides} onwordclick={handleWordClick} />
+			<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} />
 		{:else if activeTab === 'shane'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
 			     per Dann's review ruling): the interim main pane, a fixed
@@ -1319,10 +1233,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				characteristics={shaneCharacteristics}
 				{language}
 				ingested={ingestedScore}
-				scoreTitle={metadata.title}
+				scoreTitle={doc.metadata.title}
 				{engraving}
 				{notationPrefs}
-				{openSyllabification}
+				openSyllabification={doc.openSyllabification}
 				onrendered={handleScoreRendered}
 			/>
 		{:else}
