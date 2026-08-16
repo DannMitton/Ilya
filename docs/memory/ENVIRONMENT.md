@@ -36,44 +36,135 @@ deviates, and they are not failures. **Read the count, not the verdict.**
 `vitest` never compiles a `.svelte` file. If logic needs testing it does not belong
 in a `.svelte` file. `svelte-check` is what looks at components.
 
+**A CSS-only change moves no gate.** Confirmed twice in E.51 across five
+component style blocks. If you predict a gate will not move, say so before the
+ship, and then you have a control.
+
 ---
 
 ## The ship script has a bug. `ilya-ship.sh:52`
 
 **`CHANGED=$(git -C "$REPO" diff --name-only)` only sees UNSTAGED changes.** A
-file staged with `git add` first (index differs from HEAD, working tree matches
-index) reads as clean to this line, so the script prints "Working tree clean.
-Nothing to commit" and skips the commit even though a real, staged change is
-sitting there. **Confirmed 2026-08-14**: `git add`ed `STATE.md`, ran the script
-twice, got "nothing to commit" both times while `git status --porcelain` showed
-`M  docs/memory/STATE.md` the whole time.
+file staged with `git add` first reads as clean to this line, so the script
+prints "Working tree clean. Nothing to commit" and skips the commit even though
+a real, staged change is sitting there. **Confirmed 2026-08-14.**
 
 **Trigger: pre-staging before running the script.** CONTRACT §5's "ask Dann to
-`git add` a new file before you ask him to ship" is about UNTRACKED files, to
-clear the refusal at line 45-50. It does not apply to an already-tracked file
-like `STATE.md`, and applying it anyway is what surfaced this. Don't pre-stage
-a tracked file; let the script's own `git add -u` (line 94) do it.
+`git add` a new file before you ask him to ship" is about UNTRACKED files. It
+does not apply to an already-tracked file. Don't pre-stage a tracked file; let
+the script's own `git add -u` (line 94) do it.
 
 **Fixed, 2026-08-14, Dann's yes given.** Line 52 now reads
-`git -C "$REPO" diff --name-only HEAD`, which sees staged and unstaged changes
-both. Written to `~/Downloads/ilya-ship.sh` directly; not yet exercised against
-a real staged-then-shipped commit.
+`git -C "$REPO" diff --name-only HEAD`. **Exercised successfully three times in
+E.51**, including one commit that swept up `docs/memory/INBOX.md` alongside two
+source files.
+
+---
+
+## PRINT. The media-query trap, and how the paper is built
+
+**A bare `@media (max-width: 767px)` has no media type, so it defaults to `all`
+and MATCHES PRINT.** This is the single most expensive thing in this file. Every
+portrait concession written that way applies to paper. **On a desk the width
+never matches and the bug is invisible. On a phone the paper inherits the
+phone.** Write portrait concessions as `@media screen and (max-width: 767px)`.
+
+**ORDER IS NOT OVERRIDE, AND A COMMENT IS NOT A CONTROL.** Four separate comments
+in the Paper components asserted that print overrode the mobile block. None was
+true. `TitleHeader.svelte`'s `@media print` sat at line 188, *before* its width
+block at 201, so at equal specificity the width rule won. `RunningHeader.svelte`
+and `PageFooter.svelte` contained no `@media print` block at all.
+
+**And a print block that sets `box-shadow` does not override a width block that
+sets `height`.** In N.69 pass one I checked the source order of
+`TitlePage.svelte` and `SubsequentPage.svelte`, saw a print block after the width
+block, and marked them fine without reading the declarations. **Read what a block
+actually sets, every time.**
+
+**The paper's geometry, so you can reason about it without re-deriving it:**
+
+- `.paper-page` carries an INLINE `style="width: {dims.width}px; height: {dims.height}px"`
+  (`TitlePage.svelte:122`, `SubsequentPage.svelte:57`). **A rule with `!important`
+  beats an inline style**, which is how `height: auto !important` unmade the page.
+- `.page-content` is `position: absolute`, inset by
+  `style="top: {contentTop}px; bottom: {contentBottom}px"` (`TitlePage.svelte:138`).
+  That inset is the band the header and footer live outside of.
+- `.title-header` is `position: absolute; top: 48px` (`TitleHeader.svelte:104-105`).
+  `.page-footer` is `position: absolute; bottom: 48px` (`PageFooter.svelte:90-91`).
+  **Both depend on the page being letter-height and the content being inset.**
+  Break either and they land in the middle of the words.
+- `app.css:134-225` is the document-wide print block: `@page { margin: 0; size: letter }`
+  at 221-224, which suppresses the browser's own header and footer, and
+  `.header-bar, .drawer, .drawer-lip, .tab-bar, .ribbon { display: none !important }`
+  at 200-206.
+- `ReadingPaper.svelte:235` has the same bare width query and is CORRECTLY left
+  alone: it governs the Guide's padding and font sizes, not the transcription
+  paper.
+
+**There is no second renderer.** Portrait and landscape are the same Paper
+components with different CSS; Dann's N.45 ruling keeps the pages in the DOM and
+removes only the seam (`Paper.svelte:109-112`). Any instruction of the form "make
+the WYSIWYG print instead of the HTML version" has nothing to swap, and taking it
+literally would send you building a renderer.
+
+**With no score loaded, print emits a genuinely blank sheet**, not a sheet with a
+footer: there are no `.paper-page` elements and `.paper-container` is
+`font-size: 0` at print time (`app.css:177-178`). **A blank print is therefore
+useless as a test**, because blank is also what a broken print stylesheet
+produces. It has no positive control.
+
+### The two Print buttons
+
+Both call the same bare `window.print()` (`+page.svelte:457-459`), so **neither
+does anything Safari's Share → Print does not.** What they add is a gate:
+
+- **Transcribe's**, `RootPanel.svelte:195-201` (the file is in
+  `components/Drawer/`), `disabled={!hasResults}`. Transcribing is the whole
+  prerequisite. **It is the better print test**, because the button lives inside
+  the drawer and on a phone the drawer is the whole screen, so pressing it
+  guarantees `app.css:201`'s `.drawer { display: none }` is exercised.
+- **Fit's**, `+page.svelte:1227-1233`,
+  `disabled={!ingestedScore && Object.keys(shaneFormants).length === 0}`.
+
+**A desktop cannot falsify a mobile print bug.** The width query never matches on
+a desk, so desktop print preview passes either way. **The phone is the only
+instrument.** Do not send Dann to check on the Mac.
+
+**iOS Safari's print preview thumbnails are a usable instrument.** They showed
+the header overlap clearly enough to diagnose from a screenshot. **Check the
+preview before spending paper.**
 
 ---
 
 ## Deploys
 
 `WRITTEN` until a browser observation exists, then `DONE`. Builds run 26 to 27
-seconds, Vercel about 90 more.
+seconds, Vercel about 90 more. **Measured end to end in E.51: under two minutes
+from `git push` to state READY.**
 
 **Use the deployment's own permanent URL:** `list_deployments` with a `since`, match
 `githubCommitSha`. **Do not take the newest.** Team
-`team_CmkdrV66wAIF29pQLpiAb80O`, project `ilya`. There is no `.vercel/project.json`.
+`team_CmkdrV66wAIF29pQLpiAb80O`, project `ilya` (`prj_oOvEOXnovbEkVBAOQRmTmgxJK0DB`).
+There is no `.vercel/project.json`.
+
+**THE PROJECT HAS VERCEL SSO ON.** `get_project_deployment_protection` reports
+`ssoProtection: enabled, all_except_custom_domains`. Every `*.vercel.app` URL,
+deployment and branch alias alike, puts a Vercel login in front of a device that
+is not signed in. **Do not send Dann a bare deployment link for his phone.** Use
+`get_access_to_vercel_url`, which returns a `?_vercel_share=` link good for 23
+hours, and encode THAT in the QR. Regenerating after expiry is one call.
+
+**EVERY DEPLOYMENT URL IS A SEPARATE ORIGIN**, so every ship hands the phone an
+empty `localStorage` and the test text has to be pasted again. Three iterations
+in E.51 cost three re-pastes. The branch alias
+`ilya-git-shane-dannmittons-projects.vercel.app` would persist across ships at
+the cost of not being sha-pinned. **Unruled; ask Dann before switching.**
 
 **Do not tell Dann to clear website data; his readings live in `localStorage`.**
 Send a QR only for a build whose change he can see.
 
-**The cloud container cannot reach `*.vercel.app`.** Chrome on his Mac is the way.
+**The cloud container cannot reach `*.vercel.app`.** Chrome on his Mac, or his
+phone, is the way.
 
 ---
 
@@ -82,55 +173,35 @@ Send a QR only for a build whose change he can see.
 - **A TAB THAT LOADED WHILE HIDDEN NEVER HYDRATES.** Reload it. `document.hidden`
   first, always.
 - **`document.hasFocus()` can be TRUE while `visibilityState` is `hidden`**, when
-  the Chrome window is not the frontmost window on the Mac. Focus is not
-  visibility. Nothing you can do from here fixes it: **ask Dann to bring the
+  the Chrome window is not the frontmost window on the Mac. **Ask Dann to bring the
   window to the front**, and do not report a reading taken before he has.
-- **The language toggle is not a `<button>`.** `querySelectorAll('button')` misses
-  `Francais`. Use `'button,a,[role=button]'`.
-- **A BACKGROUNDED CHROME TAB IS NOT AN INSTRUMENT.** Throttling makes a
-  two-second load look like a hang.
-- The extension's tab group can drop. Recreate with `createIfEmpty: true` and
-  re-navigate.
-- **The Fit file input is NOT in the accessibility tree.** `read_page` with
-  `filter: interactive` does not list it, and forcing it visible with a `style`
-  and an `aria-label` does not make it list either, so **`file_upload` cannot be
-  given a ref**. What works: build a `File` in `javascript_tool`, put it on the
-  input through a `DataTransfer`, then dispatch `input` and `change`. Verified
-  2026-08-14. **Record and restore any attribute you set on the page first.**
+- **The language toggle is not a `<button>`.** Use `'button,a,[role=button]'`.
+- **A BACKGROUNDED CHROME TAB IS NOT AN INSTRUMENT.**
+- The extension's tab group can drop. Recreate with `createIfEmpty: true`.
+- **The Fit file input is NOT in the accessibility tree**, so **`file_upload`
+  cannot be given a ref**. What works: build a `File` in `javascript_tool`, put it
+  on the input through a `DataTransfer`, then dispatch `input` and `change`.
+  **Record and restore any attribute you set on the page first.**
 - **A fixture's JS `.length` is not its byte count.** The control file is 1757
-  bytes and 1747 JS characters; the difference is exactly the ten Cyrillic
-  characters in its `work-title`, at two UTF-8 bytes each. A short count after
-  an injection is not evidence of truncation until you have done that sum.
-- **`file_upload` needs the Fit tab ACTIVE FIRST.** With Fit active there is exactly
-  one file input and its `accept` list carries `.musicxml`. Transcription's OCR
-  input will take a `.musicxml` and fail. Stage first with `device_stage_files`,
-  pass `/mnt/user-data/uploads/...`.
-- **`form_input` triggers Svelte's binding; `computer`'s `type` did not.** Clicks
-  dispatched from `javascript_tool` drove the whole flow in E.47.
+  bytes and 1747 JS characters; the difference is the ten Cyrillic characters in
+  its `work-title` at two UTF-8 bytes each.
+- **`file_upload` needs the Fit tab ACTIVE FIRST.** Transcription's OCR input will
+  take a `.musicxml` and fail.
+- **`form_input` triggers Svelte's binding; `computer`'s `type` did not.**
 - **`computer`'s `left_click` can silently no-op on a real, visible, enabled
-  button.** No error, no DOM change, a follow-up screenshot looks identical.
-  Confirmed E.50 on "Continuer vers l'analyse." Don't diagnose by retrying
-  coordinates: check the button's own state via `javascript_tool`
-  (`disabled`, `outerHTML`) first, then drive it with a dispatched `.click()`
-  from `javascript_tool` directly.
+  button.** Check the button's own state via `javascript_tool` first, then drive
+  it with a dispatched `.click()`.
 - **`javascript_tool` has a 45-second CDP ceiling**, and it redacts base64-looking
-  strings as `[BLOCKED: JWT token]`, so an unreadable `localStorage` key is not an
-  absent one.
+  strings, so an unreadable `localStorage` key is not an absent one.
 - **`/fit-font-lab` 404s on the deployed build.** There is no zero-setup route that
   renders a stave; you must upload a score.
-- **Browsers and origins do not share state.** The branch alias and each deployment
-  URL are separate origins with separate `localStorage`. Nine voice profiles exist
-  in Chrome; **"Dann", 11 juillet, is the one with readings.**
-- **A reload does not restore the ingested score.** `ingestedScore` is never
-  persisted, so Fit comes back showing "Drop a score here" and "Calibrate your
-  voice to begin"; only `ilya:pairings` and, separately, the Transcription
-  textarea's own text survive. **Verified 2026-08-14.**
-- **A no-lyrics score upload always overwrites `pairings`** with a fresh
-  `firstPass()` (`+page.svelte:1147-1152`), with no check against what is
-  already there. To see a restored `ilya:pairings` value in the UI you must
-  reload WITHOUT re-uploading; the moment a no-lyrics file is (re-)ingested,
-  the restored map is gone. Confirmed by planting a value no `firstPass` could
-  produce, reloading, and reading it off the DOM before touching the uploader.
+- **Browsers and origins do not share state.** Nine voice profiles exist in
+  Chrome; **"Dann", 11 juillet, is the one with readings.**
+- **A reload does not restore the ingested score.** Only `ilya:pairings` and the
+  Transcription textarea's own text survive.
+- **A no-lyrics score upload always overwrites `pairings`**
+  (`+page.svelte:1147-1152`). To see a restored value you must reload WITHOUT
+  re-uploading.
 
 ---
 
@@ -138,8 +209,9 @@ Send a QR only for a build whose change he can see.
 
 - **Connected folders to request:** `~/Desktop/ilya-rewrite`, `~/Documents/Finale
   Files`, `~/Documents/Voice Pedagogy Research`, `~/Downloads`. **Folder grants are
-  PER SESSION and do not carry between sessions.** Request them with
-  `device_request_folder_access`.
+  PER SESSION and do not carry between sessions.**
+- **The grant survives a long gap WITHIN a session.** E.51 ran across a
+  twenty-eight-hour pause and the same grant still worked.
 - `device_bash` paths are `mnt/<folder>`; it times out at 45 seconds.
   `device_stage_files` takes the full `/Users/...` path.
 - **NO GATE RUNS ON THE DEVICE VM.** `node_modules` is macOS, the VM is Linux
@@ -147,19 +219,18 @@ Send a QR only for a build whose change he can see.
   sleeps use the cloud `Bash` tool and pass its `timeout`.
 - **The bridge refuses `rm`.** Move a file into `_to_delete/` and tell Dann.
 - **Re-staging a path already staged this session can return a STALE copy while
-  reporting the NEW size.** After re-staging, check `wc -c` against the reported
-  `bytes`, or read the device directly.
-- **Re-staging a path AFTER editing your local copy overwrites the edit with
-  the old device content**, not the other way round — the device is still the
-  pre-edit version at that point. Fetch a fresh `mtimeMs` for the commit guard
-  some other way (`device_list_dir`), or stage before you edit, not after.
-  Hit 2026-08-14; no damage that time only because `SendUserFile` had already
-  captured the correct content before the re-stage clobbered the local file.
-- **THE BRIDGE DROPS.** `RefreshMcpTools` on `remote-devices`, then `ToolSearch` by
-  exact name. **A ToolSearch that returns nothing during a drop is a dropped
-  connection, not a missing tool.**
+  reporting the NEW size.**
+- **Re-staging a path AFTER editing your local copy overwrites the edit.** Stage
+  before you edit, not after.
+- **THE BRIDGE DROPS**, and so do the tool schemas. `RefreshMcpTools` on
+  `remote-devices`, then `ToolSearch` by exact name. **A ToolSearch that returns
+  nothing during a drop is a dropped connection, not a missing tool.** In E.51 the
+  `mcp__remote-devices__*` schemas went deferred mid-session with the bridge still
+  live; one `ToolSearch select:` call restored them.
 - **BSD versus GNU.** `sed -i ''` and `stat -f %z` fail on the device VM. Use
-  `python3` heredocs, and **write ASCII-only Python.**
+  `python3` heredocs, and **write ASCII-only Python.** For non-ASCII content
+  (Cyrillic, guillemets, accents) do NOT use a device heredoc: write the file in
+  the container and bring it over with `SendUserFile` then `device_commit_files`.
 - **`grep -n` numbers lines relative to its input.** Read with Python and print
   absolute indices. Restrict searches to `src` and pass `--include` filters.
 - `device_list_dir` on `~/Downloads` exceeds the token cap; use `ls -lt`.
@@ -171,6 +242,13 @@ Send a QR only for a build whose change he can see.
 - `npx --yes typescript@5 tsc` fails. `npm i -D typescript` then
   `./node_modules/.bin/tsc` works.
 - `pnpm --filter` resolves from the current directory. Give Dann the `cd`.
+- **QR codes:** `pip install segno --break-system-packages`, then
+  `segno.make(url, error='h').save(path, scale=12, border=4)`. A 102-character
+  bypass URL lands at version 10 and scans off a screen.
+- **Dann's phone photographs are HEIC.** `pip install pillow-heif
+  --break-system-packages`, `pillow_heif.register_heif_opener()`, then PIL opens
+  them. **Crop and upscale a region before reading it**: the print-preview
+  thumbnails were unreadable at full-frame and legible at 1400 px wide.
 
 ---
 
@@ -184,9 +262,9 @@ npmjs.com package pages, and bundlephobia all refuse.**
 
 ## Known instrument faults in the code
 
-- **`welchPSD` (`dsp.ts:225-241`) does not fail on a short buffer.** It averages
-  zero segments and returns an all-zero spectrum, which reads downstream as perfect
-  silence rather than "no measurement." Guard on length yourself.
+- **`welchPSD` (`dsp.ts:225-241`) does not fail on a short buffer.** It returns an
+  all-zero spectrum, which reads downstream as perfect silence rather than "no
+  measurement." Guard on length yourself.
 - **`stripBackingRect` matches `fill="#FFFFFF"` while `staff-renderer.ts` paints
   `#F0EBE0`.** Unsettled.
 
@@ -200,5 +278,6 @@ here and not there.**
 
 ---
 *SOURCED from `claude/e48-thread-opener_v1_2026-08-13.md`, read in full 2026-08-13,
-plus earlier handovers quoted in it, plus the capacity figures measured directly
-this session.*
+plus earlier handovers quoted in it, plus the capacity figures measured directly.
+The PRINT section, the SSO and origin lines under Deploys, and the QR, HEIC, and
+bridge-drop lines are new in E.51 and were learned by hitting them.*

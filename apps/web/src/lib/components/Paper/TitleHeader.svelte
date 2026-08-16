@@ -199,8 +199,17 @@
 	   with an auto-height page it also overlays the transcription.
 	   Unchanged for print and for landscape, which is above 767px. */
 	@media screen and (max-width: 767px) {
+		/* N.69 pass three. NOT display:none. TitlePage derives contentTop from
+		   this header's bind:offsetHeight (TitleHeader.svelte:67), and a
+		   display:none element measures 0, so on a phone the content layer was
+		   laid out with no room for the title block and print dropped the block
+		   on top of the first verse. visibility:hidden still measures.
+		   It costs nothing on screen: this header is position:absolute, and the
+		   mobile rule makes .page-content position:static (TitlePage.svelte:233),
+		   so the inline top is ignored there anyway. Dann's N.45 ruling stands:
+		   the header is still invisible on a phone. */
 		.title-header {
-			display: none;
+			visibility: hidden;
 		}
 	}
 </style>
