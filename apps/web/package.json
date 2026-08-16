@@ -21,7 +21,6 @@
     "@ilya/dictionary": "workspace:*",
     "@ilya/phonology": "workspace:*",
     "@ilya/score-parser": "workspace:*",
-    "bits-ui": "^2.15.5",
     "tesseract.js": "^7.0.0",
     "webmscore": "^1.2.1"
   },
