@@ -44,15 +44,42 @@
 		 *  the score back without the singer re-uploading it. The converters
 		 *  live in this component (§B.2), so the re-ingest does too. */
 		restore?: { fileName: string; bytes: ArrayBuffer } | null;
+		/** N.70: threaded so the accept list can be dropped on a phone. Same
+		 *  `isMobile` N.69 already threads to the Paper components. */
+		isMobile?: boolean;
 	}
 
-	let { language, oningested, restore = null }: Props = $props();
+	let { language, oningested, restore = null, isMobile = false }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 
 	/** The file dialog offers the advertised set, live plus coming-soon, so it
 	 *  matches the dropzone text. Coming-soon formats resolve to a note. */
 	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,.mid,.midi,image/*';
+
+	/**
+	 * N.70 (Dann's ruling, 2026-08-16). THE FILTER IS KEPT WHERE IT HELPS AND
+	 * DROPPED WHERE IT ONLY BLOCKS.
+	 *
+	 * iOS matches `accept` by REGISTERED TYPE, not by the string, and it has no
+	 * registration for `.musicxml`, `.mnx`, `.musx`, or `.mscz`. So on a phone
+	 * every format Ilya can actually read is greyed out and unselectable, while
+	 * PDF, MIDI, and images — the ones it can only answer "coming soon" to —
+	 * stay pickable. Dann hit this on his own iPhone, 2026-08-16.
+	 *
+	 * A narrower MIME list was considered and rejected: iOS would need a type
+	 * registration it probably does not have, so it could fail exactly as
+	 * silently. Dropping the attribute cannot half-work.
+	 *
+	 * Nothing is loosened about what Ilya ACCEPTS: `ingestScoreFile` sniffs the
+	 * bytes and `classify` already answers for anything else. This only changes
+	 * which files the picker will let a singer point at.
+	 *
+	 * NAMED CONSEQUENCE: `isMobile` is a WIDTH test, not an iOS test, so a
+	 * narrow desktop window also gets the unfiltered picker. Accepted rather
+	 * than inventing a second detector.
+	 */
+	const acceptList = $derived(isMobile ? undefined : ACCEPT);
 
 	type UiState =
 		| { kind: 'idle' }
@@ -345,7 +372,7 @@
 	<!-- Hidden file input; the dropzone and browse click drive it. -->
 	<input
 		type="file"
-		accept={ACCEPT}
+		accept={acceptList}
 		class="file-input"
 		bind:this={fileInputEl}
 		onchange={onPick}

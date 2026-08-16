@@ -1134,6 +1134,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     is fixed (Dann's ruling, 2026-07-15; Kimi Q1 and Q2). -->
 					<ScoreUploader
 						{language}
+						{isMobile}
 						restore={restoreSource}
 						oningested={(ingested, file, origin) => {
 							// N.67 step 2. The singer's own bytes go down with the song,
