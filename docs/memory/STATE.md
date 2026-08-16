@@ -19,21 +19,18 @@ CLOSED.** An upload never destroys placements; only the singer does, on purpose.
 
 ## THE ONE THING
 
-> **NOT ESTABLISHED. Dann has not said what comes next, and three defects
-> surfaced during E.55's walk that may outrank the rest of N.67.**
+> **N.67 step 4, the library door.** Design
+> `docs/sessions/e52-fable-save-design_r1_2026-08-16.md` §7 step 4: the song
+> list, New song, rename, delete with confirmation, auto-naming per §2.3 layer
+> 3, and the fingerprint recognition prompt on a neutral upload.
 >
-> The remaining N.67 steps are 4 (the library door: the song list, New song,
-> rename, delete, fingerprint recognition), 5 (the binder, which is N.28's
-> door), and 6 (the sweep, which is where N.27 and the storage copy land).
+> **The walk's findings are cleared.** Dann ruled they came first, per the
+> schema; N.70 and N.71 are both closed and both walked by him.
 >
-> **But ask before starting any of them.** The three defects below are all in
-> the singer's path, and one of them means no iPhone can load a score at all.
+> **Observable:** two songs, switched between, both intact across a reload.
 >
-> **Steps 0 through 3 are DONE**, all observed in a real browser, step 3 walked
-> by Dann himself on `6c0c719`.
->
-> **Dann ruled on 2026-08-16 that N.67 goes first and displaces both beta
-> blockers.** That ruling stands unless he moves it.
+> Steps 0 through 3 are DONE. Steps 5 (the binder, N.28's door) and 6 (the
+> sweep, where N.27 lands) follow.
 
 ---
 
@@ -43,12 +40,10 @@ CLOSED.** An upload never destroys placements; only the singer does, on purpose.
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: FIVE
+### The blocking set: THREE
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.70** the iPhone cannot load a score | **RULED IN by Dann 2026-08-16.** iOS matches a file input's `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greys out every format Ilya reads while leaving PDFs and photos, which it cannot read, selectable. **Dann's fix, neither option offered: keep the filtered list on desktop, drop `accept` entirely on mobile.** WRITTEN `<pending>`: measured in a browser, the attribute is present at 1400 px and ABSENT below 768, and returns on widening. **ONLY DANN'S IPHONE CAN CLOSE IT.** Nothing about what Ilya accepts changed; `ingestScoreFile` still sniffs the bytes |
-| `[ ]` | **N.71** the note click | **RULED IN by Dann 2026-08-16**, with the old finding 3 folded in. WRITTEN `<pending>`, observed in a browser: every event group is now `pointer-events="none"` and the hit rectangle takes clicks back with its own `all`, so a real click DEAD CENTRE on a notehead places the syllable; and the rectangle carries `cursor="pointer"`, which is what was missing when Dann noticed the pointer never changed. **Closes when Dann clicks a notehead and it responds** |
 | `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, and 3 CLOSED**, all observed in a real browser, step 3 walked by Dann. **Three left: 4 the library door, 5 the binder, 6 the sweep.** See the four documents below |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
@@ -57,8 +52,10 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
+| `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |
+| `[x]` | **N.71** the note click | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN.** The notehead glyph was painted over its own `[data-hit]` rectangle and still interactive, so a click on the note died; every `<g data-event-id>` is now `pointer-events="none"` and the rectangle takes clicks back with its own `all`, plus `cursor="pointer"`. **What Dann saw:** a click DEAD CENTRE on the first notehead, the exact spot that did nothing an hour earlier, gave `4 / 5` with бил under it. Two tests pin both halves |
 | `[x]` | **N.68** the upload that erases placements | **CLOSED 2026-08-16, `6c0c719`, WALKED BY DANN on the real deploy.** Absorbed into N.67 and fixed by architecture, not patched: `mergeOnUpload` (`pairings.ts`) keeps the map by positional key, runs `firstPass` only into an empty map, reports orphans, and never rebuilds. **What Dann saw:** he moved бил onto the first note (5/5 to 4/5, Я turned black), re-uploaded the same score, and the counter stayed 4/5 with бил still on the first note. Positive control run first: the old code snapped back to 5/5 |
-| `[ ]` | **N.55b** Click Assignment | **NOT DONE. Marked DONE 2026-08-13 while its central gesture was broken**, and it stayed that way until Dann walked it 2026-08-16: clicking a notehead did nothing, because the glyph was painted over its own hit rectangle and still interactive. **Dann's ruling: the tracker should be right rather than tidy.** Repaired as N.71. Rotate syllables PARKED 2026-08-14 |
+| `[x]` | **N.55b** Click Assignment | **DONE AGAIN 2026-08-16, and the history is kept on purpose: it was marked DONE 2026-08-13 while its central gesture was broken**, and it stayed that way until Dann walked it 2026-08-16: clicking a notehead did nothing, because the glyph was painted over its own hit rectangle and still interactive. **Dann's ruling: the tracker should be right rather than tidy.** Repaired and closed as N.71, walked by Dann. Rotate syllables PARKED 2026-08-14 |
 | `[~]` | **N.56** draw the withheld page badly | PARKED 2026-08-14, Dann's ruling |
 | `[x]` | **N.32** the Guide's false claims | DONE, shipped and observed 2026-08-14 |
 | `[x]` | **N.55a** the score with no underlay | Closed 2026-08-13 |
@@ -267,6 +264,7 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.56: `046beec` and `58f982c`. N.71 and N.70, both found by Dann walking and both closed by Dann walking.** The notehead swallowed its own click for three days behind a DONE mark; iOS silently refused every score format Ilya can read. **Neither was reachable by a gate, and both were found by a musician using the thing.** score-parser 442 to 444. |
 | 2026-08-16 | **E.55: `6c0c719`, N.67 step 3 shipped and WALKED BY DANN. N.68 closed.** `mergeOnUpload` keeps the map by positional key, proposes only into an empty map, reports orphans, and never rebuilds; *Start placement over* is the singer's own and only destructive act. Seven new tests, gates 504 to 511. |
 | 2026-08-16 | **The walk was built to be able to FAIL, and that is why it is worth anything.** Re-running the first pass over an unchanged transcription produces the same layout either way, so the walk needs one deliberate change in the middle. Positive control: the old code was temporarily restored and the identical walk snapped back to 5/5; the merge rule held at 4/5. |
 | 2026-08-16 | **Three defects found by Dann walking, none by a gate.** The notehead swallows its own click, notes have no cursor affordance, and no iPhone can load a `.musicxml` at all. See the section above. **The instrument lesson: my Playwright harness had to DISPATCH the note click because a real click was intercepted, and I read that as a test artifact instead of as the bug it was.** |
