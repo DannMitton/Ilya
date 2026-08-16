@@ -19,7 +19,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { reconcilePairings, auditPairings } from './pairings';
+import { reconcilePairings, auditPairings, mergeOnUpload, firstPass } from './pairings';
 import type { PairingMap, Slot } from './pairings';
 
 const slot = (cyrillic: string, ipa: string, vowel: string | undefined, slotIndex: number, word: string): Slot => ({
@@ -101,5 +101,76 @@ describe('auditPairings', () => {
 	it('returns exactly the reconciliation drift, so a re-division is never reported', () => {
 		expect(auditPairings(paired(), REDIVIDED)).toEqual([]);
 		expect(auditPairings(paired(), RETRANSCRIBED)).toEqual(reconcilePairings(paired(), RETRANSCRIBED).drift);
+	});
+});
+
+/* ── The merge rule, N.67 step 3, design §2.6 ────────────────────── */
+
+describe('mergeOnUpload', () => {
+	// N.68 in one line: an upload never destroys placements; only the singer
+	// does, on purpose. Every test below is a way of saying that.
+
+	it('proposes a first pass into an EMPTY map when the score has no lyrics', () => {
+		// N.55a's fresh path, preserved exactly: Ilya proposes where the score
+		// is silent.
+		const result = mergeOnUpload({}, ['e1', 'e2'], BEFORE, true);
+
+		expect(result.proposed).toBe(true);
+		expect(Object.keys(result.map)).toEqual(['e1', 'e2']);
+		expect(result.map.e1).toEqual(firstPass(['e1', 'e2'], BEFORE).e1);
+	});
+
+	it('proposes NOTHING when the score carries its own underlay', () => {
+		// Where the score speaks, Ilya reads it rather than talking over it.
+		const result = mergeOnUpload({}, ['e1', 'e2'], BEFORE, false);
+
+		expect(result.proposed).toBe(false);
+		expect(result.map).toEqual({});
+	});
+
+	it('KEEPS an existing map rather than rebuilding it. This is N.68', () => {
+		// The old code ran the first pass again here, silently replacing the
+		// singer's own decisions with the default layout.
+		const mine = paired();
+
+		const result = mergeOnUpload(mine, ['e1', 'e2'], BEFORE, true);
+
+		expect(result.map).toBe(mine);
+		expect(result.proposed).toBe(false);
+	});
+
+	it('keeps an existing map even when the score carries lyrics', () => {
+		// The other half of N.68, and the louder one: this branch used to set
+		// the map to {} outright, erasing every placement on any lyric-bearing
+		// upload.
+		const mine = paired();
+
+		expect(mergeOnUpload(mine, ['e1', 'e2'], BEFORE, false).map).toBe(mine);
+	});
+
+	it('carries a placement across by its positional key', () => {
+		// The keys are the parsers' own positional event ids, so a note that
+		// stayed where it was keeps its pairing with no matching by text.
+		const mine = paired();
+
+		const result = mergeOnUpload(mine, ['e1', 'e2', 'e3'], BEFORE, true);
+
+		expect(result.map.e1.kind).toBe('syllable');
+		expect(result.orphaned).toEqual([]);
+	});
+
+	it('reports a placement whose note the new score does not contain, and KEEPS it', () => {
+		const mine = paired();
+
+		const result = mergeOnUpload(mine, ['e2', 'e3'], BEFORE, true);
+
+		expect(result.orphaned).toEqual(['e1']);
+		// Reported, not dropped. A singer who re-exported a shortened score has
+		// not asked Ilya to throw their work away.
+		expect(result.map.e1).toBeDefined();
+	});
+
+	it('reports nothing on a fresh proposal', () => {
+		expect(mergeOnUpload({}, ['e1'], BEFORE, true).orphaned).toEqual([]);
 	});
 });

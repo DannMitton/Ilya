@@ -547,6 +547,16 @@ const strings: Record<string, Record<Language, string>> = {
 	// French written 2026-08-16 and shown to Dann before this shipped.
 	// 'onglet' and 'chant' are both adopted, ordinary words; nothing is coined.
 	'storage.otherTab': { en: 'This song was changed in another Ilya tab. Your work here has been kept.', fr: 'Ce chant a été modifié dans un autre onglet d’Ilya. Votre travail ici a été conservé.' },
+	// N.67 step 3, design §2.6. The singer's own destructive act, and the only
+	// one: an upload never rebuilds. 'Recommencer' and not 'Reprendre', which
+	// also means to RESUME and would read as the opposite of what this does.
+	// 'partition' is the register already ratified across upload.* and meta.*.
+	// French written 2026-08-16 and shown to Dann before this shipped.
+	'station.startOver': { en: 'Start placement over', fr: 'Recommencer le placement' },
+	// The count of placements whose note the new score does not contain. They
+	// are KEPT; this only says how many no longer have a note to sit on. %s is
+	// the number. Twins 'station.textChanged' in restraint: a count, not alarm.
+	'station.orphaned': { en: '%s placements have no note in this score. They have been kept.', fr: '%s placements n’ont plus de note dans cette partition. Ils ont été conservés.' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 

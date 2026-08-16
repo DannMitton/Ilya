@@ -263,6 +263,56 @@ export function firstPass(eventIds: readonly string[], queue: readonly Slot[]): 
 	return map;
 }
 
+/* ── The merge rule (N.67 step 3, design §2.6) ──────────────────── */
+
+/**
+ * What an upload does to the placements already on the page.
+ *
+ * ONE SENTENCE: an upload never destroys placements; only the singer does, on
+ * purpose. Before this existed, `+page.svelte` replaced the map unconditionally
+ * on every accepted score, so re-uploading the same file rebuilt over the
+ * singer's own decisions, and a score WITH lyrics erased them outright. That
+ * was N.68.
+ *
+ * The keys are the parsers' positional event ids (`musicxml-parser.ts:701`,
+ * identically `mnx-parser.ts:899`), so every note that stayed where it was
+ * keeps its pairing by construction. Nothing is matched by text, and nothing
+ * is guessed.
+ *
+ * `firstPass` runs ONLY into an empty map, and only where the score carried no
+ * underlay of its own. That preserves N.55a's behaviour on the genuinely fresh
+ * path (Ilya proposes where the score is silent, and never over a score that
+ * already speaks) while ending the unconditional rebuild.
+ */
+export interface MergeResult {
+	map: PairingMap;
+	/** True when `firstPass` filled an empty map, as it does on a fresh score. */
+	proposed: boolean;
+	/**
+	 * Pairings whose note is not in the new score. KEPT, NOT DROPPED, and
+	 * reported as a count: a singer who re-exports a shortened score has not
+	 * asked Ilya to throw their work away, and a deletion nobody asked for is
+	 * exactly what this item exists to end.
+	 */
+	orphaned: string[];
+}
+
+export function mergeOnUpload(
+	existing: PairingMap,
+	eventIds: readonly string[],
+	queue: readonly Slot[],
+	scoreCarriesNoLyrics: boolean,
+): MergeResult {
+	const present = new Set(eventIds);
+	const orphaned = Object.keys(existing).filter((id) => !present.has(id));
+	if (Object.keys(existing).length === 0) {
+		return scoreCarriesNoLyrics
+			? { map: firstPass(eventIds, queue), proposed: true, orphaned: [] }
+			: { map: {}, proposed: false, orphaned: [] };
+	}
+	return { map: existing, proposed: false, orphaned };
+}
+
 /* ── The witness ────────────────────────────────────────────────── */
 
 /** One pairing whose stored text no longer matches the slot it came from. */

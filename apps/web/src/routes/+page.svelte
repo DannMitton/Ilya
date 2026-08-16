@@ -16,6 +16,7 @@
 		reconcilePairings,
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
+		mergeOnUpload,
 		type ShiftDirection,
 	} from '$lib/shane/pairings';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -116,6 +117,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
+	// N.67 step 3: placements whose note the newly uploaded score does not
+	// contain. Kept, reported, never dropped. Cleared by the next upload.
+	let orphanedCount = $state(0);
 	// N.55b: the N.55a courtesy notice's file name. The pairing map itself is
 	// `doc.pairings` now, and the save still does not swallow its exception:
 	// `doc.saveFailure` and `doc.loadFailure` carry the reason the whole song
@@ -190,6 +194,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				? shiftToEndOfLyric(doc.pairings, eventIds, fromIndex, direction)
 				: shiftToNextOpenNote(doc.pairings, eventIds, fromIndex, direction);
 		doc.pairings = result.map;
+	}
+
+	/**
+	 * N.67 step 3, design §2.6. THE ONLY DESTRUCTIVE REBUILD, and it is the
+	 * singer's own act, never a side effect of an upload.
+	 *
+	 * It runs the first pass again from scratch, exactly as an upload into an
+	 * empty map does, so "start over" means the same thing here as it meant the
+	 * first time. Disabled when there is nothing to start over from.
+	 */
+	function handleStartPlacementOver(): void {
+		if (!ingestedScore) return;
+		doc.pairings = firstPass(
+			ingestedScore.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+			buildSlotQueue(lines),
+		);
+		orphanedCount = 0;
+		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
 	}
 
 	function handleNotePick(eventId: string): void {
@@ -1130,17 +1152,32 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							// INFERENCE from R3 and N.55a together, not a ruling of Dann's.
 							const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
 							noLyricsFile = noLyrics ? ingested.fileName : null;
-							// One slot per note, in document order, until one side runs out.
-							// Rests are skipped: they have no hit target either
-							// (`staff-renderer.ts:920-928`), so they can never be clicked.
-							doc.pairings = noLyrics
-								? firstPass(
-										ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-										buildSlotQueue(lines),
-									)
-								: {};
-							// The cursor lands on the first syllable the pass did not reach.
-							pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
+							// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68
+							// closes: an upload never destroys placements; only the
+							// singer does, on purpose, with Start placement over below.
+							//
+							// This line used to replace the map unconditionally, so
+							// re-uploading rebuilt over the singer's decisions and a
+							// score WITH lyrics erased them outright. Now the first pass
+							// runs only into an EMPTY map, which keeps N.55a's behaviour
+							// on the genuinely fresh path: one slot per note, in document
+							// order, rests skipped because they have no hit target
+							// (`staff-renderer.ts:920-928`) and can never be clicked.
+							const merged = mergeOnUpload(
+								doc.pairings,
+								ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+								buildSlotQueue(lines),
+								noLyrics,
+							);
+							doc.pairings = merged.map;
+							// Kept, never dropped, and reported as a count.
+							orphanedCount = merged.orphaned.length;
+							// The cursor lands on the first syllable the pass did not
+							// reach. Only moved where the pass actually ran: a re-upload
+							// must not walk the singer's insertion point back.
+							if (merged.proposed) {
+								pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
+							}
 							// A new score arrives: clear whatever the previous score
 							// filled, then fill the blanks from this score's header
 							// if it carries one. A score with no header still
@@ -1172,6 +1209,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						oncursor={(i) => (pairingCursor = i)}
 					/>
 					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
+					{#if orphanedCount > 0}
+						<!-- N.67 step 3. Reported, not acted on: the placements are
+						     KEPT and this only says how many have no note to sit on in
+						     the score just uploaded. Twins the drift surface in
+						     restraint, and unstyled on purpose like its neighbours. -->
+						<p class="shane-storage-notice">
+							{t('station.orphaned', language).replace('%s', String(orphanedCount))}
+						</p>
+					{/if}
+					{#if slotQueue.length > 0 && ingestedScore}
+						<!-- N.67 step 3, design §2.6. The ONLY thing that may destroy a
+						     placement, and it is the singer pressing it. An upload never
+						     rebuilds. Placed after Shift Lyrics because it undoes what
+						     Shift Lyrics does, and it is the last resort of the two. -->
+						<button type="button" class="start-over" onclick={handleStartPlacementOver}>
+							{t('station.startOver', language)}
+						</button>
+					{/if}
 					{#if doc.saveFailure}
 						<!-- R5, N.27: the save does not swallow its exception. Unstyled
 						     on purpose, matching 'shane-no-lyrics' below. N.67 step 0:
@@ -1448,6 +1503,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	.shane-print-btn:disabled {
 		opacity: 0.4;
 		cursor: not-allowed;
+	}
+	/* N.67 step 3. Twins .shane-print-btn rather than inventing a look, and
+	   sits inline rather than full width: it is the destructive control on
+	   this panel and should not be the loudest thing on it. */
+	.start-over {
+		align-self: start;
+		padding: 0.45rem 0.5rem;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		background: white;
+		border: 1px solid var(--stone-600, #57534e);
+		border-radius: 4px;
+		cursor: pointer;
+		transition: opacity 0.12s;
 	}
 
 	/* The Q4 provenance line: tertiary, one quiet line beneath the
