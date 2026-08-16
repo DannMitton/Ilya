@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **470** |
+| web-test | **504** |
 | score-parser | 442 passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -30,8 +30,9 @@ is a Linux VM too.
 
 **The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
 Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
-416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`, and **438 to 470 on
-2026-08-16** for N.67 step 0's `library.test.ts` and `driver.test.ts`.
+416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`, **438 to 470 on
+2026-08-16** for N.67 step 0, and **470 to 504 on 2026-08-16** for steps 1 and
+2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`).
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -73,9 +74,38 @@ no reactivity, `$derived` stale at its initial value.
 - **The socket addendum's §5 says `flushSync` forces effects in a test. It does
   not, here.**
 
+### `$state.snapshot` BEFORE INDEXEDDB, OR NOTHING SAVES. Measured 2026-08-16
+
+**`$state` deeply proxies plain objects and arrays. IndexedDB writes through the
+structured clone algorithm. Structured clone THROWS on a Proxy.** So a record
+assembled out of rune state fails every single write with `DataCloneError`,
+reported as `write-failed`, and the singer's work never lands.
+
+```
+const record = $state.snapshot(recordFromFields(...)) as SongRecord;
+```
+
+- **Step 0 never met this** because localStorage goes through `JSON.stringify`,
+  which reads a proxy perfectly happily. The bug appears the moment the driver
+  swaps, which is exactly the seam step 1 changes.
+- **ALL FIVE GATES PASSED WITH THIS BUG LIVE.** Runes are inert under vitest, so
+  no unit test can reach it. It was found in a real browser and nowhere else.
+- The same applies to anything else handing rune state to a platform API:
+  `structuredClone`, `postMessage`, the Cache API.
+
+### THE EFFECT'S GUARDS ARE ORDER-SENSITIVE
+
+The autosave effect skips its first run (the echo of the load) and skips runs
+caused by applying another tab's record. **Priming must be checked FIRST.** With
+the applying-check ahead of it, the constructor's own apply returns early
+without ever setting the primed flag, so the next run swallows the singer's
+FIRST REAL EDIT as though it were the load echo. Nothing saves until the second
+change. Every gate passed with this live too, and the browser found it.
+
 ### `ssr = false`, and what it buys
 
-`src/routes/+page.ts` sets `ssr = false` and `prerender = true`. **The page never
+`src/routes/+layout.ts` sets `ssr = false` and `prerender = true` (NOT `+page.ts`,
+which carries N.67's load function and nothing else). **The page never
 renders on a server**, so there is no hydration pass to disagree with, and state
 may be read out of `localStorage` at component INIT rather than in `onMount`.
 That is how N.67 step 0's document is loaded before it exists, with no `null`
@@ -418,6 +448,31 @@ step. For a six-step build that is untenable.
 - **What stays in a Cowork session:** rulings, design, Fable, anything needing
   taste. **What moves:** the building.
 
+### DRIVE A REAL BROWSER YOURSELF. Playwright is installed. Learned E.54
+
+**This is now the best instrument on this project, and it beat every other one.**
+Chromium 1208 is in `~/Library/Caches/ms-playwright/` and `playwright@1.58.2` is
+in the store. A harness that boots the app, seeds an origin, uploads a score,
+reloads, and reads IndexedDB runs in about thirty seconds and finds what the
+gates structurally cannot.
+
+- **Write the script in the SESSION SCRATCHPAD, never in the repository**, or it
+  becomes an untracked file and the ship script refuses.
+- Because the scratchpad is outside the workspace, a bare `import 'playwright'`
+  does not resolve. **Import by absolute path:**
+  `/Users/dannmitton/Desktop/ilya-rewrite/node_modules/.pnpm/playwright@1.58.2/node_modules/playwright/index.mjs`.
+- **To test a migration you must seed the origin BEFORE the app's first load.**
+  Navigate to a static asset on the same origin first
+  (`/manifest.webmanifest`), write the keys there, then navigate to `/`. Loading
+  the app first sets the migration flag and there is nothing left to migrate.
+- **`fake-indexeddb`: close the database before `deleteDatabase` in `afterEach`.**
+  An open connection blocks the delete, the blocked delete blocks the next open,
+  and the whole FILE hangs rather than failing. Cost: one 120-second run.
+- **The Fit stave does not draw without a voice profile**, so
+  `[data-note-id]` is 0 even on a correctly loaded score. **Use Fit's Print
+  button as the marker for "a score is ingested"**: it is disabled unless
+  `ingestedScore` is set, so enabled-after-reload proves the source survived.
+
 ### Observing your own work in Claude Code, learned E.53
 
 **You can watch the app yourself. Do not use Dann as the renderer here either.**
@@ -431,6 +486,11 @@ at that URL. A full save-and-reload observation takes about two minutes.
 - **The Browser pane can report a 0x0 viewport**, which makes `window.innerWidth`
   0, which trips Ilya's own mobile gate ("Continue anyway"). The DOM is still
   live and scriptable when this happens.
+- **A HIDDEN Browser pane freezes every async call.** Synchronous `evaluate`
+  still returns, but any promise (a timer, an IndexedDB transaction) times out
+  at 30 seconds and reports "the pane may be stuck". It is not stuck; it is
+  backgrounded, which this file has warned about since E.51. **Use Playwright
+  instead of asking Dann to raise a window** (section above).
 - **To drive a Svelte-bound input from `javascript_tool`**, use the native
   setter and dispatch the event: `Object.getOwnPropertyDescriptor(
   window.HTMLInputElement.prototype, 'value').set.call(el, v)` then
@@ -461,6 +521,11 @@ read the lines anyway.
 
 ## Storage, as it actually is. Measured E.52
 
+- **`ilya-library` now exists**, version 1, stores `songs` / `sources` / `meta`,
+  created at N.67 step 1. Separate from `ilya-data` on purpose: that one is
+  pinned at version 1 and upgrading it would break the dictionary loader.
+  **Dev dependency added 2026-08-16, Dann's ruling: `fake-indexeddb` 6.2.5,
+  Apache-2.0, zero runtime deps, dev-only, zero shipped bytes.**
 - **Ilya ALREADY uses IndexedDB.** `apps/web/src/lib/loader.ts:103-115` opens
   database **`ilya-data`**, version **1**, object store **`cache`**, holding the
   dictionary as chunked NDJSON. **`claude/e45-n67-storage-architecture_2026-08-13.md`

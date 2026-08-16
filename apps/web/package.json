@@ -27,10 +27,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
-    "@types/node": "^22.10.0",
     "@sveltejs/adapter-static": "^3.0.8",
     "@sveltejs/kit": "^2.50.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@types/node": "^22.10.0",
+    "fake-indexeddb": "^6.2.5",
     "svelte": "^5.50.1",
     "svelte-check": "^4.2.1",
     "typescript": "^5.7.3",

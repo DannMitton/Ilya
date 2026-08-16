@@ -149,6 +149,7 @@ describe('Library', () => {
 			save: async () => {
 				throw new Error('driver exploded');
 			},
+			loadSource: async () => null,
 		};
 		const library = new Library(throwing, () => NOW);
 
@@ -163,6 +164,7 @@ describe('Library', () => {
 			kind: 'legacy',
 			load: async (id) => ({ record: emptySongRecord(id, NOW), reason: 'no-storage' }),
 			save: async () => ({ ok: false, reason: 'no-storage' }),
+			loadSource: async () => null,
 		};
 
 		// An empty record from a browser with no storage is not a malformed
@@ -175,6 +177,7 @@ describe('Library', () => {
 			kind: 'memory',
 			load: async () => ({ record: { poem: 'Если', pairings: 7 } as unknown as SongRecord }),
 			save: async () => ({ ok: true }),
+			loadSource: async () => null,
 		};
 
 		const loaded = await new Library(rotten, () => NOW).load('test-song');

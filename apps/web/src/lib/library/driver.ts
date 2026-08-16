@@ -16,6 +16,7 @@
  */
 import { PAIRINGS_KEY, type PairingMap } from '$lib/shane/pairings';
 import { parseFromScore, serializeFromScore, type MetadataField } from '$lib/metadata-provenance';
+import { getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
 import {
 	emptySongRecord,
 	type FailureReason,
@@ -32,11 +33,35 @@ export interface KeyValueStore {
 	removeItem(key: string): void;
 }
 
+/**
+ * The score file's bytes, kept whole and separate from the record.
+ *
+ * A separate store so that listing the library reads kilobytes of records and
+ * never megabytes of blobs (design §2.1). `ArrayBuffer` rather than `Blob`:
+ * both structured-clone into IndexedDB, and the plainer type sidesteps a
+ * history of WebKit defects around stored Blobs at no cost.
+ */
+export interface SourceBytes {
+	songId: string;
+	fileName: string;
+	bytes: ArrayBuffer;
+	byteLength: number;
+	contentHash: string;
+	importedAt: string;
+}
+
 export interface StorageDriver {
 	/** For notices and tests. Never branched on by the facade. */
-	readonly kind: 'legacy' | 'memory';
+	readonly kind: 'legacy' | 'memory' | 'indexeddb';
 	load(id: string): Promise<LoadResult>;
-	save(record: SongRecord): Promise<Outcome>;
+	/**
+	 * `source` UNDEFINED means leave the stored bytes exactly as they are, which
+	 * is every autosave. A value replaces them, and `null` deletes them. The
+	 * record and its bytes are written in ONE transaction, so the old source is
+	 * gone only once the new one is durable (design §2.1, §2.6).
+	 */
+	save(record: SongRecord, source?: SourceBytes | null): Promise<Outcome>;
+	loadSource(songId: string): Promise<SourceBytes | null>;
 }
 
 /* ── The six legacy keys ────────────────────────────────────────── */
@@ -215,11 +240,18 @@ export function createLegacyDriver(store: KeyValueStore | null = globalStore()):
 		kind: 'legacy',
 		async load(id) {
 			if (!store) return { record: emptySongRecord(id, new Date().toISOString()), reason: 'no-storage' };
+			// A legacy browser has nowhere to put bytes, so it must not claim a
+			// source it cannot produce. `readLegacy` leaves `source` null.
 			return readLegacy(store, id, new Date().toISOString());
 		},
 		async save(record) {
 			if (!store) return { ok: false, reason: 'no-storage' };
-			return writeLegacy(store, record);
+			// The source is dropped, not half-kept: six string keys have no room
+			// for a score, and this driver only runs where IndexedDB refused.
+			return writeLegacy(store, { ...record, source: null });
+		},
+		async loadSource() {
+			return null;
 		},
 	};
 }
@@ -227,15 +259,121 @@ export function createLegacyDriver(store: KeyValueStore | null = globalStore()):
 /** For tests, and for the "no storage at all" path once step 6 builds it. */
 export function createMemoryDriver(seed: SongRecord[] = []): StorageDriver {
 	const songs = new Map(seed.map((r) => [r.id, structuredClone(r)]));
+	const sources = new Map<string, SourceBytes>();
 	return {
 		kind: 'memory',
 		async load(id) {
 			const found = songs.get(id);
 			return { record: found ? structuredClone(found) : emptySongRecord(id, new Date().toISOString()) };
 		},
-		async save(record) {
+		async save(record, source) {
 			songs.set(record.id, structuredClone(record));
+			if (source === null) sources.delete(record.id);
+			else if (source !== undefined) sources.set(record.id, source);
 			return { ok: true };
 		},
+		async loadSource(songId) {
+			return sources.get(songId) ?? null;
+		},
 	};
+}
+
+/* ── The vault ──────────────────────────────────────────────────── */
+
+export const LIBRARY_DB = 'ilya-library';
+export const LIBRARY_DB_VERSION = 1;
+export const SONGS_STORE = 'songs';
+export const SOURCES_STORE = 'sources';
+export const META_STORE = 'meta';
+export const META_KEY = 'library';
+
+export const LIBRARY_STORES: StoreSpec[] = [
+	{
+		name: SONGS_STORE,
+		keyPath: 'id',
+		indices: [
+			{ name: 'by-updated', keyPath: 'updatedAt' },
+			{ name: 'by-fingerprint', keyPath: 'source.fingerprint' },
+		],
+	},
+	{ name: SOURCES_STORE, keyPath: 'songId' },
+	{ name: META_STORE },
+];
+
+/**
+ * Open `ilya-library`, a NEW database beside `ilya-data`, never inside it.
+ *
+ * `loader.ts:105` opens `ilya-data` with an explicit `indexedDB.open(DB_NAME, 1)`.
+ * Upgrading that database to version 2 would make the loader's own open fail
+ * with `VersionError` until the loader itself was edited, so sharing it would
+ * force a change to working dictionary code on day one. The two also deserve
+ * different lifecycles: the cache is re-downloadable and the library is the
+ * singer's work, and "clear the cache" must never be able to mean "delete a
+ * song" (design §2.1).
+ */
+export function openLibraryDatabase(): Promise<IDBDatabase> {
+	return openDatabase(LIBRARY_DB, LIBRARY_DB_VERSION, LIBRARY_STORES);
+}
+
+/**
+ * A quota failure arrives from IndexedDB as a `QuotaExceededError` DOMException
+ * on the transaction, the same name localStorage uses, so one mapping serves
+ * both. Anything else is a write failure with its own reason kept in the log.
+ */
+function idbReason(err: unknown): FailureReason {
+	if (err instanceof DOMException && err.name === 'QuotaExceededError') return 'quota-exceeded';
+	return 'write-failed';
+}
+
+export function createIndexedDbDriver(db: IDBDatabase): StorageDriver {
+	return {
+		kind: 'indexeddb',
+		async load(id) {
+			try {
+				const stored = await getFrom<unknown>(db, SONGS_STORE, id);
+				if (stored === undefined) {
+					// Not an error: a song that was never written is a new song.
+					return { record: emptySongRecord(id, new Date().toISOString()) };
+				}
+				// Shape checking is the facade's job, not the driver's; the driver
+				// hands back what it found.
+				return { record: stored as SongRecord };
+			} catch {
+				return { record: emptySongRecord(id, new Date().toISOString()), reason: 'write-failed' };
+			}
+		},
+		async save(record, source) {
+			try {
+				// ONE transaction across both stores. On any abort the previous
+				// record stands whole, so a half-written song cannot exist.
+				await writeAcross(db, [SONGS_STORE, SOURCES_STORE], (store) => {
+					store(SONGS_STORE).put(record);
+					if (source === null) store(SOURCES_STORE).delete(record.id);
+					else if (source !== undefined) store(SOURCES_STORE).put(source);
+				});
+				return { ok: true };
+			} catch (err) {
+				return { ok: false, reason: idbReason(err) };
+			}
+		},
+		async loadSource(songId) {
+			try {
+				return (await getFrom<SourceBytes>(db, SOURCES_STORE, songId)) ?? null;
+			} catch {
+				return null;
+			}
+		},
+	};
+}
+
+/** Has the one-time localStorage migration already run? Design §3. */
+export async function readMigrationFlag(db: IDBDatabase): Promise<boolean> {
+	const meta = await getFrom<{ migratedFromLocalStorage?: boolean }>(db, META_STORE, META_KEY);
+	return meta?.migratedFromLocalStorage === true;
+}
+
+export async function writeMigrationFlag(db: IDBDatabase): Promise<void> {
+	await writeAcross(db, [META_STORE], (store) => {
+		store(META_STORE).put({ migratedFromLocalStorage: true }, META_KEY);
+	});
 }

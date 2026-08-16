@@ -19,7 +19,7 @@
 	than a hard error.
 -->
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
@@ -35,11 +35,18 @@
 	interface Props {
 		language: Language;
 		/** The parsed score, accepted by the user via "Continue to analysis".
-		 *  Live wiring (§E.7) consumes this. */
-		oningested: (ingested: IngestedScore) => void;
+		 *  Live wiring (§E.7) consumes this.
+		 *
+		 *  N.67 step 2: the FILE travels with it, because the library stores the
+		 *  singer's own bytes and only this component ever holds them. */
+		oningested: (ingested: IngestedScore, file: File, origin: 'upload' | 'restore') => void;
+		/** N.67 step 2: a stored source, re-ingested at boot so a reload brings
+		 *  the score back without the singer re-uploading it. The converters
+		 *  live in this component (§B.2), so the re-ingest does too. */
+		restore?: { fileName: string; bytes: ArrayBuffer } | null;
 	}
 
-	let { language, oningested }: Props = $props();
+	let { language, oningested, restore = null }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 
@@ -50,7 +57,7 @@
 	type UiState =
 		| { kind: 'idle' }
 		| { kind: 'busy'; label: string }
-		| { kind: 'done'; ingested: IngestedScore }
+		| { kind: 'done'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
 		| { kind: 'soon'; message: string };
 
@@ -138,7 +145,7 @@
 		}
 
 		if (outcome.ok) {
-			ui = { kind: 'done', ingested: outcome.ingested };
+			ui = { kind: 'done', ingested: outcome.ingested, file };
 			return;
 		}
 		const c = classify(outcome.error, isMscz);
@@ -147,10 +154,31 @@
 
 	function accept(): void {
 		if (ui.kind === 'done') {
-			oningested(ui.ingested);
+			oningested(ui.ingested, ui.file, 'upload');
 			reset();
 		}
 	}
+
+	/**
+	 * N.67 step 2. A song with a stored source re-ingests it on boot.
+	 *
+	 * No "Continue to analysis" step: the singer accepted this file already,
+	 * and asking twice for the same score would be the tool forgetting. The
+	 * busy label still shows, because a `.musx` really does take a conversion.
+	 */
+	onMount(async () => {
+		if (!restore) return;
+		const file = new File([restore.bytes], restore.fileName);
+		await handleFile(file);
+		if (ui.kind === 'done') {
+			// 'restore', not 'upload': these bytes CAME from the vault, and
+			// writing them back would be the tool rewriting what it just read.
+			oningested(ui.ingested, ui.file, 'restore');
+			reset();
+		}
+		// A stored source that no longer parses leaves its own error on screen,
+		// which is the honest outcome: the song is still there, the score is not.
+	});
 
 	function reset(): void {
 		ui = { kind: 'idle' };

@@ -32,6 +32,8 @@ import {
 	type SaveScheduler,
 	type SongFields,
 } from './library';
+import { createLibraryChannel, type LibraryAnnouncement, type LibraryChannel } from './channel';
+import type { SourceBytes } from './driver';
 import {
 	emptyMetadata,
 	type FailureReason,
@@ -69,16 +71,36 @@ export class SongDocument {
 	/** Why the load did not come back whole. Replaces `pairingsLoadFailed`. */
 	readonly loadFailure: FailureReason | null;
 
+	/**
+	 * The score's provenance, or null for a song with no score yet. The BYTES
+	 * live in the `sources` store and never in this object: the record is
+	 * kilobytes and the source is hundreds of them (design §2.1).
+	 */
+	source = $state<SongSource | null>(null);
+
+	/**
+	 * Another tab wrote this song while this tab held unsaved work. One
+	 * sentence, and the singer's work is kept (socket §4.1).
+	 */
+	remoteChange = $state<{ updatedAt: string } | null>(null);
+
 	readonly id: string;
 	readonly createdAt: string;
 	readonly name: string;
-	readonly source: SongSource | null;
 
 	readonly #library: Library;
-	readonly #base: SongRecord;
+	#base: SongRecord;
 	readonly #scheduler: SaveScheduler;
+	readonly #channel: LibraryChannel;
 	#teardown: () => void;
 	#primed = false;
+	/**
+	 * The bytes to write with the next save. `undefined` leaves the stored
+	 * source untouched, which is every autosave; a value replaces it.
+	 */
+	#pendingSource: SourceBytes | null | undefined = undefined;
+	/** True while a remote record is being applied, so the apply does not echo. */
+	#applying = false;
 
 	private constructor(library: Library, loaded: SongRecord, loadFailure: FailureReason | null) {
 		this.#library = library;
@@ -89,31 +111,38 @@ export class SongDocument {
 		this.source = loaded.source;
 		this.loadFailure = loadFailure;
 
-		const fields = fieldsFromRecord(loaded);
-		this.inputText = fields.inputText;
-		this.metadata = fields.metadata;
-		this.fromScoreFields = fields.fromScoreFields;
-		this.glossOverrides = fields.glossOverrides as Map<string, string>;
-		this.glossAnchors = fields.glossAnchors as Map<string, string>;
-		this.openSyllabification = fields.openSyllabification;
-		this.pairings = fields.pairings;
+		this.#apply(loaded);
 
 		this.#scheduler = createSaveScheduler(() => this.#write());
+		this.#channel = createLibraryChannel((message) => void this.#onRemoteWrite(message));
 
 		const stop = $effect.root(() => {
 			$effect(() => {
-				// Read every field, so every field is tracked.
+				// Read every field, so every field is tracked. `source` is read
+				// separately because it is not one of the page's seven: without it
+				// a score attached to an otherwise unchanged song would never be
+				// written, and the bytes would sit in memory until the tab closed.
 				this.#snapshot();
+				void this.source;
+				// ORDER MATTERS HERE, AND GETTING IT WRONG COST A BUILD. The
+				// priming check must come FIRST. With the `#applying` check
+				// ahead of it, the constructor's own apply returned early
+				// without ever setting `#primed`, so the next run consumed the
+				// singer's FIRST REAL EDIT as though it were the load echo, and
+				// nothing was saved until the second change. Every gate passed.
+				//
 				// The first run is the echo of the load. Writing it straight back
-				// would put six keys into a browser that had none, which is a
-				// visible difference on a first visit and step 0 is supposed to
-				// have none. This is not the old race guard: it flips inside the
-				// instance's own first effect run, and there is no window in which
-				// unrestored state could be written.
+				// would put keys into a browser that had none, which is a visible
+				// difference on a first visit. This is not the old race guard: it
+				// flips inside the instance's own first effect run, and there is
+				// no window in which unrestored state could be written.
 				if (!this.#primed) {
 					this.#primed = true;
 					return;
 				}
+				// A record arriving from another tab is not a change this tab
+				// made, and writing it back would bounce it between tabs.
+				if (this.#applying) return;
 				this.#scheduler.schedule();
 			});
 		});
@@ -166,8 +195,80 @@ export class SongDocument {
 
 	async #write(): Promise<void> {
 		this.saveState = { status: 'saving' };
-		const outcome = await this.#library.save(recordFromFields(this.#base, this.#snapshot()));
-		this.saveState = outcome.ok ? { status: 'saved' } : { status: 'failed', reason: outcome.reason };
+		// $state.snapshot IS REQUIRED, NOT TIDINESS. `$state` deeply proxies
+		// plain objects and arrays, IndexedDB writes through the structured
+		// clone algorithm, and structured clone THROWS on a Proxy. Step 0 never
+		// met this because localStorage goes through `JSON.stringify`, which
+		// reads a proxy happily. Without this line every song save fails with
+		// `write-failed` and the singer's work never lands.
+		const record = $state.snapshot(
+			recordFromFields({ ...this.#base, source: this.source }, this.#snapshot()),
+		) as SongRecord;
+		const source = this.#pendingSource;
+		const outcome = await this.#library.save(record, source);
+		if (outcome.ok) {
+			// Cleared only on success, so a failed write keeps the bytes queued
+			// for the retry rather than dropping the singer's score silently.
+			if (this.#pendingSource === source) this.#pendingSource = undefined;
+			this.#base = record;
+			this.saveState = { status: 'saved' };
+			// Announced AFTER the write committed, never before.
+			this.#channel.announce({ songId: this.id, updatedAt: this.#library.lastSavedAt ?? record.updatedAt });
+		} else {
+			this.saveState = { status: 'failed', reason: outcome.reason };
+		}
+	}
+
+	/** Replace every field from a record, without echoing the change back out. */
+	#apply(record: SongRecord): void {
+		this.#applying = true;
+		this.#base = record;
+		this.source = record.source;
+		const fields = fieldsFromRecord(record);
+		this.inputText = fields.inputText;
+		this.metadata = fields.metadata;
+		this.fromScoreFields = fields.fromScoreFields;
+		this.glossOverrides = fields.glossOverrides as Map<string, string>;
+		this.glossAnchors = fields.glossAnchors as Map<string, string>;
+		this.openSyllabification = fields.openSyllabification;
+		this.pairings = fields.pairings;
+		// Cleared on the next microtask, after the effect this apply triggered
+		// has run and returned early.
+		queueMicrotask(() => {
+			this.#applying = false;
+		});
+	}
+
+	/**
+	 * Another tab committed a write to this song.
+	 *
+	 * A CLEAN tab reloads and the two stay current. A tab with unsaved work
+	 * KEEPS IT and shows one sentence. No merge, no lock, and above all no
+	 * silence (socket §4.1).
+	 */
+	async #onRemoteWrite(message: LibraryAnnouncement): Promise<void> {
+		if (message.songId !== this.id) return;
+		if (message.updatedAt === this.#library.lastSavedAt) return; // our own write
+		if (this.#scheduler.isPending()) {
+			this.remoteChange = { updatedAt: message.updatedAt };
+			return;
+		}
+		const loaded = await this.#library.load(this.id);
+		if (loaded.reason) {
+			this.remoteChange = { updatedAt: message.updatedAt };
+			return;
+		}
+		this.#apply(loaded.record);
+	}
+
+	/**
+	 * A score has been accepted. Its bytes go down with the next save, in the
+	 * same transaction as the record, so the old source is gone only once the
+	 * new one is durable (design §2.6).
+	 */
+	attachSource(source: SourceBytes, provenance: SongSource): void {
+		this.#pendingSource = source;
+		this.source = provenance;
 	}
 
 	/** Write anything pending now, and wait for it. */
@@ -183,6 +284,7 @@ export class SongDocument {
 	async close(): Promise<void> {
 		await this.#scheduler.flush();
 		this.#scheduler.dispose();
+		this.#channel.close();
 		this.#teardown();
 		this.#teardown = () => {};
 	}

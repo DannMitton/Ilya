@@ -541,6 +541,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'storage.saveFailed.quota': { en: 'Your device’s storage is full. Your syllable placements could not be saved and will be lost when you leave this page.', fr: 'Le stockage de cet appareil est plein. Vos syllabes n’ont pas pu être enregistrées et seront perdues lorsque vous quittez cette page.' },
 	'storage.saveFailed.generic': { en: 'Your syllable placements could not be saved on this device. They will be lost when you leave this page.', fr: 'Vos syllabes n’ont pas pu être enregistrées sur cet appareil. Elles seront perdues lorsque vous quittez cette page.' },
 	'storage.loadFailed': { en: 'Your saved syllable placements could not be read back.', fr: 'Vos syllabes enregistrées n’ont pas pu être relues.' },
+	// N.67 step 1, socket §4.1. Two tabs, one song: the tab that has unsaved
+	// work KEEPS it and says this. The second sentence is the whole point of
+	// the notice, because the failure it replaces was silence.
+	// French written 2026-08-16 and shown to Dann before this shipped.
+	// 'onglet' and 'chant' are both adopted, ordinary words; nothing is coined.
+	'storage.otherTab': { en: 'This song was changed in another Ilya tab. Your work here has been kept.', fr: 'Ce chant a été modifié dans un autre onglet d’Ilya. Votre travail ici a été conservé.' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import { updated } from '$app/state';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
@@ -23,7 +23,11 @@
 	// longer called from here; the legacy driver writes the same key.
 	import { SongDocument, LEGACY_SONG_ID } from '$lib/library/document.svelte';
 	import { Library } from '$lib/library/library';
-	import { createLegacyDriver, readLegacySync } from '$lib/library/driver';
+	import { createMemoryDriver } from '$lib/library/driver';
+	import { emptySongRecord } from '$lib/library/types';
+	import { formatBytes } from '$lib/library/quota';
+	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
+	import type { OpenedLibrary } from '$lib/library';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
@@ -61,21 +65,34 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	});
 	// Language
 	let language = $state<Language>('en');
-	// N.67 step 0, the socket. The per-song state, all seven pieces of it,
-	// lives on this object and no longer on this component: the poem, the
-	// metadata and its provenance tags, the glosses and their anchors, the
-	// open-syllabification choice, and the pairing map. The page reads and
-	// writes `doc.<field>` and never touches storage again.
+	let { data }: { data: { opened: OpenedLibrary | null } } = $props();
+
+	// N.67 steps 0 and 1, the socket and the vault. The per-song state, all
+	// seven pieces of it, lives on this object and no longer on this component:
+	// the poem, the metadata and its provenance tags, the glosses and their
+	// anchors, the open-syllabification choice, and the pairing map. The page
+	// reads and writes `doc.<field>` and never touches storage again.
 	//
-	// LOADED BEFORE IT EXISTS, WHICH IS THE WHOLE POINT. `readLegacySync`
-	// reads the six keys, and the document is constructed FROM that result, so
-	// there is no interval in which an unrestored default could be saved over
-	// real work. That is why `pairingsRestored` and its apology are gone
-	// rather than moved. Synchronous construction is safe here because
-	// `+page.ts` sets `ssr = false`: this component never renders on a server,
-	// so there is no hydration pass to disagree with.
-	const library = new Library(createLegacyDriver());
-	const doc = SongDocument.fromLoaded(library, readLegacySync(LEGACY_SONG_ID));
+	// LOADED BEFORE IT EXISTS, WHICH IS THE WHOLE POINT. `+page.ts`'s load
+	// function opened the vault, ran the migration, and read the record before
+	// this component existed, and the document is constructed FROM that result.
+	// There is no interval in which an unrestored default could be saved over
+	// real work, which is why `pairingsRestored` and its apology are gone
+	// rather than moved.
+	//
+	// The `?? ` fallback covers the prerender pass only, where there is no
+	// browser to read: it produces an empty in-memory song that is replaced the
+	// moment a real load lands.
+	// Read ONCE, on purpose, and said so with `untrack`: the document owns the
+	// song for the life of this component, and rebuilding it when `data`
+	// changed identity would throw away the singer's unsaved edits. Song
+	// switching is `close()` then `open()`, at step 4, not a prop change.
+	const opened = untrack(() => data.opened);
+	const library = opened?.library ?? new Library(createMemoryDriver());
+	const doc = SongDocument.fromLoaded(
+		library,
+		opened?.loaded ?? { record: emptySongRecord(LEGACY_SONG_ID, new Date().toISOString()) },
+	);
 	// Pipeline state
 	let lines = $state<LineData[]>([]);
 	let transcribeError = $state('');
@@ -643,6 +660,46 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleInput(text: string) {
 		doc.inputText = text;
 	}
+
+	/* ── N.67 step 2: the source survives ──────────────────────────── */
+
+	// The stored score, handed to the uploader so it can re-ingest it once at
+	// boot. Read from the load result, not from the document: the document
+	// carries the score's provenance, never its bytes.
+	const restoreSource = opened?.source
+		? { fileName: opened.source.fileName, bytes: opened.source.bytes }
+		: null;
+
+	/**
+	 * Keep the singer's own file, byte for byte.
+	 *
+	 * Two hashes, doing two different jobs (design §2.3, §2.4): `contentHash`
+	 * names these exact bytes and can never go stale, and `fingerprint` answers
+	 * "have I met this music before" for the recognition prompt step 4 builds.
+	 * Neither is identity; the song id is.
+	 */
+	async function attachUploadedSource(ingested: IngestedScore, file: File): Promise<void> {
+		const bytes = await file.arrayBuffer();
+		// THE HASHES ARE BEST EFFORT; THE BYTES ARE NOT. `crypto.subtle` is
+		// absent outside a secure context, and losing it must cost recognition
+		// (a step 4 convenience) and never the singer's file. An empty hash is
+		// honestly empty and recomputable at any time from the stored bytes.
+		let contentHash = '';
+		let fingerprint = '';
+		try {
+			[contentHash, fingerprint] = await Promise.all([
+				hashBytes(bytes),
+				fingerprintVocalLine(ingested.result.score.vocalLine),
+			]);
+		} catch (err) {
+			console.error('[Ilya] score kept, but it could not be hashed:', err);
+		}
+		const importedAt = new Date().toISOString();
+		doc.attachSource(
+			{ songId: doc.id, fileName: ingested.fileName, bytes, byteLength: bytes.byteLength, contentHash, importedAt },
+			{ fileName: ingested.fileName, byteLength: bytes.byteLength, importedAt, contentHash, fingerprint },
+		);
+	}
 	function handleLanguageChange(lang: Language) {
 		const doSwap = () => {
 			language = lang;
@@ -849,6 +906,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	onMount(() => {
+		// N.67 step 1. The first reading of `navigator.storage.estimate()` this
+		// project has ever taken: it had never been called anywhere in the tree
+		// before this step. Logged rather than drawn, because the storage COPY
+		// is step 6's work and inventing a surface for it now would be building
+		// ahead of the design. Matches the house console style at
+		// `handleWordClick`.
+		if (opened) {
+			console.log('[Ilya] storage', {
+				driver: opened.driverKind,
+				songId: opened.songId,
+				migration: opened.migration.kind,
+				usage: opened.storage.usage !== undefined ? formatBytes(opened.storage.usage) : 'not reported',
+				quota: opened.storage.quota !== undefined ? formatBytes(opened.storage.quota) : 'not reported',
+				persisted: opened.storage.persisted,
+				vaultError: opened.vaultError,
+			});
+		}
 		// Restore persisted state.
 		//
 		// N.67 step 0: the six per-song keys are NOT read here any more. The
@@ -1038,7 +1112,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     is fixed (Dann's ruling, 2026-07-15; Kimi Q1 and Q2). -->
 					<ScoreUploader
 						{language}
-						oningested={(ingested) => {
+						restore={restoreSource}
+						oningested={(ingested, file, origin) => {
+							// N.67 step 2. The singer's own bytes go down with the song,
+							// in one transaction, so a reload brings the score back. Only
+							// a real upload writes: a restore's bytes came from the vault.
+							if (origin === 'upload') void attachUploadedSource(ingested, file);
 							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
 							// as paginated notation in the Fit main pane.
 							ingestedScore = ingested;
@@ -1105,6 +1184,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						</p>
 					{:else if doc.loadFailure}
 						<p class="shane-storage-notice">{t('storage.loadFailed', language)}</p>
+					{/if}
+					{#if doc.remoteChange}
+						<!-- N.67 step 1, socket §4.1. Last-write-wins WITH the notice.
+						     A clean tab reloads silently and never reaches here; this
+						     is only the tab that had unsaved work, and its work is
+						     kept. Placed beside the storage notice because that is
+						     where storage speaks today. -->
+						<p class="shane-storage-notice">{t('storage.otherTab', language)}</p>
 					{/if}
 					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
 					     twinned in POSITION as well as in style (Dann's walk ruling,

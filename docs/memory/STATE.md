@@ -4,37 +4,41 @@
 Again at E.52, 2026-08-16.** Updated at the close of every session. This is the
 only file that changes often, and it is the handover.
 
-Repository: branch `Shane`, HEAD **`4568e01`** as of the close of E.53, tree
-clean at that moment. **Ask Dann for the state in one line. You do not run git.**
+Repository: branch `Shane`, HEAD **`b73f674`** plus E.54's uncommitted work at
+the moment this was written. **Ask Dann for the state in one line. You do not
+run git.**
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
 ```
 
-**E.53 shipped step 0 of N.67**, `4568e01`, in Claude Code, gates run for real
-on Dann's own machine for the first time.
+**E.54 shipped steps 1 and 2 of N.67**: the vault and the source. Ilya now
+keeps the singer's songs, and their score files, in IndexedDB.
 
 ---
 
 ## THE ONE THING
 
-> **N.67 step 1, the vault.** IndexedDB driver, the §3 migration, `persist()`,
-> `estimate()`, and the `BroadcastChannel` layer. Design
-> `docs/sessions/e52-fable-save-design_r1_2026-08-16.md` §7 step 1, socket
-> addendum §4.1.
+> **N.67 step 3, the merge rule. THIS IS WHERE N.68 CLOSES.** Design
+> `docs/sessions/e52-fable-save-design_r1_2026-08-16.md` §2.6 and §7 step 3.
 >
-> **Step 0 is DONE and observed** (`4568e01`). The socket is load-bearing: the
-> page owns no per-song storage, and `lib/library/` owns all of it behind
-> `StorageDriver`. Step 1 swaps the driver underneath and changes nothing
-> above it, which was the whole reason for cutting the seam first.
+> Replace the unconditional replacement in `+page.svelte`'s `oningested` branch
+> (`doc.pairings = noLyrics ? firstPass(...) : {}`) with: **keep by key, report
+> the remainder, `firstPass` only into an empty map**, and add *Start placement
+> over* as the singer's own explicit rebuild. The keys are positional event
+> ids, so unchanged positions carry their pairings across by construction.
+>
+> **The observation is STATE.md's own four-step fixture walk**, with the
+> expectation stated before the walk: re-uploading `no-lyrics-control.musicxml`
+> over placed syllables no longer erases them.
+>
+> **Steps 0, 1, and 2 are DONE and observed in a real browser.** The page owns
+> no per-song storage; `lib/library/` owns all of it behind `StorageDriver`;
+> songs and score bytes live in `ilya-library`; a reload brings the score back
+> with no re-upload.
 >
 > **Dann ruled on 2026-08-16 that N.67 goes first and displaces both beta
 > blockers.** That ruling is made. Do not re-open it.
->
-> **N.68 is absorbed.** It is not patched; it closes at step 3 by architecture.
->
-> **Ask before starting: `fake-indexeddb` or the Playwright lane.** It is a
-> lockfile operation and therefore Dann's, and step 1 is where it lands.
 
 ---
 
@@ -48,7 +52,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Step 0 CLOSED `4568e01`, E.53**, observed in a browser. Six steps left, step 1 next. Absorbs N.68. See the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, and 2 CLOSED**, all observed in a real browser. **Four left; step 3 next, and N.68 closes there.** See the four documents below |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
@@ -110,15 +114,27 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
   suite. See `ENVIRONMENT.md`, "Runes under vitest." All logic therefore lives in
   the plain-TS facade, and `document.svelte.ts` holds only fields, the factory,
   and the teardown.
-- **§4.4's `{#if doc}` is not needed.** `+page.ts` sets `ssr = false`, so there is
-  no hydration pass, and the document is built synchronously at component init
-  with its data already in it. The page never holds a `null` document.
+- **§4.4's `{#if doc}` is not needed.** `+layout.ts` sets `ssr = false`, so there
+  is no hydration pass. Step 0 built the document synchronously at component
+  init; step 1 moved the read into `+page.ts`'s load function, which runs before
+  the component exists. Either way the page never holds a `null` document.
 - **§3's blast-radius numbers were `grep -c`, which counts LINES, not
   occurrences.** The real figure was 44 compiler-named references, 8 shorthand
   props, and 7 deletions, and it omitted `openSyllabification`, which its own §1
   lists as a document field.
 
 ---
+
+## RULED IN E.54, 2026-08-16
+
+- **`fake-indexeddb` is IN**, on Dann's condition that its registry facts be
+  checked first: **6.2.5, Apache-2.0, zero runtime dependencies, 4.63 million
+  weekly downloads, last published 2025-11-07.** Dev-only, zero shipped bytes.
+  **His reason, which is the durable part: the five gates are what protect a
+  ship, and a Playwright lane outside them protects nothing automatically.**
+  Confirmed against `ilya-ship.sh:76-80`, where `test:e2e` is indeed not a gate.
+- **The `storage.otherTab` French was shown to Dann before it shipped.**
+  `'onglet'` and `'chant'` are adopted, ordinary words. Nothing coined.
 
 ## RULED THIS SESSION, 2026-08-16
 
@@ -146,11 +162,6 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 ---
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
-
-- **`fake-indexeddb` or the Playwright lane, for step 1's driver.** Fable
-  recommends the first (dev-only, zero shipped bytes, and a driver bug is a
-  data-loss bug); it is a lockfile operation and therefore Dann's. **Due at the
-  start of step 1, not before.**
 
 - **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
   (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
@@ -203,6 +214,14 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 
 ## STILL UNSETTLED. Not yours to settle alone
 
+- **Where the storage notices belong.** They render in the FIT drawer only, so a
+  singer working in Transcription never sees a save failure or the two-tab
+  notice. Inherited from when they were pairing notices; not moved in E.54
+  because moving them is a placement decision, not a build step.
+- **The three storage strings still say "syllable placements"** and the save is
+  now the whole song. Design §7 puts that copy in step 6, with the French shown
+  to Dann first, so it was left alone rather than rewritten twice.
+
 - "The page carries no chrome." · "Do not introduce a slider."
 - **N.51:** whether per-tab colour may propagate past the tab bar.
 - Whether `claude/shane-project-map_2026-07-25.md` is stale. **Unopened for
@@ -238,6 +257,8 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.54: N.67 steps 1 and 2. The vault and the source.** `ilya-library` v1 with `songs` / `sources` / `meta`; the §3 migration, write-verify-then-remove; `persist()` and `estimate()` called for the first time in this project's life (Dann's Mac reports a **1.9 GB** quota against 3.4 KB used); `BroadcastChannel` for two tabs; the score kept byte for byte and re-ingested at boot. **34 new tests, gates 470 to 504.** |
+| 2026-08-16 | **TWO BUGS THAT ALL FIVE GATES PASSED, both found only in a real browser.** (1) `$state` proxies cannot be structured-cloned, so **every IndexedDB write failed** until `$state.snapshot()` was applied; localStorage never showed it because `JSON.stringify` reads a proxy happily. (2) The effect's guards were in the wrong order, so **the singer's first edit was swallowed** as though it were the load echo. Both are in `ENVIRONMENT.md`. **The lesson is the instrument: drive Playwright yourself, it is installed and it takes thirty seconds.** |
 | 2026-08-16 | **E.53: `4568e01`, N.67 step 0 shipped and observed.** The song document, the facade, the legacy driver, 32 new tests. `+page.svelte` 2,095 to 2,009 lines, its per-song localStorage sites to **zero**, 1,324 lines added under `lib/library/`. **Observed in a browser on Dann's Mac, not merely written:** a seeded pairing map survived an idle reload byte for byte, which is the race the deleted guard flag existed to prevent. **web-test baseline moved 438 to 470 with Dann's permission** (`ilya-ship.sh:79`). |
 | 2026-08-16 | **The rename method worth reusing.** Delete the declarations FIRST, let `svelte-check` name every surviving reference, then insert at exactly the reported `line:col` after asserting the identifier is there. The compiler cannot report a comment, a string, or an import path, so nothing else can be hit, and 0 errors at the end is the proof. 44 of 44 applied, zero mismatches. |
 | 2026-08-16 | **E.52 closed. No code shipped.** N.67 ruled first, displacing both blockers. Fable commissioned three times and returned the design, the socket, and the retention policy, all in `docs/sessions/`. The retention rule ratified. **The build moves to Claude Code in the desktop app's Code tab**, folder associated; see `ENVIRONMENT.md`. |
@@ -259,8 +280,8 @@ canon still living in project knowledge.
 | 2026-08-13 | **This folder created.** |
 
 ---
-*E.53. Facts above were read in the working tree or measured on Dann's machine
-this session at HEAD `4568e01`, or are transcriptions of Dann's own rulings made
+*E.54. Facts above were read in the working tree or measured on Dann's machine
+this session, or are transcriptions of Dann's own rulings made
 in conversation. The four N.67 documents are summarised here and the design and
 the socket addendum were read in full this session; **read the design itself
 before building from this summary**, and read the three corrections above with

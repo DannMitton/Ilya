@@ -21,7 +21,8 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
-import type { StorageDriver } from './driver';
+import type { SourceBytes, StorageDriver } from './driver';
+import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
 	emptyMetadata,
 	emptySongRecord,
@@ -159,10 +160,18 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 export class Library {
 	readonly #driver: StorageDriver;
 	readonly #now: () => string;
+	readonly #requestPersistence: () => Promise<unknown>;
+	#persistenceAsked = false;
+	#lastSavedAt: string | null = null;
 
-	constructor(driver: StorageDriver, now: () => string = () => new Date().toISOString()) {
+	constructor(
+		driver: StorageDriver,
+		now: () => string = () => new Date().toISOString(),
+		requestPersistence: () => Promise<unknown> = defaultRequestPersistence,
+	) {
 		this.#driver = driver;
 		this.#now = now;
+		this.#requestPersistence = requestPersistence;
 	}
 
 	get driverKind(): string {
@@ -183,13 +192,45 @@ export class Library {
 		return { record: validated.record, reason: raw.reason ?? validated.reason };
 	}
 
-	/** Never throws. `updatedAt` is stamped here, the one place that saves. */
-	async save(record: SongRecord): Promise<Outcome> {
+	/**
+	 * Never throws. `updatedAt` is stamped here, the one place that saves.
+	 *
+	 * `source` undefined leaves the stored bytes alone, which is every autosave;
+	 * a value replaces them and `null` deletes them, in the same transaction as
+	 * the record.
+	 */
+	async save(record: SongRecord, source?: SourceBytes | null): Promise<Outcome> {
+		const stamped = { ...record, updatedAt: this.#now() };
+		let outcome: Outcome;
 		try {
-			return await this.#driver.save({ ...record, updatedAt: this.#now() });
+			outcome = await this.#driver.save(stamped, source);
 		} catch {
 			return { ok: false, reason: 'write-failed' };
 		}
+		// Design §4: ask to be kept at the FIRST REAL SAVE, not at boot, so the
+		// request is attached to the singer having actually made something. Never
+		// awaited into the save path: a slow or refused request must not delay
+		// or fail a write that already succeeded.
+		if (outcome.ok && !this.#persistenceAsked) {
+			this.#persistenceAsked = true;
+			void this.#requestPersistence();
+		}
+		if (outcome.ok) this.#lastSavedAt = stamped.updatedAt;
+		return outcome;
+	}
+
+	/** The bytes of the song's score file, or null where there are none. */
+	async loadSource(songId: string): Promise<SourceBytes | null> {
+		try {
+			return await this.#driver.loadSource(songId);
+		} catch {
+			return null;
+		}
+	}
+
+	/** The `updatedAt` of the last write this tab made. For the two-tab notice. */
+	get lastSavedAt(): string | null {
+		return this.#lastSavedAt;
 	}
 }
 
@@ -211,6 +252,8 @@ export interface SaveScheduler {
 	schedule(): void;
 	/** Write now if anything is pending, and wait for it. */
 	flush(): Promise<void>;
+	/** Is there unwritten work? The two-tab rule turns on this answer. */
+	isPending(): boolean;
 	/** Drop pending timers without writing. */
 	dispose(): void;
 }
@@ -270,6 +313,9 @@ export function createSaveScheduler(
 		},
 		async flush(): Promise<void> {
 			await fire();
+		},
+		isPending(): boolean {
+			return dirty || running !== null;
 		},
 		dispose(): void {
 			clearTimers();
