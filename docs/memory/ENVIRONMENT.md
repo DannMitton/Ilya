@@ -12,14 +12,17 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **438** |
+| web-test | **470** |
 | score-parser | 442 passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 
 **A BRIEF THAT ASKS A FARMED-OUT AGENT TO RUN A GATE IS A BROKEN BRIEF.** No
-gate runs anywhere but Dann's own Terminal, for the reason two sections down:
-`node_modules` is macOS and every VM in reach is Linux arm64. Tell the agent
+gate runs anywhere but Dann's own machine, for the reason two sections down:
+`node_modules` is macOS and every VM in reach is Linux arm64. **Corrected
+2026-08-16: a Claude Code session pointed at the folder IS Dann's own machine
+and runs all five for real** (E.53 did). What stays impossible is a cloud or
+bridge VM. Tell the agent
 that in the brief, and make its definition of done "the tests are written and
 hand-traced," with the gate run listed under what Dann must do. **Running the
 task on Dann's computer instead of in the cloud does NOT fix this**: that mode
@@ -27,7 +30,12 @@ is a Linux VM too.
 
 **The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
 Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
-then 416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`.
+416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`, and **438 to 470 on
+2026-08-16** for N.67 step 0's `library.test.ts` and `driver.test.ts`.
+
+**In Claude Code the five gates run in about a minute, all five, in one command.**
+That is the whole reason the build moved off the bridge. Run them yourself and
+tell Dann the numbers; do not make him paste output back.
 
 **`mscz-converter.test.ts` prints to stderr on three tests by design.** They
 exercise failure paths. The ship script echoes those lines when a gate
@@ -35,6 +43,49 @@ deviates, and they are not failures. **Read the count, not the verdict.**
 
 `vitest` never compiles a `.svelte` file. If logic needs testing it does not belong
 in a `.svelte` file. `svelte-check` is what looks at components.
+
+### RUNES ARE INERT UNDER VITEST. Measured 2026-08-16
+
+**A `.svelte.ts` rune module compiles, type-checks, and builds with no
+configuration work at all.** `svelte@^5.50.1`, the SvelteKit plugin, gates at
+baseline, `pnpm build` clean. That half is settled.
+
+**But its runes do nothing in a test.** `vite.config.ts` sets no `environment`,
+so vitest runs in **node**, and vitest picks its transform pipeline from the
+environment: node means the module is compiled in **server mode**, where
+`$state` is a plain assignment, `$derived` computes once, and `$effect` compiles
+to nothing. The signature is a test that passes while proving nothing: no error,
+no reactivity, `$derived` stale at its initial value.
+
+- **The failure is silent and looks like a pass.** A rune test must assert
+  reactivity (mutate, then read a `$derived`), never just construction.
+- `resolve.conditions: ['browser']` **does not fix it**, and the client build is
+  already what resolves (`mount`, `hydrate`, and `flushSync` are all present).
+  The transform, not the runtime, is what is wrong.
+- **Vitest 4 has no config switch.** `viteEnvironment: 'client'` exists only on a
+  custom `Environment` object. The ordinary route is a DOM environment, and
+  neither `jsdom` nor `happy-dom` is installed, so it is a lockfile operation and
+  therefore Dann's.
+- **So: put nothing testable in a `.svelte.ts`.** N.67 step 0 is built this way
+  on purpose. `library.ts` and `driver.ts` are plain TypeScript and carry every
+  decision; `document.svelte.ts` holds fields, the factory, and the teardown, and
+  nothing else.
+- **The socket addendum's §5 says `flushSync` forces effects in a test. It does
+  not, here.**
+
+### `ssr = false`, and what it buys
+
+`src/routes/+page.ts` sets `ssr = false` and `prerender = true`. **The page never
+renders on a server**, so there is no hydration pass to disagree with, and state
+may be read out of `localStorage` at component INIT rather than in `onMount`.
+That is how N.67 step 0's document is loaded before it exists, with no `null`
+window and no `{#if doc}` around the template.
+
+`+page.svelte`'s `<html lang>` effect carries a comment saying "the served
+document is lang=en until hydration" (the effect setting
+`document.documentElement.lang`). **That is about the served shell, not about
+this component's own render**, and it is not a reason to defer a read to
+`onMount`.
 
 **A CSS-only change moves no gate.** Confirmed twice in E.51 across five
 component style blocks. If you predict a gate will not move, say so before the
@@ -125,7 +176,7 @@ five build passes. The paper is ALWAYS letter geometry, 816 × 1056 from
 **So: a JS-computed inline style cannot be media-query-scoped.** Screen and print
 cannot carry different values for the same measured number. Below the breakpoint,
 use `HEADER_HEIGHTS_AT_LETTER` (`page-config.ts`) instead of the live
-measurement. The `isMobile` prop is already threaded `+page.svelte:985` →
+measurement. The `isMobile` prop is already threaded from `+page.svelte` →
 `Paper` → both page components.
 
 **The geometry, so nobody re-derives it.** `HEADER_GAP = 16`, one constant, both
@@ -149,7 +200,7 @@ produces. It has no positive control.
 
 ### The two Print buttons
 
-Both call the same bare `window.print()` (`+page.svelte:457-459`), so **neither
+Both call the same bare `window.print()` (`+page.svelte`, `handlePrint`), so **neither
 does anything Safari's Share → Print does not.** What they add is a gate:
 
 - **Transcribe's**, `RootPanel.svelte:195-201` (the file is in
@@ -157,7 +208,7 @@ does anything Safari's Share → Print does not.** What they add is a gate:
   prerequisite. **It is the better print test**, because the button lives inside
   the drawer and on a phone the drawer is the whole screen, so pressing it
   guarantees `app.css:201`'s `.drawer { display: none }` is exercised.
-- **Fit's**, `+page.svelte:1227-1233`,
+- **Fit's**, in `+page.svelte`, the button whose guard reads
   `disabled={!ingestedScore && Object.keys(shaneFormants).length === 0}`.
 
 **A desktop cannot falsify a mobile print bug.** The width query never matches on
@@ -270,7 +321,8 @@ phone, is the way.
 - **A reload does not restore the ingested score.** Only `ilya:pairings` and the
   Transcription textarea's own text survive.
 - **A no-lyrics score upload always overwrites `pairings`**
-  (`+page.svelte:1147-1152`). To see a restored value you must reload WITHOUT
+  (`+page.svelte`, the `oningested` branch assigning `doc.pairings = noLyrics ?
+  firstPass(...) : {}`). To see a restored value you must reload WITHOUT
   re-uploading.
 
 ---
@@ -366,6 +418,45 @@ step. For a six-step build that is untenable.
 - **What stays in a Cowork session:** rulings, design, Fable, anything needing
   taste. **What moves:** the building.
 
+### Observing your own work in Claude Code, learned E.53
+
+**You can watch the app yourself. Do not use Dann as the renderer here either.**
+Start the dev server from `apps/web` on a spare port, then open the Browser pane
+at that URL. A full save-and-reload observation takes about two minutes.
+
+- **`.claude/` is NOT in `.gitignore`.** Creating `.claude/launch.json` for
+  `preview_start` leaves an untracked file, and **the ship script refuses on
+  untracked files**, so it will block the ship. Start the server another way, or
+  delete the file before shipping.
+- **The Browser pane can report a 0x0 viewport**, which makes `window.innerWidth`
+  0, which trips Ilya's own mobile gate ("Continue anyway"). The DOM is still
+  live and scriptable when this happens.
+- **To drive a Svelte-bound input from `javascript_tool`**, use the native
+  setter and dispatch the event: `Object.getOwnPropertyDescriptor(
+  window.HTMLInputElement.prototype, 'value').set.call(el, v)` then
+  `el.dispatchEvent(new Event('input', { bubbles: true }))`. `form_input` works
+  too where the element has a ref.
+- **A localhost port is its own origin**, so its `localStorage` is a clean room
+  and clearing it costs Dann nothing. Clear it when you are done.
+
+### RENAMING INSIDE A LARGE COMPONENT. The method, E.53
+
+**Delete the declarations FIRST.** Then every surviving reference is a
+`svelte-check` error, and the compiler enumerates them for you. Insert at exactly
+the reported `line:col`, after asserting the identifier really is at that
+position. **The compiler cannot report a comment, a string literal, or an import
+path, so nothing else can be hit**, and 0 errors at the end is the proof rather
+than a promise. 44 of 44 applied with zero mismatches on `+page.svelte`.
+
+Two traps it does not cover, both of which surface as a DIFFERENT error and must
+be fixed by hand: **`{shorthand}` props** (`{metadata}` must become
+`metadata={doc.metadata}`; `{doc.metadata}` is not valid shorthand) and
+**object-literal shorthand** (`{ metadata, fromScore }`).
+
+**`grep -c` counts matching LINES, not occurrences.** Fable's blast-radius
+numbers were built on it and ran two low. Use `grep -oE ... | wc -l`, and then
+read the lines anyway.
+
 ---
 
 ## Storage, as it actually is. Measured E.52
@@ -386,13 +477,25 @@ step. For a six-step build that is untenable.
   `ScoreUploader.svelte:48` accepts them; `:184-187` classifies each as a "coming
   soon" note, copy at `i18n.ts:273-275`. **No heavy format is ingested today**, so
   nothing is yet built on the wrong storage assumption.
-- **Thirteen live storage keys**: eleven `ilya:*` (ten written inline in
-  `+page.svelte`, `ilya:pairings` in `pairings.ts:62`), plus `shane.profiles.v2`
-  with a v1 migration at `profileStore.ts:173-205`, plus a sessionStorage
-  `ilya-ios-hint-shown` at `InstallPrompt.svelte:52`.
+- **Thirteen live storage keys.** **Changed at `4568e01`, N.67 step 0:** the six
+  per-song keys (`ilya:inputText`, `ilya:metadata`, `ilya:metadataFromScore`,
+  `ilya:glossOverrides`, `ilya:openSyllabification`, `ilya:pairings`) are now
+  written ONLY by `lib/library/driver.ts`, byte-compatibly, as one whole-record
+  write. **`+page.svelte` no longer touches them at all**, and `savePairings` /
+  `loadPairings` are no longer called from it. The other seven are unchanged and
+  stay device preferences: `ilya:language`, `ilya:notationPrefs`,
+  `ilya:showStressDiacritics`, `ilya:activeTab`, `ilya:drawerCollapsed`,
+  `shane.profiles.v2` (v1 migration at `profileStore.ts:173-205`), and the
+  sessionStorage `ilya-ios-hint-shown` at `InstallPrompt.svelte:52`.
+- **The five formerly silent write sites now report.** The poem, the metadata,
+  its tags, the glosses, and the syllabification choice used to `catch {}` and
+  say nothing; they ride the song save's outcome now and surface through
+  `doc.saveFailure` at the drawer notice. N.27's own site
+  (`profileStore.ts:216-224`) is still silent and still open.
 - **`profileStore.ts:216-224` swallows its quota failure silently.** That is N.27.
   `pairings.ts:390-422` is the model to copy instead: an outcome with a reason,
-  surfaced at `+page.svelte:1186-1194`.
+  surfaced at `+page.svelte`'s drawer storage notice, now keyed on
+  `doc.saveFailure` / `doc.loadFailure`.
 
 ---
 

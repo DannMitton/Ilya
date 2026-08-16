@@ -4,35 +4,37 @@
 Again at E.52, 2026-08-16.** Updated at the close of every session. This is the
 only file that changes often, and it is the handover.
 
-Repository: branch `Shane`, HEAD **`fd1f628`** as of the close of E.52, tree
-clean at that moment. **E.52 then added five new untracked files. Ask Dann for
-the state in one line. You do not run git.**
+Repository: branch `Shane`, HEAD **`4568e01`** as of the close of E.53, tree
+clean at that moment. **Ask Dann for the state in one line. You do not run git.**
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
 ```
 
-**E.52 shipped no code.** It produced four documents, ratified one rule, and
-moved the build off the Cowork bridge into Claude Code.
+**E.53 shipped step 0 of N.67**, `4568e01`, in Claude Code, gates run for real
+on Dann's own machine for the first time.
 
 ---
 
 ## THE ONE THING
 
-> **N.67, the save function. Step 0 of Fable's build order:
-> `docs/sessions/e52-fable-save-socket_r1_2026-08-16.md` §"the socket".**
+> **N.67 step 1, the vault.** IndexedDB driver, the §3 migration, `persist()`,
+> `estimate()`, and the `BroadcastChannel` layer. Design
+> `docs/sessions/e52-fable-save-design_r1_2026-08-16.md` §7 step 1, socket
+> addendum §4.1.
+>
+> **Step 0 is DONE and observed** (`4568e01`). The socket is load-bearing: the
+> page owns no per-song storage, and `lib/library/` owns all of it behind
+> `StorageDriver`. Step 1 swaps the driver underneath and changes nothing
+> above it, which was the whole reason for cutting the seam first.
 >
 > **Dann ruled on 2026-08-16 that N.67 goes first and displaces both beta
-> blockers.** He was asked whether it displaced the beta or waited behind it and
-> he said build it now. That ruling is made. Do not re-open it.
->
-> **Step 0 changes nothing a singer could see.** It pulls the scattered
-> persistence out of `+page.svelte` into `lib/library/` behind one seam, still
-> writing to today's localStorage keys, byte-compatible, same fixture walk. The
-> IndexedDB driver swaps in underneath at step 1. **The risky part and the
-> invisible part never ship on the same day, which is the point.**
+> blockers.** That ruling is made. Do not re-open it.
 >
 > **N.68 is absorbed.** It is not patched; it closes at step 3 by architecture.
+>
+> **Ask before starting: `fake-indexeddb` or the Playwright lane.** It is a
+> lockfile operation and therefore Dann's, and step 1 is where it lands.
 
 ---
 
@@ -46,7 +48,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6, each shippable and observable alone. Absorbs N.68. See the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Step 0 CLOSED `4568e01`, E.53**, observed in a browser. Six steps left, step 1 next. Absorbs N.68. See the four documents below |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
@@ -54,7 +56,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
-| `[x]` | **N.68** the upload that erases placements | **ABSORBED into N.67, 2026-08-16.** Not patched. `+page.svelte:1147-1152` replaces the map unconditionally on every upload, and the `: {}` branch means a score WITH lyrics erases it too, which the old entry did not say. Closes at N.67 step 3 |
+| `[x]` | **N.68** the upload that erases placements | **ABSORBED into N.67, 2026-08-16.** Not patched. `+page.svelte`'s `oningested` branch (`doc.pairings = noLyrics ? firstPass(...) : {}`) replaces the map unconditionally on every upload, and the `: {}` branch means a score WITH lyrics erases it too, which the old entry did not say. Closes at N.67 step 3 |
 | `[x]` | **N.55b** Click Assignment | DONE for its named active scope. Rotate syllables PARKED 2026-08-14 |
 | `[~]` | **N.56** draw the withheld page badly | PARKED 2026-08-14, Dann's ruling |
 | `[x]` | **N.32** the Guide's false claims | DONE, shipped and observed 2026-08-14 |
@@ -93,15 +95,28 @@ builder, so **zero new dependencies and about 8 KB of bundle.** Uploads merge by
 the positional event ids; only an explicit *Start placement over* rebuilds.
 
 **Fable's recommended socket:** a rune-bearing `SongDocument` class in
-`lib/library/document.svelte.ts`. It is the one option where the restore race
-documented at `+page.svelte:94-99` is impossible by construction, because no
-document instance exists before its data is loaded. **NOT ESTABLISHED and settled
-in step 0's first hour: whether the toolchain accepts runes in a `.svelte.ts`
-module. There is no precedent file in the tree.** If it refuses, the fallback is
-a plain imperative facade.
+`lib/library/document.svelte.ts`. **Built, E.53.** The restore race documented
+at the old `+page.svelte:94-99` is impossible by construction and its guard flag
+is deleted, not moved.
 
 **Multi-tab:** `BroadcastChannel('ilya-library')` after each committed write. A
 clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
+
+### Three corrections to the addendum, measured E.53
+
+- **§7.1 is settled, and it split in two.** A `.svelte.ts` rune module compiles,
+  type-checks, and builds with **no configuration work**. But **§5 is wrong that
+  `flushSync` drives its effects in a test**: runes are INERT under this vitest
+  suite. See `ENVIRONMENT.md`, "Runes under vitest." All logic therefore lives in
+  the plain-TS facade, and `document.svelte.ts` holds only fields, the factory,
+  and the teardown.
+- **§4.4's `{#if doc}` is not needed.** `+page.ts` sets `ssr = false`, so there is
+  no hydration pass, and the document is built synchronously at component init
+  with its data already in it. The page never holds a `null` document.
+- **§3's blast-radius numbers were `grep -c`, which counts LINES, not
+  occurrences.** The real figure was 44 compiler-named references, 8 shorthand
+  props, and 7 deletions, and it omitted `openSyllabification`, which its own §1
+  lists as a document field.
 
 ---
 
@@ -131,6 +146,11 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 ---
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
+
+- **`fake-indexeddb` or the Playwright lane, for step 1's driver.** Fable
+  recommends the first (dev-only, zero shipped bytes, and a driver bug is a
+  data-loss bug); it is a lockfile operation and therefore Dann's. **Due at the
+  start of step 1, not before.**
 
 - **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
   (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
@@ -218,6 +238,8 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.53: `4568e01`, N.67 step 0 shipped and observed.** The song document, the facade, the legacy driver, 32 new tests. `+page.svelte` 2,095 to 2,009 lines, its per-song localStorage sites to **zero**, 1,324 lines added under `lib/library/`. **Observed in a browser on Dann's Mac, not merely written:** a seeded pairing map survived an idle reload byte for byte, which is the race the deleted guard flag existed to prevent. **web-test baseline moved 438 to 470 with Dann's permission** (`ilya-ship.sh:79`). |
+| 2026-08-16 | **The rename method worth reusing.** Delete the declarations FIRST, let `svelte-check` name every surviving reference, then insert at exactly the reported `line:col` after asserting the identifier is there. The compiler cannot report a comment, a string, or an import path, so nothing else can be hit, and 0 errors at the end is the proof. 44 of 44 applied, zero mismatches. |
 | 2026-08-16 | **E.52 closed. No code shipped.** N.67 ruled first, displacing both blockers. Fable commissioned three times and returned the design, the socket, and the retention policy, all in `docs/sessions/`. The retention rule ratified. **The build moves to Claude Code in the desktop app's Code tab**, folder associated; see `ENVIRONMENT.md`. |
 | 2026-08-16 | **Corrections to `claude/e45-n67-storage-architecture_2026-08-13.md`, measured:** Ilya already uses IndexedDB (`loader.ts:103-115`, `ilya-data` v1, store `cache`); `.musx` does not compress, so sources are 64 to 146 KB and stay there, not 15 to 25 KB. `navigator.storage.persist()` has never been called. |
 | 2026-08-16 | **A process failure worth keeping.** Half an hour was spent measuring that no gate runs on the device VM. `ENVIRONMENT.md` already said so. Its read rule is "before you touch a tool, a path, or a gate," and it was not followed. |
@@ -237,7 +259,9 @@ canon still living in project knowledge.
 | 2026-08-13 | **This folder created.** |
 
 ---
-*E.52. Facts above were read in the working tree or measured on Dann's machine
-this session at HEAD `fd1f628`, or are transcriptions of Dann's own rulings made
-in conversation. The four N.67 documents are summarised here and were read in
-full when written; **read the design itself before building from this summary.***
+*E.53. Facts above were read in the working tree or measured on Dann's machine
+this session at HEAD `4568e01`, or are transcriptions of Dann's own rulings made
+in conversation. The four N.67 documents are summarised here and the design and
+the socket addendum were read in full this session; **read the design itself
+before building from this summary**, and read the three corrections above with
+it.*
