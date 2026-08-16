@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **504** |
+| web-test | **511** |
 | score-parser | 442 passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -31,8 +31,9 @@ is a Linux VM too.
 **The baseline lives in `~/Downloads/ilya-ship.sh:79` and only moves with
 Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
 416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`, **438 to 470 on
-2026-08-16** for N.67 step 0, and **470 to 504 on 2026-08-16** for steps 1 and
-2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`).
+2026-08-16** for N.67 step 0, **470 to 504 on 2026-08-16** for steps 1 and
+2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`), and **504
+to 511 on 2026-08-16** for step 3's merge rule.
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -448,6 +449,24 @@ step. For a six-step build that is untenable.
 - **What stays in a Cowork session:** rulings, design, Fable, anything needing
   taste. **What moves:** the building.
 
+### THE FILE PICKER ON iOS. Learned E.55, the hard way, at 3 a.m.
+
+**iOS matches a file input's `accept` list by REGISTERED TYPE, not by string.**
+It has no registration for `.musicxml`, so the picker greys the file out and a
+singer on an iPhone cannot choose it at all. Ilya's ACCEPT
+(`ScoreUploader.svelte`) lists `.musicxml` and `.mnx` and `.musx` and `.mscz`,
+none of which iOS knows. `.xml`, `.pdf`, and `image/*` it does know.
+
+- **Diagnose it from the picker itself**: the greyed rows are the ones outside
+  the accept list. In Dann's screenshot the PDFs and screenshots were black and
+  every MusicXML and DOCX was grey.
+- **The same bytes under a `.xml` name ingest perfectly** ("Format: MusicXML
+  (direct)", verified on the deploy), because `detectScoreFormat` sniffs.
+- **DO NOT send Dann on a file-transfer errand.** AirDrop, renaming in Files,
+  and Google Drive were all tried in E.55 and all of them cost him more than the
+  walk was worth. **The desktop picker has no such restriction: move the walk to
+  the Mac and it evaporates.**
+
 ### DRIVE A REAL BROWSER YOURSELF. Playwright is installed. Learned E.54
 
 **This is now the best instrument on this project, and it beat every other one.**
@@ -468,10 +487,19 @@ gates structurally cannot.
 - **`fake-indexeddb`: close the database before `deleteDatabase` in `afterEach`.**
   An open connection blocks the delete, the blocked delete blocks the next open,
   and the whole FILE hangs rather than failing. Cost: one 120-second run.
-- **The Fit stave does not draw without a voice profile**, so
-  `[data-note-id]` is 0 even on a correctly loaded score. **Use Fit's Print
-  button as the marker for "a score is ingested"**: it is disabled unless
+- **The Fit stave DOES draw without a voice profile.** An earlier note here
+  was wrong: `[data-note-id]` does not exist in this tree at all. The note hit
+  targets are **`[data-hit]`** rectangles carrying the event id, and the stave
+  renders with withheld sigla when no profile is calibrated. Fit's Print button
+  is still a good marker for "a score is ingested": it is disabled unless
   `ingestedScore` is set, so enabled-after-reload proves the source survived.
+- **A DISPATCHED CLICK IS NOT A CLICK, AND THE DIFFERENCE WAS A REAL BUG.**
+  `el.dispatchEvent(new MouseEvent('click'))` bypasses hit testing, so it
+  succeeds where a user fails. When a dispatched click is needed to make
+  something work, **that is a finding, not a workaround**: in E.55 the notehead
+  glyph was intercepting clicks over its own hit rectangle, I dispatched around
+  it, and Dann hit the wall an hour later. Use `page.mouse.click(x, y)` at real
+  coordinates, and `document.elementFromPoint` to see what is actually on top.
 
 ### Observing your own work in Claude Code, learned E.53
 

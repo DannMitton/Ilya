@@ -4,41 +4,36 @@
 Again at E.52, 2026-08-16.** Updated at the close of every session. This is the
 only file that changes often, and it is the handover.
 
-Repository: branch `Shane`, HEAD **`6b0adb3`** at the close of E.54, which is
-the commit carrying N.67 steps 1 and 2. **Ask Dann for the state in one line.
-You do not run git.**
+Repository: branch `Shane`, HEAD **`6c0c719`** at the close of E.55, the commit
+carrying N.67 step 3. **Ask Dann for the state in one line. You do not run
+git.**
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
 ```
 
-**E.54 shipped steps 1 and 2 of N.67**: the vault and the source. Ilya now
-keeps the singer's songs, and their score files, in IndexedDB.
+**E.55 shipped step 3 of N.67, the merge rule, and Dann walked it. N.68 IS
+CLOSED.** An upload never destroys placements; only the singer does, on purpose.
 
 ---
 
 ## THE ONE THING
 
-> **N.67 step 3, the merge rule. THIS IS WHERE N.68 CLOSES.** Design
-> `docs/sessions/e52-fable-save-design_r1_2026-08-16.md` §2.6 and §7 step 3.
+> **NOT ESTABLISHED. Dann has not said what comes next, and three defects
+> surfaced during E.55's walk that may outrank the rest of N.67.**
 >
-> Replace the unconditional replacement in `+page.svelte`'s `oningested` branch
-> (`doc.pairings = noLyrics ? firstPass(...) : {}`) with: **keep by key, report
-> the remainder, `firstPass` only into an empty map**, and add *Start placement
-> over* as the singer's own explicit rebuild. The keys are positional event
-> ids, so unchanged positions carry their pairings across by construction.
+> The remaining N.67 steps are 4 (the library door: the song list, New song,
+> rename, delete, fingerprint recognition), 5 (the binder, which is N.28's
+> door), and 6 (the sweep, which is where N.27 and the storage copy land).
 >
-> **The observation is STATE.md's own four-step fixture walk**, with the
-> expectation stated before the walk: re-uploading `no-lyrics-control.musicxml`
-> over placed syllables no longer erases them.
+> **But ask before starting any of them.** The three defects below are all in
+> the singer's path, and one of them means no iPhone can load a score at all.
 >
-> **Steps 0, 1, and 2 are DONE and observed in a real browser.** The page owns
-> no per-song storage; `lib/library/` owns all of it behind `StorageDriver`;
-> songs and score bytes live in `ilya-library`; a reload brings the score back
-> with no re-upload.
+> **Steps 0 through 3 are DONE**, all observed in a real browser, step 3 walked
+> by Dann himself on `6c0c719`.
 >
 > **Dann ruled on 2026-08-16 that N.67 goes first and displaces both beta
-> blockers.** That ruling is made. Do not re-open it.
+> blockers.** That ruling stands unless he moves it.
 
 ---
 
@@ -52,7 +47,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, and 2 CLOSED**, all observed in a real browser. **Four left; step 3 next, and N.68 closes there.** See the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, and 3 CLOSED**, all observed in a real browser, step 3 walked by Dann. **Three left: 4 the library door, 5 the binder, 6 the sweep.** See the four documents below |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
@@ -60,7 +55,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 | | item | state |
 |---|---|---|
-| `[x]` | **N.68** the upload that erases placements | **ABSORBED into N.67, 2026-08-16.** Not patched. `+page.svelte`'s `oningested` branch (`doc.pairings = noLyrics ? firstPass(...) : {}`) replaces the map unconditionally on every upload, and the `: {}` branch means a score WITH lyrics erases it too, which the old entry did not say. Closes at N.67 step 3 |
+| `[x]` | **N.68** the upload that erases placements | **CLOSED 2026-08-16, `6c0c719`, WALKED BY DANN on the real deploy.** Absorbed into N.67 and fixed by architecture, not patched: `mergeOnUpload` (`pairings.ts`) keeps the map by positional key, runs `firstPass` only into an empty map, reports orphans, and never rebuilds. **What Dann saw:** he moved бил onto the first note (5/5 to 4/5, Я turned black), re-uploaded the same score, and the counter stayed 4/5 with бил still on the first note. Positive control run first: the old code snapped back to 5/5 |
 | `[x]` | **N.55b** Click Assignment | DONE for its named active scope. Rotate syllables PARKED 2026-08-14 |
 | `[~]` | **N.56** draw the withheld page badly | PARKED 2026-08-14, Dann's ruling |
 | `[x]` | **N.32** the Guide's false claims | DONE, shipped and observed 2026-08-14 |
@@ -212,6 +207,32 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 
 ---
 
+## FOUND IN E.55'S WALK. THREE DEFECTS, NONE NUMBERED
+
+**Dann rules them in or out. Nothing enters the tracker any other way.** All
+three are in the singer's path and all three were found by Dann walking, not by
+a gate.
+
+1. **THE NOTEHEAD SWALLOWS ITS OWN CLICK.** The `[data-hit]` rectangle is
+   overlaid by the notehead glyph, a bare `<text>` element that is NOT inside
+   the rect, so `closest('[data-hit]')` returns null and the click dies.
+   Measured on the deploy: a hit map of one rectangle shows a dead vertical
+   stripe through the middle and live area either side, so clicking a few
+   pixels off-centre works and clicking the notehead does nothing. **The one
+   place a musician aims is the one place that is dead.** N.55b was walked and
+   confirmed 2026-08-13, so this either regressed or was always latent.
+2. **NO CURSOR AFFORDANCE ON A NOTE.** `getComputedStyle(hit).cursor` is
+   **`auto`**, measured on the deploy. Nothing tells a singer a note is
+   actionable, which is why (1) reads as "the app is broken" rather than "aim
+   elsewhere". Dann found this one by noticing the pointer never changed.
+3. **NO IPHONE CAN LOAD A SCORE.** iOS matches a file input's `accept` list by
+   registered type and has no registration for `.musicxml`, so the picker greys
+   the file out and it cannot be chosen. Confirmed on Dann's phone: PDFs and
+   images selectable, both MusicXML files greyed, DOCX greyed. `.xml` IS
+   accepted by iOS and by Ilya, and the same bytes under a `.xml` name ingest
+   fine ("Format: MusicXML (direct)", verified on the deploy). **The fix is in
+   `ScoreUploader.svelte`'s ACCEPT string, not in the singer's file management.**
+
 ## STILL UNSETTLED. Not yours to settle alone
 
 - **Where the storage notices belong.** They render in the FIT drawer only, so a
@@ -257,6 +278,9 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.55: `6c0c719`, N.67 step 3 shipped and WALKED BY DANN. N.68 closed.** `mergeOnUpload` keeps the map by positional key, proposes only into an empty map, reports orphans, and never rebuilds; *Start placement over* is the singer's own and only destructive act. Seven new tests, gates 504 to 511. |
+| 2026-08-16 | **The walk was built to be able to FAIL, and that is why it is worth anything.** Re-running the first pass over an unchanged transcription produces the same layout either way, so the walk needs one deliberate change in the middle. Positive control: the old code was temporarily restored and the identical walk snapped back to 5/5; the merge rule held at 4/5. |
+| 2026-08-16 | **Three defects found by Dann walking, none by a gate.** The notehead swallows its own click, notes have no cursor affordance, and no iPhone can load a `.musicxml` at all. See the section above. **The instrument lesson: my Playwright harness had to DISPATCH the note click because a real click was intercepted, and I read that as a test artifact instead of as the bug it was.** |
 | 2026-08-16 | **E.54: N.67 steps 1 and 2. The vault and the source.** `ilya-library` v1 with `songs` / `sources` / `meta`; the §3 migration, write-verify-then-remove; `persist()` and `estimate()` called for the first time in this project's life (Dann's Mac reports a **1.9 GB** quota against 3.4 KB used); `BroadcastChannel` for two tabs; the score kept byte for byte and re-ingested at boot. **34 new tests, gates 470 to 504.** |
 | 2026-08-16 | **TWO BUGS THAT ALL FIVE GATES PASSED, both found only in a real browser.** (1) `$state` proxies cannot be structured-cloned, so **every IndexedDB write failed** until `$state.snapshot()` was applied; localStorage never showed it because `JSON.stringify` reads a proxy happily. (2) The effect's guards were in the wrong order, so **the singer's first edit was swallowed** as though it were the load echo. Both are in `ENVIRONMENT.md`. **The lesson is the instrument: drive Playwright yourself, it is installed and it takes thirty seconds.** |
 | 2026-08-16 | **E.53: `4568e01`, N.67 step 0 shipped and observed.** The song document, the facade, the legacy driver, 32 new tests. `+page.svelte` 2,095 to 2,009 lines, its per-song localStorage sites to **zero**, 1,324 lines added under `lib/library/`. **Observed in a browser on Dann's Mac, not merely written:** a seeded pairing map survived an idle reload byte for byte, which is the race the deleted guard flag existed to prevent. **web-test baseline moved 438 to 470 with Dann's permission** (`ilya-ship.sh:79`). |
@@ -280,7 +304,7 @@ canon still living in project knowledge.
 | 2026-08-13 | **This folder created.** |
 
 ---
-*E.54. Facts above were read in the working tree or measured on Dann's machine
+*E.55. Facts above were read in the working tree or measured on Dann's machine
 this session, or are transcriptions of Dann's own rulings made
 in conversation. The four N.67 documents are summarised here and the design and
 the socket addendum were read in full this session; **read the design itself
