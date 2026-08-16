@@ -186,8 +186,17 @@ body {
 		box-shadow: none !important;
 		background: white !important;
 		margin: 0 !important;
-		font-size: 16px;
-		line-height: normal;
+		/* N.69 pass four. These two MUST equal what body uses on screen
+		   (app.css:102-108: inherited root size, line-height 1.5), or print
+		   re-metrics every line box on the page AFTER TitlePage has already
+		   measured the header and fixed contentTop in pixels. `normal` is
+		   about 1.2, so every block on paper was shorter than the geometry
+		   built for it and nothing lined up with the WYSIWYG.
+		   The container above still carries font-size/line-height 0; that is
+		   what collapses the whitespace nodes BETWEEN pages, and it is
+		   untouched here. */
+		font-size: 1rem;
+		line-height: 1.5;
 	}
 
 	.paper-page:last-child {
