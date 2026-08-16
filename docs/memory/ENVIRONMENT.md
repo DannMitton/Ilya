@@ -400,6 +400,36 @@ phone, is the way.
 
 ## The device bridge
 
+### A SPAWNED SUBAGENT INHERITS THE BRIDGE AND READS THE REPOSITORY DIRECTLY. E.57
+
+**This changes the farm-out protocol.** An agent spawned from a Cowork desk can
+call `device_bash` itself and `cat` the working tree on Dann's machine. It needs
+no staging, and Dann pastes nothing. Both E.57 farm-outs ran this way: a Sonnet
+inventory read 3,871 lines of the E.16 reader, and Fable read the modules and the
+app before ruling.
+
+- **Tell the agent explicitly, in its prompt, that the files are NOT in its own
+  container** and that `mcp__remote-devices__device_bash` at `$HOME/mnt/ilya-rewrite`
+  is the only way to see them. Give it a first command to verify with, and tell it
+  to STOP and report NOT ESTABLISHED if the tool is missing or fails twice. Without
+  that line an agent will search its own container, find nothing, and invent.
+- **The older instruction to "write a brief Dann can paste into a fresh session"
+  is now the SLOWER path.** It is still right when the work needs a full session's
+  context window, or when the gates must run, since **no gate runs on the bridge**
+  (see below) and only a Claude Code session pointed at the folder can run them.
+- The two-subagent ceiling is unchanged and is not Dann's to waive.
+
+### WHAT A FARM-OUT ACTUALLY COSTS. Two measured points, E.57
+
+Quote the worst case and say it is a range. **A guess made without these ran 45%
+under.**
+
+| shape | measured |
+|---|---|
+| read ~3,900 lines and return a cited inventory | **131k tokens**, 42 tool calls |
+| a design ruling and a build brief, reading already done | **106k tokens**, 25 tool calls |
+
+
 - **Connected folders to request:** `~/Desktop/ilya-rewrite`, `~/Documents/Finale
   Files`, `~/Documents/Voice Pedagogy Research`, `~/Downloads`. **Folder grants are
   PER SESSION and do not carry between sessions.**
