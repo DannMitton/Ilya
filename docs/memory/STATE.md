@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`1e4081a`**. A floor cannot go stale, because further commits only
+before **`0573c10`**. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
 
@@ -34,36 +34,28 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.59, the reader in the browser.** Dann's ruling 2026-08-16, ending a
-> question open since E.51: N.59's scope and cost are measured while N.58's are
-> not, it delivers two of the three named beta items where N.58 delivers one,
-> and it lands on the branch repaired on the night of 2026-08-16, since a score
-> from the reader arrives with no lyrics.
+> **N.59 increment 2, step 8: PDF import, which needs Dann's approval of
+> `pdfjs-dist`.** Nothing else in N.59 is open.
 >
-> **Pyodide, not a rewrite. PIN THE VERSIONS.** The blocking-set row below
-> **THE BRIEF IS WRITTEN. E.57, 2026-08-16, by Fable, at
-> `docs/sessions/e57-brief-to-code-n59_r1_2026-08-16.md`. READ IT BEFORE
-> ANYTHING ELSE ABOUT N.59**, including the E.43 document, which it supersedes
-> on scope. Nine steps in two increments; increment 1 is photographs and needs
-> no new dependency. Its five rulings are settled and are not to be reopened.
+> **INCREMENT 1 IS DONE, NOT WRITTEN. Shipped `0573c10` and WALKED BY DANN on
+> the branch alias, 2026-08-16.** What he saw: he dropped a PHOTOGRAPH of
+> Musorgsky's *Within four walls* into Fit, answered bass clef and two sharps,
+> and his Russian syllables sat under thirteen notes Ilya had read off the ink,
+> `13 / 13`, with the no-lyrics banner above them. Steps 1 through 7 of
+> `docs/sessions/e57-brief-to-code-n59_r1_2026-08-16.md`, all seven proved by a
+> run or a browser observation.
 >
-> `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` is still the source for
-> the measured floor and for Dann's brace rule, and is quoted by the brief. It is
-> context now, not the instruction.
+> **Step 8 is the only thing left and it is a decision, not a build.** One
+> approval: add `pdfjs-dist` so PDFs import. Fable's recommendation is yes; the
+> cost of no is that photographs work and PDFs stay "coming soon". Increment 1
+> shipped without it, as designed.
 >
-> **N.72's minimum is BUILT, SHIPPED, AND WALKED BY DANN on the desk**, where
-> the new build arrived after one reload. It is no longer the one thing. It left
-> two things behind, neither of which blocks N.59:
->
-> - **Chrome on iPhone was NOT walked.** Recorded as unestablished, not as
->   passing.
-> - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
->   Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48`
->   already excludes `CriOS` and `FxiOS`, so Ilya never asks. Established by
->   reading, not guessed. **Dann's to rule on**, and it belongs in RULINGS DANN
->   OWES if it is not already there.
-
----
+> **What the walk and the build found, all recorded below:** `validateRecord`
+> dropped the source and had since N.67 step 1, which silently disarmed step
+> 4a's chimera warning across a reload; Ruling A's measures-per-system formula
+> carried an off-by-one; `ilya-test-page.png` is a repository fixture and is
+> PIANO-FIRST; and no fixture in this repository contains a brace, so the brace
+> rule's central case is UNPROVEN here.
 
 ## THE TRACKER
 
@@ -71,7 +63,7 @@ any of them count.
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: FOUR
+### The blocking set: THREE, plus one ruling
 
 | | item | state |
 |---|---|---|
@@ -79,7 +71,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
-| `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
+| `[ ]` | **N.59** the reader in the browser | **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Only step 8 (PDF, `pdfjs-dist`) remains, and it is Dann's ruling.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal`; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
 ### Closed and parked
 
@@ -306,8 +298,15 @@ LIBRARY backup rather than a SONG backup is.
   for pure white. Three levers: leave it; darken `--sage` globally, which keeps
   print identical to screen; or darken at print only, which breaks the WYSIWYG
   principle he set in E.51. **Nothing depends on it.**
-- **Which of N.58 and N.59 is next**, once N.67 is done. E.51 recommended N.59
-  and it was never ruled.
+- **`pdfjs-dist`, for N.59 step 8.** One approval, and the only thing left in
+  N.59. Fable's recommendation is yes. Cost of no: photographs work, PDFs stay
+  "coming soon". **Nothing else needs a decision and nothing is blocked on it.**
+- ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
+  shipped and was walked.
+- **A singer on Chrome for iPhone can never install Ilya to the home screen.**
+  Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:48`
+  already excludes `CriOS` and `FxiOS`. Established by reading, carried over
+  from N.72 where it was named and never ruled.
 - **N.63.** Killing the interstitial is ruled; **where the honest residue goes is
   not.** Asked in E.45, still unanswered.
 - **N.45's remainder.**
@@ -408,6 +407,10 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.58: `0573c10`. N.59 INCREMENT 1 SHIPPED AND WALKED BY DANN.** Steps 1 through 7. A photograph now becomes a score: Pyodide runs the eleven-module E.16 reader in a Worker, the brace rule replaces the struck gap heuristic, the recognized output becomes MusicXML and enters at the existing ingest seam, the singer answers clef and key in the drawer before the read, the read report counts every substitution without marking the page, and the greyscale ink persists so a reload restores without re-asking. **What Dann saw: thirteen syllables sitting on notes Ilya read off ink, `13 / 13`.** Gates 537 to 552. |
+| 2026-08-16 | **A DEFECT OLDER THAN N.59, found by it: `validateRecord` never carried `source` through**, and had not since N.67 step 1. It returned `record.source === null` on every load. **Consequence nobody had noticed: step 4a's chimera warning cannot fire on the first upload after a reload**, because the stored fingerprint was always absent. It works within one session, which is exactly why Dann's own 4a walk passed. Fixed, four tests. **The lesson: a walk that never reloads cannot test anything that depends on what was stored.** |
+| 2026-08-16 | **Three corrections to Fable's E.57 brief, all measured, none of them reopening a ruling.** (1) `measures_per_system` is `len(barlines)`, not `len(barlines) + 1`: the `+1` form is wrong on all six Musorgsky pieces by exactly the number of systems. (2) The spike's `loadPackage` list is `['numpy','opencv-python']` with no matplotlib, and it never writes the Leipzig caches, because it calls `read_page_pitch` rather than `envelope.run`; every matplotlib and leipzig string it contains is inside its embedded module blob. (3) `~/Downloads/ilya-test-page.png` is byte-identical to a repository fixture and is 8 staves at s = 21, not E.43's 12 at s = 17. |
+| 2026-08-16 | **DANN'S BRACE RULE IS BUILT BUT ITS CENTRAL CASE IS UNPROVEN, and that is recorded rather than dressed up.** No fixture in this repository contains a brace at all: every Verovio render joins voice and piano with the system barline alone. The rule therefore falls back to staff 0 on every fixture system and COUNTS the fallback, which the read report declares out loud. On the Piano-first piece 06 that fallback picks the piano. **The old heuristic picked the piano too; the difference is that this one says so.** |
 | 2026-08-16 | **E.57: `1e4081a`. No code shipped. N.59 briefed and nine environment traps recorded.** A Sonnet inventory read the eleven reader modules and found four things the E.43 summary did not carry: `select_vocal` is the ONLY staff-selection site (`reader.py:269-278`, one call site at `:400`); `timesig.py` carries a SECOND Node-and-Verovio shell-out; losing `rest_templates`' shell-out aborts the whole page rather than dropping rests; and **the reader detects neither clef nor key**, passing both through from a ground-truth file that does not exist in a browser. Fable then ruled all five open questions and wrote the build brief. |
 | 2026-08-16 | **The scope enlargement reported at E.57's midpoint was WRONG, and the record keeps it.** "Two shell-outs, not one" was read as a doubling of the work. Fable opened both `load_font` functions and found the cache-hit early return, so the true cost is two committed JSON files and zero new WASM. **The lesson is tether 10: the inventory read the imports and not the function bodies, and a summary of a summary got one more layer wrong.** |
 | 2026-08-16 | **Nine environment traps recorded that no gate could have found**, all learned across E.53 to E.56 and none previously written: `pnpm --filter` from `~` is destructive; the bundle-size instrument is noisy to 443 bytes; `autofocus` moves web-check to 8 warnings; `app.css:93` breaks native modals; service workers cannot be tested locally without patching the build; `cp -R` preserves mtimes so a local server lies about caching; the Vercel branch alias lags READY; there are two file inputs now; and Dann uses Chrome on his iPhone, not Safari. |

@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **537** |
+| web-test | **552** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -34,8 +34,9 @@ Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
 2026-08-16** for N.67 step 0, **470 to 504 on 2026-08-16** for steps 1 and
 2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`), **504
 to 511 on 2026-08-16** for step 3's merge rule, **511 to 517 on
-2026-08-16** for step 4a's arrival decision, and **517 to 537 on 2026-08-16**
-for step 5's binder.
+2026-08-16** for step 4a's arrival decision, **517 to 537 on 2026-08-16**
+for step 5's binder, and **537 to 552 on 2026-08-16** for N.59 increment 1
+(ten converter tests, four for the source carry-through, one for the title).
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -499,6 +500,84 @@ under.**
   thumbnails were unreadable at full-frame and legible at 1400 px wide.
 
 ---
+
+## THE PAGE READER, N.59. Measured 2026-08-16
+
+- **Pyodide v0.26.4 from `cdn.jsdelivr.net/pyodide/v0.26.4/full/` carries
+  cv2 4.9.0 and numpy 1.26.4**, confirmed in a browser. The pin is the whole
+  point: E.43 measured 37 noteheads against 36 on the same page at cv2 4.13.
+- **The spike's `loadPackage` list is `['numpy','opencv-python']` and NOTHING
+  else.** Every `matplotlib` and `leipzig` string in
+  `~/Downloads/ilya-reader-spike.html` lives inside its embedded module blob on
+  line 82, not in its own setup. The spike calls `reader.read_page_pitch`, so it
+  never imports `rest_templates` or `timesig` and never needs matplotlib.
+  **`envelope.run` does**, and matplotlib drags in 13 packages (Pillow,
+  fonttools, kiwisolver, matplotlib-pyodide, and friends).
+- **Load costs, measured in Chromium:** numpy + opencv alone **2.46 s**; plus
+  matplotlib **3.67 s**; the whole worker warm-up including 10 module fetches and
+  2 cache fetches **3.36 s**. E.43's floor was 2.9 s and did not include
+  matplotlib.
+- **`envelope.run` is 1.96 to 2.36 s per page, and that is NOT E.43's 0.867 s.**
+  E.43 timed `read_page_pitch`; the envelope adds rests, beams, time signatures,
+  and metre. **The like-for-like was never measured. Do not report one as the
+  other.**
+- **`~/Downloads/ilya-test-page.png` is a REPOSITORY FIXTURE.** SHA-256
+  `b0c91c1c…`, byte-identical to
+  `tools/e16-harness/output/mussorgsky---sunless-06---on-the-river/page2_300dpi.png`.
+  It is 2480 x 2883, 8 staves, s = 21.0, four systems of two. **E.43's 12 staves
+  and s = 17.00 belong to a different page.** Its clef and key ground truth
+  (G2, octaveChange -1, seven sharps) is right.
+- **PIECE 06 IS PIANO-FIRST: staff 0 is the piano and the voice is staff 1.**
+  Read that page and Ilya reads the accompaniment. Twenty of its 37 notes
+  abstain on duration. **For a walk that shows the voice, use
+  `mussorgsky---sunless-01---within-four-walls/page1_300dpi.png` with bass clef
+  and two sharps**: staff 0 is the voice, 78 notes, 12 rests, 12 measures, zero
+  abstentions. A copy is at `~/Downloads/ilya-voice-page.png`.
+- **NO FIXTURE IN THIS REPOSITORY CONTAINS A BRACE.** Every Verovio render joins
+  voice and piano with the system barline alone. Dann's brace rule is about a
+  three-stave braced grand staff, and **its central case has no instrument
+  here**: the rule falls back to staff 0 on every system and counts the
+  fallback. Proving the brace rule needs a page nobody has yet.
+- **The system barline IS a clean grouping signal**, unlike the struck gap
+  heuristic: within a system the left-edge column reads 100% filled through the
+  gap, between systems 4 to 5%.
+- **`detect_staves` can return ZERO staves without raising.** Its "groups of two
+  lines or fewer are spurious" branch discards silently, and
+  `b3-ledger-lines-scale-page.png` at s = 10.0 yields nothing at all. That is
+  the reader's lower bound on staff spacing, and it supports the retention
+  floor of s at least 20.
+- **`measures_per_system` is `len(barlines)`, NOT `len(barlines) + 1`.** The
+  E.57 brief carried the off-by-one. Summed per piece against ground truth, the
+  +1 form is wrong on all six Musorgsky pieces by exactly the number of systems.
+- **The harness run configs are in `tools/e16-harness/e16_scratch_2026-07-28/`**,
+  `gate02_legacy_p01p1.py` and `gate03_close_fixture.py`. E.57 could not find
+  them. gate02 gives piece 01 page 1: `vocal=[0,2,4,6]`,
+  `measures_per_system=[3,3,3,3]`, clef ('F',4), key 2.
+- **Running the reader writes `__pycache__` beside the modules**, which is an
+  untracked file and blocks the ship script. Ignored at
+  `tools/e16-harness/.gitignore` since 2026-08-16.
+- **`npx vite dev` BYPASSES the copy script.** `apps/web/static/reader/` is
+  generated by `scripts/copy-reader.mjs`, which only runs from `pnpm dev` and
+  `pnpm build`. Start the dev server the wrong way and the browser silently
+  serves a STALE reader; it cost one confusing `TypeError` about a function
+  signature that had already been changed. **Editing a reader module during a
+  dev session also needs a restart.**
+- **A greyscale PNG of a 300 dpi page is about 830 KB**, and IndexedDB reports
+  roughly 25 MB of usage for one. Quota on Dann's Mac is about 2 GB.
+
+## VALIDATERECORD DROPPED THE SOURCE, AND HAD SINCE N.67 STEP 1
+
+`library.ts`'s `validateRecord` rebuilds the record field by field from
+`emptySongRecord`, and **`source` was simply not among the fields it copied**,
+so every load returned `record.source === null`. Fixed 2026-08-16 with four
+tests.
+
+**Its other victim, which nobody had noticed: N.67 step 4a's chimera warning
+cannot fire on the first upload after a reload**, because `handleArrival` reads
+`doc.source?.fingerprint` and that was always undefined on a fresh load. It
+works within one session, because the upload that just happened set it in
+memory. **That is why the walk did not catch it: the walk never reloaded
+between uploads.** Any future walk of an arrival decision must reload first.
 
 ## Network refusals. Do not route around any of them
 

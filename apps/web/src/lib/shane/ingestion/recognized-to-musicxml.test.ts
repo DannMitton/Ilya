@@ -202,6 +202,19 @@ describe('recognizedToMusicXml', () => {
 		expect(xml).not.toContain('clef-octave-change');
 	});
 
+	/**
+	 * Found on Dann's own walk, 2026-08-16. The converter used to emit `pieceId`
+	 * as <work-title>, and the from-score rule fills BLANK fields, so a singer
+	 * with no title yet would have had their song named `page-4d8c1ba2` and
+	 * tagged as coming from the score. Ilya does not invent a fact about the
+	 * singer's music.
+	 */
+	it('emits no title at all: a derived id is not a name anyone chose', () => {
+		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
+		expect(xml).not.toContain('work-title');
+		expect(xml).not.toContain('hand-built');
+	});
+
 	it('emits <time> from a confident metre and none where metre abstained', () => {
 		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
 		expect(xml.match(/<time>/g) ?? []).toHaveLength(1);

@@ -197,9 +197,12 @@ export function recognizedToMusicXml(
 			'"http://www.musicxml.org/dtds/partwise.dtd">'
 	);
 	lines.push('<score-partwise version="4.0">');
-	lines.push('  <work>');
-	lines.push(`    <work-title>${escapeXml(ro.pieceId ?? 'Untitled')}</work-title>`);
-	lines.push('  </work>');
+	// NO <work-title>. A photograph carries no machine-readable title, and
+	// `pieceId` is a derived id (file-name stem plus a content hash), not a name
+	// anyone chose. Emitting it filled a blank song title with something like
+	// `ilya-voice-page-4d8c1ba2` and tagged it "from score", which is Ilya
+	// inventing a fact about the singer's music. An absent title is honest, and
+	// the id still lives in the stored record where it belongs.
 	lines.push('  <part-list>');
 	lines.push('    <score-part id="P1">');
 	lines.push('      <part-name>Voice</part-name>');

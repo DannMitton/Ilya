@@ -241,7 +241,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)' },
+	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), a photograph', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), une photographie' },
 	'upload.drop.comingSoon': { en: 'Coming soon: PDF, MIDI', fr: 'Bientôt\u00a0: PDF, MIDI' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
