@@ -41,7 +41,36 @@ export const GAP = 8;
  * HEADER_HEIGHTS.subsequent (a hardcoded 37 nobody measured) with GAP of 8,
  * which produced two different visible gaps and could not be made to agree.
  */
-export const HEADER_GAP = 18;
+export const HEADER_GAP = 16;
+
+/**
+ * Header heights MEASURED AT LETTER WIDTH (816px), in headless Chromium with
+ * Source Sans 3 and Source Serif 4 loaded, 2026-08-15.
+ *
+ * These exist because a live bind:offsetHeight is taken at whatever width the
+ * page happens to be on screen. On a phone .paper-page is 100% wide, the song
+ * title wraps to a second line, and the header measures about 40px too tall.
+ * Print is ALWAYS 816px. So below the mobile breakpoint the pages use these
+ * numbers instead of the live measurement.
+ *
+ * Both header components END at their rule (it is the last child, nothing
+ * renders below it), verified in the same run: title rule bottom 127.38 of a
+ * 127px box, running rule bottom 29.0 of a 29px box. That is what makes
+ *     visible gap = contentTop - (MARGINS.vertical + headerHeight)
+ * exactly HEADER_GAP on every page.
+ *
+ * Check against the spacing Dann approved on page two:
+ *   old page two contentTop = 48 + 37 + 8 = 93; rule at 48 + 29 = 77; gap 16.
+ *   new page two contentTop = 48 + 29 + 16 = 93. IDENTICAL, by arithmetic.
+ *   new page one contentTop = 48 + 127 + 16 = 191; rule at 175; gap 16.
+ *
+ * NOT the same as HEADER_HEIGHTS above, which stays untouched because
+ * VoiceProfilePane depends on those values.
+ */
+export const HEADER_HEIGHTS_AT_LETTER = {
+	title: 127,
+	subsequent: 29,
+} as const;
 
 // ── Calibrated constants ─────────────────────────────────────────
 

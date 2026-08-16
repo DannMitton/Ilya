@@ -3,7 +3,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
@@ -13,6 +13,7 @@
 		notationPrefs: NotationPreferences;
 		language: Language;
 		pageSize: PageSize;
+		isMobile?: boolean;
 		pageNumber: number;
 		totalPages: number;
 		runningHeader: string;
@@ -28,6 +29,7 @@
 		notationPrefs,
 		language,
 		pageSize,
+		isMobile = false,
 		pageNumber,
 		totalPages,
 		runningHeader,
@@ -48,17 +50,18 @@
 	}
 
 	/**
-	 * Content window positioning (px).
-	 *
-	 * Same formula as TitlePage, deliberately: margin + the header's OWN
-	 * measured height + the one shared HEADER_GAP. That is what makes the
-	 * space under the rule identical on page one and every page after it.
-	 * HEADER_HEIGHTS.subsequent survives only as the pre-measurement fallback
-	 * for the first paint.
+	 * Same formula and the same HEADER_GAP as TitlePage, so the space under the
+	 * rule is identical on every page. Below the breakpoint the running header
+	 * wraps at 100% page width, so the letter-width constant is used instead,
+	 * for the same reason TitlePage does it.
 	 */
-	const contentTop = $derived(
-		MARGINS.vertical + (headerHeight || HEADER_HEIGHTS.subsequent) + HEADER_GAP
+	const effectiveHeaderHeight = $derived(
+		isMobile
+			? HEADER_HEIGHTS_AT_LETTER.subsequent
+			: (headerHeight || HEADER_HEIGHTS_AT_LETTER.subsequent)
 	);
+
+	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 
 	/**

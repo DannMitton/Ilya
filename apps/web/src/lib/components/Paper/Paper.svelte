@@ -88,6 +88,7 @@
 				{totalPages}
 				{runningHeader}
 				{legendItems}
+				{isMobile}
 				{showStressDiacritics}
 				{spotReconstitution}
 				{glossOverrides}

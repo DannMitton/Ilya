@@ -4,7 +4,7 @@
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -65,8 +65,20 @@
 	 *   available = 1056 - (48 + 127 + 18) - (48 + 80 + 8) = 727px
 	 *   10 × 56 + 9 × 18 = 722px. 5px clearance.
 	 */
-	/** Content window positioning (px). Bottom is fixed; top adapts to measured header. */
-	const contentTop = $derived(MARGINS.vertical + headerHeight + HEADER_GAP);
+	/**
+	 * The height to lay out against.
+	 *
+	 * On screen at desk width the live measurement is right and handles a title
+	 * of any length. Below the breakpoint the page is 100% wide, the title
+	 * wraps, and the measurement is about 40px too tall for the 816px sheet that
+	 * is actually printed, so the letter-width constant is used instead.
+	 */
+	const effectiveHeaderHeight = $derived(
+		isMobile ? HEADER_HEIGHTS_AT_LETTER.title : (headerHeight || HEADER_HEIGHTS_AT_LETTER.title)
+	);
+
+	/** Content window positioning (px). Bottom is fixed; top follows the header. */
+	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 
 	/**
@@ -82,7 +94,7 @@
 	 *   10 rows at 56px = 560px; (727 - 560) / 9 = 18.56px → floor to 18
 	 */
 	const rowConfig = $derived.by(() => {
-		if (headerHeight === 0) return { rows: 9, gap: 20 };
+		if (effectiveHeaderHeight === 0) return { rows: 9, gap: 20 };
 
 		const availableHeight = PAGE_SIZES[pageSize].height - contentTop - contentBottom;
 		const minGap = 18;
