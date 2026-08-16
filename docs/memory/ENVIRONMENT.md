@@ -101,11 +101,45 @@ actually sets, every time.**
   alone: it governs the Guide's padding and font sizes, not the transcription
   paper.
 
-**There is no second renderer.** Portrait and landscape are the same Paper
-components with different CSS; Dann's N.45 ruling keeps the pages in the DOM and
-removes only the seam (`Paper.svelte:109-112`). Any instruction of the form "make
-the WYSIWYG print instead of the HTML version" has nothing to swap, and taking it
-literally would send you building a renderer.
+**There is no second renderer, and saying so to Dann is a mistake.** Portrait and
+landscape are the same Paper components with different CSS; his N.45 ruling keeps
+the pages in the DOM and removes only the seam (`Paper.svelte:109-112`). But when
+he says *"print the WYSIWYG,"* he is right and the correct reading is
+operational, not architectural: **every difference between screen and paper is a
+bug until proven otherwise.** Telling him there is nothing to point at cost E.51
+five build passes. The paper is ALWAYS letter geometry, 816 × 1056 from
+`page-config.ts:18`, on every device. Anything that differs is a leak.
+
+**THE THREE LEAKS, all found in E.51, all the same shape.**
+
+1. **CSS that forgot to say `screen`.** A bare `@media (max-width: 767px)` has no
+   media type, defaults to `all`, and matches `print`.
+2. **Print restyling the document.** `app.css` set `line-height: normal` on
+   `.paper-page` at print while the screen used `1.5` from `body:106`. Print
+   re-metriced every line box after the layout had been measured.
+3. **A measurement taken at the wrong width.** `TitlePage` derives `contentTop`
+   from `TitleHeader`'s `bind:offsetHeight`. On a phone `.paper-page` is 100%
+   wide, the song title wraps, and the header measures **40 CSS px** too tall for
+   the 816px sheet that is actually printed.
+
+**So: a JS-computed inline style cannot be media-query-scoped.** Screen and print
+cannot carry different values for the same measured number. Below the breakpoint,
+use `HEADER_HEIGHTS_AT_LETTER` (`page-config.ts`) instead of the live
+measurement. The `isMobile` prop is already threaded `+page.svelte:985` →
+`Paper` → both page components.
+
+**The geometry, so nobody re-derives it.** `HEADER_GAP = 16`, one constant, both
+pages. Both header components END at their rule (it is the last child, nothing
+below it): title 127px with rule bottom at 127.38, running 29px with rule bottom
+at 29.0, measured at 816px with the real fonts. That is what makes
+`contentTop − (MARGINS.vertical + headerHeight)` exactly `HEADER_GAP` everywhere.
+**Do not "tune" one page to look like the other. That is what produced 18 against
+8 and it cannot be made to agree.**
+
+**`VoiceProfilePane.svelte:295-313` still duplicates the OLD arithmetic**, its own
+`TITLE_HEADER_GAP = 18` and `HEADER_HEIGHTS.subsequent + GAP`, and `HEADER_HEIGHTS`
+stays in `page-config.ts` only because of it. Fit's paper does not yet share the
+single `HEADER_GAP`.
 
 **With no score loaded, print emits a genuinely blank sheet**, not a sheet with a
 footer: there are no `.paper-page` elements and `.paper-container` is
@@ -128,11 +162,36 @@ does anything Safari's Share → Print does not.** What they add is a gate:
 
 **A desktop cannot falsify a mobile print bug.** The width query never matches on
 a desk, so desktop print preview passes either way. **The phone is the only
-instrument.** Do not send Dann to check on the Mac.
+instrument on Dann's side.** Do not send him to check on the Mac.
 
 **iOS Safari's print preview thumbnails are a usable instrument.** They showed
-the header overlap clearly enough to diagnose from a screenshot. **Check the
-preview before spending paper.**
+the header overlap clearly enough to diagnose from a screenshot, and the gaps are
+measurable off a screenshot with PIL: find the long dark run (the rule), then the
+next row with ink. **Check the preview before spending paper.**
+
+### RENDER IT HERE BEFORE HE PRINTS IT
+
+**This is the most expensive lesson in this file.** E.51 shipped five passes at
+Dann, each verified by making him print. He was clear from his first message and
+the disagreement was mine every time. **Do not use him as the renderer.**
+
+Chromium is in this container and a standalone harness measures the paper in
+about a minute:
+
+- Launch path is `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, and
+  **you must pass `channel: 'chromium'`** or Playwright asks for old headless
+  mode, which the binary has removed. `/opt/pw-browsers/chromium` is a directory,
+  not the binary. `npm i -D playwright` first; the bundled version may be older
+  than the installed browser.
+- **You do not need to build the app.** Extract the `<style>` block from the
+  component with a regex, drop the real markup into a 816 × 1056 `.paper-page`
+  div, declare the CSS variables by hand, and link the Google Fonts the app
+  links. `document.fonts.status` must read `loaded` before measuring, or every
+  number is wrong. `await page.waitForTimeout(3000)` was enough.
+- Measure `getBoundingClientRect()` on the rule and on the first text node and
+  subtract. That is the same number Dann is looking at on paper.
+
+**Then, and only then, hand him a QR.**
 
 ---
 
@@ -147,16 +206,27 @@ from `git push` to state READY.**
 `team_CmkdrV66wAIF29pQLpiAb80O`, project `ilya` (`prj_oOvEOXnovbEkVBAOQRmTmgxJK0DB`).
 There is no `.vercel/project.json`.
 
-**THE PROJECT HAS VERCEL SSO ON.** `get_project_deployment_protection` reports
-`ssoProtection: enabled, all_except_custom_domains`. Every `*.vercel.app` URL,
-deployment and branch alias alike, puts a Vercel login in front of a device that
-is not signed in. **Do not send Dann a bare deployment link for his phone.** Use
-`get_access_to_vercel_url`, which returns a `?_vercel_share=` link good for 23
-hours, and encode THAT in the QR. Regenerating after expiry is one call.
+**VERCEL SSO IS NOW OFF, changed 2026-08-15.** It was
+`ssoProtection: enabled, all_except_custom_domains`, which put a Vercel login in
+front of any device not signed in. It is now disabled via
+`update_project_deployment_protection`, so **a plain deployment URL works on
+Dann's phone, needs no `?_vercel_share=` token, and never expires.** Reversible
+in the dashboard: project `ilya`, Settings, Deployment Protection.
+`get_access_to_vercel_url` is still there if it is ever turned back on; those
+links last 23 hours.
+
+**THE VERCEL SIGIL.** Vercel appends
+`<script src="https://vercel.live/_next-live/feedback/feedback.js">` after
+`</html>` on every PREVIEW deployment, and it mounts a `<vercel-live-feedback>`
+custom element. **The tag name is read out of that script**
+(`createElement("vercel-live-feedback")`), not guessed: fetch it with `curl` in
+the container and grep. It is hidden at print in `app.css`. **Nothing in the tree
+ever stripped it before E.51** — `grep -ri vercel apps/web/src` returns nothing —
+so if Dann remembers it being stripped, it was never committed.
 
 **EVERY DEPLOYMENT URL IS A SEPARATE ORIGIN**, so every ship hands the phone an
-empty `localStorage` and the test text has to be pasted again. Three iterations
-in E.51 cost three re-pastes. The branch alias
+empty `localStorage` and the test text has to be pasted again. Four iterations in
+E.51 cost four re-pastes. The branch alias
 `ilya-git-shane-dannmittons-projects.vercel.app` would persist across ships at
 the cost of not being sha-pinned. **Unruled; ask Dann before switching.**
 
@@ -245,6 +315,12 @@ phone, is the way.
 - **QR codes:** `pip install segno --break-system-packages`, then
   `segno.make(url, error='h').save(path, scale=12, border=4)`. A 102-character
   bypass URL lands at version 10 and scans off a screen.
+- **Playwright:** see "Render it here before he prints it" under PRINT. Binary at
+  `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, and `channel: 'chromium'`
+  is required.
+- **Vercel deploy timing, measured E.51:** `git push` to state READY is under two
+  minutes, six times running. `sleep 115` in the cloud `Bash` tool then one
+  `list_deployments` call is the right shape. Do not poll.
 - **Dann's phone photographs are HEIC.** `pip install pillow-heif
   --break-system-packages`, `pillow_heif.register_heif_opener()`, then PIL opens
   them. **Crop and upscale a region before reading it**: the print-preview
