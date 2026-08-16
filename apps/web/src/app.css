@@ -218,6 +218,18 @@ body {
 		display: none !important;
 	}
 
+	/* THE VERCEL SIGIL. Vercel appends
+	   <script src="https://vercel.live/_next-live/feedback/feedback.js">
+	   after </html> on every PREVIEW deployment. That script mounts a
+	   <vercel-live-feedback> custom element: the tag name is read out of the
+	   script itself, createElement("vercel-live-feedback"), not guessed.
+	   It is not part of Ilya and it must never reach paper. Hiding the host
+	   hides its shadow root with it. Harmless on production deployments,
+	   where Vercel does not inject it at all. */
+	vercel-live-feedback {
+		display: none !important;
+	}
+
 	.word-stack {
 		cursor: default !important;
 		background: transparent !important;

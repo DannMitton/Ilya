@@ -3,7 +3,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, HEADER_HEIGHTS, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
@@ -40,8 +40,25 @@
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
 
-	/** Content window positioning (px) */
-	const contentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
+	/** Measured running-header height (px). Updated via RunningHeader's callback. */
+	let headerHeight = $state(0);
+
+	function handleHeaderHeight(height: number) {
+		headerHeight = height;
+	}
+
+	/**
+	 * Content window positioning (px).
+	 *
+	 * Same formula as TitlePage, deliberately: margin + the header's OWN
+	 * measured height + the one shared HEADER_GAP. That is what makes the
+	 * space under the rule identical on page one and every page after it.
+	 * HEADER_HEIGHTS.subsequent survives only as the pre-measurement fallback
+	 * for the first paint.
+	 */
+	const contentTop = $derived(
+		MARGINS.vertical + (headerHeight || HEADER_HEIGHTS.subsequent) + HEADER_GAP
+	);
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 
 	/**
@@ -57,7 +74,7 @@
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
 	<!-- Header layer: absolute, pinned to top margin -->
-	<RunningHeader headerText={runningHeader} />
+	<RunningHeader headerText={runningHeader} onheightchange={handleHeaderHeight} />
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div

@@ -26,6 +26,23 @@ export const MARGINS = { vertical: 48, horizontal: 96 } as const;
 /** Gap between header/content and content/footer layers (px). */
 export const GAP = 8;
 
+/**
+ * Space between a header's horizontal rule and the first line of body text.
+ *
+ * ONE number, used by BOTH the title page and every subsequent page, because
+ * Dann's requirement is that the negative space under the rule be identical
+ * on every page. It is identical by construction, not by tuning: both header
+ * components END at their rule (nothing renders below it), both report their
+ * own measured offsetHeight, and both pages set
+ *     contentTop = MARGINS.vertical + measuredHeaderHeight + HEADER_GAP
+ * so the space below the rule IS this number on every page.
+ *
+ * It replaces TitlePage's local TITLE_HEADER_GAP of 18 and the pairing of
+ * HEADER_HEIGHTS.subsequent (a hardcoded 37 nobody measured) with GAP of 8,
+ * which produced two different visible gaps and could not be made to agree.
+ */
+export const HEADER_GAP = 18;
+
 // ── Calibrated constants ─────────────────────────────────────────
 
 /** Header heights (px). Subsequent page uses fixed value. Title page measures dynamically via bind:offsetHeight. */

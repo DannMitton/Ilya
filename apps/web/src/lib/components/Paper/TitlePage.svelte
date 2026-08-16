@@ -4,7 +4,7 @@
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -65,10 +65,8 @@
 	 *   available = 1056 - (48 + 127 + 18) - (48 + 80 + 8) = 727px
 	 *   10 × 56 + 9 × 18 = 722px. 5px clearance.
 	 */
-	const TITLE_HEADER_GAP = 18;
-
 	/** Content window positioning (px). Bottom is fixed; top adapts to measured header. */
-	const contentTop = $derived(MARGINS.vertical + headerHeight + TITLE_HEADER_GAP);
+	const contentTop = $derived(MARGINS.vertical + headerHeight + HEADER_GAP);
 	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
 
 	/**
