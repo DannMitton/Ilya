@@ -1,4 +1,23 @@
-const CACHE_VERSION = 'ilya-v1';
+// N.72 (Dann's ruling, 2026-08-16). MINIMUM FORM ONLY: a new deploy must be
+// able to reach a singer who already has Ilya loaded.
+//
+// THE BUG THIS ENDS. This was the literal 'ilya-v1' and never changed, so every
+// deploy shipped a BYTE-IDENTICAL service worker. The browser only installs a
+// new worker when the script's bytes differ, so it never installed one, the old
+// worker went on serving `cached || networkFetch`, and the first version a
+// tester loaded was the version they kept forever. Dann's words: that is not a
+// feature gap, it is a delivery failure, and it grows with every commit.
+//
+// `__BUILD_VERSION__` is replaced at build time by `scripts/stamp-sw.mjs` with
+// SvelteKit's own per-build version. **That script exits non-zero if it cannot
+// stamp**, because a silent failure would ship this placeholder to everyone and
+// reproduce the exact bug while looking fine.
+//
+// DELIBERATELY NOT IN THIS: `skipWaiting`, `clients.claim`, and the update
+// prompt. Dann ruled them separable polish. The accepted cost is that a new
+// worker WAITS until every client is gone, so a singer may need to close the
+// tab rather than merely reload.
+const CACHE_VERSION = 'ilya-__BUILD_VERSION__';
 const CACHE_STATIC = `${CACHE_VERSION}-static`;
 
 const APP_SHELL = [

@@ -32,17 +32,23 @@ any of them count.
 
 ## THE ONE THING
 
-> **NOT ESTABLISHED, and it is Dann's to rule: WHICH OF N.58 AND N.59.**
-> E.51 recommended N.59 and it was never ruled. **Ask before starting either.**
+> **N.72, in its MINIMUM form only: a new deploy must be able to reach a singer
+> who already has Ilya loaded.** `CACHE_VERSION` unique per build, and nothing
+> else. **The update prompt, `skipWaiting`, and `clients.claim` are separable
+> polish and do NOT go in this** (Dann, 2026-08-16). If the minimum takes two
+> reloads rather than one, that is accepted and RECORDED rather than fixed.
 >
-> **N.67 is no longer the cardinal for the beta.** It was ruled first because
-> work was being destroyed; steps 0 through 3 and 4a have ended that. The song
-> survives, the score survives, an upload cannot erase a placement, and a
-> different piece announces itself before it replaces anything.
+> **Dann's reason, on the record: a beta is a loop with testers. Right now the
+> first version a tester loads is the version they keep forever, so nothing we
+> build reaches them. That is not a feature gap, it is a delivery failure, and
+> it grows with every commit.** It displaces nothing: N.58 and N.59 are both
+> unstarted.
 >
-> **What is left of N.67 explicitly WAITS behind N.58 and N.59**, by Dann's
-> ruling 2026-08-16: 4b the library itself (list, rename, delete, switching),
-> 5 the binder (N.28's door), and 6 the sweep (where N.27 lands).
+> **THEN N.59 BECOMES THE ONE THING, over N.58.** Dann's ruling 2026-08-16,
+> ending a question open since E.51: N.59's scope and cost are measured and
+> N.58's are not, it delivers two of the three named beta items where N.58
+> delivers one, and it lands on the branch repaired tonight, since a score from
+> the reader arrives with no lyrics.
 
 ---
 
@@ -57,7 +63,8 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 | | item | state |
 |---|---|---|
 | `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, and 4a CLOSED**, all observed in a real browser, and 3 and 4a walked by Dann himself. **The emergency is over: nothing is being destroyed any more.** What remains WAITS behind N.58 and N.59 by Dann's ruling: 4b the library itself, 5 the binder, 6 the sweep. See the four documents below |
-| `[ ]` | **N.72** no singer can ever receive a fix | **NUMBERED BY DANN 2026-08-16, NOT FIXED, and deliberately not in step 5's commit.** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
+| `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **The authoritative proof is Dann's walk on three surfaces.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
+| | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
