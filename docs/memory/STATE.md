@@ -34,23 +34,29 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.72, in its MINIMUM form only: a new deploy must be able to reach a singer
-> who already has Ilya loaded.** `CACHE_VERSION` unique per build, and nothing
-> else. **The update prompt, `skipWaiting`, and `clients.claim` are separable
-> polish and do NOT go in this** (Dann, 2026-08-16). If the minimum takes two
-> reloads rather than one, that is accepted and RECORDED rather than fixed.
+> **N.59, the reader in the browser.** Dann's ruling 2026-08-16, ending a
+> question open since E.51: N.59's scope and cost are measured while N.58's are
+> not, it delivers two of the three named beta items where N.58 delivers one,
+> and it lands on the branch repaired on the night of 2026-08-16, since a score
+> from the reader arrives with no lyrics.
 >
-> **Dann's reason, on the record: a beta is a loop with testers. Right now the
-> first version a tester loads is the version they keep forever, so nothing we
-> build reaches them. That is not a feature gap, it is a delivery failure, and
-> it grows with every commit.** It displaces nothing: N.58 and N.59 are both
-> unstarted.
+> **Pyodide, not a rewrite. PIN THE VERSIONS.** The blocking-set row below
+> carries the summary. **Open
+> `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` before writing any
+> code**; this is version archaeology before it is a build, and the first useful
+> move is reading.
 >
-> **THEN N.59 BECOMES THE ONE THING, over N.58.** Dann's ruling 2026-08-16,
-> ending a question open since E.51: N.59's scope and cost are measured and
-> N.58's are not, it delivers two of the three named beta items where N.58
-> delivers one, and it lands on the branch repaired tonight, since a score from
-> the reader arrives with no lyrics.
+> **N.72's minimum is BUILT, SHIPPED, AND WALKED BY DANN on the desk**, where
+> the new build arrived after one reload. It is no longer the one thing. It left
+> two things behind, neither of which blocks N.59:
+>
+> - **Chrome on iPhone was NOT walked.** Recorded as unestablished, not as
+>   passing.
+> - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
+>   Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48`
+>   already excludes `CriOS` and `FxiOS`, so Ilya never asks. Established by
+>   reading, not guessed. **Dann's to rule on**, and it belongs in RULINGS DANN
+>   OWES if it is not already there.
 
 ---
 

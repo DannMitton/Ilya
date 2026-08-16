@@ -41,6 +41,11 @@ for step 5's binder.
 That is the whole reason the build moved off the bridge. Run them yourself and
 tell Dann the numbers; do not make him paste output back.
 
+**`autofocus` MOVES THE WEB-CHECK GATE.** `svelte-check` raises
+`a11y_autofocus`, taking it from 7 warnings to 8, so a dialog cannot use it.
+Focus the safe button programmatically after `showModal()` instead. Measured
+2026-08-16.
+
 **`mscz-converter.test.ts` prints to stderr on three tests by design.** They
 exercise failure paths. The ship script echoes those lines when a gate
 deviates, and they are not failures. **Read the count, not the verdict.**
@@ -142,6 +147,21 @@ the script's own `git add -u` (line 94) do it.
 `git -C "$REPO" diff --name-only HEAD`. **Exercised successfully three times in
 E.51**, including one commit that swept up `docs/memory/INBOX.md` alongside two
 source files.
+
+---
+
+## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16
+
+**`*, *::before, *::after { margin: 0 }` overrides the user agent's
+`dialog { margin: auto }`**, which is the rule that centres a modal. A
+`showModal()` dialog therefore renders in the viewport's **top-left corner**,
+and because the drawer starts at x=0 and is about the same width, it looks
+convincingly like it was meant to be nested in the drawer.
+
+Measured on the deploy: `(0, 0)` before, `(444, 357)` in a 1400 by 900 viewport
+after adding `margin: auto` to the dialog. **Recovery: set `margin: auto`
+explicitly on any `<dialog>`.** `:modal` reporting true is not evidence of
+correct placement, only of modality.
 
 ---
 
@@ -314,6 +334,13 @@ E.51 cost four re-pastes. The branch alias
 `ilya-git-shane-dannmittons-projects.vercel.app` would persist across ships at
 the cost of not being sha-pinned. **Unruled; ask Dann before switching.**
 
+**THE BRANCH ALIAS LAGS READY.** `get_deployment` reports READY well before
+`ilya-git-shane-dannmittons-projects.vercel.app` flips to that build; on
+2026-08-16 it took three polls at ten seconds after READY. **A walk that depends
+on the alias must poll the ALIAS CONTENT, not the deployment state**: fetch a
+file that changes per build, such as `/sw.js`'s `CACHE_VERSION`, and wait for it
+to move.
+
 **Do not tell Dann to clear website data; his readings live in `localStorage`.**
 Send a QR only for a build whose change he can see.
 
@@ -324,6 +351,17 @@ phone, is the way.
 
 ## Browser and extension
 
+- **DANN USES CHROME ON HIS IPHONE. NOT SAFARI.** Said plainly because it was
+  written wrong into a walk plan three times on 2026-08-16. Consequence, and it
+  is a real one: **Chrome on iOS offers no Add to Home Screen**, and
+  `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never
+  asks for it. The install path exists only in Safari. **A singer on Chrome for
+  iPhone can therefore never install Ilya.**
+- **THERE ARE TWO FILE INPUTS SINCE N.67 STEP 5, and the binder's is FIRST in
+  the DOM.** `page.locator('input[type=file]').first()` grabs the IMPORTER, not
+  the score uploader, and feeding it a `.musicxml` produces a correct-looking
+  "this file was not made by Ilya" rather than an upload. **Target them by
+  class: `.file-input` is the score, `.binder-input` is the binder.**
 - **A TAB THAT LOADED WHILE HIDDEN NEVER HYDRATES.** Reload it. `document.hidden`
   first, always.
 - **`document.hasFocus()` can be TRUE while `visibilityState` is `hidden`**, when
@@ -397,6 +435,25 @@ phone, is the way.
 - `npx --yes typescript@5 tsc` fails. `npm i -D typescript` then
   `./node_modules/.bin/tsc` works.
 - `pnpm --filter` resolves from the current directory. Give Dann the `cd`.
+- **`pnpm --filter` FROM `~` IS NOT MERELY WRONG, IT IS DESTRUCTIVE.** Run
+  without a `cd`, pnpm treats the HOME directory as the workspace root, reports
+  **"Scope: 884 of 6192 projects"**, walks into the macOS container aliases that
+  mirror `~/Desktop` back at themselves, and dies with
+  `ERR_PNPM_UNEXPECTED_VIRTUAL_STORE`. **It has already edited `package.json`
+  by then**, and it leaves a stray 654 KB `apps/web/pnpm-lock.yaml` whose
+  workspace links point into `link:../../../../../../../pnpm/store/…`.
+  **Recovery: delete the stray lockfile, then
+  `pnpm -C ~/Desktop/ilya-rewrite install --lockfile-only`**, which reconciles
+  the real lockfile and never relinks `node_modules`. Measured 2026-08-16.
+- **THE BUNDLE-SIZE INSTRUMENT IS NOISY, AND ONE FORM OF IT IS USELESS.** Two
+  builds from IDENTICAL source differ: raw total by **4 bytes**, gzip of all
+  JS concatenated by **443 bytes** (it depends on `find` order, and chunk hashes
+  rename files between builds), and the **sum of per-file gzip by 1 byte**.
+  **Only the per-file sum is trustworthy**:
+  `find build/_app -name '*.js' -exec sh -c 'gzip -9 -c "$1" | wc -c' _ {} \; | paste -sd+ - | bc`.
+  A claim smaller than about half a kilobyte cannot be made with the
+  concatenation method at all. The 18.7 KB measured for `bits-ui` stands,
+  being far outside that band.
 - **QR codes:** `pip install segno --break-system-packages`, then
   `segno.make(url, error='h').save(path, scale=12, border=4)`. A 102-character
   bypass URL lands at version 10 and scans off a screen.
@@ -502,6 +559,34 @@ gates structurally cannot.
   glyph was intercepting clicks over its own hit rectangle, I dispatched around
   it, and Dann hit the wall an hour later. Use `page.mouse.click(x, y)` at real
   coordinates, and `document.elementFromPoint` to see what is actually on top.
+
+### TESTING A SERVICE WORKER LOCALLY. Learned E.56, three lies deep
+
+**`app.html:30` deliberately unregisters the worker on `localhost` and
+`127.0.0.1`** — and those are the only hosts where a worker is permitted over
+plain HTTP. So a local harness must patch the **copied build output**, never the
+source, to register unconditionally. Say so when reporting, because what is then
+under test is the worker lifecycle and not the registration gate.
+
+**Two ways a local static server will lie to you about caching:**
+
+- **`python3 -m http.server` sends NO `cache-control`.** Vercel sends
+  `public, max-age=0, must-revalidate` on both `/` and `/sw.js` (measured
+  2026-08-16). Under the bare server the browser applies heuristic caching and
+  feeds the OLD page to the new worker's install.
+- **`cp -R` PRESERVES MTIMES on macOS**, so two copied build directories serve
+  an identical `Last-Modified`, the server answers **304 Not Modified**, and the
+  browser keeps serving the old build. Any "which build am I on" test is then
+  measuring nothing, silently.
+
+**What a local harness CAN prove**, and it is the part that matters: that a
+changed worker is INSTALLED. `registration.waiting` becomes non-null and a
+second cache appears; with a byte-identical worker it stays null forever. Run
+the unfixed worker as a positive control or the pass proves nothing.
+
+**What it cannot honestly prove is that the new code is then served**, because
+one static server cannot imitate two Vercel deployments. That belongs in a real
+two-deploy walk.
 
 ### Observing your own work in Claude Code, learned E.53
 
