@@ -1173,10 +1173,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      8 KB budgeted for the whole of N.67, and showModal() gives the modality,
      the focus trap, Escape, and the backdrop for nothing.
 
-     showModal() puts focus on the dialog itself, and "Keep this song" is
-     first in the DOM so Tab reaches the safe answer before the destructive
-     one. Escape resolves to keeping, because closing without answering
-     changes nothing: nothing is mutated before the answer. -->
+     "Keep this song" stays FIRST IN THE DOM so Tab reaches the safe answer
+     first, and `row-reverse` puts it visually RIGHTMOST, which is where macOS
+     puts the default and where a tired hand goes (Dann's ruling 2026-08-16,
+     after he met this dialog at half past four in the morning). Keyboard and
+     mouse therefore both land on the safe answer, which one ordering alone
+     cannot give you. Escape resolves to keeping, because closing without
+     answering changes nothing: nothing is mutated before the answer. -->
 <dialog
 	class="replace-dialog"
 	bind:this={replaceDialogEl}
@@ -1647,8 +1650,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	.replace-actions {
 		display: flex;
+		/* DOM order is Keep then Replace, for Tab. This reverses only the
+		   painting, so Keep sits on the right where the default belongs. */
+		flex-direction: row-reverse;
+		justify-content: flex-start;
 		gap: 0.5rem;
-		justify-content: flex-end;
 	}
 	.replace-actions button {
 		padding: 0.45rem 0.75rem;
@@ -1661,10 +1667,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		border-radius: 4px;
 		cursor: pointer;
 	}
-	/* The destructive one is not the pretty one. */
+	/* The destructive one is not the pretty one, and it is not the loud one
+	   either: no border, no fill, just the word in the colour of the warning.
+	   It has to be findable, not inviting. */
 	.replace-actions .replace-destructive {
 		color: #7f1d1d;
-		border-color: #7f1d1d;
+		background: transparent;
+		border-color: transparent;
+		font-weight: 500;
 	}
 	/* N.67 step 3. Twins .shane-print-btn rather than inventing a look, and
 	   sits inline rather than full width: it is the destructive control on

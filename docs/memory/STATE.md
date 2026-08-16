@@ -173,8 +173,12 @@ element and that overrides the user-agent's `dialog { margin: auto }`, which is
 what centres a modal. Measured before the fix at (0, 0) and after it at (444,
 357) in a 1400 by 900 viewport. **My checks had read the dialog's state and text
 and never once looked at where it landed**, which is tether five exactly. The
-second is open: **the destructive button sits rightmost, where macOS puts the
-safe default**, and both buttons carry the same weight.
+second is now RULED AND FIXED: the destructive button sat rightmost, where macOS
+puts the safe default, and both carried the same weight. **Keep is now visually
+rightmost while staying FIRST in the DOM**, so the mouse and the Tab key both
+reach the safe answer, which one ordering alone cannot give you; Replace is
+borderless and unfilled, findable rather than inviting. Measured: Keep at x=825,
+Replace at x=698, first Tab lands on Keep.
 
 **The trigger, decided by Claude on Dann's instruction: the fingerprint differs
 AND at least one placement would be orphaned.** A corrected note keeps every
