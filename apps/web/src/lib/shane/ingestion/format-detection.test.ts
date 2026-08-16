@@ -86,7 +86,7 @@ describe('detectScoreFormat: recognised refusals', () => {
 		});
 	});
 
-	it('refuses images by magic (PNG, JPEG, WEBP)', () => {
+	it('ROUTES images by magic (PNG, JPEG, WEBP) to the page reader', () => {
 		const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 		const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0]);
 		const webp = new Uint8Array([
@@ -94,8 +94,8 @@ describe('detectScoreFormat: recognised refusals', () => {
 		]);
 		for (const bytes of [png, jpeg, webp]) {
 			expect(detectScoreFormat('scan.bin', bytes)).toEqual({
-				ok: false,
-				failure: { kind: 'image' }
+				ok: true,
+				format: 'image'
 			});
 		}
 	});
@@ -116,27 +116,27 @@ describe('detectScoreFormat: recognised refusals', () => {
 		0x4d, 0x69, 0x50, 0x72, 0x6d, 0x69, 0x61, 0x66
 	]);
 
-	it('refuses a real iPhone HEIC photograph as an image, not a generic shrug', () => {
+	it('routes a real iPhone HEIC photograph as an image, not a generic shrug', () => {
 		expect(detectScoreFormat('IMG_5042.HEIC', IPHONE_HEIC_HEADER)).toEqual({
-			ok: false,
-			failure: { kind: 'image' }
+			ok: true,
+			format: 'image'
 		});
 	});
 
-	it('refuses HEIC by content even when the extension lies', () => {
+	it('detects HEIC by content even when the extension lies', () => {
 		expect(detectScoreFormat('score.musicxml', IPHONE_HEIC_HEADER)).toEqual({
-			ok: false,
-			failure: { kind: 'image' }
+			ok: true,
+			format: 'image'
 		});
 	});
 
-	it('refuses AVIF, the same container family', () => {
+	it('routes AVIF, the same container family', () => {
 		const avif = new Uint8Array([
 			0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x61, 0x76, 0x69, 0x66
 		]);
 		expect(detectScoreFormat('scan.avif', avif)).toEqual({
-			ok: false,
-			failure: { kind: 'image' }
+			ok: true,
+			format: 'image'
 		});
 	});
 
@@ -206,7 +206,7 @@ describe('detectScoreFormat: extension fallbacks', () => {
 describe('accepted-extensions contract', () => {
 	it('lists exactly the formats dispatch can route (no aspirational entries)', () => {
 		expect(ACCEPTED_EXTENSIONS.split(',').sort()).toEqual(
-			['.json', '.mnx', '.mscz', '.musicxml', '.musx', '.mxl', '.xml'].sort()
+			['.json', '.mnx', '.mscz', '.musicxml', '.musx', '.mxl', '.xml', 'image/*'].sort()
 		);
 	});
 

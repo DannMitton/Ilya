@@ -30,6 +30,7 @@ import {
 	type GlossRow,
 	type LoadResult,
 	type Outcome,
+	type PageProvenance,
 	type SongRecord,
 } from './types';
 
@@ -152,7 +153,63 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	if (isStringRecord(value.pairings)) record.pairings = value.pairings as PairingMap;
 	else if (value.pairings !== undefined) malformed();
 
+	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
+	// This function rebuilds the record field by field from `emptySongRecord`,
+	// whose `source` is null, and `source` was simply not among the fields it
+	// copied. So every load returned a record with no source provenance at all.
+	//
+	// Two things depended on it and neither could work across a reload:
+	//   - N.67 step 4a's chimera warning reads `doc.source?.fingerprint`, which
+	//     was therefore always undefined on a fresh load, so `arrivalDecision`
+	//     fell through to `attach` and the FIRST upload after any reload could
+	//     never warn. It works within one session because the fingerprint is
+	//     set in memory by the upload that just happened, which is why the walk
+	//     did not catch it.
+	//   - N.59 step 7's stored clef and key, which is how this was found.
+	//
+	// The bytes were never at risk: they live in their own store and are read
+	// by `openLibrary`, not by this function.
+	if (isStringRecord(value.source)) {
+		const src = value.source as Record<string, unknown>;
+		if (typeof src.fileName === 'string' && typeof src.contentHash === 'string') {
+			record.source = {
+				fileName: src.fileName,
+				byteLength: typeof src.byteLength === 'number' ? src.byteLength : 0,
+				importedAt: typeof src.importedAt === 'string' ? src.importedAt : '',
+				contentHash: src.contentHash,
+				fingerprint: typeof src.fingerprint === 'string' ? src.fingerprint : '',
+				page: validatePage(src.page),
+			};
+		} else malformed();
+	} else if (value.source !== undefined && value.source !== null) malformed();
+
 	return reason ? { record, reason } : { record };
+}
+
+/**
+ * N.59 step 7. A stored page's provenance, or null. Anything malformed is
+ * dropped to null rather than half-kept: a half-read clef would be read back as
+ * a confident answer the singer never gave, and re-asking is the honest
+ * failure. The picture itself is unaffected either way.
+ */
+function validatePage(value: unknown): PageProvenance | null {
+	if (!isStringRecord(value)) return null;
+	const v = value as Record<string, unknown>;
+	const clef = v.clef as Record<string, unknown> | undefined;
+	if (!isStringRecord(clef) || typeof clef.sign !== 'string' || typeof clef.line !== 'number') {
+		return null;
+	}
+	if (typeof v.octaveChange !== 'number' || typeof v.fifths !== 'number') return null;
+	return {
+		clef: { sign: clef.sign, line: clef.line },
+		octaveChange: v.octaveChange,
+		fifths: v.fifths,
+		originalName: typeof v.originalName === 'string' ? v.originalName : '',
+		originalHash: typeof v.originalHash === 'string' ? v.originalHash : '',
+		staffSpace: Array.isArray(v.staffSpace)
+			? v.staffSpace.filter((n): n is number => typeof n === 'number')
+			: [],
+	};
 }
 
 /* ── The facade ─────────────────────────────────────────────────── */

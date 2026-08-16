@@ -150,14 +150,29 @@ def run(cfg):
             dur *= Fraction(3, 2)                     # a dot is never applied to a null duration
         midi = r['midi']
         pitch_abstain = None
+        midi_assumed_natural = None
         if r.get('abstain'):
             # Spec item 7: the accidental engine's own abstention, computed
             # in read_page_pitch and previously dropped here. Never emit a
             # midi computed with an assumed natural.
             midi = None
             pitch_abstain = 'accidental_unresolved'
+            # N.59, Ruling D, ADDITIVE ONLY. The rule above governs `midi` and
+            # is untouched: nothing downstream that reads `midi` can now see an
+            # assumed natural. What is carried alongside it is the geometric
+            # value the nulling discarded, under a name that says exactly what
+            # it is, so the browser's engraver has something to draw.
+            #
+            # Why draw it at all: a dropped event silently shifts every later
+            # syllable one note left, and corrupts the pairing invisibly. A
+            # natural shown plainly is a visible, checkable error a singer can
+            # see and hear against their own paper. That is the same logic
+            # that struck the uncertainty mark in E.47, applied one layer down.
+            # The count is declared in the drawer's read report.
+            midi_assumed_natural = r['midi']
         events.append(dict(sys=r['sys'], x=r['x'], kind='note', dur=dur, midi=midi,
-                            dur_abstain=dur_abstain, pitch_abstain=pitch_abstain))
+                            dur_abstain=dur_abstain, pitch_abstain=pitch_abstain,
+                            midi_assumed_natural=midi_assumed_natural))
 
     rests = detect_rests_multi(nl, staves, vocal, s)
     for rr in rests:
@@ -165,7 +180,24 @@ def run(cfg):
                             dur_abstain=None, pitch_abstain=None))
 
     bl = detect_barlines(nl, staves, vocal, s)
-    mps = cfg['measures_per_system']          # list, one entry per system
+    # N.59, Ruling A. `measures_per_system` is a harness configuration list and
+    # a browser has no configuration to read it from. Where cfg omits it, it is
+    # DERIVED from the reader's own detected barlines. The harness keeps
+    # supplying it explicitly, so every fixture run is unchanged.
+    #
+    # IT IS len(barlines), NOT len(barlines) + 1. The brief's formula carried
+    # the off-by-one and it was measured, not argued: summed across each
+    # piece's pages and checked against that piece's ground-truth measure
+    # count, the +1 form is wrong on all six Musorgsky pieces and wrong by
+    # exactly the number of systems (24 against 18, 17 against 12, 57 against
+    # 41, 37 against 29, 81 against 61, 80 against 55). The plain form is exact
+    # on four of the six and short by one or two on the two longest, where the
+    # reader missed a barline of its own. The domain says the same thing: a
+    # system ENDS with a barline, so n barlines close n measures rather than
+    # opening an n+1th.
+    mps = cfg.get('measures_per_system')
+    if mps is None:
+        mps = [max(1, len(bl.get(i, []))) for i in range(len(vocal))]
     base = np.cumsum([0] + list(mps))[:-1]
     out_notes = []; msum = {}
     for syi in range(len(vocal)):
@@ -204,6 +236,10 @@ def run(cfg):
                     nd['midi'] = e['midi']
                     if e.get('pitch_abstain'):
                         abstain['pitch'] = e['pitch_abstain']
+                        # Additive, and present ONLY on an abstained note, so a
+                        # confident record is byte-identical to before (N.59
+                        # step 4's proof).
+                        nd['midiAssumedNatural'] = e.get('midi_assumed_natural')
                 if abstain:
                     nd['abstain'] = abstain            # absent key means confidence
                 out_notes.append(nd)
@@ -211,8 +247,13 @@ def run(cfg):
                     onset += e['dur']
             msum[mi] = None if measure_has_dur_abstain else onset
 
-    gt = json.load(open(cfg['gt']))
-    ro = dict(pieceId=gt['pieceId'], clef=dict(sign=cfg['clef'][0], line=cfg['clef'][1]),
+    # N.59, Ruling A. The ground-truth file is a harness artifact and does not
+    # exist in a browser; `pieceId` was the only thing read out of it. cfg's own
+    # id is preferred where present (the app derives it from the file name stem
+    # plus a short content hash, which the retention ruling already records),
+    # and the gt file is not opened at all in that case.
+    piece_id = cfg['pieceId'] if 'pieceId' in cfg else json.load(open(cfg['gt']))['pieceId']
+    ro = dict(pieceId=piece_id, clef=dict(sign=cfg['clef'][0], line=cfg['clef'][1]),
               keySignature=dict(fifths=cfg['key']),
               verses=[dict(verseNumber=1, notes=out_notes)])
 

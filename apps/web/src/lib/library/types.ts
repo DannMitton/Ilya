@@ -25,6 +25,33 @@ import type { PairingMap } from '$lib/shane/pairings';
  */
 export type GlossRow = [key: string, gloss: string, anchorWord: string];
 
+/**
+ * N.59 step 7, Ruling E: ONE additive field on the source record, carrying
+ * everything a photographed page needs to come back without being re-read
+ * wrongly or re-asked about.
+ *
+ * The clef, key, and octave are the singer's own answers (Ruling A). Re-asking
+ * on every reload is the tool forgetting, which is the principle N.67 step 2's
+ * restore already states.
+ *
+ * The original's name and hash are here because the RETENTION RULING requires
+ * them "whether or not its bytes are kept", and for a photograph the bytes
+ * kept are the GREYSCALE INK rather than the file the singer supplied.
+ * `contentHash` above keeps its own contract and names the stored bytes; this
+ * names what they came from, so the two facts never fight.
+ */
+export interface PageProvenance {
+	clef: { sign: string; line: number };
+	octaveChange: number;
+	fifths: number;
+	/** The file the singer supplied, which is not what is stored. */
+	originalName: string;
+	/** SHA-256 of the original's bytes. Empty where crypto.subtle was absent. */
+	originalHash: string;
+	/** Staff-line spacing measured after detection, per page. The floor is 20. */
+	staffSpace: number[];
+}
+
 /** Design §2.2. `null` until step 2 stores the score's bytes. */
 export interface SongSource {
 	fileName: string;
@@ -34,6 +61,8 @@ export interface SongSource {
 	contentHash: string;
 	/** SHA-256 of the canonical vocal line, design §2.4. */
 	fingerprint: string;
+	/** N.59: present only where the score was read off a picture. */
+	page?: PageProvenance | null;
 }
 
 export interface SongRecord {

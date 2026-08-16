@@ -23,6 +23,8 @@
 	import { t, type Language } from '$lib/i18n';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
+	import { WorkerPageReader } from './engine/page-reader';
+	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from './engine/page-image';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -30,7 +32,12 @@
 		type IngestError,
 		type IngestOutcome,
 		type IngestProvenance,
+		type PageRead,
 	} from './ingestion/ingest';
+	import { detectScoreFormat, SNIFF_LENGTH } from './ingestion/format-detection';
+	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
+	import type { ReadReport } from './ingestion/recognized';
+	import type { PageProvenance } from '$lib/library/types';
 
 	interface Props {
 		language: Language;
@@ -39,11 +46,25 @@
 		 *
 		 *  N.67 step 2: the FILE travels with it, because the library stores the
 		 *  singer's own bytes and only this component ever holds them. */
-		oningested: (ingested: IngestedScore, file: File, origin: 'upload' | 'restore') => void;
+		oningested: (
+			ingested: IngestedScore,
+			file: File,
+			origin: 'upload' | 'restore',
+			/** N.59 step 7: present only on the reader route. `file` is then the
+			 *  GREYSCALE INK, not the picture the singer supplied, because the ink
+			 *  is what the retention ruling stores and what a re-read reproduces. */
+			page?: PageProvenance,
+		) => void;
 		/** N.67 step 2: a stored source, re-ingested at boot so a reload brings
 		 *  the score back without the singer re-uploading it. The converters
 		 *  live in this component (§B.2), so the re-ingest does too. */
-		restore?: { fileName: string; bytes: ArrayBuffer } | null;
+		restore?: {
+			fileName: string;
+			bytes: ArrayBuffer;
+			/** N.59 step 7: the clef and key this page was read with, so a
+			 *  restore never asks the two questions again. */
+			answers?: EngravingAnswers | null;
+		} | null;
 		/** N.70: threaded so the accept list can be dropped on a phone. Same
 		 *  `isMobile` N.69 already threads to the Paper components. */
 		isMobile?: boolean;
@@ -83,6 +104,8 @@
 
 	type UiState =
 		| { kind: 'idle' }
+		/** N.59, Ruling A: a picture waits here while the singer answers. */
+		| { kind: 'asking'; file: File }
 		| { kind: 'busy'; label: string }
 		| { kind: 'done'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
@@ -99,9 +122,42 @@
 	const getReader = (): WorkerScoreReader => (reader ??= new WorkerScoreReader());
 	let converter: WebmscoreMsczConverter | null = null;
 	const getConverter = (): WebmscoreMsczConverter => (converter ??= new WebmscoreMsczConverter());
+	/** N.59, Ruling E: constructed on the first real picture, per N.26's law
+	 *  that a drop of one kind never pays for another's warm-up. Pyodide plus
+	 *  numpy, opencv-python, and matplotlib is the heaviest warm-up in the app. */
+	let pageReader: WorkerPageReader | null = null;
+	const getPageReader = (): WorkerPageReader => (pageReader ??= new WorkerPageReader());
 	onDestroy(() => {
 		reader?.dispose();
 		converter?.dispose();
+		pageReader?.dispose();
+	});
+
+	/* ── N.59: the singer's two answers (Ruling A) ──────────────────── */
+
+	/** Defaults per Ruling A: treble, no sharps or flats, no octave change. */
+	const CLEF_CHOICES: { key: string; clef: { sign: string; line: number }; octaveChange: number }[] = [
+		{ key: 'upload.ask.clefTreble', clef: { sign: 'G', line: 2 }, octaveChange: 0 },
+		{ key: 'upload.ask.clefTrebleOttava', clef: { sign: 'G', line: 2 }, octaveChange: -1 },
+		{ key: 'upload.ask.clefBass', clef: { sign: 'F', line: 4 }, octaveChange: 0 },
+	];
+	let clefChoice = $state(0);
+	let fifths = $state(0);
+
+	/** -7 through 7, flats first, so the list reads the way a circle of fifths does. */
+	const FIFTHS_CHOICES = Array.from({ length: 15 }, (_, i) => i - 7);
+	function fifthsLabel(n: number): string {
+		if (n === 0) return T('upload.ask.keyNone');
+		if (n === 1) return T('upload.ask.keySharp');
+		if (n === -1) return T('upload.ask.keyFlat');
+		return n > 0
+			? T('upload.ask.keySharps').replace('%s', String(n))
+			: T('upload.ask.keyFlats').replace('%s', String(-n));
+	}
+	const answers = $derived<EngravingAnswers>({
+		clef: CLEF_CHOICES[clefChoice].clef,
+		octaveChange: CLEF_CHOICES[clefChoice].octaveChange,
+		fifths,
 	});
 
 	/* ── Intake ─────────────────────────────────────────────────────── */
@@ -133,8 +189,25 @@
 		dragging = false;
 	}
 
-	async function handleFile(file: File): Promise<void> {
+	/** Is this a photograph? Sniffed by bytes, the same way dispatch will. */
+	async function isPicture(file: File): Promise<boolean> {
+		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
+		const detected = detectScoreFormat(file.name, head);
+		return detected.ok && detected.format === 'image';
+	}
+
+	/**
+	 * N.59, Ruling A. A picture stops here and asks its two questions BEFORE
+	 * the read, because the reader detects neither clef nor key and E.43
+	 * measured the cost of wrong values at 38% against 73%. A restored page
+	 * does not ask again: its answers came back with it.
+	 */
+	async function handleFile(file: File, storedAnswers?: EngravingAnswers): Promise<void> {
 		bannerDismissed = false;
+		if (!storedAnswers && (await isPicture(file))) {
+			ui = { kind: 'asking', file };
+			return;
+		}
 		// A .musx or .mscz routes through conversion; name the wait honestly.
 		const isMusx = /\.musx$/i.test(file.name);
 		const isMscz = /\.mscz$/i.test(file.name);
@@ -145,13 +218,19 @@
 		// longer pulls a WASM artifact it cannot use.
 		if (isMusx) getReader();
 		if (isMscz) getConverter();
+		const picture = !!storedAnswers || (await isPicture(file));
+		if (picture) getPageReader();
 		ui = {
 			kind: 'busy',
 			label: isMusx
 				? T('upload.status.converting')
 				: isMscz
 					? T('upload.status.convertingMscz')
-					: T('upload.status.reading'),
+					: picture
+						? WorkerPageReader.hasLoadedBefore
+							? T('upload.status.readingPage')
+							: T('upload.status.preparingReader')
+						: T('upload.status.reading'),
 		};
 
 		let outcome: IngestOutcome;
@@ -164,6 +243,8 @@
 					dispose: () => reader?.dispose(),
 				},
 				msczConvert: (bytes, name) => getConverter().convert(bytes, name),
+				readPages: readPages,
+				engravingAnswers: storedAnswers ?? answers,
 			});
 		} catch (err) {
 			console.error('[ScoreUploader] unexpected ingest failure:', err);
@@ -179,11 +260,78 @@
 		ui = c.soon ? { kind: 'soon', message: c.message } : { kind: 'error', message: c.message };
 	}
 
-	function accept(): void {
-		if (ui.kind === 'done') {
-			oningested(ui.ingested, ui.file, 'upload');
-			reset();
+	/**
+	 * The page-reader seam handed to dispatch. Greyscale conversion happens
+	 * here, once, and the SAME bytes are what step 7 stores, so a restored page
+	 * re-reads to the same answer rather than an approximate one.
+	 */
+	async function readPages(file: File, forAnswers: EngravingAnswers): Promise<PageRead> {
+		let ink: ArrayBuffer;
+		try {
+			ink = await toGreyscalePng(file);
+		} catch (e) {
+			if (e instanceof ImageUndecodableError) throw { code: 'IMAGE_UNDECODABLE', message: e.message };
+			throw e;
 		}
+		lastInk = ink.slice(0);
+		// The original's hash is BEST EFFORT and the ink is not: `crypto.subtle`
+		// is absent outside a secure context, and losing it must cost a recorded
+		// provenance line, never the singer's page.
+		let originalHash = '';
+		try {
+			const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+			originalHash = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+		} catch (err) {
+			console.error('[ScoreUploader] page kept, but the original could not be hashed:', err);
+		}
+		lastPage = {
+			clef: forAnswers.clef,
+			octaveChange: forAnswers.octaveChange,
+			fifths: forAnswers.fifths,
+			originalName: file.name,
+			originalHash,
+			staffSpace: [],
+		};
+		return getPageReader().read([ink], {
+			clef: [forAnswers.clef.sign, forAnswers.clef.line],
+			key: forAnswers.fifths,
+			octaveChange: forAnswers.octaveChange,
+			pieceId: await pieceIdFor(file),
+		});
+	}
+
+	/**
+	 * N.59 step 7. The greyscale ink of the last picture read, and the answers
+	 * it was read with, so the owner can store them and restore without asking
+	 * again. Held here because this component is the only one that ever sees
+	 * the singer's bytes, which is why N.67 step 2 put the restore here too.
+	 */
+	let lastInk: ArrayBuffer | null = null;
+	let lastPage: PageProvenance | null = null;
+
+	/** The singer pressed "Read this page". */
+	async function readAsked(): Promise<void> {
+		if (ui.kind !== 'asking') return;
+		await handleFile(ui.file, answers);
+	}
+
+	function accept(): void {
+		if (ui.kind !== 'done') return;
+		const page = pageFor(ui.ingested);
+		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined);
+		reset();
+	}
+
+	/** The page provenance for a reader arrival, with the measured spacing filled in. */
+	function pageFor(ingested: IngestedScore): PageProvenance | null {
+		if (ingested.provenance.via !== 'reader' || !lastPage) return null;
+		return { ...lastPage, staffSpace: ingested.readReport?.staffSpace ?? [] };
+	}
+
+	/** The greyscale ink, named after the original, as a File the owner can store. */
+	function inkFile(original: File): File {
+		const stem = original.name.replace(/\.[^.]+$/, '') || 'page';
+		return new File([lastInk ?? new ArrayBuffer(0)], `${stem}.png`, { type: 'image/png' });
 	}
 
 	/**
@@ -196,7 +344,10 @@
 	onMount(async () => {
 		if (!restore) return;
 		const file = new File([restore.bytes], restore.fileName);
-		await handleFile(file);
+		// N.59 step 7: a stored picture carries its own answers, so restoring
+		// never re-asks. Re-asking on every reload is the tool forgetting, which
+		// is the same principle N.67 step 2's restore already states.
+		await handleFile(file, restore.answers ?? undefined);
 		if (ui.kind === 'done') {
 			// 'restore', not 'upload': these bytes CAME from the vault, and
 			// writing them back would be the tool rewriting what it just read.
@@ -221,6 +372,7 @@
 		}
 		if (p.via === 'mxl') return T('upload.format.mxl');
 		if (p.via === 'denigma') return T('upload.format.musxDenigma');
+		if (p.via === 'reader') return T('upload.format.imageReader');
 		return T('upload.format.msczWebmscore'); // via === 'webmscore'
 	}
 
@@ -237,8 +389,6 @@
 						return { soon: false, message: T('upload.err.mus') };
 					case 'pdf':
 						return { soon: true, message: T('upload.soon.pdf') };
-					case 'image':
-						return { soon: true, message: T('upload.soon.image') };
 					case 'midi':
 						return { soon: true, message: T('upload.soon.midi') };
 					case 'json-not-mnx':
@@ -271,6 +421,13 @@
 				return { soon: false, message: T('upload.err.parseFailed') };
 			case 'MSCZ_CONVERTER_UNAVAILABLE':
 				return { soon: true, message: T('upload.soon.mscz') };
+			case 'PAGE_READER_UNAVAILABLE':
+			case 'PAGE_READER_LOAD_FAILED':
+				return { soon: false, message: T('upload.err.readerLoadFailed') };
+			case 'PAGE_READ_FAILED':
+				return { soon: false, message: T('upload.err.pageReadFailed') };
+			case 'IMAGE_UNDECODABLE':
+				return { soon: false, message: T('upload.err.imageUndecodable') };
 			case 'CONVERSION_FAILED':
 				return {
 					soon: false,
@@ -291,9 +448,17 @@
 		}
 	}
 
-	const showBanner = $derived(
-		ui.kind === 'done' && !bannerDismissed && fidelityBanner(ui.ingested.provenance) === 'denigma'
+	const bannerTier = $derived(
+		ui.kind === 'done' && !bannerDismissed ? fidelityBanner(ui.ingested.provenance) : null
 	);
+	const showBanner = $derived(bannerTier !== null);
+	const readReport = $derived<ReadReport | null>(
+		ui.kind === 'done' ? (ui.ingested.readReport ?? null) : null
+	);
+	const measureList = (subs: { measureIndex: number; count: number }[]): string =>
+		subs.map((x) => x.measureIndex + 1).join(', ');
+	const subTotal = (subs: { measureIndex: number; count: number }[]): number =>
+		subs.reduce((n, x) => n + x.count, 0);
 </script>
 
 <div class="uploader">
@@ -325,7 +490,7 @@
 				class="scan-btn"
 				title={T('upload.scanTooltip')}
 				aria-label={T('upload.scanTooltip')}
-				aria-disabled="true"
+				onclick={browse}
 			>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
 					<path d="M2 7V2h5" />
@@ -335,6 +500,35 @@
 					<line x1="5" y1="12" x2="19" y2="12" />
 				</svg>
 			</button>
+		</div>
+	{:else if ui.kind === 'asking'}
+		<!-- N.59, Ruling A. Two questions the reader cannot answer for itself.
+		     The drawer manipulates, so the control is lawful here; nothing about
+		     this appears on the paper. Defaults are treble and no accidentals,
+		     with the octave-down treble one tap away. -->
+		<div class="ask">
+			<p class="ask-title">{T('upload.ask.title')}</p>
+			<p class="ask-why">{T('upload.ask.why')}</p>
+			<label class="ask-field">
+				<span class="ask-label">{T('upload.ask.clef')}</span>
+				<select class="ask-select" bind:value={clefChoice}>
+					{#each CLEF_CHOICES as choice, i (choice.key)}
+						<option value={i}>{T(choice.key)}</option>
+					{/each}
+				</select>
+			</label>
+			<label class="ask-field">
+				<span class="ask-label">{T('upload.ask.key')}</span>
+				<select class="ask-select" bind:value={fifths}>
+					{#each FIFTHS_CHOICES as n (n)}
+						<option value={n}>{fifthsLabel(n)}</option>
+					{/each}
+				</select>
+			</label>
+			<div class="result-actions">
+				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.ask.cancel')}</button>
+				<button type="button" class="btn-primary" onclick={readAsked}>{T('upload.ask.read')}</button>
+			</div>
 		</div>
 	{:else if ui.kind === 'busy'}
 		<div class="status">
@@ -346,10 +540,62 @@
 			<p class="format-label">{formatLabel(ui.ingested.provenance)}</p>
 			{#if showBanner}
 				<div class="banner">
-					<p class="banner-text">{T('upload.banner.denigma')}</p>
+					<p class="banner-text">
+						{bannerTier === 'reader' ? T('upload.banner.reader') : T('upload.banner.denigma')}
+					</p>
 					<button type="button" class="banner-dismiss" onclick={() => (bannerDismissed = true)}>
 						{T('upload.banner.dismiss')}
 					</button>
+				</div>
+			{/if}
+			{#if readReport}
+				<!-- N.59, Ruling D. The read report lives in the DRAWER and counts
+				     every substitution. Nothing is marked on the page: a mark that
+				     appears on everything says nothing (E.47's strike). -->
+				<div class="read-report">
+					<p class="report-title">{T('upload.report.title')}</p>
+					<p class="report-line">
+						{T('upload.report.systems')
+							.replace('%s', String(readReport.systems))
+							.replace('%s', String(readReport.staves))}
+					</p>
+					<p class="report-line">
+						{T('upload.report.events')
+							.replace('%s', String(readReport.notes))
+							.replace('%s', String(readReport.rests))
+							.replace('%s', String(readReport.measures))}
+					</p>
+					<p class="report-line">
+						{T('upload.report.spacing').replace(
+							'%s',
+							readReport.staffSpace.map((v) => v.toFixed(1)).join(', ')
+						)}
+					</p>
+					<p class="report-line">
+						{T('upload.report.seconds').replace('%s', readReport.readSeconds.toFixed(1))}
+					</p>
+					{#if readReport.pitchSubstitutions.length > 0}
+						<p class="report-sub">
+							{T('upload.report.pitchSubs')
+								.replace('%s', String(subTotal(readReport.pitchSubstitutions)))
+								.replace('%s', measureList(readReport.pitchSubstitutions))}
+						</p>
+					{/if}
+					{#if readReport.durationSubstitutions.length > 0}
+						<p class="report-sub">
+							{T('upload.report.durationSubs')
+								.replace('%s', String(subTotal(readReport.durationSubstitutions)))
+								.replace('%s', measureList(readReport.durationSubstitutions))}
+						</p>
+					{/if}
+					{#if readReport.staffSelectionFallbacks > 0}
+						<p class="report-sub">
+							{T('upload.report.staffFallback').replace(
+								'%s',
+								String(readReport.staffSelectionFallbacks)
+							)}
+						</p>
+					{/if}
 				</div>
 			{/if}
 			<div class="result-actions">
@@ -689,5 +935,72 @@
 
 	.mus-trial {
 		font-style: italic;
+	}
+
+	/* ── N.59: the two questions, and the read report ──────── */
+
+	.ask,
+	.read-report {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		padding: 0.75rem;
+		border: 1px solid var(--rule);
+		border-radius: 4px;
+		background: var(--paper-cream);
+	}
+
+	.ask-title,
+	.report-title {
+		margin: 0;
+		font-weight: 600;
+		font-size: 0.9rem;
+		color: var(--ink);
+	}
+
+	.ask-why {
+		margin: 0 0 0.25rem;
+		font-size: 0.82rem;
+		line-height: 1.4;
+		color: var(--ink-soft, var(--ink));
+	}
+
+	.ask-field {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		font-size: 0.85rem;
+	}
+
+	.ask-label {
+		color: var(--ink);
+	}
+
+	/* The 44px floor is the cursor's alone (CONTRACT, corrected 2026-08-14),
+	   but a select is a real touch target and takes it. */
+	.ask-select {
+		min-height: 44px;
+		flex: 1 1 auto;
+		max-width: 62%;
+		padding: 0 0.5rem;
+		font-family: inherit;
+		font-size: 0.85rem;
+		color: var(--ink);
+		background: var(--paper);
+		border: 1px solid var(--rule);
+		border-radius: 3px;
+	}
+
+	.report-line,
+	.report-sub {
+		margin: 0;
+		font-size: 0.8rem;
+		line-height: 1.4;
+		color: var(--ink-soft, var(--ink));
+	}
+
+	.report-sub {
+		color: var(--ink);
 	}
 </style>

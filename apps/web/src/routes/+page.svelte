@@ -59,6 +59,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
+	import type { PageProvenance } from '$lib/library/types';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
@@ -730,11 +731,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * never made for (measured at `5c9c7f3`). Now Ilya can tell that a different
 	 * piece has arrived, and says so before anything is lost.
 	 */
+	/** N.59 step 7: the page provenance of the arrival currently being applied. */
+	let arrivalPage: PageProvenance | null = null;
+
 	async function handleArrival(
 		ingested: IngestedScore,
 		file: File,
 		origin: 'upload' | 'restore',
+		page?: PageProvenance,
 	): Promise<void> {
+		arrivalPage = page ?? null;
 		// A restore is the song's own score coming back from the vault. It is
 		// never a new arrival and must never be questioned.
 		if (origin === 'restore') {
@@ -806,7 +812,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// N.67 step 2. The singer's own bytes go down with the song, in one
 		// transaction, so a reload brings the score back. Only a real upload
 		// writes: a restore's bytes came from the vault.
-		if (origin === 'upload') void attachUploadedSource(ingested, file);
+		if (origin === 'upload') void attachUploadedSource(ingested, file, arrivalPage ?? undefined);
 		// Live-wired (§E.7 slice 1): VoiceProfilePane renders this as paginated
 		// notation in the Fit main pane.
 		ingestedScore = ingested;
@@ -961,8 +967,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// boot. Read from the load result, not from the document: the document
 	// carries the score's provenance, never its bytes.
 	const restoreSource = opened?.source
-		? { fileName: opened.source.fileName, bytes: opened.source.bytes }
+		? {
+				fileName: opened.source.fileName,
+				bytes: opened.source.bytes,
+				// N.59 step 7: a page read off a picture comes back with the clef
+				// and key it was read with, so the restore never asks again.
+				answers: openedPageAnswers(),
+			}
 		: null;
+
+	/** The clef, key, and octave a stored PICTURE was read with, or null. */
+	function openedPageAnswers() {
+		const page = opened?.loaded?.record?.source?.page;
+		if (!page) return null;
+		return { clef: page.clef, octaveChange: page.octaveChange, fifths: page.fifths };
+	}
 
 	/**
 	 * Keep the singer's own file, byte for byte.
@@ -972,7 +991,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * "have I met this music before" for the recognition prompt step 4 builds.
 	 * Neither is identity; the song id is.
 	 */
-	async function attachUploadedSource(ingested: IngestedScore, file: File): Promise<void> {
+	async function attachUploadedSource(
+		ingested: IngestedScore,
+		file: File,
+		page?: PageProvenance,
+	): Promise<void> {
+		// N.59 step 7: on the reader route `file` is already the GREYSCALE INK,
+		// so these bytes are the ones the retention ruling keeps and the ones a
+		// re-read reproduces exactly. The picture the singer supplied is recorded
+		// by name and hash inside `page` rather than kept twice.
 		const bytes = await file.arrayBuffer();
 		// THE HASHES ARE BEST EFFORT; THE BYTES ARE NOT. `crypto.subtle` is
 		// absent outside a secure context, and losing it must cost recognition
@@ -990,8 +1017,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 		const importedAt = new Date().toISOString();
 		doc.attachSource(
-			{ songId: doc.id, fileName: ingested.fileName, bytes, byteLength: bytes.byteLength, contentHash, importedAt },
-			{ fileName: ingested.fileName, byteLength: bytes.byteLength, importedAt, contentHash, fingerprint },
+			{ songId: doc.id, fileName: file.name, bytes, byteLength: bytes.byteLength, contentHash, importedAt },
+			{
+				fileName: file.name,
+				byteLength: bytes.byteLength,
+				importedAt,
+				contentHash,
+				fingerprint,
+				page: page ?? null,
+			},
 		);
 	}
 	function handleLanguageChange(lang: Language) {
@@ -1465,7 +1499,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{language}
 						{isMobile}
 						restore={restoreSource}
-						oningested={(ingested, file, origin) => void handleArrival(ingested, file, origin)}
+						oningested={(ingested, file, origin, page) =>
+							void handleArrival(ingested, file, origin, page)}
 					/>
 					{#if noLyricsFile}
 						<!-- N.55a's courtesy message (Dann, E.47). It lives in the DRAWER and

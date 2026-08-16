@@ -29,7 +29,7 @@
  */
 
 /** Formats the dispatch layer can route today. */
-export type ScoreFormat = 'mnx' | 'musicxml' | 'mxl' | 'mscz' | 'musx';
+export type ScoreFormat = 'mnx' | 'musicxml' | 'mxl' | 'mscz' | 'musx' | 'image';
 
 /**
  * Recognised-but-unroutable inputs. Each kind maps to distinct user-facing
@@ -39,7 +39,6 @@ export type DetectionFailure =
 	| { kind: 'pre-2014-finale' }
 	| { kind: 'midi' }
 	| { kind: 'pdf' }
-	| { kind: 'image' }
 	| { kind: 'json-not-mnx' }
 	| { kind: 'xml-not-musicxml'; rootElement?: string }
 	| { kind: 'zip-unrecognised' }
@@ -53,7 +52,7 @@ export type DetectionResult =
  * The `accept` attribute for the uploader's file input: exactly the formats
  * dispatch can route, nothing aspirational.
  */
-export const ACCEPTED_EXTENSIONS = '.mnx,.json,.xml,.musicxml,.mxl,.mscz,.musx';
+export const ACCEPTED_EXTENSIONS = '.mnx,.json,.xml,.musicxml,.mxl,.mscz,.musx,image/*';
 
 /** How many leading bytes detection needs at most. */
 export const SNIFF_LENGTH = 2048;
@@ -178,8 +177,13 @@ export function detectScoreFormat(fileName: string, bytes: Uint8Array): Detectio
 		return { ok: false, failure: { kind: 'zip-unrecognised' } };
 	}
 	if (isMidi(bytes)) return { ok: false, failure: { kind: 'midi' } };
+	// N.59 increment 2 promotes `pdf` the same way `image` is promoted below.
 	if (isPdf(bytes)) return { ok: false, failure: { kind: 'pdf' } };
-	if (isImage(bytes)) return { ok: false, failure: { kind: 'image' } };
+	// N.59, Ruling C. A photograph is a ROUTABLE format now, not a recognised
+	// refusal: it goes to the page reader and comes back as MusicXML. The
+	// `image` failure kind is gone rather than left dangling, so the compiler
+	// names every site that assumed a picture could only be turned away.
+	if (isImage(bytes)) return { ok: true, format: 'image' };
 
 	// Text-based formats: judge by content, not extension.
 	const head = decodeHead(bytes.subarray(0, SNIFF_LENGTH));

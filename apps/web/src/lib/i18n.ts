@@ -242,9 +242,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
 	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz)' },
-	'upload.drop.comingSoon': { en: 'Coming soon: PDF, image, MIDI', fr: 'Bientôt\u00a0: PDF, image, MIDI' },
+	'upload.drop.comingSoon': { en: 'Coming soon: PDF, MIDI', fr: 'Bientôt\u00a0: PDF, MIDI' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
-	'upload.scanTooltip':          { en: 'Scan a score from an image (coming soon)', fr: 'Numériser une partition à partir d’une image (bientôt)' },
+	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
 	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
@@ -271,7 +271,44 @@ const strings: Record<string, Record<Language, string>> = {
 
 	'upload.soon.mscz':            { en: 'MuseScore (.mscz) import is coming soon.', fr: 'L’import MuseScore (.mscz) arrive bientôt.' },
 	'upload.soon.pdf':             { en: 'PDF import is coming soon.',    fr: 'L’import PDF arrive bientôt.' },
-	'upload.soon.image':           { en: 'Image import is coming soon.',  fr: 'L’import d’image arrive bientôt.' },
+	// ── N.59: the page reader ────────────────────────────────────────
+	// The two questions the reader cannot answer for itself (Ruling A), the
+	// read report the drawer declares (Ruling D), and the reader's fidelity
+	// tier. Every French term here is adopted, ordinary musical French:
+	// clé, armure, dièse, bémol, portée, interligne, silence. Nothing coined.
+	'upload.status.readingPage':   { en: 'Reading the page…', fr: 'Lecture de la page…' },
+	'upload.status.preparingReader': { en: 'Preparing the page reader. This will only happen once.', fr: 'Préparation du lecteur de page. Cela n’arrivera qu’une fois.' },
+	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them in Transcription.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image\u00a0; saisissez-les dans Transcription.' },
+
+	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
+	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
+	'upload.ask.clef':             { en: 'Clef', fr: 'Clé' },
+	'upload.ask.clefTreble':       { en: 'Treble', fr: 'Clé de sol' },
+	'upload.ask.clefTrebleOttava': { en: 'Treble, sounding an octave lower', fr: 'Clé de sol, à l’octave inférieure' },
+	'upload.ask.clefBass':         { en: 'Bass', fr: 'Clé de fa' },
+	'upload.ask.key':              { en: 'Key signature', fr: 'Armure' },
+	'upload.ask.keyNone':          { en: 'No sharps or flats', fr: 'Aucune altération' },
+	'upload.ask.keySharp':         { en: '1 sharp', fr: '1 dièse' },
+	'upload.ask.keySharps':        { en: '%s sharps', fr: '%s dièses' },
+	'upload.ask.keyFlat':          { en: '1 flat', fr: '1 bémol' },
+	'upload.ask.keyFlats':         { en: '%s flats', fr: '%s bémols' },
+	'upload.ask.read':             { en: 'Read this page', fr: 'Lire cette page' },
+	'upload.ask.cancel':           { en: 'Cancel', fr: 'Annuler' },
+
+	'upload.report.title':         { en: 'What Ilya read', fr: 'Ce qu’Ilya a lu' },
+	'upload.report.systems':       { en: '%s systems, %s staves', fr: '%s systèmes, %s portées' },
+	'upload.report.spacing':       { en: 'Staff spacing: %s px', fr: 'Interligne\u00a0: %s px' },
+	'upload.report.events':        { en: '%s notes, %s rests, %s measures', fr: '%s notes, %s silences, %s mesures' },
+	'upload.report.seconds':       { en: 'Read in %s s', fr: 'Lu en %s s' },
+	'upload.report.pitchSubs':     { en: 'Pitch assumed on %s notes (measures %s).', fr: 'Hauteur supposée sur %s notes (mesures %s).' },
+	'upload.report.durationSubs':  { en: 'Length assumed on %s notes (measures %s).', fr: 'Durée supposée sur %s notes (mesures %s).' },
+	'upload.report.staffFallback': { en: 'Ilya could not tell which staff carries the voice in %s systems, and read the top one.', fr: 'Ilya n’a pas pu déterminer quelle portée porte la voix dans %s systèmes, et a lu celle du haut.' },
+
+	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
+	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. A flat, straight photograph of the whole page reads best.', fr: 'Ilya n’a pas pu lire cette page. Une photographie bien à plat et droite de la page entière se lit le mieux.' },
+	'upload.err.imageUndecodable': { en: 'This browser cannot open that picture. A JPEG or a PNG will work.', fr: 'Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera.' },
+
 	'upload.soon.midi':            { en: 'MIDI import is coming soon.',   fr: 'L’import MIDI arrive bientôt.' },
 
 	'upload.err.mus':              { en: 'This is a pre-2014 Finale file (.mus). This closed format cannot be read directly. Resave it as .musx in Finale 2014 or later, or export it to MusicXML, then upload again.', fr: 'Ceci est un fichier Finale antérieur à 2014 (.mus). Ce format fermé ne peut pas être lu directement. Réenregistrez-le en .musx dans Finale 2014 ou ultérieur, ou exportez-le en MusicXML, puis téléversez-le à nouveau.' },

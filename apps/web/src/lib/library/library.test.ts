@@ -91,6 +91,76 @@ describe('validateRecord', () => {
 		expect(result.record).toEqual(record);
 	});
 
+	/**
+	 * N.59 step 7 found that `source` was never carried through this function at
+	 * all. Two things depended on it and neither worked across a reload: the
+	 * chimera warning's stored fingerprint (N.67 step 4a), and the clef and key
+	 * a photographed page was read with. These tests exist so it cannot go
+	 * silently missing again.
+	 */
+	it('carries the source provenance through, which it did not before N.59', () => {
+		const source = {
+			fileName: 'kabalevsky.musx',
+			byteLength: 145513,
+			importedAt: NOW,
+			contentHash: 'abc123',
+			fingerprint: 'fp-90',
+		};
+
+		const result = validateRecord({ source }, 'test-song', NOW);
+
+		expect(result.reason).toBeUndefined();
+		expect(result.record.source).toEqual({ ...source, page: null });
+	});
+
+	it('carries a photographed page\'s clef, key, and octave', () => {
+		const page = {
+			clef: { sign: 'G', line: 2 },
+			octaveChange: -1,
+			fifths: 7,
+			originalName: 'IMG_5042.HEIC',
+			originalHash: 'b0c91c1c',
+			staffSpace: [21],
+		};
+
+		const result = validateRecord(
+			{ source: { fileName: 'page.png', byteLength: 828495, importedAt: NOW, contentHash: 'h', fingerprint: 'f', page } },
+			'test-song',
+			NOW,
+		);
+
+		expect(result.record.source?.page).toEqual(page);
+	});
+
+	it('drops a half-read page rather than inventing an answer the singer never gave', () => {
+		const result = validateRecord(
+			{
+				source: {
+					fileName: 'page.png',
+					byteLength: 1,
+					importedAt: NOW,
+					contentHash: 'h',
+					fingerprint: 'f',
+					// No clef: a half-kept answer would be read back as confident.
+					page: { octaveChange: -1, fifths: 7 },
+				},
+			},
+			'test-song',
+			NOW,
+		);
+
+		expect(result.record.source?.page).toBeNull();
+		expect(result.record.source?.fileName).toBe('page.png');
+	});
+
+	it('reports a source it cannot read, and keeps the rest of the record', () => {
+		const result = validateRecord({ poem: 'Если', source: { fileName: 7 } }, 'test-song', NOW);
+
+		expect(result.reason).toBe('malformed');
+		expect(result.record.source).toBeNull();
+		expect(result.record.poem).toBe('Если');
+	});
+
 	it('replaces a record that is not an object at all', () => {
 		expect(validateRecord('nonsense', 'test-song', NOW).reason).toBe('malformed');
 		expect(validateRecord(null, 'test-song', NOW).record.poem).toBe('');

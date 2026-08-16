@@ -12,3 +12,13 @@ _rhythm_spike/recognized.b64
 _*.tar.gz
 testwrite.txt
 .DS_Store
+
+# Python bytecode. Every Python file in this repository lives under this
+# directory, so the rule belongs here rather than in the root ignore file.
+# CPython writes these beside any module it imports, which means simply
+# RUNNING the reader leaves untracked files, and the ship script refuses on
+# untracked files. Added N.59 step 1, 2026-08-16, after a cache-generation run
+# blocked a ship from another session.
+__pycache__/
+*.pyc
+

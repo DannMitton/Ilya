@@ -266,16 +266,110 @@ def detect_staves(img, page=None):
                   'reader.detect_staves five-line validation', page)
     return checked, s
 
-def select_vocal(staves, s):
-    tops=[st[0] for st in staves]; bots=[st[-1] for st in staves]
-    gaps=[tops[i+1]-bots[i] for i in range(len(staves)-1)]
-    if not gaps: return [0]
-    gaps_arr=np.array(gaps)
-    thr=(gaps_arr.min()+gaps_arr.max())/2 if gaps_arr.max()>gaps_arr.min()*1.4 else gaps_arr.max()+1
-    vocal=[0]
-    for i,g in enumerate(gaps):
-        if g>thr: vocal.append(i+1)
-    return vocal
+# ---------- staff selection: THE BRACE RULE ----------
+#
+# N.59, 2026-08-16. THE LARGEST-GAP HEURISTIC IS STRUCK, not retuned. This
+# file's own README already ruled it "unsound, not merely mistuned: within-
+# system and between-system gap populations overlap on real pages, so no
+# threshold separates them", with three recorded failures, and ruled its
+# replacement to be connectivity-based ownership. On E.43's test page the old
+# code returned [0, 1, 4, 7, 10] where the correct answer is [0, 3, 6, 9]: it
+# invented a system break between the first two staves.
+#
+# DANN'S RULE, house authority, quoted in Fable's E.57 brief (Ruling E):
+# in a three-stave system joined at the left by the system barline, the bottom
+# two are braced as the Grand Staff, and THE STAFF NOT IN THE BRACE IS THE
+# VOICE. That is a statement about engraving, not about spacing, which is why
+# it survives pages the gap heuristic cannot read.
+#
+# Two things it needs from the raster, and neither is a tuned constant:
+#   - a PER-SYSTEM left edge. E.43 established that one page-wide edge misses
+#     the indented first system, so the edge is measured per staff.
+#   - the system barline, which is what joins a system's staves. Grouping on
+#     connectivity rather than on gaps is the README's own ruled replacement.
+#
+# The brace is found as a connected component sitting left of that edge and
+# taller than five staff spaces. A single staff is 4*s tall and an instrument
+# name is one or two, so a component spanning two staves plus their gap (about
+# 10*s) is separated from both by a wide margin; this is a separator between
+# two well-parted populations, not a fitted threshold.
+#
+# DEGENERATE CASES, ruled simply (Ruling E): a one-staff system's staff is the
+# voice; if exactly one staff in a system is unbraced, it is the voice; if no
+# brace is found or all staves are braced, take staff 0 of the system and COUNT
+# the fallback, which the drawer's read report then declares. More than one
+# unbraced staff is not ruled, and is treated as the unruled case it is: the
+# same staff-0 fallback, counted the same way, rather than a guess dressed up
+# as a rule.
+
+def _staff_left_edge(dark, st):
+    """Leftmost column where a majority of this staff's five lines carry ink.
+    A majority rather than all five, so one broken line cannot move the edge."""
+    hits=dark[st,:].sum(axis=0)
+    cols=np.where(hits>=3)[0]
+    return int(cols[0]) if len(cols) else None
+
+def _joined_at_left(dark, st_a, st_b, x0, s):
+    """Does a system barline run down the left edge from staff a to staff b?
+    A system's staves are joined there; consecutive systems are not."""
+    lo,hi=st_a[-1],st_b[0]
+    if hi<=lo or x0 is None: return False
+    W=dark.shape[1]
+    x_lo=max(0,x0-int(round(0.6*s))); x_hi=min(W-1,x0+int(round(0.6*s)))
+    band=dark[lo:hi+1, x_lo:x_hi+1]
+    if band.size==0: return False
+    return bool(band.mean(axis=0).max()>=0.85)
+
+def _brace_span(dark, x0, sys_top, sys_bot, s):
+    """Row range of the brace sitting left of the system's left edge, or None."""
+    if x0 is None: return None
+    H,W=dark.shape
+    x_lo=max(0,x0-int(round(3.5*s))); x_hi=max(0,x0-int(round(0.3*s)))
+    if x_hi-x_lo<2: return None
+    pad=int(round(0.5*s))
+    y_lo=max(0,sys_top-pad); y_hi=min(H-1,sys_bot+pad)
+    band=dark[y_lo:y_hi+1, x_lo:x_hi].astype(np.uint8)
+    if band.size==0: return None
+    num,lab,stats,cent=cv2.connectedComponentsWithStats(band,8)
+    best=None
+    for i in range(1,num):
+        x,y,w,h,area=stats[i]
+        if h<5.0*s: continue                     # shorter than two staves plus their gap
+        if best is None or h>best[1]: best=(y_lo+int(y),int(h))
+    return None if best is None else (best[0], best[0]+best[1]-1)
+
+def _in_span(span, st):
+    """Is this staff inside the brace? Most of it must be, so a brace that
+    overshoots by a few pixels does not claim the staff above it."""
+    lo,hi=span; top,bot=st[0],st[-1]
+    return (min(hi,bot)-max(lo,top))>=0.6*(bot-top)
+
+def select_vocal(staves, s, img):
+    """Return (vocal, fallbacks): one voice-staff index per system, in order,
+    and the number of systems where the brace rule could not decide."""
+    if not staves: return [], 0
+    dark=(img<128)
+    edges=[_staff_left_edge(dark,st) for st in staves]
+
+    # Group into systems on the system barline, not on gaps.
+    systems=[[0]]
+    for i in range(1,len(staves)):
+        x0=edges[i-1] if edges[i-1] is not None else edges[i]
+        if _joined_at_left(dark,staves[i-1],staves[i],x0,s): systems[-1].append(i)
+        else: systems.append([i])
+
+    vocal=[]; fallbacks=0
+    for group in systems:
+        if len(group)==1:
+            vocal.append(group[0]); continue
+        x0=next((edges[j] for j in group if edges[j] is not None), None)
+        span=_brace_span(dark,x0,staves[group[0]][0],staves[group[-1]][-1],s)
+        unbraced=[j for j in group if span is None or not _in_span(span,staves[j])]
+        if span is not None and len(unbraced)==1:
+            vocal.append(unbraced[0])
+        else:
+            vocal.append(group[0]); fallbacks+=1
+    return vocal, fallbacks
 
 def clef_topD(sign, line, octaveChange=0):
     if sign=='F':   ref_deg=LETIDX['F']+7*3
@@ -397,7 +491,13 @@ def has_stem(nl, hx, hy, s, min_len=2.0, lo=0.35, hi=1.05, max_w=0.42):
 def read_page_geometry(cfg):
     img=cv2.imread(cfg['png'],cv2.IMREAD_GRAYSCALE)
     staves,s=detect_staves(img,page=cfg.get('png'))
-    vocal=cfg['vocal'] if 'vocal' in cfg else select_vocal(staves,s)
+    # The cfg['vocal'] bypass is untouched: a fixture that names its staves is
+    # byte-identical to before, and its fallback count is zero because the
+    # brace rule was never consulted.
+    if 'vocal' in cfg:
+        vocal,vocal_fallbacks=cfg['vocal'],0
+    else:
+        vocal,vocal_fallbacks=select_vocal(staves,s,img)
     # ONE non-destructive removal, computed once, consumed by every downstream
     # stage (tier-1 unification -- see the note above remove_lines()). nl and
     # nl_safe are deliberately the SAME array: the "safe" removal is no longer
@@ -419,7 +519,8 @@ def read_page_geometry(cfg):
     topD=clef_topD(cfg['clef'][0],cfg['clef'][1],cfg.get('octaveChange',0))
     for h in heads:
         L,O=position(h,staves,vocal,topD,s); h['L']=L; h['O']=O
-    return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD)
+    return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD,
+                vocalFallbacks=vocal_fallbacks)
 
 # ---------- accidental engine ----------
 SHARP_ORDER=['F','C','G','D','A','E','B']

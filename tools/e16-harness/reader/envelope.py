@@ -100,7 +100,13 @@ def run(cfg, ctx_in=None):
     staves, s, vocal, nl = G['staves'], G['s'], G['vocal'], G['nl']
     W = G['img'].shape[1]
     bl = reader.detect_barlines(nl, staves, vocal, s)
-    mps = cfg['measures_per_system']
+    # N.59, Ruling A. Same derivation as run_page2's, and it must stay the same
+    # derivation: the two consumption sites number the same measures, and a
+    # disagreement between them would misplace every measure on the page. See
+    # run_page2's note for why it is len(barlines) and not len(barlines) + 1.
+    mps = cfg.get('measures_per_system')
+    if mps is None:
+        mps = [max(1, len(bl.get(i, []))) for i in range(len(vocal))]
     base = list(np.cumsum([0] + list(mps))[:-1])
     n_measures = int(sum(mps))
 

@@ -21,6 +21,12 @@ data/dictionary.0982ad81.json
 scripts/flagged-glosses.json
 scripts/frwikt-enrichment-report.json
 
+# Generated copies of the E.16 page reader, put there by
+# apps/web/scripts/copy-reader.mjs at dev and build so Pyodide can fetch them.
+# The source of truth is tools/e16-harness/reader/; these are never edited and
+# never committed. Added N.59 step 2, 2026-08-16.
+apps/web/static/reader/
+
 # Test output
 apps/web/test-results/
 
