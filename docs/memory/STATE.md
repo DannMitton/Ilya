@@ -176,11 +176,22 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
   has arrived and says so. Where the singer proceeds, the WHOLE song is
   replaced together, title, source, and placements, so the record is coherent.
   One song at a time, honestly.
-- **5, SINGLE-SONG HALF BUILT: the binder.** Export one song, restore a
-  one-song binder into an emptied library. Round trip measured: exported as
-  `test fixture, Я вас любил.ilya`, storage cleared to zero songs, imported
-  back with the poem, all five placements, and the same 1,757-byte score.
+- **5, SINGLE-SONG HALF CLOSED `23c05e1`, WALKED BY DANN 2026-08-16.** Export
+  one song, restore a one-song binder into an emptied library. **What Dann saw:**
+  the file downloaded as `test fixture, Я вас любил.ilya`, named from the score
+  header with the Cyrillic intact; he cleared site data in DevTools; and after
+  Import a song the whole song came back, including the five-note stave with
+  Я те бя лю бил under it. Measured alongside: 1,757 bytes of score, five
+  placements, five hit targets drawn.
   **Export-all, multi-song import, and the collision rules stay with 4b.**
+  **NOT WALKED: the cross-device half.** Dann could not locate the `.ilya` on
+  his phone, and the blocker is file transfer rather than Ilya. Worth doing,
+  not worth an errand at five in the morning.
+- **One absence that is NOT a bug, so nobody chases it.** After an import the
+  SYLLABLES station is empty until the singer presses Transcribe: the station
+  needs the pipeline to have run and a reload does not run it, which is the same
+  reason `keepSurvivingGlosses` waits for the next Transcribe. The syllables
+  UNDER THE NOTES come from the stored placements and appear immediately.
 - **A DIVERGENCE FROM §8, ON DANN'S RULING.** Design §8 says "the UI copy says
   backup", and it argues the export sits on s. 29.24 backup grounds. **The
   buttons say "Export this song" and "Import a song" instead**, because a legal
