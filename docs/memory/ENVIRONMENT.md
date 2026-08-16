@@ -346,6 +346,56 @@ npmjs.com package pages, and bundlephobia all refuse.**
 
 ---
 
+## Claude Code, and where the building happens from E.52
+
+**The build moved off the bridge on 2026-08-16.** The reason is the line under
+"The device bridge" above, which was already written and which E.52 wasted half an
+hour re-deriving: **no gate runs on the device VM.** Writing code through the
+bridge means Dann runs all five gates by hand and pastes the output back, once per
+step. For a six-step build that is untenable.
+
+- **Claude Code is in the desktop app, not the terminal.** `claude` is NOT
+  installed on Dann's Mac; `claude --version` returns `command not found`
+  (2026-08-16). It does not need to be. The desktop app's left sidebar has
+  **Home** and **Code** tabs; Code is a full Claude Code session.
+- **Point it at a folder** with **"Select folder…"** at the bottom of the Code
+  tab, beside "Local". `~/Desktop/ilya-rewrite` associated 2026-08-16.
+- **That session reads the repository directly.** No grant, no staging, no
+  `device_stage_files`, and the gates run for real. `docs/memory/README.md`'s
+  opener is the whole handover; nothing else needs writing.
+- **What stays in a Cowork session:** rulings, design, Fable, anything needing
+  taste. **What moves:** the building.
+
+---
+
+## Storage, as it actually is. Measured E.52
+
+- **Ilya ALREADY uses IndexedDB.** `apps/web/src/lib/loader.ts:103-115` opens
+  database **`ilya-data`**, version **1**, object store **`cache`**, holding the
+  dictionary as chunked NDJSON. **`claude/e45-n67-storage-architecture_2026-08-13.md`
+  recommends IndexedDB as though it were new. It is wrong about that.** A song
+  store must share this database and bump its version, or open its own beside it.
+- **`navigator.storage.persist()` and `.estimate()` have NEVER been called.** Zero
+  occurrences across `apps` and `packages`, 2026-08-16. So the origin is
+  best-effort and evictable, and the real quota on Dann's devices is unread.
+- **`.musx` does not compress.** `gzip -9` on a 145,513-byte Kabalevsky returns
+  **145,526**, thirteen bytes larger, because Finale's container is already a zip.
+  Same on a 64,286-byte Musorgsky: 64,314 out. **The N.67 document's "15 to 25 KB
+  compressed" is wrong.** Dann's real scores run **64 KB to 146 KB and stay there.**
+- **PDF, image, and MIDI are in the picker and then refused.**
+  `ScoreUploader.svelte:48` accepts them; `:184-187` classifies each as a "coming
+  soon" note, copy at `i18n.ts:273-275`. **No heavy format is ingested today**, so
+  nothing is yet built on the wrong storage assumption.
+- **Thirteen live storage keys**: eleven `ilya:*` (ten written inline in
+  `+page.svelte`, `ilya:pairings` in `pairings.ts:62`), plus `shane.profiles.v2`
+  with a v1 migration at `profileStore.ts:173-205`, plus a sessionStorage
+  `ilya-ios-hint-shown` at `InstallPrompt.svelte:52`.
+- **`profileStore.ts:216-224` swallows its quota failure silently.** That is N.27.
+  `pairings.ts:390-422` is the model to copy instead: an outcome with a reason,
+  surfaced at `+page.svelte:1186-1194`.
+
+---
+
 ## Project knowledge capacity
 
 Measured 2026-08-13: **2.55 bytes per unit**, and a document costs roughly 5,900
