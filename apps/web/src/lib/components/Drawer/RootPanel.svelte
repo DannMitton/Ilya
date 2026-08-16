@@ -21,6 +21,9 @@
 		ontranscribe: () => void;
 		onclear: () => void;
 		onprint: () => void;
+		/** N.67 step 5, the binder. Twinned on the print control, Dann's ruling. */
+		onexport: () => void;
+		onimport: () => void;
 		onmetadatachange: (meta: SongMetadata) => void;
 	}
 
@@ -40,6 +43,8 @@
 		ontranscribe,
 		onclear,
 		onprint,
+		onexport,
+		onimport,
 		onmetadatachange,
 	}: Props = $props();
 
@@ -206,6 +211,13 @@
 		>
 			{loaderState.isLoading ? t('input.transcribeLoading', language) : t('input.transcribe', language)}
 		</button>
+	</div>
+	<!-- N.67 step 5. Twinned on the print control above, in its own row so the
+	     two binder controls sit in the SAME columns on the Fit tab too (Dann's
+	     ruling 2026-08-16). Nothing goes on the paper. -->
+	<div class="button-row binder-row">
+		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
+		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
 	</div>
 
 	<!-- ── 5. Word Console section ────────────────────────── -->
@@ -436,6 +448,11 @@
 		margin-bottom: 6px;
 	}
 
+	/* N.67 step 5. Same grid as .button-row above, so the binder controls sit
+	   in the same columns here as they do on the Fit tab. */
+	.binder-row {
+		margin-top: 0;
+	}
 	.action-btn {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);

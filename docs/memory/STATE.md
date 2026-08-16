@@ -52,11 +52,12 @@ any of them count.
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: THREE
+### The blocking set: FOUR
 
 | | item | state |
 |---|---|---|
 | `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, and 4a CLOSED**, all observed in a real browser, and 3 and 4a walked by Dann himself. **The emergency is over: nothing is being destroyed any more.** What remains WAITS behind N.58 and N.59 by Dann's ruling: 4b the library itself, 5 the binder, 6 the sweep. See the four documents below |
+| `[ ]` | **N.72** no singer can ever receive a fix | **NUMBERED BY DANN 2026-08-16, NOT FIXED, and deliberately not in step 5's commit.** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
@@ -175,6 +176,17 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
   has arrived and says so. Where the singer proceeds, the WHOLE song is
   replaced together, title, source, and placements, so the record is coherent.
   One song at a time, honestly.
+- **5, SINGLE-SONG HALF BUILT: the binder.** Export one song, restore a
+  one-song binder into an emptied library. Round trip measured: exported as
+  `test fixture, Я вас любил.ilya`, storage cleared to zero songs, imported
+  back with the poem, all five placements, and the same 1,757-byte score.
+  **Export-all, multi-song import, and the collision rules stay with 4b.**
+- **A DIVERGENCE FROM §8, ON DANN'S RULING.** Design §8 says "the UI copy says
+  backup", and it argues the export sits on s. 29.24 backup grounds. **The
+  buttons say "Export this song" and "Import a song" instead**, because a legal
+  term belongs in prose a singer reads rather than in a button they press.
+  §8's framing now lives in the GUIDE, in both languages, naming the threat it
+  actually argues: a lost phone or a cleared browser.
 - **4b, WAITS behind N.58 and N.59: the library itself.** The list, rename,
   delete, and switching between saved songs. That is the feature, it is what
   makes songs plural, and it is not what ended the chimera.

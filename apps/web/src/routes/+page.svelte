@@ -29,6 +29,11 @@
 	import { formatBytes } from '$lib/library/quota';
 	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
 	import { arrivalDecision } from '$lib/library/library';
+	import { autoName, binderFileName, buildBinder, readBinder } from '$lib/library/binder';
+	import { ACTIVE_SONG_KEY } from '$lib/library';
+	import type { SongRecord } from '$lib/library/types';
+	import type { SourceBytes } from '$lib/library/driver';
+	import { version } from '$app/environment';
 	import type { OpenedLibrary } from '$lib/library';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
@@ -696,6 +701,26 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		total: number;
 	} | null>(null);
 	let replaceDialogEl = $state<HTMLDialogElement | undefined>(undefined);
+	let keepButtonEl = $state<HTMLButtonElement | undefined>(undefined);
+
+	/**
+	 * N.67 step 5. ONE dialog serves both warnings, because they are the same
+	 * act: something is about to replace this song and cannot be undone.
+	 *
+	 * `title` and `body` are already-resolved strings, so the template holds no
+	 * copy decisions, and `replace` is what the destructive button does.
+	 */
+	let pendingConfirm = $state<{ title: string; body: string; replace: () => void } | null>(null);
+
+	function askToReplace(title: string, body: string, replace: () => void): void {
+		pendingConfirm = { title, body, replace };
+		replaceDialogEl?.showModal();
+		// Focus the SAFE answer. Done here rather than with `autofocus`, which
+		// raises `a11y_autofocus` and would move the web-check gate; and the DOM
+		// order is the visual order, so nothing a singer sees disagrees with
+		// what a screen reader is told (Dann, 2026-08-16).
+		keepButtonEl?.focus();
+	}
 
 	/**
 	 * Every accepted score comes through here first.
@@ -738,22 +763,29 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 		if (decision === 'ask') {
 			pendingArrival = { ingested, file, orphaned, total: stored.length };
-			replaceDialogEl?.showModal();
+			askToReplace(
+				t('replace.title', language),
+				t('replace.body', language).replace('%s', String(orphaned)).replace('%s', String(stored.length)),
+				() => {
+					const pending = pendingArrival;
+					if (pending) applyArrival(pending.ingested, pending.file, 'upload', true);
+				},
+			);
 			return;
 		}
 		applyArrival(ingested, file, origin, false);
 	}
 
-	/** Keep the song. The upload is discarded whole, having changed nothing. */
+	/** Keep the song. Whatever was pending is discarded, having changed nothing. */
 	function keepThisSong(): void {
 		replaceDialogEl?.close();
 	}
 
 	/** Replace the song, all of it together, so the record stays coherent. */
 	function replaceThisSong(): void {
-		const pending = pendingArrival;
+		const act = pendingConfirm?.replace;
 		replaceDialogEl?.close();
-		if (pending) applyArrival(pending.ingested, pending.file, 'upload', true);
+		act?.();
 	}
 
 	/**
@@ -816,6 +848,111 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				ingested.result.score.workMetadata,
 			),
 		);
+	}
+
+	/* ── N.67 step 5: the binder ────────────────────────────────────── */
+
+	let importInputEl = $state<HTMLInputElement | undefined>(undefined);
+	let binderError = $state<string | null>(null);
+
+	/** A date a singer would write, in their own language. */
+	function todayInWords(): string {
+		return new Date().toLocaleDateString(language === 'fr' ? 'fr-CA' : 'en-CA', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
+		});
+	}
+
+	/**
+	 * Write the binder to the singer's own device.
+	 *
+	 * A Blob and an anchor, which lands in Downloads or the Files app. **NOT
+	 * `navigator.share`**, which would be the sharing affordance design §8
+	 * rules out: the binder is addressed to nobody, and the moment it is handed
+	 * to another person that act is the person's, not the tool's.
+	 */
+	async function handleExport(): Promise<void> {
+		binderError = null;
+		try {
+			const record = doc.toRecord();
+			// Read the bytes from the vault rather than from boot state, so a
+			// score uploaded this session is in the binder too.
+			const source = await library.loadSource(doc.id);
+			const today = todayInWords();
+			const name = autoName(record, today);
+			const bytes = await buildBinder({
+				record,
+				source,
+				appVersion: version,
+				exportedAt: new Date().toISOString(),
+				name,
+			});
+			const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/zip' }));
+			const anchor = document.createElement('a');
+			anchor.href = url;
+			anchor.download = binderFileName(name, today);
+			anchor.click();
+			URL.revokeObjectURL(url);
+		} catch (err) {
+			console.error('[Ilya] export failed:', err);
+			binderError = t('binder.err.damaged', language);
+		}
+	}
+
+	/** Is there anything in this song that an import would destroy? */
+	function songHasWork(): boolean {
+		return (
+			doc.inputText.trim() !== '' ||
+			Object.keys(doc.pairings).length > 0 ||
+			doc.source !== null ||
+			doc.glossOverrides.size > 0
+		);
+	}
+
+	async function handleImportFile(file: File): Promise<void> {
+		binderError = null;
+		const bytes = new Uint8Array(await file.arrayBuffer());
+		const read = await readBinder(bytes, new Date().toISOString());
+		if (!read.ok) {
+			// Three sentences over five conditions. The file is untouched in
+			// every one of them, which is why they all end the same way.
+			binderError =
+				read.reason === 'newer-schema'
+					? t('binder.err.newer', language)
+					: read.reason === 'not-a-zip' || read.reason === 'not-a-binder'
+						? t('binder.err.notIlya', language)
+						: t('binder.err.damaged', language);
+			return;
+		}
+		const incoming = read.songs[0];
+		if (!songHasWork()) {
+			await commitImport(incoming);
+			return;
+		}
+		askToReplace(t('import.title', language), t('import.body', language), () => void commitImport(incoming));
+	}
+
+	/**
+	 * Put the imported song in the vault and open it.
+	 *
+	 * The page reloads rather than mutating the live document field by field:
+	 * the document's own guarantee is that it is constructed FROM a record that
+	 * has already been read, and a reload is the honest way to get that for a
+	 * record which has just arrived. Single-song, so the pointer simply moves.
+	 */
+	async function commitImport(incoming: { record: SongRecord; source: SourceBytes | null }): Promise<void> {
+		const outcome = await library.save(incoming.record, incoming.source ?? undefined);
+		if (!outcome.ok) {
+			binderError = t('binder.err.damaged', language);
+			return;
+		}
+		try {
+			localStorage.setItem(ACTIVE_SONG_KEY, incoming.record.id);
+		} catch {
+			// A lost pointer costs which song opens first, never a song.
+		}
+		location.reload();
 	}
 
 	/* ── N.67 step 2: the source survives ──────────────────────────── */
@@ -1180,23 +1317,44 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      mouse therefore both land on the safe answer, which one ordering alone
      cannot give you. Escape resolves to keeping, because closing without
      answering changes nothing: nothing is mutated before the answer. -->
+<!-- N.67 step 5. ONE hidden input serves both tabs' Import controls.
+     `accept` is dropped on mobile for N.70's reason exactly: iOS matches by
+     registered type and knows nothing of `.ilya`, so it would grey out every
+     binder a singer owns, which would make the AirDrop half of the walk
+     impossible. -->
+<input
+	type="file"
+	accept={isMobile ? undefined : '.ilya'}
+	bind:this={importInputEl}
+	class="binder-input"
+	onchange={(e) => {
+		const input = e.currentTarget;
+		const file = input.files?.[0];
+		input.value = '';
+		if (file) void handleImportFile(file);
+	}}
+/>
+
 <dialog
 	class="replace-dialog"
 	bind:this={replaceDialogEl}
-	onclose={() => (pendingArrival = null)}
+	onclose={() => ((pendingArrival = null), (pendingConfirm = null))}
 	aria-labelledby="replace-title"
 >
-	{#if pendingArrival}
-		<h2 id="replace-title">{t('replace.title', language)}</h2>
-		<p>
-			{t('replace.body', language)
-				.replace('%s', String(pendingArrival.orphaned))
-				.replace('%s', String(pendingArrival.total))}
-		</p>
+	{#if pendingConfirm}
+		<h2 id="replace-title">{pendingConfirm.title}</h2>
+		<p>{pendingConfirm.body}</p>
+		<!-- DOM ORDER IS THE VISUAL ORDER. It used to be reversed in CSS, which
+		     told a screen reader one order and showed a sighted singer another.
+		     Keep is last, so it is rightmost where a tired hand goes, and it is
+		     focused programmatically on open. -->
 		<div class="replace-actions">
-			<button type="button" onclick={keepThisSong}>{t('replace.keep', language)}</button>
 			<button type="button" class="replace-destructive" onclick={replaceThisSong}>
 				{t('replace.replace', language)}
+			</button>
+			<button type="button" onclick={() => void handleExport()}>{t('binder.exportFirst', language)}</button>
+			<button type="button" bind:this={keepButtonEl} onclick={keepThisSong}>
+				{t('replace.keep', language)}
 			</button>
 		</div>
 	{/if}
@@ -1233,6 +1391,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
 					onprint={handlePrint}
+					onexport={() => void handleExport()}
+					onimport={() => importInputEl?.click()}
 					onmetadatachange={handleMetadataChange}
 				>
 					{#snippet consoleContent()}
@@ -1323,6 +1483,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						oncursor={(i) => (pairingCursor = i)}
 					/>
 					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
+					{#if binderError}
+						<!-- N.67 step 5. The file is untouched in every failure, which is
+						     why all three sentences end the same way. -->
+						<p class="shane-storage-notice">{binderError}</p>
+					{/if}
 					{#if orphanedCount > 0}
 						<!-- N.67 step 3. Reported, not acted on: the placements are
 						     KEPT and this only says how many have no note to sit on in
@@ -1400,6 +1565,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							onclick={handlePrint}
 						>
 							{t('input.print', language)}
+						</button>
+					</div>
+					<!-- N.67 step 5. The SAME two controls in the SAME columns as the
+					     Transcription drawer's binder row, so their position does not
+					     move when a singer switches tabs (Dann's ruling 2026-08-16). -->
+					<div class="shane-binder-row">
+						<button class="shane-binder-btn" onclick={() => void handleExport()}>
+							{t('binder.export', language)}
+						</button>
+						<button class="shane-binder-btn" onclick={() => importInputEl?.click()}>
+							{t('binder.import', language)}
 						</button>
 					</div>
 					<CalibrationWizard
@@ -1618,6 +1794,35 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		opacity: 0.4;
 		cursor: not-allowed;
 	}
+	/* N.67 step 5. The import input is never seen: both Import controls click
+	   it. Not `display: none`, which some browsers refuse to activate. */
+	.binder-input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+	/* Twins .button-row's grid so the two controls land in the same columns as
+	   the Transcription drawer's, which is what keeps their position identical
+	   across tabs. */
+	.shane-binder-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr 2fr;
+		gap: 6px;
+		margin-top: 6px;
+	}
+	.shane-binder-btn {
+		padding: 0.45rem 0.5rem;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		background: white;
+		border: 1px solid var(--stone-600, #57534e);
+		border-radius: 4px;
+		cursor: pointer;
+	}
 	/* N.67 step 4a. The replace dialog. Unstyled beyond what modality needs,
 	   matching the drawer's register rather than inventing a look. The
 	   ::backdrop is the browser's own, dimmed a little. */
@@ -1650,10 +1855,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	.replace-actions {
 		display: flex;
-		/* DOM order is Keep then Replace, for Tab. This reverses only the
-		   painting, so Keep sits on the right where the default belongs. */
-		flex-direction: row-reverse;
-		justify-content: flex-start;
+		/* No `row-reverse` any more: the DOM order IS this order, so nothing a
+		   singer sees disagrees with what a screen reader is told. */
+		justify-content: flex-end;
 		gap: 0.5rem;
 	}
 	.replace-actions button {

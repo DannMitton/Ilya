@@ -552,6 +552,35 @@ const strings: Record<string, Record<Language, string>> = {
 	// also means to RESUME and would read as the opposite of what this does.
 	// 'partition' is the register already ratified across upload.* and meta.*.
 	// French written 2026-08-16 and shown to Dann before this shipped.
+	// N.67 step 5, the binder. Dann's labels, 2026-08-16: the buttons say what
+	// they do rather than carrying a metaphor. 'binder' stays the file
+	// extension and the internal word; 'classeur' was rejected because it reads
+	// as spreadsheet in French. §8's backup framing lives in the Guide instead,
+	// in prose a singer can read, which is Dann's ruling and a DIVERGENCE from
+	// §8's own line that "the UI copy says backup" (recorded in STATE.md).
+	'binder.export': { en: 'Export this song', fr: 'Exporter ce chant' },
+	'binder.import': { en: 'Import a song', fr: 'Importer un chant' },
+	// The third choice, added once export existed: before it, the warning below
+	// truthfully said Ilya could not keep the old song. It still cannot. The
+	// singer now can.
+	'binder.exportFirst': { en: 'Export this song first', fr: 'Exporter ce chant d’abord' },
+	// Five conditions, three sentences: to a singer, "not an archive" and "an
+	// archive that is not Ilya's" are one situation, and "no songs" and
+	// "damaged" are another. All three end the same way, so that none of them
+	// invites the reader to infer their file was harmed by the others.
+	'binder.err.notIlya': { en: 'This file was not made by Ilya. Nothing has changed.', fr: 'Ce fichier n’a pas été créé par Ilya. Rien n’a été modifié.' },
+	// NOT "reload to update": measured 2026-08-16 that a reload cannot deliver
+	// a newer Ilya here. `sw.js` ships byte-identical every deploy so no new
+	// worker is ever installed, it has no skipWaiting or clients.claim, its
+	// catch-all serves stale, and every deployment is its own frozen origin.
+	// That finding is N.72. An instruction that might not work must not ship.
+	'binder.err.newer': { en: 'This file was made by a newer version of Ilya than this one, which cannot read it. Open it in the newest Ilya. Nothing has changed.', fr: 'Ce fichier a été créé par une version d’Ilya plus récente que celle-ci, qui ne peut pas le lire. Ouvrez-le dans la version la plus récente. Rien n’a été modifié.' },
+	'binder.err.damaged': { en: 'This file is damaged and could not be read. Nothing has changed.', fr: 'Ce fichier est endommagé et n’a pas pu être lu. Rien n’a été modifié.' },
+	// Importing onto an open song is the same act as replacing its score, so it
+	// wears the same shape: name what is lost, say there is no undo, and offer
+	// the export that makes the loss avoidable.
+	'import.title': { en: 'You already have a song open.', fr: 'Vous avez déjà un chant ouvert.' },
+	'import.body': { en: 'Importing replaces the song you have, its title, its score file, and every placement, with the one in this file. Ilya cannot undo that. Export this song first if you want to keep it.', fr: 'Importer remplace le chant que vous avez, son titre, son fichier de partition et tous ses placements, par celui de ce fichier. Ilya ne peut pas annuler cette action. Exportez ce chant d’abord si vous voulez le conserver.' },
 	'station.startOver': { en: 'Start placement over', fr: 'Recommencer le placement' },
 	// The count of placements whose note the new score does not contain. They
 	// are KEPT; this only says how many no longer have a note to sit on. %s is
@@ -566,7 +595,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// Nothing coined: 'chant', 'partition', and 'placement' are all already
 	// ratified elsewhere in this file.
 	'replace.title': { en: 'This is not the same music.', fr: 'Ce n’est pas la même musique.' },
-	'replace.body': { en: 'This score is not the one this song was built on. %s of your %s syllable placements have no note in it. Continuing replaces the whole song, its title, its score file, and every placement. Ilya cannot undo that, and cannot keep the old one.', fr: 'Cette partition n’est pas celle sur laquelle ce chant a été construit. %s de vos %s placements de syllabes n’y ont aucune note. Continuer remplace le chant entier, son titre, son fichier de partition et tous ses placements. Ilya ne peut pas annuler cette action, ni conserver l’ancien chant.' },
+	'replace.body': { en: 'This score is not the one this song was built on. %s of your %s syllable placements have no note in it. Continuing replaces the whole song, its title, its score file, and every placement. Ilya cannot undo that. Export this song first if you want to keep it.', fr: 'Cette partition n’est pas celle sur laquelle ce chant a été construit. %s de vos %s placements de syllabes n’y ont aucune note. Continuer remplace le chant entier, son titre, son fichier de partition et tous ses placements. Ilya ne peut pas annuler cette action. Exportez ce chant d’abord si vous voulez le conserver.' },
 	'replace.keep': { en: 'Keep this song', fr: 'Conserver ce chant' },
 	'replace.replace': { en: 'Replace this song', fr: 'Remplacer ce chant' },
 	'station.orphaned': { en: '%s placements have no note in this score. They have been kept.', fr: '%s placements n’ont plus de note dans cette partition. Ils ont été conservés.' },
