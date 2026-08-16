@@ -155,7 +155,36 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 
 ---
 
-## WHAT A SECOND SCORE DOES TODAY. Measured at `5c9c7f3`, not modelled
+## N.67 STEP 4, SPLIT BY DANN 2026-08-16
+
+**Step 4 does not go whole and does not wait whole.**
+
+- **4a, BUILT: the chimera warning.** Ilya can now tell that a different piece
+  has arrived and says so. Where the singer proceeds, the WHOLE song is
+  replaced together, title, source, and placements, so the record is coherent.
+  One song at a time, honestly.
+- **4b, WAITS behind N.58 and N.59: the library itself.** The list, rename,
+  delete, and switching between saved songs. That is the feature, it is what
+  makes songs plural, and it is not what ended the chimera.
+
+**The trigger, decided by Claude on Dann's instruction: the fingerprint differs
+AND at least one placement would be orphaned.** A corrected note keeps every
+position, so nothing is orphaned and nothing is asked, which is design §2.4's
+own promise kept. **A pitch-proportion test was considered and REJECTED**: a
+transposed edition changes every pitch while keeping every position, and in
+vocal repertoire that is a common, legitimate re-upload where placements must
+survive; the rule would fire on it at nearly 100%, indistinguishable from a
+different piece. **The named miss that remains:** a different piece whose rhythm
+matches the old one note for note across a whole score orphans nothing and
+passes silently. That shape is an artefact of small fixtures, not of repertoire.
+
+**Does 4a break §2.6?** No, it narrows it. §2.6's rule is "an upload never
+destroys placements; only the singer does, on purpose", and 4a destroys them
+only on a yes, the same shape as the *Start placement over* control §2.6 already
+names. **Fable's own neutral-state branch cannot be had without 4b**: it ends in
+"a new song is created", which needs a second reachable record.
+
+## WHAT A SECOND SCORE DID BEFORE 4a. Measured at `5c9c7f3`, not modelled
 
 **Walked in a browser: score one, then a structurally different score two,
 reading `ilya-library` after each.**
@@ -185,6 +214,11 @@ LIBRARY backup rather than a SONG backup is.
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **Step 5's export, single-song half.** Established 2026-08-16: exporting one
+  song and restoring a one-song binder into an emptied library both work without
+  the list. It is the only thing that would give the chimera warning a detour
+  instead of a stop sign. **Dann's ruling: deferred, recorded as owed against
+  step 5, NOT folded into 4a.**
 - **Remove `bits-ui` from `apps/web/package.json`.** Ruled 2026-08-16: native
   `<dialog>` + `showModal()` is the answer for the delete confirmation AND the
   fingerprint prompt, not bits-ui. **Dann's ruling on timing: not in step 4's

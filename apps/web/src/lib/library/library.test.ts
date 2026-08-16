@@ -9,6 +9,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
+	arrivalDecision,
 	createSaveScheduler,
 	fieldsFromRecord,
 	Library,
@@ -271,5 +272,49 @@ describe('the save cadence', () => {
 		await vi.advanceTimersByTimeAsync(5000);
 
 		expect(run).not.toHaveBeenCalled();
+	});
+});
+
+/* ── The chimera warning, N.67 step 4a ──────────────────────────── */
+
+describe('arrivalDecision', () => {
+	const fp = (s: string) => s.padEnd(64, '0');
+
+	it('attaches the first score a song has ever had', () => {
+		// Nothing to be different from, and nothing to lose.
+		expect(arrivalDecision({ storedFingerprint: null, incomingFingerprint: fp('a'), orphanCount: 0 })).toBe('attach');
+		expect(arrivalDecision({ storedFingerprint: undefined, incomingFingerprint: fp('a'), orphanCount: 9 })).toBe('attach');
+	});
+
+	it('attaches a re-export of the same music without a word', () => {
+		// Different bytes, same notes at the same positions, same fingerprint
+		// (design §2.4). The commonest legitimate re-upload of all.
+		expect(arrivalDecision({ storedFingerprint: fp('a'), incomingFingerprint: fp('a'), orphanCount: 0 })).toBe('attach');
+	});
+
+	it('attaches a CORRECTED NOTE without a word, which is §2.4 kept', () => {
+		// A corrected pitch breaks the fingerprint but keeps every event's
+		// measure and position, so nothing is orphaned. §2.4 promises this case
+		// is fine, and the orphan condition is what keeps that promise.
+		expect(arrivalDecision({ storedFingerprint: fp('a'), incomingFingerprint: fp('b'), orphanCount: 0 })).toBe('attach');
+	});
+
+	it('attaches a TRANSPOSED edition without a word', () => {
+		// Every pitch changes, every position survives, so no orphans. This is
+		// why the rule does not test pitches: in vocal repertoire a transposition
+		// is a common re-upload and the placements must survive it untouched.
+		expect(arrivalDecision({ storedFingerprint: fp('transposed'), incomingFingerprint: fp('orig'), orphanCount: 0 })).toBe('attach');
+	});
+
+	it('ASKS when the music differs and a placement would be orphaned', () => {
+		// A different piece. This is the chimera the warning exists to end.
+		expect(arrivalDecision({ storedFingerprint: fp('a'), incomingFingerprint: fp('b'), orphanCount: 1 })).toBe('ask');
+		expect(arrivalDecision({ storedFingerprint: fp('a'), incomingFingerprint: fp('b'), orphanCount: 40 })).toBe('ask');
+	});
+
+	it('never asks on a matching fingerprint, whatever the orphan count', () => {
+		// Same music cannot be a different piece, so orphans there are drift,
+		// which the drawer already reports without a dialog.
+		expect(arrivalDecision({ storedFingerprint: fp('a'), incomingFingerprint: fp('a'), orphanCount: 12 })).toBe('attach');
 	});
 });

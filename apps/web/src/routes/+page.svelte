@@ -28,6 +28,7 @@
 	import { emptySongRecord } from '$lib/library/types';
 	import { formatBytes } from '$lib/library/quota';
 	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
+	import { arrivalDecision } from '$lib/library/library';
 	import type { OpenedLibrary } from '$lib/library';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
@@ -683,6 +684,140 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.inputText = text;
 	}
 
+	/* ── N.67 step 4a: a different piece has arrived ───────────────── */
+
+	// The upload waiting on the singer's answer. NOTHING is mutated while this
+	// is set: not the score, not the metadata, not the placements, not the
+	// stored source. So "Keep this song" has nothing to undo.
+	let pendingArrival = $state<{
+		ingested: IngestedScore;
+		file: File;
+		orphaned: number;
+		total: number;
+	} | null>(null);
+	let replaceDialogEl = $state<HTMLDialogElement | undefined>(undefined);
+
+	/**
+	 * Every accepted score comes through here first.
+	 *
+	 * Before this existed, a second score overwrote the song's title and file in
+	 * place while the first song's placements survived onto music they were
+	 * never made for (measured at `5c9c7f3`). Now Ilya can tell that a different
+	 * piece has arrived, and says so before anything is lost.
+	 */
+	async function handleArrival(
+		ingested: IngestedScore,
+		file: File,
+		origin: 'upload' | 'restore',
+	): Promise<void> {
+		// A restore is the song's own score coming back from the vault. It is
+		// never a new arrival and must never be questioned.
+		if (origin === 'restore') {
+			applyArrival(ingested, file, origin, false);
+			return;
+		}
+		const eventIds = ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id);
+		const present = new Set(eventIds);
+		const stored = Object.keys(doc.pairings);
+		const orphaned = stored.filter((id) => !present.has(id)).length;
+
+		let incoming = '';
+		try {
+			incoming = await fingerprintVocalLine(ingested.result.score.vocalLine);
+		} catch {
+			// No fingerprint means no evidence, and an unprovable suspicion must
+			// not stand between a singer and their score.
+		}
+		const decision = incoming
+			? arrivalDecision({
+					storedFingerprint: doc.source?.fingerprint,
+					incomingFingerprint: incoming,
+					orphanCount: orphaned,
+				})
+			: 'attach';
+
+		if (decision === 'ask') {
+			pendingArrival = { ingested, file, orphaned, total: stored.length };
+			replaceDialogEl?.showModal();
+			return;
+		}
+		applyArrival(ingested, file, origin, false);
+	}
+
+	/** Keep the song. The upload is discarded whole, having changed nothing. */
+	function keepThisSong(): void {
+		replaceDialogEl?.close();
+	}
+
+	/** Replace the song, all of it together, so the record stays coherent. */
+	function replaceThisSong(): void {
+		const pending = pendingArrival;
+		replaceDialogEl?.close();
+		if (pending) applyArrival(pending.ingested, pending.file, 'upload', true);
+	}
+
+	/**
+	 * Attach a score to the open song.
+	 *
+	 * `replaceWholeSong` empties the placements FIRST, so the merge rule below
+	 * sees a fresh map and proposes into it: title, score file, and placements
+	 * all become the new piece's together, which is the whole point. Without it
+	 * this is step 3's behaviour exactly, unchanged.
+	 */
+	function applyArrival(
+		ingested: IngestedScore,
+		file: File,
+		origin: 'upload' | 'restore',
+		replaceWholeSong: boolean,
+	): void {
+		if (replaceWholeSong) doc.pairings = {};
+		// N.67 step 2. The singer's own bytes go down with the song, in one
+		// transaction, so a reload brings the score back. Only a real upload
+		// writes: a restore's bytes came from the vault.
+		if (origin === 'upload') void attachUploadedSource(ingested, file);
+		// Live-wired (§E.7 slice 1): VoiceProfilePane renders this as paginated
+		// notation in the Fit main pane.
+		ingestedScore = ingested;
+		// N.55b R3: the first pass runs on accept, and the N.55a courtesy message
+		// arrives in the same moment or it has no moment at all. It runs ONLY
+		// where the file carried no lyrics. Where the score has an underlay, Ilya
+		// READS it (`vowel-resolver.ts`), and proposing over it would be Ilya
+		// claiming where the score already speaks. That is an INFERENCE from R3
+		// and N.55a together, not a ruling of Dann's.
+		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
+		noLyricsFile = noLyrics ? ingested.fileName : null;
+		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
+		// upload never destroys placements; only the singer does, on purpose,
+		// with Start placement over or with the replace dialog above.
+		const merged = mergeOnUpload(
+			doc.pairings,
+			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+			buildSlotQueue(lines),
+			noLyrics,
+		);
+		doc.pairings = merged.map;
+		// Kept, never dropped, and reported as a count.
+		orphanedCount = merged.orphaned.length;
+		// The cursor lands on the first syllable the pass did not reach. Only
+		// moved where the pass actually ran: a re-upload must not walk the
+		// singer's insertion point back.
+		if (merged.proposed) {
+			pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
+		}
+		// A new score arrives: clear whatever the previous score filled, then
+		// fill the blanks from this score's header if it carries one. A score
+		// with no header still clears, and that case is the whole point: at E.23,
+		// Musorgsky's Sunless 1 rendered under the Schubert's title, composer,
+		// and poet, because a header-less score reached no code that touched
+		// metadata at all.
+		commitMetadataState(
+			onScoreIngested(
+				{ metadata: doc.metadata, fromScore: doc.fromScoreFields },
+				ingested.result.score.workMetadata,
+			),
+		);
+	}
+
 	/* ── N.67 step 2: the source survives ──────────────────────────── */
 
 	// The stored score, handed to the uploader so it can re-ingest it once at
@@ -1033,6 +1168,37 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 {/if}
 <div class="screen-only">
 	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
+<!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
+     AlertDialog measured +18.7 KB gzipped for this one thing, against about
+     8 KB budgeted for the whole of N.67, and showModal() gives the modality,
+     the focus trap, Escape, and the backdrop for nothing.
+
+     showModal() puts focus on the dialog itself, and "Keep this song" is
+     first in the DOM so Tab reaches the safe answer before the destructive
+     one. Escape resolves to keeping, because closing without answering
+     changes nothing: nothing is mutated before the answer. -->
+<dialog
+	class="replace-dialog"
+	bind:this={replaceDialogEl}
+	onclose={() => (pendingArrival = null)}
+	aria-labelledby="replace-title"
+>
+	{#if pendingArrival}
+		<h2 id="replace-title">{t('replace.title', language)}</h2>
+		<p>
+			{t('replace.body', language)
+				.replace('%s', String(pendingArrival.orphaned))
+				.replace('%s', String(pendingArrival.total))}
+		</p>
+		<div class="replace-actions">
+			<button type="button" onclick={keepThisSong}>{t('replace.keep', language)}</button>
+			<button type="button" class="replace-destructive" onclick={replaceThisSong}>
+				{t('replace.replace', language)}
+			</button>
+		</div>
+	{/if}
+</dialog>
+
 <InstallPrompt {language} />
 </div>
 <div class="app-content {viewBreathClass}">
@@ -1136,63 +1302,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{language}
 						{isMobile}
 						restore={restoreSource}
-						oningested={(ingested, file, origin) => {
-							// N.67 step 2. The singer's own bytes go down with the song,
-							// in one transaction, so a reload brings the score back. Only
-							// a real upload writes: a restore's bytes came from the vault.
-							if (origin === 'upload') void attachUploadedSource(ingested, file);
-							// Live-wired (§E.7 slice 1): VoiceProfilePane renders this
-							// as paginated notation in the Fit main pane.
-							ingestedScore = ingested;
-							// N.55b R3: the first pass runs on accept, and the N.55a courtesy
-							// message arrives in the same moment or it has no moment at all.
-							//
-							// It runs ONLY where the file carried no lyrics. Where the score has
-							// an underlay, Ilya READS it (`vowel-resolver.ts`), and proposing over
-							// it would be Ilya claiming where the score already speaks. That is an
-							// INFERENCE from R3 and N.55a together, not a ruling of Dann's.
-							const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
-							noLyricsFile = noLyrics ? ingested.fileName : null;
-							// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68
-							// closes: an upload never destroys placements; only the
-							// singer does, on purpose, with Start placement over below.
-							//
-							// This line used to replace the map unconditionally, so
-							// re-uploading rebuilt over the singer's decisions and a
-							// score WITH lyrics erased them outright. Now the first pass
-							// runs only into an EMPTY map, which keeps N.55a's behaviour
-							// on the genuinely fresh path: one slot per note, in document
-							// order, rests skipped because they have no hit target
-							// (`staff-renderer.ts:920-928`) and can never be clicked.
-							const merged = mergeOnUpload(
-								doc.pairings,
-								ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-								buildSlotQueue(lines),
-								noLyrics,
-							);
-							doc.pairings = merged.map;
-							// Kept, never dropped, and reported as a count.
-							orphanedCount = merged.orphaned.length;
-							// The cursor lands on the first syllable the pass did not
-							// reach. Only moved where the pass actually ran: a re-upload
-							// must not walk the singer's insertion point back.
-							if (merged.proposed) {
-								pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
-							}
-							// A new score arrives: clear whatever the previous score
-							// filled, then fill the blanks from this score's header
-							// if it carries one. A score with no header still
-							// clears, and that case is the whole point: at E.23,
-							// Musorgsky's Sunless 1 rendered under the Schubert's
-							// title, composer, and poet, because a header-less score
-							// reached no code that touched metadata at all.
-							commitMetadataState(
-								onScoreIngested(
-									{ metadata: doc.metadata, fromScore: doc.fromScoreFields },
-									ingested.result.score.workMetadata,
-								),
-							);
-						}}
+						oningested={(ingested, file, origin) => void handleArrival(ingested, file, origin)}
 					/>
 					{#if noLyricsFile}
 						<!-- N.55a's courtesy message (Dann, E.47). It lives in the DRAWER and
@@ -1504,6 +1614,52 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	.shane-print-btn:disabled {
 		opacity: 0.4;
 		cursor: not-allowed;
+	}
+	/* N.67 step 4a. The replace dialog. Unstyled beyond what modality needs,
+	   matching the drawer's register rather than inventing a look. The
+	   ::backdrop is the browser's own, dimmed a little. */
+	.replace-dialog {
+		max-width: 32rem;
+		padding: 1.25rem 1.5rem;
+		border: 1px solid var(--stone-600, #57534e);
+		border-radius: 6px;
+		background: var(--paper-cream, #f5f0e6);
+		color: var(--ink-primary, #1a1612);
+		font-family: var(--font-sans);
+	}
+	.replace-dialog::backdrop {
+		background: rgb(0 0 0 / 0.45);
+	}
+	.replace-dialog h2 {
+		margin: 0 0 0.5rem;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+	.replace-dialog p {
+		margin: 0 0 1rem;
+		font-size: 0.85rem;
+		line-height: 1.5;
+	}
+	.replace-actions {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+	}
+	.replace-actions button {
+		padding: 0.45rem 0.75rem;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		background: white;
+		border: 1px solid var(--stone-600, #57534e);
+		border-radius: 4px;
+		cursor: pointer;
+	}
+	/* The destructive one is not the pretty one. */
+	.replace-actions .replace-destructive {
+		color: #7f1d1d;
+		border-color: #7f1d1d;
 	}
 	/* N.67 step 3. Twins .shane-print-btn rather than inventing a look, and
 	   sits inline rather than full width: it is the destructive control on

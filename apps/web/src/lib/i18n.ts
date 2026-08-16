@@ -556,6 +556,19 @@ const strings: Record<string, Record<Language, string>> = {
 	// The count of placements whose note the new score does not contain. They
 	// are KEPT; this only says how many no longer have a note to sit on. %s is
 	// the number. Twins 'station.textChanged' in restraint: a count, not alarm.
+	// N.67 step 4a (Dann's ruling, 2026-08-16). THE CHIMERA WARNING. Before
+	// this, a second score overwrote the song's title and file in place while
+	// its placements survived onto music they were never made for. Shown only
+	// when the fingerprint differs AND at least one placement would be orphaned:
+	// a corrected note keeps every position, so it never asks, which is what
+	// design §2.4 promised. French shown to Dann and approved 2026-08-16; no
+	// colon, question mark, or exclamation, so it adds no ninth hard-space site.
+	// Nothing coined: 'chant', 'partition', and 'placement' are all already
+	// ratified elsewhere in this file.
+	'replace.title': { en: 'This is not the same music.', fr: 'Ce n’est pas la même musique.' },
+	'replace.body': { en: 'This score is not the one this song was built on. %s of your %s syllable placements have no note in it. Continuing replaces the whole song, its title, its score file, and every placement. Ilya cannot undo that, and cannot keep the old one.', fr: 'Cette partition n’est pas celle sur laquelle ce chant a été construit. %s de vos %s placements de syllabes n’y ont aucune note. Continuer remplace le chant entier, son titre, son fichier de partition et tous ses placements. Ilya ne peut pas annuler cette action, ni conserver l’ancien chant.' },
+	'replace.keep': { en: 'Keep this song', fr: 'Conserver ce chant' },
+	'replace.replace': { en: 'Replace this song', fr: 'Remplacer ce chant' },
 	'station.orphaned': { en: '%s placements have no note in this score. They have been kept.', fr: '%s placements n’ont plus de note dans cette partition. Ils ont été conservés.' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };

@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **511** |
+| web-test | **517** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -32,8 +32,9 @@ is a Linux VM too.
 Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
 416 to 438 on 2026-08-14 for `shift-lyrics.test.ts`, **438 to 470 on
 2026-08-16** for N.67 step 0, **470 to 504 on 2026-08-16** for steps 1 and
-2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`), and **504
-to 511 on 2026-08-16** for step 3's merge rule.
+2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`), **504
+to 511 on 2026-08-16** for step 3's merge rule, and **511 to 517 on
+2026-08-16** for step 4a's arrival decision.
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and

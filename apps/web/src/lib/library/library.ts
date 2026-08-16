@@ -323,3 +323,44 @@ export function createSaveScheduler(
 		},
 	};
 }
+
+/* ── The chimera warning (N.67 step 4a, Dann's ruling 2026-08-16) ── */
+
+/**
+ * Should an arriving score replace this song, or attach to it?
+ *
+ * BEFORE THIS EXISTED, a second score overwrote the song's title and its stored
+ * file in place while the first song's placements survived onto music they were
+ * never made for. Measured at `5c9c7f3`: two of five silently landed on notes
+ * of the new piece, because event ids are positional. The record became a
+ * chimera, and nothing said so.
+ *
+ * TWO CONDITIONS, BOTH REQUIRED.
+ *
+ * The fingerprint must differ, which means it is not the same music (§2.4).
+ * And at least one stored placement must be orphaned, which is what separates a
+ * different piece from a corrected note: correcting a pitch keeps every event's
+ * measure and position, so its id survives and nothing is orphaned. That is
+ * design §2.4's own promise, that "a singer correcting one wrong note ... is
+ * fine", kept exactly.
+ *
+ * WHY NOT ALSO TEST PITCHES. A transposed edition changes every pitch while
+ * keeping every position, and in vocal repertoire that is a common and entirely
+ * legitimate re-upload where the placements must survive. A proportion-of-
+ * pitches-changed rule fires on it at nearly 100%, indistinguishable from a
+ * different piece. The hole this leaves, a different piece whose rhythm matches
+ * the old one note for note across a whole score, is an artefact of small test
+ * fixtures rather than of real music, and it is named in `STATE.md` rather than
+ * closed by a musical rule invented inside a warning dialog.
+ */
+export function arrivalDecision(input: {
+	storedFingerprint: string | null | undefined;
+	incomingFingerprint: string;
+	orphanCount: number;
+}): 'attach' | 'ask' {
+	// No stored fingerprint means this song has never had a score, so there is
+	// nothing to be different from and nothing to lose.
+	if (!input.storedFingerprint) return 'attach';
+	if (input.storedFingerprint === input.incomingFingerprint) return 'attach';
+	return input.orphanCount >= 1 ? 'ask' : 'attach';
+}
