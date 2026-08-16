@@ -159,13 +159,22 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
 
 **Step 4 does not go whole and does not wait whole.**
 
-- **4a, BUILT: the chimera warning.** Ilya can now tell that a different piece
+- **4a, CLOSED `d79020d`, WALKED BY DANN 2026-08-16.** He saw the warning name 3 of his 5 placements, chose Replace and got a coherent new song, then repeated and chose Keep and got his original back untouched, `5 / 5`, Я вас любил. **The chimera warning.** Ilya can now tell that a different piece
   has arrived and says so. Where the singer proceeds, the WHOLE song is
   replaced together, title, source, and placements, so the record is coherent.
   One song at a time, honestly.
 - **4b, WAITS behind N.58 and N.59: the library itself.** The list, rename,
   delete, and switching between saved songs. That is the feature, it is what
   makes songs plural, and it is not what ended the chimera.
+
+**Two things the walk found that the harness had not.** The dialog rendered at
+the viewport's top-left, because `app.css:88-94` resets `margin: 0` on every
+element and that overrides the user-agent's `dialog { margin: auto }`, which is
+what centres a modal. Measured before the fix at (0, 0) and after it at (444,
+357) in a 1400 by 900 viewport. **My checks had read the dialog's state and text
+and never once looked at where it landed**, which is tether five exactly. The
+second is open: **the destructive button sits rightmost, where macOS puts the
+safe default**, and both buttons carry the same weight.
 
 **The trigger, decided by Claude on Dann's instruction: the fingerprint differs
 AND at least one placement would be orphaned.** A corrected note keeps every

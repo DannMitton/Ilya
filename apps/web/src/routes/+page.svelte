@@ -1619,6 +1619,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   matching the drawer's register rather than inventing a look. The
 	   ::backdrop is the browser's own, dimmed a little. */
 	.replace-dialog {
+		/* `app.css:88-94` resets margin to 0 on every element, which overrides
+		   the user-agent's `dialog { margin: auto }` and drops a modal at the
+		   viewport's top-left corner. Measured on the deploy: (0, 0), 512 wide,
+		   `:modal` true. Restoring the centring the browser already intended. */
+		margin: auto;
 		max-width: 32rem;
 		padding: 1.25rem 1.5rem;
 		border: 1px solid var(--stone-600, #57534e);
