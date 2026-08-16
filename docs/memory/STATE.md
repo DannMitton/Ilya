@@ -43,10 +43,12 @@ CLOSED.** An upload never destroys placements; only the singer does, on purpose.
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: THREE
+### The blocking set: FIVE
 
 | | item | state |
 |---|---|---|
+| `[ ]` | **N.70** the iPhone cannot load a score | **RULED IN by Dann 2026-08-16.** iOS matches a file input's `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greys out every format Ilya reads while leaving PDFs and photos, which it cannot read, selectable. **Dann's ruling on the fix, and it is neither option offered: keep the filtered list on desktop where it helps, and drop `accept` entirely on iOS where it only blocks.** One phone check, and it cannot half-work the way a MIME guess can |
+| `[ ]` | **N.71** the note click | **RULED IN by Dann 2026-08-16**, with the old finding 3 folded in. WRITTEN `<pending>`, observed in a browser: every event group is now `pointer-events="none"` and the hit rectangle takes clicks back with its own `all`, so a real click DEAD CENTRE on a notehead places the syllable; and the rectangle carries `cursor="pointer"`, which is what was missing when Dann noticed the pointer never changed. **Closes when Dann clicks a notehead and it responds** |
 | `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, and 3 CLOSED**, all observed in a real browser, step 3 walked by Dann. **Three left: 4 the library door, 5 the binder, 6 the sweep.** See the four documents below |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[ ]` | **N.59** the reader in the browser | **Pyodide, not a rewrite. PIN THE VERSIONS.** Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM; swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
@@ -56,7 +58,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 | | item | state |
 |---|---|---|
 | `[x]` | **N.68** the upload that erases placements | **CLOSED 2026-08-16, `6c0c719`, WALKED BY DANN on the real deploy.** Absorbed into N.67 and fixed by architecture, not patched: `mergeOnUpload` (`pairings.ts`) keeps the map by positional key, runs `firstPass` only into an empty map, reports orphans, and never rebuilds. **What Dann saw:** he moved бил onto the first note (5/5 to 4/5, Я turned black), re-uploaded the same score, and the counter stayed 4/5 with бил still on the first note. Positive control run first: the old code snapped back to 5/5 |
-| `[x]` | **N.55b** Click Assignment | DONE for its named active scope. Rotate syllables PARKED 2026-08-14 |
+| `[ ]` | **N.55b** Click Assignment | **NOT DONE. Marked DONE 2026-08-13 while its central gesture was broken**, and it stayed that way until Dann walked it 2026-08-16: clicking a notehead did nothing, because the glyph was painted over its own hit rectangle and still interactive. **Dann's ruling: the tracker should be right rather than tidy.** Repaired as N.71. Rotate syllables PARKED 2026-08-14 |
 | `[~]` | **N.56** draw the withheld page badly | PARKED 2026-08-14, Dann's ruling |
 | `[x]` | **N.32** the Guide's false claims | DONE, shipped and observed 2026-08-14 |
 | `[x]` | **N.55a** the score with no underlay | Closed 2026-08-13 |
@@ -207,31 +209,18 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 
 ---
 
-## FOUND IN E.55'S WALK. THREE DEFECTS, NONE NUMBERED
+## RULED 2026-08-16, ON E.55'S WALK FINDINGS
 
-**Dann rules them in or out. Nothing enters the tracker any other way.** All
-three are in the singer's path and all three were found by Dann walking, not by
-a gate.
-
-1. **THE NOTEHEAD SWALLOWS ITS OWN CLICK.** The `[data-hit]` rectangle is
-   overlaid by the notehead glyph, a bare `<text>` element that is NOT inside
-   the rect, so `closest('[data-hit]')` returns null and the click dies.
-   Measured on the deploy: a hit map of one rectangle shows a dead vertical
-   stripe through the middle and live area either side, so clicking a few
-   pixels off-centre works and clicking the notehead does nothing. **The one
-   place a musician aims is the one place that is dead.** N.55b was walked and
-   confirmed 2026-08-13, so this either regressed or was always latent.
-2. **NO CURSOR AFFORDANCE ON A NOTE.** `getComputedStyle(hit).cursor` is
-   **`auto`**, measured on the deploy. Nothing tells a singer a note is
-   actionable, which is why (1) reads as "the app is broken" rather than "aim
-   elsewhere". Dann found this one by noticing the pointer never changed.
-3. **NO IPHONE CAN LOAD A SCORE.** iOS matches a file input's `accept` list by
-   registered type and has no registration for `.musicxml`, so the picker greys
-   the file out and it cannot be chosen. Confirmed on Dann's phone: PDFs and
-   images selectable, both MusicXML files greyed, DOCX greyed. `.xml` IS
-   accepted by iOS and by Ilya, and the same bytes under a `.xml` name ingest
-   fine ("Format: MusicXML (direct)", verified on the deploy). **The fix is in
-   `ScoreUploader.svelte`'s ACCEPT string, not in the singer's file management.**
+- **The walk's findings come before N.67 step 4**, per the schema's own rule
+  that half of every build day is reserved for what the previous walk found.
+- **N.70 and N.71 are numbered. The third finding, no cursor on a note, is
+  FOLDED INTO N.71** rather than tracked: one CSS declaration on the same
+  element as N.71's fix.
+- **N.55b's row is corrected rather than left tidy**, Dann's words.
+- **The N.70 fix is Dann's own third option**, better than either I posed:
+  filtered on desktop, no `accept` at all on iOS. Named consequence, accepted:
+  the tree's `isMobile` is a WIDTH test, so a narrow desktop window also gets
+  the unfiltered picker.
 
 ## STILL UNSETTLED. Not yours to settle alone
 

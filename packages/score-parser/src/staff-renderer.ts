@@ -976,7 +976,20 @@ export function renderAnalyzedStaff(
       measureAcc[accKey] = pitch.alter;
     }
 
-    parts.push(`<g data-event-id="${esc(ev.id)}">`);
+    // N.71 (Dann, 2026-08-16): the group is `pointer-events="none"` so that
+    // NOTHING painted in it can intercept a click, and the hit rectangle below
+    // takes them all back with its own explicit `all`. Presentation attributes
+    // inherit, and a child's own value wins, so this is the whole fix.
+    //
+    // WHY IT WAS NEEDED. Path A gave the note a big transparent rectangle
+    // because the inked notehead is about 7 px across. But the notehead is
+    // still painted ON TOP of that rectangle and was still interactive, so a
+    // click on the notehead hit the glyph, `closest('[data-hit]')` found
+    // nothing, and the click died. Measured on the deploy: a hit map of one
+    // rectangle showed a dead vertical stripe straight down the middle. The one
+    // place a musician aims was the one place that did nothing, and it stood
+    // that way from 2026-08-13 until Dann walked it.
+    parts.push(`<g data-event-id="${esc(ev.id)}" pointer-events="none">`);
 
     // N.55b, path A (Dann's ruling, 2026-08-13). A transparent hit target,
     // because the inked notehead measures about 7 px across and SVG hit-tests
@@ -986,12 +999,16 @@ export function renderAnalyzedStaff(
     // this group still draws over it. `highestInk` is deliberately untouched,
     // so the viewBox crop at the foot of this function is unaffected and the
     // rectangle is simply clipped to the page like any other element.
+    //
+    // `cursor: pointer` because a target that gives no sign it is a target is
+    // one a singer never presses: N.71's second half, and the reason its first
+    // half read as a broken app rather than as bad aim.
     {
       const hitL = ((prevXById.get(ev.id) ?? nx - 40) + nx) / 2;
       const hitR = (nx + (nextXById.get(ev.id) ?? nx + 40)) / 2;
       const hitTop = staffTop - 3.5 * o.lineGap;
       const hitBottom = staffBottom + 3.5 * o.lineGap;
-      parts.push(`<rect data-hit="${esc(ev.id)}" x="${round2(hitL)}" y="${round2(hitTop)}" width="${round2(hitR - hitL)}" height="${round2(hitBottom - hitTop)}" fill="transparent" pointer-events="all"/>`);
+      parts.push(`<rect data-hit="${esc(ev.id)}" x="${round2(hitL)}" y="${round2(hitTop)}" width="${round2(hitR - hitL)}" height="${round2(hitBottom - hitTop)}" fill="transparent" pointer-events="all" cursor="pointer"/>`);
     }
 
     // Sage stemless turning-pitch notehead, with its own accidental state

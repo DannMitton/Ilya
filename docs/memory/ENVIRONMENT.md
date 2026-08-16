@@ -13,7 +13,7 @@ a path, or a gate. Every line here cost someone an hour.
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
 | web-test | **511** |
-| score-parser | 442 passed, 5 skipped |
+| score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 

@@ -60,7 +60,9 @@ describe('clampHyphenX', () => {
 
 /** The rendered contents of one note's `<g data-event-id>` wrapper. */
 function eventGroup(svg: string, id: string): string {
-  return svg.match(new RegExp(`<g data-event-id="${id}">([\\s\\S]*?)</g>`))?.[1] ?? '';
+  // The group carries attributes beyond its id since N.71, so this must not
+  // demand a '>' straight after the quote.
+  return svg.match(new RegExp(`<g data-event-id="${id}"[^>]*>([\\s\\S]*?)</g>`))?.[1] ?? '';
 }
 
 /**
@@ -298,7 +300,7 @@ describe('staff renderer: the four analytical criteria', () => {
   it('gives every bound note a transparent, non-overlapping hit target', () => {
     const rects = [
       ...svg.matchAll(
-        /<rect data-hit="([^"]+)" x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="transparent" pointer-events="all"\/>/g,
+        /<rect data-hit="([^"]+)" x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="transparent" pointer-events="all" cursor="pointer"\/>/g,
       ),
     ].map((m) => ({ id: m[1], x: +m[2], w: +m[4] }));
     for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
@@ -308,6 +310,26 @@ describe('staff renderer: the four analytical criteria', () => {
     const spans = rects.map((r) => [r.x, r.x + r.w]).sort((a, b) => a[0] - b[0]);
     for (let i = 1; i < spans.length; i++) {
       expect(spans[i][0] + 0.02, `span ${i}`).toBeGreaterThanOrEqual(spans[i - 1][1]);
+    }
+  });
+
+  // N.71 (Dann, 2026-08-16). The rectangle existing is not enough: from
+  // 2026-08-13 the notehead was painted over it and still interactive, so a
+  // click on the note itself hit the glyph and died. Every event group is now
+  // pointer-events="none" and only the rectangle takes them back.
+  it('lets nothing painted in an event group intercept the hit target', () => {
+    const groups = [...svg.matchAll(/<g data-event-id="([^"]+)"([^>]*)>/g)];
+    expect(groups.length).toBeGreaterThan(0);
+    for (const [, id, attrs] of groups) {
+      expect(attrs, `group ${id}`).toContain('pointer-events="none"');
+    }
+  });
+
+  // The other half of N.71: a target that gives no sign it is a target is one
+  // a singer never presses. Dann found it by noticing the pointer never changed.
+  it('shows a pointer cursor over a note', () => {
+    for (const m of svg.matchAll(/<rect data-hit="([^"]+)"([^>]*)\/>/g)) {
+      expect(m[2], `rect ${m[1]}`).toContain('cursor="pointer"');
     }
   });
 });
