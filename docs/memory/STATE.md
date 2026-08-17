@@ -34,8 +34,9 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.59 is BUILT, all nine steps, and awaits Dann's walk of two things on a
-> real deploy: PDF import, and his own photograph failing honestly.**
+> **N.59 is BUILT. Eight of its nine steps are proved. Step 3 is not.**
+> Corrected at the close of E.58 by the coordinating desk, against Code's own
+> earlier report, because the tracker should be right rather than tidy.
 >
 > **Increment 1 is DONE and was walked** (`0573c10`, `383f368`): Dann dropped a
 > photograph of Musorgsky into Fit, answered bass and two sharps, and saw
@@ -55,6 +56,34 @@ any of them count.
 > the browser. A rotation-immune run-length fallback supplies a finite `s` where
 > the projection cannot; it fires on none of the 23 fixture pages and they are
 > byte-identical.
+>
+> **TWO CORRECTIONS THE RECORD MUST KEEP.**
+>
+> **1. The brace rule has never fired on real ink, and it is WRONG where it has
+> been tested.** No page in this repository contains a brace. All 23 fixture
+> pages ran the FALLBACK, staff 0 of each system. On the test page the new rule
+> and the old heuristic return the identical `[0, 2, 4, 6]`. **On piece 06, the
+> Piano-first counter-example, the rule returns the PIANO** (Code's own
+> measurement, E.58). The only braced three-stave page this project has is
+> Dann's photograph of Kabalevsky page 32, which does not read. **N.59 step 3 is
+> `WRITTEN`, not `DONE`.** This is the N.55b lesson exactly: it was marked DONE
+> once while its central gesture was broken, and that cost three days.
+>
+> **2. NO PHONE PHOTOGRAPH OF A REAL PAGE HAS EVER BEEN READ.** Zero for three
+> attempts, on `383f368` and again on `8605062`. What increment 1's walk read was
+> a 300 dpi fixture RENDER travelling through the image path, which proves the
+> path and not the camera. A photograph of a bound book carries rotation, page
+> curl, a facing page in frame, and background, and the reader has met none of
+> those. **Do not read "photograph import walked" as "a singer can photograph
+> their score."**
+>
+> **AND ONE THING NOBODY CHECKED.** The PDF read reports 79 notes. **79 is a
+> count, not a reading.** Nothing has crossed those notes against the printed
+> page, and Ruling D's substitution counts were not reported for it. The reader
+> has now produced results at three staff spacings, 17, 21, and 29, with
+> accuracy established at none of them. Also unreported: **`pdfjs-dist`'s weight
+> in the bundle.** It sits in `dependencies` now and a singer on a phone pays for
+> it on first load.
 >
 > **WHAT DANN OWES, and it is the only thing blocking:** `i18n.ts`'s
 > `upload.err.pageReadFailed` says *"A flat, straight photograph of the whole
@@ -77,7 +106,7 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
-| `[ ]` | **N.59** the reader in the browser | **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Only step 8 (PDF, `pdfjs-dist`) remains, and it is Dann's ruling.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal`; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
+| `[ ]` | **N.59** the reader in the browser | **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Only step 8 (PDF, `pdfjs-dist`) remains, and it is Dann's ruling.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
 ### Closed and parked
 

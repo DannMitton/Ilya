@@ -863,6 +863,67 @@ read the lines anyway.
 
 ---
 
+## THE COORDINATING DESK'S OWN INSTRUMENTS. Learned E.58, all the hard way
+
+These are traps for the desk that RULES, not the one that builds. Every one cost
+time on 2026-08-16.
+
+- **THE DEVTOOLS CONSOLE FILTER PERSISTS ACROSS RELOADS, AND IT LIES BY
+  OMISSION.** Dann's console carried the word `plausibility` in its filter box
+  from some earlier session. The toolbar read **5 errors, 3 warnings, 14 hidden**
+  and the pane showed nothing. **A full hour went into inferring a cause from a
+  UI string while the traceback sat two clicks away.** Before reading any console,
+  clear the filter box and say you have. Tether 11 is exactly this and it was not
+  followed.
+- **A MESSAGE FROM A `catch` BLOCK IS NOT EVIDENCE ABOUT THE INPUT.**
+  `upload.err.pageReadFailed` said the photograph should be flat and straight. It
+  was printed for an unguarded NaN. The code had established nothing about
+  flatness. **Treat user-facing error copy as a claim by the person who wrote the
+  string, never as a reading of the data.**
+- **THE VERCEL CONNECTOR GIVES YOU THE DEPLOY URL. DO NOT ASK DANN FOR IT.**
+  `list_teams` -> `list_projects` -> `list_deployments` returns every deployment
+  with its `githubCommitSha`, its `state`, and its sha-pinned `url`. Project
+  `ilya` is `prj_oOvEOXnovbEkVBAOQRmTmgxJK0DB`, team
+  `team_CmkdrV66wAIF29pQLpiAb80O`. `get_project_deployment_protection` confirms
+  password, SSO, and trusted-IP are all off, which is how you tell a broken phone
+  from a broken deploy. Asking Dann for a URL you can fetch is a defect.
+- **QR CODES: `pip install segno`, then `segno.make(url, error='h').save(p,
+  scale=14)`.** Dann scans it off the Mac screen with the iPhone camera. The
+  camera opens Safari, not Chrome; for anything that is not engine-specific that
+  is fine, because Chrome on iOS draws with WebKit.
+- **HEIC. Two platforms, two different codes, same file.** Desktop Chromium
+  REFUSES a raw `.HEIC` at `createImageBitmap`, so `upload.err.imageUndecodable`
+  fires and the reader is never reached. On Chrome for iOS the picture gets
+  through to the reader. **Whether iOS WebKit decodes HEIC or the picker
+  transcodes to JPEG is STILL NOT ESTABLISHED**; both produce the identical
+  screen. To read a HEIC in Python on Dann's Mac with no install:
+  `sips -s format png in.HEIC --out out.png`. In this container,
+  `pip install pillow-heif` and `pillow_heif.register_heif_opener()`.
+- **MEASURING STAFF SPACE ON A TILTED PHOTOGRAPH: PROJECT NARROW SLICES.** A
+  full-width row projection is destroyed by one degree of rotation, because a
+  line drifts nearly two staff spaces across a system. **A 200 px wide slice
+  moves it 3.5 px and finds all five lines cleanly.** This recovered `s = 17.0`
+  at five separate x positions on Dann's untouched photograph, and it was the
+  measurement that found the bug. It is a DESK instrument for diagnosis; the
+  reader's own fallback is Cardoso and Rebelo run lengths, which is different and
+  cheaper.
+- **AUTOMATIC PAGE-BOUNDARY DETECTION BY LARGEST CONTOUR DOES NOT WORK ON A
+  PHOTOGRAPH OF A BOOK.** Otsu plus `findContours` plus `approxPolyDP` returned
+  the FRAME corners, area fraction 0.905, not the page. The deskew it produced
+  was worthless. **Measure the tilt from the staff lines themselves** and rotate
+  by that: residual went from 1.04 degrees to 0.07, and a full-width projection
+  that had found nothing then found 7 lines at 17 px. That is a positive control,
+  and it is the right shape for one.
+- **DANN'S PHOTOGRAPHS, kept because they are the only real ones this project
+  has.** `~/Downloads/IMG_5162.HEIC` (3024 x 4032, tilt 1.04 deg, s = 17.0) and
+  `IMG_5165.HEIC` (tilt 3.29 deg, worse, and it was the one that felt more
+  careful). `~/Downloads/score-page32-deskewed.png` is 5162 rotated flat and
+  cropped. **All three are Kabalevsky op. 52 no. 9 page 32, four systems of three
+  staves with the lower two braced**, which makes them the only braced fixture in
+  existence here.
+
+---
+
 ## Project knowledge capacity
 
 Measured 2026-08-13: **2.55 bytes per unit**, and a document costs roughly 5,900
