@@ -2,7 +2,7 @@
   "name": "@ilya/web",
   "version": "0.1.0",
   "private": true,
-  "description": "Ilya web application \u2014 SvelteKit",
+  "description": "Ilya web application — SvelteKit",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -21,6 +21,7 @@
     "@ilya/dictionary": "workspace:*",
     "@ilya/phonology": "workspace:*",
     "@ilya/score-parser": "workspace:*",
+    "pdfjs-dist": "6.2.108",
     "tesseract.js": "^7.0.0",
     "webmscore": "^1.2.1"
   },

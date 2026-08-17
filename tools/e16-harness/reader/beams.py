@@ -160,6 +160,15 @@ def remove_lines_safe(img, s, staves, page=None):
     stage had only (a), which is why an 82 px beam was deleted by a 35 px kernel.
     """
     bw = (img < 128).astype(np.uint8)
+    # N.59, E.58. The invariant asserted where it is CONSUMED, not only where it
+    # is produced. `int()` on a non-finite float raises ValueError four frames
+    # away from the cause, which is how a NaN staff space presented itself as
+    # "cannot convert float NaN to integer" and told nobody what had happened.
+    # detect_staves guards this upstream; a reader that arrives here anyway is a
+    # bug either way, and it says so in its own words.
+    if not np.isfinite(s) or s <= 0:
+        raise ValueError(
+            "remove_lines_safe: staff space must be finite and positive, got %r" % (s,))
     hk = cv2.getStructuringElement(cv2.MORPH_RECT, (int(1.7 * s), 1))
     opened = cv2.morphologyEx(bw, cv2.MORPH_OPEN, hk)
 

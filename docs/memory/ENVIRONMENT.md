@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **552** |
+| web-test | **555** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -35,8 +35,9 @@ Dann's permission.** It moved 408 to 416 on 2026-08-13 for `pairings.test.ts`,
 2 (`migration.test.ts`, `driver.idb.test.ts`, `fingerprint.test.ts`), **504
 to 511 on 2026-08-16** for step 3's merge rule, **511 to 517 on
 2026-08-16** for step 4a's arrival decision, **517 to 537 on 2026-08-16**
-for step 5's binder, and **537 to 552 on 2026-08-16** for N.59 increment 1
-(ten converter tests, four for the source carry-through, one for the title).
+for step 5's binder, **537 to 552 on 2026-08-16** for N.59 increment 1
+(ten converter tests, four for the source carry-through, one for the title), and
+**552 to 555 on 2026-08-16** for step 8's reader-route tests.
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -564,6 +565,80 @@ under.**
   dev session also needs a restart.**
 - **A greyscale PNG of a 300 dpi page is about 830 KB**, and IndexedDB reports
   roughly 25 MB of usage for one. Quota on Dann's Mac is about 2 GB.
+
+## PYODIDE IS 32-BIT. `np.intp` IS int32, AND int64 BREAKS `np.bincount`
+
+Measured 2026-08-16, in the browser and nowhere else.
+
+```
+TypeError: Cannot cast array data from dtype('int64') to dtype('int32')
+           according to the rule 'safe'
+```
+
+**A 64-bit desktop numpy accepts an int64 array in `np.bincount` and Pyodide's
+WASM numpy refuses it**, because WASM is 32-bit so `np.intp` is int32. Every
+local Python proof passed; the fault existed only in the browser, and only the
+browser could find it. **Use `np.intp` for anything that will index or be
+counted, never `np.int64`.**
+
+This is the same shape as `$state.snapshot` before IndexedDB: a whole class of
+bug that no gate and no local run can reach.
+
+## PDF IMPORT, N.59 STEP 8. Measured 2026-08-16
+
+- **`pdfjs-dist` 6.2.108**, Apache-2.0, ZERO runtime dependencies, 20.4 million
+  weekly downloads, pinned EXACTLY rather than with a caret. Dann's ruling.
+- **Weight, measured by unpacking the tarball and by building:** `pdf.mjs`
+  **141,847 gzipped** as a lazy chunk, `pdf.worker…mjs` **470,500 gzipped** as a
+  separate asset. **Up-front JS for a singer who never drops a PDF: 30,546
+  bytes** across the 10 chunks `index.html` loads. The whole-app per-file gzip
+  sum went to **550,730**, and every added byte is lazy.
+- **400 dpi, per Ruling E.** A letter page rasterizes to about 3400 x 4400 and
+  reads at **s = 29.0**, inside the retention ruling's "retained near 28 to 30".
+- **THE SAME MUSIC READS DIFFERENTLY AT DIFFERENT SPACINGS.** Musorgsky 01 p1
+  gives **78 notes at s = 21** from the PNG and **79 notes with one pitch
+  abstention at s = 29** from a PDF of the same engraving. E.43's 37-against-36
+  precedent again. Do not treat a read as reproducible across resolutions.
+- **A PDF is STORED BYTE FOR BYTE**, not as its rasters, on the `.musx`
+  precedent. A photograph has no better original, so its greyscale ink is both
+  what is read and what is stored.
+- **`PDFDocumentProxy` has no `destroy()`.** Teardown is `loadingTask.destroy()`.
+- pdf.js logs `Math.sumPrecise is not a function` while substituting Times
+  fonts. Harmless here: no `standardFontDataUrl` is configured, so TEXT may
+  render wrong, while embedded notation glyphs are unaffected.
+- **A PDF page is TRANSPARENT where nothing is drawn.** Fill the canvas white
+  before rendering or the reader's `img < 128` reads the whole page as ink.
+- **To make a true vector-PDF fixture with no dependency:** print a Verovio SVG
+  from the harness output through Playwright's `page.pdf({ format: 'Letter' })`.
+  Sizing it in CSS pixels instead gives a 21-inch page and a 94-megapixel
+  raster.
+
+## THE NaN THAT CRASHED THE READ, AND ITS GUARD. E.58
+
+**`detect_staves` returned `s = NaN` and nobody noticed for four frames.**
+`reader.py`'s `rowfrac` is a FULL-PAGE horizontal projection, which only means
+"this row is a staff line" when the page is square to the frame. On Dann's
+photograph, rotated 1.04 degrees, the top line drifts 29 px across 1,600 px and
+the projection smears every line into its neighbours. `np.median` of an empty
+array returns NaN twice in a row without raising, and `int(1.7 * s)` in
+`beams.py` raised four frames later. **The uploader then invented a reason.**
+
+- Guarded 2026-08-16: a non-finite or implausible `s` now raises the function's
+  own `RuntimeError("no staff lines")`, and an EMPTY staff list does too, which
+  it previously returned silently (`b3-ledger-lines-scale-page.png` does exactly
+  that at s = 10.0).
+- **The fallback is Cardoso and Rebelo, ICPR 2010**, paired black-plus-white run
+  lengths per column, immune to rotation because it never sums across the page
+  width. **A FALLBACK, never primary**, so the 23 fixture pages stay
+  byte-identical; measured, they do, with zero firings.
+- **On a clean render it is sharp and on a photograph it is not.** The fixture
+  gives a single peak at 21 with 6,895 counts against 2,090 for the runner-up.
+  The photograph gives 19:2973, 18:2626, 21:2216, 20:2162, 17:1213 — a smear
+  across 17 to 22 with no dominant peak, against a hand measurement of 17.0.
+  **Treat its value on a photograph as approximate.**
+- **`i18n.ts`'s `upload.err.pageReadFailed` asserts a cause the code has not
+  established** ("A flat, straight photograph of the whole page reads best").
+  It sent a desk chasing tilt for an hour. Dann's to rule.
 
 ## VALIDATERECORD DROPPED THE SOURCE, AND HAD SINCE N.67 STEP 1
 

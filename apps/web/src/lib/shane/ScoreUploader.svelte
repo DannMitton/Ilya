@@ -189,11 +189,18 @@
 		dragging = false;
 	}
 
-	/** Is this a photograph? Sniffed by bytes, the same way dispatch will. */
+	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
 	async function isPicture(file: File): Promise<boolean> {
+		return (await readableKind(file)) !== null;
+	}
+
+	async function readableKind(file: File): Promise<'image' | 'pdf' | null> {
 		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
 		const detected = detectScoreFormat(file.name, head);
-		return detected.ok && detected.format === 'image';
+		if (!detected.ok) return null;
+		if (detected.format === 'image') return 'image';
+		if (detected.format === 'pdf') return 'pdf';
+		return null;
 	}
 
 	/**
@@ -266,14 +273,28 @@
 	 * re-reads to the same answer rather than an approximate one.
 	 */
 	async function readPages(file: File, forAnswers: EngravingAnswers): Promise<PageRead> {
-		let ink: ArrayBuffer;
+		const kind = await readableKind(file);
+		let inks: ArrayBuffer[];
 		try {
-			ink = await toGreyscalePng(file);
+			if (kind === 'pdf') {
+				// Dynamic import: pdf.js is 644 KB gzipped and nobody who has not
+				// dropped a PDF ever pays for it (N.26's law, and the same shape as
+				// denigma and webmscore above).
+				const { rasterizePdf } = await import('./engine/page-pdf');
+				inks = await rasterizePdf(file);
+			} else {
+				inks = [await toGreyscalePng(file)];
+			}
 		} catch (e) {
 			if (e instanceof ImageUndecodableError) throw { code: 'IMAGE_UNDECODABLE', message: e.message };
+			if (typeof e === 'object' && e !== null && 'code' in e) throw e;
 			throw e;
 		}
-		lastInk = ink.slice(0);
+		// A PDF is STORED BYTE FOR BYTE, not as its rasters, which is Dann's own
+		// ruled precedent for `.musx`: storing the conversion would freeze the
+		// song at today's rasterizer. A photograph has no such original to keep,
+		// so its ink is both what is read and what is stored.
+		lastInk = kind === 'pdf' ? await file.arrayBuffer() : inks[0].slice(0);
 		// The original's hash is BEST EFFORT and the ink is not: `crypto.subtle`
 		// is absent outside a secure context, and losing it must cost a recorded
 		// provenance line, never the singer's page.
@@ -284,6 +305,7 @@
 		} catch (err) {
 			console.error('[ScoreUploader] page kept, but the original could not be hashed:', err);
 		}
+		lastKind = kind;
 		lastPage = {
 			clef: forAnswers.clef,
 			octaveChange: forAnswers.octaveChange,
@@ -292,7 +314,7 @@
 			originalHash,
 			staffSpace: [],
 		};
-		return getPageReader().read([ink], {
+		return getPageReader().read(inks, {
 			clef: [forAnswers.clef.sign, forAnswers.clef.line],
 			key: forAnswers.fifths,
 			octaveChange: forAnswers.octaveChange,
@@ -308,6 +330,7 @@
 	 */
 	let lastInk: ArrayBuffer | null = null;
 	let lastPage: PageProvenance | null = null;
+	let lastKind: 'image' | 'pdf' | null = null;
 
 	/** The singer pressed "Read this page". */
 	async function readAsked(): Promise<void> {
@@ -328,8 +351,15 @@
 		return { ...lastPage, staffSpace: ingested.readReport?.staffSpace ?? [] };
 	}
 
-	/** The greyscale ink, named after the original, as a File the owner can store. */
+	/**
+	 * What the owner stores. For a photograph that is the greyscale ink, because
+	 * there is no better original to keep. For a PDF it is the PDF itself, kept
+	 * under its own name and type.
+	 */
 	function inkFile(original: File): File {
+		if (lastKind === 'pdf') {
+			return new File([lastInk ?? new ArrayBuffer(0)], original.name, { type: 'application/pdf' });
+		}
 		const stem = original.name.replace(/\.[^.]+$/, '') || 'page';
 		return new File([lastInk ?? new ArrayBuffer(0)], `${stem}.png`, { type: 'image/png' });
 	}
@@ -372,7 +402,9 @@
 		}
 		if (p.via === 'mxl') return T('upload.format.mxl');
 		if (p.via === 'denigma') return T('upload.format.musxDenigma');
-		if (p.via === 'reader') return T('upload.format.imageReader');
+		if (p.via === 'reader') {
+			return T(p.sourceFormat === 'pdf' ? 'upload.format.pdfReader' : 'upload.format.imageReader');
+		}
 		return T('upload.format.msczWebmscore'); // via === 'webmscore'
 	}
 
@@ -387,8 +419,6 @@
 				switch (f.kind) {
 					case 'pre-2014-finale':
 						return { soon: false, message: T('upload.err.mus') };
-					case 'pdf':
-						return { soon: true, message: T('upload.soon.pdf') };
 					case 'midi':
 						return { soon: true, message: T('upload.soon.midi') };
 					case 'json-not-mnx':
@@ -428,6 +458,8 @@
 				return { soon: false, message: T('upload.err.pageReadFailed') };
 			case 'IMAGE_UNDECODABLE':
 				return { soon: false, message: T('upload.err.imageUndecodable') };
+			case 'PDF_UNREADABLE':
+				return { soon: false, message: T('upload.err.pdfUnreadable') };
 			case 'CONVERSION_FAILED':
 				return {
 					soon: false,

@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`0573c10`**. A floor cannot go stale, because further commits only
+before **`383f368`**. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
 
@@ -34,28 +34,34 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.59 increment 2, step 8: PDF import, which needs Dann's approval of
-> `pdfjs-dist`.** Nothing else in N.59 is open.
+> **N.59 is BUILT, all nine steps, and awaits Dann's walk of two things on a
+> real deploy: PDF import, and his own photograph failing honestly.**
 >
-> **INCREMENT 1 IS DONE, NOT WRITTEN. Shipped `0573c10` and WALKED BY DANN on
-> the branch alias, 2026-08-16.** What he saw: he dropped a PHOTOGRAPH of
-> Musorgsky's *Within four walls* into Fit, answered bass clef and two sharps,
-> and his Russian syllables sat under thirteen notes Ilya had read off the ink,
-> `13 / 13`, with the no-lyrics banner above them. Steps 1 through 7 of
-> `docs/sessions/e57-brief-to-code-n59_r1_2026-08-16.md`, all seven proved by a
-> run or a browser observation.
+> **Increment 1 is DONE and was walked** (`0573c10`, `383f368`): Dann dropped a
+> photograph of Musorgsky into Fit, answered bass and two sharps, and saw
+> `13 / 13` syllables sitting on notes Ilya read off ink.
 >
-> **Step 8 is the only thing left and it is a decision, not a build.** One
-> approval: add `pdfjs-dist` so PDFs import. Fable's recommendation is yes; the
-> cost of no is that photographs work and PDFs stay "coming soon". Increment 1
-> shipped without it, as designed.
+> **Increment 2, step 8, is BUILT AND WALKED BY ME, not yet by Dann.**
+> `pdfjs-dist` 6.2.108 ruled in by Dann 2026-08-16. A true vector PDF reads end
+> to end: 79 notes, 12 measures, s = 29.0, restored across a reload without
+> re-asking the two questions. **The PDF is stored byte for byte**, on the
+> `.musx` precedent.
 >
-> **What the walk and the build found, all recorded below:** `validateRecord`
-> dropped the source and had since N.67 step 1, which silently disarmed step
-> 4a's chimera warning across a reload; Ruling A's measures-per-system formula
-> carried an off-by-one; `ilya-test-page.png` is a repository fixture and is
-> PIANO-FIRST; and no fixture in this repository contains a brace, so the brace
-> rule's central case is UNPROVEN here.
+> **The NaN is guarded.** Dann's own photograph of Kabalevsky page 32 failed
+> three times on `383f368` and the uploader invented a reason. The cause was a
+> full-page horizontal projection collapsing on a 1.04 degree rotation, two
+> silent NaNs from `np.median` of an empty array, and a crash four frames later
+> in `int(1.7 * s)`. It now raises `RuntimeError("no staff lines")`, observed in
+> the browser. A rotation-immune run-length fallback supplies a finite `s` where
+> the projection cannot; it fires on none of the 23 fixture pages and they are
+> byte-identical.
+>
+> **WHAT DANN OWES, and it is the only thing blocking:** `i18n.ts`'s
+> `upload.err.pageReadFailed` says *"A flat, straight photograph of the whole
+> page reads best"*, which **asserts a cause the code has not established** and
+> sent a desk chasing tilt for an hour. Whether that copy changes, and whether
+> Ilya should offer photograph import in the beta at all, is his ruling. **No
+> French may be written until he has seen it.**
 
 ## THE TRACKER
 
@@ -298,9 +304,13 @@ LIBRARY backup rather than a SONG backup is.
   for pure white. Three levers: leave it; darken `--sage` globally, which keeps
   print identical to screen; or darken at print only, which breaks the WYSIWYG
   principle he set in E.51. **Nothing depends on it.**
-- **`pdfjs-dist`, for N.59 step 8.** One approval, and the only thing left in
-  N.59. Fable's recommendation is yes. Cost of no: photographs work, PDFs stay
-  "coming soon". **Nothing else needs a decision and nothing is blocked on it.**
+- ~~`pdfjs-dist`, for N.59 step 8~~ **RULED IN 2026-08-16, Dann: an enthusiastic
+  yes.** Registry facts checked first, as he required for `fake-indexeddb`:
+  6.2.108, Apache-2.0, zero runtime dependencies, 20.4 million weekly downloads,
+  last published 2026-07-28. Built, walked by me, not yet by him.
+- **THE PHOTOGRAPH COPY, and whether photographs belong in the beta at all.**
+  `upload.err.pageReadFailed` asserts a cause the code has not established.
+  Dann's ruling, and no French may be written before he sees it.
 - ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
   shipped and was walked.
 - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
@@ -407,6 +417,10 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-16 | **E.58: N.59 step 8 built, and the NaN that crashed Dann's own photograph guarded.** `pdfjs-dist` 6.2.108 ruled in by Dann, pinned exactly, lazy: **up-front JS for a singer who never drops a PDF is 30,546 bytes gzipped**, and pdf.js's 612 KB sits entirely in chunks that load on demand. A true vector PDF reads end to end at s = 29.0. `detect_staves` now raises its own `RuntimeError("no staff lines")` instead of leaking a NaN four frames into `beams.py`, and a Cardoso and Rebelo run-length fallback supplies a finite `s` on a rotated page. Gates 552 to 555. |
+| 2026-08-16 | **A BUG IN MY OWN FIX THAT NO LOCAL RUN COULD SEE.** `np.bincount` on an int64 array works on 64-bit desktop numpy and **throws under Pyodide, because WASM is 32-bit and `np.intp` is int32**. Every Python proof passed; the browser found it on the very page the fallback exists to rescue. **The lesson is E.54's again: drive a real browser, the gates and the local runs structurally cannot reach this class.** |
+| 2026-08-16 | **THE SAME MUSIC READS DIFFERENTLY AT DIFFERENT RESOLUTIONS, measured.** Musorgsky 01 page 1 gives 78 notes at s = 21 from a PNG and 79 notes with one pitch abstention at s = 29 from a PDF of the same engraving. E.43's 37-against-36 precedent, seen again from the other direction. A read is not reproducible across resolutions and must not be described as if it were. |
+| 2026-08-16 | **The run-length estimator is sharp on a render and soft on a photograph, and the difference is the finding.** The fixture gives a single peak at 21 (6,895 against 2,090). Dann's photograph gives a smear across 17 to 22 with no dominant peak, mode 19, against a hand measurement of 17.0. Reported rather than reconciled. |
 | 2026-08-16 | **E.58: `0573c10`. N.59 INCREMENT 1 SHIPPED AND WALKED BY DANN.** Steps 1 through 7. A photograph now becomes a score: Pyodide runs the eleven-module E.16 reader in a Worker, the brace rule replaces the struck gap heuristic, the recognized output becomes MusicXML and enters at the existing ingest seam, the singer answers clef and key in the drawer before the read, the read report counts every substitution without marking the page, and the greyscale ink persists so a reload restores without re-asking. **What Dann saw: thirteen syllables sitting on notes Ilya read off ink, `13 / 13`.** Gates 537 to 552. |
 | 2026-08-16 | **A DEFECT OLDER THAN N.59, found by it: `validateRecord` never carried `source` through**, and had not since N.67 step 1. It returned `record.source === null` on every load. **Consequence nobody had noticed: step 4a's chimera warning cannot fire on the first upload after a reload**, because the stored fingerprint was always absent. It works within one session, which is exactly why Dann's own 4a walk passed. Fixed, four tests. **The lesson: a walk that never reloads cannot test anything that depends on what was stored.** |
 | 2026-08-16 | **Three corrections to Fable's E.57 brief, all measured, none of them reopening a ruling.** (1) `measures_per_system` is `len(barlines)`, not `len(barlines) + 1`: the `+1` form is wrong on all six Musorgsky pieces by exactly the number of systems. (2) The spike's `loadPackage` list is `['numpy','opencv-python']` with no matplotlib, and it never writes the Leipzig caches, because it calls `read_page_pitch` rather than `envelope.run`; every matplotlib and leipzig string it contains is inside its embedded module blob. (3) `~/Downloads/ilya-test-page.png` is byte-identical to a repository fixture and is 8 staves at s = 21, not E.43's 12 at s = 17. |

@@ -79,10 +79,10 @@ describe('detectScoreFormat: recognised refusals', () => {
 		});
 	});
 
-	it('refuses PDF by %PDF magic', () => {
+	it('ROUTES PDF by %PDF magic to the page reader', () => {
 		expect(detectScoreFormat('song.pdf', utf8('%PDF-1.7\n'))).toEqual({
-			ok: false,
-			failure: { kind: 'pdf' }
+			ok: true,
+			format: 'pdf'
 		});
 	});
 
@@ -206,7 +206,7 @@ describe('detectScoreFormat: extension fallbacks', () => {
 describe('accepted-extensions contract', () => {
 	it('lists exactly the formats dispatch can route (no aspirational entries)', () => {
 		expect(ACCEPTED_EXTENSIONS.split(',').sort()).toEqual(
-			['.json', '.mnx', '.mscz', '.musicxml', '.musx', '.mxl', '.xml', 'image/*'].sort()
+			['.json', '.mnx', '.mscz', '.musicxml', '.musx', '.mxl', '.pdf', '.xml', 'image/*'].sort()
 		);
 	});
 

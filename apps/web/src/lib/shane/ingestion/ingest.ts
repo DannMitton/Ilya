@@ -109,6 +109,8 @@ export type IngestError =
 	| { code: 'PAGE_READ_FAILED'; message: string }
 	/** N.59: the browser could not decode the picture at all (HEIC on Chromium). */
 	| { code: 'IMAGE_UNDECODABLE' }
+	/** N.59 step 8: the PDF could not be opened, or carries no pages. */
+	| { code: 'PDF_UNREADABLE'; message: string }
 	| DenigmaError
 	| ResourceError;
 
@@ -205,6 +207,7 @@ export async function ingestScoreFile(file: File, deps: IngestDeps): Promise<Ing
 			});
 		}
 
+		case 'pdf':
 		case 'image': {
 			if (!deps.readPages || !deps.engravingAnswers) {
 				return err({ code: 'PAGE_READER_UNAVAILABLE' });
@@ -219,7 +222,7 @@ export async function ingestScoreFile(file: File, deps: IngestDeps): Promise<Ing
 			const outcome = await parseMusicXmlText(xml, file.name, musicxmlParser, {
 				format: 'musicxml',
 				via: 'reader',
-				sourceFormat: 'image',
+				sourceFormat: detected.format,
 			});
 			if (!outcome.ok) return outcome;
 			// The Worker counts substitutions over `ro`; the converter counts what
@@ -353,6 +356,7 @@ function asReaderError(e: unknown): IngestError {
 		if (code === 'READER_LOAD_FAILED') return { code: 'PAGE_READER_LOAD_FAILED', message };
 		if (code === 'READ_FAILED') return { code: 'PAGE_READ_FAILED', message };
 		if (code === 'IMAGE_UNDECODABLE') return { code: 'IMAGE_UNDECODABLE' };
+		if (code === 'PDF_UNREADABLE') return { code: 'PDF_UNREADABLE', message };
 	}
 	return { code: 'PAGE_READ_FAILED', message: e instanceof Error ? e.message : String(e) };
 }

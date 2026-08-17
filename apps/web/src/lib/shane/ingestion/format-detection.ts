@@ -29,7 +29,7 @@
  */
 
 /** Formats the dispatch layer can route today. */
-export type ScoreFormat = 'mnx' | 'musicxml' | 'mxl' | 'mscz' | 'musx' | 'image';
+export type ScoreFormat = 'mnx' | 'musicxml' | 'mxl' | 'mscz' | 'musx' | 'image' | 'pdf';
 
 /**
  * Recognised-but-unroutable inputs. Each kind maps to distinct user-facing
@@ -38,7 +38,6 @@ export type ScoreFormat = 'mnx' | 'musicxml' | 'mxl' | 'mscz' | 'musx' | 'image'
 export type DetectionFailure =
 	| { kind: 'pre-2014-finale' }
 	| { kind: 'midi' }
-	| { kind: 'pdf' }
 	| { kind: 'json-not-mnx' }
 	| { kind: 'xml-not-musicxml'; rootElement?: string }
 	| { kind: 'zip-unrecognised' }
@@ -52,7 +51,7 @@ export type DetectionResult =
  * The `accept` attribute for the uploader's file input: exactly the formats
  * dispatch can route, nothing aspirational.
  */
-export const ACCEPTED_EXTENSIONS = '.mnx,.json,.xml,.musicxml,.mxl,.mscz,.musx,image/*';
+export const ACCEPTED_EXTENSIONS = '.mnx,.json,.xml,.musicxml,.mxl,.mscz,.musx,.pdf,image/*';
 
 /** How many leading bytes detection needs at most. */
 export const SNIFF_LENGTH = 2048;
@@ -177,8 +176,9 @@ export function detectScoreFormat(fileName: string, bytes: Uint8Array): Detectio
 		return { ok: false, failure: { kind: 'zip-unrecognised' } };
 	}
 	if (isMidi(bytes)) return { ok: false, failure: { kind: 'midi' } };
-	// N.59 increment 2 promotes `pdf` the same way `image` is promoted below.
-	if (isPdf(bytes)) return { ok: false, failure: { kind: 'pdf' } };
+	// N.59 increment 2, on Dann's ruling of 2026-08-16: a PDF is routable, and
+	// goes to the page reader by way of the pdf.js rasterizer.
+	if (isPdf(bytes)) return { ok: true, format: 'pdf' };
 	// N.59, Ruling C. A photograph is a ROUTABLE format now, not a recognised
 	// refusal: it goes to the page reader and comes back as MusicXML. The
 	// `image` failure kind is gone rather than left dangling, so the compiler

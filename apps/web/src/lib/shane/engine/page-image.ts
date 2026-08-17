@@ -66,20 +66,33 @@ export async function toGreyscalePng(file: File): Promise<ArrayBuffer> {
 		const ctx = canvas.getContext('2d', { willReadFrequently: true });
 		if (!ctx) throw new ImageUndecodableError('no 2d context for the page canvas');
 		ctx.drawImage(bitmap, 0, 0);
-		const image = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
-		const px = image.data;
-		for (let i = 0; i < px.length; i += 4) {
-			// Rec. 601 luma, the same weighting OpenCV's own COLOR_BGR2GRAY uses,
-			// so the grey the reader sees here matches the grey it sees when a
-			// harness fixture is read from disk.
-			const y = (px[i] * 299 + px[i + 1] * 587 + px[i + 2] * 114) / 1000;
-			px[i] = px[i + 1] = px[i + 2] = y;
-			px[i + 3] = 255;
-		}
-		ctx.putImageData(image, 0, 0);
-		const blob = await canvas.convertToBlob({ type: 'image/png' });
-		return blob.arrayBuffer();
+		return greyscaleCanvasToPng(canvas, ctx);
 	} finally {
 		bitmap.close();
 	}
+}
+
+/**
+ * Flatten whatever has been drawn on a canvas to greyscale, in place, and
+ * encode it as a PNG. Shared by the photograph path above and the PDF
+ * rasterizer, so both produce the SAME kind of ink and the reader cannot tell
+ * them apart. Exported for that reason and no other.
+ */
+export async function greyscaleCanvasToPng(
+	canvas: OffscreenCanvas,
+	ctx: OffscreenCanvasRenderingContext2D
+): Promise<ArrayBuffer> {
+	const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	const px = image.data;
+	for (let i = 0; i < px.length; i += 4) {
+		// Rec. 601 luma, the same weighting OpenCV's own COLOR_BGR2GRAY uses, so
+		// the grey the reader sees here matches the grey it sees when a harness
+		// fixture is read from disk.
+		const y = (px[i] * 299 + px[i + 1] * 587 + px[i + 2] * 114) / 1000;
+		px[i] = px[i + 1] = px[i + 2] = y;
+		px[i + 3] = 255;
+	}
+	ctx.putImageData(image, 0, 0);
+	const blob = await canvas.convertToBlob({ type: 'image/png' });
+	return blob.arrayBuffer();
 }

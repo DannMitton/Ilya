@@ -193,6 +193,94 @@ def _derive_rowfrac_gate(rowfrac, floor=0.015, span_bound=0.0137, min_members=5)
         gate = accepted_lo_val / 2.0
     return gate
 
+# ---------- STAFF SPACE FROM VERTICAL RUN LENGTHS ----------
+#
+# N.59, E.58. A FALLBACK, never the primary estimator, and the restriction is
+# the point: the 23 fixture pages all read today and their `ro` is the baseline
+# every downstream number rests on. A new primary estimator could shift `s` by a
+# fraction of a pixel on every one of them and move measurements nobody asked to
+# move. A fallback that never fires on a working page cannot do that.
+#
+# WHY THIS METHOD. `detect_staves` projects dark-pixel fractions across the WHOLE
+# page width, which only means "this row is a staff line" when the page is square
+# to the frame. On Dann's photograph of Kabalevsky op. 52 no. 9 page 32, rotated
+# a measured 1.04 degrees, the top staff line drifts 29 px across 1,600 px, which
+# is 1.7 staff spaces: the projection smears every line into its neighbours,
+# `intra` comes out empty, and `np.median` of an empty array returns NaN twice in
+# a row without raising. The information was never lost; the instrument averaged
+# it away.
+#
+# SOURCE. Cardoso and Rebelo, "Robust Staffline Thickness and Distance Estimation
+# in Binary and Gray-Level Music Scores", ICPR 2010, DOI 10.1109/ICPR.2010.458:
+# the most common black run is the staff-line thickness and the most common white
+# run is the staff space, and "these estimates are also immune to severe rotation
+# of the image". They are per-column and never sum ink across the page width,
+# which is exactly the operation that returned NaN.
+#
+# THE PAIRED-SUM VARIANT, NOT THE NAIVE ONE. The same paper reports the naive
+# method failing measurably on a degraded score, returning line height 1 and
+# space height 1 against true values of 5 and 19, defeated by isolated black
+# pixels and by fluctuation in line thickness. Their fix is to histogram the SUM
+# of a black run and its adjacent white run, because a local thickness
+# fluctuation is usually compensated by an opposite fluctuation in spacing. That
+# sum is the line-to-line PERIOD, which is the same quantity `detect_staves`
+# derives from the differences between line centres, so the two estimators
+# measure the same thing and their outputs are comparable.
+
+def _column_runs(col):
+    """Run-length encode one boolean column into (lengths, values)."""
+    n = col.size
+    if n == 0:
+        return np.empty(0, np.intp), np.empty(0, bool)
+    change = np.flatnonzero(col[1:] != col[:-1]) + 1
+    starts = np.concatenate(([0], change))
+    ends = np.concatenate((change, [n]))
+    # np.intp, NOT np.int64. Pyodide's WASM build is 32-bit, so intp is int32
+    # and `np.bincount` REFUSES an int64 array with "cannot cast ... according to
+    # the rule 'safe'". A 64-bit desktop numpy accepts it happily, so this fault
+    # is invisible to every local run and appears only in a browser. Measured
+    # 2026-08-16, on the very page this fallback exists to rescue.
+    return (ends - starts).astype(np.intp), col[starts]
+
+def staff_space_from_runs(img, sample_every=8, lo=4, hi=200, min_pairs=50):
+    """Modal black-plus-following-white run length, in pixels, or NaN.
+
+    `lo` and `hi` bound what a staff-line period can be on any page: below 4 px a
+    five-line staff spans under 16 px and no notehead is resolvable, and above
+    200 px a single staff would be taller than most whole pages. They exclude
+    nonsense, they do not select an answer."""
+    dark = (img < 128)
+    H, W = dark.shape
+    pairs = []
+    for x in range(0, W, sample_every):
+        lengths, vals = _column_runs(dark[:, x])
+        # The first and last run are cut off by the page edge and carry no
+        # period, so they are dropped rather than counted short.
+        if lengths.size < 3:
+            continue
+        lengths, vals = lengths[1:-1], vals[1:-1]
+        black = np.flatnonzero(vals)
+        black = black[black + 1 < lengths.size]
+        if black.size:
+            pairs.append(lengths[black] + lengths[black + 1])
+    if not pairs:
+        return float('nan')
+    allp = np.concatenate(pairs)
+    allp = allp[(allp >= lo) & (allp <= hi)]
+    # Too little evidence is an abstention, not a guess. A page of music crossed
+    # by a few hundred sampled columns yields thousands of periods; fifty is a
+    # floor against a nearly blank frame, not a tuned constant.
+    if allp.size < min_pairs:
+        return float('nan')
+    return float(np.argmax(np.bincount(allp.astype(np.intp))))
+
+def _plausible_s(s, img):
+    """Is this staff space usable at all? A staff is four spaces tall, so one
+    taller than the page cannot be right."""
+    if s is None or not np.isfinite(s) or s < 4.0:
+        return False
+    return 4.0 * s <= img.shape[0]
+
 def detect_staves(img, page=None):
     rowfrac=(img<128).mean(axis=1)
     gate=_derive_rowfrac_gate(rowfrac)
@@ -205,8 +293,24 @@ def detect_staves(img, page=None):
     lines.append(int(np.mean(cur)))
     lines=np.array(lines)
     diffs=np.diff(lines)
-    intra=diffs[diffs<np.median(diffs)*1.6]
-    s=float(np.median(intra))
+    # N.59, E.58: EVERY ONE OF THESE CAN DEGENERATE SILENTLY. `lines` of length 1
+    # gives an empty `diffs`; np.median of an empty array is NaN; `diffs < NaN`
+    # is all False, so `intra` is empty; np.median of that is NaN again. Two
+    # silent NaNs and no exception. That NaN travelled four frames on Dann's own
+    # photograph before `int(1.7 * s)` in beams.py raised on it, and the uploader
+    # then invented a reason for a failure it had not diagnosed.
+    with np.errstate(invalid='ignore'):
+        med = np.median(diffs) if diffs.size else float('nan')
+        intra = diffs[diffs < med * 1.6] if np.isfinite(med) else diffs[:0]
+        s = float(np.median(intra)) if intra.size else float('nan')
+    if not _plausible_s(s, img):
+        # The projection could not measure this page. Try the rotation-immune
+        # estimator before giving up, and re-derive the line grouping from it.
+        s = staff_space_from_runs(img)
+    if not _plausible_s(s, img):
+        # The SAME honest failure the top of this function already raises, so
+        # the uploader's existing mapping needs no new case.
+        raise RuntimeError("no staff lines")
     # STAFF-BREAK THRESHOLD, adaptive (close-prep fix, 2026-07-24). A fixed
     # 1.7*s cutoff mis-split a beamed re-render of piece 01 p1: system 4's
     # vocal-to-piano gap measured 35 px against a 1.7*21=35.7 px threshold, a
@@ -260,6 +364,16 @@ def detect_staves(img, page=None):
     # CANDIDATE GENERATION whose over-acceptance is lawful by design, and a
     # sentinel on the candidate stream would fire on rows no decider ever
     # accepted. Downstream of every decision, upstream of none.
+    # N.59, E.58, MY DECISION beyond the brief, with grounds. An EMPTY result was
+    # previously returned silently: every candidate group of two lines or fewer
+    # is discarded as spurious, and where that discarded all of them the function
+    # returned `[]` with no error. `b3-ledger-lines-scale-page.png` at s = 10.0
+    # does exactly that. A caller then reads a page with no staves and produces
+    # an empty score rather than a failure, which is the same defect as the NaN
+    # one layer down: a fault that does not announce itself. It raises the
+    # function's own existing failure instead.
+    if not checked:
+        raise RuntimeError("no staff lines")
     import substrate as _sub
     _s = _sub.page_substrate(img)
     _sub.sentinel(_s, [y for st in checked for y in st],
