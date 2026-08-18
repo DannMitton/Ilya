@@ -78,26 +78,60 @@ any of them count.
 > their score."**
 >
 > **AND ONE THING NOBODY CHECKED.** The PDF read reports 79 notes. **79 is a
-> count, not a reading.** Nothing has crossed those notes against the printed
-> page, and Ruling D's substitution counts were not reported for it. The reader
-> has now produced results at three staff spacings, 17, 21, and 29, with
-> accuracy established at none of them. Also unreported: **`pdfjs-dist`'s weight
-> in the bundle.** It sits in `dependencies` now and a singer on a phone pays for
-> it on first load.
+> count, not a reading.** **CORRECTED 2026-08-17: the control page's "78
+> notes" is 66 noteheads plus 12 rests in one array, and its clef and key are
+> cfg INPUTS, never reproduced measurements.** Nothing has crossed those notes
+> against the printed page, and Ruling D's substitution counts were not
+> reported for it. The reader has now produced results at three staff
+> spacings, 17, 21, and 29, with accuracy established at none of them. Also
+> unreported: **`pdfjs-dist`'s weight in the bundle.** It sits in
+> `dependencies` now and a singer on a phone pays for it on first load.
 >
-> **RULED 2026-08-17, Dann: PHOTOGRAPH IMPORT STAYS IN THE BETA**, and
-> `upload.err.pageReadFailed` no longer asserts a cause. English shown and
-> approved first, French shown and approved second, neither written before he
-> saw it. It now reads *"Ilya could not read this page. Reading photographs is
-> new and does not yet work on every page. If you have the score as a
-> MusicXML, MNX, or Finale file, Ilya reads those directly."* **WRITTEN, not
-> DONE:** nobody has uploaded a failing photograph on a real deploy and read it.
+> **N.59 TIER 2. The photograph fails for a known, measured reason, and the
+> design is filed.**
 >
-> **NOTHING NOW BLOCKS N.59.** What is still unproven is unchanged and is
-> listed above: step 3's brace rule has never fired on a braced page, no phone
-> photograph of a real page has ever been read, and the PDF's 79 notes have
-> never been crossed against the printed page. Which of those is next is not
-> yet ruled.
+> **RULED 2026-08-17, Dann: photograph import stays in the beta**, and
+> `upload.err.pageReadFailed` no longer asserts a cause. Both languages shown
+> and approved before either was written. **DONE, walked by Dann on `24159b4`.**
+>
+> **RULED 2026-08-17, Dann: Fable's T3 fence and T4 third precedent class are
+> both ratified** (`claude/fable-ruling-e16-layered-synthesis_2026-07-24.md`,
+> owed since 2026-07-24). Parameter fitting of hand-specified models is
+> measurement, not training, behind the four-condition fence. A stage may cite
+> a named pre-deep-learning classical CV method with real provenance, per
+> stage, never blanket. **Tier 2 is therefore AUTHORIZED and its trigger, the
+> photo probe, has fired.**
+>
+> **THE MECHANISM, measured on two desktop-class toolchains, neither of them
+> a browser.**
+> `score-page32-deskewed.png` fails at `reader.py:376`, the empty-`checked`
+> guard. NOT tilt: the page is straight to 0.1 degree and `detect_staves`
+> fails at all 61 swept angles. NOT a facing page: none in frame. NOT the
+> threshold: Otsu 118 against 128. NOT the scan border: cropping it out
+> changes the gate to 0.897266 and one row still passes.
+> **The cause: `_derive_rowfrac_gate` looks for a TIGHT, POPULOUS band of
+> near-identical row coverage. On a third-generation photocopy the same
+> physical staff line reads a different coverage on every row it occupies.**
+> 39 interior rows above 0.6 carry 36 distinct values; the control's top
+> segment holds 13 rows agreeing to within 2 percent. The staff lines are
+> present and perfectly periodic at 19 px, five times over.
+>
+> **This is the July strike arriving from a second direction.**
+> `claude/sonnet-brief-e16-uniformity-exemplar-procurement_2026-07-27.md`
+> already struck the coverage classifier as insufficient, diagnosed that
+> coverage conflates "is this a staff line" with "how wide is this system",
+> and named run structure as its replacement. `substrate.py` was built and
+> ratified 2026-07-28 and **is wired in as a SENTINEL ONLY. The decider is
+> still coverage.**
+>
+> **THE DESIGN: `docs/sessions/e59-design-substrate-decider_r1_2026-08-17.md`.**
+> Phase 0 is a measurement that can kill it. Phase 1 moves the decider from
+> coverage to the substrate's extent conjunct, adding no new computation
+> because `page_substrate` is already run once per page. Phase 2, periodicity,
+> is held back until Phase 1 proves it necessary. **NEXT SESSION STARTS AT
+> PHASE 0.**
+>
+> **n = 1.** Every conclusion rests on one photograph.
 
 ## THE TRACKER
 
@@ -347,6 +381,10 @@ LIBRARY backup rather than a SONG backup is.
 - ~~THE PHOTOGRAPH COPY, and whether photographs belong in the beta~~ **RULED
   2026-08-17, Dann: photographs stay in the beta, and the copy was corrected in
   the same session. Both languages approved before either was written.**
+- ~~Fable's six ratification items of 2026-07-24~~ **RULED 2026-08-17, Dann:
+  items 1 and 2 ratified (T3 fence, T4 third precedent class). Items 3 to 6
+  concern that session's build balance and wording; whether they were
+  satisfied is NOT ESTABLISHED and none blocks anything.**
 - ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
   shipped and was walked.
 - **A singer on Chrome for iPhone can never install Ilya to the home screen.**

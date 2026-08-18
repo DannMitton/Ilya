@@ -566,6 +566,47 @@ under.**
 - **A greyscale PNG of a 300 dpi page is about 830 KB**, and IndexedDB reports
   roughly 25 MB of usage for one. Quota on Dann's Mac is about 2 GB.
 
+## THE PHOTO PROBE, E.59. Measured 2026-08-17 on two toolchains, NEITHER a browser
+
+- **`_derive_rowfrac_gate`'s premise is false for photographs.** It accepts the
+  page's highest coverage segment unconditionally, then walks down accepting
+  only segments that are tight (span < 0.0137) AND populous (>= 5 members). On
+  a Verovio render the staff lines form one 13-member segment spanning 0.019.
+  **On a photocopied photograph the rows of ONE physical staff line spread
+  0.71 to 0.91 and shatter into singletons.** The walk accepts one singleton
+  and stops at the next for lack of a quorum.
+- **Cropping the frame does not fix it.** Interior gate 0.897266, one row still
+  passes. The scan border was a symptom, not the cause.
+- **`substrate.py` is a SENTINEL, not a decider** (`reader.py:377-379`). Its
+  binding rule is ratified: downstream of every decision, upstream of none.
+- **Concentration cannot be a decider and this is measured, not argued.** Any
+  row whose ink is a single run scores exactly 1.0000 regardless of mass: one
+  speck, one barline, one stem. 5,584 non-band rows at 1.0000 against a keep
+  minimum K_S = 0.9737. The separation interval is empty. **The discriminator
+  is the EXTENT conjunct.**
+- **`g = 1 px` is a corpus measurement, not a constant.** Its own docstring:
+  the derivation is ratified, the number is not, and g is re-derived whenever
+  the corpus changes. **A photograph is a new corpus.**
+- **CORRECTION to this file's own record, line 659.** The run-length
+  estimator's 19 on this photograph was recorded as a soft smear "against a
+  hand measurement of 17.0". The probe located the actual staff-line rows at
+  page rows 2045-47, 2064-66, 2083-85, 2102-04, and 2122: **five lines,
+  spacing exactly 19 px.** The estimator was right and the hand measurement is
+  what the correction lands on. Whether the hand measurement was simply wrong,
+  or the page varies across regions, is NOT ESTABLISHED.
+- **THE TOOLCHAINS, and why agreement between them is worth something.** The
+  desktop runs python 3.14.3 / numpy 2.4.3 / cv2 4.11.0 with `intp` = int64.
+  The device bridge VM runs Linux aarch64, python 3.10.12, numpy 2.2.6, and
+  **cv2 5.0.0**. Pyodide runs cv2 4.9.0 / numpy 1.26.4 at 32 bits. **That is
+  three, and only the first two have ever run this probe.** A subagent
+  measuring on the bridge must reproduce a desktop number before its new ones
+  count. **Agreement between desktop and bridge says nothing whatever about
+  the browser**; E.58's `np.bincount` fault passed every desktop run and threw
+  only in Pyodide.
+- **HEIC in the cloud container.** ImageMagick's heic delegate fails with
+  "Unsupported codec". `pip install pillow-heif --break-system-packages`, then
+  `pillow_heif.register_heif_opener()`, then open with PIL.
+
 ## PYODIDE IS 32-BIT. `np.intp` IS int32, AND int64 BREAKS `np.bincount`
 
 Measured 2026-08-16, in the browser and nowhere else.

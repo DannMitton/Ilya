@@ -66,6 +66,21 @@ availability, or your own actions**, and that is where the damage has been done.
   session**, **snippet only**, or **not read**.
 - When you have not opened a thing, say "not read." Do not talk around it.
 
+### 16. NEW, 2026-08-17, ratified by Dann. HAS THIS ALREADY BEEN RULED?
+
+**This is the first and guiding principle.** Before forming any opinion about
+what to build, `project_search` the topic and search the tree. A design
+conversation that has not searched the project is drift, not thinking.
+
+Tether 12 said "search the tree before the web" and was read as being about
+the web. It is not. It is about looking inward first, always.
+
+**What it cost when it was not followed, E.59:** an hour was spent re-deriving
+an architecture Dann had proposed on 2026-07-24, which the PM had argued
+against and lost, which Fable had ruled on, and which was waiting on a
+ratification Dann had never been asked for again. The document existed
+specifically to stop that from happening.
+
 ### 15. NEW, 2026-08-13. Reason in the domain, not in the proxy.
 
 A tag count is not a reading of a score. A grep hit is not a reading of code.
