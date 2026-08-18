@@ -11,7 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`383f368`**. A floor cannot go stale, because further commits only
+before **`58d7888`**, raised from `383f368` at the close of 2026-08-18 because
+every measurement added that session was taken against `58d7888` and a floor
+that predates its own content is the stale number this paragraph exists to
+prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
 
