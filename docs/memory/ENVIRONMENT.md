@@ -587,13 +587,16 @@ under.**
 - **`g = 1 px` is a corpus measurement, not a constant.** Its own docstring:
   the derivation is ratified, the number is not, and g is re-derived whenever
   the corpus changes. **A photograph is a new corpus.**
-- **CORRECTION to this file's own record, line 659.** The run-length
+- ~~**CORRECTION to this file's own record, line 659.** The run-length
   estimator's 19 on this photograph was recorded as a soft smear "against a
   hand measurement of 17.0". The probe located the actual staff-line rows at
   page rows 2045-47, 2064-66, 2083-85, 2102-04, and 2122: **five lines,
   spacing exactly 19 px.** The estimator was right and the hand measurement is
-  what the correction lands on. Whether the hand measurement was simply wrong,
-  or the page varies across regions, is NOT ESTABLISHED.
+  what the correction lands on.~~ **SUPERSEDED 2026-08-18. BOTH NUMBERS ARE
+  RIGHT AND THE PAGE VARIES BY REGION: s runs 17.00 at staff 1 to 21.00 at
+  staff 12, monotone.** The hand measurement read staff 1; the probe read
+  staff 7. See §THE PHOTOGRAPH IS WARPED at the end of this file, which is
+  authoritative on this page's geometry.
 - **THE TOOLCHAINS, and why agreement between them is worth something.** The
   desktop runs python 3.14.3 / numpy 2.4.3 / cv2 4.11.0 with `intp` = int64.
   The device bridge VM runs Linux aarch64, python 3.10.12, numpy 2.2.6, and
@@ -676,7 +679,10 @@ array returns NaN twice in a row without raising, and `int(1.7 * s)` in
   gives a single peak at 21 with 6,895 counts against 2,090 for the runner-up.
   The photograph gives 19:2973, 18:2626, 21:2216, 20:2162, 17:1213 — a smear
   across 17 to 22 with no dominant peak, against a hand measurement of 17.0.
-  **Treat its value on a photograph as approximate.**
+  ~~**Treat its value on a photograph as approximate.**~~ **CORRECTED
+  2026-08-18: THAT SMEAR IS NOT NOISE. It is the page's real s-distribution,
+  and its peaks are its regions.** s runs 17 at the top to 21 at the bottom.
+  The estimator was reporting the page correctly and the page was the problem.
 - ~~`i18n.ts`'s `upload.err.pageReadFailed` asserts a cause the code has not
   established~~ **CORRECTED 2026-08-17.** It said "A flat, straight photograph of
   the whole page reads best" and was printed for every reader failure,
@@ -978,3 +984,78 @@ here and not there.**
 plus earlier handovers quoted in it, plus the capacity figures measured directly.
 The PRINT section, the SSO and origin lines under Deploys, and the QR, HEIC, and
 bridge-drop lines are new in E.51 and were learned by hitting them.*
+
+
+## THE PHOTOGRAPH IS WARPED, AND THIS IS THE NUMBER THAT GOVERNS IT
+
+**Measured 2026-08-18 by two Opus Code sessions. AUTHORITATIVE on the geometry
+of `~/Downloads/score-page32-deskewed.png`, and it supersedes every earlier note
+in this file about that page's `s`.** Full account and every table:
+`docs/sessions/e60-memo-n59-phase0_2026-08-18.md` and the slice-probe memo.
+
+- **THE DESKEW WAS FITTED TO STAFF 7, AND STAFF 7 IS THE ONLY FLAT BAND.**
+  Shear runs monotonically **−1.01° at the top to +1.47° at the bottom**,
+  crossing zero at staff 7. **2.48° end to end.** A single global rotation
+  cannot correct it. Keystone, page curl, or lens distortion: NOT ESTABLISHED,
+  and telling them apart needs a second photograph.
+- **`s` VARIES BY REGION: 17.00 at staff 1 to 21.00 at staff 12, monotone.**
+  There is no single `s` on this page, and `detect_staves` returns one.
+- **A STAFF LINE ON STAFF 12 OCCUPIES 71 PAGE ROWS.** On staff 7 it occupies
+  12. On staff 12, line 2 begins **48 rows before line 1 ends**: adjacent staff
+  lines overlap in row space, so no proximity rule can separate them.
+- **THE TOLERANCE. Line grouping at `reader.py:291` needs |shear| ≲ 0.12°.**
+  Lines merge once `D + thickness + 3 ≥ s`, so `D ≥ 11` at `s ≈ 19`. **Only
+  staves within ±0.12° of flat survive, which is exactly the two the deskew was
+  fitted to.** Any fix must cut shear roughly twentyfold.
+- **Line thickness on this page: median 4 px, 83 % at 3–5 px**, over 123,210
+  columns. A vertical dark run longer than 6 px is a stem or a notehead merging
+  with the line, not the line.
+- **Twelve staves, four systems of three, at rows 628, 800, 1030, 1325, 1559,
+  1747, 2041, 2247, 2466, 2786, 3064, 3270.** 1,271 true staff rows.
+- **The 16 px left strip WIDENS to 263–334 px below row 3600** and is the single
+  largest contaminator on the page. What it is remains NOT ESTABLISHED.
+
+### Two instruments that are now known to lie, and where
+
+- **NARROW-SLICE COMB MATCHING IS A DESK INSTRUMENT AND NOT A DECIDER.** It
+  finds all 12 bands on the photograph and reproduces the working reader to
+  within 0.5 px on all 40 lines of `ilya-voice-page.png`. It then fails the
+  fixture corpus **0 of 23**: ten pages raise, thirteen move line positions
+  1–3 px, two change staff count. **The ten raises are clean renders, not warped
+  pages: LYRIC BASELINES FORM FIVE-LINE COMBS**, so it finds 9–12 combs where
+  stock finds 6–10. Do not promote it. Do not raise its threshold to suppress
+  this; that is fitting against the fixture corpus.
+- **COST, measured: 16.1× on fixtures, 58.8× on the photograph, 17.1× on the
+  control**, against `envelope.run` at 1.96–2.36 s per page. A sliced projection
+  is not cheap.
+
+## `K_S = 0.9737` IS CALIBRATED TO VEROVIO RENDERS AND TO NOTHING ELSE
+
+Measured 2026-08-18. **It would raise on 59 of 60 CORRECT staff rows on the
+photograph, at every `g`.** On `ilya-voice-page.png` it sits at 0 of 40 — but
+goes to **11 of 40 under a mere 3 px shift in line positions.** The sentinel is a
+render-envelope tripwire that has never been tested against any other class of
+input, and it is Dann's to rule on. Its binding rule is unchanged and still
+ruled: downstream of every decision, upstream of none.
+
+## A GATE THAT CANNOT BE RUN: THE THREE 1.000 PAGES ARE UNDEFINED
+
+Found 2026-08-18 while trying to run it. **Fable's tier-1 gate, "the three 1.000
+pages re-score 1.000", is referenced in the design documents and no document in
+the tree names which three pages they are.** `oracle-counts.json` and the
+scorecard do not define the set. **A gate that cannot be run is not a gate.**
+Either name the three pages or stop quoting the gate.
+
+## `page_substrate` HARDCODES `img < 128`
+
+`substrate.py:140`. Otsu on `score-page32-deskewed.png` picks **118**. Every
+substrate number in the E.60 memos is therefore taken at 128, which is the
+reader's own threshold. Measured 2026-08-18: the separation answer does not flip
+between the two, but a marginal window at `g = 3` does.
+
+---
+*A NOTE ON CITING THIS FILE. The design document
+`e59-design-substrate-decider_r1_2026-08-17.md` cited `ENVIRONMENT.md:634-638`
+for the 17.0 and by 2026-08-18 those lines held something else entirely. **Line
+numbers into this file rot within a day. Cite the section heading.**
+Edits of 2026-08-18 shifted every line below §THE PAGE READER.*

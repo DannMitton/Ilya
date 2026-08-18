@@ -34,107 +34,108 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.59 is BUILT. Eight of its nine steps are proved. Step 3 is not.**
-> Corrected at the close of E.58 by the coordinating desk, against Code's own
-> earlier report, because the tracker should be right rather than tidy.
->
-> **Increment 1 is DONE and was walked** (`0573c10`, `383f368`): Dann dropped a
-> photograph of Musorgsky into Fit, answered bass and two sharps, and saw
-> `13 / 13` syllables sitting on notes Ilya read off ink.
->
-> **Increment 2, step 8, is BUILT AND WALKED BY ME, not yet by Dann.**
-> `pdfjs-dist` 6.2.108 ruled in by Dann 2026-08-16. A true vector PDF reads end
-> to end: 79 notes, 12 measures, s = 29.0, restored across a reload without
-> re-asking the two questions. **The PDF is stored byte for byte**, on the
-> `.musx` precedent.
->
-> **The NaN is guarded.** Dann's own photograph of Kabalevsky page 32 failed
-> three times on `383f368` and the uploader invented a reason. The cause was a
-> full-page horizontal projection collapsing on a 1.04 degree rotation, two
-> silent NaNs from `np.median` of an empty array, and a crash four frames later
-> in `int(1.7 * s)`. It now raises `RuntimeError("no staff lines")`, observed in
-> the browser. A rotation-immune run-length fallback supplies a finite `s` where
-> the projection cannot; it fires on none of the 23 fixture pages and they are
-> byte-identical.
->
-> **TWO CORRECTIONS THE RECORD MUST KEEP.**
->
-> **1. The brace rule has never fired on real ink, and it is WRONG where it has
-> been tested.** No page in this repository contains a brace. All 23 fixture
-> pages ran the FALLBACK, staff 0 of each system. On the test page the new rule
-> and the old heuristic return the identical `[0, 2, 4, 6]`. **On piece 06, the
-> Piano-first counter-example, the rule returns the PIANO** (Code's own
-> measurement, E.58). The only braced three-stave page this project has is
-> Dann's photograph of Kabalevsky page 32, which does not read. **N.59 step 3 is
-> `WRITTEN`, not `DONE`.** This is the N.55b lesson exactly: it was marked DONE
-> once while its central gesture was broken, and that cost three days.
->
-> **2. NO PHONE PHOTOGRAPH OF A REAL PAGE HAS EVER BEEN READ.** Zero for four
-> attempts: three on `383f368` and `8605062`, and a fourth on `24159b4`,
-> 2026-08-17, on a deskewed derivative of the same photograph. What increment
-> 1's walk read was a 300 dpi fixture RENDER travelling through the image
-> path, which proves the path and not the camera. **CORRECTED 2026-08-17 BY
-> MEASUREMENT: that list was a guess, and it was wrong.** On the one
-> photograph ever tested, rotation, page curl, and a facing page are all ruled
-> OUT as the cause. See THE MECHANISM below. What stands is the count: **zero
-> for four attempts.** **Do not read "photograph import walked" as "a singer
-> can photograph their score."**
->
-> **AND ONE THING NOBODY CHECKED.** The PDF read reports 79 notes. **79 is a
-> count, not a reading.** **CORRECTED 2026-08-17: the control page's "78
-> notes" is 66 noteheads plus 12 rests in one array, and its clef and key are
-> cfg INPUTS, never reproduced measurements.** Nothing has crossed those notes
-> against the printed page, and Ruling D's substitution counts were not
-> reported for it. The reader has now produced results at three staff
-> spacings, 17, 21, and 29, with accuracy established at none of them. Also
-> unreported: **`pdfjs-dist`'s weight in the bundle.** It sits in
-> `dependencies` now and a singer on a phone pays for it on first load.
->
-> **N.59 TIER 2. The photograph fails for a known, measured reason, and the
-> design is filed.**
->
-> **RULED 2026-08-17, Dann: photograph import stays in the beta**, and
-> `upload.err.pageReadFailed` no longer asserts a cause. Both languages shown
-> and approved before either was written. **DONE, walked by Dann on `24159b4`.**
->
-> **RULED 2026-08-17, Dann: Fable's T3 fence and T4 third precedent class are
-> both ratified** (`claude/fable-ruling-e16-layered-synthesis_2026-07-24.md`,
-> owed since 2026-07-24). Parameter fitting of hand-specified models is
-> measurement, not training, behind the four-condition fence. A stage may cite
-> a named pre-deep-learning classical CV method with real provenance, per
-> stage, never blanket. **Tier 2 is therefore AUTHORIZED and its trigger, the
-> photo probe, has fired.**
->
-> **THE MECHANISM, measured on two desktop-class toolchains, neither of them
-> a browser.**
-> `score-page32-deskewed.png` fails at `reader.py:376`, the empty-`checked`
-> guard. NOT tilt: the page is straight to 0.1 degree and `detect_staves`
-> fails at all 61 swept angles. NOT a facing page: none in frame. NOT the
-> threshold: Otsu 118 against 128. NOT the scan border: cropping it out
-> changes the gate to 0.897266 and one row still passes.
-> **The cause: `_derive_rowfrac_gate` looks for a TIGHT, POPULOUS band of
-> near-identical row coverage. On a third-generation photocopy the same
-> physical staff line reads a different coverage on every row it occupies.**
-> 39 interior rows above 0.6 carry 36 distinct values; the control's top
-> segment holds 13 rows agreeing to within 2 percent. The staff lines are
-> present and perfectly periodic at 19 px, five times over.
->
-> **This is the July strike arriving from a second direction.**
-> `claude/sonnet-brief-e16-uniformity-exemplar-procurement_2026-07-27.md`
-> already struck the coverage classifier as insufficient, diagnosed that
-> coverage conflates "is this a staff line" with "how wide is this system",
-> and named run structure as its replacement. `substrate.py` was built and
-> ratified 2026-07-28 and **is wired in as a SENTINEL ONLY. The decider is
-> still coverage.**
->
-> **THE DESIGN: `docs/sessions/e59-design-substrate-decider_r1_2026-08-17.md`.**
-> Phase 0 is a measurement that can kill it. Phase 1 moves the decider from
-> coverage to the substrate's extent conjunct, adding no new computation
-> because `page_substrate` is already run once per page. Phase 2, periodicity,
-> is held back until Phase 1 proves it necessary. **NEXT SESSION STARTS AT
-> PHASE 0.**
->
-> **n = 1.** Every conclusion rests on one photograph.
+> **N.67 step 4b, the library itself.** N.67 is FIRST by Dann's ruling of
+> 2026-08-16, and its remainder waited behind N.58 and N.59. **N.59 tier 2 was
+> answered and closed 2026-08-18**, so half of that wait is over. **N.58's real
+> scope is still NOT ESTABLISHED**; a scoping brief was delivered 2026-08-14 and
+> there is no record of it being run. **If Dann rules N.58 ahead of 4b, this
+> block is wrong, and he says so in one word.**
+
+---
+
+## N.59 TIER 2 IS FINISHED, 2026-08-18. Two Opus Code sessions, both answered NO
+
+**The photograph does not read, the cause is now fully characterised and
+quantified, and no further instrument is authorised.** Photograph import stays
+in the beta by Dann's ruling of 2026-08-17 and fails with an honest message.
+`upload.err.pageReadFailed` no longer asserts a cause. Nothing here changes what
+a singer sees.
+
+Both memos are in `docs/sessions/`:
+`e60-memo-n59-phase0_2026-08-18.md` and the slice-probe memo.
+The design they killed is `e59-design-substrate-decider_r1_2026-08-17.md`.
+
+### 1. PHASE 0 answered NO. The substrate decider is dead
+
+No extent value at any `g` separates true staff rows from contamination. Best
+margin **−587 px**, worst **−707**, unchanged at Otsu 118. The one window that
+opens requires hand-removing the exact contamination class the decider exists to
+reject, and it collapses under a ten-level threshold change.
+
+**Extent inherited coverage's defect rather than curing it.** The design's §3
+held that coverage fails because it is not a measurement of what a staff line
+*is*. The truth is narrower and worse: **coverage and extent are both row-wise,
+and on a warped page a staff line does not live in a row.** The median true staff
+row on that page carries **7 % of a system**, 184 px against 2,583.
+
+### 2. THE CAUSE, MEASURED. The deskew was fitted to staff 7, and only staff 7 is flat
+
+Shear runs monotonically **−1.01° at the top to +1.47° at the bottom**, crossing
+zero at staff 7. `s` runs **17.00 at staff 1 to 21.00 at staff 12**, monotone.
+One staff line on staff 12 occupies **71 page rows**; on staff 7 it occupies 12.
+The page is keystoned or curved, as a photograph of a bound book is. Whether it
+is keystone, curvature, or lens distortion is NOT ESTABLISHED and needs a second
+photograph.
+
+**THE 17 / 19 COLLISION IS SETTLED, and neither measurement was wrong.**
+`ENVIRONMENT.md`'s hand measurement of 17.0 is correct for staff 1; the E.59
+probe's 19 is correct for staff 7, the band it measured. **The page varies by
+region.** The run-length estimator's "smear" (19:2973, 18:2626, 21:2216,
+20:2162, 17:1213) was never noise: it is the page's real `s`-distribution and its
+peaks are its regions.
+
+### 3. THE SLICE PROBE answered NO, on three independent grounds
+
+Slicing the projection instead of flattening the page. The instrument had already
+passed both controls inside Phase 0, so it was worth one session.
+
+**Ground one, grouping.** Candidate generation worked: the tracker delivered 12
+staves and 1,271 rows, cut into exactly twelve groups, one per real staff. Then
+line grouping collapsed five lines into one on ten of them, group sizes
+`[1,1,1,1,1,5,5,3,1,1,1,1]`. **On staff 12 line 2 begins 48 rows before line 1
+ends.** No proximity rule separates lines that overlap in row space.
+**Only the two staves within ±0.12° of flat survived, which are the two the
+existing deskew was fitted to.**
+
+> **THE NUMBER THE PROJECT WAS MISSING: line grouping needs |shear| ≲ 0.12°, and
+> that page carries 2.48° end to end.** Any fix must cut shear roughly twentyfold.
+> That is a dewarp, and a dewarp is a project, not a probe.
+
+**Ground two, the fixture corpus. FORECLOSED: 0 of 23 pages survive.** Ten raise
+outright, thirteen move line positions 1 to 3 px, two change staff count. The
+ten raises are not shear, they are clean renders: **the comb matcher over-detects
+on a clean page**, finding 9 to 12 combs where stock finds 6 to 10, because
+**lyric baselines form five-line combs.** Phase 0 listed that as a way the
+instrument could lie; the corpus proved it does. It was not tuned away, because
+raising the threshold to suppress it is fitting against the test set.
+
+**Ground three, cost.** **16.1× on fixtures, 58.8× on the photograph, 17.1× on
+the control**, against a recorded envelope of 1.96 to 2.36 s per page. A singer
+on a phone pays that.
+
+### 4. TWO FINDINGS THAT OUTLIVE THE PROBE, AND ARE DANN'S TO RULE
+
+**`K_S = 0.9737` is calibrated to Verovio renders and to nothing else.** It would
+raise on **59 of 60 correct rows** on the photograph, at every `g`. It also went
+from 0/40 to **11/40** on the control under a 3 px shift in line positions. The
+sentinel is a render-envelope tripwire, and it has never been tested against any
+other class of input.
+
+**THE THREE 1.000 PAGES ARE UNDEFINED ANYWHERE IN THE TREE.** Fable's tier-1
+gate is referenced in the design documents and cannot be run as specified,
+because no document names which three pages they are. **A gate that cannot be
+run is not a gate.** Found 2026-08-18 while trying to run it.
+
+### 5. What was NOT built, and what is not authorised
+
+No dewarp. No change to `substrate.py`, `K_S`, or `g`. `reader.py` unmodified.
+Both sessions left the tree clean. **Nothing about Pyodide was established by
+either session**; every number is desktop, at numpy 2.2 to 2.4 and cv2 4.11 to
+5.0, and the browser is cv2 4.9.0, numpy 1.26.4, 32-bit.
+
+**n = 1, unchanged.** One page, one photograph, one photographer, one book.
+
+---
 
 ## THE TRACKER
 
@@ -142,15 +143,18 @@ any of them count.
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: THREE, plus one ruling
+### The blocking set: TWO, plus one ruling
+
+**Was THREE until 2026-08-18. N.59 left the blocking set by being answered, not
+by being finished.** Its tier 2 is parked with a measured reason; see above.
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, and 4a CLOSED**, all observed in a real browser, and 3 and 4a walked by Dann himself. **The emergency is over: nothing is being destroyed any more.** What remains WAITS behind N.58 and N.59 by Dann's ruling: 4b the library itself, 5 the binder, 6 the sweep. See the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, and 4a CLOSED**, all observed in a real browser, and 3 and 4a walked by Dann himself. **The emergency is over: nothing is being destroyed any more.** What remains WAITS behind N.58 and N.59 by Dann's ruling: 4b the library itself, 5 the binder, 6 the sweep. **N.59 CLEARED 2026-08-18: tier 2 was answered NO and parked, so half the wait is over. N.58 is still unscoped, and whether Dann ran its scoping brief is unknown.** **4b is THE ONE THING for the next session unless Dann rules N.58 ahead of it.** See the four documents below |
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
-| `[ ]` | **N.59** the reader in the browser | **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Only step 8 (PDF, `pdfjs-dist`) remains, and it is Dann's ruling.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
+| `[~]` | **N.59** the reader in the browser | **TIER 2 CLOSED 2026-08-18, ANSWERED NO, two Opus Code sessions. THE ONE THING above carries the whole account and its numbers.** Phase 0 killed the substrate decider, best margin −587 px; the slice probe died three times over, on grouping, on the fixture corpus (0 of 23), and on cost (16 to 59×). **Line grouping needs \|shear\| ≲ 0.12° and the photograph carries 2.48°.** The only instrument left is a dewarp, which is a project and is **NOT AUTHORISED**. **PARKED AT TIER 2. What a singer sees is unchanged:** photograph import stays in the beta and fails honestly, Dann's ruling 2026-08-17. **STILL OPEN INSIDE N.59: step 3, the brace rule, is `WRITTEN` and not `DONE`.** **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Step 8 (PDF, `pdfjs-dist`) ruled in and done.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
 ### Closed and parked
 
