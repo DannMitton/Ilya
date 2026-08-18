@@ -69,13 +69,16 @@ any of them count.
 > `WRITTEN`, not `DONE`.** This is the N.55b lesson exactly: it was marked DONE
 > once while its central gesture was broken, and that cost three days.
 >
-> **2. NO PHONE PHOTOGRAPH OF A REAL PAGE HAS EVER BEEN READ.** Zero for three
-> attempts, on `383f368` and again on `8605062`. What increment 1's walk read was
-> a 300 dpi fixture RENDER travelling through the image path, which proves the
-> path and not the camera. A photograph of a bound book carries rotation, page
-> curl, a facing page in frame, and background, and the reader has met none of
-> those. **Do not read "photograph import walked" as "a singer can photograph
-> their score."**
+> **2. NO PHONE PHOTOGRAPH OF A REAL PAGE HAS EVER BEEN READ.** Zero for four
+> attempts: three on `383f368` and `8605062`, and a fourth on `24159b4`,
+> 2026-08-17, on a deskewed derivative of the same photograph. What increment
+> 1's walk read was a 300 dpi fixture RENDER travelling through the image
+> path, which proves the path and not the camera. **CORRECTED 2026-08-17 BY
+> MEASUREMENT: that list was a guess, and it was wrong.** On the one
+> photograph ever tested, rotation, page curl, and a facing page are all ruled
+> OUT as the cause. See THE MECHANISM below. What stands is the count: **zero
+> for four attempts.** **Do not read "photograph import walked" as "a singer
+> can photograph their score."**
 >
 > **AND ONE THING NOBODY CHECKED.** The PDF read reports 79 notes. **79 is a
 > count, not a reading.** **CORRECTED 2026-08-17: the control page's "78
@@ -350,6 +353,33 @@ LIBRARY backup rather than a SONG backup is.
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **TWO DOCUMENTS FROM 2026-08-17/18 LIVE IN PROJECT KNOWLEDGE, NOT HERE.**
+  Nothing else in this folder names them and a session that does not read this
+  line will never find them.
+  - `claude/gould-beams-delta-pp16-25_2026-08-18.md` — Gould rules 245 to 284,
+    Ground Rules pp. 16 to 25, closing v7's gaps item 1 beam pages. **Two
+    independent readings, cross-checked.** One flat contradiction on p. 18's
+    three-beam rule is recorded UNRESOLVED; do not implement three-beam outer
+    placement from it. Four diagram numerals remain unverified.
+  - `claude/ruling-semantic-stems-vs-gould-priors_2026-08-18.md` — **Dann's
+    ruling: an engraving convention is a PRIOR, not a law.** His Appendices
+    assign stem direction a semantic function, stems up for close timbre and
+    stems down for open. A Gould prior may bound a DIMENSION; it may not decide
+    a MEANING; where a score carries a legend, the legend outranks Gould.
+    **This is a constraint on N.59 tier 3, not on tier 2.**
+- **Trace `stem_dir`'s consumers in the reader.** `beams.py:264-265` computes
+  it and `:310` carries it into the note record. **Whether any stage treats it
+  as evidence is NOT ESTABLISHED.** If one does, it is a defect against Dann's
+  own scores, which a photograph of Ilya's own output would expose.
+  `beams.py:133` reads "S5: one rule, both directions, no directional term",
+  read out of a grep and not in context; confirm it.
+- **`staff-renderer.ts`'s `positionalUp` now has its citation.** v7 records that
+  the helper's beamed-group stem direction is an inference derived from a chord
+  rule. Gould p. 24 states it for beams directly, confirmed by both readers:
+  the note furthest from the centre of the stave dictates the group's stem
+  direction. **Apply the citation the next time that file is touched.**
+- **The Gould re-shoot, four spots, would settle every open number.** p. 18's
+  three-beam paragraph, and the small diagram numerals on pp. 16, 19, and 21.
 - **Step 5's export, single-song half.** Established 2026-08-16: exporting one
   song and restoring a one-song binder into an emptied library both work without
   the list. It is the only thing that would give the chimera warning a detour
