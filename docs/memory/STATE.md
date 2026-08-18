@@ -76,6 +76,24 @@ The short form:
   beta line closes unless Dann names the displaced item.
 - Not walked: Print, Safari, Fit with a loaded score, calibration.
 
+**Second sitting, same day.** The control census ran (Sonnet,
+`docs/sessions/sonnet-memo-control-census_2026-08-18.md`: 92 control templates,
+every one with a `path:line` and a disposition; cost overran its bound, stated
+in its header). Its 14 open dispositions are now all closed:
+`docs/sessions/fable-gui-rulings-2_2026-08-18.md`. The short form: app bar
+keeps and re-keys to three destinations; mobile gets one labelled drawer pull,
+desktop's lip becomes the bookmark tab
+(`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A); the pairing
+work gets a fifth station named **Underlay** (French not ruled) between Source
+and Analysis; the slide operations are kept but demoted to the
+**contextual-sentences design** (click a paired note to select it, verbs appear
+as plain sentences, one automatic scope, Rotate on multi-select only,
+insert-with-ripple rejected, N.55b untouched). Five further dispositions were
+taken as stated defaults under tether 13, vetoable by one word. **Before Code
+builds:** the E.44 S0 slate needs verifying or ruling, the full French strings
+table needs Dann's eyes, Dann owes voice-profile texts and the mobile AI-slop
+thread, and Dann names the displacement or the build waits for the beta line.
+
 ---
 
 ## N.67 STEP 4b IS DONE, 2026-08-18, `cb7a15a`, WALKED BY DANN ON THE DEPLOY

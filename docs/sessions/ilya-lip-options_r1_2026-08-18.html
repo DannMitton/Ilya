@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The desktop lip: three shapes — 2026-08-18</title>
+<style>
+  :root{
+    --drawer:#FAF8F5; --surround:#6B6560; --ink:#1a1612; --ink-3:#6A655F;
+    --paper:#F0EBE0; --line:#c9c2b4;
+    --sans:-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Source Serif 4",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#EFEAE0;font-family:var(--serif);color:var(--ink);padding:30px 34px}
+  h1{font-weight:400;font-size:22px;margin-bottom:6px}
+  .note{font-family:var(--sans);font-size:12.5px;color:#5a564e;max-width:820px;margin-bottom:26px}
+  .row{display:flex;gap:30px;flex-wrap:wrap}
+  .opt{width:300px}
+  .opt-name{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+  .cap{font-family:var(--sans);font-size:12px;color:#5a564e;margin-top:9px}
+  .cap b{color:var(--ink)}
+  /* the seam fragment: drawer left, surround right */
+  .frag{height:340px;display:flex;border:1px solid #b5af9f;overflow:hidden;position:relative;
+        box-shadow:0 2px 10px rgba(46,43,38,.15)}
+  .dr{width:150px;background:var(--drawer);border-right:1px solid rgba(0,0,0,.14);padding:12px 10px}
+  .st-label{font-family:var(--sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9a8f7c;margin-bottom:6px}
+  .field{border:1px solid var(--line);background:#fff;border-radius:5px;font-family:var(--sans);
+         font-size:9px;color:#8a857a;padding:4px 6px;margin-bottom:5px}
+  .sur{flex:1;background:var(--surround);position:relative}
+  .pg{position:absolute;right:14px;top:22px;width:96px;height:130px;background:var(--paper);
+      box-shadow:0 1px 5px rgba(0,0,0,.3)}
+  .chev{font-family:var(--sans);color:var(--ink-3);font-size:12px;line-height:1}
+
+  /* A: the bookmark tab */
+  .lipA{position:absolute;left:150px;top:50%;transform:translateY(-50%);
+        width:20px;height:76px;background:var(--drawer);
+        border:1px solid rgba(0,0,0,.18);border-left:none;border-radius:0 5px 5px 0;
+        display:flex;align-items:center;justify-content:center;cursor:pointer;
+        box-shadow:1px 1px 4px rgba(0,0,0,.18)}
+  .lipA:hover{background:#fff}
+  /* B: the seam rail */
+  .fragB .dr{border-right:none}
+  .lipB{width:16px;background:var(--drawer);border-right:1px solid rgba(0,0,0,.14);
+        border-left:1px solid rgba(0,0,0,.07);
+        display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .lipB:hover{background:#f1ede4}
+  /* C: the notch */
+  .lipC{position:absolute;left:150px;top:50%;transform:translate(-50%,-50%);
+        width:34px;height:34px;background:var(--drawer);border:1px solid rgba(0,0,0,.18);
+        border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;
+        box-shadow:0 1px 5px rgba(0,0,0,.22)}
+</style>
+</head>
+<body>
+<h1>The desktop lip: three shapes</h1>
+<div class="note">Real tokens: drawer <code>#FAF8F5</code>, surround <code>#6B6560</code>. The lip's
+job: say "this edge moves" without shouting. Hue stays neutral (hue names place, ink names state);
+the chevron flips direction with the drawer's state. Hover deepens contrast; nothing animates but
+opacity and position.</div>
+
+<div class="row">
+  <div class="opt">
+    <div class="opt-name">A · The bookmark tab (recommended)</div>
+    <div class="frag">
+      <div class="dr">
+        <div class="st-label">Piece</div><div class="field">Aria or song title · Composer</div>
+        <div class="st-label" style="margin-top:8px">Notation ⌄</div>
+        <div class="st-label" style="margin-top:8px">Source</div>
+        <div class="field" style="height:40px">Я вас любил…</div>
+      </div>
+      <div class="sur"><div class="pg"></div></div>
+      <div class="lipA"><span class="chev">‹</span></div>
+    </div>
+    <div class="cap"><b>A flat tab flush with the drawer's edge</b>, drawer-paper fill, hairline
+    border, rounded only on its outer corners. It reads as part of the drawer, a book's thumb
+    notch on a spine, not a button floating on the desk. 76 px tall, one glance to find, obeys
+    the three-radii rule.</div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-name">B · The seam rail</div>
+    <div class="frag fragB">
+      <div class="dr">
+        <div class="st-label">Piece</div><div class="field">Aria or song title · Composer</div>
+        <div class="st-label" style="margin-top:8px">Notation ⌄</div>
+        <div class="st-label" style="margin-top:8px">Source</div>
+        <div class="field" style="height:40px">Я вас любил…</div>
+      </div>
+      <div class="lipB"><span class="chev">‹</span></div>
+      <div class="sur"><div class="pg"></div></div>
+    </div>
+    <div class="cap"><b>The whole edge is the handle</b>: a 16 px rail, full height, one centred
+    chevron. The most restrained of the three and the biggest target (the entire seam). Costs 16 px
+    of width permanently and whispers so quietly a first-time singer may not hear it.</div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-name">C · The knob (today's shape, honestly restyled)</div>
+    <div class="frag">
+      <div class="dr">
+        <div class="st-label">Piece</div><div class="field">Aria or song title · Composer</div>
+        <div class="st-label" style="margin-top:8px">Notation ⌄</div>
+        <div class="st-label" style="margin-top:8px">Source</div>
+        <div class="field" style="height:40px">Я вас любил…</div>
+      </div>
+      <div class="sur"><div class="pg"></div></div>
+      <div class="lipC"><span class="chev">‹</span></div>
+    </div>
+    <div class="cap"><b>Today's floating circle, kept but calmed</b>: drawer-paper fill instead of
+    dark, straddling the seam. Familiar, but it hovers over the desk rather than belonging to an
+    edge, and it spends full-round on something that is not a knob or a pill. The weakest fit with
+    the spec, shown so the comparison is honest.</div>
+  </div>
+</div>
+</body>
+</html>
