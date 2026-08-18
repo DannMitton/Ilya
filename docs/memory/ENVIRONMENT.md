@@ -957,7 +957,7 @@ read the lines anyway.
 ## THE COORDINATING DESK'S OWN INSTRUMENTS. Learned E.58, all the hard way
 
 These are traps for the desk that RULES, not the one that builds. Every one cost
-time on 2026-08-16.
+time. Unless a bullet names its own date, it was 2026-08-16.
 
 - **THE DEVTOOLS CONSOLE FILTER PERSISTS ACROSS RELOADS, AND IT LIES BY
   OMISSION.** Dann's console carried the word `plausibility` in its filter box
@@ -1012,6 +1012,21 @@ time on 2026-08-16.
   cropped. **All three are Kabalevsky op. 52 no. 9 page 32, four systems of three
   staves with the lower two braced**, which makes them the only braced fixture in
   existence here.
+
+- **A CLEAN `git status` AT SESSION OPEN DOES NOT STAY TRUE, AND THE TREE CAN MOVE
+  UNDER YOU MID-SESSION. 2026-08-18.** This desk opened on a clean tree at
+  `ed8318e`, read `STATE.md` at 58,067 bytes, and wrote a brief against it. Eleven
+  hours later a parallel session had added 2,955 bytes to that same file and left
+  three untracked documents in `docs/sessions/`. **The change was caught only
+  because the session-open copy of `STATE.md` had been kept and the two were
+  compared.** THE ONE THING was unchanged, so the brief held, but it need not have
+  been. **The method, which costs nothing: on staging any memory file, copy it
+  aside under a name that says when it was read, and diff before you rely on it at
+  the close.** A file comparison is not a git operation, so this stays inside the
+  rule that this desk never runs git. **The corollary that bit at the same moment:
+  `ilya-ship.sh` refuses on untracked files ANYWHERE in the repository, so another
+  session's uncommitted documents will stall YOUR ship**, at the end, after the
+  work is done.
 
 ---
 

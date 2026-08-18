@@ -11,8 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`cb7a15a`**, raised from `58d7888` at the close of the second session of
-2026-08-18, because N.67 step 4b shipped in `cb7a15a` and a floor that predates
+before **`924f687`**, raised from `cb7a15a` at the close of the third session of
+2026-08-18, because the GUI record, the control census, and N.67 step 5's brief
+all shipped in `924f687` and a floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
@@ -39,7 +40,12 @@ any of them count.
 > **N.67 step 5's remainder: export-all, multi-song import, and the collision
 > rules.** Step 4b closed 2026-08-18 and was walked by Dann on the deploy, so
 > songs are plural and everything step 5 was waiting on now exists. Fable's
-> build order puts 5 next and then 6, the sweep. **N.58's real scope is still
+> build order puts 5 next and then 6, the sweep.
+> **THE BRIEF IS WRITTEN AND COMMITTED:**
+> `docs/sessions/brief-to-code-n67-5_r1_2026-08-18.md`, in `924f687`. It is
+> complete, its French is approved, and it is ready to paste into Claude Code.
+> **Do not write a second one, and do not re-derive its scope.**
+> **N.58's real scope is still
 > NOT ESTABLISHED**; a scoping brief was delivered 2026-08-14 and there is no
 > record of it being run. **If Dann rules N.58, N.72's iPhone walk, or step 6
 > ahead of step 5, this block is wrong, and he says so in one word.**
@@ -140,6 +146,64 @@ an English placeholder under a French UI, a song row that read as a text input,
 a New song button whose classes did not apply because Svelte scopes styles per
 component, and a dialog focus line firing before its buttons existed, which
 would have put focus on the destructive answer.
+
+---
+
+## N.67 STEP 5's BRIEF IS WRITTEN, 2026-08-18, `924f687`. NOTHING BUILT
+
+`docs/sessions/brief-to-code-n67-5_r1_2026-08-18.md`. Written at the coordinating
+desk, which does not build. It is ready to paste into Claude Code as it stands.
+
+**DANN'S RULING, 2026-08-18: AN IMPORT ADDS SONGS AND NEVER TOUCHES THE SONG YOU
+ARE IN.** The open-song warning is retired with it, and `import.title` and
+`import.body` (`i18n.ts:620-621`) go with it. Before the ruling, import asked
+Replace, Export first, or Keep against the open song, because there was only ever
+one song to destroy. Songs have been plural since `cb7a15a`. The only prompt an
+import raises now is the id collision of design §5. **Named consequence,
+accepted:** re-importing a binder of the song you are in still asks, because that
+is a collision, and that is the one moment worth asking.
+
+**THE BINDER READER WAS ALREADY PLURAL AND NOBODY HAD LOOKED.** `binder.ts:190-225`
+loops `manifest.songs` and returns an array; it reads a two-song binder today. The
+whole single-song assumption is ONE LINE, `+page.svelte:1017`, which takes
+`read.songs[0]` and drops the rest on the floor. **This is the second time in two
+sessions that the lower layer turned out to be plural already**, after step 4b
+found the same of the vault, and both times an inventory read before the brief was
+written is what found it. Read the layer before you cost the work.
+
+**THE TRAP THAT WOULD HAVE PASSED EVERY GATE.** `library.load(id)` cannot detect a
+collision: an absent id yields an EMPTY RECORD rather than an error, on purpose
+(`library/index.ts:164-166`). A collision check written on `load` reports "no
+collision" for every song in the binder and overwrites them all silently, which is
+the exact class of loss N.67 exists to end. The brief routes the check through
+`listSongs` (`songs.ts:155`), which is one read and also carries the `updatedAt`
+the dialog must show.
+
+**Two more named in the brief:** re-iding for "keep both" must set
+`SourceBytes.songId` as well as `record.id` (`binder.ts:213`), or the source
+attaches to the wrong record; and the name numbering already exists as
+`uniqueName` (`songs.ts:65`) and must not be written twice.
+
+**THE COPY IS APPROVED. Eight strings, English and French, shown to Dann as a whole
+table and ratified by him 2026-08-18 before a word of it entered the tree.**
+`binder.exportAll`, `collide.title`, `collide.body`, `collide.take`,
+`collide.both`, `collide.mine`, `binder.importedOne`, `binder.importedMany`.
+**Nothing coined:** `chant`, `partition`, `placement`, and `bibliothèque` are all
+already ratified in `i18n.ts`, `bibliothèque` at `songs.err.write` (`i18n.ts:673`).
+**No new hard-space site**, so the U+00A0 count stays at 37. Dates are ISO and
+sliced to ten characters, the precedent `placeholderName` sets at `songs.ts:55`.
+**Two keys rather than a plural system**, picked on `n === 1`: `i18n.ts` has no
+plural mechanism and step 5 must not invent one. Correct in French, correct in
+English except at zero, and zero cannot occur because an empty binder is refused
+as `no-songs` at `binder.ts:187`.
+
+**The brief fences off F7 and F8 as NOT step 5's job**, so that the GUI audit's
+findings cannot enlarge the step from inside the same file.
+
+**`+page.svelte` is the standing debt and step 5 is the thing that touches it.**
+The brief requires the import, export, and collision logic to land in
+`lib/library/` in plain TypeScript, and requires the line and byte count reported
+before and after, with a stated reason for any net growth.
 
 ---
 
@@ -250,7 +314,7 @@ by being finished.** Its tier 2 is parked with a measured reason; see above.
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, 4a, 4b, and step 5's single-song half CLOSED**, all observed in a real browser, and 3, 4a, 5's half, and 4b walked by Dann himself. **The emergency is over and songs are plural.** **4b CLOSED 2026-08-18 `cb7a15a`, walked on the deploy: list, switch, New song, rename, delete, auto-naming, and the neutral-state fingerprint prompt.** What remains: **step 5's remainder** (export-all, multi-song import, the collision rules) and **step 6** the sweep. See the section above and the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, 4a, 4b, and step 5's single-song half CLOSED**, all observed in a real browser, and 3, 4a, 5's half, and 4b walked by Dann himself. **The emergency is over and songs are plural.** **4b CLOSED 2026-08-18 `cb7a15a`, walked on the deploy: list, switch, New song, rename, delete, auto-naming, and the neutral-state fingerprint prompt.** What remains: **step 5's remainder** (export-all, multi-song import, the collision rules) and **step 6** the sweep. **STEP 5's BRIEF IS WRITTEN AND COMMITTED, `924f687`: `docs/sessions/brief-to-code-n67-5_r1_2026-08-18.md`, French approved, ready to paste into Code. Do not write a second one.** See the section above and the four documents below |
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
@@ -665,6 +729,8 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-18 | **`924f687`: N.67 STEP 5's BRIEF WRITTEN AND COMMITTED. No code shipped from this desk, which does not build.** Dann ruled that **an import ADDS songs and never touches the song you are in**, which retires the open-song warning and leaves the id collision as the only prompt. Eight new strings approved by him as a whole table before any entered the tree. **Two findings that shrank the work: `readBinder` was already plural (`binder.ts:190-225`), so multi-song import is one line at `+page.svelte:1017`; and `library.load` cannot detect a collision, because an absent id yields an empty record on purpose (`library/index.ts:164-166`), so a check written on `load` would have overwritten every song in the binder silently.** |
+| 2026-08-18 | **A CLEAN `git status` AT SESSION OPEN DOES NOT STAY TRUE.** This session opened on a clean tree at `ed8318e` and wrote a brief against `STATE.md`. Eleven hours later another session had added 2,955 bytes to that same file. **It was caught only because the session-open copy had been kept and the two were compared**, which is a file comparison and not a git operation. THE ONE THING was unchanged, so the brief held, but it need not have been. Recorded in `ENVIRONMENT.md`. |
 | 2026-08-18 | **`cb7a15a`: N.67 STEP 4b SHIPPED AND WALKED BY DANN. SONGS ARE PLURAL.** `songs.ts` (227 lines, 35 tests), `SongList.svelte` (265), a `PluralStore` hung off `StorageDriver` as an optional property so the legacy driver can decline it, `name` made `$state` so a rename reaches the vault, and `backfillName` at boot because `SongRecord.name` had existed since step 0 with **nothing ever writing it**. Gate 4's baseline moved 555 to 590 with Dann's permission. Ten walk steps on the deploy, all matching a stated expectation or refuting one on the record. |
 | 2026-08-18 | **THE SWITCH MECHANISM WAS SETTLED BY MEASUREMENT AND THE PREDICTION WAS WRONG.** Code expected `.musx` to be too slow to switch in place and to need `location.reload()`. Measured: **warm `.musx` switch 343 ms against a 448 ms reload**, `.musicxml` 49 ms against 97, vault read 0.2 ms. The reload is both slower and loses the tab, the drawer, the scroll position, and the dictionary. **`close()` then `open()`.** Design §9.3 is closed for Chromium and **still open for WebKit**. |
 | 2026-08-18 | **THE VAULT HAD BEEN PLURAL SINCE STEP 1 AND NOBODY HAD LOOKED.** `by-updated` and `by-fingerprint` were defined at `driver.ts:290-301` and `driver.idb.test.ts:92-114` already proved two songs coexist and that a song is findable by fingerprint. **Every one-song assumption lived above the vault**, in `index.ts`, `document.svelte.ts`, and `+page.svelte`. An inventory read before the brief was written is what found it, and it made 4b smaller than its own description. |
@@ -708,6 +774,14 @@ canon still living in project knowledge.
 | 2026-08-13 | **This folder created.** |
 
 ---
+*Updated at the close of 2026-08-18, THIRD session, against `924f687`. That
+session ruled the shape of N.67 step 5, approved its copy, and wrote its brief.
+It shipped no code, and it read the tree rather than trusting the summary of it.
+Read in full: `README.md`, `CONTRACT.md`, this file, `binder.ts`,
+`library/index.ts`, `songs.ts`, `types.ts`, and design §5 and §7. Read in part:
+`+page.svelte`, `library.ts`, `zip-writer.ts`, and `i18n.ts`, all at the lines
+cited. Previously, and still true:*
+
 *Updated at the close of 2026-08-18, second session, against `cb7a15a`. Facts
 added this session were read in the working tree, measured by Claude Code on
 Dann's machine, or observed by Dann himself on the `ilya-hg5dr7kl3` deploy.

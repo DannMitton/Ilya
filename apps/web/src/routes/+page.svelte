@@ -29,8 +29,20 @@
 	import { formatBytes } from '$lib/library/quota';
 	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
 	import { arrivalDecision } from '$lib/library/library';
-	import { autoName, binderFileName, buildBinder, readBinder } from '$lib/library/binder';
-	import { ACTIVE_SONG_KEY, newId, writeActiveSongId } from '$lib/library';
+	import { readBinder } from '$lib/library/binder';
+	// N.67 step 5, the remainder. Which songs go into a binder, and what happens
+	// to each song that comes out of one, are decisions in plain TypeScript for
+	// the same reason the door's are: runes are inert under vitest, so a rule
+	// written in this file is a rule no gate can reach.
+	import {
+		binderFailureKey,
+		exportBinder,
+		importBinder,
+		importNoticeKey,
+		type Collision,
+		type CollisionAnswer,
+	} from '$lib/library/exchange';
+	import { newId, writeActiveSongId } from '$lib/library';
 	// N.67 step 4b, the library door. Every decision it makes is in this plain
 	// TypeScript module, where vitest can reach it; what is left below is wiring.
 	import {
@@ -936,6 +948,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	let importInputEl = $state<HTMLInputElement | undefined>(undefined);
 	let binderError = $state<string | null>(null);
+	/** What an import added. Cleared by the next export or import, never stale. */
+	let binderNotice = $state<string | null>(null);
 
 	/** A date a singer would write, in their own language. */
 	function todayInWords(): string {
@@ -953,100 +967,140 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * `navigator.share`**, which would be the sharing affordance design §8
 	 * rules out: the binder is addressed to nobody, and the moment it is handed
 	 * to another person that act is the person's, not the tool's.
+	 *
+	 * WHICH SONGS is the only difference between the two export controls, which
+	 * is design §5's "a binder of one song and a binder of the whole library are
+	 * the same object at different sizes". Everything else, the gathering, the
+	 * naming, and the open song coming from the document rather than the vault,
+	 * is `exchange.ts`, where a gate can reach it.
 	 */
-	async function handleExport(songId: string = doc.id): Promise<void> {
+	async function writeBinder(ids: string[]): Promise<void> {
 		binderError = null;
-		try {
-			// The OPEN song comes from the document, which holds edits the vault
-			// has not seen yet; any other song comes from the vault. `name` is
-			// taken live because a rename debounces like everything else.
-			const record =
-				songId === doc.id
-					? { ...doc.toRecord(), name: doc.name }
-					: (await library.load(songId)).record;
-			// Read the bytes from the vault rather than from boot state, so a
-			// score uploaded this session is in the binder too.
-			const source = await library.loadSource(songId);
-			const today = todayInWords();
-			// THE SINGER'S NAME WINS. Recomputing an auto-name here would ignore a
-			// rename, which is the one thing the door exists to let them do.
-			const name = record.name || autoName(record, today, t('songs.untitled', language));
-			const bytes = await buildBinder({
-				record,
-				source,
-				appVersion: version,
-				exportedAt: new Date().toISOString(),
-				name,
-			});
-			const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/zip' }));
-			const anchor = document.createElement('a');
-			anchor.href = url;
-			anchor.download = binderFileName(name, today);
-			anchor.click();
-			URL.revokeObjectURL(url);
-		} catch (err) {
-			console.error('[Ilya] export failed:', err);
+		binderNotice = null;
+		const result = await exportBinder({
+			ids,
+			openId: doc.id,
+			// Taken live: the document holds edits the vault has not seen, and a
+			// rename debounces like everything else.
+			openRecord: { ...doc.toRecord(), name: doc.name },
+			load: async (id) => (await library.load(id)).record,
+			loadSource: (id) => library.loadSource(id),
+			appVersion: version,
+			exportedAt: new Date().toISOString(),
+			today: todayInWords(),
+			untitled: t('songs.untitled', language),
+		});
+		if (!result.ok) {
 			binderError = t('binder.err.damaged', language);
-		}
-	}
-
-	/** Is there anything in this song that an import would destroy? */
-	function songHasWork(): boolean {
-		return (
-			doc.inputText.trim() !== '' ||
-			Object.keys(doc.pairings).length > 0 ||
-			doc.source !== null ||
-			doc.glossOverrides.size > 0
-		);
-	}
-
-	async function handleImportFile(file: File): Promise<void> {
-		binderError = null;
-		const bytes = new Uint8Array(await file.arrayBuffer());
-		const read = await readBinder(bytes, new Date().toISOString());
-		if (!read.ok) {
-			// Three sentences over five conditions. The file is untouched in
-			// every one of them, which is why they all end the same way.
-			binderError =
-				read.reason === 'newer-schema'
-					? t('binder.err.newer', language)
-					: read.reason === 'not-a-zip' || read.reason === 'not-a-binder'
-						? t('binder.err.notIlya', language)
-						: t('binder.err.damaged', language);
 			return;
 		}
-		const incoming = read.songs[0];
-		if (!songHasWork()) {
-			await commitImport(incoming);
-			return;
-		}
-		void askToReplace(t('import.title', language), t('import.body', language), [
-			{ label: t('replace.replace', language), destructive: true, run: () => void commitImport(incoming) },
-			{ label: t('binder.exportFirst', language), run: () => void handleExport(), keepOpen: true },
-			{ label: t('replace.keep', language) },
-		]);
+		const url = URL.createObjectURL(new Blob([result.bytes as BlobPart], { type: 'application/zip' }));
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.download = result.fileName;
+		anchor.click();
+		URL.revokeObjectURL(url);
+	}
+
+	const handleExport = (songId: string = doc.id): Promise<void> => writeBinder([songId]);
+	/** Every song the list holds, in the order it draws them. */
+	const handleExportAll = (): Promise<void> => writeBinder(songRows.map((row) => row.id));
+
+	/**
+	 * Raise design §5's three answers for one colliding song, and wait.
+	 *
+	 * PROMISE-SHAPED RATHER THAN CALLBACK-SHAPED, because the songs in a binder
+	 * are asked about one at a time and each answer must land before the next is
+	 * asked.
+	 *
+	 * **THE PRESS SETTLES IT, NOT THE CLOSE EVENT.** Measured 2026-08-18: in the
+	 * browser this walk ran in, `close()` fires NO `close` event at all, on a
+	 * bare `<dialog>` with no framework anywhere near it. An answer that waited
+	 * for that event waited forever and the import hung on the first collision.
+	 * `answerWith` closes before it runs, so the dialog is already shut when
+	 * this resolves and the next `showModal()` is safe.
+	 *
+	 * Escape settles to Keep mine, because closing without answering changes
+	 * nothing: nothing is mutated before the answer. Both `cancel` and `close`
+	 * are listened for, and whichever arrives first wins; the rest are no-ops,
+	 * because a question can only be answered once.
+	 */
+	let collisionResolve: ((answer: CollisionAnswer) => void) | null = null;
+
+	function settleCollision(answer: CollisionAnswer): void {
+		const resolve = collisionResolve;
+		collisionResolve = null;
+		resolve?.(answer);
+	}
+
+	function askCollision(collision: Collision): Promise<CollisionAnswer> {
+		// ISO, YYYY-MM-DD: it reads the same in both languages and cannot be
+		// misread as a different day (`placeholderName` sets the precedent).
+		const mine = collision.mine.updatedAt.slice(0, 10);
+		const theirs = collision.incoming.record.updatedAt.slice(0, 10);
+		return new Promise((resolve) => {
+			collisionResolve = resolve;
+			void askToReplace(
+				t('collide.title', language),
+				t('collide.body', language).replace('%s', mine).replace('%s', theirs),
+				[
+					{ label: t('collide.take', language), destructive: true, run: () => settleCollision('take') },
+					{ label: t('collide.both', language), run: () => settleCollision('both') },
+					{ label: t('collide.mine', language), run: () => settleCollision('mine') },
+				],
+			).then(() => {
+				// A dialog that never opened must not hang the import forever.
+				// Nothing was asked, so nothing is taken.
+				if (!replaceDialogEl?.open) settleCollision('mine');
+			});
+		});
 	}
 
 	/**
-	 * Put the imported song in the vault and open it.
+	 * Read a binder in.
 	 *
-	 * The page reloads rather than mutating the live document field by field:
-	 * the document's own guarantee is that it is constructed FROM a record that
-	 * has already been read, and a reload is the honest way to get that for a
-	 * record which has just arrived. Single-song, so the pointer simply moves.
+	 * **AN IMPORT ADDS SONGS TO THE LIBRARY. IT NEVER TOUCHES THE SONG YOU ARE
+	 * IN** (Dann's ruling, 2026-08-18). The open-song warning that used to stand
+	 * here is RETIRED: it existed because there was only ever one song to
+	 * destroy, and songs have been plural since `cb7a15a`. The one question left
+	 * is the id collision, and a singer who re-imports a binder of the song they
+	 * are working in still meets it, because that is an id collision and that is
+	 * the one moment the question is worth asking.
 	 */
-	async function commitImport(incoming: { record: SongRecord; source: SourceBytes | null }): Promise<void> {
-		const outcome = await library.save(incoming.record, incoming.source ?? undefined);
-		if (!outcome.ok) {
-			binderError = t('binder.err.damaged', language);
+	async function handleImportFile(file: File): Promise<void> {
+		binderError = null;
+		binderNotice = null;
+		const bytes = new Uint8Array(await file.arrayBuffer());
+		const read = await readBinder(bytes, new Date().toISOString());
+		if (!read.ok) {
+			binderError = t(binderFailureKey(read.reason), language);
 			return;
 		}
-		try {
-			localStorage.setItem(ACTIVE_SONG_KEY, incoming.record.id);
-		} catch {
-			// A lost pointer costs which song opens first, never a song.
+		const outcome = await importBinder({
+			songs: read.songs,
+			// The ids the vault ACTUALLY holds. `library.load` cannot answer this:
+			// an absent id yields an empty record rather than an error, so a check
+			// written on it would report "no collision" for every song in the file.
+			existing: await listSongs(library.plural),
+			save: (record, source) => library.save(record, source),
+			ask: askCollision,
+			newId,
+			openId: doc.id,
+		});
+		if (outcome.failed) binderError = t('songs.err.write', language);
+		const notice = importNoticeKey(outcome);
+		if (notice) binderNotice = t(notice.key, language).replace('%s', String(notice.count));
+		// THE ONLY CASE THAT RELOADS. The live document was replaced underneath,
+		// and the document's own guarantee is that it is constructed FROM a
+		// record already read, so a reload is the honest way to get that for a
+		// record which has just arrived.
+		if (outcome.replacedOpen) {
+			location.reload();
+			return;
 		}
-		location.reload();
+		// Every other answer leaves the singer exactly where they were, because
+		// an import ADDS. The list is refreshed and the pointer does not move.
+		await refreshSongs();
 	}
 
 	/* ── N.67 step 4b: the library door ─────────────────────────────── */
@@ -1609,13 +1663,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      8 KB budgeted for the whole of N.67, and showModal() gives the modality,
      the focus trap, Escape, and the backdrop for nothing.
 
-     "Keep this song" stays FIRST IN THE DOM so Tab reaches the safe answer
-     first, and `row-reverse` puts it visually RIGHTMOST, which is where macOS
-     puts the default and where a tired hand goes (Dann's ruling 2026-08-16,
-     after he met this dialog at half past four in the morning). Keyboard and
-     mouse therefore both land on the safe answer, which one ordering alone
-     cannot give you. Escape resolves to keeping, because closing without
-     answering changes nothing: nothing is mutated before the answer. -->
+     THE SAFE ANSWER IS LAST IN THE DOM, which is both where Tab reaches it
+     last and where it is drawn rightmost, which is where macOS puts the default
+     and where a tired hand goes (Dann's ruling 2026-08-16, after he met this
+     dialog at half past four in the morning). It is focused programmatically on
+     open, so keyboard and mouse both land on it. This comment said `row-reverse`
+     until N.67 step 5: the CSS reversal was removed when DOM order was made the
+     visual order, and the actions row below has said so since. Escape resolves
+     to the safe answer, because closing without answering changes nothing:
+     nothing is mutated before the answer. -->
 <!-- N.67 step 5. ONE hidden input serves both tabs' Import controls.
      `accept` is dropped on mobile for N.70's reason exactly: iOS matches by
      registered type and knows nothing of `.ilya`, so it would grey out every
@@ -1637,7 +1693,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 <dialog
 	class="replace-dialog"
 	bind:this={replaceDialogEl}
-	onclose={() => ((pendingArrival = null), (pendingConfirm = null))}
+	oncancel={() => settleCollision('mine')}
+	onclose={() => {
+		// GUARDED ON THE DIALOG BEING SHUT. One collision's close event can arrive
+		// after the next collision's dialog has already opened, and unguarded it
+		// would blank the question now on screen and answer it for the singer.
+		if (replaceDialogEl?.open) return;
+		pendingArrival = null;
+		pendingConfirm = null;
+		settleCollision('mine');
+	}}
 	aria-labelledby="replace-title"
 >
 	{#if pendingConfirm}
@@ -1699,6 +1764,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onprint={handlePrint}
 					onexport={() => void handleExport()}
 					onimport={() => importInputEl?.click()}
+					onexportall={() => void handleExportAll()}
 					{songLibrary}
 					onmetadatachange={handleMetadataChange}
 				>
@@ -1802,6 +1868,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     why all three sentences end the same way. -->
 						<p class="shane-storage-notice">{binderError}</p>
 					{/if}
+					{#if binderNotice}
+						<!-- N.67 step 5, the remainder. What an import ADDED. A "take the
+						     one in this file" adds nothing, so it says nothing: the song it
+						     overwrote moves to the top of the list, which is the change
+						     the singer can see. -->
+						<p class="shane-storage-notice">{binderNotice}</p>
+					{/if}
 					{#if orphanedCount > 0}
 						<!-- N.67 step 3. Reported, not acted on: the placements are
 						     KEPT and this only says how many have no note to sit on in
@@ -1891,6 +1964,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						<button class="shane-binder-btn" onclick={() => importInputEl?.click()}>
 							{t('binder.import', language)}
 						</button>
+						<!-- The row's third column has stood empty since the row was
+						     built. Shown only above one song, because with one song it
+						     says the same thing as the button beside it. -->
+						{#if songRows.length > 1}
+							<button class="shane-binder-btn" onclick={() => void handleExportAll()}>
+								{t('binder.exportAll', language)}
+							</button>
+						{/if}
 					</div>
 					<CalibrationWizard
 						{language}

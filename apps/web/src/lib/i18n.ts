@@ -614,11 +614,33 @@ const strings: Record<string, Record<Language, string>> = {
 	// That finding is N.72. An instruction that might not work must not ship.
 	'binder.err.newer': { en: 'This file was made by a newer version of Ilya than this one, which cannot read it. Open it in the newest Ilya. Nothing has changed.', fr: 'Ce fichier a été créé par une version d’Ilya plus récente que celle-ci, qui ne peut pas le lire. Ouvrez-le dans la version la plus récente. Rien n’a été modifié.' },
 	'binder.err.damaged': { en: 'This file is damaged and could not be read. Nothing has changed.', fr: 'Ce fichier est endommagé et n’a pas pu être lu. Rien n’a été modifié.' },
-	// Importing onto an open song is the same act as replacing its score, so it
-	// wears the same shape: name what is lost, say there is no undo, and offer
-	// the export that makes the loss avoidable.
-	'import.title': { en: 'You already have a song open.', fr: 'Vous avez déjà un chant ouvert.' },
-	'import.body': { en: 'Importing replaces the song you have, its title, its score file, and every placement, with the one in this file. Ilya cannot undo that. Export this song first if you want to keep it.', fr: 'Importer remplace le chant que vous avez, son titre, son fichier de partition et tous ses placements, par celui de ce fichier. Ilya ne peut pas annuler cette action. Exportez ce chant d’abord si vous voulez le conserver.' },
+	// N.67 step 5, the remainder. Dann's ruling 2026-08-18: AN IMPORT ADDS SONGS
+	// AND NEVER TOUCHES THE SONG YOU ARE IN, so `import.title` and `import.body`
+	// are RETIRED. They warned that importing would destroy the open song, which
+	// was true when there was only ever one song to destroy; songs have been
+	// plural since cb7a15a and the warning became a lie about what the button
+	// does. The only question an import now raises is the id collision below.
+	//
+	// Design §5, the three answers. Shown to Dann and APPROVED 2026-08-18 before
+	// a line of it was written into the tree. Nothing is coined: 'chant' is
+	// ratified across binder.*, replace.*, and songs.*, and every other word is
+	// ordinary French. No colon, question mark, or exclamation, so this adds no
+	// hard-space site. THE DATES ARE ISO, YYYY-MM-DD, which is the precedent
+	// `placeholderName` already sets: it reads the same in both languages and
+	// cannot be misread as a different day. First %s is the singer's own copy,
+	// second is the file's.
+	'binder.exportAll': { en: 'Export all songs', fr: 'Exporter tous les chants' },
+	'collide.title': { en: 'You already have this song.', fr: 'Vous avez déjà ce chant.' },
+	'collide.body': { en: 'The song in this file has the same identity as one you already have. Yours was last changed %s. The one in this file was last changed %s. Ilya cannot undo taking the one in this file.', fr: 'Le chant de ce fichier a la même identité qu’un chant que vous avez déjà. Le vôtre a été modifié pour la dernière fois le %s. Celui de ce fichier a été modifié pour la dernière fois le %s. Ilya ne peut pas annuler le remplacement.' },
+	'collide.take': { en: 'Take the one in this file', fr: 'Prendre celui de ce fichier' },
+	'collide.both': { en: 'Keep both', fr: 'Conserver les deux' },
+	'collide.mine': { en: 'Keep mine', fr: 'Conserver le mien' },
+	// TWO KEYS RATHER THAN A PLURAL SYSTEM. `i18n.ts` has no plural mechanism
+	// and this step does not invent one. Picked on `n === 1`, which is correct
+	// in French and correct in English except at zero, and zero cannot occur:
+	// a binder with no songs is refused as `no-songs` before it gets here.
+	'binder.importedOne': { en: 'One song was added.', fr: 'Un chant a été ajouté.' },
+	'binder.importedMany': { en: '%s songs were added.', fr: '%s chants ont été ajoutés.' },
 	'station.startOver': { en: 'Start placement over', fr: 'Recommencer le placement' },
 	// The count of placements whose note the new score does not contain. They
 	// are KEPT; this only says how many no longer have a note to sit on. %s is

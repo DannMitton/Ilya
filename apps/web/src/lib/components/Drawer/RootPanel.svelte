@@ -26,6 +26,7 @@ import type { SongRow } from '$lib/library/songs';
 		/** N.67 step 5, the binder. Twinned on the print control, Dann's ruling. */
 		onexport: () => void;
 		onimport: () => void;
+		onexportall: () => void;
 		onmetadatachange: (meta: SongMetadata) => void;
 		/**
 		 * N.67 step 4b, the library door. Passed WHOLE rather than as seven
@@ -62,6 +63,7 @@ import type { SongRow } from '$lib/library/songs';
 		onprint,
 		onexport,
 		onimport,
+		onexportall,
 		onmetadatachange,
 		songLibrary,
 	}: Props = $props();
@@ -236,6 +238,13 @@ import type { SongRow } from '$lib/library/songs';
 	<div class="button-row binder-row">
 		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
 		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
+		<!-- N.67 step 5, the remainder. The row's third column has stood empty
+		     since the row was built, and this is what it was the right width for.
+		     Shown only above one song, because with one song it says the same
+		     thing as the button beside it. Twinned on the Fit tab. -->
+		{#if songLibrary.songs.length > 1}
+			<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
+		{/if}
 	</div>
 
 	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both

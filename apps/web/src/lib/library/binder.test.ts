@@ -1,5 +1,5 @@
 /**
- * binder.test.ts — N.67 step 5, single-song half.
+ * binder.test.ts — N.67 step 5, the binder.
  *
  * The binder is the fire escape: design §8 says it is the only thing that
  * survives an eviction, a wipe, or a lost phone. So these tests are weighted
@@ -103,11 +103,9 @@ describe('the binder, round trip', () => {
 	it('carries the song back whole', async () => {
 		const record = song();
 		const built = await buildBinder({
-			record,
-			source: bytes('<score/>'),
+			songs: [{ record, source: bytes('<score/>'), name: 'Kabalevsky, Сонет 90' }],
 			appVersion: '2026a',
 			exportedAt: NOW,
-			name: 'Kabalevsky, Сонет 90',
 		});
 
 		const read = await readBinder(built, NOW);
@@ -125,11 +123,9 @@ describe('the binder, round trip', () => {
 	it('carries the score file back BYTE FOR BYTE', async () => {
 		// The whole point of §8: the singer's own file, not a rendition of it.
 		const built = await buildBinder({
-			record: song(),
-			source: bytes('<score>the actual bytes</score>'),
+			songs: [{ record: song(), source: bytes('<score>the actual bytes</score>'), name: 'x' }],
 			appVersion: '2026a',
 			exportedAt: NOW,
-			name: 'x',
 		});
 
 		const read = await readBinder(built, NOW);
@@ -144,7 +140,11 @@ describe('the binder, round trip', () => {
 		const record = song();
 		record.source = null;
 
-		const built = await buildBinder({ record, source: null, appVersion: '2026a', exportedAt: NOW, name: 'x' });
+		const built = await buildBinder({
+			songs: [{ record, source: null, name: 'x' }],
+			appVersion: '2026a',
+			exportedAt: NOW,
+		});
 		const read = await readBinder(built, NOW);
 
 		expect(read.ok).toBe(true);
@@ -155,11 +155,9 @@ describe('the binder, round trip', () => {
 
 	it('is a real ZIP, with the manifest first', async () => {
 		const built = await buildBinder({
-			record: song(),
-			source: bytes('<score/>'),
+			songs: [{ record: song(), source: bytes('<score/>'), name: 'x' }],
 			appVersion: '2026a',
 			exportedAt: NOW,
-			name: 'x',
 		});
 
 		const entries = listZipEntries(built);
@@ -180,11 +178,9 @@ describe('the binder, round trip', () => {
 		// original, measured 2026-08-16. Deflating those spends processor time
 		// to grow the file.
 		const built = await buildBinder({
-			record: song(),
-			source: bytes('finale bytes', 'sonata.musx'),
+			songs: [{ record: song(), source: bytes('finale bytes', 'sonata.musx'), name: 'x' }],
 			appVersion: '2026a',
 			exportedAt: NOW,
-			name: 'x',
 		});
 
 		const entries = listZipEntries(built);
@@ -192,6 +188,115 @@ describe('the binder, round trip', () => {
 		expect(source.compressionMethod).toBe(0);
 		// While the record and manifest, which are JSON, are deflated.
 		expect(entries.find((e) => e.name === MANIFEST_NAME)!.compressionMethod).toBe(8);
+	});
+});
+
+describe('a binder of the whole library', () => {
+	// Design §5: "a binder of one song and a binder of the whole library are the
+	// same object at different sizes." The reader has looped `manifest.songs`
+	// since step 5's first half, but NOTHING EVER WROTE A SECOND ENTRY, so the
+	// loop had never once run twice. These are what establish that it does.
+	function second(): SongRecord {
+		const record = emptySongRecord('song-2', NOW);
+		record.poem = 'Ночь, улица, фонарь, аптека';
+		record.metadata = { ...record.metadata, title: 'Двенадцать', composer: 'Blok' };
+		record.pairings = { 'm2-0-0': { kind: 'empty' }, 'm2-0-1': { kind: 'empty' } };
+		return record;
+	}
+
+	function otherBytes(text: string, fileName: string): SourceBytes {
+		const data = utf8(text);
+		return {
+			songId: 'song-2',
+			fileName,
+			bytes: data.buffer.slice(0) as ArrayBuffer,
+			byteLength: data.byteLength,
+			contentHash: 'def',
+			importedAt: NOW,
+		};
+	}
+
+	it('carries TWO songs back whole, each with its own score', async () => {
+		const built = await buildBinder({
+			songs: [
+				{ record: song(), source: bytes('<score>one</score>'), name: 'Kabalevsky, Сонет 90' },
+				{ record: second(), source: otherBytes('<score>two</score>', 'twelve.musicxml'), name: 'Blok, Двенадцать' },
+			],
+			appVersion: '2026a',
+			exportedAt: NOW,
+		});
+
+		const read = await readBinder(built, NOW);
+
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs).toHaveLength(2);
+		expect(read.songs.map((s) => s.record.id)).toEqual(['song-1', 'song-2']);
+		expect(read.songs.map((s) => s.name)).toEqual(['Kabalevsky, Сонет 90', 'Blok, Двенадцать']);
+		expect(read.songs[0].record.poem).toBe('Я тебя любил');
+		expect(read.songs[1].record.poem).toBe('Ночь, улица, фонарь, аптека');
+		expect(Object.keys(read.songs[1].record.pairings)).toHaveLength(2);
+	});
+
+	it('gives each song its OWN score, and never its neighbour’s', async () => {
+		// The failure this forbids is the chimera: song two opening with song
+		// one's music under it, which is the whole class N.67 exists to end.
+		const built = await buildBinder({
+			songs: [
+				{ record: song(), source: bytes('<score>one</score>'), name: 'a' },
+				{ record: second(), source: otherBytes('<score>two</score>', 'twelve.musicxml'), name: 'b' },
+			],
+			appVersion: '2026a',
+			exportedAt: NOW,
+		});
+
+		const read = await readBinder(built, NOW);
+
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(new TextDecoder().decode(read.songs[0].source!.bytes)).toBe('<score>one</score>');
+		expect(new TextDecoder().decode(read.songs[1].source!.bytes)).toBe('<score>two</score>');
+		expect(read.songs[0].source!.songId).toBe('song-1');
+		expect(read.songs[1].source!.songId).toBe('song-2');
+	});
+
+	it('groups the members by song, manifest first', async () => {
+		const built = await buildBinder({
+			songs: [
+				{ record: song(), source: bytes('<score>one</score>'), name: 'a' },
+				{ record: second(), source: otherBytes('<score>two</score>', 'twelve.musicxml'), name: 'b' },
+			],
+			appVersion: '2026a',
+			exportedAt: NOW,
+		});
+
+		expect(listZipEntries(built).map((e) => e.name)).toEqual([
+			MANIFEST_NAME,
+			'songs/song-1/song.json',
+			'songs/song-1/source/sonnet90.musicxml',
+			'songs/song-2/song.json',
+			'songs/song-2/source/twelve.musicxml',
+		]);
+	});
+
+	it('carries a song with no score beside one that has a score', async () => {
+		const built = await buildBinder({
+			songs: [
+				{ record: song(), source: bytes('<score>one</score>'), name: 'a' },
+				{ record: second(), source: null, name: 'b' },
+			],
+			appVersion: '2026a',
+			exportedAt: NOW,
+		});
+
+		const read = await readBinder(built, NOW);
+
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs[0].source).not.toBeNull();
+		// And NOT the first song's, which a prefix search done carelessly would
+		// have handed it.
+		expect(read.songs[1].source).toBeNull();
 	});
 });
 
