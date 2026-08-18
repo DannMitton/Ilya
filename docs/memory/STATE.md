@@ -46,6 +46,38 @@ any of them count.
 
 ---
 
+## THE FABLE GUI SESSION, 2026-08-18 EVENING. RULED, RECORDED, NOTHING BUILT
+
+Dann displaced N.67 step 5 for one session of GUI design work with Fable in
+Cowork. Step 5 remains THE ONE THING. Full record with rulings, artifact md5s,
+and instrument notes: `docs/sessions/fable-gui-session-record_2026-08-18.md`.
+The short form:
+
+- **Ratified:** the eleven-principle Calm Authority slate and operational spec
+  (colour, shape, grouping, typography, motion, error copy).
+  Doc: `docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`. Also filed to
+  project knowledge as a ruling.
+- **Ruled: portrait treatment C.** Fitted true page as portrait's arrival, one
+  tap into a reading aid stripped of all paper dress, one tap back. The
+  interstitial is retired. Amends PRODUCT.md's portrait accommodation;
+  rotation-as-mode-switch stands.
+- **Ruled: NOTATION opens collapsed** (toggles are departures from Grayson,
+  intentionally accessed).
+- **Ruled: error copy voice** (honest, non-patronizing, next step where
+  warranted, case by case).
+- **Ratified by eye:** Learn and Guide chapter-opening bands (full-strength
+  hue, oversized sans, untouched reading measure below).
+- **Mockups:** `docs/sessions/fable-gui-mockup_r1_2026-08-18.html` and
+  `_r2_`. r2 supersedes r1's portrait exhibit (r1 wrongly carried the four-tab
+  bar into portrait).
+- **Audit findings F1 to F9** in the audit doc. Code one-looks, non-blocking:
+  F7 auto-name produced the song title `Я` from `Я вас любил:...`; F8 the song
+  row still reads as an input. The GUI track still builds nothing before the
+  beta line closes unless Dann names the displaced item.
+- Not walked: Print, Safari, Fit with a loaded score, calibration.
+
+---
+
 ## N.67 STEP 4b IS DONE, 2026-08-18, `cb7a15a`, WALKED BY DANN ON THE DEPLOY
 
 **Songs are plural.** The list, New song, rename, delete with confirmation,

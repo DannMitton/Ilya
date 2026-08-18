@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ilya GUI comparison r1 — 2026-08-18</title>
+<style>
+  /* ============================================================
+     TOKENS. Hues marked (walked) were read from the live deploy
+     screenshots; hues marked (stand-in) approximate what was seen
+     and must be re-verified against app.css before any build.
+     Typefaces are stand-ins: the tree's fonts were not read.
+     ============================================================ */
+  :root{
+    --sage:        #8B9A7D;  /* walked: app.css:4 palette anchor   */
+    --sage-deep:   #6f7f62;
+    --lavender:    #9B8AA6;  /* stand-in: Fit header as walked     */
+    --lavender-desk:#D2CBD7; /* documented: E.36 lavender desk     */
+    --rose:        #B08585;  /* stand-in: Learn header as walked   */
+    --cobalt:      #5B739B;  /* stand-in: Guide header as walked   */
+    --paper-cream: #F0EBE0;  /* documented                          */
+    --paper-light: #F5F1E8;  /* documented                          */
+    --desk:        #6E6A60;  /* stand-in: desk tint as walked       */
+    --desk-studio: #75796a;  /* stand-in: sage-tinted desk          */
+    --ink:         #2E2B26;
+    --ink-soft:    #5a564e;
+    --ink-faint:   #8a857a;
+    --line:        #c9c2b4;
+    --r-0: 0;                /* paper, desks                        */
+    --r-s: 5px;              /* every control                       */
+    --r-f: 999px;            /* toggle knobs, language pills only   */
+    --dur: 180ms;
+    --serif: "Sorts Mill Goudy","Palatino Linotype",Palatino,Georgia,serif;
+    --sans: -apple-system,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#EFEAE0;color:var(--ink);font-family:var(--serif);line-height:1.45}
+
+  /* ---------- page chrome ---------- */
+  .masthead{background:var(--ink);color:#EFEAE0;padding:26px 34px}
+  .masthead h1{font-weight:400;font-size:26px;letter-spacing:.5px}
+  .masthead h1 em{color:#cbc4b2}
+  .masthead p{font-family:var(--sans);font-size:12.5px;color:#b9b3a4;margin-top:6px;max-width:900px}
+  section{padding:38px 34px 30px}
+  .sec-label{font-family:var(--sans);font-size:11px;letter-spacing:.22em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:4px}
+  .sec-title{font-size:22px;margin-bottom:8px}
+  .sec-note{font-family:var(--sans);font-size:13px;color:var(--ink-soft);max-width:860px;margin-bottom:24px}
+  .benches{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
+  .bench{flex:1 1 460px;max-width:640px}
+  .bench-cap{font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);margin-top:12px;max-width:520px}
+  .bench-cap b{color:var(--ink)}
+  .bench-name{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;color:var(--ink)}
+  .bench-name .tag{display:inline-block;font-size:10px;letter-spacing:.1em;padding:2px 8px;border-radius:var(--r-s);margin-left:8px;vertical-align:1px}
+  .tag-today{background:#d8d2c4;color:var(--ink-soft)}
+  .tag-ruled{background:var(--sage);color:#fff}
+
+  /* ---------- shared drawer anatomy ---------- */
+  .frame{border:1px solid #b5af9f;background:var(--desk);border-radius:var(--r-0);
+         box-shadow:0 2px 14px rgba(46,43,38,.18);overflow:hidden}
+  .frame.studio{background:var(--desk-studio)}
+  .appbar{height:38px;display:flex;align-items:center;justify-content:space-between;
+          padding:0 14px;color:#f2eee6;font-size:15px}
+  .appbar .brand{font-family:var(--serif)}
+  .appbar .brand small{font-size:8px;vertical-align:6px;letter-spacing:.1em}
+  .appbar-t{background:var(--sage)}
+  .appbar-f{background:var(--lavender)}
+  .appbar-s{background:var(--sage)}
+  .lang{font-family:var(--sans);font-size:10px}
+  .lang span{padding:3px 10px;border-radius:var(--r-f);background:rgba(255,255,255,.28)}
+  .lang span+span{background:none;opacity:.75;margin-left:2px}
+  .split{display:flex;min-height:430px}
+  .drawer{width:52%;min-width:250px;background:var(--paper-light);border-right:1px solid rgba(0,0,0,.18);
+          display:flex;flex-direction:column;font-family:var(--sans)}
+  .deskside{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:22px 12px}
+  .minipaper{background:var(--paper-cream);width:92%;min-height:330px;padding:20px 18px;
+             box-shadow:0 1px 6px rgba(0,0,0,.25)}
+  .minipaper .mp-brand{font-family:var(--serif);color:var(--sage-deep);font-size:13px}
+  .minipaper h3{font-family:var(--serif);font-weight:400;font-style:italic;font-size:17px;margin:2px 0 2px}
+  .minipaper .mp-sub{font-family:var(--sans);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;
+                     color:var(--ink-faint);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:12px}
+  .stackrow{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .stack{text-align:left}
+  .ipa{font-size:9.5px;color:var(--ink-soft);font-family:var(--sans)}
+  .cyr{font-family:var(--serif);font-weight:700;font-size:12.5px}
+  .gloss{font-family:var(--serif);font-style:italic;font-size:8.5px;color:var(--ink-faint)}
+  .mp-empty{font-family:var(--serif);font-style:italic;color:var(--ink-faint);font-size:12px;text-align:center;margin-top:110px}
+
+  /* stations */
+  .station{padding:10px 12px;border-bottom:1px solid #e3ddcf}
+  .st-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9a8f7c;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+  .st-label .chev{color:#b0a document}
+  .field{width:100%;border:1px solid var(--line);background:#fff;border-radius:var(--r-s);
+         font-family:var(--sans);font-size:10.5px;color:var(--ink-faint);padding:5px 8px;margin-bottom:5px}
+  .area{height:52px;font-family:var(--serif);color:var(--ink);font-size:11px}
+  .btnrow{display:flex;gap:6px;margin-top:8px}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:var(--r-s);font-family:var(--sans);
+       font-size:10.5px;padding:5px 10px;color:var(--ink)}
+  .btn.primary{background:var(--sage);border-color:var(--sage);color:#fff}
+  .btn.primary.lav{background:var(--lavender);border-color:var(--lavender)}
+  .btn.ghost{color:var(--ink-faint)}
+  .dz{border:1.5px dashed var(--lavender);border-radius:var(--r-s);background:#fff;
+      text-align:center;padding:14px 8px;font-size:10px;color:var(--ink-soft)}
+  .dz b{display:block;font-size:11px;color:var(--ink)}
+  .plea{text-align:center;font-weight:700;font-size:11px;padding:10px 6px 4px}
+  .plea-row{display:flex;gap:6px;justify-content:center;padding:6px 0 10px}
+  .anchor-top{border-bottom:2px solid #d8d2c2;background:#f8f5ec}
+  .anchor-bot{border-top:2px solid #d8d2c2;background:#f4f0ec;margin-top:auto}
+  .voice-line{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:10.5px}
+  .voice-dot{width:9px;height:9px;border-radius:var(--r-f);background:var(--lavender)}
+  .scrollzone{flex:1;overflow:hidden;position:relative}
+  .scroll-hint{position:absolute;right:6px;top:8px;bottom:8px;width:3px;background:#ddd6c6;border-radius:var(--r-s)}
+  .songrow{display:flex;align-items:center;gap:6px}
+  .songrow .row{flex:1;border-left:3px solid var(--sage);background:#eee9dc;padding:4px 8px;font-size:10.5px}
+  .songrow a{font-size:10px;color:var(--ink-faint);text-decoration:none}
+
+  /* today's bottom tab bar */
+  .tabbar{display:flex;border-top:1px solid #d8d2c2;background:#faf7f0}
+  .tab{flex:1;text-align:center;font-size:9px;letter-spacing:.16em;padding:10px 0;cursor:pointer;
+       color:var(--ink-soft);border-top:2px solid transparent;transition:background var(--dur) ease-out}
+  .tab.on-t{background:var(--sage);color:#fff}
+  .tab.on-f{background:var(--lavender);color:#fff}
+  .tab u{text-decoration:none;border-bottom:2px solid transparent}
+
+  /* studio pair on the desk */
+  .deskhead{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0}
+  .pair{display:inline-flex;border:1.5px solid var(--ink);border-radius:var(--r-s);overflow:hidden;background:var(--paper-light)}
+  .pair button{border:0;background:none;font-family:var(--sans);font-size:9.5px;letter-spacing:.12em;
+               text-transform:uppercase;padding:6px 12px;cursor:pointer;color:var(--ink);transition:background var(--dur) ease-out}
+  .pair button.on{background:var(--ink);color:var(--paper-light)}
+  .readlinks{font-family:var(--sans);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+  .readlinks a{color:#f0ede4;text-decoration:none;border-bottom:1px solid rgba(240,237,228,.55);margin-left:12px}
+
+  /* ---------- portrait phones ---------- */
+  .phones{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .phone-wrap{width:270px}
+  .phone{width:250px;height:520px;border:7px solid #2b2925;border-radius:26px;overflow:hidden;
+         background:var(--desk);position:relative;display:flex;flex-direction:column}
+  .p-appbar{height:30px;background:var(--sage);color:#f2eee6;display:flex;align-items:center;
+            justify-content:space-between;padding:0 10px;font-size:12px;flex:0 0 auto}
+  .p-appbar .lang span{padding:2px 7px;font-size:8px}
+  .p-body{flex:1;overflow-y:auto;position:relative}
+  .p-tabbar{flex:0 0 auto;display:flex;background:#faf7f0;border-top:1px solid #d8d2c2}
+  .p-tabbar .tab{font-size:7.5px;padding:9px 0}
+  .p-cap{font-family:var(--sans);font-size:12px;color:var(--ink-soft);margin-top:10px}
+  .p-cap b{color:var(--ink)}
+  .p-name{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 8px}
+
+  /* A: fitted page */
+  .fitpage{background:var(--paper-cream);width:170px;margin:26px auto 10px;height:220px;
+           box-shadow:0 2px 10px rgba(0,0,0,.3);padding:12px 11px;overflow:hidden}
+  .fitpage .mp-brand{font-size:8px}
+  .fitpage h3{font-size:10px;margin:1px 0}
+  .fitpage .mp-sub{font-size:4.5px;padding-bottom:4px;margin-bottom:7px}
+  .fitpage .ipa{font-size:4.5px}
+  .fitpage .cyr{font-size:6.5px}
+  .fitpage .gloss{font-size:4px}
+  .fitpage .stackrow{gap:7px;margin-bottom:7px}
+  .rotate-hint{color:#e8e4d8;font-family:var(--sans);font-size:10px;text-align:center;margin-top:6px}
+  .rotate-hint .glyph{font-size:16px;display:block;margin-bottom:2px}
+
+  /* B: dressed scroll */
+  .sheet{background:var(--paper-cream);margin:12px 12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.3);padding:16px 15px}
+  .sheet .stackrow{gap:11px}
+  .sheet .ipa{font-size:8px}.sheet .cyr{font-size:11px}.sheet .gloss{font-size:7.5px}
+  .colophon{border-top:1px solid var(--line);margin-top:16px;padding-top:8px;
+            font-family:var(--sans);font-size:6.5px;letter-spacing:.06em;color:var(--ink-faint);line-height:1.6}
+  .drawerpull{background:#faf7f0;border-top:1px solid #d8d2c2;text-align:center;
+              font-family:var(--sans);font-size:8px;letter-spacing:.2em;color:var(--ink-soft);
+              padding:7px 0 6px;flex:0 0 auto;cursor:default}
+  .drawerpull .chev{display:block;font-size:11px;line-height:.9}
+
+  /* C: layered */
+  .enterbar{position:absolute;left:0;right:0;bottom:0;background:rgba(46,43,38,.85);color:#efeade;
+            font-family:var(--sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+            text-align:center;padding:9px 0;cursor:pointer}
+  .backbar{background:rgba(46,43,38,.85);color:#efeade;font-family:var(--sans);font-size:10px;
+           letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:9px 0;cursor:pointer}
+  .hidden{display:none}
+
+  .legend{background:#e7e1d3;border:1px solid #cfc8b7;border-radius:var(--r-s);
+          padding:16px 20px;margin-top:34px;max-width:900px;font-family:var(--sans);font-size:12.5px;color:var(--ink-soft)}
+  .legend b{color:var(--ink)}
+  .legend p{margin:4px 0}
+  footer{padding:20px 34px 40px;font-family:var(--sans);font-size:11px;color:var(--ink-faint);max-width:900px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>[<em>Ilya</em>] GUI comparison, revision 1</h1>
+  <p>Two questions, two exhibits. Exhibit 1: the drawer as deployed beside the drawer under the
+  E.44 Studio ruling. Click the tabs in each and watch what moves. Exhibit 2: three portrait
+  treatments at phone width. This is a mockup, not application code. Hues and typefaces are
+  stand-ins where the footer says so.</p>
+</div>
+
+<!-- ================= EXHIBIT 1 : THE DRAWER ================= -->
+<section>
+  <div class="sec-label">Exhibit 1</div>
+  <div class="sec-title">The drawer: today beside Studio</div>
+  <div class="sec-note">In each bench, click between the two documents. <b>Today</b>, the whole
+  drawer is replaced: metadata and songs vanish, Print changes shape and position, and the one
+  filled action turns sage on a lavender screen. <b>Under Studio</b>, the drawer holds still:
+  anchors stay pinned, stations keep their order, and only the paper changes. The singer's hand
+  learns one map.</div>
+
+  <div class="benches">
+
+    <!-- ============ BENCH: TODAY ============ -->
+    <div class="bench">
+      <div class="bench-name">Today <span class="tag tag-today">as deployed</span></div>
+      <div class="frame">
+        <div class="appbar appbar-t" id="t-appbar">
+          <span class="brand">[<em>Ilya</em>]<small> 2026A</small></span>
+          <span class="lang"><span>English</span><span>Français</span></span>
+        </div>
+        <div class="split">
+          <div class="drawer">
+            <!-- TODAY / TRANSCRIPTION -->
+            <div id="t-drawer-t" class="scrollzone">
+              <div class="station"><div class="st-label">Metadata</div>
+                <div class="field">Aria or song title</div>
+                <div class="field">Composer</div>
+              </div>
+              <div class="station">
+                <div class="field area">Я вас любил: любовь ещё, быть может,<br>В душе моей угасла не совсем;</div>
+                <div class="btnrow">
+                  <span class="btn ghost">Clear text</span><span class="btn">Print</span>
+                  <span class="btn primary">Transcribe</span>
+                </div>
+                <div class="btnrow"><span class="btn">Export this song</span><span class="btn">Import a song</span></div>
+              </div>
+              <div class="station"><div class="st-label">Songs</div>
+                <div class="songrow"><span class="row">Я</span><a href="#">Rename</a></div>
+              </div>
+              <div class="station"><div class="st-label">Analysis</div></div>
+              <div class="station"><div class="st-label">Notation <span>⌄</span></div></div>
+            </div>
+            <!-- TODAY / FIT -->
+            <div id="t-drawer-f" class="scrollzone hidden">
+              <div class="station">
+                <div class="dz"><b>Drop a score here</b> or click to browse<br>MNX, MusicXML, .musx, .mscz, PDF, a photograph</div>
+              </div>
+              <div class="station"><div class="st-label">Syllables <span style="letter-spacing:0">0/21</span></div>
+                <div style="font-size:10px">вас лю-бил лю-бовь е-щё быть мо-жет…</div>
+              </div>
+              <div class="station"><div class="st-label">Shift lyrics</div>
+                <div class="btnrow"><span class="btn ghost">←</span><span class="btn ghost">→</span></div>
+              </div>
+              <div class="station" style="text-align:center"><span class="btn" style="opacity:.55">Print</span></div>
+              <div class="station"><div class="btnrow"><span class="btn">Export this song</span><span class="btn">Import a song</span></div></div>
+              <div class="plea">Please name your profile so we can map your voice across the ten sung Russian vowels.</div>
+              <div class="plea-row"><span class="field" style="width:90px;margin:0">Voice 1</span><span class="btn primary">Start</span></div>
+              <div class="station" style="border-top:1px solid #e3ddcf"><div class="st-label">Notation <span>⌄</span></div></div>
+            </div>
+            <div class="tabbar">
+              <div class="tab on-t" id="t-tab-t" onclick="todayShow('t')">TRANSCRIPTION</div>
+              <div class="tab" id="t-tab-f" onclick="todayShow('f')">FIT</div>
+              <div class="tab">LEARN</div><div class="tab">GUIDE</div>
+            </div>
+          </div>
+          <div class="deskside">
+            <div class="minipaper">
+              <div class="mp-brand">[ Ilya ]</div>
+              <h3 id="t-paper-title">Aria or song title</h3>
+              <div class="mp-sub" id="t-paper-sub">composer, opus, and poet information</div>
+              <div id="t-paper-body">
+                <div class="stackrow">
+                  <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                  <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you (pl.)</span></span>
+                  <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+                  <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+                  <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still, yet</span></span>
+                </div>
+                <div class="stackrow">
+                  <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+                  <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can, be able to</span></span>
+                </div>
+              </div>
+              <div id="t-paper-fit" class="mp-empty hidden">Calibrate your voice to begin.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bench-cap"><b>What the click does today:</b> seven stations are torn down and
+      seven different ones erected. Print moves. The song list disappears while the song remains.
+      The filled action stays sage under a lavender flag. Each of these is a real observation
+      from tonight's walk, not a caricature.</div>
+    </div>
+
+    <!-- ============ BENCH: STUDIO ============ -->
+    <div class="bench">
+      <div class="bench-name">Studio <span class="tag tag-ruled">E.44 ruling, applied</span></div>
+      <div class="frame studio">
+        <div class="appbar appbar-s">
+          <span class="brand">[<em>Ilya</em>]<small> 2026A</small></span>
+          <span class="lang"><span>English</span><span>Français</span></span>
+        </div>
+        <div class="deskhead">
+          <span class="pair">
+            <button id="s-pair-t" class="on" onclick="studioShow('t')">Transcription</button>
+            <button id="s-pair-s" onclick="studioShow('s')">Marked score</button>
+          </span>
+          <span class="readlinks"><a href="#">Learn</a><a href="#">Guide</a></span>
+        </div>
+        <div class="split" style="min-height:392px">
+          <div class="drawer">
+            <!-- pinned top anchor -->
+            <div class="anchor-top">
+              <div class="station" style="border-bottom:0"><div class="st-label">Piece</div>
+                <div class="field">Aria or song title · Composer</div>
+              </div>
+              <div class="station" style="border-bottom:0;padding-top:0"><div class="st-label">Notation <span>⌄</span></div></div>
+            </div>
+            <!-- the scroll between -->
+            <div class="scrollzone">
+              <div class="station"><div class="st-label">Source</div>
+                <div class="field area" style="height:40px">Я вас любил: любовь ещё, быть может,…</div>
+                <div class="dz" style="padding:8px"><b>Drop a score here</b> or click to browse</div>
+                <div class="btnrow"><span class="btn primary">Transcribe</span></div>
+              </div>
+              <div class="station"><div class="st-label">Analysis</div>
+                <div style="font-size:10px;color:var(--ink-faint)">13 words in 14 ms · select a word to inspect it</div>
+              </div>
+              <div class="station"><div class="st-label">Output</div>
+                <div class="btnrow"><span class="btn">Print</span><span class="btn">Export</span><span class="btn">Import</span></div>
+              </div>
+              <div class="station"><div class="st-label">Songs</div>
+                <div class="songrow"><span class="row">Я вас любил</span><a href="#">Rename</a></div>
+              </div>
+              <div class="scroll-hint"></div>
+            </div>
+            <!-- pinned bottom anchor -->
+            <div class="anchor-bot">
+              <div class="voice-line"><span class="voice-dot"></span>
+                <span style="flex:1">Voice: <b>not yet calibrated</b></span>
+                <span class="btn primary lav" style="font-size:10px">Calibrate</span>
+              </div>
+            </div>
+          </div>
+          <div class="deskside">
+            <div class="minipaper">
+              <div class="mp-brand">[ Ilya ]</div>
+              <h3>Aria or song title</h3>
+              <div class="mp-sub" id="s-paper-sub">composer, opus, and poet information</div>
+              <div id="s-paper-body">
+                <div class="stackrow">
+                  <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                  <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you (pl.)</span></span>
+                  <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+                  <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+                  <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still, yet</span></span>
+                </div>
+                <div class="stackrow">
+                  <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+                  <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can, be able to</span></span>
+                </div>
+              </div>
+              <div id="s-paper-score" class="mp-empty hidden" style="margin-top:80px">
+                The marked score renders here.<br>
+                <span style="font-size:10px">Same drawer. Same hands. Different paper.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bench-cap"><b>What the click does under Studio:</b> the paper changes; nothing
+      else does. Piece and NOTATION are pinned top, the voice is pinned bottom with its lavender
+      kept to that one line, and Source, Analysis, Output, and Songs scroll between, in the same
+      order forever. Calibration leaves the scroll and becomes the app's one takeover, reached
+      from the voice anchor.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXHIBIT 2 : PORTRAIT ================= -->
+<section style="background:#e9e3d6">
+  <div class="sec-label">Exhibit 2</div>
+  <div class="sec-title">Portrait, three treatments at phone width</div>
+  <div class="sec-note">The arithmetic that governs all three: a letter page fitted to a 390&nbsp;px
+  portrait screen renders 12&nbsp;pt text at roughly 4.5&nbsp;pt. A fitted page is legible as a
+  <b>shape</b>, not as text. Each treatment answers that fact differently. Rotation remains the
+  mode switch in all three; none of these prints; print renders the paper.</div>
+
+  <div class="phones">
+
+    <!-- A: fitted page -->
+    <div class="phone-wrap">
+      <div class="p-name">A · The fitted page</div>
+      <div class="phone">
+        <div class="p-appbar"><span class="brand">[<em>Ilya</em>]</span>
+          <span class="lang"><span>EN</span></span></div>
+        <div class="p-body">
+          <div class="fitpage">
+            <div class="mp-brand">[ Ilya ]</div>
+            <h3>Aria or song title</h3>
+            <div class="mp-sub">composer, opus, and poet information</div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+              <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you</span></span>
+              <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+              <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still</span></span>
+              <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+              <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈvdu ʃɨ</span><br><span class="cyr">душе</span><br><span class="gloss">spirit</span></span>
+              <span class="stack"><span class="ipa">ma ˈjej</span><br><span class="cyr">моей</span><br><span class="gloss">my</span></span>
+              <span class="stack"><span class="ipa">u ˈgas ɫa</span><br><span class="cyr">угасла</span><br><span class="gloss">to go out</span></span>
+            </div>
+          </div>
+          <div class="rotate-hint"><span class="glyph">⟳</span>Rotate to read · pinch to zoom</div>
+        </div>
+        <div class="p-tabbar">
+          <div class="tab on-t">TRANSCR.</div><div class="tab">FIT</div>
+          <div class="tab">LEARN</div><div class="tab">GUIDE</div>
+        </div>
+      </div>
+      <div class="p-cap"><b>Your proposal.</b> The true page, whole and still. Honest to print,
+      calm, orienting. Reading costs a rotation or a pinch, every time. The interstitial dies:
+      this screen <i>is</i> the answer to a portrait visit.</div>
+    </div>
+
+    <!-- B: dressed scroll -->
+    <div class="phone-wrap">
+      <div class="p-name">B · The scroll, dressed as a page</div>
+      <div class="phone">
+        <div class="p-appbar"><span class="brand">[<em>Ilya</em>]</span>
+          <span class="lang"><span>EN</span></span></div>
+        <div class="p-body">
+          <div class="sheet">
+            <div class="mp-brand">[ Ilya ]</div>
+            <h3 style="font-size:14px">Aria or song title</h3>
+            <div class="mp-sub" style="font-size:5.5px">composer, opus, and poet information</div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+              <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you (pl.)</span></span>
+              <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+              <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still, yet</span></span>
+              <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can, be able to</span></span>
+              <span class="stack"><span class="ipa">ˈvdu ʃɨ</span><br><span class="cyr">душе</span><br><span class="gloss">spirit</span></span>
+            </div>
+            <div class="colophon">FREE AND OPEN SOURCE · ILYA 2026A OPERATIONALIZES CRAIG GRAYSON'S
+            RUSSIAN LYRIC DICTION (2012) · MADE WITH LOVE IN CANADA · DANNMITTON.COM</div>
+          </div>
+        </div>
+        <div class="drawerpull"><span class="chev">⌃</span>DRAWER</div>
+        <div class="p-tabbar">
+          <div class="tab on-t">TRANSCR.</div><div class="tab">FIT</div>
+          <div class="tab">LEARN</div><div class="tab">GUIDE</div>
+        </div>
+      </div>
+      <div class="p-cap"><b>The repair, not the rethink.</b> Readable at arm's length. The card
+      gains margins and a header block, the attribution is demoted to a colophon at the true end,
+      the void is closed, and the drawer pull is labelled. Still a second representation of the
+      object, which is your standing objection to it.</div>
+    </div>
+
+    <!-- C: layered -->
+    <div class="phone-wrap">
+      <div class="p-name">C · Both, layered <span style="letter-spacing:0;text-transform:none">(tap it)</span></div>
+      <div class="phone">
+        <div class="p-appbar"><span class="brand">[<em>Ilya</em>]</span>
+          <span class="lang"><span>EN</span></span></div>
+        <div class="p-body" id="c-body">
+          <!-- arrival: fitted page -->
+          <div id="c-page">
+            <div class="fitpage" style="margin-top:20px">
+              <div class="mp-brand">[ Ilya ]</div>
+              <h3>Aria or song title</h3>
+              <div class="mp-sub">composer, opus, and poet information</div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still</span></span>
+                <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+              </div>
+            </div>
+            <div class="enterbar" onclick="cRead(true)">Read this page ›</div>
+          </div>
+          <!-- reading layer -->
+          <div id="c-scroll" class="hidden">
+            <div class="backbar" onclick="cRead(false)">‹ The page</div>
+            <div class="sheet">
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you (pl.)</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+                <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still, yet</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-tabbar">
+          <div class="tab on-t">TRANSCR.</div><div class="tab">FIT</div>
+          <div class="tab">LEARN</div><div class="tab">GUIDE</div>
+        </div>
+      </div>
+      <div class="p-cap"><b>Arrival, then reading.</b> The fitted page greets and orients; one tap
+      enters the readable scroll; one tap returns. Honest and legible, at the cost of a fourth
+      level of disclosure and one more concept for the singer to hold.</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <p><b>Principles applied in every exhibit</b> (from the ratified slate):</p>
+    <p>· Hue names place, ink names state: lavender appears in Studio only on the voice line and
+       its takeover; selection is carried by the ink border of the boxed pair.</p>
+    <p>· No orphan controls: the calibration plea is gone from the scroll; every control sits in a
+       labelled station.</p>
+    <p>· Station order invariant across documents; anchors never scroll away.</p>
+    <p>· Three radii only: square paper, small-radius controls, full-round toggle and pill.</p>
+    <p>· One duration: every transition here is 180 ms ease-out, opacity and transform only; the
+       paper itself never animates, it is replaced.</p>
+  </div>
+</section>
+
+<footer>
+  <b>Instrument and stand-ins.</b> Sage #8B9A7D, the two papers, and the lavender desk hex are
+  documented values; the lavender, rose, and cobalt accents and both desk tints are stand-ins read
+  by eye from tonight's walk of deploy ilya-b0gn6a3ru and must be re-verified against app.css
+  before any build. Typefaces are stand-ins (Sorts Mill Goudy / Palatino stack for the paper;
+  system sans for the instrument); the tree's font-family declarations were not read this session.
+  IPA is as walked, approximate. The Studio bench draws the E.44 Fable ruling (§PERSPECTIVE and
+  §PLAN S1 to S4) and decides nothing that ruling did not; the portrait bench decides nothing at
+  all, it is the exhibit for a ruling Dann has not yet made. English only; French strings are not
+  designed here. Mockup by Fable, 2026-08-18.
+</footer>
+
+<script>
+  function todayShow(which){
+    var t = which==='t';
+    document.getElementById('t-drawer-t').classList.toggle('hidden', !t);
+    document.getElementById('t-drawer-f').classList.toggle('hidden', t);
+    document.getElementById('t-paper-body').classList.toggle('hidden', !t);
+    document.getElementById('t-paper-fit').classList.toggle('hidden', t);
+    document.getElementById('t-appbar').className = 'appbar ' + (t?'appbar-t':'appbar-f');
+    document.getElementById('t-tab-t').className = 'tab' + (t?' on-t':'');
+    document.getElementById('t-tab-f').className = 'tab' + (t?'':' on-f');
+    document.getElementById('t-paper-sub').textContent =
+      t ? 'composer, opus, and poet information'
+        : 'formant profile: a map of your voice’s resonances';
+  }
+  function studioShow(which){
+    var t = which==='t';
+    document.getElementById('s-pair-t').className = t?'on':'';
+    document.getElementById('s-pair-s').className = t?'':'on';
+    document.getElementById('s-paper-body').classList.toggle('hidden', !t);
+    document.getElementById('s-paper-score').classList.toggle('hidden', t);
+  }
+  function cRead(reading){
+    document.getElementById('c-page').classList.toggle('hidden', reading);
+    document.getElementById('c-scroll').classList.toggle('hidden', !reading);
+  }
+</script>
+</body>
+</html>

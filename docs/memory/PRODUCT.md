@@ -14,6 +14,12 @@ Open this before forming any opinion about what Ilya should do or look like.
 - Desktop keeps WYSIWYG. Portrait mobile does not. **Rotating is the mode switch on
   both.**
 - **The portrait scroll is never printed. Print renders the paper.**
+- **Portrait treatment C, ruled 2026-08-18.** Portrait's arrival view is the
+  fitted true page (whole, shadowed, owning its header block and colophon; the
+  attribution lives in that colophon). One tap enters a **reading aid** that
+  wears no paper dress and is labelled as an aid; one tap returns. The
+  "designed for desktop" interstitial is retired. Rotation stays the mode
+  switch. Record: `docs/sessions/fable-gui-session-record_2026-08-18.md`.
 - **DRAWER MANIPULATES. PAGE DISPLAYS AND PRINTS.**
 - **THE NOTES NEVER MOVE; THE SYLLABLES SLIDE ALONG THEM.** Ruled by Dann,
   2026-08-13, adopting Finale's grammar. The engraving is the composer's and

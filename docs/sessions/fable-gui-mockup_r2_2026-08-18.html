@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ilya GUI comparison r2 — 2026-08-18</title>
+<style>
+  :root{
+    --sage:#8B9A7D; --sage-deep:#6f7f62;
+    --lavender:#9B8AA6;
+    --rose:#B08585; --rose-deep:#8f6a6a;
+    --cobalt:#5B739B; --cobalt-deep:#47597a;
+    --paper-cream:#F0EBE0; --paper-light:#F5F1E8;
+    --desk:#6E6A60; --ink:#2E2B26; --ink-soft:#5a564e; --ink-faint:#8a857a;
+    --line:#c9c2b4;
+    --r-s:5px; --r-f:999px; --dur:180ms;
+    --serif:"Sorts Mill Goudy","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#EFEAE0;color:var(--ink);font-family:var(--serif);line-height:1.45}
+  .masthead{background:var(--ink);color:#EFEAE0;padding:26px 34px}
+  .masthead h1{font-weight:400;font-size:26px}
+  .masthead h1 em{color:#cbc4b2}
+  .masthead p{font-family:var(--sans);font-size:12.5px;color:#b9b3a4;margin-top:6px;max-width:900px}
+  section{padding:38px 34px 30px}
+  .sec-label{font-family:var(--sans);font-size:11px;letter-spacing:.22em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:4px}
+  .sec-title{font-size:22px;margin-bottom:8px}
+  .sec-note{font-family:var(--sans);font-size:13px;color:var(--ink-soft);max-width:860px;margin-bottom:24px}
+  .cap{font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);margin-top:10px;max-width:430px}
+  .cap b{color:var(--ink)}
+
+  /* ---------- phone ---------- */
+  .row{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start}
+  .phone{width:262px;height:560px;border:7px solid #2b2925;border-radius:26px;overflow:hidden;
+         background:var(--desk);position:relative;display:flex;flex-direction:column;flex:0 0 auto}
+  .p-appbar{height:32px;background:var(--sage);color:#f2eee6;display:flex;align-items:center;
+            justify-content:space-between;padding:0 10px;font-size:12px;flex:0 0 auto}
+  .p-appbar .lang{font-family:var(--sans);font-size:8px}
+  .p-appbar .lang span{padding:2px 8px;border-radius:var(--r-f);background:rgba(255,255,255,.28)}
+  .p-body{flex:1;overflow-y:auto;position:relative;display:flex;flex-direction:column}
+  .p-deskhead{display:flex;align-items:center;justify-content:space-between;
+              padding:9px 10px 0;flex:0 0 auto}
+  .p-pair{display:inline-flex;border:1.5px solid #f0ede4;border-radius:var(--r-s);overflow:hidden}
+  .p-pair span{font-family:var(--sans);font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;
+               padding:4px 8px;color:#f0ede4}
+  .p-pair span.on{background:#f0ede4;color:var(--ink)}
+  .p-links{font-family:var(--sans);font-size:6.5px;letter-spacing:.12em;text-transform:uppercase}
+  .p-links a{color:#f0ede4;text-decoration:none;border-bottom:1px solid rgba(240,237,228,.55);margin-left:8px}
+
+  /* arrival: the object */
+  .fitpage{background:var(--paper-cream);width:186px;margin:22px auto 8px;height:250px;
+           box-shadow:0 3px 12px rgba(0,0,0,.35);padding:13px 12px;overflow:hidden;flex:0 0 auto}
+  .mp-brand{font-family:var(--serif);color:var(--sage-deep);font-size:8px}
+  .fitpage h3{font-family:var(--serif);font-weight:400;font-style:italic;font-size:10.5px;margin:1px 0}
+  .mp-sub{font-family:var(--sans);font-size:4.5px;letter-spacing:.16em;text-transform:uppercase;
+          color:var(--ink-faint);border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:8px}
+  .stackrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .stack{text-align:left}
+  .fitpage .ipa{font-size:4.5px}.fitpage .cyr{font-size:6.5px}.fitpage .gloss{font-size:4px}
+  .ipa{font-family:var(--sans);color:var(--ink-soft)}
+  .cyr{font-family:var(--serif);font-weight:700}
+  .gloss{font-family:var(--serif);font-style:italic;color:var(--ink-faint)}
+  .fit-colophon{border-top:1px solid var(--line);margin-top:10px;padding-top:4px;
+                font-family:var(--sans);font-size:3.2px;letter-spacing:.06em;color:var(--ink-faint);line-height:1.7}
+  .obj-caption{color:#e8e4d8;font-family:var(--sans);font-size:9px;text-align:center;letter-spacing:.06em}
+  .enterbar{margin-top:auto;background:rgba(46,43,38,.88);color:#efeade;font-family:var(--sans);
+            font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:center;
+            padding:10px 0;cursor:pointer;flex:0 0 auto}
+
+  /* reading layer: the aid, deliberately not a paper */
+  .aid{background:var(--paper-light);flex:1;display:flex;flex-direction:column;min-height:0}
+  .aid-top{background:var(--ink);color:#efeade;font-family:var(--sans);font-size:10px;
+           letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:10px 0;cursor:pointer;flex:0 0 auto}
+  .aid-label{font-family:var(--sans);font-size:7px;letter-spacing:.22em;text-transform:uppercase;
+             color:var(--ink-faint);text-align:center;padding:9px 0 2px}
+  .aid-scroll{flex:1;overflow-y:auto;padding:8px 18px 18px;min-height:0}
+  .aid .stackrow{gap:13px;margin-bottom:15px}
+  .aid .ipa{font-size:9px}.aid .cyr{font-size:12.5px}.aid .gloss{font-size:8px}
+  .aid-line-rule{border:0;border-top:1px solid #e2dccc;margin:2px 0 14px}
+  .aid-end{font-family:var(--sans);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--ink-faint);text-align:center;padding:6px 0 2px}
+  .drawerpull{background:#faf7f0;border-top:1px solid #d8d2c2;text-align:center;
+              font-family:var(--sans);font-size:8px;letter-spacing:.2em;color:var(--ink-soft);
+              padding:6px 0 5px;flex:0 0 auto}
+  .drawerpull .chev{display:block;font-size:11px;line-height:.9}
+  .hidden{display:none}
+
+  /* ---------- reading rooms ---------- */
+  .room{width:430px;border:1px solid #b5af9f;box-shadow:0 2px 14px rgba(46,43,38,.15);
+        background:var(--paper-light);overflow:hidden;flex:0 0 auto}
+  .room-band{padding:34px 30px 30px;color:#fdfbf6}
+  .room-band .kicker{font-family:var(--sans);font-size:10px;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+  .room-band h2{font-family:var(--sans);font-weight:700;font-size:40px;line-height:1.04;
+                letter-spacing:-.01em;margin-top:10px}
+  .room-band .deck{font-family:var(--serif);font-style:italic;font-size:15px;margin-top:12px;opacity:.92;max-width:330px}
+  .band-rose{background:var(--rose)}
+  .band-cobalt{background:var(--cobalt)}
+  .room-body{padding:26px 30px 30px;max-width:430px}
+  .room-body p{font-size:14.5px;line-height:1.65;margin-bottom:14px;color:var(--ink)}
+  .room-body p b{font-family:var(--serif)}
+  .room-meta{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+             color:var(--ink-faint);margin-bottom:14px;display:flex;justify-content:space-between}
+  .room-next{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;
+             font-family:var(--sans);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between}
+  .room-next b{color:var(--ink)}
+
+  .legend{background:#e7e1d3;border:1px solid #cfc8b7;border-radius:var(--r-s);
+          padding:16px 20px;margin-top:34px;max-width:900px;font-family:var(--sans);font-size:12.5px;color:var(--ink-soft)}
+  .legend b{color:var(--ink)}
+  .legend p{margin:4px 0}
+  footer{padding:20px 34px 40px;font-family:var(--sans);font-size:11px;color:var(--ink-faint);max-width:900px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>[<em>Ilya</em>] GUI comparison, revision 2</h1>
+  <p>Ruled tonight: portrait treatment C. Exhibit 1 draws it at fidelity, with the reading layer
+  deliberately stripped of its paper costume, per the ruling's own logic. Exhibit 2: the chapter
+  openings for Learn and Guide, where oversized type and colour blocking belong. This is a mockup,
+  not application code.</p>
+</div>
+
+<!-- ========== EXHIBIT 1 : PORTRAIT C, AT FIDELITY ========== -->
+<section>
+  <div class="sec-label">Exhibit 1 · ruled by Dann 2026-08-18</div>
+  <div class="sec-title">Portrait C: the object, then the aid</div>
+  <div class="sec-note">Tap <b>Read</b> on the left phone and it becomes the right phone; tap
+  <b>The page</b> to return. The page keeps everything that belongs to the object: the header
+  block, the shadow, the colophon. The reading layer keeps none of it: no shadow, no page edges,
+  no [Ilya] block, a small AID label instead. Nothing here can be mistaken for the paper, which
+  answers your ruling that we not confuse our GUIs with the musico-textual object.
+  <br><br><b>And the tabs are gone, because you are right: they make no sense under Studio.</b>
+  Revision 1's phones carried today's four-tab bar, which contradicted the Studio ruling. Under
+  Studio there are three destinations, not four: the phone's bottom bar is deleted (56&nbsp;px
+  returned to the page), the boxed pair above the page chooses the <i>document</i> (transcription
+  or marked score), and Learn and Guide are the two set-apart reading links beside it.</div>
+
+  <div class="row">
+    <!-- static arrival -->
+    <div>
+      <div class="phone">
+        <div class="p-appbar"><span>[<em>Ilya</em>]</span><span class="lang"><span>EN</span></span></div>
+        <div class="p-deskhead">
+          <span class="p-pair"><span class="on">Transcription</span><span>Marked score</span></span>
+          <span class="p-links"><a href="#">Learn</a><a href="#">Guide</a></span>
+        </div>
+        <div class="p-body">
+          <div class="fitpage">
+            <div class="mp-brand">[ Ilya ]</div>
+            <h3>Aria or song title</h3>
+            <div class="mp-sub">composer, opus, and poet information</div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+              <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you</span></span>
+              <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+              <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still</span></span>
+              <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+              <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can</span></span>
+            </div>
+            <div class="stackrow">
+              <span class="stack"><span class="ipa">ˈvdu ʃɨ</span><br><span class="cyr">душе</span><br><span class="gloss">spirit</span></span>
+              <span class="stack"><span class="ipa">ma ˈjej</span><br><span class="cyr">моей</span><br><span class="gloss">my</span></span>
+              <span class="stack"><span class="ipa">u ˈgas ɫa</span><br><span class="cyr">угасла</span><br><span class="gloss">to go out</span></span>
+            </div>
+            <div class="fit-colophon">FREE AND OPEN SOURCE · ILYA 2026A OPERATIONALIZES CRAIG GRAYSON'S RUSSIAN LYRIC DICTION (2012) · MADE WITH LOVE IN CANADA</div>
+          </div>
+          <div class="obj-caption">The page · rotate for full size</div>
+          <div class="enterbar">Read ›</div>
+        </div>
+      </div>
+      <div class="cap"><b>Arrival: the object.</b> The true page, whole, shadowed, owning its
+      header and colophon. One labelled action. The interstitial is dead; this screen is what a
+      portrait visit means.</div>
+    </div>
+
+    <!-- interactive -->
+    <div>
+      <div class="phone">
+        <div class="p-appbar"><span>[<em>Ilya</em>]</span><span class="lang"><span>EN</span></span></div>
+        <div class="p-deskhead" id="cx-deskhead">
+          <span class="p-pair"><span class="on">Transcription</span><span>Marked score</span></span>
+          <span class="p-links"><a href="#">Learn</a><a href="#">Guide</a></span>
+        </div>
+        <div class="p-body" id="cx-body" style="overflow:hidden">
+          <!-- arrival state -->
+          <div id="cx-page" class="p-body" style="overflow:visible">
+            <div class="fitpage">
+              <div class="mp-brand">[ Ilya ]</div>
+              <h3>Aria or song title</h3>
+              <div class="mp-sub">composer, opus, and poet information</div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still</span></span>
+                <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+                <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can</span></span>
+              </div>
+              <div class="fit-colophon">FREE AND OPEN SOURCE · ILYA 2026A OPERATIONALIZES CRAIG GRAYSON'S RUSSIAN LYRIC DICTION (2012)</div>
+            </div>
+            <div class="obj-caption">The page · rotate for full size</div>
+            <div class="enterbar" onclick="cx(true)">Read ›</div>
+          </div>
+          <!-- reading aid state -->
+          <div id="cx-aid" class="aid hidden">
+            <div class="aid-top" onclick="cx(false)">‹ The page</div>
+            <div class="aid-label">Reading aid · not the page</div>
+            <div class="aid-scroll">
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ˈja</span><br><span class="cyr">Я</span><br><span class="gloss">I</span></span>
+                <span class="stack"><span class="ipa">ˈvas</span><br><span class="cyr">вас</span><br><span class="gloss">you (pl.)</span></span>
+                <span class="stack"><span class="ipa">lʲu ˈbʲiɫ</span><br><span class="cyr">любил:</span><br><span class="gloss">to love</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">lʲu ˈbofʲ</span><br><span class="cyr">любовь</span><br><span class="gloss">love</span></span>
+                <span class="stack"><span class="ipa">ji ˈʃʲʃʲo</span><br><span class="cyr">ещё,</span><br><span class="gloss">still, yet</span></span>
+                <span class="stack"><span class="ipa">ˈbɨtʲ</span><br><span class="cyr">быть</span><br><span class="gloss">to be</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">ˈmo ʒɨt</span><br><span class="cyr">может,</span><br><span class="gloss">can, be able to</span></span>
+              </div>
+              <hr class="aid-line-rule">
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">→</span><br><span class="cyr">В</span><br><span class="gloss">in / into</span></span>
+                <span class="stack"><span class="ipa">ˈvdu ʃɨ</span><br><span class="cyr">душе</span><br><span class="gloss">spirit</span></span>
+                <span class="stack"><span class="ipa">ma ˈjej</span><br><span class="cyr">моей</span><br><span class="gloss">my</span></span>
+              </div>
+              <div class="stackrow">
+                <span class="stack"><span class="ipa">u ˈgas ɫa</span><br><span class="cyr">угасла</span><br><span class="gloss">to go out</span></span>
+                <span class="stack"><span class="ipa">→</span><br><span class="cyr">не</span><br><span class="gloss">not</span></span>
+                <span class="stack"><span class="ipa">ɲɪ saf ˈsʲɛm</span><br><span class="cyr">совсем;</span><br><span class="gloss">quite, entirely</span></span>
+              </div>
+              <div class="aid-end">· end of verse 1 ·</div>
+            </div>
+            <div class="drawerpull"><span class="chev">⌃</span>DRAWER</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><b>Tap Read, then tap The page (this one is live).</b> The aid keeps
+      readable stacks, line rules where the poem breaks, an honest end mark, and the labelled
+      drawer pull. It carries no page edges, no shadow, no header block, no colophon: the AID
+      label says plainly what it is. Nothing on it prints.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EXHIBIT 2 : THE READING ROOMS ========== -->
+<section style="background:#e9e3d6">
+  <div class="sec-label">Exhibit 2</div>
+  <div class="sec-title">Chapter openings: where the oversized type lives</div>
+  <div class="sec-note">Learn and Guide are reference rooms, so they can afford arrival moments
+  the working drawer cannot. One colour-blocked band per chapter, oversized sans title, then the
+  page settles into the serif reading measure you already have. The band is the room's hue at
+  full strength; the reading text below never changes. Compare against today's chapter starts,
+  which begin mid-measure with a medium heading.</div>
+
+  <div class="row">
+    <!-- Learn -->
+    <div>
+      <div class="room">
+        <div class="room-band band-rose">
+          <div class="kicker">Learn · Chapter 3 of 8</div>
+          <h2>Stressed<br>Vowels</h2>
+          <div class="deck">Five vowels do most of the singing. This chapter is where Russian starts to sound Russian.</div>
+        </div>
+        <div class="room-body">
+          <div class="room-meta"><span>Grayson §§4.1–4.9</span><span>12 min</span></div>
+          <p>Under stress, Russian vowels are at their most stable and most singable. A stressed
+          vowel holds its full colour for the length of the note, which is why Grayson builds the
+          entire system outward from the stressed syllable.</p>
+          <p>Consider <b>любовь</b>: the stress falls on the second syllable, and everything
+          about the first is decided by that fact…</p>
+          <div class="room-next"><span>‹ 2 · Stress</span><b>4 · Vowel Reduction ›</b></div>
+        </div>
+      </div>
+      <div class="cap"><b>Learn opens a chapter.</b> Rose at full strength is spent only here, on
+      arrival; the reading measure below is untouched. The meta line says where you are in
+      Grayson and what the chapter costs in minutes.</div>
+    </div>
+
+    <!-- Guide -->
+    <div>
+      <div class="room">
+        <div class="room-band band-cobalt">
+          <div class="kicker">Guide</div>
+          <h2>How Ilya<br>Works</h2>
+          <div class="deck">What happens when you paste a poem, and why you can check every symbol it prints.</div>
+        </div>
+        <div class="room-body">
+          <div class="room-meta"><span>3 sections</span><span>7 min</span></div>
+          <p><b>Ilya has twin purposes: to enable, and to educate.</b> It equips singers with
+          verifiable, accurate IPA transcriptions of sung Russian texts, following a method
+          devised by Craig Grayson.</p>
+          <p>Ilya is rule-based and deterministic, not machine learning. When you see an IPA
+          symbol in Ilya, it reflects Grayson's notation; when you see the same symbol in his
+          dissertation, it means the same thing. That is the promise.</p>
+          <div class="room-next"><span></span><b>A Walkthrough ›</b></div>
+        </div>
+      </div>
+      <div class="cap"><b>Guide opens the same way in cobalt.</b> Same anatomy, different room:
+      one band grammar serves both, so the singer learns it once.</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <p><b>Principles applied:</b></p>
+    <p>· The object owns its dress: header block, shadow, and colophon appear only on the page,
+       never on the reading aid. The aid is labelled as an aid.</p>
+    <p>· Oversized type and full-strength colour are spent on arrival moments only: chapter bands
+       and the portrait page greeting. The working drawer and the reading measure never inflate.</p>
+    <p>· Hue names place: rose is Learn's, cobalt is Guide's, at full strength on the band and
+       nowhere else on the page.</p>
+    <p>· Recognition over recall: the drawer pull is labelled, the aid says what it is, the end
+       of the verse says it ended.</p>
+  </div>
+</section>
+
+<footer>
+  <b>Instrument and stand-ins.</b> Same stand-in caveats as revision 1: lavender, rose, and
+  cobalt hexes and the desk tint were read by eye from the 2026-08-18 walk of deploy
+  ilya-b0gn6a3ru and must be re-verified against app.css before any build; typefaces are
+  stand-ins; IPA is as walked, approximate. Chapter copy in Exhibit 2 is drafted for the mockup:
+  the Learn paragraph paraphrases the room's subject and is NOT sourced prose; the Guide
+  paragraphs adapt sentences read on the deployed Guide page tonight. The reading-time figures
+  are invented placeholders. Portrait C was ruled by Dann 2026-08-18; the aid's stripped dress is
+  Fable's design consequence of that ruling and awaits his eyes. Mockup by Fable, 2026-08-18,
+  revision 2.
+</footer>
+
+<script>
+  function cx(reading){
+    document.getElementById('cx-page').classList.toggle('hidden', reading);
+    document.getElementById('cx-aid').classList.toggle('hidden', !reading);
+  }
+</script>
+</body>
+</html>
