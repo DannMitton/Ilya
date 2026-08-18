@@ -306,7 +306,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.report.staffFallback': { en: 'Ilya could not tell which staff carries the voice in %s systems, and read the top one.', fr: 'Ilya n’a pas pu déterminer quelle portée porte la voix dans %s systèmes, et a lu celle du haut.' },
 
 	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
-	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. A flat, straight photograph of the whole page reads best.', fr: 'Ilya n’a pas pu lire cette page. Une photographie bien à plat et droite de la page entière se lit le mieux.' },
+	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. Reading photographs is new and does not yet work on every page. If you have the score as a MusicXML, MNX, or Finale file, Ilya reads those directly.', fr: 'Ilya n’a pas pu lire cette page. La lecture de photographies est nouvelle et ne fonctionne pas encore sur toutes les pages. Si vous avez la partition sous forme de fichier MusicXML, MNX ou Finale, Ilya lit ces formats directement.' },
 	'upload.err.imageUndecodable': { en: 'This browser cannot open that picture. A JPEG or a PNG will work.', fr: 'Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera.' },
 	'upload.err.pdfUnreadable':    { en: 'Ilya could not open that PDF. If it is password protected, save an unlocked copy and try again.', fr: 'Ilya n’a pas pu ouvrir ce PDF. S’il est protégé par un mot de passe, enregistrez-en une copie déverrouillée et réessayez.' },
 

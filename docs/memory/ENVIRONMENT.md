@@ -636,9 +636,11 @@ array returns NaN twice in a row without raising, and `int(1.7 * s)` in
   The photograph gives 19:2973, 18:2626, 21:2216, 20:2162, 17:1213 — a smear
   across 17 to 22 with no dominant peak, against a hand measurement of 17.0.
   **Treat its value on a photograph as approximate.**
-- **`i18n.ts`'s `upload.err.pageReadFailed` asserts a cause the code has not
-  established** ("A flat, straight photograph of the whole page reads best").
-  It sent a desk chasing tilt for an hour. Dann's to rule.
+- ~~`i18n.ts`'s `upload.err.pageReadFailed` asserts a cause the code has not
+  established~~ **CORRECTED 2026-08-17.** It said "A flat, straight photograph of
+  the whole page reads best" and was printed for every reader failure,
+  including an unguarded NaN. It now names no cause. The lesson it taught is
+  kept below under THE COORDINATING DESK'S OWN INSTRUMENTS.
 
 ## VALIDATERECORD DROPPED THE SOURCE, AND HAD SINCE N.67 STEP 1
 

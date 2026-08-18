@@ -85,12 +85,19 @@ any of them count.
 > in the bundle.** It sits in `dependencies` now and a singer on a phone pays for
 > it on first load.
 >
-> **WHAT DANN OWES, and it is the only thing blocking:** `i18n.ts`'s
-> `upload.err.pageReadFailed` says *"A flat, straight photograph of the whole
-> page reads best"*, which **asserts a cause the code has not established** and
-> sent a desk chasing tilt for an hour. Whether that copy changes, and whether
-> Ilya should offer photograph import in the beta at all, is his ruling. **No
-> French may be written until he has seen it.**
+> **RULED 2026-08-17, Dann: PHOTOGRAPH IMPORT STAYS IN THE BETA**, and
+> `upload.err.pageReadFailed` no longer asserts a cause. English shown and
+> approved first, French shown and approved second, neither written before he
+> saw it. It now reads *"Ilya could not read this page. Reading photographs is
+> new and does not yet work on every page. If you have the score as a
+> MusicXML, MNX, or Finale file, Ilya reads those directly."* **WRITTEN, not
+> DONE:** nobody has uploaded a failing photograph on a real deploy and read it.
+>
+> **NOTHING NOW BLOCKS N.59.** What is still unproven is unchanged and is
+> listed above: step 3's brace rule has never fired on a braced page, no phone
+> photograph of a real page has ever been read, and the PDF's 79 notes have
+> never been crossed against the printed page. Which of those is next is not
+> yet ruled.
 
 ## THE TRACKER
 
@@ -337,9 +344,9 @@ LIBRARY backup rather than a SONG backup is.
   yes.** Registry facts checked first, as he required for `fake-indexeddb`:
   6.2.108, Apache-2.0, zero runtime dependencies, 20.4 million weekly downloads,
   last published 2026-07-28. Built, walked by me, not yet by him.
-- **THE PHOTOGRAPH COPY, and whether photographs belong in the beta at all.**
-  `upload.err.pageReadFailed` asserts a cause the code has not established.
-  Dann's ruling, and no French may be written before he sees it.
+- ~~THE PHOTOGRAPH COPY, and whether photographs belong in the beta~~ **RULED
+  2026-08-17, Dann: photographs stay in the beta, and the copy was corrected in
+  the same session. Both languages approved before either was written.**
 - ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
   shipped and was walked.
 - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
