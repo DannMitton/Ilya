@@ -11,10 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`58d7888`**, raised from `383f368` at the close of 2026-08-18 because
-every measurement added that session was taken against `58d7888` and a floor
-that predates its own content is the stale number this paragraph exists to
-prevent. A floor cannot go stale, because further commits only
+before **`cb7a15a`**, raised from `58d7888` at the close of the second session of
+2026-08-18, because N.67 step 4b shipped in `cb7a15a` and a floor that predates
+its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
 
@@ -37,12 +36,60 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.67 step 4b, the library itself.** N.67 is FIRST by Dann's ruling of
-> 2026-08-16, and its remainder waited behind N.58 and N.59. **N.59 tier 2 was
-> answered and closed 2026-08-18**, so half of that wait is over. **N.58's real
-> scope is still NOT ESTABLISHED**; a scoping brief was delivered 2026-08-14 and
-> there is no record of it being run. **If Dann rules N.58 ahead of 4b, this
-> block is wrong, and he says so in one word.**
+> **N.67 step 5's remainder: export-all, multi-song import, and the collision
+> rules.** Step 4b closed 2026-08-18 and was walked by Dann on the deploy, so
+> songs are plural and everything step 5 was waiting on now exists. Fable's
+> build order puts 5 next and then 6, the sweep. **N.58's real scope is still
+> NOT ESTABLISHED**; a scoping brief was delivered 2026-08-14 and there is no
+> record of it being run. **If Dann rules N.58, N.72's iPhone walk, or step 6
+> ahead of step 5, this block is wrong, and he says so in one word.**
+
+---
+
+## N.67 STEP 4b IS DONE, 2026-08-18, `cb7a15a`, WALKED BY DANN ON THE DEPLOY
+
+**Songs are plural.** The list, New song, rename, delete with confirmation,
+switching, auto-naming, and the neutral-state fingerprint prompt all ship and
+were all observed by Dann on `ilya-hg5dr7kl3`, ten steps, every one of them
+matching a stated expectation or refuting one on the record.
+
+Memo: `docs/sessions/n67-4b-library-door_r1_2026-08-18.md`.
+Brief: `docs/sessions/brief-to-code-n67-4b_r1_2026-08-18.md`.
+
+**What Dann saw.** A song auto-named `Я тебя любил` from its poem alone; the
+control fixture uploaded to `5 / 5`; `бил` clicked onto note one to make `4 / 5`;
+New song emptying everything and the list growing to two; **the switch back
+restoring the score, the metadata, and `4 / 5` with `бил` still on note one**;
+a rename surviving a reload; the recognition prompt naming the song by the name
+**he** gave it rather than the auto-name; and a delete that took the song and
+stayed gone across a reload.
+
+**The vault was already plural and nobody had noticed.** `LIBRARY_STORES`
+(`driver.ts:290-301`) has carried `by-updated` and `by-fingerprint` since step 1,
+and `driver.idb.test.ts:92-114` already proved two songs coexist. **Every
+one-song assumption lived in the application layer**, which is why 4b was
+smaller than its description.
+
+**The switch mechanism was decided by measurement, not by argument.** Code
+expected `.musx` to be too slow and to need `location.reload()`. It measured the
+opposite: **a warm `.musx` switch is 343 ms against a 448 ms reload**, and the
+reload additionally throws away the tab, the drawer, the scroll position, and the
+loaded dictionary. **`close()` then `open()` with a reactive document slot.**
+Whole-gesture, two real `.musx` songs, press to drawn stave including the 175 ms
+tab animation: **852 ms**. All Chromium; **Safari is NOT ESTABLISHED**. This
+closes design §9.3 for Chromium only.
+
+**`+page.svelte` grew 2,578 to 2,857 lines, 94,571 to 105,544 bytes**, far past
+the brief's thirty-line allowance and past the design's own 74 KB warning. The
+reason is stated in the memo §3 and is partly real: the page owns the document
+slot, the dialog, and the arrival path. **This file is now a standing debt and
+the next thing that touches it should shrink it.**
+
+**Four defects the gates could not reach, all found by Code driving a browser:**
+an English placeholder under a French UI, a song row that read as a text input,
+a New song button whose classes did not apply because Svelte scopes styles per
+component, and a dialog focus line firing before its buttons existed, which
+would have put focus on the destructive answer.
 
 ---
 
@@ -153,7 +200,7 @@ by being finished.** Its tier 2 is parked with a measured reason; see above.
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, and 4a CLOSED**, all observed in a real browser, and 3 and 4a walked by Dann himself. **The emergency is over: nothing is being destroyed any more.** What remains WAITS behind N.58 and N.59 by Dann's ruling: 4b the library itself, 5 the binder, 6 the sweep. **N.59 CLEARED 2026-08-18: tier 2 was answered NO and parked, so half the wait is over. N.58 is still unscoped, and whether Dann ran its scoping brief is unknown.** **4b is THE ONE THING for the next session unless Dann rules N.58 ahead of it.** See the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, 4a, 4b, and step 5's single-song half CLOSED**, all observed in a real browser, and 3, 4a, 5's half, and 4b walked by Dann himself. **The emergency is over and songs are plural.** **4b CLOSED 2026-08-18 `cb7a15a`, walked on the deploy: list, switch, New song, rename, delete, auto-naming, and the neutral-state fingerprint prompt.** What remains: **step 5's remainder** (export-all, multi-song import, the collision rules) and **step 6** the sweep. See the section above and the four documents below |
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
@@ -296,9 +343,10 @@ clean tab reloads, a dirty tab keeps the singer's work and shows one notice.
   term belongs in prose a singer reads rather than in a button they press.
   §8's framing now lives in the GUIDE, in both languages, naming the threat it
   actually argues: a lost phone or a cleared browser.
-- **4b, WAITS behind N.58 and N.59: the library itself.** The list, rename,
-  delete, and switching between saved songs. That is the feature, it is what
-  makes songs plural, and it is not what ended the chimera.
+- **4b, CLOSED `cb7a15a` 2026-08-18, WALKED BY DANN.** The list, rename, delete,
+  switching between saved songs, New song, auto-naming, and the neutral-state
+  fingerprint prompt. That is the feature, it is what makes songs plural, and it
+  is not what ended the chimera. Full account in the section above.
 
 **Two things the walk found that the harness had not.** The dialog rendered at
 the viewport's top-left, because `app.css:88-94` resets `margin: 0` on every
@@ -307,11 +355,22 @@ what centres a modal. Measured before the fix at (0, 0) and after it at (444,
 357) in a 1400 by 900 viewport. **My checks had read the dialog's state and text
 and never once looked at where it landed**, which is tether five exactly. The
 second is now RULED AND FIXED: the destructive button sat rightmost, where macOS
-puts the safe default, and both carried the same weight. **Keep is now visually
-rightmost while staying FIRST in the DOM**, so the mouse and the Tab key both
-reach the safe answer, which one ordering alone cannot give you; Replace is
-borderless and unfilled, findable rather than inviting. Measured: Keep at x=825,
-Replace at x=698, first Tab lands on Keep.
+puts the safe default, and both carried the same weight. Replace is borderless
+and unfilled, findable rather than inviting.
+
+**CORRECTED 2026-08-18 AGAINST THE TREE, WHICH WINS.** This paragraph used to
+say "Keep is now visually rightmost while staying FIRST in the DOM," and cited
+Keep at x=825 against Replace at x=698. **That is not what ships, and the error
+propagated into the N.67 4b brief before anyone checked it.** The shipped answer
+is the opposite and is better: **DOM order IS the visual order**, so Keep is
+**LAST in the DOM and rightmost**, focused programmatically on open, and a screen
+reader and a sighted singer are told the same thing. `row-reverse` is gone. Read
+in the file this session: `+page.svelte:1646-1649`, `:753-765`, `:2172-2174`.
+**A stale comment at `+page.svelte:1612-1613` still carries the old wording and
+contradicts `:1646-1649` in the same file. Repair it the next time that file is
+touched.** Dann confirmed the shipped geometry on the deploy 2026-08-18: the
+delete dialog is centred, the destructive answer is leftmost and unfilled, and
+Keep this song is rightmost and carries the focus ring.
 
 **The trigger, decided by Claude on Dann's instruction: the fingerprint differs
 AND at least one placement would be orphaned.** A corrected note keeps every
@@ -405,6 +464,34 @@ LIBRARY backup rather than a SONG backup is.
   keeps the `aria-label` exposed where a bare div would have dropped it.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
+
+### New from N.67 step 4b, 2026-08-18. Four, all small, none blocking
+
+- **Boot does not transcribe; a switch does.** Switching songs runs the pipeline
+  and draws the transcription; a reload leaves the poem sitting there until the
+  singer presses Transcribe. Code named the asymmetry in its memo §6.4 and asked
+  which way to close it. **Observed on the deploy 2026-08-18 and confirmed:** the
+  reload after the delete showed the poem present, the dictionary loaded, and
+  nothing drawn. **Recorded honestly: the coordinator claimed the opposite from a
+  pair of screenshots twenty seconds apart, which could not distinguish Ilya
+  transcribing from Dann pressing the button, and had to withdraw it.**
+- **A song named from its poem never picks up a better name from the score.**
+  Memo decision 6.1: the name is written the first time there is material to
+  build one from, and is the singer's from then on. Observed: a song auto-named
+  `Я тебя любил` from the poem kept that name after a score arrived carrying
+  `Я вас любил` and a composer. The rule cannot tell "Ilya guessed" from "Dann
+  chose." Rename fixes it in one gesture, so this is a preference, not a defect.
+- **The door is on the Transcription tab only.** The Fit tab has the twinned
+  binder row by Dann's ruling of 2026-08-16 but no song list, so switching songs
+  while working on a score means changing tabs. Code says twinning it is six
+  lines and did not do it because the brief named one place.
+- **Pressing Delete on a song you are not in appears to switch you into it before
+  it asks.** Observed on the deploy: the open song was `Pushkin, control fixture`
+  and the dialog opened over an emptied drawer with `Untitled` marked open.
+  **NOT ESTABLISHED whether the Delete press caused it or Dann clicked the row
+  first; he was asked and the walk moved on.** If Delete does move the singer,
+  choosing Keep leaves them somewhere they did not ask to be. Nothing is lost,
+  because saving is continuous.
 
 - **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
   (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
@@ -528,6 +615,11 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-18 | **`cb7a15a`: N.67 STEP 4b SHIPPED AND WALKED BY DANN. SONGS ARE PLURAL.** `songs.ts` (227 lines, 35 tests), `SongList.svelte` (265), a `PluralStore` hung off `StorageDriver` as an optional property so the legacy driver can decline it, `name` made `$state` so a rename reaches the vault, and `backfillName` at boot because `SongRecord.name` had existed since step 0 with **nothing ever writing it**. Gate 4's baseline moved 555 to 590 with Dann's permission. Ten walk steps on the deploy, all matching a stated expectation or refuting one on the record. |
+| 2026-08-18 | **THE SWITCH MECHANISM WAS SETTLED BY MEASUREMENT AND THE PREDICTION WAS WRONG.** Code expected `.musx` to be too slow to switch in place and to need `location.reload()`. Measured: **warm `.musx` switch 343 ms against a 448 ms reload**, `.musicxml` 49 ms against 97, vault read 0.2 ms. The reload is both slower and loses the tab, the drawer, the scroll position, and the dictionary. **`close()` then `open()`.** Design §9.3 is closed for Chromium and **still open for WebKit**. |
+| 2026-08-18 | **THE VAULT HAD BEEN PLURAL SINCE STEP 1 AND NOBODY HAD LOOKED.** `by-updated` and `by-fingerprint` were defined at `driver.ts:290-301` and `driver.idb.test.ts:92-114` already proved two songs coexist and that a song is findable by fingerprint. **Every one-song assumption lived above the vault**, in `index.ts`, `document.svelte.ts`, and `+page.svelte`. An inventory read before the brief was written is what found it, and it made 4b smaller than its own description. |
+| 2026-08-18 | **A MEMO'S SUBSTANCE CAN BE RIGHT WHILE ITS CITATIONS ARE WRONG.** The 4b memo correctly reported that the shipped dialog puts the safe answer last in the DOM, and cited `+page.svelte:1381-1384` and `:1347` for it. Those lines are the tab-change handler and a metadata function. **The real citations are `:1646-1649`, `:753-765`, and `:2172-2174`, found only by opening the file.** The same check found that `STATE.md` itself had carried the false version, and that a stale comment at `:1612-1613` still does. |
+| 2026-08-18 | **`+page.svelte` 2,578 to 2,857 lines, 94,571 to 105,544 bytes.** Far past the brief's thirty-line allowance and past the design's own 74 KB warning. Recorded as a standing debt rather than argued away. |
 | 2026-08-16 | **E.58: N.59 step 8 built, and the NaN that crashed Dann's own photograph guarded.** `pdfjs-dist` 6.2.108 ruled in by Dann, pinned exactly, lazy: **up-front JS for a singer who never drops a PDF is 30,546 bytes gzipped**, and pdf.js's 612 KB sits entirely in chunks that load on demand. A true vector PDF reads end to end at s = 29.0. `detect_staves` now raises its own `RuntimeError("no staff lines")` instead of leaking a NaN four frames into `beams.py`, and a Cardoso and Rebelo run-length fallback supplies a finite `s` on a rotated page. Gates 552 to 555. |
 | 2026-08-16 | **A BUG IN MY OWN FIX THAT NO LOCAL RUN COULD SEE.** `np.bincount` on an int64 array works on 64-bit desktop numpy and **throws under Pyodide, because WASM is 32-bit and `np.intp` is int32**. Every Python proof passed; the browser found it on the very page the fallback exists to rescue. **The lesson is E.54's again: drive a real browser, the gates and the local runs structurally cannot reach this class.** |
 | 2026-08-16 | **THE SAME MUSIC READS DIFFERENTLY AT DIFFERENT RESOLUTIONS, measured.** Musorgsky 01 page 1 gives 78 notes at s = 21 from a PNG and 79 notes with one pitch abstention at s = 29 from a PDF of the same engraving. E.43's 37-against-36 precedent, seen again from the other direction. A read is not reproducible across resolutions and must not be described as if it were. |
@@ -566,9 +658,12 @@ canon still living in project knowledge.
 | 2026-08-13 | **This folder created.** |
 
 ---
-*E.55. Facts above were read in the working tree or measured on Dann's machine
-this session, or are transcriptions of Dann's own rulings made
-in conversation. The four N.67 documents are summarised here and the design and
-the socket addendum were read in full this session; **read the design itself
-before building from this summary**, and read the three corrections above with
-it.*
+*Updated at the close of 2026-08-18, second session, against `cb7a15a`. Facts
+added this session were read in the working tree, measured by Claude Code on
+Dann's machine, or observed by Dann himself on the `ilya-hg5dr7kl3` deploy.
+Read in full this session: `README.md`, `CONTRACT.md`, this file,
+`e52-fable-save-design_r1_2026-08-16.md`, and
+`n67-4b-library-door_r1_2026-08-18.md`. Read in part: `+page.svelte` and
+`ilya-ship.sh`, both at the lines cited. The four N.67 documents are summarised
+here; **read the design itself before building from this summary**, and read the
+three corrections above with it.*

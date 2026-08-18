@@ -152,6 +152,48 @@ source files.
 
 ---
 
+## The ship script refuses on untracked files ANYWHERE in the repository
+
+**`ilya-ship.sh:45-50` runs `git ls-files --others --exclude-standard` against
+the whole repository**, not against `apps/`. A memo or a brief written into
+`docs/sessions/` is an untracked file and will stop the ship before a single gate
+runs. **Cost 2026-08-18: caught before Dann hit it, but only because the script
+was read rather than remembered.**
+
+**Before you ask him to ship, account for every file this session wrote to his
+disk, including documents.** `device_commit_files` puts them there.
+
+---
+
+## Moving a gate baseline needs Dann's permission, and the `sed` needs checking
+
+**Gate 4's baseline is a literal string in `ilya-ship.sh:79`**, not a number the
+script derives. New tests move it and the script then refuses. Precedent: the
+438-to-470 move at E.53 and the 555-to-590 move at 2026-08-18 were both put to
+Dann first.
+
+**Read the line before you hand him a `sed`.** A substitution that matches
+nothing exits 0, changes nothing, and sends him into a confusing refusal. Read
+`:79`, confirm the exact literal, hand him the command, then **re-read `:79`
+after he runs it** and only then tell him it is done.
+
+---
+
+## A SCREENSHOT PAIR IS NOT A CONTROLLED OBSERVATION. 2026-08-18, twice
+
+**Two screenshots twenty seconds apart cannot tell you whether the app did
+something or Dann did.** On 2026-08-18 a reload showed no transcription and then
+a transcription, and the coordinator concluded that boot runs the pipeline and
+told Dann so. **It does not.** The likeliest explanation was that Dann pressed
+Transcribe between the two frames, and that possibility was never named. The
+claim was withdrawn one step later when a second reload sat there untranscribed.
+
+**Before reading a state change out of Dann's screen, name what else could have
+produced it, and if a human hand is one of the candidates, ask.** This is tether
+eleven applied to the walk instead of to a script.
+
+---
+
 ## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16
 
 **`*, *::before, *::after { margin: 0 }` overrides the user agent's
