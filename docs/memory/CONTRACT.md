@@ -4,7 +4,16 @@ Read this every session. It is short on purpose.
 
 ---
 
-## 0. The opening ritual. Emit before your first tool call
+## 0. The opening ritual. Emit after the memory reads, before anything else
+
+**The reads come first, because you cannot cite a file you have not opened.**
+Read `README.md`, this file, and `STATE.md`. Then emit this block. Then ask for
+the repository state. **Nothing else happens before it, and no work begins
+without it.**
+
+~~Emit before your first tool call.~~ **CORRECTED 2026-08-18 on Dann's ruling.**
+That wording was impossible on a fresh session, because reading this file is
+itself a tool call, and it cost an apology at the top of every thread.
 
 ```
 SEQUENCE POSITION
@@ -226,7 +235,25 @@ the best thing you do. Keep it.
 comments inside, no continuations, no heredocs, `git --no-pager` on anything that
 prints, and give him the `cd`.
 
-Canadian spelling, Oxford comma, no em-dashes.
+**HOUSE STYLE. Ruled by Dann 2026-08-18.** Every word you write for him, in a
+reply or in a file, follows Google's developer documentation style guide with two
+standing overrides: **Canadian spelling** (`-our`, `-re`, `-ce` for nouns, but
+`-ize` and `-yze`) and **no em dashes, ever** (split the sentence; a colon or a
+comma if you cannot). Google already requires the Oxford comma, so that is
+agreement rather than an override.
+
+The short form, because these are the ones that get broken: second person, active
+voice, present tense, one idea per sentence, condition before instruction, one
+term per concept forever, no directional language (`above`, `below`, `the
+following`), sentence case headings, ISO dates, code font for anything a machine
+names. No `simply`, no `just`, no `easy`, no `please note`, no exclamation marks,
+and no pre-announcing what you are about to do.
+
+**Style never outranks accuracy.** A hedge that is true beats a clean sentence
+that is not, and `NOT ESTABLISHED` is never smoothed into confident prose.
+
+Full guide: `docs/house-style/SKILL.md`, which is also packaged as a skill so it
+applies without being read.
 
 ---
 

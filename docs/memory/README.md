@@ -71,8 +71,8 @@ Your first call is device_request_folder_access for
 /Users/dannmitton/Desktop/ilya-rewrite and /Users/dannmitton/Downloads.
 Folder grants do not carry between sessions.
 
-Emit the sequence-position block from CONTRACT.md §0 before your first tool
-call.
+Once the reads are done, emit the sequence-position block from CONTRACT.md §0.
+Nothing else happens before it.
 
 Then ask me for the repository state in one line. You do not run git, ever.
 
