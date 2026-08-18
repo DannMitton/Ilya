@@ -4,6 +4,8 @@
 	import type { SongMetadata } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import MetadataFields from './MetadataFields.svelte';
+import SongList from './SongList.svelte';
+import type { SongRow } from '$lib/library/songs';
 
 	interface Props {
 		inputText: string;
@@ -25,6 +27,21 @@
 		onexport: () => void;
 		onimport: () => void;
 		onmetadatachange: (meta: SongMetadata) => void;
+		/**
+		 * N.67 step 4b, the library door. Passed WHOLE rather than as seven
+		 * separate props, so `+page.svelte` gains one line of wiring instead of
+		 * seven and this panel's prop list stays readable.
+		 */
+		songLibrary: {
+			songs: SongRow[];
+			activeId: string;
+			plural: boolean;
+			error: string | null;
+			onopen: (id: string) => void;
+			onnew: () => void;
+			onrename: (id: string, name: string) => void;
+			ondelete: (id: string) => void;
+		};
 	}
 
 	let {
@@ -46,6 +63,7 @@
 		onexport,
 		onimport,
 		onmetadatachange,
+		songLibrary,
 	}: Props = $props();
 
 	const charCount = $derived(inputText.length);
@@ -218,6 +236,23 @@
 	<div class="button-row binder-row">
 		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
 		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
+	</div>
+
+	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both
+	     are song-level acts: this one chooses which song, that one carries a song
+	     off the device. Nothing goes on the paper. -->
+	<div class="section song-section">
+		<SongList
+			{language}
+			songs={songLibrary.songs}
+			activeId={songLibrary.activeId}
+			plural={songLibrary.plural}
+			error={songLibrary.error}
+			onopen={songLibrary.onopen}
+			onnew={songLibrary.onnew}
+			onrename={songLibrary.onrename}
+			ondelete={songLibrary.ondelete}
+		/>
 	</div>
 
 	<!-- ── 5. Word Console section ────────────────────────── -->
@@ -505,6 +540,12 @@
 		color: var(--sage);
 		margin-bottom: 0.4rem;
 		font-weight: 600;
+	}
+
+	/* ── The library door (N.67 step 4b) ─────────────────── */
+
+	.song-section {
+		margin-top: 12px;
 	}
 
 	/* ── Word Console section ────────────────────────────── */

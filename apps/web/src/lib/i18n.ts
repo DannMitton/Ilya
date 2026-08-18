@@ -637,6 +637,49 @@ const strings: Record<string, Record<Language, string>> = {
 	'replace.keep': { en: 'Keep this song', fr: 'Conserver ce chant' },
 	'replace.replace': { en: 'Replace this song', fr: 'Remplacer ce chant' },
 	'station.orphaned': { en: '%s placements have no note in this score. They have been kept.', fr: '%s placements n’ont plus de note dans cette partition. Ils ont été conservés.' },
+	// N.67 step 4b, THE LIBRARY DOOR. The surface that makes songs plural.
+	// Every French word below is ADOPTED, not coined: 'chant', 'partition', and
+	// 'placement' are ratified across upload.*, binder.*, and replace.*, and
+	// 'Renommer', 'Supprimer', 'Enregistrer', 'Annuler' and the
+	// "Comment appellerons-nous" pattern are lifted verbatim from
+	// calib.switcher.*, which shipped for voice profiles. A rename and delete
+	// pattern that a singer has already met should not be re-worded here.
+	'songs.heading': { en: 'Songs', fr: 'Chants' },
+	'songs.new': { en: 'New song', fr: 'Nouveau chant' },
+	// The word a song is drawn under before it has anything to be named after.
+	// A KEY AND NOT A LITERAL: it was English in the French drawer for exactly as
+	// long as it took to look, because the placeholder is built in plain
+	// TypeScript where the dictionary is not in hand. The module takes the word
+	// as an argument instead, so it stays free of the table and still says it in
+	// the singer's language.
+	'songs.untitled': { en: 'Untitled', fr: 'Sans titre' },
+	'songs.rename': { en: 'Rename', fr: 'Renommer' },
+	'songs.delete': { en: 'Delete', fr: 'Supprimer' },
+	'songs.nameLabel': { en: 'What shall we call this song?', fr: 'Comment appellerons-nous ce chant\u00a0?' },
+	'songs.save': { en: 'Save', fr: 'Enregistrer' },
+	'songs.cancel': { en: 'Cancel', fr: 'Annuler' },
+	// %s is the song's name. The row is a button, and its own text is the name,
+	// so the label says what pressing it does.
+	'songs.openAria': { en: 'Open %s', fr: 'Ouvrir %s' },
+	// Delete wears the same shape as every other irreversible act in Ilya: name
+	// what is lost, say there is no undo, and offer the export that makes the
+	// loss avoidable. %s is the song's name.
+	'songs.deleteTitle': { en: 'Delete this song?', fr: 'Supprimer ce chant\u00a0?' },
+	'songs.deleteBody': { en: 'This deletes %s from this device, with its score file and every placement it holds. Ilya cannot undo that.', fr: 'Ceci supprime %s de cet appareil, avec son fichier de partition et tous les placements qu\u2019il contient. Ilya ne peut pas annuler cette action.' },
+	'songs.deleteConfirm': { en: 'Delete this song', fr: 'Supprimer ce chant' },
+	// One notice for create, rename, and delete. All three end the same way for
+	// the reason binder.err.* does: the singer must not infer damage from a
+	// refusal. N.27: no save site is silent.
+	'songs.err.write': { en: 'Ilya could not change your library. Nothing has changed.', fr: 'Ilya n\u2019a pas pu modifier votre biblioth\u00e8que. Rien n\u2019a \u00e9t\u00e9 modifi\u00e9.' },
+	// Design \u00a72.3 layer 2, RECOGNITION. A hash may guide; only the singer
+	// decides, so this is always a prompt and never an action. Raised only from a
+	// neutral state, so nothing is at risk either way and neither answer is the
+	// dangerous one. Staying put is the default, because it keeps the singer
+	// where they chose to be. %s is the matched song's name.
+	'recognize.title': { en: 'Ilya has met this music before.', fr: 'Ilya a d\u00e9j\u00e0 rencontr\u00e9 cette musique.' },
+	'recognize.body': { en: 'This score is the one %s was built on. You can open that song and keep the work already in it, or put this file in the song you are in.', fr: 'Cette partition est celle sur laquelle %s a \u00e9t\u00e9 construit. Vous pouvez ouvrir ce chant et conserver le travail qu\u2019il contient d\u00e9j\u00e0, ou placer ce fichier dans le chant o\u00f9 vous \u00eates.' },
+	'recognize.open': { en: 'Open that song', fr: 'Ouvrir ce chant' },
+	'recognize.here': { en: 'Put it in this song', fr: 'Le placer dans ce chant' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
 };
 

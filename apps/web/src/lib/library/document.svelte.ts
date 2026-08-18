@@ -86,7 +86,13 @@ export class SongDocument {
 
 	readonly id: string;
 	readonly createdAt: string;
-	readonly name: string;
+	/**
+	 * The display name. LIVE, not readonly, because N.67 step 4b lets the singer
+	 * rename the open song, and a rename must reach the next write. Held here
+	 * rather than in `SongFields` because it is not one of the page's seven
+	 * per-song pieces: the page never edits it, the drawer's song list does.
+	 */
+	name = $state('');
 
 	readonly #library: Library;
 	#base: SongRecord;
@@ -124,6 +130,10 @@ export class SongDocument {
 				// written, and the bytes would sit in memory until the tab closed.
 				this.#snapshot();
 				void this.source;
+				// Read separately for the same reason `source` is: a rename changes
+				// none of the page's seven fields, so without this the new name
+				// would sit in memory until something else happened to save.
+				void this.name;
 				// ORDER MATTERS HERE, AND GETTING IT WRONG COST A BUILD. The
 				// priming check must come FIRST. With the `#applying` check
 				// ahead of it, the constructor's own apply returned early
@@ -202,7 +212,7 @@ export class SongDocument {
 		// reads a proxy happily. Without this line every song save fails with
 		// `write-failed` and the singer's work never lands.
 		const record = $state.snapshot(
-			recordFromFields({ ...this.#base, source: this.source }, this.#snapshot()),
+			recordFromFields({ ...this.#base, name: this.name, source: this.source }, this.#snapshot()),
 		) as SongRecord;
 		const source = this.#pendingSource;
 		const outcome = await this.#library.save(record, source);
@@ -223,6 +233,7 @@ export class SongDocument {
 	#apply(record: SongRecord): void {
 		this.#applying = true;
 		this.#base = record;
+		this.name = record.name;
 		this.source = record.source;
 		const fields = fieldsFromRecord(record);
 		this.inputText = fields.inputText;
@@ -279,7 +290,9 @@ export class SongDocument {
 	/**
 	 * Flush, then tear the autosave down. Song switching is `close()` then
 	 * `open()`, so two documents never share an effect and a switch cannot
-	 * cross-write. Nothing calls this yet; the library door is step 4.
+	 * cross-write. N.67 step 4b calls it: the page's `switchSong` awaits this
+	 * before it constructs the next document, so the outgoing song's tail is
+	 * written before the incoming song's first effect can run.
 	 */
 	async close(): Promise<void> {
 		await this.#scheduler.flush();

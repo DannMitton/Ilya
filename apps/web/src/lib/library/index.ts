@@ -23,7 +23,8 @@ import { Library } from './library';
 import { migrateFromLocalStorage, type MigrationOutcome } from './migration';
 import { readStorageEstimate, type StorageReading } from './quota';
 import { LEGACY_SONG_ID } from './document.svelte';
-import type { LoadResult } from './types';
+import { listSongs, nameFor } from './songs';
+import type { LoadResult, SongRecord } from './types';
 
 /**
  * A pointer, not data. Losing it loses nothing but which song opens first,
@@ -53,7 +54,11 @@ export interface OpenedLibrary {
 	vaultError: string | null;
 }
 
-function newId(): string {
+/**
+ * A song's permanent, opaque identity (design §2.3 layer 1). Exported since
+ * N.67 step 4b, because New song mints one in the page.
+ */
+export function newId(): string {
 	if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
 	// Only reachable on a browser without randomUUID; the id needs to be
 	// opaque and unique, not cryptographically strong.
@@ -70,7 +75,11 @@ function readActiveSongId(store: KeyValueStore | null): string | null {
 	}
 }
 
-function writeActiveSongId(store: KeyValueStore | null, id: string): void {
+/**
+ * Move the pointer. Exported since N.67 step 4b: switching songs is exactly
+ * this write plus `close()` then `open()`.
+ */
+export function writeActiveSongId(store: KeyValueStore | null, id: string): void {
 	try {
 		store?.setItem(ACTIVE_SONG_KEY, id);
 	} catch {
@@ -161,6 +170,7 @@ export async function openLibrary(): Promise<OpenedLibrary> {
 	}
 
 	const loaded = await library.load(songId);
+	await backfillName(library, loaded.record);
 	const source = await library.loadSource(songId);
 
 	return {
@@ -173,4 +183,31 @@ export async function openLibrary(): Promise<OpenedLibrary> {
 		storage: await readStorageEstimate(),
 		vaultError: null,
 	};
+}
+
+/**
+ * Give a song a name the first time one can be built from its own material.
+ *
+ * N.67 step 4b. `SongRecord.name` has existed since step 0 and NOTHING HAS EVER
+ * WRITTEN IT, so every record in every browser carries the empty string. This
+ * is where that is repaired, for the migrated song and for any song whose
+ * material arrived before the door did.
+ *
+ * A song with nothing in it is left EMPTY rather than named "Untitled": the
+ * list draws a placeholder for those, and storing one would still say Untitled
+ * after the singer typed a title. Storing nothing is also the rule
+ * (CONTRACT §6, do not store anything derived); a name becomes the singer's own
+ * the moment it is written, which is why it is written once and then left alone.
+ *
+ * A failure here costs a name and never a song, so it is not reported: the
+ * record is untouched, the app runs, and the next boot tries again.
+ */
+async function backfillName(library: Library, record: SongRecord): Promise<void> {
+	if (record.name !== '') return;
+	const named = nameFor(record, await listSongs(library.plural));
+	if (named === '') return;
+	// Mutated before the document is built FROM this record, so the page shows
+	// the name in the same paint as the song rather than one save later.
+	record.name = named;
+	await library.save(record);
 }

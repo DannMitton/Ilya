@@ -97,6 +97,52 @@ describe('the vault', () => {
 		expect((await driver.load('s2')).record.poem).toBe('second');
 	});
 
+	it('lists every song without reading a single score', async () => {
+		// N.67 step 4b. Design §2.1: listing reads the RECORDS, which are
+		// kilobytes, and never the sources, which are hundreds of them.
+		await driver.save(song('s1', 'first'), bytesFor('s1'));
+		await driver.save(song('s2', 'second'), bytesFor('s2'));
+
+		const listed = await driver.plural!.list();
+
+		expect(listed.map((s) => s.id).sort()).toEqual(['s1', 's2']);
+		expect(listed.every((s) => !('bytes' in s))).toBe(true);
+	});
+
+	it('REMOVES A SONG AND ITS BYTES TOGETHER, in one transaction', async () => {
+		// Design §2.1. A record without its source is a song whose score cannot
+		// be found; a source without its record is bytes nothing can reach or
+		// ever delete.
+		await driver.save(song('s1'), bytesFor('s1'));
+		await driver.save(song('s2'), bytesFor('s2'));
+
+		expect(await driver.plural!.remove('s1')).toEqual({ ok: true });
+
+		expect((await driver.plural!.list()).map((s) => s.id)).toEqual(['s2']);
+		expect(await driver.loadSource('s1')).toBeNull();
+		expect(await driver.loadSource('s2')).not.toBeNull();
+	});
+
+	it('finds a song by fingerprint through the driver, and never on an empty one', async () => {
+		const record = song('s1');
+		record.source = {
+			fileName: 'sonnet90.musicxml',
+			byteLength: 1757,
+			importedAt: NOW,
+			contentHash: 'abc123',
+			fingerprint: 'fp-kabalevsky-90',
+		};
+		const unhashable = song('s2');
+		unhashable.source = { fileName: 'x.musx', byteLength: 8, importedAt: NOW, contentHash: '', fingerprint: '' };
+		await driver.save(record);
+		await driver.save(unhashable);
+
+		expect((await driver.plural!.findByFingerprint('fp-kabalevsky-90')).map((s) => s.id)).toEqual(['s1']);
+		// The empty string is a legal IndexedDB key, so `s2` IS in the index.
+		// Without the guard it would recognize every other unhashable song.
+		expect(await driver.plural!.findByFingerprint('')).toEqual([]);
+	});
+
 	it('finds a song by its fingerprint, for the recognition prompt', async () => {
 		const record = song('s1');
 		record.source = {

@@ -30,7 +30,20 @@
 	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
 	import { arrivalDecision } from '$lib/library/library';
 	import { autoName, binderFileName, buildBinder, readBinder } from '$lib/library/binder';
-	import { ACTIVE_SONG_KEY } from '$lib/library';
+	import { ACTIVE_SONG_KEY, newId, writeActiveSongId } from '$lib/library';
+	// N.67 step 4b, the library door. Every decision it makes is in this plain
+	// TypeScript module, where vitest can reach it; what is left below is wiring.
+	import {
+		createSong,
+		deleteSong,
+		libraryRows,
+		listSongs,
+		nameFor,
+		recognize,
+		renameSong,
+		toRows,
+	} from '$lib/library/songs';
+	import type { SongSummary } from '$lib/library/driver';
 	import type { SongRecord } from '$lib/library/types';
 	import type { SourceBytes } from '$lib/library/driver';
 	import { version } from '$app/environment';
@@ -97,9 +110,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// switching is `close()` then `open()`, at step 4, not a prop change.
 	const opened = untrack(() => data.opened);
 	const library = opened?.library ?? new Library(createMemoryDriver());
-	const doc = SongDocument.fromLoaded(
-		library,
-		opened?.loaded ?? { record: emptySongRecord(LEGACY_SONG_ID, new Date().toISOString()) },
+	// N.67 step 4b. A SLOT, no longer a constant. The comment above still holds
+	// for `data`, which is read once: rebuilding the document because a PROP
+	// changed identity would throw away unsaved edits. What changes here is that
+	// the page may now put a DIFFERENT document in the slot on purpose, which is
+	// `switchSong` below, and which is close() then open() exactly as step 0
+	// promised. Measured 2026-08-18 before choosing: opening a song costs about
+	// 49 ms for a .musicxml and about 343 ms for a real 143 KB .musx, so the
+	// reload branch buys nothing and costs the drawer's whole state.
+	let doc = $state(
+		SongDocument.fromLoaded(
+			library,
+			opened?.loaded ?? { record: emptySongRecord(LEGACY_SONG_ID, new Date().toISOString()) },
+		),
 	);
 	// Pipeline state
 	let lines = $state<LineData[]>([]);
@@ -425,8 +448,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			console.error('[Ilya] Transcription error:', e);
 		}
 	}
-	function handleTranscribe() {
-		if (!canTranscribe) return;
+	/**
+	 * The per-SESSION state, which is not the song and is never stored.
+	 *
+	 * Every one of these keys on word positions in the poem that is about to be
+	 * replaced, so all three callers drop them together: Transcribe, Clear, and
+	 * N.67 step 4b's song switch. They were three copies of one list until the
+	 * switch would have made it four.
+	 */
+	function resetSessionState() {
 		transcribeError = '';
 		selectedWord = null;
 		lastFocusedWord = null;
@@ -434,6 +464,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		userStressOverrides = new Map();
 		yoToggles = new Map();
 		syllableOverrides = new Map();
+	}
+	function handleTranscribe() {
+		if (!canTranscribe) return;
+		resetSessionState();
 		// N.57: glosses are deliberately NOT wiped here. runPipeline() rebuilds
 		// `lines`, then keepSurvivingGlosses() drops only the ones whose word
 		// moved. The Guide has promised this since before it was true.
@@ -472,14 +506,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleClear() {
 		doc.inputText = '';
 		lines = [];
-		transcribeError = '';
 		transcribeMs = 0;
-		selectedWord = null;
-		lastFocusedWord = null;
-		spotReconstitution = new Map();
-		userStressOverrides = new Map();
-		yoToggles = new Map();
-		syllableOverrides = new Map();
+		resetSessionState();
 		doc.glossOverrides = new Map();
 		doc.glossAnchors = new Map();
 		// The document writes the cleared poem and the cleared glosses itself.
@@ -688,6 +716,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	function handleInput(text: string) {
 		doc.inputText = text;
+		nameIfUnnamed();
 	}
 
 	/* ── N.67 step 4a: a different piece has arrived ───────────────── */
@@ -711,10 +740,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * `title` and `body` are already-resolved strings, so the template holds no
 	 * copy decisions, and `replace` is what the destructive button does.
 	 */
-	let pendingConfirm = $state<{ title: string; body: string; replace: () => void } | null>(null);
+	/**
+	 * One button on the confirmation dialog. THE LAST ANSWER IS THE SAFE ONE.
+	 *
+	 * `keepOpen` is for the escape hatch: exporting first is not an answer, it is
+	 * something you do before answering, so it must not close the dialog.
+	 */
+	type Answer = { label: string; run?: () => void; destructive?: boolean; keepOpen?: boolean };
+	let pendingConfirm = $state<{ title: string; body: string; answers: Answer[] } | null>(null);
+	const safeAnswer = $derived(pendingConfirm?.answers.at(-1) ?? null);
 
-	function askToReplace(title: string, body: string, replace: () => void): void {
-		pendingConfirm = { title, body, replace };
+	async function askToReplace(title: string, body: string, answers: Answer[]): Promise<void> {
+		pendingConfirm = { title, body, answers };
+		// RENDERED BEFORE THE DIALOG OPENS. Without this tick the buttons do not
+		// exist yet, so `showModal()`'s own focus algorithm settles on the dialog
+		// and the explicit focus below reaches nothing. The safe answer is last
+		// in the DOM, which is `keepButtonEl`.
+		await tick();
 		replaceDialogEl?.showModal();
 		// Focus the SAFE answer. Done here rather than with `autofocus`, which
 		// raises `a11y_autofocus` and would move the web-check gate; and the DOM
@@ -767,31 +809,65 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				})
 			: 'attach';
 
+		// DESIGN §2.6, SECOND BRANCH. From a NEUTRAL state, which is what New
+		// song creates, an arriving score is checked against the library before
+		// it is attached to anything. A hash may GUIDE; only the singer decides,
+		// so the answer is a prompt and never an action, and nothing at all is
+		// mutated until they give one. A song that already has a score is not
+		// neutral, and that path is `arrivalDecision`'s, untouched.
+		if (doc.source === null) {
+			const matches = await recognize(library.plural, incoming, doc.id);
+			const match = matches[0];
+			if (match) {
+				void askToReplace(
+					t('recognize.title', language),
+					t('recognize.body', language).replace(
+						'%s',
+						toRows([match], t('songs.untitled', language))[0].label,
+					),
+					[
+						{ label: t('recognize.open', language), run: () => void switchSong(match.id) },
+						{ label: t('recognize.here', language), run: () => applyArrival(ingested, file, origin, false) },
+					],
+				);
+				return;
+			}
+		}
+
 		if (decision === 'ask') {
 			pendingArrival = { ingested, file, orphaned, total: stored.length };
-			askToReplace(
+			void askToReplace(
 				t('replace.title', language),
 				t('replace.body', language).replace('%s', String(orphaned)).replace('%s', String(stored.length)),
-				() => {
-					const pending = pendingArrival;
-					if (pending) applyArrival(pending.ingested, pending.file, 'upload', true);
-				},
+				[
+					{
+						label: t('replace.replace', language),
+						destructive: true,
+						run: () => {
+							const pending = pendingArrival;
+							if (pending) applyArrival(pending.ingested, pending.file, 'upload', true);
+						},
+					},
+					{ label: t('binder.exportFirst', language), run: () => void handleExport(), keepOpen: true },
+					{ label: t('replace.keep', language) },
+				],
 			);
 			return;
 		}
 		applyArrival(ingested, file, origin, false);
 	}
 
-	/** Keep the song. Whatever was pending is discarded, having changed nothing. */
-	function keepThisSong(): void {
+	/**
+	 * Answer the dialog. Closed FIRST, then acted on, so an act that opens
+	 * another dialog is never fighting this one for the modal.
+	 */
+	function answerWith(answer: Answer): void {
+		if (answer.keepOpen) {
+			answer.run?.();
+			return;
+		}
 		replaceDialogEl?.close();
-	}
-
-	/** Replace the song, all of it together, so the record stays coherent. */
-	function replaceThisSong(): void {
-		const act = pendingConfirm?.replace;
-		replaceDialogEl?.close();
-		act?.();
+		answer.run?.();
 	}
 
 	/**
@@ -878,15 +954,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * rules out: the binder is addressed to nobody, and the moment it is handed
 	 * to another person that act is the person's, not the tool's.
 	 */
-	async function handleExport(): Promise<void> {
+	async function handleExport(songId: string = doc.id): Promise<void> {
 		binderError = null;
 		try {
-			const record = doc.toRecord();
+			// The OPEN song comes from the document, which holds edits the vault
+			// has not seen yet; any other song comes from the vault. `name` is
+			// taken live because a rename debounces like everything else.
+			const record =
+				songId === doc.id
+					? { ...doc.toRecord(), name: doc.name }
+					: (await library.load(songId)).record;
 			// Read the bytes from the vault rather than from boot state, so a
 			// score uploaded this session is in the binder too.
-			const source = await library.loadSource(doc.id);
+			const source = await library.loadSource(songId);
 			const today = todayInWords();
-			const name = autoName(record, today);
+			// THE SINGER'S NAME WINS. Recomputing an auto-name here would ignore a
+			// rename, which is the one thing the door exists to let them do.
+			const name = record.name || autoName(record, today, t('songs.untitled', language));
 			const bytes = await buildBinder({
 				record,
 				source,
@@ -936,7 +1020,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			await commitImport(incoming);
 			return;
 		}
-		askToReplace(t('import.title', language), t('import.body', language), () => void commitImport(incoming));
+		void askToReplace(t('import.title', language), t('import.body', language), [
+			{ label: t('replace.replace', language), destructive: true, run: () => void commitImport(incoming) },
+			{ label: t('binder.exportFirst', language), run: () => void handleExport(), keepOpen: true },
+			{ label: t('replace.keep', language) },
+		]);
 	}
 
 	/**
@@ -961,27 +1049,185 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		location.reload();
 	}
 
+	/* ── N.67 step 4b: the library door ─────────────────────────────── */
+
+	// The library, as the drawer draws it. Read from the vault, refreshed after
+	// every act that changes what is in it. The OPEN song's live name is laid
+	// over its row below, because a rename debounces like every other write and
+	// the singer must see it land immediately.
+	let songs = $state<SongSummary[]>([]);
+	let libraryError = $state<string | null>(null);
+	let switching = false;
+
+	async function refreshSongs(): Promise<void> {
+		songs = await listSongs(library.plural);
+	}
+
+	const songRows = $derived(
+		libraryRows(
+			songs,
+			{
+				id: doc.id,
+				name: doc.name,
+				createdAt: doc.createdAt,
+				updatedAt: doc.createdAt,
+				fingerprint: doc.source?.fingerprint ?? null,
+			},
+			t('songs.untitled', language),
+		),
+	);
+
+	/**
+	 * Open another song. CLOSE() THEN OPEN(), never a prop change and never a
+	 * reload.
+	 *
+	 * Measured 2026-08-18 on this Mac in Chromium, before the branch was chosen,
+	 * from the score's bytes reaching the ingest path to a stave in the DOM:
+	 * about 49 ms for a .musicxml and about 343 ms for a real 143 KB .musx, plus
+	 * a vault read under a millisecond. A `location.reload()` measured 97 ms and
+	 * 448 ms for the same two files and additionally throws away the tab, the
+	 * drawer, the scroll position, and the loaded dictionary. So the reload
+	 * branch costs more and buys nothing.
+	 *
+	 * `close()` flushes the outgoing song's debounce tail and tears its autosave
+	 * down BEFORE the next document exists, so two documents never share an
+	 * effect and a switch cannot cross-write one song's work into another's.
+	 */
+	async function switchSong(id: string): Promise<void> {
+		if (id === doc.id || switching) return;
+		switching = true;
+		try {
+			await doc.close();
+			writeActiveSongId(localStorage, id);
+			const next = await SongDocument.open(library, id);
+			const bytes = await library.loadSource(id);
+			// Everything belonging to the OUTGOING song, dropped before the new
+			// document lands, so nothing of one song is ever drawn against the
+			// other's music.
+			resetSessionState();
+			ingestedScore = null;
+			lines = [];
+			transcribeMs = 0;
+			orphanedCount = 0;
+			pairingCursor = 0;
+			noLyricsFile = null;
+			restoreSource = restoreFrom(bytes, next.source?.page);
+			doc = next;
+			await refreshSongs();
+			// A SWITCH IS NOT A BOOT. The singer just chose this song, so Ilya
+			// shows it to them rather than making them press Transcribe to see
+			// what they left. It also has to run: `slotQueue` comes from `lines`,
+			// so without it the placements would come back looking like drift.
+			if (doc.inputText.trim() !== '' && !loaderState.isLoading && loaderState.entryCount > 0) {
+				runPipeline();
+				keepSurvivingGlosses();
+			}
+		} finally {
+			switching = false;
+		}
+	}
+
+	async function handleNewSong(): Promise<void> {
+		// WRITTEN BEFORE IT IS OPENED, so a reload between the two finds a song
+		// that is really there.
+		const created = await createSong({ library, newId, now: () => new Date().toISOString() });
+		if (!created.ok) {
+			libraryError = t('songs.err.write', language);
+			return;
+		}
+		libraryError = null;
+		await refreshSongs();
+		await switchSong(created.record.id);
+	}
+
+	function handleRenameSong(id: string, name: string): void {
+		libraryError = null;
+		// THE OPEN SONG IS RENAMED THROUGH ITS DOCUMENT. The document holds the
+		// live record and would write its own name back over a rename that went
+		// round it, so the rename would appear to work and then undo itself.
+		if (id === doc.id) {
+			doc.name = name;
+			return;
+		}
+		void renameSong(library, id, name).then(async (outcome) => {
+			if (!outcome.ok) libraryError = t('songs.err.write', language);
+			await refreshSongs();
+		});
+	}
+
+	function handleDeleteSong(id: string): void {
+		const row = songRows.find((candidate) => candidate.id === id);
+		if (!row) return;
+		void askToReplace(
+			t('songs.deleteTitle', language),
+			t('songs.deleteBody', language).replace('%s', row.label),
+			[
+				{ label: t('songs.deleteConfirm', language), destructive: true, run: () => void commitDelete(id) },
+				{ label: t('binder.exportFirst', language), run: () => void handleExport(id), keepOpen: true },
+				{ label: t('replace.keep', language) },
+			],
+		);
+	}
+
+	/**
+	 * Remove a song and its bytes together, or neither (design §2.1).
+	 *
+	 * SWITCH FIRST when the target is the song you are in. Its document is still
+	 * autosaving, and a delete underneath a live document would be undone by that
+	 * document's next write. `switchSong` closes it and flushes its tail, so what
+	 * is deleted is a settled record and the survivor is already open.
+	 */
+	async function commitDelete(id: string): Promise<void> {
+		if (id === doc.id) {
+			const survivor = songRows.find((row) => row.id !== id);
+			if (!survivor) {
+				libraryError = t('songs.err.write', language);
+				return;
+			}
+			await switchSong(survivor.id);
+		}
+		const outcome = await deleteSong(library.plural, id);
+		libraryError = outcome.ok ? null : t('songs.err.write', language);
+		await refreshSongs();
+	}
+
+	const songLibrary = $derived({
+		songs: songRows,
+		activeId: doc.id,
+		// Six localStorage keys have no room for a second song and are not being
+		// given one, so on the legacy driver New song and Delete do not render.
+		plural: library.plural !== undefined,
+		error: libraryError,
+		onopen: (id: string) => void switchSong(id),
+		onnew: () => void handleNewSong(),
+		onrename: handleRenameSong,
+		ondelete: handleDeleteSong,
+	});
+
 	/* ── N.67 step 2: the source survives ──────────────────────────── */
 
 	// The stored score, handed to the uploader so it can re-ingest it once at
 	// boot. Read from the load result, not from the document: the document
 	// carries the score's provenance, never its bytes.
-	const restoreSource = opened?.source
-		? {
-				fileName: opened.source.fileName,
-				bytes: opened.source.bytes,
-				// N.59 step 7: a page read off a picture comes back with the clef
-				// and key it was read with, so the restore never asks again.
-				answers: openedPageAnswers(),
-			}
-		: null;
-
-	/** The clef, key, and octave a stored PICTURE was read with, or null. */
-	function openedPageAnswers() {
-		const page = opened?.loaded?.record?.source?.page;
-		if (!page) return null;
-		return { clef: page.clef, octaveChange: page.octaveChange, fifths: page.fifths };
+	/**
+	 * What the uploader needs to bring a stored score back.
+	 *
+	 * N.59 step 7: a page read off a picture comes back with the clef and key it
+	 * was read with, so the restore never asks again.
+	 */
+	function restoreFrom(source: SourceBytes | null, page: PageProvenance | null | undefined) {
+		if (!source) return null;
+		return {
+			fileName: source.fileName,
+			bytes: source.bytes,
+			answers: page ? { clef: page.clef, octaveChange: page.octaveChange, fifths: page.fifths } : null,
+		};
 	}
+
+	// N.67 step 4b: STATE, because a switch hands the uploader a different
+	// song's bytes. The uploader is keyed on `doc.id`, so it remounts and its
+	// own restore runs, which is the same path a reload takes and no other.
+	let restoreSource = $state(restoreFrom(opened?.source ?? null, opened?.loaded?.record?.source?.page));
 
 	/**
 	 * Keep the singer's own file, byte for byte.
@@ -1055,6 +1301,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const kept = dropTagsForEdits(doc.metadata, meta, doc.fromScoreFields);
 		if (kept !== doc.fromScoreFields) setFromScoreFields(kept);
 		doc.metadata = meta;
+		nameIfUnnamed();
+	}
+
+	/**
+	 * Design §2.3 layer 3, called where the singer's material arrives: the
+	 * metadata, whether typed or filled from a score header, and the poem.
+	 *
+	 * Not at creation, because a song made a moment ago has nothing to be named
+	 * after, and not on every change, because a name the singer has accepted is
+	 * theirs and Ilya does not argue with it. `nameFor` holds the rule.
+	 */
+	function nameIfUnnamed(): void {
+		if (doc.name !== '') return;
+		const named = nameFor(doc.toRecord(), songs);
+		if (named !== '') doc.name = named;
 	}
 
 	// ── §A.6 metadata provenance ──
@@ -1251,6 +1512,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				vaultError: opened.vaultError,
 			});
 		}
+		// N.67 step 4b. The library, read once at boot and refreshed after every
+		// act that changes it. Not awaited into the boot path: a slow list must
+		// not hold up the song the singer is already looking at.
+		void refreshSongs();
 		// Restore persisted state.
 		//
 		// N.67 step 0: the six per-song keys are NOT read here any more. The
@@ -1383,13 +1648,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		     Keep is last, so it is rightmost where a tired hand goes, and it is
 		     focused programmatically on open. -->
 		<div class="replace-actions">
-			<button type="button" class="replace-destructive" onclick={replaceThisSong}>
-				{t('replace.replace', language)}
-			</button>
-			<button type="button" onclick={() => void handleExport()}>{t('binder.exportFirst', language)}</button>
-			<button type="button" bind:this={keepButtonEl} onclick={keepThisSong}>
-				{t('replace.keep', language)}
-			</button>
+			{#each pendingConfirm.answers.slice(0, -1) as answer (answer.label)}
+				<button
+					type="button"
+					class:replace-destructive={answer.destructive}
+					onclick={() => answerWith(answer)}
+				>
+					{answer.label}
+				</button>
+			{/each}
+			{#if safeAnswer}
+				<button type="button" bind:this={keepButtonEl} onclick={() => answerWith(safeAnswer)}>
+					{safeAnswer.label}
+				</button>
+			{/if}
 		</div>
 	{/if}
 </dialog>
@@ -1427,6 +1699,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onprint={handlePrint}
 					onexport={() => void handleExport()}
 					onimport={() => importInputEl?.click()}
+					{songLibrary}
 					onmetadatachange={handleMetadataChange}
 				>
 					{#snippet consoleContent()}
@@ -1495,13 +1768,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     Metadata block, twinning Ilya's headerless textarea. The
 					     EngravingControls panel is removed and the stave target
 					     is fixed (Dann's ruling, 2026-07-15; Kimi Q1 and Q2). -->
-					<ScoreUploader
-						{language}
-						{isMobile}
-						restore={restoreSource}
-						oningested={(ingested, file, origin, page) =>
-							void handleArrival(ingested, file, origin, page)}
-					/>
+					<!-- N.67 step 4b. KEYED ON THE OPEN SONG. A switch replaces the
+					     document, and this makes the uploader replace itself with it,
+					     so the new song's stored score comes back through the uploader's
+					     OWN restore: the same path a reload takes, and no second one. -->
+					{#key doc.id}
+						<ScoreUploader
+							{language}
+							{isMobile}
+							restore={restoreSource}
+							oningested={(ingested, file, origin, page) =>
+								void handleArrival(ingested, file, origin, page)}
+						/>
+					{/key}
 					{#if noLyricsFile}
 						<!-- N.55a's courtesy message (Dann, E.47). It lives in the DRAWER and
 						     not on the page because it names the FILE, and a file name dates a

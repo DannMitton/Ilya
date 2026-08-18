@@ -16,7 +16,7 @@
  */
 import { PAIRINGS_KEY, type PairingMap } from '$lib/shane/pairings';
 import { parseFromScore, serializeFromScore, type MetadataField } from '$lib/metadata-provenance';
-import { getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
+import { getAllByIndex, getAllFrom, getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
 import {
 	emptySongRecord,
 	type FailureReason,
@@ -62,6 +62,56 @@ export interface StorageDriver {
 	 */
 	save(record: SongRecord, source?: SourceBytes | null): Promise<Outcome>;
 	loadSource(songId: string): Promise<SourceBytes | null>;
+	/**
+	 * The plural half, ABSENT on the legacy driver.
+	 *
+	 * N.67 step 4b. Six string keys have no room for a second song and are not
+	 * being given one, so "this driver can hold two songs" is a fact about the
+	 * driver and belongs in its type rather than in a branch at every call
+	 * site. Where this is undefined, the door shows the one song it has and
+	 * New song and Delete do not render at all: no new string, no apology.
+	 */
+	readonly plural?: PluralStore;
+}
+
+/**
+ * One row of the song list. Kilobytes, never megabytes: the score's bytes live
+ * in their own store and are read only when a song opens (design §2.1).
+ */
+export interface SongSummary {
+	id: string;
+	/** Empty means the song has never been named. The list derives what to show. */
+	name: string;
+	createdAt: string;
+	updatedAt: string;
+	/** For recognition. Null where the song has no score, or none could be hashed. */
+	fingerprint: string | null;
+}
+
+export function summarize(record: SongRecord): SongSummary {
+	return {
+		id: record.id,
+		name: record.name,
+		createdAt: record.createdAt,
+		updatedAt: record.updatedAt,
+		fingerprint: record.source?.fingerprint || null,
+	};
+}
+
+/** What a driver that can hold more than one song can additionally do. */
+export interface PluralStore {
+	/** Every song, in no particular order. Sorting is `songs.ts`'s decision. */
+	list(): Promise<SongSummary[]>;
+	/**
+	 * Remove a song's record AND its stored bytes, or neither.
+	 *
+	 * ONE transaction, design §2.1. A record without its source would be a song
+	 * whose score cannot be found, and a source without its record would be
+	 * bytes nothing can ever reach or delete.
+	 */
+	remove(id: string): Promise<Outcome>;
+	/** Songs whose score is this music. Recognition only, never identity (§2.3). */
+	findByFingerprint(fingerprint: string): Promise<SongSummary[]>;
 }
 
 /* ── The six legacy keys ────────────────────────────────────────── */
@@ -275,6 +325,20 @@ export function createMemoryDriver(seed: SongRecord[] = []): StorageDriver {
 		async loadSource(songId) {
 			return sources.get(songId) ?? null;
 		},
+		plural: {
+			async list() {
+				return [...songs.values()].map(summarize);
+			},
+			async remove(id) {
+				songs.delete(id);
+				sources.delete(id);
+				return { ok: true };
+			},
+			async findByFingerprint(fingerprint) {
+				if (fingerprint === '') return [];
+				return [...songs.values()].filter((r) => r.source?.fingerprint === fingerprint).map(summarize);
+			},
+		},
 	};
 }
 
@@ -362,6 +426,34 @@ export function createIndexedDbDriver(db: IDBDatabase): StorageDriver {
 			} catch {
 				return null;
 			}
+		},
+		plural: {
+			async list() {
+				// Reads the RECORDS, which are kilobytes. The sources store is not
+				// touched, so listing a hundred songs never reads a hundred scores.
+				const stored = await getAllFrom<SongRecord>(db, SONGS_STORE);
+				return stored.map(summarize);
+			},
+			async remove(id) {
+				try {
+					await writeAcross(db, [SONGS_STORE, SOURCES_STORE], (store) => {
+						store(SONGS_STORE).delete(id);
+						store(SOURCES_STORE).delete(id);
+					});
+					return { ok: true };
+				} catch (err) {
+					return { ok: false, reason: idbReason(err) };
+				}
+			},
+			async findByFingerprint(fingerprint) {
+				// AN EMPTY FINGERPRINT IS NOT A KEY. `attachUploadedSource` stores
+				// the empty string where `crypto.subtle` was absent, and the empty
+				// string is a perfectly valid IndexedDB key, so without this guard
+				// every unhashable song would recognize every other one.
+				if (fingerprint === '') return [];
+				const stored = await getAllByIndex<SongRecord>(db, SONGS_STORE, 'by-fingerprint', fingerprint);
+				return stored.map(summarize);
+			},
 		},
 	};
 }

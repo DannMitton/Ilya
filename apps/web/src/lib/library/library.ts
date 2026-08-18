@@ -21,7 +21,7 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
-import type { SourceBytes, StorageDriver } from './driver';
+import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
 	emptyMetadata,
@@ -233,6 +233,18 @@ export class Library {
 
 	get driverKind(): string {
 		return this.#driver.kind;
+	}
+
+	/**
+	 * The plural half of the driver, or undefined where there is none.
+	 *
+	 * N.67 step 4b. The facade holds the driver privately, so this is how the
+	 * door reaches list, remove, and find without any caller learning which
+	 * driver it is running on. Undefined means "this browser has one song", and
+	 * the door renders accordingly rather than offering a control that cannot work.
+	 */
+	get plural(): PluralStore | undefined {
+		return this.#driver.plural;
 	}
 
 	/** Never throws. A driver that throws is a failed load, not a crash. */
