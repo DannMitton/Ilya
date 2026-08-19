@@ -127,8 +127,17 @@ export function libraryRows(
 	stored: readonly SongSummary[],
 	open: SongSummary,
 	untitled: string,
+	openIsReadOnly = false,
 ): SongRow[] {
-	const live = stored.map((song) => (song.id === open.id ? { ...song, name: open.name } : song));
+	// N.67 step 6, found on the walk 2026-08-18. THE LIVE NAME IS NOT LAID OVER A
+	// SONG THAT CANNOT BE WRITTEN TO. A record that failed validation opens as a
+	// rebuilt stand-in with an EMPTY name, the page then auto-names it from
+	// whatever is on screen, and the row drew that invented name beside a
+	// sentence promising the record had been left untouched. The two contradicted
+	// each other and the invented one was the lie: it can never be stored.
+	const live = stored.map((song) =>
+		song.id === open.id && !openIsReadOnly ? { ...song, name: open.name } : song,
+	);
 	if (!live.some((song) => song.id === open.id)) live.push(open);
 	return toRows(live, untitled);
 }
@@ -191,6 +200,14 @@ export async function createSong(deps: {
 export async function renameSong(library: Library, id: string, name: string): Promise<Outcome> {
 	const loaded = await library.load(id);
 	if (loaded.reason === 'no-storage') return { ok: false, reason: 'no-storage' };
+	// N.67 step 6, design §4. A RENAME IS A WRITE, AND A RECORD THAT FAILED
+	// VALIDATION IS NEVER WRITTEN TO. Without this the rename would save the
+	// REBUILT record over the damaged one, which is precisely the silent
+	// laundering the salvage path exists to prevent: the song would come back
+	// named, empty, and past saving.
+	if (loaded.reason === 'malformed' || loaded.reason === 'newer-schema') {
+		return { ok: false, reason: loaded.reason };
+	}
 	return library.save({ ...loaded.record, id, name });
 }
 

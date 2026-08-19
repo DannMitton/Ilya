@@ -579,6 +579,53 @@ const strings: Record<string, Record<Language, string>> = {
 	'storage.saveFailed.quota': { en: 'Your device’s storage is full. Your syllable placements could not be saved and will be lost when you leave this page.', fr: 'Le stockage de cet appareil est plein. Vos syllabes n’ont pas pu être enregistrées et seront perdues lorsque vous quittez cette page.' },
 	'storage.saveFailed.generic': { en: 'Your syllable placements could not be saved on this device. They will be lost when you leave this page.', fr: 'Vos syllabes n’ont pas pu être enregistrées sur cet appareil. Elles seront perdues lorsque vous quittez cette page.' },
 	'storage.loadFailed': { en: 'Your saved syllable placements could not be read back.', fr: 'Vos syllabes enregistrées n’ont pas pu être relues.' },
+	// N.67 step 6, THE SWEEP. Design §4's failure handling, finalized in both
+	// languages. **Ratified by Dann as a whole table, 2026-08-18, French seen
+	// first, before a word of it entered the tree.** Singer-facing copy says
+	// "your songs" and never "binder", which is a ratified DEVIATION from §4's
+	// draft prose. Nothing is coined: 'chant' and 'bibliothèque' are already
+	// ratified in this file, and every other word is ordinary.
+	//
+	// FOUR NEW HARD-SPACE SITES, all French colons: storage.quotaFull,
+	// storage.quotaNumbers, storage.partialLoss, and collide.title's revision.
+	// The English colons carry an ordinary space, which is this file's own
+	// English practice ('inspector.notationDefault' sets it).
+	//
+	// TYPOGRAPHY, AND THE ONE PLACE THIS DEPARTS FROM THE RATIFIED TABLE: the
+	// table was written with straight apostrophes and this file has used the
+	// typographic ’ for every possessive and elision since 'storage.saveFailed'.
+	// The character was matched to the tree rather than to the table, which is a
+	// change of glyph and not of wording. Reversible in one edit if Dann wants
+	// the straight mark instead.
+	//
+	// 'storage.saveFailed.quota' above is SUPERSEDED at its render site by
+	// 'storage.quotaFull' and is now unreferenced. Kept rather than deleted:
+	// removing a ratified line is Dann's call, not this step's.
+	'storage.quotaFull': { en: 'Ilya could not save: this browser’s storage is full. Your work is still on screen. Export your songs now to keep them, or free space and try again.', fr: 'Ilya n’a pas pu enregistrer\u00a0: le stockage de ce navigateur est plein. Votre travail est toujours à l’écran. Exportez vos chants maintenant pour les conserver, ou libérez de l’espace et réessayez.' },
+	// Appended to the line above, and ONLY where `navigator.storage.estimate()`
+	// returned real figures. A notice that says "of undefined" is worse than a
+	// notice that says nothing about size at all.
+	'storage.quotaNumbers': { en: 'Storage: %s of %s used.', fr: 'Stockage\u00a0: %s utilisés sur %s.' },
+	// Shown ONCE per device, when `navigator.storage.persisted()` reports false.
+	// Design §4 is honest about what detection can do: a full eviction takes
+	// localStorage, IndexedDB, and the Cache API together, so nothing survives
+	// to detect it with. This is the warning BEFORE, not a report after.
+	'storage.evictionRisk': { en: 'This browser may delete Ilya’s storage after a period of disuse. Export your songs to keep them safe.', fr: 'Ce navigateur peut supprimer le stockage d’Ilya après une période d’inactivité. Exportez vos chants pour les garder en sécurité.' },
+	// The partial-loss oddity: the pointer in localStorage names a song the
+	// vault does not hold, while the vault holds others. Design §4's "plain
+	// notice naming what happened".
+	'storage.partialLoss': { en: 'Ilya’s storage looks incomplete: the last open song is not in the library. If you have an exported file, import it to bring your songs back.', fr: 'Le stockage d’Ilya semble incomplet\u00a0: le dernier chant ouvert n’est pas dans la bibliothèque. Si vous avez un fichier exporté, importez-le pour retrouver vos chants.' },
+	// A record that fails validation. NEVER OVERWRITTEN AND NEVER DELETED: the
+	// third sentence is the salvage path, and it is the whole reason the other
+	// two can be said honestly.
+	'song.unreadable': { en: 'This song could not be read. It has been left untouched. You can still export it.', fr: 'Ce chant n’a pas pu être lu. Il a été laissé intact. Vous pouvez tout de même l’exporter.' },
+	// A record whose `schema` exceeds what this code knows. Read-never, written
+	// never. Unlike 'binder.err.newer', a reload CAN deliver a newer Ilya here,
+	// because this is the app's own origin rather than a file from elsewhere.
+	'song.newerIlya': { en: 'This song was saved by a newer Ilya. Reload the app to update, then try again.', fr: 'Ce chant a été enregistré par une version plus récente d’Ilya. Rechargez l’application pour la mettre à jour, puis réessayez.' },
+	// No storage at all: neither IndexedDB nor localStorage would answer. Ilya
+	// runs in memory and says so rather than pretending it saved.
+	'storage.none': { en: 'Nothing can be saved in this browsing mode. Your work will not survive closing the page. You can still export your songs.', fr: 'Rien ne peut être enregistré dans ce mode de navigation. Votre travail ne survivra pas à la fermeture de la page. Vous pouvez tout de même exporter vos chants.' },
 	// N.67 step 1, socket §4.1. Two tabs, one song: the tab that has unsaved
 	// work KEEPS it and says this. The second sentence is the whole point of
 	// the notice, because the failure it replaces was silence.
@@ -630,7 +677,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// cannot be misread as a different day. First %s is the singer's own copy,
 	// second is the file's.
 	'binder.exportAll': { en: 'Export all songs', fr: 'Exporter tous les chants' },
-	'collide.title': { en: 'You already have this song.', fr: 'Vous avez déjà ce chant.' },
+	// REVISED for N.67 step 6, walk finding W1, approved by Dann 2026-08-18. The
+	// dialog never named the song it was asking about, so two collisions in a
+	// row read as one stubborn dialog and, with equal dates, the singer could
+	// not tell which song each answer touched. %s is the colliding song's own
+	// name, or the placeholder the list draws for it when it has none.
+	'collide.title': { en: 'You already have this song: %s.', fr: 'Vous avez déjà ce chant\u00a0: %s.' },
 	'collide.body': { en: 'The song in this file has the same identity as one you already have. Yours was last changed %s. The one in this file was last changed %s. Ilya cannot undo taking the one in this file.', fr: 'Le chant de ce fichier a la même identité qu’un chant que vous avez déjà. Le vôtre a été modifié pour la dernière fois le %s. Celui de ce fichier a été modifié pour la dernière fois le %s. Ilya ne peut pas annuler le remplacement.' },
 	'collide.take': { en: 'Take the one in this file', fr: 'Prendre celui de ce fichier' },
 	'collide.both': { en: 'Keep both', fr: 'Conserver les deux' },

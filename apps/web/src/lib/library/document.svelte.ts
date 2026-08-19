@@ -70,6 +70,19 @@ export class SongDocument {
 	saveState = $state<SaveState>({ status: 'saved' });
 	/** Why the load did not come back whole. Replaces `pairingsLoadFailed`. */
 	readonly loadFailure: FailureReason | null;
+	/**
+	 * THIS SONG IS NEVER WRITTEN TO. N.67 step 6, design §4.
+	 *
+	 * A record that failed validation, or one saved by a newer Ilya, is never
+	 * overwritten and never deleted. The page still renders it, the singer can
+	 * still export it, and every autosave stops at this flag.
+	 *
+	 * IT HAS TO BE HERE RATHER THAN AT THE DRIVER. The document rebuilds the
+	 * record from its own fields on every write (`recordFromFields`), so by the
+	 * time a write reached storage the damage would already be gone: the singer
+	 * would see a song that looked repaired and had in fact been emptied.
+	 */
+	readonly readOnly: boolean;
 
 	/**
 	 * The score's provenance, or null for a song with no score yet. The BYTES
@@ -116,6 +129,7 @@ export class SongDocument {
 		this.name = loaded.name;
 		this.source = loaded.source;
 		this.loadFailure = loadFailure;
+		this.readOnly = loadFailure === 'malformed' || loadFailure === 'newer-schema';
 
 		this.#apply(loaded);
 
@@ -153,6 +167,10 @@ export class SongDocument {
 				// A record arriving from another tab is not a change this tab
 				// made, and writing it back would bounce it between tabs.
 				if (this.#applying) return;
+				// N.67 step 6. The one place the read-only rule is enforced: nothing
+				// is scheduled, so nothing is debounced, so `pagehide` has nothing
+				// to flush either.
+				if (this.readOnly) return;
 				this.#scheduler.schedule();
 			});
 		});
@@ -204,6 +222,9 @@ export class SongDocument {
 	}
 
 	async #write(): Promise<void> {
+		// Belt beside braces. Nothing schedules a read-only document, and a direct
+		// `flush()` must not get round that either.
+		if (this.readOnly) return;
 		this.saveState = { status: 'saving' };
 		// $state.snapshot IS REQUIRED, NOT TIDINESS. `$state` deeply proxies
 		// plain objects and arrays, IndexedDB writes through the structured

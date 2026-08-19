@@ -17,6 +17,10 @@
 import { PAIRINGS_KEY, type PairingMap } from '$lib/shane/pairings';
 import { parseFromScore, serializeFromScore, type MetadataField } from '$lib/metadata-provenance';
 import { getAllByIndex, getAllFrom, getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
+// N.67 step 6. The list must say which rows cannot be read, and there is ONE
+// validator in this codebase. A type-only import runs the other way, so this
+// adds no runtime cycle.
+import { validateRecord } from './library';
 import {
 	emptySongRecord,
 	type FailureReason,
@@ -86,6 +90,15 @@ export interface SongSummary {
 	updatedAt: string;
 	/** For recognition. Null where the song has no score, or none could be hashed. */
 	fingerprint: string | null;
+	/**
+	 * Why this row cannot be read, or null when it reads whole.
+	 *
+	 * N.67 step 6, design §4. A record that fails validation is NEVER
+	 * OVERWRITTEN AND NEVER DELETED, so it stays in the list and says what is
+	 * wrong with it. Optional so that every summary built before this step
+	 * still type-checks as one.
+	 */
+	readFailure?: 'malformed' | 'newer-schema' | null;
 }
 
 export function summarize(record: SongRecord): SongSummary {
@@ -95,6 +108,35 @@ export function summarize(record: SongRecord): SongSummary {
 		createdAt: record.createdAt,
 		updatedAt: record.updatedAt,
 		fingerprint: record.source?.fingerprint || null,
+		readFailure: null,
+	};
+}
+
+/**
+ * Summarize a value straight out of the store, whatever shape it turned out
+ * to be.
+ *
+ * N.67 step 6. `summarize` above takes a record the caller already trusts;
+ * this takes what the vault actually holds, which is the only honest input for
+ * a list that has to draw an unreadable row. The DISPLAY FIELDS ARE READ FROM
+ * THE STORED VALUE where they are strings, not from the rebuilt record, because
+ * the rebuilt one carries today's date and an empty name: a damaged song must
+ * still appear under its own name and its own date, or the singer cannot tell
+ * which song it is and the mark is useless.
+ */
+export function summarizeStored(value: unknown, id: string, now: string): SongSummary {
+	const { record, reason } = validateRecord(value, id, now);
+	if (!reason) return summarize(record);
+	const raw = (value && typeof value === 'object' ? value : {}) as Record<string, unknown>;
+	const str = (key: string, fallback: string): string =>
+		typeof raw[key] === 'string' ? (raw[key] as string) : fallback;
+	return {
+		id,
+		name: str('name', ''),
+		createdAt: str('createdAt', record.createdAt),
+		updatedAt: str('updatedAt', record.updatedAt),
+		fingerprint: null,
+		readFailure: reason === 'newer-schema' ? 'newer-schema' : 'malformed',
 	};
 }
 
@@ -327,7 +369,10 @@ export function createMemoryDriver(seed: SongRecord[] = []): StorageDriver {
 		},
 		plural: {
 			async list() {
-				return [...songs.values()].map(summarize);
+				// Through the same door the IndexedDB driver's list uses, so a test
+				// that seeds a damaged record sees what a browser would see.
+				const now = new Date().toISOString();
+				return [...songs.values()].map((r) => summarizeStored(r, (r as SongRecord).id, now));
 			},
 			async remove(id) {
 				songs.delete(id);
@@ -432,7 +477,11 @@ export function createIndexedDbDriver(db: IDBDatabase): StorageDriver {
 				// Reads the RECORDS, which are kilobytes. The sources store is not
 				// touched, so listing a hundred songs never reads a hundred scores.
 				const stored = await getAllFrom<SongRecord>(db, SONGS_STORE);
-				return stored.map(summarize);
+				// N.67 step 6: validated on the way past, so the drawer can mark the
+				// rows it cannot read. The store's own keyPath is `id`, so every
+				// value here has one whatever else is wrong with it.
+				const now = new Date().toISOString();
+				return stored.map((value) => summarizeStored(value, String((value as SongRecord)?.id ?? ''), now));
 			},
 			async remove(id) {
 				try {

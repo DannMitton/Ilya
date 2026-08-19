@@ -38,6 +38,10 @@ import type { SongRow } from '$lib/library/songs';
 			activeId: string;
 			plural: boolean;
 			error: string | null;
+			/** N.67 step 6: what a row says when its record cannot be read. */
+			unreadable: string;
+			/** N.67 step 6: what a row says when a newer Ilya wrote it. */
+			newerIlya: string;
 			onopen: (id: string) => void;
 			onnew: () => void;
 			onrename: (id: string, name: string) => void;
@@ -257,6 +261,8 @@ import type { SongRow } from '$lib/library/songs';
 			activeId={songLibrary.activeId}
 			plural={songLibrary.plural}
 			error={songLibrary.error}
+			unreadable={songLibrary.unreadable}
+			newerIlya={songLibrary.newerIlya}
 			onopen={songLibrary.onopen}
 			onnew={songLibrary.onnew}
 			onrename={songLibrary.onrename}

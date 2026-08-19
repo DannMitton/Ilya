@@ -24,7 +24,9 @@ import { migrateFromLocalStorage, type MigrationOutcome } from './migration';
 import { readStorageEstimate, type StorageReading } from './quota';
 import { LEGACY_SONG_ID } from './document.svelte';
 import { listSongs, nameFor } from './songs';
-import type { LoadResult, SongRecord } from './types';
+import type { SongSummary } from './driver';
+import type { PointerState } from './notices';
+import type { FailureReason, LoadResult, SongRecord } from './types';
 
 /**
  * A pointer, not data. Losing it loses nothing but which song opens first,
@@ -52,6 +54,13 @@ export interface OpenedLibrary {
 	storage: StorageReading;
 	/** Set when the vault could not be opened and the app fell back. */
 	vaultError: string | null;
+	/**
+	 * N.67 step 6, the three facts `storage.partialLoss` is decided from. They
+	 * are read here because this is the only place that has all three at once:
+	 * the pointer as it was found, what the vault answered for it, and how many
+	 * songs the vault actually holds. `notices.ts` does the deciding.
+	 */
+	pointer: PointerState;
 }
 
 /**
@@ -125,6 +134,9 @@ export async function openLibrary(): Promise<OpenedLibrary> {
 			migration: { kind: 'not-needed' },
 			storage: await readStorageEstimate(),
 			vaultError,
+			// The legacy driver holds exactly one song under a constant id, so
+			// there is no pointer to be stale and nothing for it to have lost.
+			pointer: { stored: true, found: true, songCount: 1 },
 		};
 	}
 
@@ -164,13 +176,20 @@ export async function openLibrary(): Promise<OpenedLibrary> {
 	// new one. A pointer naming a song that is not there yields an empty record
 	// rather than an error, which is the "new song" path.
 	let songId = readActiveSongId(store);
+	const pointerWasStored = songId !== null;
 	if (!songId) {
 		songId = migration.kind === 'migrated' ? migration.record.id : newId();
 		writeActiveSongId(store, songId);
 	}
 
+	// N.67 step 6. Read ONCE, here, and used twice: to decide whether the
+	// pointer names a song the vault actually holds, and to count the library
+	// for the same decision. The records are kilobytes and the sources store is
+	// not touched, which is what design §2.1 separated them for.
+	const stored = await listSongs(library.plural);
+
 	const loaded = await library.load(songId);
-	await backfillName(library, loaded.record);
+	await backfillName(library, loaded.record, loaded.reason ?? null, stored);
 	const source = await library.loadSource(songId);
 
 	return {
@@ -182,6 +201,11 @@ export async function openLibrary(): Promise<OpenedLibrary> {
 		migration,
 		storage: await readStorageEstimate(),
 		vaultError: null,
+		pointer: {
+			stored: pointerWasStored,
+			found: stored.some((song) => song.id === songId),
+			songCount: stored.length,
+		},
 	};
 }
 
@@ -202,9 +226,20 @@ export async function openLibrary(): Promise<OpenedLibrary> {
  * A failure here costs a name and never a song, so it is not reported: the
  * record is untouched, the app runs, and the next boot tries again.
  */
-async function backfillName(library: Library, record: SongRecord): Promise<void> {
+async function backfillName(
+	library: Library,
+	record: SongRecord,
+	reason: FailureReason | null,
+	others: readonly SongSummary[],
+): Promise<void> {
+	// N.67 step 6, design §4. A RECORD THAT FAILED VALIDATION IS NEVER WRITTEN
+	// TO, and this was the first thing that would have written to one: it fires
+	// on any record whose name is empty, and the rebuilt stand-in for a damaged
+	// record always has an empty name. Left as it was, the salvage path would
+	// have been destroyed at boot, before the singer touched anything.
+	if (reason === 'malformed' || reason === 'newer-schema') return;
 	if (record.name !== '') return;
-	const named = nameFor(record, await listSongs(library.plural));
+	const named = nameFor(record, others);
 	if (named === '') return;
 	// Mutated before the document is built FROM this record, so the page shows
 	// the name in the same paint as the song rather than one save later.

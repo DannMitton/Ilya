@@ -24,9 +24,13 @@
 	// longer called from here; the legacy driver writes the same key.
 	import { SongDocument, LEGACY_SONG_ID } from '$lib/library/document.svelte';
 	import { Library } from '$lib/library/library';
-	import { createMemoryDriver } from '$lib/library/driver';
+	import { createMemoryDriver, globalStore } from '$lib/library/driver';
 	import { emptySongRecord } from '$lib/library/types';
-	import { formatBytes } from '$lib/library/quota';
+	import { readStorageEstimate, type StorageReading } from '$lib/library/quota';
+	// N.67 step 6, the sweep. WHICH SENTENCE, AND WHETHER, is decided in plain
+	// TypeScript where a gate can reach it. What is left in this file is looking
+	// the key up and drawing the paragraph.
+	import { bootNotices, drawerNotices, fillNotice, type NoticeLine } from '$lib/library/notices';
 	import { hashBytes, fingerprintVocalLine } from '$lib/library/fingerprint';
 	import { arrivalDecision } from '$lib/library/library';
 	import { readBinder } from '$lib/library/binder';
@@ -36,6 +40,7 @@
 	// written in this file is a rule no gate can reach.
 	import {
 		binderFailureKey,
+		collisionName,
 		exportBinder,
 		importBinder,
 		importNoticeKey,
@@ -951,6 +956,34 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/** What an import added. Cleared by the next export or import, never stale. */
 	let binderNotice = $state<string | null>(null);
 
+	/* ── N.67 step 6, the sweep: what storage tells the singer ───────── */
+
+	// The last reading of `navigator.storage.estimate()`. Taken at boot and read
+	// again the moment a write refuses for quota, because the boot figure is the
+	// one thing a full origin is guaranteed to have moved past.
+	let storageReading = $state<StorageReading>(opened?.storage ?? { persisted: null });
+	// Decided ONCE, at mount, because deciding it again would show the
+	// once-per-device eviction notice a second time: `bootNotices` writes the
+	// flag as it decides, which is what makes "once" survive a reload.
+	let bootLines = $state<NoticeLine[]>([]);
+	const storageLines = $derived(
+		drawerNotices({
+			boot: bootLines,
+			saveFailure: doc.saveFailure,
+			loadFailure: doc.loadFailure,
+			reading: storageReading,
+		}),
+	);
+	$effect(() => {
+		// A REAL FIGURE OR NONE. The notice appends "Storage: x of y used" only
+		// where the browser answered with numbers, and the numbers worth showing
+		// are the ones from the moment the write refused.
+		if (doc.saveFailure !== 'quota-exceeded') return;
+		void readStorageEstimate().then((reading) => {
+			storageReading = reading;
+		});
+	});
+
 	/** A date a singer would write, in their own language. */
 	function todayInWords(): string {
 		return new Date().toLocaleDateString(language === 'fr' ? 'fr-CA' : 'en-CA', {
@@ -983,7 +1016,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			// Taken live: the document holds edits the vault has not seen, and a
 			// rename debounces like everything else.
 			openRecord: { ...doc.toRecord(), name: doc.name },
-			load: async (id) => (await library.load(id)).record,
+			// THE WHOLE LOAD RESULT. A record that failed validation comes back with
+			// its raw stored value beside it, and that is what the binder carries:
+			// design §4's salvage path, which is the only way anything ever comes
+			// back out of a record Ilya has promised never to write to again.
+			load: (id) => library.load(id),
 			loadSource: (id) => library.loadSource(id),
 			appVersion: version,
 			exportedAt: new Date().toISOString(),
@@ -1041,7 +1078,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		return new Promise((resolve) => {
 			collisionResolve = resolve;
 			void askToReplace(
-				t('collide.title', language),
+				// N.67 step 6, walk finding W1. The title names the song being asked
+				// about, so two collisions in a row are two questions rather than one
+				// stubborn dialog. The name comes from `exchange.ts`, which knows the
+				// placeholder rule for a song that was never named.
+				t('collide.title', language).replace('%s', collisionName(collision, t('songs.untitled', language))),
 				t('collide.body', language).replace('%s', mine).replace('%s', theirs),
 				[
 					{ label: t('collide.take', language), destructive: true, run: () => settleCollision('take') },
@@ -1083,6 +1124,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			// written on it would report "no collision" for every song in the file.
 			existing: await listSongs(library.plural),
 			save: (record, source) => library.save(record, source),
+			// N.67 step 6. A song that could not be read in the origin it left is
+			// written back EXACTLY AS THE FILE CARRIES IT, with no stamp and no
+			// rebuild, or the round trip would repair what design §4 promised to
+			// leave untouched.
+			salvage: (raw, id, source) => library.salvage(raw, id, source),
 			ask: askCollision,
 			newId,
 			openId: doc.id,
@@ -1128,6 +1174,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				fingerprint: doc.source?.fingerprint ?? null,
 			},
 			t('songs.untitled', language),
+			// N.67 step 6: a song that cannot be written to keeps its STORED name
+			// in the list, never the live one, which for a damaged record is a name
+			// the page invented and can never save.
+			doc.readOnly,
 		),
 	);
 
@@ -1200,6 +1250,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// live record and would write its own name back over a rename that went
 		// round it, so the rename would appear to work and then undo itself.
 		if (id === doc.id) {
+			// N.67 step 6: except when this song refuses to be written to at all.
+			// Reported rather than swallowed, which is N.27's rule, and the sentence
+			// already exists.
+			if (doc.readOnly) {
+				libraryError = t('songs.err.write', language);
+				return;
+			}
 			doc.name = name;
 			return;
 		}
@@ -1252,6 +1309,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// given one, so on the legacy driver New song and Delete do not render.
 		plural: library.plural !== undefined,
 		error: libraryError,
+		// N.67 step 6. The two sentences a row may have to say about itself,
+		// looked up here because the list holds no dictionary: `SongList.svelte`
+		// draws, and every string it draws is handed to it.
+		unreadable: t('song.unreadable', language),
+		newerIlya: t('song.newerIlya', language),
 		onopen: (id: string) => void switchSong(id),
 		onnew: () => void handleNewSong(),
 		onrename: handleRenameSong,
@@ -1367,6 +1429,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * theirs and Ilya does not argue with it. `nameFor` holds the rule.
 	 */
 	function nameIfUnnamed(): void {
+		// N.67 step 6. Naming is a WRITE, and a record that could not be read is
+		// never written to. Without this the page invents a name for a damaged
+		// song on the singer's first keystroke and nothing can ever store it.
+		if (doc.readOnly) return;
 		if (doc.name !== '') return;
 		const named = nameFor(doc.toRecord(), songs);
 		if (named !== '') doc.name = named;
@@ -1549,23 +1615,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 	}
 	onMount(() => {
-		// N.67 step 1. The first reading of `navigator.storage.estimate()` this
-		// project has ever taken: it had never been called anywhere in the tree
-		// before this step. Logged rather than drawn, because the storage COPY
-		// is step 6's work and inventing a surface for it now would be building
-		// ahead of the design. Matches the house console style at
-		// `handleWordClick`.
-		if (opened) {
-			console.log('[Ilya] storage', {
-				driver: opened.driverKind,
-				songId: opened.songId,
-				migration: opened.migration.kind,
-				usage: opened.storage.usage !== undefined ? formatBytes(opened.storage.usage) : 'not reported',
-				quota: opened.storage.quota !== undefined ? formatBytes(opened.storage.quota) : 'not reported',
-				persisted: opened.storage.persisted,
-				vaultError: opened.vaultError,
-			});
-		}
+		// N.67 step 6. Step 1's storage console line is GONE, not moved: it said
+		// it was there because "the storage COPY is step 6's work", and this is
+		// step 6. What it logged is now drawn, in both languages.
+		bootLines = bootNotices(
+			{
+				loadFailure: doc.loadFailure,
+				persisted: opened?.storage.persisted ?? null,
+				// A prerender pass has no vault and nothing to have lost.
+				pointer: opened?.pointer ?? { stored: false, found: true, songCount: 0 },
+			},
+			globalStore(),
+		);
 		// N.67 step 4b. The library, read once at boot and refreshed after every
 		// act that changes it. Not awaited into the boot path: a slow list must
 		// not hold up the song the singer is already looking at.
@@ -1893,19 +1954,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{t('station.startOver', language)}
 						</button>
 					{/if}
-					{#if doc.saveFailure}
-						<!-- R5, N.27: the save does not swallow its exception. Unstyled
-						     on purpose, matching 'shane-no-lyrics' below. N.67 step 0:
-						     this now reports the WHOLE song's save, not the pairing
-						     map's alone, so the five sites that used to fail in silence
-						     (the poem, the metadata, its tags, the glosses, and the
-						     syllabification choice) report here too. Same two strings. -->
-						<p class="shane-storage-notice">
-							{t(doc.saveFailure === 'quota-exceeded' ? 'storage.saveFailed.quota' : 'storage.saveFailed.generic', language)}
-						</p>
-					{:else if doc.loadFailure}
-						<p class="shane-storage-notice">{t('storage.loadFailed', language)}</p>
-					{/if}
+					<!-- R5, N.27: no save site is silent. N.67 step 0 made this the
+					     WHOLE song's report rather than the pairing map's alone, and
+					     N.67 step 6 finalized what it says: quota with its figures,
+					     eviction, no storage at all, the partial-loss oddity, an
+					     unreadable record, and a record from a newer Ilya. WHICH
+					     sentences and in WHAT ORDER is `notices.ts`, where a gate can
+					     reach it. Unstyled on purpose, matching its neighbours. -->
+					{#each storageLines as line}
+						<p class="shane-storage-notice">{fillNotice(t(line.key, language), line.args)}</p>
+					{/each}
 					{#if doc.remoteChange}
 						<!-- N.67 step 1, socket §4.1. Last-write-wins WITH the notice.
 						     A clean tab reloads silently and never reaches here; this

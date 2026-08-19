@@ -19,9 +19,9 @@
  * on the result, and every caller has something to say about it.
  */
 import { autoName, binderFileName, buildBinder, type BinderFailure, type BinderSong } from './binder';
-import { uniqueName } from './songs';
+import { placeholderName, uniqueName } from './songs';
 import type { SongSummary, SourceBytes } from './driver';
-import type { SongRecord } from './types';
+import type { LoadResult, SongRecord } from './types';
 
 /* ── Carrying songs off ─────────────────────────────────────────── */
 
@@ -38,7 +38,16 @@ export interface ExportDeps {
 	 */
 	openId: string;
 	openRecord: SongRecord;
-	load: (id: string) => Promise<SongRecord>;
+	/**
+	 * THE WHOLE LOAD RESULT, not the record alone.
+	 *
+	 * N.67 step 6, design §4's salvage path. A record that failed validation
+	 * comes back as a rebuilt stand-in with the damage already removed, and
+	 * exporting THAT would hand the singer a binder full of a repair they never
+	 * asked for. `LoadResult.raw` carries what the vault actually holds, and
+	 * that is what goes into the file.
+	 */
+	load: (id: string) => Promise<LoadResult>;
 	loadSource: (id: string) => Promise<SourceBytes | null>;
 	appVersion: string;
 	exportedAt: string;
@@ -75,12 +84,35 @@ export async function exportBinder(deps: ExportDeps): Promise<ExportResult> {
 	try {
 		const songs: BinderSong[] = [];
 		for (const id of deps.ids) {
-			const record = id === deps.openId ? deps.openRecord : await deps.load(id);
+			// EVERY SONG IS READ FROM THE VAULT, INCLUDING THE OPEN ONE, and the
+			// open one then usually gives way to the document.
+			//
+			// **REFUTED ON THE WALK, 2026-08-18, AND THIS IS THE REPAIR.** The first
+			// build read the open song from the document alone, on the reasoning
+			// that the document holds edits the vault has not seen. It does, but a
+			// document whose load FAILED holds the rebuilt stand-in with the damage
+			// already gone, plus edits that are never going to be saved. Exporting
+			// that carried a repair the singer never asked for into the one copy
+			// that outlives the browser, and the walk caught it by opening the
+			// damaged song before pressing Export all.
+			//
+			// So the vault's answer decides: `raw` present means this song could not
+			// be read, and what it holds wins over anything the page is showing.
+			const loaded = await deps.load(id);
+			const record = id === deps.openId && loaded.raw === undefined ? deps.openRecord : loaded.record;
 			const source = await deps.loadSource(id);
 			// THE SINGER'S NAME WINS. Recomputing an auto-name here would ignore a
 			// rename, which is the one thing the library door exists to let them do.
 			const name = record.name || autoName(record, deps.today, deps.untitled);
-			songs.push({ record, source, name });
+			// AN UNREADABLE SONG IS CARRIED, NOT SKIPPED AND NOT THROWN OVER.
+			// Design §4: its raw record and its source bytes can still be exported
+			// for salvage, and export is the only way anything ever comes back out
+			// of a record this app has promised never to write to again. `raw` is
+			// set only where validation failed, so an ordinary binder carries no
+			// second copy of anything.
+			songs.push(
+				loaded.raw !== undefined ? { record, source, name, raw: loaded.raw } : { record, source, name },
+			);
 		}
 		if (songs.length === 0) return { ok: false };
 
@@ -132,6 +164,16 @@ export interface ImportDeps {
 	 */
 	existing: readonly SongSummary[];
 	save: (record: SongRecord, source: SourceBytes | null) => Promise<{ ok: boolean }>;
+	/**
+	 * Write a song that could not be read, EXACTLY AS THE FILE CARRIES IT.
+	 *
+	 * N.67 step 6. Without this an unreadable song would come back through
+	 * `save` as the rebuilt stand-in, and the round trip would quietly repair
+	 * what design §4 promised to leave untouched. Optional so that a caller with
+	 * no salvage path still type-checks; where it is absent the rebuilt record
+	 * is written, and the caller has said by omission that it accepts that.
+	 */
+	salvage?: (raw: unknown, id: string, source: SourceBytes | null) => Promise<{ ok: boolean }>;
 	ask: (collision: Collision) => Promise<CollisionAnswer>;
 	newId: () => string;
 	/** The song the singer is in, which is the only one a reload can be owed to. */
@@ -183,10 +225,17 @@ export async function importBinder(deps: ImportDeps): Promise<ImportOutcome> {
 	const byId = new Map(deps.existing.map((song) => [song.id, song]));
 	const takenNames = new Set(deps.existing.map((song) => song.name).filter((name) => name !== ''));
 
-	const write = async (record: SongRecord, source: SourceBytes | null): Promise<boolean> => {
+	const write = async (
+		record: SongRecord,
+		source: SourceBytes | null,
+		raw?: unknown,
+	): Promise<boolean> => {
 		let ok: boolean;
 		try {
-			ok = (await deps.save(record, source)).ok;
+			ok =
+				raw !== undefined && deps.salvage
+					? (await deps.salvage(raw, record.id, source)).ok
+					: (await deps.save(record, source)).ok;
 		} catch {
 			// The vault reports rather than throws, but that is its promise and
 			// not this file's guarantee. Caught here so the contract holds no
@@ -214,7 +263,7 @@ export async function importBinder(deps: ImportDeps): Promise<ImportOutcome> {
 		const mine = byId.get(incoming.record.id);
 
 		if (!mine) {
-			if (await write(incoming.record, incoming.source)) outcome.added++;
+			if (await write(incoming.record, incoming.source, incoming.raw)) outcome.added++;
 			continue;
 		}
 
@@ -236,7 +285,7 @@ export async function importBinder(deps: ImportDeps): Promise<ImportOutcome> {
 			// bytes and `undefined` leaves them; handing `undefined` here would
 			// leave the old score attached to the new record, which is the chimera
 			// N.67 step 4a exists to prevent.
-			if (await write(incoming.record, incoming.source)) {
+			if (await write(incoming.record, incoming.source, incoming.raw)) {
 				outcome.replaced++;
 				if (incoming.record.id === deps.openId) outcome.replacedOpen = true;
 			}
@@ -264,7 +313,7 @@ export function keepBoth(
 	incoming: BinderSong,
 	id: string,
 	takenNames: ReadonlySet<string>,
-): [SongRecord, SourceBytes | null] {
+): [SongRecord, SourceBytes | null, unknown] {
 	// An unnamed song has nothing to number; the list draws it a placeholder.
 	const base = incoming.record.name || incoming.name;
 	const record: SongRecord = {
@@ -273,7 +322,16 @@ export function keepBoth(
 		name: base === '' ? '' : uniqueName(base, takenNames),
 	};
 	const source = incoming.source ? { ...incoming.source, songId: id } : null;
-	return [record, source];
+	// N.67 step 6. THE COPY OF AN UNREADABLE SONG IS STILL UNREADABLE, and its
+	// raw value is re-identified for exactly the reason the source bytes are:
+	// the id lives in more than one place, and a copy carrying the original's id
+	// is not a copy. Nothing else in the raw value is touched, so the damage
+	// travels intact and the singer has both songs to salvage from.
+	const raw =
+		incoming.raw !== null && typeof incoming.raw === 'object'
+			? { ...(incoming.raw as Record<string, unknown>), id }
+			: incoming.raw;
+	return [record, source, raw];
 }
 
 /* ── What the singer is told ────────────────────────────────────── */
@@ -288,6 +346,25 @@ export function keepBoth(
  * this module, the way `songs.ts` keeps it out by taking `untitled` as an
  * argument.
  */
+/**
+ * The name to put in the collision dialog's title.
+ *
+ * N.67 step 6, walk finding W1, approved by Dann 2026-08-18. The dialog never
+ * named the song it was asking about, so two collisions in a row read as one
+ * stubborn dialog and, with equal dates, the singer could not tell which song
+ * each answer touched.
+ *
+ * THE SONG ALREADY IN THE LIBRARY, not the one in the file. They share an id,
+ * which is why they collided; they may not share a name, and the singer is
+ * being asked what to do with THEIRS. An unnamed song gets the same placeholder
+ * the list draws for it, so the dialog and the row behind it say the same thing.
+ */
+export function collisionName(collision: Collision, untitled: string): string {
+	const mine = collision.mine.name;
+	if (mine !== '') return mine;
+	return placeholderName(collision.mine.createdAt, untitled);
+}
+
 export function binderFailureKey(reason: BinderFailure): string {
 	if (reason === 'newer-schema') return 'binder.err.newer';
 	if (reason === 'not-a-zip' || reason === 'not-a-binder') return 'binder.err.notIlya';

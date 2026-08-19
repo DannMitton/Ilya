@@ -26,6 +26,7 @@ import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
 	emptyMetadata,
 	emptySongRecord,
+	RECORD_SCHEMA,
 	type FailureReason,
 	type GlossRow,
 	type LoadResult,
@@ -107,7 +108,16 @@ function isStringRecord(value: unknown): value is Record<string, unknown> {
  */
 export function validateRecord(value: unknown, id: string, now: string): LoadResult {
 	const fallback = emptySongRecord(id, now);
-	if (!isStringRecord(value)) return { record: fallback, reason: 'malformed' };
+	if (!isStringRecord(value)) return { record: fallback, reason: 'malformed', raw: value };
+
+	// A VERSION FROM THE FUTURE, design §4. Read-never: a newer Ilya may carry
+	// fields this code has no name for, and reading the ones it recognizes would
+	// produce a record that looks whole and is not. The raw value goes back
+	// untouched so nothing is lost, and the read-only guard downstream is what
+	// keeps it from being written at this version's number.
+	if (typeof value.schema === 'number' && value.schema > RECORD_SCHEMA) {
+		return { record: fallback, reason: 'newer-schema', raw: value };
+	}
 
 	let reason: FailureReason | undefined;
 	const malformed = () => {
@@ -183,7 +193,7 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 		} else malformed();
 	} else if (value.source !== undefined && value.source !== null) malformed();
 
-	return reason ? { record, reason } : { record };
+	return reason ? { record, reason, raw: value } : { record };
 }
 
 /**
@@ -249,16 +259,23 @@ export class Library {
 
 	/** Never throws. A driver that throws is a failed load, not a crash. */
 	async load(id: string): Promise<LoadResult> {
-		let raw: LoadResult;
+		let found: LoadResult;
 		try {
-			raw = await this.#driver.load(id);
+			found = await this.#driver.load(id);
 		} catch {
 			return { record: emptySongRecord(id, this.#now()), reason: 'malformed' };
 		}
-		const validated = validateRecord(raw.record, id, this.#now());
+		const validated = validateRecord(found.record, id, this.#now());
 		// The driver's own reason wins: "no storage" is a truer account of what
 		// happened than "malformed", which is what an empty record looks like.
-		return { record: validated.record, reason: raw.reason ?? validated.reason };
+		const reason = found.reason ?? validated.reason;
+		// N.67 step 6. The stored value is carried ONLY where validation failed,
+		// which is the one case anything downstream needs it: the export writes
+		// it into a binder rather than the rebuilt record, so salvage carries
+		// what the singer actually has and not what this code could make of it.
+		return reason && validated.raw !== undefined
+			? { record: validated.record, reason, raw: validated.raw }
+			: { record: validated.record, reason };
 	}
 
 	/**
@@ -267,6 +284,29 @@ export class Library {
 	 * `source` undefined leaves the stored bytes alone, which is every autosave;
 	 * a value replaces them and `null` deletes them, in the same transaction as
 	 * the record.
+	 *
+	 * ── THE REPORTING SEAM, AND A STANDING RECOMMENDATION FOR N.27 ──────────
+	 *
+	 * This method and `load` above are the seam: every write in the library
+	 * returns an `Outcome` carrying a `FailureReason`, the page renders that
+	 * reason through `notices.ts`, and nothing between the two is allowed to
+	 * catch and say nothing. That is what satisfies N.27's prohibition, "do not
+	 * add a second silent save site while N.27 is open" (CONTRACT §6), by
+	 * construction rather than by discipline.
+	 *
+	 * **THE RECOMMENDATION, RECORDED HERE AND NOT BUILT (N.67 step 6):** when
+	 * N.27 is built, `profileStore.saveStore` (`profileStore.ts:217-225`, which
+	 * the brief cited as `:216-224`; read off the tree at this commit) routes
+	 * through this seam. It is the last catch-and-drop of its kind in the tree:
+	 * it writes the singer's voice profile to `localStorage`, and on quota or a
+	 * serialization failure it swallows the exception and returns `void`, so a
+	 * caller cannot know the write refused and the singer is never told. Giving
+	 * it an outcome type and a reason is the whole change; the sentence it needs
+	 * already exists as `storage.quotaFull` and `storage.saveFailed.generic`.
+	 *
+	 * **N.27 IS NOT BUILT HERE.** The voice profile is not a song, it does not
+	 * live in this vault (design §2.2 leaves `shane.profiles.v2` where it is),
+	 * and moving it would be its own step with its own walk.
 	 */
 	async save(record: SongRecord, source?: SourceBytes | null): Promise<Outcome> {
 		const stamped = { ...record, updatedAt: this.#now() };
@@ -294,6 +334,33 @@ export class Library {
 			return await this.#driver.loadSource(songId);
 		} catch {
 			return null;
+		}
+	}
+
+	/**
+	 * Write a record back EXACTLY AS IT CAME, with no stamp and no rebuild.
+	 *
+	 * N.67 step 6, and the ONE write in this class that does not go through
+	 * `save`. It exists for a single caller: an import carrying a song that
+	 * failed validation in the origin it was exported from. Stamping `updatedAt`
+	 * on a damaged record would edit the very thing being preserved, and
+	 * rebuilding it through `recordFromFields` would launder the damage into a
+	 * record that looks whole and is not.
+	 *
+	 * IT IS NOT SILENT. The outcome carries a reason like every other write, so
+	 * N.27's prohibition holds here too.
+	 *
+	 * A value that cannot be a record at all is REFUSED rather than coerced: the
+	 * songs store keys on `id`, so a value that is not an object, or whose `id`
+	 * is not the string the caller asked for, would either fail the put or land
+	 * under a key nothing can find again.
+	 */
+	async salvage(value: unknown, id: string, source?: SourceBytes | null): Promise<Outcome> {
+		if (!isStringRecord(value) || value.id !== id) return { ok: false, reason: 'malformed' };
+		try {
+			return await this.#driver.save(value as unknown as SongRecord, source);
+		} catch {
+			return { ok: false, reason: 'write-failed' };
 		}
 	}
 

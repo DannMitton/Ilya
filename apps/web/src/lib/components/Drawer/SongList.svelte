@@ -28,6 +28,14 @@
 		plural: boolean;
 		/** Why the last act on the library did not happen. N.27: never silent. */
 		error: string | null;
+		/**
+		 * N.67 step 6, design §4. What a row says when its record could not be
+		 * read, and when it was written by a newer Ilya. Handed in rather than
+		 * looked up: this file holds no dictionary, for the same reason it holds
+		 * no logic.
+		 */
+		unreadable: string;
+		newerIlya: string;
 		language: Language;
 		onopen: (id: string) => void;
 		onnew: () => void;
@@ -35,7 +43,19 @@
 		ondelete: (id: string) => void;
 	}
 
-	let { songs, activeId, plural, error, language, onopen, onnew, onrename, ondelete }: Props = $props();
+	let {
+		songs,
+		activeId,
+		plural,
+		error,
+		unreadable,
+		newerIlya,
+		language,
+		onopen,
+		onnew,
+		onrename,
+		ondelete,
+	}: Props = $props();
 
 	let renamingId = $state<string | null>(null);
 	let draft = $state('');
@@ -120,6 +140,17 @@
 					{/if}
 				{/if}
 			</li>
+			{#if song.readFailure}
+				<!-- N.67 step 6, design §4. THE RECORD IS NEVER OVERWRITTEN AND NEVER
+				     DELETED, so the row stays and says what is wrong with it. The
+				     whole sentence rather than a mark, because its last clause is the
+				     salvage path and a badge cannot carry that. Rename and Delete are
+				     still drawn: a rename is a write this song refuses, and deleting
+				     it is the singer's own choice to make. -->
+				<li class="song-note-row">
+					<p class="song-note">{song.readFailure === 'newer-schema' ? newerIlya : unreadable}</p>
+				</li>
+			{/if}
 		{/each}
 	</ul>
 
@@ -253,6 +284,21 @@
 		border-radius: 4px;
 		cursor: pointer;
 		transition: opacity 0.12s;
+	}
+
+	/* The unreadable sentence, in the drawer's own quiet register: the same
+	   family, size, and colour as .song-error, indented under the row it belongs
+	   to so it reads as that row's note rather than as the list's. */
+	.song-note-row {
+		display: block;
+	}
+
+	.song-note {
+		margin: 0 0 4px 0.5rem;
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		line-height: 1.4;
+		color: var(--ink-secondary);
 	}
 
 	.song-error {

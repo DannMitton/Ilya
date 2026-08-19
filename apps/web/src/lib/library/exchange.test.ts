@@ -11,6 +11,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
 	exportBinder,
 	importBinder,
+	collisionName,
 	keepBoth,
 	libraryBinderName,
 	binderFailureKey,
@@ -55,7 +56,9 @@ describe('exportBinder', () => {
 			ids: ['a'],
 			openId: 'a',
 			openRecord: record('a', { name: 'The open one', poem: 'live text' }),
-			load: async (id: string) => record(id, { name: `Vault ${id}` }),
+			// N.67 step 6: the export takes the WHOLE load result, so an unreadable
+			// record can carry its raw stored value into the binder beside it.
+			load: async (id: string) => ({ record: record(id, { name: `Vault ${id}` }) }),
 			loadSource: async () => null,
 			appVersion: '2026a',
 			exportedAt: NOW,
@@ -590,5 +593,35 @@ describe('importNoticeKey', () => {
 			key: 'binder.importedOne',
 			count: 1,
 		});
+	});
+});
+
+describe('collisionName, walk finding W1', () => {
+	function collision(mine: Partial<SongSummary>): Collision {
+		return {
+			incoming: { record: record('same-id', { name: 'The file’s copy' }), source: null, name: 'The file’s copy' },
+			mine: {
+				id: 'same-id',
+				name: '',
+				createdAt: '2026-08-01T00:00:00.000Z',
+				updatedAt: '2026-08-02T00:00:00.000Z',
+				fingerprint: null,
+				...mine,
+			},
+		};
+	}
+
+	it('names the song ALREADY IN THE LIBRARY, not the one in the file', () => {
+		// They share an id, which is why they collided; they need not share a
+		// name, and the singer is being asked what to do with theirs.
+		expect(collisionName(collision({ name: 'Кабалевский, Сонет 90' }), 'Untitled')).toBe('Кабалевский, Сонет 90');
+	});
+
+	it('falls back to the placeholder the list already draws for an unnamed song', () => {
+		// The dialog and the row behind it then say the same thing, which is the
+		// whole point of naming it: two collisions in a row must read as two
+		// questions rather than as one stubborn dialog.
+		expect(collisionName(collision({}), 'Untitled')).toBe('Untitled, 2026-08-01');
+		expect(collisionName(collision({}), 'Sans titre')).toBe('Sans titre, 2026-08-01');
 	});
 });

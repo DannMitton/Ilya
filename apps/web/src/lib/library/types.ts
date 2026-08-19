@@ -95,7 +95,20 @@ export type FailureReason =
 	| 'no-storage'
 	| 'quota-exceeded'
 	| 'write-failed'
-	| 'malformed';
+	| 'malformed'
+	| 'newer-schema';
+
+/**
+ * The record's own format version, which is what `schema` counts.
+ *
+ * N.67 step 6. NOTHING READ `schema` BEFORE THIS STEP. `validateRecord`
+ * rebuilt every field from `emptySongRecord`, whose `schema` is the literal 1,
+ * so a record written by a future Ilya was silently DOWNGRADED to 1 and then
+ * written back at that number: design §4's "a version from the future" was
+ * designed and never built. Only the binder's manifest schema was checked
+ * (`binder.ts`), and that is a different number about a different object.
+ */
+export const RECORD_SCHEMA = 1;
 
 export type Outcome = { ok: true } | { ok: false; reason: FailureReason };
 
@@ -107,6 +120,18 @@ export type Outcome = { ok: true } | { ok: false; reason: FailureReason };
 export interface LoadResult {
 	record: SongRecord;
 	reason?: FailureReason;
+	/**
+	 * The stored value EXACTLY AS IT WAS FOUND, carried only when `reason` is
+	 * `malformed` or `newer-schema`.
+	 *
+	 * N.67 step 6, design §4's salvage path. `record` above is what the page can
+	 * run on, rebuilt field by field, and it is NOT what the singer has: a
+	 * record that failed validation has already lost something by the time it
+	 * reaches `record`. This is the thing that still holds it, and it is what an
+	 * export writes into a binder. Absent on a clean load, so the ordinary path
+	 * carries no second copy of every song.
+	 */
+	raw?: unknown;
 }
 
 /** The six metadata fields, all empty. Matches `+page.svelte:256-263`. */
