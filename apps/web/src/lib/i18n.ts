@@ -310,6 +310,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.err.pdfUnreadable':    { en: 'Ilya could not open that PDF. If it is password protected, save an unlocked copy and try again.', fr: 'Ilya n’a pas pu ouvrir ce PDF. S’il est protégé par un mot de passe, enregistrez-en une copie déverrouillée et réessayez.' },
 
 	'upload.err.mus':              { en: 'This is a pre-2014 Finale file (.mus). This closed format cannot be read directly. Resave it as .musx in Finale 2014 or later, or export it to MusicXML, then upload again.', fr: 'Ceci est un fichier Finale antérieur à 2014 (.mus). Ce format fermé ne peut pas être lu directement. Réenregistrez-le en .musx dans Finale 2014 ou ultérieur, ou exportez-le en MusicXML, puis téléversez-le à nouveau.' },
+	'upload.err.midi':             { en: 'This is a MIDI file, which Ilya cannot read. If it came from notation software, export MusicXML from the same program, then upload that.', fr: 'Ceci est un fichier MIDI, qu’Ilya ne peut pas lire. S’il provient d’un logiciel de notation, exportez-le en MusicXML depuis le même logiciel, puis téléversez-le.' },
 	'upload.err.invalidMnxJson':   { en: 'This .mnx file is not valid MNX JSON.', fr: 'Ce fichier .mnx n’est pas un MNX JSON valide.' },
 	'upload.err.jsonNotMnx':       { en: 'This JSON file is not an MNX score.', fr: 'Ce fichier JSON n’est pas une partition MNX.' },
 	'upload.err.xmlNotMusicxml':   { en: 'This XML file is not MusicXML.', fr: 'Ce fichier XML n’est pas du MusicXML.' },

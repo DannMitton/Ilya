@@ -418,6 +418,8 @@
 				switch (f.kind) {
 					case 'pre-2014-finale':
 						return { soon: false, message: T('upload.err.mus') };
+					case 'midi':
+						return { soon: false, message: T('upload.err.midi') };
 					case 'json-not-mnx':
 						return { soon: false, message: T('upload.err.jsonNotMnx') };
 					case 'xml-not-musicxml': {
