@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **555** |
+| web-test | **628** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -888,6 +888,46 @@ at that URL. A full save-and-reload observation takes about two minutes.
   too where the element has a ref.
 - **A localhost port is its own origin**, so its `localStorage` is a clean room
   and clearing it costs Dann nothing. Clear it when you are done.
+
+## `<dialog>`'s `close` EVENT DOES NOT FIRE IN THE IN-APP BROWSER PANE. 2026-08-18
+
+**`close()` shuts the dialog and fires NO `close` event** in the Chromium the
+Claude Code browser pane drives. Confirmed on a bare `<dialog>` built in the
+console with no framework near it: `open` goes true, `close()` sets it false,
+and a listener added with `addEventListener('close', …)` never runs, at 300 ms
+and again at 900 ms.
+
+**Cost, N.67 step 5:** a collision dialog written to resolve its answer from the
+close event hung the whole import on the first colliding song. Every one of the
+five gates passed with the hang live, because runes are inert under vitest and
+the module underneath was correct. **The browser found it and nothing else
+could.**
+
+- **Never make a dialog's answer depend on the `close` event.** Resolve from the
+  press, and guard `onclose` with `if (dialogEl?.open) return` so a late event
+  cannot blank or answer the next dialog in a sequence.
+- **This also means `onclose` cleanup may never run here.** `+page.svelte`
+  clears `pendingConfirm` and `pendingArrival` there. Whether that holds in
+  Safari and desktop Chrome is NOT ESTABLISHED.
+- **A real Escape key press did not close a modal in this pane either.** Whether
+  Escape works for a singer is therefore not testable from here.
+
+### Driving the app from the pane, the two instruments that work
+
+- **A file input takes a real file** via `DataTransfer`: build a `File`, assign
+  `input.files = dt.files`, dispatch `new Event('change', {bubbles: true})`. The
+  real handler runs.
+- **A download is readable** by wrapping `URL.createObjectURL` to keep the Blob
+  and stubbing `HTMLAnchorElement.prototype.click` so no download sheet blocks
+  the run. The export code itself is untouched.
+- **`requestAnimationFrame` never fires while the pane is hidden.** A poll built
+  on it hangs until the tool times out. Use `setTimeout`.
+- **Vite refuses `/@fs/` outside its root** (403), so repository fixtures under
+  `tools/` cannot be fetched from the page. A three-line `http.server` with
+  `Access-Control-Allow-Origin: *` on another port is the way in.
+- **The language toggle is `<span role="button">`, not `<button>`.** A
+  `querySelectorAll('button')` search for it finds nothing and `?.click()` fails
+  silently. Use `.lang-option`.
 
 ### RENAMING INSIDE A LARGE COMPONENT. The method, E.53
 
