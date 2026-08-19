@@ -37,24 +37,37 @@ any of them count.
 
 ## THE ONE THING
 
-> **DANN'S WALK OF N.67 STEP 6, ON A DEPLOY. It is the only thing left in
-> N.67.** Step 6 SHIPPED `cee4572` on 2026-08-18 and Code walked all eight items
-> of its brief in a real browser on a production build, refuting its own build
-> three times and repairing each. **But a local build is not a deploy, and
-> nothing in this project counts until Dann walks it.** The memo names the
-> instrument for every item and marks each WALKED or PROVOKED:
-> `docs/sessions/n67-6-the-sweep_r1_2026-08-18.md`.
-> **The three items a deploy walk should re-run**, because they are the ones a
-> local origin cannot settle: whether Chrome auto-grants persistence on a Vercel
-> origin (which decides whether the eviction notice appears at all), the quota
-> notice against a genuinely full origin rather than a stubbed `put`, and the
-> corrupt-record salvage carrying a real score file's BYTES, which is gate-checked
-> and was never walked.
-> **N.58's real scope is still NOT ESTABLISHED**; a scoping brief was delivered
-> 2026-08-14 and there is no record of it being run. **Once Dann's walk closes
-> N.67, the beta line's remainder decides when N.73 (the GUI overhaul) builds. If
-> Dann rules N.58, N.72's iPhone walk, or N.73 ahead of that walk, this block is
-> wrong, and he says so in one word.**
+> **DANN'S NEXT RULING. N.67 IS CLOSED WHOLE and nothing is in progress.** The
+> standing candidates, none default: **N.58** (its scope itself NOT
+> ESTABLISHED; the scoping brief of 2026-08-14 has never been run), **N.72's
+> iPhone walk**, or **N.73, the GUI overhaul** (rulings complete; its S0 slate
+> and French strings table are one sitting with Fable, then briefs to Code).
+> One word from Dann sets this block.
+
+---
+
+## N.67 IS CLOSED WHOLE, 2026-08-18 NIGHT. THE SAVE FUNCTION EXISTS
+
+**Step 6 is DONE, walked by Dann on two deploys** (`ilya-16yumobac`,
+`ilya-qudmxhw07`), curated by Fable:
+`docs/sessions/n67-6-dann-walk_r1_2026-08-18.md`. The two deploy-only items
+settled: **Chrome does not auto-grant persistence on a Vercel origin** (the
+eviction notice appears once, then never), and **a real score's bytes survive
+the corrupt-record salvage end to end**: corrupted by hand, exported at 11.3 KB,
+imported still-damaged on a second origin, repaired, and the Mussorgsky stave
+drew from the transported bytes. New findings: **W6**, the neutral-song
+discard can strand `ilya:activeSongId` and fire `storage.partialLoss` as a
+false alarm (candidate one-look, unnumbered); W2 and W5 re-observed,
+unchanged. One instrument error by Fable, named in the record: the first
+import target ran pre-step-6 code; **check the commit under a deploy before
+walking new behaviour on it.**
+
+**Ilya now keeps songs plural in IndexedDB with their scores' bytes, survives
+reload and update, migrates the localStorage era forward, exports and imports
+one song or the whole library as one binder format, refuses to guess at
+records it cannot read while preserving them for salvage, asks before every
+destruction, and says so honestly in two languages when storage fails, fills,
+or threatens to evict. Every step of it was walked by Dann on a real deploy.**
 
 ---
 
