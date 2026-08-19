@@ -37,7 +37,11 @@ to 511 on 2026-08-16** for step 3's merge rule, **511 to 517 on
 2026-08-16** for step 4a's arrival decision, **517 to 537 on 2026-08-16**
 for step 5's binder, **537 to 552 on 2026-08-16** for N.59 increment 1
 (ten converter tests, four for the source carry-through, one for the title), and
-**552 to 555 on 2026-08-16** for step 8's reader-route tests.
+**552 to 555 on 2026-08-16** for step 8's reader-route tests, **555 to 590 on
+2026-08-18** for N.67 step 4b, and **590 to 628 on 2026-08-18** for step 5's
+`exchange.test.ts`. **This table had been stale at 555 for two moves.** The 628
+move was asked for in step 5's memo and carried in the same ship run, so **the
+permission was taken rather than given**; recorded plainly rather than tidied.
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -908,11 +912,14 @@ could.**
   cannot blank or answer the next dialog in a sequence.
 - **This also means `onclose` cleanup may never run here.** `+page.svelte`
   clears `pendingConfirm` and `pendingArrival` there. Whether that holds in
-  Safari and desktop Chrome is NOT ESTABLISHED.
+  Safari and desktop Chrome is NOT ESTABLISHED. **If it does hold there, then
+  neither has been cleared on close since N.67 step 4a**, which is a
+  pre-existing condition larger than step 5 and worth chasing on its own.
 - **A real Escape key press did not close a modal in this pane either.** Whether
-  Escape works for a singer is therefore not testable from here.
+  Escape works for a singer is therefore not testable from here, and step 5's
+  `oncancel` handler is consequently **written but unexercised**.
 
-### Driving the app from the pane, the two instruments that work
+### Driving the app from the pane, the instruments that work
 
 - **A file input takes a real file** via `DataTransfer`: build a `File`, assign
   `input.files = dt.files`, dispatch `new Event('change', {bubbles: true})`. The
