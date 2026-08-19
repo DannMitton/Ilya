@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import TabBar, { type TabId } from './TabBar.svelte';
+	import type { TabId } from '$lib/destinations';
 
 	interface Props {
 		width: number;
@@ -17,8 +17,11 @@
 		 * NOTATION (item N.7). Rendered ONCE, outside the tab switch, anchored
 		 * below the scrolling panel so it holds the same position on every tab
 		 * that shows it. Dann's ruling, 2026-08-06: predictable, and within a
-		 * thumb's reach on mobile, where `.drawer` under max-width: 767px
-		 * fixes it to calc(100dvh - 56px) and the tab bar owns that 56px.
+		 * thumb's reach on mobile, where the mobile rule on `.drawer` gives the
+		 * overlay the whole viewport height. It said `calc(100dvh - 56px)` and
+		 * named the line, until N.73 S1 deleted the tab bar that owned the
+		 * 56 px; the rule is named here rather than numbered, because a line
+		 * number in a comment rots.
 		 *
 		 * A snippet rather than props, matching rootPanel and shanePanel, so
 		 * the state stays in +page.svelte and nothing is drilled through here.
@@ -135,24 +138,8 @@
 </script>
 
 <aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls">
-	{#if isMobile}
-		<button
-			class="drawer-handle-top"
-			onclick={ontogglecollapse}
-			aria-label={t('drawer.collapse', language)}
-		>
-			<span class="mobile-handle-shape" aria-hidden="true">
-				<svg class="mobile-handle-chevron" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-					<polyline points="2,2 10,10 18,2" />
-				</svg>
-			</span>
-		</button>
-	{/if}
 	<div class="drawer-clip">
 	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
-		{#if isMobile}
-			<div class="mobile-handle-spacer"></div>
-		{/if}
 		<div
 			class="drawer-content {tabTransitionClass}"
 			role="tabpanel"
@@ -433,25 +420,28 @@
 				{@render notationPanel()}
 			</div>
 		{/if}
-		<div class="drawer-tabbar">
-			<TabBar {activeTab} {language} {ontabchange} />
-		</div>
 	</div>
 	</div>
-	{#if !isMobile}
-		<button
-			class="drawer-lip"
-			onclick={ontogglecollapse}
-			aria-label={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-			title={collapsed ? t('drawer.expand', language) : t('drawer.collapse', language)}
-		>
-			<span class="drawer-handle" aria-hidden="true">
-				<svg class="handle-chevron" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-					<polyline points="3,2 11,10 3,18" />
-				</svg>
-			</span>
-		</button>
-	{/if}
+	<!-- THE PULL, one control on every display (N.73 S1 §2.7, Dann's ruling
+	     of 2026-08-19). No visible word: "fewer text elements onscreen is good
+	     to allow the user to focus on their own texts, not controls." The
+	     ratified word is the accessible name instead, and aria-expanded says
+	     the state, so the name does not change under the singer.
+
+	     The chevron points the way the drawer will MOVE when pressed: right
+	     when it is closed and about to arrive, left when it is open and about
+	     to leave. The SVG is drawn pointing right and flipped by CSS. -->
+	<button
+		class="drawer-lip"
+		onclick={ontogglecollapse}
+		aria-label={t('drawer.pull', language)}
+		aria-expanded={!collapsed}
+		title={t('drawer.pull', language)}
+	>
+		<svg class="lip-chevron" aria-hidden="true" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+			<polyline points="3,2 11,10 3,18" />
+		</svg>
+	</button>
 </aside>
 
 <style>
@@ -541,134 +531,82 @@
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
 	}
 
-	/* ── Lip: invisible full-height touch target ─────── */
+	/* ── The pull: a bookmark tab on the drawer's edge ──── */
 
+	/* Option A of `docs/sessions/ilya-lip-options_r1_2026-08-18.html`, ruled
+	   by Dann 2026-08-18 for the desktop and extended to every display on
+	   2026-08-19. A flat tab flush with the drawer's outward edge, drawer
+	   fill, hairline border, rounded on its outward corners only. It reads as
+	   part of the drawer, a thumb notch on a spine, not a button floating on
+	   the desk.
+
+	   THE HUE STAYS NEUTRAL. The four per-destination handle colours that
+	   lived here (sage, rose, cobalt, lavender, each with a hover shade) are
+	   gone: hue names place, and this control belongs to the drawer, which is
+	   the same drawer on every desk. That also settles §2.5's instruction to
+	   fold `shane` in with `transcription` here; there is no colour left to
+	   fold. Ink names state, and the state is the chevron's direction. */
 	.drawer-lip {
 		position: absolute;
-		top: 0;
-		right: -22px;
-		width: 44px;
-		height: 100%;
+		top: 50%;
+		left: 100%;
+		transform: translateY(-50%);
+		width: 20px;
+		height: 76px;
 		padding: 0;
 		margin: 0;
-		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--drawer-bg, #FAF8F5);
+		border: 1px solid rgba(26, 22, 18, 0.18);
+		border-left: none;
+		border-radius: 0 5px 5px 0;
+		box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.18);
 		cursor: pointer;
-		background: transparent;
 		z-index: 2;
 		-webkit-tap-highlight-color: transparent;
 		touch-action: manipulation;
 	}
 
 	.drawer-lip:hover {
-		background: transparent;
+		background: #fff;
 	}
 
 	.drawer-lip:focus-visible {
-		outline: 2px solid var(--sage);
+		outline: 2px solid var(--ink-primary, #1a1612);
 		outline-offset: 2px;
 	}
 
-	/* ── Handle: visible morphing semicircle (36×72) ─── */
-
-	.drawer-handle {
-		position: absolute;
-		top: 50%;
-		left: 22px;
-		transform: translateY(-50%);
-		width: 36px;
-		height: 72px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 0 72px 72px 0;
-		background-color: var(--handle-bg, rgba(26, 22, 18, 0.65));
-		box-shadow: 1px 0 4px rgba(45, 45, 45, 0.12);
-		pointer-events: none;
-		user-select: none;
-		/* Colour morphs; position rides with drawer width */
-		transition: background-color 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+	/* MODALITY, not viewport width, sets the geometry: a coarse pointer gets
+	   the 44 px floor. This is the ruled pattern and it is deliberately not a
+	   third touch-geometry exemption. */
+	@media (pointer: coarse) {
+		.drawer-lip {
+			width: 44px;
+			height: 88px;
+			border-radius: 0 8px 8px 0;
+		}
 	}
 
-	/* ── Chevron ─────────────────────────────────────── */
+	/* ── The chevron ─────────────────────────────────────── */
 
-	.handle-chevron {
+	.lip-chevron {
 		width: 14px;
 		height: 20px;
-		color: var(--handle-fg, #FAF8F5);
-		transition:
-			color 1500ms cubic-bezier(0.22, 1, 0.36, 1),
-			transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
-		/* Open: right-pointing SVG flipped to point left */
+		color: var(--ink-primary, #1a1612);
+		/* Drawn pointing right, which is the direction a CLOSED drawer will
+		   move. Open, it flips to point the way out. */
+		transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.drawer:not(.collapsed) .lip-chevron {
 		transform: scaleX(-1);
 	}
 
-	/* ── State: expanded (default) — black, chevron left  */
-
-	.drawer:not(.collapsed) .drawer-handle {
-		--handle-bg: rgba(26, 22, 18, 0.65);
-	}
-
-	.drawer:not(.collapsed) .handle-chevron {
-		--handle-fg: var(--drawer-bg, #FAF8F5);
-		transform: scaleX(-1);
-	}
-
-	/* ── State: collapsed — tab-aware colour, chevron right ─── */
-
-	.drawer.collapsed[data-tab="transcription"] .drawer-handle {
-		--handle-bg: var(--sage, #8B9A7D);
-	}
-
-	.drawer.collapsed[data-tab="learn"] .drawer-handle {
-		--handle-bg: var(--dusty-rose, #A67B7B);
-	}
-
-	.drawer.collapsed[data-tab="guide"] .drawer-handle {
-		--handle-bg: var(--quiet-cobalt, #5C739E);
-	}
-
-	/* Shane's identity colour: --deeper-lavender, same purple used for the
-	   header bar and a captured vowel in the pacifier. Was missing here for
-	   the same reason as HeaderBar.svelte — never added when the other three
-	   tabs got their closed-mode handle colours. */
-	.drawer.collapsed[data-tab="shane"] .drawer-handle {
-		--handle-bg: var(--deeper-lavender, #8E7E9B);
-	}
-
-	.drawer.collapsed .handle-chevron {
-		--handle-fg: var(--drawer-bg, #FAF8F5);
+	.drawer.collapsed .lip-chevron {
 		transform: scaleX(1);
 	}
-
-	/* ── Hover: immediate feedback ──────────────────── */
-
-	.drawer:not(.collapsed) .drawer-lip:hover .drawer-handle {
-		--handle-bg: rgba(26, 22, 18, 0.82);
-		transition: background-color 200ms ease;
-	}
-
-	.drawer.collapsed[data-tab="transcription"] .drawer-lip:hover .drawer-handle {
-		--handle-bg: var(--deeper-sage, #7A8A6C);
-		transition: background-color 200ms ease;
-	}
-
-	.drawer.collapsed[data-tab="learn"] .drawer-lip:hover .drawer-handle {
-		--handle-bg: #8D6969;
-		transition: background-color 200ms ease;
-	}
-
-	.drawer.collapsed[data-tab="guide"] .drawer-lip:hover .drawer-handle {
-		--handle-bg: #4E6286;
-		transition: background-color 200ms ease;
-	}
-
-	/* Deeper shade of --deeper-lavender (#8E7E9B), same hand-computed value
-	   used for Shane's header-bar sigil badge, kept consistent across both. */
-	.drawer.collapsed[data-tab="shane"] .drawer-lip:hover .drawer-handle {
-		--handle-bg: #74677F;
-		transition: background-color 200ms ease;
-	}
-
 
 	/* ── Placeholder panels ─────────────────────────────── */
 
@@ -921,59 +859,64 @@
 
 	/* ── Mobile ──────────────────────────────────────────── */
 
-	/* ── Mobile top handle: downward-facing semicircle ──── */
-
-	.drawer-handle-top {
-		display: none;
-	}
-
-	.mobile-handle-shape {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 72px;
-		height: 36px;
-		background: rgba(26, 22, 18, 0.65);
-		border-radius: 0 0 72px 72px;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-	}
-
-	.mobile-handle-chevron {
-		color: #FAF8F5;
-		margin-top: 4px;
-	}
-
-	.mobile-handle-spacer {
-		height: 36px;
-		flex-shrink: 0;
-	}
-
 	@media (max-width: 767px) {
-		/* Drawer: full-screen overlay, slides up/down */
+		/* The drawer is a full-screen overlay that arrives FROM THE LEFT.
+		   Dann's ruling, 2026-08-19: the desktop's illusion is horizontal
+		   motion, the phone's vertical motion was a form-factor concession,
+		   and the concession is withdrawn. One motion model, every display.
+		   It arrives from the left because that is where it sits on the
+		   desktop, where .drawer-body's double border-right faces the paper.
+
+		   The height was calc(100dvh - 56px), reserving the deleted tab bar's
+		   footer. The bar is gone and the drawer takes the viewport. */
 		.drawer {
 			position: fixed !important;
 			top: 0 !important;
 			left: 0 !important;
 			width: 100% !important;
-			height: calc(100dvh - 56px) !important;
+			height: 100dvh !important;
 			z-index: 60;
-			overflow: hidden;
+			/* MEASURED: this was `overflow: hidden`, and it clipped the pull
+			   out of sight the moment the pull moved outside the drawer's own
+			   box. The pull sits at `left: 100%` when the drawer is closed,
+			   which is the only place a closed drawer can show a handle. The
+			   body is still clipped, by .drawer-clip, which is what that
+			   element is for. */
+			overflow: visible;
 			transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 		}
 
+		/* Collapsed, the overlay sits entirely to the left of the viewport.
+		   It was `translateY(100%)` with `width: 0 !important` behind it,
+		   the width there only to stop a translated full-width overlay from
+		   swallowing touches on the desk. Two things now stop that instead,
+		   and neither needs the width: the overlay is off-screen, and it
+		   takes no pointer events. Off-screen to the LEFT also costs no
+		   horizontal scroll, because no browser scrolls into negative space
+		   in a left-to-right document. */
 		.drawer.collapsed {
-			transform: translateY(100%);
+			transform: translateX(-100%);
 			pointer-events: none;
-			width: 0 !important;
 		}
 
 		.drawer:not(.collapsed) {
-			transform: translateY(0);
+			transform: translateX(0);
 		}
 
-		/* Hide desktop lip */
-		.drawer-lip {
-			display: none !important;
+		/* The pull is the exception to that: it is how a closed drawer gets
+		   opened, so it keeps its touches while the overlay behind it
+		   refuses them. */
+		.drawer.collapsed .drawer-lip {
+			pointer-events: auto;
+		}
+
+		/* Closed, `left: 100%` lands the tab against the drawer's outward
+		   edge, which is the left edge of the phone. Open, the drawer is the
+		   whole screen, so the tab moves inside its right edge, still the
+		   outward edge and still within a thumb's reach. */
+		.drawer:not(.collapsed) .drawer-lip {
+			left: auto;
+			right: 0;
 		}
 
 		/* Body fills full height */
@@ -983,42 +926,27 @@
 			overflow: visible;
 		}
 
+		/* The open drawer keeps a 44px gutter on the right, the width of the
+		   pull that sits inside its edge, so the pull can never cover a
+		   control. On .drawer-body rather than .drawer-content because the
+		   NOTATION anchor is .drawer-content's SIBLING, not its child, and
+		   would otherwise keep its own edge under the pull. It costs 44px of
+		   a 390px phone, which is the price of one control never hiding
+		   another. */
 		.drawer-body {
 			width: 100% !important;
 			height: 100%;
 			flex-direction: column;
 			border-right: none;
 			overflow: visible;
+			padding-right: 44px;
+			box-sizing: border-box;
 		}
 
 		/* Drawer content: allow scroll to prevent left clipping */
 		.drawer-content {
 			overflow-x: auto;
 			overflow-y: auto;
-		}
-
-		/* Internal TabBar hidden on mobile (fixed footer used instead) */
-		.drawer-tabbar {
-			display: none;
-		}
-
-		/* Top handle: fixed, semicircle pointing down */
-		.drawer-handle-top {
-			display: flex;
-			align-items: flex-end;
-			justify-content: center;
-			position: fixed;
-			top: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 72px;
-			height: 36px;
-			padding: 0;
-			border: none;
-			background: transparent;
-			z-index: 200;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
 		}
 
 		.toc-chevron {
@@ -1034,8 +962,7 @@
 			transition: none;
 		}
 
-		.drawer-handle,
-		.handle-chevron {
+		.lip-chevron {
 			transition-duration: 0.01ms !important;
 		}
 

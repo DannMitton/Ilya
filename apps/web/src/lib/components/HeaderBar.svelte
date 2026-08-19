@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Language } from '$lib/i18n';
-	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
+	import type { TabId } from '$lib/destinations';
 
 	interface Props {
 		language: Language;
@@ -85,12 +85,14 @@
 		background: var(--quiet-cobalt, #5C739E);
 	}
 
-	/* Shane's identity colour: --deeper-lavender, the same purple that marks
-	   a captured vowel in the pacifier (spec v6 §13). Was missing entirely;
-	   'shane' has been a valid TabId since the wall mechanism, this case was
-	   just never added when the other three tabs got their bar colours. */
+	/* THREE destinations, not four. Ruled by Dann 2026-08-18: the app bar
+	   keys to the destination, and Studio is one destination holding two
+	   documents. So the Marked score takes Studio's sage with Transcription,
+	   and the lavender that used to sit here is gone from the bar. Lavender's
+	   carriers under Studio are the voice anchor and the calibration
+	   surfaces, neither of which this bar draws. */
 	.header-bar.tab-shane {
-		background: var(--deeper-lavender, #8E7E9B);
+		background: var(--sage, #8B9A7D);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */

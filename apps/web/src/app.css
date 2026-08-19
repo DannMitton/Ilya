@@ -53,10 +53,15 @@
 	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
 	--app-bg: var(--desk-surface); /* main content area behind paper */
 
-	/* ── Tab-specific surrounds (Floating Paper, Approach A) ─ */
-	--surround-transcription: #6B6560;
-	--surround-learn: #A8A39B;
-	--surround-guide: #E5E1D6;
+	/* ── Desk tints, one per destination (N.73 S1) ──────────── */
+	/* Each desk carries its destination's signature hue tinted 60 percent
+	   toward white, ruled by Dann 2026-08-10: "C, Desk lightness 60%, no
+	   blotter" (N.42 §1.5). All three desks are light, so everything drawn
+	   on a desk takes dark ink (--ink-primary) by the luminance-keyed rule
+	   of the S0 slate. Studio's two documents share the sage desk. */
+	--surround-transcription: #D1D7CB;   /* sage at 60% */
+	--surround-learn: #DBCACA;           /* dusty rose at 60% */
+	--surround-guide: #BEC7D8;           /* quiet cobalt at 60% */
 
 	/* ── Shane pacifier (fourth tab) ──────────────────────── */
 	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */

@@ -31,6 +31,19 @@ const strings: Record<string, Record<Language, string>> = {
 	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
 	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
 	'tab.fit':                     { en: 'Fit',                          fr: 'Fit' },
+	// N.73 S1. Studio's second document, named for the singer in the desk
+	// head's pair. RATIFIED by Dann 2026-08-19 with the rest of the N.73
+	// table: « Partition annotée » is the idiomatic francophone term for a
+	// score carrying working markings, his own correction over « marquée ».
+	// This does NOT replace 'tab.fit': Fit is the tool's name and is
+	// invariant in French by his ruling of 2026-07-13. The document is not
+	// called Fit.
+	'tab.markedScore':             { en: 'Marked score',                 fr: 'Partition annotée' },
+	// The drawer's pull carries no visible word (N.73 S1 §2.7, Dann's ruling
+	// of 2026-08-19: fewer text elements onscreen). The ratified word is its
+	// ACCESSIBLE name instead, with aria-expanded carrying the state, so the
+	// name stays put while the drawer opens and closes.
+	'drawer.pull':                 { en: 'Drawer',                       fr: 'Tiroir' },
 
 	// ── Input area ───────────────────────────────────────────
 	'input.placeholder':           { en: 'Paste Russian text here\u2026',       fr: 'Collez le texte russe ici\u2026' },

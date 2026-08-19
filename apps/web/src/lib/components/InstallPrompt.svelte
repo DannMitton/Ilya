@@ -97,7 +97,12 @@
 <style>
   .install-prompt {
     position: fixed;
-    bottom: 56px;
+    /* This cleared the phone's 56px tab bar, which N.73 S1 deleted. Not
+       bottom: 0, which is the only other honest value: this is a floating
+       card with an 8px radius and a drop shadow, and flush against the
+       viewport edge it loses both, under the iOS home indicator. 16px is a
+       gap, where 56px was clearance for furniture. */
+    bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
     width: min(480px, calc(100vw - 32px));

@@ -72,8 +72,8 @@
 	import Paper from '$lib/components/Paper/Paper.svelte';
 import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
-	import TabBar from '$lib/components/Drawer/TabBar.svelte';
-	import type { TabId } from '$lib/components/Drawer/TabBar.svelte';
+	import DeskHead from '$lib/components/DeskHead.svelte';
+	import type { TabId } from '$lib/destinations';
 	import { INCLUDE_SHANE } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
@@ -2097,6 +2097,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		bind:this={mainContentEl}
 		tabindex="0"
 	>
+		<!-- THE DESK HEAD (N.73 S1 §2.2). One line across the top of the desk,
+		     above the sheet, on every display. It is the cure for audit finding
+		     F4: with the tab bar living inside the drawer, closing the drawer
+		     took every destination with it. -->
+		<DeskHead {activeTab} {language} ontabchange={handleTabChange} />
 		{#if activeTab === 'transcription'}
 			<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} />
 		{:else if activeTab === 'shane'}
@@ -2142,26 +2147,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			</ReadingPaper>
 		{/if}
 	</main>
-	{#if isMobile && drawerCollapsed}
-		<button
-			class="paper-handle"
-			onclick={handleDrawerToggle}
-			aria-label={t('drawer.expand', language)}
-			data-tab={activeTab}
-		>
-			<span class="paper-handle-shape" aria-hidden="true">
-				<svg class="paper-handle-chevron" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-					<polyline points="2,10 10,2 18,10" />
-				</svg>
-			</span>
-		</button>
-	{/if}
 </div>
-{#if isMobile}
-	<div class="mobile-tabbar">
-		<TabBar {activeTab} {language} ontabchange={handleTabChange} />
-	</div>
-{/if}
 {#if updated.current && !updateDismissed}
 	<div class="update-toast screen-only" role="status">
 		<span class="update-toast-text">{t('update.notice', language)}</span>
@@ -2518,20 +2504,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		align-items: center;
 		background-color: var(--desk-surface, #D8D4C8);
 		transform: none;
+		/* The desk head is flush with the SHEET's left edge, not the desk's
+		   (placement B, ruled by Dann, N.42 §1.3). The two sheets are not the
+		   same width, so the desk publishes the width of whichever one it is
+		   holding and DeskHead takes its max-width from it. 816px is
+		   PAGE_SIZES.letter.width in `$lib/page-config.ts`, which TitlePage
+		   and SubsequentPage set on `.paper-page`. Below the mobile
+		   breakpoint both sheets go full width and so does the head, so the
+		   edges still agree. */
+		--sheet-width: 816px;
+		/* The desk head sticks to the top of this scroll region, and the
+		   region's own top padding would otherwise leave a strip above the
+		   head where the sheet slides past in the open. The head pulls itself
+		   up by this much and pads itself back down by the same, so it covers
+		   the strip and nothing below it moves. Every rule that changes the
+		   desk's top padding sets this with it. */
+		--desk-pad-top: 2rem;
+	}
+
+	/* 720px is ReadingPaper's own max-width (Paper/ReadingPaper.svelte). */
+	.main-content.tab-learn,
+	.main-content.tab-guide {
+		--sheet-width: 720px;
 	}
 
 	/* ── Floating Paper: tab-specific surrounds (Approach A) ── */
 
 	.main-content.tab-transcription {
-		background-color: var(--surround-transcription, #D8D4C8);
+		background-color: var(--surround-transcription, #D1D7CB);
 	}
 
 	.main-content.tab-learn {
-		background-color: var(--surround-learn, #E5E1D6);
+		background-color: var(--surround-learn, #DBCACA);
 	}
 
 	.main-content.tab-guide {
-		background-color: var(--surround-guide, #F2EFE6);
+		background-color: var(--surround-guide, #BEC7D8);
 	}
 
 	.main-content.tab-shane {
@@ -2540,8 +2548,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   the Shane gallery shares the transcription desk tone, and Shane's
 		   lavender identity lives in the tab bar, the drawer handle, and
 		   the Pacifier band (--surround-shane, unchanged). Carry this to
-		   the next Kimi relay with provenance. */
-		background-color: var(--surround-transcription, #D8D4C8);
+		   the next Kimi relay with provenance. N.73 S1 keeps the sharing and
+		   moves both to the sage-tinted desk; the lavender desk is not
+		   introduced. */
+		background-color: var(--surround-transcription, #D1D7CB);
 	}
 
 	/* ── Floating Paper: tab-specific shadows ─────────────── */
@@ -2570,6 +2580,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		transform: none;
 		justify-content: flex-start;
 		padding-top: 1rem;
+		--desk-pad-top: 1rem;
 	}
 
 	/* ── Tab transition animations ──────────────────────── */
@@ -2827,95 +2838,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
 			transform: none;
-	
-			/* The bottom 92px of the viewport is fixed furniture: the tab bar
-			   at 56px (.mobile-tabbar) and the paper handle sitting on it at 36px
-			   (.paper-handle). Without this the last line of the document cannot
-			   be scrolled clear of them. Dann found it under the attribution's
-			   final line, 11 August 2026.
+			--desk-pad-top: 0.5rem;
 
-			   Padding rather than a shorter scroll region, deliberately: the
-			   tab bar is an overlay on the desk by design, and shortening the
-			   region would end the desk colour above it and cut the paper's
-			   surround short. The overlay stays; the content gets room.
-
-			   On .main-content rather than .paper-container because this is
-			   the scroll region for all four destinations, and Learn and Guide
-			   have the same defect unlooked-at. */
-			padding-bottom: calc(56px + 36px + 0.5rem);
-		}
-	}
-
-	/* Paper handle: upward-facing semicircle, fixed bottom, tab-aware */
-	.paper-handle {
-		display: none;
-	}
-
-	@media (max-width: 767px) {
-		.paper-handle {
-			display: flex;
-			align-items: flex-start;
-			justify-content: center;
-			position: fixed;
-			bottom: 56px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 72px;
-			height: 36px;
-			padding: 0;
-			border: none;
-			background: transparent;
-			z-index: 90;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
-		}
-
-		.paper-handle-shape {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 72px;
-			height: 36px;
-			border-radius: 72px 72px 0 0;
-			box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.12);
-		}
-
-		.paper-handle-chevron {
-			color: #FAF8F5;
-			margin-bottom: 4px;
-		}
-
-		.paper-handle[data-tab="transcription"] .paper-handle-shape {
-			background: var(--sage, #8B9A7D);
-		}
-
-		.paper-handle[data-tab="learn"] .paper-handle-shape {
-			background: var(--dusty-rose, #A67B7B);
-		}
-
-		.paper-handle[data-tab="guide"] .paper-handle-shape {
-			background: var(--quiet-cobalt, #5C739E);
-		}
-
-		.paper-handle[data-tab="shane"] .paper-handle-shape {
-			background: var(--deeper-lavender, #8E7E9B);
-		}
-	}
-
-	/* ── Mobile tab bar: fixed footer ────────────────────── */
-	.mobile-tabbar {
-		display: none;
-	}
-
-	@media (max-width: 767px) {
-		.mobile-tabbar {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			height: 56px;
-			z-index: 50;
-			display: block;
+			/* This reserved 92px at the bottom of the viewport for two pieces
+			   of fixed furniture: the tab bar at 56px and the paper handle
+			   sitting on it at 36px. Dann found the need for it under the
+			   attribution's final line on 2026-08-11. N.73 S1 deleted both, so
+			   the reservation goes with them and the phone gets its 92px back.
+			   Nothing is fixed to the bottom of the desk any more; the drawer's
+			   pull is on the side. */
+			padding-bottom: 0.5rem;
 		}
 	}
 
@@ -2979,12 +2911,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		padding: 0.2rem;
 	}
 
-	/* N.53: clear the fixed tab bar rather than sit on it. .mobile-tabbar is
-	   bottom 0, height 56px, z-index 50; this was bottom 1.25rem at z-index
-	   200, so it covered the bar's upper 36px. Same breakpoint as the bar. */
+	/* N.53 raised the toast to clear the fixed tab bar it was sitting on:
+	   the bar was bottom 0, height 56px, z-index 50, and the toast at bottom
+	   1.25rem covered its upper 36px. N.73 S1 deleted the bar, so the
+	   clearance has nothing left to clear and the toast sits where the phone
+	   has room for it. */
 	@media (max-width: 767px) {
 		.update-toast {
-			bottom: calc(56px + 0.75rem);
+			bottom: 0.75rem;
 		}
 	}
 
