@@ -14,9 +14,8 @@
 	2026-08-10). N.26 gave the reader the same treatment the converter always
 	had; before it, a drop of any kind paid for denigma. The parsed result is
 	handed up through
-	`oningested`; live wiring (§E.7) consumes it. PDF, image, and MIDI are
-	advertised as coming soon and, if dropped, answered with a note rather
-	than a hard error.
+	`oningested`; live wiring (§E.7) consumes it. MIDI is not read and is no
+	longer offered: N.58 closed on 2026-08-19 by dropping it.
 -->
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
@@ -74,9 +73,9 @@
 
 	const T = (key: string) => t(key, language);
 
-	/** The file dialog offers the advertised set, live plus coming-soon, so it
-	 *  matches the dropzone text. Coming-soon formats resolve to a note. */
-	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,.mid,.midi,image/*';
+	/** The file dialog offers the formats Ilya reads, so it matches the
+	 *  dropzone text. */
+	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,image/*';
 
 	/**
 	 * N.70 (Dann's ruling, 2026-08-16). THE FILTER IS KEPT WHERE IT HELPS AND
@@ -85,8 +84,8 @@
 	 * iOS matches `accept` by REGISTERED TYPE, not by the string, and it has no
 	 * registration for `.musicxml`, `.mnx`, `.musx`, or `.mscz`. So on a phone
 	 * every format Ilya can actually read is greyed out and unselectable, while
-	 * PDF, MIDI, and images — the ones it can only answer "coming soon" to —
-	 * stay pickable. Dann hit this on his own iPhone, 2026-08-16.
+	 * PDF and images, which iOS does have registrations for, stay pickable.
+	 * Dann hit this on his own iPhone, 2026-08-16.
 	 *
 	 * A narrower MIME list was considered and rejected: iOS would need a type
 	 * registration it probably does not have, so it could fail exactly as
@@ -419,8 +418,6 @@
 				switch (f.kind) {
 					case 'pre-2014-finale':
 						return { soon: false, message: T('upload.err.mus') };
-					case 'midi':
-						return { soon: true, message: T('upload.soon.midi') };
 					case 'json-not-mnx':
 						return { soon: false, message: T('upload.err.jsonNotMnx') };
 					case 'xml-not-musicxml': {
@@ -512,7 +509,6 @@
 					<p class="dz-browse">{T('upload.drop.browse')}</p>
 				{/if}
 				<p class="dz-accepted">{T('upload.drop.acceptedNow')}</p>
-				<p class="dz-soon">{T('upload.drop.comingSoon')}</p>
 			</button>
 			<!-- Score-from-image scan, mirroring the Transcription OCR icon.
 			     Visual only until the OMR/image path ships (Round 9); the
@@ -766,17 +762,11 @@
 		color: var(--ink-secondary);
 	}
 
-	.dz-accepted,
-	.dz-soon {
+	.dz-accepted {
 		font-size: 0.68rem;
 		line-height: 1.35;
 		color: var(--ink-tertiary);
 		margin-top: 0.15rem;
-	}
-
-	.dz-soon {
-		font-style: italic;
-		margin-top: 0;
 	}
 
 	/* ── Busy status ──────────────────────────────────────── */

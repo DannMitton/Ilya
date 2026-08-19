@@ -37,12 +37,55 @@ any of them count.
 
 ## THE ONE THING
 
-> **DANN'S NEXT RULING. N.67 IS CLOSED WHOLE and nothing is in progress.** The
-> standing candidates, none default: **N.58** (its scope itself NOT
-> ESTABLISHED; the scoping brief of 2026-08-14 has never been run), **N.72's
-> iPhone walk**, or **N.73, the GUI overhaul** (rulings complete; its S0 slate
-> and French strings table are one sitting with Fable, then briefs to Code).
-> One word from Dann sets this block.
+> **N.73, THE GUI OVERHAUL, BUILDS. Ruled by Dann 2026-08-19: nothing stands
+> in its way.** The beta line is closed: N.59 finished 2026-08-18, and **N.58
+> is RULED CLOSED, 2026-08-19: MIDI import is dropped and the "Coming soon:
+> MIDI" promise comes out** (one small Code task, below). Every N.73
+> prerequisite is met: the E.44 S0 slate is CLOSED (six rulings,
+> `claude/fable-ruling-s0-slate-closed_2026-08-19.md` in project knowledge),
+> and **the French strings table is RATIFIED whole**
+> (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
+> **The build order:** E.44 §PLAN S1 to S6, then portrait C, then the chapter
+> bands and the aesthetic layer, every brief serving "N.73 Sx", each step
+> ending in a deploy and a walk. The governing documents, all current:
+> the census (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`, count
+> corrected to 93), the rulings
+> (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
+> the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`), the
+> mockups (r2 governs where r1 disagrees), the lip
+> (`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A), and the
+> strings table above. **First act of the build session: the brief for N.73
+> S1, the desk selector.**
+
+---
+
+## 2026-08-19 AFTERNOON. THE KEY TURNS: N.58 CLOSED, S0 CLOSED, FRENCH RATIFIED
+
+- **N.58 is CLOSED by ruling: drop.** The scoping ran as a Fable-farmed Sonnet
+  agent (the 2026-08-14 brief was never run and its text is unrecoverable);
+  memo: `docs/sessions/sonnet-memo-n58-scope_r1_2026-08-19.md`, 136,545 tokens
+  inside its stated bound. The finding: MIDI import is a third parser (~450 to
+  700 lines plus tests plus fixtures from nothing), not the cheap adapter the
+  2026-08-14 framing assumed; the old no-lyrics objection is dead (N.55b hand
+  pairing exists); and anyone who can export MIDI from notation software can
+  export MusicXML from the same menu. Dann ruled drop. **Outstanding Code
+  task, small: remove the "Coming soon: MIDI" promise, the `.mid` accept, and
+  the soon-copy** (`ScoreUploader.svelte:17-19`, `:79`, `:422-423`, `:515`,
+  cited from the memo). MIDI may return as a fresh numbered item if a singer
+  asks.
+- **The E.44 S0 slate is CLOSED**, six rulings by Dann: anchors confirmed,
+  the pair is Transcription | Marked score, the sage desk (lavender desk
+  dies), luminance-keyed inks with the cream chip `#F0EBE0`, three document
+  kinds designed and two built, and the name **Studio** ratified in his words.
+- **The N.73 French strings table is RATIFIED**, every word seen by Dann,
+  several improved by him (« partition annotée », « décaler », « permuter »,
+  « couplet »): `docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`.
+- **N.72's iPhone walk is queued, step 1 pending Dann's phone**: install from
+  the branch alias, then the first N.73 ship provides the second build the
+  walk needs.
+- Usage steering, read from Dann's screenshot 14:15: Fable 58 percent against
+  all-models 46, both reset Sunday, so mechanical work rides Code and Sonnet
+  this week.
 
 ---
 
