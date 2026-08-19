@@ -572,11 +572,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// "when". Reuses 'enregistré' (calib.summary.savedLede, :418) and
 	// 'syllabe' (upload.banner.noLyrics, :511). THE SAVE DOES NOT SWALLOW ITS
 	// EXCEPTION (pairings.ts:385-389): 'no-storage' and 'write-failed' share
-	// storage.saveFailed.generic, Dann's own collapse; quota gets its own
-	// line because the design doc named it by name. Load's three reasons
-	// ('no-storage', 'malformed', 'unparseable', pairings.ts:405-422) share
-	// one message, same collapse, unopposed.
-	'storage.saveFailed.quota': { en: 'Your device’s storage is full. Your syllable placements could not be saved and will be lost when you leave this page.', fr: 'Le stockage de cet appareil est plein. Vos syllabes n’ont pas pu être enregistrées et seront perdues lorsque vous quittez cette page.' },
+	// storage.saveFailed.generic, Dann's own collapse. Quota HAD its own line
+	// here, 'storage.saveFailed.quota'; N.67 step 6 replaced it at the render
+	// site with 'storage.quotaFull', which says the same thing about the whole
+	// song rather than about the pairing map alone and carries the figures, and
+	// DANN RULED IT DELETED 2026-08-18. Load's reasons now split rather than
+	// share: see 'song.unreadable' and 'song.newerIlya' below.
 	'storage.saveFailed.generic': { en: 'Your syllable placements could not be saved on this device. They will be lost when you leave this page.', fr: 'Vos syllabes n’ont pas pu être enregistrées sur cet appareil. Elles seront perdues lorsque vous quittez cette page.' },
 	'storage.loadFailed': { en: 'Your saved syllable placements could not be read back.', fr: 'Vos syllabes enregistrées n’ont pas pu être relues.' },
 	// N.67 step 6, THE SWEEP. Design §4's failure handling, finalized in both
@@ -591,16 +592,11 @@ const strings: Record<string, Record<Language, string>> = {
 	// The English colons carry an ordinary space, which is this file's own
 	// English practice ('inspector.notationDefault' sets it).
 	//
-	// TYPOGRAPHY, AND THE ONE PLACE THIS DEPARTS FROM THE RATIFIED TABLE: the
-	// table was written with straight apostrophes and this file has used the
-	// typographic ’ for every possessive and elision since 'storage.saveFailed'.
-	// The character was matched to the tree rather than to the table, which is a
-	// change of glyph and not of wording. Reversible in one edit if Dann wants
-	// the straight mark instead.
-	//
-	// 'storage.saveFailed.quota' above is SUPERSEDED at its render site by
-	// 'storage.quotaFull' and is now unreferenced. Kept rather than deleted:
-	// removing a ratified line is Dann's call, not this step's.
+	// TYPOGRAPHY: the ratified table was written with straight apostrophes and
+	// this file has used the typographic ’ for every possessive and elision
+	// since 'storage.saveFailed'. The character was matched to the tree rather
+	// than to the table, which is a change of glyph and not of wording.
+	// **RATIFIED BY DANN 2026-08-18**, after the fact and on the record.
 	'storage.quotaFull': { en: 'Ilya could not save: this browser’s storage is full. Your work is still on screen. Export your songs now to keep them, or free space and try again.', fr: 'Ilya n’a pas pu enregistrer\u00a0: le stockage de ce navigateur est plein. Votre travail est toujours à l’écran. Exportez vos chants maintenant pour les conserver, ou libérez de l’espace et réessayez.' },
 	// Appended to the line above, and ONLY where `navigator.storage.estimate()`
 	// returned real figures. A notice that says "of undefined" is worse than a

@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **628** |
+| web-test | **671** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -38,10 +38,20 @@ to 511 on 2026-08-16** for step 3's merge rule, **511 to 517 on
 for step 5's binder, **537 to 552 on 2026-08-16** for N.59 increment 1
 (ten converter tests, four for the source carry-through, one for the title), and
 **552 to 555 on 2026-08-16** for step 8's reader-route tests, **555 to 590 on
-2026-08-18** for N.67 step 4b, and **590 to 628 on 2026-08-18** for step 5's
-`exchange.test.ts`. **This table had been stale at 555 for two moves.** The 628
-move was asked for in step 5's memo and carried in the same ship run, so **the
-permission was taken rather than given**; recorded plainly rather than tidied.
+2026-08-18** for N.67 step 4b, **590 to 628 on 2026-08-18** for step 5's
+`exchange.test.ts`, and **628 to 671 on 2026-08-18** for step 6's
+`notices.test.ts`, `salvage.test.ts`, and `positive-control.test.ts`. **This
+table had been stale at 555 for two moves.** The 628 move was asked for in step
+5's memo and carried in the same ship run, so **the permission was taken rather
+than given**; recorded plainly rather than tidied. **The 671 move was asked
+first and granted before the `sed` was handed over**, which is the shape this
+section asks for.
+
+**`sed -i ''` ON `ilya-ship.sh` DROPS ITS EXECUTE BIT.** Found 2026-08-18 moving
+gate 4 to 671. macOS `sed -i ''` rewrites the file rather than editing it, and
+the new file came out `-rw-------`, so the next run was `Permission denied` and
+looked like a problem with the ship rather than with the edit. **Follow every
+baseline `sed` with `chmod +x ~/Downloads/ilya-ship.sh`.**
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -182,6 +192,64 @@ nothing exits 0, changes nothing, and sends him into a confusing refusal. Read
 after he runs it** and only then tell him it is done.
 
 ---
+
+## `vite preview` DOES NOT SERVE `apps/web/build`, AND IT CACHES
+
+Found 2026-08-18 during N.67 step 6's walk, after half an hour of measuring a
+build that was not the one on disk. `pnpm --filter @ilya/web build` writes
+`apps/web/build` through adapter-static. **`npx vite preview` serves the vite
+`outDir` instead, and it resolves what it has ONCE at startup**, so after a
+rebuild it goes on serving the previous build's hashed chunk names and 404s the
+new ones. The page loads, runs old code, and nothing says so. A repair was
+measured as still broken because of this, and nearly re-repaired.
+
+**Serve the real thing:** `cd apps/web/build && python3 -m http.server 4200`.
+**Restart it after every rebuild.** Check which bundle is live before believing
+any measurement:
+
+```
+document.querySelector('link[rel=modulepreload]').href
+```
+
+## A WALK HARNESS BELONGS IN `build/index.html`, NEVER IN THE SOURCE TREE
+
+To provoke a state that has to exist BEFORE `+page.ts` runs (no IndexedDB, no
+localStorage), inject a `<script>` into `<head>` of `apps/web/build/index.html`,
+gated on a query parameter. `build/` is gitignored and the next build erases it,
+so the source tree never carries the stub and no gate can be fooled by it. Used
+for N.67 step 6's `storage.none`, which cannot be reached any other way from a
+console that only runs after the app has booted.
+
+## TWO DRAWERS, AND THE STORAGE NOTICES ARE IN ONLY ONE OF THEM
+
+`RootPanel.svelte` is the **Transcription** drawer and holds the song list.
+`+page.svelte`'s `shanePanel` is the **Fit** drawer and holds every storage
+notice. **A measurement that reads `.shane-storage-notice` on Transcription, or
+`.song-row` on Fit, finds an empty list and means nothing by it.** Both mistakes
+were made during N.67 step 6's walk. It is also a real defect for a singer who
+never opens Fit, named in that step's memo and not solved.
+
+**`innerWidth` is 0 in the browser pane, so Ilya's own mobile gate fires.**
+Confirmed again 2026-08-18. Click **Continue anyway / Continuer quand même**
+before looking for the textarea, or `document.querySelector('textarea')` returns
+null and the next line throws on `getPrototypeOf(null)`.
+
+## A STORED PROXY IS NOT A STORED VALUE, AND A SALVAGE PATH MUST CARRY THE RAW
+
+N.67 step 6. When a stored record can be DAMAGED and the app rebuilds a usable
+stand-in from it, **the export must carry the raw stored value and not the
+rebuild**, or the only copy that outlives the browser is a repair the singer
+never asked for. The trap that survived a first build: the OPEN song was taken
+from the live document rather than from the vault, so the salvage path failed
+for exactly the song the singer is looking at, and every gate passed.
+
+## A SVELTE `{#each}` KEYED ON A REPEATABLE VALUE KILLS THE REGION
+
+N.67 step 6. Two notices legitimately carried the same dictionary key, and
+`each_key_duplicate` threw and destroyed the whole notice region **in exactly
+the state the notices exist to describe**. For a list of plain paragraphs there
+is no identity to preserve: do not key it. Dedupe at the source as well, so the
+template never has to survive it.
 
 ## A SCREENSHOT PAIR IS NOT A CONTROLLED OBSERVATION. 2026-08-18, twice
 

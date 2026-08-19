@@ -11,9 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`db54cff`**, raised from `cb7a15a` at the close of the third session of
-2026-08-18, because N.67 step 5 itself shipped in `9892887` and its memo in
-`db54cff`, and a floor that predates
+before **`cee4572`**, raised from `db54cff` at the close of the fourth session of
+2026-08-18, because N.67 step 6 and its memo both shipped in `cee4572`, and a
+floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
@@ -37,16 +37,89 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.67 STEP 6, THE SWEEP. The last item of N.67.** Step 5 closed DONE on
-> 2026-08-18: Dann walked it on deploy `ilya-eaxv09qx3` (`a8a979b`), twelve
-> steps, curated by Fable, every expectation stated before its measurement.
-> Record: `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`, which also carries
-> five walk findings (W1 to W5), none blocking.
+> **DANN'S WALK OF N.67 STEP 6, ON A DEPLOY. It is the only thing left in
+> N.67.** Step 6 SHIPPED `cee4572` on 2026-08-18 and Code walked all eight items
+> of its brief in a real browser on a production build, refuting its own build
+> three times and repairing each. **But a local build is not a deploy, and
+> nothing in this project counts until Dann walks it.** The memo names the
+> instrument for every item and marks each WALKED or PROVOKED:
+> `docs/sessions/n67-6-the-sweep_r1_2026-08-18.md`.
+> **The three items a deploy walk should re-run**, because they are the ones a
+> local origin cannot settle: whether Chrome auto-grants persistence on a Vercel
+> origin (which decides whether the eviction notice appears at all), the quota
+> notice against a genuinely full origin rather than a stubbed `put`, and the
+> corrupt-record salvage carrying a real score file's BYTES, which is gate-checked
+> and was never walked.
 > **N.58's real scope is still NOT ESTABLISHED**; a scoping brief was delivered
-> 2026-08-14 and there is no record of it being run. **After N.67 closes, the
-> beta line's remainder decides when N.73 (the GUI overhaul) builds. If Dann
-> rules N.58, N.72's iPhone walk, or N.73 ahead of step 6, this block is wrong,
-> and he says so in one word.**
+> 2026-08-14 and there is no record of it being run. **Once Dann's walk closes
+> N.67, the beta line's remainder decides when N.73 (the GUI overhaul) builds. If
+> Dann rules N.58, N.72's iPhone walk, or N.73 ahead of that walk, this block is
+> wrong, and he says so in one word.**
+
+---
+
+## N.67 STEP 6 IS SHIPPED, 2026-08-18, `cee4572`. NOT YET WALKED BY DANN
+
+The failure-handling surface: the eviction notice, the corrupt-record salvage
+path, the storage copy finalized in both languages, and the N.27 recommendation
+recorded rather than built. Gate 4 moved **628 to 671** with Dann's permission,
+asked and granted before the ship. Memo:
+`docs/sessions/n67-6-the-sweep_r1_2026-08-18.md`.
+
+**THREE THINGS THE DESIGN ASSUMED AND THE TREE DID NOT DO.** All three were
+found by reading the tree first, which is what the brief asked for:
+
+- **Nothing ever read a record's `schema`.** `validateRecord` rebuilt every field
+  from `emptySongRecord`, whose `schema` is the literal `1`, so a record written
+  by a future Ilya was silently DOWNGRADED and written back at this version's
+  number. Only the binder MANIFEST schema was checked, which is a different
+  number about a different object. Design §4's "a version from the future" was
+  designed in E.52 and never built. It is built now.
+- **A corrupt record was silently overwritten**, which is the brief's §3.8
+  positive control and it came back positive. Three sites read a record, got the
+  rebuilt stand-in with the damage already gone, and saved it: `backfillName` at
+  boot, `renameSong`, and the document's autosave. Worse, the laundered record
+  then validated CLEAN, so nothing downstream could tell a song had ever been
+  damaged. `positive-control.test.ts` keeps the measurement.
+- **One damaged record refused an entire binder on import**, so the export that
+  design §4 calls the salvage path could be written and never read back.
+
+**THREE REFUTATIONS ON CODE'S OWN WALK, each repaired with a regression test.**
+Recorded because they are the argument for walking at all: every one passed the
+five gates first.
+
+1. **Export took the open song from the document without asking the vault**, so
+   opening the damaged song and pressing Export all wrote the laundered record
+   plus an edit that was never saved. The salvage path failed for exactly the
+   song the singer is looking at.
+2. **`storage.none` was produced twice** (boot and first write), the template
+   keyed its `{#each}` on the notice key, and `each_key_duplicate` killed the
+   notice region **in exactly the state it exists to describe**.
+3. **A read-only song's list row drew an auto-name the page invented** and could
+   never store, beside a sentence promising the record had been left untouched.
+
+**WALK FINDING W1 IS CLOSED.** `collide.title` now names the song it is asking
+about, in both languages, ratified by Dann before it entered the tree. W2, W3,
+W4, and W5 remain open and unassigned.
+
+**TWO RULINGS, GIVEN 2026-08-18 AFTER THE SHIP.** The typographic apostrophe
+rather than the ratified table's straight one: **ratified**. The now-unused
+`storage.saveFailed.quota`: **deleted**, after checking it had zero references in
+code, tests, and components.
+
+**WHERE THE TREE BEAT THE BRIEF, and the tree won each time.** Step 1 did ship
+`persist()` and `estimate()`. Blocking IndexedDB does NOT put Ilya in memory: it
+falls back to the localStorage legacy driver and work is genuinely saved, so
+`storage.none` fires only when localStorage is unreachable too. And
+`storage.partialLoss` deliberately stays SILENT on an empty vault, because a wipe
+and a first visit are indistinguishable there, which is design §4's own honesty
+rule.
+
+**THE NAMED WEAKNESS, CONFIRMED AND NOT SOLVED.** The storage notices render in
+the **Fit** drawer and the song list in the **Transcription** drawer. They are
+different drawers, so the unreadable mark and the unreadable sentence are never
+on screen together, and a singer who never opens Fit is never told their storage
+is full.
 
 ---
 
@@ -400,7 +473,7 @@ by being finished.** Its tier 2 is parked with a measured reason; see above.
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **Steps 0, 1, 2, 3, 4a, 4b, and step 5's single-song half CLOSED**, all observed in a real browser, and 3, 4a, 5's half, and 4b walked by Dann himself. **The emergency is over and songs are plural.** **4b CLOSED 2026-08-18 `cb7a15a`, walked on the deploy: list, switch, New song, rename, delete, auto-naming, and the neutral-state fingerprint prompt.** What remains: **step 5's remainder** (export-all, multi-song import, the collision rules) and **step 6** the sweep. **STEP 5 SHIPPED `9892887` 2026-08-18, memo in `db54cff`, and is DONE: Code walked it in a browser and DANN WALKED IT ON THE DEPLOY `ilya-eaxv09qx3` (`a8a979b`), twelve steps, record `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`.** Gate 4 moved 590 to 628. Only **step 6**, the sweep, remains. See the section above and the four documents below |
+| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **ALL SEVEN ARE NOW SHIPPED.** Steps 0 through 5 are CLOSED and every one of them was walked by Dann on a deploy; step 5 shipped `9892887`, was walked on `ilya-eaxv09qx3` (`a8a979b`) in twelve steps, record `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`. **The emergency is over and songs are plural.** **STEP 6 SHIPPED `cee4572` 2026-08-18, memo in the same commit, and Code walked all eight items of its brief on a local production build, refuting its own build three times.** Gate 4 moved 590 to 628 for step 5 and **628 to 671** for step 6. **What remains is DANN'S WALK OF STEP 6 ON A DEPLOY, and nothing else.** See the section above and the four documents below |
 | `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
 | `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
@@ -424,8 +497,12 @@ by being finished.** Its tier 2 is parked with a measured reason; see above.
 
 **N.62** · **N.63** · **N.45's remainder** · the **French colon spacing** (eight
 sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.61** · **N.6**.
-**N.27 now has a home:** Fable's step 6 routes `profileStore.saveStore` through
-the library module's reporting seam. **N.28** ships on N.67's step 5 binder.
+**N.27 now has a home, and the recommendation is IN THE TREE** as a comment at
+the reporting seam (`library.ts`, `Library.save`), recorded by N.67 step 6 and
+deliberately not built: when N.27 is built, `profileStore.saveStore`
+(`profileStore.ts:217-225`, which the step 6 brief cited as `:216-224`) routes
+through that seam. It is the last catch-and-drop of its kind in the tree.
+**N.28** ships on N.67's step 5 binder.
 
 ---
 
@@ -835,6 +912,7 @@ canon still living in project knowledge.
 
 | date | what changed |
 |---|---|
+| 2026-08-18 | **`cee4572`: N.67 STEP 6 SHIPPED, with its memo in the same commit.** The sweep: the eviction notice once per device, the corrupt-record salvage path, the storage copy finalized in both languages, and the N.27 recommendation recorded at the reporting seam and NOT built. Twenty files, 1,985 insertions, `notices.ts` new at 216 lines, gate 4 **628 to 671** with permission asked and granted first. **Three things the design assumed and the tree did not do:** nothing had ever read a record's `schema`, so a record from a newer Ilya was silently downgraded; a corrupt record was silently overwritten AND then validated clean, so the evidence died with the work; and one damaged record refused an entire binder on import, so the salvage export could be written and never read. **Code's own walk refuted its own build three times**, each repaired with a regression test, and every one had passed all five gates first. **W1 closed. NOT YET WALKED BY DANN ON A DEPLOY.** |
 | 2026-08-18 | **`9892887`: N.67 STEP 5 SHIPPED. `db54cff`: its memo.** Export-all, multi-song import, and the collision rules. Ten files, 1,834 insertions, `exchange.ts` new at 313 lines under 34 tests, gate 4 590 to 628. **DONE the same evening: Dann walked it on `ilya-eaxv09qx3`, twelve steps, record `n67-5-dann-walk_r1_2026-08-18.md`.** |
 | 2026-08-18 | **A DIALOG THAT WAITS FOR ITS `close` EVENT WAITS FOREVER, AND ALL FIVE GATES PASSED WITH THE HANG LIVE.** `close()` fires no `close` event in the browser pane Code drives, confirmed on a bare `<dialog>` with no framework near it. The collision dialog hung the whole import on the first colliding song. **Runes are inert under vitest, so the module was correct and the page was not, and only a browser could see it.** Resolve a dialog from the press, never from the event. |
 | 2026-08-18 | **THE TREE MOVED UNDER THIS DESK TWICE IN ONE SESSION.** First a parallel GUI session added 2,955 bytes to `STATE.md` while a brief was being written against it. Then Code shipped step 5 while the close was being written, so a section that said "nothing built" was false within the hour and the memory edits were swept into Code's own commit. **Both were caught by comparing a kept copy, not by trusting a session-open `git status`.** |
