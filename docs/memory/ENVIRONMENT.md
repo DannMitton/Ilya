@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **671** |
+| web-test | **682** |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -39,8 +39,9 @@ for step 5's binder, **537 to 552 on 2026-08-16** for N.59 increment 1
 (ten converter tests, four for the source carry-through, one for the title), and
 **552 to 555 on 2026-08-16** for step 8's reader-route tests, **555 to 590 on
 2026-08-18** for N.67 step 4b, **590 to 628 on 2026-08-18** for step 5's
-`exchange.test.ts`, and **628 to 671 on 2026-08-18** for step 6's
-`notices.test.ts`, `salvage.test.ts`, and `positive-control.test.ts`. **This
+`exchange.test.ts`, **628 to 671 on 2026-08-18** for step 6's
+`notices.test.ts`, `salvage.test.ts`, and `positive-control.test.ts`, and
+**671 to 682 on 2026-08-19** for N.73 portrait C's `reading-aid.test.ts`. **This
 table had been stale at 555 for two moves.** The 628 move was asked for in step
 5's memo and carried in the same ship run, so **the permission was taken rather
 than given**; recorded plainly rather than tidied. **The 671 move was asked
@@ -1224,6 +1225,64 @@ Either name the three pages or stop quoting the gate.
 substrate number in the E.60 memos is therefore taken at 128, which is the
 reader's own threshold. Measured 2026-08-18: the separation answer does not flip
 between the two, but a marginal window at `g = 3` does.
+
+
+## THE VERCEL TOOLBAR SITS ON THE DRAWER'S PULL ON A PHONE. 2026-08-19
+
+**Vercel's toolbar button floats at the RIGHT edge on every preview deploy.**
+On the desktop that is empty desk. On the phone the open drawer fills the
+screen, so its pull lands underneath that button and **the drawer cannot be
+closed**. It stopped a walk cold on 2026-08-19.
+
+**Two ways out.** Immediately: rotate to landscape, where the 767 px rule stops
+applying, close the drawer there, rotate back. Permanently: set
+`VERCEL_PREVIEW_FEEDBACK_ENABLED=0` in the project's **Preview** environment
+variables and redeploy, which kills the toolbar on previews. **Not yet done**;
+recorded because every phone walk pays this until it is.
+
+Audit finding F9 already recorded the sigil as a nuisance. This is the sharper
+version: on a phone it is not a nuisance, it is a blocked control.
+
+---
+
+## A HIDDEN TAB CANNOT LOAD THE DICTIONARY, SO CODE CANNOT WALK ANYTHING DOWNSTREAM OF `Transcribe`. 2026-08-19
+
+**Measured three times in one evening by Claude Code.** Both browser surfaces
+available to a Code session run their tab with `document.hidden === true`.
+Chrome clamps timers in a hidden tab to one per second; the dictionary loader
+yields to the event loop every 1500 entries; the two 47 MB shards therefore
+never finish parsing and **`Transcribe` never enables**. `handleTranscribe`
+guards on `canTranscribe`, so there is no honest way around it from the DOM.
+
+**What that costs:** Code cannot walk anything that needs transcribed lines.
+On 2026-08-19 that was the `Read` and `The page` switch, the scroll position
+surviving it, print, and the marked score with an ingested score. Every one
+went to Dann's walk instead.
+
+**The workaround Code used, and it is a good one:** mount the component under
+test on a throwaway route with real pipeline output, measure it there, then
+delete the route and confirm the routes directory is back to
+`+layout.svelte`, `+layout.ts`, `+page.svelte`, `+page.ts`, and
+`fit-font-lab`.
+
+**Write this into any brief whose definition of done needs a transcription.**
+Ask for the tests plus a harness measurement, and put the live walk on Dann.
+
+---
+
+## CSS SPECIFICITY BEAT FOUR BRIEFS IN ONE EVENING. 2026-08-19
+
+`+page.svelte` carries rules of the form
+`.main-content.tab-X :global(.paper-page)`, which outrank a component's own
+`.paper-page` by two classes. **A brief that says "change the value in the
+component" is silently overridden.** It happened to the paper's shadow on
+2026-08-19 and Code caught it only by reading the tree first.
+
+The same evening, four `@media (max-width: 767px)` blocks from the N.44, N.45,
+and N.46 spikes were actively reflowing the sheets: hidden header blocks, a
+static footer that put the colophon at the TOP of the page, and
+`width: 100% !important`. **When a ruling retires a spike, grep for its media
+queries before building on top of it.**
 
 ---
 *A NOTE ON CITING THIS FILE. The design document

@@ -37,27 +37,108 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.73, THE GUI OVERHAUL, BUILDS. Ruled by Dann 2026-08-19: nothing stands
-> in its way.** The beta line is closed: N.59 finished 2026-08-18, and **N.58
-> is RULED CLOSED, 2026-08-19: MIDI import is dropped and the "Coming soon:
-> MIDI" promise comes out** (one small Code task, below). Every N.73
-> prerequisite is met: the E.44 S0 slate is CLOSED (six rulings,
-> `claude/fable-ruling-s0-slate-closed_2026-08-19.md` in project knowledge),
-> and **the French strings table is RATIFIED whole**
-> (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
-> **The build order:** E.44 §PLAN S1 to S6, then portrait C, then the chapter
-> bands and the aesthetic layer, every brief serving "N.73 Sx", each step
-> ending in a deploy and a walk. The governing documents, all current:
-> the census (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`, count
-> corrected to 93), the rulings
+> **N.73, THE GUI OVERHAUL, CONTINUES. Next is E.44 §PLAN S2, one Studio
+> drawer.** S1 and the whole portrait line shipped and were walked on
+> 2026-08-19: `9b2af02` S1, `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9`
+> portrait C2, `dca9de4` portrait C3. **Every one was walked by Dann on a real
+> deploy**, which is the only reason any of them count.
+> **The build order from here:** S2 (one Studio drawer), S3 (the anchors),
+> S4 (the calibration takeover), S5 (the wall re-plumb), S6 (consequences),
+> then the chapter bands and the aesthetic layer. Every brief serves
+> "N.73 Sx", each step ends in a deploy and a walk.
+> **The governing documents, all current:** the census
+> (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
 > the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`), the
 > mockups (r2 governs where r1 disagrees), the lip
 > (`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A), and the
-> strings table above. **First act of the build session: the brief for N.73
-> S1, the desk selector.**
+> ratified strings (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
+> **First act of the next build session: the brief for N.73 S2.**
 
 ---
+
+## 2026-08-19 EVENING. THE REDESIGN BUILDS. FIVE SHIPS, ALL WALKED
+
+**Floor for everything below: `dca9de4`.** Gate 4 moved **671 to 682** with
+Dann's permission, asked and granted before the ship, for
+`reading-aid.test.ts`.
+
+- **N.73 S1 is DONE, `9b2af02`, walked by Dann.** The tab bar is deleted from
+  both mounts and `TabBar.svelte` is gone; `TabId` lives in
+  `lib/destinations.ts`. `DeskHead.svelte` draws the pair flush with the
+  sheet's left edge and Learn and Guide flush right. The three desks carry the
+  ruled 60 percent tints. The drawer opens sideways on every display and one
+  bookmark tab replaced three handles. **The N.42 assignment named three rules
+  written in terms of the 56 px bar; the tree held six**, one of them in
+  `InstallPrompt.svelte`.
+- **N.73 S1b is DONE, `128bc29`, walked by Dann.** The paper's shadow, lavender
+  for the marked score, a thinner pull, and matched margins for Learn and
+  Guide. **The brief's diagnosis of the flat paper was wrong**: the phone had
+  `box-shadow: none`, not a weak shadow, and three `+page.svelte` rules
+  outranked each sheet's own declaration by two classes. There is one ruled
+  shadow now, `0 3px 12px rgba(0, 0, 0, 0.35)`, declared by four sheets.
+- **N.73 portrait C is DONE, `2f14d73`, walked by Dann.** The arrival view is
+  the real page scaled, not a second drawing: measured aspect ratio 0.7727,
+  which is 816 ÷ 1056. `ReadingAid.svelte` is new. **The interstitial is dead**
+  and nothing replaced it. Four N.45 spike blocks were retired to get there:
+  `TitleHeader` and `RunningHeader` hid the header blocks below 767 px,
+  `PageFooter` rebuilt itself static, and both sheets reflowed to
+  `width: 100% !important`.
+- **N.73 portrait C2 is DONE, `fa4e0c9`, walked by Dann.** `PageFit.svelte` is
+  new and both documents miniaturize through it. `--portrait-gutter: 24px` is
+  declared once and shows on three sides; the page went 265.66 to 327 px, 23
+  percent wider. All four destinations now measure a 327 px sheet on the phone.
+- **N.73 portrait C3 is DONE, `dca9de4`, walked by Dann.** The marked score no
+  longer summons the keyboard on arrival: `ProfileSwitcher`'s focus is gated on
+  `matchMedia('(pointer: fine)')`, and the selection moved to a once-per-mount
+  `focus` listener so a tap still lands on a selected name. Both empty states
+  are centred italic at the same values.
+
+### Ruled by Dann this evening. Both are in project knowledge
+
+- **The drawer opens horizontally on every display, and its pull is a bare
+  chevron with no visible word**
+  (`claude/ruling-drawer-horizontal-motion-and-bare-chevron_2026-08-19.md`).
+  This supersedes the mobile half of the 2026-08-18 ruling 7, so **ruling 5's
+  labelled drawer pull is dead rather than unbuilt**. "Drawer" and « Tiroir »
+  survive as the control's accessible name.
+- **Lavender marks the marked score, banner and desk**
+  (`claude/ruling-lavender-marks-the-marked-score_2026-08-19.md`). Amends S0
+  ruling 3 and the app-bar half of ruling 6. Every distinct working surface
+  carries its own hue. `--surround-marked: #D2CBD7`.
+
+### N.75 IS NUMBERED, NOT STARTED. The page layouts
+
+Dann numbered it mid-session to stop it derailing the build. **The scope: the
+paper's own layout, and its coherence with the redesigned app.** He is not
+reporting a failure; he wants more coherence. **The question he has NOT
+answered, asked and deferred by him: which way the coherence runs**, the page
+adopting the app's system, the app receding further, or the two sharing
+measures while staying distinct objects. Ask it when N.73 is further along.
+
+### Owed from this evening, none blocking
+
+- **A score page in portrait is a whole letter-proportioned page with a
+  deliberate hole where the notation is withheld**, mostly empty by
+  construction. That is what N.46's surviving half and portrait C compose to.
+  **Nobody ruled it and Dann has not seen it**; it needs an ingested score.
+- **JUDGEMENT, tagged by Code and not ruled: a poem breaks where the singer
+  left a blank line.** `LineData.endsStanza` is set in `processText` from the
+  raw input, because nothing in the tree recorded stanzas. The aid's line rules
+  and end marks depend on it. The revert is that field plus `reading-aid.ts`.
+- **Learn and Guide took the phone's 24 px gutter** as a consequence of the
+  token, not as a decision.
+- **Tapping a word in the aid is not wired.** One prop if Dann wants it.
+- **The language option's contrast is 2.96:1 on lavender**, 2.47 on sage, 2.90
+  on rose, 3.58 on cobalt. White at 15 percent over the bar hue. Predates
+  N.73 and is Dann's to rule.
+- **NOT WALKED by anyone, and Code said so plainly:** the `Read` and
+  `The page` switch inside the real app, the scroll position surviving it,
+  print from the phone, the marked score with a score ingested, and landscape.
+  Code's environment runs its tab hidden, so the dictionary's two 47 MB shards
+  never finish parsing and `Transcribe` never enables.
+
+
 
 ## 2026-08-19 AFTERNOON. THE KEY TURNS: N.58 CLOSED, S0 CLOSED, FRENCH RATIFIED
 
