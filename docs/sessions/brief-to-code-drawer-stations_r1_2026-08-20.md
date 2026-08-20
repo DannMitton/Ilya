@@ -137,6 +137,45 @@ it, and Dann rules.
   existing** rather than being repaired: Source's row is two buttons, Output's
   row is three. `.binder-row`'s comment about column alignment goes with it.
 
+### 3.6 The drawer's two text intakes, from Dann's inbox
+
+Two items, and they are not the same kind. **Read which is ruled and which is
+proposed, and do not blur them.**
+
+**RULED by Dann, 2026-08-20: the placeholders match.** `.meta-input::placeholder`
+sets colour only. `.text-input::placeholder` sets colour AND
+`font-style: italic`. **Delete the italic.** The placeholder is instruction, so
+it belongs to the Instrument voice; italic is the paper's mannerism. Dann's
+words: "just make it consistent with its twin."
+
+**NOT a defect, do not touch it:** `.text-input`'s body is `var(--font-serif)`.
+Its contents are a poem, so the Reading voice is correct there. Only the
+placeholder is instruction.
+
+**PROPOSED by the coordinating desk, NOT RULED. Dann rules it on the walk.**
+Dann asked for the sage and lavender field perimeters to be "more subtle in
+colour" and ruled that the hues themselves are right: **sage names the text
+intake, lavender names the score intake, and that is hue naming place, which is
+what the system asks for. Do not neutralise either.**
+
+The desk proposes that the dominance is weight, not hue. **`.text-input` is
+`3px solid var(--sage)` and `ScoreUploader`'s drop zone is
+`3px solid var(--deeper-lavender)`, while `.meta-input` is
+`1px solid var(--stone-300)`. Take both from 3px to 1px and change no colour.**
+
+**Why not a lighter hue, measured by the desk against the white field the
+borders sit on:** `--sage` #8B9A7D is already at **2.99**, just under WCAG's 3:1
+for a control boundary, and every lighter token falls further: `--light-sage`
+#A8B5A0 at 2.15, `--muted-lavender` #A89BB5 at 2.62, `--light-lavender` #C4BACF
+at 1.86. The white fill gives nothing: `#FFFFFF` on the `#FAF8F5` drawer is
+barely above 1:1, so **the border is the only thing identifying the field.**
+`--deeper-lavender` #8E7E9B is at 3.74, so the pair only looks matched.
+
+**Report both borders' rendered weight and colour in the memo, and say that the
+weight change is unruled**, so Dann's walk is the ruling. If he wants a lighter
+hue after seeing 1px, the tokens exist and the numbers above are what he would
+be choosing.
+
 ### 3.5 Done when
 
 Dann walks these on a deploy, on the desk.
@@ -150,7 +189,10 @@ Dann walks these on a deploy, on the desk.
 4. `Print` sits beside Export and Import.
 5. Every remaining horizontal rule in the drawer is a station or anchor
    boundary, and the memo lists each with what it separates.
-6. All five gates at baseline: phonology 216, dictionary 235, web-check 0 errors
+6. The textarea's placeholder renders roman, matching the metadata fields.
+7. Both text intakes carry a 1 px border in their existing hue, sage for the
+   text and lavender for the score. **Dann rules this one by looking at it.**
+8. All five gates at baseline: phonology 216, dictionary 235, web-check 0 errors
    and 7 warnings in 4 files, web-test 682, score-parser 444 passed and 5
    skipped. **Ask Dann's permission before moving any gate count.**
 

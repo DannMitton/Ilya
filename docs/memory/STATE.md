@@ -227,6 +227,35 @@ on the same three.
      fidget. Nothing else ever moves without the user." The retraction is the
      singer's gesture. **Do not build a station that shuts itself.**
 
+  **FROM THE INBOX, opened at Dann's request 2026-08-20. Five items, and this
+  is where each landed.**
+  - **I.01 is DONE by N.73 S3 ship one** and should leave the file: NOTATION is
+    no longer bottom-anchored and no longer opens expanded.
+  - **The retractable-headers line is RULED IN** and is ruling 1 above.
+  - **The placeholder line is RULED IN, 2026-08-20.** One declaration causes
+    it: `.text-input::placeholder` carries `font-style: italic` and
+    `.meta-input::placeholder` does not. The italic goes, because a placeholder
+    is instruction and belongs to the Instrument voice. **The textarea's serif
+    BODY stays: its contents are a poem.** Dann: "just make it consistent with
+    its twin." Brief §3.6.
+  - **The border line is RULED IN PART.** Dann ruled the hues are correct and
+    must not be neutralised: **sage names the text intake, lavender names the
+    score intake, which is hue naming place.** The coordinating desk's
+    counter-proposal to make both neutral was WRONG and Dann overruled it.
+    **What is NOT ruled: how to make them subtler.** The desk proposes the
+    dominance is weight rather than hue, 3 px against the metadata fields' 1 px,
+    and put it in the brief as its own proposal for Dann to rule by looking on
+    the walk. **Measured against the white field: `--sage` #8B9A7D is already at
+    2.99 against WCAG's 3:1 for a control boundary, `--light-sage` 2.15,
+    `--muted-lavender` 2.62, `--light-lavender` 1.86, `--deeper-lavender` 3.74.
+    The white fill is barely above 1:1 on the drawer, so the border is the only
+    thing identifying the field.** Every lighter tone makes an already-marginal
+    number worse, and that bears on the WCAG line in the inbox.
+  - **The WCAG marketing line is not a build item** and stays where it is.
+  **Also found, not scoped:** `app.css:140` provides a global
+  `outline: 2px solid var(--sage)` focus rule, so the drawer's inputs are not
+  focus-less. That closes a question the desk had raised as NOT ESTABLISHED.
+
   **WHY THE ANCHORS RETRACTING MATTERS, measured.** The Inspector's placeholder
   reserves `min-height: 365px` (`RootPanel.svelte:628`, read in the tree
   2026-08-20). Against the drawer middles Code measured on `63c2bb4`, retraction
