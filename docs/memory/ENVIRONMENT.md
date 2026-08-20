@@ -1289,6 +1289,33 @@ that read 901 characters, 140 elements, and 1684 px on both documents, with only
 
 ## CSS SPECIFICITY BEAT FOUR BRIEFS IN ONE EVENING. 2026-08-19
 
+**AMENDED 2026-08-20: IT BEAT THE COORDINATING DESK TWICE MORE, THE SAME WAY.**
+The desk read a `border` declaration inside a component, named it in a brief as
+the thing that paints, and was wrong both times.
+
+- **The marked score's centring.** The desk said `VoiceProfilePane` had no
+  centring container. It has one, `.fit-paper-container`, on its score branch;
+  only the empty-state branch was bare.
+- **The textarea's border.** Brief §3.6 named `.text-input`'s
+  `3px solid var(--sage)` in `RootPanel.svelte`. **A
+  `:global(.drawer-content textarea)` rule in `+page.svelte` carried
+  `!important` and outranked it**, so Code's first edit changed the source and
+  not the screen. Code found it by measuring the rendered result and folded both
+  rules onto `.text-input`.
+- **The double line under NOTATION.** The desk called it a seam between the
+  anchor's boundary and the station's own border. **`NotationFields` draws no
+  border and never did.** It was the anchor's 2 px near-black rule and the
+  textarea's 3 px sage border, 28 px apart with empty drawer between them.
+
+**THE RULE FOR THIS DESK: a `path:line` for a CSS declaration is a claim about
+the SOURCE, never about the screen.** Before naming a rule in a brief, either
+read every rule that could reach that selector, including `+page.svelte`'s
+`:global` blocks and `app.css`, or write the brief in terms of the rendered
+result and let Code find the site. **Tether 5 already says verify the rendered
+result, not the source. It applies to writing briefs, not only to walking
+them.**
+
+
 `+page.svelte` carries rules of the form
 `.main-content.tab-X :global(.paper-page)`, which outrank a component's own
 `.paper-page` by two classes. **A brief that says "change the value in the
@@ -1407,3 +1434,11 @@ build, because it is the thing that runs the five gates first.
 **Also: finish writing before you hand Dann the command.** He is fast. Two
 corrections missed their commit by seconds because the desk offered a commit
 line while it was still editing the file.
+
+**AND NEVER PUT A PLACEHOLDER INSIDE A FENCED BLOCK.** The contract says a
+fenced block means "paste this into the terminal." The desk wrote the rule above
+into a fenced block with a literal `-m "..."` in it, Dann pasted it as given,
+and **commit `5069173` carries the message `...`**. Its contents are this
+section. **That was the desk's defect, not Dann's**, and the commit is left as
+it is rather than rewritten, because the history should be right rather than
+tidy. A command with a slot in it is prose, not a fenced block.

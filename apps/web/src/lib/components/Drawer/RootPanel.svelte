@@ -3,6 +3,7 @@
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
 import SongList from './SongList.svelte';
+import StationHeader from './StationHeader.svelte';
 import type { SongRow } from '$lib/library/songs';
 
 	interface Props {
@@ -172,7 +173,27 @@ import type { SongRow } from '$lib/library/songs';
 	     The dictionary error above stays first in the SCROLL, which is no
 	     longer first in the drawer. -->
 
-	<!-- ── 2. Textarea with OCR overlay ────────────────────── -->
+	<!-- ── SOURCE. N.65 ship one, Dann's ruling 4 of 2026-08-20 ──────
+	     The textarea, the OCR scanner, the score drop zone, the Finale
+	     disclosure, and now Clear and Transcribe are one labelled station.
+	     They sat bare before this, against the spec's own first grouping
+	     rule (`fable-gui-audit-and-spec_r1_2026-08-18.md` §3.3, "No orphan
+	     controls. Every drawer control lives inside a labelled station").
+
+	     `Clear` and `Transcribe` came DOWN here from the Clear-Print-
+	     Transcribe grid. N.73 S3 ship two moved Analysis above Output and
+	     left that grid where it was, which put Transcribe, the app's
+	     primary action, below a tall empty Analysis pane and away from the
+	     textarea it acts on. Dann's ruling 7 of 2026-08-20 dissolves the
+	     repair rather than making it: once Source is a station with its own
+	     contents, its two actions sit at its foot by construction.
+
+	     THE BODY IS A FLEX COLUMN and the header is not in it, so the
+	     header's own 0.4rem is the whole gap to the first entry. Ruling 2.
+	     Twinned on SongList. -->
+	<div class="section source-section">
+		<StationHeader label={t('source.heading', language)} />
+		<div class="station-body">
 	<div class="textarea-wrapper">
 		<textarea
 			class="text-input"
@@ -231,18 +252,35 @@ import type { SongRow } from '$lib/library/songs';
 	     no-lyrics notice that follows it came here from the Fit drawer. -->
 	{@render sourceScore?.()}
 
-	<!-- ── 3. Result summary: always reserves space to prevent layout shift ── -->
-	<p class="result-summary" class:result-hidden={!hasResults}>
-		{#if hasResults}
-			{wordCount} {t('result.words', language)} {transcribeMs}ms
-		{:else}
-			&nbsp;
-		{/if}
-	</p>
+	<!-- SOURCE'S OWN ACTIONS, N.65 ship one. Two buttons, not three: Print
+	     left with the binder controls. The `1fr 1fr 2fr` grid this came out
+	     of does not exist any more, so `.binder-row`'s comment about column
+	     alignment went with it. Clear and Transcribe keep the widths they
+	     had in that grid, 1fr and 2fr, so the primary action is still the
+	     wide one. -->
+	<div class="source-actions">
+		<button
+			class="action-btn btn-ghost"
+			onclick={onclear}
+		>
+			{t('input.clear', language)}
+		</button>
+		<button
+			class="action-btn btn-primary"
+			disabled={!canTranscribe}
+			onclick={ontranscribe}
+		>
+			{loaderState.isLoading ? t('input.transcribeLoading', language) : t('input.transcribe', language)}
+		</button>
+	</div>
 
 	{#if transcribeError}
+		<!-- The failure of Transcribe, so it reports inside the station whose
+		     button produced it. -->
 		<p class="error-text">{transcribeError}</p>
 	{/if}
+		</div>
+	</div>
 
 	<!-- ── ANALYSIS. N.73 S3 ship two moved this block ABOVE Output ──
 	     The spec rules the scroll's order Source, Analysis, Output
@@ -258,7 +296,25 @@ import type { SongRow } from '$lib/library/songs';
 	     adjacent rather than merged. Merging them is a station boundary nobody
 	     has ruled. -->
 	<div class="section console-section">
-		<h3 class="section-label">{t('console.placeholder', language)}</h3>
+		<StationHeader label={t('console.placeholder', language)} />
+		<div class="station-body">
+		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
+		     is a decision the brief did not rule. It described the
+		     transcription's word count and milliseconds from a position
+		     between two stations, and Source's new boundary leaves it nowhere
+		     to stand. The ratified r1 mockup draws it inside Analysis, beside
+		     "select a word to inspect it"
+		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
+		     reports is a reading of the text rather than an act on it. Its
+		     `margin-top: -4px` went with the move: that value tightened it
+		     against the uploader above, which is no longer above it. -->
+		<p class="result-summary" class:result-hidden={!hasResults}>
+			{#if hasResults}
+				{wordCount} {t('result.words', language)} {transcribeMs}ms
+			{:else}
+				&nbsp;
+			{/if}
+		</p>
 		{#if showInspector && consoleContent}
 			{@render consoleContent()}
 		{:else}
@@ -284,50 +340,45 @@ import type { SongRow } from '$lib/library/songs';
 				{/if}
 			</div>
 		{/if}
+		</div>
 	</div>
-	<!-- ── OUTPUT. Print, Export, Import. N.73 S3 ship two left Print in
-	     this grid deliberately: lifting it out would strand Transcribe in a
-	     `1fr` column of `grid-template-columns: 1fr 1fr 2fr` and break
-	     `.binder-row`'s deliberate column alignment below. The mockup draws
-	     Transcribe under Source and Print under Output; making the tree match
-	     that is a layout ruling, not a reorder, and it is not this ship.
+	<!-- ── OUTPUT. Print, Export, Import. N.65 ship one ──────────────
+	     Print came DOWN from the Clear-Print-Transcribe grid and joined the
+	     two binder controls, per Dann's ruling 7 of 2026-08-20. All three
+	     carry a song off the device rather than acting on the text, so they
+	     are one row of three equal columns. The `1fr 1fr 2fr` grid and
+	     `.binder-row`'s comment about column alignment are gone rather than
+	     repaired: there is one row here now, so there is nothing to align a
+	     second row against.
 
-	     The row itself is unchanged: Clear, Print, Transcribe. -->
-	<div class="button-row">
-		<button
-			class="action-btn btn-ghost"
-			onclick={onclear}
-		>
-			{t('input.clear', language)}
-		</button>
-		<button
-			class="action-btn btn-secondary"
-			disabled={printDisabled}
-			onclick={onprint}
-		>
-			{t('input.print', language)}
-		</button>
-		<button
-			class="action-btn btn-primary"
-			disabled={!canTranscribe}
-			onclick={ontranscribe}
-		>
-			{loaderState.isLoading ? t('input.transcribeLoading', language) : t('input.transcribe', language)}
-		</button>
-	</div>
-	<!-- N.67 step 5. Twinned on the print control above, in its own row so the
-	     two binder controls sit in the SAME columns on the Fit tab too (Dann's
-	     ruling 2026-08-16). Nothing goes on the paper. -->
-	<div class="button-row binder-row">
-		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
-		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
-		<!-- N.67 step 5, the remainder. The row's third column has stood empty
-		     since the row was built, and this is what it was the right width for.
-		     Shown only above one song, because with one song it says the same
-		     thing as the button beside it. Twinned on the Fit tab. -->
-		{#if songLibrary.songs.length > 1}
-			<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
-		{/if}
+	     `Export all songs` was that grid's `2fr` third column and is now a
+	     fourth cell, which wraps to the first column of a second row. It is
+	     still shown only above one song, because with one song it says the
+	     same thing as the button beside it.
+
+	     THIS STATION HAS NO LABEL, DELIBERATELY, AND THE MEMO SAYS WHY.
+	     Dann's ruling 4 named Source and only Source. The ratified r1 mockup
+	     draws an OUTPUT label here (`fable-gui-mockup_r1_2026-08-18.html:325`)
+	     but he has not ruled it and its French is NOT ESTABLISHED, so ship
+	     one does not invent one. The header's slot is this element's first
+	     child, the same position `StationHeader` takes in Source, Analysis,
+	     and Songs, and ship two has to give every station a retractable
+	     header anyway. -->
+	<div class="section output-section">
+		<div class="output-row">
+			<button
+				class="action-btn btn-secondary"
+				disabled={printDisabled}
+				onclick={onprint}
+			>
+				{t('input.print', language)}
+			</button>
+			<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
+			<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
+			{#if songLibrary.songs.length > 1}
+				<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
+			{/if}
+		</div>
 	</div>
 
 	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both
@@ -427,29 +478,56 @@ import type { SongRow } from '$lib/library/songs';
 
 	/* ── Textarea with OCR overlay ────────────────────────── */
 
+	/* N.65 ship one. THE 8px TOP MARGIN IS GONE. It gave the textarea room
+	   below the metadata block when the two were adjacent; the metadata block
+	   is a pinned anchor now and the textarea is the first entry under
+	   SOURCE's header, where 8px would add to the header's own 0.4rem and
+	   break ruling 2. `ScoreUploader`'s `.uploader` keeps its matching 8px:
+	   it is not first under a header. */
 	.textarea-wrapper {
 		position: relative;
-		margin-top: 8px;
 	}
 
+	/* THE BORDER IS 1px, AND THE WEIGHT CHANGE IS NOT RULED. Brief §3.6
+	   proposes it and Dann rules it by looking at it on the walk. It was
+	   `3px solid var(--sage)`. THE HUE IS UNCHANGED AND MUST STAY: sage
+	   names the text intake and lavender names the score intake, which is
+	   hue naming place, and Dann ruled that right. Every lighter sage token
+	   measures worse against the white fill than #8B9A7D's own 2.99:1, so
+	   weight is the only lever that does not cost contrast.
+
+	   The body font stays `var(--font-serif)`. Its contents are a poem, so
+	   the Reading voice is correct there, and §3.6 says so in as many
+	   words. */
 	.text-input {
 		width: 100%;
 		font-family: var(--font-serif);
 		font-size: 0.9rem;
 		color: var(--ink-primary);
 		background: white;
-		border: 3px solid var(--sage);
+		border: 1px solid var(--sage);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
 		padding-right: 2.2rem; /* room for the OCR icon */
 		resize: vertical;
 		line-height: 1.5;
 		box-sizing: border-box;
+		transition: border-color 150ms ease;
 	}
 
+	/* Came here from a `!important` global in `+page.svelte` that reached
+	   into `.drawer-content textarea`. Nothing competes with it here, so the
+	   `!important` is gone with the move. */
+	.text-input:focus {
+		border-color: var(--deeper-sage, #7A8A6C);
+	}
+
+	/* RULED by Dann 2026-08-20: "just make it consistent with its twin."
+	   The italic is deleted. `.meta-input::placeholder` sets colour only,
+	   and a placeholder is instruction, which belongs to the Instrument
+	   voice. Italic is the paper's mannerism. */
 	.text-input::placeholder {
 		color: var(--ink-tertiary);
-		font-style: italic;
 	}
 
 	.text-input:disabled {
@@ -520,11 +598,15 @@ import type { SongRow } from '$lib/library/songs';
 
 	/* ── Result summary: always reserves space ────────────── */
 
+	/* N.65 ship one. `margin-top: -4px` is gone. It pulled this line up
+	   against the uploader that used to sit above it; it is the first entry
+	   under ANALYSIS's header now, where a negative margin would eat the
+	   ruled 0.4rem gap. */
 	.result-summary {
 		font-size: 0.75rem;
 		color: var(--sage);
 		font-family: var(--font-sans);
-		margin-top: -4px;
+		margin: 0;
 		min-height: 1.2em;
 		text-align: right;
 	}
@@ -539,20 +621,27 @@ import type { SongRow } from '$lib/library/songs';
 		font-family: var(--font-sans);
 	}
 
-	/* ── Button row: Clear | Print | Transcribe ────────────── */
+	/* ── The two action rows (N.65 ship one) ──────────────── */
+	/* `.button-row` and `.binder-row` are gone. They shared one
+	   `1fr 1fr 2fr` grid so a Clear-Print-Transcribe row and an
+	   Export-Import row would align column for column. Print left that row
+	   for Output, so there is no second row to align against and the grid
+	   has nothing left to do. */
 
-	.button-row {
+	/* Source's foot. Clear and Transcribe keep the 1fr and 2fr they held in
+	   the old grid, so the primary action is still the wide one. */
+	.source-actions {
 		display: grid;
-		grid-template-columns: 1fr 1fr 2fr;
+		grid-template-columns: 1fr 2fr;
 		gap: 6px;
-		margin-top: 4px;
-		margin-bottom: 6px;
 	}
 
-	/* N.67 step 5. Same grid as .button-row above, so the binder controls sit
-	   in the same columns here as they do on the Fit tab. */
-	.binder-row {
-		margin-top: 0;
+	/* Output. Three equal columns, and a fourth cell wraps to the first
+	   column of a second row when `Export all songs` is drawn. */
+	.output-row {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 6px;
 	}
 	.action-btn {
 		padding: 0.45rem 0.5rem;
@@ -592,35 +681,51 @@ import type { SongRow } from '$lib/library/songs';
 		cursor: not-allowed;
 	}
 
-	/* ── Section labels (sage smallcaps, matching Drawer) ──────────────── */
+	/* ── The stations (N.65 ship one) ─────────────────────── */
+	/* THE LABEL RECIPE IS NOT HERE ANY MORE. It is
+	   `StationHeader.svelte`, the drawer's one owner, and the reasoning for
+	   a component over a `:global` rule is written there. */
 
 	.section {
 		margin-top: 0;
 	}
 
-	.section-label {
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--sage);
-		margin-bottom: 0.4rem;
-		font-weight: 600;
+	/* A station's contents, as a box the header is NOT inside. That is what
+	   makes the header's own 0.4rem the whole gap to the first entry, which
+	   is Dann's ruling 2. Put the header in the flex column instead and the
+	   column's gap adds to it, which is exactly how SONGS came to measure
+	   12.39px where every other station measured 6.39px. Twinned on
+	   SongList's `.station-body`. */
+	.station-body {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
 	}
 
-	/* ── The library door (N.67 step 4b) ─────────────────── */
-
+	/* One step between stations in the scroll, and it is the 12px the tree
+	   already spent between Analysis and Songs. With `.root-panel`'s own
+	   6px flex gap that is 18px, three times. Source takes none: it is
+	   first, under the anchor's rule. */
+	.console-section,
+	.output-section,
 	.song-section {
 		margin-top: 12px;
 	}
 
 	/* ── Word Console section ────────────────────────────── */
 
+	/* ANALYSIS's two rules. KEPT, and both have a function under Dann's
+	   ruling 3: the top one separates Analysis from Source and the bottom
+	   one separates Analysis from Output. They are the drawer's only
+	   station boundaries and they are the tree's own 2px sage, which
+	   shipped and was walked. The r1 mockup draws station boundaries at 1px
+	   against the anchors' 2px; the tree wins per tether 3, and the memo
+	   names the difference. `margin-top` moved up into the shared station
+	   step. */
 	.console-section {
 		border-top: 2px solid var(--sage);
 		border-bottom: 2px solid var(--sage);
 		padding: 6px 0 6px 0;
-		margin-top: 12px;
 		overflow: visible;
 	}
 

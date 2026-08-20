@@ -261,7 +261,7 @@
 					{@render shanePanel?.()}
 				{:else if destination === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
-						<h2 class="section-label section-label-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
+						<h2 class="toc-heading toc-heading-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
 						<ul class="toc-list">
 							<li>
 								<button class="toc-link toc-title" class:active={isActive('learn-title')} data-heading-id="learn-title" onclick={() => handleTocClick('learn-title')}>
@@ -431,7 +431,7 @@
 					</nav>
 				{:else if destination === 'guide'}
 					<nav class="learn-toc guide-toc" aria-label={language === 'fr' ? 'Table des matières du Guide' : 'Guide table of contents'}>
-						<h2 class="section-label section-label-guide">GUIDE</h2>
+						<h2 class="toc-heading toc-heading-guide">GUIDE</h2>
 						<ul class="toc-list">
 
 							<!-- ── How Ilya Works ── -->
@@ -838,7 +838,16 @@
 		padding: 1.5rem;
 	}
 
-	.section-label {
+	/* N.65 ship one. RENAMED FROM `.section-label`, VALUES UNCHANGED, and
+	   the rename is the point. This heads the table of contents in Learn and
+	   Guide. It is NOT a station label and cannot be folded into
+	   `StationHeader.svelte`: its colour is the reading room's own ruled rose
+	   and cobalt, not sage, and its 1rem gap belongs to a nav list rather
+	   than to a station body. It carried the station label's name anyway,
+	   which is how a fifth declaration of that recipe came to exist and
+	   drift. One name for one concept: a station label is `StationHeader`,
+	   and this is the TOC's heading. */
+	.toc-heading {
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-size: 0.7rem;
 		font-weight: 600;
@@ -848,11 +857,11 @@
 		margin: 0 0 1rem 0;
 	}
 
-	.section-label-learn {
+	.toc-heading-learn {
 		color: var(--dusty-rose, #A67B7B);
 	}
 
-	.section-label-guide {
+	.toc-heading-guide {
 		color: var(--quiet-cobalt, #5C739E);
 	}
 

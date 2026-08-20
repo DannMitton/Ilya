@@ -2860,15 +2860,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		border-top-color: var(--quiet-cobalt, #5C739E);
 	}
 
-	/* ── Text input field: sage border (item 6) ──────────── */
-	/* Targets textarea within the Drawer's transcription panel */
-	:global(.drawer-content textarea) {
-		border: 3px solid var(--sage, #8B9A7D) !important;
-		transition: border-color 150ms ease;
-	}
-	:global(.drawer-content textarea:focus) {
-		border-color: var(--deeper-sage, #7A8A6C) !important;
-	}
+	/* ── Text input field: the sage border (item 6) ────────
+	   N.65 ship one. THESE TWO RULES ARE GONE, AND FINDING THEM IS THE
+	   REASON THE BORDER CHANGE LANDED AT ALL. They set the border on
+	   `.drawer-content textarea` with `!important`, so `RootPanel`'s own
+	   `.text-input` rule declared a border it did not paint, and brief
+	   §3.6's "`.text-input` is `3px solid var(--sage)`" was true of the
+	   source and false of the screen. Editing `.text-input` alone changed
+	   nothing.
+
+	   There is exactly ONE textarea in the app, `RootPanel`'s, so a global
+	   reaching into the drawer to style it bought nothing and cost a lie.
+	   Both rules, the resting border and the focus colour, are on
+	   `.text-input` in `RootPanel.svelte` now, where the rest of that
+	   field's design already lived. Same defect as the station label
+	   declared five times: one thing, more than one owner. */
 	/* ── Portrait C: the stage (N.73, ruled by Dann 2026-08-18) ──
 
 	   The eleven rules that stood here dressed the interstitial. Ruling 4

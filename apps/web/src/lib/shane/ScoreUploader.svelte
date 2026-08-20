@@ -693,13 +693,20 @@
 		justify-content: center;
 		gap: 0.25rem;
 		width: 100%;
-		/* A true visual twin of the Transcription text field (.text-input),
-		   whose live design is a 3px solid sage border, 4px radius, white fill,
-		   6-row height. Same box, only the colour differs: the Fit tab's
-		   lavender (Dann, measured from the live site 2026-07-13). */
+		/* A true visual twin of the Transcription text field (.text-input):
+		   same box, 4px radius, white fill, and only the colour differs, the
+		   score intake's lavender against the text intake's sage (Dann,
+		   measured from the live site 2026-07-13).
+
+		   N.65 ship one took BOTH borders from 3px to 1px, and THE WEIGHT
+		   CHANGE IS NOT RULED. Brief §3.6 proposes it and Dann rules it by
+		   looking at it on the walk. The hue is untouched and must stay: he
+		   ruled that sage naming the text intake and lavender naming the
+		   score intake is right, and no lighter lavender token measures
+		   better against the white fill than #8E7E9B's own 3.74:1. */
 		min-height: 152px;
 		padding: 0.5rem 0.6rem;
-		border: 3px solid var(--deeper-lavender);
+		border: 1px solid var(--deeper-lavender);
 		border-radius: 4px;
 		background: white;
 		box-sizing: border-box;

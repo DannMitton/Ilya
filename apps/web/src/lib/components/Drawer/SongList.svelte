@@ -19,6 +19,7 @@
 	 */
 	import { tick } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import StationHeader from './StationHeader.svelte';
 	import type { SongRow } from '$lib/library/songs';
 
 	interface Props {
@@ -101,8 +102,16 @@
 </script>
 
 <div class="song-list">
-	<h3 class="section-label">{t('songs.heading', language)}</h3>
+	<StationHeader label={t('songs.heading', language)} />
 
+	<!-- N.65 ship one. THE BODY IS ITS OWN FLEX COLUMN. `.song-list` used to
+	     be the column, so its 6px gap landed between the header and the list
+	     ON TOP of the header's own 0.4rem, and SONGS measured 12.39px to its
+	     first entry where every other station measured 6.39px. That is Dann's
+	     ruling 2, and this is where it was broken. The 6px between the list,
+	     the error, and New song is unchanged; it just belongs to the body
+	     now instead of to the whole station. -->
+	<div class="station-body">
 	<ul class="songs">
 		{#each songs as song (song.id)}
 			<li class="song-row" class:is-open={song.id === activeId}>
@@ -165,25 +174,20 @@
 			<button type="button" class="new-btn" onclick={onnew}>{t('songs.new', language)}</button>
 		</div>
 	{/if}
+	</div>
 </div>
 
 <style>
+	/* N.65 ship one. A plain block. The station's gap is the header's alone,
+	   and the body below keeps the 6px this rule used to spend on both. */
 	.song-list {
+		display: block;
+	}
+
+	.station-body {
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-	}
-
-	/* RootPanel's own .section-label, value for value, so the drawer keeps one
-	   register rather than gaining a second heading style. */
-	.section-label {
-		margin: 0 0 0.4rem;
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--sage);
 	}
 
 	.songs {

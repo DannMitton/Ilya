@@ -165,6 +165,18 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.stressAssign.default':       { en: 'Default',             fr: 'Par défaut' },
 	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
 
+	// ── Station labels (N.65, the drawer's stations) ─────────
+	// SOURCE. Dann's ruling 4 of 2026-08-20: the textarea and the drop zone
+	// sat bare, against the spec's own "no orphan controls."
+	// THE FRENCH IS ADOPTED BY IDENTITY, NOT COINED. « Source » is the same
+	// word and the same standard noun in French, so this ships no French
+	// Dann has not seen. The precedent for recording an invariant as
+	// identical en/fr values rather than as an absence is the tab bar's own
+	// comment in this file, on 'tab.transcription' and 'tab.guide'.
+	// `t()` returns `[MISSING: key]` for an empty slot, so an omitted French
+	// value is not an option here; it would print that string in the drawer.
+	'source.heading':              { en: 'Source',                       fr: 'Source' },
+
 	// ── Word Console placeholder ─────────────────────────────
 	'console.placeholder':         { en: 'Analysis',                     fr: 'Analyse' },
 
