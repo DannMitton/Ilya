@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`63c2bb4`**, raised from `904df6e` at the close of 2026-08-20 night,
+before **`96e3fff`**, raised from `904df6e` across the night of 2026-08-20,
 because N.73 S3 ship one, its three walk repairs, and its memo all shipped in
 `63c2bb4`, and a
 floor that predates
@@ -38,44 +38,88 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.73, THE GUI OVERHAUL, CONTINUES. Next is S3 SHIP TWO.**
-> S1, S1b, portrait C, C2, C3, S2, and **S3 SHIP ONE** shipped and were walked:
-> `9b2af02` S1, `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9` portrait C2,
-> `dca9de4` portrait C3, `904df6e` S2, `f7975ca` S3 ship one, `63c2bb4` its
-> three walk repairs. **Every one was walked by Dann on a real deploy**, which
-> is the only reason any of them count.
-> **S3 SHIP ONE IS `WRITTEN`, NOT `DONE`.** Eight of the brief's nine walk
-> items passed on `63c2bb4`, plus all three repairs. **Items 6, 7, and 8 are
-> unwalked and need a microphone and a real calibration**: re-entering the
-> ritual loses no captured vowel, a word click during the ritual does not
-> destroy it, and the anchor reads the voice's name with `Re-calibrate`. The
-> French half of item 9 waits on the same three.
-> **S3 SHIP TWO, which is next and is specified in full:**
-> `docs/sessions/brief-to-code-n73-s3_r1_2026-08-20.md` §3. The `TabId` split
-> into destination plus document, the `ilya:activeTab` migration, the
-> `NotationFields` accent made unconditionally sage, and Analysis moved above
-> Output. Print stays in the Clear-Print-Transcribe grid; the brief says why.
-> **After S3: S4 is absorbed.** Ship one built the calibration takeover.
-> **The build order from here, RESEQUENCED by Dann's ruling 2026-08-20:**
-> **S3 SHIP TWO IS `DONE`, `af995a9`, WALKED BY DANN.** From here:
-> **the drawer's stations** (Dann's four rulings of 2026-08-20 late, which are
-> E.27 §3.3 arriving fifteen days late), then **the chapter bands for Learn
-> and Guide**, then S5 (the wall re-plumb), S6 (consequences), then the rest
-> of the aesthetic layer.
-> The bands moved ahead of S5 and S6 because those two are Studio's business
-> and touch neither reading room.
-> **The governing documents, all current:** the census
+> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED, `96e3fff`, and
+> PART-WALKED. One repair is RULED and unsent.**
+>
+> **FIRST ACT OF THE NEXT SESSION: send the repair below to Code, ship it,
+> and finish walking brief §3.5's eight items.** Dann walked one item and
+> stopped: the double line under NOTATION is still two lines.
+>
+> **THE REPAIR, ruled by Dann 2026-08-20 at the close.** `Drawer.svelte:638`
+> draws `border-bottom: 2px double var(--ink-primary, #1a1612)` on
+> `.drawer-anchor-top`, the mirror `border-top` at `:646` on
+> `.drawer-anchor-bottom`, and the same at `:665` on `.takeover-head`. **The
+> style is literally `double`, which is why it draws two lines, and nothing in
+> the source says why.** Dann's words: "I do not like the double line, replace
+> it with a sage horizontal like the one above Analysis." That is
+> `2px solid var(--sage)`, `.console-section`, `RootPanel.svelte:726-727`.
+> **All three sites. He is knowingly giving up the visual distinction between
+> a frame boundary and a station boundary; record it as his ruling, not as a
+> consequence.** Also replace the comment above `.drawer-anchor-top`, which
+> explains the rule's direction and padding and never explains the doubleness.
+>
+> **He said he will argue about it tomorrow. Do not treat the ruling as
+> settled beyond the repair itself, and do not defend the double rule unless
+> he asks.**
+>
+> **THE STATE OF N.73 S3.** Ship two is `DONE`, `af995a9`, walked four of four.
+> **Ship one is `WRITTEN`, not `DONE`:** eight of nine walked plus three
+> repairs, and items 6, 7, and 8 need a microphone and a real calibration.
+> Code closed item 7 in its own harness; 6 and 8 remain Dann's.
+>
+> **THE BUILD ORDER FROM HERE:** N.65 ship one's repair and walk, then N.65
+> ship two (retraction, persistence, first-run defaults, brief §4), then the
+> chapter bands for Learn and Guide, then S5 (the wall re-plumb), S6
+> (consequences), then the rest of the aesthetic layer.
+>
+> **THE GOVERNING BRIEF:** `docs/sessions/brief-to-code-drawer-stations_r1_2026-08-20.md`,
+> §3 built, §4 not started. **Its §3.2 was wrong about the double line and Code
+> corrected it; read the ship one memo before the brief.**
+>
+> **THE GOVERNING DOCUMENTS for the GUI, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
-> the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`), the
-> mockups (**r1 governs the drawer; r2 does not touch the stations**), the lip
-> (`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A), and the
-> ratified strings (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
-> **CORRECTED 2026-08-20 night.** This block used to send the next session to
-> "§4's station order." The station order is at
-> `fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, under **§3.3**. The §4
-> in the S2 brief is a provisional list that says twice, in its own words,
-> that S3 rules the stations.
+> the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`, station
+> order at **§3.3**, not §4), the mockups (**r1 governs the drawer; r2 does not
+> touch the stations**), the lip (`ilya-lip-options_r1_2026-08-18.html`, option
+> A), and the ratified strings (`fable-n73-french-strings_r1_2026-08-19.md`).
+> **E.27 is a SOURCE, not law. Tether 17. Three of its parts are superseded and
+> the drawer-stations entry below names which.**
+
+---
+
+## 2026-08-21 EARLY. N.65 SHIP ONE, `96e3fff`. SHIPPED, PART-WALKED
+
+**Floor: `96e3fff`.** All five gates at baseline on the ship: 216, 235, 0 errors
+and 7 warnings in 4 files, 682, 444 passed and 5 skipped. Nothing moved.
+
+**What shipped.** One owner for the station label, `StationHeader.svelte`, and
+four of the five declarations deleted. `SOURCE` is a labelled station in both
+languages. `Clear` and `Transcribe` returned to Source's foot. `Print` joined
+Export and Import. Both text intakes went from 3 px to 1 px, hues untouched.
+The textarea's placeholder lost its italic. Memo:
+`docs/sessions/drawer-stations-ship1_r1_2026-08-20.md`.
+
+**TWO PLACES THE TREE BEAT THE BRIEF, both found by Code measuring the screen.**
+The brief's §3.2 called the double line a seam between two rules;
+`NotationFields` draws no border and never did. And §3.6 named `.text-input`'s
+border in `RootPanel`, but a `:global(.drawer-content textarea)` rule in
+`+page.svelte` carried `!important` and outranked it, so the first edit changed
+the source and not the screen. **Both are the same fault by the coordinating
+desk and `ENVIRONMENT.md` now names it: a `path:line` for a CSS declaration is
+a claim about the SOURCE, never about the screen.**
+
+**WALKED: one item of eight.** Dann looked under NOTATION and reported two
+lines. That is the repair now sitting in THE ONE THING. **The other seven are
+unwalked**, including the table of computed label values, `SOURCE` in place,
+`Print` beside the binder, and both intakes at 1 px.
+
+**THREE THINGS ON THAT WALK ARE UNRULED and are Dann's to settle by looking:**
+both field perimeters at 1 px, which was the coordinating desk's proposal and
+not his ruling; the Output row having no label, since his ruling 4 named Source
+only; and `SOURCE` in French, which Code set to the identical string by identity
+rather than coining, because `t()` prints `[MISSING: source.heading]` and an
+empty slot was not available.
 
 ---
 
