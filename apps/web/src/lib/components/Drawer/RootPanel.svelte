@@ -405,11 +405,14 @@ import type { SongRow } from '$lib/library/songs';
 </div>
 
 <style>
+	/* N.65 ship one, Dann's walk. NO GAP AND NO TOP PADDING. Both used to
+	   sit between the stations on top of each station's own padding, so the
+	   space above a label depended on which station it was. The station
+	   recipe below owns every vertical measure in this column now. */
 	.root-panel {
 		display: flex;
 		flex-direction: column;
-		gap: 6px;
-		padding: 20px 1rem 40px;
+		padding: 0 1rem 40px;
 	}
 
 	/* ── Dictionary progress bar (Kimi spec) ───────────────── */
@@ -686,8 +689,31 @@ import type { SongRow } from '$lib/library/songs';
 	   `StationHeader.svelte`, the drawer's one owner, and the reasoning for
 	   a component over a `:global` rule is written there. */
 
+	/* THE STATION RECIPE, RULED BY DANN ON HIS WALK OF SHIP ONE, 2026-08-20:
+	   "consistent spacing and consistent section dividing lines modelled
+	   after Analysis." ANALYSIS IS THE MODEL and this is it, measured off
+	   what `.console-section` already drew: a 2px sage rule, 6px, the
+	   label, the label's own 0.4rem, the body, 6px, the next station's
+	   rule. Every station in the drawer answers to it, so the space above
+	   any label is 6px and the space below any body is 6px, wherever the
+	   singer looks.
+
+	   ONE RULE PER BOUNDARY, drawn by the station BELOW it. Analysis used
+	   to draw both its own, which is why it was the only station with
+	   lines: its neighbours drew none. Output and Songs draw their own top
+	   rule now, so Analysis's bottom rule is gone rather than doubled. */
 	.section {
-		margin-top: 0;
+		border-top: 2px solid var(--sage);
+		padding: 6px 0;
+	}
+
+	/* Source is first in the scroll and draws NO rule of its own. The top
+	   anchor's own boundary is already directly above it, and the two would
+	   land within 20px of each other, which is the double line Dann has
+	   been asking about since the walk. The anchor's rule is Source's top
+	   boundary, and it is the same 2px sage. */
+	.source-section {
+		border-top: none;
 	}
 
 	/* A station's contents, as a box the header is NOT inside. That is what
@@ -706,11 +732,7 @@ import type { SongRow } from '$lib/library/songs';
 	   already spent between Analysis and Songs. With `.root-panel`'s own
 	   6px flex gap that is 18px, three times. Source takes none: it is
 	   first, under the anchor's rule. */
-	.console-section,
-	.output-section,
-	.song-section {
-		margin-top: 12px;
-	}
+
 
 	/* ── Word Console section ────────────────────────────── */
 
@@ -722,10 +744,11 @@ import type { SongRow } from '$lib/library/songs';
 	   against the anchors' 2px; the tree wins per tether 3, and the memo
 	   names the difference. `margin-top` moved up into the shared station
 	   step. */
+	/* Analysis takes the shared recipe and adds only `overflow: visible`,
+	   which the Inspector needs. Its border and padding used to be
+	   declared here; they are the recipe now, and it is the recipe BECAUSE
+	   they were declared here. */
 	.console-section {
-		border-top: 2px solid var(--sage);
-		border-bottom: 2px solid var(--sage);
-		padding: 6px 0 6px 0;
 		overflow: visible;
 	}
 

@@ -215,8 +215,13 @@
 	   `tight` prop. The reason for the no-gap case is unchanged and is
 	   recorded there. */
 
+	/* The station recipe (RootPanel.svelte's `.section`), which Dann ruled
+	   on his walk of ship one: a 2px sage rule, 6px, the label, the body,
+	   6px. This rule is the boundary between Piece and Notation, and it is
+	   the same one Analysis draws. */
 	.section {
-		margin-top: 0;
+		border-top: 2px solid var(--sage);
+		padding: 6px 0;
 	}
 
 	/* N.43: the whole header row is the control, so the tap target is the

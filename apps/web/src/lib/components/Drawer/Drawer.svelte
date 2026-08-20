@@ -613,29 +613,63 @@
 	   compress them rather than scroll behind them.
 
 	   Side padding is 1rem, matching .root-panel and .shane-panel, so what
-	   is pinned keeps the same left edge as what scrolls. The rule is the
-	   drawer's own border language (the 2px double of .drawer-body's
-	   border-right) rather than the sage of RootPanel's .console-section,
-	   because these shelves are shared by two documents and must not carry
-	   either one's identity colour. */
+	   is pinned keeps the same left edge as what scrolls.
+
+	   THE RULE IS SAGE, AND IT IS THE SAME RULE EVERY BOUNDARY IN THIS
+	   DRAWER DRAWS. This paragraph used to argue the opposite: that a
+	   shelf shared by two documents must not carry either one's identity
+	   colour, so the anchors took .drawer-body's 2px double ink rather
+	   than the sage of RootPanel's .console-section. That argument is
+	   spent. Sage stopped being one document's colour when N.73 S3 ship
+	   two made NOTATION's accent unconditionally sage and the S0 slate
+	   kept lavender to the voice anchor alone, so every station label in
+	   the drawer is already sage on both documents. See .drawer-anchor-top
+	   for what the rule means now and who ruled it. */
 	.drawer-anchor {
 		flex-shrink: 0;
 		background: var(--drawer-bg);
 	}
 
-	/* N.73 S3. Piece and NOTATION. Its rule faces DOWN, toward the scroll it
-	   caps, which is the mirror of the bottom anchor's. Bottom padding is
-	   12px, the value the old bottom-pinned NOTATION anchor carried; there is
-	   no 6px top here, because .root-panel's own metadata block opens the
-	   region and brings its own. */
+	/* N.73 S3. Piece and NOTATION, pinned above the scroll.
+
+	   WHAT THE RULE MEANS, RULED BY DANN 2026-08-20 ON HIS WALK OF N.65
+	   SHIP ONE. A 2px sage horizontal is the drawer's ONE boundary
+	   treatment, and it means "a region ends here." There is no second
+	   treatment and no hierarchy among them. Four rules draw it: this one,
+	   .drawer-anchor-bottom, .takeover-head, and .console-section's pair
+	   in RootPanel.svelte, which is the one this value came from. Match
+	   that rule if you ever add a fifth, and do not invent a weight, a
+	   style, or a colour to say that one boundary outranks another.
+
+	   All three rules in this file were `2px double var(--ink-primary)`
+	   until that ruling. Nothing in the source ever said why the style was
+	   `double`, which is the question Dann had to ask, and asking it is
+	   what retired it.
+
+	   HE GAVE UP SOMETHING KNOWINGLY, so do not restore it as a fix. The
+	   old pair distinguished a FRAME boundary, the ink double around the
+	   pinned shelves and the takeover, from a STATION boundary, the sage
+	   between Analysis and its neighbours. One treatment cannot say which
+	   is which. He ruled that a drawer with one horizontal is worth more
+	   than a drawer that grades its horizontals.
+
+	   The direction is unchanged: this rule faces DOWN, toward the scroll
+	   it caps, and the bottom anchor's is its mirror. Bottom padding is
+	   12px, the value the old bottom-pinned NOTATION anchor carried; there
+	   is no 6px top here, because .root-panel's own metadata block opens
+	   the region and brings its own. */
 	.drawer-anchor-top {
 		display: flex;
 		flex-direction: column;
-		/* 6px, the gap `.root-panel` gives its own children, so Piece and
-		   NOTATION sit apart by the same measure everything below them does. */
-		gap: 6px;
-		padding: 12px 1rem;
-		border-bottom: 2px double var(--ink-primary, #1a1612);
+		/* NO GAP AND NO VERTICAL PADDING, N.65 ship one, Dann's walk. Piece
+		   and Notation are stations, so they answer to the station recipe in
+		   RootPanel.svelte like every other one: each brings its own 6px above
+		   and below, and Notation brings the rule between them. A gap or a
+		   padding here would land on top of that and make these two the only
+		   stations spaced differently, which is the defect. */
+		gap: 0;
+		padding: 0 1rem;
+		border-bottom: 2px solid var(--sage);
 	}
 
 	/* N.73 S3. The voice. VoiceAnchor.svelte draws its own 9px 1rem padding,
@@ -643,7 +677,7 @@
 	   line. */
 	.drawer-anchor-bottom {
 		padding: 0;
-		border-top: 2px double var(--ink-primary, #1a1612);
+		border-top: 2px solid var(--sage);
 	}
 
 	/* ── The takeover (N.73 S3) ──────────────────────────── */
@@ -662,7 +696,7 @@
 	.takeover-head {
 		flex-shrink: 0;
 		padding: 6px 1rem;
-		border-bottom: 2px double var(--ink-primary, #1a1612);
+		border-bottom: 2px solid var(--sage);
 	}
 
 	/* The ONE back affordance, E.27. Quiet by construction: this is the way

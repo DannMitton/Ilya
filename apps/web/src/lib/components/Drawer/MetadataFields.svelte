@@ -140,8 +140,13 @@
 </div>
 
 <style>
+	/* The station recipe (RootPanel.svelte's `.section`), which Dann ruled
+	   on his walk of ship one: 6px above the label, 6px below the body.
+	   NO RULE ABOVE. Piece is the first station in the drawer and the app
+	   header already bounds it; a rule here would draw against that band
+	   and separate nothing. Notation draws the rule between the two. */
 	.section {
-		margin-top: 0;
+		padding: 6px 0;
 	}
 
 	.meta-fields {

@@ -26,14 +26,14 @@ Not read: E.27 itself, E.36 §2.2, `InspectorPanel.svelte`.
 | Notation onto that owner, accent and no-gap as props | `NotationFields.svelte:29,96-106` |
 | Analysis onto that owner | `RootPanel.svelte:299` |
 | Songs onto that owner, and its 6px double-gap fixed | `SongList.svelte:22,105,114,183-190` |
-| The fifth declaration renamed, not folded | `Drawer.svelte:264,434,850-866` |
+| The fifth declaration renamed, not folded | `Drawer.svelte:264,434,884-900` |
 | SOURCE, a labelled station | `RootPanel.svelte:194-196` |
 | Clear and Transcribe at Source's foot | `RootPanel.svelte:261-283` |
 | Print beside Export and Import | `RootPanel.svelte:367-381` |
-| The `1fr 1fr 2fr` grid deleted | `RootPanel.svelte:633-645` |
-| The station body box, so the header owns the gap | `RootPanel.svelte:699`, `SongList.svelte:187` |
-| The placeholder's italic deleted, RULED | `RootPanel.svelte:529` |
-| Both field perimeters 3px to 1px, NOT RULED | `RootPanel.svelte:502`, `ScoreUploader.svelte:709` |
+| The `1fr 1fr 2fr` grid deleted | `RootPanel.svelte:636-648` |
+| The station body box, so the header owns the gap | `RootPanel.svelte:725`, `SongList.svelte:187` |
+| The placeholder's italic deleted, RULED | `RootPanel.svelte:532` |
+| Both field perimeters 3px to 1px, NOT RULED | `RootPanel.svelte:505`, `ScoreUploader.svelte:709` |
 | The `!important` global that actually painted the border, deleted | `+page.svelte:2863-2877` |
 | `source.heading` | `i18n.ts:178` |
 
@@ -50,8 +50,7 @@ The brief §1 says NOTATION "is two things at once: a pinned anchor whose wrappe
 draws a boundary, and a station that draws its own. Both fire." **It does not.**
 `NotationFields` declares no border at all, and never did. Measured in the
 browser on the pre-build tree, there is exactly one CSS rule under NOTATION:
-`.drawer-anchor-top`'s `border-bottom: 2px double var(--ink-primary)`
-(`Drawer.svelte:638`). §3.2 asks me to decide which of two rules owns the line
+`.drawer-anchor-top`'s `border-bottom: 2px double var(--ink-primary)`. §3.2 asks me to decide which of two rules owns the line
 and delete the other. There is no other, so nothing was deleted there.
 
 **What Dann is seeing is two rules 28 px apart, not two rules touching.** At
@@ -67,8 +66,11 @@ solid 2 px band. The screenshot is in the session scratchpad and is not committe
 
 **So the fix came from §3.6 rather than §3.2**, and the two sections turn out to
 be the same defect. Taking the textarea to 1px drops the second line's weight to a
-third of the first's. The anchor keeps its 2px double, which is the answer §3.2
-guessed at and the right one: an anchor boundary is a structural fact.
+third of the first's.
+
+**SUPERSEDED IN PART BY DANN'S WALK.** This paragraph used to end by keeping the
+anchor's `2px double`. He ruled it out the same evening. §7 carries what replaced
+it and why.
 
 ### 2.2 `.text-input`'s border is not set where §3.6 says it is
 
@@ -82,7 +84,7 @@ the file.
 
 There is exactly one `<textarea>` in the whole app, so a global reaching into the
 drawer to style it bought nothing. Both the resting border and the focus colour
-are on `.text-input` now (`RootPanel.svelte:502,521`) and the `!important` is
+are on `.text-input` now (`RootPanel.svelte:505,524`) and the `!important` is
 gone with them. **This is the same defect as the label declared five times: one
 thing, more than one owner.**
 
@@ -167,14 +169,14 @@ anyway, so it lands there with his string and no rework.
 ### 3.5 Station spacing in the scroll is 12px, three times
 
 `.console-section`, `.output-section`, and `.song-section` share one
-`margin-top: 12px` (`RootPanel.svelte:709-712`). 12px is the value the tree
+`margin-top: 12px` (deleted on the walk; see §7.2). 12px was the value the tree
 already spent between Analysis and Songs; with `.root-panel`'s own 6px flex gap
 it is 18px at each of the three steps. Source takes none, being first under the
 anchor's rule.
 
 ### 3.6 Source's two buttons keep their old widths
 
-`grid-template-columns: 1fr 2fr`, which is the 1fr Clear and the 2fr Transcribe
+`grid-template-columns: 1fr 2fr` (`RootPanel.svelte:636`), which is the 1fr Clear and the 2fr Transcribe
 held inside the deleted `1fr 1fr 2fr`. Output is `repeat(3, 1fr)`. `Export all
 songs` was that grid's 2fr third column and is now a fourth cell that wraps to the
 first column of a second row, still shown only above one song.
@@ -218,7 +220,7 @@ original ruling kept as the `tight` prop.
 ### Item 2. One line under NOTATION
 
 One CSS rule, and only ever one: `.drawer-anchor-top`'s `2px double
-var(--ink-primary)` at `Drawer.svelte:638`. The second heavy line 28 px beneath it
+var(--ink-primary)`, which §7.1 then made sage on Dann's ruling. The second heavy line 28 px beneath it
 was the textarea's 3px sage border, now 1px. §2.1 above carries the measurement
 and the instrument check.
 
@@ -246,12 +248,12 @@ the drop zone, and the action buttons).
 
 | rule | where | what it separates | verdict |
 |---|---|---|---|
-| `2px double var(--ink-primary)`, bottom | `Drawer.svelte:638`, `.drawer-anchor-top` | the pinned Piece-and-Notation anchor from the scroll | **anchor boundary. Kept.** |
-| `2px double var(--ink-primary)`, top | `Drawer.svelte:646`, `.drawer-anchor-bottom` | the scroll from the pinned voice anchor | **anchor boundary. Kept.** |
-| `2px solid var(--sage)`, top | `RootPanel.svelte:725`, `.console-section` | Analysis from Source | **station boundary. Kept.** |
-| `2px solid var(--sage)`, bottom | `RootPanel.svelte:725`, `.console-section` | Analysis from Output | **station boundary. Kept.** |
-| `2px double var(--ink-primary)`, bottom | `Drawer.svelte:662`, `.takeover-head` | the calibration takeover's one back affordance from the ritual | **neither. Named and left. Dann rules.** |
-| `1px solid var(--stone-300)`, top | `ScoreUploader.svelte:927`, `.mus-help` | the score drop zone from the older-Finale micro-help | **neither. Named and left. Dann rules.** |
+| `2px double var(--ink-primary)`, bottom | `.drawer-anchor-top` | the pinned Piece-and-Notation anchor from the scroll | **anchor boundary. Kept.** |
+| `2px double var(--ink-primary)`, top | `.drawer-anchor-bottom` | the scroll from the pinned voice anchor | **anchor boundary. Kept.** |
+| `2px solid var(--sage)`, top | `.console-section` | Analysis from Source | **station boundary. Kept.** |
+| `2px solid var(--sage)`, bottom | `.console-section` | Analysis from Output | **station boundary. Kept.** |
+| `2px double var(--ink-primary)`, bottom | `.takeover-head` | the calibration takeover's one back affordance from the ritual | **neither. Named and left. Dann rules.** |
+| `1px solid var(--stone-300)`, top | `.mus-help`, `ScoreUploader.svelte:927` | the score drop zone from the older-Finale micro-help | **neither. Named and left. Dann rules.** |
 
 **Nothing was deleted under ruling 3, and nothing was added.** Every rule in the
 drawer already had a function or is named above for Dann. Adding boundaries above
@@ -279,7 +281,7 @@ what Dann walked without objecting. Worth one word from him on this walk.
 
 ### Item 6. The textarea's placeholder renders roman
 
-`RootPanel.svelte:529`. `font-style: italic` deleted, colour untouched.
+`RootPanel.svelte:532`. `font-style: italic` deleted, colour untouched.
 `.meta-input::placeholder` was already colour only, so the two match now. **RULED
 by Dann, 2026-08-20: "just make it consistent with its twin."**
 
@@ -361,6 +363,135 @@ mechanism was retired**, per brief §2. `ScoreUploader` was touched once, at
 Nothing retracts yet. Every station header is inert text, exactly as before, and
 NOTATION's disclosure is the one control among them, exactly as before. **Ruling 1
 and ruling 5 are ship two.**
+
+---
+
+## 7. THE WALK REPAIR. Dann's rulings of 2026-08-20 on ship one, built and re-gated
+
+Two rulings, and both are his. **Neither is a consequence I noticed.**
+
+### 7.1 One boundary treatment for the whole drawer
+
+**HIS RULING.** The three horizontal `2px double var(--ink-primary)` rules become
+`2px solid var(--sage)`, the sage horizontal that `.console-section` already drew
+above Analysis. Three sites, all named by him: `.drawer-anchor-top`,
+`.drawer-anchor-bottom`, and `.takeover-head`. Built at `Drawer.svelte:672`,
+`:680`, and `:699`.
+
+**HE GAVE UP THE FRAME-VERSUS-STATION DISTINCTION KNOWINGLY, AND RULED THAT IT IS
+WORTH GIVING UP.** The old pair said two different things: the ink double marked a
+FRAME boundary, around the pinned shelves and the takeover, and the sage marked a
+STATION boundary, between Analysis and its neighbours. One treatment cannot say
+which is which, and after this the drawer no longer tells a singer that a pinned
+shelf is a different kind of thing from a station. **That is his call, made with
+the trade in front of him, and it is not a defect to repair later.** A drawer with
+one horizontal is worth more to him than a drawer that grades its horizontals.
+
+**The reasoning that argued the other way is deleted rather than left standing.**
+`Drawer.svelte`'s anchor comment used to say the shelves must take the drawer's ink
+rather than sage "because these shelves are shared by two documents and must not
+carry either one's identity colour." That argument was already spent before his
+ruling: N.73 S3 ship two made NOTATION's accent unconditionally sage and the S0
+slate kept lavender to the voice anchor alone, so every station label in the drawer
+is sage on both documents already.
+
+**The comment above `.drawer-anchor-top` is rewritten** (`Drawer.svelte:661`). The
+old one explained the rule's direction and its padding and never once said why the
+style was `double`, which is the question Dann had to ask. The new one states what
+the rule means, names him and the date, names all four sites that draw it, records
+what he gave up, and says not to restore it as a fix.
+
+**ONE `2px double` SURVIVES AND I LEFT IT: `.drawer-body`'s `border-right`
+(`Drawer.svelte:600`).** He named three sites and this is not one of them. It is
+the drawer's outer edge against the desk, a vertical spine rather than a rule
+inside the drawer, so no singer sees it beside a sage horizontal. **If "one
+boundary treatment for the whole drawer" is meant to reach it, that is one word
+and one line.**
+
+### 7.2 The station recipe, modelled on Analysis
+
+**HIS RULING, in his words: "consistent spacing and consistent section dividing
+lines modelled after Analysis, make Notation and Source and Metadata match."**
+
+Analysis is the model, and the recipe is measured off what `.console-section`
+already drew:
+
+> a 2px sage rule, 6px, the label, the label's own 0.4rem, the body, 6px, the next
+> station's rule
+
+It is `RootPanel.svelte:705` and every station answers to it.
+
+**One rule per boundary, drawn by the station BELOW it.** Analysis used to draw
+both its own, which is the whole reason it was the only station with lines: its
+neighbours drew none. Output and Songs draw their own top rule now, so Analysis's
+`border-bottom` is deleted rather than doubled (`RootPanel.svelte:751`).
+
+**Two stations are exceptions, and each is one line with a reason:**
+
+- **Piece draws no rule above** (`MetadataFields.svelte:148`). It is first in the
+  drawer and the app header already bounds it. A rule there would draw against that
+  band and separate nothing. Notation draws the rule between the two
+  (`NotationFields.svelte:222`).
+- **Source draws no rule above** (`RootPanel.svelte:715`). The top anchor's own
+  boundary sits directly above it, and the two would land within 20px of each
+  other. **That is the double line again, so this exception exists specifically to
+  prevent re-creating the defect this repair closes.** The anchor's rule is Source's
+  top boundary and it is the same 2px sage.
+
+**Two containers stopped owning vertical measure**, because they were spending it
+on top of each station's own and making the space above a label depend on which
+station it was: `.root-panel` lost its `gap: 6px` and its `20px` top padding
+(`RootPanel.svelte:412`), and `.drawer-anchor-top` lost its `gap: 6px` and its
+`12px` vertical padding (`Drawer.svelte:661`).
+
+### 7.3 The ladder, measured after the repair
+
+Read from the live DOM at 1440x900, top to bottom. **Every rule is 2px solid
+`rgb(139, 154, 125)`, which is `--sage` #8B9A7D. There is no other horizontal rule
+in the drawer.**
+
+| rule, at y | station below it | clear space to that label |
+|---|---|---|
+| none, drawer top | Piece | 6px |
+| 278.69, `.cosmetic-section` | Notation | 6px |
+| 311.48, `.drawer-anchor-top` | Source | 6px |
+| 758.30, `.console-section` | Analysis | 6px |
+| 1184.48, `.output-section` | Output, unlabelled | 6px |
+| 1232.86, `.song-section` | Songs | 6px |
+| 947.63, `.drawer-anchor-bottom` | the voice line, not a station | 9px, `VoiceAnchor`'s own |
+
+The voice anchor's row is out of sequence in that list because it is pinned, so its
+viewport y falls among the scrolling figures rather than after them.
+
+**The label table in §4 item 1 is unchanged by this repair.** All five station
+labels still measure 11.2px, 600, 1.344px, uppercase, `rgb(139, 154, 125)`, with a
+6.39px gap to the first entry.
+
+### 7.4 Gates, re-run after the repair
+
+| gate | baseline | this run |
+|---|---|---|
+| phonology | 216 | **216 passed (216)**, 7 files |
+| dictionary | 235 | **235 passed (235)**, 4 files |
+| web-check | 0 errors, 7 warnings, 4 files | **0 errors and 7 warnings in 4 files** |
+| web-test | 682 | **682 passed (682)**, 38 files |
+| score-parser | 444 passed, 5 skipped | **444 passed, 5 skipped (449)**, 20 files |
+
+**Nothing moved.**
+
+### 7.5 What this repair changes in the rest of this memo
+
+§4 item 5's divider inventory is superseded by §7.3. Two rows of it are now wrong:
+the two `2px double` anchor rules are sage, and Analysis's `border-bottom` no longer
+exists. **`.takeover-head` and `.mus-help` still stand exactly as §4 item 5 reports
+them**: the takeover's rule is sage now but still separates a back affordance from a
+ritual, which is neither a station nor an anchor boundary, and `.mus-help`'s 1px
+stone rule is untouched inside `ScoreUploader`. **Both are still Dann's to rule.**
+
+§4 item 5 also recorded that the r1 mockup draws station boundaries at 1px against
+the anchors' 2px, a hierarchy the tree did not follow. **That question is closed:
+his ruling is one treatment at 2px, and the mockup's hierarchy is the thing he
+declined.**
 
 ---
 *Written by Code, 2026-08-20 late. Every measurement in this memo was taken in a
