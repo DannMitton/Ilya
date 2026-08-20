@@ -935,12 +935,33 @@
 		margin-right: 0.3em;
 	}
 
+	/* Both documents' empty states are centred and italic. Ruled by Dann
+	   2026-08-19 on the walk.
+
+	   Every type value below is copied from the transcription's
+	   `.empty-directive` (`Paper/TitlePage.svelte`), which is the declaration
+	   this is matching: serif, italic, 1rem, 1.6 leading, --ink-tertiary,
+	   centred, capped at 480px and centred by auto margins. No third set of
+	   values was invented.
+
+	   What is NOT copied is that rule's `display: flex` with `flex: 1`, which
+	   is how the transcription centres its line vertically inside
+	   `.page-content`. This parent, `.profile-content`, already carries
+	   `justify-content: center`, so the vertical centring is done; `align-self`
+	   overrides the parent's `align-items: flex-start` for this one element,
+	   because that parent's left justification is the calibration plea's and
+	   Dann's ruling of 2026-07-13 keeps it. Nothing here reaches
+	   `.profile-line`. */
 	.profile-empty {
-		margin: 0;
+		align-self: center;
+		margin: 0 auto;
+		max-width: 480px;
+		text-align: center;
 		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 1.05rem;
-		line-height: 1.75;
-		color: var(--ink-secondary, #4a4540);
+		font-style: italic;
+		font-size: 1rem;
+		line-height: 1.6;
+		color: var(--ink-tertiary, #6A655F);
 	}
 
 	/* ── Score state (live wiring slice 1) ─────────────────── */

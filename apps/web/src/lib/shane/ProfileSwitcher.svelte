@@ -134,10 +134,62 @@
 	// svelte-ignore state_referenced_locally
 	if (voices.length === 0) nameDraft = nextDefaultName;
 
-	/** Focus and pre-select, so tapping through (or typing over) both work. */
+	/**
+	 * Pre-select the prefilled name, and take focus only where focus is free.
+	 *
+	 * N.73 C3. This used to call `focus()` unconditionally, and on a phone
+	 * focusing a text input summons the software keyboard, so arriving at the
+	 * marked score raised it unasked. Walked by Dann on `fa4e0c9`.
+	 *
+	 * MODALITY, not viewport width, decides, which is the pattern the drawer's
+	 * pull already follows. `(pointer: fine)` reports the PRIMARY pointer, so a
+	 * device that has both answers for the one it is driven with: a touchscreen
+	 * laptop and an iPad with a trackpad attached report fine and keep the
+	 * desktop's behaviour, which is right, because a device with a pointer has
+	 * a hardware keyboard and nothing pops up. A phone reports coarse and is
+	 * left alone. `any-pointer` would be the wrong query here: it answers "is
+	 * such a pointer present anywhere", not "is this how the singer is
+	 * working".
+	 *
+	 * The selection is NOT gated. It happens on focus, once, so the phone
+	 * still gets what the prefill is for: the singer taps the field, the
+	 * keyboard comes because they asked for it, and the default name is
+	 * already selected so typing replaces it. Once only, so a later tap to fix
+	 * a typo places a caret instead of fighting the singer for the word.
+	 *
+	 * `autofocus` is deliberately not used: `svelte-check` raises
+	 * `a11y_autofocus` and the web-check gate would move.
+	 */
 	function selectAll(node: HTMLInputElement) {
-		node.focus();
-		node.select();
+		let selected = false;
+		const selectOnce = () => {
+			if (selected) return;
+			selected = true;
+			node.select();
+		};
+		node.addEventListener('focus', selectOnce);
+
+		/* Absent matchMedia falls through to NOT focusing. An unasked keyboard
+		   is the worse failure of the two, and no browser reaches this line
+		   without the API. */
+		const pointerIsFine =
+			typeof matchMedia === 'function' && matchMedia('(pointer: fine)').matches;
+
+		if (pointerIsFine) {
+			/* The desktop path selects HERE rather than through the listener
+			   above, so it depends on nothing but these two calls: it is the
+			   pair of statements this function has always run, in the order it
+			   always ran them. The listener is the touch path's, where the
+			   focus is the singer's own tap on a live page. */
+			node.focus();
+			selectOnce();
+		}
+
+		return {
+			destroy() {
+				node.removeEventListener('focus', selectOnce);
+			}
+		};
 	}
 
 	function fmtDate(iso: string): string {
