@@ -26,6 +26,7 @@
 	   ────────────────────────────────────────────────────────────────── */
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
+	import StationHeader from './StationHeader.svelte';
 
 	interface Props {
 		notationPrefs: NotationPreferences;
@@ -92,7 +93,7 @@
 </script>
 
 <div class="section cosmetic-section" style="--notation-accent: {accent}">
-	<h3 class="section-label" class:collapsed={!expanded}>
+	<StationHeader accent={accent} tight={!expanded}>
 		<button
 			class="notation-disclosure"
 			aria-expanded={expanded}
@@ -102,7 +103,7 @@
 			<span>{t('cosmetic.heading', language)}</span>
 			<svg class="chevron-icon" class:expanded width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
 		</button>
-	</h3>
+	</StationHeader>
 	{#if expanded}
 	<div class="cosmetic-grid" id="notation-toggles">
 		<!-- Stress acutes -->
@@ -207,26 +208,15 @@
 </div>
 
 <style>
-	/* ── Section label (sage smallcaps, matching Drawer and RootPanel) ── */
+	/* N.65 ship one. THE LABEL RECIPE IS NOT HERE ANY MORE. It is
+	   `StationHeader.svelte`, the drawer's one owner for a station label,
+	   and this component's two differences went with it: the accent is that
+	   component's `accent` prop, and the collapsed no-gap variant is its
+	   `tight` prop. The reason for the no-gap case is unchanged and is
+	   recorded there. */
 
 	.section {
 		margin-top: 0;
-	}
-
-	.section-label {
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--notation-accent, var(--sage));
-		margin-bottom: 0.4rem;
-		font-weight: 600;
-	}
-
-	/* Nothing below the label when collapsed, so the gap separates it from
-	   the anchor's own padding and reads as slack. */
-	.section-label.collapsed {
-		margin-bottom: 0;
 	}
 
 	/* N.43: the whole header row is the control, so the tap target is the

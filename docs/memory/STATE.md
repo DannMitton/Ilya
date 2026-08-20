@@ -57,7 +57,7 @@ any of them count.
 > Output. Print stays in the Clear-Print-Transcribe grid; the brief says why.
 > **After S3: S4 is absorbed.** Ship one built the calibration takeover.
 > **The build order from here, RESEQUENCED by Dann's ruling 2026-08-20:**
-> **S3 ship two is SHIPPED in `af995a9` and part-walked.** From here:
+> **S3 SHIP TWO IS `DONE`, `af995a9`, WALKED BY DANN.** From here:
 > **the drawer's stations** (Dann's four rulings of 2026-08-20 late, which are
 > E.27 §3.3 arriving fifteen days late), then **the chapter bands for Learn
 > and Guide**, then S5 (the wall re-plumb), S6 (consequences), then the rest
@@ -76,6 +76,53 @@ any of them count.
 > `fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, under **§3.3**. The §4
 > in the S2 brief is a provisional list that says twice, in its own words,
 > that S3 rules the stations.
+
+---
+
+## 2026-08-20 LATE. N.73 S3 SHIP TWO IS DONE, `af995a9`, WALKED BY DANN
+
+**Floor for this section: `af995a9`.** All five gates at baseline, before and
+after: 216, 235, 0 errors and 7 warnings in 4 files, 682, 444 passed and 5
+skipped.
+
+**What shipped.** `TabId` split into `Destination` plus `StudioDocument`; the
+`ilya:activeTab` migration with every stored value named and the wall-closed
+case tested; NOTATION's accent unconditionally sage; Analysis moved above
+Output; and the desk head at one position on all four destinations.
+
+**WHAT DANN WALKED, four of four, on the deploy.** Analysis sits above Export,
+Import, and Songs. Flipping the pair does not change NOTATION's colour. The
+pair and the reading links hold one height across all four destinations. A
+stored `shane` reloads to Studio showing the marked score.
+
+**IT SHIPPED IN A COMMIT NAMED FOR THE MEMORY.** `git add -A` swept the build
+into `af995a9`, whose message reads "STATE: desk-head height ruled...". The ship
+script never ran, so its five gates never ran at ship time. **Nothing unsafe
+went out**: Code had run the same five on the settled tree, twice, and reported
+them at baseline. **Recorded because a later session reading that message would
+look for ship two somewhere else.**
+
+**The desk head's expectation held to the pixel, both directions.** Stated
+before the measurement: desktop Learn and Guide move DOWN 16 px to meet Studio,
+phone Studio moves DOWN 8 px to meet Learn and Guide. Measured: desktop 64 to
+80, phone 56 to 64. All eight readings have `--desk-pad-top` equal to
+`padding-top`.
+
+**Two things came out bigger than the brief said, both measured by Code.**
+`drawerWidth` was a live S2 invariant violation rather than a reliance: with a
+word open, flipping to the marked score narrowed the drawer from 693 to 523 px
+while the word stayed in the console. It holds at 720 now. And `aria-controls`
+was broken on BOTH pair members, not just the inactive one, because since S2
+neither has a panel of its own. Dangling references: 0.
+
+**One free result.** Code closed ship one's open walk item 7 in its own harness:
+the takeover survives a word click, 1002 px before and after, three regions
+still stowed. No ship one code was touched.
+
+**THE CORRIDOR WAS MEASURED AND NOT CUT.** See the corrected entry below. The
+coordinating desk's named cause was false.
+
+Memo: `docs/sessions/n73-s3-ship2_r1_2026-08-20.md`.
 
 ---
 

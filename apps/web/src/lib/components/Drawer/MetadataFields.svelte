@@ -13,6 +13,7 @@
 	import { COMPOSERS, POETS, type PersonEntry } from '$lib/composers-poets';
 	import type { SongMetadata } from '$lib/types';
 	import SearchableSelect from './SearchableSelect.svelte';
+	import StationHeader from './StationHeader.svelte';
 
 	interface Props {
 		metadata: SongMetadata;
@@ -62,7 +63,7 @@
 </script>
 
 <div class="section">
-	<h3 class="section-label">{t('meta.heading', language)}</h3>
+	<StationHeader label={t('meta.heading', language)} />
 	<div class="meta-fields">
 		<div class="meta-field-wrap">
 			<input
@@ -141,16 +142,6 @@
 <style>
 	.section {
 		margin-top: 0;
-	}
-
-	.section-label {
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--sage);
-		margin-bottom: 0.4rem;
-		font-weight: 600;
 	}
 
 	.meta-fields {
