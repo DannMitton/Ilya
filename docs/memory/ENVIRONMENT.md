@@ -1270,6 +1270,23 @@ Ask for the tests plus a harness measurement, and put the live walk on Dann.
 
 ---
 
+## A "NOTHING MOVES IN THE DRAWER" TEST CANNOT BE RUN ON A PHONE. 2026-08-20
+
+On a phone the drawer covers the whole screen, so the desk head and its pair sit
+behind it. To compare the drawer across a flip the singer has to close it, tap,
+reopen, and compare from memory, which is not an observation. **The desk is the
+instrument for any test whose subject is the drawer and whose trigger is on the
+page.** N.73 S2's central done-test was written for a desktop and handed to Dann
+on a phone, and it cost him a confused look and a round trip.
+
+The reliable form is a DOM fingerprint taken in the real browser, not an eye:
+`innerText` length, the count of elements with a non-zero bounding rect, and
+`.drawer-content`'s `scrollHeight`, captured either side of the flip. For S2
+that read 901 characters, 140 elements, and 1684 px on both documents, with only
+`data-tab` differing.
+
+---
+
 ## CSS SPECIFICITY BEAT FOUR BRIEFS IN ONE EVENING. 2026-08-19
 
 `+page.svelte` carries rules of the form

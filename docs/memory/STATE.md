@@ -11,8 +11,8 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`cee4572`**, raised from `db54cff` at the close of the fourth session of
-2026-08-18, because N.67 step 6 and its memo both shipped in `cee4572`, and a
+before **`904df6e`**, raised from `cee4572` at the close of 2026-08-20, because
+N.73 S2 and its memo both shipped in `904df6e`, and a
 floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
@@ -37,15 +37,19 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.73, THE GUI OVERHAUL, CONTINUES. Next is E.44 §PLAN S2, one Studio
-> drawer.** S1 and the whole portrait line shipped and were walked on
-> 2026-08-19: `9b2af02` S1, `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9`
-> portrait C2, `dca9de4` portrait C3. **Every one was walked by Dann on a real
+> **N.73, THE GUI OVERHAUL, CONTINUES. Next is E.44 §PLAN S3, the anchors.**
+> S1, the portrait line, and S2 shipped and were walked: `9b2af02` S1,
+> `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9` portrait C2, `dca9de4`
+> portrait C3, `904df6e` S2. **Every one was walked by Dann on a real
 > deploy**, which is the only reason any of them count.
-> **The build order from here:** S2 (one Studio drawer), S3 (the anchors),
-> S4 (the calibration takeover), S5 (the wall re-plumb), S6 (consequences),
-> then the chapter bands and the aesthetic layer. Every brief serves
-> "N.73 Sx", each step ends in a deploy and a walk.
+> **The build order from here:** S3 (the anchors), S4 (the calibration
+> takeover), S5 (the wall re-plumb), S6 (consequences), then the chapter
+> bands and the aesthetic layer. Every brief serves "N.73 Sx", each step
+> ends in a deploy and a walk.
+> **S3 CARRIES ONE THING S2 DID NOT:** the `TabId` split into destination
+> plus document, and the `ilya:activeTab` migration. The coordinating desk
+> moved it out of S2 on 2026-08-20 because it is invisible to a singer and
+> would have made a failed walk ambiguous. `lib/destinations.ts` says S3.
 > **The governing documents, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
@@ -53,7 +57,83 @@ any of them count.
 > mockups (r2 governs where r1 disagrees), the lip
 > (`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A), and the
 > ratified strings (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
-> **First act of the next build session: the brief for N.73 S2.**
+> **First act of the next build session: the brief for N.73 S3.**
+
+---
+
+## 2026-08-20. N.73 S2 IS DONE, `904df6e`, WALKED BY DANN
+
+**Floor for this section: `904df6e`.** All five gates at baseline, nothing
+moved, no permission needed: phonology 216, dictionary 235, web-check 0 errors
+and 7 warnings in 4 files, web-test 682, score-parser 444 passed and 5 skipped.
+
+**One Studio drawer exists.** `Drawer.svelte` renders `rootPanel` and
+`shanePanel` both, always, on both of Studio's documents, rather than folding
+one into the other. That shape was chosen over rewriting `RootPanel` to take
+about twenty new props, because a failed walk on a fused component cannot say
+which half broke.
+
+**What shipped.** The second `MetadataFields` is deleted and `fromScore` and
+`onrevert` are carried into the survivor. The second Print button is deleted
+and the survivor's guard is keyed on the visible document, reusing both old
+expressions verbatim. The twinned binder row is deleted. `ScoreUploader` and
+the no-lyrics courtesy message moved under the textarea inside `RootPanel`,
+through a `sourceScore` snippet, so text intake and score intake are one Source
+region. Brief:
+`docs/sessions/brief-to-code-n73-s2_r1_2026-08-20.md`. Memo:
+`docs/sessions/n73-s2_r1_2026-08-20.md`.
+
+**The walk, measured on the deploy rather than eyeballed.** Flipping the pair
+leaves the drawer identical: same text at 901 characters, 140 visible elements,
+`scrollHeight` 1684, on both documents. Only `data-tab` changes. **What Dann
+first read as movement was the paper**, which is what the pair is supposed to
+change.
+
+**One thing S2 broke and Code fixed in the same commit.** `ProfileSwitcher`
+focuses its profile-name field on mount on a desktop pointer. Under one drawer
+that field sits at the foot of a column twice as tall, so the drawer opened
+scrolled to its own bottom: `scrollTop` 1160.5 of 1161 merged, 0 unmerged. The
+fix is `preventScroll: true` at `ProfileSwitcher.svelte:196`. **JUDGEMENT, one
+word to reverse.**
+
+### Left open by S2, on purpose
+
+- **§4's station order cannot be reached by rendering two panels in sequence**,
+  because Output lives in `RootPanel` and Voice lives in `shanePanel`. Reaching
+  it needs Print split out of the Clear-Print-Transcribe grid. Code named the
+  gap rather than invent a ruling, which was right. **S3 settles it.**
+- **`NotationFields`' accent still follows `activeTab`** on a panel that no
+  longer has a tab of its own. Left alone. S3's.
+- **The no-lyrics courtesy message was not observed in its own state.** It needs
+  a score without lyrics. Structurally it cannot move, because it sits in the
+  drawer gated on `noLyricsFile` alone and both panels now render always, but
+  nobody has watched it.
+- **NOT WALKED: items 3 through 7 of the brief's done list.** Only the central
+  test was walked. The rest waits for a day with more in the tank.
+
+### FOUND THIS SESSION, NOT S2'S, NOT NUMBERED
+
+**On the desktop the marked score's page does not centre. It sits flush left
+while the transcription's page centres.** The desk head stays where the sheet
+ought to be, so the two disagree by about the width of the empty desk to the
+right.
+
+**Controlled, and this is the whole reason it is not S2's:** the same defect is
+present on `81438d4`, the build before S2, observed by Dann in the same Chrome
+window minutes apart. **S2 did not cause it and reverting S2 would not fix it.**
+It is somewhere in `VoiceProfilePane`'s empty-state branch, which renders a bare
+`<article class="paper-page profile-page envelope-page">` outside `PageFit`,
+rather than in `.main-content`, whose `align-items: center` is intact and does
+centre the transcription. **The exact rule is NOT ESTABLISHED; nobody has read
+the computed style.** Dann's to rule, and it may belong to N.75.
+
+### Hard-won, and now in ENVIRONMENT
+
+**A "nothing moves in the drawer" test cannot be run on a phone.** The drawer
+covers the whole screen there, so the pair sits behind it and the singer must
+close, tap, reopen, and compare from memory. The desk is the instrument for
+that class of test. The walk instruction was written for a desktop and handed
+to Dann on a phone, and it cost him a confused look.
 
 ---
 
