@@ -282,6 +282,29 @@ const strings: Record<string, Record<Language, string>> = {
 	'engraving.reset':             { en: 'Reset',                        fr: 'Réinitialiser' },
 
 	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
+	// THE DROP ZONE'S ONE PLACEHOLDER. RULED by Dann 2026-08-20 on his walk
+	// of `3c498aa`: the drop zone showed three stacked lines in three
+	// treatments while the textarea beside it showed one quiet line, and the
+	// two are the pair that must match. The three strings below are what it
+	// recombines, and they are KEPT rather than deleted: they are the
+	// provenance of this one, and reversing the ruling is one edit if he
+	// wants the three lines back.
+	//
+	// THE ENGLISH IS DANN'S, VERBATIM, including "or photograph" where
+	// 'upload.drop.acceptedNow' said "a photograph".
+	//
+	// THE FRENCH IS RECOMBINED, NOT TRANSLATED. Every word comes from the two
+	// French strings below, in their order, with three characters added and
+	// nothing else: the space joining the two sentences and the two full
+	// stops. Every format name stands exactly as it did, and the non-breaking
+	// space before the colon is French typography the tree already had.
+	// NOT MIRRORED, and Dann rules it: his English gained "or" before the
+	// last item and this French did not gain « ou », because that word is
+	// French he has not seen.
+	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie.' },
+
+	// NO LONGER RENDERED. Retained as the provenance of
+	// 'upload.drop.placeholder'; see its comment.
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
 	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, a photograph', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie' },

@@ -33,7 +33,7 @@ Not read: E.27 itself, E.36 §2.2, `InspectorPanel.svelte`.
 | The `1fr 1fr 2fr` grid deleted | `RootPanel.svelte:698-710` |
 | The station body box, so the header owns the gap | `RootPanel.svelte:798`, `SongList.svelte:187` |
 | The placeholder's italic deleted, RULED | `RootPanel.svelte:577` |
-| Both field perimeters 3px to 1px, NOT RULED | `RootPanel.svelte:538`, `ScoreUploader.svelte:722` |
+| Both field perimeters 3px to 1px, NOT RULED | `RootPanel.svelte:538`, `ScoreUploader.svelte:740` |
 | The `!important` global that actually painted the border, deleted | `+page.svelte:2863-2877` |
 | `source.heading` | `i18n.ts:186` |
 
@@ -253,7 +253,7 @@ the drop zone, and the action buttons).
 | `2px solid var(--sage)`, top | `.console-section` | Analysis from Source | **station boundary. Kept.** |
 | `2px solid var(--sage)`, bottom | `.console-section` | Analysis from Output | **station boundary. Kept.** |
 | `2px double var(--ink-primary)`, bottom | `.takeover-head` | the calibration takeover's one back affordance from the ritual | **neither. Named and left. Dann rules.** |
-| `1px solid var(--stone-300)`, top | `.mus-help`, `ScoreUploader.svelte:952` | the score drop zone from the older-Finale micro-help | **neither. Named and left. Dann rules.** |
+| `1px solid var(--stone-300)`, top | `.mus-help`, `ScoreUploader.svelte:974` | the score drop zone from the older-Finale micro-help | **neither. Named and left. Dann rules.** |
 
 **Nothing was deleted under ruling 3, and nothing was added.** Every rule in the
 drawer already had a function or is named above for Dann. Adding boundaries above
@@ -270,7 +270,7 @@ inside the takeover, which is not a station, so I did not stretch the word.
 `.mus-help`'s rule separates a station's body from an aside inside the same
 station. Brief §2 also says to stop and report rather than edit `ScoreUploader`
 internals, so two rules point the same way. **The border-width change at
-`ScoreUploader.svelte:722` was the one edit I made to that file at the time, and
+`ScoreUploader.svelte:740` was the one edit I made to that file at the time, and
 §3.6 instructs it by name.** §9 added two more, both instructed by the watermarks
 brief.
 
@@ -330,7 +330,7 @@ where they are.**
    the same word and the same standard noun in French, so no French was written.
    **The brief said not to ship a French string he has not approved, and an empty
    slot was not available**: `t()` returns `[MISSING: source.heading]` for an
-   absent value (`i18n.ts:822-826`), which would print that string in the drawer
+   absent value (`i18n.ts:845-849`), which would print that string in the drawer
    in French. The precedent for recording an invariant as identical en/fr values
    rather than as an absence is this file's own tab-bar comment on
    `tab.transcription` and `tab.guide`. **Settled by: Dann, in one word, on the
@@ -638,7 +638,7 @@ voices now split at the right seam**: what Ilya says to you is sans, what you gi
 Ilya is serif.
 
 Three edits: `app.css:312` adds `.select-trigger` to the coarse-pointer list,
-`app.css:321` carries the same size to `::placeholder` so an explicitly sized one
+`app.css:327` carries the same size to `::placeholder` so an explicitly sized one
 cannot fall behind, and `RootPanel.svelte:577` moves the textarea's placeholder to
 sans 0.8rem. `SearchableSelect.svelte:317` takes 0.78rem to 0.8rem;
 `.custom-option` keeps its own 0.78rem, being a dropdown row rather than a field.
@@ -684,7 +684,7 @@ on backing out of it.
   y figures are from the old order. §8.1 has the order.
 - **§4 item 5's inventory is superseded twice over.** §7.3 made every rule sage;
   §8.2 gave every rule one inset. `.mus-help`'s 1px stone rule inside `ScoreUploader`
-  (`ScoreUploader.svelte:952`) is the one horizontal in the drawer that is still
+  (`ScoreUploader.svelte:974`) is the one horizontal in the drawer that is still
   neither a station nor an anchor boundary, and it is still Dann's to rule.
 - **§7.2's recipe quote reads 6px below the body.** It is 12px since §8.3.
 - **§2.1's account of the double line stands as measured** and is now moot: no
@@ -706,8 +706,8 @@ stations brief is still NOT started, and nothing here retracts.**
 | `text` in light sage, empty textarea only | `RootPanel.svelte:7,208` |
 | `score` in light lavender, idle drop zone only | `ScoreUploader.svelte:23,516` |
 | The white fill moved to the wrapper so the mark can sit under the placeholder | `RootPanel.svelte:521,538` |
-| The drop zone's three lines lifted above the mark | `ScoreUploader.svelte:699,781` |
-| `input.watermark`, `upload.watermark` | `i18n.ts:57,291` |
+| The drop zone's three lines lifted above the mark | `ScoreUploader.svelte:710`, superseded by §10 |
+| `input.watermark`, `upload.watermark` | `i18n.ts:57,314` |
 
 **A component rather than two copies**, for the reason the brief itself gives in
 §4: this mark defines the oversized-sans convention rather than inheriting one, so
@@ -902,6 +902,162 @@ so they take `z-index: 1` and the mark stays where it is.
    `pointer: coarse` confirmed true. **A light sage word at 12% lightness difference
    from white has not been seen on real glass in daylight.** Settled by: Dann's walk
    on his own phone.
+
+---
+
+## 10. THE PAIR. Dann's repair from his walk of `3c498aa`
+
+**One ruling. Ship two of the stations brief is still NOT started.**
+
+### 10.1 What he ruled, and what the desk had been measuring instead
+
+**THE PAIR IS THE TEXTAREA AND THE SCORE DROP ZONE**, side by side in the Source
+station. Three earlier passes measured `::placeholder` rules against the metadata
+fields. **Those were never the pair**, and that is why four asks did not fix it.
+
+The drop zone showed three stacked lines, centred, in three treatments: `dz-title`
+bold and dark at 0.9rem, `dz-browse` at 0.8rem, and `dz-accepted` at 0.68rem. The
+textarea beside it showed one quiet sans line, top left, at the field size, in
+`--ink-tertiary`, roman, 400.
+
+**His ruling: the drop zone's text becomes ONE placeholder in the textarea
+placeholder's exact treatment.** Same family, same size, same weight, same colour,
+same alignment, top left, one line of prose that wraps.
+
+### 10.2 What shipped
+
+| what | where |
+|---|---|
+| One placeholder, in the twin's treatment | `ScoreUploader.svelte:532-533,816` |
+| Top left rather than centred | `ScoreUploader.svelte:719` |
+| The scan icon's reserve, mirrored from the textarea | `ScoreUploader.svelte:739` |
+| The combined string, both languages | `i18n.ts:304` |
+| The coarse-pointer bump reaches the new line | `app.css:318` |
+
+`dz-title`, `dz-browse`, and `dz-accepted` are gone, markup and rules both.
+
+**`app.css:318` matters and is easy to miss.** The new line is a `<p>` inside a
+`<button>`, so it matched none of `input, select, textarea, .select-trigger` in the
+N.23 coarse-pointer block. Without it the textarea's placeholder would read 16px on
+the phone and its twin 12.8px, which is the exact defect §8.4 measured and closed
+for `.select-trigger`. **A twin that shrinks while the other grows is not a twin.**
+
+### 10.3 The two rows, measured after the change
+
+Read from the live DOM. The textarea's row is `getComputedStyle(el, '::placeholder')`
+and the drop zone's is the `<p>` itself.
+
+**Desk, 1440x900:**
+
+| field | family | size | style | weight | colour | align | line-height | text left |
+|---|---|---|---|---|---|---|---|---|
+| textarea | Source Sans 3 | 12.8px | normal | 400 | `rgb(106, 101, 95)` | start | 19.2px | 26.60px |
+| drop zone | Source Sans 3 | 12.8px | normal | 400 | `rgb(106, 101, 95)` | start | 19.2px | 26.59px |
+
+**Phone, 360x640, touch emulated, `pointer: coarse` true:**
+
+| field | family | size | style | weight | colour | align | line-height | text left |
+|---|---|---|---|---|---|---|---|---|
+| textarea | Source Sans 3 | 16px | normal | 400 | `rgb(106, 101, 95)` | start | 24px | 26.60px |
+| drop zone | Source Sans 3 | 16px | normal | 400 | `rgb(106, 101, 95)` | start | 24px | 26.59px |
+
+**Identical in every column except the string, on both displays.** The 0.01px in
+the left inset is sub-pixel rounding on two different box models arriving at the
+same 0.6rem padding plus 1px border; there is no declared difference.
+
+**One thing I wrote and then corrected in the same pass:** the rule first said
+`text-align: left`, which renders identically but computes to `left` beside the
+twin's inherited `start`. It is `start` now, so the table above reads the same
+string in both rows rather than two names for one behaviour.
+
+### 10.4 The strings, as rendered
+
+**English, and it is Dann's sentence verbatim:**
+
+> Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale
+> (.musx), MuseScore (.mscz), PDF, or photograph.
+
+**FRENCH. DANN HAS NOT APPROVED THIS AND IT DOES NOT COUNT AS DONE UNTIL HE DOES.**
+Read out of the running app, not out of the source:
+
+> Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant : MNX,
+> MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie.
+
+**RECOMBINED, NOT TRANSLATED.** Every word is `upload.drop.title` and
+`upload.drop.browse` and `upload.drop.acceptedNow`, in that order, exactly as they
+already stood. **Three characters are added and nothing else**: the space joining
+the two sentences and the two full stops. Every format name is untouched. The
+character before the colon is U+00A0, verified in the rendered DOM, which is French
+typography the tree already had.
+
+**ONE PLACE THE FRENCH DOES NOT MIRROR THE ENGLISH, and it is Dann's to rule.** His
+English says "PDF, **or** photograph" where `upload.drop.acceptedNow` said "PDF, a
+photograph". The French still ends « PDF, une photographie ». Adding « ou » is the
+parallel change and it is one word, but it is a French word he has not seen, so I
+did not write it. **One word from him settles it either way.**
+
+**The three source keys are retained, not deleted** (`i18n.ts:308-310`). They render
+nowhere now. They are the provenance of the combined string, and reversing this
+ruling is one edit rather than a re-translation.
+
+**The drag state keeps its own sentence**, `upload.drop.release`, rendered through
+the same single `.dz-placeholder` in the same one treatment. It is live feedback
+rather than a placeholder and nothing in the ruling asked for it to go. Verified:
+one paragraph, one class, while dragging.
+
+### 10.5 The collision. GONE ON THE DESK, NOT GONE ON THE PHONE
+
+**The brief expected this to empty the middle of the drop zone and end the
+collision. It does on one display and not on the other, and the phone is worse than
+before.**
+
+| display | placeholder | watermark glyph band | vertical overlap |
+|---|---|---|---|
+| desk 1440x900 | 2 lines, 38.38px tall, ends at y 549.52 | 557.34 to 598.94 | **0px. Gone.** |
+| phone 360x640 | 5 lines, 120px tall, ends at y 644.88 | 571.08 to 612.68 | **41.6px, the whole band.** |
+
+**Why.** On the phone the placeholder is 16px, because the N.23 coarse-pointer rule
+raises it, and the box is 262.8px wide. A 130-character sentence at 16px wraps to
+five lines and fills 120px of a 152px box. **There is no empty middle left to
+empty.** On the desk the same sentence is 12.8px in a 464.8px box and wraps to two
+lines, which clears the mark completely.
+
+**Left, not fixed.** The placeholder is fully readable in both cases; it is above
+the mark by `z-index` and the mark is `--light-lavender`. **The watermark is what
+loses, and only on the phone.** The paths are the ones already named in §9.4, plus
+one this repair creates: the sentence could be shorter. **All of them are copy or
+design decisions that are Dann's, and build-neither is live**, because the drop zone
+says everything it needs to say and the mark is decorative.
+
+### 10.6 Gates
+
+| gate | baseline | this run |
+|---|---|---|
+| phonology | 216 | **216 passed (216)**, 7 files |
+| dictionary | 235 | **235 passed (235)**, 4 files |
+| web-check | 0 errors, 7 warnings, 4 files | **0 errors and 7 warnings in 4 files** |
+| web-test | 682 | **682 passed (682)**, 38 files |
+| score-parser | 444 passed, 5 skipped | **444 passed, 5 skipped (449)**, 20 files |
+
+**Nothing moved.** No page errors in either language.
+
+### 10.7 Decisions this repair did not rule
+
+- **The scan icon's reserve.** `.dropzone` gained `padding-right: 2.2rem`, the value
+  `.text-input` already carries for its OCR icon. A top-left placeholder runs under
+  the glyph without it; the centred text never did. It is part of making the pair
+  match, but the brief did not name it.
+- **The three source keys are kept rather than deleted.** §10.4.
+- **The drag state keeps its own string.** §10.4.
+
+### 10.8 NOT ESTABLISHED
+
+1. **The French.** §10.4 carries the exact string. **Settled by Dann, and until he
+   rules, this repair is not done in French.**
+2. **Whether « ou » joins the French list.** §10.4. Settled by one word from him.
+3. **What to do about the phone collision.** §10.5. Settled by his walk.
+4. **How the pair reads on real glass.** Every figure here is Chromium with touch
+   emulated. Settled by his own phone.
 
 ---
 *Written by Code, 2026-08-20 late. Every measurement in this memo was taken in a

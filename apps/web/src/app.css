@@ -309,7 +309,13 @@ body {
 	   A button cannot take Safari's focus zoom, so it does not need the
 	   16px for N.23's own reason. It takes it to stand beside its siblings:
 	   these five are one row of fields and a singer reads them together. */
-	.select-trigger {
+	.select-trigger,
+	/* N.65, 2026-08-20. The score drop zone's placeholder is a <p> inside a
+	   <button>, so it matches none of the element selectors above either. It
+	   is the twin of `.text-input`'s placeholder by Dann's ruling, and a twin
+	   that shrinks on the phone while the other grows is the same defect this
+	   block already fixed once for `.select-trigger`. */
+	.dz-placeholder {
 		font-size: max(1rem, 16px) !important;
 	}
 

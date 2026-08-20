@@ -510,17 +510,28 @@
 				     the mark leaves when a score arrives and returns on reset,
 				     with no predicate of its own. It stays through `dragging`,
 				     because a field being dragged over is still empty.
-				     BEHIND the three lines below by stacking: they take
-				     `z-index: 1` and this takes the default, so it paints over
-				     the white fill and under every word. -->
+				     BEHIND the placeholder below by stacking: it takes
+				     `z-index: 1` and this takes the default, so the mark paints
+				     over the white fill and under the words. -->
 				<IntakeWatermark word={T('upload.watermark')} colour="var(--light-lavender)" />
-				{#if dragging}
-					<p class="dz-title">{T('upload.drop.release')}</p>
-				{:else}
-					<p class="dz-title">{T('upload.drop.title')}</p>
-					<p class="dz-browse">{T('upload.drop.browse')}</p>
-				{/if}
-				<p class="dz-accepted">{T('upload.drop.acceptedNow')}</p>
+				<!-- ONE PLACEHOLDER, IN THE TEXTAREA'S EXACT TREATMENT. RULED
+				     by Dann 2026-08-20 on his walk of `3c498aa`, and it is the
+				     fourth time he asked for these two fields to look like each
+				     other. THE PAIR IS THIS BOX AND THE TEXTAREA, side by side
+				     in Source; the metadata fields were never it.
+
+				     This was three stacked <p>s in three treatments, centred:
+				     `dz-title` bold and dark at 0.9rem, `dz-browse` at 0.8rem,
+				     and `dz-accepted` at 0.68rem. The textarea shows one quiet
+				     sans line, top left, at the field size, in
+				     `--ink-tertiary`, roman, 400. That is what this is now.
+
+				     The drag state keeps its own sentence, in the same one
+				     treatment. It is live feedback rather than a placeholder,
+				     and nothing about the ruling asked for it to go. -->
+				<p class="dz-placeholder">
+					{dragging ? T('upload.drop.release') : T('upload.drop.placeholder')}
+				</p>
 			</button>
 			<!-- Score-from-image scan, mirroring the Transcription OCR icon.
 			     Visual only until the OMR/image path ships (Round 9); the
@@ -702,9 +713,11 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.25rem;
+		/* TOP LEFT, not centred. Dann's ruling: the placeholder sits where the
+		   textarea's sits. Centring is what made these two boxes read as
+		   different kinds of thing. */
+		align-items: flex-start;
+		justify-content: flex-start;
 		width: 100%;
 		/* A true visual twin of the Transcription text field (.text-input):
 		   same box, 4px radius, white fill, and only the colour differs, the
@@ -719,6 +732,11 @@
 		   better against the white fill than #8E7E9B's own 3.74:1. */
 		min-height: 152px;
 		padding: 0.5rem 0.6rem;
+		/* The textarea's own reserve for its OCR icon, mirrored here for the
+		   scan icon in this box's top-right corner. Without it the first line
+		   of a top-left placeholder runs under the glyph, which the centred
+		   text never did. `.text-input` carries the same value. */
+		padding-right: 2.2rem;
 		border: 1px solid var(--deeper-lavender);
 		border-radius: 4px;
 		background: white;
@@ -778,29 +796,33 @@
 	   watermark still paints over the white fill beneath them. `z-index: 1` on
 	   the text rather than a negative index on the mark, because a negative
 	   index would put the mark behind this box's own background and hide it. */
-	.dz-title,
-	.dz-browse,
-	.dz-accepted {
+	/* THE PLACEHOLDER, VALUE FOR VALUE WITH `.text-input::placeholder` AND
+	   `.text-input`'s own box. Dann's ruling of 2026-08-20: same family, same
+	   size, same weight, same colour, same alignment, top left, one line of
+	   prose that wraps.
+
+	   `line-height: 1.5` is the textarea's, which its `::placeholder`
+	   inherits, so a wrapped sentence sets on the same leading here.
+	   `text-align: start` is stated rather than left to the default, because
+	   this <p> lives inside a <button> and a button centres its text. `start`
+	   rather than `left` so the two fields' computed values match STRING FOR
+	   STRING, not merely in what they render: the textarea's placeholder
+	   inherits the initial `start`, and a row of the memo's table that reads
+	   `left` beside `start` invites the next session to go looking for a
+	   difference that is not there.
+
+	   `position: relative; z-index: 1` keeps it above the `score` watermark,
+	   which the three lines it replaces also did. */
+	.dz-placeholder {
 		position: relative;
 		z-index: 1;
-	}
-
-	.dz-title {
-		font-size: 0.9rem;
-		font-weight: 600;
-		color: var(--ink-primary);
-	}
-
-	.dz-browse {
+		font-family: var(--font-sans);
 		font-size: 0.8rem;
-		color: var(--ink-secondary);
-	}
-
-	.dz-accepted {
-		font-size: 0.68rem;
-		line-height: 1.35;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1.5;
 		color: var(--ink-tertiary);
-		margin-top: 0.15rem;
+		text-align: start;
 	}
 
 	/* ── Busy status ──────────────────────────────────────── */
