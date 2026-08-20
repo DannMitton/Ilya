@@ -1,13 +1,23 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import type { TabId } from '$lib/destinations';
+	import type { Destination, TabId } from '$lib/destinations';
 
 	interface Props {
 		width: number;
 		collapsed: boolean;
 		isMobile: boolean;
 		language: Language;
+		/** Where the singer is. Every branch in this file asks this. */
+		destination: Destination;
+		/**
+		 * The four-way surface id, and the ONLY thing it is used for here is
+		 * `data-tab`. N.73 S3 ship two kept that attribute: no selector and no
+		 * script in the tree reads it, but it is the one mark on the drawer
+		 * that tells Studio's two documents apart, which is exactly what a
+		 * harness needs to prove S2's invariant that flipping the pair changes
+		 * nothing in the drawer. Ship one's walk used it for that.
+		 */
 		activeTab: TabId;
 		activeHeadingId: string | null;
 		tabTransitionClass: string;
@@ -66,13 +76,13 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, pieceAnchor, voiceAnchor, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, pieceAnchor, voiceAnchor, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* Studio's two documents. The reading destinations, Learn and Guide, have
 	   no piece, no notation and no voice, so none of the three anchors is
 	   theirs. One name for one expression, which was previously written out
 	   twice in this file. */
-	const isStudio = $derived(activeTab === 'transcription' || activeTab === 'shane');
+	const isStudio = $derived(destination === 'studio');
 
 	let expandedSections = $state(new Set<string>());
 	let drawerContentEl: HTMLElement | undefined = $state();
@@ -222,12 +232,22 @@
 				{@render notationPanel?.()}
 			</div>
 		{/if}
+		<!-- N.73 S3 ship two. THE DRAWER IS NOT A TABPANEL, and it stopped
+		     being one at S2. This box carried `role="tabpanel"`,
+		     `id="tabpanel-{activeTab}"` and `aria-labelledby="tab-{activeTab}"`
+		     from the four-tab shape, where each destination had its own drawer.
+		     S2 merged Studio's two, so the pair's two members now share this
+		     box byte for byte, and a panel that does not change when the tab
+		     changes is not that tab's panel. Only one id was ever in the DOM,
+		     so the inactive pair member's `aria-controls` pointed at nothing.
+		     The drawer is what its own outer element already says it is: an
+		     `<aside aria-label="Controls">`, a complementary landmark that
+		     stands beside the desk on every destination. `aria-controls` is
+		     optional on a `tab` in ARIA 1.2, and an absent reference beats a
+		     broken one. `DeskHead` drops its half in the same ship. -->
 		<div
 			class="drawer-content {tabTransitionClass}"
 			class:stowed={takeoverActive}
-			role="tabpanel"
-			id="tabpanel-{activeTab}"
-			aria-labelledby="tab-{activeTab}"
 			bind:this={drawerContentEl}
 		>
 				<!-- N.73 S2. ONE Studio drawer. Both panels render, always, in this
@@ -239,7 +259,7 @@
 				{#if isStudio}
 					{@render rootPanel()}
 					{@render shanePanel?.()}
-				{:else if activeTab === 'learn'}
+				{:else if destination === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
 						<h2 class="section-label section-label-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
 						<ul class="toc-list">
@@ -409,7 +429,7 @@
 							</li>
 						</ul>
 					</nav>
-				{:else if activeTab === 'guide'}
+				{:else if destination === 'guide'}
 					<nav class="learn-toc guide-toc" aria-label={language === 'fr' ? 'Table des matières du Guide' : 'Guide table of contents'}>
 						<h2 class="section-label section-label-guide">GUIDE</h2>
 						<ul class="toc-list">

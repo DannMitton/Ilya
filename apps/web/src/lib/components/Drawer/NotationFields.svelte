@@ -33,17 +33,25 @@
 		openSyllabification: boolean;
 		language: Language;
 		/**
-		 * Colour of the section label and of an engaged toggle. Transcription
-		 * keeps the default sage; Fit/Shane passes deeper-lavender, that
-		 * surface's identity colour (Drawer.svelte:587, HeaderBar.svelte:88).
-		 * Twinned on TitleHeader.svelte and PageFooter.svelte, which take their
-		 * accents the same way rather than inheriting one.
+		 * Colour of the section label and of an engaged toggle. SAGE, on both
+		 * of Studio's documents. Twinned on TitleHeader.svelte and
+		 * PageFooter.svelte, which take their accents the same way rather than
+		 * inheriting one.
 		 *
-		 * Anchored at the foot of the drawer this component renders ONCE, so
-		 * the accent follows activeTab rather than being fixed per render site.
-		 * Dann's ruling, 2026-08-06: the colour follows the tab. The control is
-		 * document-level, but a singer should still see which surface they are
-		 * changing.
+		 * N.73 S3 ship two settles what S2 named and left. The accent used to
+		 * follow the destination, sage on the transcription and
+		 * deeper-lavender on the marked score, under Dann's ruling of
+		 * 2026-08-06 that the colour follows the tab. Two later rulings ended
+		 * that: S2 gave Studio's two documents ONE drawer whose invariant is
+		 * that nothing in it appears, disappears, or moves when the singer
+		 * flips the pair, and a panel that changes colour on the flip breaks
+		 * it; and the S0 slate's ruling 3 of 2026-08-19 keeps lavender in
+		 * Studio to the voice anchor and the calibration surfaces alone.
+		 * NOTATION is sage, unconditionally, and the caller passes a literal.
+		 *
+		 * The prop stays a prop rather than becoming a constant, because
+		 * TitleHeader and PageFooter take their accents the same way and this
+		 * component should not be the one that stops.
 		 */
 		accent?: string;
 		onnotationchange: (prefs: NotationPreferences) => void;

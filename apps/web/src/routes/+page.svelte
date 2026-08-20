@@ -74,7 +74,14 @@
 import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import DeskHead from '$lib/components/DeskHead.svelte';
-	import type { TabId } from '$lib/destinations';
+	import {
+		tabIdFor,
+		surfaceFor,
+		restoreSurface,
+		type Destination,
+		type StudioDocument,
+		type TabId,
+	} from '$lib/destinations';
 	import { INCLUDE_SHANE } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
@@ -182,8 +189,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// visible on every arrival, and now it means the RULED default is what
 	// every arrival gets. Nothing else about the retract mechanism moved.
 	let notationExpanded = $state(false);
-	// Tab state
-	let activeTab = $state<TabId>('transcription');
+	/* N.73 S3 ship two. THE SPLIT. One `$state<TabId>` carried two questions
+	   at once: where the singer is, and which paper Studio has on the desk.
+	   S2 merged the two Studio drawers, which made the second question a
+	   property of the first rather than a peer of it, and `destinations.ts`
+	   has asked for this since S1. They are two values now.
+
+	   `activeTab` survives as a DERIVED wire id, not as state. It is what
+	   `ilya:activeTab` stores, what `HeaderBar` keys its four hues from
+	   (Dann's ruling of 2026-08-19: four working surfaces, four hues), and
+	   what `DeskHead` names. Nothing writes it; writing `destination` or
+	   `studioDocument` is what moves it. */
+	let destination = $state<Destination>('studio');
+	let studioDocument = $state<StudioDocument>('transcription');
+	const activeTab = $derived(tabIdFor({ destination, studioDocument }));
 	// Shane: the active voice's stored readings and name, published by the
 	// wizard in the drawer (the workshop) so the main pane (the gallery,
 	// the Voice Profile envelope) mirrors the voice the drawer is working
@@ -367,7 +386,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   is a portrait reading of the transcription and has no meaning anywhere
 	   else, and a singer who rotates back should meet the artefact. */
 	$effect(() => {
-		if (!isMobile || activeTab !== 'transcription') portraitView = 'page';
+		if (!isMobile || destination !== 'studio' || studioDocument !== 'transcription')
+			portraitView = 'page';
 	});
 	// Song metadata: `doc.metadata`, N.67 step 0.
 	// Notation preferences -- persisted to localStorage
@@ -459,11 +479,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// 2026-07-12): its page sits exactly where the transcription page
 	// sits, sharing the full 2rem desk padding rather than reading mode's
 	// trimmed 1rem.
-	const isReadingMode = $derived(activeTab === 'learn' || activeTab === 'guide');
+	const isReadingMode = $derived(destination !== 'studio');
+	/* N.73 S3 ship two. THE WIDTH FOLLOWS THE CONSOLE, AND THE CONSOLE IS
+	   STUDIO'S, NOT THE TRANSCRIPTION'S. This read `activeTab === 'transcription'`,
+	   which was true while the two Studio documents had two drawers. S2 gave
+	   them one: `RootPanel` and its Word Console render on BOTH documents, so a
+	   word selected on the transcription is still shown on the marked score,
+	   and the old expression narrowed the drawer back to 520 with the widened
+	   word still in it. That contradicted S2's own invariant, "nothing in the
+	   drawer appears, disappears, or moves when the singer flips the pair."
+	   The guard on `destination` is still needed: Learn and Guide draw no
+	   console, and a word selected before the singer left Studio must not
+	   widen a reading drawer. MEASURED both ways; the numbers are in the
+	   ship-two memo. */
 	const drawerWidth = $derived(
-		activeTab === 'transcription'
-			? (selectedWord ? calculateDrawerWidth(selectedWord) : 520)
-			: 520
+		destination === 'studio' && selectedWord ? calculateDrawerWidth(selectedWord) : 520
 	);
 	const canTranscribe = $derived(
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
@@ -488,7 +518,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 */
 	const voiceCalibrated = $derived(hasAnyReadings(shaneFormants));
 	const printDisabled = $derived(
-		activeTab === 'shane'
+		studioDocument === 'shane'
 			? !ingestedScore && !voiceCalibrated
 			: !hasResults
 	);
@@ -615,9 +645,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (drawerCollapsed) {
 			drawerCollapsed = false;
 		}
-		// Switch to Transcription tab if clicking a word from another tab
-		if (activeTab !== 'transcription') {
-			activeTab = 'transcription';
+		// Switch to Transcription if clicking a word from another surface
+		if (destination !== 'studio' || studioDocument !== 'transcription') {
+			destination = 'studio';
+			studioDocument = 'transcription';
 			try {
 				localStorage.setItem('ilya:activeTab', 'transcription');
 			} catch {
@@ -1568,7 +1599,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const newIndex = TAB_ORDER.indexOf(tab);
 		// Compute direction: moving right in tab order → content enters from right
 		const direction = newIndex > oldIndex ? 'tab-enter-from-right' : 'tab-enter-from-left';
-		activeTab = tab;
+		/* The desk head hands back a wire id, because it draws four names.
+		   `surfaceFor` is what turns it into the two values, and it is the
+		   same function the stored-tab migration uses, so an id chosen by
+		   hand and an id read out of localStorage cannot disagree. */
+		({ destination, studioDocument } = surfaceFor(tab));
 		tabTransitionClass = direction;
 		try {
 			localStorage.setItem('ilya:activeTab', tab);
@@ -1651,7 +1686,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	$effect(() => {
 		void readingContentEpoch; // re-run when lazy reading content mounts
-		if (activeTab !== 'learn' && activeTab !== 'guide') return;
+		if (destination === 'studio') return;
 		if (!mainContentEl) return;
 
 		// Collect all heading elements with ids inside main-content
@@ -1730,10 +1765,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			if (savedCollapsed) {
 				drawerCollapsed = JSON.parse(savedCollapsed);
 			}
-			const savedTab = localStorage.getItem('ilya:activeTab');
-			if (savedTab === 'transcription' || savedTab === 'learn' || savedTab === 'guide' || (savedTab === 'shane' && INCLUDE_SHANE)) {
-				activeTab = savedTab;
-			}
+			/* N.73 S3 ship two, THE STORED-TAB MIGRATION. Every stored value is
+			   named in `restoreSurface`, including the two that mean Studio and
+			   the ones that mean nothing, so a value this build does not know
+			   lands somewhere on purpose rather than by falling through a
+			   four-way string comparison. E.27 §3.4. */
+			({ destination, studioDocument } = restoreSurface(localStorage.getItem('ilya:activeTab')));
 		} catch {
 			// localStorage unavailable
 		}
@@ -1862,6 +1899,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		collapsed={drawerCollapsed}
 		{isMobile}
 		{language}
+		{destination}
 		{activeTab}
 		{activeHeadingId}
 		{tabTransitionClass}
@@ -2128,15 +2166,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				     improvement on my first pass: two instances sharing state
 				     can drift, and one cannot.
 
-				     The accent follows the tab (Dann's ruling, 2026-08-06):
-				     sage on Transcription, deeper-lavender on Fit. Twinned on
-				     TitleHeader and PageFooter, which take accents the same way.
-				     N.73 S2 named this as a survivor it left alone and N.73 S3
-				     ship TWO settles it: under the ratified architecture NOTATION
-				     is sage unconditionally and lavender belongs to the voice
-				     anchor alone. The `Drawer.svelte:587` citation this comment
-				     used to carry pointed at a rule the S1 tab-bar deletion had
-				     already taken away, and is dropped rather than renumbered.
+				     THE ACCENT IS SAGE, UNCONDITIONALLY. N.73 S3 ship two settled
+				     it, and the reasoning is in NotationFields' own `accent`
+				     prop comment rather than repeated here. Dann's ruling of
+				     2026-08-06, that the colour follows the tab, is superseded
+				     by two later ones: S2's invariant that nothing in the drawer
+				     changes when the singer flips the pair, and the S0 slate's
+				     ruling 3 of 2026-08-19, which keeps lavender in Studio to
+				     the voice anchor and the calibration surfaces.
 
 				     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
 				     will appear on Fit and change nothing there, because
@@ -2148,7 +2185,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{showStressDiacritics}
 					openSyllabification={doc.openSyllabification}
 					{language}
-					accent={activeTab === 'shane' ? 'var(--deeper-lavender)' : 'var(--sage)'}
+					accent="var(--sage)"
 					onnotationchange={handleNotationChange}
 					onstressdiacriticschange={handleStressDiacriticsChange}
 					onopensyllabificationchange={handleOpenSyllabificationChange}
@@ -2169,7 +2206,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		     F4: with the tab bar living inside the drawer, closing the drawer
 		     took every destination with it. -->
 		<DeskHead {activeTab} {language} ontabchange={handleTabChange} />
-		{#if activeTab === 'transcription'}
+		{#if destination === 'studio' && studioDocument === 'transcription'}
 			<!-- ONE Paper, rendered from one snippet in both branches. Two call
 			     sites for the same component drift, and a drifted prop list here
 			     would mean the phone and the desk stopped showing the same
@@ -2219,7 +2256,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{:else}
 				{@render transcriptionPaper()}
 			{/if}
-		{:else if activeTab === 'shane'}
+		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
 			     per Dann's review ruling): the interim main pane, a fixed
 			     letter page with the Paper system's header and footer. The
@@ -2248,7 +2285,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{:else}
 			<ReadingPaper {language}>
 				{#snippet content()}
-					{#if activeTab === 'learn'}
+					{#if destination === 'learn'}
 						{#await import('$lib/components/Reading/LearnContent.svelte') then mod}
 							{@const LearnContent = mod.default}
 							<LearnContent {language} onready={handleReadingContentReady} />
@@ -2649,11 +2686,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * grows and ReadingPaper's max-width centres it. Smooth width transition
 	 * handled by the Drawer's own 1000ms cubic-bezier.
 	 */
+	/* N.73 S3 ship two. READING MODE NO LONGER SETS VERTICAL POSITION.
+	   Ruled by Dann on the 63c2bb4 walk: the desk head takes ONE position on
+	   all four destinations, at Learn and Guide's lower placement.
+
+	   This rule carried `padding-top: 1rem` and `--desk-pad-top: 1rem`, and
+	   two classes outweigh the one class every other rule for this element
+	   uses, so it won in BOTH directions rather than one: on the desktop it
+	   pulled Learn and Guide 1rem ABOVE Studio's 2rem, and on the phone it
+	   pushed them 0.5rem BELOW Studio's 0.5rem. Deleting both declarations
+	   leaves one value per breakpoint, set in one place, and the phone
+	   breakpoint's base rises to 1rem to keep Learn and Guide where they
+	   already were. The transform and the justification stay: they are what
+	   this rule is actually for. */
 	.main-content.reading-mode {
 		transform: none;
 		justify-content: flex-start;
-		padding-top: 1rem;
-		--desk-pad-top: 1rem;
 	}
 
 	/* ── Tab transition animations ──────────────────────── */
@@ -2917,14 +2965,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			overflow: auto;
 			/* N.73 C2: the horizontal padding IS the gutter, so the page below
 			   fills what is left and lands on the viewport width less twice
-			   this number. The vertical stays where portrait C left it;
-			   --desk-pad-top must match the top padding, and does. */
-			padding: 0.5rem var(--portrait-gutter, 24px);
+			   this number. --desk-pad-top must match the top padding, and
+			   does. The clause that used to follow, "the vertical stays where
+			   portrait C left it", is struck: it stopped being true when this
+			   ruling raised the top. The BOTTOM is still portrait C's. */
+			/* N.73 S3 ship two raised the vertical from 0.5rem to 1rem, on
+			   Dann's ruling of the 63c2bb4 walk: Learn and Guide already sat
+			   at 1rem here, through a two-class override that has now been
+			   deleted, and this is the value that keeps them there and brings
+			   Studio's two documents down to meet them. The BOTTOM is
+			   unchanged: `padding-bottom` below re-sets it to 0.5rem. */
+			padding: 1rem var(--portrait-gutter, 24px);
 			width: 100%;
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;
 			transform: none;
-			--desk-pad-top: 0.5rem;
+			--desk-pad-top: 1rem;
 
 			/* This reserved 92px at the bottom of the viewport for two pieces
 			   of fixed furniture: the tab bar at 56px and the paper handle

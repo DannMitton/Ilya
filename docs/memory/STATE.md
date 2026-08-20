@@ -55,9 +55,12 @@ any of them count.
 > into destination plus document, the `ilya:activeTab` migration, the
 > `NotationFields` accent made unconditionally sage, and Analysis moved above
 > Output. Print stays in the Clear-Print-Transcribe grid; the brief says why.
-> **After S3: S4 is absorbed.** Ship one built the calibration takeover, so
-> the build order from here is S3 ship two, S5 (the wall re-plumb), S6
-> (consequences), then the chapter bands and the aesthetic layer.
+> **After S3: S4 is absorbed.** Ship one built the calibration takeover.
+> **The build order from here, RESEQUENCED by Dann's ruling 2026-08-20:**
+> S3 ship two, then **the chapter bands for Learn and Guide**, then S5 (the
+> wall re-plumb), S6 (consequences), then the rest of the aesthetic layer.
+> The bands moved ahead of S5 and S6 because those two are Studio's business
+> and touch neither reading room.
 > **The governing documents, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
@@ -147,6 +150,80 @@ on the same three.
   "Please name your profile so we can map your voice..." still opens the
   ritual, and `fable-gui-audit-and-spec_r1_2026-08-18.md:44` says "Please"
   breaks the house style Dann ruled on 2026-08-18. **Dann writes copy.**
+- **THE CHAPTER BANDS FOR LEARN AND GUIDE. RULED by Dann 2026-08-20,
+  RESEQUENCED, not started.** Drawn in full at
+  `docs/sessions/fable-gui-mockup_r2_2026-08-18.html`, Exhibit 2. One band
+  grammar for both rooms: breadcrumb, oversized sans title, one-line lede, meta
+  line, then the page drops into the serif reading measure untouched. Rose at
+  full strength for Learn, cobalt for Guide, spent on arrival and nowhere else
+  on the page.
+  **RESEQUENCED: immediately after S3 ship two, NOT after S5 and S6.** The
+  coordinating desk argued and Dann did not object: S5 is the wall re-plumb and
+  S6 is consequences, and both are Studio's business, touching neither reading
+  room. The bands need only ship two, because ship two moves `reading-mode`'s
+  padding, which is where a band sits. Building them first would mean reworking
+  them a day later.
+  **DANN'S RULING ON THE META LINE, option B without citations.** Fable's own
+  caveats say the mockup's meta figures are invented: "Chapter 3 of 8",
+  "12 min", "3 sections", "7 min", and "Grayson §§4.1-4.9". Ilya holds none of
+  it. **Ruled: compute what can be computed.** Chapter index and section count
+  come from the heading structure the TOC already walks
+  (`+page.svelte`'s reading-mode IntersectionObserver). Reading time is a word
+  count over a stated rate, which is arithmetic rather than an invented number.
+  **The Grayson citations are NOT built now.** They are scholarship, they come
+  from Dann, and they are a later content pass. **Do not invent one.**
+  **The brief is deliberately NOT written yet**, because it would be written
+  against `reading-mode` and the desk head as they are about to change in ship
+  two. Write it when ship two lands. **Also re-verify the mockup's rose and
+  cobalt hexes against `app.css` before building: Fable read them by eye off a
+  deploy and said so.**
+
+- **THE `2026a` QUALIFIER. Dann is warming to removing it, NOT RULED,
+  2026-08-20.** His words: "I think we will remove the 2026A qualifier from the
+  Ilya sigil. All of them... Especially since I plan to chill once this is
+  released." **He is leaning, he has not ruled, and nothing may be built on
+  this.** Do not treat the lean as the ruling.
+  **His argument, which the coordinating desk did not reach and endorses:** a
+  year-letter promises an edition series. With no 2026b, the qualifier
+  advertises a cadence that will not arrive, and a stale year reads as
+  abandoned inside eighteen months.
+  **Two arguments against, put to him:** the badge is the only on-screen thing
+  that says which Ilya a singer has, and "I plan to chill" governs his effort
+  rather than whether the software changes; and the badge carries the
+  per-destination hue in four rules, so removing it drops a wayfinding echo a
+  week after hue carriers were deliberately pruned.
+  **The coordinating desk's recommendation, NOT a ruling:** strip the badge
+  from both sigils, screen and paper, and leave `2026a` in the colophon, which
+  prints on every page. Clean `[Ilya]` wordmark, build still identifiable from
+  a photograph.
+  **Cost, counted from the tree 2026-08-20, about a dozen mechanical edits with
+  no judgement inside them:** `HeaderBar.svelte` the badge span, the
+  `aria-label`, `.sigil-version`, and four per-destination colour rules;
+  `TitleHeader.svelte` the badge span, `.logo-version`, and the `versionAccent`
+  prop; `VoiceProfilePane.svelte` two call sites passing `#8E7E9B`;
+  `i18n.ts:193-194` both colophons. **No `contrast.ts` obligations.**
+  **Timing: before the beta this is invisible; after it, it is a visible change
+  to something singers have already seen.**
+
+- **THE DESK HEAD SITS AT TWO HEIGHTS. Found by Dann 2026-08-20, RULED by him
+  the same minute, rides with ship two.** The pair and the reading links sit
+  lower on Learn and Guide than on Studio's two documents, on the phone.
+  **Dann's ruling: one position on all four destinations, at Learn and Guide's
+  lower placement.**
+  **The cause, established by reading the tree:** `.main-content.reading-mode`
+  sets `padding-top` and `--desk-pad-top` itself, and two classes beat the one
+  class the breakpoint's own rule uses. So it overrides in BOTH directions:
+  phone Studio `0.5rem` against reading `1rem`, desk Studio `2rem` against
+  reading `1rem`.
+  **The fix: stop `reading-mode` setting vertical position at all**, and raise
+  the phone's base to `1rem`. Two declarations deleted, one changed. All four
+  then take one value per breakpoint, `1rem` on the phone and `2rem` on the
+  desk. **`reading-mode` keeps `justify-content` and `transform`.**
+  **The consequence, stated before the walk: on the DESKTOP, Learn and Guide
+  move DOWN 16 px to meet Studio.** That follows from Dann's rule, not from a
+  preference of the coordinating desk. If it looks wrong the answer is a
+  different single value, never a return to two.
+
 - **THE CORRIDOR AT THE DRAWER'S RIGHT EDGE. Found by Dann 2026-08-20, rides
   with ship two.** On the phone a strip of empty sits between the drawer's
   content and the pull, and every horizontal rule in the drawer stops short of

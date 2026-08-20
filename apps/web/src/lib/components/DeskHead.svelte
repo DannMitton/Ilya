@@ -87,6 +87,14 @@
 	<!-- aria-label carried over verbatim from TabBar's tablist rather than
 	     written fresh: the ratified table has no string for this, and an
 	     invented one would be untranslated French. -->
+	<!-- N.73 S3 ship two. NO `aria-controls` ON THE PAIR MEMBERS. It read
+	     `tabpanel-{id}`, and only one such id was ever in the DOM, so the
+	     inactive member always pointed at nothing. S2 is why: it merged
+	     Studio's two drawers, so the two members share one drawer and one desk
+	     region, and neither owns a panel of its own. `aria-controls` is
+	     optional on a `tab` in ARIA 1.2, and an absent reference beats a broken
+	     one. `aria-selected` still carries the state, which is what a screen
+	     reader announces. `Drawer.svelte` drops its half in the same ship. -->
 	<div class="pair" class:single={pairIds.length === 1} role="tablist" aria-label="Navigation">
 		{#each pairIds as id (id)}
 			<button
@@ -95,7 +103,6 @@
 				role="tab"
 				id="tab-{id}"
 				aria-selected={activeTab === id}
-				aria-controls="tabpanel-{id}"
 				tabindex={activeTab === id ? 0 : -1}
 				onclick={() => ontabchange(id)}
 				onkeydown={handlePairKeydown}

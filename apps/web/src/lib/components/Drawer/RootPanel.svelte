@@ -244,7 +244,55 @@ import type { SongRow } from '$lib/library/songs';
 		<p class="error-text">{transcribeError}</p>
 	{/if}
 
-	<!-- ── 4. Button row: Clear | Print | Transcribe ───────── -->
+	<!-- ── ANALYSIS. N.73 S3 ship two moved this block ABOVE Output ──
+	     The spec rules the scroll's order Source, Analysis, Output
+	     (`fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, §3.3, "Station
+	     order is invariant across documents... A singer's hand learns one
+	     map"), and the ratified mockup draws the same four stations in the
+	     same order (`fable-gui-mockup_r1_2026-08-18.html:313-329`). The tree
+	     drew Output first. This block moved; nothing inside it changed.
+
+	     It sits directly under the result summary, which is where the mockup
+	     puts the words-and-milliseconds line: inside Analysis, beside "select
+	     a word to inspect it". The summary itself did NOT move, so the two are
+	     adjacent rather than merged. Merging them is a station boundary nobody
+	     has ruled. -->
+	<div class="section console-section">
+		<h3 class="section-label">{t('console.placeholder', language)}</h3>
+		{#if showInspector && consoleContent}
+			{@render consoleContent()}
+		{:else}
+			<div class="console-placeholder-body">
+				{#if loaderState.isLoading}
+					<div class="dict-progress">
+						<span class="dict-progress-text">{t('dict.loading', language)}</span>
+						<div class="dict-progress-track">
+							{#if loaderState.progress >= 0}
+								<div
+									class="dict-progress-fill"
+									style="width: {Math.round(loaderState.progress * 100)}%"
+								></div>
+							{:else}
+								<div class="dict-progress-fill indeterminate"></div>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					<p class="placeholder-hint">
+						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
+					</p>
+				{/if}
+			</div>
+		{/if}
+	</div>
+	<!-- ── OUTPUT. Print, Export, Import. N.73 S3 ship two left Print in
+	     this grid deliberately: lifting it out would strand Transcribe in a
+	     `1fr` column of `grid-template-columns: 1fr 1fr 2fr` and break
+	     `.binder-row`'s deliberate column alignment below. The mockup draws
+	     Transcribe under Source and Print under Output; making the tree match
+	     that is a layout ruling, not a reorder, and it is not this ship.
+
+	     The row itself is unchanged: Clear, Print, Transcribe. -->
 	<div class="button-row">
 		<button
 			class="action-btn btn-ghost"
@@ -301,35 +349,7 @@ import type { SongRow } from '$lib/library/songs';
 		/>
 	</div>
 
-	<!-- ── 5. Word Console section ────────────────────────── -->
-	<div class="section console-section">
-		<h3 class="section-label">{t('console.placeholder', language)}</h3>
-		{#if showInspector && consoleContent}
-			{@render consoleContent()}
-		{:else}
-			<div class="console-placeholder-body">
-				{#if loaderState.isLoading}
-					<div class="dict-progress">
-						<span class="dict-progress-text">{t('dict.loading', language)}</span>
-						<div class="dict-progress-track">
-							{#if loaderState.progress >= 0}
-								<div
-									class="dict-progress-fill"
-									style="width: {Math.round(loaderState.progress * 100)}%"
-								></div>
-							{:else}
-								<div class="dict-progress-fill indeterminate"></div>
-							{/if}
-						</div>
-					</div>
-				{:else}
-					<p class="placeholder-hint">
-						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
-					</p>
-				{/if}
-			</div>
-		{/if}
-	</div>
+
 
 </div>
 
