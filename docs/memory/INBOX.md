@@ -20,3 +20,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 *Created 2026-08-13.*
 2026-08-18: Mention WCAG accessibility in Ilya's marketing capabilities list (Dann, GUI session).
 2026-08-20: Let every section header be retractable, metadata included (Dann, N.73 S3 walk).
+2026-08-20: Soften the sage and lavender borders on the drawer input fields; keep the semantics, ask for a lighter shade of each (Dann, N.73 S3 walk).
+2026-08-20: Make the placeholder text in the drawer input fields formatted consistently; they must match each other (Dann, N.73 S3 walk).

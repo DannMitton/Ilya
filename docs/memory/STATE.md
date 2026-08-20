@@ -11,8 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`904df6e`**, raised from `cee4572` at the close of 2026-08-20, because
-N.73 S2 and its memo both shipped in `904df6e`, and a
+before **`63c2bb4`**, raised from `904df6e` at the close of 2026-08-20 night,
+because N.73 S3 ship one, its three walk repairs, and its memo all shipped in
+`63c2bb4`, and a
 floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
@@ -37,27 +38,144 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.73, THE GUI OVERHAUL, CONTINUES. Next is E.44 §PLAN S3, the anchors.**
-> S1, the portrait line, and S2 shipped and were walked: `9b2af02` S1,
-> `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9` portrait C2, `dca9de4`
-> portrait C3, `904df6e` S2. **Every one was walked by Dann on a real
-> deploy**, which is the only reason any of them count.
-> **The build order from here:** S3 (the anchors), S4 (the calibration
-> takeover), S5 (the wall re-plumb), S6 (consequences), then the chapter
-> bands and the aesthetic layer. Every brief serves "N.73 Sx", each step
-> ends in a deploy and a walk.
-> **S3 CARRIES ONE THING S2 DID NOT:** the `TabId` split into destination
-> plus document, and the `ilya:activeTab` migration. The coordinating desk
-> moved it out of S2 on 2026-08-20 because it is invisible to a singer and
-> would have made a failed walk ambiguous. `lib/destinations.ts` says S3.
+> **N.73, THE GUI OVERHAUL, CONTINUES. Next is S3 SHIP TWO.**
+> S1, S1b, portrait C, C2, C3, S2, and **S3 SHIP ONE** shipped and were walked:
+> `9b2af02` S1, `128bc29` S1b, `2f14d73` portrait C, `fa4e0c9` portrait C2,
+> `dca9de4` portrait C3, `904df6e` S2, `f7975ca` S3 ship one, `63c2bb4` its
+> three walk repairs. **Every one was walked by Dann on a real deploy**, which
+> is the only reason any of them count.
+> **S3 SHIP ONE IS `WRITTEN`, NOT `DONE`.** Eight of the brief's nine walk
+> items passed on `63c2bb4`, plus all three repairs. **Items 6, 7, and 8 are
+> unwalked and need a microphone and a real calibration**: re-entering the
+> ritual loses no captured vowel, a word click during the ritual does not
+> destroy it, and the anchor reads the voice's name with `Re-calibrate`. The
+> French half of item 9 waits on the same three.
+> **S3 SHIP TWO, which is next and is specified in full:**
+> `docs/sessions/brief-to-code-n73-s3_r1_2026-08-20.md` §3. The `TabId` split
+> into destination plus document, the `ilya:activeTab` migration, the
+> `NotationFields` accent made unconditionally sage, and Analysis moved above
+> Output. Print stays in the Clear-Print-Transcribe grid; the brief says why.
+> **After S3: S4 is absorbed.** Ship one built the calibration takeover, so
+> the build order from here is S3 ship two, S5 (the wall re-plumb), S6
+> (consequences), then the chapter bands and the aesthetic layer.
 > **The governing documents, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
 > the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`), the
-> mockups (r2 governs where r1 disagrees), the lip
+> mockups (**r1 governs the drawer; r2 does not touch the stations**), the lip
 > (`docs/sessions/ilya-lip-options_r1_2026-08-18.html`, option A), and the
 > ratified strings (`docs/sessions/fable-n73-french-strings_r1_2026-08-19.md`).
-> **First act of the next build session: the brief for N.73 S3.**
+> **CORRECTED 2026-08-20 night.** This block used to send the next session to
+> "§4's station order." The station order is at
+> `fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, under **§3.3**. The §4
+> in the S2 brief is a provisional list that says twice, in its own words,
+> that S3 rules the stations.
+
+---
+
+## 2026-08-20 NIGHT. N.73 S3 SHIP ONE, `f7975ca` AND `63c2bb4`, WALKED BY DANN
+
+**Floor for this section: `63c2bb4`.** All five gates at baseline on every run,
+five runs across the night: phonology 216, dictionary 235, web-check 0 errors
+and 7 warnings in 4 files, web-test 682, score-parser 444 passed and 5 skipped.
+Nothing moved, so no permission was needed.
+
+**The drawer has two anchors.** Piece and NOTATION are pinned at the top, the
+voice line is pinned at the foot, and Source, Songs, Analysis, and Shift Lyrics
+scroll between them. NOTATION moved from the bottom, where E.29 put it, to the
+top, where E.36 §1.4 ruled it and Dann ratified it on 2026-08-19.
+
+**The voice line exists for the first time.** `VoiceAnchor.svelte` is new. It
+reads `Voice: not yet calibrated` with a lavender `Calibrate`, drawn at
+`docs/sessions/fable-gui-mockup_r1_2026-08-18.html:333-338` and styled at
+`:108-109`. **The calibrated wording, `Voice: {name}` with `Re-calibrate`, is
+the coordinating desk's inference and not a ruling.** So is the French
+`Recalibrer`, which is COINED with no house precedent. Both are Dann's to
+ratify or replace. `Voix : pas encore calibrée` and `Calibrer` are adopted from
+`i18n.ts:531`.
+
+**Calibration is a takeover, so S4 is absorbed into S3.** `Calibrate` gives the
+ritual the whole drawer behind one back affordance, and backing out restores
+the scroll position and the retract state. E.44 §PLAN S3 asked for a "voice
+line pinned bottom" as though one existed; it never did, and the thing it named
+is `CalibrationWizard.svelte`, 2,125 lines and five phases including the
+Pacifier's quadrilateral. **Dann ruled on 2026-08-20 that the anchor gets built
+and the ritual becomes the takeover, both in ship one.**
+
+**NOTATION's collapsed default is built.** Ruled 2026-08-18
+(`docs/sessions/fable-gui-session-record_2026-08-18.md:12-15`), never built
+until tonight, and the coordinating desk's 300 px expectation for the phone
+failed on the old default and holds on the ruled one. `.drawer-content`
+`clientHeight`, arrival: 565 at 430x932, 477 at 390x844, 360 at 393x727, 300 at
+375x667, 273 at 360x640. **It is short at 360x640 and exactly on the line at
+375x667**, and no anchor was shrunk to make the number nicer.
+
+### Three repairs, all from Dann's walk, all shipped in `63c2bb4`
+
+- **NOTATION's chevron pointed the wrong way.** Its rule is that the chevron
+  points the way the panel will grow, and its two rotations expressed that for
+  a panel pinned at the foot. Moving the panel to the top inverted them. The
+  rule was never wrong; its values became backwards.
+- **The marked score's page did not centre.** See the corrected section below.
+- **The ritual's Start button was sage.** Ruling 3 of
+  `claude/fable-ruling-s0-slate-closed_2026-08-19.md` keeps lavender to the
+  voice anchor and calibration surfaces. Ten buttons across three rules moved.
+  **Four controls were left sage and named rather than guessed**: the roster's
+  per-vowel Re-take, the hold banner's answers, the switcher's verb row, and
+  the name field's focus ring. The Pacifier's functional tokens are untouched.
+  Lavender has no darker partner, so hover borrowed the anchor's own
+  `opacity: 0.85` rather than inventing a colour in a ruled palette.
+
+### What Dann walked, and what he did not
+
+**PASSED on `63c2bb4`:** both anchors hold under scroll on the desk AND on the
+phone; NOTATION retracts and expands from its new position; the takeover fills
+the drawer with one back affordance and no chevron enters it; backing out
+restores; the French uncalibrated strings render; and all three repairs.
+
+**NOT WALKED, and the reason ship one is `WRITTEN`:** brief items 6, 7, and 8.
+They need a microphone and a real calibration. The French half of item 9 waits
+on the same three.
+
+### Owed, none blocking
+
+- **The memo needs one amendment.** `docs/sessions/n73-s3-ship1_r1_2026-08-20.md`
+  carries the walk items as NOT ESTABLISHED, because the list never reached
+  Code before the ship. Amend it with the walk and the three microphone items
+  in one pass, not two.
+- **The plea copy survives the cure.** The takeover fixed F2's container, but
+  "Please name your profile so we can map your voice..." still opens the
+  ritual, and `fable-gui-audit-and-spec_r1_2026-08-18.md:44` says "Please"
+  breaks the house style Dann ruled on 2026-08-18. **Dann writes copy.**
+- **THE CORRIDOR AT THE DRAWER'S RIGHT EDGE. Found by Dann 2026-08-20, rides
+  with ship two.** On the phone a strip of empty sits between the drawer's
+  content and the pull, and every horizontal rule in the drawer stops short of
+  the edge because of it. **The rules under NOTATION and above the voice line
+  make it visible**, which is how Dann found it.
+  **The cause, not yet measured but named:** `.drawer-body` carries
+  `padding-right: 44px` under `@media (max-width: 767px)`, whose only job is to
+  keep content out from under the pull. That reserve was set when the pull was
+  wider. Dann's ruling of 2026-08-19 made the pull a bare chevron and thinner,
+  and nobody re-measured the reserve.
+  **The fix is to stop reserving it, not to fill it:** measure the pull's real
+  width, cut the reserve to that plus a margin, and let the rules run to it.
+  **Dann proposed filling it instead**, with vertical lines from the pull to
+  the top and bottom margins, to read as a file folder's spine. **The
+  coordinating desk argued against and Dann did not overrule.** The grounds:
+  `docs/sessions/ilya-lip-options_r1_2026-08-18.html` option B, the full-height
+  seam rail, was drawn and rejected on 2026-08-18 partly because an edge that
+  whispers is missed by a first-time singer, and a rail that looks like a
+  handle along its whole length while only 76 px of it is tappable is a lie
+  about what is tappable. Two new vertical regions would also need a hue, and
+  hue names place in this system, one week after the lavender desk was killed
+  to keep hue carriers few. **If Dann wants the spine anyway, it is a ruling
+  and rulings of that kind are Fable's.**
+
+- **The pinned metadata block is 302.7 px on the phone.** With NOTATION now
+  contributing almost nothing, that block is what the top anchor costs. The
+  mockup draws Piece as one line; the tree pins a heading and six fields.
+  **Not ruled.** It is the same question as `INBOX.md`'s retractable-headers
+  entry and should be answered with it.
 
 ---
 
@@ -126,6 +244,28 @@ It is somewhere in `VoiceProfilePane`'s empty-state branch, which renders a bare
 rather than in `.main-content`, whose `align-items: center` is intact and does
 centre the transcription. **The exact rule is NOT ESTABLISHED; nobody has read
 the computed style.** Dann's to rule, and it may belong to N.75.
+
+### CORRECTED AND CLOSED 2026-08-20 NIGHT. The marked score's centring
+
+**The diagnosis above is wrong and the defect is fixed.** The envelope page is
+NOT outside `PageFit`: `VoiceProfilePane.svelte` opens `PageFit`, renders the
+article inside it, and closes it. The real cause, established by reading the
+tree: `PageFit`'s `.paper-fit` is `width: 100%`, so `.main-content`'s
+`align-items: center` has nothing to centre. `Paper.svelte` wraps the
+transcription's stack in `.paper-container`, whose rule carries
+`align-items: center`, and that is what centres it.
+
+**`VoiceProfilePane` already had the equivalent**, `.fit-paper-container`,
+byte-identical, on its score branch. Only the empty-state envelope branch was
+bare, which is the state Dann was looking at. The repair is that existing
+wrapper applied to the branch that never had it, one element, no new
+mechanism. Shipped in `63c2bb4` and walked by Dann. Left edges measured before
+and after: at 1920 the page went 552 to 812 against a desk head at 812, and
+the 260 px gap was exactly half the empty desk.
+
+**This is also why the desk had to be the instrument.** At 1400 with the
+drawer open the desk is exactly the page's width, so the two agree by accident
+and nothing shows.
 
 ### Hard-won, and now in ENVIRONMENT
 

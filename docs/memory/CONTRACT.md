@@ -214,6 +214,18 @@ sh ~/Downloads/ilya-ship.sh "N.xx: the commit message"
 It refuses on untracked files and has caught a would-be broken deploy twice.
 **Ask Dann to `git add` a new file before you ask him to ship.**
 
+**A MISSING COMPONENT IS NOT A BLOCKER. Ruled by Dann 2026-08-20.** When the
+build needs a component that does not exist, do not stop and bring him the gap.
+**Scour the history for its spec, brief Code, and have Code build it, the same
+day.** The spec is almost always already there: on 2026-08-20 the voice anchor
+was found drawn in full in a ratified mockup, in four greps and one
+`project_search`, after E.44's plan had assumed it existed for a week.
+
+Search in this order, and stop at the first hit: the mockups and specs in
+`docs/sessions/`, then `project_search`, then the tree. **Only farm out the
+scour if the cheap searches come back empty**, and say what you found rather
+than what you spent.
+
 **EDIT BY ANCHOR.** Assert every anchor before you write. Refuse on anything but
 exactly one match, unless you can say in advance why two.
 

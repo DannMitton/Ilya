@@ -1307,3 +1307,70 @@ queries before building on top of it.**
 for the 17.0 and by 2026-08-18 those lines held something else entirely. **Line
 numbers into this file rot within a day. Cite the section heading.**
 Edits of 2026-08-18 shifted every line below §THE PAGE READER.*
+
+
+## CLAUDE CODE CANNOT READ `claude/`. A BRIEF MUST QUOTE A RULING, NOT CITE IT. 2026-08-20
+
+**Project knowledge does not live in the repository.** Code is pointed at
+`~/Desktop/ilya-rewrite` and can open anything in `docs/`, but every
+`claude/...` path is a project-knowledge document and Code sees nothing at
+that path.
+
+On 2026-08-20 a repair brief cited
+`claude/fable-ruling-s0-slate-closed_2026-08-19.md` for the ruling that keeps
+lavender to the voice anchor and calibration surfaces. Code could not open it,
+acted on the substance quoted in the brief and in `STATE.md`, and recorded in
+its memo that the primary source was not read. **That is the right behaviour
+and it is still a defect in the brief.**
+
+**The rule: when a brief depends on a `claude/` ruling, quote the ruling's
+sentence into the brief.** Citing the path alone hands Code a tether-10
+violation it cannot avoid.
+
+## A DIRECTIONAL GLYPH'S VALUES ENCODE A POSITION. MOVING THE PANEL INVERTS THEM. 2026-08-20
+
+`NotationFields.svelte` draws one right-pointing chevron and rotates it:
+`-90deg` shut, `90deg` open. **The rule behind those values is that the chevron
+points the way the panel will grow.** That rule was correct and its values were
+correct while NOTATION was pinned at the FOOT of the drawer and opened upward.
+
+N.73 S3 moved NOTATION to the top, where it opens downward, and the rule stayed
+right while its two values became backwards. **Nothing in the source said so**,
+because the comment recorded the geometry rather than the rule. Dann caught it
+by eye on the first walk.
+
+**Before you move a pinned panel, grep the component for `rotate`, `transform`,
+`::before` arrows, and any comment naming a direction.** The comment above
+those values now states the rule instead of the geometry.
+
+## `PageFit`'s `.paper-fit` IS `width: 100%`, SO CENTRING COMES FROM INSIDE IT. 2026-08-20
+
+`.main-content` carries `align-items: center` and it works. It does not centre
+the page, because the flex item between them, `PageFit`'s `.paper-fit`, is
+`width: 100%` and fills the desk. **Whatever centres a page must be inside
+`PageFit`.**
+
+`Paper.svelte` does it with `.paper-container`. `VoiceProfilePane.svelte` does
+it with `.fit-paper-container`, byte-identical, on its score branch only, which
+is why the marked score sat flush left in its empty state for at least two
+builds before anyone traced it.
+
+**The trap that hid it: at 1400 px with the drawer open the desk is exactly the
+page's width, so a centred head and a flush-left page agree by accident.** Test
+this class of defect on a wide window with the drawer CLOSED, and measure both
+left edges rather than eyeballing them.
+
+## THE COORDINATING DESK CAN READ VERCEL DIRECTLY. 2026-08-20
+
+The Vercel MCP is available from this desk, so **do not make Dann go and find a
+deploy URL.** `list_teams` gives `team_CmkdrV66wAIF29pQLpiAb80O`,
+`list_projects` gives `prj_oOvEOXnovbEkVBAOQRmTmgxJK0DB` for `ilya`, and
+`list_deployments` returns each deployment with its `githubCommitSha`, so the
+URL for a commit you just shipped is one lookup. `state` reads `BUILDING` for
+roughly thirty seconds before `READY`; check `get_deployment` before handing
+the link over.
+
+**For the phone, send a QR rather than a URL.** `pip install qrcode
+--break-system-packages`, render to PNG, deliver with `SendUserFile`. Dann
+scanned one on 2026-08-20 and the phone walk started immediately instead of
+after a retyped sha.
