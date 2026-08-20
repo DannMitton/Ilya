@@ -77,6 +77,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import type { TabId } from '$lib/destinations';
 	import { INCLUDE_SHANE } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
+	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
+	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
+	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
+	// the wizard so the voice anchor reads the same answer the wizard does.
+	import { hasAnyReadings } from '$lib/shane/profileStore';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
@@ -149,9 +154,34 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
 	let drawerCollapsed = $state(false);
+	/**
+	 * N.73 S3 ship one. Whether the calibration takeover has the drawer. E.27:
+	 * a takeover "replaces the entire drawer, shows a single back affordance at
+	 * the top, restores the station accordion in its prior state on exit, and
+	 * is never entered by a chevron"
+	 * (`fable-ruling-e27-four-tab-consolidation_2026-08-05.md`). Deliberately
+	 * NOT persisted, on the same reasoning `notationExpanded` carries below: a
+	 * remembered takeover would open a singer into a ritual they did not ask
+	 * for on this visit.
+	 */
+	let calibrating = $state(false);
 	// N.43: Notation collapse. Deliberately NOT persisted: a remembered
 	// collapse hides the toggles from a singer who forgot they exist.
-	let notationExpanded = $state(true);
+	//
+	// N.73 S3 ship one, on Dann's instruction of 2026-08-20 to build a ruling
+	// that was already made and never built. THE DEFAULT IS COLLAPSED, ruled
+	// 2026-08-18 (`fable-gui-session-record_2026-08-18.md:12-15`, ruling 2, and
+	// `fable-gui-audit-and-spec_r1_2026-08-18.md:124`). Dann's rationale, kept
+	// in his words: Ilya is already set to Grayson's defaults; the toggles are
+	// departures from Grayson's schema, permissible at the user's discretion,
+	// so they are something the user intentionally accesses, not screen real
+	// estate spent by default.
+	//
+	// The line above stands and is unchanged. What it guarantees has narrowed
+	// rather than reversed: non-persistence used to mean the toggles are
+	// visible on every arrival, and now it means the RULED default is what
+	// every arrival gets. Nothing else about the retract mechanism moved.
+	let notationExpanded = $state(false);
 	// Tab state
 	let activeTab = $state<TabId>('transcription');
 	// Shane: the active voice's stored readings and name, published by the
@@ -447,11 +477,36 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * marked score once a score is ingested or a formant exists. Nothing new
 	 * is invented, and neither behaviour is lost.
 	 */
+	/**
+	 * N.73 S3 ship one. Whether the active voice holds any reading at all.
+	 * ONE predicate, `hasAnyReadings` in `profileStore.ts`, lifted out of
+	 * `CalibrationWizard` so the wizard's opening phase, the voice anchor's
+	 * sentence, and this Print guard cannot give three answers. The guard's
+	 * expression is unchanged in meaning: it read
+	 * `Object.keys(shaneFormants).length === 0` inline, which is the same test
+	 * written a second time.
+	 */
+	const voiceCalibrated = $derived(hasAnyReadings(shaneFormants));
 	const printDisabled = $derived(
 		activeTab === 'shane'
-			? !ingestedScore && Object.keys(shaneFormants).length === 0
+			? !ingestedScore && !voiceCalibrated
 			: !hasResults
 	);
+	/**
+	 * Entering the takeover expands the wizard first. The Q3 collapse (Kimi
+	 * §A.28) exists so a rendered score can take the drawer back from a wizard
+	 * that was SHARING it; a wizard that has the whole drawer is not sharing
+	 * anything, and a takeover that opened onto a one-line compact header would
+	 * be a ritual with its own ritual hidden. This is a decision about the
+	 * MOUNT POINT, not about the wizard, which is untouched.
+	 */
+	function enterCalibration() {
+		wizardCollapsed = false;
+		calibrating = true;
+	}
+	function exitCalibration() {
+		calibrating = false;
+	}
 	const wordCount = $derived(
 		lines.reduce((sum, l) => sum + l.words.length, 0)
 	);
@@ -1810,10 +1865,82 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{activeTab}
 		{activeHeadingId}
 		{tabTransitionClass}
+		takeoverActive={calibrating}
+		onexittakeover={exitCalibration}
 		ontogglecollapse={handleDrawerToggle}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
 	>
+			<!-- PIECE (N.73 S3 ship one). The drawer's pinned top region. The
+			     metadata block and the Q4 provenance line moved out of
+			     `RootPanel` to get here: a pinned region cannot be a child of
+			     the scrolling one. Their props are unchanged and are passed
+			     straight through. -->
+			{#snippet pieceAnchor()}
+				<MetadataFields
+					metadata={doc.metadata}
+					{language}
+					onchange={handleMetadataChange}
+					fromScore={doc.fromScoreFields}
+					onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
+				/>
+				{#if arrangerProvenance}
+					<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata block,
+					     never a drawer field, omitted when absent. Clamped to one
+					     line (Dann's ruling, 2026-07-13, on the Gretchen IMSLP-blob
+					     evidence): verbatim, never parsed, but the drawer stays
+					     quiet; title carries the full string on hover. Its rule
+					     travels with it, N.73 S3, for the same reason it travelled
+					     into RootPanel at N.73 S2: Svelte scopes a rule to the
+					     component that authors the markup. -->
+					<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
+				{/if}
+			{/snippet}
+			<!-- THE VOICE (N.73 S3 ship one). The drawer's pinned bottom line,
+			     and the only way into calibration. `voiceCalibrated` is the
+			     wizard's own predicate, read from `profileStore.ts`, so this
+			     line and the wizard cannot disagree. -->
+			{#snippet voiceAnchor()}
+				{#if INCLUDE_SHANE}
+					<VoiceAnchor
+						voiceName={shaneVoiceName}
+						calibrated={voiceCalibrated}
+						{language}
+						oncalibrate={enterCalibration}
+					/>
+				{/if}
+			{/snippet}
+			<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). The wizard MOVED
+			     here from the shane panel; not one line of it is rewritten. Its
+			     props are the ones it already had, in the order it already had
+			     them. -->
+			{#snippet voiceTakeover()}
+				{#if INCLUDE_SHANE}
+					<div class="takeover-panel">
+					<CalibrationWizard
+						{language}
+						{scoreRenders}
+						bind:collapsed={wizardCollapsed}
+						onActiveProfileChange={(f, name, characteristics) => {
+							shaneFormants = f;
+							shaneVoiceName = name;
+							shaneCharacteristics = characteristics;
+						}}
+						onOpenLearnNote={() => {
+							// The sung-[o] glyph's deep link: Learn tab, then the
+							// note's anchor. handleHeadingNavigate already retries
+							// while the lazy Learn content mounts. The takeover is
+							// left first, because Learn is a different destination
+							// and a takeover held open behind it would be waiting
+							// on a drawer the singer is no longer in.
+							exitCalibration();
+							handleTabChange('learn');
+							handleHeadingNavigate('learn-u3-note-o');
+						}}
+					/>
+					</div>
+				{/if}
+			{/snippet}
 			{#snippet rootPanel()}
 				<RootPanel
 					inputText={doc.inputText}
@@ -1824,10 +1951,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{transcribeMs}
 					{transcribeError}
 					{language}
-					metadata={doc.metadata}
-					fromScore={doc.fromScoreFields}
-					onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
-					{arrangerProvenance}
 					{showInspector}
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
@@ -1838,7 +1961,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onimport={() => importInputEl?.click()}
 					onexportall={() => void handleExportAll()}
 					{songLibrary}
-					onmetadatachange={handleMetadataChange}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -1980,31 +2102,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     where storage speaks today. -->
 						<p class="shane-storage-notice">{t('storage.otherTab', language)}</p>
 					{/if}
-					<CalibrationWizard
-						{language}
-						{scoreRenders}
-						bind:collapsed={wizardCollapsed}
-						onActiveProfileChange={(f, name, characteristics) => {
-							shaneFormants = f;
-							shaneVoiceName = name;
-							shaneCharacteristics = characteristics;
-						}}
-						onOpenLearnNote={() => {
-							// The sung-[o] glyph's deep link: Learn tab, then the
-							// note's anchor. handleHeadingNavigate already retries
-							// while the lazy Learn content mounts, and the return
-							// path is the Shane tab itself (the wizard rehydrates
-							// to the summary).
-							handleTabChange('learn');
-							handleHeadingNavigate('learn-u3-note-o');
-						}}
-					/>
+					<!-- N.73 S3 ship one. THE CALIBRATION WIZARD IS NOT HERE ANY
+					     MORE. It is the drawer's one takeover, entered from the
+					     voice anchor at the foot of the column, and rendered from
+					     the `voiceTakeover` snippet below. The GUI spec's defect F2
+					     was that its `welcome` plea sat inside this scroll, reading
+					     voice at a singer who had asked for an Instrument panel
+					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`). -->
 					</div>
 				{/if}
 			{/snippet}
 			{#snippet notationPanel()}
-				<!-- NOTATION (item N.7). ONE instance, anchored by the Drawer
-				     below its scrolling panel, shown on Transcription and Fit.
+				<!-- NOTATION (item N.7). ONE instance, rendered by the Drawer
+				     inside its TOP anchor, above the scrolling panel, on both of
+				     Studio's documents. It was pinned BELOW the scroll until
+				     N.73 S3, which is the E.29 shape E.36 §1.4 replaced and Dann
+				     ratified on 2026-08-19.
 				     The state was always document-level and persisted (the notationPrefs and
 				     openSyllabification declarations and their writers) and Fit obeyed it:
 				     both reach VoiceProfilePane through its own props of
@@ -2016,9 +2129,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				     can drift, and one cannot.
 
 				     The accent follows the tab (Dann's ruling, 2026-08-06):
-				     sage on Transcription, deeper-lavender on Fit, that
-				     surface's identity colour (Drawer.svelte:587). Twinned on
+				     sage on Transcription, deeper-lavender on Fit. Twinned on
 				     TitleHeader and PageFooter, which take accents the same way.
+				     N.73 S2 named this as a survivor it left alone and N.73 S3
+				     ship TWO settles it: under the ratified architecture NOTATION
+				     is sage unconditionally and lavender belongs to the voice
+				     anchor alone. The `Drawer.svelte:587` citation this comment
+				     used to carry pointed at a rule the S1 tab-bar deletion had
+				     already taken away, and is dropped rather than renumbered.
 
 				     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
 				     will appear on Fit and change nothing there, because
@@ -2190,6 +2308,39 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   sage, so focusing a Fit field mirrors the sage ring in purple. */
 	.shane-panel :global(:focus-visible) {
 		outline-color: var(--deeper-lavender);
+	}
+
+	/* N.73 S3 ship one. The takeover's own column, the same measures
+	   `.shane-panel` gives the drawer, so the ritual keeps the drawer's left
+	   edge. The wizard drops its own outer padding in favour of this, which is
+	   why the value is repeated rather than shared. */
+	.takeover-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 12px 1rem 40px;
+	}
+
+	.takeover-panel :global(:focus-visible) {
+		outline-color: var(--deeper-lavender);
+	}
+
+	/* The Q4 provenance line: tertiary, one quiet line beneath the Metadata
+	   block, sharing the drawer's content edges. Clamped to a single line with
+	   an ellipsis (Dann's ruling, 2026-07-13): real headers carry IMSLP credit
+	   blobs and URLs; the text stays verbatim (no parsing of publisher habits)
+	   but never wraps. It came back here at N.73 S3 with the metadata block,
+	   for the reason it left at S2: Svelte scopes a rule to the component that
+	   authors the markup, so the rule travels or the line loses its style
+	   silently. */
+	.shane-provenance {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	/* N.67 step 5. The import input is never seen: both Import controls click

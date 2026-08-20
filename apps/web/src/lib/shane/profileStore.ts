@@ -107,6 +107,19 @@ export interface ProfileStore {
 	voices: StoredVoice[];
 }
 
+/**
+ * Whether a working profile holds any reading at all.
+ *
+ * LIFTED here from CalibrationWizard.svelte by N.73 S3, unchanged. It decides
+ * two things that must never disagree: which phase the wizard opens on, and
+ * what the drawer's voice anchor says about the voice. Two copies of this
+ * predicate would be two answers to "is this voice calibrated," so there is
+ * one, and it lives beside the store whose shape it reads.
+ */
+export function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
+	return Object.keys(f).length > 0;
+}
+
 /** A collision-safe id; crypto.randomUUID with a time-random fallback. */
 export function newVoiceId(): string {
 	try {

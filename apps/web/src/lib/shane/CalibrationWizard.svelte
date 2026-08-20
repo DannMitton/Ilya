@@ -63,6 +63,9 @@
 		loadStore,
 		saveStore,
 		newVoiceId,
+		// N.73 S3: lifted out of this file so the drawer's voice anchor and
+		// this wizard cannot disagree about whether a voice is calibrated.
+		hasAnyReadings,
 		type ProfileStore,
 		type StoredVoice,
 		type ReadinessRecord
@@ -236,10 +239,6 @@
 		while (names.has(`${DEFAULT_NAME_BASE} ${n}`)) n += 1;
 		return `${DEFAULT_NAME_BASE} ${n}`;
 	});
-
-	function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
-		return Object.keys(f).length > 0;
-	}
 
 	/**
 	 * The profile-level [ɨ] divergence pass, wired 2026-07-11 (it existed in

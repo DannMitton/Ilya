@@ -51,8 +51,10 @@
 		onopensyllabificationchange: (value: boolean) => void;
 		/**
 		 * N.43. Collapsed state lives in +page.svelte, not here, so it
-		 * survives a trip to Learn and back (this component is destroyed
-		 * when the anchor's tab guard closes, Drawer.svelte:431).
+		 * survives a trip to Learn and back: this component is destroyed
+		 * when the drawer's `isStudio` guard closes, which it does on Learn
+		 * and Guide. The cited line number was already stale before N.73 S3
+		 * moved the anchor, so the guard is NAMED here rather than numbered.
 		 */
 		expanded: boolean;
 		onexpandedchange: (value: boolean) => void;

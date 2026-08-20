@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { LoaderState } from '$lib/loader';
-	import type { SongMetadata } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
-	import MetadataFields from './MetadataFields.svelte';
 import SongList from './SongList.svelte';
 import type { SongRow } from '$lib/library/songs';
 
@@ -16,20 +14,13 @@ import type { SongRow } from '$lib/library/songs';
 		transcribeMs: number;
 		transcribeError: string;
 		language: Language;
-		metadata: SongMetadata;
-		/**
-		 * N.73 S2. Both arrived with the second MetadataFields when the two
-		 * drawers became one. Fields auto-populated from a score header carry
-		 * their "from score" tag here now, and `onrevert` is the Q2
-		 * revert-to-score-header affordance, passed only when a header exists.
+		/*
+		 * N.73 S3 ship one. `metadata`, `onmetadatachange`, `fromScore`,
+		 * `onrevert` and `arrangerProvenance` are gone from this panel. They
+		 * fed the metadata block and the provenance line, and both are pinned
+		 * at the top of the drawer now; `+page.svelte` passes them straight to
+		 * `MetadataFields` in the `pieceAnchor` snippet.
 		 */
-		fromScore?: ReadonlySet<string>;
-		onrevert?: () => void;
-		/**
-		 * N.73 S2. The Q4 provenance line (Kimi §A.28), which sits beneath the
-		 * metadata block and is never a drawer field. Null when absent.
-		 */
-		arrangerProvenance?: string | null;
 		showInspector: boolean;
 		consoleContent?: Snippet;
 		/**
@@ -56,7 +47,6 @@ import type { SongRow } from '$lib/library/songs';
 		onexport: () => void;
 		onimport: () => void;
 		onexportall: () => void;
-		onmetadatachange: (meta: SongMetadata) => void;
 		/**
 		 * N.67 step 4b, the library door. Passed WHOLE rather than as seven
 		 * separate props, so `+page.svelte` gains one line of wiring instead of
@@ -87,10 +77,6 @@ import type { SongRow } from '$lib/library/songs';
 		transcribeMs,
 		transcribeError,
 		language,
-		metadata,
-		fromScore = undefined,
-		onrevert = undefined,
-		arrangerProvenance = null,
 		showInspector,
 		consoleContent,
 		sourceScore,
@@ -102,7 +88,6 @@ import type { SongRow } from '$lib/library/songs';
 		onexport,
 		onimport,
 		onexportall,
-		onmetadatachange,
 		songLibrary,
 	}: Props = $props();
 
@@ -177,20 +162,15 @@ import type { SongRow } from '$lib/library/songs';
 		</div>
 	{/if}
 
-	<!-- ── 1. Song Setup (metadata) ─────────────────────────── -->
-	<!-- N.73 S2. THE one instance. The Fit drawer's second instance is gone,
-	     and the two props only it carried, `fromScore` and `onrevert`, are
-	     carried here. Losing `onrevert` would lose revert-to-score-header. -->
-	<MetadataFields {metadata} {language} onchange={onmetadatachange} {fromScore} {onrevert} />
-	{#if arrangerProvenance}
-		<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata block, never
-		     a drawer field, omitted when absent. Clamped to one line (Dann's
-		     ruling, 2026-07-13, on the Gretchen IMSLP-blob evidence):
-		     verbatim, never parsed, but the drawer stays quiet; title carries
-		     the full string on hover. Moved here with the metadata block,
-		     N.73 S2. -->
-		<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
-	{/if}
+	<!-- N.73 S3 ship one. THE METADATA BLOCK AND ITS PROVENANCE LINE ARE NOT
+	     HERE ANY MORE. They are Piece, pinned at the top of the drawer's
+	     column, rendered by `Drawer.svelte`'s top anchor from the
+	     `pieceAnchor` snippet in `+page.svelte`. They left because a pinned
+	     region cannot be a child of the scrolling one. Nothing about them
+	     changed on the way out except who renders them.
+
+	     The dictionary error above stays first in the SCROLL, which is no
+	     longer first in the drawer. -->
 
 	<!-- ── 2. Textarea with OCR overlay ────────────────────── -->
 	<div class="textarea-wrapper">
@@ -590,23 +570,6 @@ import type { SongRow } from '$lib/library/songs';
 	.action-btn:disabled {
 		opacity: 0.45;
 		cursor: not-allowed;
-	}
-
-	/* The Q4 provenance line: tertiary, one quiet line beneath the Metadata
-	   block, sharing the drawer's content edges. Clamped to a single line with
-	   an ellipsis (Dann's ruling, 2026-07-13): real headers carry IMSLP credit
-	   blobs and URLs; the text stays verbatim (no parsing of publisher habits)
-	   but never wraps. Moved from `+page.svelte` with its markup, N.73 S2:
-	   Svelte scopes a rule to the component that authors the markup, so the
-	   rule had to travel or the line would have lost its style silently. */
-	.shane-provenance {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	/* ── Section labels (sage smallcaps, matching Drawer) ──────────────── */

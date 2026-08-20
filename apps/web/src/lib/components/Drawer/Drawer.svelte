@@ -27,12 +27,52 @@
 		 * the state stays in +page.svelte and nothing is drilled through here.
 		 */
 		notationPanel?: Snippet;
+		/**
+		 * PIECE (N.73 S3 ship one). The metadata block and its provenance
+		 * line, lifted out of `RootPanel` so they can be pinned. They sit
+		 * above NOTATION in the top anchor, which is what the mockup draws
+		 * (`fable-gui-mockup_r1_2026-08-18.html:309-314`) and what its caption
+		 * states: "Piece and NOTATION are pinned top."
+		 */
+		pieceAnchor?: Snippet;
+		/**
+		 * THE VOICE ANCHOR (N.73 S3 ship one), pinned to the foot of the
+		 * column. Gated by its own INCLUDE_SHANE at the call site, so an
+		 * absent snippet here means the wall is up, not that the line broke.
+		 */
+		voiceAnchor?: Snippet;
+		/**
+		 * THE CALIBRATION TAKEOVER (N.73 S3 ship one). E.27's takeover:
+		 * "replaces the entire drawer, shows a single back affordance at the
+		 * top, restores the station accordion in its prior state on exit, and
+		 * is never entered by a chevron"
+		 * (`fable-ruling-e27-four-tab-consolidation_2026-08-05.md`).
+		 *
+		 * RENDERED ALWAYS AND HIDDEN, not conditionally mounted, and the
+		 * reason is measured rather than aesthetic: the page's mirror of the
+		 * voice (`shaneFormants`, `shaneVoiceName`) is published by an
+		 * `$effect` inside the wizard, so a wizard that is not mounted leaves
+		 * the marked score's page with no voice and its Print button disabled
+		 * until the singer opens the takeover once. Hiding keeps every one of
+		 * today's behaviours and costs one CSS rule.
+		 */
+		voiceTakeover?: Snippet;
+		/** Whether the takeover has the drawer. */
+		takeoverActive?: boolean;
+		/** The back affordance's press. */
+		onexittakeover?: () => void;
 		ontogglecollapse: () => void;
 		ontabchange: (tab: TabId) => void;
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, pieceAnchor, voiceAnchor, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+
+	/* Studio's two documents. The reading destinations, Learn and Guide, have
+	   no piece, no notation and no voice, so none of the three anchors is
+	   theirs. One name for one expression, which was previously written out
+	   twice in this file. */
+	const isStudio = $derived(activeTab === 'transcription' || activeTab === 'shane');
 
 	let expandedSections = $state(new Set<string>());
 	let drawerContentEl: HTMLElement | undefined = $state();
@@ -127,6 +167,35 @@
 		});
 	});
 
+	/* The takeover's scroll, E.27: exit "restores the station accordion in its
+	   prior state." The RETRACT states survive on their own, because nothing
+	   here unmounts. The scroll does not: `display: none` drops the box, and a
+	   box with no layout has no scrollTop to keep.
+
+	   `$effect.pre`, NOT `$effect`, and this was MEASURED rather than reasoned.
+	   A plain `$effect` runs AFTER the DOM update, so by the time it read
+	   `scrollTop` the element was already stowed and it read 0; backing out of
+	   a drawer scrolled to 300 landed at 0, which is the thing this code
+	   exists to prevent. A pre-effect runs before the update, while the
+	   element still has its layout. The RESTORE is the mirror case and has to
+	   wait for the layout to come back, so it is deferred one frame. */
+	let stowedScrollTop = 0;
+	let takeoverWas = false;
+	$effect.pre(() => {
+		const active = takeoverActive;
+		if (active === takeoverWas) return;
+		takeoverWas = active;
+		const el = drawerContentEl;
+		if (!el) return;
+		if (active) {
+			stowedScrollTop = el.scrollTop;
+		} else {
+			requestAnimationFrame(() => {
+				el.scrollTop = stowedScrollTop;
+			});
+		}
+	});
+
 	function isActive(id: string): boolean {
 		return activeHeadingId === id;
 	}
@@ -140,8 +209,22 @@
 <aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls">
 	<div class="drawer-clip">
 	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
+		<!-- THE TOP ANCHOR (N.73 S3 ship one). Piece, then NOTATION, pinned
+		     above the scroll. E.36 §1.4, ratified by Dann 2026-08-19
+		     (`fable-ruling-s0-slate-closed_2026-08-19.md`, ruling 1). This
+		     replaces the E.29 shape, where NOTATION was pinned to the FOOT of
+		     the column and the metadata block scrolled away with everything
+		     else. Studio only: Learn and Guide have no piece in front of the
+		     reader. -->
+		{#if isStudio && (pieceAnchor || notationPanel)}
+			<div class="drawer-anchor drawer-anchor-top" class:stowed={takeoverActive}>
+				{@render pieceAnchor?.()}
+				{@render notationPanel?.()}
+			</div>
+		{/if}
 		<div
 			class="drawer-content {tabTransitionClass}"
+			class:stowed={takeoverActive}
 			role="tabpanel"
 			id="tabpanel-{activeTab}"
 			aria-labelledby="tab-{activeTab}"
@@ -153,7 +236,7 @@
 				     Their own {#if} guards still suppress score-only content, and
 				     shanePanel carries its own INCLUDE_SHANE gate. Learn and Guide
 				     are untouched. -->
-				{#if activeTab === 'transcription' || activeTab === 'shane'}
+				{#if isStudio}
 					{@render rootPanel()}
 					{@render shanePanel?.()}
 				{:else if activeTab === 'learn'}
@@ -415,14 +498,31 @@
 					</nav>
 				{/if}
 		</div>
-		<!-- NOTATION (item N.7), anchored. Sibling of .drawer-content rather
-		     than a child of it, so it sits outside the scroll (:468-471) and
-		     holds the same position on both tabs. Gated to the two surfaces
-		     that HAVE a document: Learn and Guide are reading surfaces with no
-		     transcription in front of the reader. -->
-		{#if notationPanel && (activeTab === 'transcription' || activeTab === 'shane')}
-			<div class="drawer-anchor">
-				{@render notationPanel()}
+		<!-- THE BOTTOM ANCHOR (N.73 S3 ship one). One line, the voice.
+		     NOTATION used to be pinned here; it is at the top now. -->
+		{#if isStudio && voiceAnchor}
+			<div class="drawer-anchor drawer-anchor-bottom" class:stowed={takeoverActive}>
+				{@render voiceAnchor()}
+			</div>
+		{/if}
+		<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). Always in the tree on
+		     Studio and hidden until it is entered; see the `voiceTakeover` prop
+		     for why it is not a conditional mount. It is a SIBLING of the three
+		     regions above and hides all of them, which is E.27's "replaces the
+		     entire drawer": NOTATION and the voice line are not visible during
+		     the ritual. Its back affordance reuses `inspector.back`, a ratified
+		     string that had no call site left in the tree, so the takeover
+		     writes no new French. -->
+		{#if isStudio && voiceTakeover}
+			<div class="drawer-takeover" class:stowed={!takeoverActive}>
+				<div class="takeover-head">
+					<button type="button" class="takeover-back" onclick={() => onexittakeover?.()}>
+						{t('inspector.back', language)}
+					</button>
+				</div>
+				<div class="takeover-body">
+					{@render voiceTakeover()}
+				</div>
 			</div>
 		{/if}
 	</div>
@@ -486,26 +586,104 @@
 		overflow-y: auto;
 	}
 
-	/* ── NOTATION anchor (N.7) ───────────────────────────── */
-	/* A sibling of .drawer-content, not a child, so it never scrolls away.
+	/* ── The anchors (N.7, and N.73 S3's second one) ─────── */
+	/* Siblings of .drawer-content, not children, so neither scrolls away.
 	   flex-shrink: 0 because .drawer-content owns the flexible height and
-	   this block must keep its own; without it a long panel would compress
-	   the toggles rather than scroll behind them.
+	   these blocks must keep their own; without it a long panel would
+	   compress them rather than scroll behind them.
 
-	   Side padding is 1rem, matching .root-panel and .shane-panel, so the
-	   toggles keep the same left edge as everything above them. The rule is
-	   the drawer's own border language (the 2px double of .drawer-body's
+	   Side padding is 1rem, matching .root-panel and .shane-panel, so what
+	   is pinned keeps the same left edge as what scrolls. The rule is the
+	   drawer's own border language (the 2px double of .drawer-body's
 	   border-right) rather than the sage of RootPanel's .console-section,
-	   because this shelf is now shared by two surfaces and must not carry
-	   either one's identity colour. The section label inside it does that. */
+	   because these shelves are shared by two documents and must not carry
+	   either one's identity colour. */
 	.drawer-anchor {
 		flex-shrink: 0;
-		/* 6px top to match .console-section's padding exactly
-		   (RootPanel.svelte:498), so ANALYSIS and NOTATION sit the same
-		   distance below their rules. */
-		padding: 6px 1rem 12px;
 		background: var(--drawer-bg);
+	}
+
+	/* N.73 S3. Piece and NOTATION. Its rule faces DOWN, toward the scroll it
+	   caps, which is the mirror of the bottom anchor's. Bottom padding is
+	   12px, the value the old bottom-pinned NOTATION anchor carried; there is
+	   no 6px top here, because .root-panel's own metadata block opens the
+	   region and brings its own. */
+	.drawer-anchor-top {
+		display: flex;
+		flex-direction: column;
+		/* 6px, the gap `.root-panel` gives its own children, so Piece and
+		   NOTATION sit apart by the same measure everything below them does. */
+		gap: 6px;
+		padding: 12px 1rem;
+		border-bottom: 2px double var(--ink-primary, #1a1612);
+	}
+
+	/* N.73 S3. The voice. VoiceAnchor.svelte draws its own 9px 1rem padding,
+	   so this shelf adds none: two paddings would meet in the middle of one
+	   line. */
+	.drawer-anchor-bottom {
+		padding: 0;
 		border-top: 2px double var(--ink-primary, #1a1612);
+	}
+
+	/* ── The takeover (N.73 S3) ──────────────────────────── */
+	/* Takes .drawer-content's place in the column when it has the drawer:
+	   same flex:1, same min-height:0, so a long ritual scrolls inside itself
+	   rather than pushing the back affordance off the top. */
+	.drawer-takeover {
+		flex: 1;
+		min-width: 0;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		background: var(--drawer-bg);
+	}
+
+	.takeover-head {
+		flex-shrink: 0;
+		padding: 6px 1rem;
+		border-bottom: 2px double var(--ink-primary, #1a1612);
+	}
+
+	/* The ONE back affordance, E.27. Quiet by construction: this is the way
+	   out of a ritual, not an invitation to leave it. The 44px floor is the
+	   same device the drawer's own pull and NotationFields' disclosure use. */
+	.takeover-back {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.35rem 0;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		color: var(--ink-secondary);
+		background: transparent;
+		border: none;
+		cursor: pointer;
+	}
+
+	.takeover-back:hover {
+		color: var(--ink-primary);
+	}
+
+	@media (pointer: coarse) {
+		.takeover-back {
+			min-height: 44px;
+			min-width: 44px;
+		}
+	}
+
+	.takeover-body {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
+	}
+
+	/* What the takeover switch actually does. A stowed region keeps its
+	   component tree and its state and gives up its box, which is the whole
+	   reason the wizard can be entered, left, and re-entered without losing a
+	   captured vowel. Declared last so it beats .drawer-content's own flex
+	   sizing above by source order at equal specificity. */
+	.stowed {
+		display: none;
 	}
 
 	/* ── Tab transition animations ──────────────────────── */

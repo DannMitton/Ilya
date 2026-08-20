@@ -350,6 +350,23 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.err.parseFailed':      { en: 'This score could not be read. It may be incomplete or use unsupported features.', fr: 'Cette partition n’a pas pu être lue. Elle est peut-être incomplète ou utilise des fonctions non prises en charge.' },
 	'upload.err.unrecognised':     { en: 'This file was not recognised as a score.', fr: 'Ce fichier n’a pas été reconnu comme une partition.' },
 
+	// ── The voice anchor (N.73 S3) ───────────────────────────
+	//    The drawer's pinned bottom line: a lavender dot, the voice's
+	//    state, and the one control that opens the calibration takeover.
+	//    English is the mockup's own, verbatim
+	//    (`fable-gui-mockup_r1_2026-08-18.html:333-338`). The calibrated
+	//    line's wording is the coordinating desk's inference, NOT a ruling,
+	//    and is Dann's to settle.
+	//    French, drafted and shown to Dann 2026-08-20: « calibrée » and
+	//    « Calibrer » are ADOPTED from `profile.emptyState` below; the
+	//    guillemets are ADOPTED from `profile.subtitleNamed`; the no-break
+	//    space before the colon follows `calib.section.ariaLabel`.
+	//    « Recalibrer » is COINED. No house precedent.
+	'calib.anchor.uncalibrated': { en: 'Voice: not yet calibrated', fr: 'Voix\u00a0: pas encore calibrée' },
+	'calib.anchor.named': { en: 'Voice: {voice}', fr: 'Voix\u00a0: \u00ab\u00a0{voice}\u00a0\u00bb' },
+	'calib.anchor.calibrate': { en: 'Calibrate', fr: 'Calibrer' },
+	'calib.anchor.recalibrate': { en: 'Re-calibrate', fr: 'Recalibrer' },
+
 	// ── Calibration wizard (N.22 extraction; French placeholder = English
 	//    verbatim, pending Dann's copy pass) ────────────────────────────────
 	'calib.defaultVoiceName': { en: 'Voice', fr: 'Voix' },
