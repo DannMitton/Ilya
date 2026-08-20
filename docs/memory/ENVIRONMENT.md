@@ -1374,3 +1374,36 @@ the link over.
 --break-system-packages`, render to PNG, deliver with `SendUserFile`. Dann
 scanned one on 2026-08-20 and the phone walk started immediately instead of
 after a retyped sha.
+
+
+## `git add -A` FROM THIS DESK SWEEPS CODE'S WORKING TREE. THREE TIMES IN ONE NIGHT. 2026-08-20
+
+**This desk and Claude Code share one working tree.** When the desk hands Dann a
+memory commit built on `git add -A`, and Code is building in the same
+repository, the commit takes Code's work with it.
+
+**What it cost on 2026-08-20, three times:**
+
+1. `af995a9` swept N.73 S3 ship two's entire build into a commit whose message
+   reads "STATE: desk-head height ruled...". The ship script never ran, so its
+   five gates never ran at ship time. Code had run them separately, so nothing
+   unsafe shipped, but the history now names the build after the memory.
+2. `661218c` and `8d5b175` each landed a moment before the desk's own edits to
+   `STATE.md` finished, so two corrections missed their commit and had to ride
+   the next one.
+3. `7b1eb20` swept `StationHeader.svelte` and three modified files out of a
+   **half-finished refactor**, ungated, and pushed it. Vercel deployed a build
+   caught mid-rewrite.
+
+**THE RULE. A memory commit names the memory:**
+
+```
+git -C ~/Desktop/ilya-rewrite add docs/memory/ docs/sessions/ && git -C ~/Desktop/ilya-rewrite commit -m "..." && git -C ~/Desktop/ilya-rewrite push
+```
+
+**Never `add -A` while Code is running.** The ship script is what commits the
+build, because it is the thing that runs the five gates first.
+
+**Also: finish writing before you hand Dann the command.** He is fast. Two
+corrections missed their commit by seconds because the desk offered a commit
+line while it was still editing the file.
