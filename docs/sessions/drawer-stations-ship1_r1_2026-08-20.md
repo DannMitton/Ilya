@@ -403,7 +403,7 @@ the rule means, names him and the date, names all four sites that draw it, recor
 what he gave up, and says not to restore it as a fix.
 
 **ONE `2px double` SURVIVES AND I LEFT IT: `.drawer-body`'s `border-right`
-(then `Drawer.svelte:600`, and §11.4 replaced it).** He named three sites and this is not one of them. It is
+(`.drawer-body`'s `border-right`, which §8.5 then made sage too).** He named three sites and this is not one of them. It is
 the drawer's outer edge against the desk, a vertical spine rather than a rule
 inside the drawer, so no singer sees it beside a sage horizontal. **If "one
 boundary treatment for the whole drawer" is meant to reach it, that is one word
@@ -659,7 +659,8 @@ One treatment, one size per display, no exceptions.
 ### 8.5 The last double line
 
 `.drawer-body`'s `border-right` is `2px solid var(--sage)`
-(`Drawer.svelte:606`). **Dann's ruling, and he is right: the desk's "vertical spine,
+(`.drawer-body`'s `border-right`; §11.2 later replaced the whole edge with the
+silhouette's path). **Dann's ruling, and he is right: the desk's "vertical spine,
 not a horizontal rule" is a distinction in the stylesheet and not in anyone's eye.
 It is the same mark.** There is no `double` border left anywhere in the drawer.
 
@@ -1257,6 +1258,133 @@ display.
 3. **Whether the phone should get a silhouette too.** §11.6 argues it has nothing to
    join. Settled by him.
 4. **Whether the drop shadow is missed.** §11.5. Settled by his walk.
+
+---
+
+## 12. THE CHEVRON. Two repairs from Dann's walk of `1f201f2`
+
+**He is satisfied with the silhouette. Nothing about it moved: not the path, not
+the grey, not the 44 by 88 target, not the flip, not the animation. Ship two of
+the stations brief is still NOT started.**
+
+| what | where |
+|---|---|
+| Dark grey instead of black | `Drawer.svelte:1066` |
+| The measured nudge, open | `Drawer.svelte:1103` |
+| The measured nudge, closed | `Drawer.svelte:1107` |
+
+### 12.1 The colour
+
+**`--ink-secondary` `#4a4540`, from `--ink-primary` `#1a1612`.** Every candidate,
+measured against the handle's own `#FAF8F5` fill:
+
+| token | hex | contrast on `#FAF8F5` | |
+|---|---|---|---|
+| `--ink-primary` | `#1a1612` | **16.97:1** | what it was. Reads as black |
+| `--stone-700` | `#44403c` | 9.69:1 | right value, wrong family |
+| **`--ink-secondary`** | **`#4a4540`** | **8.94:1** | **chosen** |
+| `--ink-tertiary` | `#6A655F` | 5.44:1 | the placeholder register |
+| `--stone-500` | `#78716c` | 4.53:1 | lighter still |
+
+**The choice is about family as much as value.** This drawer spends the ink scale
+on glyphs and type and the stone scale on borders and chrome, and a chevron is a
+glyph. `--stone-700` measures almost the same, 9.69 against 8.94, and would be the
+first stone in the drawer used as ink. `--ink-tertiary` is what placeholders and
+captions take, and a live control in the disabled register reads as switched off.
+`--ink-secondary` is the drawer's own one-step-down ink, described in `app.css` as
+"warm grey", which is the words Dann used.
+
+**All five are here so he can rule again by looking**, and any of them is a
+one-token edit.
+
+### 12.2 The nudge, measured
+
+**Two errors, and only one of them is constant. That is why one number would not
+have done.**
+
+**ONE, and it does not flip: the glyph's box is centred in the BUTTON, and the
+button is not the handle.** The button spans the whole 20px protrusion, x 520 to
+540 on the desk, so its centre is 530. **The handle's ink-bounded interior runs
+from the drawer's face at 520 to the inner face of the outer wall at 538**, so its
+centre is 529. A constant 1px of error.
+
+**TWO, and it reverses with the flip: the ink is not centred in its own box.**
+Rasterised at 40x on a transparent ground and **weighted by alpha**, the chevron's
+ink centroid sits at **x 6.666 of a 14-wide box**, not at 7.
+
+**The bounding box was no use here and that is the whole reason the brief asked for
+a centroid.** The ink's bounding box measures 1.75 to 12.25, whose centre is exactly
+7.0. By that test the glyph is already perfect. It is not: the two round caps at the
+open end carry more ink than the single round join at the apex, and the mass sits
+0.334px left of centre.
+
+**So each state takes its own number, and both are leftward:**
+
+| state | apex | ink centroid on screen | cavity centre | nudge |
+|---|---|---|---|---|
+| closed | right | 529.666 | 529 | **−0.67px** |
+| open | left | 530.334 | 529 | **−1.33px** |
+
+**BOTH FALL BELOW THE "PIXEL OR FOUR" DANN GUESSED, and they are reported rather
+than rounded up to meet it.** The honest constant term is 1px; the honest total is
+0.67 in one state and 1.33 in the other.
+
+**The translate comes BEFORE the scale**, so it applies in the parent frame.
+Written the other way round it would mirror with the glyph and push the open state
+0.67px to the right, which is the wrong direction. Both rules already existed to
+carry the flip, so each took its own number and no new machinery entered.
+
+### 12.3 Verified end to end
+
+**The rendered ink centroid was measured again after the change**, by screenshotting
+the handle at 8x and taking the darkness-weighted centroid of the glyph, not by
+trusting the CSS:
+
+| state | target | rendered ink centroid | error |
+|---|---|---|---|
+| open | 529.000 | **528.984** | −0.016px |
+| closed | 9.000 | **9.001** | +0.001px |
+
+Closed, the drawer's width is 0, so its face is at x 0, the handle spans 0 to 20,
+and the cavity is 0 to 18 with its centre at 9.
+
+Colour verified as `rgb(74, 69, 64)` in both states, which is `#4a4540`. Transforms
+verified as `matrix(-1, 0, 0, 1, -1.33, 0)` open and `matrix(1, 0, 0, 1, -0.67, 0)`
+closed.
+
+### 12.4 The phone, and a residual I did not chase
+
+**The numbers come from the desktop silhouette's cavity, and the phone's painted tab
+has a different one.** There the tab keeps its 1px border on the right and none on
+the left, so its cavity is x 0 to 19 and its centre is 9.5 against a box centre of
+10. **The ideal nudge there is −0.166px and the applied one is −0.67px, leaving
+0.504px.**
+
+**Not corrected, and stated as a decision.** Half a pixel on a 20px control is
+smaller than the 0.834px error the nudge removes on the desktop, and a
+phone-specific pair of values would be two more rules carrying two more numbers for
+something below the threshold of the thing being fixed.
+
+### 12.5 Gates
+
+| gate | baseline | this run |
+|---|---|---|
+| phonology | 216 | **216 passed (216)** |
+| dictionary | 235 | **235 passed (235)** |
+| web-check | 0 errors, 7 warnings, 4 files | **0 errors and 7 warnings in 4 files** |
+| web-test | 682 | **682 passed (682)** |
+| score-parser | 444 passed, 5 skipped | **444 passed, 5 skipped (449)** |
+
+**Nothing moved.**
+
+### 12.6 NOT ESTABLISHED
+
+1. **Whether `#4a4540` is the grey he meant.** §12.1 has all five candidates with
+   their contrast. Settled by his walk.
+2. **Whether 0.67 and 1.33 read as centred to his eye.** They are centred to the
+   measurement. Optical centring and centroid centring are not the same claim, and
+   only he can close the gap. Settled by his walk.
+3. **The phone's 0.504px residual.** §12.4. Settled by him, if he sees it.
 
 ---
 *Written by Code, 2026-08-20 late. Every measurement in this memo was taken in a

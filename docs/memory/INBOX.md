@@ -23,3 +23,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 2026-08-20: Soften the sage and lavender borders on the drawer input fields; keep the semantics, ask for a lighter shade of each (Dann, N.73 S3 walk).
 2026-08-20: Make the placeholder text in the drawer input fields formatted consistently; they must match each other (Dann, N.73 S3 walk).
 2026-08-20: A hamburger menu beside the sigil for singers who prefer that navigation: Drawer, Transcribe, Score Markup, Learn, Guide, Voice profile, Eng/Fr (Dann, N.65 walk). His own question: is this too much?
+2026-08-20: The word "Français" sits inside an English document at HeaderBar.svelte:58 with no lang attribute on it, so a screen reader pronounces it with English phonetics. WCAG language-of-parts. Applies whichever language-toggle pattern is chosen (Dann, N.65 walk).

@@ -1051,18 +1051,60 @@
 	.lip-chevron {
 		width: 14px;
 		height: 20px;
-		color: var(--ink-primary, #1a1612);
+		/* DARK GREY, NOT BLACK. Dann's ruling, 2026-08-20, on his walk of
+		   `1f201f2`. It was `--ink-primary` #1a1612, which measures 16.97:1 on
+		   the handle's #FAF8F5 fill and reads as black.
+
+		   `--ink-secondary` #4a4540 at 8.94:1, and the choice is about FAMILY
+		   as much as value. This drawer spends the ink scale on glyphs and
+		   type and the stone scale on borders and chrome, and a chevron is a
+		   glyph. `--stone-700` #44403c measures almost the same, 9.69:1, and
+		   is the wrong family. `--ink-tertiary` #6A655F at 5.44:1 is the
+		   placeholder and caption register, which would make a live control
+		   read as a disabled one. The memo carries all five candidates so
+		   Dann can rule again by looking. */
+		color: var(--ink-secondary, #4a4540);
 		/* Drawn pointing right, which is the direction a CLOSED drawer will
 		   move. Open, it flips to point the way out. */
 		transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
+	/* ── The optical nudge (N.65), and it is measured rather than judged ──
+	   Dann, 2026-08-20: "maybe it can be nudged to the left a pixel or four
+	   to give it more optical centring in the paper handle."
+
+	   TWO ERRORS, MEASURED SEPARATELY, and only one of them is constant.
+
+	   ONE: the glyph's box is centred in the BUTTON, and the button is not
+	   the handle. The button spans the whole 20px protrusion, 520 to 540 on
+	   the desk, so its centre is 530. The handle's ink-bounded interior runs
+	   from the drawer's face at 520 to the inner face of the outer wall at
+	   538, so its centre is 529. That is a constant 1px of error and it does
+	   not flip.
+
+	   TWO: the ink is not centred in its own box. Rasterised at 40x on a
+	   transparent ground and weighted BY ALPHA, the chevron's ink centroid
+	   sits at x 6.666 of a 14-wide box, not at 7. Its BOUNDING box is exactly
+	   centred, 1.75 to 12.25, which is why this needed a centroid and not a
+	   box: the two round caps at the open end outweigh the single round join
+	   at the apex. That 0.334px REVERSES when the glyph flips.
+
+	   So each state takes its own number, and both are leftward:
+	     closed, apex right, ink at 529.666 -> 529 is -0.67px
+	     open,   apex left,  ink at 530.334 -> 529 is -1.33px
+
+	   THE TRANSLATE COMES BEFORE THE SCALE so it applies in the PARENT frame.
+	   Written the other way round it would mirror with the glyph and push the
+	   open state to the right, which is the wrong direction.
+
+	   BOTH NUMBERS FALL BELOW the "pixel or four" Dann guessed, and they are
+	   reported rather than rounded up to meet it. */
 	.drawer:not(.collapsed) .lip-chevron {
-		transform: scaleX(-1);
+		transform: translateX(-1.33px) scaleX(-1);
 	}
 
 	.drawer.collapsed .lip-chevron {
-		transform: scaleX(1);
+		transform: translateX(-0.67px) scaleX(1);
 	}
 
 	/* ── Placeholder panels ─────────────────────────────── */
