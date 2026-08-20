@@ -90,6 +90,24 @@ against and lost, which Fable had ruled on, and which was waiting on a
 ratification Dann had never been asked for again. The document existed
 specifically to stop that from happening.
 
+### 17. NEW, 2026-08-20, ruled by Dann. A RULING IS A SOURCE, NOT LAW. CHECK WHAT AMENDED IT.
+
+Tether 16 sends you to search before you form an opinion. This is its other
+half: **when the search returns an old ruling, find what has amended it before
+you quote it.**
+
+Dann's words, 2026-08-20: *"That ruling was three weeks ago and a lot has
+changed since then. Leave room to be malleable."*
+
+**What it cost the same evening:** the desk quoted E.27 §3.3 to him as binding
+specification for the drawer's stations. Three of its parts were already
+superseded, two of them by Fable overturning itself in E.44 and one by Dann's
+own ratification on 2026-08-19. The desk had read both amending documents in
+the same session and still cited the original as current.
+
+**So: date every ruling you quote, say how old it is, and name what has touched
+it since. A ruling nothing has amended is worth more than one nobody checked.**
+
 ### 15. NEW, 2026-08-13. Reason in the domain, not in the proxy.
 
 A tag count is not a reading of a score. A grep hit is not a reading of code.

@@ -157,11 +157,27 @@ on the same three.
   goes NEXT, ahead of the chapter bands.** Dann asked for "a cohesive,
   attractive, sensible organization for the Drawer" after finding uneven header
   padding and a double line under NOTATION.
-  **NO DESIGN COMMISSION. NO FABLE COMMISSION.** Everything he ruled is already
-  specified in `claude/fable-ruling-e27-four-tab-consolidation_2026-08-05.md`,
-  read in full 2026-08-20, and has been unbuilt for fifteen days. This is the
-  same pattern as the voice line: the spec was there, the plan assumed it was
-  not, and nobody looked.
+  **NO COMMISSION YET.** The mechanism he ruled is described in
+  `claude/fable-ruling-e27-four-tab-consolidation_2026-08-05.md`, read in full
+  2026-08-20, and has been unbuilt for fifteen days. Same pattern as the voice
+  line: the description was there and nobody looked.
+
+  **BUT E.27 IS A SOURCE, NOT LAW, AND DANN RULED IT SO ON 2026-08-20:** "That
+  ruling was three weeks ago and a lot has changed since then. Leave room to be
+  malleable." **The coordinating desk quoted §3.3 as binding and was wrong to.**
+  Three of its parts are already superseded:
+  - **§3.2, the continuous three-sheet packet page**, overturned by Fable
+    explicitly in E.44 §PERSPECTIVE.
+  - **§3.3's inspector takeover**, overturned in the same document: the
+    Inspector is resident in Analysis and calibration is the only takeover.
+  - **§3.3's five scrolling stations**, superseded by E.36 §1.4 and ratified by
+    Dann on 2026-08-19: Piece and NOTATION are pinned anchors, the voice is a
+    pinned anchor, and only Source, Analysis, and Output scroll.
+
+  **What survives of E.27 unamended, and it is only this:** "one mechanism for
+  structure, one for asides" (§3.3), the closed-header status line (§3.6), and
+  the per-device persistence of the open set (§3.4). **Build against those and
+  treat the rest as history.**
 
   **Dann's four rulings, 2026-08-20:**
   1. **Every header retracts its section on click.** This is E.27 §3.3
