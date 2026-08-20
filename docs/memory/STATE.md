@@ -57,8 +57,11 @@ any of them count.
 > Output. Print stays in the Clear-Print-Transcribe grid; the brief says why.
 > **After S3: S4 is absorbed.** Ship one built the calibration takeover.
 > **The build order from here, RESEQUENCED by Dann's ruling 2026-08-20:**
-> S3 ship two, then **the chapter bands for Learn and Guide**, then S5 (the
-> wall re-plumb), S6 (consequences), then the rest of the aesthetic layer.
+> **S3 ship two is SHIPPED in `af995a9` and part-walked.** From here:
+> **the drawer's stations** (Dann's four rulings of 2026-08-20 late, which are
+> E.27 §3.3 arriving fifteen days late), then **the chapter bands for Learn
+> and Guide**, then S5 (the wall re-plumb), S6 (consequences), then the rest
+> of the aesthetic layer.
 > The bands moved ahead of S5 and S6 because those two are Studio's business
 > and touch neither reading room.
 > **The governing documents, all current:** the census
@@ -150,6 +153,62 @@ on the same three.
   "Please name your profile so we can map your voice..." still opens the
   ritual, and `fable-gui-audit-and-spec_r1_2026-08-18.md:44` says "Please"
   breaks the house style Dann ruled on 2026-08-18. **Dann writes copy.**
+- **THE DRAWER'S STATIONS. RULED by Dann 2026-08-20 late, NOT STARTED, and it
+  goes NEXT, ahead of the chapter bands.** Dann asked for "a cohesive,
+  attractive, sensible organization for the Drawer" after finding uneven header
+  padding and a double line under NOTATION.
+  **NO DESIGN COMMISSION. NO FABLE COMMISSION.** Everything he ruled is already
+  specified in `claude/fable-ruling-e27-four-tab-consolidation_2026-08-05.md`,
+  read in full 2026-08-20, and has been unbuilt for fifteen days. This is the
+  same pattern as the voice line: the spec was there, the plan assumed it was
+  not, and nobody looked.
+
+  **Dann's four rulings, 2026-08-20:**
+  1. **Every header retracts its section on click.** This is E.27 §3.3
+     arriving: "The stations use the existing table-of-contents accordion
+     mechanism, allow-list extended."
+  2. **One consistent relationship between a header and its first section
+     entry.** NOT in E.27. A spacing value, mechanical once chosen.
+  3. **Horizontal dividers need a semantic function or they go.** E.27 §3.3
+     specifies exactly two mechanisms, "one for structure, one for asides": the
+     accordion, and the native disclosure element for micro-help. **A divider
+     is neither, so by Dann's rule it goes.**
+  4. **Source needs a label.** E.27 §3.3 station 2 already names it. Spec §3.3
+     first bullet, "no orphan controls," is violated today by the textarea and
+     the drop zone sitting bare.
+
+  **NOT GRANTED, and the build must not assume it: phone exclusivity.** E.27
+  §3.4 rules "Desktop: any number of stations open at once. Phone: exactly one
+  open at a time." Opus flagged that on 2026-08-05 as a second override of
+  Dann's standing "we leave this to the user," which Fable did not name as an
+  override. **Dann has been asked and has not answered, twice. His standing
+  rule governs: any number open, on both displays.** The override stays
+  unbuilt and reversible.
+
+  **The defects this closes, all measured 2026-08-20:**
+  - **`.section-label` is declared five times**, in `RootPanel`,
+    `MetadataFields`, `NotationFields`, `SongList`, and `Drawer`, because
+    Svelte scopes styles per component. `SongList.svelte:177` admits it in its
+    own comment. **That is the uneven padding, and it has no owner.**
+  - **The double line under NOTATION is a seam**, not a decision: NOTATION is
+    a pinned anchor whose wrapper draws a boundary AND a station that draws its
+    own.
+  - **Source is unlabelled.**
+
+  **NOT BUILT AND STILL OWED, E.27 §3.6:** "Every closed station header carries
+  a right-aligned quiet status that does the wayfinding: Notation 'defaults,'
+  Voice 'no profile yet,' Output 'nothing to print yet.'" **Dann writes copy.**
+
+  **THE COST WAS PRICED ON 2026-08-05 AND IT IS NOT SMALL.** Opus's correction
+  §1 item 1: retiring the other collapse mechanisms "means reworking the
+  profile switcher's mode enum, the wizard's hoisted collapse boolean, the
+  uploader's local boolean, and the searchable select. **Four components, not
+  a configuration change.**"
+
+  **Sequenced ahead of the chapter bands by the coordinating desk**, because a
+  singer touches the drawer every session and a chapter band is an arrival
+  decoration. Dann may reverse it.
+
 - **THE CHAPTER BANDS FOR LEARN AND GUIDE. RULED by Dann 2026-08-20,
   RESEQUENCED, not started.** Drawn in full at
   `docs/sessions/fable-gui-mockup_r2_2026-08-18.html`, Exhibit 2. One band
@@ -229,13 +288,26 @@ on the same three.
   content and the pull, and every horizontal rule in the drawer stops short of
   the edge because of it. **The rules under NOTATION and above the voice line
   make it visible**, which is how Dann found it.
-  **The cause, not yet measured but named:** `.drawer-body` carries
-  `padding-right: 44px` under `@media (max-width: 767px)`, whose only job is to
-  keep content out from under the pull. That reserve was set when the pull was
-  wider. Dann's ruling of 2026-08-19 made the pull a bare chevron and thinner,
-  and nobody re-measured the reserve.
-  **The fix is to stop reserving it, not to fill it:** measure the pull's real
-  width, cut the reserve to that plus a margin, and let the rules run to it.
+  **CORRECTED 2026-08-20 BY MEASUREMENT. THE COORDINATING DESK'S CAUSE WAS
+  FALSE AND NOTHING WAS CUT.** The desk claimed the 44 px reserve was stale,
+  set when the pull was wider, and left behind by Dann's 2026-08-19 ruling. The
+  tree says otherwise and the tree wins. **The reserve has never measured the
+  pull's paint. It measures the pull's touch target, was set to it at N.73 S1b,
+  and the rule says so in its own words at `Drawer.svelte`, in the mobile
+  block.** The pull paints 20 px and its coarse-pointer target measures 44 px;
+  `elementFromPoint` confirms the pull owns the drawer's rightmost 44 px across
+  its band and zero anywhere else. **A 24 px reserve would put 20 px of content
+  under the pull.** The reserve is correct to the pixel.
+  **The desk did state this failure mode before the measurement**, in these
+  words: "if it measures near 44, my diagnosis is wrong and the corridor is a
+  real space, which is when Design becomes worth asking." It measured 44.
+  **What is true, and it is a real cost:** the reserve spends 44 px of the
+  drawer's FULL height to protect an 88 px band. **Exempting the anchors is not
+  safe either, and that is measured rather than reasoned:** at 360 x 640 the
+  NOTATION disclosure button falls inside the band and would lose its right
+  28 px.
+  **CLOSING THE CORRIDOR IS THEREFORE A RULING, NOT A MEASUREMENT**, and by the
+  desk's own stated condition it is now the thing worth putting to Design.
   **Dann proposed filling it instead**, with vertical lines from the pull to
   the top and bottom margins, to read as a file folder's spine. **The
   coordinating desk argued against and Dann did not overrule.** The grounds:
