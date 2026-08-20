@@ -1435,6 +1435,24 @@ build, because it is the thing that runs the five gates first.
 corrections missed their commit by seconds because the desk offered a commit
 line while it was still editing the file.
 
+**ONE BRIEF AT A TIME. NEVER HAND CODE A SECOND BRIEF WHILE THE FIRST IS
+UNSHIPPED. 2026-08-20.** The desk wrote the watermark brief while Code's walk
+pass was built but not yet shipped, and Dann issued it. Two builds then shared
+one working tree: the finished walk and a half-written watermark. The ship
+script refused, but only because the new brief file was untracked, and the
+untracked-file guard is not what would have caught the real problem. **Had it
+run, it would have committed a half-finished watermark alongside a finished
+walk.**
+
+**The sequence is: brief, build, gate, ship, walk, THEN the next brief.** A
+brief written early is fine; handing it over early is not. Hold it until the
+deploy is walked.
+
+**And ask Dann to `git add` a new brief the moment you write it into the
+repository.** The desk wrote this one to disk and asked him to ship without
+adding it, which is the exact failure the ship script's untracked guard exists
+to catch, and it caught it.
+
 **AND NEVER PUT A PLACEHOLDER INSIDE A FENCED BLOCK.** The contract says a
 fenced block means "paste this into the terminal." The desk wrote the rule above
 into a fenced block with a literal `-m "..."` in it, Dann pasted it as given,

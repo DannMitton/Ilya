@@ -309,13 +309,18 @@
 		z-index: 200;
 	}
 
+	/* 0.8rem, not the 0.78rem this declared until 2026-08-20. Measured, that
+	   rendered its placeholder at 12.48px beside every other placeholder in
+	   the drawer at 12.8px: a third size, for no reason anyone recorded.
+	   `.custom-option` below keeps its own 0.78rem; it is a dropdown row, not
+	   a placeholder-bearing field. */
 	.select-search {
 		width: 100%;
 		padding: 0.5rem;
 		border: none;
 		border-bottom: 1px solid var(--stone-300);
 		font-family: var(--font-sans);
-		font-size: 0.78rem;
+		font-size: 0.8rem;
 		color: var(--ink-primary);
 		background: transparent;
 	}

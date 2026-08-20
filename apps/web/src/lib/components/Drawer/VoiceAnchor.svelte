@@ -60,10 +60,13 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		/* The mockup's 9px 12px. The side padding is 1rem here, matching
-		   .root-panel, .shane-panel and .drawer-anchor, so this line keeps the
-		   same left edge as everything above it. */
-		padding: 9px 1rem;
+		/* The mockup's 9px 12px, with 9px kept and the sides given up.
+		   N.65 ship one, Dann's walk: `.drawer-anchor-bottom` carries the
+		   1rem now, as a MARGIN, so the shelf's rule is inset like every
+		   other station rule instead of running full bleed. This line keeps
+		   the same left edge it always had; the 1rem just belongs to the
+		   shelf rather than to the line. */
+		padding: 9px 0;
 	}
 
 	.voice-dot {

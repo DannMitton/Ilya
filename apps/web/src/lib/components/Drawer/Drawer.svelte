@@ -597,7 +597,13 @@
 		background: var(--drawer-bg);
 		display: flex;
 		flex-direction: column;
-		border-right: 2px double var(--ink-primary, #1a1612);
+		/* THE LAST `2px double` IS GONE, ruled by Dann 2026-08-20 on his walk
+		   of `f59f7d2`. The desk argued this one could stay because it is a
+		   vertical spine rather than a horizontal rule. HIS ANSWER, AND HE IS
+		   RIGHT: that is a distinction in the stylesheet and not in anyone's
+		   eye. It is the same mark. One boundary treatment means one mark,
+		   everywhere, whichever way it runs. */
+		border-right: 2px solid var(--sage);
 	}
 
 
@@ -668,7 +674,18 @@
 		   padding here would land on top of that and make these two the only
 		   stations spaced differently, which is the defect. */
 		gap: 0;
-		padding: 0 1rem;
+		/* SIDE MARGIN, NOT SIDE PADDING, and that is what insets the rule.
+		   Ruled by Dann 2026-08-20: the line above SOURCE ran full bleed to
+		   the left margin while NOTATION's started 1rem in, and every station
+		   rule must share one inset. A border draws on the border box, so
+		   1rem of PADDING sits inside it and the rule spans the whole drawer;
+		   1rem of MARGIN sits outside it and the rule starts where the
+		   content starts. Every station rule in RootPanel.svelte is already
+		   inset, because those boxes sit inside `.root-panel`'s own 1rem.
+		   This is the same 1rem, moved to the other side of the border.
+		   Twinned on `.drawer-anchor-bottom` and `.takeover-head`. */
+		padding: 0;
+		margin: 0 1rem;
 		border-bottom: 2px solid var(--sage);
 	}
 
@@ -676,7 +693,12 @@
 	   so this shelf adds none: two paddings would meet in the middle of one
 	   line. */
 	.drawer-anchor-bottom {
+		/* The 1rem came here from `VoiceAnchor`'s own `.voice-line`, so this
+		   rule is inset like every other. Same device as
+		   `.drawer-anchor-top`: margin outside the border, not padding
+		   inside it. The voice line keeps its 9px above and below. */
 		padding: 0;
+		margin: 0 1rem;
 		border-top: 2px solid var(--sage);
 	}
 
@@ -695,7 +717,10 @@
 
 	.takeover-head {
 		flex-shrink: 0;
-		padding: 6px 1rem;
+		/* Its 1rem moved outside the border too, so the takeover's one rule
+		   is inset like every other. See `.drawer-anchor-top`. */
+		padding: 6px 0;
+		margin: 0 1rem;
 		border-bottom: 2px solid var(--sage);
 	}
 

@@ -4,6 +4,7 @@
 	import { t, type Language } from '$lib/i18n';
 import SongList from './SongList.svelte';
 import StationHeader from './StationHeader.svelte';
+import IntakeWatermark from './IntakeWatermark.svelte';
 import type { SongRow } from '$lib/library/songs';
 
 	interface Props {
@@ -195,6 +196,17 @@ import type { SongRow } from '$lib/library/songs';
 		<StationHeader label={t('source.heading', language)} />
 		<div class="station-body">
 	<div class="textarea-wrapper">
+		<!-- THE TEXT WATERMARK (N.65). Empty field only, which is Dann's own
+		     ruling: it never sits under a pasted poem. `inputText` is the
+		     source of truth for the field's value, so the mark leaves the
+		     instant anything is typed and returns when Clear empties it. It is
+		     BEHIND the placeholder by stacking, not by luck: the textarea is
+		     transparent with `z-index: 1` and this wrapper holds the white
+		     fill, so the placeholder always paints over the mark even if a
+		     singer drags the field short enough for the two to meet. -->
+		{#if inputText === ''}
+			<IntakeWatermark word={t('input.watermark', language)} colour="var(--light-sage)" />
+		{/if}
 		<textarea
 			class="text-input"
 			placeholder={t('input.placeholder', language)}
@@ -282,66 +294,6 @@ import type { SongRow } from '$lib/library/songs';
 		</div>
 	</div>
 
-	<!-- ── ANALYSIS. N.73 S3 ship two moved this block ABOVE Output ──
-	     The spec rules the scroll's order Source, Analysis, Output
-	     (`fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, §3.3, "Station
-	     order is invariant across documents... A singer's hand learns one
-	     map"), and the ratified mockup draws the same four stations in the
-	     same order (`fable-gui-mockup_r1_2026-08-18.html:313-329`). The tree
-	     drew Output first. This block moved; nothing inside it changed.
-
-	     It sits directly under the result summary, which is where the mockup
-	     puts the words-and-milliseconds line: inside Analysis, beside "select
-	     a word to inspect it". The summary itself did NOT move, so the two are
-	     adjacent rather than merged. Merging them is a station boundary nobody
-	     has ruled. -->
-	<div class="section console-section">
-		<StationHeader label={t('console.placeholder', language)} />
-		<div class="station-body">
-		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
-		     is a decision the brief did not rule. It described the
-		     transcription's word count and milliseconds from a position
-		     between two stations, and Source's new boundary leaves it nowhere
-		     to stand. The ratified r1 mockup draws it inside Analysis, beside
-		     "select a word to inspect it"
-		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
-		     reports is a reading of the text rather than an act on it. Its
-		     `margin-top: -4px` went with the move: that value tightened it
-		     against the uploader above, which is no longer above it. -->
-		<p class="result-summary" class:result-hidden={!hasResults}>
-			{#if hasResults}
-				{wordCount} {t('result.words', language)} {transcribeMs}ms
-			{:else}
-				&nbsp;
-			{/if}
-		</p>
-		{#if showInspector && consoleContent}
-			{@render consoleContent()}
-		{:else}
-			<div class="console-placeholder-body">
-				{#if loaderState.isLoading}
-					<div class="dict-progress">
-						<span class="dict-progress-text">{t('dict.loading', language)}</span>
-						<div class="dict-progress-track">
-							{#if loaderState.progress >= 0}
-								<div
-									class="dict-progress-fill"
-									style="width: {Math.round(loaderState.progress * 100)}%"
-								></div>
-							{:else}
-								<div class="dict-progress-fill indeterminate"></div>
-							{/if}
-						</div>
-					</div>
-				{:else}
-					<p class="placeholder-hint">
-						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
-					</p>
-				{/if}
-			</div>
-		{/if}
-		</div>
-	</div>
 	<!-- ── OUTPUT. Print, Export, Import. N.65 ship one ──────────────
 	     Print came DOWN from the Clear-Print-Transcribe grid and joined the
 	     two binder controls, per Dann's ruling 7 of 2026-08-20. All three
@@ -398,6 +350,76 @@ import type { SongRow } from '$lib/library/songs';
 			onrename={songLibrary.onrename}
 			ondelete={songLibrary.ondelete}
 		/>
+	</div>
+	<!-- ── ANALYSIS. LAST IN THE SCROLL. RULED BY DANN 2026-08-20 on his
+	     walk of `f59f7d2`, and it reverses the order N.73 S3 ship two
+	     shipped, knowingly.
+
+	     Ship two put Analysis above Output on the spec's station order
+	     (`fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, §3.3) and the
+	     ratified mockup's four stations
+	     (`fable-gui-mockup_r1_2026-08-18.html:313-329`). BOTH WERE WRITTEN
+	     BEFORE THE ANCHORS EXISTED, so neither weighed a 365px Inspector
+	     against a pinned drawer, and Dann overturned them on what the drawer
+	     actually became.
+
+	     HIS ARRANGEMENT, in his terms: the song comes in and goes out at the
+	     top, Source then Output then Songs; the performance sits together at
+	     the bottom, Analysis then the score work; and Print stops being
+	     stranded across 365px of empty Analysis from the fields it belongs
+	     with. The order is now Source, Output, Songs, Analysis, then
+	     shanePanel's score work and notices, with the voice anchor pinned
+	     below all of it.
+
+	     Nothing inside this block changed. The result summary is still its
+	     first entry rather than merged into the header; merging them is a
+	     station boundary nobody has ruled. -->
+	<div class="section console-section">
+		<StationHeader label={t('console.placeholder', language)} />
+		<div class="station-body">
+		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
+		     is a decision the brief did not rule. It described the
+		     transcription's word count and milliseconds from a position
+		     between two stations, and Source's new boundary leaves it nowhere
+		     to stand. The ratified r1 mockup draws it inside Analysis, beside
+		     "select a word to inspect it"
+		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
+		     reports is a reading of the text rather than an act on it. Its
+		     `margin-top: -4px` went with the move: that value tightened it
+		     against the uploader above, which is no longer above it. -->
+		<p class="result-summary" class:result-hidden={!hasResults}>
+			{#if hasResults}
+				{wordCount} {t('result.words', language)} {transcribeMs}ms
+			{:else}
+				&nbsp;
+			{/if}
+		</p>
+		{#if showInspector && consoleContent}
+			{@render consoleContent()}
+		{:else}
+			<div class="console-placeholder-body">
+				{#if loaderState.isLoading}
+					<div class="dict-progress">
+						<span class="dict-progress-text">{t('dict.loading', language)}</span>
+						<div class="dict-progress-track">
+							{#if loaderState.progress >= 0}
+								<div
+									class="dict-progress-fill"
+									style="width: {Math.round(loaderState.progress * 100)}%"
+								></div>
+							{:else}
+								<div class="dict-progress-fill indeterminate"></div>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					<p class="placeholder-hint">
+						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
+					</p>
+				{/if}
+			</div>
+		{/if}
+		</div>
 	</div>
 
 
@@ -487,8 +509,19 @@ import type { SongRow } from '$lib/library/songs';
 	   SOURCE's header, where 8px would add to the header's own 0.4rem and
 	   break ruling 2. `ScoreUploader`'s `.uploader` keeps its matching 8px:
 	   it is not first under a header. */
+	/* THE WHITE FILL LIVES HERE NOW, not on the textarea, and that is what
+	   lets the watermark sit BEHIND the placeholder instead of merely beside
+	   it. A `::placeholder` is part of the textarea, so a mark can only get
+	   under it by getting under the textarea, and a mark under an opaque
+	   textarea is a mark nobody sees. The fill moved up one box; the field
+	   looks identical.
+
+	   The radius is the textarea's own 4px, repeated here so the white does
+	   not square off the corners the border rounds. */
 	.textarea-wrapper {
 		position: relative;
+		background: white;
+		border-radius: 4px;
 	}
 
 	/* THE BORDER IS 1px, AND THE WEIGHT CHANGE IS NOT RULED. Brief §3.6
@@ -507,7 +540,19 @@ import type { SongRow } from '$lib/library/songs';
 		font-family: var(--font-serif);
 		font-size: 0.9rem;
 		color: var(--ink-primary);
-		background: white;
+		/* TRANSPARENT, with the white on `.textarea-wrapper`. See that rule. */
+		background: transparent;
+		/* `display: block` because the default `inline-block` put the textarea
+		   on a text baseline, which left a 7px strip of wrapper below it,
+		   MEASURED on the desk before this change: wrapper 154.47px tall
+		   against the textarea's 147.47px. That strip was invisible while the
+		   wrapper had no background and would be a white shelf under the field
+		   now that it has one. It was never a designed gap. */
+		display: block;
+		/* Above the watermark, so the placeholder and any typed poem paint over
+		   it rather than under it. */
+		position: relative;
+		z-index: 1;
 		border: 1px solid var(--sage);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
@@ -531,6 +576,23 @@ import type { SongRow } from '$lib/library/songs';
 	   voice. Italic is the paper's mannerism. */
 	.text-input::placeholder {
 		color: var(--ink-tertiary);
+		/* THE FAMILY AND THE SIZE, not just the italic. Measured 2026-08-20
+		   before this change: every other placeholder in the drawer rendered
+		   Source Sans 3 at 12.8px and this one rendered Source Serif 4 at
+		   14.4px, because a `::placeholder` inherits the control's own font
+		   and the control is deliberately serif for the poem it holds. The
+		   italic that two earlier passes deleted was the smallest of the
+		   three differences and never the one Dann was pointing at.
+
+		   Brief §3.6 already ruled the principle: "The placeholder is
+		   instruction, so it belongs to the Instrument voice." Instruction is
+		   sans at the field size. The BODY stays `var(--font-serif)` at
+		   0.9rem, which the same section rules is not a defect.
+
+		   On a coarse pointer `app.css`'s N.23 block raises this to 16px with
+		   every other placeholder, so the two displays each show one size. */
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
 	}
 
 	.text-input:disabled {
@@ -704,7 +766,18 @@ import type { SongRow } from '$lib/library/songs';
 	   rule now, so Analysis's bottom rule is gone rather than doubled. */
 	.section {
 		border-top: 2px solid var(--sage);
-		padding: 6px 0;
+		/* 6px above the label, 12px below the body, RULED BY DANN on his walk
+		   of `f59f7d2`: the Clear-and-Transcribe row read "cramped" against
+		   the rule beneath it. 12px is the step this drawer already used
+		   between stations before this ship folded it into the recipe, so no
+		   new value enters the scale.
+
+		   THE ASYMMETRY IS THE POINT and it is applied to every station, not
+		   to Source alone. A label belongs to the rule above it, so it stays
+		   close. A body has finished saying its piece, so it gets air before
+		   the next rule. Spending 12px on both would push the label away from
+		   the line that names it. */
+		padding: 6px 0 12px;
 	}
 
 	/* Source is first in the scroll and draws NO rule of its own. The top

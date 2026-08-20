@@ -47,6 +47,14 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Input area ───────────────────────────────────────────
 	'input.placeholder':           { en: 'Paste Russian text here\u2026',       fr: 'Collez le texte russe ici\u2026' },
+	// THE INTAKE WATERMARK (N.65), Dann's ruling 2026-08-20. The large word
+	// centred inside the field, in ADDITION to the placeholder above. Keyed by
+	// SURFACE like everything else in this file, so the textarea's word sits
+	// with `input.*` and the drop zone's with `upload.*`, rather than in a new
+	// `watermark.*` namespace that would split one field's strings across two
+	// places.
+	// « texte » is the coordinating desk's proposal and Dann has seen it.
+	'input.watermark':             { en: 'text',                         fr: 'texte' },
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },
 	'input.transcribe':            { en: 'Transcribe',                   fr: 'Transcrire' },
 	'input.transcribeLoading':     { en: 'Loading dictionary\u2026',     fr: 'Chargement du dictionnaire\u2026' },
@@ -278,6 +286,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
 	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, a photograph', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
+	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
+	// translation this desk chose, and no other French ships for it.
+	'upload.watermark':            { en: 'score',                        fr: 'partition' },
 	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },

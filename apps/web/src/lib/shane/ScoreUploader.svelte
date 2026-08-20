@@ -20,6 +20,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import IntakeWatermark from '$lib/components/Drawer/IntakeWatermark.svelte';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
 	import { WorkerPageReader } from './engine/page-reader';
@@ -504,6 +505,15 @@
 				ondragleave={onDragLeave}
 				ondrop={onDrop}
 			>
+				<!-- THE SCORE WATERMARK (N.65). This branch IS the empty state:
+				     the drop zone only renders while `ui.kind === 'idle'`, so
+				     the mark leaves when a score arrives and returns on reset,
+				     with no predicate of its own. It stays through `dragging`,
+				     because a field being dragged over is still empty.
+				     BEHIND the three lines below by stacking: they take
+				     `z-index: 1` and this takes the default, so it paints over
+				     the white fill and under every word. -->
+				<IntakeWatermark word={T('upload.watermark')} colour="var(--light-lavender)" />
 				{#if dragging}
 					<p class="dz-title">{T('upload.drop.release')}</p>
 				{:else}
@@ -687,6 +697,9 @@
 	/* ── Dropzone ──────────────────────────────────────────── */
 
 	.dropzone {
+		/* The watermark's containing block. Nothing else about this box
+		   changed; it was `static`. */
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -758,6 +771,18 @@
 	.scan-btn:hover {
 		opacity: 0.7;
 		color: var(--deeper-lavender);
+	}
+
+	/* The drop zone's own three lines sit ABOVE the watermark. Positioned, so
+	   they win the paint order against an absolutely positioned sibling; the
+	   watermark still paints over the white fill beneath them. `z-index: 1` on
+	   the text rather than a negative index on the mark, because a negative
+	   index would put the mark behind this box's own background and hide it. */
+	.dz-title,
+	.dz-browse,
+	.dz-accepted {
+		position: relative;
+		z-index: 1;
 	}
 
 	.dz-title {

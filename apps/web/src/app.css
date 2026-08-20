@@ -296,7 +296,30 @@ body {
 @media (pointer: coarse) {
 	input,
 	select,
-	textarea {
+	textarea,
+	/* N.65 ship one, 2026-08-20. `.select-trigger` is a BUTTON, so it never
+	   matched the three element selectors above, and the three searchable
+	   selects stayed at their declared 0.8rem while the two plain metadata
+	   inputs beside them jumped to 16px. MEASURED on a 375x667 touch
+	   viewport: title and opus at 16px, composer, poet, and translator at
+	   12.8px. That is the two sizes among five fields Dann reported from his
+	   phone, three times, and neither the italic nor the colour was ever the
+	   cause.
+
+	   A button cannot take Safari's focus zoom, so it does not need the
+	   16px for N.23's own reason. It takes it to stand beside its siblings:
+	   these five are one row of fields and a singer reads them together. */
+	.select-trigger {
+		font-size: max(1rem, 16px) !important;
+	}
+
+	/* A `::placeholder` inherits its control's size, so the rule above
+	   already carries every placeholder that declares none. `.text-input`'s
+	   declares 0.8rem, to leave the poem's serif body behind and join the
+	   Instrument voice, so it needs saying again here or the textarea would
+	   be the one field whose placeholder stayed small on the phone. */
+	input::placeholder,
+	textarea::placeholder {
 		font-size: max(1rem, 16px) !important;
 	}
 }
