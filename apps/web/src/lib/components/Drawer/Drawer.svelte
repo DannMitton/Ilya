@@ -147,8 +147,15 @@
 			aria-labelledby="tab-{activeTab}"
 			bind:this={drawerContentEl}
 		>
-				{#if activeTab === 'transcription'}
+				<!-- N.73 S2. ONE Studio drawer. Both panels render, always, in this
+				     order, on both of Studio's documents, so nothing in the drawer
+				     appears, disappears, or moves when the singer flips the pair.
+				     Their own {#if} guards still suppress score-only content, and
+				     shanePanel carries its own INCLUDE_SHANE gate. Learn and Guide
+				     are untouched. -->
+				{#if activeTab === 'transcription' || activeTab === 'shane'}
 					{@render rootPanel()}
+					{@render shanePanel?.()}
 				{:else if activeTab === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
 						<h2 class="section-label section-label-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
@@ -406,8 +413,6 @@
 							<li><button class="toc-link" class:active={isActive('guide-licences')} data-heading-id="guide-licences" onclick={() => handleTocClick('guide-licences')}>{language === 'fr' ? 'Licences et remerciements' : 'Licences and Acknowledgments'}</button></li>
 						</ul>
 					</nav>
-				{:else if activeTab === 'shane'}
-					{@render shanePanel?.()}
 				{/if}
 		</div>
 		<!-- NOTATION (item N.7), anchored. Sibling of .drawer-content rather

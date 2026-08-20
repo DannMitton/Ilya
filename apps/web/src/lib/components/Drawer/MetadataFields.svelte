@@ -1,10 +1,12 @@
 <!--
-	MetadataFields — the shared song-metadata block (title, opus, composer,
-	poet, translator, reset). Extracted from RootPanel so the Transcription
-	drawer and the Fit drawer render the same chrome, bound to one source of
-	truth (handover v35 §E.5b; Kimi's placement ruling, questions 1 and 3).
-	Both tabs pass the same `metadata` state and `onchange`, so edits in either
-	tab converge on the same record.
+	MetadataFields — the song-metadata block (title, opus, composer, poet,
+	translator, reset). Extracted from RootPanel so the Transcription drawer and
+	the Fit drawer could render the same chrome, bound to one source of truth
+	(handover v35 §E.5b; Kimi's placement ruling, questions 1 and 3).
+
+	N.73 S2 merged the two drawers, so there is ONE instance again, RootPanel's,
+	and it serves both of Studio's documents. The two props the Fit instance
+	carried alone, `fromScore` and `onrevert`, came with it.
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
@@ -19,8 +21,9 @@
 		/**
 		 * Fields auto-populated from a score header (§A.6; Kimi's Q1
 		 * ruling, 2026-07-13): each carries a subtle "from score" tag
-		 * that the caller removes on first edit. Optional; the
-		 * Transcription drawer never passes it.
+		 * that the caller removes on first edit. Optional, and still
+		 * optional after N.73 S2: RootPanel passes it, and a caller
+		 * with no score header behind it need not.
 		 */
 		fromScore?: ReadonlySet<string>;
 		/**

@@ -87,7 +87,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type MetadataField,
 		type MetadataState,
 	} from '$lib/metadata-provenance';
-	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { PageProvenance } from '$lib/library/types';
@@ -440,6 +439,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
 	const hasResults = $derived(lines.length > 0);
+	/**
+	 * N.73 S2. ONE Print button, in the Transcription drawer's button row,
+	 * guarded by whichever document is on the desk. Both expressions are the
+	 * ones the two buttons carried before the drawers merged, verbatim:
+	 * the transcription is printable once it has been transcribed, and the
+	 * marked score once a score is ingested or a formant exists. Nothing new
+	 * is invented, and neither behaviour is lost.
+	 */
+	const printDisabled = $derived(
+		activeTab === 'shane'
+			? !ingestedScore && Object.keys(shaneFormants).length === 0
+			: !hasResults
+	);
 	const wordCount = $derived(
 		lines.reduce((sum, l) => sum + l.words.length, 0)
 	);
@@ -1813,17 +1825,52 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{transcribeError}
 					{language}
 					metadata={doc.metadata}
+					fromScore={doc.fromScoreFields}
+					onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
+					{arrangerProvenance}
 					{showInspector}
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
 					onprint={handlePrint}
+					{printDisabled}
 					onexport={() => void handleExport()}
 					onimport={() => importInputEl?.click()}
 					onexportall={() => void handleExportAll()}
 					{songLibrary}
 					onmetadatachange={handleMetadataChange}
 				>
+					{#snippet sourceScore()}
+						{#if INCLUDE_SHANE}
+							<!-- The drop surface sits directly beneath the textarea it
+							     twins: N.73 S2 made text intake and score intake one
+							     Source region. The EngravingControls panel is removed
+							     and the stave target is fixed (Dann's ruling,
+							     2026-07-15; Kimi Q1 and Q2). -->
+							<!-- N.67 step 4b. KEYED ON THE OPEN SONG. A switch replaces
+							     the document, and this makes the uploader replace itself
+							     with it, so the new song's stored score comes back
+							     through the uploader's OWN restore: the same path a
+							     reload takes, and no second one. -->
+							{#key doc.id}
+								<ScoreUploader
+									{language}
+									{isMobile}
+									restore={restoreSource}
+									oningested={(ingested, file, origin, page) =>
+										void handleArrival(ingested, file, origin, page)}
+								/>
+							{/key}
+							{#if noLyricsFile}
+								<!-- N.55a's courtesy message (Dann, E.47). It lives in the
+								     DRAWER and not on the page because it names the FILE, and
+								     a file name dates a printed study sheet to an export
+								     rather than to a song. Unstyled on purpose for the first
+								     walk. -->
+								<p class="shane-no-lyrics">{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
+							{/if}
+						{/if}
+					{/snippet}
 					{#snippet consoleContent()}
 						{#if selectedWord}
 							{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
@@ -1864,52 +1911,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{/snippet}
 			{#snippet shanePanel()}
 				{#if INCLUDE_SHANE}
-					<!-- One shared column, identical to the Transcription drawer's
-					     .root-panel (20px top, 1rem sides, 40px bottom, 6px gaps),
-					     so both drawers read as one surface. -->
+					<!-- One shared column, matching the Transcription drawer's
+					     .root-panel (1rem sides, 40px bottom, 6px gaps). N.73 S2
+					     dropped its 20px top, because this panel now renders directly
+					     beneath .root-panel rather than in place of it and the two
+					     paddings met in the middle of one column. -->
 					<div class="shane-panel">
-						<!-- Shared chrome: same Metadata block as Transcription, one
-						     source of truth (Kimi placement ruling). -->
-						<MetadataFields
-							metadata={doc.metadata}
-							{language}
-							onchange={handleMetadataChange}
-							fromScore={doc.fromScoreFields}
-							onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
-						/>
-						{#if arrangerProvenance}
-							<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata
-							     block, never a drawer field, omitted when absent.
-							     Clamped to one line (Dann's ruling, 2026-07-13, on the
-							     Gretchen IMSLP-blob evidence): verbatim, never parsed,
-							     but the drawer stays quiet; title carries the full
-							     string on hover. -->
-							<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
-						{/if}
-					<!-- The drop surface sits full-width directly beneath the
-					     Metadata block, twinning Ilya's headerless textarea. The
-					     EngravingControls panel is removed and the stave target
-					     is fixed (Dann's ruling, 2026-07-15; Kimi Q1 and Q2). -->
-					<!-- N.67 step 4b. KEYED ON THE OPEN SONG. A switch replaces the
-					     document, and this makes the uploader replace itself with it,
-					     so the new song's stored score comes back through the uploader's
-					     OWN restore: the same path a reload takes, and no second one. -->
-					{#key doc.id}
-						<ScoreUploader
-							{language}
-							{isMobile}
-							restore={restoreSource}
-							oningested={(ingested, file, origin, page) =>
-								void handleArrival(ingested, file, origin, page)}
-						/>
-					{/key}
-					{#if noLyricsFile}
-						<!-- N.55a's courtesy message (Dann, E.47). It lives in the DRAWER and
-						     not on the page because it names the FILE, and a file name dates a
-						     printed study sheet to an export rather than to a song. Unstyled on
-						     purpose for the first walk. -->
-						<p class="shane-no-lyrics">{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
-					{/if}
+					<!-- N.73 S2. This panel's own Metadata block, provenance line,
+					     score uploader, no-lyrics notice, Print button and binder row
+					     are gone. The metadata block, the provenance line and score
+					     intake moved into RootPanel; the Print button and the binder
+					     row were duplicates of RootPanel's and were deleted. What is
+					     left is the score work, the notices, and the voice. -->
 					<SyllableStation
 						slots={slotQueue}
 						pairings={shownPairings}
@@ -1967,65 +1980,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     where storage speaks today. -->
 						<p class="shane-storage-notice">{t('storage.otherTab', language)}</p>
 					{/if}
-					<!-- The Fit print control (item 1.8). TWINNED, not invented, and
-					     twinned in POSITION as well as in style (Dann's walk ruling,
-					     2026-08-05: the first pass was full width at the foot of the
-					     panel, which shouted and hid at the same time).
-
-					     The Transcription drawer's Print button is
-					     RootPanel.svelte:213-219, sitting in a .button-row grid of
-					     `1fr 1fr 2fr`, immediately after the input and before the
-					     display options. This mirrors that grid and takes the same
-					     column, so the print control occupies the SAME x-position and
-					     the same width on both tabs and does not move when a singer
-					     switches between them. It sits after the score drop zone for
-					     the same reason: that is Fit's analogue of Transcription's
-					     textarea, the input the page is made from.
-
-					     The label reuses `input.print`, so one word means one thing
-					     on both surfaces: EN "Print", FR "Imprimer".
-
-					     `handlePrint` is a bare window.print() with no tab coupling
-					     (see handlePrint above), and app.css:200-205 already hides .header-bar,
-					     .drawer, .drawer-lip, .tab-bar and .ribbon at print time, so
-					     printing from Fit emits the page alone. OBSERVED in a browser
-					     on ea9556f, 2026-08-05: one sheet, no chrome, in both
-					     languages. The capability was always reachable by Cmd-P; what
-					     was missing was any way to SEE it.
-
-					     Disabled when the page holds nothing worth putting on paper:
-					     no score ingested AND no reading captured. In that state
-					     VoiceProfilePane.svelte's .profile-empty renders the single line
-					     "Calibrate your voice to begin", which is honest and is not a
-					     result. OBSERVED greyed out on a fresh voice. -->
-					<div class="shane-button-row">
-						<button
-							class="shane-print-btn"
-							disabled={!ingestedScore && Object.keys(shaneFormants).length === 0}
-							onclick={handlePrint}
-						>
-							{t('input.print', language)}
-						</button>
-					</div>
-					<!-- N.67 step 5. The SAME two controls in the SAME columns as the
-					     Transcription drawer's binder row, so their position does not
-					     move when a singer switches tabs (Dann's ruling 2026-08-16). -->
-					<div class="shane-binder-row">
-						<button class="shane-binder-btn" onclick={() => void handleExport()}>
-							{t('binder.export', language)}
-						</button>
-						<button class="shane-binder-btn" onclick={() => importInputEl?.click()}>
-							{t('binder.import', language)}
-						</button>
-						<!-- The row's third column has stood empty since the row was
-						     built. Shown only above one song, because with one song it
-						     says the same thing as the button beside it. -->
-						{#if songRows.length > 1}
-							<button class="shane-binder-btn" onclick={() => void handleExportAll()}>
-								{t('binder.exportAll', language)}
-							</button>
-						{/if}
-					</div>
 					<CalibrationWizard
 						{language}
 						{scoreRenders}
@@ -2226,7 +2180,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		padding: 20px 1rem 40px;
+		/* N.73 S2: no top padding. `.root-panel`'s 40px bottom now closes the
+		   gap above, and 20px on top of it read as a seam in a drawer that is
+		   meant to read as one. JUDGEMENT, and one line to reverse. */
+		padding: 0 1rem 40px;
 	}
 
 	/* Fit surfaces use the tab's lavender for the focus ring, not the global
@@ -2235,48 +2192,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		outline-color: var(--deeper-lavender);
 	}
 
-	/* The Fit print control (item 1.8). RootPanel's .button-row, .action-btn
-	   and .btn-secondary are all scoped to that component, so their values are
-	   twinned here rather than imported: the same `1fr 1fr 2fr` grid, the same
-	   6px gap, the same padding, weight, radius and border.
-
-	   The grid is the point. Print takes column 2 on both tabs, so the control
-	   lands at the same x-position and the same 25% width whichever surface a
-	   singer is on, and it does not move when they switch. The first pass made
-	   it full width at the foot of the panel; Dann walked it and called it
-	   excessive and an afterthought, and he was right on both counts.
-
-	   One deliberate departure, named: it carries a disabled style, which
-	   RootPanel's Print button does not. A control that cannot be used should
-	   not look identical to one that can. RECORDED, NOT CHASED:
-	   RootPanel.svelte:213-219 has no :disabled rule at all, so
-	   Transcription's Print button looks enabled while disabled. */
-	.shane-button-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr 2fr;
-		gap: 6px;
-		margin-top: 4px;
-		margin-bottom: 6px;
-	}
-
-	.shane-print-btn {
-		grid-column: 2;
-		padding: 0.45rem 0.5rem;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--ink-secondary);
-		background: white;
-		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 4px;
-		cursor: pointer;
-		transition: opacity 0.12s;
-	}
-
-	.shane-print-btn:disabled {
-		opacity: 0.4;
-		cursor: not-allowed;
-	}
 	/* N.67 step 5. The import input is never seen: both Import controls click
 	   it. Not `display: none`, which some browsers refuse to activate. */
 	.binder-input {
@@ -2285,26 +2200,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		height: 1px;
 		opacity: 0;
 		pointer-events: none;
-	}
-	/* Twins .button-row's grid so the two controls land in the same columns as
-	   the Transcription drawer's, which is what keeps their position identical
-	   across tabs. */
-	.shane-binder-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr 2fr;
-		gap: 6px;
-		margin-top: 6px;
-	}
-	.shane-binder-btn {
-		padding: 0.45rem 0.5rem;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--ink-secondary);
-		background: white;
-		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 4px;
-		cursor: pointer;
 	}
 	/* N.67 step 4a. The replace dialog. Unstyled beyond what modality needs,
 	   matching the drawer's register rather than inventing a look. The
@@ -2363,9 +2258,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		border-color: transparent;
 		font-weight: 500;
 	}
-	/* N.67 step 3. Twins .shane-print-btn rather than inventing a look, and
-	   sits inline rather than full width: it is the destructive control on
-	   this panel and should not be the loudest thing on it. */
+	/* N.67 step 3. Sits inline rather than full width: it is the destructive
+	   control on this panel and should not be the loudest thing on it. It was
+	   twinned on .shane-print-btn, which N.73 S2 deleted; the values are the
+	   same ones RootPanel's .action-btn carries. */
 	.start-over {
 		align-self: start;
 		padding: 0.45rem 0.5rem;
@@ -2378,21 +2274,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		border-radius: 4px;
 		cursor: pointer;
 		transition: opacity 0.12s;
-	}
-
-	/* The Q4 provenance line: tertiary, one quiet line beneath the
-	   Metadata block, sharing the drawer's content edges. Clamped to a
-	   single line with an ellipsis (Dann's ruling, 2026-07-13): real
-	   headers carry IMSLP credit blobs and URLs; the text stays verbatim
-	   (no parsing of publisher habits) but never wraps. */
-	.shane-provenance {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */

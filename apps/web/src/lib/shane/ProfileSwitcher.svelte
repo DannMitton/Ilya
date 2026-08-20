@@ -180,8 +180,20 @@
 			   above, so it depends on nothing but these two calls: it is the
 			   pair of statements this function has always run, in the order it
 			   always ran them. The listener is the touch path's, where the
-			   focus is the singer's own tap on a live page. */
-			node.focus();
+			   focus is the singer's own tap on a live page.
+
+			   `preventScroll` is N.73 S2's, and it is the only line that step
+			   changed outside the drawer. This field used to sit near the top
+			   of the Fit drawer's own column. Under one Studio drawer it sits
+			   at the foot of a column roughly twice as tall, so focusing it
+			   scrolled the whole drawer to the bottom and a singer opening the
+			   drawer met the calibration wizard instead of the metadata block.
+			   MEASURED on 2026-08-20: with the merged panel rendered the
+			   drawer opened at scrollTop 1160 of 1161; with `preventScroll` it
+			   opens at 0. The focus and the selection are untouched, so
+			   typing still replaces the default name. JUDGEMENT, and one word
+			   to reverse. */
+			node.focus({ preventScroll: true });
 			selectOnce();
 		}
 

@@ -17,12 +17,41 @@ import type { SongRow } from '$lib/library/songs';
 		transcribeError: string;
 		language: Language;
 		metadata: SongMetadata;
+		/**
+		 * N.73 S2. Both arrived with the second MetadataFields when the two
+		 * drawers became one. Fields auto-populated from a score header carry
+		 * their "from score" tag here now, and `onrevert` is the Q2
+		 * revert-to-score-header affordance, passed only when a header exists.
+		 */
+		fromScore?: ReadonlySet<string>;
+		onrevert?: () => void;
+		/**
+		 * N.73 S2. The Q4 provenance line (Kimi §A.28), which sits beneath the
+		 * metadata block and is never a drawer field. Null when absent.
+		 */
+		arrangerProvenance?: string | null;
 		showInspector: boolean;
 		consoleContent?: Snippet;
+		/**
+		 * N.73 S2. Score intake, rendered by `+page.svelte` inside this panel's
+		 * Source region so text intake and score intake read as one. A snippet
+		 * rather than props, matching consoleContent, so the uploader's wiring
+		 * (its restore source, its {#key} on the open song, its arrival
+		 * handler, and the INCLUDE_SHANE gate) stays where the rest of it
+		 * lives and nothing is drilled through here.
+		 */
+		sourceScore?: Snippet;
 		oninput: (text: string) => void;
 		ontranscribe: () => void;
 		onclear: () => void;
 		onprint: () => void;
+		/**
+		 * N.73 S2. Keyed on the VISIBLE document, not on this panel: the
+		 * transcription's guard when Studio shows the transcription, the
+		 * score's when it shows the marked score. `+page.svelte` owns both
+		 * expressions because only it knows which document is on the desk.
+		 */
+		printDisabled: boolean;
 		/** N.67 step 5, the binder. Twinned on the print control, Dann's ruling. */
 		onexport: () => void;
 		onimport: () => void;
@@ -59,12 +88,17 @@ import type { SongRow } from '$lib/library/songs';
 		transcribeError,
 		language,
 		metadata,
+		fromScore = undefined,
+		onrevert = undefined,
+		arrangerProvenance = null,
 		showInspector,
 		consoleContent,
+		sourceScore,
 		oninput,
 		ontranscribe,
 		onclear,
 		onprint,
+		printDisabled,
 		onexport,
 		onimport,
 		onexportall,
@@ -143,8 +177,20 @@ import type { SongRow } from '$lib/library/songs';
 		</div>
 	{/if}
 
-	<!-- ── 1. Song Setup (metadata) — shared with the Fit drawer ──── -->
-	<MetadataFields {metadata} {language} onchange={onmetadatachange} />
+	<!-- ── 1. Song Setup (metadata) ─────────────────────────── -->
+	<!-- N.73 S2. THE one instance. The Fit drawer's second instance is gone,
+	     and the two props only it carried, `fromScore` and `onrevert`, are
+	     carried here. Losing `onrevert` would lose revert-to-score-header. -->
+	<MetadataFields {metadata} {language} onchange={onmetadatachange} {fromScore} {onrevert} />
+	{#if arrangerProvenance}
+		<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata block, never
+		     a drawer field, omitted when absent. Clamped to one line (Dann's
+		     ruling, 2026-07-13, on the Gretchen IMSLP-blob evidence):
+		     verbatim, never parsed, but the drawer stays quiet; title carries
+		     the full string on hover. Moved here with the metadata block,
+		     N.73 S2. -->
+		<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
+	{/if}
 
 	<!-- ── 2. Textarea with OCR overlay ────────────────────── -->
 	<div class="textarea-wrapper">
@@ -200,6 +246,11 @@ import type { SongRow } from '$lib/library/songs';
 		<p class="ocr-error">{ocrError}</p>
 	{/if}
 
+	<!-- N.73 S2. Score intake, beside the wired scanner. Text intake and
+	     score intake are one Source region: the drop surface and the
+	     no-lyrics notice that follows it came here from the Fit drawer. -->
+	{@render sourceScore?.()}
+
 	<!-- ── 3. Result summary: always reserves space to prevent layout shift ── -->
 	<p class="result-summary" class:result-hidden={!hasResults}>
 		{#if hasResults}
@@ -223,7 +274,7 @@ import type { SongRow } from '$lib/library/songs';
 		</button>
 		<button
 			class="action-btn btn-secondary"
-			disabled={!hasResults}
+			disabled={printDisabled}
 			onclick={onprint}
 		>
 			{t('input.print', language)}
@@ -539,6 +590,23 @@ import type { SongRow } from '$lib/library/songs';
 	.action-btn:disabled {
 		opacity: 0.45;
 		cursor: not-allowed;
+	}
+
+	/* The Q4 provenance line: tertiary, one quiet line beneath the Metadata
+	   block, sharing the drawer's content edges. Clamped to a single line with
+	   an ellipsis (Dann's ruling, 2026-07-13): real headers carry IMSLP credit
+	   blobs and URLs; the text stays verbatim (no parsing of publisher habits)
+	   but never wraps. Moved from `+page.svelte` with its markup, N.73 S2:
+	   Svelte scopes a rule to the component that authors the markup, so the
+	   rule had to travel or the line would have lost its style silently. */
+	.shane-provenance {
+		margin: 0;
+		font-family: var(--font-ui, var(--font-sans));
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	/* ── Section labels (sage smallcaps, matching Drawer) ──────────────── */
