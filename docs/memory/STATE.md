@@ -197,8 +197,9 @@ on the same three.
      contents retracts: Piece, Notation, Source, Analysis, Output, Songs.
      **The voice anchor is NOT a station**: it is one line, a dot, a status,
      and a button, with no contents to retract, and collapsing it would hide
-     `Calibrate`, the only entry to the ritual, for no height. Put to Dann as
-     a scope point and not contradicted.
+     `Calibrate`, the only entry to the ritual, for no height. **CONFIRMED by Dann in his own
+     words, 2026-08-20: "I agree with you about the voice anchor, yes,
+     Calibrate needs to be visible."**
   6. **THE OPEN SET PERSISTS PER DEVICE.** E.27 §3.4, one of the three parts
      nothing has amended. **Dann's workflow makes it a requirement, not a
      convenience:** his model is that a singer fills the metadata once, retracts
@@ -209,7 +210,19 @@ on the same three.
      its own comment, "a remembered collapse hides the toggles from a singer
      who forgot they exist," and nothing ruled on 2026-08-20 touches it. One
      line to reverse if a session proves it wrong.
-  7. **NO AUTO-COLLAPSE ON POPULATE.** It is the obvious next thought and E.27
+  7. **SOURCE'S ACTIONS COME WITH IT, and this replaces a separate repair.**
+     Ship two moved Analysis above Output and left the
+     `Clear / Print / Transcribe` grid where it was, so `Transcribe`, the
+     app's primary action, now sits below a tall empty Analysis pane,
+     separated from the textarea it acts on. The coordinating desk offered
+     this as a ship two repair and Dann did not take it up. **It dissolves
+     here instead:** once Source is a labelled station with its own contents,
+     Clear and Transcribe sit at its foot by construction, and Print joins
+     Export and Import in Output. The `1fr 1fr 2fr` grid does not need
+     repairing because it stops existing. **This is why the brief's §3 item 5,
+     "Print stays where it is," is now spent.**
+
+  8. **NO AUTO-COLLAPSE ON POPULATE.** It is the obvious next thought and E.27
      §3.3 forbids it in advance: "Calm Authority means the drawer does not
      fidget. Nothing else ever moves without the user." The retraction is the
      singer's gesture. **Do not build a station that shuts itself.**
