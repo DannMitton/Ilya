@@ -56,10 +56,18 @@
 	/* ── Desk tints, one per destination (N.73 S1) ──────────── */
 	/* Each desk carries its destination's signature hue tinted 60 percent
 	   toward white, ruled by Dann 2026-08-10: "C, Desk lightness 60%, no
-	   blotter" (N.42 §1.5). All three desks are light, so everything drawn
+	   blotter" (N.42 §1.5). All four desks are light, so everything drawn
 	   on a desk takes dark ink (--ink-primary) by the luminance-keyed rule
-	   of the S0 slate. Studio's two documents share the sage desk. */
+	   of the S0 slate.
+
+	   FOUR desks, one per destination. Ruled by Dann 2026-08-19: every
+	   distinct working surface carries its own hue, which ends the sharing
+	   S1 left in place. --surround-marked is the Marked score's desk and it
+	   is NOT --surround-shane: that token is the calibration pacifier band,
+	   it sits on white rather than on a desk, and contrast.test.ts asserts
+	   its literal. The two are different surfaces and keep different names. */
 	--surround-transcription: #D1D7CB;   /* sage at 60% */
+	--surround-marked: #D2CBD7;          /* deeper lavender at 60% */
 	--surround-learn: #DBCACA;           /* dusty rose at 60% */
 	--surround-guide: #BEC7D8;           /* quiet cobalt at 60% */
 

@@ -105,7 +105,7 @@
 		position: relative;
 		box-sizing: border-box;
 		background: var(--paper-cream);
-		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 		flex-shrink: 0;
 	}
 
@@ -147,10 +147,11 @@
 	   page boundaries remain visible. N.45 proper would bypass pagination on
 	   this breakpoint. Reverting this spike is one commit. */
 	@media screen and (max-width: 767px) {
+		/* N.73 S1b: the shadow STAYS on the phone, for the reason set out on
+		   TitlePage's matching block. Print still clears it below. */
 		.paper-page {
 			width: 100% !important;
 			height: auto !important;
-			box-shadow: none;
 		}
 
 		.page-content {

@@ -17,14 +17,24 @@
 </article>
 
 <style>
+	/* N.73 S1b §4. The reading sheet is the transcription sheet: 816px is
+	   PAGE_SIZES.letter.width and 96px is MARGINS.horizontal, both from
+	   `$lib/page-config.ts`, which TitlePage and SubsequentPage set on
+	   `.paper-page`. The prose column lands on 624px, exactly the
+	   transcription's text column, so the reading measure gets SHORTER than
+	   the 656px it had at 720 minus 2rem either side, and the negative space
+	   either side of the sheet is identical on all four destinations.
+
+	   No radius. Paper takes no radius because print has no rounded corners
+	   (Fable's ruled spec §3.2). The shadow is §1's one ruled value. */
 	.reading-paper {
 		width: 100%;
-		max-width: 720px;
+		max-width: 816px;
 		margin: 0 auto;
-		padding: 3rem 2rem;
+		padding: 3rem 96px;
 		background: var(--paper-cream, #F0EBE0);
-		border-radius: 4px;
-		box-shadow: 0 1px 4px rgba(26, 22, 18, 0.06);
+		border-radius: 0;
+		box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 		min-height: 400px;
 		flex-shrink: 0;
 	}
@@ -233,10 +243,11 @@
 	/* ── Responsive ────────────────────────────────────────── */
 
 	@media (max-width: 767px) {
+		/* The 96px margin is a letter page's margin, not a phone's: it would
+		   leave 198px of text on a 390px screen. The phone keeps the reduced
+		   padding. The shadow STAYS, as it now does on every sheet. */
 		.reading-paper {
 			padding: 1.5rem 1rem;
-			border-radius: 0;
-			box-shadow: none;
 		}
 
 		.reading-inner :global(h1) {
@@ -257,6 +268,14 @@
 		.reading-inner :global(td) {
 			padding: 0.35rem 0.5rem;
 			font-size: 0.85rem;
+		}
+	}
+
+	/* ── Print (parity with TitlePage) ─────────────────────── */
+
+	@media print {
+		.reading-paper {
+			box-shadow: none;
 		}
 	}
 </style>

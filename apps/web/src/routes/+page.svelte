@@ -2522,11 +2522,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		--desk-pad-top: 2rem;
 	}
 
-	/* 720px is ReadingPaper's own max-width (Paper/ReadingPaper.svelte). */
-	.main-content.tab-learn,
-	.main-content.tab-guide {
-		--sheet-width: 720px;
-	}
+	/* N.73 S1b §4 deleted the override that stood here. It set --sheet-width
+	   to 720px for Learn and Guide because ReadingPaper's max-width was 720px;
+	   that max-width is now 816px, the same letter sheet the transcription
+	   draws, so all four destinations take the 816px above and the desk head
+	   lands on the sheet's left edge on every one of them. */
 
 	/* ── Floating Paper: tab-specific surrounds (Approach A) ── */
 
@@ -2543,30 +2543,27 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	.main-content.tab-shane {
-		/* One desk, many papers (Dann's consistency ruling, 2026-07-12,
-		   superseding the Round 8 lavender surround for this surface only):
-		   the Shane gallery shares the transcription desk tone, and Shane's
-		   lavender identity lives in the tab bar, the drawer handle, and
-		   the Pacifier band (--surround-shane, unchanged). Carry this to
-		   the next Kimi relay with provenance. N.73 S1 keeps the sharing and
-		   moves both to the sage-tinted desk; the lavender desk is not
-		   introduced. */
-		background-color: var(--surround-transcription, #D1D7CB);
+		/* One hue per working surface. Ruled by Dann 2026-08-19 during the
+		   walk, superseding "one desk, many papers" (2026-07-12) and the S1
+		   sage desk that carried it: the Marked score is a distinct working
+		   surface, so it takes its own desk. --surround-marked is
+		   --deeper-lavender tinted 60 percent toward white, parallel to the
+		   other three. It is not --surround-shane, which is the calibration
+		   pacifier band on white and stays where it is. The bar moves with
+		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
+		background-color: var(--surround-marked, #D2CBD7);
 	}
 
-	/* ── Floating Paper: tab-specific shadows ─────────────── */
+	/* ── Floating Paper: the shadow ────────────────────────── */
 
-	.main-content.tab-transcription :global(.paper-page) {
-		box-shadow: 0 2px 8px rgba(45, 45, 45, 0.06);
-	}
-
-	.main-content.tab-learn :global(.reading-paper) {
-		box-shadow: 0 4px 20px rgba(45, 45, 45, 0.10);
-	}
-
-	.main-content.tab-guide :global(.reading-paper) {
-		box-shadow: 0 3px 12px rgba(45, 45, 45, 0.08);
-	}
+	/* N.73 S1b §1 deleted three rules that stood here, one per destination,
+	   each with its own shadow. They were `.main-content.tab-X :global(.Y)`,
+	   which outweighs the sheets' own `.paper-page` and `.reading-paper` by
+	   two class selectors, so a sheet's declared shadow never reached the
+	   screen and changing it there would have done nothing. There is one
+	   ruled shadow now, 0 3px 12px rgba(0, 0, 0, 0.35), and each sheet
+	   component declares it. No per-destination differences: the sheet is
+	   the same sheet on every desk, and only the desk under it changes. */
 
 	/* ── Transcription mode: Paper centres naturally within flex ── */
 

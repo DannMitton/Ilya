@@ -864,7 +864,7 @@
 		position: relative;
 		box-sizing: border-box;
 		background: var(--paper-cream);
-		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 		flex-shrink: 0;
 	}
 
@@ -1088,10 +1088,11 @@
 	   reflowing their page would CLIP the notation rather than re-break it.
 	   That is N.46, and it is unruled. */
 	@media (max-width: 767px) {
+		/* N.73 S1b: the shadow STAYS on the phone. See TitlePage's matching
+		   block; this pane twins that geometry and it twins this too. */
 		.paper-page.envelope-page {
 			width: 100% !important;
 			height: auto !important;
-			box-shadow: none;
 		}
 
 		.envelope-page .profile-content {
@@ -1121,7 +1122,6 @@
 		.paper-page.commentary-page {
 			width: 100% !important;
 			height: auto !important;
-			box-shadow: none;
 		}
 
 		/* N.45’s ruling, “only the seam goes”, which Paper.svelte:113 already

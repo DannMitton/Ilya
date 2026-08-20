@@ -85,14 +85,16 @@
 		background: var(--quiet-cobalt, #5C739E);
 	}
 
-	/* THREE destinations, not four. Ruled by Dann 2026-08-18: the app bar
-	   keys to the destination, and Studio is one destination holding two
-	   documents. So the Marked score takes Studio's sage with Transcription,
-	   and the lavender that used to sit here is gone from the bar. Lavender's
-	   carriers under Studio are the voice anchor and the calibration
-	   surfaces, neither of which this bar draws. */
+	/* FOUR destinations, four hues. Ruled by Dann 2026-08-19 during the
+	   walk: every distinct working surface carries its own hue. This amends
+	   the app-bar half of the 2026-08-18 ruling above, which had folded the
+	   Marked score into Studio's sage, and it amends S0 ruling 3. The bar and
+	   the desk move together; the desk is --surround-marked in app.css. The
+	   three sibling rules below (the sigil version, the inactive language
+	   option, and its hover underline) already key to --deeper-lavender and
+	   were never changed. */
 	.header-bar.tab-shane {
-		background: var(--sage, #8B9A7D);
+		background: var(--deeper-lavender, #8E7E9B);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */

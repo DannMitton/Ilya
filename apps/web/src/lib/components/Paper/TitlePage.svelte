@@ -174,7 +174,7 @@
 		position: relative;
 		box-sizing: border-box;
 		background: var(--paper-cream);
-		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 		flex-shrink: 0;
 	}
 
@@ -233,10 +233,15 @@
 	   page boundaries remain visible. N.45 proper would bypass pagination on
 	   this breakpoint. Reverting this spike is one commit. */
 	@media screen and (max-width: 767px) {
+		/* N.73 S1b: the shadow STAYS on the phone. It was `none` here, and
+		   that, not the shadow's strength, is why the sheet read as a flat
+		   box: the desk went from #6B6560 to #D1D7CB in S1, and a sheet with
+		   no shadow on a 1.24:1 desk has no edge at all. The desk keeps
+		   0.5rem of padding on this breakpoint (+page.svelte), so the 12px
+		   blur has room to land either side. */
 		.paper-page {
 			width: 100% !important;
 			height: auto !important;
-			box-shadow: none;
 		}
 
 		.page-content {

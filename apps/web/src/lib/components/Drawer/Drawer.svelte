@@ -580,12 +580,33 @@
 
 	/* MODALITY, not viewport width, sets the geometry: a coarse pointer gets
 	   the 44 px floor. This is the ruled pattern and it is deliberately not a
-	   third touch-geometry exemption. */
+	   third touch-geometry exemption.
+
+	   N.73 S1b §3. This rule used to grow the VISIBLE tab to 44 by 88, which
+	   is 11 percent of a 390px screen given over to a handle. The visible tab
+	   is now 20 by 76 on every pointer, the desktop's own size, and a
+	   transparent extension carries the target. The target is still 44 by 88,
+	   so the floor is met and no exemption is created.
+
+	   The extension is a pseudo-element rather than padding because padding
+	   would grow the tab's painted box: the background, the border and the
+	   border-radius are on .drawer-lip itself, and there is no way to pad a
+	   box without painting the padding. ::before is inside the button, so a
+	   press anywhere in it is a press on the button.
+
+	   It extends INTO THE DESK, not off-screen: left: 0 anchors it to the
+	   tab's left edge, so it covers the 20px tab and reaches 24px further
+	   right, over the desk. Closed, the tab sits at left: 100%, which on the
+	   phone is the viewport's left edge, so all 44px are on-screen. */
 	@media (pointer: coarse) {
-		.drawer-lip {
+		.drawer-lip::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 0;
 			width: 44px;
 			height: 88px;
-			border-radius: 0 8px 8px 0;
+			transform: translateY(-50%);
 		}
 	}
 
@@ -919,6 +940,17 @@
 			right: 0;
 		}
 
+		/* The open tab's outward edge IS the viewport's right edge, so the
+		   touch extension has to reach the other way or it would hang
+		   off-screen and the target would measure 20px. It reaches back into
+		   the drawer, across the 44px gutter .drawer-body reserves below,
+		   where nothing else is drawn. Inert without a coarse pointer, which
+		   is the only place ::before takes a `content`. */
+		.drawer:not(.collapsed) .drawer-lip::before {
+			left: auto;
+			right: 0;
+		}
+
 		/* Body fills full height */
 		.drawer-clip {
 			width: 100% !important;
@@ -927,8 +959,9 @@
 		}
 
 		/* The open drawer keeps a 44px gutter on the right, the width of the
-		   pull that sits inside its edge, so the pull can never cover a
-		   control. On .drawer-body rather than .drawer-content because the
+		   pull's TOUCH TARGET, which since N.73 S1b is wider than the 20px
+		   the pull paints. The gutter measures the target, not the paint, so
+		   the pull can never cover a control. On .drawer-body rather than .drawer-content because the
 		   NOTATION anchor is .drawer-content's SIBLING, not its child, and
 		   would otherwise keep its own edge under the pull. It costs 44px of
 		   a 390px phone, which is the price of one control never hiding
