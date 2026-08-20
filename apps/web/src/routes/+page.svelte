@@ -70,6 +70,7 @@
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
+	import ReadingAid from '$lib/components/ReadingAid.svelte';
 import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import DeskHead from '$lib/components/DeskHead.svelte';
@@ -303,36 +304,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// slide-direction order matches the visible tab order (Dann, 2026-07-12).
 	const TAB_ORDER: TabId[] = ['transcription', 'shane', 'learn', 'guide'];
 	let tabTransitionClass = $state('');
-	// Mobile awareness
+	// Mobile awareness. A WIDTH test, which on a phone is also the portrait
+	// test: 390 by 844 is under the breakpoint and 844 by 390 is over it, so
+	// rotation switches the mode exactly as Dann's rotation ruling says.
 	let isMobile = $state(false);
-	let mobileDismissed = $state(false);
 	let mainContentEl: HTMLElement | undefined = $state(undefined);
-	async function handleMobileDismiss() {
-		mobileDismissed = true;
-		loadDictionary({
-			onStateChange(state) {
-				loaderState = state;
-			}
-		});
+
+	/* ── Portrait C: the page and the aid (ruled by Dann 2026-08-18) ──
+	   The arrival view is the page. `Read` swaps in the aid, `The page`
+	   swaps it back. Both stay mounted: the page has to survive the swap or
+	   printing from the aid would emit nothing, and remounting it would
+	   re-measure the title header from zero and re-paginate the document
+	   under the singer. */
+	let portraitView = $state<'page' | 'aid'>('page');
+	/* One scroll position each, so neither view loses the singer's place. */
+	let pageScrollTop = 0;
+	let aidScrollTop = 0;
+
+	async function showPortraitView(next: 'page' | 'aid') {
+		if (next === portraitView) return;
+		if (mainContentEl) {
+			if (portraitView === 'page') pageScrollTop = mainContentEl.scrollTop;
+			else aidScrollTop = mainContentEl.scrollTop;
+		}
+		portraitView = next;
 		await tick();
 		if (mainContentEl) {
-			// Centre the Paper's hint text area in the viewport.
-			// Horizontal: centre the content area (96px margin + 624px/2 = 408px).
-			// Vertical: hint text sits roughly 400px from page top (header + padding-top 6rem).
-			const contentCentreX = 408;
-			const hintAreaY = 400;
-			const drawerLip = 24;
-			const viewportWidth = window.innerWidth - drawerLip;
-			const viewportHeight = window.innerHeight;
-			const scrollX = Math.max(0, contentCentreX - viewportWidth / 2);
-			const scrollY = Math.max(0, hintAreaY - viewportHeight / 2);
-			mainContentEl.scrollTo({
-				left: scrollX,
-				top: scrollY,
-				behavior: 'smooth',
-			});
+			mainContentEl.scrollTop = next === 'page' ? pageScrollTop : aidScrollTop;
 		}
 	}
+
+	/* Leaving portrait, or leaving Transcription, returns to the page. The aid
+	   is a portrait reading of the transcription and has no meaning anywhere
+	   else, and a singer who rotates back should meet the artefact. */
+	$effect(() => {
+		if (!isMobile || activeTab !== 'transcription') portraitView = 'page';
+	});
 	// Song metadata: `doc.metadata`, N.67 step 0.
 	// Notation preferences -- persisted to localStorage
 	let notationPrefs = $state<NotationPreferences>({
@@ -1700,23 +1707,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;1,400&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
 </svelte:head>
-{#if isMobile && !mobileDismissed}
-<div class="mobile-overlay">
-	<div class="mobile-card">
-		<div class="mobile-logo">
-			<span class="logo-bracket">[</span><span class="logo-ilya">Ilya</span><span class="logo-bracket">]</span>
-		</div>
-		<h1 class="mobile-heading">{t('mobile.heading', 'en')}</h1>
-		<p class="mobile-body">{t('mobile.body', 'en')}</p>
-		<button class="mobile-continue" onclick={handleMobileDismiss}>
-			{t('mobile.continue', 'en')} / {t('mobile.continue', 'fr')}
-		</button>
-		<div class="mobile-divider"></div>
-		<h1 class="mobile-heading">{t('mobile.heading', 'fr')}</h1>
-		<p class="mobile-body">{t('mobile.body', 'fr')}</p>
-	</div>
-</div>
-{/if}
+<!-- N.73 portrait C, ruling 4: THE INTERSTITIAL IS RETIRED. The gate that
+     stood here ("Ilya is designed for desktop / Continue anyway") met every
+     phone visit and is Fable's audit finding F5. A portrait visit now arrives
+     at the fitted page. Nothing replaced it: no residue, no toast, no
+     one-time note, because Dann has never ruled where a residue goes. -->
 <div class="screen-only">
 	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
 <!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
@@ -2103,7 +2098,55 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		     took every destination with it. -->
 		<DeskHead {activeTab} {language} ontabchange={handleTabChange} />
 		{#if activeTab === 'transcription'}
-			<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} />
+			<!-- ONE Paper, rendered from one snippet in both branches. Two call
+			     sites for the same component drift, and a drifted prop list here
+			     would mean the phone and the desk stopped showing the same
+			     document. -->
+			{#snippet transcriptionPaper()}
+				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} />
+			{/snippet}
+			{#if isMobile}
+				<!-- N.73 portrait C. The stage holds both views. The one that is
+				     not showing goes off-stage rather than to display:none,
+				     because TitleHeader measures itself with bind:offsetHeight
+				     and a display:none element measures 0, which would
+				     re-paginate the document on every tap. -->
+				<div class="portrait-stage">
+					<div class="stage-page" class:offstage={portraitView === 'aid'}>
+						{@render transcriptionPaper()}
+						{#if effectiveLines.length > 0}
+							<!-- ONE labelled action, UNDER the page and never on it.
+							     It sits in the flow rather than fixed to the bottom
+							     of the screen: N.73 S1 deleted the last fixed bottom
+							     furniture and gave the phone back its 92px, and this
+							     is not the place to put furniture back. -->
+							<button
+								class="portrait-action"
+								type="button"
+								onclick={() => void showPortraitView('aid')}
+							>
+								{t('portrait.read', language)}
+								<span class="portrait-action-chevron" aria-hidden="true">&rsaquo;</span>
+							</button>
+						{/if}
+					</div>
+					{#if effectiveLines.length > 0}
+						<div class="stage-aid" class:offstage={portraitView === 'page'}>
+							<ReadingAid
+								lines={effectiveLines}
+								{notationPrefs}
+								{language}
+								{showStressDiacritics}
+								{spotReconstitution}
+								glossOverrides={doc.glossOverrides}
+								onreturn={() => void showPortraitView('page')}
+							/>
+						</div>
+					{/if}
+				</div>
+			{:else}
+				{@render transcriptionPaper()}
+			{/if}
 		{:else if activeTab === 'shane'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
 			     per Dann's review ruling): the interim main pane, a fixed
@@ -2745,79 +2788,88 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	:global(.drawer-content textarea:focus) {
 		border-color: var(--deeper-sage, #7A8A6C) !important;
 	}
-	/* ── Mobile awareness ──────────────────────────────────── */
-	.mobile-overlay {
-		position: fixed;
-		inset: 0;
-		z-index: 1000;
-		background: var(--desk-surface, #D8D4C8);
+	/* ── Portrait C: the stage (N.73, ruled by Dann 2026-08-18) ──
+
+	   The eleven rules that stood here dressed the interstitial. Ruling 4
+	   retired it, so they are gone with it.
+
+	   The stage exists on the phone and on the Transcription destination
+	   only: the desktop renders Paper as a direct child of .main-content, as
+	   it always has, and this wrapper is never in its DOM. */
+	.portrait-stage {
+		position: relative;
+		width: 100%;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		padding: 2rem;
 	}
-	.mobile-card {
-		max-width: 360px;
-		text-align: center;
+
+	.stage-page,
+	.stage-aid {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
-	.mobile-logo {
-		font-size: 2rem;
-		margin-bottom: 1.5rem;
-		color: var(--sage);
+
+	/* NOT display:none. TitleHeader measures its own height with
+	   bind:offsetHeight and a display:none element measures 0, so hiding the
+	   page that way would collapse the row budget to its 9-row fallback,
+	   re-slice the document, and re-slice it again on the way back. Off-stage
+	   keeps the layout alive at a coordinate no scroll can reach: a left-to-
+	   right document does not scroll into negative space. */
+	.offstage {
+		position: absolute;
+		top: 0;
+		left: -100000px;
+		width: 100%;
 	}
-	.mobile-logo .logo-bracket {
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-weight: 400;
-	}
-	.mobile-logo .logo-ilya {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-	}
-	.mobile-logo .logo-version {
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-size: 0.5rem;
-		font-weight: 400;
-		vertical-align: super;
-		margin-left: 0.1em;
-		color: var(--sage);
-		text-transform: lowercase;
-		letter-spacing: 0.02em;
-	}
-	.mobile-heading {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: var(--ink-primary, #1a1612);
-		margin-bottom: 0.5rem;
-	}
-	.mobile-body {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 0.95rem;
-		color: var(--ink-secondary, #4a4540);
-		line-height: 1.6;
-		margin-bottom: 1rem;
-	}
-	.mobile-divider {
-		width: 40px;
-		height: 0;
-		border-top: 0.5px solid var(--stone-300, #d6d3d1);
-		margin: 0.75rem auto 1.25rem;
-	}
-	.mobile-continue {
+
+	/* ── The one labelled action ───────────────────────────── */
+
+	.portrait-action {
+		flex: 0 0 auto;
+		margin: 1.25rem 0 0;
+		border: 1px solid var(--ink-primary, #1a1612);
+		border-radius: 4px;
+		background: var(--ink-primary, #1a1612);
+		color: var(--paper-cream, #F0EBE0);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-size: 0.85rem;
-		color: var(--ink-tertiary, #7a756e);
-		background: none;
-		border: 1.5px solid var(--sage, #8B9A7D);
-		border-radius: 4px;
-		padding: 0.5rem 1.25rem;
-		margin-top: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		/* 0.9rem either side of a 0.85rem line clears the 44px floor. */
+		padding: 0.9rem 2.25rem;
 		cursor: pointer;
-		transition: border-color 150ms ease, color 150ms ease;
+		-webkit-tap-highlight-color: transparent;
+		touch-action: manipulation;
 	}
-	.mobile-continue:hover {
-		border-color: var(--sage);
-		color: var(--ink-primary, #1a1612);
+
+	.portrait-action-chevron {
+		margin-left: 0.4em;
+	}
+
+	.portrait-action:focus-visible {
+		outline: 2px solid var(--ink-primary, #1a1612);
+		outline-offset: 3px;
+	}
+
+	/* PRINT EMITS THE PAGE. Whichever view the singer is looking at, the
+	   action and the aid leave the sheet, and the page comes back on stage. */
+	@media print {
+		.portrait-action {
+			display: none !important;
+		}
+
+		.stage-aid {
+			display: none !important;
+		}
+
+		.stage-page.offstage {
+			position: static !important;
+			left: auto !important;
+		}
 	}
 	/* Responsive layout for narrow viewports */
 	@media (max-width: 767px) {

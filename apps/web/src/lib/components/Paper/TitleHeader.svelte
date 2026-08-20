@@ -191,25 +191,15 @@
 		}
 	}
 
-	/* N.45. Dann's ruling, 11 August 2026: on a phone the paper is a
-	   content view, not a picture of the printed page. This header carries
-	   only metadata, and the metadata already lives in the drawer's
-	   METADATA section, so on this breakpoint it is duplication that costs
-	   height. It is absolutely positioned to letter-page coordinates, so
-	   with an auto-height page it also overlays the transcription.
-	   Unchanged for print and for landscape, which is above 767px. */
-	@media screen and (max-width: 767px) {
-		/* N.69 pass three. NOT display:none. TitlePage derives contentTop from
-		   this header's bind:offsetHeight (TitleHeader.svelte:67), and a
-		   display:none element measures 0, so on a phone the content layer was
-		   laid out with no room for the title block and print dropped the block
-		   on top of the first verse. visibility:hidden still measures.
-		   It costs nothing on screen: this header is position:absolute, and the
-		   mobile rule makes .page-content position:static (TitlePage.svelte:233),
-		   so the inline top is ignored there anyway. Dann's N.45 ruling stands:
-		   the header is still invisible on a phone. */
-		.title-header {
-			visibility: hidden;
-		}
-	}
+	/* N.73 portrait C, ruled by Dann 2026-08-18, retires the N.45 rule that
+	   stood here. It hid this header on the phone with `visibility: hidden`,
+	   on the reasoning that a phone showed a content view rather than a
+	   picture of the printed page and the metadata was duplication.
+
+	   Portrait C reverses that reasoning. The header block is named in the
+	   ruling as part of the page's dress, the phone shows the page itself,
+	   and the metadata is what a singer looking at a document expects to see
+	   on it. The measurement note the rule carried is now in TitlePage's own
+	   comment, where it belongs: `bind:offsetHeight` is a layout measurement
+	   and the portrait scaling cannot move it. */
 </style>

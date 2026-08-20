@@ -48,17 +48,8 @@
 		margin-top: 4px;
 	}
 
-	/* N.45. A running head is a per-page artefact and the mobile document
-	   has no pages a reader can see. Same absolute-positioning problem as
-	   TitleHeader. Unchanged for print and for landscape. */
-	/* NOT display:none: SubsequentPage derives contentTop from this header's
-	   offsetHeight, and a display:none element measures 0. visibility:hidden
-	   still measures, and costs nothing on screen because this header is
-	   position:absolute and the mobile rule makes .page-content position:static
-	   anyway. Same fix as TitleHeader. */
-	@media screen and (max-width: 767px) {
-		.running-header {
-			visibility: hidden;
-		}
-	}
+	/* N.73 portrait C retires the N.45 rule that stood here. It hid this
+	   running head on the phone because the mobile document had no pages a
+	   reader could see. It has pages again, each one whole, so the head that
+	   names them is back with them. */
 </style>

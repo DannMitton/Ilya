@@ -13,7 +13,6 @@
 		notationPrefs: NotationPreferences;
 		language: Language;
 		pageSize: PageSize;
-		isMobile?: boolean;
 		pageNumber: number;
 		totalPages: number;
 		runningHeader: string;
@@ -29,7 +28,6 @@
 		notationPrefs,
 		language,
 		pageSize,
-		isMobile = false,
 		pageNumber,
 		totalPages,
 		runningHeader,
@@ -51,14 +49,13 @@
 
 	/**
 	 * Same formula and the same HEADER_GAP as TitlePage, so the space under the
-	 * rule is identical on every page. Below the breakpoint the running header
-	 * wraps at 100% page width, so the letter-width constant is used instead,
-	 * for the same reason TitlePage does it.
+	 * rule is identical on every page. The breakpoint override went with the
+	 * N.45 spike under N.73 portrait C, for the reason TitlePage's matching
+	 * comment gives: this page is 816px wide on every display now, so the
+	 * running header no longer wraps and the measurement needs no correcting.
 	 */
 	const effectiveHeaderHeight = $derived(
-		isMobile
-			? HEADER_HEIGHTS_AT_LETTER.subsequent
-			: (headerHeight || HEADER_HEIGHTS_AT_LETTER.subsequent)
+		headerHeight || HEADER_HEIGHTS_AT_LETTER.subsequent
 	);
 
 	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
@@ -132,39 +129,9 @@
 
 	/* ── Print rules ───────────────────────────────────────── */
 
-	/* SPIKE for N.45. THIS IS NOT A FEATURE.
-	   Dann's ruling, 11 August 2026: desktop keeps WYSIWYG, mobile adopts a
-	   content-viewing paradigm, and the printed artefact is unchanged because
-	   the @media print block below overrides this one.
-
-	   It answers exactly one question: does legible reflowed transcription
-	   feel right in the hand. It does NOT implement the header and footer
-	   treatment Dann ruled, because the provenance legend's home on mobile is
-	   unruled, and fit-legend.ts calls that legend load-bearing for the
-	   ratified never-guesses clause. Half a ruling is how things get lost.
-
-	   Content is still pre-paginated by sliceLinesToPages, so the old letter
-	   page boundaries remain visible. N.45 proper would bypass pagination on
-	   this breakpoint. Reverting this spike is one commit. */
-	@media screen and (max-width: 767px) {
-		/* N.73 S1b: the shadow STAYS on the phone, for the reason set out on
-		   TitlePage's matching block. Print still clears it below. */
-		.paper-page {
-			width: 100% !important;
-			height: auto !important;
-		}
-
-		.page-content {
-			position: static;
-			left: auto;
-			right: auto;
-			padding: 0.75rem;
-		}
-
-		.verse-row {
-			min-height: 0;
-		}
-	}
+	/* N.73 portrait C retires the N.45 spike that stood here, for the reason
+	   set out on TitlePage's matching block. This sheet keeps 816 by 1056 on
+	   every display. */
 
 	@media print {
 		.paper-page {

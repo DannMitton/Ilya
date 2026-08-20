@@ -68,14 +68,19 @@
 	/**
 	 * The height to lay out against.
 	 *
-	 * On screen at desk width the live measurement is right and handles a title
-	 * of any length. Below the breakpoint the page is 100% wide, the title
-	 * wraps, and the measurement is about 40px too tall for the 816px sheet that
-	 * is actually printed, so the letter-width constant is used instead.
+	 * The live measurement is right and handles a title of any length. It used
+	 * to be overridden by the letter-width constant below the breakpoint,
+	 * because the N.45 spike made the page 100 percent wide there, the title
+	 * wrapped, and the measurement came out about 40px too tall for the 816px
+	 * sheet that prints. N.73 portrait C retired that spike: the page is 816px
+	 * wide on every display, so the measurement IS the letter-width
+	 * measurement and the override has nothing left to correct.
+	 *
+	 * `bind:offsetHeight` (TitleHeader.svelte) is a layout measurement and a
+	 * CSS transform does not touch it, so the scaling Paper.svelte applies in
+	 * portrait cannot move this number either.
 	 */
-	const effectiveHeaderHeight = $derived(
-		isMobile ? HEADER_HEIGHTS_AT_LETTER.title : (headerHeight || HEADER_HEIGHTS_AT_LETTER.title)
-	);
+	const effectiveHeaderHeight = $derived(headerHeight || HEADER_HEIGHTS_AT_LETTER.title);
 
 	/** Content window positioning (px). Bottom is fixed; top follows the header. */
 	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
@@ -218,43 +223,17 @@
 
 	/* ── Print rules ───────────────────────────────────────── */
 
-	/* SPIKE for N.45. THIS IS NOT A FEATURE.
-	   Dann's ruling, 11 August 2026: desktop keeps WYSIWYG, mobile adopts a
-	   content-viewing paradigm, and the printed artefact is unchanged because
-	   the @media print block below overrides this one.
+	/* N.73 portrait C, ruled by Dann 2026-08-18, retires the N.45 spike that
+	   stood here. The spike reflowed this sheet on the phone: 100 percent
+	   wide, height auto, the content window taken out of its absolute frame.
+	   That produced a short card at no particular proportion, which is the
+	   thing portrait C exists to cure. The sheet now keeps its true 816 by
+	   1056 geometry on every display and Paper.svelte scales it to fit, so
+	   what the singer reads on the phone is the artefact that prints.
 
-	   It answers exactly one question: does legible reflowed transcription
-	   feel right in the hand. It does NOT implement the header and footer
-	   treatment Dann ruled, because the provenance legend's home on mobile is
-	   unruled, and fit-legend.ts calls that legend load-bearing for the
-	   ratified never-guesses clause. Half a ruling is how things get lost.
-
-	   Content is still pre-paginated by sliceLinesToPages, so the old letter
-	   page boundaries remain visible. N.45 proper would bypass pagination on
-	   this breakpoint. Reverting this spike is one commit. */
-	@media screen and (max-width: 767px) {
-		/* N.73 S1b: the shadow STAYS on the phone. It was `none` here, and
-		   that, not the shadow's strength, is why the sheet read as a flat
-		   box: the desk went from #6B6560 to #D1D7CB in S1, and a sheet with
-		   no shadow on a 1.24:1 desk has no edge at all. The desk keeps
-		   0.5rem of padding on this breakpoint (+page.svelte), so the 12px
-		   blur has room to land either side. */
-		.paper-page {
-			width: 100% !important;
-			height: auto !important;
-		}
-
-		.page-content {
-			position: static;
-			left: auto;
-			right: auto;
-			padding: 0.75rem;
-		}
-
-		.verse-row {
-			min-height: 0;
-		}
-	}
+	   Nothing replaces the spike here. The whole breakpoint block is gone,
+	   which is why the shadow, the header block, and the colophon survive
+	   into portrait without a rule of their own. */
 
 	@media print {
 		.paper-page {

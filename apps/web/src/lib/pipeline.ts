@@ -202,11 +202,17 @@ export function processText(
 
   // ── Step 1: Split into lines, build pre-transcribe word data ──
 
-  const rawLines = text.split('\n').filter((line) => line.trim());
+  // N.73 portrait C. The raw split is kept so a line can be asked what
+  // FOLLOWED it in the singer's text. Blank lines are still dropped from the
+  // document; they are read once, here, and recorded as `endsStanza`, because
+  // no other part of the tree remembers where a poem breaks.
+  const allRawLines = text.split('\n');
 
-  const preLines: PreTranscribeWord[][] = rawLines
-    .map((line) => {
-      const words = line
+  const preEntries = allRawLines
+    .map((line, rawIndex) => ({ line, rawIndex }))
+    .filter((entry) => entry.line.trim())
+    .map((entry) => {
+      const words = entry.line
         .trim()
         .split(/\s+/)
         .filter((word) => {
@@ -217,9 +223,20 @@ export function processText(
       // Expand hyphenated particles into separate tokens before lookup
       const expanded = expandHyphenatedParticles(words);
 
-      return expanded.map((word) => buildPreTranscribeWord(word));
+      return {
+        rawIndex: entry.rawIndex,
+        words: expanded.map((word) => buildPreTranscribeWord(word)),
+      };
     })
-    .filter((line) => line.length > 0);
+    .filter((entry) => entry.words.length > 0);
+
+  const preLines: PreTranscribeWord[][] = preEntries.map((entry) => entry.words);
+
+  /** True where the singer's next raw line is blank. Nothing else is read. */
+  const endsStanza: boolean[] = preEntries.map((entry) => {
+    const next = allRawLines[entry.rawIndex + 1];
+    return next !== undefined && next.trim() === '';
+  });
 
   // ── Step 1.5: Apply user overrides and yo toggles ────────────
 
@@ -434,6 +451,7 @@ export function processText(
     return {
       lineNumber: lineIdx,
       words: wordStackDataArray,
+      endsStanza: endsStanza[lineIdx] ?? false,
     };
   });
 

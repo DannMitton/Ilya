@@ -140,6 +140,18 @@ export interface WordStackData {
 export interface LineData {
   lineNumber: number;
   words: WordStackData[];
+  /**
+   * True when the singer left a blank line after this one in the input.
+   *
+   * N.73 portrait C. The reading aid draws a line rule where the poem breaks
+   * and closes each verse with an end mark, and nothing else in the tree
+   * records where a poem breaks: `processText` drops blank lines at its first
+   * step, so the break is gone by the time `LineData` exists. This carries it
+   * across, taken from the singer's own line breaks and from nothing else.
+   *
+   * The page does not draw it. Only the aid does, and the aid does not print.
+   */
+  endsStanza?: boolean;
 }
 
 // ── Pipeline input ───────────────────────────────────────────────

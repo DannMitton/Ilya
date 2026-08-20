@@ -170,7 +170,10 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Paper empty state ────────────────────────────────────
 	'paper.empty':                 { en: 'Enter your Cyrillic text in the drawer on the left.', fr: 'Saisissez votre texte cyrillique dans le tiroir à gauche.' },
-	'paper.empty.mobile':          { en: 'Tap the chevron at the bottom to open the drawer.', fr: 'Appuyez sur le chevron en bas pour ouvrir le tiroir.' },
+	// N.73 portrait C. The pull moved to the side of the desk in S1 and this
+	// line still sent the singer to the bottom of the screen. Both languages
+	// RATIFIED by Dann 2026-08-19.
+	'paper.empty.mobile':          { en: 'Tap the chevron on the left to open the drawer.', fr: 'Appuyez sur le chevron à gauche pour ouvrir le tiroir.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -228,10 +231,17 @@ const strings: Record<string, Record<Language, string>> = {
 	'select.filter':               { en: 'Type to filter\u2026',         fr: 'Filtrer\u2026' },
 	'select.notInList':            { en: 'Not in list (enter custom)',   fr: 'Absent de la liste (saisir manuellement)' },
 
-	// ── Mobile awareness ─────────────────────────────────────
-	'mobile.heading':              { en: 'Ilya is designed for desktop',       fr: 'Ilya est conçu pour ordinateur' },
-	'mobile.body':                 { en: 'Ilya produces paginated transcription documents best experienced on a larger screen with a keyboard.', fr: 'Ilya produit des documents de transcription paginés, mieux adaptés à un écran plus grand avec un clavier.' },
-	'mobile.continue':             { en: 'Continue anyway',                    fr: 'Continuer quand même' },
+	// ── Portrait C (N.73), ruled by Dann 2026-08-18 ──────────
+	//    The three 'mobile.*' keys that stood here carried the interstitial
+	//    ("Ilya is designed for desktop", "Continue anyway"). Ruling 4 retired
+	//    the gate, so the words go with it. Every string below is RATIFIED
+	//    whole by Dann 2026-08-19; the key names are Code's, the words are not.
+	'portrait.read':               { en: 'Read',                         fr: 'Lire' },
+	'portrait.thePage':            { en: 'The page',                     fr: 'La page' },
+	'aid.label':                   { en: 'Reading aid, not the page',    fr: 'Aide à la lecture, non la page' },
+	//    %s is the verse number. The ratified line reads "· end of verse 1 ·";
+	//    only the numeral is substituted, and no other word moves.
+	'aid.endOfVerse':              { en: '\u00b7 end of verse %s \u00b7', fr: '\u00b7 fin du couplet %s \u00b7' },
 
 	// ── Fit metadata auto-populate (§A.6; Kimi's rulings, 2026-07-13;
 	//    agentless; copy flagged for Dann's review) ──

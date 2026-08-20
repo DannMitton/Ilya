@@ -211,89 +211,19 @@
 		color: #78716c;
 	}
 
-	/* N.45. The footer carries THREE things and they are not equal.
+	/* N.73 portrait C, ruled by Dann 2026-08-18, retires the N.45 footer
+	   concession that stood here. Two comment blocks and one media query are
+	   gone: below the breakpoint the footer went static and flowed after the
+	   content, the pagination cell was hidden because pages were not visible,
+	   and the attribution consolidated onto the last page alone.
 
-	   Page numbers are meaningless without visible pages, so they go.
+	   Portrait C makes all three wrong. The page is a real page again, whole
+	   and shadowed, and Dann's own test is that what is on the small page is
+	   what prints. A footer that flows, a page number that is missing, or a
+	   colophon that appears once in a two-page document is a page that does
+	   not print as drawn.
 
-	   The provenance legend STAYS. fit-legend.ts calls it the surface
-	   through which a singer sees where calibration is absent, load-bearing
-	   for the ratified never-guesses clause. Ilya must not disclose less on
-	   a phone than on a desktop.
-
-	   The attribution STAYS. Integrity is Dann's first principle, and the
-	   kaikki.org credit is a CC BY-SA 4.0 condition rather than a courtesy.
-
-	   Both become static so they flow after the content instead of being
-	   positioned into the middle of it.
-
-	   RESIDUAL, stated rather than hidden: the attribution now repeats at
-	   every old page boundary, because pagination has not been bypassed
-	   yet. Ruled destination is one colophon at the end plus a link, and a
-	   sticky collapsible Legend anchor. Neither is built here. */
-	/* N.45, Dann's ruling of 11 August 2026: in portrait, ONE attribution
-	   footer for the whole text, not one per page. Landscape is above this
-	   breakpoint and print overrides it, so both keep the block on every
-	   page. The concession is portrait's alone and it is deliberate.
-
-	   PageFooter already receives pageNumber and totalPages, so it knows
-	   whether it is last without a new prop.
-
-	   The provenance legend does NOT consolidate. A legend explains the
-	   marks on the text above it, so it belongs where those marks are.
-	   fit-broad-legend stays with it for the same reason.
-
-	   The top margin lives on the elements that actually render, not on
-	   the footer, so a non-last page whose footer emits nothing leaves no
-	   phantom gap in the paper. */
-	@media screen and (max-width: 767px) {
-		.page-footer {
-			position: static;
-			left: auto;
-			right: auto;
-			bottom: auto;
-			margin-top: 0;
-			/* Match .page-content's 0.75rem so the footer's left edge lines up
-			   with the transcription above it. Dann caught it sitting flush. */
-			padding-left: 0.75rem;
-			padding-right: 0.75rem;
-		}
-
-		.page-footer.is-last-page {
-			margin-top: 1.5rem;
-		}
-
-		.provenance-legend {
-			position: static;
-			justify-content: flex-start;
-			margin-bottom: 8px;
-		}
-
-		.page-footer:not(.is-last-page) .provenance-legend {
-			margin-top: 1.5rem;
-		}
-
-		.page-footer:not(.is-last-page) .footer-hairline,
-		.page-footer:not(.is-last-page) .footer-content {
-			display: none;
-		}
-
-		.pagination-cell {
-			display: none;
-		}
-
-		/* The footer is a two-column grid, 1fr auto with a 32px gap. Hiding
-		   .pagination-cell removes the ITEM but not the track or the gap, so
-		   the attribution still stopped 32px short on the right while sitting
-		   flush on the left. One column, no gap, symmetric. */
-		.footer-content {
-			grid-template-columns: 1fr;
-			gap: 0;
-		}
-
-		/* Fit's per-page broad note consolidates with everything else, so a
-		   non-last footer emits nothing at all and occupies no height. */
-		.page-footer:not(.is-last-page) .fit-broad-legend {
-			display: none;
-		}
-	}
+	   The N.45 residual it recorded goes with it: the attribution repeating
+	   at every page boundary is not a residual any more, it is what a printed
+	   document does. */
 </style>
