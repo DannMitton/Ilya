@@ -141,6 +141,17 @@
 		background-color: inherit;
 	}
 
+	/* N.73 C2, ruled by Dann 2026-08-19: the desk above the page is the same
+	   negative space as the desk beside it, so it takes the same token. This
+	   head already owns the space beneath itself, so the gutter is its bottom
+	   padding rather than a margin on the page, and nothing needs to know
+	   this head's own measurements to sit the ruled distance below it. */
+	@media (max-width: 767px) {
+		.desk-head {
+			padding-bottom: var(--portrait-gutter, 24px);
+		}
+	}
+
 	/* ── The pair ────────────────────────────────────────── */
 
 	.pair {

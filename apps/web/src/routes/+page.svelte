@@ -2158,6 +2158,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     applies its own open syllabification, so the display view would
 			     be sliced twice. -->
 			<VoiceProfilePane
+				{isMobile}
 				transcribedLines={lines}
 				pairings={shownPairings}
 				onnotepick={handleNotePick}
@@ -2882,7 +2883,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		.main-content {
 			height: 100vh;
 			overflow: auto;
-			padding: 0.5rem;
+			/* N.73 C2: the horizontal padding IS the gutter, so the page below
+			   fills what is left and lands on the viewport width less twice
+			   this number. The vertical stays where portrait C left it;
+			   --desk-pad-top must match the top padding, and does. */
+			padding: 0.5rem var(--portrait-gutter, 24px);
 			width: 100%;
 			align-items: flex-start;
 			-webkit-overflow-scrolling: touch;

@@ -53,6 +53,19 @@
 	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
 	--app-bg: var(--desk-surface); /* main content area behind paper */
 
+	/* ── The portrait gutter (N.73 C2) ─────────────────────── */
+	/* ONE negative space, at one value. Ruled by Dann 2026-08-19 on the
+	   walk: the desk showing beside the page and the desk showing above it
+	   are the same thing and take the same number. It is spent in two
+	   declarations and shows on three sides: `.main-content`'s horizontal
+	   padding in `+page.svelte` gives the left and the right, and
+	   `.desk-head`'s bottom padding gives the top. The page then fills the
+	   desk that is left, so its width and its scale follow this token and
+	   nothing hard-codes a percentage.
+
+	   A future change moves this one number. */
+	--portrait-gutter: 24px;
+
 	/* ── Desk tints, one per destination (N.73 S1) ──────────── */
 	/* Each desk carries its destination's signature hue tinted 60 percent
 	   toward white, ruled by Dann 2026-08-10: "C, Desk lightness 60%, no

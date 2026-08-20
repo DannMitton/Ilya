@@ -54,6 +54,7 @@
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
 	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
+	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
@@ -172,6 +173,14 @@
 		pairings?: PairingMap;
 		/** N.55b R4: a click resolving to a note, by event id. */
 		onnotepick?: (eventId: string) => void;
+		/**
+		 * Portrait on a phone (N.73 C2). Mirrors Paper.svelte's prop of the
+		 * same name and is a WIDTH test, which on a phone is also the
+		 * portrait test. It does one thing here: it hands PageFit the word to
+		 * scale this document's pages, so both Studio documents miniaturize
+		 * through one implementation rather than through two.
+		 */
+		isMobile?: boolean;
 	}
 
 	let {
@@ -189,6 +198,7 @@
 		transcribedLines = undefined,
 		pairings = undefined,
 		onnotepick = undefined,
+		isMobile = false,
 	}: Props = $props();
 
 	// N.55b R4. The score is injected as an SVG STRING, so there is no
@@ -686,6 +696,8 @@
 {#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span
 	>{spokenName(g, language)}{/snippet}
 
+<PageFit fit={isMobile} pageWidth={dims.width}>
+	{#snippet content()}
 {#if scorePages && scorePages.length > 0}
 	<!-- Score state (live wiring slice 1): the uploaded score's systems,
 	     paginated into the envelope's exact page geometry and furniture,
@@ -856,6 +868,8 @@
 	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" />
 </article>
 {/if}
+	{/snippet}
+</PageFit>
 
 <style>
 	/* The envelope page: TitlePage's .paper-page geometry, twinned so the
@@ -1073,42 +1087,27 @@
 		color: var(--ink-secondary, #4a4540);
 	}
 
-	/* N.44, E.44, 12 August 2026. Fit had taken HALF of N.45's phone
-	   treatment. PageFooter.svelte:248 sets the footer to `position: static`
-	   under this same breakpoint, but this page kept its inline 816 x 1056
-	   and its absolutely positioned content, so on a phone the footer was the
-	   only child left in the flow and rendered at the TOP of the sheet, with
-	   the body hanging below it at its absolute offset. Observed by Dann on
-	   his own phone in portrait, 12 August 2026, on 8345803.
+	/* N.73 C2 retires the N.44 reflow that stood here.
 
-	   Mirrors TitlePage.svelte:225-237.
+	   N.44 existed for one measured reason, recorded in its own comment: the
+	   phone's PageFooter went `position: static` under this breakpoint while
+	   this page kept its 816 by 1056 and its absolutely positioned content,
+	   so the footer was the only child left in the flow and rendered at the
+	   TOP of the sheet. N.73 portrait C deleted that footer rule, so the
+	   cause is gone, and the reflow it justified is now the thing making this
+	   page overflow on a phone: the title ran off the sheet and the empty
+	   state sat over it, which is what Dann walked on 2026-08-19.
 
-	   Scoped to .envelope-page deliberately. The score and commentary pages
-	   carry an SVG drawn 1:1 against contentWidth, which .score-window anchors, so
-	   reflowing their page would CLIP the notation rather than re-break it.
-	   That is N.46, and it is unruled. */
-	@media (max-width: 767px) {
-		/* N.73 S1b: the shadow STAYS on the phone. See TitlePage's matching
-		   block; this pane twins that geometry and it twins this too. */
-		.paper-page.envelope-page {
-			width: 100% !important;
-			height: auto !important;
-		}
+	   This page keeps 816 by 1056 on every display and PageFit scales it, so
+	   both Studio documents miniaturize identically. */
 
-		.envelope-page .profile-content {
-			position: static;
-			left: auto;
-			right: auto;
-			padding: 0.75rem;
-		}
-	}
-
-	/* N.46, E.44, ruled by Dann 12 August 2026 as shape A. Portrait defers the
-	   NOTATION to landscape and reflows everything that is prose. The score and
-	   commentary pages take the same treatment the envelope took for N.44; the
-	   SVG itself is withheld rather than shrunk, because the stave may not be
-	   scaled down (Dann's standing ruling) and re-breaking the systems at 414px
-	   is a renderer job, not a stylesheet one.
+	/* N.46, E.44, ruled by Dann 12 August 2026 as shape A. PORTRAIT DEFERS
+	   THE NOTATION TO LANDSCAPE, and that half of the ruling stands untouched
+	   below: the SVG is withheld rather than shrunk, because the stave may not
+	   be scaled down (Dann's standing ruling) and re-breaking the systems at
+	   414px is a renderer job, not a stylesheet one. A fitted page would scale
+	   the stave with everything else on it, which is exactly what that ruling
+	   forbids, so the withholding matters MORE under N.73 C2, not less.
 
 	   Landscape needs nothing: 932px is above this breakpoint, so the page
 	   renders at 1:1. OBSERVED by Dann on his own phone, 12 August 2026, on
@@ -1116,21 +1115,20 @@
 
 	   The header, the footer, the provenance legend and the attribution all
 	   survive, because only .score-window is hidden. fitLegend is passed to page
-	   one’s PageFooter alone, and page one is the page that stays. */
+	   one’s PageFooter alone, and page one is the page that stays.
+
+	   WHAT N.73 C2 TOOK OUT of this block, and why. The other half of shape A
+	   reflowed these two pages, "the same treatment the envelope took for
+	   N.44". That treatment was a cure for the footer bug N.44 names, portrait
+	   C deleted the footer rule that caused it, and C2 rules that this
+	   document's page is a letter-proportioned miniature like the
+	   transcription's. So `width: 100% !important`, `height: auto !important`,
+	   the commentary window's `position: static`, and N.45's closed seam are
+	   gone from here. A score page in portrait is now a whole page with its
+	   notation withheld and its rotate notice on it, rather than a short card.
+	   NAMED CONSEQUENCE for Dann: that page is mostly empty by construction,
+	   because the thing it exists to carry is deliberately not drawn. */
 	@media (max-width: 767px) {
-		.paper-page.score-page,
-		.paper-page.commentary-page {
-			width: 100% !important;
-			height: auto !important;
-		}
-
-		/* N.45’s ruling, “only the seam goes”, which Paper.svelte:113 already
-		   applies to the transcription document. Fit had kept its 2rem gap, so a
-		   strip of desk sat between the score sheet and the notes sheet. */
-		.fit-paper-container {
-			gap: 0;
-		}
-
 		/* One notice for the score, not one per page. */
 		.score-page ~ .score-page {
 			display: none;
@@ -1142,14 +1140,6 @@
 
 		.score-page .rotate-notice {
 			display: block;
-		}
-
-		.commentary-page .commentary-window {
-			position: static;
-			left: auto;
-			right: auto;
-			overflow: visible;
-			padding: 0.75rem;
 		}
 	}
 
