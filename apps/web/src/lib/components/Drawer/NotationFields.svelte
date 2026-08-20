@@ -250,21 +250,31 @@
 		cursor: pointer;
 	}
 
-	/* Bottom-anchored accordion, not a tree. The panel is pinned to the
-	   foot of the drawer and grows UPWARD, so closed points up ("more is
-	   up there") and open points down ("push it back"). Dann's
-	   correction, 2026-08-11. The first pass borrowed .toc-chevron's
-	   right-to-down rotation, which is a TREE convention and belongs to a
-	   hierarchy, not to a panel. The glyph is still the TOC's; only the
-	   rotation differs. */
+	/* An accordion, not a tree. Dann's correction of 2026-08-11 is the
+	   durable rule and it is unchanged: the first pass borrowed
+	   .toc-chevron's right-to-down rotation, which is a TREE convention and
+	   belongs to a hierarchy, not to a panel. The glyph is still the TOC's;
+	   only the rotation differs. .toc-chevron is a different control and
+	   keeps its own rotation.
+
+	   THE CHEVRON POINTS THE WAY THE PANEL WILL GROW. That is the rule the
+	   two values express, and the two values were traded on 2026-08-20
+	   because N.73 S3 moved the panel and the rule then demanded the
+	   opposite pair.
+
+	   Bottom-anchored, the panel grew UPWARD: closed pointed up ("more is up
+	   there") and open pointed down ("push it back"). S3 pinned NOTATION to
+	   the TOP of the drawer, where it grows DOWNWARD, so closed points down
+	   and open points up. Found by Dann walking ship one; the two rotations
+	   had been left saying the old geometry. */
 	.chevron-icon {
 		flex-shrink: 0;
-		transform: rotate(-90deg);
+		transform: rotate(90deg);
 		transition: transform 150ms ease;
 	}
 
 	.chevron-icon.expanded {
-		transform: rotate(90deg);
+		transform: rotate(-90deg);
 	}
 
 	@media (pointer: coarse) {

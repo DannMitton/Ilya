@@ -505,6 +505,12 @@
 		outline: 2px solid var(--sage);
 		outline-offset: 1px;
 	}
+	/* LAVENDER, N.73 S3, third repair. This is the `Start` button Dann named
+	   walking ship one, and `Save` beside it. Same reasoning and same token as
+	   `CalibrationWizard.svelte`'s `.wizard-primary`: the S0 slate's ruling 3
+	   keeps lavender to the voice anchor and the calibration surfaces, and
+	   this switcher is the first thing the takeover shows. The hover is the
+	   anchor's `opacity: 0.85` because no darker lavender token exists. */
 	.ps-primary {
 		font-family: inherit;
 		font-size: 0.8125rem;
@@ -512,12 +518,13 @@
 		padding: 0.375rem 1rem;
 		border-radius: 999px;
 		border: 1px solid transparent;
-		background: var(--sage);
+		background: var(--deeper-lavender);
 		color: #ffffff;
 		cursor: pointer;
+		transition: opacity 0.12s;
 	}
 	.ps-primary:hover {
-		background: var(--deeper-sage);
+		opacity: 0.85;
 	}
 	.ps-quiet {
 		font-family: inherit;

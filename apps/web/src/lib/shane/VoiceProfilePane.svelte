@@ -802,6 +802,21 @@
 		{/if}
 	</div>
 {:else}
+<!-- THE CENTRING WRAPPER (N.73 S3, second repair from Dann's walk of ship
+     one). `.main-content`'s `align-items: center` has nothing to centre,
+     because `PageFit`'s `.paper-fit` is `width: 100%` and fills the desk. What
+     centres a sheet is the page stack's own container, and the rule that does
+     it is `align-items: center` on a flex column. The score branch above
+     already carries it, as `.fit-paper-container`; this branch never did, so
+     the envelope sat at the flex start while the desk head stayed centred.
+
+     THE SAME RULE, NOT A SECOND MECHANISM: this is `.fit-paper-container`
+     itself, unchanged, the one the score branch uses, whose declarations are
+     byte-identical to `Paper.svelte`'s `.paper-container`. No `role="region"`
+     and no `aria-label` here: the article below already carries its own label,
+     and an unlabelled region is not exposed as a landmark, so adding one would
+     be noise rather than structure. -->
+<div class="fit-paper-container">
 <article
 	class="paper-page profile-page envelope-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
@@ -867,6 +882,7 @@
 	     until the score pane brings provenance to this surface. -->
 	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" />
 </article>
+</div>
 {/if}
 	{/snippet}
 </PageFit>

@@ -19,3 +19,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 ---
 *Created 2026-08-13.*
 2026-08-18: Mention WCAG accessibility in Ilya's marketing capabilities list (Dann, GUI session).
+2026-08-20: Let every section header be retractable, metadata included (Dann, N.73 S3 walk).
