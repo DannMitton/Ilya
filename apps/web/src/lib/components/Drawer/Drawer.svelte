@@ -78,6 +78,75 @@
 
 	let { width, collapsed, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, pieceAnchor, voiceAnchor, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
+	/* ── THE SILHOUETTE (N.65). Dann's ruling, 2026-08-20, DRAWN at
+	   `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, whose SVG
+	   paths are the specification and whose numbers are read out below
+	   rather than paraphrased.
+
+	   The drawer's right edge and the handle are ONE outline. It runs down
+	   from the top, stops dead at the handle's top-left terminus, turns
+	   ninety degrees, runs along the handle's top, rounds the two RIGHT-hand
+	   corners as a squircle, returns along the handle's bottom, turns ninety
+	   degrees again, and continues to the bottom. THE HANDLE HAS NO LEFT
+	   WALL: its inside is the drawer's inside. Both junctions are mitred.
+
+	   WHY AN SVG. `.drawer-clip` carries `overflow: hidden` and the pull sits
+	   at `left: 100%`, outside it, which is exactly the boundary one path has
+	   to cross. `clip-path` on shaped elements would still be two boxes
+	   agreeing by hand, which is the defect. One `<path>` outside the clip
+	   crosses nothing, and the drawing IS a path, so the specification
+	   transfers literally: the mitre is `stroke-linejoin`, and the squircle
+	   is the drawing's own cubic rather than an approximation of it.
+
+	   WHY THE HEIGHT IS BOUND. A path takes user units, not percentages, so
+	   the viewBox has to know the drawer's height or the stroke and the
+	   squircle distort. `bind:clientHeight` makes user units equal CSS pixels
+	   exactly. */
+	let drawerHeight = $state(0);
+
+	/* THE PROTRUSION AND THE HEIGHT ARE THE TREE'S, NOT THE DRAWING'S. 20 by
+	   76 is N.73 S1b's ruled tab, walked on both displays; the drawing is a
+	   schematic at other proportions. What comes from the drawing is the
+	   SHAPE. */
+	const LIP_W = 20;
+	const LIP_H = 76;
+	/* One weight for one line. 2px is `.drawer-body`'s own edge, and it is
+	   also what the drawing's 5-in-56 stroke scales to at 20px: 1.79. */
+	const STROKE = 2;
+	/* The squircle, as the drawing draws it. Its corner spans 18 of a 56
+	   protrusion, and each cubic control handle runs 14 of that 18. A circle
+	   would use 0.5523; the longer handle is what makes it square-ish. */
+	const R = LIP_W * (18 / 56);
+	const K = R * (14 / 18);
+
+	const silhouette = $derived.by(() => {
+		const h = drawerHeight;
+		if (!h) return null;
+		const xEdge = STROKE / 2;
+		const xOut = STROKE + LIP_W - STROKE / 2;
+		const top = h / 2 - LIP_H / 2;
+		const bot = h / 2 + LIP_H / 2;
+		const n = (v: number) => Math.round(v * 100) / 100;
+		/* The two right corners, written once and used by both paths. */
+		const rightSide =
+			`L ${n(xOut - R)} ${n(top)} ` +
+			`C ${n(xOut - R + K)} ${n(top)} ${n(xOut)} ${n(top + R - K)} ${n(xOut)} ${n(top + R)} ` +
+			`L ${n(xOut)} ${n(bot - R)} ` +
+			`C ${n(xOut)} ${n(bot - R + K)} ${n(xOut - R + K)} ${n(bot)} ${n(xOut - R)} ${n(bot)}`;
+		return {
+			h,
+			w: STROKE + LIP_W,
+			/* The interior. Closed along the edge line, where the drawer's own
+			   fill is already the same colour, so the handle reads as a notch
+			   in the drawer rather than a box beside it. */
+			fill: `M ${n(xEdge)} ${n(top)} ${rightSide} L ${n(xEdge)} ${n(bot)} Z`,
+			/* The outline. OPEN at both ends, because it is cut off by the top
+			   and the bottom of the drawer, and open on the handle's left,
+			   because the handle has no left wall. */
+			outline: `M ${n(xEdge)} 0 L ${n(xEdge)} ${n(top)} ${rightSide} L ${n(xEdge)} ${n(bot)} L ${n(xEdge)} ${n(h)}`,
+		};
+	});
+
 	/* Studio's two documents. The reading destinations, Learn and Guide, have
 	   no piece, no notation and no voice, so none of the three anchors is
 	   theirs. One name for one expression, which was previously written out
@@ -216,7 +285,7 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls">
+<aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls" bind:clientHeight={drawerHeight}>
 	<div class="drawer-clip">
 	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
 		<!-- THE TOP ANCHOR (N.73 S3 ship one). Piece, then NOTATION, pinned
@@ -556,8 +625,32 @@
 	     The chevron points the way the drawer will MOVE when pressed: right
 	     when it is closed and about to arrive, left when it is open and about
 	     to leave. The SVG is drawn pointing right and flipped by CSS. -->
+	<!-- THE SILHOUETTE (N.65), desktop only. A sibling of `.drawer-clip`
+	     rather than a child, for the same reason the pull is one: the clip
+	     would cut it at the drawer's edge, which is the one place this shape
+	     exists to cross. Decorative and inert; the pull below is the control.
+
+	     NOT DRAWN ON THE PHONE. There the drawer is the whole viewport and
+	     `.drawer-body` already sets `border-right: none`, so there is no
+	     drawer edge for a handle to join. Open, the pull moves inside the
+	     drawer's right edge by S1's ruling, so it is not on an edge at all.
+	     The phone keeps the tab it has, unchanged. -->
+	{#if !isMobile && silhouette}
+		<svg
+			class="lip-silhouette"
+			width={silhouette.w}
+			height={silhouette.h}
+			viewBox="0 0 {silhouette.w} {silhouette.h}"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<path class="sil-fill" d={silhouette.fill} />
+			<path class="sil-line" d={silhouette.outline} />
+		</svg>
+	{/if}
 	<button
 		class="drawer-lip"
+		class:silhouetted={!isMobile}
 		onclick={ontogglecollapse}
 		aria-label={t('drawer.pull', language)}
 		aria-expanded={!collapsed}
@@ -603,7 +696,11 @@
 		   RIGHT: that is a distinction in the stylesheet and not in anyone's
 		   eye. It is the same mark. One boundary treatment means one mark,
 		   everywhere, whichever way it runs. */
-		border-right: 2px solid var(--sage);
+		/* TRANSPARENT, NOT DELETED. The silhouette's SVG paints this edge
+		   now, outside `.drawer-clip`, but the 2px still has to be reserved
+		   or the content would slide under the line. N.65, Dann's ruling of
+		   2026-08-20. It was `2px solid var(--sage)`. */
+		border-right: 2px solid transparent;
 	}
 
 
@@ -793,6 +890,65 @@
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
 	}
 
+	/* ── The silhouette (N.65) ───────────────────────────── */
+
+	/* THE COLOUR, AND WHERE IT CAME FROM. Dann ruled the paper handle's grey
+	   for the whole outline. `.paper-handle` was DELETED at N.73 S1, so there
+	   is no paper handle in the tree to read it from, and the drawing's
+	   `#C9C5BD` is a stand-in the coordinating desk invented and the brief
+	   forbids shipping. What IS in the tree is the grey this very handle has
+	   painted since 2026-08-19: `rgba(26, 22, 18, 0.18)` over the drawer's
+	   fill. MEASURED off the running app rather than computed, by reading the
+	   painted pixels of all three of its borders: #D2CFCC on every one.
+
+	   SOLID, not the alpha it came from. One path crosses the drawer's fill
+	   AND the desk, and a translucent stroke would composite to two greys on
+	   one line, which is the thing this ruling exists to end. */
+	.drawer {
+		--lip-grey: #D2CFCC;
+	}
+
+	.lip-silhouette {
+		position: absolute;
+		top: 0;
+		/* The drawer's edge, not its outside. `left: 100%` with the stroke's
+		   own 2px pulled back, so the vertical run lands exactly in the 2px
+		   `.drawer-body` reserves for it and the handle's outer face lands
+		   where the tab's right edge always was, at `100% + 20px`. */
+		left: 100%;
+		margin-left: -2px;
+		/* Under the pull, over the desk. */
+		z-index: 1;
+		pointer-events: none;
+		overflow: visible;
+	}
+
+	.sil-fill {
+		fill: var(--drawer-bg, #FAF8F5);
+		transition: fill 0.12s;
+	}
+
+	.sil-line {
+		fill: none;
+		stroke: var(--lip-grey);
+		stroke-width: 2;
+		/* THE MITRE. Dann: "please do not deliver those awful pointy
+		   artefacts." A miter join on a true right angle is a square corner,
+		   not a spike; the spikes come from joining at an acute angle, and
+		   there is no acute angle in this path. Nothing tapers or flares
+		   through either terminus. */
+		stroke-linejoin: miter;
+		/* Both ends are cut by the top and bottom of the drawer, so they take
+		   no cap. */
+		stroke-linecap: butt;
+	}
+
+	/* The hover lived on the tab's own background. The tab has no background
+	   now, so it moves to the fill the tab sits in. */
+	.drawer:has(.drawer-lip:hover) .sil-fill {
+		fill: #fff;
+	}
+
 	/* ── The pull: a bookmark tab on the drawer's edge ──── */
 
 	/* Option A of `docs/sessions/ilya-lip-options_r1_2026-08-18.html`, ruled
@@ -831,8 +987,26 @@
 		touch-action: manipulation;
 	}
 
+	/* THE TAB PAINTS NOTHING ON THE DESKTOP. N.65, Dann's ruling: the
+	   silhouette is one outline, so a second box with its own fill, its own
+	   hairline, its own radius and its own drop shadow is the two marks the
+	   ruling replaces. What stays is everything that makes it a CONTROL: the
+	   box, the 44px coarse target, the chevron, the focus ring, and the
+	   press. The phone keeps the painted tab, because there is no silhouette
+	   there to belong to. */
+	.drawer-lip.silhouetted {
+		background: none;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
 	.drawer-lip:hover {
 		background: #fff;
+	}
+
+	.drawer-lip.silhouetted:hover {
+		background: none;
 	}
 
 	.drawer-lip:focus-visible {

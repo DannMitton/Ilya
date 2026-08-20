@@ -90,6 +90,39 @@ against and lost, which Fable had ruled on, and which was waiting on a
 ratification Dann had never been asked for again. The document existed
 specifically to stop that from happening.
 
+### 18. NEW, 2026-08-20, ruled by Dann. NAME THE THING BY WHAT HE CAN SEE.
+
+**Dann's words:** *"I find your critique leans too heavily on matters that are
+important to the code (spine vs graphic line) but that do not centre the needs
+of the user."*
+
+**What it cost the same day: he asked FOUR times for one thing and did not get
+it.** He asked for the placeholder text in the drawer's two intake fields to
+match. The desk searched for `::placeholder` rules every time. The score box's
+text is not a `::placeholder`; it was three ordinary elements in a div. **Every
+search the desk ran was structurally incapable of returning the thing he was
+pointing at.**
+
+**The worst moment was the one where the desk had it and reasoned past it.** He
+wrote "make it consistent with its twin." The desk replied that it was reading
+the twin as the metadata field "since the score box has body text rather than a
+placeholder." **The right answer was inside that sentence, and a distinction
+that exists only in the stylesheet was used to rule it out.**
+
+**THE RULE. When Dann points at something on the screen, identify it by what he
+can see, not by what the source calls it.** A candidate excluded on a
+distinction that exists only in the code is excluded WRONGLY, by default, until
+you have looked at the screen.
+
+**The same fault, twice more the same day, on the drawer's edge.** The desk
+defended a `border-right: 2px double` by calling it "a vertical spine rather
+than a horizontal rule." Dann: that distinction is in the stylesheet and in
+nobody's eye. It is the same mark.
+
+**Corollary, and it is cheap: DRAW IT.** When a geometry or a treatment is in
+question, render it and send it. One drawing of three readings settled in two
+exchanges what four rounds of prose had not.
+
 ### 17. NEW, 2026-08-20, ruled by Dann. A RULING IS A SOURCE, NOT LAW. CHECK WHAT AMENDED IT.
 
 Tether 16 sends you to search before you form an opinion. This is its other

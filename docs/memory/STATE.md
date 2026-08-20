@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`96e3fff`**, raised from `904df6e` across the night of 2026-08-20,
+before **`39d60e0`**, raised from `904df6e` across 2026-08-20,
 because N.73 S3 ship one, its three walk repairs, and its memo all shipped in
 `63c2bb4`, and a
 floor that predates
@@ -38,53 +38,119 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED, `96e3fff`, and
-> PART-WALKED. One repair is RULED and unsent.**
+> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED and WALKED across four
+> commits. One pass is with Code and unshipped.**
 >
-> **FIRST ACT OF THE NEXT SESSION: send the repair below to Code, ship it,
-> and finish walking brief §3.5's eight items.** Dann walked one item and
-> stopped: the double line under NOTATION is still two lines.
+> **IN FLIGHT, sent to Code 2026-08-20 afternoon and not yet shipped:** the
+> drawer's edge and its handle become ONE silhouette in the paper handle's
+> grey, and the French drop-zone string gains its « ou ». **The geometry is
+> drawn and the drawing is the specification:**
+> `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`.
 >
-> **THE REPAIR, ruled by Dann 2026-08-20 at the close.** `Drawer.svelte:638`
-> draws `border-bottom: 2px double var(--ink-primary, #1a1612)` on
-> `.drawer-anchor-top`, the mirror `border-top` at `:646` on
-> `.drawer-anchor-bottom`, and the same at `:665` on `.takeover-head`. **The
-> style is literally `double`, which is why it draws two lines, and nothing in
-> the source says why.** Dann's words: "I do not like the double line, replace
-> it with a sage horizontal like the one above Analysis." That is
-> `2px solid var(--sage)`, `.console-section`, `RootPanel.svelte:726-727`.
-> **All three sites. He is knowingly giving up the visual distinction between
-> a frame boundary and a station boundary; record it as his ruling, not as a
-> consequence.** Also replace the comment above `.drawer-anchor-top`, which
-> explains the rule's direction and padding and never explains the doubleness.
+> **NEXT AFTER IT: ship two, `brief-to-code-drawer-stations_r1_2026-08-20.md`
+> §4.** Retraction on every station including the anchors, the persisted open
+> set with NOTATION's exemption, the first-run default of Piece and Source
+> open. **Metadata's chevron, which Dann asked for on the walk, is that ship.**
 >
-> **He said he will argue about it tomorrow. Do not treat the ruling as
-> settled beyond the repair itself, and do not defend the double rule unless
-> he asks.**
+> **THEN:** the chapter bands for Learn and Guide, then S5 (the wall re-plumb),
+> S6 (consequences), then the rest of the aesthetic layer.
 >
-> **THE STATE OF N.73 S3.** Ship two is `DONE`, `af995a9`, walked four of four.
-> **Ship one is `WRITTEN`, not `DONE`:** eight of nine walked plus three
-> repairs, and items 6, 7, and 8 need a microphone and a real calibration.
-> Code closed item 7 in its own harness; 6 and 8 remain Dann's.
+> **N.73 S3 is otherwise closed.** Ship two `DONE`, `af995a9`, walked four of
+> four. **Ship one is `WRITTEN`, not `DONE`:** brief items 6 and 8 need Dann's
+> microphone and a real calibration. Code closed item 7 in its own harness.
 >
-> **THE BUILD ORDER FROM HERE:** N.65 ship one's repair and walk, then N.65
-> ship two (retraction, persistence, first-run defaults, brief §4), then the
-> chapter bands for Learn and Guide, then S5 (the wall re-plumb), S6
-> (consequences), then the rest of the aesthetic layer.
->
-> **THE GOVERNING BRIEF:** `docs/sessions/brief-to-code-drawer-stations_r1_2026-08-20.md`,
-> §3 built, §4 not started. **Its §3.2 was wrong about the double line and Code
-> corrected it; read the ship one memo before the brief.**
+> **TWO THINGS DANN OPENED TODAY AND HAS NOT SETTLED.**
+> **The name.** He said "I think I like the term 'Score Markup' better than
+> 'Marked Score'." That would change his own S0 ruling 2 of 2026-08-19. **NOT
+> RULED. Do not build it.** The desk put two objections and he has not
+> answered: "markup" collides with the markup formats listed inches away in the
+> drop zone (MNX, MusicXML, .mxl), and the pair names two documents while
+> "markup" names marks rather than a page. **Cost if he rules it in:**
+> `i18n.ts` `'tab.markedScore'` is the only singer-facing string; the French
+> « Partition annotée » would need re-ruling; `shane` stays as the wire value
+> so there is no migration.
+> **The `score` watermark still collides on a 360 px phone.** Gone on the desk.
+> At 360 x 640 the drop zone's sentence wraps to five lines and fills 120 px of
+> a 152 px box, overlapping the whole 41.6 px glyph band. Dann's phone is wider
+> and may already be clear. **Measured, left alone, his to rule.**
 >
 > **THE GOVERNING DOCUMENTS for the GUI, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
 > the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`, station
-> order at **§3.3**, not §4), the mockups (**r1 governs the drawer; r2 does not
-> touch the stations**), the lip (`ilya-lip-options_r1_2026-08-18.html`, option
-> A), and the ratified strings (`fable-n73-french-strings_r1_2026-08-19.md`).
-> **E.27 is a SOURCE, not law. Tether 17. Three of its parts are superseded and
-> the drawer-stations entry below names which.**
+> order at **§3.3**, and **its order is superseded**, see below), the mockups
+> (**r1 governs the drawer; r2 does not touch the stations**), the lip
+> (`ilya-lip-options_r1_2026-08-18.html`, option A), and the ratified strings
+> (`fable-n73-french-strings_r1_2026-08-19.md`).
+> **E.27 is a SOURCE, not law. Tether 17.**
+
+---
+
+## 2026-08-20 AFTERNOON. N.65 SHIP ONE, WALKED AND REPAIRED FOUR TIMES
+
+**Floor: `39d60e0`.** Five gates at baseline on every ship: 216, 235, 0 errors
+and 7 warnings in 4 files, 682, 444 passed and 5 skipped. Nothing moved all day.
+
+**The four commits.** `96e3fff` ship one. `f59f7d2` the sage boundary and one
+station recipe modelled on Analysis. `3c498aa` the second walk and the intake
+watermarks. `39d60e0` the intake pair.
+
+**RULED BY DANN TODAY.**
+
+- **The scroll reads Source, Output, Songs, Analysis**, then Score work and
+  notices, then the pinned Voice anchor. **This reverses the
+  Analysis-above-Output order shipped in N.73 S3 ship two and walked.** His
+  reason: the song comes in and goes out at the top, the performance sits
+  together at the bottom, and Print stops being stranded across an empty
+  Analysis from the fields it belongs with. The order it replaced came from a
+  spec written before the anchors existed.
+- **Every station matches Analysis** in spacing and dividing rule. One recipe:
+  a 2 px sage line, 6 px, the label, its own 0.4 rem, the body, 12 px, the next
+  station's line.
+- **No `double` border survives anywhere in the drawer.** The 2 px double at
+  the three anchor and takeover boundaries went sage on his ruling "I do not
+  like the double line, replace it with a sage horizontal like the one above
+  Analysis." **He gave up the frame-versus-station distinction knowingly.**
+- **The intake watermarks.** `text` in `--light-sage` and `score` in
+  `--light-lavender`, 40 px, weight 700, `-0.01em`, `--font-sans`, centred,
+  visible only while the field is empty, `aria-hidden`. **The colour split is
+  Dann correcting himself** after the desk raised that light sage in both would
+  put a sage mark inside a lavender-bordered box against his own hue rule.
+  **40 px and its three companions are adopted from
+  `fable-gui-mockup_r2_2026-08-18.html:94`, `.room-band h2`, the only oversized
+  sans this project has drawn.** `partition` measures 148.19 px in a 262.8 px
+  box at 360 x 640, so the brief's binding constraint did not bind; the full
+  table from 28 px to 60 px is in the memo if Dann wants a larger number.
+  **This watermark now DEFINES the oversized-sans convention and the chapter
+  bands must match it**, because the bands do not exist and the mockup that
+  draws them says its typefaces are stand-ins.
+- **The drop zone's three stacked lines became ONE placeholder** in the
+  textarea placeholder's exact treatment. See the lesson below.
+- **The drawer's edge and its handle become one silhouette in grey.** Geometry
+  drawn at `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html` and ruled
+  by Dann from that drawing. In flight with Code.
+
+**THE LESSON THAT COST HIM FOUR ASKS, now CONTRACT tether 18.** He asked four
+times for the two intake fields' placeholder text to match. The desk searched
+`::placeholder` rules every time; the score box's text was three ordinary
+elements, so every search was incapable of returning it. **He said "make it
+consistent with its twin" and the desk wrote back that it was reading the twin
+as the metadata field "since the score box has body text rather than a
+placeholder."** The answer was inside that sentence and a stylesheet
+distinction was used to rule it out. **Name the thing by what he can see.**
+
+**THREE CAUSES FOUND BY MEASURING RATHER THAN READING, all by Code.**
+`app.css`'s N.23 focus-zoom rule names `input, select, textarea` and not
+`button`, so `SearchableSelect`'s three triggers stayed 12.8 px on a phone
+while the two inputs jumped to 16 px: that was Dann's "two sizes among five
+fields." A `:global(.drawer-content textarea)` rule with `!important` outranked
+`.text-input`'s own border. And the double line was `border-style: double`,
+never a seam between two rules.
+
+**ONE RULE INSET, and the cause was mechanical.** A border draws on the border
+box, so the 1 rem padding on the three pinned blocks sat inside it and the rule
+spanned the whole drawer. The same 1 rem is a margin now. All seven sage rules
+start 16 px from the drawer's left edge.
 
 ---
 

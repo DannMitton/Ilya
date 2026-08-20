@@ -298,10 +298,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// nothing else: the space joining the two sentences and the two full
 	// stops. Every format name stands exactly as it did, and the non-breaking
 	// space before the colon is French typography the tree already had.
-	// NOT MIRRORED, and Dann rules it: his English gained "or" before the
-	// last item and this French did not gain « ou », because that word is
-	// French he has not seen.
-	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie.' },
+	// « ou » CONFIRMED BY DANN 2026-08-20, on his walk of `39d60e0`. The
+	// English gained "or" before the last item and the French now mirrors
+	// it. That is the one word in this string he added rather than the tree,
+	// and it is the only word here that did not come from the three keys
+	// below.
+	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie.' },
 
 	// NO LONGER RENDERED. Retained as the provenance of
 	// 'upload.drop.placeholder'; see its comment.

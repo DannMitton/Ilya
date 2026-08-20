@@ -26,7 +26,7 @@ Not read: E.27 itself, E.36 §2.2, `InspectorPanel.svelte`.
 | Notation onto that owner, accent and no-gap as props | `NotationFields.svelte:29,96-106` |
 | Analysis onto that owner | `RootPanel.svelte:378` |
 | Songs onto that owner, and its 6px double-gap fixed | `SongList.svelte:22,105,114,183-190` |
-| The fifth declaration renamed, not folded | `Drawer.svelte:264,434,909-925` |
+| The fifth declaration renamed, not folded | `Drawer.svelte:333,503,1083-1099` |
 | SOURCE, a labelled station | `RootPanel.svelte:195-197` |
 | Clear and Transcribe at Source's foot | `RootPanel.svelte:273-295` |
 | Print beside Export and Import | `RootPanel.svelte:319-334` |
@@ -330,7 +330,7 @@ where they are.**
    the same word and the same standard noun in French, so no French was written.
    **The brief said not to ship a French string he has not approved, and an empty
    slot was not available**: `t()` returns `[MISSING: source.heading]` for an
-   absent value (`i18n.ts:845-849`), which would print that string in the drawer
+   absent value (`i18n.ts:847-851`), which would print that string in the drawer
    in French. The precedent for recording an invariant as identical en/fr values
    rather than as an absence is this file's own tab-bar comment on
    `tab.transcription` and `tab.guide`. **Settled by: Dann, in one word, on the
@@ -376,8 +376,8 @@ Two rulings, and both are his. **Neither is a consequence I noticed.**
 **HIS RULING.** The three horizontal `2px double var(--ink-primary)` rules become
 `2px solid var(--sage)`, the sage horizontal that `.console-section` already drew
 above Analysis. Three sites, all named by him: `.drawer-anchor-top`,
-`.drawer-anchor-bottom`, and `.takeover-head`. Built at `Drawer.svelte:689`,
-`:702`, and `:724`.
+`.drawer-anchor-bottom`, and `.takeover-head`. Built at `Drawer.svelte:786`,
+`:799`, and `:821`.
 
 **HE GAVE UP THE FRAME-VERSUS-STATION DISTINCTION KNOWINGLY, AND RULED THAT IT IS
 WORTH GIVING UP.** The old pair said two different things: the ink double marked a
@@ -396,14 +396,14 @@ ruling: N.73 S3 ship two made NOTATION's accent unconditionally sage and the S0
 slate kept lavender to the voice anchor alone, so every station label in the drawer
 is sage on both documents already.
 
-**The comment above `.drawer-anchor-top` is rewritten** (`Drawer.svelte:667`). The
+**The comment above `.drawer-anchor-top` is rewritten** (`Drawer.svelte:764`). The
 old one explained the rule's direction and its padding and never once said why the
 style was `double`, which is the question Dann had to ask. The new one states what
 the rule means, names him and the date, names all four sites that draw it, records
 what he gave up, and says not to restore it as a fix.
 
 **ONE `2px double` SURVIVES AND I LEFT IT: `.drawer-body`'s `border-right`
-(then `Drawer.svelte:600`).** He named three sites and this is not one of them. It is
+(then `Drawer.svelte:600`, and §11.4 replaced it).** He named three sites and this is not one of them. It is
 the drawer's outer edge against the desk, a vertical spine rather than a rule
 inside the drawer, so no singer sees it beside a sage horizontal. **If "one
 boundary treatment for the whole drawer" is meant to reach it, that is one word
@@ -445,7 +445,7 @@ neighbours drew none. Output and Songs draw their own top rule now, so Analysis'
 on top of each station's own and making the space above a label depend on which
 station it was: `.root-panel` lost its `gap: 6px` and its `20px` top padding
 (`RootPanel.svelte:434`), and `.drawer-anchor-top` lost its `gap: 6px` and its
-`12px` vertical padding (`Drawer.svelte:667`).
+`12px` vertical padding (`Drawer.svelte:764`).
 
 ### 7.3 The ladder, measured after the repair
 
@@ -542,7 +542,7 @@ INSIDE the border and the rule spanned the whole drawer. Every station rule in
 1rem.
 
 **The fix is the same 1rem moved to the other side of the border**: side margin
-instead of side padding, at `Drawer.svelte:688`, `:701`, and `:723`.
+instead of side padding, at `Drawer.svelte:785`, `:798`, and `:820`.
 `VoiceAnchor.svelte:69` gave its 1rem up to the shelf above it and keeps its 9px.
 No pseudo-elements, no compensation arithmetic, and the left edge of every pinned
 line is unchanged.
@@ -931,7 +931,7 @@ same alignment, top left, one line of prose that wraps.
 | One placeholder, in the twin's treatment | `ScoreUploader.svelte:532-533,816` |
 | Top left rather than centred | `ScoreUploader.svelte:719` |
 | The scan icon's reserve, mirrored from the textarea | `ScoreUploader.svelte:739` |
-| The combined string, both languages | `i18n.ts:304` |
+| The combined string, both languages | `i18n.ts:306` |
 | The coarse-pointer bump reaches the new line | `app.css:318` |
 
 `dz-title`, `dz-browse`, and `dz-accepted` are gone, markup and rules both.
@@ -996,7 +996,7 @@ photograph". The French still ends « PDF, une photographie ». Adding « ou » 
 parallel change and it is one word, but it is a French word he has not seen, so I
 did not write it. **One word from him settles it either way.**
 
-**The three source keys are retained, not deleted** (`i18n.ts:308-310`). They render
+**The three source keys are retained, not deleted** (`i18n.ts:310-312`). They render
 nowhere now. They are the provenance of the combined string, and reversing this
 ruling is one edit rather than a re-translation.
 
@@ -1058,6 +1058,205 @@ says everything it needs to say and the mark is decorative.
 3. **What to do about the phone collision.** §10.5. Settled by his walk.
 4. **How the pair reads on real glass.** Every figure here is Chromium with touch
    emulated. Settled by his own phone.
+
+---
+
+## 11. THE SILHOUETTE, and the French gets its « ou »
+
+**Two repairs from Dann's walk of `39d60e0`. Ship two of the stations brief is
+still NOT started.**
+
+### 11.1 What shipped
+
+| what | where |
+|---|---|
+| The one-path silhouette, geometry read out of the drawing | `Drawer.svelte:105-160` |
+| Its markup, a sibling of `.drawer-clip` | `Drawer.svelte:640` |
+| The drawer's height, bound so user units are CSS pixels | `Drawer.svelte:288` |
+| The sage edge becomes a transparent reserve | `Drawer.svelte:703` |
+| The grey, and where it came from | `Drawer.svelte:908` |
+| The outline and its mitre | `Drawer.svelte:931` |
+| The tab stops painting itself on the desktop | `Drawer.svelte:997` |
+| « ou » | `i18n.ts:306` |
+
+### 11.2 The mechanism, and why an SVG
+
+**An inline SVG with one `<path>` for the outline and one for the interior**, a
+sibling of `.drawer-clip` rather than a child.
+
+**`clip-path` and shaped elements were both rejected for the same reason.** The
+defect is not that the two marks are clipped apart; it is that they are two marks
+agreeing by hand, in two colours, at two weights, with two corner treatments. Any
+solution built from two boxes keeps that. **One `<path>` outside the clip crosses
+no boundary at all**, so `overflow: hidden` on `.drawer-clip` stops being a problem
+rather than being worked around.
+
+**The drawing is itself an SVG path, so the specification transfers literally
+instead of being paraphrased.** The mitre is `stroke-linejoin: miter`. The squircle
+is the drawing's own cubic, not a circular approximation of it. Nothing about the
+shape had to be re-derived in another language.
+
+**One thing the SVG needs that CSS would not: the drawer's height.** A path takes
+user units, never percentages, so a viewBox that does not know the height would
+distort both the stroke and the squircle. `bind:clientHeight` on the `<aside>` makes
+one user unit exactly one CSS pixel (`Drawer.svelte:288`), and the path is a
+`$derived` off it. It recomputes on a viewport resize and not during the open and
+close animation, which changes width rather than height.
+
+### 11.3 The geometry, read out of the drawing
+
+**What comes from the drawing is the SHAPE. What comes from the tree is the SIZE.**
+The handle stays 20 by 76, which is N.73 S1b's ruled tab, walked on both displays.
+The drawing is a schematic at other proportions, and per tether 3 the tree wins on
+anything it already holds.
+
+| quantity | in the drawing | here | how |
+|---|---|---|---|
+| protrusion | 56 of 300 | **20px** | the tree's, unchanged |
+| handle height | 100 | **76px** | the tree's, unchanged |
+| stroke | 5 | **2px** | the tree's own edge weight. The drawing's 5-in-56 scales to 1.79 at 20px, so both sources agree |
+| corner radius | 18, which is 18/56 of the protrusion | **6.43px** | the drawing's ratio, applied to 20px. It was a circular 5px |
+| cubic control length | 14, which is 14/18 of the corner | **5.00px** | the drawing's ratio. A circle would use 0.5523 of the corner; the longer handle is what makes it square-ish |
+
+**The rendered path, read back out of the DOM at 1440x900:**
+
+```
+M 1 0 L 1 388 L 14.57 388 C 19.57 388 21 389.43 21 394.43
+L 21 457.57 C 21 462.57 19.57 464 14.57 464 L 1 464 L 1 852
+```
+
+Check it against the drawing's `L188 100 C202 100 206 104 206 118`. Corner start at
+`xOut - R`, first control at `xOut - R + K`, second at `xOut, top + R - K`, end at
+`xOut, top + R`. **Same construction, same ratios, different scale.**
+
+**Where it lands, measured:** the SVG box is x 518, width 22, height 852. The
+vertical run's stroke is centred at user x 1, so it paints viewport 518 to 520,
+which is exactly the 2px `.drawer-body` reserves. The handle's outer face paints 538
+to 540, which is exactly where the tab's right edge has always been. **Nothing
+moved.**
+
+**The outline is open at three places and that is the drawing.** Both ends are cut
+by the top and the bottom of the drawer, so they take `stroke-linecap: butt`. The
+handle's left is open because **the handle has no left wall**: the interior path
+closes along the edge line, where the drawer's own fill is already the same colour,
+so the handle reads as a notch in the drawer rather than a box beside it.
+
+**On the mitre.** Dann: "please do not deliver those awful pointy artefacts." A
+miter join on a true right angle is a square corner; spikes come from joining at an
+acute angle, and there is no acute angle anywhere in this path. Screenshotted at 6x
+device pixel ratio: the vertical stops, the horizontal starts, the corner is square,
+and nothing tapers or curves through either terminus.
+
+### 11.4 The colour, and the tree disagreeing with the brief
+
+**THE BRIEF SAYS TO TAKE THE VALUE FROM THE PAPER HANDLE IN THE TREE. THERE IS NO
+PAPER HANDLE IN THE TREE.** `.paper-handle` was deleted at N.73 S1 on 2026-08-19
+(`docs/sessions/n73-s1-the-desk-selector_r1_2026-08-19.md:61`, "deleted with the
+handle"). I searched `docs/`, `claude/`, and the tree; no memo, spec, or mockup
+records its hex. The drawing's `#C9C5BD` is the stand-in the brief forbids shipping.
+
+**What I used instead: `#D2CFCC`, and it is the grey THIS handle already paints.**
+`.drawer-lip` has carried `rgba(26, 22, 18, 0.18)` over the drawer's fill since
+2026-08-19. **Measured rather than computed**, by screenshotting the tab and reading
+the painted pixels of all three of its borders through a canvas: `#D2CFCC` on every
+one. It is the grey Dann has been looking at on this control, which is the nearest
+thing to "the handle's grey" that the tree still holds.
+
+**Solid, not the alpha it came from.** One path crosses the drawer's fill and the
+desk, and a translucent stroke would composite to two greys on one line, which is
+the defect this ruling exists to end.
+
+**One consequence worth his eye, measured and not fixed.** The line is faint against
+the desk:
+
+| pair | contrast |
+|---|---|
+| `#D2CFCC` on the desk `#D8D4C8` | **1.05:1** |
+| `#D2CFCC` on the drawer fill `#FAF8F5` | 1.46:1 |
+| the sage `#8B9A7D` it replaced, on the desk | 2.02:1 |
+
+**The drawer's edge is about half as visible as it was**, because it traded sage for
+the handle's grey. **That is his ruling and I built it**, and the number is here so
+he can rule again after seeing it. The handle itself is unchanged: it painted
+`#D2CFCC` before this repair and it paints `#D2CFCC` now.
+
+### 11.5 What survived, verified
+
+| what must survive | measured |
+|---|---|
+| the 44px coarse target | `::before` reads 44px x 88px, on the phone AND on a desktop with a coarse pointer |
+| the chevron flips with state | `matrix(-1, 0, 0, 1, 0, 0)` open, `matrix(1, 0, 0, 1, 0, 0)` closed |
+| the open and close animation | runs; the silhouette tracks the edge because it is positioned `left: 100%` like the pull |
+| the mobile case | untouched. §11.6 |
+| the pull is a control | it keeps its box, its `aria-label`, its `aria-expanded`, its focus ring, and its press |
+
+**What the tab gave up on the desktop, and only there:** its background, its 1px
+hairline, its 5px radius, and its drop shadow. Those four made it a second box. The
+silhouette draws the shape now, and the SVG's interior path draws the fill.
+
+**The hover moved with the fill.** It was `.drawer-lip:hover { background: #fff }`.
+The tab has no background on the desktop, so it is
+`.drawer:has(.drawer-lip:hover) .sil-fill { fill: #fff }`. The phone keeps the
+original rule.
+
+**The drop shadow is gone and is not replaced.** The drawing has none, and a shadow
+under a box that no longer has a visible box is a mark with nothing to cast it.
+**Stated as a decision rather than an omission.**
+
+### 11.6 The phone, and why the silhouette is not there
+
+**The silhouette renders on the desktop only.** Verified at 390x844: no
+`.lip-silhouette` in the DOM, and the tab keeps its fill `rgb(250, 248, 245)`, its
+`1px rgba(26, 22, 18, 0.18)` hairline, its `0 5px 5px 0` radius, and its shadow. It
+opens, it closes, and the chevron flips.
+
+**The reason is that there is no drawer edge on the phone to join.**
+`.drawer-body` already sets `border-right: none` there, because the drawer is the
+whole viewport. **And open, the pull moves inside the drawer's right edge** by S1's
+ruling of 2026-08-19, so it is not on an edge at all: a silhouette would draw a
+vertical line down the middle-right of the screen. **This is the do-nothing and it
+is why the brief's "the mobile case still works" is satisfied by changing nothing
+there.**
+
+**Closed on the desktop, no new furniture appears.** The drawer's width is 0, so the
+edge sits at the viewport's left and the 2px reserve is at x -2 to 0, off-screen.
+Measured: only the handle shows, at x 0 to 20, exactly as before.
+
+### 11.7 The French
+
+**« ou » is in, on Dann's confirmation.** Read out of the running app:
+
+> Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant : MNX,
+> MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie.
+
+**U+00A0 before the colon, verified in the DOM after the change**: the three
+codepoints around it read `U+00A0 U+003A U+0020`. No `[MISSING:]` anywhere in the
+drawer. « ou » is the one word in this string that came from Dann rather than from
+the three keys it recombines, and `i18n.ts` says so at the key.
+
+### 11.8 Gates
+
+| gate | baseline | this run |
+|---|---|---|
+| phonology | 216 | **216 passed (216)** |
+| dictionary | 235 | **235 passed (235)** |
+| web-check | 0 errors, 7 warnings, 4 files | **0 errors and 7 warnings in 4 files** |
+| web-test | 682 | **682 passed (682)** |
+| score-parser | 444 passed, 5 skipped | **444 passed, 5 skipped (449)** |
+
+**Nothing moved.** No page errors on load, on opening, or on closing, on either
+display.
+
+### 11.9 NOT ESTABLISHED
+
+1. **The paper handle's actual grey.** It was deleted at N.73 S1 and no document
+   records its hex. `#D2CFCC` is this handle's own measured grey, used in its place.
+   **Settled by: Dann, if `#D2CFCC` is not what he meant.**
+2. **Whether the drawer's edge should be this faint.** 1.05:1 against the desk, from
+   2.02:1. §11.4. Settled by his walk.
+3. **Whether the phone should get a silhouette too.** §11.6 argues it has nothing to
+   join. Settled by him.
+4. **Whether the drop shadow is missed.** §11.5. Settled by his walk.
 
 ---
 *Written by Code, 2026-08-20 late. Every measurement in this memo was taken in a

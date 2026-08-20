@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C, drawn properly</title>
+<style>
+  :root{ --drawer:#FAF8F5; --desk:#D1D7CB; --sage:#8B9A7D; --grey:#C9C5BD; --ink:#1a1612; }
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 22px 42px;background:#EFECE4;
+       font-family:-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink)}
+  h1{font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;font-weight:600}
+  .lede{font-size:13px;line-height:1.5;max-width:64ch;margin:0 0 20px;color:#4a453f}
+  .wrap{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+  .card{background:#fff;border:1px solid #DAD5CB;border-radius:5px;padding:14px}
+  .name{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+        color:#6b665f;margin-bottom:9px}
+  svg{display:block;background:var(--desk);border-radius:3px}
+  .stack{display:flex;flex-direction:column;gap:14px}
+  .cap{font-size:11.5px;line-height:1.45;color:#4a453f;margin-top:9px;max-width:34ch}
+  .note{margin-top:26px;font-size:12px;line-height:1.6;color:#4a453f;max-width:72ch}
+  .note b{color:var(--ink)}
+  .pair{display:flex;gap:14px}
+</style>
+</head>
+<body>
+
+<h1>C, with square junctions and a sheared squircle</h1>
+<p class="lede">One unbroken outline. The lip arrives vertically, stops dead at the handle's
+top-left terminus, and turns ninety degrees. The handle's right side is a squircle. The lip
+leaves again from the bottom-left terminus, ninety degrees, straight down. No flare, no point,
+nothing tapered.</p>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="name">The shape</div>
+    <svg width="300" height="300" viewBox="0 0 300 300">
+      <path d="M0 0 L150 0 L150 100 L188 100 C202 100 206 104 206 118
+               L206 182 C206 196 202 200 188 200 L150 200 L150 300 L0 300 Z"
+            fill="var(--drawer)"/>
+      <path d="M150 0 L150 100 L188 100 C202 100 206 104 206 118
+               L206 182 C206 196 202 200 188 200 L150 200 L150 300"
+            fill="none" stroke="var(--sage)" stroke-width="5" stroke-linejoin="miter"/>
+      <path d="M186 132 L172 150 L186 168" fill="none" stroke="var(--ink)" stroke-width="4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="150" cy="100" r="4.5" fill="none" stroke="#B44" stroke-width="1.6"/>
+      <circle cx="150" cy="200" r="4.5" fill="none" stroke="#B44" stroke-width="1.6"/>
+    </svg>
+    <div class="cap">The two red rings are the termini. Nothing crosses them and nothing
+    curves through them.</div>
+  </div>
+
+  <div class="stack">
+    <div class="card">
+      <div class="name">The top terminus, closer</div>
+      <svg width="240" height="150" viewBox="0 0 240 150">
+        <path d="M0 0 L110 0 L110 70 L200 70 C232 70 240 78 240 110 L240 150 L0 150 Z"
+              fill="var(--drawer)"/>
+        <path d="M110 0 L110 70 L200 70 C232 70 240 78 240 110"
+              fill="none" stroke="var(--sage)" stroke-width="7" stroke-linejoin="miter"/>
+        <path d="M110 34 L110 70 L146 70" fill="none" stroke="#B44" stroke-width="2"
+              stroke-dasharray="5 4"/>
+        <path d="M110 58 L122 58 L122 70" fill="none" stroke="#B44" stroke-width="1.6"/>
+      </svg>
+      <div class="cap">A true right angle. The vertical stops, the horizontal starts, and the
+      corner is mitred rather than rounded or flared.</div>
+    </div>
+
+    <div class="card">
+      <div class="name">Which colour, now that it is one line</div>
+      <div class="pair">
+        <svg width="120" height="150" viewBox="0 0 240 300">
+          <path d="M0 0 L150 0 L150 100 L188 100 C202 100 206 104 206 118 L206 182
+                   C206 196 202 200 188 200 L150 200 L150 300 L0 300 Z" fill="var(--drawer)"/>
+          <path d="M150 0 L150 100 L188 100 C202 100 206 104 206 118 L206 182
+                   C206 196 202 200 188 200 L150 200 L150 300"
+                fill="none" stroke="var(--sage)" stroke-width="5" stroke-linejoin="miter"/>
+          <path d="M186 132 L172 150 L186 168" fill="none" stroke="var(--ink)" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg width="120" height="150" viewBox="0 0 240 300">
+          <path d="M0 0 L150 0 L150 100 L188 100 C202 100 206 104 206 118 L206 182
+                   C206 196 202 200 188 200 L150 200 L150 300 L0 300 Z" fill="var(--drawer)"/>
+          <path d="M150 0 L150 100 L188 100 C202 100 206 104 206 118 L206 182
+                   C206 196 202 200 188 200 L150 200 L150 300"
+                fill="none" stroke="var(--grey)" stroke-width="5" stroke-linejoin="miter"/>
+          <path d="M186 132 L172 150 L186 168" fill="none" stroke="var(--ink)" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="cap">Sage on the left, the paper handle's grey on the right. One line cannot
+      be two colours, so this is one choice for the whole silhouette.</div>
+    </div>
+  </div>
+
+</div>
+
+<p class="note">
+<b>What I think you are asking for, in words, so you can catch me if it is wrong.</b>
+The drawer's right edge is one path. It runs down from the top of the drawer, stops at the
+handle's top-left terminus, and turns ninety degrees to the right. It runs along the handle's
+top, rounds the two right-hand corners as a squircle, comes back along the handle's bottom,
+and reaches the bottom-left terminus. There it turns ninety degrees again and continues to
+the bottom of the drawer. <b>The handle has no left wall</b>, so its inside is the drawer's
+inside, and the only two straight vertical runs in the whole path are the lip above and the
+lip below.
+</p>
+
+</body>
+</html>
