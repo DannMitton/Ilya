@@ -193,6 +193,45 @@ on the same three.
      first bullet, "no orphan controls," is violated today by the textarea and
      the drop zone sitting bare.
 
+  5. **THE ANCHORS RETRACT TOO, ruled 2026-08-20 late.** Every station with
+     contents retracts: Piece, Notation, Source, Analysis, Output, Songs.
+     **The voice anchor is NOT a station**: it is one line, a dot, a status,
+     and a button, with no contents to retract, and collapsing it would hide
+     `Calibrate`, the only entry to the ritual, for no height. Put to Dann as
+     a scope point and not contradicted.
+  6. **THE OPEN SET PERSISTS PER DEVICE.** E.27 §3.4, one of the three parts
+     nothing has amended. **Dann's workflow makes it a requirement, not a
+     convenience:** his model is that a singer fills the metadata once, retracts
+     it because it has done its job, and gives the space to the operands. If the
+     drawer forgets, that one gesture becomes a chore every session.
+     **EXCEPTION, taken as the do-nothing rather than put to Dann: NOTATION
+     keeps its deliberate non-persistence.** `+page.svelte` states the reason in
+     its own comment, "a remembered collapse hides the toggles from a singer
+     who forgot they exist," and nothing ruled on 2026-08-20 touches it. One
+     line to reverse if a session proves it wrong.
+  7. **NO AUTO-COLLAPSE ON POPULATE.** It is the obvious next thought and E.27
+     §3.3 forbids it in advance: "Calm Authority means the drawer does not
+     fidget. Nothing else ever moves without the user." The retraction is the
+     singer's gesture. **Do not build a station that shuts itself.**
+
+  **WHY THE ANCHORS RETRACTING MATTERS, measured.** The Inspector's placeholder
+  reserves `min-height: 365px` (`RootPanel.svelte:628`, read in the tree
+  2026-08-20). Against the drawer middles Code measured on `63c2bb4`, retraction
+  of the scrolling stations alone cannot deliver a full Analysis pane on three
+  of five phone sizes, because the middle is already shorter than the reserve:
+  360, 300, and 273 px against 365. **Retracting the metadata anchor, 302.7 px,
+  gives back roughly 270 and clears all five.** So Dann's ruling 5 is what
+  closes the small-phone case, not ruling 1.
+  **NOT ESTABLISHED: the POPULATED Inspector's height.** 365 is what the
+  placeholder reserves. The figure it was chosen against sits in E.36 §2.2,
+  which this desk has not opened.
+  **A HOLE IN E.44 WORTH KNOWING BEFORE ANYONE REOPENS THIS.** E.44 overturned
+  E.27's Inspector takeover on the grounds that the Analysis region "always has
+  a truthful tenant, because its placeholder body carries the dictionary state
+  and the empty-state copy." **That is an argument about the EMPTY state.**
+  Nothing in it considered whether the populated state fits on a 375 px phone.
+  By tether 17 that overturning is a source, not law.
+
   **NOT GRANTED, and the build must not assume it: phone exclusivity.** E.27
   §3.4 rules "Desktop: any number of stations open at once. Phone: exactly one
   open at a time." Opus flagged that on 2026-08-05 as a second override of
