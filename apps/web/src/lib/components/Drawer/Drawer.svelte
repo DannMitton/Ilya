@@ -921,6 +921,30 @@
 		z-index: 1;
 		pointer-events: none;
 		overflow: visible;
+		/* ── THE LIFT (N.65). Dann's ruling, 2026-08-20, on his walk of
+		   `0e5ed6e`: the whole silhouette carries THE PAPER'S shadow, at the
+		   paper's own ruled values and not a new set.
+
+		   `0 3px 12px rgba(0, 0, 0, 0.35)` is N.73 S1b's one ruled shadow,
+		   declared today by `SubsequentPage`, `ReadingPaper`, `TitlePage`, and
+		   `VoiceProfilePane`. It is copied, not tuned.
+
+		   `drop-shadow()` AND NOT `box-shadow`. A box-shadow follows the
+		   element's BOX, which here is a 22px-wide rectangle running the whole
+		   height of the drawer, so it would draw a tall rectangular shadow
+		   that has nothing to do with the shape. `drop-shadow()` follows the
+		   painted alpha, so the shadow is the silhouette's own outline: the
+		   edge for its whole run, and the handle where the handle bulges.
+
+		   ONE FILTER ON THE SVG, NOT ONE PER PATH. Two filters would be two
+		   objects casting two shadows, which is the thing this ruling ends.
+		   The filter takes the union of the fill and the stroke, so the drawer
+		   and its handle lift together.
+
+		   NOT CONFINED TO THE HANDLE, by Dann's ruling: the lift falls from the
+		   whole edge, because that is what one object casting one shadow means
+		   and it is what the paper does. */
+		filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35));
 	}
 
 	.sil-fill {

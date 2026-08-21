@@ -93,6 +93,12 @@ import type { SongRow } from '$lib/library/songs';
 		songLibrary,
 	}: Props = $props();
 
+	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". The watermark and the sage
+	   hover are bound to the same condition by Dann's ruling of 2026-08-20,
+	   so they read it from one name rather than repeating the expression and
+	   drifting apart later. */
+	const sourceIsEmpty = $derived(inputText === '');
+
 	const charCount = $derived(inputText.length);
 	const showWarning = $derived(charCount > 5000);
 	const dictReady = $derived(loaderState.entryCount > 0 && !loaderState.isLoading);
@@ -195,7 +201,7 @@ import type { SongRow } from '$lib/library/songs';
 	<div class="section source-section">
 		<StationHeader label={t('source.heading', language)} />
 		<div class="station-body">
-	<div class="textarea-wrapper">
+	<div class="textarea-wrapper" class:empty={sourceIsEmpty}>
 		<!-- THE TEXT WATERMARK (N.65). Empty field only, which is Dann's own
 		     ruling: it never sits under a pasted poem. `inputText` is the
 		     source of truth for the field's value, so the mark leaves the
@@ -204,7 +210,7 @@ import type { SongRow } from '$lib/library/songs';
 		     transparent with `z-index: 1` and this wrapper holds the white
 		     fill, so the placeholder always paints over the mark even if a
 		     singer drags the field short enough for the two to meet. -->
-		{#if inputText === ''}
+		{#if sourceIsEmpty}
 			<IntakeWatermark word={t('input.watermark', language)} colour="var(--light-sage)" />
 		{/if}
 		<textarea
@@ -522,6 +528,42 @@ import type { SongRow } from '$lib/library/songs';
 		position: relative;
 		background: white;
 		border-radius: 4px;
+		/* `.dropzone`'s own value, copied so the two intakes tint at one
+		   speed. */
+		transition: background 0.15s ease;
+	}
+
+	/* ── THE SAGE HOVER (N.65). Dann's ruling, 2026-08-20, on his walk of
+	   `0e5ed6e`: "I notice the score input field has a lavender mouseover. I
+	   love it. Can the text input field have a sage mouseover?"
+
+	   THE TWIN'S TREATMENT IN THIS BOX'S OWN HUE. `.dropzone:hover` is
+	   `rgba(142, 126, 155, 0.06)`, which is `--deeper-lavender` at 6 percent,
+	   the score box's own border hue. This is `--sage` #8B9A7D at the same 6
+	   percent, which is the text box's own border hue. Hue names place, so
+	   the two intakes must not share one tint.
+
+	   NO DRAG STATE. `.dropzone.dragging` doubles the tint to 12 percent
+	   because it takes a drop. The textarea takes none, so there is nothing
+	   for a second value to describe.
+
+	   ON THE WRAPPER, NOT THE TEXTAREA, and this is the whole reason the
+	   wrapper exists. `.text-input` is transparent at `z-index: 1`, ABOVE the
+	   watermark; a background on it would paint over `text` and hide the
+	   thing the wrapper was built to reveal. The wrapper sits BELOW the
+	   watermark, so the tint goes behind the mark and the mark stays on top
+	   of it. The wrapper's box is also the textarea's border box exactly,
+	   because the textarea is `display: block; width: 100%` and the wrapper
+	   has no padding of its own, so the hover target matches what the score
+	   box gets: the whole bordered field.
+
+	   EMPTY ONLY, and that is Dann's correction of the same day. The score
+	   box's hover disappears because the whole drop zone unmounts once a
+	   score arrives. The textarea never unmounts, so an unconditional hover
+	   would tint the singer's poem every time the cursor crossed it. It is
+	   bound to `sourceIsEmpty`, the same name the watermark is bound to. */
+	.textarea-wrapper.empty:hover {
+		background: rgba(139, 154, 125, 0.06);
 	}
 
 	/* THE BORDER IS 1px, AND THE WEIGHT CHANGE IS NOT RULED. Brief §3.6
