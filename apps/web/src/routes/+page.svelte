@@ -2795,17 +2795,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   floor, exactly as its twin `TRANSCRIPTION` is. Giving Print a floor its
 	   twin does not have would make it stop paralleling the twin, which is the
 	   thing Dann ruled. */
+	/* N.77 ship 4 part B. THE SIZE IS THE DRAWER'S QUIET-BUTTON MODEL,
+	   `.action-btn.btn-ghost` in `RootPanel.svelte:867` and `:878`: its
+	   `padding: 0.45rem 0.5rem` and its `font-size: 0.8rem`. Print measured
+	   26.59px tall against the model's 34.38px before this.
+
+	   ITS LOOK IS UNTOUCHED, AND THAT IS DANN'S RULING OF 2026-08-21 READ
+	   AS WRITTEN: the ruling governs Print's position and its idiom, not its
+	   size. So the uppercase, the 0.1em tracking, the 600 weight, the ink
+	   border, and the transparent fill all stay exactly as they were, and
+	   `.sheet-print`'s own layout rules were not opened. Only the two
+	   declarations that set the box changed. */
 	.sheet-print-btn {
 		border: 1px solid var(--ink-primary, #1a1612);
 		border-radius: 4px;
 		background: transparent;
 		color: var(--ink-primary, #1a1612);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-size: 0.7rem;
+		font-size: 0.8rem;
 		font-weight: 600;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		padding: 0.3rem 0.7rem;
+		padding: 0.45rem 0.5rem;
 		cursor: pointer;
 	}
 

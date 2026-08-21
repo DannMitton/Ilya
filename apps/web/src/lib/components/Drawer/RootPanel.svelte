@@ -955,20 +955,41 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   read literally, and no new value enters the scale: it is this recipe's
 	   own top step.
 
-	   THE 2px THAT REMAINS IS A RULE, NOT PADDING. Notation, Repertoire and
-	   Analysis draw a `border-top`; Metadata and Source do not, because each
-	   sits directly under an anchor's own rule. That is a mark on the page,
-	   which is what Dann is looking at, and it is already consistent. */
+	   THE 2px THAT REMAINS IS A RULE, NOT PADDING. Notation, Source and
+	   Analysis draw a `border-top`; Metadata and Repertoire do not, because
+	   each sits directly under a rule something above it already draws.
+	   Metadata's comes from the drawer header, Repertoire's from
+	   `.drawer-anchor-top`'s `border-bottom` (`Drawer.svelte:839`). That is a
+	   mark on the page, which is what Dann is looking at, and it is
+	   consistent again.
+
+	   THAT LIST NAMED REPERTOIRE AND SOURCE THE OTHER WAY ROUND UNTIL N.77
+	   SHIP 4, and it was correct when written: Source was first in the
+	   scroll then. The Repertoire move of `a1b5774` swapped them and the
+	   list went stale where the exemption did. */
 	.section.shut {
 		padding-bottom: 6px;
 	}
 
-	/* Source is first in the scroll and draws NO rule of its own. The top
-	   anchor's own boundary is already directly above it, and the two would
-	   land within 20px of each other, which is the double line Dann has
-	   been asking about since the walk. The anchor's rule is Source's top
-	   boundary, and it is the same 2px sage. */
-	.source-section {
+	/* THE EXEMPTION BELONGS TO WHATEVER IS FIRST IN THE SCROLL, AND IT MOVED
+	   ON 2026-08-21 BECAUSE THE ORDER DID.
+
+	   It read `.source-section { border-top: none }` until N.77 ship 4, and
+	   its reason was sound: `.drawer-anchor-top` (`Drawer.svelte:839`) draws
+	   a 2px sage `border-bottom` under the pinned Metadata and Notation
+	   block, so the first station in the scroll already has a top boundary.
+	   A `border-top` there lands on the same y and paints as one 4px rule,
+	   which is the double line Dann had been asking about since the walk.
+
+	   `a1b5774` moved Repertoire above Source. Source stopped being first
+	   and kept the exemption, so its own boundary went blank and Repertoire
+	   inherited the doubling. MEASURED on the built phone before this
+	   change: two 2px sage marks at the same y above REPERTOIRE, and nothing
+	   at all between REPERTOIRE and SOURCE.
+
+	   So the exemption follows the position rather than the station. If the
+	   order changes again, move it again. */
+	.song-section {
 		border-top: none;
 	}
 
