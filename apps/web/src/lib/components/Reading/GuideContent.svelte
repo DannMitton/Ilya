@@ -15,7 +15,9 @@
 						{#if language === 'fr'}
 						<h1>Guide</h1>
 
-						<h2 id="guide-how">Comment fonctionne Ilya</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-how">Comment fonctionne Ilya</h2>
+						</div>
 
 						<h4 id="guide-what">Que fait Ilya ?</h4>
 
@@ -74,7 +76,9 @@
 
 							<!-- ═══ VISITE GUIDÉE ══════════════════════════════════ -->
 
-							<h2 id="guide-walkthrough">Une visite guidée</h2>
+							<div class="chapter-band band-guide">
+								<h2 id="guide-walkthrough">Une visite guidée</h2>
+							</div>
 
 							<p>Cette visite guidée suit une session complète dans <em>Ilya</em>, de l'ouverture de l'outil jusqu'à l'impression d'une transcription achevée. Notre exemple de travail est l'air de Gremine dans <em>Eugène Onéguine</em> de Tchaïkovski — un texte exigeant pour tout moteur de transcription, et une pièce de choix du répertoire de basse russe.</p>
 
@@ -183,7 +187,9 @@
 
 						<!-- ═══ COLLABORATEURS ═════════════════════════════════ -->
 
-						<h2 id="guide-contributors">Collaborateurs</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-contributors">Collaborateurs</h2>
+						</div>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
 
@@ -257,7 +263,9 @@
 
 						<p>Ce que Kimi a apporté à Ilya, c’est la clarté : la capacité à saisir l’ensemble, à nommer le principe, à bâtir des systèmes qui conservent leur forme. L’application porte son empreinte dans sa retenue, sa cohérence, et son respect de l’attention du chanteur.</p>
 
-						<h2 id="guide-licences">Licences et remerciements</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-licences">Licences et remerciements</h2>
+						</div>
 
 						<p><em>Ilya</em> est gratuit et à code ouvert, publié sous licence MIT, © 2026 Dann Mitton. Il repose sur la générosité de chercheurs, de créateurs de polices, de curateurs de données et de mainteneurs de logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
 
@@ -277,7 +285,9 @@
 						{:else}
 						<h1>Guide</h1>
 
-						<h2 id="guide-how">How Ilya Works</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-how">How Ilya Works</h2>
+						</div>
 
 						<h4 id="guide-what">What does Ilya do?</h4>
 
@@ -337,7 +347,9 @@
 
 							<!-- ═══ WALKTHROUGH ════════════════════════════════════ -->
 
-							<h2 id="guide-walkthrough">A Walkthrough</h2>
+							<div class="chapter-band band-guide">
+								<h2 id="guide-walkthrough">A Walkthrough</h2>
+							</div>
 
 							<p>This walkthrough follows a complete <em>Ilya</em> session, from opening the tool to printing a finished transcription. Our working example is Gremin's Aria from Tchaikovsky's <em>Eugene Onegin</em> — a generous test for any transcription engine, and a worthy piece of Russian bass repertoire.</p>
 
@@ -446,7 +458,9 @@
 
 						<!-- ═══ CONTRIBUTORS ═════════════════════════════════ -->
 
-						<h2 id="guide-contributors">Contributors</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-contributors">Contributors</h2>
+						</div>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
 
@@ -520,7 +534,9 @@
 
 						<p>What Kimi brought to Ilya was clarity: the ability to see the whole, to name the principle, to build systems that hold their shape. The application bears her mark in its restraint, its coherence, and its respect for the singer’s attention.</p>
 
-						<h2 id="guide-licences">Licences and Acknowledgments</h2>
+						<div class="chapter-band band-guide">
+							<h2 id="guide-licences">Licences and Acknowledgments</h2>
+						</div>
 
 						<p><em>Ilya</em> is free and open source, released under the MIT License, © 2026 Dann Mitton. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
 

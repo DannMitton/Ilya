@@ -84,6 +84,89 @@
 		line-height: 1.4;
 		margin: 2rem 0 0.75rem 0;
 	}
+	/* ── N.77 ship 1: chapter-opening bands ─────────────────
+
+	   Ruling 6 of 2026-08-18, drawn at fidelity in
+	   `docs/sessions/fable-gui-mockup_r2_2026-08-18.html` Exhibit 2. Every
+	   length here is that drawing's, read from its `.room-band` rules at
+	   `:92-98`. The `line-height` on the kicker and the deck is the
+	   mockup's `body` rule at `:21`, which both of them inherit there.
+
+	   TWO DEPARTURES FROM THE MOCKUP, BOTH RULED IN THE BRIEF. The colours
+	   are the app's own tokens, because the mockup's `--rose` and
+	   `--cobalt` are stand-ins and its closing note says so. The mockup's
+	   `opacity` on the kicker and the deck is dropped, because it costs
+	   contrast on a hue that already sits close to the 3:1 floor.
+
+	   THE HORIZONTAL BLEED IS A READING OF THE DRAWING, NOT A RULING. In
+	   the mockup the sheet carries no padding of its own and the band is
+	   its first child at full width, so the band meets the sheet edge.
+	   `.reading-paper` here carries `padding: 3rem 96px`, so the band has
+	   to cancel the horizontal half of that to land in the same place. The
+	   96px is `MARGINS.horizontal` from `$lib/page-config.ts`, the same
+	   number `.reading-paper` sets.
+
+	   The vertical margins are `h3`'s own, unchanged, so the gap above a
+	   chapter and the gap below its title stay what the page already had. */
+	.reading-inner :global(.chapter-band) {
+		margin: 3.5rem -96px 1.25rem -96px;
+		padding: 34px 30px 30px 30px;
+		color: #fdfbf6;
+	}
+
+	.reading-inner :global(.band-learn) {
+		background: var(--dusty-rose, #A67B7B);
+	}
+
+	.reading-inner :global(.band-guide) {
+		background: var(--quiet-cobalt, #5C739E);
+	}
+
+	.reading-inner :global(.band-kicker) {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 10px;
+		line-height: 1.45;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+	}
+
+	/* FOUR CLASSES AND ONE TYPE, AND THE COUNT IS THE WHOLE POINT.
+	   `+page.svelte:3051-3061` paints every reading heading in its tab's
+	   hue: `.main-content.tab-learn :global(.reading-inner h3)`, three
+	   classes and one type. A band title styled at three or fewer lands
+	   dusty rose on dusty rose and cobalt on cobalt, which renders a 40px
+	   title that is present, sized, and completely invisible. Measured on
+	   the built page 2026-08-21, before this selector was widened.
+	   `.reading-paper` and the band's own colour class carry it to four,
+	   which wins outright rather than on source order.
+
+	   The heading element itself is untouched. It keeps its tag and its
+	   id, because `Drawer.svelte`'s table of contents finds it by id and
+	   the scroll-spy at `+page.svelte:1737` observes it by id. */
+	.reading-paper .reading-inner :global(.chapter-band.band-learn h2),
+	.reading-paper .reading-inner :global(.chapter-band.band-learn h3),
+	.reading-paper .reading-inner :global(.chapter-band.band-guide h2),
+	.reading-paper .reading-inner :global(.chapter-band.band-guide h3) {
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.04;
+		letter-spacing: -0.01em;
+		color: #fdfbf6;
+		border-top: none;
+		margin: 10px 0 0 0;
+		padding-top: 0;
+	}
+
+	.reading-inner :global(.band-deck) {
+		font-family: var(--font-serif, 'Source Serif 4', serif);
+		font-style: italic;
+		font-size: 15px;
+		line-height: 1.45;
+		margin-top: 12px;
+		max-width: 330px;
+	}
+
 
 	/* ── Body text ────────────────────────────────────────── */
 

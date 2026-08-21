@@ -38,7 +38,10 @@
 						<p>Le module est organisé en sept unités qui suivent un principe directeur unique : découvrir les sons d'abord, puis apprendre ce qui leur arrive.</p>
 
 
-						<h3 id="learn-unit-1">Section 1 · Les lettres</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 1</div>
+							<h3 id="learn-unit-1">Les lettres</h3>
+						</div>
 
 						<p>Le russe standard contemporain (RSC) utilise trente-trois lettres. On rencontre parfois quatre caractères supplémentaires, aujourd'hui obsolètes, dans les partitions anciennes ; ceux-ci ont été abandonnés lors de la réforme orthographique de 1918. C'est là tout le système, et à la fin de cette section vous aurez fait connaissance avec chacun de ses membres.</p>
 
@@ -673,9 +676,11 @@
 
 						<p><em>Sources :</em> Craig M. Grayson, «&nbsp;Russian Lyric Diction&nbsp;» (thèse de doctorat, University of Washington, 2012), ch. 2, annexes B et D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya et Daniel Bunčić, «&nbsp;Russian,&nbsp;» <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
-						<h3 id="learn-unit-2">Section 2 · L'accent tonique</h3>
-
-						<p><strong>Ici, c'est l'accent qui gouverne chaque son.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 2</div>
+							<h3 id="learn-unit-2">L'accent tonique</h3>
+							<div class="band-deck">Ici, c'est l'accent qui gouverne chaque son.</div>
+						</div>
 
 						<p>En italien, l'accent tombe presque toujours sur la syllabe pénultième. En français, il se pose sur la dernière syllabe du groupe rythmique. Ni l'anglais ni le russe ne nous offrent cette régularité. L'accent tonique russe est lexical : il doit être appris mot par mot, vérifié mot par mot, et il peut se déplacer lorsqu'un mot change de forme grammaticale. C'est le fait le plus déterminant de la prononciation russe pour les chanteurs. Et c'est la raison pour laquelle <em>Ilya</em> intègre un dictionnaire de près d'un million d'entrées plutôt que de tenter de dériver l'accent à partir de règles.</p>
 
@@ -757,9 +762,11 @@
 						<p><em>Source Grayson : ch. 7 (Syllabic Stress, pp. 263–273), ch. 2 (pp. 65–66), ch. 8 §1 (pp. 274–278). Baytukalov cité dans Grayson p. 273.</em></p>
 
 
-						<h3 id="learn-unit-3">Section 3 · Les voyelles accentuées</h3>
-
-						<p id="learn-u3-inventory"><strong>Ce sont les voyelles accentuées qui constituent les cibles.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 3</div>
+							<h3 id="learn-unit-3">Les voyelles accentuées</h3>
+							<div class="band-deck" id="learn-u3-inventory">Ce sont les voyelles accentuées qui constituent les cibles.</div>
+						</div>
 
 						<p>Lorsqu'une voyelle russe porte l'accent, elle sonne comme elle-même, comme l'on attend. Ce sont les sons vocaliques cardinaux stables — ceux sur lesquels le chanteur peut compter avant que quoi que ce soit ne se transforme. La plupart de ces voyelles russes nous sont déjà familières grâce à l'italien, au français et à l'allemand. Apprenez ceux-ci d'abord&#8239;; tout ce qui suit dans les Sections 4&#160;à&#160;7 est une transformation de ce que vous entendez ici.</p>
 
@@ -882,9 +889,11 @@
 
 						<p>Transcrivez <strong>шесть</strong> et <strong>шест</strong>. Les deux commencent par ⟨ш⟩ + ⟨е⟩, mais шесть est suivi d'un cluster mou (⟨сть⟩ → /sʲtʲ/) et produit [e]. шест est suivi d'un cluster dur (⟨ст⟩ → /st/) et reste à /ɛ/. Le chemin de la consonne toujours dure vers [e] à l'œuvre — même lettre, voisin différent, couleur différente.</p>
 
-						<h3 id="learn-unit-4">Section 4 · La réduction vocalique</h3>
-
-						<p><strong>Lorsqu’une voyelle perd l’accent, elle se transforme.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 4</div>
+							<h3 id="learn-unit-4">La réduction vocalique</h3>
+							<div class="band-deck">Lorsqu’une voyelle perd l’accent, elle se transforme.</div>
+						</div>
 
 						<p>Le russe est une langue à rythme accentuel, comme l’anglais. Il se déroule en une série de syllabes accentuées et inaccentuées, où l’intervalle entre les syllabes accentuées reste à peu près constant, tandis que les syllabes inaccentuées s’accommodent de ces pulsations régulières en se comprimant entre elles et en perdant leur spécificité vocalique. Cette perte de spécificité s’appelle la réduction vocalique. La voyelle perd sa distinction par rapport à sa valeur cardinale par défaut, dérivant vers un son plus centralisé et moins engagé. En russe chanté, le compositeur prescrit les durées rythmiques, de sorte que la compression temporelle évidente d’une langue à rythme accentuel dans la parole spontanée ne peut pas se manifester&#160;: elle est contrôlée par le rythme et la vitesse de la mélodie. Mais en tant que conteurs, la réduction qualitative de la prosodie parlée continue d’éclairer notre approche des textes russes chantés. La diction lyrique préserve davantage de qualité vocalique pour le chant que la parole, mais le principe demeure&#160;: une voyelle inaccentuée n’a pas le même son défini qu’a une voyelle accentuée.</p>
 
@@ -982,7 +991,10 @@
 
 						<p><em>Source Grayson&#160;: ch. 3 §§3, 5, 7–8 (pp. 97–129), ch. 7 §1 (pp. 263–267). Tableau de reconstitution&#160;: p. 128, note p. 129. Différenciation auditive des formes casuelles&#160;: p. 266, n. 306. Cadre accentuel&#160;: Mitton (thèse, §4.5). Note de Kochetov&#160;: communication personnelle, soutenance de récital DMA, Université de Toronto.</em></p>
 
-						<h3 id="learn-unit-5">Section 5 · Les consonnes</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 5</div>
+							<h3 id="learn-unit-5">Les consonnes</h3>
+						</div>
 
 						<p>Le russe compte vingt-et-une lettres consonantiques. Bonne nouvelle&#160;: la majorité de ces consonnes produisent des sons que le chanteur connaît déjà de l’anglais, de l’italien, de l’allemand ou du français. Quelques-unes exigent un ajustement, et seule une poignée est véritablement nouvelle. Nous commençons par le familier, puis concentrons notre attention sur ce qui ne l’est pas.</p>
 
@@ -1179,7 +1191,10 @@
 
 						<p><em>Source Grayson&#160;: ch. 4 (toutes les sections), ch. 5 §1</em></p>
 
-						<h3 id="learn-unit-6">Section 6 · La palatalisation</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 6</div>
+							<h3 id="learn-unit-6">La palatalisation</h3>
+						</div>
 
 						<h4 id="learn-u6-what">Qu’est-ce que la palatalisation ?</h4>
 						<p>La palatalisation est une articulation secondaire nécessaire en
@@ -1774,7 +1789,10 @@
 						articulatoire de la consonne.</p>
 
 
-<h3 id="learn-unit-7">Section 7 · Assimilation et frontières</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 7</div>
+							<h3 id="learn-unit-7">Assimilation et frontières</h3>
+						</div>
 
 						<h4 id="learn-u7-two">Deux formes d’assimilation régressive</h4>
 
@@ -2010,7 +2028,10 @@
 
 						<p><em>Grayson source&#160;: Ch. 5 §§2–5 (pp. 150–262), Ch. 7 §2 (pp. 247–258). Appendix F (pp. 312–313).</em></p>
 
-						<h2 id="learn-coda">8 · Les inclassables</h2>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">8</div>
+							<h2 id="learn-coda">Les inclassables</h2>
+						</div>
 
 						<p><em>Avons-nous tout couvert&#160;? Est-ce possible&#160;? Qui comble les vides&#160;?</em></p>
 
@@ -2064,7 +2085,10 @@
 						<p>The module is organised into seven units that follow a single governing principle: meet the sounds first, then learn what happens to them.</p>
 
 
-						<h3 id="learn-unit-1">Section 1 · The Letters</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 1</div>
+							<h3 id="learn-unit-1">The Letters</h3>
+						</div>
 
 						<p>Contemporary Standard Russian (CSR) uses thirty-three letters, but you will sometimes see four additional, obsolete characters in old print scores; these were discarded with the 1918 spelling reform. That is the entire system, and by the end of this section you will have met every member of it.</p>
 
@@ -2699,9 +2723,11 @@
 
 						<p><em>Sources:</em> Craig M. Grayson, "Russian Lyric Diction" (D.M.A. dissertation, University of Washington, 2012), Ch. 2, Appendices B and D. Ken Griffiths, Russian Alphabet Song, arr. Dann Mitton (2017). Irena Yanushevskaya and Daniel Bunčić, "Russian," <em>Journal of the International Phonetic Association</em> 45/2 (2015).</p>
 
-						<h3 id="learn-unit-2">Section 2 · Stress</h3>
-
-						<p><strong>Every sound in this module depends on where the stress falls.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 2</div>
+							<h3 id="learn-unit-2">Stress</h3>
+							<div class="band-deck">Every sound in this module depends on where the stress falls.</div>
+						</div>
 
 						<p>Stress in Italian almost always falls on the penultimate syllable. In French, it falls reliably on the final syllable. Like English, Russian offers no such courtesy. Stress in Russian is lexical: it must be learned word by word, verified word by word, and it can shift when the same word changes its grammatical form. This is the single most consequential fact about Russian pronunciation for singers. And it is the reason that <em>Ilya</em> incorporates a dictionary of nearly one million entries rather than attempting to derive stress from rules.</p>
 
@@ -2783,9 +2809,11 @@
 						<p><em>Grayson source: Ch. 7 (Syllabic Stress, pp. 263–273), Ch. 2 (pp. 65–66), Ch. 8 §1 (pp. 274–278). Baytukalov cited in Grayson p. 273.</em></p>
 
 
-						<h3 id="learn-unit-3">Section 3 · Stressed Vowels</h3>
-
-						<p id="learn-u3-inventory"><strong>Stressed vowels are the targets.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 3</div>
+							<h3 id="learn-unit-3">Stressed Vowels</h3>
+							<div class="band-deck" id="learn-u3-inventory">Stressed vowels are the targets.</div>
+						</div>
 
 						<p>When a Russian vowel carries stress, it sounds like itself. These are the stable cardinal vowel sounds — the ones the singer can expect before anything else changes. Most of them are already familiar to us from Italian, French, and German. Learn these first; everything that follows in Sections 4–7 is a transformation of what you hear here.</p>
 
@@ -2908,9 +2936,11 @@
 
 						<p>Transcribe <strong>шесть</strong> and <strong>шест</strong>. Both begin with ⟨ш⟩ + ⟨е⟩, but шесть has a soft cluster following (⟨сть⟩ → /sʲtʲ/) and produces [e]. шест has a hard cluster (⟨ст⟩ → /st/) and stays at /ɛ/. The always-hard road to [e] at work — same letter, different neighbour, different colour.</p>
 
-						<h3 id="learn-unit-4">Section 4 · Vowel Reduction</h3>
-
-						<p><strong>When a vowel loses stress, it changes.</strong></p>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 4</div>
+							<h3 id="learn-unit-4">Vowel Reduction</h3>
+							<div class="band-deck">When a vowel loses stress, it changes.</div>
+						</div>
 
 						<p>Russian is a stress-timed language, like English. It rolls out in a series of stressed and unstressed syllables, where the interval between stressed syllables stays roughly constant, but unstressed syllables accommodate these regular pulses by both compressing in between them and reducing in vowel specificity. This loss of specificity is called vowel reduction. The vowel loses its distinctiveness by comparison to its default cardinal value, drifting toward a more centralised, less committed sound. In sung Russian, the composer prescribes durations, so the obvious temporal compression of a stress-timed language in spontaneous speech can’t manifest: it is controlled instead by the rhythm and speed of the melody. But as storytellers, the qualitative reduction of speech prosody still informs our approach to sung Russian texts. Lyric diction preserves more vowel quality for singing than speech does, yet the principle holds: an unstressed vowel is not the same defined sound as a stressed one.</p>
 
@@ -3008,7 +3038,10 @@
 
 						<p><em>Grayson source: Ch. 3 §§3, 5, 7–8 (pp. 97–129), Ch. 7 §1 (pp. 263–267). Reconstitution chart: p. 128, note p. 129. Aural differentiation of case forms: p. 266, fn. 306. Stress-timing framework: Mitton (dissertation, §4.5). Kochetov correction: personal communication, DMA recital adjudication, University of Toronto.</em></p>
 
-						<h3 id="learn-unit-5">Section 5 · The Consonants</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 5</div>
+							<h3 id="learn-unit-5">The Consonants</h3>
+						</div>
 
 						<p>Russian has twenty-one consonant letters. The good news: the majority of these consonants produce sounds that the singer already knows from English, Italian, German, or French. A few require adjustment, and only a handful are genuinely new. We begin with the familiar and then focus our attention on what is not.</p>
 
@@ -3203,7 +3236,10 @@
 
 						<p><em>Grayson source: Ch. 4 (all sections), Ch. 5 §1</em></p>
 
-						<h3 id="learn-unit-6">Section 6 · Palatalization</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 6</div>
+							<h3 id="learn-unit-6">Palatalization</h3>
+						</div>
 
 						<h4 id="learn-u6-what">What Palatalization Is</h4>
 						<p>Palatalization is a secondary articulation that is necessary in
@@ -3753,7 +3789,10 @@
 						consonant’s articulatory reality.</p>
 
 
-<h3 id="learn-unit-7">Section 7 · Assimilation and Boundaries</h3>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">Section 7</div>
+							<h3 id="learn-unit-7">Assimilation and Boundaries</h3>
+						</div>
 
 						<h4 id="learn-u7-two">Two Kinds of Regressive Assimilation</h4>
 
@@ -3989,7 +4028,10 @@
 
 						<p><em>Grayson source: Ch. 5 §§2–5 (pp. 150–262), Ch. 7 §2 (pp. 247–258). Appendix F (pp. 312–313).</em></p>
 
-						<h2 id="learn-coda">8 · What These Rules Do Not Teach</h2>
+						<div class="chapter-band band-learn">
+							<div class="band-kicker">8</div>
+							<h2 id="learn-coda">What These Rules Do Not Teach</h2>
+						</div>
 
 						<p><em>Did we cover everything? Can we? Who fills the gap(s)?</em></p>
 
