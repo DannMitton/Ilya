@@ -105,12 +105,26 @@
 	   exactly. */
 	let drawerHeight = $state(0);
 
-	/* THE PROTRUSION AND THE HEIGHT ARE THE TREE'S, NOT THE DRAWING'S. 20 by
-	   76 is N.73 S1b's ruled tab, walked on both displays; the drawing is a
-	   schematic at other proportions. What comes from the drawing is the
-	   SHAPE. */
+	/* THE PROTRUSION IS THE TREE'S, NOT THE DRAWING'S. 20 is N.73 S1b's ruled
+	   protrusion, walked on both displays; the drawing is a schematic at other
+	   proportions. What comes from the drawing is the SHAPE.
+
+	   BOTH REACH THE STYLESHEET AS CUSTOM PROPERTIES on the root `<aside>`, so
+	   the tab, its touch extension, and the phone's own width all read the two
+	   numbers declared here. Before this ship the protrusion was typed a
+	   second time as `.drawer-lip { width: 20px }` and the height a second
+	   time as `height: 76px`, which is how an outline and a tab come to
+	   disagree. */
 	const LIP_W = 20;
-	const LIP_H = 76;
+	/* DOUBLED FROM 76, RULED BY DANN 2026-08-21: "Please double the height of
+	   the paper handle and re-centre the chevron within the enlarged paper
+	   handle." His reason, given after: "to increase target size for users on
+	   both desktop and mobile."
+
+	   THE SHAPE DOES NOT CHANGE. R below derives from the WIDTH, so the
+	   squircle's two corners stand exactly as Dann's drawing ruled them and
+	   only the straight run between them lengthens. */
+	const LIP_H = 152;
 	/* One weight for one line. 2px is `.drawer-body`'s own edge, and it is
 	   also what the drawing's 5-in-56 stroke scales to at 20px: 1.79. */
 	const STROKE = 2;
@@ -282,7 +296,7 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed data-tab={activeTab} style="{isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls" bind:clientHeight={drawerHeight}>
+<aside class="drawer" class:collapsed data-tab={activeTab} style="--lip-w: {LIP_W}px; --lip-h: {LIP_H}px; {isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label="Controls" bind:clientHeight={drawerHeight}>
 	<div class="drawer-clip">
 	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
 		<!-- THE TOP ANCHOR (N.73 S3 ship one). Piece, then NOTATION, pinned
@@ -622,17 +636,24 @@
 	     The chevron points the way the drawer will MOVE when pressed: right
 	     when it is closed and about to arrive, left when it is open and about
 	     to leave. The SVG is drawn pointing right and flipped by CSS. -->
-	<!-- THE SILHOUETTE (N.65), desktop only. A sibling of `.drawer-clip`
+	<!-- THE SILHOUETTE (N.65), ON EVERY DISPLAY. A sibling of `.drawer-clip`
 	     rather than a child, for the same reason the pull is one: the clip
 	     would cut it at the drawer's edge, which is the one place this shape
 	     exists to cross. Decorative and inert; the pull below is the control.
 
-	     NOT DRAWN ON THE PHONE. There the drawer is the whole viewport and
-	     `.drawer-body` already sets `border-right: none`, so there is no
-	     drawer edge for a handle to join. Open, the pull moves inside the
-	     drawer's right edge by S1's ruling, so it is not on an edge at all.
-	     The phone keeps the tab it has, unchanged. -->
-	{#if !isMobile && silhouette}
+	     IT NOW DRAWS ON THE PHONE. Dann sent a picture of the desktop handle
+	     and ruled it on 2026-08-21: "This is the appearance I want on mobile."
+	     He named the defect by what he could see: "I can see the left edge of
+	     the paper handle (tab)." That edge is `.drawer-lip`'s own painted box,
+	     and the silhouetted class below is what stops it painting.
+
+	     The old exclusion argued that the phone has no drawer edge for a
+	     handle to join, because `.drawer-body` sets `border-right: none`
+	     there. That is an argument about a border, not about the outline: the
+	     silhouette IS the edge it joins, and it carries its own. What the
+	     phone still does not get is the LIFT; see `filter: none` in the phone
+	     block below, whose reason is the 400ms slide and not this shape. -->
+	{#if silhouette}
 		<svg
 			class="lip-silhouette"
 			width={silhouette.w}
@@ -645,9 +666,13 @@
 			<path class="sil-line" d={silhouette.outline} />
 		</svg>
 	{/if}
+	<!-- `silhouetted` IS UNCONDITIONAL NOW, N.65, Dann's ruling of 2026-08-21.
+	     It was `class:silhouetted={!isMobile}`. It is written into the class
+	     attribute rather than left as a directive bound to `true`, because a
+	     directive that cannot be false is a condition nobody can read. The
+	     class and its rules stay so the reasoning below stays with them. -->
 	<button
-		class="drawer-lip"
-		class:silhouetted={!isMobile}
+		class="drawer-lip silhouetted"
 		onclick={ontogglecollapse}
 		aria-label={t('drawer.pull', language)}
 		aria-expanded={!collapsed}
@@ -992,9 +1017,20 @@
 	}
 
 	/* The hover lived on the tab's own background. The tab has no background
-	   now, so it moves to the fill the tab sits in. */
-	.drawer:has(.drawer-lip:hover) .sil-fill {
-		fill: #fff;
+	   now, so it moves to the fill the tab sits in.
+
+	   GUARDED, N.65, and this guard is the point of item 5 rather than a
+	   tidy-up. A tap on iOS latches `:hover` until the next touch elsewhere.
+	   This rule was harmless only while the silhouette was desktop-only; the
+	   same ship draws it on the phone, at which point one tap on the handle
+	   would leave its fill `#fff` against a `#FAF8F5` drawer. That is the
+	   mismatch Dann reported on 2026-08-21: "There seems to be a colour
+	   mismatch on mobile between the Drawer surface and the paper handle.
+	   They should appear the same." */
+	@media (hover: hover) {
+		.drawer:has(.drawer-lip:hover) .sil-fill {
+			fill: #fff;
+		}
 	}
 
 	/* ── The pull: a bookmark tab on the drawer's edge ──── */
@@ -1017,8 +1053,8 @@
 		top: 50%;
 		left: 100%;
 		transform: translateY(-50%);
-		width: 20px;
-		height: 76px;
+		width: var(--lip-w, 20px);
+		height: var(--lip-h, 152px);
 		padding: 0;
 		margin: 0;
 		display: flex;
@@ -1040,8 +1076,15 @@
 	   hairline, its own radius and its own drop shadow is the two marks the
 	   ruling replaces. What stays is everything that makes it a CONTROL: the
 	   box, the 44px coarse target, the chevron, the focus ring, and the
-	   press. The phone keeps the painted tab, because there is no silhouette
-	   there to belong to. */
+	   press.
+
+	   IT APPLIES ON EVERY DISPLAY, N.65, Dann's ruling of 2026-08-21. The
+	   sentence that stood here, "the phone keeps the painted tab, because
+	   there is no silhouette there to belong to", assumed its own conclusion:
+	   the silhouette was absent on the phone because this class was, and this
+	   class was absent because the silhouette was. Dann settled it by what he
+	   could see, sending a picture of the desktop handle and writing "This is
+	   the appearance I want on mobile." One outline, two displays. */
 	.drawer-lip.silhouetted {
 		background: none;
 		border: none;
@@ -1049,12 +1092,26 @@
 		box-shadow: none;
 	}
 
-	.drawer-lip:hover {
-		background: #fff;
-	}
+	/* GUARDED, N.65 item 5. `grep -n "hover: hover"` over this file returned
+	   nothing before this ship, and a tap on iOS latches `:hover` until the
+	   next touch elsewhere, so this was the rule that painted the tab `#fff`
+	   under a singer's thumb. Measured off Dann's own screenshots: drawer
+	   surface `#FAF8F5` at every sample, tab interior `#FFFFFF` at every
+	   sample, open and shut alike.
 
-	.drawer-lip.silhouetted:hover {
-		background: none;
+	   BOTH RULES SIT INSIDE THE GUARD, so the cancel cannot outlive the thing
+	   it cancels. With `silhouetted` now unconditional the cancel already wins
+	   on specificity everywhere, which makes the first rule dead on its own
+	   terms; it is guarded rather than deleted because deleting the tab's
+	   painted hover is a separate ruling nobody has made. */
+	@media (hover: hover) {
+		.drawer-lip:hover {
+			background: #fff;
+		}
+
+		.drawer-lip.silhouetted:hover {
+			background: none;
+		}
 	}
 
 	.drawer-lip:focus-visible {
@@ -1068,9 +1125,16 @@
 
 	   N.73 S1b §3. This rule used to grow the VISIBLE tab to 44 by 88, which
 	   is 11 percent of a 390px screen given over to a handle. The visible tab
-	   is now 20 by 76 on every pointer, the desktop's own size, and a
-	   transparent extension carries the target. The target is still 44 by 88,
+	   is 20 by `--lip-h` on every pointer, the desktop's own size, and a
+	   transparent extension carries the width. The target is 44 by `--lip-h`,
 	   so the floor is met and no exemption is created.
+
+	   THE HEIGHT FOLLOWS THE TAB, N.65 item 9, AND THE COMMENT THAT STOOD
+	   HERE SAID "the target is still 44 by 88". At `LIP_H = 152` a fixed 88
+	   would have covered only the middle: the top and bottom 32px of a
+	   visibly tappable handle would have acquired 20px of width instead of
+	   44. Reading `--lip-h` is what stops the paint and the target parting
+	   company the next time the handle is resized.
 
 	   The extension is a pseudo-element rather than padding because padding
 	   would grow the tab's painted box: the background, the border and the
@@ -1089,7 +1153,7 @@
 			top: 50%;
 			left: 0;
 			width: 44px;
-			height: 88px;
+			height: var(--lip-h, 152px);
 			transform: translateY(-50%);
 		}
 	}
@@ -1426,18 +1490,34 @@
 		   The height was calc(100dvh - 56px), reserving the deleted tab bar's
 		   footer. The bar is gone and the drawer takes the viewport. */
 		.drawer {
-			/* NO LIFT ON THE PHONE. The silhouette is desktop-only
-			   (`{#if !isMobile && silhouette}`), so there is no edge and no
-			   handle here for a shadow to belong to; the drawer is a
-			   full-screen overlay and its shadow would fall entirely
-			   outside the viewport. Declaring it would buy nothing and
-			   would rasterize a full-screen filter on every frame of the
-			   400ms slide. The phone keeps its painted tab, unchanged. */
+			/* NO LIFT ON THE PHONE, AND THE EXCLUSION STANDS. N.65 item 2
+			   draws the silhouette here, so the first half of the reasoning
+			   that stood in this comment ("the silhouette is desktop-only,
+			   so there is no edge for a shadow to belong to") is struck.
+			   THE SECOND HALF IS THE ONE THAT MATTERED AND IT IS UNTOUCHED:
+			   `filter` on a full-screen overlay rasterizes on every frame of
+			   the 400ms slide below. Dann gets the silhouette without the
+			   lift. */
 			filter: none;
 			position: fixed !important;
 			top: 0 !important;
 			left: 0 !important;
-			width: 100% !important;
+			/* THE DESK STRIP, N.65 item 3, Dann's ruling of 2026-08-21: "I
+			   believe we need two regions of background on top and bottom of
+			   the paper handle for the Drawer." His reason: "on mobile the
+			   illusion is that there is always a right-screen paper GUI
+			   waiting just offscreen."
+
+			   THE WIDTH IS THE PULL'S PROTRUSION, READ AND NOT TYPED. This
+			   was `100% !important`. `--lip-w` is `LIP_W` published by the
+			   root `<aside>`, so the strip is exactly as wide as the tab that
+			   fills it and the two cannot drift.
+
+			   THIS AMENDS DANN'S FULL-SCREEN OVERLAY RULING OF 2026-08-19,
+			   which the comment above records. THE MOTION MODEL IS UNTOUCHED:
+			   the drawer still arrives from the left, one model on every
+			   display, and closed it still translates entirely off-screen. */
+			width: calc(100% - var(--lip-w, 20px)) !important;
 			height: 100dvh !important;
 			z-index: 60;
 			/* MEASURED: this was `overflow: hidden`, and it clipped the pull
@@ -1474,14 +1554,24 @@
 			pointer-events: auto;
 		}
 
-		/* Closed, `left: 100%` lands the tab against the drawer's outward
-		   edge, which is the left edge of the phone. Open, the drawer is the
-		   whole screen, so the tab moves inside its right edge, still the
-		   outward edge and still within a thumb's reach. */
-		.drawer:not(.collapsed) .drawer-lip {
-			left: auto;
-			right: 0;
-		}
+		/* THE OPEN TAB'S POSITION OVERRIDE IS DELETED, N.65 item 3, AND THE
+		   BRIEF DID NOT ASK FOR IT. It read `left: auto; right: 0`, and its
+		   reason was that the open drawer was the whole screen, so a tab at
+		   `left: 100%` would hang off the right edge. THE DRAWER IS NO LONGER
+		   THE WHOLE SCREEN: it is the screen less this tab's own width, so
+		   `left: 100%` now lands the tab exactly in the strip, its outward
+		   face on the viewport's right edge, which is where it sat before.
+
+		   TWO THINGS BREAK IF IT STAYS. The desk would show BESIDE the handle
+		   for the drawer's full height rather than above and below it, which
+		   is the opposite of what Dann asked for. And `.lip-silhouette` is
+		   `left: 100%` on every display, so the outline would draw in the
+		   strip while the tab sat 20px to its left: the outline and the tab
+		   disagreeing, which is the failure item 9 exists to prevent.
+
+		   The touch extension's own override below STAYS, and its reason is
+		   unchanged: the tab's outward edge is still the viewport's right
+		   edge, so a 44px extension has to reach back into the drawer. */
 
 		/* The open tab's outward edge IS the viewport's right edge, so the
 		   touch extension has to reach the other way or it would hang
@@ -1513,7 +1603,14 @@
 			width: 100% !important;
 			height: 100%;
 			flex-direction: column;
-			border-right: none;
+			/* RESERVED, NOT NONE, N.65 item 2. This was `border-right: none`,
+			   which was correct while the phone drew no silhouette. It draws
+			   one now, and the silhouette's vertical run lands in the 2px
+			   `.drawer-body` reserves for it; with no reservation the
+			   drawer's content would sit under that line. This is the
+			   desktop's own declaration, which the phone now needs for the
+			   same reason. */
+			border-right: 2px solid transparent;
 			overflow: visible;
 			padding-right: 44px;
 			box-sizing: border-box;

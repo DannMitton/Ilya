@@ -64,6 +64,41 @@ const LEGEND_ORDER: string[] = [
 	'inferred',
 ];
 
+/**
+ * The one legend entry that is NOT a stress source.
+ *
+ * `WordStack.svelte:165-166` prints an `R` whenever a spot override inverts the
+ * global reconstitution setting for one word. The renderer and the copy for its
+ * legend item were both built (`PageFooter.svelte:58`, `i18n.ts`'s
+ * `legend.spot-reconstitution`); the producer never was, so the mark printed
+ * and nothing decoded it.
+ *
+ * N.65, DANN'S RULING OF 2026-08-21, AND IT IS A PRINCIPLE RATHER THAN A PATCH:
+ * "When a sigil prints to the page it must be decoded with a legend."
+ *
+ * It is a separate constant rather than a sixth member of `LEGEND_ORDER`
+ * because that array is the ALLOWLIST the stress scan tests words against, and
+ * no word's `stressSource` is ever this. It comes from the `spotReconstitution`
+ * map instead.
+ */
+const SPOT_RECONSTITUTION = 'spot-reconstitution';
+
+/**
+ * The order the legend PRINTS in, derived from `LEGEND_ORDER` so the two cannot
+ * drift.
+ *
+ * Spot reconstitution sorts with the user-attributed marks and BEFORE
+ * `inferred`, which keeps the rule `LEGEND_ORDER` already states: "inferred
+ * last (the warning state)". A spot override is a singer's own decision about
+ * one word, so it belongs beside `user-override` rather than after the one
+ * entry that asks them to go and check something.
+ *
+ * THE BRIEF LEFT THIS TO THE DESK. Nothing rules it, and it is one line to move.
+ */
+const LEGEND_DISPLAY_ORDER: string[] = LEGEND_ORDER.flatMap((type) =>
+	type === 'inferred' ? [SPOT_RECONSTITUTION, type] : [type]
+);
+
 // ── Icon mapping ─────────────────────────────────────────────────
 
 /**
@@ -76,6 +111,9 @@ const PROVENANCE_ICONS: Record<string, string> = {
 	'user-composer': 'notes',
 	'user-override': 'torso',
 	'inferred': 'question',
+	/* The mark IS the character, as it is for `yo-restored`. `WordStack`
+	   prints a literal `R`; `PageFooter` draws a traced one at legend size. */
+	[SPOT_RECONSTITUTION]: 'R',
 };
 
 // ── Legend i18n key mapping ───────────────────────────────────────
@@ -89,6 +127,7 @@ const LEGEND_KEYS: Record<string, string> = {
 	'user-composer': 'legend.user-composer',
 	'user-override': 'legend.user-override',
 	'inferred': 'legend.inferred',
+	[SPOT_RECONSTITUTION]: 'legend.spot-reconstitution',
 };
 
 // ── Legend builder ────────────────────────────────────────────────
@@ -101,20 +140,56 @@ const LEGEND_KEYS: Record<string, string> = {
  * 3. Maps each type to its icon and bilingual label
  * 4. Returns in stable display order (ё first, inferred last)
  * 5. Returns empty array if no special provenance exists (legend omitted)
+ *
+ * `spotReconstitution` is the page's spot-override map, the same one
+ * `Paper.svelte` already passes down to `VerseLine` and `WordStack`. It is
+ * optional so every existing caller and test keeps its behaviour: absent means
+ * no `R` is printed, which is what a page with no spot overrides has.
  */
-export function buildProvenanceLegend(lines: LineData[], language: Language): LegendItem[] {
+export function buildProvenanceLegend(
+	lines: LineData[],
+	language: Language,
+	spotReconstitution?: Map<string, boolean>
+): LegendItem[] {
 	// Collect unique provenance types on this page
 	const seen = new Set<string>();
 
 	for (const line of lines) {
 		for (const word of line.words) {
-			// Skip clitics (display as arrows, not word stacks) and synthetic
-			// pipeline entries (clitic arrows with negative stressIndex).
-			// Their stress source is irrelevant to the legend.
+			/* THE CLITIC ARROW IS NOT A SIGIL. RULED BY DANN 2026-08-21: "the
+			   clitic arrow does not count as a sigil. The clitic arrow is fully
+			   explained in the GUIDE section." So this skip stays, and it is
+			   ruled rather than incidental. It also drops synthetic pipeline
+			   entries (clitic arrows with negative stressIndex), whose stress
+			   source is irrelevant to the legend. */
 			if (word.isProclitic || word.isEnclitic || word.stressSource === 'clitic') continue;
 			if (word.stressIndex < 0) continue;
 			if (LEGEND_ORDER.includes(word.stressSource)) {
 				seen.add(word.stressSource);
+			}
+		}
+	}
+
+	/* THE SPOT SCAN IS SEPARATE, AND IT IS NOT SUBJECT TO THE SKIP ABOVE.
+	   `WordStack.svelte:165` prints the `R` for any word it renders, clitics
+	   included, and the skip above is about a STRESS source, which this is not.
+	   Reading the map here is what makes the legend per-page: a page with a
+	   spot-reconstituted word gets the entry and a page without one does not,
+	   which is the filtering the other five already do.
+
+	   THE KEY AND THE PREDICATE ARE `VerseLine.svelte`'s, not new ones.
+	   `VerseLine.svelte:69` builds `${lineIndex}-${wordIndex}` and
+	   `VerseLine.svelte:20-22` renders a stack only for words carrying
+	   Cyrillic. Testing both is what stops this emitting a legend for a mark
+	   the page never drew, which would be Dann's own ruling in a mirror. */
+	if (spotReconstitution && spotReconstitution.size > 0) {
+		outer: for (const line of lines) {
+			for (const word of line.words) {
+				if (!/[А-Яа-яЁё]/.test(word.cyrillic || '')) continue;
+				if (spotReconstitution.has(`${word.lineIndex}-${word.wordIndex}`)) {
+					seen.add(SPOT_RECONSTITUTION);
+					break outer;
+				}
 			}
 		}
 	}
@@ -126,7 +201,7 @@ export function buildProvenanceLegend(lines: LineData[], language: Language): Le
 	// Build legend items in stable order
 	const items: LegendItem[] = [];
 
-	for (const type of LEGEND_ORDER) {
+	for (const type of LEGEND_DISPLAY_ORDER) {
 		if (seen.has(type)) {
 			const legendKey = LEGEND_KEYS[type];
 			if (legendKey) {

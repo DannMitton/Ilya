@@ -20,8 +20,9 @@ import type { PairingMap } from '$lib/shane/pairings';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was
- * written for. Exactly today's serialized row (`+page.svelte:601-603`), which
- * is what keeps step 0 byte-compatible.
+ * written for. Exactly today's serialized row, the object literal
+ * `persistGlosses` passes to `doc.save` in `+page.svelte`, which is what keeps
+ * step 0 byte-compatible.
  */
 export type GlossRow = [key: string, gloss: string, anchorWord: string];
 
@@ -89,7 +90,7 @@ export interface SongRecord {
  *
  * `quota-exceeded` and `write-failed` are `savePairings`' own two reasons
  * (`pairings.ts:397-401`), kept verbatim so the drawer's existing quota
- * branch (`+page.svelte:1190`) keeps working unchanged.
+ * branch, `handleExport` in `+page.svelte`, keeps working unchanged.
  */
 export type FailureReason =
 	| 'no-storage'

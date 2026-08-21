@@ -559,12 +559,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * `Object.keys(shaneFormants).length === 0` inline, which is the same test
 	 * written a second time.
 	 */
+	/* `printDisabled` IS GONE, N.65, Dann's ruling of 2026-08-21. It read
+	   `studioDocument === 'shane' ? !ingestedScore && !voiceCalibrated
+	   : !hasResults`, and it guarded a Print button inside the drawer. Print
+	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
+	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
+	   because the voice anchor reads it. */
 	const voiceCalibrated = $derived(hasAnyReadings(shaneFormants));
-	const printDisabled = $derived(
-		studioDocument === 'shane'
-			? !ingestedScore && !voiceCalibrated
-			: !hasResults
-	);
 	/**
 	 * Entering the takeover expands the wizard first. The Q3 collapse (Kimi
 	 * §A.28) exists so a rendered score can take the drawer back from a wizard
@@ -2045,8 +2046,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
-					onprint={handlePrint}
-					{printDisabled}
 					onexport={() => void handleExport()}
 					onimport={() => importInputEl?.click()}
 					onexportall={() => void handleExportAll()}
@@ -2369,6 +2368,37 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{/if}
 				{/snippet}
 			</ReadingPaper>
+		{/if}
+		<!-- PRINT, UNDER THE SHEET AND FLUSH WITH ITS LEFT EDGE. N.65, and it
+		     is Dann's amended ruling of 2026-08-21 rather than his first one.
+		     He first asked for it beside the pair: "I want it to float next to
+		     the Transcribe / Score Markup selector." Then he walked the desk
+		     head on a phone and found no room: "On mobile it looks like there
+		     is not enough room to insert a print button where i suggested.
+		     what if we add it under the WYSIWYG flush left? Visually it can
+		     parallel the Transcription button above the WYSIWYG." He was given
+		     four placements with a critique of each and chose this one KNOWING
+		     IT LOSES THE DESK HEAD'S STICKINESS.
+
+		     STUDIO ONLY, RULED BY DANN THE SAME DAY, reversing his own "always
+		     live on all four" of the night before: "we will simply not offer a
+		     Print button for the Learn or Guide sections." A singer can still
+		     print those pages from the browser's own menu; Ilya does not
+		     invite it. `destination === 'studio'` is the whole test, so it
+		     covers the transcription and the marked score and nothing else.
+
+		     ALWAYS LIVE WHERE IT APPEARS. No disabled state and no greying,
+		     which is why `printDisabled` left with it.
+
+		     CONTRACT §6's "do not put a control on the paper" GOVERNS THE
+		     SHEET. Below the sheet is the desk, which is where the desk head
+		     already stands. -->
+		{#if destination === 'studio'}
+			<div class="sheet-print">
+				<button class="sheet-print-btn" type="button" onclick={handlePrint}>
+					{t('input.print', language)}
+				</button>
+			</div>
 		{/if}
 	</main>
 </div>
@@ -2704,6 +2734,90 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   the strip and nothing below it moves. Every rule that changes the
 		   desk's top padding sets this with it. */
 		--desk-pad-top: 2rem;
+	}
+
+	/* ── Print, under the sheet ──────────────────────────── */
+
+	/* FLUSH WITH THE SHEET'S LEFT EDGE, BY THE DESK HEAD'S OWN MECHANISM.
+	   `--sheet-width` is set per destination just above and `DeskHead` takes
+	   its `max-width` from it; this row takes the same one, so Print lands in
+	   the same column as the `TRANSCRIPTION` half of the pair above the sheet,
+	   which is what Dann asked for. `align-self` overrides `.main-content`'s
+	   `align-items`, which is `center` on the desk and `flex-start` on the
+	   phone.
+
+	   NOT STICKY, and Dann was told. The desk head is; this is not, because it
+	   sits below a sheet that can be several pages long. He chose this
+	   placement knowing that. */
+	.sheet-print {
+		align-self: center;
+		box-sizing: border-box;
+		width: 100%;
+		max-width: var(--sheet-width, 816px);
+		display: flex;
+		justify-content: flex-start;
+		/* The desk head's own gap to the sheet, spent on the other side of it.
+		   `.desk-head` is `padding: 0.35rem 0 0.6rem`, so 0.6rem is the ruled
+		   distance between the pair and the paper. */
+		padding-top: 0.6rem;
+	}
+
+	/* THE PAIR'S IDIOM, NOT THE ACTION BUTTONS'. The brief left this open and
+	   Dann's own words settle it: "Visually it can parallel the Transcription
+	   button above the WYSIWYG." Every value here is `.pair` and `.pair-member`
+	   from `DeskHead.svelte`, so the two read as one vocabulary and no new one
+	   enters. It is NOT drawn as a card, because the cream fill is how the pair
+	   says which document you are looking at, and Print is an act rather than a
+	   place.
+
+	   IT TAKES THE PAIR'S BOX ON A COARSE POINTER TOO, which is under the 44px
+	   floor, exactly as its twin `TRANSCRIPTION` is. Giving Print a floor its
+	   twin does not have would make it stop paralleling the twin, which is the
+	   thing Dann ruled. */
+	.sheet-print-btn {
+		border: 1px solid var(--ink-primary, #1a1612);
+		border-radius: 4px;
+		background: transparent;
+		color: var(--ink-primary, #1a1612);
+		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		padding: 0.3rem 0.7rem;
+		cursor: pointer;
+	}
+
+	/* GUARDED AT BIRTH. `.pair-member`'s own hover is not, and N.65 item 5
+	   leaves the unguarded ones alone this ship; this rule is new, so it is
+	   written with the guard rather than added to the list. A tap on iOS
+	   latches `:hover` until the next touch elsewhere, which would leave this
+	   button tinted after a singer printed. */
+	@media (hover: hover) {
+		.sheet-print-btn:hover {
+			background: rgba(26, 22, 18, 0.06);
+		}
+	}
+
+	.sheet-print-btn:focus-visible {
+		outline: 2px solid var(--ink-primary, #1a1612);
+		outline-offset: 2px;
+	}
+
+	/* IT IS CHROME, SO IT HIDES AT PRINT. `DeskHead.svelte` carries the same
+	   rule and the reasoning is its own: the page prints; the desk does not. */
+	@media print {
+		.sheet-print {
+			display: none;
+		}
+	}
+
+	/* On the phone the gutter is the ruled distance, the same one `.desk-head`
+	   spends above the sheet. */
+	@media (max-width: 767px) {
+		.sheet-print {
+			padding-top: var(--portrait-gutter, 24px);
+		}
 	}
 
 	/* N.73 S1b §4 deleted the override that stood here. It set --sheet-width

@@ -191,8 +191,9 @@ export function globalStore(): KeyValueStore | null {
  *
  * ORDER MATTERS IN ONE PLACE: the provenance tags are parsed AFTER the
  * metadata values, because `parseFromScore` only honours a tag for a field
- * that came back with something in it (`+page.svelte:920-925` says so, and
- * `metadata-provenance.ts:180` is the code). Everything else is independent.
+ * that came back with something in it (`applyArrival` in `+page.svelte` says
+ * so, and `metadata-provenance.ts`'s `parseFromScore` is the code). Everything
+ * else is independent.
  *
  * A malformed value never throws and never takes the rest of the song with
  * it: that field falls back to its default and the reason is reported once.
@@ -212,7 +213,8 @@ function readLegacy(store: KeyValueStore, id: string, now: string): LoadResult {
 		try {
 			const parsed: unknown = JSON.parse(rawMeta);
 			// The page merges over its defaults rather than replacing
-			// (`+page.svelte:918`), so a record written by an older Ilya that
+			// (`applyArrival` in `+page.svelte`), so a record written by an
+			// older Ilya that
 			// lacks a field keeps the default for it instead of `undefined`.
 			if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
 				record.metadata = { ...record.metadata, ...(parsed as Partial<typeof record.metadata>) };
@@ -234,7 +236,8 @@ function readLegacy(store: KeyValueStore, id: string, now: string): LoadResult {
 		try {
 			const parsed: unknown = JSON.parse(rawGlosses);
 			if (Array.isArray(parsed)) {
-				// The anchor guard is today's, verbatim (`+page.svelte:954`): a row
+				// The anchor guard is today's, verbatim (the gloss-survival filter
+				// in `+page.svelte`): a row
 				// with no anchor word cannot be checked for survival, so it is not
 				// restored at all.
 				record.glosses = parsed.filter(
@@ -287,7 +290,9 @@ function readLegacy(store: KeyValueStore, id: string, now: string): LoadResult {
  * Every write goes through one try, so a quota failure part way through is
  * reported once with its own reason rather than five times or not at all.
  * That is the whole difference from today, where five of these six sites
- * catch and say nothing (`+page.svelte:678`, `:711`, `:732`, `:605`, `:505`).
+ * catch and say nothing: in `+page.svelte`, `handleClear`, the notation-prefs
+ * write, the spot-reconstitution write, the transcribe result write, and the
+ * width measurement.
  */
 function writeLegacy(store: KeyValueStore, record: SongRecord): Outcome {
 	try {

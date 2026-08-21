@@ -70,9 +70,9 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 }
 
 /**
- * The rows are built the way `persistGlosses` builds them
- * (`+page.svelte:601-603`), including the missing-anchor fallback to the empty
- * string, so what step 0 writes is what today writes.
+ * The rows are built the way `persistGlosses` builds them in `+page.svelte`,
+ * including the missing-anchor fallback to the empty string, so what step 0
+ * writes is what today writes.
  */
 export function recordFromFields(base: SongRecord, fields: SongFields): SongRecord {
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [

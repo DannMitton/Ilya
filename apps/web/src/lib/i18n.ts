@@ -290,8 +290,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// provenance of this one, and reversing the ruling is one edit if he
 	// wants the three lines back.
 	//
-	// THE ENGLISH IS DANN'S, VERBATIM, including "or photograph" where
-	// 'upload.drop.acceptedNow' said "a photograph".
+	// THE ENGLISH IS DANN'S, VERBATIM, including "or photograph". That used
+	// to be a difference from 'upload.drop.acceptedNow', which said "a
+	// photograph"; N.65 brought the conjunction back to that key on
+	// 2026-08-21, so the two now agree and there is no difference to name.
 	//
 	// THE FRENCH IS RECOMBINED, NOT TRANSLATED. Every word comes from the two
 	// French strings below, in their order, with three characters added and
@@ -318,7 +320,28 @@ const strings: Record<string, Record<Language, string>> = {
 	// 'upload.drop.placeholder' is above; the three keys here are LIVE again.
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, a photograph', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie' },
+	// THE LEAD-IN IS GONE AND THE « ou » IS BACK, N.65, Dann's ruling of
+	// 2026-08-21: "If we remove 'Acceptés maintenant :/ Accepted now:' we let
+	// the remaining French shrink to a single line and it stops the downward
+	// displacement of elements in French. I think it's understood that the
+	// file names are the acceptable formats."
+	//
+	// NO NEW FRENCH IS WRITTEN. Every word here comes from
+	// `upload.drop.placeholder` above, which Dann confirmed by hand on
+	// 2026-08-20, and the tail is that string's own tail: `PDF, or
+	// photograph` and `PDF, ou une photographie`.
+	//
+	// THE « ou » CORRECTS THE DESK, NOT DANN. Ship B wrote `PDF, a
+	// photograph` and `PDF, une photographie` and the desk then told him the
+	// missing conjunction could stay missing. The comment four lines above
+	// `upload.drop.placeholder` says why that was wrong: the conjunction is
+	// the one word in that string he added rather than the tree, and nothing
+	// has reversed it. A word Dann added by hand is a ruling.
+	//
+	// NO TERMINAL FULL STOP. Without a lead-in the line is a bare list, not a
+	// sentence. If Dann wants the stop back it is one character in each
+	// language.
+	'upload.drop.acceptedNow': { en: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph', fr: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie' },
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
 	// translation this desk chose, and no other French ships for it.

@@ -71,12 +71,12 @@ describe('legacy driver', () => {
 		const record = filledRecord();
 		await createLegacyDriver(store).save(record);
 
-		// The poem is a bare string, not JSON (`+page.svelte:677`).
+		// The poem is a bare string, not JSON (`handleClear` in `+page.svelte`).
 		expect(store.map.get(LEGACY_KEYS.poem)).toBe(record.poem);
 		expect(store.map.get(LEGACY_KEYS.metadata)).toBe(JSON.stringify(record.metadata));
 		// Tag order is the SCORE_HEADER_FIELDS order, not insertion order.
 		expect(store.map.get(LEGACY_KEYS.fromScore)).toBe('["title","composer"]');
-		// Rows are [key, gloss, anchor] (`+page.svelte:601-603`).
+		// Rows are [key, gloss, anchor] (`persistGlosses` in `+page.svelte`).
 		expect(store.map.get(LEGACY_KEYS.glosses)).toBe('[["0-1","loved","любил"]]');
 		expect(store.map.get(LEGACY_KEYS.openSyllabification)).toBe('true');
 		expect(store.map.get(LEGACY_KEYS.pairings)).toBe(JSON.stringify(record.pairings));

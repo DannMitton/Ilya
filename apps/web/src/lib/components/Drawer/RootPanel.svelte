@@ -38,15 +38,11 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		oninput: (text: string) => void;
 		ontranscribe: () => void;
 		onclear: () => void;
-		onprint: () => void;
-		/**
-		 * N.73 S2. Keyed on the VISIBLE document, not on this panel: the
-		 * transcription's guard when Studio shows the transcription, the
-		 * score's when it shows the marked score. `+page.svelte` owns both
-		 * expressions because only it knows which document is on the desk.
-		 */
-		printDisabled: boolean;
-		/** N.67 step 5, the binder. Twinned on the print control, Dann's ruling. */
+		/* `onprint` AND `printDisabled` LEFT WITH THE BUTTON, N.65, Dann's
+		   ruling of 2026-08-21. Print is not a drawer control any more; it
+		   sits under the sheet, rendered by `+page.svelte`, which is where
+		   `handlePrint` always lived. The guard left with it because the
+		   control under the sheet is ALWAYS LIVE, which is the same ruling. */
 		onexport: () => void;
 		onimport: () => void;
 		onexportall: () => void;
@@ -93,8 +89,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		oninput,
 		ontranscribe,
 		onclear,
-		onprint,
-		printDisabled,
 		onexport,
 		onimport,
 		onexportall,
@@ -214,7 +208,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     THE BODY IS A FLEX COLUMN and the header is not in it, so the
 	     header's own 0.4rem is the whole gap to the first entry. Ruling 2.
 	     Twinned on SongList. -->
-	<div class="section source-section">
+	<div class="section source-section" class:shut={!sections.has(STATION_IDS.source)}>
 		<StationHeader
 			label={t('source.heading', language)}
 			expanded={sections.has(STATION_IDS.source)}
@@ -347,25 +341,29 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     6px flex gap, the same gap that carries the textarea to Clear and
 	     Transcribe.
 
-	     PRINT STAYS IN THIS ROW THIS SHIP, AND THAT IS DELIBERATE. This is
-	     the only Print control in the application and `DeskHead` has none
-	     yet, so deleting it here would leave no way to print between this
-	     deploy and the desk-head ship. That ship removes it. CONSEQUENCE,
-	     AND IT IS TRANSIENT: shutting SOURCE takes Print with it until then.
-	     SOURCE is open on first run, so a singer meets this only by shutting
-	     it themselves.
+	     PRINT HAS LEFT, AND THIS SHIP IS THE ONE THAT PROMISED IT. The note
+	     that stood here said Print stayed only because deleting it would
+	     leave no way to print until the desk-head ship, and that "that ship
+	     removes it". It does. With it goes the transient consequence it
+	     named: shutting SOURCE no longer takes Print with it, because Print
+	     is not in SOURCE.
 
-	     `Export all songs` is a fourth cell and wraps to the first column of
-	     a second row. It is still shown only above one song, because with one
-	     song it says the same thing as the button beside it. -->
+	     `Export all songs` is a third cell, shown only above one song,
+	     because with one song it says the same thing as the button beside it.
+	     THE GRID IS UNCHANGED, and that is a decision the brief did not rule.
+	     It is still `repeat(3, 1fr)`, so the cell that used to wrap to a
+	     second row now takes the column Print left empty. Two buttons where
+	     there was one song, three where there is more than one, on one row
+	     either way. Narrowing the grid to two columns is a separate ruling
+	     and this ship does not make it. -->
 	<div class="output-row">
-		<button
-			class="action-btn btn-secondary"
-			disabled={printDisabled}
-			onclick={onprint}
-		>
-			{t('input.print', language)}
-		</button>
+		<!-- PRINT IS NOT HERE ANY MORE, N.65, Dann's ruling of 2026-08-21: "we
+		     will simply not offer a Print button for the Learn or Guide
+		     sections", and before that, on where it goes: "what if we add it
+		     under the WYSIWYG flush left? Visually it can parallel the
+		     Transcription button above the WYSIWYG." It is `.sheet-print` in
+		     `+page.svelte`. This row is Export and Import, and `Export all
+		     songs` keeps its conditional fourth cell below. -->
 		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
 		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
 		{#if songLibrary.songs.length > 1}
@@ -379,7 +377,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both
 	     are song-level acts: this one chooses which song, that one carries a song
 	     off the device. Nothing goes on the paper. -->
-	<div class="section song-section">
+	<div class="section song-section" class:shut={!sections.has(STATION_IDS.songs)}>
 		<SongList
 			{language}
 			songs={songLibrary.songs}
@@ -419,7 +417,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     Nothing inside this block changed. The result summary is still its
 	     first entry rather than merged into the header; merging them is a
 	     station boundary nobody has ruled. -->
-	<div class="section console-section">
+	<div class="section console-section" class:shut={!sections.has(STATION_IDS.analysis)}>
 		<StationHeader
 			label={t('console.placeholder', language)}
 			expanded={sections.has(STATION_IDS.analysis)}
@@ -809,8 +807,9 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		gap: 6px;
 	}
 
-	/* Output. Three equal columns, and a fourth cell wraps to the first
-	   column of a second row when `Export all songs` is drawn. */
+	/* Output. Three equal columns. Print was the first of them until N.65
+	   moved it under the sheet; Export and Import hold the first two now and
+	   `Export all songs` takes the third when it is drawn. */
 	.output-row {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -831,12 +830,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		color: var(--stone-500);
 		background: transparent;
 		font-weight: 500;
-		border: 1px solid var(--stone-600, #57534e);
-	}
-
-	.btn-secondary {
-		color: var(--ink-secondary);
-		background: white;
 		border: 1px solid var(--stone-600, #57534e);
 	}
 
@@ -886,6 +879,39 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		   the next rule. Spending 12px on both would push the label away from
 		   the line that names it. */
 		padding: 6px 0 12px;
+	}
+
+	/* A SHUT STATION IS THE SAME HEIGHT AS ITS TWINS. N.65, Dann's ruling of
+	   2026-08-21, on the desktop with every station shut: "the spacing of
+	   Notation Source Repertoire and Analysis all need to be consistent. Right
+	   now these retracted sections are irregularly sized." Then the direction:
+	   "I see more padding under Source and Repertoire than Metadata and
+	   Notation. Make them Match Metadata and Notation."
+
+	   THE RULING ABOVE IS KEPT, NOT OVERTURNED. Open, the asymmetry stands
+	   exactly as it is: the label stays close to the rule that names it and
+	   the body gets air before the next rule. A SHUT STATION HAS NO BODY, so
+	   the 12px is air after nothing. This is the same move
+	   `.station-label.tight` (`StationHeader.svelte:139`) already makes when it
+	   drops the label's own gap on a station that shuts.
+
+	   6px, NOT 0, AND THE TREE IS WHY. The brief said the bottom padding
+	   "leaves with the body", which would land these three on 22.8px and
+	   24.8px against Metadata's 28.8px and Notation's 30.8px: irregular again,
+	   in the other direction. MEASURED with every station shut, before this
+	   change: METADATA 28.8, NOTATION 30.8, SOURCE 34.8, REPERTOIRE 36.8,
+	   ANALYSIS 36.8. Metadata and Notation are `.section` too, in
+	   `MetadataFields.svelte` and `NotationFields.svelte`, and theirs is
+	   `padding: 6px 0`. So the target is 6px, which is Dann's own instruction
+	   read literally, and no new value enters the scale: it is this recipe's
+	   own top step.
+
+	   THE 2px THAT REMAINS IS A RULE, NOT PADDING. Notation, Repertoire and
+	   Analysis draw a `border-top`; Metadata and Source do not, because each
+	   sits directly under an anchor's own rule. That is a mark on the page,
+	   which is what Dann is looking at, and it is already consistent. */
+	.section.shut {
+		padding-bottom: 6px;
 	}
 
 	/* Source is first in the scroll and draws NO rule of its own. The top

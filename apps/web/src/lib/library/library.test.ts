@@ -59,7 +59,7 @@ describe('record and page state', () => {
 	});
 
 	it('writes an empty anchor rather than dropping a gloss that has none', () => {
-		// `persistGlosses` uses `?? ''` (`+page.svelte:602`). A gloss with no
+		// `persistGlosses` uses `?? ''` (`+page.svelte`). A gloss with no
 		// anchor is still the singer's writing, so it is stored; the READ side
 		// is where an unanchored row is discarded, which is today's split too.
 		const fields: SongFields = {

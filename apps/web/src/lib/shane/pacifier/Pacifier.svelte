@@ -870,8 +870,14 @@
 		-webkit-tap-highlight-color: transparent;
 		/* N.48: iOS raises the callout and selection UI on a long press and
 		   swallows the gesture before LONGPRESS_MS fires. `user-select` takes
-		   the house form already used at HeaderBar.svelte:103 and
-		   Drawer.svelte:587; `-webkit-touch-callout` is new to this tree. */
+		   the house form already used by `.brand-mark` in HeaderBar.svelte and
+		   by the Inspector's own non-selectable labels in
+		   InspectorPanel.svelte; `-webkit-touch-callout` is new to this tree.
+
+		   REPAIRED BY NAMING, N.65 2026-08-21. This read
+		   `HeaderBar.svelte:103 and Drawer.svelte:587`. Both were stale before
+		   this ship: HeaderBar's rule is at :93, and `Drawer.svelte` carries no
+		   `user-select` at all, at :587 or anywhere else. */
 		-webkit-touch-callout: none;
 		user-select: none;
 	}

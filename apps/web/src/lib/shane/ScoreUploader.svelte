@@ -580,12 +580,19 @@
 			     input field just underneath it." A line of its own, between the
 			     box and the action row that follows the uploader in SOURCE.
 
-			     `upload.drop.acceptedNow` VERBATIM, one of the three retained
-			     keys, in both languages. IT ENDS WITHOUT A FULL STOP, where the
-			     sentence it replaces ended `PDF, or photograph.` with one. The
-			     brief says to use the retained key as written and leave the
-			     character to Dann, so the difference is named in the memo rather
-			     than reconciled here.
+			     `upload.drop.acceptedNow` VERBATIM, in both languages. N.65,
+			     Dann's ruling of 2026-08-21 dropped the string's `Accepted
+			     now:` / `Acceptés maintenant :` lead-in, so this line is now a
+			     bare list of formats rather than a sentence: "I think it's
+			     understood that the file names are the acceptable formats." His
+			     reason is the French, which wrapped to two lines with the
+			     lead-in and displaced everything under it.
+
+			     IT ENDS WITHOUT A FULL STOP, and that follows from the same
+			     ruling rather than being left over from ship B: a list with no
+			     lead-in is not a sentence. The « ou » that ship B dropped is
+			     back, from `upload.drop.placeholder`, the string Dann added it
+			     to by hand.
 
 			     INSIDE `.dz-wrap` RATHER THAN BESIDE IT, so it belongs to the box
 			     it describes and travels with it: the wrap is the idle state's own

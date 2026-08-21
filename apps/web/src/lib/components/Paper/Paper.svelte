@@ -62,7 +62,11 @@
 	{#snippet content()}
 <div class="paper-container" role="region" aria-label="Transcription">
 	{#each pages as pageLines, i}
-		{@const legendItems = buildProvenanceLegend(pageLines, language)}
+		<!-- N.65 item 8. The spot map goes into the builder alongside the lines,
+		     so a page carrying an `R` carries its legend entry and a page
+		     without one does not. Dann's ruling of 2026-08-21: "When a sigil
+		     prints to the page it must be decoded with a legend." -->
+		{@const legendItems = buildProvenanceLegend(pageLines, language, spotReconstitution)}
 		{#if i === 0}
 			<TitlePage
 				lines={pageLines}
