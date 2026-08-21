@@ -190,6 +190,36 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     The dictionary error above stays first in the SCROLL, which is no
 	     longer first in the drawer. -->
 
+	<!-- N.67 step 4b, THE LIBRARY DOOR.
+
+	     BETWEEN NOTATION AND SOURCE, DANN'S RULING OF 2026-08-21. It sat below
+	     the binder row until then, on the reasoning that the two are adjacent
+	     song-level acts: this one chooses which song, that one carries a song
+	     off the device. It now opens the scroll instead, ahead of the station
+	     that holds the poem. Choosing the song comes before working on it.
+
+	     THAT REASONING IS SPENT, and it is recorded rather than deleted: the
+	     binder row still sits at the foot of Source, so the adjacency the step
+	     4b note claimed is gone. Nothing inside this block changed, and neither
+	     did the binder row. Only the order did. -->
+	<div class="section song-section" class:shut={!sections.has(STATION_IDS.songs)}>
+		<SongList
+			{language}
+			songs={songLibrary.songs}
+			activeId={songLibrary.activeId}
+			plural={songLibrary.plural}
+			error={songLibrary.error}
+			unreadable={songLibrary.unreadable}
+			newerIlya={songLibrary.newerIlya}
+			onopen={songLibrary.onopen}
+			onnew={songLibrary.onnew}
+			onrename={songLibrary.onrename}
+			ondelete={songLibrary.ondelete}
+			expanded={sections.has(STATION_IDS.songs)}
+			ontoggle={() => sections.toggle(STATION_IDS.songs)}
+		/>
+	</div>
+
 	<!-- ── SOURCE. N.65 ship one, Dann's ruling 4 of 2026-08-20 ──────
 	     The textarea, the OCR scanner, the score drop zone, the Finale
 	     disclosure, and now Clear and Transcribe are one labelled station.
@@ -373,27 +403,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		</div>
 		{/if}
 	</div>
-
-	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both
-	     are song-level acts: this one chooses which song, that one carries a song
-	     off the device. Nothing goes on the paper. -->
-	<div class="section song-section" class:shut={!sections.has(STATION_IDS.songs)}>
-		<SongList
-			{language}
-			songs={songLibrary.songs}
-			activeId={songLibrary.activeId}
-			plural={songLibrary.plural}
-			error={songLibrary.error}
-			unreadable={songLibrary.unreadable}
-			newerIlya={songLibrary.newerIlya}
-			onopen={songLibrary.onopen}
-			onnew={songLibrary.onnew}
-			onrename={songLibrary.onrename}
-			ondelete={songLibrary.ondelete}
-			expanded={sections.has(STATION_IDS.songs)}
-			ontoggle={() => sections.toggle(STATION_IDS.songs)}
-		/>
-	</div>
 	<!-- ── ANALYSIS. LAST IN THE SCROLL. RULED BY DANN 2026-08-20 on his
 	     walk of `f59f7d2`, and it reverses the order N.73 S3 ship two
 	     shipped, knowingly.
@@ -410,9 +419,14 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     top, Source then Output then Songs; the performance sits together at
 	     the bottom, Analysis then the score work; and Print stops being
 	     stranded across 365px of empty Analysis from the fields it belongs
-	     with. The order is now Source, Output, Songs, Analysis, then
-	     shanePanel's score work and notices, with the voice anchor pinned
-	     below all of it.
+	     with.
+
+	     THE FIRST HALF OF THAT ORDER WAS SUPERSEDED ON 2026-08-21, when Dann
+	     moved Repertoire up between Notation and Source. The order is now
+	     Repertoire, Source, Output, Analysis, then shanePanel's score work and
+	     notices, with the voice anchor pinned below all of it. **Analysis last
+	     in the scroll is untouched**, and it is the part of the 2026-08-20
+	     ruling this block exists to record.
 
 	     Nothing inside this block changed. The result summary is still its
 	     first entry rather than merged into the header; merging them is a

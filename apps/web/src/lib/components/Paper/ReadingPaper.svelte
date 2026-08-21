@@ -31,7 +31,19 @@
 		width: 100%;
 		max-width: 816px;
 		margin: 0 auto;
-		padding: 3rem 96px;
+		/* THE SHEET'S SIDE PADDING AND THE BAND'S BLEED ARE ONE NUMBER.
+		   N.77 ship 3. `.chapter-band` cancels this padding with a negative
+		   margin so it meets the sheet edge, and for two days it cancelled a
+		   hard-coded 96px while the phone's rule quietly moved the real
+		   padding to 1rem. The band then hung 80px off each side and Dann
+		   read `ow Ilya Works` on his phone.
+
+		   CHANGE THIS PROPERTY, NEVER THE HORIZONTAL PADDING. Every rule that
+		   wants a different side padding redeclares `--sheet-pad-x` and lets
+		   the padding and the bleed follow. No rule anywhere should set
+		   either one to a literal again. */
+		--sheet-pad-x: 96px;
+		padding: 3rem var(--sheet-pad-x);
 		background: var(--paper-cream, #F0EBE0);
 		border-radius: 0;
 		box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
@@ -101,15 +113,18 @@
 	   THE HORIZONTAL BLEED IS A READING OF THE DRAWING, NOT A RULING. In
 	   the mockup the sheet carries no padding of its own and the band is
 	   its first child at full width, so the band meets the sheet edge.
-	   `.reading-paper` here carries `padding: 3rem 96px`, so the band has
-	   to cancel the horizontal half of that to land in the same place. The
-	   96px is `MARGINS.horizontal` from `$lib/page-config.ts`, the same
-	   number `.reading-paper` sets.
+	   `.reading-paper` here carries side padding, so the band cancels it to
+	   land in the same place.
+
+	   N.77 ship 3 replaced the literal that used to stand here. It read
+	   `-96px`, which was true of the desk and wrong everywhere the sheet
+	   padded itself differently. It is `--sheet-pad-x` now, declared once on
+	   `.reading-paper` beside the padding it feeds.
 
 	   The vertical margins are `h3`'s own, unchanged, so the gap above a
 	   chapter and the gap below its title stay what the page already had. */
 	.reading-inner :global(.chapter-band) {
-		margin: 3.5rem -96px 1.25rem -96px;
+		margin: 3.5rem calc(-1 * var(--sheet-pad-x)) 1.25rem calc(-1 * var(--sheet-pad-x));
 		padding: 34px 30px 30px 30px;
 		color: #fdfbf6;
 	}
@@ -419,9 +434,17 @@
 	@media (max-width: 767px) {
 		/* The 96px margin is a letter page's margin, not a phone's: it would
 		   leave 198px of text on a 390px screen. The phone keeps the reduced
-		   padding. The shadow STAYS, as it now does on every sheet. */
+		   padding. The shadow STAYS, as it now does on every sheet.
+
+		   N.77 ship 3: this redeclares `--sheet-pad-x` rather than the
+		   horizontal padding, so the chapter band's bleed narrows with the
+		   sheet instead of overhanging it by the difference. The two vertical
+		   longhands carry the 1.5rem that the shorthand used to carry; both
+		   values are the ones this block already had. */
 		.reading-paper {
-			padding: 1.5rem 1rem;
+			--sheet-pad-x: 1rem;
+			padding-top: 1.5rem;
+			padding-bottom: 1.5rem;
 		}
 
 		.reading-inner :global(h1) {
