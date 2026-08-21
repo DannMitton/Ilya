@@ -13,7 +13,7 @@ import { t } from './i18n';
 // ── Legend item ───────────────────────────────────────────────────
 
 export interface LegendItem {
-	/** The provenance type key (e.g. 'yo-restored', 'inferred'). */
+	/** The provenance type key (e.g. 'yo-restored', 'user-override'). */
 	type: string;
 	/** Display icon: SVG reference key or text character. */
 	icon: string;
@@ -54,14 +54,13 @@ export function showProvenance(stressSource: string): boolean {
 
 /**
  * Ordering for provenance types in the legend.
- * ё-rule first, then user types, then inferred last (the warning state).
+ * ё-rule first, then the user-attributed types.
  */
 const LEGEND_ORDER: string[] = [
 	'yo-restored',
 	'user-dictionary',
 	'user-composer',
 	'user-override',
-	'inferred',
 ];
 
 /**
@@ -76,7 +75,7 @@ const LEGEND_ORDER: string[] = [
  * N.65, DANN'S RULING OF 2026-08-21, AND IT IS A PRINCIPLE RATHER THAN A PATCH:
  * "When a sigil prints to the page it must be decoded with a legend."
  *
- * It is a separate constant rather than a sixth member of `LEGEND_ORDER`
+ * It is a separate constant rather than a fifth member of `LEGEND_ORDER`
  * because that array is the ALLOWLIST the stress scan tests words against, and
  * no word's `stressSource` is ever this. It comes from the `spotReconstitution`
  * map instead.
@@ -87,17 +86,13 @@ const SPOT_RECONSTITUTION = 'spot-reconstitution';
  * The order the legend PRINTS in, derived from `LEGEND_ORDER` so the two cannot
  * drift.
  *
- * Spot reconstitution sorts with the user-attributed marks and BEFORE
- * `inferred`, which keeps the rule `LEGEND_ORDER` already states: "inferred
- * last (the warning state)". A spot override is a singer's own decision about
- * one word, so it belongs beside `user-override` rather than after the one
- * entry that asks them to go and check something.
- *
- * THE BRIEF LEFT THIS TO THE DESK. Nothing rules it, and it is one line to move.
+ * Spot reconstitution prints last, the position it has held since it was added.
+ * It sits after the stress sources because it is not one: it is the singer's own
+ * decision about a single word, read from the `spotReconstitution` map rather
+ * than from any word's `stressSource`. Appending it leaves `LEGEND_ORDER`'s own
+ * ё-first, user-types-after shape untouched.
  */
-const LEGEND_DISPLAY_ORDER: string[] = LEGEND_ORDER.flatMap((type) =>
-	type === 'inferred' ? [SPOT_RECONSTITUTION, type] : [type]
-);
+const LEGEND_DISPLAY_ORDER: string[] = [...LEGEND_ORDER, SPOT_RECONSTITUTION];
 
 // ── Icon mapping ─────────────────────────────────────────────────
 
@@ -110,7 +105,6 @@ const PROVENANCE_ICONS: Record<string, string> = {
 	'user-dictionary': 'book',
 	'user-composer': 'notes',
 	'user-override': 'torso',
-	'inferred': 'question',
 	/* The mark IS the character, as it is for `yo-restored`. `WordStack`
 	   prints a literal `R`; `PageFooter` draws a traced one at legend size. */
 	[SPOT_RECONSTITUTION]: 'R',
@@ -126,7 +120,6 @@ const LEGEND_KEYS: Record<string, string> = {
 	'user-dictionary': 'legend.user-dictionary',
 	'user-composer': 'legend.user-composer',
 	'user-override': 'legend.user-override',
-	'inferred': 'legend.inferred',
 	[SPOT_RECONSTITUTION]: 'legend.spot-reconstitution',
 };
 
@@ -138,7 +131,7 @@ const LEGEND_KEYS: Record<string, string> = {
  * 1. Scans all word stacks across the page's lines
  * 2. Collects unique provenance types that match known legend entries (allowlist)
  * 3. Maps each type to its icon and bilingual label
- * 4. Returns in stable display order (ё first, inferred last)
+ * 4. Returns in stable display order (ё first, spot reconstitution last)
  * 5. Returns empty array if no special provenance exists (legend omitted)
  *
  * `spotReconstitution` is the page's spot-override map, the same one
@@ -175,7 +168,7 @@ export function buildProvenanceLegend(
 	   included, and the skip above is about a STRESS source, which this is not.
 	   Reading the map here is what makes the legend per-page: a page with a
 	   spot-reconstituted word gets the entry and a page without one does not,
-	   which is the filtering the other five already do.
+	   which is the filtering the other four already do.
 
 	   THE KEY AND THE PREDICATE ARE `VerseLine.svelte`'s, not new ones.
 	   `VerseLine.svelte:69` builds `${lineIndex}-${wordIndex}` and
