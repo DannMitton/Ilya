@@ -172,7 +172,8 @@ selector.**
 
 `rgba(139, 154, 125, 0.06)` is `--sage` `#8B9A7D` at 6 percent, the twin of
 `.dropzone:hover`'s `rgba(142, 126, 155, 0.06)`, which is `--deeper-lavender` at
-6 percent (`ScoreUploader.svelte:753-755`, the tint at `:754`). **Each box takes its own border's
+6 percent (the `.dropzone:hover` rule in `ScoreUploader.svelte`; it sat at
+`:753-755` when this was written and ship A's deletion shifted it). **Each box takes its own border's
 hue, because hue names place.** `.textarea-wrapper` also takes `.dropzone`'s own
 `transition: background 0.15s ease`, so the two intakes tint at one speed.
 
@@ -364,7 +365,8 @@ edge, on the desk.
 The shadow moved from `.lip-silhouette` to **`.drawer`**
 (`Drawer.svelte:703`), the element that already contains the drawer body and the
 handle's SVG both, so the filter traces the union of the two. The strip's own
-filter is gone (`Drawer.svelte:942-948`, now a comment saying where it went).
+filter is gone from the `.lip-silhouette` rule, now a comment saying where it
+went; it sat at `:942-948` when this was written.
 Path 2, clipping the blur, was not needed and is not built.
 
 **The values are unchanged:** `0 3px 12px rgba(0, 0, 0, 0.35)`. So is the path
@@ -382,7 +384,8 @@ the phone. Nothing could move, and nothing did.
 
 ### No lift on the phone
 
-`Drawer.svelte:1425`, `filter: none` in the `max-width: 767px` block. The
+`filter: none` in `Drawer.svelte`'s `max-width: 767px` block, which sat at
+`:1425` when this was written and ship A shifted. The
 silhouette is desktop-only, so on the phone there is no edge and no handle for a
 shadow to belong to, the drawer is a full-screen overlay whose shadow would fall
 outside the viewport entirely, and the declaration would only cost a
@@ -469,7 +472,8 @@ fraction holds at both sizes. `rows="6"` stays as the no-CSS fallback and
 | score box | 360 x 640 | 152.00 px | **138.00 px** | **90.79%** |
 
 **THE SCORE BOX DID NOT REACH 75 PERCENT ON THE PHONE, and it cannot.**
-`min-height` went 152 to 114 (`ScoreUploader.svelte:738`), but at 360 px the
+`min-height` went 152 to 114 (the `min-height` in `ScoreUploader.svelte`'s
+`.dropzone` rule, at `:738` when this was written and shifted by ship A), but at 360 px the
 drop zone's sentence wraps to five lines that measure 119 px on their own, so
 with the box's 19 px of vertical padding the CONTENT is 138 px and the 114 px
 floor no longer binds. **Forcing 114 px there would clip the placeholder.** The
@@ -517,8 +521,9 @@ own failure.
 
 **The Finale disclosure stayed with the score box**, measured below it at both
 sizes. It needed no work: it lives inside `ScoreUploader`'s own root
-(`ScoreUploader.svelte:678-694`), so it travels with the score box by
-construction.
+(it sat at `ScoreUploader.svelte:678-694` when this was written), so it travelled
+with the score box by construction. **DELETED IN SHIP A on Dann's ruling; see
+`retraction-shipA_r1_2026-08-20.md`.**
 
 ### 3. No rule between the score field and Print
 
@@ -537,7 +542,9 @@ which is Dann's to say.
 
 ### 4. Songs becomes Repertoire
 
-`i18n.ts:813`: `'songs.heading': { en: 'Repertoire', fr: 'Répertoire' }`.
+The `'songs.heading'` entry in `i18n.ts` now reads
+`{ en: 'Repertoire', fr: 'Répertoire' }`. **It sat at `:813` when this was
+written; ship A deleted six keys above it and shifted it.**
 Measured in the running drawer, the station label reads **Repertoire**.
 
 **THE KEY IS UNCHANGED and it is not a lie.** It addresses the songs feature,
@@ -547,9 +554,9 @@ English because a repertoire is made of songs. Only the STATION's name changed,
 which is only what Dann ruled.
 
 **Neither word is coined.** Both are already house vocabulary:
-`profile.scoreRegionAria` is 'Repertoire fit score' (`i18n.ts:604`), and
-« répertoire » appears at `profile.lede` (`:581`) and `calib.welcome.lede`
-(`:463`).
+`profile.scoreRegionAria` is 'Repertoire fit score', and « répertoire » appears
+at `profile.lede` and `calib.welcome.lede`. **Those three sat at `:604`, `:581`,
+and `:463` when this was written; ship A shifted them. Find them by key.**
 
 ### 5 and 6. Lavender on Shift Lyrics
 

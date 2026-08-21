@@ -1460,3 +1460,69 @@ and **commit `5069173` carries the message `...`**. Its contents are this
 section. **That was the desk's defect, not Dann's**, and the commit is left as
 it is rather than rewritten, because the history should be right rather than
 tidy. A command with a slot in it is prose, not a fenced block.
+
+---
+
+## THE DESK HEAD IS NOT THE PAPER, AND CONTRACT §6 DOES NOT REACH IT. 2026-08-20
+
+CONTRACT §6 reads: **"Do not put a control on the paper. Drawer manipulates,
+page displays and prints."** Read fast, that forbids any control outside the
+drawer. **It does not.** It forbids controls on the sheet.
+
+**`DeskHead.svelte:245-249` settles it in the tree**:
+
+```
+@media print {
+	.desk-head { display: none; }
+}
+```
+
+with the component's own comment above it: *"The desk head is chrome. The page
+prints; the desk does not."* The desk head is desk furniture that happens to sit
+above the sheet. It already carries controls and always has: the
+Transcription / Score Markup pair at `:43`, and the Learn and Guide links at
+`:44`.
+
+**So a control may be added to the desk head.** Ruled by Dann 2026-08-20 for
+`Print`, in his own words: *"to be clear I dont want a control on the paper. I
+want it to float next to the Transcribe / Score Markup selector."*
+
+**Two things any such control has to survive, and neither is the rule above.**
+The bar's ruled geometry puts the pair flush with the sheet's left edge and the
+links flush right (`DeskHead.svelte:98` and following, and the layout rules at
+`:129-160`), so a new control takes the empty span between them or it displaces
+something Dann ruled. And the desk head renders on all four destinations,
+including Learn and Guide, where there is nothing to print.
+
+**The test to apply next time, rather than re-reading the sentence:** does it
+survive `@media print`? If it disappears when the page prints, it is desk. If it
+appears on paper, it is the paper, and §6 forbids it.
+
+---
+
+## TWO GAPS IN THE DRAWER ARE NOT THE SAME QUANTITY. Measured 2026-08-20
+
+Ship A of the retraction brief asked for the score box's action row to sit under
+its field the way `Clear text` and `Transcribe` sit under the textarea. **The
+deletion it was paired with closed 43.3 px of a 57.3 px difference and could not
+close the rest**, and the residue is not a tuning problem.
+
+| gap | measured |
+|---|---|
+| textarea to `Clear text` / `Transcribe` | **6.00 px** |
+| score box to `Print` / `Export` / `Import` | **20.00 px** |
+
+**The 6 px is `.station-body`'s flex gap between two siblings inside one
+station.** The 20 px crosses a station boundary and decomposes as **8 px** of
+`.dz-wrap`'s own `margin-bottom` (`ScoreUploader.svelte:766`) plus **12 px**
+from the uploader's bottom to the next section's top.
+
+**That 12 px is Dann's ruled station recipe**, from his walk of `f59f7d2`: "6px
+above the label, 12px below the body." Equalising the two gaps by changing it
+would move every station in the drawer.
+
+**THE ONLY HONEST FIX IS STRUCTURAL: the row moves INTO the station.** Then both
+gaps are the same within-station flex gap and match by construction. **A cross-
+station distance cannot be made to equal a within-station one by choosing a
+number**, because the two are made of different things and every later station
+change will pull them apart again.

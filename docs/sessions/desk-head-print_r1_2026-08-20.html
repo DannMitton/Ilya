@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Print on the desk head</title>
+<style>
+  :root{
+    --band:#8B9A7D; --desk:#D1D7CB; --paper:#F0EBE0;
+    --pair-active:#F0EBE0; --pair-idle:#DCE0D6; --edge:#3a352f; --ink:#1a1612;
+    --sans:-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 22px 44px;background:#EFECE4;font-family:var(--sans);color:var(--ink)}
+  h1{font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;font-weight:600}
+  .lede{font-size:13px;line-height:1.5;max-width:70ch;margin:0 0 22px;color:#4a453f}
+  .stage{width:100%;max-width:920px;border-radius:4px;overflow:hidden;
+         border:1px solid #DAD5CB;background:var(--desk)}
+  .band{height:26px;background:var(--band)}
+  .head{display:flex;align-items:center;padding:22px 26px 0 26px;gap:0}
+  .pair{display:flex;border:1.5px solid var(--edge);border-radius:2px;overflow:hidden}
+  .seg{font-size:13px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;
+       padding:13px 20px;line-height:1}
+  .seg.active{background:var(--pair-active)}
+  .seg.idle{background:var(--pair-idle);border-left:1.5px solid var(--edge)}
+  .gap{width:52px}
+  .print{font-size:13px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;
+         padding:13px 26px;line-height:1;border:1.5px solid var(--edge);border-radius:2px;
+         background:var(--pair-active)}
+  .links{margin-left:auto;font-size:13px;letter-spacing:.08em;color:#4a453f}
+  .links span{margin-left:20px}
+  .sheet{margin:24px 26px 0 26px;height:120px;background:var(--paper);
+         box-shadow:0 3px 12px rgba(0,0,0,.35)}
+  .sig{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:26px;
+       color:#B9B2A4;padding:34px 0 0 26px}
+  .note{margin-top:22px;font-size:12.5px;line-height:1.6;color:#4a453f;max-width:74ch}
+  .note b{color:var(--ink)}
+  .note code{font-size:12px}
+  ul{margin:6px 0 0;padding-left:20px}
+  li{font-size:12.5px;line-height:1.6;color:#4a453f;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<h1>Print on the desk head</h1>
+<p class="lede">Dann's drawing of 2026-08-20, rendered. <b>What this document rules is
+position.</b> The colours, the exact gap, and the border weight are the desk's reading of the
+drawing and are not themselves ruled.</p>
+
+<div class="stage">
+  <div class="band"></div>
+  <div class="head">
+    <div class="pair">
+      <div class="seg active">Transcription</div>
+      <div class="seg idle">Marked score</div>
+    </div>
+    <div class="gap"></div>
+    <div class="print">Print</div>
+    <div class="links"><span>Learn</span><span>Guide</span></div>
+  </div>
+  <div class="sheet"><div class="sig">[ Ilya ]</div></div>
+</div>
+
+<p class="note">
+<b>What the drawing rules.</b>
+</p>
+<ul>
+  <li><b>Print sits immediately to the right of the pair</b>, not centred in the span between
+  the pair and the reading links, and not appended to the pair as a third segment.</li>
+  <li><b>A gap separates it from the pair.</b> The gap is the whole point: the pair is a
+  choice between two destinations, and Print is an action. Joining them would say they are
+  the same kind of thing.</li>
+  <li><b>It is a box in the pair's own idiom</b>: same height, same hairline border, same
+  baseline, same uppercase letterspaced label.</li>
+  <li><b>It is desk furniture, not paper.</b> It sits on the desk field above the sheet's
+  top edge, and it disappears at print with the rest of the desk head.</li>
+</ul>
+
+<p class="note">
+<b>It is always live.</b> Dann ruled that a singer may print any of the four destinations, and
+that page parameters belong in the browser's own print dialog. So there is no disabled state,
+no greying, and no vanishing on Learn and Guide. <b>The bar is identical on all four
+destinations by construction rather than by a condition.</b>
+</p>
+
+<p class="note">
+<b>What is NOT established.</b> The exact gap, the fill, and whether Print carries the pair's
+border or sits bare on the desk. The drawing shows a bordered box and this rendering follows
+it. <b>Measure the desk head at 360 x 640 with Print added, and report a collision rather
+than shrinking anything.</b>
+</p>
+
+<p class="note">
+<b>And one consequence Dann ruled the same minute.</b> A printed Learn or Guide excerpt must
+carry a header and a footer identifying its source. <code>ReadingPaper.svelte</code> has
+neither today: its whole print block removes a box shadow. That is separate work and it is
+not numbered yet.
+</p>
+
+</body>
+</html>

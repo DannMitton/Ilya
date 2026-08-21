@@ -38,28 +38,40 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED and WALKED across four
-> commits. One pass is with Code and unshipped.**
+> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED and WALKED. Ship A of the
+> retraction brief is SHIPPED and its memo is written. DANN HAS NOT WALKED IT.**
 >
-> **IN FLIGHT, sent to Code 2026-08-20 afternoon and not yet shipped:** the
-> drawer's edge and its handle become ONE silhouette in the paper handle's
-> grey, and the French drop-zone string gains its « ou ». **The geometry is
-> drawn and the drawing is the specification:**
-> `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`.
+> **NEXT, AND IT IS ONE ACT: SHIP B of
+> `docs/sessions/brief-to-code-retraction_r1_2026-08-20.md`.** Retraction on
+> every header including the pinned anchors; the voice anchor excluded by Dann's
+> explicit ruling because `Calibrate` must stay visible; the persisted open set
+> with NOTATION's exemption; the first-run default of Piece and Source open.
 >
-> **NEXT AFTER IT: ship two, `brief-to-code-drawer-stations_r1_2026-08-20.md`
-> §4.** Retraction on every station including the anchors, the persisted open
-> set with NOTATION's exemption, the first-run default of Piece and Source
-> open. **Metadata's chevron, which Dann asked for on the walk, is that ship.**
+> **BEFORE SHIP B GOES TO CODE, §B.6 MUST BE AMENDED, AND THE AMENDMENT IS NOT
+> WRITTEN.** §B.6 as it stands moves the whole `Print` / `Export this song` /
+> `Import a song` row into SOURCE and tells Code to accept the consequence that
+> collapsing SOURCE hides `Print`. **Dann ruled that consequence away on
+> 2026-08-20 night by moving `Print` off the drawer altogether.** See the ruling
+> below. The amended §B.6 keeps `Export` and `Import` inside SOURCE and drops
+> `Print` from the row.
 >
-> **THEN:** the chapter bands for Learn and Guide, then S5 (the wall re-plumb),
+> **ONE BRIEF AT A TIME.** Ship A is unwalked. Hold Ship B until Dann has walked
+> a deploy carrying ship A, the language pill, and the silhouette's lift, all
+> three of which are shipped and unwalked.
+>
+> **THEN, IN THIS ORDER:** `Print` moves to the desk head (drawing ruled, see
+> below); the chapter bands for Learn and Guide; then S5 (the wall re-plumb),
 > S6 (consequences), then the rest of the aesthetic layer.
+>
+> **NEW AND UNNUMBERED, ARRIVED 2026-08-20 NIGHT:** a printed Learn or Guide
+> excerpt must carry a header and a footer identifying its source. `ReadingPaper`
+> has neither today. **Number it before building it, and Dann writes the copy.**
 >
 > **N.73 S3 is otherwise closed.** Ship two `DONE`, `af995a9`, walked four of
 > four. **Ship one is `WRITTEN`, not `DONE`:** brief items 6 and 8 need Dann's
 > microphone and a real calibration. Code closed item 7 in its own harness.
 >
-> **TWO THINGS DANN OPENED TODAY AND HAS NOT SETTLED.**
+> **TWO THINGS DANN OPENED AND HAS NOT SETTLED.**
 > **The name.** He said "I think I like the term 'Score Markup' better than
 > 'Marked Score'." That would change his own S0 ruling 2 of 2026-08-19. **NOT
 > RULED. Do not build it.** The desk put two objections and he has not
@@ -80,9 +92,151 @@ any of them count.
 > the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`, station
 > order at **§3.3**, and **its order is superseded**, see below), the mockups
 > (**r1 governs the drawer; r2 does not touch the stations**), the lip
-> (`ilya-lip-options_r1_2026-08-18.html`, option A), and the ratified strings
+> (`ilya-lip-options_r1_2026-08-18.html`, option A, **superseded by the
+> silhouette drawing**), and the ratified strings
 > (`fable-n73-french-strings_r1_2026-08-19.md`).
 > **E.27 is a SOURCE, not law. Tether 17.**
+
+---
+
+## 2026-08-20 NIGHT. THE SURGERY, SHIP A, THE PILL, AND PRINT LEAVES THE DRAWER
+
+**FLOOR UNCHANGED AT `b0a9860`, AND THAT IS DELIBERATE.** Four builds landed
+after it and **this desk did not record their commits**, because it does not run
+git and did not ask for the line. `0e5ed6e` is named below only because a memo
+names it. **The next session raises the floor from Dann's opening git line.**
+Nothing in this section is dated by SHA; each item is dated by its memo, which
+carries `path:line` for everything it claims.
+
+### What shipped after `b0a9860`, and NOT ONE OF IT IS WALKED
+
+| what | memo | state |
+|---|---|---|
+| The language pill | `docs/sessions/language-toggle_r1_2026-08-20.md` | `WRITTEN`, not walked |
+| The silhouette's lift, and the sage hover on the text intake | `docs/sessions/silhouette-lift-and-sage-hover_r1_2026-08-20.md` | `WRITTEN`, not walked. Built from Dann's walk of `0e5ed6e` |
+| Ship A: the Finale disclosure deleted, the bottom rule lavender | `docs/sessions/retraction-shipA_r1_2026-08-20.md` | `WRITTEN`, not walked |
+
+**Five gates at baseline on every one of them.** 216, 235, 0 errors and 7
+warnings in 4 files, 682, 444 passed and 5 skipped. Nothing moved.
+
+### PRINT LEAVES THE DRAWER. RULED BY DANN 2026-08-20 NIGHT
+
+His words, twice, and the second corrects a reading the desk had not made but
+could have: *"Can we take Print out of the Drawer entirely and install a
+consistent Print button on the right side of the Transcription / Score Markup
+selector on the paper GUI side?"* Then: **"to be clear I dont want a control on
+the paper. I want it to float next to the Transcribe / Score Markup selector."**
+
+**`Print` goes to the DESK HEAD, beside the pair. Not on the sheet.**
+
+**CONTRACT §6 LOOKS LIKE IT FORBIDS THIS AND DOES NOT.** "Do not put a control
+on the paper" governs the sheet. `DeskHead.svelte:245-249` hides the desk head
+under `@media print` with its own comment, *"The desk head is chrome. The page
+prints; the desk does not."* The desk head already carries controls and always
+has: the pair at `:43` and the Learn and Guide links at `:44`. **The full
+reasoning and the test to apply next time are now in `ENVIRONMENT.md`.**
+
+**WHERE IT SITS IS RULED, AND IT IS RULED FROM A DRAWING.** Dann drew it:
+`docs/sessions/desk-head-print_r1_2026-08-20.html` is that drawing rendered.
+**`Print` sits immediately to the RIGHT of the pair, separated by a gap, as its
+own box in the pair's own idiom: same height, same hairline border, same
+baseline.** It is not centred in the span between the pair and the links, and it
+does not join the pair as a third segment. **The gap is what says it is a
+different kind of thing.**
+
+**IT IS ALWAYS LIVE. RULED BY DANN 2026-08-20 NIGHT.** His words: *"I think
+folks can Print Learn and Guide if they want to? They'll have to specify the
+page parameters in their print dialog box themselves."*
+
+**So there is no disabled state, no greying, and no vanishing.** The desk had
+put exactly that question to him, recommending grey-and-disabled on Learn and
+Guide. **He answered it away instead: a singer may print any of the four
+destinations, and the browser's own print dialog is where page parameters
+belong.** The bar is therefore identical on all four destinations by
+construction rather than by a condition, which is simpler than either path the
+desk offered.
+
+**THE CONSTRAINT THAT REMAINS.** The bar's ruled geometry puts the pair flush
+with the sheet's left edge and Learn and Guide flush right. **`Print` takes the
+space immediately right of the pair, which is empty, so it displaces nothing.**
+Measure the desk head at 360 x 640 with `Print` added and report a collision
+rather than shrinking anything.
+
+### A PRINTED LEARN OR GUIDE EXCERPT MUST IDENTIFY ITS SOURCE. RULED 2026-08-20 NIGHT
+
+Dann, the same minute: *"If folks Print Learn and Guide excerpts those excerpts
+should bear header and footer information that identifies the source."*
+
+**THIS NAMES WORK THAT DOES NOT EXIST. Measured tonight, not assumed.** Learn
+and Guide render inside `ReadingPaper.svelte`, from `+page.svelte:2286-2300`.
+**`ReadingPaper` has no header, no footer, and no page furniture of any kind.**
+Its entire print block is `ReadingPaper.svelte:276-280`, which removes a box
+shadow and nothing else. A Learn chapter printed today carries no title, no
+attribution, no page number, and no wordmark.
+
+**THE FURNITURE EXISTS, BUT IT IS THE OTHER PAPER'S.** `TitleHeader.svelte`,
+`RunningHeader.svelte`, and `PageFooter.svelte` serve the transcription sheet
+and the marked score. **`PageFooter` is not liftable as it stands:** its props
+are `pageNumber`, `totalPages`, `legendItems`, `broadNote`, and a
+`hairlineAccent`, and three of those are provenance concepts a Learn chapter
+does not have. It does carry the one piece that transfers, `footer.attribution`.
+
+**WHAT IS RULED:** a printed Learn or Guide excerpt identifies its source, in a
+header and a footer.
+**WHAT IS NOT RULED, AND THE DESK MUST NOT INVENT IT:** what those two lines
+say, in English and in French. **Dann writes copy.** The desk's reading of
+"identifies the source" is the chapter's own title, the Ilya wordmark, and the
+build, but that is a reading rather than a ruling.
+
+**NOT ESTABLISHED.** Whether a Learn chapter breaks legibly across pages at all.
+Nothing in N.47 or N.69 was measured against `ReadingPaper`; both were done
+against the transcription sheet and the marked score. **Settled by: one print of
+a Learn chapter, on paper.**
+
+**THIS IS ITS OWN PIECE OF WORK AND IT IS NOT SHIP B.** It arrived tonight
+because Dann's `Print` ruling made Learn and Guide printable for the first time.
+**Number it before building it.**
+
+### RULED BY DANN, THIS SESSION, EVERYTHING ELSE
+
+1. **The lip and the drawer are ONE SURFACE carrying the paper's own drop
+   shadow.** Ratified from `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`,
+   option C. Dann: "The look of C is exactly what I want."
+2. **The layer order is Dann's own, given verbatim:** background deepest; drawer
+   and paper GUI coexist at the next level; "whatever sorcery you need" highest.
+   **He deferred the mechanism to the desk and ruled only the look.**
+3. **Every header gets a retraction chevron.** "Every header begins a section
+   that is retractable and expandable." Ship B.
+4. **The bottom-most divider is lavender.** Done in ship A, `Drawer.svelte:844`,
+   `--deeper-lavender` `#8E7E9B`, string-identical to the rule above SHIFT
+   LYRICS. **No second lavender entered.**
+5. **The older-Finale disclosure is deleted.** Done in ship A. Six i18n keys
+   went with it, each checked for another consumer and each having exactly one.
+   **`upload.err.mus` survives at `i18n.ts:377` and is now the only guidance a
+   `.mus` user gets.**
+6. **There is no Output station.** Dann dissolved the naming question rather
+   than answering it: *"I do not think we need an Output section articulated."*
+7. **The text intake gains a sage hover**, matching the score field's lavender
+   one, **and it goes away once text is entered.** Dann's own correction.
+8. **The two intakes' placeholders match.** The score drop zone's three stacked
+   elements became one placeholder in the textarea's exact treatment. **He asked
+   four times.** That failure is CONTRACT tether 18.
+
+### THE SHADOW SEAM, AND WHY IT IS WORTH REMEMBERING
+
+Code predicted an inward bloom before building it, and **the desk relayed the
+prediction to Dann as a curiosity instead of solving it.** He got a build he had
+not asked for: "Fucking awful Claude. This is not what you offered me."
+
+**The fix was one move.** The `filter: drop-shadow()` sat on the silhouette
+path, so the shadow fell inward across the drawer's own face. Moving the filter
+to `.drawer`, which contains both the body and the handle SVG, means the opaque
+body hides its own shadow and only the outside edge lifts. **One object, one
+shadow, exactly as the paper does it.**
+
+**The lesson is not about SVG.** A prediction handed over without a remedy is
+not a warning, it is a pre-written excuse. **If the desk can see the defect
+before the build, the brief solves it.**
 
 ---
 
@@ -136,7 +290,11 @@ state took its own value, **−0.67 px closed and −1.33 px open**. **Both fall
 below the "pixel or four" Dann guessed and Code did not round them up to meet
 his guess.**
 
-### THE LANGUAGE TOGGLE. RULED 2026-08-20, BRIEF WRITTEN, NOT BUILT
+### THE LANGUAGE TOGGLE. RULED 2026-08-20, BRIEF WRITTEN, **SINCE BUILT**
+
+**Built the same night.** Memo:
+`docs/sessions/language-toggle_r1_2026-08-20.md`. `WRITTEN`, not walked. What
+follows is the ruling as it was made.
 
 **Dann ruled the pair becomes ONE pill**, naming the language he is not in.
 **Nothing in the project had ruled the two-button form; it was built, not
