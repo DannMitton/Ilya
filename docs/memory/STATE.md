@@ -45,15 +45,19 @@ any of them count.
 > is gone, and the counter reads. His words: "Great!" and "Syllables header is
 > gone, syllabified text is correctly situated. Counter reads correctly."
 >
-> **NEXT, AND IT IS ONE ACT: WRITE THE NEXT BRIEF. NINE ITEMS, ALL RULED BY
-> DANN ON THAT WALK, NOT ONE OF THEM WRITTEN DOWN AS A BRIEF YET.**
+> **THE BRIEF IS WRITTEN:
+> `docs/sessions/brief-to-code-handle-print-and-legend_r1_2026-08-21.md`.
+> NINE ITEMS, ALL RULED BY DANN ON THAT WALK. NEXT ACT: PASTE IT INTO CODE.**
+> **Every anchor in it was re-read after `afc45cb`.** Ship B moved
+> `Drawer.svelte`, `RootPanel.svelte`, and `i18n.ts`, and eleven numbers written
+> into this file an hour earlier were already stale. They are repaired below.
 >
 > 1. **`Print` leaves the drawer for under the sheet, flush left.** Dann chose
 >    option C of four offered. He was told it loses stickiness and ruled it
->    anyway. `RootPanel.svelte:338-344` is still the only Print control.
+>    anyway. `RootPanel.svelte:365` is still the only Print control.
 > 2. **The silhouette renders on the phone.** Drop `!isMobile &&` at
->    `Drawer.svelte:638`; make `class:silhouetted` unconditional at `:653`.
->    **Leave `filter: none` at `:1434` alone: the silhouette without the lift.**
+>    `Drawer.svelte:635`; make `class:silhouetted` unconditional at `:650`.
+>    **Leave `filter: none` at `:1436` alone: the silhouette without the lift.**
 > 3. **A 20 px desk strip at the drawer's right edge on the phone.** The strip
 >    equals the pull's protrusion (`.drawer-lip`, `width: 20px` at `:1020`), so
 >    the tab fills it and the desk shows above and below. `Drawer.svelte:1440`'s
@@ -64,18 +68,20 @@ any of them count.
 >    Markup. **Free:** `app.css:82-85` already carries four desk tints and
 >    `+page.svelte:2718-2733` paints them. Learn takes rose and Guide cobalt by
 >    the same rule; Dann was told and did not object. **The tab itself stays
->    cream on every destination**, per `Drawer.svelte:1013-1017`.
+>    cream on every destination**, per `Drawer.svelte:1011`.
 > 5. **The `#fff` hover latch, guarded on BOTH rules.** See the measurement
 >    below. `@media (hover: hover)` around `Drawer.svelte:1052-1054` AND around
 >    `:996-997`, which is harmless only until item 2 lands.
 > 6. **The format line drops its lead-in.** "Accepted now:" and « Acceptés
 >    maintenant : » go; the list stays. **A truncation of a ratified string, so
 >    no new French.** Dann's reason: the French wrapped to two lines and pushed
->    everything below it down. **No terminal full stop and no « ou »: the desk
->    took the do-nothing and said so.**
+>    everything below it down. **No terminal full stop. THE « ou » COMES BACK:
+>    the desk first took the do-nothing and was WRONG. `i18n.ts:301-304` records
+>    that Dann added that word by hand on 2026-08-20 and nothing has reversed
+>    it. A word he added is a ruling.**
 > 7. **Collapsed stations match NOTATION.** Measured off Dann's screenshot,
 >    rule to rule, in CSS px: NOTATION 27.2, SOURCE 33.0, REPERTOIRE 32.6,
->    ANALYSIS 68.8. `.section` is `padding: 6px 0 12px` (`RootPanel.svelte:889`)
+>    ANALYSIS 68.8. `.section` is `padding: 6px 0 12px` (`RootPanel.svelte:875-888`)
 >    and the 12 px is air after a body; a shut station has none. **The bottom
 >    padding leaves with the body, exactly as `.station-label.tight` already
 >    drops the label's gap. Open, Dann's ruled asymmetry stands.**
@@ -92,26 +98,26 @@ any of them count.
 >    and `height: 76px` at `:1021`. **The shape does not change:** `R` derives
 >    from `LIP_W` (`:120`), so the squircle's corners are unchanged and only the
 >    straight run lengthens. **The chevron re-centres by itself** (`.drawer-lip`
->    is `align-items: center; justify-content: center` at `:1024-1026`); Code
+>    is `align-items: center; justify-content: center` at `:1025-1026`); Code
 >    confirms rather than adding a second centring rule.
 >    **Dann's reason, given after the ruling: target size, on both displays.**
 >    So Code reports the acquired target box before and after on both pointer
 >    types: 20x76 and 44x88 today, 20x152 and 44x152 after. **The `::before` at
->    `:1085-1094` is 44 by 88 and its comment SAYS 44 by 88; its height must
+>    `:1086-1094` is 44 by 88 and its comment SAYS 44 by 88; its height must
 >    follow the tab's or the comment lies and the top and bottom 32 px of a
 >    visible handle get 20 px of width.** Also check `:1396`, a second
 >    `width: 20px`, for a height twin.
 >
 > **THE THREE RULINGS THAT ARE NOT BUILD ITEMS.**
 > **The clitic arrow is NOT a sigil. RULED 2026-08-21.** Dann: *"The clitic
-> arrow is fully explained in the GUIDE section."* `provenance.ts:113-116`'s
+> arrow is fully explained in the GUIDE section."* `provenance.ts:114`'s
 > deliberate clitic skip STAYS, and his sentence goes in its comment so nobody
 > re-opens it.
 > **A mark that prints carries a legend entry. RULED 2026-08-21.** Dann: *"When
 > a sigil prints to the page it must be decoded with a legend."* The census, in
 > `WordStack.svelte` only: ё, book, notes, and torso all have legends; `R` does
 > not; the arrows are excluded above. The `↺` at `:159-161` is commented out
-> and does not print. **NOT ESTABLISHED:** `provenance.ts:79` maps `inferred` to
+> and does not print. **NOT ESTABLISHED:** `provenance.ts:78` maps `inferred` to
 > a `question` icon the desk could not find rendered in `WordStack`. If it never
 > prints, that is the mirror defect.
 > **The legend's labels and N.76's labels are the SAME WORDS. RULED 2026-08-21.**
