@@ -305,8 +305,17 @@ const strings: Record<string, Record<Language, string>> = {
 	// below.
 	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie.' },
 
-	// NO LONGER RENDERED. Retained as the provenance of
-	// 'upload.drop.placeholder'; see its comment.
+	// N.65 ship B. NO LONGER RENDERED, AND IT SWAPPED PLACES WITH THE THREE
+	// KEYS BELOW. Dann ruled on 2026-08-21 that the score box says only the
+	// first sentence and the format list moves outside it, so
+	// `ScoreUploader` now assembles the placeholder from `.title` and
+	// `.browse` and renders `.acceptedNow` as its own line. This string is
+	// RETAINED rather than deleted, on the treatment those three already
+	// carry: it is the provenance of the collapsed one-sentence version and
+	// it holds the « ou » Dann confirmed by hand on 2026-08-20. Deleting the
+	// one string he added a word to is not a thing this ship was asked to
+	// do.
+	// 'upload.drop.placeholder' is above; the three keys here are LIVE again.
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
 	'upload.drop.acceptedNow': { en: 'Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, a photograph', fr: 'Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, une photographie' },
@@ -627,7 +636,11 @@ const strings: Record<string, Record<Language, string>> = {
 	// %s is the file name, substituted with .replace('%s', ...) at the
 	// call site, the convention 'upload.err.xmlRootIs' already uses.
 	'upload.banner.noLyrics': { en: 'This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Votre texte se trouve sous les notes, une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
-	'station.syllables': { en: 'Syllables', fr: 'Syllabes' },
+	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
+	// header away on 2026-08-21 and its text became the first element under
+	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:
+	// `SyllableStation.svelte`'s `<h3>` was the only consumer in the tree,
+	// and no test and no end-to-end spec named it.
 	'station.textChanged': { en: 'Text changed', fr: 'Texte modifié' },
 	// N.55b Shift Lyrics. English ADOPTED verbatim from Finale's own manual
 	// (`e46-n55b-click-assignment-design_2026-08-13.md` §8; cross-verified,

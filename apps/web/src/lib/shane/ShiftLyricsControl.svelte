@@ -22,10 +22,24 @@
   Direction is two arrows, never text. Nothing here is visible French or
   English; `shiftLyrics.forwardAria` / `shiftLyrics.backAria` exist only
   for a screen reader.
+
+  N.65 SHIP B: THIS IS THE MERGED STATION. RULED BY DANN 2026-08-21 walking
+  `2238e8b`: "eliminate the Syllables header and make the boxed syllabified
+  text the first element under the Shift Lyrics header followed by the 'to
+  the End of the Lyric' row." So the order is the lavender rule, this
+  header carrying the counter, the syllabified text, then the two scope
+  rows. THE RULE NEEDED NO WORK: it is a `border-top` on this component's
+  own root, so putting the text inside put the rule above both.
+
+  A SNIPPET RATHER THAN PROPS, twinning `RootPanel`'s `sourceScore` and
+  `consoleContent`. `SyllableStation`'s five props stay where the rest of
+  its wiring lives, in `+page.svelte`, and nothing is drilled through here.
+  This component still owns no state and still does no shifting.
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
+	import type { Snippet } from 'svelte';
 	import type { ShiftDirection } from '$lib/shane/pairings';
 
 	interface Props {
@@ -34,8 +48,40 @@
 		    any note, so there is nothing to shift from. */
 		disabled: boolean;
 		onshift: (scope: 'end' | 'nextOpen', direction: ShiftDirection) => void;
+		/**
+		 * N.65 ship B. The syllabified text, first under this header. Rendered
+		 * by `+page.svelte` so `SyllableStation`'s wiring stays with the rest
+		 * of the score work. Optional, so this component still draws on a
+		 * document with no slots.
+		 */
+		syllables?: Snippet;
+		/**
+		 * The placed-syllable counter, in `StationHeader`'s status slot. Two
+		 * numbers rather than a formatted string, so the thin-space numeral
+		 * pair is drawn once, here, and needs no translation.
+		 *
+		 * IT IS DRAWN ONLY WHEN `total` IS ABOVE ZERO, and that is a defect
+		 * the move would otherwise have introduced. `SyllableStation` rendered
+		 * only when it had slots; this component always renders, so an
+		 * unconditional counter would say `0 / 0` on the header of an empty
+		 * drawer, before a singer has pasted anything.
+		 */
+		placed?: number;
+		total?: number;
+		/** N.65 ship B. Every header retracts. See `sections.svelte.ts`. */
+		expanded: boolean;
+		ontoggle: () => void;
 	}
-	let { language, disabled, onshift }: Props = $props();
+	let {
+		language,
+		disabled,
+		onshift,
+		syllables = undefined,
+		placed = 0,
+		total = 0,
+		expanded,
+		ontoggle,
+	}: Props = $props();
 </script>
 
 <section class="shift-lyrics">
@@ -60,45 +106,66 @@
 	     against the drawer recipe's 0.7rem at 0.12em; keeping it and only
 	     repainting it would have left this label the one that is a
 	     different size and a different tracking from all its neighbours. -->
-	<StationHeader label={t('shiftLyrics.title', language)} accent="var(--deeper-lavender)" />
-	<div class="shift-row">
-		<span class="shift-label">{t('shiftLyrics.toEndOfLyric', language)}</span>
-		<div class="shift-arrows">
-			<button
-				type="button"
-				class="arrow"
-				{disabled}
-				aria-label={t('shiftLyrics.backAria', language)}
-				onclick={() => onshift('end', 'back')}
-			>&larr;</button>
-			<button
-				type="button"
-				class="arrow"
-				{disabled}
-				aria-label={t('shiftLyrics.forwardAria', language)}
-				onclick={() => onshift('end', 'forward')}
-			>&rarr;</button>
+	<!-- THE COUNTER SITS LEFT OF THE CHEVRON, N.65 ship B. `StationHeader`
+	     documents this slot in its own header, and it is where the closed-
+	     header status line will go when Dann writes that copy. THE CHEVRON
+	     STAYS OUTERMOST RIGHT: a chevron in a different place on one header
+	     than on every other breaks the pattern he ruled. Left to right the
+	     row reads SHIFT LYRICS, space, the counter, the chevron. -->
+	<StationHeader
+		label={t('shiftLyrics.title', language)}
+		accent="var(--deeper-lavender)"
+		expanded={expanded}
+		ontoggle={ontoggle}
+		controls="station-shift-lyrics"
+	>
+		{#snippet status()}
+			{#if total > 0}{placed}&thinsp;/&thinsp;{total}{/if}
+		{/snippet}
+	</StationHeader>
+	{#if expanded}
+	<div class="shift-body" id="station-shift-lyrics">
+		{@render syllables?.()}
+		<div class="shift-row">
+			<span class="shift-label">{t('shiftLyrics.toEndOfLyric', language)}</span>
+			<div class="shift-arrows">
+				<button
+					type="button"
+					class="arrow"
+					{disabled}
+					aria-label={t('shiftLyrics.backAria', language)}
+					onclick={() => onshift('end', 'back')}
+				>&larr;</button>
+				<button
+					type="button"
+					class="arrow"
+					{disabled}
+					aria-label={t('shiftLyrics.forwardAria', language)}
+					onclick={() => onshift('end', 'forward')}
+				>&rarr;</button>
+			</div>
+		</div>
+		<div class="shift-row">
+			<span class="shift-label">{t('shiftLyrics.toNextOpenNote', language)}</span>
+			<div class="shift-arrows">
+				<button
+					type="button"
+					class="arrow"
+					{disabled}
+					aria-label={t('shiftLyrics.backAria', language)}
+					onclick={() => onshift('nextOpen', 'back')}
+				>&larr;</button>
+				<button
+					type="button"
+					class="arrow"
+					{disabled}
+					aria-label={t('shiftLyrics.forwardAria', language)}
+					onclick={() => onshift('nextOpen', 'forward')}
+				>&rarr;</button>
+			</div>
 		</div>
 	</div>
-	<div class="shift-row">
-		<span class="shift-label">{t('shiftLyrics.toNextOpenNote', language)}</span>
-		<div class="shift-arrows">
-			<button
-				type="button"
-				class="arrow"
-				{disabled}
-				aria-label={t('shiftLyrics.backAria', language)}
-				onclick={() => onshift('nextOpen', 'back')}
-			>&larr;</button>
-			<button
-				type="button"
-				class="arrow"
-				{disabled}
-				aria-label={t('shiftLyrics.forwardAria', language)}
-				onclick={() => onshift('nextOpen', 'forward')}
-			>&rarr;</button>
-		</div>
-	</div>
+	{/if}
 </section>
 
 <style>
@@ -113,11 +180,22 @@
 	   the body is NOT applied, because Dann ruled a divider above the header
 	   and nothing about the space beneath. */
 	.shift-lyrics {
+		border-top: 2px solid var(--deeper-lavender);
+		padding-top: 6px;
+	}
+
+	/* N.65 ship B. THE COLUMN MOVED OFF THE ROOT AND ONTO THE BODY, so the
+	   header is not inside it. That is the drawer's own ruling 2, which
+	   `RootPanel` and `SongList` already answer to: put the header in the
+	   flex column and the column's gap adds to the header's own 0.4rem, and
+	   this station's first entry would sit further from its label than every
+	   other station's. The 4px gap is this file's own value, unchanged, and
+	   it now carries the syllabified text to the first scope row as well as
+	   one row to the other. */
+	.shift-body {
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-		border-top: 2px solid var(--deeper-lavender);
-		padding-top: 6px;
 	}
 	.shift-row {
 		display: flex;

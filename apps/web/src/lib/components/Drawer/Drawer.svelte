@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import { SectionSet } from './sections.svelte';
 	import type { Destination, TabId } from '$lib/destinations';
 
 	interface Props {
@@ -153,7 +154,15 @@
 	   twice in this file. */
 	const isStudio = $derived(destination === 'studio');
 
-	let expandedSections = $state(new Set<string>());
+	/* N.65 ship B. THE OPEN SET AND ITS TOGGLE LEFT THIS FILE. They were
+	   declared inline here and drove Learn and Guide's table of contents;
+	   §B.2's instruction was to extract them so the drawer has ONE
+	   retraction mechanism and no second one is written for the stations.
+	   `sections.svelte.ts` is that code, moved, and this is one instance of
+	   it. THIS ONE PERSISTS NOTHING: a remembered table of contents is not
+	   what §B.4 asks to remember, and the stations' instance, which does
+	   persist, lives in `+page.svelte`. */
+	const toc = new SectionSet();
 	let drawerContentEl: HTMLElement | undefined = $state();
 
 	/* ── Parent chain lookup for auto-expand ───────────────── */
@@ -197,17 +206,8 @@
 
 	/* ── Interactions ──────────────────────────────────────── */
 
-	function toggleSection(id: string) {
-		const next = new Set(expandedSections);
-		if (next.has(id)) next.delete(id); else next.add(id);
-		expandedSections = next;
-	}
-
 	function handleTocClick(id: string) {
-		const next = new Set(expandedSections);
-		getParentIds(id).forEach(p => next.add(p));
-		if (collapsibleIds.has(id)) next.add(id);
-		expandedSections = next;
+		toc.open([...getParentIds(id), ...(collapsibleIds.has(id) ? [id] : [])]);
 		onheadingnavigate(id);
 	}
 
@@ -221,12 +221,9 @@
 		autoExpandTimer = setTimeout(() => {
 			const parents = getParentIds(activeHeadingId);
 			if (parents.length === 0) return;
-			const next = new Set(expandedSections);
-			let changed = false;
-			for (const p of parents) {
-				if (!next.has(p)) { next.add(p); changed = true; }
-			}
-			if (changed) expandedSections = next;
+			/* `open` returns early when nothing changes, which this effect
+			   depends on: reassigning an equal set would make it re-run. */
+			toc.open(parents);
 		}, 150);
 	});
 
@@ -351,12 +348,12 @@
 							<!-- ── Unit 1 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-1')} class:contains-active={sectionContainsActive('learn-unit-1')} onclick={() => toggleSection('learn-unit-1')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-1')} class:contains-active={sectionContainsActive('learn-unit-1')} onclick={() => toc.toggle('learn-unit-1')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-1')} data-heading-id="learn-unit-1" onclick={() => handleTocClick('learn-unit-1')}>
 										{language === 'fr' ? '1 \u00b7 Les lettres' : '1 \u00b7 The Letters'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-1')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-1')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-song')} data-heading-id="learn-u1-song" onclick={() => handleTocClick('learn-u1-song')}>{language === 'fr' ? 'La chanson de l\u2019alphabet' : 'The Alphabet Song'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-alphabet')} data-heading-id="learn-u1-alphabet" onclick={() => handleTocClick('learn-u1-alphabet')}>{language === 'fr' ? 'L\u2019alphabet' : 'The Alphabet'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u1-familiar')} data-heading-id="learn-u1-familiar" onclick={() => handleTocClick('learn-u1-familiar')}>{language === 'fr' ? 'Ce que vous connaissez d\u00e9j\u00e0' : 'What You Already Know'}</button></li>
@@ -370,12 +367,12 @@
 							<!-- ── Unit 2 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-2')} class:contains-active={sectionContainsActive('learn-unit-2')} onclick={() => toggleSection('learn-unit-2')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-2')} class:contains-active={sectionContainsActive('learn-unit-2')} onclick={() => toc.toggle('learn-unit-2')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-2')} data-heading-id="learn-unit-2" onclick={() => handleTocClick('learn-unit-2')}>
 										{language === 'fr' ? '2 \u00b7 L\u2019accent tonique' : '2 \u00b7 Stress'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-2')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-2')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u2-meaning')} data-heading-id="learn-u2-meaning" onclick={() => handleTocClick('learn-u2-meaning')}>{language === 'fr' ? 'L\u2019accent change le sens' : 'Stress changes meaning'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u2-moves')} data-heading-id="learn-u2-moves" onclick={() => handleTocClick('learn-u2-moves')}>{language === 'fr' ? 'L\u2019accent se d\u00e9place' : 'Stress moves'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u2-dictionary')} data-heading-id="learn-u2-dictionary" onclick={() => handleTocClick('learn-u2-dictionary')}>{language === 'fr' ? 'Probl\u00e8me de dictionnaire' : 'A dictionary problem'}</button></li>
@@ -387,12 +384,12 @@
 							<!-- ── Unit 3 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-3')} class:contains-active={sectionContainsActive('learn-unit-3')} onclick={() => toggleSection('learn-unit-3')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-3')} class:contains-active={sectionContainsActive('learn-unit-3')} onclick={() => toc.toggle('learn-unit-3')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-3')} data-heading-id="learn-unit-3" onclick={() => handleTocClick('learn-unit-3')}>
 										{language === 'fr' ? '3 \u00b7 Les voyelles accentu\u00e9es' : '3 \u00b7 Stressed Vowels'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-3')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-3')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-inventory')} data-heading-id="learn-u3-inventory" onclick={() => handleTocClick('learn-u3-inventory')}>{language === 'fr' ? 'Ce sont les voyelles accentu\u00e9es qui constituent les cibles' : 'Stressed vowels are the targets'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-note-o')} data-heading-id="learn-u3-note-o" onclick={() => handleTocClick('learn-u3-note-o')}>{language === 'fr' ? 'Un mot sur le /o/' : 'A note on /o/'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u3-interpalatal')} data-heading-id="learn-u3-interpalatal" onclick={() => handleTocClick('learn-u3-interpalatal')}>{language === 'fr' ? 'Deux voyelles changent de couleur au voisinage des consonnes molles' : 'Two vowels change colour near soft consonants'}</button></li>
@@ -405,12 +402,12 @@
 							<!-- ── Unit 4 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-4')} class:contains-active={sectionContainsActive('learn-unit-4')} onclick={() => toggleSection('learn-unit-4')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-4')} class:contains-active={sectionContainsActive('learn-unit-4')} onclick={() => toc.toggle('learn-unit-4')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-4')} data-heading-id="learn-unit-4" onclick={() => handleTocClick('learn-unit-4')}>
 										{language === 'fr' ? '4 \u00b7 La r\u00e9duction vocalique' : '4 \u00b7 Vowel Reduction'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-4')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-4')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u4-akanye')} data-heading-id="learn-u4-akanye" onclick={() => handleTocClick('learn-u4-akanye')}>{language === 'fr' ? '\u27E8\u043E\u27E9 et \u27E8\u0430\u27E9 sans accent' : '\u27E8\u043E\u27E9 and \u27E8\u0430\u27E9 when unstressed'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u4-ikanye')} data-heading-id="learn-u4-ikanye" onclick={() => handleTocClick('learn-u4-ikanye')}>{language === 'fr' ? '\u27E8\u0435\u27E9 et \u27E8\u044F\u27E9 vers [\u026A]' : '\u27E8\u0435\u27E9 and \u27E8\u044F\u27E9 toward [\u026A]'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u4-reconstitution')} data-heading-id="learn-u4-reconstitution" onclick={() => handleTocClick('learn-u4-reconstitution')}>{language === 'fr' ? 'La reconstitution' : 'Reconstitution'}</button></li>
@@ -421,12 +418,12 @@
 							<!-- ── Unit 5 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-5')} class:contains-active={sectionContainsActive('learn-unit-5')} onclick={() => toggleSection('learn-unit-5')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-5')} class:contains-active={sectionContainsActive('learn-unit-5')} onclick={() => toc.toggle('learn-unit-5')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-5')} data-heading-id="learn-unit-5" onclick={() => handleTocClick('learn-unit-5')}>
 										{language === 'fr' ? '5 \u00b7 Les consonnes' : '5 \u00b7 The Consonants'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-5')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-5')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u5-familiar')} data-heading-id="learn-u5-familiar" onclick={() => handleTocClick('learn-u5-familiar')}>{language === 'fr' ? 'Le syst\u00e8me consonantique' : 'The consonant system'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u5-pairs')} data-heading-id="learn-u5-pairs" onclick={() => handleTocClick('learn-u5-pairs')}>{language === 'fr' ? 'Paires vois\u00e9es-non vois\u00e9es' : 'Voiced-voiceless pairs'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u5-attention')} data-heading-id="learn-u5-attention" onclick={() => handleTocClick('learn-u5-attention')}>{language === 'fr' ? 'Attention cibl\u00e9e' : 'Focused attention'}</button></li>
@@ -440,12 +437,12 @@
 							<!-- ── Unit 6 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-6')} class:contains-active={sectionContainsActive('learn-unit-6')} onclick={() => toggleSection('learn-unit-6')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-6')} class:contains-active={sectionContainsActive('learn-unit-6')} onclick={() => toc.toggle('learn-unit-6')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-6')} data-heading-id="learn-unit-6" onclick={() => handleTocClick('learn-unit-6')}>
 										{language === 'fr' ? '6 \u00b7 La palatalisation' : '6 \u00b7 Palatalization'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-6')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-6')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u6-what')} data-heading-id="learn-u6-what" onclick={() => handleTocClick('learn-u6-what')}>{language === 'fr' ? 'Qu\u2019est-ce que la palatalisation\u00A0?' : 'What palatalization is'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u6-signals')} data-heading-id="learn-u6-signals" onclick={() => handleTocClick('learn-u6-signals')}>{language === 'fr' ? 'Rep\u00E9rer la palatalisation \u00E0 l\u2019\u00E9crit' : 'Signals on the page'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u6-stops')} data-heading-id="learn-u6-stops" onclick={() => handleTocClick('learn-u6-stops')}>{language === 'fr' ? 'Les six fronti\u00E8res' : 'What stops the spread'}</button></li>
@@ -459,12 +456,12 @@
 							<!-- ── Unit 7 ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('learn-unit-7')} class:contains-active={sectionContainsActive('learn-unit-7')} onclick={() => toggleSection('learn-unit-7')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('learn-unit-7')} class:contains-active={sectionContainsActive('learn-unit-7')} onclick={() => toc.toggle('learn-unit-7')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link" class:active={isActive('learn-unit-7')} data-heading-id="learn-unit-7" onclick={() => handleTocClick('learn-unit-7')}>
 										{language === 'fr' ? '7 \u00b7 Assimilation et fronti\u00e8res' : '7 \u00b7 Assimilation and Boundaries'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('learn-unit-7')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('learn-unit-7')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u7-two')} data-heading-id="learn-u7-two" onclick={() => handleTocClick('learn-u7-two')}>{language === 'fr' ? 'Deux formes d\u2019assimilation' : 'Two kinds of assimilation'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u7-voiced')} data-heading-id="learn-u7-voiced" onclick={() => handleTocClick('learn-u7-voiced')}>{language === 'fr' ? 'Vois\u00e9e rencontre sourde' : 'Voiced meets voiceless'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('learn-u7-stops')} data-heading-id="learn-u7-stops" onclick={() => handleTocClick('learn-u7-stops')}>{language === 'fr' ? 'Les limites du voisement' : 'What stops the spread'}</button></li>
@@ -506,12 +503,12 @@
 							<!-- ── How Ilya Works ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('guide-how')} class:contains-active={sectionContainsActive('guide-how')} onclick={() => toggleSection('guide-how')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('guide-how')} class:contains-active={sectionContainsActive('guide-how')} onclick={() => toc.toggle('guide-how')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link toc-title" class:active={isActive('guide-how')} data-heading-id="guide-how" onclick={() => handleTocClick('guide-how')}>
 										{language === 'fr' ? 'Comment fonctionne Ilya' : 'How Ilya Works'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('guide-how')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('guide-how')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-what')} data-heading-id="guide-what" onclick={() => handleTocClick('guide-what')}>{language === 'fr' ? 'Que fait Ilya ?' : 'What does Ilya do?'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-paste')} data-heading-id="guide-paste" onclick={() => handleTocClick('guide-paste')}>{language === 'fr' ? 'Saisie d\u2019un texte russe' : 'Pasting a Russian text'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-source')} data-heading-id="guide-source" onclick={() => handleTocClick('guide-source')}>{language === 'fr' ? 'Pourquoi une seule source ?' : 'Why only one source?'}</button></li>
@@ -528,12 +525,12 @@
 							<!-- ── Walkthrough ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('guide-walkthrough')} class:contains-active={sectionContainsActive('guide-walkthrough')} onclick={() => toggleSection('guide-walkthrough')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('guide-walkthrough')} class:contains-active={sectionContainsActive('guide-walkthrough')} onclick={() => toc.toggle('guide-walkthrough')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link toc-title" class:active={isActive('guide-walkthrough')} data-heading-id="guide-walkthrough" onclick={() => handleTocClick('guide-walkthrough')}>
 										{language === 'fr' ? 'Une visite guidée' : 'A Walkthrough'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('guide-walkthrough')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('guide-walkthrough')}><div class="toc-children-inner"><ul class="toc-subsections">
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-interface')} data-heading-id="guide-walk-interface" onclick={() => handleTocClick('guide-walk-interface')}>{language === 'fr' ? 'L’interface en un coup d’œil' : 'The interface at a glance'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-tabs')} data-heading-id="guide-walk-tabs" onclick={() => handleTocClick('guide-walk-tabs')}>{language === 'fr' ? 'Naviguer entre les onglets' : 'Navigating the tabs'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-walk-metadata')} data-heading-id="guide-walk-metadata" onclick={() => handleTocClick('guide-walk-metadata')}>{language === 'fr' ? 'Renseigner les métadonnées' : 'Entering metadata'}</button></li>
@@ -547,20 +544,20 @@
 							<!-- ── Contributors ── -->
 							<li>
 								<div class="toc-parent">
-									<button class="toc-chevron" class:expanded={expandedSections.has('guide-contributors')} class:contains-active={sectionContainsActive('guide-contributors')} onclick={() => toggleSection('guide-contributors')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+									<button class="toc-chevron" class:expanded={toc.has('guide-contributors')} class:contains-active={sectionContainsActive('guide-contributors')} onclick={() => toc.toggle('guide-contributors')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 									<button class="toc-link toc-title" class:active={isActive('guide-contributors')} data-heading-id="guide-contributors" onclick={() => handleTocClick('guide-contributors')}>
 										{language === 'fr' ? 'Collaborateurs' : 'Contributors'}
 									</button>
 								</div>
-								<div class="toc-children" class:expanded={expandedSections.has('guide-contributors')}><div class="toc-children-inner"><ul class="toc-subsections">
+								<div class="toc-children" class:expanded={toc.has('guide-contributors')}><div class="toc-children-inner"><ul class="toc-subsections">
 
 									<!-- Craig Grayson -->
 									<li>
 										<div class="toc-parent toc-parent-nested">
-											<button class="toc-chevron toc-chevron-nested" class:expanded={expandedSections.has('guide-grayson')} class:contains-active={sectionContainsActive('guide-grayson')} onclick={() => toggleSection('guide-grayson')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+											<button class="toc-chevron toc-chevron-nested" class:expanded={toc.has('guide-grayson')} class:contains-active={sectionContainsActive('guide-grayson')} onclick={() => toc.toggle('guide-grayson')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 											<button class="toc-link toc-sub" class:active={isActive('guide-grayson')} data-heading-id="guide-grayson" onclick={() => handleTocClick('guide-grayson')}>Craig Grayson</button>
 										</div>
-										<div class="toc-children" class:expanded={expandedSections.has('guide-grayson')}><div class="toc-children-inner"><ul class="toc-subsections">
+										<div class="toc-children" class:expanded={toc.has('guide-grayson')}><div class="toc-children-inner"><ul class="toc-subsections">
 											<li><button class="toc-link toc-deep" class:active={isActive('guide-grayson-intro')} data-heading-id="guide-grayson-intro" onclick={() => handleTocClick('guide-grayson-intro')}>{language === 'fr' ? 'Introduction \u00e0 Russian Lyric Diction' : 'Introduction to Russian Lyric Diction'}</button></li>
 										</ul></div></div>
 									</li>
@@ -568,10 +565,10 @@
 									<!-- Dann Mitton -->
 									<li>
 										<div class="toc-parent toc-parent-nested">
-											<button class="toc-chevron toc-chevron-nested" class:expanded={expandedSections.has('guide-mitton')} class:contains-active={sectionContainsActive('guide-mitton')} onclick={() => toggleSection('guide-mitton')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
+											<button class="toc-chevron toc-chevron-nested" class:expanded={toc.has('guide-mitton')} class:contains-active={sectionContainsActive('guide-mitton')} onclick={() => toc.toggle('guide-mitton')} aria-label="Toggle"><svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg></button>
 											<button class="toc-link toc-sub" class:active={isActive('guide-mitton')} data-heading-id="guide-mitton" onclick={() => handleTocClick('guide-mitton')}>Dann Mitton</button>
 										</div>
-										<div class="toc-children" class:expanded={expandedSections.has('guide-mitton')}><div class="toc-children-inner"><ul class="toc-subsections">
+										<div class="toc-children" class:expanded={toc.has('guide-mitton')}><div class="toc-children-inner"><ul class="toc-subsections">
 											<li><button class="toc-link toc-deep" class:active={isActive('guide-mitton-note')} data-heading-id="guide-mitton-note" onclick={() => handleTocClick('guide-mitton-note')}>{language === 'fr' ? 'Mot du cr\u00e9ateur' : "Builder's Note"}</button></li>
 										</ul></div></div>
 									</li>

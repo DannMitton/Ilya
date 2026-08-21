@@ -86,6 +86,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
+	import {
+		SectionSet,
+		FIRST_RUN_STATIONS,
+		OPEN_STATIONS_KEY,
+		STATION_IDS,
+		UNPERSISTED_STATIONS,
+	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
 	import { hasAnyReadings } from '$lib/shane/profileStore';
@@ -167,9 +174,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * the top, restores the station accordion in its prior state on exit, and
 	 * is never entered by a chevron"
 	 * (`fable-ruling-e27-four-tab-consolidation_2026-08-05.md`). Deliberately
-	 * NOT persisted, on the same reasoning `notationExpanded` carries below: a
-	 * remembered takeover would open a singer into a ritual they did not ask
-	 * for on this visit.
+	 * NOT persisted, on the same reasoning NOTATION's exemption from the open
+	 * set below carries: a remembered takeover would open a singer into a
+	 * ritual they did not ask for on this visit.
 	 */
 	let calibrating = $state(false);
 	// N.43: Notation collapse. Deliberately NOT persisted: a remembered
@@ -188,7 +195,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// rather than reversed: non-persistence used to mean the toggles are
 	// visible on every arrival, and now it means the RULED default is what
 	// every arrival gets. Nothing else about the retract mechanism moved.
-	let notationExpanded = $state(false);
+	/* N.65 ship B. THE DRAWER'S OPEN SET, and `notationExpanded` is inside
+	   it rather than beside it. Every header in the drawer retracts now, so
+	   one state holds all six, and NOTATION is the one that does not reach
+	   storage. The reason above is unchanged and it is why: a remembered
+	   collapse hides the toggles from a singer who forgot they exist. The
+	   filter lives in `sections.svelte.ts` beside the key it writes.
+
+	   FIRST RUN IS PIECE AND SOURCE OPEN (§B.5). NOTATION's ruled
+	   collapsed-on-arrival default is that same list not naming it, so the
+	   two rulings agree without a second mechanism. */
+	const sections = new SectionSet({
+		open: FIRST_RUN_STATIONS,
+		storageKey: OPEN_STATIONS_KEY,
+		unpersisted: UNPERSISTED_STATIONS,
+	});
 	/* N.73 S3 ship two. THE SPLIT. One `$state<TabId>` carried two questions
 	   at once: where the singer is, and which paper Studio has on the desk.
 	   S2 merged the two Studio drawers, which made the second question a
@@ -238,6 +259,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const reconciliation = $derived(reconcilePairings(doc.pairings, slotQueue));
 	const shownPairings = $derived(reconciliation.map);
 	const driftCount = $derived(reconciliation.drift.length);
+
+	/* N.65 ship B. THE PLACED-SYLLABLE COUNT, DERIVED HERE because the header
+	   that shows it is SHIFT LYRICS's now and `SyllableStation` no longer
+	   draws one. THE RULE IS THAT COMPONENT'S OWN, unchanged and moved: a
+	   slot counts as placed when SOME note carries a pairing that came from
+	   it, keyed by ORIGIN rather than by text, so two identical syllables in
+	   one line are still two slots.
+
+	   `shownPairings` RATHER THAN `doc.pairings`, which is also what
+	   `SyllableStation` was passed: the counter and the grey on a placed
+	   syllable have to agree, and they only agree if they read the same map. */
+	const placedSlotCount = $derived.by(() => {
+		const placed = new Set<string>();
+		for (const p of Object.values(shownPairings)) {
+			if (p.kind === 'syllable') {
+				placed.add(`${p.origin.lineIndex}-${p.origin.wordIndex}-${p.origin.slotIndex}`);
+			}
+		}
+		return slotQueue.filter(
+			(s) => placed.has(`${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`),
+		).length;
+	});
 
 	// N.55b Shift Lyrics (§8). Notes, in document order, one slot per note
 	// until one side runs out — the SAME order `firstPass` consumes them in,
@@ -1771,6 +1814,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			   lands somewhere on purpose rather than by falling through a
 			   four-way string comparison. E.27 §3.4. */
 			({ destination, studioDocument } = restoreSurface(localStorage.getItem('ilya:activeTab')));
+			/* N.65 ship B, §B.4. THE OPEN SET PERSISTS PER DEVICE, under
+			   `ilya:openStations`. An unrecognised or corrupt stored value
+			   falls back to the first-run default and does not throw, which
+			   is the pattern `restoreSurface` above established for
+			   `ilya:activeTab`. NOTATION is never in the stored array, so a
+			   reload always returns it to its ruled collapsed default. */
+			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY));
 		} catch {
 			// localStorage unavailable
 		}
@@ -1921,6 +1971,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onchange={handleMetadataChange}
 					fromScore={doc.fromScoreFields}
 					onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
+					expanded={sections.has(STATION_IDS.piece)}
+					ontoggle={() => sections.toggle(STATION_IDS.piece)}
 				/>
 				{#if arrangerProvenance}
 					<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata block,
@@ -1999,6 +2051,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onimport={() => importInputEl?.click()}
 					onexportall={() => void handleExportAll()}
 					{songLibrary}
+					{sections}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -2083,15 +2136,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     intake moved into RootPanel; the Print button and the binder
 					     row were duplicates of RootPanel's and were deleted. What is
 					     left is the score work, the notices, and the voice. -->
-					<SyllableStation
-						slots={slotQueue}
-						pairings={shownPairings}
-						drift={driftCount}
-						cursor={pairingCursor}
+					<!-- N.65 ship B. ONE STATION, SHIFT LYRICS, AND THE SYLLABIFIED TEXT
+					     IS ITS FIRST ELEMENT. Dann's ruling of 2026-08-21. The two were
+					     adjacent siblings here; they are one component with the other
+					     inside it now, and the lavender rule that sits on
+					     `ShiftLyricsControl`'s own root ends up above both with no work.
+					     `SyllableStation`'s six props are unchanged and stay here, which
+					     is why it goes in as a snippet rather than through the wrapper. -->
+					<ShiftLyricsControl
 						{language}
-						oncursor={(i) => (pairingCursor = i)}
-					/>
-					<ShiftLyricsControl {language} disabled={shiftDisabled} onshift={handleShift} />
+						disabled={shiftDisabled}
+						onshift={handleShift}
+						placed={placedSlotCount}
+						total={slotQueue.length}
+						expanded={sections.has(STATION_IDS.shiftLyrics)}
+						ontoggle={() => sections.toggle(STATION_IDS.shiftLyrics)}
+					>
+						{#snippet syllables()}
+							<SyllableStation
+								slots={slotQueue}
+								pairings={shownPairings}
+								drift={driftCount}
+								cursor={pairingCursor}
+								{language}
+								oncursor={(i) => (pairingCursor = i)}
+							/>
+						{/snippet}
+					</ShiftLyricsControl>
 					{#if binderError}
 						<!-- N.67 step 5. The file is untouched in every failure, which is
 						     why all three sentences end the same way. -->
@@ -2189,8 +2260,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onnotationchange={handleNotationChange}
 					onstressdiacriticschange={handleStressDiacriticsChange}
 					onopensyllabificationchange={handleOpenSyllabificationChange}
-					expanded={notationExpanded}
-					onexpandedchange={(v) => (notationExpanded = v)}
+					expanded={sections.has(STATION_IDS.notation)}
+					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
 				/>
 			{/snippet}
 	</Drawer>

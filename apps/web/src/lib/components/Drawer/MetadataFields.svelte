@@ -32,9 +32,25 @@
 		 * only when a score header exists to revert to.
 		 */
 		onrevert?: () => void;
+		/**
+		 * N.65 ship B. Piece retracts like every other header, AND IT RETRACTS
+		 * WHILE STAYING PINNED. Dann's ruling of 2026-08-21 covers the anchors
+		 * too: "a retracted anchor is still pinned, it is just short." This is
+		 * the header that gives the middle of the drawer its height back.
+		 */
+		expanded: boolean;
+		ontoggle: () => void;
 	}
 
-	let { metadata, language, onchange, fromScore = undefined, onrevert = undefined }: Props = $props();
+	let {
+		metadata,
+		language,
+		onchange,
+		fromScore = undefined,
+		onrevert = undefined,
+		expanded,
+		ontoggle,
+	}: Props = $props();
 
 	function handleMetaField(field: keyof SongMetadata, value: string) {
 		onchange({ ...metadata, [field]: value });
@@ -63,8 +79,14 @@
 </script>
 
 <div class="section">
-	<StationHeader label={t('meta.heading', language)} />
-	<div class="meta-fields">
+	<StationHeader
+		label={t('meta.heading', language)}
+		expanded={expanded}
+		ontoggle={ontoggle}
+		controls="station-piece"
+	/>
+	{#if expanded}
+	<div class="meta-fields" id="station-piece">
 		<div class="meta-field-wrap">
 			<input
 				type="text"
@@ -137,6 +159,7 @@
 			{t('meta.reset', language)}
 		</button>
 	</div>
+	{/if}
 </div>
 
 <style>

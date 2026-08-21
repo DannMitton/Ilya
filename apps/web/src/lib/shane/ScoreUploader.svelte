@@ -74,6 +74,31 @@
 
 	const T = (key: string) => t(key, language);
 
+	/* THE SCORE BOX SAYS ONE SENTENCE. RULED BY DANN 2026-08-21 walking
+	   `2238e8b`: "I would like the text inside the score input field to
+	   include only that first sentence 'Drop a score here or click to
+	   browse...' with an ellipsis just like its sister box above. The text
+	   'MNX, MusicXML, etc..' can exist outside the input field just
+	   underneath it."
+
+	   ASSEMBLED FROM THE TWO RETAINED KEYS, NOT WRITTEN. `upload.drop.title`
+	   and `upload.drop.browse` already carry the two halves in both
+	   languages. They were orphaned when the three-paragraph version was
+	   collapsed into one string and were kept as its provenance; this is
+	   them back on screen. No new English and NO NEW FRENCH: contract §6,
+	   do not write French Dann has not seen.
+
+	   JOINED AT THE RENDER SEAM rather than folded into a new key, because
+	   a new key would be these same two strings with a space and an
+	   ellipsis, and a third copy of a sentence the file already holds twice
+	   is a thing to keep in step by hand.
+
+	   THE ELLIPSIS IS `\u2026`, THE CHARACTER ITS SISTER ALREADY USES at
+	   `i18n.ts`'s `input.placeholder`, `Paste Russian text here\u2026`. */
+	const dropPlaceholder = $derived(
+		`${T('upload.drop.title')} ${T('upload.drop.browse')}\u2026`
+	);
+
 	/** The file dialog offers the formats Ilya reads, so it matches the
 	 *  dropzone text. */
 	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,image/*';
@@ -529,7 +554,7 @@
 				     treatment. It is live feedback rather than a placeholder,
 				     and nothing about the ruling asked for it to go. -->
 				<p class="dz-placeholder">
-					{dragging ? T('upload.drop.release') : T('upload.drop.placeholder')}
+					{dragging ? T('upload.drop.release') : dropPlaceholder}
 				</p>
 			</button>
 			<!-- Score-from-image scan, mirroring the Transcription OCR icon.
@@ -550,6 +575,22 @@
 					<line x1="5" y1="12" x2="19" y2="12" />
 				</svg>
 			</button>
+			<!-- THE FORMAT LIST, OUTSIDE THE BOX. §B.7, the other half of Dann's
+			     ruling: "The text 'MNX, MusicXML, etc..' can exist outside the
+			     input field just underneath it." A line of its own, between the
+			     box and the action row that follows the uploader in SOURCE.
+
+			     `upload.drop.acceptedNow` VERBATIM, one of the three retained
+			     keys, in both languages. IT ENDS WITHOUT A FULL STOP, where the
+			     sentence it replaces ended `PDF, or photograph.` with one. The
+			     brief says to use the retained key as written and leave the
+			     character to Dann, so the difference is named in the memo rather
+			     than reconciled here.
+
+			     INSIDE `.dz-wrap` RATHER THAN BESIDE IT, so it belongs to the box
+			     it describes and travels with it: the wrap is the idle state's own
+			     element and unmounts when a score arrives. -->
+			<p class="dz-formats">{T('upload.drop.acceptedNow')}</p>
 		</div>
 	{:else if ui.kind === 'asking'}
 		<!-- N.59, Ruling A. Two questions the reader cannot answer for itself.
@@ -763,11 +804,38 @@
 
 	/* ── Score-from-image scan icon (visual only, coming soon) ── */
 
+	/* N.65 ship B. THE 8px `margin-bottom` IS GONE. Its comment said it
+	   mirrored "the room beneath the Transcription textarea before the next
+	   control," and it mirrored 6px with 8px. §B.6 dissolves the question:
+	   the Print row is inside SOURCE now, so the room beneath this box is
+	   `.station-body`'s own 6px flex gap, the SAME element that sets the
+	   textarea's. A margin here would add to it and the two would differ
+	   again.
+
+	   A COLUMN NOW, because §B.7 gave this wrap a second child: the box, then
+	   the format list. The 6px gap between them is `.station-body`'s value,
+	   so the box, its line, and the action row are three siblings a
+	   consistent 6px apart, which is the relationship Dann asked for.
+	   `position: relative` stays: it is the scan button's containing block. */
 	.dz-wrap {
 		position: relative;
-		/* Preserve negative space below the input box, mirroring the room
-		   beneath the Transcription textarea before the next control. */
-		margin-bottom: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	/* THE PLACEHOLDER'S OWN TREATMENT, ONE STEP QUIETER IN NOTHING. Same
+	   family, size, weight, colour, and alignment as `.dz-placeholder`,
+	   because this is the second half of one sentence that used to sit in
+	   one element, and Dann moved it rather than restyling it. */
+	.dz-formats {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: 0.8rem;
+		font-weight: 400;
+		line-height: 1.5;
+		color: var(--ink-tertiary);
+		text-align: start;
 	}
 
 	.scan-btn {

@@ -6,6 +6,7 @@ import SongList from './SongList.svelte';
 import StationHeader from './StationHeader.svelte';
 import IntakeWatermark from './IntakeWatermark.svelte';
 import type { SongRow } from '$lib/library/songs';
+import { STATION_IDS, type SectionSet } from './sections.svelte';
 
 	interface Props {
 		inputText: string;
@@ -68,6 +69,13 @@ import type { SongRow } from '$lib/library/songs';
 			onrename: (id: string, name: string) => void;
 			ondelete: (id: string) => void;
 		};
+		/**
+		 * N.65 ship B. THE DRAWER'S ONE OPEN SET. Passed whole rather than as
+		 * a pair of props per station, so this panel drills one name for its
+		 * own two headers and REPERTOIRE's, and every station in the drawer
+		 * reads the same object. `sections.svelte.ts` holds the mechanism.
+		 */
+		sections: SectionSet;
 	}
 
 	let {
@@ -91,6 +99,7 @@ import type { SongRow } from '$lib/library/songs';
 		onimport,
 		onexportall,
 		songLibrary,
+		sections,
 	}: Props = $props();
 
 	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". The watermark and the sage
@@ -106,7 +115,14 @@ import type { SongRow } from '$lib/library/songs';
 	/* ── OCR state ─────────────────────────────────────────── */
 	let ocrProcessing = $state(false);
 	let ocrError = $state('');
-	let fileInputEl: HTMLInputElement;
+	/* N.65 ship B. `$state`, WHICH IT WAS NOT, AND THE COMPILER FOUND IT.
+	   `svelte-check` raised `non_reactive_update` the moment SOURCE's body
+	   went behind a retraction gate, and the warning is describing a real
+	   consequence rather than a style: the hidden file input is inside the
+	   body now, so it unmounts when a singer shuts the station and this
+	   binding has to be able to say so. Nothing else changes; the one read,
+	   `handleOcrClick`, already optional-chained. */
+	let fileInputEl = $state<HTMLInputElement | undefined>(undefined);
 
 	function handleOcrClick() {
 		fileInputEl?.click();
@@ -199,8 +215,14 @@ import type { SongRow } from '$lib/library/songs';
 	     header's own 0.4rem is the whole gap to the first entry. Ruling 2.
 	     Twinned on SongList. -->
 	<div class="section source-section">
-		<StationHeader label={t('source.heading', language)} />
-		<div class="station-body">
+		<StationHeader
+			label={t('source.heading', language)}
+			expanded={sections.has(STATION_IDS.source)}
+			ontoggle={() => sections.toggle(STATION_IDS.source)}
+			controls="station-source"
+		/>
+		{#if sections.has(STATION_IDS.source)}
+		<div class="station-body" id="station-source">
 	<div class="textarea-wrapper" class:empty={sourceIsEmpty}>
 		<!-- THE TEXT WATERMARK (N.65). Empty field only, which is Dann's own
 		     ruling: it never sits under a pasted poem. `inputText` is the
@@ -308,46 +330,50 @@ import type { SongRow } from '$lib/library/songs';
 	     no-lyrics notice that follows it came here from the Fit drawer.
 	     BELOW the action row since 2026-08-20; see that row's comment. -->
 	{@render sourceScore?.()}
-		</div>
+
+	<!-- ── THE SCORE FIELD'S ACTION ROW. N.65 ship B, §B.6. Dann dissolved
+	     the naming question rather than answering it: "I do not think we
+	     need an Output section articulated. What I want is the appearance
+	     that the Print/Export/Import row shares the same relationship to the
+	     score field as the Clear text/Transcribe row does to the text field
+	     above it."
+
+	     SO IT IS A ROW, NOT A STATION. No label, no heading, no chevron, and
+	     no orphan control: both pairs belong to SOURCE. The `.output-section`
+	     wrapper is gone rather than emptied, and its two contributions went
+	     with it: the 6px of top padding the station recipe gives a label, and
+	     the station boundary the row sat across. Those, with `.dz-wrap`'s
+	     8px margin, were the 26px this ship closes to `.station-body`'s own
+	     6px flex gap, the same gap that carries the textarea to Clear and
+	     Transcribe.
+
+	     PRINT STAYS IN THIS ROW THIS SHIP, AND THAT IS DELIBERATE. This is
+	     the only Print control in the application and `DeskHead` has none
+	     yet, so deleting it here would leave no way to print between this
+	     deploy and the desk-head ship. That ship removes it. CONSEQUENCE,
+	     AND IT IS TRANSIENT: shutting SOURCE takes Print with it until then.
+	     SOURCE is open on first run, so a singer meets this only by shutting
+	     it themselves.
+
+	     `Export all songs` is a fourth cell and wraps to the first column of
+	     a second row. It is still shown only above one song, because with one
+	     song it says the same thing as the button beside it. -->
+	<div class="output-row">
+		<button
+			class="action-btn btn-secondary"
+			disabled={printDisabled}
+			onclick={onprint}
+		>
+			{t('input.print', language)}
+		</button>
+		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
+		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
+		{#if songLibrary.songs.length > 1}
+			<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
+		{/if}
 	</div>
-
-	<!-- ── OUTPUT. Print, Export, Import. N.65 ship one ──────────────
-	     Print came DOWN from the Clear-Print-Transcribe grid and joined the
-	     two binder controls, per Dann's ruling 7 of 2026-08-20. All three
-	     carry a song off the device rather than acting on the text, so they
-	     are one row of three equal columns. The `1fr 1fr 2fr` grid and
-	     `.binder-row`'s comment about column alignment are gone rather than
-	     repaired: there is one row here now, so there is nothing to align a
-	     second row against.
-
-	     `Export all songs` was that grid's `2fr` third column and is now a
-	     fourth cell, which wraps to the first column of a second row. It is
-	     still shown only above one song, because with one song it says the
-	     same thing as the button beside it.
-
-	     THIS STATION HAS NO LABEL, DELIBERATELY, AND THE MEMO SAYS WHY.
-	     Dann's ruling 4 named Source and only Source. The ratified r1 mockup
-	     draws an OUTPUT label here (`fable-gui-mockup_r1_2026-08-18.html:325`)
-	     but he has not ruled it and its French is NOT ESTABLISHED, so ship
-	     one does not invent one. The header's slot is this element's first
-	     child, the same position `StationHeader` takes in Source, Analysis,
-	     and Songs, and ship two has to give every station a retractable
-	     header anyway. -->
-	<div class="section output-section">
-		<div class="output-row">
-			<button
-				class="action-btn btn-secondary"
-				disabled={printDisabled}
-				onclick={onprint}
-			>
-				{t('input.print', language)}
-			</button>
-			<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
-			<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
-			{#if songLibrary.songs.length > 1}
-				<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
-			{/if}
 		</div>
+		{/if}
 	</div>
 
 	<!-- N.67 step 4b, THE LIBRARY DOOR. Adjacent to the binder row because both
@@ -366,6 +392,8 @@ import type { SongRow } from '$lib/library/songs';
 			onnew={songLibrary.onnew}
 			onrename={songLibrary.onrename}
 			ondelete={songLibrary.ondelete}
+			expanded={sections.has(STATION_IDS.songs)}
+			ontoggle={() => sections.toggle(STATION_IDS.songs)}
 		/>
 	</div>
 	<!-- ── ANALYSIS. LAST IN THE SCROLL. RULED BY DANN 2026-08-20 on his
@@ -392,8 +420,14 @@ import type { SongRow } from '$lib/library/songs';
 	     first entry rather than merged into the header; merging them is a
 	     station boundary nobody has ruled. -->
 	<div class="section console-section">
-		<StationHeader label={t('console.placeholder', language)} />
-		<div class="station-body">
+		<StationHeader
+			label={t('console.placeholder', language)}
+			expanded={sections.has(STATION_IDS.analysis)}
+			ontoggle={() => sections.toggle(STATION_IDS.analysis)}
+			controls="station-analysis"
+		/>
+		{#if sections.has(STATION_IDS.analysis)}
+		<div class="station-body" id="station-analysis">
 		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
 		     is a decision the brief did not rule. It described the
 		     transcription's word count and milliseconds from a position
@@ -437,6 +471,7 @@ import type { SongRow } from '$lib/library/songs';
 			</div>
 		{/if}
 		</div>
+		{/if}
 	</div>
 
 
@@ -862,20 +897,12 @@ import type { SongRow } from '$lib/library/songs';
 		border-top: none;
 	}
 
-	/* AND OUTPUT DRAWS NONE EITHER, RULED BY DANN 2026-08-20 on his walk of
-	   the silhouette ship: no horizontal line between the score field and
-	   the Print row.
-
-	   THIS IS A CONCEPT BEING DELETED, NOT A VALUE BEING TUNED, and it is
-	   his to delete. The recipe above says one rule per boundary, drawn by
-	   the station below it, so this rule WAS the Source-to-Output boundary.
-	   Removing it says those two are one region to the eye. The 6px of top
-	   padding stays: it is the space the recipe gives a label, and without
-	   the line it simply reads as the gap it always was. Every other
-	   boundary in the drawer still draws its rule. */
-	.output-section {
-		border-top: none;
-	}
+	/* THE OUTPUT STATION IS GONE, N.65 ship B, §B.6. Its `.output-section`
+	   rule declared `border-top: none`, which was Dann's ruling of
+	   2026-08-20 on his walk of the silhouette ship: no horizontal line
+	   between the score field and the Print row. THAT RULING IS NOT
+	   REVERSED, IT IS SATISFIED BY CONSTRUCTION. There is no boundary to
+	   draw a line across any more, because the row is inside SOURCE. */
 
 	/* A station's contents, as a box the header is NOT inside. That is what
 	   makes the header's own 0.4rem the whole gap to the first entry, which

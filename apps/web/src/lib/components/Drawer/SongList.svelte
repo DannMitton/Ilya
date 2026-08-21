@@ -42,6 +42,14 @@
 		onnew: () => void;
 		onrename: (id: string, name: string) => void;
 		ondelete: (id: string) => void;
+		/**
+		 * N.65 ship B. REPERTOIRE retracts, like every other header. Handed
+		 * in rather than held here, for the same reason this file holds no
+		 * logic: the open set is one object in `+page.svelte` and every
+		 * station reads the same one.
+		 */
+		expanded: boolean;
+		ontoggle: () => void;
 	}
 
 	let {
@@ -56,6 +64,8 @@
 		onnew,
 		onrename,
 		ondelete,
+		expanded,
+		ontoggle,
 	}: Props = $props();
 
 	let renamingId = $state<string | null>(null);
@@ -102,7 +112,12 @@
 </script>
 
 <div class="song-list">
-	<StationHeader label={t('songs.heading', language)} />
+	<StationHeader
+		label={t('songs.heading', language)}
+		expanded={expanded}
+		ontoggle={ontoggle}
+		controls="station-songs"
+	/>
 
 	<!-- N.65 ship one. THE BODY IS ITS OWN FLEX COLUMN. `.song-list` used to
 	     be the column, so its 6px gap landed between the header and the list
@@ -111,7 +126,8 @@
 	     ruling 2, and this is where it was broken. The 6px between the list,
 	     the error, and New song is unchanged; it just belongs to the body
 	     now instead of to the whole station. -->
-	<div class="station-body">
+	{#if expanded}
+	<div class="station-body" id="station-songs">
 	<ul class="songs">
 		{#each songs as song (song.id)}
 			<li class="song-row" class:is-open={song.id === activeId}>
@@ -175,6 +191,7 @@
 		</div>
 	{/if}
 	</div>
+	{/if}
 </div>
 
 <style>

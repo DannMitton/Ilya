@@ -93,17 +93,19 @@
 </script>
 
 <div class="section cosmetic-section" style="--notation-accent: {accent}">
-	<StationHeader accent={accent} tight={!expanded}>
-		<button
-			class="notation-disclosure"
-			aria-expanded={expanded}
-			aria-controls={expanded ? "notation-toggles" : undefined}
-			onclick={() => onexpandedchange(!expanded)}
-		>
-			<span>{t('cosmetic.heading', language)}</span>
-			<svg class="chevron-icon" class:expanded width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
-		</button>
-	</StationHeader>
+	<!-- N.65 ship B. THE DISCLOSURE MARKUP LEFT THIS FILE. It was right here
+	     and it was right here ALONE, so ship B moved it into `StationHeader`
+	     rather than copying it to five more stations. What was a button and a
+	     chevron declared in this component is now three props, and the
+	     behaviour, the `aria-expanded`, the 44px coarse-pointer floor and the
+	     two chevron rotations are unchanged and live there. -->
+	<StationHeader
+		label={t('cosmetic.heading', language)}
+		accent={accent}
+		expanded={expanded}
+		ontoggle={() => onexpandedchange(!expanded)}
+		controls="notation-toggles"
+	/>
 	{#if expanded}
 	<div class="cosmetic-grid" id="notation-toggles">
 		<!-- Stress acutes -->
@@ -224,67 +226,12 @@
 		padding: 6px 0;
 	}
 
-	/* N.43: the whole header row is the control, so the tap target is the
-	   control's own visible box. The E.36 touch ruling of 2026-08-10
-	   prefers that over an invisible centred region, and says two
-	   exemptions exist and a third must not be created silently. This
-	   creates none. The 44px floor is twinned on .toc-chevron
-	   (Drawer.svelte:1021-1024), the only control in the app that
-	   already meets it. The chevron is the TOC's own 10x10 glyph, so no
-	   new affordance enters the vocabulary. */
-	/* Top-aligned, not centred. Centring a 0.7rem label inside a 44px box
-	   put NOTATION's label 25px below its rule while ANALYSIS sat 6px
-	   below its own (RootPanel.svelte:495-498). Dann caught the 19px.
-	   The target stays 44 by 44 and simply extends downward from the
-	   label rather than being centred on it, so no exemption is created. */
-	.notation-disclosure {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		width: 100%;
-		padding: 0;
-		background: none;
-		border: none;
-		font: inherit;
-		color: inherit;
-		letter-spacing: inherit;
-		text-transform: inherit;
-		text-align: left;
-		cursor: pointer;
-	}
-
-	/* An accordion, not a tree. Dann's correction of 2026-08-11 is the
-	   durable rule and it is unchanged: the first pass borrowed
-	   .toc-chevron's right-to-down rotation, which is a TREE convention and
-	   belongs to a hierarchy, not to a panel. The glyph is still the TOC's;
-	   only the rotation differs. .toc-chevron is a different control and
-	   keeps its own rotation.
-
-	   THE CHEVRON POINTS THE WAY THE PANEL WILL GROW. That is the rule the
-	   two values express, and the two values were traded on 2026-08-20
-	   because N.73 S3 moved the panel and the rule then demanded the
-	   opposite pair.
-
-	   Bottom-anchored, the panel grew UPWARD: closed pointed up ("more is up
-	   there") and open pointed down ("push it back"). S3 pinned NOTATION to
-	   the TOP of the drawer, where it grows DOWNWARD, so closed points down
-	   and open points up. Found by Dann walking ship one; the two rotations
-	   had been left saying the old geometry. */
-	.chevron-icon {
-		flex-shrink: 0;
-		transform: rotate(90deg);
-		transition: transform 150ms ease;
-	}
-
-	.chevron-icon.expanded {
-		transform: rotate(-90deg);
-	}
-
-	@media (pointer: coarse) {
-		.notation-disclosure {
-			min-height: 44px;
-		}
-	}
+	/* N.65 ship B. THE DISCLOSURE RULES ARE NOT HERE ANY MORE. The button
+	   recipe, the 44px coarse-pointer floor, and the two chevron rotations
+	   are `StationHeader.svelte`'s, along with the reasoning each carried:
+	   the E.36 touch ruling, Dann's 19px catch on the centred label, and the
+	   chevron pointing the way the panel will grow. Every station reads them
+	   from there now, which is the whole point of ship B. */
 
 	.cosmetic-section {
 		margin-top: 0;

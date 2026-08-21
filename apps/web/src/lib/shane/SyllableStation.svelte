@@ -31,8 +31,26 @@
   the transcription on every render, so a syllable you have not placed is
   still here, and one you place twice is still here.
 
+  N.65 SHIP B: THIS STATION HAS NO HEADER. RULED BY DANN 2026-08-21 walking
+  `2238e8b`: "I'm bothered by the elements here. I think we should eliminate
+  the Syllables header and make the boxed syllabified text the first element
+  under the Shift Lyrics header followed by the 'to the End of the Lyric'
+  row." So this component is the text and the drift line, rendered by
+  `+page.svelte` into `ShiftLyricsControl`'s own body, and SHIFT LYRICS is
+  the one header over both.
+
   The placed count is a numeral pair rather than a sentence, so it needs no
-  translation and no plural agreement.
+  translation and no plural agreement. IT LEFT WITH THE HEADER: it is the
+  status slot on the SHIFT LYRICS header now, on the desk's recommendation
+  and Dann's ratification the same minute, which is where it sat relative to
+  its own header before, so nothing moved in his eye except the word beside
+  it. `+page.svelte` derives both numbers because the header is no longer
+  this component's to draw.
+
+  THE DRIFT LINE STAYS HERE, WITH THE TEXT, and that is a decision the
+  ruling did not make. It uses `.station-count` too, but it is not the
+  counter Dann named: it reports a re-transcription against the text it sits
+  under, so it belongs to the text rather than to the header.
 
   THE DRIFT LINE is the one string here that does need translating, and its
   wording was ratified by Dann on 2026-08-14: it agrees with `texte`, not
@@ -73,7 +91,11 @@
 		}
 		return s;
 	});
-	const placedCount = $derived(slots.filter((s) => placed.has(keyOf(s))).length);
+	/* N.65 ship B. `placedCount` LEFT THIS FILE with the header it fed. It is
+	   `+page.svelte`'s `placedSlotCount` now, derived from the same two
+	   inputs by the same rule, because the header that shows it is
+	   `ShiftLyricsControl`'s. `placed` stays: it is what greys a placed
+	   syllable in the running text. */
 
 	// The reading order for the running text: a new line at a line boundary,
 	// a space at a word boundary, a hyphen (kept inside the PRECEDING
@@ -105,10 +127,6 @@
 
 {#if slots.length > 0}
 	<section class="syllable-station">
-		<div class="station-head">
-			<h3>{t('station.syllables', language)}</h3>
-			<span class="station-count">{placedCount}&thinsp;/&thinsp;{slots.length}</span>
-		</div>
 		{#if drift > 0}
 			<p class="station-drift">
 				<span>{t('station.textChanged', language)}</span>
@@ -134,20 +152,12 @@
 		flex-direction: column;
 		gap: 6px;
 	}
-	.station-head {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-	}
-	.station-head h3 {
-		margin: 0;
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: #6a655f;
-		font-weight: 600;
-	}
-	/* Mirrors .station-head so the numeral sits in the same column. */
+	/* N.65 ship B. `.station-head` AND ITS `<h3>` ARE GONE with the header.
+	   Their recipe was this file's own, 0.6875rem at 0.08em in #6a655f,
+	   against the drawer's 0.7rem at 0.12em; nothing inherits it, because
+	   SHIFT LYRICS's header is `StationHeader` and always was. */
+	/* Kept the head's own arrangement, so the numeral still sits at the
+	   right of its line. */
 	.station-drift {
 		margin: 0;
 		display: flex;
