@@ -670,6 +670,37 @@
 		height: 100%;
 		flex-shrink: 0;
 		transition: width 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+		/* ── THE LIFT (N.65), ON THE WHOLE DRAWER ─────────────────────
+		   Dann's ruling, 2026-08-20, and this is the SECOND placement. It
+		   was on `.lip-silhouette` and that was wrong, in the way he named:
+		   that SVG is a 22px strip, so it could not cover its own shadow,
+		   the blur bloomed inward across the drawer's paper, and the handle
+		   read as a pill floating beside the drawer.
+
+		   THE DRAWING IS THE REFERENCE and it says why this element.
+		   `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, option
+		   C: its filled path is `M0 0 L150 0 ... L0 300 Z`, the WHOLE
+		   drawer with the handle's bump on it, not a strip. A drop-shadow
+		   renders behind its own element, so wherever the shape is opaque
+		   its shadow is invisible, and the only shadow that shows is the
+		   one off the right edge, on the desk.
+
+		   `.drawer` is the element that already contains both the drawer
+		   body and the handle's SVG, so the filter traces the union of the
+		   two. The body is an opaque full-height box and hides its own
+		   shadow with no measurement needed.
+
+		   THE VALUES ARE UNCHANGED: `0 3px 12px rgba(0, 0, 0, 0.35)` is
+		   N.73 S1b's one ruled shadow, the paper's own.
+
+		   THE HAZARD WAS CHECKED, NOT DISCOVERED. `filter` makes a stacking
+		   context AND a containing block for absolute and fixed
+		   descendants. The only `position: fixed` in this subtree is
+		   `.drawer` itself, which its own filter cannot re-root, and the
+		   three absolute descendants (`.lip-silhouette`, `.drawer-lip`, and
+		   its `::before`) already resolved against `.drawer`. Measured
+		   before and after on all three states; nothing moved. */
+		filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35));
 	}
 
 	.drawer.collapsed {
@@ -921,30 +952,12 @@
 		z-index: 1;
 		pointer-events: none;
 		overflow: visible;
-		/* ── THE LIFT (N.65). Dann's ruling, 2026-08-20, on his walk of
-		   `0e5ed6e`: the whole silhouette carries THE PAPER'S shadow, at the
-		   paper's own ruled values and not a new set.
-
-		   `0 3px 12px rgba(0, 0, 0, 0.35)` is N.73 S1b's one ruled shadow,
-		   declared today by `SubsequentPage`, `ReadingPaper`, `TitlePage`, and
-		   `VoiceProfilePane`. It is copied, not tuned.
-
-		   `drop-shadow()` AND NOT `box-shadow`. A box-shadow follows the
-		   element's BOX, which here is a 22px-wide rectangle running the whole
-		   height of the drawer, so it would draw a tall rectangular shadow
-		   that has nothing to do with the shape. `drop-shadow()` follows the
-		   painted alpha, so the shadow is the silhouette's own outline: the
-		   edge for its whole run, and the handle where the handle bulges.
-
-		   ONE FILTER ON THE SVG, NOT ONE PER PATH. Two filters would be two
-		   objects casting two shadows, which is the thing this ruling ends.
-		   The filter takes the union of the fill and the stroke, so the drawer
-		   and its handle lift together.
-
-		   NOT CONFINED TO THE HANDLE, by Dann's ruling: the lift falls from the
-		   whole edge, because that is what one object casting one shadow means
-		   and it is what the paper does. */
-		filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35));
+		/* THE SHADOW IS NOT HERE. It was, and Dann ruled it out on his walk:
+		   this element is a 22px strip, so it could not cover its own
+		   shadow and the blur painted a seam down the drawer's paper. It
+		   lives on `.drawer` now, which contains this SVG and the drawer
+		   body both, so the filter traces the union and the opaque body
+		   hides its own shadow. See that rule. */
 	}
 
 	.sil-fill {
@@ -1402,6 +1415,14 @@
 		   The height was calc(100dvh - 56px), reserving the deleted tab bar's
 		   footer. The bar is gone and the drawer takes the viewport. */
 		.drawer {
+			/* NO LIFT ON THE PHONE. The silhouette is desktop-only
+			   (`{#if !isMobile && silhouette}`), so there is no edge and no
+			   handle here for a shadow to belong to; the drawer is a
+			   full-screen overlay and its shadow would fall entirely
+			   outside the viewport. Declaring it would buy nothing and
+			   would rasterize a full-screen filter on every frame of the
+			   400ms slide. The phone keeps its painted tab, unchanged. */
+			filter: none;
 			position: fixed !important;
 			top: 0 !important;
 			left: 0 !important;

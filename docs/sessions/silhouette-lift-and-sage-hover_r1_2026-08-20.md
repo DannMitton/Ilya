@@ -46,8 +46,9 @@ be."
 
 **That is false against the tree, and the tree wins.** `Drawer.svelte:647`
 renders `<path class="sil-fill" d={silhouette.fill} />`, a second path whose `d`
-is built at `:142` as a closed interior, and `Drawer.svelte:950-952` gives it
-`fill: var(--drawer-bg, #FAF8F5)`. The silhouette has been a filled object since
+is built at `:142` as a closed interior, and the `.sil-fill` rule in the same
+file gives it `fill: var(--drawer-bg, #FAF8F5)`. **That rule sat at `:950-952`
+when this was written and the second pass moved it; find it by its selector.** The silhouette has been a filled object since
 `1f201f2`.
 
 **It was not settled by reading the stylesheet, because that is the fault CONTRACT
@@ -81,7 +82,9 @@ state where the handle is see-through.**
 
 ## 3. Item 2. The lift is built
 
-`Drawer.svelte:924-947`, one declaration on the SVG:
+One declaration on the SVG, in the `.lip-silhouette` rule. **STALE AS OF THE
+SECOND PASS BELOW: the shadow is not on that element any more. It sat at
+`:924-947` when this was written. See §A.**
 
 ```css
 filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35));
@@ -158,8 +161,10 @@ discovering it.
 const sourceIsEmpty = $derived(inputText === '');
 ```
 
-`:204` puts it on the box, `:213` gates the watermark on the same name, and
-`:530-566` carries the rule:
+`:204` puts it on the box, `:213` gates the watermark on the same name, and the
+`.textarea-wrapper.empty:hover` rule carries the declaration. **That rule sat at
+`:530-566` when this was written and the second pass shifted it; find it by its
+selector.**
 
 ```css
 .textarea-wrapper.empty:hover { background: rgba(139, 154, 125, 0.06); }
@@ -316,3 +321,359 @@ Recorded because each one would have been a false finding in this memo.
 *Written by Claude Code, 2026-08-20, against the working tree. Every colour,
 rectangle, and ratio here was read out of a running browser, and the two claims
 that contradict the brief were each settled with a positive control.*
+
+---
+---
+
+# Second pass, 2026-08-20. Six walk items, and the shadow moved
+
+**Appended to this memo rather than started fresh, because item 7 corrects §3
+to §5 above and a reader must find the correction beside the thing it
+corrects.** Everything above stands as the record of what was done first and
+why it was wrong.
+
+`WRITTEN`, not `DONE`. Dann has not walked any of it on a deploy.
+
+---
+
+## A. The seam, and the correction to my own work
+
+**Dann's ruling:** the drawer and its handle must read as one continuous
+surface, one sheet of paper with a tab, casting one shadow onto the desk. No
+seam. Reference: `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`,
+option C.
+
+**§5 above predicted this defect and shipped it anyway.** It said "roughly 12 px
+of the drawer's own right edge is darkened by its own shadow" and left it,
+because the brief of the time said not to pre-build the confinement. **Dann has
+now ruled that the seam is the defect, not a consequence to be walked**, and he
+is right: on his screen the handle read as a pill floating beside the drawer,
+which is the exact thing the one-silhouette ruling removed.
+
+### What the drawing says, and why it settles the placement
+
+Option C's filled path is `M0 0 L150 0 L150 100 L188 100 C… L150 300 L0 300 Z`
+(`lip-handle-silhouette_r1_2026-08-20.html:73-74`). **It starts at x = 0.** The
+filled shape is the WHOLE drawer with the handle's bump on it, not a strip. A
+drop-shadow renders behind its own element, so wherever the shape is opaque its
+shadow is invisible, and the only shadow that survives is the one off the right
+edge, on the desk.
+
+### Path 1 was taken and it worked
+
+The shadow moved from `.lip-silhouette` to **`.drawer`**
+(`Drawer.svelte:703`), the element that already contains the drawer body and the
+handle's SVG both, so the filter traces the union of the two. The strip's own
+filter is gone (`Drawer.svelte:942-948`, now a comment saying where it went).
+Path 2, clipping the blur, was not needed and is not built.
+
+**The values are unchanged:** `0 3px 12px rgba(0, 0, 0, 0.35)`. So is the path
+geometry, the `#D2CFCC` stroke at 2 px, and everything else on the KEEP list.
+
+### The hazard was checked before the edit, not discovered after
+
+`filter` creates a stacking context AND a containing block for absolute and
+fixed descendants. Grepped across `lib/components/Drawer/` and `lib/shane/`:
+**the only `position: fixed` in the whole drawer subtree is `.drawer` itself**,
+which its own filter cannot re-root. The three absolute descendants,
+`.lip-silhouette`, `.drawer-lip`, and its `::before`, already resolved against
+`.drawer`, which is `position: relative` on the desk and `position: fixed` on
+the phone. Nothing could move, and nothing did.
+
+### No lift on the phone
+
+`Drawer.svelte:1425`, `filter: none` in the `max-width: 767px` block. The
+silhouette is desktop-only, so on the phone there is no edge and no handle for a
+shadow to belong to, the drawer is a full-screen overlay whose shadow would fall
+outside the viewport entirely, and the declaration would only cost a
+full-screen rasterization on every frame of the 400 ms slide.
+
+### Done-when, verified by looking
+
+**The 8x reading.** The right edge was magnified with a temporary
+`transform: scale(8)` on `body`, origin on the drawer's right edge at the
+handle's mid-height, so vector content re-rasterizes at 8x and the colours are
+the real painted ones.
+
+**What the 8x view shows:** the drawer's paper runs unbroken from well inside
+the drawer, across the right edge, and into the handle's interior. **No line, no
+gradient, no colour change at the edge and none at the handle's mouth.** The
+only shadow visible falls on the desk, to the right of the handle and off the
+edge above and below it. It is the same picture as option C.
+
+**A NUMERIC PER-PIXEL SAMPLE WAS NOT AVAILABLE IN THIS PANE and no RGB triple is
+invented here.** The Browser pane's screenshot cannot be cropped and the page
+cannot read its own painted pixels. **So the claim was settled by a control
+instead, and the control is stronger than a sample would have been.**
+
+**THE CONTROL.** The shadow was temporarily driven to
+`drop-shadow(0 3px 40px rgba(0,0,0,1))`: full opacity, more than three times the
+blur. At 8x, **the desk beside the drawer went nearly black, and the drawer's
+interior and the handle's interior did not change at all.** Not one pixel of
+shadow reached inside at alpha 1.0. At the ruled 0.35 and 12 px it is clean a
+fortiori. The instrument could plainly show shadow inside, and it showed none.
+Both probes were then removed and `body`'s transform measured back to `none`.
+
+### The lip, the collapsed state, and the phone: measured before and after
+
+Read from the running app in each state, before the edit and after it.
+
+| state | thing | before | after |
+|---|---|---|---|
+| desk, open | `.drawer` rect | 0, 48 → 520, 900 | **identical** |
+| | `.drawer-lip` rect | 520, 436 → 540, 512 | **identical** |
+| | `.lip-silhouette` rect | 518, 48 → 540, 900 | **identical** |
+| | chevron transform | `matrix(-1, 0, 0, 1, -1.33, 0)` | **identical** |
+| desk, collapsed | `.drawer` width | 0 | **identical** |
+| | `.drawer-lip` rect | 0, 436 → 20, 512 | **identical** |
+| | `.lip-silhouette` rect | −2, 48 → 20, 900 | **identical** |
+| | chevron transform | `matrix(1, 0, 0, 1, -0.67, 0)` | **identical** |
+| phone, collapsed | `.drawer` transform | `matrix(1, 0, 0, 1, -360, 0)` | **identical** |
+| | `.drawer` filter | `none` | **`none`** |
+| | `.drawer-lip` rect | 0, 282 → 20, 358 | **identical** |
+| | `.drawer-lip` background | `rgb(250, 248, 245)` | **identical** |
+| | silhouette | not rendered | **not rendered** |
+| | chevron transform | `matrix(1, 0, 0, 1, -0.67, 0)` | **identical** |
+
+**Nothing moved. The filter moved and nothing else did.** The flip, the
+animation, and the collapsed state were exercised by clicking the real pull in
+each viewport.
+
+**The 44 by 88 coarse-pointer target was NOT re-measured**, because this pane is
+a fine pointer and `.drawer-lip::before` only takes a `content` under
+`@media (pointer: coarse)`. No rule touching it changed. **NOT ESTABLISHED by
+measurement this pass.**
+
+---
+
+## B. The six walk items
+
+### 1. Both intakes at 75 percent
+
+**The textarea's height is not one number, which is why it is an expression.**
+`app.css`'s N.23 focus-zoom rule names `textarea`, so the field renders at
+14.4 px on the desk and 16 px on a phone. A fixed pixel height would have cut
+the phone by 32 percent while cutting the desk by 25.
+
+The field's height is `rows` × `line-height` plus padding and border:
+6 × 1.5em + 18px. Three quarters of that is **`calc(6.75em + 13.5px)`**
+(`RootPanel.svelte:632`), and `em` resolves against the field's own font, so the
+fraction holds at both sizes. `rows="6"` stays as the no-CSS fallback and
+`resize: vertical` is untouched.
+
+| field | where | before | after | ratio |
+|---|---|---|---|---|
+| textarea | desk, 1400 x 900 | 147.56 px | **110.70 px** | 75.02% |
+| textarea | 360 x 640 | 162.00 px | **121.50 px** | 75.00% |
+| score box | desk, 1400 x 900 | 152.00 px | **114.00 px** | 75.00% |
+| score box | 360 x 640 | 152.00 px | **138.00 px** | **90.79%** |
+
+**THE SCORE BOX DID NOT REACH 75 PERCENT ON THE PHONE, and it cannot.**
+`min-height` went 152 to 114 (`ScoreUploader.svelte:738`), but at 360 px the
+drop zone's sentence wraps to five lines that measure 119 px on their own, so
+with the box's 19 px of vertical padding the CONTENT is 138 px and the 114 px
+floor no longer binds. **Forcing 114 px there would clip the placeholder.** The
+box shrank as far as its own words allow. Reported rather than forced, and
+Dann's to rule.
+
+**Where the marks land.** Both watermarks centre themselves and still do:
+
+| mark | where | glyph top within field | offset from field centre |
+|---|---|---|---|
+| `text` | desk | 44.98 → **26.55 px** | −0.30 px, unchanged |
+| `text` | 360 | — → **31.95 px** | −0.30 px |
+| `score` | desk | 47.20 → **28.20 px** | −0.30 px, unchanged |
+| `score` | 360 | — → **40.20 px** | −0.30 px |
+
+Both glyphs are 57 px tall at both sizes and both still sit within a third of a
+pixel of their field's centre. **The −0.30 px is unchanged by this pass**; it is
+the glyph's own ink against its line box.
+
+The score box's placeholder is top-left and stays there, 9.5 px below the field's
+top at both sizes, so it did not move relative to the box. On the desk it now
+sits 28.9 px above the box's centre rather than 47.9 px. The textarea's
+placeholder is a native `::placeholder` and sits at the same top-left inset.
+
+**A COLLISION THAT PREDATES THIS PASS AND IS NOT MADE WORSE BY IT.** At 360 the
+drop zone's five-line sentence spans 9.5 to 128.5 px and the `score` glyph spans
+40.2 to 97.2 px, so they overlap. `STATE.md:72-75` already records this as
+measured, left alone, and Dann's to rule. Before this change the same two
+overlapped across a 152 px box.
+
+### 2. Clear and Transcribe move between the fields
+
+`RootPanel.svelte:284` now precedes `:310`. Measured vertical order, both sizes:
+
+| | desk | 360 |
+|---|---|---|
+| textarea | 340.8 | 345.0 |
+| Clear / Transcribe | 457.5 | 472.5 |
+| score box | 505.8 | 520.8 |
+| Finale disclosure | 639.8 | 678.8 |
+
+**Transcribe sits directly under the textarea it acts on, and the score box
+follows.** `transcribeError` came with the buttons, because it is that button's
+own failure.
+
+**The Finale disclosure stayed with the score box**, measured below it at both
+sizes. It needed no work: it lives inside `ScoreUploader`'s own root
+(`ScoreUploader.svelte:678-694`), so it travels with the score box by
+construction.
+
+### 3. No rule between the score field and Print
+
+`RootPanel.svelte:876`, `.output-section { border-top: none; }`. Measured:
+`border-top-style: none`, `border-top-width: 0px`, `padding-top: 6px`.
+
+**The 6 px of top padding stays.** It is the space the recipe gives a label, and
+without the line it reads as the gap it always was. Every other boundary in the
+drawer still draws its rule, confirmed by measurement: Notation, Repertoire, and
+Analysis all still read `2px solid rgb(139, 154, 125)`.
+
+**This is a concept deleted, not a value tuned.** The recipe at `:790-807` says
+one rule per boundary, drawn by the station below it, so this rule WAS the
+Source-to-Output boundary. Removing it says those two are one region to the eye,
+which is Dann's to say.
+
+### 4. Songs becomes Repertoire
+
+`i18n.ts:813`: `'songs.heading': { en: 'Repertoire', fr: 'Répertoire' }`.
+Measured in the running drawer, the station label reads **Repertoire**.
+
+**THE KEY IS UNCHANGED and it is not a lie.** It addresses the songs feature,
+whose other twenty strings still speak of one song at a time (`songs.new`
+"New song", `songs.deleteConfirm` "Delete this song"), and those stay correct
+English because a repertoire is made of songs. Only the STATION's name changed,
+which is only what Dann ruled.
+
+**Neither word is coined.** Both are already house vocabulary:
+`profile.scoreRegionAria` is 'Repertoire fit score' (`i18n.ts:604`), and
+« répertoire » appears at `profile.lede` (`:581`) and `calib.welcome.lede`
+(`:463`).
+
+### 5 and 6. Lavender on Shift Lyrics
+
+**RECORDED AS DANN EXTENDING HIS OWN RULING.** "Lavender marks the marked
+score" was ruled 2026-08-19 for the BANNER and the DESK
+(`claude/ruling-lavender-marks-the-marked-score_2026-08-19.md`,
+`STATE.md:830-833`). This carries it into a drawer STATION. **So the drawer now
+reads sage for transcription work and lavender for score work**, which is the
+same hue-names-place rule that already puts a sage border on the text intake and
+a lavender one on the score intake.
+
+**The token is `--deeper-lavender` `#8E7E9B`, the one the marked score already
+uses.** It is the app bar's `.header-bar.tab-shane` fill and the score intake's
+own border. **`--surround-marked` is that hue at 60 percent toward white, a DESK
+tint, far too light to set type in, so it is not this.** No new token entered
+the palette.
+
+**The rule**, `ShiftLyricsControl.svelte:119`, measured against a sage station
+rule in the same drawer:
+
+| | width | style | colour |
+|---|---|---|---|
+| Shift Lyrics | 2px | solid | `rgb(142, 126, 155)` |
+| Notation, Repertoire, Analysis | 2px | solid | `rgb(139, 154, 125)` |
+
+Same weight, same style, lavender instead of sage. The recipe's 6 px between a
+rule and the label it names came with it; **the recipe's 12 px below the body
+did NOT**, because Dann ruled a divider above the header and nothing about the
+space beneath.
+
+**The label**, `ShiftLyricsControl.svelte:63`, now renders through
+`StationHeader` with `accent="var(--deeper-lavender)"`. Measured against the
+Analysis label:
+
+| | colour | size | letter-spacing | transform | weight |
+|---|---|---|---|---|---|
+| Shift Lyrics | `rgb(142, 126, 155)` | 11.2px | 1.344px | uppercase | 600 |
+| Analysis | `rgb(139, 154, 125)` | 11.2px | 1.344px | uppercase | 600 |
+
+**Only the colour differs, which is exactly what Dann ruled.**
+
+**It could not have been done by repainting the old rule.** This file drew its
+own `<h3>` at 0.6875rem and 0.08em in `#6a655f`, against the drawer recipe's
+0.7rem and 0.12em. Repainting it would have left this the one label that is a
+different size and a different tracking from all its neighbours. Routing it
+through `StationHeader` is what makes "only the colour changes" true.
+
+---
+
+## C. The five gates
+
+| gate | baseline | this run |
+|---|---|---|
+| phonology | 216 passed (216) | **216 passed (216)** |
+| dictionary | 235 passed (235) | **235 passed (235)** |
+| web-check | 0 errors and 7 warnings in 4 files | **0 errors and 7 warnings in 4 files** |
+| web-test | 682 passed (682) | **682 passed (682)** |
+| score-parser | 444 passed, 5 skipped (449) | **444 passed, 5 skipped (449)** |
+
+**Nothing moved, so no permission was needed.**
+
+---
+
+## D. The instrument, and it is worse than §8 said
+
+**THE BROWSER PANE RUNS ITS TAB HIDDEN, and that is the single cause behind
+every stale reading in both passes.** It was proven this pass:
+`requestAnimationFrame` never fired and the call timed out after 30 seconds. A
+hidden tab does no rendering updates, so transitions do not advance and layout
+reads lag behind the class list.
+
+`ENVIRONMENT.md` already records the hidden tab as the reason the dictionary
+never finishes parsing. **It is also why §8's three "thrown out" readings
+happened, and this pass adds two more:** the phone drawer reported an identity
+transform with `collapsed` in its class list, and a probe's fill read back
+`#FF0000` after the probe was removed.
+
+**The working method, and it is the one to keep:** never trust the first read
+after a click, a navigation, or a resize; read again, or take a screenshot
+first, which forces a paint. Never use `rAF`. **Every number in this memo is a
+settled read, and the screenshot is the arbiter where they disagree.**
+
+---
+
+## E. NOT ESTABLISHED
+
+**NOT ESTABLISHED BEATS A COMPLETE INVENTED ANSWER.**
+
+- **A numeric per-pixel colour sample of the drawer's edge.** The pane cannot
+  crop a screenshot and the page cannot read its own painted output. Settled
+  instead by an 8x magnified view and by the alpha-1.0 control, which is
+  stronger. **Settled by:** a pane that supports region capture, or Dann's eye
+  on the deploy.
+- **The 44 by 88 coarse-pointer target after the filter move.** Not
+  re-measured; this pane is a fine pointer. No rule touching it changed.
+  **Settled by:** a coarse-pointer device.
+- **Whether a real window resize leaves the silhouette's height stale.** Carried
+  forward from §10 and still open. It remains the one item in this memo that
+  could be a live defect.
+- **Whether the score box at 138 px on a phone is acceptable**, given it could
+  not reach 75 percent. **Settled by:** Dann's ruling.
+- **The `score` watermark's collision at 360 px.** Pre-existing, re-measured,
+  not made worse. `STATE.md:72-75`. **Settled by:** Dann's ruling.
+- **Safari, and any real phone.** Everything here is the Chromium pane at
+  1400 x 900 and 360 x 640.
+
+---
+
+## F. What Dann walks
+
+1. The drawer's paper runs unbroken to its right edge and into the handle. No
+   seam, no pill, one sheet with a tab.
+2. The only shadow falls on the desk.
+3. The pull, the flip, the collapsed state, and the phone are as they were.
+4. Both intake fields are three quarters as tall, with their marks still
+   centred.
+5. Transcribe sits under the textarea; the score box and its Finale disclosure
+   follow.
+6. No line between the score box and Print.
+7. The station reads Repertoire, and Répertoire in French.
+8. Shift Lyrics carries a lavender rule and a lavender label, at every other
+   station label's size and tracking.
+
+---
+*Second pass written by Claude Code, 2026-08-20, against the working tree. The
+seam was settled with a control that drove the shadow to full opacity, and the
+six walk items were each measured at 1400 x 900 and 360 x 640.*

@@ -265,17 +265,22 @@ import type { SongRow } from '$lib/library/songs';
 		<p class="ocr-error">{ocrError}</p>
 	{/if}
 
-	<!-- N.73 S2. Score intake, beside the wired scanner. Text intake and
-	     score intake are one Source region: the drop surface and the
-	     no-lyrics notice that follows it came here from the Fit drawer. -->
-	{@render sourceScore?.()}
-
 	<!-- SOURCE'S OWN ACTIONS, N.65 ship one. Two buttons, not three: Print
 	     left with the binder controls. The `1fr 1fr 2fr` grid this came out
 	     of does not exist any more, so `.binder-row`'s comment about column
 	     alignment went with it. Clear and Transcribe keep the widths they
 	     had in that grid, 1fr and 2fr, so the primary action is still the
-	     wide one. -->
+	     wide one.
+
+	     BETWEEN THE TWO FIELDS, RULED BY DANN 2026-08-20 on his walk of the
+	     silhouette ship. They used to sit below the score box, so
+	     Transcribe, which acts on the TEXTAREA, sat under a field it does
+	     not touch. It now sits directly under the textarea it acts on, and
+	     the score box follows the pair. `transcribeError` comes with them,
+	     because it is this button's own failure and it reports where the
+	     button is. The Finale disclosure does NOT come with them: it is
+	     about score files, it lives inside `ScoreUploader`'s own root, and
+	     it travels with the score box by construction. -->
 	<div class="source-actions">
 		<button
 			class="action-btn btn-ghost"
@@ -294,9 +299,15 @@ import type { SongRow } from '$lib/library/songs';
 
 	{#if transcribeError}
 		<!-- The failure of Transcribe, so it reports inside the station whose
-		     button produced it. -->
+		     button produced it, and directly under it. -->
 		<p class="error-text">{transcribeError}</p>
 	{/if}
+
+	<!-- N.73 S2. Score intake, beside the wired scanner. Text intake and
+	     score intake are one Source region: the drop surface and the
+	     no-lyrics notice that follows it came here from the Fit drawer.
+	     BELOW the action row since 2026-08-20; see that row's comment. -->
+	{@render sourceScore?.()}
 		</div>
 	</div>
 
@@ -599,6 +610,26 @@ import type { SongRow } from '$lib/library/songs';
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
 		padding-right: 2.2rem; /* room for the OCR icon */
+		/* ── 75 PERCENT OF ITS OWN HEIGHT, AT EITHER FONT SIZE ────────
+		   Dann's ruling, 2026-08-20, on his walk of the silhouette ship.
+
+		   THE HEIGHT IS NOT ONE NUMBER, AND THAT IS WHY THIS IS AN
+		   EXPRESSION. `app.css`'s N.23 focus-zoom rule names `textarea`, so
+		   this field renders at 14.4px on the desk and 16px on a phone.
+		   MEASURED before the change: 147.56px on the desk, 162px at
+		   360 x 640. A fixed pixel height would have cut the phone by 32
+		   percent while cutting the desk by 25.
+
+		   The field's own height is `rows` x `line-height` plus its padding
+		   and border: 6 x 1.5em + 18px, which is 9em + 18px. Three quarters
+		   of that is 6.75em + 13.5px, and `em` here resolves against this
+		   field's own font, so the fraction holds at both sizes. Computed:
+		   110.7px on the desk, 121.5px on the phone, each exactly 75 percent.
+
+		   `rows="6"` STAYS in the markup as the no-CSS fallback; an explicit
+		   height outranks it. `resize: vertical` is untouched, so this is a
+		   starting height and the singer can still drag the field taller. */
+		height: calc(6.75em + 13.5px);
 		resize: vertical;
 		line-height: 1.5;
 		box-sizing: border-box;
@@ -828,6 +859,21 @@ import type { SongRow } from '$lib/library/songs';
 	   been asking about since the walk. The anchor's rule is Source's top
 	   boundary, and it is the same 2px sage. */
 	.source-section {
+		border-top: none;
+	}
+
+	/* AND OUTPUT DRAWS NONE EITHER, RULED BY DANN 2026-08-20 on his walk of
+	   the silhouette ship: no horizontal line between the score field and
+	   the Print row.
+
+	   THIS IS A CONCEPT BEING DELETED, NOT A VALUE BEING TUNED, and it is
+	   his to delete. The recipe above says one rule per boundary, drawn by
+	   the station below it, so this rule WAS the Source-to-Output boundary.
+	   Removing it says those two are one region to the eye. The 6px of top
+	   padding stays: it is the space the recipe gives a label, and without
+	   the line it simply reads as the gap it always was. Every other
+	   boundary in the drawer still draws its rule. */
+	.output-section {
 		border-top: none;
 	}
 

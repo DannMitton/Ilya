@@ -730,7 +730,12 @@
 		   ruled that sage naming the text intake and lavender naming the
 		   score intake is right, and no lighter lavender token measures
 		   better against the white fill than #8E7E9B's own 3.74:1. */
-		min-height: 152px;
+		/* 75 PERCENT OF 152px. Dann's ruling, 2026-08-20, on his walk of the
+		   silhouette ship: both intake fields go to three quarters of their
+		   height. 152 was the twin of the textarea's six rows; both fields
+		   drop by the same fraction, not to the same number, because they
+		   were never the same number. */
+		min-height: 114px;
 		padding: 0.5rem 0.6rem;
 		/* The textarea's own reserve for its OCR icon, mirrored here for the
 		   scan icon in this box's top-right corner. Without it the first line

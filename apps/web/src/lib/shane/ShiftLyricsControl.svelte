@@ -25,6 +25,7 @@
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
+	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import type { ShiftDirection } from '$lib/shane/pairings';
 
 	interface Props {
@@ -38,7 +39,28 @@
 </script>
 
 <section class="shift-lyrics">
-	<h3>{t('shiftLyrics.title', language)}</h3>
+	<!-- LAVENDER, AND IT IS DANN EXTENDING HIS OWN RULING, 2026-08-20 on his
+	     walk of the silhouette ship. "Lavender marks the marked score" was
+	     ruled 2026-08-19 for the BANNER and the DESK
+	     (`claude/ruling-lavender-marks-the-marked-score_2026-08-19.md`);
+	     this carries it into a drawer STATION. So the drawer now reads sage
+	     for transcription work and lavender for score work, which is the
+	     same hue-names-place rule that already puts a sage border on the
+	     text intake and a lavender one on the score intake.
+
+	     THE TOKEN IS `--deeper-lavender`, the one the marked score already
+	     uses: it is the app bar's `.header-bar.tab-shane` fill and the score
+	     intake's own border. `--surround-marked` is that hue at 60 percent
+	     toward white, which is a DESK tint and far too light to set type in,
+	     so it is not this. No new token enters the palette.
+
+	     `StationHeader` RATHER THAN THIS FILE'S OWN `<h3>`, so that only the
+	     colour differs from every other station label, which is what Dann
+	     ruled. The old rule here was 0.6875rem at 0.08em in `#6a655f`,
+	     against the drawer recipe's 0.7rem at 0.12em; keeping it and only
+	     repainting it would have left this label the one that is a
+	     different size and a different tracking from all its neighbours. -->
+	<StationHeader label={t('shiftLyrics.title', language)} accent="var(--deeper-lavender)" />
 	<div class="shift-row">
 		<span class="shift-label">{t('shiftLyrics.toEndOfLyric', language)}</span>
 		<div class="shift-arrows">
@@ -80,18 +102,22 @@
 </section>
 
 <style>
+	/* THE STATION RULE, RULED BY DANN 2026-08-20 on his walk of the
+	   silhouette ship: a horizontal divider above this header, in the weight
+	   every other station rule uses, in lavender rather than sage.
+
+	   2px is that weight, `RootPanel`'s `.section` recipe. The 6px of top
+	   padding comes with it and is not a separate decision: the recipe puts
+	   6px between a rule and the label it names, and a rule dropped in
+	   without it would sit hard against the type. The recipe's 12px below
+	   the body is NOT applied, because Dann ruled a divider above the header
+	   and nothing about the space beneath. */
 	.shift-lyrics {
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-	}
-	.shift-lyrics h3 {
-		margin: 0;
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: #6a655f;
-		font-weight: 600;
+		border-top: 2px solid var(--deeper-lavender);
+		padding-top: 6px;
 	}
 	.shift-row {
 		display: flex;

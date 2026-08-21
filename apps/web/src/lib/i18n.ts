@@ -800,7 +800,17 @@ const strings: Record<string, Record<Language, string>> = {
 	// "Comment appellerons-nous" pattern are lifted verbatim from
 	// calib.switcher.*, which shipped for voice profiles. A rename and delete
 	// pattern that a singer has already met should not be re-worded here.
-	'songs.heading': { en: 'Songs', fr: 'Chants' },
+	/* REPERTOIRE, not Songs. Both words are Dann's, ruled 2026-08-20 on his
+	   walk of the silhouette ship. Neither is coined: `Repertoire` and
+	   « répertoire » are already house vocabulary at `profile.scoreRegionAria`
+	   ('Repertoire fit score'), `profile.lede`, and `calib.welcome.lede`.
+
+	   THE KEY IS UNCHANGED and it is not a lie: it addresses the songs
+	   feature, whose other twenty strings still speak of one song at a time
+	   ('New song', 'Delete this song'), which stays correct English because a
+	   repertoire is made of songs. Only the STATION's name changed, which is
+	   only what Dann ruled. */
+	'songs.heading': { en: 'Repertoire', fr: 'Répertoire' },
 	'songs.new': { en: 'New song', fr: 'Nouveau chant' },
 	// The word a song is drawn under before it has anything to be named after.
 	// A KEY AND NOT A LITERAL: it was English in the French drawer for exactly as
