@@ -19,7 +19,7 @@
 							<h2 id="guide-how">Comment fonctionne Ilya</h2>
 						</div>
 
-						<h4 id="guide-what">Que fait Ilya ?</h4>
+						<h4 id="guide-what">Que fait Ilya?</h4>
 
 						<p><em>Ilya</em> poursuit un double objectif : ouvrir l'accès au corpus du russe chanté, et éduquer.</p>
 
@@ -27,27 +27,27 @@
 
 						<p><em>Ilya</em> propose également des leçons claires et vérifiables par des tiers sur son propre fonctionnement. Les utilisateurs peuvent progresser à travers une série de leçons séquencées qui expliquent en profondeur comment <em>Ilya</em> parvient à ses résultats, qu'ils soient familiers ou inattendus. Le module LEÇONS s'adresse aux utilisateurs qui apprécient la commodité d'<em>Ilya</em>, mais qui recherchent aussi un degré supérieur d'indépendance et d'aisance avec les textes cyrilliques.</p>
 
-						<h4 id="guide-paste">Que se passe-t-il lorsque je saisis un texte russe ?</h4>
+						<h4 id="guide-paste">Que se passe-t-il lorsque je saisis un texte russe?</h4>
 
 						<p><em>Ilya</em> fait ce que nous pouvons apprendre à faire manuellement, mais beaucoup plus vite. Il met à jour et normalise automatiquement l'orthographe, recherche l'accent tonique, détermine comment cet accent affecte les voyelles environnantes, applique les règles de voisement et de dévoisement des consonnes, propose une consultation du dictionnaire pour le sens, et produit trois lignes de contenu dans un format familier : ligne supérieure en API, ligne médiane en texte cyrillique source, et ligne inférieure en glose de traduction minimale. Ces transcriptions méritent un examen approfondi tout en restant lisibles d'un coup d'œil. Les utilisateurs peuvent exporter des PDF comme copies papier ou les conserver pour une étude ultérieure. <em>Ilya</em> ne sauvegarde pas les transcriptions, ne conservant entre les sessions que le travail en cours. <em>Ilya</em> est un outil savant actif destiné à la performance classique et à l'enseignement, pas un dépôt de transcriptions ni une maison d'édition.</p>
 
-						<h4 id="guide-source">Pourquoi Ilya ne suit-il qu’une seule source ?</h4>
+						<h4 id="guide-source">Pourquoi Ilya ne suit-il qu’une seule source?</h4>
 
 						<p>Les origines d'<em>Ilya</em> ne sont pas aveugles à l'ensemble plus large des ressources en diction lyrique russe. Après avoir parcouru toute la littérature de diction lyrique russe à ses débuts, celle de Grayson était la seule ressource à centrer de manière satisfaisante l'attribution savante et la vérifiabilité par des tiers. D'autres sources reposent sur leur expérience pratique heuristique ou sur des connaissances reçues et une tradition orale et aurale, mais Grayson conçoit une mécanique finie pour ces transformations. C'est un pont qui donne à l'étudiant la capacité d'aborder n'importe quel texte cyrillique russe. L'ouvrage de Grayson était la seule source suffisamment robuste pour prioriser l'autonomie croissante de l'utilisateur, plutôt que de préconiser un modèle où l'utilisateur reste limité par la disponibilité de ressources imprimées donnant accès à un sous-ensemble fini du répertoire vocal russe. La méthode de Grayson permet à <em>Ilya</em> de traiter n'importe quel texte, produisant des résultats chantables dans un format que les étudiants en chant d'aujourd'hui sont formés à utiliser et à comprendre.</p>
 
-						<h4 id="guide-ai">Ilya est-il un outil d’IA ?</h4>
+						<h4 id="guide-ai">Ilya est-il un outil d’IA?</h4>
 
 						<p>Non. <em>Ilya</em> est fondé sur des règles, ce qui le rend déterministe : même entrée, même sortie, à chaque fois. La base de règles d'<em>Ilya</em> fonctionne que vous soyez connecté à l'internet ou non. C'est l'opérationnalisation de la thèse de Grayson, <em>Russian Lyric Diction</em> (University of Washington, 2012). Et en tant que moteur de transcription fondé sur des règles, les résultats d'<em>Ilya</em> seront toujours justifiables par une règle de diction lyrique russe méticuleusement citée, couverte dans le module LEÇONS.</p>
 
-						<h4 id="guide-role">Quel est mon rôle en tant qu’utilisateur ?</h4>
+						<h4 id="guide-role">Quel est mon rôle en tant qu’utilisateur?</h4>
 
 						<p>L'utilisateur est le créateur de la transcription. <em>Ilya</em> est l'outil avec lequel il la réalise. Les utilisateurs sont responsables de la vérification des accents toniques inconnus, de la désambiguïsation des homographes qui surviennent, de la sélection de leurs préférences de notation si elles divergent de celles que préconise Grayson, et de la décision de recourir à la réduction vocalique généralisée ou à la reconstitution pour les passages soutenus. Les utilisateurs apporteront les transcriptions réalisées avec <em>Ilya</em> à leurs séances de coaching et à leurs répétitions, d'où la version mobile, mais <em>Ilya</em> offre la meilleure expérience sur ordinateur de bureau pour une flexibilité maximale. Les transcriptions produites avec <em>Ilya</em> méritent une étude approfondie au fauteuil. Ce sont, très littéralement, des instructions chorégraphiques pour le tractus vocal. L'utilisateur est l'artiste qui les incarne.</p>
 
-						<h4 id="guide-limits">Quelles sont les limites d’Ilya ?</h4>
+						<h4 id="guide-limits">Quelles sont les limites d’Ilya?</h4>
 
 						<p><em>Ilya</em> ne comprend pas le contexte, si bien que les gloses du dictionnaire pour les homographes paraissent parfois absurdes ou déroutantes. L'utilisateur résout cela en consultant la définition complète offerte dans le bloc de transcription d'analyse du tiroir et en sélectionnant une glose qui restitue le bon sens. <em>Ilya</em> ne peut pas vous empêcher d'imposer un accent tonique incorrect ou d'écraser de bonnes informations par de mauvaises. Il ne peut pas réorganiser la syntaxe de vers poétiques rendus obscurs par une traduction mot à mot. Et il ne peut pas préparer la сельдь под шубой, fort heureusement.</p>
 
-						<h4 id="guide-future">Où va Ilya ?</h4>
+						<h4 id="guide-future">Où va Ilya?</h4>
 
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
@@ -237,7 +237,7 @@
 
 						<p>Il y a quelques années, mon collègue Derek Boemler a publié un mode d’emploi très recherché pour l’installation Mac de Madde (un synthétiseur vocal additif) sous licence Creative Commons Attribution 4.0 International. J’ai appris par la suite que cet élan avait été amorcé lors d’une conversation avec un autre ami et mentor, Ian Howell. Ces collègues m’ont montré l’exemple, et leur générosité, aussi naturelle chez eux que la respiration, m’a inspiré.</p>
 
-						<p>Je réfléchis beaucoup au sens et à la finalité des choses. (C’est peut-être le propre de la basse de ruminer ?) J’en suis venu à décider que mes raisons d’être sont 1) aimer ma famille, et 2) faire de l’art qui en vaut la peine. En créant <em>Ilya</em> et en l’offrant gratuitement à la communauté des chanteurs, j’essaie d’aider. <em>Ilya</em> vise à éliminer les obstacles à la littératie cyrillique et à l’accès à des outils savants de qualité. N’importe qui peut utiliser <em>Ilya</em>. N’importe qui peut améliorer <em>Ilya</em>. L’invitation vous est ouverte.</p>
+						<p>Je réfléchis beaucoup au sens et à la finalité des choses. (C’est peut-être le propre de la basse de ruminer?) J’en suis venu à décider que mes raisons d’être sont 1) aimer ma famille, et 2) faire de l’art qui en vaut la peine. En créant <em>Ilya</em> et en l’offrant gratuitement à la communauté des chanteurs, j’essaie d’aider. <em>Ilya</em> vise à éliminer les obstacles à la littératie cyrillique et à l’accès à des outils savants de qualité. N’importe qui peut utiliser <em>Ilya</em>. N’importe qui peut améliorer <em>Ilya</em>. L’invitation vous est ouverte.</p>
 
 						<p>Pour reprendre les mots de Grayson : « My goal is to provide a comprehensive resource that will help singers have the confidence to explore the canon of great, Russian vocal literature. » (Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d’explorer le canon de la grande littérature vocale russe.) <em>Ilya</em> n’a pas d’autre vocation.</p>
 
@@ -255,7 +255,7 @@
 
 						<h3 id="guide-kimi">Kimi</h3>
 
-						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète ? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
+						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
 
 						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine » ; le modèle de page en couches qui résolvait structurellement la collision du pied de page ; le concept de Papier WYSIWYG ; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées ; les syllabes moléculaires du Ruban ; la grammaire d’interaction de l’Inspecteur ; le système de provenance ; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
 
