@@ -113,7 +113,6 @@
 
 	let ui = $state<UiState>({ kind: 'idle' });
 	let dragging = $state(false);
-	let musHelpOpen = $state(false);
 	let bannerDismissed = $state(false);
 	let fileInputEl: HTMLInputElement;
 
@@ -675,23 +674,22 @@
 		onchange={onPick}
 	/>
 
-	<!-- Item 6: the older-Finale-file guidance, always available below the
-	     widget so the .mus user avoids the error state in the first place. -->
-	<div class="mus-help">
-		<button type="button" class="mus-trigger" aria-expanded={musHelpOpen} onclick={() => (musHelpOpen = !musHelpOpen)}>
-			<span class="mus-chevron" class:open={musHelpOpen}>›</span>
-			{T('upload.mus.trigger')}
-		</button>
-		{#if musHelpOpen}
-			<div class="mus-body">
-				<p>{T('upload.mus.intro')}</p>
-				<p>{T('upload.mus.opt1')}</p>
-				<p>{T('upload.mus.opt2')}</p>
-				<p>{T('upload.mus.opt3')}</p>
-				<p class="mus-trial">{T('upload.mus.trial')}</p>
-			</div>
-		{/if}
-	</div>
+	<!-- THE OLDER-FINALE DISCLOSURE IS GONE. Dann's ruling, 2026-08-20 on his
+	     walk: "Let's eliminate the 'have an older Finale file' subsection. It
+	     is useless. That will let the button row beneath it snug up to the
+	     input like the buttons and input field above it."
+
+	     IT WAS REDUNDANT, WHICH IS WHY THIS IS NOT A LOSS. Dropping a `.mus`
+	     file already returns `upload.err.mus`, which carries the same two
+	     live options: resave as `.musx` in Finale 2014 or later, or export to
+	     MusicXML. Its third option was "print to PDF and upload the PDF (PDF
+	     import is coming soon)", and PDF import has since shipped, so PDF is
+	     named in the drop zone's own sentence. That path is untouched:
+	     `format-detection.ts` still returns `pre-2014-finale` for a `.mus`
+	     and `:421` above still renders `upload.err.mus`.
+
+	     The trial-version line is the only sentence with no other home, and
+	     it went with the block rather than being rehoused unasked. -->
 </div>
 
 <style>
@@ -974,51 +972,10 @@
 		display: none;
 	}
 
-	/* ── Older-Finale-file guidance (Item 6) ──────────────── */
-
-	.mus-help {
-		border-top: 1px solid var(--stone-300);
-		padding-top: 0.5rem;
-	}
-
-	.mus-trigger {
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
-		width: 100%;
-		font-family: var(--font-sans);
-		font-size: 0.76rem;
-		color: var(--ink-secondary);
-		background: transparent;
-		border: none;
-		padding: 0.15rem 0;
-		cursor: pointer;
-		text-align: left;
-	}
-
-	.mus-chevron {
-		display: inline-block;
-		transition: transform 0.15s ease;
-		color: var(--ink-tertiary);
-	}
-
-	.mus-chevron.open {
-		transform: rotate(90deg);
-	}
-
-	.mus-body {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		padding: 0.4rem 0 0.2rem 0.7rem;
-		font-size: 0.74rem;
-		line-height: 1.45;
-		color: var(--ink-tertiary);
-	}
-
-	.mus-trial {
-		font-style: italic;
-	}
+	/* The older-Finale guidance's six rules went with its markup, Dann's
+	   ruling 2026-08-20. Its `.mus-help` also carried the drop zone's only
+	   `border-top: 1px solid var(--stone-300)`, which is the line that stood
+	   between the score box and the Output row. */
 
 	/* ── N.59: the two questions, and the read report ──────── */
 

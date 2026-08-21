@@ -332,12 +332,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.continue':             { en: 'Continue to analysis',         fr: 'Continuer vers l’analyse' },
 	'upload.tryAnother':           { en: 'Try another file',             fr: 'Essayer un autre fichier' },
 
-	'upload.mus.trigger': { en: 'Have an older Finale file (.mus, pre-2014)?', fr: 'Vous avez un ancien fichier Finale (.mus, avant 2014)\u00a0?' },
-	'upload.mus.intro': { en: 'Finale files from 2014 onward (.musx) are supported. For older .mus files, there are three options:', fr: 'Les fichiers Finale à partir de 2014 (.musx) sont pris en charge. Pour les anciens fichiers .mus, trois options s\u2019offrent à vous\u00a0:' },
-	'upload.mus.opt1':             { en: '1. Open the file in any Finale version from 2014 or later and resave it as .musx, then upload.', fr: '1. Ouvrez le fichier dans une version de Finale de 2014 ou ultérieure et réenregistrez-le en .musx, puis téléversez-le.' },
-	'upload.mus.opt2':             { en: '2. Print to PDF and upload the PDF. (PDF import is coming soon.)', fr: '2. Imprimez en PDF et téléversez le PDF. (L’import PDF arrive bientôt.)' },
-	'upload.mus.opt3':             { en: '3. Export to MusicXML from Finale and upload that file.', fr: '3. Exportez en MusicXML depuis Finale et téléversez ce fichier.' },
-	'upload.mus.trial':            { en: 'If Finale is no longer available, a trial version can be downloaded for this purpose.', fr: 'Si Finale n’est plus disponible, une version d’essai peut être téléchargée à cette fin.' },
 
 	'upload.soon.mscz':            { en: 'MuseScore (.mscz) import is coming soon.', fr: 'L’import MuseScore (.mscz) arrive bientôt.' },
 	// ── N.59: the page reader ────────────────────────────────────────

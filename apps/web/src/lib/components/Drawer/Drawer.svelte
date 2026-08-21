@@ -827,7 +827,21 @@
 		   inside it. The voice line keeps its 9px above and below. */
 		padding: 0;
 		margin: 0 1rem;
-		border-top: 2px solid var(--sage);
+		/* LAVENDER, AND IT IS DANN'S OWN SYSTEM APPLIED RATHER THAN AN
+		   EXCEPTION TO IT. Ruled 2026-08-20 on his walk. Sage marks
+		   transcription work and lavender marks score and voice work, and
+		   this rule belongs to the voice, which is lavender's carrier under
+		   the S0 ruling of 2026-08-19
+		   (`claude/ruling-lavender-marks-the-marked-score_2026-08-19.md`).
+		   The rule above SHIFT LYRICS went lavender in the last pass for the
+		   same reason.
+
+		   THE SAME TOKEN AS THAT ONE, `--deeper-lavender` #8E7E9B, which is
+		   also the app bar's `.header-bar.tab-shane` fill and the score
+		   intake's border. NO SECOND LAVENDER ENTERS: `--surround-marked` is
+		   this hue at 60 percent toward white, a desk tint, and it is not
+		   this. */
+		border-top: 2px solid var(--deeper-lavender);
 	}
 
 	/* ── The takeover (N.73 S3) ──────────────────────────── */
