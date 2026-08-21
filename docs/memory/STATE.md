@@ -11,10 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`b0a9860`**, raised from `904df6e` across 2026-08-20,
-because N.73 S3 ship one, its three walk repairs, and its memo all shipped in
-`63c2bb4`, and a
-floor that predates
+before **`80c5e47`**, raised from `b0a9860` at the close of 2026-08-20,
+because N.65 ship A shipped there with all five gates at baseline and the
+working tree went clean, so every build this file describes is now in history.
+A floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
@@ -55,9 +55,12 @@ any of them count.
 > below. The amended §B.6 keeps `Export` and `Import` inside SOURCE and drops
 > `Print` from the row.
 >
-> **ONE BRIEF AT A TIME.** Ship A is unwalked. Hold Ship B until Dann has walked
-> a deploy carrying ship A, the language pill, and the silhouette's lift, all
-> three of which are shipped and unwalked.
+> **THE FIRST ACT OF THE NEXT SESSION IS A WALK, NOT A BRIEF.** `80c5e47`
+> carries all three unwalked builds at once: ship A, the language pill, and the
+> silhouette's lift with the sage hover. **One deploy, one walk, three items.**
+> Get Dann the URL and the QR before anything else is written.
+>
+> **ONE BRIEF AT A TIME.** Hold ship B until that walk is done.
 >
 > **THEN, IN THIS ORDER:** `Print` moves to the desk head (drawing ruled, see
 > below); the chapter bands for Learn and Guide; then S5 (the wall re-plumb),
@@ -101,20 +104,33 @@ any of them count.
 
 ## 2026-08-20 NIGHT. THE SURGERY, SHIP A, THE PILL, AND PRINT LEAVES THE DRAWER
 
-**FLOOR UNCHANGED AT `b0a9860`, AND THAT IS DELIBERATE.** Four builds landed
-after it and **this desk did not record their commits**, because it does not run
-git and did not ask for the line. `0e5ed6e` is named below only because a memo
-names it. **The next session raises the floor from Dann's opening git line.**
-Nothing in this section is dated by SHA; each item is dated by its memo, which
-carries `path:line` for everything it claims.
+**FLOOR RAISED TO `80c5e47` AT THE CLOSE OF THIS SESSION.** Everything in this
+section is in history and the working tree is clean.
+
+**THE CLOSE ALMOST LOST A BUILD, AND THE NEAR MISS IS WORTH MORE THAN THE
+FLOOR.** The desk wrote this section claiming three builds had shipped. Two had.
+**Ship A had not: its three files were still dirty**, its memo was untracked,
+and its brief was untracked. The desk had recorded "shipped" from the existence
+of a memo rather than from a commit. **A memo is written when the build ends,
+not when it ships. Those are different events and only one of them is in git.**
+
+Found by reading the push range on an unrelated memory commit: it ran
+`1101d94..a2dc42d`, and `1101d94` is the floor at the top of the retraction
+brief, written *before* ship A was built. **HEAD had not moved across the whole
+build.** Ship A then shipped as `80c5e47`, five gates at baseline.
+
+**THE RULE THIS EARNS:** never write `shipped` into `STATE.md` from a memo.
+**Ask Dann for the one-line git status and read it.** Each item below is dated
+by its memo, which carries `path:line` for everything it claims; the commits
+are:
 
 ### What shipped after `b0a9860`, and NOT ONE OF IT IS WALKED
 
 | what | memo | state |
 |---|---|---|
-| The language pill | `docs/sessions/language-toggle_r1_2026-08-20.md` | `WRITTEN`, not walked |
-| The silhouette's lift, and the sage hover on the text intake | `docs/sessions/silhouette-lift-and-sage-hover_r1_2026-08-20.md` | `WRITTEN`, not walked. Built from Dann's walk of `0e5ed6e` |
-| Ship A: the Finale disclosure deleted, the bottom rule lavender | `docs/sessions/retraction-shipA_r1_2026-08-20.md` | `WRITTEN`, not walked |
+| The language pill | `docs/sessions/language-toggle_r1_2026-08-20.md` | in history at or before `1101d94`. **`WRITTEN`, NOT WALKED** |
+| The silhouette's lift, and the sage hover on the text intake | `docs/sessions/silhouette-lift-and-sage-hover_r1_2026-08-20.md` | in history at or before `1101d94`. Built from Dann's walk of `0e5ed6e`. **`WRITTEN`, NOT WALKED** |
+| Ship A: the Finale disclosure deleted, six i18n keys gone, the bottom rule lavender | `docs/sessions/retraction-shipA_r1_2026-08-20.md` | **`80c5e47`**, shipped at the close of this session. **`WRITTEN`, NOT WALKED** |
 
 **Five gates at baseline on every one of them.** 216, 235, 0 errors and 7
 warnings in 4 files, 682, 444 passed and 5 skipped. Nothing moved.

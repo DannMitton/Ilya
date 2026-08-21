@@ -1526,3 +1526,38 @@ gaps are the same within-station flex gap and match by construction. **A cross-
 station distance cannot be made to equal a within-station one by choosing a
 number**, because the two are made of different things and every later station
 change will pull them apart again.
+
+---
+
+## A MEMO IS NOT A COMMIT. THE DESK WROTE `shipped` FROM THE WRONG EVIDENCE. 2026-08-20
+
+**At the close of 2026-08-20 the desk wrote into `STATE.md` that three builds had
+shipped. Two had. Ship A had not**, and its three modified files were still
+sitting dirty in the working tree, ungated by the ship script and never
+deployed. Its memo and its brief were both untracked.
+
+**THE DEFECT: the desk read `docs/sessions/` and treated the existence of a memo
+as evidence of a commit.** Claude Code writes its memo when the build ends. The
+ship script commits when the build ships. **Those are two events and only the
+second one is in git.** A memo can sit on disk for hours, or forever, with
+nothing behind it.
+
+**HOW IT WAS CAUGHT, and it was luck rather than method.** An unrelated memory
+commit printed its push range as `1101d94..a2dc42d`. `1101d94` is the floor
+named at the top of the retraction brief, **written before ship A was built**.
+HEAD had not moved across the entire build, which cannot be true of a shipped
+one.
+
+**THE RULE. NEVER WRITE `shipped` FROM A MEMO. ASK DANN FOR THE LINE.**
+
+```
+git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
+```
+
+**A `M` line in that output is a build that has not shipped**, whatever its memo
+says. It costs Dann one paste and it is the only evidence that settles it.
+
+**AND IT IS CHEAP TO FIX WHEN CAUGHT.** One run of the ship script put ship A in
+history as `80c5e47` with all five gates at baseline. **The cost of not catching
+it is a new session opening onto three dirty files it cannot identify**, which
+is a conversation Dann has already had once tonight.
