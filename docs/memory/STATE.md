@@ -11,10 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`afc45cb`**, raised from `80c5e47` at the close of 2026-08-21,
-because N.65 ship B shipped there with all five gates at baseline and the push
-printed `2238e8b..afc45cb`, so every build this file describes is now in
-history. **The push range is the check, not the memo.**
+before **`2b81f5a`**, raised from `afc45cb` at the close of 2026-08-21,
+because the ANALYSIS boundary repair shipped there with all five gates at
+baseline and the push printed `7294b42..2b81f5a`, so every build this file
+describes is now in history. **The push range is the check, not the memo.**
 A floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
@@ -39,107 +39,66 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.65 SHIP B IS SHIPPED, `afc45cb`, AND DANN WALKED MOST OF IT ON
-> 2026-08-21.** The retraction works on every header, the score box says one
-> sentence, the syllabified text has joined SHIFT LYRICS, the SYLLABLES header
-> is gone, and the counter reads. His words: "Great!" and "Syllables header is
-> gone, syllabified text is correctly situated. Counter reads correctly."
+> **N.65's DRAWER WORK IS DONE AND WALKED, `2b81f5a`.** Ten items shipped
+> across three commits on 2026-08-21 and Dann walked all of them on real
+> deploys, on his phone and on the desk. His words on the last one: "yes."
 >
-> **THE BRIEF IS WRITTEN:
-> `docs/sessions/brief-to-code-handle-print-and-legend_r1_2026-08-21.md`.
-> NINE ITEMS, ALL RULED BY DANN ON THAT WALK. NEXT ACT: PASTE IT INTO CODE.**
-> **Every anchor in it was re-read after `afc45cb`.** Ship B moved
-> `Drawer.svelte`, `RootPanel.svelte`, and `i18n.ts`, and eleven numbers written
-> into this file an hour earlier were already stale. They are repaired below.
+> **NOTHING IS IN PROGRESS. What follows are the four things left open, in the
+> order they became open, and NONE of them is started.**
 >
-> 1. **`Print` leaves the drawer for under the sheet, flush left.** Dann chose
->    option C of four offered. He was told it loses stickiness and ruled it
->    anyway. `RootPanel.svelte:365` is still the only Print control.
-> 2. **The silhouette renders on the phone.** Drop `!isMobile &&` at
->    `Drawer.svelte:635`; make `class:silhouetted` unconditional at `:650`.
->    **Leave `filter: none` at `:1436` alone: the silhouette without the lift.**
-> 3. **A 20 px desk strip at the drawer's right edge on the phone.** The strip
->    equals the pull's protrusion (`.drawer-lip`, `width: 20px` at `:1020`), so
->    the tab fills it and the desk shows above and below. `Drawer.svelte:1440`'s
->    `width: 100% !important` becomes the viewport less that protrusion.
->    **This AMENDS the full-screen overlay of 2026-08-19. The motion model is
->    untouched: it still arrives from the left.**
-> 4. **Those two regions take the destination's tint**, lavender on Score
->    Markup. **Free:** `app.css:82-85` already carries four desk tints and
->    `+page.svelte:2718-2733` paints them. Learn takes rose and Guide cobalt by
->    the same rule; Dann was told and did not object. **The tab itself stays
->    cream on every destination**, per `Drawer.svelte:1011`.
-> 5. **The `#fff` hover latch, guarded on BOTH rules.** See the measurement
->    below. `@media (hover: hover)` around `Drawer.svelte:1052-1054` AND around
->    `:996-997`, which is harmless only until item 2 lands.
-> 6. **The format line drops its lead-in.** "Accepted now:" and « Acceptés
->    maintenant : » go; the list stays. **A truncation of a ratified string, so
->    no new French.** Dann's reason: the French wrapped to two lines and pushed
->    everything below it down. **No terminal full stop. THE « ou » COMES BACK:
->    the desk first took the do-nothing and was WRONG. `i18n.ts:301-304` records
->    that Dann added that word by hand on 2026-08-20 and nothing has reversed
->    it. A word he added is a ruling.**
-> 7. **Collapsed stations match NOTATION.** Measured off Dann's screenshot,
->    rule to rule, in CSS px: NOTATION 27.2, SOURCE 33.0, REPERTOIRE 32.6,
->    ANALYSIS 68.8. `.section` is `padding: 6px 0 12px` (`RootPanel.svelte:875-888`)
->    and the 12 px is air after a body; a shut station has none. **The bottom
->    padding leaves with the body, exactly as `.station-label.tight` already
->    drops the label's gap. Open, Dann's ruled asymmetry stands.**
->    **ANALYSIS's extra 36 px is NOT ESTABLISHED. Code decomposes it.**
-> 8. **The spot-reconstitution legend.** `PageFooter.svelte:58` has the branch
->    and `i18n.ts:207` has the copy in both languages, but `spot-reconstitution`
->    is in none of `provenance.ts`'s three tables, so `buildProvenanceLegend`
->    (`Paper.svelte:65`) can never emit it. **The renderer and the string were
->    built; the producer never was. NOT a ship B regression:** that ship touched
->    fourteen files and `provenance.ts`, `Paper.svelte`, and `PageFooter.svelte`
->    are not among them.
-> 9. **The paper handle doubles in height, 76 to 152.** TWO values move
->    together or the notch and the tab disagree: `LIP_H` at `Drawer.svelte:113`
->    and `height: 76px` at `:1021`. **The shape does not change:** `R` derives
->    from `LIP_W` (`:120`), so the squircle's corners are unchanged and only the
->    straight run lengthens. **The chevron re-centres by itself** (`.drawer-lip`
->    is `align-items: center; justify-content: center` at `:1025-1026`); Code
->    confirms rather than adding a second centring rule.
->    **Dann's reason, given after the ruling: target size, on both displays.**
->    So Code reports the acquired target box before and after on both pointer
->    types: 20x76 and 44x88 today, 20x152 and 44x152 after. **The `::before` at
->    `:1086-1094` is 44 by 88 and its comment SAYS 44 by 88; its height must
->    follow the tab's or the comment lies and the top and bottom 32 px of a
->    visible handle get 20 px of width.** Also check `:1396`, a second
->    `width: 20px`, for a height twin.
+> **1. TWO DONE-CONDITIONS OF THE NINE-ITEM SHIP ARE STILL UNWALKED, and they
+> are the only debt against work already in history.**
+> **Print one page and confirm `Print` does not appear on the paper.** It is
+> chrome and hides under `@media print`, verified in the source, never on
+> paper.
+> **See the `R` legend render.** Code verified `buildProvenanceLegend` at the
+> producer against the real module, per-page filtering and both languages
+> correct, sorting before `inferred`. **The dev dictionary would not load, so
+> the rendered glyph has never been seen.** It needs a transcription carrying a
+> spot override.
 >
-> **THE THREE RULINGS THAT ARE NOT BUILD ITEMS.**
-> **The clitic arrow is NOT a sigil. RULED 2026-08-21.** Dann: *"The clitic
-> arrow is fully explained in the GUIDE section."* `provenance.ts:114`'s
-> deliberate clitic skip STAYS, and his sentence goes in its comment so nobody
-> re-opens it.
-> **A mark that prints carries a legend entry. RULED 2026-08-21.** Dann: *"When
-> a sigil prints to the page it must be decoded with a legend."* The census, in
-> `WordStack.svelte` only: ё, book, notes, and torso all have legends; `R` does
-> not; the arrows are excluded above. The `↺` at `:159-161` is commented out
-> and does not print. **NOT ESTABLISHED:** `provenance.ts:78` maps `inferred` to
-> a `question` icon the desk could not find rendered in `WordStack`. If it never
-> prints, that is the mirror defect.
-> **The legend's labels and N.76's labels are the SAME WORDS. RULED 2026-08-21.**
+> **2. N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual
+> guide page, near the FRONT of the Guide. Two files: `GuideContent.svelte`
+> holds the chapters, `Drawer.svelte` holds the table of contents as
+> hand-written buttons with both languages inline, so a new chapter needs an
+> entry in each. **THE COPY IS DANN'S, ENGLISH AND FRENCH, AND THE DESK DOES
+> NOT WRITE THE FRENCH.** **Its labels are the legend's labels, RULED BY DANN
+> 2026-08-21.**
 >
-> **N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual guide
-> page, near the FRONT of the Guide. Two files: `GuideContent.svelte` holds the
-> chapters, `Drawer.svelte` holds the table of contents as hand-written buttons
-> with both languages inline, so a new chapter needs an entry in each.
-> **THE COPY IS DANN'S, ENGLISH AND FRENCH, AND THE DESK DOES NOT WRITE THE
-> FRENCH.** Its labels are the legend's labels, ruled above.
+> **3. THE `inferred` QUESTION-MARK ICON NEVER PRINTS. ESTABLISHED BY CODE,
+> DELIBERATELY NOT FIXED, AND IT IS DANN'S TO RULE.** `provenance.ts` maps
+> `inferred` to a `question` icon and the footer legend will draw it, but
+> `WordStack.svelte` excludes `inferred` from its icon span twice and renders a
+> `VERIFY` label instead. **So the legend decodes a mark that is nowhere on the
+> sheet. That is the MIRROR of Dann's sigil ruling** and he has not been asked
+> which way it should resolve: draw the icon, or drop the legend entry.
 >
-> **KILLED 2026-08-21 BY DANN: the printed Learn or Guide excerpt that was to
-> carry a header and footer identifying its source.** His words: *"I do not
-> think we need a printed Learn or Guide. Delete this idea. If we need it later
-> we will create it but for now folks will have to be content with manual
-> selection and printing."* **It never received a number. `ReadingPaper` gets no
-> furniture, and no copy is owed.** This follows his ruling the same evening
-> that Learn and Guide get no `Print` button at all.
+> **4. THE FRENCH FORMAT LINE STILL WRAPS AT 360 x 640**, to two lines rather
+> than three. One line is not reachable in a 262 px box. **At desk width it does
+> collapse to one, which is where Dann made the ruling**, and the English is two
+> lines at 360 as well, so the displacement he named is gone where he saw it.
+> Measured by Code, reported, not solved.
 >
-> **NOT WALKED FROM SHIP B, and none of it blocking:** item 12's notehead
-> click, item 4's reload restore, and item 8's French half. Code verified all
-> three in its own harness.
+> **THE THREE RULINGS FROM 2026-08-21 THAT GOVERN FUTURE WORK.**
+> **A mark that prints carries a legend entry.** Dann: *"When a sigil prints to
+> the page it must be decoded with a legend."*
+> **The clitic arrow is NOT a sigil.** Dann: *"the clitic arrow does not count
+> as a sigil. The clitic arrow is fully explained in the GUIDE section."*
+> `provenance.ts`'s deliberate clitic skip carries his sentence in its comment.
+> **The legend's labels and N.76's labels are the SAME WORDS.**
+>
+> **KILLED 2026-08-21 BY DANN, and it never had a number:** the printed Learn
+> or Guide excerpt carrying a header and footer identifying its source. His
+> words: *"I do not think we need a printed Learn or Guide. Delete this idea. If
+> we need it later we will create it but for now folks will have to be content
+> with manual selection and printing."* **`ReadingPaper` gets no furniture and
+> no copy is owed.** It follows his ruling the same evening that Learn and Guide
+> get no `Print` button at all.
+>
+> **METADATA IS 2 px SHORTER THAN ITS FOUR SIBLINGS AND ALWAYS WAS.** It is the
+> one station with no rule above it, because it opens the column. Dann was told
+> before his walk and did not raise it. **If he ever does, it is a ruling about
+> marks rather than about spacing.**
 >
 > **THE GOVERNING DOCUMENTS for the GUI, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
@@ -151,6 +110,79 @@ any of them count.
 > silhouette drawing**), and the ratified strings
 > (`fable-n73-french-strings_r1_2026-08-19.md`).
 > **E.27 is a SOURCE, not law. Tether 17.**
+
+---
+
+## 2026-08-21 LATE. THE NINE SHIPPED, AND THE BOUNDARY THAT WAS NOT ANALYSIS'S
+
+**FLOOR RAISED TO `2b81f5a`.** Three ships after `afc45cb`, each pushed and each
+walked by Dann on its own deploy: `7294b42` carried the nine items, `2b81f5a`
+carried the boundary repair, and `502d571` carried the brief that produced them.
+
+### What Dann walked, and in what order
+
+**On the phone, `7294b42`:** the silhouette with no painted box and no visible
+left edge; the desk strip showing above the handle and below it and nowhere
+beside it; the sage tint in that strip; no white latch after a tap; and the
+doubled handle. **Five items in one look.** Then, scrolled to the foot of the
+sheet: *"Yes the print button appears just as you say. Perfect."*
+
+**On the desk, `2b81f5a`:** every station shut, six headers on one rhythm.
+
+### THE 40 px THAT WAS NEVER ANALYSIS'S, AND THE DESK PUT IT THERE
+
+**The desk measured Dann's screenshot rule to rule and reported ANALYSIS as
+68.8 px against siblings at 33.0.** Code measured the ANALYSIS station itself,
+got the same height as REPERTOIRE from the same recipe, and correctly changed
+nothing. **Both were right about their own object and the desk's object was the
+wrong one.**
+
+**Dann found it himself, in one sentence:** *"Maybe there's unexpected padding
+above Shift Lyrics?"*
+
+**It was `.root-panel { padding: 0 1rem 40px }`**, the bottom of the whole
+Transcription panel, sitting between ANALYSIS and the Fit panel that opens with
+SHIFT LYRICS. **Measured on `7294b42` at a 430 px viewport: NOTATION 58.0,
+SOURCE 58.0, REPERTOIRE 58.0, ANALYSIS 98.0. The difference was 40.0 exactly.**
+
+**THE CHECK THE BRIEF DEMANDED FOUND A LIVE CASE.** `INCLUDE_SHANE` gates the
+whole body of the Fit panel, so a wall-closed build renders `.root-panel` with
+nothing under it, and `.env.example` documents unset as the production build.
+**Code built it genuinely closed rather than simulating it in the DOM**,
+confirmed `.root-panel` becomes the last element child, restored `.env`, and
+diffed it byte-identical. **The foot went to whichever panel ends the column:
+`.shane-panel` keeps its 40 px wall-open, `.root-panel:last-child` carries it
+wall-closed. Same value, no new one.**
+
+**Verified on Dann's own walk screenshot, rule to rule at desk width: 27.2,
+27.7, 27.2, 27.7.** Before the repair: 27.2, 33.0, 32.6, 68.8.
+
+### The other correction the desk owed
+
+**The brief said NOTATION sits in an anchor and is not a `.section`. It is.**
+`MetadataFields.svelte`, `NotationFields.svelte`, and `RootPanel.svelte` each
+declare their own scoped `.section`, because Svelte scopes CSS to the component
+that authors the markup. **Three copies of one recipe, drifted. That is the same
+defect `StationHeader` was built to end**, in a property `StationHeader` does not
+own. Code's fix was 6 px rather than the desk's 0, and the desk's 0 would have
+made the drawer irregular in the other direction.
+
+### The « ou », and a ruling the desk overwrote
+
+The desk told Dann the missing conjunction in the format line could stay
+missing, taking the do-nothing. **`i18n.ts` records that he added that word by
+hand on his walk of `39d60e0` on 2026-08-20.** A word he added is a ruling, and
+nothing had reversed it. **The desk decided instead of searching. Tether 16.**
+Restored in `7294b42`.
+
+### Eleven stale anchors, and why briefs now carry names
+
+Ship B moved `Drawer.svelte`, `RootPanel.svelte`, and `i18n.ts`. **Eleven line
+numbers written into this file an hour before that ship were already wrong.**
+Every anchor in `brief-to-code-handle-print-and-legend_r1_2026-08-21.md` was
+re-read after `afc45cb` and **named as well as numbered, with the instruction to
+trust the name.** Code hit two that were off by one, trusted the names, and the
+build was unaffected.
 
 ---
 

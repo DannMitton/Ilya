@@ -1622,3 +1622,49 @@ clamps `setTimeout(…, 0)` to roughly one second per call. The dictionary's
 shim (200 zero-delay timers in 4.7 ms), and took every measurement after the
 load. **The shim stayed in the browser: `grep -rn "MessageChannel" apps/web/src
 apps/web/static` returns nothing.**
+
+## THE COLUMN'S FOOT BELONGS TO WHICHEVER PANEL ENDS IT. 2026-08-21
+
+The drawer stacks two panels: `RootPanel`'s `.root-panel` (Transcription) and
+`+page.svelte`'s `.shane-panel` (Fit). **`INCLUDE_SHANE` gates the whole body of
+the Fit panel**, and `apps/web/.env.example` documents the flag as unset for the
+production build, so a wall-closed build renders `.root-panel` with nothing
+under it.
+
+**So a bottom padding on `.root-panel` is not the column's foot. It is a seam
+between two panels, and it shows up as one station reading taller than its
+siblings.** It measured 40.0 px, and the desk spent an hour attributing it to
+ANALYSIS.
+
+The shape that works: `.shane-panel` carries the foot wall-open,
+`.root-panel:last-child` carries it wall-closed, at the same value. **Svelte
+scopes `:last-child` fine even though the sibling it tests lives outside the
+component**, and gate 3 does not flag it as unused.
+
+**HOW TO CHECK IT FOR REAL:** `PUBLIC_INCLUDE_SHANE` is a Vite `PUBLIC_`
+build-time literal, so a DOM simulation proves nothing. **Record `.env` first,
+set the flag empty, rebuild, observe, restore, and diff byte-identical.**
+
+## MEASURE THE BOX, NOT THE DISTANCE TO THE NEXT MARK. 2026-08-21
+
+The desk measured shut station heights off a screenshot **rule to rule**, which
+silently charges each station for everything between its own bottom and the next
+station's rule. On ANALYSIS that was a 40 px panel seam, and the desk reported
+ANALYSIS as 36 px too tall in a brief. **Code measured the station's own box, got
+the right answer, and correctly changed nothing.**
+
+**Both measurements were right about their own object. Only one of them was
+about the thing Dann was pointing at.** When a screenshot is the instrument, say
+which box the number belongs to, and prefer a decomposition to a single span.
+
+## THREE COMPONENTS EACH DECLARE THEIR OWN `.section`. 2026-08-21
+
+`MetadataFields.svelte`, `NotationFields.svelte`, and `RootPanel.svelte` each
+carry a scoped `.section` rule, because Svelte scopes CSS to the component that
+authors the markup. **The recipe is written three times and it had drifted**,
+which is what Dann saw as irregular shut-station heights. `StationHeader` exists
+because the same thing happened to the label; it does not own padding.
+
+**Before claiming a station is or is not a `.section`, grep for `.section {`
+across the drawer's components.** The desk asserted NOTATION was not one, in a
+brief, and it is.
