@@ -2436,9 +2436,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		/* N.73 S2: no top padding. `.root-panel`'s 40px bottom now closes the
-		   gap above, and 20px on top of it read as a seam in a drawer that is
-		   meant to read as one. JUDGEMENT, and one line to reverse. */
+		/* STILL NO TOP PADDING, AND THE REASON HAS CHANGED. N.73 S2 dropped
+		   this panel's 20px top because `.root-panel`'s 40px bottom already
+		   closed the gap above, and 20px on top of 40px read as a seam in a
+		   drawer that is meant to read as one.
+
+		   THAT 40px IS GONE, ruled by Dann 2026-08-21: it made the
+		   ANALYSIS-to-SHIFT-LYRICS boundary 98.0px against every other shut
+		   station's 58.0 at a 430px viewport. So the sentence that justified
+		   this zero no longer describes the tree, and it is replaced rather
+		   than left.
+
+		   THE ZERO IS NOW LOAD-BEARING, not incidental. The gap above this
+		   panel is ANALYSIS's own `.section.shut` 6px, and SHIFT LYRICS brings
+		   the 2px rule, which is exactly what every station boundary inside
+		   `.root-panel` is made of. A top padding here would land on top of
+		   that and make this the one boundary spaced differently, which is the
+		   defect Dann just had removed. **The two panels read as one drawer
+		   more strictly than before**, because the seam that separated them is
+		   now the same recipe as every other boundary in the column.
+
+		   THE 40px FOOT STAYS HERE. This panel ends the column when the wall is
+		   open, so this is where the column's bottom space belongs.
+		   `.root-panel:last-child` in `RootPanel.svelte` carries the same foot
+		   for the wall-closed build, where this panel does not render. */
 		padding: 0 1rem 40px;
 	}
 

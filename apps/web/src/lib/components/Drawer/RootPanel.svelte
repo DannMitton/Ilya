@@ -484,7 +484,42 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	.root-panel {
 		display: flex;
 		flex-direction: column;
-		padding: 0 1rem 40px;
+		/* NO BOTTOM PADDING. Ruled by Dann 2026-08-21, measured on the deploy
+		   of `7294b42` at a 430px viewport: shut, the station boundaries read
+		   NOTATION 58.0, SOURCE 58.0, REPERTOIRE 58.0, and ANALYSIS 98.0 CSS
+		   px, rule to rule. **The 40px difference was this declaration**, and
+		   it is not ANALYSIS's: it sat between ANALYSIS and the Fit panel that
+		   opens with SHIFT LYRICS. His ruling is that a shut station is the
+		   same height as its siblings, and that boundary was the last one that
+		   was not.
+
+		   With it gone, ANALYSIS's own `.section.shut` 6px is the whole gap and
+		   SHIFT LYRICS brings its own rule, which is the recipe every other
+		   station boundary in this column already uses. Open, ANALYSIS gives
+		   12px like every other open station. */
+		padding: 0 1rem;
+	}
+
+	/* THE COLUMN'S FOOT BELONGS TO WHICHEVER PANEL ENDS THE COLUMN, and this
+	   rule is what moves it there rather than back where it was.
+
+	   `.drawer-content` holds two panels on Studio: this one, then
+	   `.shane-panel`, which carries the same `40px` foot. Wall-open, that one
+	   ends the column and this rule does not apply. **Wall-closed it is a
+	   different drawer.** `INCLUDE_SHANE` gates the whole body of the
+	   `shanePanel` snippet in `+page.svelte`, so a build with
+	   `PUBLIC_INCLUDE_SHANE` unset renders no `.shane-panel` at all, this panel
+	   ends the column, and without this rule ANALYSIS's 6px would be the entire
+	   gap to the bottom anchor's lavender rule. `.env.example` documents unset
+	   as the production build, so that configuration is real and not
+	   hypothetical.
+
+	   `:last-child` rather than a class, because the question this asks is
+	   exactly "does anything follow me", and Svelte renders the absent snippet
+	   as a comment node, which `:last-child` does not count. 40px is the value
+	   this panel already spent; no new one enters. */
+	.root-panel:last-child {
+		padding-bottom: 40px;
 	}
 
 	/* ── Dictionary progress bar (Kimi spec) ───────────────── */
