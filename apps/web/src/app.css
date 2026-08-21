@@ -84,6 +84,31 @@
 	--surround-learn: #DBCACA;           /* dusty rose at 60% */
 	--surround-guide: #BEC7D8;           /* quiet cobalt at 60% */
 
+	/* ── Language-pill chips, one per destination ──────────── */
+	/* The header carries ONE language pill, naming the language the singer
+	   is not in. Its chip is the band's own hue taken one step down, with
+	   white text on it. Ratified by Dann 2026-08-20 from a drawing,
+	   docs/sessions/lang-toggle-options_r1_2026-08-20.html, option D: "I
+	   love D. Ratified." He chose it over one translucent declaration
+	   knowing it costs four values instead of one.
+
+	   These are named here rather than inlined because the control census
+	   of 2026-07-29 flagged this exact control for carrying three
+	   hand-picked hex literals beside one real token.
+
+	   Guide takes NO darkening: --quiet-cobalt is already dark enough to
+	   carry white at 4.5, so its chip is the band itself and it is written
+	   as the band's own token so the two can never drift apart. Being the
+	   band, it would be invisible without an edge, so only Guide's pill
+	   draws a hairline. That is what the drawing shows.
+
+	   The other three were derived by hand from their bands and must be
+	   re-derived by hand if a band ever moves. */
+	--lang-chip-transcription: #6C7A5F;  /* --sage, one step down */
+	--lang-chip-learn: #9A6A6A;          /* --dusty-rose, one step down */
+	--lang-chip-guide: var(--quiet-cobalt);  /* the band itself, undarkened */
+	--lang-chip-marked: #806E8E;         /* --deeper-lavender, one step down */
+
 	/* ── Shane pacifier (fourth tab) ──────────────────────── */
 	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */
 	/* --paper-cream and the ink hierarchy above are reused as-is.     */

@@ -155,21 +155,26 @@ test.describe('bilingual interface', () => {
 		await waitForDictionary(page);
 	});
 
-	test('language toggle switches between English and French', async ({ page }) => {
-		// Default is English
-		const enOption = page.locator('.lang-option', { hasText: 'English' });
-		await expect(enOption).toHaveAttribute('aria-pressed', 'true');
+	// ONE pill, and it names the language you are NOT in. Ruled by Dann
+	// 2026-08-20. There is no aria-pressed to assert any more, so the test
+	// reads the label instead: it is the whole state the control carries.
+	test('language pill switches the app and then offers the way back', async ({ page }) => {
+		const pill = page.locator('.lang-pill');
 
-		// Switch to French
-		const frOption = page.locator('.lang-option', { hasText: 'Français' });
-		await frOption.click();
-		await expect(frOption).toHaveAttribute('aria-pressed', 'true');
-		await expect(enOption).toHaveAttribute('aria-pressed', 'false');
+		// On an English page the pill offers French, in French.
+		await expect(pill).toHaveText('Français');
+		await expect(pill).toHaveAttribute('lang', 'fr');
+
+		await pill.click();
+
+		// On a French page it offers the language he came from, in English.
+		await expect(pill).toHaveText('English');
+		await expect(pill).toHaveAttribute('lang', 'en');
 	});
 
 	test('French empty state shows French placeholder', async ({ page }) => {
 		// Switch to French first
-		const frOption = page.locator('.lang-option', { hasText: 'Français' });
+		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
 		// Check for French empty state text
@@ -181,7 +186,7 @@ test.describe('bilingual interface', () => {
 		await transcribe(page, 'молоко');
 
 		// Switch to French
-		const frOption = page.locator('.lang-option', { hasText: 'Français' });
+		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
 		// Wait for breath animation to complete and content to re-render

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sunk or raised</title>
+<style>
+  :root{
+    --sage:#8B9A7D; --rose:#A67B7B; --cobalt:#5C739E; --lav:#8E7E9B;
+    --ink:#1a1612;
+    --sans:-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 22px 40px;background:#EFECE4;font-family:var(--sans);color:var(--ink)}
+  h1{font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;font-weight:600}
+  .lede{font-size:13px;line-height:1.5;max-width:66ch;margin:0 0 24px;color:#4a453f}
+  .opt{margin-bottom:26px}
+  .opt-name{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#6b665f;margin-bottom:3px}
+  .opt-note{font-size:12px;line-height:1.45;color:#4a453f;margin:0 0 10px;max-width:62ch}
+  .bars{display:flex;gap:10px;flex-wrap:wrap}
+  .bar{width:236px;height:48px;display:flex;align-items:center;justify-content:space-between;
+       padding:0 12px;border-radius:3px}
+  .b1{background:var(--sage)} .b2{background:var(--rose)}
+  .b3{background:var(--cobalt)} .b4{background:var(--lav)}
+  .sigil{font-family:Georgia,"Times New Roman",serif;font-size:19px;color:#fff}
+  .sigil i{font-style:italic}
+  .pill{font-family:var(--sans);font-size:13px;line-height:1;border-radius:999px;
+        padding:5px 12px;white-space:nowrap;display:inline-block}
+
+  /* raised: one translucent fill on every band, dark ink */
+  .raised .pill{background:rgba(255,255,255,.28);color:var(--ink)}
+
+  /* sunk: the band's own hue, one step down, white ink */
+  .sunk .b1 .pill{background:#6C7A5F;color:#fff}
+  .sunk .b2 .pill{background:#9A6A6A;color:#fff}
+  .sunk .b3 .pill{background:#5C739E;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+  .sunk .b4 .pill{background:#806E8E;color:#fff}
+
+  .ratios{display:flex;gap:10px;margin-top:5px}
+  .r{width:236px;font-size:11px;color:#6b665f;text-align:right;padding-right:12px}
+  .good{color:#4A6B45;font-weight:700}
+  .note{margin-top:22px;font-size:12px;line-height:1.6;color:#4a453f;max-width:70ch}
+  .note b{color:var(--ink)}
+  .side{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .stackbar{display:flex;flex-direction:column;gap:0}
+</style>
+</head>
+<body>
+
+<h1>Sunk or raised</h1>
+<p class="lede">Both clear 4.5. The difference is whether the pill goes down into the band or comes
+up out of it. Each row is an English page, so the pill offers French.</p>
+
+<div class="opt raised">
+  <div class="opt-name">B · raised · dark ink on a translucent chip</div>
+  <p class="opt-note">One declaration for all four bands, because the fill borrows whatever hue sits
+  under it. Reads like every other control in the app: a pale chip carrying dark text.</p>
+  <div class="bars">
+    <div class="bar b1"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b2"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b3"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b4"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+  </div>
+  <div class="ratios">
+    <div class="r"><span class="good">7.27</span> : 1</div><div class="r"><span class="good">6.20</span> : 1</div>
+    <div class="r"><span class="good">5.03</span> : 1</div><div class="r"><span class="good">6.09</span> : 1</div>
+  </div>
+</div>
+
+<div class="opt sunk">
+  <div class="opt-name">D · sunk · white on the band's own hue, one step down</div>
+  <p class="opt-note">Keeps the white you liked. Needs four values instead of one, because each chip
+  is its own band darkened. Guide needs no darkening at all, so its chip is the band itself and
+  carries a hairline to stay visible.</p>
+  <div class="bars">
+    <div class="bar b1"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b2"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b3"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+    <div class="bar b4"><span class="sigil">[<i>Ilya</i>]</span><span class="pill">Français</span></div>
+  </div>
+  <div class="ratios">
+    <div class="r"><span class="good">4.58</span> : 1</div><div class="r"><span class="good">4.52</span> : 1</div>
+    <div class="r"><span class="good">4.77</span> : 1</div><div class="r"><span class="good">4.63</span> : 1</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-name">The same band, one above the other</div>
+  <p class="opt-note">Raised on top, sunk below, so the two treatments sit against the identical
+  sage rather than across a gap.</p>
+  <div class="side">
+    <div class="stackbar">
+      <div class="bar b1" style="border-radius:3px 3px 0 0"><span class="sigil">[<i>Ilya</i>]</span><span class="pill" style="background:rgba(255,255,255,.28);color:#1a1612">Français</span></div>
+      <div class="bar b1" style="border-radius:0 0 3px 3px"><span class="sigil">[<i>Ilya</i>]</span><span class="pill" style="background:#6C7A5F;color:#fff">Français</span></div>
+    </div>
+    <div class="stackbar">
+      <div class="bar b4" style="border-radius:3px 3px 0 0"><span class="sigil">[<i>Ilya</i>]</span><span class="pill" style="background:rgba(255,255,255,.28);color:#1a1612">Français</span></div>
+      <div class="bar b4" style="border-radius:0 0 3px 3px"><span class="sigil">[<i>Ilya</i>]</span><span class="pill" style="background:#806E8E;color:#fff">Français</span></div>
+    </div>
+  </div>
+</div>
+
+<p class="note">
+<b>The honest difference in cost.</b> Raised is one declaration and it will keep working if you ever
+add a fifth destination or change a band's hue. Sunk is four values that must be re-derived by hand
+the moment any band moves, which is the same class of thing the census already flagged when it found
+three hand-picked literals sitting beside one real token in this exact control.
+</p>
+
+<p class="note">
+<b>And the difference in the eye.</b> Raised puts the only light-on-dark relationship in the header
+into the one element that is a control, which is arguably correct: the sigil is a name and the pill
+is a door. Sunk keeps the header one continuous field of colour with the control pressed into it,
+which is quieter and closer to what you have now.
+</p>
+
+</body>
+</html>

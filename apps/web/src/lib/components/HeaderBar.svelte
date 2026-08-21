@@ -10,17 +10,23 @@
 
 	let { language, activeTab, onlanguagechange }: Props = $props();
 
-	function switchTo(lang: Language) {
-		if (lang !== language) {
-			onlanguagechange(lang);
-		}
-	}
+	/* ONE control, and it names the language the singer is NOT in. Ruled by
+	   Dann 2026-08-20. The pattern is Canada.ca's, which he adopted for
+	   convention and familiarity rather than compliance; he is not bound by
+	   it. The pair of aria-pressed spans that stood here was built, never
+	   decided.
 
-	function handleKeydown(e: KeyboardEvent, lang: Language) {
-		if (e.key === 'Enter' || e.key === ' ') {
-			e.preventDefault();
-			switchTo(lang);
-		}
+	   The label is an autonym and is deliberately NOT routed through t():
+	   on an English page the word is French and on a French page it is
+	   English, so a translated string would say the wrong thing in both.
+	   The visible word therefore carries its own `lang` in the template,
+	   which is what stops a screen reader pronouncing "Français" with
+	   English phonetics. */
+	const other = $derived<Language>(language === 'en' ? 'fr' : 'en');
+	const label = $derived(other === 'fr' ? 'Français' : 'English');
+
+	function switchLanguage() {
+		onlanguagechange(other);
 	}
 </script>
 
@@ -36,27 +42,7 @@
 		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
 	</div>
 
-	<div class="language-toggle">
-		<span
-			class="lang-option"
-			class:active={language === 'en'}
-			role="button"
-			tabindex="0"
-			aria-pressed={language === 'en'}
-			onclick={() => switchTo('en')}
-			onkeydown={(e) => handleKeydown(e, 'en')}
-		>English</span>
-		<span class="lang-separator" aria-hidden="true"></span>
-		<span
-			class="lang-option"
-			class:active={language === 'fr'}
-			role="button"
-			tabindex="0"
-			aria-pressed={language === 'fr'}
-			onclick={() => switchTo('fr')}
-			onkeydown={(e) => handleKeydown(e, 'fr')}
-		>Français</span>
-	</div>
+	<button type="button" class="lang-pill" lang={other} onclick={switchLanguage}>{label}</button>
 </header>
 
 <style>
@@ -158,84 +144,70 @@
 		background: #74677F;
 	}
 
-	/* ── Language toggle ─────────────────────────────────── */
+	/* ── The language pill ───────────────────────────────── */
+	/* ONE control. It is a <button> because it changes application state
+	   and does not navigate, and its own word is its accessible name, per
+	   the Canada.ca pattern and WCAG's label-in-name. No aria-label sits
+	   over it and no aria-pressed describes it: with one pill there is no
+	   pressed state left to name.
 
-	.language-toggle {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
+	   The radius and the padding are unchanged from the pair. Spec §3.2,
+	   the three radii, "full-round only for toggle knobs and the language
+	   pills" (docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md),
+	   and that shape was ruled rather than chosen here. */
 
-	.lang-option {
+	.lang-pill {
 		font-family: var(--font-sans);
 		font-size: 13px;
+		font-weight: 500;
+		color: white;
+		border: none;
 		cursor: pointer;
-		transition: color 0.2s ease-out, background-color 0.2s ease-out, text-decoration 0.15s ease;
+		transition: background-color 300ms ease;
 		user-select: none;
 		line-height: 1;
 		padding: 4px 12px;
 		border-radius: 9999px;
+		white-space: nowrap;
 	}
 
-	.lang-option.active {
-		color: white;
-		font-weight: 500;
-		background: rgba(255, 255, 255, 0.15);
+	/* The chip is the band's own hue one step down, white on it, ratified
+	   by Dann 2026-08-20 as option D from a drawing. Guide alone takes the
+	   hairline, because its chip IS its band. The four values live in
+	   app.css. */
+
+	.tab-transcription .lang-pill {
+		background: var(--lang-chip-transcription, #6C7A5F);
 	}
 
-	.lang-option:not(.active) {
-		color: rgba(255, 255, 255, 0.7);
+	.tab-learn .lang-pill {
+		background: var(--lang-chip-learn, #9A6A6A);
 	}
 
-	.tab-transcription .lang-option:not(.active) {
-		background: var(--deeper-sage, #7A8A6C);
+	.tab-guide .lang-pill {
+		background: var(--lang-chip-guide, #5C739E);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 	}
 
-	.tab-learn .lang-option:not(.active) {
-		background: #8F6A6A;
+	.tab-shane .lang-pill {
+		background: var(--lang-chip-marked, #806E8E);
 	}
 
-	.tab-guide .lang-option:not(.active) {
-		background: #4D6387;
-	}
-
-	.tab-shane .lang-option:not(.active) {
-		background: #74677F;
-	}
-
-	.lang-option:not(.active):hover {
+	/* Hover is NOT ruled by the brief and this is the smallest thing that
+	   invents nothing. The pair's hover drew an underline in the band's own
+	   hue; that colour cannot survive here, because on Guide the chip IS
+	   the band and the underline would vanish. So the underline stays and
+	   takes the text's own white, which is one declaration for all four and
+	   already measured against every chip. */
+	.lang-pill:hover {
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 		text-underline-offset: 3px;
-		color: rgba(255, 255, 255, 0.9);
 	}
 
-	.tab-transcription .lang-option:not(.active):hover {
-		text-decoration-color: var(--sage, #8B9A7D);
-	}
-
-	.tab-learn .lang-option:not(.active):hover {
-		text-decoration-color: var(--dusty-rose, #A67B7B);
-	}
-
-	.tab-guide .lang-option:not(.active):hover {
-		text-decoration-color: var(--quiet-cobalt, #5C739E);
-	}
-
-	.tab-shane .lang-option:not(.active):hover {
-		text-decoration-color: var(--deeper-lavender, #8E7E9B);
-	}
-
-	.lang-option:focus-visible {
+	.lang-pill:focus-visible {
 		outline: 2px solid white;
 		outline-offset: 2px;
-		border-radius: 9999px;
-	}
-
-	.lang-separator {
-		width: 1px;
-		height: 12px;
-		background: #C5C5C5;
 	}
 
 	.sr-only {

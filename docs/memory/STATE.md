@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`39d60e0`**, raised from `904df6e` across 2026-08-20,
+before **`b0a9860`**, raised from `904df6e` across 2026-08-20,
 because N.73 S3 ship one, its three walk repairs, and its memo all shipped in
 `63c2bb4`, and a
 floor that predates
@@ -83,6 +83,108 @@ any of them count.
 > (`ilya-lip-options_r1_2026-08-18.html`, option A), and the ratified strings
 > (`fable-n73-french-strings_r1_2026-08-19.md`).
 > **E.27 is a SOURCE, not law. Tether 17.**
+
+---
+
+## 2026-08-20 EVENING. THE DRAWER'S EDGE, THE CHEVRON, AND THE LANGUAGE TOGGLE
+
+**Floor: `b0a9860`.** Five gates at baseline on both ships.
+
+### THE SILHOUETTE, `1f201f2`, WALKED AND ACCEPTED
+
+**The drawer's right edge and its handle are ONE path.** Dann's words on seeing
+it: "it looks like exactly what i asked for. I am satisfied." The lip arrives
+vertically, stops at the handle's top-left terminus, turns ninety degrees, runs
+the handle's top, rounds only the RIGHT corners as a squircle, returns to the
+bottom-left terminus, turns again, and continues down. **The handle has no left
+wall.** Geometry ruled from a drawing:
+`docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, and the drawing was
+the specification Code built from.
+
+**HOW THAT RULING WAS REACHED, and it is the method rather than the outcome
+that matters.** Four rounds of prose had not settled it. One drawing of three
+readings settled it in two exchanges. **CONTRACT tether 18's corollary: draw
+it.**
+
+**The whole silhouette is `#D2CFCC`**, measured off the handle's own painted
+pixels rather than computed, because `.paper-handle` was deleted at N.73 S1 and
+no memo, spec, or mockup records its hex. **The edge is now about half as
+visible as the sage it replaced: 1.05:1 against the desk, where the sage was
+2.02:1.** Built as ruled, and the number is recorded so Dann can rule again.
+**The tab also gave up its fill, radius, and drop shadow on the desktop**,
+because the desk's drawing showed an outline. That was the desk's specification,
+not Code's choice.
+
+### THE CHEVRON, `b0a9860`, WALKED AND ACCEPTED
+
+Dann: "I love the colour of the chevron and it loks centreed thank you."
+
+**`--ink-secondary` `#4a4540`**, down from `--ink-primary`, 8.94:1 on the
+handle. **Chosen by family, not only by value:** this drawer spends the ink
+scale on glyphs and the stone scale on borders, and a chevron is a glyph.
+`--stone-700` measured almost identically and would have been the first stone
+used as ink.
+
+**The nudge needed the centroid Dann asked for and could not have been found any
+other way.** The glyph's BOUNDING BOX is exactly centred, 1.75 to 12.25 in a
+14-wide box. Rasterised at 40x and weighted by alpha, **the INK centroid sits at
+6.666**, because the two round caps at the open end carry more ink than the
+single round join at the apex. Two errors followed, and only one is constant:
+the box centres in the button (centre 530) rather than the handle's interior
+(centre 529), and the 0.334 px asymmetry REVERSES when the glyph flips. So each
+state took its own value, **−0.67 px closed and −1.33 px open**. **Both fall
+below the "pixel or four" Dann guessed and Code did not round them up to meet
+his guess.**
+
+### THE LANGUAGE TOGGLE. RULED 2026-08-20, BRIEF WRITTEN, NOT BUILT
+
+**Dann ruled the pair becomes ONE pill**, naming the language he is not in.
+**Nothing in the project had ruled the two-button form; it was built, not
+decided.**
+
+**The pattern is Canada.ca's**, found by research at Dann's request: one control
+labelled with the other official language, "Français" on an English page, top
+right of the header, abbreviating to FR and EN below a breakpoint. Mandatory for
+Government of Canada sites under the Policy on Official Languages. **Dann is not
+bound by it and took it for convention and familiarity, not compliance.**
+Sources: `design.canada.ca/common-design-patterns/language-toggle.html` and
+`design-system.canada.ca/en/components/language-toggle/design`.
+
+**THE SHAPE WAS ALREADY RULED and was not the desk's to invent.** Spec §3.2,
+the three radii: "full-round only for toggle knobs and **the language pills**."
+The control already draws `border-radius: 9999px`.
+
+**THE MEASUREMENT THAT DECIDED THE TREATMENT.** The existing control fails 4.5
+in BOTH states on ALL FOUR bands: active 2.47, 2.90, 3.58, 2.96; inactive 2.65,
+3.21, 3.93, 3.50. **That is not something the toggle change introduces.** Dann
+first ruled dark ink on legibility grounds, then said "I think the white is
+beautiful but I do think it needs to be black." The desk offered a third path he
+had not seen, because his reason was legibility rather than taste.
+
+**RATIFIED: option D, "I love D. Ratified."** White text on a chip that is the
+band's own hue one step down.
+
+| destination | band | chip | white on it |
+|---|---|---|---|
+| Transcription | `#8B9A7D` | `#6C7A5F` | 4.58 |
+| Learn | `#A67B7B` | `#9A6A6A` | 4.52 |
+| Guide | `#5C739E` | the band itself | 4.77 |
+| Marked score | `#8E7E9B` | `#806E8E` | 4.63 |
+
+**Guide needs no darkening and takes a hairline instead.** He chose this over
+one translucent declaration knowing it costs four values.
+
+**Two things it clears on the way past.** Three hand-picked literals, `#8F6A6A`,
+`#4D6387`, and `#74677F`, exist only to colour the option you are not on and get
+deleted. And the `INBOX.md` item from the same day closes: "Français" sits
+inside an English document at `HeaderBar.svelte:58` with no `lang`.
+
+**NOT RULED, and the brief tells Code not to decide it silently:** whether the
+pill abbreviates to FR and EN on small screens. Build the full word, measure at
+360 x 640, report a collision rather than abbreviating.
+
+**Brief:** `docs/sessions/brief-to-code-language-toggle_r1_2026-08-20.md`.
+**The ratified drawing:** `docs/sessions/lang-toggle-options_r1_2026-08-20.html`.
 
 ---
 
