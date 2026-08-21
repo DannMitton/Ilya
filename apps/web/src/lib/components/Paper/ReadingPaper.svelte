@@ -166,6 +166,97 @@
 		margin-top: 12px;
 		max-width: 330px;
 	}
+	/* ── N.77 ship 2: an anchored target clears the sticky chrome ──
+
+	   THE DEFECT. `scrollToAnchor` (`+page.svelte:1676`) uses
+	   `scrollIntoView({ block: 'start' })`, which puts the target's top edge
+	   on the scroll port's top edge. `.desk-head` is sticky inside that same
+	   port and sits exactly there, so the target landed behind it. Found by
+	   Dann on `2b85d13`: he clicked `Why only one source?`, the hash became
+	   `#guide-source`, and the heading was invisible with its paragraph
+	   first on screen. Measured before the fix: the heading's top at the
+	   port's top edge, the chrome's bottom 41px lower, and the heading only
+	   30px tall, so the whole of it was covered.
+
+	   `scroll-margin-top` is the CSS answer, and it leaves `scrollToAnchor`
+	   and its two-shot settle alone.
+
+	   THE CHROME IS MEASURED, NOT ASSUMED. On the built page 2026-08-21,
+	   1600x1000, `.desk-head` renders 41.78px on Learn and on Guide, in both
+	   languages, and `top: calc(-1 * var(--desk-pad-top))` sticks it flush
+	   to `.main-content`'s top edge. 42px is that height taken up to the
+	   whole pixel so the chrome is cleared rather than met. The window's
+	   `.header-bar` is NOT part of this: it is 48px tall and sits outside
+	   the scroll port, above it, so it covers nothing.
+
+	   The gap is a choice, not a measurement, and it is one line to change. */
+	.reading-paper {
+		--sticky-chrome: 42px;
+		--anchor-gap: 1rem;
+	}
+
+	/* EVERY id, not a list of tags. The brief proposed `h1, h2, h3, h4,
+	   p[id]`. Checked against the tree first, and it misses two kinds:
+	   seven `h5` deep-link targets in Learn's consonant chapter
+	   (`learn-u5-hard` and its six siblings), and `learn-u3-inventory`,
+	   which ship 1 moved off a `<p>` and onto the band's deck `<div>`. No
+	   `<p id>` survives in either content file, so `p[id]` would have
+	   reached nothing at all. `[id]` reaches all 93 anchors and cannot
+	   drift when a new one lands on a tag nobody listed. */
+	.reading-inner :global([id]) {
+		scroll-margin-top: calc(var(--sticky-chrome) + var(--anchor-gap));
+	}
+
+	/* A CHAPTER'S ARRIVAL IS ITS BAND, NOT ITS HEADING. The heading sits
+	   inside the band, so stopping at the heading scrolls the band's top off
+	   the screen. Measured before this rule: clicking `A Walkthrough` put
+	   its heading on the port's top edge and left 85px of a 116px band
+	   either above the port or behind the chrome.
+
+	   The extra distance is the band's own declared values, term by term,
+	   not a number read off a screenshot. 34px is `.chapter-band`'s
+	   `padding-top`. 14.5px is `.band-kicker`'s line box, its `font-size:
+	   10px` times its `line-height: 1.45`. 10px is the band title's
+	   `margin-top`. Guide has no kicker, so it omits that term. Both totals
+	   were then confirmed against the render: 58.5px on all sixteen Learn
+	   bands and 44px on all eight Guide bands, identical in both languages.
+
+	   These beat the rule above on specificity, a class and a type against
+	   an attribute, so source order does not decide it. */
+	.reading-inner :global(.band-guide > h2) {
+		scroll-margin-top: calc(var(--sticky-chrome) + var(--anchor-gap) + 34px + 10px);
+	}
+
+	.reading-inner :global(.band-learn > h2),
+	.reading-inner :global(.band-learn > h3) {
+		scroll-margin-top: calc(var(--sticky-chrome) + var(--anchor-gap) + 34px + 14.5px + 10px);
+	}
+
+	/* THE DECK IS THE SAME ARRIVAL, AND THIS ONE IS BEYOND THE LETTER OF THE
+	   BRIEF. `learn-u3-inventory` is a table-of-contents entry whose label is
+	   the deck sentence itself (`Drawer.svelte:407`), and ship 1 put that id
+	   on the deck inside the band. On the rule above alone it lands correctly
+	   but decapitates its own band: the sentence sits below the chrome on a
+	   rose block whose kicker and title are scrolled away. The brief's
+	   condition 4 names a chapter's own entry, so this is Code's reading of
+	   the reason it gives, "the band is the arrival moment, so it must be
+	   what arrives". Landing the band costs the deck nothing, because the
+	   deck is inside the band and stays on screen either way.
+
+	   Two more terms than the heading rule, both declared values: 41.6px is
+	   the title's line box, its `font-size: 40px` times its `line-height:
+	   1.04`, and 12px is the deck's `margin-top`. Confirmed against the
+	   render at 112.09px in both languages.
+
+	   FRAGILE IN ONE DIRECTION, AND SAID PLAINLY: a band title that wrapped
+	   to two lines would push the deck lower and this fixed offset would
+	   clip the band's top again. Neither `Stressed Vowels` nor `Les voyelles
+	   accentuées` wraps at the 756px band measure. One selector to delete if
+	   Dann would rather it landed on the sentence alone. */
+	.reading-inner :global(.band-learn > .band-deck) {
+		scroll-margin-top: calc(var(--sticky-chrome) + var(--anchor-gap) + 34px + 14.5px + 10px + 41.6px + 12px);
+	}
+
 
 
 	/* ── Body text ────────────────────────────────────────── */
