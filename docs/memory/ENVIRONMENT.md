@@ -1668,3 +1668,20 @@ because the same thing happened to the label; it does not own padding.
 **Before claiming a station is or is not a `.section`, grep for `.section {`
 across the drawer's components.** The desk asserted NOTATION was not one, in a
 brief, and it is.
+
+## DANN'S PHOTOGRAPHS OF PAPER ARRIVE AS HEIC, AND THEY ARE READABLE. 2026-08-21
+
+An iPhone photograph of a printed sheet lands in the container as `.HEIC`, which
+Pillow does not open on its own. `pip install pillow-heif
+--break-system-packages`, then:
+
+```
+import pillow_heif; pillow_heif.register_heif_opener()
+from PIL import Image
+Image.open(path).convert('RGB').save('out.png')
+```
+
+**This matters because the paper is the only instrument that settles a print
+question.** On 2026-08-21 it confirmed two done-conditions at once: `Print` is
+absent from the sheet, and the `Ⓡ SPOT RECONSTITUTION` legend is drawn above the
+attribution rule. Neither could be established from a browser.

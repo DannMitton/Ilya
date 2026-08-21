@@ -43,21 +43,20 @@ any of them count.
 > across three commits on 2026-08-21 and Dann walked all of them on real
 > deploys, on his phone and on the desk. His words on the last one: "yes."
 >
-> **NOTHING IS IN PROGRESS. What follows are the four things left open, in the
-> order they became open, and NONE of them is started.**
+> **NOTHING IS IN PROGRESS, AND THERE IS NO DEBT AGAINST WORK IN HISTORY.
+> What follows are the three things left open and NONE of them is started.**
 >
-> **1. TWO DONE-CONDITIONS OF THE NINE-ITEM SHIP ARE STILL UNWALKED, and they
-> are the only debt against work already in history.**
-> **Print one page and confirm `Print` does not appear on the paper.** It is
-> chrome and hides under `@media print`, verified in the source, never on
-> paper.
-> **See the `R` legend render.** Code verified `buildProvenanceLegend` at the
-> producer against the real module, per-page filtering and both languages
-> correct, sorting before `inferred`. **The dev dictionary would not load, so
-> the rendered glyph has never been seen.** It needs a transcription carrying a
-> spot override.
+> **CLOSED ON PAPER 2026-08-21, 00:22, the last two done-conditions of the
+> nine-item ship.** Dann printed `В четырёх стенах` from `2b81f5a` and
+> photographed the sheet. **`Print` appears nowhere on it**, so the desk-head
+> reasoning holds: below the sheet is chrome and it hides under `@media print`.
+> **`Ⓡ SPOT RECONSTITUTION` is drawn right-aligned above the attribution
+> rule**, decoding the five `Ⓡ` sigils on that page. Code had only ever
+> verified that legend at its producer, because the dev dictionary would not
+> load. **The rendered result is now observed.** His words: "prints
+> beautifully" and "the legend appears for the sigil, perfect."
 >
-> **2. N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual
+> **1. N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual
 > guide page, near the FRONT of the Guide. Two files: `GuideContent.svelte`
 > holds the chapters, `Drawer.svelte` holds the table of contents as
 > hand-written buttons with both languages inline, so a new chapter needs an
@@ -65,7 +64,7 @@ any of them count.
 > NOT WRITE THE FRENCH.** **Its labels are the legend's labels, RULED BY DANN
 > 2026-08-21.**
 >
-> **3. THE `inferred` QUESTION-MARK ICON NEVER PRINTS. ESTABLISHED BY CODE,
+> **2. THE `inferred` QUESTION-MARK ICON NEVER PRINTS. ESTABLISHED BY CODE,
 > DELIBERATELY NOT FIXED, AND IT IS DANN'S TO RULE.** `provenance.ts` maps
 > `inferred` to a `question` icon and the footer legend will draw it, but
 > `WordStack.svelte` excludes `inferred` from its icon span twice and renders a
@@ -73,7 +72,7 @@ any of them count.
 > sheet. That is the MIRROR of Dann's sigil ruling** and he has not been asked
 > which way it should resolve: draw the icon, or drop the legend entry.
 >
-> **4. THE FRENCH FORMAT LINE STILL WRAPS AT 360 x 640**, to two lines rather
+> **3. THE FRENCH FORMAT LINE STILL WRAPS AT 360 x 640**, to two lines rather
 > than three. One line is not reachable in a 262 px box. **At desk width it does
 > collapse to one, which is where Dann made the ruling**, and the English is two
 > lines at 360 as well, so the displacement he named is gone where he saw it.
