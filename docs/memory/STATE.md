@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`80c5e47`**, raised from `b0a9860` at the close of 2026-08-20,
-because N.65 ship A shipped there with all five gates at baseline and the
-working tree went clean, so every build this file describes is now in history.
+before **`afc45cb`**, raised from `80c5e47` at the close of 2026-08-21,
+because N.65 ship B shipped there with all five gates at baseline and the push
+printed `2238e8b..afc45cb`, so every build this file describes is now in
+history. **The push range is the check, not the memo.**
 A floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
@@ -38,67 +39,178 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.65, THE DRAWER'S STATIONS. Ship one is SHIPPED and WALKED. Ship A of the
-> retraction brief is SHIPPED and its memo is written. DANN HAS NOT WALKED IT.**
+> **N.65 SHIP B IS SHIPPED, `afc45cb`, AND DANN WALKED MOST OF IT ON
+> 2026-08-21.** The retraction works on every header, the score box says one
+> sentence, the syllabified text has joined SHIFT LYRICS, the SYLLABLES header
+> is gone, and the counter reads. His words: "Great!" and "Syllables header is
+> gone, syllabified text is correctly situated. Counter reads correctly."
 >
-> **NEXT, AND IT IS ONE ACT: SHIP B of
-> `docs/sessions/brief-to-code-retraction_r1_2026-08-20.md`.** Retraction on
-> every header including the pinned anchors; the voice anchor excluded by Dann's
-> explicit ruling because `Calibrate` must stay visible; the persisted open set
-> with NOTATION's exemption; the first-run default of Piece and Source open.
+> **NEXT, AND IT IS ONE ACT: WRITE THE NEXT BRIEF. NINE ITEMS, ALL RULED BY
+> DANN ON THAT WALK, NOT ONE OF THEM WRITTEN DOWN AS A BRIEF YET.**
 >
-> **BEFORE SHIP B GOES TO CODE, §B.6 MUST BE AMENDED, AND THE AMENDMENT IS NOT
-> WRITTEN.** §B.6 as it stands moves the whole `Print` / `Export this song` /
-> `Import a song` row into SOURCE and tells Code to accept the consequence that
-> collapsing SOURCE hides `Print`. **Dann ruled that consequence away on
-> 2026-08-20 night by moving `Print` off the drawer altogether.** See the ruling
-> below. The amended §B.6 keeps `Export` and `Import` inside SOURCE and drops
-> `Print` from the row.
+> 1. **`Print` leaves the drawer for under the sheet, flush left.** Dann chose
+>    option C of four offered. He was told it loses stickiness and ruled it
+>    anyway. `RootPanel.svelte:338-344` is still the only Print control.
+> 2. **The silhouette renders on the phone.** Drop `!isMobile &&` at
+>    `Drawer.svelte:638`; make `class:silhouetted` unconditional at `:653`.
+>    **Leave `filter: none` at `:1434` alone: the silhouette without the lift.**
+> 3. **A 20 px desk strip at the drawer's right edge on the phone.** The strip
+>    equals the pull's protrusion (`.drawer-lip`, `width: 20px` at `:1020`), so
+>    the tab fills it and the desk shows above and below. `Drawer.svelte:1440`'s
+>    `width: 100% !important` becomes the viewport less that protrusion.
+>    **This AMENDS the full-screen overlay of 2026-08-19. The motion model is
+>    untouched: it still arrives from the left.**
+> 4. **Those two regions take the destination's tint**, lavender on Score
+>    Markup. **Free:** `app.css:82-85` already carries four desk tints and
+>    `+page.svelte:2718-2733` paints them. Learn takes rose and Guide cobalt by
+>    the same rule; Dann was told and did not object. **The tab itself stays
+>    cream on every destination**, per `Drawer.svelte:1013-1017`.
+> 5. **The `#fff` hover latch, guarded on BOTH rules.** See the measurement
+>    below. `@media (hover: hover)` around `Drawer.svelte:1052-1054` AND around
+>    `:996-997`, which is harmless only until item 2 lands.
+> 6. **The format line drops its lead-in.** "Accepted now:" and « Acceptés
+>    maintenant : » go; the list stays. **A truncation of a ratified string, so
+>    no new French.** Dann's reason: the French wrapped to two lines and pushed
+>    everything below it down. **No terminal full stop and no « ou »: the desk
+>    took the do-nothing and said so.**
+> 7. **Collapsed stations match NOTATION.** Measured off Dann's screenshot,
+>    rule to rule, in CSS px: NOTATION 27.2, SOURCE 33.0, REPERTOIRE 32.6,
+>    ANALYSIS 68.8. `.section` is `padding: 6px 0 12px` (`RootPanel.svelte:889`)
+>    and the 12 px is air after a body; a shut station has none. **The bottom
+>    padding leaves with the body, exactly as `.station-label.tight` already
+>    drops the label's gap. Open, Dann's ruled asymmetry stands.**
+>    **ANALYSIS's extra 36 px is NOT ESTABLISHED. Code decomposes it.**
+> 8. **The spot-reconstitution legend.** `PageFooter.svelte:58` has the branch
+>    and `i18n.ts:207` has the copy in both languages, but `spot-reconstitution`
+>    is in none of `provenance.ts`'s three tables, so `buildProvenanceLegend`
+>    (`Paper.svelte:65`) can never emit it. **The renderer and the string were
+>    built; the producer never was. NOT a ship B regression:** that ship touched
+>    fourteen files and `provenance.ts`, `Paper.svelte`, and `PageFooter.svelte`
+>    are not among them.
+> 9. **The paper handle doubles in height, 76 to 152.** TWO values move
+>    together or the notch and the tab disagree: `LIP_H` at `Drawer.svelte:113`
+>    and `height: 76px` at `:1021`. **The shape does not change:** `R` derives
+>    from `LIP_W` (`:120`), so the squircle's corners are unchanged and only the
+>    straight run lengthens. **The chevron re-centres by itself** (`.drawer-lip`
+>    is `align-items: center; justify-content: center` at `:1024-1026`); Code
+>    confirms rather than adding a second centring rule.
+>    **Dann's reason, given after the ruling: target size, on both displays.**
+>    So Code reports the acquired target box before and after on both pointer
+>    types: 20x76 and 44x88 today, 20x152 and 44x152 after. **The `::before` at
+>    `:1085-1094` is 44 by 88 and its comment SAYS 44 by 88; its height must
+>    follow the tab's or the comment lies and the top and bottom 32 px of a
+>    visible handle get 20 px of width.** Also check `:1396`, a second
+>    `width: 20px`, for a height twin.
 >
-> **THE FIRST ACT OF THE NEXT SESSION IS A WALK, NOT A BRIEF.** `80c5e47`
-> carries all three unwalked builds at once: ship A, the language pill, and the
-> silhouette's lift with the sage hover. **One deploy, one walk, three items.**
-> Get Dann the URL and the QR before anything else is written.
+> **THE THREE RULINGS THAT ARE NOT BUILD ITEMS.**
+> **The clitic arrow is NOT a sigil. RULED 2026-08-21.** Dann: *"The clitic
+> arrow is fully explained in the GUIDE section."* `provenance.ts:113-116`'s
+> deliberate clitic skip STAYS, and his sentence goes in its comment so nobody
+> re-opens it.
+> **A mark that prints carries a legend entry. RULED 2026-08-21.** Dann: *"When
+> a sigil prints to the page it must be decoded with a legend."* The census, in
+> `WordStack.svelte` only: ё, book, notes, and torso all have legends; `R` does
+> not; the arrows are excluded above. The `↺` at `:159-161` is commented out
+> and does not print. **NOT ESTABLISHED:** `provenance.ts:79` maps `inferred` to
+> a `question` icon the desk could not find rendered in `WordStack`. If it never
+> prints, that is the mirror defect.
+> **The legend's labels and N.76's labels are the SAME WORDS. RULED 2026-08-21.**
 >
-> **ONE BRIEF AT A TIME.** Hold ship B until that walk is done.
+> **N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual guide
+> page, near the FRONT of the Guide. Two files: `GuideContent.svelte` holds the
+> chapters, `Drawer.svelte` holds the table of contents as hand-written buttons
+> with both languages inline, so a new chapter needs an entry in each.
+> **THE COPY IS DANN'S, ENGLISH AND FRENCH, AND THE DESK DOES NOT WRITE THE
+> FRENCH.** Its labels are the legend's labels, ruled above.
 >
-> **THEN, IN THIS ORDER:** `Print` moves to the desk head (drawing ruled, see
-> below); the chapter bands for Learn and Guide; then S5 (the wall re-plumb),
-> S6 (consequences), then the rest of the aesthetic layer.
+> **KILLED 2026-08-21 BY DANN: the printed Learn or Guide excerpt that was to
+> carry a header and footer identifying its source.** His words: *"I do not
+> think we need a printed Learn or Guide. Delete this idea. If we need it later
+> we will create it but for now folks will have to be content with manual
+> selection and printing."* **It never received a number. `ReadingPaper` gets no
+> furniture, and no copy is owed.** This follows his ruling the same evening
+> that Learn and Guide get no `Print` button at all.
 >
-> **NEW AND UNNUMBERED, ARRIVED 2026-08-20 NIGHT:** a printed Learn or Guide
-> excerpt must carry a header and a footer identifying its source. `ReadingPaper`
-> has neither today. **Number it before building it, and Dann writes the copy.**
->
-> **N.73 S3 is otherwise closed.** Ship two `DONE`, `af995a9`, walked four of
-> four. **Ship one is `WRITTEN`, not `DONE`:** brief items 6 and 8 need Dann's
-> microphone and a real calibration. Code closed item 7 in its own harness.
->
-> **TWO THINGS DANN OPENED AND HAS NOT SETTLED.**
-> **The name.** He said "I think I like the term 'Score Markup' better than
-> 'Marked Score'." That would change his own S0 ruling 2 of 2026-08-19. **NOT
-> RULED. Do not build it.** The desk put two objections and he has not
-> answered: "markup" collides with the markup formats listed inches away in the
-> drop zone (MNX, MusicXML, .mxl), and the pair names two documents while
-> "markup" names marks rather than a page. **Cost if he rules it in:**
-> `i18n.ts` `'tab.markedScore'` is the only singer-facing string; the French
-> « Partition annotée » would need re-ruling; `shane` stays as the wire value
-> so there is no migration.
-> **The `score` watermark still collides on a 360 px phone.** Gone on the desk.
-> At 360 x 640 the drop zone's sentence wraps to five lines and fills 120 px of
-> a 152 px box, overlapping the whole 41.6 px glyph band. Dann's phone is wider
-> and may already be clear. **Measured, left alone, his to rule.**
+> **NOT WALKED FROM SHIP B, and none of it blocking:** item 12's notehead
+> click, item 4's reload restore, and item 8's French half. Code verified all
+> three in its own harness.
 >
 > **THE GOVERNING DOCUMENTS for the GUI, all current:** the census
 > (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
 > (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
 > the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`, station
-> order at **§3.3**, and **its order is superseded**, see below), the mockups
+> order at **§3.3**, and **its order is superseded**), the mockups
 > (**r1 governs the drawer; r2 does not touch the stations**), the lip
 > (`ilya-lip-options_r1_2026-08-18.html`, option A, **superseded by the
 > silhouette drawing**), and the ratified strings
 > (`fable-n73-french-strings_r1_2026-08-19.md`).
 > **E.27 is a SOURCE, not law. Tether 17.**
+
+---
+
+## 2026-08-21. SHIP B SHIPPED AND WALKED. NINE RULINGS AND ONE NEW NUMBER
+
+**FLOOR RAISED TO `afc45cb` AT THE CLOSE OF THIS SESSION.** Ship B is in
+history: the push printed `2238e8b..afc45cb`, which is the check that caught
+ship A's near miss the night before.
+
+### What shipped, and what Dann walked
+
+`afc45cb`, fourteen files, 1774 insertions. Five gates at baseline: 216, 235,
+0 errors and 7 warnings in 4 files, 682, 444 passed and 5 skipped.
+
+**WALKED AND ACCEPTED BY DANN on the `ilya-d0ygg24ga` deploy:** every header
+retracts with a chevron; the SYLLABLES header is gone and the syllabified text
+sits under SHIFT LYRICS; the counter reads `0 / 96` at the right of that header.
+
+**SHIP A IS `DONE`, walked 2026-08-21.** No older-Finale disclosure anywhere in
+the drawer, confirmed by Dann's own look, and the lavender rule above the voice
+anchor confirmed from his screenshot with every other station rule still sage.
+
+### Two things Code raised, and one of them was the desk's error
+
+**THE BRIEF CONTRADICTED ITSELF AND THE DESK DID NOT NOTICE.** §B.6 told Code
+to make the score box's gap to its action row equal the textarea's 6 px, and
+§B.7 told it to put a line of type in the same space. **Code resolved it the
+right way:** it built the sibling relationship, so every gap in SOURCE is
+exactly 6.00 px, and it reported the visible 31.20 px rather than forcing a
+number. The extra 25 px is the format line and its two 6 px gaps.
+
+**THE DESK'S 270 px EXPECTATION WAS WRONG.** Shutting the metadata anchor
+returns **227 px**, at all five phone sizes, and the middle still clears 365 px
+everywhere. Code named the cause: the 44 px touch floor on Piece's and
+NOTATION's new headers adds 27.20 px the anchor cannot hand back.
+
+**CODE CAUGHT AN ERROR IN SHIP A's MEMO.** That gap was **26.00 px** on the
+floor commit, not the 20.00 ship A reported. Ship A never named
+`.output-section`'s own 6 px of top padding.
+
+### THE COLOUR MISMATCH, AND HOW IT WAS FINALLY MEASURED
+
+Dann: *"I insist that I am seeing two different colours."* **He was right, and
+he had to insist.**
+
+**MEASURED by sampling his own screenshots**, not by reading CSS: the drawer
+surface is `#FAF8F5` at every sample and the tab interior is `#FFFFFF` at every
+sample, in both the open and the closed state. Between them one hairline pixel
+at `#F7F5F2` and the shadow at `#DDDCDA`.
+
+**The cause:** `.drawer-lip:hover { background: #fff }` at `Drawer.svelte:1052`,
+**with no `@media (hover: hover)` guard anywhere in that file**. A tap on iOS
+latches `:hover`. The desktop cannot show it because
+`.drawer-lip.silhouetted:hover` cancels it at `:1056-1058`, and `silhouetted` is
+true only there.
+
+**THE DESK'S FAULT, AND IT IS THE ONE WORTH KEEPING:** Dann had already sent the
+screenshot. The desk asked him to go and run a test instead of measuring the
+picture already in its hands. **See `ENVIRONMENT.md`.**
+
+### Instrument faults Code recorded, both now in ENVIRONMENT
+
+Reading a chevron's transform in the same call that clicks it returns the
+pre-transition value; it reported all six inverted before a settled read showed
+all six correct. And the Browser pane reports itself `hidden` even when fronted,
+which clamps the dictionary loader's zero-delay yields to a second each.
 
 ---
 

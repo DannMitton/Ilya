@@ -1561,3 +1561,64 @@ says. It costs Dann one paste and it is the only evidence that settles it.
 history as `80c5e47` with all five gates at baseline. **The cost of not catching
 it is a new session opening onto three dirty files it cannot identify**, which
 is a conversation Dann has already had once tonight.
+
+## MEASURE THE PICTURE YOU ALREADY HAVE. 2026-08-21, and it cost Dann an insistence
+
+Dann reported a colour mismatch between the drawer's surface and the paper
+handle on his phone. The desk read the CSS, named a candidate, and **asked him
+to go and run a test on the device**. He came back with *"I insist that I am
+seeing two different colours."*
+
+**The screenshot was already in the desk's hands.** Uploaded images land on the
+container's disk under `/root/.claude/uploads/<session>/`, newest first with
+`ls -t`. Reading them with Pillow and sampling pixels settled the question in
+one call:
+
+```
+from PIL import Image
+im = Image.open(path).convert('RGB')
+print(im.getpixel((x, y)))
+```
+
+**Scale matters and is not the number the harness prints.** The upload note said
+"original 2600x1462" and the actual file was 4480x2520. **Read `im.size` and
+derive the factor from the displayed width; do not trust the note.**
+
+**A screenshot is lossless enough for this.** `#FAF8F5` sampled exactly, at
+every point, so a 5/7/10 RGB difference was unmissable.
+
+**THE RULE: before asking Dann to observe something, ask whether the observation
+is already on disk.** A pixel he has already sent beats a test he has to run.
+
+## `.drawer-lip:hover` LATCHES ON iOS, AND NOTHING IN `Drawer.svelte` IS HOVER-GUARDED
+
+`Drawer.svelte:1052-1054` sets `background: #fff` on hover. `grep -n "hover: hover"
+apps/web/src/lib/components/Drawer/Drawer.svelte` **returns nothing**, so no rule
+in that file is guarded. A tap on iOS latches `:hover` until the next touch
+elsewhere, so the tab paints pure white against the drawer's `#FAF8F5`.
+
+**The desktop cannot reproduce it**, because `.drawer-lip.silhouetted:hover` at
+`:1056-1058` cancels the background and `silhouetted` is `!isMobile`. **The
+moment the silhouette lands on the phone, `.drawer:has(.drawer-lip:hover)
+.sil-fill { fill: #fff }` at `:996-997` latches the same way.** Guard both.
+
+## A MEMO'S MEASUREMENT IS NOT A MEASUREMENT. 2026-08-21
+
+Ship A's memo reported the score box's gap to the Print row as 20.00 px. Ship B
+measured the same distance on the same commit and got **26.00 px**: ship A had
+not named `.output-section`'s own 6 px of top padding. **A number in a memo is a
+claim, and the next ship re-measures rather than inherits.**
+
+## TWO INSTRUMENT FAULTS CODE FOUND WHILE WALKING SHIP B. 2026-08-21
+
+**A chevron's transform read in the same call that clicks it returns the
+PRE-TRANSITION value.** It reported all six chevrons inverted; a settled read
+showed all six correct. Wait for the transition before reading a transform.
+
+**The Browser pane reports `document.hidden` as true even when fronted**, which
+clamps `setTimeout(…, 0)` to roughly one second per call. The dictionary's
+`mergeNDJSON` yields once per chunk, so the load never finished. Code shimmed
+`setTimeout` with a `MessageChannel` in the page to unclamp it, verified the
+shim (200 zero-delay timers in 4.7 ms), and took every measurement after the
+load. **The shim stayed in the browser: `grep -rn "MessageChannel" apps/web/src
+apps/web/static` returns nothing.**
