@@ -17,6 +17,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-how">Comment fonctionne Ilya</h2>
+							<div class="band-deck">Ce qui se passe lorsque vous collez un poème, et pourquoi vous pouvez vérifier chaque symbole imprimé.</div>
 						</div>
 
 						<h4 id="guide-what">Que fait Ilya?</h4>
@@ -78,6 +79,7 @@
 
 							<div class="chapter-band band-guide">
 								<h2 id="guide-walkthrough">Une visite guidée</h2>
+								<div class="band-deck">Une session complète, de l'ouverture de l'outil jusqu'à l'impression d'une transcription achevée.</div>
 							</div>
 
 							<p>Cette visite guidée suit une session complète dans <em>Ilya</em>, de l'ouverture de l'outil jusqu'à l'impression d'une transcription achevée. Notre exemple de travail est l'air de Gremine dans <em>Eugène Onéguine</em> de Tchaïkovski — un texte exigeant pour tout moteur de transcription, et une pièce de choix du répertoire de basse russe.</p>
@@ -189,6 +191,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-contributors">Collaborateurs</h2>
+							<div class="band-deck">Celles et ceux sur qui Ilya repose.</div>
 						</div>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
@@ -265,6 +268,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-licences">Licences et remerciements</h2>
+							<div class="band-deck">Chaque composante distribuée avec Ilya, reconnue en un seul endroit, afin qu'aucune reconnaissance due ne soit enfouie.</div>
 						</div>
 
 						<p><em>Ilya</em> est gratuit et à code ouvert, publié sous licence MIT, © 2026 Dann Mitton. Il repose sur la générosité de chercheurs, de créateurs de polices, de curateurs de données et de mainteneurs de logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
@@ -287,6 +291,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-how">How Ilya Works</h2>
+							<div class="band-deck">What happens when you paste a poem, and why you can check every symbol it prints.</div>
 						</div>
 
 						<h4 id="guide-what">What does Ilya do?</h4>
@@ -349,6 +354,7 @@
 
 							<div class="chapter-band band-guide">
 								<h2 id="guide-walkthrough">A Walkthrough</h2>
+								<div class="band-deck">One complete session, from an empty page to a printed sheet.</div>
 							</div>
 
 							<p>This walkthrough follows a complete <em>Ilya</em> session, from opening the tool to printing a finished transcription. Our working example is Gremin's Aria from Tchaikovsky's <em>Eugene Onegin</em> — a generous test for any transcription engine, and a worthy piece of Russian bass repertoire.</p>
@@ -460,6 +466,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-contributors">Contributors</h2>
+							<div class="band-deck">The people whose scholarship Ilya is built on.</div>
 						</div>
 
 						<h3 id="guide-grayson">Craig Grayson</h3>
@@ -536,6 +543,7 @@
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-licences">Licences and Acknowledgments</h2>
+							<div class="band-deck">Everything Ilya ships with, acknowledged in one place, so that nothing owed is buried.</div>
 						</div>
 
 						<p><em>Ilya</em> is free and open source, released under the MIT License, © 2026 Dann Mitton. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>

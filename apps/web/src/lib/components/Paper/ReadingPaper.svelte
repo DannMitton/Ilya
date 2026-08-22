@@ -164,7 +164,39 @@
 	.reading-paper .reading-inner :global(.chapter-band.band-guide h3) {
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-weight: 700;
-		font-size: 40px;
+		/* THE TITLE SCALES WITH THE SHEET, AND 40px SURVIVES AT THE DESK.
+		   N.77 ship 6. Dann ruled 40px by eye on a desk mockup and this
+		   declaration does not revise it: the clamp's upper bound is 40px and
+		   the fluid term passes it at 920px of viewport, so every width from
+		   the desk up renders exactly 40px. What it adds is the phone, which
+		   the mockup never showed.
+
+		   WHY A SIZE AND NOT A WRAPPING RULE. Ship 3 measured
+		   `Acknowledgments` at 311.83px against a 252px band measure at 360px.
+		   A single word cannot break, so no `overflow-wrap` short of
+		   `break-word` saves it, and breaking a chapter title mid-word is
+		   worse than the overflow. Shrinking the type is the only remedy that
+		   also covers the eleven chapters nobody measured.
+
+		   THE THREE TERMS, EACH DERIVED. The band's measure is the viewport
+		   less the desk gutter and the band's own padding: at phone widths
+		   `--sheet-pad-x` is 1rem, `.main-content` pads 24px a side, and the
+		   band pads 30px a side, so the measure is `vw - 108`. The widest
+		   unbreakable word in the twenty-four bands is `Acknowledgments`, and
+		   at 40px it is 311.83px, so the largest safe size at any width is
+		   `40 * (vw - 108) / 311.83`. That line is the ceiling this clamp
+		   stays under, not the line it follows: `2.5vw + 17px` sits 19% below
+		   it at 360px, which is the room a fallback face needs when Source
+		   Sans 3 has not arrived.
+
+		   The floor is 26px because that is what `2.5vw + 17px` returns at
+		   exactly 360px, the narrowest width the brief names. Below 360px the
+		   title stops shrinking, and 26px stays inside the measure down to a
+		   311px viewport, which is narrower than any phone this app has seen.
+
+		   ONE DECLARATION, NO BREAKPOINT. `.chapter-band`'s other values are
+		   all unconditional and this one is too. */
+		font-size: clamp(26px, calc(2.5vw + 17px), 40px);
 		line-height: 1.04;
 		letter-spacing: -0.01em;
 		color: #fdfbf6;

@@ -41,6 +41,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 1</div>
 							<h3 id="learn-unit-1">Les lettres</h3>
+							<div class="band-deck">Trente-trois lettres. À la fin de cette section, vous aurez fait connaissance avec chacune d'elles.</div>
 						</div>
 
 						<p>Le russe standard contemporain (RSC) utilise trente-trois lettres. On rencontre parfois quatre caractères supplémentaires, aujourd'hui obsolètes, dans les partitions anciennes ; ceux-ci ont été abandonnés lors de la réforme orthographique de 1918. C'est là tout le système, et à la fin de cette section vous aurez fait connaissance avec chacun de ses membres.</p>
@@ -994,6 +995,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 5</div>
 							<h3 id="learn-unit-5">Les consonnes</h3>
+							<div class="band-deck">La majorité de ces consonnes, vous les connaissez déjà. Seule une poignée est véritablement nouvelle.</div>
 						</div>
 
 						<p>Le russe compte vingt-et-une lettres consonantiques. Bonne nouvelle&#160;: la majorité de ces consonnes produisent des sons que le chanteur connaît déjà de l’anglais, de l’italien, de l’allemand ou du français. Quelques-unes exigent un ajustement, et seule une poignée est véritablement nouvelle. Nous commençons par le familier, puis concentrons notre attention sur ce qui ne l’est pas.</p>
@@ -1194,6 +1196,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 6</div>
 							<h3 id="learn-unit-6">La palatalisation</h3>
+							<div class="band-deck">Deux gestes simultanés&#160;: la consonne, et le dos de la langue qui monte vers le palais.</div>
 						</div>
 
 						<h4 id="learn-u6-what">Qu’est-ce que la palatalisation?</h4>
@@ -1791,6 +1794,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 7</div>
 							<h3 id="learn-unit-7">Assimilation et frontières</h3>
+							<div class="band-deck">La palatalisation pose une question à laquelle répond la langue. Le voisement en pose une à laquelle répond le larynx.</div>
 						</div>
 
 						<h4 id="learn-u7-two">Deux formes d’assimilation régressive</h4>
@@ -2030,6 +2034,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 8</div>
 							<h2 id="learn-coda">Les inclassables</h2>
+							<div class="band-deck">Certaines prononciations résistent entièrement à la déduction. Il faut simplement les connaître.</div>
 						</div>
 
 						<p><em>Avons-nous tout couvert? Est-ce possible? Qui comble les vides?</em></p>
@@ -2087,6 +2092,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 1</div>
 							<h3 id="learn-unit-1">The Letters</h3>
+							<div class="band-deck">Thirty-three letters. By the end of this section you will have met every one.</div>
 						</div>
 
 						<p>Contemporary Standard Russian (CSR) uses thirty-three letters, but you will sometimes see four additional, obsolete characters in old print scores; these were discarded with the 1918 spelling reform. That is the entire system, and by the end of this section you will have met every member of it.</p>
@@ -3040,6 +3046,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 5</div>
 							<h3 id="learn-unit-5">The Consonants</h3>
+							<div class="band-deck">Most of these you already know. Five need your attention.</div>
 						</div>
 
 						<p>Russian has twenty-one consonant letters. The good news: the majority of these consonants produce sounds that the singer already knows from English, Italian, German, or French. A few require adjustment, and only a handful are genuinely new. We begin with the familiar and then focus our attention on what is not.</p>
@@ -3238,6 +3245,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 6</div>
 							<h3 id="learn-unit-6">Palatalization</h3>
+							<div class="band-deck">Two gestures at once: the consonant, and the tongue arching toward the palate.</div>
 						</div>
 
 						<h4 id="learn-u6-what">What Palatalization Is</h4>
@@ -3791,6 +3799,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 7</div>
 							<h3 id="learn-unit-7">Assimilation and Boundaries</h3>
+							<div class="band-deck">Palatalization is a question the tongue answers. Voicing is a question the larynx answers.</div>
 						</div>
 
 						<h4 id="learn-u7-two">Two Kinds of Regressive Assimilation</h4>
@@ -4030,6 +4039,7 @@
 						<div class="chapter-band band-learn">
 							<div class="band-kicker">Section 8</div>
 							<h2 id="learn-coda">What These Rules Do Not Teach</h2>
+							<div class="band-deck">Some pronunciations cannot be derived. They must simply be known.</div>
 						</div>
 
 						<p><em>Did we cover everything? Can we? Who fills the gap(s)?</em></p>
