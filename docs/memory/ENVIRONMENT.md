@@ -1743,6 +1743,20 @@ It also **refuses outright on untracked files**. Every brief and memo the desk
 writes into `docs/sessions/` must be `git add`ed before the ship, including
 briefs for work that has not started yet.
 
+**ITS FILE LIST IS A SNAPSHOT TAKEN BEFORE THE GATES, AND IT LIES BY OMISSION.**
+`CHANGED` is computed at the top of the script; the five gates then run for
+minutes; `git add -u` runs after them. **Anything written during the gate run is
+committed WITHOUT appearing in the printed list.**
+
+**ESTABLISHED 2026-08-21:** `docs/memory/INBOX.md` was committed in `a1b5774`
+and appeared nowhere in that ship's printed list. The desk had appended to it
+while the gates were running. **The commit is established by
+`git log -- docs/memory/INBOX.md`. The window is inferred from the script's own
+order, not measured.**
+
+**So the printed list is not the manifest.** If it matters what a commit
+contains, read the commit, not the script's echo.
+
 **Code's `git add` lines are frequently wrong** and have named a file that does
 not exist twice in one day. **Check the filenames on disk before handing Dann
 the command**, and give it as `git -C ~/Desktop/ilya-rewrite add …` because his
