@@ -11,10 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`2b81f5a`**, raised from `afc45cb` at the close of 2026-08-21,
-because the ANALYSIS boundary repair shipped there with all five gates at
-baseline and the push printed `7294b42..2b81f5a`, so every build this file
-describes is now in history. **The push range is the check, not the memo.**
+before **`d079794`**, raised from `2b81f5a` at the close of 2026-08-21,
+because N.77's six ships all landed with five gates at baseline and the pushes
+printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
+is now in history. **The push range is the check, not the memo.**
 A floor that predates
 its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
 move HEAD forward and never make the floor false. If the tree is ahead of it,
@@ -39,76 +39,187 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.65's DRAWER WORK IS DONE AND WALKED, `2b81f5a`.** Ten items shipped
-> across three commits on 2026-08-21 and Dann walked all of them on real
-> deploys, on his phone and on the desk. His words on the last one: "yes."
+> **THE BLOCKING SET IS EMPTY. That is new, and it is the headline of
+> 2026-08-21.** N.67 closed 2026-08-18. **N.72 CLOSED 2026-08-21**, its one
+> unwalked surface passing on Dann's own iPhone. **N.58 IS DEFERRED TO FUTURE
+> DEVELOPMENT, ruled by Dann 2026-08-21.** N.59 stays parked at tier 2 with a
+> measured reason. **Nothing now stands between Ilya and a working beta except
+> Dann's own judgement of when it is one.**
 >
-> **NOTHING IS IN PROGRESS, AND THERE IS NO DEBT AGAINST WORK IN HISTORY.
-> What follows are the three things left open and NONE of them is started.**
+> **THE ONE THING IS N.78: THE FRENCH FORM OF 62 NAMES.** Numbered 2026-08-21
+> from Dann's own observation, reading the French Guide, that it says
+> `Moussorgski` in the prose while the composer dropdown says `Mussorgsky`.
 >
-> **CLOSED ON PAPER 2026-08-21, 00:22, the last two done-conditions of the
-> nine-item ship.** Dann printed `В четырёх стенах` from `2b81f5a` and
-> photographed the sheet. **`Print` appears nowhere on it**, so the desk-head
-> reasoning holds: below the sheet is chrome and it hides under `@media print`.
-> **`Ⓡ SPOT RECONSTITUTION` is drawn right-aligned above the attribution
-> rule**, decoding the five `Ⓡ` sigils on that page. Code had only ever
-> verified that legend at its producer, because the dev dictionary would not
-> load. **The rendered result is now observed.** His words: "prints
-> beautifully" and "the legend appears for the sigil, perfect."
+> **The research brief is written and in history**,
+> `docs/sessions/brief-n78-french-name-forms_r1_2026-08-21.md`. It is
+> self-contained: all 62 names are inside it, so the session that runs it needs
+> no repository access. **IT HAS NOT BEEN RUN.** It pins one authority, the BnF,
+> with a fixed order of resort, and forbids the agent from transliterating
+> anything itself. `same` is an expected answer, so the deliverable is the
+> difference set.
 >
-> **1. N.76 IS NUMBERED, NOT STARTED: ANATOMY OF A TRANSCRIPTION.** A visual
-> guide page, near the FRONT of the Guide. Two files: `GuideContent.svelte`
-> holds the chapters, `Drawer.svelte` holds the table of contents as
-> hand-written buttons with both languages inline, so a new chapter needs an
-> entry in each. **THE COPY IS DANN'S, ENGLISH AND FRENCH, AND THE DESK DOES
-> NOT WRITE THE FRENCH.** **Its labels are the legend's labels, RULED BY DANN
-> 2026-08-21.**
+> **Code established the route before ship 5 interrupted it, and this is worth
+> keeping: `data.bnf.fr`'s search page is JavaScript-rendered and returns
+> nothing to a fetch, but the SRU authority endpoint and the `ark:` record pages
+> both work.**
 >
-> **2. THE `inferred` QUESTION-MARK ICON NEVER PRINTS. ESTABLISHED BY CODE,
-> DELIBERATELY NOT FIXED, AND IT IS DANN'S TO RULE.** `provenance.ts` maps
-> `inferred` to a `question` icon and the footer legend will draw it, but
-> `WordStack.svelte` excludes `inferred` from its icon span twice and renders a
-> `VERIFY` label instead. **So the legend decodes a mark that is nowhere on the
-> sheet. That is the MIRROR of Dann's sigil ruling** and he has not been asked
-> which way it should resolve: draw the icon, or drop the legend entry.
+> **THE DESIGN RULING IS ALREADY MADE AND IT BLOCKS THE BUILD, NOT THE
+> RESEARCH. Dann, 2026-08-21: DISPLAY ONLY.** A song stores its composer as a
+> string and every song already saved stores the English one. The stored value
+> stays English forever; the French form is drawn, never written back. **Picking
+> from the dropdown always writes the English form, whatever language the
+> interface is in.** That is one line in `SearchableSelect.svelte:87` and it is
+> the whole difference between a display and a corruption.
 >
-> **3. THE FRENCH FORMAT LINE STILL WRAPS AT 360 x 640**, to two lines rather
-> than three. One line is not reachable in a 262 px box. **At desk width it does
-> collapse to one, which is where Dann made the ruling**, and the English is two
-> lines at 360 as well, so the displacement he named is gone where he saw it.
-> Measured by Code, reported, not solved.
+> The machinery already exists and was read on 2026-08-21:
+> `SearchableSelect.svelte:87` stores `Given Surname (dates)`, `:36` already
+> matches a stored value against two forms of each entry, and
+> `TitlePage.svelte:49` already runs the stored string back through a lookup
+> against `COMPOSERS` before drawing it. **French slots into that layer.**
 >
-> **THE THREE RULINGS FROM 2026-08-21 THAT GOVERN FUTURE WORK.**
-> **A mark that prints carries a legend entry.** Dann: *"When a sigil prints to
-> the page it must be decoded with a legend."*
-> **The clitic arrow is NOT a sigil.** Dann: *"the clitic arrow does not count
-> as a sigil. The clitic arrow is fully explained in the GUIDE section."*
-> `provenance.ts`'s deliberate clitic skip carries his sentence in its comment.
-> **The legend's labels and N.76's labels are the SAME WORDS.**
+> **NOT ESTABLISHED: which list feeds the translator dropdown.** If it draws on
+> `POETS` it is covered by the brief. If it has its own list, that list is not
+> in the brief.
 >
-> **KILLED 2026-08-21 BY DANN, and it never had a number:** the printed Learn
-> or Guide excerpt carrying a header and footer identifying its source. His
-> words: *"I do not think we need a printed Learn or Guide. Delete this idea. If
-> we need it later we will create it but for now folks will have to be content
-> with manual selection and printing."* **`ReadingPaper` gets no furniture and
-> no copy is owed.** It follows his ruling the same evening that Learn and Guide
-> get no `Print` button at all.
->
-> **METADATA IS 2 px SHORTER THAN ITS FOUR SIBLINGS AND ALWAYS WAS.** It is the
-> one station with no rule above it, because it opens the column. Dann was told
-> before his walk and did not raise it. **If he ever does, it is a ruling about
-> marks rather than about spacing.**
->
-> **THE GOVERNING DOCUMENTS for the GUI, all current:** the census
-> (`docs/sessions/sonnet-memo-control-census_2026-08-18.md`), the rulings
-> (`docs/sessions/fable-gui-rulings-2_2026-08-18.md` and the session record),
-> the spec (`docs/sessions/fable-gui-audit-and-spec_r1_2026-08-18.md`, station
-> order at **§3.3**, and **its order is superseded**), the mockups
-> (**r1 governs the drawer; r2 does not touch the stations**), the lip
-> (`ilya-lip-options_r1_2026-08-18.html`, option A, **superseded by the
-> silhouette drawing**), and the ratified strings
-> (`fable-n73-french-strings_r1_2026-08-19.md`).
-> **E.27 is a SOURCE, not law. Tether 17.**
+> **N.76 IS STRUCK. Dann, 2026-08-21: "I don't want to do the one-pager
+> anymore."** Anatomy of a Transcription is dead, not parked. It was numbered on
+> 2026-08-21 and never started. **Its one surviving consequence: the ruling that
+> the legend's labels and N.76's labels are the same words no longer binds
+> anything.**
+
+---
+
+## 2026-08-21. N.77 IS DONE AND WALKED. SIX SHIPS, AND THE BLOCKING SET EMPTIED
+
+**N.77, the Learn and Guide redesign, was numbered, designed, built, and closed
+in one sitting.** Ruling 6 of 2026-08-18 had been ratified by Dann's eyes on
+Fable's mockup and never built. Six ships, every one walked by Dann on a real
+deploy, desk and phone.
+
+| ship | commit | what |
+|---|---|---|
+| 1 | `2b85d13` | 24 chapter-opening bands, rose for Learn and cobalt for Guide |
+| 2 | `e52b1c9` | every anchor clears the sticky chrome; a chapter lands on its band |
+| 3 | `a1b5774` | the band's bleed tracks the sheet's padding; Repertoire moves up |
+| 4 | `0fcaa6e` | one mark at every station boundary; Print takes the model's size |
+| 5 | `9f11490` | no space before a question mark in French; the coda reads `Section 8` |
+| 6 | `d079794` | nine decks in both languages; the band title scales with the sheet |
+
+**Before it: `46ab5e2`, the `inferred` legend row dropped.**
+
+### THE DESK'S OWN ERRORS, ALL FOUND BY CODE, ALL THE SAME FAULT
+
+**Four of this desk's briefs carried a wrong count, and three share one cause:
+THIS REPOSITORY WRITES A NON-BREAKING SPACE IN AT LEAST FIVE SPELLINGS.** The
+desk counted two or three of them and reported the total as fact.
+
+- Ship 5's brief said **24** question-mark sites. There were **47**, and 19 were
+  `&#160;`, a spelling the desk never searched for. One more sat on its own
+  source line, where HTML collapses the newline to a space; it matched no
+  same-line search and Code found it only in the built bundle. **A fourth file,
+  `Drawer.svelte`, was never in the brief at all.**
+- The same brief said **15** guillemet pairs. There are **124**, in four
+  spellings.
+- The same brief asserted nothing precedes `!` or `;`. **3 exclamation marks and
+  60 semicolons carry a space, all French.**
+- Ship 6's brief said `&#160;:` appears **62** times. It appears **150**. The
+  desk took Code's count of 62 `&#160;` GUILLEMETS from the ship 5 memo and
+  reused it for COLONS without re-checking. **That is tether 3 exactly, and it
+  is the second wrong count in one day.**
+- Ship 4's brief claimed `New song` lacks the model's border. `.btn-ghost`
+  supplies it; both buttons already measured 34.38 px and nothing needed doing.
+- Ship 3's defect was the desk's too: the band's `-96px` bleed was passed along
+  without ever asking what the sheet's padding is on a phone. It is `1rem`.
+
+**The lesson, and it is now in `ENVIRONMENT.md`: before counting a typographic
+character in this tree, enumerate its spellings first.**
+
+### RULED BY DANN, 2026-08-21
+
+**CANADIAN FRENCH TYPOGRAPHY, checked against both authorities before he
+ruled.** No space before `?`, `!`, or `;`. **A hard space before `:`.** Canada
+parts company with France here, and Ilya followed France. Sources: the
+Government of Canada's `Clés de la rédaction`, and the OQLF's
+`Vitrine linguistique`, which says *"pas d'espace ou une espace fine"* and
+favours none. **47 sites repaired in ship 5. The 63 `!` and `;` sites are NOT
+done and belong to the colon audit.**
+
+**THE COLON AUDIT IS FLAGGED AND NOT RUN.** About 126 colon sites across the
+French halves of `LearnContent.svelte`, `GuideContent.svelte`, and `i18n.ts`.
+**Both Svelte files hold the English and the French in one file**, and English
+takes no space before a colon, so roughly half must be left alone and telling
+which is which means reading each one. Flagged as a Sonnet farm-out, 150k to
+250k tokens worst case. **Dann never answered, because N.78 overtook it.**
+
+**LEFT ALONE, DELIBERATELY, EACH WITH ITS MEASUREMENT.**
+
+- **Learn's rose kicker is 3.54:1**, below the 4.5:1 floor for 10 px text.
+  `--dusty-rose` `#A67B7B` against `#fdfbf6`. The 40 px title passes the 3:1
+  large-text floor. Guide's cobalt is 4.61:1 and passes throughout. **A darker
+  rose reaching 4.52:1 is `#996767`; `--lang-chip-learn` `#9A6A6A`, already in
+  the palette, reaches only 4.37:1.** Dann: *"Leave it."* It joins the contrast
+  items this file already records.
+- **The sage rules print faint in greyscale.** `--sage` `#8B9A7D` is 2.99:1 on
+  white and renders around grey level 146 of 255. **Closed on Dann's own
+  evidence rather than on arithmetic:** he printed `В четырёх стенах` from
+  `2b81f5a` on 2026-08-21 and said *"prints beautifully."*
+- **N.63's honest residue: SAY NOTHING.** Asked in E.45, unanswered since, now
+  answered. The keyboard clause was the only true one, and Dann's own E.41
+  posture governs: the mobile paradigm serves the user rather than apologising
+  to it. **The gate's deletion is still owed if it still ships**, and deleting
+  it also removes desk-geometry scroll arithmetic running on a phone and a
+  second redundant `loadDictionary()` call.
+- **`Calibrate` does not match `Transcribe`'s width.** Built in ship 4 and
+  reverted before it shipped. The grid truncated the voice status to
+  `Voice: not …`, cut by 52.2 px in English and 57.9 px in French at 360 px.
+  Dann: *"the colour contrast between it and the surrounding sage is
+  sufficient."*
+- **The band title's printed size.** `vw` resolves against the page box in
+  paged media, so it is very likely under the ratified 40 px on paper. **Learn
+  and Guide are offered no `Print` button at all**, by Dann's ruling of
+  2026-08-20, so paper is not a supported route to these pages. Not worth the
+  three lines.
+- **`learn-unit-7`'s French deck runs three lines** where the rest run two,
+  making that band 21.7 px taller. Bands are never seen beside each other.
+
+### THE FINDING THAT IS NOT ABOUT THE BAND, AND IS NOT RULED
+
+**Between 768 px and about 956 px with the drawer open, the drawer takes 520 px
+and THE READING SHEET IS 192 px WIDE.** Measured by Code on `d079794`. The band
+title paints 96.2 px off screen there, recovered from 125.8 px by ship 6's
+clamp, and `vw` cannot clear it because the drawer owns 520 px of the window.
+
+**The title is the symptom. A 192 px reading sheet is unusable whatever size the
+title is.** Recorded as a question about the drawer at tablet widths, not about
+the band. Code's remedy, unruled and untaken: `container-type: inline-size` on
+`.chapter-band` and a `cqi` term instead of the `vw` term.
+
+### EIGHTEEN DECK STRINGS, RATIFIED VERBATIM
+
+Ship 1 gave decks to Learn's chapters 2, 3, and 4 by lifting a thesis sentence
+already in the body. **Nine chapters had none.** Dann ruled *"Write the nine"*
+and asked for drafts, **waiving the standing rule that the desk does not write
+the French.**
+
+**Eight of the nine English decks are Dann's own prose condensed, or Fable's
+from mockup r2. One, `guide-contributors`, was coined by the desk.** Of the nine
+French, four are effectively his own words and five carry a coined element, each
+marked in the thread before he ratified. **All eighteen ratified without
+edit.** They are in `LearnContent.svelte` and `GuideContent.svelte`; the brief
+that carries the table is
+`docs/sessions/brief-n77-ship6-decks-and-scaling_r1_2026-08-21.md`.
+
+### N.72 IS CLOSED, AND HOW
+
+**The last unwalked surface was Chrome on iPhone, on a stable URL.** Ship 4 was
+made its own instrument: the rule between `REPERTOIRE` and `SOURCE` that ship 4
+restored is visible, so no build marker was needed.
+
+**Dann held the branch alias `ilya-git-shane-dannmittons-projects.vercel.app`
+open on his phone, confirmed no rule between the two stations, ship 4 landed,
+and ONE RELOAD delivered the new build.** The confound was named in advance and
+did not fire: the alias had flipped, so the private-tab disambiguator was never
+needed.
 
 ---
 
@@ -1651,17 +1762,22 @@ either session**; every number is desktop, at numpy 2.2 to 2.4 and cv2 4.11 to
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
-### The blocking set: TWO, plus one ruling
+### THE BLOCKING SET IS EMPTY, 2026-08-21
 
-**Was THREE until 2026-08-18. N.59 left the blocking set by being answered, not
-by being finished.** Its tier 2 is parked with a measured reason; see above.
+**Was THREE until 2026-08-18, then TWO, and on 2026-08-21 it emptied.** N.59
+left it by being answered rather than finished. N.67 closed 2026-08-18. N.72
+closed 2026-08-21 on Dann's own iPhone. **N.58 was DEFERRED TO FUTURE
+DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 
 | | item | state |
 |---|---|---|
-| `[ ]` | **N.67** the save function | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **ALL SEVEN ARE NOW SHIPPED.** Steps 0 through 5 are CLOSED and every one of them was walked by Dann on a deploy; step 5 shipped `9892887`, was walked on `ilya-eaxv09qx3` (`a8a979b`) in twelve steps, record `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`. **The emergency is over and songs are plural.** **STEP 6 SHIPPED `cee4572` 2026-08-18, memo in the same commit, and Code walked all eight items of its brief on a local production build, refuting its own build three times.** Gate 4 moved 590 to 628 for step 5 and **628 to 671** for step 6. **What remains is DANN'S WALK OF STEP 6 ON A DEPLOY, and nothing else.** See the section above and the four documents below |
-| `[ ]` | **N.72** no singer can ever receive a fix | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
+| `[x]` | **N.67** the save function | **CLOSED WHOLE 2026-08-18.** This row read `[ ]` until 2026-08-21, when the desk found it contradicting the section above that records every step walked by Dann on a deploy. **The tracker was stale, not the work.** |
+| | *(2026-08-18 detail, kept)* | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **ALL SEVEN ARE NOW SHIPPED.** Steps 0 through 5 are CLOSED and every one of them was walked by Dann on a deploy; step 5 shipped `9892887`, was walked on `ilya-eaxv09qx3` (`a8a979b`) in twelve steps, record `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`. **The emergency is over and songs are plural.** **STEP 6 SHIPPED `cee4572` 2026-08-18, memo in the same commit, and Code walked all eight items of its brief on a local production build, refuting its own build three times.** Gate 4 moved 590 to 628 for step 5 and **628 to 671** for step 6. **What remains is DANN'S WALK OF STEP 6 ON A DEPLOY, and nothing else.** See the section above and the four documents below |
+| `[x]` | **N.72** no singer can ever receive a fix | **CLOSED 2026-08-21.** Chrome on iPhone on a stable URL passed: Dann held the branch alias open, ship 4 landed, ONE RELOAD delivered the new build. **Still his to rule, carried over and never asked: a singer on Chrome for iPhone can never install Ilya to the home screen.** |
+| | *(2026-08-16 detail, kept)* | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
 | | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
-| `[ ]` | **N.58** MIDI import | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
+| `[~]` | **N.58** MIDI import | **DEFERRED TO FUTURE DEVELOPMENT, ruled by Dann 2026-08-21.** Not blocking. Do not write a third scoping brief. |
+| | *(2026-08-14 detail, kept)* | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[~]` | **N.59** the reader in the browser | **TIER 2 CLOSED 2026-08-18, ANSWERED NO, two Opus Code sessions. THE ONE THING above carries the whole account and its numbers.** Phase 0 killed the substrate decider, best margin −587 px; the slice probe died three times over, on grouping, on the fixture corpus (0 of 23), and on cost (16 to 59×). **Line grouping needs \|shear\| ≲ 0.12° and the photograph carries 2.48°.** The only instrument left is a dewarp, which is a project and is **NOT AUTHORISED**. **PARKED AT TIER 2. What a singer sees is unchanged:** photograph import stays in the beta and fails honestly, Dann's ruling 2026-08-17. **STILL OPEN INSIDE N.59: step 3, the brace rule, is `WRITTEN` and not `DONE`.** **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Step 8 (PDF, `pdfjs-dist`) ruled in and done.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
 ### Closed and parked
@@ -1975,7 +2091,8 @@ French Dann has not seen.
   choosing Keep leaves them somewhere they did not ask to be. Nothing is lost,
   because saving is continuous.
 
-- **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
+- ~~RULED 2026-08-21: **LEAVE IT**, on Dann's printed sheet rather than on
+  arithmetic. Original text kept:~~ **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
   (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
   for pure white. Three levers: leave it; darken `--sage` globally, which keeps
   print identical to screen; or darken at print only, which breaks the WYSIWYG
@@ -1997,10 +2114,13 @@ French Dann has not seen.
   Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:48`
   already excludes `CriOS` and `FxiOS`. Established by reading, carried over
   from N.72 where it was named and never ruled.
-- **N.63.** Killing the interstitial is ruled; **where the honest residue goes is
-  not.** Asked in E.45, still unanswered.
+- ~~**N.63.** Where the honest residue goes~~ **RULED 2026-08-21: SAY NOTHING.**
+  Still owed: deleting the gate itself, if it still ships. NOT ESTABLISHED
+  whether it does; the last evidence is Fable's finding F5 of 2026-08-18.
 - **N.45's remainder.**
-- **The French question mark.** Eleven strings carry U+00A0 before `?`.
+- ~~**The French question mark.**~~ **RULED 2026-08-21: no space before `?` in
+  Canadian French, a hard space before `:`.** It was 47 sites, not eleven. Shipped
+  in `9f11490`. **The 63 `!` and `;` sites are NOT done.**
 - *(Not yet: what a deliberately empty note draws.)*
 
 ---

@@ -1685,3 +1685,93 @@ Image.open(path).convert('RGB').save('out.png')
 question.** On 2026-08-21 it confirmed two done-conditions at once: `Print` is
 absent from the sheet, and the `Ⓡ SPOT RECONSTITUTION` legend is drawn above the
 attribution rule. Neither could be established from a browser.
+
+---
+
+## TYPOGRAPHY IN THIS TREE. Learned the hard way, 2026-08-21
+
+**BEFORE YOU COUNT A TYPOGRAPHIC CHARACTER HERE, ENUMERATE ITS SPELLINGS
+FIRST.** The desk wrote four wrong counts into three briefs in one day, and
+three of them share this cause.
+
+**A non-breaking space is written in at least five ways in this repository:**
+
+| spelling | where |
+|---|---|
+| `\u00a0` escape | `i18n.ts`, which is TypeScript string literals |
+| `&#160;` numeric entity | the Svelte reading files, and it is the COMMONEST there |
+| `&nbsp;` named entity | the Svelte reading files |
+| a literal U+00A0 character | the Svelte reading files |
+| `&#8239;` narrow no-break space | at least once in `LearnContent.svelte` |
+
+**Measured on 2026-08-21:** `LearnContent.svelte` holds 124 guillemet pairs in
+four spellings, not the 15 the desk reported by counting `&nbsp;` alone, and 150
+occurrences of `&#160;:`, not the 62 the desk reported by reusing a guillemet
+count for colons.
+
+**Two traps a same-line grep cannot see.**
+
+- **A `?` can sit on its own source line.** `LearnContent.svelte:1562` had one,
+  where HTML collapses the newline to a space. It rendered as a defect and
+  matched no same-line search. **Only the built bundle found it.**
+- **`Drawer.svelte` holds French prose.** Its table-of-contents labels mirror
+  the Guide's headings verbatim, so a change to a heading that skips the drawer
+  puts the same sentence on screen two different ways in the same view.
+
+**Scan the BUILT BUNDLE, not the source, when the question is what a singer
+sees.** A naive tree sweep also drowns in JavaScript ternaries.
+
+### THE RULE FOR CANADIAN FRENCH, ruled by Dann 2026-08-21
+
+**No space before `?`, `!`, or `;`. A hard space before `:`.** Canada parts
+company with France here. Sources, both checked before the ruling: the
+Government of Canada's `Clés de la rédaction`
+(`nos-langues.canada.ca/fr/cles-de-la-redaction/signes-de-ponctuation-et-espaces`)
+and the OQLF's `Vitrine linguistique`, which says *"pas d'espace ou une espace
+fine"* and favours none.
+
+---
+
+## THE SHIP SCRIPT STAGES EVERYTHING. Read it, 2026-08-21
+
+`ilya-ship.sh` runs **`git add -u`**, which stages every tracked modification
+whatever you staged by hand. **You cannot make two commits by staging two
+subsets.** If Code offers to split a ship into separate commits, it is wrong:
+either ship them together or revert one first.
+
+It also **refuses outright on untracked files**. Every brief and memo the desk
+writes into `docs/sessions/` must be `git add`ed before the ship, including
+briefs for work that has not started yet.
+
+**Code's `git add` lines are frequently wrong** and have named a file that does
+not exist twice in one day. **Check the filenames on disk before handing Dann
+the command**, and give it as `git -C ~/Desktop/ilya-rewrite add …` because his
+shell sits in `~`, where a repo-relative path fails.
+
+---
+
+## THE BRANCH ALIAS IS THE N.72 INSTRUMENT
+
+`ilya-git-shane-dannmittons-projects.vercel.app` is the same address every ship,
+which is what makes it the only way to test whether a singer on a stable URL
+receives a new build. **A deployment URL cannot test this**, because every
+deployment is its own frozen origin.
+
+**Used successfully 2026-08-21 to close N.72.** The method: pick a ship that
+changes something VISIBLE, have Dann open the alias before it lands, note the
+before state, then reload once after. **The visible change is the build marker
+and no instrumentation is needed.**
+
+**Name the confound in advance.** The alias lags READY, so reloading too early
+looks identical to the service worker serving stale. **The disambiguator is a
+private tab**, which has no service worker: if private shows the new build and
+the normal tab does not, that is the bug. It was not needed on 2026-08-21.
+
+---
+
+## data.bnf.fr, for N.78
+
+Established by Code 2026-08-21: **the search page is JavaScript-rendered and
+returns nothing to a fetch. The SRU authority endpoint and the `ark:` record
+pages both work.** That is the route.
+
