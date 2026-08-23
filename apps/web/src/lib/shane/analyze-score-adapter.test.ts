@@ -309,7 +309,7 @@ describe('composeBroadNote (§B.5 print legend)', () => {
 	it('range guidance only: EN and FR', () => {
 		const c = { formants: true, range: false, tessitura: true, passaggio: true };
 		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without range guidance' + EN_SUFFIX);
-		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
 	});
 
 	it('tessitura blank alone also reads as range guidance', () => {
@@ -320,12 +320,12 @@ describe('composeBroadNote (§B.5 print legend)', () => {
 	it('positional passaggio flags only: EN and FR', () => {
 		const c = { formants: true, range: true, tessitura: true, passaggio: false };
 		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without positional passaggio flags' + EN_SUFFIX);
-		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
 	});
 
 	it('both dimensions blank: EN joins with and, FR joins with ni', () => {
 		const c = { formants: true, range: false, tessitura: true, passaggio: false };
 		expect(composeBroadNote(c, 'en')).toBe('Broad analysis: this score is shown without range guidance and positional passaggio flags' + EN_SUFFIX);
-		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus ni le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
+		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus ni le signalement des notes de passaggio, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
 	});
 });

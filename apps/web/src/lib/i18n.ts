@@ -38,7 +38,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// This does NOT replace 'tab.fit': Fit is the tool's name and is
 	// invariant in French by his ruling of 2026-07-13. The document is not
 	// called Fit.
-	'tab.markedScore':             { en: 'Marked score',                 fr: 'Partition annotée' },
+	'tab.markedScore':             { en: 'Score markup',                 fr: 'Partition annotée' },
 	// The drawer's pull carries no visible word (N.73 S1 §2.7, Dann's ruling
 	// of 2026-08-19: fewer text elements onscreen). The ratified word is its
 	// ACCESSIBLE name instead, with aria-expanded carrying the state, so the
@@ -139,7 +139,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.glossFallbackEN':    { en: 'Gloss available in English only', fr: 'Glose disponible en anglais seulement' },
 	'inspector.glossFallbackFR':    { en: 'Gloss available in French only',  fr: 'Glose disponible en français seulement' },
 	'inspector.dictCapacity':       { en: 'Maximum 20 characters',         fr: 'Maximum de 20 caractères' },
-	'inspector.dictChoose':        { en: 'Use this reading:',           fr: 'Utiliser cette lecture :' },
+	'inspector.dictChoose':        { en: 'Use this reading:',           fr: 'Utiliser cette lecture\u00a0:' },
 
 	// ── Grayson positional labels (Ribbon syllable group headers) ──
 	'ribbon.stressed':             { en: 'stressed',                     fr: 'tonique' },
@@ -224,7 +224,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Fit broad-analysis legend (§B.5) ─────────────────
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
-	'fit.broad.body':              { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large : cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
+	'fit.broad.body':              { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
 	'fit.broad.itemRange':         { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'fit.broad.itemPassaggio':     { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
 	'fit.broad.join':              { en: 'and',                          fr: 'ni' },
@@ -375,7 +375,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.status.preparingReader': { en: 'Preparing the page reader. This will only happen once.', fr: 'Préparation du lecteur de page. Cela n’arrivera qu’une fois.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them in Transcription.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image\u00a0; saisissez-les dans Transcription.' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them in Transcription.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image; saisissez-les dans Transcription.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -633,7 +633,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.emptyStateAria': { en: 'Voice profile', fr: 'Profil vocal' },
 	'profile.withheld.heading': { en: 'Nothing is claimed about your voice', fr: 'Rien n’est affirmé sur votre voix' },
 	'profile.withheld.lede': { en: 'Ilya has read your score, but no voice has been measured, so there is nothing to compare this line against.', fr: 'Ilya a lu votre partition, mais aucune voix n’a été mesurée, donc il n’y a rien à quoi comparer cette ligne.' },
-	'profile.withheld.item1': { en: 'Every acoustic mark: no crossings, no timbre turns.', fr: 'Toute marque acoustique : aucun croisement, aucun changement de timbre.' },
+	'profile.withheld.item1': { en: 'Every acoustic mark: no crossings, no timbre turns.', fr: 'Toute marque acoustique\u00a0: aucun croisement, aucun changement de timbre.' },
 	'profile.withheld.item2': { en: 'The watch list, entirely. An empty list is the truthful output here.', fr: 'La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête.' },
 	'profile.withheld.item3': { en: 'Any reading of your range, your tessitura, or your passaggio.', fr: 'Toute lecture de votre ambitus, de votre tessiture ou de votre passaggio.' },
 	// ── NotePicker (N.50) ─────────────────

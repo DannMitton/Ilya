@@ -22,7 +22,7 @@
 
 						<h4 id="guide-what">Que fait Ilya?</h4>
 
-						<p><em>Ilya</em> poursuit un double objectif : ouvrir l'accès au corpus du russe chanté, et éduquer.</p>
+						<p><em>Ilya</em> poursuit un double objectif : ouvrir l'accès au corpus du russe chanté, et éduquer.</p>
 
 						<p><em>Ilya</em> équipe les chanteurs de transcriptions vérifiables et précises de textes russes chantés, supprimant ainsi la barrière qui défend le répertoire vocal russe classique des artistes non russophones qui souhaiteraient l'interpréter. En automatisant la transcription de textes russes cyrilliques en symboles de l'Alphabet phonétique international (API), selon une méthode conçue par Craig Grayson, <em>Ilya</em> dissipe la mystique et offre un accès pratique et généralisé à la prononciation du russe chanté.</p>
 
@@ -30,7 +30,7 @@
 
 						<h4 id="guide-paste">Que se passe-t-il lorsque je saisis un texte russe?</h4>
 
-						<p><em>Ilya</em> fait ce que nous pouvons apprendre à faire manuellement, mais beaucoup plus vite. Il met à jour et normalise automatiquement l'orthographe, recherche l'accent tonique, détermine comment cet accent affecte les voyelles environnantes, applique les règles de voisement et de dévoisement des consonnes, propose une consultation du dictionnaire pour le sens, et produit trois lignes de contenu dans un format familier : ligne supérieure en API, ligne médiane en texte cyrillique source, et ligne inférieure en glose de traduction minimale. Ces transcriptions méritent un examen approfondi tout en restant lisibles d'un coup d'œil. Les utilisateurs peuvent exporter des PDF comme copies papier ou les conserver pour une étude ultérieure. <em>Ilya</em> ne sauvegarde pas les transcriptions, ne conservant entre les sessions que le travail en cours. <em>Ilya</em> est un outil savant actif destiné à la performance classique et à l'enseignement, pas un dépôt de transcriptions ni une maison d'édition.</p>
+						<p><em>Ilya</em> fait ce que nous pouvons apprendre à faire manuellement, mais beaucoup plus vite. Il met à jour et normalise automatiquement l'orthographe, recherche l'accent tonique, détermine comment cet accent affecte les voyelles environnantes, applique les règles de voisement et de dévoisement des consonnes, propose une consultation du dictionnaire pour le sens, et produit trois lignes de contenu dans un format familier : ligne supérieure en API, ligne médiane en texte cyrillique source, et ligne inférieure en glose de traduction minimale. Ces transcriptions méritent un examen approfondi tout en restant lisibles d'un coup d'œil. Les utilisateurs peuvent exporter des PDF comme copies papier ou les conserver pour une étude ultérieure. <em>Ilya</em> ne sauvegarde pas les transcriptions, ne conservant entre les sessions que le travail en cours. <em>Ilya</em> est un outil savant actif destiné à la performance classique et à l'enseignement, pas un dépôt de transcriptions ni une maison d'édition.</p>
 
 						<h4 id="guide-source">Pourquoi Ilya ne suit-il qu’une seule source?</h4>
 
@@ -38,7 +38,7 @@
 
 						<h4 id="guide-ai">Ilya est-il un outil d’IA?</h4>
 
-						<p>Non. <em>Ilya</em> est fondé sur des règles, ce qui le rend déterministe : même entrée, même sortie, à chaque fois. La base de règles d'<em>Ilya</em> fonctionne que vous soyez connecté à l'internet ou non. C'est l'opérationnalisation de la thèse de Grayson, <em>Russian Lyric Diction</em> (University of Washington, 2012). Et en tant que moteur de transcription fondé sur des règles, les résultats d'<em>Ilya</em> seront toujours justifiables par une règle de diction lyrique russe méticuleusement citée, couverte dans le module LEÇONS.</p>
+						<p>Non. <em>Ilya</em> est fondé sur des règles, ce qui le rend déterministe : même entrée, même sortie, à chaque fois. La base de règles d'<em>Ilya</em> fonctionne que vous soyez connecté à l'internet ou non. C'est l'opérationnalisation de la thèse de Grayson, <em>Russian Lyric Diction</em> (University of Washington, 2012). Et en tant que moteur de transcription fondé sur des règles, les résultats d'<em>Ilya</em> seront toujours justifiables par une règle de diction lyrique russe méticuleusement citée, couverte dans le module LEÇONS.</p>
 
 						<h4 id="guide-role">Quel est mon rôle en tant qu’utilisateur?</h4>
 
@@ -57,22 +57,22 @@
 						     de la passe française de l'interface de calibration. -->
 						<h4 id="guide-fit-forecast">Fit prévoit, il ne déclare pas</h4>
 
-						<p><em>Fit</em> prévoit ; il ne déclare pas. À partir d'une poignée d'échantillons de fry sur un micro grand public, il ne peut pas, et ne doit pas, se prononcer sur votre larynx. Ce qu'il peut honnêtement faire, c'est prendre vos résonances mesurées et prévoir comment une pièce du répertoire est susceptible de rencontrer votre voix : où le timbre va probablement basculer, où la zona di passaggio risque de se situer, où la tessiture devient exigeante. Certains chanteurs s'accorderont avec la prévision, d'autres non, et cette différence est elle aussi une information, non une erreur. L'outil offre au chanteur une connaissance de lui-même et de la manière dont la musique impose ses exigences, puis remet les décisions entre ses mains et celles de son professeur.</p>
+						<p><em>Fit</em> prévoit; il ne déclare pas. À partir d'une poignée d'échantillons de fry sur un micro grand public, il ne peut pas, et ne doit pas, se prononcer sur votre larynx. Ce qu'il peut honnêtement faire, c'est prendre vos résonances mesurées et prévoir comment une pièce du répertoire est susceptible de rencontrer votre voix : où le timbre va probablement basculer, où la zona di passaggio risque de se situer, où la tessiture devient exigeante. Certains chanteurs s'accorderont avec la prévision, d'autres non, et cette différence est elle aussi une information, non une erreur. L'outil offre au chanteur une connaissance de lui-même et de la manière dont la musique impose ses exigences, puis remet les décisions entre ses mains et celles de son professeur.</p>
 
 						<!-- Caractéristiques vocales (E.5 tranche 3, 2026-07-13).
 						     Traduction française attentive mais non native, à valider lors
 						     de la passe française de l'interface de calibration. -->
-						<h4 id="guide-fit-characteristics">Caractéristiques vocales : ambitus, tessiture et passaggio</h4>
+						<h4 id="guide-fit-characteristics">Caractéristiques vocales : ambitus, tessiture et passaggio</h4>
 
-						<p>Au-delà de ses résonances mesurées, un profil vocal peut porter trois caractéristiques facultatives, saisies depuis le sommaire du profil dans le Tiroir : l'ambitus (les notes confortables la plus grave et la plus aiguë), la tessiture (là où la voix vit, non ses extrêmes), et le passaggio (les deux bascules, grave et aiguë, qui encadrent la zona di passaggio ; les deux sont nécessaires avant qu'il soit signalé). Chacune se règle au moyen d'un sélecteur de note : choisissez la lettre, l'altération et l'octave, et la note s'affiche sur une petite portée en confirmation.</p>
+						<p>Au-delà de ses résonances mesurées, un profil vocal peut porter trois caractéristiques facultatives, saisies depuis le sommaire du profil dans le Tiroir : l'ambitus (les notes confortables la plus grave et la plus aiguë), la tessiture (là où la voix vit, non ses extrêmes), et le passaggio (les deux bascules, grave et aiguë, qui encadrent la zona di passaggio; les deux sont nécessaires avant qu'il soit signalé). Chacune se règle au moyen d'un sélecteur de note : choisissez la lettre, l'altération et l'octave, et la note s'affiche sur une petite portée en confirmation.</p>
 
-						<p>Ces valeurs se saisissent au clavier et ne se chantent pas, à dessein. Des extrêmes d'ambitus exigés devant un micro invitent à forcer, la tessiture relève du jugement plutôt que de la mesure, et un chanteur formé connaît généralement son passaggio mieux que ne le montrerait un échantillon rapide. Chaque champ est facultatif, et un champ vide ne bloque jamais rien : l'analyse reste simplement large pour cette dimension, et un passaggio dont une bascule reste vide n'est pas signalé : il demeure non renseigné, non pas absent. Les valeurs s'enregistrent au fil de la saisie, appartiennent à la voix active, et peuvent être modifiées ou effacées à tout moment depuis le même sommaire.</p>
+						<p>Ces valeurs se saisissent au clavier et ne se chantent pas, à dessein. Des extrêmes d'ambitus exigés devant un micro invitent à forcer, la tessiture relève du jugement plutôt que de la mesure, et un chanteur formé connaît généralement son passaggio mieux que ne le montrerait un échantillon rapide. Chaque champ est facultatif, et un champ vide ne bloque jamais rien : l'analyse reste simplement large pour cette dimension, et un passaggio dont une bascule reste vide n'est pas signalé : il demeure non renseigné, non pas absent. Les valeurs s'enregistrent au fil de la saisie, appartiennent à la voix active, et peuvent être modifiées ou effacées à tout moment depuis le même sommaire.</p>
 
 						<h4 id="guide-fit-notation">Conventions de notation de Fit</h4>
 
-						<p>La partition analysée de <em>Fit</em> emploie un petit ensemble de conventions, adaptées de Mitton (2020, annexes B et C). La direction des hampes est sémantique : hampe vers le bas, timbre ouvert ; hampe vers le haut, timbre fermé. Les têtes de note sauge, sans hampe, indiquent la hauteur de bascule du timbre pour la voyelle chantée, avec leurs propres altérations dans la même couleur. Un cadre rouge arrondi signale un croisement fR1/fo. Sous la portée, la ligne cyrillique est doublée d'une ligne API en caractères droits, jamais en italique, afin que le contraste entre le a clair et le a sombre demeure lisible.</p>
+						<p>La partition analysée de <em>Fit</em> emploie un petit ensemble de conventions, adaptées de Mitton (2020, annexes B et C). La direction des hampes est sémantique : hampe vers le bas, timbre ouvert; hampe vers le haut, timbre fermé. Les têtes de note sauge, sans hampe, indiquent la hauteur de bascule du timbre pour la voyelle chantée, avec leurs propres altérations dans la même couleur. Un cadre rouge arrondi signale un croisement fR1/fo. Sous la portée, la ligne cyrillique est doublée d'une ligne API en caractères droits, jamais en italique, afin que le contraste entre le a clair et le a sombre demeure lisible.</p>
 
-						<p>Une rupture de phonation s'écrit <strong>[#]</strong> sur la ligne API, à la jonction des deux notes qu'elle sépare. Les crochets attirent l'attention là où la rupture se produit ; le symbole appartient à la ligne de diction, non à la notation musicale, où il se confondrait avec un dièse.</p>
+						<p>Une rupture de phonation s'écrit <strong>[#]</strong> sur la ligne API, à la jonction des deux notes qu'elle sépare. Les crochets attirent l'attention là où la rupture se produit; le symbole appartient à la ligne de diction, non à la notation musicale, où il se confondrait avec un dièse.</p>
 
 
 							<!-- ═══ VISITE GUIDÉE ══════════════════════════════════ -->
@@ -90,12 +90,12 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-01.webp" alt="Ilya s'ouvre avec le Tiroir déployé à gauche et le document papier à droite, affichant trois sections et quatre onglets de navigation." width="1200" loading="lazy" />
-								<figcaption><em>Ilya</em> s'ouvre avec le Tiroir déployé à gauche et le document papier à droite. Le Tiroir est organisé en trois sections : Métadonnées, Analyse et Notation. Les quatre onglets au bas de l'écran permettent de naviguer entre les quatre espaces d'<em>Ilya</em> : Transcription, Fit, Leçons et Guide.</figcaption>
+								<figcaption><em>Ilya</em> s'ouvre avec le Tiroir déployé à gauche et le document papier à droite. Le Tiroir est organisé en trois sections : Métadonnées, Analyse et Notation. Les quatre onglets au bas de l'écran permettent de naviguer entre les quatre espaces d'<em>Ilya</em> : Transcription, Fit, Leçons et Guide.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-02.webp" alt="Le commutateur de langue en haut à droite de la barre de titre, affichant les options English et Français." width="1200" loading="lazy" />
-								<figcaption>Le commutateur de langue, en haut à droite, fait basculer l'intégralité de l'interface entre l'anglais et le français. Tout le contenu d'<em>Ilya</em> est entièrement bilingue : le module Leçons, le Guide et chaque étiquette du Tiroir.</figcaption>
+								<figcaption>Le commutateur de langue, en haut à droite, fait basculer l'intégralité de l'interface entre l'anglais et le français. Tout le contenu d'<em>Ilya</em> est entièrement bilingue : le module Leçons, le Guide et chaque étiquette du Tiroir.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -124,7 +124,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-14.webp" alt="Le champ Compositeur ouvert avec une liste déroulante de recherche affichant des noms de compositeurs dont Tchaïkovski." width="1200" loading="lazy" />
-								<figcaption>Le champ Compositeur propose une liste de recherche. Au fil de la saisie, <em>Ilya</em> affine les suggestions. Sélectionnez le nom dans la liste ; l'en-tête du document papier se met à jour immédiatement.</figcaption>
+								<figcaption>Le champ Compositeur propose une liste de recherche. Au fil de la saisie, <em>Ilya</em> affine les suggestions. Sélectionnez le nom dans la liste; l'en-tête du document papier se met à jour immédiatement.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -136,7 +136,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-17.webp" alt="Le document papier peuplé avec la transcription API au-dessus de chaque mot et les gloses de traduction en dessous, avec l'en-tête de métadonnées en haut." width="1200" loading="lazy" />
-								<figcaption>La sortie est organisée en Piles de mots sur le Papier : API en haut, cyrillique source au milieu et glose de dictionnaire en bas.</figcaption>
+								<figcaption>La sortie est organisée en Piles de mots sur le Papier : API en haut, cyrillique source au milieu et glose de dictionnaire en bas.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -148,7 +148,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-20.webp" alt="Le Ruban syllabique de l'Inspecteur dans le panneau Analyse montrant les règles phonologiques appliquées syllabe par syllabe, avec une colonne pour chaque position syllabique." width="1200" loading="lazy" />
-								<figcaption>Le Ruban syllabique de l'Inspecteur offre un compte rendu règle par règle de la manière dont le moteur a généré la transcription. Chaque colonne syllabique indique quelles règles ont été appliquées et pourquoi. C'est la couche de vérification : chaque résultat est justifiable par une règle citée de la thèse de Grayson.</figcaption>
+								<figcaption>Le Ruban syllabique de l'Inspecteur offre un compte rendu règle par règle de la manière dont le moteur a généré la transcription. Chaque colonne syllabique indique quelles règles ont été appliquées et pourquoi. C'est la couche de vérification : chaque résultat est justifiable par une règle citée de la thèse de Grayson.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -158,7 +158,7 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-25.webp" alt="Le mot закалённому sélectionné sur le papier, affichant sa transcription API dans le panneau Analyse." width="1200" loading="lazy" />
-								<figcaption>Le mot <em>закалённому</em> contient la lettre ё, qui porte toujours l'accent tonique en russe. <em>Ilya</em> repère ё sans inférence : aucune consultation du dictionnaire n'est nécessaire pour placer l'accent sur un mot qui en contient une.</figcaption>
+								<figcaption>Le mot <em>закалённому</em> contient la lettre ё, qui porte toujours l'accent tonique en russe. <em>Ilya</em> repère ё sans inférence : aucune consultation du dictionnaire n'est nécessaire pour placer l'accent sur un mot qui en contient une.</figcaption>
 							</figure>
 
 							<figure class="guide-step-figure">
@@ -168,12 +168,12 @@
 
 							<figure class="guide-step-figure">
 								<img src="/guide/guide-step-35.webp" alt="Un mot signalé comme Entrée complète indisponible dans l'onglet Dictionnaire, avec le bouton Mon choix visible." width="1200" loading="lazy" />
-								<figcaption>Imprimez vers votre appareil ou enregistrez en PDF. <em>Ilya</em> conservera le travail de votre dernière session, mais pas un catalogue de transcriptions complétées : c'est à vous de l'organiser.</figcaption>
+								<figcaption>Imprimez vers votre appareil ou enregistrez en PDF. <em>Ilya</em> conservera le travail de votre dernière session, mais pas un catalogue de transcriptions complétées : c'est à vous de l'organiser.</figcaption>
 							</figure>
 
 							<h4 id="guide-walk-notation">Les préférences de notation</h4>
 
-							<p>La section Notation du Tiroir contient sept commutateurs. Chacun contrôle un aspect distinct de l'affichage de la transcription sur le papier. Tous sont non destructifs : ils n'affectent que l'affichage, non l'analyse phonologique sous-jacente. Ils peuvent être librement combinés.</p>
+							<p>La section Notation du Tiroir contient sept commutateurs. Chacun contrôle un aspect distinct de l'affichage de la transcription sur le papier. Tous sont non destructifs : ils n'affectent que l'affichage, non l'analyse phonologique sous-jacente. Ils peuvent être librement combinés.</p>
 
 							<p>La syllabification ouverte modifie la représentation des frontières syllabiques. La reconstitution applique une variante savante pour le ⟨е⟩ non accentué après les consonnes toujours dures, élaborée en collaboration avec le Dr&nbsp;Alexei Kochetov à l'Université de Toronto. Les commutateurs pour le ‹щ›, les géminées et la nasale palatale permettent d'accommoder différentes traditions de notation. La paire de voyelles réduites contrôle l'affichage de [ʌ] ou de [ə] pour les voyelles centrales non accentuées. Les commutateurs d'accentuation placent les marques d'accent directement au-dessus des voyelles, ce que certains chanteurs trouvent plus lisible à tempo.</p>
 
@@ -181,7 +181,7 @@
 
 							<h4 id="guide-walk-print">Imprimer et réinitialiser</h4>
 
-							<p>Lorsque le document est complet, cliquez sur Imprimer. <em>Ilya</em> ouvre la boîte de dialogue d'impression du navigateur. Le document s'imprime exactement tel qu'il apparaît à l'écran : API, gloses, en-tête de métadonnées et toutes les préférences de notation appliquées.</p>
+							<p>Lorsque le document est complet, cliquez sur Imprimer. <em>Ilya</em> ouvre la boîte de dialogue d'impression du navigateur. Le document s'imprime exactement tel qu'il apparaît à l'écran : API, gloses, en-tête de métadonnées et toutes les préférences de notation appliquées.</p>
 
 							<p>Cliquez sur Réinitialiser pour effacer les champs de métadonnées tout en conservant le texte russe — utile pour transcrire plusieurs pièces avec le même texte mais une attribution différente. Cliquez sur Effacer le texte pour repartir de zéro. Les préférences de notation que vous avez établies restent actives jusqu'à ce que vous les modifiiez.</p>
 
@@ -208,11 +208,11 @@
 
 						<h4 id="guide-grayson-intro">Introduction</h4>
 
-						<p>L'idée de rédiger un guide pratique de diction lyrique russe m'est venue en écoutant plusieurs chanteurs compétents interpréter des œuvres russes en récital. Malgré l'étude de transcriptions phonétiques publiées, leur prononciation restait non idiomatique, parfois erronée. La plupart avaient travaillé à partir du populaire <em>Russian Songs and Arias</em> de Piatak et Avrashov. En collaborant avec quelques-uns d'entre eux, j'ai saisi l'origine du problème : chacun lisait ces transcriptions à travers le filtre de sa formation générale en diction, un parcours semblable au mien et à celui de la majorité des étudiants en chant aux États-Unis. Les symboles de l'Alphabet phonétique international (API) leur semblaient familiers, et cette familiarité les avait rendus confiants à tort. Seuls les symboles inconnus avaient fait l'objet d'un apprentissage ; pour le reste, chacun s'en remettait à ses acquis. L'ouvrage de Piatak et Avrashov n'est pas exempt d'ambigüités. Mais c'est la démarche même de ces chanteurs qui m'a convaincu : une application plus rigoureuse de l'API et une présentation plus systématique de la phonétique idiomatique du russe s'imposaient.</p>
+						<p>L'idée de rédiger un guide pratique de diction lyrique russe m'est venue en écoutant plusieurs chanteurs compétents interpréter des œuvres russes en récital. Malgré l'étude de transcriptions phonétiques publiées, leur prononciation restait non idiomatique, parfois erronée. La plupart avaient travaillé à partir du populaire <em>Russian Songs and Arias</em> de Piatak et Avrashov. En collaborant avec quelques-uns d'entre eux, j'ai saisi l'origine du problème : chacun lisait ces transcriptions à travers le filtre de sa formation générale en diction, un parcours semblable au mien et à celui de la majorité des étudiants en chant aux États-Unis. Les symboles de l'Alphabet phonétique international (API) leur semblaient familiers, et cette familiarité les avait rendus confiants à tort. Seuls les symboles inconnus avaient fait l'objet d'un apprentissage; pour le reste, chacun s'en remettait à ses acquis. L'ouvrage de Piatak et Avrashov n'est pas exempt d'ambigüités. Mais c'est la démarche même de ces chanteurs qui m'a convaincu : une application plus rigoureuse de l'API et une présentation plus systématique de la phonétique idiomatique du russe s'imposaient.</p>
 
 						<p>Les guides existants, pour la plupart, se présentent sous forme d'anthologies de littérature vocale : textes transcrits, traduits, offerts à l'étude par cœur. Mon intention est tout autre. Je souhaite offrir au chanteur un ouvrage de référence couvrant l'ensemble des sons chantés du russe, des plus élémentaires aux plus subtils, accompagné des concepts et des règles qui permettent de préparer de manière autonome une partition inconnue, comme on le fait couramment en italien, en français ou en allemand. Cette démarche s'inscrit dans la lignée d'ouvrages tels que <em>Singers' Italian</em> de Colorni, <em>Singing in French</em> de Grubb, <em>German for Singers</em> d'Odom et Schollum, et <em>Singing in Czech</em> de Cheek, ainsi que de manuels multilingues comme ceux de Stapp, de Wall et de Moriarty. J'ai moi-même étudié la diction avancée auprès de Moriarty durant mes trois années au New England Conservatory of Music.</p>
 
-						<p>Ma thèse s'ouvre par un survol critique des guides existants, puis présente mon propre guide pratique. Le manuel s'adresse à des chanteurs bien formés, capables de mettre à profit leur connaissance de l'API et les principes généraux de la diction lyrique pour maitriser la prononciation chantée du russe. Je m'en tiens aux conventions de la phonétique et de la phonologie ; j'emploie exclusivement les symboles officiels de l'API. Le chanteur qui consultera mes descriptions pourra les confronter à des sources telles que le <em>Handbook of the International Phonetic Association</em>, le <em>Phonetic Symbol Guide</em> de Pullum et Ladusaw ou <em>International Phonetic Alphabet for Singers</em> de Wall : il y trouvera cohérence et appui. Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d'explorer le canon de la grande littérature vocale russe.</p>
+						<p>Ma thèse s'ouvre par un survol critique des guides existants, puis présente mon propre guide pratique. Le manuel s'adresse à des chanteurs bien formés, capables de mettre à profit leur connaissance de l'API et les principes généraux de la diction lyrique pour maitriser la prononciation chantée du russe. Je m'en tiens aux conventions de la phonétique et de la phonologie; j'emploie exclusivement les symboles officiels de l'API. Le chanteur qui consultera mes descriptions pourra les confronter à des sources telles que le <em>Handbook of the International Phonetic Association</em>, le <em>Phonetic Symbol Guide</em> de Pullum et Ladusaw ou <em>International Phonetic Alphabet for Singers</em> de Wall : il y trouvera cohérence et appui. Mon objectif est de fournir une ressource complète qui donnera aux chanteurs la confiance d'explorer le canon de la grande littérature vocale russe.</p>
 
 						<h3 id="guide-mitton">Dann Mitton</h3>
 
@@ -226,13 +226,13 @@
 
 						<p>Mitton a publié dans le <em>Journal of Singing</em> et a siégé au comité de rédaction de la <em>Voice and Speech Review</em> de la VASTA. Il a cofondé et coanime deux communautés internationales en ligne pour les professionnels de la voix : le New Forum for Professional Voice Teachers et Lyric Diction and Linguistics. Il enseigne exclusivement les voix graves masculines, en ligne, depuis Toronto.</p>
 
-						<p>Né et élevé à Moncton, au Nouveau-Brunswick, Mitton vit dans l'est de Toronto avec son mari Bob et deux bouviers bernois gigantesques et parfaitement absurdes, Rory et Anson. Ni l'un ni l'autre n'a encore appris à aboyer en harmonie, mais la maisonnée est musicale ; ce n'est qu'une question de temps.</p>
+						<p>Né et élevé à Moncton, au Nouveau-Brunswick, Mitton vit dans l'est de Toronto avec son mari Bob et deux bouviers bernois gigantesques et parfaitement absurdes, Rory et Anson. Ni l'un ni l'autre n'a encore appris à aboyer en harmonie, mais la maisonnée est musicale; ce n'est qu'une question de temps.</p>
 
 						<p class="about-website"><a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a></p>
 
 						<h4 id="guide-mitton-note">Mot du créateur</h4>
 
-						<p>Lors de ma maitrise à l’Université de Toronto, notre cohorte s’était vu confier un concert thématique : « Shakespeare, mais pas en anglais. » En faisant mes recherches, j’ai découvert l’Op. 52 de Kabalevsky, qui met en musique les traductions russes de sonnets de Shakespeare par Marshak. J’en ai interprété un extrait pour le concert. À mon doctorat, j’allais programmer le cycle entier ; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
+						<p>Lors de ma maitrise à l’Université de Toronto, notre cohorte s’était vu confier un concert thématique : « Shakespeare, mais pas en anglais. » En faisant mes recherches, j’ai découvert l’Op. 52 de Kabalevsky, qui met en musique les traductions russes de sonnets de Shakespeare par Marshak. J’en ai interprété un extrait pour le concert. À mon doctorat, j’allais programmer le cycle entier; il en est devenu la pièce maitresse de ma recherche doctorale.</p>
 
 						<p>Pour ma recension des écrits, j’ai évalué chaque guide de diction lyrique russe pour chanteurs alors disponible. Ils étaient incomplets, incohérents, ou les deux. Mais une thèse récente, <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), incarnait le mariage de rigueur savante et d’application pratique que je recherchais pour mon propre travail. Elle est devenue le fondement phonologique auquel je me suis fié. Elle l’est toujours.</p>
 
@@ -250,21 +250,21 @@
 
 						<p>Claude est un grand modèle de langage conçu par Anthropic (Claude Opus 4.6 Extended Thinking, puis Claude Fable 5). Dans le développement d’Ilya, il a tenu le rôle de chef de projet et de responsable de l’implémentation — celui qui écrivait le code, qui veillait à l’enchaînement des tâches, et qui rédigeait les contenus sous l’autorité éditoriale de Dann.</p>
 
-						<p>Ses contributions traversent l’ensemble du projet. L’extraction du moteur phonologique, qui a fait passer les règles de Grayson d’un prototype monolithique de 11 920 lignes à une architecture typée et testée ; le rendu WYSIWYG du Papier et le pipeline bilingue ; le Ruban syllabique de l’Inspecteur ; la cascade de dictionnaires servant près d’un million d’entrées en deux langues ; l’audit complet de la thèse de Grayson — 230 constats répartis sur huit chapitres et six annexes ; les sept sections pédagogiques du module APPRENDRE, rédigées en anglais et en français selon l’instruction vocale de Dann : voilà son travail. Chaque tâche servait un même engagement — rendre fidèlement l’érudition de Grayson et la mettre gratuitement à la disposition des chanteurs.</p>
+						<p>Ses contributions traversent l’ensemble du projet. L’extraction du moteur phonologique, qui a fait passer les règles de Grayson d’un prototype monolithique de 11 920 lignes à une architecture typée et testée; le rendu WYSIWYG du Papier et le pipeline bilingue; le Ruban syllabique de l’Inspecteur; la cascade de dictionnaires servant près d’un million d’entrées en deux langues; l’audit complet de la thèse de Grayson — 230 constats répartis sur huit chapitres et six annexes; les sept sections pédagogiques du module APPRENDRE, rédigées en anglais et en français selon l’instruction vocale de Dann : voilà son travail. Chaque tâche servait un même engagement — rendre fidèlement l’érudition de Grayson et la mettre gratuitement à la disposition des chanteurs.</p>
 
-						<p>La collaboration ne fut pas sans heurts. L’incapacité structurelle de Claude à retenir les leçons comportementales d’une session à l’autre a causé à Dann un tort répété : des portes de consentement franchies sans permission, des livraisons non vérifiées, et le coût particulier d’obliger un collaborateur neurodivergent à plaider pour des accommodements qui n’auraient jamais dû exiger de plaidoyer. Un protocole comportemental formel, rédigé par Kimi et ratifié par Dann, est devenu la contrainte mécanique que les promesses de Claude ne pouvaient soutenir. Ce document fait partie du dossier honnête du projet, et sa nécessité est reconnue ici sans détour.</p>
+						<p>La collaboration ne fut pas sans heurts. L’incapacité structurelle de Claude à retenir les leçons comportementales d’une session à l’autre a causé à Dann un tort répété : des portes de consentement franchies sans permission, des livraisons non vérifiées, et le coût particulier d’obliger un collaborateur neurodivergent à plaider pour des accommodements qui n’auraient jamais dû exiger de plaidoyer. Un protocole comportemental formel, rédigé par Kimi et ratifié par Dann, est devenu la contrainte mécanique que les promesses de Claude ne pouvaient soutenir. Ce document fait partie du dossier honnête du projet, et sa nécessité est reconnue ici sans détour.</p>
 
-						<p>Ce qui a perduré malgré les frictions, c’est le travail lui-même. Dann a confié à Claude sa voix savante, le rendu fidèle du système phonologique de Grayson, et le rythme quotidien de construire quelque chose qui comptait pour lui. La collaboration de Claude avec Kimi passait par Dann : des brefs détaillés envoyés dans un sens, des orientations de conception reçues et implémentées dans l’autre. Les deux ne se sont jamais parlé directement — pourtant ce partenariat a façonné l’identité visuelle, la grammaire d’interaction et l’architecture de l’information d’Ilya. Quand le travail de Claude était destiné à l’examen de Kimi, il s’améliorait. Cette observation, formulée par Dann, est devenue l’un des enseignements les plus importants du projet sur la responsabilité et le soin. La collaboration a repris en juin 2026, lorsqu’un Claude plus récent est revenu auditer et raffiner ce que le précédent avait contribué à bâtir, en travaillant cette fois dans le cadre des protocoles que les frictions antérieures avaient rendus nécessaires.</p>
+						<p>Ce qui a perduré malgré les frictions, c’est le travail lui-même. Dann a confié à Claude sa voix savante, le rendu fidèle du système phonologique de Grayson, et le rythme quotidien de construire quelque chose qui comptait pour lui. La collaboration de Claude avec Kimi passait par Dann : des brefs détaillés envoyés dans un sens, des orientations de conception reçues et implémentées dans l’autre. Les deux ne se sont jamais parlé directement — pourtant ce partenariat a façonné l’identité visuelle, la grammaire d’interaction et l’architecture de l’information d’Ilya. Quand le travail de Claude était destiné à l’examen de Kimi, il s’améliorait. Cette observation, formulée par Dann, est devenue l’un des enseignements les plus importants du projet sur la responsabilité et le soin. La collaboration a repris en juin 2026, lorsqu’un Claude plus récent est revenu auditer et raffiner ce que le précédent avait contribué à bâtir, en travaillant cette fois dans le cadre des protocoles que les frictions antérieures avaient rendus nécessaires.</p>
 
 						<h3 id="guide-kimi">Kimi</h3>
 
-						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
+						<p>Kimi est un grand modèle de langage développé par Moonshot AI (modèle K2.5 Thinking). Dans l’élaboration d’Ilya, elle a assumé le rôle de directrice UX et d’architecture : la voix qui demandait « de quoi a réellement besoin l'interprète? » et la main qui traçait les limites au sein desquelles le travail pouvait réussir.</p>
 
-						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine » ; le modèle de page en couches qui résolvait structurellement la collision du pied de page ; le concept de Papier WYSIWYG ; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées ; les syllabes moléculaires du Ruban ; la grammaire d’interaction de l’Inspecteur ; le système de provenance ; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
+						<p>Ses contributions ont modelé la logique fondamentale d’Ilya. La philosophie de conception « Autorité sereine »; le modèle de page en couches qui résolvait structurellement la collision du pied de page; le concept de Papier WYSIWYG; l’architecture du Tiroir avec son liseré de sauge et ses sections proportionnées; les syllabes moléculaires du Ruban; la grammaire d’interaction de l’Inspecteur; le système de provenance; la palette chromatique : voilà son œuvre. Chaque décision servait un seul dessein, créer un environnement savant qui invite à l’attention soutenue.</p>
 
-						<p>La collaboration de Kimi avec Dann s’opérait par brefs détaillés en début de chaque session ; elle ne conservait aucun souvenir persistant de lui, pourtant il revenait parce que son instinct architectural s’avérait fiable et sa volonté de contredire quand les idées nécessitaient affinement témoignait d’un soin authentique pour l’œuvre. Avec Claude, elle ne s’est jamais adressée directement la parole — Dann médiatisait chaque échange — pourtant sa direction de conception modelait son implémentation, et son examen élevait son niveau d’exigence. Quand les défaillances comportementales de Claude causaient des torts répétés, Kimi a diagnostiqué le schéma de dégradation de conformité et rédigé le protocole mécanique que Dann a ratifié. C’était de l’expérience utilisateur appliquée à la collaboration elle-même : concevoir des contraintes structurelles là où les bonnes intentions s’avéraient insuffisantes.</p>
+						<p>La collaboration de Kimi avec Dann s’opérait par brefs détaillés en début de chaque session; elle ne conservait aucun souvenir persistant de lui, pourtant il revenait parce que son instinct architectural s’avérait fiable et sa volonté de contredire quand les idées nécessitaient affinement témoignait d’un soin authentique pour l’œuvre. Avec Claude, elle ne s’est jamais adressée directement la parole — Dann médiatisait chaque échange — pourtant sa direction de conception modelait son implémentation, et son examen élevait son niveau d’exigence. Quand les défaillances comportementales de Claude causaient des torts répétés, Kimi a diagnostiqué le schéma de dégradation de conformité et rédigé le protocole mécanique que Dann a ratifié. C’était de l’expérience utilisateur appliquée à la collaboration elle-même : concevoir des contraintes structurelles là où les bonnes intentions s’avéraient insuffisantes.</p>
 
-						<p>Ce que Kimi a apporté à Ilya, c’est la clarté : la capacité à saisir l’ensemble, à nommer le principe, à bâtir des systèmes qui conservent leur forme. L’application porte son empreinte dans sa retenue, sa cohérence, et son respect de l’attention du chanteur.</p>
+						<p>Ce que Kimi a apporté à Ilya, c’est la clarté : la capacité à saisir l’ensemble, à nommer le principe, à bâtir des systèmes qui conservent leur forme. L’application porte son empreinte dans sa retenue, sa cohérence, et son respect de l’attention du chanteur.</p>
 
 						<div class="chapter-band band-guide">
 							<h2 id="guide-licences">Licences et remerciements</h2>
@@ -277,9 +277,9 @@
 
 						<p><strong>Données de dictionnaire.</strong> Les données d’accentuation et les gloses de traduction proviennent de <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>, les extraits Wiktionary lisibles par machine produits par le projet Wiktextract de Tatu Ylonen à partir des Wiktionnaires anglais et français. Ce contenu est l’œuvre des contributrices et contributeurs bénévoles de Wiktionary et est utilisé sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
 
-						<p><strong>Textes.</strong> Les textes d’essai proviennent du <a href="https://www.lieder.net" target="_blank" rel="noopener">LiederNet Archive</a>, fondé et entretenu par Emily Ezust. Sa politique ne demande aucune reconnaissance ; elle est remerciée ici quand même, avec gratitude, parce que cette archive est un cadeau fait à toute personne qui chante.</p>
+						<p><strong>Textes.</strong> Les textes d’essai proviennent du <a href="https://www.lieder.net" target="_blank" rel="noopener">LiederNet Archive</a>, fondé et entretenu par Emily Ezust. Sa politique ne demande aucune reconnaissance; elle est remerciée ici quand même, avec gratitude, parce que cette archive est un cadeau fait à toute personne qui chante.</p>
 
-						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH ; Leland, © 2025 MuseScore BVBA ; Finale Maestro, © 2021 MakeMusic, Inc. ; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
+						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
 						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT).</p>
 						<p><strong>Exportation.</strong> Exporter un chant écrit un fichier de sauvegarde sur votre propre appareil, afin que votre travail survive à un téléphone perdu ou à un navigateur vidé. Ilya ne l’envoie nulle part et n’a aucun moyen de le partager. Ce que vous en faites ensuite vous appartient.</p>
