@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`230cad3`**, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`2440bf5`**, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -45,12 +45,63 @@ any of them count.
 > named.** N.78 and the colon audit closed earlier the same day. The
 > blocking set is empty.
 >
-> **THE ONE THING IS NOT ESTABLISHED. Dann names it at the next open.**
-> Candidates, none ruled: **N.79 transitions**, researched and unbuilt
-> (`docs/sessions/memo-n79-transitions-research_r1_2026-08-23.md`; the one
-> expensive animation is the desk drawer's 1,500 ms `width` transition at
-> `Drawer.svelte:694`, everything else already runs on the compositor); the
-> lavender rule in the wizard, ruled and in `INBOX.md`; the visible list.
+> **2026-08-23 NIGHT, LATER: N.81 DONE, N.79 RULED CLOSED, N.62 ENUMERATED.**
+> N.81, the calibration takeover's rule goes lavender, shipped `2440bf5` and
+> was walked by Dann on `ilya-2xbpbyyyv`: both rules read lavender. N.79 is
+> ruled by Dann: **do nothing**; every transition stays as it is. N.62 is
+> enumerated, nothing built:
+> `docs/sessions/memo-n62-enumeration_r1_2026-08-23.md`. Five rows, two
+> coined French words awaiting Dann's eye, and one finding bigger than N.62
+> (the watch band's header prints English in French mode).
+>
+> **THE ONE THING: N.62, the accessibility sweep, at the step "Dann approves
+> or strikes the French table in the memo."** Then one Code brief, one ship,
+> one walk. Do not write the brief before he has seen the table.
+>
+> Usage when the session closed, 00:06 on 2026-08-23: all models 87%, Fable
+> 77%, both resetting about 05:00. The enumeration was done on Fable because
+> the shared pool was the scarcer one that night.
+
+---
+
+## 2026-08-23 NIGHT, LATER. N.81 WALKED, N.79 RULED CLOSED, N.62 ENUMERATED
+
+**N.81, numbered this session from `INBOX.md:29` on Dann's ruling.** The rule
+under Back in the calibration takeover was `.takeover-head`'s
+`border-bottom: 2px solid var(--sage)` (`Drawer.svelte:888`); the rule under
+the voice selector is `.wizard-phase`'s `border-top: 2px solid
+var(--deeper-lavender)` (`CalibrationWizard.svelte:1713`). One token changed,
+one comment added. Code's assertion earned its keep: the sage declaration
+occurs twice in the file (`:839` is `.drawer-anchor-top`, sage by ruling), so
+the whole block was matched. Five gates at baseline, `848059e..2440bf5`,
+memo `memo-n81-takeover-rule-lavender_r1_2026-08-23.md`. **Walked by Dann:
+"both lines are lavender now."**
+
+**N.79 transitions, RULED BY DANN: do nothing.** The memo's four paths were
+put to him (leave, shorten 1,500 ms to 400 ms, move to `transform`, Svelte
+`slide`), with the honest caveat that nobody has measured the 1,500 ms
+drawer stuttering. He chose leave. Closed, nothing built.
+
+**N.62, enumerated on Fable, nothing built.** The register's twenty-nine
+strings were not reproduced in the tree; the Pacifier, NotePicker, and
+wizard carry no English outside `t()`/`T()`, so N.35 and N.50's parts appear
+done since. What remains: `Controls` on the drawer landmark, `Toggle` on
+thirteen TOC chevrons, `Navigation` and `Transcription` on two landmarks, and
+« Modifier le glose » at `InspectorPanel.svelte:1039`. Two coined French
+words, « Commandes » and « Déplier ou replier », wait for Dann.
+
+**Found, not numbered, Dann to rule:** `watchlist.ts:92` `WATCH_HEADER =
+'Places to watch'` is visible and printed in English in French mode
+(`VoiceProfilePane.svelte:791`), pinned by `watchlist.test.ts:262`. Whether
+`watchEntryLine` prints English is NOT ESTABLISHED.
+
+**Two visible-list items struck as already done:** the French colon spacing
+(the colon audit, `9d314de`) and N.63's last residue, the interstitial's
+gate, retired under N.73 portrait C ruling 4 (`+page.svelte:1865`).
+
+**The desk's own fault this session:** it asked Dann for a deploy URL that
+`ENVIRONMENT.md:1090` says the Vercel connector fetches. He had to say
+"provide URL." Corrected in the same breath; the rule was already written.
 
 ---
 
@@ -1905,7 +1956,10 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 | | item | state |
 |---|---|---|
 | `[x]` | **N.80** the [u] capture | **CLOSED 2026-08-23, `d491d22` and `230cad3`, WALKED BY DANN.** Cause: fR1 steadiness, `fr1_cv`. Best-window judging captures it; the guard now reports its numbers. Section above |
-| `[ ]` | **N.79** transitions | **RESEARCHED 2026-08-23, NOTHING BUILT.** Options weighed in `memo-n79-transitions-research_r1_2026-08-23.md`; Dann to rule. GUI track: CONTRACT §6 applies before any build |
+| `[x]` | **N.81** the takeover's rule goes lavender | **CLOSED 2026-08-23, `2440bf5`, WALKED BY DANN on `ilya-2xbpbyyyv`.** One token at `Drawer.svelte:888`. Section above |
+| `[x]` | **N.79** transitions | **RULED CLOSED BY DANN 2026-08-23: do nothing.** Researched in `memo-n79-transitions-research_r1_2026-08-23.md`; every transition stays as it is. Nothing built |
+| `[ ]` | **N.62** the accessibility sweep | **ENUMERATED 2026-08-23, NOTHING BUILT.** `memo-n62-enumeration_r1_2026-08-23.md`: five rows, two coined French words. **Next step is Dann's: approve or strike the table.** THE ONE THING |
+| `[x]` | **N.63** the desktop interstitial | **CLOSED 2026-08-23.** Residue SAY NOTHING ruled 2026-08-21; the gate itself retired under N.73 portrait C ruling 4, `+page.svelte:1865` |
 | `[x]` | **the colon audit** | **CLOSED 2026-08-23, `9d314de`, WALKED BY DANN.** Canadian French spacing on `:`, `;`, `!`; `?` was ship 5. `Score markup` rename rode with it |
 | `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |
 | `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |
@@ -1920,8 +1974,11 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 
 ### The visible list. Built only if a day finishes early
 
-**N.62** · **N.63** · **N.45's remainder** · the **French colon spacing** (eight
-sites, mechanical) · **N.51** · **N.17** · **N.19** · **N.61** · **N.6**.
+~~**N.62**~~ (now THE ONE THING, 2026-08-23) · ~~**N.63**~~ (closed 2026-08-23) ·
+**N.45's remainder** · ~~the **French colon spacing**~~ (closed as the colon
+audit, `9d314de`) · **N.51** · **N.17** · **N.19** · **N.61** · **N.6** · and,
+unnumbered, **the watch band's English header** (`watchlist.ts:92`, printed
+in French mode; Dann to rule).
 **N.27 now has a home, and the recommendation is IN THE TREE** as a comment at
 the reporting seam (`library.ts`, `Library.save`), recorded by N.67 step 6 and
 deliberately not built: when N.27 is built, `profileStore.saveStore`
