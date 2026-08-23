@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **682** |
+| web-test | **705** (682 until 2026-08-23; N.78 added 23) |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -1789,3 +1789,22 @@ Established by Code 2026-08-21: **the search page is JavaScript-rendered and
 returns nothing to a fetch. The SRU authority endpoint and the `ark:` record
 pages both work.** That is the route.
 
+
+## FRENCH NAME RESEARCH: WHICH AUTHORITY, AND WHICH ROUTE ANSWERS. 2026-08-23
+
+**The BnF authorized heading is not the French form a singer reads.** For
+about a third of Ilya's 62 composers and poets it is ISO 9 library
+transliteration (`Prokofʹev, Sergej`, `Cvetaeva, Marina`, `Homâkov, Aleksej`).
+Famous names keep the gallicized form; lesser ones do not. Dann ruled French
+Wikipedia article titles instead, one source for all 62. Both passes are in
+`docs/sessions/memo-n78-french-name-forms_r1_2026-08-23.md` (BnF) and
+`_r2_` (Wikipedia). Do not send a third agent to BnF for a display form.
+
+**Routes, as measured by two Sonnet subagents run from this desk:**
+- `data.bnf.fr` search page: JavaScript, returns nothing. The SRU endpoint
+  `catalogue.bnf.fr/api/SRU` and `data.bnf.fr` `ark:` pages return content.
+- `fr.wikipedia.org/w/api.php`: returned nothing to every call. A direct
+  fetch of `fr.wikipedia.org/wiki/<title>` works and follows redirects. The
+  markdown conversion drops the numerals inside date templates, so identify
+  the person by the prose, not by the blank `né le …`.
+- Cost: 219k tokens for 62 BnF lookups, 128k for 62 Wikipedia lookups.

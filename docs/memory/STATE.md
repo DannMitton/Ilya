@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`d079794`**, raised from `2b81f5a` at the close of 2026-08-21,
+before **`9cc68e5`**, raised from `d079794` at the close of 2026-08-23, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -39,53 +39,66 @@ any of them count.
 
 ## THE ONE THING
 
-> **THE BLOCKING SET IS EMPTY. That is new, and it is the headline of
-> 2026-08-21.** N.67 closed 2026-08-18. **N.72 CLOSED 2026-08-21**, its one
-> unwalked surface passing on Dann's own iPhone. **N.58 IS DEFERRED TO FUTURE
-> DEVELOPMENT, ruled by Dann 2026-08-21.** N.59 stays parked at tier 2 with a
-> measured reason. **Nothing now stands between Ilya and a working beta except
-> Dann's own judgement of when it is one.**
+> **N.78 IS DONE. Walked by Dann 2026-08-23 on the sha-pinned deploy
+> `ilya-a54jdyrd4`: the composer field read `Modeste Moussorgski (1839–1881)`
+> in French and `Modest Mussorgsky (1839–1881)` in English seven seconds
+> apart, on the drawer and on the title page, with no reload.**
 >
-> **THE ONE THING IS N.78: THE FRENCH FORM OF 62 NAMES.** Numbered 2026-08-21
-> from Dann's own observation, reading the French Guide, that it says
-> `Moussorgski` in the prose while the composer dropdown says `Mussorgsky`.
->
-> **The research brief is written and in history**,
-> `docs/sessions/brief-n78-french-name-forms_r1_2026-08-21.md`. It is
-> self-contained: all 62 names are inside it, so the session that runs it needs
-> no repository access. **IT HAS NOT BEEN RUN.** It pins one authority, the BnF,
-> with a fixed order of resort, and forbids the agent from transliterating
-> anything itself. `same` is an expected answer, so the deliverable is the
-> difference set.
->
-> **Code established the route before ship 5 interrupted it, and this is worth
-> keeping: `data.bnf.fr`'s search page is JavaScript-rendered and returns
-> nothing to a fetch, but the SRU authority endpoint and the `ark:` record pages
-> both work.**
->
-> **THE DESIGN RULING IS ALREADY MADE AND IT BLOCKS THE BUILD, NOT THE
-> RESEARCH. Dann, 2026-08-21: DISPLAY ONLY.** A song stores its composer as a
-> string and every song already saved stores the English one. The stored value
-> stays English forever; the French form is drawn, never written back. **Picking
-> from the dropdown always writes the English form, whatever language the
-> interface is in.** That is one line in `SearchableSelect.svelte:87` and it is
-> the whole difference between a display and a corruption.
->
-> The machinery already exists and was read on 2026-08-21:
-> `SearchableSelect.svelte:87` stores `Given Surname (dates)`, `:36` already
-> matches a stored value against two forms of each entry, and
-> `TitlePage.svelte:49` already runs the stored string back through a lookup
-> against `COMPOSERS` before drawing it. **French slots into that layer.**
->
-> **NOT ESTABLISHED: which list feeds the translator dropdown.** If it draws on
-> `POETS` it is covered by the brief. If it has its own list, that list is not
-> in the brief.
->
-> **N.76 IS STRUCK. Dann, 2026-08-21: "I don't want to do the one-pager
-> anymore."** Anatomy of a Transcription is dead, not parked. It was numbered on
-> 2026-08-21 and never started. **Its one surviving consequence: the ruling that
-> the legend's labels and N.76's labels are the same words no longer binds
-> anything.**
+> **THE ONE THING IS NOT ESTABLISHED. Dann names it at the next open.** The
+> blocking set is empty. The standing candidate is the colon audit, flagged
+> 2026-08-21 as a Sonnet farm-out at 150k to 250k tokens and never answered
+> because N.78 overtook it. The visible list in §THE TRACKER is the rest.
+
+---
+
+## 2026-08-23. N.78 SHIPPED `9cc68e5` AND WALKED. TWO RESEARCH PASSES, ONE BUILD
+
+**Floor raised to `9cc68e5`.** Five gates: 216, 235, 0 errors and 7 warnings
+in 4 files, **705**, 444 passed and 5 skipped. Gate 4 moved 682 to 705 for
+the 23 tests in the new `apps/web/src/lib/composers-poets.test.ts`, with
+Dann's permission before the ship script ran. Bundle up 1,670 bytes.
+
+### Ruled by Dann, 2026-08-23
+
+- **The desk runs the research subagents itself**, rather than handing Dann a
+  brief to paste. Two Sonnet subagents, one at a time, within the ceiling.
+- **The French form is the French Wikipedia article title**, one source for
+  all 62, converted to `Surname, Given` with the patronymic dropped. Ruled
+  after pass 1 showed the BnF heading is ISO 9 transliteration for about a
+  third of the list. Rachmaninov therefore reads `Sergueï`, the title, not
+  the `Serge` of concert usage.
+- **Display only stands**, per 2026-08-21. `SearchableSelect.svelte`'s
+  `selectEntry` still writes the English form. Code verified storage
+  byte-identical across both pill directions and a French reload.
+
+### What shipped
+
+`composers-poets.ts` carries an optional `french` field on 49 entries and a
+language-aware display helper. `SearchableSelect.svelte` filters on the
+French form too, so `Pouchkine` finds Pushkin in either language.
+`TitlePage.svelte` passes the language. **`metadata-provenance.ts` stays
+English by Code's own reading: its output reaches the persisted document
+through `commitMetadataState` at `+page.svelte:1604`.** Memo:
+`docs/sessions/memo-n78-build-french-display_r1_2026-08-23.md`. Brief:
+`brief-n78-build-french-display_r1_2026-08-23.md`.
+
+### Left as English in French, with the reason for each
+
+No French article: Bulakhov, Titov, Golenishchev-Kutuzov (a red link on the
+disambiguation page), Rathaus. Title is the bare surname: Goethe. Title is the
+pen name doubled: Galina. Same in French: Cui, Rubinstein, Stravinsky,
+Akhmatova, Heine, Pasternak, Shakespeare. **None of these was coined. The
+do-nothing holds for all thirteen.**
+
+### The desk's own faults this session
+
+- The r2 brief told the agent the MediaWiki API works. It did not, in the
+  agent's environment; direct page fetches did. Now in `ENVIRONMENT.md`.
+- The build brief's done-when quoted the trigger's `Given Surname (dates)`
+  format as though it were the row's. Rows draw `Surname, Given`. Code read
+  the intent correctly and changed nothing; the loose wording was the desk's.
+- The translator dropdown's list was `NOT ESTABLISHED` at the open. It draws
+  on `POETS` (`MetadataFields.svelte:139`). Established by reading, not asked.
 
 ---
 
@@ -1784,6 +1797,7 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 
 | | item | state |
 |---|---|---|
+| `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |
 | `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |
 | `[x]` | **N.71** the note click | **CLOSED 2026-08-16. Fix shipped in `046beec`, walked by Dann on the `58f982c` deployment.** The notehead glyph was painted over its own `[data-hit]` rectangle and still interactive, so a click on the note died; every `<g data-event-id>` is now `pointer-events="none"` and the rectangle takes clicks back with its own `all`, plus `cursor="pointer"`. **What Dann saw:** a click DEAD CENTRE on the first notehead, the exact spot that did nothing an hour earlier, gave `4 / 5` with бил under it. Two tests pin both halves |
 | `[x]` | **N.68** the upload that erases placements | **CLOSED 2026-08-16, `6c0c719`, WALKED BY DANN on the real deploy.** Absorbed into N.67 and fixed by architecture, not patched: `mergeOnUpload` (`pairings.ts`) keeps the map by positional key, runs `firstPass` only into an empty map, reports orphans, and never rebuilds. **What Dann saw:** he moved бил onto the first note (5/5 to 4/5, Я turned black), re-uploaded the same score, and the counter stayed 4/5 with бил still on the first note. Positive control run first: the old code snapped back to 5/5 |
