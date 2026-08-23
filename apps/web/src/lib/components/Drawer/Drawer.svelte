@@ -885,7 +885,11 @@
 		   is inset like every other. See `.drawer-anchor-top`. */
 		padding: 6px 0;
 		margin: 0 1rem;
-		border-bottom: 2px solid var(--sage);
+		/* Dann ruled 2026-08-23: the takeover's rule matches the lavender
+		   `.wizard-phase` border-top in CalibrationWizard.svelte, because the
+		   takeover is the calibration ritual, and lavender is kept to that and
+		   the voice anchor (S0 slate, ruling 3). */
+		border-bottom: 2px solid var(--deeper-lavender);
 	}
 
 	/* The ONE back affordance, E.27. Quiet by construction: this is the way
