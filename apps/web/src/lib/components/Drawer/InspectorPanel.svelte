@@ -1036,7 +1036,7 @@
 							maxlength="20"
 							value={dictGlossInput}
 							oninput={handleGlossInput}
-							aria-label={language === 'en' ? 'Edit gloss' : 'Modifier le glose'}
+							aria-label={language === 'en' ? 'Edit gloss' : 'Modifier la glose'}
 						/>
 						<p class="dict-capacity">{t('inspector.dictCapacity', language)}</p>
 					</div>

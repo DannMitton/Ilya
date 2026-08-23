@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import type { Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 	import { PAGE_SIZES, sliceLinesToPages, formatRunningHeader } from '$lib/page-config';
 	import { buildProvenanceLegend } from '$lib/provenance';
 	import PageFit from './PageFit.svelte';
@@ -60,7 +60,7 @@
 
 <PageFit fit={isMobile} pageWidth={PAGE_SIZES[pageSize].width}>
 	{#snippet content()}
-<div class="paper-container" role="region" aria-label="Transcription">
+<div class="paper-container" role="region" aria-label={t('a11y.paper', language)}>
 	{#each pages as pageLines, i}
 		<!-- N.65 item 8. The spot map goes into the builder alongside the lines,
 		     so a page carrying an `R` carries its legend entry and a page

@@ -95,7 +95,7 @@
 	     optional on a `tab` in ARIA 1.2, and an absent reference beats a broken
 	     one. `aria-selected` still carries the state, which is what a screen
 	     reader announces. `Drawer.svelte` drops its half in the same ship. -->
-	<div class="pair" class:single={pairIds.length === 1} role="tablist" aria-label="Navigation">
+	<div class="pair" class:single={pairIds.length === 1} role="tablist" aria-label={T('a11y.tabs')}>
 		{#each pairIds as id (id)}
 			<button
 				class="pair-member"

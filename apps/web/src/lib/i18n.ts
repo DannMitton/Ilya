@@ -45,6 +45,24 @@ const strings: Record<string, Record<Language, string>> = {
 	// name stays put while the drawer opens and closes.
 	'drawer.pull':                 { en: 'Drawer',                       fr: 'Tiroir' },
 
+	// ── Accessible names (N.62) ──────────────────────────────
+	//    Four strings a sighted singer never sees and a screen reader always
+	//    speaks. They sat as English literals in the markup, so a French
+	//    session heard English at the drawer, the twelve table-of-contents
+	//    chevrons, the tab list, and the paper. All four French values were
+	//    ratified by Dann on 2026-08-23.
+	//    'a11y.tocToggle' also corrects the English: `Toggle` named the
+	//    control, not what it does, and the chevron's own state rides on
+	//    aria-expanded.
+	//    'a11y.tabs' and 'a11y.paper' are the same word in both languages.
+	//    They are keyed anyway, the way 'tab.transcription' is, so parity
+	//    stays total and no slot is left for `t()` to report as missing.
+	//    These are spoken, never printed, so no guillemets.
+	'a11y.drawer':                 { en: 'Controls',                     fr: 'Commandes' },
+	'a11y.tocToggle':              { en: 'Expand or collapse',           fr: 'Développer ou réduire' },
+	'a11y.tabs':                   { en: 'Navigation',                   fr: 'Navigation' },
+	'a11y.paper':                  { en: 'Transcription',                fr: 'Transcription' },
+
 	// ── Input area ───────────────────────────────────────────
 	'input.placeholder':           { en: 'Paste Russian text here\u2026',       fr: 'Collez le texte russe ici\u2026' },
 	// THE INTAKE WATERMARK (N.65), Dann's ruling 2026-08-20. The large word
