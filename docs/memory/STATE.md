@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`9d314de`**, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`230cad3`**, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -39,15 +39,92 @@ any of them count.
 
 ## THE ONE THING
 
-> **THE COLON AUDIT IS DONE. Shipped `9d314de`, walked by Dann 2026-08-23 on
-> `ilya-lkhccn4lt` in French: no `:` or `;` starts a line.** N.78 closed the
-> same evening. The blocking set is empty.
+> **N.80 IS DONE. Walked by Dann 2026-08-23 on `ilya-pmuwo7k1r`: [u] read
+> `270 Hz 735 Hz Captured` on the roster, two of three takes captured
+> through the best-window path, the third Provisional with its reason
+> named.** N.78 and the colon audit closed earlier the same day. The
+> blocking set is empty.
 >
-> **THE ONE THING IS NOT ESTABLISHED. Dann names it at the next open.** The
-> visible list in §THE TRACKER is what remains. The newest inbox line is the
-> [u] capture question, which touches the formant extractor; CONTRACT §6 says
-> read the N.49 document and say how a fix gets verified against his voice
-> before opening it.
+> **THE ONE THING IS NOT ESTABLISHED. Dann names it at the next open.**
+> Candidates, none ruled: **N.79 transitions**, researched and unbuilt
+> (`docs/sessions/memo-n79-transitions-research_r1_2026-08-23.md`; the one
+> expensive animation is the desk drawer's 1,500 ms `width` transition at
+> `Drawer.svelte:694`, everything else already runs on the compositor); the
+> lavender rule in the wizard, ruled and in `INBOX.md`; the visible list.
+
+---
+
+## 2026-08-23 NIGHT. N.80 IS DONE IN TWO SHIPS, AND THE [u] QUESTION IS ANSWERED
+
+**Numbered from the inbox on Dann's ruling, with N.79.** Dann's question:
+is [u] failing on mic sensitivity, on a low cutoff, or on something else?
+
+### Research, two subagents, both run from the desk on Dann's ruling
+
+Opus read the whole capture chain and ran the tree's own `extract.ts`,
+`guard.ts`, and `detector.ts` on synthetic fry:
+`docs/sessions/memo-n80-u-capture-research_r1_2026-08-23.md`. Established:
+the three browser flags are already off (`live.ts:339-341`, and Dann's
+console confirmed `autoGainControl:false` and the other two); no highpass
+anywhere; the F1 window `[150, 1200]` resolves a synthetic fR1 down to about
+160 Hz, so **the cutoff is not the limit**; the fry detector cannot produce
+a Provisional with numbers; plausibility passed 301 Hz. Its leading
+diagnosis, level against the 12 dB SNR floor, **was refuted by Dann's
+console the same hour**: every take sat 18 to 26 dB above the floor. The
+control rule did its job.
+
+### What the console said, and what each ship did
+
+Dann's three takes on `9d314de`: two `reprompt c5_cv` (pulse regularity
+over the whole 2.5 s buffer; the live gate only asked for one second), one
+Provisional.
+
+**Ship 1, `d491d22`: judge the fry on its best steady window.** `runCapture`
+runs `guard()` first, slices to `segmentS`, and hands the slice to
+`detect()` and `analyze()`; the confidence tier reads `fullWindow` from the
+whole take so a slice never reaches `high`. `analyze.ts` only, thirteen
+tests in the new `analyze.test.ts`, gate 4 705 to 718. Memo
+`memo-n80-best-window_r1_2026-08-23.md`. **Code corrected the brief: the
+buffer is 2.5 s, not 3.5; `live.ts:665` trims half a second from each
+end.** Dann's three takes: all `segmentS: null`, so nothing to slice, and
+the guard reports only pass or fail.
+
+**Ship 2, `230cad3`: the guard reports its four measurements.**
+`GuardResult.diag` carries `cv1`, `cv2`, `mincor`, `cvr`, `spanS`, and
+`failed` for the full window and the best window; no threshold moved;
+parity proven on 56 cases against the floor's `guard.ts`. Six tests, gate 4
+718 to 724. Memo `memo-n80-guard-diag_r1_2026-08-23.md`.
+
+### The answer, read off Dann's console on `230cad3`
+
+Three takes, one name every time: **`fr1_cv`**, the steadiness of fR1
+across the held fry, at 0.154, 0.095, and 0.080 against a ceiling of 0.08.
+The other three tests were clear by a wide margin on every take. With ship
+1 in place, takes 2 and 3 captured on sub-windows of 2.25 and 2.45 s;
+take 1 had no passing window. **A [u] that failed and then succeeded in
+one sitting without the singer changing anything is the N.49 document's
+own test for a fix.** Six fR1 readings tonight: 290, 289, 301, 316, 306,
+270. Scatter, not drift.
+
+**Left alone, deliberately:** `T_FR1_CV = 0.08` (`guard.ts:4`). A move
+needs the same `diag` numbers from the other vowels, and Dann has a
+captured [u] without it. One take tonight read 764 / 2231, which is not a
+[u]; why is NOT ESTABLISHED.
+
+**Also verified tonight, on Dann's challenge:** the readiness step measures
+a room SNR and a fry rate (`readiness.ts:312-335`), writes a provenance
+record nothing reads back (`CalibrationWizard.svelte:665`), and feeds
+nothing downstream. It cannot make a capture better or worse. Left as is.
+
+### Inbox dispositions, ruled by Dann 2026-08-23
+
+Struck as already done in the tree: NOTATION collapsed on arrival
+(`+page.svelte:198-211`); metadata header retractable; the softened
+borders (replaced by the text watermarks); the matching placeholders
+(Dann's own screenshot). Parked: WCAG in marketing until an audit exists;
+the hamburger menu. Numbered: **N.79 transitions** and **N.80 [u] capture**.
+New in the inbox: the wizard's rule above the voice selector goes
+lavender.
 
 ---
 
@@ -1827,6 +1904,8 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 
 | | item | state |
 |---|---|---|
+| `[x]` | **N.80** the [u] capture | **CLOSED 2026-08-23, `d491d22` and `230cad3`, WALKED BY DANN.** Cause: fR1 steadiness, `fr1_cv`. Best-window judging captures it; the guard now reports its numbers. Section above |
+| `[ ]` | **N.79** transitions | **RESEARCHED 2026-08-23, NOTHING BUILT.** Options weighed in `memo-n79-transitions-research_r1_2026-08-23.md`; Dann to rule. GUI track: CONTRACT §6 applies before any build |
 | `[x]` | **the colon audit** | **CLOSED 2026-08-23, `9d314de`, WALKED BY DANN.** Canadian French spacing on `:`, `;`, `!`; `?` was ship 5. `Score markup` rename rode with it |
 | `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |
 | `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |

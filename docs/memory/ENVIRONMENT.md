@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **705** (682 until 2026-08-23; N.78 added 23) |
+| web-test | **724** (682 until 2026-08-23; N.78 added 23, N.80 added 13 then 6) |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -1808,3 +1808,29 @@ Wikipedia article titles instead, one source for all 62. Both passes are in
   markdown conversion drops the numerals inside date templates, so identify
   the person by the prose, not by the blank `né le …`.
 - Cost: 219k tokens for 62 BnF lookups, 128k for 62 Wikipedia lookups.
+
+## THE CAPTURE CHAIN, AS IT ACTUALLY IS. Read 2026-08-23, Opus memo and Dann's console
+
+`apps/web/src/lib/shane/engine/`. Constraints at `live.ts:337-343` already
+turn off `echoCancellation`, `noiseSuppression`, and `autoGainControl`, and
+Dann's iMac honours them (`track settings` on the console). 48 kHz, no
+highpass anywhere, pre-emphasis 0.97 in `extract.ts` only. `live.ts:665`
+trims 0.5 s from each end, so **`runCapture` sees about 2.5 s, not the 3.5
+the brief assumed.** The live gate judges 1 s; the post-sweep `detect()`
+judged the whole buffer until `d491d22`, which slices to the guard's best
+window first. The routes to Provisional are the stationarity guard
+(`guard.ts`) and the in-buffer SNR proxy under 12 dB (`analyze.ts:36`),
+plus the wizard's plausibility demotion; the fry detector re-prompts
+instead. **The SNR proxy is a level meter in disguise**, one dB per dB of
+voice level, and Dann's takes sit 18 to 26 dB above its floor, so it is not
+what fails him. **`DEBUG = true` at `live.ts:173` in the deployed build**:
+filter the console on `shane-live` and the `outcome:` line carries the
+formant, the guard verdict, and since `230cad3` the guard's four numbers
+with the name of the failing test. Ask for that line before theorizing.
+
+## A ROUND OF RESEARCH IS NOT A DIAGNOSIS. 2026-08-23
+
+Opus's memo named level as the leading cause from a careful reading and
+synthetic runs. One console paste from Dann refuted it in a minute. State
+the expectation, then measure; the memo was right about everything except
+the thing it could not see.
