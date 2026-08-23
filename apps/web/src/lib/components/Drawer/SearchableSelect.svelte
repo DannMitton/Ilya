@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { formatForPaper, type PersonEntry } from '$lib/composers-poets';
+	import {
+		formatForPaper,
+		formatEntryForDisplay,
+		personNameForDisplay,
+		type PersonEntry,
+	} from '$lib/composers-poets';
 	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
@@ -22,12 +27,18 @@
 	/** Stable unique ID prefix for ARIA references. */
 	const uid = $state(`ss-${Math.random().toString(36).slice(2, 8)}`);
 
+	/**
+	 * The search matches every form the singer might type, in any interface
+	 * language: the English name, the Cyrillic, and the French. Typing
+	 * `Pouchkine` finds Pushkin whichever pill is lit.
+	 */
 	const filtered = $derived(
 		searchQuery.length === 0
 			? entries
 			: entries.filter(e =>
 				e.latin.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				e.cyrillic.toLowerCase().includes(searchQuery.toLowerCase())
+				e.cyrillic.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				(e.french?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
 			)
 	);
 
@@ -36,10 +47,14 @@
 		entries.find(e => value === e.latin || value === formatForPaper(e)) ?? null
 	);
 
-	/** Display string for the trigger button: paper format (Given Surname (dates)). */
+	/**
+	 * Display string for the trigger button: paper format
+	 * (Given Surname (dates)), in the interface language's own spelling.
+	 * A value that matches no entry is drawn as stored.
+	 */
 	const displayText = $derived(
 		selectedEntry
-			? formatForPaper(selectedEntry)
+			? formatEntryForDisplay(selectedEntry, language)
 			: value || ''
 	);
 
@@ -83,6 +98,12 @@
 		else open();
 	}
 
+	/**
+	 * N.78: what a singer picks is stored in English, whatever language the
+	 * interface is in, so that one song reads the same to every reader and
+	 * an old song keeps matching. `formatForPaper` takes no language on
+	 * purpose. Do not pass one here.
+	 */
 	function selectEntry(entry: PersonEntry) {
 		onchange(formatForPaper(entry), entry);
 		close();
@@ -210,7 +231,7 @@
 						aria-selected={selectedEntry === entry}
 						onclick={() => selectEntry(entry)}
 					>
-						<span class="option-primary">{entry.latin}</span>
+						<span class="option-primary">{personNameForDisplay(entry, language)}</span>
 						<span class="option-secondary">{entry.cyrillic} · {entry.dates}</span>
 					</button>
 				{/each}

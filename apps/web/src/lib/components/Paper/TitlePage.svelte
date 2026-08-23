@@ -45,10 +45,15 @@
 	const dims = $derived(PAGE_SIZES[pageSize]);
 	const hasContent = $derived(lines.length > 0);
 
-	/** Transform names for paper display: "Given Surname (dates)" */
-	const composerDisplay = $derived(formatNameForPaper(metadata.composer, COMPOSERS));
-	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS));
-	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS));
+	/**
+	 * Transform names for paper display: "Given Surname (dates)", in the
+	 * interface language's own spelling (N.78). Storage still holds the
+	 * English form; only what the page draws changes, so switching the
+	 * language pill redraws the same song without writing anything.
+	 */
+	const composerDisplay = $derived(formatNameForPaper(metadata.composer, COMPOSERS, language));
+	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS, language));
+	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS, language));
 
 	/** Measured header height (px). Updated via TitleHeader's onheightchange callback. */
 	let headerHeight = $state(0);

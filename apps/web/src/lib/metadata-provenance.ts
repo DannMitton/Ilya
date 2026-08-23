@@ -64,6 +64,12 @@ function isScoreHeaderField(k: string): k is MetadataField {
  * poets canonicalize through `formatNameForPaper`, which matches exactly
  * and never guesses. Fields the header does not carry are omitted rather
  * than emitted empty, so a caller can tell "absent" from "blank".
+ *
+ * N.78: these three calls pass no language, and must not. What they return
+ * lands in `doc.metadata` by way of `commitMetadataState` in
+ * `+page.svelte:1604`, which is the persisted document. This is a write,
+ * not a display, and every write is English. The French form is drawn at
+ * the last moment, in `TitlePage.svelte` and in `SearchableSelect.svelte`.
  */
 export function scoreHeaderAsFields(
 	wm: WorkMetadata,
