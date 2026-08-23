@@ -55,20 +55,78 @@ function cv(arr: number[]): number {
 	const m = mean(a); return m === 0 ? Infinity : std(a) / m;
 }
 
-function windowPasses(fr1: number[], fr2: number[], envs: Float64Array[], rates: number[], lo: number, hi: number): boolean {
-	if (hi - lo < 2) return false;
-	const cv1 = cv(fr1.slice(lo, hi)), cv2 = cv(fr2.slice(lo, hi)), cvr = cv(rates.slice(lo, hi));
-	let mincor = 1;
-	for (let i = lo; i < hi - 1; i++) {
+/** The cosine similarity between each adjacent pair of band envelopes, computed once. */
+function adjacentCorrelations(envs: Float64Array[]): number[] {
+	const out: number[] = [];
+	for (let i = 0; i + 1 < envs.length; i++) {
 		const a = envs[i], b = envs[i + 1];
 		let dot = 0, na = 0, nb = 0;
 		for (let k = 0; k < a.length; k++) { dot += a[k] * b[k]; na += a[k] * a[k]; nb += b[k] * b[k]; }
-		mincor = Math.min(mincor, dot / (Math.sqrt(na) * Math.sqrt(nb) + 1e-12));
+		out.push(dot / (Math.sqrt(na) * Math.sqrt(nb) + 1e-12));
 	}
-	return cv1 < T_FR1_CV && cv2 < T_FR2_CV && mincor > T_ENVCORR && cvr < T_RATE_CV;
+	return out;
 }
 
-export interface GuardResult { reading: 'Captured' | 'Provisional'; fullWindow: boolean; segmentS: [number, number] | null; spanS: number; }
+interface WindowStats { cv1: number; cv2: number; mincor: number; cvr: number; }
+
+/** The four quantities the guard tests. Arithmetic unchanged from the single
+ *  boolean this replaced; `windowPasses` is now the same test read off these. */
+function measure(fr1: number[], fr2: number[], cor: number[], rates: number[], lo: number, hi: number): WindowStats {
+	const cv1 = cv(fr1.slice(lo, hi)), cv2 = cv(fr2.slice(lo, hi)), cvr = cv(rates.slice(lo, hi));
+	let mincor = 1;
+	for (let i = lo; i < hi - 1; i++) mincor = Math.min(mincor, cor[i]);
+	return { cv1, cv2, mincor, cvr };
+}
+
+/** Names of the tests this window failed. Written as negations so a NaN, which
+ *  compares false against everything, counts as a failure exactly as it did. */
+function failedIn(m: WindowStats, frames: number): string[] {
+	const out: string[] = [];
+	if (frames < 2) out.push('frames');
+	if (!(m.cv1 < T_FR1_CV)) out.push('fr1_cv');
+	if (!(m.cv2 < T_FR2_CV)) out.push('fr2_cv');
+	if (!(m.mincor > T_ENVCORR)) out.push('envcorr');
+	if (!(m.cvr < T_RATE_CV)) out.push('rate_cv');
+	return out;
+}
+
+function windowPasses(fr1: number[], fr2: number[], cor: number[], rates: number[], lo: number, hi: number): boolean {
+	if (hi - lo < 2) return false;
+	return failedIn(measure(fr1, fr2, cor, rates, lo, hi), hi - lo).length === 0;
+}
+
+/** Three places. `null` where the quantity could not be formed at all: `cv()`
+ *  returns Infinity on fewer than two measurable frames, and an infinity on the
+ *  console says nothing a reader can act on. The name still appears in `failed`. */
+function round3(x: number): number | null {
+	return Number.isFinite(x) ? Math.round(x * 1000) / 1000 : null;
+}
+
+/**
+ * What the guard measured on one window. N.80 step 2: the guard used to answer
+ * yes or no, and a [u] take that came back `Provisional` said nothing about which
+ * of the four tests refused it or by how much.
+ */
+export interface GuardWindowDiag {
+	spanS: number;
+	cv1: number | null; cv2: number | null; mincor: number | null; cvr: number | null;
+	failed: string[];
+}
+
+/**
+ * `full` is the whole buffer. `best` is the candidate window of at least
+ * MIN_STABLE_S with the fewest failing tests, ties going to the longer span and
+ * then to the earlier start. The whole buffer is itself a candidate, so when the
+ * full window passes, `best` and `full` describe the same window.
+ *
+ * `best` is a DIAGNOSTIC choice, not the guard's choice. When `best.failed` is
+ * empty it is the window `segmentS` names. When it is not empty, no window passed
+ * and `segmentS` is null: `best` then says which window came closest and what
+ * stopped it.
+ */
+export interface GuardDiag { full: GuardWindowDiag; best: GuardWindowDiag | null; }
+
+export interface GuardResult { reading: 'Captured' | 'Provisional'; fullWindow: boolean; segmentS: [number, number] | null; spanS: number; diag: GuardDiag; }
 
 export function guard(y: Float64Array, sr: number): GuardResult {
 	const idx = frameIndex(y.length, sr), nf = idx.length;
@@ -78,16 +136,43 @@ export function guard(y: Float64Array, sr: number): GuardResult {
 		const [f1, f2] = coarseFormants(fr, sr);
 		fr1.push(f1); fr2.push(f2); envs.push(envBands(fr, sr)); rates.push(pulseRate(fr, sr));
 	}
+	// Under two frames there is no window to test and never was: `windowPasses`
+	// refused on `hi - lo < 2` and the sub-window loop could not run. Same verdict,
+	// stated up front so the diagnostic below can index `idx` safely.
+	if (nf < 2)
+		return {
+			reading: 'Provisional', fullWindow: false, segmentS: null, spanS: 0,
+			diag: { full: { spanS: 0, cv1: null, cv2: null, mincor: null, cvr: null, failed: ['frames'] }, best: null }
+		};
+	const cor = adjacentCorrelations(envs);
 	const spanS = (lo: number, hi: number) => (idx[hi - 1][1] - idx[lo][0]) / sr;
-	if (windowPasses(fr1, fr2, envs, rates, 0, nf))
-		return { reading: 'Captured', fullWindow: true, segmentS: [0, y.length / sr], spanS: spanS(0, nf) };
+	const diagOf = (lo: number, hi: number): GuardWindowDiag => {
+		const m = measure(fr1, fr2, cor, rates, lo, hi);
+		return {
+			spanS: spanS(lo, hi),
+			cv1: round3(m.cv1), cv2: round3(m.cv2), mincor: round3(m.mincor), cvr: round3(m.cvr),
+			failed: failedIn(m, hi - lo)
+		};
+	};
+	let bestDiag: GuardWindowDiag | null = null;
+	for (let lo = 0; lo < nf; lo++) {
+		for (let hi = nf; hi > lo + 1; hi--) {
+			if (spanS(lo, hi) < MIN_STABLE_S) break;
+			const d = diagOf(lo, hi);
+			if (!bestDiag || d.failed.length < bestDiag.failed.length ||
+				(d.failed.length === bestDiag.failed.length && d.spanS > bestDiag.spanS)) bestDiag = d;
+		}
+	}
+	const diag: GuardDiag = { full: diagOf(0, nf), best: bestDiag };
+	if (windowPasses(fr1, fr2, cor, rates, 0, nf))
+		return { reading: 'Captured', fullWindow: true, segmentS: [0, y.length / sr], spanS: spanS(0, nf), diag };
 	let best: [number, number, number] | null = null;
 	for (let lo = 0; lo < nf; lo++) {
 		for (let hi = nf; hi > lo + 1; hi--) {
 			if (spanS(lo, hi) < MIN_STABLE_S) break;
-			if (windowPasses(fr1, fr2, envs, rates, lo, hi)) { const sp = spanS(lo, hi); if (!best || sp > best[2]) best = [lo, hi, sp]; break; }
+			if (windowPasses(fr1, fr2, cor, rates, lo, hi)) { const sp = spanS(lo, hi); if (!best || sp > best[2]) best = [lo, hi, sp]; break; }
 		}
 	}
-	if (best) return { reading: 'Captured', fullWindow: false, segmentS: [idx[best[0]][0] / sr, idx[best[1] - 1][1] / sr], spanS: best[2] };
-	return { reading: 'Provisional', fullWindow: false, segmentS: null, spanS: 0 };
+	if (best) return { reading: 'Captured', fullWindow: false, segmentS: [idx[best[0]][0] / sr, idx[best[1] - 1][1] / sr], spanS: best[2], diag };
+	return { reading: 'Provisional', fullWindow: false, segmentS: null, spanS: 0, diag };
 }

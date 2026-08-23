@@ -40,6 +40,8 @@ import { analyze, runCapture } from './analyze';
 const SR = 48000;
 /** `guard.ts:3`. Quoted, not imported, so a silent move there fails a test here. */
 const MIN_STABLE_S = 1.5;
+/** `guard.ts:4`, the four thresholds the guard tests a window against. Same rule. */
+const T_FR1_CV = 0.08, T_FR2_CV = 0.12, T_ENVCORR = 0.92, T_RATE_CV = 0.25;
 /** The two resonances the fixture puts in the signal. A dark bass [u]. */
 const FR1 = 300, FR2 = 750, RESONATOR_BW = 80;
 
@@ -118,6 +120,20 @@ const steadyThroughout = steadyIntervals(TOTAL_S, 0x11d);
 const steadyBuffer = buildBuffer(steadyThroughout, TOTAL_S, 0xbeef);
 /** The negative control: irregular from end to end, so no window passes at all. */
 const roughBuffer = buildBuffer(roughIntervals(0, TOTAL_S), TOTAL_S, 0xbeef);
+/**
+ * One quantity moved and three held. The resonators are fixed for the whole
+ * buffer, so the two formants and the band envelope are what they are in every
+ * other fixture here; only the interval between pulses wanders, by up to 95
+ * percent. This is the shape a fry that holds its vowel and loses its rhythm
+ * makes, and it is the take the guard used to refuse without saying why.
+ */
+function rateWanderIntervals(untilS: number, seed: number): number[] {
+	const r = rng(seed), out: number[] = [];
+	let t = 0;
+	while (t + 0.025 < untilS) { const iv = 0.025 * (1 + (r() * 2 - 1) * 0.95); out.push(iv); t += iv; }
+	return out;
+}
+const rateWanderBuffer = buildBuffer(rateWanderIntervals(TOTAL_S, 0x9a1), TOTAL_S, 0xbeef);
 
 describe('the fixture is what it claims to be, by arithmetic on its own schedule', () => {
 	it('gives the whole buffer an inter-pulse-interval CV above the detector 1.0 ceiling', () => {
@@ -204,7 +220,7 @@ describe('the confidence tier reads the guard verdict it was given', () => {
 		// take it came from only held for a sub-window, the same buffer must not.
 		expect(analyze(steadyBuffer, SR, 'u').confidence).toBe('high');
 		const asSubWindow = analyze(steadyBuffer, SR, 'u', undefined, {
-			reading: 'Captured', fullWindow: false, segmentS: [0, MIN_STABLE_S], spanS: MIN_STABLE_S
+			...guard(steadyBuffer, SR), fullWindow: false, segmentS: [0, MIN_STABLE_S], spanS: MIN_STABLE_S
 		});
 		expect(asSubWindow.confidence).toBe('medium');
 	});
@@ -215,5 +231,73 @@ describe('the confidence tier reads the guard verdict it was given', () => {
 		const own = analyze(steadyBuffer, SR, 'u');
 		const explicit = analyze(steadyBuffer, SR, 'u', undefined, guard(steadyBuffer, SR));
 		expect(explicit).toEqual(own);
+	});
+});
+
+describe('the guard says which of its four tests refused a take, and by how much', () => {
+	// N.80 step 2. Three [u] takes on `d491d22` all came back
+	// `{"reading":"Provisional","fullWindow":false,"segmentS":null,"spanS":0}`, and
+	// `c5_cv` never fired. Which of `windowPasses`'s four tests refused them was
+	// not recoverable from anything the engine kept.
+
+	it('measures the whole take and names every test the whole take failed', () => {
+		const d = guard(twoPhaseBuffer, SR).diag.full;
+		expect(d.spanS).toBeGreaterThan(MIN_STABLE_S);
+		// The second half alternates 9 ms and 200 ms between pulses, so the pulse
+		// rate is the quantity the fixture attacks most directly. It is not the
+		// only one it moves: a buffer that is half one thing and half another
+		// unsettles the formants and the band envelope too, and the assertion is
+		// `toContain` because that is what the fixture licenses.
+		expect(d.failed).toContain('rate_cv');
+		for (const v of [d.cv1, d.cv2, d.mincor, d.cvr]) expect(typeof v).toBe('number');
+	});
+
+	it('measures the sub-window it kept, and that one passes all four', () => {
+		const d = guard(twoPhaseBuffer, SR).diag.best;
+		if (d === null) throw new Error('expected a candidate window');
+		expect(d.failed).toEqual([]);
+		expect(d.spanS).toBeGreaterThanOrEqual(MIN_STABLE_S);
+		expect(d.cv1).toBeLessThan(T_FR1_CV);
+		expect(d.cv2).toBeLessThan(T_FR2_CV);
+		expect(d.mincor).toBeGreaterThan(T_ENVCORR);
+		expect(d.cvr).toBeLessThan(T_RATE_CV);
+	});
+
+	it('names nothing on a fry that is regular for the whole take', () => {
+		const g = guard(steadyBuffer, SR);
+		expect(g.diag.full.failed).toEqual([]);
+		// The whole buffer is itself a candidate window, so when it passes there is
+		// nothing longer or cleaner for `best` to be.
+		expect(g.diag.best).toEqual(g.diag.full);
+	});
+
+	it('names the pulse rate alone when the pulse rate alone is what wandered', () => {
+		// The reading this instrument exists to make possible. Everything except
+		// the rhythm is held fixed by construction, and the guard says so.
+		const d = guard(rateWanderBuffer, SR).diag.full;
+		expect(d.failed).toEqual(['rate_cv']);
+		expect(d.cvr).toBeGreaterThan(T_RATE_CV);
+		expect(d.cv1).toBeLessThan(T_FR1_CV);
+		expect(d.cv2).toBeLessThan(T_FR2_CV);
+		expect(d.mincor).toBeGreaterThan(T_ENVCORR);
+	});
+
+	it('offers no candidate window when the take is shorter than the minimum', () => {
+		// A 1.0 s buffer has no window of MIN_STABLE_S to offer, so `best` is null
+		// rather than a window that does not exist. `full` is still measured.
+		const g = guard(buildBuffer(steadyIntervals(1.0, 0x11d), 1.0, 0xbeef), SR);
+		expect(g.diag.best).toBeNull();
+		expect(g.diag.full.spanS).toBeLessThan(MIN_STABLE_S);
+		expect(typeof g.diag.full.cvr).toBe('number');
+	});
+
+	it('rides out on the capture outcome, which is what the console prints', () => {
+		// Confirmed, not assumed: `live.ts:684` stringifies the whole outcome, so
+		// `diag` reaches the console only if it is reachable from here.
+		const out = runCapture(twoPhaseBuffer, SR, 'u');
+		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
+		expect(out.guard.diag.full.failed).toContain('rate_cv');
+		expect(out.guard.diag.best?.failed).toEqual([]);
+		expect(JSON.parse(JSON.stringify(out)).guard.diag.full.cvr).toBe(out.guard.diag.full.cvr);
 	});
 });
