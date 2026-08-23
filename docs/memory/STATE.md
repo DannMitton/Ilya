@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`9cc68e5`**, raised from `d079794` at the close of 2026-08-23, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`9d314de`**, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -39,15 +39,45 @@ any of them count.
 
 ## THE ONE THING
 
-> **N.78 IS DONE. Walked by Dann 2026-08-23 on the sha-pinned deploy
-> `ilya-a54jdyrd4`: the composer field read `Modeste Moussorgski (1839–1881)`
-> in French and `Modest Mussorgsky (1839–1881)` in English seven seconds
-> apart, on the drawer and on the title page, with no reload.**
+> **THE COLON AUDIT IS DONE. Shipped `9d314de`, walked by Dann 2026-08-23 on
+> `ilya-lkhccn4lt` in French: no `:` or `;` starts a line.** N.78 closed the
+> same evening. The blocking set is empty.
 >
 > **THE ONE THING IS NOT ESTABLISHED. Dann names it at the next open.** The
-> blocking set is empty. The standing candidate is the colon audit, flagged
-> 2026-08-21 as a Sonnet farm-out at 150k to 250k tokens and never answered
-> because N.78 overtook it. The visible list in §THE TRACKER is the rest.
+> visible list in §THE TRACKER is what remains. The newest inbox line is the
+> [u] capture question, which touches the formant extractor; CONTRACT §6 says
+> read the N.49 document and say how a fix gets verified against his voice
+> before opening it.
+
+---
+
+## 2026-08-23 LATE. THE COLON AUDIT AND THE SCORE MARKUP RENAME, `9d314de`, WALKED
+
+**Ruled by Dann 2026-08-23:** the colon audit is the one thing, and the
+English tab `Marked score` becomes `Score markup` while the French
+`Partition annotée` stays. Both went to Code in one brief,
+`docs/sessions/brief-colon-audit-and-score-markup_r1_2026-08-23.md`; memo
+`memo-colon-audit-and-score-markup_r1_2026-08-23.md`.
+
+**229 edits across `LearnContent.svelte`, `GuideContent.svelte`, and
+`i18n.ts`, French only:** 121 colons gained or upgraded a hard space, 106
+semicolons and 2 exclamation marks lost one. Code took a spelling census first
+and found all five spellings, plus `&#8239;` before 29 semicolons, now gone.
+English blocks byte-identical. Gate 4 stayed 705 after three expectations in
+`analyze-score-adapter.test.ts` followed the string `fit.broad.body`. Bundle
+up 108 bytes.
+
+**Code's one judgement, ruled right by the desk:** the three bare colons left
+in French prose are inside English book titles (`Russian Lyric Diction: A
+Practical Guide` and two others). English titles keep English punctuation.
+
+**Walked:** Dann on the desk, French Leçons on `ilya-lkhccn4lt`, no `:` or
+`;` starting a line. **Not walked on a phone**; Code measured zero wraps at
+360 px in the pane.
+
+**The desk's survey in the brief was wrong where it said `GuideContent` had
+no hard-space colons. It had 9.** The brief marked the survey rough and said
+Code's census governs, which is the only reason it cost nothing.
 
 ---
 
@@ -1797,6 +1827,7 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 
 | | item | state |
 |---|---|---|
+| `[x]` | **the colon audit** | **CLOSED 2026-08-23, `9d314de`, WALKED BY DANN.** Canadian French spacing on `:`, `;`, `!`; `?` was ship 5. `Score markup` rename rode with it |
 | `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |
 | `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |
 | `[x]` | **N.71** the note click | **CLOSED 2026-08-16. Fix shipped in `046beec`, walked by Dann on the `58f982c` deployment.** The notehead glyph was painted over its own `[data-hit]` rectangle and still interactive, so a click on the note died; every `<g data-event-id>` is now `pointer-events="none"` and the rectangle takes clicks back with its own `all`, plus `cursor="pointer"`. **What Dann saw:** a click DEAD CENTRE on the first notehead, the exact spot that did nothing an hour earlier, gave `4 / 5` with бил under it. Two tests pin both halves |
