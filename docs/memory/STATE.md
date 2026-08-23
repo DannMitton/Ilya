@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`2440bf5`**, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`1f4e268`**, raised from `2440bf5` in the small hours of 2026-08-24 when N.62 shipped with five gates at baseline and the push printed `b54be1a..1f4e268`. Before that `2440bf5`, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -61,6 +61,54 @@ any of them count.
 > Usage when the session closed, 00:06 on 2026-08-23: all models 87%, Fable
 > 77%, both resetting about 05:00. The enumeration was done on Fable because
 > the shared pool was the scarcer one that night.
+>
+> **2026-08-24 SMALL HOURS: N.62 IS DONE.** Ratified, built by Code in one
+> ship (`1f4e268`), and walked. Rows 1 to 4 read off the rendered DOM on
+> `ilya-4f6fwt03u` in both languages by the desk driving Chrome; row 5's
+> button needs a loaded song, so its evidence is the served bundle
+> (`Modifier la glose` once, `le glose` zero, all 19 scripts), and **Dann
+> accepted the walk on that**. Glance at the gloss button next time a song
+> is open. Gate 4 is **725**; the ship script's line 79 already expects it.
+>
+> **THE ONE THING IS DANN'S TO NAME.** The blocking set is empty. Waiting,
+> on purpose: the watch band's header (`watchlist.ts:92`) prints English in
+> French mode, recommended for a number of its own; the visible list.
+
+## 2026-08-24 SMALL HOURS. N.62 DONE: RATIFIED, ONE SHIP, WALKED
+
+**The French, ratified by Dann 2026-08-23.** Row 2 changed under his eye: he
+challenged « déplier », proposed « déployer » and « serrer », the desk gave
+the platform pair, and he ruled **« Développer ou réduire »**, adopted. On
+« serrer » the desk gave only the European sense (tighten) and Dann supplied
+the Canadian one (stow); the word still lost, but the correction was his.
+« glose » is feminine, so row 5 is « Modifier la glose ». Rows 1, 3, and 4
+ratified as enumerated: « Commandes » coined, « Navigation » and
+« Transcription » adopted.
+
+**The ship, `1f4e268`, brief
+`docs/sessions/brief-n62-five-strings_r1_2026-08-23.md`, memo
+`memo-n62-five-strings_r1_2026-08-23.md`.** Four keys in `i18n.ts` (`a11y.*`),
+four call sites moved to `t()`, one character at `InspectorPanel.svelte:1039`,
+one new test file `i18n.test.ts`. Gate 4 **724 to 725**; the ship script's
+line 79 moved before the ship. **Row 2 is twelve chevrons, not the memo's
+thirteen**; the memo's own line list had twelve entries and Code confirmed no
+thirteenth exists.
+
+**The walk, desk-driven in Chrome on `ilya-4f6fwt03u` (`1f4e268`, READY,
+sha checked via the Vercel connector).** Rows 1 to 4 read off the rendered
+DOM in English, then in French after clicking « Français »: `Commandes`,
+`Développer ou réduire` as the sole chevron label, `Navigation`,
+`Transcription`. The twelve chevrons never render at once: Learn shows 7,
+Guide shows 5. Row 5's button renders only with a placement selected in a
+loaded song, predicted before the measurement; the served bundle carries
+`Modifier la glose` once and `le glose` zero times across all 19 scripts.
+**Dann accepted the walk on that evidence.** Residue: glance at the gloss
+button next time a song is open.
+
+**Code's own additions, from its memo:** `Drawer.svelte:324`'s comment
+quoted the old markup and was updated so the done-when grep runs clean, and
+this machine's `grep` is a `ugrep` shim that honours `.gitignore` and
+silently skips `apps/web/build` (Code recorded it; see ENVIRONMENT).
 
 ---
 

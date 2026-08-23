@@ -12,7 +12,7 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **724** (682 until 2026-08-23; N.78 added 23, N.80 added 13 then 6) |
+| web-test | **725** (682 until 2026-08-23; N.78 added 23, N.80 added 13 then 6, N.62 added 1) |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
@@ -1834,3 +1834,28 @@ Opus's memo named level as the leading cause from a careful reading and
 synthetic runs. One console paste from Dann refuted it in a minute. State
 the expectation, then measure; the memo was right about everything except
 the thing it could not see.
+
+## THE MAC'S `grep` IS A `ugrep` SHIM AND HONOURS `.gitignore`. Code's finding, 2026-08-24
+
+In a Claude Code session on Dann's machine, `grep` resolves to a `ugrep`
+shim with `--ignore-files`, so it silently skips anything `.gitignore`
+covers, `apps/web/build` included. Four searches of the built bundle came
+back empty and read as a real finding; the French was there all along.
+When the standing rule says scan the built bundle, that directory is
+ignored: use `grep -R --include` on an explicit path, `command grep`, or
+read the file directly.
+
+## SCREEN-READER STRINGS ARE WALKED IN CHROME, NOT BY EYE. First done 2026-08-24, N.62
+
+An `aria-label` is invisible on screen, so a deploy walk for one is a DOM
+read: navigate the sha-pinned deploy URL in Chrome, then one
+`javascript_tool` call per view reading `getAttribute('aria-label')`.
+Confirm the deploy is READY and its `githubCommitSha` matches via the
+Vercel connector first. Traps met on the first walk: the twelve TOC
+chevrons never render at once (Learn shows 7, Guide shows 5, reached by
+the `button.link` links on the paper); the paper region only exists on the
+Transcription destination; and the gloss button renders only with a
+placement selected in a loaded song, so a fresh browser cannot show it.
+Fallback evidence for a string a fresh browser cannot render: fetch the
+deploy's `/_app/immutable/*.js` from inside the page and count
+occurrences, and say it is the bundle, not the DOM.
