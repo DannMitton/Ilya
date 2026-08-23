@@ -1,7 +1,7 @@
 import type { CalibratedFormant, Vowel, VoiceType } from './types';
 import type { CaptureError } from './errors';
 import { detect } from './detector';
-import { guard } from './guard';
+import { guard, type GuardResult } from './guard';
 import { extractFormants } from './extract';
 
 // SILENCE_RMS recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console
@@ -18,10 +18,19 @@ function f2Quality(f2: number | null, f1: number | null, prom: number, guardPass
 	return 'absent';
 }
 
-/** §9 batch core: samples + vowel -> CalibratedFormant. Pure; the [ɨ] pass is separate. */
-export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType): CalibratedFormant {
+/**
+ * §9 batch core: samples + vowel -> CalibratedFormant. Pure; the [ɨ] pass is separate.
+ *
+ * N.80: `outerGuard` carries the verdict the caller already computed on the WHOLE
+ * capture, when `y` is only the best steady stretch of it. It exists for one field,
+ * `fullWindow`. Re-running the guard on a 1.5 s slice would report `fullWindow: true`
+ * for that slice and promote a sub-window take to `high`, which is a claim about
+ * steadiness the singer never made. Absent the parameter the guard runs on `y` as
+ * it always has, so every existing caller is unchanged.
+ */
+export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult): CalibratedFormant {
 	const det = detect(y, sr);
-	const g = guard(y, sr);
+	const g = outerGuard ?? guard(y, sr);
 	const ex = extractFormants(y, sr, vowel);
 	// Confidence tiers recalibrated 2026-07-01 on Dann's ACCEPT: the old flat
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
@@ -51,9 +60,12 @@ export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: 
 }
 
 export type CaptureOutcome =
-	| { outcome: 'reading'; formant: CalibratedFormant }
-	| { outcome: 'reprompt'; reason: 'not-fry'; failed: string[] }
-	| { outcome: 'error'; error: CaptureError };
+	// `guard` is the stationarity verdict on the whole capture. It rides on the
+	// outcome so `live.ts` can print it: which of the two routes to Provisional
+	// fired was undiagnosable from the console before N.80.
+	| { outcome: 'reading'; formant: CalibratedFormant; guard: GuardResult }
+	| { outcome: 'reprompt'; reason: 'not-fry'; failed: string[]; guard: GuardResult }
+	| { outcome: 'error'; error: CaptureError; guard?: GuardResult };
 
 /** The capture pipeline: structural checks, the live gate, then the §9 core. */
 export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?: VoiceType): CaptureOutcome {
@@ -63,9 +75,19 @@ export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?
 	let sum = 0; for (let i = 0; i < y.length; i++) sum += y[i] * y[i];
 	if (Math.sqrt(sum / y.length) < SILENCE_RMS)
 		return { outcome: 'error', error: { code: 'NO_AUDIO_INPUT', message: 'no audio input' } };
-	const det = detect(y, sr);
-	if (!det.accept) return { outcome: 'reprompt', reason: 'not-fry', failed: det.failed };
-	const cf = analyze(y, sr, vowel, voiceType);
-	if (!cf.f1) return { outcome: 'error', error: { code: 'EXTRACTION_FAILED', message: 'no formants recovered' } };
-	return { outcome: 'reading', formant: cf };
+	// N.80. The live gate asks for one regular second; this pipeline used to ask
+	// for a regular 3.5 s. A rounded [u] fry that holds for 1.5 s failed the
+	// whole-buffer c5_cv and never reached the extractor. The guard already finds
+	// the longest passing stretch of at least MIN_STABLE_S; nothing used it. Now
+	// the detector and the extractor are shown that stretch instead of the whole
+	// buffer. When the whole buffer passes, `segmentS` is the whole buffer and
+	// this is the pipeline exactly as it was. When nothing passes, `segmentS` is
+	// null and this is also the pipeline exactly as it was.
+	const g = guard(y, sr);
+	const yw = g.segmentS ? y.subarray(Math.round(g.segmentS[0] * sr), Math.round(g.segmentS[1] * sr)) : y;
+	const det = detect(yw, sr);
+	if (!det.accept) return { outcome: 'reprompt', reason: 'not-fry', failed: det.failed, guard: g };
+	const cf = analyze(yw, sr, vowel, voiceType, g);
+	if (!cf.f1) return { outcome: 'error', error: { code: 'EXTRACTION_FAILED', message: 'no formants recovered' }, guard: g };
+	return { outcome: 'reading', formant: cf, guard: g };
 }
