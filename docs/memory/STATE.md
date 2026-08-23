@@ -70,9 +70,81 @@ any of them count.
 > accepted the walk on that**. Glance at the gloss button next time a song
 > is open. Gate 4 is **725**; the ship script's line 79 already expects it.
 >
-> **THE ONE THING IS DANN'S TO NAME.** The blocking set is empty. Waiting,
-> on purpose: the watch band's header (`watchlist.ts:92`) prints English in
-> French mode, recommended for a number of its own; the visible list.
+> **2026-08-24, THE RELEASE SESSION: seven rulings, eight numbers, two Opus
+> audits.** N.82 through N.89 numbered and ordered (section below). The two
+> release re-audit memos are in `docs/sessions/`
+> (`memo-release-audit-a_r1_2026-08-24.md` and `-b`). Footer C, the
+> classification header, and the binder manifest fields are RATIFIED from
+> rendered drawings (`footer-options_r1`, `header-proposal_r2`, both in
+> `docs/sessions/`).
+>
+> **THE ONE THING: N.83, walkthrough prep.** A colleague asked Dann for a
+> walkthrough this week. First step: the IMSLP demonstration, one Russian
+> piano-vocal PDF through the reader on a deploy, which doubles as the
+> reader's first honest end-to-end accuracy datum. Accuracy judgement is
+> Dann's eye against the paper, never a script's count.
+
+## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
+
+**Dann opened the release question: what remains before a release, plus six
+proposals of his own.** The desk ran the seven owed rulings one by one; all
+seven are answered. Two Opus subagents re-audited the tree read-only
+(ruled by Dann; the desk quoted ~150k worst case and the pair spent ~372k,
+owned in-thread): `memo-release-audit-a_r1_2026-08-24.md` (behaviour clauses)
+and `-b` (upload, residue, open source, provenance), both in `docs/sessions/`.
+
+### The numbers, all ruled in by Dann 2026-08-24
+
+| | item | state |
+|---|---|---|
+| **N.82** | the watch band's French | NUMBERED. Bigger than the enumeration knew: header, all eight `watchEntryLine` branches, `transpositionPhrase`, `joinIntervals`, and the advice sentences (`watchlist.ts:530-590`, `advice-resolver.ts:127`) print English in French mode on the Fit paper. Desk drafts the French table for Dann's eye before any brief |
+| **N.83** | walkthrough prep | **THE ONE THING.** A colleague asked this week. Includes the IMSLP demonstration: one Russian piano-vocal PDF through the reader, the first honest end-to-end accuracy datum |
+| **N.84** | the Guide redo | Three FALSE structural claims and the stale "Ilya does not save transcriptions" promise (privacy-adjacent, now false): memo A's twelve-claim table is the work list. Extract structure and prose worth keeping; images are stale |
+| **N.85** | the open-source front door | README, CONTRIBUTING, code of conduct. Desk drafts; Dann sees every word. Must carry: free on purpose, well-built on purpose, made to help outside commercial concerns; Calm Authority with testable elements (whether the ratified slate is already testable is answered at drafting time). The `.env.example:1-4` stale instruction rides with this ship |
+| **N.86** | dead-code and structure audit | One reading pass, two outputs: dead code to delete (first entries: `ACCEPTED_EXTENSIONS` at `format-detection.ts:54`, the `lib 2/` Finder artifact, and the `PUBLIC_INCLUDE_SHANE` wall, whose fate this audit rules) and structural intuitiveness for contributors |
+| **N.87** | optimizations | Perceive, confer with Dann, then execute. Needs N.86's findings first |
+| **N.88** | marketing materials | Last on purpose: describes the cleaned-up product |
+| **N.89** | the document furniture | RATIFIED FROM DRAWINGS, NOT BUILT. Footer C (two-tier colophon, name in, "MIT licence" joins the secondary line, the real flag SVG unchanged); the classification header (page 1: today's title header plus a three-line right block, voice · printed date · document kind and language; pages 2+: running head plus one condensed line; sourced-or-silent, no voice profile means no voice line; lavender accent on the marked score); binder manifest gains `app`, `author`, `url`, `licence`, and `version.name: '2026a'` in `svelte.config.js` so the binder stops shipping a millisecond epoch. Drawings: `footer-options_r1_2026-08-24.html`, `header-proposal_r2_2026-08-24.html`. New French for Dann's eye is in the drawings' endnotes; « imprimé le » is the one coinage |
+
+**The ratified order: N.83, N.84, N.85, N.86, N.87, N.88.** N.82 and N.89 are
+ships that can ride between them.
+
+### The other rulings, 2026-08-24
+
+- **Learn and Guide print: REVERSED.** Dann: no native print for Learn or
+  Guide "until a compelling reason emerges"; a singer prints Transcriptions
+  and Score markups natively, and those bear the furniture. The tree already
+  agrees (`+page.svelte:2396`, Studio-only Print). The 2026-08-20 "a printed
+  Learn or Guide excerpt must identify its source" work is DEAD, not merely
+  unnumbered.
+- **Colour on paper: PARKED behind N.83.** No rule in the tree forces
+  greyscale or preserves colour (memo A §4); the desk's predict-and-print
+  table waits until walkthrough prep is done. Unexplained: turning noteheads
+  are foreground SVG fill and should survive printing; Dann saw greyscale
+  except the flag. A driver in greyscale mode would produce exactly that.
+- **N.72 residue: CLOSED AS KNOWN, no build.** A singer on Chrome for iPhone
+  uses Ilya fully in the browser; install exists only in Safari; no steering
+  copy.
+- **The `PUBLIC_INCLUDE_SHANE` wall: handed to N.86**, and the stale
+  `.env.example` instruction is corrected with N.85.
+
+### Audit findings not yet numbered, waiting on their tracks
+
+Memo B carries the inventory: README omits half the product and names a
+`test:e2e` that does not exist at root (N.85); CI's real gates (svelte-check
+baseline 23, build) are unmentioned in CONTRIBUTING (N.85); no code of
+conduct (N.85); the binder manifest carries no provenance (N.89); no
+end-to-end reader accuracy rate exists anywhere, and the harness's 1.000
+scorecard measures a stub, never to be quoted as the reader (N.83's
+demonstration is the first datum); `updatedAt` written five times, rendered
+nowhere (N.19, unchanged); `saveStore` still the last catch-and-drop (N.27,
+unchanged); three `100vh` remain (N.17, unchanged).
+
+**Inbox dispositions this session:** the six proposals became N.83 to N.88;
+colour print parked; header/footer became N.89; the smartwatch formant
+question remains in the inbox, unruled.
+
+---
 
 ## 2026-08-24 SMALL HOURS. N.62 DONE: RATIFIED, ONE SHIP, WALKED
 
@@ -2006,7 +2078,7 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 | `[x]` | **N.80** the [u] capture | **CLOSED 2026-08-23, `d491d22` and `230cad3`, WALKED BY DANN.** Cause: fR1 steadiness, `fr1_cv`. Best-window judging captures it; the guard now reports its numbers. Section above |
 | `[x]` | **N.81** the takeover's rule goes lavender | **CLOSED 2026-08-23, `2440bf5`, WALKED BY DANN on `ilya-2xbpbyyyv`.** One token at `Drawer.svelte:888`. Section above |
 | `[x]` | **N.79** transitions | **RULED CLOSED BY DANN 2026-08-23: do nothing.** Researched in `memo-n79-transitions-research_r1_2026-08-23.md`; every transition stays as it is. Nothing built |
-| `[ ]` | **N.62** the accessibility sweep | **ENUMERATED 2026-08-23, NOTHING BUILT.** `memo-n62-enumeration_r1_2026-08-23.md`: five rows, two coined French words. **Next step is Dann's: approve or strike the table.** THE ONE THING |
+| `[x]` | **N.62** the accessibility sweep | **CLOSED 2026-08-24, `1f4e268`, WALKED (rows 1 to 4 in the rendered DOM on `ilya-4f6fwt03u`, row 5 accepted on the served bundle).** Section above |
 | `[x]` | **N.63** the desktop interstitial | **CLOSED 2026-08-23.** Residue SAY NOTHING ruled 2026-08-21; the gate itself retired under N.73 portrait C ruling 4, `+page.svelte:1865` |
 | `[x]` | **the colon audit** | **CLOSED 2026-08-23, `9d314de`, WALKED BY DANN.** Canadian French spacing on `:`, `;`, `!`; `?` was ship 5. `Score markup` rename rode with it |
 | `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |

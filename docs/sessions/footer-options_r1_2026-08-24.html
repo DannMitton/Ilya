@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Footer options, r1, 2026-08-24</title>
+<style>
+	:root {
+		--ink: #292524;
+		--ink-secondary: #57534e;
+		--stone: #78716c;
+		--sage: #8B9A7D;
+		--paper: #ffffff;
+	}
+	body {
+		margin: 0;
+		padding: 32px 24px 64px;
+		background: #e7e5e4;
+		font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+		color: var(--ink);
+	}
+	h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+	.note { font-size: 13px; color: var(--ink-secondary); max-width: 70ch; line-height: 1.5; }
+	h2 { font-size: 15px; font-weight: 600; margin: 40px 0 2px; }
+	.cost { font-size: 12px; color: var(--stone); margin: 0 0 10px; }
+	/* A sheet strip: the bottom 160px of a US letter page at true width. */
+	.sheet {
+		width: 816px; /* 8.5in at 96dpi */
+		background: var(--paper);
+		box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+		margin: 0 0 14px;
+		padding: 40px 96px 48px; /* true side margins and bottom margin */
+		box-sizing: border-box;
+	}
+	.lang { font-size: 10px; color: var(--stone); text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 18px; }
+	.hairline { border-top: 0.5px solid var(--sage); margin-bottom: 8px; }
+	.row { display: grid; grid-template-columns: 1fr auto; gap: 0 32px; align-items: end; }
+	em { font-style: italic; }
+	.u { color: var(--ink-secondary); }
+
+	/* ── A: today ── */
+	.a-text {
+		font-family: inherit;
+		font-size: 9.5pt;
+		color: var(--ink-secondary);
+		font-variant-caps: all-small-caps;
+		letter-spacing: 1px;
+		text-align: justify;
+		line-height: 1.5;
+	}
+	.a-page { font-size: 9.5pt; font-variant-caps: all-small-caps; letter-spacing: 1px; color: var(--ink-secondary); white-space: nowrap; }
+
+	/* ── B: one line, sentence case, smaller ── */
+	.b-text {
+		font-size: 8pt;
+		color: var(--ink-secondary);
+		line-height: 1.45;
+	}
+	.b-page { font-size: 8pt; color: var(--ink-secondary); white-space: nowrap; }
+
+	/* ── C: two-tier colophon ── */
+	.c-primary {
+		font-size: 8.5pt;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.8px;
+		color: var(--ink-secondary);
+		margin: 0 0 3px;
+	}
+	.c-secondary {
+		font-size: 7.5pt;
+		color: var(--stone);
+		line-height: 1.45;
+	}
+	.c-page { font-size: 8.5pt; font-variant-caps: all-small-caps; letter-spacing: 0.8px; color: var(--ink-secondary); white-space: nowrap; }
+	.flag { color: #d52b1e; }
+</style>
+</head>
+<body>
+
+<h1>The printed footer: three treatments</h1>
+<p class="note">Each strip is the bottom of a US letter sheet at true size and true margins
+(96&nbsp;px sides, as the paper uses). The sage hairline and the page number stay in every
+option. The flag is drawn as a stand-in glyph; the real inline SVG rides along unchanged.
+Point sizes are marked per option. The provenance legend is unchanged and not shown.</p>
+
+<!-- ═══════════ A ═══════════ -->
+<h2>A · Today, unchanged (the control)</h2>
+<p class="cost">9.5&nbsp;pt all small caps, letter-spaced, justified. About three lines: ~14&nbsp;mm of page height.</p>
+<div class="sheet">
+	<p class="lang">English</p>
+	<div class="hairline"></div>
+	<div class="row">
+		<div class="a-text">Free and open source, <em>Ilya</em>&nbsp;2026a operationalizes Craig Grayson&rsquo;s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0), test text via www.lieder.net. Made with love in Canada&nbsp;<span class="flag">&#x1F341;</span>&nbsp;&nbsp;&nbsp;<span class="u">dannmitton.com</span></div>
+		<div class="a-page">Page 2 of 3</div>
+	</div>
+</div>
+
+<!-- ═══════════ B ═══════════ -->
+<h2>B · One register, sentence case, smaller</h2>
+<p class="cost">8&nbsp;pt sentence case, ragged right. Two lines: ~7&nbsp;mm. The quietest change: same single voice, less ink, the URL reads as an address.</p>
+<div class="sheet">
+	<p class="lang">English</p>
+	<div class="hairline"></div>
+	<div class="row">
+		<div class="b-text">Free and open source, <em>Ilya</em>&nbsp;2026a operationalizes Craig Grayson&rsquo;s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and glosses: kaikki.org (CC&nbsp;BY-SA&nbsp;4.0) &middot; test text: www.lieder.net &middot; Made with love in Canada&nbsp;<span class="flag">&#x1F341;</span> &middot; <strong>dannmitton.com</strong></div>
+		<div class="b-page">Page 2 of 3</div>
+	</div>
+</div>
+<div class="sheet">
+	<p class="lang">Français</p>
+	<div class="hairline"></div>
+	<div class="row">
+		<div class="b-text">Gratuit et à code ouvert, <em>Ilya</em>&nbsp;2026a met en &oelig;uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d&rsquo;accentuation et glossaires&nbsp;: kaikki.org (CC&nbsp;BY-SA&nbsp;4.0) &middot; textes d&rsquo;essai&nbsp;: www.lieder.net &middot; Fait avec amour au Canada&nbsp;<span class="flag">&#x1F341;</span> &middot; <strong>dannmitton.com</strong></div>
+		<div class="b-page">Page 2 sur 3</div>
+	</div>
+</div>
+
+<!-- ═══════════ C ═══════════ -->
+<h2>C · Two-tier colophon, with your name</h2>
+<p class="cost">Primary line 8.5&nbsp;pt small caps; scholarly line 7.5&nbsp;pt sentence case in stone. Two lines: ~7&nbsp;mm. The finder's line first, the scholarship beneath it.</p>
+<div class="sheet">
+	<p class="lang">English</p>
+	<div class="hairline"></div>
+	<div class="row">
+		<div>
+			<p class="c-primary"><em>Ilya</em>&nbsp;2026a &middot; free and open source &middot; Dann Mitton &middot; dannmitton.com &middot; made with love in Canada&nbsp;<span class="flag">&#x1F341;</span></p>
+			<p class="c-secondary">Operationalizes Craig Grayson&rsquo;s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and glosses: kaikki.org (CC&nbsp;BY-SA&nbsp;4.0); test text: www.lieder.net.</p>
+		</div>
+		<div class="c-page">Page 2 of 3</div>
+	</div>
+</div>
+<div class="sheet">
+	<p class="lang">Français</p>
+	<div class="hairline"></div>
+	<div class="row">
+		<div>
+			<p class="c-primary"><em>Ilya</em>&nbsp;2026a &middot; gratuit et à code ouvert &middot; Dann Mitton &middot; dannmitton.com &middot; fait avec amour au Canada&nbsp;<span class="flag">&#x1F341;</span></p>
+			<p class="c-secondary">Met en &oelig;uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d&rsquo;accentuation et glossaires&nbsp;: kaikki.org (CC&nbsp;BY-SA&nbsp;4.0); textes d&rsquo;essai&nbsp;: www.lieder.net.</p>
+		</div>
+		<div class="c-page">Page 2 sur 3</div>
+	</div>
+</div>
+
+<p class="note" style="margin-top:32px">French notes: every French phrase above reuses the ratified
+attribution string's own vocabulary (« gratuit et à code ouvert », « met en œuvre »,
+« données d'accentuation », « textes d'essai », « fait avec amour au Canada »); the only new
+French is « glossaires » standing alone where the long form said « glossaires de traduction »,
+a shortening, not a coinage. Hard space before every colon per the Canadian French ruling.
+Strike the name from C and it still stands; strike nothing from A.</p>
+
+</body>
+</html>

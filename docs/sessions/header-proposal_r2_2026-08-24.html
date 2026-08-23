@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The header, as proposed, r2</title>
+<style>
+	:root {
+		--ink: #292524;
+		--ink-secondary: #57534e;
+		--stone: #78716c;
+		--sage: #8B9A7D;
+	}
+	body {
+		margin: 0;
+		padding: 32px 24px 64px;
+		background: #e7e5e4;
+		font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+		color: var(--ink);
+	}
+	h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+	.note { font-size: 13px; color: var(--ink-secondary); max-width: 72ch; line-height: 1.5; }
+	h2 { font-size: 15px; font-weight: 600; margin: 36px 0 8px; }
+	.sheet {
+		width: 816px;
+		background: #fff;
+		box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+		margin: 0 0 14px;
+		padding: 48px 96px 36px;
+		box-sizing: border-box;
+	}
+	em { font-style: italic; }
+
+	.th { display: grid; grid-template-columns: 1fr auto; align-items: start; }
+	.logo { font-size: 15px; font-weight: 600; color: var(--sage); letter-spacing: 0.5px; }
+	.logo .v { font-size: 10px; vertical-align: super; margin-left: 2px; }
+	.meta1 { font-size: 11px; font-variant-caps: all-small-caps; letter-spacing: 1.2px; color: var(--ink-secondary); margin-top: 10px; }
+	.meta2 { font-size: 10px; font-variant-caps: all-small-caps; letter-spacing: 1px; color: var(--stone); margin-top: 2px; }
+	.classify {
+		text-align: right;
+		font-size: 9px;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.8px;
+		color: var(--stone);
+		line-height: 1.6;
+	}
+	.rule { border-bottom: 1px solid var(--sage); margin-top: 10px; }
+	.body-hint { margin-top: 26px; font-family: Georgia, serif; font-size: 15px; color: #a8a29e; text-align: center; letter-spacing: 0.05em; }
+
+	.rh { display: grid; grid-template-columns: 1fr auto; align-items: end; }
+	.rh-title { font-size: 14px; font-weight: 600; color: var(--ink-secondary); letter-spacing: 1.5px; font-variant-caps: all-small-caps; }
+	.rh-classify { font-size: 9px; font-variant-caps: all-small-caps; letter-spacing: 0.8px; color: var(--stone); padding-bottom: 2px; }
+</style>
+</head>
+<body>
+
+<h1>The header, as proposed</h1>
+<p class="note">True page width, true margins. Everything on the left is today's build,
+untouched. The proposal is the right-hand column only: three lines on the title page,
+one line on every page after it. 9&nbsp;pt small caps in stone, ending flush with the
+sage rule, so it reads as catalogue information rather than content.</p>
+
+<h2>Page 1 · title header with the classification block</h2>
+<div class="sheet">
+	<div class="th">
+		<div>
+			<div class="logo">[Ilya]<span class="v">2026a</span></div>
+			<div class="meta1">MODEST MUSORGSKY (1839–1881) | OP. POSTH.</div>
+			<div class="meta2">ARSENY GOLENISHCHEV-KUTUZOV (1848–1913)</div>
+		</div>
+		<div class="classify">
+			<div>voice: dann · mezzo</div>
+			<div>printed 2026-08-24</div>
+			<div>transcription · en</div>
+		</div>
+	</div>
+	<div class="rule"></div>
+	<div class="body-hint">Колыбельная<br><span style="font-size:12px">— the song begins here —</span></div>
+</div>
+
+<h2>Page 2 and following · running head with the condensed line</h2>
+<div class="sheet">
+	<div class="rh">
+		<div class="rh-title">Песни и пляски смерти</div>
+		<div class="rh-classify">dann · mezzo · 2026-08-24</div>
+	</div>
+	<div class="rule" style="margin-top:4px"></div>
+	<div class="body-hint" style="font-size:13px">— the page continues —</div>
+</div>
+
+<h2>The same two, in French mode</h2>
+<div class="sheet">
+	<div class="th">
+		<div>
+			<div class="logo">[Ilya]<span class="v">2026a</span></div>
+			<div class="meta1">MODEST MUSORGSKY (1839–1881) | OP. POSTH.</div>
+			<div class="meta2">ARSENY GOLENISHCHEV-KUTUZOV (1848–1913)</div>
+		</div>
+		<div class="classify">
+			<div>voix&nbsp;: dann · mezzo</div>
+			<div>imprimé le 2026-08-24</div>
+			<div>transcription · fr</div>
+		</div>
+	</div>
+	<div class="rule"></div>
+	<div class="body-hint" style="font-size:13px">…</div>
+</div>
+
+<p class="note" style="margin-top:28px">Rules the block obeys: sourced or silent, so a
+missing voice profile removes the voice line and nothing replaces it; the marked score's
+copy of this block takes the lavender accent its surface already uses; dates are ISO;
+no line ever wraps, the block truncates the voice name before it widens. The three
+lines answer, in order: whose, when, what. On the loose second page the one line answers
+all three at once.</p>
+
+</body>
+</html>

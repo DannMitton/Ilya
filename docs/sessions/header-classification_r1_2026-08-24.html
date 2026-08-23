@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Header and footer, the classification scheme, r1</title>
+<style>
+	:root {
+		--ink: #292524;
+		--ink-secondary: #57534e;
+		--stone: #78716c;
+		--sage: #8B9A7D;
+		--lavender: #8678a8;
+	}
+	body {
+		margin: 0;
+		padding: 32px 24px 64px;
+		background: #e7e5e4;
+		font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+		color: var(--ink);
+	}
+	h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+	.note { font-size: 13px; color: var(--ink-secondary); max-width: 72ch; line-height: 1.5; }
+	h2 { font-size: 15px; font-weight: 600; margin: 40px 0 2px; }
+	.cost { font-size: 12px; color: var(--stone); margin: 0 0 10px; }
+	.sheet {
+		width: 816px;
+		background: #fff;
+		box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+		margin: 0 0 14px;
+		padding: 48px 96px 40px;
+		box-sizing: border-box;
+	}
+	.new { outline: 1.5px dashed #c08c2c; outline-offset: 3px; }
+	.keynote { font-size: 11px; color: #c08c2c; margin: 0 0 12px; }
+	em { font-style: italic; }
+
+	/* ── Title-page header, as built today, plus the new block ── */
+	.th { display: grid; grid-template-columns: 1fr auto; align-items: start; }
+	.logo { font-size: 15px; font-weight: 600; color: var(--sage); letter-spacing: 0.5px; }
+	.logo .v { font-size: 10px; vertical-align: super; margin-left: 2px; }
+	.meta1 { font-size: 11px; font-variant-caps: all-small-caps; letter-spacing: 1.2px; color: var(--ink-secondary); margin-top: 10px; }
+	.meta2 { font-size: 10px; font-variant-caps: all-small-caps; letter-spacing: 1px; color: var(--stone); margin-top: 2px; }
+	.classify {
+		text-align: right;
+		font-size: 9px;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.8px;
+		color: var(--stone);
+		line-height: 1.6;
+	}
+	.rule { border-bottom: 1px solid var(--sage); margin-top: 10px; }
+
+	/* ── Running header ── */
+	.rh { display: grid; grid-template-columns: 1fr auto; align-items: end; }
+	.rh-title { font-size: 14px; font-weight: 600; color: var(--ink-secondary); letter-spacing: 1.5px; font-variant-caps: all-small-caps; }
+	.rh-classify { font-size: 9px; font-variant-caps: all-small-caps; letter-spacing: 0.8px; color: var(--stone); }
+
+	/* ── Footer C, constant, with MIT joined ── */
+	.hairline { border-top: 0.5px solid var(--sage); margin-bottom: 8px; }
+	.row { display: grid; grid-template-columns: 1fr auto; gap: 0 32px; align-items: end; }
+	.c-primary { font-size: 8.5pt; font-variant-caps: all-small-caps; letter-spacing: 0.8px; color: var(--ink-secondary); margin: 0 0 3px; }
+	.c-secondary { font-size: 7.5pt; color: var(--stone); line-height: 1.45; margin: 0; }
+	.c-page { font-size: 8.5pt; font-variant-caps: all-small-caps; letter-spacing: 0.8px; color: var(--ink-secondary); white-space: nowrap; }
+	.flag { color: #d52b1e; }
+	.mid { padding: 28px 0; color: #d6d3d1; font-size: 11px; text-align: center; letter-spacing: 0.2em; }
+</style>
+</head>
+<body>
+
+<h1>One scheme: the header classifies, the footer identifies</h1>
+<p class="note">The division of labour: the <strong>header</strong> answers "what is this document,
+whose is it, and when" (the piece, the people, the voice, the date). The <strong>footer</strong>,
+option&nbsp;C on every page, answers "what made it and where to find it" (app, version, author, URL,
+licence, sources). Nothing is stated twice. Dashed amber marks what is new; everything else
+already ships. Names shown are placeholder content.</p>
+
+<!-- ═══════════ Title page ═══════════ -->
+<h2>Title page, top</h2>
+<p class="cost">The wordmark and piece metadata are today's build, untouched. New: the classification
+block, top right, three short lines in 9&nbsp;pt small caps stone.</p>
+<div class="sheet">
+	<div class="th">
+		<div>
+			<div class="logo">[Ilya]<span class="v">2026a</span></div>
+			<div class="meta1">MODEST MUSORGSKY (1839–1881) | OP. POSTH.</div>
+			<div class="meta2">ARSENY GOLENISHCHEV-KUTUZOV (1848–1913)</div>
+		</div>
+		<div class="classify new">
+			<div>voice: dann · mezzo</div>
+			<div>printed 2026-08-24</div>
+			<div>transcription · en</div>
+		</div>
+	</div>
+	<div class="rule"></div>
+	<p class="keynote" style="margin-top:8px">new: the right-hand classification block</p>
+</div>
+
+<!-- ═══════════ Subsequent page ═══════════ -->
+<h2>Subsequent pages, top</h2>
+<p class="cost">The running head is today's build. New: one quiet right-hand line, so a loose
+page still says whose it is and when.</p>
+<div class="sheet">
+	<div class="rh">
+		<div class="rh-title">Песни и пляски смерти</div>
+		<div class="rh-classify new">dann · mezzo · 2026-08-24</div>
+	</div>
+	<div class="rule" style="margin-top:4px"></div>
+</div>
+
+<!-- ═══════════ Footer ═══════════ -->
+<h2>Every page, bottom: footer C, constant, licence joined</h2>
+<p class="cost">Ratified C with one addition: "MIT licence" in the secondary line. Identical on the
+title page, subsequent pages, and the marked score (whose accent is lavender, as today).</p>
+<div class="sheet">
+	<div class="hairline"></div>
+	<div class="row">
+		<div>
+			<p class="c-primary"><em>Ilya</em>&nbsp;2026a &middot; free and open source &middot; Dann Mitton &middot; dannmitton.com &middot; made with love in Canada&nbsp;<span class="flag">&#x1F341;</span></p>
+			<p class="c-secondary new">Operationalizes Craig Grayson&rsquo;s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and glosses: kaikki.org (CC&nbsp;BY-SA&nbsp;4.0); test text: www.lieder.net. MIT licence.</p>
+		</div>
+		<div class="c-page">Page 2 of 3</div>
+	</div>
+</div>
+
+<p class="note" style="margin-top:32px">French, where the copy is new: « voix&nbsp;: dann · mezzo »,
+« imprimé le 2026-08-24 », « transcription · fr », and « licence MIT » in the footer's second line.
+All adopted vocabulary; « imprimé le » is the one coinage for your eye. The classification block
+prints only what exists: with no voice profile the voice line is absent, never invented, per
+sourced-or-silent. The binder manifest carries the same five fields machine-readably
+(app, author, url, licence, version); the two are one ruling.</p>
+
+</body>
+</html>

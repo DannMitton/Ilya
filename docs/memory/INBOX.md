@@ -27,3 +27,12 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 2026-08-21: Re-examine transitions: the drawer opening, and moving between screens. Dann wants options weighed against what serves the app and what is affordable in processing power (Dann, N.77 walk).
 2026-08-23: [u] is hard to capture and keeps landing Provisional (screenshot, cardinal-u 301/759 Hz). Dann asks: mic sensitivity? is the low cutoff low enough for a bass fR1 on [u]? what else would make [u] capturable without provisional values? Read the N.49 document before opening the extractor (Dann, colon-audit walk).
 2026-08-23: In the calibration wizard, the rule under Back and above the Voice 1 selector is sage; Dann rules it lavender, to match the rule beneath the selector (Dann, N.80 walk, screenshot on ilya-cmouwkt5d).
+- 2026-08-24 Dann proposes: dead-code audit, then delete what it finds.
+- 2026-08-24 Dann proposes: optimization pass; perceive, confer with Dann, then execute.
+- 2026-08-24 Dann proposes: structural-intuitiveness pass for open-source contributors.
+- 2026-08-24 Dann proposes: curated walkthrough, IMMINENT; a colleague asked this week.
+- 2026-08-24 Dann proposes: marketing materials; Ilya exists, free, open source.
+- 2026-08-24 Dann proposes: redevelop the Guide; prose and images describe an older build.
+- 2026-08-24 Dann asks: colour print prints greyscale except the flag; intentional?
+- 2026-08-24 Dann asks: headers/footers on emitted documents; Ilya provenance plus dannmitton.com.
+- 2026-08-24 Dann asks: can a smartwatch capture formant readings and relay them to Ilya on a phone or laptop?
