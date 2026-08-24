@@ -88,6 +88,12 @@ export interface ReadReport {
 	durationSubstitutions: { measureIndex: number; count: number }[];
 	/** Systems where the brace rule could not decide and took staff 0. */
 	staffSelectionFallbacks: number;
+	/**
+	 * Pages, 1-based, that raised and were skipped (N.96 ship 1b). Empty on a
+	 * clean read. A page listed here contributed no notes, no measures, and no
+	 * staff space to any other field of this report.
+	 */
+	failedPages: number[];
 	readSeconds: number;
 }
 

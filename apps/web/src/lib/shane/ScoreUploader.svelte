@@ -688,6 +688,16 @@
 								.replace('%s', measureList(readReport.durationSubstitutions))}
 						</p>
 					{/if}
+					<!-- N.96 ship 1b. Named FIRST among the report's caveats, because a
+					     page nobody read is a bigger fact about this upload than any
+					     per-note assumption below it. One line per failed page: the
+					     ruled string takes one page number, and rendering it twice
+					     beats coining a plural nobody approved. -->
+					{#each readReport.failedPages as pageNo (pageNo)}
+						<p class="report-sub">
+							{T('upload.report.pageFailed').replace('%s', String(pageNo))}
+						</p>
+					{/each}
 					{#if readReport.staffSelectionFallbacks > 0}
 						<p class="report-sub">
 							{T('upload.report.staffFallback').replace(

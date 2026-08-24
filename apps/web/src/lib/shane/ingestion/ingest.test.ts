@@ -384,7 +384,7 @@ describe('ingestScoreFile: the page-reader route', () => {
 		},
 		report: {
 			pages: 1, systems: 4, staves: 8, staffSpace: [29], notes: 1, rests: 0, measures: 1,
-			pitchSubstitutions: [], durationSubstitutions: [], staffSelectionFallbacks: 4, readSeconds: 4.5,
+			pitchSubstitutions: [], durationSubstitutions: [], staffSelectionFallbacks: 4, failedPages: [], readSeconds: 4.5,
 		},
 	});
 

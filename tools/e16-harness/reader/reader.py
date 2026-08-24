@@ -392,6 +392,76 @@ def detect_staves(img, page=None):
     FALLBACK_FIRINGS += 1
     return _staves_from_lines(img, _lines_from_rows(rows), page)
 
+# ONE PHYSICAL LINE, ONE CENTRE (N.96 Part 2, 2026-08-24, Dann's ruling). On a
+# SKEWED page a single staff rule descends across the width, so the five slices
+# of `_slice_line_rows` peak at different rows, the consensus of three holds
+# only intermittently down that band, and `_lines_from_rows`' fixed 3 px
+# proximity chain can break one physical line into TWO centres. The staff then
+# groups as six lines and `_staves_from_lines` raises "contaminated staff
+# group" on a page whose staves are perfectly ordinary.
+#
+# MEASURED, on the Lamm scan page 2, top staff, where this was found. That rule
+# descends about 9 rows from the leftmost slice to the rightmost. The app's own
+# pdf.js raster produces candidate rows {409, 410, 414}; the 4-row hole exceeds
+# the 3 px chain and yields centres 409 and 414. Poppler's raster of the SAME
+# page produces {408, 409, 411, 413, 414}, chains all five, and yields one
+# centre at 411. The two rasters differ by two marginal rows: at row 411 the
+# fourth slice fills 0.48 against poppler's 0.78, and at row 413 the fifth
+# fills 0.16 against 0.51, on either side of SLICE_FILL. Poppler passes this
+# page by 0.01 of slice fill. That is luck, not margin, and it is the reason
+# this is repaired at the grouping rather than at the raster.
+#
+# TWO CANDIDATE MECHANISMS WERE REFUTED FIRST, both by measurement, because
+# Dann ranked them above this one.
+#   (a) The binarisation threshold. Re-run at every threshold from 100 to 220,
+#       the split SURVIVES: group sizes stay [6, 1, 5, ...] throughout and go
+#       to [7, 1, 5, ...] below 128. The grey information does not carry the
+#       discriminator, so deriving the threshold would not have helped.
+#   (b) Resampling. `imageSmoothingEnabled = false` changes NOTHING (identical
+#       levels and identical ink at both scales; pdf.js scales the image itself
+#       before the canvas sees it). At the embedded image's native 600 dpi the
+#       raster is BITONAL, 2 grey levels, no antialiasing whatever, and
+#       `detect_staves` STILL raises. Resampling does not manufacture the bad
+#       rows.
+#
+# BOUND, measured over 2,245 consecutive line-centre gaps across all 51 corpus
+# pages (47 render fixtures, both Lamm rasters, both pdf.js rasters):
+#   split of one line   0.1724 s   (5 px at s = 29, the case above)
+#   every other gap     >= 0.5667 s, and the next after that 0.9655 s
+#   render corpus       minimum exactly 1.0000 s, on all 2,057 of its gaps
+# The interval between 0.1724 s and 0.5667 s is empty. `LINE_MERGE = 1/3` sits
+# inside it, anchored structurally rather than bisected: two centres closer
+# together than one staff line is THICK cannot be two different lines, and the
+# corpus's own worst measured line thickness is 0.2333 s (7 px at s = 30 on
+# raster400-2; every render page measures 0.0952 s). A third of a staff space
+# admits a split of about one and a half of the thickest measured line, clears
+# the measured defect by 0.161 s, and stays 0.233 s below the smallest genuine
+# gap anywhere in the corpus.
+#
+# IT IS A MEASURED NO-OP ON THE RENDER CORPUS. The smallest gap on any of the
+# 47 fixture pages is exactly 1.0000 s, three times the bound, so nothing
+# merges there and `s` is re-derived only when something actually did merge.
+# This is byte-identity by measurement over the whole corpus, not by argument.
+LINE_MERGE = 1.0 / 3.0   # * s
+
+def _merge_split_lines(lines, s, diffs_rule):
+    """Collapse consecutive line centres closer than LINE_MERGE * s into their
+    mean, and re-derive s from the result. Returns (lines, s), unchanged and
+    untouched where nothing merged."""
+    if len(lines) < 2:
+        return lines, s
+    bound = LINE_MERGE * s
+    groups = [[int(lines[0])]]
+    for c in lines[1:]:
+        if c - groups[-1][-1] <= bound:
+            groups[-1].append(int(c))
+        else:
+            groups.append([int(c)])
+    if len(groups) == len(lines):
+        return lines, s                     # nothing merged; byte-identical
+    merged = np.array([int(round(float(np.mean(g)))) for g in groups])
+    return merged, diffs_rule(np.diff(merged))
+
 def _staves_from_lines(img, lines, page=None):
     diffs=np.diff(lines)
     # N.59, E.58: EVERY ONE OF THESE CAN DEGENERATE SILENTLY. `lines` of length 1
@@ -412,6 +482,18 @@ def _staves_from_lines(img, lines, page=None):
         # The SAME honest failure the top of this function already raises, so
         # the uploader's existing mapping needs no new case.
         raise RuntimeError("no staff lines")
+    # A split rule is repaired HERE, after s is measured, because the bound is
+    # scale-relative and `_lines_from_rows` runs before any s exists. See the
+    # LINE_MERGE derivation.
+    def _s_from(d):
+        with np.errstate(invalid='ignore'):
+            m = np.median(d) if d.size else float('nan')
+            i = d[d < m * 1.6] if np.isfinite(m) else d[:0]
+            return float(np.median(i)) if i.size else float('nan')
+    lines, s2 = _merge_split_lines(lines, s, _s_from)
+    if _plausible_s(s2, img):
+        s = s2
+    diffs = np.diff(lines)
     # STAFF-BREAK THRESHOLD, adaptive (close-prep fix, 2026-07-24). A fixed
     # 1.7*s cutoff mis-split a beamed re-render of piece 01 p1: system 4's
     # vocal-to-piano gap measured 35 px against a 1.7*21=35.7 px threshold, a

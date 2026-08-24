@@ -100,7 +100,7 @@ let pyodide: PyodideInterface | null = null;
  * (step 4), so `cfg` here carries no `gt` file and none is needed.
  */
 const DRIVER = `
-import json, time
+import json, time, traceback
 import cv2
 import envelope
 
@@ -125,17 +125,42 @@ def read_pages(paths_json, cfg_json):
     rest_count = 0
     fallbacks = 0
     ro_last = None
+    failed = []
+    first_traceback = None
+    # PER-PAGE FAULT ISOLATION (N.96 ship 1b, Dann's ruling 2026-08-24). One
+    # page that raises used to abort the whole upload, and the singer got the
+    # generic could-not-read message with no page named and no notation at
+    # all. Walked on ilya-6qb11jpa8 with the Lamm scan and reproduced in dev:
+    # page 2's detect_staves raises "contaminated staff group", page 1 had
+    # already read cleanly, and every one of its events was thrown away.
+    #
+    # A raising page is now recorded and skipped. What it does NOT do is
+    # invent anything for that page: it contributes no notes, no measures, no
+    # staff space, and the read report names it so the singer knows which page
+    # they are not looking at.
+    #
+    # ctx_in IS DELIBERATELY NOT ADVANCED past a failed page. It carries
+    # measure numbering across pages, and a page nobody read has no measures
+    # to count. The pages that DO read stay continuously numbered with each
+    # other, which is what the chaining is for.
     for page_no, path in enumerate(paths, start=1):
-        img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-        if img is None:
-            raise RuntimeError('OpenCV could not read page %d' % page_no)
-        cfg = dict(base)
-        cfg['png'] = path
-        cfg['page'] = page_no
-        cfg['clef'] = (base['clef'][0], int(base['clef'][1]))
-        cfg['key'] = int(base['key'])
-        cfg['octaveChange'] = int(base.get('octaveChange', 0))
-        ro, ctx_in, msum, G, rests, events = envelope.run(cfg, ctx_in)
+        try:
+            img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            if img is None:
+                raise RuntimeError('OpenCV could not read page %d' % page_no)
+            cfg = dict(base)
+            cfg['png'] = path
+            cfg['page'] = page_no
+            cfg['clef'] = (base['clef'][0], int(base['clef'][1]))
+            cfg['key'] = int(base['key'])
+            cfg['octaveChange'] = int(base.get('octaveChange', 0))
+            ro, ctx_next, msum, G, rests, events = envelope.run(cfg, ctx_in)
+        except Exception:
+            failed.append(page_no)
+            if first_traceback is None:
+                first_traceback = traceback.format_exc()
+            continue
+        ctx_in = ctx_next
         ro_last = ro
         notes.extend(ro['verses'][0]['notes'])
         measures.extend(ro.get('measures', []))
@@ -144,6 +169,17 @@ def read_pages(paths_json, cfg_json):
         staves += len(G['staves'])
         rest_count += len(rests)
         fallbacks += int(G.get('vocalFallbacks', 0))
+    if ro_last is None:
+        # EVERY page failed, so there is nothing to render and nothing to
+        # isolate. Raise the first page's own traceback rather than an empty
+        # read: a read report saying "0 notes" would be a claim, and no page
+        # was read to support it.
+        # No escape sequences in this string. The driver is a TS template
+        # literal, so a backslash-n here reaches Python as a REAL newline and
+        # breaks the literal it sits in. The traceback carries its own.
+        raise RuntimeError(
+            'no page of %d could be read. First failure: %s'
+            % (len(paths), first_traceback))
     merged = dict(ro_last)
     merged['verses'] = [dict(verseNumber=1, notes=notes)]
     merged['measures'] = measures
@@ -166,6 +202,7 @@ def read_pages(paths_json, cfg_json):
         pitchSubstitutions=[dict(measureIndex=k, count=v) for k, v in sorted(pitch_subs.items())],
         durationSubstitutions=[dict(measureIndex=k, count=v) for k, v in sorted(dur_subs.items())],
         staffSelectionFallbacks=fallbacks,
+        failedPages=failed,
         readSeconds=round(time.time() - t0, 3),
     )
     return json.dumps(dict(ro=merged, report=report), default=_frac)

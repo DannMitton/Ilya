@@ -417,6 +417,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.report.seconds':       { en: 'Read in %s s', fr: 'Lu en %s s' },
 	'upload.report.pitchSubs':     { en: 'Pitch assumed on %s notes (measures %s).', fr: 'Hauteur supposée sur %s notes (mesures %s).' },
 	'upload.report.durationSubs':  { en: 'Length assumed on %s notes (measures %s).', fr: 'Durée supposée sur %s notes (mesures %s).' },
+	// N.96 ship 1b. One page raising no longer aborts the whole read, so the
+	// read report names the pages that failed. Both strings are Dann's own
+	// wording, ruled 2026-08-24 and transcribed verbatim with the page number
+	// substituted; the French keeps its straight apostrophe. Rendered ONCE PER
+	// FAILED PAGE rather than pluralized, so no second string is coined.
+	'upload.report.pageFailed':    { en: 'Ilya could not read page %s.', fr: "Ilya n'a pas pu lire la page %s." },
 	'upload.report.staffFallback': { en: 'Ilya could not tell which staff carries the voice in %s systems, and read the top one.', fr: 'Ilya n’a pas pu déterminer quelle portée porte la voix dans %s systèmes, et a lu celle du haut.' },
 
 	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
