@@ -415,5 +415,30 @@ describe('ingestScoreFile: the page-reader route', () => {
 		const report = expectOk(out).readReport;
 		expect(report?.staffSpace).toEqual([29]);
 		expect(report?.staffSelectionFallbacks).toBe(4);
+		expect(report?.failedPages).toEqual([]);
+	});
+
+	/**
+	 * N.96 ship 1b. A page that raised is reported rather than aborting the
+	 * upload, so a multi-page read arrives with notes AND with the pages that
+	 * failed. The drawer renders one notice per entry. The only file that
+	 * exercised this end to end stopped failing when page 2 became readable, so
+	 * the seam is held here instead.
+	 */
+	it('carries failedPages up beside a partial read, so the drawer can name them', async () => {
+		const partial = () => {
+			const r = oneNoteRead();
+			return { ...r, report: { ...r.report, pages: 2, failedPages: [2] } };
+		};
+		const out = await ingestScoreFile(
+			fileOf('scan.pdf', utf8('%PDF-1.7\n')),
+			deps({ readPages: async () => partial(), engravingAnswers: answers }),
+		);
+		const ingested = expectOk(out);
+		expect(ingested.readReport?.failedPages).toEqual([2]);
+		// A partial read is a read: dispatch returns ok, with the provenance a
+		// full read would carry, and the pages that failed named beside it.
+		expect(ingested.readReport?.pages).toBe(2);
+		expect(ingested.provenance).toEqual({ format: 'musicxml', via: 'reader', sourceFormat: 'pdf' });
 	});
 });

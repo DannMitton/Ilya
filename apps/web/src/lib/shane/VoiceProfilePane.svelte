@@ -149,6 +149,11 @@
 		 */
 		openSyllabification?: boolean;
 		/**
+		 * N.92: the note the correction surface has selected, or null. DISPLAY
+		 * ONLY. It marks one note and nothing else lands on the paper.
+		 */
+		selectedEventId?: string | null;
+		/**
 		 * The singer's own transcription (N.10, Dann's ruling of 7 August:
 		 * "Fit consumes Transcription's output including the singer's stress
 		 * overrides").
@@ -198,6 +203,7 @@
 		transcribedLines = undefined,
 		pairings = undefined,
 		onnotepick = undefined,
+		selectedEventId = null,
 		isMobile = false,
 	}: Props = $props();
 
@@ -216,6 +222,32 @@
 		};
 		document.addEventListener('click', handler);
 		return () => document.removeEventListener('click', handler);
+	});
+
+	// N.92, the selection state. Applied to the INJECTED SVG from here rather
+	// than emitted by the renderer, for two reasons. The renderer is a package
+	// with its own byte-stable fixture gate, and a selection is not a property
+	// of the score: it is a property of what the singer is doing right now, and
+	// it must never print. Marking it here keeps `staff-renderer.ts` untouched
+	// and keeps the mark out of every exported artifact by construction.
+	//
+	// The mark rides the note's own group, found through the `data-hit`
+	// rectangle the correction UI already has, so there is ONE way to name a
+	// note on this page and no second id scheme.
+	$effect(() => {
+		const id = selectedEventId;
+		// Re-read on every re-render too: `{@html page}` replaces the whole SVG,
+		// which would otherwise silently drop the mark and leave the drawer
+		// claiming a selection the paper does not show.
+		void scorePages;
+		const root = document;
+		for (const el of root.querySelectorAll('[data-note-selected]')) {
+			el.removeAttribute('data-note-selected');
+		}
+		if (!id) return;
+		const hit = root.querySelector(`[data-hit="${CSS.escape(id)}"]`);
+		const group = hit?.closest('[data-event-id]');
+		group?.setAttribute('data-note-selected', '');
 	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
@@ -888,6 +920,27 @@
 </PageFit>
 
 <style>
+	/* N.92, the selection state. Display only, and it appears ONLY on the
+	   selected note, per the ship's own constraint against marks that appear on
+	   everything. Sage is Studio's accent for the score document.
+
+	   `outline` rather than a painted shape: it adds no geometry to the SVG, so
+	   it cannot collide with a notehead, a stem, or the underlay, and it cannot
+	   shift a single coordinate the renderer computed.
+
+	   PRINT DROPS IT. A selection is what the singer is doing now, not part of
+	   the score, and the drawer manipulates while the page displays and prints. */
+	:global([data-note-selected]) {
+		outline: 2px solid var(--sage, #8b9a7d);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+	@media print {
+		:global([data-note-selected]) {
+			outline: none;
+		}
+	}
+
 	/* The envelope page: TitlePage's .paper-page geometry, twinned so the
 	   eventual score pages replace the content window with no reframing. */
 	.paper-page {

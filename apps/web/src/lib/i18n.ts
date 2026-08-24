@@ -128,6 +128,36 @@ const strings: Record<string, Record<Language, string>> = {
 	'notation.shcha':              { en: 'Shcha notation',              fr: 'Notation chtcha' },
 	'notation.shcha.desc':         { en: 'ʃʲʃʲ → ʃʲː',                 fr: 'ʃʲʃʲ → ʃʲː' },
 	'notation.reconstitution':     { en: 'Reconstitution',              fr: 'Reconstitution' },
+	// N.92 first slice, the correction minimum. Both sides are Dann's own,
+	// adopted from the ship report's strings table on 2026-08-24, with
+	// `correct.none` amended in the same ruling and transcribed verbatim.
+	//
+	// Vocabulary held to one term per concept, per the house rule: the thing a
+	// singer selects is a NOTE, what they do to it is CORRECT, and the surface
+	// is never called an editor, a tool, or a mode.
+	'correct.heading':             { en: 'Correct the read',              fr: 'Corriger la lecture' },
+	'correct.none':                { en: 'Choose a note to correct it.',  fr: 'Choisissez une note pour la corriger.' },
+	'correct.selected':            { en: 'Selected: %s',                  fr: 'Sélectionnée\u00a0: %s' },
+	'correct.stepUp':              { en: 'Up a step',                     fr: 'Un degré vers le haut' },
+	'correct.stepDown':            { en: 'Down a step',                   fr: 'Un degré vers le bas' },
+	'correct.octaveUp':            { en: 'Up an octave',                  fr: 'Une octave vers le haut' },
+	'correct.octaveDown':          { en: 'Down an octave',                fr: 'Une octave vers le bas' },
+	'correct.semitoneUp':          { en: 'Up a semitone',                 fr: 'Un demi-ton vers le haut' },
+	'correct.semitoneDown':        { en: 'Down a semitone',               fr: 'Un demi-ton vers le bas' },
+	'correct.prev':                { en: 'Previous note',                 fr: 'Note précédente' },
+	'correct.next':                { en: 'Next note',                     fr: 'Note suivante' },
+	'correct.delete':              { en: 'Remove this note',              fr: 'Supprimer cette note' },
+	'correct.deselect':            { en: 'Done',                          fr: 'Terminé' },
+	'correct.length':              { en: 'Length',                        fr: 'Durée' },
+	'correct.dot':                 { en: 'Dot',                           fr: 'Point' },
+	'correct.len16th':             { en: 'Sixteenth',                     fr: 'Double croche' },
+	'correct.len8th':              { en: 'Eighth',                        fr: 'Croche' },
+	'correct.lenQuarter':          { en: 'Quarter',                       fr: 'Noire' },
+	'correct.lenHalf':             { en: 'Half',                          fr: 'Blanche' },
+	'correct.lenWhole':            { en: 'Whole',                         fr: 'Ronde' },
+	'correct.restore':             { en: 'Undo my corrections to this note', fr: 'Annuler mes corrections sur cette note' },
+	'correct.count':               { en: 'You have corrected %s notes.',  fr: 'Vous avez corrigé %s notes.' },
+	'correct.countOne':            { en: 'You have corrected one note.',  fr: 'Vous avez corrigé une note.' },
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
 	'display.stressDiacritics.desc': { en: 'Show acute accent on Cyrillic', fr: 'Afficher l\u2019accent aigu sur le cyrillique' },

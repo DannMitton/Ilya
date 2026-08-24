@@ -17,6 +17,7 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
+import type { CorrectionMap } from '$lib/shane/correction';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was
@@ -82,6 +83,16 @@ export interface SongRecord {
 	glosses: GlossRow[];
 	openSyllabification: boolean;
 	pairings: PairingMap;
+	/**
+	 * N.92: the singer's hand corrections to a page read, keyed by event id.
+	 *
+	 * ADDITIVE, and the same shape as `pairings` beside it, for the same
+	 * reason. A page read is rebuilt from the stored BYTES on reload, so
+	 * anything the singer fixed by hand has to be a diff applied after the
+	 * re-read or it does not survive one. `{}` on every record that predates
+	 * this field, which is what `validateRecord` fills in.
+	 */
+	corrections: CorrectionMap;
 	source: SongSource | null;
 }
 
@@ -158,6 +169,7 @@ export function emptySongRecord(id: string, now: string): SongRecord {
 		glosses: [],
 		openSyllabification: false,
 		pairings: {},
+		corrections: {},
 		source: null,
 	};
 }

@@ -24,6 +24,7 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
+import type { CorrectionMap } from '$lib/shane/correction';
 import {
 	createSaveScheduler,
 	fieldsFromRecord,
@@ -65,6 +66,13 @@ export class SongDocument {
 	glossAnchors = $state<Map<string, string>>(new Map());
 	openSyllabification = $state(false);
 	pairings = $state<PairingMap>({});
+
+	/**
+	 * N.92, the singer's hand corrections to a page read, keyed by event id.
+	 * Saved and restored through the SAME path `pairings` takes: no new save
+	 * site, silent or otherwise.
+	 */
+	corrections = $state<CorrectionMap>({});
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -218,6 +226,7 @@ export class SongDocument {
 			glossAnchors: this.glossAnchors,
 			openSyllabification: this.openSyllabification,
 			pairings: this.pairings,
+			corrections: this.corrections,
 		};
 	}
 
@@ -264,6 +273,7 @@ export class SongDocument {
 		this.glossAnchors = fields.glossAnchors as Map<string, string>;
 		this.openSyllabification = fields.openSyllabification;
 		this.pairings = fields.pairings;
+		this.corrections = fields.corrections;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

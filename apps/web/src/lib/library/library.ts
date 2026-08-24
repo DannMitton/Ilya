@@ -21,6 +21,7 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
+import type { CorrectionMap } from '$lib/shane/correction';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
@@ -47,6 +48,8 @@ export interface SongFields {
 	glossAnchors: ReadonlyMap<string, string>;
 	openSyllabification: boolean;
 	pairings: PairingMap;
+	/** N.92, hand corrections to a page read. Keyed by event id, like pairings. */
+	corrections: CorrectionMap;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -66,6 +69,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		glossAnchors,
 		openSyllabification: record.openSyllabification,
 		pairings: record.pairings,
+		corrections: record.corrections,
 	};
 }
 
@@ -88,6 +92,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		glosses,
 		openSyllabification: fields.openSyllabification,
 		pairings: fields.pairings,
+		corrections: fields.corrections,
 	};
 }
 
@@ -162,6 +167,12 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 
 	if (isStringRecord(value.pairings)) record.pairings = value.pairings as PairingMap;
 	else if (value.pairings !== undefined) malformed();
+	// N.92, additive. A record written before this field simply has none, and
+	// `emptySongRecord` has already put `{}` there, so an older song loads
+	// whole rather than being called malformed for lacking a field it could
+	// not have carried.
+	if (isStringRecord(value.corrections)) record.corrections = value.corrections as CorrectionMap;
+	else if (value.corrections !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

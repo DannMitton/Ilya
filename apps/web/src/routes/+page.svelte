@@ -107,6 +107,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
+	import CorrectionControls from '$lib/shane/CorrectionControls.svelte';
+	import {
+		applyCorrections,
+		clearCorrection,
+		currentDuration,
+		currentPitch,
+		DIGIT_BASE,
+		neighbourId,
+		octavePitch,
+		semitonePitch,
+		stepPitch,
+		withCorrection,
+		type CorrectionMap
+	} from '$lib/shane/correction';
+	import { pitchLabel } from '$lib/shane/note-picker';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { PageProvenance } from '$lib/library/types';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
@@ -354,6 +369,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	function handleNotePick(eventId: string): void {
+		// N.92. A click SELECTS, always. Selection is display, so setting it
+		// here cannot disturb the placement path below, which is unchanged: a
+		// click with a slot pending still places that slot's syllable.
+		selectedEventId = eventId;
 		const slot = slotQueue[pairingCursor];
 		if (!slot) return;
 		doc.pairings = {
@@ -370,6 +389,166 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// silently start overwriting from the top.
 		pairingCursor = Math.min(pairingCursor + 1, slotQueue.length - 1);
 	}
+
+	/* ── N.92, the correction minimum ────────────────────────────────────
+	   ALTER and DELETE of the read's existing notes. Insertion is N.92 proper.
+
+	   THE CORRECTIONS ARE A DIFF, not an edited score, and `correction.ts`
+	   carries the reasoning: a page read is re-ingested from its stored BYTES
+	   on reload, so an in-place edit would be destroyed by the re-read. Keyed
+	   by event id, exactly as `doc.pairings` already is, and applied after the
+	   read on the way to the renderer. */
+	let selectedEventId = $state<string | null>(null);
+
+	/** The line as the reader read it, before any hand correction. */
+	const readLine = $derived(ingestedScore?.result.score.vocalLine ?? []);
+
+	const correctedCount = $derived(Object.keys(doc.corrections).length);
+
+	const selectedEvent = $derived(
+		selectedEventId ? readLine.find((ev) => ev.id === selectedEventId) : undefined,
+	);
+
+	const selectedLabel = $derived.by(() => {
+		const ev = selectedEvent;
+		if (!ev) return null;
+		const p = currentPitch(ev, doc.corrections);
+		return p ? pitchLabel(p) : null;
+	});
+
+	const selectedBase = $derived(
+		selectedEvent ? currentDuration(selectedEvent, doc.corrections).base : null,
+	);
+	const selectedDotted = $derived(
+		selectedEvent ? currentDuration(selectedEvent, doc.corrections).dots > 0 : false,
+	);
+
+	function correct(change: Parameters<typeof withCorrection>[2]): void {
+		const id = selectedEventId;
+		if (!id) return;
+		doc.corrections = withCorrection(doc.corrections, id, change);
+	}
+
+	function handleStep(direction: 1 | -1): void {
+		const ev = selectedEvent;
+		const p = ev && currentPitch(ev, doc.corrections);
+		if (p) correct({ pitch: stepPitch(p, direction) });
+	}
+
+	function handleOctave(direction: 1 | -1): void {
+		const ev = selectedEvent;
+		const p = ev && currentPitch(ev, doc.corrections);
+		if (p) correct({ pitch: octavePitch(p, direction) });
+	}
+
+	function handleSemitone(direction: 1 | -1): void {
+		const ev = selectedEvent;
+		const p = ev && currentPitch(ev, doc.corrections);
+		if (p) correct({ pitch: semitonePitch(p, direction) });
+	}
+
+	function handleBase(base: (typeof DIGIT_BASE)[string]): void {
+		correct({ base });
+	}
+
+	function handleDot(): void {
+		const ev = selectedEvent;
+		if (!ev) return;
+		correct({ dots: currentDuration(ev, doc.corrections).dots > 0 ? 0 : 1 });
+	}
+
+	function handleMove(direction: 1 | -1): void {
+		const id = selectedEventId;
+		if (!id) return;
+		const next = neighbourId(readLine, doc.corrections, id, direction);
+		if (next) selectedEventId = next;
+	}
+
+	function handleDeleteNote(): void {
+		const id = selectedEventId;
+		if (!id) return;
+		// Move the selection off the note before removing it, so the singer is
+		// left somewhere rather than nowhere. Forward first, then back, because
+		// a run of false positives is usually deleted left to right.
+		const next =
+			neighbourId(readLine, doc.corrections, id, 1) ??
+			neighbourId(readLine, doc.corrections, id, -1);
+		doc.corrections = withCorrection(doc.corrections, id, { deleted: true });
+		selectedEventId = next;
+	}
+
+	function handleRestoreNote(): void {
+		if (selectedEventId) doc.corrections = clearCorrection(doc.corrections, selectedEventId);
+	}
+
+	/* THE KEYBOARD, active only while a note is selected. Finale's own digit
+	   mapping, kept because Dann knows it in his fingers.
+
+	   It stands down inside a text field. A singer typing a title or a poem
+	   must not have `5` swallowed by the score, and `closest` covers the
+	   contenteditable case as well as inputs. */
+	function handleCorrectionKey(e: KeyboardEvent): void {
+		if (!selectedEventId) return;
+		const el = e.target as HTMLElement | null;
+		if (el?.closest('input, textarea, select, [contenteditable="true"]')) return;
+		if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+		switch (e.key) {
+			case 'ArrowUp':
+				e.shiftKey ? handleOctave(1) : handleStep(1);
+				break;
+			case 'ArrowDown':
+				e.shiftKey ? handleOctave(-1) : handleStep(-1);
+				break;
+			case '+':
+			case '=':
+				handleSemitone(1);
+				break;
+			case '-':
+			case '_':
+				handleSemitone(-1);
+				break;
+			case 'ArrowLeft':
+				handleMove(-1);
+				break;
+			case 'ArrowRight':
+				handleMove(1);
+				break;
+			case '.':
+				handleDot();
+				break;
+			case 'Delete':
+			case 'Backspace':
+				handleDeleteNote();
+				break;
+			case 'Escape':
+				selectedEventId = null;
+				break;
+			default:
+				if (DIGIT_BASE[e.key]) handleBase(DIGIT_BASE[e.key]);
+				else return;
+		}
+		// Reached only where a branch above acted, so a key this surface does
+		// not claim still reaches the rest of the app.
+		e.preventDefault();
+	}
+
+	/** The score the renderer sees: the read, with the hand corrections applied. */
+	const correctedScore = $derived.by(() => {
+		const ing = ingestedScore;
+		if (!ing) return null;
+		if (correctedCount === 0) return ing;
+		return {
+			...ing,
+			result: {
+				...ing.result,
+				score: {
+					...ing.result.score,
+					vocalLine: applyCorrections(ing.result.score.vocalLine, doc.corrections),
+				},
+			},
+		};
+	});
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
@@ -1857,6 +2036,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	});
 </script>
 
+<!-- N.92. The correction keys, bound at the window because the score is
+     injected SVG with nothing to hang a handler on, the same reason
+     VoiceProfilePane delegates its click. The handler stands down entirely
+     unless a note is selected, and inside any text field, so nothing else in
+     the app loses a key it already had. -->
+<svelte:window on:keydown={handleCorrectionKey} />
+
 <svelte:head>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -2262,6 +2448,32 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					expanded={sections.has(STATION_IDS.notation)}
 					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
 				/>
+				<!-- N.92, seated in the NOTATION anchor per Dann's ruling of
+				     2026-08-24. It rides inside the score capability's own wall
+				     and shows nothing at all until there is a read to correct,
+				     so a wall-closed build and a text-only session are both
+				     untouched. Idle with a score open it is one line of prose,
+				     which is what leaves the pinned anchor honest room. -->
+				{#if INCLUDE_SHANE && ingestedScore}
+					<CorrectionControls
+						{language}
+						{selectedLabel}
+						{selectedBase}
+						{selectedDotted}
+						corrected={selectedEventId ? selectedEventId in doc.corrections : false}
+						{correctedCount}
+						accent="var(--sage)"
+						onstep={handleStep}
+						onoctave={handleOctave}
+						onsemitone={handleSemitone}
+						onmove={handleMove}
+						onbase={handleBase}
+						ondot={handleDot}
+						ondelete={handleDeleteNote}
+						onrestore={handleRestoreNote}
+						ondeselect={() => (selectedEventId = null)}
+					/>
+				{/if}
 			{/snippet}
 	</Drawer>
 	<main
@@ -2341,11 +2553,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				transcribedLines={lines}
 				pairings={shownPairings}
 				onnotepick={handleNotePick}
+				{selectedEventId}
 				formants={shaneFormants}
 				voiceName={shaneVoiceName}
 				characteristics={shaneCharacteristics}
 				{language}
-				ingested={ingestedScore}
+				ingested={correctedScore}
 				scoreTitle={doc.metadata.title}
 				{engraving}
 				{notationPrefs}
