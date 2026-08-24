@@ -12,10 +12,33 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **725** (682 until 2026-08-23; N.78 added 23, N.80 added 13 then 6, N.62 added 1) |
+| web-test | **754** (725 until 2026-08-24 evening; N.92's first slice added 21 correction, 7 driver-isolation, 1 ingest-flow; 682 until 2026-08-23) |
 | score-parser | **444** passed, 5 skipped |
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
+
+## Hard-won on 2026-08-24, the OMR day
+
+- **Farm-out token quotes run low by half. Multiply the honest worst case by
+  1.5 before stating it.** Three of three overran on 2026-08-24: quoted 80k
+  spent 169k, quoted 120k spent 155k, quoted 100k spent 136k. The desk owns
+  the correction; Dann never tracks this.
+- **`pnpm dev` regenerates `apps/web/static/pdfjs-wasm/` at startup** (the
+  copy script runs from `dev` and `build`), so a negative control that parks
+  that directory needs bare `npx vite dev` or the payload comes back.
+- **The clef and key prompt is two `<select>` elements, not buttons.** A
+  Playwright `getByRole('button')` against it hangs, silently.
+- **The reader worker's driver is a TypeScript template literal**: a `\n`
+  written into a Python string there arrives as a REAL newline and breaks the
+  Python mid-string. Symptom is "The page reader could not be loaded", not a
+  syntax error. The driver test's line-count invariant now guards this.
+- **`getDocument` transfers and detaches the bytes you hand it.** Any scan of
+  the PDF's bytes (for `/JBIG2Decode` or anything else) must run BEFORE the
+  call, or it silently reads a zero-length buffer.
+- **pdf.js rasters are corpus members now.** `K_S = 0.2729` was derived over
+  a corpus that includes `pdfjs400-1/2.png` (committed in `tools/e16-harness/
+  scans/`); any change to how `page-pdf.ts` rasterizes reopens the
+  derivation-corpus question, and it is Dann's, not the desk's.
 
 **A BRIEF THAT ASKS A FARMED-OUT AGENT TO RUN A GATE IS A BROKEN BRIEF.** No
 gate runs anywhere but Dann's own machine, for the reason two sections down:

@@ -11,7 +11,11 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`7f6a283`**, raised from `1f4e268` late on 2026-08-24 when N.83's two reader ships landed with five gates at baseline and the pushes printed `1c97f6b..fe74ece..7f6a283`. Before that `1f4e268`, raised from `2440bf5` in the small hours of 2026-08-24 when N.62 shipped with five gates at baseline and the push printed `b54be1a..1f4e268`. Before that `2440bf5`, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`f3b257b`**, raised from `7f6a283` on the evening of 2026-08-24 when
+the OMR day's three ships landed with five gates at baseline on each and the
+pushes printed `b08bd86..b2a502c..bc2a026..f3b257b`; gate 4's baseline moved
+725 -> 754 with the third ship and `ilya-ship.sh:79` was updated before it
+ran. Before that `7f6a283`, raised from `1f4e268` late on 2026-08-24 when N.83's two reader ships landed with five gates at baseline and the pushes printed `1c97f6b..fe74ece..7f6a283`. Before that `1f4e268`, raised from `2440bf5` in the small hours of 2026-08-24 when N.62 shipped with five gates at baseline and the push printed `b54be1a..1f4e268`. Before that `2440bf5`, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -128,11 +132,89 @@ any of them count.
 > `INTERVAL_NAMES` `:136`, and `transposePitch` spells sharps only
 > (`:41-56`).
 >
-> **THE ONE THING: OMR refinement, in a new thread today.** N.90 and N.91,
+> ~~**THE ONE THING: OMR refinement, in a new thread today.** N.90 and N.91,
 > with the JBIG2 ingest gap and the accuracy decomposition still awaiting
 > Dann's numbering. The walkthrough waits on Thursday with one open slot,
 > the deploy URL, and the colleague needs that URL and the engraved file
-> before the call.
+> before the call.~~
+>
+> **2026-08-24 EVENING: THE OMR DAY IS CLOSED. Three ships, three walks,
+> the morning goal met end to end.** Dann's goal, set at the open: a system
+> that intakes a PDF, produces a monodic melody line, and can be altered
+> inside Ilya where it diverges from its source. All three legs are DONE.
+>
+> **THE ONE THING: N.97, clef and key reading, ask becomes confirm, in a
+> fresh thread.** Numbered by Dann this session. The reader learns clef and
+> key glyphs by the same Leipzig template machinery as rests and time
+> signatures; the payoff is measured (memo N.95: 11 of 13 false positives
+> sit on clef and key ink), and the intake prompt becomes a confirmation of
+> what was read. **Its brief must face correction-id stability**: hand
+> corrections key to the reader's deterministic event ids (ship 3), and
+> N.97 changes the event population, so old corrections can silently
+> detach. The walkthrough waits on Thursday; its demonstration asset is now
+> a live PDF read with correction, far past the r2 run sheet's fallback.
+>
+> The day, in order, every ship five gates at baseline, every DONE walked
+> by Dann on a deploy:
+> - **N.95 numbered and DONE** (decomposition): scan errors split by
+>   channel against the engraved ground truth.
+>   `docs/sessions/memo-n95-decomposition_r1_2026-08-24.md`. Pitch nearly
+>   fine (36/41 exact after a corpus octave convention), barline detector
+>   found 0 barlines (fixed-width fault), confident durations 0/28.
+> - **N.96 numbered and DONE** (PDF ingest): pdf.js decodes JBIG2 only
+>   when `wasmUrl` is set; Ilya never set it. Fixed, plus honest JBIG2
+>   error (French ratified), per-page fault isolation (French ratified),
+>   and the skew-split staff line merge (`LINE_MERGE = 1/3`, bound
+>   anchored to line thickness over 2,245 corpus gaps; the defect side
+>   rests on ONE measured instance, watch it).
+>   `docs/sessions/memo-n96-pdf-ingest_r1_2026-08-24.md`.
+> - **Ship 1 `b2a502c`**: wasmUrl door, scale-relative barlines with
+>   Dann's span-and-overshoot rule, duration threshold re-derived
+>   (0/28 wrong-confident became 20/27 exact, abstentions up on purpose),
+>   `K_S` 0.2809 -> **0.2729** by the ratified derivation over a corpus
+>   extended with the two pdf.js rasters (committed as corpus members).
+> - **Ship 2 `bc2a026`**: per-page isolation and the line merge. Walked:
+>   the Lamm PDF reads BOTH pages on `ilya-51w2ybdoo`, 6 systems, 97
+>   notes.
+> - **Ship 3 `f3b257b`, N.92 FIRST SLICE DONE**: Speedy Entry correction
+>   in the drawer's NOTATION anchor. Corrections are a DIFF keyed by event
+>   id, applied after every re-read, stored beside `pairings`, no new save
+>   site. Finale digit mapping; 44 px floor, no exemption. Walked on
+>   `ilya-nfnsfm5ht`: pitch changed, note deleted, three corrections
+>   survived a reload. Gate 4 baseline is now **754** and
+>   `ilya-ship.sh:79` already says so (desk edited it over the bridge,
+>   before md5 cf342b88, after 8f64e050).
+> - **RULED AT CLOSE, N.92's next slice: accidental control.** Dann: a
+>   B natural cannot become B flat; down a semitone respells as A sharp.
+>   The speller spells sharps only (`transposition.ts:41-56`). The slice
+>   is direct accidental verbs (flat, natural, sharp) plus a real
+>   enharmonic policy (Gould rule 66, spelling in harmonic context). A
+>   design conversation first, not a patch.
+> - **N.97 numbered** (above). **Adopt-versus-build retired with data**:
+>   Audiveris measured arm's-length at 58/58 vocal notes and ~47%
+>   Cyrillic syllables under `rus` OCR; AGPL keeps it unbundlable; its
+>   lesson decomposes to Tesseract (Apache-2.0) plus our own knit. The
+>   server-tier fork is recorded, unruled, costing nothing.
+> - **Gould dimensional prior table extracted**: 98 rows in stave-spaces,
+>   dimension-vs-meaning per the 2026-08-18 ruling.
+>   `docs/sessions/memo-gould-dimensional-priors_r1_2026-08-24.md`. Gaps
+>   that matter: notehead sizes (pp. 10-12) and rest geometry (pp. 34-38)
+>   were never photographed; the reader found 0/10 rests and has no Gould
+>   rest dimensions to lean on. A re-shoot closes every numeric flag.
+> - **Metre ruled**: no third intake prompt; the metre READ joins the read
+>   report as a display line (unbuilt, small); arithmetic audits at intake
+>   and gets promoted to tie-breaker only after the duration channel is
+>   proven, every promotion marked. Clef/key prompt dies into a confirm
+>   when N.97 lands.
+> - Open observations carried: `pdfjs400-2` reads 49 records vs page 1's
+>   48, unscored; page 2 never scored against ground truth; the `g`
+>   population has an unreproduced ratified count (reimplementation gets
+>   784/18 vs recorded, monotonicity proved it inert at K_S); the 7
+>   remaining wrong confident durations are uncharacterized; portrait
+>   phone does not render the score document (pre-existing).
+> - Usage at open: Fable 39%, all-models 23%, resets Sunday 05:00. Farm-out
+>   quotes ran over three of three; the 1.5x correction is now in
+>   `ENVIRONMENT.md`.
 
 
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
