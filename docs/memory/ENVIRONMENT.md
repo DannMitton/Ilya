@@ -1859,3 +1859,39 @@ placement selected in a loaded song, so a fresh browser cannot show it.
 Fallback evidence for a string a fresh browser cannot render: fetch the
 deploy's `/_app/immutable/*.js` from inside the page and count
 occurrences, and say it is the bundle, not the DOM.
+
+## THE READER MEETS A REAL SCAN, N.83. Measured 2026-08-24, memo r2 has the story
+
+- **pdf.js 6.2.108 renders a JBIG2 page as NOTHING.** The Lamm scan's pages
+  are JBIG2, 5548 x 7380 at 600 dpi (`pdfimages -list`). pdf.js hands back a
+  correctly sized, entirely blank raster (ink fraction 0.0000) and warns
+  `Dependent image isn't ready yet` once per page. Re-rendering does not
+  recover it; `isOffscreenCanvasSupported: false` and `useWorkerFetch:
+  false` change nothing; and `pdfjs-dist@latest` IS 6.2.108, so no pin bump
+  exists. IMSLP's processing makes JBIG2 common. The reader then honestly
+  reports "no staff lines" on blank paper. Poppler (`pdftoppm`) decodes the
+  same file perfectly, which is how the fixture rasters were made.
+- **The upload rasterizes in the PAGE, not the worker**, and the PNG buffers
+  are TRANSFERRED to `page-reader.worker`, so a capture hook must copy
+  (`buf.slice(0)`) before `super.postMessage` or it holds detached buffers
+  that decode as nothing.
+- **The app swallows the reader's traceback by design; the worker message
+  carries it.** Patch `window.Worker`, listen for `{type: 'error'}`, and the
+  Python traceback is in `error.message`. The Chrome extension's DLP blocks
+  returning raw tracebacks to the desk ("[BLOCKED: Cookie/query string
+  data]"); return them transformed (split lines, strip quotes) instead.
+- **The same PNG reads 55 notes in the cloud container (cv2 4.13.0) and 57
+  on the deploy (Pyodide cv2 4.9.0).** E.43's 37-against-36, new instance.
+  Never compare note counts across toolchains.
+- **The cloud container cannot browser-test Pyodide.** Its Chromium cannot
+  reach cdn.jsdelivr.net even via the egress proxy flags (page fetch fails,
+  worker fetch times out) while node's fetch succeeds. A production build's
+  upload flow tested there dies at the Pyodide loader in about 5 s with the
+  honest failure message. Browser observations of the reader happen on a
+  deploy in a real Chrome, nowhere else.
+- **The sentinel's two binding sites carry different populations**, and a
+  full-path proof must run with the sentinel ARMED: the r1 verification
+  patched it out and missed the band-walk raise entirely. The walk-anchor
+  amendment and both sites' measured populations live in `beams.py`
+  (`_walk_band`, amendment note) and `substrate.py` (the K_S derivation
+  block, now ending at 0.2809).

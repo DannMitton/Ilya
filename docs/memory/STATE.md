@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`1f4e268`**, raised from `2440bf5` in the small hours of 2026-08-24 when N.62 shipped with five gates at baseline and the push printed `b54be1a..1f4e268`. Before that `2440bf5`, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
+before **`7f6a283`**, raised from `1f4e268` late on 2026-08-24 when N.83's two reader ships landed with five gates at baseline and the pushes printed `1c97f6b..fe74ece..7f6a283`. Before that `1f4e268`, raised from `2440bf5` in the small hours of 2026-08-24 when N.62 shipped with five gates at baseline and the push printed `b54be1a..1f4e268`. Before that `2440bf5`, raised from `230cad3` at the close of 2026-08-23 night after N.81 shipped with five gates at baseline and the push printed `848059e..2440bf5`. Before that `230cad3`, raised from `9d314de` at the close of 2026-08-23 after two N.80 ships, pushes `d0a1895..d491d22..230cad3`, five gates at baseline on each. Before that `9d314de`, raised from `9cc68e5` late on 2026-08-23 when the colon audit shipped with five gates at baseline and the push printed `cc3b912..9d314de`. Before that, `9cc68e5`, because N.78 shipped with five gates at baseline and the push printed `0f034ab..9cc68e5`. Before that it was raised from `2b81f5a` at the close of 2026-08-21,
 because N.77's six ships all landed with five gates at baseline and the pushes
 printed `46ab5e2..0fcaa6e..9f11490..d079794`, so every build this file describes
 is now in history. **The push range is the check, not the memo.**
@@ -78,11 +78,38 @@ any of them count.
 > rendered drawings (`footer-options_r1`, `header-proposal_r2`, both in
 > `docs/sessions/`).
 >
-> **THE ONE THING: N.83, walkthrough prep.** A colleague asked Dann for a
+> ~~**THE ONE THING: N.83, walkthrough prep.** A colleague asked Dann for a
 > walkthrough this week. First step: the IMSLP demonstration, one Russian
 > piano-vocal PDF through the reader on a deploy, which doubles as the
 > reader's first honest end-to-end accuracy datum. Accuracy judgement is
-> Dann's eye against the paper, never a script's count.
+> Dann's eye against the paper, never a script's count.~~
+>
+> **2026-08-24 NIGHT: THE DEMONSTRATION RAN, AND THE DATUM IS IN DANN'S
+> WORDS: "the notation rendered is totally incorrect but at least there is
+> something output."** Mechanism end to end, accuracy no. Two ships
+> (`fe74ece`, `7f6a283`, five gates at baseline each), Dann's walk on
+> `ilya-9256h493b`: the Lamm scan of Without Sun song 1, as a 400 dpi PNG,
+> reads in 6.1 s in the browser (3 systems, 9 staves, 57 notes, 50 duration
+> abstentions, 0 rests) and renders. The whole account, five walls and
+> their fixes, is `docs/sessions/memo-n83-scan-read_r2_2026-08-24.md`; the
+> raw PDF stays unreadable (pdf.js cannot decode JBIG2, no newer pdf.js
+> exists) and the walk-swallow defect in `beams.py` was ruled and repaired
+> by the desk under Dann's "solve this tonight". N.90 and N.91 numbered.
+>
+> **THE ONE THING: N.83's remainder, the walkthrough itself.** The
+> demonstration asset is the PNG on the deploy, shown honestly as
+> mechanism-works-accuracy-poor, with a `.musx` score as the accurate
+> contrast. Waiting on Dann: numbering for the JBIG2 ingest gap and for
+> the accuracy decomposition (pitch against rhythm against count).
+>
+> **RULED THE SAME NIGHT, from the datum itself: N.92, notation editing
+> tools, and N.93, easy text entry interfaces.** Dann: "tonight just
+> proves the necessity of notation editing tools and easy text entry
+> interfaces... There is no point in Score Markup without corresponding
+> prescriptive vowel values to the correct pitches in the melody." Both
+> in INBOX.md with N.90 (the photograph tier and its research map) and
+> N.91 (the piano-doubling witness and the OpenScore Lieder benchmark),
+> all four numbered 2026-08-24 and none yet placed in the release order.
 
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
