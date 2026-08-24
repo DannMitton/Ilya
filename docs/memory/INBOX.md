@@ -36,3 +36,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-08-24 Dann asks: colour print prints greyscale except the flag; intentional?
 - 2026-08-24 Dann asks: headers/footers on emitted documents; Ilya provenance plus dannmitton.com.
 - 2026-08-24 Dann asks: can a smartwatch capture formant readings and relay them to Ilya on a phone or laptop?
+- N.90 2026-08-24: the photograph tier, mapped by the OMR field report and vocal-line brief (Fable, other session; to be filed in docs/sessions). NUMBERED by Dann 2026-08-24.
+- N.91 2026-08-24: the piano-doubling witness as pitch verifier, and OpenScore Lieder as the CC0 accuracy-benchmark corpus. NUMBERED by Dann 2026-08-24.

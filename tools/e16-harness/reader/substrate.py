@@ -47,6 +47,49 @@ so g = 1 px with no raise. THE DERIVATION IS RATIFIED; THE NUMBER IS NOT.
 Anything downstream that quotes 1 px rather than the derivation is a defect,
 and g is to be re-derived whenever the corpus changes.
 
+RE-DERIVED 2026-08-24, N.83. THE CORPUS CHANGED: the Musorgsky "Without Sun"
+song 1 Lamm scan (two pages, 400 dpi, `tools/e16-harness/scans/raster400-1.png`
+and `raster400-2.png`) joined it. The SVG-anchored derivation above cannot run
+on a scan -- there is no SVG -- so the desk ruled the scan analogue: g covers
+the SPECKLE-GAP distribution measured inside five-line-validated staff rows,
+and g is its 90th percentile.
+
+POPULATION, stated exactly because the number is worthless without it: the gaps
+between consecutive raw runs inside each of the 90 five-line-validated staff
+rows of the two scan pages (45 rows each, nine staves of five lines on each
+page), scoped two ways. Scope 1, the R-1' analogue: only gaps lying inside that
+staff's own x-range, where the x-range is measured with reader.py's own
+majority instrument -- the columns where at least three of the staff's five
+lines carry ink -- so a margin speck, which never lines up across five rows,
+cannot widen the scope. Scope 2, denotational: only gaps narrower than the
+staff space s (30.0 px on both pages, measured). g denotes the width at which a
+mark falls below the binarisation threshold; a break wider than a whole staff
+space is not a broken stroke, it is the absence of the stroke, and admitting it
+would let g bridge across ink that belongs to a different object.
+
+MEASURED: 784 gaps (235 on page 1, 549 on page 2), 70.0 percent at or below
+8 px, maximum 29. The 90th percentile is 18, so g = 18 px.
+
+DIVERGENCE FROM THE DESK'S OWN MEASUREMENT, recorded rather than reconciled.
+The N.83 brief reports the page 1 distribution as "about 87 percent at or below
+8, tail to 26" and predicts g near 9 to 10. This module's measurement of page 1
+under the population above is 77.0 percent at or below 8, tail to 28, 90th
+percentile 15. The tail agrees closely; the low-gap mass does not, and no
+scoping this session could construct reproduces 87 percent. The desk's exact
+gap-scoping is therefore NOT ESTABLISHED here, and if it is restated the
+percentile must be recomputed under it. What the two agree on: g is an order of
+magnitude larger on a print than on a render, and the render corpus is
+untouched by the change -- see K_S below, whose render-side minimum measures
+0.9736526946 at every g from 1 to 20.
+
+MONOTONICITY, verified rather than assumed. Bridged concentration is monotone
+non-decreasing in g, so no render page can newly raise. But bridged EXTENT is
+also monotone in g, and beams.py's band walk consumes extent, so a larger g
+could in principle move a fixture read without raising anything. Measured
+2026-08-24: all 23 render fixture pages produce byte-identical reads at g = 18
+against g = 1 (sha256 over the full envelope.run output of each page), with
+zero sentinel raises.
+
 At runtime the reader bridges blindly, every gap <= g, because the SVG is
 oracle-only. The SVG anchors the derivation and the acceptance tests, never
 the runtime path.
@@ -55,7 +98,10 @@ import numpy as np
 
 # Derived per corpus under R-1'. See the module docstring: this is a
 # measurement of this renderer's raster, not a tunable.
-G_BRIDGE = 1
+# 1 px on the 47-page Verovio render corpus (2026-07-28); 18 px once the two
+# Lamm scan pages joined the corpus (2026-08-24, N.83). Re-derive it again the
+# next time the corpus changes; the derivation is ratified, the number is not.
+G_BRIDGE = 18
 
 
 def row_runs(ink):
@@ -192,7 +238,58 @@ def page_substrate(img, g=G_BRIDGE):
 # Measured 2026-07-28 over 3,060 keep rows on all 47 rendered pages,
 # reproducing to four figures the on-band minimum the band-edge ruling
 # ratified on 56 rows.
-K_S = 0.9737
+#
+# RE-DERIVED 2026-08-24, N.83, ON THE ENLARGED CORPUS. Same derivation, no
+# offset, no dispersion statistic, no per-source branching: the measured
+# minimum bridged concentration over the keep population, at the re-derived
+# g = 18.
+#
+# POPULATION: 3,060 SVG-anchored rule-band rows over the 47 rendered pages (the
+# ratified 2026-07-28 population, reproduced exactly this session as a positive
+# control -- 3,060 rows, minimum 0.9736526946 at g = 1, which is the ratified
+# 0.9737) PLUS the 90 five-line-validated staff rows of the two Lamm scan pages.
+# Measured at g = 18: the render side is 0.9736526946 and the scan side is
+# 0.6428571429, so the corpus minimum is 0.6428571429. Truncated, not rounded,
+# to four figures, so that the measured extreme itself passes rather than
+# raising on its own derivation corpus:
+K_S = 0.6428
+#
+# THE ENVELOPE IS NOW MUCH WIDER THAN IT WAS, from 0.9737 to 0.6428. That is
+# not a loosening anyone chose; it is what the ratified derivation yields once
+# a real print joins a corpus of clean renders. On a print, speckle breaks
+# every staff line into many runs, and a row that is one unbroken stroke on a
+# Verovio render is a chain of dozens of fragments here.
+#
+# CONTROL, on the desk's own numbers: the scan-side instrument reproduces the
+# two figures the N.83 brief quotes, exactly. Page 1's validated-row minimum
+# measures 0.501340 at g = 6 and 0.504354 at g = 8, against the brief's 0.5013
+# and 0.5044.
+#
+# WHAT THIS DERIVATION DOES NOT COVER, and it is the open question of N.83.
+# The binding rule names TWO ruled acceptance points, and only one of them is
+# in the population above. The other is beams.remove_lines_safe's band walk
+# (beams.py, "the sentinel binds HERE"). On both scan pages that walk does not
+# terminate where it does on a render: measured 2026-08-24 on raster400-1.png
+# at every g from 1 to 120, it accepts ALL 4,920 rows of the page, including
+# 1,357 rows with no ink at all, whose concentration is exactly 0. The cause is
+# measured and is not the sentinel's: _extent_consistent admits a row when its
+# principal extent is within T_REL = 0.79327 of the CLAIMED STAFF's extent, and
+# on a speckled print two of the 45 seed rows carry a bridged extent below that
+# fraction of their own staff's extent (0.633 of it at g = 18), from which the
+# walk swallows the page. On all 47 render pages that ratio is exactly 1.000 on
+# every seed row, which is why the walk has never done this before.
+#
+# So the derivation "corpus-wide over the keep population" taken across BOTH
+# binding points yields K_S = 0.0000 on this corpus -- a sentinel that can
+# never fire, annihilated by its own derivation. That is a real result and it
+# is recorded rather than papered over. It is NOT adopted here, because a
+# vacuous sentinel is not a sentinel and this session has no authority to
+# re-denote one. K_S above is therefore derived over the five-line-validation
+# keep population only, and the consequence is stated plainly: at any K_S
+# strictly above 0, the band walk's sentinel raises on both scan pages. The
+# walk's membership premise, not the sentinel, is what fails off the render
+# corpus. That is Dann's to rule on, alongside the standing finding that
+# K_S was calibrated to Verovio renders and to nothing else.
 
 
 class SentinelRaise(RuntimeError):

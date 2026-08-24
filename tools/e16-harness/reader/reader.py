@@ -12,7 +12,12 @@ LETIDX = {'C':0,'D':1,'E':2,'F':3,'G':4,'A':5,'B':6}
 SEMI = {'C':0,'D':2,'E':4,'F':5,'G':7,'A':9,'B':11}
 
 # ---------- staff detection ----------
-def _derive_rowfrac_gate(rowfrac, floor=0.015, span_bound=0.0137, min_members=5):
+# The gate derivation's FLOOR, named once so that the derivation and the test
+# for its own collapse (detect_staves, below) quote the same number rather than
+# two literals that can drift apart. Its grounds are in the docstring below.
+_ROWFRAC_FLOOR = 0.015
+
+def _derive_rowfrac_gate(rowfrac, floor=_ROWFRAC_FLOOR, span_bound=0.0137, min_members=5):
     """PER-PAGE ROWFRAC GATE, derived (detect-staves-gate fix, 2026-07-27,
     Fable's ruling on the detect_staves gate, same-day amendment, ratified by
     Dann; span_bound re-derived same day by the oracle amendment, also
@@ -281,17 +286,113 @@ def _plausible_s(s, img):
         return False
     return 4.0 * s <= img.shape[0]
 
-def detect_staves(img, page=None):
-    rowfrac=(img<128).mean(axis=1)
-    gate=_derive_rowfrac_gate(rowfrac)
-    line_rows=np.where(rowfrac>gate)[0]
-    if len(line_rows)==0: raise RuntimeError("no staff lines")
-    lines=[]; cur=[line_rows[0]]
-    for r in line_rows[1:]:
+# ---------- NARROW-SLICE LINE CANDIDATES: A FALLBACK, NEVER THE PRIMARY ------
+#
+# N.83, 2026-08-24. E.60 demoted the slice comb to a desk instrument and said do
+# not promote it. That ruling is five days old and it STANDS, for the PRIMARY
+# path. Its three kill grounds were re-checked against this corpus, and the
+# distinction is on the record here because a later reader will otherwise see
+# only the contradiction:
+#
+#   "E.60 demoted slice combs to a desk instrument and said do not promote:
+#   that ruling is five days old and stands for the PRIMARY path. Its three
+#   kill grounds were re-checked against this corpus tonight: line overlap in
+#   row space needs shear that collapses lines into one another, and at s = 30
+#   with at most 0.232 degrees the lines never overlap; the 0-of-23 fixture
+#   failure cannot occur where the fallback never fires on renders; the 16 to
+#   59 times cost is paid only on a page that would otherwise not read at all."
+#
+# The cost argument is the whole shape of this thing. A comb that runs on every
+# page buys nothing and pays 16 to 59 times; a comb that runs only where the
+# full-width projection has already failed pays that multiple on a page whose
+# alternative is not reading.
+#
+# METHOD, fixed by the N.83 brief: five slices of 200 px at 15, 30, 50, 70 and
+# 85 percent of page width; per-slice row projection; a row is a line hit in a
+# slice when more than half that slice's width is dark; consensus across the
+# five slices gives the line centres. Because the slices are narrow, a line
+# that drifts across the page still fills each slice it crosses, which is
+# exactly what the full-width projection cannot do.
+SLICE_WIDTH = 200          # px, absolute; the brief's figure, at 400 dpi
+SLICE_FRACS = (0.15, 0.30, 0.50, 0.70, 0.85)
+SLICE_FILL = 0.5           # a line hit fills more than half the slice
+SLICE_CONSENSUS = 3        # majority of the five slices
+
+# Counted, not printed: the fixture proof asserts this stays at zero across the
+# 23 render pages, and the drawer's read report can declare a firing.
+FALLBACK_FIRINGS = 0
+
+def _slice_line_rows(img):
+    """Rows that a majority of five narrow slices call staff line.
+
+    Index arrays are left at numpy's default dtype throughout. Pyodide's WASM
+    build is 32-bit, np.intp is int32 there, and an int64 index array is a
+    fault that no desktop run can see.
+    """
+    dark = img < 128
+    H, W = dark.shape
+    votes = np.zeros(H, dtype=int)
+    w = min(SLICE_WIDTH, W)
+    for f in SLICE_FRACS:
+        x0 = max(0, min(W - w, int(round(f * W)) - w // 2))
+        votes += (dark[:, x0:x0 + w].mean(axis=1) > SLICE_FILL).astype(int)
+    return np.flatnonzero(votes >= SLICE_CONSENSUS)
+
+def _lines_from_rows(rows):
+    """The existing proximity grouping of candidate rows into line centres,
+    lifted verbatim out of detect_staves so the fallback consumes the SAME
+    grouping the primary path does."""
+    lines=[]; cur=[rows[0]]
+    for r in rows[1:]:
         if r-cur[-1]<=3: cur.append(r)
         else: lines.append(int(np.mean(cur))); cur=[r]
     lines.append(int(np.mean(cur)))
-    lines=np.array(lines)
+    return np.array(lines)
+
+def detect_staves(img, page=None):
+    """Staff detection, with ONE fallback path on the Cardoso-Rebelo precedent.
+
+    The primary path is unchanged and runs first on every page. The fallback
+    runs only where the primary has already failed loudly, or where the rowfrac
+    gate can be seen to have collapsed BEFORE it is trusted. Everything
+    downstream of candidate generation -- line grouping, the staff-break
+    threshold, five-line validation, the sentinel -- is shared, so the fallback
+    cannot reach a conclusion by a route the primary path does not also take.
+
+    A SentinelRaise is NOT a trigger. It is a halt, it is downstream of every
+    decision, and retrying it through another candidate generator would convert
+    the one mechanism that abstains into one that shops for a second opinion.
+    It is re-raised explicitly, because SentinelRaise subclasses RuntimeError
+    and would otherwise be swallowed by the trigger below.
+    """
+    global FALLBACK_FIRINGS
+    import substrate as _sub
+    rowfrac=(img<128).mean(axis=1)
+    gate=_derive_rowfrac_gate(rowfrac)
+    # THE SELF-DETECTABLE DEGENERATE GATE. _derive_rowfrac_gate splits the
+    # sorted coverage distribution at gaps above its FLOOR of 0.015 and walks
+    # down from the top segment. Where a skewed staff's diluted line rows
+    # bridge the background population into the staff population, the page
+    # forms ONE segment, the walk has nowhere to stop, and the gate lands below
+    # the very floor that defines a meaningful gap -- 0.0026 on Lamm scan page
+    # 2, admitting 3,823 of 4,920 rows. A gate beneath the derivation's own
+    # floor constant is the derivation reporting that its premise did not hold
+    # on this page, and that is readable here without consulting the answer.
+    if gate >= _ROWFRAC_FLOOR:
+        try:
+            line_rows=np.where(rowfrac>gate)[0]
+            if len(line_rows)==0: raise RuntimeError("no staff lines")
+            return _staves_from_lines(img, _lines_from_rows(line_rows), page)
+        except _sub.SentinelRaise:
+            raise
+        except RuntimeError:
+            pass
+    rows=_slice_line_rows(img)
+    if len(rows)==0: raise RuntimeError("no staff lines")
+    FALLBACK_FIRINGS += 1
+    return _staves_from_lines(img, _lines_from_rows(rows), page)
+
+def _staves_from_lines(img, lines, page=None):
     diffs=np.diff(lines)
     # N.59, E.58: EVERY ONE OF THESE CAN DEGENERATE SILENTLY. `lines` of length 1
     # gives an empty `diffs`; np.median of an empty array is NaN; `diffs < NaN`
@@ -423,6 +524,21 @@ def _staff_left_edge(dark, st):
     cols=np.where(hits>=3)[0]
     return int(cols[0]) if len(cols) else None
 
+# JOIN THRESHOLD = 0.5 (N.83, 2026-08-24). Was 0.85, measured on renders alone.
+#
+# A system barline is drawn as one continuous stroke, so on a clean render the
+# column it occupies is filled to 100 percent and the gap between consecutive
+# systems fills 4 to 5 percent (ENVIRONMENT.md). On a real print the same
+# stroke is speckled: measured on the Lamm scan page 1, the six true joins fill
+# 0.819, 0.850, 0.866, and 1.000 three times, while the two true system
+# boundaries fill 0.000 and 0.015. At 0.85 the 0.819 join FAILED, staff 5 was
+# promoted to a system of its own, and select_vocal returned [0, 3, 5, 6] --
+# a piano staff offered to a singer as her line.
+#
+# 0.5 sits in the middle of a wide, empty gap on BOTH corpora: 0.05 against
+# 1.00 on renders, 0.015 against 0.819 on the scan. It is a separator between
+# two well-parted populations, not a threshold fitted to either one. The 23
+# render fixture pages are byte-identical across the change.
 def _joined_at_left(dark, st_a, st_b, x0, s):
     """Does a system barline run down the left edge from staff a to staff b?
     A system's staves are joined there; consecutive systems are not."""
@@ -432,7 +548,7 @@ def _joined_at_left(dark, st_a, st_b, x0, s):
     x_lo=max(0,x0-int(round(0.6*s))); x_hi=min(W-1,x0+int(round(0.6*s)))
     band=dark[lo:hi+1, x_lo:x_hi+1]
     if band.size==0: return False
-    return bool(band.mean(axis=0).max()>=0.85)
+    return bool(band.mean(axis=0).max()>=0.5)
 
 def _brace_span(dark, x0, sys_top, sys_bot, s):
     """Row range of the brace sitting left of the system's left edge, or None."""
