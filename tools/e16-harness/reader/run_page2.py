@@ -67,7 +67,128 @@ FLAG2_AREA_RATIO = 2.27
 # FLAG_AREA_RATIO and FLAG2_AREA_RATIO above.
 FLAG_AREA_MAX = 3.26
 
+# INK-WEIGHT GUARD (N.95/N.96 ship 1, 2026-08-24). FLAG_AREA_RATIO and
+# FLAG2_AREA_RATIO are s^2-normalized but NOT ink-weight-portable -- the
+# README's own limitation note, now measured. On the Lamm scan
+# (raster400-1, s=30) the 23 GT-matched, confidently-classifiable QUARTER
+# notes on page 1 measure area/s^2 in [1.781, 2.634] (n=23; 3 further
+# outliers, [3.682, 9.54], are touching-ink contamination -- see below).
+# That range sits ENTIRELY ABOVE the render corpus's own calibration
+# ceiling for the SAME class (piece 02 p1: quarters 1.327-1.490, comment
+# above) and overlaps its SIXTEENTH-class floor (2.354). Applying the
+# render-calibrated constants here over-counts flags on every one of the
+# 26 quarters on the page (0/28 confident durations correct, memo N.95).
+# No single global constant can serve both corpora: the render corpus's
+# own eighth/sixteenth class boundary (2.19-2.354) sits entirely BELOW the
+# floor the scan's quarters need (2.634), so any constant that fixes the
+# scan would break every render fixture that depends on the old value, and
+# any constant that keeps the renders exact cannot also fix the scan.
+#
+# The fix is therefore PAGE-LOCAL, not a new global constant: a guard,
+# self-referential and ground-truth-free, decides per page whether to
+# derive a page-specific boundary from the page's OWN note population, or
+# to take the fixed default unchanged. Guard signal: median staff-LINE
+# thickness (not spacing) as a fraction of s -- measured identically, ZERO
+# variance, across 4 independently sampled render-corpus pages from 3
+# different pieces (piece 02 p1, Elegy p5, sunless-01 p1 and p2):
+# thickness/s = 2px/21 = 0.0952 every time.
+#
+# WIDENED 2026-08-24 from that 4-page sample to the whole corpus, and the
+# separation held: ALL 23 render fixture pages measure 0.0952 exactly, with
+# zero variance, and both Lamm scan pages sit far above at 0.2000 (page 1)
+# and 0.2333 (page 2). INK_WEIGHT_GUARD = 1.5 * 0.0952 = 0.1428 sits 50%
+# above every render value and 29% below the lower of the two scan values.
+# A page at or under the guard takes the FIXED constants below, UNCHANGED --
+# the exact code path every one of the 23 render fixtures already runs, so
+# their output cannot move by construction, not merely by coincidence. That
+# is the same gate the hollow-notehead abstention uses.
+INK_WEIGHT_GUARD = 0.1428
+_REFERENCE_THICKNESS_RATIO = 0.0952   # recorded for the derivation above; not read anywhere
+
 REST_KINDS = [('quarter', Fraction(1, 4)), ('8th', Fraction(1, 8)), ('16th', Fraction(1, 16))]
+
+
+def _staff_line_thickness(img, staves, s):
+    """Median vertical ink-run length AT a detected staff-line row, sampled
+    every 20 columns -- the ink-weight guard's own signal (see derivation
+    above), computed the same way on every page and consulted by nothing
+    upstream of it."""
+    dark = img < 128
+    thick = []
+    for st in staves:
+        for ly in st:
+            for c in range(0, dark.shape[1], 20):
+                if not dark[ly, c]:
+                    continue
+                a = ly
+                while a > 0 and dark[a - 1, c]: a -= 1
+                b = ly
+                while b < dark.shape[0] - 1 and dark[b + 1, c]: b += 1
+                thick.append(b - a + 1)
+    return float(np.median(thick)) if thick else float('nan')
+
+
+def _derive_flag_boundary(areas_over_s2, floor=0.15, min_members=3):
+    """Population-shape derivation for the primary flag-count boundary
+    (nflags 0 vs >=1), consulted ONLY on an ink-weight-guarded page. Same
+    primitive as reader._derive_rowfrac_gate: segment the page's own sorted
+    area/s^2 values wherever a consecutive gap exceeds `floor`; discard
+    segments under `min_members` (an isolated singleton or pair is more
+    likely a touching-ink outlier than a real duration class -- the scan's
+    3 known outliers, area/s^2 = 3.682/3.99/9.54, are exactly this shape,
+    each its own singleton segment); take the LARGEST gap between two
+    surviving segments and return its midpoint.
+
+    Run programmatically against the scan's own 43-note area population
+    (every non-hollow, unbeamed vocal head on the page -- see the guard
+    above; NOT pre-filtered by FLAG_AREA_MAX, which would cut into the
+    scan's own eighth-note class, see the call site), this returns 2.898,
+    splitting the page into three populous segments: a 24-member segment
+    [1.781, 2.634] (quarters and dotted quarters), a 10-member segment
+    [3.162, 3.708] and a 4-member segment [3.861, 4.014] (both eighths --
+    the smaller internal gap between them, 0.153, is real but is not the
+    LARGEST gap, so it plays no part in the boundary), and 5 further
+    singleton outliers (5.131 to 26.874, touching-ink contamination, each
+    its own under-populated segment, correctly discarded). The largest gap,
+    0.528 between the first two populous segments, gives the boundary --
+    independently reproducing, from the page's own raster with no ground
+    truth consulted, the same boundary a hand analysis against ground
+    truth also found.
+
+    floor=0.15: measured inert on that same 24-member segment (does not
+    fragment it) and sits well below the render corpus's own documented
+    clean gaps (0.397, 0.164 -- FLAG_AREA_RATIO comment above); it would
+    not fragment a real render class either, though this function is never
+    reached on a render page (see the guard above).
+
+    min_members=3: WEAKER than the rowfrac gate's structurally-justified 5
+    ("five lines to a staff") -- no equivalent structural minimum exists
+    for a note population. This is the one constant in this derivation
+    without independent structural grounding; flagged NOT ESTABLISHED
+    beyond the single page it was measured on.
+
+    Returns None (use the fixed default) if fewer than two populous
+    segments survive -- an honest abstention from a data-poor page rather
+    than a guess from noise.
+    """
+    vals = np.array(sorted(areas_over_s2))
+    if len(vals) < 2 * min_members:
+        return None
+    diffs = np.diff(vals)
+    splits = [i for i in range(len(diffs)) if diffs[i] > floor]
+    bounds = [0] + [i + 1 for i in splits] + [len(vals)]
+    segs = [vals[bounds[k]:bounds[k + 1]] for k in range(len(bounds) - 1)]
+    pop = [seg for seg in segs if len(seg) >= min_members]
+    if len(pop) < 2:
+        return None
+    best_gap = -1.0
+    best_mid = None
+    for i in range(len(pop) - 1):
+        gap = pop[i + 1][0] - pop[i][-1]
+        if gap > best_gap:
+            best_gap = gap
+            best_mid = (pop[i][-1] + pop[i + 1][0]) / 2.0
+    return best_mid
 
 
 def detect_rests_multi(nl, staves, vocal, s, thr=0.62):
@@ -123,16 +244,99 @@ def run(cfg):
     nl2 = G['nl_safe']
     num, lab, stats, cent = cv2.connectedComponentsWithStats(nl, 8)
     W = img.shape[1]
-    thr = FLAG_AREA_RATIO * s * s
     bars = detect_beam_bars(nl2, s)
 
-    events = []
+    # area/nb computed once per note, ahead of classification: both the
+    # ink-weight guard's per-page derivation and the classification loop
+    # below consume the SAME values (byte-identical to the old inline
+    # per-note computation; only the order of operations changed).
+    note_areas = []
+    note_nbs = []
     for r in recs:
         area, lid = _head_cc_area(dict(x=r['x'], y=r['y']), nl, lab, stats)
         nb = beams_on_stem(find_stem(nl2, r['x'], r['y'], s), bars, s)
+        note_areas.append(area)
+        note_nbs.append(nb)
+
+    # INK-WEIGHT GUARD (see derivation above). thr/flag2 default to the
+    # fixed, render-calibrated constants, UNCHANGED, unless this page's own
+    # measured staff-line thickness is heavier than every sampled render
+    # page's.
+    thr = FLAG_AREA_RATIO * s * s
+    flag2 = FLAG2_AREA_RATIO * s * s
+    line_t = _staff_line_thickness(img, staves, s)
+    ink_heavy = bool(np.isfinite(line_t) and s > 0 and (line_t / s) > INK_WEIGHT_GUARD)
+    if ink_heavy:
+        # NOT capped by FLAG_AREA_MAX here (found live on this ship's own
+        # corrected note population, 2026-08-24): that constant is itself
+        # one of the render-calibrated, ink-weight-non-portable values this
+        # guard exists to route around. On the scan the real eighth-note
+        # class sits at 3.16-5.13, mostly ABOVE FLAG_AREA_MAX=3.26 -- a pool
+        # capped there kept only 2 of 17 eighth-class members, below
+        # min_members, so the gap-statistic saw one populous segment and
+        # correctly refused to guess (returned None), silently falling back
+        # to the fixed render threshold this whole guard exists to avoid.
+        # The uncapped pool lets `_derive_flag_boundary`'s own populous-
+        # segment filter do that job instead, the same way it already
+        # discards this page's other large-area outliers (contamination,
+        # not a duration class) as under-populated singletons -- no
+        # separate cap needed, and none is applied.
+        pool = [note_areas[i] / (s * s) for i, r in enumerate(recs)
+                if not r.get('hollow') and note_nbs[i] == 0]
+        derived = _derive_flag_boundary(pool)
+        if derived is not None:
+            thr = derived * s * s
+            # FLAG2 is scaled from the render corpus's OWN ratio between its
+            # two constants (2.27/1.65): no independent sixteenth-class
+            # evidence exists on the calibration page (its GT span has zero
+            # sixteenths), so this is an extrapolation, not a second
+            # measurement -- and it is inert in practice below
+            # FLAG_AREA_MAX regardless (that fixed abstain trigger is
+            # checked first and is not itself re-derived here).
+            flag2 = derived * (FLAG2_AREA_RATIO / FLAG_AREA_RATIO) * s * s
+
+    events = []
+    for idx, r in enumerate(recs):
+        area = note_areas[idx]
+        nb = note_nbs[idx]
         dur_abstain = None
         if r.get('hollow'):
-            dur = Fraction(1, 2)                      # minim; stemless semibreve unexercised
+            if ink_heavy:
+                # THE HOLLOW BYPASS, CLOSED (N.95 part C item 2, 2026-08-24).
+                # `dur = Fraction(1, 2)` is the one duration branch with no
+                # abstain path at all, so a hollow-detector false positive is
+                # a CONFIDENT wrong answer that nothing downstream can catch.
+                # Memo N.95 measured two of them on the Lamm scan (x=2089 and
+                # x=2669, reader/true duration ratio 4/1 and 4/3): the ring
+                # filter fired on the white space a stem and its flag enclose,
+                # several staff spaces above a filled notehead that was already
+                # detected in its own right.
+                #
+                # WHY THE WHOLE BRANCH ABSTAINS ON AN INK-HEAVY PAGE RATHER
+                # THAN THE FALSE POSITIVES ALONE. The first attempt at this
+                # rejected a stemmed hollow candidate sitting close to a filled
+                # head on both axes, on the reasoning that the two are the same
+                # note's ink. The 23-page fixture gate refuted it: sunless-06
+                # engraves a filled head and a hollow CHORD on one shared stem,
+                # pixel-confirmed on p4 sys1 (crop of x 400-1900, y 1040-1220,
+                # four such chords), so genuine minims sit at dx 0.00-1.43s and
+                # dy 0.48-3.10s from a filled head. That is the same geometry as
+                # the scan's false positives, and it moved 5 of the 23 fixtures.
+                # No dx/dy box separates the two populations, so the graphic
+                # discriminator does not exist at this stage.
+                #
+                # What remains is honesty over coverage, which is the ruled
+                # order for this ship: on a page whose ink the hollow detector
+                # was never calibrated against, do not assert a minim. The gate
+                # is the SAME measured ink-weight guard the flag threshold uses
+                # (see INK_WEIGHT_GUARD), so a render page keeps the fixed
+                # `Fraction(1, 2)` on the identical code path and cannot move,
+                # by construction rather than by luck. The cost is named: a
+                # GENUINE minim on an ink-heavy page now abstains too.
+                dur = None
+                dur_abstain = 'hollow_head_on_ink_heavy_page'
+            else:
+                dur = Fraction(1, 2)                  # minim; stemless semibreve unexercised
         elif nb > 0:
             dur = Fraction(1, 4 * (2 ** nb))          # beams win
         elif area >= FLAG_AREA_MAX * s * s:
@@ -144,7 +348,7 @@ def run(cfg):
             dur = None
             dur_abstain = 'beam_scale_ink_no_beam'
         else:
-            nflags = 2 if area >= FLAG2_AREA_RATIO * s * s else (1 if area >= thr else 0)
+            nflags = 2 if area >= flag2 else (1 if area >= thr else 0)
             dur = Fraction(1, 4 * (2 ** nflags))
         if dur is not None and _has_dot(r['x'], r['y'], stats, cent, num, s):
             dur *= Fraction(3, 2)                     # a dot is never applied to a null duration

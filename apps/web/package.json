@@ -6,8 +6,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/copy-reader.mjs && vite dev",
-    "build": "node scripts/copy-reader.mjs && vite build && node scripts/stamp-sw.mjs",
+    "dev": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && vite dev",
+    "build": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && vite build && node scripts/stamp-sw.mjs",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

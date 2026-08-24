@@ -27,6 +27,13 @@ scripts/frwikt-enrichment-report.json
 # never committed. Added N.59 step 2, 2026-08-16.
 apps/web/static/reader/
 
+# Generated copy of pdfjs-dist's own WASM codecs, put there by
+# apps/web/scripts/copy-pdfjs-wasm.mjs at dev and build so pdf.js can fetch
+# them through getDocument's wasmUrl. The source of truth is the exactly
+# pinned pdfjs-dist in the lockfile; these are never edited and never
+# committed. Added N.96, 2026-08-24.
+apps/web/static/pdfjs-wasm/
+
 # Test output
 apps/web/test-results/
 

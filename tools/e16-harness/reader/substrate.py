@@ -252,7 +252,7 @@ def page_substrate(img, g=G_BRIDGE):
 # 0.6428571429, so the corpus minimum is 0.6428571429. Truncated, not rounded,
 # to four figures, so that the measured extreme itself passes rather than
 # raising on its own derivation corpus:
-K_S = 0.2809
+K_S = 0.2729
 #
 # THE ENVELOPE IS NOW MUCH WIDER THAN IT WAS, from 0.9737 to 0.6428. That is
 # not a loosening anyone chose; it is what the ratified derivation yields once
@@ -304,6 +304,82 @@ K_S = 0.2809
 # envelope is wider again, from 0.6428 to 0.2809, and again that is what the
 # ratified derivation yields on this corpus; the vacuous 0.0000 outcome died
 # with the walk defect that produced it.
+#
+# RE-DERIVED AGAIN 2026-08-24, N.96, RULED BY DANN. THE CORPUS CHANGED AGAIN:
+# the app's OWN pdf.js rasters of the same Lamm PDF joined it. They are not the
+# same pixels as `raster400-*.png`, and the difference is the point. At
+# identical geometry (3699 x 4920) pdf.js resolves the 600 dpi JBIG2 bitonal
+# source into 57 grey levels where the ratified rasters carry 5, so ink measures
+# 0.0955 against 0.0994 on page 1 and 0.1098 against 0.1138 on page 2. Under a
+# `< 128` binarisation the antialiased greys thin every stroke, which breaks
+# more runs, which lowers bridged concentration. The two families are the same
+# page and not the same substrate, so a sentinel calibrated on one has no
+# standing over the other.
+#
+# WHY THIS WAS NOT OPTIONAL. With K_S = 0.2809 the app could not read its own
+# raster of a PDF it had just learned to open: N.96 opened the PDF door and the
+# read then halted here, on one row of pdfjs400-1 at 0.2729805014. That row is
+# a genuine ruled acceptance on a genuine page of the target repertoire, so it
+# is corpus, not contamination.
+#
+# POPULATION AND MEASUREMENT, at the ratified g = 18, both binding sites:
+#   render, 47 pages         site A min 0.9736526946 (the ratified SVG-anchored
+#                            figure, carried forward unchanged; see the
+#                            divergence note below)
+#   scan, raster400-1 and -2 site A min 0.6428571429 over 90 rows
+#                            site B min 0.2809642560 over 760 rows (319 + 441)
+#   pdfjs400-1               site A min 0.6434005954 over 45 rows
+#                            site B min 0.2729805014 over 305 rows  <-- extreme
+#   pdfjs400-2               NO KEEP POPULATION. See the exclusion below.
+# The corpus extreme across both binding sites is therefore 0.2729805014, and
+# K_S above is that extreme truncated, not rounded, to four figures, so the
+# measured extreme itself passes rather than raising on its own derivation
+# corpus. The envelope widens once more, from 0.2809 to 0.2729. The sentinel
+# stays armed: K_S is strictly positive, and the vacuous-0.0000 outcome
+# recorded further up is not reached.
+#
+# POSITIVE CONTROL, and it is exact. The scan side of the previous derivation
+# reproduces to ten figures on an independent reimplementation of both sites:
+# 760 accepted rows against the recorded 319 + 441, and 0.2809642560 against
+# the recorded 0.280964.
+#
+# PDFJS400-2 IS EXCLUDED, AND NOT BECAUSE IT IS INCONVENIENT. `detect_staves`
+# RAISES on it before any validation happens: "contaminated staff group, group
+# of 6 lines is not a valid 5-line staff, all group sizes [6, 1, 5, 5, 5, 5, 5,
+# 5, 5]". A page whose staves never validate has no five-line-validated keep
+# population and no walk, so it contributes nothing to a derivation over keep
+# populations. `raster400-2.png` validates cleanly at 9 staves, so this is the
+# antialiasing again and not the page. IT IS A STANDING FINDING, not a closed
+# one: the app cannot read page 2 of this PDF at all, for a reason upstream of
+# this sentinel and untouched by this derivation.
+#
+# g WAS NOT RE-DERIVED, AND THE REASON IS STATED RATHER THAN GLOSSED. The
+# module's own rule is that g is re-derived whenever the corpus changes. An
+# independent reimplementation of the g population here does NOT reproduce the
+# ratified counts: it measures 826 gaps (257 + 569) at 90th percentile 19 on
+# the same two pages where the ratified derivation records 784 (235 + 549) at
+# 18. The maximum agrees exactly at 29. The exact scoping that yields 784 is
+# therefore still NOT ESTABLISHED, as this module already records for the
+# desk's own third number, and replacing a ratified constant using an
+# instrument that cannot reproduce it would be worse than leaving it.
+#
+# IT IS INERT HERE, measured rather than argued. Bridged concentration is
+# monotone non-decreasing in g, so a larger g cannot lower K_S. On pdfjs400-1
+# the site B minimum measures 0.1848608070 at g = 1, 0.2541457771 at g = 8,
+# 0.2729805014 at g = 18, 0.2729805014 at g = 19, 0.3327359618 at g = 25 and
+# 0.3414211438 at g = 40. At g = 19, the value this session's own instrument
+# would pick, K_S is IDENTICAL. The one-pixel ambiguity changes nothing, and
+# 0.2729 is a conservative floor with respect to every larger g.
+#
+# RENDER-SIDE DIVERGENCE, recorded rather than reconciled. The ratified render
+# figure is 0.9736526946 over 3,060 SVG-anchored rule-band rows. Measured this
+# session with `detect_staves`' own validated output instead, the render side
+# is 0.9764386044 over 1,925 rows at site A, on the 46 of 47 pages that
+# validate; repaired sunless-06 p6 raises the same contaminated-group error as
+# pdfjs400-2. The two instruments are not the same population and this session
+# did not reimplement the SVG-anchored one. Neither figure is anywhere near the
+# corpus extreme, so the divergence does not bear on K_S, and the ratified
+# render number is the one carried forward above.
 
 
 class SentinelRaise(RuntimeError):

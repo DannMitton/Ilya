@@ -1894,4 +1894,5 @@ occurrences, and say it is the bundle, not the DOM.
   patched it out and missed the band-walk raise entirely. The walk-anchor
   amendment and both sites' measured populations live in `beams.py`
   (`_walk_band`, amendment note) and `substrate.py` (the K_S derivation
-  block, now ending at 0.2809).
+  block, now ending at 0.2729 after N.96 ruled the app's own pdf.js rasters
+  into the corpus on 2026-08-24; it read 0.2809 before that).

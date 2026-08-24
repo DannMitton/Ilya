@@ -869,6 +869,214 @@ def read_accidental(h, stats, cent, lab, num, head_centers, s):
         return (c if c!='abstain' else None), (c=='abstain')
     return None, False
 
+# BARLINE WIDTH AND SPAN, scale-relative (N.95/N.96 ship 1, 2026-08-24,
+# amending Dann's ruling of the same day to admit small OVERSHOOT as well as
+# undershoot). The old `w<=6` was absolute and untested off s~21 (README's
+# own limitation note); at the Lamm scan's s=30 it excluded every true
+# barline (0 found, whole page).
+#
+# WIDTH is admitted generously and is no longer the primary discriminator.
+# Measured true-barline widths: RENDER (4 pages, s=21, isolated strokes)
+# 3-4px = 0.143-0.190s. SCAN (raster400-1, s=30) unmerged strokes measure
+# 7-10px = 0.233-0.333s by direct column darkness, BUT the reader works on
+# CONNECTED COMPONENTS, and on this scan a true barline is routinely
+# 8-connected to touching note ink (visually confirmed by pixel crop: a
+# barline abutting an eighth-note stem), so its own bounding-box width can
+# read 29-55px. `BARLINE_WIDTH_BOUND = 0.5*s` sits in the wide, clean, empty
+# gap between the scan's unmerged/render widths (<=0.333s) and the smallest
+# measured FALSE full-span render candidate (a stem or tie, 27px = 1.286s at
+# s=21) -- comfortably below every false positive, comfortably above every
+# true barline that survives as its own component. It does not need to
+# admit the merged 29-55px case, because that case is recovered below.
+#
+# SPAN is the real discriminator, per Dann's ruling: a barline runs from the
+# top exterior staff line to the bottom, within a tolerance that admits
+# SMALL overshoot as well as undershoot -- stem/contamination overshoot is
+# LARGE (a stem runs on to a beam, flag, or touching text), barline
+# overshoot is small. Measured on the scan: true barlines' worst-column
+# overshoot is 0.20s; the smallest measured stem/contamination overshoot
+# anywhere in the same candidate pool is 0.30s. `SPAN_TOLERANCE = 0.25*s`
+# sits at the midpoint, 0.05s of clearance on each side. Measured on 4
+# render pages: true barlines overshoot 0 to 0.048s; every false full-span
+# candidate overshoots by at least 0.48s. Both corpora clear this bound with
+# margin.
+#
+# TWO-TIER SEARCH, additive, same shape as `detect_staves`'s primary/
+# fallback split above. PRIMARY: a component narrower than the width bound
+# already measures a barline-width stroke directly, and admits its centroid
+# unchanged.
+#
+# CORRECTED 2026-08-24 by the 23-page fixture gate, which refuted this
+# paragraph's earlier claim that "nothing render-side exists in the gap
+# between 6px and 27px". One thing does: the THICK stroke of a final barline,
+# 11px at s=21 on sunless-06 p7. Widening the bound admits it, and the thin
+# and thick strokes of one engraved symbol then segment an empty extra
+# measure between them. That is what `_collapse_barline_cluster` exists for,
+# and with it the whole two-tier search is measured INERT on the render
+# corpus: all 23 fixture pages return barline sets identical to the old
+# `w<=6` output, checked page by page rather than sampled.
+# FALLBACK: a wider full-height component. On a render this is always OTHER
+# ink and is rejected (see SPAN above). On the scan it also covers a TRUE
+# barline merged with touching ink: refine by searching, column by column
+# INSIDE that component's own bounding box, for the sub-run whose OWN
+# row-width profile (median width of the dark run at 6 samples across the
+# staff height) clears the width bound and whose centre column's own
+# vertical extent clears the span test. A notehead-widened blob is only
+# wide AT the notehead's own rows, a minority of the staff height, so the
+# median across the band finds the barline's true width even where a single
+# column's local width does not.
+#
+# THE SCAN COLUMN, NOT THE BBOX MIDPOINT (found chasing the scan's own
+# missing trailing barline, sys0 x~3505-3514). An earlier version of this
+# function tested only the ONE column at the component's bounding-box
+# midpoint. That assumes the merge is roughly centred -- true for a barline
+# merged with a notehead sitting astride it, false when the merge is
+# lopsided: on the scan, the true barline (x=3505-3514, its own row-width
+# median 11px, span overshoot 1-6px, comfortably inside both bounds) had
+# merged 8-connected with an unrelated contamination blob spanning back to
+# x=3371, pulling the bbox midpoint to x=3443 -- 60+px of span overshoot
+# there, nowhere near either bound. Fix: test every column across the
+# component's width, keep the ones that pass both checks, and return the
+# centre of the LARGEST contiguous run of passing columns (the stroke's own
+# width) -- robust to a handful of isolated columns elsewhere in the merged
+# blob that happen to pass by chance, since a real barline stroke passes
+# over a contiguous run of columns, not scattered singletons.
+#
+# SOLIDITY, a second column-level test, added after the widened search above
+# produced ONE false positive on the 4-render-page corpus: a "6/8" time
+# signature's "6" glyph (render, sunless-01 p1, sys0), whose own vertical
+# stroke happens to span very close to the full staff height at close to
+# barline width -- a time signature is typeset to span the staff, so SPAN
+# alone cannot separate it from a barline the way it separates a stem or a
+# slur. The two are NOT ambiguous in one further respect: a barline is one
+# unbroken stroke, and a numeral's stroke, even where it runs the height of
+# the staff, is interrupted by the glyph's own curves and terminals.
+# Measured directly on both false and true candidates, same padded column
+# window used by the span test: the "6" glyph's best columns still show 4 to
+# 17 missing (unset) pixels between their first and last dark pixel; the
+# scan's own true trailing barline (the sys0 x~3505-3514 stroke this search
+# was built to recover) shows ZERO missing pixels on 4 of its 5 sampled
+# centre columns. Requiring the padded column to be gap-free end to end --
+# not merely first-dark-to-last-dark, but every pixel in between also dark
+# -- passes every true barline column measured on both corpora and rejects
+# every column of the one false candidate found.
+#
+# ROW-WIDTH CEILING, a third column-level test, added after the scan itself
+# produced false positives the first two tests both admit: a note's STEM,
+# where the notehead sits close enough to one exterior staff line that the
+# stem's own fixed ~3.5-space length carries it to (or past) the other,
+# giving the same near-full-span, same-order-of-magnitude median width, AND
+# (because a stem is itself one straight solid stroke) the same SOLIDITY as
+# a real barline. Measured directly, same 6-samples-per-staff-height row-
+# width profile used for the median above, 4 confirmed false candidates
+# (scan, pixel-crop verified: sys1 x=2766 a stem+fermata, sys2 x=1894/3188/
+# 3315 a stem+notehead or stem+flag) against 6 confirmed true barlines
+# (scan, same page, same verification): every FALSE candidate's row-width
+# profile contains a cluster of samples struck through the attached
+# notehead or flag, 36-46px; every TRUE barline's profile peaks at 26px
+# (a single row where another symbol happens to touch the barline itself).
+# `MAX_ROW_WIDTH_BOUND = 1.07*s` (32px at s=30) sits at the midpoint, 6px of
+# clearance on each side. A stem's own width is barline-width by design
+# (Gould), so median alone cannot see this; the notehead or flag it carries
+# is not, and the ceiling on the single widest sampled row is where that
+# shows up.
+BARLINE_WIDTH_BOUND = 0.5   # * s
+BARLINE_SPAN_TOLERANCE = 0.25   # * s
+MAX_ROW_WIDTH_BOUND = 1.07   # * s
+
+def _barline_row_width(dark, y, x0, x1, xc):
+    """Width of the dark run through (y, xc), clipped to [x0, x1]."""
+    n = x1 - x0 + 1
+    xi = xc - x0
+    if xi < 0 or xi >= n or not dark[y, xc]:
+        return None
+    a = xi
+    while a > 0 and dark[y, x0 + a - 1]: a -= 1
+    b = xi
+    while b < n - 1 and dark[y, x0 + b + 1]: b += 1
+    return b - a + 1
+
+def _refine_merged_barline(nl, x, w, top, bot, s):
+    """Search inside a too-wide component for a barline merged with touching
+    ink (see derivation above). Returns an x position, or None."""
+    dark = nl > 0
+    step = max(1, int(s // 6))
+    tol = BARLINE_SPAN_TOLERANCE * s
+    bound = BARLINE_WIDTH_BOUND * s
+    max_bound = MAX_ROW_WIDTH_BOUND * s
+    H = nl.shape[0]
+    pad = int(round(2.0 * s))
+    lo = max(0, top - pad); hi = min(H, bot + pad + 1)
+    x0, x1 = x, x + w - 1
+
+    good = []
+    for xc in range(x0, x1 + 1):
+        widths = [wv for wv in (
+            _barline_row_width(dark, y, x0, x1, xc) for y in range(top, bot + 1, step)
+        ) if wv is not None]
+        if len(widths) < 3 or float(np.median(widths)) > bound or max(widths) > max_bound:
+            continue
+        col = dark[lo:hi, xc]
+        idx = np.where(col)[0]
+        if len(idx) == 0:
+            continue
+        y0 = lo + idx[0]; y1 = lo + idx[-1]
+        if (y1 - y0 + 1) != len(idx):
+            continue  # SOLIDITY: gap between first and last dark pixel -- not a stroke
+        top_over = top - y0; bot_over = y1 - bot
+        if -tol <= top_over <= tol and -tol <= bot_over <= tol:
+            good.append(xc)
+    if not good:
+        return None
+    runs = []
+    run_start = prev = good[0]
+    for xc in good[1:]:
+        if xc - prev > 1:
+            runs.append((run_start, prev))
+            run_start = xc
+        prev = xc
+    runs.append((run_start, prev))
+    best = max(runs, key=lambda r: r[1] - r[0])
+    return (best[0] + best[1]) // 2
+
+# ONE BARLINE PER CLUSTER (N.95/N.96 ship 1, 2026-08-24, found by the 23-page
+# fixture gate, not by design). A FINAL or REPEAT barline is drawn as a thin
+# stroke and a thick one, half a staff space apart, and it is ONE barline. The
+# old `w<=6` admitted only the thin stroke and so never met the case. The
+# widened width bound admits both, and the two then segment an EMPTY extra
+# measure between them: on the render corpus this moved exactly one page
+# (sunless-06 p7, sys1, the thin stroke at x=2400 and the thick one at x=2415,
+# 0.714s apart, adding a seventh measure whose sum is 0).
+#
+# BOUND, measured over every accepted candidate on all 23 render fixture pages
+# and on the Lamm scan, as consecutive gaps in units of s: RENDER 131 gaps, of
+# which the smallest genuine one is 13.333s and the ONLY sub-13s gap anywhere
+# is that single 0.714s thin-thick pair. SCAN 5 gaps, smallest 33.400s.
+# `BARLINE_CLUSTER_GAP = 1.0*s` is the structural bound rather than the
+# midpoint of the empty interval: a thin-thick pair is one engraved symbol and
+# Gould sets its own gap at about half a space, so within one staff space is
+# the same barline and beyond it is a different one. It clears the measured
+# spurious gap by 0.286s and sits 12.333s below the smallest genuine gap in
+# either corpus.
+#
+# THE LEFTMOST STROKE WINS, not the mean. Segmentation only needs one x
+# between two measures, and the leftmost is the conservative one: it can never
+# put the boundary after a note that belongs to the next measure. It also
+# reproduces the old output exactly wherever the old code saw the thin stroke
+# alone, which is every render page.
+BARLINE_CLUSTER_GAP = 1.0   # * s
+
+def _collapse_barline_cluster(xs, s):
+    """Collapse strokes within BARLINE_CLUSTER_GAP of each other to the
+    leftmost. `xs` must be sorted."""
+    gap = BARLINE_CLUSTER_GAP * s
+    out = []
+    for x in xs:
+        if out and x - out[-1] <= gap:
+            continue
+        out.append(x)
+    return out
+
 def detect_barlines(nl,staves,vocal,s):
     num,lab,stats,cent=cv2.connectedComponentsWithStats(nl,8)
     out={}
@@ -876,8 +1084,15 @@ def detect_barlines(nl,staves,vocal,s):
         st=staves[b]; sh=st[-1]-st[0]; xs=[]
         for i in range(1,num):
             x,y,w,h,area=stats[i]; cx,cy=cent[i]
-            if 0.85*sh<=h<=1.35*sh and w<=6 and st[0]-1.2*s<=cy<=st[-1]+1.2*s: xs.append(int(cx))
-        out[bi]=sorted(xs)
+            if not (0.85*sh<=h<=1.35*sh and st[0]-1.2*s<=cy<=st[-1]+1.2*s):
+                continue
+            if w <= BARLINE_WIDTH_BOUND * s:
+                xs.append(int(cx))
+                continue
+            sub = _refine_merged_barline(nl, int(x), int(w), st[0], st[-1], s)
+            if sub is not None:
+                xs.append(sub)
+        out[bi]=_collapse_barline_cluster(sorted(xs),s)
     return out
 
 def read_page_pitch(cfg):

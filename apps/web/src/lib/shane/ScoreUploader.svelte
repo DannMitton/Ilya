@@ -484,6 +484,8 @@
 				return { soon: false, message: T('upload.err.imageUndecodable') };
 			case 'PDF_UNREADABLE':
 				return { soon: false, message: T('upload.err.pdfUnreadable') };
+			case 'PDF_JBIG2_UNDECODED':
+				return { soon: false, message: T('upload.err.pdfJbig2') };
 			case 'CONVERSION_FAILED':
 				return {
 					soon: false,

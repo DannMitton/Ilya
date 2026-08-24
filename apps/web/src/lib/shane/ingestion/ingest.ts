@@ -111,6 +111,8 @@ export type IngestError =
 	| { code: 'IMAGE_UNDECODABLE' }
 	/** N.59 step 8: the PDF could not be opened, or carries no pages. */
 	| { code: 'PDF_UNREADABLE'; message: string }
+	/** N.96: the PDF renders blank and its own bytes carry a /JBIG2Decode filter. */
+	| { code: 'PDF_JBIG2_UNDECODED'; message: string }
 	| DenigmaError
 	| ResourceError;
 
@@ -357,6 +359,7 @@ function asReaderError(e: unknown): IngestError {
 		if (code === 'READ_FAILED') return { code: 'PAGE_READ_FAILED', message };
 		if (code === 'IMAGE_UNDECODABLE') return { code: 'IMAGE_UNDECODABLE' };
 		if (code === 'PDF_UNREADABLE') return { code: 'PDF_UNREADABLE', message };
+		if (code === 'PDF_JBIG2_UNDECODED') return { code: 'PDF_JBIG2_UNDECODED', message };
 	}
 	return { code: 'PAGE_READ_FAILED', message: e instanceof Error ? e.message : String(e) };
 }
