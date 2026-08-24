@@ -111,6 +111,30 @@ any of them count.
 > N.91 (the piano-doubling witness and the OpenScore Lieder benchmark),
 > all four numbered 2026-08-24 and none yet placed in the release order.
 
+>
+> **2026-08-24 MORNING, WALKTHROUGH PREP: the run sheet is ready and the
+> track order is ruled.** N.83's run sheet is
+> `docs/sessions/runsheet-n83-walkthrough_r2_2026-08-24.md` (r1 superseded,
+> beside it; both new to git). Ruled by Dann this session: the engraved
+> anchor is Without Sun song 1; the call is Thursday, Dann's to schedule;
+> part 1 runs in the colleague's own browser, because Zoom remote control
+> moves their mouse and never carries their microphone; N.94 is numbered
+> (transposition interface, Newzik model; the INBOX line cites the E.31
+> rulings, 2026-08-07, amendments checked, none found); the track order
+> after the walkthrough is OMR, then N.92, N.93, N.94. The desk's offer of
+> a demo-minimum picker before Thursday was CUT by Dann as too much; beat 5
+> uses the r2 fallback. Tree, read this session: no picker exists in
+> `apps/web`; `transposeScore` is `transposition.ts:63`, the ranking `:214`,
+> `INTERVAL_NAMES` `:136`, and `transposePitch` spells sharps only
+> (`:41-56`).
+>
+> **THE ONE THING: OMR refinement, in a new thread today.** N.90 and N.91,
+> with the JBIG2 ingest gap and the accuracy decomposition still awaiting
+> Dann's numbering. The walkthrough waits on Thursday with one open slot,
+> the deploy URL, and the colleague needs that URL and the engraved file
+> before the call.
+
+
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
 **Dann opened the release question: what remains before a release, plus six

@@ -40,3 +40,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - N.91 2026-08-24: the piano-doubling witness as pitch verifier, and OpenScore Lieder as the CC0 accuracy-benchmark corpus. NUMBERED by Dann 2026-08-24.
 - N.92 2026-08-24: notation editing tools; correct the read notation in place. Dann: no point in Score Markup without prescriptive vowel values on the correct pitches. NUMBERED by Dann 2026-08-24.
 - N.93 2026-08-24: easy text entry interfaces for the poem and underlay. Same ruling, same night. NUMBERED by Dann 2026-08-24.
+- N.94 2026-08-24: transposition interface, modelled on Newzik; prior rulings 9-14 and the detented-ruler spec are in claude/e31-late-rulings-and-the-transposition-control_2026-08-07.md, 17 days old, amendments unchecked. NUMBERED by Dann 2026-08-24.
