@@ -131,8 +131,20 @@ def _walk_band(ext, seed, staff_extent, nrows):
     S4: termination by membership failure ONLY. There is no thickness cap; a
     "max 2 rows" cap would be corpus-fitted and resolution-fragile.
     S5: one rule, both directions, no directional term.
+
+    AMENDED 2026-08-24, N.83, ruled by the desk. The reference is the CLAIMED
+    STAFF'S extent, not the seed row's own. The seed-relative reference was an
+    implementation drift from C2(b)'s ratified denotation ("deviates from the
+    reference by at most T_REL of the claimed staff's extent"), invisible on
+    the render corpus where every seed extent equals its staff extent exactly
+    (ratio 1.000 on all 47 pages, measured). On the Lamm scan two seed rows
+    carry bridged extent 0.633 of their staff's, which put the acceptance
+    band's floor below zero, made BLANK rows members, and let the walk swallow
+    all 4,920 rows of the page. Anchored to the structure, the band is
+    [(1 - T_REL) x SE, (1 + T_REL) x SE]; a row with no ink can never pass,
+    which is what C2(b) meant all along.
     """
-    ref = int(ext[seed])
+    ref = int(staff_extent)
     members = [seed]
     r = seed - 1
     while _extent_consistent(ext, r, ref, staff_extent, nrows):

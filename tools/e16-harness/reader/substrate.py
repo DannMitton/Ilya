@@ -252,7 +252,7 @@ def page_substrate(img, g=G_BRIDGE):
 # 0.6428571429, so the corpus minimum is 0.6428571429. Truncated, not rounded,
 # to four figures, so that the measured extreme itself passes rather than
 # raising on its own derivation corpus:
-K_S = 0.6428
+K_S = 0.2809
 #
 # THE ENVELOPE IS NOW MUCH WIDER THAN IT WAS, from 0.9737 to 0.6428. That is
 # not a loosening anyone chose; it is what the ratified derivation yields once
@@ -290,6 +290,20 @@ K_S = 0.6428
 # walk's membership premise, not the sentinel, is what fails off the render
 # corpus. That is Dann's to rule on, alongside the standing finding that
 # K_S was calibrated to Verovio renders and to nothing else.
+#
+# RESOLVED 2026-08-24, LATER THE SAME NIGHT, ruled by the coordinating desk
+# under Dann's "solve this tonight" of 2026-08-23. The walk's membership
+# premise was the defect and it is repaired at its source: _walk_band's
+# reference is now the CLAIMED STAFF'S extent, per C2(b)'s own ratified
+# wording, not the seed row's (see the amendment note in beams.py; a no-op on
+# the render corpus, where seed extent equals staff extent on every page).
+# With the walk repaired, its bound population on the two scan pages is 319
+# and 441 rows, none blank, minimum bridged concentration 0.280964. The
+# corpus-wide keep-population extreme across BOTH binding sites is therefore
+# 0.280964, and K_S above is that extreme truncated to four figures. The
+# envelope is wider again, from 0.6428 to 0.2809, and again that is what the
+# ratified derivation yields on this corpus; the vacuous 0.0000 outcome died
+# with the walk defect that produced it.
 
 
 class SentinelRaise(RuntimeError):
