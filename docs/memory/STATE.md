@@ -11,7 +11,11 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`f3b257b`**, raised from `7f6a283` on the evening of 2026-08-24 when
+before **`8bc036a`**, raised from `f3b257b` at the close of the 2026-08-24 night
+session when N.97 and N.97b shipped with five gates at baseline and the pushes
+printed `d9fe8a9..22fee05..8bc036a`; gate 4's baseline moved 754 -> 784 -> 790
+and gate 5's 444 -> 451 across the two ships, and `ilya-ship.sh:79-80` was
+updated over the bridge before each run. Before that `f3b257b`, raised from `7f6a283` on the evening of 2026-08-24 when
 the OMR day's three ships landed with five gates at baseline on each and the
 pushes printed `b08bd86..b2a502c..bc2a026..f3b257b`; gate 4's baseline moved
 725 -> 754 with the third ship and `ilya-ship.sh:79` was updated before it
@@ -115,6 +119,57 @@ any of them count.
 > N.91 (the piano-doubling witness and the OpenScore Lieder benchmark),
 > all four numbered 2026-08-24 and none yet placed in the release order.
 
+
+> **2026-08-24 NIGHT, THE N.97 SESSION: N.97 DONE, N.97b SHIPPED, N.92
+> SLICE 2 DESIGNED AND RULED, THREE NUMBERS INTO THE INBOX.**
+>
+> **N.97 is DONE**: shipped `22fee05`, five gates at baseline (gate 4 moved
+> 754 -> 784), walked by Dann on `ilya-jtab8oe9a`, every step to spec: the
+> prompt read "Two things Ilya read from the page" with Treble and 2 sharps
+> pre-chosen on the Lamm scan, the read matched, a correction survived a
+> reload, the French confirmed, and the walk ran the PDF route end to end,
+> which also cleared the memo's PDF-route NOT ESTABLISHED (the 60 s hang was
+> Code's pane). The read: 89 of 89 systems correct on clef and key, zero
+> abstentions. Memo: `docs/sessions/memo-n97-clef-key_r1_2026-08-24.md`.
+>
+> **The ruled re-key did not reach the corrections, and Dann ruled the fix.**
+> Code measured that correction ids are built by the PARSER
+> (`musicxml-parser.ts:701`, `m{mi}-{num}-{den}` from a duration cursor); the
+> reader's ids died at the MusicXML boundary. Dann ruled option 1: carry the
+> reader's id through as the `<note>` id attribute, parser prefers it with a
+> uniqueness-and-namespace guard. **N.97b shipped `8bc036a`** (gates moved:
+> web-test 784 -> 790, score-parser 444 -> 451; `ilya-ship.sh:79-80` already
+> expect both). Corrections on page reads are keyed to ink now. One-time
+> costs, priced in the memo: pre-ship corrections and placements orphan once
+> (counted, kept), page-read fingerprints change (one replace-or-attach
+> question, answer attach). Memo:
+> `docs/sessions/memo-n97b-id-carry_r1_2026-08-24.md`.
+> **N.97b is WRITTEN, not DONE: its deploy walk is still owed** (Code walked
+> it on localhost on Dann's real data). The Kabalevsky page that interrupted
+> the walk fails for its own reasons (N.99), not N.97b's.
+>
+> **N.92 slice 2 is designed, ruled, and briefed, nothing built.** Rulings:
+> the interface model is Finale's Simple Entry palette (amends ship 3's
+> Speedy-only template); accidentals cumulative, two clicks reach doubles,
+> natural resets, capped at doubles; one spelling policy function (Gould 66,
+> key context, previous-note fallback); nudges spell through it; the reader
+> spells its own output by key; NO respell verb. French approved: Bemol /
+> Diese / Becarre (adopted), and the orphan string. Brief, committed in
+> `22fee05`: `docs/sessions/brief-n92-slice2-accidentals_r1_2026-08-24.md`.
+>
+> **Numbered by Dann tonight, in INBOX.md, unplaced: N.98** (voice formant
+> profile selector, a dropdown for multi-student studios), **N.99**
+> (skew-tolerant staff detection; the Kabalevsky op. 52 no. 5 plate, full
+> evidence in the inbox line), **N.100** (the PDF route must not trust the
+> media box; 151 Mpx raster from a lying 96 ppi declaration).
+>
+> **THE ONE THING: N.97b's deploy walk.** On the branch alias
+> `ilya-git-shane-dannmittons-projects.vercel.app` (stable origin, library
+> persists across ships; see ENVIRONMENT), read the Lamm 400 dpi PNG, correct
+> a note, reload, the correction lands. Then paste
+> `brief-n92-slice2-accidentals_r1` into Code. The walkthrough waits on
+> Thursday; the colleague still needs the deploy URL and the engraved file.
+
 >
 > **2026-08-24 MORNING, WALKTHROUGH PREP: the run sheet is ready and the
 > track order is ruled.** N.83's run sheet is
@@ -143,8 +198,8 @@ any of them count.
 > that intakes a PDF, produces a monodic melody line, and can be altered
 > inside Ilya where it diverges from its source. All three legs are DONE.
 >
-> **THE ONE THING: N.97, clef and key reading, ask becomes confirm, in a
-> fresh thread.** Numbered by Dann this session. The reader learns clef and
+> ~~**THE ONE THING: N.97, clef and key reading, ask becomes confirm, in a
+> fresh thread.**~~ Numbered by Dann this session. The reader learns clef and
 > key glyphs by the same Leipzig template machinery as rests and time
 > signatures; the payoff is measured (memo N.95: 11 of 13 false positives
 > sit on clef and key ink), and the intake prompt becomes a confirmation of

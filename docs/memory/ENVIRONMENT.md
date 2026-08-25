@@ -1919,3 +1919,37 @@ occurrences, and say it is the bundle, not the DOM.
   (`_walk_band`, amendment note) and `substrate.py` (the K_S derivation
   block, now ending at 0.2729 after N.96 ruled the app's own pdf.js rasters
   into the corpus on 2026-08-24; it read 0.2809 before that).
+
+## Learned 2026-08-24 night, the N.97/N.97b session
+
+- **The ship script's gate literals: `ilya-ship.sh:79` holds its number TWICE**
+  (`"790 passed (790)"`), so any baseline edit needs `sed`'s `g` flag; the
+  first-match form writes an expectation no output can match. Lines 79 and 80
+  now expect `790 passed (790)` and `451 passed | 5 skipped (456)` (edited over
+  the bridge; before md5 `f074ede7`, after `a78888ac`).
+- **The branch alias `ilya-git-shane-dannmittons-projects.vercel.app` serves
+  the latest Shane ship on ONE stable origin**, so its IndexedDB library
+  persists across deploys. Per-deploy URLs each start with an empty library,
+  which is why no pre-ship walk was ever possible before. Use the alias for
+  any walk that needs data from an earlier ship.
+- **The desk can verify a deploy without asking**: the Vercel MCP lists
+  deployments for project `ilya` (team `dannmittons-projects`) with the git
+  sha in `meta.githubCommitSha` and the state (BUILDING/READY).
+- **Old plates lie about their size** (N.100): this class of PDF declares a
+  300 dpi A4 scan at 96 ppi, so a 400 dpi raster is 151 Mpx and the route dies
+  before the reader runs. `pdfimages -list` exposes the embedded encoding and
+  native pixels; CCITT G4 decodes fine in pdf.js, only JBIG2 needs `wasmUrl`.
+- **iCloud leaves " 2" conflict copies in `apps/web/static/reader/` after
+  builds** (`run_page2 2.py` beside `run_page2.py`). Inert: gitignored, the
+  manifest names only the real files, the worker fetches by manifest. Found
+  by Code 2026-08-24, cause not diagnosed, Desktop is iCloud-synced.
+- **The uploader's ask keeps the last-chosen clef and key within a tab
+  session** (`ScoreUploader.svelte:172-173`, component state): after a failed
+  read and "Try another file", the prompt reopens holding the previous
+  answers. By design, but it can masquerade as a probe detection; the title
+  is the tell (ask = "cannot see", confirm = "read from the page").
+- **The Kabalevsky op. 52 no. 5 plate fails staff detection identically at
+  cv2 4.13.0 and 4.9.0** (venv `opencv-python-headless==4.9.0.80`,
+  `numpy<2`, reproduces Pyodide's version natively): primary gate 0.0026
+  under the 0.015 floor, slice fallback loses 6 of 55 rows. The full
+  traceback and row-group table are in this session's N.99 inbox line.
