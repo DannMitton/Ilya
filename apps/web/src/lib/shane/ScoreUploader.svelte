@@ -23,7 +23,7 @@
 	import IntakeWatermark from '$lib/components/Drawer/IntakeWatermark.svelte';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
-	import { WorkerPageReader } from './engine/page-reader';
+	import { WorkerPageReader, type ClefKeyProbe } from './engine/page-reader';
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from './engine/page-image';
 	import {
 		ingestScoreFile,
@@ -35,6 +35,7 @@
 		type PageRead,
 	} from './ingestion/ingest';
 	import { detectScoreFormat, SNIFF_LENGTH } from './ingestion/format-detection';
+	import { prefillFrom } from './ingestion/clef-key-prompt';
 	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
 	import type { ReadReport } from './ingestion/recognized';
 	import type { PageProvenance } from '$lib/library/types';
@@ -129,8 +130,11 @@
 
 	type UiState =
 		| { kind: 'idle' }
-		/** N.59, Ruling A: a picture waits here while the singer answers. */
-		| { kind: 'asking'; file: File }
+		/** N.59, Ruling A: a picture waits here while the singer answers.
+		 *  N.97: `detected` is true where the page's own clef and key signature
+		 *  are what the two controls now show. False is the old prompt, word for
+		 *  word. */
+		| { kind: 'asking'; file: File; detected: boolean }
 		| { kind: 'busy'; label: string }
 		| { kind: 'done'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
@@ -167,6 +171,27 @@
 	];
 	let clefChoice = $state(0);
 	let fifths = $state(0);
+
+	/**
+	 * N.97. THE PROMPT CONFIRMS WHAT THE PAGE PRINTS, or falls back to asking.
+	 *
+	 * The reader now reads the clef glyph and the run of sharps or flats beside
+	 * it, and this moves the two controls onto that reading before the singer
+	 * sees them. Everything else about the prompt is unchanged: the same two
+	 * selects, the same options, the same buttons, and the same two answers
+	 * travelling to the reader.
+	 *
+	 * THE RULE ITSELF IS IN `clef-key-prompt.ts` and tested there, because
+	 * vitest never compiles a `.svelte` file. What is left here is the
+	 * assignment.
+	 */
+	function preselect(probe: ClefKeyProbe | null): boolean {
+		const fill = prefillFrom(probe);
+		if (!fill) return false;
+		clefChoice = fill.clefChoice;
+		fifths = fill.fifths;
+		return true;
+	}
 
 	/** -7 through 7, flats first, so the list reads the way a circle of fifths does. */
 	const FIFTHS_CHOICES = Array.from({ length: 15 }, (_, i) => i - 7);
@@ -236,7 +261,17 @@
 	async function handleFile(file: File, storedAnswers?: EngravingAnswers): Promise<void> {
 		bannerDismissed = false;
 		if (!storedAnswers && (await isPicture(file))) {
-			ui = { kind: 'asking', file };
+			// N.97. The reader looks at the page BEFORE the prompt appears, so the
+			// prompt can show what it found. The wait is named honestly with the
+			// strings the read itself uses, because this IS the reader reading the
+			// page, and the first one pays Pyodide's warm-up either way.
+			ui = {
+				kind: 'busy',
+				label: WorkerPageReader.hasLoadedBefore
+					? T('upload.status.readingPage')
+					: T('upload.status.preparingReader'),
+			};
+			ui = { kind: 'asking', file, detected: preselect(await probeFile(file)) };
 			return;
 		}
 		// A .musx or .mscz routes through conversion; name the wait honestly.
@@ -355,6 +390,39 @@
 	let lastInk: ArrayBuffer | null = null;
 	let lastPage: PageProvenance | null = null;
 	let lastKind: 'image' | 'pdf' | null = null;
+
+	/**
+	 * N.97. The clef and key signature this page PRINTS, or null.
+	 *
+	 * Only the FIRST page is probed, because the prompt asks one question about
+	 * the whole upload and the first page is what a singer looking at their
+	 * paper will check it against. A multi-page PDF therefore rasterizes page 1
+	 * twice, once here and once for the read; that cost is named rather than
+	 * traded for a cache that would have to stay in step with the read's own
+	 * rasterizing.
+	 *
+	 * NOTHING HERE CAN FAIL THE UPLOAD. Every failure path returns null, the
+	 * prompt asks the way it always did, and the read that follows reports its
+	 * own errors in its own words.
+	 */
+	async function probeFile(file: File): Promise<ClefKeyProbe | null> {
+		try {
+			const kind = await readableKind(file);
+			let ink: ArrayBuffer;
+			if (kind === 'pdf') {
+				const { rasterizePdf } = await import('./engine/page-pdf');
+				const pages = await rasterizePdf(file, 1);
+				if (pages.length === 0) return null;
+				ink = pages[0];
+			} else {
+				ink = await toGreyscalePng(file);
+			}
+			return await getPageReader().probe(ink);
+		} catch (err) {
+			console.error('[ScoreUploader] the clef and key probe failed; asking instead:', err);
+			return null;
+		}
+	}
 
 	/** The singer pressed "Read this page". */
 	async function readAsked(): Promise<void> {
@@ -602,13 +670,19 @@
 			<p class="dz-formats">{T('upload.drop.acceptedNow')}</p>
 		</div>
 	{:else if ui.kind === 'asking'}
-		<!-- N.59, Ruling A. Two questions the reader cannot answer for itself.
-		     The drawer manipulates, so the control is lawful here; nothing about
-		     this appears on the paper. Defaults are treble and no accidentals,
-		     with the octave-down treble one tap away. -->
+		<!-- N.59, Ruling A, as amended by N.97. Two things the reader now READS
+		     off the page and asks the singer to confirm. The drawer manipulates,
+		     so the control is lawful here; nothing about this appears on the
+		     paper.
+
+		     WHERE THE READ ABSTAINED THE OLD PROMPT RETURNS, word for word:
+		     `detected` is null, the two frame strings are `upload.ask.*` again,
+		     and the defaults are treble and no accidentals with the octave-down
+		     treble one tap away. Every other string in this block is shared by
+		     both, because only the frame changed and not the question. -->
 		<div class="ask">
-			<p class="ask-title">{T('upload.ask.title')}</p>
-			<p class="ask-why">{T('upload.ask.why')}</p>
+			<p class="ask-title">{ui.detected ? T('upload.confirm.title') : T('upload.ask.title')}</p>
+			<p class="ask-why">{ui.detected ? T('upload.confirm.why') : T('upload.ask.why')}</p>
 			<label class="ask-field">
 				<span class="ask-label">{T('upload.ask.clef')}</span>
 				<select class="ask-select" bind:value={clefChoice}>

@@ -1,0 +1,11 @@
+{
+	"version": "0.0.1",
+	"configurations": [
+		{
+			"name": "ilya-web",
+			"runtimeExecutable": "pnpm",
+			"runtimeArgs": ["--filter", "@ilya/web", "dev"],
+			"port": 5173
+		}
+	]
+}

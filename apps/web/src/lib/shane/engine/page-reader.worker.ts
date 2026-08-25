@@ -35,19 +35,48 @@ import type { PageReadConfig, ReadReport, RecognizedOutput } from '../ingestion/
 export type { PageReadConfig, ReadReport, RecognizedOutput };
 
 /** main thread to Worker. */
-export type PageReaderRequest = {
-	type: 'read';
-	id: number;
-	/** Greyscale PNG bytes, one entry per page, read in order and ctx-chained. */
-	pages: ArrayBuffer[];
-	config: PageReadConfig;
-};
+export type PageReaderRequest =
+	| {
+			type: 'read';
+			id: number;
+			/** Greyscale PNG bytes, one entry per page, read in order and ctx-chained. */
+			pages: ArrayBuffer[];
+			config: PageReadConfig;
+	  }
+	| {
+			/** N.97: clef and key signature only, before the singer is asked. */
+			type: 'probe';
+			id: number;
+			/** One page's greyscale PNG ink. The first page is what the prompt asks about. */
+			page: ArrayBuffer;
+	  };
+
+/**
+ * N.97. What the page PRINTS at the start of its systems, as the majority of
+ * the systems that could be read. Every field is nullable because every one of
+ * them abstains rather than guesses.
+ */
+export interface ClefKeyProbe {
+	/** `gClef`, `gClef8vb`, `fClef`, `cClef`, or null where the systems disagree. */
+	glyph: string | null;
+	/** That clef as the reader speaks it: G/F/C and the line, counted from the bottom. */
+	sign: string | null;
+	line: number | null;
+	/** True only where the 8-bearing glyph's numeral was found on the page. */
+	ottavaGlyph: boolean | null;
+	/** Signed accidental count, 0 for a page that prints none, null on abstention. */
+	fifths: number | null;
+	/** How many systems were read at all, and how many back the majority clef. */
+	systems: number;
+	agreeing: number;
+}
 
 /** Worker to main thread. */
 export type PageReaderResponse =
 	| { type: 'ready'; loadSeconds: number }
 	| { type: 'load-error'; error: PageReaderError }
 	| { type: 'result'; id: number; read: RecognizedRead }
+	| { type: 'probe-result'; id: number; probe: ClefKeyProbe | null }
 	| { type: 'error'; id: number; error: PageReaderError };
 
 export type PageReaderError =
@@ -111,6 +140,21 @@ def _frac(v):
     if hasattr(v, 'numerator'):
         return dict(numerator=int(v.numerator), denominator=int(v.denominator))
     raise TypeError('not JSON serializable: %r' % (type(v),))
+
+def probe_page(path):
+    # N.97: the clef and key-signature read ONLY, so the intake prompt can ask
+    # the singer to confirm rather than to answer blind. It runs staff
+    # detection and the staff-line removal and stops; no notehead, no rhythm,
+    # no pitch. It is a separate call and changes nothing about the read that
+    # follows, which still takes its clef and key from the config the singer
+    # confirmed.
+    #
+    # ABSTENTION IS A NULL, NOT AN ERROR. A page whose clef nothing could read
+    # returns null and the prompt falls back to asking, which is what it did
+    # before this existed.
+    import reader
+    got = reader.probe_clef_key(dict(png=path))
+    return json.dumps(got['read'])
 
 def read_pages(paths_json, cfg_json):
     paths = json.loads(paths_json)
@@ -251,7 +295,9 @@ void (async () => {
 
 ctx.onmessage = (event: MessageEvent<PageReaderRequest>) => {
 	const message = event.data;
-	if (!message || message.type !== 'read') return;
+	if (!message) return;
+	if (message.type === 'probe') return handleProbe(message);
+	if (message.type !== 'read') return;
 	const { id, pages, config } = message;
 	try {
 		if (!pyodide) throw new Error('the page reader is not ready');
@@ -280,6 +326,34 @@ ctx.onmessage = (event: MessageEvent<PageReaderRequest>) => {
 		});
 	}
 };
+
+/**
+ * N.97's probe. Separate from the read handler rather than folded into it,
+ * because it answers a different question at a different time and shares
+ * nothing but the interpreter.
+ */
+function handleProbe(message: { id: number; page: ArrayBuffer }): void {
+	const { id, page } = message;
+	try {
+		if (!pyodide) throw new Error('the page reader is not ready');
+		const path = `${PY_HOME}/probe.png`;
+		pyodide.FS.writeFile(path, new Uint8Array(page));
+		const fn = pyodide.globals.get('probe_page');
+		let raw: string;
+		try {
+			raw = fn(path);
+		} finally {
+			fn.destroy();
+		}
+		ctx.postMessage({ type: 'probe-result', id, probe: JSON.parse(raw) as ClefKeyProbe | null });
+	} catch (err) {
+		// A FAILED PROBE IS NOT A FAILED UPLOAD. The prompt falls back to asking,
+		// which is exactly what it did before the probe existed, so this reports
+		// no read rather than an error the singer has to act on.
+		console.error('[page-reader] clef and key probe failed', err);
+		ctx.postMessage({ type: 'probe-result', id, probe: null });
+	}
+}
 
 async function fetchText(url: string): Promise<string> {
 	const response = await fetch(url);

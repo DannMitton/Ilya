@@ -21,6 +21,7 @@
  */
 
 import type {
+	ClefKeyProbe,
 	PageReadConfig,
 	PageReaderError,
 	PageReaderRequest,
@@ -28,7 +29,7 @@ import type {
 	RecognizedRead,
 } from './page-reader.worker';
 
-export type { PageReadConfig, PageReaderError, RecognizedRead };
+export type { ClefKeyProbe, PageReadConfig, PageReaderError, RecognizedRead };
 
 /**
  * Whether the page reader has loaded successfully at least once this page
@@ -46,12 +47,25 @@ export interface PageReader {
 	 * is continuous across them. Rejects with a `PageReaderError`.
 	 */
 	read(pages: ArrayBuffer[], config: PageReadConfig): Promise<RecognizedRead>;
+	/**
+	 * N.97. What one page PRINTS for a clef and a key signature, so the intake
+	 * prompt can ask the singer to confirm rather than to answer blind.
+	 *
+	 * RESOLVES WITH null RATHER THAN REJECTING when the page cannot be read. A
+	 * probe that fails costs the prompt its pre-fill and nothing else, and the
+	 * singer answers the way they always did.
+	 */
+	probe(page: ArrayBuffer): Promise<ClefKeyProbe | null>;
 	dispose(): void;
 }
 
 type PendingRead = {
 	resolve: (read: RecognizedRead) => void;
 	reject: (error: PageReaderError) => void;
+};
+
+type PendingProbe = {
+	resolve: (probe: ClefKeyProbe | null) => void;
 };
 
 export class WorkerPageReader implements PageReader {
@@ -71,6 +85,7 @@ export class WorkerPageReader implements PageReader {
 	private disposed = false;
 	private nextId = 1;
 	private readonly pending = new Map<number, PendingRead>();
+	private readonly probing = new Map<number, PendingProbe>();
 
 	constructor() {
 		this.spawn();
@@ -97,6 +112,28 @@ export class WorkerPageReader implements PageReader {
 		}
 	}
 
+	async probe(page: ArrayBuffer): Promise<ClefKeyProbe | null> {
+		if (this.disposed) return null;
+		try {
+			if (!this.worker || !this.ready) this.spawn();
+			const worker = this.worker!;
+			await this.ready!;
+			const id = this.nextId++;
+			const request: PageReaderRequest = { type: 'probe', id, page };
+			return await new Promise<ClefKeyProbe | null>((resolve) => {
+				this.probing.set(id, { resolve });
+				// Transferred, like the read's pages: the caller reads its bytes
+				// fresh and must not hold this buffer afterwards.
+				worker.postMessage(request, [page]);
+			});
+		} catch {
+			// A Worker that will not load is the READ's problem to report, and it
+			// will report it a moment later with its own message. Here it is only
+			// a prompt that asks instead of confirming.
+			return null;
+		}
+	}
+
 	dispose(): void {
 		this.disposed = true;
 		this.worker?.terminate();
@@ -107,6 +144,11 @@ export class WorkerPageReader implements PageReader {
 		// In-flight reads are abandoned WITHOUT settling, matching ScoreReader:
 		// teardown mid-read is fire-and-forget and dispose is terminal.
 		this.pending.clear();
+		// A probe is settled with null instead, because its caller is waiting to
+		// show a prompt and an unsettled promise there is a prompt that never
+		// appears. Nothing depends on the value, so null is the honest answer.
+		for (const entry of this.probing.values()) entry.resolve(null);
+		this.probing.clear();
 	}
 
 	private spawn(): void {
@@ -140,6 +182,12 @@ export class WorkerPageReader implements PageReader {
 				entry?.resolve(message.read);
 				return;
 			}
+			case 'probe-result': {
+				const entry = this.probing.get(message.id);
+				this.probing.delete(message.id);
+				entry?.resolve(message.probe);
+				return;
+			}
 			case 'error': {
 				const entry = this.pending.get(message.id);
 				this.pending.delete(message.id);
@@ -158,5 +206,7 @@ export class WorkerPageReader implements PageReader {
 			entry.reject({ code: 'READ_FAILED', message: FAILURE_MESSAGE });
 		}
 		this.pending.clear();
+		for (const entry of this.probing.values()) entry.resolve(null);
+		this.probing.clear();
 	}
 }

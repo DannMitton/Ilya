@@ -69,6 +69,23 @@ def canon(o):
     return json.dumps(o, sort_keys=True, separators=(',', ':'), default=str)
 
 
+def musical(ro):
+    """`ro` with the two things N.97 changed BY DESIGN removed: the event id
+    scheme (measure and onset and x became measure and x, Dann's ruling of
+    2026-08-24) and the additive `readClefKey` block.
+
+    `run` below still hashes the whole thing, so a re-key still shows up in
+    this gate rather than hiding. What `runMusical` adds is the ability to say
+    which kind of move it was: a fixture whose `run` differs and whose
+    `runMusical` matches was renamed, and one whose `runMusical` differs read
+    the page differently. Only the second is a fixture that MOVED."""
+    stripped = dict(ro)
+    stripped.pop('readClefKey', None)
+    stripped['verses'] = [dict(v, notes=[{k: n[k] for k in n if k != 'id'} for n in v['notes']])
+                          for v in ro['verses']]
+    return stripped
+
+
 def main():
     found = pages()
     if len(found) != 23:
@@ -87,7 +104,8 @@ def main():
                        vocal=list(G['vocal']), nl=nl_hash, barlines=canon(bl),
                        notes=len(notes), rests=len(rests), metre=str(read_metre),
                        msum=canon({str(k): str(v) for k, v in sorted(msum.items())}),
-                       run=hashlib.sha256(canon(ro).encode()).hexdigest())
+                       run=hashlib.sha256(canon(ro).encode()).hexdigest(),
+                       runMusical=hashlib.sha256(canon(musical(ro)).encode()).hexdigest())
         except Exception as e:                        # a page that raises is a moved page
             row = dict(page=rel, error='%s: %s' % (type(e).__name__, e))
         print(canon(row))

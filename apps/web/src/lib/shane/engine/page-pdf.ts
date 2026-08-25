@@ -95,13 +95,18 @@ function canvasIsBlank(
 }
 
 /**
- * Rasterize every page of a PDF to greyscale PNG ink, in page order.
+ * Rasterize a PDF to greyscale PNG ink, in page order.
  *
  * The pages come back as an array because `envelope.run` is ctx-chained across
  * them, which is what makes measure numbering continuous over a whole piece
  * rather than restarting at each page.
+ *
+ * `maxPages` stops after that many, and exists for N.97's clef-and-key probe,
+ * which asks about the FIRST page and would otherwise pay to rasterize a ten-
+ * page score twice. Omitted, every page is rendered, which is what the read
+ * itself always asks for.
  */
-export async function rasterizePdf(file: File): Promise<ArrayBuffer[]> {
+export async function rasterizePdf(file: File, maxPages?: number): Promise<ArrayBuffer[]> {
 	const bytes = new Uint8Array(await file.arrayBuffer());
 
 	let pdfjs: typeof import('pdfjs-dist');
@@ -150,7 +155,8 @@ export async function rasterizePdf(file: File): Promise<ArrayBuffer[]> {
 		if (doc.numPages < 1) throw new PdfUnreadableError('this PDF has no pages');
 		const scale = TARGET_DPI / PDF_UNITS_PER_INCH;
 		const pages: ArrayBuffer[] = [];
-		for (let n = 1; n <= doc.numPages; n++) {
+		const last = maxPages === undefined ? doc.numPages : Math.min(doc.numPages, maxPages);
+		for (let n = 1; n <= last; n++) {
 			const page = await doc.getPage(n);
 			try {
 				const viewport = page.getViewport({ scale });

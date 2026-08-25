@@ -828,11 +828,77 @@ def read_page_geometry(cfg):
         hh=detect_hollow_heads(nl_safe,staves,vocal,s,sb,thr=cfg.get('hollow_thr',0.38))
         hh=[h for h in hh if h['stemmed']]        # minims; the stemless semibreve path is UNEXERCISED
         heads=merge_heads(heads,hh,s)
+    # N.97: CLEF AND KEY-SIGNATURE INK IS NOT NOTEHEAD CANDIDACY.
+    #
+    # `detect_heads` is a matched filter for a filled ellipse, and a G clef's
+    # bowl and a sharp's lozenges are filled ellipses. Memo N.95 measured the
+    # cost on the Lamm scan: 11 of the reader's 13 false positives sit on that
+    # ink, at the very start of a system, before any real note. Nothing
+    # downstream could tell them from notes, so every one of them took a
+    # syllable and shifted the line.
+    #
+    # `clefkey` reads the two glyph groups with the same Leipzig template
+    # machinery the rests and the time signature already use, and reports the x
+    # range their ink occupies. A detection whose centre falls in that range is
+    # dropped here, AFTER the stem test and the hollow merge, so a hollow false
+    # positive on clef ink goes with it, and before anything reads a pitch.
+    #
+    # A SYSTEM WHOSE CLEF ABSTAINED IS NOT MASKED AT ALL. `clef_key_spans`
+    # returns no entry for it, so an unread clef costs a singer nothing. The
+    # imports are local for the reason `remove_lines`' and the hollow branch's
+    # already are: `clefkey` imports this module.
+    clef_key_systems, clef_key_read = [], None
+    if cfg.get('clef_key_mask', True):
+        import clefkey
+        clef_key_systems, clef_key_read = clefkey.read_page_clef_key(img, nl, staves, s, vocal)
+        spans = clefkey.spans_from(clef_key_systems)
+        margin = clefkey.CLEF_KEY_MASK_MARGIN * s
+        heads = [h for h in heads
+                 if h['sys'] not in spans
+                 or not (spans[h['sys']][0] - margin <= h['x'] <= spans[h['sys']][1] + margin)]
     topD=clef_topD(cfg['clef'][0],cfg['clef'][1],cfg.get('octaveChange',0))
     for h in heads:
         L,O=position(h,staves,vocal,topD,s); h['L']=L; h['O']=O
     return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD,
-                vocalFallbacks=vocal_fallbacks)
+                vocalFallbacks=vocal_fallbacks,
+                # N.97, ADDITIVE. What the page PRINTS, alongside what the
+                # caller answered. Nothing in this module consumes it: `topD`
+                # above is still built from cfg, so a read with the same
+                # answers is unchanged whatever the glyphs say. The caller
+                # confirms or overrides; the reader reports.
+                clefKeySystems=clef_key_systems, clefKeyRead=clef_key_read)
+
+def probe_clef_key(cfg):
+    """N.97: WHAT THE PAGE PRINTS AT THE START OF EACH SYSTEM, and nothing else.
+
+    The intake prompt needs the clef and the key signature BEFORE the read, so
+    it can ask the singer to confirm rather than to answer blind. That needs
+    staff geometry and the staff-line removal, and nothing downstream of them:
+    no notehead detection, no stems, no hollow heads, no accidentals, no
+    rhythm. This runs that prefix and stops.
+
+    It is a SEPARATE CALL and changes nothing about the read that follows. The
+    read still takes its clef and key from `cfg`, still computes every pitch
+    from them, and is byte-identical to what the same answers produced before
+    this function existed. Confirming what was read and typing it by hand
+    reach the reader as the same two numbers.
+
+    Returns a dict: {read, systems, s, staves, systemsCount}. `read` is the
+    page's majority summary or None where every system abstained."""
+    img = cv2.imread(cfg['png'], cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise RuntimeError('OpenCV could not read %r' % (cfg.get('png'),))
+    staves, s = detect_staves(img, page=cfg.get('png'))
+    if 'vocal' in cfg:
+        vocal = cfg['vocal']
+    else:
+        vocal, _fallbacks = select_vocal(staves, s, img)
+    _bw, nl = remove_lines(img, s, staves, cfg.get('png'))
+    import clefkey
+    systems, summary = clefkey.read_page_clef_key(img, nl, staves, s, vocal)
+    return dict(read=summary, systems=systems, s=float(s),
+                staves=len(staves), systemsCount=len(vocal))
+
 
 # ---------- accidental engine ----------
 SHARP_ORDER=['F','C','G','D','A','E','B']

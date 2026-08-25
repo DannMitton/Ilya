@@ -116,6 +116,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		DIGIT_BASE,
 		neighbourId,
 		octavePitch,
+		orphanIds,
 		semitonePitch,
 		stepPitch,
 		withCorrection,
@@ -404,6 +405,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const readLine = $derived(ingestedScore?.result.score.vocalLine ?? []);
 
 	const correctedCount = $derived(Object.keys(doc.corrections).length);
+
+	/* N.97. Corrections whose event id the current read no longer carries.
+	   DERIVED, never stored: whether a correction lands is a fact about this
+	   read, not about the correction, and storing it would freeze an answer the
+	   next re-read may change. Counted against the line as the READER produced
+	   it, so a note the singer deleted by hand is not counted as lost. */
+	const orphanCount = $derived(orphanIds(readLine, doc.corrections).length);
 
 	const selectedEvent = $derived(
 		selectedEventId ? readLine.find((ev) => ev.id === selectedEventId) : undefined,
@@ -2462,6 +2470,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{selectedDotted}
 						corrected={selectedEventId ? selectedEventId in doc.corrections : false}
 						{correctedCount}
+						{orphanCount}
 						accent="var(--sage)"
 						onstep={handleStep}
 						onoctave={handleOctave}

@@ -31,6 +31,8 @@
 		corrected: boolean;
 		/** How many notes in the whole score carry a correction. */
 		correctedCount: number;
+		/** N.97: how many corrections no longer find a note in the current read. */
+		orphanCount: number;
 		onstep: (direction: 1 | -1) => void;
 		onoctave: (direction: 1 | -1) => void;
 		onsemitone: (direction: 1 | -1) => void;
@@ -51,6 +53,7 @@
 		selectedDotted,
 		corrected,
 		correctedCount,
+		orphanCount,
 		onstep,
 		onoctave,
 		onsemitone,
@@ -173,6 +176,16 @@
 				: T('correct.count').replace('%s', String(correctedCount))}
 		</p>
 	{/if}
+
+	<!-- N.97. A correction whose event id no longer resolves after a re-read
+	     did not land, and a correction that fails to land must never fail
+	     silently. The DRAWER says so and the paper carries no mark, which is
+	     E.47's strike applied here: a mark on everything says nothing. -->
+	{#if orphanCount > 0}
+		<p class="correct-orphans">
+			{T('notation.orphans').replace('%s', String(orphanCount))}
+		</p>
+	{/if}
 </section>
 
 <style>
@@ -191,6 +204,7 @@
 
 	.correct-idle,
 	.correct-selected,
+	.correct-orphans,
 	.correct-count {
 		margin: 0 0 8px;
 		font-size: 0.8125rem;

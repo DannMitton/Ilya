@@ -16,8 +16,10 @@ import {
 	DIGIT_BASE,
 	durationFraction,
 	firstNoteId,
+	migrateCorrectionIds,
 	neighbourId,
 	octavePitch,
+	orphanIds,
 	semitonePitch,
 	stepPitch,
 	withCorrection,
@@ -209,5 +211,118 @@ describe('N.92 moving along the line', () => {
 		expect(firstNoteId(line, {})).toBe('a');
 		expect(firstNoteId(line, { a: { deleted: true } })).toBe('b');
 		expect(firstNoteId([note('r', undefined)], {})).toBeNull();
+	});
+});
+
+/**
+ * N.97. The id re-key, its migration, and the thing the whole re-key exists to
+ * protect: a correction on a note must survive the removal of an earlier event
+ * in its own measure.
+ */
+describe('N.97 the correction id migration', () => {
+	it('strips the two onset segments from an old id', () => {
+		expect(migrateCorrectionIds({ 'r3-1-4-1408': { dots: 1 } })).toEqual({
+			'r3-1408': { dots: 1 }
+		});
+	});
+
+	it('strips an abstained onset, which the reader wrote as na-na', () => {
+		expect(migrateCorrectionIds({ 'r0-na-na-560': { deleted: true } })).toEqual({
+			'r0-560': { deleted: true }
+		});
+	});
+
+	it('leaves an already-migrated id alone, so a second run changes nothing', () => {
+		const once = migrateCorrectionIds({ 'r3-1-4-1408': { dots: 1 }, 'r0-na-na-560': { deleted: true } });
+		expect(migrateCorrectionIds(once)).toEqual(once);
+		// And a third, because idempotence is the property, not the second run.
+		expect(migrateCorrectionIds(migrateCorrectionIds(once))).toEqual(once);
+	});
+
+	it('leaves a collision-suffixed new id alone, three segments and all', () => {
+		const map: CorrectionMap = { 'r2-804-2': { base: 'half' }, 'r2-804-3': { base: 'whole' } };
+		expect(migrateCorrectionIds(map)).toBe(map);
+	});
+
+	it('migrates a mixed map, old entries and new side by side', () => {
+		expect(migrateCorrectionIds({ 'r1-0-1-515': { deleted: true }, 'r1-1266': { dots: 1 } })).toEqual({
+			'r1-515': { deleted: true },
+			'r1-1266': { dots: 1 }
+		});
+	});
+
+	it('gives the first entry the id on a post-strip collision, and orphans the rest', () => {
+		// Two old ids in one measure at one x: only their onsets differed, so
+		// they strip to the same new id. First written wins.
+		const migrated = migrateCorrectionIds({
+			'r4-0-1-796': { base: 'half' },
+			'r4-1-4-796': { base: 'whole' }
+		});
+		expect(migrated).toEqual({ 'r4-796': { base: 'half' } });
+	});
+
+	it('returns the same object where nothing needed migrating, so no reactive churn', () => {
+		const map: CorrectionMap = { 'r1-1266': { dots: 1 } };
+		expect(migrateCorrectionIds(map)).toBe(map);
+		const empty: CorrectionMap = {};
+		expect(migrateCorrectionIds(empty)).toBe(empty);
+	});
+});
+
+describe('N.97 orphaned corrections are counted, never silent', () => {
+	const line = [note('r0-1266', P('E', 4)), note('r0-1408', P('F', 4))];
+
+	it('counts nothing where every correction lands', () => {
+		expect(orphanIds(line, { 'r0-1266': { dots: 1 } })).toEqual([]);
+	});
+
+	it('names the corrections the current read no longer carries', () => {
+		expect(orphanIds(line, { 'r0-1266': { dots: 1 }, 'r0-9999': { deleted: true } })).toEqual([
+			'r0-9999'
+		]);
+	});
+
+	it('counts a deletion whose target is gone, because that instruction did not land', () => {
+		expect(orphanIds(line, { 'r0-515': { deleted: true } })).toEqual(['r0-515']);
+	});
+
+	it('costs nothing on a score with no corrections', () => {
+		expect(orphanIds(line, {})).toEqual([]);
+	});
+});
+
+describe('N.97 a correction survives the removal of an earlier event in its measure', () => {
+	// Measure 0 as the reader emitted it BEFORE N.97 masked the clef and key
+	// ink: two false positives on the G clef and the two sharps, at x 515 and
+	// 560, then three real notes. Under the old scheme the ids carried the
+	// running onset, so the third real note's id was r0-1-2-1734.
+	const singerCorrected = 'r0-1734';
+
+	const afterMasking: VocalLineEvent[] = [
+		note('r0-1266', P('E', 4)),
+		note('r0-1408', P('F', 4)),
+		note('r0-1734', P('G', 4))
+	];
+
+	it('lands on the same note after two false positives are removed', () => {
+		// The correction was made on the third note when the line still carried
+		// the two false positives. x does not move when a neighbour is removed,
+		// so the id is the same string on both sides of the removal.
+		const map: CorrectionMap = { [singerCorrected]: { base: 'half' } };
+		expect(orphanIds(afterMasking, map)).toEqual([]);
+		const corrected = applyCorrections(afterMasking, map);
+		expect(corrected[2].duration.base).toBe('half');
+		expect(corrected[2].id).toBe('r0-1734');
+	});
+
+	it('would have been orphaned under the old onset-bearing id', () => {
+		// The same correction stored the old way. Every onset after a removed
+		// event shifts, so the id it names is not the id the re-read produced.
+		// This is the defect the re-key exists to remove, asserted rather than
+		// asserted-about.
+		const old: CorrectionMap = { 'r0-1-2-1734': { base: 'half' } };
+		expect(orphanIds(afterMasking, old)).toEqual(['r0-1-2-1734']);
+		// And the migration is what rescues it.
+		expect(orphanIds(afterMasking, migrateCorrectionIds(old))).toEqual([]);
 	});
 });

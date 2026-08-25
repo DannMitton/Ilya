@@ -1,8 +1,8 @@
 /**
  * copy-reader.mjs — put the E.16 page reader where the browser can fetch it.
  *
- * N.59. The reader is eleven Python modules under `tools/e16-harness/reader/`,
- * plus the two Leipzig glyph caches generated in step 1. Pyodide cannot import
+ * N.59. The reader is a set of Python modules under `tools/e16-harness/reader/`,
+ * plus the Leipzig glyph caches generated alongside them. Pyodide cannot import
  * from the repository, so the modules are copied into `static/reader/` and
  * served as ordinary files; the worker fetches them and writes them into the
  * Pyodide filesystem.
@@ -23,8 +23,13 @@ const SOURCE = new URL('../../../tools/e16-harness/reader/', import.meta.url);
 const FONTS = new URL('fonts/', SOURCE);
 const DEST = new URL('../static/reader/', import.meta.url);
 
-/** The two caches step 1 generated. Without them the modules shell out to Node. */
-const CACHES = ['rest_templates_leipzig.json', 'timesig_templates_leipzig.json'];
+/** The glyph caches. Without them the modules shell out to Node and Verovio,
+ *  which no browser can do. N.97 added the third: clef and accidental outlines. */
+const CACHES = [
+	'rest_templates_leipzig.json',
+	'timesig_templates_leipzig.json',
+	'clefkey_templates_leipzig.json'
+];
 
 /** Not shipped: it is the harness's own test file and imports pytest-shaped helpers. */
 const SKIP = new Set(['test_metre.py']);

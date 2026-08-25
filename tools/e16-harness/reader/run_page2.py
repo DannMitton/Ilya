@@ -416,16 +416,42 @@ def run(cfg):
                                        # record this measure loses its onset
                                        # too (spec item 3); barline resync.
             measure_has_dur_abstain = False
+            # N.97, RULED BY DANN 2026-08-24: THE ID IS MEASURE AND X, and the
+            # onset is out of it.
+            #
+            # The id was r{measureIndex}-{onsetNum}-{onsetDen}-{x}, and the
+            # onset in it is a RUNNING SUM over the measure's preceding events.
+            # That made every id after a change in the event population a
+            # different string: removing one false positive early in a measure
+            # renamed every event after it, and a hand correction keyed by id
+            # stopped landing. N.97 changes the event population on purpose --
+            # the clef and key mask above drops 10 detections on the Lamm scan
+            # alone -- so the onset had to leave the id or the corrections
+            # would have been the ship's own casualty.
+            #
+            # Measure and x are both properties of WHERE THE INK IS, so they do
+            # not move when a neighbour is removed. x is the notehead centre
+            # the matched filter found, in page pixels, and it is already what
+            # the id's last segment carried.
+            #
+            # THE COLLISION SUFFIX. Two events in one measure can share an x
+            # (nothing forbids it, and a chord would be the ordinary case if
+            # this reader read chords). The second and later get a stable
+            # ordinal, r{mi}-{x}-2, counting in the same x-sorted order this
+            # loop already walks, so the suffix does not depend on anything but
+            # the page. Measured on this corpus: it never fires -- see the
+            # return memo.
+            x_ordinal = {}
             for e in segev:
                 abstain = {}
                 if onset_abstained:
                     onset_field = None
-                    id_onset = 'na-na'
                     abstain['onset'] = 'follows_duration_abstention'
                 else:
                     onset_field = dict(numerator=onset.numerator, denominator=onset.denominator)
-                    id_onset = f"{onset.numerator}-{onset.denominator}"
-                nd = dict(id=f"r{mi}-{id_onset}-{e['x']}",
+                ord_n = x_ordinal.get(e['x'], 0) + 1
+                x_ordinal[e['x']] = ord_n
+                nd = dict(id=(f"r{mi}-{e['x']}" if ord_n == 1 else f"r{mi}-{e['x']}-{ord_n}"),
                           type=('note' if e['kind'] == 'note' else 'rest'),
                           measureIndex=mi,
                           onset=onset_field)
@@ -460,6 +486,15 @@ def run(cfg):
     ro = dict(pieceId=piece_id, clef=dict(sign=cfg['clef'][0], line=cfg['clef'][1]),
               keySignature=dict(fifths=cfg['key']),
               verses=[dict(verseNumber=1, notes=out_notes)])
+    # N.97, ADDITIVE AND NEVER CONSUMED HERE. `clef` and `keySignature` above
+    # are still the CALLER'S answers, byte-identical to before, because every
+    # pitch on this page was computed from them. `readClefKey` is what the page
+    # itself prints, for the intake prompt to pre-fill from. The two are
+    # deliberately separate: the reader reports what it saw, the singer says
+    # what is true, and a disagreement is a question for the singer rather than
+    # something this module resolves.
+    if G.get('clefKeyRead') is not None:
+        ro['readClefKey'] = G['clefKeyRead']
 
     metre_beats, metre_beat_type = read_page_metre(nl, staves, s, vocal, bl, W)
     # whole-note-fraction units, matching msum: an X/Y signature's measure

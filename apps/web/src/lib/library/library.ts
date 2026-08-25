@@ -21,7 +21,7 @@
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/shane/pairings';
-import type { CorrectionMap } from '$lib/shane/correction';
+import { migrateCorrectionIds, type CorrectionMap } from '$lib/shane/correction';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
@@ -69,7 +69,12 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		glossAnchors,
 		openSyllabification: record.openSyllabification,
 		pairings: record.pairings,
-		corrections: record.corrections,
+		// N.97: THE ONE PLACE A STORED MAP IS RE-KEYED. Every path from a stored
+		// record to page state runs through here, and the migration is
+		// idempotent, so it costs one pass per load and cannot double-apply. No
+		// save site is added: the re-keyed map is written back the next time the
+		// document saves for its own reasons.
+		corrections: migrateCorrectionIds(record.corrections),
 	};
 }
 

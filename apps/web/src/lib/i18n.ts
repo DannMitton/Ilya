@@ -158,6 +158,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.restore':             { en: 'Undo my corrections to this note', fr: 'Annuler mes corrections sur cette note' },
 	'correct.count':               { en: 'You have corrected %s notes.',  fr: 'Vous avez corrigé %s notes.' },
 	'correct.countOne':            { en: 'You have corrected one note.',  fr: 'Vous avez corrigé une note.' },
+	// N.97. A correction whose event id no longer resolves after a re-read has
+	// not landed, and it must not fail silently. The DRAWER carries the count;
+	// nothing is marked on the paper. Dann's own wording, approved 2026-08-24
+	// and transcribed verbatim.
+	'notation.orphans':            { en: '%s corrections no longer find their note', fr: '%s corrections ne retrouvent plus leur note' },
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
 	'display.stressDiacritics.desc': { en: 'Show acute accent on Cyrillic', fr: 'Afficher l\u2019accent aigu sur le cyrillique' },
@@ -439,6 +444,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.ask.keyFlats':         { en: '%s flats', fr: '%s bémols' },
 	'upload.ask.read':             { en: 'Read this page', fr: 'Lire cette page' },
 	'upload.ask.cancel':           { en: 'Cancel', fr: 'Annuler' },
+
+	// N.97. The prompt CONFIRMS what the reader found instead of asking blind.
+	// Only these two frame strings are new; the field labels, the option
+	// labels, and both buttons are `upload.ask.*` above, unchanged, and the
+	// abstention path shows `upload.ask.title` and `upload.ask.why` word for
+	// word. Both rows are Dann's own wording, approved 2026-08-24 and
+	// transcribed verbatim, straight apostrophes included.
+	'upload.confirm.title':        { en: 'Two things Ilya read from the page', fr: "Deux choses qu'Ilya a lues sur la page" },
+	'upload.confirm.why':          { en: 'Ilya read the clef and the key signature off the picture. Check them against your own paper, and change them if it read wrong.', fr: "Ilya a lu la clé et l'armure sur l'image. Vérifiez-les sur votre propre partition, et corrigez-les s'il a mal lu." },
 
 	'upload.report.title':         { en: 'What Ilya read', fr: 'Ce qu’Ilya a lu' },
 	'upload.report.systems':       { en: '%s systems, %s staves', fr: '%s systèmes, %s portées' },

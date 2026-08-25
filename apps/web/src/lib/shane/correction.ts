@@ -12,8 +12,10 @@
  * re-read, and "a placement made by hand must survive a re-read" is the ruled
  * protected class. So a correction is a map keyed by EVENT ID, applied after
  * the read, exactly as `PairingMap` already is. The reader's ids are
- * deterministic (`run_page2.py` builds them from measure, onset, and x), so the
- * same bytes re-read give the same ids and the same corrections land again.
+ * deterministic (`run_page2.py` builds them from measure and x since N.97), so
+ * the same bytes re-read give the same ids and the same corrections land again.
+ * `migrateCorrectionIds` below carries a map written under the older
+ * measure-onset-x scheme across to this one.
  *
  * PURE, AND OUT OF THE COMPONENT ON PURPOSE, the note-picker.ts discipline:
  * every rule below is testable under vitest's node environment with no DOM.
@@ -273,3 +275,68 @@ export function firstNoteId(vocalLine: VocalLineEvent[], map: CorrectionMap): st
  * than two and so a caller cannot reach for a second height instrument.
  */
 export { pitchToMidi };
+
+/**
+ * THE ID RE-KEY, N.97, ruled by Dann 2026-08-24.
+ *
+ * The reader used to build an event id as `r{measureIndex}-{onsetNum}-{onsetDen}-{x}`,
+ * with `na-na` standing in for the onset where a duration abstention had cost
+ * it. The onset is a RUNNING SUM over the measure's preceding events, so
+ * removing one event early in a measure renamed every event after it and every
+ * correction keyed to those names stopped landing. N.97 removes clef and
+ * key-signature false positives on purpose, which is exactly the change that
+ * would have done it, so the id is now `r{measureIndex}-{x}`: two properties of
+ * where the ink is, neither of which moves when a neighbour is removed.
+ *
+ * A stored map is re-keyed HERE, at load, by stripping the two onset segments.
+ * The rule is SYNTACTIC and needs no knowledge of the score: an old id has
+ * exactly four dash-separated segments and a new one has two, or three when the
+ * reader's collision suffix fired. So a four-segment id is old, and nothing
+ * else is.
+ *
+ * IDEMPOTENT BY THAT SAME COUNT. A migrated id has two or three segments and is
+ * never four, so running this again is a no-op. It is safe on a map that has
+ * already been through it, on a mixed map, and on a map from a future version.
+ *
+ * ON A COLLISION THE FIRST ENTRY WINS. Two old ids in one measure can strip to
+ * the same new id only if they shared an x, which means the reader emitted two
+ * events at one x in one measure; the later ones are dropped and become
+ * orphans, which `orphanIds` then counts and the drawer declares. Insertion
+ * order decides, which for an object read back from IndexedDB is the order it
+ * was written in.
+ */
+export function migrateCorrectionIds(map: CorrectionMap): CorrectionMap {
+	let changed = false;
+	const out: CorrectionMap = {};
+	for (const [id, correction] of Object.entries(map)) {
+		const parts = id.split('-');
+		if (parts.length !== 4) {
+			out[id] = correction;
+			continue;
+		}
+		changed = true;
+		const next = `${parts[0]}-${parts[3]}`;
+		if (!(next in out)) out[next] = correction;
+	}
+	return changed ? out : map;
+}
+
+/**
+ * The ids in `map` that no event in `vocalLine` carries.
+ *
+ * A correction that fails to land must never fail silently: the drawer counts
+ * these and says so. The count is DERIVED on every read rather than stored,
+ * because whether a correction lands is a fact about the current read and not
+ * about the correction.
+ *
+ * A deletion whose target is already gone is NOT an orphan by a different
+ * standard: it is one, and it is counted, because the singer's instruction did
+ * not reach a note. What it is not is a defect to fix by dropping the entry,
+ * since the same bytes re-read may well bring the note back.
+ */
+export function orphanIds(vocalLine: VocalLineEvent[], map: CorrectionMap): string[] {
+	const ids = Object.keys(map);
+	if (ids.length === 0) return [];
+	const live = new Set(vocalLine.map((ev) => ev.id));
+	return ids.filter((id) => !live.has(id));
+}
