@@ -10,6 +10,7 @@ import {
   suggestTranspositions,
   transposePitch,
   transposeScore,
+  spellPitch,
   intervalName,
   keyNameAfterTransposition,
   type TranspositionCandidate,
@@ -194,5 +195,142 @@ describe('keyNameAfterTransposition', () => {
   it('returns null when there is no mode to trust', () => {
     expect(keyNameAfterTransposition({ fifths: -1 }, -4)).toBeNull();
     expect(keyNameAfterTransposition(undefined, -4)).toBeNull();
+  });
+});
+
+/**
+ * THE SPELLING POLICY (N.92 slice 2, ruled by Dann 2026-08-24).
+ *
+ * Read these as a musician would: every case names the note a singer expects to
+ * see on the page, and the fifteen-key sweep asserts the two facts that make a
+ * key signature what it is (its own seven letters, at its own heights).
+ */
+describe('spellPitch, the one speller', () => {
+  /** Major tonic of each signature, -7 fifths to +7. The hand-written truth. */
+  const TONIC_BY_FIFTHS: Pitch[] = [
+    { step: 'C', alter: -1, octave: 4 }, // 7 flats, C flat major
+    { step: 'G', alter: -1, octave: 4 },
+    { step: 'D', alter: -1, octave: 4 },
+    { step: 'A', alter: -1, octave: 4 },
+    { step: 'E', alter: -1, octave: 4 },
+    { step: 'B', alter: -1, octave: 4 },
+    { step: 'F', alter: 0, octave: 4 },
+    { step: 'C', alter: 0, octave: 4 }, // no sharps, no flats
+    { step: 'G', alter: 0, octave: 4 },
+    { step: 'D', alter: 0, octave: 4 },
+    { step: 'A', alter: 0, octave: 4 },
+    { step: 'E', alter: 0, octave: 4 },
+    { step: 'B', alter: 0, octave: 4 },
+    { step: 'F', alter: 1, octave: 4 },
+    { step: 'C', alter: 1, octave: 4 }, // 7 sharps, C sharp major
+  ];
+
+  const MAJOR_DEGREES = [0, 2, 4, 5, 7, 9, 11];
+
+  it('spells every one of the fifteen key signatures with its own seven letters', () => {
+    for (let fifths = -7; fifths <= 7; fifths++) {
+      const key = { fifths };
+      const tonic = TONIC_BY_FIFTHS[fifths + 7];
+      const tonicMidi = pitchToMidi(tonic);
+      const letters = new Set<string>();
+      for (const degree of MAJOR_DEGREES) {
+        const spelled = spellPitch(tonicMidi + degree, { key });
+        // The scale of the key uses each letter once and only once.
+        letters.add(spelled.step);
+        // The number of accidentals never exceeds the signature's own count.
+        expect(Math.abs(spelled.alter)).toBeLessThanOrEqual(1);
+        // Flat keys carry no sharps and sharp keys carry no flats.
+        if (fifths < 0) expect(spelled.alter).toBeLessThanOrEqual(0);
+        if (fifths > 0) expect(spelled.alter).toBeGreaterThanOrEqual(0);
+      }
+      expect(letters.size).toBe(7);
+      // And the tonic itself comes back exactly as written above.
+      expect(spellPitch(tonicMidi, { key })).toEqual(tonic);
+    }
+  });
+
+  it('never changes the sounding pitch, in any key, anywhere in the octave', () => {
+    for (let fifths = -7; fifths <= 7; fifths++) {
+      for (let midi = 55; midi <= 79; midi++) {
+        expect(pitchToMidi(spellPitch(midi, { key: { fifths } }))).toBe(midi);
+      }
+    }
+  });
+
+  it('spells the two keys whose tonic crosses the octave boundary', () => {
+    // C sharp major's leading note is B sharp, an octave below its own tonic,
+    // and C flat major's tonic is a C flat that sounds where B natural does.
+    expect(spellPitch(72, { key: { fifths: 7 } })).toEqual({ step: 'B', alter: 1, octave: 4 });
+    expect(spellPitch(71, { key: { fifths: -7 } })).toEqual({ step: 'C', alter: -1, octave: 5 });
+  });
+
+  it('spells a chromatic note to the key own side', () => {
+    // E flat major: the note between C and D is a D flat, not a C sharp.
+    expect(spellPitch(61, { key: { fifths: -3 } })).toEqual({ step: 'D', alter: -1, octave: 4 });
+    // D major: the raised fourth is a G sharp.
+    expect(spellPitch(68, { key: { fifths: 2 } })).toEqual({ step: 'G', alter: 1, octave: 4 });
+    // A key of no sharps and no flats takes the sharp side, as the reader did
+    // before this policy existed.
+    expect(spellPitch(61, { key: { fifths: 0 } })).toEqual({ step: 'C', alter: 1, octave: 4 });
+  });
+
+  it('prefers the key own spelling over its side, so E flat major keeps its E flat', () => {
+    expect(spellPitch(63, { key: { fifths: -3 } })).toEqual({ step: 'E', alter: -1, octave: 4 });
+    // B major's own A sharp, which the flat side would have called a B flat.
+    expect(spellPitch(70, { key: { fifths: 5 } })).toEqual({ step: 'A', alter: 1, octave: 4 });
+  });
+
+  it('falls back to the melodic interval where there is no key at all', () => {
+    // A leap: E flat up to the note three semitones above is a minor third to G
+    // flat, never an augmented second to F sharp.
+    expect(spellPitch(66, { previous: { step: 'E', alter: -1, octave: 4 } })).toEqual({
+      step: 'G',
+      alter: -1,
+      octave: 4,
+    });
+    // C up to the note ten semitones above is a minor seventh to B flat, never
+    // an augmented sixth to A sharp.
+    expect(spellPitch(70, { previous: { step: 'C', alter: 0, octave: 4 } })).toEqual({
+      step: 'B',
+      alter: -1,
+      octave: 4,
+    });
+    // C sharp up a tone is a D sharp, not the diminished third to E flat.
+    expect(spellPitch(63, { previous: { step: 'C', alter: 1, octave: 4 } })).toEqual({
+      step: 'D',
+      alter: 1,
+      octave: 4,
+    });
+  });
+
+  it('spells a semitone neighbour as the second, not the chromatic inflection', () => {
+    // Sunless 1, measure 2, as Dann engraved it: A A A up to the flat sixth is
+    // a B flat. The plain interval from A is the minor second, so the policy
+    // says B flat where the direction alone would have said A sharp.
+    expect(spellPitch(58, { previous: { step: 'A', alter: 0, octave: 3 } })).toEqual({
+      step: 'B',
+      alter: -1,
+      octave: 3,
+    });
+  });
+
+  it('lets direction decide only where neither spelling makes a plain interval', () => {
+    // A tritone reads as an augmented fourth or a diminished fifth whichever
+    // way it is written, so nothing distinguishes the two spellings but the way
+    // the line is going: rising takes the sharp, falling takes the flat.
+    expect(spellPitch(66, { previous: { step: 'C', alter: 0, octave: 4 } }).alter).toBe(1);
+    expect(spellPitch(66, { previous: { step: 'C', alter: 0, octave: 5 } }).alter).toBe(-1);
+  });
+
+  it('takes the sharp side with no key and no previous note', () => {
+    expect(spellPitch(61)).toEqual({ step: 'C', alter: 1, octave: 4 });
+  });
+
+  it('leaves a white key alone whatever the context', () => {
+    expect(spellPitch(60, { previous: { step: 'B', alter: -1, octave: 3 } })).toEqual({
+      step: 'C',
+      alter: 0,
+      octave: 4,
+    });
   });
 });

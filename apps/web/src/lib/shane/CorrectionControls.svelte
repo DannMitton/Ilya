@@ -1,8 +1,11 @@
 <script lang="ts">
-	/* ── CORRECT THE READ (N.92 first slice) ─────────────────────────────
+	/* ── CORRECT THE READ (N.92, first and second slices) ────────────────
 	   Touch parity for the keyboard operations, ruled by Dann 2026-08-24.
-	   Finale's Speedy Entry BEHAVIOUR, not its chrome, skinned to Calm
-	   Authority and seated in the NOTATION anchor.
+	   Finale's BEHAVIOUR, not its chrome, skinned to Calm Authority and seated
+	   in the NOTATION anchor. The durations are Speedy Entry's digits, from the
+	   first slice; the accidental cluster is Simple Entry's palette, from the
+	   second, which amends the Speedy-only template on Dann's ruling of
+	   2026-08-24.
 
 	   IT APPEARS ONLY WHILE A NOTE IS SELECTED. That is what makes the seat
 	   honest: the NOTATION anchor already carries seven display toggles, and a
@@ -36,6 +39,8 @@
 		onstep: (direction: 1 | -1) => void;
 		onoctave: (direction: 1 | -1) => void;
 		onsemitone: (direction: 1 | -1) => void;
+		/** N.92 slice 2: the cumulative accidental verbs. */
+		onaccidental: (kind: 'flat' | 'natural' | 'sharp') => void;
 		onmove: (direction: 1 | -1) => void;
 		onbase: (base: NoteBase) => void;
 		ondot: () => void;
@@ -57,6 +62,7 @@
 		onstep,
 		onoctave,
 		onsemitone,
+		onaccidental,
 		onmove,
 		onbase,
 		ondot,
@@ -67,6 +73,26 @@
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
+
+	/* THE ACCIDENTAL PALETTE (N.92 slice 2, ruled by Dann 2026-08-24). The
+	   interface model here is Finale's SIMPLE Entry palette, which amends the
+	   first slice's Speedy-only template: the durations keep Speedy's digits
+	   and the accidentals arrive as a cluster of tools.
+
+	   THE VERBS ARE CUMULATIVE, so these are actions and not states: two
+	   clicks of flat reach a double flat, a third does nothing, and natural
+	   resets. Nothing here carries `aria-pressed`, because none of the three is
+	   ever "on". What the note currently shows is already on the line above,
+	   spelled out.
+
+	   The glyph is decorative and the word is the name. A singer using a screen
+	   reader hears "Flat", not "music flat sign", which is why the glyph is
+	   `aria-hidden`. */
+	const ACCIDENTALS: { kind: 'flat' | 'natural' | 'sharp'; glyph: string; key: string }[] = [
+		{ kind: 'flat', glyph: '\u266D', key: 'notation.tool.flat' },
+		{ kind: 'natural', glyph: '\u266E', key: 'notation.tool.natural' },
+		{ kind: 'sharp', glyph: '\u266F', key: 'notation.tool.sharp' }
+	];
 
 	/* The five Finale digits, in Finale's own order. The labels are words
 	   rather than digits: a singer on a phone has no number row, and the digit
@@ -113,6 +139,19 @@
 			<button type="button" class="correct-btn" onclick={() => onsemitone(-1)}>
 				{T('correct.semitoneDown')}
 			</button>
+		</div>
+
+		<div class="correct-row correct-row-accidentals">
+			{#each ACCIDENTALS as acc (acc.kind)}
+				<button
+					type="button"
+					class="correct-btn correct-btn-accidental"
+					onclick={() => onaccidental(acc.kind)}
+				>
+					<span class="accidental-glyph" aria-hidden="true">{acc.glyph}</span>
+					{T(acc.key)}
+				</button>
+			{/each}
 		</div>
 
 		<p class="correct-label">{T('correct.length')}</p>
@@ -264,6 +303,32 @@
 
 	.correct-btn-len {
 		flex: 0 1 auto;
+	}
+
+	/* The palette cluster. The glyph sits above the word on a narrow drawer and
+	   beside it when there is room, which the flex wrap does on its own. */
+	.correct-btn-accidental {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+	}
+
+	.accidental-glyph {
+		font-size: 1.125rem;
+		line-height: 1;
+		color: var(--accent);
+	}
+
+	/* MODALITY, per the Studio ruling (E.44 §AUDIT A.2). The 44 px floor is
+	   already unconditional on `.correct-btn` and no exemption is taken here;
+	   what a coarse pointer changes is the SHARE of the row each tool takes.
+	   With a mouse the three tools stay the width of their words; with a
+	   thumb they divide the row evenly, so no tool is the small one. */
+	@media (pointer: coarse) {
+		.correct-row-accidentals .correct-btn-accidental {
+			flex: 1 1 0;
+		}
 	}
 
 	.correct-btn.engaged {

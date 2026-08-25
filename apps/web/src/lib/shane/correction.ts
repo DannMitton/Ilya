@@ -27,10 +27,11 @@
 
 import {
 	pitchToMidi,
-	transposePitch,
+	spellPitch,
 	type Fraction,
 	type NoteBase,
 	type Pitch,
+	type SpellingContext,
 	type VocalLineEvent
 } from '@ilya/score-parser';
 
@@ -109,10 +110,11 @@ export function durationFraction(base: NoteBase, dots: number): Fraction {
  *
  * A staff step moves the NOTEHEAD, so the letter and octave change and the
  * accidental does not: a singer nudging a misread F♯ up wants G♯, which is what
- * the printed key signature would give them, not G natural. This is the only
- * pitch operation that does not go through `transposePitch`, because a
- * semitone count cannot express "one line or space" (a step is one or two
- * semitones depending where it falls).
+ * the printed key signature would give them, not G natural. A step is the one
+ * pitch operation that does not ask the spelling policy, because a semitone
+ * count cannot express "one line or space" (a step is one or two semitones
+ * depending where it falls) and the accidental it carries is already the
+ * singer's own.
  */
 export function stepPitch(p: Pitch, direction: 1 | -1): Pitch {
 	const i = STEPS.indexOf(p.step);
@@ -127,14 +129,54 @@ export function octavePitch(p: Pitch, direction: 1 | -1): Pitch {
 }
 
 /**
- * One semitone up or down, spelled by the app's own speller.
+ * One semitone up or down, spelled by the app's ONE speller in the key the note
+ * sounds in (N.92 slice 2, ruled by Dann 2026-08-24).
  *
- * `transposePitch` is the existing spelling logic and this ship does not
- * hand-roll a second one. It spells with naturals and sharps, which is stated
- * rather than hidden: nudging down from D natural gives C♯, not D♭.
+ * This used to call `transposePitch`, which spells sharps only, so nudging D
+ * down gave C♯ in every key including E flat major, where the note on the page
+ * is a D flat. `spellPitch` reads the key instead. Pass the key in force at
+ * this note and, where the score carries no key at all, the note before it.
+ *
+ * A nudge is a change of PITCH, so the spelling it lands on is the policy's to
+ * choose. The three accidental verbs below are a change of SPELLING, and there
+ * the singer's choice is the answer and the policy is not consulted.
  */
-export function semitonePitch(p: Pitch, direction: 1 | -1): Pitch {
-	return transposePitch(p, direction);
+export function semitonePitch(
+	p: Pitch,
+	direction: 1 | -1,
+	context: SpellingContext = {}
+): Pitch {
+	return spellPitch(pitchToMidi(p) + direction, context);
+}
+
+/**
+ * THE ACCIDENTAL VERBS (N.92 slice 2, ruled by Dann 2026-08-24).
+ *
+ * CUMULATIVE, AND TWO CLICKS REACH DOUBLES. Flat lowers the spelling one degree
+ * per click (B, B♭, B𝄫), sharp raises it, and natural resets to the plain
+ * letter. A third click in the same direction does nothing: the alteration is
+ * capped at a double, which is where notation itself stops.
+ *
+ * SOUND FOLLOWS SPELLING. The letter and the octave never move, so a flattened
+ * B sounds a semitone lower, exactly as the singer sees it. That is the whole
+ * point of the slice: a B natural the reader got wrong becomes a B flat, and
+ * not the A sharp a semitone nudge used to give.
+ *
+ * Each verb returns the SAME pitch object when it would change nothing, so a
+ * capped click leaves the correction map untouched.
+ */
+export function flatPitch(p: Pitch): Pitch {
+	return p.alter <= -2 ? p : { ...p, alter: p.alter - 1 };
+}
+
+/** One sharp higher in spelling, capped at a double sharp. See `flatPitch`. */
+export function sharpPitch(p: Pitch): Pitch {
+	return p.alter >= 2 ? p : { ...p, alter: p.alter + 1 };
+}
+
+/** The plain letter: every sharp and flat removed. See `flatPitch`. */
+export function naturalPitch(p: Pitch): Pitch {
+	return p.alter === 0 ? p : { ...p, alter: 0 };
 }
 
 /**

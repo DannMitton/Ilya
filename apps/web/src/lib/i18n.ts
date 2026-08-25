@@ -163,6 +163,14 @@ const strings: Record<string, Record<Language, string>> = {
 	// nothing is marked on the paper. Dann's own wording, approved 2026-08-24
 	// and transcribed verbatim.
 	'notation.orphans':            { en: '%s corrections no longer find their note', fr: '%s corrections ne retrouvent plus leur note' },
+	// N.92 second slice, the accidental palette. Approved by Dann 2026-08-24.
+	// `bémol` and `dièse` are ADOPTED from the intake prompt's own French
+	// (`upload.ask.keySharp` and `upload.ask.keyFlat` above); `bécarre` is
+	// ADOPTED from standard musical usage and is new to the app. Nothing here
+	// is coined.
+	'notation.tool.flat':          { en: 'Flat',                        fr: 'Bémol' },
+	'notation.tool.sharp':         { en: 'Sharp',                       fr: 'Dièse' },
+	'notation.tool.natural':       { en: 'Natural',                     fr: 'Bécarre' },
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
 	'display.stressDiacritics.desc': { en: 'Show acute accent on Cyrillic', fr: 'Afficher l\u2019accent aigu sur le cyrillique' },

@@ -27,7 +27,7 @@
  * shifted COPY, and `analyzeScore` (itself pure) does the acoustic count.
  */
 
-import { analyzeScore, pitchToMidi, type VowelResolver } from './overlay-engine';
+import { analyzeScore, pitchToMidi, STEP_SEMITONE, type VowelResolver } from './overlay-engine';
 import type { KeySignature, ParsedScore, Pitch, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
 
@@ -36,11 +36,23 @@ const DEFAULT_MAX_SEMITONES = 6;
 /** Default number of suggestions ("X or Y" ⇒ 2). JUDGEMENT. */
 const DEFAULT_MAX_SUGGESTIONS = 2;
 
-/** Naturals-and-sharps spelling by pitch class; height-correct (render spelling is a later concern). */
+/**
+ * Naturals-and-sharps spelling by pitch class; height-correct. This is the
+ * SHARP SIDE of the spelling policy below, and it is also what
+ * `transposePitch` uses on its own: a caller that wants height without a
+ * spelling opinion opts out of the policy by calling that.
+ */
 const SPELLING: Array<{ step: Pitch['step']; alter: number }> = [
   { step: 'C', alter: 0 }, { step: 'C', alter: 1 }, { step: 'D', alter: 0 }, { step: 'D', alter: 1 },
   { step: 'E', alter: 0 }, { step: 'F', alter: 0 }, { step: 'F', alter: 1 }, { step: 'G', alter: 0 },
   { step: 'G', alter: 1 }, { step: 'A', alter: 0 }, { step: 'A', alter: 1 }, { step: 'B', alter: 0 },
+];
+
+/** Naturals-and-flats spelling by pitch class; the FLAT SIDE of the policy. */
+const FLAT_SPELLING: Array<{ step: Pitch['step']; alter: number }> = [
+  { step: 'C', alter: 0 }, { step: 'D', alter: -1 }, { step: 'D', alter: 0 }, { step: 'E', alter: -1 },
+  { step: 'E', alter: 0 }, { step: 'F', alter: 0 }, { step: 'G', alter: -1 }, { step: 'G', alter: 0 },
+  { step: 'A', alter: -1 }, { step: 'A', alter: 0 }, { step: 'B', alter: -1 }, { step: 'B', alter: 0 },
 ];
 
 /**
@@ -52,6 +64,148 @@ export function transposePitch(p: Pitch, semitones: number): Pitch {
   const midi = pitchToMidi(p) + semitones;
   const spelling = SPELLING[((midi % 12) + 12) % 12];
   return { step: spelling.step, alter: spelling.alter, octave: Math.floor(midi / 12) - 1 };
+}
+
+// ── The spelling policy (N.92 slice 2, ruled by Dann 2026-08-24) ──────
+
+/** What `spellPitch` is allowed to know. See `spellPitch` for the tiers. */
+export interface SpellingContext {
+  /**
+   * The key in force where the note sounds. Absent means no tonal anchor, which
+   * is tier 3, and is NOT the same as a key of no sharps and no flats.
+   */
+  key?: KeySignature;
+  /** The note before this one in the line, read only by tier 3. */
+  previous?: Pitch;
+}
+
+/** The seven letters in fifths order: the first n take a key's n sharps. */
+const FIFTHS_ORDER: Pitch['step'][] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+
+/** Letter positions for interval arithmetic (C = 0 … B = 6). */
+const STEP_INDEX: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+
+/**
+ * Semitone spans each letter distance can carry and still be a plain interval:
+ * a perfect, major, or minor one, the kind a singer names without the word
+ * "augmented" in it. A fourth is 5 and a fifth is 7, so the tritone is absent
+ * from both by construction, which is the point.
+ *
+ * THE UNISON ROW CARRIES 0 ALONE, so a chromatic inflection of one letter (A to
+ * A sharp) is NOT plain and a diatonic semitone (A to B flat) is. That was
+ * measured, not assumed: over the six songs of Mussorgsky's Sunless as Dann
+ * engraved them, 1934 vocal notes, a fallback holding the strict table agreed
+ * with the engraving on 97.6 per cent, and one that also called the chromatic
+ * inflection plain agreed on 96.2 per cent. The case that separates them is the
+ * one on the page at Sunless 1, measure 2: A A A up to the flat sixth, engraved
+ * B flat, which the strict table spells B flat and the loose one spells A
+ * sharp.
+ */
+const PLAIN_INTERVAL: number[][] = [[0], [1, 2], [3, 4], [5], [7], [8, 9], [10, 11]];
+
+/** The seven spellings a key signature gives, by pitch class. */
+function diatonicSpellings(fifths: number): Map<number, { step: Pitch['step']; alter: number }> {
+  const out = new Map<number, { step: Pitch['step']; alter: number }>();
+  for (let i = 0; i < 7; i++) {
+    const step = FIFTHS_ORDER[i];
+    // Sharps run forward from F; flats run backward from B, which is the same
+    // order read from the other end, so one index serves both.
+    const alter = fifths >= 0 ? (i < fifths ? 1 : 0) : i >= 7 + fifths ? -1 : 0;
+    out.set(((STEP_SEMITONE[step] + alter) % 12 + 12) % 12, { step, alter });
+  }
+  return out;
+}
+
+/**
+ * A spelling placed in the octave that makes it sound at `midi`. Subtracting
+ * the alteration before the division is what carries B sharp and C flat across
+ * the octave boundary correctly.
+ */
+function atOctave(spelling: { step: Pitch['step']; alter: number }, midi: number): Pitch {
+  return {
+    step: spelling.step,
+    alter: spelling.alter,
+    octave: Math.floor((midi - spelling.alter) / 12) - 1,
+  };
+}
+
+/** True when `a` to `b` is a perfect, major, or minor interval (any octave). */
+function isPlainInterval(a: Pitch, b: Pitch): boolean {
+  let letters = Math.abs(
+    a.octave * 7 + STEP_INDEX[a.step] - (b.octave * 7 + STEP_INDEX[b.step]),
+  );
+  let semitones = Math.abs(pitchToMidi(a) - pitchToMidi(b));
+  while (letters >= 7 && semitones >= 12) {
+    letters -= 7;
+    semitones -= 12;
+  }
+  return letters <= 6 && PLAIN_INTERVAL[letters].includes(semitones);
+}
+
+/**
+ * THE ONE SPELLER. Everything in the app that has to decide whether a pitch
+ * class is written G sharp or A flat asks `spellPitch`. Gould rule 66 is the
+ * source: a note is spelled in its harmonic context, not by a fixed table.
+ *
+ * `transposePitch` above keeps the sharps-only table, and that is the OPT-OUT,
+ * stated rather than hidden: the transposition cost search wants height and has
+ * no engraving opinion, so it takes the table. Nothing else hand-rolls a second
+ * speller.
+ *
+ * THREE TIERS, in order.
+ *
+ *   1. A DIATONIC NOTE OF THE KEY IS SPELLED AS THE KEY SPELLS IT. In C sharp
+ *      major that makes pitch class 0 a B sharp, and in C flat major it makes
+ *      pitch class 11 a C flat, which is why the octave arithmetic below cannot
+ *      use `Math.floor(midi / 12)`: those two spellings wrap the letter across
+ *      the octave boundary.
+ *   2. A CHROMATIC NOTE SPELLS TO THE KEY'S SIDE: flats in flat keys, sharps in
+ *      sharp keys. A key of no sharps and no flats takes the sharp side, which
+ *      is what this repertoire's chromatic notes in C major are written as and
+ *      what the reader already did (JUDGEMENT, carried from the table it
+ *      replaces).
+ *   3. NO KEY AT ALL, NO TONAL ANCHOR: prefer the spelling that makes a plain
+ *      melodic interval from the previous note (rule 66's own fallback). A
+ *      plain interval is a perfect, major, or minor one; an augmented or
+ *      diminished interval is what the wrong spelling produces. Where both
+ *      spellings are plain or neither is, direction decides: rising takes the
+ *      sharp, falling the flat. With no previous note either, the sharp side.
+ *      See `PLAIN_INTERVAL`, whose one row of judgement was measured against
+ *      the corpus rather than assumed.
+ *
+ * WHAT THIS DOES NOT KNOW: the harmony. Only the key, the note, and the note
+ * before it are in evidence, so a chromatic note whose correct spelling depends
+ * on the chord under it (the raised fourth of F major is an F sharp in a D
+ * major chord and a G flat in an A flat chord) is spelled by tier 2 alone. That
+ * limit is the reason the accidental verbs exist: a hand spelling always wins,
+ * and nothing in this file ever overwrites one.
+ *
+ * `midi` is the sounding height (middle C = 60), so the caller never has to
+ * hold a pitch class and an octave apart. Pure: same arguments, same spelling,
+ * always.
+ */
+export function spellPitch(midi: number, context: SpellingContext = {}): Pitch {
+  const pc = ((midi % 12) + 12) % 12;
+
+  if (context.key) {
+    const diatonic = diatonicSpellings(context.key.fifths).get(pc);
+    if (diatonic) return atOctave(diatonic, midi);
+    return atOctave(context.key.fifths < 0 ? FLAT_SPELLING[pc] : SPELLING[pc], midi);
+  }
+
+  const sharp = atOctave(SPELLING[pc], midi);
+  // The seven white keys are spelled the same on both sides, so there is
+  // nothing to choose and tier 3 never runs for them.
+  if (SPELLING[pc].step === FLAT_SPELLING[pc].step) return sharp;
+
+  const flat = atOctave(FLAT_SPELLING[pc], midi);
+  const previous = context.previous;
+  if (!previous) return sharp;
+
+  const sharpPlain = isPlainInterval(previous, sharp);
+  const flatPlain = isPlainInterval(previous, flat);
+  if (sharpPlain !== flatPlain) return sharpPlain ? sharp : flat;
+  return pitchToMidi(previous) <= midi ? sharp : flat;
 }
 
 /**

@@ -49,7 +49,12 @@ export type VowelResolver = (event: VocalLineEvent) => string | undefined;
 
 // ── Pitch ↔ frequency ──────────────────────────────────────────────
 
-const STEP_SEMITONE: Record<Pitch['step'], number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+/**
+ * Semitone of each letter above C. Exported inside the package (not from
+ * `index.ts`) so the spelling policy in `transposition.ts` reads the same
+ * table this file's `pitchToMidi` reads, rather than keeping a second copy.
+ */
+export const STEP_SEMITONE: Record<Pitch['step'], number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 // Chromatic spelling for a synthesised pitch (turning pitch): naturals and sharps.
 const SEMITONE_SPELLING: Array<{ step: Pitch['step']; alter: number }> = [
   { step: 'C', alter: 0 }, { step: 'C', alter: 1 }, { step: 'D', alter: 0 }, { step: 'D', alter: 1 },

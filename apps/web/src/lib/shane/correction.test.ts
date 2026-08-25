@@ -16,11 +16,15 @@ import {
 	DIGIT_BASE,
 	durationFraction,
 	firstNoteId,
+	flatPitch,
 	migrateCorrectionIds,
+	naturalPitch,
 	neighbourId,
 	octavePitch,
 	orphanIds,
+	pitchToMidi,
 	semitonePitch,
+	sharpPitch,
 	stepPitch,
 	withCorrection,
 	type CorrectionMap
@@ -70,11 +74,68 @@ describe('N.92 pitch operations', () => {
 		expect(octavePitch(P('E', 3, -1), -1)).toEqual(P('E', 2, -1));
 	});
 
-	it('spells a semitone with the app own speller, naturals and sharps', () => {
-		// transposePitch spells sharp, so down from D natural is C sharp rather
-		// than D flat. Asserted so the choice is visible, not discovered later.
+	it('spells a semitone with the app own speller, sharps where nothing says otherwise', () => {
+		// With no key and no previous note the policy takes the sharp side, so
+		// down from D natural is C sharp. Asserted so the choice is visible.
 		expect(semitonePitch(P('D', 4), -1)).toEqual(P('C', 4, 1));
 		expect(semitonePitch(P('C', 4, 1), 1)).toEqual(P('D', 4));
+	});
+
+	/* N.92 slice 2, and the case Dann ruled from: a nudge in a flat key must
+	   land on the note the page would print. */
+	it('nudges to the flat side in a flat key, so D down in E flat major is D flat', () => {
+		expect(semitonePitch(P('D', 4), -1, { key: { fifths: -3 } })).toEqual(P('D', 4, -1));
+	});
+
+	it('nudges to the sharp side in a sharp key', () => {
+		expect(semitonePitch(P('G', 4), 1, { key: { fifths: 2 } })).toEqual(P('G', 4, 1));
+	});
+});
+
+/**
+ * THE ACCIDENTAL VERBS (N.92 slice 2, ruled by Dann 2026-08-24). Cumulative,
+ * two clicks reach doubles, a third does nothing, and natural resets.
+ */
+describe('N.92 accidental verbs', () => {
+	it('lowers the spelling one degree per click, B to B flat to B double flat', () => {
+		const b = P('B', 4);
+		const bFlat = flatPitch(b);
+		expect(bFlat).toEqual(P('B', 4, -1));
+		expect(flatPitch(bFlat)).toEqual(P('B', 4, -2));
+	});
+
+	it('raises the spelling one degree per click, F to F sharp to F double sharp', () => {
+		const f = P('F', 4);
+		const fSharp = sharpPitch(f);
+		expect(fSharp).toEqual(P('F', 4, 1));
+		expect(sharpPitch(fSharp)).toEqual(P('F', 4, 2));
+	});
+
+	it('caps at a double, so a third click in the same direction does nothing', () => {
+		const doubleFlat = P('B', 4, -2);
+		expect(flatPitch(doubleFlat)).toBe(doubleFlat);
+		const doubleSharp = P('F', 4, 2);
+		expect(sharpPitch(doubleSharp)).toBe(doubleSharp);
+	});
+
+	it('resets to the plain letter on natural, from either side', () => {
+		expect(naturalPitch(P('B', 4, -2))).toEqual(P('B', 4));
+		expect(naturalPitch(P('F', 4, 2))).toEqual(P('F', 4));
+		// Already plain: the same object, so nothing is recorded.
+		const plain = P('G', 4);
+		expect(naturalPitch(plain)).toBe(plain);
+	});
+
+	it('crosses a verb with a nudge and back, and the note is where it started', () => {
+		// Flat then sharp returns the spelling, and the sound follows it.
+		expect(sharpPitch(flatPitch(P('B', 4)))).toEqual(P('B', 4));
+	});
+
+	it('never moves the letter or the octave, so sound follows spelling', () => {
+		const b = P('B', 4);
+		expect(pitchToMidi(b) - pitchToMidi(flatPitch(b))).toBe(1);
+		expect(flatPitch(b).step).toBe('B');
+		expect(flatPitch(b).octave).toBe(4);
 	});
 });
 
@@ -163,6 +224,20 @@ describe('N.92 applying corrections to the line', () => {
 		const before = JSON.stringify(line);
 		applyCorrections(line, { a: { pitch: P('E', 4), base: 'whole' } });
 		expect(JSON.stringify(line)).toBe(before);
+	});
+
+	/* N.92 slice 2. THE HAND SPELLING ALWAYS WINS. A singer who wrote G flat in
+	   D major, a key whose own spelling of that sound is F sharp, keeps the G
+	   flat: the policy is consulted when a nudge has to choose a spelling, and
+	   never afterwards. Both the reading and the applied line are asserted,
+	   because those are the two places a re-spelling could creep in. */
+	it('keeps a hand spelling the policy would have spelled the other way', () => {
+		const gFlat = P('G', 4, -1);
+		const map: CorrectionMap = { b: { pitch: gFlat } };
+		// The policy, asked the same question, says F sharp in D major.
+		expect(semitonePitch(P('G', 4), -1, { key: { fifths: 2 } })).toEqual(P('F', 4, 1));
+		expect(currentPitch(line[2], map)).toEqual(gFlat);
+		expect(applyCorrections(line, map)[2].pitch).toEqual(gFlat);
 	});
 
 	it('leaves a tuplet fraction to the parser rather than inventing arithmetic', () => {

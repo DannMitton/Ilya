@@ -259,6 +259,17 @@ describe('recognizedToMusicXml', () => {
 		expect(flat).toContain('<step>D</step>');
 	});
 
+	/* N.92 slice 2. The reader spells its output in harmonic context now: the
+	   file's own tables could not write a B sharp, so a page read in C sharp
+	   major engraved its leading note as a C natural, a letter the key does not
+	   contain. midi 60 sounds where C4 does and is written B sharp 3. */
+	it('spells the key own seven letters, so C sharp major gets its B sharp', () => {
+		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
+		expect(xml).toContain(
+			['<step>B</step>', '<alter>1</alter>', '<octave>3</octave>'].join('\n          '),
+		);
+	});
+
 	it('parses, with exactly the no-lyrics-found warning', async () => {
 		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
 		const result = await parseMusicXml(xml, 'hand-built.musicxml');

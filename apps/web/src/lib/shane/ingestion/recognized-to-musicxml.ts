@@ -34,6 +34,7 @@
  * to ink rather than to a duration cursor. See `idAttribute` below.
  */
 
+import { spellPitch } from '@ilya/score-parser';
 import type {
 	RecognizedFraction,
 	RecognizedMeasure,
@@ -114,29 +115,19 @@ function typeAndDots(f: RecognizedFraction): { base: string; dots: number } | nu
 
 // ── Pitch spelling ───────────────────────────────────────────────
 
-const SHARP_SPELLING: [string, number][] = [
-	['C', 0], ['C', 1], ['D', 0], ['D', 1], ['E', 0], ['F', 0],
-	['F', 1], ['G', 0], ['G', 1], ['A', 0], ['A', 1], ['B', 0],
-];
-const FLAT_SPELLING: [string, number][] = [
-	['C', 0], ['D', -1], ['D', 0], ['E', -1], ['E', 0], ['F', 0],
-	['G', -1], ['G', 0], ['A', -1], ['A', 0], ['B', -1], ['B', 0],
-];
-
-/**
- * Spell a MIDI number as step, alter, and octave, choosing sharps in sharp keys
- * and flats in flat keys. `fifths === 0` takes sharps, which is what C major's
- * chromatic notes are conventionally written as in this repertoire.
+/*
+ * THE READER SPELLS ITS OUTPUT IN HARMONIC CONTEXT (N.92 slice 2, ruled by Dann
+ * 2026-08-24). This file used to hold its own pair of spelling tables. It now
+ * asks the app's one speller, `spellPitch` in
+ * `packages/score-parser/src/transposition.ts`, with the key the singer
+ * confirmed at intake. The tables it replaced could not spell a B sharp or a C
+ * flat, so a page read in C sharp major engraved its own tonic wrong; the
+ * policy spells the key's own seven degrees as the key spells them.
  *
- * Neither table ever spells B sharp or C flat, so the step never wraps past an
- * octave boundary and the octave arithmetic below cannot be off by one.
+ * The previous note is deliberately NOT passed. It is read only where there is
+ * no key at all, and there is always a key here: the intake prompt confirms one
+ * before the reader runs.
  */
-function spellPitch(midi: number, fifths: number): { step: string; alter: number; octave: number } {
-	const table = fifths < 0 ? FLAT_SPELLING : SHARP_SPELLING;
-	const pc = ((midi % 12) + 12) % 12;
-	const [step, alter] = table[pc];
-	return { step, alter, octave: Math.floor(midi / 12) - 1 };
-}
 
 // ── XML ──────────────────────────────────────────────────────────
 
@@ -315,7 +306,7 @@ export function recognizedToMusicXml(
 					bump(pitchSubs, n.measureIndex);
 				}
 				noteCount++;
-				const p = spellPitch(midi as number, answers.fifths);
+				const p = spellPitch(midi as number, { key: { fifths: answers.fifths } });
 				lines.push('        <pitch>');
 				lines.push(`          <step>${p.step}</step>`);
 				if (p.alter !== 0) lines.push(`          <alter>${p.alter}</alter>`);

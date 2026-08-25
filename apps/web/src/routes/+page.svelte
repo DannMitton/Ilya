@@ -108,16 +108,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import CorrectionControls from '$lib/shane/CorrectionControls.svelte';
+	import type { SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
 		applyCorrections,
 		clearCorrection,
 		currentDuration,
 		currentPitch,
 		DIGIT_BASE,
+		flatPitch,
+		naturalPitch,
 		neighbourId,
 		octavePitch,
 		orphanIds,
 		semitonePitch,
+		sharpPitch,
 		stepPitch,
 		withCorrection,
 		type CorrectionMap
@@ -449,10 +453,45 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (p) correct({ pitch: octavePitch(p, direction) });
 	}
 
+	/* N.92 slice 2. The context the spelling policy reads: the key in force in
+	   this note's own measure, and the note before it in the line.
+
+	   THE KEY COMES FROM THE MEASURE, not from the score's first key
+	   signature, so a mid-score change of key spells the notes after it
+	   correctly. `Measure.keySignature` is snapshotted per measure by the
+	   parsers, which is what makes that a lookup rather than a scan.
+
+	   The previous note is read by the policy ONLY where a score carries no key
+	   at all. It is passed anyway, because working it out here costs one
+	   lookup and leaves the policy with everything its own fallback needs. */
+	function spellingContextFor(ev: VocalLineEvent): SpellingContext {
+		const key = ingestedScore?.result.score.measures.find(
+			(m) => m.index === ev.measureIndex,
+		)?.keySignature;
+		const previousId = neighbourId(readLine, doc.corrections, ev.id, -1);
+		const previousEvent = previousId ? readLine.find((e) => e.id === previousId) : undefined;
+		const previous = previousEvent ? currentPitch(previousEvent, doc.corrections) : undefined;
+		return { ...(key ? { key } : {}), ...(previous ? { previous } : {}) };
+	}
+
 	function handleSemitone(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (p) correct({ pitch: semitonePitch(p, direction) });
+		if (p && ev) correct({ pitch: semitonePitch(p, direction, spellingContextFor(ev)) });
+	}
+
+	/* The accidental verbs. Cumulative, capped at doubles, and the policy is
+	   NOT consulted: a spelling the singer chose by hand is the answer, and
+	   nothing re-spells it afterwards. */
+	function handleAccidental(kind: 'flat' | 'natural' | 'sharp'): void {
+		const ev = selectedEvent;
+		const p = ev && currentPitch(ev, doc.corrections);
+		if (!p) return;
+		const next =
+			kind === 'flat' ? flatPitch(p) : kind === 'sharp' ? sharpPitch(p) : naturalPitch(p);
+		// A capped click returns the same pitch, so the map is left alone and no
+		// correction is recorded for a decision that changed nothing.
+		if (next !== p) correct({ pitch: next });
 	}
 
 	function handleBase(base: (typeof DIGIT_BASE)[string]): void {
@@ -2475,6 +2514,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						onstep={handleStep}
 						onoctave={handleOctave}
 						onsemitone={handleSemitone}
+						onaccidental={handleAccidental}
 						onmove={handleMove}
 						onbase={handleBase}
 						ondot={handleDot}

@@ -57,6 +57,8 @@ export {
   suggestTranspositions,
   transposePitch,
   transposeScore,
+  spellPitch,
+  type SpellingContext,
   intervalName,
   type TranspositionCandidate,
   type TranspositionSuggestion,
