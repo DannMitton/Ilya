@@ -28,6 +28,10 @@
  *   the ruling as written, and the count is declared rather than hidden.
  *
  * Both are COUNTED, never marked. The counts go to the drawer's read report.
+ *
+ * N.97b, ruled by Dann 2026-08-24: each event's reader id is written as the
+ * `id` attribute on its `<note>`, so a correction on a page-read song is keyed
+ * to ink rather than to a duration cursor. See `idAttribute` below.
  */
 
 import type {
@@ -138,6 +142,26 @@ function spellPitch(midi: number, fifths: number): { step: string; alter: number
 
 const escapeXml = (s: string): string =>
 	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/**
+ * The reader's own event id, written where MusicXML already keeps one: the
+ * optional `id` attribute on `<note>` (N.97b, ruled by Dann 2026-08-24).
+ *
+ * WHY. A correction is a diff keyed by event id. Without this attribute the
+ * reader's `r{measureIndex}-{x}` is discarded at this boundary and the score
+ * parser keys the event by its own running duration cursor instead, so removing
+ * one event early in a measure renames every event after it and the singer's
+ * corrections stop landing. That is the fragility N.97 re-keyed the reader to
+ * remove, one layer further out than N.97 could reach.
+ *
+ * An id is emitted only where the reader supplied a non-empty one, so a `ro`
+ * missing the field engraves exactly what it engraved before. The value is
+ * escaped like any other attribute; the reader's ids are `r`, digits, and
+ * dashes, which is already a legal XML `ID`, and the escape is there so a
+ * malformed one cannot break the document.
+ */
+const idAttribute = (n: RecognizedNote): string =>
+	typeof n.id === 'string' && n.id.length > 0 ? ` id="${escapeXml(n.id)}"` : '';
 
 // ── The conversion ───────────────────────────────────────────────
 
@@ -263,7 +287,7 @@ export function recognizedToMusicXml(
 		for (const n of events) {
 			const dur = effective.get(n) ?? QUARTER;
 			const divs = durationDivs(dur);
-			lines.push('      <note>');
+			lines.push(`      <note${idAttribute(n)}>`);
 			if (n.type === 'rest') {
 				restCount++;
 				lines.push('        <rest/>');

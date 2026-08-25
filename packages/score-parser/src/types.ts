@@ -920,7 +920,13 @@ export type ParseWarningCode =
   | 'measure-duration-mismatch'
   | 'unsupported-articulation'
   | 'mnx-experimental-feature'
-  | 'musicxml-pre-3-1-feature';
+  | 'musicxml-pre-3-1-feature'
+  /**
+   * MusicXML only, N.97b: the file supplies `<note id>` attributes the parser
+   * cannot honour (two notes share one, or one is shaped like a generated id),
+   * so the whole vocal line falls back to generated ids.
+   */
+  | 'duplicate-note-ids';
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'

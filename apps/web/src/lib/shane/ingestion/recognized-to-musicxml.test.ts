@@ -10,6 +10,7 @@
 import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser } from '@ilya/score-parser';
 import { recognizedToMusicXml } from './recognized-to-musicxml';
+import { applyCorrections, orphanIds } from '../correction';
 import type { RecognizedOutput } from './recognized';
 import captured from './fixtures/recognized-mussorgsky-01-p1.json';
 
@@ -227,7 +228,8 @@ describe('recognizedToMusicXml', () => {
 		expect(counts.pitchSubstitutions).toEqual([{ measureIndex: 1, count: 1 }]);
 		expect(counts.pitchless).toBe(0);
 		// midi 67 is G4, and no event is dropped: six events in, six notes out.
-		expect(xml.match(/<note>/g) ?? []).toHaveLength(6);
+		// `<note ` with a space since N.97b: every event carries its reader id.
+		expect(xml.match(/<note[ >]/g) ?? []).toHaveLength(6);
 		expect(xml).toContain('<step>G</step>');
 	});
 
@@ -283,6 +285,125 @@ describe('recognizedToMusicXml, on a page actually read in a browser', () => {
 	it('keeps every read event: nothing is dropped on the way to the parser', async () => {
 		const { xml } = recognizedToMusicXml(ro, BASS);
 		const events = ro.verses[0].notes.length;
-		expect(xml.match(/<note>/g) ?? []).toHaveLength(events);
+		expect(xml.match(/<note[ >]/g) ?? []).toHaveLength(events);
+	});
+});
+
+// ── N.97b: the reader's id survives the MusicXML boundary ────────────
+//
+// Ruled by Dann 2026-08-24, option 1 of `memo-n97-clef-key_r1_2026-08-24.md`.
+// N.97 re-keyed the READER's ids to measure and x, and measured afterwards that
+// those ids never reached `VocalLineEvent` at all: the parser assigned its own
+// from a running duration cursor, so a correction was still keyed to a cursor
+// and still moved when the event population changed. These are the tests that
+// hold the two ends of the seam together.
+
+describe('recognizedToMusicXml, N.97b: the reader ids reach VocalLineEvent', () => {
+	const ro = captured as unknown as RecognizedOutput;
+	/** The parser's own id shape, `m{measureIndex}-{numerator}-{denominator}`. */
+	const CURSOR = /^m\d+-\d+-\d+$/;
+	const withoutIds = (xml: string) => xml.replace(/<note id="[^"]*"/g, '<note');
+	const without = (source: RecognizedOutput, id: string): RecognizedOutput => ({
+		...source,
+		verses: source.verses.map((v) => ({ ...v, notes: v.notes.filter((n) => n.id !== id) })),
+	});
+
+	it('writes every event id as the <note> id attribute', () => {
+		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
+		expect(xml.match(/<note id="[^"]*"/g)).toEqual([
+			'<note id="a"',
+			'<note id="b"',
+			'<note id="c"',
+			'<note id="d"',
+			'<note id="e"',
+			'<note id="f"',
+		]);
+	});
+
+	it('carries them through the parser, in the reader\'s own order', async () => {
+		const { xml } = recognizedToMusicXml(handBuilt, TREBLE_8VB);
+		const { score } = await parseMusicXml(xml, 'hand-built.musicxml');
+		expect(score.vocalLine.map((e) => e.id)).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+	});
+
+	it('carries all 78 of the captured page\'s ids, unique and in order', async () => {
+		const { xml } = recognizedToMusicXml(ro, BASS);
+		const { score } = await parseMusicXml(xml, 'mussorgsky-01-p1.musicxml');
+		const readerIds = ro.verses[0].notes.map((n) => n.id);
+		expect(score.vocalLine.map((e) => e.id)).toEqual(readerIds);
+		expect(new Set(readerIds).size).toBe(readerIds.length);
+	});
+
+	it('keeps a correction landing when an earlier event in its measure is removed', async () => {
+		// `r1-0-1-787` is the first event of the captured page's measure 1;
+		// `r1-11-8-1474` is the last of the same measure, and the correction is on
+		// it. Removing the first is exactly what N.97's clef-and-key mask does to
+		// a real page: it deletes a false positive early in a measure.
+		const parse = (source: RecognizedOutput, bare: boolean) => {
+			const { xml } = recognizedToMusicXml(source, BASS);
+			return parseMusicXml(bare ? withoutIds(xml) : xml, 'mussorgsky-01-p1.musicxml');
+		};
+		const correction = { 'r1-11-8-1474': { pitch: { step: 'G' as const, alter: 1, octave: 4 } } };
+		const after = await parse(without(ro, 'r1-0-1-787'), false);
+
+		expect(after.score.vocalLine).toHaveLength(77);
+		expect(orphanIds(after.score.vocalLine, correction)).toEqual([]);
+		const corrected = applyCorrections(after.score.vocalLine, correction).find(
+			(e) => e.id === 'r1-11-8-1474'
+		)!;
+		expect(corrected.pitch).toEqual({ step: 'G', alter: 1, octave: 4 });
+
+		// THE COUNTERFACTUAL, the same two documents with the id attributes
+		// stripped: the sixth event of measure 1 is renamed by the removal, and a
+		// correction keyed to its old name is orphaned. That is what shipped
+		// before this change, measured here rather than asserted.
+		const bareBefore = await parse(ro, true);
+		const bareAfter = await parse(without(ro, 'r1-0-1-787'), true);
+		const at = ro.verses[0].notes.findIndex((n) => n.id === 'r1-11-8-1474');
+		const oldName = bareBefore.score.vocalLine[at].id;
+		const newName = bareAfter.score.vocalLine[at - 1].id;
+		expect(oldName).toMatch(CURSOR);
+		expect(newName).not.toBe(oldName);
+		expect(orphanIds(bareAfter.score.vocalLine, { [oldName]: { deleted: true as const } })).toEqual([
+			oldName,
+		]);
+	});
+
+	it('falls back to the parser\'s ids for the whole line if the reader ever repeats one', async () => {
+		// The reader cannot do this today: `run_page2.py` suffixes a shared x, and
+		// 1,118 ids over 25 corpus pages carry 0 duplicates. This is the guard for
+		// the day it can, and for any foreign file that arrives with sloppy ids.
+		const notes = ro.verses[0].notes;
+		const broken: RecognizedOutput = {
+			...ro,
+			verses: [{ ...ro.verses[0], notes: notes.map((n, i) => (i === 3 ? { ...n, id: notes[2].id } : n)) }],
+		};
+		const { xml } = recognizedToMusicXml(broken, BASS);
+		const { score, warnings } = await parseMusicXml(xml, 'mussorgsky-01-p1.musicxml');
+		const ids = score.vocalLine.map((e) => e.id);
+		for (const id of ids) expect(id).toMatch(CURSOR);
+		expect(new Set(ids).size).toBe(ids.length);
+		expect(warnings.filter((w) => w.code === 'duplicate-note-ids')).toHaveLength(1);
+	});
+
+	it('leaves a `ro` whose events have no ids exactly where it was', async () => {
+		// Defensive: `id` is required on `RecognizedNote`, so this is a `ro` from
+		// some future or foreign producer. It engraves no attribute at all and
+		// parses to the cursor ids, which is the pre-N.97b behaviour byte for byte.
+		const idless = {
+			...handBuilt,
+			verses: [
+				{
+					...handBuilt.verses[0],
+					notes: handBuilt.verses[0].notes.map(({ id: _id, ...rest }) => rest),
+				},
+			],
+		} as unknown as RecognizedOutput;
+		const { xml } = recognizedToMusicXml(idless, TREBLE_8VB);
+		expect(xml).not.toContain('<note id');
+		expect(withoutIds(recognizedToMusicXml(handBuilt, TREBLE_8VB).xml)).toBe(xml);
+		const { score, warnings } = await parseMusicXml(xml, 'hand-built.musicxml');
+		for (const e of score.vocalLine) expect(e.id).toMatch(CURSOR);
+		expect(warnings.some((w) => w.code === 'duplicate-note-ids')).toBe(false);
 	});
 });

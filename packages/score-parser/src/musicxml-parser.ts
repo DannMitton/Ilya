@@ -19,8 +19,15 @@
  * @invariant Mirrors the MnxScoreParser invariants exactly:
  *   `measures[i].timeSignature` / `keySignature` stay consistent with the
  *   score-wide change arrays; `VocalLineEvent.id` is the deterministic
- *   `m{measureIndex}-{numerator}-{denominator}` composite key;
+ *   `m{measureIndex}-{numerator}-{denominator}` composite key, EXCEPT where the
+ *   file supplies its own `<note id>` (N.97b, `resolveSuppliedIds`), which the
+ *   page reader does and no other source Ilya reads does;
  *   `SyllableInfo.id` is a UUID.
+ *
+ * @invariant No two events share an id, under any input. A supplied id is
+ *   honoured only when every supplied id in the vocal part is unique and none
+ *   of them is shaped like a generated one; otherwise the whole line falls back
+ *   to generated ids and a `duplicate-note-ids` warning says so.
  *
  * DOM access: the parser reads through a minimal structural `XmlEl`
  * interface (a subset every W3C DOM Element and the test mini-DOM both
@@ -366,6 +373,18 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const verseToCanonical = new Map<number, number>();
 		orderedVerses.forEach((v, i) => verseToCanonical.set(v, i + 1));
 
+		// 3b. Supplied event ids (N.97b). Decided once, for the whole line,
+		//     BEFORE any event is built, so an id can never be honoured on one
+		//     event and refused on its twin.
+		const supplied = resolveSuppliedIds(vocalPart);
+		if (supplied.refusal) {
+			warnings.push({
+				code: 'duplicate-note-ids',
+				message: supplied.refusal,
+				location: { partId },
+			});
+		}
+
 		// 4. Walk the vocal part's measures.
 		const measureEls = directChildren(vocalPart, 'measure');
 		if (measureEls.length === 0) {
@@ -512,6 +531,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 							errors,
 							warnedMarkingKeys,
 							verseToCanonical,
+							honourSuppliedIds: supplied.honour,
 						});
 						break;
 					}
@@ -675,6 +695,8 @@ export class MusicXmlScoreParser implements ScoreParser {
 			errors: ParseError[];
 			warnedMarkingKeys: Set<string>;
 			verseToCanonical: Map<number, number>;
+			/** N.97b: honour a `<note id>` where one is present (see `resolveSuppliedIds`). */
+			honourSuppliedIds: boolean;
 		},
 	): Fraction {
 		// Grace notes carry no rhythmic duration; skip (v1 attends to sustained events).
@@ -698,7 +720,11 @@ export class MusicXmlScoreParser implements ScoreParser {
 		}
 		const soundingFraction = frac(durDivs, divisions * 4);
 		const position = frac(cursor.numerator, cursor.denominator);
-		const eventId = `m${measureIndex}-${position.numerator}-${position.denominator}`;
+		// N.97b: a supplied `<note id>` wins; the cursor id is the fallback, and
+		// is what every source that carries no ids has always produced.
+		const cursorId = `m${measureIndex}-${position.numerator}-${position.denominator}`;
+		const suppliedId = ctx.honourSuppliedIds ? note.getAttribute('id') : null;
+		const eventId = suppliedId !== null && suppliedId.length > 0 ? suppliedId : cursorId;
 
 		const isRest = !!firstChild(note, 'rest');
 
@@ -868,6 +894,65 @@ function readInitialDivisions(part: XmlEl): number | undefined {
 	if (!el) return undefined;
 	const n = parseInt(textOf(el), 10);
 	return Number.isFinite(n) && n > 0 ? n : undefined;
+}
+
+/** The shape of a cursor-built event id, `m{measureIndex}-{num}-{den}`. */
+const CURSOR_ID_SHAPE = /^m\d+-\d+-\d+$/;
+
+/**
+ * Decide, once and for the whole vocal line, whether `<note id>` attributes are
+ * honoured (N.97b, ruled by Dann 2026-08-24).
+ *
+ * WHY THE DECISION IS MADE HERE, AHEAD OF THE WALK. `VocalLineEvent.id` is what
+ * a stored correction and a stored `PairingMap` entry are keyed by, so two
+ * events sharing an id is not a cosmetic fault: one singer's correction lands
+ * on somebody else's note, silently. A per-note decision cannot see a duplicate
+ * that arrives later in the score, so the whole line is decided before the
+ * first event is built, and one bad id costs the file its ids rather than
+ * costing one event its identity.
+ *
+ * TWO REFUSALS, and both are needed:
+ *
+ * - A DUPLICATE. Two `<note>` elements carrying one id. The page reader's own
+ *   ids are unique by construction (`run_page2.py` adds an ordinal suffix on a
+ *   shared x, measured over 25 corpus pages: 1,118 ids, 47 suffixed, 0
+ *   duplicates), but a foreign file writes whatever it likes.
+ * - AN ID IN THE FALLBACK'S OWN NAMESPACE. A supplied id shaped exactly like
+ *   `m{measureIndex}-{num}-{den}` could collide with the cursor id generated
+ *   for a NEIGHBOURING note that carries no id of its own, which no check over
+ *   the supplied ids alone would ever see. Refusing that shape closes the mixed
+ *   case completely: honoured ids and generated ids then live in disjoint
+ *   namespaces.
+ *
+ * Grace notes and chord tones are skipped, because `readNote` skips them: they
+ * never become events, so their ids are not on the vocal line and cannot
+ * collide with anything.
+ *
+ * A file with no `id` attributes at all returns `{ honour: true }` and every
+ * event falls back, note by note, to the cursor id. That is the path every
+ * existing fixture, and every non-reader source, takes.
+ */
+function resolveSuppliedIds(vocalPart: XmlEl): { honour: boolean; refusal?: string } {
+	const seen = new Set<string>();
+	for (const note of descendants(vocalPart, 'note')) {
+		if (firstChild(note, 'grace') || firstChild(note, 'chord')) continue;
+		const id = note.getAttribute('id');
+		if (id === null || id.length === 0) continue;
+		if (seen.has(id)) {
+			return {
+				honour: false,
+				refusal: `Two notes carry the id "${id}"; every supplied <note id> is ignored and event ids come from the parser instead.`,
+			};
+		}
+		if (CURSOR_ID_SHAPE.test(id)) {
+			return {
+				honour: false,
+				refusal: `The supplied <note id> "${id}" has the shape this parser generates for notes without one, which could collide; every supplied <note id> is ignored and event ids come from the parser instead.`,
+			};
+		}
+		seen.add(id);
+	}
+	return { honour: true };
 }
 
 function resolvePartName(scorePartwise: XmlEl, partId: string): string | undefined {

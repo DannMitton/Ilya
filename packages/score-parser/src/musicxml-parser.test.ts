@@ -772,3 +772,131 @@ describe('jump capture (D.C., D.S., coda, fine from <sound>)', () => {
     expect(r.score.measures[0].jump).toBeUndefined();
   });
 });
+
+// ── N.97b: `<note id>` carried through from the page reader ─────────
+//
+// The reader's ids are the singer's correction keys. Everything here is about
+// the one property that matters: no two events may ever share an id, whatever
+// the file says. See `resolveSuppliedIds` in the parser.
+
+describe('MusicXmlScoreParser: supplied <note id> attributes (N.97b)', () => {
+	const ATTRS =
+		'<attributes><divisions>1</divisions><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>';
+	/** One quarter note, with an id or deliberately without one. */
+	const q = (id: string | null, step = 'C') =>
+		`<note${id === null ? '' : ` id="${id}"`}><pitch><step>${step}</step><octave>4</octave></pitch>` +
+		`<duration>1</duration><voice>1</voice><type>quarter</type>` +
+		`<lyric number="1"><syllabic>single</syllabic><text>ла</text></lyric></note>`;
+	const wrap = (measures: string) =>
+		`<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0">` +
+		`<part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list>` +
+		`<part id="P1">${measures}</part></score-partwise>`;
+	const oneMeasure = (notes: string) => wrap(`<measure number="1">${ATTRS}${notes}</measure>`);
+	const ids = (r: ParseResult) => r.score.vocalLine.map((e) => e.id);
+
+	it('honours a supplied id and falls back to its own where a note has none', async () => {
+		const r = await parser.parse(
+			xmlInput(oneMeasure(q('r0-100') + q(null) + q('r0-300') + q('r0-400'))),
+		);
+		expect(ids(r)).toEqual(['r0-100', 'm0-1-4', 'r0-300', 'r0-400']);
+		expect(r.warnings).toHaveLength(0);
+	});
+
+	it('leaves a document with no ids exactly where it was: the cursor ids, unchanged', async () => {
+		const r = await parser.parse(xmlInput(oneMeasure(q(null) + q(null) + q(null) + q(null))));
+		expect(ids(r)).toEqual(['m0-0-1', 'm0-1-4', 'm0-1-2', 'm0-3-4']);
+		expect(r.warnings).toHaveLength(0);
+	});
+
+	it('refuses every supplied id on ONE duplicate, anywhere in the part, and warns', async () => {
+		// The duplicate is in the second measure; the first measure's ids are
+		// perfectly good and are refused anyway, because a line half-keyed to ink
+		// and half to a cursor is the worst of both.
+		const r = await parser.parse(
+			xmlInput(
+				wrap(
+					`<measure number="1">${ATTRS}${q('r0-100')}${q('r0-200')}${q('r0-300')}${q('r0-400')}</measure>` +
+						`<measure number="2">${q('r1-100')}${q('r1-100')}${q('r1-300')}${q('r1-400')}</measure>`,
+				),
+			),
+		);
+		expect(ids(r)).toEqual([
+			'm0-0-1',
+			'm0-1-4',
+			'm0-1-2',
+			'm0-3-4',
+			'm1-0-1',
+			'm1-1-4',
+			'm1-1-2',
+			'm1-3-4',
+		]);
+		const warned = r.warnings.filter((w) => w.code === 'duplicate-note-ids');
+		expect(warned).toHaveLength(1);
+		expect(warned[0].message).toContain('r1-100');
+		// Every id is still unique, which is the whole point of refusing.
+		expect(new Set(ids(r)).size).toBe(ids(r).length);
+	});
+
+	it('refuses a supplied id shaped like a generated one, which could collide with a neighbour', async () => {
+		// `m0-1-2` is exactly what the third note would have been given for free.
+		// Nothing about the SUPPLIED ids is duplicated here; the collision would
+		// have been with a generated id, which is why the shape itself is refused.
+		const r = await parser.parse(
+			xmlInput(oneMeasure(q('m0-1-2') + q('r0-200') + q(null) + q('r0-400'))),
+		);
+		expect(ids(r)).toEqual(['m0-0-1', 'm0-1-4', 'm0-1-2', 'm0-3-4']);
+		const warned = r.warnings.filter((w) => w.code === 'duplicate-note-ids');
+		expect(warned).toHaveLength(1);
+		expect(warned[0].message).toContain('m0-1-2');
+		expect(new Set(ids(r)).size).toBe(ids(r).length);
+	});
+
+	it('keeps a supplied id still when an EARLIER event in its measure is removed', async () => {
+		// This is the fragility the carry-through exists to remove. The parser's
+		// own id is a running duration cursor, so dropping the second note renames
+		// the two after it; a supplied id is a property of the ink and does not move.
+		const withIds = async (notes: string) => ids(await parser.parse(xmlInput(oneMeasure(notes))));
+		const four = q('r0-100') + q('r0-200') + q('r0-300') + q('r0-400');
+		const three = q('r0-100') + q('r0-300') + q('r0-400');
+		expect(await withIds(four)).toEqual(['r0-100', 'r0-200', 'r0-300', 'r0-400']);
+		expect(await withIds(three)).toEqual(['r0-100', 'r0-300', 'r0-400']);
+
+		// The counterfactual, in the same measure with the ids stripped: the last
+		// note is `m0-3-4` before the removal and `m0-1-2` after it, so a
+		// correction keyed to it would have stopped landing.
+		const bare = (n: number) => Array.from({ length: n }, () => q(null)).join('');
+		expect((await withIds(bare(4))).at(-1)).toBe('m0-3-4');
+		expect((await withIds(bare(3))).at(-1)).toBe('m0-1-2');
+	});
+
+	it('links a tie by the supplied ids, not by the ids they replaced', async () => {
+		const tied = (id: string, type: 'start' | 'stop') =>
+			`<note id="${id}"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration>` +
+			`<voice>1</voice><type>whole</type><tie type="${type}"/>` +
+			`<notations><tied type="${type}"/></notations>` +
+			`<lyric number="1"><syllabic>single</syllabic><text>ла</text></lyric></note>`;
+		const r = await parser.parse(
+			xmlInput(
+				wrap(
+					`<measure number="1">${ATTRS}${tied('r0-100', 'start')}</measure>` +
+						`<measure number="2">${tied('r1-100', 'stop')}</measure>`,
+				),
+			),
+		);
+		expect(r.score.vocalLine.map((e) => e.id)).toEqual(['r0-100', 'r1-100']);
+		expect(r.score.vocalLine[0].tied).toEqual({ type: 'start', partnerEventId: 'r1-100' });
+		expect(r.score.vocalLine[1].tied).toEqual({ type: 'stop', partnerEventId: 'r0-100' });
+	});
+
+	it('ignores ids on grace notes and chord tones, which never become events', async () => {
+		// Both are skipped by `readNote`, so their ids are not on the vocal line
+		// and a duplicate among them costs the real notes nothing.
+		const grace = `<note id="dup"><grace/><pitch><step>D</step><octave>4</octave></pitch><voice>1</voice><type>eighth</type></note>`;
+		const chordTone = `<note id="dup"><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>`;
+		const r = await parser.parse(
+			xmlInput(oneMeasure(grace + q('r0-100') + chordTone + q('r0-200') + q('r0-300') + q('r0-400'))),
+		);
+		expect(ids(r)).toEqual(['r0-100', 'r0-200', 'r0-300', 'r0-400']);
+		expect(r.warnings.some((w) => w.code === 'duplicate-note-ids')).toBe(false);
+	});
+});
