@@ -11,7 +11,7 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`8bc036a`**, raised from `f3b257b` at the close of the 2026-08-24 night
+before **`2d54185`**, raised from `8bc036a` at the close of the 2026-08-25 session when N.92 slice 2 shipped with five gates at baseline and the push printed `6aebbe4..2d54185`; gate 4's baseline moved 790 -> 800 and gate 5's 451 -> 461, and `ilya-ship.sh:79-80` were updated by Code before the run (md5 a78888ac -> 38335c06). Before that `8bc036a`, raised from `f3b257b` at the close of the 2026-08-24 night
 session when N.97 and N.97b shipped with five gates at baseline and the pushes
 printed `d9fe8a9..22fee05..8bc036a`; gate 4's baseline moved 754 -> 784 -> 790
 and gate 5's 444 -> 451 across the two ships, and `ilya-ship.sh:79-80` was
@@ -163,12 +163,44 @@ any of them count.
 > evidence in the inbox line), **N.100** (the PDF route must not trust the
 > media box; 151 Mpx raster from a lying 96 ppi declaration).
 >
-> **THE ONE THING: N.97b's deploy walk.** On the branch alias
+> ~~**THE ONE THING: N.97b's deploy walk.**~~ (DONE 2026-08-25, block below.) On the branch alias
 > `ilya-git-shane-dannmittons-projects.vercel.app` (stable origin, library
 > persists across ships; see ENVIRONMENT), read the Lamm 400 dpi PNG, correct
 > a note, reload, the correction lands. Then paste
 > `brief-n92-slice2-accidentals_r1` into Code. The walkthrough waits on
 > Thursday; the colleague still needs the deploy URL and the engraved file.
+
+> **2026-08-25, THE DEPLOY-WALK SESSION: N.97b DONE, N.92 SLICE 2 DONE.**
+>
+> **N.97b is DONE.** Walked by Dann on the branch alias: a fresh read of
+> `raster400-2.png` into a new song took a G4 -> G sharp 4 correction that
+> survived a reload, with the courtesy natural firing on the later G; Blast,
+> a pre-ship page-read song, showed the priced one-time orphaning at first
+> load (13 placements, kept, counted), and a correction made after the ship
+> survived an independent boot re-read of the ink with the orphan count
+> holding at 13. A read left un-accepted in the uploader touches nothing and
+> dies on reload (`ScoreUploader.svelte:45`, `+page.svelte:1267`, both read
+> this session).
+>
+> **N.92 slice 2 is DONE**: shipped `2d54185`, five gates at baseline
+> (gate 4 790 -> 800, gate 5 451 -> 461), walked by Dann on the alias
+> against a hand-built E flat major fixture
+> (`~/Downloads/eflat-walk-fixture.musicxml`, desk-built this session):
+> D4 down a semitone spelled D flat, Flat reached D double flat, a third
+> Flat changed nothing at the cap, Natural restored plain D4, the corrected
+> spelling survived a reload, and the palette stands level with its
+> neighbours in emulated landscape (932 x 430). Still owed, small: a
+> real-phone glance at the palette next time Ilya is open on a phone. The
+> correction station renders on uploaded scores, not only page reads,
+> observed on the deploy. Memo:
+> `docs/sessions/memo-n92-slice2_r1_2026-08-25.md`. **Awaiting Dann's eye
+> in that memo: the measured 97.6% melodic-fallback line, a measurement,
+> not a proposal, and nothing is built on it.** Two INBOX lines added this
+> session: the restore pacifier, and the portrait hint placement.
+>
+> **THE ONE THING: N.83's remainder, the Thursday walkthrough.** Dann
+> schedules the call; the colleague needs the deploy URL and the engraved
+> file. Run sheet: `docs/sessions/runsheet-n83-walkthrough_r2_2026-08-24.md`.
 
 >
 > **2026-08-24 MORNING, WALKTHROUGH PREP: the run sheet is ready and the

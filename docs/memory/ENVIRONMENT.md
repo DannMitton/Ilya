@@ -1953,3 +1953,18 @@ occurrences, and say it is the bundle, not the DOM.
   `numpy<2`, reproduces Pyodide's version natively): primary gate 0.0026
   under the 0.015 floor, slice fallback loses 6 of 55 rows. The full
   traceback and row-group table are in this session's N.99 inbox line.
+
+## The branch alias, observed 2026-08-25 on the N.97b and N.92 slice 2 walks
+
+- A page-read song re-runs the reader on every boot restore, so the paper is
+  blank for several seconds after a reload before the song reappears. Nothing
+  is wrong or lost. A pacifier idea is in `INBOX.md`.
+- A read parked in the uploader, before "Continue to analysis", touches no
+  song and evaporates on reload. Ingest fires only on accept or on boot
+  restore (`ScoreUploader.svelte:45`, `+page.svelte:1267`).
+- The correction station renders on uploaded scores, not only on page reads.
+- Portrait phone still does not render the score document (pre-existing);
+  emulated landscape at 932 x 430 does, drawer and palette included.
+- Walk fixture for flat-key spelling checks:
+  `~/Downloads/eflat-walk-fixture.musicxml`, hand-built, E flat major, eight
+  notes with a D4 to nudge and a B flat.
