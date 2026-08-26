@@ -339,10 +339,35 @@
 	const TITLE_HEADER_GAP = 18;
 	let headerHeight = $state(0);
 	const contentTop = $derived(MARGINS.vertical + headerHeight + TITLE_HEADER_GAP);
-	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
+
+	/**
+	 * N.83: the footer is MEASURED, the same way the header is.
+	 *
+	 * `FOOTER_MAX_HEIGHT` is a constant 80, and a Fit footer is not 80. It
+	 * carries the provenance legend, which wraps with its entry count and its
+	 * language, and the broad-analysis sentence, which no other document has.
+	 * Reserving 80 for a footer that measured 140.6 is what let the legend and
+	 * the last system's lyrics occupy the same y.
+	 *
+	 * FLOOR, NOT REPLACEMENT. The constant stays as the minimum, so a short
+	 * footer reserves exactly what it reserved before and no existing document
+	 * repaginates; only a footer taller than the constant moves the window.
+	 *
+	 * PAGE ONE REPORTS, and only page one: it is the tallest footer in the
+	 * document (it alone carries the legend), and one window geometry serves
+	 * every page here by the same rule the score pagination already follows.
+	 */
+	let footerHeight = $state(0);
+	const contentBottom = $derived(
+		MARGINS.vertical + Math.max(FOOTER_MAX_HEIGHT, footerHeight) + GAP
+	);
 
 	function handleHeaderHeight(height: number) {
 		headerHeight = height;
+	}
+
+	function handleFooterHeight(height: number) {
+		footerHeight = height;
 	}
 
 	// ── Score pages (live wiring slice 1: notation only) ─────────────────
@@ -784,7 +809,7 @@
 						{T(showWithheld ? 'profile.rotateForScore' : 'profile.rotateForScoreMarked')}
 					</p>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#if hasCommentaryPage}
@@ -912,7 +937,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}

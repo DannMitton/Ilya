@@ -12,17 +12,38 @@
 		broadNote?: string;
 		/** Footer hairline accent: sage (Transcription) default, deeper-lavender for Fit. */
 		hairlineAccent?: string;
+		/**
+		 * Reports this footer's measured height, so the page that owns it can
+		 * reserve exactly that much and no content window ever reaches into it.
+		 *
+		 * The same seam `TitleHeader` already offers, for the same reason. A
+		 * footer's height is not a constant: the provenance legend wraps with
+		 * its entry count and its language, and the broad-analysis sentence is
+		 * present on a Fit page and absent everywhere else. Only a page that
+		 * measures its own footer can reserve one.
+		 */
+		onheightchange?: (height: number) => void;
 	}
 
-	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)' }: Props = $props();
+	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', onheightchange }: Props = $props();
 
 	const attribution = $derived(t('footer.attribution', language));
+
+	/** Measured height of this footer: legend, broad note, hairline and colophon. */
+	let measuredHeight = $state(0);
+
+	$effect(() => {
+		if (measuredHeight > 0) {
+			onheightchange?.(measuredHeight);
+		}
+	});
 </script>
 
 <footer
 	class="page-footer"
 	class:is-last-page={pageNumber === totalPages}
 	style="--footer-accent: {hairlineAccent};"
+	bind:offsetHeight={measuredHeight}
 >
 	{#if legendItems.length > 0}
 		<div class="provenance-legend">
@@ -90,12 +111,21 @@
 		right: 96px;
 	}
 
-	/* ── Provenance legend (above the footer box) ──────────── */
+	/* ── Provenance legend (the footer's first row) ─────────── */
 
+	/* IN FLOW, and that is the whole of the N.83 repair. It was
+	   `position: absolute; bottom: 100%`, which drew it in the band the page
+	   had reserved for the content window: out of the footer's own height, so
+	   nothing budgeted for it, and over the last system's lyrics whenever they
+	   reached that far down. Measured on the engraved Sunless no. 1 at page 1,
+	   816 by 1056: the legend occupied y 867.4 to 899.9 while the score window
+	   ran to y 920, and the Cyrillic row ended at y 876.
+
+	   In flow it lands on the same pixels it always did, because the footer is
+	   anchored by its bottom edge and grows upward. What changes is that its
+	   height is now the footer's height, `onheightchange` reports it, and the
+	   page reserves it. */
 	.provenance-legend {
-		position: absolute;
-		right: 0;
-		bottom: 100%;
 		margin-bottom: 8px;
 		display: flex;
 		flex-wrap: wrap;
