@@ -17,6 +17,7 @@
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
 		mergeOnUpload,
+		type PairingMap,
 		type ShiftDirection,
 	} from '$lib/shane/pairings';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -108,7 +109,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import CorrectionControls from '$lib/shane/CorrectionControls.svelte';
-	import type { SpellingContext, VocalLineEvent } from '@ilya/score-parser';
+	import Loupe from '$lib/shane/Loupe.svelte';
+	import CorrectionDock from '$lib/shane/CorrectionDock.svelte';
+	import { isDismissSwipe, nearestTarget } from '$lib/shane/loupe';
+	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
 		applyCorrections,
 		clearCorrection,
@@ -352,6 +356,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			scope === 'end'
 				? shiftToEndOfLyric(doc.pairings, eventIds, fromIndex, direction)
 				: shiftToNextOpenNote(doc.pairings, eventIds, fromIndex, direction);
+		pushUndo({ kind: 'text', key: 'loupe.undo.lyrics' });
 		doc.pairings = result.map;
 	}
 
@@ -373,11 +378,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
 	}
 
-	function handleNotePick(eventId: string): void {
-		// N.92. A click SELECTS, always. Selection is display, so setting it
-		// here cannot disturb the placement path below, which is unchanged: a
-		// click with a slot pending still places that slot's syllable.
-		selectedEventId = eventId;
+	/**
+	 * N.55b's placement: the armed syllable lands on one note.
+	 *
+	 * Lifted out of `handleNotePick` by Dann's ruling of 2026-08-26 so that two
+	 * callers can share it without either one owning it. The rule itself is
+	 * unchanged, including the advance that stops at the end rather than
+	 * wrapping, because a wrap would silently start overwriting from the top.
+	 */
+	function placeArmedSyllable(eventId: string): void {
 		const slot = slotQueue[pairingCursor];
 		if (!slot) return;
 		doc.pairings = {
@@ -390,9 +399,34 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				origin: slot.origin,
 			},
 		};
-		// Advance, and stop at the end rather than wrapping: a wrap would
-		// silently start overwriting from the top.
 		pairingCursor = Math.min(pairingCursor + 1, slotQueue.length - 1);
+	}
+
+	/**
+	 * A tap on the PAGE, through VoiceProfilePane's delegated listener.
+	 *
+	 * N.92. A click SELECTS, always. Selection is display, so setting it here
+	 * disturbs nothing.
+	 *
+	 * ON A PHONE IT NAVIGATES AND NOTHING MORE, ruled by Dann 2026-08-26. The
+	 * ruled tap grammar gives a page tap one meaning, which is choose the
+	 * measure, and slice 2 measured what the second meaning cost: a tap meant
+	 * to pick a measure silently spent a syllable and moved the station cursor
+	 * off the note the lyric verbs anchor on. Placement now lives inside the
+	 * loupe, where the entry under the finger is legible at 2.4 times.
+	 *
+	 * DESKTOP IS UNCHANGED. Off a phone this still places, exactly as shipped.
+	 */
+	function handleNotePick(eventId: string): void {
+		selectedEventId = eventId;
+		if (isPhone) return;
+		placeArmedSyllable(eventId);
+	}
+
+	/** A tap on an entry INSIDE the loupe: it takes the entry and places. */
+	function handleLoupePick(eventId: string): void {
+		selectedEventId = eventId;
+		placeArmedSyllable(eventId);
 	}
 
 	/* ── N.92, the correction minimum ────────────────────────────────────
@@ -435,6 +469,65 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		selectedEvent ? currentDuration(selectedEvent, doc.corrections).dots > 0 : false,
 	);
 
+	/* ── THE NAMED UNDO (N.92 mobile slice 2) ────────────────────────────
+	   IN MEMORY ONLY, AND THAT IS THE RULE RATHER THAN AN OMISSION. N.27
+	   stands: corrections stay the one stored diff, and this ship adds NO SAVE
+	   SITE. A reload therefore arrives with the corrections and with an empty
+	   stack, which is the honest state: the singer's corrections survived and
+	   the session's history did not.
+
+	   A SNAPSHOT, NOT AN INVERSE. `withCorrection`, `clearCorrection`, and the
+	   two shift functions all return NEW maps, so holding the previous
+	   reference is a complete, cheap record of the state before the verb, and
+	   there is no per-verb inverse to get wrong.
+
+	   THE PILL'S SENTENCE IS COMPOSED AT RENDER, not at push, so a singer who
+	   changes language mid-session reads the pill in the language they are
+	   now in.
+
+	   EVERY CORRECTION VERB PUSHES, wherever it was pressed. The dock and the
+	   desktop drawer call the same handlers, so one stack cannot disagree with
+	   another. Nothing renders the pill outside the dock, so the desk is
+	   unchanged. */
+	type UndoNote = { kind: 'text'; key: string } | { kind: 'change'; from: string; to: string };
+	interface UndoEntry {
+		note: UndoNote;
+		corrections: CorrectionMap;
+		pairings: PairingMap;
+		selected: string | null;
+	}
+	let undoStack = $state<UndoEntry[]>([]);
+
+	function pushUndo(note: UndoNote): void {
+		undoStack = [
+			...undoStack,
+			{ note, corrections: doc.corrections, pairings: doc.pairings, selected: selectedEventId },
+		];
+	}
+
+	function handleUndo(): void {
+		const top = undoStack[undoStack.length - 1];
+		if (!top) return;
+		doc.corrections = top.corrections;
+		doc.pairings = top.pairings;
+		selectedEventId = top.selected;
+		undoStack = undoStack.slice(0, -1);
+	}
+
+	/** The five duration words the surface already ships, by base. */
+	const DURATION_KEY: Partial<Record<NoteBase, string>> = {
+		'16th': 'correct.len16th',
+		eighth: 'correct.len8th',
+		quarter: 'correct.lenQuarter',
+		half: 'correct.lenHalf',
+		whole: 'correct.lenWhole',
+	};
+
+	function durationWord(base: NoteBase): string {
+		const key = DURATION_KEY[base];
+		return key ? t(key, language) : base;
+	}
+
 	function correct(change: Parameters<typeof withCorrection>[2]): void {
 		const id = selectedEventId;
 		if (!id) return;
@@ -444,13 +537,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleStep(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (p) correct({ pitch: stepPitch(p, direction) });
+		if (!p) return;
+		const next = stepPitch(p, direction);
+		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
+		correct({ pitch: next });
 	}
 
 	function handleOctave(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (p) correct({ pitch: octavePitch(p, direction) });
+		if (!p) return;
+		const next = octavePitch(p, direction);
+		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
+		correct({ pitch: next });
 	}
 
 	/* N.92 slice 2. The context the spelling policy reads: the key in force in
@@ -477,7 +576,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleSemitone(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (p && ev) correct({ pitch: semitonePitch(p, direction, spellingContextFor(ev)) });
+		if (!p || !ev) return;
+		const next = semitonePitch(p, direction, spellingContextFor(ev));
+		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
+		correct({ pitch: next });
 	}
 
 	/* The accidental verbs. Cumulative, capped at doubles, and the policy is
@@ -490,18 +592,29 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const next =
 			kind === 'flat' ? flatPitch(p) : kind === 'sharp' ? sharpPitch(p) : naturalPitch(p);
 		// A capped click returns the same pitch, so the map is left alone and no
-		// correction is recorded for a decision that changed nothing.
-		if (next !== p) correct({ pitch: next });
+		// correction is recorded for a decision that changed nothing. The stack
+		// stays out of it for the same reason: a pill offering to reverse a
+		// change that never happened would be a lie.
+		if (next === p) return;
+		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
+		correct({ pitch: next });
 	}
 
 	function handleBase(base: (typeof DIGIT_BASE)[string]): void {
+		const ev = selectedEvent;
+		const from = ev ? currentDuration(ev, doc.corrections).base : null;
+		if (from && from !== base) {
+			pushUndo({ kind: 'change', from: durationWord(from), to: durationWord(base) });
+		}
 		correct({ base });
 	}
 
 	function handleDot(): void {
 		const ev = selectedEvent;
 		if (!ev) return;
-		correct({ dots: currentDuration(ev, doc.corrections).dots > 0 ? 0 : 1 });
+		const on = currentDuration(ev, doc.corrections).dots > 0;
+		pushUndo({ kind: 'text', key: on ? 'loupe.undo.dotOff' : 'loupe.undo.dotOn' });
+		correct({ dots: on ? 0 : 1 });
 	}
 
 	function handleMove(direction: 1 | -1): void {
@@ -520,12 +633,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const next =
 			neighbourId(readLine, doc.corrections, id, 1) ??
 			neighbourId(readLine, doc.corrections, id, -1);
+		pushUndo({ kind: 'text', key: 'loupe.undo.deleted' });
 		doc.corrections = withCorrection(doc.corrections, id, { deleted: true });
 		selectedEventId = next;
 	}
 
 	function handleRestoreNote(): void {
-		if (selectedEventId) doc.corrections = clearCorrection(doc.corrections, selectedEventId);
+		if (!selectedEventId) return;
+		pushUndo({ kind: 'text', key: 'loupe.undo.restored' });
+		doc.corrections = clearCorrection(doc.corrections, selectedEventId);
 	}
 
 	/* THE KEYBOARD, active only while a note is selected. Finale's own digit
@@ -596,6 +712,207 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			},
 		};
 	});
+	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
+	   and the two answer different questions. `isMobile` asks whether THIS
+	   frame is narrower than the page, which is what decides the fit and which
+	   rotation therefore flips. The loupe and the dock are ruled for a phone
+	   in BOTH orientations, and 932 by 430 is over the width breakpoint while
+	   still being the same hand holding the same glass. The smallest side is
+	   under 768 in both, and on a desk it is not. */
+	let isPhone = $state(false);
+	/** Portrait docks at the bottom edge, landscape at the left. */
+	let phonePortrait = $state(true);
+
+	/* ── THE LOUPE AND THE DOCK (N.92 mobile slice 2) ────────────────────
+	   Ruled by Dann 2026-08-25 and 2026-08-26. The page is the product and the
+	   loupe is surgery on one of its components: a coarse tap on the page
+	   chooses the measure, the loupe raises on it at 2.4 times, and the dock
+	   carries the four stations. The page then drops one step of ink and stops
+	   taking gestures until the loupe leaves.
+
+	   THE STATE LIVES HERE, with the verbs. `Loupe.svelte` reads the rendered
+	   page's own geometry and draws; `CorrectionDock.svelte` presents; neither
+	   owns a correction. That is the split `SyllableStation` and
+	   `ShiftLyricsControl` already keep. */
+	let loupeOpen = $state(false);
+	let dockHeight = $state(0);
+
+	/** The score document on a phone, in either orientation, with a read to correct. */
+	const loupeAvailable = $derived(
+		INCLUDE_SHANE &&
+			isPhone &&
+			destination === 'studio' &&
+			studioDocument !== 'transcription' &&
+			!!ingestedScore,
+	);
+
+	/** The line as the PAGE draws it: deletions applied, so the loupe and the
+	    paper never disagree about which entries a measure holds. */
+	const renderedLine = $derived(correctedScore?.result.score.vocalLine ?? []);
+
+	const heldMeasureIndex = $derived(selectedEvent ? selectedEvent.measureIndex : null);
+
+	/* The measure's own display number, which is what the tag prints. A pickup
+	   measure is `'0'` or `''` by publisher convention (`types.ts:225`), so the
+	   index is the fallback and never the first answer. */
+	const heldMeasureLabel = $derived.by(() => {
+		const i = heldMeasureIndex;
+		if (i === null) return null;
+		const m = ingestedScore?.result.score.measures.find((x) => x.index === i);
+		return m && m.number.trim() ? m.number : String(i + 1);
+	});
+
+	const heldMeasureIds = $derived(
+		heldMeasureIndex === null
+			? []
+			: renderedLine
+					.filter((ev) => ev.type !== 'rest' && ev.measureIndex === heldMeasureIndex)
+					.map((ev) => ev.id),
+	);
+
+	/** The next measure that carries an entry, which bounds the loupe's window. */
+	const nextMeasureIds = $derived.by(() => {
+		if (heldMeasureIndex === null) return [];
+		const later = renderedLine.filter(
+			(ev) => ev.type !== 'rest' && ev.measureIndex > heldMeasureIndex,
+		);
+		const first = later[0];
+		if (!first) return [];
+		return later.filter((ev) => ev.measureIndex === first.measureIndex).map((ev) => ev.id);
+	});
+
+	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
+	   already ships, and a part that has no value is absent rather than
+	   printed empty: an unpaired note simply has no syllable segment. */
+	const readoutLine = $derived.by(() => {
+		const parts: string[] = [];
+		if (selectedLabel) parts.push(selectedLabel);
+		if (selectedBase) parts.push(durationWord(selectedBase));
+		if (selectedDotted) parts.push(t('correct.dot', language));
+		const p = selectedEventId ? shownPairings[selectedEventId] : undefined;
+		if (p && p.kind === 'syllable') parts.push(p.cyrillic);
+		return parts.join(' \u00b7 ');
+	});
+
+	/* THE DOCK'S LYRIC VERBS ANCHOR ON THE TAKEN ENTRY, ruled by Dann
+	   2026-08-26. The schematic said so in its own §4, labelling the station
+	   `LYRIC · TAKE A NOTE TO SHIFT ITS SYLLABLE`, and slice 2 measured what
+	   the shipped anchor cost on a phone: the two scopes anchored on whichever
+	   note held the syllable under the DRAWER's station cursor, and the dock
+	   carries no cursor control, so the cells read disabled in the ordinary
+	   flow.
+
+	   THE DRAWER'S OWN VERBS ARE UNTOUCHED. `shiftAnchorEventId` and
+	   `shiftDisabled` still drive `ShiftLyricsControl` from the station cursor,
+	   because desktop is not in this slice and that anchor is the one Dann
+	   confirmed on 2026-08-14. Two surfaces, two anchors, and each one says on
+	   its face which note it acts from: the drawer through the station cursor
+	   it sits beside, the dock through the entry in the loupe above it.
+
+	   `eventIds` EXCLUDES RESTS, and so does every hit rectangle on the page,
+	   so a taken entry always has an index here. */
+	const dockShiftAnchor = $derived(
+		selectedEventId && eventIds.includes(selectedEventId) ? selectedEventId : null,
+	);
+	const dockShiftDisabled = $derived(dockShiftAnchor === null);
+
+	function handleDockShift(scope: 'end' | 'nextOpen', direction: ShiftDirection): void {
+		const anchor = dockShiftAnchor;
+		if (anchor === null) return;
+		const fromIndex = eventIds.indexOf(anchor);
+		if (fromIndex === -1) return;
+		const result =
+			scope === 'end'
+				? shiftToEndOfLyric(doc.pairings, eventIds, fromIndex, direction)
+				: shiftToNextOpenNote(doc.pairings, eventIds, fromIndex, direction);
+		pushUndo({ kind: 'text', key: 'loupe.undo.lyrics' });
+		doc.pairings = result.map;
+	}
+
+	const undoLabel = $derived.by(() => {
+		const top = undoStack[undoStack.length - 1];
+		if (!top) return null;
+		return top.note.kind === 'text'
+			? t(top.note.key, language)
+			: `${top.note.from} \u2192 ${top.note.to}`;
+	});
+
+	/* THE PAGE'S FIRST STATE: every measure takes a tap, and a tap resolves to
+	   the nearest entry rather than needing to land on a 7 px notehead. That
+	   is what makes item 9's exemption for the page's own glyphs safe: coarse
+	   tap picks the measure, and fine work happens inside the loupe.
+
+	   IT DOES NOT DISTURB PLACEMENT. `handleNotePick`, VoiceProfilePane's own
+	   delegated listener, still runs on a tap that lands on a hit rectangle
+	   and still places the pending syllable. This adds the loupe and the
+	   nearest-entry fallback, and takes nothing away. */
+	function handlePageTap(e: MouseEvent): void {
+		if (!loupeAvailable || loupeOpen) return;
+		/* THE SHEET IS FOUND AT THE POINT, NOT FROM `e.target`, and both halves
+		   of that are measured requirements rather than preferences.
+
+		   NOT `e.target`, because a tap that lands on a hit rectangle reaches
+		   VoiceProfilePane's delegated listener first, and on a desk that
+		   listener places the pending syllable and re-renders the page through
+		   `{@html}`. By the time the event reaches the window, the rectangle it
+		   started on has been replaced and `closest` finds nothing, so the
+		   loupe never rose on a score that had lyrics waiting.
+
+		   `elementFromPoint` RATHER THAN A POINT-IN-BOX TEST over the sheets,
+		   which is what this was first. A box test asks only whether the sheet
+		   is under the finger and never whether anything is on top of it, and
+		   the drawer on a phone covers the whole screen while the sheet keeps
+		   its box behind it. Measured: every tap on an open drawer raised the
+		   loupe. This asks the document what is actually topmost, and it
+		   re-queries live, so it cannot be detached out from under itself
+		   either. */
+		const sheet = document.elementFromPoint(e.clientX, e.clientY)?.closest('.score-page');
+		if (!sheet) return;
+		const targets = [...sheet.querySelectorAll('[data-hit]')].map((el) => {
+			const r = el.getBoundingClientRect();
+			return {
+				id: el.getAttribute('data-hit') ?? '',
+				cx: r.left + r.width / 2,
+				cy: r.top + r.height / 2,
+			};
+		});
+		const id = nearestTarget(targets, e.clientX, e.clientY);
+		if (!id) return;
+		selectedEventId = id;
+		loupeOpen = true;
+	}
+
+	function dismissLoupe(): void {
+		loupeOpen = false;
+		selectedEventId = null;
+	}
+
+	/* SWIPE DOWN, from anywhere on either, sends both away together. Bound at
+	   the window and filtered by where the gesture STARTED, so one
+	   implementation serves the loupe and the dock and the two cannot drift.
+	   A stray tap outside the loupe deliberately does nothing: it is the
+	   easiest gesture to make by accident, and no Undo restores a lost place. */
+	let swipeFrom: { x: number; y: number } | null = null;
+
+	function handleSurfacePointerDown(e: PointerEvent): void {
+		const el = (e.target as Element | null)?.closest?.('.loupe, .dock');
+		swipeFrom = el ? { x: e.clientX, y: e.clientY } : null;
+	}
+
+	function handleSurfacePointerUp(e: PointerEvent): void {
+		const from = swipeFrom;
+		swipeFrom = null;
+		if (!from || !loupeOpen) return;
+		if (isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) dismissLoupe();
+	}
+
+	/* The loupe cannot stand without something to hold. Leaving the phone, the
+	   score document, or the selection closes it, so it never survives into a
+	   state where it would be drawing a measure nobody is working on. */
+	$effect(() => {
+		if (!loupeAvailable || !selectedEventId) loupeOpen = false;
+	});
+
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
@@ -2063,6 +2380,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// Mobile detection
 		function checkMobile() {
 			isMobile = window.innerWidth < 768;
+			isPhone = Math.min(window.innerWidth, window.innerHeight) < 768;
+			phonePortrait = window.innerHeight >= window.innerWidth;
 		}
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
@@ -2088,7 +2407,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      VoiceProfilePane delegates its click. The handler stands down entirely
      unless a note is selected, and inside any text field, so nothing else in
      the app loses a key it already had. -->
-<svelte:window on:keydown={handleCorrectionKey} />
+<!-- N.92 mobile slice 2. THREE LIVE GESTURES AND NO COLLISION, per the ruled
+     tap grammar: a tap chooses, the browser's own pinch reads, and a swipe
+     down dismisses. Double tap and drag are unassigned, and press-and-hold
+     stays reserved, because the platform trains it for text selection and for
+     context menus and neither belongs here.
+
+     Bound at the window for the reason the correction keys already are: the
+     score is injected SVG with nothing to hang a handler on. Each of the three
+     stands down entirely off a phone. -->
+<svelte:window
+	on:keydown={handleCorrectionKey}
+	on:click={handlePageTap}
+	on:pointerdown={handleSurfacePointerDown}
+	on:pointerup={handleSurfacePointerUp}
+/>
 
 <svelte:head>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2529,6 +2862,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		class="main-content tab-{activeTab} {paperBreathClass} {tabTransitionClass}"
 		class:drawer-open={!drawerCollapsed}
 		class:reading-mode={isReadingMode}
+		class:loupe-up={loupeOpen}
 		bind:this={mainContentEl}
 		tabindex="0"
 	>
@@ -2664,6 +2998,49 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{/if}
 	</main>
 </div>
+<!-- N.92 mobile slice 2. THE LOUPE AND THE DOCK, siblings of the drawer and
+     of the desk, outside `.app-content` because they answer to the viewport
+     rather than to the desk's flow. The drawer's E.36 §1.4 anchors are
+     untouched: this is a second surface, not the drawer re-anchored.
+
+     THEY ARRIVE AS ONE MOTION AND LEAVE AS ONE, a single 180 ms fade on both,
+     which is what teaches the singer they are one object on the first raise
+     rather than on the first dismissal. -->
+{#if loupeAvailable && loupeOpen && selectedEventId}
+	<Loupe
+		open={loupeOpen}
+		measureLabel={heldMeasureLabel}
+		measureIndex={heldMeasureIndex}
+		ownIds={heldMeasureIds}
+		nextIds={nextMeasureIds}
+		{selectedEventId}
+		revision={correctedScore}
+		{language}
+		onpick={handleLoupePick}
+		dockInset={phonePortrait ? 0 : 380}
+		{dockHeight}
+	/>
+	<CorrectionDock
+		{language}
+		portrait={phonePortrait}
+		readout={readoutLine}
+		{undoLabel}
+		{selectedBase}
+		{selectedDotted}
+		shiftDisabled={dockShiftDisabled}
+		onundo={handleUndo}
+		ondismiss={dismissLoupe}
+		onwalk={handleMove}
+		onbase={handleBase}
+		ondot={handleDot}
+		onstep={handleStep}
+		onoctave={handleOctave}
+		onaccidental={handleAccidental}
+		ondelete={handleDeleteNote}
+		onshift={handleDockShift}
+		onheight={(h) => (dockHeight = h)}
+	/>
+{/if}
 {#if updated.current && !updateDismissed}
 	<div class="update-toast screen-only" role="status">
 		<span class="update-toast-text">{t('update.notice', language)}</span>
@@ -3213,6 +3590,54 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	.main-content.tab-enter-from-left {
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
+	}
+
+	/* ── THE PAGE'S TWO STATES (N.92 mobile slice 2) ─────────────────────
+	   Before the loupe, the page is the navigation interface: full ink, and
+	   every measure takes a tap. While the loupe is up, the page stops taking
+	   gestures and becomes texture. It is still the object being worked on and
+	   it is no longer a control.
+
+	   ONLY THE INK CHANGES. No layout moves, nothing reflows, no measure
+	   changes place, so the geometry is identical pixel for pixel and the
+	   transition is a fade rather than a move. That is the motion rule
+	   satisfied exactly: opacity, and the paper never animates.
+
+	   THE STEP IS SMALL ON PURPOSE. Enough to say the page is not taking taps
+	   right now, and not enough to suggest it has been dismissed or disabled.
+	   The right amount is NOT ESTABLISHED: the schematic draws roughly one
+	   value of contrast and settles no number, so 0.78 is a first reading for
+	   Dann's eye and not a derivation.
+
+	   `.paper-fit` IS PageFit'S OWN ROOT, which both Studio documents share.
+	   Only the score document ever raises a loupe, so the transcription is
+	   reached by this rule and never matched by it. */
+	.main-content :global(.paper-fit) {
+		transition: opacity 180ms ease-out;
+	}
+
+	.main-content.loupe-up :global(.paper-fit) {
+		opacity: 0.78;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.main-content :global(.paper-fit) {
+			transition: none;
+		}
+	}
+
+	/* THE PAGE PRINTS AT FULL INK, whatever is on screen. Print carries none of
+	   this slice's furniture. */
+	@media print {
+		.main-content :global(.paper-fit),
+		.main-content.loupe-up :global(.paper-fit) {
+			opacity: 1 !important;
+			/* The transition has to go with the opacity. Without this the print
+			   layout catches the fade mid-flight and the sheet prints at
+			   whatever value the animation had reached. Measured: 0.813. */
+			transition: none !important;
+		}
 	}
 
 	/* screen-only wrappers: visible on screen, hidden in print */

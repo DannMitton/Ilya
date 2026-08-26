@@ -1,0 +1,198 @@
+/**
+ * N.92 mobile slice 2. The loupe's arithmetic, with no DOM.
+ *
+ * The geometry cases below are built from the renderer's own rule, that hit
+ * rectangles meet at the midpoints between columns, rather than from numbers
+ * read back out of a rendered page: an expectation that takes its value from
+ * the mechanism under test proves nothing.
+ */
+
+import { describe, it, expect } from 'vitest';
+import {
+	centredViewBox,
+	commonInkBox,
+	insertionBar,
+	isDismissSwipe,
+	measureWindow,
+	nearestTarget,
+	parseSystemRange,
+	systemIndexOf,
+	SWIPE_DISMISS_PX,
+} from './loupe';
+
+describe('parseSystemRange', () => {
+	it('reads the renderer’s own attribute', () => {
+		expect(parseSystemRange('4-9')).toEqual({ fromMeasure: 4, toMeasure: 9 });
+		expect(parseSystemRange('0-0')).toEqual({ fromMeasure: 0, toMeasure: 0 });
+	});
+
+	it('refuses anything that is not two ordered integers', () => {
+		expect(parseSystemRange(null)).toBeNull();
+		expect(parseSystemRange('')).toBeNull();
+		expect(parseSystemRange('4')).toBeNull();
+		expect(parseSystemRange('9-4')).toBeNull();
+		expect(parseSystemRange('a-b')).toBeNull();
+	});
+});
+
+describe('systemIndexOf', () => {
+	const ranges = [
+		{ fromMeasure: 0, toMeasure: 3 },
+		{ fromMeasure: 4, toMeasure: 7 },
+		{ fromMeasure: 8, toMeasure: 11 },
+	];
+
+	it('names the system that holds the measure', () => {
+		expect(systemIndexOf(ranges, 0)).toBe(0);
+		expect(systemIndexOf(ranges, 3)).toBe(0);
+		expect(systemIndexOf(ranges, 4)).toBe(1);
+		expect(systemIndexOf(ranges, 11)).toBe(2);
+	});
+
+	it('returns -1 for a measure no system claims', () => {
+		expect(systemIndexOf(ranges, 12)).toBe(-1);
+		expect(systemIndexOf([], 0)).toBe(-1);
+	});
+});
+
+describe('measureWindow', () => {
+	it('runs from this measure’s first midpoint to the next measure’s', () => {
+		// Three columns in the held measure, two in the next. The renderer's
+		// rectangles tile without gaps, so each x is the midpoint before a note.
+		const own = [
+			{ x: 100, width: 30 },
+			{ x: 130, width: 30 },
+			{ x: 160, width: 30 },
+		];
+		const next = [
+			{ x: 190, width: 30 },
+			{ x: 220, width: 30 },
+		];
+		expect(measureWindow(own, next, 620)).toEqual({ left: 100, right: 190 });
+	});
+
+	it('runs to the system’s right edge when the measure ends the system', () => {
+		const own = [{ x: 480, width: 40 }];
+		expect(measureWindow(own, [], 620)).toEqual({ left: 480, right: 620 });
+	});
+
+	it('clamps a negative left edge to the system origin', () => {
+		const own = [{ x: -12, width: 40 }];
+		expect(measureWindow(own, [{ x: 90, width: 30 }], 620)).toEqual({ left: 0, right: 90 });
+	});
+
+	it('never returns an inverted or empty window', () => {
+		const own = [{ x: 300, width: 20 }];
+		const w = measureWindow(own, [{ x: 250, width: 20 }], 620);
+		expect(w).not.toBeNull();
+		expect(w!.right).toBeGreaterThan(w!.left);
+	});
+
+	it('has nothing to show for a measure with no entries', () => {
+		expect(measureWindow([], [{ x: 10, width: 10 }], 620)).toBeNull();
+	});
+});
+
+describe('nearestTarget', () => {
+	const targets = [
+		{ id: 'a', cx: 10, cy: 10 },
+		{ id: 'b', cx: 50, cy: 10 },
+		{ id: 'c', cx: 90, cy: 10 },
+	];
+
+	it('resolves a coarse tap to the entry nearest it', () => {
+		expect(nearestTarget(targets, 12, 40)).toBe('a');
+		expect(nearestTarget(targets, 46, 200)).toBe('b');
+		expect(nearestTarget(targets, 200, 10)).toBe('c');
+	});
+
+	it('breaks a tie toward the earlier entry, so one tap has one answer', () => {
+		expect(nearestTarget(targets, 30, 10)).toBe('a');
+	});
+
+	it('has no answer when the page carries no entries', () => {
+		expect(nearestTarget([], 5, 5)).toBeNull();
+	});
+});
+
+describe('isDismissSwipe', () => {
+	it('takes a downward drag past the threshold', () => {
+		expect(isDismissSwipe(0, SWIPE_DISMISS_PX)).toBe(true);
+		expect(isDismissSwipe(20, 120)).toBe(true);
+	});
+
+	it('refuses a short drag, an upward one, and a sideways one', () => {
+		expect(isDismissSwipe(0, SWIPE_DISMISS_PX - 1)).toBe(false);
+		expect(isDismissSwipe(0, -120)).toBe(false);
+		expect(isDismissSwipe(-140, 80)).toBe(false);
+	});
+});
+
+describe('insertionBar', () => {
+	// A staff of five lines at a 10 px gap: top 100, bottom 140, middle line 120.
+	const STAFF_TOP = 100;
+	const STAFF_BOTTOM = 140;
+	const GAP = 10;
+
+	it('spans the staff with a gap of air at each end', () => {
+		// A notehead on the middle line, 12 wide and 8 tall.
+		const b = insertionBar(200, STAFF_TOP, STAFF_BOTTOM, 116, 124, GAP);
+		expect(b.x).toBe(200);
+		expect(b.top).toBe(90);
+		expect(b.bottom).toBe(150);
+	});
+
+	it('reaches past the staff to bisect a notehead on ledger lines', () => {
+		// Two ledger lines above: the notehead sits at 76 to 84.
+		const high = insertionBar(200, STAFF_TOP, STAFF_BOTTOM, 76, 84, GAP);
+		expect(high.top).toBe(71);
+		expect(high.bottom).toBe(150);
+
+		const low = insertionBar(200, STAFF_TOP, STAFF_BOTTOM, 156, 164, GAP);
+		expect(low.top).toBe(90);
+		expect(low.bottom).toBe(169);
+	});
+
+	it('scales with the engraving rather than with the screen', () => {
+		const small = insertionBar(0, 0, 4 * 5.5, 10, 18, 5.5);
+		const large = insertionBar(0, 0, 4 * 22, 40, 72, 22);
+		expect(large.thickness / small.thickness).toBeCloseTo(4);
+		expect(large.capWidth / small.capWidth).toBeCloseTo(4);
+		expect(large.capHeight / small.capHeight).toBeCloseTo(4);
+	});
+
+	it('draws a bar, not a barline: the caps are wider than the bar', () => {
+		const b = insertionBar(200, STAFF_TOP, STAFF_BOTTOM, 116, 124, GAP);
+		expect(b.capWidth).toBeGreaterThan(b.thickness * 2);
+		expect(b.bottom).toBeGreaterThan(b.top);
+	});
+});
+
+describe('commonInkBox and centredViewBox', () => {
+	// A whole note is wide and short; a sixteenth is narrow and tall, because
+	// SMuFL hangs its stem and flags off a notehead sitting at the origin.
+	const whole = { x: 0, y: -25, width: 40, height: 50 };
+	const sixteenth = { x: 0, y: -220, width: 30, height: 245 };
+
+	it('takes the widest width and the tallest height in the set', () => {
+		expect(commonInkBox([whole, sixteenth])).toEqual({ width: 40, height: 245 });
+	});
+
+	it('is zero for an empty set, so a missing face draws no box', () => {
+		expect(commonInkBox([])).toEqual({ width: 0, height: 0 });
+	});
+
+	it('centres each glyph’s own ink inside the shared box', () => {
+		const common = commonInkBox([whole, sixteenth]);
+		// The tallest glyph fills the box and is not moved.
+		expect(centredViewBox(sixteenth, common)).toBe('-5 -220 40 245');
+		// The short one is inset by half the difference, top and bottom alike.
+		expect(centredViewBox(whole, common)).toBe('0 -122.5 40 245');
+	});
+
+	it('gives every glyph in a set the same box, which is what fixes the margin', () => {
+		const common = commonInkBox([whole, sixteenth]);
+		const dims = (v: string) => v.split(' ').slice(2).join(' ');
+		expect(dims(centredViewBox(whole, common))).toBe(dims(centredViewBox(sixteenth, common)));
+	});
+});

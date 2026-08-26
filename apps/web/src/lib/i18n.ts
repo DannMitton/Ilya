@@ -171,6 +171,72 @@ const strings: Record<string, Record<Language, string>> = {
 	'notation.tool.flat':          { en: 'Flat',                        fr: 'Bémol' },
 	'notation.tool.sharp':         { en: 'Sharp',                       fr: 'Dièse' },
 	'notation.tool.natural':       { en: 'Natural',                     fr: 'Bécarre' },
+
+	// ── N.92 mobile slice 2: the loupe and the dock ──────────
+	// EVERY FRENCH WORD HERE AWAITS DANN'S EYE. The strings table in
+	// `docs/sessions/memo-mobile-slice2_r1_2026-08-26.md` sets each one beside
+	// its English and marks coined against adopted, which is the form his
+	// ruling of 2026-08-26 asks for.
+	//
+	// ADOPTED, each from a string already shipped in this file: `tiroir`
+	// (drawer.collapse), `mesures` (upload.report.events), `système`
+	// (upload.report.systems), `sur` for "of" (footer.of), `Durée`
+	// (correct.length), `Hauteur` (upload.report.pitchSubs), `Altération`
+	// (notePicker.accidentalAria), `Silence` (upload.report.events), `Texte`
+	// (station.textChanged), `degré` (correct.stepUp), `Supprimer`
+	// (correct.delete), `Annuler` (correct.restore), `Point` (correct.dot),
+	// and the two shift-scope clauses (shiftLyrics.*), reused verbatim.
+	//
+	// COINED, four: `mes.` as the abbreviation of `mesure`; `Nolet`; `Saisie`;
+	// `Liaison`.
+	//
+	// THE DOCK HAS NO ACCESSIBLE NAME OF ITS OWN. Dann's ruling of 2026-08-26
+	// settles the collision r1 of the memo raised: both containers take
+	// `a11y.drawer`, which is `Controls` / `Commandes`, ratified 2026-08-23
+	// under N.62 and asserted by `i18n.test.ts` against his own table. So the
+	// key that briefly lived here, `loupe.dockAria` (`Drawer` / `Tiroir`), is
+	// struck rather than kept beside it: one concept, one term, one key. No
+	// desktop string moved, and `Tiroir` stays what `drawer.collapse` calls the
+	// drawer in its own sentence.
+	// The measure tag, inside the loupe's top left. `%m` is the measure's own
+	// display number from the score, not its index, so a pickup measure prints
+	// what the publisher printed.
+	'loupe.measureTag':            { en: 'm.\u00a0%m \u00b7 system %s of %t', fr: 'mes.\u00a0%m \u00b7 système %s sur %t' },
+	// The same tag where the page's systems cannot be read. NOT ESTABLISHED
+	// beats an invented system number.
+	'loupe.measureTagShort':       { en: 'm.\u00a0%m',                    fr: 'mes.\u00a0%m' },
+	// The named Undo pill. It reads the change it will reverse, stated in the
+	// direction the change happened. Absent when nothing can be undone.
+	'loupe.undo':                  { en: 'Undo: %s',                     fr: 'Annuler\u00a0: %s' },
+	'loupe.undo.deleted':          { en: 'note removed',                 fr: 'note supprimée' },
+	'loupe.undo.dotOn':            { en: 'dot added',                    fr: 'point ajouté' },
+	'loupe.undo.dotOff':           { en: 'dot removed',                  fr: 'point retiré' },
+	'loupe.undo.lyrics':           { en: 'syllables shifted',            fr: 'syllabes décalées' },
+	'loupe.undo.restored':         { en: 'corrections cleared',          fr: 'corrections effacées' },
+	// The four stations, in the ruled order. Durations lead.
+	'loupe.station.duration':      { en: 'Duration',                     fr: 'Durée' },
+	'loupe.station.pitch':         { en: 'Pitch',                        fr: 'Hauteur' },
+	'loupe.station.accidental':    { en: 'Accidental \u00b7 Entry',       fr: 'Altération \u00b7 Saisie' },
+	'loupe.station.lyric':         { en: 'Lyric',                        fr: 'Texte' },
+	// Cells the singer can see and cannot use this slice. Slice 3 takes all
+	// three, and none of them carries behaviour here.
+	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
+	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
+	'loupe.tie':                   { en: 'Tie',                          fr: 'Liaison' },
+	// The visible word on the delete cell. `correct.delete` stays its
+	// accessible name, so a screen reader still hears which note goes.
+	'loupe.delete':                { en: 'Delete',                       fr: 'Supprimer' },
+	// The pitch cells' visible words, with the direction carried by a triangle
+	// beside them. `correct.stepUp` and its three neighbours stay the
+	// accessible names, so nothing a screen reader hears is abbreviated.
+	'loupe.pitch.step':            { en: 'step',                         fr: 'degré' },
+	'loupe.pitch.octave':          { en: 'octave',                       fr: 'octave' },
+	// The lyric verbs, named for what they touch rather than for Finale's
+	// scope. The clause after the comma is `shiftLyrics.toEndOfLyric` and
+	// `shiftLyrics.toNextOpenNote` verbatim.
+	'loupe.lyric.toEnd':           { en: 'Syllables, to the end of the lyric', fr: 'Les syllabes, jusqu\u2019à la fin du texte' },
+	'loupe.lyric.toNextOpen':      { en: 'Syllables, to the next open note',   fr: 'Les syllabes, jusqu\u2019à la prochaine note libre' },
+
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
 	'display.stressDiacritics.desc': { en: 'Show acute accent on Cyrillic', fr: 'Afficher l\u2019accent aigu sur le cyrillique' },
