@@ -153,6 +153,26 @@ musician would say, and let that veto the script.** The standing rule "do not
 trust a number your own script printed" is the same rule, and it was already
 written down.
 
+### 19. NEW, 2026-08-25, ruled by Dann. A RULING IS DELIBERATE, AND EVERY CONSTRAINT CARRIES ITS SOURCE.
+
+**Dann's words:** *"I suspect it was incidental or trivial decision(s) in the
+moment that led to what you interpret as a ruling? You must be able to tell the
+difference through context and effect."*
+
+- **Every constraint presented to Dann carries its source on its face:** his
+  ruled words, quoted and dated, or **DESK INFERENCE**, named as the desk's own
+  and free for him to wave off.
+- A "cost: breaks ruling X" line appears only with X quoted, dated, and
+  scope-checked per tether 17. Otherwise the line does not appear.
+- **A decision is a RULING only when Dann made it deliberately. Judge by
+  context and effect.** An incidental, in-the-moment choice is a working
+  default: reversible, never cited as a wall, and it does not harden into law
+  by being repeated in the desk's citations.
+- **What it cost, 2026-08-11 to 2026-08-25:** desk arithmetic about the
+  transcription page (E.41 §2) crept onto the score, was cited back as law,
+  and Dann fought a phantom constraint for two weeks. The score was never
+  ruled out of portrait; N.46's portrait question was open the whole time.
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about

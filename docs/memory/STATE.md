@@ -304,6 +304,75 @@ any of them count.
 >   `ENVIRONMENT.md`.
 
 
+> **2026-08-25 NIGHT, THE MOBILE DESIGN SESSION: the legend collision fixed
+> and walked, the portrait phantom fell, Design delivered, and the rulings
+> landed.**
+>
+> **The legend collision is DONE**: shipped `a46a199`, five gates at
+> baseline, walked by Dann on the alias. Cause: the legend was drawn out of
+> flow (`PageFooter.svelte`) while the Fit page reserved a constant 80 for a
+> footer that measures larger; the footer is measured now, floor kept. Cost,
+> ruled do-nothing: the demo asset gains a page. Brief and memo in
+> `docs/sessions/` (`brief-n83-legend-collision_r1`, `memo-...-r1`).
+> The engraved song 1 file gained `<work-title>` and composer; the titled
+> copy is `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls
+> (engraved).musicxml`. **The colleague walkthrough is DEFERRED by Dann:
+> "I will tell you when to plan the call." The send to the colleague waits
+> with it.** N.84, the Guide redo, deferred by Dann's own reasoning: the
+> Guide reflects the finished build.
+>
+> **Tether 19 ruled and transcribed** (CONTRACT §1.19): a ruling is
+> deliberate, judged by context and effect, and every constraint carries its
+> source on its face. Born from the portrait phantom: E.41's transcription
+> arithmetic had crept onto the score and was cited as law for two weeks;
+> the score was never ruled out of portrait, N.46 was open the whole time.
+>
+> **The portrait rulings, all Dann's, 2026-08-25:** the phone's paper is
+> the whole true page, an oversized thumbnail at full engraving resolution,
+> and the LOUPE supplies the readable zoom (amended in the Design session
+> from "window at readable zoom"); systems are never re-broken; portrait
+> and landscape are both interactive, both valid, neither a felt
+> concession; the makeshift portrait concessions are to be fixed; the loupe
+> (Finale Speedy's editing frame, magnified in place, the z-lift Dann's
+> own) persists on desktop and in landscape; the loupe is the named,
+> singular exception to "nothing floats over the paper."
+>
+> **Design was commissioned on Dann's plan and returned r2, ACCEPTED with
+> rulings:** the quick tuplet counts strike accepted (one definition
+> grammar, "N of [value] in the space of M of [value]", last definition as
+> default); one accessible name, `Drawer` and « Tiroir », for both
+> containers, "dock" internal shorthand only; the surface is one dock,
+> four stations, DURATION leading because N.95 measured durations as the
+> broken channel; stepper (coarse tap, fine step), named Undo pill (absent
+> when it cannot act), three-gesture tap grammar. Handoff filed in
+> `docs/sessions/`: `design-mobile-correction_r2_2026-08-25.html` (the
+> deliverable), `note-desktop-adaptation_r2`, superseded r1 pair,
+> `support.js`, and `design-handoff-README_2026-08-25.md`. The desk's own
+> `brief-design-mobile-correction_r1`, `memo-research-mobile-notation_r1`
+> (with the Finale addendum), three desk drawings, and the exported
+> `fable-ruling-gui-principles-and-portrait-c_2026-08-18.md` sit beside
+> them. The r2 schematic is published for phone viewing at
+> `claude.ai/code/artifact/3e219d42-54ee-4e38-9782-1527c2584bcd`.
+>
+> **THE ONE THING: the legibility walk, then the Code brief, sliced.** The
+> r2 bet is that a singer picks the right measure by eye on a whole-page
+> thumbnail. Zero-build walk: the Lamm song 1 PDF is ON DANN'S IPHONE
+> (AirDropped this session); open it in portrait at whole-page fit and try
+> to land a finger on a chosen measure. Expectation: lands or misses by
+> one, which the stepper absorbs. **Parked at Dann's stop, and it loses
+> nothing by waiting.** Also owed before Code: the notation-face
+> measurement (the page's glyph source and the surface's duration glyphs
+> must be one source), and the dense-page case stays NOT ESTABLISHED. The
+> alias refused to open in Safari on the phone (deploy verified serving
+> from outside; suspect phone-side); untested in iPhone Chrome.
+>
+> Usage at 23:31: Fable 77%, resets Sunday 05:00. All-models not re-read
+> since 42% at session start. Files new to git: everything named above in
+> `docs/sessions/`, plus modified `docs/memory/CONTRACT.md`, `INBOX.md`
+> (two lines: mobile editing, mobile navigation, both absorbed into this
+> track), and this file. `docs/sessions/_to_delete/` holds two empty
+> extraction folders for Dann to delete.
+
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
 **Dann opened the release question: what remains before a release, plus six

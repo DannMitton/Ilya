@@ -1968,3 +1968,31 @@ occurrences, and say it is the bundle, not the DOM.
 - Walk fixture for flat-key spelling checks:
   `~/Downloads/eflat-walk-fixture.musicxml`, hand-built, E flat major, eight
   notes with a D4 to nudge and a B flat.
+
+
+## The mobile design session's instruments, learned the hard way, 2026-08-25
+
+- **Chrome in macOS fullscreen makes `resize_window` a silent no-op** and
+  `outerWidth` misreports. The working instrument: inject a same-origin
+  iframe (430 x 932) into the deployed page and drive it through
+  `contentDocument`. Width media queries evaluate honestly; `pointer:
+  coarse` stays false, so nothing coarse-gated is exercised.
+- **Claude Design sessions have NO device bridge and NO project
+  knowledge.** A brief for Design must be attachment-self-sufficient: Dann
+  attaches the folder or a zip, and every project-knowledge citation must
+  first be exported to a file (`fable-ruling-gui-principles-and-portrait-c
+  _2026-08-18.md` now lives in `docs/sessions/` for exactly this reason).
+- **The Artifact publisher wraps content in its own page skeleton.** A full
+  HTML document must be stripped to title + head innards + body innards
+  before publishing, or it nests. Done for the r2 schematic.
+- **The bridge cannot `rmdir` either.** Empty directories go to
+  `_to_delete/` like files.
+- **iPhone invisible to AirDrop**: Control Centre, long-press the wireless
+  block, AirDrop, "Everyone for 10 Minutes". Worked tonight. AirDrop back
+  from the phone stayed fickle; do not build a verification step on it.
+- **The phone's Safari refused the branch alias** while an outside fetch
+  served it fine. Phone-side, unexplained, one occurrence. Dann's Chrome
+  on iPhone is the browser of record; his Chrome build has no long-press
+  "Scan QR Code" shortcut, so a QR is not a reliable route into HIS phone
+  Chrome. Route of record instead: NOT ESTABLISHED; settle it calmly some
+  other session, not mid-walk.
