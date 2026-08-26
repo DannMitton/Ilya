@@ -802,13 +802,6 @@
 						{@html page}
 					</div>
 				{/if}
-				{#if i === 0}
-					<p class="rotate-notice">
-						<!-- Bound to showWithheld, not to a second judgement of its own, so
-						     this line and profile.withheld.close cannot contend on one sheet. -->
-						{T(showWithheld ? 'profile.rotateForScore' : 'profile.rotateForScoreMarked')}
-					</p>
-				{/if}
 				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
@@ -1216,60 +1209,30 @@
 	   This page keeps 816 by 1056 on every display and PageFit scales it, so
 	   both Studio documents miniaturize identically. */
 
-	/* N.46, E.44, ruled by Dann 12 August 2026 as shape A. PORTRAIT DEFERS
-	   THE NOTATION TO LANDSCAPE, and that half of the ruling stands untouched
-	   below: the SVG is withheld rather than shrunk, because the stave may not
-	   be scaled down (Dann's standing ruling) and re-breaking the systems at
-	   414px is a renderer job, not a stylesheet one. A fitted page would scale
-	   the stave with everything else on it, which is exactly what that ruling
-	   forbids, so the withholding matters MORE under N.73 C2, not less.
+	/* N.46 / E.44's portrait withholding IS DELETED HERE (mobile slice 1,
+	   Dann's ruling of 2026-08-25, walked on his own iPhone 2026-08-26).
 
-	   Landscape needs nothing: 932px is above this breakpoint, so the page
-	   renders at 1:1. OBSERVED by Dann on his own phone, 12 August 2026, on
-	   two separate origins.
+	   WHAT STOOD HERE. Under this breakpoint the block hid `.score-window` on
+	   every score page and hid every score page after the first, and it showed
+	   a `.rotate-notice` line in their place. Its premise was that the stave
+	   may not be scaled down, so portrait had to defer the notation to
+	   landscape. N.73 C2 had already retired the other half of the shape,
+	   leaving a page that was, in its own comment's words, mostly empty by
+	   construction.
 
-	   The header, the footer, the provenance legend and the attribution all
-	   survive, because only .score-window is hidden. fitLegend is passed to page
-	   one’s PageFooter alone, and page one is the page that stays.
+	   WHY IT GOES. Dann ruled the phone's paper to be the whole true page, an
+	   oversized thumbnail at full engraving resolution, and walked the
+	   legibility bet on a real engraved page at roughly 390 by 505 CSS points.
+	   The premise that the stave may not be scaled down is superseded for this
+	   view: PageFit scales the PAGE, uniformly, and re-breaks nothing, so no
+	   system is broken to the viewport and no second renderer exists. The
+	   page's own geometry is untouched, which is why nothing above this rule
+	   had to change to let the notation through.
 
-	   WHAT N.73 C2 TOOK OUT of this block, and why. The other half of shape A
-	   reflowed these two pages, "the same treatment the envelope took for
-	   N.44". That treatment was a cure for the footer bug N.44 names, portrait
-	   C deleted the footer rule that caused it, and C2 rules that this
-	   document's page is a letter-proportioned miniature like the
-	   transcription's. So `width: 100% !important`, `height: auto !important`,
-	   the commentary window's `position: static`, and N.45's closed seam are
-	   gone from here. A score page in portrait is now a whole page with its
-	   notation withheld and its rotate notice on it, rather than a short card.
-	   NAMED CONSEQUENCE for Dann: that page is mostly empty by construction,
-	   because the thing it exists to carry is deliberately not drawn. */
-	@media (max-width: 767px) {
-		/* One notice for the score, not one per page. */
-		.score-page ~ .score-page {
-			display: none;
-		}
-
-		.score-page .score-window {
-			display: none;
-		}
-
-		.score-page .rotate-notice {
-			display: block;
-		}
-	}
-
-	/* Hidden above the breakpoint: in landscape and on a desk the notation is
-	   there to be read, so the line would be a lie. */
-	.rotate-notice {
-		display: none;
-		margin: 0;
-		padding: 0.75rem;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 1rem;
-		line-height: 1.6;
-		color: var(--ink-secondary, #4a4540);
-	}
+	   NOTHING REPLACES IT. There is no portrait-only declaration on this
+	   document any more: what a phone draws is what the desk draws, scaled.
+	   The rotate notice and its two dictionary keys are gone with it, because
+	   a page that renders needs no apology. */
 
 	/* ── Print rules (parity with TitlePage) ───────────────── */
 
