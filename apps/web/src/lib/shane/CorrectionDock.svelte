@@ -272,15 +272,25 @@
 <section class="dock" class:portrait aria-label={T('a11y.drawer')} bind:offsetHeight={height}>
 	<!-- THE HEADER ROW. The Undo pill sits alone on its own row so it can grow
 	     to fit a long sentence, and it is ABSENT rather than disabled when
-	     there is nothing to undo: a control that cannot act earns no ink. -->
-	{#if undoLabel}
-		<div class="dock-row dock-row-undo">
+	     there is nothing to undo: a control that cannot act earns no ink.
+
+	     THE ROW STANDS WHETHER THE PILL DOES OR NOT, ruled by Dann 2026-08-26
+	     after the deploy walk. The two rulings were pulling against each other:
+	     an absent pill shortened the dock by its row, the loupe is anchored
+	     above the dock, and so the whole surface jumped 50 px at the first
+	     correction of every session. Reserving the row settles it without
+	     bending either ruling, because an empty row draws NOTHING. It has no
+	     border, no fill, no text, and no target; it is height and nothing else,
+	     so the pill is still absent in every sense the ruling meant and the
+	     geometry stops moving. -->
+	<div class="dock-row dock-row-undo">
+		{#if undoLabel}
 			<button type="button" class="undo-pill" onclick={onundo}>
 				<span aria-hidden="true">&#x21B0;</span>
 				{T('loupe.undo').replace('%s', undoLabel)}
 			</button>
-		</div>
-	{/if}
+		{/if}
+	</div>
 
 	<!-- The stepper flanks the readout, and both marks are BARE: they walk the
 	     singer along the line and change nothing in the score. A coarse tap on
@@ -458,6 +468,14 @@
 	.dock {
 		position: fixed;
 		z-index: 9100;
+		/* THE SWIPE IS OURS, the same reason the loupe takes it: a downward
+		   drag on a scrollable box is a scroll as far as the browser is
+		   concerned, and it answers with `pointercancel` rather than the
+		   `pointerup` the dismissal listens for. The stations are sized to fit
+		   without scrolling, so this costs nothing; `overflow-y` below stays as
+		   the safety it always was, and a pointer that is not a finger still
+		   reaches it. */
+		touch-action: none;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
@@ -526,6 +544,14 @@
 		display: flex;
 		align-items: center;
 		gap: 6px;
+	}
+
+	/* The row the pill sits on, reserved whether it is there or not. 44 px is
+	   the pill's own floor, so a row holding one and a row holding none are the
+	   same height and the dock's geometry never changes. Empty, it is a gap:
+	   nothing is drawn in it and nothing can be tapped in it. */
+	.dock-row-undo {
+		min-height: 44px;
 	}
 
 	/* The pill sits alone on its row so a long sentence can grow into it. */

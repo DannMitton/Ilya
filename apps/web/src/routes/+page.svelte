@@ -848,6 +848,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   nearest-entry fallback, and takes nothing away. */
 	function handlePageTap(e: MouseEvent): void {
 		if (!loupeAvailable || loupeOpen) return;
+		/* A TAP THAT BEGAN ON THE LOUPE OR THE DOCK IS NEVER A TAP ON THE PAGE,
+		   and this is the fix for the dead dismissal Dann walked on the deploy.
+
+		   THE CAUSE, exactly. The chevron's own `onclick` runs first, at the
+		   target, and sets `loupeOpen` false. Svelte flushes and takes the dock
+		   out of the DOM. The SAME click event then finishes bubbling to the
+		   window and reaches this handler, where `loupeOpen` is now false so the
+		   guard above lets it through, and `elementFromPoint` is a LIVE query:
+		   the dock that stood at those coordinates is gone, so it answers with
+		   the page underneath and the loupe rises again on whatever measure sits
+		   there. Reproduced: a chevron press at 396, 538 in portrait re-tagged
+		   the loupe from `m. 9 · system 3 of 6` to `m. 16 · system 5 of 6`,
+		   which is Dann's own reading of it. In landscape the same press
+		   dismissed correctly, because no sheet sits under the chevron there,
+		   and that is why the first walk missed it.
+
+		   TWO TESTS, BECAUSE THERE ARE TWO CASES. The click's own target still
+		   answers `closest` after Svelte removes it, because a detached subtree
+		   keeps its own ancestors, and that covers the chevron. A click
+		   synthesized at the end of a swipe can carry a target that is already
+		   the page, so the gesture that produced it is remembered on
+		   `pointerdown` and consulted here. */
+		if ((e.target as Element | null)?.closest?.('.loupe, .dock')) return;
+		if (gestureBeganOnSurface) return;
 		/* THE SHEET IS FOUND AT THE POINT, NOT FROM `e.target`, and both halves
 		   of that are measured requirements rather than preferences.
 
@@ -893,17 +917,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   A stray tap outside the loupe deliberately does nothing: it is the
 	   easiest gesture to make by accident, and no Undo restores a lost place. */
 	let swipeFrom: { x: number; y: number } | null = null;
+	/** Whether the gesture now in flight started on the loupe or the dock. */
+	let gestureBeganOnSurface = $state(false);
 
 	function handleSurfacePointerDown(e: PointerEvent): void {
 		const el = (e.target as Element | null)?.closest?.('.loupe, .dock');
+		gestureBeganOnSurface = !!el;
 		swipeFrom = el ? { x: e.clientX, y: e.clientY } : null;
 	}
 
 	function handleSurfacePointerUp(e: PointerEvent): void {
 		const from = swipeFrom;
 		swipeFrom = null;
-		if (!from || !loupeOpen) return;
-		if (isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) dismissLoupe();
+		if (from && loupeOpen && isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) {
+			dismissLoupe();
+		}
+		/* Cleared on the NEXT frame, not here. The click that a tap synthesizes
+		   arrives after `pointerup`, and the flag has to still be standing when
+		   it does. */
+		requestAnimationFrame(() => (gestureBeganOnSurface = false));
+	}
+
+	/* A gesture the browser takes away from us, most often to scroll something.
+	   It ends the swipe without a `pointerup`, so without this the flag would
+	   stand until the next gesture and swallow one page tap. */
+	function handleSurfacePointerCancel(): void {
+		swipeFrom = null;
+		gestureBeganOnSurface = false;
 	}
 
 	/* The loupe cannot stand without something to hold. Leaving the phone, the
@@ -911,6 +951,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   state where it would be drawing a measure nobody is working on. */
 	$effect(() => {
 		if (!loupeAvailable || !selectedEventId) loupeOpen = false;
+	});
+
+	/* ONE SURFACE AT A TIME. Ruled by Dann 2026-08-26 on the deploy walk:
+	   opening the drawer sends the loupe and the dock away, in the same one
+	   motion they leave by any other route.
+
+	   THE DRAWER AND THE DOCK ARE SIBLINGS, and the schematic's own answer to
+	   where the surface lives says only one of the two is open at a time. On a
+	   phone the drawer covers the whole screen, so without this the singer met
+	   three surfaces stacked on one another with the page under all of them.
+
+	   IT COSTS THE SELECTION, and that is the ruling rather than an oversight:
+	   this is the same leave the chevron performs, so the drawer's own
+	   correction station arrives idle. */
+	$effect(() => {
+		if (!drawerCollapsed && loupeOpen) dismissLoupe();
 	});
 
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
@@ -2421,6 +2477,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	on:click={handlePageTap}
 	on:pointerdown={handleSurfacePointerDown}
 	on:pointerup={handleSurfacePointerUp}
+	on:pointercancel={handleSurfacePointerCancel}
 />
 
 <svelte:head>

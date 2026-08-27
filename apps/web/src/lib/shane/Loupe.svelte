@@ -109,6 +109,9 @@
 		/** The magnified measure's width, centred inside the frame. */
 		contentWidth: number;
 		contentHeight: number;
+		/** The window's height, sized by the TALLEST system on the page. */
+		windowHeight: number;
+		/** Landscape's vertical anchor. Portrait anchors on the dock instead. */
 		top: number;
 		system: number;
 		systems: number;
@@ -298,7 +301,6 @@
 		   mark does, so it sits in the system's coordinate space and the
 		   thumbnail's scale never has to be undone. */
 		for (const stale of container.querySelectorAll('[data-held-measure]')) stale.remove();
-		let markBox: DOMRect | null = null;
 		if (hitH > 0) {
 			const lineGap = hitH / 11;
 			const mark = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -310,34 +312,35 @@
 			mark.setAttribute('fill', 'none');
 			mark.setAttribute('pointer-events', 'none');
 			sysEl.insertBefore(mark, sysEl.firstChild);
-			markBox = mark.getBoundingClientRect();
 		}
 
-		/* THE LOUPE STANDS CLEAR OF THE MEASURE IT HOLDS. Two marks with two
-		   jobs is the ruled arrangement: the tag names the measure in words and
-		   the sage rectangle shows it in its place among the systems. A loupe
-		   parked over its own rectangle answers half of that, and MEASURED: at
-		   430 by 932 the centred placement covered system 3 whenever system 3
-		   was the system being worked on, which is most of the time.
+		/* THE LOUPE ANCHORS FIXED AND NEVER TRAVELS. Ruled by Dann 2026-08-26
+		   on the deploy walk, and it replaces the placement r2 shipped, which
+		   moved the loupe to keep the sage rectangle in view. The ruling is
+		   that the page is the thing that stays still and the loupe is the
+		   thing that stays put: the sage rectangle alone moves across the
+		   still page, and the measure tag carries the name.
 
-		   So it takes the room below the mark, and the room above when there is
-		   not enough below, and falls back to the centre of the free space when
-		   neither side fits. The page still does not move: this places a
-		   floating object, and nothing on the paper is displaced by it. */
-		const chromeH = contentHeight + 40;
-		const free = window.innerHeight - (dockInset > 0 ? 0 : dockHeight);
-		/* Fits WHOLLY inside the room the dock leaves, top and bottom both. The
-		   first version of this test checked only one end, and in landscape,
-		   where the page is not fitted and the held measure can be far below
-		   the fold, it put the loupe at y 460 on a 430 px screen. */
-		const fits = (y: number) => y >= GUTTER && y + chromeH <= free - GUTTER;
-		let top = Math.max(GUTTER, (free - chromeH) / 2);
-		if (markBox) {
-			const below = markBox.bottom + 14;
-			const above = markBox.top - 14 - chromeH;
-			if (fits(below)) top = below;
-			else if (fits(above)) top = above;
+		   SO THE WINDOW IS A CONSTANT, sized by the TALLEST system on the page
+		   rather than by the one in hand. Systems differ by a few units,
+		   because the renderer crops each one's headroom to its own ink
+		   (`staff-renderer.ts:1081`), and a window sized to the held system
+		   would breathe by those few units at every step. Each measure is drawn
+		   at its own height and centred in the constant window.
+
+		   AND THE ANCHOR IS THE DOCK, not the measure. Portrait hangs the
+		   loupe one gutter above the dock's top edge, so the singer's eye and
+		   thumb keep one relationship for the whole session. Landscape has the
+		   dock down its left side and nothing above, so the loupe centres in
+		   the room to its right, which is a constant now that the height is
+		   one. */
+		let maxSysHeight = sysHeight;
+		for (const el of container.querySelectorAll('[data-system]')) {
+			const h = Number(el.getAttribute('height'));
+			if (h > maxSysHeight) maxSysHeight = h;
 		}
+		const windowHeight = maxSysHeight * unitPx * MAGNIFICATION;
+		const top = Math.max(GUTTER, (window.innerHeight - (windowHeight + 40)) / 2);
 
 		frame = {
 			inner: clone.innerHTML + bar,
@@ -345,6 +348,7 @@
 			width,
 			contentWidth,
 			contentHeight,
+			windowHeight,
 			top,
 			system: systemIndexOf(ranges, measureIndex) + 1,
 			systems: ranges.length,
@@ -401,12 +405,18 @@
 </script>
 
 {#if open && frame}
+	<!-- PORTRAIT ANCHORS ON THE DOCK, landscape centres in the room beside it.
+	     `bottom` rather than `top` in portrait, so the loupe's own edge is what
+	     is pinned and a measure of a different height grows upward instead of
+	     shifting the whole frame. -->
 	<div
 		class="loupe"
-		style="left: {dockInset + 24}px; width: {frame.width}px; top: {frame.top}px;"
+		style="left: {dockInset + 24}px; width: {frame.width}px; {dockInset > 0
+			? `top: ${frame.top}px;`
+			: `bottom: ${dockHeight + 24}px;`}"
 	>
 		<p class="loupe-tag">{tag}</p>
-		<div class="loupe-window" bind:this={windowEl} style="height: {frame.contentHeight}px;">
+		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
 			<!-- ARIA-HIDDEN for the reason the accidental glyphs already carry:
 			     this is the page said louder, not a second thing to hear. The
 			     score region has its own label and the dock's readout names the
@@ -443,6 +453,12 @@
 	.loupe {
 		position: fixed;
 		z-index: 9100;
+		/* THE SWIPE IS OURS. Without this a downward drag starting here is a
+		   scroll gesture as far as the browser is concerned, it claims the
+		   pointer, and the `pointerup` the dismissal listens for never arrives:
+		   a `pointercancel` does. The ruled grammar gives pinch on the loupe no
+		   meaning either, so nothing is lost by taking the whole surface. */
+		touch-action: none;
 		box-sizing: border-box;
 		padding: 10px 10px 12px;
 		border: 1.4px solid var(--stone-700, #44403c);
@@ -484,8 +500,11 @@
 		color: var(--ink-tertiary, #6a655f);
 	}
 
+	/* The window is a constant height and the drawing is centred in it, so a
+	   short system sits in air rather than moving the frame. */
 	.loupe-window {
 		display: flex;
+		align-items: center;
 		justify-content: center;
 		overflow: hidden;
 	}
