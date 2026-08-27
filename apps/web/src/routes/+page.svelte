@@ -112,6 +112,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
 	import CorrectionDock from '$lib/shane/CorrectionDock.svelte';
 	import { isDismissSwipe, nearestTarget } from '$lib/shane/loupe';
+	import {
+		applyTuplet,
+		arrivalPitch,
+		canTie,
+		currentTie,
+		currentType,
+		DEFAULT_TUPLET,
+		enterEntry,
+		measureFill,
+		middleLine,
+		previousEntry,
+		stepCursor,
+		toggleRest,
+		toggleTie,
+		tupletRun,
+		type Cursor,
+		type TupletDefinition,
+	} from '$lib/shane/entry';
 	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
 		applyCorrections,
@@ -418,14 +436,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * DESKTOP IS UNCHANGED. Off a phone this still places, exactly as shipped.
 	 */
 	function handleNotePick(eventId: string): void {
-		selectedEventId = eventId;
+		setCursor({ kind: 'entry', id: eventId });
 		if (isPhone) return;
 		placeArmedSyllable(eventId);
 	}
 
 	/** A tap on an entry INSIDE the loupe: it takes the entry and places. */
 	function handleLoupePick(eventId: string): void {
-		selectedEventId = eventId;
+		setCursor({ kind: 'entry', id: eventId });
 		placeArmedSyllable(eventId);
 	}
 
@@ -442,6 +460,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/** The line as the reader read it, before any hand correction. */
 	const readLine = $derived(ingestedScore?.result.score.vocalLine ?? []);
 
+	/* THE LINE AS THE PAGE DRAWS IT, hand corrections applied and hand-entered
+	   entries in their places. N.92 slice 3 moved every selection and every
+	   walk onto this rather than onto `readLine`, and it had to: an entry the
+	   singer entered exists nowhere in the read, so a selection resolved
+	   against the read would find nothing the moment they made one. Applying a
+	   correction to an already-corrected event is idempotent, so `currentPitch`
+	   and `currentDuration` read the same answer off either line. */
+	const correctedLine = $derived(applyCorrections(readLine, doc.corrections));
+
 	const correctedCount = $derived(Object.keys(doc.corrections).length);
 
 	/* N.97. Corrections whose event id the current read no longer carries.
@@ -452,8 +479,83 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const orphanCount = $derived(orphanIds(readLine, doc.corrections).length);
 
 	const selectedEvent = $derived(
-		selectedEventId ? readLine.find((ev) => ev.id === selectedEventId) : undefined,
+		selectedEventId ? correctedLine.find((ev) => ev.id === selectedEventId) : undefined,
 	);
+
+	/* ── THE INSERTION BAR'S PLACE (N.92 slice 3) ────────────────────────
+	   Speedy's bar stands ON an entry or IN a gap between two of them, and
+	   before this slice only the first of those existed. `selectedEventId` is
+	   still the entry selection, because the drawer, the page's own mark, and
+	   the keyboard all read it and none of them knows about gaps;
+	   `gapAfter` is the second state and the two are mutually exclusive.
+
+	   `undefined` MEANS NOT IN A GAP, and `null` means the gap before the
+	   first entry. Three states need three values, and collapsing the head gap
+	   into "no gap" would make the one place a part can be extended from
+	   unreachable. */
+	let gapAfter = $state<string | null | undefined>(undefined);
+
+	const cursor = $derived<Cursor | null>(
+		gapAfter !== undefined
+			? { kind: 'gap', after: gapAfter }
+			: selectedEventId
+				? { kind: 'entry', id: selectedEventId }
+				: null,
+	);
+
+	const inGap = $derived(gapAfter !== undefined);
+
+	function setCursor(next: Cursor | null): void {
+		if (!next) {
+			selectedEventId = null;
+			gapAfter = undefined;
+			return;
+		}
+		if (next.kind === 'entry') {
+			selectedEventId = next.id;
+			gapAfter = undefined;
+		} else {
+			selectedEventId = null;
+			gapAfter = next.after;
+		}
+	}
+
+	/* THE ARMED DURATION, which is what a gap has instead of a selection.
+	   Speedy arms a value and types it; the brief asks for a rest "of the lit
+	   duration", so something has to be lit when no entry is taken. Tapping a
+	   value both arms it and enters it, so the armed value is always the last
+	   one the singer used and the row is never lit at nothing. */
+	let armedBase = $state<NoteBase>('quarter');
+	let armedDots = $state(0);
+
+	/** The clef in force, for the middle-line arrival where a part is empty. */
+	const scoreClef = $derived(
+		ingestedScore?.result.score.clefs?.[0]?.clef ??
+			ingestedScore?.result.score.measures[0]?.clef,
+	);
+
+	/** The pitch a note entered at the bar would arrive at. */
+	const arrival = $derived(
+		cursor ? arrivalPitch(correctedLine, cursor, scoreClef) : middleLine(scoreClef),
+	);
+
+	/** The entry the bar follows, which the gap sentence and PITCH label name. */
+	const gapAnchor = $derived(cursor ? previousEntry(correctedLine, cursor) : null);
+
+	/* WHAT THE HELD MEASURE HOLDS against what its signature asks for, or null
+	   where they agree. Ruled by Dann 2026-08-26: entering into a full bar is
+	   not blocked and not re-timed, and the page stays silent about it; the
+	   measure tag carries the arithmetic instead, and only where there is a
+	   disagreement to carry.
+
+	   THE SIGNATURE IS THE MEASURE'S OWN, snapshotted per measure by the
+	   parsers (`types.ts:228`), so a mid-score change of metre is answered
+	   correctly rather than measured against the opening bar. */
+	const heldFill = $derived.by(() => {
+		if (heldMeasureIndex === null) return null;
+		const m = ingestedScore?.result.score.measures.find((x) => x.index === heldMeasureIndex);
+		return measureFill(correctedLine, heldMeasureIndex, m?.timeSignature);
+	});
 
 	const selectedLabel = $derived.by(() => {
 		const ev = selectedEvent;
@@ -494,14 +596,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		note: UndoNote;
 		corrections: CorrectionMap;
 		pairings: PairingMap;
+		/* THE WHOLE CURSOR, not half of it. N.92 slice 3 gave the bar a second
+		   place to stand, and an undo that restored only `selected` set it to
+		   null while leaving `gapAfter` alone, which is no cursor at all: the
+		   effect that keeps the loupe standing then took it down. MEASURED on
+		   the walk: undoing an entry made in a gap dismissed the loupe, because
+		   every entry is pushed from a gap and every gap pushes a null
+		   selection. */
 		selected: string | null;
+		gapAfter: string | null | undefined;
 	}
 	let undoStack = $state<UndoEntry[]>([]);
 
 	function pushUndo(note: UndoNote): void {
 		undoStack = [
 			...undoStack,
-			{ note, corrections: doc.corrections, pairings: doc.pairings, selected: selectedEventId },
+			{
+				note,
+				corrections: doc.corrections,
+				pairings: doc.pairings,
+				selected: selectedEventId,
+				gapAfter,
+			},
 		];
 	}
 
@@ -511,6 +627,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.corrections = top.corrections;
 		doc.pairings = top.pairings;
 		selectedEventId = top.selected;
+		gapAfter = top.gapAfter;
 		undoStack = undoStack.slice(0, -1);
 	}
 
@@ -617,11 +734,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		correct({ dots: on ? 0 : 1 });
 	}
 
+	/**
+	 * The stepper, and the DRAWER's Previous and Next note.
+	 *
+	 * N.92 slice 3 moved it from `neighbourId` onto `stepCursor`, so it walks
+	 * entry, gap, entry rather than note to note. Two things changed with it:
+	 * a rest is now a place the bar can stand, because this slice converts one
+	 * back to a note, and the gaps between entries are places, because this
+	 * slice enters entries into them.
+	 */
 	function handleMove(direction: 1 | -1): void {
-		const id = selectedEventId;
-		if (!id) return;
-		const next = neighbourId(readLine, doc.corrections, id, direction);
-		if (next) selectedEventId = next;
+		const c = cursor;
+		if (!c) return;
+		const next = stepCursor(correctedLine, c, direction);
+		if (next) setCursor(next);
 	}
 
 	function handleDeleteNote(): void {
@@ -642,6 +768,179 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (!selectedEventId) return;
 		pushUndo({ kind: 'text', key: 'loupe.undo.restored' });
 		doc.corrections = clearCorrection(doc.corrections, selectedEventId);
+	}
+
+	/* ── THE ENTRY GRAMMAR (N.92 slice 3) ────────────────────────────────
+	   Speedy under touch. Every one of these acts through `entry.ts`, which is
+	   pure and tested, so what this file holds is the wiring and the undo
+	   sentence and nothing else. */
+
+	/**
+	 * A duration cell. In a gap it ENTERS an entry; on one it re-times it.
+	 *
+	 * THE ARRIVAL PITCH IS THE RULING, Dann 2026-08-25: a fresh note takes the
+	 * previous entry's pitch and the pitch verbs finish it, and where the part
+	 * has no previous entry it arrives on the staff's middle line.
+	 *
+	 * THIS DEPARTS FROM THE SCHEMATIC'S §4 ON PURPOSE. That section reads
+	 * Speedy strictly, where a duration typed in a gap with no pitch enters a
+	 * REST. The brief of 2026-08-26 rules the other way for this surface: a
+	 * duration enters a NOTE at the arrival pitch, and Rest is the cell that
+	 * enters a rest. The brief is the later instruction and it is the one
+	 * built; the divergence is named in the memo rather than buried.
+	 */
+	function handleDurationCell(base: NoteBase): void {
+		armedBase = base;
+		const c = cursor;
+		if (!c || !inGap) {
+			handleBase(base);
+			return;
+		}
+		const { map, id } = enterEntry(doc.corrections, c, {
+			base,
+			dots: armedDots,
+			pitch: arrival,
+		});
+		pushUndo({ kind: 'text', key: 'loupe.undo.entered' });
+		doc.corrections = map;
+		setCursor({ kind: 'entry', id });
+	}
+
+	/** The dot. On an entry it toggles one; in a gap it arms one. */
+	function handleDotCell(): void {
+		if (inGap) {
+			armedDots = armedDots > 0 ? 0 : 1;
+			return;
+		}
+		handleDot();
+	}
+
+	/**
+	 * Rest. In a gap it enters one; on an entry it converts, both ways.
+	 *
+	 * ONE VERB, BOTH DIRECTIONS, because the singer's question is the same in
+	 * both: is there a sound here. A rest converted back returns the note that
+	 * was there rather than the arrival guess, which `entry.ts` remembers.
+	 */
+	function handleRest(): void {
+		const c = cursor;
+		if (!c) return;
+		if (c.kind === 'gap') {
+			const { map, id } = enterEntry(doc.corrections, c, { base: armedBase, dots: armedDots });
+			pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
+			doc.corrections = map;
+			setCursor({ kind: 'entry', id });
+			return;
+		}
+		pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
+		doc.corrections = toggleRest(doc.corrections, correctedLine, c.id, arrival);
+	}
+
+	/** Tie, on a note whose neighbour can legally take one. */
+	function handleTie(): void {
+		const ev = selectedEvent;
+		if (!ev || !tieAvailable) return;
+		pushUndo({ kind: 'text', key: 'loupe.undo.tie' });
+		doc.corrections = toggleTie(doc.corrections, ev);
+	}
+
+	/** Whether the taken entry may start a tie: Gould's conditions, in code. */
+	const tieAvailable = $derived(
+		!inGap && !!selectedEventId && canTie(correctedLine, doc.corrections, selectedEventId),
+	);
+
+	const selectedIsRest = $derived(
+		selectedEvent ? currentType(selectedEvent, doc.corrections) === 'rest' : false,
+	);
+	const selectedTied = $derived(
+		selectedEvent ? currentTie(selectedEvent, doc.corrections) : false,
+	);
+
+	/* ── PRESS AND HOLD REPEATS (N.92 slice 3) ───────────────────────────
+	   From the ruled gesture table: holding a stepper arrow or a pitch verb
+	   repeats it while held, and NOTHING ELSE takes a hold. The table reserves
+	   press-and-hold on the page and on the loupe deliberately, because the
+	   platform trains it for text selection and for context menus.
+
+	   THE FIRST FIRE IS THE CLICK'S, not the hold's. The hold starts repeating
+	   only after 400 ms, so an ordinary tap is a tap and never a tap plus a
+	   repeat. 110 ms between repeats is about nine a second, which walks a
+	   line at reading speed without outrunning the eye.
+
+	   IT ENDS ON ANYTHING. `pointerup`, `pointercancel`, and `pointerleave`
+	   all stop it, because a repeat that outlives the finger is the worst
+	   failure this can have: it would run to the end of the part. */
+	const HOLD_DELAY = 400;
+	const HOLD_EVERY = 110;
+	let holdTimer: ReturnType<typeof setTimeout> | null = null;
+	let holdBeat: ReturnType<typeof setInterval> | null = null;
+
+	function stopHold(): void {
+		if (holdTimer !== null) clearTimeout(holdTimer);
+		if (holdBeat !== null) clearInterval(holdBeat);
+		holdTimer = null;
+		holdBeat = null;
+	}
+
+	function onhold(fire: () => void) {
+		return (e: PointerEvent) => {
+			stopHold();
+			const target = e.currentTarget as HTMLElement | null;
+			if (!target || (target as HTMLButtonElement).disabled) return;
+			const end = () => {
+				stopHold();
+				target.removeEventListener('pointerup', end);
+				target.removeEventListener('pointercancel', end);
+				target.removeEventListener('pointerleave', end);
+			};
+			target.addEventListener('pointerup', end);
+			target.addEventListener('pointercancel', end);
+			target.addEventListener('pointerleave', end);
+			holdTimer = setTimeout(() => {
+				holdBeat = setInterval(fire, HOLD_EVERY);
+			}, HOLD_DELAY);
+		};
+	}
+
+	/* ── THE NOLET ROW ───────────────────────────────────────────────────
+	   The DURATION station swapped in place for one definition row, and the
+	   definition applies LIVE with no confirm, which is ruling 5 holding here
+	   as it does on every other verb.
+
+	   ONE UNDO REVERSES THE WHOLE OPERATION, and that is what `tupletBase`
+	   exists for. Every nudge of a triangle re-applies the definition from the
+	   map as it stood BEFORE the row was first applied, so ten nudges leave one
+	   change on the stack rather than ten, and the pill reverses the tuplet
+	   rather than the last nudge of it. */
+	let tupletOpen = $state(false);
+	/** The last definition, kept as the session default (Finale's own rule). */
+	let tupletDef = $state<TupletDefinition>({ ...DEFAULT_TUPLET });
+	let tupletBase: CorrectionMap | null = null;
+
+	const tupletFits = $derived(
+		!inGap && !!selectedEventId && tupletRun(correctedLine, selectedEventId, tupletDef.actualNotes).length > 0,
+	);
+
+	function openTuplet(): void {
+		tupletOpen = true;
+		tupletBase = null;
+	}
+
+	function closeTuplet(): void {
+		tupletOpen = false;
+		tupletBase = null;
+	}
+
+	function applyTupletDefinition(next: TupletDefinition): void {
+		tupletDef = next;
+		const id = selectedEventId;
+		if (!id) return;
+		if (tupletRun(correctedLine, id, next.actualNotes).length === 0) return;
+		if (tupletBase === null) {
+			tupletBase = doc.corrections;
+			pushUndo({ kind: 'text', key: 'loupe.undo.tuplet' });
+		}
+		doc.corrections = applyTuplet(tupletBase, correctedLine, id, next);
 	}
 
 	/* THE KEYBOARD, active only while a note is selected. Finale's own digit
@@ -707,7 +1006,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				...ing.result,
 				score: {
 					...ing.result.score,
-					vocalLine: applyCorrections(ing.result.score.vocalLine, doc.corrections),
+					// `correctedLine` above, not a second application: two calls could
+					// disagree only by drifting, and one line is what the loupe, the
+					// dock, and the page all have to be looking at.
+					vocalLine: correctedLine,
 				},
 			},
 		};
@@ -746,11 +1048,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			!!ingestedScore,
 	);
 
-	/** The line as the PAGE draws it: deletions applied, so the loupe and the
-	    paper never disagree about which entries a measure holds. */
-	const renderedLine = $derived(correctedScore?.result.score.vocalLine ?? []);
-
-	const heldMeasureIndex = $derived(selectedEvent ? selectedEvent.measureIndex : null);
+	/* THE HELD MEASURE, and in a gap it is the anchor's. A gap is a place
+	   between two entries, so it has no measure of its own; the measure the
+	   loupe holds is the one the bar stands in, which is the measure of the
+	   entry it follows, and the head gap belongs to the first measure. */
+	const heldMeasureIndex = $derived(
+		selectedEvent
+			? selectedEvent.measureIndex
+			: inGap
+				? (gapAnchor?.measureIndex ?? correctedLine[0]?.measureIndex ?? null)
+				: null,
+	);
 
 	/* The measure's own display number, which is what the tag prints. A pickup
 	   measure is `'0'` or `''` by publisher convention (`types.ts:225`), so the
@@ -765,7 +1073,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const heldMeasureIds = $derived(
 		heldMeasureIndex === null
 			? []
-			: renderedLine
+			: correctedLine
 					.filter((ev) => ev.type !== 'rest' && ev.measureIndex === heldMeasureIndex)
 					.map((ev) => ev.id),
 	);
@@ -773,7 +1081,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/** The next measure that carries an entry, which bounds the loupe's window. */
 	const nextMeasureIds = $derived.by(() => {
 		if (heldMeasureIndex === null) return [];
-		const later = renderedLine.filter(
+		const later = correctedLine.filter(
 			(ev) => ev.type !== 'rest' && ev.measureIndex > heldMeasureIndex,
 		);
 		const first = later[0];
@@ -784,9 +1092,37 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
 	   already ships, and a part that has no value is absent rather than
 	   printed empty: an unpaired note simply has no syllable segment. */
+	/** What the gap sentence calls the entry the bar follows: its syllable if
+	    it carries one, else its pitch, which is what the singer can see. */
+	const gapAnchorName = $derived.by(() => {
+		const ev = gapAnchor;
+		if (!ev) return null;
+		const p = shownPairings[ev.id];
+		if (p && p.kind === 'syllable') return p.cyrillic;
+		const pitch = currentPitch(ev, doc.corrections);
+		return pitch ? pitchLabel(pitch) : null;
+	});
+
 	const readoutLine = $derived.by(() => {
+		/* IN A GAP THE READOUT NAMES THE PLACE, not a note: the schematic's own
+		   sentence, because a bar standing between two entries has nothing to
+		   name and the singer still has to know where the next duration lands. */
+		if (inGap) {
+			const name = gapAnchorName;
+			return name === null
+				? t('loupe.gapHead', language)
+				: t('loupe.gap', language).replace('%s', name);
+		}
 		const parts: string[] = [];
-		if (selectedLabel) parts.push(selectedLabel);
+		/* A REST LEADS WITH THE WORD AND SHOWS NO PITCH. The record still
+		   remembers one, which is what lets a conversion back return the note
+		   that was there, so the readout would otherwise print a pitch for a
+		   thing that makes no sound. MEASURED on the walk: a rest read
+		   `Eighth` alone, and a rest converted back and forth read `F4 · Eighth`
+		   both ways round, so the one sentence that says what the entry IS said
+		   nothing about the only change the singer had made. */
+		if (selectedIsRest) parts.push(t('loupe.rest', language));
+		else if (selectedLabel) parts.push(selectedLabel);
 		if (selectedBase) parts.push(durationWord(selectedBase));
 		if (selectedDotted) parts.push(t('correct.dot', language));
 		const p = selectedEventId ? shownPairings[selectedEventId] : undefined;
@@ -902,13 +1238,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		});
 		const id = nearestTarget(targets, e.clientX, e.clientY);
 		if (!id) return;
-		selectedEventId = id;
+		setCursor({ kind: 'entry', id });
 		loupeOpen = true;
 	}
 
 	function dismissLoupe(): void {
 		loupeOpen = false;
-		selectedEventId = null;
+		setCursor(null);
+		closeTuplet();
+		stopHold();
 	}
 
 	/* SWIPE DOWN, from anywhere on either, sends both away together. Bound at
@@ -950,7 +1288,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   score document, or the selection closes it, so it never survives into a
 	   state where it would be drawing a measure nobody is working on. */
 	$effect(() => {
-		if (!loupeAvailable || !selectedEventId) loupeOpen = false;
+		if (!loupeAvailable || !cursor) loupeOpen = false;
 	});
 
 	/* ONE SURFACE AT A TIME. Ruled by Dann 2026-08-26 on the deploy walk:
@@ -3063,7 +3401,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      THEY ARRIVE AS ONE MOTION AND LEAVE AS ONE, a single 180 ms fade on both,
      which is what teaches the singer they are one object on the first raise
      rather than on the first dismissal. -->
-{#if loupeAvailable && loupeOpen && selectedEventId}
+{#if loupeAvailable && loupeOpen && cursor}
 	<Loupe
 		open={loupeOpen}
 		measureLabel={heldMeasureLabel}
@@ -3073,6 +3411,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{selectedEventId}
 		revision={correctedScore}
 		{language}
+		fill={heldFill}
 		onpick={handleLoupePick}
 		dockInset={phonePortrait ? 0 : 380}
 		{dockHeight}
@@ -3088,14 +3427,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		onundo={handleUndo}
 		ondismiss={dismissLoupe}
 		onwalk={handleMove}
-		onbase={handleBase}
-		ondot={handleDot}
+		onbase={handleDurationCell}
+		ondot={handleDotCell}
 		onstep={handleStep}
 		onoctave={handleOctave}
 		onaccidental={handleAccidental}
 		ondelete={handleDeleteNote}
 		onshift={handleDockShift}
 		onheight={(h) => (dockHeight = h)}
+		{inGap}
+		{armedBase}
+		armedDots={armedDots > 0}
+		arrivalName={gapAnchorName}
+		{selectedIsRest}
+		{selectedTied}
+		{tieAvailable}
+		onrest={handleRest}
+		ontie={handleTie}
+		{tupletOpen}
+		{tupletDef}
+		{tupletFits}
+		onopentuplet={openTuplet}
+		onclosetuplet={closeTuplet}
+		ontupletdef={applyTupletDefinition}
+		{onhold}
 	/>
 {/if}
 {#if updated.current && !updateDismissed}

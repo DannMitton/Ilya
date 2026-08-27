@@ -32,6 +32,7 @@ import {
 	type NoteBase,
 	type Pitch,
 	type SpellingContext,
+	type TupletInfo,
 	type VocalLineEvent
 } from '@ilya/score-parser';
 
@@ -49,6 +50,50 @@ export interface NoteCorrection {
 	base?: NoteBase;
 	dots?: number;
 	deleted?: true;
+
+	/* ── N.92 slice 3, and every one of these is ADDITIVE ─────────────────
+	   The stored shape grew by four optional fields and lost nothing. A map
+	   written by slice 1 or slice 2 carries none of them, reads back
+	   identically, and behaves as it always did; a map written by this slice
+	   and read by an older build would lose the four and keep the rest, which
+	   is the same forward story `dots` had when it arrived.
+
+	   NO NEW SAVE SITE. N.27's rule stands: corrections are still the one
+	   stored diff, still keyed by event id, still written where they were
+	   written before. What changed is what a record may say, not where it
+	   lives. */
+
+	/**
+	 * This entry is not in the read: the singer entered it by hand, and the
+	 * record IS the entry rather than an amendment to one.
+	 *
+	 * `after` names the entry it follows, or null for the head of the part. It
+	 * may name a reader event or another hand-entered one, so several entries
+	 * in one gap form a chain whose order cannot be ambiguous. An id, never an
+	 * index, for the reason the whole diff is keyed by id: an index into the
+	 * read moves when the next pass finds one more event.
+	 */
+	entered?: { after: string | null };
+
+	/**
+	 * Note or rest, overriding what the read said. Absent means untouched,
+	 * exactly as `pitch` and `base` do.
+	 *
+	 * A STRING RATHER THAN A FLAG, and deliberately unlike `deleted`. `deleted`
+	 * is `true` or absent because absence has a natural meaning there. Here
+	 * three states are real: as read, forced to a rest, and forced back to a
+	 * note, and a boolean could only carry two of them.
+	 */
+	type?: 'note' | 'rest';
+
+	/**
+	 * A tie to the entry that follows, overriding the read. `'none'` is the
+	 * singer removing a tie the reader found, which absence cannot say.
+	 */
+	tied?: 'start' | 'none';
+
+	/** The hand-defined tuplet group this entry belongs to. */
+	tuplet?: TupletInfo;
 }
 
 /** Corrections by event id, the shape `PairingMap` already established. */
@@ -213,12 +258,21 @@ export function withCorrection(
 ): CorrectionMap {
 	const next = { ...map, [id]: { ...map[id], ...change } };
 	const entry = next[id];
-	if (entry.deleted === undefined && entry.pitch === undefined && entry.base === undefined) {
-		// `dots` alone can still be meaningful, so it is checked separately.
-		if (entry.dots === undefined) {
-			const { [id]: _dropped, ...rest } = next;
-			return rest;
-		}
+	/* AN ENTERED RECORD IS NEVER PRUNED. For every other id the record is an
+	   amendment and an empty amendment is worth nothing, but here the record is
+	   the entry's whole existence: pruning it would delete the note. */
+	if (entry.entered) return next;
+	if (
+		entry.deleted === undefined &&
+		entry.pitch === undefined &&
+		entry.base === undefined &&
+		entry.dots === undefined &&
+		entry.type === undefined &&
+		entry.tied === undefined &&
+		entry.tuplet === undefined
+	) {
+		const { [id]: _dropped, ...rest } = next;
+		return rest;
 	}
 	return next;
 }
@@ -253,36 +307,163 @@ export function applyCorrections(
 	map: CorrectionMap
 ): VocalLineEvent[] {
 	if (Object.keys(map).length === 0) return vocalLine;
+
+	/* N.92 slice 3. Hand-entered entries, gathered by the entry they follow so
+	   the walk below can emit each one in its place. A chain in one gap is
+	   resolved by following anchors, so two entries entered into the same gap
+	   keep the order they were entered in. */
+	const enteredAfter = new Map<string, string[]>();
+	for (const [id, c] of Object.entries(map)) {
+		if (!c.entered) continue;
+		const key = c.entered.after ?? HEAD;
+		const list = enteredAfter.get(key);
+		if (list) list.push(id);
+		else enteredAfter.set(key, [id]);
+	}
+
 	const out: VocalLineEvent[] = [];
+	const emitEntered = (anchorId: string, anchor: VocalLineEvent | null, depth: number) => {
+		// A cycle in the anchors, which nothing should be able to write, would
+		// otherwise be an infinite line. Bounded rather than trusted.
+		if (depth > 512) return;
+		for (const id of enteredAfter.get(anchorId) ?? []) {
+			const c = map[id];
+			if (!c || c.deleted) continue;
+			const ev = synthesize(id, c, anchor);
+			out.push(ev);
+			emitEntered(id, ev, depth + 1);
+		}
+	};
+
+	emitEntered(HEAD, null, 0);
 	for (const ev of vocalLine) {
 		const c = map[ev.id];
 		if (!c) {
 			out.push(ev);
+			emitEntered(ev.id, ev, 0);
 			continue;
 		}
-		if (c.deleted) continue;
-		const base = c.base ?? ev.duration.base;
-		const dots = c.dots ?? ev.duration.dots;
-		const durationChanged = base !== ev.duration.base || dots !== ev.duration.dots;
-		out.push({
-			...ev,
-			...(c.pitch ? { pitch: c.pitch } : {}),
-			duration: durationChanged
-				? {
-						...ev.duration,
-						base,
-						dots,
-						// A tuplet keeps the parser's own fraction: this ship cannot
-						// change a tuplet, so recomputing one here would be inventing
-						// arithmetic it has no input for.
-						fraction: ev.duration.tuplet
-							? ev.duration.fraction
-							: durationFraction(base, dots)
-					}
-				: ev.duration
-		});
+		if (c.deleted) {
+			// The entries hung off a deleted one still stand: the singer deleted
+			// the reader's note, not their own work, and re-anchoring them keeps
+			// them in the line where they were entered.
+			emitEntered(ev.id, ev, 0);
+			continue;
+		}
+		out.push(amend(ev, c));
+		emitEntered(ev.id, ev, 0);
 	}
 	return out;
+}
+
+/** The anchor key standing for the head of the part. */
+const HEAD = '\u0000head';
+
+/** One read event with its correction folded in. */
+function amend(ev: VocalLineEvent, c: NoteCorrection): VocalLineEvent {
+	const base = c.base ?? ev.duration.base;
+	const dots = c.dots ?? ev.duration.dots;
+	const tuplet = c.tuplet ?? ev.duration.tuplet;
+	const type = c.type ?? ev.type;
+	const durationChanged =
+		base !== ev.duration.base || dots !== ev.duration.dots || tuplet !== ev.duration.tuplet;
+	const out: VocalLineEvent = {
+		...ev,
+		type,
+		/* A CONVERTED REST CARRIES NO PITCH on the drawn event, and the record
+		   still remembers one, which is what lets a conversion back return the
+		   note that was there rather than the arrival guess.
+
+		   THE TEST IS `c.type`, NOT `type`, and an N.97b acceptance test is why.
+		   A rest the READER read can carry a pitch correction: the id resolves,
+		   the correction lands, and the pitch is inert because the renderer
+		   draws the rest and never reaches it
+		   (`staff-renderer.ts:926`). `recognized-to-musicxml.test.ts:365` pins
+		   exactly that, on a real captured page. Dropping the pitch from every
+		   rest broke it. Only the singer's own conversion drops one. */
+		...(c.type === 'rest' ? { pitch: undefined } : c.pitch ? { pitch: c.pitch } : {}),
+		duration: durationChanged
+			? {
+					...ev.duration,
+					base,
+					dots,
+					...(tuplet ? { tuplet } : {}),
+					/* SLICE 1'S NOTE IS SUPERSEDED, and here is why. It kept the
+					   parser's fraction under a tuplet because that ship could not
+					   change one and had no input to recompute from. This ship
+					   defines tuplets, so the ratio IS the input: the group's own
+					   `normalNotes` of `normalType`, divided by its count. */
+					fraction: tuplet ? tupletFraction(tuplet) : durationFraction(base, dots)
+				}
+			: ev.duration
+	};
+	/* THE TIE IS SET LAST, and it is a DELETE rather than a spread of
+	   `undefined`. Spreading nothing leaves the read's own tie standing, which
+	   is exactly the defect a test caught here: `tied: 'none'` is the singer
+	   removing a tie the reader found, and it has to reach the drawn event as
+	   an absence rather than as a no-op. */
+	if (c.tied === 'start') out.tied = { type: 'start' };
+	else if (c.tied === 'none') delete out.tied;
+	return out;
+}
+
+/** A hand-entered record, built into an event the renderer can draw. */
+function synthesize(
+	id: string,
+	c: NoteCorrection,
+	anchor: VocalLineEvent | null
+): VocalLineEvent {
+	const base = c.base ?? 'quarter';
+	const dots = c.dots ?? 0;
+	const type = c.type ?? (c.pitch ? 'note' : 'rest');
+	const fraction = c.tuplet ? tupletFraction(c.tuplet) : durationFraction(base, dots);
+	/* IT SITS IN THE ANCHOR'S MEASURE, at the anchor's onset plus the anchor's
+	   own length. The renderer draws barlines off `measureIndex` and keys its
+	   per-measure accidental state to it, and it spaces on durations rather
+	   than on onsets, so this is the field that has to be right and the onset
+	   is the field that has to be honest. At the head of a part both are the
+	   downbeat of measure 0. */
+	const measureIndex = anchor ? anchor.measureIndex : 0;
+	const onset = anchor
+		? addFractions(anchor.rhythmicPosition.fraction, anchor.duration.fraction)
+		: { numerator: 0, denominator: 1 };
+	return {
+		id,
+		type,
+		measureIndex,
+		rhythmicPosition: { fraction: onset },
+		duration: { base, dots, ...(c.tuplet ? { tuplet: c.tuplet } : {}), fraction },
+		...(type === 'note' && c.pitch ? { pitch: c.pitch } : {}),
+		...(c.tied === 'start' ? { tied: { type: 'start' as const } } : {})
+	};
+}
+
+/**
+ * One entry's share of the space a tuplet claims.
+ *
+ * The group's own sentence, read as arithmetic: `normalNotes` of `normalType`
+ * divided between `actualNotes` entries. Exported so the fraction the diff
+ * writes and the fraction anything else computes are one function.
+ */
+export function tupletFraction(t: TupletInfo): Fraction {
+	const unit = durationFraction(t.normalType, 0);
+	return reduceFraction(unit.numerator * t.normalNotes, unit.denominator * t.actualNotes);
+}
+
+function addFractions(a: Fraction, b: Fraction): Fraction {
+	return reduceFraction(
+		a.numerator * b.denominator + b.numerator * a.denominator,
+		a.denominator * b.denominator
+	);
+}
+
+function reduceFraction(numerator: number, denominator: number): Fraction {
+	const g = greatestCommonDivisor(Math.abs(numerator), Math.abs(denominator));
+	return { numerator: numerator / g, denominator: denominator / g };
+}
+
+function greatestCommonDivisor(a: number, b: number): number {
+	return b === 0 ? a || 1 : greatestCommonDivisor(b, a % b);
 }
 
 /**
@@ -380,5 +561,19 @@ export function orphanIds(vocalLine: VocalLineEvent[], map: CorrectionMap): stri
 	const ids = Object.keys(map);
 	if (ids.length === 0) return [];
 	const live = new Set(vocalLine.map((ev) => ev.id));
-	return ids.filter((id) => !live.has(id));
+	/* N.92 slice 3. A HAND-ENTERED ENTRY IS NEVER IN THE READ, so measuring it
+	   against the read would report every one of them lost the moment it was
+	   entered. It is judged by its ANCHOR instead: an entry lands when the
+	   entry it follows is still there, and the head of the part is always
+	   there. An entry anchored to another hand-entered one lands when that one
+	   does, so a chain is orphaned or kept whole. */
+	const entered = new Set(ids.filter((id) => map[id]?.entered));
+	const lands = (id: string, depth: number): boolean => {
+		if (depth > 512) return false;
+		const after = map[id]?.entered?.after ?? null;
+		if (after === null) return true;
+		if (entered.has(after)) return lands(after, depth + 1);
+		return live.has(after);
+	};
+	return ids.filter((id) => (entered.has(id) ? !lands(id, 0) : !live.has(id)));
 }

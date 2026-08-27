@@ -237,6 +237,61 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.lyric.toEnd':           { en: 'Syllables, to the end of the lyric', fr: 'Les syllabes, jusqu\u2019à la fin du texte' },
 	'loupe.lyric.toNextOpen':      { en: 'Syllables, to the next open note',   fr: 'Les syllabes, jusqu\u2019à la prochaine note libre' },
 
+
+	// ── N.92 mobile slice 3: the entry grammar ───────────────
+	// EVERY FRENCH WORD HERE AWAITS DANN'S EYE. The table in
+	// `docs/sessions/memo-mobile-slice3_r1_2026-08-26.md` sets each one beside
+	// its English and marks coined against adopted.
+	//
+	// ADOPTED, from strings already in this file: `mesure` and `entrée` follow
+	// `mes.` and the entry station's « Saisie » from slice 2; `Silence`
+	// (upload.report.events); `Liaison` and `Nolet` (both ratified by Dann
+	// 2026-08-26 with the slice 2 table); `Annuler` (correct.restore);
+	// `Hauteur` (upload.report.pitchSubs); `note` and `syllabe` throughout.
+	//
+	// COINED, two: « dans l'espace de » for the tuplet definition's ratio
+	// clause, and « prend la hauteur de » for the arrival label.
+	//
+	// THE GAP SENTENCE DROPS ITS NOUN, ruled by Dann 2026-08-26, striking the
+	// « intervalle » this file briefly carried. The sentence names no object
+	// because it does not need one: it says where the bar is and what happens
+	// next, and a word for the place between two entries was a term the singer
+	// would have had to learn in order to read a sentence that already told
+	// them everything. The English is reshaped to match, so the two languages
+	// say the same thing in the same shape.
+	'loupe.gap':                   { en: 'after %s \u00b7 the next duration enters here', fr: 'après %s \u00b7 la prochaine durée s\u2019inscrit ici' },
+	// The head of the part has no entry to be after, so it says where rather
+	// than after what. NOT the same sentence with an empty slot: a sentence with
+	// a hole in it is worse than a shorter one that is true.
+	'loupe.gapHead':               { en: 'before the first entry \u00b7 the next duration enters here', fr: 'avant la première entrée \u00b7 la prochaine durée s\u2019inscrit ici' },
+	// The PITCH station's label in a gap, which turns the arrival rule into
+	// recognition instead of recall by saying it before the note exists.
+	'loupe.station.pitchTakes':    { en: 'Pitch \u00b7 takes the pitch of %s', fr: 'Hauteur \u00b7 prend la hauteur de %s' },
+	'loupe.station.pitchMiddle':   { en: 'Pitch \u00b7 arrives on the middle line', fr: 'Hauteur \u00b7 arrive sur la ligne médiane' },
+	// The LYRIC station's label in a gap. The schematic's ruling: the label
+	// states the condition as an instruction and the greying agrees with the
+	// words rather than carrying the meaning alone.
+	'loupe.station.lyricTake':     { en: 'Lyric \u00b7 take a note to shift its syllable', fr: 'Texte \u00b7 prenez une note pour décaler sa syllabe' },
+	// The Nolet definition row, read left to right as the sentence it is:
+	// `3 of [value] in the space of 2 of [value]`.
+	'loupe.nolet.of':              { en: 'of',                            fr: 'de' },
+	'loupe.nolet.inSpaceOf':       { en: 'in the space of',               fr: 'dans l\u2019espace de' },
+	'loupe.nolet.back':            { en: 'Back to durations',             fr: 'Retour aux durées' },
+	'loupe.nolet.more':            { en: 'One more',                      fr: 'Un de plus' },
+	'loupe.nolet.fewer':           { en: 'One fewer',                     fr: 'Un de moins' },
+	'loupe.nolet.step':            { en: 'Next value',                    fr: 'Valeur suivante' },
+	// The Undo sentences for the four operations this slice adds.
+	'loupe.undo.entered':          { en: 'entry added',                   fr: 'entrée ajoutée' },
+	'loupe.undo.rest':             { en: 'rest changed',                  fr: 'silence modifié' },
+	'loupe.undo.tie':              { en: 'tie changed',                   fr: 'liaison modifiée' },
+	'loupe.undo.tuplet':           { en: 'tuplet defined',                fr: 'nolet défini' },
+	// THE MEASURE TAG'S ARITHMETIC, ruled by Dann 2026-08-26. An overfull or
+	// short bar is not blocked and not re-timed, and the page stays silent; the
+	// tag says what the measure holds against what its signature asks for, and
+	// says it ONLY where the two disagree. `sur` is adopted from `footer.of`,
+	// which is already how this app says "of" between two numbers in French.
+	'loupe.measureTagFill':        { en: 'm.\u00a0%m \u00b7 %a of %e',    fr: 'mes.\u00a0%m \u00b7 %a sur %e' },
+
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
 	'display.stressDiacritics.desc': { en: 'Show acute accent on Cyrillic', fr: 'Afficher l\u2019accent aigu sur le cyrillique' },

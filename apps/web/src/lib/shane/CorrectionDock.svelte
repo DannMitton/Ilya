@@ -30,6 +30,12 @@
 	import { centredViewBox, commonInkBox, type InkBox } from '$lib/shane/loupe';
 	import type { NoteBase } from '@ilya/score-parser';
 	import type { ShiftDirection } from '$lib/shane/pairings';
+	import {
+		stepCount,
+		stepValue,
+		TUPLET_VALUES,
+		type TupletDefinition,
+	} from '$lib/shane/entry';
 	import { onMount } from 'svelte';
 
 	interface Props {
@@ -44,6 +50,31 @@
 		selectedDotted: boolean;
 		/** True when the station cursor's syllable sits on no note. */
 		shiftDisabled: boolean;
+
+		/* ── N.92 slice 3 ─────────────────────────────────────────────────── */
+		/** The bar stands between two entries rather than on one. */
+		inGap: boolean;
+		/** In a gap, the value a fresh entry takes; on an entry, unused. */
+		armedBase: NoteBase;
+		armedDots: boolean;
+		/** What the PITCH station names as the arrival, or null for the middle line. */
+		arrivalName: string | null;
+		/** The taken entry is a rest, so the Rest cell reads engaged. */
+		selectedIsRest: boolean;
+		selectedTied: boolean;
+		/** Whether a tie may legally start at the taken entry. */
+		tieAvailable: boolean;
+		onrest: () => void;
+		ontie: () => void;
+		/** The Nolet row, disclosed in place of the DURATION station. */
+		tupletOpen: boolean;
+		tupletDef: TupletDefinition;
+		tupletFits: boolean;
+		onopentuplet: () => void;
+		onclosetuplet: () => void;
+		ontupletdef: (next: TupletDefinition) => void;
+		/** Press and hold repeats a stepper arrow or a pitch verb while held. */
+		onhold: (fire: () => void) => (e: PointerEvent) => void;
 		onundo: () => void;
 		ondismiss: () => void;
 		/** The stepper: entry by entry, across barlines. */
@@ -78,6 +109,22 @@
 		ondelete,
 		onshift,
 		onheight,
+		inGap,
+		armedBase,
+		armedDots,
+		arrivalName,
+		selectedIsRest,
+		selectedTied,
+		tieAvailable,
+		onrest,
+		ontie,
+		tupletOpen,
+		tupletDef,
+		tupletFits,
+		onopentuplet,
+		onclosetuplet,
+		ontupletdef,
+		onhold,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -247,6 +294,16 @@
 	$effect(() => {
 		onheight(height);
 	});
+
+	/* THE PITCH STATION'S LABEL, which in a gap answers the question the singer
+	   is about to ask: what will the note be when it arrives. */
+	const pitchLabel = $derived(
+		!inGap
+			? T('loupe.station.pitch')
+			: arrivalName === null
+				? T('loupe.station.pitchMiddle')
+				: T('loupe.station.pitchTakes').replace('%s', arrivalName),
+	);
 </script>
 
 {#snippet cell(glyph: string, common: { width: number; height: number }, h: number, word: string)}
@@ -269,7 +326,44 @@
 	{/if}
 {/snippet}
 
-<section class="dock" class:portrait aria-label={T('a11y.drawer')} bind:offsetHeight={height}>
+{#snippet count(n: number, set: (n: number) => void)}
+	<!-- A STACKED TRIANGLE PAIR, two 44 px targets making 88 px in all, with
+	     the number standing between them as the confirmation. Both marks are
+	     BARE: they move a number, not the music, and the definition they build
+	     is what acts. -->
+	<div class="nolet-count">
+		<button type="button" class="mark tri" aria-label={T('loupe.nolet.more')} onclick={() => set(stepCount(n, 1))}
+			>&#x25B2;</button
+		>
+		<span class="nolet-number">{n}</span>
+		<button type="button" class="mark tri" aria-label={T('loupe.nolet.fewer')} onclick={() => set(stepCount(n, -1))}
+			>&#x25BC;</button
+		>
+	</div>
+{/snippet}
+
+{#snippet value(base: NoteBase, set: (b: NoteBase) => void)}
+	<!-- A duration box that steps its own ladder on tap, five values in the
+	     fixed order the DURATION station already uses. A wrong tap costs one
+	     more tap, which is why five values may cycle where nine counts may not.
+	     The glyph is the page's own face, at the same scale the station uses. -->
+	<button
+		type="button"
+		class="cell nolet-value"
+		aria-label={T('loupe.nolet.step')}
+		onclick={() => set(stepValue(base, 1))}
+	>
+		{@render cell(DURATIONS[TUPLET_VALUES.indexOf(base)]?.glyph ?? '', noteCommon, NOTE_H, base)}
+	</button>
+{/snippet}
+
+<section
+	class="dock"
+	class:portrait
+	class:disclosed={tupletOpen}
+	aria-label={T('a11y.drawer')}
+	bind:offsetHeight={height}
+>
 	<!-- THE HEADER ROW. The Undo pill sits alone on its own row so it can grow
 	     to fit a long sentence, and it is ABSENT rather than disabled when
 	     there is nothing to undo: a control that cannot act earns no ink.
@@ -296,12 +390,20 @@
 	     singer along the line and change nothing in the score. A coarse tap on
 	     the page chooses the measure; these are the fine step. -->
 	<div class="dock-row dock-row-readout">
-		<button type="button" class="mark" aria-label={T('correct.prev')} onclick={() => onwalk(-1)}
-			>&#x2190;</button
+		<button
+			type="button"
+			class="mark"
+			aria-label={T('correct.prev')}
+			onpointerdown={onhold(() => onwalk(-1))}
+			onclick={() => onwalk(-1)}>&#x2190;</button
 		>
 		<p class="readout">{readout}</p>
-		<button type="button" class="mark" aria-label={T('correct.next')} onclick={() => onwalk(1)}
-			>&#x2192;</button
+		<button
+			type="button"
+			class="mark"
+			aria-label={T('correct.next')}
+			onpointerdown={onhold(() => onwalk(1))}
+			onclick={() => onwalk(1)}>&#x2192;</button
 		>
 		<button
 			type="button"
@@ -311,69 +413,108 @@
 		>
 	</div>
 
-	<!-- DURATION, first, because N.95 measured it as the broken channel. -->
+	<!-- DURATION, first, because N.95 measured it as the broken channel.
+
+	     IN A GAP THE ROW STILL ACTS. A value entered there enters an entry at
+	     the ruled arrival pitch rather than re-timing one, and the cell that
+	     reads engaged is the ARMED value, which is what Rest enters and what
+	     the next duration will be. -->
 	<section class="station">
-		<h3 class="station-label">{T('loupe.station.duration')}</h3>
-		<div class="cells">
-			{#each DURATIONS as d (d.base)}
+		{#if tupletOpen}
+			<!-- THE NOLET ROW, disclosed IN PLACE. Nothing opens over anything and
+			     nothing is modal: the other three stations stay where they are and
+			     the label gains a back chevron, which is a navigation mark and so
+			     carries no box. -->
+			<h3 class="station-label">
+				<button type="button" class="back" aria-label={T('loupe.nolet.back')} onclick={onclosetuplet}
+					>&#x2039;</button
+				>
+				{T('loupe.station.duration')} &#183; {T('loupe.tuplet')}
+			</h3>
+			<div class="nolet" class:idle={!tupletFits}>
+				{@render count(tupletDef.actualNotes, (n) => ontupletdef({ ...tupletDef, actualNotes: n }))}
+				<span class="nolet-word">{T('loupe.nolet.of')}</span>
+				{@render value(tupletDef.actualType, (b) => ontupletdef({ ...tupletDef, actualType: b }))}
+				<span class="nolet-word">{T('loupe.nolet.inSpaceOf')}</span>
+				{@render count(tupletDef.normalNotes, (n) => ontupletdef({ ...tupletDef, normalNotes: n }))}
+				<span class="nolet-word">{T('loupe.nolet.of')}</span>
+				{@render value(tupletDef.normalType, (b) => ontupletdef({ ...tupletDef, normalType: b }))}
+			</div>
+		{:else}
+			<h3 class="station-label">{T('loupe.station.duration')}</h3>
+			<div class="cells">
+				{#each DURATIONS as d (d.base)}
+					{@const lit = inGap ? armedBase === d.base : selectedBase === d.base}
+					<button
+						type="button"
+						class="cell"
+						class:engaged={lit}
+						aria-pressed={lit}
+						aria-label={T(d.key)}
+						onclick={() => onbase(d.base)}
+					>
+						{@render cell(d.glyph, noteCommon, NOTE_H, T(d.key))}
+					</button>
+				{/each}
 				<button
 					type="button"
 					class="cell"
-					class:engaged={selectedBase === d.base}
-					aria-pressed={selectedBase === d.base}
-					aria-label={T(d.key)}
-					onclick={() => onbase(d.base)}
+					class:engaged={inGap ? armedDots : selectedDotted}
+					aria-pressed={inGap ? armedDots : selectedDotted}
+					aria-label={T('correct.dot')}
+					onclick={ondot}
 				>
-					{@render cell(d.glyph, noteCommon, NOTE_H, T(d.key))}
+					{@render cell(DOT_GLYPH, dotCommon, DOT_H, T('correct.dot'))}
 				</button>
-			{/each}
-			<button
-				type="button"
-				class="cell"
-				class:engaged={selectedDotted}
-				aria-pressed={selectedDotted}
-				aria-label={T('correct.dot')}
-				onclick={ondot}
-			>
-				{@render cell(DOT_GLYPH, dotCommon, DOT_H, T('correct.dot'))}
-			</button>
-			<!-- SLICE 3 TAKES THIS. It renders so the station's shape is the shape
-			     it will keep, and it carries no behaviour at all. -->
-			<button type="button" class="cell" disabled>{T('loupe.tuplet')}</button>
-		</div>
+				<button type="button" class="cell" disabled={inGap} onclick={onopentuplet}
+					>{T('loupe.tuplet')}</button
+				>
+			</div>
+		{/if}
 	</section>
 
 	<!-- PITCH. The semitone verbs stay retired, per Dann's ruling of
 	     2026-08-24: a B natural cannot become B flat, and down a semitone
 	     respells as A sharp, which is what the spelling policy is for. -->
+	<!-- PITCH. In a gap the LABEL carries the state and the greying only agrees
+	     with it, which is principle 8: the sentence says the note will arrive at
+	     the previous entry's pitch, and the verbs finish it once it exists. -->
 	<section class="station">
-		<h3 class="station-label">{T('loupe.station.pitch')}</h3>
+		<h3 class="station-label">{pitchLabel}</h3>
 		<div class="cells">
 			<button
 				type="button"
 				class="cell"
+				disabled={inGap}
 				aria-label={T('correct.stepUp')}
+				onpointerdown={onhold(() => onstep(1))}
 				onclick={() => onstep(1)}
 				><span aria-hidden="true">&#x25B2;</span> {T('loupe.pitch.step')}</button
 			>
 			<button
 				type="button"
 				class="cell"
+				disabled={inGap}
 				aria-label={T('correct.stepDown')}
+				onpointerdown={onhold(() => onstep(-1))}
 				onclick={() => onstep(-1)}
 				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.step')}</button
 			>
 			<button
 				type="button"
 				class="cell"
+				disabled={inGap}
 				aria-label={T('correct.octaveUp')}
+				onpointerdown={onhold(() => onoctave(1))}
 				onclick={() => onoctave(1)}
 				><span aria-hidden="true">&#x25B2;</span> {T('loupe.pitch.octave')}</button
 			>
 			<button
 				type="button"
 				class="cell"
+				disabled={inGap}
 				aria-label={T('correct.octaveDown')}
+				onpointerdown={onhold(() => onoctave(-1))}
 				onclick={() => onoctave(-1)}
 				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.octave')}</button
 			>
@@ -390,17 +531,43 @@
 				<button
 					type="button"
 					class="cell"
+					disabled={inGap}
 					aria-label={T(a.key)}
 					onclick={() => onaccidental(a.kind)}
 				>
 					{@render cell(a.glyph, accidentalCommon, ACCIDENTAL_H, T(a.key))}
 				</button>
 			{/each}
-			<button type="button" class="cell" disabled>{T('loupe.rest')}</button>
-			<button type="button" class="cell" aria-label={T('correct.delete')} onclick={ondelete}
-				>{T('loupe.delete')}</button
+			<!-- REST is lit in a gap, where it enters one, and on an entry, where
+			     it converts both ways. It is the one cell in this station that a
+			     gap does not disable. -->
+			<button
+				type="button"
+				class="cell"
+				class:engaged={selectedIsRest}
+				aria-pressed={!inGap && selectedIsRest}
+				onclick={onrest}>{T('loupe.rest')}</button
 			>
-			<button type="button" class="cell" disabled>{T('loupe.tie')}</button>
+			<!-- DELETE IN A GAP DOES NOTHING, so it says nothing: there is no note
+			     under the bar to remove. -->
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
+				aria-label={T('correct.delete')}
+				onclick={ondelete}>{T('loupe.delete')}</button
+			>
+			<!-- TIE joins two soundings of ONE pitch, so it is offered only where
+			     the entry after this one can legally take it. Anything else is a
+			     slur, which is a different mark with a different meaning. -->
+			<button
+				type="button"
+				class="cell"
+				class:engaged={selectedTied}
+				aria-pressed={selectedTied}
+				disabled={!tieAvailable && !selectedTied}
+				onclick={ontie}>{T('loupe.tie')}</button
+			>
 		</div>
 	</section>
 
@@ -409,20 +576,22 @@
 	     rather than for Finale's scope. The melisma pair drawn in the
 	     schematic is NOT here: it was never ruled. -->
 	<section class="station">
-		<h3 class="station-label">{T('loupe.station.lyric')}</h3>
+		<h3 class="station-label">
+			{inGap ? T('loupe.station.lyricTake') : T('loupe.station.lyric')}
+		</h3>
 		<div class="lyric-row">
 			<span class="lyric-label">{T('loupe.lyric.toEnd')}</span>
 			<button
 				type="button"
 				class="cell cell-arrow"
-				disabled={shiftDisabled}
+				disabled={shiftDisabled || inGap}
 				aria-label={T('shiftLyrics.backAria')}
 				onclick={() => onshift('end', 'back')}>&#x2190;</button
 			>
 			<button
 				type="button"
 				class="cell cell-arrow"
-				disabled={shiftDisabled}
+				disabled={shiftDisabled || inGap}
 				aria-label={T('shiftLyrics.forwardAria')}
 				onclick={() => onshift('end', 'forward')}>&#x2192;</button
 			>
@@ -432,14 +601,14 @@
 			<button
 				type="button"
 				class="cell cell-arrow"
-				disabled={shiftDisabled}
+				disabled={shiftDisabled || inGap}
 				aria-label={T('shiftLyrics.backAria')}
 				onclick={() => onshift('nextOpen', 'back')}>&#x2190;</button
 			>
 			<button
 				type="button"
 				class="cell cell-arrow"
-				disabled={shiftDisabled}
+				disabled={shiftDisabled || inGap}
 				aria-label={T('shiftLyrics.forwardAria')}
 				onclick={() => onshift('nextOpen', 'forward')}>&#x2192;</button
 			>
@@ -521,6 +690,16 @@
 		max-height: 62vh;
 		border-top: 1px solid var(--stone-300, #d6d3d1);
 		box-shadow: 0 -2px 10px rgba(46, 42, 38, 0.08);
+	}
+
+	/* WHILE THE DEFINITION ROW IS DISCLOSED THE DOCK MAY SCROLL, so the finger
+	   gets the vertical drag back and the bottom station stays reachable. The
+	   Nolet station is 88 px where the DURATION row is 44, and in landscape
+	   that is 30 px more than 430 holds. The swipe-to-dismiss is unavailable
+	   for as long as the row is open, and the chevron is not: one gesture out
+	   of three, in one state, in exchange for a station a thumb can reach. */
+	.dock.disclosed {
+		touch-action: pan-y;
 	}
 
 	@keyframes dock-arrive {
@@ -683,6 +862,100 @@
 		font-size: 0.75rem;
 		line-height: 1.2;
 		color: var(--ink-secondary, #4a4540);
+	}
+
+	/* ── THE NOLET ROW ───────────────────────────────────────────────────
+	   One row, read left to right as the sentence it is. The station is one
+	   row of 88 px because each triangle pair is two stacked 44 px targets,
+	   which is the schematic's own arithmetic, and the other three stations
+	   stay on screen behind it. */
+	.nolet {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	/* IDLE, NOT HIDDEN. Where the run the count names does not fit, the row
+	   still reads and still steps; what it cannot do is land. The greying
+	   agrees with that rather than carrying it alone: the readout above says
+	   which entry is taken, and a definition with nowhere to go simply does
+	   not change the page. */
+	.nolet.idle {
+		opacity: 0.55;
+	}
+
+	.nolet-count {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* THE TARGETS ARE 44 PX EACH AND STACKED TO 88, which the schematic states
+	   and the standing 44 px floor requires. The MARK inside each one is small
+	   and sits toward the number, so the pair reads as belonging to the figure
+	   between them rather than overhanging it.
+
+	   THIS IS THE ONE PLACE ON THIS SURFACE WHERE THE TARGET AND THE MARK ARE
+	   NOT THE SAME RECTANGLE, and it is deliberate: the schematic says so in
+	   its own words. Everywhere else a box is exactly what it accepts.
+
+	   MEASURED and then corrected: the first pass drew 22 px targets, which
+	   made the pair 60 px against the ruled 88 and broke the floor on the only
+	   control in this slice that could break it. */
+	.tri {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 44px;
+		min-height: 44px;
+		padding: 0;
+		font-size: 0.6875rem;
+		line-height: 1;
+	}
+
+	.nolet-count .tri:first-child {
+		align-items: flex-end;
+	}
+
+	.nolet-count .tri:last-child {
+		align-items: flex-start;
+	}
+
+	.nolet-number {
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1;
+		color: var(--ink-primary, #1a1612);
+	}
+
+	.nolet-word {
+		font-size: 0.75rem;
+		font-style: italic;
+		color: var(--ink-secondary, #4a4540);
+	}
+
+	.nolet-value {
+		flex: 0 0 auto;
+		min-width: 52px;
+	}
+
+	/* The back chevron is a NAVIGATION MARK: it leaves the definition row and
+	   changes nothing in the music, so it carries no box. */
+	.back {
+		min-width: 32px;
+		min-height: 32px;
+		margin-right: 2px;
+		padding: 0;
+		border: none;
+		background: none;
+		color: var(--sage, #8b9a7d);
+		font-size: 1rem;
+		line-height: 1;
+		cursor: pointer;
+		vertical-align: middle;
 	}
 
 	.cell-arrow {

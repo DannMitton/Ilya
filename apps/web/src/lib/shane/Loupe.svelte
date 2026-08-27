@@ -50,6 +50,12 @@
 		revision: unknown;
 		language: Language;
 		/**
+		 * What the held measure holds against what its signature asks for, or
+		 * null where the two agree. Ruled by Dann 2026-08-26: the tag carries
+		 * the arithmetic ONLY on a measure that disagrees.
+		 */
+		fill: { actual: number; expected: number } | null;
+		/**
 		 * A tap on an entry inside the loupe. Dann's ruling of 2026-08-26 moved
 		 * N.55b's syllable placement here: on a phone the page tap navigates and
 		 * this one places.
@@ -69,6 +75,7 @@
 		selectedEventId,
 		revision,
 		language,
+		fill,
 		onpick,
 		dockInset,
 		dockHeight,
@@ -394,6 +401,21 @@
 
 	const tag = $derived.by(() => {
 		if (measureLabel === null || !frame) return '';
+		/* THE ARITHMETIC TAKES THE CLAUSE, it does not join it. Dann's ruling of
+		   2026-08-26 gives the whole tag for a disagreeing measure as
+		   `m. 10 · 7 of 6`, so on those measures the tag says what the bar holds
+		   instead of which system it sits on.
+
+		   THE COST IS NAMED RATHER THAN HIDDEN: an overfull measure's tag stops
+		   naming the system, which is half of what the design gave the tag to
+		   do. It is the ruled text, and both clauses together would be one more
+		   string. */
+		if (fill) {
+			return T('loupe.measureTagFill')
+				.replace('%m', measureLabel)
+				.replace('%a', String(fill.actual))
+				.replace('%e', String(fill.expected));
+		}
 		if (frame.system > 0 && frame.systems > 0) {
 			return T('loupe.measureTag')
 				.replace('%m', measureLabel)
