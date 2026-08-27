@@ -375,3 +375,94 @@ selection to null while leaving `gapAfter` alone, which is no cursor at all,
 and the effect that keeps the loupe standing took it down. Every entry is made
 from a gap and every gap pushes a null selection, so this fired on the most
 ordinary undo there is. `+page.svelte:607` snapshots the whole cursor now.
+
+---
+
+## 9. Appended: the tag carries both clauses
+
+**The floor moved while this was being built: §1 through §8 shipped as
+`320bf3a`**, "N.92: mobile slice 3, the entry grammar", nine files including
+the brief and this memo. So everything above is in history, and this section's
+change is the only slice 3 work still in the working tree: `i18n.ts` and
+`Loupe.svelte`, plus this memo. `docs/memory/INBOX.md` is also dirty and is not
+mine.
+
+Ruled by Dann after reading §8, amending his own ruling of the same day: where
+the arithmetic fires the tag says the system AND the count. It answers the cost
+§8 named, which was that a tag dropping the system exactly where the bar is
+wrong takes the singer's place away at the moment they most need it.
+
+### The one new string, for your eye
+
+| key | English | French |
+|---|---|---|
+| `loupe.measureTagBoth` | m. %m · system %s of %t · %a of %e | mes. %m · système %s sur %t · %a sur %e |
+
+`i18n.ts:300`. **Nothing is coined**: every word is already in the file.
+« système » is adopted from `upload.report.systems`, and « sur » from
+`footer.of`, which is how this app says "of" between two numbers in French.
+
+**One thing to look at rather than a defect.** The French line carries « sur »
+twice, once for the system count and once for the ratio: « mes. 2 · système 2
+sur 4 · 10 sur 1 ». Both are correct and both are the adopted word, and the
+English does the same thing with "of". It reads a little repetitively in
+French, and the alternative would be coining a second word for one of the two
+senses, which costs more than the repetition does. **Left as it is, and named
+so you can overrule it.**
+
+### The four forms, which is what this makes
+
+`Loupe.svelte:413`. The short form is not retired: it is what a page whose
+systems cannot be read still says, and that is the same relationship
+`measureTagShort` has always had to `measureTag`.
+
+| the measure | the systems | the tag |
+|---|---|---|
+| agrees | known | `m. 10 · system 3 of 6` |
+| agrees | unknown | `m. 10` |
+| disagrees | known | `m. 10 · system 3 of 6 · 7 of 6` |
+| disagrees | unknown | `m. 10 · 7 of 6` |
+
+Each form says everything it knows and no form invents what it does not.
+
+### What I looked at
+
+Same Lamm page read, 430 by 932.
+
+| check | expected | got |
+|---|---|---|
+| the first measure | both clauses | **`m. 1 · system 1 of 4 · 29 of 8`** |
+| mid page | both clauses | `m. 2 · system 2 of 4 · 6 of 1` |
+| after entering a whole into it | the count moves, the system holds | `m. 2 · system 2 of 4 · 10 of 1` |
+| French | « système … sur … · … sur … » | « mes. 2 · système 2 sur 4 · 10 sur 1 » |
+
+**The first measure is your own example back**, give or take the page: you
+wrote `m. 1 · system 1 of 6 · 29 of 8` and this read has four systems rather
+than six, so it says `m. 1 · system 1 of 4 · 29 of 8`. The `29 of 8` is the
+same.
+
+The line fits the loupe's width at 430 px without wrapping, which was the thing
+worth checking about a tag that just grew a clause.
+
+### Gates, re-run
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `871 passed (871)` | `871 passed (871)` |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | same |
+
+All five at the baseline the ship script now holds. **Gate 4 holds at 871** and no test was added: this is one string and one
+branch in a Svelte component, and the arithmetic underneath it was already
+pinned by the nine `measureFill` tests §8 added.
+
+`~/Downloads/ilya-ship.sh:79` **already says 871**, moved with the `320bf3a`
+ship. I read it rather than edited it, and nothing in this section moves it
+again.
+
+**§8's own open item stands**: on this read the arithmetic fires on measures
+nobody has touched, because the read's durations disagree with the metre it
+read. The tag now keeps the system clause while saying so, which makes that
+noise cheaper, but it does not make it quieter. Still worth your eye.

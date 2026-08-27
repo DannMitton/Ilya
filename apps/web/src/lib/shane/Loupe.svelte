@@ -401,15 +401,23 @@
 
 	const tag = $derived.by(() => {
 		if (measureLabel === null || !frame) return '';
-		/* THE ARITHMETIC TAKES THE CLAUSE, it does not join it. Dann's ruling of
-		   2026-08-26 gives the whole tag for a disagreeing measure as
-		   `m. 10 · 7 of 6`, so on those measures the tag says what the bar holds
-		   instead of which system it sits on.
+		/* THE ARITHMETIC JOINS THE CLAUSE, it does not take it. Dann's amendment
+		   of 2026-08-26, answering the cost this comment used to name: a tag
+		   that dropped the system exactly where the bar was wrong took the
+		   singer's place away at the moment they most needed it. Where the
+		   arithmetic fires the tag now says both.
 
-		   THE COST IS NAMED RATHER THAN HIDDEN: an overfull measure's tag stops
-		   naming the system, which is half of what the design gave the tag to
-		   do. It is the ruled text, and both clauses together would be one more
-		   string. */
+		   THE SHORT FORM SURVIVES for a page whose systems cannot be read,
+		   which is the same relationship `measureTagShort` has to
+		   `measureTag`. Four forms, and each one says everything it knows. */
+		if (fill && frame.system > 0 && frame.systems > 0) {
+			return T('loupe.measureTagBoth')
+				.replace('%m', measureLabel)
+				.replace('%s', String(frame.system))
+				.replace('%t', String(frame.systems))
+				.replace('%a', String(fill.actual))
+				.replace('%e', String(fill.expected));
+		}
 		if (fill) {
 			return T('loupe.measureTagFill')
 				.replace('%m', measureLabel)

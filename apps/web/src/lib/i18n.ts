@@ -291,6 +291,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// says it ONLY where the two disagree. `sur` is adopted from `footer.of`,
 	// which is already how this app says "of" between two numbers in French.
 	'loupe.measureTagFill':        { en: 'm.\u00a0%m \u00b7 %a of %e',    fr: 'mes.\u00a0%m \u00b7 %a sur %e' },
+	// BOTH CLAUSES, ruled by Dann 2026-08-26 amending his own ruling of the
+	// same day: where the arithmetic fires the tag says the system AND the
+	// count, so the singer keeps their place on the page while being told the
+	// bar disagrees with itself. `loupe.measureTagFill` above stays as the
+	// short form for a page whose systems cannot be read, which is the same
+	// relationship `loupe.measureTagShort` has to `loupe.measureTag`.
+	'loupe.measureTagBoth':        { en: 'm.\u00a0%m \u00b7 system %s of %t \u00b7 %a of %e', fr: 'mes.\u00a0%m \u00b7 système %s sur %t \u00b7 %a sur %e' },
 
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },
