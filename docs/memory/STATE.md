@@ -373,6 +373,79 @@ any of them count.
 > track), and this file. `docs/sessions/_to_delete/` holds two empty
 > extraction folders for Dann to delete.
 
+> **2026-08-26 AND INTO THE SMALL HOURS OF 08-27, THE BUILD DAYS: MOBILE
+> SLICES 1, 2, AND 3 ARE ALL DONE, EVERY ONE WALKED BY DANN ON THE DEPLOY.**
+>
+> **The floor rises through seven ships**: `98bba71` (the design session's
+> close) -> `bcab673` (slice 1) -> `e0405bd` (slice 2) -> `d9d1191` (slice
+> 2's exits, exclusion, and the fixed loupe) -> `320bf3a` (slice 3) ->
+> `90ab413` (the tag carries both clauses) -> `b68c24c` (the loupe gains
+> its clef, the tag holds its unit). Gate 4 walked 800 -> 814 -> 822 ->
+> 862 -> 871 -> 872, all by real tests, and `ilya-ship.sh:79` says 872,
+> edited over the bridge by the desk before each ship.
+>
+> **The legibility walk PASSED** on Dann's iPhone: a real engraved page
+> whole on glass at roughly 390 x 505 reads with "plenty of detail," his
+> words, r2's bet held at the exact scale it named.
+>
+> **Slice 1, portrait truth** (`bcab673`): three deletions; the score
+> document renders whole in portrait; the sideways hint is dead. The walk's
+> detour taught what N.101 now records: row "(3)" is the Lamm PAGE READ
+> (treble, 2 sharps), and the engraved upload had never persisted, because
+> an un-accepted upload dies on reload. The engraved song now lives in the
+> library under its from-score name, `Modest Mussorgsky (1839-1881), Wi...`.
+> **N.101 numbered by Dann 2026-08-26**: make score intake legible;
+> evidence in INBOX.
+>
+> **Slice 2, the loupe and the dock** (`e0405bd`, repaired `d9d1191`):
+> Finale Maestro is the one notation face (`notation-fonts.ts`), the loupe
+> is the page's own SVG cloned through a cropped viewBox. Dann's walk found
+> dismissal dead and no exclusion; the causes were a click still bubbling
+> to a live `elementFromPoint` after the dock died, and a finger swipe
+> claimed as a scroll (`pointercancel`); fixed, with exclusion on
+> `drawerCollapsed`. **Ruled by Dann on the walk: the loupe anchors FIXED,
+> centred, never travels; the sage rectangle alone moves.** Also ruled: the
+> Undo pill's empty row is reserved so the dock never changes geometry; and
+> the desk's container-name recommendation collided with N.62's ratified
+> `Controls` / « Commandes » (tether 17 against the desk, owned in-thread),
+> resolved by Dann: ONE accessible name, `Controls` / « Commandes », on
+> both containers. Strings ratified: « mes. », « Saisie », « Nolet »,
+> « Liaison » coined and approved.
+>
+> **Slice 3, the entry grammar** (`320bf3a`, then `90ab413`, `b68c24c`):
+> the corrections diff grew four optional fields, `entered`, `type`,
+> `tied`, `tuplet`, id-anchored in a `hand:` namespace, no new save site.
+> Speedy's grammar under touch: a duration in a gap enters a note at the
+> previous entry's pitch; Rest enters or converts; Tie toggles; the Nolet
+> row is the definition sentence alone, last definition standing as
+> default. Rulings along the way: « intervalle » struck (the gap sentence
+> carries itself); the overfull bar stays silent on the page while the
+> measure tag carries the arithmetic, both clauses, unreduced, and the
+> unit PINNED to the signature's own denominator (fractional counts
+> allowed: `14.5 of 4`); the loupe carries a clef and key signature, a
+> second crop of the same clone. **Dann walked the whole circuit on the
+> Lamm read**: gap sentence, entry, rest, tie, a live triplet with bracket,
+> named undo of each, and every hand entry surviving a reload's re-read.
+> The tag's first act on a real document was to expose the read's fused
+> measures (`29 of 8`), which is the audit doing its job.
+>
+> **In INBOX, unnumbered, from the walks**: the barline-correction verb (a
+> singer can repair every note but cannot split a fused measure); where the
+> Lamm read's N/8 metre came from (`timesig.py`, one measurement answers
+> it); arrow-key hotkeys for the stepper (slice 4); a named Redo pill.
+>
+> **THE ONE THING: slice 4, the desktop slice.** The loupe arrives on
+> desktop; the drawer's correction station re-cuts into the phone's four
+> stations, durations leading; one accessible name everywhere; the
+> arrow-key hotkeys; the lyric anchors unify. The brief follows the
+> pattern of the other three. After it, the mobile track ruled on
+> 2026-08-25 is built, and what waits beyond is Dann's to order: N.94, the
+> release order at N.84, and the walkthrough call he will schedule when he
+> chooses.
+>
+> Usage, last read Wednesday evening: Fable 82%, resets Sunday 05:00. Not
+> re-read since; the build ran on Code and the walks on Dann's eye.
+
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
 **Dann opened the release question: what remains before a release, plus six

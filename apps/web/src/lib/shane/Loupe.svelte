@@ -190,6 +190,8 @@
 		   insertion bar both need it. */
 		const hitY = Number(first.getAttribute('y'));
 		const hitH = Number(first.getAttribute('height'));
+		/** One line gap, an eleventh of that rectangle. Three things need it. */
+		const lineGap = hitH / 11;
 
 		const win = measureWindow(own.rects, nextHere, sysWidth);
 		if (!win || !(sysHeight > 0) || !(sysWidth > 0)) {
@@ -208,6 +210,42 @@
 		}
 
 		const width = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
+
+		/* AN ENGRAVED EXCERPT OPENS WITH NO BARLINE BEFORE ITS FIRST NOTE, and
+		   Dann walked the deploy and found one: on a mid-system measure the
+		   window began at the midpoint before the first column, which is left of
+		   the boundary barline, so the loupe read clef, key, barline, note. An
+		   orphan barline after a key signature is not something an engraver
+		   would ever set.
+
+		   THE BARLINE IS FOUND AS DRAWN, not computed from the renderer's own
+		   offset. It is the vertical line spanning exactly the staff, in the
+		   left half of the window: a measure has one boundary and its internal
+		   columns have none, so there is at most one to find. The staff's own
+		   extent comes from the hit rectangle, as the sage mark's does.
+
+		   THE FIRST MEASURE OF A SYSTEM NEEDS NOTHING, and gets nothing. The
+		   renderer draws no barline for the first column of a slice
+		   (`staff-renderer.ts:541`), so the search finds none and the window
+		   keeps the edge it had. That case was already right and this does not
+		   touch it. */
+		const staffTop = hitY + 3.5 * lineGap;
+		const staffBottom = staffTop + 4 * lineGap;
+		const tolerance = lineGap * 0.3;
+		const half = win.left + (win.right - win.left) / 2;
+		let boundary: number | null = null;
+		for (const el of sysEl.querySelectorAll('line')) {
+			const x1 = Number(el.getAttribute('x1'));
+			if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
+			const y1 = Number(el.getAttribute('y1'));
+			const y2 = Number(el.getAttribute('y2'));
+			if (Math.abs(Math.min(y1, y2) - staffTop) > tolerance) continue;
+			if (Math.abs(Math.max(y1, y2) - staffBottom) > tolerance) continue;
+			if (!(x1 >= win.left && x1 < half)) continue;
+			if (boundary === null || x1 < boundary) boundary = x1;
+		}
+		if (boundary !== null) win.left = boundary + lineGap * 0.5;
+
 		const span = win.right - win.left;
 
 		/* THE CLEF AND THE KEY SIGNATURE, at the loupe's left edge. Ruled by
@@ -289,7 +327,6 @@
 		   clone keeps the system's coordinate space. */
 		let bar = '';
 		if (selectedEventId && hitH > 0) {
-			const lineGap = hitH / 11;
 			const group = container
 				.querySelector(`[data-hit="${CSS.escape(selectedEventId)}"]`)
 				?.closest('[data-event-id]');
@@ -344,7 +381,6 @@
 		   thumbnail's scale never has to be undone. */
 		for (const stale of container.querySelectorAll('[data-held-measure]')) stale.remove();
 		if (hitH > 0) {
-			const lineGap = hitH / 11;
 			const mark = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 			mark.setAttribute('data-held-measure', '');
 			mark.setAttribute('x', String(win.left));

@@ -600,3 +600,87 @@ Svelte component, and the numbers that matter are the walk's.
   change.** It shows the system's own head, which is what the renderer drew,
   and a change occurring partway along that system is not repeated in it. No
   source rules that case and this build does not invent one.
+
+---
+
+## 11. Appended: the orphan barline at the excerpt's opening
+
+**§10 shipped as `b68c24c`**, "N.92: the loupe gains its clef, the tag holds
+its unit", so this section's change is the only one in the working tree:
+`Loupe.svelte` and this memo. `docs/memory/STATE.md` is also dirty and is not
+mine.
+
+From Dann's walk: the body crop began at the midpoint before the held measure's
+first column, which is LEFT of the measure's boundary barline, so a mid-system
+measure read clef, key, barline, note. An engraved excerpt opens with no
+barline before its first note.
+
+`Loupe.svelte:214`. The body crop's left edge moves just inside the boundary
+barline. **The first measure of a system needs nothing and gets nothing**: the
+renderer draws no barline for the first column of a slice
+(`staff-renderer.ts:541`), so the search finds none and that window keeps the
+edge it had. That case was already right and this does not touch it.
+
+**The barline is found as drawn, not computed from the renderer's offset.** It
+is the vertical line spanning exactly the staff, in the left half of the
+window: a measure has one boundary and its internal columns have none, so
+there is at most one to find. The staff's own extent comes from the hit
+rectangle, the same derivation the sage mark and the insertion bar already use.
+
+### Measured, on m. 3 of the Lamm read
+
+| | user units |
+|---|---|
+| where the window used to begin | 309.44 |
+| the boundary barline, spanning y 85 to 107, which is exactly the staff | **322.04** |
+| where the window begins now | 324.79 |
+| the first notehead | 336.54 |
+
+So the barline sat **12.6 units inside the old window**, which is the orphan
+you saw, and the crop now starts 2.75 units past it and opens with 11.75 units
+of air before the first note. That is an excerpt opening the way an engraver
+would set one.
+
+Across five measures, first-of-system and mid-system alike: **zero staff-height
+verticals between the crop's left edge and its first notehead**, which is the
+defect measured directly rather than by proxy.
+
+**One thing to know about my own instruments.** My first counterfactual probe
+reported no barline in the old window, which was wrong: it derived the staff's
+height from the horizontal lines it could see, and this page draws a sixth
+horizontal below the staff for the underlay, so its idea of "spanning the
+staff" was 27.5 units where the staff is 22. The production code derives the
+staff from the hit rectangle and was never fooled. **I mention it because a
+measurement that agrees with the code for the wrong reason is worth catching,
+and this one disagreed and was the thing at fault.**
+
+### The sage mark follows the same edge
+
+The mark on the page starts where the body crop starts, measured equal, so the
+two describe one span. That is arguably more correct than before as well: a
+measure begins after its barline, not before it.
+
+### Gates, re-run
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | `872 passed (872)` |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | same |
+
+**Gate 4 holds at 872**, unchanged from §10, and all five sit at the baseline
+the ship script now holds: `~/Downloads/ilya-ship.sh:79` **already says 872**,
+moved with the `b68c24c` ship. I read it rather than edited it.
+
+No test was added: this is DOM geometry read off a rendered page inside a
+Svelte component, and the numbers that matter are the walk's.
+
+### Not established
+
+- **What the crop should do where a measure's boundary is a double barline or
+  a repeat.** The search takes the leftmost staff-height vertical, so it moves
+  inside the first of a pair and the second would still show. The renderer
+  draws a thin-plus-thick pair only at the end of the piece today, so no page
+  I have reaches this, and I have not invented a rule for it.
