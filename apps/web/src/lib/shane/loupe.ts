@@ -219,3 +219,75 @@ export function centredViewBox(box: InkBox, common: { width: number; height: num
 function round(n: number): number {
 	return Math.round(n * 100) / 100;
 }
+
+/**
+ * What the loupe needs to know about the page as a whole, in staff units.
+ *
+ * Gathered by measuring the rendered page once, so it holds for every measure
+ * on it. See `Loupe.svelte`'s `pageMetrics`.
+ */
+export interface PageInk {
+	/** How far the highest ink on the page rises above the staff's top line. */
+	above: number;
+	/** How far the lowest ink falls below it. */
+	below: number;
+	/** The narrowest measure's width, head included; `Infinity` if unknown. */
+	minTotalSpan: number;
+}
+
+/** The loupe's vertical crop, in the system's own coordinates. */
+export interface Crop {
+	top: number;
+	height: number;
+}
+
+/**
+ * The crop, cut to the page's ink rather than to the renderer's reserved box.
+ *
+ * WHY THE PAGE'S INK AND NOT THE MEASURE'S. Dann, 2026-08-27: the loupe was
+ * too loose around its content, and empty loupe is page the singer cannot see.
+ * The obvious cure is to cut the frame to each measure — but the same ruling
+ * forbids the frame changing size as the singer steps, and MEASURED across one
+ * document's seventeen measures a per-measure frame swings between 68.15 and
+ * 80.89 units. So the cut is the page's ink band: the furthest any measure
+ * reaches above the staff and the furthest any reaches below it. One height
+ * for the page, containing every measure, clipping none.
+ *
+ * ANCHORED TO THE STAFF. `staffTop` is the one landmark every system shares;
+ * a system's viewBox top drifts with whatever its own highest note was.
+ *
+ * The fallback is the system's declared box, which is what the crop always
+ * used, so a page that cannot be measured is no worse off than before.
+ */
+export function inkCrop(
+	page: PageInk | null,
+	staffTop: number,
+	lineGap: number,
+	padSpaces: number,
+	fallback: Crop,
+): Crop {
+	if (!page || !Number.isFinite(page.above) || !Number.isFinite(page.below)) return fallback;
+	const pad = lineGap * padSpaces;
+	return { top: staffTop - page.above - pad, height: page.above + page.below + pad * 2 };
+}
+
+/**
+ * The scale the loupe's WINDOW is sized at, which is not the scale the held
+ * measure is drawn at.
+ *
+ * A measure too wide for the capped loupe is shown whole at less than full
+ * magnification (`Loupe.svelte`, "THE HEAD SHARES THE FIT"), so its drawing is
+ * shorter. A window held at full magnification keeps the difference as empty
+ * loupe: MEASURED in landscape, where the cap bites hardest, a 254.4 px window
+ * around a 212.4 px drawing. The window cannot follow the held measure without
+ * breathing, so it follows the widest drawing the page can produce, which is
+ * the narrowest measure's.
+ *
+ * UNDERSTATED ON PURPOSE. It is bounded above by the full-magnification height
+ * the window always had, so an estimate that runs small costs a little air and
+ * one that runs large would clip. This one runs small.
+ */
+export function windowScale(page: PageInk | null, fullScale: number, width: number): number {
+	if (!page || !(page.minTotalSpan > 0) || !Number.isFinite(page.minTotalSpan)) return fullScale;
+	return Math.min(fullScale, width / page.minTotalSpan);
+}

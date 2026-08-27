@@ -1006,3 +1006,123 @@ are the walk's.
 **`~/Downloads/ilya-ship.sh:80` already says `462 passed | 5 skipped (467)`**,
 moved with the `fd8bc47` ship that carried §12. I read it rather than edited
 it, and nothing in this round asks it to move again.
+
+---
+
+## 14. Appended: the frame is cut to the page's ink
+
+**Ruled by Dann**, from the walk on `00637e3`: the loupe is too loose around
+its content, and empty loupe is page the singer cannot see. Tighten the frame
+to the held measure's actual ink, top and bottom, with only enough breathing
+room for the tallest marks the measure carries. **Constraint:** the frame must
+not resize as the singer steps between measures within a page; if that means
+sizing to the page's worst case rather than each measure, measure both and
+report the numbers before choosing.
+
+### First, a measurement I had to throw away
+
+My first survey said the page's systems carried **138.25 units** of ink inside
+a **106-unit** viewBox — ink standing taller than the box containing it, which
+cannot be true. The cause is one this session has now hit three times:
+**`getBBox()` on an SVG `<text>` returns the font's LAYOUT box, not its ink.**
+The underlay's line box is far taller than its glyphs.
+
+Re-measured with canvas `measureText`'s `actualBoundingBox*` — the same
+instrument the glyph cells already use (`CorrectionSurface.svelte`) — the
+numbers came back coherent, and every number below is from that second pass.
+I am recording the false start because the first set looked plausible enough
+to have built on.
+
+### The two schemes, measured
+
+| | height, staff units | behaviour |
+|---|---|---|
+| **A.** each measure, its own ink | 68.15 – 80.89 (median 80.03) | **resizes at nearly every step** |
+| **B.** the page's ink band | 82.49 (13.88 above the staff + 68.61 below) | **constant, clips nothing** |
+| what the frame took before | 103 crop / 106 window | constant, but reserved not inked |
+
+**A is ruled out by your constraint**, and by a margin that is not marginal:
+across this document's seventeen measures the frame would swing by 12.74 units,
+nearly 16%, and would change at most steps rather than a few.
+
+**B is what B ought to be.** Note that the page's worst-case measure *height*
+(80.89) is **not** a safe constant on its own: measures put their ink at
+different heights as well as different depths, so a frame 80.89 tall could
+still clip one that sits lower. The union — furthest above the staff, furthest
+below it — is 82.49, only 1.6 units more, and contains every measure on the
+page. That union is what shipped.
+
+**The band is anchored to `staffTop`**, not to the system's viewBox. `staffTop`
+is the one landmark every system shares; a system's viewBox top drifts with
+whatever that system's own highest note happened to be, which is exactly the
+looseness being removed. Half a staff space of air is added top and bottom —
+the band already *contains* every ledger line, stem, tuplet bracket and tie on
+the page, so the pad only keeps the tallest of them off the frame's edge.
+
+**What the loupe does not draw does not set its frame.** The survey skips the
+hit rectangles, the paper behind the system, the page's own held-measure
+rectangle, and the analysis layer — the same four things §12's clone filter
+strips. Otherwise a phonation break standing above the staff would push the
+frame open for ink the loupe then removes.
+
+### A second source of empty loupe, found while measuring
+
+Landscape showed a **254.4 px window around a 212.4 px drawing** — 42 px of
+nothing that the ink band alone would not have fixed. The cause is the width
+cap: a measure too wide for the capped loupe is shown *whole* at less than full
+magnification (slice 2's "THE HEAD SHARES THE FIT"), so its drawing is shorter,
+while the window stayed at full magnification.
+
+The window still cannot follow the held measure — that is your constraint — so
+it now follows **the widest drawing the page can produce, which is the narrowest
+measure's**, found from the page's barlines in the same survey. It is bounded
+above by the full-magnification height it always had, so the estimate is
+deliberately understated: running small costs a little air, running large would
+clip.
+
+### Before and after, all three surfaces
+
+Held measure stepped across m. 2, m. 3, m. 4 on each.
+
+| surface | loupe box | window | drawing | air inside the window |
+|---|---|---|---|---|
+| **desk 1400×900** | 277.8 → **238.5** (−14%) | 231.3 → **192.0** (−17%) | 224.7 → **192.0** | 6.6 → **0** |
+| **phone portrait 430×932** | 165.6 → **145.4** (−12%) | 119.1 → **98.9** (−17%) | 115.7 → **98.9** | 3.4 → **0** |
+| **phone landscape 932×430** | 300.9 → **235.1** (−22%) | 254.4 → **188.6** (−26%) | 212.4 → **181.4** | 42.0 → **7.2** |
+
+The crop itself went from 103 units to **87.99** (82.49 of ink, 5.5 of pad).
+
+**Verified, not assumed.** At every step on all three surfaces the window height
+is one number — 192.0, 98.9, 188.6 — so the frame does not breathe. And an ink
+sweep of the loupe's own clone, run at each step with the same canvas
+measurement, reports **0 units outside the crop**: nothing visible is clipped.
+Landscape keeps 7.2–9.5 px because its measures are still width-capped and are
+drawn at slightly different scales; that residue is the cap, not the frame.
+
+### Where the reasoning lives
+
+The two decisions are pure and are now in `loupe.ts` — `inkCrop` and
+`windowScale` — where they can be tested; `Loupe.svelte` keeps only the
+measuring and hands them the survey. The survey is memoized per page against
+the systems' viewBoxes, so stepping does not re-measure the score.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | **`880 passed (880)`** |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**Gate 4 moved, 872 → 880.** Eight tests on `inkCrop` and `windowScale`. The
+one worth naming pins the constraint itself: three measures at three staff
+positions on one page must yield **one** crop height. A regression there would
+otherwise be silent, visible only to an eye on a walk.
+
+**`~/Downloads/ilya-ship.sh:79` still says `872 passed (872)` for gate 4** and
+must move to `880 passed (880)` when this ships. I read it rather than edited
+it; **no commits, no ship**.

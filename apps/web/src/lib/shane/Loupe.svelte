@@ -20,12 +20,15 @@
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
 	import { t, type Language } from '$lib/i18n';
 	import {
+		inkCrop,
 		insertionBar,
 		measureWindow,
 		nearestTarget,
 		parseSystemRange,
 		systemIndexOf,
+		windowScale,
 		type HitRect,
+		type PageInk,
 		type SystemRange,
 	} from '$lib/shane/loupe';
 
@@ -135,6 +138,127 @@
 	   character is the one thing that names it without depending on the order
 	   the renderer happens to push its parts in. */
 	const NOTEHEADS = new Set(['\uE0A2', '\uE0A3', '\uE0A4']);
+
+	/* ── THE FRAME IS CUT TO THE PAGE'S INK ──────────────────────────────
+	   Ruled by Dann 2026-08-27: the loupe was too loose around its content,
+	   and empty loupe is page the singer cannot see. The crop used to take the
+	   held system's declared box and the window the tallest system's — 103 and
+	   106 units on this document — where the ink actually occupies 82.49.
+
+	   The reasoning, and the constraint that the frame must not breathe as the
+	   singer steps, live with `inkCrop` and `windowScale` in `loupe.ts`, which
+	   is where they can be tested. What lives here is the measuring: the page
+	   is surveyed once, and the survey is what those two are handed.
+
+	   HALF A STAFF SPACE OF AIR, top and bottom. The band already contains
+	   every ledger line, stem, tuplet bracket and tie the page carries, so the
+	   pad is only to keep the tallest of them off the frame's own edge. */
+	const INK_PAD_SP = 0.5;
+
+	/* ONE CANVAS, MEASURED THE WAY THE GLYPH CELLS ARE. `getBBox` on an SVG
+	   `<text>` returns the font's LAYOUT box, not its ink, and a survey built
+	   on it reported systems whose "ink" stood taller than the viewBox that
+	   contained them. Canvas answers with the inked bounds. */
+	let inkCanvas: CanvasRenderingContext2D | null = null;
+
+	function textInk(el: Element): { top: number; bottom: number } | null {
+		const ctx = (inkCanvas ??= document.createElement('canvas').getContext('2d'));
+		if (!ctx) return null;
+		const cs = getComputedStyle(el);
+		ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+		const m = ctx.measureText(el.textContent ?? '');
+		if (!(m.actualBoundingBoxAscent > 0 || m.actualBoundingBoxDescent > 0)) return null;
+		const y = Number(el.getAttribute('y'));
+		if (!Number.isFinite(y)) return null;
+		return { top: y - m.actualBoundingBoxAscent, bottom: y + m.actualBoundingBoxDescent };
+	}
+
+	/** Remembered per page, so a step does not re-survey the whole score. */
+	const surveys = new WeakMap<Element, { signature: string; metrics: PageInk }>();
+
+	function pageMetrics(container: Element): PageInk | null {
+		const systems = [...container.querySelectorAll('[data-system]')];
+		const signature = systems.map((el) => el.getAttribute('viewBox') ?? '').join('|');
+		const held = surveys.get(container);
+		if (held && held.signature === signature) return held.metrics;
+
+		let above = -Infinity;
+		let below = -Infinity;
+		let minTotalSpan = Infinity;
+		for (const sys of systems) {
+			const hit = sys.querySelector('[data-hit]');
+			if (!hit) continue;
+			const hitH = Number(hit.getAttribute('height'));
+			const gap = hitH / 11;
+			const staffTop = Number(hit.getAttribute('y')) + 3.5 * gap;
+			const sysWidth = Number(sys.getAttribute('width'));
+			if (!(gap > 0) || !Number.isFinite(staffTop)) continue;
+			for (const el of sys.querySelectorAll('*')) {
+				if (el.tagName === 'g') continue;
+				/* WHAT THE LOUPE DOES NOT DRAW CANNOT SET ITS FRAME. The hit
+				   rectangles, the paper behind the system, the page's own held
+				   rectangle and the analysis layer are all stripped from the
+				   clone, so a phonation break standing above the staff must not
+				   push the frame open for ink the loupe then removes. */
+				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+				if (el.tagName === 'rect') {
+					if (el.hasAttribute('data-hit')) continue;
+					if (Number(el.getAttribute('width')) >= sysWidth * 0.95) continue;
+				}
+				let top: number;
+				let bottom: number;
+				if (el.tagName === 'text') {
+					const ink = textInk(el);
+					if (!ink) continue;
+					({ top, bottom } = ink);
+				} else {
+					let b: DOMRect;
+					try {
+						b = (el as SVGGraphicsElement).getBBox();
+					} catch {
+						continue;
+					}
+					if (!b || (!b.width && !b.height)) continue;
+					top = b.y;
+					bottom = b.y + b.height;
+				}
+				above = Math.max(above, staffTop - top);
+				below = Math.max(below, bottom - staffTop);
+			}
+
+			/* The system's measures, off its barlines. The same vertical test
+			   the held measure's own boundary search uses: a barline is the
+			   vertical that spans the staff exactly. */
+			const staffBottom = staffTop + 4 * gap;
+			const tol = gap * 0.3;
+			const bars: number[] = [];
+			for (const el of sys.querySelectorAll('line')) {
+				const x1 = Number(el.getAttribute('x1'));
+				if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
+				const y1 = Number(el.getAttribute('y1'));
+				const y2 = Number(el.getAttribute('y2'));
+				if (Math.abs(Math.min(y1, y2) - staffTop) > tol) continue;
+				if (Math.abs(Math.max(y1, y2) - staffBottom) > tol) continue;
+				bars.push(x1);
+			}
+			const heads = [...sys.querySelectorAll('[data-hit]')].map((el) => Number(el.getAttribute('x')));
+			const head = heads.length > 0 ? Math.max(0, Math.min(...heads)) : 0;
+			const edges = [head, ...bars.sort((a, b) => a - b), sysWidth];
+			for (let i = 0; i < edges.length - 1; i++) {
+				/* The window's left edge sits half a gap inside the barline it
+				   opens on, as the crop does; the first measure of a system
+				   opens on the head and moves nothing. */
+				const left = i === 0 ? edges[0] : edges[i] + gap * 0.5;
+				const span = edges[i + 1] - left;
+				if (span < gap) continue;
+				minTotalSpan = Math.min(minTotalSpan, head + span);
+			}
+		}
+		if (!Number.isFinite(above) || !Number.isFinite(below)) return null;
+		const metrics = { above, below, minTotalSpan };
+		surveys.set(container, { signature, metrics });
+		return metrics;
+	}
 
 	/* THE PAGE CAN MOVE UNDER THE LOUPE, and the loupe has to hear about it.
 	   Closing the drawer widens the desk and slides the sheet sideways over the
@@ -378,7 +502,18 @@
 		const scale = drawn / totalSpan;
 		const contentWidth = span * scale;
 		const headWidth = headWidthUnits * scale;
-		const contentHeight = sysHeight * scale;
+		/* THE CROP'S VERTICAL EXTENT is the page's ink band, laid around this
+		   system's own staff and padded by half a space so the tallest marks
+		   the measure carries — a ledger line, a stem, a tuplet bracket, a
+		   tie — are not shaved by their own outline. Constant for the page, so
+		   the frame holds still as the singer steps. If nothing can be
+		   measured the system's declared box stands in, which is what the
+		   frame always used. */
+		const page = pageMetrics(container);
+		const crop = inkCrop(page, staffTop, lineGap, INK_PAD_SP, { top: sysMinY, height: sysHeight });
+		const cropTop = crop.top;
+		const cropHeight = crop.height;
+		const contentHeight = cropHeight * scale;
 
 		const ranges: SystemRange[] = [];
 		for (const el of container.querySelectorAll('[data-system]')) {
@@ -518,12 +653,13 @@
 		   thing that stays put: the sage rectangle alone moves across the
 		   still page, and the measure tag carries the name.
 
-		   SO THE WINDOW IS A CONSTANT, sized by the TALLEST system on the page
-		   rather than by the one in hand. Systems differ by a few units,
-		   because the renderer crops each one's headroom to its own ink
-		   (`staff-renderer.ts:1081`), and a window sized to the held system
-		   would breathe by those few units at every step. Each measure is drawn
-		   at its own height and centred in the constant window.
+		   SO THE WINDOW IS A CONSTANT, and now it is the ink band's constant.
+		   It used to be sized by the TALLEST system's declared box, which held
+		   every system still but carried the renderer's reserved headroom with
+		   it; the band is cut to what is actually drawn, and is one number for
+		   the page in the same way. Every measure is now cropped to the same
+		   height, so the window and the drawing agree except where a wide
+		   measure meets the width cap and is scaled down whole.
 
 		   AND THE ANCHOR IS THE DOCK, not the measure. Portrait hangs the
 		   loupe one gutter above the dock's top edge, so the singer's eye and
@@ -531,22 +667,19 @@
 		   dock down its left side and nothing above, so the loupe centres in
 		   the room to its right, which is a constant now that the height is
 		   one. */
-		let maxSysHeight = sysHeight;
-		for (const el of container.querySelectorAll('[data-system]')) {
-			const h = Number(el.getAttribute('height'));
-			if (h > maxSysHeight) maxSysHeight = h;
-		}
-		const windowHeight = maxSysHeight * unitPx * magnification;
+		/* The tallest drawing the page can produce, which is the narrowest
+		   measure's, capped by the magnification this modality asks for. */
+		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, width);
 		const top = Math.max(GUTTER, (window.innerHeight - (windowHeight + 40)) / 2);
 
 		frame = {
 			inner: clone.innerHTML + bar,
-			viewBox: `${win.left} ${sysMinY} ${span} ${sysHeight}`,
+			viewBox: `${win.left} ${cropTop} ${span} ${cropHeight}`,
 			width,
 			left,
 			contentWidth,
 			headWidth,
-			headViewBox: `0 ${sysMinY} ${headWidthUnits} ${sysHeight}`,
+			headViewBox: `0 ${cropTop} ${headWidthUnits} ${cropHeight}`,
 			contentHeight,
 			windowHeight,
 			top,

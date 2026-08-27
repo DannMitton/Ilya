@@ -11,13 +11,17 @@ import { describe, it, expect } from 'vitest';
 import {
 	centredViewBox,
 	commonInkBox,
+	inkCrop,
 	insertionBar,
 	isDismissSwipe,
 	measureWindow,
 	nearestTarget,
 	parseSystemRange,
 	systemIndexOf,
+	windowScale,
 	SWIPE_DISMISS_PX,
+	type Crop,
+	type PageInk,
 } from './loupe';
 
 describe('parseSystemRange', () => {
@@ -194,5 +198,56 @@ describe('commonInkBox and centredViewBox', () => {
 		const common = commonInkBox([whole, sixteenth]);
 		const dims = (v: string) => v.split(' ').slice(2).join(' ');
 		expect(dims(centredViewBox(whole, common))).toBe(dims(centredViewBox(sixteenth, common)));
+	});
+});
+
+describe('the crop, cut to the page’s ink', () => {
+	/* The numbers are this document's, measured 2026-08-27: the page's ink
+	   reaches 13.88 units above the staff and 68.61 below it, on a 5.5-unit
+	   line gap, against the 103-unit box the crop used to take. */
+	const page: PageInk = { above: 13.88, below: 68.61, minTotalSpan: 200 };
+	const fallback: Crop = { top: 68, height: 103 };
+
+	it('cuts to the ink band with half a space of air on each side', () => {
+		const crop = inkCrop(page, 88, 5.5, 0.5, fallback);
+		expect(crop.height).toBeCloseTo(13.88 + 68.61 + 5.5, 5);
+		expect(crop.top).toBeCloseTo(88 - 13.88 - 2.75, 5);
+	});
+
+	it('is shorter than the box it replaces, which is the whole point', () => {
+		expect(inkCrop(page, 88, 5.5, 0.5, fallback).height).toBeLessThan(fallback.height);
+	});
+
+	it('DOES NOT BREATHE as the singer steps: one height for every measure', () => {
+		// Three measures at three staff positions on the same page.
+		const heights = [70, 88, 240].map((staffTop) => inkCrop(page, staffTop, 5.5, 0.5, fallback).height);
+		expect(new Set(heights).size).toBe(1);
+	});
+
+	it('follows the staff, so each measure’s crop sits over its own system', () => {
+		expect(inkCrop(page, 240, 5.5, 0.5, fallback).top - inkCrop(page, 70, 5.5, 0.5, fallback).top).toBe(170);
+	});
+
+	it('falls back to the system’s declared box when the page cannot be measured', () => {
+		expect(inkCrop(null, 88, 5.5, 0.5, fallback)).toEqual(fallback);
+		expect(inkCrop({ above: Infinity, below: 1, minTotalSpan: 1 }, 88, 5.5, 0.5, fallback)).toEqual(fallback);
+	});
+});
+
+describe('the window’s scale', () => {
+	const page: PageInk = { above: 13.88, below: 68.61, minTotalSpan: 200 };
+
+	it('drops to what the narrowest measure can actually be drawn at', () => {
+		// 200 units into a 380 px loupe is 1.9, below the 2.4 asked for.
+		expect(windowScale(page, 2.4, 380)).toBeCloseTo(1.9, 5);
+	});
+
+	it('never exceeds the magnification asked for, so it cannot grow the window', () => {
+		expect(windowScale(page, 2.4, 4000)).toBe(2.4);
+	});
+
+	it('keeps full magnification when the page’s measures are unknown', () => {
+		expect(windowScale(null, 2.4, 380)).toBe(2.4);
+		expect(windowScale({ above: 1, below: 1, minTotalSpan: Infinity }, 2.4, 380)).toBe(2.4);
 	});
 });
