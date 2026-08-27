@@ -285,6 +285,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.rest':             { en: 'rest changed',                  fr: 'silence modifié' },
 	'loupe.undo.tie':              { en: 'tie changed',                   fr: 'liaison modifiée' },
 	'loupe.undo.tuplet':           { en: 'tuplet defined',                fr: 'nolet défini' },
+	// The visible word on the restore cell. `correct.restore` stays its
+	// accessible name, so a screen reader still hears the whole sentence,
+	// "Undo my corrections to this note", which is too long for a 44 px cell.
+	// « Rétablir » is ADOPTED from `meta.revertToScore`, which already says
+	// « Rétablir l'en-tête de la partition ». Nothing is coined.
+	'loupe.restore':               { en: 'Restore',                       fr: 'Rétablir' },
 	// THE MEASURE TAG'S ARITHMETIC, ruled by Dann 2026-08-26. An overfull or
 	// short bar is not blocked and not re-timed, and the page stays silent; the
 	// tag says what the measure holds against what its signature asks for, and

@@ -61,9 +61,13 @@
 		 * this one places.
 		 */
 		onpick: (eventId: string) => void;
-		/** Landscape's dock takes the left edge; portrait's takes the bottom. */
+		/** What the loupe must stand clear of on the left: the landscape dock, or
+		    the open drawer on a desk. */
 		dockInset: number;
+		/** What it must stand clear of below: the portrait dock, or nothing. */
 		dockHeight: number;
+		/** A phone keeps the ruled 2.4; a desk aims at a readable stave. */
+		isPhone: boolean;
 	}
 
 	let {
@@ -79,6 +83,7 @@
 		onpick,
 		dockInset,
 		dockHeight,
+		isPhone,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -96,6 +101,29 @@
 	   establishes a correct loupe magnification, and no surveyed product
 	   implements a loupe over a true page on a phone. */
 	const MAGNIFICATION = 2.4;
+
+	/* THE DESKTOP FIGURE IS DERIVED, not chosen, because no source sets one.
+	   2.4 is a portrait figure: it multiplies a page already shrunk to a
+	   thumbnail, and on a desk the page is drawn at full size, so the same
+	   multiplier would put one measure across a monitor.
+
+	   WHAT THE LOUPE IS FOR IS A READABLE STAVE, so that is what the desktop
+	   asks for: a target stave space in CSS pixels, divided by the one the page
+	   is already drawing. 12 px is the target. Gould sets a vocal score's
+	   rastral around 7 mm, which at 96 dpi is about 26 px of staff height and
+	   so about 6.5 px of stave space; twelve is a little under twice that,
+	   which is the register a notation editor works at and roughly what Finale
+	   shows at 100 percent on a modern display. The shipped print engraving
+	   draws 5.5 px, so on today's pages this lands near 2.2 and it will follow
+	   the engraving rather than fight it if that number ever moves.
+
+	   CLAMPED at both ends. Below 1.2 the loupe is not a magnifier and the
+	   singer would wonder what it was for; above 2.4 it would outrun the
+	   phone's own ruled figure, and one grammar means the desk never magnifies
+	   harder than the phone does. */
+	const DESKTOP_TARGET_LINE_GAP = 12;
+	const DESKTOP_MIN = 1.2;
+	const DESKTOP_MAX = 2.4;
 
 	/** The desk's own gutter (`--portrait-gutter`), so the loupe keeps the
 	    page's margins rather than inventing a second measure. */
@@ -277,8 +305,19 @@
 		   worse failure: the singer cannot tell it happened. The head is part of
 		   what must fit, so it is part of what sets the scale, and the applied
 		   magnification is reported in the memo rather than assumed. */
+		/* The magnification this modality asks for. On a phone it is the ruled
+		   2.4 against the thumbnail; on a desk it is whatever brings the stave
+		   to the target, measured against what the page is drawing right now. */
+		const drawnLineGap = lineGap * unitPx;
+		const magnification = isPhone
+			? MAGNIFICATION
+			: Math.min(
+					DESKTOP_MAX,
+					Math.max(DESKTOP_MIN, drawnLineGap > 0 ? DESKTOP_TARGET_LINE_GAP / drawnLineGap : DESKTOP_MIN),
+				);
+
 		const totalSpan = headWidthUnits + span;
-		const drawn = Math.min(totalSpan * unitPx * MAGNIFICATION, width);
+		const drawn = Math.min(totalSpan * unitPx * magnification, width);
 		const scale = drawn / totalSpan;
 		const contentWidth = span * scale;
 		const headWidth = headWidthUnits * scale;
@@ -417,7 +456,7 @@
 			const h = Number(el.getAttribute('height'));
 			if (h > maxSysHeight) maxSysHeight = h;
 		}
-		const windowHeight = maxSysHeight * unitPx * MAGNIFICATION;
+		const windowHeight = maxSysHeight * unitPx * magnification;
 		const top = Math.max(GUTTER, (window.innerHeight - (windowHeight + 40)) / 2);
 
 		frame = {

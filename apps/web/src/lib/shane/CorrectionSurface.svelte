@@ -1,16 +1,24 @@
 <script lang="ts">
-	/* ── THE DOCK (N.92, mobile slice 2) ─────────────────────────────────
-	   The four correction stations on the phone, in the ruled order:
-	   DURATION, PITCH, ACCIDENTAL · ENTRY, LYRIC. Durations lead because N.95
-	   measured durations as the broken channel, 0 of 28 confident before
-	   re-derivation, and pitch as nearly fine.
+	/* ── THE CORRECTION SURFACE (N.92, slices 2 to 4) ────────────────────
+	   The four correction stations, in the ruled order: DURATION, PITCH,
+	   ACCIDENTAL · ENTRY, LYRIC. Durations lead because N.95 measured
+	   durations as the broken channel, 0 of 28 confident before re-derivation,
+	   and pitch as nearly fine.
 
-	   A SIBLING OF THE DRAWER, NOT THE DRAWER RE-ANCHORED. The drawer is a
-	   side-entering object whose anchors are ruled in E.36 §1.4, and
-	   re-anchoring it to the bottom edge in portrait would move those anchors
-	   and make geometry answer width. This is a separate surface that keeps
-	   the drawer's grammar: one bare pull pointing the way it moves, the same
-	   station labels, the same 180 ms.
+	   ONE COMPONENT, TWO CONTAINERS, which is slice 4's whole point. `variant`
+	   decides only WHERE the surface sits: `dock` is the phone's fixed shell,
+	   anchored to an edge; `panel` is the desktop drawer's scrolling tenant.
+	   Everything above that line, every station, every label, every verb and
+	   every string, is one implementation. A singer who learned the phone has
+	   learned the desktop because there is only one thing to learn, and two
+	   copies could not stay that way for a week.
+
+	   THE DOCK IS A SIBLING OF THE DRAWER, NOT THE DRAWER RE-ANCHORED. The
+	   drawer is a side-entering object whose anchors are ruled in E.36 §1.4,
+	   and re-anchoring it to the bottom edge in portrait would move those
+	   anchors and make geometry answer width. The dock keeps the drawer's
+	   grammar: one bare pull pointing the way it moves, the same station
+	   labels, the same 180 ms.
 
 	   THE VERBS ARE THE SHIPPED VERBS RE-HOMED. Nothing here is new function.
 	   Every one of them calls `+page.svelte`'s own handler, the same handler
@@ -36,12 +44,24 @@
 		TUPLET_VALUES,
 		type TupletDefinition,
 	} from '$lib/shane/entry';
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	interface Props {
 		language: Language;
+		/**
+		 * Where this surface sits. `dock` is the phone's fixed shell; `panel` is
+		 * the desktop drawer's tenant. Nothing else about the surface changes.
+		 */
+		variant?: 'dock' | 'panel';
 		/** Portrait anchors the dock to the bottom edge; landscape to the left. */
-		portrait: boolean;
+		portrait?: boolean;
+		/**
+		 * The syllabified text, first under the LYRIC label. Dann's N.65 ship B
+		 * arrangement, kept: the boxed text, then the shift rows. Passed only by
+		 * the container that has room for it, which is the drawer; the dock's
+		 * stations are sized to fit a phone and the queue is not a verb.
+		 */
+		syllables?: Snippet;
 		/** `F3 · quarter · на`, composed by the caller from the taken entry. */
 		readout: string;
 		/** The Undo pill's sentence, or null when nothing can be undone. */
@@ -66,6 +86,12 @@
 		tieAvailable: boolean;
 		onrest: () => void;
 		ontie: () => void;
+		/** Clear every correction on the taken entry, back by ruling 2026-08-27. */
+		onrestore: () => void;
+		restoreAvailable: boolean;
+		/** N.65's counter, on the LYRIC label. Drawn only where there are slots. */
+		placed?: number;
+		total?: number;
 		/** The Nolet row, disclosed in place of the DURATION station. */
 		tupletOpen: boolean;
 		tupletDef: TupletDefinition;
@@ -86,13 +112,15 @@
 		onaccidental: (kind: 'flat' | 'natural' | 'sharp') => void;
 		ondelete: () => void;
 		onshift: (scope: 'end' | 'nextOpen', direction: ShiftDirection) => void;
-		/** The measured height, so the loupe can centre in the room left over. */
-		onheight: (height: number) => void;
+		/** The measured height, so the loupe can sit clear of the dock. */
+		onheight?: (height: number) => void;
 	}
 
 	let {
 		language,
-		portrait,
+		variant = 'dock',
+		portrait = true,
+		syllables = undefined,
 		readout,
 		undoLabel,
 		selectedBase,
@@ -108,7 +136,7 @@
 		onaccidental,
 		ondelete,
 		onshift,
-		onheight,
+		onheight = undefined,
 		inGap,
 		armedBase,
 		armedDots,
@@ -118,6 +146,10 @@
 		tieAvailable,
 		onrest,
 		ontie,
+		onrestore,
+		restoreAvailable,
+		placed = 0,
+		total = 0,
 		tupletOpen,
 		tupletDef,
 		tupletFits,
@@ -292,8 +324,11 @@
 
 	let height = $state(0);
 	$effect(() => {
-		onheight(height);
+		onheight?.(height);
 	});
+
+	/** The dock's own tightening, which the drawer's column does not want. */
+	const tight = $derived(variant === 'dock' && !portrait);
 
 	/* THE PITCH STATION'S LABEL, which in a gap answers the question the singer
 	   is about to ask: what will the note be when it arrives. */
@@ -357,11 +392,17 @@
 	</button>
 {/snippet}
 
+<!-- ONE ROOT, TWO SKINS. The panel carries NO accessible name of its own: the
+     drawer's `<aside>` already says `Controls` / « Commandes » (N.62, ratified
+     2026-08-23), and a nested region repeating it would be one landmark
+     announced twice. The dock is not inside that aside, so it takes the name
+     itself, which is the ruling of 2026-08-26 that both containers share one. -->
 <section
-	class="dock"
-	class:portrait
+	class="surface {variant}"
+	class:portrait={variant === 'dock' && portrait}
+	class:tight
 	class:disclosed={tupletOpen}
-	aria-label={T('a11y.drawer')}
+	aria-label={variant === 'dock' ? T('a11y.drawer') : undefined}
 	bind:offsetHeight={height}
 >
 	<!-- THE HEADER ROW. The Undo pill sits alone on its own row so it can grow
@@ -405,10 +446,15 @@
 			onpointerdown={onhold(() => onwalk(1))}
 			onclick={() => onwalk(1)}>&#x2192;</button
 		>
+		<!-- THE PUT-AWAY MARK. On the dock it sends the whole surface away, so it
+		     speaks the drawer's own collapse name; in the panel the surface stays
+		     and only the loupe goes, so it speaks `Done`, which is the word the
+		     palette this re-cut replaces already used for exactly that. No new
+		     string either way. -->
 		<button
 			type="button"
 			class="mark chevron"
-			aria-label={T('drawer.collapse')}
+			aria-label={variant === 'dock' ? T('drawer.collapse') : T('correct.deselect')}
 			onclick={ondismiss}>{portrait ? '⌄' : '‹'}</button
 		>
 	</div>
@@ -568,6 +614,18 @@
 				disabled={!tieAvailable && !selectedTied}
 				onclick={ontie}>{T('loupe.tie')}</button
 			>
+			<!-- RESTORE clears every correction on ONE entry, which the Undo pill
+			     cannot do: the pill reverses the last verb and this reverses all
+			     of them here. It is offered only where the READ still carries the
+			     entry, because a hand-entered one has nothing to be restored to
+			     and Delete is the verb that removes it. -->
+			<button
+				type="button"
+				class="cell"
+				disabled={!restoreAvailable}
+				aria-label={T('correct.restore')}
+				onclick={onrestore}>{T('loupe.restore')}</button
+			>
 		</div>
 	</section>
 
@@ -578,7 +636,21 @@
 	<section class="station">
 		<h3 class="station-label">
 			{inGap ? T('loupe.station.lyricTake') : T('loupe.station.lyric')}
+			<!-- N.65 ship B's COUNTER, on the label its verbs now live under. Two
+			     numbers rather than a formatted string, so the thin-space numeral
+			     pair is drawn once and needs no translation. Drawn only where
+			     `total` is above zero, which is that ship's own rule: an
+			     unconditional counter would say `0 / 0` on an empty drawer,
+			     before a singer has pasted anything. -->
+			{#if total > 0}<span class="station-count">{placed}&thinsp;/&thinsp;{total}</span>{/if}
 		</h3>
+		{#if syllables}
+			<!-- N.65 ship B, kept whole: the boxed syllabified text is the first
+			     element under this label, then the shift rows. Dann ruled that
+			     arrangement on his walk of `2238e8b` and the station it lived in
+			     is the one this replaces, so the arrangement comes with it. -->
+			<div class="lyric-syllables">{@render syllables()}</div>
+		{/if}
 		<div class="lyric-row">
 			<span class="lyric-label">{T('loupe.lyric.toEnd')}</span>
 			<button
@@ -634,6 +706,24 @@
 	   loupe is ruled nearest the user, the dock is its other half, and a
 	   working surface a thumb cannot reach is not a surface. The prompt is
 	   untouched and returns the moment the loupe goes away. */
+	/* THE SHARED COLUMN, which both containers get and neither owns. */
+	.surface {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		color: var(--ink-primary, #1a1612);
+	}
+
+	/* THE PANEL ADDS NOTHING BUT ITS SEAT. It is a tenant of the drawer's
+	   scroll, so it takes the station rule every other tenant carries and no
+	   position of its own. The sage is Studio's accent for the score document,
+	   which is what `NotationFields` above it already uses. */
+	.surface.panel {
+		border-top: 2px solid var(--sage, #8b9a7d);
+		padding-top: 6px;
+	}
+
 	.dock {
 		position: fixed;
 		z-index: 9100;
@@ -645,13 +735,8 @@
 		   the safety it always was, and a pointer that is not a finger still
 		   reaches it. */
 		touch-action: none;
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
 		padding: 10px 12px 14px;
 		background: var(--drawer-bg, #faf8f5);
-		color: var(--ink-primary, #1a1612);
 		/* THE 180 MS, opacity and transform only. The loupe carries the same
 		   duration, which is what teaches the singer they are one object. */
 		animation: dock-arrive 180ms ease-out;
@@ -672,7 +757,7 @@
 	   arrows rather than a cell. Closing the column gap, the label margins,
 	   and the foot buys the row back and the dock measures 430. Portrait is
 	   untouched: it has the height to spare. */
-	.dock:not(.portrait) {
+	.dock.tight {
 		gap: 4px;
 		padding: 8px 12px 6px;
 		left: 0;
@@ -787,6 +872,15 @@
 		color: var(--sage, #8b9a7d);
 	}
 
+	/* The counter sits after the label in the same line, quieter than it, so the
+	   label still reads as the label. */
+	.station-count {
+		margin-left: 0.5em;
+		font-weight: 400;
+		letter-spacing: 0.02em;
+		color: var(--ink-tertiary, #6a655f);
+	}
+
 	.cells {
 		display: flex;
 		flex-wrap: wrap;
@@ -847,7 +941,7 @@
 	}
 
 
-	.dock:not(.portrait) .station-label {
+	.surface.tight .station-label {
 		margin: 2px 0 3px;
 	}
 

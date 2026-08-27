@@ -67,7 +67,6 @@
 	import { version } from '$app/environment';
 	import type { OpenedLibrary } from '$lib/library';
 	import SyllableStation from '$lib/shane/SyllableStation.svelte';
-	import ShiftLyricsControl from '$lib/shane/ShiftLyricsControl.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
 	import Paper from '$lib/components/Paper/Paper.svelte';
@@ -108,9 +107,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
-	import CorrectionControls from '$lib/shane/CorrectionControls.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
-	import CorrectionDock from '$lib/shane/CorrectionDock.svelte';
+	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
 	import { isDismissSwipe, nearestTarget } from '$lib/shane/loupe';
 	import {
 		applyTuplet,
@@ -120,6 +118,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		currentType,
 		DEFAULT_TUPLET,
 		enterEntry,
+		isEnteredId,
 		measureFill,
 		middleLine,
 		previousEntry,
@@ -302,16 +301,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const shownPairings = $derived(reconciliation.map);
 	const driftCount = $derived(reconciliation.drift.length);
 
-	/* N.65 ship B. THE PLACED-SYLLABLE COUNT, DERIVED HERE because the header
-	   that shows it is SHIFT LYRICS's now and `SyllableStation` no longer
-	   draws one. THE RULE IS THAT COMPONENT'S OWN, unchanged and moved: a
-	   slot counts as placed when SOME note carries a pairing that came from
-	   it, keyed by ORIGIN rather than by text, so two identical syllables in
-	   one line are still two slots.
+	/* N.65 ship B's PLACED-SYLLABLE COUNT, back by Dann's ruling of 2026-08-27
+	   and re-homed onto the LYRIC station's own label, where both containers
+	   show it.
 
-	   `shownPairings` RATHER THAN `doc.pairings`, which is also what
-	   `SyllableStation` was passed: the counter and the grey on a placed
-	   syllable have to agree, and they only agree if they read the same map. */
+	   THE RULE IS THAT COMPONENT'S OWN, unchanged and moved twice now: a slot
+	   counts as placed when SOME note carries a pairing that came from it,
+	   keyed by ORIGIN rather than by text, so two identical syllables in one
+	   line are still two slots. `shownPairings` rather than `doc.pairings`,
+	   because the counter and the grey on a placed syllable have to agree and
+	   they only agree if they read the same map. */
 	const placedSlotCount = $derived.by(() => {
 		const placed = new Set<string>();
 		for (const p of Object.values(shownPairings)) {
@@ -329,54 +328,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// below. `shiftToEndOfLyric` / `shiftToNextOpenNote` (pairings.ts:558,
 	// :592) index into this, not into `slotQueue`: they operate on notes
 	// already carrying a decision, not on the syllable queue.
-	const eventIds = $derived(
-		ingestedScore ? ingestedScore.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id) : [],
-	);
 
-	// The anchor, confirmed with Dann 2026-08-14: not the cursor itself (it
-	// indexes `slotQueue`, a different sequence), but the note that CURRENTLY
-	// holds the pairing whose origin matches the cursor's slot. Read from
-	// `pairings`, the singer's own record (R6), not `shownPairings`: a
-	// reconciled/refreshed origin could match a slot that drifted away from
-	// what the singer actually decided, and shifting from the wrong note
-	// silently would be worse than the button doing nothing.
-	function shiftAnchorEventId(): string | null {
-		const slot = slotQueue[pairingCursor];
-		if (!slot) return null;
-		const o = slot.origin;
-		for (const id of eventIds) {
-			const p = doc.pairings[id];
-			if (
-				p &&
-				p.kind === 'syllable' &&
-				p.origin.lineIndex === o.lineIndex &&
-				p.origin.wordIndex === o.wordIndex &&
-				p.origin.slotIndex === o.slotIndex
-			) {
-				return id;
-			}
-		}
-		return null;
-	}
-	const shiftDisabled = $derived(shiftAnchorEventId() === null);
+	/* THE LYRIC VERBS ANCHOR ON THE TAKEN ENTRY, on both modalities, and the
+	   station-cursor anchor that stood here is gone with slice 4.
 
-	// Never silently dropped (`ShiftResult.displaced`, pairings.ts:474): a
-	// displaced pairing's note returns to undecided and its syllable shows
-	// unplaced again in the station, both already visible without a toast.
-	// Nothing else consumes `displaced` yet; if that turns out not to be
-	// enough, it is a UI decision layered on top of this, not a change here.
-	function handleShift(scope: 'end' | 'nextOpen', direction: ShiftDirection): void {
-		const anchor = shiftAnchorEventId();
-		if (anchor === null) return;
-		const fromIndex = eventIds.indexOf(anchor);
-		if (fromIndex === -1) return;
-		const result =
-			scope === 'end'
-				? shiftToEndOfLyric(doc.pairings, eventIds, fromIndex, direction)
-				: shiftToNextOpenNote(doc.pairings, eventIds, fromIndex, direction);
-		pushUndo({ kind: 'text', key: 'loupe.undo.lyrics' });
-		doc.pairings = result.map;
-	}
+	   IT WAS RIGHT WHEN IT WAS WRITTEN. Confirmed with Dann 2026-08-14, the two
+	   scopes anchored on the note holding the syllable under the DRAWER's
+	   station cursor, because the drawer was the only surface and the cursor sat
+	   beside the verbs. Slice 3 moved the verbs onto a dock that carries no
+	   cursor control and measured what that cost: the cells read disabled in the
+	   ordinary flow. Dann ruled the taken entry for the phone and this slice
+	   ends the disagreement, so `dockShiftAnchor` is now the only anchor and
+	   both containers read it. The schematic said so in its own §4 all along:
+	   `LYRIC · TAKE A NOTE TO SHIFT ITS SYLLABLE`. */
 
 	/**
 	 * N.67 step 3, design §2.6. THE ONLY DESTRUCTIVE REBUILD, and it is the
@@ -426,19 +390,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * N.92. A click SELECTS, always. Selection is display, so setting it here
 	 * disturbs nothing.
 	 *
-	 * ON A PHONE IT NAVIGATES AND NOTHING MORE, ruled by Dann 2026-08-26. The
-	 * ruled tap grammar gives a page tap one meaning, which is choose the
-	 * measure, and slice 2 measured what the second meaning cost: a tap meant
-	 * to pick a measure silently spent a syllable and moved the station cursor
-	 * off the note the lyric verbs anchor on. Placement now lives inside the
-	 * loupe, where the entry under the finger is legible at 2.4 times.
+	 * IT NAVIGATES AND NOTHING MORE, on both modalities. Ruled for the phone by
+	 * Dann 2026-08-26 and for the desk by his ruling of 2026-08-27, which ends
+	 * the last difference between the two: the tap grammar gives a page click
+	 * one meaning, which is choose the measure. Slice 2 measured what a second
+	 * meaning cost: a tap meant to pick a measure silently spent a syllable and
+	 * moved the anchor off the note the lyric verbs act from.
 	 *
-	 * DESKTOP IS UNCHANGED. Off a phone this still places, exactly as shipped.
+	 * PLACEMENT LIVES INSIDE THE LOUPE, where the entry under the pointer is
+	 * legible at 2.18 times on a desk and 2.4 on a phone.
+	 *
+	 * REVERSIBLE IF REAL USE OBJECTS, recorded as such by the same ruling: the
+	 * line that went is `if (isPhone) return`, and putting it back restores the
+	 * desk's old behaviour exactly.
 	 */
 	function handleNotePick(eventId: string): void {
 		setCursor({ kind: 'entry', id: eventId });
-		if (isPhone) return;
-		placeArmedSyllable(eventId);
 	}
 
 	/** A tap on an entry INSIDE the loupe: it takes the entry and places. */
@@ -764,8 +731,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		selectedEventId = next;
 	}
 
+	/* THE PER-NOTE RESTORE, back by Dann's ruling of 2026-08-27 and re-homed
+	   into the shared surface, so both containers carry it. It clears every
+	   correction on ONE note at once, which the named Undo pill cannot do: the
+	   pill reverses the LAST verb, and this reverses all of them on one entry.
+
+	   IT IS OFFERED ONLY WHERE THERE IS SOMETHING TO RESTORE TO. A hand-entered
+	   entry's record IS the entry, so clearing it would delete the note rather
+	   than restore it, and Delete is the verb for that and says so. The test is
+	   therefore a correction on an entry the READ still carries. */
+	const restoreAvailable = $derived(
+		!inGap &&
+			!!selectedEventId &&
+			selectedEventId in doc.corrections &&
+			!isEnteredId(selectedEventId),
+	);
+
 	function handleRestoreNote(): void {
-		if (!selectedEventId) return;
+		if (!selectedEventId || !restoreAvailable) return;
 		pushUndo({ kind: 'text', key: 'loupe.undo.restored' });
 		doc.corrections = clearCorrection(doc.corrections, selectedEventId);
 	}
@@ -943,31 +926,52 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.corrections = applyTuplet(tupletBase, correctedLine, id, next);
 	}
 
-	/* THE KEYBOARD, active only while a note is selected. Finale's own digit
+	/* THE KEYBOARD, active wherever the insertion bar stands. Finale's own digit
 	   mapping, kept because Dann knows it in his fingers.
+
+	   IT WAS GATED ON A SELECTED NOTE and is gated on a CURSOR now, which is
+	   slice 4 finishing what slice 3 started: the bar can stand in a gap, and a
+	   keyboard that went dead there would be a second grammar to learn.
+
+	   EVERY KEY GOES THROUGH THE SURFACE'S OWN HANDLER, not past it. The digits
+	   call `handleDurationCell` and the dot calls `handleDotCell`, which is
+	   what the DURATION cells call, so a digit in a gap enters an entry exactly
+	   as a tap on the cell does and a digit on a note re-times it. One grammar,
+	   two ways in.
+
+	   THE VERBS THAT NEED A NOTE STAND DOWN IN A GAP, the same ones the surface
+	   greys: pitch, and delete.
+
+	   ESCAPE DISMISSES THE LOUPE, ruled by Dann 2026-08-27, rather than merely
+	   dropping the selection: on a fine pointer it is the chevron's twin, and
+	   the surfaces leave together as they do by every other route.
 
 	   It stands down inside a text field. A singer typing a title or a poem
 	   must not have `5` swallowed by the score, and `closest` covers the
 	   contenteditable case as well as inputs. */
 	function handleCorrectionKey(e: KeyboardEvent): void {
-		if (!selectedEventId) return;
+		if (!cursor) return;
 		const el = e.target as HTMLElement | null;
 		if (el?.closest('input, textarea, select, [contenteditable="true"]')) return;
 		if (e.metaKey || e.ctrlKey || e.altKey) return;
 
 		switch (e.key) {
 			case 'ArrowUp':
+				if (inGap) return;
 				e.shiftKey ? handleOctave(1) : handleStep(1);
 				break;
 			case 'ArrowDown':
+				if (inGap) return;
 				e.shiftKey ? handleOctave(-1) : handleStep(-1);
 				break;
 			case '+':
 			case '=':
+				if (inGap) return;
 				handleSemitone(1);
 				break;
 			case '-':
 			case '_':
+				if (inGap) return;
 				handleSemitone(-1);
 				break;
 			case 'ArrowLeft':
@@ -977,17 +981,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				handleMove(1);
 				break;
 			case '.':
-				handleDot();
+				handleDotCell();
 				break;
 			case 'Delete':
 			case 'Backspace':
+				if (inGap) return;
 				handleDeleteNote();
 				break;
 			case 'Escape':
-				selectedEventId = null;
+				dismissLoupe();
 				break;
 			default:
-				if (DIGIT_BASE[e.key]) handleBase(DIGIT_BASE[e.key]);
+				if (DIGIT_BASE[e.key]) handleDurationCell(DIGIT_BASE[e.key]);
 				else return;
 		}
 		// Reached only where a branch above acted, so a key this surface does
@@ -1040,13 +1045,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let dockHeight = $state(0);
 
 	/** The score document on a phone, in either orientation, with a read to correct. */
+	/* THE LOUPE IS ON BOTH MODALITIES NOW, slice 4. `isPhone` is gone from this
+	   test, and that one deletion is the whole of item 1's availability: the
+	   loupe was never a phone object, it was Finale Speedy's editing frame,
+	   and Dann's ruling of 2026-08-25 said it persists on desktop. What stays
+	   phone-only is the DOCK, which is the shell the surface sits in below
+	   768 px; the desktop's surface is the drawer's own tenant. */
 	const loupeAvailable = $derived(
 		INCLUDE_SHANE &&
-			isPhone &&
 			destination === 'studio' &&
 			studioDocument !== 'transcription' &&
 			!!ingestedScore,
 	);
+
+
 
 	/* THE HELD MEASURE, and in a gap it is the anchor's. A gap is a place
 	   between two entries, so it has no measure of its own; the measure the
@@ -1147,6 +1159,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	   `eventIds` EXCLUDES RESTS, and so does every hit rectangle on the page,
 	   so a taken entry always has an index here. */
+	/* THE LINE THE SHIFT VERBS WALK, and slice 4 moved it onto the CORRECTED
+	   line. It used to be the read's own, which was right while the only notes
+	   were the reader's; slice 3 let the singer enter notes, and an entered
+	   note is in no read. MEASURED on the desktop walk: with an entered entry
+	   taken, all four lyric cells read disabled, because the anchor test asked
+	   the read whether it had heard of a note the singer had just made.
+
+	   A syllable can sit on an entered note like any other, so the sequence the
+	   shift walks has to be the sequence the page draws. */
+	const eventIds = $derived(correctedLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id));
+
 	const dockShiftAnchor = $derived(
 		selectedEventId && eventIds.includes(selectedEventId) ? selectedEventId : null,
 	);
@@ -1267,7 +1290,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleSurfacePointerUp(e: PointerEvent): void {
 		const from = swipeFrom;
 		swipeFrom = null;
-		if (from && loupeOpen && isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) {
+		/* THE SWIPE IS THE PHONE'S GESTURE AND STAYS THERE. Dann's brief for
+		   slice 4: no swipe exists on desktop, do not invent one. Without this
+		   gate a mouse dragged down the loupe would dismiss it, which is a
+		   gesture nobody on a desk would try on purpose and everybody would
+		   trigger by accident while selecting. The chevron and Escape are the
+		   desk's two ways out. */
+		if (isPhone && from && loupeOpen && isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) {
 			dismissLoupe();
 		}
 		/* Cleared on the NEXT frame, not here. The click that a tap synthesizes
@@ -1302,9 +1331,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	   IT COSTS THE SELECTION, and that is the ruling rather than an oversight:
 	   this is the same leave the chevron performs, so the drawer's own
-	   correction station arrives idle. */
+	   correction station arrives idle.
+
+	   IT IS A PHONE RULE, and slice 4 says so out loud. On a phone the drawer
+	   covers the whole screen and three surfaces would stack; on a desk it is a
+	   side panel the loupe stands clear of by geometry, and both are meant to
+	   be up at once. MEASURED: without this gate the desktop loupe was
+	   dismissed the instant it rose, because a desk arrives with its drawer
+	   open. */
 	$effect(() => {
-		if (!drawerCollapsed && loupeOpen) dismissLoupe();
+		if (isPhone && !drawerCollapsed && loupeOpen) dismissLoupe();
 	});
 
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
@@ -1475,6 +1511,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const drawerWidth = $derived(
 		destination === 'studio' && selectedWord ? calculateDrawerWidth(selectedWord) : 520
 	);
+	/* WHAT THE LOUPE MUST STAND CLEAR OF, on each modality.
+
+	   On a phone, the dock: the bottom edge in portrait, the left edge in
+	   landscape. On a desk, the OPEN DRAWER, which the brief names: the loupe
+	   never overlaps it. A collapsed drawer takes nothing and the loupe has the
+	   whole desk. Declared here rather than beside the loupe's other state
+	   because `drawerWidth` is, and a derivation cannot read a const above it. */
+	const loupeInset = $derived(
+		isPhone ? (phonePortrait ? 0 : 380) : drawerCollapsed ? 0 : drawerWidth,
+	);
+	const loupeFoot = $derived(isPhone && phonePortrait ? dockHeight : 0);
+
 	const canTranscribe = $derived(
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
@@ -3096,33 +3144,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     intake moved into RootPanel; the Print button and the binder
 					     row were duplicates of RootPanel's and were deleted. What is
 					     left is the score work, the notices, and the voice. -->
-					<!-- N.65 ship B. ONE STATION, SHIFT LYRICS, AND THE SYLLABIFIED TEXT
-					     IS ITS FIRST ELEMENT. Dann's ruling of 2026-08-21. The two were
-					     adjacent siblings here; they are one component with the other
-					     inside it now, and the lavender rule that sits on
-					     `ShiftLyricsControl`'s own root ends up above both with no work.
-					     `SyllableStation`'s six props are unchanged and stay here, which
-					     is why it goes in as a snippet rather than through the wrapper. -->
-					<ShiftLyricsControl
-						{language}
-						disabled={shiftDisabled}
-						onshift={handleShift}
-						placed={placedSlotCount}
-						total={slotQueue.length}
-						expanded={sections.has(STATION_IDS.shiftLyrics)}
-						ontoggle={() => sections.toggle(STATION_IDS.shiftLyrics)}
-					>
-						{#snippet syllables()}
-							<SyllableStation
-								slots={slotQueue}
-								pairings={shownPairings}
-								drift={driftCount}
-								cursor={pairingCursor}
-								{language}
-								oncursor={(i) => (pairingCursor = i)}
-							/>
-						{/snippet}
-					</ShiftLyricsControl>
+					<!-- N.92 SLICE 4. THE SHIFT LYRICS STATION IS GONE, and its two verbs
+					     are the LYRIC station's now, on the same surface as the note verbs
+					     rather than in a separate place. The syllabified text went with
+					     them: N.65 ship B put it first under that label, Dann ruled that
+					     arrangement on his walk of `2238e8b`, and the arrangement survives
+					     the move because `CorrectionSurface` takes it as a snippet.
+					     `SyllableStation`'s six props are unchanged. -->
 					{#if binderError}
 						<!-- N.67 step 5. The file is untouched in every failure, which is
 						     why all three sentences end the same way. -->
@@ -3224,32 +3252,89 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
 				/>
 				<!-- N.92, seated in the NOTATION anchor per Dann's ruling of
-				     2026-08-24. It rides inside the score capability's own wall
-				     and shows nothing at all until there is a read to correct,
-				     so a wall-closed build and a text-only session are both
-				     untouched. Idle with a score open it is one line of prose,
-				     which is what leaves the pinned anchor honest room. -->
+				     2026-08-24. It rides inside the score capability's own wall and
+				     shows nothing at all until there is a read to correct, so a
+				     wall-closed build and a text-only session are both untouched.
+				
+				     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS. `CorrectionControls`
+				     is deleted: it carried the same verbs in a different order under
+				     different labels, and two surfaces that mean the same thing are two
+				     things to learn. This is the SAME COMPONENT the dock renders, in its
+				     panel variant, so the desktop and the phone cannot drift.
+				
+				     THE SEMITONE VERBS DIE HERE. They were retired for the phone by
+				     Dann's ruling of 2026-08-24 and the drawer went on showing them; the
+				     re-cut is where that ends. The spelling policy is what answers a
+				     semitone now: down a semitone from B natural respells as A sharp,
+				     and the three accidental verbs reach every spelling. -->
 				{#if INCLUDE_SHANE && ingestedScore}
-					<CorrectionControls
+					<CorrectionSurface
+						variant="panel"
 						{language}
-						{selectedLabel}
+						readout={readoutLine}
+						{undoLabel}
 						{selectedBase}
 						{selectedDotted}
-						corrected={selectedEventId ? selectedEventId in doc.corrections : false}
-						{correctedCount}
-						{orphanCount}
-						accent="var(--sage)"
+						shiftDisabled={dockShiftDisabled}
+						onundo={handleUndo}
+						ondismiss={dismissLoupe}
+						onwalk={handleMove}
+						onbase={handleDurationCell}
+						ondot={handleDotCell}
 						onstep={handleStep}
 						onoctave={handleOctave}
-						onsemitone={handleSemitone}
 						onaccidental={handleAccidental}
-						onmove={handleMove}
-						onbase={handleBase}
-						ondot={handleDot}
 						ondelete={handleDeleteNote}
+						onshift={handleDockShift}
+						{inGap}
+						{armedBase}
+						armedDots={armedDots > 0}
+						arrivalName={gapAnchorName}
+						{selectedIsRest}
+						{selectedTied}
+						{tieAvailable}
+						onrest={handleRest}
+						ontie={handleTie}
 						onrestore={handleRestoreNote}
-						ondeselect={() => (selectedEventId = null)}
-					/>
+						{restoreAvailable}
+						placed={placedSlotCount}
+						total={slotQueue.length}
+						{tupletOpen}
+						{tupletDef}
+						{tupletFits}
+						onopentuplet={openTuplet}
+						onclosetuplet={closeTuplet}
+						ontupletdef={applyTupletDefinition}
+						{onhold}
+					>
+						{#snippet syllables()}
+							<SyllableStation
+								slots={slotQueue}
+								pairings={shownPairings}
+								drift={driftCount}
+								cursor={pairingCursor}
+								{language}
+								oncursor={(i) => (pairingCursor = i)}
+							/>
+						{/snippet}
+					</CorrectionSurface>
+					{#if correctedCount > 0}
+						<p class="shane-storage-notice">
+							{correctedCount === 1
+								? t('correct.countOne', language)
+								: t('correct.count', language).replace('%s', String(correctedCount))}
+						</p>
+					{/if}
+					<!-- N.97. A correction whose event id no longer resolves after a
+					     re-read did not land, and a correction that fails to land must
+					     never fail silently. The DRAWER says so and the paper carries no
+					     mark, which is E.47's strike applied here. Kept verbatim from the
+					     palette this re-cut replaces. -->
+					{#if orphanCount > 0}
+						<p class="shane-storage-notice">
+							{t('notation.orphans', language).replace('%s', String(orphanCount))}
+						</p>
+					{/if}
 				{/if}
 			{/snippet}
 	</Drawer>
@@ -3413,10 +3498,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{language}
 		fill={heldFill}
 		onpick={handleLoupePick}
-		dockInset={phonePortrait ? 0 : 380}
-		{dockHeight}
+		dockInset={loupeInset}
+		dockHeight={loupeFoot}
+		{isPhone}
 	/>
-	<CorrectionDock
+	{#if isPhone}
+	<CorrectionSurface
 		{language}
 		portrait={phonePortrait}
 		readout={readoutLine}
@@ -3444,6 +3531,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{tieAvailable}
 		onrest={handleRest}
 		ontie={handleTie}
+		onrestore={handleRestoreNote}
+		{restoreAvailable}
+		placed={placedSlotCount}
+		total={slotQueue.length}
 		{tupletOpen}
 		{tupletDef}
 		{tupletFits}
@@ -3452,6 +3543,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		ontupletdef={applyTupletDefinition}
 		{onhold}
 	/>
+	{/if}
 {/if}
 {#if updated.current && !updateDismissed}
 	<div class="update-toast screen-only" role="status">
