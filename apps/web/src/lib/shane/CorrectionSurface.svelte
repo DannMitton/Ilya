@@ -72,6 +72,8 @@
 		shiftDisabled: boolean;
 
 		/* ── N.92 slice 3 ─────────────────────────────────────────────────── */
+		/** Whether the loupe is up, which is what the panel's chevron can act on. */
+		open?: boolean;
 		/** The bar stands between two entries rather than on one. */
 		inGap: boolean;
 		/** In a gap, the value a fresh entry takes; on an entry, unused. */
@@ -137,6 +139,7 @@
 		ondelete,
 		onshift,
 		onheight = undefined,
+		open = true,
 		inGap,
 		armedBase,
 		armedDots,
@@ -330,14 +333,13 @@
 	/** The dock's own tightening, which the drawer's column does not want. */
 	const tight = $derived(variant === 'dock' && !portrait);
 
-	/* THE PITCH STATION'S LABEL, which in a gap answers the question the singer
-	   is about to ask: what will the note be when it arrives. */
-	const pitchLabel = $derived(
-		!inGap
-			? T('loupe.station.pitch')
-			: arrivalName === null
-				? T('loupe.station.pitchMiddle')
-				: T('loupe.station.pitchTakes').replace('%s', arrivalName),
+	/* THE ARRIVAL, which is what the contextual line says in a gap: the question
+	   the singer is about to ask, answered before they ask it. The two strings
+	   are the ratified ones, unchanged; only where they are drawn has moved. */
+	const pitchLine = $derived(
+		arrivalName === null
+			? T('loupe.station.pitchMiddle')
+			: T('loupe.station.pitchTakes').replace('%s', arrivalName),
 	);
 </script>
 
@@ -405,6 +407,32 @@
 	aria-label={variant === 'dock' ? T('a11y.drawer') : undefined}
 	bind:offsetHeight={height}
 >
+	<!-- ONE HEADER OVER THE WHOLE SURFACE, ruled by Dann 2026-08-27. DURATION,
+	     PITCH and ACCIDENTAL · ENTRY had a label each and the three of them said
+	     less together than one word does: they named the ROWS, which a singer
+	     can already tell apart by the shapes in them, and they crowded the one
+	     thing worth naming, which is what this surface is for.
+
+	     LYRIC KEEPS ITS LABEL because it is the one row a singer cannot tell by
+	     shape: two lines of prose and four arrows look like prose and arrows.
+	     It rides inside Corrections as a labelled row, which is the ruling. -->
+	<h3 class="surface-header">{T('loupe.station.corrections')}</h3>
+
+	<!-- THE CONTEXTUAL LINE, one sentence, and only one shows at a time.
+
+	     WHAT IT SAYS AND WHY THAT ONE. The three state sentences this surface
+	     carries are all GAP sentences: takes-the-pitch, take-a-note and the gap
+	     line are each true only while the bar stands between two entries. So
+	     "one at a time" is a choice among three, and this is the choice: the
+	     ARRIVAL, because it is the one fact the singer cannot read anywhere
+	     else on the surface. Where the bar is, is on the readout below; why the
+	     lyric row is idle, is on the lyric row's own label, where principle 8
+	     wants it, sitting with the thing it explains.
+
+	     ITS ROW IS RESERVED, the Undo pill's rule again, so the surface does
+	     not move when the bar steps in and out of a gap. -->
+	<p class="surface-context" class:idle={!inGap}>{inGap ? pitchLine : ''}</p>
+
 	<!-- THE HEADER ROW. The Undo pill sits alone on its own row so it can grow
 	     to fit a long sentence, and it is ABSENT rather than disabled when
 	     there is nothing to undo: a control that cannot act earns no ink.
@@ -450,13 +478,29 @@
 		     speaks the drawer's own collapse name; in the panel the surface stays
 		     and only the loupe goes, so it speaks `Done`, which is the word the
 		     palette this re-cut replaces already used for exactly that. No new
-		     string either way. -->
-		<button
-			type="button"
-			class="mark chevron"
-			aria-label={variant === 'dock' ? T('drawer.collapse') : T('correct.deselect')}
-			onclick={ondismiss}>{portrait ? '⌄' : '‹'}</button
-		>
+		     string either way.
+
+		     IT IS ABSENT IN THE PANEL WHEN THERE IS NO LOUPE TO PUT AWAY, and
+		     that is the defect Dann walked: the panel stands in the drawer at
+		     all times, loupe or no loupe, so its chevron stood there with
+		     nothing to dismiss and clicking it changed nothing. Measured with
+		     the loupe down: panel rendered, chevron rendered, click, no change.
+		     The rule is the Undo pill's own, applied to the second control on
+		     this surface that can be idle: a control that cannot act earns no
+		     ink, and its 44 px stays reserved so the row does not move.
+
+		     THE DOCK KEEPS ITS CHEVRON ALWAYS, because the dock only exists
+		     while the loupe does. -->
+		{#if variant === 'dock' || open}
+			<button
+				type="button"
+				class="mark chevron"
+				aria-label={variant === 'dock' ? T('drawer.collapse') : T('correct.deselect')}
+				onclick={ondismiss}>{portrait ? '⌄' : '‹'}</button
+			>
+		{:else}
+			<span class="mark" aria-hidden="true"></span>
+		{/if}
 	</div>
 
 	<!-- DURATION, first, because N.95 measured it as the broken channel.
@@ -487,7 +531,6 @@
 				{@render value(tupletDef.normalType, (b) => ontupletdef({ ...tupletDef, normalType: b }))}
 			</div>
 		{:else}
-			<h3 class="station-label">{T('loupe.station.duration')}</h3>
 			<div class="cells">
 				{#each DURATIONS as d (d.base)}
 					{@const lit = inGap ? armedBase === d.base : selectedBase === d.base}
@@ -526,7 +569,6 @@
 	     with it, which is principle 8: the sentence says the note will arrive at
 	     the previous entry's pitch, and the verbs finish it once it exists. -->
 	<section class="station">
-		<h3 class="station-label">{pitchLabel}</h3>
 		<div class="cells">
 			<button
 				type="button"
@@ -571,7 +613,6 @@
 	     doubles, exactly as shipped, so none of them is ever "on" and none
 	     carries `aria-pressed`. What the note shows is on the readout. -->
 	<section class="station">
-		<h3 class="station-label">{T('loupe.station.accidental')}</h3>
 		<div class="cells">
 			{#each ACCIDENTALS as a (a.kind)}
 				<button
@@ -860,6 +901,28 @@
 
 	.chevron {
 		font-size: 1.375rem;
+	}
+
+	/* The one header, in the register every drawer station label uses. */
+	.surface-header {
+		margin: 0;
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--sage, #8b9a7d);
+	}
+
+	/* THE CONTEXTUAL LINE. Its row is reserved whether it speaks or not, so the
+	   surface holds still as the bar steps in and out of a gap: `min-height`
+	   rather than a conditional block, and nothing is drawn when it is idle. */
+	.surface-context {
+		margin: 0;
+		min-height: 1.15rem;
+		font-size: 0.75rem;
+		line-height: 1.15rem;
+		color: var(--ink-secondary, #4a4540);
 	}
 
 	.station-label {

@@ -1206,7 +1206,38 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   and still places the pending syllable. This adds the loupe and the
 	   nearest-entry fallback, and takes nothing away. */
 	function handlePageTap(e: MouseEvent): void {
-		if (!loupeAvailable || loupeOpen) return;
+		if (!loupeAvailable) return;
+		/* A CLICK OUTSIDE THE LOUPE RETIRES IT, on a fine pointer only. Ruled by
+		   Dann 2026-08-27 and ruled at the same time as an ACCEPTED DISPARITY
+		   with the phone, where a stray tap stays dead.
+
+		   THE DISPARITY IS THE POINT, not an oversight in it. The ruled tap
+		   grammar says a tap outside the loupe deliberately does nothing,
+		   because on glass a stray tap is the easiest gesture to make by
+		   accident and no Undo restores a lost place. A mouse does not stray:
+		   a click is aimed, it costs a deliberate movement, and on a desk the
+		   page is large enough that clicking it is the natural way to say "not
+		   that measure, this one". */
+		if (loupeOpen) {
+			if (isPhone) return;
+			if ((e.target as Element | null)?.closest?.('.loupe, .surface')) return;
+			/* A POINT-IN-BOX TEST, and `elementFromPoint` cannot serve here for a
+			   reason that is the ruling working: while the loupe is up the page
+			   is DEAF, `pointer-events: none`, so the topmost element at a page
+			   coordinate is never a sheet. Measured: the outside click did
+			   nothing at all until this became a geometry question instead of a
+			   hit-testing one. The target test above has already excluded the
+			   loupe and the surface, so a point inside a sheet's box is a click
+			   on the page and nothing else. */
+			const onSheet = [...document.querySelectorAll('.score-page')].some((el) => {
+				const r = el.getBoundingClientRect();
+				return (
+					e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom
+				);
+			});
+			if (onSheet) dismissLoupe();
+			return;
+		}
 		/* A TAP THAT BEGAN ON THE LOUPE OR THE DOCK IS NEVER A TAP ON THE PAGE,
 		   and this is the fix for the dead dismissal Dann walked on the deploy.
 
@@ -1229,7 +1260,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   synthesized at the end of a swipe can carry a target that is already
 		   the page, so the gesture that produced it is remembered on
 		   `pointerdown` and consulted here. */
-		if ((e.target as Element | null)?.closest?.('.loupe, .dock')) return;
+		if ((e.target as Element | null)?.closest?.('.loupe, .dock, .surface')) return;
 		if (gestureBeganOnSurface) return;
 		/* THE SHEET IS FOUND AT THE POINT, NOT FROM `e.target`, and both halves
 		   of that are measured requirements rather than preferences.
@@ -3151,6 +3182,103 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     arrangement on his walk of `2238e8b`, and the arrangement survives
 					     the move because `CorrectionSurface` takes it as a snippet.
 					     `SyllableStation`'s six props are unchanged. -->
+					<!-- N.92 CORRECTIONS, AND IT IS BELOW SOURCE NOW, ruled by Dann
+						     2026-08-27. It sat in the pinned NOTATION anchor from his ruling
+						     of 2026-08-24, when it was one line of prose idle; it is four
+						     rows of controls now, and a pinned region that never scrolls is
+						     the wrong home for the tallest tenant in the drawer.
+						
+						     THE ANCHORS SURVIVE, which the slice's own constraint requires:
+						     metadata and NOTATION still hold the pinned top and the voice
+						     still holds the pinned bottom. What moved is the scroll's own
+						     tenant, into the music half at the foot of the column, where the
+						     rest of the score work already lives.
+						
+						     It rides inside the score capability's own wall and shows nothing
+						     at all until there is a read to correct, so a wall-closed build
+						     and a text-only session are both untouched.
+						
+					     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS. `CorrectionControls`
+					     is deleted: it carried the same verbs in a different order under
+					     different labels, and two surfaces that mean the same thing are two
+					     things to learn. This is the SAME COMPONENT the dock renders, in its
+					     panel variant, so the desktop and the phone cannot drift.
+					
+					     THE SEMITONE VERBS DIE HERE. They were retired for the phone by
+					     Dann's ruling of 2026-08-24 and the drawer went on showing them; the
+					     re-cut is where that ends. The spelling policy is what answers a
+					     semitone now: down a semitone from B natural respells as A sharp,
+					     and the three accidental verbs reach every spelling. -->
+					{#if INCLUDE_SHANE && ingestedScore}
+						<CorrectionSurface
+							variant="panel"
+							open={loupeOpen}
+							{language}
+							readout={readoutLine}
+							{undoLabel}
+							{selectedBase}
+							{selectedDotted}
+							shiftDisabled={dockShiftDisabled}
+							onundo={handleUndo}
+							ondismiss={dismissLoupe}
+							onwalk={handleMove}
+							onbase={handleDurationCell}
+							ondot={handleDotCell}
+							onstep={handleStep}
+							onoctave={handleOctave}
+							onaccidental={handleAccidental}
+							ondelete={handleDeleteNote}
+							onshift={handleDockShift}
+							{inGap}
+							{armedBase}
+							armedDots={armedDots > 0}
+							arrivalName={gapAnchorName}
+							{selectedIsRest}
+							{selectedTied}
+							{tieAvailable}
+							onrest={handleRest}
+							ontie={handleTie}
+							onrestore={handleRestoreNote}
+							{restoreAvailable}
+							placed={placedSlotCount}
+							total={slotQueue.length}
+							{tupletOpen}
+							{tupletDef}
+							{tupletFits}
+							onopentuplet={openTuplet}
+							onclosetuplet={closeTuplet}
+							ontupletdef={applyTupletDefinition}
+							{onhold}
+						>
+							{#snippet syllables()}
+								<SyllableStation
+									slots={slotQueue}
+									pairings={shownPairings}
+									drift={driftCount}
+									cursor={pairingCursor}
+									{language}
+									oncursor={(i) => (pairingCursor = i)}
+								/>
+							{/snippet}
+						</CorrectionSurface>
+						{#if correctedCount > 0}
+							<p class="shane-storage-notice">
+								{correctedCount === 1
+									? t('correct.countOne', language)
+									: t('correct.count', language).replace('%s', String(correctedCount))}
+							</p>
+						{/if}
+						<!-- N.97. A correction whose event id no longer resolves after a
+						     re-read did not land, and a correction that fails to land must
+						     never fail silently. The DRAWER says so and the paper carries no
+						     mark, which is E.47's strike applied here. Kept verbatim from the
+						     palette this re-cut replaces. -->
+						{#if orphanCount > 0}
+							<p class="shane-storage-notice">
+								{t('notation.orphans', language).replace('%s', String(orphanCount))}
+							</p>
+						{/if}
+					{/if}
 					{#if binderError}
 						<!-- N.67 step 5. The file is untouched in every failure, which is
 						     why all three sentences end the same way. -->
@@ -3251,91 +3379,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					expanded={sections.has(STATION_IDS.notation)}
 					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
 				/>
-				<!-- N.92, seated in the NOTATION anchor per Dann's ruling of
-				     2026-08-24. It rides inside the score capability's own wall and
-				     shows nothing at all until there is a read to correct, so a
-				     wall-closed build and a text-only session are both untouched.
-				
-				     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS. `CorrectionControls`
-				     is deleted: it carried the same verbs in a different order under
-				     different labels, and two surfaces that mean the same thing are two
-				     things to learn. This is the SAME COMPONENT the dock renders, in its
-				     panel variant, so the desktop and the phone cannot drift.
-				
-				     THE SEMITONE VERBS DIE HERE. They were retired for the phone by
-				     Dann's ruling of 2026-08-24 and the drawer went on showing them; the
-				     re-cut is where that ends. The spelling policy is what answers a
-				     semitone now: down a semitone from B natural respells as A sharp,
-				     and the three accidental verbs reach every spelling. -->
-				{#if INCLUDE_SHANE && ingestedScore}
-					<CorrectionSurface
-						variant="panel"
-						{language}
-						readout={readoutLine}
-						{undoLabel}
-						{selectedBase}
-						{selectedDotted}
-						shiftDisabled={dockShiftDisabled}
-						onundo={handleUndo}
-						ondismiss={dismissLoupe}
-						onwalk={handleMove}
-						onbase={handleDurationCell}
-						ondot={handleDotCell}
-						onstep={handleStep}
-						onoctave={handleOctave}
-						onaccidental={handleAccidental}
-						ondelete={handleDeleteNote}
-						onshift={handleDockShift}
-						{inGap}
-						{armedBase}
-						armedDots={armedDots > 0}
-						arrivalName={gapAnchorName}
-						{selectedIsRest}
-						{selectedTied}
-						{tieAvailable}
-						onrest={handleRest}
-						ontie={handleTie}
-						onrestore={handleRestoreNote}
-						{restoreAvailable}
-						placed={placedSlotCount}
-						total={slotQueue.length}
-						{tupletOpen}
-						{tupletDef}
-						{tupletFits}
-						onopentuplet={openTuplet}
-						onclosetuplet={closeTuplet}
-						ontupletdef={applyTupletDefinition}
-						{onhold}
-					>
-						{#snippet syllables()}
-							<SyllableStation
-								slots={slotQueue}
-								pairings={shownPairings}
-								drift={driftCount}
-								cursor={pairingCursor}
-								{language}
-								oncursor={(i) => (pairingCursor = i)}
-							/>
-						{/snippet}
-					</CorrectionSurface>
-					{#if correctedCount > 0}
-						<p class="shane-storage-notice">
-							{correctedCount === 1
-								? t('correct.countOne', language)
-								: t('correct.count', language).replace('%s', String(correctedCount))}
-						</p>
-					{/if}
-					<!-- N.97. A correction whose event id no longer resolves after a
-					     re-read did not land, and a correction that fails to land must
-					     never fail silently. The DRAWER says so and the paper carries no
-					     mark, which is E.47's strike applied here. Kept verbatim from the
-					     palette this re-cut replaces. -->
-					{#if orphanCount > 0}
-						<p class="shane-storage-notice">
-							{t('notation.orphans', language).replace('%s', String(orphanCount))}
-						</p>
-					{/if}
-				{/if}
 			{/snippet}
 	</Drawer>
 	<main

@@ -291,6 +291,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// « Rétablir » is ADOPTED from `meta.revertToScore`, which already says
 	// « Rétablir l'en-tête de la partition ». Nothing is coined.
 	'loupe.restore':               { en: 'Restore',                       fr: 'Rétablir' },
+	// THE ONE HEADER, ruled by Dann 2026-08-27: DURATION, PITCH and
+	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a
+	// labelled row. Both words are adopted, and they are the same word: the app
+	// already says `corrections` in `correct.count` and « corrections » in its
+	// French, and `notation.orphans` says it in both too.
+	'loupe.station.corrections':   { en: 'Corrections',                   fr: 'Corrections' },
 	// THE MEASURE TAG'S ARITHMETIC, ruled by Dann 2026-08-26. An overfull or
 	// short bar is not blocked and not re-timed, and the page stays silent; the
 	// tag says what the measure holds against what its signature asks for, and

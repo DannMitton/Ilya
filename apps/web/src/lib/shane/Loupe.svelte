@@ -401,8 +401,13 @@
 				);
 				const half = g.thickness / 2;
 				const cap = g.capWidth / 2;
+				/* LAVENDER, ruled by Dann 2026-08-27 on the desktop walk: lavender
+				   is the voice's colour and the bar marks a musical place. The
+				   sage held-measure rectangle stays sage, so the two marks are
+				   two colours doing two jobs: sage says which measure the page is
+				   working on, lavender says where in it the singer stands. */
 				bar =
-					`<g data-insertion-bar="" pointer-events="none" fill="var(--sage, #8b9a7d)">` +
+					`<g data-insertion-bar="" pointer-events="none" fill="var(--deeper-lavender, #8e7e9b)">` +
 					`<rect x="${g.x - half}" y="${g.top}" width="${g.thickness}" height="${g.bottom - g.top}"/>` +
 					`<path d="M${g.x - cap} ${g.top} L${g.x + cap} ${g.top} L${g.x} ${g.top + g.capHeight} Z"/>` +
 					`<path d="M${g.x - cap} ${g.bottom} L${g.x + cap} ${g.bottom} L${g.x} ${g.bottom - g.capHeight} Z"/>` +

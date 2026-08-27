@@ -375,3 +375,189 @@ no confirmation. It can undo a run of corrections on one note in a single tap,
 and the Undo pill reverses it as one operation, which is the safety. That
 matches the surface's own no-confirm rule and I mention it because it is the
 one verb here that can throw away more than one decision at a time.
+
+---
+
+## 10. Appended: the desktop walk's three rulings and its defect
+
+**§1 through §9 shipped as `1069fe9`**, "N.92: slice 4, the desktop
+homecoming", so everything above is in history and this section's work is what
+is dirty: `RootPanel.svelte`, `i18n.ts`, `CorrectionSurface.svelte`,
+`Loupe.svelte`, `+page.svelte`, and this memo.
+
+**One new string, coined nothing. Gate 4 holds at 872.**
+
+### Ruling 1. The insertion bar is lavender
+
+`Loupe.svelte:404`. Measured: the bar draws `rgb(142, 126, 155)`, which is
+`--deeper-lavender`, and the held-measure rectangle draws `rgb(139, 154, 125)`,
+which is `--sage`. **Two marks, two colours, two jobs**: sage says which measure
+the page is working on, lavender says where in it the singer stands.
+
+### Ruling 2. A click outside the loupe retires it, on a desk
+
+`+page.svelte:1210`, gated to fine pointers. Recorded in the code as **an
+accepted disparity**, with your reasoning beside it: on glass a stray tap is
+the easiest gesture to make by accident and no Undo restores a lost place; a
+mouse does not stray, a click is aimed, and on a desk the page is large enough
+that clicking it is the natural way to say "not that measure, this one".
+
+**One thing had to be learned to make it work** (`:1224`). `elementFromPoint`
+could not serve, because while the loupe is up the page is DEAF by the ruling
+that put it in its second state, so the topmost element at a page coordinate is
+never a sheet. The click did nothing at all until it became a geometry question
+instead of a hit-testing one. The loupe and the surface are excluded by the
+click's own target first, so a point inside a sheet's box is a click on the
+page and nothing else.
+
+Measured: on a desk the outside click retires the loupe; **on a phone a stray
+tap outside it stays dead**, which is the disparity holding in the direction it
+was ruled.
+
+### The chevron defect: cause, and it was two things
+
+**The cause I can name and prove is that the panel's chevron stood there with
+nothing to dismiss.** Measured, with the loupe down: the panel is still
+rendered in the drawer, its chevron is still rendered, and clicking it changes
+nothing — no loupe to put away, page already at full ink. The panel is a
+permanent tenant of the drawer and the loupe is not, so the chevron was idle
+for most of every session. `CorrectionSurface.svelte:483` makes it absent when
+it cannot act, which is the Undo pill's own rule applied to the second control
+on this surface that can be idle, with its 44 px reserved so the row does not
+move. The dock keeps its chevron always, because the dock only exists while the
+loupe does.
+
+**A second thing turned up while I was proving the first, and it is not a
+defect.** With Corrections moved to the foot of the scroll (ruling 3), the
+chevron at 1400 by 900 sits BELOW the scroll's visible box: measured, the
+chevron's rectangle is outside `.drawer-content`'s. A locator click, which
+scrolls first as a wheel does, reaches it and it dismisses correctly. **My own
+first probe clicked raw coordinates and reported a failure that was the
+probe's**, which is worth recording because I nearly logged it as a defect.
+
+**What it means for the singer is real even though it is not a bug**: on a
+900 px desk the readout, the stepper and the chevron are below the fold, and
+reaching them means scrolling the drawer. Escape and the outside click both
+dismiss without scrolling, so the loupe is never trapped. **Named for your
+eye**, because it is a cost of the reorder rather than a mistake in it.
+
+### Ruling 3. One header, one contextual line, LYRIC as a row
+
+`CorrectionSurface.svelte:410`. DURATION, PITCH and ACCIDENTAL · ENTRY lose
+their labels to one `Corrections` header. They named the ROWS, which a singer
+can already tell apart by the shapes in them, and they crowded the one thing
+worth naming. **LYRIC keeps its label** because it is the one row that cannot
+be told by shape: two lines of prose and four arrows look like prose and
+arrows.
+
+**The contextual line** is `:421`, and here is the proposal you asked for,
+with its reasoning.
+
+All three state sentences are GAP sentences: takes-the-pitch, take-a-note and
+the gap line are each true only while the bar stands between two entries. So
+"only one at a time" is a choice among three, and the choice is **the
+arrival**, because it is the one fact the singer cannot read anywhere else on
+the surface.
+
+- **Where the bar is** is already on the readout below, and reads well there:
+  `after C♯3 · the next duration enters here`.
+- **Why the lyric row is idle** is on the lyric row's own label, where
+  principle 8 wants it, sitting with the thing it explains:
+  `Lyric · take a note to shift its syllable`.
+- **What a fresh note will be** has nowhere else to go, so the line carries it:
+  `Pitch · takes the pitch of C♯3`, or `Pitch · arrives on the middle line`.
+
+Both strings are the ratified ones, unchanged; only where they are drawn moved.
+**Its row is reserved**, the Undo pill's rule again, so the surface holds still
+as the bar steps in and out of a gap.
+
+**If you would rather the gap sentence took the line**, it is a swap of two
+expressions and the readout would then need something else to say in a gap,
+which is the part nobody has ruled.
+
+### The drawer's order
+
+`+page.svelte:3185` moved Corrections out of the pinned NOTATION anchor and
+into the scroll's music half; `RootPanel.svelte:205` moved Analysis to the top
+of the scroll.
+
+**The anchors survive**, which this slice's own constraint requires: metadata
+and NOTATION still hold the pinned top, the voice still holds the pinned
+bottom. What moved is the scroll's tenant. Corrections sat in the pinned anchor
+from your ruling of 2026-08-24, when it was one line of prose idle; it is four
+rows of controls now, and a region that never scrolls is the wrong home for the
+tallest tenant in the drawer.
+
+**Analysis is the transcription's own console**, so it belongs with the text
+tools, and it now rides directly under the pinned NOTATION where the scroll
+begins. That inverts your ruling of 2026-08-20 by its own logic: the
+performance still sits together at the bottom, and Analysis is no longer part
+of it.
+
+Measured order, read off the rendered drawer: **Metadata, Notation, Analysis,
+Repertoire, Source, Corrections, Lyric.**
+
+### The strings table
+
+| key | English | French | coined or adopted |
+|---|---|---|---|
+| `loupe.station.corrections` | Corrections | Corrections | **adopted, and it is the same word in both.** `correct.count` already says "You have corrected %s notes" / « Vous avez corrigé %s notes », and `notation.orphans` says « corrections » outright |
+
+**Two keys are now drawn nowhere**: `loupe.station.pitch` and
+`loupe.station.accidental`, whose labels this ruling consolidated.
+`loupe.station.duration` survives inside the Nolet row's own label
+(`DURATION · TUPLET`). **I left the two in the file rather than deleting them**,
+because they are ratified strings and a ruling that brings a label back should
+not have to re-ratify its words. Say the word and they go.
+
+### What I looked at
+
+**Desktop, 1400 by 900:**
+
+| check | got |
+|---|---|
+| the header | `Corrections` |
+| station labels left | `["Lyric"]` |
+| the drawer's order | `Metadata, Notation, Analysis, Repertoire, Source, Corrections, Lyric` |
+| the contextual line on an entry | empty |
+| the contextual line in a gap | `Pitch · takes the pitch of C♯3` |
+| the readout in a gap | `after C♯3 · the next duration enters here` |
+| the LYRIC label in a gap | `Lyric · take a note to shift its syllable` |
+| the bar and the mark | `rgb(142, 126, 155)` and `rgb(139, 154, 125)` |
+| a click on the page outside the loupe | retires it |
+| the chevron with the loupe down | **absent**, its space reserved |
+| the chevron with the loupe up | dismisses |
+
+**Phone, 430 by 932 and 932 by 430:**
+
+| check | got |
+|---|---|
+| the header | `Corrections` |
+| the 44 px floor | zero breaches |
+| portrait dock height | **438**, down from 477: the consolidation gave back 39 px |
+| a stray tap outside the loupe | **stays dead**, the ruled disparity |
+| landscape dock | 380 by 430, `scrollHeight` equal to `clientHeight` |
+
+### Gates, re-run
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | `872 passed (872)` |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | same |
+
+**All five at the baseline the ship script holds, and gate 4 did not move.** No
+test was added: these are labels, colours, a guard, and two block moves, and
+the pure logic underneath is untouched. `~/Downloads/ilya-ship.sh` needs no
+edit.
+
+### Not established, new with this round
+
+- **Whether the surface below the fold is acceptable on a short desk.** At
+  900 px it needs a scroll to reach; at a taller window it does not. Escape and
+  the outside click both dismiss without scrolling.
+- **Whether the contextual line chose the right one of the three.** §10 argues
+  it; the other two are one expression away.
+- **Whether the two consolidated keys should be deleted or kept.**

@@ -202,6 +202,81 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     binder row still sits at the foot of Source, so the adjacency the step
 	     4b note claimed is gone. Nothing inside this block changed, and neither
 	     did the binder row. Only the order did. -->
+	<!-- ── ANALYSIS, FIRST IN THE SCROLL. RULED BY DANN 2026-08-27, and it
+	     reverses the placement he ruled on 2026-08-20, knowingly, for a reason
+	     that did not exist then.
+
+	     HIS 2026-08-20 ARRANGEMENT put Analysis last so the performance sat
+	     together at the bottom: Analysis, then the score work. What changed is
+	     that the score work grew. N.92's four slices put a whole correction
+	     surface in this drawer, and with Corrections at the foot of the column
+	     the bottom is the MUSIC half and the top is the TEXT half. Analysis is
+	     the transcription's own console, so it belongs with the text, and it
+	     rides directly under the pinned NOTATION anchor where the scroll
+	     begins.
+
+	     THE ORDER IS NOW: Notation pinned above, then Analysis, Repertoire,
+	     Source, Output, and the score work with Corrections at the foot, with
+	     the voice anchor pinned below all of it. Nothing inside this block
+	     changed; only where it sits.
+
+	     THE 2026-08-20 RULING'S REASON IS NOT LOST, it is inverted by its own
+	     logic: the performance still sits together, and it sits at the bottom,
+	     and Analysis is no longer part of it. -->
+	<div class="section console-section" class:shut={!sections.has(STATION_IDS.analysis)}>
+		<StationHeader
+			label={t('console.placeholder', language)}
+			expanded={sections.has(STATION_IDS.analysis)}
+			ontoggle={() => sections.toggle(STATION_IDS.analysis)}
+			controls="station-analysis"
+		/>
+		{#if sections.has(STATION_IDS.analysis)}
+		<div class="station-body" id="station-analysis">
+		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
+		     is a decision the brief did not rule. It described the
+		     transcription's word count and milliseconds from a position
+		     between two stations, and Source's new boundary leaves it nowhere
+		     to stand. The ratified r1 mockup draws it inside Analysis, beside
+		     "select a word to inspect it"
+		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
+		     reports is a reading of the text rather than an act on it. Its
+		     `margin-top: -4px` went with the move: that value tightened it
+		     against the uploader above, which is no longer above it. -->
+		<p class="result-summary" class:result-hidden={!hasResults}>
+			{#if hasResults}
+				{wordCount} {t('result.words', language)} {transcribeMs}ms
+			{:else}
+				&nbsp;
+			{/if}
+		</p>
+		{#if showInspector && consoleContent}
+			{@render consoleContent()}
+		{:else}
+			<div class="console-placeholder-body">
+				{#if loaderState.isLoading}
+					<div class="dict-progress">
+						<span class="dict-progress-text">{t('dict.loading', language)}</span>
+						<div class="dict-progress-track">
+							{#if loaderState.progress >= 0}
+								<div
+									class="dict-progress-fill"
+									style="width: {Math.round(loaderState.progress * 100)}%"
+								></div>
+							{:else}
+								<div class="dict-progress-fill indeterminate"></div>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					<p class="placeholder-hint">
+						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
+					</p>
+				{/if}
+			</div>
+		{/if}
+		</div>
+		{/if}
+	</div>
 	<div class="section song-section" class:shut={!sections.has(STATION_IDS.songs)}>
 		<SongList
 			{language}
@@ -403,88 +478,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		</div>
 		{/if}
 	</div>
-	<!-- ── ANALYSIS. LAST IN THE SCROLL. RULED BY DANN 2026-08-20 on his
-	     walk of `f59f7d2`, and it reverses the order N.73 S3 ship two
-	     shipped, knowingly.
 
-	     Ship two put Analysis above Output on the spec's station order
-	     (`fable-gui-audit-and-spec_r1_2026-08-18.md:119-121`, §3.3) and the
-	     ratified mockup's four stations
-	     (`fable-gui-mockup_r1_2026-08-18.html:313-329`). BOTH WERE WRITTEN
-	     BEFORE THE ANCHORS EXISTED, so neither weighed a 365px Inspector
-	     against a pinned drawer, and Dann overturned them on what the drawer
-	     actually became.
-
-	     HIS ARRANGEMENT, in his terms: the song comes in and goes out at the
-	     top, Source then Output then Songs; the performance sits together at
-	     the bottom, Analysis then the score work; and Print stops being
-	     stranded across 365px of empty Analysis from the fields it belongs
-	     with.
-
-	     THE FIRST HALF OF THAT ORDER WAS SUPERSEDED ON 2026-08-21, when Dann
-	     moved Repertoire up between Notation and Source. The order is now
-	     Repertoire, Source, Output, Analysis, then shanePanel's score work and
-	     notices, with the voice anchor pinned below all of it. **Analysis last
-	     in the scroll is untouched**, and it is the part of the 2026-08-20
-	     ruling this block exists to record.
-
-	     Nothing inside this block changed. The result summary is still its
-	     first entry rather than merged into the header; merging them is a
-	     station boundary nobody has ruled. -->
-	<div class="section console-section" class:shut={!sections.has(STATION_IDS.analysis)}>
-		<StationHeader
-			label={t('console.placeholder', language)}
-			expanded={sections.has(STATION_IDS.analysis)}
-			ontoggle={() => sections.toggle(STATION_IDS.analysis)}
-			controls="station-analysis"
-		/>
-		{#if sections.has(STATION_IDS.analysis)}
-		<div class="station-body" id="station-analysis">
-		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
-		     is a decision the brief did not rule. It described the
-		     transcription's word count and milliseconds from a position
-		     between two stations, and Source's new boundary leaves it nowhere
-		     to stand. The ratified r1 mockup draws it inside Analysis, beside
-		     "select a word to inspect it"
-		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
-		     reports is a reading of the text rather than an act on it. Its
-		     `margin-top: -4px` went with the move: that value tightened it
-		     against the uploader above, which is no longer above it. -->
-		<p class="result-summary" class:result-hidden={!hasResults}>
-			{#if hasResults}
-				{wordCount} {t('result.words', language)} {transcribeMs}ms
-			{:else}
-				&nbsp;
-			{/if}
-		</p>
-		{#if showInspector && consoleContent}
-			{@render consoleContent()}
-		{:else}
-			<div class="console-placeholder-body">
-				{#if loaderState.isLoading}
-					<div class="dict-progress">
-						<span class="dict-progress-text">{t('dict.loading', language)}</span>
-						<div class="dict-progress-track">
-							{#if loaderState.progress >= 0}
-								<div
-									class="dict-progress-fill"
-									style="width: {Math.round(loaderState.progress * 100)}%"
-								></div>
-							{:else}
-								<div class="dict-progress-fill indeterminate"></div>
-							{/if}
-						</div>
-					</div>
-				{:else}
-					<p class="placeholder-hint">
-						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
-					</p>
-				{/if}
-			</div>
-		{/if}
-		</div>
-		{/if}
-	</div>
 
 
 
