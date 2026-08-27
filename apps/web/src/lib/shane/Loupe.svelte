@@ -115,6 +115,10 @@
 		width: number;
 		/** The magnified measure's width, centred inside the frame. */
 		contentWidth: number;
+		/** The head's width: the clef and the key signature, at the left edge. */
+		headWidth: number;
+		/** The head's own crop of the same system, in the same coordinates. */
+		headViewBox: string;
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
@@ -205,11 +209,42 @@
 
 		const width = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
 		const span = win.right - win.left;
-		/* A measure wider than the phone is shown WHOLE at less than 2.4 rather
-		   than clipped at 2.4. Notes lost off the edge of a magnifier are the
-		   worse failure, because the singer cannot tell it happened. */
-		const contentWidth = Math.min(span * unitPx * MAGNIFICATION, width);
-		const contentHeight = sysHeight * (contentWidth / span);
+
+		/* THE CLEF AND THE KEY SIGNATURE, at the loupe's left edge. Ruled by
+		   Dann 2026-08-27 from the deploy walk: a musician cannot read a stave
+		   without them, and an engraved excerpt carries them however short it
+		   is.
+
+		   THEY ARE A SECOND CROP OF THE SAME CLONE, not a second drawing. The
+		   renderer puts the clef and the key at the head of every system
+		   (`staff-renderer.ts:739` and `:770`), so the head is already in the
+		   system this loupe is showing; it is simply outside the x window of
+		   every measure but the first. One clone, two viewports, and the glyphs
+		   in the head are the page's glyphs for the same reason the measure's
+		   are: they ARE the page's.
+
+		   THE HEAD ENDS WHERE THE FIRST COLUMN BEGINS. The renderer tiles the
+		   system with hit rectangles from the midpoint before each note, so the
+		   smallest of them in the whole system bounds everything drawn before
+		   the music starts. Measured off the DOM rather than recomputed from
+		   `leftMargin`, which is an option a caller can change. */
+		const allHits = [...sysEl.querySelectorAll('[data-hit]')].map((el) =>
+			Number(el.getAttribute('x')),
+		);
+		const headWidthUnits = allHits.length > 0 ? Math.max(0, Math.min(...allHits)) : 0;
+
+		/* THE HEAD SHARES THE FIT rather than being added to it. A measure
+		   wider than the phone is shown WHOLE at less than 2.4 rather than
+		   clipped at 2.4, because notes lost off the edge of a magnifier are the
+		   worse failure: the singer cannot tell it happened. The head is part of
+		   what must fit, so it is part of what sets the scale, and the applied
+		   magnification is reported in the memo rather than assumed. */
+		const totalSpan = headWidthUnits + span;
+		const drawn = Math.min(totalSpan * unitPx * MAGNIFICATION, width);
+		const scale = drawn / totalSpan;
+		const contentWidth = span * scale;
+		const headWidth = headWidthUnits * scale;
+		const contentHeight = sysHeight * scale;
 
 		const ranges: SystemRange[] = [];
 		for (const el of container.querySelectorAll('[data-system]')) {
@@ -354,6 +389,8 @@
 			viewBox: `${win.left} ${sysMinY} ${span} ${sysHeight}`,
 			width,
 			contentWidth,
+			headWidth,
+			headViewBox: `0 ${sysMinY} ${headWidthUnits} ${sysHeight}`,
 			contentHeight,
 			windowHeight,
 			top,
@@ -450,7 +487,27 @@
 			<!-- ARIA-HIDDEN for the reason the accidental glyphs already carry:
 			     this is the page said louder, not a second thing to hear. The
 			     score region has its own label and the dock's readout names the
-			     taken entry in words. -->
+			     taken entry in words.
+
+			     TWO VIEWPORTS, ONE CLONE. The head crops the system's own left
+			     edge, which is where the renderer put the clef and the key; the
+			     body crops the held measure. They sit flush, at one scale, in
+			     one coordinate space, so the staff lines run through both and
+			     the pair reads as one stave rather than as two pictures. -->
+			{#if frame.headWidth > 0}
+				<svg
+					class="loupe-svg loupe-head"
+					viewBox={frame.headViewBox}
+					width={frame.headWidth}
+					height={frame.contentHeight}
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+					font-family="'Source Serif 4', Georgia, serif"
+				>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
+					{@html frame.inner}
+				</svg>
+			{/if}
 			<svg
 				class="loupe-svg"
 				viewBox={frame.viewBox}
@@ -541,6 +598,15 @@
 
 	.loupe-svg {
 		display: block;
+		flex: 0 0 auto;
+	}
+
+	/* The head carries the clef and the key and nothing else, and it must not
+	   take a tap: the entries live in the body, and a hit rectangle that
+	   happened to reach into the head belongs to a note the loupe is not
+	   showing. */
+	.loupe-head {
+		pointer-events: none;
 	}
 
 	/* The taken entry, marked exactly as the page marks it: an outline, which

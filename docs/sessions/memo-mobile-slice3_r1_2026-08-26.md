@@ -466,3 +466,137 @@ again.
 nobody has touched, because the read's durations disagree with the metre it
 read. The tag now keeps the system clause while saying so, which makes that
 noise cheaper, but it does not make it quieter. Still worth your eye.
+
+---
+
+## 10. Appended: the clef and key in the loupe, and the wandering unit
+
+Both from Dann's deploy walk. One ruling, one defect.
+
+**§9 shipped as `90ab413`**, "N.92: the measure tag carries both clauses", so
+everything above this section is in history. This section's work is what is
+dirty: `entry.ts`, `entry.test.ts`, `Loupe.svelte`, and this memo.
+`docs/memory/INBOX.md` is also dirty and is not mine.
+
+### The defect: the beat unit wandered, and here is why
+
+`entry.ts:402`. You watched one measure read `29 of 8`, then `15 of 4` after a
+note entry, then `31 of 8` after a rest, and called it: all three true, the
+unit moving between them.
+
+**The cause was mine and it was one expression.** The unit was
+`lcm(den, beatType)`, where `den` is the denominator of what the measure HOLDS.
+So it was derived from the CONTENT and re-derived on every change to it, and
+adding one eighth to a bar of quarters silently halved the beat the tag counted
+in. §8 wrote that expression to keep both numbers whole, and keeping them whole
+is exactly what made the unit move.
+
+**Pinned to the signature's own denominator**, as ruled. The second number is
+now always the signature's numerator, so a bar in 4 by 4 reads `N of 4` from
+the first correction to the last and two readings can be held against each
+other.
+
+**The cost, and it is the right one to pay**: `actual` can now be fractional,
+because a bar of eighths in 4 by 4 is not a whole number of quarters. Four
+quarters and an eighth reads `4.5 of 4` where it used to read `9 of 8`. The old
+form had two integers and a moving unit; this one has a fixed unit and
+sometimes a half. **Only the second can be compared with itself.**
+
+Walked, three interactions on one measure, entering a note and then a rest:
+
+```
+m. 1 · system 1 of 4 · 14.5 of 4
+m. 1 · system 1 of 4 · 15 of 4
+m. 1 · system 1 of 4 · 15.5 of 4
+```
+
+**The unit held at 4 through all three.** Your own three readings are a test
+now (`entry.test.ts`), asserting the second number does not move while the
+measure changes under it.
+
+### The ruling: the loupe carries a clef and a key signature
+
+`Loupe.svelte:213`. A musician cannot read a stave without them, and an
+engraved excerpt carries them however short it is.
+
+**They are a second crop of the same clone, not a second drawing.** The
+renderer already puts the clef and the key at the head of every system
+(`staff-renderer.ts:739` and `:770`), so the head is in the system the loupe is
+showing; it is simply outside the x window of every measure but the first. One
+clone, two viewports, one scale, one coordinate space. The glyphs in the head
+are the page's glyphs for the same reason the measure's are: **they ARE the
+page's**, which is what the brief asked for when it said the same sources.
+
+**The head ends where the first column begins.** The renderer tiles a system
+with hit rectangles from the midpoint before each note, so the smallest of them
+in the whole system bounds everything drawn before the music starts. Measured
+off the DOM rather than recomputed from `leftMargin`, which is an option a
+caller can change.
+
+Walked at 430 by 932:
+
+| | head | body | gap between them | one clef | key accidentals |
+|---|---|---|---|---|---|
+| mid page | 57.7 px | 324.3 px | **0.0** | 1 | 3 |
+| first measure of a system | 34.3 px | 347.7 px | **0.0** | 1 | 4 |
+
+They sit flush at one scale, the staff lines run through both, and the pair
+reads as one stave rather than two pictures. On the first measure of a system
+the head and the body abut exactly, with no overlap and no second clef, because
+the body's window begins where the head's ends.
+
+**The head takes no taps.** The entries live in the body, and a hit rectangle
+reaching into the head belongs to a note the loupe is not showing.
+
+### What it costs, measured rather than estimated
+
+The head shares the fit, so it takes room the measure used to have. On this
+document, measured:
+
+| | applied magnification |
+|---|---|
+| before this change | 1.54 times the thumbnail |
+| after it | **1.31 times** |
+
+**The clamp was already dominant before the head existed.** On the Lamm read a
+single measure fills most of a system, so it wanted 595 px of a 382 px frame
+and was already being shown whole at less than 2.4 rather than clipped at 2.4.
+The head cost about fifteen percent of what was left. On a document whose
+measures fit inside the frame, the head costs nothing until head plus measure
+exceeds it.
+
+I did not give the head its own scale to protect the magnification: the two
+must share one or the staff lines do not meet, and a clef drawn at a different
+size from the notes beside it is a worse lie than a smaller loupe. **Showing
+the measure whole stays the ruled priority.**
+
+### Gates, re-run
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `871 passed (871)` | **`872 passed (872)`** |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | same |
+
+**Gate 4 moves 871 to 872.** Two tests were added for the pinned unit, one was
+removed: the case that asserted `9 of 8` for four quarters and an eighth
+asserted the very behaviour this ruling strikes, so it is replaced by one
+asserting `4.5 of 4`. `~/Downloads/ilya-ship.sh:79` says 871 and **needs to say
+872. I have not touched it.**
+
+No test was added for the clef and key: it is two viewports over one clone in a
+Svelte component, and the numbers that matter are the walk's.
+
+### Not established, new with this round
+
+- **Whether 1.31 times is enough of a magnifier on a document like this one.**
+  It is the read's own doing rather than the head's, and the honest fix is
+  upstream: a read that puts a whole system in one measure is a read to
+  correct, which is what this track exists for. Worth your eye on a document
+  whose measures are ordinary.
+- **What the head should show where a system carries a mid-score clef or key
+  change.** It shows the system's own head, which is what the renderer drew,
+  and a change occurring partway along that system is not repeated in it. No
+  source rules that case and this build does not invent one.

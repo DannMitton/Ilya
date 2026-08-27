@@ -366,20 +366,32 @@ describe('what a measure holds against its signature', () => {
 		expect(measureFill(bar(5, 'quarter'), 0, FOUR_FOUR)).toEqual({ actual: 5, expected: 4 });
 	});
 
-	it('finds a unit that makes both numbers whole', () => {
-		// Four quarters and an eighth is nine eighths where eight belong, and
-		// `9 of 8` can be read at a glance where `4.5 of 4` cannot.
-		const line = [...bar(4, 'quarter'), ev('x', P('G', 3), 'eighth')];
-		expect(measureFill(line, 0, FOUR_FOUR)).toEqual({ actual: 9, expected: 8 });
-	});
-
 	it('counts against the signature’s own beat, and does not reduce', () => {
-		// Ten eighths is five whole quarters, so quarters is the finest unit
-		// needed and the second number stays the signature's own 4.
 		expect(measureFill(bar(10, 'eighth'), 0, FOUR_FOUR)).toEqual({ actual: 5, expected: 4 });
 		// Six whole notes is twenty-four quarters. Reduced it would read `6 of
 		// 1`, which is true and names no number the page shows.
 		expect(measureFill(bar(6, 'whole'), 0, FOUR_FOUR)).toEqual({ actual: 24, expected: 4 });
+	});
+
+	it('HOLDS THE UNIT STILL as the measure changes under it', () => {
+		// Dann's own three readings of one bar, from the deploy walk: the unit
+		// used to be derived from what the measure held, so it halved when an
+		// eighth arrived. The second number is the signature's now, and it does
+		// not move between one interaction and the next.
+		const quarters = bar(15, 'quarter');
+		const plusEighth = [...quarters, ev('x', P('G', 3), 'eighth')];
+		const plusTwo = [...plusEighth, ev('y', P('G', 3), 'eighth')];
+		expect(measureFill(quarters, 0, FOUR_FOUR)).toEqual({ actual: 15, expected: 4 });
+		expect(measureFill(plusEighth, 0, FOUR_FOUR)).toEqual({ actual: 15.5, expected: 4 });
+		expect(measureFill(plusTwo, 0, FOUR_FOUR)).toEqual({ actual: 16, expected: 4 });
+		for (const line of [quarters, plusEighth, plusTwo]) {
+			expect(measureFill(line, 0, FOUR_FOUR)!.expected).toBe(4);
+		}
+	});
+
+	it('reports a half where the bar is not a whole number of beats', () => {
+		const line = [...bar(4, 'quarter'), ev('x', P('G', 3), 'eighth')];
+		expect(measureFill(line, 0, FOUR_FOUR)).toEqual({ actual: 4.5, expected: 4 });
 	});
 
 	it('reads Dann’s own example back', () => {

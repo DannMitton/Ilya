@@ -399,20 +399,33 @@ export function measureFill(
 		den /= g;
 	}
 
-	/* BOTH AGAINST THE SIGNATURE'S OWN BEAT, and NOT reduced afterwards.
-	   Dann's ruling gives `7 of 6`, which is seven eighths where six belong in
-	   6 by 8: the second number is the signature's own numerator, so the singer
-	   reads the arithmetic against the signature printed in front of them.
-	   Reducing breaks that. MEASURED: on the Lamm read, reduction turned a
-	   measure holding twenty-four quarters in 4 by 4 into `6 of 1`, which is
-	   true, which is unreadable, and which names no number the page shows.
+	/* THE UNIT IS THE SIGNATURE'S OWN DENOMINATOR, ALWAYS, and it does not move.
+	   Dann's ruling of 2026-08-27, from the deploy walk: he watched one measure
+	   read `29 of 8`, then `15 of 4` after a note entry, then `31 of 8` after a
+	   rest. All three were arithmetically true and the unit had wandered
+	   between them, which makes three readings of one bar that cannot be
+	   compared with each other.
 
-	   The unit is refined only where it must be: four quarters and an eighth in
-	   4 by 4 has no whole number of quarters, so it reads `9 of 8`. */
-	const unit = lcm(den, signature.beatType);
-	const actual = (num * unit) / den;
-	const expected = (signature.beats * unit) / signature.beatType;
-	if (!Number.isInteger(actual) || !Number.isInteger(expected)) return null;
+	   THE CAUSE was here: the unit used to be `lcm(den, beatType)`, where `den`
+	   is the denominator of what the measure HOLDS. So the unit was derived
+	   from the content and re-derived on every change to it, and adding one
+	   eighth to a bar of quarters silently halved the beat the tag counted in.
+
+	   Pinned to `beatType`, the second number is always the signature's own
+	   numerator, so a bar in 4 by 4 reads `N of 4` from the first correction to
+	   the last and two readings can be held against each other.
+
+	   THE COST, and it is the right one to pay: `actual` may now be fractional,
+	   because a bar of eighths in 4 by 4 is not a whole number of quarters.
+	   Four quarters and an eighth reads `4.5 of 4` where it used to read
+	   `9 of 8`. The old form had two integers and a moving unit; this one has a
+	   fixed unit and sometimes a half. A singer can compare the second. */
+	const expected = signature.beats;
+	const scaled = (num * signature.beatType) / den;
+	// Small integers throughout, so this is exact; the rounding is against
+	// float residue rather than against a real fraction.
+	const actual = Math.round(scaled * 1000) / 1000;
+	if (!Number.isFinite(actual)) return null;
 	if (actual === expected) return null;
 	return { actual, expected };
 }
@@ -421,6 +434,3 @@ function gcd(a: number, b: number): number {
 	return b === 0 ? a || 1 : gcd(b, a % b);
 }
 
-function lcm(a: number, b: number): number {
-	return (a * b) / gcd(a, b);
-}
