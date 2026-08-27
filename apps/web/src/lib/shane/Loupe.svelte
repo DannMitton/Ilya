@@ -136,11 +136,35 @@
 	   the renderer happens to push its parts in. */
 	const NOTEHEADS = new Set(['\uE0A2', '\uE0A3', '\uE0A4']);
 
+	/* THE PAGE CAN MOVE UNDER THE LOUPE, and the loupe has to hear about it.
+	   Closing the drawer widens the desk and slides the sheet sideways over the
+	   drawer's own 180 ms, and `dockInset` changes at the START of that. An
+	   effect that re-ran on `dockInset` alone measured the sheet where it had
+	   been, not where it was going: MEASURED, the loupe landed 255.8 px right of
+	   the sheet's centre, having centred itself on a stale rectangle.
+
+	   A `ResizeObserver` ON THE PAGE'S CONTAINER answers it. The container's
+	   width really does change when the drawer moves, so the observer fires
+	   when the layout has settled rather than when the intention was formed, and
+	   it covers every other way the page can move too: a window resize, a
+	   rotation, a re-pagination. It cannot loop, because it watches the page and
+	   the loupe is not inside the page. */
+	let layoutTick = $state(0);
+	$effect(() => {
+		const el = document.querySelector('.fit-paper-container');
+		if (!el || typeof ResizeObserver === 'undefined') return;
+		const ro = new ResizeObserver(() => (layoutTick += 1));
+		ro.observe(el);
+		return () => ro.disconnect();
+	});
+
 	interface Frame {
 		inner: string;
 		viewBox: string;
 		/** The frame's own width, stable as the singer steps between measures. */
 		width: number;
+		/** Its left edge: centred on the sheet, held clear of the dock. */
+		left: number;
 		/** The magnified measure's width, centred inside the frame. */
 		contentWidth: number;
 		/** The head's width: the clef and the key signature, at the left edge. */
@@ -179,6 +203,7 @@
 		void revision;
 		void selectedEventId;
 		void dockHeight;
+		void layoutTick;
 		if (!open || measureIndex === null || ownIds.length === 0) {
 			frame = null;
 			return;
@@ -249,6 +274,27 @@
 		const sheet = container.querySelector('.score-page')?.getBoundingClientRect();
 		const room = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
 		const width = sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
+
+		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
+		   it belongs to the page it magnifies, so it lines up with it at every
+		   width, drawer open or closed, on both surfaces.
+
+		   IT WAS FLUSH LEFT BEFORE, and the width cap of §11 is what exposed
+		   that: while the loupe filled the room it was given, its left edge and
+		   the sheet's nearly agreed; once it was capped at the sheet's width it
+		   kept the old left edge and the two came apart. MEASURED at 1400 with
+		   the drawer closed, the loupe's centre was 272.2 px left of the
+		   sheet's.
+
+		   CENTRED, THEN CLAMPED CLEAR. The older ruling still binds: the loupe
+		   never overlaps the dock or the open drawer. Where the sheet's centre
+		   would put it under one, the clamp wins and the loupe sits as close to
+		   the page's axis as it can get. That is not a compromise the code
+		   makes quietly: §13 of the memo names the one case where it bites. */
+		const stop = Math.max(dockInset + GUTTER, window.innerWidth - GUTTER - width);
+		const left = sheet
+			? Math.min(Math.max(sheet.x + sheet.width / 2 - width / 2, dockInset + GUTTER), stop)
+			: dockInset + GUTTER;
 
 		/* AN ENGRAVED EXCERPT OPENS WITH NO BARLINE BEFORE ITS FIRST NOTE, and
 		   Dann walked the deploy and found one: on a mid-system measure the
@@ -497,6 +543,7 @@
 			inner: clone.innerHTML + bar,
 			viewBox: `${win.left} ${sysMinY} ${span} ${sysHeight}`,
 			width,
+			left,
 			contentWidth,
 			headWidth,
 			headViewBox: `0 ${sysMinY} ${headWidthUnits} ${sysHeight}`,
@@ -587,7 +634,7 @@
 	     shifting the whole frame. -->
 	<div
 		class="loupe"
-		style="left: {dockInset + 24}px; width: {frame.width}px; {dockInset > 0
+		style="left: {frame.left}px; width: {frame.width}px; {dockInset > 0
 			? `top: ${frame.top}px;`
 			: `bottom: ${dockHeight + 24}px;`}"
 	>

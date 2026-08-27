@@ -911,3 +911,98 @@ say `462 passed | 5 skipped (467)`. I have not touched it.** Gate 4's line at
 A stray `apps/web/undefined/` directory was created by one of my walk scripts
 writing a screenshot to an unresolved path. **Removed**, and the tree is clean
 of it.
+
+---
+
+## 13. Appended: the loupe centres on the page
+
+**§12 shipped as `fd8bc47`**, "N.92: the tapered tie, the marked analysis
+layer, and the walk's repairs", so this section's work is the only dirty code:
+`Loupe.svelte`, and this memo.
+
+`Loupe.svelte`. Built, and it took two changes rather than one: the placement,
+and the moment it is measured.
+
+### The numbers, before and after
+
+Offset is the loupe's horizontal centre minus the sheet's. Zero is the ruling
+satisfied.
+
+| | before | after |
+|---|---|---|
+| desktop 1400, drawer OPEN | **−8.0** | **0.0** |
+| desktop 1400, drawer CLOSED | **−272.2** | **0.0** |
+| phone portrait 430 | 0.0 | 0.0 |
+| phone landscape 932 | +181.7 | **+183.3** |
+
+### What was wrong, and it was the width cap's shadow
+
+While the loupe filled whatever room it was given, its left edge and the
+sheet's nearly agreed and nobody could see the difference. §11's width cap
+stopped it filling that room, and it kept the old left edge: `dockInset + 24`,
+which is the desk's edge and not the page's. With the drawer closed at 1400 the
+sheet starts at 296.2 and the loupe still started at 24, so its centre sat
+**272.2 px** left of the page's.
+
+It centres on the sheet's own measured axis now, and is then clamped clear of
+the dock or the open drawer, which the older ruling still requires.
+
+### The second change: the page can move under the loupe
+
+**The first fix made the drawer-closed case worse, not better**, and the
+measurement is what caught it: the loupe landed **255.8 px to the RIGHT** of
+the sheet's centre.
+
+The cause is timing. Closing the drawer widens the desk and slides the sheet
+sideways over the drawer's own 180 ms, and `dockInset` changes at the START of
+that. So the effect re-ran, measured the sheet where it had been, and centred
+the loupe on a rectangle that was already leaving.
+
+A `ResizeObserver` on the page's container answers it: the container's width
+really does change when the drawer moves, so the observer fires when the layout
+has settled rather than when the intention was formed. **It covers every other
+way the page can move too**, a window resize, a rotation, a re-pagination, and
+it cannot loop, because it watches the page and the loupe is not inside the
+page.
+
+**It does not make the loupe travel.** A ResizeObserver fires on layout change,
+and stepping the insertion bar is not one. Checked on both surfaces: twelve
+steps carrying the bar from `m. 5` into `m. 6`, and the loupe's box identical
+before and after, `[552, 314.4, 816, 277.8]` on the desk and
+`[24, 304.4, 382, 165.6]` on the phone.
+
+### The one case that is not zero, and why I did not force it
+
+**Phone landscape is +183.3 px off the page's axis**, and that is two rulings
+meeting rather than a defect left standing.
+
+In landscape the dock holds the left 380 px and the page is not fitted, so the
+sheet is 816 px wide starting at 64.7 and its centre falls at 472.7 — **under
+the dock**. Centring the loupe there would put it behind the surface the singer
+is working from, which the older ruling forbids: the loupe never overlaps the
+dock or the open drawer.
+
+So the clamp wins and the loupe sits as close to the page's axis as it can, at
+404. **I did not force the centring**, because the alternative is a loupe under
+the dock, and I did not quietly reinterpret the newer ruling either. Both are
+stated here for you to settle. The underlying cause is the one carried since
+slice 2: landscape does not miniaturize the page, so the sheet is wider than
+the room beside the dock.
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | `872 passed (872)` |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**No gate moved this round.** No test was added: this is a placement expression
+and an observer, both inside a Svelte component, and the numbers that matter
+are the walk's.
+
+**`~/Downloads/ilya-ship.sh:80` already says `462 passed | 5 skipped (467)`**,
+moved with the `fd8bc47` ship that carried §12. I read it rather than edited
+it, and nothing in this round asks it to move again.
