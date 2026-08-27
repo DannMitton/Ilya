@@ -534,9 +534,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const selectedBase = $derived(
 		selectedEvent ? currentDuration(selectedEvent, doc.corrections).base : null,
 	);
-	const selectedDotted = $derived(
-		selectedEvent ? currentDuration(selectedEvent, doc.corrections).dots > 0 : false,
+	const selectedDots = $derived(
+		selectedEvent ? currentDuration(selectedEvent, doc.corrections).dots : 0,
 	);
+	const selectedDotted = $derived(selectedDots > 0);
 
 	/* ── THE NAMED UNDO (N.92 mobile slice 2) ────────────────────────────
 	   IN MEMORY ONLY, AND THAT IS THE RULE RATHER THAN AN OMISSION. N.27
@@ -790,12 +791,29 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	/** The dot. On an entry it toggles one; in a gap it arms one. */
+	/**
+	 * The dot, CUMULATIVE, ruled by Dann 2026-08-27: dot, double dot, none, the
+	 * accidental verbs' own grammar. It is an action rather than a state, which
+	 * is why it carries no `aria-pressed` reading of "on"; what the entry shows
+	 * is on the readout, spelled out.
+	 *
+	 * IN A GAP IT ARMS the same three states, so the value a fresh entry takes
+	 * is the value the row is lit at.
+	 */
 	function handleDotCell(): void {
 		if (inGap) {
-			armedDots = armedDots > 0 ? 0 : 1;
+			armedDots = (armedDots + 1) % 3;
 			return;
 		}
-		handleDot();
+		const ev = selectedEvent;
+		if (!ev) return;
+		const now = currentDuration(ev, doc.corrections).dots;
+		const next = (now + 1) % 3;
+		pushUndo({
+			kind: 'text',
+			key: next === 1 ? 'loupe.undo.dotOn' : next === 2 ? 'loupe.undo.dotDouble' : 'loupe.undo.dotOff',
+		});
+		correct({ dots: next });
 	}
 
 	/**
@@ -1136,7 +1154,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (selectedIsRest) parts.push(t('loupe.rest', language));
 		else if (selectedLabel) parts.push(selectedLabel);
 		if (selectedBase) parts.push(durationWord(selectedBase));
-		if (selectedDotted) parts.push(t('correct.dot', language));
+		/* The readout names the dot STATE, which is what makes the cumulative
+		   cell honest: two dots and one dot are different durations and the
+		   sentence has to be able to say which. */
+		if (selectedDots === 1) parts.push(t('correct.dot', language));
+		else if (selectedDots >= 2) parts.push(t('loupe.doubleDot', language));
 		const p = selectedEventId ? shownPairings[selectedEventId] : undefined;
 		if (p && p.kind === 'syllable') parts.push(p.cyrillic);
 		return parts.join(' \u00b7 ');

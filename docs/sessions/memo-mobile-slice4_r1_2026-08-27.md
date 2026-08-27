@@ -561,3 +561,353 @@ edit.
 - **Whether the contextual line chose the right one of the three.** §10 argues
   it; the other two are one expression away.
 - **Whether the two consolidated keys should be deleted or kept.**
+
+---
+
+## 11. Appended: the desktop walk of `9c49fb8`
+
+**Four built, two measured and STOPPED, one proposed and not built.** One new
+string pair, coining nothing. **Gate 4 holds at 872.**
+
+### 1. The divider above ANALYSIS. Built, and the cause was mine
+
+`RootPanel.svelte:911`. The exemption that keeps the first station in the
+scroll from drawing a rule was hard-coded onto `.song-section`, because
+Repertoire was first when it was written. **The comment beside it said, in as
+many words, that the exemption follows the POSITION and must move if the order
+changes again.** Slice 4's reorder moved Analysis to the top and left the
+exemption behind, so the anchor's own down-facing rule and Analysis's top rule
+landed on the same y and painted as one 4px line, and the
+Analysis-to-Repertoire boundary went blank.
+
+**I read that warning while writing the reorder and did not act on it.**
+
+The rule is positional now: `.section + .section` draws the rule, so it appears
+only BETWEEN two stations and never above the first. That is the recipe in CSS
+rather than in prose, and a reorder cannot leave it behind. Measured after:
+Analysis `0px`, Repertoire `2px`, Source `2px`, anchor `2px`. One rule per
+boundary, and the boundary that had gone blank is back.
+
+### 2. The loupe never exceeds the page. Built
+
+`Loupe.svelte`. The width was the room the viewport left; it is the lesser of
+that room and **the sheet's own measured width**. Measured on the sheet rather
+than computed from `PAGE_SIZES`, because on a phone the sheet is already scaled
+by PageFit and the loupe is a crop of what is on screen.
+
+| | loupe | sheet | viewport |
+|---|---|---|---|
+| desktop, drawer open | 816 | 816 | 1400 |
+| desktop, drawer closed | **816** | 816 | 1400 |
+| phone, portrait | 382 | 382 | 430 |
+
+### 3. The augmentation dot, in engraving proportion. Built, and look at it
+
+`CorrectionSurface.svelte`. The dot had its own set and its own target height,
+10 px against the notes' 26, which is about four times its engraving
+proportion. **It joins the notes' own common box now**, so one box means one
+scale and the dot is drawn at the size it has beside a notehead.
+
+Measured ink widths in the rendered cells: sixteenth **14.92 px**, whole
+**10.56 px**, dot **2.63 px**.
+
+**That is the ruled proportion and it is small.** A 2.63 px dot in a 44 px cell
+is correct engraving and a modest target for an eye. It is what "engraving
+proportion through the same ink measurement" produces, so it is what I built,
+and I am flagging the number rather than quietly splitting the difference.
+**If it reads as too small on glass, the honest fix is a ruling that the
+control surface may draw this one glyph larger than the page does, not a
+number I choose.**
+
+### 4. The dot cycles dot, double dot, none. Built
+
+`+page.svelte`, `handleDotCell`. Cumulative like the accidentals, on both
+surfaces, and in a gap it arms the same three states. Walked on the desktop:
+`C♯3 · Quarter` → `· Dot` → `· Double dot`, the pill reading `dot added` then
+`double dot added`; and on the phone the same, ending `↰ Undo: double dot
+added`.
+
+**The readout names the state**, which is what makes a cumulative cell honest:
+one dot and two dots are different durations and the sentence has to say which.
+
+### The strings, for your eye
+
+| key | English | French | coined or adopted |
+|---|---|---|---|
+| `loupe.undo.dotDouble` | double dot added | double point ajouté | **adopted.** « double » from `correct.len16th` (« Double croche »), « point » from `correct.dot` |
+| `loupe.doubleDot` | Double dot | Double point | same two words |
+
+### 5. The courtesy natural. MEASURED, and I have STOPPED
+
+You asked me to measure the automatic rule first so the manual verb could never
+contradict it. **It contradicts it, so I built nothing.**
+
+**What fires today** is `staff-renderer.ts:963`. The renderer keeps a
+per-measure accidental state, reset at each barline (`:922`), and draws an
+accidental **if and only if `pitch.alter !== inEffect`**, where `inEffect` is
+the measure's carried alter or the key signature's. It then records the new
+alter (`:976`).
+
+**So what the slice 2 walk saw was not a courtesy natural.** Correcting a G4 to
+G♯4 put `1` in force for G4 in that measure; the later G4 then differed from
+what was in force, so a natural was drawn. **That is the REQUIRED cancellation,
+not a courtesy**, and it is drawn unparenthesized because it is mandatory.
+
+**The three conflicts, each measured:**
+
+1. **A courtesy accidental is by definition one that is NOT required**, and
+   this rule draws an accidental exactly when it IS required. There is no state
+   in which the renderer would draw a courtesy, so a manual "courtesy natural"
+   would have to change the rule, not ride it.
+2. **The third state, "none", would suppress a REQUIRED accidental.** After a
+   sharp earlier in the bar, a G with no natural sounds sharp. "None" is
+   therefore not a display choice; it is an engraving error the singer could
+   reach in two taps.
+3. **There are no parenthesis glyphs.** `SMUFL_CODEPOINTS`
+   (`smufl-metadata.ts:71-109`) carries none, so a parenthesized accidental
+   cannot be drawn from the loaded face without adding codepoints, and the diff
+   has no field for "draw this in parentheses" — `NoteCorrection` carries
+   pitch, not display.
+
+**There is a fourth thing worth saying.** The flat, natural and sharp cells
+change the PITCH, cumulatively to doubles. A courtesy accidental changes no
+pitch at all. Cycling one cell through a pitch change and two display states
+would put two different kinds of thing on one control, which is the one thing
+this surface has been careful never to do.
+
+**What a ruling would need to settle**: whether the renderer gains a courtesy
+rule of its own (Gould's cautionary conditions), whether the diff gains a
+display field, and whether the parenthesis codepoints are added to the package.
+I have measured all three and built none of them.
+
+### 6. The tie. MEASURED and PROPOSED, not built
+
+**What draws it today**: `staff-renderer.ts:1200-1209`. One quadratic Bézier,
+`fill="none"`, `stroke="#1a1612"`, `stroke-width="1.1"`, constant end to end.
+Depth is `lineGap × 0.9` with a nudge to clear a staff line (`:1205-1208`);
+endpoints sit at the two noteheads' edges plus 1 (`:1199-1200`); direction is
+chosen by the syllabic slur, then by timbre, then by staff position
+(`:1191-1196`). **You are right about the fault: there is no taper, because a
+stroked path cannot have one.**
+
+**Option B does not exist.** Composing Maestro's own tie segments was the
+alternative, and the face carries none: searching all 2,728 glyph names in
+`FinaleMaestro.json` for `tie` or `slur` returns `doubleTongueAboveNoSlur`,
+`doubleTongueBelowNoSlur`, `textTie`, and the two triple-tongue names. `textTie`
+is the elision character for lyrics, not a notation tie of variable span. SMuFL
+has no composable tie. **So the choice is between the stroked path today and a
+filled outline; there is no third.**
+
+**Gould is not held on this, and I will not pretend she is.** The extracted
+priors memo says so twice, at its own line 3 and line 229: ties and slurs are
+**rules 150 to 175** of `gould-vocal-engraving-rules_v7_2026-08-05.md` and were
+**excluded from the extraction**, "not because it is unquantified". The source
+document is not in this repository and is not on this machine, so **the centre
+thickness, the terminal taper, and the endpoint offsets are NOT ESTABLISHED in
+anything the project holds.** Quoting a number here would be inventing Gould.
+
+**The proposal**, therefore, is a shape with one named unknown:
+
+> Two curves and a close: out along the outer edge from terminal to terminal,
+> back along the inner edge with its control point pulled toward the chord by
+> the centre thickness, filled rather than stroked. The endpoints stay exactly
+> where they are today, so the join to the noteheads and the stem-direction
+> logic are untouched. The one number to rule is the centre thickness.
+
+**The rendered comparison is attached**, at true size and at eight times, with
+the current tie beside three candidate thicknesses of 0.29, 0.40 and 0.51 stave
+spaces. The difference is what you described: today's is a ribbon of one width;
+the filled shapes come to points at both terminals and swell at the middle.
+
+**What each costs.** The filled outline is a change to one `parts.push` in
+`staff-renderer.ts`, inside the package: about a dozen lines, no new geometry
+elsewhere, and it reaches gate 5. I measured that exposure: the renderer's
+tests use `includes` and regular expressions rather than byte-exact snapshots,
+and none of them asserts the tie's `d` attribute or its stroke, so **the change
+would not move gate 5's count and would not break an existing assertion.** The
+work that is NOT small is choosing the numbers, and that is the part the source
+would answer if it were here.
+
+### 7. The clone filter. MEASURED, and I have STOPPED
+
+**Two of the three analysis layers have a clean handle. The third does not.**
+
+| overlay | drawn at | handle |
+|---|---|---|
+| turning-pitch noteheads and their accidentals | `:1027`, `:1031`, `:1050`, `:1052` | `fill="#8B9A7D"` (`TURNING_COLOUR`, `:293`) |
+| crossing squircle | `:1123` | `stroke="#b23b3b"` |
+| phonation break `[#]` | `:1311` | **none** — drawn in `fill="#1a1612"`, the notation ink |
+
+**The two colours are not a heuristic I invented**: the package's own tests
+already identify that layer by exactly those strings, at
+`staff-renderer.test.ts:235, 240, 244, 278, 281, 357, 375, 393, 394`. A palette
+change would break the gate loudly rather than mis-fire the loupe quietly. An
+inventory of every literal ink in the renderer confirms both are unique to the
+analysis layer: the notation itself uses only `#1a1612` and `#3a352f`.
+
+**The phonation break has no equal handle.** It is a `<text>` reading `[#]` in
+full notation ink on the IPA line, chosen deliberately "for attention". It can
+be matched only by its exact text content, which is a weaker thing than a
+colour and is pinned by no test.
+
+**So I stopped, as ruled.** Filtering the two and leaving the third is exactly
+the half-suppression the ruling forbids: the loupe would hide the sage
+noteheads and still show an analysis mark.
+
+**The clean structural alternative, measured**: a `data-analysis` attribute on
+all three in `staff-renderer.ts`, which the loupe could then filter by one
+selector. It reaches gate 5, and I measured that exposure the same way as the
+tie: no byte-exact snapshot exists, and adding an attribute leaves every
+existing assertion true, **so gate 5 would neither move nor break.** That is
+your ruling to make, because it puts a display concern of the loupe's into the
+package.
+
+**One thing that softens the urgency**: with no voice calibrated the engine
+omits every event, so `analyzed.events` is empty and none of the three overlays
+draws at all. On the walk documents the loupe shows no analysis marks today
+because there are none to show.
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | `872 passed (872)` |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | same |
+
+**All five at the baseline the ship script holds, and gate 4 did not move.** No
+test was added: the four built items are a CSS selector, a width cap, a glyph
+set membership, and a modulo, and the pure logic underneath is untouched.
+
+### One consequence of the outside-click ruling, noticed while walking
+
+**Changing measures on a desk now takes two clicks**: one on the page retires
+the loupe, and a second raises it on the new measure. That follows from the
+ruling as written and my walk hit it as a surprise, so it is worth your eye.
+The phone is unaffected, where a page tap moves the loupe directly because a
+stray tap stays dead.
+
+---
+
+## 12. Appended: the four rulings on §11's open items
+
+**Two built, two closed by ruling. No new strings. GATE 5 MOVES**, disclosed
+below; gate 4 holds at 872.
+
+### 1. The courtesy accidental is withdrawn and numbered N.102
+
+Nothing built, and the natural cell is exactly as it was. My §11 measurement
+stands as the reason: `staff-renderer.ts:963` draws an accidental if and only
+if it is required, so courtesy accidentals do not exist in Ilya today and what
+the slice 2 walk read as one was the mandatory cancellation. They get their own
+control, their own French, and their own parenthesis-glyph question under
+N.102, never a cycle on a cell that changes pitch.
+
+### 2. The tie is a filled taper at 0.40. Built
+
+`staff-renderer.ts:1268` draws it; `:311` holds the constant.
+
+Out along the outer edge and back along the inner, sharing both terminals, so
+the shape meets at points and swells at the middle. **Everything that decided
+where the tie goes is untouched**: the terminals are still the two noteheads'
+own edges, the height is still `lineGap × 0.9` with the staff-line nudge, and
+the direction is still the syllabic slur, then timbre, then staff position.
+
+**The constant records whose eye it is.** `TIE_CENTRE_SP = 0.4`, with the
+provenance in the comment: **Dann's eye, 2026-08-27, from the rendered
+comparison, and NOT Gould.** Her rules 150 to 175 are excluded from the priors
+memo, which says so at its own lines 3 and 229, and the book is off this
+machine. The comment says to check the number against her if that source is
+ever photographed, and why the replacement would then be a one-line change.
+
+Walked on a tie the walk had to make, since the engraved song carries none:
+`fill="#1a1612"`, **no stroke**, two curves, closed, bowing down, the inner
+control inside the outer, **centre thickness 2.2 px**, which is 0.40 × 5.5
+exactly.
+
+**One shipped test had to change, and it is worth saying why.**
+`staff-renderer.test.ts:208` asserts Gould r174, that the tie bows opposite the
+syllabic slur, and it matched the old markup literally, down to
+`stroke-width="1.1"`. The RULE it tests is untouched; the SHAPE changed by
+ruling. So the pattern follows the markup and the assertion follows the rule,
+**and I strengthened it**: it now also asserts the inner control sits between
+the terminals and the outer one, which is the taper itself. Gate 5's count did
+not move for this.
+
+### 3. Every analysis overlay has a real handle, and the loupe filters on it. Built
+
+`staff-renderer.ts:311-333` adds `analysisMark`, and four marks now carry
+`data-analysis`: `turning-notehead`, `turning-accidental`, `crossing`, and
+**`phonation-break`**, which is the one §11 stopped on. `Loupe.svelte` removes
+`[data-analysis]` from the clone.
+
+**Marking first is what made this clean.** Two of the four could be found by
+their ink and the phonation break could not, because it is drawn in full
+notation ink on purpose; a colour filter would have suppressed three quarters
+of a layer and left the fourth standing with nothing to explain it. **The
+colours are untouched**, so every existing assertion about them still holds.
+
+**One filter serves both surfaces**, because both render one component, and it
+serves both viewports, because the head and the body are two crops of one
+clone.
+
+Walked. The engraved song emits no overlay at all with no voice calibrated, so
+the walk planted one mark of each kind into the live page, including one inside
+the head crop's own x range:
+
+| | count |
+|---|---|
+| planted on the page | 4 |
+| **inside the loupe** | **0** |
+| **inside the head crop** | **0** |
+| notes the loupe still draws | 28 |
+| ties the loupe still draws | 2 |
+
+The filter took the analysis layer and nothing else.
+
+### 4. The dot stays at 2.63 px
+
+Nothing built. Ruled: context makes it obvious and the surface keeps one rule
+for glyph sizing. The question is closed and the measurement stands.
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `872 passed (872)` | `872 passed (872)` |
+| 5 score-parser | `461 passed \| 5 skipped (466)` | **`462 passed \| 5 skipped (467)`** |
+
+**GATE 5 MOVES, 461 to 462**, and this is the disclosure. The one added test
+asserts that all four analysis marks carry their handle, and that nothing the
+engraving draws carries one. It exists because the loupe's filter now depends
+on those attributes: without it a later edit could drop one silently and the
+loupe would start showing a mark nobody meant it to show.
+
+**`~/Downloads/ilya-ship.sh:80` says `461 passed | 5 skipped (466)` and needs to
+say `462 passed | 5 skipped (467)`. I have not touched it.** Gate 4's line at
+`:79` is unchanged at 872 and needs no edit.
+
+### Not established
+
+- **The tie's centre thickness is a judgement, not a measurement.** 0.40 is
+  Dann's eye against three candidates. It is one constant, and the comment says
+  where to look if Gould is ever photographed.
+- **The analysis filter is verified against planted marks, not real ones.** No
+  voice is calibrated on any walk document, so the engine emits no overlay; the
+  handles themselves are asserted in the package's own test against a rendered
+  SVG that does carry analysis. A calibrated walk would close the loop.
+- **The tie's taper is unverified on an UPWARD tie in a real document.** The
+  arithmetic is `depth - sign(depth) × thickness`, which is symmetric, and the
+  walk's tie bowed down. A score with a high-staff tie would show the other
+  direction.
+
+### Housekeeping
+
+A stray `apps/web/undefined/` directory was created by one of my walk scripts
+writing a screenshot to an unresolved path. **Removed**, and the tree is clean
+of it.

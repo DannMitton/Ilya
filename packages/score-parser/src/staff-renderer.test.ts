@@ -206,9 +206,19 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
   });
 
   it('curves the tie OPPOSITE the syllabic slur above it (downward, r174)', () => {
-    const m = svg.match(/M[\d.]+ ([\d.]+) Q [\d.]+ ([\d.]+) [\d.]+ [\d.]+" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="n19"/);
+    // The RULE under test is unchanged: the tie bows away from the slur. What
+    // changed on 2026-08-27 is the tie's SHAPE, from a stroked path of one
+    // width to a filled two-curve outline, so the pattern follows the markup
+    // and the assertion follows the rule.
+    const m = svg.match(
+      /M-?[\d.]+ (-?[\d.]+) Q -?[\d.]+ (-?[\d.]+) -?[\d.]+ -?[\d.]+ Q -?[\d.]+ (-?[\d.]+) -?[\d.]+ -?[\d.]+ Z" fill="#1a1612" data-tie="n19"/,
+    );
     expect(m !== null).toBe(true);
-    expect(Number(m![2]) > Number(m![1])).toBe(true); // control point below endpoints
+    expect(Number(m![2]) > Number(m![1])).toBe(true); // outer control below endpoints
+    // AND IT TAPERS: the inner control sits between the terminals and the outer
+    // one, which is what gives the shape its centre thickness and its points.
+    expect(Number(m![3]) > Number(m![1])).toBe(true);
+    expect(Number(m![3]) < Number(m![2])).toBe(true);
   });
 
   it('draws one syllabic slur over the melisma, arching above the staff', () => {
@@ -288,6 +298,25 @@ describe('staff renderer: the four analytical criteria', () => {
     expect(svg.includes('>[#]<')).toBe(true);
     expect(svg.includes('fill="#4a4540"')).toBe(false); // the old above-staff mark
   });
+  it('gives every analysis overlay its own handle, the phonation break included', () => {
+    // Ruled by Dann 2026-08-27. The loupe shows engraving concerns only and is
+    // a crop of this SVG, so it filters on this attribute. Two of these marks
+    // could be found by their ink and the phonation break could not, which is
+    // why the handle exists: a filter that caught three of four would suppress
+    // half a layer. Asserted here so a later edit cannot drop one silently.
+    for (const kind of ['turning-notehead', 'turning-accidental', 'crossing', 'phonation-break']) {
+      expect(svg.includes(`data-analysis="${kind}"`), kind).toBe(true);
+    }
+    // And nothing the ENGRAVING draws carries it: the count is the count of
+    // marks, not of noteheads.
+    expect((svg.match(/data-analysis="/g) ?? []).length).toBe(
+      (svg.match(/data-analysis="turning-notehead"/g) ?? []).length +
+        (svg.match(/data-analysis="turning-accidental"/g) ?? []).length +
+        (svg.match(/data-analysis="crossing"/g) ?? []).length +
+        (svg.match(/data-analysis="phonation-break"/g) ?? []).length,
+    );
+  });
+
   it('binds every note by data-event-id', () => {
     for (const id of ['n1', 'n2', 'n3', 'n5', 'n6']) {
       expect(svg.includes(`data-event-id="${id}"`)).toBe(true);

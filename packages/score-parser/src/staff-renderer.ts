@@ -293,6 +293,47 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
 const TURNING_COLOUR = '#8B9A7D';
 
 /**
+ * A tie's thickness at its centre, in stave spaces, tapering to points at both
+ * terminals.
+ *
+ * PROVENANCE: DANN'S EYE, 2026-08-27, choosing 0.40 from a rendered comparison
+ * of 0.29, 0.40 and 0.51 against the tie as it was drawn before. **This is NOT
+ * Gould.** Her tie and slur rules are 150 to 175 of
+ * `gould-vocal-engraving-rules_v7_2026-08-05.md`, and they were deliberately
+ * excluded from the extracted priors memo, which says so at its own lines 3 and
+ * 229; the book is not on the build machine. So no number here is derived from
+ * her and none should be cited as hers.
+ *
+ * CHECK THIS AGAINST HER IF THAT SOURCE IS EVER PHOTOGRAPHED. A measured
+ * proportion should replace a judged one, and the judgement is recorded here
+ * precisely so the replacement is a one-line change with a known predecessor.
+ */
+const TIE_CENTRE_SP = 0.4;
+
+/**
+ * Stamp an analysis mark with its own handle.
+ *
+ * EVERY OVERLAY THE ANALYSIS PUTS ON THE STAVE CARRIES `data-analysis`, ruled
+ * by Dann 2026-08-27: the turning-pitch noteheads and their accidentals, the
+ * red crossing squircle, and the phonation break. Downstream can then ask for
+ * the analysis layer by name.
+ *
+ * WHY A HANDLE AND NOT A COLOUR. The loupe is a crop of this SVG and must show
+ * engraving concerns only, so it has to exclude these. Two of the four could be
+ * found by their ink, `#8B9A7D` and `#b23b3b`, and this file's own tests
+ * already do exactly that; the phonation break could not, because it is drawn
+ * in full notation ink on purpose. A filter that caught three of four would
+ * have suppressed half a layer and left the singer wondering which marks meant
+ * something. An attribute catches all four and says what it is.
+ *
+ * THE COLOURS ARE UNTOUCHED. Nothing about what these marks look like changes,
+ * so every existing assertion about their ink still holds.
+ */
+function analysisMark(markup: string, kind: string): string {
+  return markup.replace(/^<(\w+) /, `<$1 data-analysis="${kind}" `);
+}
+
+/**
  * Standard per-clef octave placement for key-signature accidentals.
  * treble-8vb shares the treble tables: it is treble geometry with a
  * sounding-octave marker, not a different staff mapping.
@@ -1024,11 +1065,11 @@ export function renderAnalyzedStaff(
           if (name) {
             const accW = sp(smufl.glyph(name).widthSp);
             const gx = Math.max(nx - sp(smufl.glyph('noteheadBlack').widthSp / 2) - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
-            parts.push(glyphAt(name, gx, ty, TURNING_COLOUR, true));
+            parts.push(analysisMark(glyphAt(name, gx, ty, TURNING_COLOUR, true), 'turning-accidental'));
           }
         } else {
           const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
-          if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+          if (g) parts.push(`<text data-analysis="turning-accidental" x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
         }
         turningAcc[tKey] = tp.alter;
       }
@@ -1047,9 +1088,14 @@ export function renderAnalyzedStaff(
         : nx - offset)                              // second, turning below
         : nx;
       if (smufl) {
-        parts.push(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '));
+        parts.push(
+          analysisMark(
+            glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '),
+            'turning-notehead',
+          ),
+        );
       } else {
-        parts.push(`<ellipse cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`);
+        parts.push(`<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`);
       }
       lowestInk = Math.max(lowestInk, ty + 6);
       highestInk = Math.min(highestInk, ty - 6);
@@ -1120,7 +1166,7 @@ export function renderAnalyzedStaff(
 
     // Red squircle around an fR1/fo crossing.
     if (a?.crossing) {
-      parts.push(`<rect x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`);
+      parts.push(`<rect data-analysis="crossing" x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`);
       lowestInk = Math.max(lowestInk, y + 11);
       highestInk = Math.min(highestInk, y - 11);
     }
@@ -1206,7 +1252,30 @@ export function renderAnalyzedStaff(
     if (apex >= staffTop && apex <= staffBottom && Math.abs((apex - staffTop) % o.lineGap) < 1.5) {
       depth += up ? -3 : 3;
     }
-    parts.push(`<path d="M${round2(x1)} ${round2(ey)} Q ${round2((x1 + x2) / 2)} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)}" fill="none" stroke="#1a1612" stroke-width="1.1" data-tie="${esc(e.id)}"/>`);
+    /* A FILLED TWO-CURVE OUTLINE, not a stroked path. Dann's ruling of
+       2026-08-27, from his walk: an engraved tie is a filled shape, thickest at
+       its centre and tapering to fine points at both terminals, and a stroked
+       path cannot taper at all. What stood here was one quadratic at a constant
+       1.1 px, which drew a ribbon of one width end to end.
+
+       OUT ALONG THE OUTER EDGE AND BACK ALONG THE INNER. The two curves share
+       both terminals, so the shape meets at points there and swells to
+       `TIE_CENTRE_SP` at the middle; the inner control is pulled toward the
+       chord, which is what makes the swell. Everything that decided WHERE the
+       tie goes is untouched: the terminals are still the two noteheads' own
+       edges (`half1`, `half2` above), the height is still `lineGap * 0.9` with
+       the staff-line nudge, and the direction is still chosen by the syllabic
+       slur, then timbre, then staff position.
+
+       MAESTRO CARRIES NO COMPOSABLE TIE. Searching all 2,728 glyph names in
+       `FinaleMaestro.json` for `tie` or `slur` returns only articulations and
+       `textTie`, which is the lyric elision character. SMuFL has none either,
+       so ties stay drawn geometry and there was never a second option. */
+    const tieInner = depth - Math.sign(depth) * sp(TIE_CENTRE_SP);
+    const tieMid = round2((x1 + x2) / 2);
+    parts.push(
+      `<path d="M${round2(x1)} ${round2(ey)} Q ${tieMid} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)} Q ${tieMid} ${round2(ey + tieInner)} ${round2(x1)} ${round2(ey)} Z" fill="#1a1612" data-tie="${esc(e.id)}"/>`,
+    );
     lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
     highestInk = Math.min(highestInk, ey + Math.min(0, depth));
   }
@@ -1308,7 +1377,7 @@ export function renderAnalyzedStaff(
   }
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {
-    parts.push(`<text x="${bx}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif">[#]</text>`);
+    parts.push(`<text data-analysis="phonation-break" x="${bx}" y="${ipaY}" text-anchor="middle" font-size="12" fill="#1a1612" font-family="'Lato IPA', sans-serif">[#]</text>`);
   }
 
   // ── Hyphens and extenders (melisma build 2; Dann's Gould extraction,

@@ -237,7 +237,18 @@
 			return;
 		}
 
-		const width = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
+		/* THE LOUPE NEVER EXCEEDS THE PAGE'S OWN WIDTH, ruled by Dann 2026-08-27
+		   after his desktop walk found it growing to the viewport with the
+		   drawer closed. It magnifies part of that page, so a frame wider than
+		   the thing it is a part of reads as a second document rather than as a
+		   closer look at this one.
+
+		   THE PAGE'S WIDTH IS MEASURED, not computed from `PAGE_SIZES`: the
+		   sheet on screen is what the loupe is a crop of, and on a phone that
+		   sheet is already scaled by PageFit. */
+		const sheet = container.querySelector('.score-page')?.getBoundingClientRect();
+		const room = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
+		const width = sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
 
 		/* AN ENGRAVED EXCERPT OPENS WITH NO BARLINE BEFORE ITS FIRST NOTE, and
 		   Dann walked the deploy and found one: on a mid-system measure the
@@ -335,6 +346,24 @@
 		   loupe, and VoiceProfilePane's `data-note-selected`, which is the
 		   page's mark and not this surface's. Both come off. */
 		for (const el of clone.querySelectorAll('[data-held-measure]')) el.remove();
+		/* THE LOUPE IS A CONTROL SURFACE FOR ENGRAVING CONCERNS ONLY, ruled by
+		   Dann 2026-08-27. The Score Markup's sage formant noteheads, the red
+		   crossing squircles and the phonation breaks are analysis, and the
+		   singer reads those on the page, in print, or through the browser's own
+		   zoom. Inside a magnifier whose whole job is to let one measure be
+		   corrected, they are marks that cannot be acted on.
+
+		   FILTERED BY HANDLE, NOT BY COLOUR. `staff-renderer.ts` stamps every
+		   analysis mark with `data-analysis` for exactly this, and the package's
+		   own test asserts all four kinds carry it. Two of them could have been
+		   found by their ink and the phonation break could not, so a colour
+		   filter would have suppressed three quarters of a layer and left the
+		   fourth mark standing with nothing to explain it.
+
+		   ONE FILTER SERVES BOTH SURFACES, because both render this component,
+		   and it serves both viewports because the head and the body are two
+		   crops of this one clone. */
+		for (const el of clone.querySelectorAll('[data-analysis]')) el.remove();
 		for (const el of clone.querySelectorAll('[data-note-selected]')) {
 			el.removeAttribute('data-note-selected');
 		}

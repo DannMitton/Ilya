@@ -210,6 +210,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo':                  { en: 'Undo: %s',                     fr: 'Annuler\u00a0: %s' },
 	'loupe.undo.deleted':          { en: 'note removed',                 fr: 'note supprimée' },
 	'loupe.undo.dotOn':            { en: 'dot added',                    fr: 'point ajouté' },
+	'loupe.undo.dotDouble':        { en: 'double dot added',             fr: 'double point ajouté' },
 	'loupe.undo.dotOff':           { en: 'dot removed',                  fr: 'point retiré' },
 	'loupe.undo.lyrics':           { en: 'syllables shifted',            fr: 'syllabes décalées' },
 	'loupe.undo.restored':         { en: 'corrections cleared',          fr: 'corrections effacées' },
@@ -290,6 +291,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// "Undo my corrections to this note", which is too long for a 44 px cell.
 	// « Rétablir » is ADOPTED from `meta.revertToScore`, which already says
 	// « Rétablir l'en-tête de la partition ». Nothing is coined.
+	// The readout's word for two dots. `double` is ADOPTED from
+	// `correct.len16th`, which is « Double croche », and `point` from
+	// `correct.dot`. Nothing is coined.
+	'loupe.doubleDot':             { en: 'Double dot',                    fr: 'Double point' },
 	'loupe.restore':               { en: 'Restore',                       fr: 'Rétablir' },
 	// THE ONE HEADER, ruled by Dann 2026-08-27: DURATION, PITCH and
 	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a

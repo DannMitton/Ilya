@@ -908,8 +908,28 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   to draw both its own, which is why it was the only station with
 	   lines: its neighbours drew none. Output and Songs draw their own top
 	   rule now, so Analysis's bottom rule is gone rather than doubled. */
-	.section {
+	/* THE RULE IS DRAWN BETWEEN TWO STATIONS, never above the first one, and
+	   that is POSITIONAL now rather than named. Ruled by Dann 2026-08-27 after
+	   his desktop walk found the boundary above ANALYSIS twice its weight.
+
+	   THE CAUSE, and the source had already warned about it: the exemption for
+	   the first station in the scroll was hard-coded onto `.song-section`,
+	   because Repertoire was first when it was written, and the comment beside
+	   it said in as many words that the exemption follows the POSITION and must
+	   move if the order changes again. Slice 4's reorder moved Analysis to the
+	   top of the scroll and left the exemption behind, so the anchor's own
+	   down-facing rule and Analysis's top rule landed on the same y and painted
+	   as one 4px line, and the Analysis-to-Repertoire boundary went blank.
+
+	   `+` CANNOT BE LEFT BEHIND. A rule between two adjacent stations is
+	   exactly the recipe in CSS: one rule per boundary, drawn by the station
+	   below it, and no boundary above the first because the anchor draws that
+	   one. Reorder the stations as often as you like; this follows. */
+	.section + .section {
 		border-top: 2px solid var(--sage);
+	}
+
+	.section {
 		/* 6px above the label, 12px below the body, RULED BY DANN on his walk
 		   of `f59f7d2`: the Clear-and-Transcribe row read "cramped" against
 		   the rule beneath it. 12px is the step this drawer already used
@@ -983,9 +1003,9 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 
 	   So the exemption follows the position rather than the station. If the
 	   order changes again, move it again. */
-	.song-section {
-		border-top: none;
-	}
+	/* `.song-section { border-top: none }` IS GONE. It was the hard-coded
+	   exemption the rule above replaces, and leaving it would suppress a
+	   boundary that now has two stations on either side of it. */
 
 	/* THE OUTPUT STATION IS GONE, N.65 ship B, §B.6. Its `.output-section`
 	   rule declared `border-top: none`, which was Dann's ruling of

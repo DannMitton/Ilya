@@ -248,8 +248,16 @@
 	const MEASURE_PX = 100;
 	const NOTE_H = 26;
 	const ACCIDENTAL_H = 22;
-	const DOT_H = 10;
 
+	/* THE DOT IS DRAWN IN ENGRAVING PROPORTION, ruled by Dann 2026-08-27 after
+	   his desktop walk found it oversized against its siblings.
+
+	   IT JOINS THE NOTES' OWN SET, which is the whole fix: one common box means
+	   one scale, so the augmentation dot is drawn at the size it has beside a
+	   notehead rather than at a size chosen to make it easy to see. It had its
+	   own set and its own target height, 10 px against the notes' 26, which is
+	   about four times its engraving proportion; the measurement that fixes it
+	   is the one every other cell already uses. */
 	const NOTE_GLYPHS = DURATIONS.map((d) => d.glyph);
 	const ACCIDENTAL_GLYPHS = ACCIDENTALS.map((a) => a.glyph);
 	const ALL_GLYPHS = [...NOTE_GLYPHS, DOT_GLYPH, ...ACCIDENTAL_GLYPHS];
@@ -303,12 +311,13 @@
 	}
 
 	const noteCommon = $derived(
-		commonInkBox(NOTE_GLYPHS.map((g) => boxes[g]).filter((b): b is InkBox => !!b)),
+		commonInkBox(
+			[...NOTE_GLYPHS, DOT_GLYPH].map((g) => boxes[g]).filter((b): b is InkBox => !!b),
+		),
 	);
 	const accidentalCommon = $derived(
 		commonInkBox(ACCIDENTAL_GLYPHS.map((g) => boxes[g]).filter((b): b is InkBox => !!b)),
 	);
-	const dotCommon = $derived(commonInkBox(boxes[DOT_GLYPH] ? [boxes[DOT_GLYPH]] : []));
 
 	/** One cell's drawing, or null where the face never arrived. */
 	function drawn(
@@ -553,7 +562,7 @@
 					aria-label={T('correct.dot')}
 					onclick={ondot}
 				>
-					{@render cell(DOT_GLYPH, dotCommon, DOT_H, T('correct.dot'))}
+					{@render cell(DOT_GLYPH, noteCommon, NOTE_H, T('correct.dot'))}
 				</button>
 				<button type="button" class="cell" disabled={inGap} onclick={onopentuplet}
 					>{T('loupe.tuplet')}</button
