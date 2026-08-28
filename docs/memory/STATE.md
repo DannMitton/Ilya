@@ -546,13 +546,39 @@ any of them count.
 > **For PRODUCT.md, in INBOX**: Dann ruled the squircle a key germ of Ilya's
 > visual vocabulary; transcribe it next session.
 >
-> **THE ONE THING: Dann's walk of the polish run, in one pass.** On the
-> deploy: a click well below a staff does nothing while a click on a measure
-> raises the loupe; the drawer's Corrections and Lyric read lavender under a
-> lavender rule; the turning pitches read lavender on the paper; a selected
-> note wears a closed tall sage squircle that contains its accidental; and a
-> dotted note SHOWS its dot, cycling dot, double dot, none. Nothing else is
-> owed on the mobile track.
+> ~~**THE ONE THING: Dann's walk of the polish run.**~~ **WALKED AND
+> PASSED, all five items, 2026-08-27.** The mobile track is complete: four
+> slices, every one walked by Dann on the deploy.
+>
+> **After the walk, three more ships and three numbers.** `dae29f5` ->
+> `c9e2b0f` (the squircle encloses the whole event; the augmentation dot is
+> drawn at last, Gould r111 p.54) -> `a900632` (the squircle draws BENEATH
+> the music; z-order, not geometry). Gates hold at 900 and 470 | 5 skipped.
+>
+> **N.102** courtesy accidentals. **N.103** measures do not re-space when
+> ink is added, so a dot crowds the next note's accidental; real engraving
+> work, to be designed. **N.104** the page must show every bar the singer
+> counts.
+>
+> **THE ONE THING: N.104.** Dann's words: "We absolutely must represent
+> measures without voice content with a single rest and a number overtop of
+> it saying how many measures are tacet for voice." Brief written and
+> filed: `docs/sessions/brief-n104-tacet-measures_r1_2026-08-27.md`. Paste
+> it to Code in a fresh thread.
+>
+> **It resolves a real fault rather than a cosmetic one, and the
+> measurement is already done** (memo-mobile-slice4 §26, and the INBOX
+> line): the engraved song's vocal measure 1 is empty while the piano's
+> carries five notes, the page omits that bar entirely, and the loupe's tag
+> copies the source's own number. So the TAG IS FAITHFUL and the PAGE IS
+> SHORT ONE BAR, which is why Dann's visibly second bar read m. 3. Do not
+> renumber the tag; complete the page. Gould holds NOTHING on rest
+> geometry (priors memo line 220), so the dimensions come from convention,
+> recorded as convention.
+>
+> **Waiting, all Dann's to order:** N.83's walkthrough call (his to
+> schedule), N.84 the Guide redo (deferred so it reflects the finished
+> build), N.94, N.102, N.103, and the release order N.85 through N.88.
 
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
