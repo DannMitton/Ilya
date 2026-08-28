@@ -22,9 +22,11 @@
 	import {
 		inkCrop,
 		insertionBar,
+		pageInset,
 		measureWindow,
 		nearestTarget,
 		parseSystemRange,
+		restingFoot,
 		systemIndexOf,
 		windowScale,
 		type HitRect,
@@ -131,6 +133,17 @@
 	/** The desk's own gutter (`--portrait-gutter`), so the loupe keeps the
 	    page's margins rather than inventing a second measure. */
 	const GUTTER = 24;
+
+	/* ── AN APPLIANCE RESTING ABOVE THE PAGE ─────────────────────────────
+	   Ruled by Dann 2026-08-28, from the walk on `9fabbf1`: the loupe matched
+	   the page's width and sat on its bottom edge, so it read as a footer —
+	   part of the document rather than a thing set down on it. Paper must show
+	   past it on both sides and continue visibly underneath.
+
+	   The two numbers, and why they are these numbers, are with `pageInset`
+	   and `restingFoot` in `loupe.ts`. */
+	const SIDE_INSET = 1 / 16;
+	const FOOT_WEIGHT = 1.4;
 
 	/* SMuFL's three notehead codepoints, spec-stable and already the registry's
 	   own (`smufl-metadata.ts:85-87`). The insertion bar needs to find the
@@ -298,8 +311,8 @@
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
-		/** Landscape's vertical anchor. Portrait anchors on the dock instead. */
-		top: number;
+		/** Its bottom edge, as a distance up from the viewport's bottom. */
+		foot: number;
 		system: number;
 		systems: number;
 	}
@@ -326,7 +339,6 @@
 	$effect(() => {
 		void revision;
 		void selectedEventId;
-		void dockHeight;
 		void layoutTick;
 		if (!open || measureIndex === null || ownIds.length === 0) {
 			frame = null;
@@ -397,7 +409,26 @@
 		   sheet is already scaled by PageFit. */
 		const sheet = container.querySelector('.score-page')?.getBoundingClientRect();
 		const room = Math.max(160, window.innerWidth - dockInset - GUTTER * 2);
-		const width = sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
+
+		/* THE STAGE is as much of the page as the singer can actually see: the
+		   sheet, clipped to the room left over beside the dock and above it.
+		   Every inset below is taken off the stage rather than off the
+		   viewport, which is what makes the loupe read as resting on the PAGE
+		   and not as floating in the window.
+
+		   WHERE THE PAGE FITS THE ROOM the stage IS the page, so a fraction of
+		   the stage is a fraction of the page's own width, as ruled. Landscape
+		   is the one place they part: the sheet is wider than the room beside
+		   the dock, so the stage is the visible part of it. That disparity is
+		   the one carried since slice 2 and named again in the memo. */
+		const stageWidth = sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
+		const stageBottom = Math.min(
+			sheet ? sheet.bottom : window.innerHeight,
+			window.innerHeight - dockHeight,
+		);
+
+		const inset = pageInset(stageWidth, SIDE_INSET);
+		const width = Math.max(160, stageWidth - inset * 2);
 
 		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
 		   it belongs to the page it magnifies, so it lines up with it at every
@@ -661,16 +692,26 @@
 		   height, so the window and the drawing agree except where a wide
 		   measure meets the width cap and is scaled down whole.
 
-		   AND THE ANCHOR IS THE DOCK, not the measure. Portrait hangs the
-		   loupe one gutter above the dock's top edge, so the singer's eye and
-		   thumb keep one relationship for the whole session. Landscape has the
-		   dock down its left side and nothing above, so the loupe centres in
-		   the room to its right, which is a constant now that the height is
-		   one. */
+		   AND THE ANCHOR IS THE PAGE, not the measure and no longer the dock.
+		   Every surface now pins the loupe's bottom edge a fixed lift above
+		   the stage's floor, so the singer's eye and thumb keep one
+		   relationship for the whole session on all three. */
 		/* The tallest drawing the page can produce, which is the narrowest
 		   measure's, capped by the magnification this modality asks for. */
 		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, width);
-		const top = Math.max(GUTTER, (window.innerHeight - (windowHeight + 40)) / 2);
+		/* THE LOUPE SITS IN THE PAGE'S LOWER THIRD, lifted clear of the stage's
+		   bottom edge. Pinning the BOTTOM rather than the top is what says
+		   "lifted off that edge by this much" directly, and it puts the frame
+		   as low as the foot allows, which is the lower third wherever the
+		   stage is tall enough to have one. */
+		const foot = restingFoot(
+			stageBottom,
+			window.innerHeight,
+			inset,
+			FOOT_WEIGHT,
+			windowHeight + 40,
+			GUTTER,
+		);
 
 		frame = {
 			inner: clone.innerHTML + bar,
@@ -682,7 +723,7 @@
 			headViewBox: `0 ${cropTop} ${headWidthUnits} ${cropHeight}`,
 			contentHeight,
 			windowHeight,
-			top,
+			foot,
 			system: systemIndexOf(ranges, measureIndex) + 1,
 			systems: ranges.length,
 		};
@@ -761,15 +802,13 @@
 </script>
 
 {#if open && frame}
-	<!-- PORTRAIT ANCHORS ON THE DOCK, landscape centres in the room beside it.
-	     `bottom` rather than `top` in portrait, so the loupe's own edge is what
-	     is pinned and a measure of a different height grows upward instead of
-	     shifting the whole frame. -->
+	<!-- ONE ANCHOR ON ALL THREE SURFACES: the loupe's own bottom edge, lifted
+	     off the stage's floor. `bottom` rather than `top` so what is pinned is
+	     the edge the lift is measured from, and so the frame cannot drift when
+	     the room above it changes. -->
 	<div
 		class="loupe"
-		style="left: {frame.left}px; width: {frame.width}px; {dockInset > 0
-			? `top: ${frame.top}px;`
-			: `bottom: ${dockHeight + 24}px;`}"
+		style="left: {frame.left}px; width: {frame.width}px; bottom: {frame.foot}px;"
 	>
 		<p class="loupe-tag">{tag}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
@@ -840,9 +879,29 @@
 		border: 1.4px solid var(--stone-700, #44403c);
 		border-radius: 10px;
 		background: var(--paper-light, #f5f1e8);
+		/* ── THREE LAYERS, TO SELL THE LIFT ──────────────────────────────
+		   Ruled by Dann 2026-08-28, out of §15's proposal. The geometry of
+		   that same round is the precondition: while the frame matched the
+		   page's width its side shadows were cut off at the page's edge and
+		   read as the page's own edge treatment. There are now 51 px of paper
+		   beside it and 71 px below for a shadow to land on.
+
+		   CONTACT SPLIT FROM MID. A lift is read from the GAP between the line
+		   that anchors an object to its surface and the diffuse mass beneath
+		   it. The old first layer was doing both jobs at `0 4px`, where there
+		   is no gap to read, so the loupe sat on the page like a card rather
+		   than standing above it.
+
+		   AMBIENT DROPPED AND SPREAD, because perceived height comes from how
+		   far the shadow's centre falls below the object.
+
+		   AND OPACITY FALLS AS BLUR RISES. On cream paper a warm black much
+		   past 8% at this blur stops reading as shadow and starts reading as
+		   dirt on the page. */
 		box-shadow:
-			0 4px 10px rgba(46, 42, 38, 0.17),
-			0 10px 26px rgba(46, 42, 38, 0.09);
+			0 1px 2px rgba(46, 42, 38, 0.2),
+			0 8px 16px rgba(46, 42, 38, 0.13),
+			0 20px 44px rgba(46, 42, 38, 0.07);
 		/* OPACITY AND TRANSFORM ONLY, 180 ms, the slate's one duration. The
 		   loupe and the dock arrive as one motion and leave as one. */
 		animation: loupe-rise 180ms ease-out;

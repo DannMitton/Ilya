@@ -291,3 +291,56 @@ export function windowScale(page: PageInk | null, fullScale: number, width: numb
 	if (!page || !(page.minTotalSpan > 0) || !Number.isFinite(page.minTotalSpan)) return fullScale;
 	return Math.min(fullScale, width / page.minTotalSpan);
 }
+
+/**
+ * How far the loupe's frame is held inside the page's own edges, in pixels.
+ *
+ * Ruled by Dann 2026-08-28: the loupe must read as an appliance resting above
+ * the page, not as part of it. MEASURED before the ruling, its frame matched
+ * the page's width exactly — 816 into 816 on the desk, 382 into 382 in
+ * portrait, no paper showing past it on either side — and a full-width bar on
+ * the page's own bottom edge is a footer, which is a part of a document rather
+ * than a thing set down on one.
+ *
+ * A FRACTION OF THE PAGE'S WIDTH, not a pixel count, so it holds at every
+ * viewport. The fraction is the page's own: MEASURED, the sheet sits inside
+ * the desk by 24 px on a 382-wide page in portrait (6.28% of its own width)
+ * and by 58.3 px on an 816-wide page in landscape (7.14%). A sixteenth, 6.25%,
+ * is the round number those two straddle, so the loupe standing inside the
+ * page repeats the rhythm the page already makes against the desk.
+ */
+export function pageInset(stageWidth: number, fraction: number): number {
+	return Math.max(0, stageWidth) * fraction;
+}
+
+/**
+ * The loupe's bottom edge, as a distance up from the viewport's bottom.
+ *
+ * LIFTED CLEAR OF THE PAGE'S BOTTOM EDGE so the page continues visibly
+ * underneath, and the gap reads as slightly LARGER than the side insets rather
+ * than equal to them. A mathematically equal bottom gap reads as smaller — the
+ * mat-cutter's problem — so equality has to be overshot, not met. The weight
+ * is the loupe's own: its frame is already padded `10px 10px 12px`, bottom
+ * heavier than top, and this repeats that judgement one level out.
+ *
+ * `stageBottom` is where the page stops being visible: the viewport's floor on
+ * a desk, the dock's top edge on a phone, whichever the page reaches first.
+ *
+ * CLAMPED AT THE TOP. Where the visible page is too short to hold the loupe at
+ * its full foot — landscape, where the loupe stands 60% as tall as the page
+ * one can see — the frame stays on screen and the foot gives way. That case is
+ * named in the memo rather than hidden here.
+ */
+export function restingFoot(
+	stageBottom: number,
+	viewportHeight: number,
+	inset: number,
+	footWeight: number,
+	height: number,
+	gutter: number,
+): number {
+	const foot = viewportHeight - stageBottom + inset * footWeight;
+	/* The most it can be lifted before its own top leaves the screen. */
+	const ceiling = viewportHeight - gutter - height;
+	return Math.max(0, Math.min(foot, ceiling));
+}

@@ -16,7 +16,9 @@ import {
 	isDismissSwipe,
 	measureWindow,
 	nearestTarget,
+	pageInset,
 	parseSystemRange,
+	restingFoot,
 	systemIndexOf,
 	windowScale,
 	SWIPE_DISMISS_PX,
@@ -249,5 +251,58 @@ describe('the window’s scale', () => {
 	it('keeps full magnification when the page’s measures are unknown', () => {
 		expect(windowScale(null, 2.4, 380)).toBe(2.4);
 		expect(windowScale({ above: 1, below: 1, minTotalSpan: Infinity }, 2.4, 380)).toBe(2.4);
+	});
+});
+
+describe('the loupe resting on the page', () => {
+	/* This document's own numbers, measured 2026-08-28 before the ruling: an
+	   816-wide page on the desk, a 382-wide one in portrait, and the loupe
+	   matching each exactly — no paper past it on either side. */
+	const SIDE = 1 / 16;
+	const FOOT = 1.4;
+
+	it('holds the frame inside the page on both sides', () => {
+		expect(pageInset(816, SIDE)).toBeCloseTo(51, 5);
+		expect(pageInset(382, SIDE)).toBeCloseTo(23.875, 5);
+	});
+
+	it('is a fraction, so it holds at every viewport rather than at one', () => {
+		const narrow = pageInset(382, SIDE) / 382;
+		const wide = pageInset(816, SIDE) / 816;
+		expect(narrow).toBeCloseTo(wide, 10);
+	});
+
+	it('leaves the loupe narrower than the page, which is the whole point', () => {
+		expect(816 - pageInset(816, SIDE) * 2).toBeCloseTo(714, 5);
+	});
+
+	it('lifts the foot clear, and by MORE than the side inset', () => {
+		// Desk: the page runs past the viewport, so its floor is the viewport's.
+		const foot = restingFoot(900, 900, pageInset(816, SIDE), FOOT, 238.5, 24);
+		expect(foot).toBeCloseTo(71.4, 5);
+		expect(foot).toBeGreaterThan(pageInset(816, SIDE));
+	});
+
+	it('measures the lift from the DOCK’s top edge when the dock is the floor', () => {
+		// Portrait: the page runs on behind the dock, so the dock is where it
+		// stops being visible. 932 tall, dock top at 493.6.
+		const foot = restingFoot(493.6, 932, pageInset(382, SIDE), FOOT, 145.4, 24);
+		expect(foot).toBeCloseTo(932 - 493.6 + 23.875 * 1.4, 5);
+		// Which puts the loupe's bottom edge 33.4 px above the dock, not on it.
+		expect(932 - foot - 145.4).toBeLessThan(493.6);
+	});
+
+	it('gives the foot up rather than the frame when the page is too short', () => {
+		// A 200-tall viewport holding a 140-tall frame: the full 84 px foot
+		// would push its top off screen, so the lift gives way at 36.
+		const foot = restingFoot(200, 200, 60, FOOT, 140, 24);
+		expect(foot).toBe(36);
+		expect(foot).toBeLessThan(60 * FOOT);
+	});
+
+	it('never pushes the frame below the viewport, however little room there is', () => {
+		expect(restingFoot(400, 200, 60, FOOT, 100, 24)).toBeGreaterThanOrEqual(0);
+		// Even where the frame is taller than the whole viewport.
+		expect(restingFoot(200, 200, 60, FOOT, 190, 24)).toBe(0);
 	});
 });

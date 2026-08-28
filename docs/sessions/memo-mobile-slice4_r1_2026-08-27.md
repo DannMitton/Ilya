@@ -1126,3 +1126,204 @@ otherwise be silent, visible only to an eye on a walk.
 **`~/Downloads/ilya-ship.sh:79` still says `872 passed (872)` for gate 4** and
 must move to `880 passed (880)` when this ships. I read it rather than edited
 it; **no commits, no ship**.
+
+---
+
+## 15. Appended: the loupe as an appliance resting on the page
+
+**Ruled by Dann**, from the walk on `9fabbf1`: the loupe must read as an
+appliance resting above the page, not as part of it. Three changes, all
+geometry; everything else already ruled about the loupe unchanged.
+
+### What it was, measured
+
+| surface | page | loupe | side gaps | foot |
+|---|---|---|---|---|
+| desk 1400×900 | x 292.3, w 816 | x 292.3, w **816** | **0 / 0** | 24 above the viewport's edge |
+| phone portrait 430×932 | x 24, w 382 | x 24, w **382** | **0 / 0** | 23.6 above the dock |
+| phone landscape 932×430 | x 58.4, w 816 | x 404, w 504 | 345.6 / **−33.7** | none; vertically centred |
+
+Exactly the footer reading: the frame the width of the page, its edges on the
+page's edges. Landscape was worse than a footer — the frame **overhung the
+page's right edge by 33.7 px**, which had not been caught before.
+
+### The fractions, proposed from measurement
+
+**The side inset is a sixteenth of the page's width, 6.25%.** It is not a
+number I picked: MEASURED, the sheet already sits inside the desk by 24 px on a
+382-wide page in portrait — **6.28% of its own width** — and by 58.4 px on an
+816-wide page in landscape, **7.15%**. A sixteenth is the round number those
+two straddle, so the loupe standing inside the page repeats the rhythm the page
+already makes against the desk. In portrait this lands the loupe 23.9 px inside
+the page, within a tenth of a pixel of the 24 px gutter the page itself keeps.
+
+**The foot is 1.4 × the side inset.** A mathematically equal bottom gap reads
+as *smaller* — the mat-cutter's problem — so "slightly larger, optically" has
+to be overshot rather than met. I rendered the desk's bottom-left corner at
+three weights and looked:
+
+| weight | foot | reads as |
+|---|---|---|
+| 1.2 | 61 px | **equal to the sides**, which is the failure being corrected |
+| **1.4** | **71 px** | **slightly larger — chosen** |
+| 1.7 | 87 px | larger enough that the band reads as its own zone, not a lift |
+
+The weight is also the loupe's own: its frame is padded `10px 10px 12px`,
+bottom heavier than top, and 1.4 repeats that judgement one level out.
+
+### The stage
+
+Both insets are taken off **the stage** — as much of the page as the singer can
+actually see: the sheet, clipped to the room beside the dock and above it.
+Where the page fits the room the stage *is* the page, so a fraction of the
+stage is a fraction of the page's own width as ruled. On the phone the stage's
+floor is the dock's top edge rather than the viewport's, which is your
+"within the space above the dock" clause; on the desk the page runs past the
+viewport, so the viewport's floor is where the page stops being visible.
+
+The vertical anchor is now **one anchor on all three surfaces** — the loupe's
+own bottom edge, lifted off the stage's floor. Portrait's dock anchor and
+landscape's viewport centring are both gone. Pinning the bottom is what states
+"lifted off that edge by this much" directly, and it puts the frame as low as
+the foot allows, which is the lower third wherever the stage has one.
+
+### What it is now
+
+| surface | loupe box | side gaps | foot | centre in the page's lower third |
+|---|---|---|---|---|
+| **desk 1400×900** | 343.3, 590.1, **714 × 238.5** | **51 / 51** | **71.4** | **yes** (lower third opens at y 640.6, centre 709.4) |
+| **phone portrait 430×932** | 47.9, 315.2, **334.3 × 145.4** | **23.9 / 23.9** | **33.0** | **yes** (opens at 369.1, centre 387.9) |
+| **phone landscape 932×430** | 404, 174.4, **441 × 211.5** | 345.6 / **29.4** | **44.1** | **no — see below** |
+
+Verified across m. 2, m. 3 and m. 4 on each: the box does not move as the
+singer steps.
+
+### Two things to report rather than bury
+
+**1. Landscape cannot reach its lower third.** The visible page is 391.2 px
+tall there and the loupe is 211.5 — **54% of it**. With the foot honoured, the
+frame's centre lands at 280.2 where the lower third opens at 299.6, missing it
+by 19.4 px. Lifting it lower would put its top through the page's top edge. The
+foot and the insets are honoured; the third is not, because there is no third
+to sit in. **I did not quietly redefine the third to make it fit.**
+
+**2. Landscape's left inset is still the dock's, not the page's.** 345.6 px on
+the left against 29.4 on the right. This is the disparity carried since slice 2
+and named in §13: landscape does not miniaturize the page, so the sheet is
+wider than the room beside the dock and the loupe is clamped clear of the dock
+rather than centred on the page. **It did improve**: the frame no longer
+overhangs the page's right edge, going from −33.7 px outside to 29.4 px inside.
+
+### What the shadow needs to sell the lift
+
+**Not built — you scoped this round to geometry, so this is a proposal.**
+
+The geometry change is the precondition. Before it there was nowhere for a
+shadow to fall: with the frame flush to the page's width, its side shadows were
+cut at the page's edge and read as the page's own edge treatment. There are now
+51 px of paper on each side and 71 px below for a shadow to land on.
+
+Today's shadow is two layers, `0 4px 10px rgba(46,42,38,.17)` and
+`0 10px 26px rgba(46,42,38,.09)`, and one of them is doing two jobs. Three
+things would sell the lift:
+
+1. **Split the contact shadow from the mid shadow.** A 1–2 px contact line
+   anchors the object to the surface; a lift is read from the *gap* between
+   that line and the diffuse mass, and at `0 4px` there is no gap.
+2. **Drop and spread the ambient layer further** — around `0 20px 44px`.
+   Perceived height comes from how far the shadow's centre falls below the
+   object, and 10 px reads as a card lying on the page.
+3. **Lower the opacity as the blur rises.** On cream paper a warm black past
+   roughly 8% at that blur stops reading as shadow and starts reading as dirt.
+
+Concretely, `0 1px 2px rgba(46,42,38,.20)`, `0 8px 16px rgba(46,42,38,.13)`,
+`0 20px 44px rgba(46,42,38,.07)`. Say the word and it is a one-line change.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `880 passed (880)` | **`887 passed (887)`** |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**Gate 4 moved, 880 → 887.** Seven tests on `pageInset` and `restingFoot`. One
+of them caught me rather than the code: I asserted a clamped foot of −14 px,
+and the function was right to floor it at 0.
+
+**`~/Downloads/ilya-ship.sh:79` still says `872 passed (872)` for gate 4** and
+must move to `887 passed (887)` when this ships — §14's `880` never shipped
+either, so one edit carries both. I read it rather than edited it;
+**no commits, no ship.**
+
+---
+
+## 16. Appended: the shadow, built
+
+**Ruled by Dann**: build §15's shadow proposal into this same ship, at the
+values proposed. Done, exactly as specified:
+
+```css
+box-shadow:
+    0 1px 2px rgba(46, 42, 38, 0.2),
+    0 8px 16px rgba(46, 42, 38, 0.13),
+    0 20px 44px rgba(46, 42, 38, 0.07);
+```
+
+replacing `0 4px 10px rgba(46,42,38,.17)` and `0 10px 26px rgba(46,42,38,.09)`.
+
+### Does the lift read? Looked at, on all three
+
+Full views and a 3× crop of the frame's bottom-left corner on each, where the
+contact line, the gap and the ambient mass are all in one frame.
+
+| surface | does the lift read | what carries it |
+|---|---|---|
+| **desk 1400×900** | **yes** | the diffuse mass falls about 40 px down and left across 51 px of bare paper before it dies; the frame reads as held above the sheet rather than printed on it |
+| **phone portrait 430×932** | **yes**, a little quieter | the same mass across a 23.9 px side gap — less paper for it to fall on, so less of it is visible, but the graduation is unmistakable |
+| **phone landscape 932×430** | **yes, most strongly of the three** | here the shadow falls across the *underlay text* of the system below, and you can see the Cyrillic dimmed underneath it. Text darkened by a shadow is the least ambiguous depth cue on the page |
+
+Nowhere does the ambient layer read as dirt: at 7% over 44 px of blur it stays
+a graduation on cream rather than a stain.
+
+### A prediction of mine that measurement overturned
+
+Looking at the corners, I thought the `0 1px 2px` contact layer was being
+**masked by the 1.4 px `stone-700` border** — that the border was already doing
+the anchoring and the contact layer was buying nothing. Rather than write that
+down as an impression, I rendered the frame with the contact layer removed and
+compared the two images pixel by pixel.
+
+**I was wrong.** At the row where the frame's bottom border sits, the contact
+layer darkens the paper by **24.4 levels out of 255** — 173.9 against 198.3,
+about a tenth of the available range. It is a real, visible line. What fooled
+me is that it is confined to two or three rows: averaged over the whole crop
+the difference between the two renders is **0.41 levels**, which is why they
+read as identical at a glance.
+
+So the mechanism is the one §15 proposed. The contact line anchors the frame to
+the sheet, the mass sits well below it, and the gap between them is what the
+eye reads as height.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `887 passed (887)` | `887 passed (887)` |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**No gate moved.** This round is three CSS values; the numbers that judge it are
+the walk's and the pixel comparison's, not a test's.
+
+**`~/Downloads/ilya-ship.sh:79` now reads `887 passed (887)`**, moved by Dann,
+and agrees with gate 4 as run. Nothing in this round asks it to move again. I
+read it rather than edited it; **no commits, no ship.**
