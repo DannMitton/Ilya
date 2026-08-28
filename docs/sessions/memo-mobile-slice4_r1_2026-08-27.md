@@ -1896,3 +1896,106 @@ deliberately rather than smuggle in here.
 **`~/Downloads/ilya-ship.sh` agrees with both gates as run** — line 79 reads
 `900 passed (900)`, line 80 `464 passed | 5 skipped (469)`. Nothing here asks
 either to move. I read it rather than edited it; **no commits, no ship.**
+
+---
+
+## 23. Appended: the squircle gets its proportion back
+
+**Ruled by Dann**, from the walk on `44f2a1e`: the selection marker keeps the
+SHAPE it had before §22 — a tall rounded rectangle spanning the stave, not a
+small ring hugging the notehead's ink. He liked that proportion; the only
+defect was ever the clipped top, and **§22 closed it by shrinking it.**
+
+Owned: §22 fixed the truncation by making the box small enough not to reach the
+crop, which cured the symptom of the symptom. The diagnosis in §22 stands — the
+box was a font line box — but the repair changed a proportion that was not
+mine to change.
+
+### What the extent is drawn from now
+
+**Vertically, the staff's own geometry**, recovered from the tap rectangle the
+way `tapBand` recovers it: eleven gaps tall, the staff its middle four, so
+`staffTop = hitY + 3.5 * gap` and four gaps below it. **Horizontally, the
+notehead's measured ink alone**, as ruled — canvas `measureText`, not a font
+box. Padding and corner radius are unchanged from §22, 3 units and `rx="4"`.
+
+**It is inside the viewBox by construction now**, which is the part of §22
+worth keeping. The renderer crops each system to its own ink less one space,
+and the staff IS ink, so a box drawn on the staff can never begin above that
+crop — where an 88-unit font box always did. The closure no longer depends on
+the ring being small.
+
+### One extension beyond the wording, and why
+
+The ruling says the staff's geometry extended for the stem. Taken literally, a
+notehead sitting **above** the top line would fall outside its own marker, and
+this document has such notes — the "high" row below is one. The vertical extent
+is therefore the union of the stave, the stem, and the notehead's ink: the
+stave in the ordinary case, and never less than it. Flagged rather than done
+quietly.
+
+### Closed at every height, both surfaces
+
+Clearance from the clipping edge, px. Every figure positive means no side cut.
+
+| surface | note | ring box | clear of the system's top | clear of the outer viewport's top |
+|---|---|---|---|---|
+| **desk 1400×900** | high | 13 × 30.8 | 42.7 | **10.2** |
+| | middle | 13 × 33.5 | 45.5 | **13.0** |
+| | low | 13 × 34.2 | 45.5 | **13.0** |
+| **phone portrait 430×932** | high | 6.1 × 17.0 | 17.3 | **1.7** |
+| | middle | 6.1 × 14.4 | 19.9 | **4.3** |
+| | low | 6.1 × 17.0 | 21.2 | **5.6** |
+| **phone landscape 932×430** | high | 13 × 30.8 | 42.7 | **10.2** |
+| | middle | 13 × 33.5 | 45.5 | **13.0** |
+| | low | 13 × 34.2 | 45.5 | **13.0** |
+
+For the record across all three rounds, on a desk middle note:
+
+| | ring height | top edge |
+|---|---|---|
+| before §22, the open U | 96 px | **31 px outside** the viewport — cut |
+| §22, the small ring | 28 px | 18.5 px inside |
+| **now** | **33.5 px** | **13.0 px inside** |
+
+**The proportion is back.** The tall squircle read 36 × 96, an aspect of
+2.67 : 1; this one reads 13 × 33.5, **2.58 : 1** — the same shape, drawn from
+the stave instead of from a font's line box. §22's ring was 13 × 28, 2.15 : 1,
+squarer than either.
+
+Looked at, at 5×, on a note above the staff, one on a middle line and one
+below: a closed sage squircle spanning the stave, containing the notehead and
+its stem, four sides, rounded corners.
+
+**The narrowest margin is still the phone's high note, 1.7 px** — unchanged
+from §22, since that case is set by the notehead's ink rising above the stave
+rather than by the stave itself.
+
+### Unchanged, and confirmed
+
+Sage. Out of print, by the same `@media print` rule. **Out of the loupe**:
+MEASURED, two ring elements reach the clone and **zero render**, the clone's
+attribute strip having taken their stroke. Still `pointer-events: none`, still
+appended by the pane so `staff-renderer.ts` is untouched.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `464 passed \| 5 skipped (469)` | `464 passed \| 5 skipped (469)` |
+
+**No gate moved**, and for §22's reason: the ring is built from canvas text
+metrics against a live SVG, and `measureText` returns zeroes under jsdom, so a
+gate-4 test would assert the absence of a font rather than the presence of a
+ring. The clearance table and the 5× look are what judge it. **A browser-level
+check is the honest home for this** and remains worth adding deliberately.
+
+**`~/Downloads/ilya-ship.sh` agrees with both gates as run** — line 79 `900
+passed (900)`, line 80 `464 passed | 5 skipped (469)`. Nothing here asks either
+to move. I read it rather than edited it; **no commits, no ship.**

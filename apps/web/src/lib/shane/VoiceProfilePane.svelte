@@ -250,10 +250,29 @@
 	   caught this project, after the glyph cells, the insertion bar and §14's
 	   ink band.
 
-	   SO THE RING IS MEASURED FROM INK, the way those three were fixed: canvas
-	   `measureText` for the glyph, `getBBox` only for the stem, which is a
-	   line and has no font box to confuse. And because no layout box can
-	   express that, it is a drawn `<rect>` rather than an outline.
+	   SO IT IS A DRAWN `<rect>` rather than an outline, because no layout box
+	   can express a glyph's ink.
+
+	   AND ITS HEIGHT COMES FROM THE STAFF, NOT FROM THE NOTE. Dann's walk on
+	   `44f2a1e`: the repair above closed the ring by SHRINKING it, and the
+	   proportion he wanted was the tall one it had before — a squircle
+	   elongated to span the stave. Only the clipping was ever the defect. So
+	   the vertical extent is the staff's own geometry, recovered from the tap
+	   rectangle the way `tapBand` recovers it (eleven spaces tall, the staff
+	   its middle four), and the notehead's measured ink decides only where the
+	   squircle sits across the page and how wide it is.
+
+	   IT STAYS INSIDE THE VIEWBOX BY CONSTRUCTION now, which is the part worth
+	   keeping. The renderer crops each system to its own ink less one space,
+	   and the staff IS ink, so a box on the staff can never begin above that
+	   crop — where the notehead's 88-unit font box always did.
+
+	   ONE EXTENSION BEYOND THE WORDING, and the reason. The ruling says the
+	   staff's geometry extended for the stem; taken literally, a notehead
+	   sitting ABOVE the top line would fall outside its own marker, and this
+	   document has such notes. The vertical extent is therefore the union of
+	   the stave, the stem, and the notehead's ink — which is the stave in the
+	   ordinary case and never less than it.
 
 	   IT IS STILL DISPLAY ONLY. `pointer-events: none`, so it cannot take a
 	   tap from the note beneath it; appended by this pane rather than emitted
@@ -300,38 +319,52 @@
 		for (const el of root.querySelectorAll('[data-selection-ring]')) el.remove();
 		if (!id) return;
 		const hit = root.querySelector(`[data-hit="${CSS.escape(id)}"]`);
-		const group = hit?.closest('[data-event-id]');
+		if (!hit) return;
+		const group = hit.closest('[data-event-id]');
 		if (!group) return;
 		group.setAttribute('data-note-selected', '');
 
-		/* The note's ink: every child but the tap rectangle, glyphs measured as
-		   glyphs and geometry measured as geometry. */
-		let top = Infinity;
-		let bottom = -Infinity;
+		/* THE STAVE, off the tap rectangle. The renderer builds each one from
+		   `staffTop - 3.5 * lineGap` to `staffBottom + 3.5 * lineGap` around a
+		   staff of four gaps, so the rectangle is eleven gaps tall and one gap
+		   is an eleventh of it — the same recovery `loupe.ts` makes. */
+		const hitY = Number(hit.getAttribute('y'));
+		const hitH = Number(hit.getAttribute('height'));
+		if (!(hitH > 0) || !Number.isFinite(hitY)) return;
+		const gap = hitH / 11;
+		const staffTop = hitY + 3.5 * gap;
+		const staffBottom = staffTop + 4 * gap;
+
+		/* The note itself: the notehead's ink sets the width, the stem only
+		   ever reaches further up or down. Glyphs measured as glyphs and
+		   geometry measured as geometry. */
+		let top = staffTop;
+		let bottom = staffBottom;
 		let left = Infinity;
 		let right = -Infinity;
 		for (const child of group.children) {
 			if (child.hasAttribute('data-hit')) continue;
-			let box: { top: number; bottom: number; left: number; right: number } | null = null;
 			if (child.tagName === 'text') {
-				box = glyphInk(child as SVGTextElement);
+				const ink = glyphInk(child as SVGTextElement);
+				if (!ink) continue;
+				top = Math.min(top, ink.top);
+				bottom = Math.max(bottom, ink.bottom);
+				/* THE WIDTH IS THE NOTEHEAD'S ALONE, as ruled. */
+				left = Math.min(left, ink.left);
+				right = Math.max(right, ink.right);
 			} else {
+				let b: DOMRect;
 				try {
-					const b = (child as SVGGraphicsElement).getBBox();
-					if (b && (b.width || b.height)) {
-						box = { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width };
-					}
+					b = (child as SVGGraphicsElement).getBBox();
 				} catch {
-					box = null;
+					continue;
 				}
+				if (!b || (!b.width && !b.height)) continue;
+				top = Math.min(top, b.y);
+				bottom = Math.max(bottom, b.y + b.height);
 			}
-			if (!box) continue;
-			top = Math.min(top, box.top);
-			bottom = Math.max(bottom, box.bottom);
-			left = Math.min(left, box.left);
-			right = Math.max(right, box.right);
 		}
-		if (!Number.isFinite(top) || !Number.isFinite(left)) return;
+		if (!Number.isFinite(left) || !Number.isFinite(right)) return;
 
 		const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		ring.setAttribute('data-selection-ring', '');
