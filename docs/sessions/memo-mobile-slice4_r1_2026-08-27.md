@@ -1773,3 +1773,126 @@ computed styles and the contrast figures above.
 reads `900 passed (900)` and line 80 now reads `464 passed | 5 skipped (469)`,
 moved by Dann for §20's tests. **Nothing in this round asks either to move
 again.** I read the file rather than edited it; **no commits, no ship.**
+
+---
+
+## 22. Appended: the selection ring closes
+
+**DEFECT**, from Dann's walk on `95f37aa`: the page's sage selection marker
+draws as an open U, truncated across its top edge, instead of a closed
+squircle. Sage stays, for contrast against the lavender; only the shape was
+wrong.
+
+### The cause, measured — and it is none of the three candidates
+
+Named: **`VoiceProfilePane.svelte:951`**, the rule
+`:global([data-note-selected]) { outline: 2px solid var(--sage); }`.
+
+A CSS `outline` boxes an element's **layout box**, and the layout box of an SVG
+`<text>` is **the font's line box, not the glyph's ink**. MEASURED on a selected
+note:
+
+| | top | bottom | height |
+|---|---|---|---|
+| the system's viewBox | 68 | 171 | 103 |
+| the group the outline boxed | **41** | 129 | **88** |
+| its `<text>` child, the notehead | **41** | 129 | **88** |
+| its `rect[data-hit]`, the tap target | 65.75 | 126.25 | 60.5 |
+| its `<line>`, the stem | 85.88 | 104.25 | 18.37 |
+
+The group's box **is** the notehead's box, to the unit. A notehead whose ink is
+about ten units tall carries an 88-unit font box, and that box begins **27
+units above the system's viewBox**, which §14 crops to the ink. The SVG
+viewport clips there, so the top edge was cut and three sides stood — at every
+staff height, which is why the U was not only on high notes.
+
+**The tap rectangle, the likeliest-looking suspect, contributed nothing**: it
+sits 2.25 units above the viewBox top where the text sits 27 above. There was
+no clip-path anywhere on the chain, and the marker was never a path drawn open.
+It was a box measured wrong.
+
+**This is the fourth time layout-box-versus-ink has caught this project** —
+after the glyph cells, the insertion bar, and §14's ink band. It is worth
+naming as a pattern rather than a run of bad luck: on SVG text, ask the canvas.
+
+I also record a wrong turn: my first comparison put the group's `getBBox` next
+to the viewBox numbers directly, which is invalid across a transform, and my
+first fix hypothesis was the tap rectangle. Both were wrong and the measurement
+above is what corrected them.
+
+### The fix, at the cause
+
+No layout box can express "the glyph's ink", so the marker stops being an
+outline and becomes a drawn `<rect>` sized from **measured ink**: canvas
+`measureText` for the glyph, `getBBox` only for the stem, which is a line and
+has no font box to confuse. 3 units of pad, `rx="4"` for the squircle.
+
+Everything the old note promised is kept. Still appended by the pane rather
+than emitted by the renderer, so `staff-renderer.ts` is untouched and the mark
+is out of every exported artifact by construction. Still display only:
+`pointer-events: none`, so it cannot take a tap from the note beneath it. Still
+dropped by print.
+
+**And it leaves the loupe alone with no edit to the loupe.** The ring carries
+`data-note-selected`, which the loupe's clone already strips, and the stroke is
+keyed on that attribute — so a ring in the clone draws nothing. One line did
+have to change there: `Loupe.svelte:232` now skips the ring in §14's ink survey,
+or the page's selection would have sized the loupe's frame.
+
+### Confirmed closed, three heights, both surfaces
+
+Clearance from the clipping edges, in px; every figure positive means no side
+is cut.
+
+| surface | note | ring box | clear of the system's top | clear of the outer viewport's top |
+|---|---|---|---|---|
+| **desk 1400×900** | high | 13 × 28 | 42.7 | **10.2** |
+| | middle | 13 × 28 | 51.0 | **18.5** |
+| | low | 13 × 28.8 | 51.0 | **18.5** |
+| **phone portrait 430×932** | high | 6.1 × 13.1 | 17.3 | **1.7** |
+| | middle | 6.1 × 13.1 | 19.9 | **4.3** |
+| | low | 6.1 × 13.1 | 25.0 | **9.4** |
+| **phone landscape 932×430** | high | 13 × 28 | 42.7 | **10.2** |
+| | middle | 13 × 28 | 51.0 | **18.5** |
+| | low | 13 × 28.8 | 51.0 | **18.5** |
+
+Before, the same measurement put the ring's top **31 px above** the viewport
+edge on a middle note and 35.5 above on a high one — always outside, always cut.
+
+Looked at, at 5×: a closed sage squircle round the notehead and its stem, four
+sides, rounded corners, on a note above the staff and on one below it.
+
+**The narrowest margin is the phone's high note at 1.7 px.** Positive, so it
+closes, but it is the case to watch if the renderer's top crop ever tightens.
+
+### The loupe
+
+**The marker does not appear there, and should not.** Slice 2 ruled the page's
+selection mark off that surface — it is the page's mark, not the loupe's, and
+the loupe draws its own lavender insertion bar instead. MEASURED: two ring
+elements reach the clone and **zero of them render**, the attribute strip having
+taken their stroke away.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `464 passed \| 5 skipped (469)` | `464 passed \| 5 skipped (469)` |
+
+**No gate moved, and I want to be plain about that.** The ring is built from
+canvas text metrics against a live SVG, which the unit gates cannot reach —
+`measureText` returns zeroes under jsdom, so a test there would assert the
+absence of a font rather than the presence of a ring. What judges this change
+is the clearance table above and the 5× look. If you want it pinned, the honest
+place is a browser-level check rather than gate 4, and that is a thing to add
+deliberately rather than smuggle in here.
+
+**`~/Downloads/ilya-ship.sh` agrees with both gates as run** — line 79 reads
+`900 passed (900)`, line 80 `464 passed | 5 skipped (469)`. Nothing here asks
+either to move. I read it rather than edited it; **no commits, no ship.**

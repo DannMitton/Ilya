@@ -1996,3 +1996,29 @@ occurrences, and say it is the bundle, not the DOM.
   "Scan QR Code" shortcut, so a QR is not a reliable route into HIS phone
   Chrome. Route of record instead: NOT ESTABLISHED; settle it calmly some
   other session, not mid-walk.
+
+## THE LAYOUT BOX IS NOT THE INK. Four incidents, 2026-08-26 to 08-27
+
+`getBBox()` on an SVG `<text>`, and every CSS box derived from it, returns the
+FONT'S LINE BOX, not the glyph's ink. On Finale Maestro a notehead whose ink is
+about 10 units tall reports an 88-unit box, most of it above the glyph.
+
+It has cost four separate hours of chasing:
+- the insertion bar drew 95 units long against a 22-unit staff;
+- the duration glyph cells came out 3.8 px slivers;
+- a survey reported 138 units of ink inside a 106-unit viewBox, which cannot
+  be true;
+- the page's selection ring drew as an open U, because a CSS `outline` boxes
+  that same line box and the viewport clipped it (`VoiceProfilePane.svelte:951`).
+
+**Use canvas `measureText` for anything that must match a glyph's ink**, the
+same instrument the glyph cells and the loupe's ink band use. `getBBox` is
+safe only on drawn geometry: lines, rects, paths with no font behind them.
+A CSS `outline` on a text-bearing element can never express ink; draw a
+`<rect>` from measured metrics instead.
+
+**A corollary that bit twice:** a probe built on the wrong instrument returns
+a plausible number. Both a `getBBox` survey and a scripted `.focus()` (which
+does not match `:focus-visible` in Chromium) reported answers that looked
+right and were measuring nothing. When a measurement disagrees with
+arithmetic, suspect the instrument first.

@@ -234,6 +234,59 @@
 	// The mark rides the note's own group, found through the `data-hit`
 	// rectangle the correction UI already has, so there is ONE way to name a
 	// note on this page and no second id scheme.
+	/* THE RING IS DRAWN, AND IT USED TO BE AN OUTLINE. Dann's walk on `95f37aa`
+	   found it rendering as an open U, truncated across its top edge.
+
+	   THE CAUSE, MEASURED: a CSS `outline` boxes an element's LAYOUT box, and
+	   the layout box of an SVG `<text>` is the font's line box, not the glyph's
+	   ink. A notehead measured 88 user units tall where its ink is about ten,
+	   and the group's box was that text's box exactly — the tap rectangle,
+	   which looks like the likelier culprit, contributed nothing. That box
+	   began 27 units ABOVE the system's viewBox, which the renderer crops to
+	   the ink (`staff-renderer.ts`, and §14 of the slice 4 memo), so the SVG
+	   viewport clipped the top edge away and left three sides standing. It was
+	   never a shape drawn open, nor a clip-path: it was a box measured wrong.
+	   This is the fourth time `getBBox`-style layout boxes on `<text>` have
+	   caught this project, after the glyph cells, the insertion bar and §14's
+	   ink band.
+
+	   SO THE RING IS MEASURED FROM INK, the way those three were fixed: canvas
+	   `measureText` for the glyph, `getBBox` only for the stem, which is a
+	   line and has no font box to confuse. And because no layout box can
+	   express that, it is a drawn `<rect>` rather than an outline.
+
+	   IT IS STILL DISPLAY ONLY. `pointer-events: none`, so it cannot take a
+	   tap from the note beneath it; appended by this pane rather than emitted
+	   by the renderer, so `staff-renderer.ts` stays untouched and the mark is
+	   out of every exported artifact by construction; and it carries
+	   `data-note-selected`, which is what the loupe already strips from its
+	   clone, so the ring leaves the loupe with no change there at all. */
+	const RING_PAD = 3;
+	const RING_RADIUS = 4;
+
+	/** A glyph's INK, not its font box. The distinction is the whole bug. */
+	function glyphInk(el: SVGTextElement): { top: number; bottom: number; left: number; right: number } | null {
+		const ctx = (inkCanvas ??= document.createElement('canvas').getContext('2d'));
+		if (!ctx) return null;
+		const cs = getComputedStyle(el);
+		ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+		const m = ctx.measureText(el.textContent ?? '');
+		if (!(m.actualBoundingBoxAscent > 0 || m.actualBoundingBoxDescent > 0)) return null;
+		const x = Number(el.getAttribute('x'));
+		const y = Number(el.getAttribute('y'));
+		if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+		const anchor = el.getAttribute('text-anchor');
+		const width = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+		const left = anchor === 'middle' ? x - width / 2 : x - m.actualBoundingBoxLeft;
+		return {
+			top: y - m.actualBoundingBoxAscent,
+			bottom: y + m.actualBoundingBoxDescent,
+			left,
+			right: left + width,
+		};
+	}
+	let inkCanvas: CanvasRenderingContext2D | null = null;
+
 	$effect(() => {
 		const id = selectedEventId;
 		// Re-read on every re-render too: `{@html page}` replaces the whole SVG,
@@ -244,10 +297,51 @@
 		for (const el of root.querySelectorAll('[data-note-selected]')) {
 			el.removeAttribute('data-note-selected');
 		}
+		for (const el of root.querySelectorAll('[data-selection-ring]')) el.remove();
 		if (!id) return;
 		const hit = root.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 		const group = hit?.closest('[data-event-id]');
-		group?.setAttribute('data-note-selected', '');
+		if (!group) return;
+		group.setAttribute('data-note-selected', '');
+
+		/* The note's ink: every child but the tap rectangle, glyphs measured as
+		   glyphs and geometry measured as geometry. */
+		let top = Infinity;
+		let bottom = -Infinity;
+		let left = Infinity;
+		let right = -Infinity;
+		for (const child of group.children) {
+			if (child.hasAttribute('data-hit')) continue;
+			let box: { top: number; bottom: number; left: number; right: number } | null = null;
+			if (child.tagName === 'text') {
+				box = glyphInk(child as SVGTextElement);
+			} else {
+				try {
+					const b = (child as SVGGraphicsElement).getBBox();
+					if (b && (b.width || b.height)) {
+						box = { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width };
+					}
+				} catch {
+					box = null;
+				}
+			}
+			if (!box) continue;
+			top = Math.min(top, box.top);
+			bottom = Math.max(bottom, box.bottom);
+			left = Math.min(left, box.left);
+			right = Math.max(right, box.right);
+		}
+		if (!Number.isFinite(top) || !Number.isFinite(left)) return;
+
+		const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+		ring.setAttribute('data-selection-ring', '');
+		ring.setAttribute('data-note-selected', '');
+		ring.setAttribute('x', String(left - RING_PAD));
+		ring.setAttribute('y', String(top - RING_PAD));
+		ring.setAttribute('width', String(right - left + RING_PAD * 2));
+		ring.setAttribute('height', String(bottom - top + RING_PAD * 2));
+		ring.setAttribute('rx', String(RING_RADIUS));
+		group.appendChild(ring);
 	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
@@ -948,14 +1042,21 @@
 
 	   PRINT DROPS IT. A selection is what the singer is doing now, not part of
 	   the score, and the drawer manipulates while the page displays and prints. */
-	:global([data-note-selected]) {
-		outline: 2px solid var(--sage, #8b9a7d);
-		outline-offset: 2px;
-		border-radius: 2px;
+	:global(rect[data-selection-ring]) {
+		fill: none;
+		stroke: var(--sage, #8b9a7d);
+		stroke-width: 2;
+		pointer-events: none;
+	}
+	/* The loupe strips `data-note-selected` from its clone, so keying the
+	   stroke on it is what keeps the ring off that surface with no edit
+	   there. A ring that lost its attribute draws nothing. */
+	:global(rect[data-selection-ring]:not([data-note-selected])) {
+		display: none;
 	}
 	@media print {
-		:global([data-note-selected]) {
-			outline: none;
+		:global(rect[data-selection-ring]) {
+			display: none;
 		}
 	}
 

@@ -227,6 +227,9 @@
 				   clone, so a phonation break standing above the staff must not
 				   push the frame open for ink the loupe then removes. */
 				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+				/* The page's selection ring is the pane's mark, not engraving, and
+				   the clone drops it — so it must not size the frame either. */
+				if (el.hasAttribute('data-selection-ring')) continue;
 				if (el.tagName === 'rect') {
 					if (el.hasAttribute('data-hit')) continue;
 					if (Number(el.getAttribute('width')) >= sysWidth * 0.95) continue;
