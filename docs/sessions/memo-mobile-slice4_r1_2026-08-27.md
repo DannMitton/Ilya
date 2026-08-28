@@ -1327,3 +1327,94 @@ the walk's and the pixel comparison's, not a test's.
 **`~/Downloads/ilya-ship.sh:79` now reads `887 passed (887)`**, moved by Dann,
 and agrees with gate 4 as run. Nothing in this round asks it to move again. I
 read it rather than edited it; **no commits, no ship.**
+
+---
+
+## 17. Appended: centred, not in the lower third
+
+**Ruled by Dann**, correcting §15: the loupe is **centred vertically on the
+page**, not placed in its lower third. The lower third was **this desk's own
+narrowing of his words and was never his ruling**, and the result sat below the
+eyeline. The side insets stay; the foot becomes whatever centring leaves rather
+than a ruled gap.
+
+That is my error to own. §15's brief said "lift it clear of the page's bottom
+edge" and "place it in the page's lower third"; I took the second phrase as a
+specification and built a `FOOT_WEIGHT` constant to serve it, then reported at
+length on landscape's failure to reach a third that was never ruled in the
+first place. The constant is gone.
+
+### What changed
+
+`restingFoot` is replaced by `centreOnPage`, which returns the y the frame's
+CENTRE sits on rather than the distance its bottom edge is lifted. Everything
+else already ruled holds: fixed and never travelling, horizontally centred,
+capped at page width, cut to its ink, inset a sixteenth on both sides, and the
+shadow as built in §16.
+
+### A first attempt that measured wrong, and why
+
+Computing a bottom edge from the stage and the frame's height put the frame
+**6.5 px off true centre** on both phone orientations — MEASURED, 111.0 px of
+air above against 117.1 below in portrait. The cause was the frame's height:
+the code carried `windowHeight + 40` from an older pass, where the chrome
+actually measures **46.5** (the tag's row, 10 px of padding over 12, two 1.4 px
+borders). A height 6.5 short lifts the frame by half that and splits the
+difference into the two gaps, which is exactly the 6.1–6.5 px seen.
+
+Rather than correct the constant and keep depending on it, the frame now hangs
+off its own centre with `translateY(-50%)` and **CSS does the centring**. It is
+exact whatever the chrome measures, and a later change to the tag's type cannot
+put it off centre again. `CHROME = 46.5` survives only for the clamps, which
+decide the degenerate case and would have to be wrong by tens of pixels to
+decide it differently. The rise animation carries the same `-50%`, or the frame
+would drop half its height as the animation ended.
+
+### The resulting boxes
+
+| surface | loupe box | side gaps | air above | air below | centred |
+|---|---|---|---|---|---|
+| **desk 1400×900** | 343.3, 391.6, **714 × 238.5** | 51 / 51 | **269.9** | **269.9** | **yes** |
+| **phone portrait 430×932** | 47.9, 234.4, **334.3 × 145.4** | 23.9 / 23.9 | **114.2** | **113.8** | **yes** |
+| **phone landscape 932×430** | 404, 128.6, **441 × 211.5** | 345.7 / 29.3 | **89.9** | **89.9** | **yes** |
+
+Portrait's 0.4 px is subpixel rounding on a 2× device, not a lean.
+
+**The clamps do not bite on any of the three.** Centring is possible everywhere,
+including landscape, where §15 had to report that the lower third was
+unreachable — the frame stands 211.5 tall in 391.2 of visible page, which is
+too tall for a third and comfortably short enough for a centre. Correcting the
+ruling dissolved that whole problem rather than solving it.
+
+Walked at m. 2, m. 3 and m. 4 on each: the box does not move as the singer
+steps. Looked at on all three; the shadow of §16 still sells the lift, and on
+the desk the loupe now sits at the eyeline with page above it and below it.
+
+### One thing worth naming about the probe
+
+The desk run reported zero rendered measures twice in a batch of three and
+rendered correctly when run alone. It is the probe's own first-context upload
+timing, not the app: the same build renders 96 hit rectangles on the desk on
+every standalone run. I am recording it rather than quietly re-running until it
+looked clean.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `887 passed (887)` | **`889 passed (889)`** |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**Gate 4 moved, 887 → 889.** The `restingFoot` tests are gone with the function
+and six on `centreOnPage` replace them, net two. One of them asserts the thing
+that was got wrong: that the frame's centre is **not** in the page's lower
+third.
+
+**`~/Downloads/ilya-ship.sh:79` now says `887 passed (887)`**, moved by Dann
+after §16, and must move again to `889 passed (889)` when this ships. I read it
+rather than edited it; **no commits, no ship.**

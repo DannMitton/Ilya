@@ -9,6 +9,7 @@
 
 import { describe, it, expect } from 'vitest';
 import {
+	centreOnPage,
 	centredViewBox,
 	commonInkBox,
 	inkCrop,
@@ -18,7 +19,6 @@ import {
 	nearestTarget,
 	pageInset,
 	parseSystemRange,
-	restingFoot,
 	systemIndexOf,
 	windowScale,
 	SWIPE_DISMISS_PX,
@@ -255,11 +255,10 @@ describe('the window’s scale', () => {
 });
 
 describe('the loupe resting on the page', () => {
-	/* This document's own numbers, measured 2026-08-28 before the ruling: an
-	   816-wide page on the desk, a 382-wide one in portrait, and the loupe
-	   matching each exactly — no paper past it on either side. */
+	/* This document's own numbers, measured 2026-08-28: an 816-wide page on the
+	   desk, a 382-wide one in portrait, and before the ruling the loupe matched
+	   each exactly — no paper past it on either side. */
 	const SIDE = 1 / 16;
-	const FOOT = 1.4;
 
 	it('holds the frame inside the page on both sides', () => {
 		expect(pageInset(816, SIDE)).toBeCloseTo(51, 5);
@@ -275,34 +274,49 @@ describe('the loupe resting on the page', () => {
 	it('leaves the loupe narrower than the page, which is the whole point', () => {
 		expect(816 - pageInset(816, SIDE) * 2).toBeCloseTo(714, 5);
 	});
+});
 
-	it('lifts the foot clear, and by MORE than the side inset', () => {
-		// Desk: the page runs past the viewport, so its floor is the viewport's.
-		const foot = restingFoot(900, 900, pageInset(816, SIDE), FOOT, 238.5, 24);
-		expect(foot).toBeCloseTo(71.4, 5);
-		expect(foot).toBeGreaterThan(pageInset(816, SIDE));
+describe('the loupe centred on the page', () => {
+	/* CENTRED, NOT IN THE LOWER THIRD. The lower third was this desk's own
+	   narrowing of Dann's words and put the loupe below the eyeline; he
+	   corrected it 2026-08-28. The foot is now a consequence, not a rule. */
+
+	it('centres the frame on the page’s visible height', () => {
+		// Desk: the page runs past the viewport, so the stage is 121.8 to 900.
+		const centre = centreOnPage(121.8, 900, 900, 238.5, 24);
+		const top = centre - 238.5 / 2;
+		// Equal air above the frame and below it, within the stage.
+		expect(top - 121.8).toBeCloseTo(900 - (top + 238.5), 5);
 	});
 
-	it('measures the lift from the DOCK’s top edge when the dock is the floor', () => {
-		// Portrait: the page runs on behind the dock, so the dock is where it
-		// stops being visible. 932 tall, dock top at 493.6.
-		const foot = restingFoot(493.6, 932, pageInset(382, SIDE), FOOT, 145.4, 24);
-		expect(foot).toBeCloseTo(932 - 493.6 + 23.875 * 1.4, 5);
-		// Which puts the loupe's bottom edge 33.4 px above the dock, not on it.
-		expect(932 - foot - 145.4).toBeLessThan(493.6);
+	it('measures the page’s height to the DOCK when the dock is its floor', () => {
+		// Portrait: the page runs on behind the dock, whose top edge is 493.6.
+		const centre = centreOnPage(120.2, 493.6, 932, 145.4, 24);
+		const top = centre - 145.4 / 2;
+		expect(top - 120.2).toBeCloseTo(493.6 - (top + 145.4), 5);
+		// And the frame stays clear of the dock rather than riding under it.
+		expect(top + 145.4).toBeLessThan(493.6);
 	});
 
-	it('gives the foot up rather than the frame when the page is too short', () => {
-		// A 200-tall viewport holding a 140-tall frame: the full 84 px foot
-		// would push its top off screen, so the lift gives way at 36.
-		const foot = restingFoot(200, 200, 60, FOOT, 140, 24);
-		expect(foot).toBe(36);
-		expect(foot).toBeLessThan(60 * FOOT);
+	it('does NOT sit in the lower third, which is what was corrected', () => {
+		const centre = centreOnPage(121.8, 900, 900, 238.5, 24);
+		const lowerThirdOpens = 900 - (900 - 121.8) / 3;
+		expect(centre).toBeLessThan(lowerThirdOpens);
 	});
 
-	it('never pushes the frame below the viewport, however little room there is', () => {
-		expect(restingFoot(400, 200, 60, FOOT, 100, 24)).toBeGreaterThanOrEqual(0);
-		// Even where the frame is taller than the whole viewport.
-		expect(restingFoot(200, 200, 60, FOOT, 190, 24)).toBe(0);
+	it('clamps rather than centring when the frame is taller than the room', () => {
+		// A 300-tall frame in a 200-tall stage cannot be centred in it; the
+		// frame keeps its own top on screen instead.
+		expect(centreOnPage(0, 200, 400, 300, 24)).toBe(24 + 300 / 2);
+	});
+
+	it('keeps the frame clear of the stage’s floor', () => {
+		// A stage whose floor is above its own centre: the frame is held off
+		// the floor rather than centred through it.
+		expect(centreOnPage(0, 200, 900, 300, 24)).toBeLessThanOrEqual(200);
+	});
+
+	it('never pushes the frame past the viewport’s own floor', () => {
+		expect(centreOnPage(0, 400, 200, 100, 24)).toBeLessThanOrEqual(200 - 50);
 	});
 });

@@ -21,12 +21,12 @@
 	import { t, type Language } from '$lib/i18n';
 	import {
 		inkCrop,
+		centreOnPage,
 		insertionBar,
 		pageInset,
 		measureWindow,
 		nearestTarget,
 		parseSystemRange,
-		restingFoot,
 		systemIndexOf,
 		windowScale,
 		type HitRect,
@@ -140,10 +140,23 @@
 	   part of the document rather than a thing set down on it. Paper must show
 	   past it on both sides and continue visibly underneath.
 
-	   The two numbers, and why they are these numbers, are with `pageInset`
-	   and `restingFoot` in `loupe.ts`. */
+	   The inset, and why it is this fraction, is with `pageInset` in
+	   `loupe.ts`. There is no matching constant for the vertical: the loupe is
+	   CENTRED on the page's visible height, so its foot is whatever centring
+	   leaves rather than a gap of its own. See `centredFoot`. */
 	const SIDE_INSET = 1 / 16;
-	const FOOT_WEIGHT = 1.4;
+
+	/* The frame's own furniture above and below the window: the measure tag's
+	   row, 10 px of padding over 12, and two 1.4 px borders. MEASURED at 46.5
+	   on all three surfaces, since none of it varies with the music.
+
+	   IT IS AN ESTIMATE AND ONLY THE CLAMPS READ IT. The centring itself is
+	   exact whatever this is, because CSS hangs the frame off its centre; this
+	   number only decides when a frame is too tall for the room to centre it
+	   in, and it would have to be wrong by tens of pixels to change that
+	   answer. It is written down rather than inlined so that a change to the
+	   tag's type is a change to something named. */
+	const CHROME = 46.5;
 
 	/* SMuFL's three notehead codepoints, spec-stable and already the registry's
 	   own (`smufl-metadata.ts:85-87`). The insertion bar needs to find the
@@ -311,8 +324,8 @@
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
-		/** Its bottom edge, as a distance up from the viewport's bottom. */
-		foot: number;
+		/** The y its CENTRE sits on; the frame hangs off it at -50%. */
+		centreY: number;
 		system: number;
 		systems: number;
 	}
@@ -699,17 +712,20 @@
 		/* The tallest drawing the page can produce, which is the narrowest
 		   measure's, capped by the magnification this modality asks for. */
 		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, width);
-		/* THE LOUPE SITS IN THE PAGE'S LOWER THIRD, lifted clear of the stage's
-		   bottom edge. Pinning the BOTTOM rather than the top is what says
-		   "lifted off that edge by this much" directly, and it puts the frame
-		   as low as the foot allows, which is the lower third wherever the
-		   stage is tall enough to have one. */
-		const foot = restingFoot(
+		/* THE LOUPE IS CENTRED ON THE PAGE'S VISIBLE HEIGHT. It sat in the
+		   page's lower third before, which put it below the eyeline; that was
+		   this desk's own narrowing of Dann's words rather than his ruling,
+		   and he corrected it 2026-08-28.
+
+		   Pinning the BOTTOM rather than the top keeps the anchor on the edge
+		   nearest the singer's thumb. The frame's height is a page-wide
+		   constant since §14, so the two are equivalent here, and the bottom
+		   is the one that cannot drift when the room above it changes. */
+		const centreY = centreOnPage(
+			Math.max(sheet ? sheet.top : 0, 0),
 			stageBottom,
 			window.innerHeight,
-			inset,
-			FOOT_WEIGHT,
-			windowHeight + 40,
+			windowHeight + CHROME,
 			GUTTER,
 		);
 
@@ -723,7 +739,7 @@
 			headViewBox: `0 ${cropTop} ${headWidthUnits} ${cropHeight}`,
 			contentHeight,
 			windowHeight,
-			foot,
+			centreY,
 			system: systemIndexOf(ranges, measureIndex) + 1,
 			systems: ranges.length,
 		};
@@ -802,13 +818,14 @@
 </script>
 
 {#if open && frame}
-	<!-- ONE ANCHOR ON ALL THREE SURFACES: the loupe's own bottom edge, lifted
-	     off the stage's floor. `bottom` rather than `top` so what is pinned is
-	     the edge the lift is measured from, and so the frame cannot drift when
-	     the room above it changes. -->
+	<!-- ONE ANCHOR ON ALL THREE SURFACES: the frame's own CENTRE, on the
+	     page's. It hangs off that point at -50% of its own height, so the
+	     centring is exact without anything here knowing what the frame's
+	     chrome measures. The rise animation carries the same -50%, or the
+	     frame would drop half its height as the animation ended. -->
 	<div
 		class="loupe"
-		style="left: {frame.left}px; width: {frame.width}px; bottom: {frame.foot}px;"
+		style="left: {frame.left}px; width: {frame.width}px; top: {frame.centreY}px;"
 	>
 		<p class="loupe-tag">{tag}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
@@ -878,6 +895,8 @@
 		padding: 10px 10px 12px;
 		border: 1.4px solid var(--stone-700, #44403c);
 		border-radius: 10px;
+		/* Hung off its own centre; see the anchor note on the element. */
+		transform: translateY(-50%);
 		background: var(--paper-light, #f5f1e8);
 		/* ── THREE LAYERS, TO SELL THE LIFT ──────────────────────────────
 		   Ruled by Dann 2026-08-28, out of §15's proposal. The geometry of
@@ -910,11 +929,11 @@
 	@keyframes loupe-rise {
 		from {
 			opacity: 0;
-			transform: translateY(6px);
+			transform: translateY(calc(-50% + 6px));
 		}
 		to {
 			opacity: 1;
-			transform: none;
+			transform: translateY(-50%);
 		}
 	}
 

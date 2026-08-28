@@ -314,33 +314,45 @@ export function pageInset(stageWidth: number, fraction: number): number {
 }
 
 /**
- * The loupe's bottom edge, as a distance up from the viewport's bottom.
+ * The y the loupe's CENTRE sits on, in viewport coordinates.
  *
- * LIFTED CLEAR OF THE PAGE'S BOTTOM EDGE so the page continues visibly
- * underneath, and the gap reads as slightly LARGER than the side insets rather
- * than equal to them. A mathematically equal bottom gap reads as smaller — the
- * mat-cutter's problem — so equality has to be overshot, not met. The weight
- * is the loupe's own: its frame is already padded `10px 10px 12px`, bottom
- * heavier than top, and this repeats that judgement one level out.
+ * Ruled by Dann 2026-08-28, correcting the round before it. That round placed
+ * the loupe in the page's lower third with a ruled gap of 1.4 × the side inset
+ * beneath it. **The lower third was this desk's own narrowing of his words and
+ * was never his ruling**, and the result sat below the eyeline. The loupe is
+ * centred on the page instead, and the foot is now whatever centring leaves
+ * rather than a number of its own.
  *
- * `stageBottom` is where the page stops being visible: the viewport's floor on
- * a desk, the dock's top edge on a phone, whichever the page reaches first.
+ * `stageTop` and `stageBottom` bound as much of the page as the singer can
+ * actually see: the sheet clipped to the room beside the dock and above it —
+ * the viewport's floor on a desk, the dock's top edge on a phone, whichever
+ * the page reaches first.
  *
- * CLAMPED AT THE TOP. Where the visible page is too short to hold the loupe at
- * its full foot — landscape, where the loupe stands 60% as tall as the page
- * one can see — the frame stays on screen and the foot gives way. That case is
- * named in the memo rather than hidden here.
+ * A CENTRE RATHER THAN AN EDGE, because the centre is the thing being ruled.
+ * The caller hangs the frame on it with `translateY(-50%)`, so the centring is
+ * exact whatever the frame's chrome measures; an earlier pass computed a
+ * bottom edge from an estimated height and MEASURED 6.5 px off true centre for
+ * exactly that reason.
+ *
+ * `height` is therefore needed only for the clamps, and only the degenerate
+ * case reads it. WHERE CENTRING IS IMPOSSIBLE, because the frame stands taller
+ * than the room it is centred in, the frame is clamped on screen rather than
+ * centred and the memo says so rather than the code pretending it centred: a
+ * frame whose top has left the screen has lost the tag naming the measure and
+ * the top of the staff with it.
  */
-export function restingFoot(
+export function centreOnPage(
+	stageTop: number,
 	stageBottom: number,
 	viewportHeight: number,
-	inset: number,
-	footWeight: number,
 	height: number,
 	gutter: number,
 ): number {
-	const foot = viewportHeight - stageBottom + inset * footWeight;
-	/* The most it can be lifted before its own top leaves the screen. */
-	const ceiling = viewportHeight - gutter - height;
-	return Math.max(0, Math.min(foot, ceiling));
+	const centre = stageTop + (stageBottom - stageTop) / 2;
+	/* Never so low that the frame crosses the stage's floor, which on a phone
+	   is the dock's top edge. */
+	const lowest = stageBottom - height / 2;
+	/* Never so high that its own top leaves the screen. */
+	const highest = gutter + height / 2;
+	return Math.min(Math.max(Math.min(centre, lowest), highest), viewportHeight - height / 2);
 }
