@@ -1999,3 +1999,263 @@ check is the honest home for this** and remains worth adding deliberately.
 **`~/Downloads/ilya-ship.sh` agrees with both gates as run** — line 79 `900
 passed (900)`, line 80 `464 passed | 5 skipped (469)`. Nothing here asks either
 to move. I read it rather than edited it; **no commits, no ship.**
+
+---
+
+## 24. Appended: the squircle encloses the event, and breathes
+
+**Ruled by Dann**, from the walk on `776c267`: two faults with one cause — the
+squircle was drawn from the notehead's ink alone. It sliced through the
+selected note's accidental; and its padding read as claustrophobic. Governing
+both: it stays a vertical rectangle, never approaching square.
+
+And, mid-round: **the mark must be subtle yet substantial enough to catch the
+eye despite its muted colour** — the figures are not arithmetic to satisfy, so
+they were chosen by looking at full pages.
+
+### First, two things the DOM had to be asked
+
+**The accidental was never a child of its note.** MEASURED: of five accidentals
+in the first system, **zero** sit inside a `[data-event-id]`. The renderer emits
+them before the group opens (`staff-renderer.ts:1023`), because N.71 gave the
+group `pointer-events="none"` and the hit rectangle takes clicks back. So the
+squircle could not have enclosed one however it was padded.
+
+Bound now by a **handle**, `data-of-event`, the lesson this file already learned
+twice: the analysis layer is filtered by `data-analysis` rather than by ink, and
+when that ink went sage to lavender in §20 nothing downstream broke. An
+accidental could be matched by "same y, a little to the left" — and that works
+until the first chord.
+
+**The augmentation dot is not drawn at all.** Grepped: no `augmentationDot`, no
+`dots` in the renderer; line 1093's comment calls ties and dots future work.
+Nothing was invented to enclose. The union takes anything carrying
+`data-of-event`, so a dot needs no work here when the renderer gains one.
+
+Ledger lines are also outside the group. Not named in the ruling, and they
+would widen the box against the portrait proportion, so they are left out —
+reported rather than decided quietly.
+
+### The measurement, on this document at one unit to the pixel
+
+| | |
+|---|---|
+| a stave space | **5.5** |
+| a bare note's ink | **7 wide × 22 tall**, uniform across all 18 events |
+| an accidental's ink | **3.63 – 5.24 wide** |
+| note-to-note ink gap | min **9.19**, median **20.99**, max **39.01** |
+
+### The figures, chosen by eye
+
+Padding **4 across, 9 top and bottom**; minimum width **15**; corner radius
+**6**; proportion floor **2.5 : 1**.
+
+**What I looked at to judge it.** Three settings rendered as FULL PAGES at
+1400×900, with a note carrying an accidental selected, so the mark had to be
+found among six systems of engraving rather than admired in a crop:
+
+| | box, that note | at a glance on a full page |
+|---|---|---|
+| 3 / 6, min 13, r 5 | 19.1 × 47.8 | reads, but slight — a hairline capsule |
+| **4 / 9, min 15, r 6** | **21.1 × 52.8** | **clears the stave visibly top and bottom; found immediately without shouting** |
+| 6 / 14, min 20, r 8 | 25.1 × 62.8 | reaches down into the IPA row and collides with the underlay; reads as an error rather than a mark |
+
+At full-page scale the first two are nearly indistinguishable in width — 19.1
+against 21.1 is below noticing — so the choice was made on height and on where
+the bottom edge lands. The loose setting was rejected for touching the lyric,
+not for being large.
+
+**A bare notehead is no longer shrink-wrapped**: its ink is 7 wide and the box
+is 15, so the minimum, not the padding, decides it.
+
+### The portrait proportion, and the clamp it forced
+
+Width grows only as the ink requires; the generosity goes into the height; and
+where an accidental widens the box, **the height grows to keep 2.5 : 1** rather
+than the box creeping towards square.
+
+That immediately broke closure. A box 2.5 times as tall as it is wide, centred
+on a note near the top of its system, reaches above the viewBox — the renderer
+leaves one space of headroom above the system's highest ink and this box wants
+several. **MEASURED before the clamp: 4.5 units outside.**
+
+Shrinking it there would break the proportion; letting it clip would bring back
+§22's open U. **So the box keeps its size and slides down into the viewBox**,
+which it can always do while still enclosing the ink, because the ink is inside
+the viewBox to begin with. The stroke straddles the path, so half of it is
+clamped in too.
+
+### Confirmed, four cases, both surfaces
+
+`enclosesAll` unions every part of the event — notehead, stem, flag, and the
+accidental found by handle.
+
+| surface | case | box | aspect | encloses all | clear of the crop, top |
+|---|---|---|---|---|---|
+| **desk** | accidental | 20.1 × 50.3 | **2.50** | **yes** | 1.78 |
+| | flag | 15 × 45.5 | 3.03 | **yes** | 1.48 |
+| | high | 15 × 42.8 | 2.85 | **yes** | 4.23 |
+| | low | 15 × 46.2 | 3.08 | **yes** | 7.00 |
+| **phone portrait** | accidental | 21.1 × 52.8 | **2.50** | **yes** | 0.00 |
+| | flag | 15 × 43.5 | 2.90 | **yes** | 7.00 |
+| | high | 15 × 48.3 | 3.22 | **yes** | 0.00 |
+| | low | 15 × 48.3 | 3.22 | **yes** | 7.00 |
+
+Nothing missed, on any of the eight. **Every aspect is 2.50 or taller** — the
+floor binds exactly where an accidental widens the box, which is what it is
+for. The two zeroes are the clamp holding the box flush inside the crop with
+its stroke accounted for: touching, not cut.
+
+### The overlap Dann allowed, and did not need
+
+Computing every event's box against every other event's ink across the system:
+**0 overlapping pairs, worst overlap 0.00 units.** The generosity never reaches
+a neighbour, so the licence to overlap was not spent. Box widths across the
+document are 15, 20.1 and 21.1 against a minimum note-to-note ink gap of 9.19
+— they do not meet because the box grows from the note's centre and the gap is
+measured between ink edges.
+
+### Kept
+
+Sage. Closed at every staff height. Spanning the stave as a floor. Out of print.
+Out of the loupe — MEASURED again, two ring elements reach the clone and zero
+render. Same corner-radius family, 6 where §23 had 4.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `464 passed \| 5 skipped (469)` | **`465 passed \| 5 skipped (470)`** |
+
+**Gate 5 moved, 464 → 465.** One test, on the handle rather than on the
+squircle: every `data-of-event` names a real event on the page. That is the
+part a unit gate can hold. The squircle itself is still canvas metrics against
+a live SVG, which jsdom cannot reach, so the tables above are what judge it —
+the same limitation §22 and §23 recorded, and the same standing case for a
+browser-level check.
+
+**`~/Downloads/ilya-ship.sh:80` says `464 passed | 5 skipped (469)` and must
+move to `465 passed | 5 skipped (470)`** when this ships; line 79's `900 passed
+(900)` still agrees. I read it rather than edited it; **no commits, no ship.**
+
+---
+
+## 25. Appended: the augmentation dot, drawn
+
+**Dann's question**: can he assign a dotted quarter and see it? Answered in the
+build, and it rides with §24.
+
+### 1. Which half existed
+
+**The correction half was complete. The drawing half did not exist at all.**
+
+| | |
+|---|---|
+| the dot cell reaches the stored diff | **YES** — `+page.svelte`'s `handleDotCell` cycles 0 → 1 → 2 → 0 and calls `correct({ dots })` |
+| the diff schema carries it | **YES** — `correction.ts:51`, `dots?: number`, and it predates slice 3 |
+| the arithmetic treats a dot as 1.5× | **YES** — `correction.ts:145`, `durationFraction` returns `(2^(dots+1) − 1) / 2^dots` times the base, and `applyCorrections` writes that `fraction` onto the event |
+| the measure count reads it | **YES** — `entry.ts:393`, `measureFill` sums `duration.fraction`, so it never sees `base` or `dots` and cannot disagree with them |
+| the renderer draws it | **NO** — grepped: no `augmentationDot`, no `dots` anywhere in `staff-renderer.ts`. Line 1093's comment, "Ties and dots may refine this again", was the only trace |
+
+So a dotted quarter has always counted and never shown. That is the worst
+shape a half-built feature can take, because the page and the arithmetic
+disagree silently.
+
+### 2. Built, at Gould's placement — and the project already holds it
+
+**Cited: Gould r111, p.54**, in `memo-gould-dimensional-priors_r1_2026-08-24.md`
+— a duration dot is about **half a stave-space clear of the notehead**,
+**centred in a stave-space**, so **a note sitting on a line takes the space
+above**. Not NOT ESTABLISHED: the priors memo carries it, with the page.
+
+That memo also carries r111's own hazard (its §4): half a space is inside the
+fill-in danger band, where a dot can fuse into the notehead's ink at small
+sizes. **The clearance is kept as Gould gives it** and the caution is recorded
+in the code rather than the number quietly widened.
+
+**Size is the font's**, not ours: `augmentationDot` was already in the registry
+at `smufl-metadata.ts:88`, so the dot is drawn and measured like every other
+glyph on the stave.
+
+**The second dot's spacing is NOT ESTABLISHED.** The priors memo covers one dot
+and says nothing about the gap between two, and the source is off this machine.
+Engraving convention repeats the same clearance, and that is what this does —
+marked in the code so it can be checked if the book is ever photographed.
+
+**And it clears the ledger lines.** A dot centred in a space can never land ON
+a ledger line, but outside the stave it would sit between two, so it is pushed
+past their extent rather than nested inside them.
+
+### 3. The dot carries `data-of-event`, and the squircle encloses it
+
+Same handle §24 gave the accidental, for the same reason: the dot is drawn
+outside the note's group, and the selection squircle unions by handle rather
+than by geometry.
+
+CONFIRMED on a dotted note, live: the page's `data-of-event` count went
+**28 → 29** on one press of the dot cell, and the squircle's own rectangle
+contains that dot's measured ink — `inside: true`.
+
+A trap worth recording: the first enclosure check queried the whole document
+and found **three** elements for one event id, which looked like three dots on
+one note. They are the page's dot and the loupe's two clones of it, the head
+crop and the body crop. Scoped to `.score-page`, it is one.
+
+### 4. A dotted quarter reads as 1.5, and survives a reload
+
+Live, on m. 3:
+
+| | |
+|---|---|
+| readout | `G3 · Eighth` → **`G3 · Eighth · Dot`** |
+| the measure tag's arithmetic | **`m. 3 · system 1 of 6 · 12.5 of 12`** |
+| dots drawn on the page | 28 → **29** |
+| after a reload | **29** — it survives |
+
+**12.5 of 12 is the confirmation.** The bar held twelve eighths; dotting one
+eighth added half an eighth and the count moved by exactly 0.5. The overfull-bar
+clause of slice 3 fired on its own, which is the arithmetic and the tag agreeing
+without being asked to.
+
+**One correction to my own first run.** I reloaded 700 ms after the click and
+read 28 dots back, which would have been reported as data loss. It was my
+probe beating a debounced save: with four seconds first, the dot survives. I
+also scanned `localStorage` for the stored value and found nothing — that
+proves only that the store is not a plain localStorage JSON with that literal
+in it, **not** that nothing was saved, and the reload says plainly that it was.
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `465 passed \| 5 skipped (470)` | **`470 passed \| 5 skipped (475)`** |
+
+**Gate 5 moved, 465 → 470.** Five tests on the dot, against a new
+`renderDemoDotted` fixture — a separate entry point rather than a change to
+`demoScore`, so every existing assertion about the demo's bytes still holds.
+They pin the count, the handle, Gould's two cases (a space note's dot on its
+own line, a line note's in the space above), the second dot's position, and
+that an undotted note draws none.
+
+**Two of my own test bugs, for the record.** The first passed the font as
+`smufl:` where the option is `font:`, so the whole suite silently exercised the
+fallback path and I nearly recorded the fallback's output as the SMuFL one. The
+second read "the notehead" as the first notehead glyph in the group — which is
+the ANALYSIS layer's turning-pitch notehead, drawn earlier in the same group
+with the same glyph. That one accused the renderer of misplacing a dot by 78
+units when the renderer was right. Both are the same lesson as §22's: do not
+identify a thing by its position among its siblings.
+
+**`~/Downloads/ilya-ship.sh:80` says `465 passed | 5 skipped (470)` and must
+move to `470 passed | 5 skipped (475)`** when this ships; line 79's `900 passed
+(900)` still agrees. I read it rather than edited it; **no commits, no ship.**

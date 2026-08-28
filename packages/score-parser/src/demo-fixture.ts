@@ -133,6 +133,28 @@ export function demoScore(): ParsedScore {
   };
 }
 
+/**
+ * The demo with two DOTTED notes, for the augmentation-dot tests.
+ *
+ * The pair is chosen to exercise both halves of Gould r111 (p.54): `n1` is F2,
+ * which sits in a SPACE in bass clef and takes its dot in that space, and `n3`
+ * is B2, which sits ON a line and must take the space ABOVE. `n3` is
+ * double-dotted so the second dot's placement is covered too.
+ *
+ * A separate entry point rather than a change to `demoScore`, so every
+ * existing assertion about the demo's bytes still holds.
+ */
+export function renderDemoDotted(options?: StaffRenderOptions): string {
+  const parsed = demoScore();
+  const ipaPreview = Object.fromEntries(lastIpaPreview);
+  for (const ev of parsed.vocalLine) {
+    if (ev.id === 'n1') ev.duration = { ...ev.duration, dots: 1, fraction: frac(3, 8) };
+    if (ev.id === 'n3') ev.duration = { ...ev.duration, dots: 2, fraction: frac(7, 32) };
+  }
+  const analyzed = analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+  return renderAnalyzedStaff(parsed, analyzed, { ...options, ipaPreview });
+}
+
 /** Analyse the demo and mark n2 as a phonation break (as the diction layer would). */
 export function renderDemo(options?: StaffRenderOptions): string {
   const parsed = demoScore(); // populates lastIpaPreview as a side effect

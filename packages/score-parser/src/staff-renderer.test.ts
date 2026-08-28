@@ -12,7 +12,13 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { demoScore, renderDemo, renderDemoUnmeasured, syntheticSmuflFont } from './demo-fixture';
+import {
+  demoScore,
+  renderDemo,
+  renderDemoDotted,
+  renderDemoUnmeasured,
+  syntheticSmuflFont,
+} from './demo-fixture';
 import { columnAdvance, clampHyphenX, HYPHEN_HALF } from './staff-renderer';
 
 // ── N.11: a hyphen's ink stays inside the gap ────────────────────────
@@ -335,6 +341,21 @@ describe('staff renderer: the four analytical criteria', () => {
     const turning = svg.match(/<[^>]*data-analysis="turning-[^"]*"[^>]*>/g) ?? [];
     expect(turning.length).toBeGreaterThan(0);
     for (const mark of turning) expect(mark).toContain('#8E7E9B');
+  });
+
+  it('binds a note’s accidental back to it with data-of-event', () => {
+    // Dann's walk on `776c267`: the selection squircle sliced through the
+    // accidental of the note it was meant to enclose, because an accidental is
+    // emitted BEFORE the note's group opens and so has never been its child.
+    // A handle, not geometry — "same y, a little to the left" works until the
+    // first chord.
+    const bound = svg.match(/data-of-event="([^"]+)"/g) ?? [];
+    expect(bound.length).toBeGreaterThan(0);
+    // Every id it names is a real event on the page.
+    for (const m of bound) {
+      const id = m.slice('data-of-event="'.length, -1);
+      expect(svg.includes(`data-event-id="${id}"`), id).toBe(true);
+    }
   });
 
   it('binds every note by data-event-id', () => {
@@ -675,5 +696,59 @@ describe('staff renderer: clef passes (v37 §A.17)', () => {
     expect(treble.includes(String.fromCodePoint(0xe062))).toBe(false); // no fClef
     const tenor = renderDemo({ clef: 'treble-8vb', font, fontFamily: 'TestFont' });
     expect(tenor.includes(String.fromCodePoint(0xe052))).toBe(true); // gClef8vb
+  });
+});
+
+describe('augmentation dots', () => {
+  // Added 2026-08-28 on Dann's question: a dotted quarter could be assigned
+  // and counted, and nothing drew it. Placement is Gould r111, p.54, which the
+  // priors memo already holds: half a stave-space clear of the notehead,
+  // centred IN a stave-space, so a line note takes the space above.
+  const svg = renderDemoDotted({ font: syntheticSmuflFont(), fontFamily: 'TestFont' });
+  const DOT = String.fromCodePoint(0xe1e7);
+  const dots = [...svg.matchAll(new RegExp(`<text[^>]*>${DOT}</text>`, 'g'))].map((m) => m[0]);
+
+  it('draws a dot for a dotted note, and two for a double dot', () => {
+    // n1 single, n3 double.
+    expect(dots.length).toBe(3);
+  });
+
+  it('binds every dot to its own note, so the squircle can enclose it', () => {
+    for (const d of dots) expect(d).toMatch(/data-of-event="/);
+    expect(dots.filter((d) => d.includes('data-of-event="n1"')).length).toBe(1);
+    expect(dots.filter((d) => d.includes('data-of-event="n3"')).length).toBe(2);
+  });
+
+  it('puts a LINE note’s dot in the space above, and a space note’s in its own', () => {
+    const yOf = (mark: string): number => Number(/ y="(-?[\d.]+)"/.exec(mark)![1]);
+    /* The SUNG notehead, found by its glyph and NOT by its place in the group.
+       Two traps live here: the group opens with a hit rectangle, so "the first
+       y" is not a notehead's; and the analysis layer draws a turning-pitch
+       notehead in the same group, with the same glyph, earlier — taking that
+       one reads the formant's pitch instead of the singer's. */
+    const headY = (id: string): number => {
+      const g = new RegExp(`<g data-event-id="${id}"[^]*?</g>`).exec(svg)![0];
+      const heads = [...g.matchAll(/<text[^>]*>[\uE0A2-\uE0A4]<\/text>/g)]
+        .map((m) => m[0])
+        .filter((m) => !m.includes('data-analysis'));
+      return yOf(heads[0]);
+    };
+    // n1 is F2, a space in bass clef: its dot shares the notehead's own y.
+    const n1 = dots.find((d) => d.includes('"n1"'))!;
+    expect(yOf(n1)).toBeCloseTo(headY('n1'), 5);
+    // n3 is B2, a LINE: its dot rises into the gap above, by half a space.
+    const n3 = dots.filter((d) => d.includes('"n3"'));
+    expect(headY('n3') - yOf(n3[0])).toBeGreaterThan(0);
+  });
+
+  it('sets both of a double dot at the same height, and the second to the right', () => {
+    const n3 = dots.filter((d) => d.includes('"n3"'));
+    const xy = (m: string) => ({ x: Number(/ x="(-?[\d.]+)"/.exec(m)![1]), y: Number(/ y="(-?[\d.]+)"/.exec(m)![1]) });
+    expect(xy(n3[1]).y).toBeCloseTo(xy(n3[0]).y, 5);
+    expect(xy(n3[1]).x).toBeGreaterThan(xy(n3[0]).x);
+  });
+
+  it('draws no dot on an undotted note, which is every other event', () => {
+    expect(dots.filter((d) => d.includes('"n2"')).length).toBe(0);
   });
 });

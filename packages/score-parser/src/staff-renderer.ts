@@ -345,6 +345,26 @@ function analysisMark(markup: string, kind: string): string {
 }
 
 /**
+ * Bind a mark drawn OUTSIDE a note's group back to that note.
+ *
+ * WHY ANY OF THIS IS OUTSIDE THE GROUP. The group carries
+ * `pointer-events="none"` for N.71's reason, and the accidental is emitted
+ * before it opens, so an accidental has never been a child of the note it
+ * belongs to. Nothing needed the association until Dann's walk on `776c267`
+ * found the selection squircle slicing through the accidental of the note it
+ * was meant to enclose.
+ *
+ * A HANDLE RATHER THAN GEOMETRY, the lesson this file already learned twice:
+ * the analysis layer is filtered by `data-analysis` and not by its ink, and
+ * when that ink later changed from sage to lavender nothing downstream broke.
+ * An accidental could be matched to its note by "same y, a little to the
+ * left", and that would work until the first chord.
+ */
+function partOfEvent(markup: string, id: string): string {
+  return markup.replace(/^<(\w+) /, `<$1 data-of-event="${esc(id)}" `);
+}
+
+/**
  * Standard per-clef octave placement for key-signature accidentals.
  * treble-8vb shares the treble tables: it is treble geometry with a
  * sounding-octave marker, not a different staff mapping.
@@ -1019,13 +1039,75 @@ export function renderAnalyzedStaff(
         if (name) {
           const accW = sp(smufl.glyph(name).widthSp);
           const gx = Math.max(nx - headHalfW - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
-          parts.push(glyphAt(name, gx, y, '#1a1612', true));
+          parts.push(partOfEvent(glyphAt(name, gx, y, '#1a1612', true), ev.id));
         }
       } else {
         const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
-        if (g) parts.push(`<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`);
+        if (g)
+          parts.push(
+            partOfEvent(
+              `<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`,
+              ev.id,
+            ),
+          );
       }
       measureAcc[accKey] = pitch.alter;
+    }
+
+    /* ── AUGMENTATION DOTS ───────────────────────────────────────────────
+       Added 2026-08-28 on Dann's question: he could assign a dotted quarter
+       and the arithmetic counted it, but nothing drew it. The correction half
+       was complete — the dot cell reaches the stored diff, `durationFraction`
+       gives a dot its 1.5x, and the measure tag counts it — and this file drew
+       no dot at all.
+
+       PLACEMENT IS GOULD'S, and the project already holds it: **r111, p.54**
+       (`memo-gould-dimensional-priors_r1_2026-08-24.md`) — a duration dot sits
+       about half a stave-space clear of the notehead, CENTRED IN A
+       STAVE-SPACE, so a note sitting on a line takes the space ABOVE. That
+       memo also flags r111's own hazard (its §4): half a space is inside the
+       fill-in danger band, where a dot risks fusing into the notehead's ink at
+       small sizes. The clearance is kept as Gould gives it and the caution is
+       recorded here rather than silently widened.
+
+       SIZE IS THE FONT'S, not a number of ours: the `augmentationDot` glyph
+       was already in the registry (`smufl-metadata.ts:88`), so it is drawn and
+       measured like every other glyph on the stave.
+
+       THE SECOND DOT'S SPACING IS **NOT ESTABLISHED**. The priors memo covers
+       one dot and says nothing about the gap between two, and the source is
+       off this machine. Engraving convention is that a double dot repeats the
+       same clearance, and that is what this does — marked so it can be checked
+       if the book is ever photographed.
+
+       AND IT CLEARS THE LEDGER LINES. A dot centred in a space can never land
+       ON a ledger line, but outside the stave it would sit between two of
+       them, so it is pushed past their extent rather than nested inside.
+
+       `data-of-event` FOR THE SAME REASON THE ACCIDENTAL CARRIES IT: this is
+       drawn outside the note's group, and the selection squircle unions by
+       that handle. */
+    const dotCount = ev.type === 'note' ? (ev.duration.dots ?? 0) : 0;
+    if (dotCount > 0) {
+      const steps = (y - o.staffMidY) / half;
+      /* An even number of half-spaces from the middle line is a LINE. */
+      const onLine = Math.abs(steps - Math.round(steps)) < 0.01 && Math.round(steps) % 2 === 0;
+      const dotY = onLine ? y - o.lineGap / 2 : y;
+      const clear = sp(0.5);
+      let dotX = nx + headHalfW + clear;
+      if (Math.abs(dotY - o.staffMidY) > 2 * o.lineGap) dotX = Math.max(dotX, nx + ledgerHalf + clear);
+      const dotW = smufl ? sp(smufl.glyph('augmentationDot').widthSp) : sp(0.4);
+      for (let d = 0; d < dotCount; d++) {
+        const dx = dotX + d * (dotW + clear);
+        parts.push(
+          partOfEvent(
+            smufl
+              ? glyphAt('augmentationDot', dx, dotY, '#1a1612', true)
+              : `<circle cx="${round2(dx + dotW / 2)}" cy="${round2(dotY)}" r="${round2(dotW / 2)}" fill="#1a1612"/>`,
+            ev.id,
+          ),
+        );
+      }
     }
 
     // N.71 (Dann, 2026-08-16): the group is `pointer-events="none"` so that

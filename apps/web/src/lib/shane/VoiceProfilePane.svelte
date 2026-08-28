@@ -280,8 +280,25 @@
 	   out of every exported artifact by construction; and it carries
 	   `data-note-selected`, which is what the loupe already strips from its
 	   clone, so the ring leaves the loupe with no change there at all. */
-	const RING_PAD = 3;
-	const RING_RADIUS = 4;
+	/* ── THE SQUIRCLE'S PROPORTIONS ──────────────────────────────────────
+	   Ruled by Dann 2026-08-28, from the walk on `776c267`, and chosen BY EYE
+	   against full pages rather than by arithmetic: the mark must be subtle
+	   and still catch the eye despite its muted sage. What each is, and what
+	   was looked at to settle it, is in §24 of the slice 4 memo.
+
+	   MEASURED FIRST, on this document at one unit to the pixel: a stave space
+	   is 5.5, a bare note's ink is 7 wide by 22 tall, note-to-note ink gaps run
+	   9.19 to 39.01 with a median of 20.99, and an accidental's ink is 3.63 to
+	   5.24 wide. */
+	const RING_PAD_X = 4;
+	const RING_PAD_Y = 9;
+	/** The narrowest the box may be, so a bare notehead is not shrink-wrapped. */
+	const RING_MIN_W = 15;
+	/** Height over width. It must never approach square. */
+	const RING_ASPECT = 2.5;
+	const RING_RADIUS = 6;
+	/** Kept here as well as in the stylesheet: the clamp has to know it. */
+	const RING_STROKE = 2;
 
 	/** A glyph's INK, not its font box. The distinction is the whole bug. */
 	function glyphInk(el: SVGTextElement): { top: number; bottom: number; left: number; right: number } | null {
@@ -364,15 +381,76 @@
 				bottom = Math.max(bottom, b.y + b.height);
 			}
 		}
+		/* THE REST OF THE EVENT, which is not in the group. An accidental is
+		   emitted before the group opens, so it is bound back by handle
+		   (`staff-renderer.ts`'s `partOfEvent`) rather than found by geometry.
+		   The union is written to take anything so bound, so an augmentation
+		   dot needs no work here when the renderer gains one — TODAY IT DRAWS
+		   NONE, which §24 records. */
+		for (const part of root.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)) {
+			let box: { top: number; bottom: number; left: number; right: number } | null = null;
+			if (part.tagName === 'text') {
+				box = glyphInk(part as SVGTextElement);
+			} else {
+				try {
+					const b = (part as SVGGraphicsElement).getBBox();
+					if (b && (b.width || b.height))
+						box = { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width };
+				} catch {
+					box = null;
+				}
+			}
+			if (!box) continue;
+			top = Math.min(top, box.top);
+			bottom = Math.max(bottom, box.bottom);
+			left = Math.min(left, box.left);
+			right = Math.max(right, box.right);
+		}
 		if (!Number.isFinite(left) || !Number.isFinite(right)) return;
+
+		/* WIDTH GROWS ONLY AS THE INK REQUIRES; the generosity goes into the
+		   height. A minimum keeps a bare notehead from being shrink-wrapped. */
+		const width = Math.max(RING_MIN_W, right - left + RING_PAD_X * 2);
+		const centreX = (left + right) / 2;
+		/* AND THE PORTRAIT PROPORTION IS A FLOOR, not an outcome. Where an
+		   accidental widens the box, the HEIGHT grows to keep it — the box
+		   never approaches square. */
+		const height = Math.max(bottom - top + RING_PAD_Y * 2, width * RING_ASPECT);
+		const centreY = (top + bottom) / 2;
+
+		/* AND IT SLIDES RATHER THAN SHRINKS. A box 2.5 times as tall as it is
+		   wide, centred on a note near the top of its system, reaches above the
+		   viewBox — the renderer leaves only one space of headroom above the
+		   system's highest ink, and this box wants several. MEASURED before the
+		   clamp: 4.5 units outside on a note carrying an accidental.
+
+		   Shrinking it there would break the proportion Dann ruled, and letting
+		   it clip would bring back the open U. So the box keeps its size and
+		   moves down into the viewBox, which it can always do while still
+		   enclosing the ink, because the ink is inside the viewBox to begin
+		   with. Only a box taller than the whole system could not, and that
+		   case is reported rather than silently squashed. */
+		let y = centreY - height / 2;
+		const vb = (group.closest('[data-system]')?.getAttribute('viewBox') ?? '').split(/\s+/).map(Number);
+		if (vb.length === 4 && Number.isFinite(vb[1]) && Number.isFinite(vb[3])) {
+			/* The stroke straddles the path, so half of it lies outside the
+			   rectangle's own edge and has to be kept inside the viewBox too. */
+			const bleed = RING_STROKE / 2;
+			const highest = vb[1] + bleed;
+			const lowest = vb[1] + vb[3] - height - bleed;
+			y = Math.min(Math.max(y, highest), Math.max(highest, lowest));
+			/* Never at the cost of leaving the ink outside. */
+			y = Math.min(y, top);
+			y = Math.max(y, bottom - height);
+		}
 
 		const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		ring.setAttribute('data-selection-ring', '');
 		ring.setAttribute('data-note-selected', '');
-		ring.setAttribute('x', String(left - RING_PAD));
-		ring.setAttribute('y', String(top - RING_PAD));
-		ring.setAttribute('width', String(right - left + RING_PAD * 2));
-		ring.setAttribute('height', String(bottom - top + RING_PAD * 2));
+		ring.setAttribute('x', String(centreX - width / 2));
+		ring.setAttribute('y', String(y));
+		ring.setAttribute('width', String(width));
+		ring.setAttribute('height', String(height));
 		ring.setAttribute('rx', String(RING_RADIUS));
 		group.appendChild(ring);
 	});
