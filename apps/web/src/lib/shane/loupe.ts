@@ -87,6 +87,60 @@ export interface TapTarget {
 	id: string;
 	cx: number;
 	cy: number;
+	/** The band a tap must land in, if this target is bounded. See `tapBand`. */
+	top?: number;
+	bottom?: number;
+}
+
+/* ── HOW FAR BEYOND THE STAFF A TAP STILL COUNTS ─────────────────────────
+   Dann's walk on `893ccb4` found the page's tap band unbounded vertically: a
+   click an inch below the staff still raised the loupe, because the search
+   took the nearest hit rectangle's centre with no limit on how far away that
+   was. Ruled: a tap must land on or near the staff to count, bounded in
+   STAVE-SPACES and not pixels so it holds at every zoom.
+
+   FINE POINTERS GET TWO LEDGER LINES' WORTH, plus the half-space a notehead
+   sitting on the second of them occupies: 2.5 spaces beyond the staff. That is
+   not only the ruling's own figure, it is this document's: MEASURED for §14,
+   the highest ink on the page stands 13.88 units above the staff's top line
+   against a 5.5-unit space, which is 2.52 spaces. So the band covers every
+   note the engraving actually draws and little else.
+
+   COARSE POINTERS GET SEVEN, and the number is the thumb's, not the music's.
+   MEASURED on the portrait thumbnail, one stave-space is 2.57 px and the
+   renderer's own hit rectangle is 28.3 px tall — well under the 44 px floor
+   this project holds for touch. Clearing 44 needs 17.1 spaces of total band,
+   so seven beyond the staff gives 18 spaces, 46.3 px, and clears it. GEOMETRY
+   ANSWERS MODALITY (principle 7): the same staff, read twice.
+
+   WHAT THIS COSTS, said plainly: on the portrait thumbnail the systems are
+   pitched 49 px apart, so bands 46.3 px tall very nearly meet, and between two
+   systems a tap picks whichever staff is nearer rather than nothing. The band
+   still ends: taps in the title, in the margins, beside the page and below the
+   last system now do nothing, which is the defect that was reported. */
+export const FINE_TAP_SPACES = 2.5;
+export const COARSE_TAP_SPACES = 7;
+
+/**
+ * One target's tap band, from the hit rectangle the renderer drew for it.
+ *
+ * The rectangle runs `staffTop - 3.5 * lineGap` to `staffBottom + 3.5 * lineGap`
+ * around a staff of `4 * lineGap` (`staff-renderer.ts:1007-1011`), so it is
+ * eleven spaces tall with the staff as its middle four, and one space is an
+ * eleventh of it. That is the same arithmetic the loupe recovers `lineGap` by,
+ * and it is why the band can be read off the rectangle without the caller
+ * knowing anything about the renderer's units.
+ */
+export function tapBand(
+	rectTop: number,
+	rectHeight: number,
+	spaces: number,
+): { top: number; bottom: number } {
+	const space = rectHeight / 11;
+	return {
+		top: rectTop + (3.5 - spaces) * space,
+		bottom: rectTop + (7.5 + spaces) * space,
+	};
 }
 
 /**
@@ -102,6 +156,12 @@ export function nearestTarget(targets: readonly TapTarget[], x: number, y: numbe
 	let best: string | null = null;
 	let bestD = Infinity;
 	for (const t of targets) {
+		/* A TARGET MAY CARRY A BAND, and where it does the tap must land inside
+		   it however near the centre is otherwise. A target without one is
+		   unbounded on purpose: the loupe's own targets live inside a window
+		   that is cropped and `overflow: hidden`, so the window is already the
+		   bound and a second one would only be a place for the two to drift. */
+		if (t.top !== undefined && (y < t.top || y > t.bottom!)) continue;
 		const dx = t.cx - x;
 		const dy = t.cy - y;
 		const d = dx * dx + dy * dy;

@@ -446,6 +446,71 @@ any of them count.
 > Usage, last read Wednesday evening: Fable 82%, resets Sunday 05:00. Not
 > re-read since; the build ran on Code and the walks on Dann's eye.
 
+> **2026-08-27, THE DESKTOP DAY: SLICE 4 IS DONE AND THE MOBILE TRACK IS
+> COMPLETE. Every look walked by Dann on the deploy.**
+>
+> **Floor rises `1069fe9` -> `9c49fb8` -> `fd8bc47` -> `00637e3` ->
+> `9fabbf1` -> `1758d0c` -> `893ccb4`.** Gate 4 walked 872 -> 880 -> 887 ->
+> 889 by real tests; gate 5 moved once, 461 -> 462, for the analysis-handle
+> test. `ilya-ship.sh:79-80` say 889 and 462, edited over the bridge by the
+> desk before each ship.
+>
+> **Slice 4 built the homecoming**: the drawer's correction station and the
+> phone's dock became ONE component in two containers
+> (`CorrectionSurface.svelte`; `CorrectionControls` and `ShiftLyricsControl`
+> deleted), the loupe arrived on desktop at 2.18x derived from a readable
+> 12 px stave, arrow keys drive the stepper, Escape dismisses, and the
+> per-note Restore and N.65's placed-syllable counter were restored into the
+> shared surface with a guard: Restore is offered only where the READ still
+> carries the entry, so a word promising restoration can never delete.
+>
+> **Dann's rulings on the desktop walks, in order:** the desktop page click
+> stops placing a syllable, so the modalities are identical; up and down
+> arrows stay on the pitch verbs; the insertion bar is LAVENDER (voice) and
+> the held-measure mark stays sage (text); a desk click outside the loupe
+> dismisses it, an accepted disparity with the phone; the three station
+> headers consolidate under ONE header, `Corrections` / « Corrections »,
+> with LYRIC riding inside as a labelled row, on BOTH surfaces, and in the
+> drawer Corrections moves below Source while Analysis moves up under
+> Notation (text tools top, music tools bottom); the dot cell cycles dot,
+> double dot, none, at true engraving proportion with no size exemption;
+> the tie is a filled two-curve taper at **0.40**, chosen by DANN'S EYE from
+> a rendered comparison, NOT Gould (rules 150-175 excluded, book off this
+> machine, and Maestro carries no composable tie in all 2,728 glyphs);
+> the loupe is an engraving-only control surface, so analysis overlays are
+> filtered out of it, by a real `data-analysis` handle on every mark rather
+> than by colour; the loupe never exceeds the page's width, centres
+> horizontally on the page, is cut to the page's ink band (one constant
+> height, verified across steps), sits inset a SIXTEENTH of the page's width
+> on both sides, and is CENTRED VERTICALLY on the page; and it lifts with a
+> three-layer shadow (contact, mid, ambient, opacity falling as blur rises).
+>
+> **Two desk faults owned in-thread:** the desk narrowed Dann's "centre it
+> or place it in the bottom third" to "lower third" without asking, which
+> cost a wrong placement and a wasted round; and the desk's one-name
+> recommendation for the containers collided with N.62's ratified strings
+> (tether 17), resolved by Dann as `Controls` / « Commandes » on both.
+>
+> **N.102 numbered by Dann 2026-08-27**: courtesy accidentals. They do NOT
+> exist in Ilya today (`staff-renderer.ts:963` draws only REQUIRED
+> accidentals), so the slice 2 walk's apparent courtesy was a mandatory
+> cancellation. Own control, own French, own parenthesis-glyph question.
+>
+> **THE ONE THING: the measure tap band.** Dann's last finding: the page's
+> tap band is unbounded vertically, so a click an inch below the staff still
+> raises the loupe. Ruled: bound it in STAVE-SPACES, tight on a fine pointer
+> (about two ledger lines), generous on a coarse one so a thumb can still
+> pick a measure on the portrait thumbnail (principle 7). The brief exists
+> in the 2026-08-27 thread; re-write it if it is not to hand. Nothing else
+> is owed on the mobile track.
+>
+> **Waiting, all Dann's to order:** N.83's walkthrough call (deferred by
+> him: "I will tell you when to plan the call"), N.84 the Guide redo (which
+> he deferred so the Guide reflects the finished build), N.94, and the
+> release order N.85 through N.88. INBOX carries: barline correction, the
+> Lamm read's metre provenance, a Redo pill, the print button under the
+> paper on a phone, and the floor-commit restore flakiness.
+
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
 **Dann opened the release question: what remains before a release, plus six

@@ -9,6 +9,8 @@
 
 import { describe, it, expect } from 'vitest';
 import {
+	COARSE_TAP_SPACES,
+	FINE_TAP_SPACES,
 	centreOnPage,
 	centredViewBox,
 	commonInkBox,
@@ -20,6 +22,7 @@ import {
 	pageInset,
 	parseSystemRange,
 	systemIndexOf,
+	tapBand,
 	windowScale,
 	SWIPE_DISMISS_PX,
 	type Crop,
@@ -318,5 +321,86 @@ describe('the loupe centred on the page', () => {
 
 	it('never pushes the frame past the viewport’s own floor', () => {
 		expect(centreOnPage(0, 400, 200, 100, 24)).toBeLessThanOrEqual(200 - 50);
+	});
+});
+
+describe('the tap band', () => {
+	/* A hit rectangle 11 spaces tall with the staff as its middle four, which
+	   is how the renderer draws them. 5.5 px to the space puts the staff from
+	   19.25 to 41.25 within a rectangle running 0 to 60.5. */
+	const RECT_TOP = 0;
+	const RECT_H = 60.5;
+	const SPACE = RECT_H / 11;
+
+	it('opens two ledger lines’ worth beyond the staff for a fine pointer', () => {
+		const band = tapBand(RECT_TOP, RECT_H, FINE_TAP_SPACES);
+		expect((3.5 * SPACE - band.top) / SPACE).toBeCloseTo(2.5, 10);
+		expect((band.bottom - 7.5 * SPACE) / SPACE).toBeCloseTo(2.5, 10);
+	});
+
+	it('is symmetrical about the staff', () => {
+		const band = tapBand(RECT_TOP, RECT_H, FINE_TAP_SPACES);
+		const staffCentre = 5.5 * SPACE;
+		expect(staffCentre - band.top).toBeCloseTo(band.bottom - staffCentre, 10);
+	});
+
+	it('opens further for a coarse pointer, because a thumb needs it', () => {
+		const fine = tapBand(RECT_TOP, RECT_H, FINE_TAP_SPACES);
+		const coarse = tapBand(RECT_TOP, RECT_H, COARSE_TAP_SPACES);
+		expect(coarse.bottom - coarse.top).toBeGreaterThan(fine.bottom - fine.top);
+	});
+
+	it('clears the 44 px thumb floor on the portrait thumbnail', () => {
+		/* MEASURED there: one stave-space is 2.57 px, so the renderer's own
+		   rectangle is 28.3 px — under the floor. The coarse band is the
+		   reason this passes; the drawn rectangle would not. */
+		const thumbnail = 2.57 * 11;
+		const band = tapBand(0, thumbnail, COARSE_TAP_SPACES);
+		expect(band.bottom - band.top).toBeGreaterThanOrEqual(44);
+		expect(tapBand(0, thumbnail, 3.5).bottom - tapBand(0, thumbnail, 3.5).top).toBeLessThan(44);
+	});
+
+	it('is a fraction of the rectangle, so it holds at every zoom', () => {
+		const small = tapBand(0, 28.3, FINE_TAP_SPACES);
+		const large = tapBand(0, 60.5, FINE_TAP_SPACES);
+		expect((small.bottom - small.top) / 28.3).toBeCloseTo((large.bottom - large.top) / 60.5, 10);
+	});
+});
+
+describe('nearestTarget, bounded', () => {
+	const band = tapBand(0, 60.5, FINE_TAP_SPACES);
+	const bounded = [{ id: 'a', cx: 100, cy: 30.25, ...band }];
+
+	it('answers a tap inside the band', () => {
+		expect(nearestTarget(bounded, 100, 30.25)).toBe('a');
+	});
+
+	it('answers a tap far to the SIDE, since only the vertical is bounded', () => {
+		expect(nearestTarget(bounded, 4000, 30.25)).toBe('a');
+	});
+
+	it('answers NOTHING to a tap below the band, which was the defect', () => {
+		expect(nearestTarget(bounded, 100, band.bottom + 1)).toBeNull();
+		// An inch below the staff, the case Dann reported.
+		expect(nearestTarget(bounded, 100, 30.25 + 96)).toBeNull();
+	});
+
+	it('answers nothing above the band either', () => {
+		expect(nearestTarget(bounded, 100, band.top - 1)).toBeNull();
+	});
+
+	it('leaves an unbanded target unbounded, which is the loupe’s own case', () => {
+		const free = [{ id: 'a', cx: 100, cy: 30 }];
+		expect(nearestTarget(free, 100, 9999)).toBe('a');
+	});
+
+	it('skips a banded target for one whose band does contain the tap', () => {
+		const two = [
+			{ id: 'near', cx: 100, cy: 30.25, ...band },
+			{ id: 'far', cx: 100, cy: 230.25, ...tapBand(200, 60.5, FINE_TAP_SPACES) },
+		];
+		// A tap by the second staff takes it, though the first centre is closer
+		// to nothing in particular — the band, not the distance, decides first.
+		expect(nearestTarget(two, 100, 230.25)).toBe('far');
 	});
 });

@@ -109,7 +109,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
 	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
-	import { isDismissSwipe, nearestTarget } from '$lib/shane/loupe';
+	import {
+		COARSE_TAP_SPACES,
+		FINE_TAP_SPACES,
+		isDismissSwipe,
+		nearestTarget,
+		tapBand,
+	} from '$lib/shane/loupe';
 	import {
 		applyTuplet,
 		arrivalPitch,
@@ -1304,14 +1310,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   either. */
 		const sheet = document.elementFromPoint(e.clientX, e.clientY)?.closest('.score-page');
 		if (!sheet) return;
+		/* THE BAND IS THE POINTER'S, and it is read once per tap rather than
+		   stored, so a trackpad plugged into a tablet is answered as it is
+		   used rather than as the page was first opened. */
+		const coarse = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+		const spaces = coarse ? COARSE_TAP_SPACES : FINE_TAP_SPACES;
 		const targets = [...sheet.querySelectorAll('[data-hit]')].map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
 				id: el.getAttribute('data-hit') ?? '',
 				cx: r.left + r.width / 2,
 				cy: r.top + r.height / 2,
+				...tapBand(r.top, r.height, spaces),
 			};
 		});
+		/* A TAP OUTSIDE EVERY BAND DOES NOTHING AT ALL: no loupe, no cursor
+		   moved, no dismissal of what is already up. It is the same silence a
+		   stray tap beside the loupe already keeps, and for the same reason —
+		   no Undo restores a lost place. */
 		const id = nearestTarget(targets, e.clientX, e.clientY);
 		if (!id) return;
 		setCursor({ kind: 'entry', id });

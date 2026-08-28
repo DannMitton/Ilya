@@ -1418,3 +1418,115 @@ third.
 **`~/Downloads/ilya-ship.sh:79` now says `887 passed (887)`**, moved by Dann
 after §16, and must move again to `889 passed (889)` when this ships. I read it
 rather than edited it; **no commits, no ship.**
+
+---
+
+## 18. Appended: the tap band, bounded
+
+**DEFECT**, from Dann's walk on `893ccb4`: the page's measure tap band is
+unbounded vertically, so a click an inch below the staff still raises the
+loupe. **Ruled**: a tap must land on or near the staff to count, bounded in
+STAVE-SPACES rather than pixels so it holds at every zoom.
+
+### The cause, named
+
+`+page.svelte:1315` handed every hit rectangle on the sheet to `nearestTarget`,
+which takes the nearest centre **with no limit on how far away that centre is**
+(`loupe.ts`). So the sheet was carved into Voronoi cells: every point on the
+page belonged to some measure, and a tap in the title, in the margins, or below
+the last system was simply nearer to one staff than to any other.
+
+Its signature in the measurement is unmistakable. Scanning downward from a
+staff, **there was no offset at which a tap did nothing** — on any of the three
+surfaces. One band ended only where the next began.
+
+### The two figures, proposed from measurement
+
+**Fine pointers: 2.5 spaces beyond the staff.** Two ledger lines, plus the
+half-space a notehead sitting on the second of them occupies. It is also this
+document's own number: MEASURED for §14, the highest ink on the page stands
+13.88 units above the staff's top line against a 5.5-unit space, which is
+**2.52 spaces**. The band covers every note the engraving actually draws.
+
+**Coarse pointers: 7 spaces beyond the staff**, and this number is the thumb's,
+not the music's. MEASURED on the portrait thumbnail, **one stave-space is
+2.57 px** and the renderer's own hit rectangle is **28.3 px tall — well under
+the 44 px floor this project holds for touch.** Clearing 44 needs 17.1 spaces
+of total band, so seven beyond the staff gives 18 spaces and 46.3 px.
+
+That is the finding worth flagging: **the drawn rectangle is not a thumb-sized
+target on the thumbnail, so the coarse band has to exceed what the renderer
+draws.** Geometry answers modality (principle 7) — the same staff, read twice.
+
+The pointer is read per tap from `(pointer: coarse)` rather than stored, so a
+trackpad plugged into a tablet is answered as it is used.
+
+### Before and after, measured on all three
+
+Scanning down in 2 px steps from a staff's centre, recording which measure
+answers:
+
+| surface | space | **before** | **after** | thumb floor |
+|---|---|---|---|---|
+| **desk 1400×900** (fine) | 5.50 px | band ran to 56 px, **never silent** | **±24 px**, 2.36 spaces beyond the staff | 48 px total — clears 44 |
+| **phone portrait 430×932** (coarse) | 2.57 px | band ran to 26 px, **never silent** | **±22 px**, 6.54 spaces beyond | **44 px total — clears 44 exactly** |
+| **phone landscape 932×430** (coarse) | 5.50 px | band ran to 56 px, **never silent** | **±50 px**, 7.09 spaces beyond | 100 px total — clears 44 |
+
+The scan's 2 px step rounds each figure down from the ruled 2.5 and 7.
+
+**A thumb-sized target still lands.** Portrait's band is 44.0 px, at the floor
+rather than over it, which is the tightest of the three and the one that
+mattered.
+
+### What happens to a tap outside the band
+
+**Nothing at all** — no loupe, no cursor moved, and nothing already up is
+dismissed. It keeps the same silence a stray tap beside the loupe already
+keeps, and for the same reason: no Undo restores a lost place.
+
+Tested at the points that made the report:
+
+| tap | before | after |
+|---|---|---|
+| an inch below the last staff (portrait) | **raises m. 17** | **nothing** |
+| in the title block above the first staff | **raises m. 2** | **nothing** |
+| in the left margin, level with a staff | raises m. 2 | **raises m. 2**, unchanged |
+| on the staff itself | raises m. 3 | raises m. 3 |
+
+The margin case is deliberate: **only the vertical is bounded.** A tap to the
+side of a system, level with its staff, still takes the nearest measure in it,
+because the ruling is about height and because a measure's own width is where
+the horizontal answer already lives.
+
+Between systems there is now a genuine dead zone: **62 px of it on the desk**
+(the band ends at 26 px, the next system takes over at 90 px). On the portrait
+thumbnail it is only 4 px, because the systems are pitched 49 px apart and a
+44 px band very nearly fills that. **Said plainly rather than buried**: on a
+phone in portrait, a tap between two systems still picks whichever staff is
+nearer rather than nothing. That is the price of the thumb floor at that zoom,
+and the reported defect — taps far from any staff — is fixed regardless.
+
+The loupe's own tap targets are left unbounded on purpose. They live inside a
+window that is cropped and `overflow: hidden`, so the window is already the
+bound and a second one would only be somewhere for the two to drift apart.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `889 passed (889)` | **`900 passed (900)`** |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | `462 passed \| 5 skipped (467)` |
+
+**Gate 4 moved, 889 → 900.** Eleven tests on `tapBand` and on the bounded
+`nearestTarget`. Two of them pin the defect directly: a target an inch above a
+tap answers **null**, and the coarse band clears 44 px on the thumbnail where
+the drawn rectangle does not.
+
+**`~/Downloads/ilya-ship.sh:79` now says `889 passed (889)`**, moved by Dann
+after §17, and must move again to `900 passed (900)` when this ships. I read it
+rather than edited it; **no commits, no ship.**
