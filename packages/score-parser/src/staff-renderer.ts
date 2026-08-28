@@ -1,7 +1,7 @@
 /**
  * Bespoke SVG staff renderer for the isolated vocal melody plus Shane's
  * Appendix B analytical markup. Chosen over driving an engraver (OSMD /
- * Verovio) by the renderer spike (2026-07-12): the sage turning-pitch
+ * Verovio) by the renderer spike (2026-07-12): the turning-pitch
  * noteheads and red crossing boxes are not notation primitives, so any
  * engraver route needs a fragile coordinate-mapping overlay anyway; the
  * melody-only staff is bounded enough to render ourselves and own every
@@ -23,10 +23,11 @@
  *     timbre, with multi-level beams and stubs for mixed values;
  *   - tuplet brackets and numerals in standard black (Dann's ruling,
  *     2026-07-12: the appendix sample's blue is engraving cosmetics);
- *   - the four analytical marks (forced semantic stems, sage turning-pitch
+ *   - the four analytical marks (forced semantic stems, lavender turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
- *     p. 206) renders in Calm Authority's sage (#8B9A7D, the `--sage` app
+ *     p. 206) renders in Calm Authority's lavender (#8E7E9B, the
+ *     `--deeper-lavender` app
  *     token; see the TURNING_COLOUR constant below), noteheads and
  *     accidentals in one colour, with
  *     its own per-measure accidental carry state independent of the sung
@@ -285,12 +286,19 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
 };
 
 /**
- * Turning-pitch layer colour: Calm Authority's core sage accent, `--sage`
- * in app.css (Dann's ruling, 2026-07-12: use the existing colour story,
- * not an invented estimate). Baked as hex because this module is pure and
+ * Turning-pitch layer colour: Calm Authority's deeper lavender,
+ * `--deeper-lavender` in app.css. Baked as hex because this module is pure and
  * DOM-free; keep in sync with the app token.
+ *
+ * IT WAS SAGE UNTIL 2026-08-27. Dann's original ruling (2026-07-12) was to use
+ * the existing colour story rather than invent an estimate, and sage was the
+ * accent to hand. His correction is that the colour story had since become
+ * specific: LAVENDER CODES MUSIC AND VOICE — the voice anchor, the loupe's
+ * insertion bar, and the drawer's correction stations all carry this token —
+ * and the turning pitches are formant-derived VOICE DATA. Sage, which codes
+ * the score document and its text, was miscoding them.
  */
-const TURNING_COLOUR = '#8B9A7D';
+const TURNING_COLOUR = '#8E7E9B';
 
 /**
  * A tie's thickness at its centre, in stave spaces, tapering to points at both
@@ -320,14 +328,17 @@ const TIE_CENTRE_SP = 0.4;
  *
  * WHY A HANDLE AND NOT A COLOUR. The loupe is a crop of this SVG and must show
  * engraving concerns only, so it has to exclude these. Two of the four could be
- * found by their ink, `#8B9A7D` and `#b23b3b`, and this file's own tests
+ * found by their ink, the turning colour and `#b23b3b`, and this file's own
+ * tests
  * already do exactly that; the phonation break could not, because it is drawn
  * in full notation ink on purpose. A filter that caught three of four would
  * have suppressed half a layer and left the singer wondering which marks meant
  * something. An attribute catches all four and says what it is.
  *
- * THE COLOURS ARE UNTOUCHED. Nothing about what these marks look like changes,
- * so every existing assertion about their ink still holds.
+ * AND THE HANDLE IS WHY THE COLOUR COULD LATER MOVE. When the turning layer
+ * went from sage to lavender on 2026-08-27, the loupe's filter needed no edit
+ * at all, because it had stopped depending on the ink a year of rulings might
+ * change. That is the argument for the attribute, made in retrospect.
  */
 function analysisMark(markup: string, kind: string): string {
   return markup.replace(/^<(\w+) /, `<$1 data-analysis="${kind}" `);
@@ -1052,7 +1063,7 @@ export function renderAnalyzedStaff(
       parts.push(`<rect data-hit="${esc(ev.id)}" x="${round2(hitL)}" y="${round2(hitTop)}" width="${round2(hitR - hitL)}" height="${round2(hitBottom - hitTop)}" fill="transparent" pointer-events="all" cursor="pointer"/>`);
     }
 
-    // Sage stemless turning-pitch notehead, with its own accidental state
+    // Lavender stemless turning-pitch notehead, with its own accidental state
     // (standard per-measure carry, independent of the sung line).
     if (a) {
       const tp = a.turningPitch;

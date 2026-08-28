@@ -767,10 +767,16 @@
 
 	/* THE PANEL ADDS NOTHING BUT ITS SEAT. It is a tenant of the drawer's
 	   scroll, so it takes the station rule every other tenant carries and no
-	   position of its own. The sage is Studio's accent for the score document,
-	   which is what `NotationFields` above it already uses. */
+	   position of its own.
+
+	   LAVENDER, ruled by Dann 2026-08-28. It was sage, on the reasoning that
+	   sage is Studio's accent for the score document; the ruling is that
+	   lavender codes music and voice and this is a MUSIC station, and that
+	   this rule is what completes the drawer's gradient — sage text stations
+	   at the top, lavender music stations at the foot. The token is the one
+	   the voice anchor and the loupe's insertion bar already carry. */
 	.surface.panel {
-		border-top: 2px solid var(--sage, #8b9a7d);
+		border-top: 2px solid var(--deeper-lavender, #8e7e9b);
 		padding-top: 6px;
 	}
 
@@ -920,7 +926,8 @@
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: var(--sage, #8b9a7d);
+		/* Lavender: a music station. See `.surface.panel`. */
+		color: var(--deeper-lavender, #8e7e9b);
 	}
 
 	/* THE CONTEXTUAL LINE. Its row is reserved whether it speaks or not, so the
@@ -941,7 +948,9 @@
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: var(--sage, #8b9a7d);
+		/* Lavender with the header it sits under. `.station-count` inherits it
+		   from here, which is right: the counter belongs to the label. */
+		color: var(--deeper-lavender, #8e7e9b);
 	}
 
 	/* The counter sits after the label in the same line, quieter than it, so the
@@ -990,16 +999,25 @@
 		cursor: default;
 	}
 
+	/* THE LAST TWO SAGE MARKS IN A LAVENDER SECTION, ruled lavender by Dann
+	   2026-08-28 to finish what §19 began. Both are STATE MARKERS ON MUSIC
+	   VERBS — which duration a fresh entry will take, and which verb the
+	   keyboard is on — so they take the section's own hue rather than the
+	   score document's. */
 	.cell.engaged {
-		border-color: var(--sage, #8b9a7d);
-		color: var(--sage, #8b9a7d);
+		border-color: var(--deeper-lavender, #8e7e9b);
+		color: var(--deeper-lavender, #8e7e9b);
 		font-weight: 600;
 	}
 
+	/* THE RING SITS OUTSIDE THE CELL, not on it: `outline-offset` puts all 2 px
+	   of it on the surface behind, so the contrast that decides whether it can
+	   be seen is against the surface rather than against the cell's own fill.
+	   MEASURED on both, before and after, in §21 of the memo. */
 	.cell:focus-visible,
 	.mark:focus-visible,
 	.undo-pill:focus-visible {
-		outline: 2px solid var(--sage, #8b9a7d);
+		outline: 2px solid var(--deeper-lavender, #8e7e9b);
 		outline-offset: 2px;
 	}
 
@@ -1117,7 +1135,11 @@
 		padding: 0;
 		border: none;
 		background: none;
-		color: var(--sage, #8b9a7d);
+		/* IT FOLLOWS ITS LABEL. A button does not inherit colour from its
+		   parent, so this is pinned rather than left to cascade — and pinned to
+		   sage it would have been the one thing left behind when the label
+		   above turned lavender, splitting one header line across two hues. */
+		color: var(--deeper-lavender, #8e7e9b);
 		font-size: 1rem;
 		line-height: 1;
 		cursor: pointer;

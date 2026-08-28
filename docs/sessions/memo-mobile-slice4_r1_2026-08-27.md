@@ -1530,3 +1530,246 @@ the drawn rectangle does not.
 **`~/Downloads/ilya-ship.sh:79` now says `889 passed (889)`**, moved by Dann
 after §17, and must move again to `900 passed (900)` when this ships. I read it
 rather than edited it; **no commits, no ship.**
+
+---
+
+## 19. Appended: the Corrections stations turn lavender
+
+**Ruled by Dann**, from the walk on `6846d5f`: the Corrections header and the
+divider above it are LAVENDER, not sage, and the Lyric label inside it likewise.
+Lavender codes music and voice and these are the music stations; this also
+completes the drawer's ruled gradient — sage text stations at the top, lavender
+music stations at the foot.
+
+The token is `--deeper-lavender` (`#8E7E9B`). VERIFIED it is the one already in
+use: the voice anchor at the drawer's foot renders `rgb(142, 126, 155)`, and so
+does the loupe's insertion bar (`Loupe.svelte:664`). `--lavender` is not a
+defined token at all; `--light-lavender` is `#C4BACF`, too pale for text.
+
+### What changed, and the one thing that had to follow
+
+Three by ruling — `.surface.panel`'s 2 px rule, `.surface-header`, and
+`.station-label` — and one by consequence:
+
+**The Nolet row's back chevron.** It lives *inside* a `.station-label`, and a
+button does not inherit colour from its parent, so its sage was pinned rather
+than cascaded. Left alone it would have been the one thing not to follow the
+label above it, splitting a single header line across two hues. This is what
+the check for inheritance turned up.
+
+`.station-count`, N.65's placed-syllable counter, sets no colour of its own and
+sits inside the Lyric label, so it inherits lavender — which is right, the
+counter belongs to the label.
+
+### The gradient, measured top to bottom in the drawer
+
+| station rule | before | after |
+|---|---|---|
+| Notation | sage | sage |
+| Repertoire | sage | sage |
+| Source | sage | sage |
+| **Corrections** | **sage** | **LAVENDER** |
+| the voice anchor | lavender | lavender |
+
+Corrections' new rule renders `rgb(142, 126, 155)`, the same value the voice
+anchor below it has always drawn. The gradient reads as ruled.
+
+### Both surfaces
+
+| surface | header | Lyric label | rule above |
+|---|---|---|---|
+| desk, drawer panel | **LAVENDER** | **LAVENDER** | **2 px LAVENDER** |
+| phone portrait, dock | **LAVENDER** | **LAVENDER** | 1 px stone — see below |
+| phone landscape, dock | **LAVENDER** | **LAVENDER** | none |
+
+One component in two containers, so the header and label change on both by
+construction. **The divider clause has no counterpart on the phone**: the dock
+is a floating shell rather than a tenant of the drawer's scroll, so it has no
+station rule above its header — only its own 1 px shell edge in portrait, and
+nothing at all in landscape. Nothing was invented to fill that gap.
+
+### What is still sage inside the surface, and not ruled on
+
+Not named in the ruling, so left alone and reported instead:
+
+- **`.cell.engaged`** — the armed duration's border and text, the marker saying
+  which duration a fresh entry will take.
+- **the focus ring** on every cell, mark and the Undo pill.
+
+Both are state markers on music verbs, so the principle would put them in
+lavender too; neither was enumerated, and each is a visible change. **One line
+from you settles it either way.** Nothing else in the drawer moved: the only
+other sage left is a 1 px input border inside the Source station, which is a
+text station and correctly sage.
+
+---
+
+## 20. Appended: the turning pitches turn lavender
+
+**Ruled by Dann** in the same walk: the Score Markup's formant-derived turning
+pitches change from sage to lavender. They are voice data, and sage — which
+codes the score document and its text — has been miscoding them.
+
+`staff-renderer.ts`'s `TURNING_COLOUR` goes `#8B9A7D` to `#8E7E9B`, the same
+token. The original ruling (2026-07-12) was to use the existing colour story
+rather than invent an estimate, and sage was the accent to hand; the correction
+is that the colour story has since become specific.
+
+### The loupe's filter is unaffected — and this is the handle's whole argument
+
+CONFIRMED. The filter matches `[data-analysis]` (`Loupe.svelte:591`), not ink,
+so **the colour moved and the filter needed no edit at all.** §12's ruling to
+mark first and filter on the handle rather than on colour is what made a later
+ruling on colour free. A filter written against `#8B9A7D` would have broken
+here silently.
+
+Pinned by a new test: every `data-analysis="turning-*"` mark must carry both
+its handle and the current ink, so the two cannot come apart.
+
+### The contrast, measured rather than asserted
+
+The page in the harness has no formant analysis — the voice is not calibrated,
+so there are no turning marks on it to sample. I measured the renderer's own
+geometry instead: the ellipse copied verbatim from `staff-renderer.ts:1098`
+(`rx="6" ry="4.4" opacity="0.85" rotate(-18)`), on the paper the renderer
+actually paints (`#F0EBE0`, read off the system's own background rect),
+rasterised at the portrait thumbnail's MEASURED scale of 0.4681 px per unit —
+one stave-space of 2.5748 px.
+
+| | sage `#8B9A7D` | lavender `#8E7E9B` |
+|---|---|---|
+| nominal contrast on `#F0EBE0` | 2.52 : 1 | **3.15 : 1** |
+| **rendered at the thumbnail's scale** | **2.15 : 1** | **2.58 : 1** |
+| inked pixels | 27 | 27 |
+| darkest pixel | rgb(154, 166, 140) | rgb(157, 142, 166) |
+
+**The marks are more legible than they were, by 20%**, and the footprint is
+identical to the pixel — 27 either way — so nothing about the mark's size or
+shape changed.
+
+**Said plainly rather than left implied: 2.58 : 1 does not clear WCAG's 3:1 for
+non-text contrast.** At that scale the ellipse is about 2.8 × 2.1 px, so
+antialiasing blends most of it toward the paper and the darkest pixel never
+reaches the colour itself — which is why the rendered figure sits below the
+nominal one. Lavender clears 3:1 nominally where sage did not. These are
+analytical overlays on a thumbnail rather than text or a control, and the
+singer reads them at full size or in the loupe; the change improves the number
+and does not fix it.
+
+### Print — a conflict to report rather than assert away
+
+The ruling says colour on paper stays parked behind N.83, so print is
+unchanged. **I changed no print rule.** But I could not confirm the second half
+and think it is not true as stated:
+
+- **No print rule references the analysis layer.** Grepped: nothing in any
+  `@media print` block matches `data-analysis`, and nothing hides it by class.
+- **In print media the sheet itself still renders** — measured with the print
+  medium emulated.
+- The turning marks are emitted whenever the rendered score carries analysis
+  (`staff-renderer.ts:1057`), into the same SVG the sheet prints.
+
+So an analysed score, printed, will carry these marks in the new colour. I
+could not demonstrate it end to end, because turning pitches need a calibrated
+voice and the harness has no microphone; the two findings above are a grep and
+a print-media probe, and I am labelling them as such rather than dressing them
+as a printed page. **If "print is unchanged" was a constraint on the outcome
+rather than on the code, this change reaches paper and one constant reverses
+it.**
+
+**No new user-facing strings in either round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `462 passed \| 5 skipped (467)` | **`464 passed \| 5 skipped (469)`** |
+
+**Gate 5 moved, 462 → 464.** Two tests: the turning layer draws lavender and no
+sage survives in it, and every turning mark carries its handle alongside its
+ink. Gate 4 did not move — §19 is four CSS declarations, judged by the measured
+computed styles above.
+
+**`~/Downloads/ilya-ship.sh` now reads `900 passed (900)` at line 79**, moved by
+Dann, and agrees with gate 4 as run. **Line 80 says `462 passed | 5 skipped
+(467)` and must move to `464 passed | 5 skipped (469)`** when this ships. I read
+it rather than edited it; **no commits, no ship.**
+
+---
+
+## 21. Appended: the last two sage marks
+
+**Ruled by Dann**, closing §19's open question: the armed duration's marker
+(`.cell.engaged`) and the focus ring inside the Corrections surface both go
+lavender. They are state markers on music verbs and were the last sage marks
+left inside a lavender section.
+
+Both take `--deeper-lavender`, the token §19 and §20 already carry. **There is
+now no `var(--sage)` anywhere in `CorrectionSurface.svelte`** — grepped, none
+left, on either variant.
+
+### A measurement I had to throw away first
+
+I focused a cell with `.focus()` and read its computed outline. It reported
+**`outline-width: 0px`** and a colour of `rgb(142, 126, 155)` — which looked
+like the right answer and was not one. **`:focus-visible` does not match a
+scripted focus in Chromium**, so no ring rule applied at all, and the colour I
+read was `currentColor` leaking through `outline-color`'s default. Had the rule
+still said sage, that probe would have reported lavender just the same.
+
+Re-done with a real keyboard arrival — tabbing until `activeElement` is a cell
+that matches `:focus-visible` — the ring is verified on all three:
+
+| surface | element found | ring | `:focus-visible` |
+|---|---|---|---|
+| desk | `surface panel` | 2 px, 2 px offset, `rgb(142, 126, 155)` | **true** |
+| phone portrait | `surface dock portrait` | 2 px, 2 px offset, `rgb(142, 126, 155)` | **true** |
+| phone landscape | `surface dock tight` | 2 px, 2 px offset, `rgb(142, 126, 155)` | **true** |
+
+### The contrast, measured
+
+**The ring sits OUTSIDE the cell, not on it.** `outline-offset: 2px` puts all
+of it on the surface behind, so the contrast that decides whether it can be
+seen is against the surface — measured `rgb(250, 248, 245)`, the drawer's own
+ground. The cell's fill is `rgb(245, 241, 232)`; both are reported because the
+ring reads against the cell's edge as well.
+
+| | sage, before | **lavender, after** | WCAG 3:1 for non-text |
+|---|---|---|---|
+| ring against the surface it sits on | 2.82 : 1 | **3.53 : 1** | **now clears** — did not before |
+| ring against the cell it outlines | 2.66 : 1 | **3.32 : 1** | **now clears** — did not before |
+| engaged cell's border and glyph, against its own fill | 2.66 : 1 | **3.32 : 1** | **now clears** — did not before |
+
+**The ring did not merely keep its contrast, it gained about 25% and crossed
+the 3:1 line on both grounds, where sage cleared neither.** Lavender is simply
+the darker of the two against a warm ground: `#8E7E9B` against `#8B9A7D`.
+
+Looked at on the phone with a cell focused: the ring reads as a ring, its 2 px
+gap holding it clear of the cell's own border, and it does not collide with the
+engaged cell beside it — the engaged state is a coloured border *and* a coloured
+glyph with no gap, the ring is an offset outline with one, so two lavender marks
+side by side still say different things.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `464 passed \| 5 skipped (469)` | `464 passed \| 5 skipped (469)` |
+
+**No gate moved.** This round is three CSS declarations; what judges it is the
+computed styles and the contrast figures above.
+
+**`~/Downloads/ilya-ship.sh` agrees with both moved gates as run**: line 79
+reads `900 passed (900)` and line 80 now reads `464 passed | 5 skipped (469)`,
+moved by Dann for §20's tests. **Nothing in this round asks either to move
+again.** I read the file rather than edited it; **no commits, no ship.**

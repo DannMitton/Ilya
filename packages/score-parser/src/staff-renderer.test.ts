@@ -242,16 +242,16 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   const svg = renderDemo();
 
   it('renders the turning layer in the appendix sage, not the old grey', () => {
-    expect(svg.includes('fill="#8B9A7D"')).toBe(true);
+    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
     expect(svg.includes('#9a968f')).toBe(false);
   });
 
   it('shows the turning D# sharp once, then carries it through the measure', () => {
-    expect((svg.match(/fill="#8B9A7D">♯</g) ?? []).length).toBe(1);
+    expect((svg.match(/fill="#8E7E9B">♯</g) ?? []).length).toBe(1);
   });
 
   it('draws no turning accidental for natural turning pitches', () => {
-    expect((svg.match(/fill="#8B9A7D">♮/g) ?? []).length).toBe(0);
+    expect((svg.match(/fill="#8E7E9B">♮/g) ?? []).length).toBe(0);
   });
 
   it('offsets a colliding turning notehead beside the sung note (two-voice rule)', () => {
@@ -285,7 +285,7 @@ describe('staff renderer: the four analytical criteria', () => {
     expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
   });
   it('2. sage stemless turning-pitch noteheads', () => {
-    expect(svg.includes('fill="#8B9A7D"')).toBe(true);
+    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
   });
   it('3. red squircle at the fR1/fo crossing (n6)', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);
@@ -315,6 +315,26 @@ describe('staff renderer: the four analytical criteria', () => {
         (svg.match(/data-analysis="crossing"/g) ?? []).length +
         (svg.match(/data-analysis="phonation-break"/g) ?? []).length,
     );
+  });
+
+  it('draws the turning layer in LAVENDER, because it is voice data', () => {
+    // Ruled by Dann 2026-08-27, correcting 2026-07-12's sage. Lavender is the
+    // project's shorthand for music and voice — the voice anchor, the loupe's
+    // insertion bar and the drawer's correction stations all carry this token
+    // — and a formant-derived turning pitch is voice data. Sage codes the
+    // score document and its text, and was miscoding these.
+    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
+    expect(svg.includes('#8B9A7D')).toBe(false);
+  });
+
+  it('keeps the handle on the turning marks whatever their ink', () => {
+    // THIS IS THE POINT OF THE HANDLE. The colour moved from sage to lavender
+    // and the loupe's filter needed no edit, because it stopped depending on
+    // ink that a ruling might change. Asserted so the two cannot come apart:
+    // every turning mark carries both its handle and the current colour.
+    const turning = svg.match(/<[^>]*data-analysis="turning-[^"]*"[^>]*>/g) ?? [];
+    expect(turning.length).toBeGreaterThan(0);
+    for (const mark of turning) expect(mark).toContain('#8E7E9B');
   });
 
   it('binds every note by data-event-id', () => {
@@ -383,8 +403,8 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
   it('renders key-signature and layer accidentals as glyphs (flat, natural, sage sharp)', () => {
     expect(svg.includes(String.fromCodePoint(0xe260))).toBe(true); // accidentalFlat (key)
     expect(svg.includes(String.fromCodePoint(0xe261))).toBe(true); // accidentalNatural (n3)
-    const sageSharp = new RegExp(`fill="#8B9A7D">${String.fromCodePoint(0xe262)}<`, 'g');
-    expect((svg.match(sageSharp) ?? []).length).toBe(1); // turning D#, carried
+    const lavenderSharp = new RegExp(`fill="#8E7E9B">${String.fromCodePoint(0xe262)}<`, 'g');
+    expect((svg.match(lavenderSharp) ?? []).length).toBe(1); // turning D#, carried
   });
 
   it('renders the lone flag as a glyph (up-stem eighth n11)', () => {
@@ -419,7 +439,7 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
   const stems = (s: string): number => (s.match(/stroke="#1a1612" stroke-width="1\.5"/g) ?? []).length;
 
   it('draws no acoustic marks at all: no turning layer, no crossing', () => {
-    expect(svg.includes('#8B9A7D')).toBe(false);
+    expect(svg.includes('#8E7E9B')).toBe(false);
     expect(svg.includes('stroke="#b23b3b"')).toBe(false);
   });
 
