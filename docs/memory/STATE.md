@@ -511,6 +511,49 @@ any of them count.
 > Lamm read's metre provenance, a Redo pill, the print button under the
 > paper on a phone, and the floor-commit restore flakiness.
 
+> **2026-08-27 EVENING, THE POLISH RUN: nine more ships, all on Dann's eye.**
+> Floor `6846d5f` -> `95f37aa` -> `44f2a1e` -> `776c267` -> `c9e2b0f`.
+> Gates: 4 at 900, 5 at 470 | 5 skipped (475); `ilya-ship.sh:79-80` say so.
+>
+> **Ruled by Dann, all walked or measured:** the tap band is bounded in
+> STAVE-SPACES (2.5 fine, 7 coarse; the portrait hit rectangle is only
+> 28.3 px, under the 44 floor, so the coarse band must exceed what the
+> renderer draws); Corrections and Lyric and their divider go LAVENDER,
+> completing the drawer's gradient, sage text at the top, lavender music at
+> the foot; the Score Markup's formant turning pitches go LAVENDER too
+> (voice data, and it gained contrast: 3.15:1 nominal against sage's 2.52);
+> the armed-duration marker and focus ring follow (the ring now clears 3:1
+> where sage cleared neither); the page's selection mark is a SQUIRCLE, a
+> tall rounded rectangle spanning the stave, closed at every height, sage
+> for contrast, enclosing the WHOLE EVENT (accidental, notehead, stem,
+> flag, dot) by a `data-of-event` handle, padded 4 across and 9 top and
+> bottom with a 15 minimum and a 2.5:1 portrait floor, chosen by looking at
+> full pages rather than by arithmetic; and the augmentation dot is DRAWN
+> at last, Gould r111 p.54, one tap dot, two double, three none.
+>
+> **The dot's finding, the important one:** its correction, schema, and 1.5x
+> arithmetic all existed and the renderer had never drawn it, so a dotted
+> quarter counted and never showed. Page and arithmetic disagreed silently
+> until Dann asked the question.
+>
+> **ENVIRONMENT gained a hard-won section: THE LAYOUT BOX IS NOT THE INK.**
+> Four incidents in two days; `getBBox` on SVG text returns the font's line
+> box, and a CSS outline boxes the same. Use canvas `measureText` for ink.
+> Its corollary bit twice more: a probe on the wrong instrument returns a
+> plausible number (a scripted `.focus()` never matches `:focus-visible`).
+>
+> **N.102 numbered**: courtesy accidentals, which do not exist today.
+> **For PRODUCT.md, in INBOX**: Dann ruled the squircle a key germ of Ilya's
+> visual vocabulary; transcribe it next session.
+>
+> **THE ONE THING: Dann's walk of the polish run, in one pass.** On the
+> deploy: a click well below a staff does nothing while a click on a measure
+> raises the loupe; the drawer's Corrections and Lyric read lavender under a
+> lavender rule; the turning pitches read lavender on the paper; a selected
+> note wears a closed tall sage squircle that contains its accidental; and a
+> dotted note SHOWS its dot, cycling dot, double dot, none. Nothing else is
+> owed on the mobile track.
+
 ## 2026-08-24. THE RELEASE SESSION: SEVEN RULINGS, EIGHT NUMBERS, TWO AUDITS
 
 **Dann opened the release question: what remains before a release, plus six
