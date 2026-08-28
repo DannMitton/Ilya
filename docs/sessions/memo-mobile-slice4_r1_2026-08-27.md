@@ -2259,3 +2259,129 @@ identify a thing by its position among its siblings.
 **`~/Downloads/ilya-ship.sh:80` says `465 passed | 5 skipped (470)` and must
 move to `470 passed | 5 skipped (475)`** when this ships; line 79's `900 passed
 (900)` still agrees. I read it rather than edited it; **no commits, no ship.**
+
+---
+
+## 26. Appended: the squircle goes under the music, and the measure number measured
+
+Two items from the walk on `dae29f5`. The first was ruled and is built; the
+second was ruled MEASURE ONLY, and is reported below without a fix.
+
+### 1. The squircle draws beneath the notation ink
+
+**Ruled**: put it behind every glyph and drawn mark of the system, keeping
+everything else exactly as ruled. **This was z-order, not geometry** — SVG
+paints in document order and has no `z-index`.
+
+The ring was appended last to the selected note's group, so it painted over
+whatever came earlier in the system. Inside the group it could only ever have
+been under that one note's own parts, which is not what "beneath the music"
+means, so **it moves out of the group to the front of the SYSTEM** — after the
+full-width backdrop rect, because first-child would put it behind the paper and
+draw nothing at all.
+
+MEASURED after the change, on a selected note:
+
+| | |
+|---|---|
+| the ring's position among the system's 143 nodes | **2nd** |
+| what still paints before it | the held-measure rectangle, and the system's backdrop — nothing else |
+| glyphs painting after the ring | **68 of 68** |
+| drawn marks (lines, paths, ellipses) after the ring | **35 of 35** |
+| still inside the note's group | **no** |
+
+Nothing else moved: sage, closed, spanning the stave as a floor, enclosing the
+whole event, the padding and the 15 minimum and the 2.5 : 1 floor, out of
+print, out of the loupe, `pointer-events: none`. Its coordinates are the
+system's and the group carries no transform, so leaving the group changed no
+number.
+
+**The stroke stays legible where it crosses the staff lines.** Looked at at 5×:
+the five staff lines now draw over the sage on each vertical side, interrupting
+it at five hairline points per side. The capsule still reads as closed and
+continuous, and the mark now sits under the engraving the way a highlighter
+does rather than on top of it.
+
+**One thing I could not do: photograph Dann's exact case.** I searched every
+note in the first system whose FOLLOWING note carries an accidental, selected
+each, and measured the squircle against that accidental's ink — plain and then
+dotted. **No overlap occurred**, which agrees with §24's survey of 0 overlapping
+pairs across all 18 events at this zoom. So the enclosure claim below is made
+from the paint order, which is the actual mechanism, rather than from a
+reproduction of the photograph. If the case is reachable at a width I did not
+try, the paint order now makes it harmless by construction: no mark of the
+music can be under the ring.
+
+**N.103 is untouched.** The dot crowding the next note's accidental is measure
+re-spacing and is not this fix's business.
+
+### 2. The measure number: MEASURED, NOT FIXED
+
+**Dann's hypothesis was right.** The tag is faithful to the source; the page
+offers the eye a different count.
+
+**How many measures the source carries before the first vocal note: ONE.**
+The file has two parts — `<part-name>Bass</part-name>` at line 16 and
+`<part-name>Piano</part-name>` at line 24 — and Bass is the vocal part.
+**P1 (Bass) `<measure number="1">`, source lines 33–62, contains 0 `<note>`,
+0 `<rest>` and 0 `<lyric>`.** The first sung note is in `<measure number="2">`,
+line 63. **P2 (Piano) measure 1, lines 2004–2126, carries 5 notes**, so it is a
+genuine piano-only bar rather than an empty one.
+
+**Ilya's page OMITS it rather than rendering it.** MEASURED: hit rectangles on
+the page run `m1-*` through `m17-*` with **no `m0-*` anywhere**, and the event
+id is `m${measureIndex}` 0-based (`musicxml-parser.ts:725`). The first system
+declares `data-system="0-3"` yet draws its first note at x = 56 with its first
+barline at x = 240.69 — there is no bar drawn before the first sung bar.
+
+**Where the tag's number comes from**: `+page.svelte:1102-1106`,
+`heldMeasureLabel`, which reads
+`measures.find((x) => x.index === i).number` — the source's own
+`<measure number>` attribute, copied verbatim at `musicxml-parser.ts:599`.
+
+So: the page's first drawn bar is the source's **m. 2**, its second is the
+source's **m. 3**, and the tag on the visibly-second bar correctly reads m. 3.
+The off-by-one the eye sees is exactly the one omitted piano-only bar.
+
+**Dann has ruled the resolution as N.104**, and it is not a renumbering: the
+page must show every bar the singer counts, a tacet stretch appearing as one
+consolidated rest with the number of silent measures above it. N.104 gets its
+own brief. **Nothing here was changed.**
+
+**One further observation, offered because it bears on the same count.** The
+first system's `data-system` says `0-3` while the measures it draws are source
+indices 1 to 4. The loupe's `systemIndexOf` compares an event's source
+`measureIndex` against those ranges, so the two scales differ by the same one
+bar. It reported "system 1 of 6" correctly here, and I did not chase it; it is
+worth a look when N.104 is built, because N.104 changes what is drawn.
+
+### Gould on multibar rests: NOT ESTABLISHED
+
+The priors memo says so itself, at its own line 220: **"Rest geometry entirely:
+pp.34 to 38 are unphotographed, so no dimensional priors exist for rests at
+all."** There is no Gould dimension in this project for a rest of any kind, let
+alone for a multibar rest's bar thickness, its height, its numeral size, or the
+numeral's clearance above the stave. **N.104 must not take a geometry from this
+desk's invention**; the source needs photographing, or the ruling needs to name
+a convention explicitly and record it as convention the way the tie's 0.40 was
+recorded as Dann's eye.
+
+**No new user-facing strings this round, so no French table.**
+
+### Gates
+
+| gate | expected | got |
+|---|---|---|
+| 1 phonology | `216 passed (216)` | `216 passed (216)` |
+| 2 dictionary | `235 passed (235)` | `235 passed (235)` |
+| 3 web-check | `found 0 errors and 7 warnings in 4 files` | same |
+| 4 web-test | `900 passed (900)` | `900 passed (900)` |
+| 5 score-parser | `470 passed \| 5 skipped (475)` | `470 passed \| 5 skipped (475)` |
+
+**No gate moved.** The change is a move of one element in the DOM, judged by
+the paint-order table above; the measure-number item changed no code at all.
+
+**`~/Downloads/ilya-ship.sh` agrees with both moved gates as run** — line 79
+`900 passed (900)`, line 80 `470 passed | 5 skipped (475)`, moved by Dann for
+§25. Nothing here asks either to move. I read it rather than edited it;
+**no commits, no ship.**

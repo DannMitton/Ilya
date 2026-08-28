@@ -452,7 +452,39 @@
 		ring.setAttribute('width', String(width));
 		ring.setAttribute('height', String(height));
 		ring.setAttribute('rx', String(RING_RADIUS));
-		group.appendChild(ring);
+		/* ── IT GOES UNDER THE MUSIC ─────────────────────────────────────
+		   Ruled by Dann 2026-08-28, from the walk on `dae29f5`: the squircle
+		   draws BENEATH the notation ink. Appended last to the note's group, it
+		   painted over marks that come earlier in the system, and its edge read
+		   as slicing a neighbouring note's accidental. That was z-order, not
+		   geometry — SVG paints in document order and has no `z-index`.
+
+		   SO IT MOVES OUT OF THE GROUP, to the front of the SYSTEM, where every
+		   glyph and every drawn mark is painted after it and therefore over it.
+		   Inside the group it could only ever be under that one note's own
+		   parts, which is not what "beneath the music" means.
+
+		   AFTER THE BACKDROP, THOUGH. The system opens with a full-width rect
+		   that is the paper; first-child would put the ring behind the page
+		   itself and draw nothing at all.
+
+		   NOTHING ELSE MOVES WITH IT. The ring still carries
+		   `data-note-selected`, so the loupe's clone still strips its stroke;
+		   it is still skipped by the loupe's ink survey; it is still removed by
+		   the same cleanup; its coordinates are the system's, and the group
+		   carries no transform, so leaving the group changes no number. */
+		const sysEl = group.closest('[data-system]');
+		if (!sysEl) return;
+		const sysWidth = Number(sysEl.getAttribute('width'));
+		let under = sysEl.firstElementChild;
+		while (
+			under &&
+			under.tagName === 'rect' &&
+			Number(under.getAttribute('width')) >= sysWidth * 0.95
+		) {
+			under = under.nextElementSibling;
+		}
+		sysEl.insertBefore(ring, under);
 	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.
