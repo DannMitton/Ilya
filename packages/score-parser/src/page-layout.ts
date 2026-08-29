@@ -21,7 +21,7 @@
 
 import type { ParsedScore } from './types';
 import type { AnalyzedScore } from './analysis-types';
-import { renderAnalyzedStaff, columnAdvance, BARLINE_ROOM, type StaffRenderOptions } from './staff-renderer';
+import { renderAnalyzedStaff, layoutColumns, type StaffRenderOptions } from './staff-renderer';
 import { chooseClef } from './clef-select';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
@@ -47,10 +47,12 @@ const PAGE_DEFAULTS = {
   systemGap: 28,
 };
 
-// The renderer's own left margin default. The advance arithmetic is NO LONGER
-// mirrored here: `columnAdvance` and `BARLINE_ROOM` are imported from the
-// renderer, so the estimate and the rendering cannot drift apart at all
-// rather than merely failing a test when they do (N.6b-1).
+// The renderer's own left margin default. The advance arithmetic is NOT
+// mirrored here: `layoutColumns` is imported from the renderer and produces
+// the columns BOTH modules walk, so the estimate and the rendering cannot
+// drift apart at all rather than merely failing a test when they do
+// (N.6b-1; widened from two shared constants to the whole walk at N.104,
+// when a system gained a second kind of column).
 const RENDER_DEFAULTS = { leftMargin: 92 };
 /**
  * Nothing past the closing barline: the renderer's `width` is exactly its
@@ -114,21 +116,8 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
  */
 export function sliceWidth(parsed: ParsedScore, fromMeasure: number, toMeasure: number, options: StaffRenderOptions = {}): number {
   const leftMargin = options.leftMargin ?? RENDER_DEFAULTS.leftMargin;
-  const events = parsed.vocalLine.filter((e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure);
-  let x = leftMargin;
-  let prevMeasure = -1;
-  let prevDurWhole = 0;
-  let prevEv: (typeof events)[number] | undefined;
-  for (const ev of events) {
-    const newMeasure = ev.measureIndex !== prevMeasure;
-    if (prevEv) {
-      x += columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
-    }
-    prevMeasure = ev.measureIndex;
-    prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
-    prevEv = ev;
-  }
-  return x + (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0) + RIGHT_PAD;
+  const { columns, trailing } = layoutColumns(parsed, options, fromMeasure, toMeasure);
+  return leftMargin + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD;
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
@@ -185,6 +174,10 @@ export function paginateScore(
     const svg = renderAnalyzedStaff(sliceScore(parsed, a, b), analyzed, {
       ...renderOptions,
       finalBarline: i === ranges.length - 1,
+      // `sliceScore` rebased this slice's measure indices to 0; the renderer
+      // needs the offset back so `data-tacet` prints the score's own scale,
+      // the one `data-system` and every event id already print (N.104).
+      measureOffset: a,
       // Every system fills the line, so they all come out the same width and
       // all reach both margins (Dann's ruling, 2026-08-06). `sliceWidth` above
       // still packs on NATURAL widths, which is what decides how many measures
@@ -269,7 +262,7 @@ export function paginateScore(
     const svg = renderAnalyzedStaff(
       sliceScore(parsed, lastSystem.fromMeasure, lastSystem.toMeasure),
       analyzed,
-      { ...renderOptions, finalBarline: true },
+      { ...renderOptions, finalBarline: true, measureOffset: lastSystem.fromMeasure },
     );
     const box = viewBoxOf(svg);
     const aloneOnFinalPage = lastGroup.length === 1 && pageGroups.length > 1;

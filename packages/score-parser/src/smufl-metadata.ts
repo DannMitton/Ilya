@@ -103,6 +103,16 @@ export const SMUFL_CODEPOINTS = {
   rest8th: 0xe4e6,
   rest16th: 0xe4e7,
   rest32nd: 0xe4e8,
+  // The multibar (H-bar) rest, N.104. `restHBar` is the complete fixed-width
+  // mark; the Left/Middle/Right trio is SMuFL's composable form, for a bar
+  // that has to span a measure of arbitrary width. Both Finale Maestro 2.7 and
+  // Bravura 1.392 carry all four, verified against each font's own
+  // `glyphBBoxes` and against Maestro's `cmap`, so neither the fallback path
+  // nor the production path invents a metric here.
+  restHBar: 0xe4ee,
+  restHBarLeft: 0xe4ef,
+  restHBarMiddle: 0xe4f0,
+  restHBarRight: 0xe4f1,
 } as const;
 
 export type RequiredGlyphName = keyof typeof SMUFL_CODEPOINTS;

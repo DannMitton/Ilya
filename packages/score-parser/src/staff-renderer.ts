@@ -219,6 +219,19 @@ export interface StaffRenderOptions {
    * Omit for a standalone render, which then sizes to its content.
    */
   targetWidth?: number;
+  /**
+   * The original measure index this slice starts at (N.104).
+   *
+   * `sliceScore` rebases a slice's measure indices to start at 0, so a
+   * renderer that printed its own indices would print the slice's scale while
+   * `data-system` prints the score's. Everything else on the page already
+   * uses the score's scale: `data-system` carries `fromMeasure-toMeasure` in
+   * original indices, and an event id carries the original measure index
+   * because the parser mints it. `paginateScore` sets this to the slice's
+   * `fromMeasure` so `data-tacet` joins them rather than opening a second
+   * scale. A standalone render leaves it 0, which is the truth there.
+   */
+  measureOffset?: number;
 }
 
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
@@ -231,6 +244,7 @@ const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview'
   pxPerWhole: 240,
   minGap: 40,
   fontFamily: 'Bravura',
+  measureOffset: 0,
 };
 
 const DIATONIC: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
@@ -277,6 +291,110 @@ const REST_SMUFL: Record<NoteBase, RequiredGlyphName> = {
   breve: 'restWhole', whole: 'restWhole', half: 'restHalf', quarter: 'restQuarter',
   eighth: 'rest8th', '16th': 'rest16th', '32nd': 'rest32nd', '64th': 'rest32nd', '128th': 'rest32nd',
 };
+
+/**
+ * THE TACET MEASURE'S GEOMETRY, AND IT IS CONVENTION RATHER THAN GOULD.
+ *
+ * N.104. Dann's ruling, 2026-08-27: "We absolutely must represent measures
+ * without voice content with a single rest and a number overtop of it saying
+ * how many measures are tacet for voice."
+ *
+ * GOULD HOLDS NOTHING HERE, and the project says so about itself. The priors
+ * memo, at its own line 220: "Rest geometry entirely: pp.34 to 38 are
+ * unphotographed, so no dimensional priors exist for rests at all." There is
+ * no Gould dimension in this project for a rest of any kind, so there is none
+ * for a multibar rest's length, its numeral's size, or that numeral's
+ * clearance. Every number in this block is CONVENTION, recorded as convention
+ * the way the tie's 0.40 is recorded as Dann's eye. If pp. 34 to 38 are ever
+ * photographed, these are the four numbers to check.
+ *
+ * WHAT IS NOT CONVENTION, and deliberately: the bar's own thickness and the
+ * proportion of its terminal serifs. Those come from the font. Finale Maestro
+ * carries `restHBarLeft`, `restHBarMiddle` and `restHBarRight`, SMuFL's
+ * composable H-bar, so the mark's weight is the face's own and this desk
+ * invents no part of it. `smufl-metadata.ts` names the four codepoints.
+ */
+export const TACET_REST = {
+  /**
+   * The width one consolidated tacet measure occupies, barline to barline, in
+   * stave-spaces. Fixed, not graduated by the count: a run of 2 and a run of
+   * 30 take the same room and differ only in the numeral, which is standard
+   * practice.
+   *
+   * PROVENANCE: DANN'S EYE, 2026-08-29, choosing 8 from the three weights in
+   * section A of `docs/sessions/drawing-n104-tacet-weights_r1_2026-08-27.html`,
+   * where every plate is the real renderer's real output on the engraved
+   * Without Sun song 1 and a sung 12/8 bar of that song runs about 20
+   * stave-spaces. It replaces the 12 the desk chose at the browser on
+   * 2026-08-27. What he saw in the plates is not recorded here; the choice is.
+   *
+   * **This is convention rather than Gould**, like every number in this block,
+   * and it is recorded here the way the tie's 0.40 is recorded as his eye.
+   */
+  measureSp: 8,
+  /**
+   * How far the H-bar stops short of the barline at each end, in
+   * stave-spaces. The bar is a mark inside a measure, not a rule joining two
+   * barlines, so it needs air at both ends or it reads as a tie between them.
+   */
+  barInsetSp: 1.25,
+  /**
+   * Clearance from the top staff line to the bottom of the numeral, in
+   * stave-spaces.
+   */
+  numeralClearanceSp: 0.9,
+  /**
+   * Numeral size, as a multiple of the notation glyph size. The digits are the
+   * time-signature digits (`timeSig0` to `timeSig9`), which is what SMuFL
+   * supplies for this and what every engraver sets the count in; 1 is
+   * therefore "the size of a time signature".
+   */
+  numeralScale: 1,
+} as const;
+
+/** The time-signature digit glyphs, which also set the tacet count. */
+const DIGIT_SMUFL: readonly RequiredGlyphName[] = [
+  'timeSig0', 'timeSig1', 'timeSig2', 'timeSig3', 'timeSig4',
+  'timeSig5', 'timeSig6', 'timeSig7', 'timeSig8', 'timeSig9',
+];
+
+/** A run of consecutive measures the vocal part is silent in. */
+export interface TacetRun {
+  /** First and last measure index of the run, inclusive. */
+  fromMeasure: number;
+  toMeasure: number;
+  /** How many measures are tacet, which is what the numeral prints. */
+  count: number;
+}
+
+/**
+ * The measures the singer counts and does not sing in, grouped into runs.
+ *
+ * A measure is tacet when the score declares it and the vocal line puts no
+ * event in it. That is the whole test, and it is why the piano-only opening
+ * bar of Without Sun song 1 counts: `<measure number="1">` of the Bass part
+ * carries 0 notes, 0 rests and 0 lyrics while the piano's carries 5.
+ *
+ * A score whose `measures` array is empty yields no runs, so a caller that
+ * renders a bare vocal line gets exactly the layout it got before N.104.
+ */
+export function tacetRuns(parsed: ParsedScore): TacetRun[] {
+  if (parsed.measures.length === 0) return [];
+  const sung = new Set<number>();
+  for (const ev of parsed.vocalLine) sung.add(ev.measureIndex);
+  const runs: TacetRun[] = [];
+  for (const m of parsed.measures) {
+    if (sung.has(m.index)) continue;
+    const open = runs[runs.length - 1];
+    if (open && open.toMeasure === m.index - 1) {
+      open.toMeasure = m.index;
+      open.count += 1;
+    } else {
+      runs.push({ fromMeasure: m.index, toMeasure: m.index, count: 1 });
+    }
+  }
+  return runs;
+}
 
 /** SMuFL flag glyphs [up, down] by flag count (clamped at 3 for v1). */
 const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
@@ -496,6 +614,108 @@ export function columnAdvance(
   return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed);
 }
 
+/**
+ * One column of the system: an event, or a run of tacet measures.
+ *
+ * `advance` is the px from the previous column to this one at the minimum
+ * width, before any justification stretch, and it already includes
+ * `BARLINE_ROOM` where the column opens a measure.
+ */
+export interface LayoutColumn {
+  ev?: VocalLineEvent;
+  tacet?: TacetRun;
+  advance: number;
+  newMeasure: boolean;
+}
+
+/**
+ * The system's columns and the trailing advance past the last one.
+ *
+ * ONE function, called by `renderAnalyzedStaff` and by `page-layout.ts`'s
+ * `sliceWidth`, so the packing estimate and the rendering cannot drift apart.
+ * N.6b-1 made `columnAdvance` and `BARLINE_ROOM` shared for that reason;
+ * N.104 adds a second kind of column, and sharing the whole walk rather than
+ * two more constants is what keeps that guarantee.
+ *
+ * A tacet run breaks the ink-to-ink chain: the column after it is spaced by
+ * the run's own width rather than by `columnAdvance`, because there is no
+ * previous syllable whose underlay has to clear the next one.
+ *
+ * `fromMeasure` and `toMeasure` bound the walk for `sliceWidth`, which asks
+ * about a range of an unsliced score. Omit them to walk the whole score.
+ */
+export function layoutColumns(
+  parsed: ParsedScore,
+  options: StaffRenderOptions = {},
+  fromMeasure = -Infinity,
+  toMeasure = Infinity,
+): { columns: LayoutColumn[]; trailing: number } {
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const runWidth = TACET_REST.measureSp * lineGap;
+  const runs = tacetRuns(parsed).filter(
+    (r) => r.fromMeasure >= fromMeasure && r.toMeasure <= toMeasure,
+  );
+  const events = parsed.vocalLine.filter(
+    (e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure,
+  );
+
+  const columns: LayoutColumn[] = [];
+  let prevMeasure = -1;
+  let prevDurWhole = 0;
+  let prevEv: VocalLineEvent | undefined;
+  // Set by a tacet column, spent by the column after it.
+  let owedByTacet = 0;
+  let runCursor = 0;
+
+  const openRun = (run: TacetRun): void => {
+    columns.push({
+      tacet: run,
+      advance:
+        columns.length === 0
+          ? 0
+          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0) + BARLINE_ROOM,
+      newMeasure: columns.length > 0,
+    });
+    prevMeasure = run.toMeasure;
+    prevEv = undefined;
+    owedByTacet = runWidth;
+  };
+
+  for (const ev of events) {
+    while (runCursor < runs.length && runs[runCursor].fromMeasure < ev.measureIndex) {
+      openRun(runs[runCursor]);
+      runCursor += 1;
+    }
+    const newMeasure = ev.measureIndex !== prevMeasure;
+    let advance: number;
+    if (owedByTacet > 0) {
+      advance = owedByTacet + BARLINE_ROOM;
+      owedByTacet = 0;
+    } else if (prevEv) {
+      advance = columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
+    } else {
+      advance = 0;
+    }
+    columns.push({ ev, advance, newMeasure: newMeasure && columns.length > 0 });
+    prevMeasure = ev.measureIndex;
+    prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
+    prevEv = ev;
+  }
+  // A run that ends the system has no following event to open it.
+  while (runCursor < runs.length) {
+    openRun(runs[runCursor]);
+    runCursor += 1;
+  }
+
+  const trailing =
+    owedByTacet > 0
+      ? owedByTacet
+      : prevEv
+        ? columnAdvance(prevEv, undefined, prevDurWhole, options)
+        : 0;
+  return { columns, trailing };
+}
+
 // ── Beaming ────────────────────────────────────────────────────────
 // Groups are derived by beat, not read from the source (Dann's ruling,
 // 2026-07-12): `ParsedScore` carries no beam data, and the semantic stems
@@ -598,25 +818,9 @@ export function renderAnalyzedStaff(
   const stemLen = sp(STEM_LENGTH_SP);
 
   // ── Layout: assign x by onset, insert barlines at measure changes ──
-  // Pass one: every column's MINIMUM advance, from `columnAdvance`.
-  const steps: Array<{ ev: VocalLineEvent; advance: number; newMeasure: boolean }> = [];
-  let prevMeasure = -1;
-  let prevDurWhole = 0;
-  let prevEv: VocalLineEvent | undefined;
-  for (const ev of parsed.vocalLine) {
-    const newMeasure = ev.measureIndex !== prevMeasure;
-    steps.push({
-      ev,
-      advance: prevEv
-        ? columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0)
-        : 0,
-      newMeasure: newMeasure && steps.length > 0,
-    });
-    prevMeasure = ev.measureIndex;
-    prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
-    prevEv = ev;
-  }
-  const trailing = prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0;
+  // Pass one: every column's MINIMUM advance, from `layoutColumns`, which
+  // `sliceWidth` also calls so the packing estimate and the rendering agree.
+  const { columns: steps, trailing } = layoutColumns(parsed, options);
   const naturalSpan = steps.reduce((total, s) => total + s.advance, 0) + trailing;
 
   // Pass two: justify. The whole span scales by one factor, so the duration
@@ -628,10 +832,29 @@ export function renderAnalyzedStaff(
   const stretch = naturalSpan > 0 && targetSpan > naturalSpan ? targetSpan / naturalSpan : 1;
 
   const placed: Placed[] = [];
-  let x = o.leftMargin;
-  for (const s of steps) {
-    x += s.advance * stretch;
-    placed.push({ ev: s.ev, x: round2(x), newMeasure: s.newMeasure });
+  /**
+   * The tacet columns, kept apart from `placed` on purpose: every pass after
+   * this one (beams, tuplets, the underlay, the hit targets, the analysis
+   * layer) walks `placed` and asks each member for a pitch, a syllable or a
+   * duration. A run of silent measures has none of those, so it is drawn by
+   * its own pass and is invisible to all of them.
+   *
+   * `nextX` is the x of the column that follows, which is what bounds the
+   * run's measure on the right; it is undefined for a run that ends the
+   * system, where the closing barline bounds it instead.
+   */
+  const tacetPlaced: Array<{ run: TacetRun; x: number; nextX?: number; newMeasure: boolean }> = [];
+  {
+    let x = o.leftMargin;
+    const xs: number[] = [];
+    for (const s of steps) {
+      x += s.advance * stretch;
+      xs.push(round2(x));
+    }
+    steps.forEach((s, i) => {
+      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure });
+      else if (s.tacet) tacetPlaced.push({ run: s.tacet, x: xs[i], nextX: xs[i + 1], newMeasure: s.newMeasure });
+    });
   }
   const contentRight = round2(o.leftMargin + naturalSpan * stretch);
   // The system ends AT its barline. No empty stave past it: Gould's r242
@@ -987,6 +1210,124 @@ export function renderAnalyzedStaff(
     prevXById.set(placed[i].ev.id, placed[i - 1]?.x ?? placed[i].x - 40);
   }
   let lowestInk = staffBottom;
+
+  /* ── THE TACET MEASURES ──────────────────────────────────────────────
+     N.104. Every measure the singer counts appears on the page, whether or
+     not the singer sings in it. A run of consecutive silent measures draws as
+     ONE consolidated H-bar rest carrying the count above it; a single silent
+     measure draws as a whole-measure rest with no numeral, by convention.
+
+     The measure's extent is recovered from its BARLINES rather than from the
+     column's own advance, so the rest stays centred in its bar after the
+     system justifies. The left bound is the run's opening barline, or the end
+     of the key signature where the run opens the system and there is no
+     barline to open it. The right bound is the next column's barline, or the
+     system's closing barline where the run ends the system.
+
+     `TACET_REST` holds the four numbers and says which of them are convention
+     and which come from the face. */
+  for (const { run, x: tx, nextX, newMeasure } of tacetPlaced) {
+    const left = newMeasure ? tx - 18 : ksEnd;
+    const right = nextX === undefined ? contentRight : nextX - 18;
+    const centre = (left + right) / 2;
+    if (newMeasure) {
+      const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
+      parts.push(`<line x1="${round2(left)}" y1="${staffTop}" x2="${round2(left)}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
+    }
+    const runFrom = run.fromMeasure + o.measureOffset;
+    parts.push(`<g data-tacet="${runFrom}-${runFrom + run.count - 1}" data-tacet-count="${run.count}">`);
+
+    if (run.count === 1) {
+      // One bar of silence is a whole-measure rest, hanging under the second
+      // line from the top, exactly as `REST_SMUFL` already draws a whole rest.
+      if (smufl) {
+        parts.push(glyphAt('restWhole', centre, o.staffMidY - o.lineGap, '#3a352f'));
+      } else {
+        parts.push(`<rect x="${round2(centre - sp(0.64))}" y="${round2(o.staffMidY - o.lineGap - sp(0.29))}" width="${round2(sp(1.28))}" height="${round2(sp(0.29))}" fill="#3a352f"/>`);
+      }
+    } else {
+      const inset = sp(TACET_REST.barInsetSp);
+      const barLeft = left + inset;
+      const barRight = right - inset;
+      if (smufl) {
+        const L = smufl.glyph('restHBarLeft');
+        const R = smufl.glyph('restHBarRight');
+        const M = smufl.glyph('restHBarMiddle');
+        const wL = sp(L.bBoxNE[0] - L.bBoxSW[0]);
+        const wR = sp(R.bBoxNE[0] - R.bBoxSW[0]);
+        if (barRight - barLeft >= wL + wR) {
+          // The composable H-bar. The two terminals are the face's own
+          // glyphs; the body between them is the face's own `restHBarMiddle`
+          // STRETCHED horizontally to the span, which is the one construction
+          // whose thickness cannot disagree with the terminals it meets. The
+          // middle glyph is a plain rectangle in both faces the project ships
+          // (looked at in Finale Maestro at forty pixels to the stave-space),
+          // so a horizontal scale distorts nothing.
+          //
+          // The alternative, tiling the middle glyph at its own advance,
+          // opens a hairline seam wherever the advance rounds; a rect of this
+          // desk's own thickness disagrees with the terminals by whatever the
+          // face's stub is not.
+          const lap = sp(0.2); // overlap into each terminal, so no seam opens
+          const bodyLeft = barLeft + sp(L.bBoxNE[0]) - lap;
+          const bodyRight = barRight - wR + lap;
+          parts.push(glyphAt('restHBarLeft', barLeft - sp(L.bBoxSW[0]), o.staffMidY, '#3a352f', true));
+          if (bodyRight > bodyLeft) {
+            const mInk = sp(M.bBoxNE[0] - M.bBoxSW[0]);
+            const scaleX = (bodyRight - bodyLeft) / mInk;
+            parts.push(
+              `<g transform="translate(${round2(bodyLeft)} 0) scale(${round2(scaleX)} 1)">` +
+              `<text x="${round2(-sp(M.bBoxSW[0]))}" y="${round2(o.staffMidY)}" font-size="${glyphSize}px" font-family="${esc(o.fontFamily)}" fill="#3a352f">${M.char}</text>` +
+              `</g>`,
+            );
+          }
+          parts.push(glyphAt('restHBarRight', barRight - sp(R.bBoxNE[0]), o.staffMidY, '#3a352f', true));
+        } else {
+          // Too narrow to compose. The complete fixed-width H-bar, centred,
+          // which overhangs rather than distorting the face's proportion.
+          parts.push(glyphAt('restHBar', centre, o.staffMidY, '#3a352f'));
+        }
+      } else {
+        const half = round2(sp(0.36));
+        const capHalf = round2(sp(1.028));
+        const capT = round2(sp(0.25));
+        parts.push(`<rect x="${round2(barLeft)}" y="${round2(o.staffMidY - half)}" width="${round2(barRight - barLeft)}" height="${round2(half * 2)}" fill="#3a352f"/>`);
+        for (const cx of [barLeft, barRight - capT]) {
+          parts.push(`<rect x="${round2(cx)}" y="${round2(o.staffMidY - capHalf)}" width="${capT}" height="${round2(capHalf * 2)}" fill="#3a352f"/>`);
+        }
+      }
+
+      // The count, above the staff and centred on the rest. The digits are
+      // the time-signature digits, which is what SMuFL supplies for a
+      // multibar rest's number.
+      const digits = String(run.count);
+      if (smufl) {
+        const scale = TACET_REST.numeralScale;
+        const metrics = [...digits].map((d) => smufl.glyph(DIGIT_SMUFL[Number(d)]));
+        const widths = metrics.map((g) => sp(g.bBoxNE[0] - g.bBoxSW[0]) * scale);
+        const total = widths.reduce((a, b) => a + b, 0);
+        // The digits share one baseline, so the clearance is set by the
+        // deepest of them and the crop by the tallest.
+        const drop = Math.max(...metrics.map((g) => sp(-g.bBoxSW[1]) * scale));
+        const rise = Math.max(...metrics.map((g) => sp(g.bBoxNE[1]) * scale));
+        const baseline = staffTop - sp(TACET_REST.numeralClearanceSp) - drop;
+        let dx = centre - total / 2;
+        for (let i = 0; i < digits.length; i++) {
+          const g = metrics[i];
+          parts.push(
+            `<text x="${round2(dx - sp(g.bBoxSW[0]) * scale)}" y="${round2(baseline)}" font-size="${round2(glyphSize * scale)}px" font-family="${esc(o.fontFamily)}" fill="#3a352f">${g.char}</text>`,
+          );
+          dx += widths[i];
+        }
+        highestInk = Math.min(highestInk, baseline - rise);
+      } else {
+        const baseline = staffTop - sp(TACET_REST.numeralClearanceSp);
+        parts.push(`<text x="${round2(centre)}" y="${round2(baseline)}" text-anchor="middle" font-size="${round2(sp(2))}" fill="#3a352f">${digits}</text>`);
+        highestInk = Math.min(highestInk, baseline - sp(2));
+      }
+    }
+    parts.push('</g>');
+  }
 
   for (const { ev, x: nx, newMeasure } of placed) {
     if (ev.measureIndex !== curMeasure) {

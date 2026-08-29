@@ -13,13 +13,26 @@
 
 import { describe, expect, it } from 'vitest';
 import {
+  demoProfile,
+  demoResolver,
   demoScore,
   renderDemo,
   renderDemoDotted,
   renderDemoUnmeasured,
   syntheticSmuflFont,
 } from './demo-fixture';
-import { columnAdvance, clampHyphenX, HYPHEN_HALF } from './staff-renderer';
+import { analyzeScore } from './overlay-engine';
+import type { ParsedScore, VocalLineEvent } from './types';
+import {
+  BARLINE_ROOM,
+  columnAdvance,
+  clampHyphenX,
+  HYPHEN_HALF,
+  layoutColumns,
+  renderAnalyzedStaff,
+  tacetRuns,
+  type StaffRenderOptions,
+} from './staff-renderer';
 
 // ── N.11: a hyphen's ink stays inside the gap ────────────────────────
 //
@@ -750,5 +763,176 @@ describe('augmentation dots', () => {
 
   it('draws no dot on an undotted note, which is every other event', () => {
     expect(dots.filter((d) => d.includes('"n2"')).length).toBe(0);
+  });
+});
+
+// ── N.104: the measures the singer counts and does not sing in ───────
+//
+// Dann's ruling, 2026-08-27: "We absolutely must represent measures without
+// voice content with a single rest and a number overtop of it saying how many
+// measures are tacet for voice." The case that prompted it is the engraved
+// Without Sun song 1, whose vocal part's measure 1 carries 0 notes, 0 rests
+// and 0 lyrics while the piano's carries 5; the page omitted it, so the eye
+// counted one bar fewer than the measure tag did.
+//
+// The geometry these assert is CONVENTION, recorded as such at `TACET_REST`.
+// What they assert is the arithmetic rather than the taste: that the mark is
+// centred in its measure, that the count is the run's length, and that the
+// packer reserves the room the renderer spends.
+describe('tacet measures', () => {
+  // Written as codepoints rather than as literal characters: these live in
+  // the Private Use Area, where an editor shows a box and a careless paste
+  // silently changes one.
+  const G = {
+    restWhole: String.fromCodePoint(0xe4e3),
+    hBarLeft: String.fromCodePoint(0xe4ef),
+    hBarMiddle: String.fromCodePoint(0xe4f0),
+    hBarRight: String.fromCodePoint(0xe4f1),
+    digit: (d: number) => String.fromCodePoint(0xe080 + d),
+  };
+  const DIGIT_RANGE = /<text x="([-\d.]+)"[^>]*>([\u{E080}-\u{E089}])<\/text>/gu;
+
+  /** The demo with `silent` emptied of vocal events, its measures intact. */
+  const scoreSilentIn = (silent: number[]): ParsedScore => {
+    const parsed = demoScore();
+    return { ...parsed, vocalLine: parsed.vocalLine.filter((e) => !silent.includes(e.measureIndex)) };
+  };
+  const analyzedOf = (parsed: ParsedScore) =>
+    analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+  const render = (silent: number[], options: StaffRenderOptions = {}) => {
+    const parsed = scoreSilentIn(silent);
+    return renderAnalyzedStaff(parsed, analyzedOf(parsed), options);
+  };
+  const smufl = (): StaffRenderOptions => ({ font: syntheticSmuflFont(), fontFamily: 'TestFont' });
+
+  /** The tacet group, found by counting tags: it nests a group of its own. */
+  const tacetBlock = (svg: string): string => {
+    const start = svg.indexOf('<g data-tacet');
+    if (start < 0) return '';
+    let depth = 0;
+    for (const m of svg.slice(start).matchAll(/<g\b|<\/g>/g)) {
+      depth += m[0] === '</g>' ? -1 : 1;
+      if (depth === 0) return svg.slice(start, start + (m.index as number) + m[0].length);
+    }
+    return '';
+  };
+
+  it('finds a silent measure, and groups consecutive ones into one run', () => {
+    expect(tacetRuns(scoreSilentIn([2]))).toEqual([{ fromMeasure: 2, toMeasure: 2, count: 1 }]);
+    expect(tacetRuns(scoreSilentIn([1, 2, 3]))).toEqual([{ fromMeasure: 1, toMeasure: 3, count: 3 }]);
+  });
+
+  it('keeps two runs apart when a sung measure stands between them', () => {
+    expect(tacetRuns(scoreSilentIn([0, 3, 4]))).toEqual([
+      { fromMeasure: 0, toMeasure: 0, count: 1 },
+      { fromMeasure: 3, toMeasure: 4, count: 2 },
+    ]);
+  });
+
+  it('finds nothing where the singer sings in every measure', () => {
+    expect(tacetRuns(demoScore())).toEqual([]);
+  });
+
+  it('finds nothing where the score declares no measures at all', () => {
+    // A caller rendering a bare vocal line gets the pre-N.104 layout exactly.
+    expect(tacetRuns({ ...demoScore(), measures: [] })).toEqual([]);
+  });
+
+  it('leaves the columns untouched where no measure is tacet', () => {
+    // The guarantee the whole change rests on: with no run, `layoutColumns`
+    // reproduces the arithmetic the renderer used before N.104, column for
+    // column, so every score without a silent measure draws as it always did.
+    const parsed = demoScore();
+    const { columns, trailing } = layoutColumns(parsed);
+    expect(columns.every((c) => c.ev && !c.tacet)).toBe(true);
+    let prevMeasure = -1;
+    let prevDurWhole = 0;
+    let prevEv: (typeof parsed.vocalLine)[number] | undefined;
+    parsed.vocalLine.forEach((ev, i) => {
+      const newMeasure = ev.measureIndex !== prevMeasure;
+      const advance = prevEv
+        ? columnAdvance(prevEv, ev, prevDurWhole, {}) + (newMeasure ? BARLINE_ROOM : 0)
+        : 0;
+      expect(columns[i].advance, `column ${i}`).toBe(advance);
+      expect(columns[i].newMeasure, `column ${i}`).toBe(newMeasure && i > 0);
+      prevMeasure = ev.measureIndex;
+      prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
+      prevEv = ev;
+    });
+    expect(trailing).toBe(columnAdvance(prevEv as VocalLineEvent, undefined, prevDurWhole, {}));
+  });
+
+  it('draws one silent measure as a whole-measure rest, with no numeral', () => {
+    // Consolidation starts at two: a single bar of silence is a whole rest by
+    // convention, and a numeral over it would be counting to one.
+    const block = tacetBlock(render([2], smufl()));
+    expect(block).toContain('data-tacet="2-2"');
+    expect(block).toContain('data-tacet-count="1"');
+    expect(block).toContain(G.restWhole);
+    expect(block).not.toContain(G.hBarLeft);
+    expect(block).not.toContain(G.digit(1));
+  });
+
+  it('draws a run of several as one H-bar carrying the count', () => {
+    const block = tacetBlock(render([1, 2, 3], smufl()));
+    expect(block).toContain('data-tacet="1-3"');
+    expect(block).toContain('data-tacet-count="3"');
+    expect(block).toContain(G.hBarLeft);
+    expect(block).toContain(G.hBarMiddle);
+    expect(block).toContain(G.hBarRight);
+    expect(block).toContain(G.digit(3));
+    expect(block).not.toContain(G.restWhole);
+  });
+
+  it('sets a two-digit count as two digits, left to right', () => {
+    const parsed = demoScore();
+    const measures = Array.from({ length: 14 }, (_, index) => ({
+      ...parsed.measures[0],
+      index,
+      number: String(index + 1),
+    }));
+    const wide: ParsedScore = {
+      ...parsed,
+      measures,
+      vocalLine: parsed.vocalLine.filter((e) => e.measureIndex === 0),
+    };
+    const block = tacetBlock(renderAnalyzedStaff(wide, analyzedOf(parsed), smufl()));
+    expect(block).toContain('data-tacet-count="13"');
+    const digits = [...block.matchAll(DIGIT_RANGE)];
+    expect(digits.map((d) => d[2])).toEqual([G.digit(1), G.digit(3)]);
+    expect(Number(digits[1][1])).toBeGreaterThan(Number(digits[0][1]));
+  });
+
+  it('centres the mark in its measure rather than on its column', () => {
+    const svg = render([2], smufl());
+    const rest = /<g data-tacet[^>]*>\s*<text x="([-\d.]+)"/.exec(svg) as RegExpExecArray;
+    const restX = Number(rest[1]);
+    // Both barlines: the run's own, and the one opening the measure after it.
+    // Each is drawn 18 px before the column it opens.
+    const bars = [...svg.matchAll(/<line x1="([\d.]+)" y1="[\d.]+" x2="\1"/g)].map((m) => Number(m[1]));
+    const before = Math.max(...bars.filter((x) => x < restX));
+    const after = Math.min(...bars.filter((x) => x > restX));
+    // `glyphAt` centres by the glyph's width, which the synthetic font sets to
+    // 1.18 spaces for everything; the default lineGap is 12.
+    expect(restX + (1.18 / 2) * 12).toBeCloseTo((before + after) / 2, 5);
+  });
+
+  it("prints the score's own measure scale, not the slice's", () => {
+    // `data-system` and every event id carry the score's indices, so
+    // `data-tacet` has to as well or the page opens a second scale.
+    expect(tacetBlock(render([2], { ...smufl(), measureOffset: 40 }))).toContain('data-tacet="42-42"');
+  });
+
+  it('reserves the room in the packing estimate that the renderer spends', () => {
+    // `sliceWidth` and the renderer both walk `layoutColumns`, so a run costs
+    // the packer exactly what it costs the page. Without that a system would
+    // be packed on the sung measures alone and then drawn wider than the line.
+    const silent = scoreSilentIn([2]);
+    const withRun = layoutColumns(silent);
+    const withoutRun = layoutColumns({ ...silent, measures: [] });
+    const span = (r: ReturnType<typeof layoutColumns>) =>
+      r.columns.reduce((total, c) => total + c.advance, 0) + r.trailing;
+    expect(span(withRun)).toBeGreaterThan(span(withoutRun));
+    expect(withRun.columns.filter((c) => c.tacet).length).toBe(1);
   });
 });
