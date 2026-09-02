@@ -15,7 +15,9 @@
  *     at that clef's standard positions;
  *   - accidentals (sung line and turning layer) with per-measure carry and
  *     the measure-opening barline nudge (Kimi's collision rule);
- *   - ledger lines; rests; flags for unbeamed short notes;
+ *   - ledger lines, for the sung head and for a turning head outside the
+ *     stave alike (N.107, one shared `drawLedgerLines`); rests; flags for
+ *     unbeamed short notes;
  *   - beaming, derived by beat (Dann's ruling, 2026-07-12): the data model
  *     carries no source beams, and the forced semantic stems would break an
  *     engraver's groups anyway, so groups are computed here — flagged notes
@@ -1994,12 +1996,40 @@ export function renderAnalyzedStaff(
     // Ledger lines.
     const ledgerHalf = M.ledgerHalf(ev.duration.base);
     const ledgerT = smufl ? round2(sp(ed!.legerLineThickness)) : 1;
-    for (let ly = o.staffMidY - 3 * o.lineGap; ly >= y - 1; ly -= o.lineGap) {
-      parts.push(`<line x1="${round2(nx - ledgerHalf)}" y1="${ly}" x2="${round2(nx + ledgerHalf)}" y2="${ly}" stroke="#3a352f" stroke-width="${ledgerT}"/>`);
-    }
-    for (let ly = o.staffMidY + 3 * o.lineGap; ly <= y + 1; ly += o.lineGap) {
-      parts.push(`<line x1="${round2(nx - ledgerHalf)}" y1="${ly}" x2="${round2(nx + ledgerHalf)}" y2="${ly}" stroke="#3a352f" stroke-width="${ledgerT}"/>`);
-    }
+    /**
+     * The ledger lines a head at `y` needs, centred on `x`.
+     *
+     * ONE HELPER, TWO CALLERS, and that is the whole point. N.107, ruled by
+     * Dann 2026-09-02: a turning head outside the stave had no ledger lines
+     * at all, and in his words, "Without ledger lines, the noteheads are
+     * meaningless." A head floating in blank air above the stave states no
+     * pitch; the reader counts lines, and there was nothing to count. The fix
+     * is not a second copy of this arithmetic in the turning block. Two copies
+     * of "which stave positions does a head at `y` cross" are two answers
+     * waiting to disagree the first time anything here is touched, so the sung
+     * line and the turning layer call the same function or neither does.
+     *
+     * SPANNING THE SAME `ledgerHalf` AS THE SUNG HEAD, which the ruling names
+     * and this signature enforces by taking no notehead base. In primitive
+     * mode that is 11 px whatever the note; in SMuFL mode the turning head is
+     * always `noteheadBlack`, so it differs from the sung head's extension
+     * only under a half, whole or breve, where the turning ledger is a hair
+     * wider than the head it carries. See the memo's NOT ESTABLISHED section.
+     *
+     * The lines are returned rather than pushed: the turning caller has to
+     * stamp each one with `data-analysis` before it goes on the page, and a
+     * helper that wrote straight to `parts` could not be filtered.
+     */
+    const drawLedgerLines = (x: number, ly0: number, colour: string, opacity: number): string[] => {
+      const out: string[] = [];
+      const op = opacity === 1 ? '' : ` opacity="${opacity}"`;
+      const line = (ly: number): string =>
+        `<line x1="${round2(x - ledgerHalf)}" y1="${ly}" x2="${round2(x + ledgerHalf)}" y2="${ly}" stroke="${colour}" stroke-width="${ledgerT}"${op}/>`;
+      for (let ly = o.staffMidY - 3 * o.lineGap; ly >= ly0 - 1; ly -= o.lineGap) out.push(line(ly));
+      for (let ly = o.staffMidY + 3 * o.lineGap; ly <= ly0 + 1; ly += o.lineGap) out.push(line(ly));
+      return out;
+    };
+    parts.push(...drawLedgerLines(nx, y, '#3a352f', 1));
 
     // Accidental, if the note's alter differs from what's in effect.
     // Measure-opening notes nudge the accidental right so it clears the
@@ -2292,6 +2322,22 @@ export function renderAnalyzedStaff(
       } else {
         const sungRight = sungRightEdge(M, ev.duration.base, stemUpFor(ev, y), dotsRight);
         tx = nx + turningUnitAt(M, sungRight, tAccW).tx;
+      }
+
+      /* THE TURNING HEAD COUNTS ITS OWN LEDGER LINES, N.107, and they are
+         centred on `tx`, not on `nx`. That distinction is the whole reason
+         this call sits AFTER the placement above rather than beside the sung
+         line's: a displaced unit's head is a unit's width right of the sung
+         head, and ledgers drawn under `nx` would sit under the sung note and
+         say the wrong pitch about the turning one.
+
+         THEY ARE ANALYSIS MARKS. A ledger line is engraving ink everywhere
+         else in this file, but these belong to the lavender layer and vanish
+         with it, so they carry `data-analysis` like the head they serve and
+         the loupe's filter drops them with the rest (N.71's argument for the
+         handle, made again). */
+      for (const l of drawLedgerLines(tx, ty, TURNING_COLOUR, 0.85)) {
+        parts.push(analysisMark(l, 'turning-ledger'));
       }
 
       if (drawsAcc) {

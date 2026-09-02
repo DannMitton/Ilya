@@ -116,15 +116,36 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > behind it (semantic units, biglyph and triglyph, always right, the
 > departure from Gould 103) are in `PRODUCT.md` §The turning layer.
 >
-> **THE ONE THING: N.103, the spacer sees ink.** Placed by Dann 2026-09-02
-> ahead of N.102 increment 1c, on the «лё ко» pair where N.106's displaced
-> turning head sits hard against the next eighth. His design intent, his
-> words: the spacer should have "some kind of sensitivity" to the layers it
-> does not see. Design: a fourth term in `columnAdvance`
-> (`staff-renderer.ts:758-775`), ink, from one shared `columnInk` function;
-> `INK_CLEAR` 0.5 sp is a DESK DEFAULT. Brief:
-> `docs/sessions/brief-n103-ink-spacing_r1_2026-09-02.md`, untracked until
-> Dann adds it. Status: BRIEFED, not built.
+> **N.103 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `62967a7`,
+> "N.103: the spacer sees ink". `columnAdvance` has a fourth term, ink, from
+> one shared `columnInk`; `INK_CLEAR_SP = 0.5` and `TURNING_TRAIL_SP = 1.0`
+> exported, the second carrying his ruling verbatim. «лё ко» went from
+> -4.38 to 18.92 units; the page's narrowest ink clearance from -4.38 to
+> 4.05; systems 7 to 8, pages held at 2. Packing now takes the resolved
+> clef, a latent bug Code found. Gate 5 now **528 | 5 skipped (533)**,
+> `ilya-ship.sh:80` carries it. **His words: "Claude I find it absolutely
+> gorgeous."** `TURNING_TRAIL_SP` stays at 1.0 on that; the cost is a bar
+> per system from bar 7 on, accepted. Memo:
+> `docs/sessions/memo-n103-ink-spacing_r1_2026-09-02.md`. The rulings
+> behind it are in `PRODUCT.md` §The turning layer.
+>
+> **THE ONE THING: N.107, ledger lines for turning heads.** Ruled by Dann
+> 2026-09-02 ("critically important"; "Without ledger lines, the noteheads
+> are meaningless"). Paste written and given to him; runs in a fresh Code
+> thread now that N.103 is committed. Status: BRIEFED, not built.
+>
+> **N.108, the drawer as three finite groups. Numbered by Dann 2026-09-02,
+> BRIEFED TO DESIGN, not ruled and not built.** File (open at open state,
+> holding Repertoire, Metadata, one unified intake, import and export), Text
+> (Transcribe, Notation, Analysis), Score markup (Underlay, Corrections,
+> Voice). Principle ruled by him: "the opening state is the map of
+> everything, and it fits without scrolling." Departs on purpose from E.27
+> §3.3/§3.6 and from the 2026-08-18 "one takeover" and "one accent per
+> surface"; the brief names each. Group names and all French are his and
+> owed. Brief:
+> `docs/sessions/brief-to-design-n108-drawer-three-groups_r1_2026-09-02.md`,
+> untracked until he adds it. **GUI track: builds only after the beta line
+> closes or he names what it displaces (CONTRACT §6).**
 >
 > **Open and unplaced:** N.102 increment 1c (turning-layer courtesies), N.94, N.84 the Guide redo, N.83's call, and
 > the release order N.85 through N.88.

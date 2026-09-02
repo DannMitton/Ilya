@@ -333,57 +333,64 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
 // The cases are the ones the ruling names. Primitive mode throughout, the
 // byte-stable sandbox default, so every number below is arithmetic a reader
 // can check rather than a font's report.
-describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
-  const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+// The one-note scene and its readers are shared by the N.106 and N.107
+// blocks, which ask the same question of the same picture: where a turning
+// unit's ink lands relative to the sung note's. They were hoisted out of the
+// N.106 describe at N.107 rather than copied, for the reason the renderer
+// itself gives for sharing `drawLedgerLines`: two fixtures that drift are
+// worse than none.
+const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 
-  /**
-   * One bar, one sung note, and a turning pitch chosen BY CONSTRUCTION: the
-   * engine takes the turning pitch as `hzToPitch(fR1 / 2)`, so naming the
-   * pitch we want and doubling its frequency lands it exactly there, at
-   * whatever interval from the sung note the case calls for. `fifths` is 0,
-   * so a sharp turning pitch is one the turning layer must state.
-   */
-  const scene = (sung: Pitch, turning: Pitch, dots = 0): string => {
-    const parsed: ParsedScore = {
-      source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
-      vocalPart: { partId: 'P1', partName: 'Voice' },
-      measures: [{
-        index: 0, number: '1',
-        timeSignature: { beats: 4, beatType: 4 },
-        keySignature: { fifths: 0 },
-        expectedDuration: { numerator: 1, denominator: 1 },
-      }],
-      keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
-      timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
-      tempoMarkings: [],
-      vocalLine: [{
-        id: 't1',
-        type: 'note',
-        measureIndex: 0,
-        rhythmicPosition: { fraction: { numerator: 0, denominator: 4 } },
-        duration: {
-          base: 'quarter',
-          dots,
-          fraction: dots > 0 ? { numerator: 3, denominator: 8 } : { numerator: 1, denominator: 4 },
-        },
-        pitch: sung,
-      } satisfies VocalLineEvent],
-    };
-    const profile: VoiceProfileSnapshot = {
-      fR1: { v: 2 * pitchToHz(turning) },
-      range: { lowest: P('C', 3), highest: P('C', 6) },
-      tessitura: { low: P('E', 4), high: P('A', 4) },
-      passaggio: { primo: P('E', 4), secondo: P('A', 4) },
-      label: 'test',
-    };
-    const analyzed = analyzeScore(parsed, profile, () => 'v', { generatedAt: '2026-09-02T00:00:00.000Z' });
-    return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble' });
+/**
+ * One bar, one sung note, and a turning pitch chosen BY CONSTRUCTION: the
+ * engine takes the turning pitch as `hzToPitch(fR1 / 2)`, so naming the
+ * pitch we want and doubling its frequency lands it exactly there, at
+ * whatever interval from the sung note the case calls for. `fifths` is 0,
+ * so a sharp turning pitch is one the turning layer must state.
+ */
+const scene = (sung: Pitch, turning: Pitch, dots = 0): string => {
+  const parsed: ParsedScore = {
+    source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
+    vocalPart: { partId: 'P1', partName: 'Voice' },
+    measures: [{
+      index: 0, number: '1',
+      timeSignature: { beats: 4, beatType: 4 },
+      keySignature: { fifths: 0 },
+      expectedDuration: { numerator: 1, denominator: 1 },
+    }],
+    keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
+    timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
+    tempoMarkings: [],
+    vocalLine: [{
+      id: 't1',
+      type: 'note',
+      measureIndex: 0,
+      rhythmicPosition: { fraction: { numerator: 0, denominator: 4 } },
+      duration: {
+        base: 'quarter',
+        dots,
+        fraction: dots > 0 ? { numerator: 3, denominator: 8 } : { numerator: 1, denominator: 4 },
+      },
+      pitch: sung,
+    } satisfies VocalLineEvent],
   };
+  const profile: VoiceProfileSnapshot = {
+    fR1: { v: 2 * pitchToHz(turning) },
+    range: { lowest: P('C', 3), highest: P('C', 6) },
+    tessitura: { low: P('E', 4), high: P('A', 4) },
+    passaggio: { primo: P('E', 4), secondo: P('A', 4) },
+    label: 'test',
+  };
+  const analyzed = analyzeScore(parsed, profile, () => 'v', { generatedAt: '2026-09-02T00:00:00.000Z' });
+  return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble' });
+};
 
-  /** The sung notehead's centre: the only bare `<ellipse cx=` on the page. */
-  const sungCx = (svg: string): number => Number(svg.match(/<ellipse cx="([-\d.]+)"[^>]*fill="#1a1612"/)![1]);
-  const turningCx = (svg: string): number =>
-    Number(svg.match(/data-analysis="turning-notehead"[^>]*cx="([-\d.]+)"/)![1]);
+/** The sung notehead's centre: the only bare `<ellipse cx=` on the page. */
+const sungCx = (svg: string): number => Number(svg.match(/<ellipse cx="([-\d.]+)"[^>]*fill="#1a1612"/)![1]);
+const turningCx = (svg: string): number =>
+  Number(svg.match(/data-analysis="turning-notehead"[^>]*cx="([-\d.]+)"/)![1]);
+
+describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
   const turningAccX = (svg: string): number =>
     Number(svg.match(/data-analysis="turning-accidental"[^>]*x="([-\d.]+)"/)![1]);
   /**
@@ -481,6 +488,109 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
   });
 });
 
+// ── N.107: the turning head counts its ledger lines ──────────────────
+//
+// Ruled by Dann 2026-09-02, in his words: "Without ledger lines, the
+// noteheads are meaningless." A turning head above or below the stave was
+// drawn in blank air, and a reader counts lines to know what a floating head
+// says. The sung line has drawn its own since the first build; the turning
+// layer never drew any.
+//
+// Primitive mode throughout, the byte-stable sandbox default. The stave is
+// the renderer's own: `staffMidY` 96, `lineGap` 12, so the stave lines are
+// 72, 84, 96, 108 and 120, the first ledger position above is 60 and the
+// first below is 132. The primitive ledger is 11 px each side of the head
+// and 1 px thick.
+describe('the turning head counts its ledger lines (N.107)', () => {
+  const MID = 96;
+  const GAP = 12;
+  const HALF = 11;  // the primitive ledger's half-width, `inkMetrics.ledgerHalf`
+
+  /**
+   * The ledger lines on the page, by ink.
+   *
+   * The stave lines are drawn in the SAME colour and the same 1 px, so
+   * colour alone cannot tell a ledger from a stave line. Width can: a ledger
+   * is 22 px and a stave line runs the system. That is what this filters on,
+   * and it is why the assertions below can count.
+   */
+  const ledgers = (svg: string, colour: string): string[] =>
+    (svg.match(/<line [^>]*\/>/g) ?? []).filter((l) => {
+      const m = l.match(/x1="([-\d.]+)"[^>]*x2="([-\d.]+)"/);
+      return !!m && l.includes(`stroke="${colour}"`) && Number(m[2]) - Number(m[1]) === 2 * HALF;
+    });
+  const ys = (lines: string[]): number[] => lines.map((l) => Number(l.match(/y1="([-\d.]+)"/)![1]));
+  const centre = (line: string): number => {
+    const m = line.match(/x1="([-\d.]+)"[^>]*x2="([-\d.]+)"/)!;
+    return (Number(m[1]) + Number(m[2])) / 2;
+  };
+  const round2 = (v: number): number => Math.round(v * 100) / 100;
+
+  it('draws ONE lavender ledger line, at tx, for a turning head one line above', () => {
+    // Sung B4 on the middle line, turning A5 sitting on the first ledger
+    // above. Six stave steps apart, so the unit is aligned and tx is nx.
+    const svg = scene(P('B', 4), P('A', 5));
+    const lav = ledgers(svg, '#8E7E9B');
+    expect(ys(lav)).toEqual([MID - 3 * GAP]);
+    expect(centre(lav[0])).toBe(round2(turningCx(svg)));
+    expect(lav[0]).toContain('data-analysis="turning-ledger"');
+    expect(lav[0]).toContain('opacity="0.85"'); // the head's own opacity
+  });
+
+  it('draws THREE for a turning head three lines above', () => {
+    // Turning E6, the third ledger above. Every position between the stave
+    // and the head is drawn, top-down, as the sung line has always done.
+    const svg = scene(P('B', 4), P('E', 6));
+    expect(ys(ledgers(svg, '#8E7E9B'))).toEqual([MID - 3 * GAP, MID - 4 * GAP, MID - 5 * GAP]);
+  });
+
+  it('draws them BELOW the stave the same way', () => {
+    // Turning C4, one ledger below. The ruling is symmetric and so is the
+    // arithmetic; this holds the second loop to it.
+    const svg = scene(P('B', 4), P('C', 4));
+    expect(ys(ledgers(svg, '#8E7E9B'))).toEqual([MID + 3 * GAP]);
+  });
+
+  it('draws NONE for a turning head inside the stave', () => {
+    // Sung B4, turning D5, both on the stave. Nothing is drawn, which is the
+    // case the old code got right by drawing nothing at all.
+    const svg = scene(P('B', 4), P('D', 5));
+    expect(ledgers(svg, '#8E7E9B')).toEqual([]);
+  });
+
+  it('centres a DISPLACED unit’s ledgers on tx, not on nx', () => {
+    // Sung A5, turning B5: a second, so N.106 displaces the whole turning
+    // unit right, and the two heads share the first ledger position above.
+    // The sung note's own ledger stays under nx and the turning note's goes
+    // with the head that needs it. This is the case a ledger drawn at nx
+    // would silently pass and a reader would silently misread.
+    const svg = scene(P('A', 5), P('B', 5));
+    const lav = ledgers(svg, '#8E7E9B');
+    const black = ledgers(svg, '#3a352f');
+    const nx = sungCx(svg);
+    expect(ys(lav)).toEqual([MID - 3 * GAP]);
+    expect(ys(black)).toEqual([MID - 3 * GAP]);
+    expect(centre(black[0])).toBe(round2(nx));
+    expect(centre(lav[0])).toBe(round2(turningCx(svg)));
+    expect(centre(lav[0])).toBeGreaterThan(centre(black[0]));
+  });
+
+  it('leaves the sung line’s own ledger markup byte-identical', () => {
+    // The refactor put both callers behind one `drawLedgerLines`, so the
+    // sung line's output is now generated by new code. This pins it to the
+    // exact string the old loop wrote: the attribute order, the ink, the
+    // 1 px, the 11 px half-width, and NO `opacity`, which the helper emits
+    // only when it is not 1. Sung C4 below the stave, turning D5 inside it,
+    // so the only ledger on the page is the sung one.
+    const svg = scene(P('C', 4), P('D', 5));
+    const nx = sungCx(svg);
+    const expected =
+      `<line x1="${round2(nx - HALF)}" y1="${MID + 3 * GAP}" x2="${round2(nx + HALF)}" y2="${MID + 3 * GAP}" stroke="#3a352f" stroke-width="1"/>`;
+    expect(ledgers(svg, '#3a352f')).toEqual([expected]);
+    expect(svg).toContain(expected);
+  });
+});
+
 describe('staff renderer: the four analytical criteria', () => {
   const svg = renderDemo();
 
@@ -512,9 +622,15 @@ describe('staff renderer: the four analytical criteria', () => {
     }
     // And nothing the ENGRAVING draws carries it: the count is the count of
     // marks, not of noteheads.
+    //
+    // `turning-ledger` joined the census at N.107. The ledger lines under a
+    // turning head outside the stave are the one piece of ordinary engraving
+    // ink in this file that belongs to the analysis layer, because they say
+    // nothing about the sung note and must leave when the layer does.
     expect((svg.match(/data-analysis="/g) ?? []).length).toBe(
       (svg.match(/data-analysis="turning-notehead"/g) ?? []).length +
         (svg.match(/data-analysis="turning-accidental"/g) ?? []).length +
+        (svg.match(/data-analysis="turning-ledger"/g) ?? []).length +
         (svg.match(/data-analysis="crossing"/g) ?? []).length +
         (svg.match(/data-analysis="phonation-break"/g) ?? []).length,
     );
