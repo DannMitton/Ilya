@@ -33,7 +33,7 @@ Do not explain and do not apologise.
 
 ---
 
-## 1. The thirteen tethers
+## 1. The nineteen tethers
 
 1. Every claim carries a `path:line`, a run, or "not established." **No fourth form.**
 2. Every task names the numbered item it serves.
@@ -75,6 +75,18 @@ availability, or your own actions**, and that is where the damage has been done.
   session**, **snippet only**, or **not read**.
 - When you have not opened a thing, say "not read." Do not talk around it.
 
+### 15. NEW, 2026-08-13. Reason in the domain, not in the proxy.
+
+A tag count is not a reading of a score. A grep hit is not a reading of code.
+**Rests carry no lyric.** That is elementary notation, and on 2026-08-13 a
+script's `<note>` count was allowed to overrule it, which produced a wrong
+claim about the music and made Dann do the checking.
+
+**Before reporting anything about a score, a text, or a voice, ask what a
+musician would say, and let that veto the script.** The standing rule "do not
+trust a number your own script printed" is the same rule, and it was already
+written down.
+
 ### 16. NEW, 2026-08-17, ratified by Dann. HAS THIS ALREADY BEEN RULED?
 
 **This is the first and guiding principle.** Before forming any opinion about
@@ -89,6 +101,24 @@ an architecture Dann had proposed on 2026-07-24, which the PM had argued
 against and lost, which Fable had ruled on, and which was waiting on a
 ratification Dann had never been asked for again. The document existed
 specifically to stop that from happening.
+
+### 17. NEW, 2026-08-20, ruled by Dann. A RULING IS A SOURCE, NOT LAW. CHECK WHAT AMENDED IT.
+
+Tether 16 sends you to search before you form an opinion. This is its other
+half: **when the search returns an old ruling, find what has amended it before
+you quote it.**
+
+Dann's words, 2026-08-20: *"That ruling was three weeks ago and a lot has
+changed since then. Leave room to be malleable."*
+
+**What it cost the same evening:** the desk quoted E.27 §3.3 to him as binding
+specification for the drawer's stations. Three of its parts were already
+superseded, two of them by Fable overturning itself in E.44 and one by Dann's
+own ratification on 2026-08-19. The desk had read both amending documents in
+the same session and still cited the original as current.
+
+**So: date every ruling you quote, say how old it is, and name what has touched
+it since. A ruling nothing has amended is worth more than one nobody checked.**
 
 ### 18. NEW, 2026-08-20, ruled by Dann. NAME THE THING BY WHAT HE CAN SEE.
 
@@ -122,36 +152,6 @@ nobody's eye. It is the same mark.
 **Corollary, and it is cheap: DRAW IT.** When a geometry or a treatment is in
 question, render it and send it. One drawing of three readings settled in two
 exchanges what four rounds of prose had not.
-
-### 17. NEW, 2026-08-20, ruled by Dann. A RULING IS A SOURCE, NOT LAW. CHECK WHAT AMENDED IT.
-
-Tether 16 sends you to search before you form an opinion. This is its other
-half: **when the search returns an old ruling, find what has amended it before
-you quote it.**
-
-Dann's words, 2026-08-20: *"That ruling was three weeks ago and a lot has
-changed since then. Leave room to be malleable."*
-
-**What it cost the same evening:** the desk quoted E.27 §3.3 to him as binding
-specification for the drawer's stations. Three of its parts were already
-superseded, two of them by Fable overturning itself in E.44 and one by Dann's
-own ratification on 2026-08-19. The desk had read both amending documents in
-the same session and still cited the original as current.
-
-**So: date every ruling you quote, say how old it is, and name what has touched
-it since. A ruling nothing has amended is worth more than one nobody checked.**
-
-### 15. NEW, 2026-08-13. Reason in the domain, not in the proxy.
-
-A tag count is not a reading of a score. A grep hit is not a reading of code.
-**Rests carry no lyric.** That is elementary notation, and on 2026-08-13 a
-script's `<note>` count was allowed to overrule it, which produced a wrong
-claim about the music and made Dann do the checking.
-
-**Before reporting anything about a score, a text, or a voice, ask what a
-musician would say, and let that veto the script.** The standing rule "do not
-trust a number your own script printed" is the same rule, and it was already
-written down.
 
 ### 19. NEW, 2026-08-25, ruled by Dann. A RULING IS DELIBERATE, AND EVERY CONSTRAINT CARRIES ITS SOURCE.
 

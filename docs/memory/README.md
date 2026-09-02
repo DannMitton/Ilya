@@ -29,11 +29,16 @@ waiting, on purpose.
    to skip.**
 2. **`STATE.md`** — the one thing, the tracker, and the rulings Dann owes.
 3. **`ENVIRONMENT.md`** — only when you are about to touch a tool, a path, or a
-   gate. It is a lookup table, not a read-through.
+   gate. It is a lookup table, not a read-through, and since 2026-09-01 it
+   opens with an index keyed by symptom. Use the index.
 4. **`PRODUCT.md`** — only before forming an opinion about what Ilya should do or
    look like.
 
 `INBOX.md` is append-only and **you do not open it unless Dann asks.**
+
+`../sessions/LOG.md` is the archive behind `STATE.md`, split out 2026-09-01.
+**Nothing in the read order opens it.** Go there to check what a superseded
+ruling said, and nowhere else.
 
 `../sessions/` holds the archived thread openers, handovers, and returned memos.
 Nothing there is authoritative. **The code beats this folder, and this folder
@@ -88,8 +93,15 @@ forty-seven of its predecessors were written and thrown away.
 ## Closing a session
 
 1. Update `STATE.md`: the one thing, the tracker marks, what moved.
-2. Add anything hard-won to `ENVIRONMENT.md`.
-3. Ask Dann to commit. **You do not run git. No agent commits, ever.**
+2. **Move what closed to `../sessions/LOG.md`.** Ruled by Dann 2026-09-01:
+   **`STATE.md` holds only what is open. Anything that closes moves to `LOG.md` at
+   the close of the session that closed it.** Size is an output, not a target.
+   **Tripwire, not an allowance: over 600 lines means something failed to move.
+   Go and find it.**
+3. Add anything hard-won to `ENVIRONMENT.md`, **and add its row to the index at
+   the top of that file.** A trap nobody can find costs the next session the same
+   hour it cost the last one.
+4. Ask Dann to commit. **You do not run git. No agent commits, ever.**
 
 That is the whole ritual. There is no handover document and no opener to write.
 

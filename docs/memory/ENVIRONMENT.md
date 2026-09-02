@@ -5,6 +5,153 @@ a path, or a gate. Every line here cost someone an hour.
 
 ---
 
+## HOW TO USE THIS FILE
+
+**Find your symptom in the tables. Each row names the section that answers it.
+Search this file for that heading text.** Do not read top to bottom: this file is
+ordered by when each trap was learned, not by subject, and it is 2,000 lines.
+The index was added 2026-09-01. Nothing below it was moved, reworded, or removed.
+
+**When you add a section, add its row here.** A trap nobody can find costs the
+next session the same hour it cost the last one.
+
+### Shipping, gates, and the ship script
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| ship anything at all | `Gate baselines` |
+| move a gate number | `Moving a gate baseline` |
+| the ship script refuses to run | `refuses on untracked files` |
+| the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
+| the ship script behaved oddly at line 52 | `The ship script has a bug` |
+| the gate literal is in two places | `the N.97/N.97b session` |
+| your own `git add -A` swept Code's tree | `git add -A` |
+
+### Deploys and URLs
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| find the permanent URL for a deploy | `Deploys` |
+| check a deploy without asking Dann | `CAN READ VERCEL DIRECTLY` |
+| a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
+| the alias is serving something stale | `The branch alias, observed` |
+| the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
+
+### Browsers, phones, and what each one refuses
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| anything involving Dann's phone | `Browser and extension` |
+| iOS greys out a file Ilya can read | `Claude Code, and where the building` |
+| a tab loaded hidden and nothing downstream works | `A HIDDEN TAB` |
+| a `<dialog>` hangs and never resolves | `close` EVENT DOES NOT FIRE` |
+| a hover state latches and will not release on iOS | `drawer-lip:hover` |
+| a drawer test that cannot run on a phone | `NOTHING MOVES IN THE DRAWER` |
+| `resize_window` silently does nothing | `The mobile design session's instruments` |
+| a photograph from Dann arrives in an odd format | `ARRIVE AS HEIC` |
+
+### Driving the app, and observing it honestly
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| drive a browser yourself | `Claude Code, and where the building` |
+| a walk harness needs a home | `A WALK HARNESS BELONGS` |
+| `vite preview` serving the wrong thing, or caching | `vite preview` |
+| a service worker that will not update locally | `Claude Code, and where the building` |
+| the console filter hiding what you need | `THE COORDINATING DESK'S OWN INSTRUMENTS` |
+| a screen-reader string to check | `SCREEN-READER STRINGS` |
+| instruments already known to lie | `Known instrument faults` |
+| `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
+
+### Svelte, CSS, and this tree
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| a test passes but the page is wrong | `RUNES ARE INERT UNDER VITEST` (in `the OMR day`) |
+| an `{#each}` region dying | `A SVELTE `{#each}`` |
+| a CSS rule that will not take | `CSS SPECIFICITY` |
+| three components fighting over one class | `THREE COMPONENTS EACH DECLARE` |
+| native modals broken | `app.css:93` |
+| centring that comes from the wrong box | `PageFit` |
+| a gap measurement that disagrees with itself | `TWO GAPS IN THE DRAWER` |
+| a column foot in the wrong panel | `THE COLUMN'S FOOT` |
+| a glyph pointing the wrong way after a move | `A DIRECTIONAL GLYPH'S VALUES` |
+| ink and its box disagreeing | `THE LAYOUT BOX IS NOT THE INK` |
+| any type choice | `TYPOGRAPHY IN THIS TREE` |
+| renaming inside a large component | `Claude Code, and where the building` |
+| storage notices missing from a drawer | `TWO DRAWERS` |
+
+### Storage and the vault
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| how storage actually is today | `Storage, as it actually is` |
+| an IndexedDB write that silently fails | `A STORED PROXY` |
+| a record losing a field across a reload | `VALIDATERECORD` |
+| a salvage or corrupt-record path | `A STORED PROXY` |
+
+### The page reader, PDFs, and photographs
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| the reader's measured numbers and traps | `THE PAGE READER` |
+| a photograph that reads badly | `THE PHOTOGRAPH IS WARPED` |
+| the probe's two toolchains | `THE PHOTO PROBE` |
+| a real scan rather than a render | `THE READER MEETS A REAL SCAN` |
+| numpy or `bincount` throwing in the browser only | `PYODIDE IS 32-BIT` |
+| PDF import | `PDF IMPORT` |
+| a NaN four frames deep | `THE NaN THAT CRASHED` |
+| a scale constant you are about to trust | `K_S = 0.9737` |
+| a hardcoded threshold in the substrate | `page_substrate` |
+| a gate that cannot be run at all | `A GATE THAT CANNOT BE RUN` |
+| anything from the OMR day | `the OMR day` |
+| the capture chain end to end | `THE CAPTURE CHAIN` |
+
+### Print and paper
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| anything that prints | `PRINT. The media-query trap` |
+| the desk head appearing on paper | `THE DESK HEAD IS NOT THE PAPER` |
+
+### French, names, and sources
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| Canadian French punctuation | `TYPOGRAPHY IN THIS TREE` |
+| the French form of a name | `FRENCH NAME RESEARCH` |
+| the BnF authority route | `data.bnf.fr` |
+
+### The desk's own tools and limits
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| spawn a farm-out, or cost one | `The device bridge` |
+| a subagent that cannot find the files | `The device bridge` |
+| run anything in the container | `Container` |
+| a network call that was refused | `Network refusals` |
+| the project knowledge estate filling | `Project knowledge capacity` |
+| Code unable to read a ruling you cited | `CLAUDE CODE CANNOT READ` |
+| a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
+
+### The method traps, which are one lesson in six voices
+
+**Read this group together.** Six sections, learned separately, all saying that a
+description of a thing is not the thing. They are the most repeated finding in the
+file.
+
+| the mistake | search for |
+|---|---|
+| you believed a memo about a commit | `A MEMO IS NOT A COMMIT` |
+| you believed a memo about a measurement | `A MEMO'S MEASUREMENT` |
+| you believed research instead of diagnosing | `A ROUND OF RESEARCH` |
+| you believed two screenshots were a control | `A SCREENSHOT PAIR` |
+| you re-measured what you already had | `MEASURE THE PICTURE` |
+| you measured to the next mark, not the box | `MEASURE THE BOX` |
+| Code found the instrument at fault, not the code | `TWO INSTRUMENT FAULTS` |
+
+---
+
 ## Gate baselines
 
 | gate | baseline |
@@ -12,8 +159,22 @@ a path, or a gate. Every line here cost someone an hour.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **754** (725 until 2026-08-24 evening; N.92's first slice added 21 correction, 7 driver-isolation, 1 ingest-flow; 682 until 2026-08-23) |
-| score-parser | **444** passed, 5 skipped |
+| web-test | **900 passed (900)** |
+| score-parser | **481 passed, 5 skipped (486)** |
+
+**CORRECTED 2026-09-01.** This table read `754` and `444` and had done since
+2026-08-24, which is 146 and 37 tests behind the tree. The current numbers are
+read out of two memos that ran all five gates: `memo-n104-ship_r1_2026-08-29.md`
+§4 and `memo-n104-loupe-head_r1_2026-08-29.md` §7. **Nothing was run to produce
+this table; it is transcribed from those runs.** The superseded web-test history
+(682 until 2026-08-23, 725 until 2026-08-24 evening, then 754) is in
+`../sessions/LOG.md`.
+
+**WEB-TEST IS ABOUT TO MOVE AGAIN, AND IT NEEDS DANN'S PERMISSION.** N.104's
+loupe fix adds eight tests in `loupe.test.ts`, taking web-test to **908**. It is
+WRITTEN and unwalked, so **900 is the number until he walks it and rules**.
+`~/Downloads/ilya-ship.sh:79` still reads `900 passed (900)` and is correct
+today.
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 
@@ -2022,3 +2183,23 @@ a plausible number. Both a `getBBox` survey and a scripted `.focus()` (which
 does not match `:focus-visible` in Chromium) reported answers that looked
 right and were measuring nothing. When a measurement disagrees with
 arithmetic, suspect the instrument first.
+
+---
+
+## THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE. Cost six wrong stamps, 2026-09-01
+
+- **`ls` under `$HOME/mnt/` on the device bridge displayed mtimes a full day
+  behind the real clock.** Files written at 2026-09-01 20:43 local displayed as
+  `Aug 31 20:43`. A date read off `ls` is not a date.
+- **What it cost.** The desk stamped `2026-08-31` into six memory documents and
+  five backup filenames, taking it from that display. It was caught only because
+  Dann's own terminal login banner said `Tue Sep  1`, and every one had to be
+  corrected before the commit. In a project where a ruling is identified by its
+  date, this is a falsification, not a typo.
+- **Run `date` and convert.** Both the device VM and the cloud container report
+  **UTC**. Dann is America/Toronto, UTC-4 in summer, so any UTC time after 04:00
+  is the previous day to him. `2026-09-02 02:44 UTC` is `2026-09-01 22:44` local,
+  and his records are kept in his local date.
+- **Tether 9 covers this exactly: open the file that holds the value.** For a
+  date, `date` is that file. The desk did not open it, and used a display
+  instead.
