@@ -179,6 +179,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >   not read the first time. All untracked until Dann adds them. Design reads
 >   the connected repository, so Dann pushes before pasting.
 
+> **DESIGN'S REVISION 2 RETURNED AND RULED ON, 2026-09-02 evening.** A
+> working prototype: `docs/sessions/n108-drawer-prototype_r1_2026-09-02.html`,
+> memo `n108-design-return_r2_2026-09-02.md`. Ruled by Dann on the desk's
+> critique:
+> - **Bands take the language-chip tokens with white text** (Design's fix
+>   inside A; the ruled hues fail contrast with cream, cobalt included at
+>   4.23:1): Piece `#5C739E` 4.77:1, Text `#6C7A5F` 4.58:1, Score markup
+>   `#806E8E` 4.63:1.
+> - **The slab takes the desk's surround and the groups carry the drawer
+>   paper**, as built; the bookmark tab belongs to the slab.
+> - **The Transcribe station in Text is dissolved**: the Transcribe action
+>   stays under the intake in Piece; the word count and Clear move onto the
+>   receipt line. Text holds Notation and Analysis only.
+> - **Calibration stays a takeover**, entered from Calibrate in the Voice
+>   station, restore-on-exit as today; Design restyles it in the new dress
+>   (Score markup band, 20 px surface). In-place ritual is NOT built; it may
+>   return as its own item.
+> - Owed to Design in revision 3: no self-scroll on opening a station (only
+>   on ritual entry); the opening state measured at 1366 × 768 with Metadata
+>   giving first; the labelled mobile pull (2026-08-18); the contrast readouts
+>   out of the bands; the takeover restyled.
+
 > *(Earlier record, kept:)* Numbered by Dann 2026-09-02, briefed to Design. File (open at open state,
 > holding Repertoire, Metadata, one unified intake, import and export), Text
 > (Transcribe, Notation, Analysis), Score markup (Underlay, Corrections,
