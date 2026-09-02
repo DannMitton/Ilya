@@ -80,11 +80,18 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > before the cluster moves when the measure-opening floor binds. The general
 > tight-rhythm case is N.103's.
 >
-> **THE ONE THING: N.102 increment 1a, the gap.** Briefed inline to Code
-> 2026-09-02. Then **1b**: the system-opening measure, which `paginateScore`
-> renders as its own slice so `prevMeasureAcc` is empty; needs a
-> `StaffRenderOptions` field carrying the incoming state. Not briefed.
-> **Increment 2**, the singer's control with its French, waits.
+> **N.102 INCREMENT 1a DONE 2026-09-02, WALKED BY DANN on the alias.** Ship
+> `3dd37e4`, "N.102: the courtesy's parentheses breathe". `COURTESY_GAP_SP =
+> 0.2` exported at `staff-renderer.ts:153`; the gap is the first thing to
+> give at the measure-opening floor. Gate 5 now **496 | 5 skipped (501)**,
+> `ilya-ship.sh:80` carries it. His words: "yes to my eye that reads
+> better." Memo: `docs/sessions/memo-n102-gap_r1_2026-09-02.md`.
+>
+> **THE ONE THING: N.102 increment 1b, the system-opening measure.**
+> `paginateScore` renders each system as its own slice, so `prevMeasureAcc`
+> is empty at every system opening and no courtesy is ever drawn there.
+> Needs the incoming state carried on `StaffRenderOptions`. **Increment 2**,
+> the singer's control with its French, waits.
 >
 > **Open and unplaced:** N.103 measures do not re-space when ink is added
 > (N.102 may hand it a case), N.94, N.84 the Guide redo, N.83's call, and

@@ -25,7 +25,9 @@ import type { VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
+import { paginateScore } from './page-layout';
 import {
+  accidentalStateAtEndOf,
   BARLINE_ROOM,
   columnAdvance,
   clampHyphenX,
@@ -972,7 +974,7 @@ type Slot = [number, Pitch['step'], number, number];
  * A C-major score built from slots, one quarter note per beat, with as many
  * measures declared as the slots reach. `fifths` is 0 throughout, so a
  * natural is exactly what the key signature already gives and the required
- * accidental at `staff-renderer.ts:1416` draws nothing for it.
+ * accidental rule at `staff-renderer.ts:355` draws nothing for it.
  */
 const scoreOf = (slots: Slot[], measureCount = Math.max(...slots.map((s) => s[0])) + 1): ParsedScore => {
   const perMeasure = new Map<number, number>();
@@ -1279,5 +1281,120 @@ describe('the courtesy cluster breathes (N.102 increment 1a)', () => {
     // The right edge is now PAST where a bare accidental would end, which is
     // the collision the floor accepts rather than crossing the barline.
     expect(xR + glyphW).toBeGreaterThan(bareRightEdge(nx, w));
+  });
+});
+
+// ── N.102 increment 1b: the courtesy survives the system break ───────
+//
+// Every system is rendered from its own slice, and `sliceScore` rebases the
+// slice's measure indices to 0, so the measure before a system break is drawn
+// by a different call. A courtesy accidental was therefore never drawn on a
+// measure that opened a system, and a cancellation a singer needs was lost at
+// every line break.
+//
+// `accidentalStateAtEndOf` is the walk that answers what a slice inherits, and
+// `advanceAccidentalState` is the one decision both it and the draw loop make,
+// so the two cannot drift.
+describe('the courtesy survives the system break (N.102 increment 1b)', () => {
+  const PL = String.fromCodePoint(0xe26a);
+  const PR = String.fromCodePoint(0xe26b);
+  const NAT = String.fromCodePoint(0xe261);
+
+  describe('accidentalStateAtEndOf', () => {
+    it('carries the flat a bar stated, keyed on step and octave', () => {
+      // B flat in bar 1, B natural in bar 2. At the end of bar 1 the flat is
+      // what stands, and that is the whole reason bar 2 draws a cancellation.
+      const score = scoreOf([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+      expect(accidentalStateAtEndOf(score, 0, 0)).toEqual({ B4: -1 });
+    });
+
+    it('carries the natural where a bar restated one over its own flat', () => {
+      // Both notes are in bar 1: the flat is required against C major, and the
+      // natural is required against the flat. The bar therefore ends on 0, not
+      // on -1, and a B natural in bar 2 must draw nothing.
+      const score = scoreOf([[0, 'B', 4, -1], [0, 'B', 4, 0]]);
+      expect(accidentalStateAtEndOf(score, 0, 0)).toEqual({ B4: 0 });
+    });
+
+    it('carries nothing out of a bar that altered nothing', () => {
+      // An empty state is a real answer, not a failure to compute one.
+      const score = scoreOf([[0, 'B', 4, 0], [1, 'B', 4, 0]]);
+      expect(accidentalStateAtEndOf(score, 0, 0)).toEqual({});
+    });
+
+    it('carries the courtesy the bar itself drew, and nothing before the first bar', () => {
+      // Bar 2's cancellation writes to bar 2's own state, so the walk has to
+      // run the courtesy rule and not only the required one. And a measure
+      // index below zero is the first system's case: nothing precedes it.
+      const score = scoreOf([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+      expect(accidentalStateAtEndOf(score, 1, 0)).toEqual({ B4: 0 });
+      expect(accidentalStateAtEndOf(score, -1, 0)).toEqual({});
+    });
+
+    it('carries nothing out of a bar the singer does not sing', () => {
+      // Bar 2 holds no sung event at all, so it states nothing, and the walk
+      // says so rather than handing back bar 1's state by accident.
+      const score = scoreOf([[0, 'B', 4, -1], [2, 'B', 4, 0]], 3);
+      expect(accidentalStateAtEndOf(score, 1, 0)).toEqual({});
+    });
+  });
+
+  describe('through paginateScore', () => {
+    /**
+     * A page too narrow to hold two measures, so every measure gets a system of
+     * its own and the boundary under test is where the test puts it, not where
+     * the packing arithmetic happens to land.
+     */
+    const paginate = (slots: Parameters<typeof scoreOf>[0]) => {
+      const parsed = scoreOf(slots);
+      const analyzed = analyzeScore(parsed, bareProfile, () => undefined, {
+        generatedAt: '2026-09-02T00:00:00.000Z',
+      });
+      return paginateScore(parsed, analyzed, {
+        clef: 'treble',
+        font: syntheticSmuflFont(),
+        fontFamily: 'TestFont',
+        pageWidth: 300,
+        marginLeft: 72,
+        marginRight: 72,
+      });
+    };
+    const count = (s: string, ch: string) => (s.match(new RegExp(ch, 'gu')) ?? []).length;
+
+    it('cancels across a system break, on the first note of the second system', () => {
+      const out = paginate([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+      expect(out.systems.map((s) => [s.fromMeasure, s.toMeasure])).toEqual([[0, 0], [1, 1]]);
+
+      // System 1 states the flat and brackets nothing.
+      expect(count(out.systems[0].svg, PL)).toBe(0);
+      // System 2 opens with the cancellation, and draws it exactly once.
+      expect(count(out.systems[1].svg, PL)).toBe(1);
+      expect(count(out.systems[1].svg, PR)).toBe(1);
+      // On the first note of that system, and bracketing a natural.
+      const trio = out.systems[1].svg.match(
+        new RegExp(`<text data-of-event="c2"[^>]*>([\\u{E260}-\\u{E26B}])</text>`, 'gu'),
+      );
+      expect(trio).toHaveLength(3);
+      expect(out.systems[1].svg).toContain(`<text data-of-event="c2"`);
+      expect(count(out.systems[1].svg, NAT)).toBe(1);
+    });
+
+    it('says nothing across a system break where nothing was altered', () => {
+      // The control. Same two systems, same pitch either side of the break, and
+      // no alteration anywhere: the page stays quiet.
+      const out = paginate([[0, 'B', 4, 0], [1, 'B', 4, 0]]);
+      expect(out.systems.map((s) => [s.fromMeasure, s.toMeasure])).toEqual([[0, 0], [1, 1]]);
+      for (const s of out.systems) {
+        expect(count(s.svg, PL)).toBe(0);
+        expect(count(s.svg, PR)).toBe(0);
+      }
+    });
+
+    it('leaves the first system alone, which has no bar before it to inherit from', () => {
+      // The seed is empty for system 1 by construction. This pins that the
+      // option cannot make the piece open on a courtesy.
+      const out = paginate([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+      expect(count(out.systems[0].svg, PL)).toBe(0);
+    });
   });
 });

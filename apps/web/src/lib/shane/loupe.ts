@@ -293,9 +293,9 @@ function round(n: number): number {
  * one place to read it.
  *
  * IT IS PAINT ORDER, GATED BY A HANDLE. The renderer emits a system in one
- * fixed order: the staff lines, the clef (`staff-renderer.ts:1034`), the
- * octave `8` (`:1058`), the key signature (`:1077`), and only then the tacet
- * pass (`:1214`), the note loop (`:1360`) and the underlay (`:1778`). So
+ * fixed order: the staff lines, the clef (`staff-renderer.ts:1172`), the
+ * octave `8` (`:1196`), the key signature (`:1215`), and only then the tacet
+ * pass (`:1382`), the note loop (`:1532`) and the underlay (`:2044`). So
  * everything before the FIRST element carrying a music handle is the head's
  * furniture, and everything from it onward is not.
  *
@@ -303,17 +303,17 @@ function round(n: number): number {
  * every drawn part of a note and on nothing else:
  *
  * - `[data-event-id] > :not([data-hit])`, a notehead with its stem, flag and
- *   ledger lines (`:1467`). The group itself is deliberately not matched: its
+ *   ledger lines (`:1731`). The group itself is deliberately not matched: its
  *   own box contains the hit rectangle.
  * - `[data-of-event]`, a part drawn OUTSIDE that group because it precedes the
- *   group in paint order: an accidental (`:1383`) or an augmentation dot
- *   (`:1444`). An accidental sits LEFT of its notehead, and MEASURED on the
+ *   group in paint order: an accidental (`:1559`) or an augmentation dot
+ *   (`:1708`). An accidental sits LEFT of its notehead, and MEASURED on the
  *   engraved Without Sun song 1 it is the leftmost music ink on two of the
  *   seven systems, at x = 66.38 against a notehead at 72.5.
  * - `[data-tacet]`, N.104's consolidated multibar rest (`:1214-1340`).
  *
  * WHY A GATE AND NOT A LIST. The underlay carries no handle at all
- * (`:1778`, `:1783`), and it is drawn wider than the note it sits under: on
+ * (`:2044`, `:2049`), and it is drawn wider than the note it sits under: on
  * six of the seven systems the first syllable begins LEFT of the first
  * notehead. A head bounded on the marked music alone paints that syllable,
  * which is a word where a clef and key belong. Paint order catches it without
@@ -322,7 +322,7 @@ function round(n: number): number {
  * WHAT THE HEAD KEEPS. Anything the renderer draws before the gate and leaves
  * unmarked lands INSIDE the head. That is the right side for a clef, a key
  * signature and the octave `8`, and it would be the right side for a printed
- * time signature. **Ilya draws no time signature anywhere today**: `:964`
+ * time signature. **Ilya draws no time signature anywhere today**: `:1102`
  * reads `timeSignature` for spacing and nothing emits it.
  */
 export const MUSIC_MARK = '[data-event-id] > :not([data-hit]), [data-of-event], [data-tacet]';

@@ -378,7 +378,7 @@ function amend(ev: VocalLineEvent, c: NoteCorrection): VocalLineEvent {
 		   A rest the READER read can carry a pitch correction: the id resolves,
 		   the correction lands, and the pitch is inert because the renderer
 		   draws the rest and never reaches it
-		   (`staff-renderer.ts:926`). `recognized-to-musicxml.test.ts:365` pins
+		   (`staff-renderer.ts:1064`). `recognized-to-musicxml.test.ts:365` pins
 		   exactly that, on a real captured page. Dropping the pitch from every
 		   rest broke it. Only the singer's own conversion drops one. */
 		...(c.type === 'rest' ? { pitch: undefined } : c.pitch ? { pitch: c.pitch } : {}),

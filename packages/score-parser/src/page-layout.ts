@@ -21,7 +21,12 @@
 
 import type { ParsedScore } from './types';
 import type { AnalyzedScore } from './analysis-types';
-import { renderAnalyzedStaff, layoutColumns, type StaffRenderOptions } from './staff-renderer';
+import {
+	accidentalStateAtEndOf,
+	renderAnalyzedStaff,
+	layoutColumns,
+	type StaffRenderOptions,
+} from './staff-renderer';
 import { chooseClef } from './clef-select';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
@@ -152,6 +157,26 @@ export function paginateScore(
   // heuristic could flip clefs between systems on a wide-range melody.
   const renderOptions: StaffRenderOptions = { ...options, clef: options.clef ?? chooseClef(parsed) };
 
+  /**
+   * N.102 increment 1b. Every system is rendered from a slice whose measure
+   * indices start at 0, so the renderer cannot see what the measure before the
+   * slice stated and drew no courtesy accidental on any measure that opens a
+   * system. This is the missing half: the closing accidental state of the bar
+   * before each slice, handed in as `incomingAccidentals`.
+   *
+   * It is computed by `accidentalStateAtEndOf`, which walks through the same
+   * `advanceAccidentalState` call the draw loop makes, so the paginator and the
+   * renderer cannot answer differently. `a - 1` is -1 for the first system,
+   * which the walk answers with an empty state, and that is the truth: nothing
+   * precedes the first bar.
+   *
+   * ONE KEY SIGNATURE for the whole walk, the score's own, which is the
+   * assumption the renderer already makes when it reads `keySignatures[0]`.
+   */
+  const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
+  const incomingAt = (fromMeasure: number): Record<string, number> =>
+    accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths);
+
   // ── Pack measures into systems against the inner width ──
   const ranges: Array<[number, number]> = [];
   let from = 0;
@@ -178,6 +203,8 @@ export function paginateScore(
       // needs the offset back so `data-tacet` prints the score's own scale,
       // the one `data-system` and every event id already print (N.104).
       measureOffset: a,
+      // N.102 increment 1b: what the bar before this slice left in force.
+      incomingAccidentals: incomingAt(a),
       // Every system fills the line, so they all come out the same width and
       // all reach both margins (Dann's ruling, 2026-08-06). `sliceWidth` above
       // still packs on NATURAL widths, which is what decides how many measures
@@ -262,7 +289,12 @@ export function paginateScore(
     const svg = renderAnalyzedStaff(
       sliceScore(parsed, lastSystem.fromMeasure, lastSystem.toMeasure),
       analyzed,
-      { ...renderOptions, finalBarline: true, measureOffset: lastSystem.fromMeasure },
+      {
+        ...renderOptions,
+        finalBarline: true,
+        measureOffset: lastSystem.fromMeasure,
+        incomingAccidentals: incomingAt(lastSystem.fromMeasure),
+      },
     );
     const box = viewBoxOf(svg);
     const aloneOnFinalPage = lastGroup.length === 1 && pageGroups.length > 1;

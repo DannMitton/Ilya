@@ -252,12 +252,31 @@ export interface StaffRenderOptions {
    * scale. A standalone render leaves it 0, which is the truth there.
    */
   measureOffset?: number;
+  /**
+   * The sung line's accidental state at the END of the measure before this
+   * slice's first measure (N.102 increment 1b), keyed as `measureAcc` keys it.
+   *
+   * WHY A SLICE NEEDS TELLING. `paginateScore` renders every system through its
+   * own call on a slice whose measure indices `sliceScore` has rebased to 0, so
+   * the measure before a system break is drawn by a different call and its
+   * closing state is not reachable from inside this one. Until this option, no
+   * courtesy accidental was ever drawn on a measure that opens a system, and a
+   * cancellation a singer needs was silently lost at every line break.
+   *
+   * `accidentalStateAtEndOf` computes it, and `paginateScore` passes it. A
+   * standalone render omits it, which is the truth there: nothing precedes the
+   * measures it holds.
+   *
+   * IT SEEDS THE FIRST MEASURE AND NOTHING ELSE. Every later measure in the
+   * slice takes its carry from the measure this call itself just drew.
+   */
+  incomingAccidentals?: Record<string, number>;
 }
 
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'finalBarline' | 'targetWidth'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals'>> = {
   staffMidY: 96,
   lineGap: 12,
   leftMargin: 92,
@@ -288,11 +307,110 @@ function esc(s: string): string {
 const SHARP_ORDER: Pitch['step'][] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
 const FLAT_ORDER: Pitch['step'][] = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
 
+/**
+ * The key an accidental is carried under: step AND octave, so a B flat in one
+ * octave says nothing about a B in another (r116, per
+ * `brief-n102-courtesy-accidentals_r1_2026-09-02.md` §4).
+ */
+export function accidentalKey(p: Pitch): string {
+  return `${p.step}${p.octave}`;
+}
+
 /** The alteration a key signature imposes on a given diatonic step. */
 function keySignatureAlter(step: Pitch['step'], fifths: number): number {
   if (fifths > 0 && SHARP_ORDER.slice(0, fifths).includes(step)) return 1;
   if (fifths < 0 && FLAT_ORDER.slice(0, -fifths).includes(step)) return -1;
   return 0;
+}
+
+/** What a note's accidental draws, once the two carry maps have had their say. */
+export type AccidentalMark = 'none' | 'required' | 'courtesy';
+
+/**
+ * Decide what one note's accidental draws, and ADVANCE the two carry maps.
+ *
+ * N.102 increment 1b. This is the whole accidental rule, in one place, and it
+ * exists so that the draw loop and `accidentalStateAtEndOf` cannot drift.
+ * Before this the rule lived only inside the draw loop, so the paginator had no
+ * way to ask what state a slice inherits without restating the rule and
+ * inviting the two copies to disagree.
+ *
+ * IT MUTATES BOTH MAPS, exactly as the draw loop did when it owned the rule:
+ * a drawn accidental of either kind puts the note's alter into `measureAcc`, so
+ * the rest of the bar is governed by it, and a drawn courtesy also drops its key
+ * from `prevMeasureAcc`, so a second recurrence in this bar draws nothing.
+ *
+ * @param pitch           the sung note's pitch
+ * @param fifths          the key signature in force
+ * @param measureAcc      what has been stated so far in THIS bar (mutated)
+ * @param prevMeasureAcc  what stood at the end of the bar before (mutated)
+ */
+export function advanceAccidentalState(
+  pitch: Pitch,
+  fifths: number,
+  measureAcc: Record<string, number>,
+  prevMeasureAcc: Record<string, number>,
+): AccidentalMark {
+  const key = accidentalKey(pitch);
+  const inEffect = key in measureAcc ? measureAcc[key] : keySignatureAlter(pitch.step, fifths);
+  if (pitch.alter !== inEffect) {
+    measureAcc[key] = pitch.alter;
+    return 'required';
+  }
+  if (prevMeasureAcc[key] !== undefined && prevMeasureAcc[key] !== pitch.alter && !(key in measureAcc)) {
+    measureAcc[key] = pitch.alter;
+    delete prevMeasureAcc[key];
+    return 'courtesy';
+  }
+  return 'none';
+}
+
+/**
+ * The sung line's accidental state as it stands at the END of `measureIndex`,
+ * keyed the way `measureAcc` keys it.
+ *
+ * N.102 increment 1b, and the reason it exists: `paginateScore` renders every
+ * system through its own `renderAnalyzedStaff` call on a rebased slice, so a
+ * slice's first measure had no idea what the measure before it stated and no
+ * courtesy was ever drawn on a measure that opens a system. The paginator now
+ * computes this and hands it in as `incomingAccidentals`.
+ *
+ * IT WALKS FROM MEASURE 0, and it has to: a courtesy drawn in one bar writes to
+ * that bar's `measureAcc`, so the state at the end of any bar depends on the
+ * whole chain before it. It walks through `advanceAccidentalState`, the same
+ * call the draw loop makes, so the two cannot answer differently.
+ *
+ * AN EMPTY RESULT IS A REAL ANSWER, not a failure. A bar in which the singer
+ * altered nothing ends with nothing carried, and so does a bar the singer does
+ * not sing at all. `measureIndex` below zero means there is no bar before the
+ * slice, which is the first system's case.
+ *
+ * ONE KEY SIGNATURE governs the whole walk, which is what the renderer itself
+ * assumes: it reads `keySignatures[0]` and renders every measure under it. A
+ * score that changes key mid-piece is NOT handled here, and is not handled by
+ * the renderer either.
+ */
+export function accidentalStateAtEndOf(
+  parsed: ParsedScore,
+  measureIndex: number,
+  fifths: number,
+): Record<string, number> {
+  if (measureIndex < 0) return {};
+  let measureAcc: Record<string, number> = {};
+  let prevMeasureAcc: Record<string, number> = {};
+  let curMeasure = -1;
+  for (const ev of parsed.vocalLine) {
+    if (ev.measureIndex > measureIndex) break; // the vocal line is in measure order
+    if (ev.measureIndex !== curMeasure) {
+      prevMeasureAcc = ev.measureIndex === curMeasure + 1 ? measureAcc : {};
+      curMeasure = ev.measureIndex;
+      measureAcc = {};
+    }
+    if (ev.type !== 'note' || !ev.pitch) continue;
+    advanceAccidentalState(ev.pitch, fifths, measureAcc, prevMeasureAcc);
+  }
+  // The bar asked about carried no sung event at all, so it states nothing.
+  return curMeasure === measureIndex ? measureAcc : {};
 }
 
 const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '♮', 2: '𝄪', [-2]: '𝄫' };
@@ -1163,7 +1281,21 @@ export function renderAnalyzedStaff(
   }
 
   // ── Draw ──
-  let measureAcc: Record<string, number> = {};
+  /**
+   * Seeded with `incomingAccidentals` (N.102 increment 1b), which is NOT this
+   * slice's first measure's own state: it is the closing state of the measure
+   * before the slice, standing in for a bar this call never draws.
+   *
+   * Seeding it here rather than `prevMeasureAcc` is what makes the handoff
+   * correct without a special case. The first pass through the measure-change
+   * block below moves this into `prevMeasureAcc` and resets `measureAcc`, and
+   * it does so under the SAME `curMeasure + 1` guard every later measure gets.
+   * So a slice that opens on a tacet measure, whose first sung event lands in
+   * rebased measure 1, drops the seed exactly as it should: the bar directly
+   * before that event is the slice's own silent first bar, not the previous
+   * system's last.
+   */
+  let measureAcc: Record<string, number> = { ...(options.incomingAccidentals ?? {}) };
   let turningAcc: Record<string, number> = {};
   /**
    * N.102. The sung line's accidental state as it stood at the END of the
@@ -1412,9 +1544,13 @@ export function renderAnalyzedStaff(
     // Accidental, if the note's alter differs from what's in effect.
     // Measure-opening notes nudge the accidental right so it clears the
     // barline at nx - 18 (Kimi's collision rule, 2026-07-12).
-    const accKey = `${pitch.step}${pitch.octave}`;
-    const inEffect = accKey in measureAcc ? measureAcc[accKey] : keySignatureAlter(pitch.step, fifths);
-    if (pitch.alter !== inEffect) {
+    //
+    // THE RULE ITSELF LIVES IN `advanceAccidentalState` since N.102 increment
+    // 1b, so `accidentalStateAtEndOf` can answer what a slice inherits by
+    // making the same call this loop makes. Everything below decides only what
+    // the mark LOOKS like; what it is was decided there.
+    const mark = advanceAccidentalState(pitch, fifths, measureAcc, prevMeasureAcc);
+    if (mark === 'required') {
       if (smufl) {
         const name = ACCIDENTAL_SMUFL[pitch.alter];
         if (name) {
@@ -1432,8 +1568,7 @@ export function renderAnalyzedStaff(
             ),
           );
       }
-      measureAcc[accKey] = pitch.alter;
-    } else if (prevMeasureAcc[accKey] !== undefined && prevMeasureAcc[accKey] !== pitch.alter && !(accKey in measureAcc)) {
+    } else if (mark === 'courtesy') {
       /* ── THE COURTESY ACCIDENTAL ACROSS A BARLINE (N.102, increment 1) ──
          Gould p.81, extraction v7 rule 121, as distilled by the desk in
          `brief-n102-courtesy-accidentals_r1_2026-09-02.md` §2: a pitch altered
@@ -1522,8 +1657,6 @@ export function renderAnalyzedStaff(
             ),
           );
       }
-      measureAcc[accKey] = pitch.alter;
-      delete prevMeasureAcc[accKey];
     }
 
     /* ── AUGMENTATION DOTS ───────────────────────────────────────────────

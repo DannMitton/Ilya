@@ -514,7 +514,7 @@
 
 		   THEY ARE A SECOND CROP OF THE SAME CLONE, not a second drawing. The
 		   renderer puts the clef and the key at the head of every system
-		   (`staff-renderer.ts:739` and `:770`), so the head is already in the
+		   (`staff-renderer.ts:739` and `:908`), so the head is already in the
 		   system this loupe is showing; it is simply outside the x window of
 		   every measure but the first. One clone, two viewports, and the glyphs
 		   in the head are the page's glyphs for the same reason the measure's
@@ -533,7 +533,7 @@
 
 		   - A TACET MARK CARRIES NO HIT RECTANGLE. N.104's pass emits
 		     `<g data-tacet>` and no `data-hit` at all
-		     (`staff-renderer.ts:1250-1380`), so on a system that OPENS with a run
+		     (`staff-renderer.ts:1382-1512`), so on a system that OPENS with a run
 		     the smallest hit belonged to the first note AFTER the run, and the
 		     head reached past the consolidated rest and painted it. Dann walked
 		     `e347311` and found it: clef, key, a whole rest, then the held
@@ -590,7 +590,7 @@
 		   x = 56, and the head now runs past it, so both crops contained the
 		   second sharp's ink at 56.01 to 61.25 and both drew it.
 
-		   THE PAGE'S SAGE RECTANGLE KEEPS THE UNCLIPPED WINDOW, at `:770` and
+		   THE PAGE'S SAGE RECTANGLE KEEPS THE UNCLIPPED WINDOW, at `:908` and
 		   after. It marks which measure the page is working on, which is a
 		   question about the measure and not about the loupe's two crops; the
 		   clip is the loupe's business alone. */
