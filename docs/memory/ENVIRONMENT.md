@@ -159,7 +159,7 @@ file.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **900 passed (900)** |
+| web-test | **908 passed (908)** |
 | score-parser | **481 passed, 5 skipped (486)** |
 
 **CORRECTED 2026-09-01.** This table read `754` and `444` and had done since
@@ -170,11 +170,14 @@ this table; it is transcribed from those runs.** The superseded web-test history
 (682 until 2026-08-23, 725 until 2026-08-24 evening, then 754) is in
 `../sessions/LOG.md`.
 
-**WEB-TEST IS ABOUT TO MOVE AGAIN, AND IT NEEDS DANN'S PERMISSION.** N.104's
-loupe fix adds eight tests in `loupe.test.ts`, taking web-test to **908**. It is
-WRITTEN and unwalked, so **900 is the number until he walks it and rules**.
-`~/Downloads/ilya-ship.sh:79` still reads `900 passed (900)` and is correct
-today.
+**WEB-TEST IS 908 AND THE SCRIPT ALREADY CARRIES IT.** N.104's loupe fix adds
+eight tests in `loupe.test.ts`. **VERIFIED 2026-09-01 by reading it**:
+`~/Downloads/ilya-ship.sh:79` reads `gate 4 web-test "908 passed (908)"`, `:80`
+reads `gate 5 score-parser "481 passed | 5 skipped (486)"`.
+
+*This paragraph previously asserted the script still read 900. That was taken
+from a memo rather than from the script, which this desk cannot read. Corrected
+2026-09-01.*
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 
@@ -375,6 +378,14 @@ Dann first.
 nothing exits 0, changes nothing, and sends him into a confusing refusal. Read
 `:79`, confirm the exact literal, hand him the command, then **re-read `:79`
 after he runs it** and only then tell him it is done.
+
+**AND THE DESK CANNOT READ THE SCRIPT AT ALL.** `ilya-ship.sh` lives in
+`~/Downloads`, which is not among the session's connected folders, so
+`device_bash` cannot open it. **Ask Dann to paste `sed -n '79,80p'` and read his
+output.** On 2026-09-01 the desk skipped that and transcribed a memo's claim
+about the line into `STATE.md` and into this file; the script had in fact
+already been changed to 908 and both claims were false. A memo about a file is
+not the file, and a file you cannot open is "not established".
 
 ---
 

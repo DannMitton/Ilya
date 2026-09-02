@@ -281,6 +281,67 @@ function round(n: number): number {
 }
 
 /**
+ * THE DISCRIMINATOR: where the head's ink stops and the music's begins.
+ *
+ * The head is the clef and the key signature, ruled by Dann 2026-08-27, and it
+ * ends where the music's first ink begins. Naming that boundary is the whole
+ * of the rule, and it is done here rather than in the component so there is
+ * one place to read it.
+ *
+ * IT IS PAINT ORDER, GATED BY A HANDLE. The renderer emits a system in one
+ * fixed order: the staff lines, the clef (`staff-renderer.ts:1034`), the
+ * octave `8` (`:1058`), the key signature (`:1077`), and only then the tacet
+ * pass (`:1214`), the note loop (`:1360`) and the underlay (`:1778`). So
+ * everything before the FIRST element carrying a music handle is the head's
+ * furniture, and everything from it onward is not.
+ *
+ * `MUSIC_MARK` IS THAT GATE. Three handles, and the renderer puts them on
+ * every drawn part of a note and on nothing else:
+ *
+ * - `[data-event-id] > :not([data-hit])`, a notehead with its stem, flag and
+ *   ledger lines (`:1467`). The group itself is deliberately not matched: its
+ *   own box contains the hit rectangle.
+ * - `[data-of-event]`, a part drawn OUTSIDE that group because it precedes the
+ *   group in paint order: an accidental (`:1383`) or an augmentation dot
+ *   (`:1444`). An accidental sits LEFT of its notehead, and MEASURED on the
+ *   engraved Without Sun song 1 it is the leftmost music ink on two of the
+ *   seven systems, at x = 66.38 against a notehead at 72.5.
+ * - `[data-tacet]`, N.104's consolidated multibar rest (`:1214-1340`).
+ *
+ * WHY A GATE AND NOT A LIST. The underlay carries no handle at all
+ * (`:1778`, `:1783`), and it is drawn wider than the note it sits under: on
+ * six of the seven systems the first syllable begins LEFT of the first
+ * notehead. A head bounded on the marked music alone paints that syllable,
+ * which is a word where a clef and key belong. Paint order catches it without
+ * asking the renderer for a new handle, because the underlay is emitted last.
+ *
+ * WHAT THE HEAD KEEPS. Anything the renderer draws before the gate and leaves
+ * unmarked lands INSIDE the head. That is the right side for a clef, a key
+ * signature and the octave `8`, and it would be the right side for a printed
+ * time signature. **Ilya draws no time signature anywhere today**: `:964`
+ * reads `timeSignature` for spacing and nothing emits it.
+ */
+export const MUSIC_MARK = '[data-event-id] > :not([data-hit]), [data-of-event], [data-tacet]';
+
+/**
+ * Where the loupe's head ends: the leftmost ink drawn from `MUSIC_MARK` on.
+ *
+ * The caller measures each candidate off the DOM as drawn rather than
+ * computing any of it from the renderer's constants, which are options a
+ * caller can change. Same register as the boundary-barline search in
+ * `Loupe.svelte`, which the file's own comment insists is found as drawn.
+ *
+ * Zero when the system draws no music at all. The loupe never rises on one:
+ * `Loupe.svelte:359` returns early when the held measure carries no event ids,
+ * and a system of nothing but rests carries none.
+ */
+export function headBound(inkXs: readonly number[]): number {
+	const all = inkXs.filter((n) => Number.isFinite(n));
+	if (all.length === 0) return 0;
+	return Math.max(0, Math.min(...all));
+}
+
+/**
  * What the loupe needs to know about the page as a whole, in staff units.
  *
  * Gathered by measuring the rendered page once, so it holds for every measure

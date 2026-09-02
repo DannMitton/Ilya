@@ -87,12 +87,17 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `docs/sessions/memo-n104-loupe-head_r1_2026-08-29.md`.
 > `docs/sessions/memo-n104-ship_r1_2026-08-29.md` is modified and rides along.
 >
-> **GATE 4 MOVES, AND IT NEEDS DANN'S PERMISSION.** `900 passed (900)` becomes
-> **`908 passed (908)`**, from eight tests the build added in
-> `loupe.test.ts` under `describe('the head's bound')`. No existing test changed
-> or was deleted. **`~/Downloads/ilya-ship.sh:79` needs that number changed by
-> hand before the next ship**; line 80 stays at `481 passed | 5 skipped (486)`.
-> Script md5 at the time of the memo: `f90fae3ebe70e5db6b95eacac1b7d58b`.
+> **GATE 4 IS 908, AND THE SHIP SCRIPT ALREADY CARRIES IT.** Eight tests the
+> loupe build added in `loupe.test.ts` under `describe('the head’s bound')` take
+> web-test from 900 to 908. No existing test changed or was deleted.
+> **VERIFIED 2026-09-01 by reading the line**: `~/Downloads/ilya-ship.sh:79`
+> reads `gate 4 web-test "908 passed (908)"` and `:80` reads
+> `gate 5 score-parser "481 passed | 5 skipped (486)"`. Both are correct for the
+> tree as it stands. **Nothing is owed here.**
+>
+> *This block previously said the line still read 900 and needed changing by
+> hand. That was transcribed from the loupe memo's §7 rather than read off the
+> script, which the desk had no access to. Corrected 2026-09-01.*
 >
 > **Waiting, all Dann's to order:** N.83's walkthrough call (his to
 > schedule), N.84 the Guide redo (deferred so it reflects the finished
@@ -165,11 +170,6 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 > step 4 split, and the second-score measurement. All verbatim, block 4.
 
 ## OWED, RULED BUT NOT YET DONE
-
-- **`~/Downloads/ilya-ship.sh:79`, gate 4, `900` to `908`.** Owed before the
-  next ship. **Moving a gate baseline needs Dann's permission**, and the eight
-  new tests are disclosed in
-  `docs/sessions/memo-n104-loupe-head_r1_2026-08-29.md` §7. Not done.
 
 - **TWO DOCUMENTS FROM 2026-08-17/18 LIVE IN PROJECT KNOWLEDGE, NOT HERE.**
   Nothing else in this folder names them and a session that does not read this

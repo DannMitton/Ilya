@@ -20,6 +20,8 @@
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
 	import { t, type Language } from '$lib/i18n';
 	import {
+		headBound,
+		MUSIC_MARK,
 		inkCrop,
 		centreOnPage,
 		insertionBar,
@@ -517,15 +519,65 @@
 		   in the head are the page's glyphs for the same reason the measure's
 		   are: they ARE the page's.
 
-		   THE HEAD ENDS WHERE THE FIRST COLUMN BEGINS. The renderer tiles the
-		   system with hit rectangles from the midpoint before each note, so the
-		   smallest of them in the whole system bounds everything drawn before
-		   the music starts. Measured off the DOM rather than recomputed from
-		   `leftMargin`, which is an option a caller can change. */
-		const allHits = [...sysEl.querySelectorAll('[data-hit]')].map((el) =>
-			Number(el.getAttribute('x')),
-		);
-		const headWidthUnits = allHits.length > 0 ? Math.max(0, Math.min(...allHits)) : 0;
+		   THE HEAD ENDS WHERE THE MUSIC'S FIRST INK BEGINS. `MUSIC_MARK` in
+		   `loupe.ts` carries the whole of that decision and why it is paint order
+		   rather than a list. Everything from the first marked element onward is
+		   the music's, and this walk takes the leftmost ink of it, measured off
+		   the DOM as drawn rather than recomputed from `leftMargin` or
+		   `TACET_REST`, in the same register as the boundary-barline search above.
+
+		   IT WAS BOUNDED ON HIT RECTANGLES UNTIL 2026-08-29, and that rule failed
+		   twice on one walk. A hit rectangle begins at the midpoint BEFORE its
+		   note, so it is neither the music's ink nor reliably right of the head's:
+
+		   - A TACET MARK CARRIES NO HIT RECTANGLE. N.104's pass emits
+		     `<g data-tacet>` and no `data-hit` at all
+		     (`staff-renderer.ts:1214-1340`), so on a system that OPENS with a run
+		     the smallest hit belonged to the first note AFTER the run, and the
+		     head reached past the consolidated rest and painted it. Dann walked
+		     `e347311` and found it: clef, key, a whole rest, then the held
+		     measure, on a rest belonging to neither measure.
+
+		   - THE HIT RECTANGLE CUT THE KEY SIGNATURE. On the engraved Without Sun
+		     song 1 the first hit begins at x = 56 and the key signature's second
+		     sharp is drawn at 56.01, so six of that document's seven systems
+		     showed one sharp where the page has two. MEASURED on all seven and
+		     looked at at nine times. Dann ruled the one rule in on 2026-08-29.
+
+		   N.104 EXPOSED THE FIRST RATHER THAN CAUSING IT: before it, that
+		   document's first measure drew nothing, so the head caught empty space
+		   and the assumption held silently. Same shape as the augmentation dot.
+		   The second was there the whole time.
+
+		   FOUR THINGS ARE SKIPPED, and the last three are `pageMetrics`' own list
+		   at `:222-236` for its own reason: what the loupe does not draw cannot
+		   set its frame. A hit rectangle is a touch target and not ink. An
+		   `[data-event-id]` group's box contains one, so the group is skipped and
+		   its children carry it. A descendant of `[data-tacet]` is skipped because
+		   the composed H-bar's body sits inside a `scale()` and `getBBox()` on it
+		   returns local coordinates; the group's own box is the drawn one. The
+		   analysis layer, the page's held rectangle and the selection ring are
+		   stripped from the clone at `:594` and after, so they must not size a
+		   crop that will not paint them. */
+		const nodes = [...sysEl.querySelectorAll('*')];
+		const gate = nodes.findIndex((el) => el.matches(MUSIC_MARK));
+		const inkXs: number[] = [];
+		for (let i = gate; i >= 0 && i < nodes.length; i++) {
+			const el = nodes[i];
+			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
+			if (el.hasAttribute('data-selection-ring')) continue;
+			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+			const tacet = el.closest('[data-tacet]');
+			if (tacet && tacet !== el) continue;
+			let b: DOMRect;
+			try {
+				b = (el as SVGGraphicsElement).getBBox();
+			} catch {
+				continue;
+			}
+			if (b && (b.width || b.height)) inkXs.push(b.x);
+		}
+		const headWidthUnits = headBound(inkXs);
 
 		/* THE HEAD SHARES THE FIT rather than being added to it. A measure
 		   wider than the phone is shown WHOLE at less than 2.4 rather than

@@ -14,6 +14,7 @@ import {
 	centreOnPage,
 	centredViewBox,
 	commonInkBox,
+	headBound,
 	inkCrop,
 	insertionBar,
 	isDismissSwipe,
@@ -402,5 +403,68 @@ describe('nearestTarget, bounded', () => {
 		// A tap by the second staff takes it, though the first centre is closer
 		// to nothing in particular — the band, not the distance, decides first.
 		expect(nearestTarget(two, 100, 230.25)).toBe('far');
+	});
+});
+
+
+// ── N.104 reopened: the head carries the whole clef and key ──────────
+//
+// Dann walked `e347311` and raised the loupe on the second and third drawn
+// bars of the engraved Without Sun song 1. Both heads showed clef, key, a
+// whole rest, and then the held measure's notes, on a rest that is in neither
+// measure. Measuring that found a second fault of the same rule: the head was
+// bounded at a hit rectangle, which begins at the midpoint BEFORE its note at
+// x = 56, and the key signature's second sharp is drawn at 56.01, so six of
+// the seven systems showed one sharp where the page has two.
+//
+// Dann ruled the one rule in, 2026-08-29: the head ends at the leftmost ink
+// the music draws. `MUSIC_INK` is the discriminator; this is its arithmetic.
+describe('the head’s bound', () => {
+	it('stops at the leftmost ink where the music opens with a note', () => {
+		// System 3 of that document: the notehead is drawn at 72.5, and the hit
+		// rectangle that used to bound the head began at 56, inside the key.
+		expect(headBound([72.5, 100.52, 128.91])).toBe(72.5);
+	});
+
+	it('stops at the first syllable where the underlay reaches left of the note', () => {
+		// System 2: the notehead is at 72.5 and its accidental at 66.38, but
+		// «тень» begins at 63.53. The underlay carries no handle, which is why
+		// `MUSIC_MARK` gates on paint order rather than listing the music.
+		expect(headBound([66.38, 72.5, 63.53])).toBe(63.53);
+	});
+
+	it('stops at the tacet mark where a run OPENS the system', () => {
+		// System 1 of the same document: the consolidated rest is the leftmost
+		// thing the music draws, and the first notehead is far right of it.
+		expect(headBound([140.64, 179.1, 95.37])).toBe(95.37);
+	});
+
+	it('takes an accidental drawn left of its own notehead', () => {
+		// `data-of-event` exists because an accidental is painted before the
+		// group it belongs to (`staff-renderer.ts:1383`). Missing it would let
+		// the head swallow one.
+		expect(headBound([260.2, 254.08])).toBe(254.08);
+	});
+
+	it('takes the least of several marks', () => {
+		expect(headBound([200, 180, 95.03, 140])).toBe(95.03);
+	});
+
+	it('is zero where the system draws no music, which the loupe never reaches', () => {
+		// `Loupe.svelte:359` returns before the frame is computed when the held
+		// measure carries no event ids, and a system of nothing but rests
+		// carries none. Measured: a tap inside such a system raises no loupe
+		// and the stepper stops at the last sung measure.
+		expect(headBound([])).toBe(0);
+	});
+
+	it('ignores a candidate that is not a number', () => {
+		// `getBBox()` throws on a detached node and the caller skips it, but a
+		// NaN must not become the minimum if one ever arrives.
+		expect(headBound([Number.NaN, 72.5])).toBe(72.5);
+	});
+
+	it('never returns a negative bound', () => {
+		expect(headBound([-12])).toBe(0);
 	});
 });
