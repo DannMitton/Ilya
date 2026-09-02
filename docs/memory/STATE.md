@@ -99,6 +99,43 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > hand. That was transcribed from the loupe memo's §7 rather than read off the
 > script, which the desk had no access to. Corrected 2026-09-01.*
 >
+>
+> **THE ONE THING: N.104's LOUPE FIX SHIPPED A REGRESSION. Found by Dann on his
+> own walk of `510a280`, 2026-09-01.** The loupe draws the key signature's
+> second sharp TWICE on any measure that opens a system: F sharp, C sharp,
+> C sharp. **He saw it; no gate did, and the desk had already written the item
+> DONE off three screenshots before he spoke. The close was retracted.**
+>
+> **The mechanism, established from the code and from the memo's own numbers.**
+> The window's left edge is the leftmost HIT RECTANGLE of the held measure
+> (`loupe.ts:79`). Tonight's change moved the head onto the leftmost MUSIC INK
+> (`loupe.ts:338`, `Loupe.svelte:563-580`). **Those were the same quantity
+> before and are not the same quantity now.** Hit rectangles tile from the
+> midpoint before each note, so a measure that opens a system has its window
+> left at **56**, while the head now runs to 63.53 or beyond. The overlap is
+> 7.53 units on system 2, and the second sharp's ink is 56.01 to 61.25, which
+> sits entirely inside it. The head draws it, then the window draws it again.
+> The first sharp ends at 55.02, below 56, so it appears once.
+>
+> **Scope: the first measure of systems 2 through 7**, that is source measures
+> 4, 7, 10, 13, 16, and 18. Head bounds 63.53, 64.98, 66.38, 69.33, 70.77,
+> 69.14, all above 56, all overlapping the second sharp whole. System 1's
+> opening measure is the tacet bar, which carries no hit rectangle, so
+> `measureWindow` returns null and no loupe rises there. **WALKED AND CONFIRMED:
+> m. 4 (system 2) and m. 7 (system 3). The other four are predicted from the
+> same arithmetic and NOT walked.**
+>
+> **How it got past the memo.** `memo-n104-loupe-head_r1_2026-08-29.md` §3.1
+> records the head at 63.53 and §3.3 records m. 18's window left at 56. **Both
+> numbers are in the same memo, in two different tables, and nobody subtracted
+> one from the other.** Every measure §3.3 tested was the second or third of its
+> system except m. 18, whose window it measured without ever comparing it to the
+> head.
+>
+> **The brief is written**:
+> `docs/sessions/brief-n104-head-window-overlap_r1_2026-09-01.md`. Paste it to
+> Code in a fresh thread. Nothing is owed from Dann before that.
+>
 > **Waiting, all Dann's to order:** N.83's walkthrough call (his to
 > schedule), N.84 the Guide redo (deferred so it reflects the finished
 > build), N.94, N.102, N.103, and the release order N.85 through N.88.
@@ -170,6 +207,19 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 > step 4 split, and the second-score measurement. All verbatim, block 4.
 
 ## OWED, RULED BUT NOT YET DONE
+
+- **THREE RESIDUES OF N.104's LOUPE FIX. None is a regression, all three predate
+  it, and all three want numbers.** (1) `Loupe.svelte:275-276` still bounds
+  `pageMetrics`' head on `[data-hit]`, which is a different question from the
+  head's crop: bringing it onto `MUSIC_MARK` makes system 1's tacet measure a
+  candidate measure and resizes the loupe's window on every system of the page.
+  (2) `Loupe.svelte:217` skips a whole system from the page's ink survey when it
+  carries no notes, so a system of nothing but a tacet run draws a numeral the
+  survey never sees. **Cannot bite on this document**, where every system with a
+  run also carries notes. (3) **`MUSIC_MARK` is pinned by no test.**
+  `headBound`'s arithmetic is pinned eight ways; the selector is not, because
+  `apps/web`'s vitest has no DOM environment. Source:
+  `docs/sessions/memo-n104-loupe-head_r1_2026-08-29.md` §4 and §9.
 
 - **TWO DOCUMENTS FROM 2026-08-17/18 LIVE IN PROJECT KNOWLEDGE, NOT HERE.**
   Nothing else in this folder names them and a session that does not read this

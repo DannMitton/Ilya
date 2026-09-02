@@ -382,7 +382,7 @@ after he runs it** and only then tell him it is done.
 **AND THE DESK CANNOT READ THE SCRIPT AT ALL.** `ilya-ship.sh` lives in
 `~/Downloads`, which is not among the session's connected folders, so
 `device_bash` cannot open it. **Ask Dann to paste `sed -n '79,80p'` and read his
-output.** On 2026-09-01 the desk skipped that and transcribed a memo's claim
+output, OR request the folder.** On 2026-09-01 Dann granted `~/Downloads` on request, so the script and the score fixtures became readable from `$HOME/mnt/Downloads`. **Folder grants do not carry between sessions** (`README.md`), so a new session starts without it and must ask again. Asking once is cheaper than transcribing a memo's claim about a file, which is how the false claim below happened. On 2026-09-01 the desk skipped that and transcribed a memo's claim
 about the line into `STATE.md` and into this file; the script had in fact
 already been changed to 908 and both claims were false. A memo about a file is
 not the file, and a file you cannot open is "not established".
