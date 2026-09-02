@@ -62,13 +62,29 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > ESTABLISHED: the iOS path was never entered. His words: "The banner is
 > successfully dismissed."
 >
-> **THE ONE THING: N.102 increment 1, the courtesy accidental across a
-> barline.** Placed by Dann 2026-09-02 ("Proceed"). Gould rule 121 only,
-> automatic, parenthesized, sung line only; no control and no French, which
-> are increment 2. Maestro carries U+E26A and U+E26B, established by reading
-> the cmap. Brief: `docs/sessions/brief-n102-courtesy-accidentals_r1_2026-09-02.md`,
-> untracked until Dann adds it. Two DESK DEFAULTS inside it, both his to wave
-> off: sung line only, and parenthesized. Status: BRIEFED, not built.
+> **N.102 INCREMENT 1 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship
+> `0ed0fd8`, "N.102: the courtesy accidental across a barline". Gate 5 now
+> **493 | 5 skipped (498)** and `ilya-ship.sh:80` carries it. Two courtesies
+> drawn on Without Sun song 1 (bar 3 natural, bar 6 sharp); he saw the bar 3
+> natural: "Yes! Success!" Memo:
+> `docs/sessions/memo-n102-courtesy-accidentals_r1_2026-09-02.md`. Its three
+> flags, all desk calls: a courtesy is never drawn on a system-opening
+> measure (increment 1b, below); primitive mode collides at a measure opening
+> (fallback only, left); Gould 121's words matched the brief's paraphrase.
+>
+> **RULED BY DANN 2026-09-02, HIS EYE: the parenthesis gap is 0.2 stave-spaces
+> each side**, chosen from a four-column drawing of Maestro's outlines. His
+> caveat, his words: "I'm concerned about this being a hard rule. In scores
+> where very short rhythms bear courtesy accidentals we can be more fluid."
+> DESK DEFAULT built from that: 0.2 sp preferred, the gap closes toward 0
+> before the cluster moves when the measure-opening floor binds. The general
+> tight-rhythm case is N.103's.
+>
+> **THE ONE THING: N.102 increment 1a, the gap.** Briefed inline to Code
+> 2026-09-02. Then **1b**: the system-opening measure, which `paginateScore`
+> renders as its own slice so `prevMeasureAcc` is empty; needs a
+> `StaffRenderOptions` field carrying the incoming state. Not briefed.
+> **Increment 2**, the singer's control with its French, waits.
 >
 > **Open and unplaced:** N.103 measures do not re-space when ink is added
 > (N.102 may hand it a case), N.94, N.84 the Guide redo, N.83's call, and

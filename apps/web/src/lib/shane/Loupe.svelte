@@ -533,7 +533,7 @@
 
 		   - A TACET MARK CARRIES NO HIT RECTANGLE. N.104's pass emits
 		     `<g data-tacet>` and no `data-hit` at all
-		     (`staff-renderer.ts:1230-1360`), so on a system that OPENS with a run
+		     (`staff-renderer.ts:1250-1380`), so on a system that OPENS with a run
 		     the smallest hit belonged to the first note AFTER the run, and the
 		     head reached past the consolidated rest and painted it. Dann walked
 		     `e347311` and found it: clef, key, a whole rest, then the held

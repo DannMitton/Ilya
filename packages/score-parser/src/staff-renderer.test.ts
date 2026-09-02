@@ -24,10 +24,12 @@ import {
 import type { VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
+import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
 import {
   BARLINE_ROOM,
   columnAdvance,
   clampHyphenX,
+  COURTESY_GAP_SP,
   HYPHEN_HALF,
   layoutColumns,
   renderAnalyzedStaff,
@@ -954,74 +956,78 @@ describe('tacet measures', () => {
 // one flat and every existing assertion about its bytes has to keep holding.
 // C major, treble, one voice, a quarter note per slot, so the only thing an
 // assertion can be reading is the rule.
-describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
-  const PARENS_LEFT = String.fromCodePoint(0xe26a);
-  const PARENS_RIGHT = String.fromCodePoint(0xe26b);
-  const NATURAL = String.fromCodePoint(0xe261);
-  const FLAT = String.fromCodePoint(0xe260);
-  const SHARP = String.fromCodePoint(0xe262);
+/* The N.102 fixture, shared by both of this rule's describes since increment
+   1a needed a second one. Lifted to module scope unchanged; the twelve tests
+   of increment 1 read exactly what they read before. */
+const PARENS_LEFT = String.fromCodePoint(0xe26a);
+const PARENS_RIGHT = String.fromCodePoint(0xe26b);
+const NATURAL = String.fromCodePoint(0xe261);
+const FLAT = String.fromCodePoint(0xe260);
+const SHARP = String.fromCodePoint(0xe262);
 
-  /** One quarter note, spelled [measure, step, octave, alter]. */
-  type Slot = [number, Pitch['step'], number, number];
+/** One quarter note, spelled [measure, step, octave, alter]. */
+type Slot = [number, Pitch['step'], number, number];
 
-  /**
-   * A C-major score built from slots, one quarter note per beat, with as many
-   * measures declared as the slots reach. `fifths` is 0 throughout, so a
-   * natural is exactly what the key signature already gives and the required
-   * accidental at `staff-renderer.ts:1396` draws nothing for it.
-   */
-  const scoreOf = (slots: Slot[], measureCount = Math.max(...slots.map((s) => s[0])) + 1): ParsedScore => {
-    const perMeasure = new Map<number, number>();
-    const vocalLine: VocalLineEvent[] = slots.map(([measureIndex, step, octave, alter], i) => {
-      const beat = perMeasure.get(measureIndex) ?? 0;
-      perMeasure.set(measureIndex, beat + 1);
-      return {
-        id: `c${i + 1}`,
-        type: 'note',
-        measureIndex,
-        rhythmicPosition: { fraction: { numerator: beat, denominator: 4 } },
-        duration: { base: 'quarter', dots: 0, fraction: { numerator: 1, denominator: 4 } },
-        pitch: { step, octave, alter },
-      };
-    });
+/**
+ * A C-major score built from slots, one quarter note per beat, with as many
+ * measures declared as the slots reach. `fifths` is 0 throughout, so a
+ * natural is exactly what the key signature already gives and the required
+ * accidental at `staff-renderer.ts:1416` draws nothing for it.
+ */
+const scoreOf = (slots: Slot[], measureCount = Math.max(...slots.map((s) => s[0])) + 1): ParsedScore => {
+  const perMeasure = new Map<number, number>();
+  const vocalLine: VocalLineEvent[] = slots.map(([measureIndex, step, octave, alter], i) => {
+    const beat = perMeasure.get(measureIndex) ?? 0;
+    perMeasure.set(measureIndex, beat + 1);
     return {
-      source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
-      vocalPart: { partId: 'P1', partName: 'Voice' },
-      measures: Array.from({ length: measureCount }, (_, index) => ({
-        index,
-        number: String(index + 1),
-        timeSignature: { beats: 4, beatType: 4 },
-        keySignature: { fifths: 0 },
-        expectedDuration: { numerator: 1, denominator: 1 },
-      })),
-      keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
-      timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
-      tempoMarkings: [],
-      vocalLine,
+      id: `c${i + 1}`,
+      type: 'note',
+      measureIndex,
+      rhythmicPosition: { fraction: { numerator: beat, denominator: 4 } },
+      duration: { base: 'quarter', dots: 0, fraction: { numerator: 1, denominator: 4 } },
+      pitch: { step, octave, alter },
     };
+  });
+  return {
+    source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
+    vocalPart: { partId: 'P1', partName: 'Voice' },
+    measures: Array.from({ length: measureCount }, (_, index) => ({
+      index,
+      number: String(index + 1),
+      timeSignature: { beats: 4, beatType: 4 },
+      keySignature: { fifths: 0 },
+      expectedDuration: { numerator: 1, denominator: 1 },
+    })),
+    keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
+    timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
+    tempoMarkings: [],
+    vocalLine,
   };
+};
 
-  const bareProfile: VoiceProfileSnapshot = {
-    fR1: {},
-    range: { lowest: { step: 'C', octave: 3, alter: 0 }, highest: { step: 'C', octave: 6, alter: 0 } },
-    tessitura: { low: { step: 'E', octave: 4, alter: 0 }, high: { step: 'A', octave: 4, alter: 0 } },
-    passaggio: { primo: { step: 'E', octave: 4, alter: 0 }, secondo: { step: 'A', octave: 4, alter: 0 } },
-    label: 'test',
-  };
+const bareProfile: VoiceProfileSnapshot = {
+  fR1: {},
+  range: { lowest: { step: 'C', octave: 3, alter: 0 }, highest: { step: 'C', octave: 6, alter: 0 } },
+  tessitura: { low: { step: 'E', octave: 4, alter: 0 }, high: { step: 'A', octave: 4, alter: 0 } },
+  passaggio: { primo: { step: 'E', octave: 4, alter: 0 }, secondo: { step: 'A', octave: 4, alter: 0 } },
+  label: 'test',
+};
 
-  /**
-   * Render slots with an EMPTY analysis layer, the notation-only path a singer
-   * sees before measuring: the resolver names no vowel, so `analyzed.events`
-   * comes back empty, nothing lavender reaches the page, and every glyph an
-   * assertion reads belongs to the sung line.
-   */
-  const render = (slots: Slot[], options: StaffRenderOptions = {}): string => {
-    const parsed = scoreOf(slots);
-    const analyzed = analyzeScore(parsed, bareProfile, () => undefined, {
-      generatedAt: '2026-09-02T00:00:00.000Z',
-    });
-    return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble', ...options });
-  };
+/**
+ * Render slots with an EMPTY analysis layer, the notation-only path a singer
+ * sees before measuring: the resolver names no vowel, so `analyzed.events`
+ * comes back empty, nothing lavender reaches the page, and every glyph an
+ * assertion reads belongs to the sung line.
+ */
+const render = (slots: Slot[], options: StaffRenderOptions = {}): string => {
+  const parsed = scoreOf(slots);
+  const analyzed = analyzeScore(parsed, bareProfile, () => undefined, {
+    generatedAt: '2026-09-02T00:00:00.000Z',
+  });
+  return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble', ...options });
+};
+
+describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
   const glyphs = (slots: Slot[]): string =>
     render(slots, { font: syntheticSmuflFont(), fontFamily: 'TestFont' });
 
@@ -1153,5 +1159,125 @@ describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
     // And no parenthesis of any colour reaches the page.
     expect(svg.includes(PARENS_LEFT)).toBe(false);
     expect(svg.includes(PARENS_RIGHT)).toBe(false);
+  });
+});
+
+// ── N.102 increment 1a: the courtesy's parentheses breathe ───────────
+//
+// Dann's ruling, 2026-09-02. Increment 1 abutted the three glyphs at their
+// bounding boxes, so a sharp's outer stroke and a parenthesis's inner stroke
+// met with nothing between them. `COURTESY_GAP_SP` puts 0.2 stave-spaces on
+// each side of the accidental, and the gap is the FIRST thing to give: where
+// the measure-opening floor binds, the gap closes before the cluster is
+// allowed to move right off the accidental's own position.
+//
+// The three cases are the three the ruling names, and each is reached by
+// changing only the glyph widths the font reports, never the rule.
+describe('the courtesy cluster breathes (N.102 increment 1a)', () => {
+  /**
+   * A synthetic font whose every glyph is `widthSp` wide, so the case a test
+   * lands in is set by one number. `syntheticSmuflFont` fixes 1.18 spaces,
+   * which at the default 12 px lineGap overruns the measure-opening floor by
+   * far more than the gap can buy back; the narrower font below overruns it by
+   * less, which is the only way to reach the middle case.
+   */
+  const fontOfWidth = (widthSp: number) => {
+    const glyphBBoxes: Record<string, { bBoxNE: [number, number]; bBoxSW: [number, number] }> = {};
+    const glyphsWithAnchors: Record<string, Record<string, [number, number]>> = {};
+    for (const name of REQUIRED_GLYPHS) {
+      glyphBBoxes[name] = { bBoxNE: [widthSp, 0.5], bBoxSW: [0, -0.5] };
+      glyphsWithAnchors[name] = { stemUpSE: [widthSp, 0.168], stemDownNW: [0, -0.168] };
+    }
+    return prepareSmuflFont({
+      fontName: 'GapFont',
+      fontVersion: '1.0',
+      engravingDefaults: {
+        staffLineThickness: 0.13, stemThickness: 0.12, beamThickness: 0.5, beamSpacing: 0.25,
+        thinBarlineThickness: 0.16, thickBarlineThickness: 0.5,
+        legerLineThickness: 0.16, legerLineExtension: 0.4, tupletBracketThickness: 0.16,
+      },
+      glyphBBoxes,
+      glyphsWithAnchors,
+    });
+  };
+
+  const LINE_GAP = 12; // the renderer's default, restated so the arithmetic below is readable
+
+  /** The x of each glyph in the courtesy cluster, left to right. */
+  const clusterXs = (svg: string): number[] => {
+    const all = [...svg.matchAll(/<text [^>]*x="([-\d.]+)"[^>]*>([\u{E260}-\u{E26B}])<\/text>/gu)]
+      .map((m) => ({ x: Number(m[1]), cp: m[2].codePointAt(0)! }));
+    const i = all.findIndex((m) => m.cp === 0xe26a);
+    expect(i, 'no courtesy cluster was drawn').toBeGreaterThanOrEqual(0);
+    return all.slice(i, i + 3).map((m) => m.x);
+  };
+
+  /** The notehead's centre, which is what every accidental offset is measured from. */
+  const noteheadCentre = (svg: string, id: string, widthSp: number): number =>
+    Number(eventGroup(svg, id).match(/<text [^>]*x="([-\d.]+)"[^>]*>\u{E0A4}<\/text>/u)![1]) +
+    (widthSp / 2) * LINE_GAP;
+
+  /** The x a bare accidental's RIGHT edge would take: what the cluster hangs from. */
+  const bareRightEdge = (nx: number, widthSp: number): number => nx - (widthSp / 2) * LINE_GAP - 1.5;
+
+  it('takes the full gap on both sides where the floor does not bind', () => {
+    // The courtesy is on the THIRD note: G4 opens bar 2 and draws nothing, so
+    // the B4 that takes the cancellation is mid-measure and `newMeasure` is
+    // false. With no floor the cluster hangs entirely from the right edge.
+    const w = 1.18;
+    const svg = render([[0, 'B', 4, -1], [1, 'G', 4, 0], [1, 'B', 4, 0]], {
+      font: syntheticSmuflFont(), fontFamily: 'TestFont',
+    });
+    const [xL, xA, xR] = clusterXs(svg);
+    const glyphW = w * LINE_GAP;
+    const gap = COURTESY_GAP_SP * LINE_GAP;
+    expect(xA - xL).toBeCloseTo(glyphW + gap, 5);
+    expect(xR - xA).toBeCloseTo(glyphW + gap, 5);
+    // And the accidental still ends where a bare one would: the brackets grew
+    // leftward, they did not push the accidental off its place.
+    expect(xR + glyphW).toBeCloseTo(bareRightEdge(noteheadCentre(svg, 'c3', w), w), 5);
+  });
+
+  it('closes the gap part way, and no further, where the floor binds by less than two gaps', () => {
+    // GapFont at 0.3 spaces: the full-gap cluster reaches 18.9 px left of the
+    // notehead centre and the floor sits at 16, so it overruns by 2.9 px. That
+    // is inside the 4.8 px the two gaps can buy back, so each gap gives 1.45 px
+    // and the cluster's right edge does not move at all.
+    const w = 0.3;
+    const svg = render([[0, 'B', 4, -1], [1, 'B', 4, 0]], {
+      font: fontOfWidth(w), fontFamily: 'GapFont',
+    });
+    const [xL, xA, xR] = clusterXs(svg);
+    const glyphW = w * LINE_GAP;
+    const nx = noteheadCentre(svg, 'c2', w);
+    const gap = xA - xL - glyphW;
+
+    expect(gap).toBeCloseTo(0.95, 5);                         // 2.4 wanted, 1.45 given back
+    expect(gap).toBeGreaterThan(0);
+    expect(gap).toBeLessThan(COURTESY_GAP_SP * LINE_GAP);
+    expect(xR - xA).toBeCloseTo(glyphW + gap, 5);             // still symmetrical
+    expect(xL).toBeCloseTo(nx - 16, 5);                       // the floor holds it
+    expect(xR + glyphW).toBeCloseTo(bareRightEdge(nx, w), 5); // and the accidental keeps its place
+  });
+
+  it('spends the gap entirely and then moves the cluster, where the floor binds by more', () => {
+    // The 1.18-space font at a measure opening overruns the floor by 39.86 px,
+    // which two gaps of 2.4 cannot buy back. The gap goes to nothing and the
+    // cluster sits on the floor: increment 1's geometry exactly, which is what
+    // Dann walked, so a cluster too wide for its bar loses nothing it had.
+    const w = 1.18;
+    const svg = render([[0, 'B', 4, -1], [1, 'B', 4, 0]], {
+      font: syntheticSmuflFont(), fontFamily: 'TestFont',
+    });
+    const [xL, xA, xR] = clusterXs(svg);
+    const glyphW = w * LINE_GAP;
+    const nx = noteheadCentre(svg, 'c2', w);
+
+    expect(xA - xL).toBeCloseTo(glyphW, 5); // abutted: no gap left to give
+    expect(xR - xA).toBeCloseTo(glyphW, 5);
+    expect(xL).toBeCloseTo(nx - 16, 5);
+    // The right edge is now PAST where a bare accidental would end, which is
+    // the collision the floor accepts rather than crossing the barline.
+    expect(xR + glyphW).toBeGreaterThan(bareRightEdge(nx, w));
   });
 });

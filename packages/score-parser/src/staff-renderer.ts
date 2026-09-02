@@ -132,6 +132,26 @@ const IPA_FONT_PX = 12;
 /** Extra room at a barline, shared with `page-layout.ts`'s width estimate. */
 export const BARLINE_ROOM = 14;
 
+/**
+ * The air between a courtesy accidental and each of its parentheses, in stave
+ * spaces (N.102 increment 1a, Dann's ruling 2026-09-02).
+ *
+ * Increment 1 abutted the three glyphs at their bounding boxes, and abutted is
+ * what Finale Maestro's own boxes make it: the parenthesis box ends where its
+ * ink ends, so a sharp's outer stroke and a parenthesis's inner stroke meet
+ * with nothing between them. This is the gap Dann ruled in.
+ *
+ * JUDGEMENT, and it carries no rule number. The Gould extraction is not on
+ * this machine, so 0.2 is Dann's value and not a citation. It is exported so
+ * the tests read the same number the renderer draws, rather than repeating a
+ * literal that could drift from it.
+ *
+ * THE GAP IS THE FIRST THING TO GIVE. Where the measure-opening floor binds,
+ * the gap closes by exactly as much as the floor asks, down to nothing, before
+ * the cluster is allowed to move right off the accidental's own position.
+ */
+export const COURTESY_GAP_SP = 0.2;
+
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
   lineGap?: number;     // px between adjacent staff lines
@@ -1453,20 +1473,39 @@ export function renderAnalyzedStaff(
       if (smufl) {
         const name = ACCIDENTAL_SMUFL[pitch.alter];
         if (name) {
-          // Parens left, accidental, parens right, abutting at their bounding
-          // boxes with no gap, and the whole cluster placed where the bare
-          // accidental would go: the same `gx` arithmetic, with the cluster's
-          // width standing in for the accidental's own. The measure-opening
-          // floor still applies, so the cluster is nudged right off the
-          // barline exactly as a bare accidental is.
+          /* Parens left, accidental, parens right, with `COURTESY_GAP_SP` of
+             air on each side of the accidental (increment 1a), and the whole
+             cluster hung from the RIGHT: its right edge lands exactly where a
+             bare accidental's right edge would, so the accidental keeps the
+             position the required one would have taken and the brackets grow
+             leftward from it.
+
+             THE GAP GIVES BEFORE THE CLUSTER MOVES. A measure-opening cluster
+             may reach back past the `nx - 16` floor that keeps it off the
+             barline at `nx - 18`. When it does, `overrun` is how far, and the
+             gap closes by half of it on each side, which buys back exactly
+             that much and holds the right edge where it was. Only when the
+             whole gap is spent does the cluster move right, and at that point
+             `gap` is 0 and the arithmetic is increment 1's exactly, so the
+             behaviour Dann walked on 2026-09-02 is what a cluster too wide for
+             its bar still gets.
+
+             HALF ON EACH SIDE rather than closing one gap first: the brackets
+             stay symmetrical about the accidental at every width, and an
+             asymmetric pair reads as a mistake rather than as tight spacing. */
           const wL = sp(smufl.glyph('accidentalParensLeft').widthSp);
           const wA = sp(smufl.glyph(name).widthSp);
           const wR = sp(smufl.glyph('accidentalParensRight').widthSp);
-          const clusterW = wL + wA + wR;
-          const gx = Math.max(nx - headHalfW - 1.5 - clusterW, newMeasure ? nx - 16 : -Infinity);
+          const gapWanted = sp(COURTESY_GAP_SP);
+          const rightEdge = nx - headHalfW - 1.5;
+          const floor = newMeasure ? nx - 16 : -Infinity;
+          const overrun = Math.max(0, floor - (rightEdge - (wL + wA + wR + 2 * gapWanted)));
+          const gap = Math.max(0, gapWanted - overrun / 2);
+          const clusterW = wL + wA + wR + 2 * gap;
+          const gx = Math.max(rightEdge - clusterW, floor);
           parts.push(partOfEvent(glyphAt('accidentalParensLeft', gx, y, '#1a1612', true), ev.id));
-          parts.push(partOfEvent(glyphAt(name, gx + wL, y, '#1a1612', true), ev.id));
-          parts.push(partOfEvent(glyphAt('accidentalParensRight', gx + wL + wA, y, '#1a1612', true), ev.id));
+          parts.push(partOfEvent(glyphAt(name, gx + wL + gap, y, '#1a1612', true), ev.id));
+          parts.push(partOfEvent(glyphAt('accidentalParensRight', gx + wL + gap + wA + gap, y, '#1a1612', true), ev.id));
         }
       } else {
         // Primitive mode has no font to measure, so it brackets with the

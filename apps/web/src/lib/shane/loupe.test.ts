@@ -442,7 +442,7 @@ describe('the head’s bound', () => {
 
 	it('takes an accidental drawn left of its own notehead', () => {
 		// `data-of-event` exists because an accidental is painted before the
-		// group it belongs to (`staff-renderer.ts:1403`). Missing it would let
+		// group it belongs to (`staff-renderer.ts:1423`). Missing it would let
 		// the head swallow one.
 		expect(headBound([260.2, 254.08])).toBe(254.08);
 	});
