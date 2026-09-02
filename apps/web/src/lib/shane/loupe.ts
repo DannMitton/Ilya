@@ -69,6 +69,10 @@ export function systemIndexOf(ranges: readonly SystemRange[], measureIndex: numb
  * A measure that ends its system has no next measure to bound it, so the
  * window runs to the system's right edge, which is where the closing barline
  * is drawn.
+ *
+ * THIS LEFT EDGE IS COUPLED TO `headBound` AND MUST NOT OVERLAP IT.
+ * `clipToHead` carries the whole of that rule and what it cost when it was
+ * only an accident of construction. Read it before changing either.
  */
 export function measureWindow(
 	own: readonly HitRect[],
@@ -332,13 +336,65 @@ export const MUSIC_MARK = '[data-event-id] > :not([data-hit]), [data-of-event], 
  * `Loupe.svelte`, which the file's own comment insists is found as drawn.
  *
  * Zero when the system draws no music at all. The loupe never rises on one:
- * `Loupe.svelte:359` returns early when the held measure carries no event ids,
- * and a system of nothing but rests carries none.
+ * `Loupe.svelte`'s frame effect returns early on its `ownIds.length === 0`
+ * guard when the held measure carries no event ids, and a system of nothing
+ * but rests carries none.
+ *
+ * THIS BOUND IS COUPLED TO `measureWindow`'S LEFT EDGE AND MUST NOT OVERLAP
+ * IT. `clipToHead` carries the whole of that rule. Read it before changing
+ * what this returns.
  */
 export function headBound(inkXs: readonly number[]): number {
 	const all = inkXs.filter((n) => Number.isFinite(n));
 	if (all.length === 0) return 0;
 	return Math.max(0, Math.min(...all));
+}
+
+/**
+ * THE WINDOW BEGINS WHERE THE HEAD ENDS, and the two are one rule rather than
+ * two quantities that happen to agree.
+ *
+ * WHAT THEY ARE. `headBound` is the leftmost MUSIC INK on the system, so the
+ * head paints `[0, head]`. `measureWindow`'s left is the leftmost HIT
+ * RECTANGLE of the held measure, which the renderer tiles from the midpoint
+ * BEFORE each note (`staff-renderer.ts:1011`). The loupe draws the two crops
+ * flush, at one scale, so any x they both contain is painted twice.
+ *
+ * THEY WERE THE SAME NUMBER BY CONSTRUCTION UNTIL 2026-08-29. The head was
+ * bounded on `Math.min(...allHits)` then, which is the same quantity this
+ * window opens on, so an overlap was impossible and the coupling was never
+ * written down. `510a280` moved the head onto the music's ink to stop it
+ * cutting the key signature, and broke the coupling without noticing.
+ *
+ * WHAT DANN WALKED, 2026-09-01. On a measure that OPENS a system the leftmost
+ * hit rectangle stands at x = 56, LEFT of the key signature's second sharp,
+ * whose ink runs 56.01 to 61.25; the head now runs to 63.53 or beyond. So the
+ * head drew that sharp and the window drew it again, and the loupe showed
+ * three sharps in a key signature that has two. MEASURED on all six affected
+ * measures of the engraved Without Sun song 1: overlaps of 7.53, 8.98, 10.38,
+ * 13.33, 14.77 and 13.14 units, with exactly one glyph inside each.
+ *
+ * NOTHING IS LOST, AND THAT IS A PROOF RATHER THAN A HOPE. The head paints
+ * `[0, head]` and the clipped window paints `[head, right]`, so their union is
+ * `[0, right]`, which is exactly the union the unclipped pair painted. The clip
+ * changes the PARTITION and not the coverage, so it cannot remove a note, an
+ * accidental, a rest or a syllable whatever the discarded region holds. A mark
+ * that straddles the seam is cut by the head's crop and resumes at the window's,
+ * and the two halves abut because the caller draws the crops adjacent at one
+ * scale: MEASURED, the five staff lines cross it on every system and read as
+ * one stave.
+ *
+ * THE CLAMP CANNOT BITE TODAY and is kept for the same reason `measureWindow`
+ * keeps its own `left + 1`: a window narrower than a unit is not a window. A
+ * head past the held measure's right edge would need a system whose first
+ * measure carries a hit rectangle and no music ink at all, and a hit rectangle
+ * is only ever emitted for a note (`staff-renderer.ts:1011`), whose notehead is
+ * ink. NOT ESTABLISHED by a test on the page, because the case cannot be built
+ * from this renderer.
+ */
+export function clipToHead(win: MeasureWindow, head: number): MeasureWindow {
+	if (!Number.isFinite(head) || !(head > win.left)) return win;
+	return { left: Math.min(head, win.right - 1), right: win.right };
 }
 
 /**

@@ -13,6 +13,7 @@ import {
 	FINE_TAP_SPACES,
 	centreOnPage,
 	centredViewBox,
+	clipToHead,
 	commonInkBox,
 	headBound,
 	inkCrop,
@@ -451,9 +452,10 @@ describe('the head’s bound', () => {
 	});
 
 	it('is zero where the system draws no music, which the loupe never reaches', () => {
-		// `Loupe.svelte:359` returns before the frame is computed when the held
-		// measure carries no event ids, and a system of nothing but rests
-		// carries none. Measured: a tap inside such a system raises no loupe
+		// `Loupe.svelte`'s frame effect returns before the frame is computed, on
+		// its `ownIds.length === 0` guard, when the held measure carries no
+		// event ids, and a system of nothing but rests carries none.
+		// Measured: a tap inside such a system raises no loupe
 		// and the stepper stops at the last sung measure.
 		expect(headBound([])).toBe(0);
 	});
@@ -466,5 +468,84 @@ describe('the head’s bound', () => {
 
 	it('never returns a negative bound', () => {
 		expect(headBound([-12])).toBe(0);
+	});
+});
+
+// ── THE WINDOW BEGINS WHERE THE HEAD ENDS ────────────────────────────────
+//
+// Dann walked `510a280` on 2026-09-01 and found the loupe drawing THREE
+// sharps in a two-sharp key signature, on m. 4 and m. 7 of the engraved
+// Without Sun song 1. Five gates passed and none of them could have seen it.
+//
+// The cause is a coupling nobody had written down. Until 2026-08-29 the head
+// was bounded on `Math.min(...allHits)`, which is the same quantity
+// `measureWindow` opens on, so the head's right edge and the window's left
+// edge were ONE number by construction and an overlap was impossible. Moving
+// the head onto the music's ink broke that, and on a measure that opens a
+// system the window still opens at the leftmost hit rectangle, x = 56, while
+// the head now runs to 63.53 or beyond. Both crops held the second sharp's
+// ink at 56.01 to 61.25 and both drew it.
+//
+// These pin the coupling, so the two cannot silently diverge again. The
+// numbers are MEASURED off the rendered page on 2026-09-01, before and after.
+describe('the window clipped to the head', () => {
+	it('opens the window where the head stops, on a measure that opens a system', () => {
+		// m. 4, system 2. The head runs to 63.53 and the window opened at 56,
+		// so 7.53 units were painted twice and the second sharp sat inside.
+		expect(clipToHead({ left: 56, right: 241.51 }, 63.53)).toEqual({
+			left: 63.53,
+			right: 241.51,
+		});
+	});
+
+	it('leaves a mid-system window untouched', () => {
+		// m. 5, same system. The window opens at 247.42, far right of the head,
+		// which is the case the fault never reached and must not now change.
+		expect(clipToHead({ left: 247.42, right: 438.65 }, 63.53)).toEqual({
+			left: 247.42,
+			right: 438.65,
+		});
+	});
+
+	it('leaves the window untouched where the head ends exactly on it', () => {
+		// The construction as it stood before 2026-08-29: head and window were
+		// the same number, so there was nothing to clip and nothing was lost.
+		expect(clipToHead({ left: 56, right: 241.51 }, 56)).toEqual({
+			left: 56,
+			right: 241.51,
+		});
+	});
+
+	it('tiles the system once, on every measure that opens one', () => {
+		// The head paints [0, head] and the window paints [left, right], drawn
+		// flush at one scale. Their total must be the system's own extent to
+		// the window's right edge: no unit twice, and none missing. The six
+		// heads and the one window left are MEASURED, 2026-09-01.
+		const heads = [63.53, 64.98, 66.38, 69.33, 70.77, 69.14];
+		const rights = [241.51, 248.38, 239.63, 248.7, 323.43, 245.03];
+		for (let i = 0; i < heads.length; i++) {
+			const win = clipToHead({ left: 56, right: rights[i] }, heads[i]);
+			expect(win.left).toBe(heads[i]);
+			expect(heads[i] + (win.right - win.left)).toBeCloseTo(rights[i], 10);
+		}
+	});
+
+	it('never returns a window narrower than a unit', () => {
+		// `measureWindow` keeps its own `left + 1` floor for the same reason.
+		// The case cannot be built from this renderer: a hit rectangle is only
+		// ever emitted for a note, whose notehead is ink left of the window's
+		// right edge. The floor is here so a renderer change cannot collapse
+		// the window to nothing without a test saying so.
+		expect(clipToHead({ left: 56, right: 100 }, 400)).toEqual({ left: 99, right: 100 });
+	});
+
+	it('ignores a head that is not a number', () => {
+		// `headBound` returns 0 for a system with no music, and a caller that
+		// hands this a NaN must get the window it already had rather than one
+		// bounded by nothing.
+		expect(clipToHead({ left: 56, right: 241.51 }, Number.NaN)).toEqual({
+			left: 56,
+			right: 241.51,
+		});
 	});
 });

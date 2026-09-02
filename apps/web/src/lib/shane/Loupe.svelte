@@ -22,6 +22,7 @@
 	import {
 		headBound,
 		MUSIC_MARK,
+		clipToHead,
 		inkCrop,
 		centreOnPage,
 		insertionBar,
@@ -579,6 +580,23 @@
 		}
 		const headWidthUnits = headBound(inkXs);
 
+		/* THE WINDOW BEGINS WHERE THE HEAD ENDS. `clipToHead` in `loupe.ts`
+		   carries the whole of that rule, why the two were one number until
+		   2026-08-29, and the proof that clipping loses nothing.
+
+		   WHAT DANN WALKED on `510a280`, 2026-09-01: the loupe on m. 4 painted
+		   three sharps in a two-sharp key signature. On a measure that opens a
+		   system the window's left edge is the leftmost hit rectangle, at
+		   x = 56, and the head now runs past it, so both crops contained the
+		   second sharp's ink at 56.01 to 61.25 and both drew it.
+
+		   THE PAGE'S SAGE RECTANGLE KEEPS THE UNCLIPPED WINDOW, at `:770` and
+		   after. It marks which measure the page is working on, which is a
+		   question about the measure and not about the loupe's two crops; the
+		   clip is the loupe's business alone. */
+		const view = clipToHead(win, headWidthUnits);
+		const viewSpan = view.right - view.left;
+
 		/* THE HEAD SHARES THE FIT rather than being added to it. A measure
 		   wider than the phone is shown WHOLE at less than 2.4 rather than
 		   clipped at 2.4, because notes lost off the edge of a magnifier are the
@@ -596,10 +614,10 @@
 					Math.max(DESKTOP_MIN, drawnLineGap > 0 ? DESKTOP_TARGET_LINE_GAP / drawnLineGap : DESKTOP_MIN),
 				);
 
-		const totalSpan = headWidthUnits + span;
+		const totalSpan = headWidthUnits + viewSpan;
 		const drawn = Math.min(totalSpan * unitPx * magnification, width);
 		const scale = drawn / totalSpan;
-		const contentWidth = span * scale;
+		const contentWidth = viewSpan * scale;
 		const headWidth = headWidthUnits * scale;
 		/* THE CROP'S VERTICAL EXTENT is the page's ink band, laid around this
 		   system's own staff and padded by half a space so the tallest marks
@@ -786,7 +804,7 @@
 
 		frame = {
 			inner: clone.innerHTML + bar,
-			viewBox: `${win.left} ${cropTop} ${span} ${cropHeight}`,
+			viewBox: `${view.left} ${cropTop} ${viewSpan} ${cropHeight}`,
 			width,
 			left,
 			contentWidth,
