@@ -1145,6 +1145,22 @@ export function renderAnalyzedStaff(
   // ── Draw ──
   let measureAcc: Record<string, number> = {};
   let turningAcc: Record<string, number> = {};
+  /**
+   * N.102. The sung line's accidental state as it stood at the END of the
+   * measure immediately before this one, which is what the courtesy
+   * accidental across a barline is computed from.
+   *
+   * It holds only the (step, octave) keys that carried a STATED accidental in
+   * that measure, because that is all `measureAcc` ever holds. A pitch the key
+   * signature governed and nothing altered is absent, and absent is the right
+   * answer: r121 is about a pitch that was altered, not about every pitch.
+   *
+   * It is carried only from the DIRECTLY preceding measure. A measure of rests
+   * between two soundings clears it, because r121's "repeated in the next bar"
+   * is not satisfied two bars later, and a tacet run clears it for the same
+   * reason.
+   */
+  let prevMeasureAcc: Record<string, number> = {};
   let curMeasure = -1;
 
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
@@ -1331,6 +1347,10 @@ export function renderAnalyzedStaff(
 
   for (const { ev, x: nx, newMeasure } of placed) {
     if (ev.measureIndex !== curMeasure) {
+      // N.102: the outgoing measure's state becomes the courtesy source, but
+      // only for the measure that DIRECTLY follows it. A skipped index is a
+      // tacet run, and nothing carries across one.
+      prevMeasureAcc = ev.measureIndex === curMeasure + 1 ? measureAcc : {};
       curMeasure = ev.measureIndex;
       measureAcc = {}; // accidental state resets each measure
       turningAcc = {}; // the turning layer carries its own state
@@ -1393,6 +1413,78 @@ export function renderAnalyzedStaff(
           );
       }
       measureAcc[accKey] = pitch.alter;
+    } else if (prevMeasureAcc[accKey] !== undefined && prevMeasureAcc[accKey] !== pitch.alter && !(accKey in measureAcc)) {
+      /* ── THE COURTESY ACCIDENTAL ACROSS A BARLINE (N.102, increment 1) ──
+         Gould p.81, extraction v7 rule 121, as distilled by the desk in
+         `brief-n102-courtesy-accidentals_r1_2026-09-02.md` §2: a pitch altered
+         in one bar and repeated in the next carries either a restated
+         accidental or an explicit cancellation, EVEN THOUGH the barline has
+         reset it, and even when the key signature already restores the pitch.
+         The extraction itself is not on this machine, so the rule's own words
+         are the brief's paraphrase and not a quotation. Until now this file
+         had no courtesy accidental of any kind, and what a walk once read as
+         one was a mandatory cancellation
+         (`memo-mobile-slice4_r1_2026-08-27.md` §1).
+
+         THE BRANCH IS AN `else`, so it can only fire where the required
+         accidental did not. The three conditions on it are r121's own: the
+         pitch was altered in the directly preceding bar (`prevMeasureAcc` has
+         the key), it now sounds at a different alter, and no accidental has
+         been stated for it yet in THIS bar. A required accidental is never
+         parenthesized, and nothing here changes one.
+
+         IT IS DRAWN ONCE. Writing `measureAcc` makes the bar behave as though
+         the accidental had been stated, and clearing the key from
+         `prevMeasureAcc` makes a second recurrence in this same bar draw
+         nothing. Either alone would do it; both are written because the
+         invariant is worth stating twice rather than inferring.
+
+         KEYED ON STEP AND OCTAVE (r116), so B flat in bar 1 says nothing at
+         all about a B in another octave in bar 2.
+
+         AND IT IS INK, NOT A CONFIDENCE MARK. `#1a1612`, the same colour as
+         every required accidental, never the analysis layer's lavender. A
+         courtesy accidental is an engraving convention. It does not say Ilya
+         is unsure; it says the singer is not misreading.
+
+         SCOPE. Sung line only, this desk's default. The turning layer keeps
+         its own per-measure state and draws no courtesy at all. Rule 122, the
+         generous cautionaries of chromatic music, is NOT built here. */
+      if (smufl) {
+        const name = ACCIDENTAL_SMUFL[pitch.alter];
+        if (name) {
+          // Parens left, accidental, parens right, abutting at their bounding
+          // boxes with no gap, and the whole cluster placed where the bare
+          // accidental would go: the same `gx` arithmetic, with the cluster's
+          // width standing in for the accidental's own. The measure-opening
+          // floor still applies, so the cluster is nudged right off the
+          // barline exactly as a bare accidental is.
+          const wL = sp(smufl.glyph('accidentalParensLeft').widthSp);
+          const wA = sp(smufl.glyph(name).widthSp);
+          const wR = sp(smufl.glyph('accidentalParensRight').widthSp);
+          const clusterW = wL + wA + wR;
+          const gx = Math.max(nx - headHalfW - 1.5 - clusterW, newMeasure ? nx - 16 : -Infinity);
+          parts.push(partOfEvent(glyphAt('accidentalParensLeft', gx, y, '#1a1612', true), ev.id));
+          parts.push(partOfEvent(glyphAt(name, gx + wL, y, '#1a1612', true), ev.id));
+          parts.push(partOfEvent(glyphAt('accidentalParensRight', gx + wL + wA, y, '#1a1612', true), ev.id));
+        }
+      } else {
+        // Primitive mode has no font to measure, so it brackets with the
+        // ordinary parentheses it already draws text with. The rule is the
+        // renderer's, not the font's, and a mode that drew the required
+        // accidental but not the courtesy would be wrong in the mode the
+        // sandbox tests by default.
+        const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
+        if (g)
+          parts.push(
+            partOfEvent(
+              `<text x="${newMeasure ? nx - 16 : nx - 25}" y="${y + 4}" font-size="15" fill="#1a1612">(${g})</text>`,
+              ev.id,
+            ),
+          );
+      }
+      measureAcc[accKey] = pitch.alter;
+      delete prevMeasureAcc[accKey];
     }
 
     /* ── AUGMENTATION DOTS ───────────────────────────────────────────────
@@ -1487,7 +1579,9 @@ export function renderAnalyzedStaff(
     }
 
     // Lavender stemless turning-pitch notehead, with its own accidental state
-    // (standard per-measure carry, independent of the sung line).
+    // (standard per-measure carry, independent of the sung line). It draws NO
+    // courtesy accidental across a barline: N.102 is the sung line only, this
+    // desk's default and Dann's to wave off.
     if (a) {
       const tp = a.turningPitch;
       const ty = yFor(tp);

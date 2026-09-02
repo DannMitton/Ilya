@@ -53,14 +53,26 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > stood here is in `../sessions/LOG.md`, block 6. **N.102 and N.103 stay open
 > and unplaced.**
 >
-> **THE ONE THING: N.105, the install prompt that never saves a dismissal.**
-> Numbered by Dann 2026-09-01 and not yet placed by him; it is here because
-> nothing else is in progress, and it hit him ten times in one hour on the
-> walk. Cause, read off the tree: `InstallPrompt.svelte:73-77` guards the only
-> write behind `if (isIos)`, and that write is `sessionStorage`, which dies
-> with the tab. **Owed from Dann before a brief is written, one ruling: how
-> long a decline lasts before Ilya may ask again.** `INBOX.md:56` carries the
-> full note. No brief exists.
+> **N.105 CLOSED 2026-09-02, WALKED BY DANN on the branch alias.** Ship
+> `21e9ce2`, 'N.105: "Not now" lasts thirty days', five gates at baseline,
+> gate 4 now **920** and `ilya-ship.sh:79` already carries it. One key,
+> `ilya:installDeclinedAt`; thirty days is a DESK DEFAULT he has not waved
+> off; a dismissed native prompt counts as a decline. Memo:
+> `docs/sessions/memo-n105-install-decline_r1_2026-09-02.md`. Its NOT
+> ESTABLISHED: the iOS path was never entered. His words: "The banner is
+> successfully dismissed."
+>
+> **THE ONE THING: N.102 increment 1, the courtesy accidental across a
+> barline.** Placed by Dann 2026-09-02 ("Proceed"). Gould rule 121 only,
+> automatic, parenthesized, sung line only; no control and no French, which
+> are increment 2. Maestro carries U+E26A and U+E26B, established by reading
+> the cmap. Brief: `docs/sessions/brief-n102-courtesy-accidentals_r1_2026-09-02.md`,
+> untracked until Dann adds it. Two DESK DEFAULTS inside it, both his to wave
+> off: sung line only, and parenthesized. Status: BRIEFED, not built.
+>
+> **Open and unplaced:** N.103 measures do not re-space when ink is added
+> (N.102 may hand it a case), N.94, N.84 the Guide redo, N.83's call, and
+> the release order N.85 through N.88.
 >
 > **Also this session, ruled: CONTRACT.md tether 20**, put yourself in his
 > position first. Transcribed with his ratified words, `CONTRACT.md` §1.20.

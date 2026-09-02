@@ -21,8 +21,9 @@ import {
   renderDemoUnmeasured,
   syntheticSmuflFont,
 } from './demo-fixture';
+import type { VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore } from './overlay-engine';
-import type { ParsedScore, VocalLineEvent } from './types';
+import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import {
   BARLINE_ROOM,
   columnAdvance,
@@ -934,5 +935,223 @@ describe('tacet measures', () => {
       r.columns.reduce((total, c) => total + c.advance, 0) + r.trailing;
     expect(span(withRun)).toBeGreaterThan(span(withoutRun));
     expect(withRun.columns.filter((c) => c.tacet).length).toBe(1);
+  });
+});
+
+// ── N.102: the courtesy accidental across a barline ──────────────────
+//
+// Gould p.81, extraction v7 rule 121, as distilled by the desk in
+// `brief-n102-courtesy-accidentals_r1_2026-09-02.md` §2: a pitch altered in one
+// bar and repeated in the next carries either a restated accidental or an
+// explicit cancellation, even though the barline has reset it, and even where
+// the key signature already restores the pitch. The extraction is not on this
+// machine, so that wording is the brief's paraphrase, not a quotation.
+// Before this the renderer had no
+// courtesy accidental of any kind; what a walk once read as one was a
+// mandatory cancellation (`memo-mobile-slice4_r1_2026-08-27.md` §1).
+//
+// The fixture is its own score rather than the demo's, because the demo is in
+// one flat and every existing assertion about its bytes has to keep holding.
+// C major, treble, one voice, a quarter note per slot, so the only thing an
+// assertion can be reading is the rule.
+describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
+  const PARENS_LEFT = String.fromCodePoint(0xe26a);
+  const PARENS_RIGHT = String.fromCodePoint(0xe26b);
+  const NATURAL = String.fromCodePoint(0xe261);
+  const FLAT = String.fromCodePoint(0xe260);
+  const SHARP = String.fromCodePoint(0xe262);
+
+  /** One quarter note, spelled [measure, step, octave, alter]. */
+  type Slot = [number, Pitch['step'], number, number];
+
+  /**
+   * A C-major score built from slots, one quarter note per beat, with as many
+   * measures declared as the slots reach. `fifths` is 0 throughout, so a
+   * natural is exactly what the key signature already gives and the required
+   * accidental at `staff-renderer.ts:1396` draws nothing for it.
+   */
+  const scoreOf = (slots: Slot[], measureCount = Math.max(...slots.map((s) => s[0])) + 1): ParsedScore => {
+    const perMeasure = new Map<number, number>();
+    const vocalLine: VocalLineEvent[] = slots.map(([measureIndex, step, octave, alter], i) => {
+      const beat = perMeasure.get(measureIndex) ?? 0;
+      perMeasure.set(measureIndex, beat + 1);
+      return {
+        id: `c${i + 1}`,
+        type: 'note',
+        measureIndex,
+        rhythmicPosition: { fraction: { numerator: beat, denominator: 4 } },
+        duration: { base: 'quarter', dots: 0, fraction: { numerator: 1, denominator: 4 } },
+        pitch: { step, octave, alter },
+      };
+    });
+    return {
+      source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
+      vocalPart: { partId: 'P1', partName: 'Voice' },
+      measures: Array.from({ length: measureCount }, (_, index) => ({
+        index,
+        number: String(index + 1),
+        timeSignature: { beats: 4, beatType: 4 },
+        keySignature: { fifths: 0 },
+        expectedDuration: { numerator: 1, denominator: 1 },
+      })),
+      keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
+      timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
+      tempoMarkings: [],
+      vocalLine,
+    };
+  };
+
+  const bareProfile: VoiceProfileSnapshot = {
+    fR1: {},
+    range: { lowest: { step: 'C', octave: 3, alter: 0 }, highest: { step: 'C', octave: 6, alter: 0 } },
+    tessitura: { low: { step: 'E', octave: 4, alter: 0 }, high: { step: 'A', octave: 4, alter: 0 } },
+    passaggio: { primo: { step: 'E', octave: 4, alter: 0 }, secondo: { step: 'A', octave: 4, alter: 0 } },
+    label: 'test',
+  };
+
+  /**
+   * Render slots with an EMPTY analysis layer, the notation-only path a singer
+   * sees before measuring: the resolver names no vowel, so `analyzed.events`
+   * comes back empty, nothing lavender reaches the page, and every glyph an
+   * assertion reads belongs to the sung line.
+   */
+  const render = (slots: Slot[], options: StaffRenderOptions = {}): string => {
+    const parsed = scoreOf(slots);
+    const analyzed = analyzeScore(parsed, bareProfile, () => undefined, {
+      generatedAt: '2026-09-02T00:00:00.000Z',
+    });
+    return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble', ...options });
+  };
+  const glyphs = (slots: Slot[]): string =>
+    render(slots, { font: syntheticSmuflFont(), fontFamily: 'TestFont' });
+
+  /** Every accidental-family glyph the SMuFL render drew, in document order. */
+  const accidentalRun = (svg: string): string =>
+    [...svg.matchAll(/>([\u{E260}-\u{E26B}])<\/text>/gu)].map((m) => m[1]).join('');
+
+  it('cancels in bar 2 a flat stated in bar 1, in parentheses, though C major already gives the natural', () => {
+    // The whole rule in one case: B flat, barline, B natural. The barline has
+    // reset the flat and the key signature agrees with the natural, so nothing
+    // was drawn here before N.102.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0]]))).toBe(
+      FLAT + PARENS_LEFT + NATURAL + PARENS_RIGHT,
+    );
+  });
+
+  it('draws the same case in primitive mode, where there is no font to measure', () => {
+    const svg = render([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+    expect((svg.match(/>\(♮\)</g) ?? []).length).toBe(1);
+    expect((svg.match(/>♭</g) ?? []).length).toBe(1);
+  });
+
+  it('says nothing a bar later, when nothing was altered in between', () => {
+    // Bar 3's B natural follows a bar 2 that stated nothing about B, so r121
+    // has no altered pitch to restate and the page stays quiet.
+    const svg = glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0], [2, 'B', 4, 0]]);
+    expect(accidentalRun(svg)).toBe(FLAT + PARENS_LEFT + NATURAL + PARENS_RIGHT);
+    expect((svg.match(new RegExp(PARENS_LEFT, 'gu')) ?? []).length).toBe(1);
+  });
+
+  it('draws a required accidental bare, and never parenthesizes one', () => {
+    // A restated flat in bar 2 is mandatory, not a courtesy: the barline reset
+    // it and the note contradicts the key signature, so `:1376` draws it and
+    // the courtesy branch is never reached.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [1, 'B', 4, -1]]))).toBe(FLAT + FLAT);
+    // And a bar-2 sharp against a bar-1 flat is required for the same reason.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [1, 'B', 4, 1]]))).toBe(FLAT + SHARP);
+  });
+
+  it('draws the courtesy once when the pitch recurs twice in the same bar', () => {
+    // The first B in bar 2 takes the cancellation; the second is governed by
+    // it and takes nothing, exactly as a stated accidental governs the rest of
+    // its bar.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0], [1, 'B', 4, 0]]))).toBe(
+      FLAT + PARENS_LEFT + NATURAL + PARENS_RIGHT,
+    );
+  });
+
+  it('keys on step AND octave, so another octave says nothing (r116 per the brief)', () => {
+    // B flat 4 in bar 1 makes no claim about B5, so B natural 5 in bar 2 is an
+    // ordinary key-signature pitch and draws nothing.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [1, 'B', 5, 0]]))).toBe(FLAT);
+  });
+
+  it('carries only from the directly preceding bar, so a silent bar between clears it', () => {
+    // JUDGEMENT, and it is this desk's reading of r121's "in the next bar": a
+    // bar with no sung note is not the next bar, so bar 3 gets nothing. The
+    // narrower reading, chosen because increment 1 builds r121 and not r122.
+    expect(accidentalRun(glyphs([[0, 'B', 4, -1], [2, 'B', 4, 0]]))).toBe(FLAT);
+  });
+
+  it('draws the cluster in ink, never in the lavender of the analysis layer', () => {
+    // A courtesy accidental is an engraving convention, not a confidence mark.
+    const svg = glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+    const cluster = [...svg.matchAll(/<text [^>]*fill="([^"]+)"[^>]*>[\u{E26A}\u{E26B}]<\/text>/gu)];
+    expect(cluster.length).toBe(2);
+    expect(cluster.every((m) => m[1] === '#1a1612')).toBe(true);
+  });
+
+  it('binds all three glyphs to the note, so the selection squircle encloses them', () => {
+    // The accidental has carried `data-of-event` since the squircle was found
+    // slicing through one; a bracketed accidental is three marks with the same
+    // need.
+    const svg = glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+    const bound = [...svg.matchAll(/<text data-of-event="c2"[^>]*>([\u{E260}-\u{E26B}])<\/text>/gu)];
+    expect(bound.map((m) => m[1]).join('')).toBe(PARENS_LEFT + NATURAL + PARENS_RIGHT);
+  });
+
+  it('abuts the three glyphs and lands the cluster where the bare accidental would end', () => {
+    // Parens left, accidental, parens right, at their bounding boxes with no
+    // gap, and the cluster's RIGHT edge where a bare accidental's right edge
+    // would sit. The synthetic font gives every glyph a width of 1.18 spaces
+    // and the default lineGap is 12, so each step is 14.16 px.
+    const svg = glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+    const xs = [...svg.matchAll(/<text [^>]*x="([-\d.]+)"[^>]*>([\u{E26A}\u{E261}\u{E26B}])<\/text>/gu)]
+      .map((m) => Number(m[1]));
+    expect(xs.length).toBe(3);
+    expect(xs[1] - xs[0]).toBeCloseTo(14.16, 5);
+    expect(xs[2] - xs[1]).toBeCloseTo(14.16, 5);
+  });
+
+  it('keeps a measure-opening cluster clear of the barline it follows', () => {
+    // The bar-2 note IS the measure opening here, so the floor at `nx - 16`
+    // is the branch under test: the cluster is nudged right rather than
+    // allowed to reach back across the barline at `nx - 18`.
+    const svg = glyphs([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
+    const left = Number(svg.match(new RegExp(`<text [^>]*x="([-\\d.]+)"[^>]*>${PARENS_LEFT}</text>`, 'u'))![1]);
+    const bars = [...svg.matchAll(/<line x1="([\d.]+)" y1="72" x2="\1"/g)].map((m) => Number(m[1]));
+    const opening = Math.max(...bars.filter((x) => x < left + 1));
+    expect(left).toBeGreaterThan(opening);
+    expect(left).toBeCloseTo(opening + 2, 5); // the nx-16 floor against the nx-18 barline
+  });
+
+  it('draws no courtesy on the turning layer', () => {
+    // The turning line keeps its own per-measure carry and gets no courtesy:
+    // sung line only, this desk's default. The profile is built so the turning
+    // pitch is D#4 in bar 1 (fR1 622 Hz, an octave below is 311 Hz) and D
+    // natural 4 in bar 2 (fR1 587 Hz → 293.5 Hz), which is precisely the shape
+    // that earns a courtesy on the sung line.
+    const parsed = scoreOf([[0, 'G', 4, 0], [1, 'G', 4, 0]]);
+    const profile: VoiceProfileSnapshot = {
+      fR1: { sharp: 622, nat: 587 },
+      range: { lowest: { step: 'C', octave: 3, alter: 0 }, highest: { step: 'C', octave: 6, alter: 0 } },
+      tessitura: { low: { step: 'E', octave: 4, alter: 0 }, high: { step: 'A', octave: 4, alter: 0 } },
+      passaggio: { primo: { step: 'E', octave: 4, alter: 0 }, secondo: { step: 'A', octave: 4, alter: 0 } },
+      label: 'test',
+    };
+    const analyzed = analyzeScore(parsed, profile, (e) => (e.measureIndex === 0 ? 'sharp' : 'nat'), {
+      generatedAt: '2026-09-02T00:00:00.000Z',
+    });
+    const svg = renderAnalyzedStaff(parsed, analyzed, {
+      clef: 'treble',
+      font: syntheticSmuflFont(),
+      fontFamily: 'TestFont',
+    });
+    // The bar-1 turning sharp is drawn, which proves the fixture reaches the
+    // turning-accidental path at all.
+    expect(svg).toContain(`fill="#8E7E9B">${SHARP}</text>`);
+    // And no parenthesis of any colour reaches the page.
+    expect(svg.includes(PARENS_LEFT)).toBe(false);
+    expect(svg.includes(PARENS_RIGHT)).toBe(false);
   });
 });

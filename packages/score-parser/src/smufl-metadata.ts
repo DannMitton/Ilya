@@ -97,6 +97,15 @@ export const SMUFL_CODEPOINTS = {
   accidentalSharp: 0xe262,
   accidentalDoubleSharp: 0xe263,
   accidentalDoubleFlat: 0xe264,
+  // The courtesy accidental's parentheses, N.102. Gould r121 gives the
+  // restatement across a barline; the brackets are this desk's default form
+  // of it, and Gould allows either bare or bracketed. Both codepoints are
+  // mapped by Finale Maestro 2.7 (gid 534 and 535) and by Leland 0.80
+  // (gid 168 and 169), read out of each font's own `cmap` on 2026-09-02, and
+  // all three fonts the project ships carry native `glyphBBoxes` for the
+  // pair, so adding them here raises no fallback warning in any font.
+  accidentalParensLeft: 0xe26a,
+  accidentalParensRight: 0xe26b,
   restWhole: 0xe4e3,
   restHalf: 0xe4e4,
   restQuarter: 0xe4e5,
