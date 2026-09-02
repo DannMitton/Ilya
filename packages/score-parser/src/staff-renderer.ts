@@ -318,6 +318,20 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/** Two decimals, the file's rounding for every coordinate it prints. */
+function round2px(v: number): number {
+  return Math.round(v * 100) / 100;
+}
+
+/** The notehead glyph a duration takes: open for half and longer, filled otherwise. */
+function headNameOf(base: NoteBase): RequiredGlyphName {
+  return base === 'whole' || base === 'breve'
+    ? 'noteheadWhole'
+    : base === 'half'
+      ? 'noteheadHalf'
+      : 'noteheadBlack';
+}
+
 // Order in which sharps / flats are added by the key signature.
 const SHARP_ORDER: Pitch['step'][] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
 const FLAT_ORDER: Pitch['step'][] = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
@@ -411,21 +425,18 @@ export function accidentalStateAtEndOf(
   fifths: number,
 ): Record<string, number> {
   if (measureIndex < 0) return {};
-  let measureAcc: Record<string, number> = {};
-  let prevMeasureAcc: Record<string, number> = {};
-  let curMeasure = -1;
+  // N.103: the barline step is `carryIntoMeasure`, the same call the draw loop
+  // and `layoutColumns` make. This function held the third copy of it.
+  const carry = newAccidentalCarry(fifths);
+  const turningAcc: Record<string, number> = {};
   for (const ev of parsed.vocalLine) {
     if (ev.measureIndex > measureIndex) break; // the vocal line is in measure order
-    if (ev.measureIndex !== curMeasure) {
-      prevMeasureAcc = ev.measureIndex === curMeasure + 1 ? measureAcc : {};
-      curMeasure = ev.measureIndex;
-      measureAcc = {};
-    }
+    carryIntoMeasure(carry, turningAcc, ev.measureIndex);
     if (ev.type !== 'note' || !ev.pitch) continue;
-    advanceAccidentalState(ev.pitch, fifths, measureAcc, prevMeasureAcc);
+    advanceAccidentalState(ev.pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
   }
   // The bar asked about carried no sung event at all, so it states nothing.
-  return curMeasure === measureIndex ? measureAcc : {};
+  return carry.curMeasure === measureIndex ? carry.measureAcc : {};
 }
 
 const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '♮', 2: '𝄪', [-2]: '𝄫' };
@@ -755,11 +766,371 @@ export function clampHyphenX(hx: number, from: number, to: number, half = HYPHEN
   return Math.min(Math.max(hx, from + half), to - half);
 }
 
+// ── N.103: the spacer sees ink ──────────────────────────────────────
+
+/**
+ * The clearance between one column's rightmost ink and the next column's
+ * leftmost ink, in stave spaces. N.103, desk default, Dann's to wave off.
+ *
+ * Half a stave space, which is the floor Gould r235 already gives the
+ * underlay text, on the reasoning that ink is ink: if two syllables may not
+ * come closer than this, neither may an augmentation dot and the accidental
+ * that follows it.
+ *
+ * THE BRIEF NAMES IT `INK_CLEAR`. The `_SP` suffix is this file's convention
+ * for a stave-space quantity (`COURTESY_GAP_SP`, `TURNING_CLEARANCE_SP`,
+ * `STEM_LENGTH_SP`) and is added so the unit is legible where it is spent.
+ * Nothing else about it changed.
+ */
+export const INK_CLEAR_SP = 0.5;
+
+/**
+ * The clearance AFTER a displaced turning unit, in stave spaces. N.103, ruled
+ * by Dann 2026-09-02, desk default 1.0, and the point of the item.
+ *
+ * His words: "Lavender pitches relate to the black ink that precedes them.
+ * When lavender is too close to a following adjacent black ink note, it blurs
+ * this clarity. I'm looking for a way to insist on space after the lavender to
+ * preserve its impression as a unit relating to the preceding note."
+ *
+ * A turning pitch is a property of the vowel that corresponds to the note it
+ * follows (his words). The biglyph belongs to its parent SEMANTICALLY, and
+ * proximity is how the page SHOWS that, not why it is so. N.106 seats the unit
+ * `TURNING_CLEARANCE_SP` from the sung unit, which is 0.25, so the gap after
+ * it has to be visibly larger or the page states the opposite of the meaning.
+ * Four times the leading gap is the desk default. The number is Dann's to set
+ * by eye once he has seen it.
+ *
+ * It replaces `INK_CLEAR_SP` only where the previous column's rightmost ink IS
+ * a displaced turning unit. An ALIGNED turning unit, a third or more, draws
+ * nothing right of the sung head and does not trigger it.
+ */
+export const TURNING_TRAIL_SP = 1.0;
+
+/** The px between a notehead and its own accidental, sung line and turning alike. */
+const ACC_GAP_PX = 1.5;
+
+/** The px the two-voice offset has carried since 2026-07-12, kept by N.106. */
+const TURNING_OFFSET_PX = 1.6;
+
+/**
+ * Stave steps between two pitches: 0 a unison, 1 a second, 2 a third.
+ *
+ * Clef-independent, because a step is a step on any stave. N.106 measured this
+ * in pixels and had to divide by the half-space to get back to it; this states
+ * it directly, so the draw loop and `columnInk` cannot disagree about whether a
+ * turning unit is displaced.
+ */
+function staveSteps(a: Pitch, b: Pitch): number {
+  return Math.abs(diatonicNumber(a) - diatonicNumber(b));
+}
+
+/**
+ * Every glyph width the ink rule needs, from the font in SMuFL mode and from
+ * primitive mode's fixed numbers otherwise. All in px at this stave size.
+ *
+ * ONE definition, for the reason `advanceAccidentalState` is one definition:
+ * `columnInk` measures a column and the draw loop draws it, and two copies of
+ * "how wide is a flat" are two answers waiting to disagree. The draw loop reads
+ * these same numbers.
+ *
+ * PRIMITIVE MODE HAS NO FONT, so its numbers are reconstructions of what the
+ * mode's own hard-coded offsets already implied. They are marked where they are
+ * defined and they are exact for the placements that already existed.
+ */
+export interface InkMetrics {
+  lineGap: number;
+  sp(v: number): number;
+  headHalfW(base: NoteBase): number;
+  ledgerHalf(base: NoteBase): number;
+  restHalfW(base: NoteBase): number;
+  /** 0 where the alteration has no glyph at all. */
+  accidentalW(alter: number): number;
+  /** Parens, gaps, and accidental at the FULL `COURTESY_GAP_SP`; 0 where none draws. */
+  courtesyClusterW(alter: number): number;
+  courtesyParts(alter: number): { wL: number; wA: number; wR: number; gap: number } | undefined;
+  dotW: number;
+  dotClear: number;
+  turningHeadW: number;
+  turningAccW(alter: number): number;
+  stemHalfUp: number;
+  stemHalfDown: number;
+  stemT: number;
+}
+
+export function inkMetrics(options: StaffRenderOptions = {}): InkMetrics {
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const smufl = options.font;
+  const sp = (v: number): number => v * lineGap;
+  const ed = smufl?.engravingDefaults;
+  const stemT = smufl ? sp(ed!.stemThickness) : 1.5;
+  let stemHalfUp = STEM_HALF;
+  let stemHalfDown = -STEM_HALF;
+  if (smufl) {
+    const nh = smufl.glyph('noteheadBlack');
+    const w = nh.widthSp;
+    stemHalfUp = sp((nh.anchors.stemUpSE?.[0] ?? w) - w / 2) - stemT / 2;
+    stemHalfDown = sp((nh.anchors.stemDownNW?.[0] ?? 0) - w / 2) + stemT / 2;
+  }
+  const headHalfW = (base: NoteBase): number =>
+    smufl ? sp(smufl.glyph(headNameOf(base)).widthSp / 2) : 6.2;
+  const accidentalW = (alter: number): number => {
+    if (smufl) {
+      const name = ACCIDENTAL_SMUFL[alter];
+      return name ? sp(smufl.glyph(name).widthSp) : 0;
+    }
+    /* The width the mode's own `nx - 20` implied: head half 6.2, then
+       `ACC_GAP_PX`, at font-size 15. */
+    return ACCIDENTAL_GLYPH[alter] ? 12.3 : 0;
+  };
+  const courtesyParts = (alter: number) => {
+    if (!smufl) return undefined;
+    const name = ACCIDENTAL_SMUFL[alter];
+    if (!name) return undefined;
+    return {
+      wL: sp(smufl.glyph('accidentalParensLeft').widthSp),
+      wA: sp(smufl.glyph(name).widthSp),
+      wR: sp(smufl.glyph('accidentalParensRight').widthSp),
+      gap: sp(COURTESY_GAP_SP),
+    };
+  };
+  return {
+    lineGap,
+    sp,
+    headHalfW,
+    ledgerHalf: (base) => (smufl ? round2px(headHalfW(base) + sp(ed!.legerLineExtension)) : 11),
+    restHalfW: (base) => (smufl ? sp(smufl.glyph(REST_SMUFL[base]).widthSp / 2) : 5),
+    accidentalW,
+    courtesyParts,
+    courtesyClusterW: (alter) => {
+      const c = courtesyParts(alter);
+      if (c) return c.wL + c.wA + c.wR + 2 * c.gap;
+      /* Primitive mode draws `(♮)` as one text run at `nx - 25`, which implies
+         this width against the same head half and `ACC_GAP_PX`. */
+      return ACCIDENTAL_GLYPH[alter] ? 17.3 : 0;
+    },
+    dotW: smufl ? sp(smufl.glyph('augmentationDot').widthSp) : sp(0.4),
+    dotClear: sp(0.5),
+    turningHeadW: smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4,
+    turningAccW: (alter) => {
+      if (smufl) {
+        const name = ACCIDENTAL_SMUFL[alter];
+        return name ? sp(smufl.glyph(name).widthSp) : 0;
+      }
+      return ACCIDENTAL_GLYPH[alter] ? PRIMITIVE_TURNING_ACC_W : 0;
+    },
+    stemHalfUp,
+    stemHalfDown,
+    stemT,
+  };
+}
+
+/**
+ * The x of each augmentation dot and the right ink edge of the last one, as
+ * offsets from the notehead centre. Gould r111: half a stave space clear of the
+ * head, and clear of the ledger lines where the note sits outside the stave.
+ */
+function dotGeometry(
+  M: InkMetrics,
+  base: NoteBase,
+  dotCount: number,
+  outsideStave: boolean,
+): { first: number; right: number } {
+  let first = M.headHalfW(base) + M.dotClear;
+  if (outsideStave) first = Math.max(first, M.ledgerHalf(base) + M.dotClear);
+  return { first, right: first + (dotCount - 1) * (M.dotW + M.dotClear) + M.dotW };
+}
+
+/**
+ * The sung unit's right ink edge, as an offset from the notehead centre: the
+ * notehead, its dots where it has any, and an UP-stem, which stands on the
+ * right of the head. A down-stem is on the left and a whole note has none.
+ * N.106's triglyph, measured.
+ */
+function sungRightEdge(
+  M: InkMetrics,
+  base: NoteBase,
+  stemUp: boolean,
+  dotsRight: number,
+): number {
+  const stemmed = base !== 'whole' && base !== 'breve';
+  let right = M.headHalfW(base);
+  if (stemmed && stemUp) right = Math.max(right, M.stemHalfUp + M.stemT / 2);
+  return Math.max(right, dotsRight);
+}
+
+/**
+ * Where a DISPLACED turning unit sits, as offsets from the notehead centre.
+ * N.106's rule, in one place so the draw loop and `columnInk` cannot restate
+ * it: the unit's left ink edge sits at the sung unit's right ink edge plus
+ * `TURNING_OFFSET_PX` plus `TURNING_CLEARANCE_SP`, and the accidental leads it
+ * when there is one.
+ */
+function turningUnitAt(
+  M: InkMetrics,
+  sungRight: number,
+  accW: number,
+): { left: number; tx: number; right: number } {
+  const left = sungRight + TURNING_OFFSET_PX + M.sp(TURNING_CLEARANCE_SP);
+  const tx = left + accW + (accW > 0 ? ACC_GAP_PX : 0) + M.turningHeadW / 2;
+  return { left, tx, right: tx + M.turningHeadW / 2 };
+}
+
+/** The sung line's accidental state, plus the key signature that governs it. */
+export interface AccidentalCarry {
+  fifths: number;
+  /** What has been stated so far in THIS bar. Mutated by the walk. */
+  measureAcc: Record<string, number>;
+  /** What stood at the end of the bar before. Mutated by the walk. */
+  prevMeasureAcc: Record<string, number>;
+  /** The bar the carry currently stands in; -1 before the first. */
+  curMeasure: number;
+}
+
+/**
+ * A fresh carry, seeded the way the draw loop seeds itself.
+ *
+ * `incoming` is NOT the first measure's own state: it is the closing state of
+ * the measure before, standing in for a bar this walk never sees (N.102
+ * increment 1b). The first `carryIntoMeasure` moves it into `prevMeasureAcc`
+ * under the same guard every later measure gets.
+ */
+export function newAccidentalCarry(fifths: number, incoming?: Record<string, number>): AccidentalCarry {
+  return { fifths, measureAcc: { ...(incoming ?? {}) }, prevMeasureAcc: {}, curMeasure: -1 };
+}
+
+/**
+ * Step the carry to `measureIndex`, if it is not already there.
+ *
+ * The outgoing measure's state becomes the courtesy source, but only for the
+ * measure that DIRECTLY follows it: a skipped index is a tacet run, and nothing
+ * carries across one. The turning layer keeps its own per-measure state and
+ * resets with no carry at all.
+ *
+ * ONE definition, called by the draw loop and by `layoutColumns`, so the
+ * spacer's idea of what draws and the page's idea cannot diverge at a barline.
+ */
+export function carryIntoMeasure(
+  carry: AccidentalCarry,
+  turningAcc: Record<string, number>,
+  measureIndex: number,
+): void {
+  if (measureIndex === carry.curMeasure) return;
+  carry.prevMeasureAcc = measureIndex === carry.curMeasure + 1 ? carry.measureAcc : {};
+  carry.curMeasure = measureIndex;
+  carry.measureAcc = {};
+  for (const k of Object.keys(turningAcc)) delete turningAcc[k];
+}
+
+/** One column's ink, as offsets from the notehead centre. */
+export interface ColumnInk {
+  /** Leftmost ink, positive, measured leftward from `nx`. */
+  left: number;
+  /** Rightmost ink, positive, measured rightward from `nx`. */
+  right: number;
+  /** True where `right` is a turning unit N.106 displaced. */
+  turningDisplaced: boolean;
+}
+
+/**
+ * What one column actually draws, measured from the notehead's centre.
+ *
+ * N.103. `columnAdvance` knew `minGap`, the duration, and the underlay, and
+ * nothing about accidentals, dots, courtesy clusters, or the turning layer, all
+ * of which the draw loop adds after the columns are placed. This is the
+ * measurement the spacer was missing.
+ *
+ * IT ADVANCES THE TWO CARRIES, exactly as the draw loop does, because whether a
+ * flat draws at all depends on every note before it in the bar. It calls
+ * `advanceAccidentalState` and `carryIntoMeasure` rather than restating either,
+ * so a walk through `columnInk` and a walk through the draw loop see the same
+ * marks on the same notes. That is the whole reason the state is a parameter and
+ * not a local.
+ *
+ * THE MEASURE-OPENING NUDGE IS NOT APPLIED. The draw loop holds a measure-opening
+ * accidental off the barline at `nx - 16`, which makes its ink NARROWER on the
+ * left than this reports. Reporting the un-nudged width is the conservative
+ * answer for a minimum, and a measure opening gets `BARLINE_ROOM` on top of the
+ * advance regardless.
+ *
+ * THE STEM SIDE IS THE ANALYSIS'S, then Gould's positional default. The beam
+ * pass has not run at layout time and cannot, so a beamed note with no analysis
+ * takes the positional answer here and the beam's answer on the page. It costs
+ * at most `stemHalfUp + stemT / 2 - headHalfW` on the right, which is 0.05 px at
+ * the production stave, and both call sites make the same call, so pagination
+ * and rendering still agree with each other.
+ */
+export function columnInk(
+  ev: VocalLineEvent,
+  a: AnalyzedEvent | undefined,
+  accState: AccidentalCarry,
+  turningState: Record<string, number>,
+  options: StaffRenderOptions = {},
+): ColumnInk {
+  const M = inkMetrics(options);
+  carryIntoMeasure(accState, turningState, ev.measureIndex);
+
+  if (ev.type === 'rest' || !ev.pitch) {
+    const half = M.restHalfW(ev.duration.base);
+    return { left: half, right: half, turningDisplaced: false };
+  }
+
+  const pitch = ev.pitch;
+  const base = ev.duration.base;
+  const staffMidY = options.staffMidY ?? DEFAULTS.staffMidY;
+  const clef: RenderClef = options.clef ?? 'treble';
+  const y = staffMidY - (diatonicNumber(pitch) - MIDDLE_LINE[clef]) * (M.lineGap / 2);
+
+  // ── Left: the head, then whatever accidental the rule says draws ──
+  let left = M.headHalfW(base);
+  const mark = advanceAccidentalState(pitch, accState.fifths, accState.measureAcc, accState.prevMeasureAcc);
+  if (mark === 'required') {
+    const w = M.accidentalW(pitch.alter);
+    if (w > 0) left = Math.max(left, M.headHalfW(base) + ACC_GAP_PX + w);
+  } else if (mark === 'courtesy') {
+    const w = M.courtesyClusterW(pitch.alter);
+    if (w > 0) left = Math.max(left, M.headHalfW(base) + ACC_GAP_PX + w);
+  }
+
+  // ── Right: the head, an up-stem, the dots ──
+  const dotCount = ev.duration.dots ?? 0;
+  let dotsRight = -Infinity;
+  if (dotCount > 0) {
+    const steps = (y - staffMidY) / (M.lineGap / 2);
+    const onLine = Math.abs(steps - Math.round(steps)) < 0.01 && Math.round(steps) % 2 === 0;
+    const dotY = onLine ? y - M.lineGap / 2 : y;
+    dotsRight = dotGeometry(M, base, dotCount, Math.abs(dotY - staffMidY) > 2 * M.lineGap).right;
+  }
+  const stemUp = a ? a.timbre === 'close' : y > staffMidY;
+  let right = sungRightEdge(M, base, stemUp, dotsRight);
+
+  // ── The turning unit ──
+  let turningDisplaced = false;
+  if (a) {
+    const tp = a.turningPitch;
+    const tKey = `${tp.step}${tp.octave}`;
+    const tInEffect = tKey in turningState ? turningState[tKey] : keySignatureAlter(tp.step, accState.fifths);
+    const accW = tp.alter !== tInEffect ? M.turningAccW(tp.alter) : 0;
+    if (accW > 0) turningState[tKey] = tp.alter;
+    if (staveSteps(tp, pitch) > 1) {
+      // Aligned: the accidental hangs left of the sung head's own position.
+      if (accW > 0) left = Math.max(left, M.turningHeadW / 2 + ACC_GAP_PX + accW);
+    } else {
+      turningDisplaced = true;
+      right = turningUnitAt(M, right, accW).right;
+    }
+  }
+
+  return { left, right, turningDisplaced };
+}
+
 export function columnAdvance(
   prevEv: VocalLineEvent,
   ev: VocalLineEvent | undefined,
   prevDurWhole: number,
   options: StaffRenderOptions = {},
+  prevInk?: ColumnInk,
+  nextInk?: ColumnInk,
 ): number {
   const lineGap = options.lineGap ?? DEFAULTS.lineGap;
   const minGap = options.minGap ?? DEFAULTS.minGap;
@@ -774,7 +1145,26 @@ export function columnAdvance(
     (ev
       ? underlayHalfWidth(ev, options) + lineGap * 0.5
       : lineGap);
-  return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed);
+  /* THE INK TERM (N.103). The previous column's rightmost ink, this column's
+     leftmost ink, and a clearance between them. `TURNING_TRAIL_SP` replaces
+     `INK_CLEAR_SP` where the previous column's rightmost ink is a turning unit
+     N.106 displaced, on Dann's ruling of 2026-09-02: the biglyph relates to the
+     note BEFORE it, and a page that seats it 0.25 spaces from its parent and
+     0.5 from the next note says the opposite.
+
+     ABSENT INK MEANS NO TERM, not a zero-width column. A caller that does not
+     measure ink gets exactly the three terms it got before N.103, which is what
+     keeps every existing caller and test honest.
+
+     The trailing advance past the last column has no `nextInk`, so its ink term
+     is the previous column's own ink plus the clearance. That keeps a displaced
+     turning unit off the barline it runs into. */
+  const inkNeed = prevInk
+    ? prevInk.right +
+      (nextInk ? nextInk.left : 0) +
+      lineGap * (prevInk.turningDisplaced ? TURNING_TRAIL_SP : INK_CLEAR_SP)
+    : 0;
+  return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed, inkNeed);
 }
 
 /**
@@ -812,6 +1202,7 @@ export function layoutColumns(
   options: StaffRenderOptions = {},
   fromMeasure = -Infinity,
   toMeasure = Infinity,
+  analyzed?: AnalyzedScore,
 ): { columns: LayoutColumn[]; trailing: number } {
   const lineGap = options.lineGap ?? DEFAULTS.lineGap;
   const runWidth = TACET_REST.measureSp * lineGap;
@@ -822,10 +1213,37 @@ export function layoutColumns(
     (e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure,
   );
 
+  /* N.103's threading, and it is the whole of it: the walk that already knows
+     the column order carries the accidental state forward and measures each
+     column's ink as it passes, so `columnAdvance` receives the two ink
+     measurements it needs and neither call site has to assemble them.
+
+     THE SEED. `incomingAccidentals` is what `paginateScore` hands the renderer
+     for a rebased slice. `sliceWidth` asks about a measure range of an unsliced
+     score instead, so there is no such option and the state entering
+     `fromMeasure` is computed here from `accidentalStateAtEndOf`, which is the
+     same call `paginateScore` makes for the renderer. The two call sites
+     therefore start from the same state by two routes that cannot disagree,
+     because the route is one function.
+
+     NO ANALYSIS MEANS NO TURNING INK, which is correct rather than degraded: a
+     score with no measured voice draws no turning layer at all. */
+  const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
+  const inkOptions: StaffRenderOptions = { ...options, clef: options.clef ?? chooseClef(parsed) };
+  const carry = newAccidentalCarry(
+    fifths,
+    options.incomingAccidentals ??
+      (Number.isFinite(fromMeasure) ? accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths) : undefined),
+  );
+  const turningAcc: Record<string, number> = {};
+  const inkOf = (ev: VocalLineEvent): ColumnInk =>
+    columnInk(ev, analyzed?.events[ev.id], carry, turningAcc, inkOptions);
+
   const columns: LayoutColumn[] = [];
   let prevMeasure = -1;
   let prevDurWhole = 0;
   let prevEv: VocalLineEvent | undefined;
+  let prevInk: ColumnInk | undefined;
   // Set by a tacet column, spent by the column after it.
   let owedByTacet = 0;
   let runCursor = 0;
@@ -836,11 +1254,12 @@ export function layoutColumns(
       advance:
         columns.length === 0
           ? 0
-          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options) : 0) + BARLINE_ROOM,
+          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM,
       newMeasure: columns.length > 0,
     });
     prevMeasure = run.toMeasure;
     prevEv = undefined;
+    prevInk = undefined;
     owedByTacet = runWidth;
   };
 
@@ -850,12 +1269,17 @@ export function layoutColumns(
       runCursor += 1;
     }
     const newMeasure = ev.measureIndex !== prevMeasure;
+    /* MEASURED BEFORE THE ADVANCE IS SPENT, and every column is measured even
+       where its advance is not: the carry has to see every note in order or the
+       next bar's courtesy is wrong. */
+    const ink = inkOf(ev);
     let advance: number;
     if (owedByTacet > 0) {
       advance = owedByTacet + BARLINE_ROOM;
       owedByTacet = 0;
     } else if (prevEv) {
-      advance = columnAdvance(prevEv, ev, prevDurWhole, options) + (newMeasure ? BARLINE_ROOM : 0);
+      advance =
+        columnAdvance(prevEv, ev, prevDurWhole, options, prevInk, ink) + (newMeasure ? BARLINE_ROOM : 0);
     } else {
       advance = 0;
     }
@@ -863,6 +1287,7 @@ export function layoutColumns(
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
     prevEv = ev;
+    prevInk = ink;
   }
   // A run that ends the system has no following event to open it.
   while (runCursor < runs.length) {
@@ -874,7 +1299,7 @@ export function layoutColumns(
     owedByTacet > 0
       ? owedByTacet
       : prevEv
-        ? columnAdvance(prevEv, undefined, prevDurWhole, options)
+        ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk)
         : 0;
   return { columns, trailing };
 }
@@ -959,31 +1384,42 @@ export function renderAnalyzedStaff(
     const gx = anchorLeft ? x : x - sp(g.widthSp / 2);
     return `<text x="${round2(gx)}" y="${round2(y)}" font-size="${glyphSize}px" font-family="${esc(o.fontFamily)}" fill="${fill}">${g.char}</text>`;
   };
-  const headNameFor = (base: NoteBase): RequiredGlyphName =>
-    base === 'whole' || base === 'breve' ? 'noteheadWhole' : base === 'half' ? 'noteheadHalf' : 'noteheadBlack';
+  const headNameFor = headNameOf;
 
   const ed = smufl?.engravingDefaults;
-  const stemT = smufl ? sp(ed!.stemThickness) : 1.5;
+  /* N.103: every width this loop draws from comes from `inkMetrics`, which is
+     the same object `columnInk` measures with. Two copies of "how wide is a
+     flat" are two answers waiting to disagree, and the spacer's whole job is to
+     be right about what this loop is about to draw. */
+  const M = inkMetrics(options);
+  const stemT = M.stemT;
   const beamT = smufl ? sp(ed!.beamThickness) : BEAM_STROKE;
   const beamLevelGap = smufl ? sp(ed!.beamThickness + ed!.beamSpacing) : BEAM_GAP;
   // Stem x-offsets from the notehead centre, from the black notehead's
   // anchors (half noteheads differ by a hair; v1 accepts the approximation
   // so the beam pass and the stem pass agree).
-  let stemHalfUp = STEM_HALF;
-  let stemHalfDown = -STEM_HALF;
-  if (smufl) {
-    const nh = smufl.glyph('noteheadBlack');
-    const w = nh.widthSp;
-    stemHalfUp = sp((nh.anchors.stemUpSE?.[0] ?? w) - w / 2) - stemT / 2;
-    stemHalfDown = sp((nh.anchors.stemDownNW?.[0] ?? 0) - w / 2) + stemT / 2;
-  }
+  const stemHalfUp = M.stemHalfUp;
+  const stemHalfDown = M.stemHalfDown;
   /** Standard stem length in px at this stave size (Gould r86). */
   const stemLen = sp(STEM_LENGTH_SP);
 
   // ── Layout: assign x by onset, insert barlines at measure changes ──
   // Pass one: every column's MINIMUM advance, from `layoutColumns`, which
   // `sliceWidth` also calls so the packing estimate and the rendering agree.
-  const { columns: steps, trailing } = layoutColumns(parsed, options);
+  /* N.103: the layout walk is given the ANALYSIS and the resolved clef, which
+     is what lets it see the turning layer and the sung note's stave position.
+     `sliceWidth` passes the same two, so the packing estimate and this render
+     measure the same ink. Passing `clef` matters on its own: this call used to
+     take raw `options`, so a score whose clef the renderer resolved by
+     heuristic was packed under whatever `chooseClef` made of the unsliced
+     score, and until N.103 nothing in the advance depended on the clef. */
+  const { columns: steps, trailing } = layoutColumns(
+    parsed,
+    { ...options, clef },
+    undefined,
+    undefined,
+    analyzed,
+  );
   const naturalSpan = steps.reduce((total, s) => total + s.advance, 0) + trailing;
 
   // Pass two: justify. The whole span scales by one factor, so the duration
@@ -1320,8 +1756,8 @@ export function renderAnalyzedStaff(
    * before that event is the slice's own silent first bar, not the previous
    * system's last.
    */
-  let measureAcc: Record<string, number> = { ...(options.incomingAccidentals ?? {}) };
-  let turningAcc: Record<string, number> = {};
+  const carry = newAccidentalCarry(fifths, options.incomingAccidentals);
+  const turningAcc: Record<string, number> = {};
   /**
    * N.102. The sung line's accidental state as it stood at the END of the
    * measure immediately before this one, which is what the courtesy
@@ -1337,8 +1773,12 @@ export function renderAnalyzedStaff(
    * is not satisfied two bars later, and a tacet run clears it for the same
    * reason.
    */
-  let prevMeasureAcc: Record<string, number> = {};
-  let curMeasure = -1;
+  /* N.103 moved the two maps, the bar counter, and the barline step into
+     `AccidentalCarry` and `carryIntoMeasure`, so `layoutColumns` walks the
+     state exactly as this loop walks it and the spacer cannot disagree with the
+     page about whether a courtesy draws. They are read off `carry` rather than
+     destructured, because the barline step REPLACES `measureAcc` and a local
+     binding would go stale at the first bar change. */
 
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
   // are collected during the draw and placed below the lowest ink of the
@@ -1523,15 +1963,10 @@ export function renderAnalyzedStaff(
   }
 
   for (const { ev, x: nx, newMeasure } of placed) {
-    if (ev.measureIndex !== curMeasure) {
-      // N.102: the outgoing measure's state becomes the courtesy source, but
-      // only for the measure that DIRECTLY follows it. A skipped index is a
-      // tacet run, and nothing carries across one.
-      prevMeasureAcc = ev.measureIndex === curMeasure + 1 ? measureAcc : {};
-      curMeasure = ev.measureIndex;
-      measureAcc = {}; // accidental state resets each measure
-      turningAcc = {}; // the turning layer carries its own state
-    }
+    // N.102: the outgoing measure's state becomes the courtesy source, but only
+    // for the measure that DIRECTLY follows it. A skipped index is a tacet run,
+    // and nothing carries across one. The turning layer resets outright.
+    carryIntoMeasure(carry, turningAcc, ev.measureIndex);
     if (newMeasure) {
       const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
       parts.push(`<line x1="${nx - 18}" y1="${staffTop}" x2="${nx - 18}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
@@ -1552,12 +1987,12 @@ export function renderAnalyzedStaff(
     const y = yFor(pitch);
     const a: AnalyzedEvent | undefined = analyzed.events[ev.id];
     const headName = headNameFor(ev.duration.base);
-    const headHalfW = smufl ? sp(smufl.glyph(headName).widthSp / 2) : 6.2;
+    const headHalfW = M.headHalfW(ev.duration.base);
     lowestInk = Math.max(lowestInk, y + 6);
     highestInk = Math.min(highestInk, y - 6);
 
     // Ledger lines.
-    const ledgerHalf = smufl ? round2(headHalfW + sp(ed!.legerLineExtension)) : 11;
+    const ledgerHalf = M.ledgerHalf(ev.duration.base);
     const ledgerT = smufl ? round2(sp(ed!.legerLineThickness)) : 1;
     for (let ly = o.staffMidY - 3 * o.lineGap; ly >= y - 1; ly -= o.lineGap) {
       parts.push(`<line x1="${round2(nx - ledgerHalf)}" y1="${ly}" x2="${round2(nx + ledgerHalf)}" y2="${ly}" stroke="#3a352f" stroke-width="${ledgerT}"/>`);
@@ -1574,21 +2009,23 @@ export function renderAnalyzedStaff(
     // 1b, so `accidentalStateAtEndOf` can answer what a slice inherits by
     // making the same call this loop makes. Everything below decides only what
     // the mark LOOKS like; what it is was decided there.
-    const mark = advanceAccidentalState(pitch, fifths, measureAcc, prevMeasureAcc);
+    const mark = advanceAccidentalState(pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
     if (mark === 'required') {
+      /* The width is `inkMetrics`'s in both modes since N.103, so the spacer's
+         left extent and this placement are the same number. Primitive mode's
+         `nx - 20` is now that arithmetic rather than a literal, and lands on
+         the same pixel it always did. */
+      const accW = M.accidentalW(pitch.alter);
+      const gx = Math.max(nx - headHalfW - ACC_GAP_PX - accW, newMeasure ? (smufl ? nx - 16 : nx - 13) : -Infinity);
       if (smufl) {
         const name = ACCIDENTAL_SMUFL[pitch.alter];
-        if (name) {
-          const accW = sp(smufl.glyph(name).widthSp);
-          const gx = Math.max(nx - headHalfW - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
-          parts.push(partOfEvent(glyphAt(name, gx, y, '#1a1612', true), ev.id));
-        }
+        if (name) parts.push(partOfEvent(glyphAt(name, gx, y, '#1a1612', true), ev.id));
       } else {
         const g = ACCIDENTAL_GLYPH[pitch.alter] ?? '';
         if (g)
           parts.push(
             partOfEvent(
-              `<text x="${newMeasure ? nx - 13 : nx - 20}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`,
+              `<text x="${round2(gx)}" y="${y + 4}" font-size="15" fill="#1a1612">${g}</text>`,
               ev.id,
             ),
           );
@@ -1653,11 +2090,8 @@ export function renderAnalyzedStaff(
              HALF ON EACH SIDE rather than closing one gap first: the brackets
              stay symmetrical about the accidental at every width, and an
              asymmetric pair reads as a mistake rather than as tight spacing. */
-          const wL = sp(smufl.glyph('accidentalParensLeft').widthSp);
-          const wA = sp(smufl.glyph(name).widthSp);
-          const wR = sp(smufl.glyph('accidentalParensRight').widthSp);
-          const gapWanted = sp(COURTESY_GAP_SP);
-          const rightEdge = nx - headHalfW - 1.5;
+          const { wL, wA, wR, gap: gapWanted } = M.courtesyParts(pitch.alter)!;
+          const rightEdge = nx - headHalfW - ACC_GAP_PX;
           const floor = newMeasure ? nx - 16 : -Infinity;
           const overrun = Math.max(0, floor - (rightEdge - (wL + wA + wR + 2 * gapWanted)));
           const gap = Math.max(0, gapWanted - overrun / 2);
@@ -1724,17 +2158,19 @@ export function renderAnalyzedStaff(
        notehead. That is the whole reason this block stands where it does,
        ahead of the turning layer; it already did, so N.106 reordered
        nothing. */
-    let dotsRight = -Infinity;
+    let dotsRight = -Infinity; // an OFFSET from `nx`, as `sungRightEdge` reads it
     if (dotCount > 0) {
       const steps = (y - o.staffMidY) / half;
       /* An even number of half-spaces from the middle line is a LINE. */
       const onLine = Math.abs(steps - Math.round(steps)) < 0.01 && Math.round(steps) % 2 === 0;
       const dotY = onLine ? y - o.lineGap / 2 : y;
-      const clear = sp(0.5);
-      let dotX = nx + headHalfW + clear;
-      if (Math.abs(dotY - o.staffMidY) > 2 * o.lineGap) dotX = Math.max(dotX, nx + ledgerHalf + clear);
-      const dotW = smufl ? sp(smufl.glyph('augmentationDot').widthSp) : sp(0.4);
-      dotsRight = dotX + (dotCount - 1) * (dotW + clear) + dotW;
+      /* Placement and extent from one function since N.103, so the dot the
+         spacer allows for is the dot this loop draws. */
+      const geo = dotGeometry(M, ev.duration.base, dotCount, Math.abs(dotY - o.staffMidY) > 2 * o.lineGap);
+      const clear = M.dotClear;
+      const dotX = nx + geo.first;
+      const dotW = M.dotW;
+      dotsRight = geo.right;
       for (let d = 0; d < dotCount; d++) {
         const dx = dotX + d * (dotW + clear);
         parts.push(
@@ -1838,24 +2274,24 @@ export function renderAnalyzedStaff(
          a whole note has none. A FLAG IS NOT COUNTED: it flies from the stem
          tip, a stave and more from the turning unit's own height, so it can
          never be ink the biglyph sits inside. */
-      const gap = Math.abs(ty - y);
-      const steps = Math.round(gap / half);
-      const tHeadW = smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4;
+      const tHeadW = M.turningHeadW;
       const accName = smufl ? ACCIDENTAL_SMUFL[tp.alter] : undefined;
       const accChar = smufl ? '' : ACCIDENTAL_GLYPH[tp.alter] ?? '';
       const drawsAcc = tp.alter !== tInEffect && (smufl ? !!accName : !!accChar);
-      const tAccW = !drawsAcc ? 0 : smufl ? sp(smufl.glyph(accName!).widthSp) : PRIMITIVE_TURNING_ACC_W;
-      const tAccGap = drawsAcc ? 1.5 : 0; // the sung line's head-to-accidental clearance
+      const tAccW = drawsAcc ? M.turningAccW(tp.alter) : 0;
+      const tAccGap = tAccW > 0 ? ACC_GAP_PX : 0; // the sung line's head-to-accidental clearance
 
+      /* THE INTERVAL AND THE PLACEMENT ARE BOTH SHARED SINCE N.103. `staveSteps`
+         counts the interval directly instead of dividing pixels by the
+         half-space, and `turningUnitAt` seats the displaced unit. `columnInk`
+         calls the same two, so the spacer cannot think a unit is aligned that
+         this loop displaces. */
       let tx: number;
-      if (steps > 1) {
+      if (staveSteps(tp, pitch) > 1) {
         tx = nx; // a third or more: aligned, and the accidental hangs to its left
       } else {
-        const stemmed = ev.duration.base !== 'whole' && ev.duration.base !== 'breve';
-        let sungRight = nx + headHalfW;
-        if (stemmed && stemUpFor(ev, y)) sungRight = Math.max(sungRight, nx + stemHalfUp + stemT / 2);
-        sungRight = Math.max(sungRight, dotsRight);
-        tx = sungRight + 1.6 + sp(TURNING_CLEARANCE_SP) + tAccW + tAccGap + tHeadW / 2;
+        const sungRight = sungRightEdge(M, ev.duration.base, stemUpFor(ev, y), dotsRight);
+        tx = nx + turningUnitAt(M, sungRight, tAccW).tx;
       }
 
       if (drawsAcc) {

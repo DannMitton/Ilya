@@ -4,9 +4,11 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { analyzeScore } from './overlay-engine';
+import { analyzeScore, pitchToHz } from './overlay-engine';
 import { demoProfile, demoResolver, demoScore } from './demo-fixture';
 import { LAST_SYSTEM_JUSTIFY_FILL, paginateScore, sliceScore, sliceWidth } from './page-layout';
+import type { AnalyzedScore, VoiceProfileSnapshot } from './analysis-types';
+import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 
 function demo() {
   const parsed = demoScore();
@@ -251,5 +253,128 @@ describe('page layout: system packing and page assembly', () => {
       expect(s.svg.includes('data-clef="treble"')).toBe(true);
       expect(s.svg.includes('data-clef="bass"')).toBe(false);
     }
+  });
+});
+
+// ── N.103: the spacer sees ink, and the paginator sees the spacer ────
+//
+// `sliceWidth` and the render both walk `layoutColumns`, which is what has kept
+// packing and drawing from drifting since N.6b-1. N.103 gives that walk the
+// ANALYSIS and the resolved clef, so the turning layer is ink it can measure;
+// both call sites had to gain the same two arguments or the guarantee would
+// have quietly become a lie.
+describe('page layout: the ink term reaches pagination (N.103)', () => {
+  const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+
+  /** `bars` measures of four eighths on one pitch, every note on the vowel `v`. */
+  const runOfEighths = (bars: number, pitch: Pitch): ParsedScore => {
+    const vocalLine: VocalLineEvent[] = [];
+    for (let m = 0; m < bars; m++) {
+      for (let b = 0; b < 4; b++) {
+        vocalLine.push({
+          id: `m${m}-${b}`,
+          type: 'note',
+          measureIndex: m,
+          rhythmicPosition: { fraction: { numerator: b, denominator: 8 } },
+          duration: { base: 'eighth', dots: 0, fraction: { numerator: 1, denominator: 8 } },
+          pitch,
+        });
+      }
+    }
+    return {
+      source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
+      vocalPart: { partId: 'P1', partName: 'Voice' },
+      measures: Array.from({ length: bars }, (_, index) => ({
+        index,
+        number: String(index + 1),
+        timeSignature: { beats: 2, beatType: 4 },
+        keySignature: { fifths: 0 },
+        expectedDuration: { numerator: 1, denominator: 2 },
+      })),
+      keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
+      timeSignatures: [{ measureIndex: 0, signature: { beats: 2, beatType: 4 } }],
+      tempoMarkings: [],
+      vocalLine,
+    };
+  };
+
+  /**
+   * A voice whose turning pitch is `turning` on every note, chosen by
+   * construction: the engine takes the turning pitch as `hzToPitch(fR1 / 2)`.
+   */
+  const voiced = (parsed: ParsedScore, turning: Pitch): AnalyzedScore => {
+    const profile: VoiceProfileSnapshot = {
+      fR1: { v: 2 * pitchToHz(turning) },
+      range: { lowest: P('C', 3), highest: P('C', 6) },
+      tessitura: { low: P('E', 4), high: P('A', 4) },
+      passaggio: { primo: P('E', 4), secondo: P('A', 4) },
+      label: 'test',
+    };
+    return analyzeScore(parsed, profile, () => 'v', { generatedAt: '2026-09-02T00:00:00.000Z' });
+  };
+
+  /** The same score with no measured voice: sung ink only, no turning layer. */
+  const silent = (parsed: ParsedScore): AnalyzedScore =>
+    analyzeScore(parsed, { fR1: {}, label: 'test' }, () => undefined, {
+      generatedAt: '2026-09-02T00:00:00.000Z',
+    });
+
+  // Starve the floor and the duration term so the ink term is what decides the
+  // packing, which is the only way to see it decide anything.
+  const OPTS = {
+    clef: 'treble' as const,
+    minGap: 1,
+    pxPerWhole: 1,
+    pageWidth: 400,
+    pageHeight: 100000,
+    marginLeft: 0,
+    marginRight: 0,
+  };
+
+  it('packs FEWER measures per system once the columns carry turning ink', () => {
+    const parsed = runOfEighths(12, P('G', 4));
+    const withTurning = paginateScore(parsed, voiced(parsed, P('A', 4)), OPTS);
+    const withoutTurning = paginateScore(parsed, silent(parsed), OPTS);
+    const barsInFirst = (out: ReturnType<typeof paginateScore>): number =>
+      out.systems[0].toMeasure - out.systems[0].fromMeasure + 1;
+    expect(barsInFirst(withTurning)).toBeLessThan(barsInFirst(withoutTurning));
+    expect(withTurning.systems.length).toBeGreaterThan(withoutTurning.systems.length);
+  });
+
+  it('agrees with the render: sliceWidth equals an unstretched system’s width', () => {
+    // A sole system is the piece's last, and the piece's last is not stretched
+    // below the fill limit, so its rendered width IS its natural width. Both
+    // sides are given the analysis and the same resolved clef, which is the
+    // whole of N.103's threading.
+    const parsed = runOfEighths(3, P('G', 4));
+    const analyzed = voiced(parsed, P('A', 4));
+    const opts = { ...OPTS, pageWidth: 100000 };
+    const out = paginateScore(parsed, analyzed, opts);
+    expect(out.systems).toHaveLength(1);
+    // To nine places: the two sides sum the same advances in the same order and
+    // differ only where floating-point addition associates differently.
+    expect(out.systems[0].width).toBeCloseTo(sliceWidth(parsed, 0, 2, opts, analyzed), 9);
+  });
+
+  it('would DISAGREE with the render if the analysis were withheld, which is why it is threaded', () => {
+    // The regression this guards: `sliceWidth` without the analysis measures a
+    // page with no turning layer on it, and packs measures the render then has
+    // to fit anyway.
+    const parsed = runOfEighths(3, P('G', 4));
+    const analyzed = voiced(parsed, P('A', 4));
+    const opts = { ...OPTS, pageWidth: 100000 };
+    expect(sliceWidth(parsed, 0, 2, opts)).toBeLessThan(sliceWidth(parsed, 0, 2, opts, analyzed));
+  });
+
+  it('leaves a system with no ink of its own exactly where it was: the control', () => {
+    // No displaced turning unit, no courtesy, no dot. The sung ink term is the
+    // same on both sides and smaller than the duration term, so the two pack
+    // and render identically, to the digit.
+    const parsed = runOfEighths(4, P('G', 4));
+    const opts = { ...OPTS, minGap: 40, pxPerWhole: 240, pageWidth: 100000 };
+    const a = paginateScore(parsed, silent(parsed), opts);
+    const b = paginateScore(parsed, silent(parsed), opts);
+    expect(a.systems[0].width).toBe(b.systems[0].width);
+    expect(sliceWidth(parsed, 0, 3, opts, silent(parsed))).toBe(sliceWidth(parsed, 0, 3, opts));
   });
 });

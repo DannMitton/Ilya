@@ -104,29 +104,29 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > were stale before any N.102 work.** Code listed them and left them rather
 > than guess. Repair by naming the thing, not by writing a new number.
 >
-> **THE ONE THING: N.106, the turning head beside the sung head.** Placed by
-> Dann 2026-09-02 ("N.106 Proceed"). **RULED BY DANN, HIS EYE, from three
-> drawings of Maestro's outlines:** the turning head aligns vertically with
-> the sung head whenever the interval allows (a third or more); at a unison
-> or a second it is ALWAYS displaced to the RIGHT, never left, at one head
-> width + 1.6 px + **0.25 sp**. His words: "if the turning note and the
-> parent note can align vertically, they should"; "The lower second on the
-> left looks strange." This retires Gould 103's rising diagonal for this
-> layer; a convention is a prior, not a law (tether 19, and his 2026-08-18
-> stems ruling). **RULED, the semantic unit, his words: "accidentals and dots and their
-> corresponding notehead should operate as a semantic unit. We should never
-> see a case where elements from another layer insert themselves between a
-> note head and its dot or accidental."** So nothing in the sung unit moves;
-> a displaced turning head sits to the right of the whole unit, past the
-> dots when there are any. **The turning layer shares the rule.** Its accidental plus head is a
-> unit too, and travels together. **Coined by Dann 2026-09-02: "biglyph"**
-> (turning accidental + head) **and "triglyph"** (sung accidental + head +
-> dots). Clearance is measured between the two units' ink edges. Briefed
-> inline to Code 2026-09-02, third paste, after two corrections on his
-> rulings.
+> **N.106 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `bb73488`,
+> "N.106: the turning unit keeps to the right of the sung unit". Rule at
+> `staff-renderer.ts:1796-1871`, `TURNING_CLEARANCE_SP = 0.25` exported.
+> 22 of 95 turning heads on Without Sun song 1 displaced right, 2.97 units
+> of clearance, nine of them seconds below that used to go left. He saw the
+> dotted case on system 2: flat, head, dot, then the lavender natural and
+> head clear to the right. His words: "Yes! :)" Gate 5 now **511 | 5 skipped
+> (516)**, `ilya-ship.sh:80` carries it. Memo:
+> `docs/sessions/memo-n106-turning-right_r1_2026-09-02.md`. The rulings
+> behind it (semantic units, biglyph and triglyph, always right, the
+> departure from Gould 103) are in `PRODUCT.md` §The turning layer.
 >
-> **Open and unplaced:** N.103 measures do not re-space when ink is added
-> (N.102 may hand it a case), N.94, N.84 the Guide redo, N.83's call, and
+> **THE ONE THING: N.103, the spacer sees ink.** Placed by Dann 2026-09-02
+> ahead of N.102 increment 1c, on the «лё ко» pair where N.106's displaced
+> turning head sits hard against the next eighth. His design intent, his
+> words: the spacer should have "some kind of sensitivity" to the layers it
+> does not see. Design: a fourth term in `columnAdvance`
+> (`staff-renderer.ts:758-775`), ink, from one shared `columnInk` function;
+> `INK_CLEAR` 0.5 sp is a DESK DEFAULT. Brief:
+> `docs/sessions/brief-n103-ink-spacing_r1_2026-09-02.md`, untracked until
+> Dann adds it. Status: BRIEFED, not built.
+>
+> **Open and unplaced:** N.102 increment 1c (turning-layer courtesies), N.94, N.84 the Guide redo, N.83's call, and
 > the release order N.85 through N.88.
 >
 > **Also this session, ruled: CONTRACT.md tether 20**, put yourself in his

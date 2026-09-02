@@ -118,10 +118,22 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
  * Width a measure range would occupy, using the renderer's own x-advance
  * arithmetic (leftMargin + duration-proportional advances + barline room
  * + right pad).
+ *
+ * N.103 adds `analyzed`, and it is not optional in practice: without it the
+ * walk cannot see the turning layer, so a page packed here would hold measures
+ * the render then has to stretch past the line. `paginateScore` passes it, and
+ * passes the SAME options the render uses, resolved clef included, so the two
+ * walks measure the same ink.
  */
-export function sliceWidth(parsed: ParsedScore, fromMeasure: number, toMeasure: number, options: StaffRenderOptions = {}): number {
+export function sliceWidth(
+  parsed: ParsedScore,
+  fromMeasure: number,
+  toMeasure: number,
+  options: StaffRenderOptions = {},
+  analyzed?: AnalyzedScore,
+): number {
   const leftMargin = options.leftMargin ?? RENDER_DEFAULTS.leftMargin;
-  const { columns, trailing } = layoutColumns(parsed, options, fromMeasure, toMeasure);
+  const { columns, trailing } = layoutColumns(parsed, options, fromMeasure, toMeasure, analyzed);
   return leftMargin + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD;
 }
 
@@ -182,7 +194,10 @@ export function paginateScore(
   let from = 0;
   while (from < measureCount) {
     let to = from;
-    while (to + 1 < measureCount && sliceWidth(parsed, from, to + 1, options) <= innerWidth) {
+    while (
+      to + 1 < measureCount &&
+      sliceWidth(parsed, from, to + 1, renderOptions, analyzed) <= innerWidth
+    ) {
       to++;
     }
     // A single measure wider than the page still gets its own system

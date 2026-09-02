@@ -64,7 +64,11 @@ A turning pitch marks where the voice turns, not how long it stays. It has a
 pitch and nothing else, so it carries no stem, no flag, no beam, and no dot,
 ever. Its whole extent is an accidental and a head, which Dann calls a
 "biglyph" against the sung note's "triglyph" of accidental, head, and dots.
-Each is a semantic unit; no mark from one may sit inside the other. At a
+Each is a semantic unit; no mark from one may sit inside the other. A turning pitch is a property of the vowel that corresponds to the note it
+follows (his words, 2026-09-02); that
+relation is semantic, and the page shows it by proximity: a displaced
+turning unit sits close after its parent and visibly further from what
+follows (his ruling, 2026-09-02). At a
 unison or a second the turning unit is always displaced to the right of the
 sung unit, never left; at a third or more it aligns vertically. This departs
 from Gould 103 on purpose; his words: "I realize this may be at odds with

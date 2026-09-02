@@ -21,7 +21,7 @@ import {
   renderDemoUnmeasured,
   syntheticSmuflFont,
 } from './demo-fixture';
-import type { VoiceProfileSnapshot } from './analysis-types';
+import type { AnalyzedEvent, VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore, pitchToHz } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
@@ -37,6 +37,11 @@ import {
   renderAnalyzedStaff,
   tacetRuns,
   TURNING_CLEARANCE_SP,
+  columnInk,
+  inkMetrics,
+  newAccidentalCarry,
+  INK_CLEAR_SP,
+  TURNING_TRAIL_SP,
   type StaffRenderOptions,
 } from './staff-renderer';
 
@@ -304,9 +309,14 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   });
 
   it('nudges a measure-opening turning accidental clear of the barline', () => {
-    // n13 opens measure 4: its sage sharp sits at nx - 13 (x 761), right of
-    // the barline at nx - 18, instead of the mid-measure nx - 19.
-    expect(svg.includes('x="761" y="58"')).toBe(true);
+    // n13 opens measure 4: its sage sharp sits at nx - 13, right of the barline
+    // at nx - 18, instead of the mid-measure nx - 19.
+    //
+    // x 761.25 since N.103, not 761: n11 carries a displaced turning unit, so
+    // the advance to the rest that follows it now answers to `TURNING_TRAIL_SP`
+    // and grew by a quarter of a pixel, which every column after it inherits.
+    // That single column is the ONLY place the ink term binds on this fixture.
+    expect(svg.includes('x="761.25" y="58"')).toBe(true);
   });
 });
 
@@ -797,6 +807,206 @@ describe('column advance: text-aware spacing (N.6b-1)', () => {
 
   it('never returns less than the floor', () => {
     expect(columnAdvance(n1, n13, 0, { ...opts, minGap: 500 })).toBe(500);
+  });
+});
+
+// ── N.103: the spacer sees ink ───────────────────────────────────────
+//
+// `columnAdvance` knew `minGap`, the duration, and the underlay, and nothing
+// about the accidentals, dots, courtesy clusters, and turning units the draw
+// loop adds after the columns are placed. `columnInk` is that measurement, and
+// the ink term is the fourth term it feeds.
+//
+// The clearance after a DISPLACED turning unit is `TURNING_TRAIL_SP`, not
+// `INK_CLEAR_SP`, on Dann's ruling of 2026-09-02: the biglyph relates to the
+// note before it, and a page that seats it 0.25 spaces from its parent and 0.5
+// from the next note states the opposite of the meaning.
+describe('columnInk (N.103)', () => {
+  const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+  const OPTS: StaffRenderOptions = { clef: 'treble' };
+  const M = inkMetrics(OPTS);
+
+  /** One note, in the bar and at the duration the case needs. */
+  const note = (
+    pitch: Pitch,
+    over: Partial<{ id: string; measureIndex: number; base: 'quarter' | 'eighth'; dots: number }> = {},
+  ): VocalLineEvent => ({
+    id: over.id ?? 'c1',
+    type: 'note',
+    measureIndex: over.measureIndex ?? 0,
+    rhythmicPosition: { fraction: { numerator: 0, denominator: 4 } },
+    duration: {
+      base: over.base ?? 'quarter',
+      dots: over.dots ?? 0,
+      fraction: { numerator: 1, denominator: 4 },
+    },
+    pitch,
+  });
+
+  /** A turning pitch, as the renderer's analysis layer supplies one. */
+  const turning = (tp: Pitch, timbre: 'open' | 'close' = 'close'): AnalyzedEvent =>
+    ({ turningPitch: tp, timbre }) as AnalyzedEvent;
+
+  const inkOf = (
+    ev: VocalLineEvent,
+    a?: AnalyzedEvent,
+    carry = newAccidentalCarry(0),
+    turningState: Record<string, number> = {},
+  ) => columnInk(ev, a, carry, turningState, OPTS);
+
+  const HEAD_HALF = M.headHalfW('quarter');
+  const ACC_GAP = 1.5;
+
+  // G4 sits below the middle line, so Gould's positional default gives it an
+  // up-stem and a `close` timbre gives it the same one. The two agree, which is
+  // what keeps a bare note and an analysed note comparable below.
+  const SUNG = P('G', 4);
+  const SUNG_RIGHT = Math.max(HEAD_HALF, M.stemHalfUp + M.stemT / 2);
+
+  it('measures a bare quarter as its notehead, both sides', () => {
+    const ink = inkOf(note(SUNG));
+    expect(ink.left).toBeCloseTo(HEAD_HALF, 6);
+    // An up-stem is on the right of the head and stands a hair past its ink.
+    expect(ink.right).toBeCloseTo(SUNG_RIGHT, 6);
+    expect(ink.turningDisplaced).toBe(false);
+  });
+
+  it('adds a required flat, plus its clearance, on the left', () => {
+    const ink = inkOf(note(P('B', 4, -1)));  // any pitch: the stem is on the other side
+    expect(ink.left).toBeCloseTo(HEAD_HALF + ACC_GAP + M.accidentalW(-1), 6);
+    expect(M.accidentalW(-1)).toBeGreaterThan(0);
+  });
+
+  it('adds the whole courtesy cluster on the left, parentheses and gaps included', () => {
+    // B flat in bar 1, B natural in bar 2: r121's plain cancellation, and the
+    // cluster is wider than the bare natural the required branch would draw.
+    const carry = newAccidentalCarry(0);
+    const turningState: Record<string, number> = {};
+    inkOf(note(P('B', 4, -1), { id: 'c1', measureIndex: 0 }), undefined, carry, turningState);
+    const ink = inkOf(note(P('B', 4, 0), { id: 'c2', measureIndex: 1 }), undefined, carry, turningState);
+    expect(ink.left).toBeCloseTo(HEAD_HALF + ACC_GAP + M.courtesyClusterW(0), 6);
+    expect(M.courtesyClusterW(0)).toBeGreaterThan(M.accidentalW(0));
+  });
+
+  it('adds the augmentation dot on the right', () => {
+    const bare = inkOf(note(P('B', 4)));
+    const dotted = inkOf(note(P('B', 4), { dots: 1 }));
+    expect(dotted.right).toBeGreaterThan(bare.right);
+    expect(dotted.right).toBeCloseTo(HEAD_HALF + M.dotClear + M.dotW, 6);
+    expect(dotted.left).toBeCloseTo(bare.left, 6);
+  });
+
+  it('adds a DISPLACED turning unit on the right, and says so', () => {
+    // A second above: N.106 displaces it, so the whole biglyph is ink to the
+    // right of everything the sung note owns.
+    const bare = inkOf(note(SUNG));
+    const ink = inkOf(note(SUNG), turning(P('A', 4)));
+    expect(ink.turningDisplaced).toBe(true);
+    expect(ink.right).toBeCloseTo(
+      SUNG_RIGHT + 1.6 + TURNING_CLEARANCE_SP * M.lineGap + M.turningHeadW,
+      6,
+    );
+    expect(ink.left).toBeCloseTo(bare.left, 6);
+  });
+
+  it('adds an ALIGNED turning unit’s accidental on the left, and nothing on the right', () => {
+    // Sung A4, turning C sharp 5: two stave steps, so the head aligns with the
+    // sung head, the accidental is the column's leftmost ink, and the right is
+    // untouched.
+    const bare = inkOf(note(P('A', 4)));
+    const ink = inkOf(note(P('A', 4)), turning(P('C', 5, 1)));
+    expect(ink.turningDisplaced).toBe(false);
+    expect(ink.right).toBeCloseTo(bare.right, 6);
+    expect(ink.left).toBeCloseTo(M.turningHeadW / 2 + ACC_GAP + M.turningAccW(1), 6);
+    expect(ink.left).toBeGreaterThan(bare.left);
+  });
+
+  it('measures a rest as its own glyph, never as nothing', () => {
+    const rest: VocalLineEvent = {
+      id: 'r1', type: 'rest', measureIndex: 0,
+      rhythmicPosition: { fraction: { numerator: 0, denominator: 4 } },
+      duration: { base: 'quarter', dots: 0, fraction: { numerator: 1, denominator: 4 } },
+    };
+    const ink = inkOf(rest);
+    expect(ink.left).toBeCloseTo(M.restHalfW('quarter'), 6);
+    expect(ink.right).toBeCloseTo(M.restHalfW('quarter'), 6);
+    expect(ink.left).toBeGreaterThan(0);
+  });
+
+  it('gives primitive mode real widths, never a zero ink term', () => {
+    const prim = inkMetrics({});
+    const carry = newAccidentalCarry(0);
+    const ink = columnInk(note(P('B', 4, -1)), undefined, carry, {}, { clef: 'treble' });
+    expect(ink.left).toBeCloseTo(prim.headHalfW('quarter') + ACC_GAP + prim.accidentalW(-1), 6);
+    expect(prim.accidentalW(-1)).toBeGreaterThan(0);
+    expect(prim.courtesyClusterW(0)).toBeGreaterThan(0);
+    expect(prim.turningHeadW).toBeGreaterThan(0);
+  });
+});
+
+describe('the ink term in columnAdvance (N.103)', () => {
+  const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+  /** Starve the floor and the duration so the ink term is what is under test. */
+  const OPTS: StaffRenderOptions = { clef: 'treble', minGap: 1, pxPerWhole: 1 };
+  const M = inkMetrics(OPTS);
+
+  const eighth = (id: string, pitch: Pitch): VocalLineEvent => ({
+    id, type: 'note', measureIndex: 0,
+    rhythmicPosition: { fraction: { numerator: 0, denominator: 8 } },
+    duration: { base: 'eighth', dots: 0, fraction: { numerator: 1, denominator: 8 } },
+    pitch,
+  });
+  const turning = (tp: Pitch): AnalyzedEvent => ({ turningPitch: tp, timbre: 'close' }) as AnalyzedEvent;
+  const inkOf = (ev: VocalLineEvent, a?: AnalyzedEvent) =>
+    columnInk(ev, a, newAccidentalCarry(0), {}, OPTS);
+
+  it('clears a displaced turning unit by TURNING_TRAIL_SP, not by INK_CLEAR_SP', () => {
+    // «лё ко»: two eighths a head apart, the first carrying a turning unit N.106
+    // put to its right. This is the pair Dann read as cramped.
+    const a = eighth('e1', P('B', 4));
+    const b = eighth('e2', P('B', 4));
+    const inkA = inkOf(a, turning(P('A', 4)));
+    const inkB = inkOf(b);
+    expect(inkA.turningDisplaced).toBe(true);
+    const advance = columnAdvance(a, b, 1 / 8, OPTS, inkA, inkB);
+    expect(advance).toBeGreaterThanOrEqual(inkA.right + inkB.left + TURNING_TRAIL_SP * M.lineGap);
+    expect(advance).toBeCloseTo(inkA.right + inkB.left + TURNING_TRAIL_SP * M.lineGap, 6);
+  });
+
+  it('clears sung ink alone by INK_CLEAR_SP', () => {
+    const a = eighth('e1', P('B', 4, -1));
+    const b = eighth('e2', P('E', 4, 1));
+    const inkA = inkOf(a);
+    const inkB = inkOf(b);
+    expect(inkA.turningDisplaced).toBe(false);
+    const advance = columnAdvance(a, b, 1 / 8, OPTS, inkA, inkB);
+    expect(advance).toBeGreaterThanOrEqual(inkA.right + inkB.left + INK_CLEAR_SP * M.lineGap);
+    expect(advance).toBeCloseTo(inkA.right + inkB.left + INK_CLEAR_SP * M.lineGap, 6);
+  });
+
+  it('insists on more room after lavender than after the same note without it', () => {
+    // The ruling in one comparison: the same two notes, the same rhythm, and
+    // the only difference is that the first one carries a turning unit.
+    const a = eighth('e1', P('B', 4));
+    const b = eighth('e2', P('B', 4));
+    const plain = columnAdvance(a, b, 1 / 8, OPTS, inkOf(a), inkOf(b));
+    const lavender = columnAdvance(a, b, 1 / 8, OPTS, inkOf(a, turning(P('A', 4))), inkOf(b));
+    expect(lavender).toBeGreaterThan(plain);
+  });
+
+  it('returns exactly the rhythm term when the ink term is smaller', () => {
+    const a = eighth('e1', P('B', 4));
+    const b = eighth('e2', P('B', 4));
+    const wide = { ...OPTS, pxPerWhole: 4000 }; // an eighth is 500 px
+    expect(columnAdvance(a, b, 1 / 8, wide, inkOf(a), inkOf(b))).toBe(500);
+  });
+
+  it('leaves a caller that measures no ink exactly where it was before N.103', () => {
+    const a = eighth('e1', P('B', 4));
+    const b = eighth('e2', P('B', 4));
+    expect(columnAdvance(a, b, 1 / 8, OPTS)).toBeLessThan(
+      columnAdvance(a, b, 1 / 8, OPTS, inkOf(a), inkOf(b)),
+    );
   });
 });
 
