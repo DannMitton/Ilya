@@ -948,9 +948,10 @@
 	   the two are one object.
 
 	   THE Z-INDEX CLEARS THE INSTALL PROMPT, and that is measured rather than
-	   chosen. `InstallPrompt.svelte:114` sits at 9000 and raises itself six
-	   seconds into every iOS Safari session, and at any lower value it lands
-	   on top of the LYRIC station and the singer cannot reach it. The mobile
+	   chosen. `InstallPrompt.svelte:157` sits at 9000 and raises itself six
+	   seconds into an iOS Safari session that carries no fresh decline
+	   (N.105), and at any lower value it lands on top of the LYRIC station
+	   and the singer cannot reach it. The mobile
 	   drawer takes 60 (`Drawer.svelte:1526`) and the update toast 200. The
 	   loupe is ruled nearest the user, the dock is its other half, and a
 	   working surface a thumb cannot reach is not a surface. The prompt is

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { Language } from '$lib/i18n';
+  import { DEAD_IOS_KEY, DECLINE_KEY, declineIsFresh } from '$lib/install-decline';
 
   interface Props {
     language?: Language;
@@ -41,23 +42,61 @@
   let visible = $state(false);
   let isIos = $state(false);
 
+  // N.105. Every storage call here is wrapped, because a private-mode Safari
+  // throws on write and a thrown decline must not take the banner's own logic
+  // down with it. On a throw we behave as though nothing is stored, which is
+  // the state the singer was in before this item.
+
+  /** May Ilya ask right now? Read at each decision point, never cached. */
+  function mayAsk(): boolean {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(DECLINE_KEY);
+    } catch {
+      // localStorage unavailable (private browsing)
+    }
+    return !declineIsFresh(stored, new Date());
+  }
+
+  /** Record a decline. One key, one rule, both platforms. */
+  function recordDecline() {
+    try {
+      localStorage.setItem(DECLINE_KEY, new Date().toISOString());
+    } catch {
+      // localStorage unavailable (private browsing)
+    }
+  }
+
   onMount(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+    // The iOS path's old key. sessionStorage, so it died with the tab and
+    // nothing reads it now. Removed rather than left to sit.
+    try {
+      sessionStorage.removeItem(DEAD_IOS_KEY);
+    } catch {
+      // sessionStorage unavailable (private browsing)
+    }
 
     const ua = navigator.userAgent;
     const ios = /iphone|ipad|ipod/i.test(ua) && !(ua.includes('CriOS') || ua.includes('FxiOS'));
 
     if (ios) {
       isIos = true;
-      if (!sessionStorage.getItem('ilya-ios-hint-shown')) {
+      if (mayAsk()) {
         setTimeout(() => { visible = true; }, 6000);
       }
       return;
     }
 
+    // The listener stays registered and still calls preventDefault even when
+    // a decline is fresh. Returning before it would hand the singer Chrome's
+    // own install affordance in place of this banner, which is a second nag
+    // in the shape of a fix. Only the banner is held back.
     window.addEventListener('beforeinstallprompt', (e: Event) => {
       e.preventDefault();
       deferredPrompt = e as BeforeInstallPromptEvent;
+      if (!mayAsk()) return;
       setTimeout(() => { visible = true; }, 8000);
     });
   });
@@ -66,6 +105,10 @@
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
+    // A dismissed native prompt is a decline too. An accepted one writes
+    // nothing: the app is installed, and display-mode: standalone above
+    // already keeps the banner down.
+    if (outcome === 'dismissed') recordDecline();
     deferredPrompt = null;
     visible = false;
   }
@@ -73,7 +116,7 @@
   function dismiss() {
     visible = false;
     deferredPrompt = null;
-    if (isIos) sessionStorage.setItem('ilya-ios-hint-shown', '1');
+    recordDecline();
   }
 
   let t = $derived(strings[language] ?? strings.en);
