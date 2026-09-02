@@ -36,6 +36,7 @@ next session the same hour it cost the last one.
 | a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
 | the alias is serving something stale | `The branch alias, observed` |
 | sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
+| briefing Design | `WHAT DESIGN CAN READ` |
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
 
 ### Browsers, phones, and what each one refuses
@@ -2237,3 +2238,18 @@ his library, but the desk's clicks on a notehead did not raise the loupe
 (twice, on Score markup, cause NOT ESTABLISHED), and the desk's screenshots
 come back at a different viewport size from his window. Use it to read, not
 to drive, until that is understood.
+
+## WHAT DESIGN CAN READ. 2026-09-02
+
+Design (the design desk, a separate Cowork project) has no files unless Dann
+gives it some. On N.108 it drew the whole first pass with placeholder values,
+then Dann connected `DannMitton/Ilya` and it re-tokened everything from the
+tree. What it still could not read: the rulings that live only in project
+knowledge (`claude/...`), four of them on N.108, so it built against the
+brief's paraphrase and listed them NOT ESTABLISHED.
+
+Before pasting a brief to Design, in this order: (1) Dann connects the
+repository to the Design project, branch `Shane`; (2) the desk attaches, as
+files, every `claude/` ruling the brief cites; (3) then the brief. Dann's
+words: "we should offer Design the files that make up the foundation of the
+work in future."

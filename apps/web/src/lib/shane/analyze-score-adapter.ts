@@ -34,6 +34,7 @@
 import type { VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from './engine/types';
+import { DERIV_SOURCE, deriveFrom } from './engine/derivations';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -87,7 +88,9 @@ export function completenessOf(s: VoiceProfileSnapshot): AnalysisCompleteness {
  *
  * @param formants the active voice's direct-sample formants (captured or
  *   provisional); a reading with no usable f1, or one the plausibility guard
- *   judged implausible, contributes no fR1 (§B.4).
+ *   judged implausible, contributes no fR1 (§B.4). A derivable vowel absent
+ *   from this map is derived from its anchors here, per snapshot and never
+ *   stored (N.109).
  * @param characteristics the typed range/tessitura/passaggio, or undefined
  *   when the singer skipped the phase entirely.
  * @param label optional citation-block label (e.g. the voice name or type).
@@ -149,6 +152,47 @@ export function buildVoiceProfileSnapshot(
 			formant.plausibility !== 'implausible'
 		) {
 			fR2[vowel] = formant.f2;
+		}
+	}
+
+	// N.109: the four derivable vowels reach the forecast too.
+	//
+	// The wizard's roster has always shown a derived fR1/fR2 for a challenging
+	// vowel the singer never sang, greyed and labelled Estimated (Dann,
+	// 2026-07-02). Its comment said the analysis layer used the same derive().
+	// It did not: the two loops above read measured formants only, so a singer
+	// who sang [i] and [u] saw an Estimated [ɨ] on the roster and got no
+	// acoustic mark on a single [ɨ] in the score. The roster and the forecast
+	// now read one anchor table and one usability gate (`deriveFrom`,
+	// derivations.ts), so they cannot disagree, and the wizard's comment is
+	// true.
+	//
+	// NOTHING IS WRITTEN TO THE STORED PROFILE. This is computed per snapshot,
+	// from the sampled formants handed in. The standing rule holds unchanged:
+	// the stored profile keeps only what was actually sung (Dann, 2026-07-02;
+	// profileStore.ts's contract note), and a derived value is recomputed on
+	// every render rather than persisted.
+	//
+	// A MEASURED READING ALWAYS WINS. Each channel is filled only where the
+	// loops above left it empty, so a sung [ɨ] is never displaced by a derived
+	// one. `deriveFrom` gates every anchor on a positive f1 and f2 and on the
+	// plausibility guard's verdict, carrying §B.4 inward: Fit will not build a
+	// derived value on a number the engine has already decided cannot be that
+	// vowel. The derived fR2 is gated as the measured fR2 loop is — the derived
+	// reading carries no f2Quality and no plausibility, both of which mean "not
+	// assessed" and pass, so the live condition is a positive number.
+	//
+	// No anchor is itself derivable, and `formants` is the sampled map, so
+	// nothing here derives from a derived value.
+	for (const vowel of Object.keys(DERIV_SOURCE) as Vowel[]) {
+		if (fR1[vowel] !== undefined && fR2[vowel] !== undefined) continue;
+		const derived = deriveFrom(vowel, formants);
+		if (!derived) continue;
+		if (fR1[vowel] === undefined && typeof derived.f1 === 'number' && derived.f1 > 0) {
+			fR1[vowel] = derived.f1;
+		}
+		if (fR2[vowel] === undefined && typeof derived.f2 === 'number' && derived.f2 > 0) {
+			fR2[vowel] = derived.f2;
 		}
 	}
 

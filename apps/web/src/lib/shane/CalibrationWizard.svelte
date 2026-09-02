@@ -56,7 +56,7 @@
 	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
-	import { derive } from '$lib/shane/engine/derivations';
+	import { deriveFrom } from '$lib/shane/engine/derivations';
 	import { applyIghDivergence } from '$lib/shane/engine/divergence';
 	import { checkPlausibility, buildPlausibilityEvent } from '$lib/shane/engine/plausibility';
 	import {
@@ -1025,48 +1025,20 @@
 
 	// ── Working values (Dann, 2026-07-02) ────────────────────────────────────
 	// Each roster row publishes the working fR1/fR2 so the singer sees what
-	// was received. For the three challenging vowels, an unsampled row shows the
+	// was received. For the challenging vowels, an unsampled row shows the
 	// engine's derived value (reading: Estimated), greyed, computed by the
 	// same derive() the analysis layer uses — display-only, single source of
 	// formulae (Mitton 2020 §5.3.3; the formulae themselves are never shown),
 	// and the stored profile keeps only what was actually sung.
+	//
+	// N.109 made that sentence true. The anchor table and the usability gate
+	// moved to derivations.ts, and the analysis adapter now imports the same
+	// deriveFrom(), so a value greyed here reaches the forecast instead of
+	// being dropped there.
 
-	/** The anchors each derivable challenging vowel needs (derivations.ts). */
-	const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
-		ɨ: ['i', 'u'],
-		ɪ: ['e', 'i'],
-		ʌ: ['ɑ', 'ɛ']
-	};
-
-	/**
-	 * Usable as a derivation anchor: sampled with both resonances present.
-	 * A Provisional anchor still derives (Dann, 2026-07-11): a greyed
-	 * synthetic value beats an empty cell, and the derivation math needs
-	 * numbers, not confidence labels. The earlier not-Provisional gate
-	 * blocked every derivation whenever a session ran Provisional-heavy,
-	 * which is exactly when the singer most wants the full picture. The
-	 * locked anchor rule (a Provisional [i]/[u] resolves [ɨ] to
-	 * Provisional) belongs to the engine's resolution pass
-	 * (applyIghDivergence, not yet wired); this preview stays display-only
-	 * and labelled Estimated until that pass takes over.
-	 */
-	function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedFormant & { f2: number } {
-		return !!f && typeof f.f2 === 'number';
-	}
-
-	/** The row's display value: the direct sample, or a derived preview for the challenging three. */
+	/** The row's display value: the direct sample, or a derived preview. */
 	function displayFormant(g: Vowel): CalibratedFormant | undefined {
-		const direct = profile[g];
-		if (direct) return direct;
-		const need = DERIVE_ANCHORS[g];
-		if (!need) return undefined;
-		const cap: Record<string, { f1: number; f2: number }> = {};
-		for (const a of need) {
-			const f = profile[a];
-			if (!usableAnchor(f)) return undefined;
-			cap[a] = { f1: f.f1, f2: f.f2 };
-		}
-		return derive(g, cap) ?? undefined;
+		return profile[g] ?? deriveFrom(g, profile);
 	}
 
 	// The chart receives the merged map (Kimi's ruling, 2026-07-11): sung

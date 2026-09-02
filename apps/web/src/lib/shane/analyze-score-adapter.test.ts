@@ -162,7 +162,12 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 			} as Partial<Record<'i' | 'e' | 'a' | 'o', CalibratedFormant>>,
 			COMPLETE,
 		);
-		expect(snapshot.fR2).toEqual({ i: 1705, e: 1532 });
+		// [a]'s absent f2 and [o]'s missing one contribute nothing, which is the
+		// point of this test. [ɪ] is present because [e] and [i] are its anchors
+		// and N.109 derives it here; it is a ruled derivation, not a guess at a
+		// missing measurement, and its own tests are below.
+		expect(snapshot.fR2).toEqual({ i: 1705, e: 1532, 'ɪ': 1599.5 });
+		expect(snapshot.fR1).toEqual({ i: 296, e: 381, a: 800, o: 489, 'ɪ': 393 });
 	});
 
 	it('excludes an fR2 from a reading the plausibility guard judged implausible', () => {
@@ -294,6 +299,65 @@ describe('analyzeScore through the adapter', () => {
 		const { snapshot } = buildVoiceProfileSnapshot({}, COMPLETE);
 		const analyzed = analyzeScore(SCORE, snapshot, resolveA, { generatedAt: '2026-07-14T00:00:00Z' });
 		expect(Object.keys(analyzed.events)).toHaveLength(0);
+	});
+});
+
+describe('derived vowels reach the forecast (N.109)', () => {
+	// An anchor needs both resonances to be usable, so these carry f2.
+	function anchor(f1: number, f2: number, plausibility?: CalibratedFormant['plausibility']): CalibratedFormant {
+		return {
+			f1,
+			f2,
+			f2Quality: 'clear',
+			confidence: 'high',
+			reading: 'captured',
+			source: 'measured-user',
+			...(plausibility !== undefined ? { plausibility } : {}),
+		};
+	}
+
+	const I = anchor(300, 2200);
+	const U = anchor(350, 850);
+
+	it('i and u with no sung ɨ: fR1.ɨ is the derived 1.365 × i.f1', () => {
+		const { snapshot, completeness } = buildVoiceProfileSnapshot({ i: I, u: U }, undefined);
+		expect(snapshot.fR1['ɨ']).toBe(409.5); // 1.365 × 300
+		// fR2 rides the same derivation: 2200 − 0.67 × (2200 − 850).
+		expect(snapshot.fR2?.['ɨ']).toBe(1295.5);
+		// The sung anchors are untouched, and the forecast now has formants.
+		expect(snapshot.fR1.i).toBe(300);
+		expect(snapshot.fR1.u).toBe(350);
+		expect(completeness.formants).toBe(true);
+	});
+
+	it('i without u: ɨ is not derived, because an anchor is missing', () => {
+		const { snapshot } = buildVoiceProfileSnapshot({ i: I }, undefined);
+		expect(snapshot.fR1['ɨ']).toBeUndefined();
+		expect(snapshot.fR2?.['ɨ']).toBeUndefined();
+		expect(snapshot.fR1.i).toBe(300);
+	});
+
+	it('an implausible anchor derives nothing', () => {
+		const bad = anchor(1063, 2200, 'implausible');
+		const { snapshot } = buildVoiceProfileSnapshot({ i: bad, u: U }, undefined);
+		expect(snapshot.fR1['ɨ']).toBeUndefined();
+		expect(snapshot.fR2?.['ɨ']).toBeUndefined();
+		// §B.4 already dropped the implausible reading itself.
+		expect(snapshot.fR1.i).toBeUndefined();
+	});
+
+	it('a sung ɨ is kept: a measured reading always wins over a derived one', () => {
+		const sung = anchor(430, 1400);
+		const { snapshot } = buildVoiceProfileSnapshot({ i: I, u: U, 'ɨ': sung }, undefined);
+		expect(snapshot.fR1['ɨ']).toBe(430);
+		expect(snapshot.fR2?.['ɨ']).toBe(1400);
+	});
+
+	it('none of the anchors: the snapshot is unchanged', () => {
+		const { snapshot, completeness } = buildVoiceProfileSnapshot(FORMANTS_A, COMPLETE, 'Test voice');
+		expect(snapshot.fR1).toEqual({ a: 800 });
+		expect(snapshot.fR2).toBeUndefined();
+		expect(completeness.formants).toBe(true);
 	});
 });
 

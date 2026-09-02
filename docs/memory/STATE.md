@@ -129,13 +129,57 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `docs/sessions/memo-n103-ink-spacing_r1_2026-09-02.md`. The rulings
 > behind it are in `PRODUCT.md` §The turning layer.
 >
-> **THE ONE THING: N.107, ledger lines for turning heads.** Ruled by Dann
-> 2026-09-02 ("critically important"; "Without ledger lines, the noteheads
-> are meaningless"). Paste written and given to him; runs in a fresh Code
-> thread now that N.103 is committed. Status: BRIEFED, not built.
+> **N.107 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `d22084c`,
+> "N.107: the turning head counts its ledger lines". One shared
+> `drawLedgerLines` (`staff-renderer.ts:1996`) serves the sung line and the
+> turning block; the sung line's markup proven byte-identical over 9,408
+> rendered scores. 37 of 95 turning heads on Without Sun song 1 sit outside
+> the stave, all 37 with their lines; the below-stave case proved on a
+> deliberately lowered profile, 1 to 5 lines. His words: "Yes, I see exactly
+> that!" Gate 5 now **534 | 5 skipped (539)**, `ilya-ship.sh:80` carries it.
+> Memo: `docs/sessions/memo-n107-turning-ledgers_r1_2026-09-02.md`.
 >
-> **N.108, the drawer as three finite groups. Numbered by Dann 2026-09-02,
-> BRIEFED TO DESIGN, not ruled and not built.** File (open at open state,
+> **THE ONE THING: NOT ESTABLISHED. Nothing is in progress.** Eight ships
+> this session, all walked or proved: N.104, N.105, N.102 (three), N.106,
+> N.103, N.107. Dann places the next item. Waiting on Design: N.108.
+>
+> **N.108. RULED BY DANN 2026-09-02, from the three-choice drawing
+> (`docs/sessions/drawing-n108-three-choices_r1_2026-09-02.png`): CHOICE 2,
+> "frames, no fold".** Three frames as Design drew them; an open station
+> grows inside its group; the other groups stay where they are; the drawer
+> scrolls once something is open. Design's fold (open one station, fold the
+> other two groups) is REJECTED: the drawer must not rearrange under the
+> singer's hand. Design's return filed: `docs/sessions/n108-design-return_r1_2026-09-02.md`,
+> `n108-design-mockups_r1_2026-09-02.html`, `n108-design-sources_r1_2026-09-02.md`
+> (all untracked until added). **Still his to rule: the fourth radius** (the
+> ruled three cannot draw a divot; Design's candidate is 20 px). Not built;
+> the GUI track still waits on the beta line or a named displacement.
+>
+> **RULED BY DANN 2026-09-02, later the same day, on drawings:**
+> - **The fourth radius is 20 px**, a surface radius, from
+>   `docs/sessions/drawing-n108-radius_r1_2026-09-02.png` (16, 20, 24). His
+>   words: "20 looks terrific." Amends "three radii, no fourth" (2026-08-18).
+> - **Group headers are option A of
+>   `docs/sessions/drawing-n108-group-headers_r1_2026-09-02.png`:** a band of
+>   full-strength colour with reverse text in a light neutral; File borrows
+>   Guide's cobalt `--quiet-cobalt`, Text sage, Score markup lavender. His
+>   words: "I honestly prefer mine." Two facts ride with it, for Design to
+>   solve inside A: cream on the ruled sage measures 2.7:1 and on lavender
+>   3.3:1 at label size, under WCAG's 4.5:1; and cobalt on File overrides
+>   "hue names place" for Guide, on purpose.
+> - **The first group is named PIECE**, not File. His words: "not every
+>   *piece* will be a song: some will be arias." Working names now: Piece,
+>   Text, Score markup. French deferred by his ruling; when it comes, the
+>   "song" strings ("New song", "songs", the binder copy, N.67's ruled French)
+>   move to "piece" wording, shown as a table first.
+> - **Design's second brief is written and packed:**
+>   `docs/sessions/n108-design-pack/` holds the r2 brief (a working HTML
+>   prototype is the deliverable), its README, and copies of E.27, E.44, the
+>   2026-08-18 dispositions ruling, and N.70, the four things Design could
+>   not read the first time. All untracked until Dann adds them. Design reads
+>   the connected repository, so Dann pushes before pasting.
+
+> *(Earlier record, kept:)* Numbered by Dann 2026-09-02, briefed to Design. File (open at open state,
 > holding Repertoire, Metadata, one unified intake, import and export), Text
 > (Transcribe, Notation, Analysis), Score markup (Underlay, Corrections,
 > Voice). Principle ruled by him: "the opening state is the map of
