@@ -58,6 +58,18 @@ words: *"Let's not confuse our GUIs with the actual musico-textual object."*
 
 ---
 
+## The turning layer. Ruled by Dann 2026-09-02
+
+A turning pitch marks where the voice turns, not how long it stays. It has a
+pitch and nothing else, so it carries no stem, no flag, no beam, and no dot,
+ever. Its whole extent is an accidental and a head, which Dann calls a
+"biglyph" against the sung note's "triglyph" of accidental, head, and dots.
+Each is a semantic unit; no mark from one may sit inside the other. At a
+unison or a second the turning unit is always displaced to the right of the
+sung unit, never left; at a third or more it aligns vertically. This departs
+from Gould 103 on purpose; his words: "I realize this may be at odds with
+Gould, but I find this acceptable for our purposes." Built under N.106.
+
 ## Naming, ruled
 
 `Russian-o` / `o russe`. `cardinal-u` / `u cardinal`. **The French is LOWERCASE.**

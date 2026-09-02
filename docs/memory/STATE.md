@@ -87,11 +87,43 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `ilya-ship.sh:80` carries it. His words: "yes to my eye that reads
 > better." Memo: `docs/sessions/memo-n102-gap_r1_2026-09-02.md`.
 >
-> **THE ONE THING: N.102 increment 1b, the system-opening measure.**
-> `paginateScore` renders each system as its own slice, so `prevMeasureAcc`
-> is empty at every system opening and no courtesy is ever drawn there.
-> Needs the incoming state carried on `StaffRenderOptions`. **Increment 2**,
-> the singer's control with its French, waits.
+> **N.102 INCREMENT 1b DONE 2026-09-02.** Ship `e7c2e43`, "N.102: the
+> courtesy survives the system break". The accidental rule lives once, in
+> `advanceAccidentalState` (`staff-renderer.ts:348`), shared by the draw loop
+> and `accidentalStateAtEndOf`; `incomingAccidentals` on `StaffRenderOptions`
+> seeds each slice. Gate 5 now **504 | 5 skipped (509)**, `ilya-ship.sh:80`
+> carries it. Without Sun song 1 has no case, so nothing changed on the
+> page; Code proved it on a two-system probe in the browser. Memo:
+> `docs/sessions/memo-n102-system-opening_r1_2026-09-02.md`.
+>
+> **N.102 INCREMENT 1 IS WHOLE.** Four ships tonight: `0ed0fd8`, `3dd37e4`,
+> `e7c2e43`, and N.105's `21e9ce2` before them. **Increment 2**, the singer's
+> own control with its French, waits on Dann.
+>
+> **OWED, from the 1b memo: eight `path:line` citations in the loupe's source
+> were stale before any N.102 work.** Code listed them and left them rather
+> than guess. Repair by naming the thing, not by writing a new number.
+>
+> **THE ONE THING: N.106, the turning head beside the sung head.** Placed by
+> Dann 2026-09-02 ("N.106 Proceed"). **RULED BY DANN, HIS EYE, from three
+> drawings of Maestro's outlines:** the turning head aligns vertically with
+> the sung head whenever the interval allows (a third or more); at a unison
+> or a second it is ALWAYS displaced to the RIGHT, never left, at one head
+> width + 1.6 px + **0.25 sp**. His words: "if the turning note and the
+> parent note can align vertically, they should"; "The lower second on the
+> left looks strange." This retires Gould 103's rising diagonal for this
+> layer; a convention is a prior, not a law (tether 19, and his 2026-08-18
+> stems ruling). **RULED, the semantic unit, his words: "accidentals and dots and their
+> corresponding notehead should operate as a semantic unit. We should never
+> see a case where elements from another layer insert themselves between a
+> note head and its dot or accidental."** So nothing in the sung unit moves;
+> a displaced turning head sits to the right of the whole unit, past the
+> dots when there are any. **The turning layer shares the rule.** Its accidental plus head is a
+> unit too, and travels together. **Coined by Dann 2026-09-02: "biglyph"**
+> (turning accidental + head) **and "triglyph"** (sung accidental + head +
+> dots). Clearance is measured between the two units' ink edges. Briefed
+> inline to Code 2026-09-02, third paste, after two corrections on his
+> rulings.
 >
 > **Open and unplaced:** N.103 measures do not re-space when ink is added
 > (N.102 may hand it a case), N.94, N.84 the Guide redo, N.83's call, and
@@ -174,6 +206,15 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **`columnAdvance` reserves no room for the turning layer**, and N.106
+  widens what a turning unit can occupy on the right. Nothing crowds on
+  Without Sun song 1. Closing it means teaching the layout pass an
+  analysis-layer measurement; it belongs with N.103's spacing work. Source:
+  `docs/sessions/memo-n106-turning-right_r1_2026-09-02.md`, NOT ESTABLISHED.
+- **A third was being read as a second by the desk's own predicate**
+  (`gap > o.lineGap`), caught by Code in N.106: a stave step is half a
+  space, so intervals are counted in steps, never in `lineGap`. The old rule
+  had the same flaw. Do not write that predicate again.
 - **THREE RESIDUES OF N.104's LOUPE FIX. None is a regression, all three predate
   it, and all three want numbers.** (1) `Loupe.svelte:276-277` still bounds
   `pageMetrics`' head on `[data-hit]`, which is a different question from the

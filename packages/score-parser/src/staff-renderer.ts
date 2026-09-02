@@ -152,6 +152,21 @@ export const BARLINE_ROOM = 14;
  */
 export const COURTESY_GAP_SP = 0.2;
 
+/**
+ * The air between the sung unit's right ink edge and the turning unit's left
+ * ink edge, in stave spaces (N.106, Dann's ruling 2026-09-02).
+ *
+ * It is added to the 1.6 px the two-voice offset has always carried, so the
+ * displacement is `1.6 + TURNING_CLEARANCE_SP x lineGap` and the two numbers
+ * stay legible as what they are: the old offset, and the air Dann asked for
+ * on top of it.
+ *
+ * JUDGEMENT, and it carries no rule number. Gould's own two-voice spacing is
+ * a chord's, and N.106 is precisely the ruling that this layer is not a
+ * chord. Exported so the tests read the same number the renderer draws.
+ */
+export const TURNING_CLEARANCE_SP = 0.25;
+
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
   lineGap?: number;     // px between adjacent staff lines
@@ -555,6 +570,16 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
  * the score document and its text, was miscoding them.
  */
 const TURNING_COLOUR = '#8E7E9B';
+
+/**
+ * The width a primitive-mode turning accidental is treated as having, in px.
+ * There is no font to measure, so this is the width the mode's own hard-coded
+ * `nx - 19` implied before N.106: the 12.4 px turning head's half-width, then
+ * the sung line's 1.5 px of head-to-accidental clearance. Stating it as a
+ * width is what lets primitive mode run the same rule SMuFL mode runs, and
+ * keeps an ALIGNED primitive turning accidental on the pixel it always had.
+ */
+const PRIMITIVE_TURNING_ACC_W = 11.3;
 
 /**
  * A tie's thickness at its centre, in stave spaces, tapering to points at both
@@ -1693,6 +1718,13 @@ export function renderAnalyzedStaff(
        drawn outside the note's group, and the selection squircle unions by
        that handle. */
     const dotCount = ev.type === 'note' ? (ev.duration.dots ?? 0) : 0;
+    /* The last dot's right ink edge, or `-Infinity` where there is no dot.
+       READ BY THE TURNING UNIT BELOW (N.106): a dotted sung note's dots are
+       part of the sung unit, so the turning unit clears them rather than the
+       notehead. That is the whole reason this block stands where it does,
+       ahead of the turning layer; it already did, so N.106 reordered
+       nothing. */
+    let dotsRight = -Infinity;
     if (dotCount > 0) {
       const steps = (y - o.staffMidY) / half;
       /* An even number of half-spaces from the middle line is a LINE. */
@@ -1702,6 +1734,7 @@ export function renderAnalyzedStaff(
       let dotX = nx + headHalfW + clear;
       if (Math.abs(dotY - o.staffMidY) > 2 * o.lineGap) dotX = Math.max(dotX, nx + ledgerHalf + clear);
       const dotW = smufl ? sp(smufl.glyph('augmentationDot').widthSp) : sp(0.4);
+      dotsRight = dotX + (dotCount - 1) * (dotW + clear) + dotW;
       for (let d = 0; d < dotCount; d++) {
         const dx = dotX + d * (dotW + clear);
         parts.push(
@@ -1759,34 +1792,84 @@ export function renderAnalyzedStaff(
       const ty = yFor(tp);
       const tKey = `${tp.step}${tp.octave}`;
       const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, fifths);
-      if (tp.alter !== tInEffect) {
+
+      /* ── THE TURNING UNIT KEEPS TO THE RIGHT OF THE SUNG UNIT ────────────
+         N.106, ruled by Dann at the page on 2026-09-02, and the principle is
+         his, in his words: a sung note's accidental, notehead, and
+         augmentation dots are ONE SEMANTIC UNIT (his term, a "TRIGLYPH"),
+         the turning note's accidental and head are another (a "BIGLYPH"),
+         and NO MARK FROM ONE UNIT MAY SIT INSIDE THE OTHER.
+
+         GOULD 103'S RISING DIAGONAL IS RETIRED FOR THIS LAYER, on Dann's
+         ruling of 2026-09-02. r103 spaces the two notes of a second inside
+         ONE voice's chord, where the pair is read as a single shape; here
+         the two marks belong to different voices and different alphabets,
+         and the diagonal sent a lower turning note LEFT, through the sung
+         note's own accidental and across the place a singer reads the sung
+         pitch from. That was the rule this file carried from 2026-07-12
+         until today. Nothing below chooses a side any more.
+
+         THE RULE. At a third or more the turning head aligns with the sung
+         head (`tx = nx`) and its accidental sits to its left, as today. At a
+         unison or a second the WHOLE turning unit is displaced RIGHT, never
+         left: the unit's left ink edge, which is its accidental's left edge
+         when it has one and its head's left edge otherwise, sits at the
+         sung unit's right ink edge + 1.6 + `TURNING_CLEARANCE_SP` x lineGap.
+         The turning
+         accidental is then drawn immediately left of the turning head INSIDE
+         the unit, at the same head-to-accidental clearance the sung line
+         uses. Nothing in the sung unit moves: system alignment was never the
+         melody's to give up, and an offset is a collision device, never a
+         timing statement.
+
+         THE INTERVAL IS COUNTED IN STAVE STEPS, not in pixels, and that is a
+         correction. Dann's ruling names `gap > o.lineGap` for "a third or
+         more", which is the predicate this file already carried. But a
+         stave STEP is half a stave space, so a third measures exactly one
+         `lineGap` and `gap <= o.lineGap` swept thirds in with the seconds.
+         The old rule therefore displaced a third too, and no fixture ever
+         held one to catch it. `steps` states the interval the ruling names,
+         and the boundary Dann called for, a third aligns, is a test.
+
+         THE SUNG UNIT'S RIGHT EDGE is the rightmost ink the triglyph owns:
+         the notehead, the augmentation dots where there are any (computed
+         above, ahead of this block, for exactly this reason), and an UP-stem,
+         which stands on the right of the head. A down-stem is on the left and
+         a whole note has none. A FLAG IS NOT COUNTED: it flies from the stem
+         tip, a stave and more from the turning unit's own height, so it can
+         never be ink the biglyph sits inside. */
+      const gap = Math.abs(ty - y);
+      const steps = Math.round(gap / half);
+      const tHeadW = smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4;
+      const accName = smufl ? ACCIDENTAL_SMUFL[tp.alter] : undefined;
+      const accChar = smufl ? '' : ACCIDENTAL_GLYPH[tp.alter] ?? '';
+      const drawsAcc = tp.alter !== tInEffect && (smufl ? !!accName : !!accChar);
+      const tAccW = !drawsAcc ? 0 : smufl ? sp(smufl.glyph(accName!).widthSp) : PRIMITIVE_TURNING_ACC_W;
+      const tAccGap = drawsAcc ? 1.5 : 0; // the sung line's head-to-accidental clearance
+
+      let tx: number;
+      if (steps > 1) {
+        tx = nx; // a third or more: aligned, and the accidental hangs to its left
+      } else {
+        const stemmed = ev.duration.base !== 'whole' && ev.duration.base !== 'breve';
+        let sungRight = nx + headHalfW;
+        if (stemmed && stemUpFor(ev, y)) sungRight = Math.max(sungRight, nx + stemHalfUp + stemT / 2);
+        sungRight = Math.max(sungRight, dotsRight);
+        tx = sungRight + 1.6 + sp(TURNING_CLEARANCE_SP) + tAccW + tAccGap + tHeadW / 2;
+      }
+
+      if (drawsAcc) {
+        // The measure-opening floor still holds the mark off the barline at
+        // `nx - 18`. It can only bind in the ALIGNED case; a displaced unit is
+        // far right of it, so the `Math.max` is a no-op there.
+        const gx = Math.max(tx - tHeadW / 2 - tAccGap - tAccW, newMeasure ? (smufl ? nx - 16 : nx - 13) : -Infinity);
         if (smufl) {
-          const name = ACCIDENTAL_SMUFL[tp.alter];
-          if (name) {
-            const accW = sp(smufl.glyph(name).widthSp);
-            const gx = Math.max(nx - sp(smufl.glyph('noteheadBlack').widthSp / 2) - 1.5 - accW, newMeasure ? nx - 16 : -Infinity);
-            parts.push(analysisMark(glyphAt(name, gx, ty, TURNING_COLOUR, true), 'turning-accidental'));
-          }
+          parts.push(analysisMark(glyphAt(accName!, gx, ty, TURNING_COLOUR, true), 'turning-accidental'));
         } else {
-          const g = ACCIDENTAL_GLYPH[tp.alter] ?? '';
-          if (g) parts.push(`<text data-analysis="turning-accidental" x="${newMeasure ? nx - 13 : nx - 19}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${g}</text>`);
+          parts.push(`<text data-analysis="turning-accidental" x="${round2(gx)}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${accChar}</text>`);
         }
         turningAcc[tKey] = tp.alter;
       }
-      // Two-voice collision rule, refined per the Gould extraction (v5
-      // rules 103/104/109/180; Dann's legibility ruling, 2026-07-12).
-      // The melody always keeps system alignment (offsets are collision
-      // devices, never timing statements). Unison: turning note displaces
-      // right. Second: the pair keeps the fixed rising diagonal, so the
-      // turning note goes right when it is the upper note and left when
-      // it is the lower. Ties and dots may refine this again at the
-      // melisma build (v5 rule 169).
-      const offset = (smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4) + 1.6;
-      const gap = Math.abs(ty - y);
-      const tx = gap === 0 ? nx + offset            // unison
-        : gap <= o.lineGap ? (ty < y ? nx + offset  // second, turning above
-        : nx - offset)                              // second, turning below
-        : nx;
       if (smufl) {
         parts.push(
           analysisMark(

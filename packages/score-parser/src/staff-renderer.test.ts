@@ -22,7 +22,7 @@ import {
   syntheticSmuflFont,
 } from './demo-fixture';
 import type { VoiceProfileSnapshot } from './analysis-types';
-import { analyzeScore } from './overlay-engine';
+import { analyzeScore, pitchToHz } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
 import { paginateScore } from './page-layout';
@@ -36,6 +36,7 @@ import {
   layoutColumns,
   renderAnalyzedStaff,
   tacetRuns,
+  TURNING_CLEARANCE_SP,
   type StaffRenderOptions,
 } from './staff-renderer';
 
@@ -279,15 +280,22 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   });
 
   it('offsets a colliding turning notehead beside the sung note (two-voice rule)', () => {
-    // n5: sung D3 on [i], turning pitch also D3 (unison). The sage
-    // notehead shifts right of the sung one: cx = 306 + 12.4 + 1.6 = 320.
-    expect(svg.includes('cx="320"')).toBe(true);
+    // n5: sung D3 on [i], turning pitch also D3 (unison). The sage notehead
+    // shifts right of the sung one. N.106 restates the arithmetic: D3 takes a
+    // down-stem, so the sung unit's right ink edge is its notehead's, at
+    // 306 + 6.2, and the turning head's centre is 1.6 + 0.25x12 + 6.2 beyond
+    // it: cx = 323.
+    expect(svg.includes('cx="323"')).toBe(true);
   });
 
-  it('keeps the rising diagonal at a second: lower turning note goes left (Gould v5, r103/104)', () => {
-    // n11: sung E3 (y 90), turning D3 (y 96), a second with the turning
-    // note BELOW → it displaces left: cx = 660 - 14 = 646.
-    expect(svg.includes('cx="646"')).toBe(true);
+  it('sends a LOWER turning note right as well, the retired diagonal (N.106)', () => {
+    // n11: sung E3 (y 90), turning D3 (y 96), a second with the turning note
+    // BELOW. Until N.106 the pair kept Gould r103's rising diagonal and this
+    // note displaced LEFT, to cx 646, through the sung note's own accidental
+    // space. E3 takes an up-stem, so the sung unit's right edge is the stem's
+    // at 660 + 5.5 + 0.75, and the turning head lands at 677.05.
+    expect(svg.includes('cx="677.05"')).toBe(true);
+    expect(svg.includes('cx="646"')).toBe(false);
   });
 
   it('brackets the triplet in black with its numeral', () => {
@@ -299,6 +307,167 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // n13 opens measure 4: its sage sharp sits at nx - 13 (x 761), right of
     // the barline at nx - 18, instead of the mid-measure nx - 19.
     expect(svg.includes('x="761" y="58"')).toBe(true);
+  });
+});
+
+// ── N.106: the turning unit keeps to the right of the sung unit ──────
+//
+// Dann's ruling at the page, 2026-09-02, and his principle: a sung note's
+// accidental, notehead, and augmentation dots are ONE SEMANTIC UNIT (his
+// term, a "triglyph"), the turning note's accidental and head are another (a
+// "biglyph"), and no mark from one unit may sit inside the other. At a third
+// or more the turning head aligns with the sung head as it always has; at a
+// unison or a second the WHOLE turning unit is displaced RIGHT, never left,
+// and Gould r103's rising diagonal is retired for this layer.
+//
+// The cases are the ones the ruling names. Primitive mode throughout, the
+// byte-stable sandbox default, so every number below is arithmetic a reader
+// can check rather than a font's report.
+describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
+  const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+
+  /**
+   * One bar, one sung note, and a turning pitch chosen BY CONSTRUCTION: the
+   * engine takes the turning pitch as `hzToPitch(fR1 / 2)`, so naming the
+   * pitch we want and doubling its frequency lands it exactly there, at
+   * whatever interval from the sung note the case calls for. `fifths` is 0,
+   * so a sharp turning pitch is one the turning layer must state.
+   */
+  const scene = (sung: Pitch, turning: Pitch, dots = 0): string => {
+    const parsed: ParsedScore = {
+      source: { format: 'mnx', fidelity: 'native', origin: 'mnx-direct', sourceWarnings: [] },
+      vocalPart: { partId: 'P1', partName: 'Voice' },
+      measures: [{
+        index: 0, number: '1',
+        timeSignature: { beats: 4, beatType: 4 },
+        keySignature: { fifths: 0 },
+        expectedDuration: { numerator: 1, denominator: 1 },
+      }],
+      keySignatures: [{ measureIndex: 0, signature: { fifths: 0 } }],
+      timeSignatures: [{ measureIndex: 0, signature: { beats: 4, beatType: 4 } }],
+      tempoMarkings: [],
+      vocalLine: [{
+        id: 't1',
+        type: 'note',
+        measureIndex: 0,
+        rhythmicPosition: { fraction: { numerator: 0, denominator: 4 } },
+        duration: {
+          base: 'quarter',
+          dots,
+          fraction: dots > 0 ? { numerator: 3, denominator: 8 } : { numerator: 1, denominator: 4 },
+        },
+        pitch: sung,
+      } satisfies VocalLineEvent],
+    };
+    const profile: VoiceProfileSnapshot = {
+      fR1: { v: 2 * pitchToHz(turning) },
+      range: { lowest: P('C', 3), highest: P('C', 6) },
+      tessitura: { low: P('E', 4), high: P('A', 4) },
+      passaggio: { primo: P('E', 4), secondo: P('A', 4) },
+      label: 'test',
+    };
+    const analyzed = analyzeScore(parsed, profile, () => 'v', { generatedAt: '2026-09-02T00:00:00.000Z' });
+    return renderAnalyzedStaff(parsed, analyzed, { clef: 'treble' });
+  };
+
+  /** The sung notehead's centre: the only bare `<ellipse cx=` on the page. */
+  const sungCx = (svg: string): number => Number(svg.match(/<ellipse cx="([-\d.]+)"[^>]*fill="#1a1612"/)![1]);
+  const turningCx = (svg: string): number =>
+    Number(svg.match(/data-analysis="turning-notehead"[^>]*cx="([-\d.]+)"/)![1]);
+  const turningAccX = (svg: string): number =>
+    Number(svg.match(/data-analysis="turning-accidental"[^>]*x="([-\d.]+)"/)![1]);
+  /**
+   * The augmentation dot's centre. Primitive mode draws it as a `<circle>`,
+   * and so does the treble clef's own ring, so this reads the one in the
+   * note's ink colour.
+   */
+  const dotCx = (svg: string): number =>
+    Number(svg.match(/<circle [^>]*cx="([-\d.]+)"[^>]*fill="#1a1612"/)![1]);
+
+  const LINE_GAP = 12;      // the default stave
+  const HEAD_HALF = 6.2;    // primitive notehead half-width, sung and turning alike
+  const STEM_RIGHT = 6.25;  // STEM_HALF 5.5 + half the 1.5 px stem
+  const OFFSET = 1.6 + TURNING_CLEARANCE_SP * LINE_GAP; // the air between the two units
+  const ACC_W = 11.3;       // the primitive turning accidental's width
+  const ACC_GAP = 1.5;      // head-to-accidental clearance, the sung line's own
+
+  it('displaces the turning unit right at a UNISON', () => {
+    // G4 sits below the middle line and takes an up-stem, so the sung unit's
+    // right ink edge is the stem's, not the notehead's.
+    const svg = scene(P('G', 4), P('G', 4));
+    const nx = sungCx(svg);
+    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeGreaterThan(nx);
+  });
+
+  it('displaces the turning unit right at a SECOND ABOVE', () => {
+    // A turning pitch ABOVE the sung note makes the timbre open, which forces
+    // the sung stem DOWN (analysis-types.ts:130), and a down-stem is on the
+    // left of the head. So the sung unit's right ink edge here is the
+    // notehead's, and the turning unit is 0.05 px nearer than in the two
+    // cases above. The rule is one rule; the sung unit's edge is what moved.
+    const svg = scene(P('G', 4), P('A', 4));
+    const nx = sungCx(svg);
+    expect(turningCx(svg)).toBeCloseTo(nx + HEAD_HALF + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeGreaterThan(nx);
+  });
+
+  it('displaces the turning unit right at a SECOND BELOW, which is the case that changed', () => {
+    // Gould r103's diagonal sent this one LEFT, through the sung note's own
+    // accidental space. It goes right now, and to the same place a second
+    // above goes: the side is no longer a function of the interval's sign.
+    const svg = scene(P('G', 4), P('F', 4));
+    const nx = sungCx(svg);
+    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeGreaterThan(nx); // NOT left, and this is the assertion
+    // And within a rounding hair of where a second ABOVE lands: the side no
+    // longer depends on the interval's sign, only the sung stem does.
+    expect(turningCx(svg) - turningCx(scene(P('G', 4), P('A', 4)))).toBeCloseTo(0.05, 5);
+  });
+
+  it('aligns the turning head with the sung head at a THIRD', () => {
+    // The boundary the ruling's own pixel predicate would have missed: a
+    // stave step is HALF a space, so a third measures exactly one `lineGap`
+    // and `gap <= lineGap` swept it in with the seconds.
+    const svg = scene(P('G', 4), P('B', 4));
+    expect(turningCx(svg)).toBe(sungCx(svg));
+  });
+
+  it('clears a DOTTED sung note past its dot, and leaves the dot where it was', () => {
+    const second = scene(P('G', 4), P('A', 4), 1);
+    const third = scene(P('G', 4), P('B', 4), 1);
+    // G4 is on a line, so the dot takes the space above; its ink runs to the
+    // circle's centre plus its 2.4 px radius, and that is the sung unit's
+    // right edge, further right than either the notehead or the stem.
+    const dotRight = dotCx(second) + 2.4;
+    expect(dotRight).toBeGreaterThan(sungCx(second) + STEM_RIGHT);
+    expect(dotRight).toBeGreaterThan(sungCx(second) + HEAD_HALF);
+    expect(turningCx(second) - HEAD_HALF).toBeCloseTo(dotRight + OFFSET, 5);
+    // And nothing in the sung unit moved: the dot sits where it sits when the
+    // turning pitch is a third away and nothing is displaced at all.
+    expect(dotCx(second)).toBe(dotCx(third));
+  });
+
+  it('draws a displaced turning accidental RIGHT of the sung unit, never left of the sung head', () => {
+    // A second below, with a sharp on the turning pitch. The accidental is
+    // the unit's left ink edge, so IT lands at the clearance and the head
+    // follows it; before N.106 this mark was drawn at nx - 19, inside the
+    // sung triglyph.
+    const svg = scene(P('G', 4), P('F', 4, 1));
+    const nx = sungCx(svg);
+    expect(turningAccX(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET, 5);
+    expect(turningAccX(svg)).toBeGreaterThan(nx);
+    expect(turningCx(svg)).toBeCloseTo(turningAccX(svg) + ACC_W + ACC_GAP + HEAD_HALF, 5);
+  });
+
+  it('still draws a turning THIRD’s accidental left of the aligned head, as today', () => {
+    // Sung A4, turning C#5: two stave steps, so the head aligns and the sharp
+    // hangs to its left at the unchanged nx - 19.
+    const svg = scene(P('A', 4), P('C', 5, 1));
+    const nx = sungCx(svg);
+    expect(turningCx(svg)).toBe(nx);
+    expect(turningAccX(svg)).toBeCloseTo(nx - HEAD_HALF - ACC_GAP - ACC_W, 5);
+    expect(turningAccX(svg)).toBeLessThan(nx);
   });
 });
 
