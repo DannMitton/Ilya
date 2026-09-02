@@ -77,9 +77,22 @@ Five gates passed. This is the class the walk exists for.
 
 **Clip the window's left to the head's right edge when they overlap**, so the
 loupe paints each unit of the system once. On the affected measures this
-discards 7.53 to 14.77 units from the window's left, and **what is discarded is
-key-signature ink that the head is already drawing**, so nothing the singer
-needs is lost. Verify that claim by measurement rather than accepting it.
+discards 7.53 to 14.77 units from the window's left.
+
+**Nothing is lost, and this is a proof rather than a hope.** `headBound` IS the
+leftmost music ink, by the definition of the `MUSIC_MARK` walk. `windowLeft` is
+the leftmost hit rectangle, which the renderer places at the midpoint BEFORE the
+first note. So the overlapping region `[windowLeft, headBound]` contains no
+music ink by construction: every mark in it is head furniture, and the head is
+already drawing all of it. **Clipping the window to `max(windowLeft, headBound)`
+therefore removes duplicated furniture and can never remove a note, an
+accidental, a rest or a syllable.**
+
+Confirm the construction still holds in the tree before you rely on it, then
+measure the result anyway. Two things could falsify it: a mark drawn before the
+first music mark that carries a music handle after all, and an underlay syllable
+reaching left of `windowLeft`, which `memo-n104-loupe-head_r1_2026-08-29.md` §3.1
+records happening on four of the seven systems.
 
 **Do NOT solve it by lowering the head back onto hit rectangles.** That is the
 defect `510a280` fixed: at 56 the head cuts the second sharp, which is what
