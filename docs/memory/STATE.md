@@ -44,97 +44,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the current one thing and nothing else, which is what `README.md` sends you
 > here for.
 
-> **N.102** courtesy accidentals. **N.103** measures do not re-space when
-> ink is added, so a dot crowds the next note's accidental; real engraving
-> work, to be designed. **N.104** the page must show every bar the singer
-> counts.
+> **N.104 CLOSED 2026-09-02, WALKED BY DANN on the branch alias.** Ship
+> `ea300ef`, "N.104: the loupe's window opens where its head stops", five gates
+> at baseline, gate 4 now **914**. He raised the loupe on m. 4, system 2 of 7,
+> and saw clef, F sharp, C sharp, once each; his words: "There!" Memo:
+> `docs/sessions/memo-n104-head-window-overlap_r1_2026-09-01.md`, whose §8
+> lists six moved anchors, applied in this file below. The N.104 history that
+> stood here is in `../sessions/LOG.md`, block 6. **N.102 and N.103 stay open
+> and unplaced.**
 >
-> **N.104 IS REOPENED, ruled by Dann 2026-08-29.** It stays open until the
-> loupe is right and he has walked it.
-> `docs/sessions/brief-n104-loupe-head_r1_2026-08-29.md` carries the ruling in
-> those words. **What shipped is not in doubt: the paper is correct and nothing
-> shipped draws a wrong bar.**
+> **THE ONE THING: N.105, the install prompt that never saves a dismissal.**
+> Numbered by Dann 2026-09-01 and not yet placed by him; it is here because
+> nothing else is in progress, and it hit him ten times in one hour on the
+> walk. Cause, read off the tree: `InstallPrompt.svelte:73-77` guards the only
+> write behind `if (isIos)`, and that write is `sessionStorage`, which dies
+> with the tab. **Owed from Dann before a brief is written, one ruling: how
+> long a decline lasts before Ilya may ask again.** `INBOX.md:56` carries the
+> full note. No brief exists.
 >
-> **What shipped.** `e19c1b9` (the brief and handover), then `e347311`, "N.104:
-> the page shows every bar the singer counts". `TACET_REST.measureSp` is **8**,
-> **Dann's eye, 2026-08-29**, chosen from section A of
-> `docs/sessions/drawing-n104-tacet-weights_r1_2026-08-27.html`, replacing the
-> 12 the desk chose at the browser on 2026-08-27. Five gates at baseline. Memo:
-> `docs/sessions/memo-n104-ship_r1_2026-08-29.md`. **Why he chose 8 is not
-> recorded, by him or by the desk. The choice is recorded; the reason is not.**
->
-> **What his walk of `e347311` found.** On the engraved Without Sun song 1,
-> system 1, the loupe raised on the second and third drawn bars showed a clef, a
-> key signature, **and a whole rest that is in neither measure**. His second
-> observation named the mechanism: later systems do not carry it. Cause, from
-> `Loupe.svelte:528`: the head was bounded on the smallest `[data-hit]` x, and a
-> tacet mark carries no hit rectangle at all.
->
-> **THE ONE THING: Dann's walk of the loupe fix. It is WRITTEN, not DONE.**
-> Built 2026-08-29 against the brief and its §8 amendment, which he ruled after
-> a first pass fixed the rest and left the key signature cut on six of the seven
-> systems. Three files under `apps/web/src/lib/shane/`; the renderer is
-> untouched. The rule is one exported constant, `MUSIC_MARK` at
-> `loupe.ts:283-324`, gating on the renderer's paint order rather than on a list
-> of handles, because the underlay carries no handle and reaches left of the
-> first note on six of seven systems. Measured after: all seven heads paint the
-> clef and **both** sharps and nothing else, narrowest clearance 2.28 units.
-> Memo: `docs/sessions/memo-n104-loupe-head_r1_2026-08-29.md`.
->
-> **NOTHING IS COMMITTED AND NOTHING IS SHIPPED.** Before the ship, these need
-> `git add`: `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`,
-> `docs/sessions/brief-n104-loupe-head_r1_2026-08-29.md`, and
-> `docs/sessions/memo-n104-loupe-head_r1_2026-08-29.md`.
-> `docs/sessions/memo-n104-ship_r1_2026-08-29.md` is modified and rides along.
->
-> **GATE 4 IS 908, AND THE SHIP SCRIPT ALREADY CARRIES IT.** Eight tests the
-> loupe build added in `loupe.test.ts` under `describe('the head’s bound')` take
-> web-test from 900 to 908. No existing test changed or was deleted.
-> **VERIFIED 2026-09-01 by reading the line**: `~/Downloads/ilya-ship.sh:79`
-> reads `gate 4 web-test "908 passed (908)"` and `:80` reads
-> `gate 5 score-parser "481 passed | 5 skipped (486)"`. Both are correct for the
-> tree as it stands. **Nothing is owed here.**
->
-> *This block previously said the line still read 900 and needed changing by
-> hand. That was transcribed from the loupe memo's §7 rather than read off the
-> script, which the desk had no access to. Corrected 2026-09-01.*
->
->
-> **THE ONE THING: N.104's LOUPE FIX SHIPPED A REGRESSION. Found by Dann on his
-> own walk of `510a280`, 2026-09-01.** The loupe draws the key signature's
-> second sharp TWICE on any measure that opens a system: F sharp, C sharp,
-> C sharp. **He saw it; no gate did, and the desk had already written the item
-> DONE off three screenshots before he spoke. The close was retracted.**
->
-> **The mechanism, established from the code and from the memo's own numbers.**
-> The window's left edge is the leftmost HIT RECTANGLE of the held measure
-> (`loupe.ts:79`). Tonight's change moved the head onto the leftmost MUSIC INK
-> (`loupe.ts:338`, `Loupe.svelte:563-580`). **Those were the same quantity
-> before and are not the same quantity now.** Hit rectangles tile from the
-> midpoint before each note, so a measure that opens a system has its window
-> left at **56**, while the head now runs to 63.53 or beyond. The overlap is
-> 7.53 units on system 2, and the second sharp's ink is 56.01 to 61.25, which
-> sits entirely inside it. The head draws it, then the window draws it again.
-> The first sharp ends at 55.02, below 56, so it appears once.
->
-> **Scope: the first measure of systems 2 through 7**, that is source measures
-> 4, 7, 10, 13, 16, and 18. Head bounds 63.53, 64.98, 66.38, 69.33, 70.77,
-> 69.14, all above 56, all overlapping the second sharp whole. System 1's
-> opening measure is the tacet bar, which carries no hit rectangle, so
-> `measureWindow` returns null and no loupe rises there. **WALKED AND CONFIRMED:
-> m. 4 (system 2) and m. 7 (system 3). The other four are predicted from the
-> same arithmetic and NOT walked.**
->
-> **How it got past the memo.** `memo-n104-loupe-head_r1_2026-08-29.md` §3.1
-> records the head at 63.53 and §3.3 records m. 18's window left at 56. **Both
-> numbers are in the same memo, in two different tables, and nobody subtracted
-> one from the other.** Every measure §3.3 tested was the second or third of its
-> system except m. 18, whose window it measured without ever comparing it to the
-> head.
->
-> **The brief is written**:
-> `docs/sessions/brief-n104-head-window-overlap_r1_2026-09-01.md`. Paste it to
-> Code in a fresh thread. Nothing is owed from Dann before that.
+> **Also this session, ruled: CONTRACT.md tether 20**, put yourself in his
+> position first. Transcribed with his ratified words, `CONTRACT.md` §1.20.
+> Project knowledge:
+> `claude/ruling-tether-20-put-yourself-in-his-position_2026-09-02.md`.
 >
 > **Waiting, all Dann's to order:** N.83's walkthrough call (his to
 > schedule), N.84 the Guide redo (deferred so it reflects the finished
@@ -209,11 +140,11 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 ## OWED, RULED BUT NOT YET DONE
 
 - **THREE RESIDUES OF N.104's LOUPE FIX. None is a regression, all three predate
-  it, and all three want numbers.** (1) `Loupe.svelte:275-276` still bounds
+  it, and all three want numbers.** (1) `Loupe.svelte:276-277` still bounds
   `pageMetrics`' head on `[data-hit]`, which is a different question from the
   head's crop: bringing it onto `MUSIC_MARK` makes system 1's tacet measure a
   candidate measure and resizes the loupe's window on every system of the page.
-  (2) `Loupe.svelte:217` skips a whole system from the page's ink survey when it
+  (2) `Loupe.svelte:218` skips a whole system from the page's ink survey when it
   carries no notes, so a system of nothing but a tacet run draws a numeral the
   survey never sees. **Cannot bite on this document**, where every system with a
   run also carries notes. (3) **`MUSIC_MARK` is pinned by no test.**

@@ -35,6 +35,7 @@ next session the same hour it cost the last one.
 | check a deploy without asking Dann | `CAN READ VERCEL DIRECTLY` |
 | a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
 | the alias is serving something stale | `The branch alias, observed` |
+| sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
 
 ### Browsers, phones, and what each one refuses
@@ -2214,3 +2215,25 @@ arithmetic, suspect the instrument first.
 - **Tether 9 covers this exactly: open the file that holds the value.** For a
   date, `date` is that file. The desk did not open it, and used a display
   instead.
+
+## WALK ON THE ALIAS, NEVER ON A SHA URL. 2026-09-02
+
+Every deployment is its own origin, and the library lives in the browser per
+origin. A sha-pinned URL therefore opens an EMPTY drawer: no songs, no voice,
+and Dann has to load the score again before he can look at anything. The
+branch alias `ilya-git-shane-dannmittons-projects.vercel.app` is one origin
+across every ship, so his library is already there, and one reload delivers
+the new build (N.72). Send him there, in a fenced `open` command, and say what
+arrival looks like.
+
+What it cost, 2026-09-01: "open the new deployment" sent him to
+`ilya-4ydny0kui`, which Vercel's list showed was the build of `510a280`, the
+one carrying the bug he had just reported. He walked it and saw the bug
+again. Check the URL against `list_deployments` (section CAN READ VERCEL
+DIRECTLY) before naming one.
+
+Also learned: the Chrome extension can open the alias in his Chrome and see
+his library, but the desk's clicks on a notehead did not raise the loupe
+(twice, on Score markup, cause NOT ESTABLISHED), and the desk's screenshots
+come back at a different viewport size from his window. Use it to read, not
+to drive, until that is understood.
