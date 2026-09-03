@@ -133,24 +133,84 @@ function sameOrder(a: readonly string[], b: readonly string[]): boolean {
 }
 
 /**
- * Read a stored open set. AN UNRECOGNISED OR CORRUPT VALUE FALLS BACK TO THE
- * FIRST-RUN DEFAULT AND DOES NOT THROW (§B.4), which is the pattern N.73 S3
- * ship two established for `ilya:activeTab` in `restoreSurface`.
+ * THE STORED SHAPE CARRIES ITS OWN VERSION. N.108 increment 1a.
+ *
+ * Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the migration "lands
+ * every singer on the opening state once: drop the old set, write the empty
+ * array, so nothing is open except the intake." His own drawer had come back
+ * with Repertoire and Analysis open and pushed the Score markup group off the
+ * bottom, which is the defect this closes.
+ *
+ * WHY A VERSION AND NOT JUST AN EMPTY ARRAY, and this is the whole reason the
+ * shape changed. "Once" needs a mark. After increment 1 a returning singer's
+ * key already holds NEW ids, `["repertoire","analysis"]`, and a bare array
+ * cannot say whether that was written by increment 1 or by the singer's own
+ * hand five seconds ago. Reset every boot and no station could ever stay open;
+ * reset only sets holding OLD ids and Dann's own drawer is not reset, which is
+ * the one case he reported. So the SHAPE is the mark: a bare array is what
+ * every build before 1a wrote, and an object is what 1a writes.
+ *
+ * IT IS STILL ONE KEY AND ONE SAVE SITE. N.27 is open and no second silent
+ * save may enter; `#write` below is the same single writer it has always been,
+ * and the only thing that changed is the bytes it puts there.
+ *
+ * AN UNRECOGNISED OR CORRUPT VALUE FALLS BACK AND DOES NOT THROW (§B.4), the
+ * pattern N.73 S3 ship two established for `ilya:activeTab` in
+ * `restoreSurface`. A corrupt value reads as version 0, so it is reset with
+ * everything else rather than being trusted.
+ */
+export const OPEN_STATIONS_VERSION = 2;
+
+/** What a stored value turned out to be. */
+export interface StoredOpenSet {
+	/**
+	 * The version the bytes were written by. 1 for the bare array every build
+	 * before N.108 increment 1a wrote; 0 for absent, corrupt or unreadable.
+	 */
+	version: number;
+	/** The ids it carried, empty when there were none to read. */
+	open: string[];
+}
+
+/**
+ * Read a stored value into its version and its ids.
  *
  * An empty array is NOT corrupt. It is a singer who shut everything, and it
- * round-trips as everything shut rather than falling back to Piece and Source.
+ * round-trips as everything shut.
  */
-export function parseOpenSections(raw: string | null, fallback: readonly string[]): string[] {
-	if (raw === null) return [...fallback];
+export function readStoredOpenSet(raw: string | null): StoredOpenSet {
+	if (raw === null) return { version: 0, open: [] };
 	let parsed: unknown;
 	try {
 		parsed = JSON.parse(raw);
 	} catch {
-		return [...fallback];
+		return { version: 0, open: [] };
 	}
-	if (!Array.isArray(parsed)) return [...fallback];
-	if (!parsed.every((id) => typeof id === 'string')) return [...fallback];
-	return parsed as string[];
+	if (Array.isArray(parsed)) {
+		if (!parsed.every((id) => typeof id === 'string')) return { version: 0, open: [] };
+		return { version: 1, open: parsed as string[] };
+	}
+	if (parsed !== null && typeof parsed === 'object') {
+		const o = parsed as { v?: unknown; open?: unknown };
+		const version = typeof o.v === 'number' ? o.v : 0;
+		const open = Array.isArray(o.open) && o.open.every((id) => typeof id === 'string')
+			? (o.open as string[])
+			: [];
+		return { version, open };
+	}
+	return { version: 0, open: [] };
+}
+
+/**
+ * `parseOpenSections`, KEPT AND NARROWED. It was ship B's whole reader; it is
+ * now the array half of `readStoredOpenSet` above, and it survives because the
+ * fallback behaviour it documents is a ruling (§B.4) and because a caller that
+ * only wants ids should not have to know about versions. Nothing in the tree
+ * calls it but the tests that pin that ruling.
+ */
+export function parseOpenSections(raw: string | null, fallback: readonly string[]): string[] {
+	const stored = readStoredOpenSet(raw);
+	return stored.version === 0 ? [...fallback] : stored.open;
 }
 
 /** What the class needs to know to be either instance. */
@@ -250,30 +310,54 @@ export class SectionSet {
 	 * sequence stays in `+page.svelte` beside the other restores.
 	 *
 	 * N.108 increment 1: THE RESTORE IS ALSO THE MIGRATION, and it writes back.
+	 * N.108 increment 1a: AND IT RESETS EVERY SINGER ONCE.
 	 *
-	 * IT WRITES ONLY WHEN THE MIGRATION CHANGED SOMETHING, and that is what
-	 * makes "the migration runs once" true rather than merely intended. A
-	 * browser that has already been here holds new ids, `migrateOpenStations`
-	 * returns them unchanged, and nothing is written. Constraint: N.27 is open,
-	 * so no second silent save site may enter; this routes through `#write`,
-	 * the one site that has always owned this key, and adds none.
+	 * THE TWO BRANCHES, and they are the whole of it:
 	 *
-	 * A FIRST-RUN BROWSER (`raw === null`) IS NOT WRITTEN EITHER. There is
-	 * nothing stored to migrate, and writing the empty array would put a key on
-	 * a device that has not asked for one.
+	 * - **Anything written before 1a** (a bare array, or bytes this build
+	 *   cannot read) lands on the OPENING STATE: nothing open but the intake,
+	 *   which is never closed. Ruled by Dann, and it is what his own walk
+	 *   asked for. The old ids are not mapped, because the point is not to
+	 *   carry them across under new names; it is to land on the map.
+	 * - **Anything written by 1a or later** is the singer's own and is kept.
+	 *   It still goes through `migrateOpenStations`, which for a set of new
+	 *   ids is the identity, and which is kept for exactly the case its own
+	 *   comment describes: an id this build does not know is still dropped,
+	 *   and a phone still holds one station.
+	 *
+	 * IT WRITES ONLY WHEN SOMETHING CHANGED, which is what makes "once" true
+	 * rather than merely intended: the second boot reads version 2, keeps what
+	 * it finds, and writes nothing. Constraint: N.27 is open, so no second
+	 * silent save site may enter; this routes through `#write`, the one site
+	 * that has always owned this key, and adds none.
+	 *
+	 * A FIRST-RUN BROWSER IS WRITTEN, and that is a change from increment 1.
+	 * It has to be: without the mark, the next boot would read version 0 again
+	 * and reset a singer who had opened a station in between.
 	 */
 	restore(raw: string | null, onPhone = false): void {
-		const stored = parseOpenSections(raw, [...this.#open]);
-		const migrated = migrateOpenStations(stored, onPhone);
-		this.#open = new Set(migrated);
-		if (raw !== null && !sameOrder(stored, migrated)) this.#write();
+		const stored = readStoredOpenSet(raw);
+		const next =
+			stored.version < OPEN_STATIONS_VERSION
+				? []
+				: migrateOpenStations(stored.open, onPhone);
+		this.#open = new Set(next);
+		if (stored.version < OPEN_STATIONS_VERSION || !sameOrder(stored.open, next)) this.#write();
 	}
 
+	/**
+	 * THE ONE SAVE SITE FOR THIS KEY, and N.108 increment 1a changed only the
+	 * bytes: the array is wrapped in `{ v, open }` so a later build can tell
+	 * what wrote it. See `OPEN_STATIONS_VERSION`.
+	 */
 	#write(): void {
 		if (this.#storageKey === null) return;
 		const ids = [...this.#open].filter((id) => !this.#unpersisted.has(id));
 		try {
-			localStorage.setItem(this.#storageKey, JSON.stringify(ids));
+			localStorage.setItem(
+				this.#storageKey,
+				JSON.stringify({ v: OPEN_STATIONS_VERSION, open: ids })
+			);
 		} catch {
 			// localStorage unavailable. The open set still works for this visit.
 		}

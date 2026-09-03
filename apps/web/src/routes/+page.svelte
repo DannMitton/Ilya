@@ -23,6 +23,7 @@
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
+	import { isDeskLayout } from '$lib/components/Drawer/layout';
 	import { SongDocument, LEGACY_SONG_ID } from '$lib/library/document.svelte';
 	import { Library } from '$lib/library/library';
 	import { createMemoryDriver, globalStore } from '$lib/library/driver';
@@ -216,7 +217,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let selectedWord = $state<WordStackData | null>(null);
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
-	let drawerCollapsed = $state(false);
+	/**
+	 * PHONE ONLY: whether the drawer is up. N.108 increment 1a.
+	 *
+	 * It was `drawerCollapsed`, it was persisted under `ilya:drawerCollapsed`,
+	 * and both are retired by Dann's ruling of 2026-09-02: the desk has no
+	 * collapsed state, because at every width where the drawer and a whole
+	 * sheet both fit "the drawer is always present". Below that width the
+	 * layout is the phone's, where the drawer rises from the bottom, so the
+	 * state worth naming is `raised`.
+	 *
+	 * IT IS NOT PERSISTED, and that is the ruling read literally: the key is
+	 * retired, not renamed. THE ARRIVAL IS THE PAPER, which is both what the
+	 * phone did before (it defaulted to collapsed) and what N.73 portrait C
+	 * ruled on 2026-08-18, "the arrival view is the page". A singer who wants
+	 * the drawer is one press or one swipe from it.
+	 */
+	let drawerRaised = $state(false);
 	/**
 	 * N.73 S3 ship one. Whether the calibration takeover has the drawer. E.27:
 	 * a takeover "replaces the entire drawer, shows a single back affordance at
@@ -1411,7 +1428,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   dismissed the instant it rose, because a desk arrives with its drawer
 	   open. */
 	$effect(() => {
-		if (isPhone && !drawerCollapsed && loupeOpen) dismissLoupe();
+		if (isPhone && drawerRaised && loupeOpen) dismissLoupe();
 	});
 
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
@@ -1589,8 +1606,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   never overlaps it. A collapsed drawer takes nothing and the loupe has the
 	   whole desk. Declared here rather than beside the loupe's other state
 	   because `drawerWidth` is, and a derivation cannot read a const above it. */
+	/* N.108 increment 1a. `drawerCollapsed ? 0 : drawerWidth` became
+	   `isMobile ? 0 : drawerWidth`, and the change is the ruling: the desk's
+	   drawer is always present, so there is no collapsed case left to give the
+	   loupe the whole desk. In the PHONE'S LAYOUT the drawer is an overlay
+	   that covers everything, so the loupe stands clear of nothing; the
+	   `isPhone` branch above it is untouched and still carries the dock's
+	   ruled 380 in landscape. */
 	const loupeInset = $derived(
-		isPhone ? (phonePortrait ? 0 : 380) : drawerCollapsed ? 0 : drawerWidth,
+		isPhone ? (phonePortrait ? 0 : 380) : isMobile ? 0 : drawerWidth,
 	);
 	const loupeFoot = $derived(isPhone && phonePortrait ? dockHeight : 0);
 
@@ -1741,10 +1765,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleWordClick(word: WordStackData) {
 		selectedWord = word;
 		lastFocusedWord = { line: word.lineIndex, word: word.wordIndex };
-		// Auto-expand drawer if collapsed when user clicks a word
-		if (drawerCollapsed) {
-			drawerCollapsed = false;
-		}
+		/* Raise the drawer when a word is clicked, so the Analysis station has
+		   somewhere to appear. PHONE ONLY: on the desk it is already up, and
+		   `drawerRaised` is not read there. This is the same behaviour the
+		   collapsed drawer had, under the state that replaced it. */
+		if (isMobile) drawerRaised = true;
 		// Switch to Transcription if clicking a word from another surface
 		if (destination !== 'studio' || studioDocument !== 'transcription') {
 			destination = 'studio';
@@ -2686,13 +2711,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (!s || !name) return null;
 		return `${t('meta.arrAbbr', language)} ${name} · ${t('meta.detectedFrom', language)} ${PROVENANCE_FORMAT_LABELS[s.provenance.format]}`;
 	});
-	function handleDrawerToggle() {
-		drawerCollapsed = !drawerCollapsed;
-		try {
-			localStorage.setItem('ilya:drawerCollapsed', JSON.stringify(drawerCollapsed));
-		} catch {
-			// localStorage unavailable
-		}
+	/* THE PULL'S PRESS, AND THE SWIPE'S. N.108 increment 1a: it writes nothing.
+	   `ilya:drawerCollapsed` is retired with the collapsed state it stored, so
+	   this is the one place in the app that had a save site and lost it. */
+	function handlePullToggle() {
+		drawerRaised = !drawerRaised;
 	}
 	function handleTabChange(tab: TabId) {
 		const oldIndex = TAB_ORDER.indexOf(activeTab);
@@ -2855,10 +2878,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 		   `sections.exclusive` IS SET ON THE SAME LINE AS `isMobile` AND IN
 		   THE SAME PLACE, which is the point: the drawer's one-station-at-a-
-		   time rule and the 767 px rule are the same rule, and this function is
-		   its one owner. Ruled 2026-09-02. */
+		   time rule and the layout rule are the same rule, and this function is
+		   its one owner. Ruled 2026-09-02.
+
+		   N.108 INCREMENT 1a MOVED THE THRESHOLD AND NOT THE MEANING. It was
+		   `window.innerWidth < 768`, a round number with no relation to
+		   anything this app draws. It is `isDeskLayout` now (`layout.ts`),
+		   which is the arithmetic Dann's ruling states: the width at which the
+		   520 px drawer and a whole 816 px sheet stop both fitting. That is
+		   1400, and below it "the layout is the phone's", which is why this
+		   one assignment moves the drawer, the sheet's fit, the desk's padding
+		   and the one-station rule together. */
 		function checkMobile() {
-			isMobile = window.innerWidth < 768;
+			isMobile = !isDeskLayout(window.innerWidth);
 			sections.exclusive = isMobile;
 			isPhone = Math.min(window.innerWidth, window.innerHeight) < 768;
 			phonePortrait = window.innerHeight >= window.innerWidth;
@@ -2878,10 +2910,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			if (savedDiacritics) {
 				showStressDiacritics = JSON.parse(savedDiacritics);
 			}
-			const savedCollapsed = localStorage.getItem('ilya:drawerCollapsed');
-			if (savedCollapsed) {
-				drawerCollapsed = JSON.parse(savedCollapsed);
-			}
+			/* `ilya:drawerCollapsed` IS NOT READ ANY MORE, N.108 increment 1a,
+			   and it is not cleared either. Dann retired the collapsed state,
+			   so the key has nothing left to say; deleting a singer's stored
+			   value would be a write on their device to remove a preference
+			   they can no longer express, which is worth less than the byte it
+			   frees. It is left where it is, unread. */
 			/* N.73 S3 ship two, THE STORED-TAB MIGRATION. Every stored value is
 			   named in `restoreSurface`, including the two that mean Studio and
 			   the ones that mean nothing, so a value this build does not know
@@ -2908,7 +2942,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			   above this block. The phone keeps one open station, so the
 			   migration has to know which display it landed on, and reading
 			   the width a second time here would put a second opinion about
-			   the 767 px rule in the tree. */
+			   the layout rule in the tree. */
 			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY), isMobile);
 		} catch {
 			// localStorage unavailable
@@ -2923,16 +2957,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			}
 		});
 		window.addEventListener('resize', checkMobile);
-		// On mobile, default drawer to collapsed unless user has a saved preference
-		if (isMobile) {
-			try {
-				if (!localStorage.getItem('ilya:drawerCollapsed')) {
-					drawerCollapsed = true;
-				}
-			} catch {
-				drawerCollapsed = true;
-			}
-		}
+		/* THE PHONE'S DEFAULT IS DECLARED, NOT RESTORED. `drawerRaised` is
+		   `false` where it is declared, which is the paper, and there is no
+		   stored preference to consult. N.108 increment 1a. */
 		handleHashNavigation();
 		return () => {
 			window.removeEventListener('resize', checkMobile);
@@ -2992,10 +3019,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      `accept` is dropped on mobile for N.70's reason exactly: iOS matches by
      registered type and knows nothing of `.ilya`, so it would grey out every
      binder a singer owns, which would make the AirDrop half of the walk
-     impossible. -->
+     impossible.
+
+     N.108 INCREMENT 1a: THE TEST IS `isPhone`, NOT `isMobile`, AND THE
+     BEHAVIOUR IS UNCHANGED BY THE SWAP. `isMobile` used to mean "narrower than
+     768" and now means "the layout is the phone's", which is true on a 1366
+     laptop; leaving this on it would have dropped the filter on a desktop file
+     picker, which is the opposite of what N.70 ruled ("filtered list on
+     desktop, no accept at all on mobile", walked by Dann on his own iPhone).
+     `isPhone` is the smallest-side test and it is true on exactly the devices
+     N.70 was walked on. Increment 2 replaces it with a coarse-pointer test,
+     which the build brief already names. -->
 <input
 	type="file"
-	accept={isMobile ? undefined : '.ilya'}
+	accept={isPhone ? undefined : '.ilya'}
 	bind:this={importInputEl}
 	class="binder-input"
 	onchange={(e) => {
@@ -3049,10 +3086,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 <InstallPrompt {language} />
 </div>
-<div class="app-content {viewBreathClass}">
+<!-- ONE PAINTED DESK, UNDER THE DRAWER AND THE PAPER BOTH (N.108 increment
+     1a). It carries the tab class now, which `.main-content` below used to
+     carry alone, and the four per-destination surrounds moved up here with it.
+
+     WHY IT MOVED. Dann ruled the slab away on 2026-09-02 so the three groups
+     float on the desk; that only works if the desk runs under them. Increment
+     1 had the drawer paint its own copy of the surround, and the copy showed
+     the wrong desk under the Score markup document, which is what he saw. Two
+     boxes agreeing by hand is the defect; one box cannot disagree with itself. -->
+<div class="app-content tab-{activeTab} {viewBreathClass}">
 	<Drawer
 		width={drawerWidth}
-		collapsed={drawerCollapsed}
+		raised={drawerRaised}
 		{isMobile}
 		{language}
 		{destination}
@@ -3063,7 +3109,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		onexittakeover={exitCalibration}
 		metadataOpen={sections.has(STATION_IDS.metadata)}
 		onmetadatatoggle={() => sections.toggle(STATION_IDS.metadata)}
-		ontogglecollapse={handleDrawerToggle}
+		ontogglepull={handlePullToggle}
+		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
 	>
@@ -3155,10 +3202,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							     with it, so the new song's stored score comes back
 							     through the uploader's OWN restore: the same path a
 							     reload takes, and no second one. -->
+							<!-- N.108 increment 1a. `isMobile={isPhone}`, and the prop
+							     name is the uploader's, not this file's. It feeds
+							     `acceptList`, which is N.70's ruling and not a layout
+							     question; see the binder input above for the whole
+							     reason. -->
 							{#key doc.id}
 								<ScoreUploader
 									{language}
-									{isMobile}
+									isMobile={isPhone}
 									restore={restoreSource}
 									oningested={(ingested, file, origin, page) =>
 										void handleArrival(ingested, file, origin, page)}
@@ -3303,6 +3355,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							ontupletdef={applyTupletDefinition}
 							{onhold}
 						/>
+						<!-- N.108 increment 1a, ruled by Dann 2026-09-02: "You have
+						     corrected 2 notes." renders inside the Corrections
+						     station body, not under Voice. It was in the notices
+						     block at the foot of the group, which put a sentence
+						     about corrections three stations away from the surface
+						     that made them. Nothing about the sentence changed. -->
+						{#if correctedCount > 0}
+							<p class="shane-storage-notice">
+								{correctedCount === 1
+									? t('correct.countOne', language)
+									: t('correct.count', language).replace('%s', String(correctedCount))}
+							</p>
+						{/if}
 						</div>
 						{/if}
 						</div>
@@ -3384,13 +3449,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     groups on its own authority. -->
 					<div class="group-notices">
 					{#if ingestedScore}
-						{#if correctedCount > 0}
-							<p class="shane-storage-notice">
-								{correctedCount === 1
-									? t('correct.countOne', language)
-									: t('correct.count', language).replace('%s', String(correctedCount))}
-							</p>
-						{/if}
 						<!-- N.97. A correction whose event id no longer resolves after a
 						     re-read did not land, and a correction that fails to land must
 						     never fail silently. The DRAWER says so and the paper carries no
@@ -3558,7 +3616,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	</Drawer>
 	<main
 		class="main-content tab-{activeTab} {paperBreathClass} {tabTransitionClass}"
-		class:drawer-open={!drawerCollapsed}
 		class:reading-mode={isReadingMode}
 		class:loupe-up={loupeOpen}
 		bind:this={mainContentEl}
@@ -4075,11 +4132,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		height: auto !important;
 		text-align: left !important;
 	}
+	/* THE DESK IS PAINTED HERE (N.108 increment 1a). It was
+	   `var(--drawer-bg)`, a fill nobody saw, because `.main-content` painted
+	   the desk over all of it and the drawer painted itself over the rest.
+	   Now the drawer paints nothing, so this is the desk, and the four
+	   per-destination rules below are its. */
 	.app-content {
 		display: flex;
 		flex: 1;
 		overflow: hidden;
-		background-color: var(--drawer-bg, #FAF8F5);
+		/* ONE NAME FOR THE DESK, DECLARED ONCE. The four rules below set
+		   `--desk-fill` and nothing else; this is the only place the value is
+		   spent as a colour, and the phone's drawer INHERITS the property
+		   rather than being given a second copy of the token. That is what
+		   makes "no corner can mismatch the desk" true by construction rather
+		   than by two boxes agreeing: there is one value, and everything that
+		   paints the desk reads it from here. */
+		--desk-fill: var(--desk-surface, #D8D4C8);
+		background-color: var(--desk-fill);
 	}
 	.main-content {
 		flex: 1;
@@ -4088,7 +4158,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: var(--desk-surface, #D8D4C8);
+		/* TRANSPARENT. The desk is `.app-content`'s, one box, so this one adds
+		   nothing and cannot disagree with it. */
+		background-color: transparent;
 		transform: none;
 		/* The desk head is flush with the SHEET's left edge, not the desk's
 		   (placement B, ruled by Dann, N.42 §1.3). The two sheets are not the
@@ -4196,8 +4268,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	/* On the phone the gutter is the ruled distance, the same one `.desk-head`
-	   spends above the sheet. */
-	@media (max-width: 767px) {
+	   spends above the sheet. N.108 increment 1a moved the query with the
+	   layout it belongs to: this row sits under the sheet, and the sheet is
+	   full width wherever the layout is the phone's. */
+	@media (max-width: 1399px) {
 		.sheet-print {
 			padding-top: var(--portrait-gutter, 24px);
 		}
@@ -4210,20 +4284,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   lands on the sheet's left edge on every one of them. */
 
 	/* ── Floating Paper: tab-specific surrounds (Approach A) ── */
+	/* N.108 increment 1a: ON `.app-content`, NOT `.main-content`. The selector
+	   moved up one box so the desk runs under the drawer as well as under the
+	   paper; nothing else about these four rules changed, and the tokens are
+	   the same four. See the element's own comment. */
 
-	.main-content.tab-transcription {
-		background-color: var(--surround-transcription, #D1D7CB);
+	.app-content.tab-transcription {
+		--desk-fill: var(--surround-transcription, #D1D7CB);
 	}
 
-	.main-content.tab-learn {
-		background-color: var(--surround-learn, #DBCACA);
+	.app-content.tab-learn {
+		--desk-fill: var(--surround-learn, #DBCACA);
 	}
 
-	.main-content.tab-guide {
-		background-color: var(--surround-guide, #BEC7D8);
+	.app-content.tab-guide {
+		--desk-fill: var(--surround-guide, #BEC7D8);
 	}
 
-	.main-content.tab-shane {
+	.app-content.tab-shane {
 		/* One hue per working surface. Ruled by Dann 2026-08-19 during the
 		   walk, superseding "one desk, many papers" (2026-07-12) and the S1
 		   sage desk that carried it: the Marked score is a distinct working
@@ -4232,7 +4310,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   other three. It is not --surround-shane, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
-		background-color: var(--surround-marked, #D2CBD7);
+		--desk-fill: var(--surround-marked, #D2CBD7);
 	}
 
 	/* ── Floating Paper: the shadow ────────────────────────── */
@@ -4574,8 +4652,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			left: auto !important;
 		}
 	}
-	/* Responsive layout for narrow viewports */
-	@media (max-width: 767px) {
+	/* ── THE PHONE'S LAYOUT (N.108 increment 1a) ─────────────
+	   THE BREAKPOINT IS 1400, NOT 768. `layout.ts` owns the arithmetic and
+	   the test beside it pins the sum; the literal is repeated here because
+	   there is no custom-media syntax. Dann's ruling of 2026-09-02: below the
+	   width where the 520 px drawer and a whole sheet both fit, "the layout is
+	   the phone's."
+
+	   THE WHOLE BLOCK IS UNCHANGED except the query and the bottom padding.
+	   Every value in it was ruled for a narrow screen and every one of them is
+	   still right at 1366, where the sheet is now the only thing on the desk. */
+	@media (max-width: 1399px) {
 		.app-content {
 			position: relative;
 			height: 100vh;
@@ -4604,14 +4691,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			transform: none;
 			--desk-pad-top: 1rem;
 
-			/* This reserved 92px at the bottom of the viewport for two pieces
-			   of fixed furniture: the tab bar at 56px and the paper handle
-			   sitting on it at 36px. Dann found the need for it under the
-			   attribution's final line on 2026-08-11. N.73 S1 deleted both, so
-			   the reservation goes with them and the phone gets its 92px back.
-			   Nothing is fixed to the bottom of the desk any more; the drawer's
-			   pull is on the side. */
-			padding-bottom: 0.5rem;
+			/* THE PULL IS FIXED FURNITURE AGAIN, N.108 increment 1a, and this
+			   is what reserves room for it. The paragraph that stood here
+			   recorded the opposite and it is kept because the history is the
+			   argument: 92px was reserved for a tab bar and a paper handle,
+			   N.73 S1 deleted both and gave the phone its 92px back, and the
+			   note ended "nothing is fixed to the bottom of the desk any more;
+			   the drawer's pull is on the side."
+
+			   THE PULL IS BACK ON THE BOTTOM, ruled by Dann 2026-09-02, and it
+			   is 44px rather than 92. `0.5rem` is portrait C's own bottom
+			   padding and it is kept, spent above the bar rather than at the
+			   viewport's edge, so the last line of a sheet still clears the
+			   pull by the ruled distance. */
+			padding-bottom: calc(44px + 0.5rem);
 		}
 	}
 

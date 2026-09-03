@@ -2,11 +2,30 @@
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { SectionSet } from './sections.svelte';
+	import { readSwipe } from './gesture';
 	import type { Destination, TabId } from '$lib/destinations';
 
 	interface Props {
 		width: number;
-		collapsed: boolean;
+		/**
+		 * PHONE ONLY: whether the drawer is up. N.108 increment 1a.
+		 *
+		 * It was `collapsed`, and it was the desk's question. Dann ruled on
+		 * 2026-09-02 that the desk has no collapsed state at all: at every
+		 * width where the drawer and a whole sheet both fit, "the drawer is
+		 * always present", so `ilya:drawerCollapsed` and the bookmark tab that
+		 * drove it are both retired. What is left is the PHONE's question,
+		 * and it is asked the other way up: the drawer rises from the bottom,
+		 * so the state worth naming is `raised` rather than `collapsed`.
+		 *
+		 * Ignored above the breakpoint (`layout.ts`), where nothing reads it.
+		 */
+		raised: boolean;
+		/**
+		 * Whether the layout is the phone's. THE NAME IS OLDER THAN ITS
+		 * MEANING: `+page.svelte` computes it from `isDeskLayout` now, not
+		 * from 768 px, so it is true on a 1366 laptop. See `layout.ts`.
+		 */
 		isMobile: boolean;
 		language: Language;
 		/** Where the singer is. Every branch in this file asks this. */
@@ -93,95 +112,112 @@
 		takeoverActive?: boolean;
 		/** The back affordance's press. */
 		onexittakeover?: () => void;
-		ontogglecollapse: () => void;
+		/**
+		 * The pull's press, and the swipe's. Phone only. It was
+		 * `ontogglecollapse` and it drove a bookmark tab on the drawer's right
+		 * edge; there is no tab and no desk state to toggle now.
+		 */
+		ontogglepull: () => void;
+		/**
+		 * The loupe has the screen, so the swipe must not fire. Dann's ruling
+		 * names it. The press still works: the pull is a control and the dock
+		 * covers it rather than disabling it.
+		 */
+		gesturesBlocked?: boolean;
 		ontabchange: (tab: TabId) => void;
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, pieceGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, pieceGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
-	/* ── THE SILHOUETTE (N.65). Dann's ruling, 2026-08-20, DRAWN at
-	   `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, whose SVG
-	   paths are the specification and whose numbers are read out below
-	   rather than paraphrased.
+	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
+	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
+	   no chevron and no collapsed state, and the phone's pull is a horizontal
+	   bar on the bottom edge instead of a tab on the right.
 
-	   The drawer's right edge and the handle are ONE outline. It runs down
-	   from the top, stops dead at the handle's top-left terminus, turns
-	   ninety degrees, runs along the handle's top, rounds the two RIGHT-hand
-	   corners as a squircle, returns along the handle's bottom, turns ninety
-	   degrees again, and continues to the bottom. THE HANDLE HAS NO LEFT
-	   WALL: its inside is the drawer's inside. Both junctions are mitred.
+	   WHAT LEFT WITH THEM, and every one of these was ruled once: `LIP_W` 20
+	   and `LIP_H` 152 (2026-08-19, 2026-08-21), the one-outline silhouette
+	   drawn at `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html` with
+	   its mitred junctions and its squircle cubic (2026-08-20), the drawer's
+	   `bind:clientHeight`, which existed only so that path could have user
+	   units, the drop-shadow lift the outline needed, the `--lip-grey`, the
+	   coarse-pointer touch extension, the two measured optical nudges of the
+	   chevron, and the vertical DRAWER label increment 1 built on the tab four
+	   hours ago.
 
-	   WHY AN SVG. `.drawer-clip` carries `overflow: hidden` and the pull sits
-	   at `left: 100%`, outside it, which is exactly the boundary one path has
-	   to cross. `clip-path` on shaped elements would still be two boxes
-	   agreeing by hand, which is the defect. One `<path>` outside the clip
-	   crosses nothing, and the drawing IS a path, so the specification
-	   transfers literally: the mitre is `stroke-linejoin`, and the squircle
-	   is the drawing's own cubic rather than an approximation of it.
+	   NONE OF IT IS A DEFECT BEING FIXED. It was right for a drawer that slid
+	   in from the left and had to show a handle when it was gone. The desk's
+	   drawer never goes now, so it needs no handle; the phone's comes from the
+	   bottom, so its handle is a bar across the bottom. The reasoning is kept
+	   here rather than in the file's history because the shape may come back
+	   if the motion ever does.
 
-	   WHY THE HEIGHT IS BOUND. A path takes user units, not percentages, so
-	   the viewBox has to know the drawer's height or the stroke and the
-	   squircle distort. `bind:clientHeight` makes user units equal CSS pixels
-	   exactly. */
-	let drawerHeight = $state(0);
+	   `docs/sessions/drawing-n108-pull_r2_2026-09-02.png` is the drawing this
+	   replaces it with, and `_r3` is the alternative Dann rejected. */
 
-	/* THE PROTRUSION IS THE TREE'S, NOT THE DRAWING'S. 20 is N.73 S1b's ruled
-	   protrusion, walked on both displays; the drawing is a schematic at other
-	   proportions. What comes from the drawing is the SHAPE.
+	/* ── THE SWIPE (N.108 increment 1a) ──────────────────────────────────
+	   "A vertical swipe in the motion's direction is a second way, and it must
+	   not fire while the loupe is up or a station body is scrolling."
 
-	   BOTH REACH THE STYLESHEET AS CUSTOM PROPERTIES on the root `<aside>`, so
-	   the tab, its touch extension, and the phone's own width all read the two
-	   numbers declared here. Before this ship the protrusion was typed a
-	   second time as `.drawer-lip { width: 20px }` and the height a second
-	   time as `height: 76px`, which is how an outline and a tab come to
-	   disagree. */
-	const LIP_W = 20;
-	/* DOUBLED FROM 76, RULED BY DANN 2026-08-21: "Please double the height of
-	   the paper handle and re-centre the chevron within the enlarged paper
-	   handle." His reason, given after: "to increase target size for users on
-	   both desktop and mobile."
+	   THE DECISION IS NOT HERE. `gesture.ts` holds it, in plain TypeScript, so
+	   a gate can reach it; this measures the touch and reads the DOM, which is
+	   the only part a browser is needed for. Same split as `sections.svelte.ts`
+	   and for the same stated reason.
 
-	   THE SHAPE DOES NOT CHANGE. R below derives from the WIDTH, so the
-	   squircle's two corners stand exactly as Dann's drawing ruled them and
-	   only the straight run between them lengthens. */
-	const LIP_H = 152;
-	/* One weight for one line. 2px is `.drawer-body`'s own edge, and it is
-	   also what the drawing's 5-in-56 stroke scales to at 20px: 1.79. */
-	const STROKE = 2;
-	/* The squircle, as the drawing draws it. Its corner spans 18 of a 56
-	   protrusion, and each cubic control handle runs 14 of that 18. A circle
-	   would use 0.5523; the longer handle is what makes it square-ish. */
-	const R = LIP_W * (18 / 56);
-	const K = R * (14 / 18);
+	   WHERE IT LISTENS, AND THIS IS A SCOPING DECISION THE RULING DID NOT MAKE.
+	   The DOWN swipe listens on the drawer, because that is the surface the
+	   ruling's two exclusions are about. The UP swipe listens on the PULL BAR
+	   ONLY, because the paper scrolls under a thumb all day and an up-swipe
+	   anywhere on it would be a gesture stolen from the document. The bar is
+	   44 px of full-width target and it is the only thing showing at the
+	   bottom when the paper is up. Recorded in the memo as mine. */
+	let touchStart: { x: number; y: number; at: number; el: EventTarget | null } | null = null;
 
-	const silhouette = $derived.by(() => {
-		const h = drawerHeight;
-		if (!h) return null;
-		const xEdge = STROKE / 2;
-		const xOut = STROKE + LIP_W - STROKE / 2;
-		const top = h / 2 - LIP_H / 2;
-		const bot = h / 2 + LIP_H / 2;
-		const n = (v: number) => Math.round(v * 100) / 100;
-		/* The two right corners, written once and used by both paths. */
-		const rightSide =
-			`L ${n(xOut - R)} ${n(top)} ` +
-			`C ${n(xOut - R + K)} ${n(top)} ${n(xOut)} ${n(top + R - K)} ${n(xOut)} ${n(top + R)} ` +
-			`L ${n(xOut)} ${n(bot - R)} ` +
-			`C ${n(xOut)} ${n(bot - R + K)} ${n(xOut - R + K)} ${n(bot)} ${n(xOut - R)} ${n(bot)}`;
-		return {
-			h,
-			w: STROKE + LIP_W,
-			/* The interior. Closed along the edge line, where the drawer's own
-			   fill is already the same colour, so the handle reads as a notch
-			   in the drawer rather than a box beside it. */
-			fill: `M ${n(xEdge)} ${n(top)} ${rightSide} L ${n(xEdge)} ${n(bot)} Z`,
-			/* The outline. OPEN at both ends, because it is cut off by the top
-			   and the bottom of the drawer, and open on the handle's left,
-			   because the handle has no left wall. */
-			outline: `M ${n(xEdge)} 0 L ${n(xEdge)} ${n(top)} ${rightSide} L ${n(xEdge)} ${n(bot)} L ${n(xEdge)} ${n(h)}`,
-		};
-	});
+	/* Whether the box the touch began in can still travel in the thumb's own
+	   direction. Walks from the touched element up to the drawer, because a
+	   station body is a scroller inside a scroller and either may be mid-way.
+	   `>= 1` rather than `> 0`: a fractional device pixel at the end of a
+	   scroll is not room to move. */
+	function scrollableUnder(el: EventTarget | null, downward: boolean): boolean {
+		let node = el instanceof Element ? el : null;
+		while (node) {
+			const style = getComputedStyle(node);
+			const scrolls = /(auto|scroll|overlay)/.test(style.overflowY);
+			if (scrolls && node.scrollHeight > node.clientHeight) {
+				const room = downward
+					? node.scrollTop
+					: node.scrollHeight - node.clientHeight - node.scrollTop;
+				if (room >= 1) return true;
+			}
+			if (node.classList.contains('drawer')) return false;
+			node = node.parentElement;
+		}
+		return false;
+	}
+
+	function onTouchStart(e: TouchEvent) {
+		const t = e.changedTouches[0];
+		touchStart = t ? { x: t.clientX, y: t.clientY, at: Date.now(), el: e.target } : null;
+	}
+
+	/* `wantDown` says which way this listener is willing to read. The drawer
+	   sends itself away and the bar brings it back; neither answers a swipe
+	   that would do what has already been done. */
+	function onTouchEnd(e: TouchEvent, wantDown: boolean) {
+		const start = touchStart;
+		touchStart = null;
+		if (!start || !isMobile) return;
+		const t = e.changedTouches[0];
+		if (!t) return;
+		const dy = t.clientY - start.y;
+		const verdict = readSwipe(
+			{ dx: t.clientX - start.x, dy, ms: Date.now() - start.at },
+			{ blocked: gesturesBlocked, canScrollFurther: scrollableUnder(start.el, dy > 0) }
+		);
+		if (verdict === null) return;
+		if (verdict === 'down' && wantDown && raised) ontogglepull();
+		if (verdict === 'up' && !wantDown && !raised) ontogglepull();
+	}
 
 	/* Studio's two documents. The reading destinations, Learn and Guide, have
 	   no piece, no notation and no voice, so none of the three anchors is
@@ -317,9 +353,18 @@
 	}
 </script>
 
-<aside class="drawer" class:collapsed data-tab={activeTab} style="--lip-w: {LIP_W}px; --lip-h: {LIP_H}px; {isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label={t('a11y.drawer', language)} bind:clientHeight={drawerHeight}>
+<aside
+	class="drawer"
+	class:lowered={isMobile && !raised}
+	data-tab={activeTab}
+	style={isMobile ? '' : `width: ${width}px`}
+	aria-label={t('a11y.drawer', language)}
+	inert={isMobile && !raised}
+	ontouchstart={onTouchStart}
+	ontouchend={(e) => onTouchEnd(e, true)}
+>
 	<div class="drawer-clip">
-	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
+	<div class="drawer-body" id="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
 		<!-- THE TWO PINNED ANCHORS ARE GONE, N.108 increment 1. A pinned top
 		     carrying Piece and Notation and a pinned bottom carrying the voice
 		     were the N.73 S3 column, ratified 2026-08-19. The three frames
@@ -672,80 +717,46 @@
 		{/if}
 	</div>
 	</div>
-	<!-- THE PULL, one control on every display (N.73 S1 §2.7, Dann's ruling
-	     of 2026-08-19). No visible word: "fewer text elements onscreen is good
-	     to allow the user to focus on their own texts, not controls." The
-	     ratified word is the accessible name instead, and aria-expanded says
-	     the state, so the name does not change under the singer.
-
-	     The chevron points the way the drawer will MOVE when pressed: right
-	     when it is closed and about to arrive, left when it is open and about
-	     to leave. The SVG is drawn pointing right and flipped by CSS. -->
-	<!-- THE SILHOUETTE (N.65), ON EVERY DISPLAY. A sibling of `.drawer-clip`
-	     rather than a child, for the same reason the pull is one: the clip
-	     would cut it at the drawer's edge, which is the one place this shape
-	     exists to cross. Decorative and inert; the pull below is the control.
-
-	     IT NOW DRAWS ON THE PHONE. Dann sent a picture of the desktop handle
-	     and ruled it on 2026-08-21: "This is the appearance I want on mobile."
-	     He named the defect by what he could see: "I can see the left edge of
-	     the paper handle (tab)." That edge is `.drawer-lip`'s own painted box,
-	     and the silhouetted class below is what stops it painting.
-
-	     The old exclusion argued that the phone has no drawer edge for a
-	     handle to join, because `.drawer-body` sets `border-right: none`
-	     there. That is an argument about a border, not about the outline: the
-	     silhouette IS the edge it joins, and it carries its own. What the
-	     phone still does not get is the LIFT; see `filter: none` in the phone
-	     block below, whose reason is the 400ms slide and not this shape. -->
-	{#if silhouette}
-		<svg
-			class="lip-silhouette"
-			width={silhouette.w}
-			height={silhouette.h}
-			viewBox="0 0 {silhouette.w} {silhouette.h}"
-			aria-hidden="true"
-			focusable="false"
-		>
-			<path class="sil-fill" d={silhouette.fill} />
-			<path class="sil-line" d={silhouette.outline} />
-		</svg>
-	{/if}
-	<!-- `silhouetted` IS UNCONDITIONAL NOW, N.65, Dann's ruling of 2026-08-21.
-	     It was `class:silhouetted={!isMobile}`. It is written into the class
-	     attribute rather than left as a directive bound to `true`, because a
-	     directive that cannot be false is a condition nobody can read. The
-	     class and its rules stay so the reasoning below stays with them. -->
-	<button
-		class="drawer-lip silhouetted"
-		onclick={ontogglecollapse}
-		aria-label={t('drawer.pull', language)}
-		aria-expanded={!collapsed}
-		title={t('drawer.pull', language)}
-	>
-		<svg class="lip-chevron" aria-hidden="true" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-			<polyline points="3,2 11,10 3,18" />
-		</svg>
-		<!-- THE LABELLED PULL, ON THE PHONE ONLY. Ruled by Dann 2026-08-18:
-		     "mobile gets one labelled pull (caret, DRAWER) on both portrait
-		     states, replacing both unlabelled handles." The ruling was made and
-		     never built; N.108 §2 restates it and this is it.
-
-		     THE DESKTOP TAB STAYS UNLABELLED, which is the same ruling read
-		     literally: the label is the MOBILE pull's. N.73 S1 §2.7's "no
-		     visible word" governs the desktop still, and its reason, fewer text
-		     elements onscreen, is unchanged there.
-
-		     `aria-hidden`, because the button already carries `drawer.pull` as
-		     its accessible name and this is the same word drawn. A screen
-		     reader must not hear it twice.
-
-		     THE STRING IS RATIFIED and so is its French: `drawer.pull`,
-		     `i18n.ts:46`, "Drawer" / « Tiroir ». Nothing new is written for
-		     it. -->
-		<span class="pull-label" aria-hidden="true">{t('drawer.pull', language)}</span>
-	</button>
 </aside>
+
+<!-- ── THE PULL (N.108 increment 1a), PHONE ONLY ────────────────────────
+     `docs/sessions/drawing-n108-pull_r2_2026-09-02.png`, ruled by Dann
+     2026-09-02: one horizontal labelled pull on the bottom edge, 44 px tall,
+     drawer paper, reading PAPER when the drawer is up and DRAWER when the
+     paper is up. One control, one place, both states.
+
+     THIS AMENDS THE 2026-08-19 RULING IN BOTH ITS PARTS
+     (`claude/ruling-drawer-horizontal-motion-and-bare-chevron_2026-08-19.md`).
+     That ruling withdrew the phone's vertical motion as a form-factor
+     concession and made the pull a bare chevron. His words tonight: "The
+     vertical model for mobile that you offered is fine. Let's go with that."
+     So the motion is vertical again and the pull carries a word again.
+
+     A SIBLING OF THE DRAWER, NOT A CHILD, and that is load-bearing: the drawer
+     translates off the bottom of the screen and the pull must not go with it.
+
+     THE CHEVRON POINTS THE WAY THE DRAWER WILL MOVE when pressed, which is the
+     rule this drawer's chevron has always followed: down with the drawer up,
+     up with the paper up. It leads the word, as the drawing draws it.
+
+     ON THE DESK IT DOES NOT EXIST. Not hidden: not rendered. There is nothing
+     for it to do, because the drawer is always present. -->
+{#if isMobile}
+	<button
+		type="button"
+		class="drawer-pull"
+		onclick={ontogglepull}
+		ontouchstart={onTouchStart}
+		ontouchend={(e) => onTouchEnd(e, false)}
+		aria-expanded={raised}
+		aria-controls="drawer-body"
+	>
+		<svg class="pull-chevron" class:up={!raised} aria-hidden="true" width="14" height="9" viewBox="0 0 14 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<polyline points="2,2 7,7 12,2" />
+		</svg>
+		<span class="pull-label">{raised ? t('drawer.paper', language) : t('drawer.pull', language)}</span>
+	</button>
+{/if}
 
 <style>
 	.drawer {
@@ -754,86 +765,63 @@
 		flex-direction: row;
 		height: 100%;
 		flex-shrink: 0;
-		transition: width 1500ms cubic-bezier(0.22, 1, 0.36, 1);
-		/* ── THE LIFT (N.65), ON THE WHOLE DRAWER ─────────────────────
-		   Dann's ruling, 2026-08-20, and this is the SECOND placement. It
-		   was on `.lip-silhouette` and that was wrong, in the way he named:
-		   that SVG is a 22px strip, so it could not cover its own shadow,
-		   the blur bloomed inward across the drawer's paper, and the handle
-		   read as a pill floating beside the drawer.
+		/* ── THE LIFT IS GONE (N.108 increment 1a) ────────────────────
+		   `filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35))` was N.73 S1b's
+		   one ruled shadow, and Dann moved it onto this element on 2026-08-20
+		   for a reason that no longer exists: it had to trace the union of the
+		   drawer body and the handle's SVG so the outline would read as one
+		   shape lifted off the desk. There is no outline and no handle.
 
-		   THE DRAWING IS THE REFERENCE and it says why this element.
-		   `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, option
-		   C: its filled path is `M0 0 L150 0 ... L0 300 Z`, the WHOLE
-		   drawer with the handle's bump on it, not a strip. A drop-shadow
-		   renders behind its own element, so wherever the shape is opaque
-		   its shadow is invisible, and the only shadow that shows is the
-		   one off the right edge, on the desk.
+		   AND IT MUST GO RATHER THAN MERELY BEING UNUSED. This ship makes the
+		   drawer transparent so the three groups float on the desk; a
+		   drop-shadow traces the alpha of what is painted, so with the slab
+		   gone it would have drawn a shadow around each group's 20 px corners
+		   and around the divots between them. The groups float; they do not
+		   hover.
 
-		   `.drawer` is the element that already contains both the drawer
-		   body and the handle's SVG, so the filter traces the union of the
-		   two. The body is an opaque full-height box and hides its own
-		   shadow with no measurement needed.
-
-		   THE VALUES ARE UNCHANGED: `0 3px 12px rgba(0, 0, 0, 0.35)` is
-		   N.73 S1b's one ruled shadow, the paper's own.
-
-		   THE HAZARD WAS CHECKED, NOT DISCOVERED. `filter` makes a stacking
-		   context AND a containing block for absolute and fixed
-		   descendants. The only `position: fixed` in this subtree is
-		   `.drawer` itself, which its own filter cannot re-root, and the
-		   three absolute descendants (`.lip-silhouette`, `.drawer-lip`, and
-		   its `::before`) already resolved against `.drawer`. Measured
-		   before and after on all three states; nothing moved. */
-		filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.35));
-	}
-
-	.drawer.collapsed {
-		width: 0px;
+		   The `transition: width` went with the collapse it animated. */
 	}
 
 	.drawer-clip {
-		/* Clips the pinned-width body as drawer animates — lip lives outside this */
+		/* Clips the body to the drawer's own box. It was clipping around a
+		   pull that lived outside it; the pull is a sibling of the drawer
+		   itself now, so nothing crosses this boundary. */
 		flex: 1;
 		min-width: 0;
 		overflow: hidden;
 		position: relative;
 	}
 
-	/* ── THE SLAB (N.108). Ruled by Dann 2026-09-02: "the slab takes the
-	   desk's surround and the groups carry the drawer paper, as built; the
-	   bookmark tab belongs to the slab."
+	/* ── THE SLAB IS GONE (N.108 increment 1a) ───────────────
+	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: "allowing the Drawer
+	   to fully become a floating control set." No fill behind the groups; they
+	   float directly on the desk of whichever document is showing.
 
-	   SO THIS BOX'S FILL IS THE DESK'S, NOT THE DRAWER'S. It was
-	   `--drawer-bg`, which is now the three groups' fill. What the change buys
-	   is the DIVOT: two 20 px corners meeting between one group and the next
-	   cut a notch, and a notch has to be cut out of something. The desk is
-	   what it is cut out of, so the drawer reads as three cards laid on the
-	   desk rather than as one sheet with lines drawn on it.
+	   WHAT WENT WRONG WITH THE SLAB, and it is worth keeping because the fault
+	   was in the idea and not in the value. Increment 1 gave this box the
+	   desk's surround, keyed off `data-tab`, on the ruling of 2026-09-02
+	   ("the slab takes the desk's surround"). Two painted boxes then had to
+	   agree, and they did not: the drawer showed the transcription desk's
+	   corner under the Score markup document, because the class that keys the
+	   desk and the attribute that keyed the slab are set at different moments.
+	   ONE PAINTED DESK CANNOT MISMATCH ITSELF, so `.app-content` in
+	   `+page.svelte` paints it now, once, under the drawer and the paper both,
+	   and this box paints nothing at all.
 
-	   ONE FILL PER DESK, from the four-desks ruling of 2026-08-19, keyed off
-	   `data-tab` on the root `<aside>`. Learn and Guide keep `--drawer-bg`,
-	   and that is a DECISION THIS SHIP MAKES RATHER THAN A RULING IT CARRIES:
-	   their drawer holds a table of contents and no groups, so there is no
-	   paper card to cut the notch out of and a surround there would put the
-	   reading room's own list straight onto the desk. Recorded in the memo. */
+	   `--slab-fill` and the two `data-tab` rules that set it are deleted with
+	   it. `data-tab` returns to what N.73 S3 ship two kept it for: a mark on
+	   the drawer that a harness can read, which no selector uses. */
 	.drawer-body {
 		height: 100%;
 		overflow: hidden;
-		background: var(--slab-fill, var(--drawer-bg));
 		display: flex;
 		flex-direction: column;
-		/* THE LAST `2px double` IS GONE, ruled by Dann 2026-08-20 on his walk
-		   of `f59f7d2`. The desk argued this one could stay because it is a
-		   vertical spine rather than a horizontal rule. HIS ANSWER, AND HE IS
-		   RIGHT: that is a distinction in the stylesheet and not in anyone's
-		   eye. It is the same mark. One boundary treatment means one mark,
-		   everywhere, whichever way it runs. */
-		/* TRANSPARENT, NOT DELETED. The silhouette's SVG paints this edge
-		   now, outside `.drawer-clip`, but the 2px still has to be reserved
-		   or the content would slide under the line. N.65, Dann's ruling of
-		   2026-08-20. It was `2px solid var(--sage)`. */
-		border-right: 2px solid transparent;
+		/* THE RIGHT EDGE IS GONE ENTIRELY (N.108 increment 1a). It was
+		   `2px solid var(--sage)` until Dann's ruling of 2026-08-20 retired
+		   the drawer's last vertical spine, and then `2px solid transparent`,
+		   because the silhouette's SVG painted that line from outside the clip
+		   and the content had to be held off it. There is no silhouette, so
+		   there is nothing to reserve, and the 2 px goes back to the drawer. */
 	}
 
 
@@ -847,11 +835,33 @@
 		flex: 1;
 		min-height: 0;
 		overflow-y: auto;
-		/* The foot of the column. It was `.root-panel:last-child`'s 40px,
-		   which belonged to whichever panel ended the column; there is no last
-		   panel now, there is a last GROUP, and a group's corners must not be
-		   cropped by the scroll's own edge. 12px, the prototype's value. */
-		padding-bottom: 12px;
+		/* ── THE GROUPS FLOAT, SO THEY NEED AIR ON EVERY SIDE ─────
+		   N.108 increment 1a. With the slab gone the groups sit on the desk,
+		   and a 20 px corner against the viewport's own edge is a corner that
+		   has been sliced off rather than drawn. Dann's words for what he
+		   wanted are "allowing the Drawer to fully become a floating control
+		   set", and `drawing-n108-pull_r2_2026-09-02.png` draws desk on every
+		   side of the cards.
+
+		   16 px IS THE DRAWER'S OWN INSET AND NOT A NEW VALUE. It is the 1rem
+		   that `.root-panel`, `.drawer-anchor-top` and `.drawer-anchor-bottom`
+		   each spent before N.108, ruled by Dann 2026-08-20 when he required
+		   every station rule in the drawer to share one inset. The stations'
+		   own 18 px lives inside the group; this is the group's own margin
+		   from the desk.
+
+		   THE SIDES ONLY, AND NO TOP, AND THE PROTOTYPE ALREADY GAVE THE
+		   REASON: "the first group's 20 px corners now meet the slab at the
+		   top, which is the same join they make at the bottom". The join at
+		   the top is drawn, not clipped. THE TOP WAS ALSO MEASURED AND
+		   REJECTED: 16 px there costs 16 px of height, and at 1366 x 768 on a
+		   coarse pointer the opening state then overruns its box by 10 px,
+		   which is a ruled fit given up for a margin nobody asked for.
+
+		   THE FOOT IS 12, not 16, and it was 12 before: it is
+		   `.root-panel:last-child`'s 40 px replaced at increment 1 by the
+		   prototype's own value, and nothing about the bottom changed here. */
+		padding: 0 16px 12px;
 	}
 
 	/* ── THE THREE GROUPS (N.108) ─────────────────────────────
@@ -1151,312 +1161,81 @@
 		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
 	}
 
-	/* ── The silhouette (N.65) ───────────────────────────── */
+	/* ── THE BOTTOM PULL (N.108 increment 1a) ─────────────────
+	   Drawn at `docs/sessions/drawing-n108-pull_r2_2026-09-02.png`: horizontal,
+	   on the bottom edge, 44 px tall, drawer paper, the chevron leading the
+	   word. It replaces `.drawer-lip`, `.lip-silhouette`, `.sil-fill`,
+	   `.sil-line`, `--lip-grey`, `.lip-chevron` and the two measured optical
+	   nudges, all deleted; the script above records what each was for.
 
-	/* THE COLOUR, AND WHERE IT CAME FROM. Dann ruled the paper handle's grey
-	   for the whole outline. `.paper-handle` was DELETED at N.73 S1, so there
-	   is no paper handle in the tree to read it from, and the drawing's
-	   `#C9C5BD` is a stand-in the coordinating desk invented and the brief
-	   forbids shipping. What IS in the tree is the grey this very handle has
-	   painted since 2026-08-19: `rgba(26, 22, 18, 0.18)` over the drawer's
-	   fill. MEASURED off the running app rather than computed, by reading the
-	   painted pixels of all three of its borders: #D2CFCC on every one.
+	   44 px ON EVERY POINTER, not only a coarse one. It is the ruled height
+	   and it is also the touch floor, so the two agree by construction and no
+	   `@media (pointer: coarse)` block is needed to raise it. The old tab
+	   needed one because it painted 20 px and had to reach 44.
 
-	   SOLID, not the alpha it came from. One path crosses the drawer's fill
-	   AND the desk, and a translucent stroke would composite to two greys on
-	   one line, which is the thing this ruling exists to end. */
-	.drawer {
-		--lip-grey: #D2CFCC;
-	}
+	   DRAWER PAPER, ruled. It is the one piece of the drawer that is not a
+	   group, so it takes the groups' own fill rather than the desk's, and a
+	   hairline above it separates it from whatever it is sitting on. NO
+	   SHADOW: nothing in this drawer is lifted any more.
 
-	/* ── THE SLAB'S FILL, ONE PER DESK (N.108) ────────────────
-	   `data-tab` USED TO BE READ BY NOTHING, and the prop's own comment said
-	   so: it was the one mark on the drawer that told Studio's two documents
-	   apart, kept for a harness. It is read now, here, and that comment is
-	   corrected where it stands.
-
-	   Four desks, four surrounds, ruled 2026-08-19. Studio's two take theirs;
-	   Learn and Guide keep the drawer's own paper, for the reason recorded on
-	   `.drawer-body`. */
-	.drawer[data-tab='transcription'] {
-		--slab-fill: var(--surround-transcription, #D1D7CB);
-	}
-
-	.drawer[data-tab='shane'] {
-		--slab-fill: var(--surround-marked, #D2CBD7);
-	}
-
-	.lip-silhouette {
-		position: absolute;
-		top: 0;
-		/* The drawer's edge, not its outside. `left: 100%` with the stroke's
-		   own 2px pulled back, so the vertical run lands exactly in the 2px
-		   `.drawer-body` reserves for it and the handle's outer face lands
-		   where the tab's right edge always was, at `100% + 20px`. */
-		left: 100%;
-		margin-left: -2px;
-		/* Under the pull, over the desk. */
-		z-index: 1;
-		pointer-events: none;
-		overflow: visible;
-		/* THE SHADOW IS NOT HERE. It was, and Dann ruled it out on his walk:
-		   this element is a 22px strip, so it could not cover its own
-		   shadow and the blur painted a seam down the drawer's paper. It
-		   lives on `.drawer` now, which contains this SVG and the drawer
-		   body both, so the filter traces the union and the opaque body
-		   hides its own shadow. See that rule. */
-	}
-
-	/* N.108: THE TAB BELONGS TO THE SLAB, ruled 2026-09-02, so its fill is the
-	   slab's and not the drawer paper's. It was `--drawer-bg`, which is now
-	   the groups' fill; leaving it there would have painted a paper-coloured
-	   notch on a desk-coloured spine, which is the outline and the tab
-	   disagreeing again. The 20 x 152 geometry and the centring are untouched:
-	   they are ruled (2026-08-18, 2026-08-20, 2026-08-21) and this ship
-	   restates them rather than moving them. */
-	.sil-fill {
-		fill: var(--slab-fill, var(--drawer-bg, #FAF8F5));
-		transition: fill 0.12s;
-	}
-
-	.sil-line {
-		fill: none;
-		stroke: var(--lip-grey);
-		stroke-width: 2;
-		/* THE MITRE. Dann: "please do not deliver those awful pointy
-		   artefacts." A miter join on a true right angle is a square corner,
-		   not a spike; the spikes come from joining at an acute angle, and
-		   there is no acute angle in this path. Nothing tapers or flares
-		   through either terminus. */
-		stroke-linejoin: miter;
-		/* Both ends are cut by the top and bottom of the drawer, so they take
-		   no cap. */
-		stroke-linecap: butt;
-	}
-
-	/* The hover lived on the tab's own background. The tab has no background
-	   now, so it moves to the fill the tab sits in.
-
-	   GUARDED, N.65, and this guard is the point of item 5 rather than a
-	   tidy-up. A tap on iOS latches `:hover` until the next touch elsewhere.
-	   This rule was harmless only while the silhouette was desktop-only; the
-	   same ship draws it on the phone, at which point one tap on the handle
-	   would leave its fill `#fff` against a `#FAF8F5` drawer. That is the
-	   mismatch Dann reported on 2026-08-21: "There seems to be a colour
-	   mismatch on mobile between the Drawer surface and the paper handle.
-	   They should appear the same." */
-	@media (hover: hover) {
-		.drawer:has(.drawer-lip:hover) .sil-fill {
-			fill: #fff;
-		}
-	}
-
-	/* ── The pull: a bookmark tab on the drawer's edge ──── */
-
-	/* Option A of `docs/sessions/ilya-lip-options_r1_2026-08-18.html`, ruled
-	   by Dann 2026-08-18 for the desktop and extended to every display on
-	   2026-08-19. A flat tab flush with the drawer's outward edge, drawer
-	   fill, hairline border, rounded on its outward corners only. It reads as
-	   part of the drawer, a thumb notch on a spine, not a button floating on
-	   the desk.
-
-	   THE HUE STAYS NEUTRAL. The four per-destination handle colours that
-	   lived here (sage, rose, cobalt, lavender, each with a hover shade) are
-	   gone: hue names place, and this control belongs to the drawer, which is
-	   the same drawer on every desk. That also settles §2.5's instruction to
-	   fold `shane` in with `transcription` here; there is no colour left to
-	   fold. Ink names state, and the state is the chevron's direction. */
-	.drawer-lip {
-		position: absolute;
-		top: 50%;
-		left: 100%;
-		transform: translateY(-50%);
-		width: var(--lip-w, 20px);
-		height: var(--lip-h, 152px);
-		padding: 0;
-		margin: 0;
-		display: flex;
+	   FIXED, so it holds the bottom edge whether the drawer is up or the paper
+	   is. z-index 70 clears the drawer's own 60 and stays under the loupe and
+	   its dock at 9100, which are ruled nearest the singer, and under the
+	   update toast at 200. */
+	.drawer-pull {
+		display: none;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 44px;
 		align-items: center;
 		justify-content: center;
-		background: var(--slab-fill, var(--drawer-bg, #FAF8F5));
-		border: 1px solid rgba(26, 22, 18, 0.18);
-		border-left: none;
-		border-radius: 0 5px 5px 0;
-		box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.18);
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		background: var(--drawer-bg, #FAF8F5);
+		border: none;
+		border-top: 1px solid rgba(26, 22, 18, 0.1);
 		cursor: pointer;
-		z-index: 2;
+		z-index: 70;
 		-webkit-tap-highlight-color: transparent;
 		touch-action: manipulation;
 	}
 
-	/* THE TAB PAINTS NOTHING ON THE DESKTOP. N.65, Dann's ruling: the
-	   silhouette is one outline, so a second box with its own fill, its own
-	   hairline, its own radius and its own drop shadow is the two marks the
-	   ruling replaces. What stays is everything that makes it a CONTROL: the
-	   box, the 44px coarse target, the chevron, the focus ring, and the
-	   press.
-
-	   IT APPLIES ON EVERY DISPLAY, N.65, Dann's ruling of 2026-08-21. The
-	   sentence that stood here, "the phone keeps the painted tab, because
-	   there is no silhouette there to belong to", assumed its own conclusion:
-	   the silhouette was absent on the phone because this class was, and this
-	   class was absent because the silhouette was. Dann settled it by what he
-	   could see, sending a picture of the desktop handle and writing "This is
-	   the appearance I want on mobile." One outline, two displays. */
-	.drawer-lip.silhouetted {
-		background: none;
-		border: none;
-		border-radius: 0;
-		box-shadow: none;
-	}
-
-	/* GUARDED, N.65 item 5. `grep -n "hover: hover"` over this file returned
-	   nothing before this ship, and a tap on iOS latches `:hover` until the
-	   next touch elsewhere, so this was the rule that painted the tab `#fff`
-	   under a singer's thumb. Measured off Dann's own screenshots: drawer
-	   surface `#FAF8F5` at every sample, tab interior `#FFFFFF` at every
-	   sample, open and shut alike.
-
-	   BOTH RULES SIT INSIDE THE GUARD, so the cancel cannot outlive the thing
-	   it cancels. With `silhouetted` now unconditional the cancel already wins
-	   on specificity everywhere, which makes the first rule dead on its own
-	   terms; it is guarded rather than deleted because deleting the tab's
-	   painted hover is a separate ruling nobody has made. */
-	@media (hover: hover) {
-		.drawer-lip:hover {
-			background: #fff;
-		}
-
-		.drawer-lip.silhouetted:hover {
-			background: none;
-		}
-	}
-
-	.drawer-lip:focus-visible {
+	.drawer-pull:focus-visible {
 		outline: 2px solid var(--ink-primary, #1a1612);
-		outline-offset: 2px;
+		outline-offset: -2px;
 	}
 
-	/* MODALITY, not viewport width, sets the geometry: a coarse pointer gets
-	   the 44 px floor. This is the ruled pattern and it is deliberately not a
-	   third touch-geometry exemption.
-
-	   N.73 S1b §3. This rule used to grow the VISIBLE tab to 44 by 88, which
-	   is 11 percent of a 390px screen given over to a handle. The visible tab
-	   is 20 by `--lip-h` on every pointer, the desktop's own size, and a
-	   transparent extension carries the width. The target is 44 by `--lip-h`,
-	   so the floor is met and no exemption is created.
-
-	   THE HEIGHT FOLLOWS THE TAB, N.65 item 9, AND THE COMMENT THAT STOOD
-	   HERE SAID "the target is still 44 by 88". At `LIP_H = 152` a fixed 88
-	   would have covered only the middle: the top and bottom 32px of a
-	   visibly tappable handle would have acquired 20px of width instead of
-	   44. Reading `--lip-h` is what stops the paint and the target parting
-	   company the next time the handle is resized.
-
-	   The extension is a pseudo-element rather than padding because padding
-	   would grow the tab's painted box: the background, the border and the
-	   border-radius are on .drawer-lip itself, and there is no way to pad a
-	   box without painting the padding. ::before is inside the button, so a
-	   press anywhere in it is a press on the button.
-
-	   It extends INTO THE DESK, not off-screen: left: 0 anchors it to the
-	   tab's left edge, so it covers the 20px tab and reaches 24px further
-	   right, over the desk. Closed, the tab sits at left: 100%, which on the
-	   phone is the viewport's left edge, so all 44px are on-screen. */
-	@media (pointer: coarse) {
-		.drawer-lip::before {
-			content: '';
-			position: absolute;
-			top: 50%;
-			left: 0;
-			width: 44px;
-			height: var(--lip-h, 152px);
-			transform: translateY(-50%);
-		}
-	}
-
-	/* ── The chevron ─────────────────────────────────────── */
-
-	/* THE LABEL IS SET VERTICALLY, because the tab is 20px wide and ruled so
-	   (2026-08-18, 2026-08-20, 2026-08-21) and a horizontal "DRAWER" does not
-	   go in 20px. `writing-mode: vertical-rl` reads downward, so the eye takes
-	   the caret and then the word, in the order the ruling writes them.
-
-	   THE RECIPE IS THE DRAWER'S OWN LABEL RECIPE, the one that is on the
-	   group bands: 0.7rem, 600, 0.12em, uppercase. Here it is ink on the tab
-	   rather than reversed, because the tab is the slab and not a band.
-
-	   IT IS DRAWN ONLY BELOW 768px. Declared `display: none` here and turned
-	   on in the phone block, so the desktop tab is untouched by this ship. */
+	/* The label recipe, the drawer's own, the one the group bands carry. Ink
+	   on paper here rather than reversed, because this is not a band. */
 	.pull-label {
-		display: none;
-		writing-mode: vertical-rl;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		font-weight: 600;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		color: var(--ink-tertiary, #6A655F);
-	}
-
-	.lip-chevron {
-		width: 14px;
-		height: 20px;
-		/* DARK GREY, NOT BLACK. Dann's ruling, 2026-08-20, on his walk of
-		   `1f201f2`. It was `--ink-primary` #1a1612, which measures 16.97:1 on
-		   the handle's #FAF8F5 fill and reads as black.
-
-		   `--ink-secondary` #4a4540 at 8.94:1, and the choice is about FAMILY
-		   as much as value. This drawer spends the ink scale on glyphs and
-		   type and the stone scale on borders and chrome, and a chevron is a
-		   glyph. `--stone-700` #44403c measures almost the same, 9.69:1, and
-		   is the wrong family. `--ink-tertiary` #6A655F at 5.44:1 is the
-		   placeholder and caption register, which would make a live control
-		   read as a disabled one. The memo carries all five candidates so
-		   Dann can rule again by looking. */
 		color: var(--ink-secondary, #4a4540);
-		/* Drawn pointing right, which is the direction a CLOSED drawer will
-		   move. Open, it flips to point the way out. */
-		transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	/* ── The optical nudge (N.65), and it is measured rather than judged ──
-	   Dann, 2026-08-20: "maybe it can be nudged to the left a pixel or four
-	   to give it more optical centring in the paper handle."
-
-	   TWO ERRORS, MEASURED SEPARATELY, and only one of them is constant.
-
-	   ONE: the glyph's box is centred in the BUTTON, and the button is not
-	   the handle. The button spans the whole 20px protrusion, 520 to 540 on
-	   the desk, so its centre is 530. The handle's ink-bounded interior runs
-	   from the drawer's face at 520 to the inner face of the outer wall at
-	   538, so its centre is 529. That is a constant 1px of error and it does
-	   not flip.
-
-	   TWO: the ink is not centred in its own box. Rasterised at 40x on a
-	   transparent ground and weighted BY ALPHA, the chevron's ink centroid
-	   sits at x 6.666 of a 14-wide box, not at 7. Its BOUNDING box is exactly
-	   centred, 1.75 to 12.25, which is why this needed a centroid and not a
-	   box: the two round caps at the open end outweigh the single round join
-	   at the apex. That 0.334px REVERSES when the glyph flips.
-
-	   So each state takes its own number, and both are leftward:
-	     closed, apex right, ink at 529.666 -> 529 is -0.67px
-	     open,   apex left,  ink at 530.334 -> 529 is -1.33px
-
-	   THE TRANSLATE COMES BEFORE THE SCALE so it applies in the PARENT frame.
-	   Written the other way round it would mirror with the glyph and push the
-	   open state to the right, which is the wrong direction.
-
-	   BOTH NUMBERS FALL BELOW the "pixel or four" Dann guessed, and they are
-	   reported rather than rounded up to meet it. */
-	.drawer:not(.collapsed) .lip-chevron {
-		transform: translateX(-1.33px) scaleX(-1);
+	/* DRAWN POINTING DOWN, flipped when the paper is up. The chevron points
+	   the way the drawer will MOVE when pressed, which is the rule every
+	   chevron in this drawer follows and the one the station headers keep. */
+	.pull-chevron {
+		flex: none;
+		color: var(--ink-secondary, #4a4540);
+		transition: transform var(--motion, 180ms ease-out);
 	}
 
-	.drawer.collapsed .lip-chevron {
-		transform: translateX(-0.67px) scaleX(1);
+	.pull-chevron.up {
+		transform: rotate(180deg);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pull-chevron {
+			transition: none;
+		}
 	}
 
 	/* ── Placeholder panels ─────────────────────────────── */
@@ -1717,163 +1496,103 @@
 		overflow: hidden;
 	}
 
-	/* ── Mobile ──────────────────────────────────────────── */
+	/* ── THE PHONE'S LAYOUT (N.108 increment 1a) ─────────────
+	   THE BREAKPOINT IS 1400, NOT 768, and it is an arithmetic rather than a
+	   round number: `layout.ts` derives it from the drawer's 520, the letter
+	   sheet's 816 and the desk's 2 rem, so below it a whole sheet cannot sit
+	   beside the drawer. Dann's ruling of 2026-09-02: "Below that width the
+	   layout is the phone's." The literal is repeated here because there is no
+	   custom-media syntax; `layout.ts` is its owner and the test beside it
+	   pins the sum.
 
-	@media (max-width: 767px) {
-		/* The drawer is a full-screen overlay that arrives FROM THE LEFT.
-		   Dann's ruling, 2026-08-19: the desktop's illusion is horizontal
-		   motion, the phone's vertical motion was a form-factor concession,
-		   and the concession is withdrawn. One motion model, every display.
-		   It arrives from the left because that is where it sits on the
-		   desktop, where .drawer-body's double border-right faces the paper.
-
-		   The height was calc(100dvh - 56px), reserving the deleted tab bar's
-		   footer. The bar is gone and the drawer takes the viewport. */
+	   THE VERTICAL MODEL RETURNS. The drawer rises from the BOTTOM, and this
+	   AMENDS the ruling of 2026-08-19
+	   (`claude/ruling-drawer-horizontal-motion-and-bare-chevron_2026-08-19.md`)
+	   in both its parts, on Dann's word of 2026-09-02: "The vertical model for
+	   mobile that you offered is fine. Let's go with that." That ruling had
+	   withdrawn vertical motion as a form-factor concession and made the pull
+	   a bare chevron; the motion is vertical again and the pull carries a word
+	   again. What the old ruling was protecting, one motion model on every
+	   display, is answered a different way: the desk has no motion at all
+	   now, so there is only one. */
+	@media (max-width: 1399px) {
 		.drawer {
-			/* NO LIFT ON THE PHONE, AND THE EXCLUSION STANDS. N.65 item 2
-			   draws the silhouette here, so the first half of the reasoning
-			   that stood in this comment ("the silhouette is desktop-only,
-			   so there is no edge for a shadow to belong to") is struck.
-			   THE SECOND HALF IS THE ONE THAT MATTERED AND IT IS UNTOUCHED:
-			   `filter` on a full-screen overlay rasterizes on every frame of
-			   the 400ms slide below. Dann gets the silhouette without the
-			   lift. */
-			filter: none;
 			position: fixed !important;
-			top: 0 !important;
 			left: 0 !important;
-			/* THE DESK STRIP, N.65 item 3, Dann's ruling of 2026-08-21: "I
-			   believe we need two regions of background on top and bottom of
-			   the paper handle for the Drawer." His reason: "on mobile the
-			   illusion is that there is always a right-screen paper GUI
-			   waiting just offscreen."
-
-			   THE WIDTH IS THE PULL'S PROTRUSION, READ AND NOT TYPED. This
-			   was `100% !important`. `--lip-w` is `LIP_W` published by the
-			   root `<aside>`, so the strip is exactly as wide as the tab that
-			   fills it and the two cannot drift.
-
-			   THIS AMENDS DANN'S FULL-SCREEN OVERLAY RULING OF 2026-08-19,
-			   which the comment above records. THE MOTION MODEL IS UNTOUCHED:
-			   the drawer still arrives from the left, one model on every
-			   display, and closed it still translates entirely off-screen. */
-			width: calc(100% - var(--lip-w, 20px)) !important;
-			height: 100dvh !important;
+			right: 0 !important;
+			/* THE DRAWER STOPS AT THE PULL. 44px is the bar's own height, and
+			   the bar is a sibling that does not travel, so the drawer that
+			   rises has to leave it room or it would rise over its own
+			   control. */
+			top: 0 !important;
+			bottom: 44px !important;
+			width: auto !important;
+			height: auto !important;
 			z-index: 60;
-			/* MEASURED: this was `overflow: hidden`, and it clipped the pull
-			   out of sight the moment the pull moved outside the drawer's own
-			   box. The pull sits at `left: 100%` when the drawer is closed,
-			   which is the only place a closed drawer can show a handle. The
-			   body is still clipped, by .drawer-clip, which is what that
-			   element is for. */
+			/* The pull sits outside this box, so nothing here may clip it.
+			   `.drawer-clip` is what clips the body, which is what it is for. */
 			overflow: visible;
-			transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+			/* THE DESK, INHERITED, NOT COPIED (N.108 increment 1a). On the
+			   phone the drawer is a full-screen overlay that covers the app
+			   bar as well as the desk, so the groups would otherwise float on
+			   the sage of `HeaderBar` for the first 48 px. `--desk-fill` is
+			   declared once, on `.app-content` in `+page.svelte`, and this
+			   element inherits it through the DOM, which `position: fixed`
+			   does not break. So this is not a second slab: it is the same
+			   value, and there is nothing for it to disagree with.
+
+			   IT IS ON `.drawer` AND NOT `.drawer-body`, because the body is
+			   the box Dann ruled to have no fill and it keeps none. This is
+			   the overlay's own ground. On the desk this rule does not apply
+			   at all and the drawer paints nothing. */
+			background: var(--desk-fill, var(--desk-surface, #D8D4C8));
+			/* ONE DURATION FOR THE TRAVEL. It was 400ms with the horizontal
+			   slide; the vertical model is a shorter distance under a thumb
+			   and takes `--motion`, `app.css`'s one duration, like every other
+			   thing this drawer animates since N.108. TRANSFORM ONLY: nothing
+			   here animates a height. */
+			transition: transform var(--motion, 180ms ease-out) !important;
 		}
 
-		/* Collapsed, the overlay sits entirely to the left of the viewport.
-		   It was `translateY(100%)` with `width: 0 !important` behind it,
-		   the width there only to stop a translated full-width overlay from
-		   swallowing touches on the desk. Two things now stop that instead,
-		   and neither needs the width: the overlay is off-screen, and it
-		   takes no pointer events. Off-screen to the LEFT also costs no
-		   horizontal scroll, because no browser scrolls into negative space
-		   in a left-to-right document. */
-		.drawer.collapsed {
-			transform: translateX(-100%);
+		/* Lowered, the drawer sits entirely below the viewport, under the bar
+		   that brought it. It takes no touches there, so the paper behind it
+		   is reachable everywhere.
+
+		   `inert` ON THE ELEMENT ITSELF, in the markup, rather than
+		   `aria-hidden` here. A drawer translated off-screen is still in the
+		   document: `aria-hidden` would hide it from a screen reader while
+		   leaving every station header in the Tab order, which is the one
+		   combination the a11y model forbids. `inert` takes both. */
+		.drawer.lowered {
+			transform: translateY(calc(100% + 44px));
 			pointer-events: none;
 		}
 
-		.drawer:not(.collapsed) {
-			transform: translateX(0);
+		.drawer:not(.lowered) {
+			transform: translateY(0);
 		}
 
-		/* The pull is the exception to that: it is how a closed drawer gets
-		   opened, so it keeps its touches while the overlay behind it
-		   refuses them. */
-		.drawer.collapsed .drawer-lip {
-			pointer-events: auto;
+		.drawer-pull {
+			display: flex;
 		}
 
-		/* THE LABELLED PULL (N.108 §2, Dann's ruling of 2026-08-18). The tab
-		   becomes a column so the caret sits above the word; 8px between them,
-		   the step this drawer already spends between a glyph and its label.
-		   Neither the tab's 20 x 152 box nor its centring moves: the two
-		   children are laid out inside the box it already had. */
-		.drawer-lip {
-			flex-direction: column;
-			gap: 8px;
-		}
-
-		.pull-label {
-			display: block;
-		}
-
-		/* THE OPEN TAB'S POSITION OVERRIDE IS DELETED, N.65 item 3, AND THE
-		   BRIEF DID NOT ASK FOR IT. It read `left: auto; right: 0`, and its
-		   reason was that the open drawer was the whole screen, so a tab at
-		   `left: 100%` would hang off the right edge. THE DRAWER IS NO LONGER
-		   THE WHOLE SCREEN: it is the screen less this tab's own width, so
-		   `left: 100%` now lands the tab exactly in the strip, its outward
-		   face on the viewport's right edge, which is where it sat before.
-
-		   TWO THINGS BREAK IF IT STAYS. The desk would show BESIDE the handle
-		   for the drawer's full height rather than above and below it, which
-		   is the opposite of what Dann asked for. And `.lip-silhouette` is
-		   `left: 100%` on every display, so the outline would draw in the
-		   strip while the tab sat 20px to its left: the outline and the tab
-		   disagreeing, which is the failure item 9 exists to prevent.
-
-		   The touch extension's own override below STAYS, and its reason is
-		   unchanged: the tab's outward edge is still the viewport's right
-		   edge, so a 44px extension has to reach back into the drawer. */
-
-		/* The open tab's outward edge IS the viewport's right edge, so the
-		   touch extension has to reach the other way or it would hang
-		   off-screen and the target would measure 20px. It reaches back into
-		   the drawer, across the 44px gutter .drawer-body reserves below,
-		   where nothing else is drawn. Inert without a coarse pointer, which
-		   is the only place ::before takes a `content`. */
-		.drawer:not(.collapsed) .drawer-lip::before {
-			left: auto;
-			right: 0;
-		}
-
-		/* Body fills full height */
 		.drawer-clip {
 			width: 100% !important;
 			height: 100%;
-			overflow: visible;
+			overflow: hidden;
 		}
 
-		/* The open drawer keeps a 44px gutter on the right, the width of the
-		   pull's TOUCH TARGET, which since N.73 S1b is wider than the 20px
-		   the pull paints. The gutter measures the target, not the paint, so
-		   the pull can never cover a control. On .drawer-body rather than .drawer-content because the
-		   NOTATION anchor is .drawer-content's SIBLING, not its child, and
-		   would otherwise keep its own edge under the pull. It costs 44px of
-		   a 390px phone, which is the price of one control never hiding
-		   another. */
+		/* NO GUTTER AND NO RESERVED EDGE. Both were the bookmark tab's:
+		   `padding-right: 44px` kept the tab's touch target off the drawer's
+		   own controls, and `border-right: 2px solid transparent` reserved the
+		   line the silhouette painted. There is no tab and no silhouette, so
+		   the drawer gets those 46 px of a 430 px phone back. */
 		.drawer-body {
 			width: 100% !important;
 			height: 100%;
 			flex-direction: column;
-			/* RESERVED, NOT NONE, N.65 item 2. This was `border-right: none`,
-			   which was correct while the phone drew no silhouette. It draws
-			   one now, and the silhouette's vertical run lands in the 2px
-			   `.drawer-body` reserves for it; with no reservation the
-			   drawer's content would sit under that line. This is the
-			   desktop's own declaration, which the phone now needs for the
-			   same reason. */
-			border-right: 2px solid transparent;
-			overflow: visible;
-			padding-right: 44px;
+			border-right: none;
 			box-sizing: border-box;
-		}
-
-		/* Drawer content: allow scroll to prevent left clipping */
-		.drawer-content {
-			overflow-x: auto;
-			overflow-y: auto;
 		}
 
 		.toc-chevron {
@@ -1887,10 +1606,6 @@
 	@media (prefers-reduced-motion: reduce) {
 		.drawer {
 			transition: none;
-		}
-
-		.lip-chevron {
-			transition-duration: 0.01ms !important;
 		}
 
 		.drawer-content.tab-enter-from-right,

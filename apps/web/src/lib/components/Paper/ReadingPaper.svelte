@@ -281,7 +281,7 @@
 
 	/* THE DECK IS THE SAME ARRIVAL, AND THIS ONE IS BEYOND THE LETTER OF THE
 	   BRIEF. `learn-u3-inventory` is a table-of-contents entry whose label is
-	   the deck sentence itself (`Drawer.svelte:459`), and ship 1 put that id
+	   the deck sentence itself (`Drawer.svelte:504`), and ship 1 put that id
 	   on the deck inside the band. On the rule above alone it lands correctly
 	   but decapitates its own band: the sentence sits below the chrome on a
 	   rose block whose kicker and title are scrolled away. The brief's

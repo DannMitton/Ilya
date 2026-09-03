@@ -149,9 +149,36 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > map at every size (Metadata on the Piece band everywhere), and Back on the
 > left of the takeover band. Build brief, three increments each ending in a
 > ship and a walk: `docs/sessions/brief-n108-build_r1_2026-09-02.md`.
-> Status: increment 1 BRIEFED, not built. Usage read 2026-09-02 evening:
+> Status: increment 1 SHIPPED and walked; 1a briefed. Usage read 2026-09-02 evening:
 > Fable 29%, shared pool 21%, both reset Sunday; nothing scarce.
 >
+> **INCREMENT 1 SHIPPED `2c1cecf` 2026-09-02 and WALKED BY DANN on the
+> alias.** The frames stand. His walk found, and he ruled, all 2026-09-02
+> late evening, from drawings `drawing-n108-pull_r1/r2/r3`:
+> - **The slab is gone.** No fill behind the groups; they float on the desk
+>   of the document showing. His words: "allowing the Drawer to fully become
+>   a floating control set." (Code had given the slab one fixed tone, which
+>   showed as a wrong-coloured corner under the Score markup desk.)
+> - **Desk: no pull, no chevron, no collapse.** The drawer is always
+>   present. `ilya:drawerCollapsed` retires. Below the width where drawer
+>   and paper both fit (about 1340 px, Code to measure), the layout is the
+>   phone's.
+> - **Phone: the VERTICAL model returns**, drawer rising from the bottom, one
+>   horizontal labelled pull on the bottom edge reading PAPER with the
+>   drawer up and DRAWER with the paper up; a swipe in the motion's
+>   direction is a second way in. **This AMENDS the 2026-08-19 ruling
+>   (`claude/ruling-drawer-horizontal-motion-and-bare-chevron_2026-08-19.md`)
+>   in both parts, motion and label**, on his word tonight: "The vertical
+>   model for mobile that you offered is fine. Let's go with that." The desk
+>   found this only after quoting the 08-18 pull without the 08-19 amendment
+>   (tether 17, broken and caught by Dann).
+> - **The migration lands every returning singer on the opening state once**
+>   (old open set dropped), desk ruling; his old Repertoire and Analysis had
+>   come across open and pushed Score markup off the bottom.
+> - "You have corrected 2 notes." moves inside Corrections.
+> - The intake stays two fields until increment 2, as briefed.
+> **Increment 1a (these fixes) is the one thing; then increment 2.**
+
 > Nine ships this session before N.108, all walked or proved: N.104, N.105,
 > N.102 (three), N.106, N.103, N.107.
 >

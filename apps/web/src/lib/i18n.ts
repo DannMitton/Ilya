@@ -19,6 +19,18 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Drawer ───────────────────────────────────────────────
 	'drawer.collapse':             { en: 'Collapse drawer',              fr: 'Réduire le tiroir' },
 	'drawer.expand':               { en: 'Expand drawer',                fr: 'Ouvrir le tiroir' },
+	// N.108 increment 1a. THE PHONE'S PULL CARRIES TWO WORDS, one per state,
+	// and it says where the press GOES rather than what it does: PAPER with
+	// the drawer up, DRAWER with the paper up. Drawn at
+	// `docs/sessions/drawing-n108-pull_r2_2026-09-02.png`, ruled by Dann
+	// 2026-09-02. `drawer.pull` above carries DRAWER and is ratified in both
+	// languages; only the other half is new.
+	//
+	// FRENCH IS DEFERRED, as it is for the six N.108 strings below: the
+	// English stands in both slots because `t()` prints `[MISSING: key]` for an
+	// absent variant, which would put that literal on the pull. « Papier » is
+	// the obvious word and it is DANN'S TO RULE, not this ship's to assume.
+	'drawer.paper':                { en: 'Paper',                        fr: 'Paper' },
 
 	// ── The three groups (N.108 increment 1) ─────────────────
 	//    FRENCH IS DEFERRED BY DANN'S RULING OF 2026-09-02, and these six

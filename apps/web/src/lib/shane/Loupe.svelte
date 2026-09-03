@@ -952,7 +952,7 @@
 	   seconds into an iOS Safari session that carries no fresh decline
 	   (N.105), and at any lower value it lands on top of the LYRIC station
 	   and the singer cannot reach it. The mobile
-	   drawer takes 60 (`Drawer.svelte:1762`) and the update toast 200. The
+	   drawer takes 60 (`Drawer.svelte:1531`) and the update toast 200. The
 	   loupe is ruled nearest the user, the dock is its other half, and a
 	   working surface a thumb cannot reach is not a surface. The prompt is
 	   untouched and returns the moment the loupe goes away. */

@@ -23,7 +23,13 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { migrateOpenStations, FIRST_RUN_STATIONS } from './sections.svelte';
+import {
+	migrateOpenStations,
+	parseOpenSections,
+	readStoredOpenSet,
+	FIRST_RUN_STATIONS,
+	OPEN_STATIONS_VERSION,
+} from './sections.svelte';
 
 describe('N.108 the open set migrates once', () => {
 	it('maps each of ship B’s four survivors to its successor', () => {
@@ -88,5 +94,85 @@ describe('N.108 the open set migrates once', () => {
 	it('opens nothing on a first run', () => {
 		expect([...FIRST_RUN_STATIONS]).toEqual([]);
 		expect(migrateOpenStations([...FIRST_RUN_STATIONS], false)).toEqual([]);
+	});
+});
+
+/**
+ * N.108 increment 1a: THE RESET, AND THE MARK THAT MAKES IT HAPPEN ONCE.
+ *
+ * Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the migration "lands
+ * every singer on the opening state once: drop the old set, write the empty
+ * array, so nothing is open except the intake; keep the id mapping code for a
+ * singer whose set is already new."
+ *
+ * `SectionSet.restore` is where the two branches meet, and it holds `$state`
+ * and a `localStorage` write, neither of which this repository's `node`
+ * environment has. What is testable is the READER: whether a stored value
+ * announces itself as pre-1a or post-1a is the whole of the decision, and
+ * `readStoredOpenSet` is that decision.
+ */
+describe('N.108 increment 1a the stored shape says who wrote it', () => {
+	it('reads a bare array as version 1, which is every build before 1a', () => {
+		expect(readStoredOpenSet('["repertoire","analysis"]')).toEqual({
+			version: 1,
+			open: ['repertoire', 'analysis'],
+		});
+	});
+
+	it('reads increment 1a’s own shape as version 2', () => {
+		expect(readStoredOpenSet('{"v":2,"open":["metadata"]}')).toEqual({
+			version: 2,
+			open: ['metadata'],
+		});
+	});
+
+	/* A returning singer whose set is already NEW still has to be reset once,
+	   which is the case a bare array could never carry on its own: Dann's own
+	   drawer held `["repertoire","analysis"]` after increment 1, both new ids,
+	   and both came back open. Version 1 is what says "reset me". */
+	it('marks a set of new ids written before 1a as version 1', () => {
+		const stored = readStoredOpenSet('["repertoire","analysis"]');
+		expect(stored.version).toBeLessThan(OPEN_STATIONS_VERSION);
+	});
+
+	it('marks 1a’s own write as needing no reset', () => {
+		const stored = readStoredOpenSet('{"v":2,"open":["repertoire"]}');
+		expect(stored.version).toBe(OPEN_STATIONS_VERSION);
+	});
+
+	/* Absent, corrupt, and wrong-typed all read as version 0, so they are
+	   reset with everything else rather than trusted. §B.4's ruling is that an
+	   unreadable value does not throw. */
+	it('reads absent, corrupt and wrong-typed as version 0', () => {
+		expect(readStoredOpenSet(null)).toEqual({ version: 0, open: [] });
+		expect(readStoredOpenSet('not json')).toEqual({ version: 0, open: [] });
+		expect(readStoredOpenSet('[1,2,3]')).toEqual({ version: 0, open: [] });
+		expect(readStoredOpenSet('"repertoire"')).toEqual({ version: 0, open: [] });
+	});
+
+	/* An empty array is not corrupt: it is a singer who shut everything. It
+	   still reads as version 1, so it is written forward once and then left
+	   alone. */
+	it('reads an empty array as a version 1 value, not as corruption', () => {
+		expect(readStoredOpenSet('[]')).toEqual({ version: 1, open: [] });
+	});
+
+	it('survives an object with no open list', () => {
+		expect(readStoredOpenSet('{"v":2}')).toEqual({ version: 2, open: [] });
+	});
+
+	/* `parseOpenSections` is ship B's reader and §B.4's ruling lives in it.
+	   It is narrowed onto the reader above and its behaviour is unchanged. */
+	it('keeps §B.4’s fallback on an unreadable value and not on an empty one', () => {
+		expect(parseOpenSections(null, ['metadata'])).toEqual(['metadata']);
+		expect(parseOpenSections('nonsense', ['metadata'])).toEqual(['metadata']);
+		expect(parseOpenSections('[]', ['metadata'])).toEqual([]);
+	});
+
+	/* The mapping is KEPT, which the ruling asks for in as many words, and it
+	   is what a version 2 set still goes through. */
+	it('keeps the mapping for a set that is already new', () => {
+		expect(migrateOpenStations(['repertoire', 'voice'], false)).toEqual(['repertoire', 'voice']);
+		expect(migrateOpenStations(['repertoire', 'voice'], true)).toEqual(['repertoire']);
 	});
 });
