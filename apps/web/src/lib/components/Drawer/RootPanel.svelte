@@ -4,7 +4,6 @@
 	import { t, type Language } from '$lib/i18n';
 import SongList from './SongList.svelte';
 import StationHeader from './StationHeader.svelte';
-import IntakeWatermark from './IntakeWatermark.svelte';
 import type { SongRow } from '$lib/library/songs';
 import { STATION_IDS, type SectionSet } from './sections.svelte';
 
@@ -157,10 +156,10 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		onclearscore,
 	}: Props = $props();
 
-	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". The watermark and the sage
-	   hover are bound to the same condition by Dann's ruling of 2026-08-20,
-	   so they read it from one name rather than repeating the expression and
-	   drifting apart later. */
+	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". It bound the watermark and
+	   the sage hover together by Dann's ruling of 2026-08-20; the watermark
+	   was retired 2026-09-03 and the hover is the one reader left. The name
+	   stays, because the poem's receipt reads it too. */
 	const sourceIsEmpty = $derived(inputText === '');
 
 	const charCount = $derived(inputText.length);
@@ -423,15 +422,16 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		role="group"
 		aria-label={t('source.heading', language)}
 	>
-		<!-- THE TEXT WATERMARK (N.65), unchanged and still bound to the same
-		     one name. Empty field only, which is Dann's own ruling: it never
-		     sits under a pasted poem.
+		<!-- THE WATERMARK IS RETIRED. Ruled by Dann 2026-09-03 on his walk of
+		     `cedf246`, amending N.65 (his own ruling of 2026-08-20, which put
+		     a large centred word inside each of the two intake fields). The
+		     component is deleted, not merely unmounted: `IntakeWatermark.svelte`
+		     is gone from the tree.
 
-		     THE SCORE WATERMARK IS GONE with the box it stood in. It was the
-		     other half of N.65's pair and there is no second box to mark. -->
-		{#if sourceIsEmpty}
-			<IntakeWatermark word={t('input.watermark', language)} colour="var(--light-sage)" />
-		{/if}
+		     `input.watermark` AND `upload.watermark` STAY IN `i18n.ts`. They
+		     are the receipt tags now, `text` and `score`, so the two words the
+		     mark was drawn from are still on screen and still ratified in both
+		     languages. -->
 		<textarea
 			class="text-input"
 			bind:this={textareaEl}
@@ -685,13 +685,14 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   inventing a different one: no hex is written here that `app.css` does not
 	   already hold.
 
-	   THE WHITE FILL LEFT WITH THE PAIR. It was here so the watermark could sit
-	   BEHIND the placeholder while the textarea stayed transparent, and that
-	   stacking is unchanged: the mark is still under a transparent field, over
-	   this frame's fill, whatever colour the fill is.
+	   THE FILL IS ON THIS BOX AND THE FIELD INSIDE IT IS TRANSPARENT. That was
+	   the watermark's stacking once; the watermark was retired 2026-09-03 and
+	   the arrangement is kept because it is what the field looks like. Moving
+	   the fill back onto the textarea would change the frame, which this
+	   ruling did not ask for.
 
-	   `position: relative` IS STILL THE WATERMARK'S CONTAINING BLOCK, and now
-	   the OCR button's too. */
+	   `position: relative` IS THE OCR BUTTON'S CONTAINING BLOCK. It was the
+	   watermark's too, and the button is the reader left. */
 	.intake {
 		position: relative;
 		border: 1px dashed rgba(26, 22, 18, 0.28);
@@ -836,10 +837,10 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		   wrapper had no background and would be a white shelf under the field
 		   now that it has one. It was never a designed gap. */
 		display: block;
-		/* Above the watermark, so the placeholder and any typed poem paint over
-		   it rather than under it. */
-		position: relative;
-		z-index: 1;
+		/* `position: relative` and `z-index: 1` are gone with the watermark
+		   (2026-09-03). They lifted this field above the mark so the
+		   placeholder and any typed poem painted over it rather than under
+		   it; there is no mark to be above. */
 		border: 1px solid var(--sage);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
