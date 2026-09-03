@@ -44,102 +44,12 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the current one thing and nothing else, which is what `README.md` sends you
 > here for.
 
-> **N.104 CLOSED 2026-09-02, WALKED BY DANN on the branch alias.** Ship
-> `ea300ef`, "N.104: the loupe's window opens where its head stops", five gates
-> at baseline, gate 4 now **914**. He raised the loupe on m. 4, system 2 of 7,
-> and saw clef, F sharp, C sharp, once each; his words: "There!" Memo:
-> `docs/sessions/memo-n104-head-window-overlap_r1_2026-09-01.md`, whose §8
-> lists six moved anchors, applied in this file below. The N.104 history that
-> stood here is in `../sessions/LOG.md`, block 6. **N.102 and N.103 stay open
-> and unplaced.**
+> **Closed 2026-09-02, moved to `../sessions/LOG.md` block 7 at the close:**
+> N.104 (`ea300ef`), N.105 (`21e9ce2`), N.102 increments 1, 1a, 1b
+> (`0ed0fd8`, `3dd37e4`, `e7c2e43`), N.106 (`bb73488`), N.103 (`62967a7`),
+> N.107 (`d22084c`), N.109 (rode in `2c1cecf`). All walked or proved.
 >
-> **N.105 CLOSED 2026-09-02, WALKED BY DANN on the branch alias.** Ship
-> `21e9ce2`, 'N.105: "Not now" lasts thirty days', five gates at baseline,
-> gate 4 now **920** and `ilya-ship.sh:79` already carries it. One key,
-> `ilya:installDeclinedAt`; thirty days is a DESK DEFAULT he has not waved
-> off; a dismissed native prompt counts as a decline. Memo:
-> `docs/sessions/memo-n105-install-decline_r1_2026-09-02.md`. Its NOT
-> ESTABLISHED: the iOS path was never entered. His words: "The banner is
-> successfully dismissed."
->
-> **N.102 INCREMENT 1 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship
-> `0ed0fd8`, "N.102: the courtesy accidental across a barline". Gate 5 now
-> **493 | 5 skipped (498)** and `ilya-ship.sh:80` carries it. Two courtesies
-> drawn on Without Sun song 1 (bar 3 natural, bar 6 sharp); he saw the bar 3
-> natural: "Yes! Success!" Memo:
-> `docs/sessions/memo-n102-courtesy-accidentals_r1_2026-09-02.md`. Its three
-> flags, all desk calls: a courtesy is never drawn on a system-opening
-> measure (increment 1b, below); primitive mode collides at a measure opening
-> (fallback only, left); Gould 121's words matched the brief's paraphrase.
->
-> **RULED BY DANN 2026-09-02, HIS EYE: the parenthesis gap is 0.2 stave-spaces
-> each side**, chosen from a four-column drawing of Maestro's outlines. His
-> caveat, his words: "I'm concerned about this being a hard rule. In scores
-> where very short rhythms bear courtesy accidentals we can be more fluid."
-> DESK DEFAULT built from that: 0.2 sp preferred, the gap closes toward 0
-> before the cluster moves when the measure-opening floor binds. The general
-> tight-rhythm case is N.103's.
->
-> **N.102 INCREMENT 1a DONE 2026-09-02, WALKED BY DANN on the alias.** Ship
-> `3dd37e4`, "N.102: the courtesy's parentheses breathe". `COURTESY_GAP_SP =
-> 0.2` exported at `staff-renderer.ts:153`; the gap is the first thing to
-> give at the measure-opening floor. Gate 5 now **496 | 5 skipped (501)**,
-> `ilya-ship.sh:80` carries it. His words: "yes to my eye that reads
-> better." Memo: `docs/sessions/memo-n102-gap_r1_2026-09-02.md`.
->
-> **N.102 INCREMENT 1b DONE 2026-09-02.** Ship `e7c2e43`, "N.102: the
-> courtesy survives the system break". The accidental rule lives once, in
-> `advanceAccidentalState` (`staff-renderer.ts:348`), shared by the draw loop
-> and `accidentalStateAtEndOf`; `incomingAccidentals` on `StaffRenderOptions`
-> seeds each slice. Gate 5 now **504 | 5 skipped (509)**, `ilya-ship.sh:80`
-> carries it. Without Sun song 1 has no case, so nothing changed on the
-> page; Code proved it on a two-system probe in the browser. Memo:
-> `docs/sessions/memo-n102-system-opening_r1_2026-09-02.md`.
->
-> **N.102 INCREMENT 1 IS WHOLE.** Four ships tonight: `0ed0fd8`, `3dd37e4`,
-> `e7c2e43`, and N.105's `21e9ce2` before them. **Increment 2**, the singer's
-> own control with its French, waits on Dann.
->
-> **OWED, from the 1b memo: eight `path:line` citations in the loupe's source
-> were stale before any N.102 work.** Code listed them and left them rather
-> than guess. Repair by naming the thing, not by writing a new number.
->
-> **N.106 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `bb73488`,
-> "N.106: the turning unit keeps to the right of the sung unit". Rule at
-> `staff-renderer.ts:1796-1871`, `TURNING_CLEARANCE_SP = 0.25` exported.
-> 22 of 95 turning heads on Without Sun song 1 displaced right, 2.97 units
-> of clearance, nine of them seconds below that used to go left. He saw the
-> dotted case on system 2: flat, head, dot, then the lavender natural and
-> head clear to the right. His words: "Yes! :)" Gate 5 now **511 | 5 skipped
-> (516)**, `ilya-ship.sh:80` carries it. Memo:
-> `docs/sessions/memo-n106-turning-right_r1_2026-09-02.md`. The rulings
-> behind it (semantic units, biglyph and triglyph, always right, the
-> departure from Gould 103) are in `PRODUCT.md` §The turning layer.
->
-> **N.103 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `62967a7`,
-> "N.103: the spacer sees ink". `columnAdvance` has a fourth term, ink, from
-> one shared `columnInk`; `INK_CLEAR_SP = 0.5` and `TURNING_TRAIL_SP = 1.0`
-> exported, the second carrying his ruling verbatim. «лё ко» went from
-> -4.38 to 18.92 units; the page's narrowest ink clearance from -4.38 to
-> 4.05; systems 7 to 8, pages held at 2. Packing now takes the resolved
-> clef, a latent bug Code found. Gate 5 now **528 | 5 skipped (533)**,
-> `ilya-ship.sh:80` carries it. **His words: "Claude I find it absolutely
-> gorgeous."** `TURNING_TRAIL_SP` stays at 1.0 on that; the cost is a bar
-> per system from bar 7 on, accepted. Memo:
-> `docs/sessions/memo-n103-ink-spacing_r1_2026-09-02.md`. The rulings
-> behind it are in `PRODUCT.md` §The turning layer.
->
-> **N.107 DONE 2026-09-02, WALKED BY DANN on the alias.** Ship `d22084c`,
-> "N.107: the turning head counts its ledger lines". One shared
-> `drawLedgerLines` (`staff-renderer.ts:1996`) serves the sung line and the
-> turning block; the sung line's markup proven byte-identical over 9,408
-> rendered scores. 37 of 95 turning heads on Without Sun song 1 sit outside
-> the stave, all 37 with their lines; the below-stave case proved on a
-> deliberately lowered profile, 1 to 5 lines. His words: "Yes, I see exactly
-> that!" Gate 5 now **534 | 5 skipped (539)**, `ilya-ship.sh:80` carries it.
-> Memo: `docs/sessions/memo-n107-turning-ledgers_r1_2026-09-02.md`.
->
-> **THE ONE THING: N.108 increment 1, the frames.** RULED BY DANN 2026-09-02:
+> **N.108 increment 1, the frames (record of its placing).** RULED BY DANN 2026-09-02:
 > "N.108 comes before the release and the release waits for it." That is the
 > named displacement CONTRACT §6 requires; the release order N.85 to N.88
 > waits behind N.108. Design's revision 3 returned as a working prototype
@@ -149,7 +59,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > map at every size (Metadata on the Piece band everywhere), and Back on the
 > left of the takeover band. Build brief, three increments each ending in a
 > ship and a walk: `docs/sessions/brief-n108-build_r1_2026-09-02.md`.
-> Status: increment 1 SHIPPED and walked; 1a briefed. Usage read 2026-09-02 evening:
+> Status: increments 1 and 1a SHIPPED and walked; 2 is next. Usage read 2026-09-02 evening:
 > Fable 29%, shared pool 21%, both reset Sunday; nothing scarce.
 >
 > **INCREMENT 1 SHIPPED `2c1cecf` 2026-09-02 and WALKED BY DANN on the
@@ -177,7 +87,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >   come across open and pushed Score markup off the bottom.
 > - "You have corrected 2 notes." moves inside Corrections.
 > - The intake stays two fields until increment 2, as briefed.
-> **Increment 1a (these fixes) is the one thing; then increment 2.**
+> **INCREMENT 1a SHIPPED `60e6615` 2026-09-02 and WALKED BY DANN, desk and
+> phone.** His words: "Yes! It works just as you say :)" Desk breakpoint
+> measured at exactly 1400 px (520 + 816 + 2 × 32); a 1366 laptop takes the
+> phone's layout, accepted. Migration key is now `{"v":2,"open":[]}`.
+> Groups take a 16 px side inset. NOT walked: the loupe covering the pull on
+> the phone (nothing unreachable; dismiss the loupe first). Memo:
+> `docs/sessions/memo-n108-frames-1a_r1_2026-09-02.md`.
+> **THE ONE THING: N.108 increment 2, the one intake**, per
+> `brief-n108-build_r1_2026-09-02.md` §3, increment 2. Not started.
 
 > Nine ships this session before N.108, all walked or proved: N.104, N.105,
 > N.102 (three), N.106, N.103, N.107.

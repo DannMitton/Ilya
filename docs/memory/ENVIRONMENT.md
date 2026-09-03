@@ -37,6 +37,7 @@ next session the same hour it cost the last one.
 | the alias is serving something stale | `The branch alias, observed` |
 | sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
 | briefing Design | `WHAT DESIGN CAN READ` |
+| Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
 
 ### Browsers, phones, and what each one refuses
@@ -2253,3 +2254,13 @@ repository to the Design project, branch `Shane`; (2) the desk attaches, as
 files, every `claude/` ruling the brief cites; (3) then the brief. Dann's
 words: "we should offer Design the files that make up the foundation of the
 work in future."
+
+## DESIGN WRITES INTO THE TREE. 2026-09-02
+
+Once the repository is connected to the Design project, Design writes its
+return straight into `docs/sessions/` on Dann's disk (revision 3 of N.108
+arrived that way: `n108-drawer-prototype_r2_2026-09-02.html` and
+`n108-design-return_r3_2026-09-02.md`, no zip in Downloads). Look in the tree
+before asking him to fetch anything. Its files are untracked until he adds
+them, and `ilya-ship.sh` refuses on untracked files, so name them in the
+`git add` before the ship.
