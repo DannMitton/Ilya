@@ -19,8 +19,19 @@
 	 * THE RESULT SUMMARY IS STILL INSIDE IT, N.65 ship one's decision on the
 	 * ratified r1 mockup (`fable-gui-mockup_r1_2026-08-18.html:322-324`): what
 	 * it reports is a READING of the text rather than an act on it, so it sits
-	 * with the reading. N.108 increment 2 moves the word count to the intake's
-	 * receipt line, and this ship deliberately does not begin that.
+	 * with the reading.
+	 *
+	 * N.108 INCREMENT 2 TOOK THE WORD COUNT OFF IT, and left the timing. Ruled
+	 * 2026-09-02: "the word count and Clear live on the intake's receipt line."
+	 * The line read `13 words in 14ms` and it reads `14ms` now, because the
+	 * count moved and the timing did not.
+	 *
+	 * WHERE THE TIMING BELONGS IS NOT ESTABLISHED. Design's revision 3 memo
+	 * left it open in as many words: "Whether the word count keeps its
+	 * instrument. The receipt carries the count and not the timing, because the
+	 * timing did not fit. Whether the singer should still see it, and where, is
+	 * open." So it stays exactly where it was rather than being moved on a
+	 * guess or deleted on one. Dann's to rule.
 	 */
 	import type { Snippet } from 'svelte';
 	import type { LoaderState } from '$lib/loader';
@@ -30,7 +41,6 @@
 	interface Props {
 		loaderState: LoaderState;
 		hasResults: boolean;
-		wordCount: number;
 		transcribeMs: number;
 		language: Language;
 		/** Whether a word is selected, so the inspector has something to draw. */
@@ -44,7 +54,6 @@
 	let {
 		loaderState,
 		hasResults,
-		wordCount,
 		transcribeMs,
 		language,
 		showInspector,
@@ -65,7 +74,7 @@
 		<div class="station-body" id="station-analysis">
 			<p class="result-summary" class:result-hidden={!hasResults}>
 				{#if hasResults}
-					{wordCount} {t('result.words', language)} {transcribeMs}ms
+					{transcribeMs}ms
 				{:else}
 					&nbsp;
 				{/if}

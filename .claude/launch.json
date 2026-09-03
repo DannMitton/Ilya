@@ -4,8 +4,25 @@
 		{
 			"name": "ilya-web",
 			"runtimeExecutable": "pnpm",
-			"runtimeArgs": ["--filter", "@ilya/web", "dev"],
+			"runtimeArgs": [
+				"--filter",
+				"@ilya/web",
+				"dev"
+			],
 			"port": 5173
+		},
+		{
+			"name": "ilya-prod",
+			"runtimeExecutable": "pnpm",
+			"runtimeArgs": [
+				"--filter",
+				"@ilya/web",
+				"preview",
+				"--port",
+				"4173",
+				"--strictPort"
+			],
+			"port": 4173
 		}
 	]
 }

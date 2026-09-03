@@ -112,6 +112,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'a11y.paper':                  { en: 'Transcription',                fr: 'Transcription' },
 
 	// ── Input area ───────────────────────────────────────────
+	// UNUSED SINCE N.108 increment 2: the one intake's placeholder is
+	// `intake.placeholder`. Kept because its French is ratified and the French
+	// table is not ruled.
 	'input.placeholder':           { en: 'Paste Russian text here\u2026',       fr: 'Collez le texte russe ici\u2026' },
 	// THE INTAKE WATERMARK (N.65), Dann's ruling 2026-08-20. The large word
 	// centred inside the field, in ADDITION to the placeholder above. Keyed by
@@ -124,10 +127,16 @@ const strings: Record<string, Record<Language, string>> = {
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },
 	'input.transcribe':            { en: 'Transcribe',                   fr: 'Transcrire' },
 	'input.transcribeLoading':     { en: 'Loading dictionary\u2026',     fr: 'Chargement du dictionnaire\u2026' },
+	// UNUSED SINCE N.108 increment 2: both receipts say `intake.clear`. Kept
+	// for the same reason `input.placeholder` above is.
 	'input.clear':                 { en: 'Clear text',                   fr: 'Effacer le texte' },
 	'input.print':                 { en: 'Print',                        fr: 'Imprimer' },
 
 	// ── Result meta ──────────────────────────────────────────
+	// UNUSED SINCE N.108 increment 2: the word count moved to the intake's
+	// receipt line and says `intake.words` there, because a receipt is not the
+	// instrument line and "words in" needs a timing after it. Kept: ratified
+	// French, and the French table is not ruled.
 	'result.words':                { en: 'words in',                     fr: 'mots en' },
 
 	// ── Metadata fields ─────────────────────────────────────
@@ -439,6 +448,51 @@ const strings: Record<string, Record<Language, string>> = {
 	// value is not an option here; it would print that string in the drawer.
 	'source.heading':              { en: 'Source',                       fr: 'Source' },
 
+	// ── THE ONE INTAKE (N.108 increment 2) ───────────────────
+	//    NINE NEW ENGLISH STRINGS, EVERY FRENCH SLOT CARRYING THE ENGLISH.
+	//    French is deferred by Dann's ruling of 2026-09-02, and this block
+	//    follows the `group.*` block above exactly: `t()` prints
+	//    `[MISSING: key]` for an absent variant, which would put that literal
+	//    inside a French session's intake, so the English stands in both slots
+	//    and the French is OWED. That is not a translation and must not be read
+	//    as one. Every key here is listed in the increment 2 memo.
+	//
+	//    WHAT THEY REPLACE, and none of the replaced strings is deleted: the
+	//    French table is not ruled, and a ratified French string is not a
+	//    build's to throw away. `input.placeholder`, `input.clear`,
+	//    `upload.drop.title`, `upload.drop.browse`, `upload.drop.release`,
+	//    `upload.drop.acceptedNow` and `upload.drop.placeholder` are UNUSED as
+	//    of this ship and stay where they are, marked below.
+	//
+	//    `intake.placeholder` IS DESIGN'S OWN SENTENCE, from the r2 prototype
+	//    at `:359`, where it is marked a placeholder string. It says the two
+	//    things the one field has to say: what to put in it, and that a file
+	//    dropped on it is read as whatever it is.
+	'intake.placeholder': { en: 'Paste or type the poem here. A score or a photograph dropped here is read as what it is.', fr: 'Paste or type the poem here. A score or a photograph dropped here is read as what it is.' },
+	// The receipt lines. %s is the count in each.
+	'intake.lines':       { en: '%s lines',   fr: '%s lines' },
+	'intake.words':       { en: '%s words',   fr: '%s words' },
+	// One Clear for both receipts, because the tag beside it already says which
+	// kind is being cleared. `input.clear` said "Clear text", which named the
+	// kind a second time and could not name the score at all.
+	'intake.clear':       { en: 'Clear',      fr: 'Clear' },
+	'intake.replace':     { en: 'Replace',    fr: 'Replace' },
+	'intake.choose':      { en: 'Choose a file', fr: 'Choose a file' },
+	'intake.dropHint':    { en: 'Drop the other kind here, or a new file of the same kind to replace it.', fr: 'Drop the other kind here, or a new file of the same kind to replace it.' },
+	// THE PDF QUESTION, build brief §3: "A PDF asks once, in place, which it
+	// is. Do not guess." %s is the file's name, so a singer who dropped two
+	// files in a row can see which one is being asked about.
+	'intake.pdf.title':   { en: 'Is this PDF the poem, or the score?', fr: 'Is this PDF the poem, or the score?' },
+	'intake.pdf.why':     { en: 'Ilya cannot tell from the file itself. %s', fr: 'Ilya cannot tell from the file itself. %s' },
+	'intake.pdf.poem':    { en: 'The poem', fr: 'The poem' },
+	'intake.pdf.score':   { en: 'The score', fr: 'The score' },
+	'intake.pdf.reading': { en: 'Reading the words out of the PDF…', fr: 'Reading the words out of the PDF…' },
+	// The honest answer where a PDF answered "the poem" holds no text at all,
+	// which is what a scan is. It is a mis-answer and not a broken file, so it
+	// says what happened and points at the other answer.
+	'intake.pdf.noText':  { en: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.', fr: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.' },
+
+
 	// ── Word Console placeholder ─────────────────────────────
 	'console.placeholder':         { en: 'Analysis',                     fr: 'Analyse' },
 
@@ -572,7 +626,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// one string he added a word to is not a thing this ship was asked to
 	// do.
 	// 'upload.drop.placeholder' is above; the three keys here are LIVE again.
+	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
 	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
+	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
 	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
 	// THE LEAD-IN IS GONE AND THE « ou » IS BACK, N.65, Dann's ruling of
 	// 2026-08-21: "If we remove 'Acceptés maintenant :/ Accepted now:' we let
@@ -595,7 +651,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// NO TERMINAL FULL STOP. Without a lead-in the line is a bare list, not a
 	// sentence. If Dann wants the stop back it is one character in each
 	// language.
+	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
 	'upload.drop.acceptedNow': { en: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph', fr: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie' },
+	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
 	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
 	// translation this desk chose, and no other French ships for it.

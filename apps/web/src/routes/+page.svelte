@@ -1759,6 +1759,32 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// Clearing used to REMOVE the gloss key and write an empty poem; it now
 		// writes an empty list and an empty poem, which restores identically.
 	}
+	/**
+	 * CLEAR ON THE SCORE'S RECEIPT (N.108 increment 2).
+	 *
+	 * The poem's Clear and this one cannot reach each other's material, which
+	 * is the ruling the build brief states as a gate: "Clear on one kind leaves
+	 * the other." `handleClear` above touches `doc.inputText`, the lines and
+	 * the glosses; this touches the score and the two things that only exist
+	 * because of one.
+	 *
+	 * THE PLACEMENTS SURVIVE, and `SongDocument.detachSource` carries the
+	 * reasoning: N.68 keys them positionally and only the singer destroys them,
+	 * on purpose. Putting the same score back brings them with it.
+	 *
+	 * `restoreSource` IS CLEARED TOO, because it is what the uploader re-ingests
+	 * on a remount. Left standing, a song switch away and back would bring the
+	 * cleared score home again.
+	 */
+	function handleClearScore(): void {
+		ingestedScore = null;
+		noLyricsFile = null;
+		orphanedCount = 0;
+		arrivalPage = null;
+		restoreSource = null;
+		doc.detachSource();
+	}
+
 	function handlePrint() {
 		window.print();
 	}
@@ -2576,6 +2602,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let restoreSource = $state(restoreFrom(opened?.source ?? null, opened?.loaded?.record?.source?.page));
 
 	/**
+	 * N.108 increment 2. THE UPLOADER INSTANCE, so the one intake can hand it a
+	 * file. It is null with the shane wall up, and the call site chains on that.
+	 *
+	 * `$state`, AND THE COMPILER ASKS FOR IT. `svelte-check` raises
+	 * `non_reactive_update` on a plain `let` that a `bind:this` writes, and it
+	 * is describing a real consequence rather than a style: the uploader is
+	 * inside `{#key doc.id}`, so a song switch unmounts and remounts it and this
+	 * binding has to be able to say so. `RootPanel`'s own file input carries the
+	 * same note for the same reason.
+	 */
+	let uploaderEl = $state<ScoreUploader | null>(null);
+
+	/**
 	 * Keep the singer's own file, byte for byte.
 	 *
 	 * Two hashes, doing two different jobs (design §2.3, §2.4): `contentHash`
@@ -3189,6 +3228,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onexportall={() => void handleExportAll()}
 					{songLibrary}
 					{sections}
+					{wordCount}
+					{hasResults}
+					isMobile={isPhone}
+					score={ingestedScore ? { fileName: ingestedScore.fileName } : null}
+					onfile={(file) => void uploaderEl?.take(file)}
+					onclearscore={handleClearScore}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -3207,13 +3252,26 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							     `acceptList`, which is N.70's ruling and not a layout
 							     question; see the binder input above for the whole
 							     reason. -->
+							<!-- N.108 increment 2. `bind:this`, because the one intake
+							     hands files IN: `RootPanel`'s field takes the drop and
+							     the pick and calls `take()` on this instance, which
+							     sniffs and routes. `isMobile` left, because the picker
+							     N.70 governs left with it.
+
+							     THE BINDING IS OPTIONAL-CHAINED AT ITS ONE CALL SITE,
+							     which is not defensive tidying: this component is
+							     behind `INCLUDE_SHANE`, so with the wall up there is
+							     no instance to call and the field's file handlers do
+							     nothing, which is what a walled-off score path should
+							     do. -->
 							{#key doc.id}
 								<ScoreUploader
+									bind:this={uploaderEl}
 									{language}
-									isMobile={isPhone}
 									restore={restoreSource}
 									oningested={(ingested, file, origin, page) =>
 										void handleArrival(ingested, file, origin, page)}
+									onpoem={(text) => handleInput(text)}
 								/>
 							{/key}
 							{#if noLyricsFile}
@@ -3568,7 +3626,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				<AnalysisStation
 					{loaderState}
 					{hasResults}
-					{wordCount}
 					{transcribeMs}
 					{language}
 					{showInspector}

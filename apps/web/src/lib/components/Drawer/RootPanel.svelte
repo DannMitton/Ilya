@@ -101,6 +101,37 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		 * reads the same object. `sections.svelte.ts` holds the mechanism.
 		 */
 		sections: SectionSet;
+		/**
+		 * N.108 increment 2, and it is N.70's ruling arriving with the picker it
+		 * governs. See `acceptList` below for the whole of it. `+page.svelte`
+		 * passes `isPhone`, the same value it passed the uploader at 1a.
+		 */
+		isMobile?: boolean;
+		/**
+		 * N.108 increment 2. THE POEM'S RECEIPT CARRIES THE WORD COUNT, ruled
+		 * 2026-09-02: "the word count and Clear live on the intake's receipt
+		 * line." It is the instrument line's own count, moved off
+		 * `AnalysisStation`'s summary, so it is the transcription's words and it
+		 * appears only once there has been a transcription.
+		 */
+		wordCount: number;
+		hasResults: boolean;
+		/**
+		 * N.108 increment 2. THE SCORE'S RECEIPT, or null where no score is
+		 * attached. It is the ACCEPTED score, not a file mid-flight: the uploader
+		 * still asks its own questions and still ends on "Continue to analysis",
+		 * and this line is what stands after that.
+		 */
+		score: { fileName: string } | null;
+		/**
+		 * A file arrived at the one field, by drop or by picker. The intake does
+		 * not sniff it: `ScoreUploader.take` does, with the same
+		 * `detectScoreFormat` dispatch uses, so there is one opinion about what a
+		 * file is and not two.
+		 */
+		onfile: (file: File) => void;
+		/** Clear on the SCORE receipt. Leaves the poem alone. */
+		onclearscore: () => void;
 	}
 
 	let {
@@ -118,6 +149,12 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		onexportall,
 		songLibrary,
 		sections,
+		isMobile = false,
+		wordCount,
+		hasResults,
+		score,
+		onfile,
+		onclearscore,
 	}: Props = $props();
 
 	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". The watermark and the sage
@@ -128,6 +165,118 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 
 	const charCount = $derived(inputText.length);
 	const showWarning = $derived(charCount > 5000);
+
+	/* ── THE ONE INTAKE (N.108 increment 2) ─────────────────────────
+	   One field takes paste, typing, a dropped file of any format the ingest
+	   reads, and the photograph. It is the textarea: the poem is the thing a
+	   singer edits in place, so the field that holds it must never go away,
+	   and everything else the intake does hangs off it.
+
+	   DESIGN'S r2 PROTOTYPE HIDES THE FIELD ONCE MATERIAL ARRIVES (`:200`) AND
+	   THIS BUILD DOES NOT. In a static mock the state is set by a selector; in
+	   the app the poem arrives one keystroke at a time, and a field that
+	   unmounts on the first character cannot be typed into. So the field
+	   stays, the receipts sit under it, and REPLACE on the poem line selects
+	   what is there so the next paste takes its place. That is the prototype's
+	   Replace doing the same job through the field that survived. Recorded in
+	   the memo as a departure and as Dann's to rule.
+
+	   THE RECEIPT LINE PER KIND, one line each, is the prototype at `:362-:374`
+	   and the brief §3: count, Clear and Replace, and a second file of a kind
+	   already present replaces that kind only. Clear on one kind leaves the
+	   other, because the two receipts read two different pieces of state and
+	   neither handler touches the other's. */
+
+	/** The poem's own measure, for its receipt. Blank lines are not lines of
+	 *  verse; a poem pasted with a trailing newline must not report one more
+	 *  line than it has. */
+	const lineCount = $derived(
+		inputText.split('\n').filter((l) => l.trim() !== '').length
+	);
+
+	/**
+	 * N.70 (Dann's ruling, 2026-08-16), MOVED HERE WITH THE PICKER IT GOVERNS.
+	 * It was `ScoreUploader`'s until N.108 increment 2 gave the drawer one
+	 * intake; the reasoning is his and is reproduced whole rather than cited,
+	 * because a ruling that lives one file away from the line it governs is a
+	 * ruling that gets deleted by someone tidying.
+	 *
+	 * iOS matches `accept` by REGISTERED TYPE, not by the string, and it has no
+	 * registration for `.musicxml`, `.mnx`, `.musx`, or `.mscz`. So on a phone
+	 * every format Ilya can actually read is greyed out and unselectable, while
+	 * PDF and images, which iOS does have registrations for, stay pickable.
+	 * Dann hit this on his own iPhone, 2026-08-16.
+	 *
+	 * A narrower MIME list was considered and rejected: iOS would need a type
+	 * registration it probably does not have, so it could fail exactly as
+	 * silently. Dropping the attribute cannot half-work.
+	 *
+	 * Nothing is loosened about what Ilya ACCEPTS: the sniff reads the bytes and
+	 * every refusal is named. This only changes which files the picker will let
+	 * a singer point at.
+	 *
+	 * NAMED CONSEQUENCE: `isMobile` is a WIDTH test, not an iOS test, so a
+	 * narrow desktop window also gets the unfiltered picker. Accepted rather
+	 * than inventing a second detector.
+	 *
+	 * THE PHOTOGRAPH PICKER TAKES THE SAME RULE, and that is the ruling's own
+	 * words rather than an extension of them: the brief says no `accept`
+	 * attribute on a coarse pointer, with no exception for `image/*`. On a fine
+	 * pointer it is filtered to images, because the button says photograph.
+	 */
+	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,image/*';
+	const acceptList = $derived(isMobile ? undefined : ACCEPT);
+	const photoAcceptList = $derived(isMobile ? undefined : 'image/*');
+
+	let dragging = $state(false);
+	let textareaEl = $state<HTMLTextAreaElement | undefined>(undefined);
+	let fileInputEl = $state<HTMLInputElement | undefined>(undefined);
+	let photoInputEl = $state<HTMLInputElement | undefined>(undefined);
+
+	function chooseFile(): void {
+		fileInputEl?.click();
+	}
+
+	function choosePhotograph(): void {
+		photoInputEl?.click();
+	}
+
+	function onPick(e: Event): void {
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		input.value = ''; // reset so the same file can be re-selected
+		if (file) onfile(file);
+	}
+
+	/* A FILE DROP IS TAKEN AND A TEXT DROP IS NOT. `preventDefault` runs only
+	   where `dataTransfer` actually carries a file, so dropping selected text
+	   onto the field still inserts it the way a textarea always has. Dragover
+	   is prevented unconditionally, because without it the browser refuses the
+	   drop before this handler ever sees it. */
+	function onDrop(e: DragEvent): void {
+		dragging = false;
+		const file = e.dataTransfer?.files?.[0];
+		if (!file) return;
+		e.preventDefault();
+		onfile(file);
+	}
+
+	function onDragOver(e: DragEvent): void {
+		e.preventDefault();
+		dragging = true;
+	}
+
+	function onDragLeave(): void {
+		dragging = false;
+	}
+
+	/** Replace on the POEM's receipt. The field never left, so this is what
+	 *  Replace means where it did not: the poem is selected and the next thing
+	 *  typed or pasted takes its place. Nothing is destroyed by pressing it. */
+	function replacePoem(): void {
+		textareaEl?.focus();
+		textareaEl?.select();
+	}
 	/* `dictReady` IS GONE with `.root-panel`. It set a `status-ok` class on
 	   that wrapper, and nothing in this file or any other ever declared a rule
 	   for it, so the wrapper's removal took its only reader and left a derived
@@ -144,10 +293,10 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   body now, so it unmounts when a singer shuts the station and this
 	   binding has to be able to say so. Nothing else changes; the one read,
 	   `handleOcrClick`, already optional-chained. */
-	let fileInputEl = $state<HTMLInputElement | undefined>(undefined);
+	let ocrFileInputEl = $state<HTMLInputElement | undefined>(undefined);
 
 	function handleOcrClick() {
-		fileInputEl?.click();
+		ocrFileInputEl?.click();
 	}
 
 	async function handleOcrFile(e: Event) {
@@ -246,21 +395,47 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			<span class="status-text">{loaderState.error}</span>
 		</div>
 	{/if}
-	<div class="textarea-wrapper" class:empty={sourceIsEmpty}>
-		<!-- THE TEXT WATERMARK (N.65). Empty field only, which is Dann's own
-		     ruling: it never sits under a pasted poem. `inputText` is the
-		     source of truth for the field's value, so the mark leaves the
-		     instant anything is typed and returns when Clear empties it. It is
-		     BEHIND the placeholder by stacking, not by luck: the textarea is
-		     transparent with `z-index: 1` and this wrapper holds the white
-		     fill, so the placeholder always paints over the mark even if a
-		     singer drags the field short enough for the two to meet. -->
+
+	<!-- ═══ THE ONE FIELD (N.108 increment 2) ═══════════════════════════
+	     It was two: a textarea for the poem and a drop zone for the score,
+	     side by side under one heading since N.73 S2. It is one now, and the
+	     kind is decided by what arrives rather than by which box it was put
+	     in. The frame is Design's r2 prototype at `:190`, a neutral dashed
+	     rule around the whole intake; the field inside it is the textarea,
+	     unchanged in font, size and behaviour.
+
+	     THE DASHED RULE IS THE DROP AFFORDANCE, and it is neutral on purpose.
+	     "Hue names place" ruled sage for the text intake and lavender for the
+	     score intake (Dann, 2026-07-13, ratified since). There is one place
+	     now, so there is one hue and it is neither of theirs. Design drew it
+	     that way and marked the fill a placeholder; it is Dann's on the walk.
+
+	     THE DROP TARGET IS THE WHOLE FRAME, receipts and buttons included, so
+	     a singer who already has a poem can still drop a score without
+	     hunting for a strip of empty field. -->
+	<div
+		class="intake"
+		class:dragging
+		class:empty={sourceIsEmpty}
+		ondragover={onDragOver}
+		ondragleave={onDragLeave}
+		ondrop={onDrop}
+		role="group"
+		aria-label={t('source.heading', language)}
+	>
+		<!-- THE TEXT WATERMARK (N.65), unchanged and still bound to the same
+		     one name. Empty field only, which is Dann's own ruling: it never
+		     sits under a pasted poem.
+
+		     THE SCORE WATERMARK IS GONE with the box it stood in. It was the
+		     other half of N.65's pair and there is no second box to mark. -->
 		{#if sourceIsEmpty}
 			<IntakeWatermark word={t('input.watermark', language)} colour="var(--light-sage)" />
 		{/if}
 		<textarea
 			class="text-input"
-			placeholder={t('input.placeholder', language)}
+			bind:this={textareaEl}
+			placeholder={t('intake.placeholder', language)}
 			value={inputText}
 			oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
 			onkeydown={handleKeydown}
@@ -268,7 +443,12 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			disabled={loaderState.isLoading || ocrProcessing}
 		></textarea>
 
-		<!-- OCR camera icon: top-right corner of textarea -->
+		<!-- OCR camera icon: top-right corner of the field. It reads CYRILLIC
+		     TEXT out of a picture and puts it in the poem, which is a
+		     different act from reading a score out of a picture, and the two
+		     stay apart because the button a singer presses is what says which
+		     they meant. A dropped picture goes to the SCORE reader, ruled by
+		     the brief: "a photograph goes to the reader." -->
 		<button
 			class="ocr-btn"
 			onclick={handleOcrClick}
@@ -292,13 +472,75 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			{/if}
 		</button>
 
-		<!-- Hidden file input for image selection -->
+		<!-- Hidden file input for the OCR image selection. -->
 		<input
 			type="file"
 			accept="image/*"
 			class="ocr-file-input"
-			bind:this={fileInputEl}
+			bind:this={ocrFileInputEl}
 			onchange={handleOcrFile}
+		/>
+
+		<!-- ── THE RECEIPTS, one line per kind (the prototype `:362-:374`).
+		     Each carries its own Clear and its own Replace, and neither
+		     handler can reach the other's material: the poem's Clear is
+		     `onclear`, which empties `inputText`, and the score's is
+		     `onclearscore`, which detaches the source. The tags are
+		     `input.watermark` and `upload.watermark`, the two ratified words
+		     the watermarks already used, so the receipt names each kind in
+		     the word the field named it in. -->
+		{#if !sourceIsEmpty}
+			<div class="intake-receipt receipt-poem">
+				<span class="tag">{t('input.watermark', language)}</span>
+				<span class="line">{t('intake.lines', language).replace('%s', String(lineCount))}</span>
+				{#if hasResults}
+					<span class="count">{t('intake.words', language).replace('%s', String(wordCount))}</span>
+				{/if}
+				<button type="button" class="receipt-btn" onclick={onclear}>{t('intake.clear', language)}</button>
+				<button type="button" class="receipt-btn" onclick={replacePoem}>{t('intake.replace', language)}</button>
+			</div>
+		{/if}
+		{#if score}
+			<div class="intake-receipt receipt-score">
+				<span class="tag">{t('upload.watermark', language)}</span>
+				<span class="line" title={score.fileName}>{score.fileName}</span>
+				<button type="button" class="receipt-btn" onclick={onclearscore}>{t('intake.clear', language)}</button>
+				<button type="button" class="receipt-btn" onclick={chooseFile}>{t('intake.replace', language)}</button>
+			</div>
+		{/if}
+
+		<!-- ── THE TWO WAYS IN THAT ARE NOT A DROP. They stay drawn in every
+		     state, which is a departure from the prototype (`:200` hides them
+		     once material arrives and leaves Replace to do the picking). A
+		     phone cannot drop a file, so hiding these would strand a singer
+		     who has a poem and wants to add a score with no way to add one. -->
+		<div class="intake-actions">
+			<button type="button" class="action-btn btn-ghost" onclick={chooseFile}>
+				{t('intake.choose', language)}
+			</button>
+			<button type="button" class="action-btn btn-ghost" onclick={choosePhotograph}>
+				{t('upload.scanTooltip', language)}
+			</button>
+		</div>
+
+		{#if !sourceIsEmpty || score}
+			<p class="intake-drop-hint">{t('intake.dropHint', language)}</p>
+		{/if}
+
+		<!-- The two pickers. One rule governs both; see `acceptList`. -->
+		<input
+			type="file"
+			accept={acceptList}
+			class="hidden-input"
+			bind:this={fileInputEl}
+			onchange={onPick}
+		/>
+		<input
+			type="file"
+			accept={photoAcceptList}
+			class="hidden-input"
+			bind:this={photoInputEl}
+			onchange={onPick}
 		/>
 	</div>
 
@@ -310,29 +552,19 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		<p class="ocr-error">{ocrError}</p>
 	{/if}
 
-	<!-- SOURCE'S OWN ACTIONS, N.65 ship one. Two buttons, not three: Print
-	     left with the binder controls. The `1fr 1fr 2fr` grid this came out
-	     of does not exist any more, so `.binder-row`'s comment about column
-	     alignment went with it. Clear and Transcribe keep the widths they
-	     had in that grid, 1fr and 2fr, so the primary action is still the
-	     wide one.
+	<!-- THE SCORE ENGINE'S ANSWERS, and nothing else: `ScoreUploader` draws
+	     no field of its own since N.108 increment 2. What appears here is the
+	     PDF question, the clef-and-key question, the wait, the read report,
+	     the fidelity banner and every named refusal, and each of them is
+	     about a file that arrived at the frame directly above. -->
+	{@render sourceScore?.()}
 
-	     BETWEEN THE TWO FIELDS, RULED BY DANN 2026-08-20 on his walk of the
-	     silhouette ship. They used to sit below the score box, so
-	     Transcribe, which acts on the TEXTAREA, sat under a field it does
-	     not touch. It now sits directly under the textarea it acts on, and
-	     the score box follows the pair. `transcribeError` comes with them,
-	     because it is this button's own failure and it reports where the
-	     button is. The Finale disclosure does NOT come with them: it is
-	     about score files, it lives inside `ScoreUploader`'s own root, and
-	     it travels with the score box by construction. -->
-	<div class="source-actions">
-		<button
-			class="action-btn btn-ghost"
-			onclick={onclear}
-		>
-			{t('input.clear', language)}
-		</button>
+	<!-- ── THE ONE TRANSCRIBE. Ruled 2026-09-02: "The Transcribe action lives
+	     under the intake in Piece and nowhere else." Clear left this row for
+	     the poem's receipt, which is the other half of the same ruling, so
+	     the row holds one button and the `1fr 2fr` grid that made Transcribe
+	     the wide one has nothing left to divide. -->
+	<div class="intake-transcribe">
 		<button
 			class="action-btn btn-primary"
 			disabled={!canTranscribe}
@@ -347,12 +579,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		     button produced it, and directly under it. -->
 		<p class="error-text">{transcribeError}</p>
 	{/if}
-
-	<!-- N.73 S2. Score intake, beside the wired scanner. Text intake and
-	     score intake are one Source region: the drop surface and the
-	     no-lyrics notice that follows it came here from the Fit drawer.
-	     BELOW the action row since 2026-08-20; see that row's comment. -->
-	{@render sourceScore?.()}
 
 	</div>
 </div>
@@ -446,63 +672,143 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		font-family: var(--font-sans);
 	}
 
-	/* ── Textarea with OCR overlay ────────────────────────── */
+	/* ── THE ONE FIELD'S FRAME (N.108 increment 2) ──────────
+	   `.textarea-wrapper` is `.intake`, and it grew from a box around one
+	   textarea into the frame around the whole intake: the field, both
+	   receipts, the two buttons and the drop hint.
 
-	/* N.65 ship one. THE 8px TOP MARGIN IS GONE. It gave the textarea room
-	   below the metadata block when the two were adjacent; the metadata block
-	   is a pinned anchor now and the textarea is the first entry under
-	   SOURCE's header, where 8px would add to the header's own 0.4rem and
-	   break ruling 2. `ScoreUploader`'s `.uploader` keeps its matching 8px:
-	   it is not first under a header. */
-	/* THE WHITE FILL LIVES HERE NOW, not on the textarea, and that is what
-	   lets the watermark sit BEHIND the placeholder instead of merely beside
-	   it. A `::placeholder` is part of the textarea, so a mark can only get
-	   under it by getting under the textarea, and a mark under an opaque
-	   textarea is a mark nobody sees. The fill moved up one box; the field
-	   looks identical.
+	   THE PROTOTYPE'S OWN RULE, `:190`: a 1px DASHED neutral border at ink
+	   0.28, the tree's 4px control radius, `--paper-light` as the fill, 12px of
+	   padding. Dashed because the frame takes a drop; neutral because there is
+	   one intake and "hue names place" has one place to name. Design marked the
+	   fill a placeholder and this ship carries that forward rather than
+	   inventing a different one: no hex is written here that `app.css` does not
+	   already hold.
 
-	   The radius is the textarea's own 4px, repeated here so the white does
-	   not square off the corners the border rounds. */
-	.textarea-wrapper {
+	   THE WHITE FILL LEFT WITH THE PAIR. It was here so the watermark could sit
+	   BEHIND the placeholder while the textarea stayed transparent, and that
+	   stacking is unchanged: the mark is still under a transparent field, over
+	   this frame's fill, whatever colour the fill is.
+
+	   `position: relative` IS STILL THE WATERMARK'S CONTAINING BLOCK, and now
+	   the OCR button's too. */
+	.intake {
 		position: relative;
-		background: white;
+		border: 1px dashed rgba(26, 22, 18, 0.28);
 		border-radius: 4px;
-		/* `.dropzone`'s own value, copied so the two intakes tint at one
-		   speed. */
+		background: var(--paper-light);
+		padding: 12px;
+		/* `.dropzone`'s own value, kept so the frame tints at the speed the
+		   score box always did. */
 		transition: background 0.15s ease;
 	}
 
-	/* ── THE SAGE HOVER (N.65). Dann's ruling, 2026-08-20, on his walk of
-	   `0e5ed6e`: "I notice the score input field has a lavender mouseover. I
-	   love it. Can the text input field have a sage mouseover?"
+	/* ── THE SAGE HOVER (N.65), KEPT AND NARROWED ───────────
+	   Dann's ruling, 2026-08-20: "Can the text input field have a sage
+	   mouseover?" It is `--sage` #8B9A7D at 6 percent, and it stays bound to
+	   `sourceIsEmpty`, which is his own correction of the same day: an
+	   unconditional hover would tint the singer's poem every time the cursor
+	   crossed it.
 
-	   THE TWIN'S TREATMENT IN THIS BOX'S OWN HUE. `.dropzone:hover` is
-	   `rgba(142, 126, 155, 0.06)`, which is `--deeper-lavender` at 6 percent,
-	   the score box's own border hue. This is `--sage` #8B9A7D at the same 6
-	   percent, which is the text box's own border hue. Hue names place, so
-	   the two intakes must not share one tint.
-
-	   NO DRAG STATE. `.dropzone.dragging` doubles the tint to 12 percent
-	   because it takes a drop. The textarea takes none, so there is nothing
-	   for a second value to describe.
-
-	   ON THE WRAPPER, NOT THE TEXTAREA, and this is the whole reason the
-	   wrapper exists. `.text-input` is transparent at `z-index: 1`, ABOVE the
-	   watermark; a background on it would paint over `text` and hide the
-	   thing the wrapper was built to reveal. The wrapper sits BELOW the
-	   watermark, so the tint goes behind the mark and the mark stays on top
-	   of it. The wrapper's box is also the textarea's border box exactly,
-	   because the textarea is `display: block; width: 100%` and the wrapper
-	   has no padding of its own, so the hover target matches what the score
-	   box gets: the whole bordered field.
-
-	   EMPTY ONLY, and that is Dann's correction of the same day. The score
-	   box's hover disappears because the whole drop zone unmounts once a
-	   score arrives. The textarea never unmounts, so an unconditional hover
-	   would tint the singer's poem every time the cursor crossed it. It is
-	   bound to `sourceIsEmpty`, the same name the watermark is bound to. */
-	.textarea-wrapper.empty:hover {
+	   THE LAVENDER TWIN IS GONE with the second box. `.dropzone:hover` was the
+	   same 6 percent in `--deeper-lavender`, and there is nothing left for it
+	   to describe. */
+	.intake.empty:hover {
 		background: rgba(139, 154, 125, 0.06);
+	}
+
+	/* THE DRAG STATE IS THE SCORE BOX'S, at its own doubled tint, moved onto
+	   the frame that takes the drop now. `.dropzone.dragging` was
+	   `rgba(142, 126, 155, 0.12)`; this is the same 12 percent in the sage the
+	   one field hovers in, because one field means one hue. */
+	.intake.dragging {
+		background: rgba(139, 154, 125, 0.12);
+	}
+
+	/* ── The receipts (the prototype `:192-:196`) ───────────
+	   One row per kind, tag then line then count then the two verbs. The
+	   44px minimum is the prototype's and is the thumb target; the hairline
+	   under each is the drawer's own station hairline value, so a receipt
+	   separates from what follows it the way a station does. */
+	.intake-receipt {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 44px;
+		border-bottom: 1px solid rgba(26, 22, 18, 0.08);
+	}
+
+	.intake-receipt .tag {
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-tertiary);
+		flex: none;
+		width: 40px;
+	}
+
+	/* The file name can be long and the drawer is 520px. It takes the room
+	   that is left and ellipsises; the whole name is on the element's title. */
+	.intake-receipt .line {
+		flex: 1;
+		min-width: 0;
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		color: var(--ink-primary);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	/* The word count, moved off `AnalysisStation`'s instrument line. Tabular
+	   figures so it does not jitter as the count grows. */
+	.intake-receipt .count {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+		font-variant-numeric: tabular-nums;
+		flex: none;
+	}
+
+	/* Clear and Replace. Quiet, because a receipt is a statement and these are
+	   its two afterthoughts; the 44px is the prototype's thumb target. */
+	.receipt-btn {
+		flex: none;
+		min-height: 44px;
+		padding: 0 8px;
+		border: none;
+		background: transparent;
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--stone-500);
+		cursor: pointer;
+	}
+
+	.receipt-btn:hover {
+		color: var(--ink-primary);
+	}
+
+	/* The two ways in that are not a drop. They wrap on a phone rather than
+	   squeezing, because the photograph button's sentence is long. */
+	.intake-actions {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		margin-top: 8px;
+	}
+
+	.intake-drop-hint {
+		margin: 0;
+		padding-top: 8px;
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+	}
+
+	.hidden-input {
+		display: none;
 	}
 
 	/* THE BORDER IS 1px, AND THE WEIGHT CHANGE IS NOT RULED. Brief §3.6
@@ -521,7 +827,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		font-family: var(--font-serif);
 		font-size: 0.9rem;
 		color: var(--ink-primary);
-		/* TRANSPARENT, with the white on `.textarea-wrapper`. See that rule. */
+		/* TRANSPARENT, with the fill on `.intake`. See that rule. */
 		background: transparent;
 		/* `display: block` because the default `inline-block` put the textarea
 		   on a text baseline, which left a 7px strip of wrapper below it,
@@ -675,11 +981,13 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   for Output, so there is no second row to align against and the grid
 	   has nothing left to do. */
 
-	/* Source's foot. Clear and Transcribe keep the 1fr and 2fr they held in
-	   the old grid, so the primary action is still the wide one. */
-	.source-actions {
+	/* THE ONE TRANSCRIBE, N.108 increment 2. `.source-actions` was a
+	   `1fr 2fr` grid holding Clear and Transcribe, and Clear left it for the
+	   poem's receipt on Dann's ruling of 2026-09-02. One button has no columns
+	   to divide, so this is a grid of one and Transcribe takes the width, which
+	   is what "the primary action is the wide one" always meant. */
+	.intake-transcribe {
 		display: grid;
-		grid-template-columns: 1fr 2fr;
 		gap: 6px;
 	}
 

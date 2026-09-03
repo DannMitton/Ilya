@@ -313,6 +313,28 @@ export class SongDocument {
 		this.source = provenance;
 	}
 
+	/**
+	 * The score has been cleared off the intake's receipt. N.108 increment 2.
+	 *
+	 * `null` IS NOT `undefined` HERE, and the difference is the whole method.
+	 * The driver reads `undefined` as "leave the stored bytes exactly as they
+	 * are", which is every autosave, and `null` as "delete them", in the same
+	 * transaction as the record. So this queues the deletion the way
+	 * `attachSource` queues a write, through the one scheduler and the one save
+	 * site. N.27 is open: no second silent save enters here.
+	 *
+	 * THE PLACEMENTS ARE NOT TOUCHED, and that is deliberate rather than an
+	 * omission. `mergeOnUpload` keys placements positionally and rebuilds
+	 * nothing (N.68), so a singer who clears a score and puts the same one back
+	 * gets their placements back with it. Emptying them here would make Clear
+	 * the destructive act N.68 exists to prevent, and the receipt's Clear is
+	 * not that: it says a score is no longer attached.
+	 */
+	detachSource(): void {
+		this.#pendingSource = null;
+		this.source = null;
+	}
+
 	/** Write anything pending now, and wait for it. */
 	async flush(): Promise<void> {
 		await this.#scheduler.flush();
