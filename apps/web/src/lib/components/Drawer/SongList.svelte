@@ -275,6 +275,15 @@
 		border-radius: 4px;
 	}
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   `.song-open` is NOT changed: it is the row that names the song, not a
+	   button on it, and `.is-open` draws it with a rule down its left edge. */
 	.song-btn {
 		flex: 0 0 auto;
 		padding: 0.3rem 0.45rem;
@@ -283,7 +292,7 @@
 		color: var(--ink-secondary);
 		background: none;
 		border: 1px solid transparent;
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 	}
 
@@ -300,6 +309,12 @@
 		margin-bottom: 6px;
 	}
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.new-btn {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);
@@ -308,7 +323,7 @@
 		color: var(--stone-500);
 		background: transparent;
 		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		transition: opacity 0.12s;
 	}

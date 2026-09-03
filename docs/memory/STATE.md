@@ -139,9 +139,18 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > **Spent by this increment:** the increment 2 finding "the drawer takes the
 > 175 ms tab slide (`Drawer.svelte:1148-1162`)". Those rules are deleted.
 >
-> **THE ONE THING: Dann ships and walks N.108 increment 3**, then rules on the
-> ritual's fit. Then N.111, N.110 (set aside, briefed), the release order
-> N.85 to N.88, N.84, N.83.
+> **INCREMENT 3 SHIPPED `42f6871` 2026-09-03 and WALKED BY DANN, desk and
+> phone, four steps.** His words: "It looks ravishing" and "it looks great
+> on mobile." Both riders walked. DESK DEFAULT on the fit, not waved off: the
+> ritual keeps its inner scroll (memo §2). **N.108 IS CLOSED.** Move its whole
+> record to LOG.md at the close of this session.
+> Ruled on the walk, riding with the next Code paste: a top inset on the
+> drawer so Piece clears the banner (INBOX, 2026-09-03). Also owed from memo
+> §9: the empty-paper hint still says "chevron on the left".
+> **THE ONE THING: N.111, the clitic seat.** Next step is the desk's: read
+> `claude/e24-the-unused-boolean_2026-08-04.md` in full and write the brief.
+> After N.111: N.110 (set aside, briefed), the release order N.85 to N.88,
+> N.84, N.83.
 
 > Nine ships this session before N.108, all walked or proved: N.104, N.105,
 > N.102 (three), N.106, N.103, N.107.

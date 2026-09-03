@@ -218,26 +218,21 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	 * narrow desktop window also gets the unfiltered picker. Accepted rather
 	 * than inventing a second detector.
 	 *
-	 * THE PHOTOGRAPH PICKER TAKES THE SAME RULE, and that is the ruling's own
-	 * words rather than an extension of them: the brief says no `accept`
-	 * attribute on a coarse pointer, with no exception for `image/*`. On a fine
-	 * pointer it is filtered to images, because the button says photograph.
+	 * N.108 increment 4: THERE IS ONE PICKER NOW and this rule governs it, as
+	 * it governed the two before. The photograph picker that carried the same
+	 * rule with an `image/*` filter is gone; `image/*` is still in ACCEPT, so
+	 * a photograph is pickable on a fine pointer and every kind is pickable on
+	 * a coarse one, which is the whole of N.70.
 	 */
 	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,image/*';
 	const acceptList = $derived(isMobile ? undefined : ACCEPT);
-	const photoAcceptList = $derived(isMobile ? undefined : 'image/*');
 
 	let dragging = $state(false);
 	let textareaEl = $state<HTMLTextAreaElement | undefined>(undefined);
 	let fileInputEl = $state<HTMLInputElement | undefined>(undefined);
-	let photoInputEl = $state<HTMLInputElement | undefined>(undefined);
 
 	function chooseFile(): void {
 		fileInputEl?.click();
-	}
-
-	function choosePhotograph(): void {
-		photoInputEl?.click();
 	}
 
 	function onPick(e: Event): void {
@@ -282,54 +277,19 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   value that computed an answer nobody asked. Deleted rather than moved.
 	   N.108 increment 1. */
 
-	/* ── OCR state ─────────────────────────────────────────── */
-	let ocrProcessing = $state(false);
-	let ocrError = $state('');
-	/* N.65 ship B. `$state`, WHICH IT WAS NOT, AND THE COMPILER FOUND IT.
-	   `svelte-check` raised `non_reactive_update` the moment SOURCE's body
-	   went behind a retraction gate, and the warning is describing a real
-	   consequence rather than a style: the hidden file input is inside the
-	   body now, so it unmounts when a singer shuts the station and this
-	   binding has to be able to say so. Nothing else changes; the one read,
-	   `handleOcrClick`, already optional-chained. */
-	let ocrFileInputEl = $state<HTMLInputElement | undefined>(undefined);
+	/* ── THE OCR MOVED OUT, N.108 increment 4 ───────────────
+	   The camera icon that stood in the field's top-right corner is gone with
+	   the photograph button beside it, ruled by Dann 2026-09-03: the icon,
+	   Choose a file, and Read a score from a photograph "all serve the same
+	   function". What the icon did has not gone anywhere. A picture picked or
+	   dropped now asks in place which it is, and the poem answer runs exactly
+	   the same Tesseract read, in `ScoreUploader.svelte`, beside the PDF
+	   question it now shares. The two failure messages went with it, word for
+	   word in both languages.
 
-	function handleOcrClick() {
-		ocrFileInputEl?.click();
-	}
-
-	async function handleOcrFile(e: Event) {
-		const input = e.target as HTMLInputElement;
-		const file = input.files?.[0];
-		if (!file) return;
-
-		ocrProcessing = true;
-		ocrError = '';
-
-		try {
-			const { createWorker } = await import('tesseract.js');
-			const worker = await createWorker('rus');
-			const { data: { text } } = await worker.recognize(file);
-			await worker.terminate();
-
-			if (text.trim()) {
-				oninput(text.trim());
-			} else {
-				ocrError = language === 'en'
-					? 'No text recognised in image.'
-					: 'Aucun texte reconnu dans l\u2019image.';
-			}
-		} catch (err) {
-			ocrError = language === 'en'
-				? 'OCR processing failed.'
-				: 'Échec du traitement OCR.';
-			console.error('OCR error:', err);
-		} finally {
-			ocrProcessing = false;
-			// Reset so the same file can be re-selected
-			input.value = '';
-		}
-	}
+	   THIS PANEL KEEPS NO OCR STATE, so the field is no longer disabled by a
+	   read it cannot see: the wait and the refusal both appear under the field,
+	   where `ScoreUploader` renders every other answer about a file. */
 
 	/* ── Existing handlers ─────────────────────────────────── */
 
@@ -440,46 +400,27 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			oninput={(e) => oninput((e.target as HTMLTextAreaElement).value)}
 			onkeydown={handleKeydown}
 			rows="6"
-			disabled={loaderState.isLoading || ocrProcessing}
+			disabled={loaderState.isLoading}
 		></textarea>
 
-		<!-- OCR camera icon: top-right corner of the field. It reads CYRILLIC
-		     TEXT out of a picture and puts it in the poem, which is a
-		     different act from reading a score out of a picture, and the two
-		     stay apart because the button a singer presses is what says which
-		     they meant. A dropped picture goes to the SCORE reader, ruled by
-		     the brief: "a photograph goes to the reader." -->
-		<button
-			class="ocr-btn"
-			onclick={handleOcrClick}
-			disabled={loaderState.isLoading || ocrProcessing}
-			aria-label={language === 'en' ? 'Scan Cyrillic text from image' : 'Numériser du texte cyrillique à partir d\u2019une image'}
-			title={language === 'en' ? 'Click here for optical character recognition' : 'Cliquez ici pour la reconnaissance optique de caractères'}
-		>
-			{#if ocrProcessing}
-				<span class="ocr-spinner"></span>
-			{:else}
-				<!-- Viewfinder / scan frame icon -->
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-					<!-- Four corner brackets -->
-					<path d="M2 7V2h5"/>
-					<path d="M17 2h5v5"/>
-					<path d="M22 17v5h-5"/>
-					<path d="M7 22H2v-5"/>
-					<!-- Scan line -->
-					<line x1="5" y1="12" x2="19" y2="12"/>
-				</svg>
-			{/if}
-		</button>
+		<!-- THE CAMERA ICON IS GONE, N.108 increment 4, ruled by Dann
+		     2026-09-03 on his walk of `42f6871`: the icon, Choose a file, and
+		     Read a score from a photograph "all serve the same function. Please
+		     consolidate these and find a reasonable place for the user to
+		     perform their file retrieval."
 
-		<!-- Hidden file input for the OCR image selection. -->
-		<input
-			type="file"
-			accept="image/*"
-			class="ocr-file-input"
-			bind:this={ocrFileInputEl}
-			onchange={handleOcrFile}
-		/>
+		     WHAT THE ICON MEANT IS NOW A QUESTION RATHER THAN A BUTTON. It
+		     existed because pressing it was how a singer said "this picture is
+		     text, not music"; the increment 2 comment said so in as many words,
+		     "the two stay apart because the button a singer presses is what says
+		     which they meant". One picker cannot say it that way, so the picture
+		     asks in place, exactly as a PDF has since increment 2, and the poem
+		     answer runs the same OCR. `ScoreUploader.take` holds both questions.
+
+		     A DROPPED PICTURE NOW ASKS TOO. It went straight to the score reader
+		     before, on the brief's "a photograph goes to the reader"; that rule
+		     assumed the camera icon was the other way in, and the icon is gone.
+		     Recorded in the memo as a departure. -->
 
 		<!-- ── THE RECEIPTS, one line per kind (the prototype `:362-:374`).
 		     Each carries its own Clear and its own Replace, and neither
@@ -511,17 +452,21 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			</div>
 		{/if}
 
-		<!-- ── THE TWO WAYS IN THAT ARE NOT A DROP. They stay drawn in every
-		     state, which is a departure from the prototype (`:200` hides them
-		     once material arrives and leaves Replace to do the picking). A
-		     phone cannot drop a file, so hiding these would strand a singer
-		     who has a poem and wants to add a score with no way to add one. -->
+		<!-- ── THE ONE WAY IN THAT IS NOT A DROP. N.108 increment 4, ruled by
+		     Dann 2026-09-03: one Choose a file button, under the field, taking
+		     every kind. It was two, and the second said "Read a score from a
+		     photograph"; a photograph is one of the kinds this one takes, and
+		     `upload.scanTooltip` is marked unused in `i18n.ts` rather than
+		     deleted, on his word.
+
+		     IT STAYS DRAWN IN EVERY STATE, which is a departure from the
+		     prototype (`:200` hides it once material arrives and leaves
+		     Replace to do the picking). A phone cannot drop a file, so hiding
+		     it would strand a singer who has a poem and wants to add a score
+		     with no way to add one. -->
 		<div class="intake-actions">
 			<button type="button" class="action-btn btn-ghost" onclick={chooseFile}>
 				{t('intake.choose', language)}
-			</button>
-			<button type="button" class="action-btn btn-ghost" onclick={choosePhotograph}>
-				{t('upload.scanTooltip', language)}
 			</button>
 		</div>
 
@@ -529,7 +474,7 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			<p class="intake-drop-hint">{t('intake.dropHint', language)}</p>
 		{/if}
 
-		<!-- The two pickers. One rule governs both; see `acceptList`. -->
+		<!-- THE ONE PICKER. N.70 governs it; see `acceptList`. -->
 		<input
 			type="file"
 			accept={acceptList}
@@ -537,21 +482,10 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			bind:this={fileInputEl}
 			onchange={onPick}
 		/>
-		<input
-			type="file"
-			accept={photoAcceptList}
-			class="hidden-input"
-			bind:this={photoInputEl}
-			onchange={onPick}
-		/>
 	</div>
 
 	{#if showWarning}
 		<p class="char-warning">{charCount.toLocaleString()} {t('input.warning', language)}</p>
-	{/if}
-
-	{#if ocrError}
-		<p class="ocr-error">{ocrError}</p>
 	{/if}
 
 	<!-- THE SCORE ENGINE'S ANSWERS, and nothing else: `ScoreUploader` draws
@@ -693,8 +627,11 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	   the fill back onto the textarea would change the frame, which this
 	   ruling did not ask for.
 
-	   `position: relative` IS THE OCR BUTTON'S CONTAINING BLOCK. It was the
-	   watermark's too, and the button is the reader left. */
+	   `position: relative` STAYS WITH NO CAMERA TO CONTAIN. It was the
+	   watermark's containing block, then the OCR button's, and both are gone
+	   (N.108 increments 2 and 4). It is kept because `.dragging` paints this
+	   box and a positioned box is what the frame has always been; removing it
+	   is a change to the frame that nothing asked for. */
 	.intake {
 		position: relative;
 		border: 1px dashed rgba(26, 22, 18, 0.28);
@@ -793,8 +730,9 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		color: var(--ink-primary);
 	}
 
-	/* The two ways in that are not a drop. They wrap on a phone rather than
-	   squeezing, because the photograph button's sentence is long. */
+	/* The one way in that is not a drop, N.108 increment 4. The wrap is kept
+	   from when there were two: a French Choose a file may run longer than an
+	   English one, and a row that wraps costs nothing when it does not. */
 	.intake-actions {
 		display: flex;
 		gap: 8px;
@@ -846,7 +784,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		border: 1px solid var(--sage);
 		border-radius: 4px;
 		padding: 0.5rem 0.6rem;
-		padding-right: 2.2rem; /* room for the OCR icon */
 		/* ── 75 PERCENT OF ITS OWN HEIGHT, AT EITHER FONT SIZE ────────
 		   Dann's ruling, 2026-08-20, on his walk of the silhouette ship.
 
@@ -910,60 +847,14 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		cursor: not-allowed;
 	}
 
-	/* ── OCR camera button ────────────────────────────────── */
+	/* THE OCR CAMERA BUTTON'S RULES ARE GONE, N.108 increment 4, with the
+	   button they drew: `.ocr-btn`, its hover and disabled states,
+	   `.ocr-file-input`, `.ocr-spinner`, the `ocr-spin` keyframes, and
+	   `.ocr-error`. They are deleted rather than left, because `svelte-check`
+	   counts an unused selector as a warning and gate 3's baseline is 7.
 
-	.ocr-btn {
-		position: absolute;
-		top: 6px;
-		right: 6px;
-		width: 28px;
-		height: 28px;
-		padding: 4px;
-		border: none;
-		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.8);
-		color: var(--ink-tertiary);
-		cursor: pointer;
-		opacity: 0.3;
-		transition: color 0.15s ease, background 0.15s ease, opacity 0.2s ease;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.ocr-btn:hover:not(:disabled) {
-		color: var(--sage);
-		background: rgba(255, 255, 255, 0.95);
-		opacity: 1;
-	}
-
-	.ocr-btn:disabled {
-		opacity: 0.4;
-		cursor: not-allowed;
-	}
-
-	.ocr-file-input {
-		display: none;
-	}
-
-	.ocr-spinner {
-		width: 16px;
-		height: 16px;
-		border: 2px solid var(--stone-300);
-		border-top-color: var(--sage);
-		border-radius: 50%;
-		animation: ocr-spin 0.8s linear infinite;
-	}
-
-	@keyframes ocr-spin {
-		to { transform: rotate(360deg); }
-	}
-
-	.ocr-error {
-		font-size: 0.7rem;
-		color: #d97706;
-		font-family: var(--font-sans);
-	}
+	   `.intake`'s `position: relative` STAYS. It was the camera's containing
+	   block and it is also the dragging state's, so it has a second reader.
 
 	.char-warning {
 		font-size: 0.7rem;
@@ -1002,13 +893,22 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		grid-template-columns: repeat(3, 1fr);
 		gap: 6px;
 	}
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   It carries all six drawer buttons: five `.btn-ghost` and the one
+	   `.btn-primary`, which are fill rules and set no radius of their own. */
 	.action-btn {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
 		font-weight: 600;
 		border: none;
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		transition: opacity 0.12s;
 	}

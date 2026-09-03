@@ -183,6 +183,12 @@
 
   .install-actions { display: flex; gap: 10px; margin-top: 4px; }
 
+  /* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+     calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+     `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+     "The buttons shown here can form the template. Can we make other
+     buttons share its rounded ends?" Only the corners move; the fill, the
+     border, the type and the padding are untouched. */
   .install-btn-primary {
     font-family: 'Source Sans 3', sans-serif;
     font-size: 13px;
@@ -190,7 +196,7 @@
     background: var(--sage, #8B9A7D);
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 999px;
     padding: 7px 18px;
     cursor: pointer;
     transition: background 0.15s;
@@ -198,13 +204,19 @@
 
   .install-btn-primary:hover { background: var(--deeper-sage, #7A8A6C); }
 
+  /* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+     calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+     `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+     "The buttons shown here can form the template. Can we make other
+     buttons share its rounded ends?" Only the corners move; the fill, the
+     border, the type and the padding are untouched. */
   .install-btn-ghost {
     font-family: 'Source Sans 3', sans-serif;
     font-size: 13px;
     color: var(--ink-secondary, #5a5248);
     background: transparent;
     border: 1px solid var(--border, #d4cec8);
-    border-radius: 4px;
+    border-radius: 999px;
     padding: 7px 14px;
     cursor: pointer;
   }

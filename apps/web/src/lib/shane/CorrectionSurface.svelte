@@ -982,6 +982,16 @@
 
 	/* A VERB SITS IN A BOX. 44 px is a floor and not a target: a cell grows
 	   with its text and never shrinks below it. */
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   THE GRID FEELS THIS MOST. A cell is 44 px tall at its floor, so 999 px
+	   draws a 22 px end and the correction grid reads as a row of pills. That
+	   is the ruling applied where it shows, and it is Dann's to wave off. */
 	.cell {
 		/* A flex box so a drawn glyph centres on both axes. The gap is what puts
 		   the space back between a pitch cell's triangle and its word: inside a
@@ -996,7 +1006,7 @@
 		min-height: 44px;
 		padding: 6px 8px;
 		border: 1px solid var(--stone-300, #d6d3d1);
-		border-radius: 4px;
+		border-radius: 999px;
 		background: var(--paper-light, #f5f1e8);
 		color: var(--ink-primary, #1a1612);
 		font: inherit;

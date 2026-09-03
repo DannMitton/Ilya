@@ -4041,6 +4041,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		justify-content: flex-end;
 		gap: 0.5rem;
 	}
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   The confirm panel's answers. `.replace-destructive` sets colour only and
+	   inherits the ends. */
 	.replace-actions button {
 		padding: 0.45rem 0.75rem;
 		font-family: var(--font-sans);
@@ -4049,7 +4058,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		color: var(--ink-secondary);
 		background: white;
 		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 	}
 	/* The destructive one is not the pretty one, and it is not the loud one
@@ -4065,6 +4074,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   control on this panel and should not be the loudest thing on it. It was
 	   twinned on .shane-print-btn, which N.73 S2 deleted; the values are the
 	   same ones RootPanel's .action-btn carries. */
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.start-over {
 		align-self: start;
 		padding: 0.45rem 0.5rem;
@@ -4074,7 +4089,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		color: var(--ink-secondary);
 		background: white;
 		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		transition: opacity 0.12s;
 	}
@@ -4314,9 +4329,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   border, and the transparent fill all stay exactly as they were, and
 	   `.sheet-print`'s own layout rules were not opened. Only the two
 	   declarations that set the box changed. */
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   Its look was ruled untouched on 2026-08-21 as to POSITION and IDIOM; the
+	   corners are neither, and Dann's 2026-09-03 ruling reaches every button. */
 	.sheet-print-btn {
 		border: 1px solid var(--ink-primary, #1a1612);
-		border-radius: 4px;
+		border-radius: 999px;
 		background: transparent;
 		color: var(--ink-primary, #1a1612);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
@@ -4693,11 +4717,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	/* ── The one labelled action ───────────────────────────── */
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.portrait-action {
 		flex: 0 0 auto;
 		margin: 1.25rem 0 0;
 		border: 1px solid var(--ink-primary, #1a1612);
-		border-radius: 4px;
+		border-radius: 999px;
 		background: var(--ink-primary, #1a1612);
 		color: var(--paper-cream, #F0EBE0);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);

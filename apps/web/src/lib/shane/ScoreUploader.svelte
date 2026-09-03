@@ -135,8 +135,13 @@
 		 *  word. */
 		| { kind: 'asking'; file: File; detected: boolean }
 		/** N.108 increment 2: a PDF waits here for the one answer its bytes
-		 *  cannot give. See this file's header. */
-		| { kind: 'askKind'; file: File }
+		 *  cannot give. See this file's header.
+		 *
+		 *  N.108 increment 4: A PICTURE WAITS HERE TOO, and `picture` says
+		 *  which it is. The question is the same and the two answers are the
+		 *  same words; only the route behind each answer differs, because a
+		 *  PDF's words are extracted and a picture's are recognised. */
+		| { kind: 'askKind'; file: File; picture: boolean }
 		| { kind: 'busy'; label: string }
 		| { kind: 'done'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
@@ -215,30 +220,33 @@
 	 * THE ONE WAY IN, N.108 increment 2. `RootPanel`'s field takes the drop and
 	 * the pick; `+page.svelte` calls this on the instance.
 	 *
-	 * A PDF STOPS HERE AND ASKS. Every other file goes straight to `handleFile`,
-	 * unchanged, because the sniff already answers for it. The question is asked
-	 * ONCE per file: answering it calls `handleFile` or `readPdfAsPoem` directly,
-	 * and neither comes back through here.
+	 * A PDF STOPS HERE AND ASKS, and SINCE N.108 INCREMENT 4 SO DOES A PICTURE.
+	 * Ruled by Dann 2026-09-03 when he consolidated the three ways in: the
+	 * camera icon was how a singer used to say "this picture is text", and with
+	 * one picker there is no button left to say it, so the picture asks. Every
+	 * other file goes straight to `handleFile`, unchanged, because the sniff
+	 * answers for it. The question is asked ONCE per file: answering it calls
+	 * `handleFile`, `readPdfAsPoem` or `readPictureAsPoem` directly, and none of
+	 * them comes back through here.
 	 *
-	 * THE SNIFF IS `detectScoreFormat`, THE SAME ONE DISPATCH USES, so this
-	 * cannot disagree with what `ingestScoreFile` decides a moment later. A file
-	 * whose head cannot be read at all is not a PDF, so it falls through to the
-	 * score route and earns that route's own named refusal.
+	 * A DROPPED PICTURE ASKS TOO, which reverses the increment 2 brief's "a
+	 * photograph goes to the reader". That rule was written while the camera
+	 * icon existed to mean the other thing. Recorded in
+	 * `memo-n108-finishings_r1_2026-09-03.md` §5 as a departure.
+	 *
+	 * THE SNIFF IS `readableKind`, WHICH IS `detectScoreFormat`, THE SAME ONE
+	 * DISPATCH USES, so this cannot disagree with what `ingestScoreFile` decides
+	 * a moment later. A file whose head cannot be read at all is neither, so it
+	 * falls through to the score route and earns that route's own named refusal.
 	 */
 	export async function take(file: File): Promise<void> {
-		if (await isPdf(file)) {
+		const kind = await readableKind(file);
+		if (kind !== null) {
 			bannerDismissed = false;
-			ui = { kind: 'askKind', file };
+			ui = { kind: 'askKind', file, picture: kind === 'image' };
 			return;
 		}
 		await handleFile(file);
-	}
-
-	/** Does this file open with `%PDF`? Sniffed by bytes, as dispatch will. */
-	async function isPdf(file: File): Promise<boolean> {
-		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
-		const detected = detectScoreFormat(file.name, head);
-		return detected.ok && detected.format === 'pdf';
 	}
 
 	/**
@@ -267,6 +275,55 @@
 		}
 		onpoem(text);
 		reset();
+	}
+
+	/**
+	 * The singer answered "the poem" on a PICTURE. N.108 increment 4.
+	 *
+	 * THIS IS THE CAMERA ICON'S OWN CODE, MOVED, NOT REWRITTEN. It was
+	 * `handleOcrFile` in `RootPanel.svelte`: the same dynamic `tesseract.js`
+	 * import, the same `rus` worker, the same `terminate`, and the same two
+	 * failure messages in both languages, which were English and French
+	 * literals there and are English and French literals here. Nothing about
+	 * the recognition changed; only what a singer presses to ask for it.
+	 *
+	 * IT REPORTS THROUGH `ui`, WHICH THE ICON COULD NOT. The icon spun in the
+	 * field's corner and wrote its refusal into a line under the intake; this
+	 * component already owns a wait and a refusal for every other file, and a
+	 * picture's OCR is now one more answer about a file, shown where the rest
+	 * are.
+	 *
+	 * A PICTURE WITH NO WORDS IN IT IS A MIS-ANSWER, not a fault, exactly as an
+	 * imageless PDF is: the singer is told, and the score answer is still one
+	 * press away behind the same question.
+	 */
+	async function readPictureAsPoem(file: File): Promise<void> {
+		ui = { kind: 'busy', label: T('intake.picture.reading') };
+		try {
+			const { createWorker } = await import('tesseract.js');
+			const worker = await createWorker('rus');
+			const { data: { text } } = await worker.recognize(file);
+			await worker.terminate();
+			if (text.trim() === '') {
+				ui = {
+					kind: 'error',
+					message: language === 'en'
+						? 'No text recognised in image.'
+						: 'Aucun texte reconnu dans l\u2019image.',
+				};
+				return;
+			}
+			onpoem(text.trim());
+			reset();
+		} catch (err) {
+			console.error('[ScoreUploader] the picture could not be recognised:', err);
+			ui = {
+				kind: 'error',
+				message: language === 'en'
+					? 'OCR processing failed.'
+					: 'Échec du traitement OCR.',
+			};
+		}
 	}
 
 	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
@@ -636,6 +693,12 @@
 		     once, in place, per the build brief §3: "A PDF asks once, in place,
 		     which it is. Do not guess."
 
+		     N.108 increment 4: A PICTURE ASKS IT TOO. Only the title changes,
+		     because only the noun does; `intake.pdf.why`, `intake.pdf.poem` and
+		     `intake.pdf.score` name no format and are reused word for word. The
+		     poem answer runs OCR on a picture and a text extraction on a PDF,
+		     which is the whole of the difference and it is behind the button.
+
 		     TWO ANSWERS AND A WAY OUT, in the shape the clef-and-key prompt
 		     below already uses, because it is the same kind of thing: a file is
 		     held, nothing is mutated, and the singer decides. Cancel is
@@ -644,11 +707,18 @@
 		     THE FILE NAME IS SHOWN, because a singer who dropped two files in a
 		     row must be able to see which one is being asked about. -->
 		<div class="ask">
-			<p class="ask-title">{T('intake.pdf.title')}</p>
+			<p class="ask-title">{ui.picture ? T('intake.picture.title') : T('intake.pdf.title')}</p>
 			<p class="ask-why">{T('intake.pdf.why').replace('%s', ui.file.name)}</p>
 			<div class="result-actions">
 				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.ask.cancel')}</button>
-				<button type="button" class="btn-secondary" onclick={() => void readPdfAsPoem((ui as { file: File }).file)}>
+				<button
+					type="button"
+					class="btn-secondary"
+					onclick={() => {
+						const asked = ui as { file: File; picture: boolean };
+						void (asked.picture ? readPictureAsPoem(asked.file) : readPdfAsPoem(asked.file));
+					}}
+				>
 					{T('intake.pdf.poem')}
 				</button>
 				<button type="button" class="btn-primary" onclick={() => void handleFile((ui as { file: File }).file)}>
@@ -952,13 +1022,22 @@
 
 	/* ── Buttons ──────────────────────────────────────────── */
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   Both answers to every question this component asks, the PDF and picture
+	   kind question included. */
 	.btn-primary,
 	.btn-secondary {
 		padding: 0.4rem 0.7rem;
 		font-family: var(--font-sans);
 		font-size: 0.78rem;
 		font-weight: 600;
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		border: none;
 		transition: opacity 0.12s;

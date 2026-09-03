@@ -223,13 +223,19 @@
 		margin-top: 0.25rem;
 	}
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.btn-reset {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
 		font-weight: 500;
 		border: none;
-		border-radius: 4px;
+		border-radius: 999px;
 		background: transparent;
 		color: var(--stone-500);
 		cursor: pointer;

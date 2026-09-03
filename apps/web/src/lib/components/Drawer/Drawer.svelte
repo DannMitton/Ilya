@@ -903,18 +903,23 @@
 		   own 18 px lives inside the group; this is the group's own margin
 		   from the desk.
 
-		   THE SIDES ONLY, AND NO TOP, AND THE PROTOTYPE ALREADY GAVE THE
-		   REASON: "the first group's 20 px corners now meet the slab at the
-		   top, which is the same join they make at the bottom". The join at
-		   the top is drawn, not clipped. THE TOP WAS ALSO MEASURED AND
-		   REJECTED: 16 px there costs 16 px of height, and at 1366 x 768 on a
-		   coarse pointer the opening state then overruns its box by 10 px,
-		   which is a ruled fit given up for a margin nobody asked for.
+		   THE TOP IS 16 NOW, AND IT WAS 0. RULED BY DANN 2026-09-03 on his walk
+		   of `42f6871`: "negative space between the Piece band and the Ilya
+		   banner. This will increase the illusion that the controls float. On
+		   my screen, simply moving the controls down a few pixels would be
+		   sufficient." His ruling REVERSES what stood here at increment 1a,
+		   which is reproduced so the next reader sees what was traded and does
+		   not undo him: "the first group's 20 px corners now meet the slab at
+		   the top, which is the same join they make at the bottom", and "16 px
+		   there costs 16 px of height, and at 1366 x 768 on a coarse pointer
+		   the opening state then overruns its box by 10 px". The slab is gone,
+		   so the first join is now against the viewport rather than against a
+		   fill, and the height is the cost he accepted by ruling.
 
 		   THE FOOT IS 12, not 16, and it was 12 before: it is
 		   `.root-panel:last-child`'s 40 px replaced at increment 1 by the
 		   prototype's own value, and nothing about the bottom changed here. */
-		padding: 0 16px 12px;
+		padding: 16px 16px 12px;
 	}
 
 	/* ── THE THREE GROUPS (N.108) ─────────────────────────────
@@ -1127,9 +1132,11 @@
 	   THE INSET IS `.drawer-content`'s OWN, repeated rather than shared,
 	   because these two boxes never exist at once and neither can be the
 	   other's parent. 16 px at the sides so the frame's 20 px corners have
-	   desk beside them, 12 px at the foot, no top: the same three values and
-	   the same reasoning as the groups, written out where `.drawer-content`
-	   writes them.
+	   desk beside them, 12 px at the foot, and 16 px at the top since Dann's
+	   ruling of 2026-09-03: the same three values and the same reasoning as
+	   the groups, written out where `.drawer-content` writes them. The top
+	   moves with the groups' top or the frame jumps 16 px up the moment the
+	   ritual is entered, which is the one motion this drawer does not make.
 
 	   IT PAINTS NOTHING NOW. The fill moved onto `.takeover-frame`, which is
 	   the box with the corners; a fill out here would square them off
@@ -1140,7 +1147,7 @@
 		min-height: 0;
 		display: flex;
 		flex-direction: column;
-		padding: 0 16px 12px;
+		padding: 16px 16px 12px;
 	}
 
 	/* THE FOURTH FRAME. One group, grown to fill the drawer, at the same 20 px

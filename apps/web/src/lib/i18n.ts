@@ -491,6 +491,21 @@ const strings: Record<string, Record<Language, string>> = {
 	// which is what a scan is. It is a mis-answer and not a broken file, so it
 	// says what happened and points at the other answer.
 	'intake.pdf.noText':  { en: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.', fr: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.' },
+	// THE PICTURE ASKS THE SAME QUESTION, N.108 increment 4, ruled by Dann
+	// 2026-09-03: the camera icon, Choose a file, and Read a score from a
+	// photograph "all serve the same function". One picker takes every kind,
+	// and a picture is the second kind whose bytes cannot say which it is: it
+	// is either Cyrillic text to read with OCR or a page of music to read with
+	// the page reader, and only the singer knows. Two new English strings,
+	// listed in `memo-n108-finishings_r1_2026-09-03.md` §5.
+	//
+	// `intake.pdf.why`, `intake.pdf.poem` and `intake.pdf.score` are REUSED
+	// unchanged: neither names a format, so neither needed a twin.
+	//
+	// FRENCH IS OWED, as it is for every N.108 string: the English stands in
+	// both slots because `t()` prints `[MISSING: key]` for an absent variant.
+	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Is this picture the poem, or the score?' },
+	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Reading the words out of the picture…' },
 
 
 	// ── Word Console placeholder ─────────────────────────────
@@ -501,7 +516,21 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.73 portrait C. The pull moved to the side of the desk in S1 and this
 	// line still sent the singer to the bottom of the screen. Both languages
 	// RATIFIED by Dann 2026-08-19.
-	'paper.empty.mobile':          { en: 'Tap the chevron on the left to open the drawer.', fr: 'Appuyez sur le chevron à gauche pour ouvrir le tiroir.' },
+	//
+	// N.108 increment 4. THE CHEVRON IS NOT ON THE LEFT AND HAS NOT BEEN SINCE
+	// INCREMENT 1a. The pull is a horizontal bar on the BOTTOM edge carrying
+	// the word DRAWER with the paper up (`drawer.pull`), ruled by Dann
+	// 2026-09-02 and amending the 2026-08-19 line above in both parts. This
+	// string named the old geometry on every phone-layout screen, which is
+	// every viewport under 1400 px. Found on the increment 3 walk
+	// (`memo-n108-takeover_r1_2026-09-03.md` §9).
+	//
+	// THE OLD ENGLISH: 'Tap the chevron on the left to open the drawer.'
+	// THE OLD FRENCH:  'Appuyez sur le chevron à gauche pour ouvrir le tiroir.'
+	// THE FRENCH IS OWED. The English stands in both slots, as the six N.108
+	// strings above do, because `t()` prints `[MISSING: key]` for an absent
+	// variant and that literal would land on the empty page.
+	'paper.empty.mobile':          { en: 'Tap Drawer at the bottom of the screen to open the drawer.', fr: 'Tap Drawer at the bottom of the screen to open the drawer.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -658,6 +687,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
 	// translation this desk chose, and no other French ships for it.
 	'upload.watermark':            { en: 'score',                        fr: 'partition' },
+	// UNUSED SINCE N.108 increment 4 (the photograph button is gone; the one
+	// picker takes a photograph like every other kind, and a picture asks in
+	// place which it is). Kept: ratified French. RULED BY DANN 2026-09-03:
+	// the strings are "marked unused in place, not deleted".
 	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },

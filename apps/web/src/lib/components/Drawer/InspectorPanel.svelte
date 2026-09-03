@@ -1493,6 +1493,12 @@
 
 	/* ═══ Dictionary panel ═══════════════════════════════════════ */
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.dict-button {
 		display: block;
 		width: 100%;
@@ -1507,7 +1513,7 @@
 		letter-spacing: 0.02em;
 		text-align: center;
 		border: none;
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		transition: background-color 150ms ease, opacity 150ms ease;
 	}
@@ -2318,10 +2324,18 @@
 
 	/* ── Provenance choice buttons (shared by stress and ё choosers) ── */
 
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched.
+
+	   It was 3 px, the one control radius nothing else in the tree spent. */
 	.provenance-choice {
 		background: var(--paper-cream);
 		border: 1px solid var(--stone-300);
-		border-radius: 3px;
+		border-radius: 999px;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		color: var(--ink-secondary);

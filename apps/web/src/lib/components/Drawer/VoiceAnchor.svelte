@@ -98,6 +98,12 @@
 	   precedent, white on --sage at 2.99:1, which .btn-primary has carried
 	   since before N.73. Recorded rather than fixed here: darkening a ruled
 	   palette token is Dann's, not this ship's. */
+	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
+	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
+	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
+	   "The buttons shown here can form the template. Can we make other
+	   buttons share its rounded ends?" Only the corners move; the fill, the
+	   border, the type and the padding are untouched. */
 	.voice-action {
 		flex-shrink: 0;
 		padding: 0.45rem 0.7rem;
@@ -107,7 +113,7 @@
 		color: white;
 		background: var(--deeper-lavender);
 		border: none;
-		border-radius: 4px;
+		border-radius: 999px;
 		cursor: pointer;
 		transition: opacity 0.12s;
 	}
