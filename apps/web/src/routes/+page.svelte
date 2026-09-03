@@ -107,6 +107,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
+	import AnalysisStation from '$lib/components/Drawer/AnalysisStation.svelte';
+	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
 	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
 	import {
@@ -2845,6 +2847,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// pairings guard flag could be deleted rather than moved. What is left
 		// in this block is the device preferences, which are not a song and do
 		// not move (design §2.2).
+		/* MOBILE DETECTION, AND IT RUNS FIRST NOW. N.108 increment 1 moved it
+		   above the restores from below the dictionary load, because the open
+		   set's migration keeps one station on a phone and has to be told
+		   which display it is on. Nothing about the three measures changed;
+		   only when they are first taken.
+
+		   `sections.exclusive` IS SET ON THE SAME LINE AS `isMobile` AND IN
+		   THE SAME PLACE, which is the point: the drawer's one-station-at-a-
+		   time rule and the 767 px rule are the same rule, and this function is
+		   its one owner. Ruled 2026-09-02. */
+		function checkMobile() {
+			isMobile = window.innerWidth < 768;
+			sections.exclusive = isMobile;
+			isPhone = Math.min(window.innerWidth, window.innerHeight) < 768;
+			phonePortrait = window.innerHeight >= window.innerWidth;
+		}
+		checkMobile();
 		try {
 			const savedLang = localStorage.getItem('ilya:language');
 			if (savedLang === 'en' || savedLang === 'fr') {
@@ -2874,8 +2893,23 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			   falls back to the first-run default and does not throw, which
 			   is the pattern `restoreSurface` above established for
 			   `ilya:activeTab`. NOTATION is never in the stored array, so a
-			   reload always returns it to its ruled collapsed default. */
-			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY));
+			   reload always returns it to its ruled collapsed default.
+
+			   N.108 INCREMENT 1: THIS CALL IS ALSO THE MIGRATION, and it is
+			   the only site that writes `ilya:openStations` at boot. It maps
+			   ship B's five ids onto the three-group drawer, drops what has no
+			   successor, keeps one station on a phone, and writes back only
+			   when something changed. `sections.svelte.ts` holds the whole of
+			   that decision; nothing about it is here, because a decision in a
+			   `.svelte` file is a decision no vitest in this repository can
+			   reach.
+
+			   `isMobile` IS ALREADY SET, which is why `checkMobile` moved
+			   above this block. The phone keeps one open station, so the
+			   migration has to know which display it landed on, and reading
+			   the width a second time here would put a second opinion about
+			   the 767 px rule in the tree. */
+			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY), isMobile);
 		} catch {
 			// localStorage unavailable
 		}
@@ -2888,13 +2922,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				loaderState = state;
 			}
 		});
-		// Mobile detection
-		function checkMobile() {
-			isMobile = window.innerWidth < 768;
-			isPhone = Math.min(window.innerWidth, window.innerHeight) < 768;
-			phonePortrait = window.innerHeight >= window.innerWidth;
-		}
-		checkMobile();
 		window.addEventListener('resize', checkMobile);
 		// On mobile, default drawer to collapsed unless user has a saved preference
 		if (isMobile) {
@@ -3034,24 +3061,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{tabTransitionClass}
 		takeoverActive={calibrating}
 		onexittakeover={exitCalibration}
+		metadataOpen={sections.has(STATION_IDS.metadata)}
+		onmetadatatoggle={() => sections.toggle(STATION_IDS.metadata)}
 		ontogglecollapse={handleDrawerToggle}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
 	>
-			<!-- PIECE (N.73 S3 ship one). The drawer's pinned top region. The
-			     metadata block and the Q4 provenance line moved out of
-			     `RootPanel` to get here: a pinned region cannot be a child of
-			     the scrolling one. Their props are unchanged and are passed
-			     straight through. -->
-			{#snippet pieceAnchor()}
+			<!-- METADATA'S BODY (N.108 increment 1). It was `pieceAnchor`, the
+			     drawer's pinned top region; there is no pinned region now and
+			     no station row either. The Piece band carries the affordance,
+			     `Drawer.svelte` draws it, and this is what it opens. The props
+			     are unchanged except the two the header owned. -->
+			{#snippet metadataBody()}
 				<MetadataFields
 					metadata={doc.metadata}
 					{language}
 					onchange={handleMetadataChange}
 					fromScore={doc.fromScoreFields}
 					onrevert={ingestedScore?.result.score.workMetadata ? handleRevertToScoreHeader : undefined}
-					expanded={sections.has(STATION_IDS.piece)}
-					ontoggle={() => sections.toggle(STATION_IDS.piece)}
 				/>
 				{#if arrangerProvenance}
 					<!-- Q4 provenance line (Kimi §A.28): beneath the Metadata block,
@@ -3063,20 +3090,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     into RootPanel at N.73 S2: Svelte scopes a rule to the
 					     component that authors the markup. -->
 					<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
-				{/if}
-			{/snippet}
-			<!-- THE VOICE (N.73 S3 ship one). The drawer's pinned bottom line,
-			     and the only way into calibration. `voiceCalibrated` is the
-			     wizard's own predicate, read from `profileStore.ts`, so this
-			     line and the wizard cannot disagree. -->
-			{#snippet voiceAnchor()}
-				{#if INCLUDE_SHANE}
-					<VoiceAnchor
-						voiceName={shaneVoiceName}
-						calibrated={voiceCalibrated}
-						{language}
-						oncalibrate={enterCalibration}
-					/>
 				{/if}
 			{/snippet}
 			<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). The wizard MOVED
@@ -3110,17 +3123,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					</div>
 				{/if}
 			{/snippet}
-			{#snippet rootPanel()}
+			<!-- ═══ THE PIECE GROUP (N.108 increment 1). Repertoire, the intake,
+			     Export and import. `RootPanel` is its contents and nothing
+			     else; Analysis left it for Text, and the panel's own header
+			     records what moved and why. -->
+			{#snippet pieceGroup()}
 				<RootPanel
 					inputText={doc.inputText}
 					{loaderState}
 					{canTranscribe}
-					{hasResults}
-					{wordCount}
-					{transcribeMs}
 					{transcribeError}
 					{language}
-					{showInspector}
 					oninput={handleInput}
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
@@ -3161,93 +3174,95 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{/if}
 						{/if}
 					{/snippet}
-					{#snippet consoleContent()}
-						{#if selectedWord}
-							{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
-							{@const wordYoToggles = (() => {
-								const prefix = `${wordKey}-`;
-								const m = new Map<number, import('$lib/types').YoToggle>();
-								for (const [k, v] of yoToggles) {
-									if (k.startsWith(prefix)) {
-										const ci = parseInt(k.substring(prefix.length), 10);
-										if (!isNaN(ci)) m.set(ci, v);
-									}
-								}
-								return m;
-							})()}
-							<InspectorPanel
-								word={selectedWord}
-								{language}
-								{notationPrefs}
-								openSyllabification={doc.openSyllabification}
-								{showStressDiacritics}
-								syllableOverride={syllableOverrides.get(wordKey) ?? null}
-								spotReconstituted={spotReconstitution.has(wordKey)}
-								promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
-								yoCharToggles={wordYoToggles}
-								onspotrecontoggle={handleSpotReconToggle}
-								onstressassign={handleStressAssign}
-								onstressrevert={handleStressRevert}
-								onyochartoggle={handleYoCharToggle}
-								onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-								onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
-								onreset={handleReset}
-								glossOverride={doc.glossOverrides.get(wordKey)}
-								onglossoverride={handleGlossOverride}
-							/>
-						{/if}
-					{/snippet}
 				</RootPanel>
 			{/snippet}
-			{#snippet shanePanel()}
+			<!-- ═══ THE SCORE MARKUP GROUP (N.108 increment 1). Underlay,
+			     Corrections, Voice, in that order, which is the map Dann ruled
+			     2026-09-02. It was `shanePanel`, a column of score work with
+			     the voice pinned below it in its own anchor.
+
+			     UNDERLAY IS A STATION AGAIN, AND THAT REVERSES SOMETHING. N.92
+			     slice 4 dissolved the Shift Lyrics station and put the
+			     syllabified text inside `CorrectionSurface`'s LYRIC row, on
+			     Dann's walk of `2238e8b`; the three-group map names Underlay
+			     as its own station in Score markup, and that is the later
+			     ruling. WHAT MOVED IS ONLY THE QUEUE AND THE CURSOR, which is
+			     what the prototype draws under Underlay. The lyric VERBS stay
+			     in Corrections with the note they act on, because they render
+			     only when a paired note is selected, and their label and their
+			     placed-syllable counter stay with them; nothing is drawn twice.
+
+			     THE NOTICES SIT WHERE THEY SAT, between Corrections and the
+			     voice, in the order they had. Where a notice belongs in a
+			     three-group map is not ruled, and this ship does not decide it.
+
+			     THE STATION ROWS KEEP TODAY'S GATE: Underlay and Corrections
+			     are drawn only when a score has been read, which is what the
+			     score capability's own wall already did. That means the
+			     opening state is not the whole map until a score arrives, and
+			     that is reported rather than fixed here, because fixing it is
+			     new behaviour and increment 1 adds none. -->
+			{#snippet scoreGroup()}
 				{#if INCLUDE_SHANE}
-					<!-- One shared column, matching the Transcription drawer's
-					     .root-panel (1rem sides, 40px bottom, 6px gaps). N.73 S2
-					     dropped its 20px top, because this panel now renders directly
-					     beneath .root-panel rather than in place of it and the two
-					     paddings met in the middle of one column. -->
-					<div class="shane-panel">
-					<!-- N.73 S2. This panel's own Metadata block, provenance line,
-					     score uploader, no-lyrics notice, Print button and binder row
-					     are gone. The metadata block, the provenance line and score
-					     intake moved into RootPanel; the Print button and the binder
-					     row were duplicates of RootPanel's and were deleted. What is
-					     left is the score work, the notices, and the voice. -->
-					<!-- N.92 SLICE 4. THE SHIFT LYRICS STATION IS GONE, and its two verbs
-					     are the LYRIC station's now, on the same surface as the note verbs
-					     rather than in a separate place. The syllabified text went with
-					     them: N.65 ship B put it first under that label, Dann ruled that
-					     arrangement on his walk of `2238e8b`, and the arrangement survives
-					     the move because `CorrectionSurface` takes it as a snippet.
-					     `SyllableStation`'s six props are unchanged. -->
-					<!-- N.92 CORRECTIONS, AND IT IS BELOW SOURCE NOW, ruled by Dann
-						     2026-08-27. It sat in the pinned NOTATION anchor from his ruling
-						     of 2026-08-24, when it was one line of prose idle; it is four
-						     rows of controls now, and a pinned region that never scrolls is
-						     the wrong home for the tallest tenant in the drawer.
-						
-						     THE ANCHORS SURVIVE, which the slice's own constraint requires:
-						     metadata and NOTATION still hold the pinned top and the voice
-						     still holds the pinned bottom. What moved is the scroll's own
-						     tenant, into the music half at the foot of the column, where the
-						     rest of the score work already lives.
-						
-						     It rides inside the score capability's own wall and shows nothing
-						     at all until there is a read to correct, so a wall-closed build
-						     and a text-only session are both untouched.
-						
-					     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS. `CorrectionControls`
-					     is deleted: it carried the same verbs in a different order under
-					     different labels, and two surfaces that mean the same thing are two
-					     things to learn. This is the SAME COMPONENT the dock renders, in its
-					     panel variant, so the desktop and the phone cannot drift.
-					
-					     THE SEMITONE VERBS DIE HERE. They were retired for the phone by
-					     Dann's ruling of 2026-08-24 and the drawer went on showing them; the
-					     re-cut is where that ends. The spelling policy is what answers a
-					     semitone now: down a semitone from B natural respells as A sharp,
-					     and the three accidental verbs reach every spelling. -->
-					{#if INCLUDE_SHANE && ingestedScore}
+					<!-- ── UNDERLAY. The queue and the cursor. It draws nothing
+					     at all when there are no slots, which is
+					     `SyllableStation`'s own guard and is unchanged. -->
+					{#if ingestedScore}
+						<div class="station">
+							<StationHeader
+								label={t('underlay.heading', language)}
+								expanded={sections.has(STATION_IDS.underlay)}
+								ontoggle={() => sections.toggle(STATION_IDS.underlay)}
+								controls="station-underlay"
+							/>
+							{#if sections.has(STATION_IDS.underlay)}
+								<div class="station-body" id="station-underlay">
+									<SyllableStation
+										slots={slotQueue}
+										pairings={shownPairings}
+										drift={driftCount}
+										cursor={pairingCursor}
+										{language}
+										oncursor={(i) => (pairingCursor = i)}
+									/>
+								</div>
+							{/if}
+						</div>
+					{/if}
+					<!-- N.92 CORRECTIONS. It rides inside the score capability's
+					     own wall and shows nothing at all until there is a read
+					     to correct, so a wall-closed build and a text-only
+					     session are both untouched.
+
+					     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS.
+					     `CorrectionControls` is deleted: it carried the same
+					     verbs in a different order under different labels, and
+					     two surfaces that mean the same thing are two things to
+					     learn. This is the SAME COMPONENT the dock renders, in
+					     its panel variant, so the desktop and the phone cannot
+					     drift.
+
+					     THE SEMITONE VERBS DIED HERE. They were retired for the
+					     phone by Dann's ruling of 2026-08-24 and the drawer went
+					     on showing them; the re-cut is where that ended. The
+					     spelling policy is what answers a semitone now: down a
+					     semitone from B natural respells as A sharp, and the
+					     three accidental verbs reach every spelling.
+
+					     N.108 gives it a station header and a chevron, which it
+					     did not have, because every station in a frame retracts.
+					     The surface's own CORRECTIONS heading is gated to the
+					     dock in the same ship, so the name is drawn once. -->
+					{#if ingestedScore}
+						<div class="station">
+						<StationHeader
+							label={t('loupe.station.corrections', language)}
+							expanded={sections.has(STATION_IDS.corrections)}
+							ontoggle={() => sections.toggle(STATION_IDS.corrections)}
+							controls="station-corrections"
+						/>
+						{#if sections.has(STATION_IDS.corrections)}
+						<div class="station-body" id="station-corrections">
 						<CorrectionSurface
 							variant="panel"
 							open={loupeOpen}
@@ -3287,18 +3302,88 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							onclosetuplet={closeTuplet}
 							ontupletdef={applyTupletDefinition}
 							{onhold}
-						>
-							{#snippet syllables()}
-								<SyllableStation
-									slots={slotQueue}
-									pairings={shownPairings}
-									drift={driftCount}
-									cursor={pairingCursor}
+						/>
+						</div>
+						{/if}
+						</div>
+					{/if}
+					<!-- ── VOICE. N.108: the anchor line is inside a station now,
+					     and the station is the last one in Score markup. It was
+					     the drawer's pinned BOTTOM region, one line with its own
+					     lavender rule; the group's band carries that hue one step
+					     down, so the rule of 2026-08-19 survives in the band and
+					     no lavender is lost.
+
+					     THE STATION RETRACTS, WHICH THE ANCHOR DID NOT. Ship B
+					     gave the voice a header and no chevron on Dann's explicit
+					     ruling: "it has a header and no contents, and collapsing
+					     it would hide Calibrate, the only entry to the ritual, for
+					     no height." The three-frame map answers that ruling rather
+					     than overriding it: Calibrate is the station's CONTENTS
+					     now, not its header, and every station in a frame
+					     retracts. Shut, the row costs one line and says the voice
+					     is there; open, Calibrate is one press away. That is a
+					     change to a ratified affordance and it is reported.
+
+					     THE CALIBRATION WIZARD IS NOT HERE. It is the drawer's one
+					     takeover, entered from Calibrate inside this station, and
+					     rendered from the `voiceTakeover` snippet above. The GUI
+					     spec's defect F2 was that its `welcome` plea sat inside
+					     this scroll, reading voice at a singer who had asked for an
+					     Instrument panel
+					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`).
+
+					     `voiceCalibrated` is the wizard's own predicate, read from
+					     `profileStore.ts`, so this line and the wizard cannot
+					     disagree. -->
+					<div class="station">
+						<StationHeader
+							label={t('voice.heading', language)}
+							expanded={sections.has(STATION_IDS.voice)}
+							ontoggle={() => sections.toggle(STATION_IDS.voice)}
+							controls="station-voice"
+						/>
+						{#if sections.has(STATION_IDS.voice)}
+							<div class="station-body" id="station-voice">
+								<VoiceAnchor
+									voiceName={shaneVoiceName}
+									calibrated={voiceCalibrated}
 									{language}
-									oncursor={(i) => (pairingCursor = i)}
+									oncalibrate={enterCalibration}
 								/>
-							{/snippet}
-						</CorrectionSurface>
+							</div>
+						{/if}
+					</div>
+					<!-- ── THE NOTICES. Unstyled on purpose, as they have always
+					     been, and in the order they had among themselves.
+
+					     THEY ARE LAST IN THE GROUP, which is where they were:
+					     they sat at the foot of `.shane-panel`, and the voice
+					     that followed them was a PINNED anchor outside that
+					     panel, so "after the panel" and "last in the scroll" were
+					     the same place. The voice is a station in this group now,
+					     so keeping them physically before it would move them up.
+					     They keep the position they had.
+
+					     THE ALTERNATIVE WAS MEASURED AND REJECTED: before Voice,
+					     a first-run storage notice with no score read lands
+					     directly under the SCORE MARKUP band, where a station
+					     name belongs, and reads as the group's first entry. Seen
+					     at 430 x 932 on the built site.
+
+					     They are not stations, so they carry the group's inset
+					     themselves rather than borrowing the station box's;
+					     `.group-notices` is that inset and the 6px column
+					     `.shane-panel` used to give them, and nothing else.
+
+					     WHERE A NOTICE BELONGS IN A THREE-GROUP MAP IS NOT RULED,
+					     and two of these are not the Score markup group's at all:
+					     `binderError` and `binderNotice` report on Export and
+					     import, which is in Piece. This ship keeps them together
+					     where they were rather than splitting them across two
+					     groups on its own authority. -->
+					<div class="group-notices">
+					{#if ingestedScore}
 						{#if correctedCount > 0}
 							<p class="shane-storage-notice">
 								{correctedCount === 1
@@ -3365,22 +3450,27 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     where storage speaks today. -->
 						<p class="shane-storage-notice">{t('storage.otherTab', language)}</p>
 					{/if}
-					<!-- N.73 S3 ship one. THE CALIBRATION WIZARD IS NOT HERE ANY
-					     MORE. It is the drawer's one takeover, entered from the
-					     voice anchor at the foot of the column, and rendered from
-					     the `voiceTakeover` snippet below. The GUI spec's defect F2
-					     was that its `welcome` plea sat inside this scroll, reading
-					     voice at a singer who had asked for an Instrument panel
-					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`). -->
 					</div>
 				{/if}
 			{/snippet}
-			{#snippet notationPanel()}
-				<!-- NOTATION (item N.7). ONE instance, rendered by the Drawer
-				     inside its TOP anchor, above the scrolling panel, on both of
-				     Studio's documents. It was pinned BELOW the scroll until
-				     N.73 S3, which is the E.29 shape E.36 §1.4 replaced and Dann
-				     ratified on 2026-08-19.
+			<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
+			     and only those two: the map Dann ruled 2026-09-02 gives Text
+			     exactly them. Both were somewhere else in the N.73 S3 column,
+			     Notation pinned above the scroll and Analysis first inside it,
+			     and neither moved because of anything wrong with where it was.
+			     They are together because they are both text work. -->
+			{#snippet textGroup()}
+				<!-- NOTATION (item N.7). ONE instance, on both of Studio's
+				     documents, and it is the first station in the TEXT group.
+				     It was pinned BELOW the scroll until N.73 S3 and pinned
+				     ABOVE it after (the E.29 shape E.36 §1.4 replaced, ratified
+				     by Dann 2026-08-19). N.108 unpins it: nothing in the drawer
+				     is pinned, and Notation sits with Analysis because both are
+				     text work.
+
+				     THE 2026-08-06 RULING IS UNTOUCHED BY THE MOVE: it is
+				     predictable and within a thumb's reach, and being the first
+				     station of the second group is both.
 				     The state was always document-level and persisted (the notationPrefs and
 				     openSyllabification declarations and their writers) and Fit obeyed it:
 				     both reach VoiceProfilePane through its own props of
@@ -3417,6 +3507,53 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					expanded={sections.has(STATION_IDS.notation)}
 					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
 				/>
+				<AnalysisStation
+					{loaderState}
+					{hasResults}
+					{wordCount}
+					{transcribeMs}
+					{language}
+					{showInspector}
+					expanded={sections.has(STATION_IDS.analysis)}
+					ontoggle={() => sections.toggle(STATION_IDS.analysis)}
+				>
+				{#snippet consoleContent()}
+					{#if selectedWord}
+						{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+						{@const wordYoToggles = (() => {
+							const prefix = `${wordKey}-`;
+							const m = new Map<number, import('$lib/types').YoToggle>();
+							for (const [k, v] of yoToggles) {
+								if (k.startsWith(prefix)) {
+									const ci = parseInt(k.substring(prefix.length), 10);
+									if (!isNaN(ci)) m.set(ci, v);
+								}
+							}
+							return m;
+						})()}
+						<InspectorPanel
+							word={selectedWord}
+							{language}
+							{notationPrefs}
+							openSyllabification={doc.openSyllabification}
+							{showStressDiacritics}
+							syllableOverride={syllableOverrides.get(wordKey) ?? null}
+							spotReconstituted={spotReconstitution.has(wordKey)}
+							promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
+							yoCharToggles={wordYoToggles}
+							onspotrecontoggle={handleSpotReconToggle}
+							onstressassign={handleStressAssign}
+							onstressrevert={handleStressRevert}
+							onyochartoggle={handleYoCharToggle}
+							onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+							onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
+							onreset={handleReset}
+							glossOverride={doc.glossOverrides.get(wordKey)}
+							onglossoverride={handleGlossOverride}
+						/>
+					{/if}
+				{/snippet}
+				</AnalysisStation>
 			{/snippet}
 	</Drawer>
 	<main
@@ -3653,45 +3790,35 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 {/if}
 
 <style>
-	/* ── Fit drawer column: identical to RootPanel's .root-panel, so the
-	   Transcription and Fit drawers share one layout (Dann, 2026-07-13). The
-	   CalibrationWizard's own outer padding is dropped in favour of this. */
-	.shane-panel {
+	/* ── `.shane-panel` IS GONE (N.108 increment 1) ──────────
+	   It was the Fit drawer's column, then the score work's column inside the
+	   one Studio drawer: 1rem sides, a 6px gap, and a 40px foot. All three are
+	   the Score markup GROUP's now, and the group is `Drawer.svelte`'s. The
+	   wrapper had to go rather than be restyled, because a box between the
+	   group and its stations puts the band's adjacency rule out of reach and
+	   the stations would lose their boundaries.
+
+	   ITS LAVENDER FOCUS RING SURVIVED THE MOVE. That rule was Dann's
+	   2026-07-13 arrangement, so a Fit field's focus ring mirrors the sage one
+	   in purple; it is declared on `.group-score` in `Drawer.svelte` now,
+	   which is the same set of surfaces under a name that describes them.
+
+	   `.group-notices` below is what is left of the column: the inset and the
+	   6px, for the notices, which are not stations and have no station box. */
+	/* NO PADDING, AND `:empty` CANNOT BE USED TO GIVE IT ANY. Svelte renders
+	   each `{#if}` as a comment node, so this box is never `:empty` even when
+	   it draws nothing, and a `:not(:empty)` rule spent 12px on every drawer
+	   that has no notices. MEASURED at 1366 x 768 before it was removed.
+	   Nothing needs the padding: the gap between the last notice and the
+	   station below it is that station's own header padding, above its
+	   hairline. */
+	.group-notices {
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		/* STILL NO TOP PADDING, AND THE REASON HAS CHANGED. N.73 S2 dropped
-		   this panel's 20px top because `.root-panel`'s 40px bottom already
-		   closed the gap above, and 20px on top of 40px read as a seam in a
-		   drawer that is meant to read as one.
-
-		   THAT 40px IS GONE, ruled by Dann 2026-08-21: it made the
-		   ANALYSIS-to-SHIFT-LYRICS boundary 98.0px against every other shut
-		   station's 58.0 at a 430px viewport. So the sentence that justified
-		   this zero no longer describes the tree, and it is replaced rather
-		   than left.
-
-		   THE ZERO IS NOW LOAD-BEARING, not incidental. The gap above this
-		   panel is ANALYSIS's own `.section.shut` 6px, and SHIFT LYRICS brings
-		   the 2px rule, which is exactly what every station boundary inside
-		   `.root-panel` is made of. A top padding here would land on top of
-		   that and make this the one boundary spaced differently, which is the
-		   defect Dann just had removed. **The two panels read as one drawer
-		   more strictly than before**, because the seam that separated them is
-		   now the same recipe as every other boundary in the column.
-
-		   THE 40px FOOT STAYS HERE. This panel ends the column when the wall is
-		   open, so this is where the column's bottom space belongs.
-		   `.root-panel:last-child` in `RootPanel.svelte` carries the same foot
-		   for the wall-closed build, where this panel does not render. */
-		padding: 0 1rem 40px;
+		margin: 0 18px;
 	}
 
-	/* Fit surfaces use the tab's lavender for the focus ring, not the global
-	   sage, so focusing a Fit field mirrors the sage ring in purple. */
-	.shane-panel :global(:focus-visible) {
-		outline-color: var(--deeper-lavender);
-	}
 
 	/* N.73 S3 ship one. The takeover's own column, the same measures
 	   `.shane-panel` gives the drawer, so the ritual keeps the drawer's left
@@ -4020,7 +4147,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   twin does not have would make it stop paralleling the twin, which is the
 	   thing Dann ruled. */
 	/* N.77 ship 4 part B. THE SIZE IS THE DRAWER'S QUIET-BUTTON MODEL,
-	   `.action-btn.btn-ghost` in `RootPanel.svelte:867` and `:878`: its
+	   `.action-btn.btn-ghost` in `RootPanel.svelte:694` and `:705`: its
 	   `padding: 0.45rem 0.5rem` and its `font-size: 0.8rem`. Print measured
 	   26.59px tall against the model's 34.38px before this.
 

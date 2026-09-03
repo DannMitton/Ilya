@@ -53,6 +53,20 @@
 	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
 	--app-bg: var(--desk-surface); /* main content area behind paper */
 
+	/* ── The drawer's one motion (N.108) ───────────────────── */
+	/* ONE DURATION AND ONE CURVE, ruled by the N.108 build brief §2 from the
+	   ratified GUI spec of 2026-08-18, "~180 ms ease-out". It is spent on
+	   OPACITY AND TRANSFORM ONLY; height is never animated, because animating
+	   a height is what makes a drawer rearrange under a singer's hand while
+	   they are reading it.
+
+	   IT IS DECLARED HERE AND SPENT IN ONE PLACE, `Drawer.svelte`'s station
+	   bodies. The tree's other transitions are older and each carries its own
+	   ruling (the pull's 400 ms slide, the tab switch's 175 ms, the chevron's
+	   150 ms); none of them is folded into this and none should be without a
+	   ruling that says so. */
+	--motion: 180ms ease-out;
+
 	/* ── The portrait gutter (N.73 C2) ─────────────────────── */
 	/* ONE negative space, at one value. Ruled by Dann 2026-08-19 on the
 	   walk: the desk showing beside the page and the desk showing above it

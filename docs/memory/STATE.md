@@ -225,6 +225,20 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > untracked until he adds it. **GUI track: builds only after the beta line
 > closes or he names what it displaces (CONTRACT §6).**
 >
+> **N.110, the [i] extractor. Numbered by Dann 2026-09-02, SET ASIDE by him
+> ("set it aside for now"), BRIEFED, not built.** His roster reads [i] fR1 =
+> 1063 Hz, captured in fry as the ritual asks; [i]'s fR1 is the lowest of
+> the ten. Established by the desk: `extract.ts:47-58` finds no peak near
+> 300 Hz that clears 3 dB and takes 1063 as nearest to the prior; [u] at
+> 274 came through the same code. Desk hypothesis, unproven: pre-emphasis
+> flattens a lone low peak. Increment 1 is N.49's instrumentation, a
+> dev-only WAV capture, an offline harness that imports `extract.ts` and
+> plots the envelope and peaks, and the attempt series; **no fix**. Brief:
+> `docs/sessions/brief-n110-i-extractor-harness_r1_2026-09-02.md`,
+> untracked. The stored 1063 is a pre-E.26 record with its verdict erased;
+> the guard-at-snapshot fix is an inbox candidate. No default value: sourced
+> or silent.
+>
 > **Open and unplaced:** N.102 increment 1c (turning-layer courtesies), N.94, N.84 the Guide redo, N.83's call, and
 > the release order N.85 through N.88.
 >

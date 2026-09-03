@@ -13,7 +13,6 @@
 	import { COMPOSERS, POETS, type PersonEntry } from '$lib/composers-poets';
 	import type { SongMetadata } from '$lib/types';
 	import SearchableSelect from './SearchableSelect.svelte';
-	import StationHeader from './StationHeader.svelte';
 
 	interface Props {
 		metadata: SongMetadata;
@@ -32,14 +31,13 @@
 		 * only when a score header exists to revert to.
 		 */
 		onrevert?: () => void;
-		/**
-		 * N.65 ship B. Piece retracts like every other header, AND IT RETRACTS
-		 * WHILE STAYING PINNED. Dann's ruling of 2026-08-21 covers the anchors
-		 * too: "a retracted anchor is still pinned, it is just short." This is
-		 * the header that gives the middle of the drawer its height back.
-		 */
-		expanded: boolean;
-		ontoggle: () => void;
+		/* N.65 ship B's `expanded` and `ontoggle` LEFT AT N.108 increment 1.
+		   Piece retracted like every other header while staying pinned, on
+		   Dann's ruling of 2026-08-21 ("a retracted anchor is still pinned, it
+		   is just short"), and that was the header that gave the middle of the
+		   drawer its height back. There is no pinned anchor and no header
+		   here now: the Piece band carries the affordance, and this component
+		   renders only while it is open. */
 	}
 
 	let {
@@ -48,8 +46,6 @@
 		onchange,
 		fromScore = undefined,
 		onrevert = undefined,
-		expanded,
-		ontoggle,
 	}: Props = $props();
 
 	function handleMetaField(field: keyof SongMetadata, value: string) {
@@ -78,15 +74,20 @@
 	}
 </script>
 
-<div class="section">
-	<StationHeader
-		label={t('meta.heading', language)}
-		expanded={expanded}
-		ontoggle={ontoggle}
-		controls="station-piece"
-	/>
-	{#if expanded}
-	<div class="meta-fields" id="station-piece">
+<!-- N.108 increment 1. THIS COMPONENT DRAWS NO HEADER. Metadata is the one
+     station with no row on the map: its affordance is on the Piece band, drawn
+     by `Drawer.svelte`, and this is the body that affordance opens. Design's
+     prototype took Metadata off the map at 1366 x 768 alone, where the opening
+     state would not otherwise fit; the build brief overrides that and takes it
+     off at every size, on the desk's ruling that two desktops must not show
+     two maps.
+
+     SO `expanded` AND `ontoggle` LEFT THIS FILE. The band owns both, and the
+     component that is only ever rendered when it is open does not need to be
+     told that it is. The four fields, the from-score tags, the reset row and
+     every rule below are untouched. -->
+<div class="metadata-body">
+	<div class="meta-fields" id="station-metadata">
 		<div class="meta-field-wrap">
 			<input
 				type="text"
@@ -159,17 +160,17 @@
 			{t('meta.reset', language)}
 		</button>
 	</div>
-	{/if}
 </div>
 
 <style>
-	/* The station recipe (RootPanel.svelte's `.section`), which Dann ruled
-	   on his walk of ship one: 6px above the label, 6px below the body.
-	   NO RULE ABOVE. Piece is the first station in the drawer and the app
-	   header already bounds it; a rule here would draw against that band
-	   and separate nothing. Notation draws the rule between the two. */
-	.section {
-		padding: 6px 0;
+	/* N.108 increment 1. `.section` is gone with the header. It gave 6px above
+	   a label and 6px below a body; there is no label here, and the band above
+	   this body is what the old comment's "no rule above" was already
+	   describing. The bottom 12px comes from the frame, on
+	   `.group :global(.station-body)` in `Drawer.svelte`, and the sides come
+	   from `.band-body`'s own 18px inset there. */
+	.metadata-body {
+		padding-bottom: 12px;
 	}
 
 	.meta-fields {

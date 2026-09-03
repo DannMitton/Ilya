@@ -20,6 +20,42 @@ const strings: Record<string, Record<Language, string>> = {
 	'drawer.collapse':             { en: 'Collapse drawer',              fr: 'Réduire le tiroir' },
 	'drawer.expand':               { en: 'Expand drawer',                fr: 'Ouvrir le tiroir' },
 
+	// ── The three groups (N.108 increment 1) ─────────────────
+	//    FRENCH IS DEFERRED BY DANN'S RULING OF 2026-09-02, and these six
+	//    entries carry the ENGLISH IN BOTH SLOTS until he rules the strings
+	//    table. That is not a translation and must not be read as one: `t()`
+	//    prints `[MISSING: key]` for an absent language variant, so a truly
+	//    absent French key would put that literal on the band of a French
+	//    session's drawer. The tree's own precedent for recording a value that
+	//    is the same in both languages is the `tab.*` block below, which says
+	//    so in as many words; this block says instead that the French is OWED.
+	//
+	//    THE SIX ARE: the three group names, the binder station's name, the
+	//    Underlay station's name, and the Voice station's name. Every one is
+	//    listed in the increment 1 memo with its key.
+	//
+	//    `group.scoreMarkup` IS THE SAME ENGLISH AS `tab.markedScore`, which
+	//    already carries ratified French (« Partition annotée », 2026-08-19).
+	//    They are kept apart because one names a DOCUMENT in the desk head and
+	//    one names a GROUP in the drawer, and folding two concepts onto one
+	//    string is how a rename comes to move something nobody meant to move.
+	//    Whether they should be one string is DANN'S TO RULE.
+	'group.piece':                 { en: 'Piece',                        fr: 'Piece' },
+	'group.text':                  { en: 'Text',                         fr: 'Text' },
+	'group.scoreMarkup':           { en: 'Score markup',                 fr: 'Score markup' },
+	//    The binder station. Its three buttons keep their own ratified
+	//    `binder.*` strings; this names the station they sit in, which had no
+	//    name because it was a bare row inside Source.
+	'binder.heading':              { en: 'Export and import',            fr: 'Export and import' },
+	//    UNDERLAY is the English name Dann ruled 2026-08-18. It ships today as
+	//    `shiftLyrics.title` "Shift Lyrics", which keeps its ratified French
+	//    and its own call sites; this is the station name, and the two are not
+	//    folded together for the reason given above.
+	'underlay.heading':            { en: 'Underlay',                     fr: 'Underlay' },
+	//    VOICE, the station name from E.27 §3.3. The anchor line inside it
+	//    keeps its ratified `calib.anchor.*` strings.
+	'voice.heading':               { en: 'Voice',                        fr: 'Voice' },
+
 	// ── Tab bar (N.36) ───────────────────────────────────────
 	//    The labels lived in the component, so French lived in two
 	//    places. Three of the four are invariant by ruling; they are

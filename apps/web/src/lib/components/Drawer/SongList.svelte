@@ -111,7 +111,7 @@
 	}
 </script>
 
-<div class="song-list">
+<div class="station song-list">
 	<StationHeader
 		label={t('songs.heading', language)}
 		expanded={expanded}
@@ -196,7 +196,13 @@
 
 <style>
 	/* N.65 ship one. A plain block. The station's gap is the header's alone,
-	   and the body below keeps the 6px this rule used to spend on both. */
+	   and the body below keeps the 6px this rule used to spend on both.
+
+	   N.108 increment 1: the root also carries `station`, which is what
+	   `Drawer.svelte`'s group frame styles. The class is added rather than
+	   substituted because `.song-list` is this file's own name for its own
+	   box and `station` is the frame's name for the same box; one file must
+	   not have to know the other's rules, only its vocabulary. */
 	.song-list {
 		display: block;
 	}

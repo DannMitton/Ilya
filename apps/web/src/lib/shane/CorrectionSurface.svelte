@@ -424,8 +424,19 @@
 
 	     LYRIC KEEPS ITS LABEL because it is the one row a singer cannot tell by
 	     shape: two lines of prose and four arrows look like prose and arrows.
-	     It rides inside Corrections as a labelled row, which is the ruling. -->
-	<h3 class="surface-header">{T('loupe.station.corrections')}</h3>
+	     It rides inside Corrections as a labelled row, which is the ruling.
+
+	     N.108 INCREMENT 1: THE DOCK DRAWS IT, THE PANEL NO LONGER DOES. In the
+	     drawer, Corrections is a station in the Score markup group and the
+	     drawer's own `StationHeader` says its name, with the retraction chevron
+	     the three-frame map gives every station. Two headers reading
+	     CORRECTIONS, one above the other, is what gating this avoids; the
+	     ruling that this surface has ONE header over the whole of it is not
+	     touched, and the dock, which sits outside the drawer and has no station
+	     header above it, keeps drawing that header itself. -->
+	{#if variant === 'dock'}
+		<h3 class="surface-header">{T('loupe.station.corrections')}</h3>
+	{/if}
 
 	<!-- THE CONTEXTUAL LINE, one sentence, and only one shows at a time.
 
@@ -753,7 +764,7 @@
 	   seconds into an iOS Safari session that carries no fresh decline
 	   (N.105), and at any lower value it lands on top of the LYRIC station
 	   and the singer cannot reach it. The mobile
-	   drawer takes 60 (`Drawer.svelte:1526`) and the update toast 200. The
+	   drawer takes 60 (`Drawer.svelte:1762`) and the update toast 200. The
 	   loupe is ruled nearest the user, the dock is its other half, and a
 	   working surface a thumb cannot reach is not a surface. The prompt is
 	   untouched and returns the moment the loupe goes away. */

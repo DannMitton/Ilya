@@ -8,13 +8,44 @@ import IntakeWatermark from './IntakeWatermark.svelte';
 import type { SongRow } from '$lib/library/songs';
 import { STATION_IDS, type SectionSet } from './sections.svelte';
 
+	/*
+	 * N.108 INCREMENT 1. THIS PANEL IS THE PIECE GROUP'S CONTENTS AND NOTHING
+	 * ELSE. It held four things and now holds three, and it holds them without
+	 * a wrapper.
+	 *
+	 * ANALYSIS LEFT FOR THE TEXT GROUP. It is `AnalysisStation.svelte` now,
+	 * rendered from `+page.svelte`'s `textGroup` snippet beside Notation, and
+	 * the five props that fed it left with it: `hasResults`, `wordCount`,
+	 * `transcribeMs`, `showInspector` and the `consoleContent` snippet. The
+	 * ruling that put Analysis first in the scroll (Dann, 2026-08-27, "the
+	 * bottom is the MUSIC half and the top is the TEXT half") is not reversed:
+	 * it is what the three groups make structural. Analysis is with the text
+	 * because Text is a group.
+	 *
+	 * SOURCE BECAME THE INTAKE AND LOST ITS HEADER. Ruled 2026-09-02: the
+	 * intake has no station row and is never closed. Its two intakes are
+	 * unchanged in increment 1, the textarea above and the score drop below,
+	 * which is increment 2's to unify.
+	 *
+	 * THE BINDER ROW BECAME A STATION. It was a bare row at the foot of
+	 * Source, which N.65 ship B ruled it into ("the appearance that the
+	 * Print/Export/Import row shares the same relationship to the score field
+	 * as the Clear text/Transcribe row does to the text field above it"). The
+	 * three-group map names it: Piece holds "Export and import". That ruling
+	 * is superseded by the map, and the row's own arrangement inside the
+	 * station is untouched.
+	 *
+	 * THERE IS NO `.root-panel` WRAPPER. The stations are direct children of
+	 * the group, because the group frame owns their inset and their boundary
+	 * (`Drawer.svelte`'s `.group :global(.station)`), and a wrapper between
+	 * them and the frame would put the band's adjacency rule out of reach.
+	 * Svelte lets a component have more than one root element; this one has
+	 * three.
+	 */
 	interface Props {
 		inputText: string;
 		loaderState: LoaderState;
 		canTranscribe: boolean;
-		hasResults: boolean;
-		wordCount: number;
-		transcribeMs: number;
 		transcribeError: string;
 		language: Language;
 		/*
@@ -24,8 +55,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		 * at the top of the drawer now; `+page.svelte` passes them straight to
 		 * `MetadataFields` in the `pieceAnchor` snippet.
 		 */
-		showInspector: boolean;
-		consoleContent?: Snippet;
 		/**
 		 * N.73 S2. Score intake, rendered by `+page.svelte` inside this panel's
 		 * Source region so text intake and score intake read as one. A snippet
@@ -78,13 +107,8 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		inputText,
 		loaderState,
 		canTranscribe,
-		hasResults,
-		wordCount,
-		transcribeMs,
 		transcribeError,
 		language,
-		showInspector,
-		consoleContent,
 		sourceScore,
 		oninput,
 		ontranscribe,
@@ -104,7 +128,11 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 
 	const charCount = $derived(inputText.length);
 	const showWarning = $derived(charCount > 5000);
-	const dictReady = $derived(loaderState.entryCount > 0 && !loaderState.isLoading);
+	/* `dictReady` IS GONE with `.root-panel`. It set a `status-ok` class on
+	   that wrapper, and nothing in this file or any other ever declared a rule
+	   for it, so the wrapper's removal took its only reader and left a derived
+	   value that computed an answer nobody asked. Deleted rather than moved.
+	   N.108 increment 1. */
 
 	/* ── OCR state ─────────────────────────────────────────── */
 	let ocrProcessing = $state(false);
@@ -171,157 +199,53 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	// this tab. This panel no longer sees notationPrefs at all.
 </script>
 
-<div class="root-panel" class:status-ok={dictReady}>
-	<!-- Dictionary error (persistent, stays at top) -->
+<!-- ── REPERTOIRE. N.108: the first station in the Piece group, and the
+     group's band above it is its boundary, so it draws no rule of its own.
+     Its own arrangement is untouched. -->
+<SongList
+	{language}
+	songs={songLibrary.songs}
+	activeId={songLibrary.activeId}
+	plural={songLibrary.plural}
+	error={songLibrary.error}
+	unreadable={songLibrary.unreadable}
+	newerIlya={songLibrary.newerIlya}
+	onopen={songLibrary.onopen}
+	onnew={songLibrary.onnew}
+	onrename={songLibrary.onrename}
+	ondelete={songLibrary.ondelete}
+	expanded={sections.has(STATION_IDS.repertoire)}
+	ontoggle={() => sections.toggle(STATION_IDS.repertoire)}
+/>
+
+<!-- ── THE INTAKE. N.108, ruled 2026-09-02: it has NO STATION ROW and it is
+     never closed. Source's header, its chevron and its id are gone with the
+     retraction; `source` is the one old wire value the migration drops,
+     because a station that cannot close has nothing to store.
+
+     ITS OWN CONTENTS ARE UNTOUCHED IN INCREMENT 1. Two intakes, the textarea
+     above and the score drop below, exactly as they ship. Unifying them into
+     one field is increment 2, and this ship deliberately does not begin it.
+
+     WHAT SOURCE'S HEADER USED TO DO, the label, is done by an accessible name
+     instead. It is not drawn: the intake is the only unlabelled thing in the
+     drawer and it is unlabelled because it is always there, which is the
+     whole of the ruling. `source.heading` is a ratified string with ratified
+     French, so nothing new is written for it.
+
+     THE DICTIONARY ERROR CAME HERE. It was first in `.root-panel`, above
+     everything; there is no "above everything" any more, and what it reports
+     is the dictionary that Transcribe needs, so it reports where that button
+     is. -->
+<div class="station station-intake">
+	<h3 class="visually-hidden">{t('source.heading', language)}</h3>
+	<div class="station-body">
 	{#if loaderState.error}
 		<div class="dict-status">
 			<span class="status-dot error"></span>
 			<span class="status-text">{loaderState.error}</span>
 		</div>
 	{/if}
-
-	<!-- N.73 S3 ship one. THE METADATA BLOCK AND ITS PROVENANCE LINE ARE NOT
-	     HERE ANY MORE. They are Piece, pinned at the top of the drawer's
-	     column, rendered by `Drawer.svelte`'s top anchor from the
-	     `pieceAnchor` snippet in `+page.svelte`. They left because a pinned
-	     region cannot be a child of the scrolling one. Nothing about them
-	     changed on the way out except who renders them.
-
-	     The dictionary error above stays first in the SCROLL, which is no
-	     longer first in the drawer. -->
-
-	<!-- N.67 step 4b, THE LIBRARY DOOR.
-
-	     BETWEEN NOTATION AND SOURCE, DANN'S RULING OF 2026-08-21. It sat below
-	     the binder row until then, on the reasoning that the two are adjacent
-	     song-level acts: this one chooses which song, that one carries a song
-	     off the device. It now opens the scroll instead, ahead of the station
-	     that holds the poem. Choosing the song comes before working on it.
-
-	     THAT REASONING IS SPENT, and it is recorded rather than deleted: the
-	     binder row still sits at the foot of Source, so the adjacency the step
-	     4b note claimed is gone. Nothing inside this block changed, and neither
-	     did the binder row. Only the order did. -->
-	<!-- ── ANALYSIS, FIRST IN THE SCROLL. RULED BY DANN 2026-08-27, and it
-	     reverses the placement he ruled on 2026-08-20, knowingly, for a reason
-	     that did not exist then.
-
-	     HIS 2026-08-20 ARRANGEMENT put Analysis last so the performance sat
-	     together at the bottom: Analysis, then the score work. What changed is
-	     that the score work grew. N.92's four slices put a whole correction
-	     surface in this drawer, and with Corrections at the foot of the column
-	     the bottom is the MUSIC half and the top is the TEXT half. Analysis is
-	     the transcription's own console, so it belongs with the text, and it
-	     rides directly under the pinned NOTATION anchor where the scroll
-	     begins.
-
-	     THE ORDER IS NOW: Notation pinned above, then Analysis, Repertoire,
-	     Source, Output, and the score work with Corrections at the foot, with
-	     the voice anchor pinned below all of it. Nothing inside this block
-	     changed; only where it sits.
-
-	     THE 2026-08-20 RULING'S REASON IS NOT LOST, it is inverted by its own
-	     logic: the performance still sits together, and it sits at the bottom,
-	     and Analysis is no longer part of it. -->
-	<div class="section console-section" class:shut={!sections.has(STATION_IDS.analysis)}>
-		<StationHeader
-			label={t('console.placeholder', language)}
-			expanded={sections.has(STATION_IDS.analysis)}
-			ontoggle={() => sections.toggle(STATION_IDS.analysis)}
-			controls="station-analysis"
-		/>
-		{#if sections.has(STATION_IDS.analysis)}
-		<div class="station-body" id="station-analysis">
-		<!-- THE RESULT SUMMARY MOVED INSIDE ANALYSIS, N.65 ship one, and this
-		     is a decision the brief did not rule. It described the
-		     transcription's word count and milliseconds from a position
-		     between two stations, and Source's new boundary leaves it nowhere
-		     to stand. The ratified r1 mockup draws it inside Analysis, beside
-		     "select a word to inspect it"
-		     (`fable-gui-mockup_r1_2026-08-18.html:322-324`), and what it
-		     reports is a reading of the text rather than an act on it. Its
-		     `margin-top: -4px` went with the move: that value tightened it
-		     against the uploader above, which is no longer above it. -->
-		<p class="result-summary" class:result-hidden={!hasResults}>
-			{#if hasResults}
-				{wordCount} {t('result.words', language)} {transcribeMs}ms
-			{:else}
-				&nbsp;
-			{/if}
-		</p>
-		{#if showInspector && consoleContent}
-			{@render consoleContent()}
-		{:else}
-			<div class="console-placeholder-body">
-				{#if loaderState.isLoading}
-					<div class="dict-progress">
-						<span class="dict-progress-text">{t('dict.loading', language)}</span>
-						<div class="dict-progress-track">
-							{#if loaderState.progress >= 0}
-								<div
-									class="dict-progress-fill"
-									style="width: {Math.round(loaderState.progress * 100)}%"
-								></div>
-							{:else}
-								<div class="dict-progress-fill indeterminate"></div>
-							{/if}
-						</div>
-					</div>
-				{:else}
-					<p class="placeholder-hint">
-						{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l\u2019analyser ici.'}
-					</p>
-				{/if}
-			</div>
-		{/if}
-		</div>
-		{/if}
-	</div>
-	<div class="section song-section" class:shut={!sections.has(STATION_IDS.songs)}>
-		<SongList
-			{language}
-			songs={songLibrary.songs}
-			activeId={songLibrary.activeId}
-			plural={songLibrary.plural}
-			error={songLibrary.error}
-			unreadable={songLibrary.unreadable}
-			newerIlya={songLibrary.newerIlya}
-			onopen={songLibrary.onopen}
-			onnew={songLibrary.onnew}
-			onrename={songLibrary.onrename}
-			ondelete={songLibrary.ondelete}
-			expanded={sections.has(STATION_IDS.songs)}
-			ontoggle={() => sections.toggle(STATION_IDS.songs)}
-		/>
-	</div>
-
-	<!-- ── SOURCE. N.65 ship one, Dann's ruling 4 of 2026-08-20 ──────
-	     The textarea, the OCR scanner, the score drop zone, the Finale
-	     disclosure, and now Clear and Transcribe are one labelled station.
-	     They sat bare before this, against the spec's own first grouping
-	     rule (`fable-gui-audit-and-spec_r1_2026-08-18.md` §3.3, "No orphan
-	     controls. Every drawer control lives inside a labelled station").
-
-	     `Clear` and `Transcribe` came DOWN here from the Clear-Print-
-	     Transcribe grid. N.73 S3 ship two moved Analysis above Output and
-	     left that grid where it was, which put Transcribe, the app's
-	     primary action, below a tall empty Analysis pane and away from the
-	     textarea it acts on. Dann's ruling 7 of 2026-08-20 dissolves the
-	     repair rather than making it: once Source is a station with its own
-	     contents, its two actions sit at its foot by construction.
-
-	     THE BODY IS A FLEX COLUMN and the header is not in it, so the
-	     header's own 0.4rem is the whole gap to the first entry. Ruling 2.
-	     Twinned on SongList. -->
-	<div class="section source-section" class:shut={!sections.has(STATION_IDS.source)}>
-		<StationHeader
-			label={t('source.heading', language)}
-			expanded={sections.has(STATION_IDS.source)}
-			ontoggle={() => sections.toggle(STATION_IDS.source)}
-			controls="station-source"
-		/>
-		{#if sections.has(STATION_IDS.source)}
-		<div class="station-body" id="station-source">
 	<div class="textarea-wrapper" class:empty={sourceIsEmpty}>
 		<!-- THE TEXT WATERMARK (N.65). Empty field only, which is Dann's own
 		     ruling: it never sits under a pasted poem. `inputText` is the
@@ -430,37 +354,36 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	     BELOW the action row since 2026-08-20; see that row's comment. -->
 	{@render sourceScore?.()}
 
-	<!-- ── THE SCORE FIELD'S ACTION ROW. N.65 ship B, §B.6. Dann dissolved
-	     the naming question rather than answering it: "I do not think we
-	     need an Output section articulated. What I want is the appearance
-	     that the Print/Export/Import row shares the same relationship to the
-	     score field as the Clear text/Transcribe row does to the text field
-	     above it."
+	</div>
+</div>
 
-	     SO IT IS A ROW, NOT A STATION. No label, no heading, no chevron, and
-	     no orphan control: both pairs belong to SOURCE. The `.output-section`
-	     wrapper is gone rather than emptied, and its two contributions went
-	     with it: the 6px of top padding the station recipe gives a label, and
-	     the station boundary the row sat across. Those, with `.dz-wrap`'s
-	     8px margin, were the 26px this ship closes to `.station-body`'s own
-	     6px flex gap, the same gap that carries the textarea to Clear and
-	     Transcribe.
+<!-- ── EXPORT AND IMPORT. N.108: the binder row is a STATION in Piece now,
+     which the three-group map names. It was a bare row at the foot of Source,
+     by Dann's ruling of N.65 ship B §B.6: "I do not think we need an Output
+     section articulated. What I want is the appearance that the
+     Print/Export/Import row shares the same relationship to the score field
+     as the Clear text/Transcribe row does to the text field above it."
 
-	     PRINT HAS LEFT, AND THIS SHIP IS THE ONE THAT PROMISED IT. The note
-	     that stood here said Print stayed only because deleting it would
-	     leave no way to print until the desk-head ship, and that "that ship
-	     removes it". It does. With it goes the transient consequence it
-	     named: shutting SOURCE no longer takes Print with it, because Print
-	     is not in SOURCE.
+     THAT RULING IS SUPERSEDED BY THE MAP, not overturned by this file. What it
+     was protecting was the row's relationship to a field, and the field it sat
+     under is the intake, which is now headerless and never closed; a bare row
+     at the foot of a headerless station would be the orphan control the spec's
+     §3.3 forbids. The row's own arrangement inside the station is untouched.
 
-	     `Export all songs` is a third cell, shown only above one song,
-	     because with one song it says the same thing as the button beside it.
-	     THE GRID IS UNCHANGED, and that is a decision the brief did not rule.
-	     It is still `repeat(3, 1fr)`, so the cell that used to wrap to a
-	     second row now takes the column Print left empty. Two buttons where
-	     there was one song, three where there is more than one, on one row
-	     either way. Narrowing the grid to two columns is a separate ruling
-	     and this ship does not make it. -->
+     `Export all songs` is a third cell, shown only above one song, because
+     with one song it says the same thing as the button beside it. THE GRID IS
+     UNCHANGED, `repeat(3, 1fr)`: two buttons where there is one song, three
+     where there is more than one, on one row either way. Narrowing it to two
+     columns is a separate ruling and this ship does not make it. -->
+<div class="station">
+	<StationHeader
+		label={t('binder.heading', language)}
+		expanded={sections.has(STATION_IDS.binder)}
+		ontoggle={() => sections.toggle(STATION_IDS.binder)}
+		controls="station-binder"
+	/>
+	{#if sections.has(STATION_IDS.binder)}
+	<div class="station-body" id="station-binder">
 	<div class="output-row">
 		<!-- PRINT IS NOT HERE ANY MORE, N.65, Dann's ruling of 2026-08-21: "we
 		     will simply not offer a Print button for the Learn or Guide
@@ -475,101 +398,30 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 			<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
 		{/if}
 	</div>
-		</div>
-		{/if}
 	</div>
-
-
-
-
+	{/if}
 </div>
 
 <style>
-	/* N.65 ship one, Dann's walk. NO GAP AND NO TOP PADDING. Both used to
-	   sit between the stations on top of each station's own padding, so the
-	   space above a label depended on which station it was. The station
-	   recipe below owns every vertical measure in this column now. */
-	.root-panel {
-		display: flex;
-		flex-direction: column;
-		/* NO BOTTOM PADDING. Ruled by Dann 2026-08-21, measured on the deploy
-		   of `7294b42` at a 430px viewport: shut, the station boundaries read
-		   NOTATION 58.0, SOURCE 58.0, REPERTOIRE 58.0, and ANALYSIS 98.0 CSS
-		   px, rule to rule. **The 40px difference was this declaration**, and
-		   it is not ANALYSIS's: it sat between ANALYSIS and the Fit panel that
-		   opens with SHIFT LYRICS. His ruling is that a shut station is the
-		   same height as its siblings, and that boundary was the last one that
-		   was not.
+	/* ── `.root-panel` IS GONE (N.108 increment 1) ────────────
+	   The wrapper and its three rules left with it: the `0 1rem` sides, which
+	   the group's own 18px station inset replaces; the `:last-child` 40px
+	   foot, which belonged to whichever panel ended the column and there is no
+	   last panel now (the scroll carries a 12px foot instead, in
+	   `Drawer.svelte`); and the flex column, which the group is.
 
-		   With it gone, ANALYSIS's own `.section.shut` 6px is the whole gap and
-		   SHIFT LYRICS brings its own rule, which is the recipe every other
-		   station boundary in this column already uses. Open, ANALYSIS gives
-		   12px like every other open station. */
-		padding: 0 1rem;
-	}
+	   The 1rem was ruled: every station rule in the drawer had to share one
+	   inset, Dann 2026-08-20. THE RULING HOLDS AND ITS OWNER MOVED. One inset,
+	   declared once, in the frame that contains every station rather than in
+	   each panel that draws some of them. */
 
-	/* THE COLUMN'S FOOT BELONGS TO WHICHEVER PANEL ENDS THE COLUMN, and this
-	   rule is what moves it there rather than back where it was.
+	/* ── The dictionary error, now inside the intake ──────── */
+	/* It reports the dictionary Transcribe needs, so it reports where that
+	   button is. Its own two rules are unchanged. */
 
-	   `.drawer-content` holds two panels on Studio: this one, then
-	   `.shane-panel`, which carries the same `40px` foot. Wall-open, that one
-	   ends the column and this rule does not apply. **Wall-closed it is a
-	   different drawer.** `INCLUDE_SHANE` gates the whole body of the
-	   `shanePanel` snippet in `+page.svelte`, so a build with
-	   `PUBLIC_INCLUDE_SHANE` unset renders no `.shane-panel` at all, this panel
-	   ends the column, and without this rule ANALYSIS's 6px would be the entire
-	   gap to the bottom anchor's lavender rule. `.env.example` documents unset
-	   as the production build, so that configuration is real and not
-	   hypothetical.
-
-	   `:last-child` rather than a class, because the question this asks is
-	   exactly "does anything follow me", and Svelte renders the absent snippet
-	   as a comment node, which `:last-child` does not count. 40px is the value
-	   this panel already spent; no new one enters. */
-	.root-panel:last-child {
-		padding-bottom: 40px;
-	}
-
-	/* ── Dictionary progress bar (Kimi spec) ───────────────── */
-
-	.dict-progress {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-		align-items: center;
-		width: 60%;
-	}
-
-	.dict-progress-text {
-		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-		font-family: var(--font-sans);
-	}
-
-	.dict-progress-track {
-		width: 100%;
-		height: 4px;
-		background: var(--stone-300);
-		border-radius: 2px;
-		overflow: hidden;
-	}
-
-	.dict-progress-fill {
-		height: 100%;
-		background: var(--sage);
-		border-radius: 2px;
-		transition: width 200ms ease;
-	}
-
-	.dict-progress-fill.indeterminate {
-		width: 30%;
-		animation: indeterminate 1.5s ease-in-out infinite;
-	}
-
-	@keyframes indeterminate {
-		0% { transform: translateX(-100%); }
-		100% { transform: translateX(433%); }
-	}
+	/* ── The dictionary progress bar left with Analysis ─────
+	   `.dict-progress` and its four rules are `AnalysisStation.svelte`'s now,
+	   with the markup that draws them. */
 
 	/* ── Dictionary error (kept from original) ─────────────── */
 
@@ -810,25 +662,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		font-family: var(--font-sans);
 	}
 
-	/* ── Result summary: always reserves space ────────────── */
-
-	/* N.65 ship one. `margin-top: -4px` is gone. It pulled this line up
-	   against the uploader that used to sit above it; it is the first entry
-	   under ANALYSIS's header now, where a negative margin would eat the
-	   ruled 0.4rem gap. */
-	.result-summary {
-		font-size: 0.75rem;
-		color: var(--sage);
-		font-family: var(--font-sans);
-		margin: 0;
-		min-height: 1.2em;
-		text-align: right;
-	}
-
-	.result-hidden {
-		visibility: hidden;
-	}
-
 	.error-text {
 		font-size: 0.75rem;
 		color: #d97706;
@@ -890,129 +723,30 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		cursor: not-allowed;
 	}
 
-	/* ── The stations (N.65 ship one) ─────────────────────── */
-	/* THE LABEL RECIPE IS NOT HERE ANY MORE. It is
-	   `StationHeader.svelte`, the drawer's one owner, and the reasoning for
-	   a component over a `:global` rule is written there. */
+	/* ── THE STATION RECIPE MOVED TO THE FRAME (N.108) ───────
+	   `.section`, `.section + .section`, `.section.shut` and the two exemption
+	   comments are gone from this file. What they declared was: a 2px sage
+	   rule between stations, 6px above a label, 12px below a body, 6px below a
+	   shut one, and no rule above whatever was first in the scroll.
 
-	/* THE STATION RECIPE, RULED BY DANN ON HIS WALK OF SHIP ONE, 2026-08-20:
-	   "consistent spacing and consistent section dividing lines modelled
-	   after Analysis." ANALYSIS IS THE MODEL and this is it, measured off
-	   what `.console-section` already drew: a 2px sage rule, 6px, the
-	   label, the label's own 0.4rem, the body, 6px, the next station's
-	   rule. Every station in the drawer answers to it, so the space above
-	   any label is 6px and the space below any body is 6px, wherever the
-	   singer looks.
+	   EVERY ONE OF THOSE IS NOW ONE DECLARATION IN `Drawer.svelte`, on
+	   `.group :global(.station)` and its two neighbours, for the reason that
+	   file gives: the inset and the boundary are properties of the FRAME, and
+	   five components were declaring them. That is the same argument
+	   `StationHeader.svelte` makes for the label.
 
-	   ONE RULE PER BOUNDARY, drawn by the station BELOW it. Analysis used
-	   to draw both its own, which is why it was the only station with
-	   lines: its neighbours drew none. Output and Songs draw their own top
-	   rule now, so Analysis's bottom rule is gone rather than doubled. */
-	/* THE RULE IS DRAWN BETWEEN TWO STATIONS, never above the first one, and
-	   that is POSITIONAL now rather than named. Ruled by Dann 2026-08-27 after
-	   his desktop walk found the boundary above ANALYSIS twice its weight.
-
-	   THE CAUSE, and the source had already warned about it: the exemption for
-	   the first station in the scroll was hard-coded onto `.song-section`,
-	   because Repertoire was first when it was written, and the comment beside
-	   it said in as many words that the exemption follows the POSITION and must
-	   move if the order changes again. Slice 4's reorder moved Analysis to the
-	   top of the scroll and left the exemption behind, so the anchor's own
-	   down-facing rule and Analysis's top rule landed on the same y and painted
-	   as one 4px line, and the Analysis-to-Repertoire boundary went blank.
-
-	   `+` CANNOT BE LEFT BEHIND. A rule between two adjacent stations is
-	   exactly the recipe in CSS: one rule per boundary, drawn by the station
-	   below it, and no boundary above the first because the anchor draws that
-	   one. Reorder the stations as often as you like; this follows. */
-	.section + .section {
-		border-top: 2px solid var(--sage);
-	}
-
-	.section {
-		/* 6px above the label, 12px below the body, RULED BY DANN on his walk
-		   of `f59f7d2`: the Clear-and-Transcribe row read "cramped" against
-		   the rule beneath it. 12px is the step this drawer already used
-		   between stations before this ship folded it into the recipe, so no
-		   new value enters the scale.
-
-		   THE ASYMMETRY IS THE POINT and it is applied to every station, not
-		   to Source alone. A label belongs to the rule above it, so it stays
-		   close. A body has finished saying its piece, so it gets air before
-		   the next rule. Spending 12px on both would push the label away from
-		   the line that names it. */
-		padding: 6px 0 12px;
-	}
-
-	/* A SHUT STATION IS THE SAME HEIGHT AS ITS TWINS. N.65, Dann's ruling of
-	   2026-08-21, on the desktop with every station shut: "the spacing of
-	   Notation Source Repertoire and Analysis all need to be consistent. Right
-	   now these retracted sections are irregularly sized." Then the direction:
-	   "I see more padding under Source and Repertoire than Metadata and
-	   Notation. Make them Match Metadata and Notation."
-
-	   THE RULING ABOVE IS KEPT, NOT OVERTURNED. Open, the asymmetry stands
-	   exactly as it is: the label stays close to the rule that names it and
-	   the body gets air before the next rule. A SHUT STATION HAS NO BODY, so
-	   the 12px is air after nothing. This is the same move
-	   `.station-label.tight` (`StationHeader.svelte:139`) already makes when it
-	   drops the label's own gap on a station that shuts.
-
-	   6px, NOT 0, AND THE TREE IS WHY. The brief said the bottom padding
-	   "leaves with the body", which would land these three on 22.8px and
-	   24.8px against Metadata's 28.8px and Notation's 30.8px: irregular again,
-	   in the other direction. MEASURED with every station shut, before this
-	   change: METADATA 28.8, NOTATION 30.8, SOURCE 34.8, REPERTOIRE 36.8,
-	   ANALYSIS 36.8. Metadata and Notation are `.section` too, in
-	   `MetadataFields.svelte` and `NotationFields.svelte`, and theirs is
-	   `padding: 6px 0`. So the target is 6px, which is Dann's own instruction
-	   read literally, and no new value enters the scale: it is this recipe's
-	   own top step.
-
-	   THE 2px THAT REMAINS IS A RULE, NOT PADDING. Notation, Source and
-	   Analysis draw a `border-top`; Metadata and Repertoire do not, because
-	   each sits directly under a rule something above it already draws.
-	   Metadata's comes from the drawer header, Repertoire's from
-	   `.drawer-anchor-top`'s `border-bottom` (`Drawer.svelte:839`). That is a
-	   mark on the page, which is what Dann is looking at, and it is
-	   consistent again.
-
-	   THAT LIST NAMED REPERTOIRE AND SOURCE THE OTHER WAY ROUND UNTIL N.77
-	   SHIP 4, and it was correct when written: Source was first in the
-	   scroll then. The Repertoire move of `a1b5774` swapped them and the
-	   list went stale where the exemption did. */
-	.section.shut {
-		padding-bottom: 6px;
-	}
-
-	/* THE EXEMPTION BELONGS TO WHATEVER IS FIRST IN THE SCROLL, AND IT MOVED
-	   ON 2026-08-21 BECAUSE THE ORDER DID.
-
-	   It read `.source-section { border-top: none }` until N.77 ship 4, and
-	   its reason was sound: `.drawer-anchor-top` (`Drawer.svelte:839`) draws
-	   a 2px sage `border-bottom` under the pinned Metadata and Notation
-	   block, so the first station in the scroll already has a top boundary.
-	   A `border-top` there lands on the same y and paints as one 4px rule,
-	   which is the double line Dann had been asking about since the walk.
-
-	   `a1b5774` moved Repertoire above Source. Source stopped being first
-	   and kept the exemption, so its own boundary went blank and Repertoire
-	   inherited the doubling. MEASURED on the built phone before this
-	   change: two 2px sage marks at the same y above REPERTOIRE, and nothing
-	   at all between REPERTOIRE and SOURCE.
-
-	   So the exemption follows the position rather than the station. If the
-	   order changes again, move it again. */
-	/* `.song-section { border-top: none }` IS GONE. It was the hard-coded
-	   exemption the rule above replaces, and leaving it would suppress a
-	   boundary that now has two stations on either side of it. */
-
-	/* THE OUTPUT STATION IS GONE, N.65 ship B, §B.6. Its `.output-section`
-	   rule declared `border-top: none`, which was Dann's ruling of
-	   2026-08-20 on his walk of the silhouette ship: no horizontal line
-	   between the score field and the Print row. THAT RULING IS NOT
-	   REVERSED, IT IS SATISFIED BY CONSTRUCTION. There is no boundary to
-	   draw a line across any more, because the row is inside SOURCE. */
+	   DANN'S RULINGS INSIDE THEM ARE NOT LOST, and here is where each went:
+	   - "one rule per boundary, drawn by the station below it, none above the
+	     first" (2026-08-27) is `.group-band + .station { border-top: none }`.
+	   - "a shut station is the same height as its twins" (2026-08-21) is
+	     satisfied by construction: the row IS the station when it is shut, and
+	     every row is the same box.
+	   - The 2px sage rule itself (2026-08-20) is retired inside a group and
+	     replaced by a 1px hairline, because inside a frame it is a station
+	     that ends and not a region. The band says the region.
+	   - The asymmetry, a label close to the rule above it and a body given air
+	     below it (2026-08-20), survives as the header's 8px and the body's
+	     12px. */
 
 	/* A station's contents, as a box the header is NOT inside. That is what
 	   makes the header's own 0.4rem the whole gap to the first entry, which
@@ -1026,44 +760,29 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		gap: 6px;
 	}
 
-	/* One step between stations in the scroll, and it is the 12px the tree
-	   already spent between Analysis and Songs. With `.root-panel`'s own
-	   6px flex gap that is 18px, three times. Source takes none: it is
-	   first, under the anchor's rule. */
-
-
-	/* ── Word Console section ────────────────────────────── */
-
-	/* ANALYSIS's two rules. KEPT, and both have a function under Dann's
-	   ruling 3: the top one separates Analysis from Source and the bottom
-	   one separates Analysis from Output. They are the drawer's only
-	   station boundaries and they are the tree's own 2px sage, which
-	   shipped and was walked. The r1 mockup draws station boundaries at 1px
-	   against the anchors' 2px; the tree wins per tether 3, and the memo
-	   names the difference. `margin-top` moved up into the shared station
-	   step. */
-	/* Analysis takes the shared recipe and adds only `overflow: visible`,
-	   which the Inspector needs. Its border and padding used to be
-	   declared here; they are the recipe now, and it is the recipe BECAUSE
-	   they were declared here. */
-	.console-section {
-		overflow: visible;
+	/* THE INTAKE'S NAME IS SPOKEN AND NOT DRAWN. N.108: the intake is the one
+	   station with no visible label, because it is the one station that is
+	   never closed, and a heading a screen reader can reach is what keeps it
+	   from being an unnamed region of controls. `source.heading` is the
+	   ratified string its drawn header used to carry, so no new French is
+	   written and none is owed. The clip recipe is the tree's own, copied
+	   value for value from `NotePicker.svelte`'s `.visually-hidden`. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
-	.console-placeholder-body {
-		min-height: 365px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		padding: 0 0.5rem;
-	}
-
-	.placeholder-hint {
-		font-family: var(--font-serif);
-		font-size: 0.8rem;
-		font-style: italic;
-		color: var(--ink-tertiary);
-	}
+	/* ── ANALYSIS'S RULES LEFT WITH ANALYSIS (N.108) ─────────
+	   `.console-section`, `.console-placeholder-body`, `.placeholder-hint`,
+	   `.result-summary` and `.result-hidden` are `AnalysisStation.svelte`'s
+	   now, copied value for value, because Svelte scopes a rule to the file
+	   that writes the markup and the markup went to the Text group. */
 
 </style>

@@ -92,7 +92,7 @@
 	}
 </script>
 
-<div class="section cosmetic-section" style="--notation-accent: {accent}">
+<div class="station cosmetic-section" style="--notation-accent: {accent}">
 	<!-- N.65 ship B. THE DISCLOSURE MARKUP LEFT THIS FILE. It was right here
 	     and it was right here ALONE, so ship B moved it into `StationHeader`
 	     rather than copying it to five more stations. What was a button and a
@@ -217,14 +217,13 @@
 	   `tight` prop. The reason for the no-gap case is unchanged and is
 	   recorded there. */
 
-	/* The station recipe (RootPanel.svelte's `.section`), which Dann ruled
-	   on his walk of ship one: a 2px sage rule, 6px, the label, the body,
-	   6px. This rule is the boundary between Piece and Notation, and it is
-	   the same one Analysis draws. */
-	.section {
-		border-top: 2px solid var(--sage);
-		padding: 6px 0;
-	}
+	/* N.108 increment 1. `.section` AND ITS 2px SAGE RULE ARE GONE. That rule
+	   was the boundary between Piece and Notation in the pinned top anchor,
+	   and there is no pinned top anchor: Notation is the first station in the
+	   TEXT group and the sage band above it is its boundary. The box, the
+	   inset and the hairline between it and Analysis are the frame's, on
+	   `.group :global(.station)` in `Drawer.svelte`, which is where every
+	   station in the drawer reads them from now. */
 
 	/* N.65 ship B. THE DISCLOSURE RULES ARE NOT HERE ANY MORE. The button
 	   recipe, the 44px coarse-pointer floor, and the two chevron rotations

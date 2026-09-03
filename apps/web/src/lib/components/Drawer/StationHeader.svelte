@@ -34,6 +34,28 @@
 	 * that room's own ruled rose and cobalt. It is renamed `.toc-heading`
 	 * there so the name stops claiming to be this one.
 	 *
+	 * N.108 INCREMENT 1: THE UPPERCASE LABEL RECIPE LEFT THIS ROW AND WENT
+	 * ONTO THE GROUP BAND. It did not change and it was not deleted; it moved
+	 * up one level. Under the three groups the band above a station says PIECE
+	 * or TEXT or SCORE MARKUP in 0.7 rem, 600, 0.12 em, uppercase, in white on
+	 * full colour, and that IS this recipe, reversed. The build brief ruled it:
+	 * "Label recipe from `StationHeader.svelte`."
+	 *
+	 * SO THE STATION'S OWN NAME BECOMES A NAME AGAIN: 0.95 rem in
+	 * `--ink-primary`, sentence case, the way the prototype draws it
+	 * (`n108-drawer-prototype_r2_2026-09-02.html`, `.station-name`). Two
+	 * uppercase registers stacked, the band's and the row's, would have said
+	 * the same thing twice at two sizes. The strings are untouched: every one
+	 * of them is already sentence case in `i18n.ts` and was being uppercased
+	 * by CSS.
+	 *
+	 * WHAT THIS COSTS, AND IT IS RECORDED RATHER THAN HIDDEN: the `accent`
+	 * prop no longer colours a station's name, because a station name is ink
+	 * now. It still colours a header that draws no button, and there are none
+	 * of those in the drawer today. It is kept because deleting a prop is a
+	 * separate change from restyling a row, and because the caller that passes
+	 * it (`NotationFields`) carries a ruling about which colour it passes.
+	 *
 	 * WHERE THE CLOSED-HEADER STATUS GOES, when Dann writes the copy that
 	 * E.27 §3.6 asks for ("Notation: defaults", "Output: nothing to print
 	 * yet"): the `status` snippet below, a second child of the header, with
@@ -126,16 +148,29 @@
 </h3>
 
 <style>
+	/* N.108 increment 1. The uppercase recipe moved onto the group band; see
+	   the header of this file. What is left here is a row that names a station
+	   in ink, at the size a name is read at.
+
+	   THE `--station-accent` FALLBACK STAYS on the no-button branch, which is
+	   the only branch it ever reached in the new dress: a header with no
+	   `ontoggle` still draws whatever colour its caller asks for. */
 	.station-label {
-		margin: 0 0 0.4rem;
+		margin: 0;
 		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--station-accent, var(--sage));
+		font-size: 0.95rem;
+		font-weight: 400;
+		letter-spacing: normal;
+		text-transform: none;
+		color: var(--ink-primary);
 	}
 
+	/* `tight` no longer moves anything: the row carries no bottom margin under
+	   the three groups, because `.station-body`'s own padding is the gap and
+	   `.station`'s hairline is the boundary. The class is kept, and so is the
+	   `isTight` derivation that sets it, because a shut station being tight is
+	   a fact this component knows and a future dress may want. It costs one
+	   empty rule and no measurement. */
 	.station-label.tight {
 		margin-bottom: 0;
 	}
@@ -162,13 +197,29 @@
 	   chevron takes `align-self: flex-start` because a replaced element
 	   baselines on its bottom edge and would otherwise drop. MEASURED against
 	   the same header before the change rather than reasoned. */
+	/* N.108 increment 1. The row grows to the prototype's `.station-header`:
+	   40 px on a fine pointer, 44 on a coarse one, with 8 px of its own above
+	   and below. It was a bare `padding: 0` row whose height was the label's,
+	   and the group frame it now sits in has no 2 px sage rule to sit against,
+	   so the row's own box is what separates one station from the next.
+
+	   `align-items: center` REPLACES `align-items: baseline`, and the reason
+	   the baseline was there is spent. Ship B chose it because a 0.7 rem label
+	   and a 0.75 rem status set two different tops; the name is 0.95 rem now
+	   and the row has a fixed minimum height, so what has to agree is the two
+	   boxes' centres, not their baselines. The chevron loses its
+	   `align-self: flex-start` for the same reason: it was there to stop a
+	   replaced element baselining on its bottom edge, and there is no baseline
+	   group left to fall out of. MEASURED against the same header before the
+	   change rather than reasoned. */
 	.station-disclosure {
 		display: flex;
-		align-items: baseline;
+		align-items: center;
 		justify-content: space-between;
-		gap: 0.5rem;
+		gap: 12px;
 		width: 100%;
-		padding: 0;
+		min-height: 40px;
+		padding: 8px 0;
 		background: none;
 		border: none;
 		font: inherit;
@@ -219,9 +270,9 @@
 	   ship B gives all of them this same pair rather than deriving a second. */
 	.chevron-icon {
 		flex-shrink: 0;
-		align-self: flex-start;
 		transform: rotate(90deg);
 		transition: transform 150ms ease;
+		color: var(--ink-tertiary);
 	}
 
 	.chevron-icon.expanded {

@@ -13,45 +13,66 @@
 		destination: Destination;
 		/**
 		 * The four-way surface id, and the ONLY thing it is used for here is
-		 * `data-tab`. N.73 S3 ship two kept that attribute: no selector and no
-		 * script in the tree reads it, but it is the one mark on the drawer
-		 * that tells Studio's two documents apart, which is exactly what a
-		 * harness needs to prove S2's invariant that flipping the pair changes
-		 * nothing in the drawer. Ship one's walk used it for that.
+		 * `data-tab`. N.73 S3 ship two kept that attribute when NO selector and
+		 * no script read it, because it is the one mark on the drawer that
+		 * tells Studio's two documents apart, which is exactly what a harness
+		 * needs to prove S2's invariant that flipping the pair changes nothing
+		 * in the drawer. Ship one's walk used it for that.
+		 *
+		 * N.108 GAVE IT A SECOND JOB AND THE FIRST ONE SURVIVES. Two rules in
+		 * this file's stylesheet now key the SLAB's fill off it, one per
+		 * Studio document, because the desk under the drawer is that
+		 * document's desk (four desks, ruled 2026-08-19). S2's invariant is
+		 * narrowed rather than broken: flipping the pair changes the fill
+		 * behind the three groups and moves nothing in them.
 		 */
 		activeTab: TabId;
 		activeHeadingId: string | null;
 		tabTransitionClass: string;
-		rootPanel: Snippet;
-		shanePanel?: Snippet;
 		/**
-		 * NOTATION (item N.7). Rendered ONCE, outside the tab switch, anchored
-		 * below the scrolling panel so it holds the same position on every tab
-		 * that shows it. Dann's ruling, 2026-08-06: predictable, and within a
-		 * thumb's reach on mobile, where the mobile rule on `.drawer` gives the
-		 * overlay the whole viewport height. It said `calc(100dvh - 56px)` and
-		 * named the line, until N.73 S1 deleted the tab bar that owned the
-		 * 56 px; the rule is named here rather than numbered, because a line
-		 * number in a comment rots.
+		 * ── THE THREE GROUPS (N.108 increment 1) ──────────────────────────
 		 *
-		 * A snippet rather than props, matching rootPanel and shanePanel, so
-		 * the state stays in +page.svelte and nothing is drilled through here.
+		 * `rootPanel`, `shanePanel`, `notationPanel`, `pieceAnchor` and
+		 * `voiceAnchor` ARE GONE, and what replaced them is not a rename. The
+		 * five named REGIONS of the N.73 S3 column: a pinned top holding Piece
+		 * and Notation, a scroll holding two panels, and a pinned bottom
+		 * holding the voice. Dann ruled the column into three FRAMES on
+		 * 2026-09-02, choice 2 of `drawing-n108-three-choices_r1_2026-09-02.png`,
+		 * "frames, no fold", and the frames cut across every one of those
+		 * regions: Notation left the pinned top for Text, Analysis left
+		 * `rootPanel` for Text, the voice left the pinned bottom for Score
+		 * markup, and the score work left `shanePanel` for the same group.
+		 *
+		 * NOTHING IS PINNED ANY MORE. All three groups scroll together, which
+		 * is what makes "the opening state is the map of everything, and it
+		 * fits without scrolling" a claim about ONE box rather than three. The
+		 * two anchors' sage and lavender rules go with them; the band above
+		 * each group is the boundary now.
+		 *
+		 * Snippets, as the five were, so the state stays in `+page.svelte` and
+		 * nothing is drilled through here.
 		 */
-		notationPanel?: Snippet;
+		pieceGroup?: Snippet;
+		textGroup?: Snippet;
+		scoreGroup?: Snippet;
 		/**
-		 * PIECE (N.73 S3 ship one). The metadata block and its provenance
-		 * line, lifted out of `RootPanel` so they can be pinned. They sit
-		 * above NOTATION in the top anchor, which is what the mockup draws
-		 * (`fable-gui-mockup_r1_2026-08-18.html:309-314`) and what its caption
-		 * states: "Piece and NOTATION are pinned top."
+		 * METADATA'S BODY, opened from the affordance on the Piece band.
+		 *
+		 * Metadata is the one station with no row on the map. Design's
+		 * prototype took it off the map at 1366 x 768 only, where the opening
+		 * state would not otherwise fit; THE BUILD BRIEF OVERRIDES THAT and
+		 * takes it off at every size, phone included, on the desk's ruling
+		 * that two desktops must not show two maps. So the affordance is
+		 * unconditional and the station row does not exist.
+		 *
+		 * The band is drawer chrome, so this file draws the affordance; the
+		 * body is `MetadataFields`, unchanged, rendered under the band.
 		 */
-		pieceAnchor?: Snippet;
-		/**
-		 * THE VOICE ANCHOR (N.73 S3 ship one), pinned to the foot of the
-		 * column. Gated by its own INCLUDE_SHANE at the call site, so an
-		 * absent snippet here means the wall is up, not that the line broke.
-		 */
-		voiceAnchor?: Snippet;
+		metadataBody?: Snippet;
+		/** Whether Metadata's body is showing. Read by the band affordance. */
+		metadataOpen?: boolean;
+		/** The singer's press on the band affordance. */
+		onmetadatatoggle?: () => void;
 		/**
 		 * THE CALIBRATION TAKEOVER (N.73 S3 ship one). E.27's takeover:
 		 * "replaces the entire drawer, shows a single back affordance at the
@@ -77,7 +98,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, collapsed, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, rootPanel, shanePanel, notationPanel, pieceAnchor, voiceAnchor, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, collapsed, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, pieceGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglecollapse, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE (N.65). Dann's ruling, 2026-08-20, DRAWN at
 	   `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html`, whose SVG
@@ -299,19 +320,14 @@
 <aside class="drawer" class:collapsed data-tab={activeTab} style="--lip-w: {LIP_W}px; --lip-h: {LIP_H}px; {isMobile ? '' : `width: ${collapsed ? 0 : width}px`}" aria-label={t('a11y.drawer', language)} bind:clientHeight={drawerHeight}>
 	<div class="drawer-clip">
 	<div class="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
-		<!-- THE TOP ANCHOR (N.73 S3 ship one). Piece, then NOTATION, pinned
-		     above the scroll. E.36 §1.4, ratified by Dann 2026-08-19
-		     (`fable-ruling-s0-slate-closed_2026-08-19.md`, ruling 1). This
-		     replaces the E.29 shape, where NOTATION was pinned to the FOOT of
-		     the column and the metadata block scrolled away with everything
-		     else. Studio only: Learn and Guide have no piece in front of the
-		     reader. -->
-		{#if isStudio && (pieceAnchor || notationPanel)}
-			<div class="drawer-anchor drawer-anchor-top" class:stowed={takeoverActive}>
-				{@render pieceAnchor?.()}
-				{@render notationPanel?.()}
-			</div>
-		{/if}
+		<!-- THE TWO PINNED ANCHORS ARE GONE, N.108 increment 1. A pinned top
+		     carrying Piece and Notation and a pinned bottom carrying the voice
+		     were the N.73 S3 column, ratified 2026-08-19. The three frames
+		     replace them: Notation is in Text, the voice is in Score markup,
+		     and everything in the drawer scrolls in one box, which is what
+		     lets the opening state be measured as one height. Their two rules,
+		     the sage down-facing one and the lavender up-facing one, go with
+		     them; the group bands are the boundaries now. -->
 		<!-- N.73 S3 ship two. THE DRAWER IS NOT A TABPANEL, and it stopped
 		     being one at S2. This box carried `role="tabpanel"`,
 		     `id="tabpanel-{activeTab}"` and `aria-labelledby="tab-{activeTab}"`
@@ -337,8 +353,44 @@
 				     shanePanel carries its own INCLUDE_SHANE gate. Learn and Guide
 				     are untouched. -->
 				{#if isStudio}
-					{@render rootPanel()}
-					{@render shanePanel?.()}
+					<!-- ═══ PIECE. N.108, Dann's ruling of 2026-09-02: the first
+					     group is named Piece, "not every piece will be a song:
+					     some will be arias." It borrows Guide's cobalt on
+					     purpose, which overrides "hue names place" for Guide,
+					     also on purpose and also his ruling. -->
+					<section class="group group-piece">
+						<h2 class="group-band">
+							<span class="band-name">{t('group.piece', language)}</span>
+							<!-- METADATA'S AFFORDANCE, at every size. See the
+							     `metadataBody` prop for why it is unconditional
+							     and what it overrides. It costs no height,
+							     because the band is already there. -->
+							{#if metadataBody}
+								<button
+									type="button"
+									class="band-link"
+									aria-expanded={metadataOpen}
+									aria-controls={metadataOpen ? 'station-metadata' : undefined}
+									onclick={() => onmetadatatoggle?.()}
+								>{t('meta.heading', language)}</button>
+							{/if}
+						</h2>
+						{#if metadataOpen && metadataBody}
+							<div class="band-body" id="station-metadata">{@render metadataBody()}</div>
+						{/if}
+						{@render pieceGroup?.()}
+					</section>
+					<!-- ═══ TEXT. Sage, one step down. Notation and Analysis. -->
+					<section class="group group-text">
+						<h2 class="group-band"><span class="band-name">{t('group.text', language)}</span></h2>
+						{@render textGroup?.()}
+					</section>
+					<!-- ═══ SCORE MARKUP. Lavender, one step down. Underlay,
+					     Corrections, Voice. -->
+					<section class="group group-score">
+						<h2 class="group-band"><span class="band-name">{t('group.scoreMarkup', language)}</span></h2>
+						{@render scoreGroup?.()}
+					</section>
 				{:else if destination === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
 						<h2 class="toc-heading toc-heading-learn">{language === 'fr' ? 'LEÇONS' : 'LEARN'}</h2>
@@ -598,13 +650,6 @@
 					</nav>
 				{/if}
 		</div>
-		<!-- THE BOTTOM ANCHOR (N.73 S3 ship one). One line, the voice.
-		     NOTATION used to be pinned here; it is at the top now. -->
-		{#if isStudio && voiceAnchor}
-			<div class="drawer-anchor drawer-anchor-bottom" class:stowed={takeoverActive}>
-				{@render voiceAnchor()}
-			</div>
-		{/if}
 		<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). Always in the tree on
 		     Studio and hidden until it is entered; see the `voiceTakeover` prop
 		     for why it is not a conditional mount. It is a SIBLING of the three
@@ -681,6 +726,24 @@
 		<svg class="lip-chevron" aria-hidden="true" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 			<polyline points="3,2 11,10 3,18" />
 		</svg>
+		<!-- THE LABELLED PULL, ON THE PHONE ONLY. Ruled by Dann 2026-08-18:
+		     "mobile gets one labelled pull (caret, DRAWER) on both portrait
+		     states, replacing both unlabelled handles." The ruling was made and
+		     never built; N.108 §2 restates it and this is it.
+
+		     THE DESKTOP TAB STAYS UNLABELLED, which is the same ruling read
+		     literally: the label is the MOBILE pull's. N.73 S1 §2.7's "no
+		     visible word" governs the desktop still, and its reason, fewer text
+		     elements onscreen, is unchanged there.
+
+		     `aria-hidden`, because the button already carries `drawer.pull` as
+		     its accessible name and this is the same word drawn. A screen
+		     reader must not hear it twice.
+
+		     THE STRING IS RATIFIED and so is its French: `drawer.pull`,
+		     `i18n.ts:46`, "Drawer" / « Tiroir ». Nothing new is written for
+		     it. -->
+		<span class="pull-label" aria-hidden="true">{t('drawer.pull', language)}</span>
 	</button>
 </aside>
 
@@ -737,10 +800,27 @@
 		position: relative;
 	}
 
+	/* ── THE SLAB (N.108). Ruled by Dann 2026-09-02: "the slab takes the
+	   desk's surround and the groups carry the drawer paper, as built; the
+	   bookmark tab belongs to the slab."
+
+	   SO THIS BOX'S FILL IS THE DESK'S, NOT THE DRAWER'S. It was
+	   `--drawer-bg`, which is now the three groups' fill. What the change buys
+	   is the DIVOT: two 20 px corners meeting between one group and the next
+	   cut a notch, and a notch has to be cut out of something. The desk is
+	   what it is cut out of, so the drawer reads as three cards laid on the
+	   desk rather than as one sheet with lines drawn on it.
+
+	   ONE FILL PER DESK, from the four-desks ruling of 2026-08-19, keyed off
+	   `data-tab` on the root `<aside>`. Learn and Guide keep `--drawer-bg`,
+	   and that is a DECISION THIS SHIP MAKES RATHER THAN A RULING IT CARRIES:
+	   their drawer holds a table of contents and no groups, so there is no
+	   paper card to cut the notch out of and a surround there would put the
+	   reading room's own list straight onto the desk. Recorded in the memo. */
 	.drawer-body {
 		height: 100%;
 		overflow: hidden;
-		background: var(--drawer-bg);
+		background: var(--slab-fill, var(--drawer-bg));
 		display: flex;
 		flex-direction: column;
 		/* THE LAST `2px double` IS GONE, ruled by Dann 2026-08-20 on his walk
@@ -757,114 +837,224 @@
 	}
 
 
+	/* THE ONE SCROLL. N.108: the drawer never scrolls itself, except once, on
+	   entry to the calibration takeover, and that one call is the takeover's
+	   (increment 3). Nothing in this file calls `scrollTo` on this box; the
+	   only thing that touches its `scrollTop` is the takeover's stow and
+	   restore below, which gives the singer back the position they had. A
+	   station opens IN PLACE. Do not add a scroll here. */
 	.drawer-content {
 		flex: 1;
+		min-height: 0;
 		overflow-y: auto;
+		/* The foot of the column. It was `.root-panel:last-child`'s 40px,
+		   which belonged to whichever panel ended the column; there is no last
+		   panel now, there is a last GROUP, and a group's corners must not be
+		   cropped by the scroll's own edge. 12px, the prototype's value. */
+		padding-bottom: 12px;
 	}
 
-	/* ── The anchors (N.7, and N.73 S3's second one) ─────── */
-	/* Siblings of .drawer-content, not children, so neither scrolls away.
-	   flex-shrink: 0 because .drawer-content owns the flexible height and
-	   these blocks must keep their own; without it a long panel would
-	   compress them rather than scroll behind them.
+	/* ── THE THREE GROUPS (N.108) ─────────────────────────────
+	   Contiguous squircles at the fourth radius, flush, no gap between them.
+	   THE DIVOT IS THE TWO 20 px CORNERS MEETING, depth 20 and chord 40, cut
+	   out of the slab's desk fill. A margin between groups would draw a gap
+	   instead of a divot, which is a different mark.
 
-	   Side padding is 1rem, matching .root-panel and .shane-panel, so what
-	   is pinned keeps the same left edge as what scrolls.
-
-	   THE RULE IS SAGE, AND IT IS THE SAME RULE EVERY BOUNDARY IN THIS
-	   DRAWER DRAWS. This paragraph used to argue the opposite: that a
-	   shelf shared by two documents must not carry either one's identity
-	   colour, so the anchors took .drawer-body's 2px double ink rather
-	   than the sage of RootPanel's .console-section. That argument is
-	   spent. Sage stopped being one document's colour when N.73 S3 ship
-	   two made NOTATION's accent unconditionally sage and the S0 slate
-	   kept lavender to the voice anchor alone, so every station label in
-	   the drawer is already sage on both documents. See .drawer-anchor-top
-	   for what the rule means now and who ruled it. */
-	.drawer-anchor {
-		flex-shrink: 0;
+	   THE FOURTH RADIUS IS 20 px, ruled by Dann 2026-09-02 from
+	   `drawing-n108-radius_r1_2026-09-02.png`: "20 looks terrific." It is a
+	   SURFACE radius and it amends "three radii, no fourth" of 2026-08-18. The
+	   ruled set is now 0, 4 (control), 20 (surface), and full-round. */
+	.group {
 		background: var(--drawer-bg);
+		border-radius: 20px;
+		overflow: hidden;
+		padding-bottom: 4px;
 	}
 
-	/* N.73 S3. Piece and NOTATION, pinned above the scroll.
+	/* ── THE GROUP BAND ───────────────────────────────────────
+	   Option A of `drawing-n108-group-headers_r1_2026-09-02.png`, ruled by
+	   Dann 2026-09-02: "a band of full-strength colour with reverse text in a
+	   light neutral", his own drawing over Design's three. "I honestly prefer
+	   mine."
 
-	   WHAT THE RULE MEANS, RULED BY DANN 2026-08-20 ON HIS WALK OF N.65
-	   SHIP ONE. A 2px sage horizontal is the drawer's ONE boundary
-	   treatment, and it means "a region ends here." There is no second
-	   treatment and no hierarchy among them. Four rules draw it: this one,
-	   .drawer-anchor-bottom, .takeover-head, and .console-section's pair
-	   in RootPanel.svelte, which is the one this value came from. Match
-	   that rule if you ever add a fifth, and do not invent a weight, a
-	   style, or a colour to say that one boundary outranks another.
+	   THE HUE IS THE LANGUAGE-CHIP TOKEN, one step down from the band hue, and
+	   THE TEXT IS WHITE RATHER THAN CREAM. That is the fix Dann ruled inside
+	   option A on the same day, because the ruled hues fail 4.5:1 against
+	   cream, cobalt included at 4.23:1. Measured on the chips: Piece 4.77:1,
+	   Text 4.58:1, Score markup 4.63:1. NO HEX IS ADDED HERE; all three tokens
+	   are `app.css`'s own, ratified 2026-08-20 as option D of the language
+	   toggle. If a band ever moves, it moves there.
 
-	   All three rules in this file were `2px double var(--ink-primary)`
-	   until that ruling. Nothing in the source ever said why the style was
-	   `double`, which is the question Dann had to ask, and asking it is
-	   what retired it.
-
-	   HE GAVE UP SOMETHING KNOWINGLY, so do not restore it as a fix. The
-	   old pair distinguished a FRAME boundary, the ink double around the
-	   pinned shelves and the takeover, from a STATION boundary, the sage
-	   between Analysis and its neighbours. One treatment cannot say which
-	   is which. He ruled that a drawer with one horizontal is worth more
-	   than a drawer that grades its horizontals.
-
-	   The direction is unchanged: this rule faces DOWN, toward the scroll
-	   it caps, and the bottom anchor's is its mirror. Bottom padding is
-	   12px, the value the old bottom-pinned NOTATION anchor carried; there
-	   is no 6px top here, because .root-panel's own metadata block opens
-	   the region and brings its own. */
-	.drawer-anchor-top {
+	   THE LABEL RECIPE IS `StationHeader.svelte`'s, reversed: 0.7rem, 600,
+	   0.12em, uppercase. The build brief rules it, and that file's header
+	   records that the recipe moved up here from the station row. */
+	.group-band {
 		display: flex;
-		flex-direction: column;
-		/* NO GAP AND NO VERTICAL PADDING, N.65 ship one, Dann's walk. Piece
-		   and Notation are stations, so they answer to the station recipe in
-		   RootPanel.svelte like every other one: each brings its own 6px above
-		   and below, and Notation brings the rule between them. A gap or a
-		   padding here would land on top of that and make these two the only
-		   stations spaced differently, which is the defect. */
-		gap: 0;
-		/* SIDE MARGIN, NOT SIDE PADDING, and that is what insets the rule.
-		   Ruled by Dann 2026-08-20: the line above SOURCE ran full bleed to
-		   the left margin while NOTATION's started 1rem in, and every station
-		   rule must share one inset. A border draws on the border box, so
-		   1rem of PADDING sits inside it and the rule spans the whole drawer;
-		   1rem of MARGIN sits outside it and the rule starts where the
-		   content starts. Every station rule in RootPanel.svelte is already
-		   inset, because those boxes sit inside `.root-panel`'s own 1rem.
-		   This is the same 1rem, moved to the other side of the border.
-		   Twinned on `.drawer-anchor-bottom` and `.takeover-head`. */
-		padding: 0;
-		margin: 0 1rem;
-		border-bottom: 2px solid var(--sage);
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		height: 40px;
+		margin: 0;
+		padding: 0 18px;
+		color: #fff;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		white-space: nowrap;
 	}
 
-	/* N.73 S3. The voice. VoiceAnchor.svelte draws its own 9px 1rem padding,
-	   so this shelf adds none: two paddings would meet in the middle of one
-	   line. */
-	.drawer-anchor-bottom {
-		/* The 1rem came here from `VoiceAnchor`'s own `.voice-line`, so this
-		   rule is inset like every other. Same device as
-		   `.drawer-anchor-top`: margin outside the border, not padding
-		   inside it. The voice line keeps its 9px above and below. */
-		padding: 0;
-		margin: 0 1rem;
-		/* LAVENDER, AND IT IS DANN'S OWN SYSTEM APPLIED RATHER THAN AN
-		   EXCEPTION TO IT. Ruled 2026-08-20 on his walk. Sage marks
-		   transcription work and lavender marks score and voice work, and
-		   this rule belongs to the voice, which is lavender's carrier under
-		   the S0 ruling of 2026-08-19
-		   (`claude/ruling-lavender-marks-the-marked-score_2026-08-19.md`).
-		   The rule above SHIFT LYRICS went lavender in the last pass for the
-		   same reason.
-
-		   THE SAME TOKEN AS THAT ONE, `--deeper-lavender` #8E7E9B, which is
-		   also the app bar's `.header-bar.tab-shane` fill and the score
-		   intake's border. NO SECOND LAVENDER ENTERS: `--surround-marked` is
-		   this hue at 60 percent toward white, a desk tint, and it is not
-		   this. */
-		border-top: 2px solid var(--deeper-lavender);
+	.band-name {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
+
+	.group-piece .group-band {
+		background: var(--lang-chip-guide);
+	}
+
+	.group-text .group-band {
+		background: var(--lang-chip-transcription);
+	}
+
+	.group-score .group-band {
+		background: var(--lang-chip-marked);
+	}
+
+	/* THE SCORE MARKUP GROUP'S FOCUS RING IS LAVENDER, not the global sage.
+	   Dann's arrangement of 2026-07-13, so focusing a score field mirrors the
+	   sage ring in purple. It was `.shane-panel :global(:focus-visible)` in
+	   `+page.svelte` and it came here with the column that carried it; the set
+	   of surfaces is the same set, under a name that says what they are. */
+	.group-score :global(:focus-visible) {
+		outline-color: var(--deeper-lavender);
+	}
+
+	/* METADATA'S AFFORDANCE. The same recipe as the band it sits on, held one
+	   step back by opacity rather than by a second colour, so the band still
+	   reads as the group's name with a way in beside it rather than as two
+	   labels. Its target is the band's own 40px height. */
+	.band-link {
+		display: inline-flex;
+		align-items: center;
+		flex: none;
+		min-height: 40px;
+		padding: 0;
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		color: #fff;
+		background: none;
+		border: none;
+		opacity: 0.85;
+		cursor: pointer;
+	}
+
+	.band-link:hover {
+		opacity: 1;
+	}
+
+	.band-link:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: -2px;
+	}
+
+	/* Metadata's body sits directly under the band, where its station row
+	   would have been, and takes the same inset every station takes. */
+	.band-body {
+		margin: 0 18px;
+	}
+
+	/* ── THE STATION BOX, ONE OWNER ───────────────────────────
+	   `:global`, and deliberately: the stations are authored by five other
+	   components (`SongList`, `NotationFields`, `MetadataFields`,
+	   `RootPanel`, `+page.svelte`'s own group snippets), and Svelte scopes a
+	   rule to the file that writes the markup. The INSET and the BOUNDARY are
+	   properties of the group frame, not of any one station, so the frame
+	   owns them here and no station repeats them. That is the same argument
+	   `StationHeader.svelte` makes for the label, and it is why the drawer
+	   stopped having five copies of that.
+
+	   THE HAIRLINE REPLACES THE 2 px SAGE RULE, which was the drawer's one
+	   boundary treatment under Dann's ruling of 2026-08-20. It is retired
+	   INSIDE a group rather than everywhere: the sage rule said "a region ends
+	   here", and inside a frame the region does not end, the station does. The
+	   band is what says a region ends now, and it says it louder than 2px ever
+	   did. No boundary above the first station in a group, because the band
+	   above it is that boundary. */
+	.group :global(.station) {
+		margin: 0 18px;
+		border-top: 1px solid rgba(26, 22, 18, 0.1);
+	}
+
+	/* NO BOUNDARY UNDER THE BAND, and it is written as adjacency rather than
+	   as `:first-of-type` because Metadata's body may stand between the two.
+	   With Metadata open the first station DOES take a hairline, which is
+	   right: the body above it is content, not a band. Whatever a group's
+	   contents turn out to be, the rule is the same one this drawer has used
+	   since 2026-08-27 for its station rules: one rule per boundary, drawn by
+	   the thing below it, and none above the first. */
+	.group-band + :global(.station) {
+		border-top: none;
+	}
+
+	/* A station's contents. The prototype's `.station-body`: no top padding,
+	   because the header's own 8px is the gap, and 12px below, because the
+	   next station's hairline needs air above it. Global for the same reason
+	   the box above is: five components author these bodies and the frame owns
+	   the measure. */
+	.group :global(.station-body) {
+		padding: 0 0 12px;
+	}
+
+	/* ── THE ONE MOTION (N.108 §2) ────────────────────────────
+	   A station body arrives at `--motion`, `app.css`'s one duration, and it
+	   arrives on OPACITY AND TRANSFORM ONLY. HEIGHT IS NOT ANIMATED, which is
+	   the ruling and not a shortcut: an animated height would make every group
+	   below the opened station travel for 180 ms, and the whole of N.108 is
+	   that the drawer does not rearrange under the singer's hand. The groups
+	   below step down in one frame; only the body that arrived fades in.
+
+	   `both` LEAVES `transform: none` APPLIED, which matters: a live transform
+	   would make the body a containing block for the Inspector's absolutely
+	   positioned parts and for `SearchableSelect`'s dropdown. The final frame
+	   removes it. */
+	.group :global(.station-body),
+	.band-body {
+		animation: bodyIn var(--motion) both;
+	}
+
+	@keyframes bodyIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* ── THE ANCHORS ARE GONE (N.108 increment 1) ────────────
+	   `.drawer-anchor`, `.drawer-anchor-top` and `.drawer-anchor-bottom` are
+	   deleted with the two pinned regions they dressed. Three of the four
+	   declarations of the drawer's ONE boundary treatment lived here: the top
+	   anchor's 2px sage down-facing rule, ruled by Dann 2026-08-20, and the
+	   bottom anchor's 2px lavender up-facing one, ruled the same day. THE
+	   RULING THEY CARRY IS NOT REVERSED, IT IS SPENT: it said a drawer with
+	   one horizontal is worth more than a drawer that grades its horizontals,
+	   and the new dress has no horizontals to grade. A band of full colour is
+	   what says "a region ends here" now, and a 1px hairline is what separates
+	   two stations inside one region. The fourth declaration, `.takeover-head`,
+	   survives untouched below and is increment 3's to restyle.
+
+	   THE LAVENDER IS NOT LOST EITHER. It was the voice's rule under the S0
+	   slate of 2026-08-19; the voice is inside the Score markup group now, and
+	   that group's band is `--lang-chip-marked`, the same hue one step down.
+	   The ruling survives in a stronger form, which is the argument Design
+	   made for the takeover's own rule and it holds here for the same reason. */
 
 	/* ── The takeover (N.73 S3) ──────────────────────────── */
 	/* Takes .drawer-content's place in the column when it has the drawer:
@@ -979,6 +1169,23 @@
 		--lip-grey: #D2CFCC;
 	}
 
+	/* ── THE SLAB'S FILL, ONE PER DESK (N.108) ────────────────
+	   `data-tab` USED TO BE READ BY NOTHING, and the prop's own comment said
+	   so: it was the one mark on the drawer that told Studio's two documents
+	   apart, kept for a harness. It is read now, here, and that comment is
+	   corrected where it stands.
+
+	   Four desks, four surrounds, ruled 2026-08-19. Studio's two take theirs;
+	   Learn and Guide keep the drawer's own paper, for the reason recorded on
+	   `.drawer-body`. */
+	.drawer[data-tab='transcription'] {
+		--slab-fill: var(--surround-transcription, #D1D7CB);
+	}
+
+	.drawer[data-tab='shane'] {
+		--slab-fill: var(--surround-marked, #D2CBD7);
+	}
+
 	.lip-silhouette {
 		position: absolute;
 		top: 0;
@@ -1000,8 +1207,15 @@
 		   hides its own shadow. See that rule. */
 	}
 
+	/* N.108: THE TAB BELONGS TO THE SLAB, ruled 2026-09-02, so its fill is the
+	   slab's and not the drawer paper's. It was `--drawer-bg`, which is now
+	   the groups' fill; leaving it there would have painted a paper-coloured
+	   notch on a desk-coloured spine, which is the outline and the tab
+	   disagreeing again. The 20 x 152 geometry and the centring are untouched:
+	   they are ruled (2026-08-18, 2026-08-20, 2026-08-21) and this ship
+	   restates them rather than moving them. */
 	.sil-fill {
-		fill: var(--drawer-bg, #FAF8F5);
+		fill: var(--slab-fill, var(--drawer-bg, #FAF8F5));
 		transition: fill 0.12s;
 	}
 
@@ -1064,7 +1278,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: var(--drawer-bg, #FAF8F5);
+		background: var(--slab-fill, var(--drawer-bg, #FAF8F5));
 		border: 1px solid rgba(26, 22, 18, 0.18);
 		border-left: none;
 		border-radius: 0 5px 5px 0;
@@ -1163,6 +1377,28 @@
 	}
 
 	/* ── The chevron ─────────────────────────────────────── */
+
+	/* THE LABEL IS SET VERTICALLY, because the tab is 20px wide and ruled so
+	   (2026-08-18, 2026-08-20, 2026-08-21) and a horizontal "DRAWER" does not
+	   go in 20px. `writing-mode: vertical-rl` reads downward, so the eye takes
+	   the caret and then the word, in the order the ruling writes them.
+
+	   THE RECIPE IS THE DRAWER'S OWN LABEL RECIPE, the one that is on the
+	   group bands: 0.7rem, 600, 0.12em, uppercase. Here it is ink on the tab
+	   rather than reversed, because the tab is the slab and not a band.
+
+	   IT IS DRAWN ONLY BELOW 768px. Declared `display: none` here and turned
+	   on in the phone block, so the desktop tab is untouched by this ship. */
+	.pull-label {
+		display: none;
+		writing-mode: vertical-rl;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-tertiary, #6A655F);
+	}
 
 	.lip-chevron {
 		width: 14px;
@@ -1558,6 +1794,20 @@
 			pointer-events: auto;
 		}
 
+		/* THE LABELLED PULL (N.108 §2, Dann's ruling of 2026-08-18). The tab
+		   becomes a column so the caret sits above the word; 8px between them,
+		   the step this drawer already spends between a glyph and its label.
+		   Neither the tab's 20 x 152 box nor its centring moves: the two
+		   children are laid out inside the box it already had. */
+		.drawer-lip {
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.pull-label {
+			display: block;
+		}
+
 		/* THE OPEN TAB'S POSITION OVERRIDE IS DELETED, N.65 item 3, AND THE
 		   BRIEF DID NOT ASK FOR IT. It read `left: auto; right: 0`, and its
 		   reason was that the open drawer was the whole screen, so a tab at
@@ -1650,6 +1900,13 @@
 
 		.toc-children {
 			transition: none;
+		}
+
+		/* N.108's one motion, off. A station still opens; it just arrives
+		   without the 180 ms. */
+		.group :global(.station-body),
+		.band-body {
+			animation: none;
 		}
 
 		.chevron-icon {
