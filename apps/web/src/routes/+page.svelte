@@ -101,6 +101,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import {
+		clearScoreFilled,
 		dropTagsForEdits,
 		onScoreIngested,
 		revertToScoreHeader,
@@ -1783,6 +1784,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		arrivalPage = null;
 		restoreSource = null;
 		doc.detachSource();
+		/* THE HEADER FIELDS GO WITH THE SCORE. RULED BY DANN 2026-09-03 on his
+		   walk of increment 2: Clear on the score empties every Metadata field
+		   still tagged "from score" and leaves the singer's own alone.
+
+		   `clearScoreFilled` IS THE RULE ALREADY WRITTEN, not a second copy of
+		   it. It is what an arriving score calls through `onScoreIngested` to
+		   drop the last score's identity, its transitions are covered by
+		   `metadata-provenance.test.ts`, and the Q1 refinement (Kimi,
+		   2026-07-13) is what makes it safe here: a tag fades on the field's
+		   first hand edit, so a field the singer has touched is not tagged and
+		   is not reached. A field they filled from blank was never tagged
+		   either.
+
+		   IT ANSWERS THE SAME FAULT E.23 FOUND, from the other end. A score
+		   that arrives clears what the last one filled, so a printed page
+		   cannot name the wrong work; until now a score that LEFT cleared
+		   nothing, so the drawer and the page header kept the departed score's
+		   title and composer, still wearing a badge naming a file that is no
+		   longer here. */
+		commitMetadataState(
+			clearScoreFilled({ metadata: doc.metadata, fromScore: doc.fromScoreFields }),
+		);
 	}
 
 	function handlePrint() {
@@ -3143,7 +3166,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{destination}
 		{activeTab}
 		{activeHeadingId}
-		{tabTransitionClass}
 		takeoverActive={calibrating}
 		onexittakeover={exitCalibration}
 		metadataOpen={sections.has(STATION_IDS.metadata)}
@@ -3934,15 +3956,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 
-	/* N.73 S3 ship one. The takeover's own column, the same measures
-	   `.shane-panel` gives the drawer, so the ritual keeps the drawer's left
-	   edge. The wizard drops its own outer padding in favour of this, which is
-	   why the value is repeated rather than shared. */
+	/* N.73 S3 ship one. The takeover's own column, so the ritual keeps the
+	   drawer's left edge. The wizard drops its own outer padding in favour of
+	   this.
+
+	   THE PADDING MOVED OUT AT N.108 INCREMENT 3, and this is the second half
+	   of one change rather than a loss. `.takeover-body` in `Drawer.svelte`
+	   now spends the prototype's `4px 18px 16px`, which is the 18 px inset
+	   every station in the new dress takes; the `12px 1rem 40px` here was the
+	   old takeover's own copy of the same idea, and two boxes both padding
+	   would have set the ritual in from the frame twice. The column stays,
+	   because the 6 px gap between the wizard's parts is its own. */
 	.takeover-panel {
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		padding: 12px 1rem 40px;
 	}
 
 	.takeover-panel :global(:focus-visible) {

@@ -47,7 +47,11 @@
 		 */
 		activeTab: TabId;
 		activeHeadingId: string | null;
-		tabTransitionClass: string;
+		/* `tabTransitionClass` IS GONE (N.108 increment 3). It was the tab
+		   slide's only carrier into this component, and Dann ruled the slide
+		   off the drawer on 2026-09-03; the stylesheet below records what
+		   went and what stayed. `+page.svelte` keeps the state, because
+		   `.main-content` still reads it. */
 		/**
 		 * ── THE THREE GROUPS (N.108 increment 1) ──────────────────────────
 		 *
@@ -128,7 +132,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, tabTransitionClass, pieceGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
@@ -325,9 +329,34 @@
 	   a drawer scrolled to 300 landed at 0, which is the thing this code
 	   exists to prevent. A pre-effect runs before the update, while the
 	   element still has its layout. The RESTORE is the mirror case and has to
-	   wait for the layout to come back, so it is deferred one frame. */
+	   wait for the layout to come back, so it is deferred one frame.
+
+	   THE ONE SELF-SCROLL IN THE WHOLE DRAWER, N.108 increment 3, and it
+	   rides in the same effect. N.108 §2: "the drawer never scrolls itself,
+	   except once, on entry to the calibration takeover." The singer must
+	   land on the ritual and not part-way down it, and the drawer's own
+	   scroll is held and given back on exit so they land where they were.
+
+	   IT IS WRITTEN ON THE WAY OUT, NOT ON THE WAY IN, AND THAT WAS MEASURED
+	   RATHER THAN CHOSEN. The prototype sets `takeoverBody.scrollTop = 0` on
+	   entry (`:602`), where the element is already showing. Here the element
+	   is `display: none` until the update lands, so the write has to be
+	   deferred, and a deferred write LOSES: `display: none` does not discard
+	   this box's scroll offset, Chrome restores it when the box gets its
+	   layout back, and that restoration happens after `requestAnimationFrame`
+	   runs. Observed on the production build, 2026-09-03: scroll the ritual
+	   to 200, back out, re-enter, and the ritual comes back at 200 with the
+	   rAF write already spent.
+
+	   ON THE WAY OUT the box still has its layout, so `scrollTop = 0` is one
+	   synchronous write with nothing to race, and the next entry is at the
+	   top by construction. It is the same argument the stow above makes for
+	   reading `scrollTop` in a pre-effect, used in the other direction.
+	   NOTHING IS PAINTED SCROLLED: this runs before the DOM update that
+	   stows the box, so the reset and the hide land in one frame. */
 	let stowedScrollTop = 0;
 	let takeoverWas = false;
+	let takeoverBodyEl: HTMLElement | undefined = $state();
 	$effect.pre(() => {
 		const active = takeoverActive;
 		if (active === takeoverWas) return;
@@ -337,6 +366,7 @@
 		if (active) {
 			stowedScrollTop = el.scrollTop;
 		} else {
+			if (takeoverBodyEl) takeoverBodyEl.scrollTop = 0;
 			requestAnimationFrame(() => {
 				el.scrollTop = stowedScrollTop;
 			});
@@ -387,7 +417,7 @@
 		     optional on a `tab` in ARIA 1.2, and an absent reference beats a
 		     broken one. `DeskHead` drops its half in the same ship. -->
 		<div
-			class="drawer-content {tabTransitionClass}"
+			class="drawer-content"
 			class:stowed={takeoverActive}
 			bind:this={drawerContentEl}
 		>
@@ -695,23 +725,46 @@
 					</nav>
 				{/if}
 		</div>
-		<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). Always in the tree on
-		     Studio and hidden until it is entered; see the `voiceTakeover` prop
-		     for why it is not a conditional mount. It is a SIBLING of the three
-		     regions above and hides all of them, which is E.27's "replaces the
-		     entire drawer": NOTATION and the voice line are not visible during
-		     the ritual. Its back affordance reuses `inspector.back`, a ratified
-		     string that had no call site left in the tree, so the takeover
-		     writes no new French. -->
+		<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one, redressed at N.108
+		     increment 3). Always in the tree on Studio and hidden until it is
+		     entered; see the `voiceTakeover` prop for why it is not a
+		     conditional mount. It is a SIBLING of the three groups above and
+		     hides all of them, which is E.27's "replaces the entire drawer":
+		     the groups, their bands and the voice line are not visible during
+		     the ritual. Its back affordance reuses `inspector.back`, a
+		     ratified string, so the takeover writes no new French.
+
+		     THE NEW DRESS IS ONE GROUP, GROWN. Ruled by Dann 2026-09-02:
+		     calibration stays a takeover and Design restyles it in the new
+		     dress. So this is a fourth frame at the 20 px surface radius,
+		     wearing the Score markup band, because the ritual IS the Score
+		     markup group's Voice station filling the drawer. The prototype
+		     draws it at `.takeover-frame`, `.takeover-band`,
+		     `.takeover-title` (`n108-drawer-prototype_r2_2026-09-02.html`).
+
+		     BACK IS ON THE LEFT OF THE BAND, which is the build brief §1.2
+		     overriding the prototype: "Back sits on the LEFT of the
+		     takeover's band, where `Drawer.svelte:619` puts it today. The
+		     prototype has it on the right; reverse the flex order." It is
+		     first in the markup, which is that reversal.
+
+		     THE BAND SAYS THE GROUP AND THE TITLE SAYS THE STATION. Two
+		     labels rather than one, and the prototype gives the reason: the
+		     band is the group's name, so the station the ritual grew from
+		     has to say its own. -->
 		{#if isStudio && voiceTakeover}
 			<div class="drawer-takeover" class:stowed={!takeoverActive}>
-				<div class="takeover-head">
-					<button type="button" class="takeover-back" onclick={() => onexittakeover?.()}>
-						{t('inspector.back', language)}
-					</button>
-				</div>
-				<div class="takeover-body">
-					{@render voiceTakeover()}
+				<div class="takeover-frame">
+					<h2 class="takeover-band">
+						<button type="button" class="takeover-back" onclick={() => onexittakeover?.()}>
+							{t('inspector.back', language)}
+						</button>
+						<span class="band-name">{t('group.scoreMarkup', language)}</span>
+					</h2>
+					<div class="takeover-body" bind:this={takeoverBodyEl}>
+						<p class="takeover-title">{t('voice.heading', language)}</p>
+						{@render voiceTakeover()}
+					</div>
 				</div>
 			</div>
 		{/if}
@@ -1066,62 +1119,147 @@
 	   The ruling survives in a stronger form, which is the argument Design
 	   made for the takeover's own rule and it holds here for the same reason. */
 
-	/* ── The takeover (N.73 S3) ──────────────────────────── */
-	/* Takes .drawer-content's place in the column when it has the drawer:
+	/* ── The takeover (N.73 S3, redressed at N.108 increment 3) ──────
+	   Takes .drawer-content's place in the column when it has the drawer:
 	   same flex:1, same min-height:0, so a long ritual scrolls inside itself
-	   rather than pushing the back affordance off the top. */
+	   rather than pushing the back affordance off the top.
+
+	   THE INSET IS `.drawer-content`'s OWN, repeated rather than shared,
+	   because these two boxes never exist at once and neither can be the
+	   other's parent. 16 px at the sides so the frame's 20 px corners have
+	   desk beside them, 12 px at the foot, no top: the same three values and
+	   the same reasoning as the groups, written out where `.drawer-content`
+	   writes them.
+
+	   IT PAINTS NOTHING NOW. The fill moved onto `.takeover-frame`, which is
+	   the box with the corners; a fill out here would square them off
+	   against the desk. */
 	.drawer-takeover {
 		flex: 1;
 		min-width: 0;
 		min-height: 0;
 		display: flex;
 		flex-direction: column;
+		padding: 0 16px 12px;
+	}
+
+	/* THE FOURTH FRAME. One group, grown to fill the drawer, at the same 20 px
+	   surface radius Dann ruled on 2026-09-02 ("20 looks terrific"). It
+	   arrives on the drawer's one motion, `bodyIn`, exactly as a station body
+	   does, because entering the ritual is the same act as opening a station:
+	   the prototype animates it at `:230`. */
+	.takeover-frame {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
 		background: var(--drawer-bg);
+		border-radius: 20px;
+		overflow: hidden;
+		animation: bodyIn var(--motion) both;
 	}
 
-	.takeover-head {
-		flex-shrink: 0;
-		/* Its 1rem moved outside the border too, so the takeover's one rule
-		   is inset like every other. See `.drawer-anchor-top`. */
-		padding: 6px 0;
-		margin: 0 1rem;
-		/* Dann ruled 2026-08-23: the takeover's rule matches the lavender
-		   `.wizard-phase` border-top in CalibrationWizard.svelte, because the
-		   takeover is the calibration ritual, and lavender is kept to that and
-		   the voice anchor (S0 slate, ruling 3). */
-		border-bottom: 2px solid var(--deeper-lavender);
+	/* THE BAND. `.group-band`'s recipe and the Score markup group's hue,
+	   because this IS that group's Voice station filling the drawer. It
+	   replaces the 2 px lavender rule and the quiet Back this takeover wore
+	   until now. DANN'S RULING OF 2026-08-23 IS NOT REVERSED, IT IS CARRIED:
+	   he ruled that the takeover's rule is lavender, matching
+	   `.wizard-phase`'s border-top, because the takeover is the calibration
+	   ritual. `--lang-chip-marked` IS `--deeper-lavender` one step down
+	   (`app.css:124`), so the hue survives in a stronger form, which is the
+	   argument Design made for it and the same one the anchors' rules made
+	   when they went. */
+	.takeover-band {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		flex: none;
+		height: 40px;
+		margin: 0;
+		padding: 0 18px;
+		background: var(--lang-chip-marked);
+		color: #fff;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		white-space: nowrap;
 	}
 
-	/* The ONE back affordance, E.27. Quiet by construction: this is the way
-	   out of a ritual, not an invitation to leave it. The 44px floor is the
-	   same device the drawer's own pull and NotationFields' disclosure use. */
+	/* The ONE back affordance, E.27, reversed onto the band. Quiet by weight
+	   and opacity rather than by colour: this is the way out of a ritual, not
+	   an invitation to leave it. It drops the band's uppercase register on
+	   purpose, so the band reads as the group's name and this reads as a
+	   control beside it.
+
+	   THE ARROW IS THE STRING'S OWN. `inspector.back` is `\u2190 Back`
+	   (`i18n.ts:381`), ratified with its arrow in both languages, so the
+	   prototype's 10 x 10 polyline chevron was drawn and then removed: it
+	   put two left-pointing marks side by side on the band, observed on the
+	   build. The string is not touched, which is what keeps the French out
+	   of this increment.
+
+	   THE TARGET IS THE BAND'S OWN 40 px, and that is `.band-link`'s
+	   geometry, not a new exemption: increment 1 shipped Metadata's affordance
+	   at 40 px in a 40 px band and Dann walked it. The `@media (pointer:
+	   coarse)` block that raised this button to 44 px is gone with the row it
+	   sat in, because 44 px inside a 40 px band is a target taller than the
+	   thing it is in. Recorded in the memo as the desk's. */
 	.takeover-back {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.35rem 0;
+		gap: 6px;
+		flex: none;
+		min-height: 40px;
+		padding: 0;
 		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		color: var(--ink-secondary);
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		text-transform: none;
+		color: #fff;
 		background: transparent;
 		border: none;
+		opacity: 0.88;
 		cursor: pointer;
 	}
 
 	.takeover-back:hover {
-		color: var(--ink-primary);
+		opacity: 1;
 	}
 
-	@media (pointer: coarse) {
-		.takeover-back {
-			min-height: 44px;
-			min-width: 44px;
-		}
+	.takeover-back:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: -2px;
 	}
 
+	/* The ritual's own scroll, as it has been since N.73 S3. The measures are
+	   the prototype's (`:241`): 18 px at the sides, the station inset the
+	   groups spend, and the wizard's own outer padding drops in favour of it
+	   (`.takeover-panel`, `+page.svelte`). */
 	.takeover-body {
 		flex: 1;
 		min-height: 0;
 		overflow-y: auto;
+		padding: 4px 18px 16px;
+	}
+
+	/* THE STATION'S OWN NAME. The band says the group, so this says the
+	   station the ritual grew from, in the label recipe that left the station
+	   row for the band at increment 1 (`StationHeader.svelte`, which records
+	   the move). Tertiary ink, because it names where you are rather than
+	   asking for anything. */
+	.takeover-title {
+		margin: 0;
+		padding-top: 10px;
+		font-family: var(--font-sans);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-tertiary);
 	}
 
 	/* What the takeover switch actually does. A stowed region keeps its
@@ -1133,33 +1271,24 @@
 		display: none;
 	}
 
-	/* ── Tab transition animations ──────────────────────── */
+	/* ── THE TAB SLIDE IS GONE FROM THE DRAWER (N.108 increment 3) ────
+	   RULED BY DANN 2026-09-03 on his walk of increment 2: the drawer stays
+	   still on a tab change. Four rules stood here, `tabSlideFromRight` and
+	   `tabSlideFromLeft` applied to `.drawer-content` itself and to any
+	   descendant carrying the class, with the two keyframes they used; the
+	   reduced-motion block that turned them off went with them.
 
-	@keyframes tabSlideFromRight {
-		from { opacity: 0; transform: translateX(12px); }
-		to { opacity: 1; transform: translateX(0); }
-	}
+	   IT IS STILL ON THE PAPER. `.main-content` in `+page.svelte` keeps the
+	   same 175 ms slide and its own copy of the keyframes, so the document
+	   still enters from the side the singer travelled. The drawer does not,
+	   and that is the whole of N.108 in one line: THE DRAWER DOES NOT
+	   REARRANGE UNDER THE SINGER'S HAND. Both of Studio's documents share
+	   this drawer byte for byte since N.73 S2, so a slide here was animating
+	   an arrival that never happened.
 
-	@keyframes tabSlideFromLeft {
-		from { opacity: 0; transform: translateX(-12px); }
-		to { opacity: 1; transform: translateX(0); }
-	}
-
-	.drawer-content :global(.tab-enter-from-right) {
-		animation: tabSlideFromRight 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
-	}
-
-	.drawer-content :global(.tab-enter-from-left) {
-		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
-	}
-
-	.drawer-content.tab-enter-from-right {
-		animation: tabSlideFromRight 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
-	}
-
-	.drawer-content.tab-enter-from-left {
-		animation: tabSlideFromLeft 175ms cubic-bezier(0.25, 0, 0.15, 1) both;
-	}
+	   `tabTransitionClass` LEFT THIS COMPONENT WITH THEM. It was the only
+	   thing that put the class on `.drawer-content`, and nothing else in the
+	   drawer carries it, so the `:global` pair had no subject either. */
 
 	/* ── THE BOTTOM PULL (N.108 increment 1a) ─────────────────
 	   Drawn at `docs/sessions/drawing-n108-pull_r2_2026-09-02.png`: horizontal,
@@ -1238,11 +1367,17 @@
 		}
 	}
 
-	/* ── Placeholder panels ─────────────────────────────── */
-
-	.placeholder-panel {
-		padding: 1.5rem;
-	}
+	/* ── THE PLACEHOLDER PANELS ARE GONE (N.108 increment 3) ─────────
+	   `.placeholder-panel` and `.placeholder-text` had no markup in this
+	   component and had not had any for some time. THEY WERE MASKED BY THE
+	   TAB SLIDE, and the mechanism is worth recording because it can hide
+	   anything: `.drawer-content` carried `class="drawer-content
+	   {tabTransitionClass}"`, and a class attribute with a dynamic part
+	   makes Svelte treat that element as possibly carrying ANY class, so
+	   every bare class selector in the file counted as reachable. Removing
+	   the slide's class removed the mask and `svelte-check` named them the
+	   same minute. Deleted rather than disclosed, so gate 3 returns to its
+	   recorded 7 warnings in 4 files. */
 
 	/* N.65 ship one. RENAMED FROM `.section-label`, VALUES UNCHANGED, and
 	   the rename is the point. This heads the table of contents in Learn and
@@ -1269,14 +1404,6 @@
 
 	.toc-heading-guide {
 		color: var(--quiet-cobalt, #5C739E);
-	}
-
-	.placeholder-text {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 0.95rem;
-		color: var(--ink-secondary, #4a4540);
-		line-height: 1.6;
-		margin: 0;
 	}
 
 	/* ── TOC base styles ─────────────────────────────────── */
@@ -1608,19 +1735,15 @@
 			transition: none;
 		}
 
-		.drawer-content.tab-enter-from-right,
-		.drawer-content.tab-enter-from-left {
-			animation: none;
-		}
-
 		.toc-children {
 			transition: none;
 		}
 
-		/* N.108's one motion, off. A station still opens; it just arrives
-		   without the 180 ms. */
+		/* N.108's one motion, off. A station still opens and the takeover
+		   still takes the drawer; they arrive without the 180 ms. */
 		.group :global(.station-body),
-		.band-body {
+		.band-body,
+		.takeover-frame {
 			animation: none;
 		}
 

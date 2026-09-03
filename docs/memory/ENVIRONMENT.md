@@ -60,6 +60,10 @@ next session the same hour it cost the last one.
 | drive a browser yourself | `Claude Code, and where the building` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | `vite preview` serving the wrong thing, or caching | `vite preview` |
+| a code change that will not appear after a rebuild | `VITE PREVIEW BUILDS ITS FILE TABLE AT BOOT` |
+| a fixture file you need the app to fetch | `VITE PREVIEW BUILDS ITS FILE TABLE AT BOOT` |
+| a scroll reset that will not take on a shown box | `DISPLAY NONE KEEPS THE SCROLL OFFSET` |
+| CSS that svelte-check calls dead only after an edit | `A DYNAMIC CLASS MASKS EVERY UNUSED SELECTOR` |
 | a service worker that will not update locally | `Claude Code, and where the building` |
 | the console filter hiding what you need | `THE COORDINATING DESK'S OWN INSTRUMENTS` |
 | a screen-reader string to check | `SCREEN-READER STRINGS` |
@@ -181,6 +185,15 @@ reads `gate 5 score-parser "481 passed | 5 skipped (486)"`.
 *This paragraph previously asserted the script still read 900. That was taken
 from a memo rather than from the script, which this desk cannot read. Corrected
 2026-09-01.*
+
+**CORRECTED AGAIN 2026-09-03, and this time by reading the script.** The table
+above says 908 and 481; `~/Downloads/ilya-ship.sh:79` reads
+`gate 4 web-test "959 passed (959)"` and `:80` reads
+`gate 5 score-parser "534 passed | 5 skipped (539)"`. **The live baselines are
+216, 235, 0 errors and 7 warnings in 4 files, 959, and 534 passed with 5
+skipped**, all five run for real on 2026-09-03 during N.108 increment 3, before
+and after the work. The 908 and 481 rows are what the tree looked like on
+2026-08-29 and are kept only so the history reads.
 
 **Tell Dann the new gate number BEFORE he runs the ship script, not after.**
 
@@ -2264,3 +2277,64 @@ arrived that way: `n108-drawer-prototype_r2_2026-09-02.html` and
 before asking him to fetch anything. Its files are untracked until he adds
 them, and `ilya-ship.sh` refuses on untracked files, so name them in the
 `git add` before the ship.
+
+
+## VITE PREVIEW BUILDS ITS FILE TABLE AT BOOT. Learned 2026-09-03, N.108 increment 3
+
+**A rebuild alone does not change what the running `vite preview` serves, and it
+does not tell you.** The page kept loading `app.6Zv7ohfh.js` while `build/` held
+`app.D7six769.js`, so a fix was measured on the previous build and read as a
+failure. Twenty minutes.
+
+- **Restart the preview server after every rebuild**, then read the loaded entry
+  hash back before you believe any null result:
+  `performance.getEntriesByType('resource').filter(r=>/entry\//.test(r.name)).map(r=>r.name.split('/').pop())`
+  against `ls apps/web/build/_app/immutable/entry/`.
+- **The same boot-time table is why a fixture file appears not to exist.** A
+  file copied into `build/` after the server started 404s; the server's own log
+  shows the 404, which is the fastest way to tell this apart from a wrong path.
+  Copy the fixture, THEN restart, then fetch it from the page.
+- **`vite preview` serves `build/` here** (adapter-static, `pages: 'build'`),
+  NOT `.svelte-kit/output/client` and NOT `static/`. A file in `static/` reaches
+  the preview only through a rebuild.
+- **`build/` is gitignored**, so a fixture parked there cannot make the ship
+  script refuse. Delete it anyway when the walk is done.
+- Do this through `preview_start` / `preview_stop`, not Bash. A Bash-started
+  `vite preview` holds port 4173 and then `preview_start` refuses it.
+
+## DISPLAY NONE KEEPS THE SCROLL OFFSET, AND CHROME RESTORES IT AFTER YOUR rAF. Learned 2026-09-03
+
+Hiding a box with `display: none` does **not** reset its `scrollTop`. When the
+box is shown again Chrome puts the old offset back, and it does that **after**
+`requestAnimationFrame` callbacks run. So the obvious "reset the scroll on the
+way in, deferred one frame because the box has no layout yet" is written and
+then silently overwritten.
+
+Measured in the page, and this pair is the whole trap:
+
+| what you do | what `scrollTop` reads afterwards |
+|---|---|
+| write 0 while the box is visible, then hide and show it | 0 |
+| hide the box, write 0, then show it | the pre-hide value |
+
+**So write the reset while the box still has its layout, on the way OUT.** In
+Svelte that is `$effect.pre`, which runs before the DOM update that stows the
+element. Nothing is painted scrolled, because the reset and the hide land in the
+same frame. This is what `Drawer.svelte`'s takeover does for N.108's one
+permitted self-scroll, and its comment carries the reasoning.
+
+## A DYNAMIC CLASS MASKS EVERY UNUSED SELECTOR IN THE FILE. Learned 2026-09-03
+
+`svelte-check` reports "Unused CSS selector" by matching selectors against the
+component's markup. **One `class="thing {someVariable}"` anywhere in the file
+makes that element a possible carrier of ANY class**, so every bare class
+selector in the stylesheet counts as reachable and nothing is ever reported.
+
+Remove the dynamic part and the warnings all arrive at once, looking like
+damage the edit did. They are not: they are dead rules that were always dead.
+`Drawer.svelte` lost `.placeholder-panel` and `.placeholder-text` this way, gate
+3 went 7 in 4 files to 9 in 5, and deleting the two rules put it back.
+
+**So: when gate 3 gains "unused selector" warnings after an edit that removed a
+dynamic class, check whether the selector ever had markup before you go looking
+for what you broke.**

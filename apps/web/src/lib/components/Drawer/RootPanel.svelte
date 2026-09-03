@@ -485,7 +485,9 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		     Each carries its own Clear and its own Replace, and neither
 		     handler can reach the other's material: the poem's Clear is
 		     `onclear`, which empties `inputText`, and the score's is
-		     `onclearscore`, which detaches the source. The tags are
+		     `onclearscore`, which detaches the source and, since N.108
+		     increment 3, empties the Metadata fields that score filled and
+		     nothing the singer typed. The tags are
 		     `input.watermark` and `upload.watermark`, the two ratified words
 		     the watermarks already used, so the receipt names each kind in
 		     the word the field named it in. -->

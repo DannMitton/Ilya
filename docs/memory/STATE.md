@@ -94,16 +94,54 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > Groups take a 16 px side inset. NOT walked: the loupe covering the pull on
 > the phone (nothing unreachable; dismiss the loupe first). Memo:
 > `docs/sessions/memo-n108-frames-1a_r1_2026-09-02.md`.
-> **THE ONE THING: N.108 increment 2, the one intake**, per
-> `brief-n108-build_r1_2026-09-02.md` §3, increment 2. **IN CODE: Dann pasted
-> the increment 2 brief to a fresh Code thread at 23:20 on 2026-09-02.** When
-> it returns: read the memo against the tree, set `ilya-ship.sh:79` (gate 4)
-> and `:80` (gate 5) to the new counts before the ship, name every untracked
-> file in the `git add`, then his walk on the alias: one field in Piece,
-> paste a poem and drop `~/Downloads/no-lyrics-control.musicxml` on the same
-> field, two receipt lines, Replace and Clear per kind. Then increment 3, the
-> takeover in the new dress, last. After N.108: N.110 (set aside, briefed),
-> the release order N.85 to N.88, N.84, N.83.
+> **INCREMENT 2 SHIPPED `cedf246` and `2fe7ebd` 2026-09-03 and WALKED BY
+> DANN on the alias, seven steps.** Memo
+> `docs/sessions/memo-n108-intake_r1_2026-09-03.md` (§7 is the watermark).
+> Walked: paste gives `TEXT · 8 lines`; Transcribe adds `38 words`; the
+> control dropped on the poem gives the confirm panel, then `5 / 5` on Score
+> markup with the poem intact; Clear on the score removes the SCORE line,
+> Underlay, and Corrections and leaves the poem; Replace on the poem selects
+> it; the clear survives a reload. **RULED BY DANN 2026-09-03 on the walk:
+> the intake watermarks are retired** (amends N.65, 2026-08-20); the
+> oversized-sans convention the deleted component carried (700, -0.01em,
+> line-height 1.04, 40 px, from the r2 mockup) now lives only in memo §7.
+> Findings, both for the increment 3 paste: (1) the drawer takes the 175 ms
+> tab slide and Dann ruled it still (`Drawer.svelte:1148-1162`); (2) Metadata
+> fields tagged *from score* survive Clear on the score
+> (`handleClearScore`, `+page.svelte:1779`). Also seen, not acted on: the
+> SCORE receipt shows the file name before Continue to analysis, where memo
+> §6.7 says after; the "not the same music" dialog does not fire when no
+> placements exist. Numbered on the walk: **N.111**, the clitic seat, below.
+> Inbox, on his word: "one piece at a time".
+> **INCREMENT 3 BUILT AND WALKED BY CODE 2026-09-03, AWAITING DANN'S SHIP AND
+> HIS WALK.** Memo `docs/sessions/memo-n108-takeover_r1_2026-09-03.md`. Commit
+> message `N.108-3: the takeover in the new dress`. Floor `2fe7ebd`. Five gates
+> at baseline before and after; no line of `~/Downloads/ilya-ship.sh` changes.
+> The takeover wears the Score markup band with Back on its left, the 20 px
+> frame, and the station label recipe; the ONE self-scroll is written on EXIT,
+> not entry, because `display: none` keeps a scroll offset and Chrome restores
+> it after `requestAnimationFrame` (measured). No new string, English or French:
+> the band reuses `group.scoreMarkup`, Back reuses `inspector.back`, the title
+> reuses `voice.heading`. The prototype's Back chevron was drawn and removed,
+> because `inspector.back` is already `← Back`. Both riders ride: the tab slide
+> is gone from `.drawer-content` and stays on `.main-content`, and Clear on the
+> score now calls `clearScoreFilled`, so the fields that score filled empty and
+> the singer's own survive, walked and proved through a reload.
+>
+> **HIS TO RULE, THE ONE OPEN THING (memo §2): the ritual's phases do not fit
+> their box.** At 1366 x 768 the box is 672 px; summary is 1042, capture 1295,
+> characteristics 1485. The dress is not the cause: at 1400 x 900 the wizard's
+> own column is 995 px inside an 852 px drawer, so no chrome height absorbs it.
+> Design measured a placeholder. Nothing is broken; the ritual has scrolled
+> inside itself since N.73 S3. Three ways out are listed in the memo and none is
+> chosen, because it is taste.
+>
+> **Spent by this increment:** the increment 2 finding "the drawer takes the
+> 175 ms tab slide (`Drawer.svelte:1148-1162`)". Those rules are deleted.
+>
+> **THE ONE THING: Dann ships and walks N.108 increment 3**, then rules on the
+> ritual's fit. Then N.111, N.110 (set aside, briefed), the release order
+> N.85 to N.88, N.84, N.83.
 
 > Nine ships this session before N.108, all walked or proved: N.104, N.105,
 > N.102 (three), N.106, N.103, N.107.
@@ -192,7 +230,24 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the guard-at-snapshot fix is an inbox candidate. No default value: sourced
 > or silent.
 >
-> **Open and unplaced:** N.102 increment 1c (turning-layer courtesies), N.94, N.84 the Guide redo, N.83's call, and
+> **N.111, the clitic seat. Numbered by Dann 2026-09-03, on the N.108-2 walk
+> of Without Sun no. 1.** The score seats the vowelless proclitic в alone under
+> a sung pitch before бьющемся; Ilya draws it as its own syllable with no
+> vowel, and a singer has no way to fix it. His words: "The clitic should
+> concatenate with the parent word that follows; we have discussed that
+> vowelless words cannot be applied alone to sung pitches," and "We need
+> controls to account for this if it happens in the real world. At the moment
+> there is no way for a user to resolve this." Already framed in
+> `claude/e24-the-unused-boolean_2026-08-04.md` §6 (snippet only, read it in
+> full before briefing): a vowelless clitic never holds a note-assignment of
+> its own; it is seated with its host in the direction `CliticEntry.type`
+> gives; the page shows the re-seating rather than doing it silently. Still
+> his to rule from that document: what the page shows when text is re-seated.
+> New in N.111: a control for the singer to re-seat by hand where Ilya cannot.
+> Placement: DESK DEFAULT, after N.108 increment 3 and before N.110; not
+> placed against the release order, which is his.
+>
+> **Open and unplaced:** N.111 the clitic seat, N.102 increment 1c (turning-layer courtesies), N.94, N.84 the Guide redo, N.83's call, and
 > the release order N.85 through N.88.
 >
 > **Also this session, ruled: CONTRACT.md tether 20**, put yourself in his
