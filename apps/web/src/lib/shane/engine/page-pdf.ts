@@ -200,3 +200,88 @@ export async function rasterizePdf(file: File, maxPages?: number): Promise<Array
 		await task.destroy();
 	}
 }
+
+/**
+ * The text a PDF already carries, as the poem.
+ *
+ * N.108 increment 2. The one intake takes one field, and every dropped file
+ * is sniffed into a kind. A PDF is the ONE kind the bytes cannot settle: a
+ * born-digital PDF of a poem and a scan of a page of music open with the same
+ * four bytes, so the intake asks the singer which it is rather than guessing.
+ * This is the answer "the poem".
+ *
+ * IT IS AN EXTRACTION, NOT AN OCR. pdf.js hands back the text OBJECTS a PDF
+ * was written with, so a PDF that was typed has words here and a PDF that was
+ * photographed has none. The empty return is therefore a real answer and not a
+ * failure, and the caller says so in the singer's own words rather than
+ * throwing: a scan answered "the poem" by mistake is a mis-answer, not a
+ * broken file.
+ *
+ * THE LINE BREAKS ARE THE PDF'S OWN. pdf.js marks the end of a laid-out line
+ * with `hasEOL`, which is what a poem needs: a line of verse is a line, and
+ * joining on spaces would hand the transcription one long paragraph. Items
+ * inside a line are joined with nothing, because their own `str` values carry
+ * the spacing a PDF writer emitted.
+ *
+ * SAME LOADING DANCE AS `rasterizePdf` ABOVE, and deliberately not factored
+ * out of it: the two differ in `wasmUrl` (the image decoders are pointless for
+ * text), in what they do with the document, and in what they throw. A shared
+ * loader would be three lines saved and one more thing to keep in step.
+ */
+export async function extractPdfText(file: File): Promise<string> {
+	const bytes = new Uint8Array(await file.arrayBuffer());
+
+	let pdfjs: typeof import('pdfjs-dist');
+	let workerSrc: string;
+	try {
+		[pdfjs, workerSrc] = await Promise.all([
+			import('pdfjs-dist'),
+			import('pdfjs-dist/build/pdf.worker.mjs?url').then((m) => m.default as string),
+		]);
+	} catch (err) {
+		throw new PdfUnreadableError(
+			`the PDF reader could not be loaded: ${err instanceof Error ? err.message : String(err)}`
+		);
+	}
+	pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+	const task = pdfjs.getDocument({ data: bytes });
+	let doc: Awaited<typeof task.promise>;
+	try {
+		doc = await task.promise;
+	} catch (err) {
+		await task.destroy();
+		throw new PdfUnreadableError(err instanceof Error ? err.message : String(err));
+	}
+
+	try {
+		if (doc.numPages < 1) throw new PdfUnreadableError('this PDF has no pages');
+		const pages: string[] = [];
+		for (let n = 1; n <= doc.numPages; n++) {
+			const page = await doc.getPage(n);
+			try {
+				const content = await page.getTextContent();
+				let line = '';
+				const lines: string[] = [];
+				for (const item of content.items) {
+					if (!('str' in item)) continue;
+					line += item.str;
+					if (item.hasEOL) {
+						lines.push(line);
+						line = '';
+					}
+				}
+				if (line !== '') lines.push(line);
+				pages.push(lines.join('\n'));
+			} finally {
+				page.cleanup();
+			}
+		}
+		// A blank page between two pages of verse is the PDF's own paragraph
+		// break and is kept; leading and trailing blank lines are not, because
+		// they would arrive in the field as an empty first line.
+		return pages.join('\n\n').replace(/^\s+|\s+$/g, '');
+	} finally {
+		await task.destroy();
+	}
+}

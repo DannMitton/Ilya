@@ -95,7 +95,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the phone (nothing unreachable; dismiss the loupe first). Memo:
 > `docs/sessions/memo-n108-frames-1a_r1_2026-09-02.md`.
 > **THE ONE THING: N.108 increment 2, the one intake**, per
-> `brief-n108-build_r1_2026-09-02.md` §3, increment 2. Not started.
+> `brief-n108-build_r1_2026-09-02.md` §3, increment 2. **IN CODE: Dann pasted
+> the increment 2 brief to a fresh Code thread at 23:20 on 2026-09-02.** When
+> it returns: read the memo against the tree, set `ilya-ship.sh:79` (gate 4)
+> and `:80` (gate 5) to the new counts before the ship, name every untracked
+> file in the `git add`, then his walk on the alias: one field in Piece,
+> paste a poem and drop `~/Downloads/no-lyrics-control.musicxml` on the same
+> field, two receipt lines, Replace and Clear per kind. Then increment 3, the
+> takeover in the new dress, last. After N.108: N.110 (set aside, briefed),
+> the release order N.85 to N.88, N.84, N.83.
 
 > Nine ships this session before N.108, all walked or proved: N.104, N.105,
 > N.102 (three), N.106, N.103, N.107.

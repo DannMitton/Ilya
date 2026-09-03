@@ -16,11 +16,40 @@
 	handed up through
 	`oningested`; live wiring (§E.7) consumes it. MIDI is not read and is no
 	longer offered: N.58 closed on 2026-08-19 by dropping it.
+
+	N.108 INCREMENT 2. THIS COMPONENT NO LONGER HAS A FIELD OF ITS OWN, and
+	that is the whole of the change. The drawer has ONE intake now, drawn by
+	`RootPanel.svelte`, and it is the surface a singer pastes into, types into,
+	drops onto, and picks a file with. So the dropzone, its watermark, its
+	placeholder, its format list, its scan icon and its hidden file input are
+	gone from this file, and with them `browse`, `onPick`, `onDrop`,
+	`onDragOver`, `onDragLeave`, `dragging`, and N.70's `acceptList`. The
+	ruling in `acceptList` IS NOT SPENT: it moved with the picker it governs,
+	and `RootPanel` carries it with its reasons.
+
+	WHAT IS LEFT IS THE ENGINE AND EVERY ANSWER IT GIVES. The two converter
+	lifecycles, the page reader, the clef-and-key prompt, the busy labels, the
+	fidelity banner, the read report, and `classify`'s twenty-odd named errors
+	are untouched, line for line. They render UNDER the one field, because
+	`+page.svelte` renders this component inside the intake, which is where a
+	question about a file the singer just dropped belongs.
+
+	THE INTAKE HANDS FILES IN THROUGH `take()`, exported as an instance method
+	and called from `+page.svelte` on the `bind:this`. It is `handleFile` with
+	one thing in front of it: the PDF question below.
+
+	THE ONE KIND THE BYTES CANNOT SETTLE IS A PDF, so it is the one kind that
+	asks. Ruled by the build brief: "A PDF asks once, in place, which it is. Do
+	not guess." Every other format the sniff meets answers for itself: MusicXML,
+	MNX, the three ZIP containers and a photograph are all the SCORE, and text
+	typed or pasted is the POEM. A PDF is honestly either, so `askKind` puts the
+	question where the file landed and takes the singer's answer. The score
+	answer is the path this component always took. The poem answer is
+	`extractPdfText`, and it hands the words up through `onpoem`.
 -->
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import IntakeWatermark from '$lib/components/Drawer/IntakeWatermark.svelte';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
 	import { WorkerPageReader, type ClefKeyProbe } from './engine/page-reader';
@@ -66,67 +95,37 @@
 			 *  restore never asks the two questions again. */
 			answers?: EngravingAnswers | null;
 		} | null;
-		/** N.70: threaded so the accept list can be dropped on a phone. Same
-		 *  `isMobile` N.69 already threads to the Paper components. */
-		isMobile?: boolean;
+		/**
+		 * N.108 increment 2. THE POEM, where a PDF turned out to hold one.
+		 *
+		 * This component reads a PDF either way; only the destination differs, and
+		 * the destination is not this component's to write. `+page.svelte` owns
+		 * `doc.inputText` and every other writer of it, so the words go up the same
+		 * way a score does.
+		 */
+		onpoem: (text: string) => void;
 	}
 
-	let { language, oningested, restore = null, isMobile = false }: Props = $props();
+	let { language, oningested, restore = null, onpoem }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 
-	/* THE SCORE BOX SAYS ONE SENTENCE. RULED BY DANN 2026-08-21 walking
-	   `2238e8b`: "I would like the text inside the score input field to
-	   include only that first sentence 'Drop a score here or click to
-	   browse...' with an ellipsis just like its sister box above. The text
-	   'MNX, MusicXML, etc..' can exist outside the input field just
-	   underneath it."
+	/* THE DROP ZONE AND ITS SENTENCE LEFT THIS FILE (N.108 increment 2), and
+	   with them `dropPlaceholder`, `ACCEPT` and `acceptList`.
 
-	   ASSEMBLED FROM THE TWO RETAINED KEYS, NOT WRITTEN. `upload.drop.title`
-	   and `upload.drop.browse` already carry the two halves in both
-	   languages. They were orphaned when the three-paragraph version was
-	   collapsed into one string and were kept as its provenance; this is
-	   them back on screen. No new English and NO NEW FRENCH: contract §6,
-	   do not write French Dann has not seen.
+	   DANN'S RULING OF 2026-08-21 IS NOT REVERSED, IT IS SPENT. It said the
+	   score box says one sentence and the format list sits outside it. There is
+	   no score box: there is one intake, and `RootPanel.svelte` draws it. The
+	   two strings that sentence was assembled from, `upload.drop.title` and
+	   `upload.drop.browse`, stay in `i18n.ts` unused, as does
+	   `upload.drop.acceptedNow`, because the French table is not ruled yet and a
+	   ratified French string is not this ship's to delete.
 
-	   JOINED AT THE RENDER SEAM rather than folded into a new key, because
-	   a new key would be these same two strings with a space and an
-	   ellipsis, and a third copy of a sentence the file already holds twice
-	   is a thing to keep in step by hand.
-
-	   THE ELLIPSIS IS `\u2026`, THE CHARACTER ITS SISTER ALREADY USES at
-	   `i18n.ts`'s `input.placeholder`, `Paste Russian text here\u2026`. */
-	const dropPlaceholder = $derived(
-		`${T('upload.drop.title')} ${T('upload.drop.browse')}\u2026`
-	);
-
-	/** The file dialog offers the formats Ilya reads, so it matches the
-	 *  dropzone text. */
-	const ACCEPT = '.mnx,.json,.xml,.musicxml,.mxl,.musx,.mscz,.pdf,image/*';
-
-	/**
-	 * N.70 (Dann's ruling, 2026-08-16). THE FILTER IS KEPT WHERE IT HELPS AND
-	 * DROPPED WHERE IT ONLY BLOCKS.
-	 *
-	 * iOS matches `accept` by REGISTERED TYPE, not by the string, and it has no
-	 * registration for `.musicxml`, `.mnx`, `.musx`, or `.mscz`. So on a phone
-	 * every format Ilya can actually read is greyed out and unselectable, while
-	 * PDF and images, which iOS does have registrations for, stay pickable.
-	 * Dann hit this on his own iPhone, 2026-08-16.
-	 *
-	 * A narrower MIME list was considered and rejected: iOS would need a type
-	 * registration it probably does not have, so it could fail exactly as
-	 * silently. Dropping the attribute cannot half-work.
-	 *
-	 * Nothing is loosened about what Ilya ACCEPTS: `ingestScoreFile` sniffs the
-	 * bytes and `classify` already answers for anything else. This only changes
-	 * which files the picker will let a singer point at.
-	 *
-	 * NAMED CONSEQUENCE: `isMobile` is a WIDTH test, not an iOS test, so a
-	 * narrow desktop window also gets the unfiltered picker. Accepted rather
-	 * than inventing a second detector.
-	 */
-	const acceptList = $derived(isMobile ? undefined : ACCEPT);
+	   N.70'S RULING TRAVELLED WITH THE PICKER IT GOVERNS. `RootPanel` holds the
+	   two file inputs now and carries the whole reasoning: iOS matches `accept`
+	   by registered type, knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`,
+	   and so greys out every format Ilya reads. The attribute is kept on a fine
+	   pointer and dropped on a coarse one. */
 
 	type UiState =
 		| { kind: 'idle' }
@@ -135,15 +134,16 @@
 		 *  are what the two controls now show. False is the old prompt, word for
 		 *  word. */
 		| { kind: 'asking'; file: File; detected: boolean }
+		/** N.108 increment 2: a PDF waits here for the one answer its bytes
+		 *  cannot give. See this file's header. */
+		| { kind: 'askKind'; file: File }
 		| { kind: 'busy'; label: string }
 		| { kind: 'done'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
 		| { kind: 'soon'; message: string };
 
 	let ui = $state<UiState>({ kind: 'idle' });
-	let dragging = $state(false);
 	let bannerDismissed = $state(false);
-	let fileInputEl: HTMLInputElement;
 
 	/* ── converter lifecycles (this component owns them, §B.2) ──────── */
 	let reader: WorkerScoreReader | null = null;
@@ -211,31 +211,62 @@
 
 	/* ── Intake ─────────────────────────────────────────────────────── */
 
-	function browse(): void {
-		fileInputEl?.click();
+	/**
+	 * THE ONE WAY IN, N.108 increment 2. `RootPanel`'s field takes the drop and
+	 * the pick; `+page.svelte` calls this on the instance.
+	 *
+	 * A PDF STOPS HERE AND ASKS. Every other file goes straight to `handleFile`,
+	 * unchanged, because the sniff already answers for it. The question is asked
+	 * ONCE per file: answering it calls `handleFile` or `readPdfAsPoem` directly,
+	 * and neither comes back through here.
+	 *
+	 * THE SNIFF IS `detectScoreFormat`, THE SAME ONE DISPATCH USES, so this
+	 * cannot disagree with what `ingestScoreFile` decides a moment later. A file
+	 * whose head cannot be read at all is not a PDF, so it falls through to the
+	 * score route and earns that route's own named refusal.
+	 */
+	export async function take(file: File): Promise<void> {
+		if (await isPdf(file)) {
+			bannerDismissed = false;
+			ui = { kind: 'askKind', file };
+			return;
+		}
+		await handleFile(file);
 	}
 
-	async function onPick(e: Event): Promise<void> {
-		const input = e.target as HTMLInputElement;
-		const file = input.files?.[0];
-		input.value = ''; // reset so the same file can be re-selected
-		if (file) await handleFile(file);
+	/** Does this file open with `%PDF`? Sniffed by bytes, as dispatch will. */
+	async function isPdf(file: File): Promise<boolean> {
+		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
+		const detected = detectScoreFormat(file.name, head);
+		return detected.ok && detected.format === 'pdf';
 	}
 
-	function onDrop(e: DragEvent): void {
-		e.preventDefault();
-		dragging = false;
-		const file = e.dataTransfer?.files?.[0];
-		if (file) void handleFile(file);
-	}
-
-	function onDragOver(e: DragEvent): void {
-		e.preventDefault();
-		dragging = true;
-	}
-
-	function onDragLeave(): void {
-		dragging = false;
+	/**
+	 * The singer answered "the poem".
+	 *
+	 * IT IS AN EXTRACTION AND NOT AN OCR, so a scanned PDF holds no text and
+	 * comes back empty. That is a mis-answer rather than a fault, and it is
+	 * reported as one: the singer is told the PDF carries no text and is left
+	 * where they were, with the file still nameable and the score answer still
+	 * one press away.
+	 */
+	async function readPdfAsPoem(file: File): Promise<void> {
+		ui = { kind: 'busy', label: T('intake.pdf.reading') };
+		let text: string;
+		try {
+			const { extractPdfText } = await import('./engine/page-pdf');
+			text = await extractPdfText(file);
+		} catch (err) {
+			console.error('[ScoreUploader] the PDF text could not be read:', err);
+			ui = { kind: 'error', message: T('upload.err.pdfUnreadable') };
+			return;
+		}
+		if (text === '') {
+			ui = { kind: 'error', message: T('intake.pdf.noText') };
+			return;
+		}
+		onpoem(text);
+		reset();
 	}
 
 	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
@@ -482,7 +513,6 @@
 
 	function reset(): void {
 		ui = { kind: 'idle' };
-		dragging = false;
 		bannerDismissed = false;
 	}
 
@@ -588,86 +618,43 @@
 </script>
 
 <div class="uploader">
-	{#if ui.kind === 'idle'}
-		<div class="dz-wrap">
-			<button
-				type="button"
-				class="dropzone"
-				class:dragging
-				onclick={browse}
-				ondragover={onDragOver}
-				ondragleave={onDragLeave}
-				ondrop={onDrop}
-			>
-				<!-- THE SCORE WATERMARK (N.65). This branch IS the empty state:
-				     the drop zone only renders while `ui.kind === 'idle'`, so
-				     the mark leaves when a score arrives and returns on reset,
-				     with no predicate of its own. It stays through `dragging`,
-				     because a field being dragged over is still empty.
-				     BEHIND the placeholder below by stacking: it takes
-				     `z-index: 1` and this takes the default, so the mark paints
-				     over the white fill and under the words. -->
-				<IntakeWatermark word={T('upload.watermark')} colour="var(--light-lavender)" />
-				<!-- ONE PLACEHOLDER, IN THE TEXTAREA'S EXACT TREATMENT. RULED
-				     by Dann 2026-08-20 on his walk of `3c498aa`, and it is the
-				     fourth time he asked for these two fields to look like each
-				     other. THE PAIR IS THIS BOX AND THE TEXTAREA, side by side
-				     in Source; the metadata fields were never it.
+	<!-- THE IDLE BRANCH IS EMPTY (N.108 increment 2), and that is the shape of
+	     the change rather than a hole in it. This component drew the score
+	     intake; the drawer has one intake now and `RootPanel` draws it. What
+	     stood here was the dropzone with its watermark and one placeholder
+	     sentence, the scan icon, the format list, and the hidden file input.
+	     Every one of them has a successor in `RootPanel`'s field, and the two
+	     rulings they carried are recorded at the top of this file.
 
-				     This was three stacked <p>s in three treatments, centred:
-				     `dz-title` bold and dark at 0.9rem, `dz-browse` at 0.8rem,
-				     and `dz-accepted` at 0.68rem. The textarea shows one quiet
-				     sans line, top left, at the field size, in
-				     `--ink-tertiary`, roman, 400. That is what this is now.
+	     SO THIS COMPONENT RENDERS NOTHING UNTIL A FILE ARRIVES, and everything
+	     it renders after that is an answer about that file: the PDF question,
+	     the clef and key question, the wait, the read report, the refusals. It
+	     is mounted inside the intake, so every one of them appears where the
+	     file landed. -->
+	{#if ui.kind === 'askKind'}
+		<!-- N.108 increment 2. THE ONE QUESTION THE BYTES CANNOT ANSWER, asked
+		     once, in place, per the build brief §3: "A PDF asks once, in place,
+		     which it is. Do not guess."
 
-				     The drag state keeps its own sentence, in the same one
-				     treatment. It is live feedback rather than a placeholder,
-				     and nothing about the ruling asked for it to go. -->
-				<p class="dz-placeholder">
-					{dragging ? T('upload.drop.release') : dropPlaceholder}
-				</p>
-			</button>
-			<!-- Score-from-image scan, mirroring the Transcription OCR icon.
-			     Visual only until the OMR/image path ships (Round 9); the
-			     tooltip marks it coming soon, and it takes no action yet. -->
-			<button
-				type="button"
-				class="scan-btn"
-				title={T('upload.scanTooltip')}
-				aria-label={T('upload.scanTooltip')}
-				onclick={browse}
-			>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-					<path d="M2 7V2h5" />
-					<path d="M17 2h5v5" />
-					<path d="M22 17v5h-5" />
-					<path d="M7 22H2v-5" />
-					<line x1="5" y1="12" x2="19" y2="12" />
-				</svg>
-			</button>
-			<!-- THE FORMAT LIST, OUTSIDE THE BOX. §B.7, the other half of Dann's
-			     ruling: "The text 'MNX, MusicXML, etc..' can exist outside the
-			     input field just underneath it." A line of its own, between the
-			     box and the action row that follows the uploader in SOURCE.
+		     TWO ANSWERS AND A WAY OUT, in the shape the clef-and-key prompt
+		     below already uses, because it is the same kind of thing: a file is
+		     held, nothing is mutated, and the singer decides. Cancel is
+		     `upload.ask.cancel`, that prompt's own ratified string.
 
-			     `upload.drop.acceptedNow` VERBATIM, in both languages. N.65,
-			     Dann's ruling of 2026-08-21 dropped the string's `Accepted
-			     now:` / `Acceptés maintenant :` lead-in, so this line is now a
-			     bare list of formats rather than a sentence: "I think it's
-			     understood that the file names are the acceptable formats." His
-			     reason is the French, which wrapped to two lines with the
-			     lead-in and displaced everything under it.
-
-			     IT ENDS WITHOUT A FULL STOP, and that follows from the same
-			     ruling rather than being left over from ship B: a list with no
-			     lead-in is not a sentence. The « ou » that ship B dropped is
-			     back, from `upload.drop.placeholder`, the string Dann added it
-			     to by hand.
-
-			     INSIDE `.dz-wrap` RATHER THAN BESIDE IT, so it belongs to the box
-			     it describes and travels with it: the wrap is the idle state's own
-			     element and unmounts when a score arrives. -->
-			<p class="dz-formats">{T('upload.drop.acceptedNow')}</p>
+		     THE FILE NAME IS SHOWN, because a singer who dropped two files in a
+		     row must be able to see which one is being asked about. -->
+		<div class="ask">
+			<p class="ask-title">{T('intake.pdf.title')}</p>
+			<p class="ask-why">{T('intake.pdf.why').replace('%s', ui.file.name)}</p>
+			<div class="result-actions">
+				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.ask.cancel')}</button>
+				<button type="button" class="btn-secondary" onclick={() => void readPdfAsPoem((ui as { file: File }).file)}>
+					{T('intake.pdf.poem')}
+				</button>
+				<button type="button" class="btn-primary" onclick={() => void handleFile((ui as { file: File }).file)}>
+					{T('intake.pdf.score')}
+				</button>
+			</div>
 		</div>
 	{:else if ui.kind === 'asking'}
 		<!-- N.59, Ruling A, as amended by N.97. Two things the reader now READS
@@ -799,14 +786,9 @@
 		</div>
 	{/if}
 
-	<!-- Hidden file input; the dropzone and browse click drive it. -->
-	<input
-		type="file"
-		accept={acceptList}
-		class="file-input"
-		bind:this={fileInputEl}
-		onchange={onPick}
-	/>
+	<!-- THE HIDDEN FILE INPUT LEFT WITH THE DROPZONE (N.108 increment 2). One
+	     intake means one picker, and `RootPanel` holds it, along with the
+	     `accept` rule N.70 wrote for it. -->
 
 	<!-- THE OLDER-FINALE DISCLOSURE IS GONE. Dann's ruling, 2026-08-20 on his
 	     walk: "Let's eliminate the 'have an older Finale file' subsection. It
@@ -837,157 +819,26 @@
 		font-family: var(--font-sans);
 	}
 
-	/* ── Dropzone ──────────────────────────────────────────── */
+	/* ── THE DROPZONE'S RULES LEFT WITH IT (N.108 increment 2) ──
+	   `.dropzone`, `.dropzone:hover`, `.dropzone.dragging`, `.dz-wrap`,
+	   `.dz-formats`, `.dz-placeholder`, `.scan-btn` and `.scan-btn:hover` are
+	   deleted with the markup they dressed. Svelte scopes a rule to the file
+	   that writes the markup, and the markup is `RootPanel`'s field now.
 
-	.dropzone {
-		/* The watermark's containing block. Nothing else about this box
-		   changed; it was `static`. */
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		/* TOP LEFT, not centred. Dann's ruling: the placeholder sits where the
-		   textarea's sits. Centring is what made these two boxes read as
-		   different kinds of thing. */
-		align-items: flex-start;
-		justify-content: flex-start;
-		width: 100%;
-		/* A true visual twin of the Transcription text field (.text-input):
-		   same box, 4px radius, white fill, and only the colour differs, the
-		   score intake's lavender against the text intake's sage (Dann,
-		   measured from the live site 2026-07-13).
-
-		   N.65 ship one took BOTH borders from 3px to 1px, and THE WEIGHT
-		   CHANGE IS NOT RULED. Brief §3.6 proposes it and Dann rules it by
-		   looking at it on the walk. The hue is untouched and must stay: he
-		   ruled that sage naming the text intake and lavender naming the
-		   score intake is right, and no lighter lavender token measures
-		   better against the white fill than #8E7E9B's own 3.74:1. */
-		/* 75 PERCENT OF 152px. Dann's ruling, 2026-08-20, on his walk of the
-		   silhouette ship: both intake fields go to three quarters of their
-		   height. 152 was the twin of the textarea's six rows; both fields
-		   drop by the same fraction, not to the same number, because they
-		   were never the same number. */
-		min-height: 114px;
-		padding: 0.5rem 0.6rem;
-		/* The textarea's own reserve for its OCR icon, mirrored here for the
-		   scan icon in this box's top-right corner. Without it the first line
-		   of a top-left placeholder runs under the glyph, which the centred
-		   text never did. `.text-input` carries the same value. */
-		padding-right: 2.2rem;
-		border: 1px solid var(--deeper-lavender);
-		border-radius: 4px;
-		background: white;
-		box-sizing: border-box;
-		cursor: pointer;
-		/* No resize affordance (Dann's ruling, 2026-07-13): the textarea's
-		   handle serves growing TYPED content; a drop target's content
-		   never grows. The box twins the Transcription field's border and
-		   fill but holds its half-width drawer dimension. */
-		transition: background 0.15s ease;
-		text-align: center;
-	}
-
-	.dropzone:hover {
-		background: rgba(142, 126, 155, 0.06);
-	}
-
-	.dropzone.dragging {
-		background: rgba(142, 126, 155, 0.12);
-	}
-
-	/* ── Score-from-image scan icon (visual only, coming soon) ── */
-
-	/* N.65 ship B. THE 8px `margin-bottom` IS GONE. Its comment said it
-	   mirrored "the room beneath the Transcription textarea before the next
-	   control," and it mirrored 6px with 8px. §B.6 dissolves the question:
-	   the Print row is inside SOURCE now, so the room beneath this box is
-	   `.station-body`'s own 6px flex gap, the SAME element that sets the
-	   textarea's. A margin here would add to it and the two would differ
-	   again.
-
-	   A COLUMN NOW, because §B.7 gave this wrap a second child: the box, then
-	   the format list. The 6px gap between them is `.station-body`'s value,
-	   so the box, its line, and the action row are three siblings a
-	   consistent 6px apart, which is the relationship Dann asked for.
-	   `position: relative` stays: it is the scan button's containing block. */
-	.dz-wrap {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-	}
-
-	/* THE PLACEHOLDER'S OWN TREATMENT, ONE STEP QUIETER IN NOTHING. Same
-	   family, size, weight, colour, and alignment as `.dz-placeholder`,
-	   because this is the second half of one sentence that used to sit in
-	   one element, and Dann moved it rather than restyling it. */
-	.dz-formats {
-		margin: 0;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-weight: 400;
-		line-height: 1.5;
-		color: var(--ink-tertiary);
-		text-align: start;
-	}
-
-	.scan-btn {
-		position: absolute;
-		top: 6px;
-		right: 6px;
-		width: 28px;
-		height: 28px;
-		padding: 4px;
-		border: none;
-		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.8);
-		color: var(--ink-tertiary);
-		opacity: 0.4;
-		cursor: default;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: color 0.15s ease, opacity 0.2s ease;
-	}
-
-	.scan-btn:hover {
-		opacity: 0.7;
-		color: var(--deeper-lavender);
-	}
-
-	/* The drop zone's own three lines sit ABOVE the watermark. Positioned, so
-	   they win the paint order against an absolutely positioned sibling; the
-	   watermark still paints over the white fill beneath them. `z-index: 1` on
-	   the text rather than a negative index on the mark, because a negative
-	   index would put the mark behind this box's own background and hide it. */
-	/* THE PLACEHOLDER, VALUE FOR VALUE WITH `.text-input::placeholder` AND
-	   `.text-input`'s own box. Dann's ruling of 2026-08-20: same family, same
-	   size, same weight, same colour, same alignment, top left, one line of
-	   prose that wraps.
-
-	   `line-height: 1.5` is the textarea's, which its `::placeholder`
-	   inherits, so a wrapped sentence sets on the same leading here.
-	   `text-align: start` is stated rather than left to the default, because
-	   this <p> lives inside a <button> and a button centres its text. `start`
-	   rather than `left` so the two fields' computed values match STRING FOR
-	   STRING, not merely in what they render: the textarea's placeholder
-	   inherits the initial `start`, and a row of the memo's table that reads
-	   `left` beside `start` invites the next session to go looking for a
-	   difference that is not there.
-
-	   `position: relative; z-index: 1` keeps it above the `score` watermark,
-	   which the three lines it replaces also did. */
-	.dz-placeholder {
-		position: relative;
-		z-index: 1;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-style: normal;
-		font-weight: 400;
-		line-height: 1.5;
-		color: var(--ink-tertiary);
-		text-align: start;
-	}
+	   THREE OF DANN'S RULINGS WERE DECLARED IN THEM, and here is where each
+	   went:
+	   - The placeholder top left, at the field size, in the textarea's exact
+	     treatment (2026-08-20 and 2026-08-21, asked four times): the one field
+	     IS the textarea, so the treatment is the textarea's by construction and
+	     no second box has to be made to look like it.
+	   - Three quarters of 152px (2026-08-20): there is no second box to size.
+	     The one field keeps `.text-input`'s own `calc(6.75em + 13.5px)`, which
+	     is the same ruling applied to the field that survived.
+	   - Lavender names the score intake and sage names the text intake
+	     (2026-07-13, ratified since): SPENT, not reversed. Hue names place, and
+	     there is one place. The one field takes the neutral dashed frame Design
+	     drew for it in the r2 prototype at `:190`; the memo says so and it is
+	     Dann's to rule on the walk.
 
 	/* ── Busy status ──────────────────────────────────────── */
 
@@ -1127,10 +978,6 @@
 	.btn-primary:hover,
 	.btn-secondary:hover {
 		opacity: 0.85;
-	}
-
-	.file-input {
-		display: none;
 	}
 
 	/* The older-Finale guidance's six rules went with its markup, Dann's
