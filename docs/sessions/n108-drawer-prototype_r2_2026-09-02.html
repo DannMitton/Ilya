@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N.108 drawer prototype r2, 2026-09-02</title>
+<!--
+  N.108 DRAWER PROTOTYPE, revision 2, 2026-09-02. Design desk, for Code.
+  (Design revision 3, against Dann's rulings of 2026-09-02 in
+  docs/memory/STATE.md §N.108.)
+
+  WHAT MOVED SINCE r1, and nothing else did:
+    1. The Transcribe station in Text is dissolved. The Transcribe action
+       stays under the intake in Piece, the only control of that name; the
+       word count and Clear are on the intake's receipt line. Text holds
+       Notation and Analysis.
+    2. A station opens in place. NOTHING SCROLLS ITSELF except one thing:
+       entry to the calibration ritual, which parks the drawer at the top and
+       restores the singer's own scroll on the way out.
+    3. Calibration is a TAKEOVER again, entered from Calibrate in the Voice
+       station, restore-on-exit. It is restyled in the new dress: the Score
+       markup band across the top with the Back affordance on it, the 20 px
+       group surface, the same label recipe. The in-place ritual is CUT.
+    4. Three viewports: 1400 x 900, 1366 x 768, 430 x 932. The opening state
+       is measured in the readout at each.
+    5. The phone pull is the labelled pull ruled 2026-08-18 (caret, DRAWER),
+       not a bare chevron. The desktop keeps the bookmark tab.
+    6. The contrast readouts are out of the bands. They live in the toolbar
+       readout only.
+
+  One self-contained file. No framework, no fetch, no font that is not in
+  apps/web/static/fonts (none of the drawer's fonts are, so --font-sans falls
+  through to system-ui exactly as app.css:23 would without a webfont).
+
+  EVERY VALUE CARRIES ITS SOURCE in a comment beside it. Three kinds:
+    app.css:NN          copied from apps/web/src/app.css on branch Shane
+    <file>.svelte:NN    copied from that component on branch Shane
+    N.108 ruled         Dann's rulings of 2026-09-02
+    PLACEHOLDER         mine, unsourced, marked, to be replaced
+  Strings: English only, French deferred by ruling. Strings that ship today
+  carry their i18n.ts key. Strings marked PLACEHOLDER do not exist yet.
+
+  STRUCTURE FOR SVELTE. One <section class="group"> per group, one
+  <div class="station"> per station, one <button class="station-header"> per
+  header that toggles, one <div class="station-body"> per body. The intake is
+  a station with no header (it is never closed). The takeover is a SIBLING of
+  .drawer-scroll and hides it, which is how Drawer.svelte:617 already builds
+  it. Class names say what the thing is; the prototype's own chrome is
+  everything inside .proto and is not part of the drawer.
+-->
+<style>
+/* ── Tokens, app.css:21-72, copied verbatim where used ─────────────────── */
+:root {
+  --font-sans: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif; /* app.css:23 */
+  --font-mono: 'Menlo', 'Consolas', monospace;                                   /* app.css:24 */
+  --ink-primary: #1a1612;      /* app.css:27 */
+  --ink-secondary: #4a4540;    /* app.css:28 */
+  --ink-tertiary: #6A655F;     /* app.css:29 */
+  --sage: #8B9A7D;             /* app.css:32 */
+  --quiet-cobalt: #5C739E;     /* app.css:41 */
+  --stone-300: #d6d3d1;        /* app.css:44 */
+  --paper-cream: #F0EBE0;      /* app.css:49 */
+  --paper-light: #F5F1E8;      /* app.css:50 */
+  --drawer-bg: #FAF8F5;        /* app.css:51 */
+  --desk-surface: #D8D4C8;     /* app.css:52 */
+  --surround-transcription: #D1D7CB; /* app.css:84, Studio's desk, sage at 60% */
+  --surround-marked: #D2CBD7;        /* app.css:85 */
+  --lang-chip-transcription: #6C7A5F; /* app.css:105, --sage one step down, ruled for white text 2026-08-20 */
+  --lang-chip-guide: var(--quiet-cobalt); /* app.css:107 */
+  --lang-chip-marked: #806E8E;        /* app.css:108, --deeper-lavender one step down */
+  --deeper-lavender: #8E7E9B;  /* app.css:118 */
+  --light-lavender: #C4BACF;   /* app.css:117 */
+  --light-sage: #A8B5A0;       /* app.css:33 */
+  /* Four radii, N.108 ruled: 0, 4 px control, 20 px surface, full-round. */
+  --radius-control: 4px;       /* the tree's control radius, VoiceAnchor.svelte:110 */
+  --radius-surface: 20px;      /* N.108 ruled 2026-09-02, "20 looks terrific" */
+  /* Motion: one duration, ratified spec 2026-08-18, "~180 ms ease-out". */
+  --motion: 180ms ease-out;
+  /* The pull, Drawer.svelte LIP_W / LIP_H, ruled 2026-08-20 and 2026-08-21. */
+  --lip-w: 20px;
+  --lip-h: 152px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; } /* app.css reset */
+body { font-family: var(--font-sans); color: var(--ink-primary); background: var(--desk-surface); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; text-align: left; }
+:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; } /* app.css:113-116 */
+
+/* ── Prototype chrome. NOT the drawer. ─────────────────────────────────── */
+.proto { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; min-height: 100vh; }
+.proto-bar { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; font-size: 13px; color: var(--ink-secondary); }
+.proto-bar label { display: flex; gap: 6px; align-items: center; }
+.proto-bar select, .proto-bar .seg button { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--stone-300); border-radius: var(--radius-control); background: var(--drawer-bg); color: var(--ink-primary); }
+.proto-bar .seg { display: inline-flex; }
+.proto-bar .seg button[aria-pressed="true"] { background: var(--ink-primary); color: #fff; border-color: var(--ink-primary); }
+.proto-readout { font-family: var(--font-mono); font-size: 11px; color: var(--ink-tertiary); white-space: pre-wrap; }
+.proto-stage { transform-origin: top left; }
+.frame { position: relative; overflow: hidden; background: var(--surround-transcription); }
+/* Three viewports. The two desktops share every rule; only the box differs. */
+.frame[data-viewport="desk1400"] { width: 1400px; height: 900px; }
+.frame[data-viewport="desk1366"] { width: 1366px; height: 768px; }
+.frame[data-viewport="phone"]    { width: 430px;  height: 932px; }
+/* Desktop only: an app bar, PLACEHOLDER height 56 (HeaderBar.svelte not read), and the paper beside the drawer. */
+.frame:not([data-viewport="phone"]) .appbar { height: 56px; background: var(--sage); }
+.frame:not([data-viewport="phone"]) .deck { display: flex; padding: 20px 24px; gap: 24px; } /* 24 = --portrait-gutter, app.css:63 */
+.frame[data-viewport="desk1400"] .deck { height: 844px; } /* 900 - 56 */
+.frame[data-viewport="desk1366"] .deck { height: 712px; } /* 768 - 56 */
+.frame:not([data-viewport="phone"]) .paper { flex: 1; background: var(--paper-cream); border-radius: 0; box-shadow: 0 1px 3px rgba(26,22,18,.18); } /* radius 0: paper, ruled */
+.frame[data-viewport="phone"] .appbar, .frame[data-viewport="phone"] .paper { display: none; }
+.frame[data-viewport="phone"] .deck { height: 932px; }
+
+/* ── THE DRAWER ─────────────────────────────────────────────────────────── */
+/* The slab keeps today's footprint: 520 px on desktop (+page.svelte:1581),
+   100% minus the pull on the phone (Drawer.svelte, the 767 px rule, N.65 item 3).
+   Its fill is the desk's own surround, so the divots between groups are cut
+   from the desk. Today's .drawer-body fill (--drawer-bg) moves onto the groups.
+   Ruled 2026-09-02: "the slab takes the desk's surround and the groups carry
+   the drawer paper, as built; the bookmark tab belongs to the slab." */
+.drawer { position: relative; display: flex; flex-direction: column; flex: none; height: 100%; background: var(--surround-transcription); }
+.frame:not([data-viewport="phone"]) .drawer { width: 520px; }
+.frame[data-viewport="phone"] .drawer { width: calc(100% - var(--lip-w)); position: absolute; top: 0; left: 0; height: 100%; } /* Svelte: height: 100dvh, Drawer.svelte's own rule; 100% of the 932 frame here */
+
+/* NO HEADER ROW. r1 drew a 48 px head carrying the word "Drawer" and a Close
+   button, both marked PLACEHOLDER, and the shipped drawer has neither: the
+   pull is the drawer's name (aria-label 'drawer.pull', i18n.ts:46) and the
+   pull is what collapses it (Drawer.svelte, ontogglecollapse on .drawer-lip).
+   It is deleted here, and §4 of the memo records that deleting it is what
+   made 1366 x 768 fit after Metadata gave. The first group's 20 px corners
+   now meet the slab at the top, which is the same join they make at the
+   bottom. */
+
+/* The scroll. RULED 2026-09-02: a station opens IN PLACE and the drawer never
+   scrolls on its own. The singer may scroll it; nothing here calls scrollTo
+   except the ritual's entry and exit (see the script). */
+.drawer-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 0 0 12px; } /* 12: PLACEHOLDER */
+.drawer[data-takeover="on"] .drawer-scroll { display: none; } /* E.27: the takeover "replaces the entire drawer"; Drawer.svelte stows the regions the same way */
+
+/* ── Groups: contiguous squircles, radius 20, flush, no gap. ──────────── */
+.group { background: var(--drawer-bg); border-radius: var(--radius-surface); overflow: hidden; padding-bottom: 4px; } /* 4: PLACEHOLDER */
+.group + .group { margin-top: 0; } /* flush: the divot is the two 20 px corners meeting, depth 20, chord 40 */
+
+/* Group band. N.108 ruled: full-strength colour, reverse text in a light
+   neutral. RULED 2026-09-02, the fix inside that ruling: the band takes the
+   hue's own one-step-down chip token (app.css:96-108, ratified 2026-08-20,
+   option D) and the text is WHITE, not cream. Piece #5C739E 4.77:1, Text
+   #6C7A5F 4.58:1, Score markup #806E8E 4.63:1, all past 4.5:1 at label size.
+   RULED 2026-09-02: the measured ratios come OUT of the bands. They are in the
+   toolbar readout, computed live from these same tokens. */
+.group-band { display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 18px; color: #fff; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; } /* 40: PLACEHOLDER; type: StationHeader recipe */
+.group-piece .group-band { background: var(--lang-chip-guide); }         /* Piece borrows Guide's cobalt, N.108 ruled, on purpose */
+.group-text  .group-band { background: var(--lang-chip-transcription); } /* sage, one step down */
+.group-score .group-band { background: var(--lang-chip-marked); }        /* lavender, one step down */
+
+/* ── Stations ───────────────────────────────────────────────────────────── */
+.station { margin: 0 18px; border-top: 1px solid rgba(26,22,18,.10); } /* hairline: PLACEHOLDER weight, ink at .10 */
+.station:first-of-type { border-top: none; }
+.station-header { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 8px 0; } /* 44: touch floor, ruling 7; extended downward from the label as StationHeader.svelte does */
+.frame:not([data-viewport="phone"]) .station-header { min-height: 40px; } /* fine pointer keeps the natural height; Svelte: @media (pointer: coarse) { min-height: 44px } */
+.station-name { flex: 1; min-width: 0; font-size: 0.95rem; } /* PLACEHOLDER size */
+.station-status { flex-shrink: 0; font-size: 0.75rem; font-weight: 500; color: var(--ink-tertiary); font-variant-numeric: tabular-nums; white-space: nowrap; } /* StationHeader.svelte .station-status */
+.chevron-icon { flex-shrink: 0; transform: rotate(90deg); transition: transform 150ms ease; color: var(--ink-tertiary); } /* StationHeader.svelte: closed points the way the panel grows, down */
+.station-header[aria-expanded="true"] .chevron-icon { transform: rotate(-90deg); }
+.station-body { display: none; padding: 0 0 12px; }
+.station.open > .station-body { display: block; animation: bodyIn var(--motion) both; } /* opacity and transform only */
+@keyframes bodyIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* METADATA GIVES AT 1366. See the memo §4: at 1366 x 768 the opening state
+   overruns, and Dann ruled Metadata is the station that gives. It leaves the
+   map and becomes a quiet affordance on the Piece band, which costs no height
+   because the band is already there. Nothing else in the map moves. */
+.band-link { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; opacity: .85; display: none; } /* same label recipe, reversed */
+.frame[data-viewport="desk1366"] .band-link { display: inline-flex; align-items: center; min-height: 40px; }
+.frame[data-viewport="desk1366"] .station[data-station="metadata"] { display: none; }
+
+/* Fields and buttons: the 4 px control radius, the tree's own. */
+.field { display: block; width: 100%; min-height: 44px; padding: 8px 10px; margin-top: 8px; font: inherit; font-size: max(1rem, 16px); border: 1px solid var(--stone-300); border-radius: var(--radius-control); background: #fff; color: var(--ink-primary); } /* 16px floor: app.css N.23 rule */
+.field::placeholder { color: var(--ink-tertiary); }
+.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; white-space: nowrap; border: 1px solid var(--stone-300); border-radius: var(--radius-control); font-size: 0.8rem; font-weight: 600; background: var(--drawer-bg); }
+.btn-primary { background: var(--sage); color: #fff; border-color: var(--sage); }              /* .btn-primary precedent, white on sage 2.99:1, recorded not fixed (VoiceAnchor.svelte comment) */
+.btn-voice   { background: var(--deeper-lavender); color: #fff; border-color: var(--deeper-lavender); } /* VoiceAnchor.svelte .voice-action, 3.74:1, recorded */
+.btn-quiet   { border-color: transparent; color: var(--ink-secondary); font-weight: 500; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.note { font-size: 0.8rem; color: var(--ink-tertiary); margin-top: 8px; text-wrap: pretty; }
+.ph { font-family: var(--font-mono); font-size: 10px; color: var(--ink-tertiary); } /* marks a PLACEHOLDER string */
+
+/* ── The intake: one field, no header, four states. ─────────────────────── */
+/* RULED 2026-09-02: the Transcribe station is dissolved. Transcribe stays here,
+   under the intake, as the only control of that name; the word count and Clear
+   are on the receipt line, where the poem's own receipt already is. */
+.station-intake { padding: 10px 0 12px; }
+.intake { position: relative; border: 1px dashed rgba(26,22,18,.28); border-radius: var(--radius-control); background: var(--paper-light); padding: 12px; } /* dashed: today's drop zone; paper-light: PLACEHOLDER fill */
+.intake-field { width: 100%; min-height: 72px; resize: vertical; border: none; background: transparent; font: inherit; font-size: max(1rem, 16px); color: var(--ink-primary); } /* 72: PLACEHOLDER, about three lines */
+.intake-receipt { display: none; align-items: center; gap: 10px; min-height: 44px; border-bottom: 1px solid rgba(26,22,18,.08); }
+.intake-receipt .tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-tertiary); flex: none; width: 40px; }
+.intake-receipt .line { flex: 1; min-width: 0; font-size: 0.85rem; }
+.intake-receipt .count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-tertiary); font-variant-numeric: tabular-nums; flex: none; } /* the word count, moved off the dissolved station */
+.intake-receipt .btn { min-height: 44px; padding: 0 8px; }
+.intake-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.drawer[data-intake="poem"]  .receipt-poem,  .drawer[data-intake="both"] .receipt-poem  { display: flex; }
+.drawer[data-intake="score"] .receipt-score, .drawer[data-intake="both"] .receipt-score { display: flex; }
+.drawer:not([data-intake="empty"]) .intake-field, .drawer:not([data-intake="empty"]) .intake-actions { display: none; } /* after material arrives the field is its receipts; Replace does the picking; the frame stays a drop target */
+.drawer:not([data-intake="empty"]) .intake { padding-top: 0; }
+.intake-drop-hint { display: none; font-size: 0.75rem; color: var(--ink-tertiary); padding-top: 8px; }
+.drawer:not([data-intake="empty"]) .intake-drop-hint { display: block; }
+
+/* ── Notation: seven toggles, i18n.ts:100-113, left = off, right = on. ─── */
+.toggle-row { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 0.85rem; border-top: 1px solid rgba(26,22,18,.06); }
+.toggle-row .off { flex: 1; color: var(--ink-tertiary); text-align: right; }
+.toggle-row .on { flex: 1; }
+.knob { width: 34px; height: 18px; border-radius: 9px; background: rgba(26,22,18,.18); position: relative; flex: none; } /* NotationFields.svelte:277 radius 9, full-round */
+.knob::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform var(--motion); }
+.knob[aria-checked="true"] { background: var(--sage); }
+.knob[aria-checked="true"]::after { transform: translateX(16px); }
+
+/* ── Voice: the anchor line only. The ritual is the takeover below. ────── */
+.voice-line { display: flex; align-items: center; gap: 8px; padding: 9px 0; } /* VoiceAnchor.svelte:63-70 */
+.voice-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--deeper-lavender); flex: none; }
+.voice-status { flex: 1; min-width: 0; font-size: 0.75rem; color: var(--ink-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── THE TAKEOVER ───────────────────────────────────────────────────────── */
+/* RULED 2026-09-02: calibration stays a takeover, entered from Calibrate in
+   the Voice station, exit restoring the drawer as today (Drawer.svelte:260-287
+   already saves and restores the scroll). Restyled in the new dress so it
+   reads as the Voice station grown to fill the drawer: the Score markup band
+   across the top with the Back affordance ON it, the 20 px group surface, the
+   same label recipe. It replaces today's 2 px lavender rule and quiet Back
+   (Drawer.svelte:882-897); the lavender is now carried by the band, which is
+   the Score markup hue, so the 2026-08-23 ruling that the takeover's rule is
+   lavender survives in a stronger form. */
+.takeover { display: none; flex: 1; min-height: 0; flex-direction: column; }
+.drawer[data-takeover="on"] .takeover { display: flex; animation: bodyIn var(--motion) both; }
+.takeover-frame { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--drawer-bg); border-radius: var(--radius-surface); overflow: hidden; } /* one group, grown */
+/* The band. Same recipe as .group-band, and the same hue as Score markup,
+   because this IS the Score markup group's Voice station filling the drawer. */
+.takeover-band { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none; height: 40px; padding: 0 18px; background: var(--lang-chip-marked); color: #fff; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+/* The ONE back affordance, E.27, now reversed onto the band. Kept quiet by
+   weight and opacity rather than by colour: this is the way out of a ritual,
+   not an invitation to leave it. 44 px target, the floor the drawer's own pull
+   and NotationFields' disclosure use (ruling 7). */
+.takeover-back { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: none; color: #fff; opacity: .88; }
+.takeover-back:hover { opacity: 1; }
+.takeover-body { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 18px 16px; } /* the ritual's own scroll, as today (.drawer-takeover, Drawer.svelte:873-880) */
+.takeover-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-tertiary); padding-top: 10px; } /* the station's own name, kept so the band says the group and this says the station */
+.phase-rail { display: flex; gap: 5px; margin: 10px 0 2px; }
+.phase-rail span { width: 7px; height: 7px; transform: rotate(45deg); background: rgba(26,22,18,.18); }
+.phase-rail span.done { background: var(--deeper-lavender); }
+.phase { display: none; }
+.drawer[data-phase="welcome"] .phase-welcome, .drawer[data-phase="readiness"] .phase-readiness, .drawer[data-phase="capture"] .phase-capture, .drawer[data-phase="summary"] .phase-summary, .drawer[data-phase="characteristics"] .phase-characteristics { display: block; animation: bodyIn var(--motion) both; }
+.phase h3 { font-size: 1rem; font-weight: 600; margin: 8px 0 6px; }
+.phase p { font-size: 0.85rem; color: var(--ink-secondary); text-wrap: pretty; }
+.meter { display: flex; align-items: flex-end; gap: 3px; height: 56px; margin: 12px 0; } /* PLACEHOLDER for the Pacifier */
+.meter span { flex: 1; background: var(--light-lavender); }
+.meter span.live { background: var(--deeper-lavender); }
+.hold { display: flex; align-items: center; justify-content: center; width: 100%; height: 56px; border-radius: var(--radius-control); background: var(--deeper-lavender); color: #fff; font-weight: 600; } /* PLACEHOLDER control */
+.roster { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 8px; }
+.roster th, .roster td { text-align: left; padding: 0 6px; height: 44px; border-top: 1px solid rgba(26,22,18,.08); font-weight: 400; }
+.roster th { color: var(--ink-tertiary); font-weight: 500; }
+.char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+.char-grid label { font-size: 0.75rem; color: var(--ink-tertiary); }
+.char-grid .field { margin-top: 2px; }
+
+/* ── The pull ────────────────────────────────────────────────────────────── */
+/* Desktop: the bookmark tab, ruled 2026-08-18 (option A), 2026-08-20, 2026-08-21.
+   Phone: the LABELLED pull ruled 2026-08-18 in the same item, "mobile gets one
+   labelled pull (caret, DRAWER) on both portrait states, replacing both
+   unlabelled handles". r1 drew the bare chevron on the phone; this is the fix.
+   The label is set in the drawer's own label recipe, reversed to nothing: it
+   is ink on the drawer paper, like the drawer head's title. */
+.drawer-pull { position: absolute; top: 50%; left: 100%; transform: translateY(-50%); width: var(--lip-w); height: var(--lip-h); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: var(--drawer-bg); border: 1px solid rgba(26,22,18,.18); border-left: none; border-radius: 0 6px 6px 0; box-shadow: 1px 1px 4px rgba(0,0,0,.18); } /* Drawer.svelte:1055-1072; 6px approximates the drawn squircle R 6.43 */
+.drawer-pull svg { width: 14px; height: 20px; flex: none; color: var(--ink-secondary); } /* .lip-chevron, Drawer.svelte:1167-1169 */
+.pull-label { display: none; writing-mode: vertical-rl; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-tertiary); } /* StationHeader.svelte .station-label recipe, set vertically to fit the 20 px tab */
+.frame[data-viewport="phone"] .pull-label { display: block; }
+.frame[data-viewport="phone"] .drawer-pull::before { content: ''; position: absolute; top: 50%; left: 0; width: 44px; height: var(--lip-h); transform: translateY(-50%); } /* coarse-pointer extension, Drawer.svelte:1153-1162 */
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="proto">
+  <div class="proto-bar" role="toolbar" aria-label="Prototype controls, not part of the drawer">
+    <label>Viewport
+      <span class="seg" id="viewport">
+        <button type="button" data-v="desk1400" aria-pressed="true">1400 × 900</button>
+        <button type="button" data-v="desk1366" aria-pressed="false">1366 × 768</button>
+        <button type="button" data-v="phone" aria-pressed="false">430 × 932</button>
+      </span>
+    </label>
+    <label>Intake
+      <select id="intake">
+        <option value="empty">empty</option>
+        <option value="poem">poem received</option>
+        <option value="score">score received</option>
+        <option value="both">both received</option>
+      </select>
+    </label>
+    <label>Voice
+      <select id="phase">
+        <option value="none">closed</option>
+        <option value="anchor">open, anchor line</option>
+        <option value="welcome">takeover: welcome</option>
+        <option value="readiness">takeover: readiness</option>
+        <option value="capture">takeover: capture</option>
+        <option value="summary">takeover: summary</option>
+        <option value="characteristics">takeover: characteristics</option>
+      </select>
+    </label>
+    <button type="button" class="btn btn-quiet" id="reset" style="min-height:32px">Opening state</button>
+    <span class="proto-readout" id="readout"></span>
+  </div>
+
+  <div class="proto-stage" id="stage">
+    <div class="frame" id="frame" data-viewport="desk1400">
+      <div class="appbar"></div>
+      <div class="deck">
+
+        <aside class="drawer" id="drawer" aria-label="Drawer" data-intake="empty" data-takeover="off" data-phase="none">
+          <div class="drawer-scroll" id="scroll">
+
+            <!-- ═══ PIECE. N.108 ruled name. Borrows Guide's cobalt on purpose. ═══ -->
+            <section class="group group-piece" data-group="piece">
+              <h2 class="group-band">
+                <span>Piece</span>
+                <!-- Metadata's affordance at 1366 only. See the memo §4. -->
+                <button type="button" class="band-link" id="metaLink">Metadata</button> <!-- meta.heading, i18n.ts:86 -->
+              </h2>
+
+              <div class="station" data-station="repertoire">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-repertoire">
+                  <span class="station-name">Repertoire</span> <!-- songs.heading, i18n.ts:1061 -->
+                  <span class="station-status">2 songs</span> <!-- PLACEHOLDER status -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-repertoire">
+                  <div class="toggle-row" style="justify-content:space-between"><span>Mussorgsky, Without Sun</span><span class="row" style="margin:0"><button type="button" class="btn btn-quiet">Rename</button><button type="button" class="btn btn-quiet">Delete</button></span></div> <!-- songs.rename, songs.delete, i18n.ts:1070-1071; song titles PLACEHOLDER -->
+                  <div class="toggle-row" style="justify-content:space-between"><span>Untitled, 2026-08-25</span><span class="row" style="margin:0"><button type="button" class="btn btn-quiet">Rename</button><button type="button" class="btn btn-quiet">Delete</button></span></div>
+                  <div class="row"><button type="button" class="btn">New song</button></div> <!-- songs.new, i18n.ts:1062 -->
+                </div>
+              </div>
+
+              <div class="station" data-station="metadata">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-metadata">
+                  <span class="station-name">Metadata</span> <!-- meta.heading, i18n.ts:86 -->
+                  <span class="station-status">title, poet</span> <!-- PLACEHOLDER status -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-metadata">
+                  <input class="field" placeholder="Aria or song title"> <!-- meta.title, i18n.ts:87 -->
+                  <input class="field" placeholder="Composer"> <!-- meta.composer, i18n.ts:88 -->
+                  <input class="field" placeholder="Poet or librettist"> <!-- meta.poet, i18n.ts:89 -->
+                  <input class="field" placeholder="Opera, song cycle, opus number"> <!-- meta.opus, i18n.ts:90 -->
+                </div>
+              </div>
+
+              <!-- THE INTAKE. Successor of the Source station (source.heading, i18n.ts:392).
+                   No header: the field is the station and it is never closed.
+                   RULED 2026-09-02: Transcribe lives here and nowhere else. -->
+              <div class="station station-intake" data-station="intake">
+                <span class="visually-hidden">Source</span>
+                <div class="intake" id="intakeBox">
+                  <textarea class="intake-field" placeholder="Paste or type the poem here. A score or a photograph dropped here is read as what it is."></textarea> <!-- PLACEHOLDER string -->
+                  <!-- The poem's receipt line now carries the word count and Clear,
+                       the two things the dissolved Transcribe station held. -->
+                  <div class="intake-receipt receipt-poem">
+                    <span class="tag">text</span>
+                    <span class="line">24 lines · transcription</span> <!-- PLACEHOLDER strings, cut to one line: the receipt says how much arrived and which surface reads it -->
+                    <span class="count">13 words</span> <!-- the instrument line's count, audited 2026-08-18; PLACEHOLDER number -->
+                    <button type="button" class="btn btn-quiet" data-clear="poem">Clear</button> <!-- E.27 §3.3 Source action, moved here -->
+                    <button type="button" class="btn btn-quiet" data-replace="poem">Replace</button>
+                  </div>
+                  <div class="intake-receipt receipt-score">
+                    <span class="tag">score</span>
+                    <span class="line">3 pages · score markup</span>
+                    <button type="button" class="btn btn-quiet" data-clear="score">Clear</button>
+                    <button type="button" class="btn btn-quiet" data-replace="score">Replace</button>
+                  </div>
+                  <div class="intake-actions">
+                    <button type="button" class="btn">Choose a file</button> <!-- PLACEHOLDER; desktop: filtered accept list; phone: no accept attribute, N.70 -->
+                    <button type="button" class="btn">Read a score from a photograph</button> <!-- upload.scanTooltip, i18n.ts:555 -->
+                  </div>
+                  <div class="intake-drop-hint">Drop the other kind here, or a new file of the same kind to replace it.</div> <!-- PLACEHOLDER -->
+                </div>
+                <div class="row"><button type="button" class="btn btn-primary">Transcribe</button></div> <!-- the ONE control of that name, ruled 2026-09-02; the shipped action key was not read -->
+              </div>
+
+              <div class="station" data-station="binder">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-binder">
+                  <span class="station-name">Export and import</span> <!-- PLACEHOLDER name; the shipped strings are the binder.* keys inside -->
+                  <span class="station-status">binder</span>
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-binder">
+                  <div class="row"><button type="button" class="btn">Export this song</button><button type="button" class="btn">Export all songs</button><button type="button" class="btn">Import a song</button></div> <!-- binder.export :976, binder.exportAll :1009, binder.import :977 -->
+                </div>
+              </div>
+            </section>
+
+            <!-- ═══ TEXT. Sage. Notation and Analysis only, ruled 2026-09-02. ═══ -->
+            <section class="group group-text" data-group="text">
+              <h2 class="group-band"><span>Text</span></h2>
+
+              <div class="station" data-station="notation">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-notation">
+                  <span class="station-name">Notation</span> <!-- cosmetic.heading, i18n.ts:99 -->
+                  <span class="station-status">defaults</span> <!-- E.27 §3.6 -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-notation">
+                  <!-- seven toggles, i18n.ts:100-113, off-label left, on-label right -->
+                  <div class="toggle-row"><span class="off">No stress marks</span><span class="knob" role="switch" aria-checked="true"></span><span class="on">Apply stress acutes</span></div>
+                  <div class="toggle-row"><span class="off">Default [ʌ]</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Display [ə] instead</span></div>
+                  <div class="toggle-row"><span class="off">Palatal nasal [ɲ]</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Palatalized nasal [nʲ]</span></div>
+                  <div class="toggle-row"><span class="off">Separate geminates [tt]</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Length markers [tː]</span></div>
+                  <div class="toggle-row"><span class="off">Shcha notation [ʃʲʃʲ]</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Length marker [ʃʲː]</span></div>
+                  <div class="toggle-row"><span class="off">Default reduction</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Reconstitution</span></div>
+                  <div class="toggle-row"><span class="off">Default syllabification</span><span class="knob" role="switch" aria-checked="false"></span><span class="on">Open syllables</span></div>
+                </div>
+              </div>
+
+              <div class="station" data-station="analysis">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-analysis">
+                  <span class="station-name">Analysis</span> <!-- console.placeholder, i18n.ts:395 -->
+                  <span class="station-status">no word selected</span> <!-- PLACEHOLDER -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-analysis">
+                  <p class="note">Select a word on the page to analyze it here.</p> <!-- PLACEHOLDER; the inspector is resident here, E.44 -->
+                </div>
+              </div>
+            </section>
+
+            <!-- ═══ SCORE MARKUP. Lavender. ═══ -->
+            <section class="group group-score" data-group="score">
+              <h2 class="group-band"><span>Score markup</span></h2>
+
+              <div class="station" data-station="underlay">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-underlay">
+                  <span class="station-name">Underlay</span> <!-- ruled English name 2026-08-18; ships today as shiftLyrics.title "Shift Lyrics", i18n.ts:895 -->
+                  <span class="station-status">12 unpaired</span> <!-- PLACEHOLDER; the counter slot is StationHeader's status snippet -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-underlay">
+                  <p class="note">Queue and cursor here. The verbs render only when a paired note is selected (ruled 2026-08-18).</p> <!-- PLACEHOLDER -->
+                </div>
+              </div>
+
+              <div class="station" data-station="corrections">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-corrections">
+                  <span class="station-name">Corrections</span> <!-- loupe.station.corrections, i18n.ts:304 -->
+                  <span class="station-status">none</span> <!-- PLACEHOLDER -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-corrections">
+                  <p class="note">Edits the sung note under the loupe. Contents as CorrectionSurface.svelte ships them.</p> <!-- PLACEHOLDER -->
+                </div>
+              </div>
+
+              <div class="station station-voice" data-station="voice" id="voice">
+                <button type="button" class="station-header" aria-expanded="false" aria-controls="body-voice">
+                  <span class="station-name">Voice</span> <!-- E.27 §3.3 station name -->
+                  <span class="station-status">not yet calibrated</span> <!-- from calib.anchor.uncalibrated, i18n.ts:663, with the "Voice:" prefix dropped because the name is beside it -->
+                  <svg class="chevron-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,1.5 7,5 3,8.5"/></svg>
+                </button>
+                <div class="station-body" id="body-voice">
+                  <!-- The anchor line, VoiceAnchor.svelte, inside the station.
+                       Calibrate is the ONLY entry to the takeover: never a chevron (E.27). -->
+                  <div class="voice-line">
+                    <span class="voice-dot" aria-hidden="true"></span>
+                    <span class="voice-status">Voice: not yet calibrated</span> <!-- calib.anchor.uncalibrated -->
+                    <button type="button" class="btn btn-voice" id="calibrate">Calibrate</button> <!-- calib.anchor.calibrate, i18n.ts:665 -->
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- ═══ THE TAKEOVER. A SIBLING of .drawer-scroll, exactly as
+               Drawer.svelte:617 builds it, and it hides what is behind it.
+               Ruled 2026-09-02: restyled in the new dress, the in-place
+               ritual cut. ═══ -->
+          <div class="takeover" aria-label="Calibration">
+            <div class="takeover-frame">
+              <div class="takeover-band">
+                <span>Score markup</span>
+                <button type="button" class="takeover-back" id="ritualBack"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7,1.5 3,5 7,8.5"/></svg>Back</button> <!-- the ONE back affordance, E.27; ships today as inspector.back -->
+              </div>
+              <div class="takeover-body" id="takeoverBody">
+                <p class="takeover-title">Voice</p> <!-- the station this grew from, in the station-label recipe -->
+                <span class="phase-rail" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+
+                <div class="phase phase-welcome">
+                  <h3>Finding Your Resonances</h3> <!-- calib.welcome.title, i18n.ts:712 -->
+                  <p>Lede as shipped (calib.welcome.lede, not read here).</p> <span class="ph">PLACEHOLDER body</span>
+                  <details style="margin-top:8px;font-size:.85rem"><summary>What is vocal fry?</summary><p>Answer as shipped.</p></details> <!-- calib.welcome.fryQuestion / fryAnswer; wording not read -->
+                  <div class="row"><button type="button" class="btn btn-voice" data-next="readiness">Begin</button></div> <!-- calib.welcome.beginButton, i18n.ts:716 -->
+                </div>
+
+                <div class="phase phase-readiness">
+                  <h3>Getting ready</h3> <!-- calib.readiness.title, i18n.ts:717 -->
+                  <p>Quiet, then a count of three, then a short capture of the room. Nothing is recorded during the count.</p> <span class="ph">PLACEHOLDER paraphrase of readinessStep quiet, prepare, capture, done</span>
+                  <p style="font-size:2rem;text-align:center;margin:8px 0;font-variant-numeric:tabular-nums">3</p> <!-- .wizard-count -->
+                  <div class="meter" aria-hidden="true"><span style="height:20%"></span><span style="height:28%"></span><span style="height:22%"></span><span style="height:30%"></span><span style="height:24%"></span><span style="height:18%"></span><span style="height:26%"></span><span style="height:20%"></span></div>
+                  <div class="row"><button type="button" class="btn btn-voice" data-next="capture">Continue</button></div> <!-- PLACEHOLDER -->
+                </div>
+
+                <div class="phase phase-capture">
+                  <h3>Capture</h3> <span class="ph">PLACEHOLDER title; the shipped capture phase has no title key that was read</span>
+                  <p style="font-family:var(--font-mono);font-size:.75rem">Voice 1 · 3/7 vowels</p> <!-- compactLabel shape, CalibrationWizard.svelte:360-362; counts PLACEHOLDER -->
+                  <p>Sing the vowel shown and hold it until the meter fills.</p> <span class="ph">PLACEHOLDER; the Pacifier draws this surface</span>
+                  <div class="meter" aria-hidden="true"><span class="live" style="height:22%"></span><span class="live" style="height:41%"></span><span class="live" style="height:66%"></span><span class="live" style="height:88%"></span><span class="live" style="height:74%"></span><span class="live" style="height:52%"></span><span style="height:33%"></span><span style="height:18%"></span></div>
+                  <div class="hold">Hold to record</div> <span class="ph">PLACEHOLDER control; the microphone is open only while held</span>
+                  <div class="row"><button type="button" class="btn btn-quiet">Skip this vowel</button><button type="button" class="btn btn-quiet">Retake</button><button type="button" class="btn btn-voice" data-next="summary">Finish</button></div> <!-- Retake: calib.common.retake; others PLACEHOLDER -->
+                </div>
+
+                <div class="phase phase-summary">
+                  <h3>Profile summary</h3> <!-- calib.summary.title, i18n.ts:791 -->
+                  <table class="roster">
+                    <thead><tr><th>Vowel</th><th>F1</th><th>F2</th><th></th></tr></thead> <!-- calib.common.vowelWord; frSym(1), frSym(2) -->
+                    <tbody>
+                      <tr><td>vowel 1</td><td>612 Hz</td><td>1 040 Hz</td><td><button type="button" class="btn btn-quiet">Retake</button></td></tr>
+                      <tr><td>vowel 2</td><td>430 Hz</td><td>2 100 Hz</td><td><button type="button" class="btn btn-quiet">Retake</button></td></tr>
+                      <tr><td>vowel 3</td><td>380 Hz</td><td>try again</td><td><button type="button" class="btn btn-quiet">Retake</button></td></tr>
+                      <tr><td>vowel 4</td><td>estimated</td><td></td><td></td></tr>
+                      <tr><td>vowel 5</td><td>estimated</td><td></td><td></td></tr>
+                      <tr><td>vowel 6</td><td>estimated</td><td></td><td></td></tr>
+                      <tr><td>vowel 7</td><td>estimated</td><td></td><td></td></tr>
+                    </tbody>
+                  </table>
+                  <span class="ph">PLACEHOLDER rows; vowel names are ruled elsewhere and not retyped here</span>
+                  <div class="row"><button type="button" class="btn" data-next="characteristics">Add voice characteristics</button><button type="button" class="btn btn-voice" data-next="none">Done</button></div> <!-- calib.characteristics.addButton (wording not read), Done: PLACEHOLDER -->
+                </div>
+
+                <div class="phase phase-characteristics">
+                  <h3>Voice characteristics</h3> <!-- calib.characteristics.title, i18n.ts:799 -->
+                  <div class="char-grid">
+                    <label>Range, low<input class="field"></label><label>Range, high<input class="field"></label>
+                    <label>Tessitura, low<input class="field"></label><label>Tessitura, high<input class="field"></label>
+                    <label>Passaggio, primary<input class="field"></label><label>Passaggio, secondary<input class="field"></label>
+                  </div> <!-- six fields, CalibrationWizard.svelte:1511-1563; label wording PLACEHOLDER -->
+                  <div class="row"><button type="button" class="btn btn-voice" data-next="summary">Save</button></div> <!-- PLACEHOLDER -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="drawer-pull" aria-label="Drawer"><svg viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="10,3 4,10 10,17"/></svg><span class="pull-label" aria-hidden="true">Drawer</span></button> <!-- 'drawer.pull' "Drawer", i18n.ts:46; the label shows on the phone only, ruled 2026-08-18 -->
+        </aside>
+
+        <div class="paper" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Prototype behaviour. Everything below maps to something that already exists
+   in the tree: SectionSet (sections.svelte.ts) for the open set, isMobile
+   (+page.svelte) for the phone rule, takeoverActive and the saved scrollTop
+   (Drawer.svelte:260-287) for the ritual. */
+(function () {
+  const frame = document.getElementById('frame');
+  const drawer = document.getElementById('drawer');
+  const scroll = document.getElementById('scroll');
+  const takeoverBody = document.getElementById('takeoverBody');
+  const voice = document.getElementById('voice');
+  const stations = Array.from(drawer.querySelectorAll('.station'));
+  const isPhone = () => frame.dataset.viewport === 'phone'; /* Svelte: isMobile, the 767 px rule */
+
+  function setOpen(st, open) {
+    st.classList.toggle('open', open);
+    const h = st.querySelector('.station-header');
+    if (h) h.setAttribute('aria-expanded', String(open));
+  }
+  /* THE ONE RETRACTION MECHANISM. Desktop: any number open (E.27 §3.4).
+     Phone: exactly one; opening a second closes the first; nothing else moves.
+     RULED 2026-09-02: a station opens IN PLACE. There is no scrollTo here and
+     there must not be one. The group grows, the groups below step down, and
+     wherever the singer had the drawer is where the drawer stays. */
+  function toggle(st) {
+    const opening = !st.classList.contains('open');
+    if (opening && isPhone()) stations.forEach(s => { if (s !== st) setOpen(s, false); });
+    setOpen(st, opening);
+    readout();
+  }
+  stations.forEach(st => {
+    const h = st.querySelector('.station-header');
+    if (h) h.addEventListener('click', () => toggle(st));
+  });
+
+  /* THE TAKEOVER. Entered ONLY from Calibrate (never a chevron, E.27), left by
+     Back, and the drawer comes back as it was.
+
+     THE ONE SELF-SCROLL IN THE WHOLE DRAWER, ruled 2026-09-02. Entry parks the
+     ritual at the top, because the singer must land on the ritual and not
+     halfway down it; exit puts the singer's own scroll back, which is what
+     Drawer.svelte:273-287 already does with a pre-effect and one deferred
+     frame. Nothing else calls scrollTo. */
+  const phases = ['welcome', 'readiness', 'capture', 'summary', 'characteristics'];
+  let stowedScrollTop = 0;
+  function enterTakeover(p) {
+    if (drawer.dataset.takeover !== 'on') stowedScrollTop = scroll.scrollTop;
+    drawer.dataset.takeover = 'on';
+    setPhase(p);
+    takeoverBody.scrollTop = 0; /* the self-scroll, and the only one */
+  }
+  function exitTakeover() {
+    drawer.dataset.takeover = 'off';
+    drawer.dataset.phase = 'none';
+    requestAnimationFrame(() => { scroll.scrollTop = stowedScrollTop; syncPhaseSelect(); readout(); });
+  }
+  function setPhase(p) {
+    drawer.dataset.phase = p;
+    const i = phases.indexOf(p);
+    drawer.querySelectorAll('.phase-rail span').forEach((d, k) => d.classList.toggle('done', i >= 0 && k <= i));
+    syncPhaseSelect(); readout();
+  }
+  function syncPhaseSelect() {
+    const sel = document.getElementById('phase');
+    sel.value = drawer.dataset.takeover === 'on' ? drawer.dataset.phase
+      : (voice.classList.contains('open') ? 'anchor' : 'none');
+  }
+  document.getElementById('calibrate').addEventListener('click', () => enterTakeover('welcome'));
+  document.getElementById('ritualBack').addEventListener('click', exitTakeover);
+  drawer.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.next === 'none') exitTakeover(); else setPhase(b.dataset.next);
+  }));
+  drawer.querySelectorAll('.knob').forEach(k => k.addEventListener('click', () => k.setAttribute('aria-checked', String(k.getAttribute('aria-checked') !== 'true'))));
+
+  /* Metadata's affordance at 1366: it opens the same station body, which is
+     still in the tree and still carries the same four fields. It is off the
+     map, not out of the drawer. */
+  document.getElementById('metaLink').addEventListener('click', e => {
+    e.stopPropagation();
+    const meta = drawer.querySelector('.station[data-station="metadata"]');
+    meta.style.display = 'block';
+    if (!meta.classList.contains('open')) toggle(meta); else { setOpen(meta, false); meta.style.display = ''; readout(); }
+  });
+
+  /* The intake's four states. Clear and Replace are each scoped to their line. */
+  const intakeSel = document.getElementById('intake');
+  function setIntake(v) { drawer.dataset.intake = v; intakeSel.value = v; readout(); }
+  intakeSel.addEventListener('change', e => setIntake(e.target.value));
+  drawer.querySelectorAll('[data-replace], [data-clear]').forEach(b => b.addEventListener('click', () => {
+    const cur = drawer.dataset.intake, kind = b.dataset.replace || b.dataset.clear;
+    /* Both verbs drop that kind. Replace then reopens the picker; Clear does not.
+       The other kind stays either way. */
+    setIntake(cur === 'both' ? (kind === 'poem' ? 'score' : 'poem') : 'empty');
+  }));
+
+  /* Chrome: viewport, phase select, reset, readout, fit-to-window scaling. */
+  document.querySelectorAll('#viewport button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#viewport button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', 'true');
+    frame.dataset.viewport = b.dataset.v;
+    drawer.querySelectorAll('.station[data-station="metadata"]').forEach(m => { m.style.display = ''; });
+    if (isPhone()) { /* entering the phone rule: keep the first open station only */
+      let kept = false; stations.forEach(s => { if (s.classList.contains('open')) { if (kept) setOpen(s, false); kept = true; } });
+    }
+    fit(); readout();
+  }));
+  document.getElementById('phase').addEventListener('change', e => {
+    const v = e.target.value;
+    if (v === 'none') { if (drawer.dataset.takeover === 'on') exitTakeover(); setOpen(voice, false); readout(); }
+    else if (v === 'anchor') {
+      if (drawer.dataset.takeover === 'on') exitTakeover();
+      if (isPhone()) stations.forEach(s => { if (s !== voice) setOpen(s, false); });
+      setOpen(voice, true); readout();
+    }
+    else enterTakeover(v);
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    if (drawer.dataset.takeover === 'on') exitTakeover();
+    stations.forEach(s => setOpen(s, false));
+    drawer.querySelectorAll('.station[data-station="metadata"]').forEach(m => { m.style.display = ''; });
+    setIntake('empty'); scroll.scrollTop = 0; syncPhaseSelect(); readout();
+  });
+
+  /* WCAG relative luminance and contrast, computed live so the numbers are
+     measured, not typed. RULED 2026-09-02: they belong in this readout and not
+     in the bands, so the bands carry their names and nothing else. */
+  const lum = hex => { const c = hex.trim().replace('#', ''); const v = [0, 2, 4].map(i => parseInt(c.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+  const ratio = (a, b) => { const [l1, l2] = [lum(a), lum(b)].sort((x, y) => y - x); return ((l1 + 0.05) / (l2 + 0.05)).toFixed(2); };
+  const cs = getComputedStyle(document.documentElement);
+  const bandHex = { piece: cs.getPropertyValue('--quiet-cobalt'), text: cs.getPropertyValue('--lang-chip-transcription'), score: cs.getPropertyValue('--lang-chip-marked') };
+
+  /* The drawer's own available height, by viewport. Desktop: the frame less
+     the 56 app bar and the deck's 20 + 20 padding. Phone: the whole frame. */
+  const VH = { desk1400: 900 - 56 - 40, desk1366: 768 - 56 - 40, phone: 932 };
+  function contentHeight() {
+    const top = scroll.getBoundingClientRect().top;
+    const last = scroll.lastElementChild.getBoundingClientRect();
+    return Math.round((last.bottom - top) / scale + scroll.scrollTop + 12); /* + the scroll's bottom pad */
+  }
+  function readout() {
+    requestAnimationFrame(() => {
+      const vh = VH[frame.dataset.viewport];
+      /* The open set is read from the class, not from visibility, so the
+         readout can prove the takeover gives the drawer back as it was. */
+      const offMap = frame.dataset.viewport === 'desk1366' ? ' (metadata is off the map here)' : '';
+      const open = stations.filter(s => s.classList.contains('open')).map(s => s.dataset.station);
+      let line1;
+      if (drawer.dataset.takeover === 'on') {
+        line1 = `TAKEOVER, phase ${drawer.dataset.phase} · ritual body ${Math.round(takeoverBody.scrollHeight)} px in ${Math.round(takeoverBody.getBoundingClientRect().height / scale)} px`;
+      } else {
+        const content = contentHeight();
+        line1 = `drawer content ${content} px in ${vh} px · ${content > vh ? 'SCROLLS, over by ' + (content - vh) + ' px' : 'fits, ' + (vh - content) + ' px slack'}`;
+      }
+      document.getElementById('readout').textContent =
+        line1 +
+        `\nopen: ${open.length ? open.join(', ') : 'nothing'}${drawer.dataset.takeover === 'on' ? ' · held behind the takeover, scroll ' + stowedScrollTop + ' px' : ''}${offMap}` +
+        `\nbands, white on band: Piece ${ratio('#FFFFFF', bandHex.piece)}:1 · Text ${ratio('#FFFFFF', bandHex.text)}:1 · Score markup ${ratio('#FFFFFF', bandHex.score)}:1`;
+    });
+  }
+  let scale = 1;
+  function fit() {
+    const stage = document.getElementById('stage');
+    const v = frame.dataset.viewport;
+    const w = v === 'phone' ? 430 : (v === 'desk1366' ? 1366 : 1400);
+    const h = v === 'phone' ? 932 : (v === 'desk1366' ? 768 : 900);
+    scale = Math.min(1, (window.innerWidth - 40) / w, (window.innerHeight - stage.getBoundingClientRect().top - 24) / h);
+    stage.style.transform = `scale(${scale})`;
+    stage.style.height = (h * scale) + 'px';
+  }
+  window.addEventListener('resize', () => { fit(); readout(); });
+  fit(); readout();
+})();
+</script>
+</body>
+</html>

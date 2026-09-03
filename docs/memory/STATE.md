@@ -139,9 +139,21 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > that!" Gate 5 now **534 | 5 skipped (539)**, `ilya-ship.sh:80` carries it.
 > Memo: `docs/sessions/memo-n107-turning-ledgers_r1_2026-09-02.md`.
 >
-> **THE ONE THING: NOT ESTABLISHED. Nothing is in progress.** Eight ships
-> this session, all walked or proved: N.104, N.105, N.102 (three), N.106,
-> N.103, N.107. Dann places the next item. Waiting on Design: N.108.
+> **THE ONE THING: N.108 increment 1, the frames.** RULED BY DANN 2026-09-02:
+> "N.108 comes before the release and the release waits for it." That is the
+> named displacement CONTRACT §6 requires; the release order N.85 to N.88
+> waits behind N.108. Design's revision 3 returned as a working prototype
+> (`docs/sessions/n108-drawer-prototype_r2_2026-09-02.html`, memo
+> `n108-design-return_r3_2026-09-02.md`), both written by Design straight
+> into the tree. Two desk overrides of it, recorded in the build brief: one
+> map at every size (Metadata on the Piece band everywhere), and Back on the
+> left of the takeover band. Build brief, three increments each ending in a
+> ship and a walk: `docs/sessions/brief-n108-build_r1_2026-09-02.md`.
+> Status: increment 1 BRIEFED, not built. Usage read 2026-09-02 evening:
+> Fable 29%, shared pool 21%, both reset Sunday; nothing scarce.
+>
+> Nine ships this session before N.108, all walked or proved: N.104, N.105,
+> N.102 (three), N.106, N.103, N.107.
 >
 > **N.108. RULED BY DANN 2026-09-02, from the three-choice drawing
 > (`docs/sessions/drawing-n108-three-choices_r1_2026-09-02.png`): CHOICE 2,
