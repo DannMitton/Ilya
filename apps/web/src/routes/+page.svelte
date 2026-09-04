@@ -1567,6 +1567,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		renderCountedFor = ingestedScore;
 		scoreRenders += 1;
 	}
+
+	/* THE LOUPE'S INVALIDATION TOKEN, and the walk finding on `c574cf8` is what
+	   it is for.
+
+	   THE LOUPE CLONES THE PAGE'S OWN SVG (`Loupe.svelte`'s own doc: "a view
+	   transform, not a second renderer"), and re-clones when this changes. It
+	   used to be handed `correctedScore`, which is derived from the ingested
+	   score and the note corrections and NEVER READS `doc.pairings`. So seating
+	   a syllable from inside the loupe rebuilt the page behind it and left the
+	   loupe drawing the cell that had just moved, until it was dismissed and
+	   raised again. RULED BY DANN 2026-09-04: a change made from the dock must
+	   be reflected in the loupe at once.
+
+	   THE FIX IS AT THE SEAM, not a forced reopen: the pane reports every
+	   rebuild of its own SVG through `onpagesdrawn`, and this counts them. A
+	   token that says "the page was redrawn" cannot go stale for a fourth
+	   reason, which a list of the values that redraw it can and did. */
+	let pageRevision = $state(0);
+	/* A FUNCTION DECLARATION, NOT AN INLINE ARROW. An arrow here is a new
+	   identity on every render of this file, and the pane reads this prop inside
+	   the effect that reports the rebuild, so a fresh identity would re-run that
+	   effect, bump this counter, and re-render: an unbounded loop, which is what
+	   `effect_update_depth_exceeded` was on the first build of this fix. The
+	   pane also calls it untracked; both ends are closed on purpose. */
+	function handlePagesDrawn(): void {
+		pageRevision += 1;
+	}
 	let updateDismissed = $state(false);
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
@@ -3921,6 +3948,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{notationPrefs}
 				openSyllabification={doc.openSyllabification}
 				onrendered={handleScoreRendered}
+				onpagesdrawn={handlePagesDrawn}
 			/>
 		{:else}
 			<ReadingPaper {language}>
@@ -3988,7 +4016,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		ownIds={heldMeasureIds}
 		nextIds={nextMeasureIds}
 		{selectedEventId}
-		revision={correctedScore}
+		revision={pageRevision}
 		{language}
 		fill={heldFill}
 		onpick={handleLoupePick}

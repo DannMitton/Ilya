@@ -27,7 +27,7 @@ import {
 	readScoreText,
 } from './clitic-seat';
 import { collectScoreWords } from './vowel-resolver';
-import { pairedCyrillic } from './pairings';
+import { pairedCyrillic, applyBlank } from './pairings';
 
 const NBSP = '\u00A0';
 
@@ -286,6 +286,36 @@ describe('N.111 increment 3, the automatic seat', () => {
 		// draws nothing for (`if (cyr || ipa)`).
 		const blanked = pairedCyrillic(seated, new Set(fold.blanked));
 		expect(blanked?.[last]).toBe('');
+	});
+
+	it('blanks the IPA line by the SAME rule as the Cyrillic line', async () => {
+		// The walk finding on `c574cf8`. The Cyrillic channel blanked and the IPA
+		// channel merely omitted the event, which is not the same thing:
+		// `staff-renderer.ts:2463` reads `ipaPreview?.[id] ?? a?.vowel`, so an
+		// omission falls through to the analysis's sustained vowel and the note
+		// drew a stray `ɑ` over a bare cell. Both channels call `applyBlank` now.
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const fold = findCliticFolds(score)[0];
+		const blank = new Set(fold.blanked);
+		const last = cells[95].eventId;
+
+		// The IPA channel, as the pane builds it: whatever resolved, then the
+		// blank pass. The blanked note comes out as the empty string, not absent.
+		const ipa: Record<string, string> = { [cells[94].eventId]: 'kɑ' };
+		applyBlank(ipa, blank);
+		expect(ipa[last]).toBe('');
+		expect(Object.prototype.hasOwnProperty.call(ipa, last)).toBe(true);
+
+		// Both channels agree on which ids are blank, by construction.
+		const cyr = pairedCyrillic(seatCliticFolds(score, {}), blank);
+		expect(cyr?.[last]).toBe('');
+
+		// AND IT NEVER OVERWRITES SOMETHING THAT HAS SOMETHING TO SAY, which is
+		// the positive control: a note the singer has decided keeps its text.
+		const kept: Record<string, string> = { [last]: 'jɑ' };
+		applyBlank(kept, blank);
+		expect(kept[last]).toBe('jɑ');
 	});
 
 	it('a note the singer seats by hand is no longer blank', async () => {

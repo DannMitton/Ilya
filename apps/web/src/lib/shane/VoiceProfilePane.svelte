@@ -49,7 +49,7 @@
 	 * French values placeholder (English verbatim) pending Dann's copy pass;
 	 * the header and footer components were already bilingual through t().
 	 */
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
@@ -72,6 +72,7 @@
 	import {
 		withPairedVowel,
 		pairedCyrillic,
+		applyBlank,
 		type PairingMap,
 	} from '$lib/shane/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
@@ -130,6 +131,27 @@
 		 * score identity across mounts.
 		 */
 		onrendered?: () => void;
+		/**
+		 * The page's SVG has just been rebuilt, and `{@html page}` has replaced
+		 * it in the DOM.
+		 *
+		 * NOT `onrendered`, WHICH FIRES ONCE PER SCORE. This one fires on every
+		 * new pagination, which is what anything reading the page's DOM has to
+		 * know. The loupe is that reader: it clones the system it magnifies out
+		 * of this pane's own SVG, so a clone taken before a rebuild is a picture
+		 * of a page that is no longer on screen.
+		 *
+		 * WHY IT EXISTS AT ALL (the walk finding on `c574cf8`). The loupe was
+		 * given `correctedScore` as its invalidation token, which changes when a
+		 * NOTE correction lands and never when a pairing does, so seating a
+		 * syllable from inside the loupe redrew the page behind it and left the
+		 * loupe drawing the old cell. This pane's own selection mark had the
+		 * right dependency all along, `void scorePages` above, and could have it
+		 * because it lives in this file. The loupe does not, so the dependency
+		 * comes to it as this callback rather than as a list of values someone
+		 * has to remember to extend. THAT LIST IS HOW THE DEFECT HAPPENED.
+		 */
+		onpagesdrawn?: () => void;
 		/**
 		 * The singer's notation preferences (N.5, 2026-08-05). Ilya's output
 		 * is ONE study document, and Transcribe already spells its IPA to
@@ -213,6 +235,7 @@
 		scoreTitle = undefined,
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
+		onpagesdrawn = undefined,
 		notationPrefs,
 		openSyllabification = false,
 		transcribedLines = undefined,
@@ -748,13 +771,21 @@
 			// N.55b R7: the pairing's IPA outranks the resolver's, and outranks
 			// its abstention too.
 			const paired = pairings?.[ev.id];
-			// N.111: a blanked note draws nothing at all, so its IPA goes with its
-			// Cyrillic. Without this the file's own transcription would stand over
-			// an empty underlay cell.
+			/* N.111: a blanked note draws nothing at all, so its IPA goes with its
+			   Cyrillic. The resolver is not consulted for it; `applyBlank` below
+			   then writes the empty string that makes the renderer draw nothing. */
 			if (!paired && blankUnderlay?.has(ev.id)) continue;
 			const ipa = paired?.kind === 'syllable' ? paired.ipa : underlayResolvers.ipa(ev);
 			if (ipa) out[ev.id] = applyNotationPreferences(ipa, notationPrefs, true);
 		}
+		/* AN EXPLICIT EMPTY STRING, NOT AN OMISSION, and the walk finding on
+		   `c574cf8` is why. Skipping the event above is not enough on its own:
+		   `staff-renderer.ts:2463` reads
+		   `options.ipaPreview?.[ev.id] ?? a?.vowel`, so an omitted id falls
+		   through to the ANALYSIS's single sustained vowel and the note drew a
+		   stray `ɑ` over a bare Cyrillic cell. `applyBlank` is the same call the
+		   Cyrillic channel makes, so the two lines cannot drift apart. */
+		applyBlank(out, blankUnderlay);
 		return Object.keys(out).length > 0 ? out : undefined;
 	});
 	// N.10b: the onsets the resolver declined to transcribe (Dann's ruling of
@@ -950,6 +981,27 @@
 			reportedRenderFor = ingested;
 			onrendered?.();
 		}
+	});
+
+	/* THE PAGE-REBUILT REPORT, and it is a different report from the one above.
+	   `scorePages` is a `$derived`, so this effect runs exactly when the
+	   pagination changes identity and therefore exactly when `{@html page}`
+	   replaces the SVG. Svelte runs an effect after the DOM update for that
+	   render, so by the time this fires the new SVG is the one in the document
+	   and a reader can measure it.
+
+	   THE CALLBACK IS CALLED UNTRACKED, and that is not a precaution: without it
+	   this effect loops until Svelte kills it with `effect_update_depth_exceeded`.
+	   `onpagesdrawn` is a PROP, so reading it inside an effect makes its identity
+	   a dependency; the page shell re-renders when the counter changes, and an
+	   inline arrow would be a new function every time, so the effect would
+	   re-run, bump again, and never settle. MEASURED, on the first build of this
+	   fix: the loop fired the moment a transcription landed. The shell also
+	   passes a stable function declaration rather than an arrow, so both ends
+	   are closed; only `scorePages` may be a dependency here. */
+	$effect(() => {
+		void scorePages;
+		untrack(() => onpagesdrawn?.());
 	});
 
 	// Interim running-header text for pages 2+: the song title when the

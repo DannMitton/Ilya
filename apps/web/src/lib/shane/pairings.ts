@@ -534,10 +534,32 @@ export function pairedCyrillic(
 	for (const [id, p] of Object.entries(map)) {
 		if (p.kind === 'syllable' && p.cyrillic) out[id] = p.cyrillic;
 	}
-	if (blank) {
-		for (const id of blank) if (out[id] === undefined) out[id] = '';
-	}
+	applyBlank(out, blank);
 	return Object.keys(out).length > 0 ? out : undefined;
+}
+
+/**
+ * Mark every blanked event with the EMPTY STRING, in place, without disturbing
+ * an event that already has something to say.
+ *
+ * ONE RULE FOR BOTH UNDERLAY CHANNELS, and the walk finding on `c574cf8` is
+ * why it is a function rather than two lines in two files. The Cyrillic channel
+ * blanked correctly and the IPA channel merely OMITTED the event, which is not
+ * the same thing: `staff-renderer.ts:2463` reads
+ * `options.ipaPreview?.[ev.id] ?? a?.vowel`, so an omission falls through to
+ * the analysis's single sustained vowel and the note drew a stray `ɑ` over a
+ * bare Cyrillic cell. Both channels now go through here, so they cannot drift
+ * apart again.
+ *
+ * An EMPTY STRING rather than an absent key, because `??` falls through
+ * `undefined` and keeps `''`. That is the whole mechanism, on both lines.
+ */
+export function applyBlank(
+	out: Record<string, string>,
+	blank: ReadonlySet<string> | undefined,
+): void {
+	if (!blank) return;
+	for (const id of blank) if (out[id] === undefined) out[id] = '';
 }
 
 /* -- Shift Lyrics (N.55b design, section 8) ------------------------ */
