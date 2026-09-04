@@ -147,6 +147,14 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > Ruled on the walk, riding with the next Code paste: a top inset on the
 > drawer so Piece clears the banner (INBOX, 2026-09-03). Also owed from memo
 > §9: the empty-paper hint still says "chevron on the left".
+> **INCREMENT 4 SHIPPED `8fbc8d7` 2026-09-03 and WALKED BY DANN on the alias:
+> the top inset, the pill ends on 54 buttons (audit in memo §5.2), one Choose
+> a file that asks poem-or-score on a picture, and the bottom-pull hint. His
+> words: "they all look as they should." Both desk defaults stood: the
+> correction grid as pills, the TRANSCRIPTION / SCORE MARKUP pair square. Memo
+> `docs/sessions/memo-n108-finishings_r1_2026-09-03.md`. **N.108 is finished,
+> four increments.** French owed for every N.108 string, shown as a table
+> first when it comes.
 > **THE ONE THING: N.111, the clitic seat.** Next step is the desk's: read
 > `claude/e24-the-unused-boolean_2026-08-04.md` in full and write the brief.
 > After N.111: N.110 (set aside, briefed), the release order N.85 to N.88,

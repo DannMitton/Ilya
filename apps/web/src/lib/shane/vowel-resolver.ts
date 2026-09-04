@@ -134,11 +134,27 @@ export interface ScoreWord {
 	 * counts aligned with the engine's syllabification, which counts nuclei.
 	 */
 	slots: string[][];
+	/**
+	 * Every lyric CELL this word occupies, in vocal-line order: the onset
+	 * event and the text the file printed there.
+	 *
+	 * N.111 needs this and `slots` cannot serve. `slots` counts NUCLEI, so a
+	 * syllable carrying no Cyrillic vowel has no entry of its own and a word
+	 * carrying none at all («в») loses its event entirely: that is exactly
+	 * right for the vowel resolver, which has nothing to say about a note with
+	 * no vowel, and exactly wrong for an item whose whole subject is the note
+	 * the file gave that word. This channel is ADDITIVE and nothing else reads
+	 * it, so the resolver's behaviour is unchanged.
+	 *
+	 * The onset event only. A melisma continuation joins the syllable's event
+	 * array after this is taken, and a continuation note carries no cell.
+	 */
+	cells: Array<{ eventId: string; text: string }>;
 }
 
 export const CYRILLIC_VOWEL = /[аеёиоуыэюя]/iu;
 
-function cleanForAlignment(s: string): string {
+export function cleanForAlignment(s: string): string {
 	// Letters and combining marks only (a score syllable can carry a
 	// combining acute); dashes and punctuation go. Lowercased for the
 	// case-insensitive match against the pipeline's cleanWord.
@@ -192,6 +208,10 @@ export function collectScoreWords(parsed: ParsedScore, verseNumber: number): Sco
 	const close = (): ScoreWord | null => {
 		if (!cur) return null;
 		const raw = cur.syls.map((s) => s.text).join('');
+		// TAKEN BEFORE THE MERGE BELOW, which unshifts a vowelless syllable's
+		// events onto a neighbour's array and would otherwise put a borrowed
+		// event id at the head of the wrong cell.
+		const cells = cur.syls.map((s) => ({ eventId: s.events[0], text: s.text }));
 		const slots: string[][] = [];
 		let leading: string[] = []; // events from vowelless syllables awaiting a nucleus
 		for (const s of cur.syls) {
@@ -210,7 +230,7 @@ export function collectScoreWords(parsed: ParsedScore, verseNumber: number): Sco
 		// A word with no vowel-bearing syllable at all keeps zero slots and
 		// resolves nothing (its syllable count can never match the engine's).
 		cur = null;
-		const word: ScoreWord = { raw, clean: cleanForAlignment(raw), slots };
+		const word: ScoreWord = { raw, clean: cleanForAlignment(raw), slots, cells };
 		words.push(word);
 		return word;
 	};

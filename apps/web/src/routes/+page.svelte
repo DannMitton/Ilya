@@ -113,6 +113,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
 	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
+	import CliticSeat from '$lib/shane/CliticSeat.svelte';
+	import { findCliticFolds, applyCliticSeat, type CliticFold } from '$lib/shane/clitic-seat';
 	import {
 		COARSE_TAP_SPACES,
 		FINE_TAP_SPACES,
@@ -326,6 +328,49 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const reconciliation = $derived(reconcilePairings(doc.pairings, slotQueue));
 	const shownPairings = $derived(reconciliation.map);
 	const driftCount = $derived(reconciliation.drift.length);
+
+	/* ── N.111, THE CLITIC SEAT ──────────────────────────────────────────
+	   A vowelless clitic the FILE seated alone on a sung pitch. Read off the
+	   score's own underlay, not off the singer's transcription, because this
+	   is the path a score that arrives WITH words takes and there may be no
+	   transcription at all.
+
+	   IT OVERRIDES ONE INFERENCE, AND ONLY ONE. `applyArrival` runs the first
+	   pass only where the file carried no lyrics, on the reasoning that
+	   proposing over a score that already speaks would be Ilya claiming; that
+	   comment names itself an INFERENCE rather than a ruling. Dann's ruling of
+	   2026-09-03 overrides it for exactly this case: a vowelless clitic seated
+	   alone is not the score speaking, it is the file being wrong by a rule
+	   with no exceptions. Nothing else about that path changes, and Ilya still
+	   applies nothing on its own.
+
+	   DERIVED FROM THE INGESTED SCORE, so it costs one pipeline run per score
+	   rather than one per render. `buildUnderlayResolvers` already makes the
+	   same call on the same reconstruction.
+
+	   A SEATED FOLD RETIRES ITSELF. The comparison reads the file, which never
+	   changes, so the proposal would stand forever if nothing closed it; a fold
+	   whose clitic note already carries the fused text is answered. Undo
+	   restores the pairings, so it brings the proposal back with them. */
+	const cliticFolds = $derived(
+		ingestedScore ? findCliticFolds(ingestedScore.result.score, 1) : [],
+	);
+	const openCliticFolds = $derived(
+		cliticFolds.filter((fold) => {
+			const p = doc.pairings[fold.cliticEventId];
+			return !(p?.kind === 'syllable' && p.cyrillic === fold.fusedText);
+		}),
+	);
+	/* THE DOCK IS ABOUT THE NOTE IN HAND, so it offers the fold on the taken
+	   entry and nothing else. The drawer offers them all. */
+	const dockCliticFolds = $derived(
+		openCliticFolds.filter((fold) => fold.cliticEventId === selectedEventId),
+	);
+
+	function handleCliticSeat(fold: CliticFold): void {
+		pushUndo({ kind: 'text', key: 'loupe.undo.lyrics' });
+		doc.pairings = applyCliticSeat(doc.pairings, fold);
+	}
 
 	/* N.65 ship B's PLACED-SYLLABLE COUNT, back by Dann's ruling of 2026-08-27
 	   and re-homed onto the LYRIC station's own label, where both containers
@@ -3434,7 +3479,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							onclosetuplet={closeTuplet}
 							ontupletdef={applyTupletDefinition}
 							{onhold}
-						/>
+						>
+							{#snippet seat()}
+								<CliticSeat folds={openCliticFolds} {language} onseat={handleCliticSeat} />
+							{/snippet}
+						</CorrectionSurface>
 						<!-- N.108 increment 1a, ruled by Dann 2026-09-02: "You have
 						     corrected 2 notes." renders inside the Corrections
 						     station body, not under Voice. It was in the notices
@@ -3896,7 +3945,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		onclosetuplet={closeTuplet}
 		ontupletdef={applyTupletDefinition}
 		{onhold}
-	/>
+	>
+		{#snippet seat()}
+			<CliticSeat folds={dockCliticFolds} {language} onseat={handleCliticSeat} />
+		{/snippet}
+	</CorrectionSurface>
 	{/if}
 {/if}
 {#if updated.current && !updateDismissed}
