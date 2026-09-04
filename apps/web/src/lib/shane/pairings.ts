@@ -509,12 +509,33 @@ export function withPairedVowel<E extends { id: string }>(
  * The Cyrillic a pairing puts under each note. Undefined when there is
  * none, so the renderer takes its existing no-op path and an unpaired score
  * renders byte-for-byte as it did before N.55b.
+ *
+ * `blank` IS THE THIRD ANSWER, and N.111 increment 3 is why it exists. The
+ * renderer reads `cyrPreview?.[id] ?? ev.syllable?.text ?? ''`
+ * (`staff-renderer.ts:709`, `:2462`), so on a lyric-bearing score an event
+ * ABSENT from this record is not blank: it draws the file's own cell. An event
+ * mapped to the EMPTY STRING is blank, because `??` keeps an empty string and
+ * the renderer's own `if (cyr || ipa)` then draws nothing.
+ *
+ * Only a note inside a seated run belongs here, and only while it carries no
+ * pairing of its own: the seat moved the text off it, so the file's cell there
+ * is stale rather than silent. Dann walked the stale reading on `7875892` as
+ * the `ка ка` close and ruled it 2026-09-04. Nothing is written into the map
+ * for those notes, because Ilya may claim neither an `empty` note nor a
+ * melisma (E.46); the blankness is a fact about the run, not a decision about
+ * the note.
  */
-export function pairedCyrillic(map: PairingMap | undefined): Record<string, string> | undefined {
+export function pairedCyrillic(
+	map: PairingMap | undefined,
+	blank?: ReadonlySet<string>,
+): Record<string, string> | undefined {
 	if (!map) return undefined;
 	const out: Record<string, string> = {};
 	for (const [id, p] of Object.entries(map)) {
 		if (p.kind === 'syllable' && p.cyrillic) out[id] = p.cyrillic;
+	}
+	if (blank) {
+		for (const id of blank) if (out[id] === undefined) out[id] = '';
 	}
 	return Object.keys(out).length > 0 ? out : undefined;
 }

@@ -216,23 +216,34 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.count':               { en: 'You have corrected %s notes.',  fr: 'Vous avez corrigé %s notes.' },
 	'correct.countOne':            { en: 'You have corrected one note.',  fr: 'Vous avez corrigé une note.' },
 	// ── N.111, the clitic seat ───────────────────────────────
-	//    A vowelless clitic the file seated alone on a sung pitch, and the one
-	//    action that seats it with its host. The sentence is the desk's, from
-	//    `docs/sessions/brief-n111-clitic-seat_r2_2026-09-03.md` §5.1, split
-	//    into three keys because the dictionary's `%s` habit carries ONE
-	//    placeholder per entry and a numbered second one would be a new
-	//    convention nobody ruled.
+	//    A vowelless clitic the file seated alone on a sung pitch, and what
+	//    Ilya did about it.
 	//
-	//    FRENCH IS OWED, and these five carry the ENGLISH IN BOTH SLOTS for the
+	//    REWORDED 2026-09-04 ON DANN'S RULING, on his walk of `7875892`. The
+	//    five keys these replace asked a question and named a button: `в sits
+	//    alone on a note.` / `Seat it with бью?` / `%s notes move.` / `One note
+	//    moves.` / `Seat`. Ilya seats automatically now, so there is nothing to
+	//    ask and no button to press. His words: "I swear to you: no vowelless
+	//    word in Russian can carry its own duration. You are complicating
+	//    things for the user with a situation that is impossible in music
+	//    notation." The station STATES what Ilya did, in one sentence, with
+	//    Undo, and asks nothing.
+	//
+	//    ONE SENTENCE MEANS ONE KEY, so these two carry three placeholders and
+	//    two respectively, filled left to right. That is a departure from the
+	//    dictionary's one-`%s` habit and it is deliberate: a sentence split
+	//    across three entries cannot be translated, because a translator cannot
+	//    reorder its clauses. POSITIONAL `%s` CANNOT BE REORDERED EITHER, so
+	//    the French may want this restructured; that is part of what is owed.
+	//
+	//    FRENCH IS OWED, and these three carry the ENGLISH IN BOTH SLOTS for the
 	//    reason the N.108 block above gives: `t()` prints `[MISSING: key]` for
 	//    an absent variant, which would put that literal in a French singer's
 	//    drawer. That is not a translation. The words a French singer needs
-	//    here are Dann's to rule, and the brief says no French this ship.
-	'clitic.alone':                { en: '%s sits alone on a note.',      fr: '%s sits alone on a note.' },
-	'clitic.seatWith':             { en: 'Seat it with %s?',              fr: 'Seat it with %s?' },
-	'clitic.moves':                { en: '%s notes move.',                fr: '%s notes move.' },
-	'clitic.movesOne':             { en: 'One note moves.',               fr: 'One note moves.' },
-	'clitic.seat':                 { en: 'Seat',                          fr: 'Seat' },
+	//    here are Dann's to rule.
+	'clitic.seated':               { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.', fr: '%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.' },
+	'clitic.seatedOne':            { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved one note.', fr: '%s cannot take a note of its own, so Ilya seated it with %s and moved one note.' },
+	'clitic.undo':                 { en: 'Undo',                          fr: 'Undo' },
 	// N.97. A correction whose event id no longer resolves after a re-read has
 	// not landed, and it must not fail silently. The DRAWER carries the count;
 	// nothing is marked on the paper. Dann's own wording, approved 2026-08-24

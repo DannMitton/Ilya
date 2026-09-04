@@ -176,6 +176,21 @@
 		 * pairing exists and every derivation below takes its prior path.
 		 */
 		pairings?: PairingMap;
+		/**
+		 * N.111 increment 3: notes inside a seated clitic run that carry no
+		 * pairing and must draw NOTHING.
+		 *
+		 * On a lyric-bearing score an event with no pairing is not blank: the
+		 * renderer falls back to the file's own cell. Inside a run the seat has
+		 * just moved that text onto an earlier note, so what is left there is
+		 * stale rather than silent. RULED BY DANN 2026-09-04, on the `ка ка`
+		 * close he walked on `7875892`.
+		 *
+		 * A SET RATHER THAN A PAIRING, because Ilya may claim neither an `empty`
+		 * note nor a melisma (E.46). The note stays undecided; this says only
+		 * that the file has nothing true to say about it.
+		 */
+		blankUnderlay?: ReadonlySet<string>;
 		/** N.55b R4: a click resolving to a note, by event id. */
 		onnotepick?: (eventId: string) => void;
 		/**
@@ -202,6 +217,7 @@
 		openSyllabification = false,
 		transcribedLines = undefined,
 		pairings = undefined,
+		blankUnderlay = undefined,
 		onnotepick = undefined,
 		selectedEventId = null,
 		isMobile = false,
@@ -732,6 +748,10 @@
 			// N.55b R7: the pairing's IPA outranks the resolver's, and outranks
 			// its abstention too.
 			const paired = pairings?.[ev.id];
+			// N.111: a blanked note draws nothing at all, so its IPA goes with its
+			// Cyrillic. Without this the file's own transcription would stand over
+			// an empty underlay cell.
+			if (!paired && blankUnderlay?.has(ev.id)) continue;
 			const ipa = paired?.kind === 'syllable' ? paired.ipa : underlayResolvers.ipa(ev);
 			if (ipa) out[ev.id] = applyNotationPreferences(ipa, notationPrefs, true);
 		}
@@ -748,6 +768,10 @@
 			// N.55b R7: a paired event is no longer withheld, or the page would
 			// draw the withheld siglum and the paired syllable at the same time.
 			if (pairings?.[ev.id]?.kind === 'syllable') continue;
+			// N.111: nothing is withheld on a note that draws nothing. The siglum
+			// says Ilya declined to transcribe a syllable that is there; on a
+			// blanked note there is no syllable to decline.
+			if (blankUnderlay?.has(ev.id)) continue;
 			if (underlayResolvers.withheld(ev)) out.add(ev.id);
 		}
 		return out.size > 0 ? out : undefined;
@@ -755,7 +779,7 @@
 
 	// N.55b R6: the Cyrillic channel. A score that arrived with no lyric
 	// underlay has no other source for the word under the note.
-	const cyrPreview = $derived(pairedCyrillic(pairings));
+	const cyrPreview = $derived(pairedCyrillic(pairings, blankUnderlay));
 
 	// The Fit legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.

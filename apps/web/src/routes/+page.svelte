@@ -114,7 +114,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import Loupe from '$lib/shane/Loupe.svelte';
 	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
 	import CliticSeat from '$lib/shane/CliticSeat.svelte';
-	import { findCliticFolds, applyCliticSeat, type CliticFold } from '$lib/shane/clitic-seat';
+	import {
+		findCliticFolds,
+		isCliticSeated,
+		revertCliticSeat,
+		readScoreText,
+		seatCliticFolds,
+		type CliticFold,
+	} from '$lib/shane/clitic-seat';
 	import {
 		COARSE_TAP_SPACES,
 		FINE_TAP_SPACES,
@@ -314,7 +321,36 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let noLyricsFile = $state<string | null>(null);
 	// The syllable the NEXT note click will place. Finale's insertion point.
 	let pairingCursor = $state(0);
-	const slotQueue = $derived(buildSlotQueue(lines));
+	/* THE QUEUE, AND WHERE IT COMES FROM WHEN THE SINGER HAS TYPED NOTHING.
+
+	   N.111 increment 3, ruled by Dann 2026-09-04: on a lyric-bearing score the
+	   singer gets "the same click surface the no-lyrics path already has ...
+	   N.55b's surface reaching the other path; do not build a second one."
+
+	   NOTHING IN THAT SURFACE WAS EVER GATED ON `noLyrics`. `handleLoupePick`
+	   places, `SyllableStation` draws the queue and the cursor, the two shifts
+	   move a run, and none of them asks whether the file carried words. THE
+	   QUEUE WAS THE WHOLE GAP: it is built from the singer's own transcription,
+	   and on a score that arrives with words there usually is none, so
+	   `slotQueue` was empty, `SyllableStation`'s own `slots.length > 0` guard
+	   drew nothing, and `placeArmedSyllable` returned at its first line.
+
+	   So the fallback is the score's own words, read through the same pipeline
+	   (`readScoreText`, `clitic-seat.ts`). THE SINGER'S TEXT STILL WINS
+	   wherever they have typed any: that is N.10 and E.31 Path C, and this only
+	   fills a queue that would otherwise be empty.
+
+	   IT IS THE SAME QUEUE THE SEAT'S ORIGINS POINT INTO, which is not a
+	   coincidence and is worth keeping: `reconcilePairings` compares a stored
+	   pairing's origin against this queue, so the automatic seat reads as
+	   placed rather than as drift. */
+	const scoreTextQueue = $derived(
+		ingestedScore ? (readScoreText(ingestedScore.result.score, 1)?.queue ?? []) : [],
+	);
+	const slotQueue = $derived.by(() => {
+		const own = buildSlotQueue(lines);
+		return own.length > 0 ? own : scoreTextQueue;
+	});
 	// N.55b: the pairing layer, wired. `reconcilePairings` (pairings.ts:318)
 	// is the ONE rule for what counts as drift. A re-division moves consonants
 	// within a word, so the nucleus the singer paired is still the same nucleus
@@ -335,41 +371,62 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   is the path a score that arrives WITH words takes and there may be no
 	   transcription at all.
 
+	   ILYA SEATS IT AUTOMATICALLY, AT INGEST. RULED BY DANN 2026-09-04 on his
+	   walk of `7875892`, amending the increment 2 build, which proposed the
+	   seat and waited for a press: "I swear to you: no vowelless word in
+	   Russian can carry its own duration. You are complicating things for the
+	   user with a situation that is impossible in music notation." A lone
+	   vowelless clitic cannot exist on the page, so nothing asks whether it may
+	   be repaired. The seat itself runs in `applyArrival`; this is what the
+	   Corrections station reports afterwards.
+
 	   IT OVERRIDES ONE INFERENCE, AND ONLY ONE. `applyArrival` runs the first
 	   pass only where the file carried no lyrics, on the reasoning that
 	   proposing over a score that already speaks would be Ilya claiming; that
 	   comment names itself an INFERENCE rather than a ruling. Dann's ruling of
-	   2026-09-03 overrides it for exactly this case: a vowelless clitic seated
-	   alone is not the score speaking, it is the file being wrong by a rule
-	   with no exceptions. Nothing else about that path changes, and Ilya still
-	   applies nothing on its own.
+	   2026-09-03 overrides it for exactly this case, and his ruling of
+	   2026-09-04 keeps the limit around it: where the file and the
+	   transcription diverge for ANY other reason, Ilya withholds as today and
+	   seats nothing.
 
 	   DERIVED FROM THE INGESTED SCORE, so it costs one pipeline run per score
 	   rather than one per render. `buildUnderlayResolvers` already makes the
-	   same call on the same reconstruction.
-
-	   A SEATED FOLD RETIRES ITSELF. The comparison reads the file, which never
-	   changes, so the proposal would stand forever if nothing closed it; a fold
-	   whose clitic note already carries the fused text is answered. Undo
-	   restores the pairings, so it brings the proposal back with them. */
+	   same call on the same reconstruction. */
 	const cliticFolds = $derived(
 		ingestedScore ? findCliticFolds(ingestedScore.result.score, 1) : [],
 	);
-	const openCliticFolds = $derived(
-		cliticFolds.filter((fold) => {
-			const p = doc.pairings[fold.cliticEventId];
-			return !(p?.kind === 'syllable' && p.cyrillic === fold.fusedText);
-		}),
+	/* WHAT THE STATION REPORTS is what is actually seated, so an Undo takes the
+	   sentence with it and nothing claims a seat that is not on the page. */
+	const seatedCliticFolds = $derived(
+		cliticFolds.filter((fold) => isCliticSeated(doc.pairings, fold)),
 	);
-	/* THE DOCK IS ABOUT THE NOTE IN HAND, so it offers the fold on the taken
-	   entry and nothing else. The drawer offers them all. */
+	/* THE DOCK IS ABOUT THE NOTE IN HAND, so it reports the fold on the taken
+	   entry and nothing else. The drawer reports them all. */
 	const dockCliticFolds = $derived(
-		openCliticFolds.filter((fold) => fold.cliticEventId === selectedEventId),
+		seatedCliticFolds.filter((fold) => fold.cliticEventId === selectedEventId),
 	);
+	/* THE NOTES A SEATED RUN LEFT WITH NOTHING TO SAY. Ruled by Dann 2026-09-04
+	   on the `ка ka` close he walked: inside a seated run an undecided note
+	   draws nothing, and must not draw the file's stale cell. A note the singer
+	   has since decided for themselves is not in this set, which is what makes
+	   the hand able to seat the fixture's lost final я onto exactly this note. */
+	const blankUnderlay = $derived.by(() => {
+		const out = new Set<string>();
+		for (const fold of seatedCliticFolds) {
+			for (const id of fold.blanked) if (!doc.pairings[id]) out.add(id);
+		}
+		return out.size > 0 ? out : undefined;
+	});
 
-	function handleCliticSeat(fold: CliticFold): void {
+	/* THE INGEST SEAT PUSHES NO UNDO ENTRY. The undo stack is the singer's
+	   record of their own acts, and an entry sitting at the bottom of it before
+	   they have done anything would make the first press of the loupe's Undo
+	   pill do something they never asked for. The seat's own Undo lives beside
+	   its sentence in Corrections and works from the map, so it survives a
+	   reload; the pill could not. */
+	function handleCliticUndo(fold: CliticFold): void {
 		pushUndo({ kind: 'text', key: 'loupe.undo.lyrics' });
-		doc.pairings = applyCliticSeat(doc.pairings, fold);
+		doc.pairings = revertCliticSeat(doc.pairings, fold);
 	}
 
 	/* N.65 ship B's PLACED-SYLLABLE COUNT, back by Dann's ruling of 2026-08-27
@@ -420,12 +477,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * It runs the first pass again from scratch, exactly as an upload into an
 	 * empty map does, so "start over" means the same thing here as it meant the
 	 * first time. Disabled when there is nothing to start over from.
+	 *
+	 * IT READS `slotQueue`, NOT `buildSlotQueue(lines)`, and N.111 increment 3
+	 * is why that distinction now matters. The button's own guard is
+	 * `slotQueue.length > 0`, so the queue fallback makes it appear on a
+	 * lyric-bearing score where it did not before, and the transcription it
+	 * used to rebuild from is empty there: pressing it would have emptied the
+	 * map and put nothing back.
+	 *
+	 * THE CLITIC SEAT IS RE-APPLIED AFTER IT, because starting placement over
+	 * is the singer resetting their own work, not a licence for a lone
+	 * vowelless clitic to reappear on the page. Where the first pass already
+	 * produced the seated arrangement this is a no-op.
 	 */
 	function handleStartPlacementOver(): void {
 		if (!ingestedScore) return;
-		doc.pairings = firstPass(
-			ingestedScore.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-			buildSlotQueue(lines),
+		const parsed = ingestedScore.result.score;
+		doc.pairings = seatCliticFolds(
+			parsed,
+			firstPass(
+				parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+				slotQueue,
+			),
 		);
 		orphanedCount = 0;
 		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
@@ -2251,6 +2324,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			noLyrics,
 		);
 		doc.pairings = merged.map;
+		/* N.111 increment 3, RULED BY DANN 2026-09-04: Ilya seats a vowelless
+		   clitic with its host HERE, at ingest, with no proposal and no button.
+		   A lone vowelless clitic cannot exist on the page.
+
+		   AFTER THE MERGE, so it can never overwrite a placement the singer
+		   already made: `mergeOnUpload` returns the existing map untouched on a
+		   re-upload, and `isCliticSeated` then finds each fold already seated
+		   and does nothing. On a fresh map it seats.
+
+		   IT RUNS ON A RESTORE TOO. The restored map already carries the seat,
+		   so this is a no-op there; it is not gated on `origin` because a song
+		   saved before this shipped has a map that does not carry it. */
+		doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
 		// Kept, never dropped, and reported as a count.
 		orphanedCount = merged.orphaned.length;
 		// The cursor lands on the first syllable the pass did not reach. Only
@@ -3481,7 +3567,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{onhold}
 						>
 							{#snippet seat()}
-								<CliticSeat folds={openCliticFolds} {language} onseat={handleCliticSeat} />
+								<CliticSeat
+									folds={seatedCliticFolds}
+									{language}
+									onundo={handleCliticUndo}
+								/>
 							{/snippet}
 						</CorrectionSurface>
 						<!-- N.108 increment 1a, ruled by Dann 2026-09-02: "You have
@@ -3818,6 +3908,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{isMobile}
 				transcribedLines={lines}
 				pairings={shownPairings}
+				{blankUnderlay}
 				onnotepick={handleNotePick}
 				{selectedEventId}
 				formants={shaneFormants}
@@ -3947,7 +4038,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{onhold}
 	>
 		{#snippet seat()}
-			<CliticSeat folds={dockCliticFolds} {language} onseat={handleCliticSeat} />
+			<CliticSeat folds={dockCliticFolds} {language} onundo={handleCliticUndo} />
 		{/snippet}
 	</CorrectionSurface>
 	{/if}

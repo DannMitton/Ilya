@@ -20,14 +20,28 @@
  * that ARRIVES WITH WORDS takes. `isVowellessClitic` and the engine's clitic
  * tables are the only sources of "vowelless clitic" consulted here.
  *
- * WHAT IT DOES NOT DO. It never applies anything: `findCliticFolds` reports and
- * `applyCliticSeat` runs only on the singer's press (E.24 §6: do not silently
- * re-seat the text without showing it). It writes no `empty` pairing, so the
- * note left over at the end of a run is UNDECIDED (E.46). And it acts on ONE
- * divergence class: everything else the comparison finds (a count that differs
- * for another reason, a composer's elision, an engraver's hyphenation Ilya does
- * not share) is withheld exactly as `vowel-resolver.ts` withholds it today
- * (E.24 §7). One-vowel-per-note is not built.
+ * ILYA SEATS AUTOMATICALLY, AT INGEST. RULED BY DANN 2026-09-04 on his walk of
+ * `7875892`, amending brief r2 §5.3 and the increment 2 build: *"I swear to
+ * you: no vowelless word in Russian can carry its own duration. You are
+ * complicating things for the user with a situation that is impossible in
+ * music notation."* There is no proposal and no button. A lone vowelless
+ * clitic cannot exist on the page, so nothing asks whether it may be repaired.
+ * E.24 §6's limit survives in the only form that still means anything: the
+ * Corrections station STATES what Ilya did, in one sentence, with Undo, and
+ * asks nothing.
+ *
+ * THE LIMIT STANDS, and it is the other half of the same ruling. This acts on
+ * ONE divergence class. Everything else the comparison finds (a count that
+ * differs for another reason, a composer setting several syllables on one
+ * duration, an engraver's hyphenation Ilya does not share) is withheld exactly
+ * as `vowel-resolver.ts` withholds it today (E.24 §7), and nothing is seated
+ * there. Dann's words, 2026-09-04: *"I like your distinction, especially when
+ * we expand Ilya to process Italian text where multiple syllables on a single
+ * duration are common."* One-vowel-per-note is not built.
+ *
+ * IT WRITES NO `empty` AND NO `melisma` PAIRING (E.46). A note the run cannot
+ * reach stays UNDECIDED, and `blanked` names it so the renderer can draw
+ * nothing there rather than the file's stale cell.
  */
 
 import { processText } from '$lib/pipeline';
@@ -69,7 +83,29 @@ export interface CliticFold {
 	 * fold, or where the queue runs out; a note past the queue's end is left
 	 * UNDECIDED rather than emptied.
 	 */
-	seat: ReadonlyArray<{ eventId: string; slot: Slot }>;
+	seat: ReadonlyArray<{
+		eventId: string;
+		slot: Slot;
+		/**
+		 * What goes on the Cyrillic line: the slot's own text, plus whatever
+		 * punctuation the file printed on the cell that text came from. See
+		 * `carryPunctuation`.
+		 */
+		cyrillic: string;
+	}>;
+	/**
+	 * Notes inside the run that the queue cannot reach, in vocal-line order.
+	 *
+	 * They stay UNDECIDED, and on a lyric-bearing score undecided is not the
+	 * same as blank: the renderer falls back to the file's own cell
+	 * (`staff-renderer.ts:709`, `:2462`), which is the stale text the seat has
+	 * just moved off. Dann walked that on `7875892` as the `ка ка` close.
+	 * RULED 2026-09-04: inside a seated run an undecided note DRAWS NOTHING.
+	 * The caller hands these ids to the renderer's blank channel; nothing is
+	 * written into the pairing map, because Ilya may claim neither an `empty`
+	 * note nor a melisma (E.46).
+	 */
+	blanked: readonly string[];
 }
 
 /** A word's cells against its slots, so a run's offset can be read off. */
@@ -106,24 +142,12 @@ interface Aligned {
  * with no vowelless clitic all return nothing.
  */
 export function findCliticFolds(parsed: ParsedScore, verseNumber = 1): CliticFold[] {
-	const words = collectScoreWords(parsed, verseNumber);
-	if (words.length === 0) return [];
-
-	let lines: LineData[];
-	try {
-		// The SAME call `vowel-resolver.ts` makes in its move 2, on the same
-		// reconstruction, so the two surfaces cannot disagree about the text.
-		lines = processText(words.map((w) => w.raw).join(' '));
-	} catch {
-		// A pipeline failure proposes nothing. The page is what it was.
-		return [];
-	}
-	// ONE LINE, because the input is one joined string with no break in it.
-	// More than one would make `origin.wordIndex` ambiguous below, since that
-	// ordinal is per line rather than per queue.
-	if (lines.length > 1) return [];
+	// The SAME reconstruction and the SAME pipeline call `vowel-resolver.ts`
+	// makes in its move 2, so no two surfaces can disagree about the text.
+	const read = readScoreText(parsed, verseNumber);
+	if (!read) return [];
+	const { words, lines, queue } = read;
 	const pipelineWords = lines[0]?.words ?? [];
-	const queue = buildSlotQueue(lines);
 	const rows = align(words, pipelineWords, queue);
 	// A WALK THAT LOST SYNC PROPOSES NOTHING. `vowel-resolver.ts` latches its
 	// own fallback walk off at the first mismatch, "because its index is
@@ -260,11 +284,30 @@ function foldAt(
 		}
 	}
 
-	const seat: Array<{ eventId: string; slot: Slot }> = [];
-	for (let t = 0; row.firstCell + t < endCell && fusedSlotIndex + t < queue.length; t++) {
-		seat.push({ eventId: cells[row.firstCell + t].eventId, slot: queue[fusedSlotIndex + t] });
+	const seat: Array<{ eventId: string; slot: Slot; cyrillic: string }> = [];
+	let t = 0;
+	for (; row.firstCell + t < endCell && fusedSlotIndex + t < queue.length; t++) {
+		const cell = cells[row.firstCell + t];
+		const slot = queue[fusedSlotIndex + t];
+		seat.push({
+			eventId: cell.eventId,
+			slot,
+			// THE SOURCE CELL IS THE NEXT ONE, and that is the invariant the run
+			// is defined by rather than an assumption: inside the run the file is
+			// exactly one cell ahead of the queue, so the text now going onto
+			// cell c is the text the file printed on cell c + 1.
+			cyrillic: carryPunctuation(slot.cyrillic, cells[row.firstCell + t + 1]?.text),
+		});
 	}
 	if (seat.length === 0) return null;
+
+	// The tail of the run the queue could not reach. On this fixture that is the
+	// last note of the piece: the engraving spent a note on «в» that the print
+	// did not, so after the repair one note has no syllable left.
+	const blanked: string[] = [];
+	for (let u = t; row.firstCell + u < endCell; u++) {
+		blanked.push(cells[row.firstCell + u].eventId);
+	}
 
 	return {
 		cliticEventId: w.cells[0].eventId,
@@ -272,7 +315,37 @@ function foldAt(
 		hostText: host.word.cells[0]?.text ?? '',
 		fusedText: fused.cyrillic,
 		seat,
+		blanked,
 	};
+}
+
+/**
+ * Trailing punctuation, which is neither a letter nor a combining mark. The
+ * same character class `cleanForAlignment` strips, read from the other end.
+ */
+const TRAILING_PUNCTUATION = /[^\p{L}\p{M}]+$/u;
+
+/**
+ * The seated text, carrying the file's own punctuation where the word is the
+ * same word.
+ *
+ * RULED BY DANN 2026-09-04: *"Carry the punctuation of the file's cell onto
+ * the re-seated cell where the text is the same word (я, stays я,)."* The
+ * queue's Cyrillic comes from `cleanWord`, which has had punctuation stripped
+ * (`pairings.ts`, `cyrOfSyllable`), so without this every cell the seat
+ * rewrites loses its comma while the cells before the fold keep theirs.
+ *
+ * THE GUARD IS THE WHOLE RULE. The mark travels only where the two texts are
+ * the same word once punctuation is off both. Where the engraver's division
+ * and Ilya's differ (`про`/`гляд` against `прог`/`ляд`) they are not the same
+ * word, nothing is carried, and the queue's text stands alone.
+ */
+function carryPunctuation(slotText: string, fileText: string | undefined): string {
+	if (!fileText) return slotText;
+	const mark = TRAILING_PUNCTUATION.exec(fileText)?.[0];
+	if (!mark) return slotText;
+	if (fileText.slice(0, fileText.length - mark.length) !== slotText) return slotText;
+	return slotText + mark;
 }
 
 /**
@@ -280,19 +353,120 @@ function foldAt(
  *
  * NOTHING IS MUTATED, matching `reconcilePairings`' habit of always handing
  * back a new object. Nothing outside the run is touched, so the singer's own
- * placements before the clitic survive, and the note past the queue's end keeps
- * no entry at all: undecided, never `empty`.
+ * placements before the clitic survive, and the notes the queue could not
+ * reach keep no entry at all: undecided, never `empty` and never a melisma.
  */
 export function applyCliticSeat(map: PairingMap, fold: CliticFold): PairingMap {
 	const next: PairingMap = { ...map };
-	for (const { eventId, slot } of fold.seat) {
+	for (const { eventId, slot, cyrillic } of fold.seat) {
 		next[eventId] = {
 			kind: 'syllable',
-			cyrillic: slot.cyrillic,
+			cyrillic,
 			ipa: slot.ipa,
 			vowel: slot.vowel,
 			origin: slot.origin,
 		};
 	}
 	return next;
+}
+
+/**
+ * Whether this fold is already seated in `map`.
+ *
+ * ONE PREDICATE, read by the ingest that seats, by the sentence that reports,
+ * and by the blank channel. Two of them disagreeing would show as a statement
+ * about a seat that is not there, or a note blanked under text that is.
+ *
+ * It tests the clitic's own note, because that is the note the seat exists to
+ * change and the only one no other act writes the fused text onto.
+ */
+export function isCliticSeated(map: PairingMap, fold: CliticFold): boolean {
+	const p = map[fold.cliticEventId];
+	return p?.kind === 'syllable' && p.cyrillic === fold.seat[0]?.cyrillic;
+}
+
+/**
+ * Take one fold's seat back off the map: the Undo beside the sentence.
+ *
+ * IT REMOVES ONLY WHAT THE SEAT ITSELF WROTE, cell by cell. A note the singer
+ * has since decided for themselves carries a different text or a different
+ * origin, and it is left exactly as they left it, because R6 says the page
+ * prints what the singer decided and nothing here is entitled to overrule that
+ * on the way out any more than on the way in.
+ *
+ * The notes go back to UNDECIDED, which on a lyric-bearing score is the file's
+ * own cell again. That is the point: the singer asked for the file back.
+ */
+export function revertCliticSeat(map: PairingMap, fold: CliticFold): PairingMap {
+	const next: PairingMap = { ...map };
+	for (const { eventId, slot, cyrillic } of fold.seat) {
+		const p = next[eventId];
+		if (
+			p?.kind === 'syllable' &&
+			p.cyrillic === cyrillic &&
+			p.origin.lineIndex === slot.origin.lineIndex &&
+			p.origin.wordIndex === slot.origin.wordIndex &&
+			p.origin.slotIndex === slot.origin.slotIndex
+		) {
+			delete next[eventId];
+		}
+	}
+	return next;
+}
+
+/**
+ * Seat every fold in one score that the map does not already carry.
+ *
+ * THE AUTOMATIC SEAT, and the one call `+page.svelte` makes at ingest. RULED
+ * BY DANN 2026-09-04: Ilya seats a vowelless clitic with its host at ingest of
+ * a lyric-bearing score, with no proposal and no button.
+ *
+ * IDEMPOTENT, which is what makes it safe to run on a re-upload and on a
+ * restore. `mergeOnUpload` hands back the singer's existing map untouched when
+ * one exists, and every fold in it is already seated, so this returns that map
+ * unchanged. It is not gated on how the score arrived, because a song saved
+ * before this shipped carries a map that does not have the seat in it.
+ */
+export function seatCliticFolds(
+	parsed: ParsedScore,
+	map: PairingMap,
+	verseNumber = 1,
+): PairingMap {
+	let next = map;
+	for (const fold of findCliticFolds(parsed, verseNumber)) {
+		if (!isCliticSeated(next, fold)) next = applyCliticSeat(next, fold);
+	}
+	return next;
+}
+
+/**
+ * The score's own words, read through the transcription pipeline: the
+ * reconstruction, the pipeline's lines, and the consumable slot queue.
+ *
+ * N.111 INCREMENT 3 NEEDS THIS BY ITSELF, and that is why it is exported
+ * rather than staying inside `findCliticFolds`. On a lyric-bearing score the
+ * singer has usually transcribed nothing, so `buildSlotQueue(lines)` over their
+ * own text is empty and every surface N.55b built (the Underlay station, the
+ * cursor, the placement click, the placed count) draws nothing and does
+ * nothing. This is the queue those surfaces fall back to, and it is the SAME
+ * queue the seat's pairings carry their origins into, so the two cannot
+ * disagree about what a slot is.
+ *
+ * Null where there is nothing honest to return: no lyrics, a pipeline failure,
+ * or more than one line out of a single joined string.
+ */
+export function readScoreText(
+	parsed: ParsedScore,
+	verseNumber = 1,
+): { words: ScoreWord[]; lines: LineData[]; queue: Slot[] } | null {
+	const words = collectScoreWords(parsed, verseNumber);
+	if (words.length === 0) return null;
+	let lines: LineData[];
+	try {
+		lines = processText(words.map((w) => w.raw).join(' '));
+	} catch {
+		return null;
+	}
+	if (lines.length > 1) return null;
+	return { words, lines, queue: buildSlotQueue(lines) };
 }

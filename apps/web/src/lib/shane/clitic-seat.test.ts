@@ -18,8 +18,16 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { MusicXmlScoreParser, type ParsedScore } from '@ilya/score-parser';
 import { parseXml } from './ingestion/mini-dom';
-import { findCliticFolds, applyCliticSeat } from './clitic-seat';
+import {
+	findCliticFolds,
+	applyCliticSeat,
+	isCliticSeated,
+	revertCliticSeat,
+	seatCliticFolds,
+	readScoreText,
+} from './clitic-seat';
 import { collectScoreWords } from './vowel-resolver';
+import { pairedCyrillic } from './pairings';
 
 const NBSP = '\u00A0';
 
@@ -201,5 +209,223 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		// refused outright rather than passed clean.
 		expect(collectScoreWords(score, 1)).toHaveLength(38);
 		expect(findCliticFolds(score)).toEqual([]);
+	});
+});
+
+/**
+ * N.111 increment 3, ruled by Dann 2026-09-04 on his walk of `7875892`.
+ *
+ * (1) Ilya seats automatically at ingest, with no proposal and no button.
+ * (2) Inside a seated run an undecided note draws NOTHING, never the file's
+ *     stale cell.
+ * (4) The file's punctuation travels with the word it belongs to.
+ */
+describe('N.111 increment 3, the automatic seat', () => {
+	it('seats every fold from an empty map, with nothing pressed', async () => {
+		const score = await parse(xml);
+		const seated = seatCliticFolds(score, {});
+		const fold = findCliticFolds(score)[0];
+		expect(isCliticSeated(seated, fold)).toBe(true);
+		expect(seated[fold.cliticEventId]).toEqual(
+			expect.objectContaining({ kind: 'syllable', cyrillic: 'в' + NBSP + 'бью' }),
+		);
+		// The whole run, and nothing before it.
+		expect(Object.keys(seated)).toHaveLength(59);
+	});
+
+	it('is idempotent, so a re-upload cannot seat twice', async () => {
+		const score = await parse(xml);
+		const once = seatCliticFolds(score, {});
+		const twice = seatCliticFolds(score, once);
+		expect(twice).toEqual(once);
+	});
+
+	it('never overwrites a placement the singer already made', async () => {
+		const score = await parse(xml);
+		const fold = findCliticFolds(score)[0];
+		// The singer has decided the clitic's own note for themselves. The fold
+		// reads as seated only on its own text, so this one is not seated; what
+		// matters is that seating does not silently replace their decision on a
+		// note further down the run.
+		const mine = seatCliticFolds(score, {});
+		const own = fold.seat[5].eventId;
+		const edited = { ...mine, [own]: { kind: 'melisma' as const } };
+		const again = seatCliticFolds(score, edited);
+		expect(again[own]).toEqual({ kind: 'melisma' });
+	});
+
+	it('leaves the note the queue cannot reach UNDECIDED, and names it blank', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const fold = findCliticFolds(score)[0];
+		// 96 cells against 95 slots: exactly one note is left over, and it is the
+		// last of the piece.
+		expect(fold.blanked).toEqual([cells[95].eventId]);
+		const seated = seatCliticFolds(score, {});
+		expect(seated[cells[95].eventId]).toBeUndefined();
+		expect(Object.values(seated).some((p) => p.kind === 'empty')).toBe(false);
+		expect(Object.values(seated).some((p) => p.kind === 'melisma')).toBe(false);
+	});
+
+	it('draws NOTHING on a blanked note, not the file’s stale cell', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const fold = findCliticFolds(score)[0];
+		const seated = seatCliticFolds(score, {});
+		const last = cells[95].eventId;
+
+		// THE POSITIVE CONTROL FIRST, and it is the defect Dann walked. With no
+		// blank set the renderer's own fallback stands, so the file's `ка` shows
+		// on the note the seat has just moved `ка` off: the `ка ка` close.
+		const stale = pairedCyrillic(seated);
+		expect(stale?.[last]).toBeUndefined();
+		expect(shown(score, seated).slice(91)).toEqual(['о', 'ди', 'но', 'ка', 'ка']);
+
+		// With the blank set the note is mapped to the EMPTY STRING, which the
+		// renderer keeps (`??` does not fall through an empty string) and then
+		// draws nothing for (`if (cyr || ipa)`).
+		const blanked = pairedCyrillic(seated, new Set(fold.blanked));
+		expect(blanked?.[last]).toBe('');
+	});
+
+	it('a note the singer seats by hand is no longer blank', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const fold = findCliticFolds(score)[0];
+		const last = cells[95].eventId;
+		// The hand puts a syllable on it. `+page.svelte` builds the blank set out
+		// of the folds MINUS whatever the map now decides, so this note leaves it.
+		const seated = {
+			...seatCliticFolds(score, {}),
+			[last]: {
+				kind: 'syllable' as const,
+				cyrillic: 'я',
+				ipa: 'jɑ',
+				vowel: 'ɑ',
+				origin: { lineIndex: 0, wordIndex: 38, slotIndex: 4, word: 'одинокая' },
+			},
+		};
+		const blank = new Set(fold.blanked.filter((id) => !seated[id]));
+		expect(blank.size).toBe(0);
+		expect(pairedCyrillic(seated, blank)?.[last]).toBe('я');
+	});
+
+	it('carries the file’s punctuation onto the re-seated cell', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const seated = seatCliticFolds(score, {});
+		const after = shown(score, seated);
+
+		// `я,` of заветная. The file prints it on cell 48 and the seat moves the
+		// word back one note, onto cell 47; the comma travels with it. Before
+		// this it read a bare `я` there.
+		const before = cells.map((c) => c.text);
+		expect(before.slice(45, 49)).toEqual(['за', 'вет', 'на', 'я,']);
+		expect(after.slice(45, 49)).toEqual(['вет', 'на', 'я,', 'быст']);
+
+		// EVERY mark the file printed survives the move, and no mark is invented:
+		// the two lists are equal, in order.
+		const marks = (list: readonly string[]) => list.filter((c) => /[^\p{L}\p{M}]$/u.test(c));
+		expect(marks(after)).toEqual(marks(before));
+	});
+
+	it('carries nothing where the engraver’s division is not Ilya’s word', async () => {
+		// `carryPunctuation` refuses unless the two texts are the same word once
+		// punctuation is off both. The negative control is the file's own
+		// `про`/`гляд` against Ilya's `прог`/`ляд`, which sits BEFORE the fold and
+		// is therefore untouched: the seat rewrites nothing there at all.
+		const score = await parse(xml);
+		const seated = seatCliticFolds(score, {});
+		const cells = cellsOf(score);
+		for (const cell of cells.slice(0, 36)) expect(seated[cell.eventId]).toBeUndefined();
+		expect(shown(score, seated).slice(13, 17)).toEqual(['не', 'про', 'гляд', 'на']);
+		// INSIDE the run the queue's division stands instead, which is the same
+		// rule seen from the other side: the seat rewrites the text there, so it
+		// is Ilya's `счас`/`тье` rather than the engraver's `сча`/`стье`.
+		const pairAt = (list: readonly string[], head: string) => {
+			const i = list.indexOf(head);
+			return i < 0 ? [] : list.slice(i, i + 2);
+		};
+		expect(pairAt(cells.map((c) => c.text), 'сча')).toEqual(['сча', 'стье']);
+		expect(pairAt(shown(score, seated), 'счас')).toEqual(['счас', 'тье']);
+	});
+
+	it('takes the seat back off, and leaves the singer’s own work alone', async () => {
+		const score = await parse(xml);
+		const fold = findCliticFolds(score)[0];
+		const seated = seatCliticFolds(score, {});
+		const mine = fold.seat[3].eventId;
+		const withMine = {
+			...seated,
+			[mine]: {
+				kind: 'syllable' as const,
+				cyrillic: 'МОЁ',
+				ipa: 'x',
+				vowel: undefined,
+				origin: { lineIndex: 9, wordIndex: 9, slotIndex: 9, word: 'мое' },
+			},
+		};
+		const reverted = revertCliticSeat(withMine, fold);
+		expect(isCliticSeated(reverted, fold)).toBe(false);
+		expect(reverted[fold.cliticEventId]).toBeUndefined();
+		// The singer's own decision on a note inside the run survives.
+		expect(reverted[mine]).toEqual(expect.objectContaining({ cyrillic: 'МОЁ' }));
+		// And the file's own seating is back everywhere the seat had written.
+		expect(shown(score, reverted).slice(36, 40)).toEqual(['в', 'бью', 'щем', 'МОЁ']);
+	});
+
+	it('mutates nothing, on the way in or the way out', async () => {
+		const score = await parse(xml);
+		const fold = findCliticFolds(score)[0];
+		const start = {};
+		const seated = seatCliticFolds(score, start);
+		expect(start).toEqual({});
+		const reverted = revertCliticSeat(seated, fold);
+		expect(Object.keys(seated)).toHaveLength(59);
+		expect(reverted).not.toBe(seated);
+	});
+});
+
+describe('N.111 increment 3, the hand', () => {
+	it('gives the click surface a queue on a lyric-bearing score', async () => {
+		// The gap the hand had to close: `buildSlotQueue(lines)` over the SINGER'S
+		// transcription is empty on a score that arrives with words, so
+		// `SyllableStation` drew nothing and `placeArmedSyllable` returned at its
+		// first line. This is the queue `+page.svelte` falls back to.
+		const score = await parse(xml);
+		const read = readScoreText(score, 1);
+		expect(read).not.toBeNull();
+		expect(read!.queue).toHaveLength(95);
+		expect(read!.queue[0].cyrillic).toBe('Ком');
+		expect(read!.queue.at(-1)!.cyrillic).toBe('ка');
+	});
+
+	it('is the SAME queue the seat’s origins point into, so a seat is not drift', async () => {
+		const score = await parse(xml);
+		const queue = readScoreText(score, 1)!.queue;
+		const seated = seatCliticFolds(score, {});
+		const key = (o: { lineIndex: number; wordIndex: number; slotIndex: number }) =>
+			`${o.lineIndex}-${o.wordIndex}-${o.slotIndex}`;
+		const inQueue = new Set(queue.map((s) => key(s.origin)));
+		for (const p of Object.values(seated)) {
+			if (p.kind === 'syllable') expect(inQueue.has(key(p.origin))).toBe(true);
+		}
+	});
+
+	it('returns nothing to fall back to on a score with no lyrics', async () => {
+		const stripped = xml.replace(/<lyric[\s\S]*?<\/lyric>/g, '');
+		const score = await parse(stripped);
+		expect(readScoreText(score, 1)).toBeNull();
+	});
+
+	it('has no я to offer, because the engraving never wrote one', async () => {
+		// The fixture's own words end «ночь одинока»: the final `я` of одинокая is
+		// missing from the file, so it is missing from the queue too. Ilya cannot
+		// know it, which is exactly why the hand exists. The singer supplies it by
+		// transcribing the poem, and the queue then comes from their text.
+		const score = await parse(xml);
+		const queue = readScoreText(score, 1)!.queue;
+		expect(queue.at(-1)!.origin.word).toBe('одинока');
+		expect(queue.map((s) => s.cyrillic).slice(-4)).toEqual(['о', 'ди', 'но', 'ка']);
 	});
 });

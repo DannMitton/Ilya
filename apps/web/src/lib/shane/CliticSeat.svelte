@@ -1,21 +1,23 @@
 <script lang="ts">
 	/**
-	 * N.111 increment 2: the clitic seat's one proposal, and its one action.
+	 * N.111 increment 3: what Ilya did about a vowelless clitic, and the Undo.
 	 *
-	 * ONE SENTENCE PER FOLD, English only this ship, and one button. The
-	 * sentence is the desk's, from `brief-n111-clitic-seat_r2_2026-09-03.md`
-	 * §5.1: «в sits alone on a note. Seat it with бью? 59 notes move.»
+	 * IT ASKS NOTHING. RULED BY DANN 2026-09-04 on his walk of `7875892`,
+	 * amending brief r2 §5.3 and the increment 2 build, which offered a
+	 * proposal and a Seat button: *"I swear to you: no vowelless word in
+	 * Russian can carry its own duration. You are complicating things for the
+	 * user with a situation that is impossible in music notation."* A lone
+	 * vowelless clitic cannot exist on the page, so Ilya seats it at ingest and
+	 * this states what it did, in one sentence, with Undo.
 	 *
-	 * ILYA PROPOSES AND DOES NOT APPLY (E.24 §6). This component decides
-	 * nothing and applies nothing; it renders what it is given and calls back.
-	 * The count it prints is the length of the fold's own seat, so the number
-	 * the singer reads and the number of notes the press rewrites are the same
-	 * number by construction rather than by agreement.
+	 * E.24 §6's LIMIT IS WHAT SURVIVES OF THE PROPOSAL. "Do not silently
+	 * re-seat the text without showing it" asked for two things, showing and
+	 * asking. The showing is this sentence. The asking is gone, because it was
+	 * asking about the impossible.
 	 *
-	 * NOTHING GOES ON THE PAPER. The note itself takes no new mark, per
-	 * CONTRACT §6: a mark that says Ilya is unsure appears on everything and
-	 * says nothing. The proposal lives where the singer manipulates, and the
-	 * page displays and prints.
+	 * NOTHING GOES ON THE PAPER. The note takes no new mark, per CONTRACT §6:
+	 * a mark that says Ilya is unsure appears on everything and says nothing.
+	 * The drawer manipulates; the page displays and prints.
 	 *
 	 * The line's geometry, the pill and the 44 px coarse-pointer floor are
 	 * `VoiceAnchor.svelte`'s, so the drawer keeps one button shape (N.108
@@ -25,25 +27,31 @@
 	import type { CliticFold } from '$lib/shane/clitic-seat';
 
 	interface Props {
-		/** The folds to offer, in vocal-line order. Nothing renders on none. */
+		/** The seated folds to report, in vocal-line order. Nothing on none. */
 		folds: readonly CliticFold[];
 		language: Language;
-		/** The singer's press. The caller writes the pairings and pushes undo. */
-		onseat: (fold: CliticFold) => void;
+		/** Take one seat back off. The caller writes the pairings. */
+		onundo: (fold: CliticFold) => void;
 	}
 
-	let { folds, language, onseat }: Props = $props();
+	let { folds, language, onundo }: Props = $props();
 
+	/**
+	 * ONE SENTENCE FROM ONE KEY, its placeholders filled left to right.
+	 *
+	 * `String.replace` with a string pattern replaces the FIRST match only, so
+	 * three calls fill `%s` in order. That ordering is what a positional
+	 * placeholder costs, and it is named in the dictionary entry: a French
+	 * translation that needs the clauses in another order will want the key
+	 * restructured rather than reordered.
+	 */
 	function sentence(fold: CliticFold): string {
-		const moved =
-			fold.seat.length === 1
-				? t('clitic.movesOne', language)
-				: t('clitic.moves', language).replace('%s', String(fold.seat.length));
-		return [
-			t('clitic.alone', language).replace('%s', fold.cliticText),
-			t('clitic.seatWith', language).replace('%s', fold.hostText),
-			moved,
-		].join(' ');
+		const one = fold.seat.length === 1;
+		let out = t(one ? 'clitic.seatedOne' : 'clitic.seated', language)
+			.replace('%s', fold.cliticText)
+			.replace('%s', fold.hostText);
+		if (!one) out = out.replace('%s', String(fold.seat.length));
+		return out;
 	}
 </script>
 
@@ -52,8 +60,8 @@
 		{#each folds as fold (fold.cliticEventId)}
 			<div class="clitic-line">
 				<span class="clitic-status">{sentence(fold)}</span>
-				<button type="button" class="clitic-action" onclick={() => onseat(fold)}
-					>{t('clitic.seat', language)}</button
+				<button type="button" class="clitic-action" onclick={() => onundo(fold)}
+					>{t('clitic.undo', language)}</button
 				>
 			</div>
 		{/each}
@@ -71,7 +79,7 @@
 	/* The sentence WRAPS rather than truncating. `VoiceAnchor`'s own status
 	   ellipsis exists so a long voice name cannot push its control off the
 	   line; this sentence names two Cyrillic words and a count, and a singer
-	   who cannot read which clitic is meant cannot judge the proposal. */
+	   who cannot read which clitic is meant cannot judge what Ilya did. */
 	.clitic-status {
 		flex: 1;
 		min-width: 0;
