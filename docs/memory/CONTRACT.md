@@ -257,6 +257,30 @@ file and tether it or say NOT ESTABLISHED. Tether 1's fourth form was never
 allowed; this names the moment it slips in, which is when a picture looks
 explanatory. An inference he asked for is marked DESK INFERENCE on its face.
 
+### 22. NEW, 2026-09-09, ruled by Dann. WHEN HE SAYS IT IS HARD, THAT IS THE FINDING. LEAD WITH THE BETTER DESIGN, NEVER WITH A CASE FOR WHAT IS THERE.
+
+**Dann's words, 2026-09-09:** *"You're coming up with reasons why you should
+preserve the status quo. I'm telling you the button is hard to find."* And,
+when it had cost him: *"You obviously do not understand how hard 'made you
+push through them' is for a person with AuDHD. I need you to lighten my
+cognitive load and make this an enjoyable process. I'm receptive to
+criticism. I'm receptive to better ideas. But I can't keep pushing this hard
+to get what I want."*
+
+**What it cost, the same night, twice:** he said the Undo was hard to find,
+and the desk answered with the tree's reasons the Undo was where it was,
+then "build neither". He said the drop hint was confusing, and the desk
+argued the receipts' pairing. Both times he had to push through a wall to
+get a list of options he should have been handed first.
+
+**The rule.** When Dann says a thing is hard, confusing, clunky, or hidden,
+that is the finding; it is not a claim to be tested against the code. The
+reply leads with the better designs, from a singer's hand, ranked, with a
+recommendation. The tree's facts follow, as cost, in one clause each. "Build
+neither" is offered only when doing nothing is defensible for HIM, never as
+a defence of what is there. He does not push twice. If he has to, that is
+this tether failing, and it goes in the record.
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about
