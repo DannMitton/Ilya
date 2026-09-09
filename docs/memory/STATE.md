@@ -184,7 +184,23 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
 > DESK DEFAULT. After N.114 unless he places it.
 >
-> **N.114 NARROWED BY DANN 2026-09-09, r2 DRAWN AND RULED, BRIEFED:**
+> **N.114 DONE. SHIPPED `3765314`, WALKED BY DANN ON THE ALIAS 2026-09-09, ALL SEEN.**
+> Code's memo `docs/sessions/memo-n114-syllable-line_r1_2026-09-09.md`: six
+> items matched except item 1 by one Svelte `<!---->` anchor, seven bytes,
+> accepted; gate 4 1074 to 1075 (one test added), `ilya-ship.sh:79` updated;
+> Code ran `git status` once by reflex, owned in the memo. Dann saw: the boxed
+> collapsed row under the score receipt; the open line with placed black and
+> unplaced grey; a syllable click moving the SABB without taking the field's
+> focus; a loupe placement turning the syllable black and moving the count;
+> Underlay gone from Score markup. Vercel deployment
+> `dpl_HLDV6zJ7RjEPUqNKkxEyfVDy6wcb` READY for that sha on the branch alias.
+> **Two rulings from the walk, both his, briefed as N.114a:**
+> `docs/sessions/brief-n114a-voice-and-hint_r1_2026-09-09.md`: Voice always
+> expanded, chevron struck; `intake.dropHint` moves under the textarea, same
+> words. Glyph in the field's corner considered and rejected by Dann (it was
+> a button he struck 2026-09-03); state-dependent caption rejected. NOT RUN.
+>
+> *(superseded 2026-09-09 late, kept for the record:)* N.114 NARROWED, r2 DRAWN AND RULED, BRIEFED:
 > `docs/sessions/brief-n114-syllable-line_r1_2026-09-09.md`, six walk items,
 > no French, no new string. Code has not run it. Next: Dann pastes it into
 > Code; then his walk on the alias.
