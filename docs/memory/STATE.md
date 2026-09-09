@@ -197,7 +197,10 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > **Two rulings from the walk, both his, briefed as N.114a:**
 > `docs/sessions/brief-n114a-voice-and-hint_r1_2026-09-09.md`: Voice always
 > expanded, chevron struck; `intake.dropHint` moves under the textarea, same
-> words. Glyph in the field's corner considered and rejected by Dann (it was
+> words; **and Undo and Redo move to the top bar, right end, fixed, ruled by
+> Dann from the user's side ("the button is hard to find") after the desk
+> argued the status quo and was told so; one undo, one place, the dock's row
+> goes.** Glyph in the field's corner considered and rejected by Dann (it was
 > a button he struck 2026-09-03); state-dependent caption rejected. NOT RUN.
 >
 > *(superseded 2026-09-09 late, kept for the record:)* N.114 NARROWED, r2 DRAWN AND RULED, BRIEFED:

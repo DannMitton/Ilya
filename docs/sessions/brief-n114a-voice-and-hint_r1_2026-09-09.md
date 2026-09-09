@@ -5,7 +5,7 @@ Read `docs/memory/CONTRACT.md` §5 first. Do not run git.
 
 ## Goal
 
-Two small changes in the drawer, both ruled by Dann on 2026-09-09 walking
+Three changes, all ruled by Dann on 2026-09-09 walking
 `3765314` on the alias. No new string, no French, no copy change.
 
 1. **The Voice station in Score markup is always expanded and loses its
@@ -23,6 +23,22 @@ Two small changes in the drawer, both ruled by Dann on 2026-09-09 walking
    `IntakePanel.svelte` moves. (`IntakePanel.svelte:355-372` is the receipt
    block; the hint is below the button after it.)
 
+3. **Undo and Redo move to the top bar.** Ruled by Dann 2026-09-09, from the
+   user's side: "the button is hard to find." The Undo pill and the Redo pill
+   leave the Corrections dock and sit at the right end of the lavender top
+   bar (the strip carrying `[Ilya]` and the Français toggle), fixed, in the
+   same place whatever is scrolled or open. Undo first, Redo beside it. Each
+   keeps its existing sentence as its label (`loupe.undo` and `loupe.redo`
+   with their `loupe.undo.*` clauses, `i18n.ts:342-357`), so the button says
+   what it will do. Same handlers, same stack, same Cmd-Z and Shift-Cmd-Z.
+   ONE UNDO, ONE PLACE: the dock's Undo row and its reservation
+   (`CorrectionSurface.svelte:472-496`) go, and the dock closes up by that
+   row; measure the loupe's anchor before and after and report it. DESK
+   DEFAULT, reversible: both buttons are always drawn and are dimmed and
+   disabled when their stack is empty, so their place is learned; if Dann
+   prefers absent-when-empty, that is one line. Pill ends per
+   `IntakePanel.svelte:753-768`. Touch floor 44 px. No new string.
+
 ## Definition of done
 
 - Five gates clean, `tsc` clean, no new i18n key. Report gate 4 and 5 numbers
@@ -34,6 +50,12 @@ Two small changes in the drawer, both ruled by Dann on 2026-09-09 walking
      the textarea; the receipt follows it; Choose a file is unchanged.
   3. Input band with a score: same, and the syllable line still sits under
      the score receipt.
+  4. Top bar: Undo and Redo at the right end, dimmed with nothing to undo;
+     after a placement, Undo reads "Undo: syllable placed" and pressing it
+     undoes exactly that; Redo then reads "Redo: syllable placed". Cmd-Z with
+     the poem field unfocused still works. The dock has no Undo row and the
+     loupe's anchor is reported before and after.
+  5. Phone width (390 px): both buttons visible and 44 px, nothing wraps.
 
 ## Constraints
 
@@ -47,4 +69,4 @@ invented answer.**
 
 ## Return memo
 
-`docs/sessions/memo-n114a-voice-and-hint_r1_<date>.md`, under 60 lines.
+`docs/sessions/memo-n114a-voice-and-hint_r1_<date>.md`, under 90 lines.
