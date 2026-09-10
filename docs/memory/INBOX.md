@@ -115,3 +115,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - [2026-09-09] RULED by Dann on the N.114 alias walk: the Voice station in Score markup stays expanded always; strike its chevron. Reason, his: Calibrate/Re-calibrate opens its own drawer surface. Small, unnumbered, Code's next pass over +page.svelte's stations.
 - [2026-09-09] RULED by Dann on the N.114 alias walk: the intake hint (`intake.dropHint`, approved copy, unchanged) moves to sit directly under the textarea, above the receipts, as the field's caption. Choose a file stays where it is. Glyph rejected; state-dependent caption rejected. Rides with the Voice-chevron pass.
 - [2026-09-09] RULED by Dann: Undo and Redo move to the top bar, right end, fixed, pill sentence as label; one undo, one place; dock row goes. In brief-n114a item 3.
+- [2026-09-10] RULED by Dann: Undo/Redo pills align to the drawer's right edge, above the hands (N.114b, briefed).

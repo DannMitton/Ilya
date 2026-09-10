@@ -184,6 +184,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
 > DESK DEFAULT. After N.114 unless he places it.
 >
+> **N.114a DONE. SHIPPED `f3250a6`, WALKED BY DANN ON THE ALIAS 2026-09-10 01:06, ALL SEEN, "it works perfectly and I love it."**
+> Voice open with no chevron; the hint under the poem field; Undo and Redo
+> at the bar's right end, dimmed on an empty stack (the stack was empty after
+> his reload; whether it survives a reload is NOT READ), lit after a placement
+> and undoing exactly it. Code's memo `memo-n114a-voice-and-hint_r1_2026-09-09.md`:
+> the dock lost its Undo row, loupe `top` moved 221.1 to 238.6 px on a phone;
+> bare pills read the table's own "Undo"/"Annuler" (`verbOnly`); only a pill
+> carrying a clause may shrink; the pair is drawn on every destination (DESK
+> DEFAULT, one line to make it Studio-only). Vercel `dpl_Gu1g3UAA4TGZA4fdT1h7jDzz63gh`.
+> **N.114b, ruled by Dann on the same walk, briefed, NOT RUN:** the pills
+> align to the drawer's right edge, directly above the hands, so desk and
+> phone become one picture; `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`.
+>
 > **N.114 DONE. SHIPPED `3765314`, WALKED BY DANN ON THE ALIAS 2026-09-09, ALL SEEN.**
 > Code's memo `docs/sessions/memo-n114-syllable-line_r1_2026-09-09.md`: six
 > items matched except item 1 by one Svelte `<!---->` anchor, seven bytes,
