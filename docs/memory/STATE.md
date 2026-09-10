@@ -184,6 +184,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
 > DESK DEFAULT. After N.114 unless he places it.
 >
+> **THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH. Design is being
+> consulted.** Brief `docs/sessions/brief-to-design-drawer-as-a-path_r1_2026-09-10.md`
+> committed `a03cfdc`, package of five (brief, drawing r1, design system
+> r2-3 md5 `3b0c9cf4c9f194245d6ab6914d7c52a8`, two screenshots). Dann hands
+> it to Design himself. Asked of Design: a three-session walkthrough from
+> the singer's chair measured by CONFIDENCE (knowing it worked before moving
+> on), then mockups of the front side in three states and the calibration
+> summary with the capture surface open in place, then a page of reasoning
+> and a NOT ESTABLISHED section. While Design works: N.114b items 6 to 9
+> are briefed for Code and independent of Design; N.119 is briefed-in-
+> principle; N.120 to N.122 WAIT for Design's return before any drawing r2.
+> Design's return goes into STATE.md and its rulings into PRODUCT.md.
+>
 > **N.114b, items 1 to 5 DONE on Dann's alias walk 2026-09-10 (`ec4fbe9`,
 > `7665afa`, `8278429`); items 6 to 9 BRIEFED, NOT RUN**, all in
 > `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`: 6 air

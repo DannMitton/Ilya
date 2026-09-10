@@ -20,8 +20,9 @@ stop, rather than filling the gap.**
    Plate 1 is the drawer's grammar as measured from the code; Plates 2 and
    3 are the desk's redraw of the calibration summary. Treat the plates as
    a first answer to be bettered, not as a specification.
-4. The current design system, standalone HTML, which Dann attaches with its
-   hash. Verify the hash before you use it.
+4. `ilya-design-system-r2-3-standalone.html`, in Dann's Downloads, md5
+   `3b0c9cf4c9f194245d6ab6914d7c52a8`, 1,318,529 bytes, verified
+   2026-09-10. A superseded sibling, `r2-2b`, sits beside it; do not use it.
 
 ---
 
