@@ -474,14 +474,20 @@
 					     OPEN, which is the ruling: a verb this destructive does
 					     not ride a collapsed row a singer opened by accident.
 
-					     `.receipt-btn` IS THE STYLE, the same quiet text verb
-					     Clear and Replace wear one row up, because this is the
-					     same kind of thing they are: a receipt's afterthought,
-					     not an action. `station.startOver` is the string it
-					     already carried; nothing is coined. -->
+					     A PILL, NOT A TEXT VERB. N.114b item 4, RULED BY DANN
+					     2026-09-10 walking `7665afa`: "needs to be inside a pill
+					     to be consistent as an actionable button." It wore
+					     `.receipt-btn` for one ship on the desk's reading that
+					     it was a receipt's afterthought; his ruling is that it
+					     is an ACTION, so it takes the ghost pill Choose a file
+					     wears three rows down in this same band. Clear and
+					     Replace on the receipts stay text, which is the same
+					     ruling drawing the line rather than blurring it.
+					     `station.startOver` is the string it already carried;
+					     nothing is coined. -->
 					<button
 						type="button"
-						class="receipt-btn syl-start-over"
+						class="action-btn btn-ghost syl-start-over"
 						onclick={() => onstartover?.()}
 					>{t('station.startOver', language)}</button>
 					<button
@@ -778,7 +784,9 @@
 	}
 
 	/* The verb takes the room, so the count and the chevron keep the corner.
-	   Everything else about it is `.receipt-btn`'s, which it also wears. */
+	   Everything else about it is `.action-btn.btn-ghost`'s, which it wears
+	   whole: the pill ends, the fill, the border and the type are Choose a
+	   file's, unchanged, so the band holds one ghost pill recipe and not two. */
 	.syl-start-over {
 		margin-right: auto;
 	}
@@ -830,7 +838,11 @@
 	   other disclosures. */
 	@media (pointer: coarse) {
 		.syl-row,
-		.syl-toggle {
+		.syl-toggle,
+		/* N.114b item 4. `.action-btn` sets no floor of its own, so the pill
+		   joins the row's two disclosures here rather than carrying a floor
+		   the other five `.action-btn`s do not have. */
+		.syl-start-over {
 			min-height: 44px;
 		}
 	}

@@ -990,7 +990,10 @@
 		gap: 12px;
 		height: 40px;
 		margin: 0;
-		padding: 0 18px;
+		/* N.114b item 5: `--band-inset` is this 18px, unchanged in value.
+		   `HeaderBar` spends it as the Undo and Redo pills' horizontal padding
+		   so their words end on the line this label ends on. */
+		padding: 0 var(--band-inset);
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;

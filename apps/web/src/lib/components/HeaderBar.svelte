@@ -348,7 +348,13 @@
 		   clause, keeping its verb. So the bar's narrowest honest state is
 		   `Undo: syllable…` beside `Redo`, and never a truncated verb. */
 		flex: 0 0 auto;
-		padding: 4px 12px;
+		/* N.114b item 5, RULED BY DANN 2026-09-10. The horizontal padding is the
+		   BAND'S INSET, `--band-inset`, the same 18px `.group-band` spends on
+		   its label. The box stays tangent to the card's edge, so the word
+		   inside it ends exactly where METADATA ends: one edge for the
+		   surfaces, one line for the words, and one number behind both. The
+		   vertical 4px is unchanged and is this bar's own. */
+		padding: 4px var(--band-inset);
 		border: none;
 		border-radius: 999px;
 		font-family: var(--font-sans);

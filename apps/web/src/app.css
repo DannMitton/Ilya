@@ -68,6 +68,24 @@
 	   in each file. Move it and the pills move with the card. */
 	--drawer-gutter: 16px;
 
+	/* ── The band's own inset ──────────────────────────────── */
+	/* N.114b item 5, RULED BY DANN 2026-09-10 walking `7665afa`. This is
+	   `.group-band`'s horizontal padding: the line its label sits on, so
+	   METADATA's right edge is one of these in from the card's edge.
+
+	   IT IS A TOKEN SO THE PILLS CAN SPEND IT AS THEIR OWN PADDING. That is
+	   the whole of the ruling: an Undo or Redo pill whose box is tangent to the
+	   card and whose horizontal padding is this value ends its WORD on the same
+	   content line the band's label ends on. Two edges, one number, and neither
+	   is a literal copied into the other's file.
+
+	   FOUR OTHER 18px LITERALS IN `Drawer.svelte` ARE THE SAME RULED INSET and
+	   are deliberately left alone: the station margin, `.band-body`'s margin,
+	   the takeover header and its body. They are the same measure but they are
+	   not what this ruling keys, and rewriting them is a wider ship than the
+	   one that was asked for. */
+	--band-inset: 18px;
+
 	/* ── The drawer's one motion (N.108) ───────────────────── */
 	/* ONE DURATION AND ONE CURVE, ruled by the N.108 build brief §2 from the
 	   ratified GUI spec of 2026-08-18, "~180 ms ease-out". It is spent on
