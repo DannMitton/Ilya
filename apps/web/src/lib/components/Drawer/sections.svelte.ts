@@ -37,21 +37,20 @@
 export const OPEN_STATIONS_KEY = 'ilya:openStations';
 
 /**
- * FIRST RUN: NOTHING OPEN. N.108 increment 1.
+ * FIRST RUN: INPUT ALONE. N.115, the path pass.
  *
- * IT WAS `['piece', 'source']` (§B.5), and the reason it was is the reason it
- * is empty now. Those two were open on arrival because they were the first two
- * things a singer needed and a wall of closed headers is what §B.5 exists to
- * stop. Under the three groups BOTH ARE VISIBLE WITHOUT A TOGGLE: Metadata is
- * an affordance on the Piece band, and the intake is a station with no header
- * that is never closed. So the ruling is satisfied by construction and the
- * default is the empty array, which is what Design's revision 2 §4.4 asked for
- * and what the build brief ruled.
+ * IT WAS `[]`, and the reason it was is gone. Under N.108 the four groups had
+ * no open state at all, so "the opening state is the MAP" was satisfied by
+ * construction: every band was a name with its contents under it and nothing
+ * could be shut. THE BANDS ARE DOORS NOW, ruled by Dann 2026-09-10, so a map
+ * with nothing open is a column of four closed doors.
  *
- * The opening state is now the MAP: every station name visible, every station
- * shut, and it fits without scrolling at all three ruled viewports.
+ * The ruling names what opens: "An empty drawer opens Input alone; Piece,
+ * Text, and Score markup show their band and nothing under it"
+ * (`PRODUCT.md` §The drawer grammar and the path). This array is that
+ * sentence, and it is the ONLY place it is written.
  */
-export const FIRST_RUN_STATIONS: readonly string[] = [];
+export const FIRST_RUN_STATIONS: readonly string[] = ['input'];
 
 /**
  * NOTATION DOES NOT JOIN THE PERSISTED SET, AND THIS IS DELIBERATE (§B.4).
@@ -70,7 +69,6 @@ export const UNPERSISTED_STATIONS: readonly string[] = ['notation'];
  */
 export const STATION_IDS = {
 	repertoire: 'repertoire',
-	metadata: 'metadata',
 	binder: 'binder',
 	notation: 'notation',
 	analysis: 'analysis',
@@ -78,54 +76,92 @@ export const STATION_IDS = {
 } as const;
 
 /**
- * THE MIGRATION, as Design's revision 2 §4.4 wrote it and the N.108 build
- * brief ruled it: `piece` to `metadata`, `songs` to `repertoire`, `analysis`
- * to `analysis`.
+ * THE FOUR BANDS, N.115, RULED BY DANN 2026-09-10.
  *
- * `voice` LEFT THE TABLE AT N.114a, RULED BY DANN 2026-09-09: the Voice station
- * is always expanded and has no chevron, because Calibrate opens the drawer's
- * own takeover surface, so the station has nothing to collapse for. A station
- * that cannot close has no open state to store, and a stored `voice` is dropped
- * on the next visit the way `source` is.
+ * "The drawer is a path read top to bottom: Piece, Input, Text, Score markup.
+ * Each band opens and closes." They are members of THIS set and not of a
+ * second one, so one mechanism persists both tiers and a band cannot disagree
+ * with a station about what "open" means.
  *
- * `shiftLyrics` MAPPED TO `underlay` UNTIL N.114, RULED BY DANN 2026-09-07.
- * That ruling moved the queue and the SABB out of Score markup and under the
- * poem field, where they are a row inside the intake and not a station: there
- * is no UNDERLAY station left, so `underlay` is out of `STATION_IDS` and
- * `shiftLyrics` has no successor to be mapped to. It is DROPPED, exactly as
- * `source` is and for the same reason.
+ * WIRE VALUES, like `STATION_IDS`, and `piece` is a REUSED one: ship B wrote
+ * it for the Piece STATION, which became `metadata` at N.108 and is struck
+ * altogether at N.115. Reusing the string is safe only because
+ * `OPEN_STATIONS_VERSION` is 3: every set that could carry ship B's meaning is
+ * reset before `migrateOpenStations` ever sees it. If that version is ever
+ * lowered, this is the line that breaks.
+ */
+export const BAND_IDS = {
+	piece: 'piece',
+	input: 'input',
+	text: 'text',
+	scoreMarkup: 'scoreMarkup',
+} as const;
+
+/**
+ * Which tier an id belongs to. THE PHONE'S "ONE AT A TIME" IS PER TIER.
  *
- * THE FIVE IDS SHIP B COULD WRITE were `piece`, `source`, `songs`, `analysis`
- * and `shiftLyrics`; `notation` was a station under both maps and was never
- * written. Three of the five are mapped above. `source` IS DROPPED AND HAS NO
- * SUCCESSOR: the intake is always open and has no id to store, so a stored
- * `source` has nothing to become. A stored `underlay`, from a browser that
- * visited between N.108 and N.114, is dropped the same way.
+ * N.115. `exclusive` shuts the other open id when a singer opens one, and a
+ * band CONTAINS stations: shutting Piece because the singer opened Repertoire
+ * would hide the station they just asked for, one frame after asking. So the
+ * rule is applied within a tier, which leaves the 2026-09-02 ruling exactly
+ * where it was for stations and gives the bands the same rule among
+ * themselves.
+ */
+const BAND_ID_SET: ReadonlySet<string> = new Set(Object.values(BAND_IDS));
+
+export function isBandId(id: string): boolean {
+	return BAND_ID_SET.has(id);
+}
+
+/**
+ * THE MIGRATION. It was Design's revision 2 §4.4, `piece` to `metadata`,
+ * `songs` to `repertoire`, `analysis` to `analysis`; N.115 EMPTIED THE SHIP B
+ * HALF OF IT AND THE REASON IS THE VERSION.
  *
- * A NEW ID MAPS TO ITSELF, which is what makes this idempotent. Run it on an
+ * `OPEN_STATIONS_VERSION` is 3, and `restore` lands every set below 3 on the
+ * first-run default without consulting this table. Ship B's ids could only
+ * ever arrive in a version 1 value, so `piece`, `songs` and `shiftLyrics` can
+ * no longer reach this function from storage at all: their entries would be
+ * unreachable code claiming to be a migration. `metadata`, their one surviving
+ * destination, is struck as well, because the METADATA station is struck
+ * (ruled 2026-09-10) and a map may not point at a door that is gone.
+ *
+ * WHAT IS LEFT IS THE PART THAT STILL RUNS. A version 3 set holds band ids and
+ * station ids, each maps to itself, and anything else is dropped: an id this
+ * build does not know cannot name a door a singer can see, and a set carrying
+ * one would write it back out again on the next toggle.
+ *
+ * THE DROPS ARE STILL DROPS, and each was ruled once. `source`: the intake is
+ * always open and has no id, so a stored `source` has nothing to become
+ * (2026-09-02). `underlay` and `shiftLyrics`: the station moved under the poem
+ * field and is a row, not a station (N.114, 2026-09-07). `voice`: a station
+ * that cannot close has no open state to store (N.114a, 2026-09-09).
+ * `metadata`: the label on the Piece band is struck and collapsing Piece is
+ * the collapse (N.115, 2026-09-10).
+ *
+ * A KNOWN ID MAPS TO ITSELF, which is what makes this idempotent. Run it on an
  * already-migrated array and it returns that array, so a browser that has been
  * here once is not rewritten a second time; `restore` below is what decides
  * whether anything is written at all.
  */
 const SUCCESSOR: Readonly<Record<string, string>> = {
-	piece: STATION_IDS.metadata,
-	songs: STATION_IDS.repertoire,
-	analysis: STATION_IDS.analysis,
 	...Object.fromEntries(Object.values(STATION_IDS).map((id) => [id, id])),
+	...Object.fromEntries(Object.values(BAND_IDS).map((id) => [id, id])),
 };
 
 /**
- * Map a stored open set onto the three-group drawer.
+ * Map a stored open set onto the drawer's two tiers.
  *
- * Anything unrecognised is dropped rather than kept, because an id this build
- * does not know cannot name a station a singer can see, and a set carrying one
- * would write it back out again on the next toggle.
+ * ON A PHONE, ONE SURVIVOR PER TIER. It was one survivor altogether, which was
+ * right while every id named a station. N.115 puts BANDS in the same set, and
+ * a band contains stations: keeping `['piece']` and dropping `['repertoire']`
+ * would reopen Piece onto a station the singer had left open and then closed
+ * for them. So the phone keeps the first band and the first station, which is
+ * the 2026-09-02 ruling read within each tier and is what makes a reload land
+ * a phone where the singer left it.
  *
- * ON A PHONE, ONLY THE FIRST SURVIVOR. The phone holds one open station, so a
- * stored set of three would otherwise arrive in a state the singer cannot
- * reach by hand. First rather than last, because the stored array is in the
- * order the ids were added and the first is the one that has been open
- * longest.
+ * FIRST RATHER THAN LAST, unchanged: the stored array is in the order the ids
+ * were added and the first is the one that has been open longest.
  */
 export function migrateOpenStations(stored: readonly string[], onPhone: boolean): string[] {
 	const out: string[] = [];
@@ -135,7 +171,10 @@ export function migrateOpenStations(stored: readonly string[], onPhone: boolean)
 		if (out.includes(successor)) continue;
 		out.push(successor);
 	}
-	return onPhone ? out.slice(0, 1) : out;
+	if (!onPhone) return out;
+	const band = out.find((id) => isBandId(id));
+	const station = out.find((id) => !isBandId(id));
+	return out.filter((id) => id === band || id === station);
 }
 
 /** Whether two open sets, in order, are the same array. */
@@ -170,7 +209,16 @@ function sameOrder(a: readonly string[], b: readonly string[]): boolean {
  * `restoreSurface`. A corrupt value reads as version 0, so it is reset with
  * everything else rather than being trusted.
  */
-export const OPEN_STATIONS_VERSION = 2;
+export const OPEN_STATIONS_VERSION = 3;
+
+/* VERSION 3 IS N.115, and it is the same device for the same reason. The MAP
+   changed: the four bands became doors and took ids, `metadata` stopped being
+   a door at all, and a version 2 set names none of the bands. Read one forward
+   unchanged and a returning singer meets four shut bands with nothing under
+   them, which is the state Dann's walk of `2c1cecf` called the defect. So
+   every set below 3 lands on `FIRST_RUN_STATIONS` once, exactly as every set
+   below 2 landed on the empty array once, and the mark is the version rather
+   than the shape this time because the shape already carries one. */
 
 /** What a stored value turned out to be. */
 export interface StoredOpenSet {
@@ -262,8 +310,16 @@ export class SectionSet {
 	 */
 	exclusive = $state(false);
 
+	/* WHAT A RESET LANDS ON. N.115: it was the literal `[]` inside `restore`,
+	   which was true only while the opening state was "nothing open". The
+	   opening state is `FIRST_RUN_STATIONS` now, the caller already hands it
+	   in as `open`, and one file may not hold two opinions about what a fresh
+	   drawer looks like. */
+	readonly #firstRun: readonly string[];
+
 	constructor(options: SectionSetOptions = {}) {
 		this.#open = new Set(options.open ?? []);
+		this.#firstRun = options.open ?? [];
 		this.#storageKey = options.storageKey ?? null;
 		this.#unpersisted = new Set(options.unpersisted ?? []);
 	}
@@ -287,7 +343,14 @@ export class SectionSet {
 	 */
 	toggle(id: string): void {
 		const opening = !this.#open.has(id);
-		const next = opening && this.exclusive ? new Set<string>() : new Set(this.#open);
+		/* N.115: THE SHUTTING IS PER TIER. Opening a band shuts the other open
+		   band and opening a station shuts the other open station; a band does
+		   not shut the stations it contains, because those are inside the door
+		   the singer just opened. See `isBandId`. */
+		const next =
+			opening && this.exclusive
+				? new Set([...this.#open].filter((held) => isBandId(held) !== isBandId(id)))
+				: new Set(this.#open);
 		if (opening) next.add(id);
 		else next.delete(id);
 		this.#open = next;
@@ -350,7 +413,7 @@ export class SectionSet {
 		const stored = readStoredOpenSet(raw);
 		const next =
 			stored.version < OPEN_STATIONS_VERSION
-				? []
+				? migrateOpenStations([...this.#firstRun], onPhone)
 				: migrateOpenStations(stored.open, onPhone);
 		this.#open = new Set(next);
 		if (stored.version < OPEN_STATIONS_VERSION || !sameOrder(stored.open, next)) this.#write();

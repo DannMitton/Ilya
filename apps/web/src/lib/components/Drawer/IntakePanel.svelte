@@ -3,6 +3,9 @@
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
 	import type { TextArrival } from '$lib/one-action';
+	// N.115: one owner for `37 / 94 placed`, which is drawn on both syllable
+	// rows here and on Input's closed state line in `Drawer.svelte`.
+	import { placedLine } from './bandState';
 
 	/*
 	 * IntakePanel.svelte — THE INPUT GROUP'S CONTENTS AND NOTHING ELSE.
@@ -62,6 +65,21 @@
 		isMobile?: boolean;
 		/** The transcription's own count, shown once there has been one. */
 		wordCount: number;
+		/**
+		 * N.115. The poem's own measure, for its receipt. IT CAME FROM HERE and
+		 * went up to `+page.svelte`: Input's closed state line needs the same
+		 * number, and two derivations of one count are two answers waiting to
+		 * disagree. Blank lines are not lines of verse.
+		 */
+		lineCount: number;
+		/**
+		 * N.115, brief §3.2: whether pressing Transcribe and fit would change
+		 * anything. It decides the FILL and nothing else; the button is live
+		 * whenever `canTranscribe` says so, because Dann's ruling of
+		 * 2026-09-07 keeps its explicit act. See `+page.svelte`'s
+		 * `transcribeActs`.
+		 */
+		transcribeActs: boolean;
 		hasResults: boolean;
 		/** The ACCEPTED score, or null. Not a file mid-flight. */
 		score: { fileName: string } | null;
@@ -110,6 +128,8 @@
 		onclear,
 		isMobile = false,
 		wordCount,
+		lineCount,
+		transcribeActs,
 		hasResults,
 		score,
 		onfile,
@@ -150,13 +170,6 @@
 
 	const charCount = $derived(inputText.length);
 	const showWarning = $derived(charCount > 5000);
-
-	/** The poem's own measure, for its receipt. Blank lines are not lines of
-	 *  verse; a poem pasted with a trailing newline must not report one more
-	 *  line than it has. */
-	const lineCount = $derived(
-		inputText.split('\n').filter((l) => l.trim() !== '').length
-	);
 
 	/**
 	 * N.70 (Dann's ruling, 2026-08-16), MOVED HERE WITH THE PICKER IT GOVERNS.
@@ -407,6 +420,40 @@
 			<p class="intake-drop-hint">{t('intake.dropHint', language)}</p>
 		{/if}
 
+		<!-- ── THE EMPTY FIELD'S CAPTION. N.115, RULED BY DANN 2026-09-10
+		     after the walk: the placeholder is "Paste, type, or drop your poem
+		     here." and the line under the field is "A score or a photograph can
+		     go here too, or you can choose a file." with the last three words
+		     as the link and the Choose a file pill gone.
+
+		     THE OPPOSITE GUARD FROM THE DROP HINT, and deliberately: this line
+		     says what else the EMPTY field takes, and `intake.dropHint` says
+		     what a second file does to a field that already holds something.
+		     Only one of the two is ever drawn, in the intake hint's ruled
+		     place (2026-09-09), directly under the textarea.
+
+		     ONE SURFACE TAKES EITHER KIND, which is why Design's second dashed
+		     box with its own pill is not built: two boxes say "poem here,
+		     score there" and that is not true.
+
+		     THE LINK IS A SUBSTRING OF A RULED SENTENCE, so the sentence stays
+		     whole in the table where Dann reads it and this splits it here.
+		     `intake.captionLink` is the phrase in each language; if it is ever
+		     absent from the caption the whole sentence is drawn as text, which
+		     loses the link and never loses the words. -->
+		{#if sourceIsEmpty && !score}
+			{@const caption = t('intake.caption', language)}
+			{@const link = t('intake.captionLink', language)}
+			{@const at = caption.indexOf(link)}
+			<p class="intake-caption">
+				{#if at === -1}
+					{caption}
+				{:else}
+					{caption.slice(0, at)}<button type="button" class="caption-link" onclick={chooseFile}>{link}</button>{caption.slice(at + link.length)}
+				{/if}
+			</p>
+		{/if}
+
 		<!-- ── THE RECEIPTS, one line per kind (the prototype `:362-:374`).
 		     Each carries its own Clear and its own Replace, and neither
 		     handler can reach the other's material: the poem's Clear is
@@ -497,7 +544,7 @@
 						aria-controls="intake-syllables"
 						onclick={() => (syllablesOpen = false)}
 					>
-						<span class="syl-count">{syllablesPlaced}&thinsp;/&thinsp;{syllablesTotal}</span>
+						<span class="syl-count">{placedLine(syllablesPlaced, syllablesTotal, language)}</span>
 						<svg class="syl-chevron" class:expanded={syllablesOpen} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
 					</button>
 				</div>
@@ -510,29 +557,23 @@
 					onclick={() => (syllablesOpen = true)}
 				>
 					<span class="syl-preview">{@render syllableLine?.(true)}</span>
-					<span class="syl-count">{syllablesPlaced}&thinsp;/&thinsp;{syllablesTotal}</span>
+					<span class="syl-count">{placedLine(syllablesPlaced, syllablesTotal, language)}</span>
 					<svg class="syl-chevron" class:expanded={syllablesOpen} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
 				</button>
 			{/if}
 		{/if}
 
-		<!-- ── THE ONE WAY IN THAT IS NOT A DROP. N.108 increment 4, ruled by
-		     Dann 2026-09-03: one Choose a file button, under the field, taking
-		     every kind. It was two, and the second said "Read a score from a
-		     photograph"; a photograph is one of the kinds this one takes, and
-		     `upload.scanTooltip` is marked unused in `i18n.ts` rather than
-		     deleted, on his word.
+		<!-- ── THE CHOOSE A FILE PILL IS STRUCK. N.115, ruled by Dann
+		     2026-09-10: the verb is the link in the field's caption above and
+		     the pill is gone, so the empty drawer has one filled thing on it
+		     and no ghost pill competing for the same act. `intake.choose` is
+		     deleted from `i18n.ts` with it; nothing else read the key.
 
-		     IT STAYS DRAWN IN EVERY STATE, which is a departure from the
-		     prototype (`:200` hides it once material arrives and leaves
-		     Replace to do the picking). A phone cannot drop a file, so hiding
-		     it would strand a singer who has a poem and wants to add a score
-		     with no way to add one. -->
-		<div class="intake-actions">
-			<button type="button" class="action-btn btn-ghost" onclick={chooseFile}>
-				{t('intake.choose', language)}
-			</button>
-		</div>
+		     THE PHONE STILL HAS A WAY IN, which is what the pill was protecting
+		     (a phone cannot drop a file): the caption's link calls the same
+		     `chooseFile()`, and it is drawn in exactly the state a phone singer
+		     with no poem is in. Once there IS material, Replace on each receipt
+		     opens the same picker, which is what it always did. -->
 
 		<!-- THE ONE PICKER. N.70 governs it; see `acceptList`. -->
 		<input
@@ -561,8 +602,16 @@
 	     the row holds one button and the `1fr 2fr` grid that made Transcribe
 	     the wide one has nothing left to divide. -->
 	<div class="intake-transcribe">
+		<!-- N.115: FILLED ONLY WHILE ITS ACT DOES SOMETHING, ruled 2026-09-10
+		     through "at rest, nothing is filled; exactly one thing is next, and
+		     only that pill is filled". The predicate is `transcribeActs` in
+		     `+page.svelte`, which is `handleTranscribe` read back. The button
+		     is LIVE either way: Dann's ruling of 2026-09-07 keeps its explicit
+		     act, and a ghost pill is still a pill a singer can press. -->
 		<button
-			class="action-btn btn-primary"
+			class="action-btn"
+			class:btn-primary={transcribeActs}
+			class:btn-ghost={!transcribeActs}
 			disabled={!canTranscribe}
 			onclick={ontranscribe}
 		>
@@ -860,19 +909,16 @@
 	/* The one way in that is not a drop, N.108 increment 4. The wrap is kept
 	   from when there were two: a French Choose a file may run longer than an
 	   English one, and a row that wraps costs nothing when it does not. */
-	.intake-actions {
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
-	}
+	/* `.intake-actions` IS GONE, N.115. It held one button, Choose a file, and
+	   that pill is struck; the verb is the link in `.intake-caption` now. Its
+	   share of the row-gap rule below goes with it. */
 
-	/* N.114b item 6. THE THREE ROWS THAT TAKE THE FRAME'S GAP, in one rule so
+	/* N.114b item 6. THE TWO ROWS THAT TAKE THE FRAME'S GAP, in one rule so
 	   there is one owner and no literal repeated. `.syl-open` is the OPEN box
 	   only: the collapsed row is `.syl-box.syl-row` and sits where it always
 	   has, directly under the score receipt, which this ship does not move. */
 	.syl-head,
-	.syl-open,
-	.intake-actions {
+	.syl-open {
 		margin-top: var(--intake-row-gap);
 	}
 
@@ -882,6 +928,37 @@
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
 		color: var(--ink-tertiary);
+	}
+
+	/* THE EMPTY FIELD'S CAPTION, N.115. The drop hint's recipe value for
+	   value, because the two occupy the same place under the textarea and only
+	   one is ever drawn: a caption that changed size when the field filled
+	   would make the frame jump. */
+	.intake-caption {
+		margin: 0;
+		padding-top: 8px;
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		color: var(--ink-tertiary);
+	}
+
+	/* THE VERB, INSIDE THE SENTENCE. A link rather than a pill, ruled
+	   2026-09-10, so it takes a link's dress: the caption's own type, one step
+	   darker, underlined at the drawing's 2px offset. It is a `<button>`
+	   because it opens a picker rather than going anywhere. */
+	.caption-link {
+		padding: 0;
+		font: inherit;
+		color: var(--ink-secondary);
+		background: none;
+		border: none;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		cursor: pointer;
+	}
+
+	.caption-link:hover {
+		color: var(--ink-primary);
 	}
 
 	.hidden-input {

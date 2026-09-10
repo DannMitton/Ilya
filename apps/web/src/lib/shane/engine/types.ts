@@ -8,8 +8,24 @@
 
 import type { Pitch } from '@ilya/score-parser';
 
-/** The ten Russian sung vowels (Mitton 2020, Fig 4.2). */
-export type Vowel = 'i' | 'e' | 'ɪ' | 'ɨ' | 'ɛ' | 'a' | 'ɑ' | 'ʌ' | 'o' | 'u';
+/**
+ * The ten Russian sung vowels (Mitton 2020, Fig 4.2).
+ *
+ * N.115 MADE THE LIST A VALUE AND DERIVED THE TYPE FROM IT. Score markup's
+ * closed state line reads "Voice: Dann · 10 of 10", and the denominator is
+ * "how many vowels there are to sample". That number existed only inside
+ * `CalibrationWizard.svelte`, as `ALL_VOWELS.length`; reading it from there
+ * would make the drawer's state line depend on the ritual's own queue, which
+ * is the wizard's to reorder. The ten belong to the domain, so they live where
+ * the type is declared.
+ *
+ * THE WIZARD IS NOT REWIRED. Its `DEFAULT_VOWELS` and `CHALLENGING_VOWELS`
+ * keep their own order, which drives a rendered list and a queue; this array
+ * is the type's order and is only ever counted, never walked for display.
+ */
+export const VOWELS = ['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u'] as const;
+
+export type Vowel = (typeof VOWELS)[number];
 
 /**
  * Voice type is a routing key to Bozeman value-sets and type-aware logic, not a

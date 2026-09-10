@@ -11,11 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`8278429`**, "N.114b: Start placement over as a pill; the pills'
-padding is the band inset", shipped 2026-09-10, Vercel
-`dpl_6aGW9t94Q6aegjDW2vn1Cz5harpd` READY on the branch alias (the previous
-floors, `00149c3` of 2026-09-07 and earlier, are in `../sessions/LOG.md`).
-Memory commits since, to `7902176`, carry no code. A floor cannot go stale,
+before **`92b7d5d`**, "N.114b: items 6 to 9, air, binder order, collapse row
+gone, Start over as a ghost pill", shipped 2026-09-10 04:24, Vercel
+`dpl_E42mxc3bGuhkZAUNTMk6RmhrTRhE` READY on the branch alias, walked by Dann
+(the previous floors, `8278429` and earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
 If the tree is ahead of it, that is expected and tells you only that work has
 landed since.
@@ -60,24 +59,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > N.118.** Then N.110 (set aside, briefed), N.115, N.116, the release
 > order N.85 to N.88, N.84 (Guide and Learn), N.83.
 >
-> **THE ONE THING, at the close of 2026-09-10: THE DRAWER AS A PATH, step 2
-> of 4.** Design consulted and returned; ruled on; grammar and path in
-> `PRODUCT.md` (`7902176`). Next in order: (2) drawing r2 of the front side
-> from Design's frames A, B, C with Dann's rulings applied (desk, Fable);
-> (3) Code briefs: N.114b items 6 to 9 (ready, independent), then the path
-> pass, then N.119, N.120 (lyric first), N.121, N.122; (4) the phone landing
-> against portrait C, its own drawing. Fable was at 62% on 2026-09-10;
-> farm mechanical work to Sonnet. **Closed this session and moved to
+> **THE ONE THING, 2026-09-10 05:00: THE DRAWER AS A PATH, step 3 of 4, THE
+> PATH PASS IS IN CODE.** Brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
+> built on Sonnet's read-only anchor memo
+> `docs/sessions/memo-anchors-path-pass_r1_2026-09-10.md` (86 lines; its
+> finding: no front-side band has an open or closed state today, only
+> sub-stations toggle, `sections.svelte.ts:54`). Code returns
+> `memo-path-pass_r1_…`; NOT walked until Dann walks it on the alias. Two
+> DESK DEFAULTS in the brief for Dann to wave off: Input closes like its
+> siblings; the bands join the station store. **Step 2 DONE:** drawing r2
+> `docs/sessions/drawing-drawer-front-side_r2_2026-09-10.html`, Plates A to
+> D plus the departures table, rendered and checked, Plate B corrected to
+> the tree after the walk; nothing in it is open. Then: N.119, N.120
+> (drawing first), N.121 remainder, N.122; (4) the phone landing against
+> portrait C, its own drawing. Fable was at 62% on 2026-09-10 early; farm
+> mechanical work to Sonnet. **Closed this session and moved to
 > `../sessions/LOG.md` block 9:** N.113a and N.113b (walks and the item 3
 > account), N.114 (done, walked), N.114a (done, walked), and N.114b items 1
 > to 5 (done, walked). Details there, verbatim.
 >
-> **CODE STARTED 2026-09-10 04:10 on N.114b items 6 to 9** (air above the
-> open syllable box; Export and import order; the calibration collapse row
-> removed; Start over as a ghost pill), from
-> `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`. Its
-> memo lands in `docs/sessions/` as `memo-n114b-…_r3_…`; it is NOT walked
-> until Dann walks it on the alias. The next session picks that up first.
+> **N.114b CLOSED WHOLE, items 1 to 9, 2026-09-10 04:36, walked by Dann on
+> the alias** (`92b7d5d`, memo r3). Moved to `../sessions/LOG.md` block 9.
+> Still owed from it: the Undo clause for Start placement over (N.121 d).
 >
 
 > **N.118, NUMBERED BY DANN 2026-09-09: punctuation travels in the slot.**
@@ -175,13 +178,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > WITHDRAWN. Also under N.121: the PDF question asks only when neither tell
 > fires (Cyrillic text layer = poem; staves = score), Code to wire.
 >
-> **N.121, the Input band's words and the way in.** Four things, all copy
-> or cue, French owed on each: (a) the drop cue and Choose a file are one
-> problem; desk recommends one line under the field, "Drop a score or a
-> photograph here, or choose a file." with the verb as the link and the pill
-> gone; alternative, the pill moves beside the score receipt. UNRULED. (b)
-> the collapsed row's "37 / 94" wants a word: "37 / 94 placed", « 37 / 94
-> placées », both coined, or the count leaves the row. UNRULED. (c)
+> **N.121, the Input band's words and the way in.** (a) RULED 2026-09-10
+> 04:50: placeholder "Paste, type, or drop your poem here." and, under the
+> field while empty, "A score or a photograph can go here too, or you can
+> choose a file." with the last three words as the link; the pill goes;
+> "poem" kept over "text" because Text is the band. French shown and
+> standing (table in the path-pass brief §6). In Code with the path pass.
+> (b) RULED 2026-09-10: "37 / 94 placed", « 37 / 94 placées ». In Code. (c)
 > "Transcribe and fit": since N.112 text transcribes live, so what the
 > button still does is NOT ESTABLISHED; Code states it before any rename;
 > if it only fits, "Fit to score" / « Ajuster à la partition », coined.

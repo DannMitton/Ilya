@@ -3651,3 +3651,20 @@ N.113a and N.113b walks and the item 3 closing account; N.114 and N.114a done an
 > Undo and Redo, and N.114's typed field, which rewrites that word in the
 > poem and marks it in the field; N.112 re-seats. Drawing before Code.
 >
+
+### N.114b closed whole, 2026-09-10 04:36. Appended to block 9 by the desk
+
+Items 1 to 5 walked by Dann on the alias earlier the same night (`ec4fbe9`,
+`7665afa`, `8278429`). Items 6 to 9 built by Code from
+`brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`, memo r3, shipped
+`92b7d5d` (Vercel `dpl_E42mxc3bGuhkZAUNTMk6RmhrTRhE`), walked by Dann on the
+alias 2026-09-10 04:31 to 04:36: item 7 Export all songs, Export this song,
+Import a song, left to right; item 6 the open syllable box breathes above and
+below, his words; items 8 and 9 the takeover opens with no collapse row and a
+column of Finish (filled), Add voice characteristics, Start over. Code also
+added a coarse-pointer `min-height: 44px` on `.wizard-primary` and
+`.wizard-secondary`, which measured 43.5 px, twinned on `StationHeader`'s
+disclosure. Gates held at baseline. Left in the browser pane's library by
+Code: a second song `Untitled, 2026-09-10`, made to reach the third binder
+button, which is gated on `songs.length > 1`. Owed: the Undo clause for
+Start placement over (N.121 d).

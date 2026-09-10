@@ -60,6 +60,18 @@ const strings: Record<string, Record<Language, string>> = {
 	//    group between Piece and Text, "named INPUT, painted sage like Text
 	//    (hue names place: it is text)". Same slot treatment as the six above.
 	'group.input':                 { en: 'Input',                        fr: 'Input' },
+	//    ── A BAND'S STATE LINE, N.115, ruled with its French 2026-09-10.
+	//    A closed band shows one line under it, its state; open, the content
+	//    itself is the state. Piece's line, Input's line and Score markup's
+	//    line are built from strings that already existed; these three are what
+	//    had none.
+	'text.state.default':          { en: 'Grayson defaults',             fr: 'Grayson par défaut' },
+	'text.state.changed':          { en: '%s of %s changed',             fr: '%s sur %s modifiés' },
+	//    Voice's own count on Score markup's state line. The NAME half of that
+	//    line is `calib.anchor.named`, which already reads "Voice: {voice}" in
+	//    ratified French; a second key for the same words would be two strings
+	//    to keep agreeing.
+	'voice.state.count':           { en: '%s of %s',                     fr: '%s sur %s' },
 	//    The binder station. Its three buttons keep their own ratified
 	//    `binder.*` strings; this names the station they sit in, which had no
 	//    name because it was a bare row inside Source.
@@ -240,6 +252,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.restore':             { en: 'Undo my corrections to this note', fr: 'Annuler mes corrections sur cette note' },
 	'correct.count':               { en: 'You have corrected %s notes.',  fr: 'Vous avez corrigé %s notes.' },
 	'correct.countOne':            { en: 'You have corrected one note.',  fr: 'Vous avez corrigé une note.' },
+	// N.115, RULED BY DANN 2026-09-10 with its French. SCORE MARKUP'S CLOSED
+	// STATE LINE ONLY. The two keys above are a SENTENCE and they keep their
+	// one render site, the notice inside the Corrections station body; a
+	// sentence on a state line ate the row before the voice reached it, walked
+	// at 390 px. These two are the phrase the plates draw
+	// (`drawing-drawer-front-side_r2_2026-09-10.html`, Plates B and C).
+	'correct.state':               { en: '%s notes corrected',            fr: '%s notes corrigées' },
+	'correct.stateOne':            { en: '1 note corrected',              fr: '1 note corrigée' },
 	// ── N.111, the clitic seat ───────────────────────────────
 	//    A vowelless clitic the file seated alone on a sung pitch, and what
 	//    Ilya did about it.
@@ -567,16 +587,41 @@ const strings: Record<string, Record<Language, string>> = {
 	//    at `:359`, where it is marked a placeholder string. It says the two
 	//    things the one field has to say: what to put in it, and that a file
 	//    dropped on it is read as whatever it is.
-	'intake.placeholder': { en: 'Paste or type the poem here. A score or a photograph dropped here is read as what it is.', fr: 'Paste or type the poem here. A score or a photograph dropped here is read as what it is.' },
+	//
+	//    N.115, RULED BY DANN 2026-09-10 after the walk, with its French: the
+	//    placeholder is the short sentence and the second half of Design's
+	//    sentence becomes the field's own caption, `intake.caption`, one line
+	//    under it. "Poem" stays over "text", because Text is the band under
+	//    Input.
+	'intake.placeholder': { en: 'Paste, type, or drop your poem here.', fr: 'Collez, saisissez ou déposez votre poème ici.' },
+	// THE FIELD'S CAPTION, N.115, ruled with its French 2026-09-10. It is drawn
+	// only while the field is empty and no score is in, which is the opposite
+	// guard from `intake.dropHint` and deliberately so: this one says what else
+	// the empty field takes, and that one says what a second file does to a
+	// field that already holds something.
+	//
+	// `intake.captionLink` IS THE LAST THREE WORDS OF THE SENTENCE ABOVE, and
+	// it is a second key rather than a `%s` because the link is a substring of
+	// a ruled sentence in both languages: the renderer splits the caption on
+	// this string, so the ruled sentence stays whole in the table where Dann
+	// reads it. Change one and change the other.
+	'intake.caption':     { en: 'A score or a photograph can go here too, or you can choose a file.', fr: 'Une partition ou une photographie peut aussi aller ici, ou vous pouvez choisir un fichier.' },
+	'intake.captionLink': { en: 'choose a file', fr: 'choisir un fichier' },
 	// The receipt lines. %s is the count in each.
 	'intake.lines':       { en: '%s lines',   fr: '%s lines' },
 	'intake.words':       { en: '%s words',   fr: '%s words' },
+	// N.115, ruled with its French 2026-09-10. The syllable line's own numeral
+	// pair, given the word it was missing, in both the open row and the closed
+	// one. The first %s is what is placed and the second is the whole queue.
+	'intake.placed':      { en: '%s / %s placed', fr: '%s / %s placées' },
 	// One Clear for both receipts, because the tag beside it already says which
 	// kind is being cleared. `input.clear` said "Clear text", which named the
 	// kind a second time and could not name the score at all.
 	'intake.clear':       { en: 'Clear',      fr: 'Clear' },
 	'intake.replace':     { en: 'Replace',    fr: 'Replace' },
-	'intake.choose':      { en: 'Choose a file', fr: 'Choose a file' },
+	// `intake.choose` IS DELETED, N.115. The Choose a file pill under the field
+	// is struck (ruled 2026-09-10) and the verb is the link inside
+	// `intake.caption` now; nothing else in the tree read the key.
 	'intake.dropHint':    { en: 'Drop the other kind here, or a new file of the same kind to replace it.', fr: 'Drop the other kind here, or a new file of the same kind to replace it.' },
 	// THE PDF QUESTION, build brief §3: "A PDF asks once, in place, which it
 	// is. Do not guess." %s is the file's name, so a singer who dropped two

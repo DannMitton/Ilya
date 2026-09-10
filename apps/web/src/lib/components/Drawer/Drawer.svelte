@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import { SectionSet } from './sections.svelte';
+	import { SectionSet, BAND_IDS } from './sections.svelte';
 	import { readSwipe } from './gesture';
 	import type { Destination, TabId } from '$lib/destinations';
 
@@ -84,23 +84,45 @@
 		textGroup?: Snippet;
 		scoreGroup?: Snippet;
 		/**
-		 * METADATA'S BODY, opened from the affordance on the Piece band.
+		 * METADATA'S BODY, drawn whenever Piece is open.
 		 *
-		 * Metadata is the one station with no row on the map. Design's
-		 * prototype took it off the map at 1366 x 768 only, where the opening
-		 * state would not otherwise fit; THE BUILD BRIEF OVERRIDES THAT and
-		 * takes it off at every size, phone included, on the desk's ruling
-		 * that two desktops must not show two maps. So the affordance is
-		 * unconditional and the station row does not exist.
+		 * N.115, RULED BY DANN 2026-09-10: "the METADATA label on the Piece
+		 * band is struck; the metadata body shows whenever Piece is open, and
+		 * collapsing Piece is the collapse." The affordance and its
+		 * `metadataOpen` prop are gone with the label; the band's own chevron
+		 * is the only door, which is what makes the four bands siblings.
 		 *
-		 * The band is drawer chrome, so this file draws the affordance; the
-		 * body is `MetadataFields`, unchanged, rendered under the band.
+		 * IT IS STILL A SNIPPET AND STILL FIRST INSIDE PIECE. The body is
+		 * `MetadataFields`, unchanged, and Repertoire and Export and import
+		 * follow it in `pieceGroup` as they always have.
 		 */
 		metadataBody?: Snippet;
-		/** Whether Metadata's body is showing. Read by the band affordance. */
-		metadataOpen?: boolean;
-		/** The singer's press on the band affordance. */
-		onmetadatatoggle?: () => void;
+		/**
+		 * THE DRAWER'S ONE OPEN SET, N.115. The four bands are members of it,
+		 * ids `BAND_IDS`, so one mechanism persists both the bands and the
+		 * stations inside them and this file keeps no second opinion about
+		 * what "open" means. `+page.svelte` owns the instance, restores it and
+		 * sets `exclusive`; this file reads it and toggles it.
+		 */
+		sections: SectionSet;
+		/**
+		 * ── THE FOUR STATE LINES (N.115) ──────────────────────────────────
+		 *
+		 * What a band says when it is CLOSED, already built and already
+		 * localized. Strings rather than snippets, and that is the empty case
+		 * deciding it: a band with nothing to say must draw no element at all,
+		 * and an empty string is a thing this file can test where an empty
+		 * snippet is not. The builders are `bandState.ts`, with their own
+		 * tests; the values come from `+page.svelte`, which holds every count
+		 * they read.
+		 */
+		pieceState?: string;
+		/** Whether Piece's title came from a score header. Draws the tag. */
+		pieceFromScore?: boolean;
+		inputState?: string;
+		/** Apparatus rather than the singer's own content, so secondary ink. */
+		textState?: string;
+		scoreState?: string;
 		/**
 		 * THE CALIBRATION TAKEOVER (N.73 S3 ship one). E.27's takeover:
 		 * "replaces the entire drawer, shows a single back affordance at the
@@ -137,7 +159,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, textGroup, scoreGroup, metadataBody, metadataOpen = false, onmetadatatoggle, voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, textGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', textState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
@@ -433,32 +455,66 @@
 				     shanePanel carries its own INCLUDE_SHANE gate. Learn and Guide
 				     are untouched. -->
 				{#if isStudio}
+					<!-- ═══ THE PATH. N.115, RULED BY DANN 2026-09-10: "The drawer
+					     is a path read top to bottom: Piece, Input, Text, Score
+					     markup. Each band opens and closes."
+
+					     THE BAND IS THE TOGGLE, all 40 px of it, with a bare
+					     chevron at its right end (ruled 2026-08-19), up when open
+					     and down when closed, on every band alike. That is the
+					     station row's own glyph and its own two rotations, so one
+					     chevron means one thing at both tiers of the drawer.
+
+					     ONE RECIPE, FOUR CALLS. `bandHead` below is the band, and
+					     it is a snippet rather than four copies for the reason
+					     `StationHeader.svelte` exists: consistency kept by hand
+					     drifts, and Dann catches the drift.
+
+					     A CLOSED BAND SHOWS ITS STATE LINE AND AN OPEN ONE SHOWS
+					     ITS CONTENT, which is the ruling in full: "an open band
+					     shows its content, and the content is the state." An empty
+					     state line draws no element, so a band with nothing to say
+					     costs no height. -->
+					{#snippet bandHead(id: string, label: string, state: string, apparatus: boolean, fromScore: boolean)}
+						{@const open = sections.has(id)}
+						<h2 class="group-band">
+							<button
+								type="button"
+								class="band-toggle"
+								aria-expanded={open}
+								aria-controls={open ? `band-${id}` : undefined}
+								onclick={() => sections.toggle(id)}
+							>
+								<span class="band-name">{label}</span>
+								<svg class="band-chevron" class:expanded={open} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
+							</button>
+						</h2>
+						{#if !open && state}
+							<p class="band-state" class:apparatus>
+								<span class="band-state-text">{state}</span>
+								{#if fromScore}<span class="band-state-tag">{t('meta.fromScore', language)}</span>{/if}
+							</p>
+						{/if}
+					{/snippet}
 					<!-- ═══ PIECE. N.108, Dann's ruling of 2026-09-02: the first
 					     group is named Piece, "not every piece will be a song:
 					     some will be arias." It borrows Guide's cobalt on
 					     purpose, which overrides "hue names place" for Guide,
-					     also on purpose and also his ruling. -->
+					     also on purpose and also his ruling.
+
+					     THE METADATA LABEL IS STRUCK, N.115, ruled 2026-09-10.
+					     The band carried the word METADATA at its right end where
+					     every other band carries a bare chevron; the fields show
+					     whenever Piece is open now, and collapsing Piece is the
+					     collapse. `.band-link` and `metadataOpen` went with it. -->
 					<section class="group group-piece">
-						<h2 class="group-band">
-							<span class="band-name">{t('group.piece', language)}</span>
-							<!-- METADATA'S AFFORDANCE, at every size. See the
-							     `metadataBody` prop for why it is unconditional
-							     and what it overrides. It costs no height,
-							     because the band is already there. -->
-							{#if metadataBody}
-								<button
-									type="button"
-									class="band-link"
-									aria-expanded={metadataOpen}
-									aria-controls={metadataOpen ? 'station-metadata' : undefined}
-									onclick={() => onmetadatatoggle?.()}
-								>{t('meta.heading', language)}</button>
-							{/if}
-						</h2>
-						{#if metadataOpen && metadataBody}
-							<div class="band-body" id="station-metadata">{@render metadataBody()}</div>
+						{@render bandHead(BAND_IDS.piece, t('group.piece', language), pieceState, false, pieceFromScore)}
+						{#if sections.has(BAND_IDS.piece)}
+							<div class="band-body" id="band-piece">
+								{#if metadataBody}<div class="band-inset">{@render metadataBody()}</div>{/if}
+								{@render pieceGroup?.()}
+							</div>
 						{/if}
-						{@render pieceGroup?.()}
 					</section>
 					<!-- ═══ INPUT. N.108-5, ruled by Dann 2026-09-07: the intake
 					     leaves Piece and takes a band of its own between Piece
@@ -467,25 +523,33 @@
 					     neighbours; the only thing that distinguishes it is
 					     which token paints the band.
 
-					     IT HAS NO STATION ROW INSIDE IT, which is the
-					     2026-09-02 ruling untouched: the intake is never closed
-					     and has no id in the open set. So this band is the
-					     region's name and the frame under it is the region,
-					     with nothing between them to open or shut. -->
+					     IT CLOSES NOW, N.115, and that is a DESK DEFAULT the
+					     brief §3.2 names as one: no ruling says Input alone stays
+					     open, siblings behave identically (slate rule 11), and
+					     Plate C draws it closed. The 2026-09-02 ruling it amends
+					     was about the intake having no STATION row inside it, and
+					     it still has none. Reversible in one line: give Input no
+					     chevron and no state line. -->
 					<section class="group group-input">
-						<h2 class="group-band"><span class="band-name">{t('group.input', language)}</span></h2>
-						{@render inputGroup?.()}
+						{@render bandHead(BAND_IDS.input, t('group.input', language), inputState, false, false)}
+						{#if sections.has(BAND_IDS.input)}
+							<div class="band-body" id="band-input">{@render inputGroup?.()}</div>
+						{/if}
 					</section>
 					<!-- ═══ TEXT. Sage, one step down. Notation and Analysis. -->
 					<section class="group group-text">
-						<h2 class="group-band"><span class="band-name">{t('group.text', language)}</span></h2>
-						{@render textGroup?.()}
+						{@render bandHead(BAND_IDS.text, t('group.text', language), textState, true, false)}
+						{#if sections.has(BAND_IDS.text)}
+							<div class="band-body" id="band-text">{@render textGroup?.()}</div>
+						{/if}
 					</section>
-					<!-- ═══ SCORE MARKUP. Lavender, one step down. Underlay,
-					     Corrections, Voice. -->
+					<!-- ═══ SCORE MARKUP. Lavender, one step down. Corrections and
+					     Voice. -->
 					<section class="group group-score">
-						<h2 class="group-band"><span class="band-name">{t('group.scoreMarkup', language)}</span></h2>
-						{@render scoreGroup?.()}
+						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false, false)}
+						{#if sections.has(BAND_IDS.scoreMarkup)}
+							<div class="band-body" id="band-scoreMarkup">{@render scoreGroup?.()}</div>
+						{/if}
 					</section>
 				{:else if destination === 'learn'}
 					<nav class="learn-toc" aria-label={language === 'fr' ? 'Table des matières' : 'Table of contents'}>
@@ -983,17 +1047,15 @@
 	   THE LABEL RECIPE IS `StationHeader.svelte`'s, reversed: 0.7rem, 600,
 	   0.12em, uppercase. The build brief rules it, and that file's header
 	   records that the recipe moved up here from the station row. */
+	/* N.115: THE PADDING MOVED ONTO `.band-toggle`, and its value is unchanged.
+	   The band is a button now, so the 18 px belongs to the thing a singer
+	   presses; leaving it here would have inset the button and put its focus
+	   ring 18 px inside the band's own edge. */
 	.group-band {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
+		align-items: stretch;
 		height: 40px;
 		margin: 0;
-		/* N.114b item 5: `--band-inset` is this 18px, unchanged in value.
-		   `HeaderBar` spends it as the Undo and Redo pills' horizontal padding
-		   so their words end on the line this label ends on. */
-		padding: 0 var(--band-inset);
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
@@ -1039,38 +1101,115 @@
 		outline-color: var(--deeper-lavender);
 	}
 
-	/* METADATA'S AFFORDANCE. The same recipe as the band it sits on, held one
-	   step back by opacity rather than by a second colour, so the band still
-	   reads as the group's name with a way in beside it rather than as two
-	   labels. Its target is the band's own 40px height. */
-	.band-link {
-		display: inline-flex;
+	/* THE BAND IS THE TOGGLE, N.115, ruled 2026-09-10. `.band-link`, METADATA's
+	   affordance, is struck with the word it carried; what replaces it is not
+	   a control BESIDE the band's name but the band itself, all 40 px of it,
+	   with the name at one end and a bare chevron at the other.
+
+	   THE BUTTON INHERITS EVERYTHING AND ADDS NOTHING. It takes the band's own
+	   type, colour and 40 px height and spends the band's padding, so the
+	   label ends exactly where it ended when the band was an `<h2>` with a
+	   span in it. `.group-band`'s own `padding` moves onto this element for
+	   that reason: a button inset inside a padded heading would have put the
+	   focus ring 18 px in from the band's edge. */
+	.band-toggle {
+		display: flex;
 		align-items: center;
-		flex: none;
-		min-height: 40px;
-		padding: 0;
+		justify-content: space-between;
+		gap: 12px;
+		width: 100%;
+		height: 100%;
+		padding: 0 var(--band-inset);
 		font: inherit;
 		letter-spacing: inherit;
 		text-transform: inherit;
-		color: #fff;
+		color: inherit;
 		background: none;
 		border: none;
-		opacity: 0.85;
 		cursor: pointer;
 	}
 
-	.band-link:hover {
-		opacity: 1;
-	}
-
-	.band-link:focus-visible {
+	.band-toggle:focus-visible {
 		outline: 2px solid #fff;
 		outline-offset: -2px;
 	}
 
-	/* Metadata's body sits directly under the band, where its station row
-	   would have been, and takes the same inset every station takes. */
+	/* THE STATION ROW'S OWN GLYPH AND ITS OWN TWO ROTATIONS
+	   (`StationHeader.svelte`), so one chevron means one thing at both tiers.
+	   Down when closed, up when open, on every band alike. It is BARE, ruled
+	   2026-08-19, and it is white at the band's own opacity rather than a
+	   second colour. */
+	.band-chevron {
+		flex: none;
+		opacity: 0.85;
+		transform: rotate(90deg);
+		transition: transform 150ms ease;
+	}
+
+	.band-chevron.expanded {
+		transform: rotate(-90deg);
+	}
+
+	/* ── A CLOSED BAND'S STATE LINE ───────────────────────────
+	   N.115, ruled 2026-09-10: "A closed band shows one line under it, its
+	   state." ONE LINE, and the rules say so rather than hoping: `nowrap` and
+	   an ellipsis, because a state line that wrapped would make a shut band
+	   taller than an open one is at its shortest.
+
+	   FLUSH LEFT ON THE INSET, nothing centred, which is the drawer-wide
+	   ruling of 2026-09-10. The air above it is 0.35rem, the fields' own gap
+	   and N.114b item 2's measure, so a state line sits where a body sits.
+
+	   TABULAR NUMERALS, so `8 lines · 37 words` and `94 / 94 placed` do not
+	   jitter as the counts climb. 14 px is the drawing's, PRIMARY ink for the
+	   singer's own content and SECONDARY for apparatus, which today is Text's
+	   line alone. */
+	.band-state {
+		display: flex;
+		align-items: baseline;
+		gap: 10px;
+		margin: 0.35rem 0 0;
+		padding: 0 var(--band-inset) 0.35rem;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-variant-numeric: tabular-nums;
+		color: var(--ink-primary);
+	}
+
+	.band-state.apparatus {
+		color: var(--ink-secondary);
+	}
+
+	.band-state-text {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	/* `from score`, the tag `MetadataFields` draws on a field the score header
+	   filled, at the right end of Piece's state line. Its recipe is that
+	   component's `.meta-from-score`, repeated here because Svelte scopes a
+	   rule to the file that writes the markup; the tree says so in four other
+	   headers and this is the fifth. */
+	.band-state-tag {
+		flex: none;
+		font-size: 12px;
+		font-style: italic;
+		color: var(--ink-tertiary);
+		white-space: nowrap;
+	}
+
+	/* A band's contents. IT CARRIES NO INSET, because the stations inside it
+	   carry their own (`.group :global(.station)`, 18 px) and a wrapper with a
+	   margin would inset them twice. `.band-inset` is for the one child that
+	   is not a station: Metadata's body, which sat directly under the band and
+	   took the same 18 px every station takes. */
 	.band-body {
+		min-width: 0;
+	}
+
+	.band-inset {
 		margin: 0 18px;
 	}
 
@@ -1273,12 +1412,13 @@
 	   build. The string is not touched, which is what keeps the French out
 	   of this increment.
 
-	   THE TARGET IS THE BAND'S OWN 40 px, and that is `.band-link`'s
-	   geometry, not a new exemption: increment 1 shipped Metadata's affordance
-	   at 40 px in a 40 px band and Dann walked it. The `@media (pointer:
-	   coarse)` block that raised this button to 44 px is gone with the row it
-	   sat in, because 44 px inside a 40 px band is a target taller than the
-	   thing it is in. Recorded in the memo as the desk's. */
+	   THE TARGET IS THE BAND'S OWN 40 px, not a new exemption: increment 1
+	   shipped Metadata's affordance at 40 px in a 40 px band and Dann walked
+	   it, and N.115's `.band-toggle` takes the same 40 px for the same reason.
+	   The `@media (pointer: coarse)` block that raised this button to 44 px is
+	   gone with the row it sat in, because 44 px inside a 40 px band is a
+	   target taller than the thing it is in. Recorded in the memo as the
+	   desk's. */
 	.takeover-back {
 		display: inline-flex;
 		align-items: center;

@@ -96,11 +96,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		FIRST_RUN_STATIONS,
 		OPEN_STATIONS_KEY,
 		STATION_IDS,
+		BAND_IDS,
 		UNPERSISTED_STATIONS,
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
 	import { hasAnyReadings } from '$lib/shane/profileStore';
+	// N.115: the ten sung vowels as a value, so Score markup's state line can
+	// count the denominator of "10 of 10" without reading the wizard's queue.
+	import { VOWELS } from '$lib/shane/engine/types';
+	// N.115: what a closed band says, pure and tested. See `bandState.ts`.
+	import {
+		pieceStateLine,
+		inputStateLine,
+		textStateLine,
+		scoreStateLine,
+	} from '$lib/components/Drawer/bandState';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
@@ -2033,6 +2044,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const canTranscribe = $derived(
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
+
 	const hasResults = $derived(lines.length > 0);
 	/**
 	 * N.73 S2. ONE Print button, in the Transcription drawer's button row,
@@ -2072,6 +2084,68 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	const wordCount = $derived(
 		lines.reduce((sum, l) => sum + l.words.length, 0)
+	);
+
+	/**
+	 * ── THE FOUR STATE LINES (N.115, the path pass) ──────────────────────
+	 *
+	 * RULED BY DANN 2026-09-10: "A closed band shows one line under it, its
+	 * state; an open band shows its content, and the content is the state."
+	 * The builders are `bandState.ts`, pure and tested; what lives here is the
+	 * READING, because every count they take is already here.
+	 *
+	 * THE POEM'S OWN MEASURE CAME UP FROM `IntakePanel`. It was that
+	 * component's `lineCount`, and Input's state line needs the same number,
+	 * so it is derived once and passed down rather than derived twice. Blank
+	 * lines are not lines of verse: a poem pasted with a trailing newline must
+	 * not report one more line than it has.
+	 */
+	const poemLineCount = $derived(
+		doc.inputText.split('\n').filter((l) => l.trim() !== '').length
+	);
+
+	const pieceStateText = $derived(pieceStateLine(doc.metadata.title, doc.metadata.composer));
+
+	const inputStateText = $derived(
+		inputStateLine(
+			poemLineCount,
+			hasResults ? wordCount : 0,
+			placedSlotCount,
+			slotQueue.length,
+			ingestedScore !== null,
+			language,
+		)
+	);
+
+	const textStateText = $derived(
+		textStateLine(
+			{
+				reducedVowel: notationPrefs.reducedVowel,
+				geminate: notationPrefs.geminate,
+				shcha: notationPrefs.shcha,
+				palatalNasal: notationPrefs.palatalNasal,
+				reconstitution: notationPrefs.reconstitution,
+				showStressDiacritics,
+				openSyllabification: doc.openSyllabification,
+			},
+			language,
+		)
+	);
+
+	/* SCORE MARKUP SAYS NOTHING BEHIND THE WALL. Both halves of its line, the
+	   corrected notes and the voice, are score-capability state, so a
+	   wall-closed build shows the band and nothing under it, which is the same
+	   answer an empty song gets. */
+	const scoreStateText = $derived(
+		INCLUDE_SHANE
+			? scoreStateLine(
+					correctedCount,
+					shaneVoiceName,
+					Object.keys(shaneFormants).length,
+					VOWELS.length,
+					language,
+				)
+			: ''
 	);
 	// Apply open syllabification as a display-time transform (no pipeline re-run).
 	// Per-word syllable overrides take precedence when present.
@@ -3388,6 +3462,31 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let uploaderEl = $state<ScoreUploader | null>(null);
 
 	/**
+	 * WHETHER TRANSCRIBE AND FIT'S ACT DOES ANYTHING. N.115, brief §3.2:
+	 * "Transcribe and fit is filled only while its act does something."
+	 *
+	 * THE PREDICATE IS `handleTranscribe` READ BACK. That function does two
+	 * things and no more: it runs the pipeline over `doc.inputText`, and it
+	 * accepts a score that is standing at Continue. So it does something when
+	 * the field holds text the current `lines` were not built from, or when
+	 * the uploader has a score waiting; `transcribedText` is the one owner of
+	 * the first question and `hasWaitingScore` of the second.
+	 *
+	 * IT IS NOT `canTranscribe`. That guard says whether the button may be
+	 * pressed at all, and a dictionary still loading disables it; this says
+	 * whether pressing it would change anything, which is what a fill means
+	 * under "at rest, nothing is filled; exactly one thing is next".
+	 *
+	 * THE BUTTON'S ACT IS UNTOUCHED. Dann's ruling of 2026-09-07 stands: "the
+	 * button keeps its explicit act", so a press with nothing to do still runs
+	 * the pipeline. Only the FILL is conditional, and a ghost pill is still a
+	 * pill a singer can press.
+	 */
+	const transcribeActs = $derived(
+		canTranscribe && (doc.inputText !== transcribedText || uploaderEl?.hasWaitingScore() === true)
+	);
+
+	/**
 	 * Keep the singer's own file, byte for byte.
 	 *
 	 * Two hashes, doing two different jobs (design §2.3, §2.4): `contentHash`
@@ -3951,8 +4050,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{activeHeadingId}
 		takeoverActive={calibrating}
 		onexittakeover={exitCalibration}
-		metadataOpen={sections.has(STATION_IDS.metadata)}
-		onmetadatatoggle={() => sections.toggle(STATION_IDS.metadata)}
+		{sections}
+		pieceState={pieceStateText}
+		pieceFromScore={doc.fromScoreFields.has('title')}
+		inputState={inputStateText}
+		textState={textStateText}
+		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
@@ -4053,6 +4156,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					ontranscribe={handleTranscribe}
 					onclear={handleClear}
 					{wordCount}
+					lineCount={poemLineCount}
+					{transcribeActs}
 					{hasResults}
 					isMobile={isPhone}
 					score={ingestedScore ? { fileName: ingestedScore.fileName } : null}

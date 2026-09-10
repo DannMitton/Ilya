@@ -36,17 +36,43 @@ import {
 	migrateOpenStations,
 	parseOpenSections,
 	readStoredOpenSet,
+	isBandId,
+	BAND_IDS,
+	STATION_IDS,
 	FIRST_RUN_STATIONS,
 	OPEN_STATIONS_VERSION,
 } from './sections.svelte';
 
 describe('N.108 the open set migrates once', () => {
-	/* Three of ship B's four, since N.114 took `shiftLyrics`'s successor away
-	   with the station. The fourth is in its own test below. */
-	it('maps each of ship B’s three surviving ids to its successor', () => {
-		expect(migrateOpenStations(['piece'], false)).toEqual(['metadata']);
-		expect(migrateOpenStations(['songs'], false)).toEqual(['repertoire']);
+	/* SHIP B'S IDS NO LONGER REACH THIS FUNCTION, N.115. `OPEN_STATIONS_VERSION`
+	   is 3 and `restore` lands every set below 3 on the first-run default, so a
+	   ship B value is reset before the map is consulted. `songs` therefore
+	   drops; `analysis` survives because it is still a station under its own
+	   name; `piece` survives as the BAND of that name, which is a different
+	   door from the station ship B meant by the same string. The expectation
+	   comes from the brief's §2, "ids `piece`, `input`, `text`,
+	   `scoreMarkup`", not from the mechanism. */
+	it('drops ship B’s ids, which version 3 resets before the map is reached', () => {
+		expect(migrateOpenStations(['songs'], false)).toEqual([]);
+		expect(migrateOpenStations(['shiftLyrics'], false)).toEqual([]);
+		expect(migrateOpenStations(['metadata'], false)).toEqual([]);
 		expect(migrateOpenStations(['analysis'], false)).toEqual(['analysis']);
+	});
+
+	/* N.115. The four bands are members of the same set, so each survives a
+	   round trip under its own name. */
+	it('keeps each of the four band ids', () => {
+		expect(migrateOpenStations(['piece', 'input', 'text', 'scoreMarkup'], false)).toEqual([
+			'piece',
+			'input',
+			'text',
+			'scoreMarkup',
+		]);
+	});
+
+	it('knows a band id from a station id', () => {
+		for (const id of Object.values(BAND_IDS)) expect(isBandId(id)).toBe(true);
+		for (const id of Object.values(STATION_IDS)) expect(isBandId(id)).toBe(false);
 	});
 
 	it('drops `source`, which has no successor because the intake never closes', () => {
@@ -62,34 +88,44 @@ describe('N.108 the open set migrates once', () => {
 		expect(migrateOpenStations(['shiftLyrics', 'underlay'], false)).toEqual([]);
 	});
 
+	/* N.115, ruled 2026-09-10: "the METADATA label on the Piece band is struck;
+	   the metadata body shows whenever Piece is open, and collapsing Piece is
+	   the collapse." A station that is not a door has no open state to store. */
+	it('drops `metadata`, whose label N.115 struck', () => {
+		expect(migrateOpenStations(['metadata'], false)).toEqual([]);
+		expect(migrateOpenStations(['piece', 'metadata'], false)).toEqual(['piece']);
+	});
+
 	it('drops anything it does not recognise', () => {
 		expect(migrateOpenStations(['output', 'transcribe', ''], false)).toEqual([]);
 	});
 
-	/* The brief's own acceptance gate, in the value it names: "a browser
-	   holding the old `ilya:openStations` value `["piece","source"]` lands on
-	   the new drawer with Metadata open and nothing else." */
-	it('lands the shipped first-run default on Metadata alone', () => {
-		expect(migrateOpenStations(['piece', 'source'], false)).toEqual(['metadata']);
-	});
-
 	it('keeps the order the singer had, and keeps every survivor on a desk', () => {
-		expect(migrateOpenStations(['analysis', 'piece', 'songs'], false)).toEqual([
+		expect(migrateOpenStations(['analysis', 'piece', 'repertoire'], false)).toEqual([
 			'analysis',
-			'metadata',
+			'piece',
 			'repertoire',
 		]);
 	});
 
-	it('keeps only the first survivor on a phone', () => {
-		expect(migrateOpenStations(['analysis', 'piece', 'songs'], true)).toEqual(['analysis']);
+	/* N.115. ONE SURVIVOR PER TIER on a phone, which was one survivor
+	   altogether while every id named a station. A band contains stations, so
+	   keeping the band and dropping the station inside it would reopen the
+	   band onto a station the singer had left open. */
+	it('keeps the first band and the first station on a phone', () => {
+		expect(migrateOpenStations(['analysis', 'piece', 'repertoire'], true)).toEqual([
+			'analysis',
+			'piece',
+		]);
+		expect(migrateOpenStations(['piece', 'text'], true)).toEqual(['piece']);
+		expect(migrateOpenStations(['analysis', 'repertoire'], true)).toEqual(['analysis']);
 	});
 
 	/* `source` is dropped BEFORE the phone takes the first one, so a phone
 	   whose stored set began with `source` does not arrive with nothing open
 	   while a real station waited behind it. */
 	it('takes the first SURVIVOR on a phone, not the first stored id', () => {
-		expect(migrateOpenStations(['source', 'songs'], true)).toEqual(['repertoire']);
+		expect(migrateOpenStations(['source', 'repertoire'], true)).toEqual(['repertoire']);
 	});
 
 	/* IDEMPOTENCE IS WHAT MAKES "RUNS ONCE" TRUE. `SectionSet.restore` writes
@@ -97,7 +133,7 @@ describe('N.108 the open set migrates once', () => {
 	   return the same array or the key would be rewritten on every boot, which
 	   is the second silent save site N.27 forbids while it is open. */
 	it('returns an already-migrated set unchanged', () => {
-		const migrated = ['metadata', 'repertoire', 'analysis'];
+		const migrated = ['piece', 'repertoire', 'analysis'];
 		expect(migrateOpenStations(migrated, false)).toEqual(migrated);
 		expect(migrateOpenStations(migrated, false)).toEqual(
 			migrateOpenStations(migrateOpenStations(migrated, false), false)
@@ -108,11 +144,23 @@ describe('N.108 the open set migrates once', () => {
 		expect(migrateOpenStations(['analysis', 'analysis'], false)).toEqual(['analysis']);
 	});
 
-	/* The first-run default is the empty array, ruled by the brief: every
-	   station is visible without a toggle, so nothing needs to be open. */
-	it('opens nothing on a first run', () => {
-		expect([...FIRST_RUN_STATIONS]).toEqual([]);
-		expect(migrateOpenStations([...FIRST_RUN_STATIONS], false)).toEqual([]);
+	/* N.115, RULED BY DANN 2026-09-10 and quoted in `PRODUCT.md` §The drawer
+	   grammar and the path: "An empty drawer opens Input alone; Piece, Text,
+	   and Score markup show their band and nothing under it." The expectation
+	   is that sentence and not a reading of the module. */
+	it('opens Input alone on a first run', () => {
+		expect([...FIRST_RUN_STATIONS]).toEqual(['input']);
+		expect(migrateOpenStations([...FIRST_RUN_STATIONS], false)).toEqual(['input']);
+		expect(migrateOpenStations([...FIRST_RUN_STATIONS], true)).toEqual(['input']);
+	});
+
+	it('opens no band but Input, and no station at all, on a first run', () => {
+		for (const id of Object.values(BAND_IDS)) {
+			expect(FIRST_RUN_STATIONS.includes(id)).toBe(id === BAND_IDS.input);
+		}
+		for (const id of Object.values(STATION_IDS)) {
+			expect(FIRST_RUN_STATIONS.includes(id)).toBe(false);
+		}
 	});
 });
 
@@ -145,6 +193,19 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 		});
 	});
 
+	/* N.115. A version 2 value names no band, so reading it forward unchanged
+	   would land a returning singer on four shut bands. Version 3 is the mark
+	   that says "reset me once", the same device increment 1a used. */
+	it('marks a version 2 set as needing the N.115 reset', () => {
+		expect(readStoredOpenSet('{"v":2,"open":["repertoire"]}').version).toBeLessThan(
+			OPEN_STATIONS_VERSION
+		);
+		expect(readStoredOpenSet('{"v":3,"open":["input"]}')).toEqual({
+			version: 3,
+			open: ['input'],
+		});
+	});
+
 	/* A returning singer whose set is already NEW still has to be reset once,
 	   which is the case a bare array could never carry on its own: Dann's own
 	   drawer held `["repertoire","analysis"]` after increment 1, both new ids,
@@ -154,8 +215,8 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 		expect(stored.version).toBeLessThan(OPEN_STATIONS_VERSION);
 	});
 
-	it('marks 1a’s own write as needing no reset', () => {
-		const stored = readStoredOpenSet('{"v":2,"open":["repertoire"]}');
+	it('marks the current build’s own write as needing no reset', () => {
+		const stored = readStoredOpenSet('{"v":3,"open":["repertoire"]}');
 		expect(stored.version).toBe(OPEN_STATIONS_VERSION);
 	});
 
@@ -200,10 +261,16 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 		expect(migrateOpenStations(['repertoire', 'corrections'], true)).toEqual(['repertoire']);
 	});
 
+	/* N.115. A band and a station together survive a phone, because they are
+	   different tiers; two bands do not, and neither do two stations. */
+	it('keeps a band and the station inside it on a phone', () => {
+		expect(migrateOpenStations(['piece', 'repertoire'], true)).toEqual(['piece', 'repertoire']);
+	});
+
 	/* N.114a ruling 1. The Voice station is always expanded and has no chevron,
 	   so `voice` has no open state to store and a stored one is dropped. */
 	it('drops `voice`, whose station N.114a stopped collapsing', () => {
 		expect(migrateOpenStations(['voice'], false)).toEqual([]);
-		expect(migrateOpenStations(['metadata', 'voice'], false)).toEqual(['metadata']);
+		expect(migrateOpenStations(['piece', 'voice'], false)).toEqual(['piece']);
 	});
 });

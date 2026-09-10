@@ -531,6 +531,22 @@
 	 * Continue and one press of Transcribe now run the SAME line, so the two
 	 * paths cannot drift apart into two behaviours.
 	 */
+	/**
+	 * N.115. WHETHER A SCORE IS STANDING AT CONTINUE, without accepting it.
+	 *
+	 * "Transcribe and fit is filled only while its act does something" (brief
+	 * §3.2), and one of the two things its act does is `acceptWaiting`. That
+	 * predicate is the `if` on the next function, read rather than acted on,
+	 * so the pill and the press cannot disagree about whether there is a score
+	 * to accept.
+	 *
+	 * IT IS REACTIVE ACROSS THE BOUNDARY: `ui` is `$state`, so a `$derived` in
+	 * the owner that calls this re-runs when the read finishes.
+	 */
+	export function hasWaitingScore(): boolean {
+		return ui.kind === 'done';
+	}
+
 	export function acceptWaiting(): boolean {
 		if (ui.kind !== 'done') return false;
 		accept();
