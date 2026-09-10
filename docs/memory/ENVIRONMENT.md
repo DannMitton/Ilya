@@ -62,6 +62,7 @@ next session the same hour it cost the last one.
 |---|---|
 | drive a browser yourself | `Claude Code, and where the building` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
+| a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
 | vitest or node dies on the bridge with `@rollup/rollup-linux-arm64-gnu` | `THE BRIDGE SHELL IS NOT THE MAC` |
 | `vite preview` serving the wrong thing, or caching | `vite preview` |
 | a code change that will not appear after a rebuild | `VITE PREVIEW BUILDS ITS FILE TABLE AT BOOT` |
@@ -440,6 +441,20 @@ any measurement:
 document.querySelector('link[rel=modulepreload]').href
 ```
 
+
+## NEVER `commit -a` WHILE CODE IS WORKING IN THE SAME TREE
+
+2026-09-10. The desk asked Dann for `git commit -aqm "..."` to save memory
+files while a Code session was mid-build in the same checkout. `-a` staged
+Code's modified source files too, so N.114b's code landed inside a commit
+titled as a memory note (`767f70d`), and the ship commit `ec4fbe9` carried
+only the memo. Nothing broke (HEAD held everything, gates ran at HEAD, the
+deploy is right), but the history lies about which commit did what. **While
+Code is working: commit memory files by path, never `-a`.**
+
+```
+git -C ~/Desktop/ilya-rewrite commit -qm "..." -- docs/memory docs/sessions
+```
 
 ## THE BRIDGE SHELL IS NOT THE MAC. `node_modules` WILL NOT RUN THERE
 

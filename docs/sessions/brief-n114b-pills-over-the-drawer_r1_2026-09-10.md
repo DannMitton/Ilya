@@ -13,6 +13,18 @@ drawer is the full width, so the pills already sit there; nothing changes
 below the drawer's breakpoint. Same handlers, same labels, same disabled
 state, no new string.
 
+## Item 1, CORRECTION after Dann's walk of `ec4fbe9`, 2026-09-10
+
+Items 1 and 2 shipped in `ec4fbe9` (code rode in `767f70d`). Dann's eye on
+the alias: the Redo pill's right edge overhangs the drawer's drawn edge by
+about a pill's end-cap; it must be TANGENT. The anchor was `drawerWidth`
+via `--drawer-right`; the drawn band (`.group-band`, the Piece band's right
+edge) is evidently narrower than that value. Read why (the drawer's outer
+gutter is the likeliest, unread) and anchor to the edge the singer sees.
+Walk item, stated by what he can see: on the desk, `getBoundingClientRect().right`
+of the Redo pill equals that of the Piece band, to the pixel. Item 3 below
+is NOT yet built and goes in this pass.
+
 ## Item 2. Air under every band
 
 Ruled by Dann 2026-09-10 from two crops: the first field under the Piece
