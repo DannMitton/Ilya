@@ -13,6 +13,38 @@ drawer is the full width, so the pills already sit there; nothing changes
 below the drawer's breakpoint. Same handlers, same labels, same disabled
 state, no new string.
 
+## Item 2. Air under every band
+
+Ruled by Dann 2026-09-10 from two crops: the first field under the Piece
+band and the intake frame under the Input band both touch their band, while
+the fields sit `gap: 0.35rem` apart (`MetadataFields.svelte:176-180`).
+`.band-body { margin: 0 18px }` (`Drawer.svelte:1064-1066`) gives no top
+margin and `.intake` (`IntakePanel.svelte:604-609`) has none. Add ONE rule in
+`Drawer.svelte`: the first child after `.group-band` takes
+`margin-top: 0.35rem`, the fields' own value, so the two measures stay equal.
+DESK DEFAULT: it applies to all four bands. If Text or Score markup read
+wrong with it (their stations carry their own header row), narrow it to
+Piece and Input and say so in the memo. Walk item: Piece's first field and
+Input's frame each sit 0.35rem under their band, measured in the DOM, and
+the gap between Piece's fields is unchanged.
+
+## Item 3. Start placement over moves into the syllable line's row
+
+Ruled by Dann 2026-09-10. The button now sits as a pill under Voice in Score
+markup. It rebuilds every seat from the poem (`+page.svelte:557-568`), so it
+is the Clear of placements, and placements live in the syllable line since
+N.114. Move it: when the line is OPEN, its header row (count and chevron)
+also carries "Start placement over" as a small text verb in the receipts'
+`.receipt-btn` style, left of the count. Absent while the line is collapsed
+and absent without a score. Same handler, same string
+(`placement.startOver` or whatever key it carries today; do not coin one).
+The pill under Voice goes. UNDO: whether the handler pushes onto the undo
+stack is NOT ESTABLISHED by the desk; read it, and if it does not, make it
+push with the existing `loupe.undo.*` vocabulary if one clause fits, or STOP
+and name the gap in the memo rather than coin a string. Walk items: the verb
+is present only with a score and the line open; pressing it rebuilds; Undo
+in the top bar reverses it, or the memo says why not.
+
 ## Constraints
 
 - Use the width the layout already has for the drawer column; do not
@@ -34,4 +66,4 @@ A section with this heading. **NOT ESTABLISHED beats a complete invented answer.
 
 ## Return memo
 
-`docs/sessions/memo-n114b-pills-over-the-drawer_r1_<date>.md`, under 40 lines.
+`docs/sessions/memo-n114b-pills-over-the-drawer_r1_<date>.md`, under 70 lines.

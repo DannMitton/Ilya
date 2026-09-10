@@ -2,6 +2,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import type { TabId } from '$lib/destinations';
 	import { INCLUDE_SHANE } from '$lib/wall';
+	import { DRAWER_WIDTH } from '$lib/components/Drawer/layout';
 
 	interface Props {
 		language: Language;
@@ -22,6 +23,18 @@
 		redoLabel?: string | null;
 		onundo?: () => void;
 		onredo?: () => void;
+		/**
+		 * N.114b, RULED BY DANN 2026-09-10 walking `f3250a6`: on a desk the two
+		 * pills sit flush with the drawer's right edge, directly above it.
+		 *
+		 * THIS IS THE LAYOUT'S OWN NUMBER, `+page.svelte`'s `drawerWidth`, the
+		 * same value it hands `Drawer` as `width`. Nothing here measures the
+		 * DOM, and the pills follow the Inspector when it widens the column,
+		 * because they are reading the width the column is actually drawn at.
+		 * The default is `layout.ts`'s `DRAWER_WIDTH`, so this file carries no
+		 * number of its own.
+		 */
+		drawerWidth?: number;
 	}
 
 	let {
@@ -32,6 +45,7 @@
 		redoLabel = null,
 		onundo,
 		onredo,
+		drawerWidth = DRAWER_WIDTH,
 	}: Props = $props();
 
 	/* ONE control, and it names the language the singer is NOT in. Ruled by
@@ -74,8 +88,12 @@
 	);
 </script>
 
+<!-- N.114b. `--drawer-right` IS THE ONLY WAY THE WIDTH ENTERS. The desk rule
+     at the foot of this file reads it and nothing else does, so a build with no
+     drawer column simply never spends it. -->
 <header
 	class="header-bar"
+	style="--drawer-right: {drawerWidth}px"
 	class:tab-transcription={activeTab === 'transcription'}
 	class:tab-learn={activeTab === 'learn'}
 	class:tab-guide={activeTab === 'guide'}
@@ -119,8 +137,15 @@
 				<span class="head-pill-text">{redoText}</span>
 			</button>
 		{/if}
-		<button type="button" class="lang-pill" lang={other} onclick={switchLanguage}>{label}</button>
 	</div>
+	<!-- N.114b. THE LANGUAGE PILL IS THE HEADER'S OWN LAST CHILD AGAIN, which is
+	     where it stood before N.114a put it in the group. It has to leave the
+	     group because the group moves to the drawer's edge on a desk and the
+	     pill keeps the far corner; two places cannot be one element's children.
+	     Below the breakpoint nothing about the rendering changes: `.head-right`
+	     takes the auto margin that packs it against this pill, and this pill
+	     carries the 8px the group's own `gap` used to give it. -->
+	<button type="button" class="lang-pill" lang={other} onclick={switchLanguage}>{label}</button>
 </header>
 
 <style>
@@ -223,14 +248,65 @@
 	}
 
 	/* ── N.114a. THE RIGHT END ──────────────────────────────
-	   One group so the three controls share a gap and the pill keeps the far
-	   corner. `min-width: 0` is what lets the two sentences clip instead of
-	   pushing the pill off the bar. */
+	   One group for the two pills, so they share a gap and move as one.
+	   `min-width: 0` is what lets the two sentences clip instead of pushing the
+	   language pill off the bar.
+
+	   N.114b: `margin-left: auto` replaces the packing the header's own
+	   `space-between` used to do with two children. With three, an auto margin
+	   here absorbs every pixel of free space, so the sigil keeps the left and
+	   the group and the language pill stay packed against the right, which is
+	   exactly what the bar drew before this ship. */
 	.head-right {
 		display: flex;
 		align-items: center;
 		gap: 8px;
 		min-width: 0;
+		margin-left: auto;
+	}
+
+	/* ── N.114b. FLUSH WITH THE DRAWER'S RIGHT EDGE ─────────
+	   RULED BY DANN 2026-09-10. The pills leave the bar's right end and stand
+	   directly over the drawer, whose right edge is `--drawer-right` from the
+	   viewport's left: the drawer is `.app-content`'s FIRST flex child, so on a
+	   desk it is the left column and its right edge is its own width.
+
+	   `right: calc(100% - var(--drawer-right))` IS THE WHOLE ANCHOR. An
+	   absolutely positioned child is offset from its containing block's PADDING
+	   box, and this header has no border, so 100% here is the viewport's width
+	   and the group's right edge lands exactly on the drawer's. `left: 0` gives
+	   it the rest of the bar to grow leftward into; `justify-content: flex-end`
+	   keeps it hugging the anchor, and the pills clip their clause before they
+	   could ever reach the sigil.
+
+	   `pointer-events` IS NOT DECORATION. The box now spans the sigil, and a
+	   transparent box still swallows what lands on it, so the box takes none
+	   and the two pills take their own back.
+
+	   1400px IS `layout.ts`'s `DESK_LAYOUT_MIN_WIDTH`, carried as a literal
+	   because there is no custom-media syntax in the browsers this ships to.
+	   That file's header says so and every other layout query in the tree
+	   carries `1399px` the same way. Below it the layout is the phone's, the
+	   drawer is the full width, and the pills are already over it. */
+	@media (min-width: 1400px) {
+		.header-bar {
+			position: relative;
+		}
+
+		.head-right {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: calc(100% - var(--drawer-right));
+			margin-left: 0;
+			justify-content: flex-end;
+			pointer-events: none;
+		}
+
+		.head-right .head-pill {
+			pointer-events: auto;
+		}
 	}
 
 	/* PILL ENDS, the 2026-09-03 ruling `IntakePanel.svelte`'s `.action-btn`
@@ -332,6 +408,9 @@
 	   and that shape was ruled rather than chosen here. */
 
 	.lang-pill {
+		/* N.114b: the 8px the group's own `gap` used to give this pill, now that
+		   the pill is `.head-right`'s sibling and not its child. */
+		margin-left: 8px;
 		font-family: var(--font-sans);
 		font-size: 13px;
 		font-weight: 500;

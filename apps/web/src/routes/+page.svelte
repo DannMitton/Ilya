@@ -3840,7 +3840,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 <div class="screen-only">
 	<!-- N.114a. UNDO AND REDO RIDE THE TOP BAR, ruled by Dann 2026-09-09. The
 	     two sentences and the two handlers are the ones the loupe dock had; the
-	     stack, `pushUndo`, and the Cmd-Z pair are untouched. -->
+	     stack, `pushUndo`, and the Cmd-Z pair are untouched.
+
+	     N.114b, ruled 2026-09-10: `drawerWidth` goes with them, so on a desk the
+	     pair stands flush with the drawer's right edge. It is the SAME value
+	     `Drawer` is given as `width` below, read from one place, so the bar and
+	     the column cannot disagree. -->
 	<HeaderBar
 		{language}
 		{activeTab}
@@ -3849,6 +3854,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{redoLabel}
 		onundo={handleUndo}
 		onredo={handleRedo}
+		{drawerWidth}
 	/>
 <!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
      AlertDialog measured +18.7 KB gzipped for this one thing, against about

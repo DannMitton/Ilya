@@ -116,3 +116,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - [2026-09-09] RULED by Dann on the N.114 alias walk: the intake hint (`intake.dropHint`, approved copy, unchanged) moves to sit directly under the textarea, above the receipts, as the field's caption. Choose a file stays where it is. Glyph rejected; state-dependent caption rejected. Rides with the Voice-chevron pass.
 - [2026-09-09] RULED by Dann: Undo and Redo move to the top bar, right end, fixed, pill sentence as label; one undo, one place; dock row goes. In brief-n114a item 3.
 - [2026-09-10] RULED by Dann: Undo/Redo pills align to the drawer's right edge, above the hands (N.114b, briefed).
+- [2026-09-10] RULED by Dann: Start placement over moves into the syllable line's open header row; pill under Voice goes; air under every band 0.35rem (N.114b items 2 and 3).

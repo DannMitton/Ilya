@@ -1098,6 +1098,32 @@
 		border-top: none;
 	}
 
+	/* ── AIR UNDER EVERY BAND. N.114b, RULED BY DANN 2026-09-10 ─────────
+	   From two crops: the first field under PIECE and the intake frame under
+	   INPUT both touched their band, while Metadata's own fields sit
+	   `gap: 0.35rem` apart (`MetadataFields.svelte:176-180`). A band is not a
+	   field, so the first thing under it was the only measure in the drawer
+	   with no air at all.
+
+	   THE VALUE IS THE FIELDS' OWN, not a new one, so the distance from a band
+	   to the first thing under it and the distance between two fields are the
+	   same measure and stay the same measure if either ever moves.
+
+	   ONE RULE, WRITTEN AS ADJACENCY, for the reason the rule above it is: what
+	   stands first in a group is not fixed. It is `.band-body` in Piece with
+	   Metadata open, a `.station` in Piece with it shut and in all three other
+	   groups, and `IntakePanel`'s own `.station.station-intake` under INPUT,
+	   whose visually-hidden `<h3>` takes no height, so the margin lands
+	   directly above the frame. `:global` because four of the five are authored
+	   in other components; `.band-body` is this file's own and is named beside
+	   them rather than in a second rule.
+
+	   DESK DEFAULT: all four bands, which is what the brief asks for first. */
+	.group-band + :global(.station),
+	.group-band + .band-body {
+		margin-top: 0.35rem;
+	}
+
 	/* A station's contents. The prototype's `.station-body`: no top padding,
 	   because the header's own 8px is the gap, and 12px below, because the
 	   next station's hairline needs air above it. Global for the same reason
