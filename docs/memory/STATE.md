@@ -59,8 +59,29 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > N.118.** Then N.110 (set aside, briefed), N.115, N.116, the release
 > order N.85 to N.88, N.84 (Guide and Learn), N.83.
 >
-> **THE ONE THING, 2026-09-10 05:00: THE DRAWER AS A PATH, step 3 of 4, THE
-> PATH PASS IS IN CODE.** Brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
+> **THE ONE THING, at the close of 2026-09-10 06:15: THE DRAWER AS A PATH,
+> step 3 of 4. THE PATH PASS IS SHIPPED `a584ad8` (Vercel
+> `dpl_FBG38EnSpN659JGGbv7DUR9yUpmK`, READY on the alias) AND PART WALKED.**
+> Dann saw on the alias, one reload: four bands with bare chevrons; Piece
+> closed with `Without Sun, no. 1: Within Four Walls · Modest Mussorgsky
+> (1839…` and `from score`; Input open with the new placeholder; Text closed
+> reading `Grayson defaults`; Score markup closed reading `2 notes corrected ·
+> Voice: Dann · 7 of 10`. The poem box was empty because he had cleared it
+> himself before the ship, not a defect. **NOT WALKED:** the brief's six-step
+> walk (§5 of `brief-path-pass_r1`): the empty-drawer state, the caption's
+> `choose a file` link, Input's closed line, `n of 7 changed`, the one-filled-
+> pill count, persistence across reload, and 390 px. **Next session opens
+> here.** Two Code follow-ups owed, both one line: (1) Dann, 06:12: "Why
+> Grayson defaults? seems random." DESK DEFAULT: Text shows nothing under
+> the band at default and `2 of 7 changed` only when something moved, per
+> Design's rule that a band with nothing to say shows its band line;
+> (2) nothing else yet. Code's memo `memo-path-pass_r1_2026-09-10.md` §9
+> carries `correct.state`; two of its notes stand as desk defaults: Input's
+> placed pair needs a score (`slotQueue` fills from the poem alone), and
+> Transcribe and fit fills only while its act does something. Gate 4 moved
+> 1076 → 1103; `ilya-ship.sh:79` moved with it (ENVIRONMENT §Gate baselines).
+>
+> **Earlier the same session:** brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
 > built on Sonnet's read-only anchor memo
 > `docs/sessions/memo-anchors-path-pass_r1_2026-09-10.md` (86 lines; its
 > finding: no front-side band has an open or closed state today, only
@@ -277,26 +298,7 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 | | *(2026-08-14 detail, kept)* | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[~]` | **N.59** the reader in the browser | **TIER 2 CLOSED 2026-08-18, ANSWERED NO, two Opus Code sessions. THE ONE THING above carries the whole account and its numbers.** Phase 0 killed the substrate decider, best margin −587 px; the slice probe died three times over, on grouping, on the fixture corpus (0 of 23), and on cost (16 to 59×). **Line grouping needs \|shear\| ≲ 0.12° and the photograph carries 2.48°.** The only instrument left is a dewarp, which is a project and is **NOT AUTHORISED**. **PARKED AT TIER 2. What a singer sees is unchanged:** photograph import stays in the beta and fails honestly, Dann's ruling 2026-08-17. **STILL OPEN INSIDE N.59: step 3, the brace rule, is `WRITTEN` and not `DONE`.** **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Step 8 (PDF, `pdfjs-dist`) ruled in and done.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
-### Closed and parked
-
-| | item | state |
-|---|---|---|
-| `[x]` | **N.80** the [u] capture | **CLOSED 2026-08-23, `d491d22` and `230cad3`, WALKED BY DANN.** Cause: fR1 steadiness, `fr1_cv`. Best-window judging captures it; the guard now reports its numbers. Section above |
-| `[x]` | **N.81** the takeover's rule goes lavender | **CLOSED 2026-08-23, `2440bf5`, WALKED BY DANN on `ilya-2xbpbyyyv`.** One token at `Drawer.svelte:888`. Section above |
-| `[x]` | **N.79** transitions | **RULED CLOSED BY DANN 2026-08-23: do nothing.** Researched in `memo-n79-transitions-research_r1_2026-08-23.md`; every transition stays as it is. Nothing built |
-| `[x]` | **N.62** the accessibility sweep | **CLOSED 2026-08-24, `1f4e268`, WALKED (rows 1 to 4 in the rendered DOM on `ilya-4f6fwt03u`, row 5 accepted on the served bundle).** Section above |
-| `[x]` | **N.63** the desktop interstitial | **CLOSED 2026-08-23.** Residue SAY NOTHING ruled 2026-08-21; the gate itself retired under N.73 portrait C ruling 4, `+page.svelte:1865` |
-| `[x]` | **the colon audit** | **CLOSED 2026-08-23, `9d314de`, WALKED BY DANN.** Canadian French spacing on `:`, `;`, `!`; `?` was ship 5. `Score markup` rename rode with it |
-| `[x]` | **N.78** the French form of 62 names | **CLOSED 2026-08-23, `9cc68e5`, WALKED BY DANN on `ilya-a54jdyrd4`.** Display only; 49 French forms from French Wikipedia titles; storage stays English. Section above |
-| `[x]` | **N.70** the iPhone cannot load a score | **CLOSED 2026-08-16, `58f982c`, WALKED BY DANN ON HIS OWN IPHONE.** iOS matches `accept` by registered type and knows none of `.musicxml`, `.mnx`, `.musx`, `.mscz`, so it greyed out every format Ilya reads while leaving PDFs and photos selectable. **Dann's fix, better than either option offered: filtered list on desktop, no `accept` at all on mobile** (`ScoreUploader.svelte`, `acceptList`). Measured: attribute present at 1400 px, absent below 768. **What Dann saw:** the file that was grey at 03:08 was black and selectable at 03:52, as was an unrecognised `.com` file in the same folder |
-| `[x]` | **N.71** the note click | **CLOSED 2026-08-16. Fix shipped in `046beec`, walked by Dann on the `58f982c` deployment.** The notehead glyph was painted over its own `[data-hit]` rectangle and still interactive, so a click on the note died; every `<g data-event-id>` is now `pointer-events="none"` and the rectangle takes clicks back with its own `all`, plus `cursor="pointer"`. **What Dann saw:** a click DEAD CENTRE on the first notehead, the exact spot that did nothing an hour earlier, gave `4 / 5` with бил under it. Two tests pin both halves |
-| `[x]` | **N.68** the upload that erases placements | **CLOSED 2026-08-16, `6c0c719`, WALKED BY DANN on the real deploy.** Absorbed into N.67 and fixed by architecture, not patched: `mergeOnUpload` (`pairings.ts`) keeps the map by positional key, runs `firstPass` only into an empty map, reports orphans, and never rebuilds. **What Dann saw:** he moved бил onto the first note (5/5 to 4/5, Я turned black), re-uploaded the same score, and the counter stayed 4/5 with бил still on the first note. Positive control run first: the old code snapped back to 5/5 |
-| `[x]` | **N.55b** Click Assignment | **DONE AGAIN 2026-08-16, and the history is kept on purpose: it was marked DONE 2026-08-13 while its central gesture was broken**, and it stayed that way until Dann walked it 2026-08-16: clicking a notehead did nothing, because the glyph was painted over its own hit rectangle and still interactive. **Dann's ruling: the tracker should be right rather than tidy.** Repaired and closed as N.71, walked by Dann. Rotate syllables PARKED 2026-08-14 |
-| `[~]` | **N.56** draw the withheld page badly | PARKED 2026-08-14, Dann's ruling |
-| `[x]` | **N.32** the Guide's false claims | DONE, shipped and observed 2026-08-14 |
-| `[x]` | **N.55a** the score with no underlay | Closed 2026-08-13 |
-| `[x]` | **N.47** print, from a phone, once | CLOSED 2026-08-15 |
-| `[x]` | **N.69** print takes the paper | CLOSED 2026-08-15, six passes, observed on paper |
+> **The "Closed and parked" table (N.80, N.81, N.79, N.62, N.63, the colon audit, N.78, N.70, N.71, N.68, N.55b, N.56, N.32, N.55a, N.47, N.69) moved to `../sessions/LOG.md` block 9 at the close of 2026-09-10.** All closed or parked; nothing in it is open.
 
 ### The visible list. Built only if a day finishes early
 

@@ -173,8 +173,10 @@ file.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1056 passed (1056)** |
-| score-parser | **541 passed, 5 skipped (546)** |
+| web-test | **1103 passed (1103)** |
+| score-parser | **547 passed, 5 skipped (552)** |
+
+**MOVED 2026-09-10 06:05: 1076 → 1103 (the path pass, 27 new tests in `bandState.test.ts` and `sections.test.ts`). The script refused the ship on the old 1076 with every test green; the desk moved `~/Downloads/ilya-ship.sh:79` and kept the old line as `ilya-ship.sh.bak-1076`. When Code reports a gate number higher than the script's and all passed, move the script BEFORE the ship, not after a refusal. Score-parser was 547 by 2026-09-10 (read from the ship output); when it moved from 541 is NOT ESTABLISHED here.**
 
 **MOVED 2026-09-07, late: 995 → 1030 (N.112) → 1038 (N.112b) → 1056 (N.113), and score-parser 534 → 541 (N.113). The script is the instrument; this table follows it.** N.113a is in Code and may move both again.
 
