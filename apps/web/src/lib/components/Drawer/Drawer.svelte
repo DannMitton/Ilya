@@ -939,8 +939,14 @@
 
 		   THE FOOT IS 12, not 16, and it was 12 before: it is
 		   `.root-panel:last-child`'s 40 px replaced at increment 1 by the
-		   prototype's own value, and nothing about the bottom changed here. */
-		padding: 16px 16px 12px;
+		   prototype's own value, and nothing about the bottom changed here.
+
+		   THE THREE 16s ARE `--drawer-gutter` SINCE N.114b, and the value is
+		   unchanged. `HeaderBar` has to know where the card's right edge is so
+		   the Undo and Redo pills can stand tangent to it, and a copy of this
+		   number over there is a copy that would rot. `app.css` holds it and
+		   both spend it. */
+		padding: var(--drawer-gutter) var(--drawer-gutter) 12px;
 	}
 
 	/* ── THE THREE GROUPS (N.108) ─────────────────────────────

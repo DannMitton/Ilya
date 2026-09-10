@@ -4068,6 +4068,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onclearscore={handleClearScore}
 					syllablesPlaced={placedSlotCount}
 					syllablesTotal={slotQueue.length}
+					onstartover={handleStartPlacementOver}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -4374,15 +4375,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{t('station.orphaned', language).replace('%s', String(orphanedCount))}
 						</p>
 					{/if}
-					{#if slotQueue.length > 0 && ingestedScore}
-						<!-- N.67 step 3, design §2.6. The ONLY thing that may destroy a
-						     placement, and it is the singer pressing it. An upload never
-						     rebuilds. Placed after Shift Lyrics because it undoes what
-						     Shift Lyrics does, and it is the last resort of the two. -->
-						<button type="button" class="start-over" onclick={handleStartPlacementOver}>
-							{t('station.startOver', language)}
-						</button>
-					{/if}
+					<!-- START PLACEMENT OVER LEFT THIS BLOCK, N.114b item 3, RULED BY
+					     DANN 2026-09-10. It rebuilds every seat from the poem, so it
+					     is the Clear of placements, and placements live in the
+					     syllable line since N.114. It rides that line's own open row
+					     now, beside the count it resets (`IntakePanel`'s
+					     `onstartover`). Its guard came with it: the row is drawn only
+					     where there is a score and a queue, which is the same pair of
+					     conditions this `{#if}` tested. `.start-over` goes with the
+					     button; `station.startOver` is unchanged and still the only
+					     string it uses. -->
 					<!-- R5, N.27: no save site is silent. N.67 step 0 made this the
 					     WHOLE song's report rather than the pairing map's alone, and
 					     N.67 step 6 finalized what it says: quota with its figures,
@@ -4891,25 +4893,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   control on this panel and should not be the loudest thing on it. It was
 	   twinned on .shane-print-btn, which N.73 S2 deleted; the values are the
 	   same ones RootPanel's .action-btn carries. */
-	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
-	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
-	   `.wizard-primary` and `.wizard-secondary`, `border-radius: 999px`):
-	   "The buttons shown here can form the template. Can we make other
-	   buttons share its rounded ends?" Only the corners move; the fill, the
-	   border, the type and the padding are untouched. */
-	.start-over {
-		align-self: start;
-		padding: 0.45rem 0.5rem;
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--ink-secondary);
-		background: white;
-		border: 1px solid var(--stone-600, #57534e);
-		border-radius: 999px;
-		cursor: pointer;
-		transition: opacity 0.12s;
-	}
+	/* `.start-over` IS GONE, N.114b item 3, with the pill it drew. The verb is
+	   a `.receipt-btn` on the syllable line's own row now (`IntakePanel`), so
+	   the pill ends N.108 increment 4 gave it are not its shape any more.
+	   Deleted rather than left, because `svelte-check` counts an unused
+	   selector as a warning and gate 3's baseline is 7. */
 
 	/* ── Glyph Table (LEARN Section 1) ─────────────────── */
 

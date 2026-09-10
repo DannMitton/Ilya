@@ -53,6 +53,21 @@
 	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
 	--app-bg: var(--desk-surface); /* main content area behind paper */
 
+	/* ── The drawer's outer gutter ─────────────────────────── */
+	/* N.114b, RULED BY DANN 2026-09-10 walking `ec4fbe9`: the Redo pill
+	   overhung the drawer's DRAWN edge, because it was anchored to the
+	   column's width and the card inside that column is inset by this much on
+	   each side. The value is not new: it is `.drawer-content`'s own
+	   horizontal padding, the 1rem `.root-panel` and the two drawer anchors
+	   each spent before N.108 and which Dann ruled in 2026-08-20 as the one
+	   inset every drawer rule shares.
+
+	   IT IS A TOKEN NOW SO TWO BOXES CANNOT DISAGREE. `Drawer.svelte` spends
+	   it as the padding that draws the gutter and `HeaderBar.svelte` spends it
+	   to find the card's right edge, and there is one value rather than a copy
+	   in each file. Move it and the pills move with the card. */
+	--drawer-gutter: 16px;
+
 	/* ── The drawer's one motion (N.108) ───────────────────── */
 	/* ONE DURATION AND ONE CURVE, ruled by the N.108 build brief §2 from the
 	   ratified GUI spec of 2026-08-18, "~180 ms ease-out". It is spent on

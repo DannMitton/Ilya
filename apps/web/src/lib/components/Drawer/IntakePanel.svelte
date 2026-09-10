@@ -86,6 +86,16 @@
 		/** The pair on the row, the two numbers the Lyric label already has. */
 		syllablesPlaced?: number;
 		syllablesTotal?: number;
+		/**
+		 * N.114b item 3, RULED BY DANN 2026-09-10. "Start placement over" was a
+		 * pill under Voice in Score markup. It rebuilds every seat from the
+		 * poem, so it is the CLEAR of placements, and placements live in this
+		 * line since N.114; it rides the open line's own row now, beside the
+		 * count it resets.
+		 *
+		 * The handler is `+page.svelte`'s `handleStartPlacementOver`, unchanged.
+		 */
+		onstartover?: () => void;
 	}
 
 	let {
@@ -107,6 +117,7 @@
 		syllableLine,
 		syllablesPlaced = 0,
 		syllablesTotal = 0,
+		onstartover,
 	}: Props = $props();
 
 	/* N.114. THE LINE IS COLLAPSED UNTIL IT IS OPENED, and once opened it stays
@@ -455,6 +466,24 @@
 		{#if showSyllables}
 			{#if syllablesOpen}
 				<div class="syl-head">
+					<!-- N.114b item 3. THE ONLY THING THAT MAY DESTROY A PLACEMENT,
+					     and it is the singer pressing it; an upload never
+					     rebuilds. It left its pill under Voice for this row on
+					     Dann's ruling of 2026-09-10, because what it clears is
+					     the count sitting beside it. Drawn only with the line
+					     OPEN, which is the ruling: a verb this destructive does
+					     not ride a collapsed row a singer opened by accident.
+
+					     `.receipt-btn` IS THE STYLE, the same quiet text verb
+					     Clear and Replace wear one row up, because this is the
+					     same kind of thing they are: a receipt's afterthought,
+					     not an action. `station.startOver` is the string it
+					     already carried; nothing is coined. -->
+					<button
+						type="button"
+						class="receipt-btn syl-start-over"
+						onclick={() => onstartover?.()}
+					>{t('station.startOver', language)}</button>
 					<button
 						type="button"
 						class="syl-toggle"
@@ -735,11 +764,23 @@
 	/* Open: the count and the chevron on the row ABOVE the line, right-aligned
 	   because there is no label to sit opposite. No rule of its own: the score
 	   receipt directly above already draws the drawer's hairline, and a second
-	   one 8px under it would read as a mistake. */
+	   one 8px under it would read as a mistake.
+
+	   N.114b item 3 puts "Start placement over" on this row, left of the count.
+	   `justify-content: flex-end` still holds the pair to the right and the
+	   verb takes the margin, so nothing about where the count and the chevron
+	   sit changes when the verb is drawn. */
 	.syl-head {
 		display: flex;
+		align-items: center;
 		justify-content: flex-end;
 		margin-top: 8px;
+	}
+
+	/* The verb takes the room, so the count and the chevron keep the corner.
+	   Everything else about it is `.receipt-btn`'s, which it also wears. */
+	.syl-start-over {
+		margin-right: auto;
 	}
 
 	.syl-toggle {

@@ -271,10 +271,25 @@
 	   viewport's left: the drawer is `.app-content`'s FIRST flex child, so on a
 	   desk it is the left column and its right edge is its own width.
 
-	   `right: calc(100% - var(--drawer-right))` IS THE WHOLE ANCHOR. An
-	   absolutely positioned child is offset from its containing block's PADDING
-	   box, and this header has no border, so 100% here is the viewport's width
-	   and the group's right edge lands exactly on the drawer's. `left: 0` gives
+	   IT ANCHORS TO THE DRAWN EDGE, NOT TO THE COLUMN'S WIDTH. N.114b
+	   CORRECTION, RULED BY DANN 2026-09-10 walking `ec4fbe9`: the Redo pill
+	   overhung "by about a pill's end-cap". The cause, read rather than
+	   guessed: `drawerWidth` is the COLUMN, and the card inside it is inset by
+	   `.drawer-content`'s own horizontal padding on each side, so the band the
+	   singer sees ends one gutter short of the column. Subtracting
+	   `--drawer-gutter` puts the pill's right edge on the band's, tangent.
+
+	   `right: calc(100% - var(--drawer-right) + var(--drawer-gutter))` IS THE
+	   WHOLE ANCHOR. An absolutely positioned child is offset from its
+	   containing block's PADDING box, and this header has no border, so 100%
+	   here is the viewport's width.
+
+	   IT IS THE CARD'S EDGE AND NOT THE BAND'S LABEL. `METADATA` sits one band
+	   inset further in (`.group-band`'s `padding: 0 18px`), and a chip aligned
+	   to a word rather than to the card would read short of the edge the eye
+	   actually follows: the card's edge is a continuous vertical down the whole
+	   drawer, and the label is one word on one band. Reversible: the label's
+	   line is that 18px further left. `left: 0` gives
 	   it the rest of the bar to grow leftward into; `justify-content: flex-end`
 	   keeps it hugging the anchor, and the pills clip their clause before they
 	   could ever reach the sigil.
@@ -298,7 +313,7 @@
 			top: 0;
 			bottom: 0;
 			left: 0;
-			right: calc(100% - var(--drawer-right));
+			right: calc(100% - var(--drawer-right) + var(--drawer-gutter));
 			margin-left: 0;
 			justify-content: flex-end;
 			pointer-events: none;

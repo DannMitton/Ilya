@@ -19,10 +19,15 @@ Items 1 and 2 shipped in `ec4fbe9` (code rode in `767f70d`). Dann's eye on
 the alias: the Redo pill's right edge overhangs the drawer's drawn edge by
 about a pill's end-cap; it must be TANGENT. The anchor was `drawerWidth`
 via `--drawer-right`; the drawn band (`.group-band`, the Piece band's right
-edge) is evidently narrower than that value. Read why (the drawer's outer
-gutter is the likeliest, unread) and anchor to the edge the singer sees.
-Walk item, stated by what he can see: on the desk, `getBoundingClientRect().right`
-of the Redo pill equals that of the Piece band, to the pixel. Item 3 below
+edge) is evidently narrower than that value. RULED BY DANN 2026-09-10, refining
+the target: the pill sits on the drawer's CONTENT line, not the band's outer
+edge. That line is the band's label edge, 18 px inside the band
+(`.group-band { padding: 0 18px }`, `Drawer.svelte:980-994`), which the
+fields share (`.band-body { margin: 0 18px }`, `:1064-1066`). Anchor to it
+using the same value the band uses, not a second literal. Walk item, by
+what he can see: on the desk, `getBoundingClientRect().right` of the Redo
+pill, of the METADATA label, and of the first metadata field share one x,
+to the pixel. Item 3 below
 is NOT yet built and goes in this pass.
 
 ## Item 2. Air under every band
