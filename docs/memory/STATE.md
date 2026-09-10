@@ -72,6 +72,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > account), N.114 (done, walked), N.114a (done, walked), and N.114b items 1
 > to 5 (done, walked). Details there, verbatim.
 >
+> **CODE STARTED 2026-09-10 04:10 on N.114b items 6 to 9** (air above the
+> open syllable box; Export and import order; the calibration collapse row
+> removed; Start over as a ghost pill), from
+> `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`. Its
+> memo lands in `docs/sessions/` as `memo-n114b-…_r3_…`; it is NOT walked
+> until Dann walks it on the alias. The next session picks that up first.
+>
 
 > **N.118, NUMBERED BY DANN 2026-09-09: punctuation travels in the slot.**
 > A placed syllable never carries the poem's punctuation because

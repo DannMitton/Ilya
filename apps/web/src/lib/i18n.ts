@@ -913,6 +913,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.common.vowels': { en: 'vowels', fr: 'voyelles' },
 	'calib.common.vowelWord': { en: 'Vowel', fr: 'Voyelle' },
 	'calib.common.hz': { en: 'Hz', fr: 'Hz' },
+	// UNUSED SINCE N.114b item 8 (Dann's ruling of 2026-09-10: the wizard's
+	// compact collapse row is gone, and this was its spoken label's tail).
+	// Kept and marked in place rather than deleted, with its ratified French,
+	// the way `upload.scanTooltip` and `underlay.heading` are.
 	'calib.compact.vowelsSampled': { en: 'vowels sampled', fr: 'voyelles échantillonnées' },
 	'calib.log.addedPrefix': { en: 'Added to progress:', fr: 'Ajouté à la progression\u00a0:' },
 	'calib.log.hertz': { en: 'hertz', fr: 'hertz' },

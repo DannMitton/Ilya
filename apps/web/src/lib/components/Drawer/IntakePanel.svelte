@@ -501,7 +501,7 @@
 						<svg class="syl-chevron" class:expanded={syllablesOpen} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
 					</button>
 				</div>
-				<div class="syl-box" id="intake-syllables">{@render syllableLine?.(false)}</div>
+				<div class="syl-box syl-open" id="intake-syllables">{@render syllableLine?.(false)}</div>
 			{:else}
 				<button
 					type="button"
@@ -637,6 +637,17 @@
 	   box and a positioned box is what the frame has always been; removing it
 	   is a change to the frame that nothing asked for. */
 	.intake {
+		/* ── ONE GAP BETWEEN THE FRAME'S ROWS. N.114b item 6, RULED BY DANN
+		   2026-09-10 walking `8278429`: the open syllable box had 8 px under it
+		   (Choose a file's row) and nothing above it, so the box sat against its
+		   own header row while the rest of the frame breathed.
+
+		   THE VALUE IS DECLARED ONCE AND SPENT THREE TIMES, which is the whole
+		   of the fix: the header row, the open box, and the actions row all read
+		   this, so the air above the box and the air below it cannot drift
+		   apart. It was `.syl-head`'s and `.intake-actions`'s own literal 8px in
+		   two places before this ship. */
+		--intake-row-gap: 8px;
 		position: relative;
 		border: 1px dashed rgba(26, 22, 18, 0.28);
 		border-radius: 4px;
@@ -780,7 +791,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		margin-top: 8px;
 	}
 
 	/* The verb takes the room, so the count and the chevron keep the corner.
@@ -854,7 +864,16 @@
 		display: flex;
 		gap: 8px;
 		flex-wrap: wrap;
-		margin-top: 8px;
+	}
+
+	/* N.114b item 6. THE THREE ROWS THAT TAKE THE FRAME'S GAP, in one rule so
+	   there is one owner and no literal repeated. `.syl-open` is the OPEN box
+	   only: the collapsed row is `.syl-box.syl-row` and sits where it always
+	   has, directly under the score receipt, which this ship does not move. */
+	.syl-head,
+	.syl-open,
+	.intake-actions {
+		margin-top: var(--intake-row-gap);
 	}
 
 	.intake-drop-hint {

@@ -1827,19 +1827,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
 	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
-	// Q3 wizard collapse (Kimi §A.28): successful-render counter and the
-	// wizard's collapse state, both held here so they survive the shane
-	// panel's unmount on tab switches. The pane reports a render once per
-	// mount; renderCountedFor dedupes by score identity across remounts,
-	// so returning to the Fit tab never re-collapses an expanded wizard.
-	let scoreRenders = $state(0);
-	let wizardCollapsed = $state(false);
-	let renderCountedFor: IngestedScore | null = null;
-	function handleScoreRendered() {
-		if (!ingestedScore || renderCountedFor === ingestedScore) return;
-		renderCountedFor = ingestedScore;
-		scoreRenders += 1;
-	}
+	// THE Q3 RENDER COUNTER IS GONE, N.114b item 8. `scoreRenders`,
+	// `wizardCollapsed`, `renderCountedFor` and `handleScoreRendered` existed
+	// only to collapse the calibration wizard once a score had rendered, and
+	// the wizard has no collapse any more. `VoiceProfilePane`'s `onrendered`
+	// prop STAYS: it is that component's own optional report and removing it
+	// is a wider ship than this ruling asks for. Nothing binds it now.
 
 	/* THE LOUPE'S INVALIDATION TOKEN, and the walk finding on `c574cf8` is what
 	   it is for.
@@ -2066,15 +2059,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   because the voice anchor reads it. */
 	const voiceCalibrated = $derived(hasAnyReadings(shaneFormants));
 	/**
-	 * Entering the takeover expands the wizard first. The Q3 collapse (Kimi
-	 * §A.28) exists so a rendered score can take the drawer back from a wizard
-	 * that was SHARING it; a wizard that has the whole drawer is not sharing
-	 * anything, and a takeover that opened onto a one-line compact header would
-	 * be a ritual with its own ritual hidden. This is a decision about the
-	 * MOUNT POINT, not about the wizard, which is untouched.
+	 * N.114b item 8 emptied this of everything but the flag. It used to expand
+	 * the wizard first, because the Q3 collapse could leave a takeover opening
+	 * onto a one-line header: a ritual with its own ritual hidden. There is no
+	 * collapse to undo now, so the takeover simply opens.
 	 */
 	function enterCalibration() {
-		wizardCollapsed = false;
 		calibrating = true;
 	}
 	function exitCalibration() {
@@ -4000,10 +3990,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{#snippet voiceTakeover()}
 				{#if INCLUDE_SHANE}
 					<div class="takeover-panel">
+					<!-- N.114b item 8: `scoreRenders` and `bind:collapsed` are gone
+					     with the wizard's collapse. The takeover is the ritual's own
+					     surface, so a score rendering on the page behind it has
+					     nothing to ask of it. -->
 					<CalibrationWizard
 						{language}
-						{scoreRenders}
-						bind:collapsed={wizardCollapsed}
 						onActiveProfileChange={(f, name, characteristics) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
@@ -4596,7 +4588,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{engraving}
 				{notationPrefs}
 				openSyllabification={doc.openSyllabification}
-				onrendered={handleScoreRendered}
 				onpagesdrawn={handlePagesDrawn}
 			/>
 		{:else}

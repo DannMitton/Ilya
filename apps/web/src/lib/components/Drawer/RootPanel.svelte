@@ -160,13 +160,20 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 		     sections", and before that, on where it goes: "what if we add it
 		     under the WYSIWYG flush left? Visually it can parallel the
 		     Transcription button above the WYSIWYG." It is `.sheet-print` in
-		     `+page.svelte`. This row is Export and Import, and `Export all
-		     songs` keeps its conditional fourth cell below. -->
-		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
-		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
+		     `+page.svelte`. This row is Export and Import; `Export all songs`
+		     keeps its conditional cell and leads the row since N.114b item 7. -->
+		<!-- THE ORDER IS EXPORT ALL, EXPORT THIS, IMPORT. N.114b item 7, RULED BY
+		     DANN 2026-09-10 walking `8278429`. It was Export this song, Import a
+		     song, Export all songs, with the conditional cell last because that
+		     is where a cell added later lands. REORDER ONLY: the three handlers,
+		     the three strings and the ghost pill are untouched, and `Export all
+		     songs` keeps the `songs.length > 1` guard it has always had, now in
+		     the first cell rather than the third. -->
 		{#if songLibrary.songs.length > 1}
 			<button class="action-btn btn-ghost" onclick={onexportall}>{t('binder.exportAll', language)}</button>
 		{/if}
+		<button class="action-btn btn-ghost" onclick={onexport}>{t('binder.export', language)}</button>
+		<button class="action-btn btn-ghost" onclick={onimport}>{t('binder.import', language)}</button>
 	</div>
 	</div>
 	{/if}

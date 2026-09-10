@@ -162,20 +162,11 @@
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
 		 * successful score renders in the Fit main pane — loaded, parsed,
 		 * AND rendered; a load failure never increments (the error belongs
-		 * to the uploader slot). Each increment collapses the wizard to
-		 * its compact header, unless a capture is mid-flight, in which
-		 * case the collapse waits for the summary (Dann's deferral ruling,
-		 * 2026-07-13): the ritual is never interrupted. 0 = no score yet,
-		 * and no collapse chrome renders at all.
+		 * `scoreRenders` AND `collapsed` ARE GONE, N.114b item 8. They were
+		 * this component's whole collapse mechanism and it has no collapse
+		 * any more; the takeover surface is the wizard's own, so a render on
+		 * the page behind it has nothing to ask of the ritual.
 		 */
-		scoreRenders?: number;
-		/**
-		 * The collapse state, bindable so the page shell can carry it
-		 * across drawer tab switches (the shane panel unmounts when the
-		 * tab changes, so wizard-local state would forget an expansion).
-		 * The compact-header chevron toggles it both ways.
-		 */
-		collapsed?: boolean;
 		/**
 		 * Opens the Learn module's sung-[o] note (anchor learn-u3-note-o).
 		 * The sung-[o] précis ruling (Kimi 2026-07-11; copy Dann's, approved
@@ -200,8 +191,6 @@
 		// rests dark between them. Construction touches no browser API;
 		// getUserMedia is requested only inside start() and startReadiness().
 		session: captureSession = new LiveCaptureSession(),
-		scoreRenders = 0,
-		collapsed = $bindable(false),
 		onVowelCaptured,
 		onProfileChange,
 		onComplete,
@@ -329,40 +318,14 @@
 	// early by any path (a single-vowel re-take pass, or a queue bug).
 	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
 
-	// ── Q3 wizard collapse (Kimi §A.28; Dann's mid-capture deferral) ─────────
-	// A new successful render (the counter incremented) collapses the wizard
-	// to its compact header — including a re-collapse after the singer
-	// expanded, since each fresh score render re-triggers (Dann's default,
-	// 2026-07-13). Mid-capture, the trigger is remembered and lands when the
-	// phase next reaches the summary; the ritual is never torn down. Plain
-	// variables: both are compared inside effects, never rendered.
-	// svelte-ignore state_referenced_locally
-	let seenScoreRenders = scoreRenders;
-	let pendingCollapse = false;
-	$effect(() => {
-		if (scoreRenders > seenScoreRenders) {
-			seenScoreRenders = scoreRenders;
-			if (phase === 'capture') pendingCollapse = true;
-			else collapsed = true;
-		}
-	});
-	$effect(() => {
-		if (phase === 'summary' && pendingCollapse) {
-			pendingCollapse = false;
-			collapsed = true;
-		}
-	});
-	// The compact header's line, Kimi's "Dann — bass (provisional) — 7/10
-	// vowels" style. The voice-type segment waits for the Q5 declaration
-	// build (no selector exists yet); the separator is a middle dot per the
-	// no-em-dash constraint. The aria-label speaks the counts in words, the
-	// §4.6 discipline (a raw "7/10" reads as a fraction).
-	let compactLabel = $derived(
-		`${activeVoice ? `${activeVoice.name} · ` : ''}${capturedCount}/${ALL_VOWELS.length} ${T('calib.common.vowels')}`
-	);
-	let compactSpokenLabel = $derived(
-		`${activeVoice ? `${activeVoice.name}, ` : ''}${capturedCount} ${T('calib.common.of')} ${ALL_VOWELS.length} ${T('calib.compact.vowelsSampled')}`
-	);
+	// ── Q3 WIZARD COLLAPSE, GONE (N.114b item 8) ─────────────────────────────
+	// Two effects, `seenScoreRenders`, `pendingCollapse` and the compact label
+	// pair lived here. They collapsed the wizard to a one-line header on each
+	// fresh score render, deferring mid-capture so the ritual was never torn
+	// down (Kimi §A.28; Dann's deferral ruling, 2026-07-13). The takeover
+	// surface made the ceding pointless and Dann ruled the row away
+	// 2026-09-10. `calib.compact.vowelsSampled` is marked UNUSED in `i18n.ts`
+	// rather than deleted, the way this tree's retired strings are.
 
 	function persistStore() {
 		saveStore($state.snapshot(store) as ProfileStore);
@@ -1242,26 +1205,20 @@
 	     visual banner below renders conditionally and carries no aria-live. -->
 	<div class="visually-hidden" role="status">{holdAnnounce}</div>
 
-	<!-- The Q3 collapse header (Kimi §A.28): renders only once a score has
-	     rendered (before that there is nothing to cede the drawer to). One
-	     accordion row in both states — chevron flips, body shows or hides —
-	     so the affordance is reversible in place. The visible glyph is
-	     aria-hidden; aria-expanded and the spoken label carry the state. -->
-	{#if scoreRenders > 0 || collapsed}
-		<button
-			type="button"
-			class="wizard-compact-toggle"
-			aria-expanded={!collapsed}
-			aria-controls="calibration-wizard-body"
-			aria-label={compactSpokenLabel}
-			onclick={() => (collapsed = !collapsed)}
-		>
-			<span class="wizard-compact-chevron" aria-hidden="true">{collapsed ? '▸' : '▾'}</span>
-			<span aria-hidden="true">{compactLabel}</span>
-		</button>
-	{/if}
+	<!-- THE Q3 COLLAPSE HEADER IS GONE, N.114b item 8, RULED BY DANN 2026-09-10
+	     walking `8278429`. Kimi §A.28 built it to cede the Fit drawer to the
+	     score once a score had rendered; N.73 S3 gave calibration a TAKEOVER
+	     surface of its own, so there has been nothing to cede since, and the row
+	     folded the whole ritual away and left an empty drawer.
 
-	{#if !collapsed}
+	     THE WHOLE COLLAPSE WENT WITH IT, not just the row: the `collapsed`
+	     binding, the `scoreRenders` prop that drove it, the two effects that
+	     collapsed on a fresh render and deferred that mid-capture, the compact
+	     label pair, and three rules. This component is mounted in ONE place,
+	     `+page.svelte`'s `voiceTakeover` snippet, so there is no second surface
+	     where the fold still had a job and nothing needed scoping.
+
+	     DESK DEFAULT, ruled reversible: the body is always shown. -->
 	<div class="wizard-body" id="calibration-wizard-body">
 	<!-- The voice switcher heads the drawer (Kimi: whose-voice-is-this is
 	     settled before any capture; the main pane stays a pure gallery).
@@ -1473,8 +1430,13 @@
 					</p>
 					{@render rosterTable(true)}
 					{@render challengingInvite()}
-					{@render characteristicsButton()}
+					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
+					     "Filled Finish, ghost Add voice characteristics, ghost Start
+					     over, in that order." It stood after the characteristics
+					     button, so the column read ghost then filled then link.
+					     REORDER ONLY: same handler, same string, same recipe. -->
 					<button type="button" class="wizard-primary" onclick={finish}>{T('calib.summary.finishButton')}</button>
+					{@render characteristicsButton()}
 				{/if}
 				{#if confirmingReset}
 					<div class="wizard-inline-banner">
@@ -1487,7 +1449,14 @@
 						</div>
 					</div>
 				{:else}
-					<button type="button" class="wizard-pause" onclick={() => (confirmingReset = true)}>
+					<!-- A GHOST PILL, N.114b item 9, RULED BY DANN 2026-09-10. It was
+					     `.wizard-pause`, the underlined text link the capture phase's
+					     Pause and its return-to-summary still wear; on this surface
+					     it is the third action in a column of actions, so it takes
+					     the same `.wizard-secondary` recipe as Add voice
+					     characteristics above it. Same handler, same string; the two
+					     capture-phase links keep `.wizard-pause`. -->
+					<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>
 						{T('calib.summary.startOverButton')}
 					</button>
 				{/if}
@@ -1574,7 +1543,6 @@
 		{/if}
 	{/if}
 	</div>
-	{/if}
 </section>
 
 <style>
@@ -1614,36 +1582,10 @@
 		width: 100%;
 	}
 
-	/* The Q3 compact header: the phase-heading recipe (sans smallcaps,
-	   0.12em tracking, the Fit drawer's deeper lavender), rendered as one
-	   full-width accordion row. The chevron column is fixed-width so the
-	   label does not shift when the glyph flips. */
-	.wizard-compact-toggle {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		gap: 0.375rem;
-		background: none;
-		border: none;
-		padding: 0.125rem 0;
-		font-family: var(--font-sans);
-		font-size: 0.7rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--deeper-lavender);
-		font-weight: 600;
-		text-align: left;
-		cursor: pointer;
-	}
-	.wizard-compact-toggle:hover {
-		color: var(--ink-primary);
-	}
-	.wizard-compact-chevron {
-		display: inline-block;
-		width: 0.875rem;
-		font-size: 0.75rem;
-		line-height: 1;
-	}
+	/* `.wizard-compact-toggle`, ITS HOVER AND `.wizard-compact-chevron` ARE
+	   GONE, N.114b item 8, with the accordion row they drew. Deleted rather
+	   than left, because `svelte-check` counts an unused selector as a warning
+	   and gate 3's baseline is 7. */
 
 	.ipa-tag {
 		font-family: 'Lato IPA', sans-serif;
@@ -1774,6 +1716,20 @@
 	.wizard-secondary:hover {
 		border-color: var(--deeper-lavender);
 		color: var(--deeper-lavender);
+	}
+
+	/* THE TOUCH FLOOR, N.114b item 9. MEASURED at 43.5 px: `0.625rem` twice
+	   plus a 0.9375rem line lands half a pixel short of the ruled 44, and the
+	   ruling puts a third action in this column, so the shortfall is now three
+	   targets rather than two. Coarse pointer only, twinned on
+	   `StationHeader`'s `.station-disclosure` and `IntakePanel`'s row, so a
+	   desk's geometry does not move. It reaches Finish and Add voice
+	   characteristics as well, by half a pixel each. */
+	@media (pointer: coarse) {
+		.wizard-primary,
+		.wizard-secondary {
+			min-height: 44px;
+		}
 	}
 
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).

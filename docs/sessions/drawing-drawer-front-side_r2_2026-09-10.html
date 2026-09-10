@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The drawer front side, r2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:ital@0;1&display=swap">
+<style>
+  :root {
+    --ink-primary: #1a1612; --ink-secondary: #4a4540; --ink-tertiary: #6A655F;
+    --sage: #8B9A7D; --lavender: #8E7E9B; --cobalt: #6473A3; --paper-cream: #F0EBE0; --drawer-bg: #FAF8F5;
+    --rule: #DAD5CC; --inset: 18px;
+  }
+  body { margin: 0; background: #E9E5DD; color: var(--ink-primary); font: 15px/1.45 "Source Sans 3", "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 1240px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 17px; font-weight: 600; margin: 40px 0 8px; }
+  p.lede { color: var(--ink-secondary); margin: 0 0 12px; max-width: 70ch; }
+  .row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  figure { margin: 0; }
+  figcaption { font-size: 13px; color: var(--ink-secondary); margin: 8px 0 0; max-width: 360px; }
+  figcaption b { color: var(--ink-primary); }
+  .desk { font-size: 12px; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: .04em; }
+  .q { background:#fff; border-left:3px solid var(--lavender); padding:8px 12px; margin:10px 0; max-width:70ch; font-size:14px; }
+  .tbl { border-collapse: collapse; font-size: 13px; width: 100%; max-width: 900px; }
+  .tbl th, .tbl td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .tbl th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-tertiary); font-weight: 600; }
+  .tbl code { font-size: 12px; }
+
+  /* the phone frame: top bar and card */
+  .phone { width: 360px; background: #C9BFD0; padding: 0 0 24px; border-radius: 6px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 6px; }
+  .wordmark { font-family: "Source Serif 4", Georgia, serif; font-size: 22px; color: #fff; }
+  .wordmark small { font-size: 9px; vertical-align: sub; background: rgba(255,255,255,.35); padding: 1px 4px; border-radius: 2px; margin-left: 2px; }
+  .topbar .pills { display: flex; gap: 8px; }
+  .topbar .pill { background: rgba(255,255,255,.22); border: 0; color: rgba(255,255,255,.95); padding: 6px var(--inset); }
+  .topbar .pill.off { color: rgba(255,255,255,.55); }
+  .drawer { margin: 0 12px; background: var(--drawer-bg); border-radius: 12px 12px 8px 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+  /* bands and bodies */
+  .band { display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 var(--inset); font-size: 11.2px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
+  .band.cobalt { background: var(--cobalt); }
+  .band.sage { background: var(--sage); }
+  .band.lav { background: var(--lavender); }
+  .band .chev { font-weight: 400; opacity: .9; font-size: 13px; letter-spacing: 0; }
+  .state { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; padding: 10px var(--inset); font-size: 14px; color: var(--ink-primary); }
+  .state.app { color: var(--ink-secondary); }
+  .state .from { font-style: italic; color: var(--ink-tertiary); font-size: 13px; white-space: nowrap; }
+  .state .tt { font-variant-numeric: tabular-nums; }
+  .body { padding: 6px var(--inset) 12px; }
+
+  /* input */
+  .field { border: 1px solid #C9C3B8; border-radius: 4px; background: #fff; padding: 10px 12px; font-family: "Source Serif 4", Georgia, serif; font-size: 15px; line-height: 1.45; color: var(--ink-primary); min-height: 96px; white-space: pre-line; }
+  .field.empty { color: var(--ink-tertiary); }
+  .cue { font-size: 13px; color: var(--ink-tertiary); margin: 8px 0 0; }
+  .cue a { color: var(--ink-secondary); text-decoration: underline; text-underline-offset: 2px; }
+  .receipt { display: flex; gap: 10px; align-items: baseline; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-primary); }
+  .receipt .tag { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--sage); font-weight: 600; min-width: 42px; }
+  .receipt .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .receipt .btn { margin-left: auto; color: var(--ink-tertiary); white-space: nowrap; }
+  .receipt .btn + .btn { margin-left: 0; }
+  .syl-head { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-primary); }
+  .syl-head .chev { color: var(--ink-tertiary); }
+  .syl-head .tt { font-variant-numeric: tabular-nums; }
+  .syl { font-family: "Source Serif 4", Georgia, serif; font-size: 15px; line-height: 1.7; margin: 6px 0 0; }
+  .s { color: var(--ink-tertiary); }
+  .s.placed { color: var(--ink-primary); }
+  .s.cur { background: #fff; outline: 1px solid var(--lavender); padding: 2px 3px; border-radius: 2px; }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+  .pill { display: inline-block; border: 1px solid #C9C3B8; border-radius: 999px; padding: 6px var(--inset); font-size: 13px; color: var(--ink-secondary); background: #fff; white-space: nowrap; }
+  .pill.fill { background: var(--sage); color: #fff; border-color: var(--sage); font-weight: 600; }
+  .pill.fill.lav { background: var(--lavender); border-color: var(--lavender); }
+
+  /* stations and piece fields */
+  .st { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px var(--inset); border-bottom: 1px solid var(--rule); font-size: 15px; }
+  .st:last-child { border-bottom: 0; }
+  .st .val { color: var(--ink-tertiary); font-size: 12.5px; font-variant-numeric: tabular-nums; margin-left: auto; white-space: nowrap; }
+  .st .chev { color: var(--ink-tertiary); }
+  .st.sub { padding-left: calc(var(--inset) + 12px); font-size: 14px; color: var(--ink-secondary); border-bottom: 0; padding-top: 6px; padding-bottom: 6px; }
+  .fld { display: flex; justify-content: space-between; gap: 8px; align-items: center; border: 1px solid #C9C3B8; border-radius: 4px; background: #fff; padding: 7px 10px; font-size: 14px; margin-top: 6px; }
+  .fld.empty { color: var(--ink-tertiary); }
+  .fld .from { font-style: italic; color: var(--ink-tertiary); font-size: 12px; white-space: nowrap; }
+  .fld .chev { color: var(--ink-tertiary); }
+  .verbs { display: flex; justify-content: flex-end; gap: 14px; font-size: 13px; color: var(--ink-tertiary); margin: 10px 0 4px; }
+  .gone { opacity: .35; text-decoration: line-through; }
+</style>
+</head>
+<body>
+<main>
+<h1>The drawer front side. Drawing r2, 2026-09-10</h1>
+<p class="lede">Design's frames A, B, and C (<code>design-reply-drawer-as-a-path_r1_2026-09-10.html</code>, rendered and read this session) redrawn with Dann's rulings of 2026-09-10 applied, at the desk's 360 px, in the grammar ratified into <code>PRODUCT.md</code> §The drawer grammar. Two things Design could not draw are added: the top bar with Undo and Redo as it ships (N.114b items 1 to 5, walked), because it is the first thing the singer sees, and Piece open (Plate D), because the METADATA ruling changes it. <b>Not drawn here:</b> Design's B2, Corrections open, which is N.120's own drawing and cites the station shape ruled 2026-08-13 and Fable's E.44 amendment; and the phone landing, which is step 4. Every departure from Design's frame is named in the caption with its ruling.</p>
+
+<h2>Plate A. Empty</h2>
+<div class="row">
+<figure>
+<div class="phone">
+  <div class="topbar"><span class="wordmark">[<i>Ilya</i>]<small>2026A</small></span><span class="pills"><span class="pill off">⮌ Undo</span><span class="pill off">⮎ Redo</span></span></div>
+  <div class="drawer">
+    <div class="band cobalt"><span>Piece</span><span class="chev">⌄</span></div>
+    <div class="band sage"><span>Input</span><span class="chev">⌃</span></div>
+    <div class="body">
+      <div class="field empty">Type or paste the poem.</div>
+      <p class="cue">Drop the score here, or <a>choose a file</a>.</p>
+    </div>
+    <div class="band sage"><span>Text</span><span class="chev">⌄</span></div>
+    <div class="state app">Grayson defaults</div>
+    <div class="band lav"><span>Score markup</span><span class="chev">⌄</span></div>
+  </div>
+</div>
+<figcaption><b>Nothing filled. Input alone is open</b> (ruled 2026-09-10, accepted from Design). Piece and Score markup show their band and nothing under it. Undo and Redo sit in the top bar, right end, tangent to the card, padding equal to the band inset (ruled 2026-09-09 and 2026-09-10, shipped), greyed because there is nothing to undo. The placeholder and the drop sentence are the ruled strings (« Saisissez ou collez le poème. », « Déposez la partition ici. »). <b>One departure from Design's frame, and it is the drawing's one open question:</b> Design drew a second dashed box with a Choose a file pill; here the drop sentence is one line under the field with <i>choose a file</i> as the link and the pill gone, the desk's N.121(a) recommendation, UNRULED. Reason from the singer's seat: one surface takes either kind, so two boxes say "poem here, score there" and that is not true. The intake hint's ruled place, directly under the textarea (2026-09-09), is where this line sits.</figcaption>
+</figure>
+</div>
+
+<h2>Plate B. Mid-work: poem and score in, syllables part placed</h2>
+<div class="row">
+<figure>
+<div class="phone">
+  <div class="topbar"><span class="wordmark">[<i>Ilya</i>]<small>2026A</small></span><span class="pills"><span class="pill">⮌ Undo</span><span class="pill off">⮎ Redo</span></span></div>
+  <div class="drawer">
+    <div class="band cobalt"><span>Piece</span><span class="chev">⌄</span></div>
+    <div class="state"><span>Without Sun, no. 1: Within Four Walls · Mussorgsky</span><span class="from">from score</span></div>
+    <div class="band sage"><span>Input</span><span class="chev">⌃</span></div>
+    <div class="body">
+      <div class="field">Комнатка тесная, тихая, милая,
+Тень непроглядная, тень безответная,
+Дума глубокая, песня унылая,
+В бьющемся сердце надежда заветная;</div>
+      <div class="receipt"><span class="tag">Poem</span><span class="name">8 lines · 37 words</span><span class="btn">Clear</span><span class="btn">Replace</span></div>
+      <div class="receipt"><span class="tag">Score</span><span class="name">Mussorgsky - Sunless 01 - Within Four Walls.mxl</span><span class="btn">Clear</span><span class="btn">Replace</span></div>
+      <div class="syl-head"><span class="tt">37 / 94 placed</span><span class="pill" style="margin-left:auto;margin-right:10px;padding:4px 12px;font-size:12.5px">Start placement over</span><span class="chev">⌃</span></div>
+      <p class="syl"><span class="s placed">Ком-нат-ка тес-на-я ти-ха-я ми-ла-я Тень неп-рог-ляд-на-я тень бе-зот-вет-на-я Ду-ма глу-бо-ка-я пес-ня у-ны-ла-я</span> <span class="s cur">В</span> <span class="s">бью-щем-ся серд-це на-деж-да за-вет-на-я …</span></p>
+      <div class="actions"><span class="pill">Transcribe and fit</span></div>
+    </div>
+    <div class="band sage"><span>Text</span><span class="chev">⌄</span></div>
+    <div class="state app">Grayson defaults</div>
+    <div class="band lav"><span>Score markup</span><span class="chev">⌃</span></div>
+    <div class="st"><span>Corrections</span><span class="val">2 notes corrected · 37 / 94 placed</span><span class="chev">⌄</span></div>
+    <div class="st"><span>Voice</span><span class="pill">Calibrate</span></div>
+  </div>
+</div>
+<figcaption><b>Nothing filled; the count is the work.</b> Piece collapsed to its state line, the collapsed form (ruled 2026-09-10). Placed syllables black, unplaced tertiary, the cursor boxed in lavender, and no word on any unplaced syllable: the count carries it (ruled 2026-09-10). Undo is live. <b>Three additions to Design's frame:</b> Start placement over as a ghost pill in the open syllable line's row, beside the count (ruled 2026-09-10, N.114b item 9, in Code now); the Voice station always expanded with its chevron struck (ruled 2026-09-09), which Design's frame already obeyed; and "Calibrate" as the first-time verb, « Calibrer » adopted. Transcribe and fit is drawn outline because its job is done, as Design drew it; what the button still does since N.112 is NOT ESTABLISHED (N.121(c)), so nothing about it is settled by this plate. The Corrections row's state words are the French table's rows, adopted or coined NOT ESTABLISHED.</figcaption>
+</figure>
+</div>
+
+<h2>Plate C. At rest: everything done</h2>
+<div class="row">
+<figure>
+<div class="phone">
+  <div class="topbar"><span class="wordmark">[<i>Ilya</i>]<small>2026A</small></span><span class="pills"><span class="pill">⮌ Undo</span><span class="pill off">⮎ Redo</span></span></div>
+  <div class="drawer">
+    <div class="band cobalt"><span>Piece</span><span class="chev">⌄</span></div>
+    <div class="state"><span>Without Sun, no. 1: Within Four Walls · Mussorgsky</span><span class="from">from score</span></div>
+    <div class="band sage"><span>Input</span><span class="chev">⌄</span></div>
+    <div class="state"><span class="tt">8 lines · 37 words · 94 / 94 placed</span></div>
+    <div class="band sage"><span>Text</span><span class="chev">⌄</span></div>
+    <div class="state app">Grayson defaults</div>
+    <div class="band lav"><span>Score markup</span><span class="chev">⌄</span></div>
+    <div class="state"><span class="tt">2 notes corrected · Voice: Dann · 10 of 10</span></div>
+  </div>
+</div>
+<figcaption><b>Four bands, four lines, nothing filled.</b> Design's frame C unchanged in content. The singer's own content (title, counts, voice) in primary ink; "Grayson defaults" is apparatus and takes secondary. Re-calibrate is not on the face; it lives inside Voice when Score markup opens. If a Notation toggle is on, the Text line reads "2 of 7 changed" (N.119 carries the live case). <b>What "done going quiet" means is NOT ESTABLISHED</b> in the sources read (PRODUCT.md says so); this plate draws only what is ruled.</figcaption>
+</figure>
+</div>
+
+<h2>Plate D. Piece open, with the METADATA label struck</h2>
+<div class="row">
+<figure>
+<div class="phone">
+  <div class="topbar"><span class="wordmark">[<i>Ilya</i>]<small>2026A</small></span><span class="pills"><span class="pill">⮌ Undo</span><span class="pill off">⮎ Redo</span></span></div>
+  <div class="drawer">
+    <div class="band cobalt"><span>Piece</span><span class="chev">⌃</span></div>
+    <div class="body">
+      <div class="fld"><span>Without Sun, no. 1: Within Four Walls</span><span class="from">from score</span></div>
+      <div class="fld empty"><span>Opera, song cycle, opus number</span></div>
+      <div class="fld"><span>Modest Mussorgsky (1839–1881)</span><span class="from">from score</span><span class="chev">⌄</span></div>
+      <div class="fld empty"><span>Poet or librettist</span><span class="chev">⌄</span></div>
+      <div class="fld empty"><span>Translator</span><span class="chev">⌄</span></div>
+      <div class="verbs"><span>Revert to score header</span><span>Reset</span></div>
+    </div>
+    <div class="st"><span>Repertoire</span><span class="chev">⌄</span></div>
+    <div class="st"><span>Export and import</span><span class="chev">⌃</span></div>
+    <div class="st sub"><span>Export all songs</span></div>
+    <div class="st sub"><span>Export this song</span></div>
+    <div class="st sub"><span>Import a song</span></div>
+    <div class="band sage"><span>Input</span><span class="chev">⌄</span></div>
+    <div class="state"><span class="tt">8 lines · 37 words · 37 / 94 placed</span></div>
+    <div class="band sage"><span>Text</span><span class="chev">⌄</span></div>
+    <div class="state app">Grayson defaults</div>
+    <div class="band lav"><span>Score markup</span><span class="chev">⌄</span></div>
+    <div class="state"><span class="tt">2 notes corrected</span></div>
+  </div>
+</div>
+<figcaption><b>The band's chevron is the only door.</b> The METADATA word on the Piece band is struck (ruled 2026-09-10); the fields show whenever Piece is open, and collapsing Piece is the collapse. The shipped face (<code>drawer-front.png</code>, read this session) carried METADATA at the band's right end where every other band carries a bare chevron; now the four bands are siblings. Fields, text verbs, Repertoire, and Export and import are as shipped, unchanged; Export and import is drawn open to show the ruled order, Export all songs, Export this song, Import a song (ruled 2026-09-10, N.114b item 7, in Code now). <span class="desk">desk default:</span> the chevron on the Piece band points up when open, as Input's does, so one glyph means one thing drawer-wide.</figcaption>
+</figure>
+</div>
+
+<h2>Plate E. Departures from Design's frames, in one table</h2>
+<table class="tbl">
+<tr><th>where</th><th>Design drew</th><th>r2 draws</th><th>source</th></tr>
+<tr><td>Every plate</td><td>no top bar</td><td>Undo and Redo as pills, right end, tangent to the card</td><td>ruled 2026-09-09 and 2026-09-10, shipped, N.114b items 1 to 5</td></tr>
+<tr><td>A, the drop cue</td><td>a second dashed box with a Choose a file pill</td><td>one line under the field, the verb as the link</td><td>desk recommendation, N.121(a), UNRULED</td></tr>
+<tr><td>B, the syllable line's row</td><td>no pill</td><td>Start placement over, ghost, in the open row</td><td>ruled 2026-09-10, N.114b item 9</td></tr>
+<tr><td>B2, Corrections open</td><td>lyric hands swap above note tools by state</td><td>not redrawn here; lyric first, fixed, always</td><td>ruled 2026-09-10; N.120's drawing carries it</td></tr>
+<tr><td>D, the Piece band</td><td>not drawn open</td><td>open, METADATA struck, chevron only</td><td>ruled 2026-09-10</td></tr>
+<tr><td>D, Export and import</td><td>not drawn</td><td>Export all songs, Export this song, Import a song</td><td>ruled 2026-09-10, N.114b item 7</td></tr>
+<tr><td>Width</td><td>390 px</td><td>360 px, the desk's r1 measure</td><td>drawing convention only; nothing reflows</td></tr>
+</table>
+
+<h2>Plate F. What this drawing asks</h2>
+<div class="q"><b>One thing.</b> Plate A's drop cue: one line under the field with "choose a file" as the link (drawn, desk recommendation), or Design's dashed box with the pill? Do nothing is the shipped hint, "Drop the other kind here, or a new file of the same kind to replace it.", which presumes one kind is already in and reads wrong on an empty drawer, so do nothing does not hold. <b>Not asked, because ruled or placed elsewhere:</b> "placed" and every other string in the French table stands unless Dann names a row; Transcribe and fit's fate waits on Code stating what it does (N.121(c)); the phone landing is step 4 against portrait C; Corrections is N.120.</div>
+</main>
+</body>
+</html>
