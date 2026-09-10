@@ -184,6 +184,34 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
 > DESK DEFAULT. After N.114 unless he places it.
 >
+> **DESIGN RETURNED, 2026-09-10 07:36, READ IN FULL, CRITIQUED, RULED ON.**
+> Reply: `docs/sessions/design-reply-drawer-as-a-path_r1_2026-09-10.html`
+> (bundled page; render it to read it). Critique:
+> `docs/sessions/desk-critique-of-design-reply_r1_2026-09-10.md`. Design's
+> two findings the desk missed: THE PHONE LANDING (a step's primary action
+> changes nothing in view on a phone) and THE STALE STATE (done is not
+> permanent; toggles = N.119). **Dann's rulings on it, all 2026-09-10:**
+> lyric hands FIRST in Corrections, always, fixed (Design's swap-by-state
+> rejected); the METADATA label on the Piece band is struck (DESK DEFAULT:
+> the fields show whenever Piece is open); on a phone a step's primary
+> action lands the singer on the page and Back brings them home (READ
+> AGAINST PORTRAIT C before Code); the ⓘ on Russian-o stays as the ONE
+> NAMED EXEMPTION to slate rule 11; no word on every unplaced syllable,
+> count plus ink on the page, state in the accessible label. French table
+> shown (INBOX); « saisir », « coller », « déposer » adopted from the tree;
+> the rest stands unless he names a row. Design's corrections to the
+> thesis ACCEPTED: state line is the collapsed form; empty drawer opens
+> Input only, Piece collapsed; "committed is black" holds once placed.
+> Usage: Fable 62%, all-models 38%, reset Sunday; Fable scarce.
+>
+> **NEXT, in order:** (1) transcribe the ratified grammar, the path rules,
+> and the exemptions into `PRODUCT.md` (mechanical: Sonnet); (2) a drawing
+> r2 of the drawer front side from Design's frames A, B, C with Dann's
+> rulings applied (desk); (3) Code briefs: N.114b items 6 to 9 (ready),
+> then the path pass (Piece collapsed on empty, state lines, one primary,
+> Calibrate, placed, strings), then N.119, N.120 (lyric first), N.121,
+> N.122; (4) the phone landing against portrait C, its own drawing.
+>
 > **THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH. Design is being
 > consulted.** Brief `docs/sessions/brief-to-design-drawer-as-a-path_r1_2026-09-10.md`
 > committed `a03cfdc`, package of five (brief, drawing r1, design system
