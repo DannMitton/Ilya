@@ -3446,3 +3446,208 @@ Verbatim and in order: N.108 (five increments), N.111 (three increments plus 3a 
 > schedule), N.84 the Guide redo (deferred so it reflects the finished
 > build), N.94, N.102, N.103, and the release order N.85 through N.88.
 
+
+
+---
+
+## Block 9. Moved from STATE.md at the close of 2026-09-10
+
+N.113a and N.113b walks and the item 3 closing account; N.114 and N.114a done and walked; the pre-N.114 "Type Into Score" one-thing narrative, superseded 2026-09-09. Verbatim, in the order they stood.
+
+> **N.113a SHIPPED `00149c3`, 2026-09-07 late, WALKED BY DANN 2026-09-08 00:05, see the walk block below.**
+> Code built, gated (gate 4 moved 1056 to 1058), and walked all five items on a
+> local production build: memo `docs/sessions/memo-n113a-walk_r1_2026-09-07.md`.
+> `ilya-ship.sh:79` now reads `1058`. **Dann's walk on the alias is the one
+> open step**; the session that shipped it hit its five-hour limit at 97%
+> before he opened the alias. The five things to see: a deleted word leaves
+> its notes bare on both lines and moves nothing; after a melisma, a deleted
+> word's notes stay bare (no `ка ка`); the dock's Melisma row carries the
+> dock's 4 px gap; Cmd-Z undoes only with the field unfocused; the loupe boxes
+> the taken notehead, no bar. **Memo §9 carries two findings not Code's to
+> fix**: a clitic re-seat pulls a run back by one after a melisma shift
+> (`seatCliticFolds` in `reseatAcross`), and on the walk fixture 59 of 96
+> seats carry score coordinates, so a text edit reaches only poem lines 0, 1,
+> 2, and 7. The second wants a number. **Memo §10, NOT ESTABLISHED**: the
+> tail case of the vacated-note rule; a melisma displacement plus deleting the
+> first word leaves head notes on the file's words (a ruling, not a default);
+> Ctrl-Z on Windows and Linux.
+>
+> **N.113a WALKED BY DANN 2026-09-08 00:05, on the alias, ALL FIVE SEEN.**
+> Items 1 and 2 together: with the melisma set, deleting «песня» left its two
+> notes and the sustained B♭ bare on both lines, nothing else moved, no file
+> words appeared, POEM 37 to 36 words. Redo by Shift-Cmd-Z also seen. N.113a
+> is CLOSED except for the three findings below, which are N.113b's. Item 5 SEEN:
+> the taken note wears the box, no bar. **Two findings, both Dann's, for a
+> N.113b:** (1) the loupe's box on the taken note goes LAVENDER (it drew
+> sage); (2) the loupe's locator, "m. 7 · system 3 of 8", gains a SECOND LINE
+> naming the note, its beat in the measure, and its duration, in the shape of
+> the drawing's "note 5, F♯4, quarter" line he liked. The tree already knows the beat:
+> `RhythmicPosition` (`packages/score-parser/src/types.ts:510-518`) holds each
+> note's position from the barline as a whole-note fraction, so the second
+> line is formatting against the time signature, not a new measurement. **RULED BY DANN on the same walk: the beat count
+> is COMPOUND-METRE AWARE.** 6/8 is two beats of a dotted quarter, not six;
+> when the numerator is a multiple of 3 and the denominator 8 or 16, the beat
+> is the dotted unit and the count is numerator ÷ 3; otherwise the beat is the
+> denominator's unit; 3/8 is one beat. A position inside a beat reads as beat
+> plus pulse, wording to be shown to Dann before it ships. Item 3 SEEN: the
+> Melisma row's gap reads even. **(3) DEFECT, Dann's eye on the page 2026-09-07
+> late:** Melisma on the taken B♭3 (m. 7, «песня», word-final «ня») drew a
+> HYPHEN level with the other hyphens, not the baseline extender. The file's
+> convention is hyphen `y=147` stroke 1, extender `y=151` stroke 0.5
+> (memo-n113 §7.1); the harness walk saw an extender on «ка» (memo-n113
+> §8 step 1), so this is likely the mid-run or shifted case. Rule, Dann's:
+> word-final sustain draws an extender on the baseline; mid-word sustain
+> keeps hyphens. Item 4 SEEN, both halves: Cmd-Z with the field focused does
+> nothing; blurred, it undid the melisma and the pill read "Redo: melisma
+> set". Items 1 to 4 not yet
+> walked when this line was written.
+>
+> **N.113b SHIPPED `6ec4378`, 2026-09-08, WALK STOPPED AT ITEM 3, 2026-09-09.**
+> Items 1 and 2 SEEN by Dann (lavender box; second locator line read `G3 ·
+> beat 1 · Quarter`). Item 3 NOT WALKED. **Open, and the thread ended on it:**
+> on Without Sun no. 1, system 1, an extender runs from «ка» of «Комнатка»
+> onto the B♭3 (m. 2, beat 3, dotted quarter) and every syllable after it
+> sits one note late; Dann calls it an improper melisma. The Melisma pill on
+> that note is PLAIN (Dann's eye, 2026-09-09), so it is not a singer mark in
+> the store. Where the extender and the shift come from is NOT ESTABLISHED;
+> the desk did not open the file's own melisma path. Next session opens
+> `pairings.ts` (`melismaIds`, `:408`) and the renderer's `melismaEndX` /
+> `melismaPreview` (`staff-renderer.ts:2751-2759`, option at `:337`) and reads
+> the score file's own underlay for that note before saying anything. Also
+> ask Dann whether the setting holds «ка» across the B♭ or brings «тес»
+> onto it; he knows the score. **The thread ended with Dann upset at the
+> desk's untethered claims; tether 21 in `CONTRACT.md` is the ruling.**
+> Memo `docs/sessions/memo-n113b-walk-findings_r1_2026-09-08.md`. Gates 4 and 5
+> moved to 1074 and 547 | 5 (552), `ilya-ship.sh:79-80` updated. Item 1 SEEN
+> by Dann: the loupe's box is lavender, the page ring with it (Code's
+> default). **Walk finding, cosmetic:** a vertical hairline above the stave
+> between the key signature and the taken note, visible at 90% browser zoom
+> only, gone at other zooms. DESK INFERENCE: a rasterization seam where the
+> loupe's head crop meets its music crop (`Loupe.svelte:509-517`, one clone,
+> two viewports) lands on a fractional device pixel. Fix is Code's: overlap
+> the crops by a fraction or snap the seam. Not a DOM element; not chased.
+> **Walk observation, not a defect:** the box on a B♭3 with a flat read tall
+> to Dann. Cause established: `VoiceProfilePane.svelte:459` sets height to
+> `max(ink + 18, width × 2.5)`; the flat widens the box and the ruled 2.5
+> portrait floor grows the height. The ring never reads the underlay. The
+> desk first blamed the extender off a picture and was wrong; Dann corrected
+> it. Whether 2.5 holds on accidental-bearing notes is his, unasked.
+> **Memo §7.1, Code's finding, wants a number:** on the Sunless fixture with
+> no poem and no melisma, the system holding measure indices 6 and 7 draws
+> nine underlay cells where the file has twelve, wrong words; every other
+> system right; the pairing layer's seats, third walk to touch it (see also
+> memo-n113a §9). Dann to rule whether it is numbered.
+>
+> **N.113b ITEM 3 CLOSED BY DANN'S HANDS, 2026-09-09, session on HEAD `15e8ab4`.**
+> The "improper melisma" was not a melisma path at all: the score file gives
+> the B♭3 of m. 2 its own «тес» and no `<extend>` (parsed this session), the
+> renderer's file-side rule (`staff-renderer.ts:1841-1852`) and singer-side
+> rule (`:1887-1904`) both need the next note bare or marked, and the pill
+> was plain. What the page carried was a garbled seat map: from «тес» on,
+> every seat one note late, two junk seats («я ти»), «ка» unseated, the
+> final «я» pushed off; system 2 carried «на нат Ком» for «на-я тень»;
+> «песня» was absent because Dann deleted it on the N.113a walk. **Cleaned
+> with the existing hands only:** shift ← to end of lyric from the junk
+> note (drops the taken note's seat, `pairings.ts:849-850`, and pulls every
+> later seat back one), then two-click placements (arm the syllable in the
+> Underlay station, `SyllableStation.svelte:129`; pick the note in the loupe,
+> `+page.svelte:623-626`, `:579-600`), then «песня» typed back into the poem
+> box, which re-seated live with no press (N.112, `+page.svelte:544-548`)
+> but produced a stray «в бью» and a one-forward shift after it, cleaned by
+> one more shift ←. **Dann: the whole piece is seated.** Whether the seat
+> garble's ORIGIN is the pairing layer's coordinates (memo-n113a §9, 59 of
+> 96 seats) is still unnumbered and still wants a number.
+>
+> **Walk findings 2026-09-09, all Dann's, in INBOX.md:** the loupe's box on
+> the dotted B♭3 reads tall (`VoiceProfilePane.svelte:459`); the loupe's
+> locator should read "dotted quarter" not "Quarter · Dot", French to be
+> shown; the Open syllables toggle should alter Score markup live as it does
+> Transcription; the loupe draws a stress mark U+02C8 in a Cyrillic cell
+> where the page does not (loupe only, source NOT ESTABLISHED, neither
+> `pairings.ts` write of `STRESS_MARK` touches `cyrillic`); a placed final
+> syllable draws no hyphen before it («ка я»; `pairedSyllableType` not
+> read).
+>
+
+> **N.114a DONE. SHIPPED `f3250a6`, WALKED BY DANN ON THE ALIAS 2026-09-10 01:06, ALL SEEN, "it works perfectly and I love it."**
+> Voice open with no chevron; the hint under the poem field; Undo and Redo
+> at the bar's right end, dimmed on an empty stack (the stack was empty after
+> his reload; whether it survives a reload is NOT READ), lit after a placement
+> and undoing exactly it. Code's memo `memo-n114a-voice-and-hint_r1_2026-09-09.md`:
+> the dock lost its Undo row, loupe `top` moved 221.1 to 238.6 px on a phone;
+> bare pills read the table's own "Undo"/"Annuler" (`verbOnly`); only a pill
+> carrying a clause may shrink; the pair is drawn on every destination (DESK
+> DEFAULT, one line to make it Studio-only). Vercel `dpl_Gu1g3UAA4TGZA4fdT1h7jDzz63gh`.
+> **N.114b, ruled by Dann on the same walk, briefed, NOT RUN:** the pills
+> align to the drawer's right edge, directly above the hands, so desk and
+> phone become one picture; `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`.
+>
+> **N.114 DONE. SHIPPED `3765314`, WALKED BY DANN ON THE ALIAS 2026-09-09, ALL SEEN.**
+> Code's memo `docs/sessions/memo-n114-syllable-line_r1_2026-09-09.md`: six
+> items matched except item 1 by one Svelte `<!---->` anchor, seven bytes,
+> accepted; gate 4 1074 to 1075 (one test added), `ilya-ship.sh:79` updated;
+> Code ran `git status` once by reflex, owned in the memo. Dann saw: the boxed
+> collapsed row under the score receipt; the open line with placed black and
+> unplaced grey; a syllable click moving the SABB without taking the field's
+> focus; a loupe placement turning the syllable black and moving the count;
+> Underlay gone from Score markup. Vercel deployment
+> `dpl_HLDV6zJ7RjEPUqNKkxEyfVDy6wcb` READY for that sha on the branch alias.
+> **Two rulings from the walk, both his, briefed as N.114a:**
+> `docs/sessions/brief-n114a-voice-and-hint_r1_2026-09-09.md`: Voice always
+> expanded, chevron struck; `intake.dropHint` moves under the textarea, same
+> words; **and Undo and Redo move to the top bar, right end, fixed, ruled by
+> Dann from the user's side ("the button is hard to find") after the desk
+> argued the status quo and was told so; one undo, one place, the dock's row
+> goes.** Glyph in the field's corner considered and rejected by Dann (it was
+> a button he struck 2026-09-03); state-dependent caption rejected. NOT RUN.
+>
+> *(superseded 2026-09-09 late, kept for the record:)* N.114 NARROWED, r2 DRAWN AND RULED, BRIEFED:
+> `docs/sessions/brief-n114-syllable-line_r1_2026-09-09.md`, six walk items,
+> no French, no new string. Code has not run it. Next: Dann pastes it into
+> Code; then his walk on the alias.
+> r2 is `docs/sessions/drawing-n114-type-into-score_r2_2026-09-09.html`,
+> rendered and checked. Rulings on it, all Dann's: the collapsed row sits
+> under the score receipt, inside the same hairline box the open line wears
+> (his idea, "port the squircle up"), one clipped line, placed count, chevron
+> down; the open row has NO label, count and chevron carry it; **the loupe's
+> typed field is STRUCK**: "lyrics are linear, the user will alter them in
+> the input field", and the desk agreed that it duplicated N.112 minus a
+> scroll. **N.114 is now the syllable line under the poem field, Plates 1
+> and 2, nothing else.** DESK DEFAULT for its name: **N.114, the syllable
+> line under the poem**; "Type Into Score" promised Finale's gesture, which
+> this never was. No French owed by N.114. Buttons in every drawing wear
+> the pill ends ruled 2026-09-03 (`IntakePanel.svelte:753-768`); r1 drew
+> them square. Still DESK DEFAULT, unruled and reversible: the line stays
+> open per session once opened; while the dictionary loads the row is absent.
+>
+> **THE ONE THING after Dann's N.113a walk: N.114, Type Into Score.**
+> **Drawing r1 in the tree, `docs/sessions/drawing-n114-type-into-score_r1_2026-09-08.html`
+> (rode in `00149c3`), and Dann ruled on it 2026-09-07 late, all recorded
+> here, r2 NOT YET DRAWN:** (1) the collapsed line is reading B, a clipped
+> one-line preview with the placed count at its right and a chevron pointing
+> DOWN; readings A and C retired; (2) no syllable line at all without a score:
+> the transcription paper already shows the division, so the line appears
+> only when a score is present and is then always boxed (plate 2 struck);
+> (3) COLOUR INVERTED from the tree's default: unplaced syllables in tertiary
+> ink, placed in primary ink, "committed is black"; (4) his term for the
+> cursor is the **syllable-assignment bounding box, SABB**; use it; (5) RULED:
+> the line is click-to-place only; a click moves the SABB and does NOT park
+> the field's caret (navigation conflict); the field writes, the line places,
+> the dock's typed field rewrites one word, every other verb stays in the
+> dock; (6) plate 4's taken-note line ("note 5, F♯4, quarter") is desk
+> wording, liked, not in the tree. **Facts for the brief, read from the tree
+> 2026-09-07:** syllable overrides survive Transcribe since N.112
+> (`+page.svelte:2082`) but are cleared by Clear, song switch (`:2090-2096`)
+> and the global open-syllabification toggle (`:2391`); they are per-session,
+> never stored (`:2076`); Start placement over does not touch them (`:529`).
+> Whether the line syllabifies before Transcribe is pressed is Code's cost to
+> state. **"Transcribe owns every text operation" is E.46's desk comment, not
+> a ruling.** Frame agreed 2026-09-07 (Dann's idea, desk-adjusted; INBOX): the syllabified line moves
+> from Score markup to sit under the field inside the Input band, live on
+> text present, collapsed by default; without a score it is read-only
+> syllabification (hyphens, no box); with a score the box appears and a
+> click moves the cursor. Score markup keeps Corrections, Voice, and a placed
+> count. The loupe dock keeps the hands: taken note, next syllables, shifts,
+> Undo and Redo, and N.114's typed field, which rewrites that word in the
+> poem and marks it in the field; N.112 re-seats. Drawing before Code.
+>
