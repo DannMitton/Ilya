@@ -84,6 +84,47 @@ node "Redo"'s `right` equals the METADATA label's, both to the pixel; at
 390 px both pills, 44 px, and Français still fit on one line with the
 clipping rule holding.
 
+## Item 6, Dann's walk of `8278429`, 2026-09-10
+
+Air above the open syllable box to match the air below it. Below: Choose a
+file's row is `margin-top: 8px` under the box (`IntakePanel.svelte:853-857`).
+Above: the header row (`.syl-head`, `:779-783`) has 8 px above itself and
+nothing between it and `.syl-box` (`:504`). Give the open box the same 8 px
+above it, from the one value the actions row uses (a custom property or a
+shared rule, not a second literal). Walk item: header row bottom to box top
+equals box bottom to Choose a file top, in the DOM.
+
+## Item 7, Dann's walk of `8278429`, 2026-09-10
+
+Under Export and import (Piece band, `SongList.svelte` or wherever the three
+buttons live; read it), the order becomes: **Export all songs, Export this
+song, Import a song.** Today it is Export this song, Import a song, Export
+all songs. Reorder only; same handlers, same strings, same pills. Walk item:
+the three read in that order left to right on the desk and top to bottom
+if they wrap at 390 px.
+
+## Item 8, Dann's walk of `8278429`, 2026-09-10
+
+On the calibration takeover surface, the compact collapse row ("Dann ·
+7/10 vowels", `CalibrationWizard.svelte:1250-1262`, gated on
+`scoreRenders > 0 || collapsed`) folds the whole wizard body away and leaves
+an empty drawer. It was built to cede the Fit drawer to the score (Kimi Q3,
+§A.28); calibration now takes over its own surface, so there is nothing to
+cede. DESK DEFAULT, ruled reversible: remove the row and the collapsed state
+on the takeover surface; the body is always shown. Read first whether the
+wizard is mounted anywhere else where the fold still has a job, and say so
+in the memo; if it is, scope the removal to the takeover. Walk item: with a
+score rendered, the calibration surface opens with no collapse row and the
+body present; nothing else on the surface moves.
+
+## Item 9, same walk
+
+On the calibration surface, "Start over" (the text link under Finish) becomes
+a ghost pill, the same recipe as "Add voice characteristics" above it
+(`.wizard-secondary`, `border-radius: 999px`). Filled Finish, ghost Add
+voice characteristics, ghost Start over, in that order. Same handler, same
+string. Walk item: three pills in a column; 44 px on touch.
+
 ## Constraints
 
 - Use the width the layout already has for the drawer column; do not

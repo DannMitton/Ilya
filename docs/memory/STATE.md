@@ -184,6 +184,81 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
 > DESK DEFAULT. After N.114 unless he places it.
 >
+> **N.114b, items 1 to 5 DONE on Dann's alias walk 2026-09-10 (`ec4fbe9`,
+> `7665afa`, `8278429`); items 6 to 9 BRIEFED, NOT RUN**, all in
+> `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`: 6 air
+> above the open syllable box; 7 Export and import order (all, this, import);
+> 8 the calibration surface's collapse row goes; 9 Start over as a ghost
+> pill. Done and seen: the pills tangent to the card with "Redo" on
+> METADATA's line (`--band-inset`, `app.css`); air under every band; Start
+> placement over as a ghost pill in the open syllable line's row. **Undo for
+> Start placement over is NOT wired: no existing clause fits; the sentence
+> is Dann's to rule (English and French), then one line in Code.**
+>
+> **NUMBERED BY DANN 2026-09-10 ("create cardinal numbers for what deserves
+> it"), all UNPLACED, all after N.114b's items 6 to 9:**
+>
+> **N.119, the Notation toggles reach Score markup live.** Dann: "I want
+> them to." Tree facts: the open-syllabification toggle clears syllable
+> overrides (`+page.svelte:2391`); the IPA line under the notes comes from
+> `underlayResolvers` (`VoiceProfilePane.svelte:748-755`), which takes
+> `openSyllabification` only. Code reads which toggles reach it. Own brief.
+>
+> **N.120, the Corrections station redesigned: context before choice.**
+> Dann: "a tangled junk drawer." About twenty controls drawn at once, one
+> of four stations named. Desk's recommendation, unruled: each station is a
+> sentence that opens ("Duration · dotted quarter", "Pitch · B♭3",
+> "Accidental · flat", "Lyric · тес, 37 / 94"), one open at a time, and
+> only what applies to the taken thing is shown (nothing taken: "Take a note
+> to correct it"; a rest: no Pitch, Accidental, Lyric). DRAWING FIRST,
+> citing the station shape ruled 2026-08-13 and Fable's E.44 amendment
+> (tether 17), then a Fable pass if Dann wants one, then Code.
+>
+> **N.121, RULED IN PART 2026-09-10 late, the two sets of words:** the
+> singer is never surprised by which words end up under the notes. A score
+> arriving with words into an EMPTY box fills the box and tags the poem
+> receipt "from score" (the Piece fields' own pattern); no question; never
+> overwrite a singer's words. No difference reporting, ever. No narration on
+> score arrival. Dann's earlier sketch of an in-place question is
+> WITHDRAWN. Also under N.121: the PDF question asks only when neither tell
+> fires (Cyrillic text layer = poem; staves = score), Code to wire.
+>
+> **N.121, the Input band's words and the way in.** Four things, all copy
+> or cue, French owed on each: (a) the drop cue and Choose a file are one
+> problem; desk recommends one line under the field, "Drop a score or a
+> photograph here, or choose a file." with the verb as the link and the pill
+> gone; alternative, the pill moves beside the score receipt. UNRULED. (b)
+> the collapsed row's "37 / 94" wants a word: "37 / 94 placed", « 37 / 94
+> placées », both coined, or the count leaves the row. UNRULED. (c)
+> "Transcribe and fit": since N.112 text transcribes live, so what the
+> button still does is NOT ESTABLISHED; Code states it before any rename;
+> if it only fits, "Fit to score" / « Ajuster à la partition », coined.
+> (d) the undo clause for Start placement over, "placements rebuilt" or
+> Dann's better word, both languages, then the push is one line.
+>
+> **N.122, the capture surface as a landmark.** Dann, 2026-09-10: the
+> lavender vowel-intake surface (the capture phase with the fry guide,
+> `CalibrationWizard.svelte`, phase `capture`) is a surface "people will
+> respond well to" and he wants it as a VISUAL LANDMARK that stays
+> available to view. Ruled shape: the summary stays on screen; the capture
+> surface lives inside it as a section that opens when Re-take or "Sing the
+> three Ilya derived for you" is pressed, and folds when that vowel is done,
+> so the table is never lost while singing. Still a phase in the wizard's
+> logic; what changes is that phases no longer replace each other on the
+> summary. DRAWING FIRST, citing wizard spec v1 and pacifier spec v11
+> (project knowledge, tether 17) so nothing ruled there is re-decided.
+> Unplaced; belongs with N.120 as "the drawer's surfaces".
+> **DRAWN r1, 2026-09-10 late: `docs/sessions/drawing-calibration-surface_r1_2026-09-10.html`**,
+> rendered and checked. Plate 1 is THE DRAWER GRAMMAR, every measure with
+> its file and line, to go into `PRODUCT.md` once Dann ratifies it; Plates
+> 2 and 3 redraw the summary to it (verbs by state, two station rows, one
+> caption, Finish last) and show N.122's capture surface opening under the
+> pressed row. Plate 5 asks four things, unanswered. Wizard spec v1 and
+> pacifier spec v11 NOT OPENED; open them before Code is briefed.
+>
+> **For N.84 (Guide):** explain Revert to score header; a music file carries
+> its own header text. Filed in INBOX with the mechanism.
+>
 > **N.114a DONE. SHIPPED `f3250a6`, WALKED BY DANN ON THE ALIAS 2026-09-10 01:06, ALL SEEN, "it works perfectly and I love it."**
 > Voice open with no chevron; the hint under the poem field; Undo and Redo
 > at the bar's right end, dimmed on an empty stack (the stack was empty after

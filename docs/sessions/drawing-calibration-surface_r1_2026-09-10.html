@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The drawer grammar and the calibration surface, r1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:ital@0;1&display=swap">
+<style>
+  :root {
+    --ink-primary: #1a1612; --ink-secondary: #4a4540; --ink-tertiary: #6A655F;
+    --sage: #8B9A7D; --lavender: #8E7E9B; --paper-cream: #F0EBE0; --drawer-bg: #FAF8F5;
+    --rule: #DAD5CC;
+  }
+  body { margin: 0; background: #E9E5DD; color: var(--ink-primary); font: 15px/1.45 "Source Sans 3", "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 1240px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 17px; font-weight: 600; margin: 40px 0 8px; }
+  p.lede { color: var(--ink-secondary); margin: 0 0 12px; max-width: 70ch; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  figure { margin: 0; }
+  figcaption { font-size: 13px; color: var(--ink-secondary); margin: 8px 0 0; max-width: 360px; }
+  figcaption b { color: var(--ink-primary); }
+  .desk { font-size: 12px; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: .04em; }
+
+  /* the drawer */
+  .drawer { width: 360px; background: var(--drawer-bg); border: 1px solid var(--rule); border-radius: 4px; padding: 0 0 12px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .band { display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #fff; }
+  .band.sage { background: var(--sage); }
+  .band.lav { background: var(--lavender); }
+  .band .chev { font-weight: 400; opacity: .9; }
+  .inner { padding: 12px; }
+  .intake { border: 1px dashed #C9C3B8; border-radius: 4px; padding: 10px; background: #fff; }
+  .field { font-family: "Source Serif 4", Georgia, serif; font-size: 15px; line-height: 1.4; color: var(--ink-primary); min-height: 96px; white-space: pre-line; }
+  .field.empty { color: var(--ink-tertiary); }
+  .receipt { display: flex; gap: 10px; align-items: baseline; margin-top: 10px; font-size: 13px; color: var(--ink-secondary); }
+  .receipt .tag { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--sage); font-weight: 600; }
+  .receipt .btn { margin-left: auto; color: var(--ink-tertiary); }
+  .receipt .btn + .btn { margin-left: 0; }
+  .actions { margin-top: 10px; }
+  .ghost { display: inline-block; border: 1px solid #C9C3B8; border-radius: 999px; padding: 4px 10px; font-size: 13px; color: var(--ink-secondary); }
+  .hint { font-size: 12px; color: var(--ink-tertiary); margin: 8px 0 0; }
+  .primary { display: block; margin: 12px 0 0; text-align: center; background: var(--ink-primary); color: #fff; border-radius: 999px; padding: 8px; font-weight: 600; }
+
+  /* the syllable line under the field */
+  .syl-head { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-secondary); }
+  .syl-head .chev { color: var(--ink-tertiary); }
+  .syl-head .count { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; white-space: nowrap; margin-left: 8px; }
+  .syl { font-family: "Source Serif 4", Georgia, serif; font-size: 15px; line-height: 1.7; margin: 6px 0 0; }
+  .syl.boxed { background: #fff; border: 1px solid var(--lavender); border-radius: 3px; padding: 6px 8px; }
+  .syl.preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; color: var(--ink-secondary); font-size: 14px; }
+  .s { display: inline; padding: 0 1px; border-radius: 2px; }
+  .s { color: var(--ink-tertiary); }
+.s.placed { color: var(--ink-primary); }
+  .s.cur { background: #fff; outline: 1px solid var(--lavender); padding: 2px 3px; }
+  .s.mark { text-decoration: underline; text-decoration-color: var(--sage); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .plain .s { cursor: default; }
+
+  /* stations */
+  .station { padding: 8px 12px; border-bottom: 1px solid var(--rule); }
+  .station:last-child { border-bottom: 0; }
+  .st-head { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-secondary); }
+  .st-head .count { font-weight: 400; text-transform: none; letter-spacing: 0; font-variant-numeric: tabular-nums; color: var(--ink-tertiary); }
+  .st-head .chev { font-weight: 400; color: var(--ink-tertiary); }
+  .q { background:#fff; border-left:3px solid var(--lavender); padding:8px 12px; margin:10px 0; max-width:70ch; font-size:14px; }
+.gone { opacity: .35; text-decoration: line-through; }
+  .note { font-size: 12px; color: var(--ink-tertiary); margin: 6px 0 0; }
+
+  /* the dock */
+  .dock { width: 360px; background: #fff; border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+  .dock .top { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--rule); font-size: 13px; color: var(--ink-secondary); }
+  .dock .top b { color: var(--ink-primary); font-family: "Source Serif 4", Georgia, serif; font-weight: 400; }
+  .lyric-row { display: grid; grid-template-columns: 1fr auto auto; gap: 6px; align-items: center; padding: 6px 0; font-size: 13px; color: var(--ink-secondary); }
+  .cell { border: 1px solid #C9C3B8; border-radius: 999px; padding: 3px 9px; font-size: 13px; color: var(--ink-primary); background: #fff; text-align: center; min-width: 26px; }
+  .cell.on { background: var(--lavender); color: #fff; border-color: var(--lavender); }
+  .typed { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+  .input { border: 1px solid var(--lavender); border-radius: 3px; padding: 4px 8px; font-family: "Source Serif 4", Georgia, serif; font-size: 15px; background: #fff; color: var(--ink-primary); }
+  .input .caret { display: inline-block; width: 1px; height: 1em; background: var(--ink-primary); vertical-align: -2px; margin-left: 1px; }
+  .undo { display: flex; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-secondary); }
+
+.tbl { border-collapse: collapse; font-size: 13px; width: 100%; max-width: 900px; }
+.tbl th, .tbl td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tbl th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-tertiary); font-weight: 600; }
+.tbl code { font-size: 12px; }
+.pill { display: inline-block; border: 1px solid #C9C3B8; border-radius: 999px; padding: 6px 18px; font-size: 13px; color: var(--ink-secondary); background: #fff; }
+.pill.fill { background: var(--lavender); color: #fff; border-color: var(--lavender); }
+.pill.sm { padding: 3px 12px; font-size: 12px; }
+.row { gap: 28px; }
+.drawer.wide { width: 420px; }
+.st { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; border-bottom: 1px solid var(--rule); font-size: 15px; }
+.st .chev { color: var(--ink-tertiary); }
+.st .val { color: var(--ink-tertiary); font-size: 13px; }
+.lede2 { margin: 0; padding: 10px 18px 6px; font-size: 14px; color: var(--ink-secondary); }
+.vt { width: 100%; border-collapse: collapse; font-size: 14px; }
+.vt th { background: var(--lavender); color: #fff; font-weight: 600; font-size: 13px; text-align: left; padding: 6px 10px; }
+.vt th:first-child { padding-left: 18px; }
+.vt td { padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.vt td:first-child { padding-left: 18px; }
+.vt .ipa { font-family: "Source Serif 4", Georgia, serif; }
+.vt .stat { display: block; font-size: 12px; color: var(--ink-tertiary); }
+.vt .stat.prov { color: #9a6b12; }
+.vt tr.est td { color: var(--ink-tertiary); }
+.cap { padding: 8px 18px 0; font-size: 12px; color: var(--ink-tertiary); }
+.foot { display: flex; gap: 10px; align-items: center; padding: 14px 18px; }
+.bad { color: #9a3b2a; }
+.capture { margin: 8px 18px; background: #EDE8F1; border: 1px solid var(--lavender); border-radius: 4px; padding: 12px; }
+.capture .cue { font-family: "Source Serif 4", Georgia, serif; font-size: 20px; margin: 0 0 6px; }
+.capture .bar { height: 6px; background: #fff; border-radius: 3px; overflow: hidden; }
+.capture .bar i { display: block; width: 45%; height: 100%; background: var(--lavender); }
+.dim { opacity: .45; }
+.centred { text-align: center; }
+</style>
+</head>
+<body>
+<main>
+<h1>The drawer grammar and the calibration surface. Drawing r1, 2026-09-10</h1>
+<p class="lede">Dann, 2026-09-10: the calibration surface must read as the same tool as the rest of the drawer, "reliably curated by its organization". This drawing does two things. <b>Plate 1</b> writes down the grammar the drawer already uses, every measure with its file and line, nothing invented. <b>Plates 2 to 4</b> redraw the calibration summary to obey it, carrying N.122 (the capture surface as a landmark) and the five subtractions from the desk's critique. Anything the tree does not source is marked <span class="desk">desk inference</span> or asked in Plate 5. Governing text: the Calm Authority slate ratified 2026-08-18 (<code>claude/fable-ruling-gui-principles-and-portrait-c_2026-08-18.md</code>, read in full this session): siblings behave identically; no orphan controls; three radii, no fourth; one accent per surface; progressive disclosure.</p>
+
+<h2>Plate 1. The drawer grammar, as the tree has it today</h2>
+<table class="tbl">
+<tr><th>measure</th><th>value</th><th>source, read 2026-09-10</th></tr>
+<tr><td>The left edge of everything</td><td><code>--band-inset</code>, 18 px</td><td><code>app.css</code> token (N.114b); <code>.group-band { padding: 0 18px }</code> <code>Drawer.svelte:980-994</code>; <code>.band-body { margin: 0 18px }</code> <code>:1064-1066</code></td></tr>
+<tr><td>Air under a band</td><td>0.35rem, the fields' own gap</td><td><code>MetadataFields.svelte:176-180</code>; the band's next sibling, N.114b item 2</td></tr>
+<tr><td>Air between rows</td><td>8 px</td><td><code>IntakePanel.svelte:779-783</code>, <code>:853-857</code></td></tr>
+<tr><td>A band</td><td>40 px, full-strength hue, white 0.7rem 600 uppercase 0.12em</td><td><code>Drawer.svelte:980-994</code>, Dann's option A of 2026-09-02</td></tr>
+<tr><td>A station row that opens</td><td>sentence-case name left, count and chevron right, hairline below</td><td><code>StationHeader.svelte</code>; the syllable line's row, N.114</td></tr>
+<tr><td>A pill, ghost</td><td>outlined, pill ends, horizontal padding = band inset</td><td><code>IntakePanel.svelte:753-768</code>; <code>.head-pill</code> N.114b item 5</td></tr>
+<tr><td>A pill, filled</td><td>one per surface, the primary, last</td><td>Transcribe and fit; Finish; Re-calibrate</td></tr>
+<tr><td>Text verbs</td><td>receipt-scoped only: Clear, Replace, Revert, Reset</td><td><code>.receipt-btn</code>, <code>.btn-reset</code></td></tr>
+<tr><td>Alignment</td><td>flush left on the inset; nothing centred</td><td>every band on the front side; <span class="desk">desk inference</span> as a rule, since no document states it</td></tr>
+<tr><td>Radii</td><td>three: 0 paper, small controls (3 to 4 px), pills 999</td><td>slate, 2026-08-18</td></tr>
+<tr><td>Accent</td><td>one per surface; lavender on Score markup and its takeover</td><td>slate; <code>--lang-chip-*</code> tokens</td></tr>
+</table>
+<p class="lede"><b>What the back side breaks, measured on Dann's screenshot and the file:</b> the lede, the switcher, the caption, and the whole button column are centred (<code>CalibrationWizard.svelte:1708</code>, <code>:1791</code>, <code>:1832</code>, <code>:2055</code>); "VOICE" and "PROFILE SUMMARY" are small-cap labels where the front side uses sentence-case station rows; the switcher floats under a collapse row and over a rule; ten identical Re-take pills; a text link as the last control; a fourth block, the table header, in the accent hue.</p>
+
+<h2>Plate 2. The summary, redrawn to the grammar</h2>
+<div class="row">
+<figure>
+<div class="drawer wide">
+<div class="band lav"><span>← Back</span><span>Score markup</span></div>
+<div class="st"><span>Voice · Dann</span><span class="chev">⌄</span></div>
+<div class="st"><span>Voice characteristics <span class="val">· none added</span></span><span class="chev">⌄</span></div>
+<p class="lede2">7 of 10 vowels sampled. Review each reading and re-take anything uncertain before you finish.</p>
+<table class="vt">
+<tr><th>Vowel</th><th>fR1</th><th>fR2</th><th></th></tr>
+<tr><td><span class="ipa">[i]</span> cardinal-i<span class="stat prov">Provisional</span></td><td>1063 Hz</td><td>1770 Hz</td><td><span class="pill sm">Re-take</span></td></tr>
+<tr><td><span class="ipa">[ɛ]</span> open-e<span class="stat">Captured</span></td><td>533 Hz</td><td>1421 Hz</td><td></td></tr>
+<tr><td><span class="ipa">[o]</span> Russian-o<span class="stat prov">Provisional</span></td><td>440 Hz</td><td>787 Hz</td><td><span class="pill sm">Re-take</span></td></tr>
+<tr class="est"><td><span class="ipa">[ɨ]</span> velar-i<span class="stat">≈ Estimated</span></td><td>1451 Hz</td><td>1091 Hz</td><td><span class="pill sm">Sing</span></td></tr>
+<tr class="est"><td><span class="ipa">[ʌ]</span> turned-v<span class="stat">≈ Estimated</span></td><td>655 Hz</td><td>1233 Hz</td><td><span class="pill sm">Sing</span></td></tr>
+</table>
+<p class="cap">fR1 and fR2 are your first and second resonances, measured from your own voice. Provisional means Ilya heard it but less clearly; Estimated means it is derived from your other vowels until you sing it.</p>
+<div class="foot"><span class="pill fill">Finish</span><span class="pill">Start over</span></div>
+</div>
+<figcaption><b>Everything flush left on the inset.</b> Two station rows at the top in the front side's shape: the switcher becomes "Voice · Dann", and Add voice characteristics becomes a row that opens, "none added". <b>Verbs by state:</b> Captured rows carry nothing; Provisional carry Re-take (ratified string); Estimated carry <b>Sing</b>, whose French « Chanter » is ADOPTED from the button it replaces (<code>calib.challengingInvite.button</code>), so "Sing the three Ilya derived for you" goes and its caption folds into the one caption under the table. Finish filled and last, Start over the ghost pill beside it (ruled, N.114b item 9). Five rows drawn of ten. <span class="desk">desk inference:</span> the caption's two sentences, coined, French owed; the table header keeps its lavender only if Dann wants a fourth block in the accent, else it is a hairline row like the front side.</figcaption>
+</figure>
+</div>
+
+<h2>Plate 3. N.122, the capture surface opens in place</h2>
+<div class="row">
+<figure>
+<div class="drawer wide">
+<div class="band lav"><span>← Back</span><span>Score markup</span></div>
+<div class="st dim"><span>Voice · Dann</span><span class="chev">⌄</span></div>
+<div class="st dim"><span>Voice characteristics <span class="val">· none added</span></span><span class="chev">⌄</span></div>
+<p class="lede2 dim">7 of 10 vowels sampled. Review each reading and re-take anything uncertain before you finish.</p>
+<table class="vt">
+<tr class="dim"><th>Vowel</th><th>fR1</th><th>fR2</th><th></th></tr>
+<tr class="dim"><td><span class="ipa">[i]</span> cardinal-i<span class="stat prov">Provisional</span></td><td>1063 Hz</td><td>1770 Hz</td><td></td></tr>
+<tr><td><span class="ipa">[o]</span> Russian-o<span class="stat prov">Provisional</span></td><td>440 Hz</td><td>787 Hz</td><td><span class="pill sm fill">Re-take</span></td></tr>
+</table>
+<div class="capture"><p class="cue">Sing [o] as in «кот», through fry, and hold it.</p><div class="bar"><i></i></div><p class="note" style="margin:6px 0 0">The fry guide and the bar are the existing capture phase, unchanged. Only its place changes.</p></div>
+<table class="vt">
+<tr class="dim est"><td><span class="ipa">[ɨ]</span> velar-i<span class="stat">≈ Estimated</span></td><td>1451 Hz</td><td>1091 Hz</td><td></td></tr>
+</table>
+<div class="foot dim"><span class="pill fill">Finish</span><span class="pill">Start over</span></div>
+</div>
+<figcaption><b>The landmark stays a landmark.</b> Pressing Re-take on a row opens the lavender capture surface directly under that row; everything else on the summary dims and goes inert, the way the switcher already does during capture (<code>CalibrationWizard.svelte</code>, <code>disabled={phase === 'capture'}</code>). When the vowel is done the surface folds and the row's status updates in place. The table never leaves. On a phone the open surface is where the finger was. <span class="desk">desk inference:</span> the dim treatment and the pressed pill going filled while its capture is open; the wizard's phase logic is untouched underneath, only what the summary shows changes.</figcaption>
+</figure>
+</div>
+
+<h2>Plate 4. Where the grammar reaches beyond this surface</h2>
+<div class="q">Once ratified, Plate 1 goes into <code>PRODUCT.md</code> as the drawer grammar, and the same measure is applied without a new drawing to: the Corrections station (N.120, whose plates will cite this one), the collapse row on the calibration surface (item 8, going), and any takeover surface that comes later. Every surface is then checked against one table instead of re-argued.</div>
+
+<h2>Plate 5. What this drawing asks</h2>
+<div class="q"><b>In order, one at a time.</b> (1) Plate 1: is "flush left on the inset, nothing centred" the rule? It is the front side's practice and no document states it. (2) Plate 2: the table header, lavender block or hairline row? (3) Plate 2: the two caption sentences, coined; and "Sing" as a row verb with « Chanter » adopted. (4) Plate 3: does the capture surface open under the pressed row, as drawn, or pinned at the top of the surface? <b>Not settled here:</b> whether the fry guide's own copy inside the capture surface changes at all (nothing is drawn as changed); what the summary shows while the microphone is asked for; the wizard spec v1 and pacifier spec v11 were not opened this session, so any rule in them that touches Plates 2 and 3 is NOT CHECKED and the next session opens them before Code is briefed.</div>
+</main>
+</body>
+</html>

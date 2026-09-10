@@ -281,6 +281,13 @@ neither" is offered only when doing nothing is defensible for HIM, never as
 a defence of what is there. He does not push twice. If he has to, that is
 this tether failing, and it goes in the record.
 
+**Amended 2026-09-10, Dann's words:** *"You must assume and operate from the
+user's perspective, NOT your own perspective as designer or coder. The user
+experience is primary."* So every design reply is written from the singer's
+seat: what they see, what they are trying to do, what they feel at that
+moment. Tokens, files, and principles come after, as the means, never as the
+frame.
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about
