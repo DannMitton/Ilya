@@ -62,6 +62,28 @@ and name the gap in the memo rather than coin a string. Walk items: the verb
 is present only with a score and the line open; pressing it rebuilds; Undo
 in the top bar reverses it, or the memo says why not.
 
+## Item 4, after Dann's walk of `7665afa`, 2026-09-10
+
+"Start placement over" in the open line's row is a PILL, not a text verb.
+Dann: "needs to be inside a pill to be consistent as an actionable button."
+DESK DEFAULT: the outlined ghost pill Choose a file wears in the same band
+(`.action-btn.btn-ghost`, pill ends per `IntakePanel.svelte:753-768`); Clear
+and Replace on the receipts stay text. Same handler, same string. Walk item:
+the row shows the pill left of the count; 44 px on touch; nothing wraps at
+390 px.
+
+## Item 5, same walk, 2026-09-10
+
+The pills' horizontal padding becomes the band inset, the 18 px
+`.group-band` spends on its label (`Drawer.svelte:980-994`), keyed to the
+same value and not a second literal. Effect, ruled by Dann: the pill's end
+stays tangent to the card's edge (504 at 1400 px, as built) AND the word
+"Redo" ends on the content line where METADATA ends (486). Walk items: on
+the desk, the Redo pill's `right` equals the Piece band's, and the text
+node "Redo"'s `right` equals the METADATA label's, both to the pixel; at
+390 px both pills, 44 px, and Français still fit on one line with the
+clipping rule holding.
+
 ## Constraints
 
 - Use the width the layout already has for the drawer column; do not
