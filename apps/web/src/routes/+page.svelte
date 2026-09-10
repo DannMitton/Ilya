@@ -3838,7 +3838,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      at the fitted page. Nothing replaced it: no residue, no toast, no
      one-time note, because Dann has never ruled where a residue goes. -->
 <div class="screen-only">
-	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
+	<!-- N.114a. UNDO AND REDO RIDE THE TOP BAR, ruled by Dann 2026-09-09. The
+	     two sentences and the two handlers are the ones the loupe dock had; the
+	     stack, `pushUndo`, and the Cmd-Z pair are untouched. -->
+	<HeaderBar
+		{language}
+		{activeTab}
+		onlanguagechange={handleLanguageChange}
+		{undoLabel}
+		{redoLabel}
+		onundo={handleUndo}
+		onredo={handleRedo}
+	/>
 <!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
      AlertDialog measured +18.7 KB gzipped for this one thing, against about
      8 KB budgeted for the whole of N.67, and showModal() gives the modality,
@@ -4195,13 +4206,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							open={loupeOpen}
 							{language}
 							readout={readoutLine}
-							{undoLabel}
-							{redoLabel}
 							{selectedBase}
 							{selectedDotted}
 							shiftDisabled={dockShiftDisabled}
-							onundo={handleUndo}
-							onredo={handleRedo}
 							ondismiss={dismissLoupe}
 							onwalk={handleMove}
 							onbase={handleDurationCell}
@@ -4259,16 +4266,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     down, so the rule of 2026-08-19 survives in the band and
 					     no lavender is lost.
 
-					     THE STATION RETRACTS, WHICH THE ANCHOR DID NOT. Ship B
-					     gave the voice a header and no chevron on Dann's explicit
-					     ruling: "it has a header and no contents, and collapsing
-					     it would hide Calibrate, the only entry to the ritual, for
-					     no height." The three-frame map answers that ruling rather
-					     than overriding it: Calibrate is the station's CONTENTS
-					     now, not its header, and every station in a frame
-					     retracts. Shut, the row costs one line and says the voice
-					     is there; open, Calibrate is one press away. That is a
-					     change to a ratified affordance and it is reported.
+					     THE STATION DOES NOT RETRACT, AND THAT IS BACK WHERE SHIP
+					     B HAD IT. N.114a, RULED BY DANN 2026-09-09 walking
+					     `3765314`: Calibrate and Re-calibrate open the drawer's own
+					     takeover surface, so this station has nothing to collapse
+					     for. N.108 had given it a header and a chevron on "every
+					     station in a frame retracts"; his ruling of 2026-08-21 said
+					     the opposite for this one station and is the later word
+					     again. So: the header stays, the toggle and the collapsed
+					     state go, and `voice` leaves `STATION_IDS` with them,
+					     because a station that cannot close has no state to store.
+					     `StationHeader` draws no button and no chevron when it is
+					     given no `ontoggle`, so this needs no new branch there.
+					     CORRECTIONS KEEPS ITS CHEVRON: it has contents that are
+					     worth the height.
 
 					     THE CALIBRATION WIZARD IS NOT HERE. It is the drawer's one
 					     takeover, entered from Calibrate inside this station, and
@@ -4282,22 +4293,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     `profileStore.ts`, so this line and the wizard cannot
 					     disagree. -->
 					<div class="station">
-						<StationHeader
-							label={t('voice.heading', language)}
-							expanded={sections.has(STATION_IDS.voice)}
-							ontoggle={() => sections.toggle(STATION_IDS.voice)}
-							controls="station-voice"
-						/>
-						{#if sections.has(STATION_IDS.voice)}
-							<div class="station-body" id="station-voice">
-								<VoiceAnchor
-									voiceName={shaneVoiceName}
-									calibrated={voiceCalibrated}
-									{language}
-									oncalibrate={enterCalibration}
-								/>
-							</div>
-						{/if}
+						<StationHeader label={t('voice.heading', language)} />
+						<!-- No `id` here since N.114a: the id existed for the
+						     header's `aria-controls`, and there is no toggle
+						     left to control anything. -->
+						<div class="station-body">
+							<VoiceAnchor
+								voiceName={shaneVoiceName}
+								calibrated={voiceCalibrated}
+								{language}
+								oncalibrate={enterCalibration}
+							/>
+						</div>
 					</div>
 					<!-- ── THE NOTICES. Unstyled on purpose, as they have always
 					     been, and in the order they had among themselves.
@@ -4664,13 +4671,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		{language}
 		portrait={phonePortrait}
 		readout={readoutLine}
-		{undoLabel}
-		{redoLabel}
 		{selectedBase}
 		{selectedDotted}
 		shiftDisabled={dockShiftDisabled}
-		onundo={handleUndo}
-		onredo={handleRedo}
 		ondismiss={dismissLoupe}
 		onwalk={handleMove}
 		onbase={handleDurationCell}

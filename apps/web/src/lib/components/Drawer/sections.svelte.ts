@@ -75,13 +75,18 @@ export const STATION_IDS = {
 	notation: 'notation',
 	analysis: 'analysis',
 	corrections: 'corrections',
-	voice: 'voice',
 } as const;
 
 /**
  * THE MIGRATION, as Design's revision 2 §4.4 wrote it and the N.108 build
  * brief ruled it: `piece` to `metadata`, `songs` to `repertoire`, `analysis`
  * to `analysis`.
+ *
+ * `voice` LEFT THE TABLE AT N.114a, RULED BY DANN 2026-09-09: the Voice station
+ * is always expanded and has no chevron, because Calibrate opens the drawer's
+ * own takeover surface, so the station has nothing to collapse for. A station
+ * that cannot close has no open state to store, and a stored `voice` is dropped
+ * on the next visit the way `source` is.
  *
  * `shiftLyrics` MAPPED TO `underlay` UNTIL N.114, RULED BY DANN 2026-09-07.
  * That ruling moved the queue and the SABB out of Score markup and under the

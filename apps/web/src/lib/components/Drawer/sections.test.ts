@@ -189,9 +189,21 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 	});
 
 	/* The mapping is KEPT, which the ruling asks for in as many words, and it
-	   is what a version 2 set still goes through. */
+	   is what a version 2 set still goes through. `voice` was the second id
+	   here until N.114a took it out of `STATION_IDS`; `corrections` is a
+	   surviving Score markup station and stands in its place. */
 	it('keeps the mapping for a set that is already new', () => {
-		expect(migrateOpenStations(['repertoire', 'voice'], false)).toEqual(['repertoire', 'voice']);
-		expect(migrateOpenStations(['repertoire', 'voice'], true)).toEqual(['repertoire']);
+		expect(migrateOpenStations(['repertoire', 'corrections'], false)).toEqual([
+			'repertoire',
+			'corrections',
+		]);
+		expect(migrateOpenStations(['repertoire', 'corrections'], true)).toEqual(['repertoire']);
+	});
+
+	/* N.114a ruling 1. The Voice station is always expanded and has no chevron,
+	   so `voice` has no open state to store and a stored one is dropped. */
+	it('drops `voice`, whose station N.114a stopped collapsing', () => {
+		expect(migrateOpenStations(['voice'], false)).toEqual([]);
+		expect(migrateOpenStations(['metadata', 'voice'], false)).toEqual(['metadata']);
 	});
 });

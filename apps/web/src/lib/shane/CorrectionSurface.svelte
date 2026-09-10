@@ -70,10 +70,10 @@
 		   snippet, so the prop went with the component. */
 		/** `F3 · quarter · на`, composed by the caller from the taken entry. */
 		readout: string;
-		/** The Undo pill's sentence, or null when nothing can be undone. */
-		undoLabel: string | null;
-		/** The Redo pill's sentence, or null when nothing can be redone. */
-		redoLabel: string | null;
+		/* `undoLabel` AND `redoLabel` ARE GONE, N.114a. The two sentences are
+		   `HeaderBar`'s now, composed from the same `stackLabel` in
+		   `+page.svelte`; this surface never held the stack and no longer names
+		   it. */
 		selectedBase: NoteBase | null;
 		selectedDotted: boolean;
 		/** True when the station cursor's syllable sits on no note. */
@@ -115,8 +115,8 @@
 		ontupletdef: (next: TupletDefinition) => void;
 		/** Press and hold repeats a stepper arrow or a pitch verb while held. */
 		onhold: (fire: () => void) => (e: PointerEvent) => void;
-		onundo: () => void;
-		onredo: () => void;
+		/* `onundo` AND `onredo` LEFT WITH THE ROW, N.114a. `handleUndo` and
+		   `handleRedo` are unchanged; `HeaderBar` calls them now. */
 		ondismiss: () => void;
 		/** The stepper: entry by entry, across barlines. */
 		onwalk: (direction: 1 | -1) => void;
@@ -139,15 +139,11 @@
 		portrait = true,
 		syllables = undefined,
 		readout,
-		undoLabel,
-		redoLabel,
 		selectedBase,
 		selectedDotted,
 		shiftDisabled,
 		selectedMelisma,
 		melismaDisabled,
-		onundo,
-		onredo,
 		ondismiss,
 		onwalk,
 		onbase,
@@ -473,45 +469,22 @@
 	     not move when the bar steps in and out of a gap. -->
 	<p class="surface-context" class:idle={!inGap}>{inGap ? pitchLine : ''}</p>
 
-	<!-- THE HEADER ROW. The Undo pill sits alone on its own row so it can grow
-	     to fit a long sentence, and it is ABSENT rather than disabled when
-	     there is nothing to undo: a control that cannot act earns no ink.
+	<!-- THE UNDO ROW IS GONE, N.114a, RULED BY DANN 2026-09-09 from the user's
+	     side: "the button is hard to find." Undo and Redo are at the right end
+	     of the top bar now (`HeaderBar.svelte`), which is the one strip that
+	     does not move when the dock, the drawer or the loupe does.
 
-	     THE ROW STANDS WHETHER THE PILL DOES OR NOT, ruled by Dann 2026-08-26
-	     after the deploy walk. The two rulings were pulling against each other:
-	     an absent pill shortened the dock by its row, the loupe is anchored
-	     above the dock, and so the whole surface jumped 50 px at the first
-	     correction of every session. Reserving the row settles it without
-	     bending either ruling, because an empty row draws NOTHING. It has no
-	     border, no fill, no text, and no target; it is height and nothing else,
-	     so the pill is still absent in every sense the ruling meant and the
-	     geometry stops moving. -->
-	<!-- REDO JOINS UNDO ON THAT ROW, N.111-3b. RULED BY DANN 2026-09-07: "we do
-	     not include an Undo/Redo button on the Loupe. We need one."
+	     WHAT WENT WITH THEM. The row, its reservation (ruled 2026-08-26 so an
+	     absent pill could not shorten the dock and jump the loupe), the
+	     absent-rather-than-disabled rule, and this surface's `undoLabel`,
+	     `redoLabel`, `onundo` and `onredo` props. ONE UNDO, ONE PLACE: the
+	     reservation existed to stop the dock's height moving, and a row that no
+	     longer exists cannot move it. The dock closes up by 44 px and the
+	     loupe's anchor moves with it; the two numbers are in the N.114a memo.
 
-	     IT KEEPS THE UNDO PILL'S RULES, all of them: absent rather than
-	     disabled, named after the action it will perform, composed at render so
-	     a language change is heard, and sitting on the row that stands whether
-	     either pill does. The row is reserved once for both, so a redo pill
-	     appearing beside an undo pill moves nothing.
-
-	     ONE ROW, NOT TWO. The pair reads left to right in the order the two
-	     directions run, and each pill shrinks (`flex: 0 1 auto`) so a long
-	     sentence wraps inside the pill rather than pushing its neighbour off. -->
-	<div class="dock-row dock-row-undo">
-		{#if undoLabel}
-			<button type="button" class="undo-pill" onclick={onundo}>
-				<span aria-hidden="true">&#x21B0;</span>
-				{T('loupe.undo').replace('%s', undoLabel)}
-			</button>
-		{/if}
-		{#if redoLabel}
-			<button type="button" class="undo-pill" onclick={onredo}>
-				<span aria-hidden="true">&#x21B1;</span>
-				{T('loupe.redo').replace('%s', redoLabel)}
-			</button>
-		{/if}
-	</div>
+	     `handleUndo` and `handleRedo` in `+page.svelte` are untouched, and so
+	     are the Cmd-Z and Shift-Cmd-Z hotkeys that call them. One stack, as
+	     N.111-3b required. -->
 
 	<!-- The stepper flanks the readout, and both marks are BARE: they walk the
 	     singer along the line and change nothing in the score. A coarse tap on
@@ -940,27 +913,11 @@
 	}
 
 	/* The row the pill sits on, reserved whether it is there or not. 44 px is
-	   the pill's own floor, so a row holding one and a row holding none are the
-	   same height and the dock's geometry never changes. Empty, it is a gap:
-	   nothing is drawn in it and nothing can be tapped in it. */
-	.dock-row-undo {
-		min-height: 44px;
-	}
-
-	/* The pill sits alone on its row so a long sentence can grow into it. */
-	.undo-pill {
-		flex: 0 1 auto;
-		min-height: 44px;
-		padding: 8px 16px;
-		border: 1px solid var(--stone-300, #d6d3d1);
-		border-radius: 999px;
-		background: var(--paper-light, #f5f1e8);
-		color: var(--ink-primary, #1a1612);
-		font: inherit;
-		font-size: 0.8125rem;
-		line-height: 1.2;
-		cursor: pointer;
-	}
+	   the pill's own floor. `.dock-row-undo` AND `.undo-pill` ARE GONE, N.114a,
+	   with the row and the two pills they drew: the reservation was there so an
+	   absent pill could not shorten the dock, and there is no row left to
+	   reserve. They are deleted rather than left, because `svelte-check` counts
+	   an unused selector as a warning and gate 3's baseline is 7. */
 
 	.readout {
 		flex: 1 1 auto;
@@ -1098,8 +1055,7 @@
 	   be seen is against the surface rather than against the cell's own fill.
 	   MEASURED on both, before and after, in §21 of the memo. */
 	.cell:focus-visible,
-	.mark:focus-visible,
-	.undo-pill:focus-visible {
+	.mark:focus-visible {
 		outline: 2px solid var(--deeper-lavender, #8e7e9b);
 		outline-offset: 2px;
 	}

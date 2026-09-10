@@ -385,6 +385,17 @@
 		     assumed the camera icon was the other way in, and the icon is gone.
 		     Recorded in the memo as a departure. -->
 
+		<!-- ── THE HINT IS THE FIELD'S CAPTION. N.114a, RULED BY DANN
+		     2026-09-09 walking `3765314`: it moves from the foot of the frame,
+		     under Choose a file, to sit directly under the textarea and above
+		     the receipts. The copy is `intake.dropHint` unchanged in both
+		     languages, and so is its type: it says what a file dropped on the
+		     field will do, so it reads where the field is rather than three
+		     controls later. Choose a file did not move. -->
+		{#if !sourceIsEmpty || score}
+			<p class="intake-drop-hint">{t('intake.dropHint', language)}</p>
+		{/if}
+
 		<!-- ── THE RECEIPTS, one line per kind (the prototype `:362-:374`).
 		     Each carries its own Clear and its own Replace, and neither
 		     handler can reach the other's material: the poem's Clear is
@@ -487,10 +498,6 @@
 				{t('intake.choose', language)}
 			</button>
 		</div>
-
-		{#if !sourceIsEmpty || score}
-			<p class="intake-drop-hint">{t('intake.dropHint', language)}</p>
-		{/if}
 
 		<!-- THE ONE PICKER. N.70 governs it; see `acceptList`. -->
 		<input
