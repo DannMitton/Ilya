@@ -73,15 +73,28 @@ export const STATION_IDS = {
 	notation: 'notation',
 	analysis: 'analysis',
 	corrections: 'corrections',
+	/* THE TEXT FOLD, N.115 increment 2, RULED BY DANN 2026-09-10 on trial:
+	   TEXT stops being a band and folds into INPUT, under the poem box, as
+	   one section closed by default that holds Notation and Analysis.
+
+	   `text` IS THE BAND'S OWN WIRE VALUE, CARRIED ACROSS, and that is a DESK
+	   DEFAULT. A version 3 set holding `text` was written by a singer who had
+	   TEXT's contents showing; reading it as the fold open shows them the same
+	   two stations they left open, one band higher. No version bump is needed
+	   for that reason: the string's meaning, "Notation and Analysis are in
+	   view", did not change. A fresh drawer still opens INPUT alone, so the
+	   fold is closed by default through `FIRST_RUN_STATIONS` not naming it. */
+	text: 'text',
 } as const;
 
 /**
- * THE FOUR BANDS, N.115, RULED BY DANN 2026-09-10.
+ * THE THREE BANDS, N.115 increment 2. They were four, "Piece, Input, Text,
+ * Score markup" (ruled 2026-09-10); TEXT folded into INPUT the same night and
+ * its id moved to `STATION_IDS.text` above.
  *
- * "The drawer is a path read top to bottom: Piece, Input, Text, Score markup.
- * Each band opens and closes." They are members of THIS set and not of a
- * second one, so one mechanism persists both tiers and a band cannot disagree
- * with a station about what "open" means.
+ * They are members of THIS set and not of a second one, so one mechanism
+ * persists every tier and a band cannot disagree with a station about what
+ * "open" means.
  *
  * WIRE VALUES, like `STATION_IDS`, and `piece` is a REUSED one: ship B wrote
  * it for the Piece STATION, which became `metadata` at N.108 and is struck
@@ -93,7 +106,6 @@ export const STATION_IDS = {
 export const BAND_IDS = {
 	piece: 'piece',
 	input: 'input',
-	text: 'text',
 	scoreMarkup: 'scoreMarkup',
 } as const;
 
@@ -111,6 +123,24 @@ const BAND_ID_SET: ReadonlySet<string> = new Set(Object.values(BAND_IDS));
 
 export function isBandId(id: string): boolean {
 	return BAND_ID_SET.has(id);
+}
+
+/**
+ * THE FOLD IS A THIRD TIER, N.115 increment 2, and for the reason the bands
+ * became a second one. The Text fold CONTAINS Notation and Analysis, so if it
+ * were an ordinary station, a phone singer opening Notation would shut the
+ * fold Notation stands in, one frame after asking for it. As its own tier it
+ * shuts nothing and nothing but another fold shuts it, and there is no other
+ * fold.
+ */
+const FOLD_ID_SET: ReadonlySet<string> = new Set([STATION_IDS.text]);
+
+export type Tier = 'band' | 'fold' | 'station';
+
+export function tierOf(id: string): Tier {
+	if (BAND_ID_SET.has(id)) return 'band';
+	if (FOLD_ID_SET.has(id)) return 'fold';
+	return 'station';
 }
 
 /**
@@ -172,9 +202,13 @@ export function migrateOpenStations(stored: readonly string[], onPhone: boolean)
 		out.push(successor);
 	}
 	if (!onPhone) return out;
-	const band = out.find((id) => isBandId(id));
-	const station = out.find((id) => !isBandId(id));
-	return out.filter((id) => id === band || id === station);
+	/* N.115 increment 2: ONE SURVIVOR PER TIER, and there are three tiers now
+	   (`tierOf`). A phone keeps the first band, the fold, and the first
+	   station, so a reload lands the Text fold open with Notation inside it
+	   rather than dropping one of the two. */
+	const kept = new Map<Tier, string>();
+	for (const id of out) if (!kept.has(tierOf(id))) kept.set(tierOf(id), id);
+	return out.filter((id) => kept.get(tierOf(id)) === id);
 }
 
 /** Whether two open sets, in order, are the same array. */
@@ -346,10 +380,11 @@ export class SectionSet {
 		/* N.115: THE SHUTTING IS PER TIER. Opening a band shuts the other open
 		   band and opening a station shuts the other open station; a band does
 		   not shut the stations it contains, because those are inside the door
-		   the singer just opened. See `isBandId`. */
+		   the singer just opened. See `isBandId`. N.115 increment 2 adds the
+		   fold as a third tier for the same reason; see `tierOf`. */
 		const next =
 			opening && this.exclusive
-				? new Set([...this.#open].filter((held) => isBandId(held) !== isBandId(id)))
+				? new Set([...this.#open].filter((held) => tierOf(held) !== tierOf(id)))
 				: new Set(this.#open);
 		if (opening) next.add(id);
 		else next.delete(id);

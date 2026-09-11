@@ -3465,12 +3465,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * WHETHER TRANSCRIBE AND FIT'S ACT DOES ANYTHING. N.115, brief §3.2:
 	 * "Transcribe and fit is filled only while its act does something."
 	 *
-	 * THE PREDICATE IS `handleTranscribe` READ BACK. That function does two
+	 * THE PREDICATE WAS `handleTranscribe` READ BACK. That function does two
 	 * things and no more: it runs the pipeline over `doc.inputText`, and it
-	 * accepts a score that is standing at Continue. So it does something when
-	 * the field holds text the current `lines` were not built from, or when
-	 * the uploader has a score waiting; `transcribedText` is the one owner of
-	 * the first question and `hasWaitingScore` of the second.
+	 * accepts a score that is standing at Continue. `transcribedText` is the
+	 * one owner of the first question and `hasWaitingScore` of the second.
+	 *
+	 * ONE PRIMARY WHILE A SCORE WAITS, N.115 increment 2, the path rule "one
+	 * primary" (DESK DEFAULT, Dann's to wave off). Dann's walk of `a584ad8`
+	 * found `Continue to analysis` and this pill both filled after a `.musx`
+	 * drop, because the second disjunct here was exactly the fact that draws
+	 * Continue (`ScoreUploader`'s `ui.kind === 'done'`). So while a score
+	 * waits, Continue is the one filled pill and this one is a ghost; once the
+	 * score is accepted it fills again if the text still needs its act. THIS
+	 * IS PRESENTATION ONLY: `handleTranscribe` is untouched and a press while
+	 * a score waits still accepts it.
 	 *
 	 * IT IS NOT `canTranscribe`. That guard says whether the button may be
 	 * pressed at all, and a dictionary still loading disables it; this says
@@ -3483,7 +3491,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * pill a singer can press.
 	 */
 	const transcribeActs = $derived(
-		canTranscribe && (doc.inputText !== transcribedText || uploaderEl?.hasWaitingScore() === true)
+		canTranscribe && doc.inputText !== transcribedText && uploaderEl?.hasWaitingScore() !== true
 	);
 
 	/**
@@ -4054,7 +4062,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pieceState={pieceStateText}
 		pieceFromScore={doc.fromScoreFields.has('title')}
 		inputState={inputStateText}
-		textState={textStateText}
 		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
 		gesturesBlocked={loupeOpen}
@@ -4166,6 +4173,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					syllablesPlaced={placedSlotCount}
 					syllablesTotal={slotQueue.length}
 					onstartover={handleStartPlacementOver}
+					textOpen={sections.has(STATION_IDS.text)}
+					ontoggletext={() => sections.toggle(STATION_IDS.text)}
+					textState={textStateText}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -4241,6 +4251,112 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							oncursor={(i) => (pairingCursor = i)}
 							{clipped}
 						/>
+					{/snippet}
+					<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
+					     and only those two: the map Dann ruled 2026-09-02 gives Text
+					     exactly them. Both were somewhere else in the N.73 S3 column,
+					     Notation pinned above the scroll and Analysis first inside it,
+					     and neither moved because of anything wrong with where it was.
+					     They are together because they are both text work. -->
+					<!-- N.115 increment 2: THIS IS `textSection` NOW, AND IT MOVED
+					     VERBATIM. TEXT stopped being a band on Dann's ruling of
+					     2026-09-10 22:00, on trial, and folds into INPUT under the poem
+					     box; `IntakePanel` draws the fold around this snippet and the
+					     drawer's open set (`STATION_IDS.text`) holds its open state. -->
+					{#snippet textSection()}
+						<!-- NOTATION (item N.7). ONE instance, on both of Studio's
+						     documents, and it is the first station in the TEXT group.
+						     It was pinned BELOW the scroll until N.73 S3 and pinned
+						     ABOVE it after (the E.29 shape E.36 §1.4 replaced, ratified
+						     by Dann 2026-08-19). N.108 unpins it: nothing in the drawer
+						     is pinned, and Notation sits with Analysis because both are
+						     text work.
+
+						     THE 2026-08-06 RULING IS UNTOUCHED BY THE MOVE: it is
+						     predictable and within a thumb's reach, and being the first
+						     station of the second group is both.
+						     The state was always document-level and persisted (the notationPrefs and
+						     openSyllabification declarations and their writers) and Fit obeyed it:
+						     both reach VoiceProfilePane through its own props of
+						     those names. Only the CONTROL was tab-scoped, which made its
+						     placement lie about its scope.
+
+						     Rendering it once rather than once per panel is Dann's
+						     improvement on my first pass: two instances sharing state
+						     can drift, and one cannot.
+
+						     THE ACCENT IS SAGE, UNCONDITIONALLY. N.73 S3 ship two settled
+						     it, and the reasoning is in NotationFields' own `accent`
+						     prop comment rather than repeated here. Dann's ruling of
+						     2026-08-06, that the colour follows the tab, is superseded
+						     by two later ones: S2's invariant that nothing in the drawer
+						     changes when the singer flips the pair, and the S0 slate's
+						     ruling 3 of 2026-08-19, which keeps lavender in Studio to
+						     the voice anchor and the calibration surfaces.
+
+						     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
+						     will appear on Fit and change nothing there, because
+						     showStressDiacritics never reaches VoiceProfilePane
+						     (it is never given that prop). Fit's IPA stress mark is a separate and
+						     unconditional thing (pipeline.ts:711). -->
+						<NotationFields
+							{notationPrefs}
+							{showStressDiacritics}
+							openSyllabification={doc.openSyllabification}
+							{language}
+							accent="var(--sage)"
+							onnotationchange={handleNotationChange}
+							onstressdiacriticschange={handleStressDiacriticsChange}
+							onopensyllabificationchange={handleOpenSyllabificationChange}
+							expanded={sections.has(STATION_IDS.notation)}
+							onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
+						/>
+						<AnalysisStation
+							{loaderState}
+							{hasResults}
+							{transcribeMs}
+							{language}
+							{showInspector}
+							expanded={sections.has(STATION_IDS.analysis)}
+							ontoggle={() => sections.toggle(STATION_IDS.analysis)}
+						>
+						{#snippet consoleContent()}
+							{#if selectedWord}
+								{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+								{@const wordYoToggles = (() => {
+									const prefix = `${wordKey}-`;
+									const m = new Map<number, import('$lib/types').YoToggle>();
+									for (const [k, v] of yoToggles) {
+										if (k.startsWith(prefix)) {
+											const ci = parseInt(k.substring(prefix.length), 10);
+											if (!isNaN(ci)) m.set(ci, v);
+										}
+									}
+									return m;
+								})()}
+								<InspectorPanel
+									word={selectedWord}
+									{language}
+									{notationPrefs}
+									openSyllabification={doc.openSyllabification}
+									{showStressDiacritics}
+									syllableOverride={syllableOverrides.get(wordKey) ?? null}
+									spotReconstituted={spotReconstitution.has(wordKey)}
+									promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
+									yoCharToggles={wordYoToggles}
+									onspotrecontoggle={handleSpotReconToggle}
+									onstressassign={handleStressAssign}
+									onstressrevert={handleStressRevert}
+									onyochartoggle={handleYoCharToggle}
+									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+									onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
+									onreset={handleReset}
+									glossOverride={doc.glossOverrides.get(wordKey)}
+									onglossoverride={handleGlossOverride}
+								/>
+							{/if}
+						{/snippet}
+						</AnalysisStation>
 					{/snippet}
 				</IntakePanel>
 			{/snippet}
@@ -4502,107 +4618,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{/if}
 					</div>
 				{/if}
-			{/snippet}
-			<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
-			     and only those two: the map Dann ruled 2026-09-02 gives Text
-			     exactly them. Both were somewhere else in the N.73 S3 column,
-			     Notation pinned above the scroll and Analysis first inside it,
-			     and neither moved because of anything wrong with where it was.
-			     They are together because they are both text work. -->
-			{#snippet textGroup()}
-				<!-- NOTATION (item N.7). ONE instance, on both of Studio's
-				     documents, and it is the first station in the TEXT group.
-				     It was pinned BELOW the scroll until N.73 S3 and pinned
-				     ABOVE it after (the E.29 shape E.36 §1.4 replaced, ratified
-				     by Dann 2026-08-19). N.108 unpins it: nothing in the drawer
-				     is pinned, and Notation sits with Analysis because both are
-				     text work.
-
-				     THE 2026-08-06 RULING IS UNTOUCHED BY THE MOVE: it is
-				     predictable and within a thumb's reach, and being the first
-				     station of the second group is both.
-				     The state was always document-level and persisted (the notationPrefs and
-				     openSyllabification declarations and their writers) and Fit obeyed it:
-				     both reach VoiceProfilePane through its own props of
-				     those names. Only the CONTROL was tab-scoped, which made its
-				     placement lie about its scope.
-
-				     Rendering it once rather than once per panel is Dann's
-				     improvement on my first pass: two instances sharing state
-				     can drift, and one cannot.
-
-				     THE ACCENT IS SAGE, UNCONDITIONALLY. N.73 S3 ship two settled
-				     it, and the reasoning is in NotationFields' own `accent`
-				     prop comment rather than repeated here. Dann's ruling of
-				     2026-08-06, that the colour follows the tab, is superseded
-				     by two later ones: S2's invariant that nothing in the drawer
-				     changes when the singer flips the pair, and the S0 slate's
-				     ruling 3 of 2026-08-19, which keeps lavender in Studio to
-				     the voice anchor and the calibration surfaces.
-
-				     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
-				     will appear on Fit and change nothing there, because
-				     showStressDiacritics never reaches VoiceProfilePane
-				     (it is never given that prop). Fit's IPA stress mark is a separate and
-				     unconditional thing (pipeline.ts:711). -->
-				<NotationFields
-					{notationPrefs}
-					{showStressDiacritics}
-					openSyllabification={doc.openSyllabification}
-					{language}
-					accent="var(--sage)"
-					onnotationchange={handleNotationChange}
-					onstressdiacriticschange={handleStressDiacriticsChange}
-					onopensyllabificationchange={handleOpenSyllabificationChange}
-					expanded={sections.has(STATION_IDS.notation)}
-					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
-				/>
-				<AnalysisStation
-					{loaderState}
-					{hasResults}
-					{transcribeMs}
-					{language}
-					{showInspector}
-					expanded={sections.has(STATION_IDS.analysis)}
-					ontoggle={() => sections.toggle(STATION_IDS.analysis)}
-				>
-				{#snippet consoleContent()}
-					{#if selectedWord}
-						{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
-						{@const wordYoToggles = (() => {
-							const prefix = `${wordKey}-`;
-							const m = new Map<number, import('$lib/types').YoToggle>();
-							for (const [k, v] of yoToggles) {
-								if (k.startsWith(prefix)) {
-									const ci = parseInt(k.substring(prefix.length), 10);
-									if (!isNaN(ci)) m.set(ci, v);
-								}
-							}
-							return m;
-						})()}
-						<InspectorPanel
-							word={selectedWord}
-							{language}
-							{notationPrefs}
-							openSyllabification={doc.openSyllabification}
-							{showStressDiacritics}
-							syllableOverride={syllableOverrides.get(wordKey) ?? null}
-							spotReconstituted={spotReconstitution.has(wordKey)}
-							promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
-							yoCharToggles={wordYoToggles}
-							onspotrecontoggle={handleSpotReconToggle}
-							onstressassign={handleStressAssign}
-							onstressrevert={handleStressRevert}
-							onyochartoggle={handleYoCharToggle}
-							onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-							onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
-							onreset={handleReset}
-							glossOverride={doc.glossOverrides.get(wordKey)}
-							onglossoverride={handleGlossOverride}
-						/>
-					{/if}
-				{/snippet}
-				</AnalysisStation>
 			{/snippet}
 	</Drawer>
 	<main

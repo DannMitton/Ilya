@@ -6,6 +6,8 @@
 	// N.115: one owner for `37 / 94 placed`, which is drawn on both syllable
 	// rows here and on Input's closed state line in `Drawer.svelte`.
 	import { placedLine } from './bandState';
+	// N.115 increment 2: the Text fold's header row is a station row.
+	import StationHeader from './StationHeader.svelte';
 
 	/*
 	 * IntakePanel.svelte — THE INPUT GROUP'S CONTENTS AND NOTHING ELSE.
@@ -114,6 +116,23 @@
 		 * The handler is `+page.svelte`'s `handleStartPlacementOver`, unchanged.
 		 */
 		onstartover?: () => void;
+		/**
+		 * THE TEXT FOLD, N.115 increment 2, RULED BY DANN 2026-09-10 22:00
+		 * on trial: "The four bands become three: PIECE, INPUT, SCORE MARKUP.
+		 * The Notation toggles and Analysis live inside INPUT, under the poem
+		 * box, folded until the singer opens them."
+		 *
+		 * A SNIPPET, for `sourceScore`'s reason: Notation's and Analysis's
+		 * wiring is all in `+page.svelte`, and moving the band did not move
+		 * one prop of it. The open state is the drawer's one open set
+		 * (`STATION_IDS.text`), read and toggled there and handed in here, so
+		 * this component keeps no second opinion about what "open" means.
+		 */
+		textSection?: Snippet;
+		textOpen?: boolean;
+		ontoggletext?: () => void;
+		/** `textStateLine`, already built: '' at default, `2 of 7 changed` otherwise. */
+		textState?: string;
 	}
 
 	let {
@@ -138,6 +157,10 @@
 		syllablesPlaced = 0,
 		syllablesTotal = 0,
 		onstartover,
+		textSection,
+		textOpen = false,
+		ontoggletext,
+		textState = '',
 	}: Props = $props();
 
 	/* N.114. THE LINE IS COLLAPSED UNTIL IT IS OPENED, and once opened it stays
@@ -595,6 +618,39 @@
 	     the fidelity banner and every named refusal, and each of them is
 	     about a file that arrived at the frame directly above. -->
 	{@render sourceScore?.()}
+
+	<!-- ── THE TEXT FOLD. N.115 increment 2, RULED BY DANN 2026-09-10 22:00
+	     on trial: TEXT stops being a band, and Notation and Analysis live
+	     here, under the poem box, folded until the singer opens them. Its
+	     header row is a station row, `StationHeader`, reading the band's own
+	     `group.text` label with the drawer's one chevron; the two stations
+	     inside keep their own rows and their own ids exactly as they had them
+	     in the band.
+
+	     BELOW THE SCORE ENGINE'S ANSWERS AND ABOVE TRANSCRIBE AND FIT. DESK
+	     DEFAULT, the brief's, and Dann's to wave off: the primary stays last
+	     in the band, and the uploader's answers stay directly under the frame
+	     they are about, which is what that snippet's own comment asks for.
+
+	     NOTHING BESIDE THE HEADER AT DEFAULT, ruled 2026-09-10 21:55. The
+	     count shows only while the fold is CLOSED, which is the band grammar
+	     read one level down (DESK DEFAULT): a closed section says its state,
+	     an open one shows its content, and the content is the state. -->
+	{#if textSection}
+		<div class="intake-text">
+			<StationHeader
+				label={t('group.text', language)}
+				expanded={textOpen}
+				ontoggle={() => ontoggletext?.()}
+				controls="intake-text"
+				status={!textOpen && textState !== '' ? textStatus : undefined}
+			/>
+			{#if textOpen}
+				<div class="intake-text-body" id="intake-text">{@render textSection()}</div>
+			{/if}
+		</div>
+	{/if}
+	{#snippet textStatus()}<span class="intake-text-state">{textState}</span>{/snippet}
 
 	<!-- ── THE ONE TRANSCRIBE. Ruled 2026-09-02: "The Transcribe action lives
 	     under the intake in Piece and nowhere else." Clear left this row for
@@ -1087,6 +1143,65 @@
 	   Export-Import row would align column for column. Print left that row
 	   for Output, so there is no second row to align against and the grid
 	   has nothing left to do. */
+
+	/* ── THE TEXT FOLD, N.115 increment 2 ────────────────────
+	   ONE HAIRLINE ABOVE IT, the station hairline's own value
+	   (`Drawer.svelte`'s `.group :global(.station)`), because its header is a
+	   station row and a station row is separated the way a station is. None
+	   below it: Transcribe and fit is a pill, not a region. */
+	.intake-text {
+		border-top: 1px solid rgba(26, 22, 18, 0.1);
+	}
+
+	/* THE TWO STATIONS INSIDE LOSE THEIR SIDE INSET, and only that. The
+	   drawer insets every `.station` 18 px from the group's edge; these two
+	   already stand inside the intake, which took that 18 px, so a second one
+	   would push Notation and Analysis 36 px in. Their hairlines, headers,
+	   bodies and motion stay the drawer's. Two classes deep, so the rule
+	   outranks the drawer's `.group .station` whatever order the bundle loads
+	   the two sheets in. */
+	.intake-text .intake-text-body :global(.station) {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	/* THE COUNT, IN THE STATE LINE'S STYLE (brief §2.3): `Drawer.svelte`'s
+	   `.band-state` recipe, 14 px sans with tabular figures on one line, in
+	   SECONDARY ink because it is apparatus. Repeated because Svelte scopes a
+	   rule to the file that writes the markup, and it overrides the header's
+	   own quieter status type, which it sits inside. */
+	.intake-text-state {
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-weight: 400;
+		font-variant-numeric: tabular-nums;
+		color: var(--ink-secondary);
+		white-space: nowrap;
+	}
+
+	/* THE DRAWER'S ONE MOTION on the fold's body, so opening the fold arrives
+	   the way opening a station does: `Drawer.svelte`'s `bodyIn`, value for
+	   value, repeated for the scoping reason above. */
+	.intake-text-body {
+		animation: textIn var(--motion) both;
+	}
+
+	@keyframes textIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.intake-text-body {
+			animation: none;
+		}
+	}
 
 	/* THE ONE TRANSCRIBE, N.108 increment 2. `.source-actions` was a
 	   `1fr 2fr` grid holding Clear and Transcribe, and Clear left it for the

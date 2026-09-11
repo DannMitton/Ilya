@@ -63,9 +63,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    ── A BAND'S STATE LINE, N.115, ruled with its French 2026-09-10.
 	//    A closed band shows one line under it, its state; open, the content
 	//    itself is the state. Piece's line, Input's line and Score markup's
-	//    line are built from strings that already existed; these three are what
-	//    had none.
-	'text.state.default':          { en: 'Grayson defaults',             fr: 'Grayson par défaut' },
+	//    line are built from strings that already existed; these two are what
+	//    had none. `text.state.default` ("Grayson defaults") is STRUCK in
+	//    both languages, N.115 increment 2, ruled by Dann 2026-09-10 21:55:
+	//    the Text fold says nothing at default.
 	'text.state.changed':          { en: '%s of %s changed',             fr: '%s sur %s modifiés' },
 	//    Voice's own count on Score markup's state line. The NAME half of that
 	//    line is `calib.anchor.named`, which already reads "Voice: {voice}" in

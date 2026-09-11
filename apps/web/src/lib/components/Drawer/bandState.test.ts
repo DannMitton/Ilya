@@ -123,10 +123,9 @@ describe('N.115 Text’s state line', () => {
 		).toBe(NOTATION_TOGGLE_COUNT);
 	});
 
-	/* Plate A and Plate C: "Grayson defaults". Plate C's caption: "If a
-	   Notation toggle is on, the Text line reads '2 of 7 changed'." */
-	it('reads Grayson defaults at rest and the count once one has moved', () => {
-		expect(textStateLine(DEFAULTS, 'en')).toBe('Grayson defaults');
+	/* Plate C's caption: "If a Notation toggle is on, the Text line reads
+	   '2 of 7 changed'." */
+	it('reads the count once one has moved', () => {
 		expect(textStateLine({ ...DEFAULTS, shcha: true }, 'en')).toBe('1 of 7 changed');
 		expect(textStateLine({ ...DEFAULTS, shcha: true, geminate: true }, 'en')).toBe(
 			'2 of 7 changed'
@@ -135,16 +134,19 @@ describe('N.115 Text’s state line', () => {
 
 	/* §6, ruled with its French 2026-09-10. */
 	it('takes the ruled French', () => {
-		expect(textStateLine(DEFAULTS, 'fr')).toBe('Grayson par défaut');
 		expect(textStateLine({ ...DEFAULTS, shcha: true, geminate: true }, 'fr')).toBe(
 			'2 sur 7 modifiés'
 		);
 	});
 
-	/* Text is the one band that always has something true to say. */
-	it('is never empty', () => {
-		expect(textStateLine(DEFAULTS, 'en')).not.toBe('');
-		expect(textStateLine(DEFAULTS, 'fr')).not.toBe('');
+	/* N.115 increment 2, brief §2.3, RULED BY DANN 2026-09-10 21:55:
+	   "Nothing at default. When one or more Notation toggles have moved, the
+	   existing `text.state.changed` phrase shows." `Grayson defaults` was the
+	   old answer at rest, and it is struck with its key. */
+	it('says nothing at default and the changed phrase after one toggle', () => {
+		expect(textStateLine(DEFAULTS, 'en')).toBe('');
+		expect(textStateLine(DEFAULTS, 'fr')).toBe('');
+		expect(textStateLine({ ...DEFAULTS, reducedVowel: true }, 'en')).toBe('1 of 7 changed');
 	});
 });
 

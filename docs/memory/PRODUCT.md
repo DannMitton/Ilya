@@ -177,7 +177,6 @@ Shown to Dann as the FRENCH TABLE. He approved « saisir » explicitly ("that's 
 | Calibrate | Calibrer | adopted, from Recalibrer |
 | 37 / 94 placed | 37 / 94 placées | coined |
 | 2 of 7 changed | 2 sur 7 modifiés | NOT ESTABLISHED (adopted or coined) |
-| Grayson defaults | Grayson par défaut | NOT ESTABLISHED (adopted or coined) |
 | 2 notes corrected | 2 notes corrigées | NOT ESTABLISHED (adopted or coined) |
 | Type or paste the poem. | Saisissez ou collez le poème. | adopted, « saisir » and « coller » from the tree; « saisir » explicitly approved |
 | Drop the score here. | Déposez la partition ici. | adopted, « déposer » from the tree |

@@ -135,20 +135,25 @@ export function notationDepartures(state: NotationToggleState): number {
 export const NOTATION_TOGGLE_COUNT = 7;
 
 /**
- * TEXT, closed: `Grayson defaults` at rest, `2 of 7 changed` otherwise.
+ * THE TEXT FOLD, closed: nothing at rest, `2 of 7 changed` once a toggle moved.
  *
- * IT IS NEVER EMPTY, which is the one band where that is right: the toggles
- * always hold some position, so Text always has something true to say. The
- * line is apparatus rather than the singer's own content, so the caller draws
- * it in secondary ink.
+ * N.115 increment 2, RULED BY DANN 2026-09-10 21:55: nothing at default.
+ * `Grayson defaults` is struck with its key; he read it on the walk as
+ * "seems random". REDUCED TO THE CHANGED CASE RATHER THAN DELETED, because
+ * the count and its phrase still need one owner and this is it. The empty
+ * string at rest is the convention every other builder in this file keeps,
+ * and the caller draws no element for it.
+ *
+ * TEXT IS NO LONGER A BAND. It folds into INPUT under the poem box, and this
+ * line sits at the right end of the fold's header row, in secondary ink,
+ * because it is apparatus rather than the singer's own content.
  */
 export function textStateLine(state: NotationToggleState, language: Language): string {
 	const changed = notationDepartures(state);
-	return changed === 0
-		? t('text.state.default', language)
-		: t('text.state.changed', language)
-				.replace('%s', String(changed))
-				.replace('%s', String(NOTATION_TOGGLE_COUNT));
+	if (changed === 0) return '';
+	return t('text.state.changed', language)
+		.replace('%s', String(changed))
+		.replace('%s', String(NOTATION_TOGGLE_COUNT));
 }
 
 /**

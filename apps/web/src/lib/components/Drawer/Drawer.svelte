@@ -81,7 +81,8 @@
 		 * Piece and Text. It holds the whole intake frame and nothing else.
 		 */
 		inputGroup?: Snippet;
-		textGroup?: Snippet;
+		/* `textGroup` IS GONE, N.115 increment 2: TEXT folded into INPUT, and
+		   its contents are `IntakePanel`'s `textSection` now. */
 		scoreGroup?: Snippet;
 		/**
 		 * METADATA'S BODY, drawn whenever Piece is open.
@@ -90,7 +91,7 @@
 		 * band is struck; the metadata body shows whenever Piece is open, and
 		 * collapsing Piece is the collapse." The affordance and its
 		 * `metadataOpen` prop are gone with the label; the band's own chevron
-		 * is the only door, which is what makes the four bands siblings.
+		 * is the only door, which is what makes the bands siblings.
 		 *
 		 * IT IS STILL A SNIPPET AND STILL FIRST INSIDE PIECE. The body is
 		 * `MetadataFields`, unchanged, and Repertoire and Export and import
@@ -98,7 +99,7 @@
 		 */
 		metadataBody?: Snippet;
 		/**
-		 * THE DRAWER'S ONE OPEN SET, N.115. The four bands are members of it,
+		 * THE DRAWER'S ONE OPEN SET, N.115. The bands are members of it,
 		 * ids `BAND_IDS`, so one mechanism persists both the bands and the
 		 * stations inside them and this file keeps no second opinion about
 		 * what "open" means. `+page.svelte` owns the instance, restores it and
@@ -106,7 +107,7 @@
 		 */
 		sections: SectionSet;
 		/**
-		 * ── THE FOUR STATE LINES (N.115) ──────────────────────────────────
+		 * ── THE THREE STATE LINES (N.115; four until increment 2) ──────────────────────────────────
 		 *
 		 * What a band says when it is CLOSED, already built and already
 		 * localized. Strings rather than snippets, and that is the empty case
@@ -120,8 +121,8 @@
 		/** Whether Piece's title came from a score header. Draws the tag. */
 		pieceFromScore?: boolean;
 		inputState?: string;
-		/** Apparatus rather than the singer's own content, so secondary ink. */
-		textState?: string;
+		/* `textState` IS GONE, N.115 increment 2. TEXT is a fold inside
+		   INPUT and draws its own count on its header row; see `IntakePanel`. */
 		scoreState?: string;
 		/**
 		 * THE CALIBRATION TAKEOVER (N.73 S3 ship one). E.27's takeover:
@@ -159,7 +160,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, textGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', textState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
@@ -457,7 +458,9 @@
 				{#if isStudio}
 					<!-- ═══ THE PATH. N.115, RULED BY DANN 2026-09-10: "The drawer
 					     is a path read top to bottom: Piece, Input, Text, Score
-					     markup. Each band opens and closes."
+					     markup. Each band opens and closes." N.115 increment 2,
+					     ruled 2026-09-10 22:00 on trial: THREE, with Text folded
+					     into Input under the poem box.
 
 					     THE BAND IS THE TOGGLE, all 40 px of it, with a bare
 					     chevron at its right end (ruled 2026-08-19), up when open
@@ -465,7 +468,7 @@
 					     station row's own glyph and its own two rotations, so one
 					     chevron means one thing at both tiers of the drawer.
 
-					     ONE RECIPE, FOUR CALLS. `bandHead` below is the band, and
+					     ONE RECIPE, THREE CALLS. `bandHead` below is the band, and
 					     it is a snippet rather than four copies for the reason
 					     `StationHeader.svelte` exists: consistency kept by hand
 					     drifts, and Dann catches the drift.
@@ -475,7 +478,7 @@
 					     shows its content, and the content is the state." An empty
 					     state line draws no element, so a band with nothing to say
 					     costs no height. -->
-					{#snippet bandHead(id: string, label: string, state: string, apparatus: boolean, fromScore: boolean)}
+					{#snippet bandHead(id: string, label: string, state: string, fromScore: boolean)}
 						{@const open = sections.has(id)}
 						<h2 class="group-band">
 							<button
@@ -490,7 +493,7 @@
 							</button>
 						</h2>
 						{#if !open && state}
-							<p class="band-state" class:apparatus>
+							<p class="band-state">
 								<span class="band-state-text">{state}</span>
 								{#if fromScore}<span class="band-state-tag">{t('meta.fromScore', language)}</span>{/if}
 							</p>
@@ -508,7 +511,7 @@
 					     whenever Piece is open now, and collapsing Piece is the
 					     collapse. `.band-link` and `metadataOpen` went with it. -->
 					<section class="group group-piece">
-						{@render bandHead(BAND_IDS.piece, t('group.piece', language), pieceState, false, pieceFromScore)}
+						{@render bandHead(BAND_IDS.piece, t('group.piece', language), pieceState, pieceFromScore)}
 						{#if sections.has(BAND_IDS.piece)}
 							<div class="band-body" id="band-piece">
 								{#if metadataBody}<div class="band-inset">{@render metadataBody()}</div>{/if}
@@ -531,22 +534,19 @@
 					     it still has none. Reversible in one line: give Input no
 					     chevron and no state line. -->
 					<section class="group group-input">
-						{@render bandHead(BAND_IDS.input, t('group.input', language), inputState, false, false)}
+						{@render bandHead(BAND_IDS.input, t('group.input', language), inputState, false)}
 						{#if sections.has(BAND_IDS.input)}
 							<div class="band-body" id="band-input">{@render inputGroup?.()}</div>
 						{/if}
 					</section>
-					<!-- ═══ TEXT. Sage, one step down. Notation and Analysis. -->
-					<section class="group group-text">
-						{@render bandHead(BAND_IDS.text, t('group.text', language), textState, true, false)}
-						{#if sections.has(BAND_IDS.text)}
-							<div class="band-body" id="band-text">{@render textGroup?.()}</div>
-						{/if}
-					</section>
+					<!-- ═══ TEXT IS NOT A BAND. N.115 increment 2, ruled by Dann
+					     2026-09-10 22:00 on trial: Notation and Analysis fold into
+					     INPUT under the poem box. The fold is `IntakePanel`'s, and
+					     its open state is `STATION_IDS.text`. -->
 					<!-- ═══ SCORE MARKUP. Lavender, one step down. Corrections and
 					     Voice. -->
 					<section class="group group-score">
-						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false, false)}
+						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false)}
 						{#if sections.has(BAND_IDS.scoreMarkup)}
 							<div class="band-body" id="band-scoreMarkup">{@render scoreGroup?.()}</div>
 						{/if}
@@ -1065,6 +1065,33 @@
 		white-space: nowrap;
 	}
 
+	/* THE BAND CARRIES ITS OWN CORNERS. N.115 increment 2, Dann's finding
+	   twice on his walk of `a584ad8` at 1400 px: after a band closed by its
+	   chevron, its top corners drew square while the state line under it
+	   stayed round, and a reload cleared it. The rounding was `.group`'s clip
+	   alone (`overflow: hidden` under the 20 px radius), and the band is the
+	   one child whose FILL reaches the group's corners, so any paint that lost
+	   the clip showed the band's square fill. The cause of the lost clip is
+	   NOT ESTABLISHED: it did not reproduce in the desk's browser pane, and
+	   the increment 2 memo says so.
+
+	   So the corners no longer depend on the clip surviving a paint. The top
+	   pair is the group's own 20 px exactly, because the band starts at the
+	   group's edge. The bottom pair applies only when the band is the group's
+	   last child, which is a closed band with no state line. 8 px by 16 px is
+	   the curve the group's own corner already cuts across a 40 px band
+	   standing on 4 px of padding (a circle centred 20 px in and 24 px down,
+	   meeting the band's foot 8 px in and its side 24 px down), drawn a hair
+	   outside that circle, so while the clip works nothing on screen changes. */
+	.group-band {
+		border-radius: 20px 20px 0 0;
+	}
+
+	.group-band:last-child {
+		border-bottom-left-radius: 8px 16px;
+		border-bottom-right-radius: 8px 16px;
+	}
+
 	.band-name {
 		min-width: 0;
 		overflow: hidden;
@@ -1075,16 +1102,12 @@
 		background: var(--lang-chip-guide);
 	}
 
-	/* INPUT AND TEXT SHARE ONE TOKEN, N.108-5, and that is Dann's ruling
-	   rather than an economy: "painted sage like Text (hue names place: it is
-	   text)". The intake takes text in, so it is the text hue. They are two
-	   selectors and not one grouped rule, so that ruling one of them a
-	   different colour later is a one-line change in the file that draws it. */
+	/* INPUT TAKES TEXT'S TOKEN, N.108-5, and that is Dann's ruling rather
+	   than an economy: "painted sage like Text (hue names place: it is
+	   text)". The intake takes text in, so it is the text hue. `.group-text`
+	   and its rule are gone with the band, N.115 increment 2; Text is a fold
+	   inside this band now. */
 	.group-input .group-band {
-		background: var(--lang-chip-transcription);
-	}
-
-	.group-text .group-band {
 		background: var(--lang-chip-transcription);
 	}
 
@@ -1161,9 +1184,10 @@
 	   and N.114b item 2's measure, so a state line sits where a body sits.
 
 	   TABULAR NUMERALS, so `8 lines · 37 words` and `94 / 94 placed` do not
-	   jitter as the counts climb. 14 px is the drawing's, PRIMARY ink for the
-	   singer's own content and SECONDARY for apparatus, which today is Text's
-	   line alone. */
+	   jitter as the counts climb. 14 px is the drawing's, in PRIMARY ink for
+	   the singer's own content. SECONDARY ink was for apparatus, which was
+	   Text's line alone; TEXT left the bands at N.115 increment 2 and took
+	   `.apparatus` and the `bandHead` argument that set it with it. */
 	.band-state {
 		display: flex;
 		align-items: baseline;
@@ -1174,10 +1198,6 @@
 		font-size: 14px;
 		font-variant-numeric: tabular-nums;
 		color: var(--ink-primary);
-	}
-
-	.band-state.apparatus {
-		color: var(--ink-secondary);
 	}
 
 	.band-state-text {
@@ -1266,7 +1286,7 @@
 	   in other components; `.band-body` is this file's own and is named beside
 	   them rather than in a second rule.
 
-	   DESK DEFAULT: all four bands, which is what the brief asks for first. */
+	   DESK DEFAULT: every band, which is what the brief asks for first. */
 	.group-band + :global(.station),
 	.group-band + .band-body {
 		margin-top: 0.35rem;

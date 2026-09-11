@@ -37,6 +37,7 @@ import {
 	parseOpenSections,
 	readStoredOpenSet,
 	isBandId,
+	tierOf,
 	BAND_IDS,
 	STATION_IDS,
 	FIRST_RUN_STATIONS,
@@ -59,9 +60,11 @@ describe('N.108 the open set migrates once', () => {
 		expect(migrateOpenStations(['analysis'], false)).toEqual(['analysis']);
 	});
 
-	/* N.115. The four bands are members of the same set, so each survives a
-	   round trip under its own name. */
-	it('keeps each of the four band ids', () => {
+	/* N.115. The bands are members of the same set, so each survives a round
+	   trip under its own name. N.115 increment 2: THREE, "PIECE, INPUT, SCORE
+	   MARKUP" (brief §1), and `text` still survives, as the fold. */
+	it('keeps each of the three band ids, and the Text fold', () => {
+		expect(Object.values(BAND_IDS)).toEqual(['piece', 'input', 'scoreMarkup']);
 		expect(migrateOpenStations(['piece', 'input', 'text', 'scoreMarkup'], false)).toEqual([
 			'piece',
 			'input',
@@ -73,6 +76,23 @@ describe('N.108 the open set migrates once', () => {
 	it('knows a band id from a station id', () => {
 		for (const id of Object.values(BAND_IDS)) expect(isBandId(id)).toBe(true);
 		for (const id of Object.values(STATION_IDS)) expect(isBandId(id)).toBe(false);
+	});
+
+	/* N.115 increment 2, brief §2.2: TEXT's contents fold into INPUT "as one
+	   folded section ... whose open and closed state joins the station store
+	   (a new station id)". It contains Notation and Analysis, so it is its own
+	   tier: a phone keeps it beside a band and a station. */
+	it('holds the Text fold as a station id in a tier of its own', () => {
+		expect(STATION_IDS.text).toBe('text');
+		expect(isBandId('text')).toBe(false);
+		expect(tierOf('input')).toBe('band');
+		expect(tierOf('text')).toBe('fold');
+		expect(tierOf('notation')).toBe('station');
+		expect(migrateOpenStations(['input', 'text', 'notation', 'analysis'], true)).toEqual([
+			'input',
+			'text',
+			'notation',
+		]);
 	});
 
 	it('drops `source`, which has no successor because the intake never closes', () => {
@@ -117,7 +137,7 @@ describe('N.108 the open set migrates once', () => {
 			'analysis',
 			'piece',
 		]);
-		expect(migrateOpenStations(['piece', 'text'], true)).toEqual(['piece']);
+		expect(migrateOpenStations(['piece', 'scoreMarkup'], true)).toEqual(['piece']);
 		expect(migrateOpenStations(['analysis', 'repertoire'], true)).toEqual(['analysis']);
 	});
 
