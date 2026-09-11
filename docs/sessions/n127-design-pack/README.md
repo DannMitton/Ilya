@@ -1,17 +1,20 @@
-# N.126 design pack: everything Design needs, in the repository
+# N.127 design pack: everything Design needs, in the repository
+
+**Renumbered N.126 to N.127 on 2026-09-11; the tree's N.126 is measure
+numbers on Score markup. Content unchanged.**
 
 Assembled 2026-09-11 by the coordinating desk, on the N.108 pack's precedent
 (`docs/sessions/n108-design-pack/`). Design reads the connected repository
 (`DannMitton/Ilya`, branch `Shane`) and nothing else, so everything is here.
 
-N.126 is **Insights**, Ilya's third document, joining Transcription and Score
+N.127 is **Insights**, Ilya's third document, joining Transcription and Score
 markup in the desk selector's boxed set (`DeskHead.svelte:43`).
 
 ## In this folder
 
 | file | what |
 |---|---|
-| `brief-to-design-n126-insights_r3_2026-09-11.md` | **the brief to answer** |
+| `brief-to-design-n127-insights_r3_2026-09-11.md` | **the brief to answer** |
 | `ruling-e44-studio-architecture_2026-08-13.md` | the Studio ruling, to be read before any GUI opinion: Studio, one takeover, anchors compose with stations |
 | `s0-slate-excerpt.md` | the S0 slate answers as recorded (`docs/sessions/LOG.md:2142-2145`); an excerpt of the record, not a ruling document |
 | `typography-extract.md` | ENVIRONMENT.md's `TYPOGRAPHY IN THIS TREE`, verbatim (`docs/memory/ENVIRONMENT.md:1950-1990`) |

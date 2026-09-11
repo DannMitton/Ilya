@@ -1,7 +1,7 @@
-# Brief to Design: N.126, Insights
+# Brief to Design: N.127, Insights
 
 **r3, 2026-09-11. Status: for Dann's strikes, then to Design. Supersedes r2.**
-Numbered N.126 and named **Insights** by Dann 2026-09-11. French name: not
+Numbered N.127 and named **Insights** by Dann 2026-09-11. French name: not
 yet coined; the whole strings table comes to Dann before anything ships.
 
 ## What it is
@@ -113,7 +113,7 @@ citation-verified pipeline.
 ## The pack that travels with this brief
 
 Precedent: the N.108 pack (`docs/sessions/n108-design-pack/`). Assembled as
-`docs/sessions/n126-design-pack/` at send time, one copy step. Contents:
+`docs/sessions/n127-design-pack/` at send time, one copy step. Contents:
 
 - This brief, as struck by Dann.
 - Fable's Studio ruling, quoted whole, and the S0 slate answers,
