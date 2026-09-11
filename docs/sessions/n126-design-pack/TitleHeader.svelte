@@ -1,0 +1,205 @@
+<script lang="ts">
+	import { t, type Language } from '$lib/i18n';
+
+	interface Props {
+		title: string;
+		composer: string;
+		poet: string;
+		translator: string;
+		opus: string;
+		language: Language;
+		onheightchange?: (height: number) => void;
+		/**
+		 * Colour of the nestled "2026a" version badge. Transcription pages
+		 * keep the default sage; Fit/Shane surfaces pass deeper-lavender to
+		 * harmonize the mark with their palette (Dann's ruling, 2026-07-12).
+		 */
+		versionAccent?: string;
+		/**
+		 * Colour of the "[Ilya]" wordmark itself (brackets and name).
+		 * Transcription keeps the default sage; Fit/Shane surfaces pass
+		 * deeper-lavender so the whole mark harmonizes, not just the version
+		 * badge (Dann's ruling, 2026-07-13).
+		 */
+		markAccent?: string;
+		/**
+		 * Colour of the header rule beneath the metadata. Transcription keeps
+		 * the default sage; Fit/Shane surfaces pass deeper-lavender so the header
+		 * harmonizes with the footer hairline (Dann's ruling, 2026-07-16).
+		 */
+		ruleAccent?: string;
+	}
+
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)' }: Props = $props();
+
+	/**
+	 * Line 1: COMPOSER (DATES)    OPUS
+	 * Full formatted composer display name, then opus. Space-separated.
+	 */
+	const composerLine = $derived.by(() => {
+		const parts: string[] = [];
+		if (composer.trim()) parts.push(composer.trim().toUpperCase());
+		if (opus.trim()) parts.push(opus.trim().toUpperCase());
+		return parts.join(' | ');
+	});
+
+	/**
+	 * Line 2: POET (DATES) | TRANSLATOR (DATES) (TRANSL.)
+	 * Full formatted names with dates. Translator only when populated.
+	 */
+	const attributionLine = $derived.by(() => {
+		const parts: string[] = [];
+		if (poet.trim()) parts.push(poet.trim().toUpperCase());
+		if (translator.trim()) parts.push(`${translator.trim().toUpperCase()} (${t('meta.transl', language)})`);
+		return parts.join(' | ');
+	});
+
+	/** Measured height of this header, including all content and the rule. */
+	let measuredHeight = $state(0);
+
+	$effect(() => {
+		if (measuredHeight > 0) {
+			onheightchange?.(measuredHeight);
+		}
+	});
+</script>
+
+<header class="title-header" bind:offsetHeight={measuredHeight}>
+	<div class="logo" style="color: {markAccent}">
+		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version" style="color: {versionAccent}">2026a</span>
+	</div>
+
+	<div class="song-title">
+		{#if title.trim()}
+			{title.trim()}
+		{:else}
+			<span class="placeholder-text">
+				{t('meta.title', language)}
+			</span>
+		{/if}
+	</div>
+
+	<div class="metadata-block">
+		{#if composerLine || attributionLine}
+			{#if composerLine}
+				<div class="metadata-line">{composerLine}</div>
+			{/if}
+			{#if attributionLine}
+				<div class="metadata-line">{attributionLine}</div>
+			{/if}
+		{:else}
+			<div class="metadata-line">
+				<span class="placeholder-text">
+					{t('meta.placeholderLine', language)}
+				</span>
+			</div>
+		{/if}
+	</div>
+
+	<div class="header-rule" style="border-bottom-color: {ruleAccent}"></div>
+</header>
+
+<style>
+	.title-header {
+		position: absolute;
+		top: 48px;
+		left: 96px;
+		right: 96px;
+	}
+
+	/* ── Logo: version nestled in y descender ──────────────── */
+
+	.logo {
+		position: relative;
+		display: inline-block;
+		margin-bottom: 8px;
+		margin-left: -6px;
+		color: var(--sage);
+		font-size: 24px;
+		line-height: 1;
+	}
+
+	.logo-bracket {
+		font-family: 'Courier New', Courier, monospace;
+	}
+
+	.logo-name {
+		font-family: var(--font-serif);
+		font-style: italic;
+	}
+
+	.logo-version {
+		position: absolute;
+		top: 21px;
+		left: 36px;
+		font-family: var(--font-sans);
+		font-size: 12px;
+		color: var(--sage);
+		font-weight: 400;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.04em;
+		line-height: 1;
+	}
+
+	/* ── Song title ────────────────────────────────────────── */
+
+	.song-title {
+		font-family: var(--font-serif);
+		font-size: 28px;
+		font-weight: 400;
+		color: var(--ink-primary);
+		line-height: 1.2;
+		margin-bottom: 6px;
+	}
+
+	/* ── Metadata block ────────────────────────────────────── */
+
+	.metadata-block {
+		margin-bottom: 8px;
+	}
+
+	.metadata-line {
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink-secondary);
+		letter-spacing: 1.5px;
+		line-height: 1.6;
+		font-variant-caps: all-small-caps;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+	}
+
+	/* ── Sage horizontal rule ──────────────────────────────── */
+
+	.header-rule {
+		border-bottom: 1px solid var(--sage);
+	}
+
+	/* ── Placeholder text ──────────────────────────────────── */
+
+	.placeholder-text {
+		color: var(--ink-tertiary);
+		font-style: italic;
+	}
+
+	@media print {
+		.placeholder-text {
+			display: none;
+		}
+	}
+
+	/* N.73 portrait C, ruled by Dann 2026-08-18, retires the N.45 rule that
+	   stood here. It hid this header on the phone with `visibility: hidden`,
+	   on the reasoning that a phone showed a content view rather than a
+	   picture of the printed page and the metadata was duplication.
+
+	   Portrait C reverses that reasoning. The header block is named in the
+	   ruling as part of the page's dress, the phone shows the page itself,
+	   and the metadata is what a singer looking at a document expects to see
+	   on it. The measurement note the rule carried is now in TitlePage's own
+	   comment, where it belongs: `bind:offsetHeight` is a layout measurement
+	   and the portrait scaling cannot move it. */
+</style>

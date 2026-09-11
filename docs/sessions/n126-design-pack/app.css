@@ -1,0 +1,403 @@
+/* ═══════════════════════════════════════════════════════════
+   ILYA — Design Tokens
+   Typography: Source Serif 4 (text) + Source Sans 3 (IPA, UI)
+   Palette: Kimi Round 2 — Calm Authority
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Shane pacifier font: self-hosted Lato IPA subset ─────────
+   Google Fonts' served Lato omits the five IPA Extensions vowels
+   the pacifier needs, so Shane self-hosts a verified subset under
+   the distinct family 'Lato IPA' (spec §5, §5a). The woff2 sits at
+   static/fonts/lato-ipa.woff2, served at /fonts/lato-ipa.woff2.
+   ───────────────────────────────────────────────────────────── */
+@font-face {
+	font-family: 'Lato IPA';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/lato-ipa.woff2') format('woff2');
+}
+
+:root {
+	/* ── Typography ────────────────────────────────────────── */
+	--font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+	--font-sans: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'Menlo', 'Consolas', monospace;
+
+	/* ── Ink hierarchy ────────────────────────────────────── */
+	--ink-primary: #1a1612;       /* warm charcoal — headings, Cyrillic, body */
+	--ink-secondary: #4a4540;     /* warm grey — IPA, metadata, secondary text */
+	--ink-tertiary: #6A655F;      /* lighter warm grey — captions, placeholders */
+
+	/* ── Sage accent ──────────────────────────────────────── */
+	--sage: #8B9A7D;
+	--light-sage: #A8B5A0;
+	--deeper-sage: #7A8A6C;
+
+	/* ── Dusty Rose accent (replaces terra cotta) ────────── */
+	--dusty-rose: #A67B7B;
+	--terracotta: var(--dusty-rose);  /* backward-compatible alias */
+
+	/* ── Quiet Cobalt accent (Guide tab) ──────────────────── */
+	--quiet-cobalt: #5C739E;
+
+	/* ── Stone palette (UI chrome) ────────────────────────── */
+	--stone-300: #d6d3d1;
+	--stone-500: #78716c;
+	--stone-700: #44403c;
+
+	/* ── Surfaces ─────────────────────────────────────────── */
+	--paper-cream: #F0EBE0;       /* Paper — primary reading surface */
+	--paper-light: #F5F1E8;       /* Paper Light — alternate/secondary backgrounds */
+	--drawer-bg: #FAF8F5;         /* UI Background — drawer, panels */
+	--desk-surface: #D8D4C8;      /* Desk — global background beneath Paper */
+	--app-bg: var(--desk-surface); /* main content area behind paper */
+
+	/* ── The drawer's outer gutter ─────────────────────────── */
+	/* N.114b, RULED BY DANN 2026-09-10 walking `ec4fbe9`: the Redo pill
+	   overhung the drawer's DRAWN edge, because it was anchored to the
+	   column's width and the card inside that column is inset by this much on
+	   each side. The value is not new: it is `.drawer-content`'s own
+	   horizontal padding, the 1rem `.root-panel` and the two drawer anchors
+	   each spent before N.108 and which Dann ruled in 2026-08-20 as the one
+	   inset every drawer rule shares.
+
+	   IT IS A TOKEN NOW SO TWO BOXES CANNOT DISAGREE. `Drawer.svelte` spends
+	   it as the padding that draws the gutter and `HeaderBar.svelte` spends it
+	   to find the card's right edge, and there is one value rather than a copy
+	   in each file. Move it and the pills move with the card. */
+	--drawer-gutter: 16px;
+
+	/* ── The band's own inset ──────────────────────────────── */
+	/* N.114b item 5, RULED BY DANN 2026-09-10 walking `7665afa`. This is
+	   `.group-band`'s horizontal padding: the line its label sits on, so
+	   METADATA's right edge is one of these in from the card's edge.
+
+	   IT IS A TOKEN SO THE PILLS CAN SPEND IT AS THEIR OWN PADDING. That is
+	   the whole of the ruling: an Undo or Redo pill whose box is tangent to the
+	   card and whose horizontal padding is this value ends its WORD on the same
+	   content line the band's label ends on. Two edges, one number, and neither
+	   is a literal copied into the other's file.
+
+	   FOUR OTHER 18px LITERALS IN `Drawer.svelte` ARE THE SAME RULED INSET and
+	   are deliberately left alone: the station margin, `.band-body`'s margin,
+	   the takeover header and its body. They are the same measure but they are
+	   not what this ruling keys, and rewriting them is a wider ship than the
+	   one that was asked for. */
+	--band-inset: 18px;
+
+	/* ── The drawer's one motion (N.108) ───────────────────── */
+	/* ONE DURATION AND ONE CURVE, ruled by the N.108 build brief §2 from the
+	   ratified GUI spec of 2026-08-18, "~180 ms ease-out". It is spent on
+	   OPACITY AND TRANSFORM ONLY; height is never animated, because animating
+	   a height is what makes a drawer rearrange under a singer's hand while
+	   they are reading it.
+
+	   IT IS DECLARED HERE AND SPENT IN ONE PLACE, `Drawer.svelte`'s station
+	   bodies. The tree's other transitions are older and each carries its own
+	   ruling (the pull's 400 ms slide, the tab switch's 175 ms, the chevron's
+	   150 ms); none of them is folded into this and none should be without a
+	   ruling that says so. */
+	--motion: 180ms ease-out;
+
+	/* ── The portrait gutter (N.73 C2) ─────────────────────── */
+	/* ONE negative space, at one value. Ruled by Dann 2026-08-19 on the
+	   walk: the desk showing beside the page and the desk showing above it
+	   are the same thing and take the same number. It is spent in two
+	   declarations and shows on three sides: `.main-content`'s horizontal
+	   padding in `+page.svelte` gives the left and the right, and
+	   `.desk-head`'s bottom padding gives the top. The page then fills the
+	   desk that is left, so its width and its scale follow this token and
+	   nothing hard-codes a percentage.
+
+	   A future change moves this one number. */
+	--portrait-gutter: 24px;
+
+	/* ── Desk tints, one per destination (N.73 S1) ──────────── */
+	/* Each desk carries its destination's signature hue tinted 60 percent
+	   toward white, ruled by Dann 2026-08-10: "C, Desk lightness 60%, no
+	   blotter" (N.42 §1.5). All four desks are light, so everything drawn
+	   on a desk takes dark ink (--ink-primary) by the luminance-keyed rule
+	   of the S0 slate.
+
+	   FOUR desks, one per destination. Ruled by Dann 2026-08-19: every
+	   distinct working surface carries its own hue, which ends the sharing
+	   S1 left in place. --surround-marked is the Marked score's desk and it
+	   is NOT --surround-shane: that token is the calibration pacifier band,
+	   it sits on white rather than on a desk, and contrast.test.ts asserts
+	   its literal. The two are different surfaces and keep different names. */
+	--surround-transcription: #D1D7CB;   /* sage at 60% */
+	--surround-marked: #D2CBD7;          /* deeper lavender at 60% */
+	--surround-learn: #DBCACA;           /* dusty rose at 60% */
+	--surround-guide: #BEC7D8;           /* quiet cobalt at 60% */
+
+	/* ── Language-pill chips, one per destination ──────────── */
+	/* The header carries ONE language pill, naming the language the singer
+	   is not in. Its chip is the band's own hue taken one step down, with
+	   white text on it. Ratified by Dann 2026-08-20 from a drawing,
+	   docs/sessions/lang-toggle-options_r1_2026-08-20.html, option D: "I
+	   love D. Ratified." He chose it over one translucent declaration
+	   knowing it costs four values instead of one.
+
+	   These are named here rather than inlined because the control census
+	   of 2026-07-29 flagged this exact control for carrying three
+	   hand-picked hex literals beside one real token.
+
+	   Guide takes NO darkening: --quiet-cobalt is already dark enough to
+	   carry white at 4.5, so its chip is the band itself and it is written
+	   as the band's own token so the two can never drift apart. Being the
+	   band, it would be invisible without an edge, so only Guide's pill
+	   draws a hairline. That is what the drawing shows.
+
+	   The other three were derived by hand from their bands and must be
+	   re-derived by hand if a band ever moves. */
+	--lang-chip-transcription: #6C7A5F;  /* --sage, one step down */
+	--lang-chip-learn: #9A6A6A;          /* --dusty-rose, one step down */
+	--lang-chip-guide: var(--quiet-cobalt);  /* the band itself, undarkened */
+	--lang-chip-marked: #806E8E;         /* --deeper-lavender, one step down */
+
+	/* ── Shane pacifier (fourth tab) ──────────────────────── */
+	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */
+	/* --paper-cream and the ink hierarchy above are reused as-is.     */
+	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
+	/* the pacifier contrast checker (contrast.ts), not here.          */
+	--surround-shane: #D8D0E0;    /* the pacifier band, on white */
+	--muted-lavender: #A89BB5;
+	--light-lavender: #C4BACF;
+	--deeper-lavender: #8E7E9B;   /* captured outline */
+	--arc-green: #1DB954;         /* progress arc (owned exception) */
+	--signal-red: #A32D2D;        /* retake flash and badge */
+	--prep-amber: #BC7E08;        /* prep-countdown flash (policy-pending) */
+
+	/* ── Backward-compatible aliases ──────────────────────── */
+	/* Components from Phase 2 reference these names.         */
+	/* New code should prefer the semantic names above.       */
+	--color-text: var(--ink-primary);
+	--color-text-muted: var(--ink-tertiary);
+	--color-accent: var(--sage);
+	--color-border: var(--stone-300);
+	--color-paper: var(--drawer-bg);
+	--color-bg: var(--app-bg);
+	--font-body: var(--font-serif);
+	--font-ui: var(--font-sans);
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	font-family: var(--font-sans);
+	color: var(--ink-primary);
+	background-color: var(--app-bg);
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* ── Focus ring (global) ─────────────────────────────────── */
+/* Sage green focus ring, 2px offset, replaces browser blue   */
+
+:focus-visible {
+	outline: 2px solid var(--sage);
+	outline-offset: 2px;
+}
+
+/* ── Print styles ─────────────────────────────────────────── */
+/* WYSIWYG: the screen IS the document. Print overrides only  */
+/* remove screen chrome (shadows, cream bg) and set margins.  */
+/*                                                             */
+/* IMPORTANT: All wrapper resets live here in app.css because  */
+/* this is truly global CSS. Svelte-scoped <style> blocks in  */
+/* individual components add hash suffixes that may not        */
+/* override reliably at print time. This single block is the   */
+/* authoritative print reset for the entire wrapper chain.     */
+/*                                                             */
+/* The font-size/line-height zero on .paper-container          */
+/* collapses whitespace text nodes between .paper-page divs.  */
+/* Without this, inherited line-height creates invisible line  */
+/* boxes that push total height past the page boundary,        */
+/* causing Chrome to generate a trailing blank page.           */
+
+@media print {
+	:root {
+		--paper-cream: #ffffff;
+	}
+
+	/* ── Wrapper chain reset ──────────────────────────────── */
+	/* Every container from <html> down to .paper-container    */
+	/* must be transparent at print time: no height caps, no   */
+	/* flex residue, no overflow clipping, no padding/margin,  */
+	/* no gap, no inherited line-height on whitespace nodes.   */
+
+	html,
+	body {
+		height: auto !important;
+		overflow: visible !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	body {
+		background: white;
+	}
+
+	.app-shell,
+	.app-content,
+	.main-content {
+		display: block !important;
+		height: auto !important;
+		overflow: visible !important;
+		flex: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		gap: 0 !important;
+	}
+
+	.paper-container {
+		display: block !important;
+		height: auto !important;
+		overflow: visible !important;
+		flex: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		gap: 0 !important;
+		font-size: 0 !important;
+		line-height: 0 !important;
+	}
+
+	/* ── Page-level print rules ───────────────────────────── */
+
+	.paper-page {
+		page-break-after: always;
+		break-after: page;
+		box-shadow: none !important;
+		background: white !important;
+		margin: 0 !important;
+		/* N.69 pass four. These two MUST equal what body uses on screen
+		   (app.css:102-108: inherited root size, line-height 1.5), or print
+		   re-metrics every line box on the page AFTER TitlePage has already
+		   measured the header and fixed contentTop in pixels. `normal` is
+		   about 1.2, so every block on paper was shorter than the geometry
+		   built for it and nothing lined up with the WYSIWYG.
+		   The container above still carries font-size/line-height 0; that is
+		   what collapses the whitespace nodes BETWEEN pages, and it is
+		   untouched here. */
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
+	.paper-page:last-child {
+		page-break-after: auto;
+		break-after: auto;
+	}
+
+	/* ── Hide screen chrome at print time ────────────────── */
+
+	.header-bar,
+	.drawer,
+	.drawer-lip,
+	.tab-bar,
+	.ribbon {
+		display: none !important;
+	}
+
+	.watermark {
+		display: none !important;
+	}
+
+	/* THE VERCEL SIGIL. Vercel appends
+	   <script src="https://vercel.live/_next-live/feedback/feedback.js">
+	   after </html> on every PREVIEW deployment. That script mounts a
+	   <vercel-live-feedback> custom element: the tag name is read out of the
+	   script itself, createElement("vercel-live-feedback"), not guessed.
+	   It is not part of Ilya and it must never reach paper. Hiding the host
+	   hides its shadow root with it. Harmless on production deployments,
+	   where Vercel does not inject it at all. */
+	vercel-live-feedback {
+		display: none !important;
+	}
+
+	.word-stack {
+		cursor: default !important;
+		background: transparent !important;
+	}
+
+	.word-stack:hover {
+		background: transparent !important;
+	}
+
+	@page {
+		margin: 0;
+		size: letter;
+	}
+}
+
+/* ── N.23: iOS Safari's focus zoom ─────────────────────────────────────
+   Safari zooms the page whenever a focused form control's font-size is
+   below 16px, and a zoomed page pans sideways. Measured in E.37 against
+   .text-input at 0.9rem (14.4px): zoom factor 16 / 14.4 = 1.1111,
+   predicted pan 43.0 CSS px, measured 43.2. The pan reads as breakage and
+   it silently corrupts any layout measurement taken while a field has
+   focus, which is the expensive part.
+
+   This answers to MODALITY rather than form factor (ruling 4, sixth
+   clause), so a fine pointer keeps today's sizes exactly.
+
+   max(1rem, 16px) rather than a bare 16px: it guarantees the threshold
+   that stops the zoom while still scaling up for a singer who has raised
+   their browser's base font size.
+
+   !important is required, not casual: Svelte scopes component styles with
+   a generated class, so .text-input.svelte-xxxx outranks a bare element
+   selector here. The @media print block above uses the same device for
+   the same reason.
+
+   maximum-scale=1 is NOT on the table. It would also stop the zoom, and
+   it kills pinch, which Dann kept deliberately (E.36 section 7.6). */
+@media (pointer: coarse) {
+	input,
+	select,
+	textarea,
+	/* N.65 ship one, 2026-08-20. `.select-trigger` is a BUTTON, so it never
+	   matched the three element selectors above, and the three searchable
+	   selects stayed at their declared 0.8rem while the two plain metadata
+	   inputs beside them jumped to 16px. MEASURED on a 375x667 touch
+	   viewport: title and opus at 16px, composer, poet, and translator at
+	   12.8px. That is the two sizes among five fields Dann reported from his
+	   phone, three times, and neither the italic nor the colour was ever the
+	   cause.
+
+	   A button cannot take Safari's focus zoom, so it does not need the
+	   16px for N.23's own reason. It takes it to stand beside its siblings:
+	   these five are one row of fields and a singer reads them together. */
+	.select-trigger,
+	/* N.65, 2026-08-20. The score drop zone's placeholder is a <p> inside a
+	   <button>, so it matches none of the element selectors above either. It
+	   is the twin of `.text-input`'s placeholder by Dann's ruling, and a twin
+	   that shrinks on the phone while the other grows is the same defect this
+	   block already fixed once for `.select-trigger`. */
+	.dz-placeholder {
+		font-size: max(1rem, 16px) !important;
+	}
+
+	/* A `::placeholder` inherits its control's size, so the rule above
+	   already carries every placeholder that declares none. `.text-input`'s
+	   declares 0.8rem, to leave the poem's serif body behind and join the
+	   Instrument voice, so it needs saying again here or the textarea would
+	   be the one field whose placeholder stayed small on the phone. */
+	input::placeholder,
+	textarea::placeholder {
+		font-size: max(1rem, 16px) !important;
+	}
+}
