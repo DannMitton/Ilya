@@ -59,27 +59,51 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > N.118.** Then N.110 (set aside, briefed), N.115, N.116, the release
 > order N.85 to N.88, N.84 (Guide and Learn), N.83.
 >
-> **THE ONE THING, at the close of 2026-09-10 06:15: THE DRAWER AS A PATH,
-> step 3 of 4. THE PATH PASS IS SHIPPED `a584ad8` (Vercel
-> `dpl_FBG38EnSpN659JGGbv7DUR9yUpmK`, READY on the alias) AND PART WALKED.**
-> Dann saw on the alias, one reload: four bands with bare chevrons; Piece
-> closed with `Without Sun, no. 1: Within Four Walls · Modest Mussorgsky
-> (1839…` and `from score`; Input open with the new placeholder; Text closed
-> reading `Grayson defaults`; Score markup closed reading `2 notes corrected ·
-> Voice: Dann · 7 of 10`. The poem box was empty because he had cleared it
-> himself before the ship, not a defect. **NOT WALKED:** the brief's six-step
-> walk (§5 of `brief-path-pass_r1`): the empty-drawer state, the caption's
-> `choose a file` link, Input's closed line, `n of 7 changed`, the one-filled-
-> pill count, persistence across reload, and 390 px. **Next session opens
-> here.** Two Code follow-ups owed, both one line: (1) Dann, 06:12: "Why
-> Grayson defaults? seems random." DESK DEFAULT: Text shows nothing under
-> the band at default and `2 of 7 changed` only when something moved, per
-> Design's rule that a band with nothing to say shows its band line;
-> (2) nothing else yet. Code's memo `memo-path-pass_r1_2026-09-10.md` §9
-> carries `correct.state`; two of its notes stand as desk defaults: Input's
-> placed pair needs a score (`slotQueue` fills from the poem alone), and
-> Transcribe and fit fills only while its act does something. Gate 4 moved
-> 1076 → 1103; `ilya-ship.sh:79` moved with it (ENVIRONMENT §Gate baselines).
+> **THE ONE THING, at the close of 2026-09-10 23:55: THE DRAWER AS A PATH,
+> step 3 of 4. THE PATH PASS IS WALKED WHOLE AND INCREMENT 2 IS SHIPPED AND
+> WALKED.** Walk of `a584ad8` by Dann in a fresh incognito profile at 1400 px
+> and 390 px, all six steps of `brief-path-pass_r1` §5: passes, with
+> findings. Increment 2 shipped `8032489` (Vercel
+> `dpl_7TxVs9XHJksHW9nWBVfgLYBHbsPs`, READY 23:41, alias attached), from
+> `docs/sessions/brief-path-pass-inc2_r1_2026-09-10.md` on Sonnet's anchor
+> memo `memo-anchors-path-pass-inc2_r1_2026-09-10.md`; Code's memo
+> `memo-path-pass-inc2_r1_2026-09-10.md`. Dann walked it on the alias at
+> 390 px and 1400 px: three bands (PIECE, INPUT, SCORE MARKUP); the Text
+> fold under the poem box, closed by default; `1 of 7 changed` after one
+> toggle; band corners rounded on close at desktop width ("whatever was
+> causing the problems seems to have been resolved"). Gate 4 moved
+> 1103 → 1104; `ilya-ship.sh:79` moved with it before the ship.
+>
+> **RULED BY DANN 2026-09-10 late, all in this session:** (a) nothing under
+> TEXT at default, ratified 21:55, then made moot by (b); (b) TEXT is not a
+> band: it folds into INPUT as a section under the poem box, on trial
+> ("if I don't like it we can revert"), shipped in `8032489`; (c) the
+> `n of 7 changed` phrase belongs beside the `Notation` header, NOT the
+> `Text` row where Code put it. **ONE LINE FOR CODE, OWED**, into the next
+> brief. (d) The running header on page 2 and after should read
+> Composer - Title (INBOX, unruled beyond the ask).
+>
+> **From the walk, settled:** the `.musx` drop works in the browser (denigma
+> to MNX); a `.musx` can never carry `from score` because MNX has no work
+> metadata (`mnx-parser.ts:743-755`, Sonnet, read); Dann had clicked PIECE
+> and TEXT open himself (F4 withdrawn); the short INPUT line after reload is
+> a timing race that resolves itself in about 4.6 s (Code, measured), no
+> code changed; where the five PIECE fields came from on the `.musx` arrival
+> is NOT ESTABLISHED (Code: the file fills none on a fresh profile; Dann's
+> typing or a stored song are the two seams). Boot does not transcribe was
+> seen again at 390 px, then on the next reload the page DID draw; not
+> explained. Code's own NOT ESTABLISHED list is in its memo.
+>
+> **NEXT, in order:** the Notation-header phrase (one line, with the next
+> Code brief); N.119; N.120 (drawing first, now carrying the `Tempo`
+> station, see N.120 below); N.121 remainder; N.122; then step 4, the phone
+> landing against portrait C. Usage 2026-09-10 22:26: Fable 71%, all-models
+> 44%, reset Sunday 05:00. Two Sonnet subagents ran tonight from this desk
+> at Dann's instruction ("I don't need to be involved"): 148k and 160k
+> tokens against the all-models pool; the desk had quoted 60k for the
+> first and owns the miss.
+>
+> **The superseded 06:15 block moved to `../sessions/LOG.md` block 10.**
 >
 > **Earlier the same session:** brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
 > built on Sonnet's read-only anchor memo
@@ -212,6 +236,65 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > (d) the undo clause for Start placement over, "placements rebuilt" or
 > Dann's better word, both languages, then the push is one line.
 >
+> **N.123, THE AGGREGATION LAYER, numbered by Dann 2026-09-10 late,
+> UNPLACED, displaces nothing until he places it.** One layer under four
+> figures (E.19, 2026-07-30, found them sharing it): per-pitch and per-vowel
+> phonation time in seconds; the TESSITURAGRAM (adopted from Titze and
+> Maxfield, J Singing 77(5), 2021, pp. 653-661, read in full by Sonnet): the
+> accumulated-duration histogram per pitch with the singer's turning points
+> shaded; beneath it the half-mass band ("half the singing sits between D3
+> and A3", the narrowest interval holding half the summed sung duration,
+> DESK DEFAULT fraction one half, coined wording), the duration-weighted
+> centre of gravity (Rastall, via Barcan 2013, formula NOT ESTABLISHED),
+> Pacheco's half-maximum band drawn on the same histogram as a labelled
+> second reading (Chapter 6 continuity), and CYCLE DOSE (Titze, Švec, and
+> Popolo, JSLHR 46(4), 2003; primary NOT fetched, formulas from a citing
+> review), which is Dann's fold-collision count: sum over sung notes of
+> f0 × seconds, rests out. **RULED by Dann:** full-voiced classical singing,
+> one collision per cycle in principle; the falsetto/breathy caveat is one
+> line on the screen and never stops the figure. Amends E.20 ruling 9
+> (2026-07-31, "a cute add-on, a learned guess"): it is a named, cited
+> figure, carried with the tempo's band. Survey:
+> `docs/sessions/memo-tessitura-literature_r1_2026-09-10.md` (218 lines;
+> 10 sources full, 4 snippet only; Thurmer 1988 "tessiturogram" and Tessa
+> 2020 not fetched). Guide paragraph, English only, r2 with dates:
+> `docs/sessions/guide-tessituragram-paragraph_r2_2026-09-10.md` (N.84).
+> Ruled out again: any ranking or difficulty score.
+>
+> **N.124, REPERTOIRE FOR A STUDIO, numbered by Dann 2026-09-10 late,
+> UNPLACED, after N.123.** A teacher holding several students' voices,
+> one song. Ilya gives a curation, not a table: the original key's
+> challenges in sentences (range first, on held or exposed notes, ceiling
+> AND floor; then how the song sits against the passaggi, counting which
+> vowels land there per Shane's per-vowel sums), then up to THREE candidate
+> keys inside the voice's window, each with its sentence and what it trades
+> away, or the honest finding that no key fits and another song is the
+> answer ("and that's ok"). Amends the 2026-08-07 ruling against suitability
+> judgements in scope: Ilya may suggest keys with reasons on their face;
+> never a score, never a rank. **Pianist's key, Dann's rule:** a proposed
+> transposition landing in a key pianists resist is disfavoured (six sharps
+> his example; five flats acceptable); DESK DEFAULT table until he names
+> one: up to four sharps or five flats count as pianistic, beyond that
+> shown with a one-clause note and never chosen over an equal pianistic
+> key; enharmonics respelled (C♭ as B, C♯ as D♭). **The rule never touches
+> the original key** ("some pieces are written in six or seven sharps"), nor
+> a candidate that lands back in it. Needs: N.123; the singer's floor and
+> ceiling from calibration (what the wizard captures today NOT ESTABLISHED);
+> a multi-voice library, NOT ESTABLISHED as existing; sentence copy in both
+> languages, Dann's, before Code.
+>
+> **N.120 gains a `Tempo` station, RULED by Dann 2026-09-10 late:** Ilya
+> presets tempo from what it reads (encoded mark, or an editorial marking on
+> an image or PDF), applies changes at the score's own tempo words, shows
+> every one on the Score markup page (nothing hidden), and the singer
+> overrides any of them without being made to articulate a tempo they did
+> not choose ("death by a thousand cuts"). Shape, desk's: a sentence station
+> `Tempo · ♩ = 72 · from score`, and on a taken note `from here`. The seam
+> is built (E.20, 2026-07-31: override → mark → Quantz tier with band →
+> abstain); per-region override NOT ESTABLISHED in the tree. Finale's
+> handling of gradual cues (rit., rall., schnell) is an INBOX item, recorded
+> at Dann's word, for the same station.
+>
 > **N.122, the capture surface as a landmark.** Dann, 2026-09-10: the
 > lavender vowel-intake surface (the capture phase with the fry guide,
 > `CalibrationWizard.svelte`, phase `capture`) is a surface "people will
@@ -282,21 +365,14 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 ### THE BLOCKING SET IS EMPTY, 2026-08-21
 
-**Was THREE until 2026-08-18, then TWO, and on 2026-08-21 it emptied.** N.59
-left it by being answered rather than finished. N.67 closed 2026-08-18. N.72
-closed 2026-08-21 on Dann's own iPhone. **N.58 was DEFERRED TO FUTURE
-DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
-
-| | item | state |
-|---|---|---|
-| `[x]` | **N.67** the save function | **CLOSED WHOLE 2026-08-18.** This row read `[ ]` until 2026-08-21, when the desk found it contradicting the section above that records every step walked by Dann on a deploy. **The tracker was stale, not the work.** |
-| | *(2026-08-18 detail, kept)* | **FIRST, by Dann's ruling 2026-08-16.** Designed in full by Fable, E.52. Seven steps, 0 through 6. **ALL SEVEN ARE NOW SHIPPED.** Steps 0 through 5 are CLOSED and every one of them was walked by Dann on a deploy; step 5 shipped `9892887`, was walked on `ilya-eaxv09qx3` (`a8a979b`) in twelve steps, record `docs/sessions/n67-5-dann-walk_r1_2026-08-18.md`. **The emergency is over and songs are plural.** **STEP 6 SHIPPED `cee4572` 2026-08-18, memo in the same commit, and Code walked all eight items of its brief on a local production build, refuting its own build three times.** Gate 4 moved 590 to 628 for step 5 and **628 to 671** for step 6. **What remains is DANN'S WALK OF STEP 6 ON A DEPLOY, and nothing else.** See the section above and the four documents below |
-| `[x]` | **N.72** no singer can ever receive a fix | **CLOSED 2026-08-21.** Chrome on iPhone on a stable URL passed: Dann held the branch alias open, ship 4 landed, ONE RELOAD delivered the new build. **Still his to rule, carried over and never asked: a singer on Chrome for iPhone can never install Ilya to the home screen.** |
-| | *(2026-08-16 detail, kept)* | **MINIMUM FIX BUILT, awaiting Dann's three-surface walk.** `static/sw.js` carries `__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs` stamps SvelteKit's per-build version into `build/sw.js` after `vite build`. **The script exits non-zero if it cannot stamp**, because a silent failure would ship the placeholder and reproduce the bug while the build looked healthy. **PROVEN LOCALLY, with a positive control:** a stamped worker makes the browser INSTALL a new one (`registration.waiting` becomes non-null, a second cache appears); the old byte-identical worker NEVER does (`waiting` stays null, one cache). **NOT PROVEN LOCALLY: that the new code is then served.** A static server cannot honestly imitate two Vercel deployments, and three separate harness faults were found trying (a grep matching its own comment text, `cp -R` preserving mtimes so revalidation returned 304, and a build marker that never reached the bundle). **WALKED BY DANN 2026-08-16, Chrome on the desk: the new build arrived after ONE RELOAD**, better than the predicted close-the-tab, and it measured the case that matters, one stamped deploy to the next. **Why it was that quick rather than needing a close is NOT fully accounted for**, and is recorded as observed rather than dressed up as predicted. **NOT WALKED: Chrome on iPhone**, left for another day. **NOT APPLICABLE: the home-screen install.** Chrome on iOS offers no Add to Home Screen, and `InstallPrompt.svelte:48` already excludes `CriOS` and `FxiOS` so Ilya never asks for it. The path exists only in Safari, which Dann does not use. **A singer on Chrome for iPhone can therefore never install Ilya, which is now a known fact rather than a guess, and is Dann's to rule on.** DELIBERATELY EXCLUDED by Dann's ruling: `skipWaiting`, `clients.claim`, the update prompt |
-| | | **The finding, as established 2026-08-16:** **ESTABLISHED by reading `static/sw.js`:** `CACHE_VERSION` is the literal `'ilya-v1'` and never changes, so every deploy ships a BYTE-IDENTICAL service worker and the browser never installs a new one; there is no `skipWaiting` and no `clients.claim` (zero occurrences); and the catch-all is `return cached || networkFetch`, so a cached `/` is served STALE and refreshed only for the next load. **Also established:** every deployment is its own frozen origin, so on a sha-pinned URL no reload can ever deliver a newer Ilya. **NOT ESTABLISHED:** the iPhone home-screen case, which cannot be driven from here, and the branch-alias two-reload behaviour, which needs two builds to observe. **Why it matters: Dann does not feel it because he scans sha-pinned URLs. Every singer on a stable URL or a home-screen install would never receive anything shipped tonight.** **The fix, one line:** derive `CACHE_VERSION` from the build so each deploy ships a different worker, add `skipWaiting` and `clients.claim`, and serve navigations network-first rather than stale. **Cost:** roughly fifteen lines in `sw.js` and an hour, of which most is verification, because it can only be proven on a stable URL across two deploys and on a real home-screen install. **Dann to rule where it sits against N.58 and N.59** |
-| `[~]` | **N.58** MIDI import | **DEFERRED TO FUTURE DEVELOPMENT, ruled by Dann 2026-08-21.** Not blocking. Do not write a third scoping brief. |
-| | *(2026-08-14 detail, kept)* | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
-| `[~]` | **N.59** the reader in the browser | **TIER 2 CLOSED 2026-08-18, ANSWERED NO, two Opus Code sessions. THE ONE THING above carries the whole account and its numbers.** Phase 0 killed the substrate decider, best margin −587 px; the slice probe died three times over, on grouping, on the fixture corpus (0 of 23), and on cost (16 to 59×). **Line grouping needs \|shear\| ≲ 0.12° and the photograph carries 2.48°.** The only instrument left is a dewarp, which is a project and is **NOT AUTHORISED**. **PARKED AT TIER 2. What a singer sees is unchanged:** photograph import stays in the beta and fails honestly, Dann's ruling 2026-08-17. **STILL OPEN INSIDE N.59: step 3, the brace rule, is `WRITTEN` and not `DONE`.** **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Step 8 (PDF, `pdfjs-dist`) ruled in and done.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
+**Nothing blocks the beta.** N.67 (the save function) CLOSED WHOLE 2026-08-18;
+N.72 (no singer can ever receive a fix) CLOSED 2026-08-21; N.58 (MIDI import)
+DEFERRED TO FUTURE DEVELOPMENT by Dann 2026-08-21; N.59 (the reader in the
+browser) PARKED AT TIER 2, answered no, 2026-08-18. **The four rows with their
+full accounts moved to `../sessions/LOG.md` block 10 at the close of
+2026-09-10 late.** Still open inside them and carried here: N.59 step 3, the
+brace rule, is `WRITTEN` and not `DONE`; a singer on Chrome for iPhone can
+never install Ilya to the home screen (Dann to rule).
 
 > **The "Closed and parked" table (N.80, N.81, N.79, N.62, N.63, the colon audit, N.78, N.70, N.71, N.68, N.55b, N.56, N.32, N.55a, N.47, N.69) moved to `../sessions/LOG.md` block 9 at the close of 2026-09-10.** All closed or parked; nothing in it is open.
 
@@ -594,3 +670,5 @@ the `## Log` table, and three stale colophons moved to `../sessions/LOG.md`.
 What stays is what `README.md` asks a new session to read: the one thing, the
 tracker, and the rulings Dann owes. Backup of the pre-split file:
 `STATE.md.bak-2026-09-01`.*
+
+*Close of 2026-09-10 late: 673 lines, over the 600 tripwire after N.123, N.124, and the Tempo station were added. Two blocks moved to LOG.md block 10 tonight (the 06:15 one-thing block; the blocking-set table). What remains is open. The next thing to move is whatever Dann rules in RULINGS DANN OWES; the 2026-08-18 copy-gap and step-4b lists are the oldest.*

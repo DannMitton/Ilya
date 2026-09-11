@@ -38,6 +38,9 @@ next session the same hour it cost the last one.
 | a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
 | the alias is serving something stale | `The branch alias, observed` |
 | sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
+| walking a fresh profile without touching his library | `INCOGNITO ON THE ALIAS` |
+| walking at 390 px on his Mac | `DEVICE MODE LOCKS THE WIDTH` |
+| the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
 | briefing Design | `WHAT DESIGN CAN READ` |
 | Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
@@ -173,7 +176,7 @@ file.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1103 passed (1103)** |
+| web-test | **1104 passed (1104)** |
 | score-parser | **547 passed, 5 skipped (552)** |
 
 **MOVED 2026-09-10 06:05: 1076 → 1103 (the path pass, 27 new tests in `bandState.test.ts` and `sections.test.ts`). The script refused the ship on the old 1076 with every test green; the desk moved `~/Downloads/ilya-ship.sh:79` and kept the old line as `ilya-ship.sh.bak-1076`. When Code reports a gate number higher than the script's and all passed, move the script BEFORE the ship, not after a refusal. Score-parser was 547 by 2026-09-10 (read from the ship output); when it moved from 541 is NOT ESTABLISHED here.**
@@ -2511,3 +2514,38 @@ Record the old and new literals in the reply so the move is auditable.
 fails there with "can't read s/...": use GNU `sed -i` with no empty argument.
 The fenced blocks Dann pastes into his own Terminal are macOS and keep `-i ''`.
 Cost: one failed edit and a second call, 2026-09-07.
+
+## INCOGNITO ON THE ALIAS. 2026-09-10
+
+A fresh profile with an empty library, on the same build as the alias and
+without touching Dann's own library: Cmd+Shift+N in his Chrome, then the
+alias URL in the dark window. First-run state, `FIRST_RUN_STATIONS`, is
+what the walk sees. Storage survives reloads inside that window and dies
+when it closes. What it cost: the first instruction sent him to the alias
+without saying the URL goes in the NEW window, and he walked his own
+library (`71 / 95 placed`) believing it was fresh.
+
+## DEVICE MODE LOCKS THE WIDTH. 2026-09-10
+
+Chrome DevTools device mode (Cmd+Option+I, then Cmd+Shift+M) opens on a
+device preset (his: iPhone 14 Pro Max, 430 × 932) and the width field is
+NOT editable under a preset. Choose `Responsive`, the small grey first entry
+above the bold `Standard` heading in the device dropdown, then type 390.
+Two exchanges lost finding it.
+
+## NO NETWORK TO VERCEL FROM THE DESK. 2026-09-10
+
+Neither the cloud shell nor `device_bash` could reach `*.vercel.app`
+tonight (curl returned 000 in the cloud; nothing at all on the device), and
+WebFetch returns a parsed page, not raw HTML, so the alias-lag check by
+entry hash (`app.<hash>.js`) is not available from the desk. `get_deployment`
+still reports READY and the alias attachment. The alias-content check is
+Dann's eye: name the visible difference of the new build before sending him
+to reload (tonight: "three bands, no TEXT band").
+
+## THE DESK MOVED THE GATE LINE, 2026-09-10 late
+
+`ilya-ship.sh:79` moved 1103 → 1104 before the ship (`8032489`), old copy
+kept as `~/Downloads/ilya-ship.sh.bak-1103`. Gate baselines table above
+updated in the same edit.
+
