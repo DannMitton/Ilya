@@ -94,8 +94,32 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > seen again at 390 px, then on the next reload the page DID draw; not
 > explained. Code's own NOT ESTABLISHED list is in its memo.
 >
-> **NEXT, in order:** the Notation-header phrase (one line, with the next
-> Code brief); N.119; N.120 (drawing first, now carrying the `Tempo`
+> **RULED 2026-09-11 00:00 to 00:12, after the close above, all Dann's:**
+> (e) the Text fold is DELETED; `Notation` and `Analysis` are two plain
+> rows under the receipts, both closed; (f) Undo and Redo leave the top bar
+> (which keeps the sigil and the language toggle) and sit at the right end
+> of the SCORE MARKUP band header as clickable text in the label style, not
+> pills, shown only when a stack is non-empty; the loupe's own undo is
+> unchanged; Code inventories the undo stack first and stops if anything on
+> it originates outside Score markup. Brief WRITTEN, not run, UNTRACKED:
+> `docs/sessions/brief-path-pass-inc3_r1_2026-09-11.md` (126 lines), which
+> also carries (c) and a read-only inventory of filled pills at rest
+> (`Dictionary` and `Calibrate` were both filled at 00:02).
+>
+> **N.125, SLURS AS TAPERED OBJECTS, numbered 2026-09-11 00:30 at Dann's
+> word, UNPLACED, its own Code thread (`staff-renderer.ts` only, off the
+> drawer path).** Finding (Sonnet memo `memo-anchors-ties-slurs_r1_2026-09-11.md`,
+> read in full): ties already taper (Dann's eye, `TIE_CENTRE_SP` 0.4 sp,
+> 2026-08-27); the uniform-width arcs are SLURS, a 1.3 px stroke
+> (`:2636-2670`); long arcs go flat because the slur lift is capped at
+> 24 px (`:2658`) and tie depth is fixed at 0.9 lineGap (`:2602`). Gould
+> 151: one design for both. Gould's slur pages 109-112 never photographed,
+> so the arch height is Dann's eye: the brief asks Code for three renders
+> per number. Brief WRITTEN, UNTRACKED:
+> `docs/sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`.
+>
+> **NEXT, in order:** increment 3 (the brief above: `git add` it, paste the
+> opener from `brief-path-pass-inc2`'s pattern, ship, walk); N.119; N.120 (drawing first, now carrying the `Tempo`
 > station, see N.120 below); N.121 remainder; N.122; then step 4, the phone
 > landing against portrait C. Usage 2026-09-10 22:26: Fable 71%, all-models
 > 44%, reset Sunday 05:00. Two Sonnet subagents ran tonight from this desk
@@ -469,7 +493,18 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ### New from N.104, 2026-08-29. Three, none blocking the walk
 
-- **THE BAR-NUMBERS DRAWING IS WAITING ON HIM.** Thirty-two plates in
+- ~~THE BAR-NUMBERS DRAWING IS WAITING ON HIM.~~ **RULED 2026-09-11 00:40,
+  numbered N.126, measure numbers on Score markup, UNPLACED.** Size: the
+  lyric underlay's point size. Weight: regular, italic (Gould p484-d
+  agrees). Clearance: "legible without emphasis", DESK DEFAULT 1.0
+  stave-space (the drawing's middle of 0.6 / 1.0 / 1.4). Bare, never
+  parenthesized ("to orient collaborating musicians quickly, not to trumpet
+  our editorial decision"). Post-rest anchor: DESK DEFAULT the closing
+  barline of the rest, explained to Dann and not waved off. System-start
+  number above the clef per Gould p484 and his 2026-08-29 ruling. Drawing:
+  `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`; source
+  `gould-bar-numbers-p484_2026-08-29.md`. Original text kept:
+- **THE BAR-NUMBERS DRAWING WAS WAITING ON HIM.** Thirty-two plates in
   `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`, built on
   `docs/sessions/gould-bar-numbers-p484_2026-08-29.md`. **Gould gives which bars
   are numbered, where, what slope and what framing, and gives no size, no
