@@ -118,6 +118,41 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > per number. Brief WRITTEN, UNTRACKED:
 > `docs/sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`.
 >
+> **N.127, INSIGHTS, numbered by Dann 2026-09-11 evening (first ruled as
+> N.126 in-session; renumbered after the desk missed `STATE.md:497`, the
+> collision is the desk's error, owned in-thread). UNPLACED. Ilya's third
+> document, sibling to Transcription and Score markup, third member of the
+> `DeskHead` pair.** Rulings, all Dann's 2026-09-11: read-only, never an
+> input surface; every line computed from the singer's inputs or a sourced
+> advice string a predicate fired; appears the instant voice information
+> exists, thin to deep, broad-analysis pattern inherited; content in a
+> squircle inheriting the watch band (`VoiceProfilePane.svelte:1532-1533`),
+> which migrates off Score markup wholly, leaving it pure notation;
+> governing colour dusty rose `--dusty-rose #A67B7B`, inks luminance-keyed;
+> page one fixed at one page, a second page only when earned, fired advice
+> printed there in full; citations as footnotes, attribution in Guide and
+> footer; page one ordered for the choosing moment; identity head carries
+> voice name, composer, title (DESK DEFAULT: calibration date joins it,
+> which would close N.19); section headers take `TitleHeader.svelte`
+> `.metadata-line` recipe in rose ink; the compass stave's clef follows the
+> SINGER via `chooseClef` on the declared range's median (tenor
+> treble-8vb-by-range refinement recorded here, not yet designed); the foot
+> is one apparatus block, Insights' copy of `footer.attribution` drops the
+> lieder.net clause, siblings untouched; the labelled teacher's blank is
+> DEAD, unlabelled negative space stays. Six curation criteria ruled as a
+> LIVING list (see the brief), headline: helpful not comprehensive; one
+> entry per hazard anchored by its weightiest instance in the Loupe's
+> measure-tag grammar; Score markup answers where, Insights answers what,
+> how much, and what to do; silence is a finding. Record:
+> `docs/sessions/n127-design-pack/` (commits `e0c34c1`, `52517e6`). Design
+> returned R1 to R3 the same evening; R3 carries the three clef passes and
+> the French-proved foot; a six-item refinement message is with Design
+> (stave to 8 px line gap, no note-name captions, mini-squircle collision
+> law, G clef curl on the G line, binding-squircle footprint with two
+> treatments for Dann to rule, foot daylight and right-indented hairline).
+> **Design's returned HTML lives only in Dann's Downloads; commit the
+> latest into the pack at the next touch.**
+>
 > **NEXT, in order:** increment 3 (the brief above: `git add` it, paste the
 > opener from `brief-path-pass-inc2`'s pattern, ship, walk); N.119; N.120 (drawing first, now carrying the `Tempo`
 > station, see N.120 below); N.121 remainder; N.122; then step 4, the phone
@@ -490,6 +525,9 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   keeps the `aria-label` exposed where a bare div would have dropped it.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
+
+- The binding squircle's footprint on Insights page one: Design proposes two
+  treatments, Dann rules (2026-09-11).
 
 ### New from N.104, 2026-08-29. Three, none blocking the walk
 

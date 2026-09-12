@@ -72,6 +72,7 @@ next session the same hour it cost the last one.
 | a fixture file you need the app to fetch | `WHAT VITE PREVIEW ACTUALLY SERVES` |
 | a walk from Code that needs a transcription | `THE WALKCLOCK HARNESS` |
 | a click on the page that raises no loupe | `THE PANE'S VIEWPORT IS 0 x 0` |
+| a click that lands somewhere other than where you measured | `THE PANE'S COORDINATE FRAME IS NOT THE VIEWPORT` |
 | a scroll reset that will not take on a shown box | `DISPLAY NONE KEEPS THE SCROLL OFFSET` |
 | CSS that svelte-check calls dead only after an edit | `A DYNAMIC CLASS MASKS EVERY UNUSED SELECTOR` |
 | a service worker that will not update locally | `Claude Code, and where the building` |
@@ -79,6 +80,7 @@ next session the same hour it cost the last one.
 | a screen-reader string to check | `SCREEN-READER STRINGS` |
 | instruments already known to lie | `Known instrument faults` |
 | `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
+| a remote branch that seems not to exist | `implies --single-branch` |
 
 ### Svelte, CSS, and this tree
 
@@ -1091,6 +1093,10 @@ npmjs.com package pages, and bundlephobia all refuse.**
   measurement." Guard on length yourself.
 - **`stripBackingRect` matches `fill="#FFFFFF"` while `staff-renderer.ts` paints
   `#F0EBE0`.** Unsettled.
+- **`git clone --depth` implies `--single-branch`.** A branch missing from such a
+  clone is a blind spot, not an absence; the desk claimed "no Shane branch on the
+  remote" from one on 2026-09-11. Verify with `--no-single-branch` or
+  `git ls-remote` before any absence claim.
 
 ---
 
@@ -2395,6 +2401,29 @@ the target at `y = 0`. Nothing on screen says why.
 and every rectangle measured before the resize is stale.
 
 Reset it with `resize_window` preset `desktop` when the walk is done.
+
+## THE PANE'S COORDINATE FRAME IS NOT THE VIEWPORT SCALED BY WIDTH. Learned 2026-09-11, N.115 increment 3
+
+**A click you aim with `rect * (frameWidth / innerWidth)` lands somewhere else
+vertically.** Three clicks were spent on this during the increment 3 walk: two
+looked like the app ignoring them, and one silently opened a station nobody
+asked for, which then had to be told apart from a defect.
+
+- The screenshot names its frame, for example `coordinate frame: 800x600`,
+  while the emulated viewport was `1400x900`. Those aspect ratios differ, so
+  **the frame is the pane's box and the page is letterboxed inside it**. The
+  horizontal factor is right and the vertical one is not.
+- **So do not compute click coordinates from `getBoundingClientRect`.** Get a
+  `ref_N` from `find` or `read_page` and click that: the harness maps the ref
+  itself and it landed every time.
+- `find` reaches what `read_page` does not name. A `.band-action` button whose
+  name comes from `aria-label` was listed by `read_page` as a bare `button`
+  with no name, and `find "Undo"` returned it with its label.
+- **A click on the PAGE is different again**: the note handler is delegated on
+  `window` and goes through `elementFromPoint`, so the faithful way is to
+  measure the element and dispatch
+  `new MouseEvent('click', {bubbles: true, clientX, clientY})` at its centre,
+  in viewport coordinates. That worked at both widths.
 
 ## THE WALKCLOCK HARNESS: HOW CODE WALKS A TRANSCRIPTION AT ALL. 2026-09-07
 
