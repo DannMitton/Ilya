@@ -67,6 +67,13 @@
 		 */
 		expanded: boolean;
 		onexpandedchange: (value: boolean) => void;
+		/**
+		 * N.115 increment 3, RULED BY DANN 2026-09-10 late: `2 of 7 changed`
+		 * sits at the right end of this station's own row, open or shut, and
+		 * only once a toggle has moved. `notationStateLine`, already built by
+		 * `+page.svelte`, which holds the seven values; '' draws nothing.
+		 */
+		changed?: string;
 	}
 
 	let {
@@ -80,6 +87,7 @@
 		onopensyllabificationchange,
 		expanded,
 		onexpandedchange,
+		changed = '',
 	}: Props = $props();
 
 	function handleToggle(key: keyof NotationPreferences, value: boolean) {
@@ -99,13 +107,23 @@
 	     chevron declared in this component is now three props, and the
 	     behaviour, the `aria-expanded`, the 44px coarse-pointer floor and the
 	     two chevron rotations are unchanged and live there. -->
+	<!-- N.115 increment 3, RULED BY DANN 2026-09-10 late: "if we're going to
+	     offer this courtesy message it should be on the Notation header, not
+	     the Text header." It takes `StationHeader`'s own status slot, the one
+	     that slot was built for, and it shows whether the station is open or
+	     shut, because it reports the state of the toggles rather than of the
+	     disclosure. Nothing is drawn at default: `notationStateLine` returns
+	     '' there, which is the same absence every state line in the drawer
+	     keeps. -->
 	<StationHeader
 		label={t('cosmetic.heading', language)}
 		accent={accent}
 		expanded={expanded}
 		ontoggle={() => onexpandedchange(!expanded)}
 		controls="notation-toggles"
+		status={changed === '' ? undefined : changedStatus}
 	/>
+	{#snippet changedStatus()}<span class="notation-changed">{changed}</span>{/snippet}
 	{#if expanded}
 	<div class="cosmetic-grid" id="notation-toggles">
 		<!-- Stress acutes -->
@@ -234,6 +252,23 @@
 
 	.cosmetic-section {
 		margin-top: 0;
+	}
+
+	/* N.115 increment 3. THE COUNT, IN THE STATE LINE'S STYLE: `Drawer.svelte`'s
+	   `.band-state` recipe, 14 px sans with tabular figures on one line, in
+	   SECONDARY ink because it is apparatus rather than the singer's own
+	   content. It is the recipe the deleted Text fold drew the phrase in, moved
+	   here with the phrase on Dann's ruling of 2026-09-10 late. Declared here
+	   because Svelte scopes a rule to the file that writes the markup, and it
+	   overrides `StationHeader`'s own quieter status type, which it sits
+	   inside. */
+	.notation-changed {
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-weight: 400;
+		font-variant-numeric: tabular-nums;
+		color: var(--ink-secondary);
+		white-space: nowrap;
 	}
 
 	/* ── Cosmetic toggle grid ────────────────────────────── */

@@ -53,7 +53,9 @@ const strings: Record<string, Record<Language, string>> = {
 	//    string is how a rename comes to move something nobody meant to move.
 	//    Whether they should be one string is DANN'S TO RULE.
 	'group.piece':                 { en: 'Piece',                        fr: 'Piece' },
-	'group.text':                  { en: 'Text',                         fr: 'Text' },
+	//    `group.text` IS DELETED in both languages, N.115 increment 3: the
+	//    Text fold was its last reader, and Dann ruled the fold away
+	//    2026-09-10 late.
 	'group.scoreMarkup':           { en: 'Score markup',                 fr: 'Score markup' },
 	//    `group.input` JOINS THEM, N.108-5, and it is a SEVENTH owed name.
 	//    Dann named the band himself on 2026-09-07: the intake becomes its own
@@ -66,8 +68,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    line are built from strings that already existed; these two are what
 	//    had none. `text.state.default` ("Grayson defaults") is STRUCK in
 	//    both languages, N.115 increment 2, ruled by Dann 2026-09-10 21:55:
-	//    the Text fold says nothing at default.
-	'text.state.changed':          { en: '%s of %s changed',             fr: '%s sur %s modifiés' },
+	//    nothing at default. N.115 increment 3 moves the phrase to the
+	//    Notation header and renames the key from `text.state.changed`; the
+	//    text is unchanged in both languages.
+	'notation.state.changed':      { en: '%s of %s changed',             fr: '%s sur %s modifiés' },
 	//    Voice's own count on Score markup's state line. The NAME half of that
 	//    line is `calib.anchor.named`, which already reads "Voice: {voice}" in
 	//    ratified French; a second key for the same words would be two strings

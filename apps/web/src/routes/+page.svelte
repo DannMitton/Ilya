@@ -109,7 +109,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import {
 		pieceStateLine,
 		inputStateLine,
-		textStateLine,
+		notationStateLine,
 		scoreStateLine,
 	} from '$lib/components/Drawer/bandState';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
@@ -2117,8 +2117,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		)
 	);
 
-	const textStateText = $derived(
-		textStateLine(
+	/* N.115 increment 3: the phrase moved from the deleted Text fold to the
+	   Notation station's own header row, and the builder was renamed with it.
+	   The seven values are unchanged and still live here. */
+	const notationStateText = $derived(
+		notationStateLine(
 			{
 				reducedVowel: notationPrefs.reducedVowel,
 				geminate: notationPrefs.geminate,
@@ -3935,24 +3938,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      at the fitted page. Nothing replaced it: no residue, no toast, no
      one-time note, because Dann has never ruled where a residue goes. -->
 <div class="screen-only">
-	<!-- N.114a. UNDO AND REDO RIDE THE TOP BAR, ruled by Dann 2026-09-09. The
-	     two sentences and the two handlers are the ones the loupe dock had; the
-	     stack, `pushUndo`, and the Cmd-Z pair are untouched.
-
-	     N.114b, ruled 2026-09-10: `drawerWidth` goes with them, so on a desk the
-	     pair stands flush with the drawer's right edge. It is the SAME value
-	     `Drawer` is given as `width` below, read from one place, so the bar and
-	     the column cannot disagree. -->
-	<HeaderBar
-		{language}
-		{activeTab}
-		onlanguagechange={handleLanguageChange}
-		{undoLabel}
-		{redoLabel}
-		onundo={handleUndo}
-		onredo={handleRedo}
-		{drawerWidth}
-	/>
+	<!-- N.115 increment 3, RULED BY DANN 2026-09-10 late: "I hate where they are
+	     placed." UNDO AND REDO LEAVE THIS BAR for the right end of the SCORE
+	     MARKUP band header, and the bar keeps the sigil and the language
+	     toggle. `drawerWidth` goes with them: N.114b added it only so the pair
+	     could stand flush with the drawer's edge. The stack, `pushUndo`, the
+	     two handlers and the Cmd-Z pair are untouched; only the place changed,
+	     and `Drawer` below is given the same two labels and the same two
+	     handlers. -->
+	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
 <!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
      AlertDialog measured +18.7 KB gzipped for this one thing, against about
      8 KB budgeted for the whole of N.67, and showModal() gives the modality,
@@ -4063,6 +4057,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pieceFromScore={doc.fromScoreFields.has('title')}
 		inputState={inputStateText}
 		scoreState={scoreStateText}
+		{undoLabel}
+		{redoLabel}
+		onundo={handleUndo}
+		onredo={handleRedo}
 		ontogglepull={handlePullToggle}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
@@ -4173,9 +4171,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					syllablesPlaced={placedSlotCount}
 					syllablesTotal={slotQueue.length}
 					onstartover={handleStartPlacementOver}
-					textOpen={sections.has(STATION_IDS.text)}
-					ontoggletext={() => sections.toggle(STATION_IDS.text)}
-					textState={textStateText}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -4258,12 +4253,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     Notation pinned above the scroll and Analysis first inside it,
 					     and neither moved because of anything wrong with where it was.
 					     They are together because they are both text work. -->
-					<!-- N.115 increment 2: THIS IS `textSection` NOW, AND IT MOVED
-					     VERBATIM. TEXT stopped being a band on Dann's ruling of
-					     2026-09-10 22:00, on trial, and folds into INPUT under the poem
-					     box; `IntakePanel` draws the fold around this snippet and the
-					     drawer's open set (`STATION_IDS.text`) holds its open state. -->
-					{#snippet textSection()}
+					<!-- N.115 increment 3: THIS IS `notationAndAnalysis` NOW, AND IT
+					     MOVED VERBATIM AGAIN. Increment 2 folded TEXT into INPUT as a
+					     section with an open state of its own; Dann ruled that fold away
+					     2026-09-10 late, so `IntakePanel` renders these two stations
+					     directly under the poem box and each keeps its own id, its own
+					     chevron and its own row. -->
+					{#snippet notationAndAnalysis()}
 						<!-- NOTATION (item N.7). ONE instance, on both of Studio's
 						     documents, and it is the first station in the TEXT group.
 						     It was pinned BELOW the scroll until N.73 S3 and pinned
@@ -4310,6 +4306,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							onopensyllabificationchange={handleOpenSyllabificationChange}
 							expanded={sections.has(STATION_IDS.notation)}
 							onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
+							changed={notationStateText}
 						/>
 						<AnalysisStation
 							{loaderState}

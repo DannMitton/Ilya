@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { SectionSet, BAND_IDS } from './sections.svelte';
+	import { stackActions, type StackAction } from './bandState';
 	import { readSwipe } from './gesture';
 	import type { Destination, TabId } from '$lib/destinations';
 
@@ -81,8 +82,9 @@
 		 * Piece and Text. It holds the whole intake frame and nothing else.
 		 */
 		inputGroup?: Snippet;
-		/* `textGroup` IS GONE, N.115 increment 2: TEXT folded into INPUT, and
-		   its contents are `IntakePanel`'s `textSection` now. */
+		/* `textGroup` IS GONE, N.115 increment 2: TEXT folded into INPUT. Its
+		   contents are `IntakePanel`'s `notationAndAnalysis` since increment 3
+		   deleted the fold that held them. */
 		scoreGroup?: Snippet;
 		/**
 		 * METADATA'S BODY, drawn whenever Piece is open.
@@ -121,9 +123,27 @@
 		/** Whether Piece's title came from a score header. Draws the tag. */
 		pieceFromScore?: boolean;
 		inputState?: string;
-		/* `textState` IS GONE, N.115 increment 2. TEXT is a fold inside
-		   INPUT and draws its own count on its header row; see `IntakePanel`. */
+		/* `textState` IS GONE, N.115 increment 2. The count it carried is on the
+		   NOTATION station's own row since increment 3 deleted the fold that
+		   held it; see `NotationFields`. */
 		scoreState?: string;
+		/**
+		 * ── UNDO AND REDO, N.115 increment 3 ──────────────────────────────
+		 *
+		 * RULED BY DANN 2026-09-10 late: "I hate where they are placed." The
+		 * pair leaves the top bar, which keeps the sigil and the language
+		 * toggle, and stands at the right end of the SCORE MARKUP band
+		 * header, before its chevron.
+		 *
+		 * THE LABELS ARE THE PAGE'S, as they were on the bar: `stackLabel` in
+		 * `+page.svelte` composes them from the same two stacks the Cmd-Z
+		 * pair uses, so a press and a hotkey cannot diverge. `null` means the
+		 * stack is empty, and an empty stack draws nothing at all.
+		 */
+		undoLabel?: string | null;
+		redoLabel?: string | null;
+		onundo?: () => void;
+		onredo?: () => void;
 		/**
 		 * THE CALIBRATION TAKEOVER (N.73 S3 ship one). E.27's takeover:
 		 * "replaces the entire drawer, shows a single back affordance at the
@@ -160,7 +180,20 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', scoreState = '', undoLabel = null, redoLabel = null, onundo, onredo, voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+
+	/* N.115 increment 3. WHICH OF THE PAIR THE SCORE MARKUP BAND DRAWS, and
+	   the decision is `bandState.ts`'s so a gate can reach it: this file's
+	   band draws exactly the list it returns, which is empty while both
+	   stacks are. */
+	const scoreActions = $derived(stackActions(undoLabel, redoLabel, language));
+
+	/* THE ROOM THE PAIR TAKES ON THAT BAND, measured rather than guessed,
+	   because the two verbs are two words in two languages. The band's name
+	   reserves it, so a long name ellipsizes before it can run under Undo
+	   instead of over it. Nothing else reads it, and with no actions drawn
+	   nothing spends it. */
+	let bandActionsWidth = $state(0);
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
@@ -478,7 +511,7 @@
 					     shows its content, and the content is the state." An empty
 					     state line draws no element, so a band with nothing to say
 					     costs no height. -->
-					{#snippet bandHead(id: string, label: string, state: string, fromScore: boolean)}
+					{#snippet bandHead(id: string, label: string, state: string, fromScore: boolean, actions: StackAction[] = [])}
 						{@const open = sections.has(id)}
 						<h2 class="group-band">
 							<button
@@ -489,8 +522,51 @@
 								onclick={() => sections.toggle(id)}
 							>
 								<span class="band-name">{label}</span>
+								<!-- THE ROOM THE PAIR TAKES, inside the toggle so the band's
+								     own name ellipsizes before it reaches them. It is
+								     `margin-left: auto`, so the free length of the band stays
+								     between the name and the pair and stays part of the
+								     toggle: a tap on the band's empty length still opens and
+								     closes it. -->
+								{#if actions.length > 0}
+									<span class="band-actions-room" style="width: {bandActionsWidth}px" aria-hidden="true"></span>
+								{/if}
 								<svg class="band-chevron" class:expanded={open} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
 							</button>
+							<!-- ── UNDO AND REDO. N.115 increment 3, RULED BY DANN
+							     2026-09-10 late: "I hate where they are placed." They are
+							     CLICKABLE TEXT in the band's own label style and not pills,
+							     which is his reason in his own words: "that will avoid
+							     conflicts about inconsistent header height." So the band is
+							     40 px with them and 40 px without them.
+
+							     A SIBLING OF THE TOGGLE, NOT A CHILD, because a button
+							     inside a button is not markup a browser will keep. It is
+							     positioned over the toggle's last stretch, so a tap on Undo
+							     reaches Undo and never the band: the toggle is not its
+							     ancestor, so nothing bubbles into it.
+
+							     THE SENTENCE IS THE ACCESSIBLE NAME AND THE VERB IS THE
+							     LABEL. N.114a drew the whole sentence on the top bar; at
+							     the band's 0.7 rem uppercase, two sentences would not fit
+							     beside SCORE MARKUP at 390 px, so the clause moves into
+							     `aria-label`, which still opens with the verb the singer
+							     sees. Reversible: draw `action.sentence` instead. -->
+							{#if actions.length > 0}
+								<span class="band-actions" bind:clientWidth={bandActionsWidth}>
+									{#each actions as action (action.kind)}
+										<button
+											type="button"
+											class="band-action"
+											aria-label={action.sentence}
+											onclick={() => (action.kind === 'undo' ? onundo?.() : onredo?.())}
+										>
+											<span aria-hidden="true">{action.kind === 'undo' ? '↶' : '↷'}</span>
+											<span>{action.verb}</span>
+										</button>
+									{/each}
+								</span>
+							{/if}
 						</h2>
 						{#if !open && state}
 							<p class="band-state">
@@ -539,14 +615,15 @@
 							<div class="band-body" id="band-input">{@render inputGroup?.()}</div>
 						{/if}
 					</section>
-					<!-- ═══ TEXT IS NOT A BAND. N.115 increment 2, ruled by Dann
-					     2026-09-10 22:00 on trial: Notation and Analysis fold into
-					     INPUT under the poem box. The fold is `IntakePanel`'s, and
-					     its open state is `STATION_IDS.text`. -->
+					<!-- ═══ TEXT IS NOT A BAND, AND ITS FOLD IS GONE TOO. Increment 2
+					     folded Notation and Analysis into INPUT under the poem box;
+					     increment 3 deleted the fold on Dann's ruling of 2026-09-10
+					     late, so the two are `IntakePanel`'s own stations and no id of
+					     TEXT's survives anywhere. -->
 					<!-- ═══ SCORE MARKUP. Lavender, one step down. Corrections and
 					     Voice. -->
 					<section class="group group-score">
-						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false)}
+						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false, scoreActions)}
 						{#if sections.has(BAND_IDS.scoreMarkup)}
 							<div class="band-body" id="band-scoreMarkup">{@render scoreGroup?.()}</div>
 						{/if}
@@ -1167,6 +1244,72 @@
 		opacity: 0.85;
 		transform: rotate(90deg);
 		transition: transform 150ms ease;
+	}
+
+	/* ── UNDO AND REDO ON A BAND. N.115 increment 3 ───────────
+	   RULED BY DANN 2026-09-10 late. CLICKABLE TEXT IN THE BAND'S OWN LABEL
+	   STYLE, not pills: the pair inherits the band's 0.7 rem, its 0.12 em
+	   tracking, its uppercase and its white, and adds no fill, no border and
+	   no radius. That is his reason in his own words, "that will avoid
+	   conflicts about inconsistent header height": nothing here can make the
+	   band taller than 40 px, because nothing here has a height of its own.
+
+	   THE HIT AREA IS THE FULL HEADER HEIGHT, which `align-items: stretch`
+	   gives without a number. It is 40 px rather than 44, because the band is
+	   40 px on every pointer and a control that made its own band taller is
+	   the thing the ruling forbids. NO NEW TOUCH EXEMPTION IS CREATED: the
+	   band toggle beside it has been 40 px since N.108 and these two stand
+	   inside that same band.
+
+	   WHERE IT SITS: `--band-inset` is the band's own side padding, 10 px is
+	   the chevron and 12 px is `.band-toggle`'s gap, so the pair's right edge
+	   lands exactly one gap before the chevron and the chevron stays
+	   outermost right, which is the rule every station header keeps. */
+	.group-band {
+		position: relative;
+	}
+
+	.band-actions {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: calc(var(--band-inset) + 22px);
+		display: flex;
+		align-items: stretch;
+	}
+
+	.band-actions-room {
+		flex: none;
+		margin-left: auto;
+	}
+
+	.band-action {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4em;
+		min-width: 44px;
+		padding: 0 6px;
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		color: inherit;
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+
+	/* The underline is `HeaderBar`'s hover, which is what the pair had on the
+	   top bar, kept so the gesture reads the same after the move. */
+	.band-action:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+	}
+
+	.band-action:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: -2px;
 	}
 
 	.band-chevron.expanded {

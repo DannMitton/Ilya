@@ -135,25 +135,71 @@ export function notationDepartures(state: NotationToggleState): number {
 export const NOTATION_TOGGLE_COUNT = 7;
 
 /**
- * THE TEXT FOLD, closed: nothing at rest, `2 of 7 changed` once a toggle moved.
+ * NOTATION'S HEADER: nothing at rest, `2 of 7 changed` once a toggle moved.
  *
  * N.115 increment 2, RULED BY DANN 2026-09-10 21:55: nothing at default.
  * `Grayson defaults` is struck with its key; he read it on the walk as
- * "seems random". REDUCED TO THE CHANGED CASE RATHER THAN DELETED, because
- * the count and its phrase still need one owner and this is it. The empty
- * string at rest is the convention every other builder in this file keeps,
- * and the caller draws no element for it.
+ * "seems random". The empty string at rest is the convention every other
+ * builder in this file keeps, and the caller draws no element for it.
  *
- * TEXT IS NO LONGER A BAND. It folds into INPUT under the poem box, and this
- * line sits at the right end of the fold's header row, in secondary ink,
- * because it is apparatus rather than the singer's own content.
+ * IT MOVED FROM THE TEXT FOLD TO NOTATION, N.115 increment 3, RULED BY DANN
+ * 2026-09-10 late: "if we're going to offer this courtesy message it should
+ * be on the Notation header, not the Text header." The fold is deleted. The
+ * phrase sits at the right end of Notation's own station row, open or shut,
+ * in secondary ink, because it is apparatus rather than the singer's own
+ * content. It was `textStateLine` and its key was `text.state.changed`;
+ * both names lied once the fold went, and the text is unchanged.
  */
-export function textStateLine(state: NotationToggleState, language: Language): string {
+export function notationStateLine(state: NotationToggleState, language: Language): string {
 	const changed = notationDepartures(state);
 	if (changed === 0) return '';
-	return t('text.state.changed', language)
+	return t('notation.state.changed', language)
 		.replace('%s', String(changed))
 		.replace('%s', String(NOTATION_TOGGLE_COUNT));
+}
+
+/**
+ * UNDO AND REDO ON THE SCORE MARKUP BAND, N.115 increment 3. RULED BY DANN
+ * 2026-09-10 late ("I hate where they are placed"): the pair leaves the top
+ * bar for the right end of the SCORE MARKUP band header, as clickable text
+ * in the band's own label style, and each is drawn ONLY while its stack
+ * holds something.
+ *
+ * THE DECISION LIVES HERE AND NOT IN THE TEMPLATE, for the reason
+ * `sections.svelte.ts` gives: this repository's vitest runs in `node`, where
+ * no component renders, so the band draws exactly the list this returns.
+ *
+ * `undoLabel` AND `redoLabel` ARE `+page.svelte`'s `stackLabel`, `null` for
+ * an empty stack. The VERB is the ratified `loupe.undo` or `loupe.redo` with
+ * its clause and the separator before it dropped, which is `HeaderBar`'s old
+ * `verbOnly` moved here with the pair, so no string is coined. `\s` matches
+ * the non-breaking space that carries the French spacing before the colon.
+ * The SENTENCE, clause included, is the accessible name. It begins with the
+ * verb the singer sees, which keeps the visible label inside the name.
+ */
+export interface StackAction {
+	kind: 'undo' | 'redo';
+	verb: string;
+	sentence: string;
+}
+
+export function stackActions(
+	undoLabel: string | null,
+	redoLabel: string | null,
+	language: Language,
+): StackAction[] {
+	const action = (kind: 'undo' | 'redo', clause: string): StackAction => {
+		const key = kind === 'undo' ? 'loupe.undo' : 'loupe.redo';
+		return {
+			kind,
+			verb: t(key, language).replace(/[\s:]*%s\s*$/, ''),
+			sentence: t(key, language).replace('%s', clause),
+		};
+	};
+	const out: StackAction[] = [];
+	if (undoLabel !== null) out.push(action('undo', undoLabel));
+	if (redoLabel !== null) out.push(action('redo', redoLabel));
+	return out;
 }
 
 /**

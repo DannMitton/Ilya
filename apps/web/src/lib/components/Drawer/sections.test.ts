@@ -62,13 +62,12 @@ describe('N.108 the open set migrates once', () => {
 
 	/* N.115. The bands are members of the same set, so each survives a round
 	   trip under its own name. N.115 increment 2: THREE, "PIECE, INPUT, SCORE
-	   MARKUP" (brief §1), and `text` still survives, as the fold. */
-	it('keeps each of the three band ids, and the Text fold', () => {
+	   MARKUP" (brief §1). */
+	it('keeps each of the three band ids', () => {
 		expect(Object.values(BAND_IDS)).toEqual(['piece', 'input', 'scoreMarkup']);
-		expect(migrateOpenStations(['piece', 'input', 'text', 'scoreMarkup'], false)).toEqual([
+		expect(migrateOpenStations(['piece', 'input', 'scoreMarkup'], false)).toEqual([
 			'piece',
 			'input',
-			'text',
 			'scoreMarkup',
 		]);
 	});
@@ -78,19 +77,19 @@ describe('N.108 the open set migrates once', () => {
 		for (const id of Object.values(STATION_IDS)) expect(isBandId(id)).toBe(false);
 	});
 
-	/* N.115 increment 2, brief §2.2: TEXT's contents fold into INPUT "as one
-	   folded section ... whose open and closed state joins the station store
-	   (a new station id)". It contains Notation and Analysis, so it is its own
-	   tier: a phone keeps it beside a band and a station. */
-	it('holds the Text fold as a station id in a tier of its own', () => {
-		expect(STATION_IDS.text).toBe('text');
-		expect(isBandId('text')).toBe(false);
+	/* N.115 increment 3, brief §2.1, RULED BY DANN 2026-09-10 late: the Text
+	   fold is deleted, and Notation and Analysis "render directly where the
+	   fold's body rendered, as the two stations they already are". So a
+	   stored `text` names no door and drops, and the two are ordinary
+	   stations: on a phone the first of them survives beside a band. */
+	it('drops the deleted Text fold and keeps Notation and Analysis as stations', () => {
+		expect(Object.values(STATION_IDS)).not.toContain('text');
+		expect(migrateOpenStations(['input', 'text'], false)).toEqual(['input']);
 		expect(tierOf('input')).toBe('band');
-		expect(tierOf('text')).toBe('fold');
 		expect(tierOf('notation')).toBe('station');
+		expect(tierOf('analysis')).toBe('station');
 		expect(migrateOpenStations(['input', 'text', 'notation', 'analysis'], true)).toEqual([
 			'input',
-			'text',
 			'notation',
 		]);
 	});
