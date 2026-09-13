@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawing: the undo and redo marks, r1, 2026-09-12</title>
+<style>
+  :root{
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --deeper-lavender:#8E7E9B;
+    --ink-tertiary:#6A655F;
+    --paper-light:#F5F1E8;
+    --paper-cream:#F0EBE0;
+    --stone-600:#57534e;
+  }
+  body{margin:0;background:#D2CBD7;font-family:var(--font-sans);color:#2B2622;padding:32px 24px 64px}
+  .sheet{max-width:860px;margin:0 auto}
+  h1{font-size:20px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:#4a453f;margin:0 0 26px;max-width:64ch;line-height:1.5}
+  .row{background:var(--paper-light);border-radius:10px;padding:16px 18px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-tertiary);margin:0 0 2px}
+  .name{font-size:15px;font-weight:600;margin:0 0 10px}
+  .name code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:400;background:var(--paper-cream);padding:1px 5px;border-radius:3px}
+  .note{font-size:13px;line-height:1.5;margin:9px 0 0;color:#4a453f;max-width:62ch}
+  .flag{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--stone-600);padding:2px 7px;border-radius:999px;vertical-align:middle;margin-left:8px}
+  .flag.now{background:var(--deeper-lavender)}
+
+  /* ── the band, at the tree's own recipe ─────────────────
+     Drawer.svelte:1272-1300, .band-action inherits the band's font.
+     Band hue --deeper-lavender #8E7E9B, app.css:167. */
+  .band{
+    position:relative;
+    width:390px;
+    height:40px;
+    border-radius:10px 10px 0 0;
+    background:var(--deeper-lavender);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    font-family:var(--font-sans);
+    font-size:0.7rem;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:0 18px;
+    user-select:none;
+  }
+  .band .label{flex:none}
+  .actions{position:absolute;right:40px;top:0;bottom:0;display:flex;align-items:stretch}
+  .act{display:flex;align-items:center;justify-content:center;gap:0.4em;min-width:44px;padding:0 6px}
+  .chev{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:11px}
+  .stage{background:var(--paper-cream);border-radius:8px;padding:20px 16px;display:flex;justify-content:center}
+  .big{font-size:30px;letter-spacing:0;margin-left:26px;color:#3a352f;align-self:center}
+  .pair{display:flex;align-items:center;gap:18px;justify-content:center}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<h1>The undo and redo marks</h1>
+<p class="sub">r1, 2026-09-12. Each candidate is drawn in the SCORE MARKUP band at its real recipe: 390 px wide, 40 px tall, 0.7 rem, weight 600, 0.1 em tracking, uppercase, white on <code>--deeper-lavender</code> <code>#8E7E9B</code>. The large pair beside each band is the same two characters at 30 px, so the shape is unmistakable. Point at a letter.</p>
+
+<div class="row">
+  <p class="tag">A</p>
+  <p class="name">Turned arrows &nbsp;<code>↰ U+21B0</code> &nbsp;<code>↱ U+21B1</code><span class="flag now">on the band now</span></p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">↰ Undo</span><span class="act">↱ Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big">↰ ↱</span>
+  </div></div>
+  <p class="note">What the memos document from 2026-08-26 onward, stated outright at <code>memo-n111-3b-loupe_r1_2026-09-07.md:165</code>. A square corner: the stroke goes up, then turns.</p>
+</div>
+
+<div class="row">
+  <p class="tag">B</p>
+  <p class="name">Curved arrows &nbsp;<code>↶ U+21B6</code> &nbsp;<code>↷ U+21B7</code><span class="flag">rejected tonight</span></p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">↶ Undo</span><span class="act">↷ Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big">↶ ↷</span>
+  </div></div>
+  <p class="note">What increment 3 put there, from the desk's brief. A shallow arc over the top.</p>
+</div>
+
+<div class="row">
+  <p class="tag">C</p>
+  <p class="name">Open circle arrows &nbsp;<code>↺ U+21BA</code> &nbsp;<code>↻ U+21BB</code></p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">↺ Undo</span><span class="act">↻ Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big">↺ ↻</span>
+  </div></div>
+  <p class="note">A full circle, broken at the arrowhead. Reads as "go round again" more than "step back".</p>
+</div>
+
+<div class="row">
+  <p class="tag">D</p>
+  <p class="name">Hooked arrows &nbsp;<code>↩ U+21A9</code> &nbsp;<code>↪ U+21AA</code></p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">↩ Undo</span><span class="act">↪ Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big">↩ ↪</span>
+  </div></div>
+  <p class="note">The return key's shape. Widely read as undo in software, and it is the one most likely to be confused with a carriage return.</p>
+</div>
+
+<div class="row">
+  <p class="tag">E</p>
+  <p class="name">Long curved arrows &nbsp;<code>⤺ U+293A</code> &nbsp;<code>⤻ U+293B</code></p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">⤺ Undo</span><span class="act">⤻ Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big">⤺ ⤻</span>
+  </div></div>
+  <p class="note">A wider arc than B, with the arrowhead further round. Not in the tree at any point; shown for completeness.</p>
+</div>
+
+<div class="row">
+  <p class="tag">F</p>
+  <p class="name">No mark at all</p>
+  <div class="stage"><div class="pair">
+    <div class="band"><span class="label">Score markup</span><span class="actions"><span class="act">Undo</span><span class="act">Redo</span></span><span class="chev">⌃</span></div>
+    <span class="big" style="color:#9a958e;font-size:15px;letter-spacing:.08em">(words only)</span>
+  </div></div>
+  <p class="note">The words already say it, and the band's other label carries no mark. This is the option that spends nothing and is the only one that cannot be recalled wrongly.</p>
+</div>
+
+<div class="row" style="background:#fff">
+  <p class="tag">What is established</p>
+  <p class="note" style="margin-top:6px"><strong>A is documented, not merely used.</strong> <code>memo-n111-3b-loupe_r1_2026-09-07.md:165</code> states that the Redo pill's mark is <code>↱</code> (U+21B1), the mirror of the Undo pill's <code>↰</code>, and A appears in the mobile slice memos of 2026-08-26, in N.111, N.113 and N.114b. <strong>Whether you ever ruled it deliberately is NOT ESTABLISHED</strong>; no ruling document names a glyph. So if A is not the shape you remember, the record is of a working default that was never chosen, and you are free to choose now.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -138,7 +138,7 @@ export function middleLine(clef?: { sign: 'G' | 'F' | 'C'; octaveChange?: number
  *
  * A COLON, and that is load-bearing rather than decorative.
  * `migrateCorrectionIds` decides an id is the old four-segment reader form by
- * counting DASH-separated segments (`correction.ts:354`), so a synthetic id
+ * counting DASH-separated segments (`correction.ts`, its `parts.length` test), so a synthetic id
  * carrying dashes could be re-keyed into nonsense at load. A colon carries no
  * meaning to that rule, so `hand:7` passes through it untouched and stays
  * itself across every reload.
@@ -533,10 +533,11 @@ export function beatAt(
  *
  * THE ONSET IS SUMMED HERE RATHER THAN READ OFF THE EVENT, and that is a
  * departure from what `VocalLineEvent.rhythmicPosition` offers. The parser sets
- * that field from its own cursor and `applyCorrections` carries it through
- * unchanged (`correction.ts:371`, the `...ev` spread), so lengthening the first
- * note of a bar leaves every later note in the bar claiming the beat it stood
- * on before the correction. The loupe is the surface the singer makes that
+ * that field from its own cursor, and until N.128 `applyCorrections` carried it
+ * through unchanged, so lengthening the first note of a bar left every later
+ * note in the bar claiming the beat it stood on before the correction.
+ * `reflowOnsets` in `correction.ts` now moves those onsets; the sum stays here
+ * because it is the loupe's own instrument and needs no stored field at all. The loupe is the surface the singer makes that
  * correction ON, so it is the last place that may print a stale beat. Summing
  * `duration.fraction` across the measure is the same arithmetic `measureFill`
  * runs three lines up, and it tracks corrections, entered notes and deletions

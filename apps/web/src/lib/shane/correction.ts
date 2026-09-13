@@ -353,7 +353,92 @@ export function applyCorrections(
 		out.push(amend(ev, c));
 		emitEntered(ev.id, ev, 0);
 	}
-	return out;
+	return reflowOnsets(vocalLine, out, map);
+}
+
+/**
+ * N.128. THE ONSETS, MOVED BY WHAT THE CORRECTIONS DID TO THE DURATIONS.
+ *
+ * `amend` changes a duration and `synthesize` seats an entry, and neither can
+ * see the notes after them, so without this pass every later note in the
+ * measure kept the onset the reader gave it. The renderer spaces on durations
+ * and groups beams on onsets (`staff-renderer.ts`, the beam pass's group key),
+ * so a lengthened first note drew the bar with new spacing and old beats.
+ *
+ * A SHIFT, NOT A RE-COUNT FROM THE BARLINE. Each event's onset moves by the
+ * durations the line now holds before it in its measure, less the durations
+ * the read held there. A measure nothing touched shifts by zero and keeps the
+ * reader's own event object, and a gap the source wrote with `<forward>`
+ * survives, because the reader's onset is the base the shift is added to.
+ *
+ * A HAND-ENTERED ENTRY takes its base from the end of the read event its chain
+ * hangs off, which is where `synthesize` seats it, and it held no duration in
+ * the read. At the head of the part both are zero.
+ *
+ * A DURATION NO ONE CAN SUM leaves the rest of its measure where it stood,
+ * `beatOfEntry`'s precedent in `entry.ts`: an onset derived from an unreadable
+ * length is not more honest than the one already stored.
+ */
+function reflowOnsets(
+	read: VocalLineEvent[],
+	out: VocalLineEvent[],
+	map: CorrectionMap
+): VocalLineEvent[] {
+	/* The read side: for each read event, its onset and the durations before
+	   it in its measure, then the same two measured from its end, which is
+	   what an entry anchored to it inherits. `null` is a sum that was lost. */
+	type Slot = { base: Fraction; before: Fraction | null };
+	const startOf = new Map<string, Slot>();
+	const endOf = new Map<string, Slot>();
+	let measure = Number.NaN;
+	let sum: Fraction | null = ZERO;
+	for (const ev of read) {
+		if (ev.measureIndex !== measure) {
+			measure = ev.measureIndex;
+			sum = ZERO;
+		}
+		const onset = ev.rhythmicPosition.fraction;
+		const length = summable(ev.duration.fraction) ? ev.duration.fraction : null;
+		startOf.set(ev.id, { base: onset, before: sum });
+		sum = sum && length ? addFractions(sum, length) : null;
+		endOf.set(ev.id, { base: length ? addFractions(onset, length) : onset, before: sum });
+	}
+
+	const slotOf = (id: string, depth = 0): Slot | undefined => {
+		const after = map[id]?.entered ? map[id].entered!.after : undefined;
+		if (after === undefined) return startOf.get(id);
+		if (after === null) return { base: ZERO, before: ZERO };
+		if (depth > 512) return undefined;
+		return map[after]?.entered ? slotOf(after, depth + 1) : endOf.get(after);
+	};
+
+	measure = Number.NaN;
+	sum = ZERO;
+	return out.map((ev) => {
+		if (ev.measureIndex !== measure) {
+			measure = ev.measureIndex;
+			sum = ZERO;
+		}
+		const before = sum;
+		sum = sum && summable(ev.duration.fraction) ? addFractions(sum, ev.duration.fraction) : null;
+		const slot = slotOf(ev.id);
+		if (!slot || !slot.before || !before) return ev;
+		let onset = addFractions(slot.base, subtractFractions(before, slot.before));
+		// Never before the barline, the parser's own floor for a `<backup>`.
+		if (onset.numerator < 0) onset = ZERO;
+		const was = ev.rhythmicPosition.fraction;
+		if (onset.numerator * was.denominator === was.numerator * onset.denominator) return ev;
+		return { ...ev, rhythmicPosition: { ...ev.rhythmicPosition, fraction: onset } };
+	});
+}
+
+const ZERO: Fraction = { numerator: 0, denominator: 1 };
+
+/** A length the pass can add: finite, with a positive denominator. */
+function summable(f: Fraction | undefined): f is Fraction {
+	return (
+		!!f && Number.isFinite(f.numerator) && Number.isFinite(f.denominator) && f.denominator > 0
+	);
 }
 
 /** The anchor key standing for the head of the part. */
@@ -422,7 +507,9 @@ function synthesize(
 	   per-measure accidental state to it, and it spaces on durations rather
 	   than on onsets, so this is the field that has to be right and the onset
 	   is the field that has to be honest. At the head of a part both are the
-	   downbeat of measure 0. */
+	   downbeat of measure 0. The anchor here is the read event, so where the
+	   anchor's own duration was corrected `reflowOnsets` moves this onset to
+	   the corrected end. */
 	const measureIndex = anchor ? anchor.measureIndex : 0;
 	const onset = anchor
 		? addFractions(anchor.rhythmicPosition.fraction, anchor.duration.fraction)
@@ -455,6 +542,10 @@ function addFractions(a: Fraction, b: Fraction): Fraction {
 		a.numerator * b.denominator + b.numerator * a.denominator,
 		a.denominator * b.denominator
 	);
+}
+
+function subtractFractions(a: Fraction, b: Fraction): Fraction {
+	return addFractions(a, { numerator: -b.numerator, denominator: b.denominator });
 }
 
 function reduceFraction(numerator: number, denominator: number): Fraction {

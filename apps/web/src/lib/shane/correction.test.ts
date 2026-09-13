@@ -7,7 +7,18 @@
  * is a constraint rather than a feature, so it is asserted rather than assumed.
  */
 import { describe, it, expect } from 'vitest';
-import type { NoteBase, Pitch, VocalLineEvent } from '@ilya/score-parser';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import {
+	MusicXmlScoreParser,
+	renderAnalyzedStaff,
+	type AnalyzedScore,
+	type Fraction,
+	type NoteBase,
+	type Pitch,
+	type VocalLineEvent
+} from '@ilya/score-parser';
+import { parseXml } from './ingestion/mini-dom';
 import {
 	applyCorrections,
 	clearCorrection,
@@ -399,5 +410,105 @@ describe('N.97 a correction survives the removal of an earlier event in its meas
 		expect(orphanIds(afterMasking, old)).toEqual(['r0-1-2-1734']);
 		// And the migration is what rescues it.
 		expect(orphanIds(afterMasking, migrateCorrectionIds(old))).toEqual([]);
+	});
+});
+
+/* N.128. THE RULE, NOT THE SYMPTOM. A note's beat is where the durations
+   before it in its measure put it. A duration correction moves every later
+   note of that measure, and the renderer's beam groups read that onset
+   (`staff-renderer.ts`, the beam pass's group key), so an onset the correction
+   left behind groups a note by a beat it no longer stands on. */
+describe('N.128 a corrected duration moves the notes after it in its measure', () => {
+	const at = (ev: VocalLineEvent, num: number, den: number, measureIndex = 0): VocalLineEvent => ({
+		...ev,
+		measureIndex,
+		rhythmicPosition: { fraction: { numerator: num, denominator: den } }
+	});
+	const onsets = (line: VocalLineEvent[]): Fraction[] => line.map((e) => e.rhythmicPosition.fraction);
+	const f = (numerator: number, denominator: number): Fraction => ({ numerator, denominator });
+
+	// Measure 1 of the engraved Sunless no. 1 in miniature: two quarters and
+	// an eighth, as the file spells them, then an eighth rest.
+	const bar = [
+		at(note('тес', P('F', 4), 'quarter'), 0, 1),
+		at(note('на', P('E', 4), 'quarter'), 1, 4),
+		at(note('я', P('E', 4), 'eighth'), 1, 2),
+		at(note('r', undefined, 'eighth'), 5, 8)
+	];
+
+	it('puts each note after a lengthened first note where the durations say it is', () => {
+		const out = applyCorrections(bar, { тес: { dots: 1 }, на: { base: 'eighth' } });
+		expect(onsets(out)).toEqual([f(0, 1), f(3, 8), f(1, 2), f(5, 8)]);
+	});
+
+	it('moves the later notes when only the first one changes', () => {
+		const out = applyCorrections(bar, { тес: { base: 'half' } });
+		expect(onsets(out)).toEqual([f(0, 1), f(1, 2), f(3, 4), f(7, 8)]);
+	});
+
+	it('closes the space a deleted note held', () => {
+		const out = applyCorrections(bar, { на: { deleted: true } });
+		expect(onsets(out)).toEqual([f(0, 1), f(1, 4), f(3, 8)]);
+	});
+
+	it('opens space for an entry, and seats the entry at the end of a corrected anchor', () => {
+		const out = applyCorrections(bar, {
+			тес: { dots: 1 },
+			'hand:1': { entered: { after: 'тес' }, base: 'eighth', pitch: P('G', 4) }
+		});
+		expect(out.map((e) => e.id)).toEqual(['тес', 'hand:1', 'на', 'я', 'r']);
+		expect(onsets(out)).toEqual([f(0, 1), f(3, 8), f(1, 2), f(3, 4), f(7, 8)]);
+	});
+
+	it('keeps a gap the source left, so only the correction moves anything', () => {
+		// A `<forward>` of an eighth between the first and second notes.
+		const gapped = [at(bar[0], 0, 1), at(bar[1], 3, 8), at(bar[2], 5, 8)];
+		const out = applyCorrections(gapped, { тес: { dots: 1 } });
+		expect(onsets(out)).toEqual([f(0, 1), f(1, 2), f(3, 4)]);
+	});
+
+	it('leaves every other measure exactly as the reader read it', () => {
+		const next = at(note('ти', P('D', 4)), 0, 1, 1);
+		const line = [...bar, next];
+		const out = applyCorrections(line, { тес: { base: 'half' } });
+		expect(out[4]).toBe(next);
+	});
+
+	/* THE PAGE ITSELF. Dann's two corrections on the engraved Sunless no. 1,
+	   measured on his page 2026-09-12: `тес` is a plain quarter in the file and
+	   a dotted quarter on the page, and `на` a quarter in the file and an
+	   eighth on the page. After them « на–я » in measure 1 and « ла–я » in
+	   measure 2 are the same figure on the same beat, so the page must mark
+	   them the same way: two beams, one each. */
+	it('marks « на–я » and « ла–я » in system 1 of Sunless no. 1 the same way', async () => {
+		const xml = readFileSync(
+			fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+			'utf8'
+		);
+		const { score } = await new MusicXmlScoreParser().parse({
+			format: 'musicxml',
+			data: parseXml(xml) as unknown as Document,
+			sourcePath: 'sunless-01-engraved.musicxml'
+		});
+		// Found by syllable and measure, never by id: an id names the onset the
+		// file gave, not the one the page draws.
+		const inMeasure = (mi: number, text: string) => {
+			const ev = score.vocalLine.find((e) => e.measureIndex === mi && e.syllable?.text === text);
+			if (!ev) throw new Error(`no « ${text} » in measure ${mi}`);
+			return ev;
+		};
+		const map: CorrectionMap = {
+			[inMeasure(1, 'тес').id]: { dots: 1 },
+			[inMeasure(1, 'на').id]: { base: 'eighth' }
+		};
+		const line = applyCorrections(score.vocalLine, map).filter(
+			(e) => e.measureIndex === 1 || e.measureIndex === 2
+		);
+		const svg = renderAnalyzedStaff(
+			{ ...score, vocalLine: line },
+			{ events: {} } as unknown as AnalyzedScore,
+			{ clef: 'treble' }
+		);
+		expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(2);
 	});
 });

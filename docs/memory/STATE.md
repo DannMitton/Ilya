@@ -193,9 +193,14 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > either pair; the system's one beam runs x 563.89 to 583.56.
 > Cause: the beam key is
 > `measure | beatIndexOf(ev.rhythmicPosition.fraction, ts) | timbre`
-> (`staff-renderer.ts:1611`), and `modification-engine.ts` has ZERO
-> references to `rhythmicPosition` (grep, 0 hits). The x layout advances by
-> duration, so the page redraws; nothing recomputes the following events'
+> (`staff-renderer.ts:1611`), and the duration-correction path never moved
+> the following notes' onsets. **CORRECTED 2026-09-12 by Code, and the
+> desk's error is on the record:** the desk cited `modification-engine.ts`
+> having zero references to `rhythmicPosition`, but that file is the
+> **vowel**-modification engine (`modification-engine.ts:1-2`) and was never
+> in the duration path. The zero hits were true and irrelevant. Durations
+> change in `apps/web/src/lib/shane/correction.ts`. The x layout advances by
+> duration, so the page redraws; nothing recomputed the following events'
 > positions. On the page на is `m1-1-1` (4.0 quarters, beat 3 of 12/8) and
 > я is `m1-5-4` (5.0, beat 4); ла is `m2-9-8` (4.5, beat 4) and я is
 > `m2-5-4` (5.0, beat 4). Corroborating: the source file has тес as a PLAIN

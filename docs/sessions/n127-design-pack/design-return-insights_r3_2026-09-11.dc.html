@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..600&family=Source+Sans+3:ital,wght@0,300..700;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Finale Maestro'; src: url('./fonts/FinaleMaestro.otf') format('opentype'); font-display: block; }
+  body { margin:0; background:#D8D4C8; color:#1a1612; font-family:'Source Sans 3', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#8A5C5C; text-decoration:none; }
+  a:hover { color:#1a1612; }
+</style>
+</helmet>
+
+<section style="padding:56px 64px 96px; display:flex; flex-direction:column; gap:44px">
+
+  <div style="max-width:900px; display:flex; flex-direction:column; gap:14px">
+    <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.14em; color:#8A5C5C">N.127 &middot; INSIGHTS &middot; DESIGN AND MOCKUPS, R2 &middot; 2026-09-11</div>
+    <h1 style="margin:0; font-family:'Source Serif 4', Georgia, serif; font-size:34px; font-weight:400; line-height:1.15; color:#1a1612">Insights, the third document: a squircle that sizes to its content, on paper that does not move</h1>
+    <p style="margin:0; max-width:760px; font-family:'Source Serif 4', Georgia, serif; font-size:16px; line-height:1.55; color:#4a4540; text-wrap:pretty">Six drawings: page one on the rose desk, the earned second page, the nearly empty page, the three clef passes over one compass, the consolidated foot in both languages, and the selector trio at the narrowest portrait width. Page one's budget is kept by curation, which demotes the two lighter findings to the earned page, so the frame never crosses prose. Every string on these sheets is an illustrative placeholder in the shape the engine's output would take, computed against the Sunless no. 1 fixture. No French is coined here; the French shown is <code style="font-family:Menlo, Consolas, monospace; font-size:15px">i18n.ts:696</code> as the tree holds it, less the struck clause.</p>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start">
+
+    <div id="1e" style="width:400px; box-sizing:border-box; background:#F0EBE0; border:1px solid #A67B7B; border-radius:12px; padding:26px 28px; display:flex; flex-direction:column; gap:18px">
+      <div style="font-family:'Source Sans 3'; font-size:12px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">WHAT R2 CHANGED</div>
+      <div style="display:flex; flex-direction:column; gap:10px; font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#4a4540">
+        <div><strong style="color:#1a1612; font-weight:600">The squircle sizes to its content.</strong> It opens under the head's rule and ends where the prose ends. The paper is what is fixed: 816 by 1056, 96 px sides, 48 px head and foot. Nothing is clipped and the frame crosses no line.</div>
+        <div><strong style="color:#1a1612; font-weight:600">Curation keeps page one's budget.</strong> The two lighter findings by phonation mass, measures 5 to 8 and measure 27, are demoted whole to the earned page and leave a count behind. That is criterion 5 doing the work the frame was doing wrongly.</div>
+        <div><strong style="color:#1a1612; font-weight:600">One apparatus block, one hairline.</strong> Footnotes, then the method line, then the attribution, all at 9.5 px on 1.45, above a single rose hairline. The page count sits alone beneath it. The attribution prints without its <code style="font-family:Menlo, Consolas, monospace; font-size:12px">lieder.net</code> clause.</div>
+        <div><strong style="color:#1a1612; font-weight:600">Sized to the French.</strong> Every sheet reserves the height the French apparatus measures at this width, and English leaves the difference as space. Drawing <a href="#1f">1f</a> is the acceptance test.</div>
+        <div><strong style="color:#1a1612; font-weight:600">Section headers take the metadata recipe.</strong> The sheet head's own <code style="font-family:Menlo, Consolas, monospace; font-size:12px">.metadata-line</code>, 14 px, 600, all small caps, 1.5 px tracking, in rose ink. One recipe now runs from the head into the squircle.</div>
+        <div><strong style="color:#1a1612; font-weight:600">The compass leads, in a squircle of its own.</strong> The engraved stave is the first thing on the page, bound tight in the watch band's outline inside the page's, the graphic bleeding to that border with no interior margin, because it is what a singer researching repertoire reads first and it answers the choosing question without words. Ruling 8 opens page one with the at-a-glance fit; this treats the stave as that glance and puts the table's numbers under it.</div>
+        <div><strong style="color:#1a1612; font-weight:600">The clef follows the singer.</strong> It is not fixed: <code style="font-family:Menlo, Consolas, monospace; font-size:12px">clef-select.ts</code> chooses among treble, treble-8vb and bass on the median against middle C, and drawing <a href="#1g">1g</a> sets the same compass in all three. Page one's sheets draw the bass pass because the fixture is a bass.</div>
+        <div><strong style="color:#1a1612; font-weight:600">The stave carries its clef, in Maestro.</strong> The F clef is Finale Maestro's own glyph, SMuFL <code style="font-family:Menlo, Consolas, monospace; font-size:12px">U+E062</code> at 56 px, four staff spaces to the em on this 14 px stave, baseline on the F line, the same face and the same wiring the Loupe and the correction surface already use. It opens the stave, so the lines are G2, B2, D3, F3, A3 by notation and not by caption, and the passaggi now rule where a low male voice turns: primo A3 on the top line, secondo D4 above it. The pitches are engine values, so correct them if the calibration says otherwise.</div>
+        <div><strong style="color:#1a1612; font-weight:600">The labelled blank is gone.</strong> No rules, no heading, no invitation. What remains is the space between the squircle's last line and the foot, unlabelled, belonging to whoever holds the pen.</div>
+      </div>
+      <div style="border-top:1px solid #A67B7B; padding-top:14px; display:flex; flex-direction:column; gap:8px">
+        <div style="font-family:'Source Sans 3'; font-size:12px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">STANDING FROM R1</div>
+        <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-family:'Source Serif 4', Georgia, serif; font-size:13.5px; line-height:1.45; color:#4a4540">
+          <li>The squircle's outline is the watch band's: 12 px radius, 1 px of <code style="font-family:Menlo, Consolas, monospace; font-size:12px">--dusty-rose</code>, cream inside (<code style="font-family:Menlo, Consolas, monospace; font-size:12px">VoiceProfilePane.svelte:1533</code>).</li>
+          <li>The desk is rose at <code style="font-family:Menlo, Consolas, monospace; font-size:12px">#DBCACA</code>, its own token, at the value Learn's surround carries.</li>
+          <li>Label ink is <code style="font-family:Menlo, Consolas, monospace; font-size:12px">#8A5C5C</code> so small caps clear 4.5 on cream; <code style="font-family:Menlo, Consolas, monospace; font-size:12px">#A67B7B</code> draws lines and marks only.</li>
+          <li>Colour never carries information alone. Two type registers only.</li>
+          <li>The compass and the histogram share one pitch axis; the typed passaggi rule across the histogram, not the stave.</li>
+        </ul>
+      </div>
+      <div style="border-top:1px solid #A67B7B; padding-top:14px; display:flex; flex-direction:column; gap:8px">
+        <div style="font-family:'Source Sans 3'; font-size:12px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">NOT ESTABLISHED</div>
+        <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-family:'Source Serif 4', Georgia, serif; font-size:13.5px; line-height:1.45; color:#4a4540">
+          <li>Every string on these sheets. They are placeholders in the engine's shape, not copy.</li>
+          <li>The citations. Both footnote slots print a verification marker, because the advice programme's pipeline has verified none.</li>
+          <li>The French strings, including the document's French name, the footnotes, and the method line. The French foot in <a href="#1f">1f</a> now ends « par dannmitton.com » on your word. Striking the <code style="font-family:Menlo, Consolas, monospace; font-size:12px">lieder.net</code> clause also leaves a comma where a period is now wanted, in both languages; that punctuation is yours.</li>
+          <li>Whether the aggregation seams expose the compass, the tessitura band, the crossing count, and the phonation totals where a third document can reach them.</li>
+          <li>The trio at the narrowest portrait widths. Drawing <a href="#1d">1d</a> is a proposal.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="1a" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1A &middot; PAGE ONE, ON THE ROSE DESK, FULL CALIBRATION</div>
+
+      <div style="width:1040px; box-sizing:border-box; background:#DBCACA; padding:20px 24px 40px; display:flex; flex-direction:column; align-items:center">
+
+        <div style="width:816px; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:6px 0 24px">
+          <div style="display:inline-flex; border:1px solid #1a1612; border-radius:4px; overflow:hidden">
+            <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612">Transcription</div>
+            <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612">Score markup</div>
+            <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612; background:#F0EBE0">Insights</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px">
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Learn</div>
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Guide</div>
+          </div>
+        </div>
+
+        <div style="width:816px; height:1056px; position:relative; box-sizing:border-box; background:#F0EBE0; box-shadow:0 3px 12px rgba(0,0,0,0.35); flex-shrink:0">
+
+          <div style="position:absolute; top:48px; left:96px; right:96px">
+            <div style="position:relative; display:inline-block; margin-bottom:8px; margin-left:-6px; color:#A67B7B; font-size:24px; line-height:1">
+              <span style="font-family:'Courier New', Courier, monospace">[</span><span style="font-family:'Source Serif 4', Georgia, serif; font-style:italic">Ilya</span><span style="font-family:'Courier New', Courier, monospace">]</span><span style="position:absolute; top:21px; left:36px; font-family:'Source Sans 3', sans-serif; font-size:12px; color:#A67B7B; font-variant-caps:all-small-caps; letter-spacing:0.04em; line-height:1">2026a</span>
+            </div>
+            <div style="font-family:'Source Serif 4', Georgia, serif; font-size:28px; font-weight:400; color:#1a1612; line-height:1.2; margin-bottom:6px">Without Sun, no. 1: Within Four Walls</div>
+            <div style="margin-bottom:8px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; color:#4a4540; letter-spacing:1.5px; line-height:1.6; font-variant-caps:all-small-caps">Modest Mussorgsky (1839&ndash;1881)</div>
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; color:#4a4540; letter-spacing:1.5px; line-height:1.6; font-variant-caps:all-small-caps">Insights for Voice 1 &middot; calibrated 2026-08-31</div>
+            </div>
+            <div style="border-bottom:1px solid #A67B7B"></div>
+          </div>
+
+          <div style="position:absolute; top:180px; left:96px; right:96px; box-sizing:border-box; border:1px solid #A67B7B; border-radius:12px; padding:18px 26px 20px; display:flex; flex-direction:column; gap:15px">
+
+            <div style="display:flex; flex-direction:column; gap:6px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">The compass of this piece against your voice</div>
+              <div style="border:1px solid #A67B7B; border-radius:12px; overflow:hidden; line-height:0">
+                <svg viewBox="60 34 556 156" style="width:100%; height:auto; display:block" aria-label="Range stave: the piece's compass, its tessitura, and your calibrated range">
+                <rect x="60" y="41" width="556" height="98" fill="rgba(166,123,123,0.10)"></rect>
+                <rect x="60" y="70" width="556" height="36" fill="rgba(166,123,123,0.20)"></rect>
+                <g stroke="#1a1612" stroke-width="1">
+                  <line x1="96" y1="132" x2="300" y2="132"></line>
+                  <line x1="96" y1="118" x2="300" y2="118"></line>
+                  <line x1="96" y1="104" x2="300" y2="104"></line>
+                  <line x1="96" y1="90" x2="300" y2="90"></line>
+                  <line x1="96" y1="76" x2="300" y2="76"></line>
+                </g>
+                <text x="100" y="90" font-family="Finale Maestro" font-size="56" fill="#1a1612">&#xE062;</text>
+                <g fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5" text-anchor="end">
+                  <text x="88" y="135">G2</text>
+                  <text x="88" y="121">B2</text>
+                  <text x="88" y="107">D3</text>
+                  <text x="88" y="93">F3</text>
+                  <text x="88" y="79">A3</text>
+                </g>
+                <g stroke="#1a1612" stroke-width="1">
+                  <line x1="238" y1="62" x2="262" y2="62"></line>
+                  <line x1="238" y1="48" x2="262" y2="48"></line>
+                </g>
+                <ellipse cx="150" cy="125" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 150 125)"></ellipse>
+                <line x1="156" y1="124" x2="156" y2="86" stroke="#1a1612" stroke-width="1.4"></line>
+                <ellipse cx="250" cy="48" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 250 48)"></ellipse>
+                <line x1="244" y1="49" x2="244" y2="87" stroke="#1a1612" stroke-width="1.4"></line>
+                <text x="234" y="52" fill="#1a1612" font-family="'Source Serif 4', Georgia, serif" font-size="13" text-anchor="end">&flat;</text>
+                <rect x="142" y="106" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                <rect x="242" y="30" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                <g fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">
+                  <text x="150" y="162">A2</text>
+                  <text x="250" y="162">E&flat;4</text>
+                </g>
+                <g fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5">
+                  <text x="104" y="162">lowest</text>
+                  <text x="266" y="162">highest</text>
+                </g>
+                <g fill="#A67B7B">
+                  <rect x="330" y="128" width="23" height="5"></rect>
+                  <rect x="330" y="121" width="34" height="5"></rect>
+                  <rect x="330" y="114" width="68" height="5"></rect>
+                  <rect x="330" y="107" width="159" height="5"></rect>
+                  <rect x="330" y="100" width="205" height="5"></rect>
+                  <rect x="330" y="93" width="250" height="5"></rect>
+                  <rect x="330" y="86" width="182" height="5"></rect>
+                  <rect x="330" y="79" width="102" height="5"></rect>
+                  <rect x="330" y="72" width="80" height="5"></rect>
+                  <rect x="330" y="65" width="45" height="5"></rect>
+                  <rect x="330" y="58" width="23" height="5"></rect>
+                  <rect x="330" y="51" width="34" height="5"></rect>
+                </g>
+                <g stroke="#4a4540" stroke-width="1" stroke-dasharray="4 3">
+                  <line x1="326" y1="76" x2="616" y2="76"></line>
+                  <line x1="326" y1="55" x2="616" y2="55"></line>
+                </g>
+                <g fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="8.5">
+                  <text x="612" y="73" text-anchor="end">primo passaggio, A3</text>
+                  <text x="612" y="52" text-anchor="end">secondo passaggio, D4</text>
+                </g>
+                <text x="330" y="162" fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5" font-variant="small-caps" letter-spacing="0.06em">Seconds of phonation per pitch, longest 22 s at F3</text>
+                <line x1="60" y1="172" x2="616" y2="172" stroke="rgba(166,123,123,0.35)" stroke-width="1"></line>
+                <g font-family="'Source Sans 3', sans-serif" font-size="9" fill="#4a4540">
+                  <rect x="60" y="179" width="10" height="5" fill="rgba(166,123,123,0.10)" stroke="rgba(166,123,123,0.4)" stroke-width="0.5"></rect>
+                  <text x="76" y="184">your calibrated range, G2 to F4</text>
+                  <rect x="248" y="179" width="10" height="5" fill="rgba(166,123,123,0.20)"></rect>
+                  <text x="264" y="184">the tessitura of this piece</text>
+                  <rect x="440" y="177" width="7" height="9" rx="3" fill="none" stroke="#A67B7B" stroke-width="1"></rect>
+                  <text x="453" y="184">flagged: named in the findings</text>
+                </g>
+              </svg>
+              </div>
+            </div>
+
+            
+
+            <div style="display:flex; flex-direction:column; gap:7px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">The fit, in its terms</div>
+              <div style="display:grid; grid-template-columns:150px 1fr 1fr 88px; gap:4px 14px; font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.35; color:#4a4540">
+                <div style="font-family:'Source Sans 3', sans-serif; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6A655F">Term</div>
+                <div style="font-family:'Source Sans 3', sans-serif; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6A655F">Measured in this piece</div>
+                <div style="font-family:'Source Sans 3', sans-serif; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6A655F">Your reference range</div>
+                <div style="font-family:'Source Sans 3', sans-serif; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6A655F; text-align:right">Flag</div>
+
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; color:#1a1612">Range containment</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">Compass A2 to E&flat;4</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">G2 to F4, calibrated</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; text-align:right; font-family:'Source Sans 3', sans-serif; font-size:10.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#4a4540">Contained</div>
+
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; color:#1a1612">Passaggio crossings</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">9 of the primo, 2 of the secondo</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">Primo A3, secondo D4, typed</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; text-align:right; font-family:'Source Sans 3', sans-serif; font-size:10.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#4a4540">Elevated</div>
+
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; color:#1a1612">Tessitura containment</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">D3 to B&flat;3, the middle half by duration<sup style="font-size:0.62em; vertical-align:super">1</sup></div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px">Below your secondo passaggio</div>
+                <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:5px; text-align:right; font-family:'Source Sans 3', sans-serif; font-size:10.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#4a4540">Contained</div>
+              </div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:16px; line-height:1.4; color:#1a1612; padding-top:2px">This key seems like a good fit for you.</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#4a4540">Two transpositions change those terms. Down a whole tone: compass G2 to D&flat;4, 7 crossings of the primo. Down a minor third: compass F&sharp;2 to C4, 5 crossings, and the lowest note reaches the floor of your range.</div>
+            </div>
+
+            
+
+            <div style="display:flex; flex-direction:column; gap:6px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">What is flagged, heaviest first</div>
+
+              <div style="display:flex; flex-direction:column; gap:2px">
+                <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; font-weight:600; letter-spacing:0.06em; color:#6A655F">Measure 12, the E&flat; at the top of the phrase, the vowel [u] in &#1075;&#1083;&#1091;&#1073;&#1086;&#1082;&#1072;&#1103;</div>
+                <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.4; color:#1a1612; text-wrap:pretty">The piece puts its highest note on the close vowel that measured quietest in your calibration, 4 dB under your other close vowels. 3 further instances, in the score.</div>
+              </div>
+
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#6A655F">2 further findings, lighter by phonation mass, print in full on page 2.</div>
+
+              <div style="border-top:1px solid rgba(166,123,123,0.35); margin-top:3px; padding-top:5px">
+                <div style="font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#6A655F; text-wrap:pretty">Confirmed, nothing departs from your calibration: the compass is contained, as your typed range predicted; every vowel in this text is in your captured roster; your secondo passaggio measured where you typed it.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="position:absolute; bottom:48px; left:96px; right:96px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:9.5px; line-height:1.45; color:#78716c; display:flex; flex-direction:column; gap:0; margin-bottom:8px">
+              <div>1. Tessitura is the middle half of sung duration, quartile to quartile. Source queued for the advice programme's verified pipeline: per-song profiling of <em style="font-style:italic">Die sch&ouml;ne M&uuml;llerin</em>, Journal of Voice, 2024. <span style="font-family:Menlo, Consolas, monospace; font-size:8.5px; letter-spacing:0.04em">CITATION NOT YET VERIFIED</span></div>
+              <div style="font-variant-caps:all-small-caps; letter-spacing:0.06em">Method: computed from your typed range, your calibration of 2026-08-31, and the score as engraved. Nothing on this page is hand-written.</div>
+              <div style="text-align:justify; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Free and open source, <em style="font-style:italic">Ilya</em>&nbsp;2026a operationalizes Craig Grayson's <em style="font-style:italic">Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0). Made with love in Canada&nbsp;<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>&nbsp;&nbsp;by dannmitton.com</div>
+            </div>
+            <div style="border-top:1px solid #A67B7B; margin-bottom:8px"></div>
+            <div style="display:flex; justify-content:flex-end">
+              <span style="font-family:'Source Sans 3', sans-serif; font-size:9.5pt; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Page 1 of 2</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div id="1g" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1G &middot; THE CLEF FOLLOWS THE SINGER: ALL THREE PASSES, ONE COMPASS</div>
+
+      <div style="width:996px; box-sizing:border-box; background:#F0EBE0; box-shadow:0 3px 12px rgba(0,0,0,0.35); padding:28px 30px 30px; display:flex; flex-direction:column; gap:22px">
+
+        <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#4a4540; max-width:78ch; text-wrap:pretty">The same compass, A2 to E&flat;4, engraved three times. <code style="font-family:Menlo, Consolas, monospace; font-size:12.5px">clef-select.ts</code> draws exactly these three passes and maps a source C clef through the heuristic rather than drawing one, on Gould's rule 76. The pass is chosen on the median against middle C, so the stave the singer reads is theirs and the F clef suits only the basses.</div>
+
+        <div style="display:flex; gap:26px; align-items:flex-start">
+        <div style="width:300px; display:flex; flex-direction:column; gap:8px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">bass</div>
+          <div style="border:1px solid #A67B7B; border-radius:12px; overflow:hidden; line-height:0; background:#F0EBE0">
+            <svg viewBox="22 20 278 212" style="width:100%; height:auto; display:block" aria-label="The compass A2 to E flat 4 engraved in the bass pass">
+                  <rect x="52" y="33.5" width="240" height="98" fill="rgba(166,123,123,0.10)"></rect>
+                  <g stroke="#1a1612" stroke-width="1">
+                    <line x1="86" y1="72" x2="250" y2="72"></line>
+                    <line x1="86" y1="86" x2="250" y2="86"></line>
+                    <line x1="86" y1="100" x2="250" y2="100"></line>
+                    <line x1="86" y1="114" x2="250" y2="114"></line>
+                    <line x1="86" y1="128" x2="250" y2="128"></line>
+                  </g>
+                  <text x="58" y="86" font-family="Finale Maestro" font-size="56" fill="#1a1612">&#xE062;</text>
+                  <g fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5" text-anchor="end">
+                    <text x="50" y="131">G2</text>
+                    <text x="50" y="117">B2</text>
+                    <text x="50" y="103">D3</text>
+                    <text x="50" y="89">F3</text>
+                    <text x="50" y="75">A3</text>
+                  </g>
+                  <ellipse cx="130" cy="121" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 130 121)"></ellipse>
+                  <line x1="136" y1="120" x2="136" y2="82" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="122" y="101" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="130" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">A2</text>
+                  <line x1="189" y1="58" x2="211" y2="58" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="189" y1="44" x2="211" y2="44" stroke="#1a1612" stroke-width="1"></line>
+                  <text x="191" y="48.5" fill="#1a1612" font-family="Finale Maestro" font-size="30" text-anchor="end">&#xE260;</text>
+                  <ellipse cx="200" cy="44" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 200 44)"></ellipse>
+                  <line x1="194" y1="45" x2="194" y2="83" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="192" y="24" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="200" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">E♭4</text>
+            </svg>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:3px; font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#4a4540">
+            <div style="color:#1a1612">Basses and baritones</div>
+            <div>Declared G2 to F4, median around C3, below middle C.</div>
+            <div>Two ledger lines above, none below.</div>
+          </div>
+        </div>
+
+        <div style="width:300px; display:flex; flex-direction:column; gap:8px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">treble-8vb</div>
+          <div style="border:1px solid #A67B7B; border-radius:12px; overflow:hidden; line-height:0; background:#F0EBE0">
+            <svg viewBox="22 20 278 212" style="width:100%; height:auto; display:block" aria-label="The compass A2 to E flat 4 engraved in the treble-8vb pass">
+                  <rect x="52" y="47.5" width="240" height="98" fill="rgba(166,123,123,0.10)"></rect>
+                  <g stroke="#1a1612" stroke-width="1">
+                    <line x1="86" y1="72" x2="250" y2="72"></line>
+                    <line x1="86" y1="86" x2="250" y2="86"></line>
+                    <line x1="86" y1="100" x2="250" y2="100"></line>
+                    <line x1="86" y1="114" x2="250" y2="114"></line>
+                    <line x1="86" y1="128" x2="250" y2="128"></line>
+                  </g>
+                  <text x="58" y="86" font-family="Finale Maestro" font-size="56" fill="#1a1612">&#xE052;</text>
+                  <g fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5" text-anchor="end">
+                    <text x="50" y="131">E3</text>
+                    <text x="50" y="117">G3</text>
+                    <text x="50" y="103">B3</text>
+                    <text x="50" y="89">D4</text>
+                    <text x="50" y="75">F4</text>
+                  </g>
+                  <line x1="119" y1="142" x2="141" y2="142" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="119" y1="156" x2="141" y2="156" stroke="#1a1612" stroke-width="1"></line>
+                  <ellipse cx="130" cy="156" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 130 156)"></ellipse>
+                  <line x1="136" y1="155" x2="136" y2="117" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="122" y="136" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="130" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">A2</text>
+                  <text x="191" y="83.5" fill="#1a1612" font-family="Finale Maestro" font-size="30" text-anchor="end">&#xE260;</text>
+                  <ellipse cx="200" cy="79" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 200 79)"></ellipse>
+                  <line x1="194" y1="80" x2="194" y2="118" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="192" y="59" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="200" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">E♭4</text>
+            </svg>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:3px; font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#4a4540">
+            <div style="color:#1a1612">Tenors</div>
+            <div>Declared C3 to B♭4, median around B3, below middle C.</div>
+            <div>Two ledger lines below, none above.</div>
+          </div>
+        </div>
+
+        <div style="width:300px; display:flex; flex-direction:column; gap:8px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">treble</div>
+          <div style="border:1px solid #A67B7B; border-radius:12px; overflow:hidden; line-height:0; background:#F0EBE0">
+            <svg viewBox="22 20 278 212" style="width:100%; height:auto; display:block" aria-label="The compass A2 to E flat 4 engraved in the treble pass">
+                  <rect x="52" y="61.5" width="240" height="98" fill="rgba(166,123,123,0.10)"></rect>
+                  <g stroke="#1a1612" stroke-width="1">
+                    <line x1="86" y1="72" x2="250" y2="72"></line>
+                    <line x1="86" y1="86" x2="250" y2="86"></line>
+                    <line x1="86" y1="100" x2="250" y2="100"></line>
+                    <line x1="86" y1="114" x2="250" y2="114"></line>
+                    <line x1="86" y1="128" x2="250" y2="128"></line>
+                  </g>
+                  <text x="58" y="86" font-family="Finale Maestro" font-size="56" fill="#1a1612">&#xE050;</text>
+                  <g fill="#6A655F" font-family="'Source Sans 3', sans-serif" font-size="8.5" text-anchor="end">
+                    <text x="50" y="131">E4</text>
+                    <text x="50" y="117">G4</text>
+                    <text x="50" y="103">B4</text>
+                    <text x="50" y="89">D5</text>
+                    <text x="50" y="75">F5</text>
+                  </g>
+                  <line x1="119" y1="142" x2="141" y2="142" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="119" y1="156" x2="141" y2="156" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="119" y1="170" x2="141" y2="170" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="119" y1="184" x2="141" y2="184" stroke="#1a1612" stroke-width="1"></line>
+                  <line x1="119" y1="198" x2="141" y2="198" stroke="#1a1612" stroke-width="1"></line>
+                  <ellipse cx="130" cy="205" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 130 205)"></ellipse>
+                  <line x1="136" y1="204" x2="136" y2="166" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="122" y="185" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="130" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">A2</text>
+                  <text x="191" y="132.5" fill="#1a1612" font-family="Finale Maestro" font-size="30" text-anchor="end">&#xE260;</text>
+                  <ellipse cx="200" cy="128" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 200 128)"></ellipse>
+                  <line x1="206" y1="127" x2="206" y2="89" stroke="#1a1612" stroke-width="1.4"></line>
+                  <rect x="192" y="108" width="16" height="40" rx="6" fill="none" stroke="#A67B7B" stroke-width="1.5"></rect>
+                  <text x="200" y="222" fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">E♭4</text>
+            </svg>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:3px; font-family:'Source Serif 4', Georgia, serif; font-size:12.5px; line-height:1.4; color:#4a4540">
+            <div style="color:#1a1612">Sopranos, mezzos, altos</div>
+            <div>Declared A3 to G5, median around E4, at or above middle C.</div>
+            <div>Five ledger lines below.</div>
+          </div>
+        </div>
+        </div>
+
+        <div style="border-top:1px solid rgba(166,123,123,0.35); padding-top:16px; display:flex; flex-direction:column; gap:8px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">What the drawing shows, and the one thing it exposes</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#1a1612; max-width:78ch; text-wrap:pretty">Ledger cost is why the selector exists: this piece costs two lines in bass, two in treble-8vb, and five in treble. The rose band behind each stave is that singer's declared range, so the compass is read against the voice and not against the page.</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#4a4540; max-width:78ch; text-wrap:pretty">The exposure: <code style="font-family:Menlo, Consolas, monospace; font-size:12.5px">chooseClef</code> can only return treble or bass from the median. The treble-8vb pass is reachable today through <code style="font-family:Menlo, Consolas, monospace; font-size:12.5px">clefFromSource</code> alone, when the score's own clef carries the octave displacement, so a tenor whose declared median sits below middle C takes bass on a source that prints no clef. The tenor panel above is drawn as the pass intends, not as the median would currently route it. Whether the median should reach that pass is yours.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="1b" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1B &middot; THE EARNED SECOND PAGE: ADVICE IN FULL, THE DEMOTED FINDING, UNLABELLED SPACE</div>
+      <div style="width:816px; height:1056px; position:relative; box-sizing:border-box; background:#F0EBE0; box-shadow:0 3px 12px rgba(0,0,0,0.35); flex-shrink:0">
+
+        <div style="position:absolute; top:48px; left:96px; right:96px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; color:#4a4540; letter-spacing:1.5px; font-variant-caps:all-small-caps; margin-bottom:8px">Without Sun, no. 1: Within Four Walls &middot; Insights for Voice 1</div>
+          <div style="border-bottom:1px solid #A67B7B"></div>
+        </div>
+
+        <div style="position:absolute; top:112px; left:96px; right:96px; box-sizing:border-box; border:1px solid #A67B7B; border-radius:12px; padding:20px 26px 22px; display:flex; flex-direction:column; gap:16px">
+
+          <div style="display:flex; flex-direction:column; gap:14px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">Advice, one entry per hazard, in the findings' order</div>
+
+            <div style="display:flex; flex-direction:column; gap:5px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; font-weight:600; letter-spacing:0.06em; color:#6A655F">Measure 12, the E&flat; at the top of the phrase, the vowel [u] in &#1075;&#1083;&#1091;&#1073;&#1086;&#1082;&#1072;&#1103;</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:15px; line-height:1.5; color:#1a1612; text-wrap:pretty">Your highest note in this piece arrives on your quietest vowel. Cross the passaggio on the syllable before it, so the [u] begins already voiced and the top note continues a sound rather than starting one. Practise the two syllables as one gesture, then restore the consonant.<sup style="font-size:0.62em; vertical-align:super">1</sup></div>
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; color:#6A655F">3 further instances. The score carries each one, squircled in place.</div>
+            </div>
+
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:14px; border-top:1px solid rgba(166,123,123,0.35); padding-top:14px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">The findings page one deferred, with their advice</div>
+
+            <div style="display:flex; flex-direction:column; gap:5px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; font-weight:600; letter-spacing:0.06em; color:#6A655F">Measures 5 to 8, the descent on &#1090;&#1077;&#1089;&#1085;&#1072;&#1103;</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.45; color:#4a4540; text-wrap:pretty">Nine crossings of your primo passaggio inside four measures, six of them on unstressed syllables.</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:15px; line-height:1.5; color:#1a1612; text-wrap:pretty">Nine crossings in four measures is a phrase that tires before it is learned. Sing the whole phrase on one vowel until the register change stops announcing itself, then put the text back a syllable at a time from the end.<sup style="font-size:0.62em; vertical-align:super">2</sup></div>
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; color:#6A655F">The score carries all nine crossings by measure.</div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:5px">
+              <div style="font-family:'Source Sans 3', sans-serif; font-size:11px; font-weight:600; letter-spacing:0.06em; color:#6A655F">Measure 27, the A2, the vowel [o] in &#1086;&#1076;&#1080;&#1085;&#1086;&#1082;&#1072;</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.45; color:#4a4540; text-wrap:pretty">The lowest note of the piece sits two semitones above the floor of your calibrated range, held 2.4 seconds.</div>
+              <div style="font-family:'Source Serif 4', Georgia, serif; font-size:15px; line-height:1.5; color:#1a1612; text-wrap:pretty">Take the phrase in the key as written before you consider the whole-tone transposition, because the transposition puts this note on the floor itself. Approach it from above on the vowel alone, then restore the consonant.<sup style="font-size:0.62em; vertical-align:super">2</sup></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="position:absolute; bottom:48px; left:96px; right:96px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:9.5px; line-height:1.45; color:#78716c; margin-bottom:8px">
+            <div>1. Intervention sourced from the advice programme. <span style="font-family:Menlo, Consolas, monospace; font-size:8.5px; letter-spacing:0.04em">CITATION NOT YET VERIFIED</span></div>
+            <div>2. Intervention sourced from the advice programme. <span style="font-family:Menlo, Consolas, monospace; font-size:8.5px; letter-spacing:0.04em">CITATION NOT YET VERIFIED</span></div>
+            <div style="font-variant-caps:all-small-caps; letter-spacing:0.06em">Method: computed from your typed range, your calibration of 2026-08-31, and the score as engraved. Full attribution in Guide.</div>
+            <div style="text-align:justify; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Free and open source, <em style="font-style:italic">Ilya</em>&nbsp;2026a operationalizes Craig Grayson's <em style="font-style:italic">Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0). Made with love in Canada&nbsp;<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>&nbsp;&nbsp;by dannmitton.com</div>
+          </div>
+          <div style="border-top:1px solid #A67B7B; margin-bottom:8px"></div>
+          <div style="display:flex; justify-content:flex-end">
+            <span style="font-family:'Source Sans 3', sans-serif; font-size:9.5pt; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Page 2 of 2</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="1c" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1C &middot; THE NEARLY EMPTY PAGE: A TYPED RANGE ONLY, NOTHING FIRED</div>
+      <div style="width:816px; height:1056px; position:relative; box-sizing:border-box; background:#F0EBE0; box-shadow:0 3px 12px rgba(0,0,0,0.35); flex-shrink:0">
+
+        <div style="position:absolute; top:48px; left:96px; right:96px">
+          <div style="position:relative; display:inline-block; margin-bottom:8px; margin-left:-6px; color:#A67B7B; font-size:24px; line-height:1">
+            <span style="font-family:'Courier New', Courier, monospace">[</span><span style="font-family:'Source Serif 4', Georgia, serif; font-style:italic">Ilya</span><span style="font-family:'Courier New', Courier, monospace">]</span><span style="position:absolute; top:21px; left:36px; font-family:'Source Sans 3', sans-serif; font-size:12px; color:#A67B7B; font-variant-caps:all-small-caps; letter-spacing:0.04em; line-height:1">2026a</span>
+          </div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:28px; font-weight:400; color:#1a1612; line-height:1.2; margin-bottom:6px">Without Sun, no. 1: Within Four Walls</div>
+          <div style="margin-bottom:8px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; color:#4a4540; letter-spacing:1.5px; line-height:1.6; font-variant-caps:all-small-caps">Modest Mussorgsky (1839&ndash;1881)</div>
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; color:#4a4540; letter-spacing:1.5px; line-height:1.6; font-variant-caps:all-small-caps">Insights for your voice &middot; typed range only, not calibrated</div>
+          </div>
+          <div style="border-bottom:1px solid #A67B7B"></div>
+        </div>
+
+        <div style="position:absolute; top:190px; left:96px; right:96px; box-sizing:border-box; border:1px solid #A67B7B; border-radius:12px; padding:26px 30px 28px; display:flex; flex-direction:column; gap:22px">
+
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">The compass against the range you typed</div>
+            <div style="border:1px solid #A67B7B; border-radius:12px; overflow:hidden; line-height:0">
+              <svg viewBox="60 6 330 154" style="width:100%; height:auto; display:block" aria-label="Range stave: the piece's compass inside the typed range">
+              <rect x="60" y="54" width="330" height="105" fill="rgba(166,123,123,0.10)"></rect>
+              <g stroke="#1a1612" stroke-width="1">
+                <line x1="96" y1="152" x2="300" y2="152"></line>
+                <line x1="96" y1="138" x2="300" y2="138"></line>
+                <line x1="96" y1="124" x2="300" y2="124"></line>
+                <line x1="96" y1="110" x2="300" y2="110"></line>
+                <line x1="96" y1="96" x2="300" y2="96"></line>
+              </g>
+              <text x="100" y="124" font-family="Finale Maestro" font-size="56" fill="#1a1612">&#xE062;</text>
+              <g stroke="#1a1612" stroke-width="1">
+                <line x1="238" y1="82" x2="262" y2="82"></line>
+                <line x1="238" y1="68" x2="262" y2="68"></line>
+              </g>
+              <ellipse cx="150" cy="145" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 150 145)"></ellipse>
+              <line x1="156" y1="144" x2="156" y2="106" stroke="#1a1612" stroke-width="1.4"></line>
+              <ellipse cx="250" cy="68" rx="6" ry="4.4" fill="#1a1612" transform="rotate(-18 250 68)"></ellipse>
+              <line x1="244" y1="69" x2="244" y2="107" stroke="#1a1612" stroke-width="1.4"></line>
+              <text x="234" y="72" fill="#1a1612" font-family="'Source Serif 4', Georgia, serif" font-size="13" text-anchor="end">&flat;</text>
+              <g fill="#4a4540" font-family="'Source Sans 3', sans-serif" font-size="9.5" text-anchor="middle">
+                <text x="150" y="46">A2</text>
+                <text x="250" y="46">E&flat;4</text>
+              </g>
+              <g font-family="'Source Sans 3', sans-serif" font-size="9" fill="#4a4540">
+                <rect x="60" y="14" width="10" height="5" fill="rgba(166,123,123,0.10)" stroke="rgba(166,123,123,0.4)" stroke-width="0.5"></rect>
+                <text x="76" y="19">the range you typed, G2 to F4</text>
+              </g>
+            </svg>
+            </div>
+          </div>
+
+          
+
+          <div style="display:flex; flex-direction:column; gap:9px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">What this page can say today</div>
+            <div style="font-family:'Source Serif 4', Georgia, serif; font-size:16px; line-height:1.5; color:#1a1612; max-width:44ch; text-wrap:pretty">The compass of this piece, A2 to E&flat;4, sits inside the range you typed. Nothing else has fired.</div>
+            <div style="font-family:'Source Serif 4', Georgia, serif; font-style:italic; font-size:14px; line-height:1.5; color:#4a4540; max-width:52ch; text-wrap:pretty">This reading is broad. It uses the range you typed, not a measurement of your voice, so it holds for any voice with that range and for none in particular.</div>
+          </div>
+
+          
+
+          <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid rgba(166,123,123,0.35); padding-top:16px">
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:14px; font-weight:600; font-variant-caps:all-small-caps; letter-spacing:1.5px; line-height:1.6; color:#8A5C5C">What a calibration would add here</div>
+            <ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:4px; font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.45; color:#4a4540">
+              <li>Your tessitura against this piece's, rather than this piece's alone.</li>
+              <li>Your passaggi where you sing them, so crossings can be counted.</li>
+              <li>Which vowels in this text your voice carries, and which it does not.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div style="position:absolute; bottom:48px; left:96px; right:96px">
+          <div style="font-family:'Source Sans 3', sans-serif; font-size:9.5px; line-height:1.45; color:#78716c; margin-bottom:8px">
+            <div style="font-variant-caps:all-small-caps; letter-spacing:0.06em">Method: computed from the range you typed and the score as engraved. No voice has been measured, so nothing here is personal to you.</div>
+            <div style="text-align:justify; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Free and open source, <em style="font-style:italic">Ilya</em>&nbsp;2026a operationalizes Craig Grayson's <em style="font-style:italic">Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0). Made with love in Canada&nbsp;<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>&nbsp;&nbsp;by dannmitton.com</div>
+          </div>
+          <div style="border-top:1px solid #A67B7B; margin-bottom:8px"></div>
+          <div style="display:flex; justify-content:flex-end">
+            <span style="font-family:'Source Sans 3', sans-serif; font-size:9.5pt; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Page 1 of 1</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="1f" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1F &middot; THE CONSOLIDATED FOOT, BOTH LANGUAGES, AT THE SHEET'S 624 PX MEASURE</div>
+
+      <div style="width:816px; display:flex; flex-direction:column; gap:24px">
+
+        <div style="background:#F0EBE0; box-shadow:0 3px 12px rgba(0,0,0,0.35); padding:28px 96px 32px; display:flex; flex-direction:column; gap:24px">
+
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <div style="font-family:'Source Sans 3'; font-size:10.5px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">ENGLISH, AS 1A PRINTS IT</div>
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:9.5px; line-height:1.45; color:#78716c">
+              <div>1. Tessitura is the middle half of sung duration, quartile to quartile. Source queued for the advice programme's verified pipeline: per-song profiling of <em style="font-style:italic">Die sch&ouml;ne M&uuml;llerin</em>, Journal of Voice, 2024. <span style="font-family:Menlo, Consolas, monospace; font-size:8.5px; letter-spacing:0.04em">CITATION NOT YET VERIFIED</span></div>
+              <div style="font-variant-caps:all-small-caps; letter-spacing:0.06em">Method: computed from your typed range, your calibration of 2026-08-31, and the score as engraved. Nothing on this page is hand-written.</div>
+              <div style="text-align:justify; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Free and open source, <em style="font-style:italic">Ilya</em>&nbsp;2026a operationalizes Craig Grayson's <em style="font-style:italic">Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0). Made with love in Canada&nbsp;<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>&nbsp;&nbsp;by dannmitton.com</div>
+            </div>
+            <div style="border-top:1px solid #A67B7B"></div>
+            <div style="display:flex; justify-content:flex-end">
+              <span style="font-family:'Source Sans 3', sans-serif; font-size:9.5pt; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Page 1 of 2</span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <div style="font-family:'Source Sans 3'; font-size:10.5px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">FRENCH, THE STRING THE TREE HOLDS, LESS THE STRUCK CLAUSE</div>
+            <div style="font-family:'Source Sans 3', sans-serif; font-size:9.5px; line-height:1.45; color:#78716c">
+              <div style="height:14px; display:flex; align-items:center"><span style="display:block; width:100%; border-top:1px dashed rgba(166,123,123,0.7)"></span></div>
+              <div style="height:14px; display:flex; align-items:center"><span style="display:block; width:100%; border-top:1px dashed rgba(166,123,123,0.7)"></span></div>
+              <div style="text-align:justify; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Gratuit et &agrave; code ouvert, <em style="font-style:italic">Ilya</em>&nbsp;2026a met en &oelig;uvre <em style="font-style:italic">Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Donn&eacute;es d'accentuation et glossaires de traduction via kaikki.org (CC&nbsp;BY-SA&nbsp;4.0). Fait avec amour au Canada&nbsp;<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>&nbsp;&nbsp;par dannmitton.com</div>
+            </div>
+            <div style="border-top:1px solid #A67B7B"></div>
+            <div style="display:flex; justify-content:flex-end">
+              <span style="font-family:'Source Sans 3', sans-serif; font-size:9.5pt; font-variant-caps:all-small-caps; letter-spacing:1px; color:#4a4540">Page 1 of 2</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="border:1px solid #A67B7B; border-radius:12px; background:#F0EBE0; padding:20px 22px; display:flex; flex-direction:column; gap:10px">
+          <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">HOW TO READ THIS DRAWING</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#1a1612; text-wrap:pretty">Both feet are set at the sheet's real geometry, 624 px between the margins, so the two blocks below can be compared line for line. The two dashed rules stand where the French footnote and method lines will go. Those strings are not coined, so Design will not write them; the rules hold their space at the same 9.5 px on 1.45 the rest of the block uses, which is what the reserve must cover. The French attribution beneath them is the tree's own string with the <code style="font-family:Menlo, Consolas, monospace; font-size:12px">lieder.net</code> clause struck, and it is the longest line in either language.</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#4a4540; text-wrap:pretty">Measured, at the sheet's own 624 px measure and the block's 9.5 px on 1.45: the English attribution sets in <strong style="color:#1a1612; font-weight:600">2 lines, 28 px</strong>, and the French of <code style="font-family:Menlo, Consolas, monospace; font-size:12px">i18n.ts:696</code> sets in <strong style="color:#1a1612; font-weight:600">2 lines, 28 px</strong>. They are the same height. Page one's whole apparatus is 69 px inside a 103 px foot, so the French costs nothing over the English and the reserve holds with 34 px spare.</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14px; line-height:1.5; color:#4a4540; text-wrap:pretty">The condition still binds on the two owed strings: if the French footnote and method lines come back longer than their English counterparts by more than one line, that 34 px goes, the reserve grows, and the squircle ends higher. Nothing else moves.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="1d" style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.12em; color:#4a4540">1D &middot; THE SELECTOR'S THIRD SEGMENT, AND THE TRIO AT 375 PX</div>
+
+      <div style="width:520px; display:flex; flex-direction:column; gap:26px">
+
+        <div style="background:#DBCACA; padding:22px 24px; display:flex; flex-direction:column; gap:14px">
+          <div style="font-family:'Source Sans 3'; font-size:10.5px; font-weight:600; letter-spacing:0.1em; color:#4a4540">DESKTOP, 816 PX SHEET: THREE WORDS IN ONE TRACK, INSIGHTS ACTIVE</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px">
+            <div style="display:inline-flex; border:1px solid #1a1612; border-radius:4px; overflow:hidden">
+              <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612">Transcription</div>
+              <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612">Score markup</div>
+              <div style="padding:5px 11px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612; background:#F0EBE0">Insights</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Learn</div>
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Guide</div>
+            </div>
+          </div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:13px; line-height:1.45; color:#4a4540; text-wrap:pretty">The track, the divider, and the card are unchanged: both inactive words at equal weight, the card in <code style="font-family:Menlo, Consolas, monospace; font-size:11.5px">--paper-cream</code> inside the full-ink border. The third member joins as a third segment, not as a second row.</div>
+        </div>
+
+        <div style="background:#DBCACA; padding:22px 24px; display:flex; flex-direction:column; gap:14px">
+          <div style="font-family:'Source Sans 3'; font-size:10.5px; font-weight:600; letter-spacing:0.1em; color:#4a4540">PORTRAIT, 375 PX: PROPOSAL, NOT AN ANSWER</div>
+          <div style="width:327px; display:flex; flex-direction:column; gap:10px">
+            <div style="display:flex; border:1px solid #1a1612; border-radius:4px; overflow:hidden">
+              <div style="flex:1; text-align:center; padding:8px 4px; font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#1a1612">Text</div>
+              <div style="flex:1; text-align:center; padding:8px 4px; font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612">Score</div>
+              <div style="flex:1; text-align:center; padding:8px 4px; font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#1a1612; border-left:1px solid #1a1612; background:#F0EBE0">Insights</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <div style="font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Learn</div>
+              <div style="font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#1a1612; border-bottom:1px solid #1a1612; padding-bottom:1px">Guide</div>
+            </div>
+          </div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:13px; line-height:1.45; color:#4a4540; text-wrap:pretty">Three equal thirds of the sheet's width, 109 px each, 36 px tall for the 44 px touch floor with the head's own padding counted in. "Transcription" and "Score markup" do not fit at 109 px, so this drawing shows them shortened, which needs two new strings in two languages and is therefore not Design's to settle. The alternative that coins nothing is the full words with the track scrolling, and it puts a scroll inside a three-item control.</div>
+        </div>
+
+        <div style="border:1px solid #A67B7B; border-radius:12px; background:#F0EBE0; padding:20px 22px; display:flex; flex-direction:column; gap:10px">
+          <div style="font-family:'Source Sans 3'; font-size:11px; font-weight:600; letter-spacing:0.1em; color:#8A5C5C">THE ONE THING I CANNOT DECIDE</div>
+          <div style="font-family:'Source Serif 4', Georgia, serif; font-size:14.5px; line-height:1.5; color:#1a1612; text-wrap:pretty">At 375 px the trio needs either shortened labels in both languages or a scrolling track. The labels are strings, so they are yours, and the French is yours in the same breath.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+</x-dc>
+</body>
+</html>

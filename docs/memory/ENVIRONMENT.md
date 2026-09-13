@@ -28,6 +28,7 @@ next session the same hour it cost the last one.
 | the ship script behaved oddly at line 52 | `The ship script has a bug` |
 | the gate literal is in two places | `the N.97/N.97b session` |
 | your own `git add -A` swept Code's tree | `git add -A` |
+| you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
 
 ### Deploys and URLs
 
@@ -2578,3 +2579,18 @@ to reload (tonight: "three bands, no TEXT band").
 kept as `~/Downloads/ilya-ship.sh.bak-1103`. Gate baselines table above
 updated in the same edit.
 
+
+## `modification-engine.ts` IS THE VOWEL ENGINE, NOT A SCORE-EDITING PATH. 2026-09-12
+
+**A grep of the wrong file returns a true answer to a question nobody asked.**
+On 2026-09-12 the desk built N.128's causal account on `modification-engine.ts`
+having zero references to `rhythmicPosition`. The count was correct. The file is
+`packages/score-parser/src/modification-engine.ts`, "the general
+vowel-modification engine" (`:1-2`), and it has never touched durations.
+
+**Durations change in `apps/web/src/lib/shane/correction.ts`**, in
+`applyCorrections`. The conclusion survived only because Code went and found the
+real path. **Before you cite a file's absence as evidence, open its first ten
+lines and confirm it is the file you think it is.** This is tether 11 in a form
+that does not look like an instrument failure, because a grep that returns zero
+looks the same whether you aimed it well or not.
