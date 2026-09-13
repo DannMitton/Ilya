@@ -23,6 +23,7 @@ next session the same hour it cost the last one.
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
+| a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
@@ -2770,3 +2771,43 @@ quotes**: a pattern written `"Claude outputs"/` matches nothing, since the quote
 characters are literal. Write the bare name, spaces and all. **Prove it with
 `git --no-pager check-ignore -v <a file inside it>`**, which names the
 `.gitignore` line that matched, rather than trusting a clean `git status`.
+
+---
+
+## CHECK-IGNORE TAKES THE INDEX LOCK, AND THE BRIDGE CANNOT PUT IT BACK
+
+**Learned 2026-09-13, the desk's error, and it cost Dann a failed commit.**
+
+CONTRACT §5 lists `check-ignore` among the allowed read-only git commands. **It
+is read-only in intent and not in effect: it takes `.git/index.lock` to refresh
+the index.** Run through the bridge shell, which cannot unlink, the lock is
+created and stranded:
+
+	warning: unable to unlink '.../.git/index.lock': Operation not permitted
+
+Dann's next commit then fails with `fatal: Unable to create ... index.lock:
+File exists`, which reads like a crashed git process and is not one.
+
+**How to tell a stranded lock from a live one:** it is zero bytes, its timestamp
+matches the desk's last git call rather than anything Dann ran, and the `.git/index`
+beside it is older. Say all three before asking him to delete it.
+
+**CORRECTED WITHIN THE HOUR, 2026-09-13, and the first version of this section
+was wrong.** It said `status`, `log`, `diff` and `show` had not done this across
+a full day of use. **`git status --porcelain` stranded a lock on the very next
+call**, with modified files in the tree. Earlier calls had not, which is why the
+claim looked safe: git refreshes the index OPPORTUNISTICALLY, when the stat
+cache is stale, so the same command is harmless one minute and leaves a lock the
+next. **A command that has not yet bitten is not a command that cannot.**
+
+**THE RULE, in its corrected form. Treat EVERY git command run from the bridge
+as a possible writer of `.git/index.lock`, `check-ignore` and `status`
+included.** CONTRACT §5's read-only list is about what a command MEANS, not about
+what it touches, and the two are not the same thing here.
+
+- Prefer not to run git from the bridge at all. To prove a path is ignored, read
+  `.gitignore` and reason about the pattern.
+- When you do run one, **check `.git/index.lock` afterwards in the same call**,
+  and tell Dann before he meets it as a failed commit.
+- **Fold `rm -f .git/index.lock` into the front of the next command you give
+  him** rather than sending him a separate clean-up step.
