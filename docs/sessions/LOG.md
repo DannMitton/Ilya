@@ -3910,3 +3910,134 @@ Six closed or superseded blocks, verbatim, in the order `STATE.md` named them. `
 - ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
   shipped and was walked.
 
+
+## Block 12. Moved from STATE.md at the close of 2026-09-13, on Dann's instruction
+
+**The 2026-09-10 and 2026-09-11 walk narrative, plus N.128's account and
+N.114b's.** The 2026-09-13 prune named this as the remaining excess and left it
+deliberately, because three live residues were buried in it and separating a
+residue from a record is judgement rather than filing. **All three were resolved
+against the tree before this moved**, and the outcome is recorded in `STATE.md`:
+
+1. **The `n of 7 changed` line owed to Code: ALREADY CLOSED**, and the note
+   calling it live was stale. `i18n.ts:72-74` renames the key from
+   `text.state.changed` to `notation.state.changed`, `NotationFields.svelte:71`
+   cites Dann's ruling of 2026-09-10 late by name, `bandState.ts:138` documents
+   the behaviour, and `bandState.test.ts:128-152` pins it with three assertions.
+   All read 2026-09-13.
+2. **The Undo clause for Start placement over: STILL LIVE**, extracted to
+   `STATE.md` §RULINGS DANN OWES.
+3. **N.128's two other consumers: STILL LIVE and now sharper**, extracted to
+   `STATE.md` §OWED with the one question that settles it.
+
+Nothing below was reworded, reordered, or removed.
+
+---
+
+> **THE ONE THING, at the close of 2026-09-10 23:55: THE DRAWER AS A PATH,
+> step 3 of 4. THE PATH PASS IS WALKED WHOLE AND INCREMENT 2 IS SHIPPED AND
+> WALKED.** Walk of `a584ad8` by Dann in a fresh incognito profile at 1400 px
+> and 390 px, all six steps of `brief-path-pass_r1` §5: passes, with
+> findings. Increment 2 shipped `8032489` (Vercel
+> `dpl_7TxVs9XHJksHW9nWBVfgLYBHbsPs`, READY 23:41, alias attached), from
+> `docs/sessions/brief-path-pass-inc2_r1_2026-09-10.md` on Sonnet's anchor
+> memo `memo-anchors-path-pass-inc2_r1_2026-09-10.md`; Code's memo
+> `memo-path-pass-inc2_r1_2026-09-10.md`. Dann walked it on the alias at
+> 390 px and 1400 px: three bands (PIECE, INPUT, SCORE MARKUP); the Text
+> fold under the poem box, closed by default; `1 of 7 changed` after one
+> toggle; band corners rounded on close at desktop width ("whatever was
+> causing the problems seems to have been resolved"). Gate 4 moved
+> 1103 → 1104; `ilya-ship.sh:79` moved with it before the ship.
+>
+> **RULED BY DANN 2026-09-10 late, all in this session:** (a) nothing under
+> TEXT at default, ratified 21:55, then made moot by (b); (b) TEXT is not a
+> band: it folds into INPUT as a section under the poem box, on trial
+> ("if I don't like it we can revert"), shipped in `8032489`; (c) the
+> `n of 7 changed` phrase belongs beside the `Notation` header, NOT the
+> `Text` row where Code put it. **ONE LINE FOR CODE, OWED**, into the next
+> brief. (d) The running header on page 2 and after should read
+> Composer - Title (INBOX, unruled beyond the ask).
+>
+> **From the walk, settled:** the `.musx` drop works in the browser (denigma
+> to MNX); a `.musx` can never carry `from score` because MNX has no work
+> metadata (`mnx-parser.ts:743-755`, Sonnet, read); Dann had clicked PIECE
+> and TEXT open himself (F4 withdrawn); the short INPUT line after reload is
+> a timing race that resolves itself in about 4.6 s (Code, measured), no
+> code changed; where the five PIECE fields came from on the `.musx` arrival
+> is NOT ESTABLISHED (Code: the file fills none on a fresh profile; Dann's
+> typing or a stored song are the two seams). Boot does not transcribe was
+> seen again at 390 px, then on the next reload the page DID draw; not
+> explained. Code's own NOT ESTABLISHED list is in its memo.
+>
+> **RULED 2026-09-11 00:00 to 00:12, after the close above, all Dann's:**
+> (e) the Text fold is DELETED; `Notation` and `Analysis` are two plain
+> rows under the receipts, both closed; (f) Undo and Redo leave the top bar
+> (which keeps the sigil and the language toggle) and sit at the right end
+> of the SCORE MARKUP band header as clickable text in the label style, not
+> pills, shown only when a stack is non-empty; the loupe's own undo is
+> unchanged; Code inventories the undo stack first and stops if anything on
+> it originates outside Score markup. Brief WRITTEN, not run, UNTRACKED:
+> `docs/sessions/brief-path-pass-inc3_r1_2026-09-11.md` (126 lines), which
+> also carries (c) and a read-only inventory of filled pills at rest
+> (`Dictionary` and `Calibrate` were both filled at 00:02).
+>
+> **THE ONE THING after this walk: the four ready briefs, in order.**
+> `brief-loupe-typeface_r1_2026-09-12.md` (loupe typeface plus the `↰ ↱`
+> marks restored), `brief-n128-stale-beat_r1_2026-09-12.md`,
+> `brief-n117-dictionary-fill_r1_2026-09-12.md`,
+> `brief-n125-slurs-as-objects_r1_2026-09-11.md`. One Code thread at a time,
+> never two: this desk and Code share one working tree.
+>
+
+> **N.128, THE BEAT A NOTE THINKS IT IS ON, numbered by Dann 2026-09-12,
+> UNPLACED. A corrected duration does not move the following notes' stored
+> rhythmic position, so beam grouping reads a stale beat.** Found on Dann's
+> own Sunless 01 page: « на–я » is flagged and « ла–я » is beamed although
+> both are drawn as two eighths in the last beat of their measure.
+> **Dann's words, and they are the item, not the beaming:** *"I really don't
+> care whether this kind of figure is beamed or flagged, but whatever it is,
+> it has to follow a rule. This doesn't seem to, and I want to scrutinize
+> what looks like arbitrary typesetting."*
+> Measured from the live SVG in his browser: spacing identical for both
+> pairs (тес→на 54.78 px = ми→ла 54.78 px; на→я 20.14 vs ла→я 19.67;
+> я→rest 15.68 vs 15.69); all four stems down, so timbre did not break the
+> group; the only eighth rests (SMuFL `e4e6`) sit at x 353.2, 490.85, 602.5,
+> each AFTER the second « я », so no rest and no barline falls between
+> either pair; the system's one beam runs x 563.89 to 583.56.
+> Cause: the beam key is
+> `measure | beatIndexOf(ev.rhythmicPosition.fraction, ts) | timbre`
+> (`staff-renderer.ts:1611`), and the duration-correction path never moved
+> the following notes' onsets. **CORRECTED 2026-09-12 by Code, and the
+> desk's error is on the record:** the desk cited `modification-engine.ts`
+> having zero references to `rhythmicPosition`, but that file is the
+> **vowel**-modification engine (`modification-engine.ts:1-2`) and was never
+> in the duration path. The zero hits were true and irrelevant. Durations
+> change in `apps/web/src/lib/shane/correction.ts`. The x layout advances by
+> duration, so the page redraws; nothing recomputed the following events'
+> positions. On the page на is `m1-1-1` (4.0 quarters, beat 3 of 12/8) and
+> я is `m1-5-4` (5.0, beat 4); ла is `m2-9-8` (4.5, beat 4) and я is
+> `m2-5-4` (5.0, beat 4). Corroborating: the source file has тес as a PLAIN
+> quarter at 3.0q (`~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls
+> (engraved).musicxml`, md5 `265f7cb5fa359942b54826795cf10c4f`,
+> byte-identical to `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`),
+> while the page draws it 1.5 quarters wide.
+> **NOT ESTABLISHED, named so it is not lost:** two other consumers compare
+> the same field against tempo and marking positions, `sustain.ts:67-79` and
+> `watchlist.ts:232-240`, so a corrected duration may also mis-assign a
+> sustain marking or a watch-list entry.
+> Brief WRITTEN, NOT RUN, UNTRACKED:
+> `docs/sessions/brief-n128-stale-beat_r1_2026-09-12.md`.
+>
+> **The superseded 06:15 block moved to `../sessions/LOG.md` block 10.**
+
+> **N.114b, items 1 to 5 DONE on Dann's alias walk 2026-09-10 (`ec4fbe9`,
+> `7665afa`, `8278429`); items 6 to 9 BRIEFED, NOT RUN**, all in
+> `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`: 6 air
+> above the open syllable box; 7 Export and import order (all, this, import);
+> 8 the calibration surface's collapse row goes; 9 Start over as a ghost
+> pill. Done and seen: the pills tangent to the card with "Redo" on
+> METADATA's line (`--band-inset`, `app.css`); air under every band; Start
+> placement over as a ghost pill in the open syllable line's row. **Undo for
+> Start placement over is NOT wired: no existing clause fits; the sentence
+> is Dann's to rule (English and French), then one line in Code.**
+>

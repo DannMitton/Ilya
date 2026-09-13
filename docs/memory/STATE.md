@@ -42,7 +42,30 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### THE ONE THING: THE COLOUR STORY, STAGE 3a. THE RENAME.
+> ### THE ONE THING: THE COLOUR STORY, STAGE 3b. FAMILY AND ROLE.
+>
+> **STAGE 3b HAS NO BRIEF YET.** The plan's definition
+> (`docs/sessions/plan-colour-story_r1_2026-09-13.md`): `--surround-marked`
+> becomes `--lavender-desk`, `--lang-chip-marked` becomes `--lavender-chip`, and
+> so on for all five families across desk, band, chip and ink; destination-named
+> tokens go. **Its whole purpose is to make stage 4 cheap:** afterwards, changing
+> a family's values is four declarations rather than a hunt.
+>
+> **DESK DEFAULT, not a ruling, and Dann is free to move any of it.** Rulings 2
+> and 3 produced naming and deletion work the plan did not anticipate, and it is
+> the same kind of work as 3b, so it belongs in 3b rather than in stage 4 with
+> the values: give `#3A352F` a token, split `--deeper-sage` into two tokens at
+> the same value, merge `--stone-700` into `--ink-secondary`, delete
+> `--light-sage`, delete `--light-lavender` with its `contrast.ts:127` copy and
+> the R20 assertion at `contrast.test.ts:233`, and delete `--muted-lavender` with
+> the update toast taking a neutral. **All of it is naming or deleting. No value
+> moves in 3b.**
+>
+> **STAGE 4 IS FULLY SPECIFIED ALREADY.** The twenty values are below and the
+> reasoning is in `../sessions/spec-colour_r1_2026-09-13.md`. It is one commit:
+> the ramp applied to five families, umber declared, Learn moved rose to umber,
+> `--surround-insights` deleted with Insights taking rose's own tokens. **It must
+> be walked by Dann at 1400 px across all five destinations.**
 >
 > **STAGE 3a IS BUILT, WALKED BY CODE, AND COMMITTED `6c53a9d` 2026-09-13**,
 > "Colour story stage 3a: the families take one-word names", 24 files, 435
@@ -213,16 +236,14 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > fires, ask first whether the excess is closed work or misfiled work. Twice now
 > it has been the second.**
 >
-> **WHAT IS LEFT TO FIND, named so nobody has to find it twice.** The remaining
-> excess is the walk narrative of 2026-09-10 and 2026-09-11 inside this section,
-> about 105 lines: the 23:55 one thing, the rulings of 2026-09-10 late, the walk
-> findings, the rulings of 2026-09-11 00:00 to 00:12, and N.128's account, which
-> is DONE. **It was not moved on 2026-09-13 because three live residues are
-> buried in it** and pulling them out is judgement, not filing: the `n of 7
-> changed` line owed to Code, N.121 (d)'s Undo clause for Start placement over,
-> and the NOT ESTABLISHED about N.128's two other consumers. **Extract those
-> three into their own blocks first, then the narrative moves in one piece.**
-> Do not farm this out: a subagent cannot tell a residue from a record.
+> **WHAT WAS LEFT TO FIND IS FOUND AND MOVED, 2026-09-13, on Dann's
+> instruction.** The remaining excess was the 2026-09-10 and 2026-09-11 walk
+> narrative, with N.128's and N.114b's accounts: 106 lines, now
+> `../sessions/LOG.md` block 12, verbatim. **The three live residues buried in
+> it were resolved against the tree first, which is why it could move.** One was
+> already closed and the note calling it live was stale; the other two are
+> extracted into their own blocks in this file, one in §OWED and one in
+> §RULINGS DANN OWES. Block 12's header says which is which.
 >
 > **N.129, THE UNDERLAY IS SPACED IN THE WRONG FONT'S METRICS. Numbered by
 > Dann 2026-09-13. UNPLACED.** `underlay-widths.ts:690` declares its table as
@@ -291,60 +312,6 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > N.118.** Then N.110 (set aside, briefed), N.115, N.116, the release
 > order N.85 to N.88, N.84 (Guide and Learn), N.83.
 >
-> **THE ONE THING, at the close of 2026-09-10 23:55: THE DRAWER AS A PATH,
-> step 3 of 4. THE PATH PASS IS WALKED WHOLE AND INCREMENT 2 IS SHIPPED AND
-> WALKED.** Walk of `a584ad8` by Dann in a fresh incognito profile at 1400 px
-> and 390 px, all six steps of `brief-path-pass_r1` §5: passes, with
-> findings. Increment 2 shipped `8032489` (Vercel
-> `dpl_7TxVs9XHJksHW9nWBVfgLYBHbsPs`, READY 23:41, alias attached), from
-> `docs/sessions/brief-path-pass-inc2_r1_2026-09-10.md` on Sonnet's anchor
-> memo `memo-anchors-path-pass-inc2_r1_2026-09-10.md`; Code's memo
-> `memo-path-pass-inc2_r1_2026-09-10.md`. Dann walked it on the alias at
-> 390 px and 1400 px: three bands (PIECE, INPUT, SCORE MARKUP); the Text
-> fold under the poem box, closed by default; `1 of 7 changed` after one
-> toggle; band corners rounded on close at desktop width ("whatever was
-> causing the problems seems to have been resolved"). Gate 4 moved
-> 1103 → 1104; `ilya-ship.sh:79` moved with it before the ship.
->
-> **RULED BY DANN 2026-09-10 late, all in this session:** (a) nothing under
-> TEXT at default, ratified 21:55, then made moot by (b); (b) TEXT is not a
-> band: it folds into INPUT as a section under the poem box, on trial
-> ("if I don't like it we can revert"), shipped in `8032489`; (c) the
-> `n of 7 changed` phrase belongs beside the `Notation` header, NOT the
-> `Text` row where Code put it. **ONE LINE FOR CODE, OWED**, into the next
-> brief. (d) The running header on page 2 and after should read
-> Composer - Title (INBOX, unruled beyond the ask).
->
-> **From the walk, settled:** the `.musx` drop works in the browser (denigma
-> to MNX); a `.musx` can never carry `from score` because MNX has no work
-> metadata (`mnx-parser.ts:743-755`, Sonnet, read); Dann had clicked PIECE
-> and TEXT open himself (F4 withdrawn); the short INPUT line after reload is
-> a timing race that resolves itself in about 4.6 s (Code, measured), no
-> code changed; where the five PIECE fields came from on the `.musx` arrival
-> is NOT ESTABLISHED (Code: the file fills none on a fresh profile; Dann's
-> typing or a stored song are the two seams). Boot does not transcribe was
-> seen again at 390 px, then on the next reload the page DID draw; not
-> explained. Code's own NOT ESTABLISHED list is in its memo.
->
-> **RULED 2026-09-11 00:00 to 00:12, after the close above, all Dann's:**
-> (e) the Text fold is DELETED; `Notation` and `Analysis` are two plain
-> rows under the receipts, both closed; (f) Undo and Redo leave the top bar
-> (which keeps the sigil and the language toggle) and sit at the right end
-> of the SCORE MARKUP band header as clickable text in the label style, not
-> pills, shown only when a stack is non-empty; the loupe's own undo is
-> unchanged; Code inventories the undo stack first and stops if anything on
-> it originates outside Score markup. Brief WRITTEN, not run, UNTRACKED:
-> `docs/sessions/brief-path-pass-inc3_r1_2026-09-11.md` (126 lines), which
-> also carries (c) and a read-only inventory of filled pills at rest
-> (`Dictionary` and `Calibrate` were both filled at 00:02).
->
-> **THE ONE THING after this walk: the four ready briefs, in order.**
-> `brief-loupe-typeface_r1_2026-09-12.md` (loupe typeface plus the `↰ ↱`
-> marks restored), `brief-n128-stale-beat_r1_2026-09-12.md`,
-> `brief-n117-dictionary-fill_r1_2026-09-12.md`,
-> `brief-n125-slurs-as-objects_r1_2026-09-11.md`. One Code thread at a time,
-> never two: this desk and Code share one working tree.
->
 > **N.127, INSIGHTS, numbered by Dann 2026-09-11 evening (first ruled as
 > N.126 in-session; renumbered after the desk missed `STATE.md:497`, the
 > collision is the desk's error, owned in-thread). UNPLACED. Ilya's third
@@ -380,58 +347,6 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > **Design's returned HTML lives only in Dann's Downloads; commit the
 > latest into the pack at the next touch.**
 >
-> **N.128, THE BEAT A NOTE THINKS IT IS ON, numbered by Dann 2026-09-12,
-> UNPLACED. A corrected duration does not move the following notes' stored
-> rhythmic position, so beam grouping reads a stale beat.** Found on Dann's
-> own Sunless 01 page: « на–я » is flagged and « ла–я » is beamed although
-> both are drawn as two eighths in the last beat of their measure.
-> **Dann's words, and they are the item, not the beaming:** *"I really don't
-> care whether this kind of figure is beamed or flagged, but whatever it is,
-> it has to follow a rule. This doesn't seem to, and I want to scrutinize
-> what looks like arbitrary typesetting."*
-> Measured from the live SVG in his browser: spacing identical for both
-> pairs (тес→на 54.78 px = ми→ла 54.78 px; на→я 20.14 vs ла→я 19.67;
-> я→rest 15.68 vs 15.69); all four stems down, so timbre did not break the
-> group; the only eighth rests (SMuFL `e4e6`) sit at x 353.2, 490.85, 602.5,
-> each AFTER the second « я », so no rest and no barline falls between
-> either pair; the system's one beam runs x 563.89 to 583.56.
-> Cause: the beam key is
-> `measure | beatIndexOf(ev.rhythmicPosition.fraction, ts) | timbre`
-> (`staff-renderer.ts:1611`), and the duration-correction path never moved
-> the following notes' onsets. **CORRECTED 2026-09-12 by Code, and the
-> desk's error is on the record:** the desk cited `modification-engine.ts`
-> having zero references to `rhythmicPosition`, but that file is the
-> **vowel**-modification engine (`modification-engine.ts:1-2`) and was never
-> in the duration path. The zero hits were true and irrelevant. Durations
-> change in `apps/web/src/lib/shane/correction.ts`. The x layout advances by
-> duration, so the page redraws; nothing recomputed the following events'
-> positions. On the page на is `m1-1-1` (4.0 quarters, beat 3 of 12/8) and
-> я is `m1-5-4` (5.0, beat 4); ла is `m2-9-8` (4.5, beat 4) and я is
-> `m2-5-4` (5.0, beat 4). Corroborating: the source file has тес as a PLAIN
-> quarter at 3.0q (`~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls
-> (engraved).musicxml`, md5 `265f7cb5fa359942b54826795cf10c4f`,
-> byte-identical to `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`),
-> while the page draws it 1.5 quarters wide.
-> **NOT ESTABLISHED, named so it is not lost:** two other consumers compare
-> the same field against tempo and marking positions, `sustain.ts:67-79` and
-> `watchlist.ts:232-240`, so a corrected duration may also mis-assign a
-> sustain marking or a watch-list entry.
-> Brief WRITTEN, NOT RUN, UNTRACKED:
-> `docs/sessions/brief-n128-stale-beat_r1_2026-09-12.md`.
->
-> **The superseded 06:15 block moved to `../sessions/LOG.md` block 10.**
-
-> **N.114b, items 1 to 5 DONE on Dann's alias walk 2026-09-10 (`ec4fbe9`,
-> `7665afa`, `8278429`); items 6 to 9 BRIEFED, NOT RUN**, all in
-> `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`: 6 air
-> above the open syllable box; 7 Export and import order (all, this, import);
-> 8 the calibration surface's collapse row goes; 9 Start over as a ghost
-> pill. Done and seen: the pills tangent to the card with "Redo" on
-> METADATA's line (`--band-inset`, `app.css`); air under every band; Start
-> placement over as a ghost pill in the open syllable line's row. **Undo for
-> Start placement over is NOT wired: no existing clause fits; the sentence
-> is Dann's to rule (English and French), then one line in Code.**
->
 
 ## THE TRACKER
 
@@ -441,6 +356,20 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 **The specs these marks point at live in `OPEN.md` from 2026-09-13.** This
 section carries the marks; that file carries the items.
+
+### Numbered 2026-09-13
+
+- `[ ]` **N.130. Insights has no French.** About 58 entries at `i18n.ts:1417-1475`,
+  all English in both languages, found while checking the loupe's undo clauses.
+  **Belongs in the release cut's IN bucket:** the ruled release sentence names
+  Insights, and a document in the wrong language is wrong rather than
+  half-built. Spec in `OPEN.md`. **Dann owes the French; nothing is coined.**
+- `[ ]` **N.131. French parity everywhere else.** The 64 or so untranslated
+  entries outside Insights. **DESK DEFAULT on splitting this from N.130, and Dann
+  can merge them with a word:** the two differ in urgency, and one number would
+  bury the release-blocking half. **Its real size is NOT ESTABLISHED** until a
+  triage separates the genuinely untranslated from the words that are identical
+  in French on purpose. Not release-blocking. Spec in `OPEN.md`.
 
 ### THE BLOCKING SET IS EMPTY, 2026-08-21
 
@@ -478,6 +407,21 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **N.128'S TWO OTHER CONSUMERS. Carried out of the narrative 2026-09-13 and
+  SHARPENED; the question is now a single one.** Both `sustain.ts:61-84` and
+  `watchlist.ts:229-244` hold **the same duplicated `activeTempoAt`**, which
+  compares `ev.rhythmicPosition.fraction` against each tempo marking's position.
+  That is the field N.128 found stale. **What is newly established, read
+  2026-09-13:** N.128's fix at `correction.ts:358-435` is not a beam-key patch.
+  It is a line-wide pass that recomputes the onset of every event whose
+  predecessors' durations changed and returns a new event carrying the corrected
+  `rhythmicPosition` (`:431`). **So the whole question is which side of that pass
+  these two read from.** If they consume the corrected line they are already
+  right; if they consume the reader's events they are still wrong. The desk did
+  not find the call chain and stopped rather than guess: **NOT ESTABLISHED.**
+  Whoever picks this up answers one question, not three. **The duplication is its
+  own small finding:** the same function lives in `packages/score-parser` and in
+  `apps/web`, so a fix to one does not reach the other.
 - **`columnAdvance` reserves no room for the turning layer**, and N.106
   widens what a turning unit can occupy on the right. Nothing crowds on
   Without Sun song 1. Closing it means teaching the layout pass an
@@ -538,6 +482,22 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
+- **THE UNDO SENTENCE FOR "START PLACEMENT OVER". Dann's to rule, English and
+  French, then one line in Code.** Carried out of the 2026-09-10 walk narrative
+  on 2026-09-13 before that narrative moved to `../sessions/LOG.md` block 12.
+  **Confirmed live against the tree 2026-09-13:** the button exists
+  (`i18n.ts:1328`, `station.startOver`, en "Start placement over", fr
+  « Recommencer le placement »), it is drawn at `IntakePanel.svelte:554`, and
+  **no `loupe.undo.*` clause fits it.** The clause list at `i18n.ts:377-392` and
+  `:470-472` holds `deleted`, `dotOn`, `dotDouble`, `dotOff`, `lyrics`,
+  `restored`, `placed`, `melisma`, `melismaOff`, `entered`, `rest` and `tie`,
+  and none of them says that a whole placement was started over.
+- **THREE FRENCH STRINGS ARE ENGLISH, found 2026-09-13 while checking the clause
+  list above.** `i18n.ts:388` `loupe.undo.placed` reads fr 'syllable placed';
+  `:391` `loupe.undo.melisma` reads fr 'melisma set'; `:392`
+  `loupe.undo.melismaOff` reads fr 'melisma cleared'. **A singer in French mode
+  is shown English in the loupe's undo line.** French is Dann's; nothing is
+  coined here.
 - **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
   when he asked how close a fully working app is.** The answer is in
   `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md` §4, and

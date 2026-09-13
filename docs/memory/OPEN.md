@@ -214,3 +214,88 @@ those marks point at.
 >
 > **Waiting, all Dann's to order:** N.83's walkthrough call, N.84 the Guide
 > and Learn redo (after N.114), and the release order N.85 through N.88.
+
+---
+
+## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. UNPLACED.
+
+**The item.** Every string on Insights is English in both languages. A singer
+working in French meets Ilya's third document speaking English from its identity
+line to its silence lines.
+
+**Measured 2026-09-13, and the measurement is the evidence.** `i18n.ts` holds 622
+single-line entries; all 622 parsed, none unparsed. **122 carry French identical
+to their English, and `:1417` to `:1475` is the largest single block, about 58
+consecutive entries, all of them Insights:** the identity line and its
+uncalibrated twin, the page aria, the fit heading, all four fit column heads,
+every fit row label, the compass and span lines, the crossings lines, the two
+tessitura qualifiers, the two withheld lines, the five flags, the five verdicts,
+the findings heading and its none/further/remainder lines, the deferred heading,
+the nine findings, the tessitura footnote, the unverified-citation mark, the
+three method lines and the three silence lines.
+
+**Why IN and not FLAGGED.** Dann's release sentence of 2026-09-13 names Insights
+as one of three supports. **A document in the wrong language is not half-built,
+it is wrong**, so this cannot ship behind a switch.
+
+**What it needs, and it is Dann's.** The French. **Nothing is coined.** Per
+CONTRACT §6, show him the whole table and say which words are adopted and which
+would be coined; do not write French he has not seen.
+
+**Four things to get right, named so they are not discovered late.**
+
+1. **The placeholders must survive**: `{voice}`, `{date}`, `{n}`, `{total}`,
+   `{low}`, `{high}`, `{primo}`, `{secondo}`, `{vowel}`, `{measures}`.
+2. **Canadian French typography is already ruled**, 2026-08-21: a hard space
+   before `:`, no space before `?`. **The 63 `!` and `;` sites are still not
+   done** and some of them may be here.
+3. **French runs longer than English**, and the fit table puts four column heads
+   across one printed page. Measure before assuming they fit.
+4. **N.82 is "the watch band's French" and may overlap.** Read it before
+   starting, per tether 17.
+
+**NOT THIS ITEM: the other 64 or so untranslated entries outside Insights.**
+They are recorded in `INBOX.md`, 2026-09-13, with the note that some of the 122
+are identical on purpose because the word IS the French word (`Notation`,
+`Reconstitution`, `Provenance`, `Source`, `Transcription`, `Guide`, `Passaggio`,
+`Actions`, `Pause`, `Hz`, `m.`, `Arr.`, and the IPA and glyph strings). **The
+triage that separates those two groups has not been run.**
+
+---
+
+## N.131. FRENCH PARITY EVERYWHERE ELSE. Numbered by Dann 2026-09-13. UNPLACED.
+
+**DESK DEFAULT on the split, and Dann can merge this into N.130 with a word.**
+He asked for "the whole thing" numbered. The desk kept Insights as its own
+number because the two have different urgency: **N.130 is release-blocking and
+this is not.** One number would bury the blocking part inside a large triage.
+
+**The item.** The 64 or so entries outside Insights whose French is identical to
+their English and should not be. Measured 2026-09-13: 122 of `i18n.ts`'s 622
+entries match, 58 of them Insights (N.130), the rest scattered from `:33` to
+`:1164`.
+
+**Step one is a TRIAGE, and it is not a translation.** An unknown share of the
+64 are identical **on purpose**, because the word IS the French word:
+`Notation`, `Reconstitution`, `Provenance`, `Source`, `Transcription`, `Guide`,
+`Passaggio`, `Actions`, `Pause`, `Hz`, `m.`, `Arr.`, and the IPA and glyph
+strings such as `ʌ → ə` and `ё ↔ е`. **Until the triage runs, the real size of
+this item is NOT ESTABLISHED**, and 64 is an upper bound rather than a count.
+
+**The triage is a farm-out candidate, costed and not run:** Sonnet, roughly 40k
+to 80k tokens, mechanical classification against a file already parsed,
+verifiable line by line, no French written. Dann was offered it 2026-09-13 and
+chose to number and defer instead.
+
+**Known members worth naming, because they were found by hand:**
+`i18n.ts:388` `loupe.undo.placed` (fr "syllable placed"), `:391`
+`loupe.undo.melisma` (fr "melisma set"), `:392` `loupe.undo.melismaOff` (fr
+"melisma cleared"). **A singer in French mode reads English in the loupe's undo
+line.**
+
+**Also unresolved and probably in scope:** the 63 `!` and `;` sites left over
+from the French punctuation ruling of 2026-08-21.
+
+**Related, read before starting:** N.82, the watch band's French, and the
+unnumbered watch band English header at `watchlist.ts:92` in this file's visible
+list. **They may be the same item three times.**
