@@ -39,8 +39,16 @@
 	   §CONTRADICTIONS 6), so a wall-closed build draws no track and no
 	   divider: one document, named where the pair would have been, still
 	   reachable from Learn and Guide. INCLUDE_SHANE is a build-time literal,
-	   so Rollup takes the dead half with it. */
-	const pairIds: TabId[] = INCLUDE_SHANE ? ['transcription', 'shane'] : ['transcription'];
+	   so Rollup takes the dead half with it.
+
+	   THE PAIR IS THREE, N.127 increment 1: Insights joins as a third segment
+	   in the same track, not as a second row (Design R3, drawing 1d). It
+	   reads the voice and the score the marked score reads, so it sits behind
+	   the same wall. The name `pairIds` stays; renaming it would move every
+	   comment in the tree that cites it. DESKTOP ONLY in this increment: at
+	   390 px the head does not hold three documents, and the direction there
+	   is Dann's to rule. */
+	const pairIds: TabId[] = INCLUDE_SHANE ? ['transcription', 'shane', 'insights'] : ['transcription'];
 	const linkIds: TabId[] = ['learn', 'guide'];
 
 	function label(id: TabId): string {
@@ -50,6 +58,8 @@
 			// singer reads "Marked score" and « Partition annotée », ratified
 			// by Dann 2026-08-19. It is not called Fit here.
 			case 'shane': return T('tab.markedScore');
+			// Studio's third document, N.127. « Aperçus », ruled by Dann 2026-09-12.
+			case 'insights': return T('tab.insights');
 			case 'learn': return T('tab.learn');
 			case 'guide': return T('tab.guide');
 		}

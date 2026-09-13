@@ -43,6 +43,7 @@
 	class:tab-learn={activeTab === 'learn'}
 	class:tab-guide={activeTab === 'guide'}
 	class:tab-shane={activeTab === 'shane'}
+	class:tab-insights={activeTab === 'insights'}
 >
 	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
 	<div class="sigil" aria-label="Ilya 2026a">
@@ -91,6 +92,16 @@
 	   were never changed. */
 	.header-bar.tab-shane {
 		background: var(--deeper-lavender, #8E7E9B);
+	}
+
+	/* N.127 increment 1. Insights' governing colour is dusty rose, ruled by
+	   Dann 2026-09-11, so the bar takes the rose Learn already carries, and
+	   the sigil version and the language chip below take Learn's two values.
+	   DESK DEFAULT: no new hue was coined for the bar; the one-hue-per-surface
+	   ruling of 2026-08-19 named four surfaces, and whether Insights and Learn
+	   may share a bar is Dann's to wave off. */
+	.header-bar.tab-insights {
+		background: var(--dusty-rose, #A67B7B);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
@@ -154,6 +165,10 @@
 		background: #74677F;
 	}
 
+	.tab-insights .sigil-version {
+		background: #8F6A6A;
+	}
+
 	/* `.head-right`, `.head-pill` AND THE 1400 px ANCHOR THAT STOOD THE PAIR
 	   OVER THE DRAWER'S EDGE ARE GONE with the pair, N.115 increment 3. The
 	   pill ends, the band-inset padding and the dimmed-when-empty rule they
@@ -207,6 +222,10 @@
 
 	.tab-shane .lang-pill {
 		background: var(--lang-chip-marked, #806E8E);
+	}
+
+	.tab-insights .lang-pill {
+		background: var(--lang-chip-learn, #9A6A6A);
 	}
 
 	/* Hover is NOT ruled by the brief and this is the smallest thing that

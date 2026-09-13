@@ -156,7 +156,14 @@
 		onActiveProfileChange?: (
 			formants: Partial<Record<Vowel, CalibratedFormant>>,
 			voiceName: string | undefined,
-			characteristics: VoiceCharacteristics | undefined
+			characteristics: VoiceCharacteristics | undefined,
+			/**
+			 * The voice's `updatedAt`, ISO 8601. N.127 increment 1 prints it on
+			 * Insights' identity line, which closes N.19: written five times,
+			 * rendered nowhere (`memo-release-audit-b_r1_2026-08-24.md`).
+			 * Additive, so the other readers of this callback are unchanged.
+			 */
+			updatedAt?: string
 		) => void;
 		/**
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
@@ -1031,7 +1038,10 @@
 			// Reading activeVoice?.characteristics here tracks it, so the effect
 			// re-runs when the Voice characteristics phase writes (E.5 slice 4)
 			// and the main pane re-analyses. Snapshotted like the formants.
-			$state.snapshot(activeVoice?.characteristics) as VoiceCharacteristics | undefined
+			$state.snapshot(activeVoice?.characteristics) as VoiceCharacteristics | undefined,
+			// Read here so the effect tracks it: every write that refreshes it
+			// (a reading, a characteristic, the readiness record) re-publishes.
+			activeVoice?.updatedAt
 		);
 	});
 

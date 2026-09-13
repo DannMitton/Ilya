@@ -130,6 +130,10 @@
 	--surround-marked: #D2CBD7;          /* deeper lavender at 60% */
 	--surround-learn: #DBCACA;           /* dusty rose at 60% */
 	--surround-guide: #BEC7D8;           /* quiet cobalt at 60% */
+	/* N.127: Insights' desk, its own token at the value Learn's surround
+	   carries (Design R3, "the desk is rose at #DBCACA, its own token"). Kept
+	   apart from --surround-learn so the two can part without a rename. */
+	--surround-insights: #DBCACA;        /* dusty rose at 60% */
 
 	/* ── Language-pill chips, one per destination ──────────── */
 	/* The header carries ONE language pill, naming the language the singer

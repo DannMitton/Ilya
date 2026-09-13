@@ -113,6 +113,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		scoreStateLine,
 	} from '$lib/components/Drawer/bandState';
 	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
+	import InsightsPane from '$lib/shane/InsightsPane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import {
@@ -329,6 +330,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let shaneFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
 	let shaneVoiceName = $state<string | undefined>(undefined);
 	let shaneCharacteristics = $state<VoiceCharacteristics | undefined>(undefined);
+	/* N.127: the voice's `updatedAt`, which Insights prints as its calibration
+	   date. Mirrored beside the name for the same reason the name is. */
+	let shaneVoiceUpdatedAt = $state<string | undefined>(undefined);
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
@@ -1372,10 +1376,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   and Dann's ruling of 2026-08-25 said it persists on desktop. What stays
 	   phone-only is the DOCK, which is the shell the surface sits in below
 	   768 px; the desktop's surface is the drawer's own tenant. */
+	/* N.127: `=== 'shane'`, where this read `!== 'transcription'`. That test
+	   meant the marked score while Studio held two documents, and a third
+	   document would have raised the loupe over a page with no staves. */
 	const loupeAvailable = $derived(
 		INCLUDE_SHANE &&
 			destination === 'studio' &&
-			studioDocument !== 'transcription' &&
+			studioDocument === 'shane' &&
 			!!ingestedScore,
 	);
 
@@ -1877,7 +1884,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Tab transition animation
 	// Fit (engine codename 'shane') sits adjacent to Transcription; the
 	// slide-direction order matches the visible tab order (Dann, 2026-07-12).
-	const TAB_ORDER: TabId[] = ['transcription', 'shane', 'learn', 'guide'];
+	// N.127: Insights is the pair's third member, so it slides between the
+	// marked score and Learn, in the order the desk head draws them.
+	const TAB_ORDER: TabId[] = ['transcription', 'shane', 'insights', 'learn', 'guide'];
 	let tabTransitionClass = $state('');
 	// Mobile awareness. A WIDTH test, which on a phone is also the portrait
 	// test: 390 by 844 is under the breakpoint and 844 by 390 is over it, so
@@ -4104,10 +4113,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     nothing to ask of it. -->
 					<CalibrationWizard
 						{language}
-						onActiveProfileChange={(f, name, characteristics) => {
+						onActiveProfileChange={(f, name, characteristics, updatedAt) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
 							shaneCharacteristics = characteristics;
+							shaneVoiceUpdatedAt = updatedAt;
 						}}
 						onOpenLearnNote={() => {
 							// The sung-[o] glyph's deep link: Learn tab, then the
@@ -4679,6 +4689,25 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{:else}
 				{@render transcriptionPaper()}
 			{/if}
+		{:else if destination === 'studio' && studioDocument === 'insights'}
+			<!-- N.127 INSIGHTS, increment 1. Studio's third document, read-only.
+			     It reads what the marked score reads (the corrected score, the
+			     singer's pairings and transcription, the active voice), so the
+			     findings it names are the marks that page draws. -->
+			<InsightsPane
+				{isMobile}
+				formants={shaneFormants}
+				characteristics={shaneCharacteristics}
+				voiceName={shaneVoiceName}
+				voiceUpdatedAt={shaneVoiceUpdatedAt}
+				{language}
+				ingested={correctedScore}
+				scoreTitle={doc.metadata.title}
+				composer={doc.metadata.composer}
+				transcribedLines={lines}
+				pairings={shownPairings}
+				openSyllabification={doc.openSyllabification}
+			/>
 		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
 			     per Dann's review ruling): the interim main pane, a fixed
@@ -5321,6 +5350,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	.app-content.tab-guide {
 		--desk-fill: var(--surround-guide, #BEC7D8);
+	}
+
+	/* N.127: Insights' desk, rose, ruled by Dann 2026-09-11 as the document's
+	   governing colour. Its own token, at the value Learn's surround carries. */
+	.app-content.tab-insights {
+		--desk-fill: var(--surround-insights, #DBCACA);
 	}
 
 	.app-content.tab-shane {

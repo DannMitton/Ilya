@@ -115,6 +115,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// invariant in French by his ruling of 2026-07-13. The document is not
 	// called Fit.
 	'tab.markedScore':             { en: 'Score markup',                 fr: 'Partition annotée' },
+	// N.127. Studio's third document. « Aperçus » RULED by Dann 2026-09-12,
+	// and it is the only French N.127 increment 1 writes. Every `insights.*`
+	// key below carries the English in both slots, and its French is OWED.
+	'tab.insights':                { en: 'Insights',                     fr: 'Aperçus' },
 	// The drawer's pull carries no visible word (N.73 S1 §2.7, Dann's ruling
 	// of 2026-08-19: fewer text elements onscreen). The ratified word is its
 	// ACCESSIBLE name instead, with aria-expanded carrying the state, so the
@@ -1393,6 +1397,82 @@ const strings: Record<string, Record<Language, string>> = {
 	'recognize.open': { en: 'Open that song', fr: 'Ouvrir ce chant' },
 	'recognize.here': { en: 'Put it in this song', fr: 'Le placer dans ce chant' },
 	'profile.withheld.close': { en: 'The stave carries no marks because none can be earned.', fr: 'La portée ne porte aucune marque, car aucune ne peut être fondée.' },
+
+	// ── N.127 Insights, increment 1 ─────────────────────────────
+	//    FRENCH IS OWED ON EVERY KEY IN THIS BLOCK. The English stands in both
+	//    slots because `t()` prints `[MISSING: key]` for an absent variant,
+	//    which would put that literal on a French session's page. That is the
+	//    tree's own precedent for owed names (the N.108 group names at the top
+	//    of this table), and it is not a translation. Dann rules the whole
+	//    table, coined and adopted marked, before the French is written.
+	//
+	//    Two things on this page are NOT new strings and carry ratified French
+	//    already: the measure tag reuses `loupe.measureTagShort`, and the page
+	//    with no measured voice reuses `profile.withheld.heading` and
+	//    `profile.withheld.item3`.
+	//
+	//    The finding descriptions adapt `watchlist.ts`'s CLOSED copy (§A.150,
+	//    Dann 2026-07-22) with its leading "Bar N:" removed, because the tag
+	//    above each description already names the measure.
+	'insights.identity':           { en: 'Insights for {voice} · calibrated {date}', fr: 'Insights for {voice} · calibrated {date}' },
+	'insights.identityUncalibrated': { en: 'Insights for {voice} · not calibrated', fr: 'Insights for {voice} · not calibrated' },
+	'insights.yourVoice':          { en: 'your voice',                   fr: 'your voice' },
+	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Insights, page {n} of {total}' },
+	'insights.fit.heading':        { en: 'The fit, in its terms',        fr: 'The fit, in its terms' },
+	'insights.fit.colTerm':        { en: 'Term',                         fr: 'Term' },
+	'insights.fit.colMeasured':    { en: 'Measured in this piece',       fr: 'Measured in this piece' },
+	'insights.fit.colReference':   { en: 'Your reference range',         fr: 'Your reference range' },
+	'insights.fit.colFlag':        { en: 'Flag',                         fr: 'Flag' },
+	'insights.fit.range':          { en: 'Range containment',            fr: 'Range containment' },
+	'insights.fit.crossings':      { en: 'Passaggio crossings',          fr: 'Passaggio crossings' },
+	'insights.fit.tessitura':      { en: 'Tessitura containment',        fr: 'Tessitura containment' },
+	'insights.fit.compass':        { en: 'Compass {low} to {high}',      fr: 'Compass {low} to {high}' },
+	'insights.fit.span':           { en: '{low} to {high}',              fr: '{low} to {high}' },
+	'insights.fit.spanTyped':      { en: '{low} to {high}, typed',       fr: '{low} to {high}, typed' },
+	'insights.fit.notTyped':       { en: 'Not typed',                    fr: 'Not typed' },
+	'insights.fit.noPitches':      { en: 'No sung pitch',                fr: 'No sung pitch' },
+	'insights.fit.crossingsCount': { en: '{primo} of the primo, {secondo} of the secondo', fr: '{primo} of the primo, {secondo} of the secondo' },
+	'insights.fit.crossingsUncounted': { en: 'Not counted without both passaggi', fr: 'Not counted without both passaggi' },
+	'insights.fit.passaggiTyped':  { en: 'Primo {primo}, secondo {secondo}, typed', fr: 'Primo {primo}, secondo {secondo}, typed' },
+	'insights.fit.tessituraFallback': { en: 'cut at half the second-longest pitch, because the published rule gave one note', fr: 'cut at half the second-longest pitch, because the published rule gave one note' },
+	'insights.fit.tessituraMarginal': { en: 'a pitch sits within half a quaver of the cut, so the band could move', fr: 'a pitch sits within half a quaver of the cut, so the band could move' },
+	'insights.fit.withheldOne':    { en: 'Not printed: measure {measures} does not add up to its time signature', fr: 'Not printed: measure {measures} does not add up to its time signature' },
+	'insights.fit.withheldMany':   { en: 'Not printed: measures {measures} do not add up to their time signatures', fr: 'Not printed: measures {measures} do not add up to their time signatures' },
+	'insights.fit.nothingSung':    { en: 'Nothing sung to measure',      fr: 'Nothing sung to measure' },
+	'insights.flag.contained':     { en: 'Contained',                    fr: 'Contained' },
+	'insights.flag.above':         { en: 'Above',                        fr: 'Above' },
+	'insights.flag.below':         { en: 'Below',                        fr: 'Below' },
+	'insights.flag.wider':         { en: 'Wider',                        fr: 'Wider' },
+	'insights.flag.noThreshold':   { en: 'No threshold',                 fr: 'No threshold' },
+	'insights.verdict.fit':        { en: 'This key seems like a good fit for you.', fr: 'This key seems like a good fit for you.' },
+	'insights.verdict.outsideRange': { en: 'This key takes the piece outside the range you typed.', fr: 'This key takes the piece outside the range you typed.' },
+	'insights.verdict.outsideTessitura': { en: 'The compass fits the range you typed, but the piece sits outside the tessitura you typed.', fr: 'The compass fits the range you typed, but the piece sits outside the tessitura you typed.' },
+	'insights.verdict.rangeOnly':  { en: 'The compass fits the range you typed, and nothing on this page compares the tessitura.', fr: 'The compass fits the range you typed, and nothing on this page compares the tessitura.' },
+	'insights.verdict.cannotSay':  { en: 'Without the range you typed, this page cannot say whether this key suits you.', fr: 'Without the range you typed, this page cannot say whether this key suits you.' },
+	'insights.findings.heading':   { en: 'What is flagged, heaviest first', fr: 'What is flagged, heaviest first' },
+	'insights.findings.none':      { en: 'Nothing in this piece is flagged for your voice.', fr: 'Nothing in this piece is flagged for your voice.' },
+	'insights.findings.furtherOne': { en: '1 further instance, in the score.', fr: '1 further instance, in the score.' },
+	'insights.findings.furtherMany': { en: '{n} further instances, in the score.', fr: '{n} further instances, in the score.' },
+	'insights.findings.remainderOne': { en: '1 further finding, lighter by phonation mass, prints in full on page 2.', fr: '1 further finding, lighter by phonation mass, prints in full on page 2.' },
+	'insights.findings.remainderMany': { en: '{n} further findings, lighter by phonation mass, print in full on page 2.', fr: '{n} further findings, lighter by phonation mass, print in full on page 2.' },
+	'insights.findings.deferredHeading': { en: 'The findings page one deferred', fr: 'The findings page one deferred' },
+	'insights.finding.rangeAbove': { en: 'The note rises above the range you typed.', fr: 'The note rises above the range you typed.' },
+	'insights.finding.rangeBelow': { en: 'The note drops below the range you typed.', fr: 'The note drops below the range you typed.' },
+	'insights.finding.crossing':   { en: 'Your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.', fr: 'Your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.' },
+	'insights.finding.tighten':    { en: 'The {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.', fr: 'The {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.' },
+	'insights.finding.turnover':   { en: 'The {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.', fr: 'The {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.' },
+	'insights.finding.passaggio':  { en: 'This falls near your passaggio; expect the turn to want managing.', fr: 'This falls near your passaggio; expect the turn to want managing.' },
+	'insights.finding.timbreOpenToClose': { en: 'Your {vowel} turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Your {vowel} turns open to close inside the word, so the colour shifts as you sing it.' },
+	'insights.finding.timbreCloseToOpen': { en: 'Your {vowel} turns close to open inside the word, so the colour shifts as you sing it.', fr: 'Your {vowel} turns close to open inside the word, so the colour shifts as you sing it.' },
+	'insights.finding.sustain':    { en: 'The longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.', fr: 'The longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.' },
+	'insights.footnote.tessitura': { en: 'Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.', fr: 'Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.' },
+	'insights.citationUnverified': { en: 'CITATION NOT YET VERIFIED',    fr: 'CITATION NOT YET VERIFIED' },
+	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken. Nothing on this page is hand-written.', fr: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken. Nothing on this page is hand-written.' },
+	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken. Nothing on this page is hand-written.', fr: 'Method: computed from your calibration of {date} and the score as sung, repeats taken. Nothing on this page is hand-written.' },
+	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Method: no voice has been measured, so nothing on this page is computed from one.' },
+	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:' },
+	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Any finding about where this piece may challenge your voice.' },
+	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'No score has been added, so there is nothing of this piece to measure.' },
 };
 
 /**
