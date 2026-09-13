@@ -155,6 +155,7 @@ next session the same hour it cost the last one.
 | Code unable to read a ruling you cited | `CLAUDE CODE CANNOT READ` |
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
+| quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -2674,3 +2675,40 @@ by eye afterwards, not assumed.**
   new tripwire note in `STATE.md` quoted 583 lines, then grew the file to 659 by
   existing. **Do not put the current line count in the file it describes;**
   describe the move instead, the way the floor paragraph does.
+
+---
+
+## ILYA'S SIZE. Measured 2026-09-13, and the three numbers are not interchangeable
+
+**Full account with every figure and its method:**
+`../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md`. **Quote
+from there, not from here**, and re-measure before quoting anything older than
+the last build.
+
+| question | answer |
+|---|---|
+| the deploy on disk | about 196 MB |
+| a singer's first session | roughly 12 to 22 MB over the wire |
+| the app source | 5.6 MB |
+
+**The dictionary is the footprint: 166 MB of JSON ships, and it compresses about
+fifteen to one.** The English pair is 5.6 MB gzipped, all four shards 11.1 MB.
+App code is 607,546 bytes gzipped across 38 chunks, which is a CEILING: the
+first-paint subset was not measured.
+
+**THE TRAP. The dictionary exists four times in the working copy**, at
+`data/`, `apps/web/build/data/`, `apps/web/.svelte-kit/output/client/data/`, and
+`.claude/worktrees/objective-wright-7aea5b/data/`, 166 MB each. **So any
+`du` that sums `apps` and `data` double counts it**, which is how 0.6 GB was
+arrived at and why it is wrong. The whole working copy is 1.2 GB and 55 % of it
+is that one file set.
+
+**`apps/web/static/data` is a symlink to `../../../data`, and SvelteKit
+DEREFERENCES it at build time.** That is why each build output carries its own
+166 MB, and `apps/web/build/data` is a real directory rather than a link. The
+desk reported the opposite to Dann first, from `ls` on the wrong path, and had
+to correct it in the next message.
+
+**A leftover agent worktree at `.claude/worktrees/` holds 167 MB**, including one
+of the four dictionary copies. No agent can clear it: `git worktree remove` is a
+write and the bridge refuses `rm`. It is Dann's to delete.

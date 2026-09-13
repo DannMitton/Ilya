@@ -128,6 +128,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > in the bridge shell's own home, which is outside the repository and will not
 > survive the session.
 >
+> **AFTER THE COMMIT, he asked two questions: how big Ilya is, and how close a
+> fully working app is.** Both are answered with measurements in
+> `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md`. The size
+> lookup is in `ENVIRONMENT.md` §ILYA'S SIZE. **The two rulings the second
+> question produced are at the top of §RULINGS DANN OWES: the release cut, and
+> the release order contradicting itself.** Nothing was built and nothing shipped.
+>
 > **NOT DONE, and named so it is not lost:** the 105 lines of 2026-09-10 and
 > 2026-09-11 walk narrative still in this section. The tripwire note says what
 > has to come out of it first.
@@ -508,6 +515,30 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
+- **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
+  when he asked how close a fully working app is.** The answer is in
+  `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md` §4, and
+  the arithmetic is this: about thirty-five units of ruled and unbuilt work
+  stand open, throughput runs two to three units per session, so **twelve to
+  eighteen sessions, three to six weeks, DESK INFERENCE and a range.** That
+  range assumes nothing new is numbered. **In the seven days 2026-09-07 to
+  2026-09-13, fifteen new numbers arrived, N.115 to N.129, and nine units
+  closed, of which only N.128 was one of the fifteen.** The queue grew faster
+  than it drained. **So the release date is set by when he stops numbering, not
+  by how fast Code builds.** The ask, when the moment is right: name the items
+  a first public Ilya contains, freeze that list, and move the rest to a
+  post-release file the way `OPEN.md` now holds unstarted specs. **Do not put
+  this to him mid-item, and do not raise it twice.**
+- **THE RELEASE ORDER CONTRADICTS ITSELF, and both halves are his. Found
+  2026-09-13.** His ruling of 2026-08-24 set the order **N.83, N.84, N.85,
+  N.86, N.87, N.88**, with walkthrough prep first, and N.82 and N.89 riding
+  between (`../sessions/LOG.md`, the 2026-08-24 numbers table). His
+  text-to-score sequence of 2026-09-06 lists it as **the release order N.85 to
+  N.88, then N.84, then N.83**, which reverses both ends. Per tether 17 the
+  later ruling stands, but **N.83 is the item that produces the first honest
+  end-to-end reader accuracy datum, and nothing else in the tree produces one**,
+  so putting it last has a cost he may not have intended. **One question,
+  whichever order he wants.**
 - The binding squircle's footprint on Insights page one: Design proposes two
   treatments, Dann rules (2026-09-11).
 
