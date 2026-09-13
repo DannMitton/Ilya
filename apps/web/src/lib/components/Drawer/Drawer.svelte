@@ -561,7 +561,7 @@
 											aria-label={action.sentence}
 											onclick={() => (action.kind === 'undo' ? onundo?.() : onredo?.())}
 										>
-											<span aria-hidden="true">{action.kind === 'undo' ? '↶' : '↷'}</span>
+											<span aria-hidden="true">{action.kind === 'undo' ? '↰' : '↱'}</span>
 											<span>{action.verb}</span>
 										</button>
 									{/each}

@@ -106,6 +106,29 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > also carries (c) and a read-only inventory of filled pills at rest
 > (`Dictionary` and `Calibrate` were both filled at 00:02).
 >
+> **INCREMENT 3 IS SHIPPED, WALKED, AND DONE, 2026-09-12.** Shipped
+> `9026a56` (Vercel `dpl_CFgHDALExXjqsPbSDXke2UKsud5X`, READY, branch alias),
+> from `brief-path-pass-inc3_r1_2026-09-11.md` on Code's memo
+> `memo-path-pass-inc3_r1_2026-09-11.md`. Dann walked all four steps on the
+> alias in his own profile at 1400 px: no `TEXT` band; `Notation` and
+> `Analysis` two plain closed rows under the intake; `1 of 7 changed` beside
+> `Notation`, open and shut, nothing beside `Analysis`; `SCORE MARKUP`
+> carrying no pair at rest; and after one `▲ step` in the Corrections
+> station, `↶ UNDO` on the band header. **Opening the SCORE MARKUP band did
+> NOT dismiss the loupe at desktop width**, which was the desk's named
+> likeliest failure. **On a desktop the loupe carries no correction verbs at
+> all**: the second `CorrectionSurface` is gated `{#if isPhone}`
+> (`+page.svelte:4785`), so the verbs live only in the drawer's Corrections
+> station. Code's own phone finding stands unanswered: at 390 px no Undo is
+> reachable at the moment of action.
+>
+> **THE ONE THING after this walk: the four ready briefs, in order.**
+> `brief-loupe-typeface_r1_2026-09-12.md` (loupe typeface plus the `↰ ↱`
+> marks restored), `brief-n128-stale-beat_r1_2026-09-12.md`,
+> `brief-n117-dictionary-fill_r1_2026-09-12.md`,
+> `brief-n125-slurs-as-objects_r1_2026-09-11.md`. One Code thread at a time,
+> never two: this desk and Code share one working tree.
+>
 > **N.125, SLURS AS TAPERED OBJECTS, numbered 2026-09-11 00:30 at Dann's
 > word, UNPLACED, its own Code thread (`staff-renderer.ts` only, off the
 > drawer path).** Finding (Sonnet memo `memo-anchors-ties-slurs_r1_2026-09-11.md`,
@@ -152,6 +175,40 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > treatments for Dann to rule, foot daylight and right-indented hairline).
 > **Design's returned HTML lives only in Dann's Downloads; commit the
 > latest into the pack at the next touch.**
+>
+> **N.128, THE BEAT A NOTE THINKS IT IS ON, numbered by Dann 2026-09-12,
+> UNPLACED. A corrected duration does not move the following notes' stored
+> rhythmic position, so beam grouping reads a stale beat.** Found on Dann's
+> own Sunless 01 page: « на–я » is flagged and « ла–я » is beamed although
+> both are drawn as two eighths in the last beat of their measure.
+> **Dann's words, and they are the item, not the beaming:** *"I really don't
+> care whether this kind of figure is beamed or flagged, but whatever it is,
+> it has to follow a rule. This doesn't seem to, and I want to scrutinize
+> what looks like arbitrary typesetting."*
+> Measured from the live SVG in his browser: spacing identical for both
+> pairs (тес→на 54.78 px = ми→ла 54.78 px; на→я 20.14 vs ла→я 19.67;
+> я→rest 15.68 vs 15.69); all four stems down, so timbre did not break the
+> group; the only eighth rests (SMuFL `e4e6`) sit at x 353.2, 490.85, 602.5,
+> each AFTER the second « я », so no rest and no barline falls between
+> either pair; the system's one beam runs x 563.89 to 583.56.
+> Cause: the beam key is
+> `measure | beatIndexOf(ev.rhythmicPosition.fraction, ts) | timbre`
+> (`staff-renderer.ts:1611`), and `modification-engine.ts` has ZERO
+> references to `rhythmicPosition` (grep, 0 hits). The x layout advances by
+> duration, so the page redraws; nothing recomputes the following events'
+> positions. On the page на is `m1-1-1` (4.0 quarters, beat 3 of 12/8) and
+> я is `m1-5-4` (5.0, beat 4); ла is `m2-9-8` (4.5, beat 4) and я is
+> `m2-5-4` (5.0, beat 4). Corroborating: the source file has тес as a PLAIN
+> quarter at 3.0q (`~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls
+> (engraved).musicxml`, md5 `265f7cb5fa359942b54826795cf10c4f`,
+> byte-identical to `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`),
+> while the page draws it 1.5 quarters wide.
+> **NOT ESTABLISHED, named so it is not lost:** two other consumers compare
+> the same field against tempo and marking positions, `sustain.ts:67-79` and
+> `watchlist.ts:232-240`, so a corrected duration may also mis-assign a
+> sustain marking or a watch-list entry.
+> Brief WRITTEN, NOT RUN, UNTRACKED:
+> `docs/sessions/brief-n128-stale-beat_r1_2026-09-12.md`.
 >
 > **NEXT, in order:** increment 3 (the brief above: `git add` it, paste the
 > opener from `brief-path-pass-inc2`'s pattern, ship, walk); N.119; N.120 (drawing first, now carrying the `Tempo`

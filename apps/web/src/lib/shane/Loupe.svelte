@@ -881,7 +881,7 @@
 					height={frame.contentHeight}
 					aria-hidden="true"
 					xmlns="http://www.w3.org/2000/svg"
-					font-family="'Source Serif 4', Georgia, serif"
+					style="font-family: var(--font-sans)"
 				>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
 					{@html frame.inner}
@@ -894,7 +894,7 @@
 				height={frame.contentHeight}
 				aria-hidden="true"
 				xmlns="http://www.w3.org/2000/svg"
-				font-family="'Source Serif 4', Georgia, serif"
+				style="font-family: var(--font-sans)"
 			>
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
 				{@html frame.inner}

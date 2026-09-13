@@ -2824,7 +2824,7 @@ export function renderAnalyzedStaff(
   // when the origin was always 0.
   const top = Math.max(0, Math.floor(Math.min(highestInk, staffTop) - sp(1)));
   const height = cyrY + 20 - top;
-  parts[0] = `<svg viewBox="0 ${top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4', Georgia, serif">`;
+  parts[0] = `<svg viewBox="0 ${top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif">`;
   parts[1] = `<rect x="0" y="${top}" width="${width}" height="${height}" fill="#F0EBE0"/>`;
   return parts.join('\n');
 }

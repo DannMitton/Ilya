@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawing: the dictionary progress bar inside the pill, r1, 2026-09-12</title>
+<style>
+  :root{
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ink-tertiary:#6A655F;
+    --sage:#8B9A7D;
+    --stone-300:#d6d3d1;
+    --stone-500:#78716c;
+    --stone-600:#57534e;
+    --paper-cream:#F0EBE0;
+    --paper-light:#F5F1E8;
+    --p:0%;
+  }
+  body{margin:0;background:#E4E8DC;font-family:var(--font-sans);color:#2B2622;padding:32px 24px 64px}
+  .sheet{max-width:820px;margin:0 auto}
+  h1{font-size:20px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-tertiary);margin:0 0 24px}
+  .controls{position:sticky;top:0;background:#E4E8DC;padding:12px 0 14px;border-bottom:1px solid rgba(0,0,0,.12);display:flex;align-items:center;gap:14px;font-size:13px;z-index:5}
+  .controls input[type=range]{flex:1;accent-color:var(--sage)}
+  button.ctl{font:inherit;font-size:13px;padding:4px 12px;border:1px solid var(--stone-600);background:transparent;border-radius:999px;cursor:pointer}
+  .plate{background:var(--paper-light);border-radius:10px;padding:20px 22px 22px;margin:22px 0;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .plate h2{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 2px;color:var(--ink-tertiary)}
+  .plate .name{font-size:17px;font-weight:600;margin:0 0 12px}
+  .plate p{font-size:13.5px;line-height:1.5;margin:10px 0 0;max-width:62ch}
+  .cost{font-size:12.5px;color:var(--ink-tertiary);margin-top:8px}
+  .stage{background:var(--paper-cream);border-radius:8px;padding:22px 18px;display:flex;justify-content:center}
+
+  /* ── the pill, tree geometry ──────────────────────────────
+     IntakePanel.svelte:1158-1188 .action-btn / .btn-ghost / :disabled */
+  .pill{
+    position:relative;
+    width:360px;
+    padding:.45rem .5rem;
+    font-family:var(--font-sans);
+    font-size:.8rem;
+    font-weight:500;
+    border-radius:999px;
+    border:1px solid var(--stone-600);
+    background:transparent;
+    color:var(--stone-500);
+    text-align:center;
+    overflow:hidden;
+    cursor:default;
+    user-select:none;
+  }
+  .pill .lab{position:relative;z-index:2}
+  .pill .fill{position:absolute;inset:0 auto 0 0;width:var(--p);z-index:1}
+  .dimmed{opacity:.45}
+
+  /* A — sage wash */
+  .plate-a .fill{background:rgba(139,154,125,.30);transition:width 120ms linear}
+
+  /* B — solid fill, the word inverts at the edge */
+  .plate-b .fill{background:var(--sage);transition:width 120ms linear}
+  .plate-b .lab-white{
+    position:absolute;inset:0;z-index:3;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    clip-path:inset(0 calc(100% - var(--p)) 0 0);
+    transition:clip-path 120ms linear;
+  }
+
+  /* C — the hairline inside the foot */
+  .plate-c .fill{
+    inset:auto auto 0 0;height:3px;background:var(--sage);
+    border-radius:2px;transition:width 120ms linear;
+  }
+
+  /* D — indeterminate, Kimi's own keyframes, AnalysisStation.svelte:194-202 */
+  .plate-d .track{position:absolute;inset:auto auto 0 0;width:100%;height:3px;overflow:hidden}
+  .plate-d .sweep{width:30%;height:100%;background:var(--sage);border-radius:2px;animation:indeterminate 1.5s ease-in-out infinite}
+  @keyframes indeterminate{0%{transform:translateX(-100%)}100%{transform:translateX(433%)}}
+
+  .facts{background:#fff;border-radius:10px;padding:18px 22px;margin-top:26px;font-size:13px;line-height:1.55}
+  .facts h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px;color:var(--ink-tertiary)}
+  .facts code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#F0EBE0;padding:1px 4px;border-radius:3px}
+  .facts li{margin-bottom:7px}
+  .rec{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--sage);color:#fff;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:8px}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<h1>The dictionary progress bar, inside the pill</h1>
+<p class="sub">r1, 2026-09-12. Four treatments at the tree's own geometry, 360 px pill. Drag the slider to judge the edge; Play loops it.</p>
+
+<div class="controls">
+  <button class="ctl" id="play">Pause</button>
+  <input type="range" id="scrub" min="0" max="100" value="0">
+  <span id="pct" style="width:4ch;text-align:right">0%</span>
+</div>
+
+<div class="plate">
+  <h2>Plate 0 · control</h2>
+  <p class="name">What is on the screen tonight</p>
+  <div class="stage">
+    <div class="pill dimmed"><span class="lab">Loading dictionary…</span></div>
+  </div>
+  <p>A ghost outline at <code>opacity: .45</code>, because <code>canTranscribe</code> is false while the dictionary loads (<code>+page.svelte:2044-2046</code>) and <code>.action-btn:disabled</code> dims it (<code>IntakePanel.svelte:1185-1188</code>). Nothing moves.</p>
+  <p class="cost">Finding, and it governs all three below: <strong>loading is not the same state as unavailable.</strong> At 0.45 any sage you paint here is washed out. Lifting the loading pill to full opacity while keeping it unclickable is one line, and every plate below assumes it.</p>
+</div>
+
+<div class="plate plate-a">
+  <h2>Plate A</h2>
+  <p class="name">Sage wash, the word never changes<span class="rec">recommended</span></p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span></div>
+  </div>
+  <p>The fill is sage at 30% alpha, so the label holds one colour from first paint to last. Nothing about the word moves or flickers as the edge passes under it.</p>
+  <p class="cost">Cost: the quietest of the three, and the least like a progress bar at a glance. Gains: no contrast risk at any position, no second copy of the string, and it reads as the pill filling rather than as a meter bolted to it.</p>
+</div>
+
+<div class="plate plate-b">
+  <h2>Plate B</h2>
+  <p class="name">Solid sage, the word inverts at the edge</p>
+  <div class="stage">
+    <div class="pill">
+      <span class="fill"></span>
+      <span class="lab">Loading dictionary…</span>
+      <span class="lab-white">Loading dictionary…</span>
+    </div>
+  </div>
+  <p>Full-strength <code>--sage</code>, and a white copy of the label clipped to the fill width, so each letter turns white as the edge crosses it. When it completes, the pill is already the primary sage the button becomes once the dictionary is in.</p>
+  <p class="cost">Cost: the most satisfying and the most fragile. A letter straddling the edge is half stone and half white for a frame, and the effect needs the string twice in the DOM, which means the screen reader gets one and the eye gets two.</p>
+</div>
+
+<div class="plate plate-c">
+  <h2>Plate C</h2>
+  <p class="name">A hairline along the inside foot</p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span></div>
+  </div>
+  <p>A 3 px sage rule inside the pill's bottom edge. Closest to Kimi's existing bar, which is 4 px of sage on a stone track (<code>AnalysisStation.svelte:179-192</code>), just moved inside the control it describes.</p>
+  <p class="cost">Cost: the pill's radius crops the rule's ends, so the first and last few percent are hidden by the curve. Gains: the label is untouched and the mark is unmistakably a meter.</p>
+</div>
+
+<div class="plate plate-d">
+  <h2>Plate D</h2>
+  <p class="name">The indeterminate case, which is not optional</p>
+  <div class="stage">
+    <div class="pill"><span class="track"><span class="sweep"></span></span><span class="lab">Loading dictionary…</span></div>
+  </div>
+  <p>When the server sends no <code>content-length</code>, <code>fetchWithProgress</code> reports <code>-1</code> and there is no fraction to draw (<code>loader.ts:286-292</code>). The NDJSON merge path sets <code>-1</code> too (<code>loader.ts:639</code>). This sweep is Kimi's own keyframes, already in the tree (<code>AnalysisStation.svelte:194-202</code>), shown here on Plate C's hairline.</p>
+  <p class="cost">Whichever of A, B, or C you rule, this one ships with it. A bar that cannot admit it does not know is a mark that says Ilya is unsure, which CONTRACT §6 forbids.</p>
+</div>
+
+<div class="facts">
+  <h2>What the tree already has, read this session</h2>
+  <ul>
+    <li><strong>The number is real.</strong> <code>loaderState.progress</code> is 0 to 1 from byte counting when <code>content-length</code> is present, and <code>-1</code> when it is not. <code>loader.ts:91-92</code>, <code>:273-295</code>.</li>
+    <li><strong>The bar is already built.</strong> A determinate sage fill on a stone track, with the indeterminate fallback, is drawn today inside the Analysis station's empty console. <code>AnalysisStation.svelte:87-99</code> and <code>:165-202</code>, marked "Kimi spec". Analysis is closed by default now, so nobody sees it.</li>
+    <li><strong>The string exists in both languages.</strong> <code>input.transcribeLoading</code>, "Loading dictionary…" and « Chargement du dictionnaire… », <code>i18n.ts:171</code>. No French is owed by any plate above.</li>
+    <li><strong>The sage is the pill's own finish colour.</strong> <code>--sage #8B9A7D</code>, <code>app.css:33</code>; <code>.btn-primary</code> is <code>background: var(--sage)</code> with white text, <code>IntakePanel.svelte:1176-1179</code>. So a sage fill is the button filling in with what it is about to become.</li>
+    <li><strong>A warm cache finishes instantly.</strong> On a cache hit <code>progress</code> is set to 1 without ever passing through the middle (<code>loader.ts:704</code>, <code>:712</code>), so on most of your reloads the bar would flash rather than travel. A short delay before it appears, DESK DEFAULT 200 ms, keeps a fast load silent.</li>
+  </ul>
+  <h2 style="margin-top:16px">Not established</h2>
+  <ul>
+    <li>Whether Ilya's own dictionary response carries <code>content-length</code> in production, which decides whether you ever see a determinate bar or only Plate D. Measurable in one network read; not measured tonight.</li>
+    <li>How long the load actually takes on your machine, warm and cold. No timing is claimed here.</li>
+  </ul>
+</div>
+
+</div>
+<script>
+  const root=document.documentElement, scrub=document.getElementById('scrub'),
+        pct=document.getElementById('pct'), play=document.getElementById('play');
+  let running=true, v=0;
+  function set(n){v=n;root.style.setProperty('--p',n+'%');pct.textContent=Math.round(n)+'%';scrub.value=n;}
+  scrub.addEventListener('input',e=>{running=false;play.textContent='Play';set(+e.target.value);});
+  play.addEventListener('click',()=>{running=!running;play.textContent=running?'Pause':'Play';});
+  let last=performance.now();
+  function tick(now){
+    if(running){ v+=(now-last)/2600*100; if(v>118){v=0;} set(Math.min(v,100)); }
+    last=now; requestAnimationFrame(tick);
+  }
+  set(0); requestAnimationFrame(tick);
+</script>
+</body>
+</html>

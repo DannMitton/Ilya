@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawing: the dictionary fill rises, r2, 2026-09-12</title>
+<style>
+  :root{
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ink-tertiary:#6A655F;
+    --sage:#8B9A7D;
+    --stone-300:#d6d3d1;
+    --stone-500:#78716c;
+    --stone-600:#57534e;
+    --paper-cream:#F0EBE0;
+    --paper-light:#F5F1E8;
+    --p:0%;
+  }
+  body{margin:0;background:#E4E8DC;font-family:var(--font-sans);color:#2B2622;padding:32px 24px 64px}
+  .sheet{max-width:820px;margin:0 auto}
+  h1{font-size:20px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-tertiary);margin:0 0 24px}
+  .controls{position:sticky;top:0;background:#E4E8DC;padding:12px 0 14px;border-bottom:1px solid rgba(0,0,0,.12);display:flex;align-items:center;gap:14px;font-size:13px;z-index:5}
+  .controls input[type=range]{flex:1;accent-color:var(--sage)}
+  button.ctl{font:inherit;font-size:13px;padding:4px 12px;border:1px solid var(--stone-600);background:transparent;border-radius:999px;cursor:pointer}
+  .plate{background:var(--paper-light);border-radius:10px;padding:20px 22px 22px;margin:22px 0;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .plate h2{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 2px;color:var(--ink-tertiary)}
+  .plate .name{font-size:17px;font-weight:600;margin:0 0 12px}
+  .plate p{font-size:13.5px;line-height:1.5;margin:10px 0 0;max-width:62ch}
+  .cost{font-size:12.5px;color:var(--ink-tertiary);margin-top:8px}
+  .stage{background:var(--paper-cream);border-radius:8px;padding:22px 18px;display:flex;justify-content:center}
+  .stage.zoom{gap:26px;align-items:center}
+  .rec{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--sage);color:#fff;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:8px}
+  .ruled{background:var(--stone-600)}
+
+  /* ── the pill, tree geometry ──────────────────────────────
+     IntakePanel.svelte:1158-1188 .action-btn / .btn-ghost */
+  .pill{
+    position:relative;
+    width:360px;
+    padding:.45rem .5rem;
+    font-family:var(--font-sans);
+    font-size:.8rem;
+    font-weight:500;
+    border-radius:999px;
+    border:1px solid var(--stone-600);
+    background:transparent;
+    color:var(--stone-500);
+    text-align:center;
+    overflow:hidden;
+    user-select:none;
+  }
+  .pill .lab{position:relative;z-index:2}
+  .pill .lab-white{
+    position:absolute;inset:0;z-index:3;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pill .fill{position:absolute;z-index:1;background:var(--sage)}
+  .big{transform:scale(2);transform-origin:center}
+  .bigwrap{width:760px;height:72px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+  /* H — horizontal, the r1 plate B he ruled */
+  .h .fill{inset:0 auto 0 0;width:var(--p);transition:width 120ms linear}
+  .h .lab-white{clip-path:inset(0 calc(100% - var(--p)) 0 0);transition:clip-path 120ms linear}
+
+  /* V — vertical, hard level */
+  .v .fill{inset:auto 0 0 0;height:var(--p);transition:height 120ms linear}
+  .v .lab-white{clip-path:inset(calc(100% - var(--p)) 0 0 0);transition:clip-path 120ms linear}
+
+  /* VS — vertical, soft meniscus */
+  .vs .fill{
+    inset:auto 0 0 0;height:var(--p);transition:height 120ms linear;
+    background:linear-gradient(to top, var(--sage) 0, var(--sage) calc(100% - 3px), rgba(139,154,125,.45) 100%);
+  }
+  .vs .lab-white{clip-path:inset(calc(100% - var(--p)) 0 0 0);transition:clip-path 120ms linear}
+
+  /* VI — vertical indeterminate, the level breathes */
+  .vi .fill{inset:auto 0 0 0;height:38%;animation:breathe 1.9s ease-in-out infinite}
+  .vi .lab-white{animation:breatheclip 1.9s ease-in-out infinite}
+  @keyframes breathe{0%{height:14%}50%{height:72%}100%{height:14%}}
+  @keyframes breatheclip{0%{clip-path:inset(86% 0 0 0)}50%{clip-path:inset(28% 0 0 0)}100%{clip-path:inset(86% 0 0 0)}}
+
+  .facts{background:#fff;border-radius:10px;padding:18px 22px;margin-top:26px;font-size:13px;line-height:1.55}
+  .facts h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px;color:var(--ink-tertiary)}
+  .facts code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#F0EBE0;padding:1px 4px;border-radius:3px}
+  .facts li{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<h1>The fill rises instead of travelling</h1>
+<p class="sub">r2, 2026-09-12. Plate B's inverting label, turned on its side. Same pill, same sage, same string. Drag the slider to judge the level.</p>
+
+<div class="controls">
+  <button class="ctl" id="play">Pause</button>
+  <input type="range" id="scrub" min="0" max="100" value="0">
+  <span id="pct" style="width:4ch;text-align:right">0%</span>
+</div>
+
+<div class="plate h">
+  <h2>Plate B · control</h2>
+  <p class="name">Horizontal, as you ruled it<span class="rec ruled">ruled r1</span></p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div>
+  </div>
+  <p>Here for comparison only. The edge travels 360 px and crosses the word letter by letter.</p>
+</div>
+
+<div class="plate v">
+  <h2>Plate B-V</h2>
+  <p class="name">Vertical, a hard level<span class="rec">recommended of the two</span></p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div>
+  </div>
+  <div class="stage zoom" style="margin-top:10px">
+    <div class="bigwrap"><div class="pill big"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div></div>
+  </div>
+  <p>The level rises from the foot and the whole word turns white at once, sliced horizontally, rather than letter by letter. The second stage is the same pill at 2× so you can judge the slice through the letterforms.</p>
+  <p class="cost">Cost, and it is the real one: the travel is about 32 px tall against 360 px wide, so the eye reads the position roughly eleven times more coarsely. It tells you it is working and stops being a measurement you could read a number off. Gains: the rounded ends crop the level into a vessel shape, and the whole word changes together instead of mid-word.</p>
+</div>
+
+<div class="plate vs">
+  <h2>Plate B-VS</h2>
+  <p class="name">Vertical, a 3 px meniscus</p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div>
+  </div>
+  <div class="stage zoom" style="margin-top:10px">
+    <div class="bigwrap"><div class="pill big"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div></div>
+  </div>
+  <p>The same level with its top 3 px softened to 45% sage, so the surface reads as liquid rather than as a bar. The label still inverts on the hard line, not the soft one.</p>
+  <p class="cost">Cost: the soft edge and the hard clip of the label disagree by three pixels, visible at 2× and, I expect, invisible at 1×. That is an expectation, not a measurement.</p>
+</div>
+
+<div class="plate vi">
+  <h2>Plate B-VI</h2>
+  <p class="name">The indeterminate case, vertical</p>
+  <div class="stage">
+    <div class="pill"><span class="fill"></span><span class="lab">Loading dictionary…</span><span class="lab-white">Loading dictionary…</span></div>
+  </div>
+  <p>Kimi's horizontal sweep has no vertical translation, so this is a coined alternative: the level breathes between 14% and 72% and never claims to arrive. It ignores the slider.</p>
+  <p class="cost">Cost: a rising and falling level can read as a fault rather than as waiting. The safe alternative is to keep the horizontal sweep for the indeterminate case only, at the price of two different animations in one control. Your eye, not mine.</p>
+</div>
+
+<div class="facts">
+  <h2>What is the same in every plate</h2>
+  <ul>
+    <li>The pill, the string, and the sage are the tree's own: <code>IntakePanel.svelte:642-649</code>, <code>i18n.ts:171</code>, <code>--sage #8B9A7D</code> at <code>app.css:33</code>.</li>
+    <li>The label is in the DOM twice, once stone and once white, and the white copy is clipped. A screen reader hears it once.</li>
+    <li>Every plate still assumes the loading pill escapes <code>.action-btn:disabled</code>'s <code>opacity: .45</code> (<code>IntakePanel.svelte:1185-1188</code>).</li>
+    <li>A warm cache sets <code>progress</code> straight to 1 (<code>loader.ts:704</code>, <code>:712</code>), so the 200 ms delay before the fill appears matters more for a vertical rise: a flash of a level jumping the height of the pill is more startling than a wipe.</li>
+  </ul>
+  <h2 style="margin-top:16px">Not established</h2>
+  <ul>
+    <li>Whether the three-pixel disagreement in B-VS is visible at 1× on your screen. I have not measured it.</li>
+    <li>Whether Ilya's dictionary response carries <code>content-length</code> in production, which decides how often the indeterminate plate is what a singer actually sees.</li>
+  </ul>
+</div>
+
+</div>
+<script>
+  const root=document.documentElement, scrub=document.getElementById('scrub'),
+        pct=document.getElementById('pct'), play=document.getElementById('play');
+  let running=true, v=0;
+  function set(n){v=n;root.style.setProperty('--p',n+'%');pct.textContent=Math.round(n)+'%';scrub.value=n;}
+  scrub.addEventListener('input',e=>{running=false;play.textContent='Play';set(+e.target.value);});
+  play.addEventListener('click',()=>{running=!running;play.textContent=running?'Pause':'Play';});
+  let last=performance.now();
+  function tick(now){
+    if(running){ v+=(now-last)/2600*100; if(v>118){v=0;} set(Math.min(v,100)); }
+    last=now; requestAnimationFrame(tick);
+  }
+  set(0); requestAnimationFrame(tick);
+</script>
+</body>
+</html>
