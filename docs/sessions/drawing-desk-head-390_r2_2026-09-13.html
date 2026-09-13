@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawing: the desk head at 390 px, r1, 2026-09-13</title>
+<style>
+  :root{
+    --font-sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --ink-primary:#1a1612;--ink-tertiary:#6A655F;
+    --paper-cream:#F0EBE0;--sage:#8B9A7D;--surround-transcription:#D1D7CB;
+    --portrait-gutter:24px;
+  }
+  body{margin:0;background:#E9E6DF;font-family:var(--font-sans);color:#2B2622;padding:28px 22px 70px}
+  .sheet{max-width:1320px;margin:0 auto}
+  h1{font-size:21px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:#413c37;margin:0 0 20px;max-width:82ch;line-height:1.5}
+  .cols{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+  .col{width:390px}
+  .tag{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-tertiary);margin:0 0 2px}
+  .cname{font-size:15px;font-weight:600;margin:0 0 9px}
+  .phone{width:390px;background:var(--surround-transcription);box-shadow:0 2px 6px rgba(0,0,0,.15);overflow:hidden}
+  /* top bar: header-bar, 48px, padding 16, space-between */
+  .topbar{height:48px;background:var(--sage);display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-sizing:border-box}
+  .sigil{font-family:'Source Serif 4',Georgia,serif;font-style:italic;color:#fff;font-size:17px;letter-spacing:.02em}
+  .langpill{background:#6C7A5F;color:#fff;font-size:12px;padding:3px 12px;border-radius:999px}
+  .toplinks{display:flex;gap:.9rem;align-items:center}
+  .toplink{color:#fff;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid #fff;padding-bottom:1px}
+  /* desk head */
+  .head{max-width:816px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+        padding:.35rem 0 var(--portrait-gutter);box-sizing:border-box;width:342px}
+  .head.wrap2{flex-wrap:wrap;justify-content:flex-start;gap:.4rem 1rem}
+  .pair{display:flex;align-items:stretch;border:1px solid var(--ink-primary);border-radius:2px;overflow:hidden;flex-shrink:1;min-width:0}
+  .pm{border:none;background:transparent;color:var(--ink-primary);font-family:var(--font-sans);
+      font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .7rem;
+      flex-shrink:1;min-width:0}
+  .pm+.pm{border-left:1px solid var(--ink-primary)}
+  .pm.active{background:var(--paper-cream)}
+  .links{display:flex;align-items:center;gap:.9rem;flex-shrink:0}
+  .lk{color:var(--ink-primary);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      border-bottom:1px solid var(--ink-primary);padding-bottom:1px;white-space:nowrap}
+  .paper{background:var(--paper-cream);height:96px;margin:0 24px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .why{font-size:12.5px;line-height:1.45;color:#403b36;margin-top:10px}
+  .m{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6a655f;margin-top:6px;display:block}
+  .bad{color:#8c2f2f;font-weight:600}
+  .good{color:#4b6b3f;font-weight:600}
+  .rec{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:#8B9A7D;color:#fff;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:8px}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<h1>The desk head at 390 px</h1>
+<p class="sub">r2, 2026-09-13, redrawn after the tab was renamed <strong>Markup</strong> and the drawer band <strong>Melody</strong>. Each phone is 390 px wide and drawn at the tree's own recipe: a 48 px top bar with 16 px padding, then the head at 342 px between 24 px gutters, tabs at 0.7 rem, weight 600, 0.1 em tracking, uppercase, links with a 1 px underline and a 0.9 rem gap. Nothing is styled for effect; the breakage in the first column is the CSS doing what it does today.</p>
+
+<div class="cols">
+
+  <div class="col">
+    <p class="tag">Today</p>
+    <p class="cname">Three documents and two links in one row, with the new name</p>
+    <div class="phone">
+      <div class="topbar"><span class="sigil">[Ilya]</span><span class="langpill">Français</span></div>
+      <div class="head" id="h0">
+        <div class="pair">
+          <span class="pm active">Transcription</span><span class="pm">Markup</span><span class="pm">Insights</span>
+        </div>
+        <div class="links"><span class="lk">Learn</span><span class="lk">Guide</span></div>
+      </div>
+      <div class="paper"></div>
+    </div>
+    <span class="m" id="m0"></span>
+    <p class="why"><span class="bad">Broken.</span> The labels need 265.19 px and have 237.97. Even with the shorter name the labels need 266.19 px for the documents plus 88.03 for the links, against 342. Watch what the row does.</p>
+  </div>
+
+  <div class="col">
+    <p class="tag">Proposal A</p>
+    <p class="cname">Learn and Guide move to the top bar<span class="rec">recommended</span></p>
+    <div class="phone">
+      <div class="topbar">
+        <span class="sigil">[Ilya]</span>
+        <span class="toplinks"><span class="toplink">Learn</span><span class="toplink">Guide</span></span>
+        <span class="langpill">Français</span>
+      </div>
+      <div class="head" id="h1">
+        <div class="pair">
+          <span class="pm active">Transcription</span><span class="pm">Markup</span><span class="pm">Insights</span>
+        </div>
+      </div>
+      <div class="paper"></div>
+    </div>
+    <span class="m" id="m1"></span>
+    <p class="why"><span class="good">Fits.</span> The head carries only documents, and the three read at full length on one line. The top bar had 227 px of empty space between the sigil and the language pill; the pair needs 88.</p>
+  </div>
+
+  <div class="col">
+    <p class="tag">Proposal B</p>
+    <p class="cname">Two rows: documents, then links</p>
+    <div class="phone">
+      <div class="topbar"><span class="sigil">[Ilya]</span><span class="langpill">Français</span></div>
+      <div class="head wrap2" id="h2">
+        <div class="pair">
+          <span class="pm active">Transcription</span><span class="pm">Markup</span><span class="pm">Insights</span>
+        </div>
+        <div class="links"><span class="lk">Learn</span><span class="lk">Guide</span></div>
+      </div>
+      <div class="paper"></div>
+    </div>
+    <span class="m" id="m2"></span>
+    <p class="why">Fits, and nothing moves house. Costs vertical space on the surface that has least of it, and the links sit below the documents where they read as a second, lesser tier.</p>
+  </div>
+
+  <div class="col">
+    <p class="tag">Proposal C</p>
+    <p class="cname">Shorter words, everything stays</p>
+    <div class="phone">
+      <div class="topbar"><span class="sigil">[Ilya]</span><span class="langpill">Français</span></div>
+      <div class="head" id="h3">
+        <div class="pair">
+          <span class="pm active">Words</span><span class="pm">Markup</span><span class="pm">Insights</span>
+        </div>
+        <div class="links"><span class="lk">Learn</span><span class="lk">Guide</span></div>
+      </div>
+      <div class="paper"></div>
+    </div>
+    <span class="m" id="m3"></span>
+    <p class="why">Shortening the one remaining long name. <em>Text</em> was struck as a name in September, so this shows <em>Words</em> instead. It buys about 55 px and asks you to rename the document you named most carefully.</p>
+  </div>
+
+</div>
+</div>
+<script>
+  const meas = (headId, outId) => {
+    const h = document.getElementById(headId);
+    const pair = h.querySelector('.pair');
+    const kids = [...h.querySelectorAll('.pm, .lk')];
+    const ink = kids.reduce((a, e) => a + e.getBoundingClientRect().width, 0);
+    const tallest = Math.max(...kids.map(e => e.getBoundingClientRect().height));
+    const clipped = kids.filter(e => e.scrollWidth > e.clientWidth + 0.5).map(e => e.textContent);
+    const wrapped = kids.filter(e => e.getBoundingClientRect().height > 22).map(e => e.textContent);
+    document.getElementById(outId).textContent =
+      `head ${Math.round(h.getBoundingClientRect().height)} px tall · labels ${ink.toFixed(2)} px` +
+      (clipped.length ? ` · CLIPPED: ${clipped.join(', ')}` : '') +
+      (wrapped.length ? ` · WRAPPED: ${wrapped.join(', ')}` : ' · no wrap, no clip');
+  };
+  meas('h0','m0'); meas('h1','m1'); meas('h2','m2'); meas('h3','m3');
+</script>
+</body>
+</html>

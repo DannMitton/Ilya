@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawing: one footer for three documents, r1, 2026-09-13</title>
+<style>
+  :root{
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-serif:'Source Serif 4', Georgia, serif;
+    --font-mono:ui-monospace,Menlo,monospace;
+    --ink-primary:#1a1612; --ink-secondary:#4A4540; --ink-tertiary:#6A655F;
+    --sage:#8B9A7D; --deeper-lavender:#8E7E9B; --dusty-rose:#A67B7B;
+    --paper-cream:#F0EBE0;
+    --surround-transcription:#D1D7CB; --surround-marked:#D2CBD7; --surround-learn:#DBCACA;
+  }
+  body{margin:0;background:#E8E4DC;font-family:var(--font-sans);color:#2B2622;padding:30px 24px 70px}
+  .sheet{max-width:1000px;margin:0 auto}
+  h1{font-size:21px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:#4a453f;margin:0 0 8px;max-width:70ch;line-height:1.5}
+  .warn{font-size:12.5px;color:#7a3b3b;background:#f6e9e9;border-radius:6px;padding:8px 12px;margin:0 0 22px;max-width:70ch;line-height:1.45}
+  .plate{background:#fff;border-radius:10px;padding:18px 20px 20px;margin:18px 0;box-shadow:0 1px 2px rgba(0,0,0,.07)}
+  .tag{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-tertiary);margin:0 0 2px}
+  .name{font-size:16px;font-weight:600;margin:0 0 4px}
+  .note{font-size:13px;line-height:1.5;margin:10px 0 0;color:#403b36;max-width:72ch}
+  .cost{font-size:12.5px;color:var(--ink-tertiary);margin-top:7px;max-width:72ch;line-height:1.45}
+  .rec{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--sage);color:#fff;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:8px}
+  .desk{padding:16px 18px 18px;border-radius:8px}
+  .d-t{background:var(--surround-transcription)} .d-m{background:var(--surround-marked)} .d-i{background:var(--surround-learn)}
+  .page{background:var(--paper-cream);padding:14px 18px 16px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .col{width:624px;max-width:100%}
+  .h{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-tertiary);margin:0 0 6px}
+  .measure{font-family:var(--font-mono);font-size:11px;color:#7a6f63;margin-top:6px}
+
+  /* ── the tree's own footer type ─────────────────────── */
+  .attr{display:block;font-family:var(--font-sans);font-size:9.5pt;color:var(--ink-secondary);
+        font-variant-caps:all-small-caps;letter-spacing:1px;font-weight:400;text-align:justify;margin:0}
+  .attr em{font-style:italic}
+  .pagenum{font-family:var(--font-sans);font-size:9.5pt;font-variant-caps:all-small-caps;
+        letter-spacing:1px;color:var(--ink-secondary);white-space:nowrap}
+  .method{margin:0;font-family:var(--font-sans);font-size:9.5pt;color:var(--ink-secondary);
+        font-variant-caps:all-small-caps;letter-spacing:.06em}
+  .legendline{margin:0 0 6px;font-family:var(--font-serif);font-size:9.5px;color:var(--ink-tertiary);font-variant-caps:small-caps;letter-spacing:.04em}
+
+  /* today: siblings */
+  .f-sib .rule{border-top:.5px solid var(--accent);margin-bottom:8px}
+  .f-sib .row{display:grid;grid-template-columns:1fr auto;gap:0 32px;align-items:flex-end}
+  /* today: insights */
+  .f-ins .rule{border-top:1px solid var(--dusty-rose);margin-bottom:8px}
+  .f-ins .pc{margin:0;text-align:right}
+
+  /* proposal A */
+  .f-a .matter{margin:0 0 7px}
+  .f-a .rule{border-top:.5px solid var(--accent);margin-bottom:7px}
+  .f-a .row{display:grid;grid-template-columns:1fr auto;gap:0 28px;align-items:flex-end}
+  /* proposal B */
+  .f-b .rule{border-top:.5px solid var(--accent);margin:7px 0}
+  .f-b .row{display:grid;grid-template-columns:1fr auto;gap:0 28px;align-items:flex-end}
+  /* proposal C: rule as a short mark */
+  .f-c .rule{border-top:.5px solid var(--accent);width:96px;margin:0 0 7px}
+  .f-c .row{display:grid;grid-template-columns:1fr auto;gap:0 28px;align-items:flex-end}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<h1>One footer for three documents</h1>
+<p class="sub">r1, 2026-09-13. Every block below is set in the tree's own footer type: <code>9.5pt</code>, <code>all-small-caps</code>, <code>1px</code> tracking, <code>--ink-secondary</code>, justified, in a 624 px text column. The desk colour behind each block says which document it belongs to.</p>
+<p class="warn"><strong>Instrument.</strong> The "today" plates are rebuilt from the CSS in <code>PageFooter.svelte</code> and <code>InsightsPane.svelte</code>, not measured off your screen. The heights printed under them are this page's measurement of this reconstruction. Treat them as close, not exact.</p>
+
+<div class="plate">
+  <p class="tag">Today · 1 of 3</p>
+  <p class="name">Transcription and Score markup share one recipe</p>
+  <div class="desk d-t"><div class="page col">
+    <div class="f-sib" style="--accent:var(--sage)" id="t0">
+      <div class="rule"></div>
+      <div class="row">
+        <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0), test text via www.lieder.net. Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+    </div>
+  </div></div>
+  <p class="measure" id="m0"></p>
+  <p class="note">Rule <strong>above</strong>, 0.5 px in the page's accent. Attribution justified, page number in its own column on the same line. Score markup is identical but lavender, and puts the sigla legend and the broad-analysis note above the rule.</p>
+</div>
+
+<div class="plate">
+  <p class="tag">Today · 3 of 3</p>
+  <p class="name">Insights does three things differently</p>
+  <div class="desk d-i"><div class="page col">
+    <div class="f-ins" id="t1">
+      <p class="method">Method: computed from your calibration of 2026-08-12 and the score as sung, repeats taken. Nothing on this page is hand-written.</p>
+      <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0). Made with love in Canada 🇨🇦 dannmitton.com</span>
+      <div class="rule"></div>
+      <p class="pc pagenum">Page 1 of 1</p>
+    </div>
+  </div></div>
+  <p class="measure" id="m1"></p>
+  <p class="note">Rule <strong>below</strong>, at <strong>1 px</strong>, and the page number spends <strong>a whole line of its own</strong>. Three divergences, none of them ruled.</p>
+</div>
+
+<div class="plate">
+  <p class="tag">Proposal A</p>
+  <p class="name">One rule above, pagination on the last line<span class="rec">recommended</span></p>
+  <div class="desk d-t"><div class="page col">
+    <div class="f-a" style="--accent:var(--sage)" id="a0">
+      <p class="legendline matter">Captured: you sang it, and it read cleanly. &nbsp; Provisional: you sang it, but it read with less certainty.</p>
+      <div class="rule"></div>
+      <div class="row">
+        <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0), test text via www.lieder.net. Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+    </div>
+  </div></div>
+  <div class="desk d-i" style="margin-top:10px"><div class="page col">
+    <div class="f-a" style="--accent:var(--dusty-rose)" id="a1">
+      <p class="method matter">Method: computed from your calibration of 2026-08-12 and the score as sung, repeats taken. Nothing on this page is hand-written.</p>
+      <div class="rule"></div>
+      <div class="row">
+        <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0). Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+    </div>
+  </div></div>
+  <p class="measure" id="ma"></p>
+  <p class="note">One geometry for all three. Page-specific matter sits above the rule, where each document already puts its own. The rule is 0.5 px in the document's own accent, so hue still names place while the shape never changes. The page number returns to the attribution's last line and stops costing Insights a line.</p>
+  <p class="cost">Cost: Insights gives up its 1 px rule, which read as heavier and more final. Gain: the three feet become one object with three inks, and Insights loses a line.</p>
+</div>
+
+<div class="plate">
+  <p class="tag">Proposal B</p>
+  <p class="name">The rule under everything, as a baseline</p>
+  <div class="desk d-i"><div class="page col">
+    <div class="f-b" style="--accent:var(--dusty-rose)" id="b0">
+      <p class="method">Method: computed from your calibration of 2026-08-12 and the score as sung, repeats taken. Nothing on this page is hand-written.</p>
+      <div class="row">
+        <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0). Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+      <div class="rule"></div>
+    </div>
+  </div></div>
+  <p class="measure" id="mb"></p>
+  <p class="note">Keeps Insights' instinct: the rule closes the apparatus rather than opening it. The page number still comes back onto the attribution's line.</p>
+  <p class="cost">Cost: a rule at the very bottom of a sheet reads as an underline on the paper's edge, and it puts a line between the apparatus and the page's own lower margin, which is where the eye wants nothing at all.</p>
+</div>
+
+<div class="plate">
+  <p class="tag">Proposal C</p>
+  <p class="name">A short mark instead of a full rule</p>
+  <div class="desk d-m"><div class="page col">
+    <div class="f-c" style="--accent:var(--deeper-lavender)" id="c0">
+      <div class="rule"></div>
+      <div class="row">
+        <span class="attr">Free and open source, <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via kaikki.org (CC BY-SA 4.0), test text via www.lieder.net. Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+    </div>
+  </div></div>
+  <p class="measure" id="mc"></p>
+  <p class="note">The divider becomes a 96 px mark at the left, not a rule across the column. Quieter, and it never competes with the stave's own horizontals.</p>
+  <p class="cost">Cost: it stops reading as a boundary and starts reading as a mark, so the footer separates by whitespace rather than by a line. On a page that already ends in a full-width hairline above the apparatus, that may be too little.</p>
+</div>
+
+<div class="plate" style="background:#FCF9F4">
+  <p class="tag">The lever you actually have</p>
+  <p class="name">Height is set by the word count, not by the rule</p>
+  <div class="desk d-t"><div class="page col">
+    <div class="f-a" style="--accent:var(--sage)" id="s0">
+      <div class="rule"></div>
+      <div class="row">
+        <span class="attr">Free and open source. <em>Ilya</em> 2026a operationalizes Craig Grayson's <em>Russian Lyric Diction</em> (2012); stress and gloss data via kaikki.org, CC BY-SA 4.0; test texts via lieder.net. Made with love in Canada 🇨🇦 dannmitton.com</span>
+        <span class="pagenum">Page 1 of 1</span>
+      </div>
+    </div>
+  </div></div>
+  <p class="measure" id="ms"></p>
+  <p class="note">The same recipe with the attribution cut from three lines to two. Nothing about the layout changed; only the words did. <strong>This is the only change that buys real height back.</strong> Whether the licensing can be said this way is yours, not mine: "University of Washington" is dropped, the two clauses are joined with semicolons, and "test text via www.lieder.net" becomes "test texts via lieder.net".</p>
+</div>
+
+</div>
+<script>
+  const h = el => Math.round(el.getBoundingClientRect().height * 10) / 10;
+  const put = (id, targetId, label) => {
+    const e = document.getElementById(targetId);
+    document.getElementById(id).textContent = label + h(e) + ' px tall';
+  };
+  put('m0','t0','block height: ');
+  put('m1','t1','block height: ');
+  put('ma','a1','block height, Insights pass: ');
+  put('mb','b0','block height: ');
+  put('mc','c0','block height: ');
+  put('ms','s0','block height: ');
+</script>
+</body>
+</html>

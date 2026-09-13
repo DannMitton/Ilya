@@ -29,6 +29,7 @@ next session the same hour it cost the last one.
 | the gate literal is in two places | `the N.97/N.97b session` |
 | your own `git add -A` swept Code's tree | `git add -A` |
 | you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
+| you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
 
 ### Deploys and URLs
 
@@ -2594,3 +2595,21 @@ real path. **Before you cite a file's absence as evidence, open its first ten
 lines and confirm it is the file you think it is.** This is tether 11 in a form
 that does not look like an instrument failure, because a grep that returns zero
 looks the same whether you aimed it well or not.
+
+## A GREP COUNT IS NOT A USE COUNT. THE COMMENTS COUNT TOO. 2026-09-13
+
+**`grep -rn -- "--token" | wc -l` over `apps` and `packages` inflated every
+colour-token count the desk gave Dann**, by 11% up to five times, because
+`app.css` explains its own tokens in prose and every mention in a comment was
+counted as a use. The chip board built on those numbers had to be corrected by
+Code's census.
+
+The same night, the same command **undercounted** `#3A352F` as 9 when it is 38,
+because the desk limited the glob to `apps/web/src/*.svelte` and the score
+renderer lives in `packages/score-parser`. The renderer draws every staff line,
+clef, barline and rest in it.
+
+**So: a count that will be shown to Dann excludes comments and covers both
+workspaces.** Better still, do not report counts at all when what the question
+needs is USE SITES. Dann's own framing, 2026-09-13: *"counts do not tell you
+whether a use is justified."*

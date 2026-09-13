@@ -39,6 +39,131 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### FIRST, BEFORE ANY OTHER WORK. TEN MINUTES. Added 2026-09-13
+>
+> **This file is 901 lines against a 600 tripwire. Move what closed to
+> `../sessions/LOG.md` before you start anything else.** README's ritual says
+> a closed thing moves at the close of the session that closed it; the
+> 2026-09-12 session ran to 03:00 and left this deliberately rather than cut
+> two hundred lines out of the handover while tired.
+>
+> **Move these, verbatim, in this order, each as its own LOG block:**
+>
+> 1. The block beginning `**INCREMENT 3 IS SHIPPED, WALKED, AND DONE`. Closed,
+>    walked by Dann on `9026a56`.
+> 2. The `085bb9e` N.128 account inside the `CLOSE OF 2026-09-12` block.
+>    Shipped and walked. **Keep N.128's own entry if anything is still open on
+>    it; nothing is.**
+> 3. The block beginning `**N.114b CLOSED WHOLE, items 1 to 9`. Closed
+>    2026-09-10.
+> 4. The block beginning `**DESIGN RETURNED, 2026-09-10 07:36`. Its rulings
+>    were applied in the path pass and increment 3.
+> 5. The `**THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH` block and
+>    the `**Earlier the same session:**` block. Both superseded by the
+>    2026-09-12 close.
+> 6. The two stale `**NEXT, in order:**` lists from 2026-09-10. Superseded.
+>
+> **ASSESS, do not move blindly:** the `RULINGS DANN OWES` section and the
+> `OWED, RULED BUT NOT YET DONE` section both mix live items with settled
+> ones. Read each row.
+>
+> **Do not move:** the `CLOSE OF 2026-09-12 INTO 2026-09-13` summary, N.129,
+> N.94, the names ruling, or the colour story. Those are the live handover.
+>
+> **Then delete this block and carry on with the real one thing below.**
+>
+
+> **CLOSE OF 2026-09-12 INTO 2026-09-13. FOUR SHIPS, ALL WALKED OR VERIFIED.**
+>
+> 1. `9026a56` path pass increment 3, **walked whole by Dann, DONE**.
+> 2. `246c17c` the loupe draws sans like the page, the renderer root follows,
+>    and the undo and redo marks are restored to `↰ ↱`. Dann confirmed the
+>    Cyrillic match; he then said the marks are still not the sigla he recalls,
+>    and the search found what he was remembering: the pacifier's `provisional`
+>    badge, a circled `↻` (`Pacifier.svelte:836-848`). **DESK DEFAULT, unruled:
+>    the band takes `↶ ↷`, since the badge stays where it is.**
+> 3. `085bb9e` **N.128**, a corrected duration now moves the onsets after it.
+>    Code chose to recompute in `applyCorrections` (`correction.ts:356`, new
+>    pass `:382`) over deriving the beat at render time, because the latter
+>    would have changed beaming on scores nobody corrected. Seven new tests,
+>    six failed before. **The desk's causal account named the wrong file and the
+>    correction is in `ENVIRONMENT.md`.**
+> 4. `7841fe7` **N.127 increment 1: INSIGHTS IS LIVE**, the third document,
+>    without the compass. Gate 4 is at **1123**.
+>
+> **INSIGHTS, WHAT IS OPEN.** Code made five decisions of its own, all listed in
+> `memo-n127-insights-inc1_r1_2026-09-13.md` and all reversible, none reviewed
+> by Dann. One row prints nothing on his Sunless score because measure 17 does
+> not add up to its time signature. At 390 px the head does not fit three
+> documents: 237.97 px for labels needing 265.19. Increment 2 is the compass.
+>
+> **BRIEFS WRITTEN AND NOT RUN:** `brief-n117-dictionary-fill_r1_2026-09-12`,
+> `brief-n125-slurs-as-objects_r1_2026-09-11`,
+> `brief-n118-punctuation-travels_r1_2026-09-12`,
+> `brief-n119-toggles-reach-score-markup_r1_2026-09-12`,
+> `brief-colour-token-rename_r1_2026-09-13`. N.119's audit corrected `STATE.md`:
+> five of the seven Notation toggles already reach Score markup.
+>
+> **THE COLOUR STORY, RULED AND PLANNED.** The principle, the five-hue map, and
+> the six-stage plan are in `docs/sessions/plan-colour-story_r1_2026-09-13.md`,
+> with the full ruling in `INBOX.md`. Learn moves rose to umber; nothing else
+> moves. Stage 1, the census, is running.
+>
+> **N.121's unbuilt half, established 2026-09-12:** no path anywhere fills the
+> poem box from an ingested score's lyrics, which is why Dann's Score markup is
+> full while Transcription is empty. His ruling of 2026-09-10 covers it.
+>
+> **TRIPWIRE: this file is past 800 lines against a 600 limit.** Increment 3,
+> N.128 and N.127 increment 1 are closed and should move to `../sessions/LOG.md`
+> at the next close.
+>
+> **N.129, THE UNDERLAY IS SPACED IN THE WRONG FONT'S METRICS. Numbered by
+> Dann 2026-09-13. UNPLACED.** `underlay-widths.ts:690` declares its table as
+> "Per-1000-em advance widths for **Source Serif 4** Cyrillic", and the
+> renderer uses it for the syllable column advance
+> (`staff-renderer.ts:754-762`) and for hyphen and extender endpoints
+> (`:2742-2750`). The page has drawn those glyphs in **Source Sans 3** ever
+> since the paginator began stripping the renderer's serif root
+> (`page-layout.ts:376`). So every syllable's spacing and every hyphen and
+> extender end on Score markup is computed from metrics the glyphs never had.
+> Code measured about 5% on one word, « ночь » 27.72 serif against 26.34 sans.
+> Candidate fixes, unruled: remeasure the table in Source Sans 3, or make the
+> face a parameter so the two cannot diverge again. **Bears on N.118 and on
+> the `columnAdvance` crowding item already in OWED.** Found by Code inside
+> the loupe-typeface memo; the desk read all three sites itself.
+>
+> **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
+> interface, modelled on Newzik" and never built. It is now a **station inside
+> the `Melody` band, sibling to Corrections**. Established: the ENGINE already
+> exists and ships. `packages/score-parser/src/transposition.ts` exports
+> `transposeScore`, `suggestTranspositions`, `spellPitch`,
+> `keyNameAfterTransposition` and more, built so the watch list names computed
+> keys rather than guesses (Dann's ruling 2026-07-20), wired at
+> `watchlist.ts:476`. Only the control is missing. **Re-read
+> `claude/e31-late-rulings-and-the-transposition-control_2026-08-07.md` first**
+> (rulings 9 to 14, the detented-ruler spec); it is 37 days old and its
+> amendments are unchecked, per tether 17.
+>
+> **THE NAMES, RATIFIED 2026-09-13, BOTH LANGUAGES.** Tabs: `Text` / « Texte »,
+> `Markup` / « Annotation », `Insights` / « Aperçus ». Drawer band:
+> `Melody` / « Mélodie ». The French mirrors the English throughout and
+> nothing is coined. **Tab padding goes 0.7 rem to 0.5 rem** to fit the French
+> row, returning 19.2 px; afterwards English has 55.07 px spare and French
+> 15.64 at a 390 px viewport. **OWED: nobody has seen 0.5 rem on screen.**
+> This supersedes the `MARKUP` band rename of 2026-09-12.
+>
+> **THE COLOUR STORY, RULED 2026-09-13.** A hue names ONE IDEA, and a band
+> takes the hue of the idea it holds, wherever that band appears. **sage = the
+> words** (Text, the Input band); **lavender = the melody** (the Markup tab,
+> the Melody band, the turning layer); **cobalt = information** (Guide, the
+> Piece band); **rose = your voice** (the new Voice band, the whole
+> calibration interface INCLUDING THE PACIFIER, and Insights); **umber = the
+> book** (Learn). `Voice` extracts from Score markup to become a band sibling
+> of Piece, Input and Melody. Plan and stages:
+> `docs/sessions/plan-colour-story_r1_2026-09-13.md`. The census memo landed;
+> stage 2 is Dann's four rulings.
+
+
 > **The history of this section moved to `../sessions/LOG.md` on 2026-09-01.**
 > Every entry from 2026-08-23 to 2026-08-27 that used to sit here is in that
 > file, verbatim and in order. Nothing was rewritten. This section now carries

@@ -389,8 +389,26 @@ prompts Dann pastes into Code.** If you find yourself about to write application
 code, you have taken the wrong job. Reading the tree is not building; a subagent
 reading it for you is not building either.
 
-**YOU DO NOT RUN GIT. AT ALL. No agent commits, ever.** `device_commit_files` is
-file delivery, not a commit. The bridge refuses `rm`: move a file into
+**NO AGENT WRITES WITH GIT. NARROWED AND RATIFIED BY DANN 2026-09-13.**
+
+~~YOU DO NOT RUN GIT. AT ALL.~~ The absolute form was the desk's own and it was
+too blunt. **What is forbidden is every git command that WRITES:** `add`,
+`commit`, `push`, `checkout`, `reset`, `restore`, `clean`, `stash`, `rm`, `mv`,
+`merge`, `rebase`, `tag`. **No agent commits, ever**, and no agent stages.
+
+**Read-only git is allowed and is sometimes the honest thing to do:** `status`,
+`log`, `diff`, `show`, `ls-files`, `check-ignore`. They change nothing.
+
+The rule exists for one concrete reason, not for a general fear: **`git add -A`
+from this desk swept Code's working tree three times in one night, 2026-08-20**
+(`ENVIRONMENT.md`, section `git add -A`). That is a write. A read could not have
+done it.
+
+Dann's words on ratifying the narrowing: *"I think it's supposed to safeguard
+from you running amok... I couldn't care less as long as you're not compromising
+my identity or doing crime."*
+
+`device_commit_files` is file delivery, not a commit. The bridge refuses `rm`: move a file into
 `_to_delete/` and say so. Write scratch scripts to the session home.
 
 **THE SHIP SCRIPT.**
