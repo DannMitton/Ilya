@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Drawing: the four strays, r1, 2026-09-13</title>
+<style>
+:root{--font-sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif}
+body{margin:0;background:#EDE9E2;font-family:var(--font-sans);color:#2B2622;padding:30px 24px 70px}
+.sheet{max-width:960px;margin:0 auto}
+h1{font-size:21px;font-weight:600;margin:0 0 4px}
+.sub{font-size:13px;color:#4a453f;margin:0 0 18px;max-width:74ch;line-height:1.55}
+.plate{background:#fff;border-radius:10px;padding:16px 18px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.07)}
+.ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 6px}
+.pn{font-size:16px;font-weight:600}
+.pn code{font-size:15px}
+.pv{font-size:12px;color:#6A655F}
+.tag{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#fff;padding:2px 8px;border-radius:999px}
+.go{background:#9A6A6A}.stay{background:#6C7A5F}.split{background:#5C739E}
+.note{font-size:12.5px;line-height:1.55;margin:10px 0 0;color:#403b36;max-width:78ch}
+.sw{display:inline-block;width:74px;height:30px;border-radius:5px;vertical-align:middle;margin-right:10px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#6A655F}
+.stage{background:#F0EBE0;padding:16px 18px;border-radius:6px;display:inline-block}
+.two{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;margin-top:12px}
+.cap{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6A655F;margin:0 0 7px}
+.word{text-align:center}
+.cyr{font-size:21px;color:#1A1612;line-height:1.25}
+.ipa{font-size:15px;color:#4A4540;line-height:1.35}
+.gloss{font-size:12.5px;color:#7A8A6C;line-height:1.35;font-style:italic}
+.btn{display:inline-block;font-size:13px;padding:7px 15px;border-radius:6px;color:#fff;background:#7A8A6C}
+.toast{background:#FAF7F2;border:1px solid #A89BB5;border-radius:8px;padding:11px 14px;font-size:12.5px;max-width:260px}
+.none{border:1px dashed #d8d3cb;border-radius:6px;padding:12px 14px;font-size:12.5px;color:#8a857f;background:#FCFBF9}
+</style></head><body><div class="sheet">
+
+<h1>The four strays, and what each one actually paints</h1>
+<p class="sub">r1, 2026-09-13. Drawn for ruling 3 of the colour story, stage 2. Every use site is read out of <code>memo-neutral-audit_r1_2026-09-13.md</code> §5.1, §5.2 and §5.3. Two of the four paint nothing at all, one paints a single border, and one is not a stray.</p>
+
+<div class="plate">
+  <p class="ph"><span class="pn"><code>--light-sage</code></span><span class="tag go">it goes</span><span class="pv">#A8B5A0 &middot; declared <code>app.css:34</code></span></p>
+  <div class="none"><span class="sw" style="background:#A8B5A0"></span> <strong>No use anywhere.</strong> Not a stylesheet, not a component, not a test. Nothing reads it.</div>
+  <p class="note">Cost of deleting it: none. Nothing changes on any screen.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn"><code>--light-lavender</code></span><span class="tag go">it goes, with one companion edit</span><span class="pv">#C4BACF &middot; declared <code>app.css:170</code></span></p>
+  <div class="none"><span class="sw" style="background:#C4BACF"></span> <strong>Paints nothing.</strong> No reader in any stylesheet. Its only other appearance is a copy of its value in <code>contrast.ts:127</code>, which R20 (<code>contrast.test.ts:233</code>) holds equal to <code>app.css</code>.</div>
+  <p class="note">So it cannot simply be deleted: the copy and the assertion move in the same commit, or the gate fails. <strong>The alternative is worse:</strong> keeping a colour alive that paints nothing, purely so a test about it keeps passing.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn"><code>--deeper-sage</code></span><span class="tag split">not a stray. It is two roles wearing one name</span><span class="pv">#7A8A6C</span></p>
+  <div class="two">
+    <div><p class="cap">On the page, under every word</p>
+      <div class="stage"><div class="word">
+        <div class="cyr">&#1085;&#1086;&#1095;&#1100;</div>
+        <div class="ipa">not&#643;</div>
+        <div class="gloss">night</div>
+      </div></div>
+      <p class="note" style="max-width:30ch"><code>WordStack.svelte:275</code>. The gloss line under every word, on paper.</p>
+    </div>
+    <div><p class="cap">And in the drawer, as a hover</p>
+      <div class="stage"><span class="btn">Dictionary</span></div>
+      <p class="note" style="max-width:34ch">Hover fills at <code>InspectorPanel.svelte:1522</code> and <code>:2185</code>, the poem field's focus border at <code>IntakePanel.svelte:1060</code>, the version badge at <code>HeaderBar.svelte:149</code>, the install button's hover at <code>InstallPrompt.svelte:205</code>.</p>
+    </div>
+  </div>
+  <p class="note"><strong>The same value paints a printed page element and a pointer state.</strong> They are not the same idea and they do not want to move together: darken the hover one day and the gloss under every word on the paper darkens with it. This one does not go. It splits, and each half gets the name of its job.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn"><code>--muted-lavender</code></span><span class="tag go">it goes</span><span class="pv">#A89BB5 &middot; one use in the whole tree</span></p>
+  <div class="two">
+    <div><div class="toast"><strong>A new version is ready.</strong><br>Reload to update.</div>
+      <p class="note" style="max-width:32ch"><code>+page.svelte:5795</code>, the border of the update toast. Its only use.</p></div>
+    <div><p class="note" style="margin-top:0"><code>app.css:163</code> files this token under the pacifier's heading. <strong>It is not in the pacifier.</strong> It is the edge of a chrome notice that has nothing to do with the melody, the voice, or the score, so under the grammar it is not a lavender at all. The toast's border wants a neutral.</p></div>
+  </div>
+</div>
+
+</div></body></html>

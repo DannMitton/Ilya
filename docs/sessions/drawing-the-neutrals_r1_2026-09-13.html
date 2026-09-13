@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Drawing: the twelve neutrals, r1, 2026-09-13</title>
+<style>
+:root{--font-sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif}
+body{margin:0;background:#EDE9E2;font-family:var(--font-sans);color:#2B2622;padding:30px 24px 70px}
+.sheet{max-width:1000px;margin:0 auto}
+h1{font-size:21px;font-weight:600;margin:0 0 4px}
+.sub{font-size:13px;color:#4a453f;margin:0 0 18px;max-width:74ch;line-height:1.55}
+.plate{background:#fff;border-radius:10px;padding:16px 18px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.07)}
+.ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 4px}
+.pn{font-size:16px;font-weight:600}
+.pv{font-size:12px;color:#6A655F}
+.tag{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#fff;padding:2px 8px;border-radius:999px}
+.keep{background:#6C7A5F}.merge{background:#5C739E}.name{background:#8E7E9B}.look{background:#BC7E08}
+.note{font-size:12.5px;line-height:1.55;margin:10px 0 0;color:#403b36;max-width:76ch}
+.pair{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.col{flex:1;min-width:300px}
+.ct{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#6A655F;margin:0 0 7px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6A655F}
+
+.ladder{display:flex;flex-direction:column;gap:0;border-radius:8px;overflow:hidden;border:1px solid #eae5dd}
+.rung{display:flex;align-items:center;height:38px}
+.rsw{width:110px;height:100%}
+.rlb{flex:1;padding-left:14px;font-size:12.5px}
+.rlb b{font-weight:600}
+.rmo{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6A655F;padding-right:14px;text-align:right;min-width:200px}
+.brace{font-size:11px;color:#A32D2D;font-weight:600}
+
+.stage{background:#F0EBE0;padding:18px 16px;border-radius:6px}
+.ghost{display:inline-block;font-size:13px;padding:7px 16px;border-radius:999px;background:transparent}
+.loupe{position:relative;background:#F5F1E8;padding:14px 16px;border-radius:6px;width:200px}
+.switchrow{display:flex;align-items:center;gap:10px;font-size:13px}
+.track{width:44px;height:24px;border-radius:999px;position:relative}
+.thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:999px;background:#fff}
+.stave{position:relative;height:64px;margin:14px 0 2px}
+.sline{position:absolute;left:0;right:0;height:1.4px}
+.nh{position:absolute;width:15px;height:11px;border-radius:50%;transform:rotate(-20deg)}
+.stem{position:absolute;width:1.6px;height:32px}
+.bar{position:absolute;width:1.4px;height:100%;top:0}
+</style></head><body><div class="sheet">
+
+<h1>The twelve neutrals, and which of them are two things</h1>
+<p class="sub">r1, 2026-09-13. Drawn for ruling 2 of the colour story, stage 2. Every value and every use site below is read out of <code>memo-neutral-audit_r1_2026-09-13.md</code> §6.1, §6.2 and §6.3. Nothing here is inferred from the tree without that memo behind it.</p>
+
+<div class="plate">
+  <p class="ph"><span class="pn">All twelve, as one ladder</span><span class="pv">lightest at the top, OKLCH L on the right</span></p>
+  <div class="ladder">
+    <div class="rung"><div class="rsw" style="background:#FAF8F5"></div><div class="rlb"><b>--drawer-bg</b> the drawer&rsquo;s cards</div><div class="rmo">#FAF8F5 &middot; L 0.980</div></div>
+    <div class="rung"><div class="rsw" style="background:#F5F1E8"></div><div class="rlb"><b>--paper-light</b> paper that is not the page <span class="brace">&larr; 0.018 from the page</span></div><div class="rmo">#F5F1E8 &middot; L 0.959</div></div>
+    <div class="rung"><div class="rsw" style="background:#F0EBE0"></div><div class="rlb"><b>--paper-cream</b> the page</div><div class="rmo">#F0EBE0 &middot; L 0.941</div></div>
+    <div class="rung"><div class="rsw" style="background:#D8D4C8"></div><div class="rlb"><b>--desk-surface</b> the ground under the desk</div><div class="rmo">#D8D4C8 &middot; L 0.870</div></div>
+    <div class="rung"><div class="rsw" style="background:#D6D3D1"></div><div class="rlb"><b>--stone-300</b> borders, hairlines, a switch track <span class="brace">&larr; 0.001 from the ground</span></div><div class="rmo">#D6D3D1 &middot; L 0.869</div></div>
+    <div class="rung"><div class="rsw" style="background:#78716C"></div><div class="rlb"><b>--stone-500</b> ghost labels, the sigla ring</div><div class="rmo">#78716C &middot; L 0.553</div></div>
+    <div class="rung"><div class="rsw" style="background:#6A655F"></div><div class="rlb"><b>--ink-tertiary</b> captions, placeholders</div><div class="rmo">#6A655F &middot; L 0.509</div></div>
+    <div class="rung"><div class="rsw" style="background:#57534E"></div><div class="rlb"><b>#57534E</b> never declared, seven fallbacks only</div><div class="rmo">#57534E &middot; L 0.444</div></div>
+    <div class="rung"><div class="rsw" style="background:#4A4540"></div><div class="rlb"><b>--ink-secondary</b> the IPA line</div><div class="rmo">#4A4540 &middot; L 0.394</div></div>
+    <div class="rung"><div class="rsw" style="background:#44403C"></div><div class="rlb"><b>--stone-700</b> the loupe frame, two hover states <span class="brace">&larr; 0.020 from the IPA</span></div><div class="rmo">#44403C &middot; L 0.374</div></div>
+    <div class="rung"><div class="rsw" style="background:#3A352F"></div><div class="rlb"><b>#3A352F</b> the stave&rsquo;s furniture, 37 uses, no token</div><div class="rmo">#3A352F &middot; L 0.332</div></div>
+    <div class="rung"><div class="rsw" style="background:#1A1612"></div><div class="rlb"><b>--ink-primary</b> the Cyrillic, and what is sung</div><div class="rmo">#1A1612 &middot; L 0.203</div></div>
+  </div>
+  <p class="note">Four of the twelve sit inside one just-noticeable difference of a neighbour. Those four are the whole ruling; the other eight are not in question.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn">1. <code>--stone-700</code> and <code>--ink-secondary</code></span><span class="tag merge">merge</span><span class="pv">0.020 apart in L, same hue to the degree</span></p>
+  <div class="pair">
+    <div class="col"><p class="ct">Today: the loupe&rsquo;s frame is <code>--stone-700</code></p>
+      <div class="stage"><div class="loupe" style="border:1.4px solid #44403C">
+        <p style="margin:0;font-size:12px;color:#6A655F">measure 4</p>
+        <p style="margin:4px 0 0;font-size:15px;color:#4A4540">&#1085;&#1086;&#1095;&#1100; &middot; not&#643;</p></div></div>
+    </div>
+    <div class="col"><p class="ct">After: the frame is <code>--ink-secondary</code></p>
+      <div class="stage"><div class="loupe" style="border:1.4px solid #4A4540">
+        <p style="margin:0;font-size:12px;color:#6A655F">measure 4</p>
+        <p style="margin:4px 0 0;font-size:15px;color:#4A4540">&#1085;&#1086;&#1095;&#1100; &middot; not&#643;</p></div></div>
+    </div>
+  </div>
+  <p class="note">The loupe frame is the hardest of the three uses: it is the loupe&rsquo;s only drawn edge, and the two fills it separates are themselves only 0.018 apart. The other two uses are a hovered provenance icon and the &#1105; sigla at 9 px and 25 % opacity, where 0.020 disappears. <strong>No gate moves:</strong> <code>--ink-secondary</code> keeps its value, so <code>contrast.ts</code> is untouched.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn">2. <code>#3A352F</code>, the stave&rsquo;s furniture</span><span class="tag name">name it, do not merge it</span><span class="pv">37 uses, no token, 0.129 from --ink-primary</span></p>
+  <div class="stage">
+    <div class="stave">
+      <div class="sline" style="top:8px;background:#3A352F"></div><div class="sline" style="top:20px;background:#3A352F"></div>
+      <div class="sline" style="top:32px;background:#3A352F"></div><div class="sline" style="top:44px;background:#3A352F"></div>
+      <div class="sline" style="top:56px;background:#3A352F"></div>
+      <div class="bar" style="left:300px;background:#3A352F;top:8px;height:48px"></div>
+      <div class="nh" style="left:70px;top:38px;background:#1A1612"></div><div class="stem" style="left:83.194px;top:2.50px;height:39.855px;background:#1A1612"></div>
+      <div class="nh" style="left:150px;top:32px;background:#1A1612"></div><div class="stem" style="left:163.194px;top:-3.50px;height:39.855px;background:#1A1612"></div>
+      <div class="nh" style="left:230px;top:44px;background:#1A1612"></div><div class="stem" style="left:243.194px;top:8.50px;height:39.855px;background:#1A1612"></div>
+    </div>
+    <p style="margin:10px 0 0;font-size:12.5px;color:#403b36">The five lines and the barlines are <code>#3A352F</code>. The noteheads and stems are <code>--ink-primary</code>.</p>
+  </div>
+  <p class="note">This is not a duplicate to be swept up. The census found the split held across all 29 renderer sites: <strong><code>#3A352F</code> is the furniture a singer reads through</strong> (lines, clefs, key signatures, barlines, rests, ledger lines, multi-bar numerals), <strong>and <code>--ink-primary</code> is what a singer sings</strong> (noteheads, stems, beams, accidentals, ties, lyrics). It is the most consistent rule in the neutrals and it has no name, which is why it looks like a stray.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn">3. <code>#57534E</code>, the border that outweighs its own label</span><span class="tag merge">delete it</span><span class="pv">seven sites, all fallbacks to an undeclared token</span></p>
+  <div class="pair">
+    <div class="col"><p class="ct">Today: border <code>#57534E</code>, label <code>--stone-500</code></p>
+      <div class="stage"><span class="ghost" style="border:1px solid #57534E;color:#78716C">Start over</span>
+        <span class="ghost" style="border:1px solid #57534E;color:#78716C;margin-left:8px">Import</span></div>
+    </div>
+    <div class="col"><p class="ct">After: both <code>--stone-500</code></p>
+      <div class="stage"><span class="ghost" style="border:1px solid #78716C;color:#78716C">Start over</span>
+        <span class="ghost" style="border:1px solid #78716C;color:#78716C;margin-left:8px">Import</span></div>
+    </div>
+  </div>
+  <p class="note">The drawer&rsquo;s ghost buttons draw their label in <code>--stone-500</code> and their outline through <code>--stone-600</code>, which is <strong>declared nowhere</strong>, so all seven sites fall through to the literal <code>#57534E</code>. The outline is 0.109 darker than the words inside it. <strong>This is the one thing in the whole neutral question a singer could notice</strong>, and the fix makes the button quieter, not louder.</p>
+</div>
+
+<div class="plate">
+  <p class="ph"><span class="pn">4. <code>--stone-300</code> and <code>--desk-surface</code></span><span class="tag keep">keep both</span><span class="pv">0.001 apart in L, and two different jobs</span></p>
+  <div class="pair">
+    <div class="col"><p class="ct"><code>--stone-300</code>: 26 hairlines, and this</p>
+      <div class="stage"><div class="switchrow"><div class="track" style="background:#D6D3D1"><div class="thumb"></div></div><span>Bar numbers</span></div>
+      <p style="margin:12px 0 0;font-size:12px;color:#6A655F">An off switch. The track is the only thing that says off.</p></div>
+    </div>
+    <div class="col"><p class="ct"><code>--desk-surface</code>: the ground, under everything</p>
+      <div class="stage" style="background:#D8D4C8;padding:0;overflow:hidden">
+        <div style="background:#F0EBE0;margin:14px 22px;padding:14px;border-radius:4px;font-size:12.5px;color:#403b36">A page, floating on the desk.</div></div>
+    </div>
+  </div>
+  <p class="note">They are one thousandth of a lightness step apart and they will look identical side by side. They are still two ideas: one is the chrome a control is drawn from, the other is the ground the whole app sits on. Merging them means that the day you warm the desk, every hairline and every off switch warms with it. <strong>Recommended: leave them as two, and let them happen to be near.</strong></p>
+</div>
+
+<div class="plate" style="background:#FFFCF5">
+  <p class="ph"><span class="pn">Not a consolidation, and flagged rather than ruled</span><span class="tag look">to look at later</span></p>
+  <p class="note" style="margin-top:2px"><code>--paper-light</code> is meant to be the one visual difference between the reading aid and the page. The census measured that difference at <strong>0.018, which is under one just-noticeable difference</strong>: the fill that is supposed to separate them does not separate them. That is a design question about what the reading aid should look like, not a question about how many neutrals there are, so it belongs with the drawer work rather than inside this ruling.</p>
+</div>
+
+</div></body></html>
