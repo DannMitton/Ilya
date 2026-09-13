@@ -200,17 +200,17 @@
 					y1={MID + i * L}
 					x2={W - 10}
 					y2={MID + i * L}
-					stroke="#3a352f"
+					stroke="var(--ink-stave)"
 					stroke-width={staffLineT}
 				/>
 			{/each}
 			{#if prepared && font}
 				{#if clef === 'bass'}
-					<text x="16" y={MID - L} font-size="{glyphSize}px" font-family={font.family} fill="#3a352f"
+					<text x="16" y={MID - L} font-size="{glyphSize}px" font-family={font.family} fill="var(--ink-stave)"
 						>{prepared.glyph('fClef').char}</text
 					>
 				{:else}
-					<text x="16" y={MID + L} font-size="{glyphSize}px" font-family={font.family} fill="#3a352f"
+					<text x="16" y={MID + L} font-size="{glyphSize}px" font-family={font.family} fill="var(--ink-stave)"
 						>{prepared.glyph('gClef').char}</text
 					>
 				{/if}
@@ -219,14 +219,14 @@
 				<path
 					d="M22 {MID - L - 5} q10 -2 10 8 q0 12 -14 16"
 					fill="none"
-					stroke="#3a352f"
+					stroke="var(--ink-stave)"
 					stroke-width="2.2"
 				/>
-				<circle cx="36" cy={MID - L - 3} r="1.7" fill="#3a352f" />
-				<circle cx="36" cy={MID - L + 3} r="1.7" fill="#3a352f" />
+				<circle cx="36" cy={MID - L - 3} r="1.7" fill="var(--ink-stave)" />
+				<circle cx="36" cy={MID - L + 3} r="1.7" fill="var(--ink-stave)" />
 			{:else}
-				<line x1="26" y1={MID - 2 * L - 8} x2="26" y2={MID + L + 10} stroke="#3a352f" stroke-width="2.2" />
-				<circle cx="26" cy={MID + L} r="4" fill="none" stroke="#3a352f" stroke-width="1.6" />
+				<line x1="26" y1={MID - 2 * L - 8} x2="26" y2={MID + L + 10} stroke="var(--ink-stave)" stroke-width="2.2" />
+				<circle cx="26" cy={MID + L} r="4" fill="none" stroke="var(--ink-stave)" stroke-width="1.6" />
 			{/if}
 
 			{#if value}
@@ -236,7 +236,7 @@
 						y1={MID - k * HALF}
 						x2={NOTE_X + ledgerHalf}
 						y2={MID - k * HALF}
-						stroke="#3a352f"
+						stroke="var(--ink-stave)"
 						stroke-width={ledgerT}
 					/>
 				{/each}

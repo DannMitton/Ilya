@@ -928,7 +928,7 @@
 		touch-action: none;
 		box-sizing: border-box;
 		padding: 10px 10px 12px;
-		border: 1.4px solid var(--stone-700, #44403c);
+		border: 1.4px solid var(--ink-secondary, #4a4540);
 		border-radius: 10px;
 		/* Hung off its own centre; see the anchor note on the element. */
 		transform: translateY(-50%);

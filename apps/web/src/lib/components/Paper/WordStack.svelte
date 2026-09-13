@@ -272,7 +272,7 @@
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
 		font-style: italic;
-		color: var(--deeper-sage);
+		color: var(--sage-gloss);
 		white-space: nowrap;
 		min-height: 1.04rem;
 	}
@@ -320,7 +320,7 @@
 
 	.word-stack:hover .icon-area {
 		opacity: 1;
-		color: #44403c;
+		color: var(--ink-secondary);
 	}
 
 	.provenance-icon {

@@ -1057,7 +1057,7 @@
 	   into `.drawer-content textarea`. Nothing competes with it here, so the
 	   `!important` is gone with the move. */
 	.text-input:focus {
-		border-color: var(--deeper-sage, #7A8A6C);
+		border-color: var(--sage-deep, #7A8A6C);
 	}
 
 	/* RULED by Dann 2026-08-20: "just make it consistent with its twin."

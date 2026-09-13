@@ -24,6 +24,7 @@ next session the same hour it cost the last one.
 | the ship script refuses to run | `refuses on untracked files` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
+| every header reads the same colour in a browser check | `A HIDDEN PANE FREEZES ITS TRANSITIONS` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
@@ -2811,3 +2812,28 @@ what it touches, and the two are not the same thing here.
   and tell Dann before he meets it as a failed commit.
 - **Fold `rm -f .git/index.lock` into the front of the next command you give
   him** rather than sending him a separate clean-up step.
+
+---
+
+## A HIDDEN PANE FREEZES ITS TRANSITIONS, AND THE CHECK READS THE OLD COLOUR
+
+**Found by Code, 2026-09-13, during the stage 3b walk, and it caught itself.**
+
+Walking the five documents after a token rename, every header read **sage**,
+including the ones that should have been rose, cobalt and lavender. That looks
+exactly like a broken variable falling back to a default.
+
+**It was the instrument.** The panes carry a `0.3s background-color` transition.
+**While a pane is hidden, its transitions are frozen at `currentTime` 0**, so a
+computed-style read returns the colour the element is transitioning FROM, not the
+colour it will settle on. Every reading was of a starting value.
+
+**THE RULE. After making a pane visible, let its transitions finish before you
+read any computed colour**, and say in the memo that you did. Do not change code
+on a colour reading taken from a pane that was just revealed.
+
+**Why this one matters more than most:** it produces a WRONG READING THAT LOOKS
+LIKE A REAL DEFECT, in the direction of "the rename broke it", at exactly the
+moment a rename has just landed. The desk's tether 11 is the defence: check what
+could make your instrument lie and rule it out before reporting the reading. Code
+did that unprompted.

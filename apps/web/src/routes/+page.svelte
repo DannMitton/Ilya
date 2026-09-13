@@ -4964,7 +4964,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   matching the drawer's register rather than inventing a look. The
 	   ::backdrop is the browser's own, dimmed a little. */
 	.replace-dialog {
-		/* `app.css:88-94` resets margin to 0 on every element, which overrides
+		/* The reset in `app.css` sets margin to 0 on every element, which overrides
 		   the user-agent's `dialog { margin: auto }` and drops a modal at the
 		   viewport's top-left corner. Measured on the deploy: (0, 0), 512 wide,
 		   `:modal` true. Restoring the centring the browser already intended. */
@@ -5341,33 +5341,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   the same four. See the element's own comment. */
 
 	.app-content.tab-transcription {
-		--desk-fill: var(--surround-transcription, #D1D7CB);
+		--desk-fill: var(--sage-desk, #D1D7CB);
 	}
 
 	.app-content.tab-learn {
-		--desk-fill: var(--surround-learn, #DBCACA);
+		--desk-fill: var(--rose-desk, #DBCACA);
 	}
 
 	.app-content.tab-guide {
-		--desk-fill: var(--surround-guide, #BEC7D8);
+		--desk-fill: var(--cobalt-desk, #BEC7D8);
 	}
 
 	/* N.127: Insights' desk, rose, ruled by Dann 2026-09-11 as the document's
-	   governing colour. Its own token, at the value Learn's surround carries. */
+	   governing colour. It reads rose's own desk token, as Learn does. */
 	.app-content.tab-insights {
-		--desk-fill: var(--surround-insights, #DBCACA);
+		--desk-fill: var(--rose-desk, #DBCACA);
 	}
 
 	.app-content.tab-shane {
 		/* One hue per working surface. Ruled by Dann 2026-08-19 during the
 		   walk, superseding "one desk, many papers" (2026-07-12) and the S1
 		   sage desk that carried it: the Marked score is a distinct working
-		   surface, so it takes its own desk. --surround-marked is
+		   surface, so it takes its own desk. --lavender-desk is
 		   --lavender tinted 60 percent toward white, parallel to the
 		   other three. It is not --surround-shane, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
-		--desk-fill: var(--surround-marked, #D2CBD7);
+		--desk-fill: var(--lavender-desk, #D2CBD7);
 	}
 
 	/* ── Floating Paper: the shadow ────────────────────────── */
@@ -5792,7 +5792,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		gap: 0.75rem;
 		padding: 0.6rem 0.9rem 0.6rem 1.1rem;
 		background: var(--paper, #faf7f2);
-		border: 2px solid var(--muted-lavender, #A89BB5);
+		border: 2px solid var(--stone-300, #d6d3d1);
 		border-radius: 999px;
 		box-shadow: 0 4px 16px rgba(40, 38, 35, 0.18);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);

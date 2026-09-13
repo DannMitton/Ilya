@@ -202,7 +202,7 @@
     transition: background 0.15s;
   }
 
-  .install-btn-primary:hover { background: var(--deeper-sage, #7A8A6C); }
+  .install-btn-primary:hover { background: var(--sage-deep, #7A8A6C); }
 
   /* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
      calibration ritual's own two buttons (`CalibrationWizard.svelte`'s

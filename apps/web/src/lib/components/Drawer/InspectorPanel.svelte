@@ -1519,7 +1519,7 @@
 	}
 
 	.dict-button:hover {
-		background: var(--deeper-sage, #7A8A6C);
+		background: var(--sage-deep, #7A8A6C);
 	}
 
 	.dict-button:focus-visible {
@@ -1864,7 +1864,7 @@
 		font-size: 9px;
 		font-weight: 700;
 		line-height: 1;
-		color: var(--stone-700, #44403c);
+		color: var(--ink-secondary, #4a4540);
 	}
 
 	/* ── Yo provenance chooser (inside organism) ─────────────── */
@@ -2182,8 +2182,8 @@
 	}
 
 	.stress-circle.is-stressed:hover {
-		background: var(--deeper-sage, #7A8A6C);
-		border-color: var(--deeper-sage, #7A8A6C);
+		background: var(--sage-deep, #7A8A6C);
+		border-color: var(--sage-deep, #7A8A6C);
 	}
 
 	.stress-circle.is-assigning {

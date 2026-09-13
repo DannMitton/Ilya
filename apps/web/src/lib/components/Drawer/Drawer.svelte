@@ -1176,7 +1176,7 @@
 	}
 
 	.group-piece .group-band {
-		background: var(--lang-chip-guide);
+		background: var(--cobalt-chip);
 	}
 
 	/* INPUT TAKES TEXT'S TOKEN, N.108-5, and that is Dann's ruling rather
@@ -1185,11 +1185,11 @@
 	   and its rule are gone with the band, N.115 increment 2; Text is a fold
 	   inside this band now. */
 	.group-input .group-band {
-		background: var(--lang-chip-transcription);
+		background: var(--sage-chip);
 	}
 
 	.group-score .group-band {
-		background: var(--lang-chip-marked);
+		background: var(--lavender-chip);
 	}
 
 	/* THE SCORE MARKUP GROUP'S FOCUS RING IS LAVENDER, not the global sage.
@@ -1487,7 +1487,7 @@
 
 	   THE LAVENDER IS NOT LOST EITHER. It was the voice's rule under the S0
 	   slate of 2026-08-19; the voice is inside the Score markup group now, and
-	   that group's band is `--lang-chip-marked`, the same hue one step down.
+	   that group's band is `--lavender-chip`, the same hue one step down.
 	   The ruling survives in a stronger form, which is the argument Design
 	   made for the takeover's own rule and it holds here for the same reason. */
 
@@ -1539,8 +1539,8 @@
 	   until now. DANN'S RULING OF 2026-08-23 IS NOT REVERSED, IT IS CARRIED:
 	   he ruled that the takeover's rule is lavender, matching
 	   `.wizard-phase`'s border-top, because the takeover is the calibration
-	   ritual. `--lang-chip-marked` IS `--lavender` one step down
-	   (`app.css:124`), so the hue survives in a stronger form, which is the
+	   ritual. `--lavender-chip` IS `--lavender` one step down
+	   (its declaration in `app.css`), so the hue survives in a stronger form, which is the
 	   argument Design made for it and the same one the anchors' rules made
 	   when they went. */
 	.takeover-band {
@@ -1552,7 +1552,7 @@
 		height: 40px;
 		margin: 0;
 		padding: 0 18px;
-		background: var(--lang-chip-marked);
+		background: var(--lavender-chip);
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;

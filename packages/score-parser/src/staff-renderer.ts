@@ -72,7 +72,7 @@ import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
  * `PageFooter` imports it for the legend circle, so the mark and its legend
  * entry cannot drift into being two different glyphs.
  *
- * `--lavender`, `app.css:69`. Fit's own accent, and a colour the
+ * `--lavender` in `app.css`. Fit's own accent, and a colour the
  * underlay's ink and the acoustic marks both leave alone.
  */
 export const WITHHELD_SIGLA = {
@@ -1663,7 +1663,7 @@ export function renderAnalyzedStaff(
   const clefX = Math.max(0, (ksCount > 0 ? ksStart - sp(1) : ksEnd) - clefW);
   const staveLeft = round2(Math.max(0, clefX - sp(1)));
 
-  // Staff lines.
+  // Staff lines. Every #3a352f in this module is the stave's ink, `--ink-stave` in app.css. Baked as hex because this module is pure and DOM-free; keep in sync with the app token.
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;

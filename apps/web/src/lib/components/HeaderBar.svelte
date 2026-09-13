@@ -86,7 +86,7 @@
 	   walk: every distinct working surface carries its own hue. This amends
 	   the app-bar half of the 2026-08-18 ruling above, which had folded the
 	   Marked score into Studio's sage, and it amends S0 ruling 3. The bar and
-	   the desk move together; the desk is --surround-marked in app.css. The
+	   the desk move together; the desk is --lavender-desk in app.css. The
 	   three sibling rules below (the sigil version, the inactive language
 	   option, and its hover underline) already key to --lavender and
 	   were never changed. */
@@ -146,7 +146,7 @@
 	}
 
 	.tab-transcription .sigil-version {
-		background: var(--deeper-sage, #7A8A6C);
+		background: var(--sage-deep, #7A8A6C);
 	}
 
 	.tab-learn .sigil-version {
@@ -208,24 +208,24 @@
 	   app.css. */
 
 	.tab-transcription .lang-pill {
-		background: var(--lang-chip-transcription, #6C7A5F);
+		background: var(--sage-chip, #6C7A5F);
 	}
 
 	.tab-learn .lang-pill {
-		background: var(--lang-chip-learn, #9A6A6A);
+		background: var(--rose-chip, #9A6A6A);
 	}
 
 	.tab-guide .lang-pill {
-		background: var(--lang-chip-guide, #5C739E);
+		background: var(--cobalt-chip, #5C739E);
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 	}
 
 	.tab-shane .lang-pill {
-		background: var(--lang-chip-marked, #806E8E);
+		background: var(--lavender-chip, #806E8E);
 	}
 
 	.tab-insights .lang-pill {
-		background: var(--lang-chip-learn, #9A6A6A);
+		background: var(--rose-chip, #9A6A6A);
 	}
 
 	/* Hover is NOT ruled by the brief and this is the smallest thing that

@@ -1702,7 +1702,7 @@
 
 	   THE FILL IS THE SAME TOKEN. THE HOVER IS NOT THE SAME MECHANISM, and
 	   that is named rather than smuggled: sage has a darker partner,
-	   `--deeper-sage`, and lavender has none. The three lavender tokens in
+	   `--sage-deep`, and lavender has none. The three lavender tokens in
 	   `app.css` are all LIGHTER than `--lavender`. Rather than write a
 	   new colour into a ruled palette, this borrows the anchor's own hover,
 	   `opacity: 0.85`, which is also `RootPanel`'s `.action-btn:hover`.

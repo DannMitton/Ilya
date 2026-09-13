@@ -44,7 +44,83 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 > ### THE ONE THING: THE COLOUR STORY, STAGE 3b. FAMILY AND ROLE.
 >
-> **STAGE 3b HAS NO BRIEF YET.** The plan's definition
+> **STAGE 3b IS DONE AND WALKED BY CODE, 2026-09-13. NOT COMMITTED WHEN THIS WAS
+> WRITTEN, NOT SHIPPED, NOT WALKED BY DANN.** 13 files. **No hex value moved
+> except the two the rulings ordered:** the `--stone-700` merge repaints three
+> sites `#44403C` to `#4A4540`, one just-noticeable difference, and the update
+> toast's border goes from lavender to `--stone-300`. **All five gates at
+> baseline, twice, against Code's OWN prediction both times**, the desk's having
+> been excluded from the brief after 3a.
+>
+> **What landed:** desks and chips took family-and-role names (`--sage-desk`,
+> `--lavender-chip`, and so on); `--surround-insights` is deleted with Insights
+> reading `--rose-desk`; `--deeper-sage` is split into `--sage-gloss` (the gloss
+> under every word, `WordStack.svelte:275`) and `--sage-deep` (the other eight);
+> `--stone-700` merged into `--ink-secondary`; `--light-sage`,
+> `--light-lavender` and `--muted-lavender` deleted with their `contrast.ts`
+> entries. **`contrast.test.ts` needed no edit: its check loops over whatever the
+> palette holds**, which the desk had expected to need changing.
+>
+> **`#3A352F` SPLIT 9 / 34, exactly as the trap predicted.** The note picker's 9
+> CSS uses take `--ink-stave`; the renderer's 29 and its tests' 5 stay literals,
+> because the renderer builds SVG strings with no stylesheet, and it gains one
+> "keep in sync" note of the kind `#8E7E9B` already carried.
+>
+> **THREE THINGS ARE UNCONFIRMED ON SCREEN, named by Code, and they belong to the
+> STAGE 4 WALK rather than to a new item.** None appeared for the sample line: the
+> `--stone-700` merge (the loupe's frame, the ё badge, the hovered icons over a
+> word), the note picker (reaching it means pressing Start, which creates a voice
+> profile, so Code did not), and the update toast's new border (it appears only
+> when a new version is waiting). **Check all three when Dann walks stage 4.**
+>
+> **Code's walk went further than asked:** it typed a line of Pushkin, pressed
+> Transcribe, and confirmed all four gloss lines painted `#7A8A6C` through
+> `--sage-gloss`, **which carries no fallback hex that could hide a broken name.**
+> That sample line may still sit in the preview browser's own storage, which is
+> separate from Dann's Chrome.
+>
+> **RULED BY DANN 2026-09-13, MID-3b. THE DIVISION IS THE PAPER VERSUS
+> EVERYTHING ON THE SCREEN.** His words: *"I agree: the real division is the paper
+> versus everything on the screen."*
+>
+> **What it settles.** Ruling 3 split `--deeper-sage` so that a change to a hover
+> could never reach the gloss under every word on the paper. The desk briefed that
+> split as **page versus pointer**, which was the desk's framing and was wrong: it
+> left `HeaderBar.svelte:149`, the resting fill of the version badge on
+> Transcription, with nowhere to go, and Code correctly stopped rather than guess.
+> **The line is the paper against the interface.** So:
+> **`--sage-gloss`** takes the one paper use (`WordStack.svelte:275`), and
+> **`--sage-deep`** takes the other eight, the badge among them. Both hold
+> `#7A8A6C` on the day they land, so nothing changes on any screen, and
+> `--sage-deep` keeps the meaning `--deeper-sage` carried.
+>
+> **THE DESK'S COUNTS WERE WRONG IN THREE PLACES AND CODE'S ARE RIGHT:** `--sage`
+> is 94 not 92, `--surround-shane` is 6 and 22 not 5 and 10, `#3A352F` is 43 not
+> 42. **Cause: the desk counted matching LINES with `grep -n | wc -l`, so a line
+> holding a token twice counted once.** `ENVIRONMENT.md` §A GREP COUNT IS NOT A
+> USE COUNT already warned about this.
+>
+> **STAGE 3b IS BRIEFED AND WITH CODE, 2026-09-13:**
+> `docs/sessions/paste-colour-3b_r1_2026-09-13.md`, 193 lines, UNTRACKED.
+> **Three desk decisions inside it, all DESK DEFAULT and all reversible by Dann:**
+> (1) **the bands do NOT take a `-band` suffix**, departing from the plan, because
+> that is 169 further sites and 77 of them were rewritten by 3a this morning; the
+> rule "the bare family name IS the band" goes in `PRODUCT.md` at stage 6.
+> (2) **`--surround-insights` is folded into `--rose-desk` now** rather than at
+> stage 4, being a pure duplicate of `--surround-learn`'s value.
+> (3) **`--surround-shane` is left untouched**, 5 token sites and 10 bare ones in
+> `contrast.ts`, because the pacifier recast moves it to rose later and renaming
+> it now would name it for a family it is about to leave.
+>
+> **THE TRAP THE MEASUREMENT FOUND, and ruling 2 did not anticipate it.** Ruling 2
+> says `#3A352F` gets a token. **The renderer cannot read a CSS token:**
+> `staff-renderer.ts:615-616` records that it is pure and DOM-free, which is why
+> it already bakes `#8E7E9B` as a hex under a "keep in sync with the app token"
+> comment. So of `#3A352F`'s 42 sites, the CSS consumers take `--ink-stave` and
+> the renderer's stay literals under that same existing pattern. The brief carries
+> this; without it Code would have met it mid-pass with no ruling to follow.
+>
+> **The plan's own definition of 3b, for the record:** The plan's definition
 > (`docs/sessions/plan-colour-story_r1_2026-09-13.md`): `--surround-marked`
 > becomes `--lavender-desk`, `--lang-chip-marked` becomes `--lavender-chip`, and
 > so on for all five families across desk, band, chip and ink; destination-named
