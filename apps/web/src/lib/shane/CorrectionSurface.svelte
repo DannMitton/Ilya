@@ -822,7 +822,7 @@
 	   at the top, lavender music stations at the foot. The token is the one
 	   the voice anchor and the loupe's insertion bar already carry. */
 	.surface.panel {
-		border-top: 2px solid var(--deeper-lavender, #8e7e9b);
+		border-top: 2px solid var(--lavender, #8e7e9b);
 		padding-top: 6px;
 	}
 
@@ -957,7 +957,7 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		/* Lavender: a music station. See `.surface.panel`. */
-		color: var(--deeper-lavender, #8e7e9b);
+		color: var(--lavender, #8e7e9b);
 	}
 
 	/* THE CONTEXTUAL LINE. Its row is reserved whether it speaks or not, so the
@@ -980,7 +980,7 @@
 		text-transform: uppercase;
 		/* Lavender with the header it sits under. `.station-count` inherits it
 		   from here, which is right: the counter belongs to the label. */
-		color: var(--deeper-lavender, #8e7e9b);
+		color: var(--lavender, #8e7e9b);
 	}
 
 	/* The counter sits after the label in the same line, quieter than it, so the
@@ -1045,8 +1045,8 @@
 	   keyboard is on — so they take the section's own hue rather than the
 	   score document's. */
 	.cell.engaged {
-		border-color: var(--deeper-lavender, #8e7e9b);
-		color: var(--deeper-lavender, #8e7e9b);
+		border-color: var(--lavender, #8e7e9b);
+		color: var(--lavender, #8e7e9b);
 		font-weight: 600;
 	}
 
@@ -1056,7 +1056,7 @@
 	   MEASURED on both, before and after, in §21 of the memo. */
 	.cell:focus-visible,
 	.mark:focus-visible {
-		outline: 2px solid var(--deeper-lavender, #8e7e9b);
+		outline: 2px solid var(--lavender, #8e7e9b);
 		outline-offset: 2px;
 	}
 
@@ -1191,7 +1191,7 @@
 		   parent, so this is pinned rather than left to cascade — and pinned to
 		   sage it would have been the one thing left behind when the label
 		   above turned lavender, splitting one header line across two hues. */
-		color: var(--deeper-lavender, #8e7e9b);
+		color: var(--lavender, #8e7e9b);
 		font-size: 1rem;
 		line-height: 1;
 		cursor: pointer;

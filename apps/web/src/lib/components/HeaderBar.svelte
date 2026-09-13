@@ -75,11 +75,11 @@
 	}
 
 	.header-bar.tab-learn {
-		background: var(--dusty-rose, #A67B7B);
+		background: var(--rose, #A67B7B);
 	}
 
 	.header-bar.tab-guide {
-		background: var(--quiet-cobalt, #5C739E);
+		background: var(--cobalt, #5C739E);
 	}
 
 	/* FOUR destinations, four hues. Ruled by Dann 2026-08-19 during the
@@ -88,10 +88,10 @@
 	   Marked score into Studio's sage, and it amends S0 ruling 3. The bar and
 	   the desk move together; the desk is --surround-marked in app.css. The
 	   three sibling rules below (the sigil version, the inactive language
-	   option, and its hover underline) already key to --deeper-lavender and
+	   option, and its hover underline) already key to --lavender and
 	   were never changed. */
 	.header-bar.tab-shane {
-		background: var(--deeper-lavender, #8E7E9B);
+		background: var(--lavender, #8E7E9B);
 	}
 
 	/* N.127 increment 1. Insights' governing colour is dusty rose, ruled by
@@ -101,7 +101,7 @@
 	   ruling of 2026-08-19 named four surfaces, and whether Insights and Learn
 	   may share a bar is Dann's to wave off. */
 	.header-bar.tab-insights {
-		background: var(--dusty-rose, #A67B7B);
+		background: var(--rose, #A67B7B);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
@@ -157,7 +157,7 @@
 		background: #4D6387;
 	}
 
-	/* Deeper shade of --deeper-lavender (#8E7E9B), computed the same way the
+	/* Deeper shade of --lavender (#8E7E9B), computed the same way the
 	   Learn and Guide deepened badge shades were hand-picked, not a token
 	   that exists yet. If Kimi or Dann want a precise locked value, this is
 	   the one to revisit. */

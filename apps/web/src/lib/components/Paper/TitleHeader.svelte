@@ -11,20 +11,20 @@
 		onheightchange?: (height: number) => void;
 		/**
 		 * Colour of the nestled "2026a" version badge. Transcription pages
-		 * keep the default sage; Fit/Shane surfaces pass deeper-lavender to
+		 * keep the default sage; Fit/Shane surfaces pass lavender to
 		 * harmonize the mark with their palette (Dann's ruling, 2026-07-12).
 		 */
 		versionAccent?: string;
 		/**
 		 * Colour of the "[Ilya]" wordmark itself (brackets and name).
 		 * Transcription keeps the default sage; Fit/Shane surfaces pass
-		 * deeper-lavender so the whole mark harmonizes, not just the version
+		 * lavender so the whole mark harmonizes, not just the version
 		 * badge (Dann's ruling, 2026-07-13).
 		 */
 		markAccent?: string;
 		/**
 		 * Colour of the header rule beneath the metadata. Transcription keeps
-		 * the default sage; Fit/Shane surfaces pass deeper-lavender so the header
+		 * the default sage; Fit/Shane surfaces pass lavender so the header
 		 * harmonizes with the footer hairline (Dann's ruling, 2026-07-16).
 		 */
 		ruleAccent?: string;

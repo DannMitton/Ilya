@@ -30,6 +30,7 @@ next session the same hour it cost the last one.
 | your own `git add -A` swept Code's tree | `git add -A` |
 | you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
 | you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
+| you are about to rename a CSS custom property | `A TOKEN IS ALSO A STRING KEY` |
 
 ### Deploys and URLs
 
@@ -2712,3 +2713,37 @@ to correct it in the next message.
 **A leftover agent worktree at `.claude/worktrees/` holds 167 MB**, including one
 of the four dictionary copies. No agent can clear it: `git worktree remove` is a
 write and the bridge refuses `rm`. It is Dann's to delete.
+
+---
+
+## A TOKEN IS ALSO A STRING KEY
+
+**Learned 2026-09-13, on colour story stage 3a, and it was the desk's error.**
+
+The desk predicted that renaming `--dusty-rose`, `--deeper-lavender` and
+`--quiet-cobalt` would move no gate. Two true facts stood behind that prediction:
+a CSS-only change moves no gate, confirmed twice in E.51, and the tests assert
+hex literals rather than token names.
+
+**Gate 4 failed 3 of 1123, every failure reading "token --deeper-lavender is not
+declared."**
+
+**Why.** `apps/web/src/lib/shane/pacifier/contrast.ts:128` and `:283` key the
+pacifier's palette as the STRING `'deeper-lavender'`, **without the leading
+dashes**, and R20 in `contrast.test.ts` resolves that key against `app.css`. The
+desk's grep pattern was `--deeper-lavender`. **A pattern carrying the dashes
+cannot match a key written without them**, so the lookup came back complete and
+was wrong. Six code comments name tokens the same dash-less way; the rename
+touched 20 files, not the 19 the desk counted.
+
+**THE RULE. Before renaming a CSS custom property, grep BOTH forms: `--name` and
+the bare `name`.** The bare form finds string keys, object properties, test
+fixtures, and prose in comments. Then read each bare hit, because `name` alone
+matches ordinary English.
+
+**Found by Code, 2026-09-13, and how it found it is the better lesson:** it did
+not accept the desk's prediction. It ran the five gates on the untouched tree
+first to establish a real baseline, then ran gate 4 again after the CSS rename
+and before touching `contrast.ts`, so the failure it saw was a controlled result
+rather than a surprise. That is CONTRACT's control rule used properly, against
+the desk's own claim.

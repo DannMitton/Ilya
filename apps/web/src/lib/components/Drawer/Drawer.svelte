@@ -1198,7 +1198,7 @@
 	   `+page.svelte` and it came here with the column that carried it; the set
 	   of surfaces is the same set, under a name that says what they are. */
 	.group-score :global(:focus-visible) {
-		outline-color: var(--deeper-lavender);
+		outline-color: var(--lavender);
 	}
 
 	/* THE BAND IS THE TOGGLE, N.115, ruled 2026-09-10. `.band-link`, METADATA's
@@ -1539,7 +1539,7 @@
 	   until now. DANN'S RULING OF 2026-08-23 IS NOT REVERSED, IT IS CARRIED:
 	   he ruled that the takeover's rule is lavender, matching
 	   `.wizard-phase`'s border-top, because the takeover is the calibration
-	   ritual. `--lang-chip-marked` IS `--deeper-lavender` one step down
+	   ritual. `--lang-chip-marked` IS `--lavender` one step down
 	   (`app.css:124`), so the hue survives in a stronger form, which is the
 	   argument Design made for it and the same one the anchors' rules made
 	   when they went. */
@@ -1774,11 +1774,11 @@
 	}
 
 	.toc-heading-learn {
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 	}
 
 	.toc-heading-guide {
-		color: var(--quiet-cobalt, #5C739E);
+		color: var(--cobalt, #5C739E);
 	}
 
 	/* ── TOC base styles ─────────────────────────────────── */
@@ -1829,7 +1829,7 @@
 	/* ── Active heading indicator ─────────────────────────── */
 
 	.toc-link.active {
-		border-left-color: var(--dusty-rose, #A67B7B);
+		border-left-color: var(--rose, #A67B7B);
 		border-left-width: 4px;
 		color: var(--ink-primary, #1a1612);
 		background: rgba(166, 123, 123, 0.08);
@@ -1838,7 +1838,7 @@
 	}
 
 	.toc-link.active:hover {
-		border-left-color: var(--dusty-rose, #A67B7B);
+		border-left-color: var(--rose, #A67B7B);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -1925,7 +1925,7 @@
 	}
 
 	.toc-chevron.contains-active {
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 	}
 
 	.toc-chevron-spacer {
@@ -1935,7 +1935,7 @@
 	}
 
 
-	/* -- Guide tab: quiet-cobalt colour identity ----------- */
+	/* -- Guide tab: cobalt colour identity ----------- */
 
 	.guide-toc .toc-link:hover {
 		border-left-color: rgba(92, 115, 158, 0.4);
@@ -1943,16 +1943,16 @@
 	}
 
 	.guide-toc .toc-link.active {
-		border-left-color: var(--quiet-cobalt, #5C739E);
+		border-left-color: var(--cobalt, #5C739E);
 		background: rgba(92, 115, 158, 0.08);
 	}
 
 	.guide-toc .toc-link.active:hover {
-		border-left-color: var(--quiet-cobalt, #5C739E);
+		border-left-color: var(--cobalt, #5C739E);
 	}
 
 	.guide-toc .toc-chevron.contains-active {
-		color: var(--quiet-cobalt, #5C739E);
+		color: var(--cobalt, #5C739E);
 	}
 
 	.toc-chevron:focus-visible {

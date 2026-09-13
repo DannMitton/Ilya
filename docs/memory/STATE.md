@@ -44,6 +44,37 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 > ### THE ONE THING: THE COLOUR STORY, STAGE 3a. THE RENAME.
 >
+> **STAGE 3a IS BUILT AND WALKED BY CODE, 2026-09-13, NOT COMMITTED AND NOT
+> SHIPPED.** `--dusty-rose` to `--rose`, `--deeper-lavender` to `--lavender`,
+> `--quiet-cobalt` to `--cobalt`. **No hex value moved.** Memo:
+> `docs/sessions/memo-colour-token-rename_r1_2026-09-13.md`. Prompt Code was
+> given: `docs/sessions/paste-colour-3a_r1_2026-09-13.md`.
+>
+> **THE DESK'S PREDICTION WAS WRONG AND THE ERROR IS ON THE RECORD.** The desk
+> said no gate would move. Gate 4 failed 3 of 1123, all reading "token
+> --deeper-lavender is not declared", because `contrast.ts:128` and `:283` key
+> the pacifier palette as the bare string `'deeper-lavender'` with no leading
+> dashes, which the desk's `--deeper-lavender` grep could not match. Code
+> renamed both keys plus six dash-less comments and gate 4 returned to 1123.
+> **The trap is in `ENVIRONMENT.md` §A TOKEN IS ALSO A STRING KEY, with its
+> index row.**
+>
+> **Counts confirmed against the desk's:** 19, 43 and 12 uses across 6, 13 and 6
+> files. **20 files changed in all**, the extra one being the comments.
+> **Old names remaining in `apps/web/src` and `packages/*/src`: none.** `docs/`
+> went 205 to 221 hits, the 16 new ones all inside the memo.
+> **All five gates at baseline**, run directly rather than through the ship
+> script, which refuses while untracked files exist.
+>
+> **CODE'S OWN CAVEAT, kept because it is honest and not yet closed:** every rose
+> and lavender use it saw on screen also carries its hex as a fallback, so those
+> two would paint correctly even with a broken name; the proof for them is that
+> the page resolves `--rose` and `--lavender` to their values. **Cobalt is the one
+> proven by paint alone**, because the drawer's Piece band has no fallback.
+>
+> **DANN HAS NOT WALKED IT.** Code walked all five documents at 1400 px and found
+> every desk, band and chip unchanged.
+>
 > **STAGE 2 CLOSED 2026-09-13. All four rulings are Dann's and all four are
 > recorded below, which is the specification stage 4 builds from.** Ruling 1 the
 > ramp, ruling 2 the neutrals, ruling 3 the strays, ruling 4 the fourth value.
@@ -55,11 +86,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > About 95 call sites, **no value changes**, and the tests assert hex literals
 > rather than token names, so no gate can move. It has not been run.
 >
-> **FIVE FILES ARE UNTRACKED AND CARRY THE RULINGS' EVIDENCE.** Four drawings Dann
-> walked and ruled from, plus the release inventory:
-> `drawing-the-ramp_r1`, `drawing-the-neutrals_r1`, `drawing-the-strays_r1`,
-> `drawing-the-fourth-value_r1`, `inventory-release_r1`, all dated 2026-09-13 in
-> `docs/sessions/`. **They need a `git add` before the next ship.**
+> **THE RULINGS' EVIDENCE IS COMMITTED, `45f7cd4`, 2026-09-13**, "Colour story
+> stage 2: the four rulings, the drawings they were ruled from, and the release
+> inventory", 7 files, 851 insertions. Documentation only; no code changed and
+> nothing shipped. The four drawings Dann walked and ruled from are
+> `drawing-the-ramp_r1`, `drawing-the-neutrals_r1`, `drawing-the-strays_r1` and
+> `drawing-the-fourth-value_r1`, with `inventory-release_r1`, all 2026-09-13 in
+> `docs/sessions/`.
 >
 > ---
 >

@@ -125,7 +125,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 export const PALETTE = {
 	'muted-lavender': hexToRgb('#A89BB5'),
 	'light-lavender': hexToRgb('#C4BACF'),
-	'deeper-lavender': hexToRgb('#8E7E9B'),
+	'lavender': hexToRgb('#8E7E9B'),
 	'surround-shane': hexToRgb('#D8D0E0'),
 	'paper-cream': hexToRgb('#F0EBE0'),
 	'ink-primary': hexToRgb('#1A1612'),
@@ -280,7 +280,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	},
 	{
 		state: 'captured', element: 'outline', kind: 'ui',
-		fgToken: 'deeper-lavender', fgAlpha: 1.0,
+		fgToken: 'lavender', fgAlpha: 1.0,
 		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22).'

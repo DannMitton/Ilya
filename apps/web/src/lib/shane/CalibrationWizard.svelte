@@ -1634,7 +1634,7 @@
 	   working area from the voice switcher, echoing the transcription
 	   panel's fenced console. Headings stay h2 semantically. */
 	.wizard-phase {
-		border-top: 2px solid var(--deeper-lavender);
+		border-top: 2px solid var(--lavender);
 		padding-top: 0.875rem;
 	}
 
@@ -1645,7 +1645,7 @@
 		font-size: 0.7rem;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		color: var(--deeper-lavender);
+		color: var(--lavender);
 		font-weight: 600;
 		text-align: left;
 	}
@@ -1696,22 +1696,22 @@
 	/* LAVENDER, N.73 S3, third repair from Dann's walk of ship one. The S0
 	   slate's ruling 3 keeps lavender in Studio to the voice anchor and the
 	   calibration surfaces, so the ritual's own actions take it and match the
-	   Calibrate button that opened them. This is `--deeper-lavender`, the
+	   Calibrate button that opened them. This is `--lavender`, the
 	   token `VoiceAnchor.svelte` uses; it closes the audit's F3, "one accent
 	   per surface is broken in Fit".
 
 	   THE FILL IS THE SAME TOKEN. THE HOVER IS NOT THE SAME MECHANISM, and
 	   that is named rather than smuggled: sage has a darker partner,
 	   `--deeper-sage`, and lavender has none. The three lavender tokens in
-	   `app.css` are all LIGHTER than `--deeper-lavender`. Rather than write a
+	   `app.css` are all LIGHTER than `--lavender`. Rather than write a
 	   new colour into a ruled palette, this borrows the anchor's own hover,
 	   `opacity: 0.85`, which is also `RootPanel`'s `.action-btn:hover`.
 
-	   MEASURED: white on `--deeper-lavender` is 3.74:1, against 2.99:1 for the
+	   MEASURED: white on `--lavender` is 3.74:1, against 2.99:1 for the
 	   white on `--sage` this replaces. Below the 4.5:1 floor either way, and
 	   better than what shipped. */
 	.wizard-primary {
-		background: var(--deeper-lavender);
+		background: var(--lavender);
 		color: #ffffff;
 		transition: opacity 0.12s;
 	}
@@ -1724,8 +1724,8 @@
 		border-color: var(--stone-300);
 	}
 	.wizard-secondary:hover {
-		border-color: var(--deeper-lavender);
-		color: var(--deeper-lavender);
+		border-color: var(--lavender);
+		color: var(--lavender);
 	}
 
 	/* THE TOUCH FLOOR, N.114b item 9. MEASURED at 43.5 px: `0.625rem` twice
@@ -1819,7 +1819,7 @@
 		font-size: 0.875rem;
 	}
 	.wizard-roster thead th {
-		background: var(--deeper-lavender);
+		background: var(--lavender);
 		color: #ffffff;
 		font-weight: 600;
 		font-size: 0.8125rem;

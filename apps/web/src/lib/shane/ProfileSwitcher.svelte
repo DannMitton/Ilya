@@ -518,7 +518,7 @@
 		padding: 0.375rem 1rem;
 		border-radius: 999px;
 		border: 1px solid transparent;
-		background: var(--deeper-lavender);
+		background: var(--lavender);
 		color: #ffffff;
 		cursor: pointer;
 		transition: opacity 0.12s;

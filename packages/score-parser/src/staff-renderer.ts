@@ -29,7 +29,7 @@
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
  *     p. 206) renders in Calm Authority's lavender (#8E7E9B, the
- *     `--deeper-lavender` app
+ *     `--lavender` app
  *     token; see the TURNING_COLOUR constant below), noteheads and
  *     accidentals in one colour, with
  *     its own per-measure accidental carry state independent of the sung
@@ -72,7 +72,7 @@ import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
  * `PageFooter` imports it for the legend circle, so the mark and its legend
  * entry cannot drift into being two different glyphs.
  *
- * `--deeper-lavender`, `app.css:69`. Fit's own accent, and a colour the
+ * `--lavender`, `app.css:69`. Fit's own accent, and a colour the
  * underlay's ink and the acoustic marks both leave alone.
  */
 export const WITHHELD_SIGLA = {
@@ -612,7 +612,7 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
 
 /**
  * Turning-pitch layer colour: Calm Authority's deeper lavender,
- * `--deeper-lavender` in app.css. Baked as hex because this module is pure and
+ * `--lavender` in app.css. Baked as hex because this module is pure and
  * DOM-free; keep in sync with the app token.
  *
  * IT WAS SAGE UNTIL 2026-08-27. Dann's original ruling (2026-07-12) was to use

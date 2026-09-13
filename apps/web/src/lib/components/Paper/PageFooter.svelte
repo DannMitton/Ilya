@@ -10,7 +10,7 @@
 		legendItems?: LegendItem[];
 		/** The broad-analysis legend sentence (§B.5); absent on non-Fit pages. */
 		broadNote?: string;
-		/** Footer hairline accent: sage (Transcription) default, deeper-lavender for Fit. */
+		/** Footer hairline accent: sage (Transcription) default, lavender for Fit. */
 		hairlineAccent?: string;
 		/**
 		 * Reports this footer's measured height, so the page that owns it can

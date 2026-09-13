@@ -712,7 +712,7 @@
 				glyphOpacity = 1;
 				break;
 			case 'captured':
-				stroke = 'var(--deeper-lavender)';
+				stroke = 'var(--lavender)';
 				strokeOpacity = 1;
 				strokeWidth = 2.5;
 				glyphOpacity = 1;
@@ -720,7 +720,7 @@
 				sigilColor = 'var(--ink-secondary)';
 				break;
 			case 'provisional':
-				stroke = 'var(--deeper-lavender)';
+				stroke = 'var(--lavender)';
 				strokeOpacity = 1;
 				strokeWidth = 2.5;
 				glyphOpacity = 1;
@@ -902,7 +902,7 @@
 	@keyframes flashGood {
 		0%,
 		100% {
-			stroke: var(--deeper-lavender);
+			stroke: var(--lavender);
 		}
 		16%,
 		48%,
@@ -911,13 +911,13 @@
 		}
 		32%,
 		64% {
-			stroke: var(--deeper-lavender);
+			stroke: var(--lavender);
 		}
 	}
 	@keyframes flashRetake {
 		0%,
 		100% {
-			stroke: var(--deeper-lavender);
+			stroke: var(--lavender);
 		}
 		16%,
 		48%,
@@ -926,7 +926,7 @@
 		}
 		32%,
 		64% {
-			stroke: var(--deeper-lavender);
+			stroke: var(--lavender);
 		}
 	}
 	.complete-flash-good {

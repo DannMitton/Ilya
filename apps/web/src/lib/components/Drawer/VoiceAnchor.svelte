@@ -10,7 +10,7 @@
 	 *
 	 * LAVENDER'S ONLY CARRIERS IN STUDIO are this line and the calibration
 	 * surfaces (`fable-ruling-s0-slate-closed_2026-08-19.md`, ruling 3). The
-	 * token is the project's `--deeper-lavender`, not the mockup's
+	 * token is the project's `--lavender`, not the mockup's
 	 * `--lavender: #9B8AA6`, which that file declares a stand-in on its own
 	 * line 17.
 	 *
@@ -74,7 +74,7 @@
 		height: 10px;
 		flex-shrink: 0;
 		border-radius: 50%;
-		background: var(--deeper-lavender);
+		background: var(--lavender);
 	}
 
 	.voice-status {
@@ -93,7 +93,7 @@
 	   button shape. The fill is lavender rather than sage because this is the
 	   calibration surface's entry point.
 
-	   MEASURED, not assumed: white on --deeper-lavender is 3.74:1. That is
+	   MEASURED, not assumed: white on --lavender is 3.74:1. That is
 	   below the 4.5:1 normal-text floor and ABOVE the tree's own shipped
 	   precedent, white on --sage at 2.99:1, which .btn-primary has carried
 	   since before N.73. Recorded rather than fixed here: darkening a ruled
@@ -111,7 +111,7 @@
 		font-size: 0.8rem;
 		font-weight: 600;
 		color: white;
-		background: var(--deeper-lavender);
+		background: var(--lavender);
 		border: none;
 		border-radius: 999px;
 		cursor: pointer;

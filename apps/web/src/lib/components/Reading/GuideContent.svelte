@@ -596,7 +596,7 @@
 	}
 
 	.about-website a {
-		color: var(--quiet-cobalt, #5C739E);
+		color: var(--cobalt, #5C739E);
 		text-decoration: none;
 	}
 

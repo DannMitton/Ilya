@@ -4930,7 +4930,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	.takeover-panel :global(:focus-visible) {
-		outline-color: var(--deeper-lavender);
+		outline-color: var(--lavender);
 	}
 
 	/* The Q4 provenance line: tertiary, one quiet line beneath the Metadata
@@ -5151,7 +5151,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		line-height: 48px;
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 	}
 
 	:global(.gt-hi) {
@@ -5363,7 +5363,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   walk, superseding "one desk, many papers" (2026-07-12) and the S1
 		   sage desk that carried it: the Marked score is a distinct working
 		   surface, so it takes its own desk. --surround-marked is
-		   --deeper-lavender tinted 60 percent toward white, parallel to the
+		   --lavender tinted 60 percent toward white, parallel to the
 		   other three. It is not --surround-shane, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
@@ -5538,7 +5538,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	/* ── Editorial mark callout (scholarly departure/note) ──── */
 	:global(.learn-callout) {
-		border-left: 4px solid var(--dusty-rose, #A67B7B);
+		border-left: 4px solid var(--rose, #A67B7B);
 		border-top: none;
 		border-right: none;
 		border-bottom: none;
@@ -5555,7 +5555,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		font-variant: small-caps;
 		font-weight: 600;
 		letter-spacing: 0.05em;
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 		margin-bottom: 0.5rem;
 		margin-left: -4px;
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
@@ -5597,18 +5597,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	.main-content.tab-learn :global(.reading-inner h2),
 	.main-content.tab-learn :global(.reading-inner h3),
 	.main-content.tab-learn :global(.reading-inner h4) {
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h1),
 	.main-content.tab-guide :global(.reading-inner h2),
 	.main-content.tab-guide :global(.reading-inner h3),
 	.main-content.tab-guide :global(.reading-inner h4) {
-		color: var(--quiet-cobalt, #5C739E);
+		color: var(--cobalt, #5C739E);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h3) {
-		border-top-color: var(--quiet-cobalt, #5C739E);
+		border-top-color: var(--cobalt, #5C739E);
 	}
 
 	/* ── Text input field: the sage border (item 6) ────────

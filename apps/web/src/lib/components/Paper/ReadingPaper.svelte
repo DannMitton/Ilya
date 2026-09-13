@@ -81,7 +81,7 @@
 		font-weight: 600;
 		color: var(--ink-primary, #1a1612);
 		line-height: 1.35;
-		border-top: 1px solid var(--dusty-rose, #A67B7B);
+		border-top: 1px solid var(--rose, #A67B7B);
 		margin: 3.5rem 0 1.25rem 0;
 		padding-top: 1.25rem;
 	}
@@ -130,11 +130,11 @@
 	}
 
 	.reading-inner :global(.band-learn) {
-		background: var(--dusty-rose, #A67B7B);
+		background: var(--rose, #A67B7B);
 	}
 
 	.reading-inner :global(.band-guide) {
-		background: var(--quiet-cobalt, #5C739E);
+		background: var(--cobalt, #5C739E);
 	}
 
 	.reading-inner :global(.band-kicker) {
@@ -373,7 +373,7 @@
 	/* ── Links ─────────────────────────────────────────────── */
 
 	.reading-inner :global(a) {
-		color: var(--dusty-rose, #A67B7B);
+		color: var(--rose, #A67B7B);
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 2px;

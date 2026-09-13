@@ -745,7 +745,7 @@
 	   crossed it.
 
 	   THE LAVENDER TWIN IS GONE with the second box. `.dropzone:hover` was the
-	   same 6 percent in `--deeper-lavender`, and there is nothing left for it
+	   same 6 percent in `--lavender`, and there is nothing left for it
 	   to describe. */
 	.intake.empty:hover {
 		background: rgba(139, 154, 125, 0.06);

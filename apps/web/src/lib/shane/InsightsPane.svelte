@@ -470,7 +470,7 @@
 		left: 96px;
 		right: 96px;
 		box-sizing: border-box;
-		border: 1px solid var(--dusty-rose, #a67b7b);
+		border: 1px solid var(--rose, #a67b7b);
 		border-radius: 12px;
 		background: var(--paper-cream);
 		padding: 18px 26px 20px;
@@ -656,7 +656,7 @@
 	}
 
 	.running-rule {
-		border-bottom: 1px solid var(--dusty-rose, #a67b7b);
+		border-bottom: 1px solid var(--rose, #a67b7b);
 		margin-top: 4px;
 	}
 
@@ -705,7 +705,7 @@
 	}
 
 	.foot-hairline {
-		border-top: 1px solid var(--dusty-rose, #a67b7b);
+		border-top: 1px solid var(--rose, #a67b7b);
 		margin-bottom: 8px;
 	}
 

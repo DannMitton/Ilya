@@ -73,7 +73,7 @@
 		label?: string;
 		/**
 		 * The label's colour. SAGE on every station but one, and SHIFT LYRICS
-		 * is the exception: `--deeper-lavender`, because lavender marks the
+		 * is the exception: `--lavender`, because lavender marks the
 		 * marked score. It stays a parameter because `NotationFields`
 		 * already took its accent as a prop, twinned on `TitleHeader` and
 		 * `PageFooter`, and this component should not be the one that stops.

@@ -41,7 +41,7 @@
 		 *
 		 * N.73 S3 ship two settles what S2 named and left. The accent used to
 		 * follow the destination, sage on the transcription and
-		 * deeper-lavender on the marked score, under Dann's ruling of
+		 * lavender on the marked score, under Dann's ruling of
 		 * 2026-08-06 that the colour follows the tab. Two later rulings ended
 		 * that: S2 gave Studio's two documents ONE drawer whose invariant is
 		 * that nothing in it appears, disappears, or moves when the singer

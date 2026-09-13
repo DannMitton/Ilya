@@ -1292,7 +1292,7 @@
 	   on the reasoning that sage is Studio's accent for the score document, and
 	   this is the same ruling he made against the same reasoning at
 	   `CorrectionSurface.svelte:845` on 2026-08-28: lavender codes music and
-	   voice, and a box on a notehead is a mark on the music. `--deeper-lavender`
+	   voice, and a box on a notehead is a mark on the music. `--lavender`
 	   is the token the voice anchor, the Corrections station and the drawer's
 	   music stations already carry.
 
@@ -1311,7 +1311,7 @@
 	   the score, and the drawer manipulates while the page displays and prints. */
 	:global(rect[data-selection-ring]) {
 		fill: none;
-		stroke: var(--deeper-lavender, #8e7e9b);
+		stroke: var(--lavender, #8e7e9b);
 		stroke-width: 2;
 		pointer-events: none;
 	}
