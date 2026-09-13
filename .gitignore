@@ -40,3 +40,7 @@ apps/web/test-results/
 # OS
 .DS_Store
 
+
+# Files Claude delivers into the chat land here via the desktop app.
+# Generated, disposable, and they block the ship script while untracked.
+Claude outputs/

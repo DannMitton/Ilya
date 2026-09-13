@@ -44,8 +44,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 > ### THE ONE THING: THE COLOUR STORY, STAGE 3a. THE RENAME.
 >
-> **STAGE 3a IS BUILT AND WALKED BY CODE, 2026-09-13, NOT COMMITTED AND NOT
-> SHIPPED.** `--dusty-rose` to `--rose`, `--deeper-lavender` to `--lavender`,
+> **STAGE 3a IS BUILT, WALKED BY CODE, AND COMMITTED `6c53a9d` 2026-09-13**,
+> "Colour story stage 3a: the families take one-word names", 24 files, 435
+> insertions. **NOT SHIPPED and not walked by Dann.** `--dusty-rose` to `--rose`, `--deeper-lavender` to `--lavender`,
 > `--quiet-cobalt` to `--cobalt`. **No hex value moved.** Memo:
 > `docs/sessions/memo-colour-token-rename_r1_2026-09-13.md`. Prompt Code was
 > given: `docs/sessions/paste-colour-3a_r1_2026-09-13.md`.

@@ -22,6 +22,7 @@ next session the same hour it cost the last one.
 | ship anything at all | `Gate baselines` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
+| an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
@@ -2747,3 +2748,25 @@ first to establish a real baseline, then ran gate 4 again after the CSS rename
 and before touching `contrast.ts`, so the failure it saw was a controlled result
 rather than a surprise. That is CONTRACT's control rule used properly, against
 the desk's own claim.
+
+---
+
+## CLAUDE OUTPUTS IS THE DESKTOP APP, AND IT WILL COME BACK
+
+**Learned 2026-09-13.** An untracked folder named `Claude outputs/` appeared in
+the repository root and blocked the ship script, which refuses on untracked
+files. **It is not Dann's and it is not the desk's working file.** The Claude
+desktop app writes every file the desk delivers into the chat there, so it
+refills whenever the desk sends Dann a picture, and each time it blocks a ship.
+
+**Settled 2026-09-13, DESK DEFAULT, Dann free to wave it off:** it is ignored
+rather than committed or moved. Committing puts disposable PNGs into an
+open-source history forever; moving fixes today and not tomorrow. `.gitignore:46`
+now reads `Claude outputs/`.
+
+**The quoting trap, which cost one cycle.** `git status` prints the path quoted,
+as `?? "Claude outputs/"`, because of the space. **`.gitignore` does not take
+quotes**: a pattern written `"Claude outputs"/` matches nothing, since the quote
+characters are literal. Write the bare name, spaces and all. **Prove it with
+`git --no-pager check-ignore -v <a file inside it>`**, which names the
+`.gitignore` line that matched, rather than trusting a clean `git status`.
