@@ -4041,3 +4041,173 @@ Nothing below was reworded, reordered, or removed.
 > Start placement over is NOT wired: no existing clause fits; the sentence
 > is Dann's to rule (English and French), then one line in Code.**
 >
+
+## Block 13. Moved from STATE.md at the close of 2026-09-13, the colour session
+
+**Stages 3a and 3b, the close of stage 2, and the desk's two errors along the
+way.** All of it closed and committed: `45f7cd4`, `6c53a9d`, `2a39366`,
+`a3e2de4`, `28b48fa`, `6a24169`, pushed and deployed
+(`dpl_6jRMMzsA9uDDYiUcsRaU8QNFYVKX`, READY, walked by Dann at 1400 px).
+
+**Three things were lifted out of this block before it moved, because they are
+live**, and they sit in `STATE.md` §THE ONE THING: the three tokens Code could
+not get on screen, Code's caveat that rose and lavender carry fallback hexes
+that would mask a broken name, and the fact that stage 4 is already fully
+specified.
+
+Nothing below was reworded, reordered, or removed.
+
+---
+
+> ### THE ONE THING: THE COLOUR STORY, STAGE 3b. FAMILY AND ROLE.
+>
+> **STAGE 3b IS DONE AND WALKED BY CODE, 2026-09-13. NOT COMMITTED WHEN THIS WAS
+> WRITTEN, NOT SHIPPED, NOT WALKED BY DANN.** 13 files. **No hex value moved
+> except the two the rulings ordered:** the `--stone-700` merge repaints three
+> sites `#44403C` to `#4A4540`, one just-noticeable difference, and the update
+> toast's border goes from lavender to `--stone-300`. **All five gates at
+> baseline, twice, against Code's OWN prediction both times**, the desk's having
+> been excluded from the brief after 3a.
+>
+> **What landed:** desks and chips took family-and-role names (`--sage-desk`,
+> `--lavender-chip`, and so on); `--surround-insights` is deleted with Insights
+> reading `--rose-desk`; `--deeper-sage` is split into `--sage-gloss` (the gloss
+> under every word, `WordStack.svelte:275`) and `--sage-deep` (the other eight);
+> `--stone-700` merged into `--ink-secondary`; `--light-sage`,
+> `--light-lavender` and `--muted-lavender` deleted with their `contrast.ts`
+> entries. **`contrast.test.ts` needed no edit: its check loops over whatever the
+> palette holds**, which the desk had expected to need changing.
+>
+> **`#3A352F` SPLIT 9 / 34, exactly as the trap predicted.** The note picker's 9
+> CSS uses take `--ink-stave`; the renderer's 29 and its tests' 5 stay literals,
+> because the renderer builds SVG strings with no stylesheet, and it gains one
+> "keep in sync" note of the kind `#8E7E9B` already carried.
+>
+> **THREE THINGS ARE UNCONFIRMED ON SCREEN, named by Code, and they belong to the
+> STAGE 4 WALK rather than to a new item.** None appeared for the sample line: the
+> `--stone-700` merge (the loupe's frame, the ё badge, the hovered icons over a
+> word), the note picker (reaching it means pressing Start, which creates a voice
+> profile, so Code did not), and the update toast's new border (it appears only
+> when a new version is waiting). **Check all three when Dann walks stage 4.**
+>
+> **Code's walk went further than asked:** it typed a line of Pushkin, pressed
+> Transcribe, and confirmed all four gloss lines painted `#7A8A6C` through
+> `--sage-gloss`, **which carries no fallback hex that could hide a broken name.**
+> That sample line may still sit in the preview browser's own storage, which is
+> separate from Dann's Chrome.
+>
+> **RULED BY DANN 2026-09-13, MID-3b. THE DIVISION IS THE PAPER VERSUS
+> EVERYTHING ON THE SCREEN.** His words: *"I agree: the real division is the paper
+> versus everything on the screen."*
+>
+> **What it settles.** Ruling 3 split `--deeper-sage` so that a change to a hover
+> could never reach the gloss under every word on the paper. The desk briefed that
+> split as **page versus pointer**, which was the desk's framing and was wrong: it
+> left `HeaderBar.svelte:149`, the resting fill of the version badge on
+> Transcription, with nowhere to go, and Code correctly stopped rather than guess.
+> **The line is the paper against the interface.** So:
+> **`--sage-gloss`** takes the one paper use (`WordStack.svelte:275`), and
+> **`--sage-deep`** takes the other eight, the badge among them. Both hold
+> `#7A8A6C` on the day they land, so nothing changes on any screen, and
+> `--sage-deep` keeps the meaning `--deeper-sage` carried.
+>
+> **THE DESK'S COUNTS WERE WRONG IN THREE PLACES AND CODE'S ARE RIGHT:** `--sage`
+> is 94 not 92, `--surround-shane` is 6 and 22 not 5 and 10, `#3A352F` is 43 not
+> 42. **Cause: the desk counted matching LINES with `grep -n | wc -l`, so a line
+> holding a token twice counted once.** `ENVIRONMENT.md` §A GREP COUNT IS NOT A
+> USE COUNT already warned about this.
+>
+> **STAGE 3b IS BRIEFED AND WITH CODE, 2026-09-13:**
+> `docs/sessions/paste-colour-3b_r1_2026-09-13.md`, 193 lines, UNTRACKED.
+> **Three desk decisions inside it, all DESK DEFAULT and all reversible by Dann:**
+> (1) **the bands do NOT take a `-band` suffix**, departing from the plan, because
+> that is 169 further sites and 77 of them were rewritten by 3a this morning; the
+> rule "the bare family name IS the band" goes in `PRODUCT.md` at stage 6.
+> (2) **`--surround-insights` is folded into `--rose-desk` now** rather than at
+> stage 4, being a pure duplicate of `--surround-learn`'s value.
+> (3) **`--surround-shane` is left untouched**, 5 token sites and 10 bare ones in
+> `contrast.ts`, because the pacifier recast moves it to rose later and renaming
+> it now would name it for a family it is about to leave.
+>
+> **THE TRAP THE MEASUREMENT FOUND, and ruling 2 did not anticipate it.** Ruling 2
+> says `#3A352F` gets a token. **The renderer cannot read a CSS token:**
+> `staff-renderer.ts:615-616` records that it is pure and DOM-free, which is why
+> it already bakes `#8E7E9B` as a hex under a "keep in sync with the app token"
+> comment. So of `#3A352F`'s 42 sites, the CSS consumers take `--ink-stave` and
+> the renderer's stay literals under that same existing pattern. The brief carries
+> this; without it Code would have met it mid-pass with no ruling to follow.
+>
+> **The plan's own definition of 3b, for the record:** The plan's definition
+> (`docs/sessions/plan-colour-story_r1_2026-09-13.md`): `--surround-marked`
+> becomes `--lavender-desk`, `--lang-chip-marked` becomes `--lavender-chip`, and
+> so on for all five families across desk, band, chip and ink; destination-named
+> tokens go. **Its whole purpose is to make stage 4 cheap:** afterwards, changing
+> a family's values is four declarations rather than a hunt.
+>
+> **DESK DEFAULT, not a ruling, and Dann is free to move any of it.** Rulings 2
+> and 3 produced naming and deletion work the plan did not anticipate, and it is
+> the same kind of work as 3b, so it belongs in 3b rather than in stage 4 with
+> the values: give `#3A352F` a token, split `--deeper-sage` into two tokens at
+> the same value, merge `--stone-700` into `--ink-secondary`, delete
+> `--light-sage`, delete `--light-lavender` with its `contrast.ts:127` copy and
+> the R20 assertion at `contrast.test.ts:233`, and delete `--muted-lavender` with
+> the update toast taking a neutral. **All of it is naming or deleting. No value
+> moves in 3b.**
+>
+> **STAGE 4 IS FULLY SPECIFIED ALREADY.** The twenty values are below and the
+> reasoning is in `../sessions/spec-colour_r1_2026-09-13.md`. It is one commit:
+> the ramp applied to five families, umber declared, Learn moved rose to umber,
+> `--surround-insights` deleted with Insights taking rose's own tokens. **It must
+> be walked by Dann at 1400 px across all five destinations.**
+>
+> **STAGE 3a IS BUILT, WALKED BY CODE, AND COMMITTED `6c53a9d` 2026-09-13**,
+> "Colour story stage 3a: the families take one-word names", 24 files, 435
+> insertions. **NOT SHIPPED and not walked by Dann.** `--dusty-rose` to `--rose`, `--deeper-lavender` to `--lavender`,
+> `--quiet-cobalt` to `--cobalt`. **No hex value moved.** Memo:
+> `docs/sessions/memo-colour-token-rename_r1_2026-09-13.md`. Prompt Code was
+> given: `docs/sessions/paste-colour-3a_r1_2026-09-13.md`.
+>
+> **THE DESK'S PREDICTION WAS WRONG AND THE ERROR IS ON THE RECORD.** The desk
+> said no gate would move. Gate 4 failed 3 of 1123, all reading "token
+> --deeper-lavender is not declared", because `contrast.ts:128` and `:283` key
+> the pacifier palette as the bare string `'deeper-lavender'` with no leading
+> dashes, which the desk's `--deeper-lavender` grep could not match. Code
+> renamed both keys plus six dash-less comments and gate 4 returned to 1123.
+> **The trap is in `ENVIRONMENT.md` §A TOKEN IS ALSO A STRING KEY, with its
+> index row.**
+>
+> **Counts confirmed against the desk's:** 19, 43 and 12 uses across 6, 13 and 6
+> files. **20 files changed in all**, the extra one being the comments.
+> **Old names remaining in `apps/web/src` and `packages/*/src`: none.** `docs/`
+> went 205 to 221 hits, the 16 new ones all inside the memo.
+> **All five gates at baseline**, run directly rather than through the ship
+> script, which refuses while untracked files exist.
+>
+> **CODE'S OWN CAVEAT, kept because it is honest and not yet closed:** every rose
+> and lavender use it saw on screen also carries its hex as a fallback, so those
+> two would paint correctly even with a broken name; the proof for them is that
+> the page resolves `--rose` and `--lavender` to their values. **Cobalt is the one
+> proven by paint alone**, because the drawer's Piece band has no fallback.
+>
+> **DANN HAS NOT WALKED IT.** Code walked all five documents at 1400 px and found
+> every desk, band and chip unchanged.
+>
+> **STAGE 2 CLOSED 2026-09-13. All four rulings are Dann's and all four are
+> recorded below, which is the specification stage 4 builds from.** Ruling 1 the
+> ramp, ruling 2 the neutrals, ruling 3 the strays, ruling 4 the fourth value.
+> Nothing in stage 2 is open.
+>
+> **THE NEXT THING IS STAGE 3a AND IT IS ALREADY BRIEFED:**
+> `docs/sessions/brief-colour-token-rename_r1_2026-09-13.md`. `--dusty-rose` to
+> `--rose`, `--deeper-lavender` to `--lavender`, `--quiet-cobalt` to `--cobalt`.
+> About 95 call sites, **no value changes**, and the tests assert hex literals
+> rather than token names, so no gate can move. It has not been run.
+>
+> **THE RULINGS' EVIDENCE IS COMMITTED, `45f7cd4`, 2026-09-13**, "Colour story
+> stage 2: the four rulings, the drawings they were ruled from, and the release
+> inventory", 7 files, 851 insertions. Documentation only; no code changed and
+> nothing shipped. The four drawings Dann walked and ruled from are
+> `drawing-the-ramp_r1`, `drawing-the-neutrals_r1`, `drawing-the-strays_r1` and
+> `drawing-the-fourth-value_r1`, with `inventory-release_r1`, all 2026-09-13 in
+> `docs/sessions/`.
+>

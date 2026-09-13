@@ -299,3 +299,107 @@ from the French punctuation ruling of 2026-08-21.
 **Related, read before starting:** N.82, the watch band's French, and the
 unnumbered watch band English header at `watchlist.ts:92` in this file's visible
 list. **They may be the same item three times.**
+
+---
+
+## N.132. THE RATIFIED NAMES ARE NOT BUILT. Numbered by Dann 2026-09-13. UNPLACED.
+
+**Found 2026-09-13 when Dann walked the colour deploy and saw "Transcription"
+and "Score markup" on screen.** He ratified new names earlier the same day, in
+both languages, and **nothing tracked building them.** A search of `STATE.md` and
+`OPEN.md` for "Melody" returned the ruling and no item.
+
+**The ruling, from `STATE.md` §THE ONE THING, ratified 2026-09-13:** tabs are
+`Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus »; the
+drawer band is `Melody` / « Mélodie ». The French mirrors the English throughout
+and **nothing is coined.**
+
+**What the tree holds today, read 2026-09-13:**
+
+- `i18n.ts:106` `tab.transcription` = "Transcription", both languages
+- `i18n.ts:117` `tab.markedScore` = "Score markup" / « Partition annotée »
+- `i18n.ts:59` `group.scoreMarkup` = "Score markup", both languages
+- `i18n.ts:121` `tab.insights` = "Insights" / « Aperçus » — **ALREADY CORRECT**
+- No `Melody`, no `tab.text`, no `group.melody` anywhere
+
+**The geometry rides with it, and it is ruled.** Tab padding goes 0.7 rem to
+0.5 rem, that is 11.2 px to 8 px each side, returning 19.2 px across the three.
+Measured on the live build in Dann's Chrome: at a 390 px viewport the head has
+342 px, and afterwards English has 55.07 px spare and French 15.64.
+**OWED, and it is the one thing in this item nobody has seen: 0.5 rem padding on
+screen.** Render it before it ships.
+
+**Two traps.**
+
+1. **« Partition annotée » was ratified 2026-08-19 for the OLD name.** The short
+   form « Annotation » is ruled for the TAB, and it is free only because the band
+   becomes Melody rather than Markup. Do not carry the old French forward.
+2. **`i18n.ts:49` records that `group.scoreMarkup` is the same English as
+   `tab.markedScore`.** The rename is what resolves that collision, so both move
+   together or the collision returns in a new form.
+
+**Whether the KEYS rename alongside the strings is NOT ESTABLISHED and is a
+build decision, not a ruling.** `tab.transcription` could keep its key and change
+its value.
+
+**Two members of N.131 live here:** `group.scoreMarkup` and `tab.fit` both read
+English in the French column today. Fixing them inside this item is cheaper than
+finding them twice.
+
+---
+
+## N.133. THE RENDERER STOPS PAINTING ITS OWN GROUND. Numbered by Dann 2026-09-13. UNPLACED.
+
+**Ruled by Dann 2026-09-13**, on his walk of `6a24169`, from three options the
+desk put to him. **His words, and they are the item:** *"I absolutely do not want
+to see, in the Loupe, the measure under examination mounted on a cream
+background. The background should be transparent and accept the Loupe's native
+background."* His ruling: **"The renderer stops painting the rectangle at all,
+and every surface provides its own ground."**
+
+**What he saw.** The loupe crops a clone of the page's system SVG
+(`Loupe.svelte:764`) and shows it over the loupe's own `--paper-light` fill
+(`:935`). The system's SVG carries its own cream rectangle, so the loupe's fill
+never shows.
+
+**TWO RECTANGLES, NOT ONE.**
+
+- `staff-renderer.ts:2828` paints `#F0EBE0` behind EVERY SYSTEM. This is the one
+  in the loupe. Nothing strips it.
+- `page-layout.ts:365` paints `#FFFFFF` behind the whole page, from
+  `paginateScore`. `VoiceProfilePane.svelte:664-665` strips it, and `:990` is
+  the call site.
+
+**Once both go, `stripBackingRect` has nothing left to strip and goes with them.**
+
+**ESTABLISHED 2026-09-13, and it is what makes this a deletion rather than an
+option:** the only consumer of `packages/score-parser` is `apps/web`. The
+"standalone artifact" case the comment at `VoiceProfilePane.svelte:661` names has
+no user, so there is no default to preserve and no `background: null` parameter
+to add.
+
+**Consumers to check afterwards, all of them:** the page (`--paper-cream`), the
+loupe (`--paper-light`), the `fit-font-lab` dev route
+(`routes/fit-font-lab/+page.svelte:9`, which renders glyphs through the
+production renderer and may have been relying on the ground), and print.
+
+**THE RISK, NAMED BEFORE ANYONE BUILDS IT: gates 4 and 5 are both exposed.**
+`correction.test.ts:507` calls `renderAnalyzedStaff`,
+`performance-order-seam.test.ts:94` calls `paginateScore`, and
+`staff-renderer.test.ts` asserts hex literals. If one of them pins a rectangle,
+**the test is the thing to look at, not the ruling.**
+
+**WHAT THIS CLOSES.** Two open questions resolve themselves, and whoever builds
+this should strike both rather than leave them:
+
+1. The census (`memo-neutral-audit_r1_2026-09-13.md` §6.2) recorded "Whether a
+   cream rectangle prints behind each system was not observed." **Dann observed
+   it on screen 2026-09-13.**
+2. `STATE.md` §STILL UNSETTLED carries the print half, settled 2026-09-07 by
+   Dann's print preview: the cream prints, and the page was ruled to print white.
+   **It records a paste already written and NOT YET RUN, filed in `INBOX.md`.
+   FIND THAT PASTE BEFORE WRITING A NEW ONE**, per tether 16. It may already do
+   half of this job, or it may conflict with the ruling above.
+
+**Done when:** the loupe shows its own ground with no rectangle over it, Dann
+walks it, and the print path is checked once rather than assumed.
