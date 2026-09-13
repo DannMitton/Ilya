@@ -79,7 +79,8 @@ Folder grants do not carry between sessions.
 Once the reads are done, emit the sequence-position block from CONTRACT.md §0.
 Nothing else happens before it.
 
-Then ask me for the repository state in one line. You do not run git, ever.
+Then ask me for the repository state in one line. You do not write with git,
+ever. Read-only git is allowed; CONTRACT.md §5 says which commands.
 
 Then start on THE ONE THING in STATE.md and stop after one question.
 ```
@@ -101,7 +102,10 @@ forty-seven of its predecessors were written and thrown away.
 3. Add anything hard-won to `ENVIRONMENT.md`, **and add its row to the index at
    the top of that file.** A trap nobody can find costs the next session the same
    hour it cost the last one.
-4. Ask Dann to commit. **You do not run git. No agent commits, ever.**
+4. Ask Dann to commit. **No agent commits, ever, and no agent stages.** The
+   narrowed rule, ratified by Dann 2026-09-13, is in `CONTRACT.md` §5: every
+   git command that WRITES is forbidden; `status`, `log`, `diff`, `show`,
+   `ls-files` and `check-ignore` are allowed.
 
 That is the whole ritual. There is no handover document and no opener to write.
 

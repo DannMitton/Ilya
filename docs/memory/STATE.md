@@ -29,7 +29,10 @@ its own content is the stale number this paragraph exists to prevent. A floor ca
 move HEAD forward and never make the floor false. If the tree is ahead of it,
 that is expected and tells you only that work has landed since.
 
-**Ask Dann for the state in one line. You do not run git.**
+**Ask Dann for the state in one line. You do not WRITE with git, ever.**
+Read-only git is allowed under the narrowed CONTRACT §5, ratified 2026-09-13:
+`status`, `log`, `diff`, `show`, `ls-files`, `check-ignore`. Asking Dann is
+still the courtesy and still the habit.
 
 ```
 git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
