@@ -42,41 +42,100 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### FIRST, BEFORE ANY OTHER WORK. TEN MINUTES. Added 2026-09-13
+> ### THE ONE THING: THE COLOUR STORY, STAGE 2. FOUR RULINGS, ALL DANN'S
 >
-> **This file is 901 lines against a 600 tripwire. Move what closed to
-> `../sessions/LOG.md` before you start anything else.** README's ritual says
-> a closed thing moves at the close of the session that closed it; the
-> 2026-09-12 session ran to 03:00 and left this deliberately rather than cut
-> two hundred lines out of the handover while tired.
+> **Set 2026-09-13.** Asked whether stage 2 was the one thing, Dann: *"I think
+> so, but I'd feel most comfortable starting that work in a fresh thread."* So
+> this session closed rather than open the rulings, and **the next session opens
+> on ruling 1 and asks it alone.**
 >
-> **Move these, verbatim, in this order, each as its own LOG block:**
+> **Stage 1, the census, is CLOSED.** Stage 2 is four rulings and nothing else.
+> Stages 3 and 4 both wait on them, which is why no build work is queued behind
+> this.
 >
-> 1. The block beginning `**INCREMENT 3 IS SHIPPED, WALKED, AND DONE`. Closed,
->    walked by Dann on `9026a56`.
-> 2. The `085bb9e` N.128 account inside the `CLOSE OF 2026-09-12` block.
->    Shipped and walked. **Keep N.128's own entry if anything is still open on
->    it; nothing is.**
-> 3. The block beginning `**N.114b CLOSED WHOLE, items 1 to 9`. Closed
->    2026-09-10.
-> 4. The block beginning `**DESIGN RETURNED, 2026-09-10 07:36`. Its rulings
->    were applied in the path pass and increment 3.
-> 5. The `**THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH` block and
->    the `**Earlier the same session:**` block. Both superseded by the
->    2026-09-12 close.
-> 6. The two stale `**NEXT, in order:**` lists from 2026-09-10. Superseded.
+> **The plan:** `docs/sessions/plan-colour-story_r1_2026-09-13.md`, read in full
+> 2026-09-13, six stages. **The census memo:** `docs/sessions/memo-neutral-audit_r1_2026-09-13.md`,
+> 1786 lines, §1 and §2 read in full 2026-09-13 and its tables NOT read. **Its
+> filename does not say colour, which already cost one search; it is the census,
+> and it answers `brief-colour-census_r1_2026-09-13.md`.**
 >
-> **ASSESS, do not move blindly:** the `RULINGS DANN OWES` section and the
-> `OWED, RULED BUT NOT YET DONE` section both mix live items with settled
-> ones. Read each row.
+> **THE PLAN'S MAP IS STALE IN TWO CELLS. QUOTE THE RULING IN THIS FILE, NEVER
+> THE PLAN'S TABLE.** The plan calls lavender "notation and voice", puts the
+> pacifier nowhere, and gives rose "your voice, explained" with Insights only.
+> The colour story ruling of 2026-09-13, later the same day and recorded in this
+> section, names lavender "the melody", moves the pacifier into rose with the
+> whole calibration interface, and adds a `Voice` band as a sibling of Piece,
+> Input and Melody.
 >
-> **Do not move:** the `CLOSE OF 2026-09-12 INTO 2026-09-13` summary, N.129,
-> N.94, the names ruling, or the colour story. Those are the live handover.
+> **Ask one at a time, in this order, each with its census section open. The
+> numbers in rulings 1, 3 and 4 are the plan's own words, not the desk's.**
 >
-> **Then delete this block and carry on with the real one thing below.**
+> 1. **The ramp.** Do the three marks space evenly, L 0.64 / 0.53 / 0.42 in
+>    steps of 0.11, against today's 0.23 / 0.05 / 0.05? Cost: four of five
+>    bands move by under 0.03 and are invisible, and cobalt moves 0.084, which
+>    he will see. Gain: band and chip stop being mistakable, every chip clears
+>    5.16 on white against today's 4.5, and every ink clears 6.9 on cream
+>    against rose's 4.69. Method:
+>    `docs/sessions/drawing-warm-brown_r1_2026-09-13.html`.
+> 2. **The neutrals.** Which of them consolidate. **The plan says eleven and the
+>    census says twelve values against ten tokens plus two literals**, with two
+>    pairs inside 0.02 lightness of each other: `--stone-300` with
+>    `--desk-surface`, and `--stone-700` with `--ink-secondary`. Census §6.1,
+>    §6.2, and the table at §7.1.
+> 3. **The strays.** `--light-sage`, `--light-lavender`, `--deeper-sage`,
+>    `--muted-lavender`: each becomes a role in the grammar, or goes. Census
+>    §5.1 and §5.2, which found eight lavender values with seven painting
+>    something, and twelve sage-family values with ten painting.
+> 4. **The fourth value's name.** Rose's label ink is the inline `#8A5C5C`
+>    today. Every family gets a fourth name, or none does. Census §5.4.
 >
+> **Done when:** all four are ruled and written into this block. That hands
+> stage 3a its go-ahead, and 3a is already briefed as
+> `brief-colour-token-rename_r1_2026-09-13.md`, about 95 call sites, no value
+> changes, no gate movement.
+>
+> **Do not start stage 3 or 4 before all four are ruled.** The plan's own
+> reason: every later stage touches the same declarations, and out of order
+> means touching them twice.
 
+> **CLOSE OF 2026-09-13, THE PRUNE SESSION. NO CODE RAN AND NOTHING SHIPPED.**
+>
+> The whole session was the prune this section asked for, plus the split it
+> turned out to need. **Nothing was farmed out; Fable stood at 89 % and the desk
+> stayed off it.** What changed, all of it documentation:
+>
+> 1. **`../sessions/LOG.md` block 11**, ten entries. 11.1 to 11.6 are the six
+>    blocks the prune instruction named. 11.7 to 11.10 came out of the row-by-row
+>    assessment it asked for: the `InstallPrompt` row struck DONE in August, the
+>    bar-numbers original text the 2026-09-11 ruling superseded, the loupe
+>    typeface row that `246c17c` closed, and five rulings Dann had already made
+>    sitting in `RULINGS DANN OWES`.
+> 2. **`OPEN.md` is new**, carrying 188 lines of item specs verbatim out of this
+>    section. `README.md` holds it at rank 5, outside the opening read.
+> 3. **`ENVIRONMENT.md` gained two sections:** `A STAVE STEP IS HALF A SPACE`,
+>    moved out of §OWED because it is a permanent trap and not an owed item, and
+>    `PRUNING A MEMORY FILE`, which is the recipe and the one way it broke.
+> 4. **`README.md`'s one-thing block was lying and is fixed.** It still named
+>    the syllable station and the note click as `WRITTEN`, and sent the reader
+>    to a `STATE.md` §The walk that does not exist. Neither phrase appeared
+>    anywhere in this file any more. The block warns against exactly that fault
+>    in its own second line.
+> 5. **Two section headings that counted their rows were corrected** after
+>    removals: `FOUR SHIPS` and `New from N.104 ... Three`.
+>
+> **Nothing was reworded anywhere. Every moved block is verbatim.** The backup of
+> `STATE.md` as it stood before the prune is at `$HOME/STATE.md.pre-prune-20260913`
+> in the bridge shell's own home, which is outside the repository and will not
+> survive the session.
+>
+> **NOT DONE, and named so it is not lost:** the 105 lines of 2026-09-10 and
+> 2026-09-11 walk narrative still in this section. The tripwire note says what
+> has to come out of it first.
+>
 > **CLOSE OF 2026-09-12 INTO 2026-09-13. FOUR SHIPS, ALL WALKED OR VERIFIED.**
+>
+> **`085bb9e` N.128 was the fourth. Its account moved to `../sessions/LOG.md`
+> block 11.2 on 2026-09-13, shipped and walked, nothing open on it.**
 >
 > 1. `9026a56` path pass increment 3, **walked whole by Dann, DONE**.
 > 2. `246c17c` the loupe draws sans like the page, the renderer root follows,
@@ -85,13 +144,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >    and the search found what he was remembering: the pacifier's `provisional`
 >    badge, a circled `↻` (`Pacifier.svelte:836-848`). **DESK DEFAULT, unruled:
 >    the band takes `↶ ↷`, since the badge stays where it is.**
-> 3. `085bb9e` **N.128**, a corrected duration now moves the onsets after it.
->    Code chose to recompute in `applyCorrections` (`correction.ts:356`, new
->    pass `:382`) over deriving the beat at render time, because the latter
->    would have changed beaming on scores nobody corrected. Seven new tests,
->    six failed before. **The desk's causal account named the wrong file and the
->    correction is in `ENVIRONMENT.md`.**
-> 4. `7841fe7` **N.127 increment 1: INSIGHTS IS LIVE**, the third document,
+> 3. `7841fe7` **N.127 increment 1: INSIGHTS IS LIVE**, the third document,
 >    without the compass. Gate 4 is at **1123**.
 >
 > **INSIGHTS, WHAT IS OPEN.** Code made five decisions of its own, all listed in
@@ -116,9 +169,30 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > poem box from an ingested score's lyrics, which is why Dann's Score markup is
 > full while Transcription is empty. His ruling of 2026-09-10 covers it.
 >
-> **TRIPWIRE: this file is past 800 lines against a 600 limit.** Increment 3,
-> N.128 and N.127 increment 1 are closed and should move to `../sessions/LOG.md`
-> at the next close.
+> **THE TRIPWIRE IS CLEAR AGAIN, 2026-09-13, and here is what it took, because
+> the next session will hit the same wall if it only moves closed things.** This
+> file was 937 lines. Ninety-five lines were closed and went to
+> `../sessions/LOG.md` block 11, which is all the prune instruction asked for and
+> was never going to be enough. The rest of the excess was never closed: it was
+> the catalogue of open items sitting inside this section, 188 lines of specs for
+> N.115 to N.124 and the open lists, which no close could move because every line
+> of it is live. **It now lives in `OPEN.md`, verbatim**, and `README.md` carries
+> it at rank 5 of the read order, outside the opening read. That took this file
+> to 583 lines, and the new one thing block, with this note, put it back over the
+> line. **So when the tripwire
+> fires, ask first whether the excess is closed work or misfiled work. Twice now
+> it has been the second.**
+>
+> **WHAT IS LEFT TO FIND, named so nobody has to find it twice.** The remaining
+> excess is the walk narrative of 2026-09-10 and 2026-09-11 inside this section,
+> about 105 lines: the 23:55 one thing, the rulings of 2026-09-10 late, the walk
+> findings, the rulings of 2026-09-11 00:00 to 00:12, and N.128's account, which
+> is DONE. **It was not moved on 2026-09-13 because three live residues are
+> buried in it** and pulling them out is judgement, not filing: the `n of 7
+> changed` line owed to Code, N.121 (d)'s Undo clause for Start placement over,
+> and the NOT ESTABLISHED about N.128's two other consumers. **Extract those
+> three into their own blocks first, then the narrative moves in one piece.**
+> Do not farm this out: a subagent cannot tell a residue from a record.
 >
 > **N.129, THE UNDERLAY IS SPACED IN THE WRONG FONT'S METRICS. Numbered by
 > Dann 2026-09-13. UNPLACED.** `underlay-widths.ts:690` declares its table as
@@ -234,40 +308,12 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > also carries (c) and a read-only inventory of filled pills at rest
 > (`Dictionary` and `Calibrate` were both filled at 00:02).
 >
-> **INCREMENT 3 IS SHIPPED, WALKED, AND DONE, 2026-09-12.** Shipped
-> `9026a56` (Vercel `dpl_CFgHDALExXjqsPbSDXke2UKsud5X`, READY, branch alias),
-> from `brief-path-pass-inc3_r1_2026-09-11.md` on Code's memo
-> `memo-path-pass-inc3_r1_2026-09-11.md`. Dann walked all four steps on the
-> alias in his own profile at 1400 px: no `TEXT` band; `Notation` and
-> `Analysis` two plain closed rows under the intake; `1 of 7 changed` beside
-> `Notation`, open and shut, nothing beside `Analysis`; `SCORE MARKUP`
-> carrying no pair at rest; and after one `▲ step` in the Corrections
-> station, `↶ UNDO` on the band header. **Opening the SCORE MARKUP band did
-> NOT dismiss the loupe at desktop width**, which was the desk's named
-> likeliest failure. **On a desktop the loupe carries no correction verbs at
-> all**: the second `CorrectionSurface` is gated `{#if isPhone}`
-> (`+page.svelte:4785`), so the verbs live only in the drawer's Corrections
-> station. Code's own phone finding stands unanswered: at 390 px no Undo is
-> reachable at the moment of action.
->
 > **THE ONE THING after this walk: the four ready briefs, in order.**
 > `brief-loupe-typeface_r1_2026-09-12.md` (loupe typeface plus the `↰ ↱`
 > marks restored), `brief-n128-stale-beat_r1_2026-09-12.md`,
 > `brief-n117-dictionary-fill_r1_2026-09-12.md`,
 > `brief-n125-slurs-as-objects_r1_2026-09-11.md`. One Code thread at a time,
 > never two: this desk and Code share one working tree.
->
-> **N.125, SLURS AS TAPERED OBJECTS, numbered 2026-09-11 00:30 at Dann's
-> word, UNPLACED, its own Code thread (`staff-renderer.ts` only, off the
-> drawer path).** Finding (Sonnet memo `memo-anchors-ties-slurs_r1_2026-09-11.md`,
-> read in full): ties already taper (Dann's eye, `TIE_CENTRE_SP` 0.4 sp,
-> 2026-08-27); the uniform-width arcs are SLURS, a 1.3 px stroke
-> (`:2636-2670`); long arcs go flat because the slur lift is capped at
-> 24 px (`:2658`) and tie depth is fixed at 0.9 lineGap (`:2602`). Gould
-> 151: one design for both. Gould's slur pages 109-112 never photographed,
-> so the arch height is Dann's eye: the brief asks Code for three renders
-> per number. Brief WRITTEN, UNTRACKED:
-> `docs/sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`.
 >
 > **N.127, INSIGHTS, numbered by Dann 2026-09-11 evening (first ruled as
 > N.126 in-session; renumbered after the desk missed `STATE.md:497`, the
@@ -343,96 +389,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > Brief WRITTEN, NOT RUN, UNTRACKED:
 > `docs/sessions/brief-n128-stale-beat_r1_2026-09-12.md`.
 >
-> **NEXT, in order:** increment 3 (the brief above: `git add` it, paste the
-> opener from `brief-path-pass-inc2`'s pattern, ship, walk); N.119; N.120 (drawing first, now carrying the `Tempo`
-> station, see N.120 below); N.121 remainder; N.122; then step 4, the phone
-> landing against portrait C. Usage 2026-09-10 22:26: Fable 71%, all-models
-> 44%, reset Sunday 05:00. Two Sonnet subagents ran tonight from this desk
-> at Dann's instruction ("I don't need to be involved"): 148k and 160k
-> tokens against the all-models pool; the desk had quoted 60k for the
-> first and owns the miss.
->
 > **The superseded 06:15 block moved to `../sessions/LOG.md` block 10.**
->
-> **Earlier the same session:** brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
-> built on Sonnet's read-only anchor memo
-> `docs/sessions/memo-anchors-path-pass_r1_2026-09-10.md` (86 lines; its
-> finding: no front-side band has an open or closed state today, only
-> sub-stations toggle, `sections.svelte.ts:54`). Code returns
-> `memo-path-pass_r1_…`; NOT walked until Dann walks it on the alias. Two
-> DESK DEFAULTS in the brief for Dann to wave off: Input closes like its
-> siblings; the bands join the station store. **Step 2 DONE:** drawing r2
-> `docs/sessions/drawing-drawer-front-side_r2_2026-09-10.html`, Plates A to
-> D plus the departures table, rendered and checked, Plate B corrected to
-> the tree after the walk; nothing in it is open. Then: N.119, N.120
-> (drawing first), N.121 remainder, N.122; (4) the phone landing against
-> portrait C, its own drawing. Fable was at 62% on 2026-09-10 early; farm
-> mechanical work to Sonnet. **Closed this session and moved to
-> `../sessions/LOG.md` block 9:** N.113a and N.113b (walks and the item 3
-> account), N.114 (done, walked), N.114a (done, walked), and N.114b items 1
-> to 5 (done, walked). Details there, verbatim.
->
-> **N.114b CLOSED WHOLE, items 1 to 9, 2026-09-10 04:36, walked by Dann on
-> the alias** (`92b7d5d`, memo r3). Moved to `../sessions/LOG.md` block 9.
-> Still owed from it: the Undo clause for Start placement over (N.121 d).
->
 
-> **N.118, NUMBERED BY DANN 2026-09-09: punctuation travels in the slot.**
-> A placed syllable never carries the poem's punctuation because
-> `cyrOfSyllable` reads `cleanWord` (`pairings.ts:152-159`); the punctuated
-> cells on the page are wherever the map has no entry (`pairedCyrillic`,
-> `:702-712`, overrides only mapped ids; consistent with Dann's screens, not
-> yet proven on a taken note). Ruled design, desk's recommendation taken
-> over Dann's first idea of a Transcribe-and-fit restore pass: give the
-> word's LAST syllable its trailing punctuation inside `buildSlotQueue`
-> (`:192-226`), so every placement, shift, and re-seat carries it. NOT
-> ESTABLISHED for Code: whether `WordStackData` holds the raw word beside
-> `cleanWord`; whether `estimateCyrillicWidthPx` prices a trailing comma.
-> Gould rule 10 (project extraction, snippet only): the Cyrillic line keeps
-> the author's punctuation. Dann said N.115; N.115 was taken, N.118 is the
-> DESK DEFAULT. After N.114 unless he places it.
->
-> **DESIGN RETURNED, 2026-09-10 07:36, READ IN FULL, CRITIQUED, RULED ON.**
-> Reply: `docs/sessions/design-reply-drawer-as-a-path_r1_2026-09-10.html`
-> (bundled page; render it to read it). Critique:
-> `docs/sessions/desk-critique-of-design-reply_r1_2026-09-10.md`. Design's
-> two findings the desk missed: THE PHONE LANDING (a step's primary action
-> changes nothing in view on a phone) and THE STALE STATE (done is not
-> permanent; toggles = N.119). **Dann's rulings on it, all 2026-09-10:**
-> lyric hands FIRST in Corrections, always, fixed (Design's swap-by-state
-> rejected); the METADATA label on the Piece band is struck (DESK DEFAULT:
-> the fields show whenever Piece is open); on a phone a step's primary
-> action lands the singer on the page and Back brings them home (READ
-> AGAINST PORTRAIT C before Code); the ⓘ on Russian-o stays as the ONE
-> NAMED EXEMPTION to slate rule 11; no word on every unplaced syllable,
-> count plus ink on the page, state in the accessible label. French table
-> shown (INBOX); « saisir », « coller », « déposer » adopted from the tree;
-> the rest stands unless he names a row. Design's corrections to the
-> thesis ACCEPTED: state line is the collapsed form; empty drawer opens
-> Input only, Piece collapsed; "committed is black" holds once placed.
-> Usage: Fable 62%, all-models 38%, reset Sunday; Fable scarce.
->
-> **NEXT, in order:** (1) transcribe the ratified grammar, the path rules,
-> and the exemptions into `PRODUCT.md` (mechanical: Sonnet); (2) a drawing
-> r2 of the drawer front side from Design's frames A, B, C with Dann's
-> rulings applied (desk); (3) Code briefs: N.114b items 6 to 9 (ready),
-> then the path pass (Piece collapsed on empty, state lines, one primary,
-> Calibrate, placed, strings), then N.119, N.120 (lyric first), N.121,
-> N.122; (4) the phone landing against portrait C, its own drawing.
->
-> **THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH. Design is being
-> consulted.** Brief `docs/sessions/brief-to-design-drawer-as-a-path_r1_2026-09-10.md`
-> committed `a03cfdc`, package of five (brief, drawing r1, design system
-> r2-3 md5 `3b0c9cf4c9f194245d6ab6914d7c52a8`, two screenshots). Dann hands
-> it to Design himself. Asked of Design: a three-session walkthrough from
-> the singer's chair measured by CONFIDENCE (knowing it worked before moving
-> on), then mockups of the front side in three states and the calibration
-> summary with the capture surface open in place, then a page of reasoning
-> and a NOT ESTABLISHED section. While Design works: N.114b items 6 to 9
-> are briefed for Code and independent of Design; N.119 is briefed-in-
-> principle; N.120 to N.122 WAIT for Design's return before any drawing r2.
-> Design's return goes into STATE.md and its rulings into PRODUCT.md.
->
 > **N.114b, items 1 to 5 DONE on Dann's alias walk 2026-09-10 (`ec4fbe9`,
 > `7665afa`, `8278429`); items 6 to 9 BRIEFED, NOT RUN**, all in
 > `docs/sessions/brief-n114b-pills-over-the-drawer_r1_2026-09-10.md`: 6 air
@@ -444,173 +402,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > Start placement over is NOT wired: no existing clause fits; the sentence
 > is Dann's to rule (English and French), then one line in Code.**
 >
-> **NUMBERED BY DANN 2026-09-10 ("create cardinal numbers for what deserves
-> it"), all UNPLACED, all after N.114b's items 6 to 9:**
->
-> **N.119, the Notation toggles reach Score markup live.** Dann: "I want
-> them to." Tree facts: the open-syllabification toggle clears syllable
-> overrides (`+page.svelte:2391`); the IPA line under the notes comes from
-> `underlayResolvers` (`VoiceProfilePane.svelte:748-755`), which takes
-> `openSyllabification` only. Code reads which toggles reach it. Own brief.
->
-> **N.120, the Corrections station redesigned: context before choice.**
-> Dann: "a tangled junk drawer." About twenty controls drawn at once, one
-> of four stations named. Desk's recommendation, unruled: each station is a
-> sentence that opens ("Duration · dotted quarter", "Pitch · B♭3",
-> "Accidental · flat", "Lyric · тес, 37 / 94"), one open at a time, and
-> only what applies to the taken thing is shown (nothing taken: "Take a note
-> to correct it"; a rest: no Pitch, Accidental, Lyric). DRAWING FIRST,
-> citing the station shape ruled 2026-08-13 and Fable's E.44 amendment
-> (tether 17), then a Fable pass if Dann wants one, then Code.
->
-> **N.121, RULED IN PART 2026-09-10 late, the two sets of words:** the
-> singer is never surprised by which words end up under the notes. A score
-> arriving with words into an EMPTY box fills the box and tags the poem
-> receipt "from score" (the Piece fields' own pattern); no question; never
-> overwrite a singer's words. No difference reporting, ever. No narration on
-> score arrival. Dann's earlier sketch of an in-place question is
-> WITHDRAWN. Also under N.121: the PDF question asks only when neither tell
-> fires (Cyrillic text layer = poem; staves = score), Code to wire.
->
-> **N.121, the Input band's words and the way in.** (a) RULED 2026-09-10
-> 04:50: placeholder "Paste, type, or drop your poem here." and, under the
-> field while empty, "A score or a photograph can go here too, or you can
-> choose a file." with the last three words as the link; the pill goes;
-> "poem" kept over "text" because Text is the band. French shown and
-> standing (table in the path-pass brief §6). In Code with the path pass.
-> (b) RULED 2026-09-10: "37 / 94 placed", « 37 / 94 placées ». In Code. (c)
-> "Transcribe and fit": since N.112 text transcribes live, so what the
-> button still does is NOT ESTABLISHED; Code states it before any rename;
-> if it only fits, "Fit to score" / « Ajuster à la partition », coined.
-> (d) the undo clause for Start placement over, "placements rebuilt" or
-> Dann's better word, both languages, then the push is one line.
->
-> **N.123, THE AGGREGATION LAYER, numbered by Dann 2026-09-10 late,
-> UNPLACED, displaces nothing until he places it.** One layer under four
-> figures (E.19, 2026-07-30, found them sharing it): per-pitch and per-vowel
-> phonation time in seconds; the TESSITURAGRAM (adopted from Titze and
-> Maxfield, J Singing 77(5), 2021, pp. 653-661, read in full by Sonnet): the
-> accumulated-duration histogram per pitch with the singer's turning points
-> shaded; beneath it the half-mass band ("half the singing sits between D3
-> and A3", the narrowest interval holding half the summed sung duration,
-> DESK DEFAULT fraction one half, coined wording), the duration-weighted
-> centre of gravity (Rastall, via Barcan 2013, formula NOT ESTABLISHED),
-> Pacheco's half-maximum band drawn on the same histogram as a labelled
-> second reading (Chapter 6 continuity), and CYCLE DOSE (Titze, Švec, and
-> Popolo, JSLHR 46(4), 2003; primary NOT fetched, formulas from a citing
-> review), which is Dann's fold-collision count: sum over sung notes of
-> f0 × seconds, rests out. **RULED by Dann:** full-voiced classical singing,
-> one collision per cycle in principle; the falsetto/breathy caveat is one
-> line on the screen and never stops the figure. Amends E.20 ruling 9
-> (2026-07-31, "a cute add-on, a learned guess"): it is a named, cited
-> figure, carried with the tempo's band. Survey:
-> `docs/sessions/memo-tessitura-literature_r1_2026-09-10.md` (218 lines;
-> 10 sources full, 4 snippet only; Thurmer 1988 "tessiturogram" and Tessa
-> 2020 not fetched). Guide paragraph, English only, r2 with dates:
-> `docs/sessions/guide-tessituragram-paragraph_r2_2026-09-10.md` (N.84).
-> Ruled out again: any ranking or difficulty score.
->
-> **N.124, REPERTOIRE FOR A STUDIO, numbered by Dann 2026-09-10 late,
-> UNPLACED, after N.123.** A teacher holding several students' voices,
-> one song. Ilya gives a curation, not a table: the original key's
-> challenges in sentences (range first, on held or exposed notes, ceiling
-> AND floor; then how the song sits against the passaggi, counting which
-> vowels land there per Shane's per-vowel sums), then up to THREE candidate
-> keys inside the voice's window, each with its sentence and what it trades
-> away, or the honest finding that no key fits and another song is the
-> answer ("and that's ok"). Amends the 2026-08-07 ruling against suitability
-> judgements in scope: Ilya may suggest keys with reasons on their face;
-> never a score, never a rank. **Pianist's key, Dann's rule:** a proposed
-> transposition landing in a key pianists resist is disfavoured (six sharps
-> his example; five flats acceptable); DESK DEFAULT table until he names
-> one: up to four sharps or five flats count as pianistic, beyond that
-> shown with a one-clause note and never chosen over an equal pianistic
-> key; enharmonics respelled (C♭ as B, C♯ as D♭). **The rule never touches
-> the original key** ("some pieces are written in six or seven sharps"), nor
-> a candidate that lands back in it. Needs: N.123; the singer's floor and
-> ceiling from calibration (what the wizard captures today NOT ESTABLISHED);
-> a multi-voice library, NOT ESTABLISHED as existing; sentence copy in both
-> languages, Dann's, before Code.
->
-> **N.120 gains a `Tempo` station, RULED by Dann 2026-09-10 late:** Ilya
-> presets tempo from what it reads (encoded mark, or an editorial marking on
-> an image or PDF), applies changes at the score's own tempo words, shows
-> every one on the Score markup page (nothing hidden), and the singer
-> overrides any of them without being made to articulate a tempo they did
-> not choose ("death by a thousand cuts"). Shape, desk's: a sentence station
-> `Tempo · ♩ = 72 · from score`, and on a taken note `from here`. The seam
-> is built (E.20, 2026-07-31: override → mark → Quantz tier with band →
-> abstain); per-region override NOT ESTABLISHED in the tree. Finale's
-> handling of gradual cues (rit., rall., schnell) is an INBOX item, recorded
-> at Dann's word, for the same station.
->
-> **N.122, the capture surface as a landmark.** Dann, 2026-09-10: the
-> lavender vowel-intake surface (the capture phase with the fry guide,
-> `CalibrationWizard.svelte`, phase `capture`) is a surface "people will
-> respond well to" and he wants it as a VISUAL LANDMARK that stays
-> available to view. Ruled shape: the summary stays on screen; the capture
-> surface lives inside it as a section that opens when Re-take or "Sing the
-> three Ilya derived for you" is pressed, and folds when that vowel is done,
-> so the table is never lost while singing. Still a phase in the wizard's
-> logic; what changes is that phases no longer replace each other on the
-> summary. DRAWING FIRST, citing wizard spec v1 and pacifier spec v11
-> (project knowledge, tether 17) so nothing ruled there is re-decided.
-> Unplaced; belongs with N.120 as "the drawer's surfaces".
-> **DRAWN r1, 2026-09-10 late: `docs/sessions/drawing-calibration-surface_r1_2026-09-10.html`**,
-> rendered and checked. Plate 1 is THE DRAWER GRAMMAR, every measure with
-> its file and line, to go into `PRODUCT.md` once Dann ratifies it; Plates
-> 2 and 3 redraw the summary to it (verbs by state, two station rows, one
-> caption, Finish last) and show N.122's capture surface opening under the
-> pressed row. Plate 5 asks four things, unanswered. Wizard spec v1 and
-> pacifier spec v11 NOT OPENED; open them before Code is briefed.
->
-> **For N.84 (Guide):** explain Revert to score header; a music file carries
-> its own header text. Filed in INBOX with the mechanism.
->
-> **N.115, the singer moves a measure between systems** (numbered
-> 2026-09-06, UNPLACED): Finale's arrow-up on a selected measure. Research
-> Finale first (his ask), then find the tree's orphaned-measure rule.
->
-> **N.116, Learn as the book** (numbered 2026-09-07, UNPLACED). Step 1 DONE:
-> `docs/sessions/inventory-n116-learn-grayson_r1_2026-09-07.md` and
-> `n116-dann-lit-review-sung-russian_2026-09-07.md`. Step 2, the desk's
-> proposed sequence for a singer, needs the inventory read in full and
-> Grayson chapters 1, 8, 9. Rule: every chapter from Grayson cited as his;
-> Dann's additions marked as his.
->
-> **N.117, a progress bar on load** (numbered by Dann 2026-09-07 late,
-> UNPLACED, ruled in from INBOX on the N.113a alias walk). The page takes a
-> few seconds to load on reload with nothing to say so; Dann wants a progress
-> bar, not a message. What the bar measures is NOT ESTABLISHED (dictionary
-> load is the likeliest candidate: `input.transcribeLoading` already exists).
-> Displaces nothing until he places it.
->
-> **N.110, the [i] extractor harness**: set aside by Dann, briefed
-> (`brief-n110-i-extractor-harness_r1_2026-09-02.md`), not built.
->
-> **The print fix**: the page prints white; cause found
-> (`staff-renderer.ts:2740` cream rect, `stripBackingRect` strips only the
-> white page rect). Paste written 2026-09-07 (INBOX), never run; its own
-> Code thread whenever, different files from the sequence.
->
-> **French owed, one table after N.114:** every N.108, N.111, N.112 to
-> N.114 string (`group.input`, `input.transcribe`, `input.watermark` as
-> « poème », `intake.*`, `loupe.redo`, `loupe.undo.placed`,
-> `loupe.undo.melisma*`, `loupe.melisma`, `paper.empty.mobile`).
->
-> **Open and unplaced, small:** N.102 increment 1c (turning-layer
-> courtesies), N.94, N.82 (the watch band's French), N.89 (document
-> furniture, ratified from drawings), and the `#` marker in Dann's engraved
-> IPA verse (his file, not Ilya).
->
-> **Waiting, all Dann's to order:** N.83's walkthrough call, N.84 the Guide
-> and Learn redo (after N.114), and the release order N.85 through N.88.
 
 ## THE TRACKER
 
 **The goal: a working beta. PDF, photograph, and MIDI stay in it.**
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
+
+**The specs these marks point at live in `OPEN.md` from 2026-09-13.** This
+section carries the marks; that file carries the items.
 
 ### THE BLOCKING SET IS EMPTY, 2026-08-21
 
@@ -653,10 +453,6 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   Without Sun song 1. Closing it means teaching the layout pass an
   analysis-layer measurement; it belongs with N.103's spacing work. Source:
   `docs/sessions/memo-n106-turning-right_r1_2026-09-02.md`, NOT ESTABLISHED.
-- **A third was being read as a second by the desk's own predicate**
-  (`gap > o.lineGap`), caught by Code in N.106: a stave step is half a
-  space, so intervals are counted in steps, never in `lineGap`. The old rule
-  had the same flaw. Do not write that predicate again.
 - **THREE RESIDUES OF N.104's LOUPE FIX. None is a regression, all three predate
   it, and all three want numbers.** (1) `Loupe.svelte:276-277` still bounds
   `pageMetrics`' head on `[data-hit]`, which is a different question from the
@@ -709,17 +505,17 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   hygiene, not weight, and it is a lockfile operation. **Do it clean, on its own.**
   Measured before the ruling: one `AlertDialog` cost **+18.7 KB gzipped**
   (392,547 to 411,292), against Fable's ~8 KB budget for all of N.67.
-- ~~`InstallPrompt.svelte:83`'s false `role="dialog"`~~ **DONE 2026-08-16**,
-  Dann's ruling. It is a bottom banner, not a modal, and `showModal()` would
-  have trapped a singer inside an install suggestion. Now `role="region"`, which
-  keeps the `aria-label` exposed where a bare div would have dropped it.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
 - The binding squircle's footprint on Insights page one: Design proposes two
   treatments, Dann rules (2026-09-11).
 
-### New from N.104, 2026-08-29. Three, none blocking the walk
+### New from N.104, 2026-08-29. One left, not blocking the walk
+
+The bar numbers were ruled on 2026-09-11 and are now N.126, below. The loupe's
+typeface closed with `246c17c` on 2026-09-13 and moved to `../sessions/LOG.md`
+block 11.9. The tacet question is the one that is still his.
 
 - ~~THE BAR-NUMBERS DRAWING IS WAITING ON HIM.~~ **RULED 2026-09-11 00:40,
   numbered N.126, measure numbers on Score markup, UNPLACED.** Size: the
@@ -731,26 +527,8 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   barline of the rest, explained to Dann and not waved off. System-start
   number above the clef per Gould p484 and his 2026-08-29 ruling. Drawing:
   `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`; source
-  `gould-bar-numbers-p484_2026-08-29.md`. Original text kept:
-- **THE BAR-NUMBERS DRAWING WAS WAITING ON HIM.** Thirty-two plates in
-  `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`, built on
-  `docs/sessions/gould-bar-numbers-p484_2026-08-29.md`. **Gould gives which bars
-  are numbered, where, what slope and what framing, and gives no size, no
-  weight, no clearance and no horizontal offset**, so five things are his and
-  are all convention: size, weight, clearance, the post-rest anchor, and bare
-  against parenthesized. **Sections B and C are not independent**: the
-  parenthesis crosses back over the barline at two of the three anchors and is
-  clear at the third, so width and placement have to be ruled together. Ilya
-  draws no bar number today; nothing here is built or proposed.
-- **The loupe draws the singer's words in a different typeface than the page
-  does**, and has since before N.104. The loupe declares Source Serif 4, which
-  is the renderer's own intent; the page's container overrides it to Source
-  Sans 3. Measured on «тень»: the clone lays that text out 1.99 units further
-  left than the head bound allows, on systems 2, 5, 6 and 7. **Looked at at 9×
-  on all four: no ink enters the head**, the overlap falling inside the first
-  letter's side bearing. A measured near-miss, not a guarantee. **The fix is
-  either which face the loupe draws words in, which is his eye, or measuring
-  the bound on the clone, which needs two passes.** Not built.
+  `gould-bar-numbers-p484_2026-08-29.md`. The original text it superseded moved
+  to `../sessions/LOG.md` block 11.8 on 2026-09-13.
 - **What the correction surface does over a tacet run.** Three proposals in
   `docs/sessions/memo-n104-tacet_r1_2026-08-27.md` §7, unruled since
   2026-08-27. The ship changed nothing there **on desk inference rather than on
@@ -804,25 +582,6 @@ French Dann has not seen.
   choosing Keep leaves them somewhere they did not ask to be. Nothing is lost,
   because saving is continuous.
 
-- ~~RULED 2026-08-21: **LEAVE IT**, on Dann's printed sheet rather than on
-  arithmetic. Original text kept:~~ **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
-  (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
-  for pure white. Three levers: leave it; darken `--sage` globally, which keeps
-  print identical to screen; or darken at print only, which breaks the WYSIWYG
-  principle he set in E.51. **Nothing depends on it.**
-- ~~`pdfjs-dist`, for N.59 step 8~~ **RULED IN 2026-08-16, Dann: an enthusiastic
-  yes.** Registry facts checked first, as he required for `fake-indexeddb`:
-  6.2.108, Apache-2.0, zero runtime dependencies, 20.4 million weekly downloads,
-  last published 2026-07-28. Built, walked by me, not yet by him.
-- ~~THE PHOTOGRAPH COPY, and whether photographs belong in the beta~~ **RULED
-  2026-08-17, Dann: photographs stay in the beta, and the copy was corrected in
-  the same session. Both languages approved before either was written.**
-- ~~Fable's six ratification items of 2026-07-24~~ **RULED 2026-08-17, Dann:
-  items 1 and 2 ratified (T3 fence, T4 third precedent class). Items 3 to 6
-  concern that session's build balance and wording; whether they were
-  satisfied is NOT ESTABLISHED and none blocks anything.**
-- ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
-  shipped and was walked.
 - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
   Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:48`
   already excludes `CriOS` and `FxiOS`. Established by reading, carried over

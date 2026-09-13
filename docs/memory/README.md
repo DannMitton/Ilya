@@ -14,8 +14,14 @@ Read this page. Then read only what it sends you to. Do not read the whole folde
 > **Do not restate the one thing here.** On 2026-08-14 this block still named a
 > commit that `STATE.md` had never heard of, and the session opened on a
 > contradiction it had to resolve before it could start.
-> The syllable station and the note click are `WRITTEN`, not `DONE`.
-> Recipe: `STATE.md` §The walk.
+>
+> **It happened again and was caught on 2026-09-13.** This block still carried
+> "the syllable station and the note click are `WRITTEN`, not `DONE`" and sent
+> the reader to `STATE.md` §The walk. Neither phrase appeared anywhere in
+> `STATE.md` any more, and there is no §The walk: the four-step walk lives in
+> §THE FIXTURE. **Both lines are struck.** The rule this block states is the rule
+> it kept breaking, so: nothing after the first line of this block ever names an
+> item, a commit, a state, or a section of `STATE.md`.
 
 Nothing else is in progress. Everything else is in `STATE.md` or `INBOX.md` and is
 waiting, on purpose.
@@ -33,6 +39,10 @@ waiting, on purpose.
    opens with an index keyed by symptom. Use the index.
 4. **`PRODUCT.md`** — only before forming an opinion about what Ilya should do or
    look like.
+5. **`OPEN.md`** — the specs for the numbered items that are open and not
+   started. **NOT part of the opening read.** Open it when the one thing closes
+   and you need the next item's spec, or when Dann names an item by its number.
+   Split out of `STATE.md` on 2026-09-13; nothing in it was reworded.
 
 `INBOX.md` is append-only and **you do not open it unless Dann asks.**
 
@@ -53,6 +63,7 @@ beats the archive.**
 | `CONTRACT.md` | rarely, when Dann rules a new tether | Dann rules, you transcribe |
 | `PRODUCT.md` | rarely, when something is settled | Dann rules, you transcribe |
 | `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, when you learn it the hard way |
+| `OPEN.md` | when an item is numbered, ruled, or starts | you |
 | `STATE.md` | **every session, at the close** | you |
 | `INBOX.md` | any time Dann digresses | you, one line, immediately |
 
@@ -93,7 +104,9 @@ forty-seven of its predecessors were written and thrown away.
 
 ## Closing a session
 
-1. Update `STATE.md`: the one thing, the tracker marks, what moved.
+1. Update `STATE.md`: the one thing, the tracker marks, what moved. **If an item
+   closes, its spec leaves `OPEN.md` in the same pass;** if Dann numbers a new
+   one, its spec enters `OPEN.md` and its mark enters `STATE.md` §THE TRACKER.
 2. **Move what closed to `../sessions/LOG.md`.** Ruled by Dann 2026-09-01:
    **`STATE.md` holds only what is open. Anything that closes moves to `LOG.md` at
    the close of the session that closed it.** Size is an output, not a target.

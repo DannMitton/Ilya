@@ -3740,3 +3740,173 @@ DEVELOPMENT by Dann, 2026-08-21.** Nothing blocks the beta.
 | | *(2026-08-14 detail, kept)* | **"cheap" does not hold. Real scope NOT ESTABLISHED.** A scoping brief for a fresh Sonnet session was written and delivered to Dann 2026-08-14. **Whether he has run it is unknown. Ask before writing a second one** |
 | `[~]` | **N.59** the reader in the browser | **TIER 2 CLOSED 2026-08-18, ANSWERED NO, two Opus Code sessions. THE ONE THING above carries the whole account and its numbers.** Phase 0 killed the substrate decider, best margin −587 px; the slice probe died three times over, on grouping, on the fixture corpus (0 of 23), and on cost (16 to 59×). **Line grouping needs \|shear\| ≲ 0.12° and the photograph carries 2.48°.** The only instrument left is a dewarp, which is a project and is **NOT AUTHORISED**. **PARKED AT TIER 2. What a singer sees is unchanged:** photograph import stays in the beta and fails honestly, Dann's ruling 2026-08-17. **STILL OPEN INSIDE N.59: step 3, the brace rule, is `WRITTEN` and not `DONE`.** **INCREMENT 1 DONE `0573c10`, WALKED BY DANN. Step 8 (PDF, `pdfjs-dist`) ruled in and done.** Pyodide v0.26.4 pinned from the jsdelivr CDN, cv2 4.9.0 / numpy 1.26.4 confirmed in a browser; matplotlib added because `envelope.run` needs it and the spike never did; both Leipzig caches committed at `tools/e16-harness/reader/fonts/` so no Node and no Verovio ship; the brace rule replaces `select_vocal` **but has never once fired, and returns the PIANO on piece 06, so step 3 stands WRITTEN**; `pieceId` and `measures_per_system` derived; `midiAssumedNatural` additive; `recognized-to-musicxml.ts` joins at the existing ingest seam; the two questions and the read report live in the drawer; the greyscale ink and the singer's answers persist and restore without re-asking. Load 3.36 s, `envelope.run` 1.96 to 2.36 s per page. **`ENVIRONMENT.md` §THE PAGE READER carries every measured number and every trap.** ~~Pyodide, not a rewrite. PIN THE VERSIONS.~~ Stand the eleven-module reader up under Pyodide with cv2 4.9.0 / numpy 1.26.4; ~~replace `rest_templates.py`'s Node-and-Verovio shell-out with Verovio WASM~~ (STRUCK E.57, see below); swap `reader.py:269-278`'s five-line staff heuristic for Dann's brace rule. **CORRECTED E.57: NEITHER Verovio shell-out is replaced.** `rest_templates.py` and `timesig.py` each shell out to Node, and each `load_font` returns the parsed JSON on a cache hit BEFORE any subprocess is reached, so the browser needs two committed cache files and no Verovio WASM at all. Metre ships free on the same finding. Measured floor 2.9s load, 0.867s per page. Spike at `~/Downloads/ilya-reader-spike.html`. `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` |
 
+
+## Block 11. Moved from STATE.md at the close of 2026-09-13
+
+Six closed or superseded blocks, verbatim, in the order `STATE.md` named them. `STATE.md` was 937 lines against the 600 tripwire when this move began.
+
+### 11.1 Increment 3 of the path pass, shipped `9026a56` and walked whole by Dann 2026-09-12. Closed.
+
+> **INCREMENT 3 IS SHIPPED, WALKED, AND DONE, 2026-09-12.** Shipped
+> `9026a56` (Vercel `dpl_CFgHDALExXjqsPbSDXke2UKsud5X`, READY, branch alias),
+> from `brief-path-pass-inc3_r1_2026-09-11.md` on Code's memo
+> `memo-path-pass-inc3_r1_2026-09-11.md`. Dann walked all four steps on the
+> alias in his own profile at 1400 px: no `TEXT` band; `Notation` and
+> `Analysis` two plain closed rows under the intake; `1 of 7 changed` beside
+> `Notation`, open and shut, nothing beside `Analysis`; `SCORE MARKUP`
+> carrying no pair at rest; and after one `▲ step` in the Corrections
+> station, `↶ UNDO` on the band header. **Opening the SCORE MARKUP band did
+> NOT dismiss the loupe at desktop width**, which was the desk's named
+> likeliest failure. **On a desktop the loupe carries no correction verbs at
+> all**: the second `CorrectionSurface` is gated `{#if isPhone}`
+> (`+page.svelte:4785`), so the verbs live only in the drawer's Corrections
+> station. Code's own phone finding stands unanswered: at 390 px no Undo is
+> reachable at the moment of action.
+
+### 11.2 N.128, the beat a note thinks it is on, shipped `085bb9e` 2026-09-13. Shipped and walked; the account moved out of the 2026-09-12 close block.
+
+> 3. `085bb9e` **N.128**, a corrected duration now moves the onsets after it.
+>    Code chose to recompute in `applyCorrections` (`correction.ts:356`, new
+>    pass `:382`) over deriving the beat at render time, because the latter
+>    would have changed beaming on scores nobody corrected. Seven new tests,
+>    six failed before. **The desk's causal account named the wrong file and the
+>    correction is in `ENVIRONMENT.md`.**
+
+### 11.3 N.114b closed whole, items 1 to 9, 2026-09-10. Closed.
+
+> **N.114b CLOSED WHOLE, items 1 to 9, 2026-09-10 04:36, walked by Dann on
+> the alias** (`92b7d5d`, memo r3). Moved to `../sessions/LOG.md` block 9.
+> Still owed from it: the Undo clause for Start placement over (N.121 d).
+
+### 11.4 Design's return on the drawer as a path, 2026-09-10 07:36, read, critiqued, and ruled on. Its rulings were applied in the path pass and in increment 3.
+
+> **DESIGN RETURNED, 2026-09-10 07:36, READ IN FULL, CRITIQUED, RULED ON.**
+> Reply: `docs/sessions/design-reply-drawer-as-a-path_r1_2026-09-10.html`
+> (bundled page; render it to read it). Critique:
+> `docs/sessions/desk-critique-of-design-reply_r1_2026-09-10.md`. Design's
+> two findings the desk missed: THE PHONE LANDING (a step's primary action
+> changes nothing in view on a phone) and THE STALE STATE (done is not
+> permanent; toggles = N.119). **Dann's rulings on it, all 2026-09-10:**
+> lyric hands FIRST in Corrections, always, fixed (Design's swap-by-state
+> rejected); the METADATA label on the Piece band is struck (DESK DEFAULT:
+> the fields show whenever Piece is open); on a phone a step's primary
+> action lands the singer on the page and Back brings them home (READ
+> AGAINST PORTRAIT C before Code); the ⓘ on Russian-o stays as the ONE
+> NAMED EXEMPTION to slate rule 11; no word on every unplaced syllable,
+> count plus ink on the page, state in the accessible label. French table
+> shown (INBOX); « saisir », « coller », « déposer » adopted from the tree;
+> the rest stands unless he names a row. Design's corrections to the
+> thesis ACCEPTED: state line is the collapsed form; empty drawer opens
+> Input only, Piece collapsed; "committed is black" holds once placed.
+> Usage: Fable 62%, all-models 38%, reset Sunday; Fable scarce.
+
+### 11.5 The one thing of 2026-09-10 03:20, the drawer as a path with Design consulted, and the `Earlier the same session` block. Both superseded by the close of 2026-09-12.
+
+> **THE ONE THING, 2026-09-10 03:20: THE DRAWER AS A PATH. Design is being
+> consulted.** Brief `docs/sessions/brief-to-design-drawer-as-a-path_r1_2026-09-10.md`
+> committed `a03cfdc`, package of five (brief, drawing r1, design system
+> r2-3 md5 `3b0c9cf4c9f194245d6ab6914d7c52a8`, two screenshots). Dann hands
+> it to Design himself. Asked of Design: a three-session walkthrough from
+> the singer's chair measured by CONFIDENCE (knowing it worked before moving
+> on), then mockups of the front side in three states and the calibration
+> summary with the capture surface open in place, then a page of reasoning
+> and a NOT ESTABLISHED section. While Design works: N.114b items 6 to 9
+> are briefed for Code and independent of Design; N.119 is briefed-in-
+> principle; N.120 to N.122 WAIT for Design's return before any drawing r2.
+> Design's return goes into STATE.md and its rulings into PRODUCT.md.
+>
+> **Earlier the same session:** brief `docs/sessions/brief-path-pass_r1_2026-09-10.md`,
+> built on Sonnet's read-only anchor memo
+> `docs/sessions/memo-anchors-path-pass_r1_2026-09-10.md` (86 lines; its
+> finding: no front-side band has an open or closed state today, only
+> sub-stations toggle, `sections.svelte.ts:54`). Code returns
+> `memo-path-pass_r1_…`; NOT walked until Dann walks it on the alias. Two
+> DESK DEFAULTS in the brief for Dann to wave off: Input closes like its
+> siblings; the bands join the station store. **Step 2 DONE:** drawing r2
+> `docs/sessions/drawing-drawer-front-side_r2_2026-09-10.html`, Plates A to
+> D plus the departures table, rendered and checked, Plate B corrected to
+> the tree after the walk; nothing in it is open. Then: N.119, N.120
+> (drawing first), N.121 remainder, N.122; (4) the phone landing against
+> portrait C, its own drawing. Fable was at 62% on 2026-09-10 early; farm
+> mechanical work to Sonnet. **Closed this session and moved to
+> `../sessions/LOG.md` block 9:** N.113a and N.113b (walks and the item 3
+> account), N.114 (done, walked), N.114a (done, walked), and N.114b items 1
+> to 5 (done, walked). Details there, verbatim.
+>
+
+### 11.6 The two stale `NEXT, in order` lists of 2026-09-10. Superseded.
+
+> **NEXT, in order:** increment 3 (the brief above: `git add` it, paste the
+> opener from `brief-path-pass-inc2`'s pattern, ship, walk); N.119; N.120 (drawing first, now carrying the `Tempo`
+> station, see N.120 below); N.121 remainder; N.122; then step 4, the phone
+> landing against portrait C. Usage 2026-09-10 22:26: Fable 71%, all-models
+> 44%, reset Sunday 05:00. Two Sonnet subagents ran tonight from this desk
+> at Dann's instruction ("I don't need to be involved"): 148k and 160k
+> tokens against the all-models pool; the desk had quoted 60k for the
+> first and owns the miss.
+>
+> **NEXT, in order:** (1) transcribe the ratified grammar, the path rules,
+> and the exemptions into `PRODUCT.md` (mechanical: Sonnet); (2) a drawing
+> r2 of the drawer front side from Design's frames A, B, C with Dann's
+> rulings applied (desk); (3) Code briefs: N.114b items 6 to 9 (ready),
+> then the path pass (Piece collapsed on empty, state lines, one primary,
+> Calibrate, placed, strings), then N.119, N.120 (lyric first), N.121,
+> N.122; (4) the phone landing against portrait C, its own drawing.
+
+
+### Added 2026-09-13, the same prune, after the row-by-row assessment of the two OWED sections
+
+### 11.7 `InstallPrompt.svelte:83`'s false `role="dialog"`. Done 2026-08-16 on Dann's ruling. Moved out of `OWED, RULED BUT NOT YET DONE`.
+
+- ~~`InstallPrompt.svelte:83`'s false `role="dialog"`~~ **DONE 2026-08-16**,
+  Dann's ruling. It is a bottom banner, not a modal, and `showModal()` would
+  have trapped a singer inside an install suggestion. Now `role="region"`, which
+  keeps the `aria-label` exposed where a bare div would have dropped it.
+
+### 11.8 The bar-numbers drawing, the original text that was kept under the 2026-09-11 ruling. Superseded by that ruling, which numbered it N.126 and stays in `STATE.md`.
+
+- **THE BAR-NUMBERS DRAWING WAS WAITING ON HIM.** Thirty-two plates in
+  `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`, built on
+  `docs/sessions/gould-bar-numbers-p484_2026-08-29.md`. **Gould gives which bars
+  are numbered, where, what slope and what framing, and gives no size, no
+  weight, no clearance and no horizontal offset**, so five things are his and
+  are all convention: size, weight, clearance, the post-rest anchor, and bare
+  against parenthesized. **Sections B and C are not independent**: the
+  parenthesis crosses back over the barline at two of the three anchors and is
+  clear at the third, so width and placement have to be ruled together. Ilya
+  draws no bar number today; nothing here is built or proposed.
+
+### 11.9 The loupe drew the singer's words in a different typeface than the page. CLOSED by `246c17c`, 2026-09-13: the loupe draws sans like the page and Dann confirmed the Cyrillic match. Its successor is N.129, the underlay's metrics, which stays in `STATE.md`.
+
+- **The loupe draws the singer's words in a different typeface than the page
+  does**, and has since before N.104. The loupe declares Source Serif 4, which
+  is the renderer's own intent; the page's container overrides it to Source
+  Sans 3. Measured on «тень»: the clone lays that text out 1.99 units further
+  left than the head bound allows, on systems 2, 5, 6 and 7. **Looked at at 9×
+  on all four: no ink enters the head**, the overlap falling inside the first
+  letter's side bearing. A measured near-miss, not a guarantee. **The fix is
+  either which face the loupe draws words in, which is his eye, or measuring
+  the bound on the clone, which needs two passes.** Not built.
+
+### 11.10 Five rulings Dann had already made, moved out of `RULINGS DANN OWES`: the sage rules in print (leave it, 2026-08-21), `pdfjs-dist` (ruled in 2026-08-16), the photograph copy (2026-08-17), Fable's six ratification items (2026-08-17), and which of N.58 and N.59 came next (2026-08-16).
+
+- ~~RULED 2026-08-21: **LEAVE IT**, on Dann's printed sheet rather than on
+  arithmetic. Original text kept:~~ **The sage rules print faint in greyscale.** `--sage` is `#8B9A7D`
+  (`app.css:33`), about 58% relative luminance, and print swaps `--paper-cream`
+  for pure white. Three levers: leave it; darken `--sage` globally, which keeps
+  print identical to screen; or darken at print only, which breaks the WYSIWYG
+  principle he set in E.51. **Nothing depends on it.**
+- ~~`pdfjs-dist`, for N.59 step 8~~ **RULED IN 2026-08-16, Dann: an enthusiastic
+  yes.** Registry facts checked first, as he required for `fake-indexeddb`:
+  6.2.108, Apache-2.0, zero runtime dependencies, 20.4 million weekly downloads,
+  last published 2026-07-28. Built, walked by me, not yet by him.
+- ~~THE PHOTOGRAPH COPY, and whether photographs belong in the beta~~ **RULED
+  2026-08-17, Dann: photographs stay in the beta, and the copy was corrected in
+  the same session. Both languages approved before either was written.**
+- ~~Fable's six ratification items of 2026-07-24~~ **RULED 2026-08-17, Dann:
+  items 1 and 2 ratified (T3 fence, T4 third precedent class). Items 3 to 6
+  concern that session's build balance and wording; whether they were
+  satisfied is NOT ESTABLISHED and none blocks anything.**
+- ~~Which of N.58 and N.59 is next~~ **RULED 2026-08-16: N.59.** Increment 1
+  shipped and was walked.
+

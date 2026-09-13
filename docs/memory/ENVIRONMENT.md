@@ -154,6 +154,7 @@ next session the same hour it cost the last one.
 | the project knowledge estate filling | `Project knowledge capacity` |
 | Code unable to read a ruling you cited | `CLAUDE CODE CANNOT READ` |
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
+| prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -170,6 +171,7 @@ file.
 | you re-measured what you already had | `MEASURE THE PICTURE` |
 | you measured to the next mark, not the box | `MEASURE THE BOX` |
 | Code found the instrument at fault, not the code | `TWO INSTRUMENT FAULTS` |
+| you counted stave intervals in `lineGap` | `A STAVE STEP IS HALF A SPACE` |
 
 ---
 
@@ -2613,3 +2615,62 @@ clef, barline and rest in it.
 workspaces.** Better still, do not report counts at all when what the question
 needs is USE SITES. Dann's own framing, 2026-09-13: *"counts do not tell you
 whether a use is justified."*
+
+---
+
+## A STAVE STEP IS HALF A SPACE, SO INTERVALS ARE COUNTED IN STEPS, NEVER IN `lineGap`
+
+Moved here from `STATE.md` §OWED on 2026-09-13: the finding is closed and the
+lesson is permanent, so it belongs in the lookup table rather than in the
+handover. The text is verbatim as `STATE.md` carried it.
+
+- **A third was being read as a second by the desk's own predicate**
+  (`gap > o.lineGap`), caught by Code in N.106: a stave step is half a
+  space, so intervals are counted in steps, never in `lineGap`. The old rule
+  had the same flaw. Do not write that predicate again.
+
+---
+
+## PRUNING A MEMORY FILE. The recipe, and the one way it broke. 2026-09-13
+
+**The job:** move closed blocks out of `STATE.md` into `../sessions/LOG.md`,
+verbatim, without disturbing what stays. 937 lines went to 583 in about fifteen
+minutes this way, and every seam held.
+
+**The recipe, in order.**
+
+1. `cp STATE.md $HOME/STATE.md.pre-prune-<date>` first. The bridge shell's home
+   is outside `mnt/`, so the backup never lands in the repository and never
+   shows up in `git status`. CONTRACT's rule applies: record what was there
+   before you change state on Dann's machine.
+2. Find each block's first and last line with one `awk` that prints only
+   `^> \*\*` lines plus their numbers. Blocks in these files are blockquote
+   paragraphs separated by a bare `>`, so the last line of a block is the `>`
+   before the next bold opener, and blank lines are rare enough to spot.
+3. **Assert every anchor before you write anything.** Build a list of
+   `(line number, expected substring)` pairs, check them all, and exit on the
+   first failure. On 2026-09-13 this caught nothing, which is the point: the
+   twenty-one assertions are what made a 95-line deletion safe to run blind.
+4. Grab the ranges into the destination file, then delete the union of the
+   ranges from the source in ONE pass, filtering by line number. Deleting range
+   by range renumbers the file under you.
+5. Re-read every seam afterwards. Six seams, six `sed -n` calls.
+
+**HOW IT BROKE, and it is the only thing that broke.** Removing item 3 from a
+numbered list inside a blockquote left item 4 needing to become item 3. The
+replacement string was written as `3. \`7841fe7\` ...` and **dropped the `> `
+prefix**, which silently ended the blockquote in the middle of a list and
+printed one line as body text. **So: any string you write back into one of these
+files carries its `> ` prefix, and a replacement inside a blockquote is checked
+by eye afterwards, not assumed.**
+
+**Two bookkeeping traps in the same job.**
+
+- **A list whose header counts its rows.** Removing a row left
+  `### New from N.104, 2026-08-29. Three, none blocking the walk` above two
+  rows, and `FOUR SHIPS` above three. Grep the section heading for a number
+  after any removal.
+- **A number you write about the file is stale the moment you write more.** The
+  new tripwire note in `STATE.md` quoted 583 lines, then grew the file to 659 by
+  existing. **Do not put the current line count in the file it describes;**
+  describe the move instead, the way the floor paragraph does.
