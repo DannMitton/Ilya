@@ -287,6 +287,20 @@ export function collectScoreWords(parsed: ParsedScore, verseNumber: number): Sco
 }
 
 /**
+ * The score's own words as one line of text: each word's syllables rejoined,
+ * one space between words, and nothing added. Punctuation travels inside the
+ * syllable text the file printed.
+ *
+ * ONE JOIN FOR EVERY READER. This resolver's own pipeline run, `readScoreText`
+ * in `clitic-seat.ts`, and N.134's fill of the poem box all read this string,
+ * so the poem a score fills and the text the clitic seat aligns against are
+ * the same text by construction rather than by two joins agreeing.
+ */
+export function scoreWordsText(words: readonly ScoreWord[]): string {
+	return words.map((w) => w.raw).join(' ');
+}
+
+/**
  * The single vowel (bare glyph) of the word's syllable `sylIdx`, verbatim
  * from the engine's transcription log, or undefined when the syllable
  * does not carry exactly one vowel from the ten-vowel roster.
@@ -424,7 +438,7 @@ export function buildUnderlayResolvers(
 	if (scoreWords.length > 0) {
 		let pipelineWords: WordStackData[] = [];
 		try {
-			const lines = processText(scoreWords.map((w) => w.raw).join(' '));
+			const lines = processText(scoreWordsText(scoreWords));
 			pipelineWords = lines[0]?.words ?? [];
 		} catch {
 			// A pipeline failure resolves nothing; the overlay stays honest

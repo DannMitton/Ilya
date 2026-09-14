@@ -49,6 +49,7 @@ import {
 	cleanForAlignment,
 	collectScoreWords,
 	CYRILLIC_VOWEL,
+	scoreWordsText,
 	type ScoreWord,
 } from './vowel-resolver';
 import { buildSlotQueue, type PairingMap, type Slot } from './pairings';
@@ -109,7 +110,7 @@ export interface CliticFold {
 }
 
 /** A word's cells against its slots, so a run's offset can be read off. */
-interface Aligned {
+export interface Aligned {
 	word: ScoreWord;
 	/**
 	 * The pipeline word or words this score word matched. Two where the
@@ -173,8 +174,12 @@ export function findCliticFolds(parsed: ParsedScore, verseNumber = 1): CliticFol
  * (`vowel-resolver.ts`'s move 3). That tolerance is what lets this run at all
  * on a CORRECTLY engraved score, where the engraver has already put «в бью» in
  * a single cell and the pipeline still reads two words there.
+ *
+ * EXPORTED FOR N.134, its second reader. `score-seat.ts` seats a filled poem
+ * word by word from these same rows, so the fold and the seat cannot disagree
+ * about which slots belong to which score word.
  */
-function align(
+export function align(
 	words: readonly ScoreWord[],
 	pipelineWords: readonly WordStackData[],
 	queue: readonly Slot[],
@@ -339,8 +344,11 @@ const TRAILING_PUNCTUATION = /[^\p{L}\p{M}]+$/u;
  * the same word once punctuation is off both. Where the engraver's division
  * and Ilya's differ (`про`/`гляд` against `прог`/`ляд`) they are not the same
  * word, nothing is carried, and the queue's text stands alone.
+ *
+ * EXPORTED FOR N.134. A seat copied from the file's own mapping writes over the
+ * file's own cell, which is the case this ruling names.
  */
-function carryPunctuation(slotText: string, fileText: string | undefined): string {
+export function carryPunctuation(slotText: string, fileText: string | undefined): string {
 	if (!fileText) return slotText;
 	const mark = TRAILING_PUNCTUATION.exec(fileText)?.[0];
 	if (!mark) return slotText;
@@ -446,7 +454,7 @@ export function readScoreText(
 	if (words.length === 0) return null;
 	let lines: LineData[];
 	try {
-		lines = processText(words.map((w) => w.raw).join(' '));
+		lines = processText(scoreWordsText(words));
 	} catch {
 		return null;
 	}

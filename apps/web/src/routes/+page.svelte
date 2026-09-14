@@ -144,6 +144,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		readScoreText,
 		seatCliticFolds,
 	} from '$lib/shane/clitic-seat';
+	import { seatScoreWords } from '$lib/shane/score-seat';
+	import { collectScoreWords, scoreWordsText } from '$lib/shane/vowel-resolver';
 	import {
 		COARSE_TAP_SPACES,
 		FINE_TAP_SPACES,
@@ -376,6 +378,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/** The singer's OWN queue, from their transcription. Empty until it runs. */
 	const poemQueue = $derived(buildSlotQueue(lines));
 	const slotQueue = $derived(poemQueue.length > 0 ? poemQueue : scoreTextQueue);
+	/* N.134. THE SCORE'S OWN WORDS AS ONE LINE, the text an empty poem box is
+	   filled with when a score arrives carrying words (Dann 2026-09-10). Empty
+	   where there is no score or the score carries no words. */
+	const scoreText = $derived(
+		ingestedScore ? scoreWordsText(collectScoreWords(ingestedScore.result.score, 1)) : '',
+	);
+	/* N.134. THE POEM RECEIPT'S `from score` TAG. DESK DEFAULT, 2026-09-14:
+	   DERIVED, NOT STORED. The poem is from the score exactly while it is the
+	   score's words verbatim, so the tag clears on the singer's first edit, as a
+	   Piece field's does, and it survives a reload because the poem and the
+	   score both come back and the comparison is made again. A stored flag
+	   would be a derived value written into the record, which CONTRACT §6 rules
+	   out, and it would need a new field on `SongRecord`. What this costs,
+	   stated rather than hidden: an edit that restores the exact text brings the
+	   tag back, and clearing the score takes the tag away while the words stay. */
+	const poemFromScore = $derived(scoreText !== '' && doc.inputText === scoreText);
 	/* N.55b: the pairing layer, wired. `refreshPairings` brings a re-divided
 	   word's TEXT forward: the nucleus the singer paired is still the same
 	   nucleus, so its text is stale rather than wrong.
@@ -2281,6 +2299,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   from one made from the score's own words or carried in from another
 		   song. Walk defect on `b191867`, memo §9. */
 		reseatAcross(diff, prevGrid);
+		/* N.134. A SCORE'S SEAT THAT ARRIVED BEFORE THE DICTIONARY is spent here,
+		   now that `lines` is this poem's. See `scoreSeatWaiting`. */
+		if (scoreSeatWaiting) {
+			const waiting = scoreSeatWaiting;
+			scoreSeatWaiting = null;
+			if (
+				waiting === ingestedScore &&
+				lines.length > 0 &&
+				doc.inputText === scoreWordsText(collectScoreWords(waiting.result.score, 1))
+			) {
+				seatFilledPoem(waiting);
+			}
+		}
 		/* N.57's anchor check STAYS, and it is now a second gate rather than
 		   the mechanism. The diff has already moved every gloss whose word
 		   survived; this drops any whose anchor no longer matches the word now
@@ -2683,6 +2714,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * quiet pause. It defaults to `paste` because the other callers are a
 	 * poem read out of a PDF or a photograph, which arrive whole, the way a
 	 * paste does.
+	 *
+	 * N.134 added a fourth caller that arrives whole the same way: a score's
+	 * own underlay filling an empty box, from `applyArrival`.
 	 */
 	function handleInput(text: string, how: TextArrival = 'paste') {
 		doc.inputText = text;
@@ -2979,6 +3013,32 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	/**
+	 * N.134. A score whose words filled the box while the dictionary was still
+	 * loading, waiting for the transcription its seat has to read.
+	 *
+	 * SPENT BY `transcribeText`, once, and only while it still describes the page:
+	 * the same score is attached and the box still holds that score's words
+	 * verbatim. A song switch, a Clear, or an edit before the dictionary lands
+	 * each fails one of those tests and the seat is dropped rather than applied
+	 * to a poem it was not made for. Session state, never stored.
+	 */
+	let scoreSeatWaiting: IngestedScore | null = null;
+
+	/**
+	 * N.134. Seat the filled poem from the score's own mapping, and put the
+	 * cursor where the no-lyrics path puts it after its first pass.
+	 *
+	 * The clitic seat is re-run after it, which is a no-op on the arrival path
+	 * (it has already run) and is what keeps the ruled arrangement on the
+	 * waiting path, where the fold ran at arrival against the score's own queue.
+	 */
+	function seatFilledPoem(ingested: IngestedScore): void {
+		const parsed = ingested.result.score;
+		doc.pairings = seatCliticFolds(parsed, seatScoreWords(parsed, doc.pairings, lines).map);
+		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
+	}
+
+	/**
 	 * Attach a score to the open song.
 	 *
 	 * `replaceWholeSong` empties the placements FIRST, so the merge rule below
@@ -3002,15 +3062,62 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		ingestedScore = ingested;
 		// N.55b R3: the first pass runs on accept, and the N.55a courtesy message
 		// arrives in the same moment or it has no moment at all. It runs ONLY
-		// where the file carried no lyrics. Where the score has an underlay, Ilya
-		// READS it (`vowel-resolver.ts`), and proposing over it would be Ilya
-		// claiming where the score already speaks. That is an INFERENCE from R3
-		// and N.55a together, not a ruling of Dann's.
+		// where the file carried no lyrics, because it counts syllables from the
+		// top. Where the score has an underlay, the desk's INFERENCE here was that
+		// Ilya must not place at all; RULED BY DANN 2026-09-14 (N.134), that is
+		// overturned: a score carrying words seats them on its own notes, from the
+		// file's own mapping, below.
 		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
 		noLyricsFile = noLyrics ? ingested.fileName : null;
+		// A new score arrives: clear whatever the previous score filled, then
+		// fill the blanks from this score's header if it carries one. A score
+		// with no header still clears, and that case is the whole point: at E.23,
+		// Musorgsky's Sunless 1 rendered under the Schubert's title, composer,
+		// and poet, because a header-less score reached no code that touched
+		// metadata at all.
+		//
+		// N.134 MOVED THIS ABOVE THE FILL, and nothing in it changed. Both the
+		// header and the fill name an unnamed song (`nameIfUnnamed`), and the
+		// first to run wins. Below the fill, a song would be named after the
+		// poem's first four words even where the file carries a title and a
+		// composer, which is the name design §2.3 ranks first. Nothing in this
+		// call reads the placements, so the merge below is unaffected.
+		commitMetadataState(
+			onScoreIngested(
+				{ metadata: doc.metadata, fromScore: doc.fromScoreFields },
+				ingested.result.score.workMetadata,
+			),
+		);
+		/* N.134, RULED BY DANN 2026-09-10: a score arriving with words into an
+		   EMPTY poem box fills that box. No question and no narration. A singer's
+		   own words are never overwritten, so any text at all stops it here, and
+		   nothing below fills or seats.
+
+		   BEFORE THE MERGE, because the merge and the seat both read `lines`, and
+		   `lines` is empty until the pipeline has run over this text.
+		   `handleInput` transcribes in this same tick when the dictionary is
+		   ready (a paste's verdict is `now`), so both see this poem's queue.
+
+		   AN UPLOAD ONLY. DESK DEFAULT, 2026-09-14: a restore is the song's own
+		   score coming back and "must never be questioned", and a song saved
+		   before this shipped with an empty box and a full set of placements
+		   (Dann's own Without Sun no. 1 is one) would otherwise have its poem
+		   written on boot without the singer doing anything. Dropping the file
+		   onto that song again fills it, because that is the singer's act. */
+		const fillText =
+			origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
+				? scoreWordsText(collectScoreWords(ingested.result.score, 1))
+				: '';
+		if (fillText !== '') handleInput(fillText);
 		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
 		// upload never destroys placements; only the singer does, on purpose,
 		// with Start placement over or with the replace dialog above.
+		//
+		// N.134 LEFT THIS FUNCTION'S SHAPE ALONE. It still decides the one thing
+		// it decided: whether the map is fresh. Its `scoreCarriesNoLyrics` branch
+		// is still the only caller of `firstPass`; the score's own seat is not
+		// folded into it, because that seat needs the parsed score's cells and
+		// the clitic seat has to run between the two (see below).
 		const merged = mergeOnUpload(
 			doc.pairings,
 			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
@@ -3039,18 +3146,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (merged.proposed) {
 			pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
 		}
-		// A new score arrives: clear whatever the previous score filled, then
-		// fill the blanks from this score's header if it carries one. A score
-		// with no header still clears, and that case is the whole point: at E.23,
-		// Musorgsky's Sunless 1 rendered under the Schubert's title, composer,
-		// and poet, because a header-less score reached no code that touched
-		// metadata at all.
-		commitMetadataState(
-			onScoreIngested(
-				{ metadata: doc.metadata, fromScore: doc.fromScoreFields },
-				ingested.result.score.workMetadata,
-			),
-		);
+		/* N.134, RULED BY DANN 2026-09-14: the words the box was just filled with
+		   are seated on the notes the file engraved them under.
+
+		   ONLY INTO A FRESH MAP, the same gate `firstPass` runs behind: a song
+		   that already carries placements has decisions on it, and this seat is
+		   not one of the singer's.
+
+		   AFTER THE CLITIC SEAT, AND THE ORDER IS MEASURED, not preferred
+		   (`score-seat.test.ts`). The fold writes the run from «в» to the end and
+		   leaves the piece's last note undecided. Seating first would put the
+		   last syllable on that note, the fold would then put it on the note
+		   before, and the page would read `ка ка`, which is the close Dann walked
+		   on 2026-09-04. Seating second, every slot the fold placed is already
+		   placed and is skipped.
+
+		   WITH THE DICTIONARY STILL LOADING, `lines` is empty and there is
+		   nothing to seat against, so the seat waits for the transcription
+		   (`scoreSeatWaiting`). */
+		if (fillText !== '' && !merged.proposed && Object.keys(merged.map).length === 0) {
+			if (transcribedText === fillText && lines.length > 0) seatFilledPoem(ingested);
+			else scoreSeatWaiting = ingested;
+		}
 	}
 
 	/* ── N.67 step 5: the binder ────────────────────────────────────── */
@@ -4176,6 +4293,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{hasResults}
 					isMobile={isPhone}
 					score={ingestedScore ? { fileName: ingestedScore.fileName } : null}
+					{poemFromScore}
 					onfile={(file) => void uploaderEl?.take(file)}
 					onclearscore={handleClearScore}
 					syllablesPlaced={placedSlotCount}

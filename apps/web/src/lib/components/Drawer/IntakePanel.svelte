@@ -83,6 +83,12 @@
 		hasResults: boolean;
 		/** The ACCEPTED score, or null. Not a file mid-flight. */
 		score: { fileName: string } | null;
+		/**
+		 * N.134, RULED BY DANN 2026-09-10: the poem in the box is the score's own
+		 * words, so its receipt carries `from score`, the Piece fields' tag.
+		 * Derived in `+page.svelte`, where the score and the poem both live.
+		 */
+		poemFromScore?: boolean;
 		/** A file arrived at the one field, by drop or by picker. */
 		onfile: (file: File) => void;
 		/** Clear on the SCORE receipt. Leaves the poem alone. */
@@ -146,6 +152,7 @@
 		transcribeActs,
 		hasResults,
 		score,
+		poemFromScore = false,
 		onfile,
 		onclearscore,
 		syllableLine,
@@ -486,6 +493,9 @@
 				{#if hasResults}
 					<span class="count">{t('intake.words', language).replace('%s', String(wordCount))}</span>
 				{/if}
+				{#if poemFromScore}
+					<span class="from-score">{t('meta.fromScore', language)}</span>
+				{/if}
 				<button type="button" class="receipt-btn" onclick={onclear}>{t('intake.clear', language)}</button>
 				<button type="button" class="receipt-btn" onclick={replacePoem}>{t('intake.replace', language)}</button>
 			</div>
@@ -803,6 +813,18 @@
 		color: var(--ink-tertiary);
 		font-variant-numeric: tabular-nums;
 		flex: none;
+	}
+
+	/* N.134. The provenance tag, in the drawer's existing `from score` voice:
+	   `.band-state-tag`'s values in `Drawer.svelte`, which is where the same
+	   string already stands on a band head. Italic tertiary, so it reads as a
+	   note on the receipt rather than a second tag beside `poem`. */
+	.intake-receipt .from-score {
+		flex: none;
+		font-size: 12px;
+		font-style: italic;
+		color: var(--ink-tertiary);
+		white-space: nowrap;
 	}
 
 	/* Clear and Replace. Quiet, because a receipt is a statement and these are
