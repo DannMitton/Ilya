@@ -923,6 +923,11 @@
 		for (let i = 0; i < lemma.length; i++) {
 			if (vowels.has(lemma[i])) {
 				if (vowelCount === si) {
+					// ё/Ё are inherently stressed and never marked, the atom ribbon's
+					// rule above. Source Serif 4 draws ё + U+0301 as a rendering artefact:
+					// an и-shaped letter carrying a single dot on the left and an acute
+					// on the right, so the line would show something that is not the word.
+					if (lemma[i] === 'ё' || lemma[i] === 'Ё') return lemma;
 					return lemma.slice(0, i + 1) + '\u0301' + lemma.slice(i + 1);
 				}
 				vowelCount++;

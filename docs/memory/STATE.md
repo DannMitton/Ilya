@@ -322,6 +322,13 @@ section carries the marks; that file carries the items.
 
 ### Numbered 2026-09-14
 
+- `[ ]` **N.137. The dictionary line draws the wrong letter when the stressed
+  vowel is ё.** Found by Dann on the stage 4 walk of `aa2b419`:
+  `getStressedLemma` puts a combining acute on the ё of `далёкий`, and Source
+  Serif 4 then draws, in place of the ё, an и-shaped letter carrying one dot and
+  an acute. That shape is not a Russian letter; do not transcribe it. Drawn at
+  150 px in the browser pane, not reasoned. **Not a regression from stage 4.** Spec in
+  `OPEN.md`, and it carries the one-condition fix verbatim.
 - `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
   Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
   nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from

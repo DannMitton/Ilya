@@ -167,6 +167,21 @@ defended a `border-right: 2px double` by calling it "a vertical spine rather
 than a horizontal rule." Dann: that distinction is in the stylesheet and in
 nobody's eye. It is the same mark.
 
+**AMENDED 2026-09-14, after he corrected the same glyph three times in one
+walk. DESCRIBE A GLYPH. NEVER SUBSTITUTE THE NEAREST LETTER YOU CAN TYPE.**
+Dann read a dictionary lemma as a letter with a diaeresis. The desk twice
+answered from a string it had reasoned to rather than one it had drawn, and
+then, having finally drawn it, wrote the result as `далйк`. **That was a third
+wrong answer:** й is и with a breve, and a breve is not what the screen shows.
+The shape is a rendering artefact of ё plus U+0301 and it is not a Russian
+letter at all, so no spelling of it is correct.
+
+**The rule. When reporting what is drawn, say what the marks are: the base
+shape, and each mark above or below it, in words.** Reaching for the nearest
+character you can type turns an artefact into a letter, and Dann then has to
+disprove a letter that was never there. **If a glyph can be drawn, draw it and
+send it, per this tether's own corollary, rather than spelling it.**
+
 **Corollary, and it is cheap: DRAW IT.** When a geometry or a treatment is in
 question, render it and send it. One drawing of three readings settled in two
 exchanges what four rounds of prose had not.
