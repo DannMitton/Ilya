@@ -158,6 +158,29 @@ Dann's words: *"this saves the user the manual labour while they retain control
 of small inevitable fixes."* The singer's corrections remain the authority over
 anything Ilya seats.
 
+**A NOTE DEMANDS A VOWEL, AND ILYA'S RULE SUPERSEDES THE FILE. Ruled by Dann
+2026-09-14.** His words: *"in Russian, no note can be set without a vowel to
+sing it on. Since that clitic has no vowel, it can never be assigned alone to a
+note. A note predicates a vowel."* And: *"Ilya's rule needs to supersede this
+kind of latent nonsense."*
+
+**Stated generally, in his words 2026-09-14:** *"a vowelless clitic can never
+hold a note alone. By itself. Because it has no vowel. That clitic and all other
+vowelless clitics will always concatenate to a parent syllable WITH a vowel.
+Because we sing on vowels."* The rule is about every vowelless clitic, not about
+`в`.
+
+So a file that puts any vowelless clitic on a note of its own is wrong, and Ilya
+concatenates it to its vowel-bearing parent without asking and without a mark.
+This is not Ilya second-guessing an engraving. It is Ilya refusing to draw
+something that cannot be sung.
+
+**Measured on his own engraving, 2026-09-14**, `Mussorgsky - Sunless 01 - Within
+Four Walls (engraved).musicxml`: verse 1, the Cyrillic, gives `в` its own note
+36 and is one note ahead of verse 2, the IPA, which folds the same clitic into
+`ˈvʲbʲu` on note 37 and is correct. The two underlays in one file disagree for
+at least notes 30 to 36, visible in Dorico's own render of the file.
+
 ### Rulings on the drawer's surfaces, 2026-09-09 and 2026-09-10
 
 - 2026-09-09: the Voice station in Score markup stays expanded always; its chevron is struck.
