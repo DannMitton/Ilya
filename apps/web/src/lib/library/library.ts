@@ -15,7 +15,7 @@
  *
  * NOTHING HERE THROWS TO A CALLER AND NOTHING HERE SWALLOWS. Every path
  * returns an outcome carrying a reason, which is `savePairings`' contract
- * (`pairings.ts:390-403`) generalized to the song, and is what keeps N.27's
+ * (in `pairings.ts`) generalized to the song, and is what keeps N.27's
  * prohibition satisfied by construction rather than by discipline.
  */
 import type { SongMetadata } from '$lib/types';

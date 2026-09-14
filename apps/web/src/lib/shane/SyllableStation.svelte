@@ -119,7 +119,7 @@
 	// The reading order for the running text: a new line at a line boundary,
 	// a space at a word boundary, a hyphen (kept inside the PRECEDING
 	// syllable's own button, not a separate element) at a boundary within one
-	// word. `buildSlotQueue` (pairings.ts:187) already walks slots in that
+	// word. `buildSlotQueue` (pairings.ts) already walks slots in that
 	// document order, so this only has to look at neighbours.
 	type Lead = 'line' | 'space' | null;
 	const items = $derived.by(() => {

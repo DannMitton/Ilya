@@ -6,8 +6,8 @@
  * for tests. Step 1 adds the IndexedDB driver underneath the same interface
  * and deletes nothing above it.
  *
- * THE STORE IS INJECTED. `savePairings` / `loadPairings` (`pairings.ts:390`,
- * `:408`) reach for the global `localStorage` directly, which is correct for
+ * THE STORE IS INJECTED. `savePairings` / `loadPairings` (both in
+ * `pairings.ts`) reach for the global `localStorage` directly, which is correct for
  * them and untestable in this suite: vitest runs in node, where there is no
  * `localStorage`. So the driver takes its store as an argument, defaulting to
  * the global one, and the tests hand it a plain object. The pairings KEY is
@@ -168,7 +168,7 @@ export const LEGACY_KEYS = {
 } as const;
 
 /**
- * The same detection `savePairings` performs (`pairings.ts:397-401`). A quota
+ * The same detection `savePairings` performs (`pairings.ts`). A quota
  * failure has its own notice, so it must not be flattened into the generic one.
  */
 function reasonFor(err: unknown): FailureReason {

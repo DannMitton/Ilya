@@ -15,7 +15,7 @@
  * predicate: the score's own words go back through the transcription pipeline
  * before placement, and the pipeline's slots are what get seated. The pipeline
  * already fuses a vowelless clitic into its host (`pipeline.ts:919-943` and
- * `:960-976`, mirrored by `buildSlotQueue` at `pairings.ts:179-214`), so the
+ * `:960-976`, mirrored by `buildSlotQueue` in `pairings.ts`), so the
  * seat is not a new rule; it is the existing rule reaching the path a score
  * that ARRIVES WITH WORDS takes. `isVowellessClitic` and the engine's clitic
  * tables are the only sources of "vowelless clitic" consulted here.
@@ -390,7 +390,16 @@ export function applyCliticSeat(map: PairingMap, fold: CliticFold): PairingMap {
  */
 export function isCliticSeated(map: PairingMap, fold: CliticFold): boolean {
 	const p = map[fold.cliticEventId];
-	return p?.kind === 'syllable' && p.cyrillic === fold.seat[0]?.cyrillic;
+	const seat = fold.seat[0]?.cyrillic;
+	if (p?.kind !== 'syllable' || seat === undefined) return false;
+	/* N.118. TRAILING PUNCTUATION IS NOT PART OF THE TEST. Since N.118 the queue
+	   carries it, so a fold whose host ends its word (`в ночь,`) now builds its
+	   seat with the comma, and a seat stored before N.118 does not have it. A
+	   strict comparison would read that stored seat as unseated, and
+	   `seatCliticFolds` would write the whole run again over every note in it,
+	   the singer's corrections included. The refresh brings the stored text
+	   forward on the page; this only has to recognize the seat. */
+	return p.cyrillic.replace(TRAILING_PUNCTUATION, '') === seat.replace(TRAILING_PUNCTUATION, '');
 }
 
 /* `revertCliticSeat` IS GONE, N.108-5. It took one fold's seat back off the

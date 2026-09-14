@@ -523,8 +523,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	// N.55b Shift Lyrics (§8). Notes, in document order, one slot per note
 	// until one side runs out — the SAME order `firstPass` consumes them in,
-	// below. `shiftToEndOfLyric` / `shiftToNextOpenNote` (pairings.ts:558,
-	// :592) index into this, not into `slotQueue`: they operate on notes
+	// below. `shiftToEndOfLyric` / `shiftToNextOpenNote` (both in pairings.ts)
+	// index into this, not into `slotQueue`: they operate on notes
 	// already carrying a decision, not on the syllable queue.
 
 	/* THE LYRIC VERBS ANCHOR ON THE TAKEN ENTRY, on both modalities, and the

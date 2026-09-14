@@ -100,7 +100,7 @@ export interface SongRecord {
  * Why a save or a load did not do what it was asked to.
  *
  * `quota-exceeded` and `write-failed` are `savePairings`' own two reasons
- * (`pairings.ts:397-401`), kept verbatim so the drawer's existing quota
+ * (in `pairings.ts`), kept verbatim so the drawer's existing quota
  * branch, `handleExport` in `+page.svelte`, keeps working unchanged.
  */
 export type FailureReason =
@@ -127,7 +127,7 @@ export type Outcome = { ok: true } | { ok: false; reason: FailureReason };
 /**
  * A load always yields a usable record. A failure is REPORTED beside it, never
  * thrown and never swallowed: that is `loadPairings`' contract
- * (`pairings.ts:408-422`) applied to the whole song.
+ * (in `pairings.ts`) applied to the whole song.
  */
 export interface LoadResult {
 	record: SongRecord;

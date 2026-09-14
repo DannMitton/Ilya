@@ -180,6 +180,23 @@ function syllableIpa(w: WordStackData, k: number): string {
  * Direction follows the pipeline's own classification where it has one, and
  * falls back to `vowel-resolver.ts:503-506`'s rule otherwise: before any
  * nucleus it is proclitic, after one it is enclitic.
+ *
+ * N.118, PUNCTUATION TRAVELS IN THE SLOT. Ruled design 2026-09-09: the word's
+ * LAST syllable carries the word's trailing punctuation, so every placement,
+ * shift, and re-seat carries it, because each of them copies the slot's text.
+ * It is `WordStackData.punctuation` (`types.ts`), which the pipeline already
+ * holds beside `cleanWord`; nothing is re-parsed here.
+ *
+ * A VOWELLESS CLITIC IS A WHOLE WORD, so its punctuation follows its own text
+ * inside the slot it fuses into, in the order the poem wrote it: an enclitic's
+ * ends the slot (`да б,`), and a proclitic's stays before its host (`в, бью`).
+ * A host's punctuation stays ahead of an enclitic attached after it
+ * (`да, б`). After a hyphen, which the pipeline leaves on a host it split off a
+ * particle (`pipeline.ts`, `expandHyphenatedParticles`), the clitic joins with
+ * no space, because the poem wrote none (`та-б,`).
+ *
+ * NOTHING HERE DECIDES A HYPHEN OR AN EXTENDER ON THE PAGE. Those read
+ * `origin` (`pairedSyllableType`), never this text.
  */
 export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 	const queue: Slot[] = [];
@@ -193,12 +210,15 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 			const w = line.words[wordIndex];
 			if (!CYRILLIC_VOWEL.test(w.cleanWord)) {
 				const cliticIpa = w.ipaContent || '';
-				const cliticCyr = w.cleanWord;
-				if (!cliticIpa && !cliticCyr) continue;
+				// The guard reads the LETTERS, so a token that is punctuation
+				// alone still contributes nothing, exactly as before N.118.
+				if (!cliticIpa && !w.cleanWord) continue;
+				const cliticCyr = w.cleanWord + w.punctuation;
 				const enclitic = w.isEnclitic || (!w.isProclitic && lastInLine !== null);
 				if (enclitic && lastInLine) {
 					lastInLine.ipa = lastInLine.ipa + cliticIpa;
-					lastInLine.cyrillic = lastInLine.cyrillic + NBSP + cliticCyr;
+					const joiner = /[-–—]$/.test(lastInLine.cyrillic) ? '' : NBSP;
+					lastInLine.cyrillic = lastInLine.cyrillic + joiner + cliticCyr;
 				} else {
 					pendingIpa += cliticIpa;
 					pendingCyr = pendingCyr ? pendingCyr + NBSP + cliticCyr : cliticCyr;
@@ -214,7 +234,8 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 						? STRESS_MARK + pendingIpa + ipa.slice(STRESS_MARK.length)
 						: pendingIpa + ipa;
 				}
-				const cyr = cyrOfSyllable(w, k);
+				// N.118: the word's trailing punctuation, on its last syllable only.
+				const cyr = cyrOfSyllable(w, k) + (k === w.syllables.length - 1 ? w.punctuation : '');
 				const slot: Slot = {
 					cyrillic: k === 0 && pendingCyr ? pendingCyr + NBSP + cyr : cyr,
 					ipa,

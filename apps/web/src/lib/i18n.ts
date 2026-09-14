@@ -1207,7 +1207,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// lose the work, it is not conditional, and the English already said
 	// "when". Reuses 'enregistré' (calib.summary.savedLede, :418) and
 	// 'syllabe' (upload.banner.noLyrics, :511). THE SAVE DOES NOT SWALLOW ITS
-	// EXCEPTION (pairings.ts:385-389): 'no-storage' and 'write-failed' share
+	// EXCEPTION (`savePairings`, pairings.ts): 'no-storage' and 'write-failed' share
 	// storage.saveFailed.generic, Dann's own collapse. Quota HAD its own line
 	// here, 'storage.saveFailed.quota'; N.67 step 6 replaced it at the render
 	// site with 'storage.quotaFull', which says the same thing about the whole
