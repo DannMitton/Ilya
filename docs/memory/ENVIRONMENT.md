@@ -177,6 +177,8 @@ file.
 | you measured to the next mark, not the box | `MEASURE THE BOX` |
 | Code found the instrument at fault, not the code | `TWO INSTRUMENT FAULTS` |
 | you counted stave intervals in `lineGap` | `A STAVE STEP IS HALF A SPACE` |
+| you read a grep hit list without checking WHICH term matched | `A HIT LIST IS NOT AN ANSWER` |
+| you quoted a farm-out cost you had not measured | `A FARM-OUT COST QUOTED FROM A FEEL` |
 
 ---
 
@@ -2837,3 +2839,63 @@ LIKE A REAL DEFECT, in the direction of "the rename broke it", at exactly the
 moment a rename has just landed. The desk's tether 11 is the defence: check what
 could make your instrument lie and rule it out before reporting the reading. Code
 did that unprompted.
+
+
+---
+
+## A HIT LIST IS NOT AN ANSWER. IT DOES NOT SAY WHICH TERM MATCHED. 2026-09-14
+
+**What it cost.** The desk told Dann *"there is no OCR anywhere in Ilya."* The
+grep that produced it searched five terms at once, `pyodide|Pyodide|opencv|onnx|tesseract`,
+and printed a file list. **`apps/web/package.json` and `ScoreUploader.svelte`
+were both in that list**, because they match `tesseract`. The desk read the list
+as "the Pyodide files" and never checked which term had matched.
+
+Ilya has shipped OCR since before this project's memory folder existed:
+`apps/web/package.json:25` declares `tesseract.js`, `ScoreUploader.svelte:300-326`
+runs `createWorker('rus')` on a photographed poem, and **`PRODUCT.md` states it
+on its face**, under the tabs table, which the desk had not opened that session.
+
+**It had happened before and was written down.**
+`claude/e19-the-plan-to-beta_v2_2026-07-30.md`, correction 3: *"I missed that
+Ilya already ships OCR for photographed Cyrillic text, via `tesseract.js`."*
+Seven weeks apart, the same miss.
+
+**THE RULE. A multi-term grep returns a union, so print the matching LINE, not
+the file name, or run the terms separately.** And when a claim is about what the
+product does rather than about one file, `PRODUCT.md` is the primary source and
+it is rank 4 of the read order for exactly this reason.
+
+---
+
+## A FARM-OUT COST QUOTED FROM A FEEL. 2026-09-14
+
+CONTRACT §2 demands a bounded cost before a farm-out. The desk quoted
+**"1 agent, ~40k tokens worst case"** for the N.135 OCR measurement. The run
+spent **267k**, 6.7 times the ceiling it had been given.
+
+Nothing was harmed, because Dann's usage that night was Fable 0 % and all-models
+7 %, but the number was invented. **Quote a farm-out from a measured run of
+similar shape, or say the cost is NOT ESTABLISHED and ask before starting.** A
+measurement task that reads a repository, installs tools, and runs an engine is
+a hundreds-of-thousands job, not a tens-of-thousands one.
+
+---
+
+## THE BRIDGE WILL NOT MOVE A FILE OUT OF THE MOUNT. 2026-09-14
+
+`mv` from `$HOME/mnt/...` to the bridge shell's own home fails with
+`Operation not permitted`, because leaving the mount is a delete and the bridge
+refuses deletes. So the desk **cannot** clean up after itself inside the
+repository.
+
+**What it cost, the same night.** The desk moved a superseded brief into
+`docs/sessions/_to_delete/` per CONTRACT, then could not remove the folder, and
+`_to_delete` inside the repository is the thing that blocks `ilya-ship.sh`
+(§`_to_delete INSIDE THE REPO`). Dann had to run `rm -rf` himself.
+
+**THE RULE. Do not create `_to_delete/` inside the repository for a file the
+desk itself wrote.** A superseded draft is superseded by a header line in its
+replacement, which costs nothing and blocks no ship. Reserve `_to_delete/` for
+files Dann asked to have deleted, and tell him in the same breath that only he
+can empty it.

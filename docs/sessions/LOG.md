@@ -4211,3 +4211,216 @@ Nothing below was reworded, reordered, or removed.
 > `drawing-the-fourth-value_r1`, with `inventory-release_r1`, all 2026-09-13 in
 > `docs/sessions/`.
 >
+
+
+## Block 14. Moved from STATE.md at the close of 2026-09-14
+
+**Verbatim, nothing reworded.** This is the whole of `STATE.md` §THE ONE THING
+as it stood before the close of 2026-09-14: the stage 3a/3b account, the four
+findings of the 2026-09-13 walk, the twenty values, the prune-session close,
+the four-ships close of 2026-09-12 into 2026-09-13, N.121's unbuilt half, and
+the two tripwire narratives.
+
+**Four things were live and were rewritten fresh in `STATE.md` rather than
+moved:** the stage 4 spec and its walk, the twenty values, INSIGHTS WHAT IS
+OPEN, and BRIEFS WRITTEN AND NOT RUN. **N.121's unbuilt half closed on
+2026-09-14** when N.134 shipped, and the 2026-09-13 walk's finding 1 closed
+the same night; both accounts are in `STATE.md` §THE ONE THING.
+
+> ### THE ONE THING: THE COLOUR STORY, STAGE 4. THE VALUES.
+>
+> **Stages 3a and 3b are DONE, committed, pushed, deployed and walked by Dann at
+> 1400 px on 2026-09-13. Their accounts are in `../sessions/LOG.md` block 13.**
+> Six commits, `45f7cd4` through `6a24169`. Deployment
+> `dpl_6jRMMzsA9uDDYiUcsRaU8QNFYVKX`, READY, branch alias, sha checked before he
+> was sent to it. **The colour walk passed: sage on Transcription, lavender on
+> Score markup, rose on Insights, each with its own desk, band and pill.**
+>
+> **STAGE 4 IS FULLY SPECIFIED AND NEEDS NO RULING.** The twenty values are in
+> the block below this one; the reasoning is in
+> `../sessions/spec-colour_r1_2026-09-13.md`. **It is ONE commit:** the ramp
+> applied to all five families, umber declared and entering the tree for the
+> first time, Learn moved from rose to umber, `--surround-insights` already
+> deleted in 3b. **It has no brief yet.**
+>
+> **IT MUST BE WALKED BY DANN at 1400 px across all five destinations**, and
+> three things must be checked on that walk because nobody has seen them yet.
+> Code named all three at the close of 3b and could not reach them:
+>
+> 1. **The `--stone-700` merge**: the loupe's frame, the ё badge in the word
+>    inspector, and the hovered provenance icons over a word. All three moved
+>    `#44403C` to `#4A4540`, one just-noticeable difference.
+> 2. **The note picker**, which now reads `--ink-stave`. Reaching it means
+>    pressing Start, which creates a voice profile.
+> 3. **The update toast's border**, now `--stone-300` instead of lavender. It
+>    appears only when a new version is waiting.
+>
+> **CODE'S CAVEAT, HONEST AND NOT YET CLOSED.** Every rose and lavender use it
+> saw on screen also carries its hex as a fallback, **so those two would paint
+> correctly even with a broken token name.** For them the proof is that the page
+> resolves `--rose` and `--lavender` to their values. **Cobalt is the only family
+> proven by paint alone**, because the drawer's Piece band has no fallback.
+> Stage 4 changes every value, so this is the walk where it matters.
+>
+> ---
+>
+> **FOUR THINGS DANN FOUND ON THE 2026-09-13 WALK. THREE ARE NOT ABOUT COLOUR.**
+>
+> 1. **THE CHEAPEST TEST ON THE TABLE, AND IT IS NOT RUN.** On the branch alias,
+>    Transcription is fully populated with IPA and glosses, and Score markup
+>    reads **`0 / 146 placed`** with no IPA line under the stave. **`Transcribe
+>    and fit` was never pressed.** Expectation stated before the press: the
+>    counter moves off `0 / 146` and an IPA line appears. **If it stays at
+>    `0 / 146`, that is a real defect and it outranks everything else here.**
+>    Dann's poem and his score are the SAME text; the desk checked. The box was
+>    scrolled to its last five lines, which is why they looked different.
+> 2. **THE METER SIGNATURE IS MISSING** from the rendered score. Dann's
+>    observation, 2026-09-13, on Kabalevsky T05. **NOT ESTABLISHED and not yet
+>    investigated.** The source is
+>    `~/Downloads/Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`.
+>    **Open the source before reasoning about the render**, per tether 10.
+> 3. **THE RHYTHMIC VALUES MAY BE HALVED.** Dann's words: *"I could be mistaken
+>    but it feels like the measures are half the rhythmic value they should
+>    be."* **Per tether 15, a musician's reading of a score outranks a script's
+>    count. Treat this as evidence, not as a claim to be argued with.** It may
+>    share a cause with the missing meter signature; that link is DESK INFERENCE
+>    and is not established.
+> 4. **N.133, the renderer's own ground, is ruled and numbered.** It came out of
+>    the same walk. Spec in `OPEN.md`.
+>
+> **THE DESK MADE TWO ERRORS IN THIS WORK AND BOTH ARE IN `ENVIRONMENT.md`**, so
+> the next session inherits the traps rather than the embarrassment: §A TOKEN IS
+> ALSO A STRING KEY (a CSS token is also a bare string key, and a `--name` grep
+> cannot find it) and §CHECK-IGNORE TAKES THE INDEX LOCK, corrected within the
+> hour to say that ANY git command run from the bridge can strand the lock.
+> Code's own finding is there too: §A HIDDEN PANE FREEZES ITS TRANSITIONS.
+>
+> ---
+>
+> #### THE FOUR RULINGS OF STAGE 2 ARE SPECIFICATION, AND THEY HAVE MOVED.
+>
+> **Moved 2026-09-13 on Dann's word, verbatim, nothing reworded:**
+> `../sessions/spec-colour_r1_2026-09-13.md` carries all four ruling records in
+> full, with their reasoning, their costs, their citations, and the drawing each
+> was ruled from. **They are not closed work**, which is why they did not go to
+> `LOG.md`. They left this file because a handover should not make tomorrow's
+> session read four ruling records to learn one sentence.
+>
+> **THE TWENTY VALUES STAY HERE**, because sending a reader elsewhere for a
+> number is the trap this folder keeps setting. Band L 0.640, chip L 0.530, ink
+> L 0.420, each family holding its own hue and chroma. The desk is NOT on the
+> ramp: it stays 40 % hue plus 60 % white.
+>
+> | family | band | chip | ink |
+> |---|---|---|---|
+> | sage | `#839275` | `#637156` | `#455238` |
+> | rose | `#AB7F7F` | `#885F60` | `#674141` |
+> | lavender | `#9585A2` | `#746580` | `#554660` |
+> | cobalt | `#748CB9` | `#556C96` | `#374D75` |
+> | umber | `#A38669` | `#82664A` | `#61472C` |
+>
+> **Every chip clears 5.21 on white, every ink 7.02 on cream.** Umber is new and
+> enters the tree at stage 4, where Learn also moves from rose to umber. Every
+> document's label ink is its own family, ruling 4 of 4.
+
+> **CLOSE OF 2026-09-13, THE PRUNE SESSION. NO CODE RAN AND NOTHING SHIPPED.**
+>
+> The whole session was the prune this section asked for, plus the split it
+> turned out to need. **Nothing was farmed out; Fable stood at 89 % and the desk
+> stayed off it.** What changed, all of it documentation:
+>
+> 1. **`../sessions/LOG.md` block 11**, ten entries. 11.1 to 11.6 are the six
+>    blocks the prune instruction named. 11.7 to 11.10 came out of the row-by-row
+>    assessment it asked for: the `InstallPrompt` row struck DONE in August, the
+>    bar-numbers original text the 2026-09-11 ruling superseded, the loupe
+>    typeface row that `246c17c` closed, and five rulings Dann had already made
+>    sitting in `RULINGS DANN OWES`.
+> 2. **`OPEN.md` is new**, carrying 188 lines of item specs verbatim out of this
+>    section. `README.md` holds it at rank 5, outside the opening read.
+> 3. **`ENVIRONMENT.md` gained two sections:** `A STAVE STEP IS HALF A SPACE`,
+>    moved out of §OWED because it is a permanent trap and not an owed item, and
+>    `PRUNING A MEMORY FILE`, which is the recipe and the one way it broke.
+> 4. **`README.md`'s one-thing block was lying and is fixed.** It still named
+>    the syllable station and the note click as `WRITTEN`, and sent the reader
+>    to a `STATE.md` §The walk that does not exist. Neither phrase appeared
+>    anywhere in this file any more. The block warns against exactly that fault
+>    in its own second line.
+> 5. **Two section headings that counted their rows were corrected** after
+>    removals: `FOUR SHIPS` and `New from N.104 ... Three`.
+>
+> **Nothing was reworded anywhere. Every moved block is verbatim.** The backup of
+> `STATE.md` as it stood before the prune is at `$HOME/STATE.md.pre-prune-20260913`
+> in the bridge shell's own home, which is outside the repository and will not
+> survive the session.
+>
+> **AFTER THE COMMIT, he asked two questions: how big Ilya is, and how close a
+> fully working app is.** Both are answered with measurements in
+> `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md`. The size
+> lookup is in `ENVIRONMENT.md` §ILYA'S SIZE. **The two rulings the second
+> question produced are at the top of §RULINGS DANN OWES: the release cut, and
+> the release order contradicting itself.** Nothing was built and nothing shipped.
+>
+> **NOT DONE, and named so it is not lost:** the 105 lines of 2026-09-10 and
+> 2026-09-11 walk narrative still in this section. The tripwire note says what
+> has to come out of it first.
+>
+> **CLOSE OF 2026-09-12 INTO 2026-09-13. FOUR SHIPS, ALL WALKED OR VERIFIED.**
+>
+> **`085bb9e` N.128 was the fourth. Its account moved to `../sessions/LOG.md`
+> block 11.2 on 2026-09-13, shipped and walked, nothing open on it.**
+>
+> 1. `9026a56` path pass increment 3, **walked whole by Dann, DONE**.
+> 2. `246c17c` the loupe draws sans like the page, the renderer root follows,
+>    and the undo and redo marks are restored to `↰ ↱`. Dann confirmed the
+>    Cyrillic match; he then said the marks are still not the sigla he recalls,
+>    and the search found what he was remembering: the pacifier's `provisional`
+>    badge, a circled `↻` (`Pacifier.svelte:836-848`). **DESK DEFAULT, unruled:
+>    the band takes `↶ ↷`, since the badge stays where it is.**
+> 3. `7841fe7` **N.127 increment 1: INSIGHTS IS LIVE**, the third document,
+>    without the compass. Gate 4 is at **1123**.
+>
+> **INSIGHTS, WHAT IS OPEN.** Code made five decisions of its own, all listed in
+> `memo-n127-insights-inc1_r1_2026-09-13.md` and all reversible, none reviewed
+> by Dann. One row prints nothing on his Sunless score because measure 17 does
+> not add up to its time signature. At 390 px the head does not fit three
+> documents: 237.97 px for labels needing 265.19. Increment 2 is the compass.
+>
+> **BRIEFS WRITTEN AND NOT RUN:** `brief-n117-dictionary-fill_r1_2026-09-12`,
+> `brief-n125-slurs-as-objects_r1_2026-09-11`,
+> `brief-n118-punctuation-travels_r1_2026-09-12`,
+> `brief-n119-toggles-reach-score-markup_r1_2026-09-12`,
+> `brief-colour-token-rename_r1_2026-09-13`. N.119's audit corrected `STATE.md`:
+> five of the seven Notation toggles already reach Score markup.
+>
+> **THE COLOUR STORY, RULED AND PLANNED.** The principle, the five-hue map, and
+> the six-stage plan are in `docs/sessions/plan-colour-story_r1_2026-09-13.md`,
+> with the full ruling in `INBOX.md`. Learn moves rose to umber; nothing else
+> moves. Stage 1, the census, is running.
+>
+> **N.121's unbuilt half, established 2026-09-12:** no path anywhere fills the
+> poem box from an ingested score's lyrics, which is why Dann's Score markup is
+> full while Transcription is empty. His ruling of 2026-09-10 covers it.
+>
+> **THE TRIPWIRE IS CLEAR AGAIN, 2026-09-13, and here is what it took, because
+> the next session will hit the same wall if it only moves closed things.** This
+> file was 937 lines. Ninety-five lines were closed and went to
+> `../sessions/LOG.md` block 11, which is all the prune instruction asked for and
+> was never going to be enough. The rest of the excess was never closed: it was
+> the catalogue of open items sitting inside this section, 188 lines of specs for
+> N.115 to N.124 and the open lists, which no close could move because every line
+> of it is live. **It now lives in `OPEN.md`, verbatim**, and `README.md` carries
+> it at rank 5 of the read order, outside the opening read. That took this file
+> to 583 lines, and the new one thing block, with this note, put it back over the
+> line. **So when the tripwire
+> fires, ask first whether the excess is closed work or misfiled work. Twice now
+> it has been the second.**
+>
+> **WHAT WAS LEFT TO FIND IS FOUND AND MOVED, 2026-09-13, on Dann's
+> instruction.** The remaining excess was the 2026-09-10 and 2026-09-11 walk
+> narrative, with N.128's and N.114b's accounts: 106 lines, now
+> `../sessions/LOG.md` block 12, verbatim. **The three live residues buried in
+> it were resolved against the tree first, which is why it could move.** One was
+> already closed and the note calling it live was stale; the other two are
+> extracted into their own blocks in this file, one in §OWED and one in
+> §RULINGS DANN OWES. Block 12's header says which is which.
+>
