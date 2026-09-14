@@ -18,7 +18,10 @@
 	   or leaves.
 
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
+	import { onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -27,6 +30,7 @@
 		centreOnPage,
 		pageInset,
 		measureWindow,
+		meterLayout,
 		nearestTarget,
 		parseSystemRange,
 		systemIndexOf,
@@ -71,6 +75,13 @@
 		 */
 		fill: { actual: number; expected: number } | null;
 		/**
+		 * The meter in effect in the held measure (N.138), or null where the
+		 * score carries none. Every measure carries its own snapshot from the
+		 * parsers, so this is the right meter whether or not the measure's
+		 * system declares one.
+		 */
+		meter?: { beats: number; beatType: number } | null;
+		/**
 		 * A tap on an entry inside the loupe. Dann's ruling of 2026-08-26 moved
 		 * N.55b's syllable placement here: on a phone the page tap navigates and
 		 * this one places.
@@ -96,6 +107,7 @@
 		revision,
 		language,
 		fill,
+		meter = null,
 		onpick,
 		dockInset,
 		dockHeight,
@@ -168,6 +180,21 @@
 	   answer. It is written down rather than inlined so that a change to the
 	   tag's type is a change to something named. */
 	const CHROME = 46.5;
+
+	/* THE FRAME'S OWN FURNITURE ACROSS: 10 px of padding and a 1.4 px border on
+	   each side, from `.loupe` in this file's stylesheet. The drawing lives in
+	   the window inside it, so that is the width it is fitted to.
+
+	   N.138 FOUND THE FIT TAKING THE FRAME'S OUTER WIDTH. MEASURED at 390 px on
+	   the engraved Without Sun song 1: the frame is 299.25 px and its window
+	   277, so every measure wide enough to meet the cap drew 299.3 px into 277
+	   and lost about 11 px at each edge, the stave's left end on one side and the
+	   closing rest of m. 3 on the other. That predates N.138, on ten of the
+	   document's seventeen sung measures; the meter panel added m. 5. The fit's comment
+	   already said a measure is shown whole rather than clipped, so this makes
+	   the arithmetic agree with it. A change to the frame's padding or border
+	   is a change to this number. */
+	const FRAME_SIDES = 2 * (10 + 1.4);
 
 	/* ── THE FRAME IS CUT TO THE PAGE'S INK ──────────────────────────────
 	   Ruled by Dann 2026-08-27: the loupe was too loose around its content,
@@ -315,6 +342,49 @@
 		return () => ro.disconnect();
 	});
 
+	/* THE NOTATION FACE'S METRICS, for the meter panel (N.138). The page draws
+	   its glyphs through the same shared loader, which memoizes the promise, so
+	   this costs no second fetch: it hands back the face the page already has.
+	   Until it arrives the panel does not draw, which is also what the page
+	   does with its own glyphs. */
+	let notationFont = $state<LoadedNotationFont | null>(null);
+	onMount(() => {
+		let alive = true;
+		loadNotationFont()
+			.then((f) => {
+				if (alive) notationFont = f;
+			})
+			.catch(() => {
+				/* no metrics, so no panel; the loupe is otherwise whole */
+			});
+		return () => {
+			alive = false;
+		};
+	});
+
+	const DIGIT_GLYPHS: readonly RequiredGlyphName[] = [
+		'timeSig0', 'timeSig1', 'timeSig2', 'timeSig3', 'timeSig4',
+		'timeSig5', 'timeSig6', 'timeSig7', 'timeSig8', 'timeSig9',
+	];
+
+	/** The meter panel's drawing, in page units from the panel's own left edge. */
+	interface MeterPanel {
+		/** The panel's width in page units, and in CSS pixels once scaled. */
+		span: number;
+		width: number;
+		viewBox: string;
+		/** The five stave lines' y values, read off the page as drawn. */
+		lines: number[];
+		lineStroke: string;
+		lineWidth: number;
+		/** The page's own ground behind the stave, where the renderer paints one. */
+		ground: { y: number; height: number; fill: string } | null;
+		glyphs: { char: string; x: number; y: number }[];
+		fontFamily: string;
+		fontSize: string;
+		fill: string;
+	}
+
 	interface Frame {
 		inner: string;
 		viewBox: string;
@@ -328,6 +398,8 @@
 		headWidth: number;
 		/** The head's own crop of the same system, in the same coordinates. */
 		headViewBox: string;
+		/** N.138. The meter, between the head and the body; null draws none. */
+		meter: MeterPanel | null;
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
@@ -360,6 +432,7 @@
 		void revision;
 		void selectedEventId;
 		void layoutTick;
+		const font = notationFont;
 		if (!open || measureIndex === null || ownIds.length === 0) {
 			frame = null;
 			return;
@@ -617,11 +690,116 @@
 					Math.max(DESKTOP_MIN, drawnLineGap > 0 ? DESKTOP_TARGET_LINE_GAP / drawnLineGap : DESKTOP_MIN),
 				);
 
-		const totalSpan = headWidthUnits + viewSpan;
-		const drawn = Math.min(totalSpan * unitPx * magnification, width);
+		/* ── N.138. THE METER, A THIRD PANEL BETWEEN THE HEAD AND THE BODY ──
+		   Ruled by Dann 2026-09-14: a measure lifted out of its system must carry
+		   the meter that counts it, whether or not its system declares one. The
+		   layout and why it sits where it does are with `meterLayout` in
+		   `loupe.ts`. What lives here is reading the page as drawn.
+
+		   THE FACE IS THE PAGE'S OWN. The clef's `<text>` names the family and
+		   the size the renderer set, so the meter is drawn in exactly the glyphs
+		   beside it. A page still in primitive shapes has no clef `<text>`, and a
+		   page drawn in a face this loader did not hand back has no metrics
+		   here, and both draw no panel rather than a meter in the wrong face.
+
+		   THE STAVE LINES ARE THE PAGE'S, found as drawn: the horizontal lines
+		   that cross most of the system inside the staff's band. The panel draws
+		   them at the same y, the same weight and the same ink, so the stave runs
+		   through all three panels. If five cannot be found, the renderer's own
+		   construction stands in. */
+		let meterPanel: Omit<MeterPanel, 'width' | 'viewBox'> | null = null;
+		const clefText = sysEl.querySelector('[data-clef] text');
+		const family = clefText?.getAttribute('font-family') ?? '';
+		if (meter && font && clefText && family.replace(/['"]/g, '') === font.family) {
+			/* The head's own trailing air: from the last glyph drawn before the
+			   music, which is the key signature's last accidental or the clef, to
+			   the head's edge. Walked over the same paint order as `inkXs`, up to
+			   the gate, with the stave lines and the ground left out by width
+			   because they cross the whole system. */
+			let headInkRight = -Infinity;
+			for (let i = 0; i < gate; i++) {
+				const el = nodes[i];
+				if (el.tagName === 'g' || el.hasAttribute('data-selection-ring')) continue;
+				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+				let b: DOMRect;
+				try {
+					b = (el as SVGGraphicsElement).getBBox();
+				} catch {
+					continue;
+				}
+				if (!b || !(b.width || b.height) || b.width >= sysWidth / 2) continue;
+				if (b.x + b.width <= headWidthUnits) headInkRight = Math.max(headInkRight, b.x + b.width);
+			}
+			const firstInk = Math.min(...inkXs.filter((x) => x >= view.left && x < view.right));
+			const layout = meterLayout(
+				meter.beats,
+				meter.beatType,
+				(d) => font.prepared.glyph(DIGIT_GLYPHS[d]),
+				lineGap,
+				staffTop,
+				Number.isFinite(headInkRight) ? headWidthUnits - headInkRight : 0,
+				Number.isFinite(firstInk) ? firstInk - view.left : 0,
+			);
+			if (layout) {
+				/* The widest horizontal on each line of the staff, so a beam that
+				   happens to lie along a line cannot stand in for it. */
+				const staffLines = new Map<number, { el: Element; length: number }>();
+				for (const el of sysEl.querySelectorAll('line')) {
+					const y = Number(el.getAttribute('y1'));
+					if (Math.abs(y - Number(el.getAttribute('y2'))) > 0.01) continue;
+					const length = Math.abs(Number(el.getAttribute('x2')) - Number(el.getAttribute('x1')));
+					if (!(length >= sysWidth / 2)) continue;
+					const step = (y - staffTop) / lineGap;
+					if (step < -0.3 || step > 4.3 || Math.abs(step - Math.round(step)) > 0.3) continue;
+					const held = staffLines.get(Math.round(step));
+					if (!held || length > held.length) staffLines.set(Math.round(step), { el, length });
+				}
+				const found = staffLines.size === 5 ? [...staffLines.values()].map((l) => l.el) : [];
+				const sample = found[0];
+				/* THE PAGE'S GROUND, where the renderer still paints one: the
+				   system-wide rectangle `pageMetrics` already knows by its width.
+				   Without it the panel is a pale strip between two tinted crops.
+				   N.133 removes that ground, and then this finds nothing and the
+				   panel paints nothing, which is what the crops will do too. */
+				const groundEl = [...sysEl.querySelectorAll('rect')].find(
+					(r) =>
+						!r.hasAttribute('data-hit') &&
+						!r.hasAttribute('data-selection-ring') &&
+						!r.closest('[data-held-measure]') &&
+						Number(r.getAttribute('width')) >= sysWidth * 0.95,
+				);
+				meterPanel = {
+					span: layout.span,
+					lines: found.length === 5
+						? found.map((el) => Number(el.getAttribute('y1'))).sort((a, b) => a - b)
+						: [0, 1, 2, 3, 4].map((i) => staffTop + i * lineGap),
+					lineStroke: sample?.getAttribute('stroke') ?? '#3a352f',
+					lineWidth: sample
+						? Number(sample.getAttribute('stroke-width'))
+						: font.prepared.engravingDefaults.staffLineThickness * lineGap,
+					ground: groundEl
+						? {
+								y: Number(groundEl.getAttribute('y')),
+								height: Number(groundEl.getAttribute('height')),
+								fill: groundEl.getAttribute('fill') ?? 'none',
+							}
+						: null,
+					glyphs: layout.glyphs,
+					fontFamily: family,
+					fontSize: clefText.getAttribute('font-size') ?? `${4 * lineGap}px`,
+					fill: clefText.getAttribute('fill') ?? '#3a352f',
+				};
+			}
+		}
+		const meterSpanUnits = meterPanel?.span ?? 0;
+
+		const totalSpan = headWidthUnits + meterSpanUnits + viewSpan;
+		const fitWidth = Math.max(0, width - FRAME_SIDES);
+		const drawn = Math.min(totalSpan * unitPx * magnification, fitWidth);
 		const scale = drawn / totalSpan;
 		const contentWidth = viewSpan * scale;
 		const headWidth = headWidthUnits * scale;
+		const meterWidth = meterSpanUnits * scale;
 		/* THE CROP'S VERTICAL EXTENT is the page's ink band, laid around this
 		   system's own staff and padded by half a space so the tallest marks
 		   the measure carries — a ledger line, a stem, a tuplet bracket, a
@@ -688,6 +866,33 @@
 			if (el.hasAttribute('data-selection-ring')) continue;
 			el.removeAttribute('data-note-selected');
 		}
+		/* N.138. THE RING NO LONGER CROSSES A SEAM. The ring is the one mark the
+		   head's bound leaves out on purpose (see the ink walk), so on a measure
+		   that opens its system it can begin left of the head's edge: MEASURED on
+		   the engraved Without Sun song 1, m. 4, the ring opens at 62.38 with a
+		   2-unit stroke and the head ends at 63.54. While the crops were flush the
+		   two halves met. With the meter between them the ring's left side stood
+		   alone in the head, torn off the box around the note.
+
+		   So, in this clone only, the ring's left edge is brought inside the body's
+		   crop by its whole stroke. HALF A STROKE WAS TRIED FIRST AND FAILED: the
+		   stroke's outer edge then sat exactly on the head's edge, and the head
+		   painted an antialiased sliver of it, a grey hairline the height of the
+		   ring standing between the key signature and the meter. OBSERVED at
+		   390 px on m. 4. The page's own ring is not touched. Only while a meter
+		   panel draws: without one the crops still abut and the ring is whole. */
+		if (meterPanel) {
+			const pageRing = sysEl.querySelector('[data-selection-ring]');
+			const stroke = pageRing ? parseFloat(getComputedStyle(pageRing).strokeWidth) || 0 : 0;
+			const inside = view.left + stroke;
+			for (const ring of clone.querySelectorAll('[data-selection-ring]')) {
+				const x = Number(ring.getAttribute('x'));
+				const w = Number(ring.getAttribute('width'));
+				if (!(x < inside) || !(x + w > inside)) continue;
+				ring.setAttribute('x', String(inside));
+				ring.setAttribute('width', String(x + w - inside));
+			}
+		}
 		/* THE HIT RECTANGLES ARE RENAMED IN THE CLONE, and that is what keeps
 		   the two tap grammars apart. VoiceProfilePane's delegated listener
 		   matches `[data-hit]` anywhere in the document, so a clone carrying
@@ -742,7 +947,7 @@
 		   relationship for the whole session on all three. */
 		/* The tallest drawing the page can produce, which is the narrowest
 		   measure's, capped by the magnification this modality asks for. */
-		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, width);
+		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, fitWidth);
 		/* THE LOUPE IS CENTRED ON THE PAGE'S VISIBLE HEIGHT. It sat in the
 		   page's lower third before, which put it below the eyeline; that was
 		   this desk's own narrowing of Dann's words rather than his ruling,
@@ -768,6 +973,9 @@
 			contentWidth,
 			headWidth,
 			headViewBox: `0 ${cropTop} ${headWidthUnits} ${cropHeight}`,
+			meter: meterPanel
+				? { ...meterPanel, width: meterWidth, viewBox: `0 ${cropTop} ${meterSpanUnits} ${cropHeight}` }
+				: null,
 			contentHeight,
 			windowHeight,
 			centreY,
@@ -885,6 +1093,48 @@
 				>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
 					{@html frame.inner}
+				</svg>
+			{/if}
+			<!-- N.138. THE METER, drawn by the loupe itself between the two crops,
+			     in the page's coordinates and the page's face, so it reads as the
+			     meter an engraver would have set after the key signature. -->
+			{#if frame.meter}
+				<svg
+					class="loupe-svg loupe-meter"
+					viewBox={frame.meter.viewBox}
+					width={frame.meter.width}
+					height={frame.contentHeight}
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					{#if frame.meter.ground}
+						<rect
+							x="0"
+							y={frame.meter.ground.y}
+							width={frame.meter.span}
+							height={frame.meter.ground.height}
+							fill={frame.meter.ground.fill}
+						/>
+					{/if}
+					{#each frame.meter.lines as y, i (i)}
+						<line
+							x1="0"
+							y1={y}
+							x2={frame.meter.span}
+							y2={y}
+							stroke={frame.meter.lineStroke}
+							stroke-width={frame.meter.lineWidth}
+						/>
+					{/each}
+					{#each frame.meter.glyphs as g, i (i)}
+						<text
+							x={g.x}
+							y={g.y}
+							font-size={frame.meter.fontSize}
+							font-family={frame.meter.fontFamily}
+							fill={frame.meter.fill}>{g.char}</text
+						>
+					{/each}
 				</svg>
 			{/if}
 			<svg
@@ -1028,7 +1278,8 @@
 	   take a tap: the entries live in the body, and a hit rectangle that
 	   happened to reach into the head belongs to a note the loupe is not
 	   showing. */
-	.loupe-head {
+	.loupe-head,
+	.loupe-meter {
 		pointer-events: none;
 	}
 

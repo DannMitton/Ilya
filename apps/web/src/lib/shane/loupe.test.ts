@@ -19,6 +19,9 @@ import {
 	inkCrop,
 	isDismissSwipe,
 	measureWindow,
+	meterLayout,
+	METER_LEAD_SP,
+	METER_RUN_IN_SP,
 	nearestTarget,
 	pageInset,
 	parseSystemRange,
@@ -506,5 +509,69 @@ describe('the window clipped to the head', () => {
 			left: 56,
 			right: 241.51,
 		});
+	});
+});
+
+// N.138. The meter panel the loupe draws between its head and its body.
+//
+// The digit boxes here are synthetic and chosen to make the arithmetic
+// legible: every digit is 1.5 stave-spaces wide from a left bearing of 0.1,
+// except the 1, which is 1.0 wide. They are not read out of a font, so the
+// expectations do not borrow their values from the metadata under test.
+describe('the meter panel', () => {
+	const digit = (d: number) => ({
+		char: `d${d}`,
+		bBoxSW: [0.1, -1] as const,
+		bBoxNE: [d === 1 ? 1.1 : 1.6, 1] as const,
+	});
+	const gap = 10;
+	const top = 100;
+
+	it('sets the count on the second line from the top and the unit on the second from the bottom', () => {
+		const m = meterLayout(6, 8, digit, gap, top, METER_LEAD_SP * gap, 0)!;
+		expect(m.glyphs.map((g) => g.y)).toEqual([top + gap, top + 3 * gap]);
+	});
+
+	it('takes its ink width from the digit boxes and centres the narrower group', () => {
+		// 12 over 8: the count is 1.0 + 1.5 = 2.5 spaces wide, the unit 1.5, so
+		// the unit sits half a space in from each side of the count.
+		const m = meterLayout(12, 8, digit, gap, top, METER_LEAD_SP * gap, 0)!;
+		const [one, two, eight] = m.glyphs;
+		// Each origin sits a left bearing left of where its box begins.
+		expect(one.x).toBeCloseTo(0 - 0.1 * gap, 10);
+		expect(two.x).toBeCloseTo(1.0 * gap - 0.1 * gap, 10);
+		expect(eight.x).toBeCloseTo(0.5 * gap - 0.1 * gap, 10);
+		expect(m.span).toBeCloseTo(2.5 * gap + METER_RUN_IN_SP * gap, 10);
+	});
+
+	it('adds the whole run-in where the body opens on its first ink', () => {
+		const m = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 0)!;
+		expect(m.span).toBeCloseTo(1.5 * gap + METER_RUN_IN_SP * gap, 10);
+	});
+
+	it('adds only the run-in the body lacks, and none past it', () => {
+		const some = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 1 * gap)!;
+		expect(some.span).toBeCloseTo(1.5 * gap + (METER_RUN_IN_SP - 1) * gap, 10);
+		const plenty = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 4 * gap)!;
+		expect(plenty.span).toBeCloseTo(1.5 * gap, 10);
+	});
+
+	it('adds only the air the head lacks before the key signature, and moves the digits with it', () => {
+		// m. 4 of the engraved Without Sun song 1 measured 0.42 of a space
+		// between its second sharp and the head's edge.
+		const tight = meterLayout(2, 4, digit, gap, top, 0.42 * gap, 0)!;
+		const lead = (METER_LEAD_SP - 0.42) * gap;
+		expect(tight.span).toBeCloseTo(lead + 1.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(tight.glyphs[0].x).toBeCloseTo(lead - 0.1 * gap, 10);
+		const open = meterLayout(2, 4, digit, gap, top, 3 * gap, 0)!;
+		expect(open.span).toBeCloseTo(1.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(open.glyphs[0].x).toBeCloseTo(-0.1 * gap, 10);
+	});
+
+	it('draws nothing for a signature no digit can spell', () => {
+		expect(meterLayout(0, 4, digit, gap, top, METER_LEAD_SP * gap, 0)).toBeNull();
+		expect(meterLayout(3, 0, digit, gap, top, METER_LEAD_SP * gap, 0)).toBeNull();
+		expect(meterLayout(2.5, 4, digit, gap, top, METER_LEAD_SP * gap, 0)).toBeNull();
+		expect(meterLayout(3, 4, digit, 0, top, METER_LEAD_SP * gap, 0)).toBeNull();
 	});
 });

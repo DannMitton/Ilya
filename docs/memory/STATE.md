@@ -298,6 +298,28 @@ section carries the marks; that file carries the items.
 
 ### Numbered 2026-09-14
 
+- `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than
+  shrinking below it.** Dann's own design, ruled 2026-09-14, over the desk's
+  recommendation to do nothing; both cases are recorded in `OPEN.md`. **A
+  phone-portrait item:** the desktop branch already derives its magnification to
+  hit a 12 px target (`Loupe.svelte:152`, `:686-691`), and Dann reads the loupe
+  well on his desk. **He owes two things: the floor in CSS pixels, and whether
+  the scroll may take a gesture on a surface where the swipe dismisses and the
+  tap places a syllable.**
+
+- `[ ]` **N.138. The loupe supplies the meter for every measure it shows.** Ruled
+  by Dann 2026-09-14. Spec in `OPEN.md`. The notation faces all carry the ten
+  `timeSig` digits, every measure already carries the meter in effect
+  (`mnx-parser.ts:579`, `musicxml-parser.ts:600`), and the shape is a third panel
+  between the loupe's head and its body, so `headBound` and `clipToHead` are
+  untouched.
+- `[ ]` **N.139. Every meter assignment in a score draws on the page.** Ruled by
+  Dann 2026-09-14; **the number is a DESK DEFAULT** and he can collapse it into
+  N.138 with a word. Finding 2 of the 2026-09-13 walk. Ilya draws no meter
+  signature anywhere: the system head lays out the clef and the key signature and
+  nothing else (`staff-renderer.ts:1654-1664`). Spec in `OPEN.md`. **Finding 3 of
+  that walk is CLOSED and was not a defect.**
+
 - `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
   Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
   nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from

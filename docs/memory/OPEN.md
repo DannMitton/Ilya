@@ -481,3 +481,242 @@ walks it, and the print path is checked once rather than assumed.
 > teach the projection to carry the resolver's division. **Whichever is taken,
 > N.10's 2026-08-07 reasoning is a source to re-check, not a wall**
 > (CONTRACT §1.19, amended 2026-09-14).
+
+---
+
+## N.138. THE LOUPE SUPPLIES THE METER FOR EVERY MEASURE IT SHOWS. Numbered by Dann 2026-09-14. UNPLACED.
+
+**Ruled by Dann 2026-09-14, and his words are the item:** *"I want Ilya to insert
+the correct corresponding meter signature for every measure the Loupe displays,
+even if that measure does not feature a verbatim meter signature marking in the
+score. The point is to supply all of the information the user needs, in order to
+make sense of these isolate measures in Loupe."* And, bounding it away from
+N.139: *"I agree that inserting a meter signature at the beginning of each in the
+score is undesirable; I am just talking about Loupe measures, because they are
+isolated and examined individually."*
+
+**What the singer sees now.** A measure lifted out of its system at 2.4 times,
+with a clef and a key signature in the head and nothing saying how to count the
+bar. On Kabalevsky T05 that is a 2/4 bar with no signature, which reads as a
+half-empty 4/4. On the engraved Without Sun song 1 the piece runs 6/8 for one bar
+and 12/8 from the second, and the loupe shows neither.
+
+**ESTABLISHED 2026-09-14, every line read in the tree that session.**
+
+- Every measure already carries the meter in effect, not only the ones that
+  declare a change. `mnx-parser.ts:579` and `musicxml-parser.ts:600` both write
+  `timeSignature: currentTime` onto every measure. No lookup is needed, and
+  `timeSignatureAt` (`tempo-seam.ts:269`) is not required either.
+- The loupe's caller already holds the examined measure and reads its signature.
+  `+page.svelte:770-773` finds it by index and passes `m?.timeSignature` into
+  `measureFill`. The value is in hand at the call site.
+- The loupe already receives `measureIndex` (`Loupe.svelte:53`) and `fill`
+  (`:69-73`), so the prop pipeline exists.
+- **`loupe.ts:283-287` had already reasoned that the head is where a printed time
+  signature belongs**, and recorded that Ilya draws none.
+- **THE FONT CARRIES THE DIGITS.** `FinaleMaestro.json` holds bounding boxes for
+  all ten of `timeSig0` to `timeSig9`, plus `timeSigCommon`, `timeSigCutCommon`,
+  `timeSigPlus` and `timeSigFractionalSlash`. Bravura and Leland carry the same
+  ten. Finale Maestro is the default face (`notation-fonts.ts:5-6`, Dann's
+  rulings 2026-07-12 and 2026-07-13). Maestro and Leland ship no
+  `glyphAdvanceWidths`, which does not matter: `smufl-metadata.ts:256` derives
+  `widthSp` from the bounding box.
+- `staff-renderer.ts:564` already declares the ten digits as `RequiredGlyphName`,
+  borrowed there for the tacet count numeral (`:553-558`).
+
+**THE SHAPE, AND WHY IT IS NOT A CHANGE TO THE HEAD.**
+
+The loupe's head and its body render the SAME markup, `frame.inner`, through two
+viewBoxes (`Loupe.svelte:887` and `:900`). The head crops `[0, headBound]` and
+the clipped window crops `[headBound, right]`, and `clipToHead` carries a written
+proof that their union is exactly the union the unclipped pair painted
+(`loupe.ts:315-357`). That file warns in capitals that the bound is coupled to
+the window's left edge and must not overlap it.
+
+**So the meter draws as a THIRD PANEL between head and body, and nothing widens
+the head or moves its bound.** The panel is the loupe's own synthesized SVG: five
+stave lines at the same y and the same scale as its neighbours, so the stave runs
+through unbroken, then the two digits, count over unit, in the selected notation
+face.
+
+Nothing in `headBound`, `clipToHead` or `measureWindow` changes, so the
+three-sharps class of defect Dann walked on 2026-09-01 cannot return through this
+work.
+
+**FOUR DESK DEFAULTS, all reversible, and Dann can wave off any of them.**
+
+1. The meter draws on EVERY measure the loupe shows, not only on measures whose
+   system declares one. That is his ruling stated as a build rule, and it keeps
+   the loupe's width from jumping between measures.
+2. It draws identically to an engraved meter signature, with no editorial mark to
+   say Ilya supplied it. CONTRACT §6 forbids a mark that appears on everything,
+   and the loupe is a reading aid rather than the printed page.
+3. Digits always, never `timeSigCommon` or `timeSigCutCommon`, even where the
+   MusicXML path recorded `symbol: 'common'` (`musicxml-parser.ts:454`). The MNX
+   path records no symbol, so digits are the only form both paths produce
+   identically.
+4. The panel sits between the head and the body, which puts the meter where an
+   engraver puts it: after the key signature, before the music.
+
+**NAMED COST, CORRECTED 2026-09-14 BY READING THE ARITHMETIC RATHER THAN
+ASSUMING IT.** The frame does NOT get wider. `Loupe.svelte:621` caps the drawn
+width at the loupe's own `width`, and `:622` derives `scale = drawn / totalSpan`.
+Inserting a third panel raises `totalSpan` (`:620`), so `scale` falls and **the
+examined measure is drawn slightly SMALLER** at the same magnification. That is
+the real cost, and it lands on the one thing the loupe exists to do. **How much
+smaller is NOT ESTABLISHED**: it is the ratio of the old `totalSpan` to the new,
+and nobody has measured `headWidthUnits` or a typical `viewSpan` on a real page.
+Measure it before anyone ships this.
+
+The desk's first writing of this line said the frame widens. That was wrong, and
+it was an assumption rather than a reading.
+
+**RULED BY DANN 2026-09-14, AFTER THE BUILD: THE RUN-IN IS 2 STAVE SPACES, NOT
+2.5.** Code set `METER_RUN_IN_SP = 2.5` at `loupe.ts:368` and its comment says it
+borrowed the figure the renderer uses after its KEY SIGNATURE. **Gould gives the
+time signature its own row and it is smaller.** `memo-gould-dimensional-priors_r1_2026-08-24.md:113`,
+rule 240, p. 42, the distance from the last header element to a first note
+carrying no accidental, one, or two or more:
+
+| header element | stave spaces |
+|---|---|
+| clef only | 2.5 / 1.5 / 1 |
+| key signature | 2.5 / 1.5 / 1 |
+| **time signature** | **2 / 1 / 1** |
+
+**That row is FLAGGED in its own memo**: *"read from small table numerals,
+re-verify before implementation."* Dann ruled on it anyway, knowing the flag, on
+the desk's recommendation that the time-signature row's own figure is better
+evidence than the key signature's figure copied across. **It joins the Gould
+re-shoot item in `STATE.md`.**
+
+**The order is also sourced**, from the same memo at `:21`, rule 176, p. 91:
+clef, then key signature, then time signature.
+
+**N.139 INHERITS THIS NUMBER.** The page's meter signature takes the same 2 stave
+spaces, so the two surfaces cannot drift.
+
+**Done when:** the loupe is raised on a measure whose system declares no meter,
+the correct meter draws between the clef-and-key head and the measure, the stave
+lines run unbroken through all three panels, and Dann walks it. Walk it on the
+engraved Without Sun song 1, where the answer changes at measure 2, and on T05,
+where it is 2/4 throughout.
+
+---
+
+## N.139. EVERY METER ASSIGNMENT IN A SCORE DRAWS ON THE PAGE. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Ruled by Dann 2026-09-14:** *"I do want every meter assignment in a score to be
+reproduced faithfully."* And, bounding it: *"I agree that inserting a meter
+signature at the beginning of each in the score is undesirable."* **The number is
+the desk's own. He ruled the behaviour and did not name an item, so he can
+collapse this into N.138 with a word.**
+
+**Found by Dann on the 2026-09-13 walk**, as finding 2 of four: the meter
+signature is missing from the rendered score, observed on Kabalevsky T05.
+
+**ESTABLISHED 2026-09-14: Ilya has never drawn one, on any score.** The system
+head lays out exactly two symbols, computed backwards from `leftMargin`, the clef
+and the key signature (`staff-renderer.ts:1654-1664`). The draw calls are the
+clef at `:1684` and `:1694` and the key accidentals at `:1712-1718`. No
+time-signature draw call exists anywhere in that file. The `timeSig0` to
+`timeSig9` glyphs at `:564` are there for the tacet count numeral, per
+`:553-558`. So this is a feature that was never built. It is not a regression and
+not a parse failure.
+
+**IT IS NOT THE CAUSE OF THE 2026-09-13 WALK'S FINDING 3, WHICH IS CLOSED AND WAS
+NOT A DEFECT.** That finding read *"it feels like the measures are half the
+rhythmic value they should be."* T05's own file declares 2/4 once at measure 1
+and never changes it across 90 measures; its Bass measures fill 2/4 exactly
+(measure 9 is quarter, eighth, eighth; measure 10 is dotted quarter, eighth;
+measure 12 is a half note); and Dann checked the printed score on 2026-09-14 and
+it is 2/4. Read from the `.musx` converted with the project's own denigma WASM
+that session.
+
+**SCOPE, from his two sentences.** Draw the opening signature and every change.
+Do not repeat it at the start of each system, which is where a meter signature
+differs from a clef and a key signature.
+
+**The data is there:** `types.ts:228` carries it per measure, and the change list
+is built at `mnx-parser.ts:411-437` and `musicxml-parser.ts:395-455`.
+
+**NAMED COST, and it is why this is separate from N.138.** The head arithmetic at
+`staff-renderer.ts:1654-1664` gains a third symbol, so `ksStart`, `clefX` and
+`staveLeft` all move left. A change of meter draws inside a system, where nothing
+draws today, so the measure-spacing pass has to reserve room for it. That means
+fewer measures per system and different pagination, the same class of cost
+already named for N.129's hyphen widening.
+
+**Done when:** the opening signature draws at the head of the first system, every
+change draws at the measure that declares it, no signature draws at a system
+start that declares none, and Dann walks it on the engraved Without Sun song 1,
+which changes at measure 2.
+
+---
+
+## N.140. THE LOUPE GUARANTEES A STAVE SPACE, AND SCROLLS RATHER THAN SHRINKING BELOW IT. Numbered by Dann 2026-09-14. UNPLACED.
+
+**Dann's design, 2026-09-14, and the words are his:** *"a contextual horizontal
+scroll with notation remaining at a pre-set point size seems preferable to
+shrinking the contents?"*
+
+**The shape, as ruled: option A of the four the desk put to him.** The loupe fits
+the measure to its window as it does today. **When fitting would take the stave
+space below a ruled floor, it stops shrinking and scrolls horizontally instead.**
+The common case is untouched.
+
+**What the singer gets.** Today the loupe guarantees fit and nothing else. Across
+one song it hands back a stave space anywhere from 5.53 px to 3.96 px, a 40%
+range, set by whatever else is in the bar. After this, the notation is the fixed
+quantity and the window is the variable one.
+
+**ESTABLISHED 2026-09-14, all read in the tree.**
+
+- The cap: `Loupe.svelte:621` takes `drawn = min(totalSpan * unitPx * magnification, width)` and `:622` derives `scale = drawn / totalSpan`. Widening `totalSpan` lowers `scale`.
+- **10 of Sunless 01's 17 sung measures exceed the window at 390 px** (`memo-n138-loupe-meter_r1_2026-09-14.md` §2). The cap is the normal case, not an exotic one.
+- **Width is not density.** m. 17 holds 3 notes and 6 syllables and is the WIDEST measure; the six-note measures mostly fit. A column takes `Math.max(minGap, prevDurWhole * pxPerWhole, textNeed, inkNeed)` (`staff-renderer.ts:1209`), and with `pxPerWhole` at 110 (`engraving.ts:32`) a long note claims a lot of room.
+- **Landscape already relieves some of this, and it is the first thing to measure.** `+page.svelte:2080` sets the loupe's dock inset to `0` in phone portrait and `380` in phone landscape, which leaves roughly 440 px of room on an 844-wide landscape phone against a 277 px portrait window. `Loupe.svelte:510-515` names landscape as the one case where the stage and the page part company. **And rotating does not change the magnification rule:** `+page.svelte:3956` derives `isPhone` from `Math.min(innerWidth, innerHeight) < 768`, so a phone stays a phone and keeps the ruled 2.4.
+
+**THIS IS A PHONE-PORTRAIT ITEM. Dann, 2026-09-14:** *"I spend a lot of time with
+Ilya on desktop, so the extra screen real estate is a luxury and the Loupe reads
+well on my desktop device."*
+
+**And the desktop branch already implements his design intent, which is the
+precedent to build the phone's floor against.** `Loupe.svelte:686-691` does not
+give the desktop a fixed magnification at all. It DERIVES one to hit a target
+stave space: `DESKTOP_TARGET_LINE_GAP = 12` at `:152`, divided by what the page is
+already drawing, clamped between `DESKTOP_MIN = 1.2` and `DESKTOP_MAX = 2.4`. So
+on a desk the notation is already held at a pre-set size and the magnification is
+the variable. The phone takes the ruled flat 2.4 instead (`MAGNIFICATION`).
+
+**Two cautions against simply copying the 12.** The desktop figure is a TARGET,
+not a floor: `:621` still caps `drawn` at the window's width, so a wide enough
+measure shrinks below 12 px on a desk too. And 12 px on a desk is not comparable
+to 3.96 px on a phone, because the pixel densities differ. **Dann has already said
+3.96 px reads well on a phone, so the phone's floor is its own number and still
+his.**
+
+Code's single desktop observation, 1024 px, T05 m. 15: head 155.7 px, panel
+23.4 px, body 188.6 px in a 692 px window. Nowhere near the cap.
+
+**TWO THINGS DANN OWES, AND NEITHER IS THE DESK'S.**
+
+1. **The floor, in CSS pixels.** The only datum anyone has: he looked at all five scales drawn at true size on 2026-09-14 (`drawing-loupe-stave-scales_r1_2026-09-14.html`) and said they all read well, including 3.96 px. **So the floor is at or below 3.96, and on Sunless 01 at 390 px the scroll would never trigger.**
+2. **Whether the scroll may take the gesture.** The loupe holds `touch-action: none` across its whole surface so the downward swipe can dismiss it (`isDismissSwipe`, `SWIPE_DISMISS_PX = 56`), and a tap inside it PLACES A SYLLABLE, on his ruling of 2026-08-26. A horizontal pan has to be separated from both without making dismissal unreliable or placing a syllable at the end of a scroll.
+
+**THE DESK'S CASE FOR DOING NOTHING, RECORDED BECAUSE HE OVERRODE IT AND THE NEXT
+SESSION SHOULD SEE BOTH SIDES.** The floor sits at or below the smallest scale he
+has already approved, so on this score the scroll never fires; landscape answers
+the mobile case with a gesture the singer already knows; and CONTRACT tether 13
+says do nothing where doing nothing is defensible. **Dann numbered it anyway, on
+2026-09-14, after reading that case.** The value he is buying is that a future
+score cannot quietly drop below what he has approved.
+
+**NOT ESTABLISHED, and cheapest to settle on a walk rather than by a build:** how
+many of Sunless 01's 17 measures still hit the cap in landscape, and whether the
+loupe's height still fits a 390 px tall landscape viewport once it is 40 to 50%
+wider. Code measured portrait only.
+
+**Done when:** a measure that would fall below the ruled floor draws at the floor
+and scrolls instead, the dismiss swipe and the placement tap both still work on a
+phone, and Dann walks it.

@@ -371,10 +371,22 @@
 		// claiming a selection the paper does not show.
 		void scorePages;
 		const root = document;
-		for (const el of root.querySelectorAll('[data-note-selected]')) {
-			el.removeAttribute('data-note-selected');
+		/* THE SWEEP IS THE PAGE'S, NOT THE DOCUMENT'S. Found on N.138's walk,
+		   2026-09-14: the loupe's clone carries this pane's ring as the FIRST node
+		   of its `{@html}` range, and a document-wide sweep removed it. Svelte then
+		   removes a replaced `{@html}` range by walking `nextSibling` from that
+		   first node (`remove_effect_dom`), which on a detached node is nothing,
+		   so every step left the old clone in place. MEASURED: 152 stacked system
+		   clones, 18,805 nodes, in each of the loupe's crops after one pass over
+		   Kabalevsky T05, and 14 after 30 steps on the shipped `Loupe.svelte`.
+		   The loupe rebuilds its own ring from the page on every selection, so
+		   it needs nothing from this sweep. */
+		for (const page of root.querySelectorAll('.fit-paper-container')) {
+			for (const el of page.querySelectorAll('[data-note-selected]')) {
+				el.removeAttribute('data-note-selected');
+			}
+			for (const el of page.querySelectorAll('[data-selection-ring]')) el.remove();
 		}
-		for (const el of root.querySelectorAll('[data-selection-ring]')) el.remove();
 		if (!id) return;
 		const hit = root.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 		if (!hit) return;

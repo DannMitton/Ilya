@@ -18,7 +18,7 @@ All values are in stave-spaces (rule 79's base unit) unless marked otherwise.
 | Clef vertical centring | Treble winds around the G line, bass around the F line, dots either side | r80, pp.5,7 | — |
 | Clef indent at system start | 1 stave-space, or slightly less | r81, p.6 | — |
 | Mid-system clef change size | 2/3 of the opening clef's size | r82, pp.7,9 | smaller glyph, more vulnerable to fill-in |
-| Header element order | Clef, then key signature, then time signature | r176, p.91 | order only; Ilya carries no key signature |
+| Header element order | Clef, then key signature, then time signature | r176, p.91 | order only. **CORRECTED 2026-09-14: the annotation used to read "Ilya carries no key signature". That is false and has been since the renderer drew one at `staff-renderer.ts:1712-1718`. The r240 key-signature row below is live for Ilya.** |
 | Clef / key / time separation | 1 to 1.5 stave-spaces between each | r236, p.41 | low end of range sits near the collision floor (see §4) |
 
 ### Barlines
@@ -110,7 +110,7 @@ All values are in stave-spaces (rule 79's base unit) unless marked otherwise.
 | Unison accidental placement | Altered unison in two-part writing: each accidental sits beside its own part's head. Converged unison: one accidental placed once, before both heads | r147–148, p.91 | position rule; "which part" is a semantic input the reader supplies separately |
 | Accidental-to-header clearance | Must stay far enough from a clef or key signature that it cannot be mistaken for part of it | r238, p.42 | — |
 | Accidental floor | Never closer than 1sp to a preceding symbol (except where the accidental belongs to the first note itself) | r239, p.42 | — |
-| Pre-first-note distance table | Clef only: 2.5 / 1.5 / 1sp (no / one / 2+ accidentals). Key signature: 2.5 / 1.5 / 1sp. Time signature: 2 / 1 / 1sp | r240, p.42 | **FLAGGED**, read from small table numerals, re-verify before implementation |
+| Pre-first-note distance table | Clef only: 2.5 / 1.5 / 1sp (no / one / 2+ accidentals). Key signature: 2.5 / 1.5 / 1sp. Time signature: 2 / 1 / 1sp | r240, p.42 | **FLAGGED**, read from small table numerals, re-verify before implementation **USED 2026-09-14** by N.138's `METER_RUN_IN_SP`, on Dann's ruling, at the time-signature row's 2sp. |
 | Accidental close-up | Closes toward the following note or fellow accidental as far as possible without collision | r241, p.42 | — |
 
 ### The lyric band (text geometry below the stave)

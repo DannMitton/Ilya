@@ -767,11 +767,24 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   THE SIGNATURE IS THE MEASURE'S OWN, snapshotted per measure by the
 	   parsers (`types.ts:228`), so a mid-score change of metre is answered
 	   correctly rather than measured against the opening bar. */
+	const heldMeasure = $derived.by(() => {
+		if (heldMeasureIndex === null) return undefined;
+		return ingestedScore?.result.score.measures.find((x) => x.index === heldMeasureIndex);
+	});
 	const heldFill = $derived.by(() => {
 		if (heldMeasureIndex === null) return null;
-		const m = ingestedScore?.result.score.measures.find((x) => x.index === heldMeasureIndex);
-		return measureFill(correctedLine, heldMeasureIndex, m?.timeSignature);
+		return measureFill(correctedLine, heldMeasureIndex, heldMeasure?.timeSignature);
 	});
+
+	/* N.138. THE METER THE LOUPE SUPPLIES, from the same per-measure snapshot,
+	   so it is the meter in effect in this measure and not the one its system
+	   last declared. Digits only, by desk default: the MNX path records no
+	   `symbol`, so a common-time C is a form only one reader could produce. */
+	const heldMeter = $derived(
+		heldMeasure
+			? { beats: heldMeasure.timeSignature.beats, beatType: heldMeasure.timeSignature.beatType }
+			: null,
+	);
 
 	const selectedLabel = $derived.by(() => {
 		const ev = selectedEvent;
@@ -4924,6 +4937,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		revision={pageRevision}
 		{language}
 		fill={heldFill}
+		meter={heldMeter}
 		onpick={handleLoupePick}
 		dockInset={loupeInset}
 		dockHeight={loupeFoot}

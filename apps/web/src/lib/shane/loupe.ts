@@ -359,6 +359,137 @@ export function clipToHead(win: MeasureWindow, head: number): MeasureWindow {
 }
 
 /**
+ * THE RUN-IN FROM THE METER TO THE MUSIC, in stave-spaces. Gould rule 240,
+ * p. 42, TIME-SIGNATURE ROW: two stave-spaces from a time signature to a first
+ * note that carries no accidental. The same table gives the clef and the key
+ * signature 2.5, and the time signature its own, smaller figure; the renderer's
+ * `ksEnd = o.leftMargin - sp(2.5)` (`staff-renderer.ts`) is the key-signature
+ * row and is not this one.
+ *
+ * Ruled by Dann 2026-09-14, after the build had borrowed the key signature's 2.5
+ * (`docs/memory/OPEN.md`, section N.138). Read from
+ * `docs/sessions/memo-gould-dimensional-priors_r1_2026-08-24.md:113`, where the
+ * row is FLAGGED as read from small table numerals and owed a re-verification;
+ * he ruled on it knowing that, and it joins the Gould re-shoot. N.139 inherits
+ * this number, so the page and the loupe stand the meter off the music alike.
+ *
+ * NOT IMPLEMENTED, recorded: the row's shorter figures for a first note that
+ * carries one accidental (1) or two or more (1).
+ */
+export const METER_RUN_IN_SP = 2;
+
+/**
+ * THE AIR BETWEEN THE KEY SIGNATURE AND THE METER, in stave-spaces. The
+ * renderer separates its clef from its key signature by one stave-space, on
+ * Gould r236, p. 41 (`staff-renderer.ts`, `clefX = ksStart - sp(1) - clefW`),
+ * and the meter takes the same separation from the key. DESK DEFAULT: Gould's
+ * own figure for key to meter was not read, because the book is not on this
+ * machine.
+ */
+export const METER_LEAD_SP = 1;
+
+/** One time-signature digit's SMuFL box, in stave-spaces. */
+export interface MeterDigit {
+	char: string;
+	bBoxSW: readonly [number, number];
+	bBoxNE: readonly [number, number];
+}
+
+/** The meter panel, in page units, with x measured from the panel's own left edge. */
+export interface MeterLayout {
+	/** The panel's width: the air the head lacks, the wider digit group, and the run-in the body lacks. */
+	span: number;
+	/** Each digit's `<text>` origin: its x, and its baseline. */
+	glyphs: { char: string; x: number; y: number }[];
+}
+
+/**
+ * N.138. The meter the loupe supplies for the measure it holds, laid out as a
+ * third panel between the head and the body.
+ *
+ * Ruled by Dann 2026-09-14: *"insert the correct corresponding meter signature
+ * for every measure the Loupe displays, even if that measure does not feature a
+ * verbatim meter signature marking in the score."*
+ *
+ * A PANEL AND NOT A WIDER HEAD. `headBound` and `clipToHead` partition one clone
+ * into two crops, and that partition carries a proof. This panel is the loupe's
+ * own drawing and sits between the two crops, so neither bound moves.
+ *
+ * THE DIGITS ARE PLACED THE WAY SMUFL DRAWS THEM. Every time-signature digit is
+ * two stave-spaces tall and centred on its baseline: MEASURED in all three
+ * faces' metadata, `timeSig4` runs -0.964 to 1.0 in Finale Maestro, -1.0 to
+ * 1.004 in Bravura, and -0.992 to 0.996 in Leland. So the count's baseline is
+ * the second line from the top and the unit's the second line from the bottom,
+ * and each group fills its two spaces.
+ *
+ * THE WIDTH COMES FROM THE FONT. A group is as wide as its digits' boxes laid
+ * edge to edge, and the two groups are centred on the wider. No chosen constant
+ * sets the ink's width.
+ *
+ * EACH SIDE MAKES UP ONLY THE AIR ITS NEIGHBOUR LACKS. The head ends at the
+ * system's first music ink and the body begins on the held measure's crop, and
+ * both already open some air of their own, so a fixed clearance on each side
+ * would double it where it exists.
+ *
+ * THE LEFT. `headAir` is the space from the head's last glyph to the head's
+ * right edge. It is not the renderer's two and a half spaces: MEASURED on the
+ * engraved Without Sun song 1, m. 4, the second sharp ends at 61.25 and the
+ * head at 63.54, 0.42 of a space, because the first note's flat stands left of
+ * its notehead and the head ends on the flat. So the panel adds whatever
+ * brings the key-to-meter gap to `METER_LEAD_SP`, and nothing where the head
+ * already has it.
+ *
+ * THE RIGHT. `bodyAir` is the
+ * space the body's own crop already opens with, from its left edge to the
+ * measure's first ink. A measure that opens its system has none, because the
+ * body starts on that ink; a mid-system measure opens half a gap after its
+ * barline and has some. Either way the meter's ink stands at least
+ * `METER_RUN_IN_SP` clear of the first thing in the measure.
+ *
+ * Null for a signature no digit can spell, so a malformed measure draws no
+ * panel rather than a wrong one.
+ */
+export function meterLayout(
+	beats: number,
+	beatType: number,
+	digit: (d: number) => MeterDigit,
+	lineGap: number,
+	staffTop: number,
+	headAir: number,
+	bodyAir: number,
+): MeterLayout | null {
+	const valid = (n: number) => Number.isInteger(n) && n > 0;
+	if (!valid(beats) || !valid(beatType) || !(lineGap > 0) || !Number.isFinite(staffTop)) return null;
+
+	const group = (n: number) =>
+		[...String(n)].map((c) => {
+			const g = digit(Number(c));
+			return { g, width: (g.bBoxNE[0] - g.bBoxSW[0]) * lineGap };
+		});
+	const count = group(beats);
+	const unit = group(beatType);
+	const widthOf = (gs: { width: number }[]) => gs.reduce((a, b) => a + b.width, 0);
+	const ink = Math.max(widthOf(count), widthOf(unit));
+
+	const gapBefore = (want: number, have: number) =>
+		Math.max(0, want * lineGap - (Number.isFinite(have) ? Math.max(0, have) : 0));
+	const lead = gapBefore(METER_LEAD_SP, headAir);
+
+	const glyphs: MeterLayout['glyphs'] = [];
+	const place = (gs: { g: MeterDigit; width: number }[], baseline: number) => {
+		let x = lead + (ink - widthOf(gs)) / 2;
+		for (const { g, width } of gs) {
+			glyphs.push({ char: g.char, x: x - g.bBoxSW[0] * lineGap, y: baseline });
+			x += width;
+		}
+	};
+	place(count, staffTop + lineGap);
+	place(unit, staffTop + 3 * lineGap);
+
+	return { span: lead + ink + gapBefore(METER_RUN_IN_SP, bodyAir), glyphs };
+}
+
+/**
  * What the loupe needs to know about the page as a whole, in staff units.
  *
  * Gathered by measuring the rendered page once, so it holds for every measure

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Loupe stave scales, N.138 — drawing r1, 2026-09-14</title>
+<style>
+  :root{
+    --paper-light:#f5f1e8; --paper-cream:#F0EBE0;
+    --ink-stave:#3a352f; --ink-text:#1a1612; --ink-ipa:#6a655f;
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  body{margin:0;padding:32px;background:#e8e3d8;font-family:var(--font-sans);color:var(--ink-text);}
+  .wrap{max-width:860px;margin:0 auto;}
+  h1{font-size:20px;margin:0 0 4px;font-weight:600;}
+  .sub{font-size:13px;color:#5a544c;margin:0 0 24px;line-height:1.5;}
+  .row{background:var(--paper-light);border:1.4px solid #4a4540;border-radius:10px;padding:10px 10px 12px;margin:0 0 18px;
+       box-shadow:0 1px 2px rgba(46,42,38,.2),0 8px 16px rgba(46,42,38,.13);}
+  .tag{font-size:12px;color:#4a4540;margin:0 0 6px;}
+  .tag b{font-weight:600;}
+  .verdict{font-size:12px;color:#5a544c;margin:6px 0 0;}
+  .note{font-size:12px;color:#5a544c;background:#efe9dc;border-left:3px solid #8a8278;padding:10px 12px;margin:24px 0 0;line-height:1.55;}
+  svg{display:block;background:var(--paper-cream);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>What each stave space looks like in the loupe</h1>
+<p class="sub">
+  N.138. Every size below is drawn at true CSS pixel size, so <b>open this at 100% browser zoom</b> and do not pinch.
+  The stave spaces are the measured values from <code>memo-n138-loupe-meter_r1_2026-09-14.md</code> §2.
+  The two type sizes are computed from them by the renderer's own constants: the page draws at
+  <code>lineGap: 5.5</code> (<code>engraving.ts:31</code>), and the underlay is emitted at
+  <code>font-size="12.5"</code> for the Cyrillic and <code>font-size="12"</code> for the IPA in those same page units
+  (<code>staff-renderer.ts:2697</code>, <code>:2702</code>). So the type does not shrink in step with the stave: at every
+  scale it stands at 2.27 stave spaces.
+</p>
+
+<div id="rows"></div>
+
+<p class="note">
+  <b>What is measured and what is not.</b> Measured: the stave space, the Cyrillic size, and the IPA size.
+  Approximate: the vertical gaps between stave and underlay, and the horizontal spacing of the notes.
+  The clef is the renderer's own primitive bass-clef shape (<code>staff-renderer.ts:1686-1687</code>), not the SMuFL glyph,
+  and the meter digits are set in the sans face rather than in Finale Maestro's <code>timeSig</code> glyphs, because this
+  page cannot load the notation font reliably from disk. So judge the <b>text</b> here, which is exact. The notation is
+  indicative.
+  <br><br>
+  The words are real, taken from Kabalevsky T05 m. 9 as the file itself spells them. The scales are Sunless 01's.
+</p>
+</div>
+
+<script>
+const ROWS = [
+  {ss:5.53, label:'An uncapped measure, today and after N.138',       sub:'Most of T05, and 7 of Sunless 01’s 17 sung measures. The panel costs these nothing.'},
+  {ss:4.61, label:'m. 17 as it ships today, before N.138',            sub:'The worst measure on Sunless 01 in the shipped loupe.'},
+  {ss:4.28, label:'m. 17 with the meter panel only',                  sub:'What the meter alone costs: 4.61 to 4.28.'},
+  {ss:3.96, label:'m. 17 as built, meter panel plus the clipping fix',sub:'The number in question. The second half of the drop buys back 22.8 px the shipped loupe was cutting off.'},
+  {ss:2.30, label:'The page thumbnail at 390 px, for scale',          sub:'What the loupe is rescuing you from. Not a loupe reading.'},
+];
+const WORDS = [
+  {cyr:'Бог', ipa:'box'},
+  {cyr:'Ку', ipa:'ku'},
+  {cyr:'пи', ipa:'pʲi'},
+  {cyr:'дон', ipa:'ˈdon'},
+];
+const host = document.getElementById('rows');
+for (const r of ROWS) {
+  const ss = r.ss, s = ss / 5.5;
+  const cyrPx = 12.5 * s, ipaPx = 12 * s;
+  const staffTop = 14 * s + 6, staffH = 4 * ss, staffBot = staffTop + staffH;
+  const cyrBase = staffBot + ss * 2.2 + cyrPx;
+  const ipaBase = cyrBase + ipaPx * 1.35;
+  const H = Math.ceil(ipaBase + ipaPx * 0.5 + 6);
+  const left = 8, headX = left + 30 * s, meterX = headX + 26 * s, firstX = meterX + 22 * s, step = 78 * s;
+  const W = Math.ceil(firstX + step * 3 + 40 * s);
+  const y = i => staffTop + i * ss;
+  let p = '';
+  for (let i = 0; i < 5; i++) p += `<line x1="${left}" y1="${y(i)}" x2="${W-6}" y2="${y(i)}" stroke="var(--ink-stave)" stroke-width="${Math.max(0.5, 1*s)}"/>`;
+  const fLine = y(1);
+  p += `<g transform="translate(${headX - 40*s} 0) scale(${s*0.46}) translate(${-40} 0)">`;
+  p += `<path d="M40 ${(fLine-5*s)/(s*0.46)} q10 -2 10 8 q0 12 -14 16" fill="none" stroke="var(--ink-stave)" stroke-width="${2.2/(s*0.46)*s}"/></g>`;
+  p += `<circle cx="${headX-6*s}" cy="${fLine-3*s}" r="${1.7*s}" fill="var(--ink-stave)"/><circle cx="${headX-6*s}" cy="${fLine+3*s}" r="${1.7*s}" fill="var(--ink-stave)"/>`;
+  p += `<text x="${meterX}" y="${y(1)+ss*0.5}" text-anchor="middle" font-size="${ss*2.1}" font-weight="600" fill="var(--ink-stave)" font-family="var(--font-sans)">12</text>`;
+  p += `<text x="${meterX}" y="${y(3)+ss*0.5}" text-anchor="middle" font-size="${ss*2.1}" font-weight="600" fill="var(--ink-stave)" font-family="var(--font-sans)">8</text>`;
+  const beamY = staffTop - ss * 0.9;
+  WORDS.forEach((w, i) => {
+    const nx = firstX + step * i, ny = y(3) - ss * 0.5 * (i % 2);
+    p += `<ellipse cx="${nx}" cy="${ny}" rx="${ss*0.68}" ry="${ss*0.5}" fill="var(--ink-stave)" transform="rotate(-18 ${nx} ${ny})"/>`;
+    p += `<line x1="${nx+ss*0.62}" y1="${ny}" x2="${nx+ss*0.62}" y2="${beamY}" stroke="var(--ink-stave)" stroke-width="${Math.max(0.5,1.1*s)}"/>`;
+    p += `<text x="${nx}" y="${cyrBase}" text-anchor="middle" font-size="${cyrPx}" fill="var(--ink-text)" font-family="var(--font-sans)">${w.cyr}</text>`;
+    p += `<text x="${nx}" y="${ipaBase}" text-anchor="middle" font-size="${ipaPx}" fill="var(--ink-ipa)" font-family="var(--font-sans)">${w.ipa}</text>`;
+  });
+  p += `<line x1="${firstX+ss*0.62}" y1="${beamY}" x2="${firstX+step*3+ss*0.62}" y2="${beamY}" stroke="var(--ink-stave)" stroke-width="${Math.max(1, ss*0.5)}"/>`;
+  const d = document.createElement('div');
+  d.className = 'row';
+  d.innerHTML = `<p class="tag"><b>${r.label}</b></p>`
+    + `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${p}</svg>`
+    + `<p class="verdict">stave space <b>${ss.toFixed(2)} px</b> &middot; Cyrillic <b>${cyrPx.toFixed(2)} px</b> &middot; IPA <b>${ipaPx.toFixed(2)} px</b><br>${r.sub}</p>`;
+  host.appendChild(d);
+}
+</script>
+</body>
+</html>
