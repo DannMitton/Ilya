@@ -1774,11 +1774,11 @@
 	}
 
 	.toc-heading-learn {
-		color: var(--rose, #A67B7B);
+		color: var(--umber, #A38669);
 	}
 
 	.toc-heading-guide {
-		color: var(--cobalt, #5C739E);
+		color: var(--cobalt, #748CB9);
 	}
 
 	/* ── TOC base styles ─────────────────────────────────── */
@@ -1815,13 +1815,13 @@
 	}
 
 	.toc-link:hover {
-		border-left-color: rgba(166, 123, 123, 0.4);
-		background: rgba(166, 123, 123, 0.06);
+		border-left-color: rgba(163, 134, 105, 0.4);
+		background: rgba(163, 134, 105, 0.06);
 		color: var(--ink-primary, #1a1612);
 	}
 
 	.toc-link:focus-visible {
-		outline: 2px solid var(--sage, #8B9A7D);
+		outline: 2px solid var(--sage, #839275);
 		outline-offset: -2px;
 		border-radius: 2px;
 	}
@@ -1829,16 +1829,16 @@
 	/* ── Active heading indicator ─────────────────────────── */
 
 	.toc-link.active {
-		border-left-color: var(--rose, #A67B7B);
+		border-left-color: var(--umber, #A38669);
 		border-left-width: 4px;
 		color: var(--ink-primary, #1a1612);
-		background: rgba(166, 123, 123, 0.08);
+		background: rgba(163, 134, 105, 0.08);
 		font-weight: 500;
 		padding-left: calc(0.75rem - 1px);
 	}
 
 	.toc-link.active:hover {
-		border-left-color: var(--rose, #A67B7B);
+		border-left-color: var(--umber, #A38669);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -1925,7 +1925,7 @@
 	}
 
 	.toc-chevron.contains-active {
-		color: var(--rose, #A67B7B);
+		color: var(--umber, #A38669);
 	}
 
 	.toc-chevron-spacer {
@@ -1938,25 +1938,25 @@
 	/* -- Guide tab: cobalt colour identity ----------- */
 
 	.guide-toc .toc-link:hover {
-		border-left-color: rgba(92, 115, 158, 0.4);
-		background: rgba(92, 115, 158, 0.06);
+		border-left-color: rgba(116, 140, 185, 0.4);
+		background: rgba(116, 140, 185, 0.06);
 	}
 
 	.guide-toc .toc-link.active {
-		border-left-color: var(--cobalt, #5C739E);
-		background: rgba(92, 115, 158, 0.08);
+		border-left-color: var(--cobalt, #748CB9);
+		background: rgba(116, 140, 185, 0.08);
 	}
 
 	.guide-toc .toc-link.active:hover {
-		border-left-color: var(--cobalt, #5C739E);
+		border-left-color: var(--cobalt, #748CB9);
 	}
 
 	.guide-toc .toc-chevron.contains-active {
-		color: var(--cobalt, #5C739E);
+		color: var(--cobalt, #748CB9);
 	}
 
 	.toc-chevron:focus-visible {
-		outline: 2px solid var(--sage, #8B9A7D);
+		outline: 2px solid var(--sage, #839275);
 		outline-offset: -2px;
 		border-radius: 2px;
 	}

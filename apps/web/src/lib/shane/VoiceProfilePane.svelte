@@ -1134,9 +1134,10 @@
 						opus=""
 						{language}
 						onheightchange={handleHeaderHeight}
-						versionAccent="#8E7E9B"
-						markAccent="#8E7E9B"
-						ruleAccent="#8E7E9B"
+						versionAccent="#9585A2"
+						markAccent="#9585A2"
+						ruleAccent="#9585A2"
+						labelInk="var(--lavender-ink)"
 					/>
 					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
@@ -1148,7 +1149,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#8E7E9B" onheightchange={i === 0 ? handleFooterHeight : undefined} />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#if hasCommentaryPage}
@@ -1193,7 +1194,7 @@
 						</aside>
 					{/if}
 				</div>
-				<PageFooter pageNumber={totalPages} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#8E7E9B" />
+				<PageFooter pageNumber={totalPages} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
 			</article>
 		{/if}
 	</div>
@@ -1241,9 +1242,10 @@
 		opus=""
 		{language}
 		onheightchange={handleHeaderHeight}
-		versionAccent="#8E7E9B"
-		markAccent="#8E7E9B"
-		ruleAccent="#8E7E9B"
+		versionAccent="#9585A2"
+		markAccent="#9585A2"
+		ruleAccent="#9585A2"
+		labelInk="var(--lavender-ink)"
 	/>
 
 	<!-- Content layer: the envelope's interim states, centred in the
@@ -1276,7 +1278,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#8E7E9B" onheightchange={handleFooterHeight} />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#9585A2" onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}
@@ -1311,7 +1313,7 @@
 	   the score, and the drawer manipulates while the page displays and prints. */
 	:global(rect[data-selection-ring]) {
 		fill: none;
-		stroke: var(--lavender, #8e7e9b);
+		stroke: var(--lavender, #9585a2);
 		stroke-width: 2;
 		pointer-events: none;
 	}
@@ -1482,7 +1484,7 @@
 	   about the page rather than an item in a list. */
 	.withheld {
 		box-sizing: border-box;
-		border: 1px solid #8e7e9b;
+		border: 1px solid #9585a2;
 		border-radius: 12px;
 		padding: 0.7rem 1.1rem 0.8rem;
 		background: var(--paper-cream);
@@ -1494,7 +1496,7 @@
 		font-variant: small-caps;
 		letter-spacing: 0.06em;
 		font-size: 0.8rem;
-		color: #8e7e9b;
+		color: #9585a2;
 	}
 
 	.withheld-lede {
@@ -1532,7 +1534,7 @@
 	/* Outline-only lavender squircle; an in-flow block below the score. */
 	.watch-band {
 		box-sizing: border-box;
-		border: 1px solid #8e7e9b;
+		border: 1px solid #9585a2;
 		border-radius: 12px;
 		padding: 0.7rem 1.1rem 0.8rem;
 		background: var(--paper-cream);
@@ -1544,7 +1546,7 @@
 		font-variant: small-caps;
 		letter-spacing: 0.06em;
 		font-size: 0.8rem;
-		color: #8e7e9b;
+		color: #9585a2;
 	}
 
 	.watch-band-list {

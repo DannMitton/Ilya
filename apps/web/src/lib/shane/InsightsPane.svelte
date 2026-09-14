@@ -8,8 +8,8 @@
 	 * never an input surface; every line computed or a sourced string a
 	 * predicate fired; the content in a squircle inheriting the watch band
 	 * (`VoiceProfilePane.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
-	 * cream inside); governing colour dusty rose, label ink #8A5C5C, #A67B7B
-	 * for lines and marks only; page one fixed at one page; section headers on
+	 * cream inside); governing colour dusty rose, label ink `--rose-ink`, `--rose`
+	 * for lines and marks only (both moved at colour stage 4, 2026-09-14); page one fixed at one page; section headers on
 	 * `TitleHeader.svelte`'s `.metadata-line` recipe in rose; the foot one
 	 * apparatus block with the lieder.net clause struck; silence is a finding.
 	 * The composition is Design's R3, drawing 1a
@@ -273,9 +273,10 @@
 					opus=""
 					{language}
 					onheightchange={(h) => (headerHeight = h)}
-					versionAccent="#A67B7B"
-					markAccent="#A67B7B"
-					ruleAccent="#A67B7B"
+					versionAccent="#AB7F7F"
+					markAccent="#AB7F7F"
+					ruleAccent="#AB7F7F"
+					labelInk="var(--rose-ink)"
 				/>
 
 				<div class="squircle" style="top: {contentTop}px;">
@@ -470,7 +471,7 @@
 		left: 96px;
 		right: 96px;
 		box-sizing: border-box;
-		border: 1px solid var(--rose, #a67b7b);
+		border: 1px solid var(--rose, #ab7f7f);
 		border-radius: 12px;
 		background: var(--paper-cream);
 		padding: 18px 26px 20px;
@@ -493,7 +494,9 @@
 	}
 
 	/* `TitleHeader.svelte`'s `.metadata-line`, in rose label ink, ruled by
-	   Dann 2026-09-11. #8A5C5C, because small caps must clear 4.5 on cream. */
+	   Dann 2026-09-11. Small caps must clear 4.5 on cream. Since colour stage
+	   4 (2026-09-14) it is `--rose-ink`, #674141 at 7.33, per ruling 4 of 4
+	   of 2026-09-13; it was the literal #8A5C5C. */
 	.section-head {
 		margin: 0;
 		font-family: var(--font-sans);
@@ -502,7 +505,7 @@
 		letter-spacing: 1.5px;
 		line-height: 1.6;
 		font-variant-caps: all-small-caps;
-		color: #8a5c5c;
+		color: var(--rose-ink);
 	}
 
 	.prose,
@@ -541,7 +544,7 @@
 
 	.fit-row > span {
 		padding: 5px 0 4px;
-		border-top: 1px solid rgba(166, 123, 123, 0.35);
+		border-top: 1px solid rgba(171, 127, 127, 0.35);
 	}
 
 	.fit-head > span {
@@ -656,7 +659,7 @@
 	}
 
 	.running-rule {
-		border-bottom: 1px solid var(--rose, #a67b7b);
+		border-bottom: 1px solid var(--rose, #ab7f7f);
 		margin-top: 4px;
 	}
 
@@ -705,7 +708,7 @@
 	}
 
 	.foot-hairline {
-		border-top: 1px solid var(--rose, #a67b7b);
+		border-top: 1px solid var(--rose, #ab7f7f);
 		margin-bottom: 8px;
 	}
 

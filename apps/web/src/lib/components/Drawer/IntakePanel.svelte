@@ -530,7 +530,7 @@
 		     above the line carries the count and the chevron and the line
 		     below it is the station exactly as it has always rendered. Both
 		     states wear the box: `SyllableStation`'s own white ground and its
-		     1 px #8E7E9B rule, the recipe its SABB cell already used.
+		     1 px #9585A2 rule, the recipe its SABB cell already used.
 
 		     NOT A PILL. The 999px ends of `.action-btn` are the drawer's six
 		     ACTIONS; this is a disclosure over a box of text, and drawing r2
@@ -749,7 +749,7 @@
 
 	/* ── THE SAGE HOVER (N.65), KEPT AND NARROWED ───────────
 	   Dann's ruling, 2026-08-20: "Can the text input field have a sage
-	   mouseover?" It is `--sage` #8B9A7D at 6 percent, and it stays bound to
+	   mouseover?" It is `--sage` #839275 at 6 percent, and it stays bound to
 	   `sourceIsEmpty`, which is his own correction of the same day: an
 	   unconditional hover would tint the singer's poem every time the cursor
 	   crossed it.
@@ -758,7 +758,7 @@
 	   same 6 percent in `--lavender`, and there is nothing left for it
 	   to describe. */
 	.intake.empty:hover {
-		background: rgba(139, 154, 125, 0.06);
+		background: rgba(131, 146, 117, 0.06);
 	}
 
 	/* THE DRAG STATE IS THE SCORE BOX'S, at its own doubled tint, moved onto
@@ -766,7 +766,7 @@
 	   `rgba(142, 126, 155, 0.12)`; this is the same 12 percent in the sage the
 	   one field hovers in, because one field means one hue. */
 	.intake.dragging {
-		background: rgba(139, 154, 125, 0.12);
+		background: rgba(131, 146, 117, 0.12);
 	}
 
 	/* ── The receipts (the prototype `:192-:196`) ───────────
@@ -849,13 +849,13 @@
 	/* ── THE SYLLABLE LINE, N.114 ───────────────────────────
 	   THE BOX IS `SyllableStation`'s OWN RECIPE, lifted off the SABB cell it
 	   already draws (that file's `.slot.is-cursor`, `background: #FFFFFF` and
-	   `border: 1px solid #8E7E9B`) and applied to the row. Ruling 2 names
+	   `border: 1px solid #9585A2`) and applied to the row. Ruling 2 names
 	   those two declarations, so they are copied value for value rather than
 	   re-chosen, and the collapsed row and the open line wear the same box.
 	   The 3px radius is drawing r2's (`.syl.boxed`). */
 	.syl-box {
 		background: #ffffff;
-		border: 1px solid #8e7e9b;
+		border: 1px solid #9585a2;
 		border-radius: 3px;
 		padding: 6px 8px;
 		text-align: left;
@@ -1022,7 +1022,7 @@
 	   `3px solid var(--sage)`. THE HUE IS UNCHANGED AND MUST STAY: sage
 	   names the text intake and lavender names the score intake, which is
 	   hue naming place, and Dann ruled that right. Every lighter sage token
-	   measures worse against the white fill than #8B9A7D's own 2.99:1, so
+	   measures worse against the white fill than #839275's own 3.32:1, so
 	   weight is the only lever that does not cost contrast.
 
 	   The body font stays `var(--font-serif)`. Its contents are a poem, so

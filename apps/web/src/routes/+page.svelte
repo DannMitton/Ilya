@@ -5269,7 +5269,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		line-height: 48px;
-		color: var(--rose, #A67B7B);
+		color: var(--umber, #A38669);
 	}
 
 	:global(.gt-hi) {
@@ -5459,21 +5459,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   the same four. See the element's own comment. */
 
 	.app-content.tab-transcription {
-		--desk-fill: var(--sage-desk, #D1D7CB);
+		--desk-fill: var(--sage-desk, #CDD3C8);
 	}
 
 	.app-content.tab-learn {
-		--desk-fill: var(--rose-desk, #DBCACA);
+		--desk-fill: var(--umber-desk, #DACFC3);
 	}
 
 	.app-content.tab-guide {
-		--desk-fill: var(--cobalt-desk, #BEC7D8);
+		--desk-fill: var(--cobalt-desk, #C7D1E3);
 	}
 
 	/* N.127: Insights' desk, rose, ruled by Dann 2026-09-11 as the document's
-	   governing colour. It reads rose's own desk token, as Learn does. */
+	   governing colour. It reads rose's own desk token. Learn read it too until
+	   stage 4 of the colour story moved Learn to umber, 2026-09-14. */
 	.app-content.tab-insights {
-		--desk-fill: var(--rose-desk, #DBCACA);
+		--desk-fill: var(--rose-desk, #DDCCCC);
 	}
 
 	.app-content.tab-shane {
@@ -5485,7 +5486,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   other three. It is not --surround-shane, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
-		--desk-fill: var(--lavender-desk, #D2CBD7);
+		--desk-fill: var(--lavender-desk, #D5CEDA);
 	}
 
 	/* ── Floating Paper: the shadow ────────────────────────── */
@@ -5656,7 +5657,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	/* ── Editorial mark callout (scholarly departure/note) ──── */
 	:global(.learn-callout) {
-		border-left: 4px solid var(--rose, #A67B7B);
+		border-left: 4px solid var(--umber, #A38669);
 		border-top: none;
 		border-right: none;
 		border-bottom: none;
@@ -5673,7 +5674,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		font-variant: small-caps;
 		font-weight: 600;
 		letter-spacing: 0.05em;
-		color: var(--rose, #A67B7B);
+		color: var(--umber, #A38669);
 		margin-bottom: 0.5rem;
 		margin-left: -4px;
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
@@ -5715,18 +5716,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	.main-content.tab-learn :global(.reading-inner h2),
 	.main-content.tab-learn :global(.reading-inner h3),
 	.main-content.tab-learn :global(.reading-inner h4) {
-		color: var(--rose, #A67B7B);
+		color: var(--umber, #A38669);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h1),
 	.main-content.tab-guide :global(.reading-inner h2),
 	.main-content.tab-guide :global(.reading-inner h3),
 	.main-content.tab-guide :global(.reading-inner h4) {
-		color: var(--cobalt, #5C739E);
+		color: var(--cobalt, #748CB9);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h3) {
-		border-top-color: var(--cobalt, #5C739E);
+		border-top-color: var(--cobalt, #748CB9);
 	}
 
 	/* ── Text input field: the sage border (item 6) ────────

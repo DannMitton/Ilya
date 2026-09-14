@@ -242,7 +242,7 @@
 		padding: 2px 6px;
 		color: #1a1612;
 		background: #FFFFFF;
-		border: 1px solid #8E7E9B;
+		border: 1px solid #9585A2;
 		vertical-align: middle;
 	}
 	/* CLIPPED, THE SABB DRAWS ITS CELL AND SPENDS NO TOUCH GEOMETRY. No
@@ -254,7 +254,7 @@
 		min-width: 0;
 	}
 	.slot:focus-visible {
-		outline: 2px solid #8E7E9B;
+		outline: 2px solid #9585A2;
 		outline-offset: 1px;
 	}
 </style>

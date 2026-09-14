@@ -212,7 +212,7 @@
 	}
 
 	.word-stack:hover {
-		background-color: rgba(139, 154, 125, 0.08);
+		background-color: rgba(131, 146, 117, 0.08);
 	}
 
 	.word-stack:focus-visible {

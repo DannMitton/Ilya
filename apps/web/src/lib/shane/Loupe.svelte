@@ -1036,7 +1036,7 @@
 	   adds no geometry to the SVG and cannot shift a coordinate the renderer
 	   computed. */
 	.loupe :global([data-loupe-selected]) {
-		outline: 2px solid var(--sage, #8b9a7d);
+		outline: 2px solid var(--sage, #839275);
 		outline-offset: 2px;
 		border-radius: 2px;
 	}
@@ -1045,7 +1045,7 @@
 	   Studio's accent for the score document, and hairline so it reads as a
 	   bracket around the measure rather than as a box drawn on the music. */
 	:global([data-held-measure]) {
-		stroke: var(--sage, #8b9a7d);
+		stroke: var(--sage, #839275);
 		stroke-width: 1.2;
 	}
 

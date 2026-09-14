@@ -30,17 +30,33 @@
 	--ink-tertiary: #6A655F;      /* lighter warm grey — captions, placeholders */
 	--ink-stave: #3A352F;         /* the stave's furniture: staff lines, clefs, barlines, rests */
 
+	/* ── The five family bands ─────────────────────────────── */
+	/* Stage 4 of the colour story, 2026-09-14. Every band sits at OKLCH
+	   L 0.640 in its family's own hue and chroma, its chip one ramp step down
+	   at L 0.530, and its label ink at L 0.420 (ruling 1 of 4, 2026-09-13,
+	   docs/sessions/spec-colour_r1_2026-09-13.md). A hue names one idea:
+	   sage the words, rose your voice, cobalt information, lavender the
+	   melody, umber the book. */
+
 	/* ── Sage accent ──────────────────────────────────────── */
-	--sage: #8B9A7D;
+	--sage: #839275;
 	--sage-deep: #7A8A6C;         /* sage one step deeper: fills, borders, and pointer states on screen */
 	--sage-gloss: #7A8A6C;        /* the gloss line under every word on the paper */
 
 	/* ── Dusty Rose accent (replaces terra cotta) ────────── */
-	--rose: #A67B7B;
+	--rose: #AB7F7F;
 	--terracotta: var(--rose);  /* backward-compatible alias */
 
 	/* ── Quiet Cobalt accent (Guide tab) ──────────────────── */
-	--cobalt: #5C739E;
+	--cobalt: #748CB9;
+
+	/* ── Lavender accent (the melody: Markup, the Melody band) ── */
+	/* Moved here from the pacifier block at stage 4, where it sat apart from
+	   its three siblings. It is still the pacifier's captured outline. */
+	--lavender: #9585A2;
+
+	/* ── Umber accent (the book: Learn) ───────────────────── */
+	--umber: #A38669;
 
 	/* ── Stone palette (UI chrome) ────────────────────────── */
 	--stone-300: #d6d3d1;
@@ -126,10 +142,14 @@
 	   is NOT --surround-shane: that token is the calibration pacifier band,
 	   it sits on white rather than on a desk, and contrast.test.ts asserts
 	   its literal. The two are different surfaces and keep different names. */
-	--sage-desk: #D1D7CB;   /* sage at 60% */
-	--lavender-desk: #D2CBD7;          /* deeper lavender at 60% */
-	--rose-desk: #DBCACA;           /* dusty rose at 60% */
-	--cobalt-desk: #BEC7D8;           /* quiet cobalt at 60% */
+	/* Stage 4, 2026-09-14: the desk is NOT on the ramp. Each is still 40
+	   percent of its band over 60 percent white, recomputed from the ruled
+	   bands, and umber's is Learn's. */
+	--sage-desk: #CDD3C8;   /* sage at 60% */
+	--lavender-desk: #D5CEDA;          /* lavender at 60% */
+	--rose-desk: #DDCCCC;           /* rose at 60% */
+	--cobalt-desk: #C7D1E3;           /* cobalt at 60% */
+	--umber-desk: #DACFC3;           /* umber at 60% */
 
 	/* ── Language-pill chips, one per destination ──────────── */
 	/* The header carries ONE language pill, naming the language the singer
@@ -143,18 +163,28 @@
 	   of 2026-07-29 flagged this exact control for carrying three
 	   hand-picked hex literals beside one real token.
 
-	   Guide takes NO darkening: --cobalt is already dark enough to
-	   carry white at 4.5, so its chip is the band itself and it is written
-	   as the band's own token so the two can never drift apart. Being the
-	   band, it would be invisible without an edge, so only Guide's pill
-	   draws a hairline. That is what the drawing shows.
+	   Stage 4, 2026-09-14: every chip is its family's hue and chroma at
+	   OKLCH L 0.530, one ramp step under its band, and every one clears 5.21
+	   with white text. Guide's chip was the band itself until this stage and
+	   now takes its own value like the other four. Guide's pill still draws
+	   its hairline (HeaderBar.svelte), which was drawn because the chip was
+	   the band. */
+	--sage-chip: #637156;  /* --sage, one step down */
+	--rose-chip: #885F60;          /* --rose, one step down */
+	--cobalt-chip: #556C96;  /* --cobalt, one step down */
+	--lavender-chip: #746580;         /* --lavender, one step down */
+	--umber-chip: #82664A;         /* --umber, one step down */
 
-	   The other three were derived by hand from their bands and must be
-	   re-derived by hand if a band ever moves. */
-	--sage-chip: #6C7A5F;  /* --sage, one step down */
-	--rose-chip: #9A6A6A;          /* --rose, one step down */
-	--cobalt-chip: var(--cobalt);  /* the band itself, undarkened */
-	--lavender-chip: #806E8E;         /* --lavender, one step down */
+	/* ── Label inks, one per family ────────────────────────── */
+	/* Ruling 4 of 4, 2026-09-13: every document's label ink is its own
+	   family at the ramp's OKLCH L 0.420, and every one clears 7.02 on
+	   cream. Sage for Text, lavender for Markup, rose for Insights, umber
+	   for Learn, cobalt for Guide. */
+	--sage-ink: #455238;
+	--lavender-ink: #554660;
+	--rose-ink: #674141;
+	--umber-ink: #61472C;
+	--cobalt-ink: #374D75;
 
 	/* ── Shane pacifier (fourth tab) ──────────────────────── */
 	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */
@@ -162,7 +192,7 @@
 	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
 	/* the pacifier contrast checker (contrast.ts), not here.          */
 	--surround-shane: #D8D0E0;    /* the pacifier band, on white */
-	--lavender: #8E7E9B;   /* captured outline */
+	/* --lavender, the captured outline, is declared with the family bands. */
 	--arc-green: #1DB954;         /* progress arc (owned exception) */
 	--signal-red: #A32D2D;        /* retake flash and badge */
 	--prep-amber: #BC7E08;        /* prep-countdown flash (policy-pending) */

@@ -81,7 +81,7 @@
 		font-weight: 600;
 		color: var(--ink-primary, #1a1612);
 		line-height: 1.35;
-		border-top: 1px solid var(--rose, #A67B7B);
+		border-top: 1px solid var(--umber, #A38669);
 		margin: 3.5rem 0 1.25rem 0;
 		padding-top: 1.25rem;
 	}
@@ -130,11 +130,11 @@
 	}
 
 	.reading-inner :global(.band-learn) {
-		background: var(--rose, #A67B7B);
+		background: var(--umber, #A38669);
 	}
 
 	.reading-inner :global(.band-guide) {
-		background: var(--cobalt, #5C739E);
+		background: var(--cobalt, #748CB9);
 	}
 
 	.reading-inner :global(.band-kicker) {
@@ -330,7 +330,7 @@
 	.reading-inner :global(code) {
 		font-family: var(--font-mono, 'Source Code Pro', monospace);
 		font-size: 0.95em;
-		background: rgba(139, 154, 125, 0.1);
+		background: rgba(131, 146, 117, 0.1);
 		padding: 0.1em 0.35em;
 		border-radius: 3px;
 	}
@@ -340,8 +340,8 @@
 	.reading-inner :global(blockquote) {
 		margin: 1.5rem 0;
 		padding: 1rem 1.25rem;
-		border-left: 3px solid var(--sage, #8B9A7D);
-		background: rgba(139, 154, 125, 0.06);
+		border-left: 3px solid var(--sage, #839275);
+		background: rgba(131, 146, 117, 0.06);
 		border-radius: 0 4px 4px 0;
 	}
 
@@ -373,7 +373,7 @@
 	/* ── Links ─────────────────────────────────────────────── */
 
 	.reading-inner :global(a) {
-		color: var(--rose, #A67B7B);
+		color: var(--rose, #AB7F7F);
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 2px;
@@ -448,7 +448,7 @@
 	}
 
 	.reading-inner :global(tbody tr:hover) {
-		background: rgba(139, 154, 125, 0.04);
+		background: rgba(131, 146, 117, 0.04);
 	}
 
 	/* IPA cells: monospace for clarity */
@@ -456,7 +456,7 @@
 	.reading-inner :global(th code) {
 		font-family: var(--font-mono, 'Source Code Pro', monospace);
 		font-size: 0.9em;
-		background: rgba(139, 154, 125, 0.1);
+		background: rgba(131, 146, 117, 0.1);
 		padding: 0.1em 0.3em;
 		border-radius: 2px;
 	}

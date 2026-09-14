@@ -123,7 +123,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 // ---------------------------------------------------------------------------
 
 export const PALETTE = {
-	'lavender': hexToRgb('#8E7E9B'),
+	'lavender': hexToRgb('#9585A2'),
 	'surround-shane': hexToRgb('#D8D0E0'),
 	'paper-cream': hexToRgb('#F0EBE0'),
 	'ink-primary': hexToRgb('#1A1612'),
@@ -281,7 +281,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 		fgToken: 'lavender', fgAlpha: 1.0,
 		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
-		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22).'
+		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22). Colour stage 4 (2026-09-14) moved lavender to #9585A2: 2.28:1 against the band and 3.41:1 against the white interior.'
 	},
 
 	// --- Progress arc, against the band (spec v6 §6.6) -------------------------

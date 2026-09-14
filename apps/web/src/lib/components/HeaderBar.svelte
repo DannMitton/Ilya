@@ -71,15 +71,15 @@
 	/* ── Tab-responsive background ────────────────────────── */
 
 	.header-bar.tab-transcription {
-		background: var(--sage, #8B9A7D);
+		background: var(--sage, #839275);
 	}
 
 	.header-bar.tab-learn {
-		background: var(--rose, #A67B7B);
+		background: var(--umber, #A38669);
 	}
 
 	.header-bar.tab-guide {
-		background: var(--cobalt, #5C739E);
+		background: var(--cobalt, #748CB9);
 	}
 
 	/* FOUR destinations, four hues. Ruled by Dann 2026-08-19 during the
@@ -91,17 +91,16 @@
 	   option, and its hover underline) already key to --lavender and
 	   were never changed. */
 	.header-bar.tab-shane {
-		background: var(--lavender, #8E7E9B);
+		background: var(--lavender, #9585A2);
 	}
 
 	/* N.127 increment 1. Insights' governing colour is dusty rose, ruled by
-	   Dann 2026-09-11, so the bar takes the rose Learn already carries, and
-	   the sigil version and the language chip below take Learn's two values.
-	   DESK DEFAULT: no new hue was coined for the bar; the one-hue-per-surface
-	   ruling of 2026-08-19 named four surfaces, and whether Insights and Learn
-	   may share a bar is Dann's to wave off. */
+	   Dann 2026-09-11, so the bar takes rose. Learn carried rose too until
+	   stage 4 of the colour story moved it to umber, 2026-09-14; Insights
+	   keeps rose, and its sigil version and language chip below keep rose's
+	   values. */
 	.header-bar.tab-insights {
-		background: var(--rose, #A67B7B);
+		background: var(--rose, #AB7F7F);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
@@ -150,14 +149,14 @@
 	}
 
 	.tab-learn .sigil-version {
-		background: #8F6A6A;
+		background: var(--umber-chip, #82664A);
 	}
 
 	.tab-guide .sigil-version {
 		background: #4D6387;
 	}
 
-	/* Deeper shade of --lavender (#8E7E9B), computed the same way the
+	/* Deeper shade of --lavender as it stood before stage 4 (#8E7E9B), computed the same way the
 	   Learn and Guide deepened badge shades were hand-picked, not a token
 	   that exists yet. If Kimi or Dann want a precise locked value, this is
 	   the one to revisit. */
@@ -204,28 +203,29 @@
 
 	/* The chip is the band's own hue one step down, white on it, ratified
 	   by Dann 2026-08-20 as option D from a drawing. Guide alone takes the
-	   hairline, because its chip IS its band. The four values live in
-	   app.css. */
+	   hairline, drawn because its chip was its band; since stage 4
+	   (2026-09-14) the chip has its own value and the hairline was left in
+	   place. The five values live in app.css. */
 
 	.tab-transcription .lang-pill {
-		background: var(--sage-chip, #6C7A5F);
+		background: var(--sage-chip, #637156);
 	}
 
 	.tab-learn .lang-pill {
-		background: var(--rose-chip, #9A6A6A);
+		background: var(--umber-chip, #82664A);
 	}
 
 	.tab-guide .lang-pill {
-		background: var(--cobalt-chip, #5C739E);
+		background: var(--cobalt-chip, #556C96);
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 	}
 
 	.tab-shane .lang-pill {
-		background: var(--lavender-chip, #806E8E);
+		background: var(--lavender-chip, #746580);
 	}
 
 	.tab-insights .lang-pill {
-		background: var(--rose-chip, #9A6A6A);
+		background: var(--rose-chip, #885F60);
 	}
 
 	/* Hover is NOT ruled by the brief and this is the smallest thing that

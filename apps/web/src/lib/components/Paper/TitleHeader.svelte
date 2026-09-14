@@ -28,9 +28,17 @@
 		 * harmonizes with the footer hairline (Dann's ruling, 2026-07-16).
 		 */
 		ruleAccent?: string;
+		/**
+		 * Colour of the metadata lines, the document's label ink. Every
+		 * document's label ink is its own family at OKLCH L 0.420 (ruling 4
+		 * of 4, 2026-09-13): Text keeps the default sage, Markup passes
+		 * lavender, Insights passes rose. It was `--ink-secondary` for every
+		 * document until colour stage 4, 2026-09-14.
+		 */
+		labelInk?: string;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)' }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)' }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -79,7 +87,7 @@
 		{/if}
 	</div>
 
-	<div class="metadata-block">
+	<div class="metadata-block" style="color: {labelInk}">
 		{#if composerLine || attributionLine}
 			{#if composerLine}
 				<div class="metadata-line">{composerLine}</div>
@@ -162,7 +170,7 @@
 		font-family: var(--font-sans);
 		font-size: 14px;
 		font-weight: 600;
-		color: var(--ink-secondary);
+		/* colour: inherited from `.metadata-block`, which carries `labelInk` */
 		letter-spacing: 1.5px;
 		line-height: 1.6;
 		font-variant-caps: all-small-caps;

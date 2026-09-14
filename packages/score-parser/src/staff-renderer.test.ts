@@ -426,16 +426,16 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   const svg = renderDemo();
 
   it('renders the turning layer in the appendix sage, not the old grey', () => {
-    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
+    expect(svg.includes('fill="#9585A2"')).toBe(true);
     expect(svg.includes('#9a968f')).toBe(false);
   });
 
   it('shows the turning D# sharp once, then carries it through the measure', () => {
-    expect((svg.match(/fill="#8E7E9B">♯</g) ?? []).length).toBe(1);
+    expect((svg.match(/fill="#9585A2">♯</g) ?? []).length).toBe(1);
   });
 
   it('draws no turning accidental for natural turning pitches', () => {
-    expect((svg.match(/fill="#8E7E9B">♮/g) ?? []).length).toBe(0);
+    expect((svg.match(/fill="#9585A2">♮/g) ?? []).length).toBe(0);
   });
 
   it('offsets a colliding turning notehead beside the sung note (two-voice rule)', () => {
@@ -684,7 +684,7 @@ describe('the turning head counts its ledger lines (N.107)', () => {
     // Sung B4 on the middle line, turning A5 sitting on the first ledger
     // above. Six stave steps apart, so the unit is aligned and tx is nx.
     const svg = scene(P('B', 4), P('A', 5));
-    const lav = ledgers(svg, '#8E7E9B');
+    const lav = ledgers(svg, '#9585A2');
     expect(ys(lav)).toEqual([MID - 3 * GAP]);
     expect(centre(lav[0])).toBe(round2(turningCx(svg)));
     expect(lav[0]).toContain('data-analysis="turning-ledger"');
@@ -695,21 +695,21 @@ describe('the turning head counts its ledger lines (N.107)', () => {
     // Turning E6, the third ledger above. Every position between the stave
     // and the head is drawn, top-down, as the sung line has always done.
     const svg = scene(P('B', 4), P('E', 6));
-    expect(ys(ledgers(svg, '#8E7E9B'))).toEqual([MID - 3 * GAP, MID - 4 * GAP, MID - 5 * GAP]);
+    expect(ys(ledgers(svg, '#9585A2'))).toEqual([MID - 3 * GAP, MID - 4 * GAP, MID - 5 * GAP]);
   });
 
   it('draws them BELOW the stave the same way', () => {
     // Turning C4, one ledger below. The ruling is symmetric and so is the
     // arithmetic; this holds the second loop to it.
     const svg = scene(P('B', 4), P('C', 4));
-    expect(ys(ledgers(svg, '#8E7E9B'))).toEqual([MID + 3 * GAP]);
+    expect(ys(ledgers(svg, '#9585A2'))).toEqual([MID + 3 * GAP]);
   });
 
   it('draws NONE for a turning head inside the stave', () => {
     // Sung B4, turning D5, both on the stave. Nothing is drawn, which is the
     // case the old code got right by drawing nothing at all.
     const svg = scene(P('B', 4), P('D', 5));
-    expect(ledgers(svg, '#8E7E9B')).toEqual([]);
+    expect(ledgers(svg, '#9585A2')).toEqual([]);
   });
 
   it('centres a DISPLACED unit’s ledgers on tx, not on nx', () => {
@@ -719,7 +719,7 @@ describe('the turning head counts its ledger lines (N.107)', () => {
     // with the head that needs it. This is the case a ledger drawn at nx
     // would silently pass and a reader would silently misread.
     const svg = scene(P('A', 5), P('B', 5));
-    const lav = ledgers(svg, '#8E7E9B');
+    const lav = ledgers(svg, '#9585A2');
     const black = ledgers(svg, '#3a352f');
     const nx = sungCx(svg);
     expect(ys(lav)).toEqual([MID - 3 * GAP]);
@@ -752,7 +752,7 @@ describe('staff renderer: the four analytical criteria', () => {
     expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
   });
   it('2. sage stemless turning-pitch noteheads', () => {
-    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
+    expect(svg.includes('fill="#9585A2"')).toBe(true);
   });
   it('3. red squircle at the fR1/fo crossing (n6)', () => {
     expect(svg.includes('stroke="#b23b3b"')).toBe(true);
@@ -796,8 +796,8 @@ describe('staff renderer: the four analytical criteria', () => {
     // insertion bar and the drawer's correction stations all carry this token
     // — and a formant-derived turning pitch is voice data. Sage codes the
     // score document and its text, and was miscoding these.
-    expect(svg.includes('fill="#8E7E9B"')).toBe(true);
-    expect(svg.includes('#8B9A7D')).toBe(false);
+    expect(svg.includes('fill="#9585A2"')).toBe(true);
+    expect(svg.includes('#839275')).toBe(false);
   });
 
   it('keeps the handle on the turning marks whatever their ink', () => {
@@ -807,7 +807,7 @@ describe('staff renderer: the four analytical criteria', () => {
     // every turning mark carries both its handle and the current colour.
     const turning = svg.match(/<[^>]*data-analysis="turning-[^"]*"[^>]*>/g) ?? [];
     expect(turning.length).toBeGreaterThan(0);
-    for (const mark of turning) expect(mark).toContain('#8E7E9B');
+    for (const mark of turning) expect(mark).toContain('#9585A2');
   });
 
   it('binds a note’s accidental back to it with data-of-event', () => {
@@ -891,7 +891,7 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
   it('renders key-signature and layer accidentals as glyphs (flat, natural, sage sharp)', () => {
     expect(svg.includes(String.fromCodePoint(0xe260))).toBe(true); // accidentalFlat (key)
     expect(svg.includes(String.fromCodePoint(0xe261))).toBe(true); // accidentalNatural (n3)
-    const lavenderSharp = new RegExp(`fill="#8E7E9B">${String.fromCodePoint(0xe262)}<`, 'g');
+    const lavenderSharp = new RegExp(`fill="#9585A2">${String.fromCodePoint(0xe262)}<`, 'g');
     expect((svg.match(lavenderSharp) ?? []).length).toBe(1); // turning D#, carried
   });
 
@@ -927,7 +927,7 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
   const stems = (s: string): number => (s.match(/stroke="#1a1612" stroke-width="1\.5"/g) ?? []).length;
 
   it('draws no acoustic marks at all: no turning layer, no crossing', () => {
-    expect(svg.includes('#8E7E9B')).toBe(false);
+    expect(svg.includes('#9585A2')).toBe(false);
     expect(svg.includes('stroke="#b23b3b"')).toBe(false);
   });
 
@@ -1806,7 +1806,7 @@ describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
     });
     // The bar-1 turning sharp is drawn, which proves the fixture reaches the
     // turning-accidental path at all.
-    expect(svg).toContain(`fill="#8E7E9B">${SHARP}</text>`);
+    expect(svg).toContain(`fill="#9585A2">${SHARP}</text>`);
     // And no parenthesis of any colour reaches the page.
     expect(svg.includes(PARENS_LEFT)).toBe(false);
     expect(svg.includes(PARENS_RIGHT)).toBe(false);

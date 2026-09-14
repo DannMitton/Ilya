@@ -174,7 +174,7 @@
 		border: none;
 		padding: 0;
 		font: inherit;
-		color: var(--fit-accent, #8e7e9b);
+		color: var(--lavender, #9585a2);
 		cursor: pointer;
 		white-space: nowrap;
 	}

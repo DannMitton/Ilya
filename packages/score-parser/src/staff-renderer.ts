@@ -28,7 +28,7 @@
  *   - the four analytical marks (forced semantic stems, lavender turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
- *     p. 206) renders in Calm Authority's lavender (#8E7E9B, the
+ *     p. 206) renders in Calm Authority's lavender (#9585A2, the
  *     `--lavender` app
  *     token; see the TURNING_COLOUR constant below), noteheads and
  *     accidentals in one colour, with
@@ -82,7 +82,7 @@ export const WITHHELD_SIGLA = {
 	w: 493,
 	h: 751,
 	path: 'M426.5 348.1c-53.8 4.4-96.8 20.7-133.1 50.3-29.3 23.9-51.8 62.6-59.9 103.1-2.1 10.7-4.5 30.4-4.5 37.7v2.8h125.9l.5-3.3c.3-1.7 1-6.6 1.6-10.7 2.7-18.4 10.2-33.1 23.5-46.6 16.8-16.8 34.3-24.3 61.2-26 38.3-2.5 72.4 14.5 86.7 43.1 5.9 11.7 7.1 17.9 7 35.5 0 16.9-1.7 25.8-6.8 37.4-7.6 17.3-25.5 34.2-57.4 54.6-41.3 26.4-54.8 36.7-66.3 50.6-25.5 30.8-32.8 56.2-31.3 108.6l.7 22.8h123.4l.6-18.8c.6-21.6 2.2-29.7 8.7-42.8 4.6-9.4 14.3-21.1 25.1-30.2 7.7-6.6 31.6-22.8 51-34.6 50.9-31.1 79.7-68 89.8-115.1 8.2-38 3.5-81.4-12.4-114-23.1-47.4-71.3-82.9-132.5-97.4-29.8-7.1-68.2-9.7-101.5-7m2 538c-18.7 1.7-38 12-50 26.7-11.4 13.7-15.9 26.8-15.9 45.7 0 8.3.6 14 1.8 18.5 6.2 22.6 23.2 41.1 45.5 49.4 9.8 3.6 15.9 4.6 29 4.6 13.8 0 24.8-2.6 36.2-8.6 38.6-20.3 51-69.7 26.3-105-11.7-16.7-32.4-29.1-51.4-30.9-3.6-.3-8.1-.7-10-.9s-7.1 0-11.5.5',
-	colour: '#8E7E9B',
+	colour: '#9585A2',
 
 	// THE RING, and it is the sigla's graphic identity rather than decoration.
 	// Dann, 8 August: "Our siglas are enclosed in a circle. This is a visual
@@ -623,7 +623,7 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
  * and the turning pitches are formant-derived VOICE DATA. Sage, which codes
  * the score document and its text, was miscoding them.
  */
-const TURNING_COLOUR = '#8E7E9B';
+const TURNING_COLOUR = '#9585A2';
 
 /**
  * The width a primitive-mode turning accidental is treated as having, in px.

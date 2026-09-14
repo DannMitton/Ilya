@@ -284,7 +284,7 @@
 
 	.select-trigger.active {
 		border-color: var(--sage);
-		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.15);
+		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.15);
 	}
 
 	.trigger-text {
@@ -377,7 +377,7 @@
 
 	.select-option:hover,
 	.select-option.highlighted {
-		background: rgba(139, 154, 125, 0.1);
+		background: rgba(131, 146, 117, 0.1);
 	}
 
 	.option-primary {

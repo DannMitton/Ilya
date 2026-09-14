@@ -1727,7 +1727,7 @@
 
 	.organism {
 		position: relative;
-		background: rgba(139, 154, 125, 0.15);
+		background: rgba(131, 146, 117, 0.15);
 		border-radius: 0;
 		padding: 2px 1rem 10px;
 		margin-left: -2.5rem;
@@ -1799,7 +1799,7 @@
 	.molecule.is-stressed {
 		border: 2.5px solid var(--sage);
 		padding: 2px;
-		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.2);
+		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.2);
 	}
 
 	.atom-row {
@@ -1953,7 +1953,7 @@
 	.atom.selected {
 		background: #FAF7F2;
 		border-color: var(--sage);
-		box-shadow: inset 0 0 6px rgba(139, 154, 125, 0.15);
+		box-shadow: inset 0 0 6px rgba(131, 146, 117, 0.15);
 	}
 
 	/* Subtle blurb indicator dot */
@@ -1986,7 +1986,7 @@
 	.atom.drag-highlight {
 		border-color: var(--sage);
 		background: #faf8f4;
-		box-shadow: 0 0 0 1px rgba(139, 154, 125, 0.25);
+		box-shadow: 0 0 0 1px rgba(131, 146, 117, 0.25);
 	}
 
 	/* ── Drag preview ghost slot ────────────────────────────── */
@@ -2189,7 +2189,7 @@
 	.stress-circle.is-assigning {
 		border-color: var(--sage);
 		opacity: 1;
-		box-shadow: 0 0 0 2px rgba(139, 154, 125, 0.3);
+		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.3);
 	}
 
 	.stress-icon {
