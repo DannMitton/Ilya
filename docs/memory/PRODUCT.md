@@ -28,6 +28,35 @@ Open this before forming any opinion about what Ilya should do or look like.
   every Shift Lyrics operation is a permutation of a map: free to undo, and
   testable without a browser.
 
+  **AMENDED 2026-09-14 BY DANN, and the amendment is load-bearing.** His
+  words: *"Sometimes I want the notes to move to accommodate legibility in the
+  text underlay. The engraving is not the composer's; it is a highly edited
+  aspect of the musico-textual object that is subject to our scholarly
+  intervention. We can freely rearrange the page layout and measure
+  distribution to accommodate legibility and logic. We don't want to interfere
+  with these elements without justification."*
+
+  **So page layout, measure distribution, and horizontal spacing are editorial
+  and may be changed for legibility. The standard is justification, not
+  prohibition.** What the 2026-08-13 ruling still carries is the mechanism it
+  was written to explain: the pairing remains a correction layer keyed by
+  event id and never writes to `ParsedScore`.
+
+  **Do not quote the 2026-08-13 sentence as a wall.** Dann's words the same
+  night: *"this is why I hate these absolute edicts as rulings."*
+
+  **AGENCY IS ITSELF THE JUSTIFICATION. Ruled by Dann 2026-09-14, closing the
+  question the amendment above opens.** His words: *"the standard for the
+  respacing is your eye, not merely correctness, and that is enough
+  justification. We are giving the user agency."* And, on the layout control
+  he numbered as N.115: *"you could achieve some unholy collisions that way,
+  but that was part of offering the user control."*
+
+  So where a layout intervention is the singer's own act, the justification
+  the amendment asks for is the act itself. **Ilya does not refuse it, does not
+  mark it, and does not ask.** The no-unsure-mark rule of CONTRACT §6 applies
+  here as it does everywhere else.
+
 The portrait HTML scroll is an accommodation to a phone's form factor. In Dann's
 words: *"Let's not confuse our GUIs with the actual musico-textual object."*
 

@@ -180,6 +180,40 @@ those marks point at.
 > 2026-09-06, UNPLACED): Finale's arrow-up on a selected measure. Research
 > Finale first (his ask), then find the tree's orphaned-measure rule.
 >
+> **EXTENDED 2026-09-14, Dann raising it a second time.** His words: *"I want
+> to offer the user the possibility of controlling the page layout themselves
+> like Finale made possible through its page layout tool. You could select a
+> measure and arrow down to force the measure into the next system, or arrow
+> up to force the measure into the previous system. You could achieve some
+> unholy collisions that way, but that was part of offering the user control.
+> I think this will solve single orphaned measures, for example, and it can
+> provide a little more breathing space to densely-populated measures."*
+>
+> Three things this adds to the 2026-09-06 note:
+>
+> 1. **Both directions.** Arrow down pushes a measure into the next system,
+>    arrow up pulls it into the previous one. The first note carried arrow-up
+>    only.
+> 2. **Collisions are accepted, not prevented.** His words: *"you could achieve
+>    some unholy collisions that way, but that was part of offering the user
+>    control."* So the control does not refuse a bad result, and Ilya does not
+>    mark one. This bears on CONTRACT §6, which forbids a mark that says Ilya
+>    is unsure.
+> 3. **Two motivations, not one.** The orphaned measure, and breathing space
+>    for a densely populated one. The second is the same need N.129's hyphen
+>    clearance serves from the other end: N.129 widens automatically, N.115
+>    lets the singer widen by hand.
+> 4. **The reflow is part of the feature.** His words, 2026-09-14: *"the page
+>    layout would adjust beautifully after the manual intervention."* So the
+>    respacing that follows a forced break is not an afterthought and not
+>    merely correct: the standard is his eye. The 2026-09-06 note already said
+>    "with the other measures respacing accordingly"; this sets the bar for how.
+>
+> **Now unblocked by his ruling of 2026-09-14** (`PRODUCT.md`): layout, measure
+> distribution and horizontal spacing are editorial, and the standard is
+> justification rather than prohibition. Before that ruling, "THE NOTES NEVER
+> MOVE" of 2026-08-13 read as a bar on this whole item.
+>
 > **N.116, Learn as the book** (numbered 2026-09-07, UNPLACED). Step 1 DONE:
 > `docs/sessions/inventory-n116-learn-grayson_r1_2026-09-07.md` and
 > `n116-dann-lit-review-sung-russian_2026-09-07.md`. Step 2, the desk's
@@ -403,3 +437,47 @@ this should strike both rather than leave them:
 
 **Done when:** the loupe shows its own ground with no rectangle over it, Dann
 walks it, and the print path is checked once rather than assumed.
+
+
+---
+
+> **N.136. OPEN SYLLABIFICATION NEVER REACHES SCORE MARKUP'S DRAWN TEXT.
+> Numbered by Dann 2026-09-14. UNPLACED.**
+>
+> **How it was found.** Dann toggled `Open syllables` on the walk of `4d79f24`
+> and neither the Cyrillic underlay nor the IPA line above it changed. The
+> drawer registered the change: the band read `1 of 7 changed`.
+>
+> **The cause, read 2026-09-14.** The toggle reaches the resolver. The resolver
+> no longer supplies the text that draws.
+>
+> - A placed syllable's Cyrillic comes from `doc.pairings`, projected through
+>   `refreshPairings` from `slotQueue`.
+> - `slotQueue` is `buildSlotQueue(lines)` (`+page.svelte:379`), and that is
+>   **raw** `lines`.
+> - `effectiveLines`, the open-syllabified view (`+page.svelte:2182`), goes only
+>   to the Transcription page (`:4766`, `:4793`, `:4796`).
+> - The raw pass to the score pane is deliberate and is Dann's own ruling,
+>   quoted at `+page.svelte:4835-4838`, N.10, 2026-08-07: *"`lines` is passed
+>   RAW, not `effectiveLines` — the Fit resolver applies its own open
+>   syllabification, so the display view would be sliced twice."* That reasoning
+>   held while the resolver drew the text. It stopped being true when the queue
+>   took over.
+>
+> **NOT A REGRESSION FROM 2026-09-14.** Any placed syllable has always drawn
+> from the raw queue. Before N.134 this song had nothing placed, so every cell
+> came from the file's own underlay and the toggle changed nothing there either.
+> N.134 placed all 95, which turned a partial gap into a total one.
+>
+> **The audit of 2026-09-12 proved the wrong thing**
+> (`../sessions/brief-n119-toggles-reach-score-markup_r1_2026-09-12.md` §1). It
+> showed the toggle reaches `buildUnderlayResolvers` and concluded it reaches
+> the page. Those are two claims and only the first was tested. **Correct that
+> brief's table before N.119 is built**, or N.119 will be built against it.
+>
+> **Candidate fixes, unruled.** Feed the queue from `effectiveLines` rather than
+> `lines`, which makes the drawn text obey the toggle and needs the double-slice
+> question of N.10 re-answered, since the resolver still applies its own. Or
+> teach the projection to carry the resolver's division. **Whichever is taken,
+> N.10's 2026-08-07 reasoning is a source to re-check, not a wall**
+> (CONTRACT §1.19, amended 2026-09-14).

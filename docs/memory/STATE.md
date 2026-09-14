@@ -254,6 +254,47 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > the `columnAdvance` crowding item already in OWED.** Found by Code inside
 > the loupe-typeface memo; the desk read all three sites itself.
 >
+> **FOLDED IN 2026-09-14 ON DANN'S WORD, found by him on the N.118 walk.**
+> He read `не прог ляд – на я,` on the page and counted three hyphens missing
+> from one word.
+>
+> 1. **Ilya omits a hyphen silently whenever two syllables' ink comes within
+>    4 px.** `staff-renderer.ts:2761-2763`: `from = rightEdgeOf(a) + 2`,
+>    `to = leftEdgeOf(b) - 2`, then `if (to <= from) continue`. The 4 is two
+>    paddings, not a chosen engraving value.
+> 2. **The file contradicts itself.** `clampHyphenX` handles a gap narrower
+>    than the hyphen by centring it and letting it overhang, and says so in
+>    its own comment: *"Omitting the hyphen instead is a Gould question (rules
+>    26 to 40, unread), so it is not taken here."* The loop omits before
+>    `clampHyphenX` is ever reached.
+> 3. **Gould rules 26 to 40 are still unread**, recorded at
+>    `../sessions/memo-n113-melisma_r1_2026-09-07.md:223`, and the book is not
+>    on this machine.
+> 4. **RULED BY DANN 2026-09-14:** *"I don't want Ilya dropping hyphens.
+>    Instead, I want the note spacing to shift to permit the appearance of
+>    hyphens properly."* So the omission goes, and the spacer widens instead.
+> 5. **The fix's shape, DESK INFERENCE and his to wave off:** a gap between
+>    two syllables of ONE WORD takes a larger floor than a gap between two
+>    words, sized to the hyphen plus its clearance. Today there is one floor,
+>    `INK_CLEAR_SP = 0.5` stave spaces (N.103), and it knows nothing about
+>    hyphens.
+> 6. **Named cost:** widening word-internal gaps means fewer measures per
+>    system and different pagination on every page, not only on tight words.
+> 7. **This work sits on top of the wrong-metrics fix, not beside it.** A
+>    hyphen clearance tuned against a table that is 5% out is tuned against a
+>    bad ruler.
+>
+> **SCOPE RULED 2026-09-14, and item 5 is unblocked.** The desk asked whether
+> his ruling of 2026-08-13, "THE NOTES NEVER MOVE", barred widening a column to
+> fit a hyphen. His answer, recorded in full in `PRODUCT.md`: *"Sometimes I want
+> the notes to move to accommodate legibility in the text underlay. The
+> engraving is not the composer's; it is a highly edited aspect of the
+> musico-textual object that is subject to our scholarly intervention. We can
+> freely rearrange the page layout and measure distribution to accommodate
+> legibility and logic. We don't want to interfere with these elements without
+> justification."* **So layout, measure distribution and horizontal spacing are
+> editorial, and the standard is justification rather than prohibition.**
+>
 > **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
 > interface, modelled on Newzik" and never built. It is now a **station inside
 > the `Melody` band, sibling to Corrections**. Established: the ENGINE already
@@ -350,6 +391,16 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
 **The specs these marks point at live in `OPEN.md` from 2026-09-13.** This
 section carries the marks; that file carries the items.
+
+### Numbered 2026-09-14
+
+- `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
+  Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
+  nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from
+  N.134 or N.118**; those made a partial gap total.
+- `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann
+  2026-09-14. Cost measured the same night in
+  `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Spec in `OPEN.md`.
 
 ### Numbered 2026-09-13
 

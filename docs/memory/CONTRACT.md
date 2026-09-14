@@ -191,6 +191,24 @@ difference through context and effect."*
   and Dann fought a phantom constraint for two weeks. The score was never
   ruled out of portrait; N.46's portrait question was open the whole time.
 
+**AMENDED 2026-09-14, after he said it twice in one night. DO NOT WRITE HIS
+RULINGS AS ABSOLUTES, AND DO NOT CITE THEM AS WALLS.** His words: *"Ugh, this
+is why I hate these absolute edicts as rulings"*, and earlier the same night:
+*"when I read assertions like 'an inserted word takes open notes only' I feel
+squirmy because there will always be a condition that justifiably lives outside
+of that edict."*
+
+Record a ruling as a stated default plus the condition that would justify
+departing from it. Music has an exception for every rule, and a ruling
+transcribed as an edict will be quoted back at him one day to block the thing
+he actually wants. **What it cost, 2026-09-14:** "THE NOTES NEVER MOVE" of
+2026-08-13 was put to him as a possible bar on widening a column to fit a
+hyphen, which is ordinary engraving practice. He had to overturn his own
+sentence to get it.
+
+When a ruling of his appears to forbid something, bring him the case, not the
+prohibition.
+
 ### 20. NEW, 2026-09-02, ruled by Dann. PUT YOURSELF IN HIS POSITION FIRST.
 
 **Dann's words:** *"I need you to put yourself in my position. I am a human
