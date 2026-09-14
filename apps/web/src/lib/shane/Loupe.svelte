@@ -327,18 +327,16 @@
 			for (const el of sys.querySelectorAll('*')) {
 				if (el.tagName === 'g') continue;
 				/* WHAT THE LOUPE DOES NOT DRAW CANNOT SET ITS FRAME. The hit
-				   rectangles, the paper behind the system, the page's own held
-				   rectangle and the analysis layer are all stripped from the
-				   clone, so a phonation break standing above the staff must not
-				   push the frame open for ink the loupe then removes. */
+				   rectangles, the page's own held rectangle and the analysis
+				   layer are all stripped from the clone, so a phonation break
+				   standing above the staff must not push the frame open for ink
+				   the loupe then removes. The paper behind the system was skipped
+				   here by its width until N.133 took it out of the renderer. */
 				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 				/* The page's selection ring is the pane's mark, not engraving, and
 				   the clone drops it — so it must not size the frame either. */
 				if (el.hasAttribute('data-selection-ring')) continue;
-				if (el.tagName === 'rect') {
-					if (el.hasAttribute('data-hit')) continue;
-					if (Number(el.getAttribute('width')) >= sysWidth * 0.95) continue;
-				}
+				if (el.tagName === 'rect' && el.hasAttribute('data-hit')) continue;
 				let top: number;
 				let bottom: number;
 				if (el.tagName === 'text') {
@@ -446,8 +444,6 @@
 		lines: number[];
 		lineStroke: string;
 		lineWidth: number;
-		/** The page's own ground behind the stave, where the renderer paints one. */
-		ground: { y: number; height: number; fill: string } | null;
 	}
 
 	/** A panel of bare stave: its width in page units, then in CSS pixels. */
@@ -809,18 +805,12 @@
 		}
 		const foundLines = staffLines.size === 5 ? [...staffLines.values()].map((l) => l.el) : [];
 		const sampleLine = foundLines[0];
-		/* THE PAGE'S GROUND, where the renderer still paints one: the
-		   system-wide rectangle `pageMetrics` already knows by its width.
-		   Without it a panel is a pale strip between two tinted crops. N.133
-		   removes that ground, and then this finds nothing and the panels paint
-		   nothing, which is what the crops will do too. */
-		const groundEl = [...sysEl.querySelectorAll('rect')].find(
-			(r) =>
-				!r.hasAttribute('data-hit') &&
-				!r.hasAttribute('data-selection-ring') &&
-				!r.closest('[data-held-measure]') &&
-				Number(r.getAttribute('width')) >= sysWidth * 0.95,
-		);
+		/* NO GROUND IS COPIED, N.133. Until Dann's ruling of 2026-09-13 the
+		   renderer painted a cream rectangle behind every system, and these
+		   panels repeated it or they read as pale strips between two tinted
+		   crops. The renderer paints none now, so every crop and every panel
+		   is transparent and the loupe's own `--paper-light` shows through all
+		   of them alike. */
 		const stave: StaveInk = {
 			lines:
 				foundLines.length === 5
@@ -832,13 +822,6 @@
 				: font
 					? font.prepared.engravingDefaults.staffLineThickness * lineGap
 					: 1,
-			ground: groundEl
-				? {
-						y: Number(groundEl.getAttribute('y')),
-						height: Number(groundEl.getAttribute('height')),
-						fill: groundEl.getAttribute('fill') ?? 'none',
-					}
-				: null,
 		};
 
 		let meterPanel: Omit<MeterPanel, 'width' | 'viewBox'> | null = null;
@@ -1260,15 +1243,6 @@
 					aria-hidden="true"
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					{#if frame.meter.ground}
-						<rect
-							x="0"
-							y={frame.meter.ground.y}
-							width={frame.meter.span}
-							height={frame.meter.ground.height}
-							fill={frame.meter.ground.fill}
-						/>
-					{/if}
 					{#each frame.meter.lines as y, i (i)}
 						<line
 							x1="0"
@@ -1331,15 +1305,6 @@
 					aria-hidden="true"
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					{#if frame.tail.ground}
-						<rect
-							x="0"
-							y={frame.tail.ground.y}
-							width={frame.tail.span}
-							height={frame.tail.ground.height}
-							fill={frame.tail.ground.fill}
-						/>
-					{/if}
 					{#each frame.tail.lines as y, i (i)}
 						<line
 							x1="0"

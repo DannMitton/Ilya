@@ -360,9 +360,11 @@ export function paginateScore(
       establishedGap = gap;
     }
 
+    // NO BACKGROUND, N.133, Dann's ruling of 2026-09-13: every surface
+    // provides its own ground. The white page rectangle that stood here was
+    // stripped by its only consumer before it ever drew.
     const pageParts: string[] = [
       `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-fit-page="${pageIndex + 1}">`,
-      `<rect x="0" y="0" width="${o.pageWidth}" height="${o.pageHeight}" fill="#FFFFFF"/>`,
     ];
     let y = o.marginTop;
     for (const s of group) {

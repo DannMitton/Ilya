@@ -600,3 +600,165 @@ wider. Code measured portrait only.
 **Done when:** a measure that would fall below the ruled floor draws at the floor
 and scrolls instead, the dismiss swipe and the placement tap both still work on a
 phone, and Dann walks it.
+
+---
+
+## N.141. THE SQUIRCLE HAS NO GRAMMAR. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Found by Dann on the walk of `d6580af`, 2026-09-14, across four measures of
+Without Sun song 1. His words are the finding and are not a claim to be tested:**
+
+> *"The lavender squircles need a consistent grammar. Sometimes they capture the
+> IPA syllable with their note, sometimes they don't. Sometimes the squircle is
+> trimmed inside the measure region, sometimes it isn't. Accidentals belonging to
+> the note under examination must never collide with the squircle. Re-engrave the
+> measure for the Loupe with the spacing to allow this, if necessary."*
+
+**The number is the desk's. He described the defect and asked whether it was
+captured; he did not name an item.** Wave it off or renumber it with a word.
+
+### What the four screenshots show. READ FROM PICTURES, not from the DOM
+
+Recorded as observation rather than as measurement, per tether 14. **Whoever
+builds this measures it in the DOM first.**
+
+| measure | what the ring encloses |
+|---|---|
+| m. 3 | the notehead, its cautionary natural in brackets, **and the IPA « ˈtʲi » below**. The Cyrillic « ти » is outside |
+| m. 13 | the notehead, its flat, and its dot. **It stops above the IPA « ˈlʲo »** |
+| m. 14 | the eighth notehead and its flag only. **The IPA « ɲi » is outside** |
+| m. 6 | a beamed eighth and its flat, **and the flat's ink appears to meet the ring's left edge** |
+
+So the ring takes the IPA on one measure and not on three, which is the
+inconsistency he names first.
+
+### THE GRAMMAR, RULED BY DANN 2026-09-14. His words, then what follows from them
+
+> *"The squircle should always capture the IPA syllable beneath. Score markup
+> knits the elements of the pitch and the vowel, so we will underscore that
+> conceptually by always capturing the IPA syllable that corresponds to the note
+> when there is one (this won't be possible with melismas, but we should still
+> have the squircle descend into the IPA baseline as if there were a verbatim
+> vowel printed there).*
+>
+> *A squircle must never be truncated. User should always see a fully-realized
+> closed lavender squircle.*
+>
+> *Essential musical notation (Accidentals, dots) must never collide with the
+> squircle. If the reproduction of a measure in the Loupe would demand such a
+> collision, Ilya must modify the note spacing or measure spacing in the Loupe to
+> accommodate the squircle without colliding with essential musical notation."*
+
+**RULE 1. The bottom is the IPA baseline, always.** Whether or not a syllable is
+printed under that note. **The Cyrillic row is OUTSIDE it. CONFIRMED BY DANN
+2026-09-14 when the desk raised it:** *"We do not need the squircle to bind the
+Cyrillic text."* So this is ruled, not read off his phrasing.
+
+**RULE 2. Never truncated. The squircle is always a closed shape on screen.**
+
+**RULE 3. No essential notation of the TAKEN note may collide with it**, and the
+loupe may change note spacing or measure spacing to make room. See the permission
+note below for what that costs.
+
+**WHAT FOLLOWS, AND IT MAKES 2 AND 3 CHEAPER: every squircle on a system has the
+SAME HEIGHT.** Rule 1 fixes the bottom at a constant baseline and the stave fixes
+the top's range, so the shape is uniform rather than per-note. A uniform object is
+far easier to guarantee closed than a shape that changes with its contents.
+
+**THE TOP, RULED BY DANN 2026-09-14 on the desk's default.** The squircle
+encloses the notehead, its accidental, its dot, and its own stem. **A BEAM MAY BE
+BISECTED.** His words: *"a beam is acceptable for the circle to bisect. Of
+course."* The desk's default had said the squircle never encloses a beam; he
+corrected it to the simpler rule, that the squircle may simply cross one.
+
+**SO RULE 3'S COLLISION CLAUSE IS NARROWER THAN "ESSENTIAL NOTATION", AND THIS IS
+THE DISTINCTION TO BUILD TO.** What must never collide is the marks that sit
+BESIDE the note horizontally and belong to it: accidentals and dots. What the
+squircle may freely cross is what runs THROUGH it vertically or horizontally
+without being displaced by it: stave lines, beams, and ties. The first kind
+competes with the squircle for space; the second does not.
+
+**RULED BY DANN 2026-09-14: THE GRAMMAR IS THE LOUPE'S. THE PAGE KEEPS ITS OWN
+RULE, AND THEY ARE NOW TWO MARKS.** His words: *"my grammar was meant to apply to
+the Loupe. I forgot that there is also a squircle as a selection on the page. The
+squircle on the page should not displace the music layout, so some collisions will
+necessarily occur and this is acceptable. The priority is the preservation and
+focus on the selected note, so its adjacent siblings effectively conceptually
+recede to the background during the selection on the page. This is acceptable."*
+
+| | the loupe's squircle | the page's squircle |
+|---|---|---|
+| may re-space the music to avoid a collision | **yes**, rule 3 | **NO. Never.** |
+| a collision with an adjacent note's accidental | must not happen | **accepted** |
+| what it is for | examining one measure closely | focus: the taken note is primary, and its neighbours accept subordinate treatment as adjacent to it (his wording, 2026-09-14) |
+
+**THIS SPLITS ONE ELEMENT INTO TWO, AND THAT IS THE STRUCTURAL CONSEQUENCE
+WHOEVER BUILDS IT MUST START FROM.** Today there is ONE ring:
+`VoiceProfilePane.svelte:501` creates it on the page and the loupe renders a clone
+of that patch (`Loupe.svelte:887`, `:900`, both `{@html frame.inner}`). **The
+loupe must draw its own mark rather than inherit the page's**, or the two rules
+cannot both be obeyed. `system-ground.ts`'s `afterGround`, added 2026-09-14 in
+`d6580af`, already places both the page's ring and the loupe's held-measure mark,
+so it is the natural seam for a second mark.
+
+**RULED BY DANN 2026-09-14: THE PAGE'S SQUIRCLE DESCENDS TO THE IPA BASELINE
+TOO.** *"Yes, exactly."* So the SHAPE is the same on both surfaces and only the
+re-spacing permission differs. Descending displaces nothing, so it does not
+conflict with his page rule, and his reason was about meaning rather than about
+the surface: *"Score markup knits the elements of the pitch and the vowel."* A
+singer learns one shape and meets it twice.
+
+**HIS PREFERRED WORDING FOR THE PAGE'S RULE, given 2026-09-14 as a rephrasing of
+his own earlier sentence:** the neighbours *"accept subordinate treatment as
+adjacent to the primary note under examination/focus"*, rather than "recede to the
+background".
+
+**THE DESK READS THAT AS DESCRIPTIVE, NOT AS A NEW INSTRUCTION, and says so here
+so that no later session reads it as one.** It names the relationship the existing
+drawing already expresses: the squircle marks the taken note, and its neighbours
+are simply what surrounds it. **It is NOT read as authorizing a visual treatment
+of the neighbours**, such as dimming, greying, or shrinking them. If Dann does
+want an active treatment, that is a different and larger item, it would put a mark
+on every note that is not selected, and CONTRACT §6's rule about a mark that
+appears on everything would have to be argued through first. **He can say the word
+and it becomes its own number.**
+
+### THE THREE QUESTIONS AS THEY WERE PUT TO HIM. Answered above, kept for the record
+
+1. **What does the squircle enclose?** The note alone; the note and its
+   accidental and dot; or the whole vertical column including the IPA and the
+   Cyrillic. **One answer, applied everywhere.** It is a reading question: the
+   ring says "this is the thing you are working on", and what that thing IS is
+   his to rule.
+2. **May it extend past the measure's own region?** He reports it trimmed
+   sometimes and not others. Whichever way he rules, it is one rule.
+3. **How does an accidental stay clear of it?** This one is the desk's to solve
+   once 1 and 2 are answered, because it is geometry rather than meaning.
+
+### THE PERMISSION HE GAVE, RECORDED WITH ITS CONDITION AND NOT AS AN ABSOLUTE
+
+*"Re-engrave the measure for the Loupe with the spacing to allow this, **if
+necessary**."* Per CONTRACT §1.19 this is a stated default plus its condition,
+not an edict.
+
+**It is a large permission and whoever builds this should know its size.** The
+loupe today is a CROP of the page's own SVG: `Loupe.svelte:887` and `:900` render
+the same `frame.inner` through two viewBoxes. Re-engraving means calling the
+renderer for the held measure alone, at its own spacing. **That buys the room, and
+it costs the property that the loupe is a guaranteed picture of the page**, which
+matters for an editorial instrument: what you examine would no longer be exactly
+what prints. **Take the cheaper route first** and re-engrave only if the geometry
+genuinely cannot be solved by moving the ring.
+
+### RELATED, AND NOT THE SAME THING
+
+- **N.133** removes the cream ground the ring sits on. It is a different defect
+  and it does not answer any of the three questions above.
+- The ring's paint order was fixed on 2026-09-14 in `d6580af` via
+  `system-ground.ts`. **That was about whether the ring is visible at all, not
+  about what it encloses.**
+- The ring is created at `VoiceProfilePane.svelte:501` and styled at `:1326`,
+  `:1335` and `:1339`.
+
+**Done when:** one rule governs what the squircle encloses, it is the same on
+every measure, no accidental of the taken note touches it, and Dann walks it.

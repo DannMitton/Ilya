@@ -2,8 +2,14 @@
  * system-ground.ts — where a mark goes in a rendered system so the paper does
  * not cover it.
  *
- * Every system `staff-renderer.ts` draws opens with a full-width `<rect>`, the
- * ground, painted in the paper's colour (`parts[1]`). SVG paints in document
+ * SINCE N.133 THE RENDERER PAINTS NO GROUND, so on today's page this always
+ * answers "the front of the system", which is under all of the music. It is
+ * kept rather than inlined as `firstChild` because the fault it fixed was a
+ * mark landing under an opaque full-width rect, and the rule stays correct if
+ * any surface ever paints one into a system again.
+ *
+ * Until N.133 every system `staff-renderer.ts` drew opened with a full-width
+ * `<rect>`, the ground, painted in the paper's colour. SVG paints in document
  * order, so anything inserted before the ground is painted UNDER it and cannot
  * be seen. Two marks are inserted into the page's systems from outside the
  * renderer and both want to sit under the music but over the paper:

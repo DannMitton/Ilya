@@ -1631,9 +1631,14 @@ export function renderAnalyzedStaff(
   };
 
   const parts: string[] = [];
-  // The svg tag and background are patched at the end, once the true
-  // height (underlay placed clear of the lowest ink) is known.
-  parts.push('');
+  // The svg tag is patched at the end, once the true height (underlay placed
+  // clear of the lowest ink) is known.
+  //
+  // NO BACKGROUND, N.133. Ruled by Dann 2026-09-13: "The renderer stops
+  // painting the rectangle at all, and every surface provides its own
+  // ground." This slot held a `#F0EBE0` rectangle behind every system, and the
+  // loupe, which crops a clone of the system, showed the measure mounted on it
+  // instead of on its own paper.
   parts.push('');
 
   // ── Header geometry, derived instead of hardcoded ──
@@ -2812,7 +2817,7 @@ export function renderAnalyzedStaff(
   }
   parts.push('</svg>');
 
-  // Patch the svg tag and background with the true extent. The LOWER of the
+  // Patch the svg tag with the true extent. The LOWER of the
   // two underlay baselines governs the bottom, which is the Cyrillic since
   // the swap; `highestInk` governs the top (N.6a).
   //
@@ -2832,6 +2837,5 @@ export function renderAnalyzedStaff(
   const top = Math.max(0, Math.floor(Math.min(highestInk, staffTop) - sp(1)));
   const height = cyrY + 20 - top;
   parts[0] = `<svg viewBox="0 ${top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif">`;
-  parts[1] = `<rect x="0" y="${top}" width="${width}" height="${height}" fill="#F0EBE0"/>`;
   return parts.join('\n');
 }

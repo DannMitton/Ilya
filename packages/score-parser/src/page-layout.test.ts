@@ -16,6 +16,21 @@ function demo() {
   return { parsed, analyzed };
 }
 
+describe('page layout: no ground (N.133)', () => {
+  it('paints no rectangle behind the page or behind any system', () => {
+    // Dann, 2026-09-13: "The renderer stops painting the rectangle at all, and
+    // every surface provides its own ground." Both used to stand here: a white
+    // rect over the whole page, and a cream one inside every system.
+    const { parsed: p, analyzed } = demo();
+    const out = paginateScore(p, analyzed, { pageWidth: 500, marginLeft: 0, marginRight: 0 });
+    expect(out.systems.length).toBeGreaterThan(1);
+    for (const page of out.pages) {
+      expect(page).not.toMatch(/fill="#(?:FFFFFF|F0EBE0)"/i);
+      expect(page).not.toMatch(/<rect x="0" y="0"/);
+    }
+  });
+});
+
 describe('page layout: slicing', () => {
   const { parsed } = demo();
 

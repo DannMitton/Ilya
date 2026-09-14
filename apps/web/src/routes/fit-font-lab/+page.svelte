@@ -170,10 +170,13 @@
 		margin-bottom: 0.5rem;
 	}
 
+	/* N.133: the renderer paints no ground, and every surface provides its own.
+	   This one had been borrowing the renderer's cream, so it names it. */
 	.lab-score {
 		border: 1px solid #ddd9d4;
 		border-radius: 6px;
 		overflow-x: auto;
+		background: var(--paper-cream, #f0ebe0);
 	}
 
 	.lab-score :global(svg) {

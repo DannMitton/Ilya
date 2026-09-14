@@ -1301,13 +1301,27 @@ describe('staff renderer: system headroom (N.6a)', () => {
     const m = s.match(/viewBox="0 ([\d.]+) ([\d.]+) ([\d.]+)"/)!;
     return { minY: Number(m[1]), width: Number(m[2]), height: Number(m[3]) };
   };
-  /** Every y-bearing attribute of DRAWN content: lines 0 and 1 are the svg
-   *  tag and the background rect, and the rect sits at min-y by definition,
-   *  so including it would make the clipping assertion unfailable. Path data
-   *  (slurs, ties) carries no y attribute and is not covered here; those are
-   *  bounded in `highestInk` by their control point, which over-reserves. */
+  /** Every y-bearing attribute of DRAWN content. Line 0 is the svg tag and
+   *  carries the viewBox, not a drawn y. Until N.133 line 1 was a background
+   *  rect sitting at min-y by definition, which had to be skipped or the
+   *  clipping assertion was unfailable; the renderer paints no background
+   *  now, so line 1 is drawn content and is counted. Path data (slurs, ties)
+   *  carries no y attribute and is not covered here; those are bounded in
+   *  `highestInk` by their control point, which over-reserves. */
   const drawnYs = (s: string): number[] =>
-    [...s.split('\n').slice(2).join('\n').matchAll(/\s(?:y|y1|y2|cy)="(-?[\d.]+)"/g)].map((m) => Number(m[1]));
+    [...s.split('\n').slice(1).join('\n').matchAll(/\s(?:y|y1|y2|cy)="(-?[\d.]+)"/g)].map((m) => Number(m[1]));
+
+  it('paints no background behind the system (N.133)', () => {
+    // Dann, 2026-09-13: every surface provides its own ground. A full-width
+    // rectangle anywhere in a system is a ground, whatever its fill.
+    for (const lineGap of [12, 5.5]) {
+      const s = renderDemo({ lineGap });
+      const { width } = vbOf(s);
+      const wide = [...s.matchAll(/<rect\b[^>]*\bwidth="([\d.]+)"/g)].filter((m) => Number(m[1]) >= width * 0.95);
+      expect(wide).toHaveLength(0);
+      expect(s).not.toMatch(/#F0EBE0/i);
+    }
+  });
 
   it('crops the unoccupied headroom at the print stave', () => {
     expect(vbOf(renderDemo({ lineGap: 5.5 })).minY).toBeGreaterThan(0);

@@ -518,9 +518,10 @@
 		   Inside the group it could only ever be under that one note's own
 		   parts, which is not what "beneath the music" means.
 
-		   AFTER THE BACKDROP, THOUGH. The system opens with a full-width rect
-		   that is the paper; first-child would put the ring behind the page
-		   itself and draw nothing at all. `afterGround` in `system-ground.ts`
+		   AFTER ANY BACKDROP, THOUGH. The system used to open with a full-width
+		   rect that was the paper, and first-child put the ring behind it, where
+		   it drew nothing. N.133 took that rect out of the renderer, so today the
+		   ring goes to the front. `afterGround` in `system-ground.ts`
 		   finds the paper wherever it stands: this used to skip LEADING
 		   full-width rects only, and the loupe's held-measure rectangle, standing
 		   first, stopped the skip, so a note taken with the loupe up drew no box.
@@ -664,12 +665,10 @@
 	const contentWidth = $derived(dims.width - 2 * MARGINS.horizontal);
 	const subsequentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
 
-	// paginateScore paints a white full-page backing rect (its pages are
-	// standalone artifacts); here the Paper page provides the surface, so
-	// the rect is stripped. Upstream option (background: null) noted for
-	// the package.
-	const stripBackingRect = (svg: string): string =>
-		svg.replace(/<rect x="0" y="0" width="\d+" height="\d+" fill="#FFFFFF"\/>/, '');
+	// `stripBackingRect` stood here and removed the white full-page rect
+	// `paginateScore` painted. N.133, Dann's ruling of 2026-09-13: the renderer
+	// paints no ground at all and every surface provides its own, so there is
+	// nothing left to strip. The Paper page's `--paper-cream` is this surface's.
 
 	// SMuFL font wiring (Dann's ruling, 2026-07-13): Finale Maestro is the
 	// default for ALL renderings. Loaded async through the shared loader;
@@ -994,7 +993,7 @@
 					...(sylTypePreview ? { sylTypePreview } : {}),
 					...(melismaPreview ? { melismaPreview } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
-				}).pages.map(stripBackingRect)
+				}).pages
 			: null,
 	);
 

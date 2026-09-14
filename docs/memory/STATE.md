@@ -300,6 +300,15 @@ section carries the marks; that file carries the items.
 
 ### Numbered 2026-09-14
 
+- `[D]` **N.141. The squircle has no grammar.** Found by Dann on the walk of
+  `d6580af`, 2026-09-14: the ring takes the IPA on one measure and not on three,
+  it is trimmed inside the measure region only sometimes, and an accidental of the
+  taken note can meet its edge. **Marked `[D]` because two of its three questions
+  are his taste, not the desk's:** what the squircle encloses, and whether it may
+  extend past the measure's region. The number is a DESK DEFAULT. Spec in
+  `OPEN.md`, including the permission to re-engrave the measure for the loupe and
+  what that permission costs.
+
 - `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than
   shrinking below it.** Dann's own design, ruled 2026-09-14, over the desk's
   recommendation to do nothing; both cases are recorded in `OPEN.md`. **A
@@ -659,7 +668,7 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 - **D3's Job A**, per-verse reprints, ruled in E.36 and still unnumbered.
 - **The per-format score arrival audit**, asked for in E.45 and never written.
 - ~~`stripBackingRect` matches `fill="#FFFFFF"` while `staff-renderer.ts` paints
-  `#F0EBE0`.~~ **SETTLED 2026-09-07 by Dann's print preview: the cream prints. Ruled: the page prints white. Paste written (INBOX), not yet run.**
+  `#F0EBE0`.~~ **SETTLED 2026-09-07 by Dann's print preview: the cream prints. Ruled: the page prints white. Paste written (INBOX), not yet run.** **BUILT 2026-09-14 as N.133, uncommitted.** The paste was never found: `INBOX.md:97` records it only as sent to a second Code thread, and no commit touches `stripBackingRect`. Its aim, no cream on paper, is part of N.133, which removed both rectangles and `stripBackingRect`.
 - **The marks on the printed page.** E.51's prints carry a dashed `VERIFY` box
   and a `USER OVERRIDE` badge on paper. CONTRACT §6 forbids a mark that says Ilya
   is unsure. **Whether these are the ruled exception was not checked.**
