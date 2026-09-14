@@ -11,9 +11,12 @@ import { describe, it, expect } from 'vitest';
 import {
 	COARSE_TAP_SPACES,
 	FINE_TAP_SPACES,
+	carryBand,
 	centreOnPage,
 	centredViewBox,
 	clipToHead,
+	closingBarline,
+	EXCERPT_TAIL_SP,
 	commonInkBox,
 	headBound,
 	inkCrop,
@@ -573,5 +576,99 @@ describe('the meter panel', () => {
 		expect(meterLayout(3, 0, digit, gap, top, METER_LEAD_SP * gap, 0)).toBeNull();
 		expect(meterLayout(2.5, 4, digit, gap, top, METER_LEAD_SP * gap, 0)).toBeNull();
 		expect(meterLayout(3, 4, digit, 0, top, METER_LEAD_SP * gap, 0)).toBeNull();
+	});
+});
+
+// N.138 increment 2. The head ends on the header's last glyph; what stood
+// between that glyph and `headBound` is carried only where it abuts the body.
+// Spans are synthetic: a header ending at 60, a head bound at 80.
+describe('the band the shortened head would drop', () => {
+	it('carries nothing where the band is empty stave', () => {
+		expect(carryBand(60, 80, 80, [])).toBeNull();
+	});
+
+	it('carries an opening rest from its own left edge to the head bound', () => {
+		expect(carryBand(60, 80, 80, [{ left: 66, right: 72 }])).toEqual({ left: 66, right: 80 });
+	});
+
+	it('carries a ledger line that crosses the seam from its left end', () => {
+		// The first note's ledger runs 76 to 88; the notehead's ink opens at 80.
+		expect(carryBand(60, 80, 80, [{ left: 76, right: 88 }])).toEqual({ left: 76, right: 80 });
+	});
+
+	it('opens on the leftmost carried mark, and never left of the header', () => {
+		const band = [
+			{ left: 70, right: 74 },
+			{ left: 58, right: 64 },
+		];
+		expect(carryBand(60, 80, 80, band)).toEqual({ left: 60, right: 80 });
+	});
+
+	it('ignores what lies inside the header or right of the head bound', () => {
+		const band = [
+			{ left: 40, right: 59 },
+			{ left: 81, right: 90 },
+		];
+		expect(carryBand(60, 80, 80, band)).toBeNull();
+	});
+
+	it('leaves an earlier measure out when the body opens further right', () => {
+		// A mid-system measure: the body opens at 247, far past the head bound.
+		expect(carryBand(60, 80, 247, [{ left: 66, right: 72 }])).toBeNull();
+	});
+
+	it('has nothing to cut where the header reaches the head bound', () => {
+		expect(carryBand(80, 80, 80, [{ left: 66, right: 72 }])).toBeNull();
+	});
+});
+
+// N.138 increment 3. The closing barline, found among the staff-spanning
+// verticals right of the window's opening edge.
+describe('the closing barline', () => {
+	const gap = 5.5;
+
+	it('takes the first barline right of the opening edge and ends on its outer edge', () => {
+		const lines = [
+			{ x: 100, width: 0.8 },
+			{ x: 241, width: 0.8 },
+			{ x: 420, width: 0.8 },
+		];
+		expect(closingBarline(lines, 106, gap)).toEqual({ right: 241.4, final: false });
+	});
+
+	it('does not depend on the order the lines were drawn in', () => {
+		const lines = [
+			{ x: 420, width: 0.8 },
+			{ x: 241, width: 0.8 },
+		];
+		expect(closingBarline(lines, 106, gap)!.right).toBeCloseTo(241.4, 10);
+	});
+
+	it('reads a thin line and a thick one half a space apart as the final bar, and ends on the thick', () => {
+		// Thick 2.75 wide centred at 610.62, thin at 610.62 - 2.75 - 1.375.
+		const lines = [
+			{ x: 606.5, width: 0.88 },
+			{ x: 610.62, width: 2.75 },
+		];
+		const c = closingBarline(lines, 400, gap)!;
+		expect(c.final).toBe(true);
+		expect(c.right).toBeCloseTo(610.62 + 2.75 / 2, 10);
+	});
+
+	it('does not read the next measure\'s barline as half of a pair', () => {
+		const lines = [
+			{ x: 241, width: 0.8 },
+			{ x: 241 + gap * 3, width: 0.8 },
+		];
+		expect(closingBarline(lines, 106, gap)!.final).toBe(false);
+	});
+
+	it('finds nothing where no barline stands right of the opening edge', () => {
+		expect(closingBarline([{ x: 100, width: 0.8 }], 106, gap)).toBeNull();
+		expect(closingBarline([], 106, gap)).toBeNull();
+	});
+
+	it('protrudes one stave-space, as the desk default records', () => {
+		expect(EXCERPT_TAIL_SP).toBe(1);
 	});
 });

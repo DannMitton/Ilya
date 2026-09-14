@@ -895,6 +895,17 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
     expect((svg.match(lavenderSharp) ?? []).length).toBe(1); // turning D#, carried
   });
 
+  it('stamps each key-signature glyph with its handle, and nothing else (N.138 increment 2)', () => {
+    // The demo is in one flat. The loupe tells the key signature from an
+    // opening rest or a ledger line by this handle alone, so it must mark the
+    // key's accidental and no other glyph, in both drawing modes.
+    const flat = String.fromCodePoint(0xe260);
+    const marked = svg.match(/<text data-key-signature=""[^>]*>[^<]*</g) ?? [];
+    expect(marked).toHaveLength(1);
+    expect(marked[0].endsWith(`>${flat}<`)).toBe(true);
+    expect((renderDemo().match(/data-key-signature=""/g) ?? []).length).toBe(1);
+  });
+
   it('renders the lone flag as a glyph (up-stem eighth n11)', () => {
     expect(svg.includes(String.fromCodePoint(0xe240))).toBe(true); // flag8thUp
   });

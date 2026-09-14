@@ -596,6 +596,80 @@ clef, then key signature, then time signature.
 **N.139 INHERITS THIS NUMBER.** The page's meter signature takes the same 2 stave
 spaces, so the two surfaces cannot drift.
 
+**INCREMENT 2, FOUND BY DANN ON THE WALK OF `78f3db8`, 2026-09-14. THE GAP
+BETWEEN THE KEY SIGNATURE AND THE METER.** His words: *"In the Loupe, there is an
+inexplicable gap between the key signature and the meter signature. This should be
+rectified."* Observed on Without Sun song 1, m. 2.
+
+**The cause.** The head crops `[0, headBound]` and `headBound` is the leftmost
+MUSIC ink on the system (`loupe.ts:308`), so the head carries the run-in that
+belongs before the first NOTE. The panel is then appended after all of it, and
+Code's increment 1 only added the air the head lacked, so the head's surplus air
+stayed. On a mid-system measure the surplus is larger still: Code measured about
+eight stave spaces on m. 2 and m. 3 and raised it as a taste question
+(`memo-n138-loupe-meter_r1_2026-09-14.md` §5 decision 2). **Dann has now ruled it.**
+
+**The fix: the panel REPLACES that air instead of following it.** The head's
+viewBox ends at the head's LAST GLYPH rather than at `headBound`. The panel then
+supplies the whole of `METER_LEAD_SP` and `METER_RUN_IN_SP` itself rather than
+topping up what is missing. The body's crop is unchanged and still opens at
+`headBound`, so the run-in the head used to hold is not drawn twice.
+
+**`headBound`, `clipToHead` and `measureWindow` still do not change.** What
+changes is only what the head's viewBox SHOWS.
+
+**THE NAMED RISK, and it is the one thing to check before building.** The head's
+crop and the body's crop stop being complementary: the region between the head's
+last glyph and `headBound` is no longer drawn by either. On this score that region
+is empty stave. **A tempo mark, a dynamic, or a rehearsal mark drawn there would
+vanish from the loupe.** Establish what the renderer can emit in that band before
+dropping it, and if anything can land there, carry it into the panel instead.
+
+**The span gets SMALLER, not larger.** The panel replaces air wider than itself on
+most measures, so `totalSpan` falls, `scale` rises, and capped measures gain back
+size. That is the opposite of increment 1's cost.
+
+**INCREMENT 3, RULED BY DANN ON THE WALK OF `78f3db8`, 2026-09-14. THE EXCERPT
+DOES NOT END ON ITS BARLINE.** His words: *"At the moment the rightmost terminus
+of the measure in the Loupe is a barline. I would ask that the barline scootch a
+bit to the left? Essentially I am asking for the stave lines to protrude
+uniformly a little beyond the barline. Users will understand this to mean that
+the measure is extracted from the middle of a piece. The only measure that should
+terminate with the barline flush right is the final measure. This tells the user
+it is the final bar."*
+
+**THIS IS THE MIRROR OF A RULING ALREADY MADE, AND THE TECHNIQUE IS ALREADY IN
+THE TREE.** `memo-mobile-slice3_r1_2026-08-26.md` §11: Dann walked the loupe and
+found it OPENING with an orphan barline, and the reasoning recorded there was
+*"An engraved excerpt opens with no barline before its first note."* The body
+crop's left edge was moved just inside the boundary barline at
+`Loupe.svelte:214`, **with the barline found AS DRAWN**, a vertical spanning
+exactly the staff in the left half of the window, the staff's extent taken from
+the hit rectangle. **Do the same search at the right edge.**
+
+**GOULD DOES NOT COVER THIS, as extracted.** The four barline priors in
+`memo-gould-dimensional-priors_r1_2026-08-24.md` are r96 p. 39 (final barline is
+beam-thick plus a thin line 0.5 sp before), r224 p. 240 (the final double is
+reserved for the *Fine* bar), r98 p. 43 (stem-to-barline clearance), and r242
+p. 42 (1 sp clearance each side of a barline). All concern weight, spacing and
+clearance; none concerns how an excerpt terminates. **Whether the book addresses
+it unextracted is NOT ESTABLISHED. Add it to the Gould re-shoot list in
+`STATE.md`.**
+
+**The final-bar exception is consistent with r224.** The bar that ends the piece
+is the one carrying the final double barline, which `paginateScore` already marks
+through the renderer's `finalBarline` option (`staff-renderer.ts:277-282`, Dann's
+ruling of 2026-08-06 that only the bar ending the piece takes it). **Where the
+crop's right edge carries that final barline, the stave ends flush.**
+
+**DESK DEFAULT, and Dann overrules it after he sees it: the protrusion is ONE
+STAVE SPACE**, matching the barline-adjacent clearance the project already uses.
+It is the desk's figure, not Gould's, and it is recorded as such.
+
+**Done when:** a measure taken from the middle of a piece shows its stave running
+a little past its closing barline, the last bar of the piece still ends flush on
+its final barline, the protrusion is the same on every measure, and Dann walks it.
+
 **Done when:** the loupe is raised on a measure whose system declares no meter,
 the correct meter draws between the clef-and-key head and the measure, the stave
 lines run unbroken through all three panels, and Dann walks it. Walk it on the

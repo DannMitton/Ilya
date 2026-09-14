@@ -432,12 +432,12 @@ export interface MeterLayout {
  * would double it where it exists.
  *
  * THE LEFT. `headAir` is the space from the head's last glyph to the head's
- * right edge. It is not the renderer's two and a half spaces: MEASURED on the
- * engraved Without Sun song 1, m. 4, the second sharp ends at 61.25 and the
- * head at 63.54, 0.42 of a space, because the first note's flat stands left of
- * its notehead and the head ends on the flat. So the panel adds whatever
- * brings the key-to-meter gap to `METER_LEAD_SP`, and nothing where the head
- * already has it.
+ * right edge. Since increment 2 the caller ends the head's crop ON that glyph,
+ * so it passes 0 and the panel supplies the whole of `METER_LEAD_SP`: Dann
+ * walked `78f3db8` and found *"an inexplicable gap between the key signature
+ * and the meter signature"*, which was the head's own run-in air, about eight
+ * spaces on a mid-system measure, standing before a panel that only topped it
+ * up. The parameter stays for a caller whose head still carries air.
  *
  * THE RIGHT. `bodyAir` is the
  * space the body's own crop already opens with, from its left edge to the
@@ -487,6 +487,112 @@ export function meterLayout(
 	place(unit, staffTop + 3 * lineGap);
 
 	return { span: lead + ink + gapBefore(METER_RUN_IN_SP, bodyAir), glyphs };
+}
+
+/** One mark's horizontal extent, in its system's coordinates. */
+export interface InkSpan {
+	left: number;
+	right: number;
+}
+
+/**
+ * N.138 increment 2. What the head's shortened crop would drop, and whether the
+ * loupe carries it.
+ *
+ * THE HEAD NOW ENDS ON THE HEADER'S LAST GLYPH, the clef or the key signature's
+ * last accidental, instead of at `headBound`, the system's first music ink. The
+ * body still opens at `headBound`, so the stretch between the two is drawn by
+ * neither crop. ON THE PAGE IT IS NOT ALWAYS EMPTY STAVE. Established by reading
+ * the renderer's paint order: everything from the `MUSIC_MARK` gate on lies at
+ * or right of `headBound` by construction, so only what is painted BEFORE the
+ * gate and carries no mark can stand there. Three things can:
+ *
+ * - a REST's glyph, which gets neither an event group nor a hit rectangle
+ *   (`staff-renderer.ts`, the `ev.type === 'rest'` branch), so a system that
+ *   opens on rests has them all before the gate;
+ * - the first sung note's LEDGER LINES, pushed before its group opens, and a
+ *   ledger line is wider than its notehead, so its left end stands just left of
+ *   `headBound`;
+ * - a BARLINE between two opening measures of rests.
+ *
+ * The renderer draws no tempo mark, dynamic or rehearsal mark anywhere, so
+ * none of those can land there today. A future one that is painted before the
+ * gate would be carried by this same rule without a change here.
+ *
+ * `band` is every such mark's extent: pre-gate ink that is not the header, not a
+ * stave line and not the ground. The carried band opens on the leftmost of them
+ * that reaches past the header, and closes at `headBound`, where the body opens,
+ * so the carried band and the body abut exactly the way the old head and body
+ * did, and a ledger line that straddles the seam is still whole.
+ *
+ * CARRIED ONLY WHERE IT ABUTS THE BODY. On a measure that opens its system,
+ * `clipToHead` opens the body at `headBound` and the band is that measure's own
+ * opening. On a mid-system measure the body opens further right and the band is
+ * an EARLIER measure's ink, whose other contents the body already leaves out,
+ * so it is left out too and null is returned. DESK DEFAULT.
+ */
+export function carryBand(
+	headerRight: number,
+	head: number,
+	viewLeft: number,
+	band: readonly InkSpan[],
+): InkSpan | null {
+	if (![headerRight, head, viewLeft].every(Number.isFinite) || !(headerRight < head)) return null;
+	if (Math.abs(viewLeft - head) > 1e-6) return null;
+	let left = Infinity;
+	for (const b of band) {
+		if (!(b.right > headerRight) || !(b.left < head)) continue;
+		left = Math.min(left, Math.max(b.left, headerRight));
+	}
+	return Number.isFinite(left) ? { left, right: head } : null;
+}
+
+/**
+ * N.138 increment 3. How far the stave runs on past a measure's closing barline,
+ * in stave-spaces. DESK DEFAULT, recorded in `docs/memory/OPEN.md` §N.138 as the
+ * desk's figure and not Gould's: one space, the barline clearance the project
+ * already uses. Dann overrules it once he has seen it.
+ */
+export const EXCERPT_TAIL_SP = 1;
+
+/** A staff-spanning vertical as drawn: its centre x and its stroke width. */
+export interface Vertical {
+	x: number;
+	width: number;
+}
+
+/**
+ * N.138 increment 3. The held measure's closing barline, found as drawn.
+ *
+ * Ruled by Dann 2026-09-14: *"I am asking for the stave lines to protrude
+ * uniformly a little beyond the barline. Users will understand this to mean
+ * that the measure is extracted from the middle of a piece. The only measure
+ * that should terminate with the barline flush right is the final measure."*
+ *
+ * THE MIRROR OF THE OPENING SEARCH, `memo-mobile-slice3_r1_2026-08-26.md` §11:
+ * `verticals` are the lines that span exactly the staff, found by the caller
+ * the same way, and a measure has no barline inside it, so the first one right
+ * of the window's opening edge is the one that closes it.
+ *
+ * A FINAL BARLINE IS TWO LINES, thin then thick half a space apart
+ * (`staff-renderer.ts`, `options.finalBarline`, Gould r96), and the renderer
+ * draws that pair only where the piece ends. So a second staff-spanning line
+ * within a stave-space of the first marks the final bar, and the crop takes the
+ * whole pair.
+ *
+ * `right` is the outer edge of the closing stroke, where the body's crop ends.
+ * Null when no line is found, and the caller keeps the edge it had.
+ */
+export function closingBarline(
+	verticals: readonly Vertical[],
+	after: number,
+	lineGap: number,
+): { right: number; final: boolean } | null {
+	const lines = verticals.filter((v) => Number.isFinite(v.x) && v.x > after).sort((a, b) => a.x - b.x);
+	if (lines.length === 0 || !(lineGap > 0)) return null;
+	const pair = lines.filter((v) => v.x - lines[0].x <= lineGap);
+	const right = Math.max(...pair.map((v) => v.x + Math.max(0, v.width) / 2));
+	return { right, final: pair.length >= 2 };
 }
 
 /**

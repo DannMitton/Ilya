@@ -24,6 +24,7 @@ next session the same hour it cost the last one.
 | the ship script refuses to run | `refuses on untracked files` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
+| you are about to run ANY read-only git from the bridge | `NO-OPTIONAL-LOCKS IS THE FIX` |
 | every header reads the same colour in a browser check | `A HIDDEN PANE FREEZES ITS TRANSITIONS` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
@@ -182,6 +183,32 @@ file.
 | you quoted a farm-out cost you had not measured | `A FARM-OUT COST QUOTED FROM A FEEL` |
 
 ---
+
+## NO-OPTIONAL-LOCKS IS THE FIX, AND IT ENDS THE INDEX-LOCK TRAP. 2026-09-14
+
+**Prefix every git read from the bridge with `--no-optional-locks`:**
+
+```
+git --no-optional-locks --no-pager status --porcelain
+```
+
+**Why.** `git status`, `git diff` and `git check-ignore` all refresh the index as
+a side effect, which takes `.git/index.lock`. **The bridge refuses `unlink`**, so
+git cannot remove the lock on its way out and it is stranded. A stranded lock
+blocks Dann's next commit and the ship script, and only he can delete it.
+
+**Three sightings before the fix was found.** `check-ignore` took it first (see
+`CHECK-IGNORE TAKES THE INDEX LOCK`), a second was recorded at the close of
+2026-09-14, and on 2026-09-14 evening a plain `git status` from this desk stranded
+one mid-session and cost Dann a paste to clear it.
+
+**Verified 2026-09-14:** `git --no-optional-locks --no-pager status --porcelain`
+returned the working tree correctly and `.git/index.lock` did not exist
+afterwards. The flag tells git to skip locks it only wants for the refresh.
+
+**This does not relax CONTRACT §5.** Every git command that WRITES is still
+forbidden. The flag makes the ALLOWED reads safe to run, which they were not
+before.
 
 ## Gate baselines
 

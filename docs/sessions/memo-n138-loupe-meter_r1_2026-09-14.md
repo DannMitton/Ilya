@@ -285,3 +285,144 @@ NOT ESTABLISHED beats a complete invented answer.
   changed during this session**, along with two new untracked files,
   `brief-n139-page-meter-signature_r1_2026-09-14.md` and
   `spec-loupe-french_r1_2026-09-14.md`. None of them is mine.
+
+---
+
+## 7. Appended: increments 2 and 3
+
+Built to `docs/memory/OPEN.md` §N.138, INCREMENT 2 and INCREMENT 3, on
+`78f3db8`. **Not committed and not staged. WRITTEN, walked in the dev
+server's browser pane at 390 px on both scores, not walked by Dann.**
+
+### 7.1 The named risk, answered before building
+
+**Question:** what can the renderer draw between the head's last glyph and
+`headBound`?
+
+**By reading the paint order** in `staff-renderer.ts`: everything from the
+`MUSIC_MARK` gate on stands at or right of `headBound` by construction, so only
+unmarked marks painted before the gate can stand in that band. Beams, tuplet
+brackets (`:2787-2788`), slurs, underlay, hyphens and extenders are all painted
+after the gate. **The renderer draws no tempo mark, dynamic or rehearsal mark
+anywhere.** Three things can stand in the band:
+
+1. **An opening rest.** A rest gets no event group and no hit rectangle, so a
+   system that opens on rests has them all before the gate.
+2. **The first sung note's ledger lines**, pushed before its group opens, and
+   wider than the notehead.
+3. **A barline between two opening measures of rests.**
+
+**By measuring every system on both scores:**
+
+| score | systems | carrying something in the band |
+|---|---|---|
+| Sunless 01 | 8 | none |
+| T05 | 11 | system 5, quarter rest U+E4E5 at 73.2; system 7, eighth rest U+E4E6 at 73.1 |
+
+**No ledger line or opening barline stands in the band on either score.**
+Those two cases are established by reading only.
+
+**So the band is carried, not dropped.** `carryBand` (`loupe.ts:534`) opens it
+on the leftmost such mark past the header and closes it at `headBound`. It
+draws as its own crop of the clone, flush against the body, so a ledger line
+crossing that seam stays whole.
+
+### 7.2 What changed
+
+- **`packages/score-parser/src/staff-renderer.ts:1713`**: each key-signature
+  glyph carries `data-key-signature`. Without a handle, a key's accidental
+  cannot be told apart from an opening rest. Pinned by one new test at
+  `staff-renderer.test.ts:903`.
+- **`loupe.ts:534` `carryBand`, `:556` `EXCERPT_TAIL_SP = 1`, `:586`
+  `closingBarline`.** The `meterLayout` comment is updated. `headBound`,
+  `clipToHead` and `measureWindow` are unchanged.
+- **`loupe.test.ts:585` and `:627`**: 7 and 6 tests.
+- **`Loupe.svelte`:**
+  - `:247`, `:272`, `:292` hold three helpers that the frame and
+    `pageMetrics` now share: `musicInk`, `staffVerticals` and `headerRightOf`.
+  - `:660` finds the closing barline and ends the body's crop on its outer
+    edge.
+  - `:823` reads the stave once for both loupe-drawn panels.
+  - `:850` ends the head on the header's last glyph and walks the band.
+  - `:918` adds the carried band and the tail to `totalSpan`.
+  - `:1291` draws the carried crop and `:1320` the tail.
+  - `:369` keeps `pageMetrics`' `minTotalSpan` a lower bound on the shorter
+    head, so the window is never cut shorter than a drawing.
+
+### 7.3 Found on the walk, fixed
+
+1. **Hit rectangles sort before the gate.** A note's hit rectangle is its
+   group's first child, and `MUSIC_MARK` excludes it by name. The first build's
+   band walk counted it as ink. On T05 system 2 that meant `data-hit` at x = 56,
+   left of the header's edge at 61.25, so the band would have carried the whole
+   gap back in. This was the failure I predicted before measuring. The walk now
+   skips `data-hit` (`:873`).
+2. **Taps now search the body's hit rectangles only** (`:1138`). Measured on
+   T05 m. 37: the head's copy and the carried band's copy each placed all
+   three of the measure's hit rectangles inside the drawn window, where nothing
+   of theirs is drawn. The head's copy predates this work. **Whether a tap was
+   ever misdirected by one is NOT ESTABLISHED.**
+
+### 7.4 Measurements, 390 px
+
+- **Increment 2.** The head crop is 61.25 units on every measure of both
+  scores. The meter panel is the whole lead plus ink plus the run-in the body
+  lacks: 25.23 units for 2/4 and 30.93 for 12/8 on a measure that opens its
+  system.
+  - Sunless m. 2 and m. 3 lose 33.5 units of head air. The gap you reported is
+    gone.
+  - T05 m. 37 carries 26.57 units from its quarter rest, and m. 57 carries
+    15.14 from its eighth rest.
+- **Increment 3.** Every non-final measure's tail is 5.5 units, one stave
+  space, on 64 of 67 T05 measures and 16 of 17 Sunless measures reached.
+  - T05 m. 90 and Sunless m. 18 have no tail.
+  - Sunless m. 18's crop ends at 241.25, the thick final line's outer edge.
+- **Scale.** The body now runs to the barline instead of to the next measure's
+  first hit rectangle. That is further right, as slice 3 §11 found at the
+  opening edge, so increment 3 adds about 11 units on wide measures. On
+  measures that open their system this outweighs increment 2's saving.
+  - **Worst stave space is now Sunless m. 17, 3.93 px**, against 3.96 px before
+    these increments.
+  - m. 2 and m. 3 grow from 4.25 and 4.17 px to 4.51 and 4.48 px.
+  - Nothing overflows its window on either score.
+- **No clone stacking:** at most 149 child nodes per crop after a full pass.
+
+### 7.5 Gates
+
+| gate | result | ship script reads | moved |
+|---|---|---|---|
+| 1 | 216 passed (216) | 216 | no |
+| 2 | 235 passed (235) | 235 | no |
+| 3 | 0 errors and 7 warnings in 4 files | same | no |
+| 4 | **1163 passed (1163)** | 1150 | **+13**: 7 `carryBand`, 6 `closingBarline` |
+| 5 | **548 passed, 5 skipped (553)** | 547 / 552 | **+1**: the key-signature handle |
+
+**`~/Downloads/ilya-ship.sh:79-80` will refuse until both lines move.**
+
+### 7.6 Decisions of mine, reversible
+
+1. **A carried band draws only on a measure that opens its system.** On a
+   mid-system measure the band is an earlier measure's ink, and the body
+   already leaves that measure out.
+2. **The final bar is recognized by drawing**: a second staff-spanning line
+   within a stave space of the first. The renderer draws that pair only on the
+   bar that ends the piece.
+3. **The tail is the loupe's own drawn stave**, not a wider crop. That keeps any
+   next-measure accidental or syllable out of it. **Cost: a tie or slur leaving
+   the held measure is cut at the barline.** Neither score's walk showed one.
+4. **A key signature handle in the renderer**, rather than telling glyphs apart
+   by SMuFL codepoint.
+
+### 7.7 NOT ESTABLISHED
+
+- **The selection ring can hide under the page's paper, and this predates N.138.**
+  Established in the DOM on Sunless m. 18: the system's children run
+  held-measure mark, then ring, then the opaque ground. `VoiceProfilePane.svelte:533-540`
+  skips only full-width rects before inserting the ring, and it stops at the
+  loupe's held-measure mark, which is not full width. **Whether that ordering
+  is why no ring showed on m. 18 is NOT ESTABLISHED, because the pane was
+  hidden** and its screenshots were unreliable.
+- **The ledger-line and opening-barline cases of the band were not observed.**
+- **Every screenshot was taken with the Browser pane hidden.** The survey
+  numbers are DOM readings.
+- **No production build, no desktop width, no print preview.**

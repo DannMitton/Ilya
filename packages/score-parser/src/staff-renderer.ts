@@ -1709,14 +1709,21 @@ export function renderAnalyzedStaff(
   const glyph = fifths >= 0 ? ACCIDENTAL_GLYPH[1] : ACCIDENTAL_GLYPH[-1];
   const ksClef = clef === 'bass' ? KS_OCTAVES.bass : KS_OCTAVES.treble;
   const ksTable = fifths >= 0 ? ksClef.sharps : ksClef.flats;
+  //
+  // `data-key-signature` IS A HANDLE, N.138 increment 2. The loupe ends its head
+  // on the header's last glyph and has to tell a key signature's accidental
+  // from anything else painted before the music: an opening rest, or a first
+  // note's ledger line, which carry no handle of their own. Same stamping as
+  // `partOfEvent`, and nothing on the page reads it.
   let ksX = ksStart;
+  const keyGlyph = (markup: string): string => markup.replace(/^<(\w+) /, '<$1 data-key-signature="" ');
   for (let i = 0; i < ksCount; i++) {
     const step = order[i];
     const ky = yFor({ step, octave: ksTable[step], alter: 0 });
     if (smufl) {
-      parts.push(glyphAt(ksGlyphName, round2(ksX), ky, '#3a352f', true));
+      parts.push(keyGlyph(glyphAt(ksGlyphName, round2(ksX), ky, '#3a352f', true)));
     } else {
-      parts.push(`<text x="${round2(ksX)}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`);
+      parts.push(keyGlyph(`<text x="${round2(ksX)}" y="${ky + 4}" font-size="15" fill="#3a352f">${glyph}</text>`));
     }
     ksX += ksStep;
   }

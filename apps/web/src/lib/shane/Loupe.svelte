@@ -27,16 +27,22 @@
 		MUSIC_MARK,
 		clipToHead,
 		inkCrop,
+		carryBand,
 		centreOnPage,
+		closingBarline,
+		EXCERPT_TAIL_SP,
 		pageInset,
 		measureWindow,
 		meterLayout,
+		METER_LEAD_SP,
 		nearestTarget,
 		parseSystemRange,
 		systemIndexOf,
 		windowScale,
 		type HitRect,
+		type InkSpan,
 		type PageInk,
+		type Vertical,
 		type SystemRange,
 	} from '$lib/shane/loupe';
 
@@ -230,6 +236,73 @@
 		return { top: y - m.actualBoundingBoxAscent, bottom: y + m.actualBoundingBoxDescent };
 	}
 
+	/* ── THREE READINGS OF A SYSTEM AS DRAWN, shared by the frame and the survey ──
+	   The frame effect and `pageMetrics` used to walk these each in their own
+	   copy. N.138 increments 2 and 3 need all three in both places, so they
+	   live once. */
+
+	/** The system's paint order, the `MUSIC_MARK` gate in it, and the music's
+	    ink from the gate on. The frame effect's ink-walk comment says what is
+	    skipped and why; this is that walk, moved and unchanged. */
+	function musicInk(sys: Element): { nodes: Element[]; gate: number; xs: number[] } {
+		const nodes = [...sys.querySelectorAll('*')];
+		const gate = nodes.findIndex((el) => el.matches(MUSIC_MARK));
+		const xs: number[] = [];
+		for (let i = gate; i >= 0 && i < nodes.length; i++) {
+			const el = nodes[i];
+			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
+			if (el.hasAttribute('data-selection-ring')) continue;
+			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+			const tacet = el.closest('[data-tacet]');
+			if (tacet && tacet !== el) continue;
+			let b: DOMRect;
+			try {
+				b = (el as SVGGraphicsElement).getBBox();
+			} catch {
+				continue;
+			}
+			if (b && (b.width || b.height)) xs.push(b.x);
+		}
+		return { nodes, gate, xs };
+	}
+
+	/** The barlines, found as drawn: every vertical that spans exactly the
+	    staff, the staff's extent taken from the hit rectangle. Slice 3 §11's
+	    test, with the stroke width kept so a crop can end on a line's edge. */
+	function staffVerticals(sys: Element, staffTop: number, gap: number): Vertical[] {
+		const staffBottom = staffTop + 4 * gap;
+		const tol = gap * 0.3;
+		const out: Vertical[] = [];
+		for (const el of sys.querySelectorAll('line')) {
+			const x1 = Number(el.getAttribute('x1'));
+			if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
+			const y1 = Number(el.getAttribute('y1'));
+			const y2 = Number(el.getAttribute('y2'));
+			if (Math.abs(Math.min(y1, y2) - staffTop) > tol) continue;
+			if (Math.abs(Math.max(y1, y2) - staffBottom) > tol) continue;
+			out.push({ x: x1, width: Number(el.getAttribute('stroke-width')) || 0 });
+		}
+		return out;
+	}
+
+	/** Where the header ends: the right edge of the clef and of the key
+	    signature's last accidental, as drawn. `-Infinity` where neither is
+	    marked. The key signature's handle is `data-key-signature`, N.138
+	    increment 2. */
+	function headerRightOf(sys: Element): number {
+		let right = -Infinity;
+		for (const el of sys.querySelectorAll('[data-clef], [data-key-signature]')) {
+			let b: DOMRect;
+			try {
+				b = (el as SVGGraphicsElement).getBBox();
+			} catch {
+				continue;
+			}
+			if (b && (b.width || b.height)) right = Math.max(right, b.x + b.width);
+		}
+		return right;
+	}
+
 	/** Remembered per page, so a step does not re-survey the whole score. */
 	const surveys = new WeakMap<Element, { signature: string; metrics: PageInk }>();
 
@@ -289,29 +362,28 @@
 			/* The system's measures, off its barlines. The same vertical test
 			   the held measure's own boundary search uses: a barline is the
 			   vertical that spans the staff exactly. */
-			const staffBottom = staffTop + 4 * gap;
-			const tol = gap * 0.3;
-			const bars: number[] = [];
-			for (const el of sys.querySelectorAll('line')) {
-				const x1 = Number(el.getAttribute('x1'));
-				if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
-				const y1 = Number(el.getAttribute('y1'));
-				const y2 = Number(el.getAttribute('y2'));
-				if (Math.abs(Math.min(y1, y2) - staffTop) > tol) continue;
-				if (Math.abs(Math.max(y1, y2) - staffBottom) > tol) continue;
-				bars.push(x1);
-			}
+			const bars = staffVerticals(sys, staffTop, gap).map((v) => v.x);
 			const heads = [...sys.querySelectorAll('[data-hit]')].map((el) => Number(el.getAttribute('x')));
 			const head = heads.length > 0 ? Math.max(0, Math.min(...heads)) : 0;
 			const edges = [head, ...bars.sort((a, b) => a - b), sysWidth];
+			/* N.138 INCREMENT 2 SHORTENS THE HEAD, so this has to stay a LOWER
+			   bound on what the frame draws or a narrow measure would draw taller
+			   than the window cut for it. The frame draws the header up to its last
+			   glyph, then a meter, then any carried band, then the body from the
+			   head's bound or the barline, then the tail: at least the header plus
+			   the body. The first measure's body opens where `clipToHead` opens it,
+			   at the later of its hit rectangle and the head's bound. */
+			const headerRight = headerRightOf(sys);
+			const bound = headBound(musicInk(sys).xs);
+			const headTerm = Number.isFinite(headerRight) ? Math.min(headerRight, head) : head;
 			for (let i = 0; i < edges.length - 1; i++) {
 				/* The window's left edge sits half a gap inside the barline it
 				   opens on, as the crop does; the first measure of a system
 				   opens on the head and moves nothing. */
-				const left = i === 0 ? edges[0] : edges[i] + gap * 0.5;
+				const left = i === 0 ? Math.max(edges[0], bound) : edges[i] + gap * 0.5;
 				const span = edges[i + 1] - left;
 				if (span < gap) continue;
-				minTotalSpan = Math.min(minTotalSpan, head + span);
+				minTotalSpan = Math.min(minTotalSpan, headTerm + span);
 			}
 		}
 		if (!Number.isFinite(above) || !Number.isFinite(below)) return null;
@@ -367,18 +439,25 @@
 		'timeSig5', 'timeSig6', 'timeSig7', 'timeSig8', 'timeSig9',
 	];
 
-	/** The meter panel's drawing, in page units from the panel's own left edge. */
-	interface MeterPanel {
-		/** The panel's width in page units, and in CSS pixels once scaled. */
-		span: number;
-		width: number;
-		viewBox: string;
+	/** The stave as the page draws it, for a panel the loupe draws itself. */
+	interface StaveInk {
 		/** The five stave lines' y values, read off the page as drawn. */
 		lines: number[];
 		lineStroke: string;
 		lineWidth: number;
 		/** The page's own ground behind the stave, where the renderer paints one. */
 		ground: { y: number; height: number; fill: string } | null;
+	}
+
+	/** A panel of bare stave: its width in page units, then in CSS pixels. */
+	interface StavePanel extends StaveInk {
+		span: number;
+		width: number;
+		viewBox: string;
+	}
+
+	/** The meter panel's drawing, in page units from the panel's own left edge. */
+	interface MeterPanel extends StavePanel {
 		glyphs: { char: string; x: number; y: number }[];
 		fontFamily: string;
 		fontSize: string;
@@ -400,6 +479,13 @@
 		headViewBox: string;
 		/** N.138. The meter, between the head and the body; null draws none. */
 		meter: MeterPanel | null;
+		/** N.138 increment 2. The head's pre-music ink that stands right of its
+		    last glyph, as its own crop of the clone, between the meter and the
+		    body; null where there is none to carry. */
+		carry: { width: number; viewBox: string } | null;
+		/** N.138 increment 3. The stave past the closing barline; null on the
+		    final bar, which ends flush. */
+		tail: StavePanel | null;
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
@@ -562,21 +648,36 @@
 		   keeps the edge it had. That case was already right and this does not
 		   touch it. */
 		const staffTop = hitY + 3.5 * lineGap;
-		const staffBottom = staffTop + 4 * lineGap;
-		const tolerance = lineGap * 0.3;
 		const half = win.left + (win.right - win.left) / 2;
+		const verticals = staffVerticals(sysEl, staffTop, lineGap);
 		let boundary: number | null = null;
-		for (const el of sysEl.querySelectorAll('line')) {
-			const x1 = Number(el.getAttribute('x1'));
-			if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
-			const y1 = Number(el.getAttribute('y1'));
-			const y2 = Number(el.getAttribute('y2'));
-			if (Math.abs(Math.min(y1, y2) - staffTop) > tolerance) continue;
-			if (Math.abs(Math.max(y1, y2) - staffBottom) > tolerance) continue;
-			if (!(x1 >= win.left && x1 < half)) continue;
-			if (boundary === null || x1 < boundary) boundary = x1;
+		for (const { x } of verticals) {
+			if (!(x >= win.left && x < half)) continue;
+			if (boundary === null || x < boundary) boundary = x;
 		}
 		if (boundary !== null) win.left = boundary + lineGap * 0.5;
+
+		/* ── N.138 INCREMENT 3. THE EXCERPT ENDS PAST ITS BARLINE ─────────────
+		   Ruled by Dann 2026-09-14 on the walk of `78f3db8`: the stave lines run
+		   uniformly a little past the closing barline, so the singer reads the
+		   measure as lifted from the middle of a piece, and only the final bar
+		   ends flush on its barline.
+
+		   THE MIRROR OF THE OPENING SEARCH ABOVE, and `closingBarline` in
+		   `loupe.ts` carries the rule. The crop now ends on the closing stroke's
+		   outer edge instead of at the next measure's first hit rectangle, so
+		   nothing of the next measure can stand in the protrusion: the stave past
+		   the barline is the loupe's own panel, not a wider crop.
+
+		   WHAT THE OLD EDGE WAS, established by slice 3 §11's measurement at the
+		   other end: a hit rectangle begins at the midpoint before its note,
+		   which is usually LEFT of that measure's barline. So the new edge more
+		   often moves the crop right, onto the barline, than left.
+
+		   The page's sage rectangle follows, as it followed the opening edge. */
+		const closing = closingBarline(verticals, win.left, lineGap);
+		if (closing && closing.right > win.left + 1) win.right = closing.right;
+		const tailSpanUnits = closing && !closing.final ? EXCERPT_TAIL_SP * lineGap : 0;
 
 		const span = win.right - win.left;
 
@@ -636,24 +737,7 @@
 		   the opposite reason: it is a mark on the music rather than music, and
 		   its box is two and a half times as tall as it is wide, so letting it
 		   size the crop would open the frame around the taken note alone. */
-		const nodes = [...sysEl.querySelectorAll('*')];
-		const gate = nodes.findIndex((el) => el.matches(MUSIC_MARK));
-		const inkXs: number[] = [];
-		for (let i = gate; i >= 0 && i < nodes.length; i++) {
-			const el = nodes[i];
-			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
-			if (el.hasAttribute('data-selection-ring')) continue;
-			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
-			const tacet = el.closest('[data-tacet]');
-			if (tacet && tacet !== el) continue;
-			let b: DOMRect;
-			try {
-				b = (el as SVGGraphicsElement).getBBox();
-			} catch {
-				continue;
-			}
-			if (b && (b.width || b.height)) inkXs.push(b.x);
-		}
+		const { nodes, gate, xs: inkXs } = musicInk(sysEl);
 		const headWidthUnits = headBound(inkXs);
 
 		/* THE WINDOW BEGINS WHERE THE HEAD ENDS. `clipToHead` in `loupe.ts`
@@ -707,19 +791,91 @@
 		   them at the same y, the same weight and the same ink, so the stave runs
 		   through all three panels. If five cannot be found, the renderer's own
 		   construction stands in. */
+		/* THE STAVE AS DRAWN, for the two panels the loupe draws itself: the
+		   meter and the tail. The widest horizontal on each line of the staff,
+		   so a beam that happens to lie along a line cannot stand in for it; if
+		   five cannot be found, the renderer's own construction stands in. */
+		const staffLines = new Map<number, { el: Element; length: number }>();
+		for (const el of sysEl.querySelectorAll('line')) {
+			const y = Number(el.getAttribute('y1'));
+			if (Math.abs(y - Number(el.getAttribute('y2'))) > 0.01) continue;
+			const length = Math.abs(Number(el.getAttribute('x2')) - Number(el.getAttribute('x1')));
+			if (!(length >= sysWidth / 2)) continue;
+			const step = (y - staffTop) / lineGap;
+			if (step < -0.3 || step > 4.3 || Math.abs(step - Math.round(step)) > 0.3) continue;
+			const held = staffLines.get(Math.round(step));
+			if (!held || length > held.length) staffLines.set(Math.round(step), { el, length });
+		}
+		const foundLines = staffLines.size === 5 ? [...staffLines.values()].map((l) => l.el) : [];
+		const sampleLine = foundLines[0];
+		/* THE PAGE'S GROUND, where the renderer still paints one: the
+		   system-wide rectangle `pageMetrics` already knows by its width.
+		   Without it a panel is a pale strip between two tinted crops. N.133
+		   removes that ground, and then this finds nothing and the panels paint
+		   nothing, which is what the crops will do too. */
+		const groundEl = [...sysEl.querySelectorAll('rect')].find(
+			(r) =>
+				!r.hasAttribute('data-hit') &&
+				!r.hasAttribute('data-selection-ring') &&
+				!r.closest('[data-held-measure]') &&
+				Number(r.getAttribute('width')) >= sysWidth * 0.95,
+		);
+		const stave: StaveInk = {
+			lines:
+				foundLines.length === 5
+					? foundLines.map((el) => Number(el.getAttribute('y1'))).sort((a, b) => a - b)
+					: [0, 1, 2, 3, 4].map((i) => staffTop + i * lineGap),
+			lineStroke: sampleLine?.getAttribute('stroke') ?? '#3a352f',
+			lineWidth: sampleLine
+				? Number(sampleLine.getAttribute('stroke-width'))
+				: font
+					? font.prepared.engravingDefaults.staffLineThickness * lineGap
+					: 1,
+			ground: groundEl
+				? {
+						y: Number(groundEl.getAttribute('y')),
+						height: Number(groundEl.getAttribute('height')),
+						fill: groundEl.getAttribute('fill') ?? 'none',
+					}
+				: null,
+		};
+
 		let meterPanel: Omit<MeterPanel, 'width' | 'viewBox'> | null = null;
+		let carry: InkSpan | null = null;
+		let headCropUnits = headWidthUnits;
 		const clefText = sysEl.querySelector('[data-clef] text');
 		const family = clefText?.getAttribute('font-family') ?? '';
+		const headerRight = headerRightOf(sysEl);
 		if (meter && font && clefText && family.replace(/['"]/g, '') === font.family) {
-			/* The head's own trailing air: from the last glyph drawn before the
-			   music, which is the key signature's last accidental or the clef, to
-			   the head's edge. Walked over the same paint order as `inkXs`, up to
-			   the gate, with the stave lines and the ground left out by width
-			   because they cross the whole system. */
-			let headInkRight = -Infinity;
+			/* ── N.138 INCREMENT 2. THE PANEL REPLACES THE HEAD'S AIR ────────────
+			   Found by Dann on the walk of `78f3db8`: *"an inexplicable gap between
+			   the key signature and the meter signature."* The head ran to
+			   `headBound`, the system's first MUSIC ink, so it carried the run-in
+			   that belongs before the first note, about eight spaces on a
+			   mid-system measure, and the panel stood after all of it.
+
+			   So while a meter draws, the head's crop ends on the header's last
+			   glyph, and the panel supplies its whole lead. `headBound`,
+			   `clipToHead` and `measureWindow` are unchanged; only what the head's
+			   viewBox SHOWS changes, and the body still opens where it did.
+
+			   WHAT THAT WOULD DROP, and it is carried rather than dropped:
+			   `carryBand` in `loupe.ts` says what the renderer can paint between
+			   the header and `headBound`, which is an opening rest, a first note's
+			   ledger line, or a barline between opening rests. The band is walked
+			   here over the same paint order as the ink walk, before the gate,
+			   with the header, the stave lines, the ground, and the marks the
+			   clone strips all left out. */
+			const band: InkSpan[] = [];
 			for (let i = 0; i < gate; i++) {
 				const el = nodes[i];
-				if (el.tagName === 'g' || el.hasAttribute('data-selection-ring')) continue;
+				if (el.tagName === 'g' || el.hasAttribute('data-key-signature') || el.closest('[data-clef]')) continue;
+				/* A HIT RECTANGLE IS NOT INK, and it sorts before the gate: it is its
+				   note group's first child, and `MUSIC_MARK` excludes it by name.
+				   MEASURED on Kabalevsky T05, system 2: `data-hit="m13-0-1"` at
+				   x = 56, left of the header's edge at 61.25, so without this the
+				   band opened on the header and carried the whole gap back in. */
+				if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring')) continue;
 				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 				let b: DOMRect;
 				try {
@@ -728,8 +884,10 @@
 					continue;
 				}
 				if (!b || !(b.width || b.height) || b.width >= sysWidth / 2) continue;
-				if (b.x + b.width <= headWidthUnits) headInkRight = Math.max(headInkRight, b.x + b.width);
+				band.push({ left: b.x, right: b.x + b.width });
 			}
+			const headEnds = Number.isFinite(headerRight) && headerRight < headWidthUnits;
+			carry = headEnds ? carryBand(headerRight, headWidthUnits, view.left, band) : null;
 			const firstInk = Math.min(...inkXs.filter((x) => x >= view.left && x < view.right));
 			const layout = meterLayout(
 				meter.beats,
@@ -737,68 +895,32 @@
 				(d) => font.prepared.glyph(DIGIT_GLYPHS[d]),
 				lineGap,
 				staffTop,
-				Number.isFinite(headInkRight) ? headWidthUnits - headInkRight : 0,
-				Number.isFinite(firstInk) ? firstInk - view.left : 0,
+				headEnds ? 0 : METER_LEAD_SP * lineGap,
+				carry ? 0 : Number.isFinite(firstInk) ? firstInk - view.left : 0,
 			);
 			if (layout) {
-				/* The widest horizontal on each line of the staff, so a beam that
-				   happens to lie along a line cannot stand in for it. */
-				const staffLines = new Map<number, { el: Element; length: number }>();
-				for (const el of sysEl.querySelectorAll('line')) {
-					const y = Number(el.getAttribute('y1'));
-					if (Math.abs(y - Number(el.getAttribute('y2'))) > 0.01) continue;
-					const length = Math.abs(Number(el.getAttribute('x2')) - Number(el.getAttribute('x1')));
-					if (!(length >= sysWidth / 2)) continue;
-					const step = (y - staffTop) / lineGap;
-					if (step < -0.3 || step > 4.3 || Math.abs(step - Math.round(step)) > 0.3) continue;
-					const held = staffLines.get(Math.round(step));
-					if (!held || length > held.length) staffLines.set(Math.round(step), { el, length });
-				}
-				const found = staffLines.size === 5 ? [...staffLines.values()].map((l) => l.el) : [];
-				const sample = found[0];
-				/* THE PAGE'S GROUND, where the renderer still paints one: the
-				   system-wide rectangle `pageMetrics` already knows by its width.
-				   Without it the panel is a pale strip between two tinted crops.
-				   N.133 removes that ground, and then this finds nothing and the
-				   panel paints nothing, which is what the crops will do too. */
-				const groundEl = [...sysEl.querySelectorAll('rect')].find(
-					(r) =>
-						!r.hasAttribute('data-hit') &&
-						!r.hasAttribute('data-selection-ring') &&
-						!r.closest('[data-held-measure]') &&
-						Number(r.getAttribute('width')) >= sysWidth * 0.95,
-				);
+				if (headEnds) headCropUnits = headerRight;
 				meterPanel = {
+					...stave,
 					span: layout.span,
-					lines: found.length === 5
-						? found.map((el) => Number(el.getAttribute('y1'))).sort((a, b) => a - b)
-						: [0, 1, 2, 3, 4].map((i) => staffTop + i * lineGap),
-					lineStroke: sample?.getAttribute('stroke') ?? '#3a352f',
-					lineWidth: sample
-						? Number(sample.getAttribute('stroke-width'))
-						: font.prepared.engravingDefaults.staffLineThickness * lineGap,
-					ground: groundEl
-						? {
-								y: Number(groundEl.getAttribute('y')),
-								height: Number(groundEl.getAttribute('height')),
-								fill: groundEl.getAttribute('fill') ?? 'none',
-							}
-						: null,
 					glyphs: layout.glyphs,
 					fontFamily: family,
 					fontSize: clefText.getAttribute('font-size') ?? `${4 * lineGap}px`,
 					fill: clefText.getAttribute('fill') ?? '#3a352f',
 				};
+			} else {
+				carry = null;
 			}
 		}
 		const meterSpanUnits = meterPanel?.span ?? 0;
+		const carrySpanUnits = carry ? carry.right - carry.left : 0;
 
-		const totalSpan = headWidthUnits + meterSpanUnits + viewSpan;
+		const totalSpan = headCropUnits + meterSpanUnits + carrySpanUnits + viewSpan + tailSpanUnits;
 		const fitWidth = Math.max(0, width - FRAME_SIDES);
 		const drawn = Math.min(totalSpan * unitPx * magnification, fitWidth);
 		const scale = drawn / totalSpan;
 		const contentWidth = viewSpan * scale;
-		const headWidth = headWidthUnits * scale;
+		const headWidth = headCropUnits * scale;
 		const meterWidth = meterSpanUnits * scale;
 		/* THE CROP'S VERTICAL EXTENT is the page's ink band, laid around this
 		   system's own staff and padded by half a space so the tallest marks
@@ -880,11 +1002,14 @@
 		   painted an antialiased sliver of it, a grey hairline the height of the
 		   ring standing between the key signature and the meter. OBSERVED at
 		   390 px on m. 4. The page's own ring is not touched. Only while a meter
-		   panel draws: without one the crops still abut and the ring is whole. */
+		   panel draws: without one the crops still abut and the ring is whole.
+
+		   INCREMENT 2: where a carried band draws, the band and the body abut, so
+		   the seam the ring must not cross moves to the band's left edge. */
 		if (meterPanel) {
 			const pageRing = sysEl.querySelector('[data-selection-ring]');
 			const stroke = pageRing ? parseFloat(getComputedStyle(pageRing).strokeWidth) || 0 : 0;
-			const inside = view.left + stroke;
+			const inside = (carry ? carry.left : view.left) + stroke;
 			for (const ring of clone.querySelectorAll('[data-selection-ring]')) {
 				const x = Number(ring.getAttribute('x'));
 				const w = Number(ring.getAttribute('width'));
@@ -972,10 +1097,25 @@
 			left,
 			contentWidth,
 			headWidth,
-			headViewBox: `0 ${cropTop} ${headWidthUnits} ${cropHeight}`,
+			headViewBox: `0 ${cropTop} ${headCropUnits} ${cropHeight}`,
 			meter: meterPanel
 				? { ...meterPanel, width: meterWidth, viewBox: `0 ${cropTop} ${meterSpanUnits} ${cropHeight}` }
 				: null,
+			carry: carry
+				? {
+						width: carrySpanUnits * scale,
+						viewBox: `${carry.left} ${cropTop} ${carrySpanUnits} ${cropHeight}`,
+					}
+				: null,
+			tail:
+				tailSpanUnits > 0
+					? {
+							...stave,
+							span: tailSpanUnits,
+							width: tailSpanUnits * scale,
+							viewBox: `0 ${cropTop} ${tailSpanUnits} ${cropHeight}`,
+						}
+					: null,
 			contentHeight,
 			windowHeight,
 			centreY,
@@ -993,9 +1133,15 @@
 
 	   NEAREST RATHER THAN `closest`, the same rule the page tap uses, so a tap
 	   that lands between two entries still resolves to one and always the same
-	   one. At 2.4 times the targets are large, and this only ever helps. */
+	   one. At 2.4 times the targets are large, and this only ever helps.
+
+	   ONLY THE BODY'S TARGETS, N.138 increment 2. The head, and now the carried
+	   band, each hold a whole copy of the system's clone, hit rectangles and
+	   all, and a rectangle's client box is not cut by the crop that hides it,
+	   so those copies stand where nothing is drawn. The body is the one crop
+	   that shows the measure's own entries. */
 	function handleTap(e: MouseEvent): void {
-		const targets = [...(windowEl?.querySelectorAll('[data-loupe-hit]') ?? [])].map((el) => {
+		const targets = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-hit]') ?? [])].map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
 				id: el.getAttribute('data-loupe-hit') ?? '',
@@ -1137,8 +1283,25 @@
 					{/each}
 				</svg>
 			{/if}
+			<!-- N.138 INCREMENT 2. What the shortened head would have dropped, a
+			     third crop of the same clone, flush against the body, so an opening
+			     rest or a ledger line crossing the seam reads as one mark. -->
+			{#if frame.carry}
+				<svg
+					class="loupe-svg loupe-carry"
+					viewBox={frame.carry.viewBox}
+					width={frame.carry.width}
+					height={frame.contentHeight}
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+					style="font-family: var(--font-sans)"
+				>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
+					{@html frame.inner}
+				</svg>
+			{/if}
 			<svg
-				class="loupe-svg"
+				class="loupe-svg loupe-body"
 				viewBox={frame.viewBox}
 				width={frame.contentWidth}
 				height={frame.contentHeight}
@@ -1149,6 +1312,39 @@
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
 				{@html frame.inner}
 			</svg>
+			<!-- N.138 INCREMENT 3. The stave past the closing barline, the loupe's
+			     own drawing like the meter, so nothing of the next measure stands
+			     in it. Absent on the final bar, which ends flush. -->
+			{#if frame.tail}
+				<svg
+					class="loupe-svg loupe-tail"
+					viewBox={frame.tail.viewBox}
+					width={frame.tail.width}
+					height={frame.contentHeight}
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					{#if frame.tail.ground}
+						<rect
+							x="0"
+							y={frame.tail.ground.y}
+							width={frame.tail.span}
+							height={frame.tail.ground.height}
+							fill={frame.tail.ground.fill}
+						/>
+					{/if}
+					{#each frame.tail.lines as y, i (i)}
+						<line
+							x1="0"
+							y1={y}
+							x2={frame.tail.span}
+							y2={y}
+							stroke={frame.tail.lineStroke}
+							stroke-width={frame.tail.lineWidth}
+						/>
+					{/each}
+				</svg>
+			{/if}
 		</div>
 	</div>
 {/if}
@@ -1279,7 +1475,9 @@
 	   happened to reach into the head belongs to a note the loupe is not
 	   showing. */
 	.loupe-head,
-	.loupe-meter {
+	.loupe-meter,
+	.loupe-carry,
+	.loupe-tail {
 		pointer-events: none;
 	}
 
