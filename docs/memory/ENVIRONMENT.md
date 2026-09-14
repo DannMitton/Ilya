@@ -86,6 +86,7 @@ next session the same hour it cost the last one.
 | the console filter hiding what you need | `THE COORDINATING DESK'S OWN INSTRUMENTS` |
 | a screen-reader string to check | `SCREEN-READER STRINGS` |
 | instruments already known to lie | `Known instrument faults` |
+| asking whether an SVG mark is hidden behind another | `YOU DO NOT NEED A PIXEL` |
 | a Cyrillic letter on screen that is not the letter in the data | `Ё PLUS U+0301` |
 | `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
 | a remote branch that seems not to exist | `implies --single-branch` |
@@ -209,6 +210,37 @@ afterwards. The flag tells git to skip locks it only wants for the refresh.
 **This does not relax CONTRACT §5.** Every git command that WRITES is still
 forbidden. The flag makes the ALLOWED reads safe to run, which they were not
 before.
+
+## YOU DO NOT NEED A PIXEL TO SETTLE WHETHER AN SVG MARK IS COVERED. 2026-09-14
+
+**SVG paints in document order and has no `z-index`.** The project states this in
+its own source, at `VoiceProfilePane.svelte:513`. So "is this mark hidden behind
+that one" is answerable from the DOM, and three things settle it without a
+screenshot:
+
+1. **The document order of the two elements**, read from the DOM.
+2. **A positive control**: the same two elements in the order that works. On
+   2026-09-14 the loupe-down case gave ground-then-ring with the ring visible, and
+   the loupe-up case gave ring-then-ground. Same elements, same fills, order
+   reversed. Code then went further and moved ONE of them by hand, saw the mark
+   return on that surface alone, and restored it.
+3. **The absence of a stacking context** on either mark or on an ancestor that
+   contains only one of them: `filter`, `opacity`, `mix-blend-mode`, `isolation`,
+   `transform`, `z-index`. An ancestor that contains BOTH cannot reorder them, so
+   `div.paper-fit` at opacity 0.78, `div.paper-scale` with a transform, and
+   `div.loupe` at z-index 9100 were all ruled out on inspection.
+
+**What this cost before it was written down.** The defect was flagged NOT
+ESTABLISHED and left unfixed for a turn, on the grounds that the Browser pane was
+hidden and its screenshots were unreliable. The screenshots were never the
+instrument that could answer it.
+
+**This is not a licence to reason from a picture you have not taken.** It is the
+narrow case where the rendering model is deterministic and the inputs are all
+readable. Where the question is about type size, colour, or what a human can make
+out, the pixel is still the only instrument, and
+`drawing-loupe-stave-scales_r1_2026-09-14.html` is how that one was answered the
+same night.
 
 ## Gate baselines
 

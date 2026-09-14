@@ -21,6 +21,7 @@
 	import { onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { afterGround } from '$lib/shane/system-ground';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
 		headBound,
@@ -1037,7 +1038,13 @@
 
 		   IT RIDES THE PAGE'S OWN SVG, the way VoiceProfilePane's selection
 		   mark does, so it sits in the system's coordinate space and the
-		   thumbnail's scale never has to be undone. */
+		   thumbnail's scale never has to be undone.
+
+		   AND IT GOES AFTER THE PAPER. It went in at `firstChild`, which is
+		   before the system's full-width ground, so it was painted under the
+		   paper, and standing first it also stopped the pane's skip over that
+		   ground and sent the selection ring under the paper too. Established
+		   2026-09-14 with the pane visible; `system-ground.ts` has the account. */
 		for (const stale of container.querySelectorAll('[data-held-measure]')) stale.remove();
 		if (hitH > 0) {
 			const mark = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -1048,7 +1055,7 @@
 			mark.setAttribute('height', String(4 * lineGap));
 			mark.setAttribute('fill', 'none');
 			mark.setAttribute('pointer-events', 'none');
-			sysEl.insertBefore(mark, sysEl.firstChild);
+			sysEl.insertBefore(mark, afterGround(sysEl));
 		}
 
 		/* THE LOUPE ANCHORS FIXED AND NEVER TRAVELS. Ruled by Dann 2026-08-26

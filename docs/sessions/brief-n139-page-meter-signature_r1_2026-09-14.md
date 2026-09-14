@@ -78,14 +78,36 @@ barline and the first note. `:1300` and `:1321` are the two sibling advance
 sites, for a tacet run opening and for the column after one; check whether either
 can also open a measure that declares a change.
 
-**A TRAP TO CHECK BEFORE YOU WIDEN ANYTHING.** `staff-renderer.ts:134` says
-`BARLINE_ROOM` is *"shared with `page-layout.ts`'s width estimate"*, but a grep of
-`packages/score-parser/src` finds the constant referenced only in
-`staff-renderer.ts` and `staff-renderer.test.ts`. **Whether `page-layout.ts`
-duplicates the value, derives the width another way, or the comment is stale is
-NOT ESTABLISHED.** Establish it first. If the pagination estimate does not learn
-the same widths the renderer spends, the page breaks where the estimate thinks it
-does and not where the ink actually is.
+**THE TRAP IS SETTLED, 2026-09-14, BY READING BOTH FILES. It is not a trap, and
+the instruction it becomes is the important one in this brief.**
+
+`staff-renderer.ts:134` says `BARLINE_ROOM` is *"shared with `page-layout.ts`'s
+width estimate"*. **`page-layout.ts` never references that constant.** What it
+does instead is stronger: `sliceWidth` imports `layoutColumns` from the renderer
+and sums the SAME columns' advances (`page-layout.ts:136-137`). Its own comment at
+`:55-60` states the reason: *"The advance arithmetic is NOT mirrored here:
+`layoutColumns` is imported from the renderer and produces the columns BOTH
+modules walk, so the estimate and the rendering cannot drift apart at all rather
+than merely failing a test when they do (N.6b-1; widened from two shared
+constants to the whole walk at N.104)."*
+
+**SO: PUT THE METER'S WIDTH INTO A COLUMN'S `advance`, INSIDE `layoutColumns`.**
+Do that and the paginator sees it with no further work. Add it anywhere in the
+draw loop instead and the page will break where the estimate thinks it does rather
+than where the ink is, and no test will catch it.
+
+**A SECOND RISK, FOUND WHILE CHECKING THAT, AND IT IS NOT ESTABLISHED.** The
+opening signature is a HEAD symbol, not a column, so it does not pass through
+`layoutColumns` at all. The head is laid out BACKWARDS from `leftMargin`
+(`staff-renderer.ts:1654-1664`), and `clefX` and `staveLeft` are both clamped at
+zero. `leftMargin` is 76 on the page path (`engraving.ts:35`). **Adding a third
+header symbol eats into a fixed budget, and with enough accidentals in the key
+signature the clef will clamp at 0 and the symbols will collide.** The desk's
+rough arithmetic says two sharps still fit with room to spare, but it used
+estimated glyph widths and is not a measurement. **Measure the head's total width
+at 0, 4 and 7 accidentals before you ship, and if it clamps, say so rather than
+letting it overlap.** `sliceWidth` starts from `leftMargin`, so a wider head does
+not change the slice width and the paginator will not warn you.
 
 ---
 

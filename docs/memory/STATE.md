@@ -11,10 +11,12 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`490c12d`**, "N.137: the dictionary line never marks ё with an
-acute", shipped 2026-09-14, Vercel `dpl_CfDTDQYQ2AZH79MNz2EWc5GU519t` READY on
-the branch alias, walked by Dann (the previous floors, `92b7d5d`, `8278429` and
-earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
+before **`8bb406c`**, "N.138 increments 2 and 3: the meter sits one
+space after the key, and the excerpt no longer ends on its barline", shipped
+2026-09-14, Vercel `dpl_NVPuRWJzticKSxLs9bLp6RMkaLpw` READY on the branch alias,
+sha checked by the desk before Dann was sent to it, and walked by him (the
+previous floors, `490c12d`, `92b7d5d`, `8278429` and earlier, are in
+`../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
 If the tree is ahead of it, that is expected and tells you only that work has
 landed since.
@@ -307,12 +309,12 @@ section carries the marks; that file carries the items.
   the scroll may take a gesture on a surface where the swipe dismisses and the
   tap places a syllable.**
 
-- `[ ]` **N.138. The loupe supplies the meter for every measure it shows.** Ruled
-  by Dann 2026-09-14. Spec in `OPEN.md`. The notation faces all carry the ten
-  `timeSig` digits, every measure already carries the meter in effect
-  (`mnx-parser.ts:579`, `musicxml-parser.ts:600`), and the shape is a third panel
-  between the loupe's head and its body, so `headBound` and `clipToHead` are
-  untouched.
+- `[x]` **N.138. The loupe supplies the meter for every measure it shows. DONE
+  2026-09-14, all three increments, walked by Dann.** Increment 1 `78f3db8`,
+  increments 2 and 3 `8bb406c`. Account and spec in `../sessions/LOG.md` block 16.
+  **Three things it raised are still live and are NOT closed by it:** the
+  selection ring landing under the system's ground (`INBOX.md`), whether a tap
+  ever picked the wrong note (NOT ESTABLISHED), and N.140.
 - `[ ]` **N.139. Every meter assignment in a score draws on the page.** Ruled by
   Dann 2026-09-14; **the number is a DESK DEFAULT** and he can collapse it into
   N.138 with a word. Finding 2 of the 2026-09-13 walk. Ilya draws no meter

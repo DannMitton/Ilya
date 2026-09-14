@@ -82,6 +82,7 @@
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { afterGround } from '$lib/shane/system-ground';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/shane/watchlist';
 	import { scoreMetrics } from '$lib/shane/score-metrics';
@@ -519,7 +520,10 @@
 
 		   AFTER THE BACKDROP, THOUGH. The system opens with a full-width rect
 		   that is the paper; first-child would put the ring behind the page
-		   itself and draw nothing at all.
+		   itself and draw nothing at all. `afterGround` in `system-ground.ts`
+		   finds the paper wherever it stands: this used to skip LEADING
+		   full-width rects only, and the loupe's held-measure rectangle, standing
+		   first, stopped the skip, so a note taken with the loupe up drew no box.
 
 		   NOTHING ELSE MOVES WITH IT. The ring still carries
 		   `data-note-selected`, so the loupe's clone still strips its stroke;
@@ -528,16 +532,7 @@
 		   carries no transform, so leaving the group changes no number. */
 		const sysEl = group.closest('[data-system]');
 		if (!sysEl) return;
-		const sysWidth = Number(sysEl.getAttribute('width'));
-		let under = sysEl.firstElementChild;
-		while (
-			under &&
-			under.tagName === 'rect' &&
-			Number(under.getAttribute('width')) >= sysWidth * 0.95
-		) {
-			under = under.nextElementSibling;
-		}
-		sysEl.insertBefore(ring, under);
+		sysEl.insertBefore(ring, afterGround(sysEl));
 	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.

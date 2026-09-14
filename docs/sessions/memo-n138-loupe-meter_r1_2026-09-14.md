@@ -426,3 +426,83 @@ crossing that seam stays whole.
 - **Every screenshot was taken with the Browser pane hidden.** The survey
   numbers are DOM readings.
 - **No production build, no desktop width, no print preview.**
+
+---
+
+## 8. Appended: the selection ring under the paper, established and fixed
+
+**Not committed and not staged.** This settles the first item in §7.7.
+
+### 8.1 Established, Browser pane visible
+
+Observed on the engraved Without Sun song 1, m. 18, dev server, 1440 × 900.
+
+| state | page children | loupe body children | box on page | box in loupe |
+|---|---|---|---|---|
+| loupe down, note taken | ground, ring | none | not looked at | none |
+| loupe raised on the D3 quarter | held-measure, ground, ring | ground, ring | shown | shown |
+| Left Arrow twice to the D3 eighth, loupe up | held-measure, **ring, ground** | **ring, ground** | **none** | **none** |
+| that state, page ring moved after the ground by hand | held-measure, ground, ring | ring, ground | **shown** | none |
+
+**The control settles it.** Moving only the page's ring after the ground brought
+the box back on the page and nowhere else.
+
+**The loupe's held-measure rectangle stood before the ground in every state,
+and that establishes it was covered.** No pixel check is needed, per Dann,
+2026-09-14. SVG paints in document order and has no `z-index`
+(`VoiceProfilePane.svelte`'s own comment, IT GOES UNDER THE MUSIC). The ring
+is the positive control: the same elements and fills in the other order drew
+the box.
+
+The one thing that could break that is a stacking context, so it was checked
+in computed styles:
+
+- **The marks themselves.** The ring, the held-measure rectangle and the ground
+  are siblings under the system `<svg>`, on the page and in the loupe's clone.
+  None of the three has a filter, opacity, `mix-blend-mode`, `isolation`,
+  transform or `z-index`. The ground's `fill-opacity` is 1.
+- **Their ancestors.** The contexts that exist are all shared by the three:
+  `div.paper-fit` (`opacity: 0.78`) and `div.paper-scale` (a transform) on the
+  page, and `div.loupe` (`position: fixed`, a transform, `z-index: 9100`) in the
+  loupe. A shared ancestor composites all three together and cannot reorder
+  them.
+
+### 8.2 The fix
+
+- **New file, `apps/web/src/lib/shane/system-ground.ts`.** `afterGroundIndex`
+  inserts after the LAST full-width rect among the system's children, wherever
+  that rect stands. Hit rectangles, rings and held-measure rectangles never
+  count as ground. `afterGround` applies the same rule to a live system.
+- **New file, `system-ground.test.ts`**, 7 tests.
+- **`VoiceProfilePane.svelte`:** the leading-rect skip is replaced by
+  `sysEl.insertBefore(ring, afterGround(sysEl))`.
+- **`Loupe.svelte`:** `sysEl.insertBefore(mark, sysEl.firstChild)` becomes
+  `sysEl.insertBefore(mark, afterGround(sysEl))`.
+
+### 8.3 Verified, Browser pane visible, 1440 × 900
+
+- **Loupe raised on the D3 quarter.** Page: ground, held-measure, ring. Loupe:
+  ground, ring.
+- **Left Arrow twice to the D3 eighth with the loupe up**, the path that failed
+  before. Page: ground, held-measure, ring. Loupe: ground, ring. **The box shows
+  around the eighth in the loupe and on the page.**
+
+### 8.4 Gates
+
+| gate | result | ship script |
+|---|---|---|
+| 1 | 216 passed (216) | 216 |
+| 2 | 235 passed (235) | 235 |
+| 3 | 0 errors and 7 warnings in 4 files | same |
+| 4 | **1170 passed (1170)** | 1163, **+7** from `system-ground.test.ts` |
+| 5 | 548 passed, 5 skipped (553) | same |
+
+**Both new files are untracked, so the ship script refuses until they are
+added.**
+
+### 8.5 One thing done by accident, undone
+
+A tap inside the loupe, used to change the taken note, PLACED the armed
+syllable: «Ком» under the D3 eighth. That change was in the dev pane's own
+scratch library, not Dann's. It was undone with **Undo: syllable placed** and
+checked: m. 18 reads «но – ка» again and the count is back to 59 / 95.
