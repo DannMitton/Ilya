@@ -85,6 +85,7 @@ next session the same hour it cost the last one.
 | the console filter hiding what you need | `THE COORDINATING DESK'S OWN INSTRUMENTS` |
 | a screen-reader string to check | `SCREEN-READER STRINGS` |
 | instruments already known to lie | `Known instrument faults` |
+| a Cyrillic letter on screen that is not the letter in the data | `Ё PLUS U+0301` |
 | `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
 | a remote branch that seems not to exist | `implies --single-branch` |
 
@@ -2803,6 +2804,12 @@ claim looked safe: git refreshes the index OPPORTUNISTICALLY, when the stat
 cache is stale, so the same command is harmless one minute and leaves a lock the
 next. **A command that has not yet bitten is not a command that cannot.**
 
+**IT RECURRED 2026-09-14**, from a plain `git status --porcelain` run to see what
+the close had modified. Same signature: zero bytes, stamped one minute after the
+`.git/index` beside it. Dann cleared it with `rm`. **A second sighting in two
+days, so treat the warning line in a bridge git call's output as the signal and
+tell him in the same message, rather than letting his next commit find it.**
+
 **THE RULE, in its corrected form. Treat EVERY git command run from the bridge
 as a possible writer of `.git/index.lock`, `check-ignore` and `status`
 included.** CONTRACT §5's read-only list is about what a command MEANS, not about
@@ -2899,3 +2906,27 @@ desk itself wrote.** A superseded draft is superseded by a header line in its
 replacement, which costs nothing and blocks no ship. Reserve `_to_delete/` for
 files Dann asked to have deleted, and tell him in the same breath that only he
 can empty it.
+
+
+## Ё PLUS U+0301 IS NOT DRAWN AS Ё. 2026-09-14
+
+**A combining acute on a ё does not produce a marked ё. It produces a shape that
+is not a Russian letter at all.** Drawn in the browser pane at 150 px in Source
+Serif 4: `далёк` renders correctly, and `далё` + U+0301 + `к` renders with an
+и-shaped letter in the ё's place, carrying a single dot on the left and an acute
+on the right. Same font, same string, one variable.
+
+**DO NOT TRANSCRIBE THAT SHAPE.** It has no spelling. The desk wrote it as
+`далйк` and that was wrong: й is и with a breve, and a breve is not what is
+drawn. Describe the base and each mark in words, or draw it and send the picture.
+`CONTRACT.md` tether 18 carries the general rule.
+
+**Where it bit:** `InspectorPanel.svelte`, `getStressedLemma`, which inserted
+U+0301 after the vowel the dictionary names as stressed. For `далёкий` that vowel
+IS the ё. Fixed in N.137, `490c12d`. The same file had stated the rule for the
+atom ribbon since long before, at `:198-201`: ё and Ё are inherently stressed and
+are never marked.
+
+**The general trap, and it is bigger than this one site: a font can draw a
+correct string as a different letter.** Reading the code points proves what the
+data is and proves nothing about what the singer sees. **Render it and look.**

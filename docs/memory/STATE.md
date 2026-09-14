@@ -11,10 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`92b7d5d`**, "N.114b: items 6 to 9, air, binder order, collapse row
-gone, Start over as a ghost pill", shipped 2026-09-10 04:24, Vercel
-`dpl_E42mxc3bGuhkZAUNTMk6RmhrTRhE` READY on the branch alias, walked by Dann
-(the previous floors, `8278429` and earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
+before **`490c12d`**, "N.137: the dictionary line never marks ё with an
+acute", shipped 2026-09-14, Vercel `dpl_CfDTDQYQ2AZH79MNz2EWc5GU519t` READY on
+the branch alias, walked by Dann (the previous floors, `92b7d5d`, `8278429` and
+earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
 If the tree is ahead of it, that is expected and tells you only that work has
 landed since.
@@ -42,49 +42,25 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### THE ONE THING: THE COLOUR STORY, STAGE 4. THE VALUES.
+> ### THE ONE THING: THE COLOUR STORY, STAGE 5. THE GHOSTS AND THE DUPLICATES.
 >
-> **Its brief is written and the hold is lifted:**
-> `../sessions/brief-colour-stage4_r1_2026-09-14.md`, 125 lines. It was held only
-> because N.134 was unshipped; N.134 shipped 2026-09-14, so it can go to Code.
+> **Stage 4 CLOSED 2026-09-14, shipped as `aa2b419` and walked by Dann.** Its
+> spec, the twenty values, and the two items he did not reach are in
+> `../sessions/LOG.md` block 15. Stages 1, 2, 3a, 3b and 4 are done and walked.
 >
-> **Stage 4 needs no ruling.** The four rulings of stage 2 are in
-> `../sessions/spec-colour_r1_2026-09-13.md`, read that first. **The brief adds
-> five values the record never carried:** the desk tokens, which are 40 % of the
-> band hue over 60 % white and therefore move when every band hue moves. The
-> formula was verified first against the tree, where it reproduces all four
-> existing desk values exactly.
+> **Stage 5 is named by the ruled order, not by the desk**
+> (`../sessions/plan-colour-story_r1_2026-09-13.md`, §STAGE 5 and §The order, in
+> one line). Its scope, verbatim from that plan: `--stone-600` declared or its
+> seven references rewritten; every other ghost the census found; inline literals
+> that duplicate a token replaced by the token, or the reason they are literals
+> written down beside them. **The plan says it is last on purpose: it is hygiene
+> and it is the least visible.** No brief is written for it.
 >
-> **IT MUST BE WALKED BY DANN at 1400 px across all five destinations**, and
-> three things must be checked because nobody has seen them: the `--stone-700`
-> merge (the loupe's frame, the `ё` badge in the word inspector, hovered
-> provenance icons over a word), the note picker now reading `--ink-stave`
-> (reaching it means pressing Start, which creates a voice profile), and the
-> update toast's border, now `--stone-300` (it appears only when a new version
-> is waiting).
->
-> **CODE'S CAVEAT, STILL OPEN.** Every rose and lavender use also carries its hex
-> as a fallback, so those two paint correctly even with a broken token name.
-> **Cobalt is the only family proven by paint alone**, because the drawer's Piece
-> band has no fallback. Stage 4 changes every value, so this is the walk where it
-> matters.
->
-> **THE TWENTY VALUES STAY HERE**, because sending a reader elsewhere for a
-> number is the trap this folder keeps setting. Band L 0.640, chip L 0.530, ink
-> L 0.420, each family holding its own hue and chroma. The desk is NOT on the
-> ramp: it stays 40 % hue plus 60 % white.
->
-> | family | band | chip | ink |
-> |---|---|---|---|
-> | sage | `#839275` | `#637156` | `#455238` |
-> | rose | `#AB7F7F` | `#885F60` | `#674141` |
-> | lavender | `#9585A2` | `#746580` | `#554660` |
-> | cobalt | `#748CB9` | `#556C96` | `#374D75` |
-> | umber | `#A38669` | `#82664A` | `#61472C` |
->
-> **Every chip clears 5.21 on white, every ink 7.02 on cream.** Umber is new and
-> enters the tree at stage 4, where Learn also moves from rose to umber. Every
-> document's label ink is its own family, ruling 4 of 4.
+> **DANN MAY DISPLACE IT WITH A WORD, and two candidates are already standing.**
+> Findings 2 and 3 of the 2026-09-13 walk below, the missing meter signature and
+> the possibly halved rhythmic values, are both NOT ESTABLISHED and neither has
+> been investigated. §THE SCHEMA rule 3 reserves half of every build day for what
+> the previous walk found.
 >
 > ---
 >
@@ -322,13 +298,6 @@ section carries the marks; that file carries the items.
 
 ### Numbered 2026-09-14
 
-- `[ ]` **N.137. The dictionary line draws the wrong letter when the stressed
-  vowel is ё.** Found by Dann on the stage 4 walk of `aa2b419`:
-  `getStressedLemma` puts a combining acute on the ё of `далёкий`, and Source
-  Serif 4 then draws, in place of the ё, an и-shaped letter carrying one dot and
-  an acute. That shape is not a Russian letter; do not transcribe it. Drawn at
-  150 px in the browser pane, not reasoned. **Not a regression from stage 4.** Spec in
-  `OPEN.md`, and it carries the one-condition fix verbatim.
 - `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
   Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
   nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from
@@ -715,3 +684,19 @@ arrow directions and the reflow standard. Amended tonight: `PRODUCT.md` twice
 a note alone) and `CONTRACT.md` twice (no aphorisms and no hype; do not write his
 rulings as absolutes). Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count
 is written here.*
+
+
+*Close of 2026-09-14 late. Stage 4 of the colour story shipped as `aa2b419` and
+was walked; N.137 was numbered, shipped as `490c12d`, and walked the same night.
+Both moved to `../sessions/LOG.md` block 15, verbatim, with the two items stage
+4's walk did not reach recorded there as UNWALKED rather than passed. The floor
+moves to `490c12d`. `CONTRACT.md` tether 18 was amended: describe a glyph, never
+substitute the nearest letter you can type. `ENVIRONMENT.md` gains the ё plus
+U+0301 render trap with its index row, and a second dated sighting of the
+stranded `index.lock`. THE ONE THING moves to colour stage 5 on the ruled order
+of `plan-colour-story_r1_2026-09-13.md`, and Dann may displace it with a word.*
+
+***TRIPWIRE: this file is over 600 lines. Per `README.md` that means something
+failed to move, and it is not stage 4, which moved tonight. The oldest
+candidates are still the 2026-08-18 copy-gap and step-4b lists and the RULINGS
+DANN OWES block. Raised for Dann, not acted on.***

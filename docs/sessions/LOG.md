@@ -4424,3 +4424,144 @@ the same night; both accounts are in `STATE.md` §THE ONE THING.
 > extracted into their own blocks in this file, one in §OWED and one in
 > §RULINGS DANN OWES. Block 12's header says which is which.
 >
+
+---
+
+## Block 15. Moved from STATE.md and OPEN.md at the close of 2026-09-14 late
+
+**Two things closed this session and both were walked by Dann: the colour
+story's stage 4, shipped as `aa2b419`, and N.137, shipped as `490c12d`. Nothing
+below is open.** Everything here is verbatim as `STATE.md` and `OPEN.md` carried
+it, except this heading.
+
+### 15.1 THE ONE THING as it stood while stage 4 was open
+
+> ### THE ONE THING: THE COLOUR STORY, STAGE 4. THE VALUES.
+>
+> **Its brief is written and the hold is lifted:**
+> `../sessions/brief-colour-stage4_r1_2026-09-14.md`, 125 lines. It was held only
+> because N.134 was unshipped; N.134 shipped 2026-09-14, so it can go to Code.
+>
+> **Stage 4 needs no ruling.** The four rulings of stage 2 are in
+> `../sessions/spec-colour_r1_2026-09-13.md`, read that first. **The brief adds
+> five values the record never carried:** the desk tokens, which are 40 % of the
+> band hue over 60 % white and therefore move when every band hue moves. The
+> formula was verified first against the tree, where it reproduces all four
+> existing desk values exactly.
+>
+> **IT MUST BE WALKED BY DANN at 1400 px across all five destinations**, and
+> three things must be checked because nobody has seen them: the `--stone-700`
+> merge (the loupe's frame, the `ё` badge in the word inspector, hovered
+> provenance icons over a word), the note picker now reading `--ink-stave`
+> (reaching it means pressing Start, which creates a voice profile), and the
+> update toast's border, now `--stone-300` (it appears only when a new version
+> is waiting).
+>
+> **CODE'S CAVEAT, STILL OPEN.** Every rose and lavender use also carries its hex
+> as a fallback, so those two paint correctly even with a broken token name.
+> **Cobalt is the only family proven by paint alone**, because the drawer's Piece
+> band has no fallback. Stage 4 changes every value, so this is the walk where it
+> matters.
+>
+> **THE TWENTY VALUES STAY HERE**, because sending a reader elsewhere for a
+> number is the trap this folder keeps setting. Band L 0.640, chip L 0.530, ink
+> L 0.420, each family holding its own hue and chroma. The desk is NOT on the
+> ramp: it stays 40 % hue plus 60 % white.
+>
+> | family | band | chip | ink |
+> |---|---|---|---|
+> | sage | `#839275` | `#637156` | `#455238` |
+> | rose | `#AB7F7F` | `#885F60` | `#674141` |
+> | lavender | `#9585A2` | `#746580` | `#554660` |
+> | cobalt | `#748CB9` | `#556C96` | `#374D75` |
+> | umber | `#A38669` | `#82664A` | `#61472C` |
+>
+> **Every chip clears 5.21 on white, every ink 7.02 on cream.** Umber is new and
+> enters the tree at stage 4, where Learn also moves from rose to umber. Every
+> document's label ink is its own family, ruling 4 of 4.
+>
+> ---
+>
+
+### 15.2 What stage 4's walk did NOT reach
+
+**Recorded so nobody reports it as fully walked.** Dann walked the tabs and the
+word inspector on 2026-09-14 and said everything looked as it should. **Two of
+the brief's unseen items were not reached, because each needs a gesture that did
+not come up:** the update toast's `--stone-300` border, which appears only when a
+new version is waiting, and the note picker on `--ink-stave`, which needs Start
+pressed and therefore creates a voice profile. Both are UNWALKED, not failed.
+
+### 15.3 N.137, closed the night it was numbered
+
+**Its tracker mark as `STATE.md` carried it:**
+
+- `[ ]` **N.137. The dictionary line draws the wrong letter when the stressed
+  vowel is ё.** Found by Dann on the stage 4 walk of `aa2b419`:
+  `getStressedLemma` puts a combining acute on the ё of `далёкий`, and Source
+  Serif 4 then draws, in place of the ё, an и-shaped letter carrying one dot and
+  an acute. That shape is not a Russian letter; do not transcribe it. Drawn at
+  150 px in the browser pane, not reasoned. **Not a regression from stage 4.** Spec in
+  `OPEN.md`, and it carries the one-condition fix verbatim.
+
+**Its spec as `OPEN.md` carried it:**
+
+---
+
+> **N.137. THE DICTIONARY LINE DRAWS THE WRONG LETTER WHEN THE STRESSED VOWEL
+> IS ё. Numbered by Dann 2026-09-14. UNPLACED.**
+>
+> **How it was found.** Dann opened the word inspector's Dictionary panel on
+> `далёкое` during the stage 4 walk of `aa2b419` and read the lemma as
+> `даликий` with a diaeresis on the second vowel. He said it three times before
+> the desk stopped reasoning and drew it. **That is tether 22 failing, and it is
+> recorded here rather than smoothed over.**
+>
+> **The chain, every link read or drawn on 2026-09-14.**
+>
+> - The shard entry is `["далёкое",{"s":1,...,"l":"далёкий"}]`, fetched from the
+>   deploy at `/data/dictionary.86d83340-a.json`.
+> - `getStressedLemma` (`InspectorPanel.svelte:913-932`) counts vowels, finds
+>   the `s`-th one, and inserts U+0301 after it (`:926`). Its vowel set at
+>   `:921` contains ё and Ё.
+> - In `далёкий` the second vowel IS the ё, so the ё takes the acute.
+> - **Rendered in the browser pane at 150 px in Source Serif 4:** `далёк` draws
+>   correctly. `далё` + U+0301 + `к` does not: in place of the ё it draws an
+>   и-shaped letter carrying a single dot on the left and an acute on the right.
+>   **The letter changes. This is not a badly placed mark.**
+>
+> - **DO NOT TRANSCRIBE THAT SHAPE. It is not a Russian letter and it has no
+>   spelling.** The desk first wrote it as `далйк`, which is wrong: й is и with a
+>   breve, and a breve is not what is drawn. Dann corrected it 2026-09-14.
+>   **Describe the glyph; do not name it with the nearest letter you can type.**
+>
+> **The same file already states the rule, at `:198-201`, for the atom ribbon,
+> in its own comment: ё and Ё are inherently stressed and are never marked.** So
+> the ribbon follows the convention and the dictionary line does not.
+>
+> **The fix, unbuilt.** In `getStressedLemma`, when the matched vowel is ё or Ё,
+> return the lemma unmarked rather than inserting U+0301. The function only ever
+> marks the vowel the dictionary itself names as stressed, so a compound
+> carrying an unstressed ё elsewhere is untouched.
+>
+> **NOT A REGRESSION FROM STAGE 4.** `aa2b419` moved colour values only.
+>
+> **NOT ESTABLISHED: every other site that inserts a combining acute.** The
+> paste asks Code to grep the tree for U+0301 and name each one with its
+> `path:line` without changing it.
+>
+> **Done when:** the dictionary entry for `далёкое` reads `далёкий` with its ё
+> intact, observed in a browser, and all five gates are at baseline.
+
+**CLOSED 2026-09-14.** Shipped as `490c12d`, four files, all five gates at
+baseline, Vercel `dpl_CfDTDQYQ2AZH79MNz2EWc5GU519t` READY on the branch alias.
+Dann reloaded and read `далёкий` with its ё intact. **The fix is one condition in
+`getStressedLemma`; Code's own return memo names every other site that inserts a
+combining acute and confirms each already guards ё and Ё.**
+
+**What it cost, and it is recorded because the record is how it stops
+recurring.** Dann named the wrong letter on screen four times before the desk
+drew the string instead of reasoning about it, and the desk then transcribed the
+artefact as `далйк`, which was a fourth wrong answer. `CONTRACT.md` tether 18 was
+amended the same night: describe a glyph, never substitute the nearest letter you
+can type.
