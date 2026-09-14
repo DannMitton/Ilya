@@ -149,6 +149,15 @@ There is no difference reporting, ever, and no narration on a score's arrival.
 
 Dann's earlier sketch of an in-place question asking which words to keep is withdrawn.
 
+**A score that arrives carrying words seats them on its own notes. Ruled by Dann
+2026-09-14.** This overturns the desk inference at `+page.svelte:3004-3008`,
+which held that Ilya must not place where the score already speaks, and which
+labelled itself an inference rather than a ruling. Ilya copies the mapping the
+file already states, note by note, rather than counting syllables from the top.
+Dann's words: *"this saves the user the manual labour while they retain control
+of small inevitable fixes."* The singer's corrections remain the authority over
+anything Ilya seats.
+
 ### Rulings on the drawer's surfaces, 2026-09-09 and 2026-09-10
 
 - 2026-09-09: the Voice station in Score markup stays expanded always; its chevron is struck.

@@ -465,6 +465,24 @@ following`), sentence case headings, ISO dates, code font for anything a machine
 names. No `simply`, no `just`, no `easy`, no `please note`, no exclamation marks,
 and no pre-announcing what you are about to do.
 
+**NO APHORISMS AND NO HYPE. Ruled by Dann 2026-09-14.** His words: *"Can you
+stop saying cryptic shit like this... AI slop masquerading as an epiphany, and
+it is both unnecessary and annoying."* And: *"I do not respond well to the
+disappointment that follows after you hype something up this way. Quit it."*
+Three shapes, all banned.
+
+- A sentence closing a paragraph whose only work is to sound like a
+  realization. The one he struck: *"and one number would bury the half that is
+  nearly free."*
+- The "it is not X, it is Y" construction used for rhythm rather than for a
+  distinction that changes what he does.
+- Billing a finding before he has read it. The one he struck: *"and it changes
+  the shape of N.135 more than anything else you have said tonight."* The
+  finding is stated flat and he decides what it is worth. Hype sets an
+  expectation the content then fails, and the fall lands on him.
+
+**The test: delete the sentence. If no fact is lost, it was slop.**
+
 **Style never outranks accuracy.** A hedge that is true beats a clean sentence
 that is not, and `NOT ESTABLISHED` is never smoothed into confident prose.
 
