@@ -339,3 +339,110 @@ permission was not used.
 - **Pagination on a longer song.** Both scores kept 3 pages, but the 4 units per
   system will add a page wherever a page was already full.
 - **How the taller systems read to Dann on screen and in print.**
+
+---
+
+## 8. Appended: the width holds the IPA syllable
+
+This follows `docs/memory/OPEN.md` §N.141, INCREMENT: THE WIDTH IGNORES THE IPA,
+found by Dann on the walk of `debdf02`. **Not committed and not staged. WRITTEN,
+not walked by Dann.**
+
+### 8.1 What changed
+
+- **`packages/score-parser/src/staff-renderer.ts:2750`.** Every IPA syllable now
+  carries `data-ipa-of="<event id>"`, the same stamping as `data-withheld`. The
+  column's x is not a safe key, because a melisma's syllable is left-anchored.
+- **`staff-renderer.test.ts:918`.** One new test: every IPA text carries the
+  handle, and each handle names an event the system draws.
+- **`apps/web/src/lib/shane/VoiceProfilePane.svelte:515`.** The box's left and
+  right edges are the union of the notation's ink and the syllable's rendered
+  ink, found by the handle, padded by the same `RING_PAD_X`, and floored at
+  `RING_MIN_W`.
+  - A withheld syllable's sigla, `data-withheld`, is held the same way. **DESK
+    DEFAULT.**
+  - A note with no syllable keeps the notation's width.
+  - The Cyrillic row is not read.
+- **`VoiceProfilePane.svelte:357`, `glyphInk`: a fix to the ink measurement
+  itself.** It centred a middle-anchored string's INK on x. SVG centres the
+  string's ADVANCE on x, and an IPA syllable's ink is not symmetric in its
+  advance: the stress mark hangs left and the superscripts trail right. So the
+  measured ink sat in the wrong place on exactly m. 15's kind of syllable. It now
+  places the advance first and reads the ink from it. Notation glyphs carry no
+  anchor and are unaffected.
+
+**Nothing in `Loupe.svelte` changed.** The loupe draws the page ring's geometry
+across the whole strip, so the wider box reached it for free, as the cheap route
+predicted.
+
+### 8.2 Measured, 390 px, pane hidden, DOM geometry
+
+**Expectation, stated before measuring.**
+- No IPA glyph touches its squircle on Sunless, on either surface.
+- Still 0 accidental collisions and 0 Cyrillic contacts.
+- Possibly a few loupe truncations from long melisma syllables near the window's
+  edges.
+- T05 might have no IPA row in the pane.
+
+**The IPA instrument is deliberately not the pane's own.** It is an independent
+canvas measurement placed by its own advance arithmetic, widened to the union
+with the text's SVG layout box. That is conservative: it can only report less
+air than there is.
+
+| | Sunless 01 | T05 |
+|---|---|---|
+| notes | 96 | 160 |
+| notes with an IPA syllable | 95 | **0**: no IPA text in this fixture |
+| **IPA glyphs touching or crossing their own squircle, page** | **0** | not testable |
+| **the same, loupe** | **0** | not testable |
+| minimum IPA side air, page | 1.91 | n/a |
+| loupe collisions with the note's own accidental or dot | 0 | 0 |
+| loupe truncations | 0 | 0 |
+| boxes touching the Cyrillic row, by face ascent | 0; minimum air 2 (±1 rounding, §7.1) | 0; minimum air 2 (±1 rounding) |
+| boxes touching the Cyrillic row, by actual ink | 0; minimum air 5.88 | 0; minimum air 5.88 |
+| stale readings discarded | 0 | 0 |
+
+**The truncations I expected did not appear.**
+
+### 8.3 Dann's three cases, with a positive control
+
+The control re-checks each syllable against a box sized by the notation alone,
+which is the old rule. The instrument must fail there for the pass to mean
+anything.
+
+| measure | syllable as drawn | notation-only box: left and right air | now, page | now, loupe |
+|---|---|---|---|---|
+| m. 15 | « ˈpʲe » | **−2.45** and 3.96: the stress mark crosses | inside, 1.91 and 3.96 | inside, 1.84 and 3.83 |
+| m. 8 | « ʃʲʃʲɪm » | **−5.56** and **−4.46**: crosses both sides | inside, 3.00 and 2.23 | inside, 2.23 and 1.66 |
+| m. 4 | « ɲɪ » | 1.02 and 1.76: inside, but under one stroke-width of air | inside, 3.00 and 2.15 | inside, 2.90 and 2.09 |
+
+- **m. 8's syllable is drawn as « ʃʲʃʲɪm »**, a doubled ʃʲ, not « ʃʲːɪm » as the
+  finding records it. The codepoints are U+0283 U+02B2 U+0283 U+02B2 U+026A
+  U+006D.
+- **m. 4's case measured as inside the old box by a hair.** Dann saw it tangent,
+  and under 2 units of air at page scale reads as tangent, so his reading and the
+  numbers agree. It now has 2.15 or more on both surfaces.
+- **Three more syllables** crossed the notation-only box by about 6 units and are
+  now inside: « ˈʃʲʃʲɑsʲ » on m. 13 and « ˈnotʃʲ » on m. 16 and m. 17.
+
+### 8.4 Gates
+
+| gate | result | ship script reads | moved |
+|---|---|---|---|
+| 1 | 216 passed (216) | 216 | no |
+| 2 | 235 passed (235) | 235 | no |
+| 3 | 0 errors and 7 warnings in 4 files | same | no |
+| 4 | **1173 passed (1173)** | 1173 | no |
+| 5 | **551 passed, 5 skipped (556)** | 550 / 555 | **+1**, the `data-ipa-of` test |
+
+**`~/Downloads/ilya-ship.sh:80` will refuse until it moves to 551 and 556.**
+
+### 8.5 NOT ESTABLISHED
+
+- **T05's IPA row.** No IPA text drew on T05 in this pane, for the third time, so
+  the new check has no T05 case.
+- **Where a wider box now reaches a neighbour on the page.** It is accepted by
+  ruling, so it was not counted.
+- **A withheld syllable's sigla.** Neither score carried one, so the DESK DEFAULT
+  was not exercised.
+- **Desktop width, and Dann's eye.**

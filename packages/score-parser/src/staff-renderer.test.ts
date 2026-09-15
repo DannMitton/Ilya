@@ -907,8 +907,20 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
     const flat = String.fromCodePoint(0xe260);
     const marked = svg.match(/<text data-key-signature=""[^>]*>[^<]*</g) ?? [];
     expect(marked).toHaveLength(1);
-    expect(marked[0].endsWith(`>${flat}<`)).toBe(true);
+    expect(marked[0]!.endsWith(`>${flat}<`)).toBe(true);
     expect((renderDemo().match(/data-key-signature=""/g) ?? []).length).toBe(1);
+  });
+
+  it('stamps every IPA syllable with the event it belongs to (N.141)', () => {
+    // The selection squircle holds the note's IPA syllable, so it finds the
+    // syllable by this handle. Every IPA text carries one, and each names an
+    // event the system actually draws.
+    const ipa = [...svg.matchAll(/<text data-ipa-of="([^"]+)"[^>]*font-family="'Lato IPA', sans-serif">/g)];
+    const allIpa = svg.match(/font-family="'Lato IPA', sans-serif"/g) ?? [];
+    const phonationBreaks = svg.match(/data-analysis="phonation-break"/g) ?? [];
+    expect(ipa.length).toBeGreaterThan(0);
+    expect(ipa.length).toBe(allIpa.length - phonationBreaks.length);
+    for (const m of ipa) expect(svg.includes(`data-event-id="${m[1]}"`)).toBe(true);
   });
 
   it('renders the lone flag as a glyph (up-stem eighth n11)', () => {

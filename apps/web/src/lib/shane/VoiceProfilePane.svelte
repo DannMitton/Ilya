@@ -354,14 +354,22 @@
 		const x = Number(el.getAttribute('x'));
 		const y = Number(el.getAttribute('y'));
 		if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+		/* THE ANCHOR PLACES THE ADVANCE, NOT THE INK. `text-anchor="middle"`
+		   centres the string's advance width on x, and the ink sits inside that
+		   advance by the string's own side bearings. This used to centre the INK
+		   on x, which is only right for a string whose ink is symmetric in its
+		   advance. An IPA syllable is not: its stress mark hangs left of the
+		   first letter and its superscripts trail right. Found on N.141's IPA
+		   increment, 2026-09-15, where m. 15's « ˈpʲe » crossed the ring's left
+		   edge. Canvas measures from the start of the advance, so the start is
+		   placed first and the ink read from it. */
 		const anchor = el.getAttribute('text-anchor');
-		const width = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
-		const left = anchor === 'middle' ? x - width / 2 : x - m.actualBoundingBoxLeft;
+		const start = anchor === 'middle' ? x - m.width / 2 : anchor === 'end' ? x - m.width : x;
 		return {
 			top: y - m.actualBoundingBoxAscent,
 			bottom: y + m.actualBoundingBoxDescent,
-			left,
-			right: left + width,
+			left: start - m.actualBoundingBoxLeft,
+			right: start + m.actualBoundingBoxRight,
 		};
 	}
 	let inkCanvas: CanvasRenderingContext2D | null = null;
@@ -423,7 +431,9 @@
 		let ipa = -Infinity;
 		let cyr = -Infinity;
 		for (const t of sys.querySelectorAll('text')) {
-			if (t.hasAttribute('data-analysis')) continue;
+			/* A measure number (N.126) shares the Cyrillic row's size by ruling,
+			   so it has to be named out or it reads as that row. */
+			if (t.hasAttribute('data-analysis') || t.hasAttribute('data-bar-number')) continue;
 			const y = Number(t.getAttribute('y'));
 			if (!Number.isFinite(y)) continue;
 			if ((t.getAttribute('font-family') ?? '').includes('Lato IPA')) ipa = Math.max(ipa, y);
@@ -503,10 +513,36 @@
 		   The portrait feel survives as `RING_MIN_W`. */
 		const own = eventInk(sysEl, group, id);
 		if (!own || !Number.isFinite(own.left) || !Number.isFinite(own.right)) return;
-		const { left, right } = own;
 
-		/* WIDTH GROWS ONLY AS THE INK REQUIRES. A minimum keeps a bare notehead
-		   from being shrink-wrapped, and is what keeps the box portrait. */
+		/* THE WIDTH HOLDS THE NOTE AND ITS IPA SYLLABLE. Found by Dann on the walk
+		   of `debdf02`, 2026-09-15, three times on Without Sun song 1: « ɲɪ » on
+		   m. 4's right edge, « ʃʲːɪm » through m. 8's, and the stress mark of
+		   « ˈpʲe » across m. 15's LEFT edge. His words: *"We need to ask Ilya to
+		   consider the IPA when it builds squircles, not just the musical
+		   notation."* His grammar of 2026-09-14 captures the note AND its vowel,
+		   and the height was built to it while the width was not.
+
+		   So the box spans both extents, each with the same clearance: the
+		   notation's ink, and the syllable's RENDERED ink, stress mark and
+		   superscripts included, found by the renderer's `data-ipa-of` handle.
+		   A withheld syllable's sigla stands in the same slot and is held the
+		   same way (DESK DEFAULT). A note with no syllable, a melisma's
+		   continuation or an unplaced note, keeps the notation's width alone.
+
+		   THE CYRILLIC IS NOT READ HERE. It is outside the box, ruled twice.
+
+		   ON THE PAGE a wider box may reach its neighbours, accepted by Dann
+		   2026-09-14. A minimum keeps a bare notehead from being shrink-wrapped. */
+		let left = own.left;
+		let right = own.right;
+		for (const el of sysEl.querySelectorAll(
+			`[data-ipa-of="${CSS.escape(id)}"], [data-withheld="${CSS.escape(id)}"]`,
+		)) {
+			const box = markBox(el);
+			if (!box) continue;
+			left = Math.min(left, box.left);
+			right = Math.max(right, box.right);
+		}
 		const width = Math.max(RING_MIN_W, right - left + RING_PAD_X * 2);
 		const centreX = (left + right) / 2;
 

@@ -712,6 +712,54 @@ clips the vowel is not expressing the thing the document is for.
 problem it named was real; the conclusion it drew from it was not the only one
 available.
 
+### INCREMENT: THE WIDTH IGNORES THE IPA. Found by Dann on the walk of `debdf02`, 2026-09-15
+
+**His words:** *"Please solve the collision shown, the IPA should not be tangent
+to the squircle. It is clear that Ilya's construction of squircles is insensitive
+to the IPA beneath them. We need to ask Ilya to consider the IPA when it builds
+squircles, not just the musical notation."*
+
+**Observed on Without Sun song 1, three times, 2026-09-15:** m. 4 where « ɲɪ »
+meets the right edge, m. 8 where « ʃʲːɪm » runs through it, and **m. 15 where the
+LEFT edge is the one crossed, by the STRESS MARK of « ˈpʲe »**.
+
+**The m. 15 case carries a detail worth building to.** The syllable's ink is not
+its letters alone. **The stress mark `ˈ` sits to the LEFT of the first letter**,
+and the superscript modifiers (`ʲ`, `ː`) extend it on the right. A width taken
+from the letters and not from the syllable's full drawn ink will still collide,
+just less often. **Measure the rendered ink of the whole IPA string**, the way
+`glyphInk` already does for the notation, rather than estimating from characters.
+
+**THE CAUSE IS THAT HIS GRAMMAR WAS BUILT VERTICALLY AND NOT HORIZONTALLY.** The
+ruling of 2026-09-14 is that the squircle captures the note AND its IPA syllable.
+The build took the bottom down to the IPA row, which is the vertical half. **The
+WIDTH is still computed from the notation alone**, the notehead with its
+accidental and dot, exactly as it was before the grammar existed. So a syllable
+wider than its notehead overflows.
+
+**THE RULE, which is not new and only needs applying to the other axis: the box's
+width holds the WIDER of the notation and the IPA syllable it captures**, each
+with its clearance. Where a note carries no IPA, a melisma or an unplaced note,
+the width is the notation's alone, which is today's behaviour.
+
+**THE CONSEQUENCE IS ALREADY RULED and needs no new decision.** A box widened to
+hold a long syllable may reach its neighbours.
+
+- **On the page: accepted.** Dann, 2026-09-14: the page's squircle never displaces
+  the music, and *"its adjacent siblings accept subordinate treatment as adjacent
+  to the primary note under examination"*.
+- **In the loupe: re-space if it is needed.** Dann, 2026-09-15, `PRODUCT.md` §The
+  page and the loupe answer to different things. **Cheapest route first**: the
+  loupe's own mark already draws over the whole strip, so a wider box may cost
+  nothing.
+
+**WATCH FOR ONE THING THAT IS NOT A COLLISION.** The Cyrillic row below carries
+its own syllable, usually wider than the IPA. **The box must not grow to hold
+that**: the Cyrillic is outside the box, ruled twice.
+
+**Done when:** no IPA glyph touches or crosses its own squircle on either surface,
+on both scores, and Dann walks it.
+
 ### A LATER INCREMENT: THE SQUIRCLE SPANS A TIE. Raised by Dann 2026-09-15
 
 **NOT part of the current build. It depends on N.142**, which gives the tie

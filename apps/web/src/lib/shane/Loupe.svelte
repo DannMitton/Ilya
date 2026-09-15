@@ -255,7 +255,7 @@
 		for (let i = gate; i >= 0 && i < nodes.length; i++) {
 			const el = nodes[i];
 			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
-			if (el.hasAttribute('data-selection-ring')) continue;
+			if (el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 			const tacet = el.closest('[data-tacet]');
 			if (tacet && tacet !== el) continue;
@@ -346,6 +346,8 @@
 				/* The page's selection ring is the pane's mark, not engraving, and
 				   the clone drops it — so it must not size the frame either. */
 				if (el.hasAttribute('data-selection-ring')) continue;
+				/* N.126's measure numbers are stripped from the clone too. */
+				if (el.hasAttribute('data-bar-number')) continue;
 				if (el.tagName === 'rect' && el.hasAttribute('data-hit')) continue;
 				let top: number;
 				let bottom: number;
@@ -897,7 +899,7 @@
 				   MEASURED on Kabalevsky T05, system 2: `data-hit="m13-0-1"` at
 				   x = 56, left of the header's edge at 61.25, so without this the
 				   band opened on the header and carried the whole gap back in. */
-				if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring')) continue;
+				if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 				let b: DOMRect;
 				try {
@@ -992,6 +994,13 @@
 		   and it serves both viewports because the head and the body are two
 		   crops of this one clone. */
 		for (const el of clone.querySelectorAll('[data-analysis]')) el.remove();
+		/* N.126: THE PAGE'S MEASURE NUMBERS STAY ON THE PAGE. The head crops the
+		   system's own left edge, so a system-start number above the clef would
+		   stand in the loupe over every measure of that system, naming the wrong
+		   bar on all but the first, and the tag already names the held one. A
+		   courtesy number after a rest is the page orienting a reader across the
+		   piece, which an excerpt does not need. DESK DEFAULT. */
+		for (const el of clone.querySelectorAll('[data-bar-number]')) el.remove();
 		/* THE LOUPE MARKS THE TAKEN NOTE THE WAY THE PAGE DOES, N.113a, ruled by
 		   Dann 2026-09-07 from his walk of `e1bcb67`: "a box on the notehead".
 		   His words on what it replaced: the bar drawn after the notehead is

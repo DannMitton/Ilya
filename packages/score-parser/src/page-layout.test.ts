@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { analyzeScore, pitchToHz } from './overlay-engine';
 import { demoProfile, demoResolver, demoScore } from './demo-fixture';
 import { LAST_SYSTEM_JUSTIFY_FILL, paginateScore, sliceScore, sliceWidth } from './page-layout';
+import { BAR_NUMBER } from './staff-renderer';
 import type { AnalyzedScore, VoiceProfileSnapshot } from './analysis-types';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 
@@ -28,6 +29,77 @@ describe('page layout: no ground (N.133)', () => {
       expect(page).not.toMatch(/fill="#(?:FFFFFF|F0EBE0)"/i);
       expect(page).not.toMatch(/<rect x="0" y="0"/);
     }
+  });
+});
+
+describe('page layout: measure numbers (N.126)', () => {
+  // Gould p484-a and p484-c, and Dann's rulings of 2026-08-29 and 2026-09-11:
+  // the first measure of every system is numbered, the first bar of the piece
+  // is not, italic, at the underlay's size, above the clef.
+  const numbersOf = (svg: string) =>
+    [...svg.matchAll(/<text data-bar-number="([^"]*)" x="([\d.]+)" y="([\d.]+)" text-anchor="middle" font-size="([\d.]+)" font-style="([a-z]+)" fill="([^"]+)">([^<]*)</g)].map((m) => ({
+      attr: m[1], x: Number(m[2]), y: Number(m[3]), size: Number(m[4]), style: m[5], fill: m[6], text: m[7],
+    }));
+
+  it('numbers every system but the first with its first measure, printed verbatim', () => {
+    const { parsed: p, analyzed } = demo();
+    const out = paginateScore(p, analyzed, { pageWidth: 500, marginLeft: 0, marginRight: 0 });
+    expect(out.systems.length).toBeGreaterThan(1);
+    out.systems.forEach((sys, i) => {
+      const numbers = numbersOf(sys.svg);
+      if (i === 0) {
+        expect(numbers).toHaveLength(0);
+        return;
+      }
+      expect(numbers).toHaveLength(1);
+      const expected = p.measures.find((m) => m.index === sys.fromMeasure)!.number;
+      // Standard practice, so bare: no brackets of either kind.
+      expect(numbers[0].text).toBe(expected);
+      expect(numbers[0].attr).toBe(expected);
+      expect(numbers[0].text).not.toMatch(/[[\]()]/);
+      expect(numbers[0].style).toBe('italic');
+      expect(numbers[0].size).toBe(BAR_NUMBER.fontSize);
+      expect(numbers[0].fill).toBe(BAR_NUMBER.fill);
+    });
+  });
+
+  it('stands one stave-space above the top line of a bass-clef system, and inside the crop', () => {
+    const { parsed: p, analyzed } = demo();
+    const out = paginateScore(p, analyzed, { pageWidth: 500, marginLeft: 0, marginRight: 0 });
+    const sys = out.systems[1];
+    const [n] = numbersOf(sys.svg);
+    // The demo is in bass clef, whose ink does not rise above the stave, so the
+    // number's baseline is 1.0 stave-space above the top line. Default stave:
+    // staffMidY 96, lineGap 12, so the top line is at 72.
+    expect(n.y).toBeCloseTo(72 - 12 * BAR_NUMBER.clearanceSp, 5);
+    // The crop keeps the digit's estimated height inside the system.
+    expect(sys.minY).toBeLessThanOrEqual(n.y - BAR_NUMBER.fontSize * BAR_NUMBER.digitHeightEm);
+  });
+
+  it('adds a courtesy number after a multibar rest that ends mid-system, on its closing barline', () => {
+    const { parsed: p, analyzed } = demo();
+    // Silence measures 1 and 2, so a two-bar rest stands inside one system.
+    const silenced = { ...p, vocalLine: p.vocalLine.filter((e) => e.measureIndex !== 1 && e.measureIndex !== 2) };
+    const out = paginateScore(silenced, analyzed, { pageWidth: 4000, marginLeft: 0, marginRight: 0 });
+    expect(out.systems).toHaveLength(1);
+    const numbers = numbersOf(out.systems[0].svg);
+    // The first system of the piece carries no system-start number, so the one
+    // number drawn is the courtesy on measure 3. Dann, 2026-09-15: it is set in
+    // SQUARE BRACKETS, because it is Ilya's editorial addition. The handle keeps
+    // the bare number.
+    expect(numbers.map((n) => n.attr)).toEqual([p.measures[3].number]);
+    expect(numbers.map((n) => n.text)).toEqual([`[${p.measures[3].number}]`]);
+    expect(numbers[0].text).not.toMatch(/[()]/);
+    const barlines = [...out.systems[0].svg.matchAll(/<line x1="([\d.]+)" y1="72" x2="\1" y2="120"/g)].map((m) => Number(m[1]));
+    expect(barlines.some((x) => Math.abs(x - numbers[0].x) < 0.01)).toBe(true);
+  });
+
+  it('adds no courtesy number after a single bar of rest', () => {
+    const { parsed: p, analyzed } = demo();
+    const silenced = { ...p, vocalLine: p.vocalLine.filter((e) => e.measureIndex !== 2) };
+    const out = paginateScore(silenced, analyzed, { pageWidth: 4000, marginLeft: 0, marginRight: 0 });
+    expect(out.systems).toHaveLength(1);
+    expect(numbersOf(out.systems[0].svg)).toHaveLength(0);
   });
 });
 

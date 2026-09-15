@@ -817,6 +817,57 @@ export const CYR_FONT_SIZE = 12.5;
 export const IPA_TO_CYR_BASELINE = 20;
 
 /**
+ * N.126, MEASURE NUMBERS. Ruled by Dann 2026-09-11 at 00:40, from
+ * `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`, on Gould p. 484
+ * (`docs/sessions/gould-bar-numbers-p484_2026-08-29.md`, read in full).
+ *
+ * WHICH BARS: the first measure of every system (Gould p484-c: *"Place bar
+ * numbers at the beginning of each system, ideally above the clef of the top
+ * stave"*), except the first bar of the piece, which *"is not labelled"*
+ * (p484-a, and Dann's amendment the same day). Plus the measure after a
+ * multibar rest when it lands mid-system: Dann, 2026-08-29, *"a useful
+ * courtesy"*. Gould does not say that; it is his ruling, not hers, and it is set
+ * in SQUARE BRACKETS as an editorial addition (Dann 2026-09-15). The
+ * system-start number is bare.
+ *
+ * WHAT IS PRINTED is `Measure.number`, verbatim from the source, a string, so a
+ * publisher's numbering is printed as the publisher printed it (p484-a's
+ * up-beat rule is the source's business, recorded in the Gould memo).
+ *
+ * THE DIMENSIONS ARE CONVENTION. Gould gives none on that page.
+ */
+export const BAR_NUMBER = {
+  /** Italic, Gould p484-d, and Dann's habit. Regular weight, Dann 2026-09-11. */
+  fontStyle: 'italic',
+  /** The lyric underlay's point size, ruled by Dann 2026-09-11. */
+  fontSize: CYR_FONT_SIZE,
+  /**
+   * The baseline stands this far above the top staff line, in stave-spaces:
+   * the middle of the drawing's 0.6 / 1.0 / 1.4, DESK DEFAULT ruled by Dann
+   * 2026-09-11 ("legible without emphasis"). The drawing measured it baseline
+   * to top line. Where a clef's own ink rises above the stave, the number
+   * stands the same distance above the clef instead, so it is never drawn into
+   * a treble clef's loop. DESK DEFAULT; neither score walked carries one.
+   */
+  clearanceSp: 1.0,
+  /**
+   * A digit's height as a share of the font size, for the crop only: the
+   * renderer is DOM-free and cannot measure the face, so the system's highest
+   * ink is estimated rather than read, the way the tuplet bracket's is. A cap
+   * digit in the page's sans stands about 0.7 of the em; 0.75 errs toward room.
+   * DESK DEFAULT.
+   */
+  digitHeightEm: 0.75,
+  /**
+   * The stave's ink, the tacet count's own fill: two numerals above one stave
+   * in two greys would need a reason. DESK DEFAULT, sourced from the tree.
+   */
+  fill: '#3a352f',
+  /** A courtesy number follows a rest of at least this many bars. "Multibar". */
+  courtesyAfterBars: 2,
+} as const;
+
+/**
  * Keep a hyphen's INK inside the gap between two syllables (N.11).
  *
  * The placement loop nudges a hyphen 8 px right when it would sit under a
@@ -1764,6 +1815,40 @@ export function renderAnalyzedStaff(
     ksX += ksStep;
   }
 
+  // ── N.126: the system's measure number, above the clef ──
+  // Gould p484-c and Dann's rulings; `BAR_NUMBER` holds every value and says
+  // which are convention. CENTRED ON THE CLEF'S INK, which is where the drawing
+  // Dann ruled from put it, and what "above the clef" says. Emitted HERE, in the
+  // header and before the first music mark, so the loupe's head bound, which is
+  // the first music ink at or after that mark, cannot be pulled left by it.
+  //
+  // THE FIRST BAR OF THE PIECE IS NOT LABELLED (p484-a). A slice starting at the
+  // score's measure 0 is the first system; a standalone render is too, which is
+  // the truth there.
+  //
+  // `data-bar-number` is a handle, so the loupe can leave it out of an excerpt.
+  // It always carries the bare number; `shown` is what is drawn, which differs
+  // only for the post-rest courtesy number's editorial brackets.
+  const barNumber = (x: number, baseline: number, text: string, shown: string = text): string =>
+    `<text data-bar-number="${esc(text)}" x="${round2(x)}" y="${round2(baseline)}" text-anchor="middle" font-size="${BAR_NUMBER.fontSize}" font-style="${BAR_NUMBER.fontStyle}" fill="${BAR_NUMBER.fill}">${esc(shown)}</text>`;
+  const barNumberBaseline = (above: number): number => above - sp(BAR_NUMBER.clearanceSp);
+  if (o.measureOffset > 0) {
+    const text = (parsed.measures.find((m) => m.index === 0)?.number ?? '').trim();
+    if (text) {
+      let clefInkTop = staffTop;
+      let clefCentre = clefX + clefW / 2;
+      if (smufl) {
+        const cg = smufl.glyph(clefGlyphName);
+        const refY = clef === 'bass' ? o.staffMidY - o.lineGap : o.staffMidY + o.lineGap;
+        clefInkTop = Math.min(staffTop, refY - sp(cg.bBoxNE[1]));
+        clefCentre = clefX + sp((cg.bBoxSW[0] + cg.bBoxNE[0]) / 2);
+      }
+      const baseline = barNumberBaseline(clefInkTop);
+      parts.push(barNumber(clefCentre, baseline, text));
+      highestInk = Math.min(highestInk, baseline - BAR_NUMBER.fontSize * BAR_NUMBER.digitHeightEm);
+    }
+  }
+
   // ── Tuplet pass: bracket runs of identical tuplet info ──
   // Chunked by `actualNotes` (adjacent same-ratio groups split correctly);
   // rests inside a tuplet belong to its bracket. Standard black ink: the
@@ -2084,6 +2169,31 @@ export function renderAnalyzedStaff(
       }
     }
     parts.push('</g>');
+
+    // ── N.126: the courtesy number on the measure after a multibar rest ──
+    // Dann, 2026-08-29: "a useful courtesy". Only where the run is followed by
+    // a measure in this system; a run that ends the system is followed by a
+    // system-start number instead. ANCHORED ON THE RUN'S CLOSING BARLINE, DESK
+    // DEFAULT explained to Dann and not waved off.
+    //
+    // IN SQUARE BRACKETS, RULED BY DANN 2026-09-15: *"square brackets in a
+    // musical score means 'this is editorial'."* The system-start number is
+    // standard practice and stays bare; this one is Ilya's own addition, so it
+    // declares its provenance. A provenance mark, not an uncertainty mark, so
+    // CONTRACT §6 does not reach it. The brackets are TEXT in the numeral's own
+    // italic face, never SMuFL glyphs: round parentheses are the courtesy
+    // ACCIDENTAL's (`accidentalParensLeft`, `accidentalParensRight`), and square
+    // for editorial against round for courtesy accidentals must never blur. The
+    // text is centred whole, and the brackets are symmetric, so the numeral
+    // stays over the barline.
+    if (nextX !== undefined && run.count >= BAR_NUMBER.courtesyAfterBars) {
+      const text = (parsed.measures.find((m) => m.index === run.toMeasure + 1)?.number ?? '').trim();
+      if (text) {
+        const baseline = barNumberBaseline(staffTop);
+        parts.push(barNumber(right, baseline, text, `[${text}]`));
+        highestInk = Math.min(highestInk, baseline - BAR_NUMBER.fontSize * BAR_NUMBER.digitHeightEm);
+      }
+    }
   }
 
   for (const { ev, x: nx, newMeasure } of placed) {
@@ -2742,7 +2852,12 @@ export function renderAnalyzedStaff(
     // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward
     // single-storey, destroying the bright-a / dark-a contrast that sung
     // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
-    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="${IPA_FONT_SIZE}" fill="#6a655f" font-family="${IPA_FONT_FAMILY}">${esc(u.ipa)}</text>`);
+    //
+    // `data-ipa-of` IS A HANDLE, N.141. The selection squircle captures the
+    // note AND its IPA syllable, so it has to find the syllable that belongs to
+    // the note; the column's x is not a safe key, because a melisma's syllable
+    // is left-anchored rather than centred. Same stamping as `data-withheld`.
+    if (u.ipa) parts.push(`<text data-ipa-of="${esc(u.evId)}" x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="${IPA_FONT_SIZE}" fill="#6a655f" font-family="${IPA_FONT_FAMILY}">${esc(u.ipa)}</text>`);
     // N.10b: the withheld sigla, standing in the IPA line's slot, sitting on
     // the same baseline as the transcription it replaces. Tagged
     // `data-withheld` with the event id, matching `data-hyphen` and

@@ -566,9 +566,12 @@ block 11.9. The tacet question is the one that is still his.
   numbered N.126, measure numbers on Score markup, UNPLACED.** Size: the
   lyric underlay's point size. Weight: regular, italic (Gould p484-d
   agrees). Clearance: "legible without emphasis", DESK DEFAULT 1.0
-  stave-space (the drawing's middle of 0.6 / 1.0 / 1.4). Bare, never
+  stave-space (the drawing's middle of 0.6 / 1.0 / 1.4). The SYSTEM-START number is bare, never
   parenthesized ("to orient collaborating musicians quickly, not to trumpet
-  our editorial decision"). Post-rest anchor: DESK DEFAULT the closing
+  our editorial decision"). **AMENDED 2026-09-15: the POST-REST courtesy number
+  takes SQUARE BRACKETS**, Dann's ruling, because square brackets mean editorial
+  in a score and that number is Ilya's own addition rather than standard
+  practice. Post-rest anchor: DESK DEFAULT the closing
   barline of the rest, explained to Dann and not waved off. System-start
   number above the clef per Gould p484 and his 2026-08-29 ruling. Drawing:
   `docs/sessions/drawing-bar-numbers_r1_2026-08-29.html`; source

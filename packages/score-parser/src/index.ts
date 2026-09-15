@@ -46,6 +46,7 @@ export {
 } from './tempo-terms';
 export {
 	renderAnalyzedStaff,
+	BAR_NUMBER,
 	CYR_FONT_SIZE,
 	IPA_FONT_FAMILY,
 	IPA_FONT_SIZE,
