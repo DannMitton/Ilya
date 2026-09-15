@@ -44,6 +44,11 @@ waiting, on purpose.
    and you need the next item's spec, or when Dann names an item by its number.
    Split out of `STATE.md` on 2026-09-13; nothing in it was reworded.
 
+6. **`SEQUENCE.md`** — the build order for the open cardinals, and the
+   dependencies that fix it. **NOT part of the opening read.** Open it when the
+   one thing closes and the next is being chosen, or when Dann asks to work
+   through the queue. Created 2026-09-15.
+
 `INBOX.md` is append-only and **you do not open it unless Dann asks.**
 
 `../sessions/LOG.md` is the archive behind `STATE.md`, split out 2026-09-01.
@@ -64,6 +69,7 @@ beats the archive.**
 | `PRODUCT.md` | rarely, when something is settled | Dann rules, you transcribe |
 | `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, when you learn it the hard way |
 | `OPEN.md` | when an item is numbered, ruled, or starts | you |
+| `SEQUENCE.md` | when an item closes or is numbered | you |
 | `STATE.md` | **every session, at the close** | you |
 | `INBOX.md` | any time Dann digresses | you, one line, immediately |
 

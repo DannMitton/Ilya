@@ -23,6 +23,8 @@ import {
 	isDismissSwipe,
 	measureWindow,
 	meterLayout,
+	ringRoom,
+	stripRing,
 	METER_LEAD_SP,
 	METER_RUN_IN_SP,
 	nearestTarget,
@@ -670,5 +672,33 @@ describe('the closing barline', () => {
 
 	it('protrudes one stave-space, as the desk default records', () => {
 		expect(EXCERPT_TAIL_SP).toBe(1);
+	});
+});
+
+// N.141 step 2. The loupe draws the page's ring itself, on the strip of panels.
+describe('the loupe\'s own squircle', () => {
+	const ring = { x: 62, y: 66, width: 21, height: 73.5, radius: 6, stroke: 2 };
+
+	it('places the ring by the body\'s own map, and scales every dimension alike', () => {
+		// Body opens at 63.54 in page units, 120 px along the strip, scale 2.
+		const r = stripRing(ring, 63.54, 120, 60, 2);
+		expect(r.x).toBeCloseTo(120 + (62 - 63.54) * 2, 10);
+		expect(r.y).toBeCloseTo((66 - 60) * 2, 10);
+		expect([r.width, r.height, r.radius, r.stroke]).toEqual([42, 147, 12, 4]);
+	});
+
+	it('reaches left of the body\'s edge instead of being cut or clamped there', () => {
+		// The four collisions of step 1 were a ring opening left of the body.
+		expect(stripRing(ring, 70, 120, 60, 1).x).toBeLessThan(120);
+	});
+
+	it('widens the band above by only what the half-space pad lacks', () => {
+		const page = { above: 13.88, below: 68.61, minTotalSpan: 200 };
+		// A reach of 10 against a pad of 2.75 needs 7.25 more above.
+		expect(ringRoom(page, 5.5, 0.5, 10)!.above).toBeCloseTo(13.88 + 7.25, 10);
+		expect(ringRoom(page, 5.5, 0.5, 10)!.below).toBe(68.61);
+		// A reach the pad already covers adds nothing.
+		expect(ringRoom(page, 5.5, 0.5, 2)!.above).toBe(13.88);
+		expect(ringRoom(null, 5.5, 0.5, 10)).toBeNull();
 	});
 });

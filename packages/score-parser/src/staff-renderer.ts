@@ -92,8 +92,9 @@ export const WITHHELD_SIGLA = {
 	// with a 1px ring around a 9px glyph.
 	//
 	// SCALED TO 75 PERCENT HERE, ratio preserved, because 16px does not fit this
-	// page: `cyrY = ipaY + 16`, so a full-size ring centred on the IPA line
-	// would sit on the Cyrillic beneath it. 16:1:9 becomes 12:0.75:6.75.
+	// page: `cyrY = ipaY + 16` when this was measured (it is 20 since N.141),
+	// so a full-size ring centred on the IPA line would sit on the Cyrillic
+	// beneath it. 16:1:9 becomes 12:0.75:6.75.
 	/** Outer diameter of the ring. 16 x 0.75. */
 	diameterPx: 12,
 	/** Ring thickness. 1 x 0.75. */
@@ -784,6 +785,36 @@ function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): num
  */
 /** Half the drawn width of a hyphen: its ink spans `hx ± HYPHEN_HALF`. */
 export const HYPHEN_HALF = 2.5;
+
+/** The IPA row's size, in page units, and its face. */
+export const IPA_FONT_SIZE = 12;
+export const IPA_FONT_FAMILY = "'Lato IPA', sans-serif";
+/** The Cyrillic row's size, in page units. Its face is the page's sans. */
+export const CYR_FONT_SIZE = 12.5;
+
+/**
+ * How far the Cyrillic baseline sits below the IPA baseline, in page units.
+ *
+ * IT WAS 16, AND N.141 WIDENED IT TO 20. Ruled by Dann 2026-09-15, in
+ * advance, for the case where the selection squircle would not fit: *"increase
+ * the space between the Cyrillic parent and its IPA child to accommodate the
+ * squircle's bottom edge cleanly."* The squircle encloses the IPA row's full
+ * ink, descenders included, and stops short of the Cyrillic row, both sides
+ * taken from the FACE's metrics (`docs/memory/OPEN.md` §N.141).
+ *
+ * MEASURED 2026-09-15 in Chrome, as `fontBoundingBox` on the page's own faces:
+ * Lato IPA at 12 descends 3 below its baseline, Source Sans 3 at 12.5 rises 13
+ * above its own. The browser returns both as whole numbers, so each carries
+ * about half a unit of rounding and the sum about one. At 16 the IPA row's
+ * descent and the Cyrillic row's ascent met exactly: no room for the box's
+ * edge. The box's outer edge needs descent 3 plus its 2-unit stroke, so the
+ * rows touch the box at 18 and 19 leaves one unit of air, which the rounding
+ * can eat. 20 is the smallest value that keeps air under the worst case: two
+ * units nominal, one at worst.
+ *
+ * NAMED COST, accepted by the same ruling: every system is four units taller.
+ */
+export const IPA_TO_CYR_BASELINE = 20;
 
 /**
  * Keep a hyphen's INK inside the gap between two syllables (N.11).
@@ -2704,14 +2735,14 @@ export function renderAnalyzedStaff(
   // second language but a pronunciation guide, which she treats separately
   // at r49 and r50 without ordering it).
   const ipaY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
-  const cyrY = ipaY + 16;
+  const cyrY = ipaY + IPA_TO_CYR_BASELINE;
   for (const u of underlay) {
-    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="12.5" fill="#1a1612">${esc(u.cyr)}</text>`);
+    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="${CYR_FONT_SIZE}" fill="#1a1612">${esc(u.cyr)}</text>`);
     // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
     // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward
     // single-storey, destroying the bright-a / dark-a contrast that sung
     // Russian depends on (dark [ɑ] default, bright [a] interpalatal only).
-    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">${esc(u.ipa)}</text>`);
+    if (u.ipa) parts.push(`<text x="${u.x}" y="${ipaY}" text-anchor="${u.align}" font-size="${IPA_FONT_SIZE}" fill="#6a655f" font-family="${IPA_FONT_FAMILY}">${esc(u.ipa)}</text>`);
     // N.10b: the withheld sigla, standing in the IPA line's slot, sitting on
     // the same baseline as the transcription it replaces. Tagged
     // `data-withheld` with the event id, matching `data-hyphen` and

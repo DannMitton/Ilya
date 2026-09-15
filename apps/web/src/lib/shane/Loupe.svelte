@@ -22,6 +22,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { afterGround } from '$lib/shane/system-ground';
+	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
 		headBound,
@@ -33,6 +34,8 @@
 		closingBarline,
 		EXCERPT_TAIL_SP,
 		pageInset,
+		ringRoom,
+		stripRing,
 		measureWindow,
 		meterLayout,
 		METER_LEAD_SP,
@@ -275,6 +278,13 @@
 		const tol = gap * 0.3;
 		const out: Vertical[] = [];
 		for (const el of sys.querySelectorAll('line')) {
+			/* A STEM IS NOT A BARLINE, and a stem can span the staff to within
+			   the tolerance. MEASURED 2026-09-15 on Kabalevsky T05, m. 15: a stem
+			   at x = 151.85 runs 85.88 to 106.95 against a staff of 85 to 107,
+			   so the closing search took it and the loupe showed 12.25 units of
+			   an 80-unit measure. A barline is never inside a note's group, a
+			   stem always is, so the group is the test. Since `8bb406c`. */
+			if (el.closest('[data-event-id]') || el.closest('[data-analysis]')) continue;
 			const x1 = Number(el.getAttribute('x1'));
 			if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
 			const y1 = Number(el.getAttribute('y1'));
@@ -483,6 +493,11 @@
 		/** N.138 increment 3. The stave past the closing barline; null on the
 		    final bar, which ends flush. */
 		tail: StavePanel | null;
+		/** N.141 step 2. The taken note's squircle on the strip, in CSS pixels;
+		    null where the page has none. */
+		ring: { x: number; y: number; width: number; height: number; radius: number; stroke: number } | null;
+		/** The strip's width: every panel side by side. */
+		stripWidth: number;
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
@@ -647,9 +662,32 @@
 		const staffTop = hitY + 3.5 * lineGap;
 		const half = win.left + (win.right - win.left) / 2;
 		const verticals = staffVerticals(sysEl, staffTop, lineGap);
+		/* AN OPENING BARLINE STANDS LEFT OF THE MEASURE'S FIRST NOTE. The window's
+		   right edge is the next measure that carries entries, and where a tacet
+		   run stands between, the window spans the run and its left half can
+		   hold the run's own opening barline. MEASURED 2026-09-15 on Kabalevsky
+		   T05, m. 23: notes at 344 to 358, the run's barline at 408.83 inside the
+		   left half, so the crop opened past every note of the measure. Found by
+		   N.141's measurement; the search is slice 3 §11's and N.104's tacet runs
+		   exposed it. The first note's leftmost ink, accidental included, bounds
+		   the search. */
+		let firstOwnInk = Infinity;
+		const firstGroup = first.closest('[data-event-id]');
+		const firstId = firstGroup?.getAttribute('data-event-id') ?? '';
+		for (const el of [
+			...(firstGroup ? [...firstGroup.children].filter((c) => !c.hasAttribute('data-hit')) : []),
+			...(firstId ? [...sysEl.querySelectorAll(`[data-of-event="${CSS.escape(firstId)}"]`)] : []),
+		]) {
+			try {
+				const b = (el as SVGGraphicsElement).getBBox();
+				if (b && (b.width || b.height)) firstOwnInk = Math.min(firstOwnInk, b.x);
+			} catch {
+				/* not rendered */
+			}
+		}
 		let boundary: number | null = null;
 		for (const { x } of verticals) {
-			if (!(x >= win.left && x < half)) continue;
+			if (!(x >= win.left && x < half && x < firstOwnInk)) continue;
 			if (boundary === null || x < boundary) boundary = x;
 		}
 		if (boundary !== null) win.left = boundary + lineGap * 0.5;
@@ -914,7 +952,12 @@
 		   measured the system's declared box stands in, which is what the
 		   frame always used. */
 		const page = pageMetrics(container);
-		const crop = inkCrop(page, staffTop, lineGap, INK_PAD_SP, { top: sysMinY, height: sysHeight });
+		/* N.141 step 2: the band leaves room above for the selection ring's
+		   reach, which half a space did not. `ringRoom` in `loupe.ts`. */
+		const crop = inkCrop(ringRoom(page, lineGap, INK_PAD_SP, RING_REACH), staffTop, lineGap, INK_PAD_SP, {
+			top: sysMinY,
+			height: sysHeight,
+		});
 		const cropTop = crop.top;
 		const cropHeight = crop.height;
 		const contentHeight = cropHeight * scale;
@@ -949,59 +992,28 @@
 		   and it serves both viewports because the head and the body are two
 		   crops of this one clone. */
 		for (const el of clone.querySelectorAll('[data-analysis]')) el.remove();
-		/* THE PAGE'S OWN MARK STAYS, N.113a, AND ONLY THE GROUP'S ATTRIBUTE
-		   COMES OFF. RULED BY DANN 2026-09-07 from his walk of `e1bcb67`: the
-		   loupe marks the taken note "the way the page does, a box on the
-		   notehead". His words on what it replaced: the bar drawn after the
-		   notehead is *"misleading because the insertion point was in the space
-		   after тес"*.
+		/* THE LOUPE MARKS THE TAKEN NOTE THE WAY THE PAGE DOES, N.113a, ruled by
+		   Dann 2026-09-07 from his walk of `e1bcb67`: "a box on the notehead".
+		   His words on what it replaced: the bar drawn after the notehead is
+		   *"misleading because the insertion point was in the space after тес"*.
 
-		   The page's mark is a rectangle carrying `data-selection-ring`, built
-		   by `VoiceProfilePane.svelte` from the notehead's measured ink and
-		   inserted at the front of the SYSTEM, so the clone already holds it
-		   and it already sits in the system's coordinate space. Keeping its
-		   `data-note-selected` is the whole change: the pane's stylesheet hides
-		   a ring that has lost that attribute.
+		   SINCE N.141 STEP 2 THE LOUPE DRAWS THAT BOX ITSELF and the page's ring
+		   comes out of the clone. The clone's copy could only be seen through
+		   the body's crop, so a ring reaching left of the crop was either cut
+		   or clamped, and the clamp pushed its edge across the note's own
+		   accidental: MEASURED 2026-09-15, four notes that open a system, three
+		   on the engraved Without Sun song 1 and one on Kabalevsky T05. The
+		   loupe's ring is drawn across the whole strip, beneath the panels, with
+		   the page ring's own geometry, so the shape stays identical on both
+		   surfaces, as ruled 2026-09-14. See `ringStrip` below.
 
 		   THE GROUP'S ATTRIBUTE STILL COMES OFF, and it must. Dann struck the
 		   magnified outline on 2026-08-26 because it rode the note's whole
 		   group, whose box includes the transparent hit rectangle, and read as
 		   a tall capsule at 2.4 times. That mark is not this one: the ring is
 		   sized to the notehead's ink, not to the group's box. */
-		for (const el of clone.querySelectorAll('[data-note-selected]')) {
-			if (el.hasAttribute('data-selection-ring')) continue;
-			el.removeAttribute('data-note-selected');
-		}
-		/* N.138. THE RING NO LONGER CROSSES A SEAM. The ring is the one mark the
-		   head's bound leaves out on purpose (see the ink walk), so on a measure
-		   that opens its system it can begin left of the head's edge: MEASURED on
-		   the engraved Without Sun song 1, m. 4, the ring opens at 62.38 with a
-		   2-unit stroke and the head ends at 63.54. While the crops were flush the
-		   two halves met. With the meter between them the ring's left side stood
-		   alone in the head, torn off the box around the note.
-
-		   So, in this clone only, the ring's left edge is brought inside the body's
-		   crop by its whole stroke. HALF A STROKE WAS TRIED FIRST AND FAILED: the
-		   stroke's outer edge then sat exactly on the head's edge, and the head
-		   painted an antialiased sliver of it, a grey hairline the height of the
-		   ring standing between the key signature and the meter. OBSERVED at
-		   390 px on m. 4. The page's own ring is not touched. Only while a meter
-		   panel draws: without one the crops still abut and the ring is whole.
-
-		   INCREMENT 2: where a carried band draws, the band and the body abut, so
-		   the seam the ring must not cross moves to the band's left edge. */
-		if (meterPanel) {
-			const pageRing = sysEl.querySelector('[data-selection-ring]');
-			const stroke = pageRing ? parseFloat(getComputedStyle(pageRing).strokeWidth) || 0 : 0;
-			const inside = (carry ? carry.left : view.left) + stroke;
-			for (const ring of clone.querySelectorAll('[data-selection-ring]')) {
-				const x = Number(ring.getAttribute('x'));
-				const w = Number(ring.getAttribute('width'));
-				if (!(x < inside) || !(x + w > inside)) continue;
-				ring.setAttribute('x', String(inside));
-				ring.setAttribute('width', String(x + w - inside));
-			}
-		}
+		for (const el of clone.querySelectorAll('[data-selection-ring]')) el.remove();
+		for (const el of clone.querySelectorAll('[data-note-selected]')) el.removeAttribute('data-note-selected');
 		/* THE HIT RECTANGLES ARE RENAMED IN THE CLONE, and that is what keeps
 		   the two tap grammars apart. VoiceProfilePane's delegated listener
 		   matches `[data-hit]` anywhere in the document, so a clone carrying
@@ -1080,6 +1092,32 @@
 			GUTTER,
 		);
 
+		/* ── N.141 STEP 2. THE LOUPE'S OWN SQUIRCLE ──────────────────────────────
+		   The page's ring, read as drawn and placed on the strip by `stripRing`
+		   in `loupe.ts`: same box, same corner, same stroke, scaled. It is drawn
+		   in its own layer BENEATH the panels, which are transparent since N.133,
+		   so it still sits under the music as ruled 2026-08-28, and it reaches
+		   across the seams the body's crop used to cut it at. */
+		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
+		const carryWidth = carry ? carrySpanUnits * scale : 0;
+		const tailWidth = tailSpanUnits * scale;
+		const ring = pageRing
+			? stripRing(
+					{
+						x: Number(pageRing.getAttribute('x')),
+						y: Number(pageRing.getAttribute('y')),
+						width: Number(pageRing.getAttribute('width')),
+						height: Number(pageRing.getAttribute('height')),
+						radius: Number(pageRing.getAttribute('rx')) || 0,
+						stroke: parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE,
+					},
+					view.left,
+					headWidth + meterWidth + carryWidth,
+					cropTop,
+					scale,
+				)
+			: null;
+
 		frame = {
 			inner: clone.innerHTML,
 			viewBox: `${view.left} ${cropTop} ${viewSpan} ${cropHeight}`,
@@ -1106,6 +1144,8 @@
 							viewBox: `0 ${cropTop} ${tailSpanUnits} ${cropHeight}`,
 						}
 					: null,
+			ring,
+			stripWidth: headWidth + meterWidth + carryWidth + contentWidth + tailWidth,
 			contentHeight,
 			windowHeight,
 			centreY,
@@ -1217,6 +1257,29 @@
 			     body crops the held measure. They sit flush, at one scale, in
 			     one coordinate space, so the staff lines run through both and
 			     the pair reads as one stave rather than as two pictures. -->
+			<!-- THE STRIP, N.141 step 2: every panel side by side, and beneath
+			     them the loupe's own squircle, so the mark can reach across a
+			     seam and still sit under the music. -->
+			<div class="loupe-strip" style="width: {frame.stripWidth}px; height: {frame.contentHeight}px;">
+			{#if frame.ring}
+				<svg
+					class="loupe-ring"
+					width={frame.stripWidth}
+					height={frame.contentHeight}
+					viewBox="0 0 {frame.stripWidth} {frame.contentHeight}"
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<rect
+						x={frame.ring.x}
+						y={frame.ring.y}
+						width={frame.ring.width}
+						height={frame.ring.height}
+						rx={frame.ring.radius}
+						stroke-width={frame.ring.stroke}
+					/>
+				</svg>
+			{/if}
 			{#if frame.headWidth > 0}
 				<svg
 					class="loupe-svg loupe-head"
@@ -1317,6 +1380,7 @@
 					{/each}
 				</svg>
 			{/if}
+			</div>
 		</div>
 	</div>
 {/if}
@@ -1440,6 +1504,32 @@
 	.loupe-svg {
 		display: block;
 		flex: 0 0 auto;
+	}
+
+	/* N.141 step 2. The panels stand side by side in the strip, and the ring's
+	   layer sits under all of them: the panels are later in the document and
+	   positioned, so they paint over it, and they are transparent. */
+	.loupe-strip {
+		position: relative;
+		display: flex;
+		flex: 0 0 auto;
+	}
+
+	.loupe-strip > .loupe-svg {
+		position: relative;
+	}
+
+	.loupe-ring {
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	.loupe-ring rect {
+		fill: none;
+		stroke: var(--lavender, #9585a2);
 	}
 
 	/* The head carries the clef and the key and nothing else, and it must not

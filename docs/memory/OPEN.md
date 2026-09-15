@@ -382,108 +382,6 @@ finding them twice.
 
 ---
 
-## N.133. THE RENDERER STOPS PAINTING ITS OWN GROUND. Numbered by Dann 2026-09-13. UNPLACED.
-
-**Ruled by Dann 2026-09-13**, on his walk of `6a24169`, from three options the
-desk put to him. **His words, and they are the item:** *"I absolutely do not want
-to see, in the Loupe, the measure under examination mounted on a cream
-background. The background should be transparent and accept the Loupe's native
-background."* His ruling: **"The renderer stops painting the rectangle at all,
-and every surface provides its own ground."**
-
-**What he saw.** The loupe crops a clone of the page's system SVG
-(`Loupe.svelte:764`) and shows it over the loupe's own `--paper-light` fill
-(`:935`). The system's SVG carries its own cream rectangle, so the loupe's fill
-never shows.
-
-**TWO RECTANGLES, NOT ONE.**
-
-- `staff-renderer.ts:2828` paints `#F0EBE0` behind EVERY SYSTEM. This is the one
-  in the loupe. Nothing strips it.
-- `page-layout.ts:365` paints `#FFFFFF` behind the whole page, from
-  `paginateScore`. `VoiceProfilePane.svelte:664-665` strips it, and `:990` is
-  the call site.
-
-**Once both go, `stripBackingRect` has nothing left to strip and goes with them.**
-
-**ESTABLISHED 2026-09-13, and it is what makes this a deletion rather than an
-option:** the only consumer of `packages/score-parser` is `apps/web`. The
-"standalone artifact" case the comment at `VoiceProfilePane.svelte:661` names has
-no user, so there is no default to preserve and no `background: null` parameter
-to add.
-
-**Consumers to check afterwards, all of them:** the page (`--paper-cream`), the
-loupe (`--paper-light`), the `fit-font-lab` dev route
-(`routes/fit-font-lab/+page.svelte:9`, which renders glyphs through the
-production renderer and may have been relying on the ground), and print.
-
-**THE RISK, NAMED BEFORE ANYONE BUILDS IT: gates 4 and 5 are both exposed.**
-`correction.test.ts:507` calls `renderAnalyzedStaff`,
-`performance-order-seam.test.ts:94` calls `paginateScore`, and
-`staff-renderer.test.ts` asserts hex literals. If one of them pins a rectangle,
-**the test is the thing to look at, not the ruling.**
-
-**WHAT THIS CLOSES.** Two open questions resolve themselves, and whoever builds
-this should strike both rather than leave them:
-
-1. The census (`memo-neutral-audit_r1_2026-09-13.md` §6.2) recorded "Whether a
-   cream rectangle prints behind each system was not observed." **Dann observed
-   it on screen 2026-09-13.**
-2. `STATE.md` §STILL UNSETTLED carries the print half, settled 2026-09-07 by
-   Dann's print preview: the cream prints, and the page was ruled to print white.
-   **It records a paste already written and NOT YET RUN, filed in `INBOX.md`.
-   FIND THAT PASTE BEFORE WRITING A NEW ONE**, per tether 16. It may already do
-   half of this job, or it may conflict with the ruling above.
-
-**Done when:** the loupe shows its own ground with no rectangle over it, Dann
-walks it, and the print path is checked once rather than assumed.
-
-
----
-
-> **N.136. OPEN SYLLABIFICATION NEVER REACHES SCORE MARKUP'S DRAWN TEXT.
-> Numbered by Dann 2026-09-14. UNPLACED.**
->
-> **How it was found.** Dann toggled `Open syllables` on the walk of `4d79f24`
-> and neither the Cyrillic underlay nor the IPA line above it changed. The
-> drawer registered the change: the band read `1 of 7 changed`.
->
-> **The cause, read 2026-09-14.** The toggle reaches the resolver. The resolver
-> no longer supplies the text that draws.
->
-> - A placed syllable's Cyrillic comes from `doc.pairings`, projected through
->   `refreshPairings` from `slotQueue`.
-> - `slotQueue` is `buildSlotQueue(lines)` (`+page.svelte:379`), and that is
->   **raw** `lines`.
-> - `effectiveLines`, the open-syllabified view (`+page.svelte:2182`), goes only
->   to the Transcription page (`:4766`, `:4793`, `:4796`).
-> - The raw pass to the score pane is deliberate and is Dann's own ruling,
->   quoted at `+page.svelte:4835-4838`, N.10, 2026-08-07: *"`lines` is passed
->   RAW, not `effectiveLines` — the Fit resolver applies its own open
->   syllabification, so the display view would be sliced twice."* That reasoning
->   held while the resolver drew the text. It stopped being true when the queue
->   took over.
->
-> **NOT A REGRESSION FROM 2026-09-14.** Any placed syllable has always drawn
-> from the raw queue. Before N.134 this song had nothing placed, so every cell
-> came from the file's own underlay and the toggle changed nothing there either.
-> N.134 placed all 95, which turned a partial gap into a total one.
->
-> **The audit of 2026-09-12 proved the wrong thing**
-> (`../sessions/brief-n119-toggles-reach-score-markup_r1_2026-09-12.md` §1). It
-> showed the toggle reaches `buildUnderlayResolvers` and concluded it reaches
-> the page. Those are two claims and only the first was tested. **Correct that
-> brief's table before N.119 is built**, or N.119 will be built against it.
->
-> **Candidate fixes, unruled.** Feed the queue from `effectiveLines` rather than
-> `lines`, which makes the drawn text obey the toggle and needs the double-slice
-> question of N.10 re-answered, since the resolver still applies its own. Or
-> teach the projection to carry the resolver's division. **Whichever is taken,
-> N.10's 2026-08-07 reasoning is a source to re-check, not a wall**
-> (CONTRACT §1.19, amended 2026-09-14).
-
----
-
 ## N.139. EVERY METER ASSIGNMENT IN A SCORE DRAWS ON THE PAGE. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
 
 **Ruled by Dann 2026-09-14:** *"I do want every meter assignment in a score to be
@@ -723,6 +621,262 @@ on every note that is not selected, and CONTRACT §6's rule about a mark that
 appears on everything would have to be argued through first. **He can say the word
 and it becomes its own number.**
 
+### IF THE BOX WILL NOT FIT BETWEEN THE ROWS, WIDEN THE ROWS. Ruled 2026-09-15
+
+**The desk raised the case before it was met:** the box's bottom now encloses the
+IPA row's descenders and must stop short of the Cyrillic row, and nobody has
+measured whether the edge and its stroke fit in the gap between them. **Dann ruled
+the answer in advance rather than waiting to be asked.**
+
+His words: *"My vote would be to increase the space between the Cyrillic parent
+and its IPA child to accommodate the squircle's bottom edge cleanly."*
+
+**THIS IS A CONTINGENCY AND IT MAY NEVER FIRE. Dann, 2026-09-15, when the desk's
+prompt read as though the widening were a step rather than a fallback:** *"I'm not
+sure we need to mess with the baseline of the Cyrillic line just yet? It is a
+contingency."* **Measure the gap first. If the box fits, change nothing about the
+rows and say so.**
+
+**Where it does not fit, the underlay's vertical spacing yields to the squircle
+and not the other way round.** Clipping the descender by any route is ruled out,
+and so is thinning the box to squeeze it in.
+
+**HIS PHRASING IS WORTH KEEPING: the Cyrillic is the PARENT and the IPA is its
+CHILD.** That is the relationship between the two rows, and it is a reason the
+gap between them is Ilya's to set rather than a fixed property of the page.
+
+**NAMED COST, and it is measurable before anything ships.** Widening that gap
+makes every system taller. Fewer systems then fit a page, so the page count can
+grow on a long song. **This is the same class of cost as N.129's hyphen
+clearance**, and like that one it is accepted for a legibility reason rather than
+paid by accident. **Measure the page count before and after on both scores.**
+
+### HEIGHT AND WIDTH ARE INDEPENDENT. Clarified by Dann 2026-09-15
+
+**His words:** *"I ruled every box on a system to be one height, as a means of
+communicating consistency. Not every squircle will be the same width, because not
+every note requires the same width to effectively capture (accidentals, dots)."*
+
+| | rule | why |
+|---|---|---|
+| **height** | **constant across a system** | it communicates consistency |
+| **width** | **whatever the note needs** | a note with a flat and a dot needs more room than a bare notehead |
+
+**THIS IS WHY `RING_ASPECT` HAD TO GO, and it is the cleanest statement of it.**
+That constant made height a FUNCTION of width, so a wide note became a tall one
+and the consistency the height is meant to communicate was destroyed by the very
+thing width is meant to accommodate. **The two are independent, and each has its
+own job.**
+
+**Do not make the widths uniform in pursuit of consistency.** The consistency is
+carried by the height. A uniform width would either crowd the notes that need room
+or waste it on the notes that do not.
+
+### OVERRULED 2026-09-15: THE BOX ENCLOSES THE WHOLE IPA ROW, DESCENDERS AND ALL
+
+**Code's build put the box's bottom BETWEEN the IPA and Cyrillic rows**, on the
+grounds that a baseline edge would slice through IPA letters that hang below it,
+`ɲ` and `j` among them. **Dann overruled it the same day, and the reasoning as
+well as the outcome:**
+
+> *"Nonsense. These dimensions are calculable and predictable. There is no reason
+> we can't include them in planning the dimensions of the squircle. The concept at
+> work here in Score Markup is the intersection of the vowel plus the pitch. The
+> musical notation is effectively the pitch, and the IPA is the vowel. I want both
+> captured to the exclusion of the original Cyrillic. Make it so."*
+
+**THE RULE, stated so it is buildable.** The box's bottom encloses the IPA row's
+FULL INK, descenders included, and stops short of the Cyrillic row. A descender is
+a font metric and is known before anything is drawn.
+
+**AND THE DEPTH COMES FROM THE FONT, NOT FROM THE GLYPHS PRESENT.** Dann also
+ruled that every box on a system is one height. So the bottom is the IPA row's
+baseline plus the FACE'S descender depth, which is constant, rather than the
+lowest ink among the syllables that happen to be on that system. Three things
+follow, and all three are what he asked for:
+
+- a syllable with no descender gets the same box as one carrying `ɲ`;
+- a melisma, which has no IPA at all, still gets it, which is his ruling of
+  2026-09-14 that the box descends *"as if there were a verbatim vowel printed
+  there"*;
+- the box cannot change height when a singer edits a syllable.
+
+**WHY IT MATTERS, in his words, and this is the reason to get it right rather than
+close:** Score markup exists to hold the pitch and the vowel together. **The
+notation is the pitch and the IPA is the vowel.** A box that holds the notation and
+clips the vowel is not expressing the thing the document is for.
+
+**The Cyrillic stays outside**, ruled twice now.
+
+**The desk relayed Code's reasoning without challenging it and owns that.** The
+problem it named was real; the conclusion it drew from it was not the only one
+available.
+
+### A LATER INCREMENT: THE SQUIRCLE SPANS A TIE. Raised by Dann 2026-09-15
+
+**NOT part of the current build. It depends on N.142**, which gives the tie
+predicate, and N.142 is not built.
+
+**His words:** *"the tied note is one entity, so the squircle could capture the
+primary note and its subsequent tied value(s). This will complicate things for the
+Loupe when we have a melisma that carries over several measures, but I think we can
+tackle that and create a grammar for it as well?"*
+
+**THE MELISMA HALF IS ALREADY ANSWERED BY HIS OWN DISTINCTION, drawn the same
+day** and recorded in `OPEN.md` §N.142: a tie's continuation is not a new sounded
+event, a melisma's is.
+
+- **A tie is ONE entity, so ONE squircle spans it.**
+- **A melisma is SEVERAL entities under one vowel, so each note keeps its own
+  squircle.** A singer can still examine any single note of a melisma, which is
+  what the squircle is for.
+
+**THREE GEOMETRIES, and only the third is hard.**
+
+1. **Within a measure.** One wider box over both noteheads and the tie.
+2. **Across a barline, inside one system. RULED BY DANN 2026-09-15: the same
+   treatment.** His words: *"the Loupe only magnifies one measure at a time. A
+   truncated squircle in the Loupe will trigger the user to investigate the
+   following measure to see the continuation of the rhythmic value and I think
+   this is a good thing."* **The opening is not a cost to be tolerated; it is the
+   mark doing a second job**, telling the singer the note continues where they
+   cannot currently see it.
+3. **Across a system break.** One box is geometrically impossible; the notes are
+   on different lines.
+
+**CASE 3 IS ANSWERED BY DANN'S OWN PRIOR ART, shown 2026-09-15 from his
+dissertation.** He met this problem engraving his doctoral edition and solved it
+there.
+
+**What his solution draws.** One shape in two pieces. The fragment ending the
+upper system is **rounded on its left edge and runs square off the right of the
+page**. The fragment opening the lower system **begins square at the left and is
+rounded on its right edge**. So each piece is closed at the passage's true
+boundary and deliberately OPEN where the music continues.
+
+**THE SQUARE END IS A STATEMENT, NOT A TRUNCATION.** A reader sees one thing
+interrupted rather than two things. It is the grammar a tie or a slur already uses
+across a system break, which is the justification the desk was reaching for.
+
+**THE DESK'S OWN RECOMMENDATION WAS WEAKER AND IS WITHDRAWN.** It proposed two
+COMPLETE squircles, each closed on all sides. A reader would count two marks. His
+is better and it is his own solved problem rather than a proposal.
+
+**THE NO-TRUNCATION RULE IS AMENDED, RULED BY DANN 2026-09-15, and his wording is
+the rule:** *"A squircle is never truncated WHEN THE TRUNCATION OCCURS
+ACCIDENTALLY. We can use truncated squircles like the one I showed you from my
+dissertation for its semiotic value."*
+
+**So the test is not whether the shape is closed. It is whether the opening was
+MEANT.**
+
+- **Accidental truncation is forbidden**, and that is what the original rule was
+  guarding: a shape cut off by a crop tells the reader nothing and looks like a
+  defect.
+- **Deliberate truncation is permitted where it carries meaning**, and the open
+  edge then reads as a statement rather than as damage.
+
+**THE PRINCIPLE UNDER BOTH CASES, and it is one statement rather than two
+exceptions: AN OPEN EDGE MEANS THE ENTITY CONTINUES BEYOND THE REGION BEING
+SHOWN.**
+
+| the region shown | where the fragment opens |
+|---|---|
+| a system, on the page | at the system's margin |
+| one measure, in the loupe | at the crop's edge |
+
+**Same statement, different boundary.** Both were ruled by Dann on 2026-09-15, the
+first from his doctoral edition and the second on the loupe's own terms.
+
+**THE GUARD, in its sharper form. A deliberate opening is legitimate ONLY AT THE
+BOUNDARY OF WHAT IS DISPLAYED.** Anywhere else an open edge is accidental, and the
+original rule forbids it. Per CONTRACT §1.19 this is a stated rule with its
+condition, and the condition is the boundary: an opening that is not at one is a
+defect, not a statement.
+
+**TWO DIFFERENCES BETWEEN HIS DISSERTATION MARK AND ILYA'S, recorded as
+observation rather than as objection.**
+
+1. **CORRECTED 2026-09-15 on Dann's word: his mark is a RED STROKE WITH A LIGHT
+   RED FILL**, not a fill alone as the desk first described it. **Ilya's ring has
+   no fill:** `rect[data-selection-ring]` is `fill: none` with a 2-unit
+   `--lavender` stroke, hidden under `@media print`
+   (`VoiceProfilePane.svelte`, the ring's own rule).
+
+   **THIS IS NOT A DETAIL. HIS SOLUTION LEANS ON THE FILL.** At the system break
+   the FILL is what runs to the page edge while the STROKE stops at the rounded
+   end, and that is what makes the fragment read as a region continuing. **With
+   `fill: none`, three stroked sides and an invisible fourth read as a box with a
+   missing side, not as a continuation.**
+
+   **RULED 2026-09-15: NO FILL. The squircle stays an outline**, and the reasoning
+   is in `PRODUCT.md` §The squircle. So the system-break fragment needs a
+   different answer from his dissertation's.
+
+   **THE ANSWER, RULED BY DANN 2026-09-15: THE FRAGMENT RUNS TO THE MARGIN.** His
+   words: *"in the tie-across-a-system case, the fragment's two long strokes must
+   reach the margin rather than ending in space."*
+
+   **Why it is needed.** A three-sided outline reads as BROKEN if it stops short of
+   anything, and as CONTINUING if its two long strokes reach the boundary. His
+   dissertation gets that free, because the fill runs off the page edge. **An
+   outline has to be given it deliberately.** Applies at both boundaries: the
+   system's margin on the page, the crop's edge in the loupe.
+2. **His region encloses the stave and BOTH text rows, Cyrillic included**, where
+   he ruled the Cyrillic outside Ilya's selection squircle the same day. **Two
+   different marks doing two different jobs**: his marks a passage, Ilya's marks
+   the note under examination. Recorded so a later session does not read it as a
+   contradiction.
+
+**Source: his own doctoral edition, shown as two page images 2026-09-15**, the
+passage at measures 32 to 38 of a Mussorgsky setting, « а твой приют », with the
+rose region spanning the system break.
+
+### TWO RULINGS FROM THE WALK OF `eb918ed`, 2026-09-15
+
+**1. `RING_ASPECT` STOPS BEING A HEIGHT FLOOR. The new grammar wins.** Dann's
+words: *"the new grammar wins and `RING_ASPECT` stops being a height floor."*
+
+**Why it had to be ruled.** Two of his own rulings had come into conflict, and the
+desk brought him the case rather than picking one, per CONTRACT §1.17 and §1.19.
+
+- **2026-08-28**: the portrait proportion is a FLOOR, so height follows WIDTH.
+  `RING_ASPECT = 2.5` at `VoiceProfilePane.svelte:340`, applied at `:472` as
+  `height = max(inkHeight + padding, width * RING_ASPECT)`. The comment there
+  states the intent: *"Where an accidental widens the box, the HEIGHT grows to
+  keep it, the box never approaches square."*
+- **2026-09-14**: the bottom is the IPA baseline and the top is the note's own
+  extent, so height follows POSITION and every squircle on a system is the same
+  height.
+
+**What this explains, and it was the walk's actual finding.** On Without Sun song
+1 m. 7 the note carries a flat on its left and an augmentation dot on its right,
+both bound into the ring's union (`staff-renderer.ts:2298` for the dot). Both
+widen the box; the height then follows at two and a half times the width. **The
+empty space Dann saw above the stave was the proportion being honoured, not
+content being enclosed.**
+
+**What replaces it:** nothing for the height, which is now determined by the
+baseline and the note. The portrait feel survives as a MINIMUM WIDTH, which
+`RING_MIN_W` at `:338` already provides, so a bare notehead is still not
+shrink-wrapped.
+
+**2. THE TURNING LAYER'S ABSENCE FROM THE LOUPE IS ACCEPTED, NOT A DEFECT.**
+Dann's words, 2026-09-15: *"It's fine for now, I think including it will introduce
+visual clutter when the squircle is serving adequately to raise the user's
+attention. The score is always present with those noteheads so I am not
+worried."*
+
+**Recorded so that no later session reads the absence as a bug and restores it.**
+The turning notehead is emitted at `staff-renderer.ts:2454` as
+`<ellipse data-analysis="turning-notehead" …>`, and it carries `data-analysis`
+rather than `data-of-event`, so it was never in the ring's union either.
+
+**WHY it is absent from the loupe is NOT ESTABLISHED.** `Loupe.svelte` contains no
+code that strips it. Dann offered a hypothesis, that it lives in a layer the loupe
+does not capture; **that is his guess and the desk has not tested it.** It is
+recorded as a guess, not as a finding, and nothing depends on it.
+
 ### THE THREE QUESTIONS AS THEY WERE PUT TO HIM. Answered above, kept for the record
 
 1. **What does the squircle enclose?** The note alone; the note and its
@@ -762,3 +916,165 @@ genuinely cannot be solved by moving the ring.
 
 **Done when:** one rule governs what the squircle encloses, it is the same on
 every measure, no accidental of the taken note touches it, and Dann walks it.
+
+---
+
+## N.142. A TIE IS PROLONGATION, NOT A NEW SYLLABLE TARGET. Numbered 2026-09-15. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Dann, 2026-09-15, and the musical statement is the item:**
+
+> *"Ilya does not understand the rhythmic function of a tie. Ties effectively
+> extend the duration of a note. The very same duration, depending on context
+> (i.e. meter) can reasonably be expressed through a dotted quarter note, AND/OR
+> by a quarter note tied to an eighth note or vice versa. At the moment, Ilya will
+> set a syllable under any engraved note that is contiguous. This is an error.
+> Ilya must understand that a tie is rhythmic prolongation."*
+
+**The number is the desk's; he described the defect and ruled it an error without
+naming an item.** Wave it off or renumber with a word.
+
+### ESTABLISHED 2026-09-15
+
+- **The data is there, on both ingest paths.** `types.ts:439` gives every
+  `VocalLineEvent` a `tied?: TieInfo`, and `TieInfo.type` is
+  `'start' | 'continue' | 'stop' | 'let-ring'` (`:572-585`).
+  **`musicxml-parser.ts:633`** sets it from the sounding tie, and
+  **`mnx-parser.ts:720-723`** sets it from MNX's `ties` array. So nothing has to
+  be parsed that is not already parsed.
+- **Nothing in the seating path reads it.** The list handed to `firstPass` is
+  `parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id)`
+  (`+page.svelte:596`), and the same filter appears at `:1589`, `:2947`, `:3136`,
+  `:1448`, `:1456`, and in `correction.ts:574` and `:583`. **Rests are excluded;
+  tie continuations are not.**
+
+### RESTS ARE ALREADY RIGHT, AND HIS PARALLEL ALREADY HOLDS
+
+He put the rest case as an analogy to the clitic rule: a rest has no pitch, so it
+cannot carry a syllable, as a vowelless clitic cannot. **That rule is already
+built.** `firstPass`'s own doc comment states it as a contract: *"@param eventIds
+sung note events in document order, rests already excluded."* **Nothing is owed on
+the rest half.**
+
+### THE HANDLE IS `tied`, NOT THE ONSET. Recorded because Dann asked the question
+
+He asked: *"Is there a way to associate the assignment of a syllable with the
+onset of the note? Tied notes have no onset, they are a continuation."*
+
+**The instinct is right and the handle would not work.** Every event carries a
+`rhythmicPosition`, a tie's continuation included, because in the data a
+continuation does begin somewhere. **What he means by "no onset" is musical: no
+new articulation.** The field that expresses that is `tied`. Onset is a position;
+articulation is what a tie suppresses.
+
+### THE CONCEPTUAL FRAME. Dann, 2026-09-15, and it governs the predicate
+
+> *"One way to think about a melisma with my earlier onset idea is to read a
+> melisma as a collection of contiguous notes with one single onset: the first
+> note is the onset with the syllable assignment, and the subsequent contiguous
+> notes lack this onset since it is expected that the same vowel will be sung on
+> these notes as is assigned to the primary note."*
+
+**THIS IS THE RIGHT MODEL FOR SYLLABLE ASSIGNMENT, and it unifies the tie and the
+melisma under one predicate:** a note either begins a syllable or continues one.
+
+**AND ONE DISTINCTION MUST SURVIVE UNDERNEATH IT, or the analysis is wrong.**
+
+| | a TIE's continuation | a MELISMA's continuation |
+|---|---|---|
+| new syllable | no | no |
+| **new sounded event** | **no.** One note written twice | **yes.** New pitch, new attack, same vowel |
+| duration | belongs to the first note's sounded length | its own, at its own pitch |
+
+**Where that bites, and it is not cosmetic.** N.123's cycle dose sums f0 against
+seconds over sung notes: a melisma's notes are several pitches each accruing time
+under one vowel, a tie is one pitch accruing the sum. **The same is true of every
+per-vowel figure Shane produces**, which is the whole point of the product.
+**So: one onset rule for syllables, two behaviours for duration and pitch.**
+
+**A SECOND DIFFERENCE, AND IT GOVERNS WHAT THE SINGER MAY DO.** A tie is a fact of
+the score and Ilya reads it. A melisma is sometimes read, where a score carries its
+own words and encodes it by the absence of a syllable on later notes
+(`types.ts:464-479`), and sometimes chosen, where the text comes from the poem box
+and the singer sets it with `toggleMelisma` (`pairings.ts:455`).
+
+**So a singer may re-decide a melisma and should not be able to re-decide a tie.**
+**Recorded as a strong default and NOT as a wall**, per CONTRACT §1.19: editions do
+sometimes tie where a slur is meant, and a singer who meets one needs a way
+through rather than a refusal.
+
+**THE PHRASE MARK, raised by Dann in the same breath.** *"Very often melismas will
+feature a phrase mark that applies to all its notes. But not always."* A slur over
+a melisma is the engraver's own statement that those notes carry one syllable, so
+it is a signal Ilya could READ rather than infer. **His "not always" is what stops
+it being the only signal: it is a prior, not a rule.** Nothing is built on it and
+it is recorded here so the idea is not lost. It touches N.125, which draws slurs
+but does not read them.
+
+### THE SHAPE OF THE FIX
+
+**One predicate, applied where the sung-note list is built.** A note is a syllable
+target when it is not a rest AND its `tied.type` is not `continue` and not `stop`.
+**It deserves a named helper rather than a filter repeated in eight places**,
+because "a note that can take a syllable" is a concept in this product and not an
+incidental condition. The eight sites are listed above.
+
+**`let-ring` is NOT the same case and is left alone** unless Dann rules
+otherwise: it is l.v. notation, rare in vocal music, preserved for fidelity, and
+it does not describe a continuation of a sounded note.
+
+### NAMED COSTS, and the second one needs a ruling before anything ships
+
+1. **The count of available notes falls on any score with ties.** `95 / 95 placed`
+   becomes a smaller denominator. That is correct, and it will look like a change
+   to a number the singer has seen.
+2. **EXISTING PLACEMENTS ON TIED CONTINUATIONS. NARROWED 2026-09-15, and it is
+   probably not a ruling Dann owes.** A song seated under the old rule may hold a
+   syllable on a note that stops being a target. Every remedy has a cost: back
+   onto the tie's first note gives that note two syllables; forward shifts every
+   later syllable by one and the last falls off the end; dropping it destroys a
+   placement the singer made.
+
+   **THE DESK FIRST PUT THIS TO DANN AS A RULING HE OWED. That was wrong, and two
+   things narrow it almost to nothing.**
+
+   - **It cannot arise on the score-words path.** Where a score carries its own
+     lyrics, the file already does the right thing. **MEASURED on Kabalevsky T05,
+     2026-09-15:** the tie from `ev453` in m. 12 to `ev454` in m. 13 gives the
+     first note the syllable « ной, » and the tied note **no lyric key at all**.
+     Engravers do not set a syllable on a tie's continuation. **So the defect is
+     confined to the POEM path**, where `firstPass` seats typed text by counting
+     notes.
+   - **It only bites if it has actually happened.** Whether any song in Dann's
+     library holds a syllable on a tied continuation is **countable, not
+     hypothetical**. Count it before designing a migration.
+
+   **RULED BY DANN 2026-09-15: PUSH FORWARD. Every later syllable shifts by one
+   and the last falls off the end.** His words, and the reason is the ruling:
+   *"Because lyrics are linearly sequenced (following the existence of language in
+   time), the only reasonable option is push it forward. Lyrics are not
+   mathematical constructs. They exist inside a linear implication of first x then
+   y then z, and that order cannot change while still representing the lyric with
+   fidelity."*
+
+   **The other two answers each break the sequence**: putting it back gives one
+   note two syllables, dropping it removes a word from the line. **Only pushing
+   forward preserves the order, which is the thing a lyric IS.**
+
+   **AND THE RULE SIGNALS ITSELF, which is why it needs no mark.** A syllable that
+   falls off the end leaves the placed count short, and that count is already on
+   the singer's screen. CONTRACT §6 forbids a mark that says Ilya is unsure; none
+   is needed here.
+
+   **So the build's first act is a count, not a policy.** If the count is zero,
+   no migration is needed and nothing is put to Dann. If it is not zero, the
+   merge rule's own principle governs the design: *"an upload never destroys
+   placements; only the singer does, on purpose"* (`pairings.ts`, §The merge
+   rule), and only then is there a question worth his time.
+
+### NOT ESTABLISHED
+
+- **Whether the renderer draws a tie's continuation as a note the singer can tap**
+  and therefore place on by hand, independently of `firstPass`. The loupe's own
+  `ownIds` filter at `+page.svelte:1448` excludes rests only.
+- **What a melisma spanning a tie should do.** N.113's melisma machinery and this
+  rule meet on the same notes and nobody has looked.

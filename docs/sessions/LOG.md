@@ -4804,3 +4804,151 @@ engraved Without Sun song 1, where the answer changes at measure 2, and on T05,
 where it is 2/4 throughout.
 
 ---
+
+
+---
+
+## Block 17. N.133 CLOSED 2026-09-15. The renderer stops painting its own ground.
+
+**Ruled by Dann 2026-09-13, built and shipped as `eb918ed`, walked by him.** His
+words on the walk: *"that tacky cream rectangle region is gone. Thank you."*
+Served by `dpl_CocZiesaB9svP3bRoYAUA3RtwTnZ` on the branch alias, sha checked
+before he was sent to it.
+
+Gate 5 moved 548 to **550 passed, 5 skipped (555)**, two new no-background tests.
+Gate 4 held at 1170: no web test pinned either rectangle. The desk moved
+`~/Downloads/ilya-ship.sh:80`, keeping `ilya-ship.sh.bak-548`.
+
+**It had been open for a day while three other items shipped. That sequencing was
+the desk's error, owned in-thread**: it was already ruled, so it needed nothing
+from Dann and should have gone to Code the moment Code was free. He had to raise
+it again to get it built.
+
+**WHAT THE BUILD FOUND, and both are worth keeping.**
+
+1. **A test was pinning the rectangle without naming it.**
+   `staff-renderer.test.ts:1304-1310` skipped its first two elements on the
+   assumption that the second was the background. With the rectangle gone it would
+   have silently skipped a real stave line. **The test was fixed, not the ruling**,
+   which is what the spec's own risk note asked for.
+2. **The renderer's hard-coded `#F0EBE0` was the only cream not driven by the
+   `--paper-cream` token**, which `app.css` already overrides to white for print.
+   So the removal also closes the print question rather than merely moving it.
+
+**`system-ground.ts` survived the removal of the thing it was named for.**
+`afterGround` was added one commit earlier, in `d6580af`, to place marks after the
+ground rect. With no ground it now answers "the front of the system". Code kept it
+deliberately and documented why: the fault it fixed was a mark landing under an
+opaque full-width rect, and the rule stays correct if any surface ever paints one
+into a system again.
+
+**CLOSED BY THIS ITEM, and neither needs revisiting:** the census's unobserved
+print question (`memo-neutral-audit_r1_2026-09-13.md` §6.2), and the print half of
+`STATE.md` §STILL UNSETTLED.
+
+**NOT ESTABLISHED, and small:** no actual print preview was taken. The print path
+was checked by reading the stylesheets actually loaded, not by printing.
+
+### The spec, verbatim as `OPEN.md` carried it
+
+## N.133. THE RENDERER STOPS PAINTING ITS OWN GROUND. Numbered by Dann 2026-09-13. UNPLACED.
+
+**Ruled by Dann 2026-09-13**, on his walk of `6a24169`, from three options the
+desk put to him. **His words, and they are the item:** *"I absolutely do not want
+to see, in the Loupe, the measure under examination mounted on a cream
+background. The background should be transparent and accept the Loupe's native
+background."* His ruling: **"The renderer stops painting the rectangle at all,
+and every surface provides its own ground."**
+
+**What he saw.** The loupe crops a clone of the page's system SVG
+(`Loupe.svelte:764`) and shows it over the loupe's own `--paper-light` fill
+(`:935`). The system's SVG carries its own cream rectangle, so the loupe's fill
+never shows.
+
+**TWO RECTANGLES, NOT ONE.**
+
+- `staff-renderer.ts:2828` paints `#F0EBE0` behind EVERY SYSTEM. This is the one
+  in the loupe. Nothing strips it.
+- `page-layout.ts:365` paints `#FFFFFF` behind the whole page, from
+  `paginateScore`. `VoiceProfilePane.svelte:664-665` strips it, and `:990` is
+  the call site.
+
+**Once both go, `stripBackingRect` has nothing left to strip and goes with them.**
+
+**ESTABLISHED 2026-09-13, and it is what makes this a deletion rather than an
+option:** the only consumer of `packages/score-parser` is `apps/web`. The
+"standalone artifact" case the comment at `VoiceProfilePane.svelte:661` names has
+no user, so there is no default to preserve and no `background: null` parameter
+to add.
+
+**Consumers to check afterwards, all of them:** the page (`--paper-cream`), the
+loupe (`--paper-light`), the `fit-font-lab` dev route
+(`routes/fit-font-lab/+page.svelte:9`, which renders glyphs through the
+production renderer and may have been relying on the ground), and print.
+
+**THE RISK, NAMED BEFORE ANYONE BUILDS IT: gates 4 and 5 are both exposed.**
+`correction.test.ts:507` calls `renderAnalyzedStaff`,
+`performance-order-seam.test.ts:94` calls `paginateScore`, and
+`staff-renderer.test.ts` asserts hex literals. If one of them pins a rectangle,
+**the test is the thing to look at, not the ruling.**
+
+**WHAT THIS CLOSES.** Two open questions resolve themselves, and whoever builds
+this should strike both rather than leave them:
+
+1. The census (`memo-neutral-audit_r1_2026-09-13.md` §6.2) recorded "Whether a
+   cream rectangle prints behind each system was not observed." **Dann observed
+   it on screen 2026-09-13.**
+2. `STATE.md` §STILL UNSETTLED carries the print half, settled 2026-09-07 by
+   Dann's print preview: the cream prints, and the page was ruled to print white.
+   **It records a paste already written and NOT YET RUN, filed in `INBOX.md`.
+   FIND THAT PASTE BEFORE WRITING A NEW ONE**, per tether 16. It may already do
+   half of this job, or it may conflict with the ruling above.
+
+**Done when:** the loupe shows its own ground with no rectangle over it, Dann
+walks it, and the print path is checked once rather than assumed.
+
+
+---
+
+> **N.136. OPEN SYLLABIFICATION NEVER REACHES SCORE MARKUP'S DRAWN TEXT.
+> Numbered by Dann 2026-09-14. UNPLACED.**
+>
+> **How it was found.** Dann toggled `Open syllables` on the walk of `4d79f24`
+> and neither the Cyrillic underlay nor the IPA line above it changed. The
+> drawer registered the change: the band read `1 of 7 changed`.
+>
+> **The cause, read 2026-09-14.** The toggle reaches the resolver. The resolver
+> no longer supplies the text that draws.
+>
+> - A placed syllable's Cyrillic comes from `doc.pairings`, projected through
+>   `refreshPairings` from `slotQueue`.
+> - `slotQueue` is `buildSlotQueue(lines)` (`+page.svelte:379`), and that is
+>   **raw** `lines`.
+> - `effectiveLines`, the open-syllabified view (`+page.svelte:2182`), goes only
+>   to the Transcription page (`:4766`, `:4793`, `:4796`).
+> - The raw pass to the score pane is deliberate and is Dann's own ruling,
+>   quoted at `+page.svelte:4835-4838`, N.10, 2026-08-07: *"`lines` is passed
+>   RAW, not `effectiveLines` — the Fit resolver applies its own open
+>   syllabification, so the display view would be sliced twice."* That reasoning
+>   held while the resolver drew the text. It stopped being true when the queue
+>   took over.
+>
+> **NOT A REGRESSION FROM 2026-09-14.** Any placed syllable has always drawn
+> from the raw queue. Before N.134 this song had nothing placed, so every cell
+> came from the file's own underlay and the toggle changed nothing there either.
+> N.134 placed all 95, which turned a partial gap into a total one.
+>
+> **The audit of 2026-09-12 proved the wrong thing**
+> (`../sessions/brief-n119-toggles-reach-score-markup_r1_2026-09-12.md` §1). It
+> showed the toggle reaches `buildUnderlayResolvers` and concluded it reaches
+> the page. Those are two claims and only the first was tested. **Correct that
+> brief's table before N.119 is built**, or N.119 will be built against it.
+>
+> **Candidate fixes, unruled.** Feed the queue from `effectiveLines` rather than
+> `lines`, which makes the drawn text obey the toggle and needs the double-slice
+> question of N.10 re-answered, since the resolver still applies its own. Or
+> teach the projection to carry the resolver's division. **Whichever is taken,
+> N.10's 2026-08-07 reasoning is a source to re-check, not a wall**
+> (CONTRACT §1.19, amended 2026-09-14).
+
+---

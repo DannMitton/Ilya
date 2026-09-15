@@ -65,7 +65,11 @@
 		analyzeScore,
 		resolveVocalReadingOctave,
 		shiftVocalOctave,
-		scoreInPerformanceOrder
+		scoreInPerformanceOrder,
+		CYR_FONT_SIZE,
+		IPA_FONT_FAMILY,
+		IPA_FONT_SIZE,
+		IPA_TO_CYR_BASELINE,
 	} from '@ilya/score-parser';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
@@ -83,6 +87,7 @@
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { afterGround } from '$lib/shane/system-ground';
+	import { RING_MIN_W, RING_PAD_X, RING_PAD_Y, RING_RADIUS, RING_STROKE } from '$lib/shane/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/shane/watchlist';
 	import { scoreMetrics } from '$lib/shane/score-metrics';
@@ -332,15 +337,11 @@
 	   is 5.5, a bare note's ink is 7 wide by 22 tall, note-to-note ink gaps run
 	   9.19 to 39.01 with a median of 20.99, and an accidental's ink is 3.63 to
 	   5.24 wide. */
-	const RING_PAD_X = 4;
-	const RING_PAD_Y = 9;
-	/** The narrowest the box may be, so a bare notehead is not shrink-wrapped. */
-	const RING_MIN_W = 15;
-	/** Height over width. It must never approach square. */
-	const RING_ASPECT = 2.5;
-	const RING_RADIUS = 6;
-	/** Kept here as well as in the stylesheet: the clamp has to know it. */
-	const RING_STROKE = 2;
+	/* The numbers live in `selection-ring.ts` since N.141 step 2, because the
+	   loupe now draws its own copy of this ring and has to read the same
+	   stroke and reach. `RING_ASPECT = 2.5`, the height floor of 2026-08-28,
+	   was ruled out by Dann 2026-09-15: height follows the system's IPA
+	   baseline now, not the box's width. */
 
 	/** A glyph's INK, not its font box. The distinction is the whole bug. */
 	function glyphInk(el: SVGTextElement): { top: number; bottom: number; left: number; right: number } | null {
@@ -364,6 +365,88 @@
 		};
 	}
 	let inkCanvas: CanvasRenderingContext2D | null = null;
+
+	/** One element's box: a glyph's ink, or any other element's geometry. */
+	function markBox(el: Element): { top: number; bottom: number; left: number; right: number } | null {
+		if (el.tagName === 'text') return glyphInk(el as SVGTextElement);
+		try {
+			const b = (el as SVGGraphicsElement).getBBox();
+			if (b && (b.width || b.height)) return { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width };
+		} catch {
+			/* not rendered */
+		}
+		return null;
+	}
+
+	/**
+	 * A note's OWN ink: its group's marks and everything bound to it by
+	 * `data-of-event` (the accidental, its brackets, the augmentation dot).
+	 * The width is the glyphs' alone, as ruled 2026-08-28: the stem only ever
+	 * reaches up or down. N.141 leaves the analysis layer out: the turning
+	 * notehead and its marks are not the note's notation, and Dann ruled
+	 * 2026-09-14 that the ring encloses the notehead, its accidental, its dot
+	 * and its own stem.
+	 */
+	function eventInk(
+		scope: Element,
+		group: Element,
+		id: string,
+	): { top: number; bottom: number; left: number; right: number } | null {
+		let top = Infinity;
+		let bottom = -Infinity;
+		let left = Infinity;
+		let right = -Infinity;
+		const parts = [
+			...[...group.children].filter((c) => !c.hasAttribute('data-hit') && !c.hasAttribute('data-analysis')),
+			...(id ? [...scope.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)] : []),
+		];
+		for (const el of parts) {
+			const box = markBox(el);
+			if (!box) continue;
+			top = Math.min(top, box.top);
+			bottom = Math.max(bottom, box.bottom);
+			if (el.tagName === 'text' || el.hasAttribute('data-of-event')) {
+				left = Math.min(left, box.left);
+				right = Math.max(right, box.right);
+			}
+		}
+		return Number.isFinite(top) ? { top, bottom, left, right } : null;
+	}
+
+	/**
+	 * The system's IPA baseline, as drawn. Read off the IPA row where the
+	 * system prints one, or off the Cyrillic row `IPA_TO_CYR_BASELINE` below
+	 * it where every note on the system is a melisma or unplaced. Null where
+	 * the system has no underlay at all.
+	 */
+	function ipaBaselineOf(sys: Element): number | null {
+		let ipa = -Infinity;
+		let cyr = -Infinity;
+		for (const t of sys.querySelectorAll('text')) {
+			if (t.hasAttribute('data-analysis')) continue;
+			const y = Number(t.getAttribute('y'));
+			if (!Number.isFinite(y)) continue;
+			if ((t.getAttribute('font-family') ?? '').includes('Lato IPA')) ipa = Math.max(ipa, y);
+			else if (Number(t.getAttribute('font-size')) === CYR_FONT_SIZE) cyr = Math.max(cyr, y);
+		}
+		if (Number.isFinite(ipa)) return ipa;
+		return Number.isFinite(cyr) ? cyr - IPA_TO_CYR_BASELINE : null;
+	}
+
+	/**
+	 * The IPA FACE's descent at the row's size: how far below its baseline the
+	 * face declares its ink may go. A property of the font, known before any
+	 * syllable is drawn, so it is the same for every note on every system,
+	 * ruled by Dann 2026-09-15. Chrome returns it as a whole number, so it
+	 * carries about half a unit of rounding. Zero where the canvas cannot say.
+	 */
+	function ipaFaceDescent(): number {
+		const ctx = (inkCanvas ??= document.createElement('canvas').getContext('2d'));
+		if (!ctx) return 0;
+		ctx.font = `${IPA_FONT_SIZE}px ${IPA_FONT_FAMILY}`;
+		const d = ctx.measureText('a').fontBoundingBoxDescent;
+		return Number.isFinite(d) && d > 0 ? d : 0;
+	}
 
 	$effect(() => {
 		const id = selectedEventId;
@@ -406,97 +489,73 @@
 		const staffTop = hitY + 3.5 * gap;
 		const staffBottom = staffTop + 4 * gap;
 
-		/* The note itself: the notehead's ink sets the width, the stem only
-		   ever reaches further up or down. Glyphs measured as glyphs and
-		   geometry measured as geometry. */
-		let top = staffTop;
-		let bottom = staffBottom;
-		let left = Infinity;
-		let right = -Infinity;
-		for (const child of group.children) {
-			if (child.hasAttribute('data-hit')) continue;
-			if (child.tagName === 'text') {
-				const ink = glyphInk(child as SVGTextElement);
-				if (!ink) continue;
-				top = Math.min(top, ink.top);
-				bottom = Math.max(bottom, ink.bottom);
-				/* THE WIDTH IS THE NOTEHEAD'S ALONE, as ruled. */
-				left = Math.min(left, ink.left);
-				right = Math.max(right, ink.right);
-			} else {
-				let b: DOMRect;
-				try {
-					b = (child as SVGGraphicsElement).getBBox();
-				} catch {
-					continue;
-				}
-				if (!b || (!b.width && !b.height)) continue;
-				top = Math.min(top, b.y);
-				bottom = Math.max(bottom, b.y + b.height);
-			}
-		}
-		/* THE REST OF THE EVENT, which is not in the group. An accidental is
-		   emitted before the group opens, so it is bound back by handle
-		   (`staff-renderer.ts`'s `partOfEvent`) rather than found by geometry.
-		   The union is written to take anything so bound, so an augmentation
-		   dot needs no work here when the renderer gains one — TODAY IT DRAWS
-		   NONE, which §24 records. */
-		for (const part of root.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)) {
-			let box: { top: number; bottom: number; left: number; right: number } | null = null;
-			if (part.tagName === 'text') {
-				box = glyphInk(part as SVGTextElement);
-			} else {
-				try {
-					const b = (part as SVGGraphicsElement).getBBox();
-					if (b && (b.width || b.height))
-						box = { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width };
-				} catch {
-					box = null;
-				}
-			}
-			if (!box) continue;
-			top = Math.min(top, box.top);
-			bottom = Math.max(bottom, box.bottom);
-			left = Math.min(left, box.left);
-			right = Math.max(right, box.right);
-		}
-		if (!Number.isFinite(left) || !Number.isFinite(right)) return;
+		const sysEl = group.closest('[data-system]');
+		if (!sysEl) return;
 
-		/* WIDTH GROWS ONLY AS THE INK REQUIRES; the generosity goes into the
-		   height. A minimum keeps a bare notehead from being shrink-wrapped. */
+		/* ── THE SQUIRCLE'S GRAMMAR, N.141 STEP 1 ───────────────────────────
+		   Ruled by Dann 2026-09-14 and 2026-09-15, in `docs/memory/OPEN.md`
+		   §N.141. The WIDTH still follows the taken note's own ink, notehead,
+		   accidental and dot. The HEIGHT no longer follows the width: the
+		   bottom is the IPA baseline and the top is the note's own extent, and
+		   both are read for the whole system, so every ring on a system is the
+		   same height. `RING_ASPECT` is gone, by his ruling of 2026-09-15:
+		   "the new grammar wins and `RING_ASPECT` stops being a height floor".
+		   The portrait feel survives as `RING_MIN_W`. */
+		const own = eventInk(sysEl, group, id);
+		if (!own || !Number.isFinite(own.left) || !Number.isFinite(own.right)) return;
+		const { left, right } = own;
+
+		/* WIDTH GROWS ONLY AS THE INK REQUIRES. A minimum keeps a bare notehead
+		   from being shrink-wrapped, and is what keeps the box portrait. */
 		const width = Math.max(RING_MIN_W, right - left + RING_PAD_X * 2);
 		const centreX = (left + right) / 2;
-		/* AND THE PORTRAIT PROPORTION IS A FLOOR, not an outcome. Where an
-		   accidental widens the box, the HEIGHT grows to keep it — the box
-		   never approaches square. */
-		const height = Math.max(bottom - top + RING_PAD_Y * 2, width * RING_ASPECT);
-		const centreY = (top + bottom) / 2;
 
-		/* AND IT SLIDES RATHER THAN SHRINKS. A box 2.5 times as tall as it is
-		   wide, centred on a note near the top of its system, reaches above the
-		   viewBox — the renderer leaves only one space of headroom above the
-		   system's highest ink, and this box wants several. MEASURED before the
-		   clamp: 4.5 units outside on a note carrying an accidental.
-
-		   Shrinking it there would break the proportion Dann ruled, and letting
-		   it clip would bring back the open U. So the box keeps its size and
-		   moves down into the viewBox, which it can always do while still
-		   enclosing the ink, because the ink is inside the viewBox to begin
-		   with. Only a box taller than the whole system could not, and that
-		   case is reported rather than silently squashed. */
-		let y = centreY - height / 2;
-		const vb = (group.closest('[data-system]')?.getAttribute('viewBox') ?? '').split(/\s+/).map(Number);
-		if (vb.length === 4 && Number.isFinite(vb[1]) && Number.isFinite(vb[3])) {
-			/* The stroke straddles the path, so half of it lies outside the
-			   rectangle's own edge and has to be kept inside the viewBox too. */
-			const bleed = RING_STROKE / 2;
-			const highest = vb[1] + bleed;
-			const lowest = vb[1] + vb[3] - height - bleed;
-			y = Math.min(Math.max(y, highest), Math.max(highest, lowest));
-			/* Never at the cost of leaving the ink outside. */
-			y = Math.min(y, top);
-			y = Math.max(y, bottom - height);
+		/* THE TOP: the highest ink any note on this system reaches, notehead,
+		   accidental, dot or its own stem, padded. One number for the system,
+		   so the taken note's own top is always inside it and every ring on
+		   the system shares it. A beam is not a note's own ink in this sense
+		   and may be bisected, ruled 2026-09-14, so beams are not read. */
+		let systemTop = staffTop;
+		for (const g of sysEl.querySelectorAll('[data-event-id]')) {
+			const ink = eventInk(sysEl, g, g.getAttribute('data-event-id') ?? '');
+			if (ink) systemTop = Math.min(systemTop, ink.top);
 		}
+		let top = systemTop - RING_PAD_Y;
+
+		/* THE BOTTOM ENCLOSES THE IPA ROW'S FULL INK, descenders included, and
+		   stops short of the Cyrillic row. RULED BY DANN 2026-09-15, overruling
+		   the desk's midpoint: *"The musical notation is effectively the pitch,
+		   and the IPA is the vowel. I want both captured to the exclusion of the
+		   original Cyrillic."* So the stroke's INNER edge sits on the IPA face's
+		   descent below the IPA baseline: the face's metric, not the glyphs on
+		   the system, so a syllable without a descender, and a melisma with no
+		   syllable at all, get the same box as one carrying ɲ (his ruling of
+		   2026-09-14: "as if there were a verbatim vowel printed there").
+
+		   THE CYRILLIC IS OUTSIDE BY CONSTRUCTION, not by a clamp here: the
+		   renderer sets the Cyrillic baseline `IPA_TO_CYR_BASELINE` below the
+		   IPA baseline, and that constant was widened for exactly this box.
+
+		   A system with no underlay at all keeps the note's own bottom, padded. */
+		const ipaBaseline = ipaBaselineOf(sysEl);
+		let bottom =
+			ipaBaseline !== null
+				? ipaBaseline + ipaFaceDescent() + RING_STROKE / 2
+				: Math.max(own.bottom, staffBottom) + RING_PAD_Y;
+
+		/* NEVER TRUNCATED ON THE PAGE. The renderer leaves one stave-space of
+		   headroom above the system's highest ink, and the pad wants more, so
+		   the top is held inside the viewBox with its stroke. It moves down
+		   rather than the box being cut, and it cannot pass the highest ink,
+		   which is inside the viewBox to begin with. */
+		const vb = (sysEl.getAttribute('viewBox') ?? '').split(/\s+/).map(Number);
+		if (vb.length === 4 && Number.isFinite(vb[1]) && Number.isFinite(vb[3])) {
+			const bleed = RING_STROKE / 2;
+			top = Math.min(Math.max(top, vb[1] + bleed), systemTop);
+			bottom = Math.min(bottom, vb[1] + vb[3] - bleed);
+		}
+		const y = top;
+		const height = bottom - top;
 
 		const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		ring.setAttribute('data-selection-ring', '');
@@ -531,8 +590,6 @@
 		   it is still skipped by the loupe's ink survey; it is still removed by
 		   the same cleanup; its coordinates are the system's, and the group
 		   carries no transform, so leaving the group changes no number. */
-		const sysEl = group.closest('[data-system]');
-		if (!sysEl) return;
 		sysEl.insertBefore(ring, afterGround(sysEl));
 	});
 

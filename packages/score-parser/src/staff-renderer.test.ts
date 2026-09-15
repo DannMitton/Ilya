@@ -41,6 +41,7 @@ import {
   inkMetrics,
   newAccidentalCarry,
   INK_CLEAR_SP,
+  IPA_TO_CYR_BASELINE,
   TURNING_TRAIL_SP,
   type StaffRenderOptions,
 } from './staff-renderer';
@@ -163,6 +164,10 @@ describe('staff renderer: layout', () => {
     const ipaY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12" fill="#6a655f"/)![1]);
     const cyrY = Number(svg.match(/y="([\d.]+)" text-anchor="middle" font-size="12\.5"/)![1]);
     expect(ipaY).toBeLessThan(cyrY);
+    // N.141, Dann 2026-09-15: the rows part far enough for the selection
+    // squircle's bottom edge and stroke to sit between them.
+    expect(cyrY - ipaY).toBe(IPA_TO_CYR_BASELINE);
+    expect(IPA_TO_CYR_BASELINE).toBe(20);
   });
 });
 

@@ -11,12 +11,11 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`8bb406c`**, "N.138 increments 2 and 3: the meter sits one
-space after the key, and the excerpt no longer ends on its barline", shipped
-2026-09-14, Vercel `dpl_NVPuRWJzticKSxLs9bLp6RMkaLpw` READY on the branch alias,
-sha checked by the desk before Dann was sent to it, and walked by him (the
-previous floors, `490c12d`, `92b7d5d`, `8278429` and earlier, are in
-`../sessions/LOG.md`). A floor cannot go stale,
+before **`eb918ed`**, "N.133: the renderer stops painting its own
+ground", shipped 2026-09-15, Vercel `dpl_CocZiesaB9svP3bRoYAUA3RtwTnZ` READY on
+the branch alias, sha checked by the desk before Dann was sent to it, and walked
+by him (the previous floors, `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and
+earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
 If the tree is ahead of it, that is expected and tells you only that work has
 landed since.
@@ -44,25 +43,50 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### THE ONE THING: THE COLOUR STORY, STAGE 5. THE GHOSTS AND THE DUPLICATES.
+> ### THE ONE THING: N.141, THE SQUIRCLE'S GRAMMAR. IN CODE, 2026-09-15.
 >
-> **Stage 4 CLOSED 2026-09-14, shipped as `aa2b419` and walked by Dann.** Its
-> spec, the twenty values, and the two items he did not reach are in
-> `../sessions/LOG.md` block 15. Stages 1, 2, 3a, 3b and 4 are done and walked.
+> **Spec in `OPEN.md` §N.141, brief at
+> `../sessions/brief-n141-squircle-grammar_r1_2026-09-15.md`.** Every rule in it
+> is Dann's, quoted and dated. **Built in three steps, and step 1 may be the whole
+> job:** one geometry change to the single existing mark, measured before anything
+> else is built. Steps 2 and 3 exist only for collisions step 1 cannot solve, and
+> step 3 is expensive, because it would make the loupe a render rather than a crop
+> of the page.
 >
-> **Stage 5 is named by the ruled order, not by the desk**
-> (`../sessions/plan-colour-story_r1_2026-09-13.md`, §STAGE 5 and §The order, in
-> one line). Its scope, verbatim from that plan: `--stone-600` declared or its
-> seven references rewritten; every other ghost the census found; inline literals
-> that duplicate a token replaced by the token, or the reason they are literals
-> written down beside them. **The plan says it is last on purpose: it is hygiene
-> and it is the least visible.** No brief is written for it.
+> ---
 >
-> **DANN MAY DISPLACE IT WITH A WORD, and two candidates are already standing.**
-> Findings 2 and 3 of the 2026-09-13 walk below, the missing meter signature and
-> the possibly halved rhythmic values, are both NOT ESTABLISHED and neither has
-> been investigated. §THE SCHEMA rule 3 reserves half of every build day for what
-> the previous walk found.
+> **COLOUR STAGE 5 WAS DISPLACED BY DANN ON 2026-09-14 AND IS STILL DISPLACED.**
+> He displaced it in favour of the 2026-09-13 walk's findings 2 and 3. Its scope
+> is unchanged and is in
+> `../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5: `--stone-600`
+> declared or its seven references rewritten, every other ghost the census found,
+> and inline literals that duplicate a token replaced or explained. **No brief is
+> written for it. It is hygiene and it is the least visible thing on the list.**
+>
+> **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** The block
+> further down still describes three of them as standing; that text is stale and
+> moves to `LOG.md` at the close.
+>
+> 1. The `Transcribe and fit` pill: CLOSED 2026-09-14. **The pill's fate is still
+>    Dann's to rule**, and both its acts are known duplicates.
+> 2. The missing meter signature: **numbered N.139**, brief written, not built.
+> 3. The possibly halved rhythmic values: **CLOSED 2026-09-14 and never a
+>    defect.** T05 declares 2/4 once and its measures fill 2/4; Dann checked the
+>    printed score and it is 2/4.
+> 4. N.133, the renderer's ground: **DONE 2026-09-15**, `LOG.md` block 17.
+>
+> **FOUR SHIPS ON 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
+> N.138 increment 1, `8bb406c` its increments 2 and 3, `d6580af` the ring and
+> held-measure mark landing after the ground, `eb918ed` N.133. **N.138's account
+> is `LOG.md` block 16 and N.133's is block 17.** Gate 4 moved 1144 to 1170 across
+> the night and gate 5 547 to 550; the desk moved the ship script's lines each
+> time and kept a backup per move.
+>
+> **THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE AND HAS
+> NOT BEEN PRUNED.** It holds live items mixed with closed ones. The live ones are
+> N.127's unreviewed decisions, the briefs list, N.129, N.94, the ratified names,
+> the colour plan pointer, the text-to-score sequence, and the damage in Dann's own
+> engraving. **Everything else in it is closed and belongs in `LOG.md`.**
 >
 > ---
 >
@@ -298,6 +322,21 @@ Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 **The specs these marks point at live in `OPEN.md` from 2026-09-13.** This
 section carries the marks; that file carries the items.
 
+**AND THE ORDER THEY ARE BUILT IN LIVES IN `SEQUENCE.md` from 2026-09-15.** This
+section says what is open; that file says what comes first and why. **Six
+dependencies fix the order and everything else floats**; the rest of this file
+does not repeat them.
+
+### Numbered 2026-09-15
+
+- `[ ]` **N.142. A tie is prolongation, not a new syllable target.** Dann,
+  2026-09-15: *"Ilya must understand that a tie is rhythmic prolongation."* The
+  number is a DESK DEFAULT. **The data is already there and both parsers fill it**
+  (`types.ts:572`, `musicxml-parser.ts:633`, `mnx-parser.ts:720`); nothing in the
+  seating path reads it. **Rests are already excluded and nothing is owed there.**
+  Spec in `OPEN.md`, including the one thing Dann must rule before it ships: what
+  happens to syllables already sitting on tie continuations.
+
 ### Numbered 2026-09-14
 
 - `[D]` **N.141. The squircle has no grammar.** Found by Dann on the walk of
@@ -346,12 +385,11 @@ section carries the marks; that file carries the items.
   **Belongs in the release cut's IN bucket:** the ruled release sentence names
   Insights, and a document in the wrong language is wrong rather than
   half-built. Spec in `OPEN.md`. **Dann owes the French; nothing is coined.**
-- `[ ]` **N.133. The renderer stops painting its own ground.** Ruled by Dann
-  2026-09-13 on the walk: the cream rect at `staff-renderer.ts:2828` and the white
-  one at `page-layout.ts:365` both go, and `stripBackingRect` goes with them.
-  **Found because the loupe showed a measure on cream instead of its own fill.**
-  Closes the census's unobserved print question and §STILL UNSETTLED's half of it.
-  **Gates 4 and 5 are exposed.** Spec in `OPEN.md`.
+- `[x]` **N.133. The renderer stops painting its own ground. DONE 2026-09-15,
+  shipped as `eb918ed` and walked by Dann.** Account and spec in
+  `../sessions/LOG.md` block 17. Gate 5 moved to 550. **Still NOT ESTABLISHED, and
+  small: no actual print preview was taken**, only a reading of the loaded print
+  stylesheets.
 - `[ ]` **N.132. The ratified names are not built.** `Text`, `Markup`, `Melody`,
   ruled 2026-09-13 in both languages, and the tree still says "Transcription" and
   "Score markup" (`i18n.ts:106`, `:117`, `:59`). **Found because Dann walked the

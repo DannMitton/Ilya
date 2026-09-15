@@ -595,6 +595,59 @@ export function closingBarline(
 	return { right, final: pair.length >= 2 };
 }
 
+/** A rectangle, in whatever units the caller names. */
+export interface Box {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
+/**
+ * N.141 step 2. The page's selection ring, placed on the loupe's strip.
+ *
+ * The loupe draws its panels side by side at one `scale`, and the body panel's
+ * left edge in page units is `viewLeft`, at `bodyLeftPx` along the strip. The
+ * page's coordinates run on continuously across that edge, so one linear map
+ * places the ring wherever it reaches, including left of the body over the
+ * meter's run-in or the carried band, which is exactly the reach a ring cut to
+ * the body could not have. Vertically the strip starts at the crop's top.
+ *
+ * THE SHAPE IS THE PAGE'S, ruled 2026-09-14: same box, same corner, same
+ * stroke, only scaled. Nothing here adjusts it.
+ */
+export function stripRing(
+	ring: Box & { radius: number; stroke: number },
+	viewLeft: number,
+	bodyLeftPx: number,
+	cropTop: number,
+	scale: number,
+): Box & { radius: number; stroke: number } {
+	return {
+		x: bodyLeftPx + (ring.x - viewLeft) * scale,
+		y: (ring.y - cropTop) * scale,
+		width: ring.width * scale,
+		height: ring.height * scale,
+		radius: ring.radius * scale,
+		stroke: ring.stroke * scale,
+	};
+}
+
+/**
+ * N.141 step 2. The ink band the loupe crops to, widened above so the ring fits.
+ *
+ * `inkCrop` pads the page's ink band by half a stave-space. The ring stands
+ * `reach` above the highest ink it encloses, which is more than that, so on the
+ * page's tallest system its top was cut: MEASURED 2026-09-15 on the engraved
+ * Without Sun song 1, 60 of 96 notes, by 0.37 to 3.37 units. The band grows
+ * above by only what the pad does not already give. It is a page-wide constant
+ * like the band itself, so the frame still does not breathe between notes.
+ */
+export function ringRoom(page: PageInk | null, lineGap: number, padSpaces: number, reach: number): PageInk | null {
+	if (!page) return page;
+	return { ...page, above: page.above + Math.max(0, reach - lineGap * padSpaces) };
+}
+
 /**
  * What the loupe needs to know about the page as a whole, in staff units.
  *

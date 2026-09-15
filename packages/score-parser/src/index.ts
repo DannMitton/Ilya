@@ -46,6 +46,10 @@ export {
 } from './tempo-terms';
 export {
 	renderAnalyzedStaff,
+	CYR_FONT_SIZE,
+	IPA_FONT_FAMILY,
+	IPA_FONT_SIZE,
+	IPA_TO_CYR_BASELINE,
 	WITHHELD_SIGLA,
 	WITHHELD_SIGLA_WIDTH_PX,
 	type StaffRenderOptions,

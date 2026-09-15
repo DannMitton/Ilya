@@ -103,6 +103,107 @@ sung unit, never left; at a third or more it aligns vertically. This departs
 from Gould 103 on purpose; his words: "I realize this may be at odds with
 Gould, but I find this acceptable for our purposes." Built under N.106.
 
+## Ilya does the correct work up front. Ruled by Dann 2026-09-15
+
+**His words:** *"This is also why we invested so much energy in creating controls
+for the user to correct such errors. The infrastructure is already in place. I just
+want Ilya to do the correct work up front; to my mind this reinforces user
+confidence in Ilya rather than undermining it while requiring manual
+intervention."*
+
+**THE CORRECTION SURFACE IS A SAFETY NET, NOT THE PLAN.** Ilya already tells the
+singer that its placements are proposals, and it already gives them the means to
+change every one. **That is not a licence to propose badly.** A singer who has to
+repair the same class of error on every score learns that Ilya does not understand
+the music, and no amount of correctability buys that back.
+
+**HOW TO APPLY IT.** Where Ilya can know the right answer from the score, it does
+the right thing rather than proposing a plausible one and relying on the
+correction path. **A rule Ilya can read out of the notation is not a matter of
+taste and should not be delegated to the singer.** Where Ilya genuinely cannot
+know, it proposes, says so once, and leaves the controls to hand.
+
+**What prompted it, 2026-09-15:** N.142, where Ilya seats syllables on tied
+continuations because it counts noteheads rather than reading ties. The controls to
+fix that by hand already exist. Dann's point is that they should not be needed.
+
+## The page and the loupe answer to different things. Ruled by Dann 2026-09-15
+
+**His words, and they are the principle:** *"I can accept that a measure in the
+Loupe could be drawn differently to accommodate our requirements while its
+counterpart on the page obeys the page's music spacing and layout. That seems
+proper and good to me. The page needs to serve the demands of the piece, while
+the Loupe needs to juggle the vagaries of the individual measure."*
+
+**THE PAGE SERVES THE PIECE.** Its spacing, its measure distribution and its
+system breaks answer to the whole work. They are editorial and may be changed with
+justification (his ruling of 2026-09-14, recorded above), but they are changed for
+the sake of the piece.
+
+**THE LOUPE SERVES ONE MEASURE.** It may space that measure differently from the
+page, to make the measure readable and to make Ilya's own marks fit around it.
+
+**WHAT THIS GIVES UP, recorded so the trade is on its face.** The loupe is
+currently a CROP of the page's SVG, which guarantees that what the singer examines
+is exactly what prints. **Where the loupe re-spaces, that guarantee goes.** Dann
+ruled it knowing that; the desk had argued the other way, treating the guarantee
+as the thing to protect, and his division of labour is the better account: two
+jobs, two drawings.
+
+**IT IS PERMISSION, NOT AN INSTRUCTION. The cheap route is still tried first.**
+Nothing should be re-spaced that can be solved by moving Ilya's own marks. **As of
+2026-09-15 nothing requires it:** N.141's step 2 reached zero collisions and zero
+truncations on both scores by giving the loupe its own selection mark, so its step
+3 was not built.
+
+**Where it bears on open items:** N.141 step 3, and N.140, whose scroll-below-a-floor
+design has a second answer under this principle, namely re-spacing the measure for
+the width available.
+
+## The squircle. Ruled by Dann 2026-08-27 and 2026-09-15
+
+**IT IS IDENTITY, NOT DECORATION.** Ruled 2026-08-27: the squircle is a key germ
+of Ilya's visual vocabulary. It is not one marker's shape, and it is not
+ornament. **It governs where rounded forms appear across the product.** This
+REFINES the three-radii rule in the drawer grammar table rather than contradicting
+it; the radii say what values exist, this says what the shape means.
+
+**ITS PURPOSE IS ARRESTING FOCUS.** Ruled 2026-09-15, in his words: *"The purpose
+of the squircle is to create arresting focus for the user, something they can't
+ignore and that focuses their attention. The negative space inside a squircle
+gives breath, and as long as it reads proportionately, I believe it still aligns
+with Calm Authority."*
+
+**IT CARRIES NO FILL, AND THAT IS DELIBERATE.** Dann, 2026-09-15: *"Ilya is a
+grandchild of my dissertation and I decided arbitrarily not to fill the squircles
+in Ilya. I think it reads cleanly and aligns with Calm Authority."* The mark in his
+doctoral edition is a red stroke with a light red fill; Ilya's is
+`fill: none` with a `--lavender` stroke (`VoiceProfilePane.svelte`,
+`rect[data-selection-ring]`).
+
+**The two marks do different jobs, which is the justification even though he
+reached it by eye.** His annotates a region on a static page, where a wash reads as
+commentary laid over the music. **Ilya's sits on live notation the singer is
+working in**, and a fill of any weight tints the notation inside it, so the mark
+would compete with the ink it exists to point at. An outline points without
+colouring.
+
+**SO THE NEGATIVE SPACE IS THE POINT, AND IT IS NOT WASTE.** A squircle that looks
+larger than its contents require is doing its job. **The condition he attached is
+PROPORTION, and it is judged by his eye, not by a number.** Per CONTRACT §1.19
+this is a stated default with its condition, not an edict: a squircle that stops
+reading proportionately is a case to bring him, not a rule to enforce against
+him.
+
+**WHAT THIS SETTLED, the same day.** The selection squircle takes its top from the
+highest note on its system, so **one tall stem raises every box on that system**.
+Dann ruled that acceptable on the reasoning above rather than as a concession.
+
+**The selection squircle's own grammar is an item, not a product rule**, and lives
+in `OPEN.md` §N.141: what it encloses, that it is never truncated, what may
+collide with it, and the difference between its behaviour on the page and in the
+loupe.
+
 ## Naming, ruled
 
 `Russian-o` / `o russe`. `cardinal-u` / `u cardinal`. **The French is LOWERCASE.**
