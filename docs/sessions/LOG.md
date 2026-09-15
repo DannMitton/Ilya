@@ -4952,3 +4952,93 @@ walks it, and the print path is checked once rather than assumed.
 > (CONTRACT §1.19, amended 2026-09-14).
 
 ---
+
+---
+
+## Block 18. Moved from STATE.md at the close of 2026-09-15
+
+Closed narrative, verbatim and in order, nothing rewritten. The four ships of
+2026-09-14, the two items of that close, and the 2026-09-13 walk's findings as they
+were last written while three of them still stood. The colour hue map below is
+live as a RULING and lives in `plan-colour-story_r1_2026-09-13.md`; only this
+duplicate copy moved.
+
+**FOUR SHIPS ON 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
+N.138 increment 1, `8bb406c` its increments 2 and 3, `d6580af` the ring and
+held-measure mark landing after the ground, `eb918ed` N.133. **N.138's account
+is `LOG.md` block 16 and N.133's is block 17.** Gate 4 moved 1144 to 1170 across
+the night and gate 5 547 to 550; the desk moved the ship script's lines each
+time and kept a backup per move.
+
+**THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE AND HAS
+NOT BEEN PRUNED.** It holds live items mixed with closed ones. The live ones are
+N.127's unreviewed decisions, the briefs list, N.129, N.94, the ratified names,
+the colour plan pointer, the text-to-score sequence, and the damage in Dann's own
+engraving. **Everything else in it is closed and belongs in `LOG.md`.**
+
+---
+
+**CLOSE OF 2026-09-14. TWO ITEMS SHIPPED, BOTH WALKED BY DANN.** `4d79f24`,
+all five gates green, `dpl_92MYtg58wc4G3No77UvfPZY8f5oD` READY on the branch
+alias, sha checked before he was sent to it.
+
+- **N.134 DONE.** A score arriving with its own words into an EMPTY poem box
+  fills the box, tags the receipt `from score`, and seats the syllables from
+  the file's own syllable-to-note mapping. Committed alone as `e973afc`.
+  Walked: 39 words, receipt `from score`, Transcription draws, `95 / 95
+  placed`, and the song named from the score header rather than from the poem.
+  **Increment 2, a singer's own different poem, is NOT built.**
+- **N.118 DONE.** Punctuation travels in the slot. Walked on the page:
+  fourteen marks where none drew the day before.
+
+Gate 4 moved 1123 to 1131 to **1144**; the desk moved `~/Downloads/ilya-ship.sh:79`
+both times, per §THE DESK MOVES THE GATE LINE.
+
+**WHAT THAT WALK FOUND, both numbered the same night.** N.136, open
+syllabification never reaches Score markup's drawn text. And the hyphen
+omission, folded into N.129 below on Dann's word.
+
+**THE 2026-09-13 WALK'S FOUR FINDINGS: ONE CLOSED, THREE STAND.**
+
+1. **CLOSED 2026-09-14, and it was not the defect it looked like.** `Transcribe
+   and fit` was pressed and the counter did not move, because **the button does
+   not fit**: `handleTranscribe` never touches `doc.pairings`
+   (`+page.svelte:2373-2380`, and its own comment says so), and its second act
+   duplicates `Continue to analysis` (`ScoreUploader.svelte:550-560`). **That
+   settles N.121 (c), opposite to the guess recorded there. The pill's fate is
+   still Dann's to rule**, and its two acts are now both known to be duplicates.
+2. **THE METER SIGNATURE IS MISSING** from the rendered score. Dann's
+   observation, 2026-09-13, on Kabalevsky T05. **NOT ESTABLISHED and still not
+   investigated.** Source:
+   `~/Downloads/Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`.
+   Open the source before reasoning about the render, per tether 10.
+3. **THE RHYTHMIC VALUES MAY BE HALVED.** Dann: *"it feels like the measures
+   are half the rhythmic value they should be."* Per tether 15 this is evidence,
+   not a claim to argue with. Still open.
+4. **N.133**, the renderer stops painting its own ground. Ruled, numbered, spec
+   in `OPEN.md`.
+
+
+**THE COLOUR STORY, RULED 2026-09-13.** A hue names ONE IDEA, and a band
+takes the hue of the idea it holds, wherever that band appears. **sage = the
+words** (Text, the Input band); **lavender = the melody** (the Markup tab,
+the Melody band, the turning layer); **cobalt = information** (Guide, the
+Piece band); **rose = your voice** (the new Voice band, the whole
+calibration interface INCLUDING THE PACIFIER, and Insights); **umber = the
+book** (Learn). `Voice` extracts from Score markup to become a band sibling
+of Piece, Input and Melody. Plan and stages:
+`docs/sessions/plan-colour-story_r1_2026-09-13.md`. The census memo landed;
+stage 2 is Dann's four rulings.
+
+
+**The history of this section moved to `../sessions/LOG.md` on 2026-09-01.**
+Every entry from 2026-08-23 to 2026-08-27 that used to sit here is in that
+file, verbatim and in order. Nothing was rewritten. This section now carries
+the current one thing and nothing else, which is what `README.md` sends you
+here for.
+
+**Closed and moved to `../sessions/LOG.md` block 8 at the close of the
+2026-09-07 session:** N.108 (five increments, `2c1cecf` to `5f6a2f3`),
+N.111 (`7875892`, `c574cf8`, `d5a49ff`, `a186f20`), N.112 (`b191867`,
+`1b3054a`), and N.113 (`e1bcb67`, walked 2026-09-07). All walked by Dann.
+

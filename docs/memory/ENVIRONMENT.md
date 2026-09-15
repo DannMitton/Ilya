@@ -87,6 +87,7 @@ next session the same hour it cost the last one.
 | a screen-reader string to check | `SCREEN-READER STRINGS` |
 | instruments already known to lie | `Known instrument faults` |
 | asking whether an SVG mark is hidden behind another | `YOU DO NOT NEED A PIXEL` |
+| asking WHICH mark an arc or a glyph on screen is | `YOU DO NOT NEED A PIXEL` §THE SAME RULE |
 | a Cyrillic letter on screen that is not the letter in the data | `Ё PLUS U+0301` |
 | `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
 | a remote branch that seems not to exist | `implies --single-branch` |
@@ -241,6 +242,23 @@ readable. Where the question is about type size, colour, or what a human can mak
 out, the pixel is still the only instrument, and
 `drawing-loupe-stave-scales_r1_2026-09-14.html` is how that one was answered the
 same night.
+
+### THE SAME RULE, A SECOND CASE: WHICH MARK IS THIS. Added 2026-09-15
+
+**The renderer labels its own marks, and the labels are in the shipped DOM.**
+`data-tie`, `data-slur`, `data-analysis`, `data-loupe-*`. So "is that arc a tie
+or a melisma slur" is a `querySelectorAll`, not a judgement about a curve in a
+screenshot.
+
+**This cost a whole exchange on 2026-09-15.** Dann sent two pictures of arcs and
+the desk reasoned about which block drew them from where each arc's terminal
+appeared to sit: a tie starts at the notehead's own level
+(`staff-renderer.ts:2757`, `ey = y1 ± 4`), a slur above the stave (`:2817`,
+`sy = top - 6`). **That reasoning is sound and it is still not evidence.** The
+attribute is one call away and it is the answer.
+
+**The general form: before reasoning about a rendered mark, ask whether the
+renderer named it.** In this project it usually did.
 
 ## Gate baselines
 

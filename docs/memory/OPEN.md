@@ -35,6 +35,63 @@ those marks point at.
 > `docs/sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`.
 >
 
+### RAISED AGAIN BY DANN 2026-09-15, WITH A CHALLENGE TO THE RECORD
+
+**His words, on two screenshots of the walk of `76b24a3`:** *"This also troubles
+me. We already discussed this in a prior work session. These arcs should be
+tapered at either end, like most of the others are. You claimed that these were
+melisma phrase marks, not ties, and that this somehow affected their rendering?
+But the second one is clearly a tie. Please review that conversation and make it
+right. These constant-width arcs are noticeable and wrong. They need to be
+tapered."*
+
+**THE RE-VERIFICATION, done 2026-09-15 against the tree at `76b24a3`** (the line
+numbers in the block above are from 2026-09-11 and have moved; N.126 pushed them
+down by about 150):
+
+| | today's line | what it emits |
+|---|---|---|
+| tie | `staff-renderer.ts:2783` | two quadratics, closed `Z`, `fill="#1a1612"`, **no stroke: a filled tapered lens**, centre `TIE_CENTRE_SP` 0.4 sp |
+| slur | `staff-renderer.ts:2822` | one quadratic, `fill="none" stroke-width="1.3"`: **a constant-width ribbon** |
+
+**So the finding as recorded holds in the tree, and the desk owns how it was put
+to him.** What was on record was never *"these are melisma marks, so tapering
+does not apply"*. It was that ties are ALREADY tapered in the source and the
+constant-width arcs are slurs. **If it reached him as an excuse for the slur
+rather than as a location for the fix, that is the desk's fault and not his
+misreading.** The brief has ruled since 2026-09-11 that slurs become filled
+tapered objects with pointed ends (§2.1), for exactly his reason, and Gould 151
+is the authority: **tie and slur share one design.**
+
+**DANN IS RIGHT THAT THE DISTINCTION CHANGES NOTHING ABOUT THE OUTCOME.** Both
+arcs taper. The distinction changes only WHICH code block is edited, and §2.1
+already edits the one that does not.
+
+**BUT IT CHANGES ONE THING, AND THE BRIEF DOES NOT COVER IT.** If an arc he is
+pointing at is a TIE and it reads as constant width to his eye, then the tie's
+taper is invisible at the drawn stave size, which the source says should not
+happen. **That is a second defect, not this one.** The memo's own NOT
+ESTABLISHED of 2026-09-11 named it and it is still open: *"whether the tie's
+filled-tapered code is actually what rendered on the page the user viewed."*
+**Add a §2.4 to the brief: measure the rendered tie's centre thickness in px at
+the shipping `lineGap` of 5.5, against the slur's 1.3 px, and say whether 0.4 sp
+survives the size it is drawn at.**
+
+### THE TIE / SLUR PREDICATE IS NOW LOAD-BEARING FOR THREE ITEMS
+
+Named 2026-09-15 because three separate questions of the same evening all turned
+on it, and none of them can be answered from a picture.
+
+- **N.125**, this item: which block draws the arc Dann flagged.
+- **N.141** case 2: a squircle opens on a TIE across a barline and stays closed
+  on a MELISMA. See §N.141 §EVIDENCE.
+- **N.142**, the tie predicate itself, which is not built.
+
+**The cheap instrument settles all three at once: read `data-tie` and
+`data-slur` off the rendered page rather than off a screenshot** (they are on
+the paths already). Whoever takes N.142 should be told this.
+
+
 > **N.118, NUMBERED BY DANN 2026-09-09: punctuation travels in the slot.**
 > A placed syllable never carries the poem's punctuation because
 > `cyrOfSyllable` reads `cleanWord` (`pairings.ts:152-159`); the punctuated
@@ -789,6 +846,24 @@ event, a melisma's is.
    this is a good thing."* **The opening is not a cost to be tolerated; it is the
    mark doing a second job**, telling the singer the note continues where they
    cannot currently see it.
+
+**EVIDENCE, Dann on the walk of `76b24a3`, 2026-09-15.** Two loupe shots of
+Without Sun song 2, both on system 10 of 11, where he says the closed box is
+wrong under this ruling: **m. 84**, A#3, half, *"this is an example of a
+squircle that should imply continuation like we discussed earlier tonight,
+because the rhythmic value carries past the measure's barline"*; and **m. 87**,
+B3, half, *"same here"*.
+
+**THE SECOND ONE IS NOT YET ESTABLISHED, AND THE DESK SAYS SO RATHER THAN
+AGREEING.** Case 2 fires on a TIE. A melisma keeps one box per note, ruled
+above. Both measures carry a lyric extender in the underlay (« чей, ____ » at
+m. 84, « яд— ____ » at m. 87), which is the melisma's own mark, and the arc
+leaving m. 87 starts ABOVE the stave, which is where the SLUR block puts it
+(`staff-renderer.ts:2817`, `sy = top - 6`); a tie starts at the notehead's own
+level (`:2757`, `ey = y1 ± 4`). **So m. 87 reads as a melisma slur from the
+geometry, in which case its closed box is already correct and only m. 84 is the
+defect.** Settle it by reading `data-tie` / `data-slur` off the rendered page,
+never from the picture (tether 14).
 3. **Across a system break.** One box is geometrically impossible; the notes are
    on different lines.
 
@@ -1126,3 +1201,141 @@ it does not describe a continuation of a sounded note.
   `ownIds` filter at `+page.svelte:1448` excludes rests only.
 - **What a melisma spanning a tie should do.** N.113's melisma machinery and this
   rule meet on the same notes and nobody has looked.
+
+---
+
+## N.143. N.134 DOES NOT FIRE ON A `.musx` SCORE. Numbered 2026-09-15. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Observed by Dann on the deploy `76b24a3`, 2026-09-15**, with screenshots, after
+three prior sightings by Code that were each written off to the load. His words:
+*"I just pulled T05 in and there is no instantaneous transcription. Why doesn't an
+instantaneous transcription appear? We based a whole evening of work on making
+that happen."*
+
+**THE TERM IS "THE INPUT FIELD". Dann, 2026-09-15:** *"the input field (not the
+poem box grrr)"*. The band is labelled `Input` and the field is where a poem is
+pasted, typed or dropped. **Older records, N.134's included, say "poem box"; they
+are history and are not rewritten. Nothing written from 2026-09-15 uses it.**
+
+**THE FOURTH SIGHTING, AND THE FIRST BY DANN ON A DEPLOY.** The `INBOX.md` entry
+of 2026-09-15 recorded the pattern across Code's three runs. This supersedes it:
+it is a defect, not a fixture quirk.
+
+### WHAT HIS SCREENSHOTS SHOW
+
+| | state |
+|---|---|
+| Score markup | **Draws T05's own words.** « Бог Ку-пи-дон дре-мал в ти-ши лес-ной » |
+| Measure numbers | Drawing, including the bracketed courtesy numbers `[9]` and `[28]` |
+| **The input field** | **EMPTY.** Placeholder showing |
+| **Transcription** | **EMPTY.** "Enter your Cyrillic text in the drawer on the left." |
+| The poem receipt | **No `from score` tag** |
+| The song's name | **`Untitled, 2026-09-15`**, not named from the score |
+| The Piece fields | All empty |
+
+**So BOTH halves of N.134 are absent for this file.** N.134 was walked on
+2026-09-14 with 39 words, the `from score` receipt, Transcription drawing, and the
+song named from the score header. **That walk was on Sunless 01, which is
+MusicXML. T05 is `.musx` through denigma into MNX.**
+
+### HALF A: THE POEM FILL. THE GATE IS FOUND, THE FAILING CONDITION IS NOT
+
+`+page.svelte:3120-3123`:
+
+```
+const fillText =
+    origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
+        ? scoreWordsText(collectScoreWords(ingested.result.score, 1))
+        : '';
+```
+
+**All three conditions must hold. Two of them plainly do:** the box is empty in his
+screenshot, and the score carries lyrics, since they draw on Score markup. **So the
+failure is one of:**
+
+1. **`origin !== 'upload'`.** The comment above that line says the fill is
+   deliberately confined to an upload so that a saved song with an empty box is
+   not written on boot. **Establish what `origin` was for his drop.**
+2. **`collectScoreWords(score, 1)` returns nothing on this file.** It takes VERSE
+   1. **T05's MNX carries TWO lyric lines**, `v1` Cyrillic and `v2` IPA
+   (read from the converted file 2026-09-15). If the MNX path numbers or orders
+   them differently from MusicXML, verse 1 may not be what the caller assumes.
+   Its `close()` also returns null for a word where **no syllable carried a
+   vowel**, so a structural difference could empty the list silently.
+3. **`noLyrics` is computed true** despite the lyrics drawing.
+
+**Instrument each of the three rather than guessing. They are cheap to
+distinguish and only one of them is a design decision working correctly.**
+
+### HALF B: THE NAME FROM THE HEADER. CAUSE ALREADY ESTABLISHED
+
+**The converted MNX carries no header at all.** Read 2026-09-15 from T05 converted
+with the project's own denigma WASM: the document's top-level keys are `global`,
+`layouts`, `mnx`, `parts` and `scores`, and the `scores` block holds only
+`"name":"Score"` with layout ids. **There is no title and no composer for Ilya to
+read.**
+
+**So this half is a LIMIT OF THE CONVERSION, not a defect in Ilya**, and it
+explains the empty Piece fields and `Untitled, 2026-09-15`.
+
+**It still wants a decision from Dann, and it is not the same decision as half A.**
+A `.musx` singer will never get a song named from its score while denigma emits no
+header. **Whether Ilya says anything about that, or silently leaves the fields to
+the singer, is his.** CONTRACT §6 forbids a mark that says Ilya is unsure, which
+bears on any notice.
+
+### HALF B's ANSWER, RULED BY DANN 2026-09-15: A DEFAULT NAMING CONVENTION
+
+**His words:** *"If there is no header for Ilya to name the song from, and this
+somehow affects its ability to work properly, then we should develop a default
+assigned naming convention."*
+
+**FIRST, THE CONDITIONAL IN HIS SENTENCE IS ANSWERED: IT DOES NOT AFFECT
+FUNCTION.** Half A's gate at `+page.svelte:3120-3123` reads the origin, the
+lyrics, and whether the input field is empty. **It never reads the name or the
+header.** The two halves are independent, and fixing the name will not fill the
+input field.
+
+**SECOND, A DEFAULT ALREADY EXISTS.** Dann's own library shows
+`Untitled, 2026-09-15`, `Untitled, 2026-08-25` and `Untitled, 2026-08-25 (2)`, so
+Ilya already falls back to a dated name with a disambiguator. **What is missing is
+a BETTER fallback, not a first one.**
+
+**THE CANDIDATE IS THE FILE'S OWN NAME, and it is usually richer than a score
+header.** The file Dann dropped is
+`Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`: composer,
+poet, catalogue position and title, all present.
+
+**DESK DEFAULT on the shape, and Dann can overrule it:**
+
+1. **Where the score carries a header, that wins.** Unchanged, and it is N.134's
+   ruled behaviour.
+2. **Where it does not, the song takes the FILE'S BASE NAME**, extension stripped.
+3. **Where there is no usable file name either**, the existing `Untitled, <date>`
+   fallback stands.
+
+**DO NOT PARSE THE FILE NAME INTO THE PIECE FIELDS.** Splitting
+`Kabalevsky - Shakespeare - T05 …` into composer, poet and title is inference, it
+will be wrong on other people's filenames, and CONTRACT §1.21 forbids inferring
+without being asked. **The whole base name becomes the song's NAME; the Piece
+fields stay empty for the singer.**
+
+**IT OBEYS THE EXISTING NAMING RULE WITHOUT AMENDING IT.** N.67 step 4b, 2026-08-18:
+the name is written the first time there is material to build one from, and is the
+singer's from then on. **A file name is material.** The same memo records that a
+song named from its poem never picks up a better name later, which is deliberate
+and is not changed here.
+
+### WHY IT MATTERS MORE THAN ITS SIZE
+
+**`.musx` is one of the four formats Ilya accepts and it is the one Dann's own
+Finale work arrives in.** A feature that works on MusicXML and not on Finale files
+fails for the singer who has just paid for Finale.
+
+### NOT ESTABLISHED
+
+- Which of the three conditions fails.
+- Whether the same failure affects `.mnx` arriving directly, which shares the
+  parser but not the conversion.
+- Whether `collectScoreWords` is verse-aware in the way the MNX parser numbers
+  lines.

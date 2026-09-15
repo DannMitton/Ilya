@@ -89,3 +89,62 @@ exist and are named in the memo.
 shipped (2.1 and the test), the three-render sets with their numbers and
 the stave-space formula, the which-arc-was-which finding, gate numbers,
 NOT ESTABLISHED.
+
+---
+
+# AMENDED AT THE DESK, 2026-09-15. Read this before §1
+
+## 0.1 THE LINE NUMBERS ABOVE ARE FROM 2026-09-11 AND HAVE MOVED
+
+N.126 landed between then and now and pushed this file down by about 150 lines.
+**Re-verified against the tree at `76b24a3`, 2026-09-15:**
+
+| | line as written above | line today |
+|---|---|---|
+| tie emission | `:2630` | **`:2783`** |
+| `TIE_CENTRE_SP` declaration | `:654` | **`:655`** |
+| tie depth | `:2602` | **`:2757` region** |
+| slur emission | `:2669` | **`:2822`** |
+| slur lift cap | `:2658` | **`:2818`** |
+
+Re-verify every one before editing. The FINDING is unchanged: the tie is a
+filled two-quadratic lens with `fill="#1a1612"` and no stroke; the slur is a
+single quadratic with `fill="none" stroke-width="1.3"`.
+
+## 2.4 NEW. IS THE TIE'S TAPER VISIBLE AT THE SIZE IT IS DRAWN?
+
+**Why this was added.** Dann raised the arcs again on 2026-09-15 and said *"These
+constant-width arcs are noticeable and wrong."* If any arc he is pointing at is a
+TIE, then the source and his eye disagree, because the source says ties already
+taper. **The 2026-09-11 memo flagged this as NOT ESTABLISHED and it has never
+been measured.**
+
+**Do this before §2.1, because it may change what §2.1 is worth.** It is
+arithmetic and a render, not a redesign.
+
+1. **State the tie's centre thickness in px** at the shipping `lineGap` of 5.5
+   (`engraving.ts:30-36`), that is `sp(TIE_CENTRE_SP)` with `TIE_CENTRE_SP =
+   0.4`, and put it beside the slur's 1.3 px stroke. Say which is thicker.
+2. **Measure the drawn shape, not only the control points.** The lens's greatest
+   thickness is not the difference between the two control points; compute or
+   sample the actual vertical gap between the two quadratics at the midpoint and
+   report THAT number.
+3. **Say whether a tie of the shortest span on the T05 page still reads as
+   tapered**, and at what span the taper stops being visible.
+4. **Change nothing.** If the number is too thin, `TIE_CENTRE_SP` is Dann's eye
+   (2026-08-27, chosen from 0.29 / 0.40 / 0.51) and only he moves it. Render the
+   same spot at 0.4, 0.55 and 0.7 sp as `tie-centre-040.png`, `-055.png`,
+   `-070.png` for his eye, the way §2.2 and §2.3 do.
+
+## 2.3 AMENDED: HOW TO TELL WHICH ARC IS WHICH
+
+**Do not judge it from the curve.** The paths carry `data-tie` and `data-slur`
+already. `querySelectorAll('[data-tie], [data-slur]')` on the rendered page, or
+a regex over the emitted SVG string in a test, answers it exactly.
+`ENVIRONMENT.md` §YOU DO NOT NEED A PIXEL §THE SAME RULE.
+
+**This answer is wanted by two other items**, so report it plainly and in one
+place: N.141's case 2 needs to know whether m. 84 and m. 87 of Without Sun song
+2 carry ties or melisma slurs, and N.142 is the tie predicate itself. **Name
+those two measures explicitly in the memo.**
+

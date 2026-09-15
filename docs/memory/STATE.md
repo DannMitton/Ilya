@@ -11,11 +11,12 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`eb918ed`**, "N.133: the renderer stops painting its own
-ground", shipped 2026-09-15, Vercel `dpl_CocZiesaB9svP3bRoYAUA3RtwTnZ` READY on
-the branch alias, sha checked by the desk before Dann was sent to it, and walked
-by him (the previous floors, `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and
-earlier, are in `../sessions/LOG.md`). A floor cannot go stale,
+before **`76b24a3`**, "N.126 and N.141: measure numbers arrive on
+Score markup, and the squircle's width holds its IPA syllable", shipped
+2026-09-14 22:35, READY on the branch alias, sha checked by the desk before Dann
+was sent to it, and walked by him on 2026-09-15 (the previous floors, `eb918ed`,
+`d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
+`../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
 If the tree is ahead of it, that is expected and tells you only that work has
 landed since.
@@ -43,15 +44,70 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### READ THIS FIRST. Written at the close of 2026-09-15, for the next instantiation
+>
+> **The thread before this one compacted mid-work and was closed deliberately.**
+> Nothing is in flight and nothing is half-built. The tree at the floor is clean
+> apart from the memory files of that close.
+>
+> **TWO THINGS ARE BRIEFED AND READY TO RUN, and neither needs a ruling first:**
+>
+> - **N.125, slurs as tapered objects.** Brief at
+>   `../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`, **amended at the
+>   desk 2026-09-15 with §0.1 (the line numbers moved), §2.4 (measure the tie's
+>   taper before touching the slur), and a corrected §2.3 (read `data-tie` and
+>   `data-slur`, never judge a curve from a picture).** Dann has met this defect
+>   twice on walks. **It is the desk's recommendation for the next thing built.**
+> - **N.139, every meter assignment draws on the page.** Brief at
+>   `../sessions/brief-n139-page-meter-signature_r1_2026-09-14.md`.
+>
+> **N.141's remaining increment is BLOCKED on N.142**, which is not built, so the
+> heading below is accurate about the item and not about what to do next. **Ask
+> Dann which he wants; do not choose for him.**
+>
+> ---
+>
 > ### THE ONE THING: N.141, THE SQUIRCLE'S GRAMMAR. IN CODE, 2026-09-15.
 >
 > **Spec in `OPEN.md` §N.141, brief at
 > `../sessions/brief-n141-squircle-grammar_r1_2026-09-15.md`.** Every rule in it
-> is Dann's, quoted and dated. **Built in three steps, and step 1 may be the whole
-> job:** one geometry change to the single existing mark, measured before anything
-> else is built. Steps 2 and 3 exist only for collisions step 1 cannot solve, and
-> step 3 is expensive, because it would make the loupe a render rather than a crop
-> of the page.
+> is Dann's, quoted and dated. **Two increments have shipped** (`debdf02` the
+> grammar and the row spacing, `76b24a3` the width holding its IPA syllable, both
+> walked). **What is left in N.141 is the tie-spanning increment, and it DEPENDS
+> ON N.142**, which is not built.
+>
+> ---
+>
+> ### WHAT THE WALK OF `76b24a3` FOUND, 2026-09-15 late. Four things, all recorded
+>
+> 1. **N.143.** N.134 does not fire on a `.musx` score: the input field and
+>    Transcription are both empty on T05, the song is `Untitled, 2026-09-15`, and
+>    the Piece fields are blank, while Score markup draws the file's own words.
+>    **Fourth sighting, first by Dann on a deploy.** Spec `OPEN.md` §N.143, three
+>    candidate causes named, NOT BUILT. **This reopens the first half of N.134,
+>    which the block below still records as DONE; it was walked on a
+>    `.musicxml`.**
+> 2. **N.141 case 2, with evidence.** Two loupe shots, m. 84 and m. 87 of Without
+>    Sun song 2, where a note's value carries past the barline and the squircle
+>    stays closed. **m. 84 is the defect. m. 87 is NOT ESTABLISHED and may be a
+>    melisma, in which case its closed box is correct.** `OPEN.md` §N.141
+>    §EVIDENCE.
+> 3. **N.125 raised again, with a challenge to the record.** Dann: *"These
+>    constant-width arcs are noticeable and wrong. They need to be tapered."*
+>    **Re-verified against the tree tonight and the finding holds**: ties are
+>    filled tapered lenses (`staff-renderer.ts:2783`), slurs are a constant 1.3 px
+>    stroke (`:2822`). The brief has ruled since 2026-09-11 that slurs become
+>    tapered objects. **It needs a §2.4 added** and it needs PLACING; it has been
+>    UNPLACED and untracked since 2026-09-11 and he keeps meeting it.
+> 4. **N.126 CONFIRMED ON THE PAGE.** Dann, 2026-09-15: *"4 [28] reads exactly as
+>    it should."* The system-start number bare, the post-rest courtesy number in
+>    square brackets, side by side, and he read them without prompting. **The last
+>    open question on N.126 is closed and the item is DONE.**
+>
+> **THE TIE / SLUR PREDICATE IS LOAD-BEARING FOR THREE ITEMS AT ONCE** (N.125,
+> N.141 case 2, N.142), and none of them can be settled from a picture. **Read
+> `data-tie` and `data-slur` off the rendered page.** Recorded in `OPEN.md`
+> §N.125.
 >
 > ---
 >
@@ -63,72 +119,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > and inline literals that duplicate a token replaced or explained. **No brief is
 > written for it. It is hygiene and it is the least visible thing on the list.**
 >
-> **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** The block
-> further down still describes three of them as standing; that text is stale and
-> moves to `LOG.md` at the close.
+> **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** 1 the
+> `Transcribe and fit` pill, CLOSED 2026-09-14, **its fate still Dann's to rule**
+> and both its acts known duplicates; 2 the missing meter signature, **numbered
+> N.139**, brief written, not built; 3 the possibly halved rhythmic values,
+> **CLOSED 2026-09-14 and never a defect**, T05 declares 2/4 once and Dann checked
+> the printed score; 4 N.133, **DONE 2026-09-15**, `LOG.md` block 17.
 >
-> 1. The `Transcribe and fit` pill: CLOSED 2026-09-14. **The pill's fate is still
->    Dann's to rule**, and both its acts are known duplicates.
-> 2. The missing meter signature: **numbered N.139**, brief written, not built.
-> 3. The possibly halved rhythmic values: **CLOSED 2026-09-14 and never a
->    defect.** T05 declares 2/4 once and its measures fill 2/4; Dann checked the
->    printed score and it is 2/4.
-> 4. N.133, the renderer's ground: **DONE 2026-09-15**, `LOG.md` block 17.
->
-> **FOUR SHIPS ON 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
+> **SIX SHIPS ACROSS 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
 > N.138 increment 1, `8bb406c` its increments 2 and 3, `d6580af` the ring and
-> held-measure mark landing after the ground, `eb918ed` N.133. **N.138's account
-> is `LOG.md` block 16 and N.133's is block 17.** Gate 4 moved 1144 to 1170 across
-> the night and gate 5 547 to 550; the desk moved the ship script's lines each
-> time and kept a backup per move.
+> held-measure mark landing after the ground, `eb918ed` N.133, `debdf02` N.141's
+> grammar, `76b24a3` N.126 and N.141's IPA width. **N.138's account is `LOG.md`
+> block 16 and N.133's is block 17.** Gates moved across the night; the desk moved
+> `~/Downloads/ilya-ship.sh` lines 79 and 80 each time and kept a backup per move.
+> **At `76b24a3` the gate lines read 1173 and 555.**
 >
-> **THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE AND HAS
-> NOT BEEN PRUNED.** It holds live items mixed with closed ones. The live ones are
+> **THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE.** Its
+> closed material moved to `LOG.md` block 18 at this close. What remains is live:
 > N.127's unreviewed decisions, the briefs list, N.129, N.94, the ratified names,
-> the colour plan pointer, the text-to-score sequence, and the damage in Dann's own
-> engraving. **Everything else in it is closed and belongs in `LOG.md`.**
+> the colour plan pointer, the text-to-score sequence, and the damage in Dann's
+> own engraving.
 >
 > ---
->
-> **CLOSE OF 2026-09-14. TWO ITEMS SHIPPED, BOTH WALKED BY DANN.** `4d79f24`,
-> all five gates green, `dpl_92MYtg58wc4G3No77UvfPZY8f5oD` READY on the branch
-> alias, sha checked before he was sent to it.
->
-> - **N.134 DONE.** A score arriving with its own words into an EMPTY poem box
->   fills the box, tags the receipt `from score`, and seats the syllables from
->   the file's own syllable-to-note mapping. Committed alone as `e973afc`.
->   Walked: 39 words, receipt `from score`, Transcription draws, `95 / 95
->   placed`, and the song named from the score header rather than from the poem.
->   **Increment 2, a singer's own different poem, is NOT built.**
-> - **N.118 DONE.** Punctuation travels in the slot. Walked on the page:
->   fourteen marks where none drew the day before.
->
-> Gate 4 moved 1123 to 1131 to **1144**; the desk moved `~/Downloads/ilya-ship.sh:79`
-> both times, per §THE DESK MOVES THE GATE LINE.
->
-> **WHAT THAT WALK FOUND, both numbered the same night.** N.136, open
-> syllabification never reaches Score markup's drawn text. And the hyphen
-> omission, folded into N.129 below on Dann's word.
->
-> **THE 2026-09-13 WALK'S FOUR FINDINGS: ONE CLOSED, THREE STAND.**
->
-> 1. **CLOSED 2026-09-14, and it was not the defect it looked like.** `Transcribe
->    and fit` was pressed and the counter did not move, because **the button does
->    not fit**: `handleTranscribe` never touches `doc.pairings`
->    (`+page.svelte:2373-2380`, and its own comment says so), and its second act
->    duplicates `Continue to analysis` (`ScoreUploader.svelte:550-560`). **That
->    settles N.121 (c), opposite to the guess recorded there. The pill's fate is
->    still Dann's to rule**, and its two acts are now both known to be duplicates.
-> 2. **THE METER SIGNATURE IS MISSING** from the rendered score. Dann's
->    observation, 2026-09-13, on Kabalevsky T05. **NOT ESTABLISHED and still not
->    investigated.** Source:
->    `~/Downloads/Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`.
->    Open the source before reasoning about the render, per tether 10.
-> 3. **THE RHYTHMIC VALUES MAY BE HALVED.** Dann: *"it feels like the measures
->    are half the rhythmic value they should be."* Per tether 15 this is evidence,
->    not a claim to argue with. Still open.
-> 4. **N.133**, the renderer stops painting its own ground. Ruled, numbered, spec
->    in `OPEN.md`.
 >
 > **DANN'S OWN ENGRAVING IS DAMAGED, AND IT IS NOT ILYA'S DOING. Measured
 > 2026-09-14** on `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`:
@@ -245,29 +257,6 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > 15.64 at a 390 px viewport. **OWED: nobody has seen 0.5 rem on screen.**
 > This supersedes the `MARKUP` band rename of 2026-09-12.
 >
-> **THE COLOUR STORY, RULED 2026-09-13.** A hue names ONE IDEA, and a band
-> takes the hue of the idea it holds, wherever that band appears. **sage = the
-> words** (Text, the Input band); **lavender = the melody** (the Markup tab,
-> the Melody band, the turning layer); **cobalt = information** (Guide, the
-> Piece band); **rose = your voice** (the new Voice band, the whole
-> calibration interface INCLUDING THE PACIFIER, and Insights); **umber = the
-> book** (Learn). `Voice` extracts from Score markup to become a band sibling
-> of Piece, Input and Melody. Plan and stages:
-> `docs/sessions/plan-colour-story_r1_2026-09-13.md`. The census memo landed;
-> stage 2 is Dann's four rulings.
-
-
-> **The history of this section moved to `../sessions/LOG.md` on 2026-09-01.**
-> Every entry from 2026-08-23 to 2026-08-27 that used to sit here is in that
-> file, verbatim and in order. Nothing was rewritten. This section now carries
-> the current one thing and nothing else, which is what `README.md` sends you
-> here for.
-
-> **Closed and moved to `../sessions/LOG.md` block 8 at the close of the
-> 2026-09-07 session:** N.108 (five increments, `2c1cecf` to `5f6a2f3`),
-> N.111 (`7875892`, `c574cf8`, `d5a49ff`, `a186f20`), N.112 (`b191867`,
-> `1b3054a`), and N.113 (`e1bcb67`, walked 2026-09-07). All walked by Dann.
->
 > **THE TEXT-TO-SCORE SEQUENCE, RULED BY DANN 2026-09-06**, one path through
 > the pairing layer: 1 N.108-5 cleanup DONE; 2 N.112 the text is
 > authoritative DONE; 3 N.113 the melisma DONE; 4 N.114 the syllable line
@@ -327,7 +316,37 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Placed 2026-09-15 at the close. Both were UNPLACED and untracked since 2026-09-11
+
+- `[x]` **N.126. Measure numbers on Score markup. DONE, shipped in `76b24a3`,
+  CONFIRMED BY DANN 2026-09-15:** *"4 [28] reads exactly as it should."* The
+  system-start number bare above the clef, the post-rest courtesy number in
+  square brackets beside it, and he read the pair on the page without being
+  prompted. **The square brackets were his amendment of 2026-09-15**, because
+  square brackets mean editorial in a score and that number is Ilya's own
+  addition. Spec in the OWED section below; it stays there as the record of what
+  was ruled.
+- `[ ]` **N.125. Slurs as tapered objects.** Numbered 2026-09-11, **never tracked
+  until now, which is why Dann has met it twice.** Slurs draw as a constant
+  1.3 px stroke (`staff-renderer.ts:2822`) where ties are filled tapered lenses
+  (`:2783`); Gould 151 gives both one design. Brief written
+  (`../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`) and it **needs a
+  §2.4** added before it runs: measure the rendered tie's centre thickness at the
+  shipping `lineGap` of 5.5 and say whether `TIE_CENTRE_SP` 0.4 sp survives the
+  size it is drawn at. Spec and tonight's re-verification: `OPEN.md` §N.125. Its
+  own Code thread, `staff-renderer.ts` only, off the drawer path.
+
 ### Numbered 2026-09-15
+
+- `[ ]` **N.143. N.134 does not fire on a `.musx` score.** Observed by Dann on the
+  deploy `76b24a3`, 2026-09-15, after three sightings by Code that were each
+  written off to the load. **Both halves are absent on T05:** the input field stays empty, no
+  `from score` receipt, no name from the header. **N.134 was walked on MusicXML;
+  T05 is `.musx` through denigma into MNX.** The gate is at
+  `+page.svelte:3120-3123` and three conditions could be failing. **Half B's cause
+  is already established: the converted MNX carries no title or composer at all.**
+  Spec in `OPEN.md`. The number is a DESK DEFAULT.
 
 - `[ ]` **N.142. A tie is prolongation, not a new syllable target.** Dann,
   2026-09-15: *"Ilya must understand that a tie is rhythmic prolongation."* The

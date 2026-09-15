@@ -170,3 +170,12 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-09-15. TRANSCRIBED, and the item above of 2026-08-27 is now closed: the squircle-as-visual-germ ruling is in `PRODUCT.md` §The squircle, together with Dann's ruling of 2026-09-15 that the squircle's purpose is arresting focus and that its negative space is the point. **Nothing further is owed on that inbox line.**
 - 2026-09-15, Dann, mid-N.141: **a second job for the squircle on the page, alerting the singer to acoustic events**, his words *"conflicts or exceedances between the sung pitch and the prescribed vowel's pitch-of-turning"*. He put it as a distinction: the loupe's squircle is focus, the page's would be alert, *"even though we use this familiar shape for both purposes"*. **NOT a clarification of N.141 and it does not amend it**; N.141's page mark is SELECTION and exists today (`VoiceProfilePane.svelte:502`). The design question it raises: one shape, two meanings on one surface, told apart only by context. Today the acoustic information is carried by the turning layer's lavender noteheads instead (`staff-renderer.ts:2440-2454`, `data-analysis="turning-*"`). **Not numbered. Dann rules it in or lets it sit.**
 - 2026-09-15. **T05 HAS DRAWN NO IPA ROW IN THE PANE THREE TIMES, in three separate Code runs on N.141**, each time attributed to the load rather than investigated: once to an empty poem box, once to the dictionary being throttled while the browser pane was hidden, once unexplained. **Each time it cost a NOT ESTABLISHED**: T05's vertical grammar, then its IPA clearance, then the new IPA-collision check. **Three times is a pattern, not a coincidence.** Kabalevsky T05 is one of Dann's three scores and it carries 146 Cyrillic syllables with 0 IPA in the pane. **Either the fixture load is wrong in a repeatable way, or the IPA row genuinely does not draw for this score.** Nobody has looked. Not numbered; raised for Dann.
+
+- 2026-09-15, close. **N.126 confirmed by Dann on the page:** *"4 [28] reads
+  exactly as it should."* The last open question on it is closed.
+- 2026-09-15, close. **The desk let a correct finding reach Dann as an excuse.**
+  N.125's record said the constant-width arcs are slurs and ties already taper.
+  True, and re-verified. But it arrived as a reason the arcs looked as they did
+  rather than as the location of the fix, so he read it as a refusal and had to
+  push twice. **The finding was the answer to "which block", never to "should
+  this taper".** Say which question a finding answers.
