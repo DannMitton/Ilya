@@ -58,8 +58,24 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >   tolerances (TOL2, and the crossing band), INS-P01-7's migration targets for six
 >   vowels and replace-or-annotate, INS-P01-8's treble alternative, INS-P01-10's leap size.
 > - **N.143's cause is found** (`OPEN.md` §N.143, Half A): fix queued behind N.139.
-> - **N.139 is built, not shipped**: head-room, loupe, and first-measure fixes approved
->   as desk defaults and running in Code.
+> - **N.139 is DONE**, shipped `eb7d220`, walked by Dann 2026-09-16: "Everything looks
+>   exactly as it should." The system head now lays out forwards (`systemHead`,
+>   `staff-renderer.ts:766`, shared with `sliceWidth`). Gate 5 moved 555/560 to
+>   **564 passed, 5 skipped (569)**, nine new tests; the desk moved
+>   `~/Downloads/ilya-ship.sh` line 80 and kept `ilya-ship.sh.bak-before-n139-2026-09-16`.
+>   **Record correction:** Code's memo says Sunless 01 went to 6 systems on 1 page; Dann's
+>   walk screenshot shows page 1 of 2 with 5 systems (mm. 1 to 15). The page is right;
+>   the memo's page count is not. **Follow-up, unnumbered:** the loupe keeps its meter 2
+>   spaces clear of the first ink, not the note, on measures without a meter change (T05
+>   m. 9 37.28 px, m. 14 26.44 px). **Check at the close:** the Sonnet 90 print fixture
+>   ("fills exactly two letter sheets") may have changed with the forward head.
+> - **Loupe drops a measure's opening rest, found by Dann 2026-09-16** (T05 mm. 28, 35, 37,
+>   57, 81; every mid-system measure that opens on a rest). Not a regression: the same code is
+>   in the 570d76f bundle. Cause: rests carry no hit rectangle (`staff-renderer.ts:2626`), the
+>   window opens at the first hit rectangle (`loupe.ts:79-89`), and the barline search rejects a
+>   barline left of the window (`Loupe.svelte:696`). Fix approved as DESK DEFAULT and sent to Code,
+>   bundled with the meter run-in follow-up.
+> - **Next build: N.143 Half A** (`OPEN.md` §N.143), then the file-name fallback (Half B).
 > - **N.139 is still briefed and ready.**
 >
 > ### ADDED AT THE CLOSE OF 2026-09-16 (late). One research thread IS in flight

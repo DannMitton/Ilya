@@ -604,6 +604,61 @@ export interface Vertical {
 }
 
 /**
+ * The held measure's OPENING barline, found as drawn: the rightmost
+ * staff-spanning vertical left of the measure's first note's ink.
+ *
+ * Found on the walk of `eb7d220`, 2026-09-16: a measure that opens on a REST lost
+ * the rest in the loupe. MEASURED on Kabalevsky T05, mm. 28, 35, 37, 57 and 81.
+ * The renderer draws a rest with no hit rectangle, and a note's hit rectangle
+ * starts halfway from the column before it (`staff-renderer.ts:2894`), so where
+ * that column is the rest, `measureWindow` opened BETWEEN the rest and the note:
+ * on m. 37, at 576.00 against the rest's ink at 558.52 to 564.09. The old search
+ * then took a barline only INSIDE that window, and this barline, at 543.28, lies
+ * left of it. The same code was deployed at `570d76f`.
+ *
+ * WHY THE RIGHTMOST, AND WHY LEFT OF THE FIRST NOTE. A measure has no barline
+ * inside it, so the nearest barline left of its first note is its own opening,
+ * whatever columns (rests, a multibar rest's closing edge) stand between. A
+ * barline RIGHT of the first note is never the opening: N.141 measured T05 m. 23,
+ * where a tacet run's barline stood in the window's left half, right of every
+ * note, and the crop opened past them.
+ *
+ * Null where none stands left of the note, which is a system's first measure:
+ * the renderer draws no barline before a slice's first column, and the caller
+ * keeps the window it had. Null too where the first note's ink is unknown, so a
+ * missing measurement cannot fall through to the system's closing barline.
+ */
+export function openingBarline(verticals: readonly Vertical[], firstNoteInk: number): Vertical | null {
+	if (!Number.isFinite(firstNoteInk)) return null;
+	let found: Vertical | null = null;
+	for (const v of verticals) {
+		if (!Number.isFinite(v.x) || !(v.x < firstNoteInk)) continue;
+		if (found === null || v.x > found.x) found = v;
+	}
+	return found;
+}
+
+/**
+ * Whether a `<text>` holds a SMuFL rest glyph: one character in the Rests range,
+ * U+E4E0 to U+E4FF. The renderer draws a rest as a bare glyph with no handle,
+ * so the glyph is the only thing that says it is a rest.
+ */
+export function isRestGlyph(text: string | null | undefined): boolean {
+	if (!text) return false;
+	const chars = [...text];
+	if (chars.length !== 1) return false;
+	const cp = chars[0].codePointAt(0) ?? 0;
+	return cp >= 0xe4e0 && cp <= 0xe4ff;
+}
+
+/** The leftmost x in `[left, right)`, or `Infinity` where none falls there. */
+export function firstInkIn(xs: readonly number[], left: number, right: number): number {
+	let first = Infinity;
+	for (const x of xs) if (Number.isFinite(x) && x >= left && x < right && x < first) first = x;
+	return first;
+}
+
+/**
  * N.138 increment 3. The held measure's closing barline, found as drawn.
  *
  * Ruled by Dann 2026-09-14: *"I am asking for the stave lines to protrude

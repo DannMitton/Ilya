@@ -28,6 +28,9 @@
 		headBound,
 		MUSIC_MARK,
 		clipToHead,
+		firstInkIn,
+		isRestGlyph,
+		openingBarline,
 		inkCrop,
 		carryBand,
 		centreOnPage,
@@ -272,6 +275,32 @@
 			if (b && (b.width || b.height)) xs.push(b.x);
 		}
 		return { nodes, gate, xs };
+	}
+
+	/** The x of every RESTS-OR-NOTES mark on the system, and of nothing else.
+	    A note is its event group's own marks (notehead, stem, flag) and what is
+	    tagged `data-of-event` (accidentals, courtesy parentheses, dots); a rest
+	    is a bare SMuFL rest glyph, or a multibar rest's group. Underlay, ties,
+	    slurs and ledger lines carry neither handle and are left out, which is
+	    the point: the meter panel's run-in is measured to the music, as the
+	    page measures it (desk ruling, 2026-09-16). */
+	function restOrNoteInk(sys: Element): number[] {
+		const xs: number[] = [];
+		for (const el of sys.querySelectorAll('*')) {
+			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]') || el.closest('[data-meter]')) continue;
+			if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
+			const tacet = el.closest('[data-tacet]');
+			const isNote = !!el.parentElement?.hasAttribute('data-event-id') || el.hasAttribute('data-of-event');
+			const isRest = tacet ? tacet === el : el.tagName === 'text' && !el.closest('[data-event-id]') && isRestGlyph(el.textContent);
+			if (!isNote && !isRest) continue;
+			try {
+				const b = (el as SVGGraphicsElement).getBBox();
+				if (b && (b.width || b.height)) xs.push(b.x);
+			} catch {
+				/* not rendered */
+			}
+		}
+		return xs;
 	}
 
 	/** The barlines, found as drawn: every vertical that spans exactly the
@@ -666,7 +695,6 @@
 		   keeps the edge it had. That case was already right and this does not
 		   touch it. */
 		const staffTop = hitY + 3.5 * lineGap;
-		const half = win.left + (win.right - win.left) / 2;
 		const verticals = staffVerticals(sysEl, staffTop, lineGap);
 		/* AN OPENING BARLINE STANDS LEFT OF THE MEASURE'S FIRST NOTE. The window's
 		   right edge is the next measure that carries entries, and where a tacet
@@ -691,12 +719,14 @@
 				/* not rendered */
 			}
 		}
-		let boundary: number | null = null;
-		for (const { x } of verticals) {
-			if (!(x >= win.left && x < half && x < firstOwnInk)) continue;
-			if (boundary === null || x < boundary) boundary = x;
-		}
-		if (boundary !== null) win.left = boundary + lineGap * 0.5;
+		/* THE MEASURE'S OWN OPENING BARLINE, the rightmost left of its first
+		   note, and NOT only one inside the hit window. Found on the walk of
+		   `eb7d220`: a measure that opens on a rest lost the rest, because the
+		   window opened between the rest and the note and the barline stood
+		   left of it. `openingBarline` in `loupe.ts` carries the rule and the
+		   measurements. A system's first measure has none and keeps its window. */
+		const opening = openingBarline(verticals, firstOwnInk);
+		if (opening) win.left = opening.x + lineGap * 0.5;
 
 		/* ── N.138 INCREMENT 3. THE EXCERPT ENDS PAST ITS BARLINE ─────────────
 		   Ruled by Dann 2026-09-14 on the walk of `78f3db8`: the stave lines run
@@ -821,16 +851,20 @@
 			}
 			if (Number.isFinite(right)) pageMeterRights.push(right);
 		}
-		const headClipped = clipToHead(win, headWidthUnits);
-		const view = openAfterPageMeter(headClipped, pageMeterRights, firstOwnInk, inkXs, lineGap);
-		/* Where the body opened on the page meter's edge, the panel's run-in is
-		   measured to the first NOTE, as the page measures it, and not to the
-		   underlay. MEASURED on the first build of this round: Without Sun song 1,
-		   m. 2's IPA syllable starts at 150.27, 1.8 units right of the edge at
-		   148.47, and the panel held the meter two spaces off it, 20.19 units
-		   from the notehead. Underlay sits below the stave, where it never meets
-		   the meter on the page either. */
-		const openedAfterPageMeter = view.left !== headClipped.left;
+		/* The music the meter stands off: rests and notes only. N.139 round 3
+		   measured why: on Without Sun song 1, m. 2 the IPA syllable starts at
+		   150.27, left of the notehead at 159.47, and a panel measuring to the
+		   first ink held the meter two spaces off the syllable. The page measures
+		   its run-in to the first column, which is a rest or a note. */
+		const restNoteXs = restOrNoteInk(sysEl);
+		const firstMusic = firstInkIn(restNoteXs, win.left, win.right);
+		const view = openAfterPageMeter(
+			clipToHead(win, headWidthUnits),
+			pageMeterRights,
+			Number.isFinite(firstMusic) ? firstMusic : firstOwnInk,
+			inkXs,
+			lineGap,
+		);
 		const viewSpan = view.right - view.left;
 
 		/* THE HEAD SHARES THE FIT rather than being added to it. A measure
@@ -954,7 +988,19 @@
 			}
 			const headEnds = Number.isFinite(headerRight) && headerRight < headWidthUnits;
 			carry = headEnds ? carryBand(headerRight, headWidthUnits, view.left, band) : null;
+			/* THE RUN-IN IS MEASURED TO THE FIRST REST OR NOTE, never to underlay or
+			   a ledger line (desk ruling, 2026-09-16). Where a band is carried, the
+			   panel abuts the band, so the air is the band's own up to its music. */
+			const airFrom = carry ? carry.left : view.left;
+			const music = firstInkIn(restNoteXs, airFrom, view.right);
 			const firstInk = Math.min(...inkXs.filter((x) => x >= view.left && x < view.right));
+			const bodyAir = Number.isFinite(music)
+				? music - airFrom
+				: carry
+					? 0
+					: Number.isFinite(firstInk)
+						? firstInk - view.left
+						: 0;
 			const layout = meterLayout(
 				meter.beats,
 				meter.beatType,
@@ -962,13 +1008,7 @@
 				lineGap,
 				staffTop,
 				headEnds ? 0 : METER_LEAD_SP * lineGap,
-				carry
-					? 0
-					: openedAfterPageMeter
-						? firstOwnInk - view.left
-						: Number.isFinite(firstInk)
-							? firstInk - view.left
-							: 0,
+				bodyAir,
 			);
 			if (layout) {
 				if (headEnds) headCropUnits = headerRight;

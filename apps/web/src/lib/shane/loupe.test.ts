@@ -16,6 +16,9 @@ import {
 	centredViewBox,
 	clipToHead,
 	closingBarline,
+	firstInkIn,
+	isRestGlyph,
+	openingBarline,
 	EXCERPT_TAIL_SP,
 	commonInkBox,
 	headBound,
@@ -672,6 +675,80 @@ describe('the closing barline', () => {
 
 	it('protrudes one stave-space, as the desk default records', () => {
 		expect(EXCERPT_TAIL_SP).toBe(1);
+	});
+});
+
+describe('the opening barline', () => {
+	// Built from the renderer's rule: a note's hit rectangle starts halfway from
+	// the column before it, and a rest is a column with no rectangle. Columns at
+	// the measured T05 m. 37 positions: the barline at 543.28, the eighth rest
+	// centred at 561.30, the B3 centred at 590.72 with its notehead's ink at
+	// 587.22, and the previous measure's barline at 379.15.
+	const bars = [
+		{ x: 379.15, width: 0.55 },
+		{ x: 543.28, width: 0.55 },
+	];
+	const restCentre = 561.3;
+	const noteCentre = 590.72;
+	const noteInk = 587.22;
+	const gap = 5.5;
+
+	it('finds the barline of a measure that opens on a rest, left of the hit window', () => {
+		const own = [{ x: (restCentre + noteCentre) / 2, width: 20 }];
+		const win = measureWindow(own, [], 624)!;
+		// The window alone opens between the rest and the note: the defect.
+		expect(win.left).toBeCloseTo(576.01, 2);
+		expect(win.left).toBeGreaterThan(restCentre);
+		const opening = openingBarline(bars, noteInk);
+		expect(opening).toEqual({ x: 543.28, width: 0.55 });
+		// Half a space past it, the rest's ink (558.52) is inside.
+		expect(opening!.x + gap * 0.5).toBeLessThan(558.52);
+	});
+
+	it('finds the same barline for a measure that opens on a note', () => {
+		expect(openingBarline(bars, 548.5)!.x).toBe(543.28);
+	});
+
+	it('takes the rightmost barline left of the note, whatever order they were drawn in', () => {
+		expect(openingBarline([...bars].reverse(), noteInk)!.x).toBe(543.28);
+	});
+
+	it('never takes a barline right of the first note, as a tacet run inside the window draws', () => {
+		// N.141: T05 m. 23, notes from 344, a run's barline at 408.83.
+		const lines = [
+			{ x: 300, width: 0.55 },
+			{ x: 408.83, width: 0.55 },
+		];
+		expect(openingBarline(lines, 344)!.x).toBe(300);
+	});
+
+	it('finds none for a system\'s first measure, which has no barline before its first note', () => {
+		expect(openingBarline([{ x: 620, width: 0.55 }], 72.5)).toBeNull();
+		expect(openingBarline([], 72.5)).toBeNull();
+	});
+
+	it('finds none when the first note\'s ink is unknown, rather than the closing barline', () => {
+		expect(openingBarline(bars, Infinity)).toBeNull();
+		expect(openingBarline(bars, Number.NaN)).toBeNull();
+	});
+});
+
+describe('rests and the first music in a span', () => {
+	it('knows a SMuFL rest glyph and nothing else', () => {
+		expect(isRestGlyph('\u{E4E5}')).toBe(true); // restQuarter
+		expect(isRestGlyph('\u{E4E6}')).toBe(true); // rest8th
+		expect(isRestGlyph('\u{E4E3}')).toBe(true); // restWhole
+		expect(isRestGlyph('\u{E0A4}')).toBe(false); // noteheadBlack
+		expect(isRestGlyph('\u{E262}')).toBe(false); // accidentalSharp
+		expect(isRestGlyph('Ком')).toBe(false);
+		expect(isRestGlyph('')).toBe(false);
+		expect(isRestGlyph(null)).toBe(false);
+	});
+
+	it('takes the leftmost x inside the span, left edge included and right edge not', () => {
+		expect(firstInkIn([600, 558.52, 587.22], 546.03, 624)).toBe(558.52);
+		expect(firstInkIn([546.03, 600], 546.03, 624)).toBe(546.03);
+		expect(firstInkIn([540, 624], 546.03, 624)).toBe(Infinity);
 	});
 });
 

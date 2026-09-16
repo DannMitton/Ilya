@@ -273,8 +273,10 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1104 passed (1104)** |
-| score-parser | **547 passed, 5 skipped (552)** |
+| web-test | **1173 passed (1173)** |
+| score-parser | **564 passed, 5 skipped (569)** |
+
+**MOVED 2026-09-16: score-parser 555 → 564 (N.139, nine new tests), shipped `eb7d220`. The table was stale before that too (web-test read 1104, score-parser 547); both were read from `~/Downloads/ilya-ship.sh` lines 79 and 80 on 2026-09-16. The script is the instrument.**
 
 **MOVED 2026-09-10 06:05: 1076 → 1103 (the path pass, 27 new tests in `bandState.test.ts` and `sections.test.ts`). The script refused the ship on the old 1076 with every test green; the desk moved `~/Downloads/ilya-ship.sh:79` and kept the old line as `ilya-ship.sh.bak-1076`. When Code reports a gate number higher than the script's and all passed, move the script BEFORE the ship, not after a refusal. Score-parser was 547 by 2026-09-10 (read from the ship output); when it moved from 541 is NOT ESTABLISHED here.**
 
