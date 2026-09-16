@@ -240,28 +240,91 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     expect(svg.includes('data-tie="n19"')).toBe(true);
   });
 
-  it('curves the tie OPPOSITE the syllabic slur above it (downward, r174)', () => {
-    // The RULE under test is unchanged: the tie bows away from the slur. What
-    // changed on 2026-08-27 is the tie's SHAPE, from a stroked path of one
-    // width to a filled two-curve outline, so the pattern follows the markup
-    // and the assertion follows the rule.
-    const m = svg.match(
-      /M-?[\d.]+ (-?[\d.]+) Q -?[\d.]+ (-?[\d.]+) -?[\d.]+ -?[\d.]+ Q -?[\d.]+ (-?[\d.]+) -?[\d.]+ -?[\d.]+ Z" fill="#1a1612" data-tie="n19"/,
+  /**
+   * The DRAWN ink of a tie or a slur, measured off the emitted outline.
+   *
+   * Reading the control points cannot answer this. A quadratic reaches half way
+   * to its control point, so the ink is not the control gap (N.125, 2026-09-16).
+   * This walks both edges at the same x and returns what is actually painted at
+   * the terminals and at the centre. Both edges carry the same control x, so
+   * each one's x is linear in its parameter and `t` on the outer edge meets
+   * `1 - t` on the inner edge at one x.
+   */
+  const arcInk = (src: string, attr: 'tie' | 'slur', id: string) => {
+    const m = src.match(
+      new RegExp(
+        `<path d="M(-?[\\d.]+) (-?[\\d.]+) Q (-?[\\d.]+) (-?[\\d.]+) (-?[\\d.]+) (-?[\\d.]+)( L -?[\\d.]+ (?:-?[\\d.]+))? Q (-?[\\d.]+) (-?[\\d.]+) (-?[\\d.]+) (-?[\\d.]+) Z" fill="#1a1612" data-${attr}="${id}"`,
+      ),
     );
-    expect(m !== null).toBe(true);
-    expect(Number(m![2]) > Number(m![1])).toBe(true); // outer control below endpoints
-    // AND IT TAPERS: the inner control sits between the terminals and the outer
-    // one, which is what gives the shape its centre thickness and its points.
-    expect(Number(m![3]) > Number(m![1])).toBe(true);
-    expect(Number(m![3]) < Number(m![2])).toBe(true);
+    if (!m) return null;
+    const n = (i: number) => Number(m[i]);
+    const [x1, y1, , cyOut, , y2] = [n(1), n(2), n(3), n(4), n(5), n(6)];
+    const cyIn = n(9);
+    const yBack = n(11);
+    const q = (a: number, c: number, b: number, t: number) =>
+      (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
+    // Outer edge runs x1 → x2 at parameter t; inner edge runs x2 → x1, so the
+    // point above the same x is at 1 - t. Both reduce to the same x because the
+    // control x is the midpoint.
+    const gap = (t: number) => Math.abs(q(y1, cyOut, y2, t) - q(yBack, cyIn, yBack, 1 - t));
+    let peak = 0;
+    for (let i = 0; i <= 2000; i++) peak = Math.max(peak, gap(i / 2000));
+    return { end: gap(0), mid: gap(0.5), peak, bowsDown: cyOut > y1, x1, y1 };
+  };
+
+  it('curves the tie OPPOSITE the syllabic slur above it (downward, r174)', () => {
+    // The RULE under test is unchanged: the tie bows away from the slur. Its
+    // SHAPE has moved twice. On 2026-08-27 it became a filled outline instead
+    // of a stroked path, and on 2026-09-16 its WEIGHT became the font's, so the
+    // assertion measures the drawn ink rather than reading a control point.
+    const plain = arcInk(svg, 'tie', 'n19');
+    expect(plain !== null).toBe(true);
+    expect(plain!.bowsDown).toBe(true);
+
+    // WITH A FONT, the ink is `tieMidpointThickness` and `tieEndpointThickness`
+    // in stave spaces. The synthetic font carries Bravura's 0.22 and 0.1, and
+    // the demo stave is a 12 px `lineGap`.
+    const fitted = arcInk(renderDemo({ font: syntheticSmuflFont(), fontFamily: 'TestFont' }), 'tie', 'n19');
+    expect(fitted !== null).toBe(true);
+    expect(fitted!.mid).toBeCloseTo(0.22 * 12, 6);
+    expect(fitted!.end).toBeCloseTo(0.1 * 12, 6);
+    // The centre is the thickest point, so the taper runs the right way.
+    expect(fitted!.peak).toBeCloseTo(fitted!.mid, 6);
+
+    // WITH NO FONT the shape is unchanged: points at both terminals, and the
+    // 0.2 sp of centre ink that `TIE_CENTRE_SP = 0.4` has always drawn.
+    expect(plain!.end).toBeCloseTo(0, 6);
+    expect(plain!.mid).toBeCloseTo(0.2 * 12, 6);
   });
 
   it('draws one syllabic slur over the melisma, arching above the staff', () => {
+    // The RULE under test is unchanged: one slur, above the staff, bowing the
+    // opposite way from the tie. Gould 151 makes tie and slur one design, so
+    // the slur is the same outline at the same weight, and since 2026-09-16
+    // that weight is the font's `slurMidpointThickness` and its endpoint kin.
     expect((svg.match(/data-slur="/g) ?? []).length).toBe(1);
-    const m = svg.match(/M[\d.]+ ([\d.]+) Q [\d.]+ ([\d.]+) [\d.]+ [\d.]+" fill="none" stroke="#1a1612" stroke-width="1.3" data-slur="n18"/);
-    expect(m !== null).toBe(true);
-    expect(Number(m![1]) < 72).toBe(true); // endpoints above the top staff line
-    expect(Number(m![2]) < Number(m![1])).toBe(true); // slur bows upward: opposite the tie
+    const plain = arcInk(svg, 'slur', 'n18');
+    expect(plain !== null).toBe(true);
+    expect(plain!.y1 < 72).toBe(true); // endpoints above the top staff line
+    expect(plain!.bowsDown).toBe(false); // bows upward: opposite the tie
+
+    const fitted = renderDemo({ font: syntheticSmuflFont(), fontFamily: 'TestFont' });
+    const slur = arcInk(fitted, 'slur', 'n18');
+    expect(slur !== null).toBe(true);
+    expect(slur!.mid).toBeCloseTo(0.22 * 12, 6);
+    expect(slur!.end).toBeCloseTo(0.1 * 12, 6);
+    expect(slur!.peak).toBeCloseTo(slur!.mid, 6);
+
+    // ONE DESIGN, read out of the same SVG rather than restated: the slur's ink
+    // matches the tie's wherever a font sets the two pairs equal, as Bravura
+    // and Maestro both do.
+    const tie = arcInk(fitted, 'tie', 'n19');
+    expect(slur!.mid).toBeCloseTo(tie!.mid, 6);
+    expect(slur!.end).toBeCloseTo(tie!.end, 6);
+
+    // WITH NO FONT the slur keeps the pointed lens it drew before.
+    expect(plain!.end).toBeCloseTo(0, 6);
+    expect(plain!.mid).toBeCloseTo(0.2 * 12, 6);
   });
 
   it('draws no underlay under melisma continuation notes', () => {
@@ -1888,6 +1951,8 @@ describe('the courtesy cluster breathes (N.102 increment 1a)', () => {
         staffLineThickness: 0.13, stemThickness: 0.12, beamThickness: 0.5, beamSpacing: 0.25,
         thinBarlineThickness: 0.16, thickBarlineThickness: 0.5,
         legerLineThickness: 0.16, legerLineExtension: 0.4, tupletBracketThickness: 0.16,
+        tieMidpointThickness: 0.22, tieEndpointThickness: 0.1,
+        slurMidpointThickness: 0.22, slurEndpointThickness: 0.1,
       },
       glyphBBoxes,
       glyphsWithAnchors,

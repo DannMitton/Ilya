@@ -148,3 +148,16 @@ place: N.141's case 2 needs to know whether m. 84 and m. 87 of Without Sun song
 2 carry ties or melisma slurs, and N.142 is the tie predicate itself. **Name
 those two measures explicitly in the memo.**
 
+
+---
+
+# AMENDED AT THE DESK, 2026-09-16. Read with §0.1
+
+## 0.2 RE-VERIFIED AT `68aab4f`, WITH CORRECTIONS
+
+- **No commit since `76b24a3` touches `packages/` or `apps/`** (`git log 76b24a3..HEAD -- packages apps` is empty). The §0.1 table holds: `:655`, `:2783`, `:2818`, `:2822` read as stated. Tie depth is `:2755` (`o.lineGap * 0.9`).
+- **The gate baseline in §0 is stale.** Today, from `~/Downloads/ilya-ship.sh` gates 4 and 5: web-test `1173 passed (1173)`, score-parser `555 passed | 5 skipped (560)`. Phonology 216, dictionary 235, and web-check 0 errors and 7 warnings in 4 files are unchanged.
+- **The slur test is `staff-renderer.test.ts:259-264`** (the pinning regex is `:261`), not `:254-259`. The tie shape test that §3 copies starts at `:243`.
+- **§2.4's `engraving.ts:30-36` is `apps/web/src/lib/shane/engraving.ts:31`** (`lineGap: 5.5`). There is no `engraving.ts` in `packages/score-parser`.
+- **T05 is `~/Downloads/Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`.** N.143 is open: on a `.musx`, the input field and Transcription stay empty, but Score markup draws the file's own words, which is all this brief needs.
+- **The Without Sun song 2 file Dann walked on 2026-09-15 is NOT ESTABLISHED on this machine.** It is not in `~/Downloads`. Ask Dann for it. Do not substitute `tools/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/`, which is OCR harness output and not the file he walked.

@@ -848,11 +848,19 @@ event, a melisma's is.
    cannot currently see it.
 
 **EVIDENCE, Dann on the walk of `76b24a3`, 2026-09-15.** Two loupe shots of
-Without Sun song 2, both on system 10 of 11, where he says the closed box is
+**T05** (`Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`;
+**CORRECTED 2026-09-16**, this line first named Without Sun song 2, which has 12
+measures and no ties or slurs, per Code in
+`../sessions/memo-n125-slurs_r1_2026-09-11.md`), both on system 10 of 11, where he says the closed box is
 wrong under this ruling: **m. 84**, A#3, half, *"this is an example of a
 squircle that should imply continuation like we discussed earlier tonight,
 because the rhythmic value carries past the measure's barline"*; and **m. 87**,
 B3, half, *"same here"*.
+
+**SETTLED 2026-09-16 FROM THE RENDERED PAGE: m. 84 is a tie (`data-tie="m83-0-1"`) and
+m. 87 is a melisma slur (`data-slur="m86-0-1"`), so m. 84 alone is the case 2 defect**
+(`../sessions/memo-n125-slurs_r1_2026-09-11.md`). The paragraph that follows is the
+reasoning from before that reading.
 
 **THE SECOND ONE IS NOT YET ESTABLISHED, AND THE DESK SAYS SO RATHER THAN
 AGREEING.** Case 2 fires on a TIE. A melisma keeps one box per note, ruled

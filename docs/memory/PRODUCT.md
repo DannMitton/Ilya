@@ -87,6 +87,20 @@ words: *"Let's not confuse our GUIs with the actual musico-textual object."*
 
 ---
 
+## Ten vowels, Grayson's, and no others. Ruled by Dann, restated 2026-09-16
+
+**Ilya works in Grayson's ten prescriptive sung vowels and meets no other vowel.** Dann's words, 2026-09-16: *"Ilya will never encounter [ɔ] because it is not one of the ten prescriptive vowel targets devised by Grayson. Ilya is constrained to Grayson's ten-vowel schema, and will only ever encounter these ten vowels and no others."* The set is `VOWELS` in `apps/web/src/lib/shane/engine/types.ts:26`. The vowel resolver drops any other glyph (`vowel-resolver.ts:105-116`, `:314`).
+
+**He had to say this twice.** On 2026-09-16 the desk wrote that an [ɔ] advice case "can never fire on a Russian score", as if that were a finding. It is the design. **How it holds, in Dann's words, 2026-09-16:** *"Ilya performs transcriptions automatically whener text is input, and it only uses Grayson's ten-vowel schema. This is the data that interfaces with the user's formant profile and range data."* So no later stage needs its own guard. This changes only if Dann changes the schema.
+
+**Why the glyph for Russian stressed <o> is [o]:** Grayson, *Russian Lyric Diction* (2012), Appendix K, "The Story of /o/", pp. 359 to 397. On pp. 395 to 396 he describes Russian /o/ as a fusion vowel: the lips and back of the tongue form a closed /o/, and the front of the tongue shapes an open /ɔ/. On pp. 396 to 397 he chooses [o], because in his view the [ɔ] symbol makes singers widen the lip rounding far too much. He names the compromise: a singer may not lower the tongue enough to sound authentically Russian, and erring too closed is better than too open. On p. 397 he adds the concession: /o/ is mono-phonemic in Russian, so a singer may shape it rounder or less round, and with a higher or lower tongue, for tone, as long as it stays somewhat rounded and does not sound like /ɑ/. The extremes of the range open up, and the highest notes are often sung essentially as /ɑ/ by singers of any nationality. Read by the desk 2026-09-16 from the text layer, where the IPA font is keyboard-mapped; the /ɑ/ reading of p. 397 matches a rendered read of 2026-07-21 (`claude/sonnet-memo-grayson-boa-cover-sourcing_2026-07-21.md`).
+
+## No belting. Ruled by Dann 2026-09-16
+
+Ilya gives no belting advice. Dann's words: *"No belting voice, this is not a colour that is recruited for classical vocal rep."* A default for classical repertoire. It would change only if Ilya served repertoire that recruits the colour.
+
+---
+
 ## The turning layer. Ruled by Dann 2026-09-02
 
 A turning pitch marks where the voice turns, not how long it stays. It has a

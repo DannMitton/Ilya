@@ -109,10 +109,10 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >    candidate causes named, NOT BUILT. **This reopens the first half of N.134,
 >    which the block below still records as DONE; it was walked on a
 >    `.musicxml`.**
-> 2. **N.141 case 2, with evidence.** Two loupe shots, m. 84 and m. 87 of Without
->    Sun song 2, where a note's value carries past the barline and the squircle
->    stays closed. **m. 84 is the defect. m. 87 is NOT ESTABLISHED and may be a
->    melisma, in which case its closed box is correct.** `OPEN.md` §N.141
+> 2. **N.141 case 2, with evidence.** Two loupe shots, m. 84 and m. 87 of T05
+>    (**corrected 2026-09-16**; first recorded as Without Sun song 2), where a note's value carries past the barline and the squircle
+>    stays closed. **m. 84 is the defect. m. 87 is a melisma slur, settled
+>    2026-09-16 from `data-slur` (N.125 memo), so its closed box is correct.** `OPEN.md` §N.141
 >    §EVIDENCE.
 > 3. **N.125 raised again, with a challenge to the record.** Dann: *"These
 >    constant-width arcs are noticeable and wrong. They need to be tapered."*

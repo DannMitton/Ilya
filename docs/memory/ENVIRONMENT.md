@@ -142,6 +142,7 @@ next session the same hour it cost the last one.
 |---|---|
 | anything that prints | `PRINT. The media-query trap` |
 | the desk head appearing on paper | `THE DESK HEAD IS NOT THE PAPER` |
+| you are about to tune any engraving thickness, gap, or extension | `ASK THE FONT FIRST` |
 
 ### French, names, and sources
 
@@ -3034,3 +3035,24 @@ are never marked.
 **The general trap, and it is bigger than this one site: a font can draw a
 correct string as a different letter.** Reading the code points proves what the
 data is and proves nothing about what the singer sees. **Render it and look.**
+
+## ASK THE FONT FIRST. 2026-09-16
+
+**Before you tune, render, or ask Dann to choose any engraving thickness, gap, or
+extension, open the notation font's SMuFL metadata.** The fonts ship in
+`apps/web/static/fonts/*/`, and the product default is Finale Maestro
+(`apps/web/src/lib/shane/engine/notation-fonts.ts:42`). Their `engravingDefaults`
+block gives, in stave spaces, the thickness of ties, slurs, stems, beams, staff lines,
+barlines, leger lines, and more. `packages/score-parser/src/smufl-metadata.ts:47-57`
+reads only some of them; a missing key is a one-line addition, not a design question.
+
+**What it cost, 2026-09-16:** N.125 ran a brief, three render sets, and a
+thickness question to Dann against a constant of the project's own
+(`TIE_CENTRE_SP`), while `FinaleMaestro.json:19-20` and `:28-29` already named the
+tie and slur thicknesses. Dann: *"Maestro typeface and SmuFL should habndle this
+without all this re-inventing of the proverbial wheel."* And: *"I'm irritated at this
+waste of time."*
+
+**What the font does not give:** the curve itself, a slur's height, or a tie's
+depth. Every notation program draws those. Only those reach Dann's eye.
+

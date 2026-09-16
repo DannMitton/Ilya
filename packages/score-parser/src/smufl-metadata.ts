@@ -54,6 +54,13 @@ export interface SmuflEngravingDefaults {
   legerLineThickness: number;
   legerLineExtension: number;
   tupletBracketThickness: number;
+  /** Tie and slur ink, in staff spaces. SMuFL gives the DRAWN thickness of the
+   *  shape at its centre and at each terminal, which is what the renderer has
+   *  to produce; a curve's control point is not its ink. */
+  tieMidpointThickness: number;
+  tieEndpointThickness: number;
+  slurMidpointThickness: number;
+  slurEndpointThickness: number;
 }
 
 export interface PreparedSmuflFont {
@@ -143,6 +150,10 @@ const ENGRAVING_DEFAULT_KEYS: Array<keyof SmuflEngravingDefaults> = [
   'legerLineThickness',
   'legerLineExtension',
   'tupletBracketThickness',
+  'tieMidpointThickness',
+  'tieEndpointThickness',
+  'slurMidpointThickness',
+  'slurEndpointThickness',
 ];
 
 /** Bravura's published values, the fallback of last resort (spaces). */
@@ -156,6 +167,10 @@ const BRAVURA_ENGRAVING_DEFAULTS: SmuflEngravingDefaults = {
   legerLineThickness: 0.16,
   legerLineExtension: 0.4,
   tupletBracketThickness: 0.16,
+  tieMidpointThickness: 0.22,
+  tieEndpointThickness: 0.1,
+  slurMidpointThickness: 0.22,
+  slurEndpointThickness: 0.1,
 };
 
 // ── Unit conversion (Kimi guardrail 2) ─────────────────────────────

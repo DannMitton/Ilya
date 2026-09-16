@@ -637,22 +637,71 @@ const TURNING_COLOUR = '#9585A2';
 const PRIMITIVE_TURNING_ACC_W = 11.3;
 
 /**
- * A tie's thickness at its centre, in stave spaces, tapering to points at both
- * terminals.
+ * The DRAWN centre thickness of a tie or a slur when no font is loaded, in
+ * stave spaces. A font supplies `tieMidpointThickness` and its three kin, and
+ * `arcOutline` uses those whenever one is loaded; this is the primitive-mode
+ * fallback and nothing else reads it.
  *
- * PROVENANCE: DANN'S EYE, 2026-08-27, choosing 0.40 from a rendered comparison
- * of 0.29, 0.40 and 0.51 against the tie as it was drawn before. **This is NOT
- * Gould.** Her tie and slur rules are 150 to 175 of
- * `gould-vocal-engraving-rules_v7_2026-08-05.md`, and they were deliberately
- * excluded from the extracted priors memo, which says so at its own lines 3 and
- * 229; the book is not on the build machine. So no number here is derived from
- * her and none should be cited as hers.
- *
- * CHECK THIS AGAINST HER IF THAT SOURCE IS EVER PHOTOGRAPHED. A measured
- * proportion should replace a judged one, and the judgement is recorded here
- * precisely so the replacement is a one-line change with a known predecessor.
+ * PROVENANCE: the retired `TIE_CENTRE_SP = 0.4`, Dann's eye 2026-08-27 from a
+ * comparison of 0.29, 0.40 and 0.51, and never Gould's. It is 0.2 here, not
+ * 0.4, because 0.4 was the gap between two control points and a quadratic
+ * reaches half way to its control point, so 0.4 sp of control gap has always
+ * drawn 0.2 sp of ink (N.125, measured 2026-09-16). The number that changes is
+ * the units it is stated in, not a pixel on the page.
  */
-const TIE_CENTRE_SP = 0.4;
+const NO_FONT_ARC_MIDPOINT_SP = 0.2;
+
+/**
+ * One tapered arc, outlined and filled: the shape both ties and slurs draw.
+ *
+ * GOULD 151, ONE DESIGN. A tie and a slur are the same object at different
+ * flatness, so they are the same geometry here and differ only in the four
+ * numbers handed in.
+ *
+ * WHAT SMuFL PROMISES, AND WHAT A CURVE ACTUALLY DRAWS. `tieMidpointThickness`
+ * and `tieEndpointThickness` are DRAWN ink, the thickness of the finished shape
+ * at its centre and at each terminal. A quadratic reaches only half way to its
+ * control point, so the gap between two control points draws half as much ink,
+ * and a renderer that feeds the font's number straight into a control point
+ * draws a tie half the weight the font asked for. That was the defect N.125
+ * measured on 2026-09-16.
+ *
+ * THE CONSTRUCTION. The outer edge runs the nominal arc, terminal to terminal
+ * with control `y + depth`, exactly where the single curve always ran. The
+ * inner edge returns `endThick` away at the terminals and `midThick` away at
+ * the centre, which gives the shape blunt ends of the font's own height rather
+ * than points. Writing the thickness as `2 * midThick - endThick` at the inner
+ * control is what cancels the half-way rule: sampled across the span the ink is
+ * `endThick + 4u(1-u)(midThick - endThick)`, so it is exactly `endThick` at
+ * each end and exactly `midThick` at the centre.
+ *
+ * ENDS THAT ARE POINTS STAY POINTS. With `endThick` at 0 the two edges meet at
+ * the terminals and the joining segment has no length, so the path is the
+ * two-quadratic lens that primitive mode has always emitted, character for
+ * character.
+ *
+ * @param x1 @param x2  The terminals' x, left and right.
+ * @param y             The terminals' y; both ends sit level, as they always have.
+ * @param depth         Signed arc height at the control point: negative bows up.
+ * @param midThick      Drawn ink at the centre.
+ * @param endThick      Drawn ink at each terminal.
+ */
+function arcOutline(
+  x1: number,
+  x2: number,
+  y: number,
+  depth: number,
+  midThick: number,
+  endThick: number,
+): string {
+  const sgn = Math.sign(depth) || 1;
+  const mid = round2px((x1 + x2) / 2);
+  const inner = y + depth - sgn * (2 * midThick - endThick);
+  const back = round2px(y - sgn * endThick);
+  const out = `M${round2px(x1)} ${round2px(y)} Q ${mid} ${round2px(y + depth)} ${round2px(x2)} ${round2px(y)}`;
+  const ret = `Q ${mid} ${round2px(inner)} ${round2px(x1)} ${back} Z`;
+  return endThick === 0 ? `${out} ${ret}` : `${out} L ${round2px(x2)} ${back} ${ret}`;
+}
 
 /**
  * Stamp an analysis mark with its own handle.
@@ -1512,6 +1561,27 @@ export function renderAnalyzedStaff(
   const headNameFor = headNameOf;
 
   const ed = smufl?.engravingDefaults;
+
+  /* TIE AND SLUR INK COMES FROM THE FONT. Dann's ruling of 2026-09-16: the
+     thickness of these two shapes is the notation font's business, not ours,
+     and SMuFL states all four numbers. They are DRAWN thicknesses in stave
+     spaces, so `arcOutline` converts them to control points rather than using
+     them as control points. With no font loaded there is nothing to ask, so
+     primitive mode keeps the pointed lens it has always drawn, at the
+     historical weight. */
+  const arcInk = ed
+    ? {
+        tieMid: sp(ed.tieMidpointThickness),
+        tieEnd: sp(ed.tieEndpointThickness),
+        slurMid: sp(ed.slurMidpointThickness),
+        slurEnd: sp(ed.slurEndpointThickness),
+      }
+    : {
+        tieMid: sp(NO_FONT_ARC_MIDPOINT_SP),
+        tieEnd: 0,
+        slurMid: sp(NO_FONT_ARC_MIDPOINT_SP),
+        slurEnd: 0,
+      };
   /* N.103: every width this loop draws from comes from `inkMetrics`, which is
      the same object `columnInk` measures with. Two copies of "how wide is a
      flat" are two answers waiting to disagree, and the spacer's whole job is to
@@ -2764,10 +2834,10 @@ export function renderAnalyzedStaff(
        path cannot taper at all. What stood here was one quadratic at a constant
        1.1 px, which drew a ribbon of one width end to end.
 
-       OUT ALONG THE OUTER EDGE AND BACK ALONG THE INNER. The two curves share
-       both terminals, so the shape meets at points there and swells to
-       `TIE_CENTRE_SP` at the middle; the inner control is pulled toward the
-       chord, which is what makes the swell. Everything that decided WHERE the
+       THE SHAPE IS `arcOutline`'s, AND ITS WEIGHT IS THE FONT'S. N.125,
+       2026-09-16: the centre and terminal thicknesses are the loaded font's
+       `tieMidpointThickness` and `tieEndpointThickness`, converted from drawn
+       ink to control points there. Everything that decided WHERE the
        tie goes is untouched: the terminals are still the two noteheads' own
        edges (`half1`, `half2` above), the height is still `lineGap * 0.9` with
        the staff-line nudge, and the direction is still chosen by the syllabic
@@ -2777,10 +2847,8 @@ export function renderAnalyzedStaff(
        `FinaleMaestro.json` for `tie` or `slur` returns only articulations and
        `textTie`, which is the lyric elision character. SMuFL has none either,
        so ties stay drawn geometry and there was never a second option. */
-    const tieInner = depth - Math.sign(depth) * sp(TIE_CENTRE_SP);
-    const tieMid = round2((x1 + x2) / 2);
     parts.push(
-      `<path d="M${round2(x1)} ${round2(ey)} Q ${tieMid} ${round2(ey + depth)} ${round2(x2)} ${round2(ey)} Q ${tieMid} ${round2(ey + tieInner)} ${round2(x1)} ${round2(ey)} Z" fill="#1a1612" data-tie="${esc(e.id)}"/>`,
+      `<path d="${arcOutline(x1, x2, ey, depth, arcInk.tieMid, arcInk.tieEnd)}" fill="#1a1612" data-tie="${esc(e.id)}"/>`,
     );
     lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
     highestInk = Math.min(highestInk, ey + Math.min(0, depth));
@@ -2819,7 +2887,26 @@ export function renderAnalyzedStaff(
       // The control point, not the apex: the quadratic peaks at half the lift,
       // so this over-reserves rather than clipping.
       highestInk = Math.min(highestInk, sy - lift);
-      parts.push(`<path d="M${round2(first.x)} ${round2(sy)} Q ${round2((first.x + last.x) / 2)} ${round2(sy - lift)} ${round2(last.x)} ${round2(sy)}" fill="none" stroke="#1a1612" stroke-width="1.3" data-slur="${esc(s.id)}"/>`);
+      /* THE SAME FILLED OUTLINE THE TIE USES. N.125, Dann's word of 2026-09-11:
+         "make them taper gracefully as objects". Gould 151 (project extraction,
+         `gould-vocal-engraving-rules_v7`) gives tie and slur ONE design, a
+         tapered symmetrical arc with the tie the flatter of the two, so the
+         slur cannot keep a stroked path of one width while the tie is a filled
+         lens. What stood here was a single quadratic at a constant 1.3 px.
+
+         IT IS `arcOutline`, THE SAME CALL THE TIE MAKES, and its weight is the
+         font's: `slurMidpointThickness` and `slurEndpointThickness`, which
+         Bravura and Maestro both set equal to their tie pair. If a font ever
+         parts them, the slur follows that font rather than a constant of ours
+         (Dann's ruling, 2026-09-16).
+
+         WHERE THE SLUR GOES IS UNTOUCHED. The terminals are still `first.x`
+         and `last.x` at `sy`, and the height is still the `lift` above, with
+         its cap. Only the ink changed. `data-slur` stays: N.141 and N.142 both
+         read this attribute to tell a slur from a tie. */
+      parts.push(
+        `<path d="${arcOutline(first.x, last.x, sy, -lift, arcInk.slurMid, arcInk.slurEnd)}" fill="#1a1612" data-slur="${esc(s.id)}"/>`,
+      );
     }
   }
 
