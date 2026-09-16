@@ -44,6 +44,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### ADDED AT THE CLOSE OF 2026-09-16 (late). One research thread IS in flight
+>
+> **Fable is running Stage 01a of the Insights synthesis** (started by Dann
+> 2026-09-16, in its own thread; no code, no repository writes). Everything about
+> it is in **INSIGHTS, THE EVIDENCE BASE** below and in the plan it points to.
+> What the desk does with it, in order:
+>
+> 1. When Dann brings the 01a memo, help him review the files in
+>    `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`, one
+>    question at a time. His notes go in `_synthesis/review-01a.md`.
+> 2. Then give him the 01b opener: *"Read ...brief-insights-step-b-core_r5_2026-09-16.md
+>    first, then brief-insights-step-b-pass01_r5_2026-09-16.md in the same folder.
+>    Carry out Stage 01b of pass 01."* (full path: `~/Documents/Voice Pedagogy
+>    Library/Insights Research/`).
+> 3. Candidates for later, each needing Dann's yes: a Sonnet re-extraction of
+>    Bozeman's interventions (only 10 advice rows exist); photos of Bozeman PVA2
+>    Ch. 1 to 3 and 10 to 12 (Ch. 12 is Belting); the Elsevier reply on Journal of
+>    Voice access.
+>
+> The rest of this section, written 2026-09-15, still stands: the two briefed
+> builds below are unaffected by the research thread.
+>
 > ### READ THIS FIRST. Written at the close of 2026-09-15, for the next instantiation
 >
 > **The thread before this one compacted mid-work and was closed deliberately.**
@@ -180,8 +202,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > session)" holds twelve rulings from that night (tiers, blind spots, tethered
 > abstraction, the ten-vowel set, Bozeman surrogates on a continuum between
 > charts, no pronouncements on identity) and the rulings still owed. The build
-> consequence is one line in INBOX.md. **Next:** Dann pastes the 01a opener into a
-> fresh Fable session. Waiting: Elsevier's reply on Journal of Voice access.
+> consequence is one line in INBOX.md. **Stage 01a is running in Fable** (started
+> 2026-09-16 late); see THE ONE THING for what follows. Waiting: Elsevier's reply
+> on Journal of Voice access.
 >
 > **BRIEFS WRITTEN AND NOT RUN, corrected 2026-09-14:**
 > `brief-n117-dictionary-fill_r1_2026-09-12`,

@@ -208,6 +208,11 @@ one mid-session and cost Dann a paste to clear it.
 returned the working tree correctly and `.git/index.lock` did not exist
 afterwards. The flag tells git to skip locks it only wants for the refresh.
 
+**Fourth sighting, 2026-09-16 late:** the research desk ran a plain `git status`
+without the flag (it had read only the bridge section of this file) and stranded a
+lock at the close. **Read this section before any git command, whatever the
+thread is about.**
+
 **This does not relax CONTRACT §5.** Every git command that WRITES is still
 forbidden. The flag makes the ALLOWED reads safe to run, which they were not
 before.
