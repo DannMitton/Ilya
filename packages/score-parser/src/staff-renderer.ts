@@ -652,6 +652,29 @@ const PRIMITIVE_TURNING_ACC_W = 11.3;
 const NO_FONT_ARC_MIDPOINT_SP = 0.2;
 
 /**
+ * How far a syllabic slur's terminal sits from its notehead's centre, in stave
+ * spaces, and how far it clears everything else it has to miss.
+ *
+ * THE HEAD ANCHOR IS THE TIE'S OWN. Dann on the walk of `34b143c`, 2026-09-16:
+ * the m. 87 slur sits too high and the m. 30 tie is right. A tie anchors 4 px
+ * from the notehead centre (`ey = y1 ± 4`); the slur was taking `y2 - 6` and
+ * then another 6 in `sy = top - 6`, so it sat 12 px off the head, about seven
+ * times the tie's clearance measured from the head's edge. One clearance now,
+ * at the tie's distance. DESK DEFAULT: Dann judges the height on the walk.
+ *
+ * WHY THESE ARE FRACTIONS AND NOT DECIMALS. Both were px constants that ignored
+ * the stave size, which is the second of the two N.4 faults this block already
+ * carries a note about. Written over 5.5, the shipping `lineGap`
+ * (`apps/web/src/lib/shane/engraving.ts`), they draw the same pixel they drew
+ * before at the shipping stave and scale everywhere else. `SLUR_CLEAR_SP` is
+ * the old 6 px, unchanged in value and applied to the same two things: an
+ * up-stem or beam tip, and the turning layer above its own accidental
+ * clearance.
+ */
+const SLUR_HEAD_ANCHOR_SP = 4 / 5.5;
+const SLUR_CLEAR_SP = 6 / 5.5;
+
+/**
  * One tapered arc, outlined and filled: the shape both ties and slurs draw.
  *
  * GOULD 151, ONE DESIGN. A tie and a slur are the same object at different
@@ -2866,23 +2889,28 @@ export function renderAnalyzedStaff(
       if (!s.slur) continue;
       const first = placed[s.startIdx];
       const last = placed[s.endIdx];
-      let top = staffTop;
+      /* ONE CLEARANCE PER THING CLEARED, and the terminal's own is the tie's.
+         What stood here took `y2 - 6` off the notehead and then a second 6 in
+         `sy = top - 6`, so the two stacked and the slur floated 12 px above its
+         own head. Everything else the slur has to miss keeps the 6 px it had,
+         now as `SLUR_CLEAR_SP`. `sy` is computed directly, so no clearance can
+         pick up a second one on the way out. */
+      let sy = staffTop - sp(SLUR_CLEAR_SP);
       for (let k = s.startIdx; k <= s.endIdx; k++) {
         const ev2 = placed[k].ev;
         if (!ev2.pitch) continue;
         const y2 = yFor(ev2.pitch);
-        top = Math.min(top, y2 - 6);
+        sy = Math.min(sy, y2 - sp(SLUR_HEAD_ANCHOR_SP));
         const a2 = analyzed.events[ev2.id];
-        if (a2) top = Math.min(top, yFor(a2.turningPitch) - accClearSlur);
+        if (a2) sy = Math.min(sy, yFor(a2.turningPitch) - accClearSlur - sp(SLUR_CLEAR_SP));
         // The same two N.4 faults the tuplet bracket had: this was gated on
         // close timbre, so an unmeasured page's positional up-stems never
         // pushed the slur clear, and the fallback was a hardcoded 30 px that
         // ignored the stave size.
         if (ev2.duration.base !== 'whole' && ev2.duration.base !== 'breve' && stemUpFor(ev2, y2)) {
-          top = Math.min(top, beamStemById.get(ev2.id)?.tipY ?? y2 - stemLen);
+          sy = Math.min(sy, (beamStemById.get(ev2.id)?.tipY ?? y2 - stemLen) - sp(SLUR_CLEAR_SP));
         }
       }
-      const sy = top - 6;
       const lift = Math.min(24, 10 + (last.x - first.x) / 20);
       // The control point, not the apex: the quadratic peaks at half the lift,
       // so this over-reserves rather than clipping.

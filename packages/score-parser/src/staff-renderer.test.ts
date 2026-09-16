@@ -325,6 +325,55 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     // WITH NO FONT the slur keeps the pointed lens it drew before.
     expect(plain!.end).toBeCloseTo(0, 6);
     expect(plain!.mid).toBeCloseTo(0.2 * 12, 6);
+
+    /* THE TERMINAL ANCHORS ON ITS NOTEHEAD AT THE TIE'S OWN DISTANCE, in stave
+       spaces. Dann on the walk of `34b143c`: the T05 m. 87 slur sat too high,
+       because `y2 - 6` and `sy = top - 6` stacked into 12 px. It is now
+       `SLUR_HEAD_ANCHOR_SP`, the tie's 4 px at the shipping 5.5 `lineGap`.
+
+       THE DEMO CANNOT SHOW IT AS IT STANDS. The head clearance only binds when
+       the melisma sits above the staff, which is m. 87's case; the demo's
+       melisma sits well below the top line, so the `staffTop` seed wins. Raise
+       the span an octave and drop the turning layer, which is also what an
+       unmeasured `.musx` page renders, and the head becomes the binding one. */
+    const raised = (() => {
+      const base = demoScore();
+      return {
+        ...base,
+        vocalLine: base.vocalLine.map((e) =>
+          ['n18', 'n19', 'n20'].includes(e.id) && e.pitch
+            ? { ...e, pitch: { ...e.pitch, octave: e.pitch.octave + 2 } }
+            : e,
+        ),
+      };
+    })();
+    const bare = (lineGap: number) =>
+      renderAnalyzedStaff(
+        raised,
+        {
+          ...analyzeScore(raised, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' }),
+          events: {},
+        },
+        { lineGap },
+      );
+    /** The sung notehead's centre y: the one ellipse in the event's group that
+     *  the analysis did not put there. */
+    const headY = (src: string, id: string): number => {
+      const i = src.indexOf(`data-event-id="${id}"`);
+      const group = src.slice(i, src.indexOf('</g>', i));
+      const heads = [...group.matchAll(/<ellipse (?![^>]*data-analysis)[^>]*cy="([-\d.]+)"/g)];
+      return Math.min(...heads.map((h) => Number(h[1])));
+    };
+    /* AND IT SCALES: the same 4/5.5 of a stave space at either stave size. The
+       tolerance is the file's own: every coordinate is printed to two decimals,
+       so a distance in px is pinned to ±0.005 and the ratio to a thousandth. */
+    for (const lineGap of [12, 24]) {
+      const src = bare(lineGap);
+      const sy = Number(src.match(/<path d="M[\d.]+ ([-\d.]+) [^"]*" fill="#1a1612" data-slur="n18"/)![1]);
+      const top = Math.min(headY(src, 'n18'), headY(src, 'n19'), headY(src, 'n20'));
+      expect(top - sy).toBeCloseTo((4 / 5.5) * lineGap, 2);
+      expect((top - sy) / lineGap).toBeCloseTo(4 / 5.5, 3);
+    }
   });
 
   it('draws no underlay under melisma continuation notes', () => {
